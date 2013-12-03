@@ -4,6 +4,7 @@ Ext.define('NextThought.view.content.View', {
 	requires: [
 		'NextThought.view.reader.Panel',
 		'NextThought.view.courseware.View',
+		'NextThought.view.courseware.assessment.View',
 		'NextThought.view.courseware.dashboard.View',
 		'NextThought.view.courseware.forum.View',
 		'NextThought.view.courseware.info.View',
@@ -45,6 +46,10 @@ Ext.define('NextThought.view.content.View', {
 			id: 'course-forum',
 			xtype: 'course-forum'
 		},{
+			title: 'Your Progress',
+			id: 'course-assessment',
+			xtype: 'course-assessment'
+		},{
 			title: 'Course Info',
 			id: 'course-info',
 			xtype: 'course-info'
@@ -55,9 +60,9 @@ Ext.define('NextThought.view.content.View', {
 	tabSpecs: [
 		{label: 'Dashboard', viewId: 'course-dashboard'},
 		{label: 'Lessons', viewId: 'course-book?'},
-    //		{label: 'Assignments', viewId: ''},
 		{label: 'Discussions', viewId: 'course-forum'},
     //		{label: 'Notebook', viewId: ''},
+		{label: 'Assignments', viewId: 'course-assessment'},
 		{label: 'Course Info', viewId: 'course-info'}
 	],
 
