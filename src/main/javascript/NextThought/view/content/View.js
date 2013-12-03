@@ -19,25 +19,14 @@ Ext.define('NextThought.view.content.View', {
 
 	items: [
 		{
-			title: 'Dashboard',
-			id: 'course-dashboard',
-			xtype: 'course-dashboard'
-		},{
 			id: 'course-book',
 			xtype: 'container',
-			layout: {
-				type: 'card',
-				deferredRender: true
-			},
+			layout: { type: 'card', deferredRender: true },
 			activeItem: 'main-reader-view',
-			items: [{
-				xtype: 'course',
-				id: 'course-nav'
-
-			},{
-				id: 'main-reader-view',
-				xtype: 'reader'
-			}],
+			items: [
+				{ xtype: 'course', id: 'course-nav' },
+				{ xtype: 'reader', id: 'main-reader-view' }
+			],
 			listeners: {
 				'beforedeactivate': function() {
 					var active = this.layout && this.layout.activeItem;
@@ -48,11 +37,14 @@ Ext.define('NextThought.view.content.View', {
 				}
 			}
 		},{
+			title: 'Dashboard',
+			id: 'course-dashboard',
+			xtype: 'course-dashboard'
+		},{
 			title: 'Discussion',
 			id: 'course-forum',
 			xtype: 'course-forum'
-		},
-		{
+		},{
 			title: 'Course Info',
 			id: 'course-info',
 			xtype: 'course-info'
@@ -436,7 +428,9 @@ Ext.define('NextThought.view.content.View', {
 			this.showContentReader();
 		}
 
-		this.setActiveTab(preview ? 'course-info' : 'course-book');
+		this.setActiveTab(preview ?
+						  'course-info' :
+						  this.layout.getActiveItem() || 'course-book');
 	},
 
 
@@ -454,7 +448,7 @@ Ext.define('NextThought.view.content.View', {
 
 	showCourseNavigation: function() {
 		this.courseBook.getLayout().setActiveItem('course-nav');
-		this.setActiveTab('course-book');
+		//this.setActiveTab('course-book');
 	},
 
 
@@ -522,7 +516,6 @@ Ext.define('NextThought.view.content.View', {
 					me.courseForum.restoreState(forum, topic);
 				}
 
-				me.setActiveTab((tab === 'null') ? null : tab);
 				if (ntiid) {
 					me.reader.setLocation(ntiid, null, true);
 					//Temp HACK:
@@ -530,6 +523,8 @@ Ext.define('NextThought.view.content.View', {
 				} else {
 					me.reader.clearLocation();
 				}
+
+				me.setActiveTab((tab === 'null') ? null : tab);
 			}
 			catch (e) {
 				console.error(e.stack || e.message || e);
