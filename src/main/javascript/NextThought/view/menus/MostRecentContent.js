@@ -85,7 +85,7 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 	fillStore: function() {
 		this.allowTracking = true;
 
-		var store,
+		var store, me = this,
 			courses = Ext.getStore('courseware.EnrolledCourses'),
 			s = PersistentStorage.getProperty(this.persistenceKey, this.persistenceProperty, []);
 
@@ -122,7 +122,7 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 			Promise.pool(Ext.Array.map(s, getRecord)).then(function(records) {
 				store.loadRecords(Ext.Array.clean(records));
 				if (store.getCount()) {
-					this.fireEvent('update-current', store.getAt(0));
+					me.fireEvent('update-current', store.getAt(0));
 				}
 			});
 		}
