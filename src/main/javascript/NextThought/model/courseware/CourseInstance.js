@@ -16,32 +16,36 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 				isCourse: true,
 				title: (e && e.get('Title')) || 'Missing Catalog Entry',
 				label: (e && e.get('ProviderUniqueID')) || '---',
-				icon: (e && e.get('icon')) || 'no-entry.png'
+				icon: (e && e.get('icon')) || 'missing-icon.png'
 			};
 		}());
 		return me._uiData;
 	},
 
 
-	getAvailableCourses: function() {
-		if (!this.availableStore) {
-			this.availableStore = Ext.getStore('courseware.AvailableCourses');
-		}
-		return this.availableStore;
+	__precacheEntry: function() {
+		var p = new Promise(),
+			me = this,
+			Cls = NextThought.model.courseware.CourseInstance;
+
+		Cls.load(null, {
+			url: me.getLink('CourseCatalogEntry'),
+			callback: function(rec) {
+				me.__courseCatalogEntry = rec;
+				if (rec) {
+					p.fulfill(rec);
+				} else {
+					p.reject('No Record, See logs');
+				}
+			}
+		});
+
+		return p;
 	},
 
 
 	getCourseCatalogEntry: function() {
-		var links = this.get('Links'),
-			href = links && links.getRelHref('CourseCatalogEntry'),
-			all = href && this.getAvailableCourses(),
-			course;
-
-		if (href && all) {
-			course = all.findRecord('href', href, 0, false, true, true);
-		}
-
-		return course;
+		return this.__courseCatalogEntry;
 	},
 
 

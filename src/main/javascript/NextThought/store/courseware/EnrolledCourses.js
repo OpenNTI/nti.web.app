@@ -38,7 +38,15 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 		this.on({
 			scope: this,
 			single: true,
-			load: function() { p.fulfill(me); }
+			load: function() {
+				Promise.pool(Ext.Array.map(
+						me.getRange(),
+						function(r) {
+							return r.__precacheEntry();
+						})).then(
+							function() { p.fulfill(me); },
+							function(reason) { p.reject(reason); });
+			}
 		});
 	},
 
@@ -63,7 +71,7 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 			if (promise.state !== Promise.State.FULFILLED) {
 				promise.reject('Not found');
 			}
-		});
+		}, function(reason) { promise.reject(reason); });
 
 		return promise;
 	},

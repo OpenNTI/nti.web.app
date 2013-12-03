@@ -7,6 +7,11 @@ Ext.define('NextThought.model.courseware.CourseInstanceEnrollment', {
 	],
 
 
+	__precacheEntry: function() {
+		return this.get('CourseInstance').__precacheEntry();
+	},
+
+
 	getCourseCatalogEntry: function() {
 		return this.get('CourseInstance').getCourseCatalogEntry();
 	}
