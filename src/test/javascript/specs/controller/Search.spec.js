@@ -89,7 +89,7 @@ describe('Search Controller Tests', function(){
 				overflowX: 'hidden',
 				overflowY: 'hidden',
 				items:[
-					//{ xtype: 'searchfield' },
+					//{ xtype: 'nti-searchfield' },
 					{ xtype: 'container',
 					  overflowX: 'hidden',
 					  overflowY: 'scroll',

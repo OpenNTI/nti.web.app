@@ -33,7 +33,7 @@ Ext.define('NextThought.controller.Search', {
 	refs: [
 		{
 			ref: 'searchField',
-			selector: 'searchfield'
+			selector: 'nti-searchfield'
 		},
 		{
 			ref: 'searchMenu',
@@ -44,7 +44,7 @@ Ext.define('NextThought.controller.Search', {
 	init: function() {
 		this.listen({
 						component: {
-							'searchfield': {
+							'nti-searchfield': {
 								'search': this.searchForValue,
 								'clear-search': this.clearSearchResults
 							},

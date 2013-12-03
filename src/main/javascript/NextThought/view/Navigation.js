@@ -114,7 +114,7 @@ Ext.define('NextThought.view.Navigation', {
 					startHide: Ext.emptyFn,
 					items: [
 						{
-							xtype: 'searchfield'
+							xtype: 'nti-searchfield'
 						},
 						{
 							xtype: 'container',
@@ -134,7 +134,7 @@ Ext.define('NextThought.view.Navigation', {
 						show: function(m) {
 							this.reactivate = this.containerNode.down('.active').removeCls('active');
 							this.ownerNode.addCls('active');
-							m.down('searchfield').focus(true, true);
+							m.down('nti-searchfield').focus(true, true);
 						}
 					}
 				});
