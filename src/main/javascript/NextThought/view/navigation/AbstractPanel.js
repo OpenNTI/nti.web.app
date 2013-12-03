@@ -15,7 +15,7 @@ Ext.define('NextThought.view.navigation.AbstractPanel', {
 
 
 	onClassExtended: function(cls, data) {
-		function apply(i,x,key) {
+		function apply(i, x, key) {
 			if (!Ext.isDefined(data[key]) && !Ext.isDefined(cls.superclass[key])) {
 				Ext.log.warn('No ' + key + ' component declared/configured');
 			} else if (Ext.isString(data[key])) {
@@ -38,7 +38,7 @@ Ext.define('NextThought.view.navigation.AbstractPanel', {
 		Ext.callback(data.onClassExtended, this, arguments);
 	},
 
-	applyConfigs: function(name,config) {
+	applyConfigs: function(name, config) {
 		if (!this.hasOwnProperty('items')) {
 			this.items = Ext.clone(this.items);
 		}
