@@ -6,6 +6,7 @@ Ext.define('NextThought.controller.CourseWare', {
 		'courseware.CourseCatalogInstructorInfo',
 		'courseware.CourseCreditLegacyInfo',
 		'courseware.CourseInstance',
+		'courseware.LegacyCommunityBasedCourseInstance',
 		'courseware.CourseInstanceEnrollment'
 	],
 
