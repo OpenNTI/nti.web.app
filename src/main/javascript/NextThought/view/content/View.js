@@ -92,7 +92,7 @@ Ext.define('NextThought.view.content.View', {
 
 		this.mon(this.courseForum, {
 			scope: this,
-			'set-active-state': 'updateActiveState'
+			'set-active-state': 'updateForumState'
 		});
 
 		this.on({
@@ -108,9 +108,9 @@ Ext.define('NextThought.view.content.View', {
 	},
 
 
-	updateActiveState: function(type, ntiid) {
+	updateForumState: function(type, ntiid) {
 		var state = {};
-		state['current_' + type] = ntiid;
+		(state.discussion = {})[type] = ntiid;
 		this.pushState(state);
 	},
 
@@ -510,8 +510,9 @@ Ext.define('NextThought.view.content.View', {
 			course = st.course,
 			ntiid = st.location,
 			tab = st.activeTab,
-			topic = st.current_topic,
-			forum = st.current_forum,
+			disc = st.discussion || {},
+			topic = disc.topic,
+			forum = disc.forum,
 			me = this;
 
 		function setupCourseUI(instance) {
