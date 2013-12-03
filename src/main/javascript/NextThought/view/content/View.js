@@ -406,7 +406,7 @@ Ext.define('NextThought.view.content.View', {
 		var info = instance && instance.__getLocationInfo(),
 			catalogEntry = instance && instance.getCourseCatalogEntry(),
 			preview = catalogEntry && catalogEntry.get('Preview'),
-			background = info && getURL(info.toc.querySelector('toc').getAttribute('background'), info.root);
+			background = info && info.toc && getURL(info.toc.querySelector('toc').getAttribute('background'), info.root);
 
 		this.currentCourse = instance;
 		this.reader.clearLocation();
