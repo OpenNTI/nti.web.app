@@ -14,9 +14,9 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 			return {
 				id: me.getId(),
 				isCourse: true,
-				title: e.get('Title'),
-				label: e.get('ProviderUniqueID'),
-				icon: e.get('icon')
+				title: (e && e.get('Title')) || 'Missing Catalog Entry',
+				label: (e && e.get('ProviderUniqueID')) || '---',
+				icon: (e && e.get('icon')) || 'no-entry.png'
 			};
 		}());
 		return me._uiData;
@@ -58,7 +58,8 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 
 
 	__getLocationInfo: function() {
-		return ContentUtils.getLocation(this.getCourseCatalogEntry().get('ContentPackageNTIID'));
+		var c = this.getCourseCatalogEntry();
+		return ContentUtils.getLocation(c && c.get('ContentPackageNTIID'));
 	},
 
 
