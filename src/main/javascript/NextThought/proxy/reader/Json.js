@@ -8,6 +8,7 @@ Ext.define('NextThought.proxy.reader.Json', {
 			items = data.Items, item,
 			mimeType = data.MimeType,
 			links = data.Links,
+			baseModel = this.model,
 			result, i, record, modelName;
 
 		if (data.request) {
@@ -49,23 +50,32 @@ Ext.define('NextThought.proxy.reader.Json', {
 				Ext.each(links, function(l) {result.links[l.rel] = l.href;});
 			}
 
-			i = result.records.length - 1;
-			for (i; i >= 0; i--) {
-				record = result.records[i];
-				try {
-					//Stores like to have one type of model in them, but we need non-homogenous stores.
-					//e.g. PageItem stores have notes, highlights, redaction, etc.  So make sure we coerce the proper model
-					//here.  TODO move into NextThought.proxy.reader.Base and/or a more elegant way to do this
-					if (record instanceof NextThought.model.Base && !record.homogenous) {
-						modelName = record.get('Class');
-						if (record.modelName.substr(-modelName.length) !== modelName) {
-							result.records[i] = ParseUtils.findModel(modelName).create(record.raw, record.getId());
-							delete record.raw;
+			try {
+				i = result.records.length - 1;
+				for (i; i >= 0; i--) {
+					record = result.records[i];
+					try {
+						//Stores like to have one type of model in them, but we need non-homogenous stores.
+						//e.g. PageItem stores have notes, highlights, redaction, etc.  So make sure we coerce the proper model
+						//here.  TODO move into NextThought.proxy.reader.Base and/or a more elegant way to do this
+						if (record instanceof NextThought.model.Base && !record.homogenous) {
+							modelName = record.get('Class');
+							if (record.modelName.substr(-modelName.length) !== modelName) {
+								result.records[i] = this.__rebuildRecordAsType(
+										ParseUtils.findModel(modelName), record.getId(), record.raw);
+								delete record.raw;
+							}
 						}
 					}
+					catch (e1) {
+						console.error(Globals.getError(e1), '\n\nNo model for record? : ', record);
+					}
 				}
-				catch (e1) {
-					console.error(Globals.getError(e1), '\n\nNo model for record? : ', record);
+			} finally {
+				//put the base back
+				if (this.model !== baseModel) {
+					this.model = baseModel;
+					this.buildExtractors(true);
 				}
 			}
 
@@ -80,5 +90,21 @@ Ext.define('NextThought.proxy.reader.Json', {
 				success: false
 			});
 		}
+	},
+
+	__rebuildRecordAsType: function(Model, id, data) {
+		var convertedValues,
+			record = new Model(undefined, id, data, convertedValues = {});
+
+		if (this.model !== Model) {
+			this.model = Model;
+			this.buildExtractors(true);
+		}
+
+		record.phantom = false;
+
+		this.convertRecordData(convertedValues, data, record);
+
+		return record;
 	}
 });
