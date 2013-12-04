@@ -21,7 +21,7 @@ Ext.define('NextThought.view.navigation.AbstractPanel', {
 			} else if (Ext.isString(data[key])) {
 				i[x].xtype = data[key];
 			} else if (Ext.isObject(data[key])) {
-				Ext.applyIf(i[x], data[key]);
+				Ext[(data[key].override) ? 'apply' : 'applyIf'](i[x], data[key]);
 			} else {
 				Ext.Error.raise('Cannot handle ' + key + ' as configured');
 			}
