@@ -41,6 +41,21 @@ Ext.define('NextThought.util.Object', {
 				}
 			}
 		}
+	},
+
+
+	clean: function clean(o) {
+		var key, v;
+		if (!o || !Ext.isObject(o)) {return;}
+		for (key in o) {
+			if (o.hasOwnProperty(key)) {
+				v = o[key];
+				if (v === undefined || v === null) {
+					delete o[key];
+				}
+				clean(v);
+			}
+		}
 	}
 },function() {
 	window.ObjectUtils = this;

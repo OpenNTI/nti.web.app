@@ -71,9 +71,9 @@ Ext.define('NextThought.controller.State', {
 			replace = (history.replaceState || Ext.emptyFn),
 			SEVEN_DAYS = 604800000,
 			p = me.getStateKey() + 'non-history-state-',
-			provider = Ext.supports.LocalStorage
-				? new Ext.state.LocalStorageProvider({prefix: p})
-				: new Ext.state.CookieProvider({prefix: p, expires: new Date(new Date().getTime() + SEVEN_DAYS) });
+			provider = Ext.supports.LocalStorage ?
+				new Ext.state.LocalStorageProvider({prefix: p}) :
+				new Ext.state.CookieProvider({prefix: p, expires: new Date(new Date().getTime() + SEVEN_DAYS) });
 
 		Ext.state.Manager.setProvider(provider);
 
@@ -121,6 +121,7 @@ Ext.define('NextThought.controller.State', {
 			//The only thing listening to this event is the Google Hangout controller.
 			if (diff && me.fireEvent('stateChange', s)) {
 				Ext.Object.merge(current, s);
+				ObjectUtils.clean(current);//drop keys with null & undefined values
 				PersistentStorage.set(me.getStateKey(), current);
 				return true;
 			}
