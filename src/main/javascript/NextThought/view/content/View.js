@@ -376,6 +376,11 @@ Ext.define('NextThought.view.content.View', {
 
 		this.down('content-toolbar').show();
 
+		//force this to blank out if it was unset
+		this.pushState({
+			course: this.currentCourse && this.currentCourse.getId()
+		});
+
 		//TEMP:
 		var sc = Ext.bind(this._setCourse, this);
 		if (this.isPartOfCourse(pageInfo)) {
