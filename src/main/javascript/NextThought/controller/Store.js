@@ -372,7 +372,6 @@ Ext.define('NextThought.controller.Store', function(){
 
 		//For marking sample state
 		updateLibraryWithPurchasable: function(p) {
-			var courses = Ext.getStore('courseware.AvailableCourses');
 			Ext.each(p.get('Items') || [], function(itemId) {
 				var title = Library.getTitle(itemId);
 				if (title) {
@@ -381,13 +380,6 @@ Ext.define('NextThought.controller.Store', function(){
 				else {
 					console.warn('This purchasable item is not in the library:', itemId);
 				}
-
-				courses.findBy(function(r) {
-					if (r.get('ContentPackageNTIID') === itemId) {
-						r.set('Preview', p.raw.Preview);
-					}
-				});
-
 			}, this);
 		},
 
