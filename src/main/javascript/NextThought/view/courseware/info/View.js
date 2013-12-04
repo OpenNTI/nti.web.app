@@ -24,11 +24,6 @@ Ext.define('NextThought.view.courseware.info.View', {
 	},
 
 
-	getCurrentTitle: function() {
-		return this.currentTitle || 'Course Info';
-	},
-
-
 	courseChanged: function(courseInstance) {
 		var me = this,
 			catalogEntry = courseInstance && courseInstance.getCourseCatalogEntry();
@@ -38,8 +33,6 @@ Ext.define('NextThought.view.courseware.info.View', {
 
 			me[me.infoOnly?'addCls':'removeCls']('info-only');
 			me.navigation.margin = (me.infoOnly? '105':'0')+' 5 5 0';
-
-			me.currentTitle = info && (info.get('Title') + ' - Course Info');
 
 			me.body.setContent(info);
 			me.navigation.setContent(info);

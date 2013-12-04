@@ -24,11 +24,6 @@ Ext.define('NextThought.view.courseware.forum.View', {
 	},
 
 
-	getCurrentTitle: function() {
-		return this.currentTitle || 'Discussions';
-	},
-
-
 	initComponent: function() {
 		this.callParent(arguments);
 		this.initCustomScrollOn('content');
@@ -300,8 +295,6 @@ Ext.define('NextThought.view.courseware.forum.View', {
 		var s = {content: {discussion: null}};
 
 		history.pushState(s); //history is accumulating at this point in the "transaction"
-
-		this.currentTitle = courseInstance && (courseInstance.asUIData().title + ' - Discussions');
 
 		this.setBoard(courseInstance && courseInstance.get('Discussions'));
 	}

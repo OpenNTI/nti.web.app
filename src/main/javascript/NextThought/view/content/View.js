@@ -518,12 +518,18 @@ Ext.define('NextThought.view.content.View', {
 
 
 	updateTitle: function() {
-		var tab = this.layout.getActiveItem();
+		var tab = this.layout.getActiveItem(),
+			inst = this.currentCourse,
+			courseTitle,
+			pageTitle = this.locationTitle,
+			subTitle;
+
 		if (!tab) {return;}
-		this.setTitle(this.getTitlePrefix() + (tab.getCurrentTitle ?
-					  tab.getCurrentTitle() :
-					  this.locationTitle)
-		);
+
+		courseTitle = (inst && inst.asUIData().title);
+		subTitle = Ext.isEmpty(tab.title) ? pageTitle : courseTitle;
+
+		this.setTitle(this.getTitlePrefix() + subTitle);
 	},
 
 

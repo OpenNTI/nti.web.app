@@ -16,15 +16,9 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 	},
 
 
-	getCurrentTitle: function() {
-		return this.currentTitle || 'Dashboard';
-	},
-
-
 	courseChanged: function(courseInstance) {
 		if (!courseInstance) {
 			this.tileContainer.removeAll(true);
-			delete this.currentTitle;
 			return;
 		}
 
@@ -33,8 +27,6 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 			toc, course,
 			courseNavStore,
 			date = this.self.dateOverride || new Date();//now
-
-		this.currentTitle = courseInstance.asUIData().title + ' - Dashboard';
 
 		if (l && l !== ContentUtils.NO_LOCATION) {
 			toc = l.toc.querySelector('toc');
