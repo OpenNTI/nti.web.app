@@ -16,6 +16,11 @@ Ext.define('NextThought.view.courseware.assessment.Navigation', {
 		frameBodyEl: '.outline-list'
 	},
 
+	selModel: {
+		allowDeselect: false,
+		toggleOnClick: false,
+		deselectOnContainerClick: false
+	},
 
 	getTargetEl: function() { return this.frameBodyEl; },
 	overItemCls: 'over',
