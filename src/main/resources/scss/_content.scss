@@ -280,6 +280,7 @@
 		white-space: nowrap;
 
 		.main-view-tab {
+			position: relative;
 			display: inline-block;
 			font: normal 300 16px/30px $font;
 			color: $tertiary-grey;
@@ -297,6 +298,17 @@
 				//text-shadow: 0 1px 1px rgba(0,0,0,0.05);
 				background: rgba(255,255,255,0.1);
 				color: #fff;
+			}
+
+			&[data-badge]::after {
+				position: absolute; top: -0.6em; right: 0;
+				border-radius: 10em;
+				line-height: 1em; font-size: 0.7em; font-weight: 700;
+				content: attr(data-badge);
+				background: $primary-blue;
+				color: #fff;
+				padding: 0.3em 0.6em 0.3em 0.5em;
+
 			}
 		}
 	}

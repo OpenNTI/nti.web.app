@@ -179,8 +179,10 @@ Ext.define('NextThought.view.Views', {
 			if (cmp) {
 				me.tabMonitors.push(me.mon(cmp, {
 					activate: 'onTabActivated',
+					notify: 'onViewNotifiy',
 					destroyable: true
 				}));
+				me.onViewNotifiy(cmp, cmp.notifications);
 			} else if (id) {
 				console.warn('No component found for:', id);
 			}
@@ -188,11 +190,24 @@ Ext.define('NextThought.view.Views', {
 	},
 
 
+	getTabFromView: function(view) {
+		var id = view && view.id,
+			t = id && this.tabs,
+			s = '.main-view-tab[data-view-id="{0}"]';
+		return t && (t.down(Ext.String.format(s, id)) || t.down(Ext.String.format(s, id + '?')));
+	},
+
+
+	onViewNotifiy: function(tabView, count) {
+		var tab = this.getTabFromView(tabView);
+		if (tab) {
+			tab.set({'data-badge': count});
+		}
+	},
+
+
 	onTabActivated: function(tabView) {
-		var id = tabView.id,
-				t = this.tabs,
-				s = '.main-view-tab[data-view-id="{0}"]',
-				tab = t.down(Ext.String.format(s, id)) || t.down(Ext.String.format(s, id + '?'));
+		var tab = this.getTabFromView(tabView);
 		this.tabs.select('.main-view-tab').removeCls('selected');
 		if (tab) {
 			tab.addCls('selected');
