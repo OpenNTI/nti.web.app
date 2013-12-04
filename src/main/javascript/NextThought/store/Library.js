@@ -28,7 +28,7 @@ Ext.define('NextThought.store.Library', {
 			type: 'json',
 			root: 'titles'
 		},
-		noCache: true,
+		noCache: false,
 
 		//Don't send any params with this store load.
 	    groupParam: undefined,
