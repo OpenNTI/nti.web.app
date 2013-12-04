@@ -154,6 +154,11 @@ Ext.define('NextThought.view.content.View', {
 	},
 
 
+	updateState: function(s) {
+		history.replaceState({active: 'content', content: s}, this.title, this.getFragment());
+	},
+
+
 	/**
 	 * @param {Boolean|String[]} enable
 	 */
@@ -356,7 +361,6 @@ Ext.define('NextThought.view.content.View', {
 
 	onLocationCleared: function() {
 		delete this.reader.ntiidOnFrameReady;
-		this.setActiveTab('course-book');
 		this.courseBook.getLayout().setActiveItem('main-reader-view');
 	},
 
@@ -376,10 +380,6 @@ Ext.define('NextThought.view.content.View', {
 
 		this.down('content-toolbar').show();
 
-		//force this to blank out if it was unset
-		this.pushState({
-			course: this.currentCourse && this.currentCourse.getId()
-		});
 
 		//TEMP:
 		var sc = Ext.bind(this._setCourse, this);
@@ -402,10 +402,15 @@ Ext.define('NextThought.view.content.View', {
 	},
 
 
-	_setCourse: function(instance) {
+	_setCourse: function(instance, tab) {
 		if (this.currentCourse === instance) {
 			return;
 		}
+
+		//force this to blank out if it was unset
+		this.updateState({
+			course: instance && instance.getId()
+		});
 
 		//Temporary stop gap
 		var info = instance && instance.__getLocationInfo(),
@@ -440,7 +445,7 @@ Ext.define('NextThought.view.content.View', {
 
 		this.setActiveTab(preview ?
 						  'course-info' :
-						  this.layout.getActiveItem() || 'course-book');
+						  tab || 'course-book');
 	},
 
 
@@ -520,10 +525,12 @@ Ext.define('NextThought.view.content.View', {
 			forum = disc.forum,
 			me = this;
 
+		tab = (tab === 'null') ? null : tab;
+
 		function setupCourseUI(instance) {
 			try {
 				if (instance) {
-					me._setCourse(instance);
+					me._setCourse(instance, tab);
 					me.courseForum.restoreState(forum, topic);
 				}
 
@@ -535,7 +542,7 @@ Ext.define('NextThought.view.content.View', {
 					me.reader.clearLocation();
 				}
 
-				me.setActiveTab((tab === 'null') ? null : tab);
+				me.setActiveTab(tab);
 			}
 			catch (e) {
 				console.error(e.stack || e.message || e);
