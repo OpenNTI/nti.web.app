@@ -505,7 +505,8 @@ Ext.define('NextThought.view.content.View', {
 
 
 	restore: function(state) {
-		var st = state.content,
+		var promise = new Promise(),
+			st = state.content,
 			course = st.course,
 			ntiid = st.location,
 			tab = st.activeTab,
@@ -535,19 +536,21 @@ Ext.define('NextThought.view.content.View', {
 				console.error(e.stack || e.message || e);
 			}
 			finally {
-				me.fireEvent('finished-restore');
+				promise.fulfill();
 			}
 		}
 
 		function noCourse() {
 			console.warn('Dropping state for course that is not accessible.');
-			me.fireEvent('finished-restore');
+			promise.fulfill();
 			if (state.active === me.id) {
 				me.fireEvent('go-to-library');
 			}
 		}
 
 		me.resolveCourse(course).then(setupCourseUI, noCourse);
+
+		return promise;
 	},
 
 

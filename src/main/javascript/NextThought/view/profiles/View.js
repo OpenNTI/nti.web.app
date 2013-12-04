@@ -26,22 +26,24 @@ Ext.define('NextThought.view.profiles.View', {
 
 	restore: function(state) {
 		state = (state || {});
-		var user = (state.profile || {}).username,
+		var promise = new Promise(),
+			user = (state.profile || {}).username,
 			me = this;
 
 		if (!me.isActive() || (state.hasOwnProperty('active') && state.active !== this.id)) {
-			me.fireEvent('finished-restore');
-			return;
+			promise.fulfill();
+		} else {
+			console.debug('Setting user in profile:', user);
+			me.setUser(state.profile || {}, function(panel) {
+				var name = (panel && panel.displayName) || user;
+					name = (panel && panel.user && panel.user.get('displayName')) || name;
+				console.debug('fire finish');
+				me.setTitle('Profile: ' + name);
+				promise.fulfill();
+			});
 		}
 
-		console.debug('Setting user in profile:', user);
-		me.setUser(state.profile || {}, function(panel) {
-			var name = (panel && panel.displayName) || user;
-				name = (panel && panel.user && panel.user.get('displayName')) || name;
-			console.debug('fire finish');
-			me.setTitle('Profile: ' + name);
-			me.fireEvent('finished-restore');
-		});
+		return promise;
 	},
 
 

@@ -20,7 +20,9 @@ Ext.define('NextThought.view.forums.View', {
 
 
 	restore: function(state) {
-		this.fireEvent('restore-forum-state', state);
+		var promise = new Promise();
+		this.fireEvent('restore-forum-state', state, promise);
+		return promise;
 	},
 
 

@@ -50,6 +50,8 @@ Ext.define('NextThought.view.library.View', {
 
 
 	restore: function(state) {
-		this.fireEvent('finished-restore');
+		var promise = new Promise();
+		promise.fulfill();
+		return promise;
 	}
 });

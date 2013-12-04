@@ -183,7 +183,9 @@ Ext.define('NextThought.view.contacts.View', {
 
 
 	restore: function(state) {
-		this.fireEvent('finished-restore');
+		var promise = new Promise();
+		promise.fulfill();
+		return promise;
 
     //		var myState = state[this.getId()], tab;
     //		if (myState && myState.source) {

@@ -201,13 +201,13 @@ Ext.define('NextThought.controller.Forums', {
 	stateKeyPrecedence: ['board', 'forum', 'topic', 'comment'],
 
 
-	handleRestoreState: function(state, c) {
+	handleRestoreState: function(state, promise) {
 		console.log('Handle restore of state here', state);
 		this.popToLastKnownMatchingState(state);
 		this.pushKnownState(state);
 
-		if (c) {
-			c.fireEvent('finished-restore');
+		if (promise) {
+			promise.fulfill();
 		}
 		else {
 			//Ruh roh
@@ -216,15 +216,15 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	restoreState: function(s) {
-		var c = this.getForumViewContainer(),
-			state = s.forums || {},
+	restoreState: function(s, promise) {
+		var state = s.forums || {},
 			me = this;
 
 		function handle() {
-			me.handleRestoreState(state, c);
+			me.handleRestoreState(state, promise);
 		}
 
+		//TODO: convert this entire chain of events to promises...
 		//make sure loadRoot has finished
 		if (me.loadingRoot) {
 			me.on('root-loaded', handle, me, {single: true});

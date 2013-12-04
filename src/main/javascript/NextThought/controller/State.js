@@ -505,6 +505,12 @@ Ext.define('NextThought.controller.State', {
 			};
 		}
 
+		function fail(stateFrag) {
+			return function(reason) {
+				console.error('Restore state Failed because', reason, ', fragment:', stateFrag);
+			};
+		}
+
 		if (stateObject === PREVIOUS_STATE) {
 			replaceState = true;
 			stateObject = this.loadState();
@@ -533,8 +539,7 @@ Ext.define('NextThought.controller.State', {
 					try {
 						stateScoped = {active: stateObject.active};
 						this.currentState[key] = stateScoped[key] = stateObject[key];
-						c.on('finished-restore', fin(key, stateScoped), this, { single: true });
-						c.restore(stateScoped);
+						c.restore(stateScoped).then(fin(key, stateScoped), fail(stateScoped));
 					}
 					catch (e) {
 						console.error('Setting state: ', e, e.message, e.stack);
