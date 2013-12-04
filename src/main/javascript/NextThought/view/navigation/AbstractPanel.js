@@ -38,6 +38,7 @@ Ext.define('NextThought.view.navigation.AbstractPanel', {
 		Ext.callback(data.onClassExtended, this, arguments);
 	},
 
+
 	applyConfigs: function(name, config) {
 		if (!this.hasOwnProperty('items')) {
 			this.items = Ext.clone(this.items);
@@ -52,7 +53,8 @@ Ext.define('NextThought.view.navigation.AbstractPanel', {
 		Ext.apply(i, config);
 	},
 
-	constructor: function() {
+
+	initComponent: function() {
 		this.callParent(arguments);
 		this.navigation = this.items.first();
 		this.body = this.items.last();
