@@ -398,7 +398,7 @@ Ext.define('NextThought.view.content.View', {
 		}
 
 		this.locationTitle = pageInfo.getTitle('NextThought');
-		this.setTitle(this.getTitlePrefix() + this.locationTitle);
+		this.updateTitle();
 	},
 
 
@@ -505,12 +505,23 @@ Ext.define('NextThought.view.content.View', {
 	setActiveTab: function(tab) {
 		if (this.rendered) {
 			this.layout.setActiveItem(tab || 'course-book');
-			this.setTitle(this.getTitlePrefix() + this.locationTitle);
+			this.updateTitle();
 		} else {
 			this.on('afterrender', function() {
 				this.layout.setActiveItem(tab);
+				this.updateTitle();
 			}, this);
 		}
+	},
+
+
+	updateTitle: function() {
+		var tab = this.layout.getActiveItem();
+		if (!tab) {return;}
+		this.setTitle(this.getTitlePrefix() + tab.getCurrentTitle ?
+					  tab.getCurrentTitle() :
+					  this.locationTitle
+		);
 	},
 
 
