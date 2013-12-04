@@ -106,7 +106,7 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 			}
 
 			if (v.c && ParseUtils.isNTIID(v.i)) {
-				courses.getCourse(v.i).then(f, reject);
+				courses.getCourseInstance(v.i).then(f, reject);
 			} else {
 				title = Library.getTitle(v.i);
 				if (title && !title.get('isCourse')) { f(title); }

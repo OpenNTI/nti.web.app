@@ -56,7 +56,7 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 	},
 
 
-	getCourse: function(courseInstanceId) {
+	getCourseInstance: function(courseInstanceId) {
 		var promise = new Promise(),
 			me = this;
 
@@ -65,6 +65,7 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 				var instance = r.get('CourseInstance');
 				if (instance && instance.getId() === courseInstanceId) {
 					promise.fulfill(instance);
+					return false;//stop iteration
 				}
 			});
 
@@ -83,9 +84,9 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 			args = Ext.Array.clone(arguments);
 
 		this.onceLoaded().then(function() {
-			var instance = me.find.apply(me, args);
-			if (instance >= 0) {
-				promise.fulfill(me.getAt(instance));
+			var i = me.find.apply(me, args);
+			if (i >= 0) {
+				promise.fulfill(me.getAt(i));
 			} else {
 				promise.reject('Not found');
 			}
@@ -101,9 +102,9 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 			args = Ext.Array.clone(arguments);
 
 		this.onceLoaded().then(function() {
-			var instance = me.findBy.apply(me, args);
-			if (instance >= 0) {
-				promise.fulfill(me.getAt(instance));
+			var i = me.findBy.apply(me, args);
+			if (i >= 0) {
+				promise.fulfill(me.getAt(i));
 			} else {
 				promise.reject('Not found');
 			}

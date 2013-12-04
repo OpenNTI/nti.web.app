@@ -583,7 +583,7 @@ Ext.define('NextThought.view.content.View', {
 		var promise = new Promise();
 
 		if (courseInstanceId) {
-			promise = Ext.getStore('courseware.EnrolledCourses').getCourse(courseInstanceId);
+			promise = Ext.getStore('courseware.EnrolledCourses').getCourseInstance(courseInstanceId);
 		} else {
 			promise.fulfill(undefined);
 		}
