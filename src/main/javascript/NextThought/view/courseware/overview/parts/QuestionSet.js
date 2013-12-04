@@ -71,12 +71,18 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 		Ext.Ajax.request(req);
 	},
 
-	containerLoaded: function(q,s,r) {
+	containerLoaded: function(q, s, r) {
+		if (!this.rendered) {
+			this.on('afterrender', Ext.bind(this.containerLoaded, this, arguments), this, {single: true});
+			return;
+		}
+
 		var correct = NaN, b,
 			json = Ext.decode(r.responseText, true) || {};
 
 		json = (json.Items || [])[0];
     //		console.debug('Loaded:', r.status, r.responseText);
+
 
 		if (!json) {
 			b = this.down('button');
