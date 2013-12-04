@@ -73,6 +73,7 @@ Ext.define('NextThought.view.content.View', {
 		this.courseBook = this.down('#course-book');
 		this.courseDash = this.down('course-dashboard');
 		this.courseForum = this.down('course-forum');
+		this.courseProgress = this.down('course-assessment');
 		this.courseNav = this.down('course');
 		this.courseInfo = this.down('course-info');
 
@@ -429,6 +430,7 @@ Ext.define('NextThought.view.content.View', {
 			this.courseNav,
 			this.courseDash,
 			this.courseForum,
+			this.courseProgress,
 			this.courseInfo
 		], function(e) {
 			if (e.courseChanged) {

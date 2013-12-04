@@ -26,5 +26,10 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 	getCurrentTitle: function() {
 		return this.currentTitle || this.title;
+	},
+
+
+	courseChanged: function(instance) {
+		this.currentTitle = instance && (instance.asUIData().title + ' - ' + this.title);
 	}
 });
