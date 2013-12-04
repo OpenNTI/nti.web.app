@@ -21,5 +21,10 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 		this.callParent(arguments);
 		this.initCustomScrollOn('content');
 		this.navigation.setTitle(this.title);
+	},
+
+
+	getCurrentTitle: function() {
+		return this.currentTitle || this.title;
 	}
 });
