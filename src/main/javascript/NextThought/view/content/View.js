@@ -520,9 +520,9 @@ Ext.define('NextThought.view.content.View', {
 	updateTitle: function() {
 		var tab = this.layout.getActiveItem();
 		if (!tab) {return;}
-		this.setTitle(this.getTitlePrefix() + tab.getCurrentTitle ?
+		this.setTitle(this.getTitlePrefix() + (tab.getCurrentTitle ?
 					  tab.getCurrentTitle() :
-					  this.locationTitle
+					  this.locationTitle)
 		);
 	},
 
