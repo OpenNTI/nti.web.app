@@ -277,6 +277,63 @@
 			}
 		}
 	}
+
+	&.dark{
+		background-color: #292929;
+		box-shadow: -1px 0 0 0 #191919;
+
+		.row{
+			border-bottom-color: #222;
+
+			&.over:not(.x-item-selected){
+				background-color: #343434;
+				border-bottom-color: #222;
+				box-shadow: none;
+
+				.name{
+					color: $tertiary-grey;
+				}
+
+				.snippet{
+					color: #fff;
+				}
+
+				.footer{
+					color: $tertiary-grey;
+				}
+			}
+
+			&.x-item-selected{
+				box-shadow: none;
+				.name{
+					color: #E2F3FE;
+				}
+
+				.snippet{
+					color: #fff;
+				}
+
+				.footer{
+					color: #E2F3FE;
+				}
+			}
+
+			.name{
+				font-weight: 700 !important;
+				color: $secondary-grey;
+			}
+
+			.snippet{
+				font-weight: 600 !important;
+				color: $tertiary-grey;
+			}
+
+			.footer{
+				font-weight: 700 !important;
+				color: #bababa;
+			}
+		}
+	}
 }
 
 

@@ -490,17 +490,18 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 
 	showAnnotationView: function(store) {
-		var me = this;
+		var me = this, classList = 'presentation-note-slider annotation-view dark';
 		if (!this.annotationView) {
+			classList += (this.accountForScrollbars)? ' scroll-margin-right' : '';
 			this.annotationView = this.add({
 				xtype: 'annotation-view',
 				floating: true,
 				border: false,
-				width: 400,
+				width: 240,
 				shadow: false,
 				constrain: true,
 				renderTo: Ext.getBody(),
-				cls: 'presentation-note-slider annotation-view',
+				cls: classList,
 				title: 'Discussion',
 				iconCls: 'discus',
 				discussion: true,

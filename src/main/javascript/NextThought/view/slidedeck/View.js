@@ -42,7 +42,8 @@ Ext.define('NextThought.view.slidedeck.View', {
 			},
 			{
 				flex: 1,
-				xtype: 'slidedeck-transcript'
+				xtype: 'slidedeck-transcript',
+				accountForScrollbars: true
 			}
 		];
 

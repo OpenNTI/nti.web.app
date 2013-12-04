@@ -1389,14 +1389,12 @@ $experimental-support-for-svg: true;
 		@include animate(FadeIn);
 
 		border-width: 0px;
-		width: 400px;
+		width: 240px;
 		position: absolute !important;
-		top: 70px !important;
+		top: 77px !important;
 		bottom: 0 !important;
 		right: 0 !important;
 		left: auto !important;
-		box-shadow: 0 0 2px 0 rgba(0,0,0,0.2);
-		background-color: $panel-background;
 
 		& ~ .note-window {
 			position: absolute !important;
