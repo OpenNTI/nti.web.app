@@ -268,7 +268,7 @@ Ext.define('NextThought.view.profiles.outline.View', {
 	},
 
 
-	selectionChanged: function(sel,rec) {
+	selectionChanged: function(sel, rec) {
 		var d = (rec && rec.getData()) || {};
 
 		this.fireEvent('show-profile-view', d.mapping, d.type, d.id);

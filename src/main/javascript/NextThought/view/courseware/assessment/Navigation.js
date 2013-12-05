@@ -46,16 +46,17 @@ Ext.define('NextThought.view.courseware.assessment.Navigation', {
 			{name: 'mapping', type: 'string'}
 		],
 		data: [
-			{id: 'activity', label: 'Activity & Notifications', mapping: '', count: 6},
-			{id: 'assignments', label: 'Assignments', mapping: '' },
-			{id: 'grades', label: 'Grades and Performance', mapping: '' }
+			//{id: 'activity', label: 'Activity & Notifications', mapping: '', count: 6},
+			//{id: 'assignments', label: 'Assignments', mapping: '' },
+			//{id: 'grades', label: 'Grades and Performance', mapping: '' }
 		]
 	}),
 
 
-	//clear: function() {
-	//	this.bindStore('ext-empty-store');
-	//},
+	initComponent: function() {
+		this.callParent(arguments);
+		this.on('select', 'selectionChanged');
+	},
 
 
 	setTitle: function(title) {
@@ -68,5 +69,34 @@ Ext.define('NextThought.view.courseware.assessment.Navigation', {
 				title: title
 			});
 		}
-	}
+	},
+
+
+	addView: function(view) {
+		var id = view.xtype.split(/[-_\/\\\. ]/).last();
+		this.store.add({mapping: view.xtype, label: view.title, id: id});
+		//If a view wants to define sub-views or filters...
+		//if (view.getSubViewItems) {
+		//}
+	},
+
+
+	selectionChanged: function(sel, rec) {
+		var d = (rec && rec.getData()) || {};
+
+		this.fireEvent('show-view', d.mapping, d.type, d.id);
+	},
+
+
+	updateSelection: function(active, fromUser) {
+		var view = active.xtype || active,
+			i = this.store.findBy(function(r) {
+				return r.get('type') === 'view' && r.get('mapping') === view;
+			});
+
+		this.getSelectionModel().select(i, false, fromUser !== true);
+	},
+
+
+	removeNavigationItem: function(relatedComponent) {}
 });

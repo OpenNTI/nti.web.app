@@ -71,7 +71,7 @@ Ext.define('NextThought.view.profiles.Panel', {
 	},
 
 
-	forEachView: function(fn,scope) {
+	forEachView: function(fn, scope) {
 		this.body.items.each(fn, scope || this);
 	},
 

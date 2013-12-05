@@ -5,7 +5,8 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 	requires: [
 		'NextThought.view.courseware.assessment.Activity',
-		'NextThought.view.courseware.assessment.Navigation'
+		'NextThought.view.courseware.assessment.Navigation',
+		'NextThought.view.courseware.assessment.assignments.View'
 	],
 
 	mixins: {
@@ -20,18 +21,83 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 		cls: 'make-white',
 		layout: 'card',
 		items: [
-			{ xtype: 'course-assessment-activity', title: 'Activity & Notifications' }
+			{ xtype: 'course-assessment-activity', title: 'Activity & Notifications' },
+			{ xtype: 'course-assessment-assignments', title: 'Assignments' }
 		]
 	},
 
 
 	initComponent: function() {
-		this.callParent(arguments);
-		this.initCustomScrollOn('content');
-		this.navigation.setTitle(this.title);
+		var me = this;
+		me.callParent(arguments);
+		me.initCustomScrollOn('content');
+		me.navigation.setTitle(me.title);
+
+
+		function monitor(panel) {
+			me.navigation.addView(panel);
+			me.mon(panel, {
+				beforeactivate: 'onBeforeViewChanged',
+				activate: 'onViewChanged',
+				destroy: 'removeNavigationItem'
+			});
+		}
+
+		me.forEachView(monitor, this);
+		me.mon(me.navigation, {
+			'show-view': 'changeView'
+		});
 	},
 
 
 	courseChanged: function(instance) {
+	},
+
+
+	forEachView: function(fn, scope) {
+		this.body.items.each(fn, scope || this);
+	},
+
+
+	onBeforeDeactivate: function() {
+		return Ext.Array.every(this.body.items.items, function(item) {
+			return item.fireEvent('beforedeactivate');
+		});
+	},
+
+
+	onBeforeViewChanged: function() {},
+
+
+	onViewChanged: function(activeCmp) {
+		this.navigation.updateSelection(activeCmp);
+	},
+
+
+	removeNavigationItem: function(cmp) {
+		this.navigation.removeNavigationItem(cmp);
+	},
+
+
+	changeView: function(view, action, data) {
+
+		var //stateData = Ext.clone(this.getStateData()),
+			c = this.down(view);
+
+		if (!c) {
+			console.error('No view selected from query: ' + view);
+			return;
+		}
+
+		this.body.getLayout().setActiveItem(c);
+		if (c.performAction) {
+			c.performAction(action, data);
+		} else if (action !== 'view') {
+			console.warn(c.$className + ' does not implement performAction and was requested to ' + action + ' but it was dropped');
+		}
+
+		//stateData.activeTab = c.getStateData();
+		//console.debug('State Data: ', stateData, url);
+		//history.pushState({profile: Ext.clone(stateData)},this.ownerCt.title, url);
 	}
 });
