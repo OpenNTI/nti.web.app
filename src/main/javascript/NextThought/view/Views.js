@@ -201,7 +201,7 @@ Ext.define('NextThought.view.Views', {
 	onViewNotifiy: function(tabView, count) {
 		var tab = this.getTabFromView(tabView);
 		if (tab) {
-			tab.set({'data-badge': count});
+			tab.set({'data-badge': count || undefined});
 		}
 	},
 
