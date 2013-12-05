@@ -55,5 +55,45 @@
 	}
 
 
+	&.course-assessment-activity {
+		color: $primary-grey;
+		padding: 10px 30px;
+		.header {
+			font: normal 300 1.5em/2 $font;
+		}
+
+		.list {
+			position: relative;
+
+			.item {
+				cursor: pointer;
+				position: relative;
+				font: normal 400 0.9em/3 $font;
+
+				&.unread {
+					font-weight: 600;
+					&::before {
+						content: '';
+						background: $primary-blue;
+						position: absolute;
+						overflow: hidden;
+						border-radius: 10em;
+						width: 0.3em; height: 0.3em;
+						top: 1.3em; left: -1em;
+					}
+				}
+
+				time {
+					float: right;
+					color: $tertiary-grey;
+					font: normal 300 1em/3 $font;
+				}
+
+				.target {
+					color: $primary-blue;
+				}
+			}
+		}
+	}
 }
 
