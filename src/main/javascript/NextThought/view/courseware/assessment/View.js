@@ -13,7 +13,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 		customScroll: 'NextThought.mixins.CustomScroll'
 	},
 
-	notifications: 6,
+	notifications: 0,
 
 	navigation: { xtype: 'course-assessment-navigation', margin: '0 0 10 0', override: true },
 	body: {
