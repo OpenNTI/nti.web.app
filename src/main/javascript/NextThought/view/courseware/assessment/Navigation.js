@@ -73,8 +73,18 @@ Ext.define('NextThought.view.courseware.assessment.Navigation', {
 
 
 	addView: function(view) {
-		var id = view.xtype.split(/[-_\/\\\. ]/).last();
-		this.store.add({mapping: view.xtype, label: view.title, id: id});
+		var id = view.xtype.split(/[\-_\/\\\. ]/).last(),
+			r = this.store.add({mapping: view.xtype, label: view.title, id: id})[0];
+
+		//listen for notify events, and clean ourselves up when the view dies.
+		view.on('destroy', 'destroy',
+			this.mon(view, {
+				destroyable: true,
+				notify: function(c) {
+					r.set({'count': c});
+				}
+			}));
+
 		//If a view wants to define sub-views or filters...
 		//if (view.getSubViewItems) {
 		//}

@@ -39,7 +39,8 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 			me.mon(panel, {
 				beforeactivate: 'onBeforeViewChanged',
 				activate: 'onViewChanged',
-				destroy: 'removeNavigationItem'
+				destroy: 'removeNavigationItem',
+				notify: 'onSubViewNotify'
 			});
 		}
 
@@ -56,6 +57,17 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 	forEachView: function(fn, scope) {
 		this.body.items.each(fn, scope || this);
+	},
+
+
+	onSubViewNotify: function() {
+		var c = 0;
+		//aggregate all the views notification counts.
+		this.forEachView(function(v) {
+			c += (v.notifications || 0);
+		});
+		this.notifications = c;
+		this.fireEvent('notify', c);
 	},
 
 
