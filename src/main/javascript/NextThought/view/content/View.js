@@ -496,9 +496,14 @@ Ext.define('NextThought.view.content.View', {
 
 
 	getTitlePrefix: function() {
-		var prefix = this.getLayout().getActiveItem().title || '';
+		var prefix = this.getLayout().getActiveItem().title || '',
+			inst = this.currentCourse,
+			courseTitle = (inst && inst.asUIData().title);
+
 		if (!Ext.isEmpty(prefix)) {
 			prefix += ' - ';
+		} else if (!Ext.isEmpty(courseTitle)) {
+			prefix = courseTitle + ' - ';
 		}
 		return prefix;
 	},
@@ -520,16 +525,11 @@ Ext.define('NextThought.view.content.View', {
 	updateTitle: function() {
 		var tab = this.layout.getActiveItem(),
 			inst = this.currentCourse,
-			courseTitle,
+			courseTitle = (inst && inst.asUIData().title),
 			pageTitle = this.locationTitle,
-			subTitle;
+			subTitle = tab && (Ext.isEmpty(tab.title) ? pageTitle : courseTitle);
 
-		if (!tab) {return;}
-
-		courseTitle = (inst && inst.asUIData().title);
-		subTitle = Ext.isEmpty(tab.title) ? pageTitle : courseTitle;
-
-		this.setTitle(this.getTitlePrefix() + subTitle);
+		this.setTitle((this.getTitlePrefix() + subTitle) || 'NextThought');
 	},
 
 
