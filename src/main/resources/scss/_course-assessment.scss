@@ -85,6 +85,7 @@
 
 				time {
 					float: right;
+					width: 5em;//allow this to line up as if it were a 'left aligned column'.
 					color: $tertiary-grey;
 					font: normal 300 1em/3 $font;
 				}
