@@ -18,6 +18,8 @@
 
 		.header {
 			background: none;
+			box-shadow: inset 0 -1px 0 0 #e0e0e0;
+			color: $secondary-grey;
 		}
 
 		.outline-list {
@@ -95,6 +97,64 @@
 				}
 			}
 		}
+	}
+
+
+	&.assignment-filterbar {
+		box-shadow: inset 0 -1px 0 0 #f1f1f1;
+		background: #fbfbfb;
+		color: $secondary-grey;
+		z-index: 2;
+		position: relative;
+		font: normal 500 0.9em/3.5em $font;
+
+		input {
+			font: normal 500 1em/2 $font;
+			background: none;
+			border: 0;
+			width: 100%;
+		}
+
+		.third {
+			position: relative;
+			display: inline-block;
+			width: 33.3333333333%;
+			padding: 0 2em;
+			box-shadow: inset -1px 0 0 0 #f1f1f1;
+			&:last-of-type {
+				box-shadow: none;
+			}
+		}
+
+		.dropmenu {
+			cursor: pointer;
+			@include icon('arrow-course-dropdown-light', $top:1.5em, $left:auto, $right:1em);
+
+			&:hover {
+				color: $primary-grey;
+				&::after {
+					@include sprite($icons, 'arrow-course-dropdown');
+				}
+			}
+		}
+
+		.search {
+			padding-left: 3em;
+			@include icon('rhp-search', $top:1.1em, $left:1.5em);
+			&:hover {
+				color: $primary-grey;
+			}
+
+			input:invalid ~ .clear { display: none; }
+
+			.clear {
+				top: 1.2em; right: 1em;
+				position: absolute;
+				background: $icons no-repeat;
+				@include sprite($icons,'clear_line',$dimensions: true);
+			}
+		}
+
 	}
 }
 
