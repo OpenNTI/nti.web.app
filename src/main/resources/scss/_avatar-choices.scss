@@ -22,7 +22,7 @@
 				right: 25px;
 				top: 43px;
 				background: $icons no-repeat;
-				@include sprite($icons,'blue_check',$dimensions: true);
+				@include sprite($icons,'check_blue',$dimensions: true);
 			}
 		}
 
