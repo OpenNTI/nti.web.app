@@ -58,6 +58,7 @@
 
 
 	&.course-assessment-activity {
+		overflow: {x: hidden; y: auto;}
 		color: $primary-grey;
 		padding: 10px 30px;
 		.header {
@@ -219,7 +220,18 @@
 	}
 }
 
+.course-assessment-assignments {
+	.scrollzone {
+		overflow: {x: hidden; y: auto;}
+		position: absolute;//avoid ext's anchor layout
+		top: 0; left: 0; right: 0; bottom: 0;
+		margin-top: 50px;//toolbar
+	}
+}
+
 .x-container-course-assessment {
+
+
 	&.assignment-group {
 		padding: 30px 25px 60px;
 		box-shadow: 0 1px 0 0 #f1f1f1;

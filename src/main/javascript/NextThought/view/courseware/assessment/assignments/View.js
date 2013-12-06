@@ -6,11 +6,14 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 		'NextThought.view.courseware.assessment.assignments.Grouping',
 		'NextThought.view.courseware.assessment.assignments.List'
 	],
-
+	layout: 'auto',
+	cls: 'course-assessment-assignments',
 	items: [
 		{xtype: 'course-assessment-assignments-filterbar'},
-		{xtype: 'course-assessment-assignment-group', title: '1. About Geology', subTitle: 'August 19', items: [
-			{ xtype: 'course-assessment-assignment-list' }
+		{xtype: 'container', cls: 'scrollzone scrollable', items: [
+			{xtype: 'course-assessment-assignment-group', title: '1. About Geology', subTitle: 'August 19', items: [
+				{ xtype: 'course-assessment-assignment-list' }
+			]}
 		]}
 	]
 });
