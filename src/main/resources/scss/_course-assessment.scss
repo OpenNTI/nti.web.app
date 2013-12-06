@@ -148,6 +148,7 @@
 			input:invalid ~ .clear { display: none; }
 
 			.clear {
+				cursor: pointer;
 				top: 1.2em; right: 1em;
 				position: absolute;
 				background: $icons no-repeat;
