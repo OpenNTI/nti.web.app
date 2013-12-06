@@ -11,6 +11,8 @@ var Promise = (function() {
 				State: State,//handy ref
 				state: State.PENDING,
 
+				isResolved: function() { return this.state !== State.PENDING; },
+
 				changeState: function(state, value) {
 					// catch changing to same state (perhaps trying to change the value)
 					if (this.state === state) {
