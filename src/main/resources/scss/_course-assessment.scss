@@ -56,6 +56,13 @@
 		}
 	}
 
+	canvas& {
+		&.grade {
+			width: 224px;
+			height: 200px;
+		}
+	}
+
 
 	&.course-assessment-activity {
 		overflow: {x: hidden; y: auto;}
