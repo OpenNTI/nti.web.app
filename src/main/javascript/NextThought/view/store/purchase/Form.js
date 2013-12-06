@@ -211,7 +211,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 			input = Ext.getDom(input);
 			var fields = input.getAttribute('data-cardfields'),
 				name = input.getAttribute('name'),
-				val, formatter;
+				val;
 
 			if (fields) {
 				fields = fields.split(',');
@@ -257,25 +257,26 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 
 	pricePurchase: function() {
-		var desc = this.gatherPricingInfo(),
+		var me = this,
+			desc = this.gatherPricingInfo(),
 			sendingCoupon = Boolean(desc.Coupon);
 
-		if (this.lastPricingDesc
-			&& desc.Coupon === this.lastPricingDesc.Coupon
-			&& desc.Quantity === this.lastPricingDesc.Quantity) {
+		if (this.lastPricingDesc &&
+			desc.Coupon === this.lastPricingDesc.Coupon &&
+			desc.Quantity === this.lastPricingDesc.Quantity) {
 			return;
 		}
 
 
 		function unmask() {
-			var el = this.getEl();
+			var el = me.getEl();
 			if (el) {
 				el.unmask();
 			}
 		}
 
 		function onSuccess(pricing) {
-			unmask.call(this);
+			unmask();
 
 			this.couponEl.removeCls(['invalid', 'valid']);
 			if (sendingCoupon) {
@@ -287,7 +288,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		}
 
 		function onFailure() {
-			unmask.call(this);
+			unmask();
 			//What to actually do here, if we can't price we really can't let them purchase.
 			//maybe let it go and up the final pricing before submission works, then if
 			//that fails abort?
