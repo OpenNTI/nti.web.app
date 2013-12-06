@@ -46,8 +46,13 @@ var Promise = (function() {
 
 				then: function(onFulfilled, onRejected) {
 
-					var promise = Object.create(Promise),
+					var chain = onFulfilled && onFulfilled.then ? onFulfilled : null,
+						promise = chain || Object.create(Promise),
 						me = this;
+
+					if (chain) {
+						onFulfilled = undefined;//don't set it as a function in the cache
+					}
 
 					// initialize array
 					me.cache = me.cache || [];
