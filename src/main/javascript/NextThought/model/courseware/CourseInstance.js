@@ -32,6 +32,7 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 			url: me.getLink('CourseCatalogEntry'),
 			callback: function(rec) {
 				me.__courseCatalogEntry = rec;
+				me.afterEdit(['NTIID']);//let views know the record "changed".
 				if (rec) {
 					p.fulfill(rec);
 				} else {
