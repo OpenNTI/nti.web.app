@@ -5,9 +5,13 @@ Ext.define('NextThought.model.converters.Items', {
 	/* converters for models which reference other models*/
 	SINGLEITEM: {
 		type: 'singleItem',
-		convert: function(v) {
+		convert: function(v, r) {
 			if (v instanceof Object) {
-				return !v ? null : ParseUtils.parseItems([v])[0];
+				v = !v ? null : ParseUtils.parseItems([v])[0];
+				if (v) {
+					v.stores.push(r);//make store updates bubble up to this owner record.
+				}
+				return v;
 			}
 
 			if (v) { console.warn('unexpected value', v); }
@@ -19,13 +23,14 @@ Ext.define('NextThought.model.converters.Items', {
 
 	ARRAYITEM: {
 		type: 'arrayItem',
-		convert: function(v) {
+		convert: function(v, r) {
 			var result = null;
 			if (Ext.isArray(v)) {
 				result = ParseUtils.parseItems(v);
 				if (this.limit !== undefined && result.length > this.limit) {
 					console.warn('Limiting set of items to the (' + this.name + ') field\'s configured limit of: ' + this.limit + ', was: ' + result.length);
 					result = result.slice(0, this.limit);
+					result.forEach(function(a) {if (a) {a.stores.push(r);}});
 				}
 				return result;
 			}
@@ -39,7 +44,7 @@ Ext.define('NextThought.model.converters.Items', {
 
 	COLLECTIONITEM: {
 		type: 'collectionItem',
-		convert: function(v) {
+		convert: function(v, r) {
 			var values = [], key, result;
 			if (v instanceof Object) {
 				for (key in v) {
@@ -51,6 +56,7 @@ Ext.define('NextThought.model.converters.Items', {
 				if (this.limit !== undefined && result.length > this.limit) {
 					console.warn('Limiting set of items to the (' + this.name + ') field\'s configured limit of: ' + this.limit + ', was: ' + result.length);
 					result = result.slice(0, this.limit);
+					result.forEach(function(a) {if (a) {a.stores.push(r);}});
 				}
 				return result;
 			}

@@ -811,8 +811,22 @@ Ext.define('NextThought.model.Base', {
 
 
 	afterEdit: function(fnames) {
-		this.callParent(arguments);
-		Ext.each(fnames || [], this.onFieldChanged, this);
+		var me = this, updatedValue;
+		//are we getting called by a child record (see converters/Items.js)
+		if (fnames instanceof Ext.data.Model) {
+			updatedValue = fnames;
+			fnames = [];//just in case its not found
+			me.fields.each(function(f) {
+				var v = me.get(f.name);
+				if (v === fnames) {
+					fnames = [f.name];
+					return false;
+				}
+			});
+		}
+
+		me.callParent(arguments);
+		Ext.each(fnames || [], me.onFieldChanged, me);
 	},
 
 
