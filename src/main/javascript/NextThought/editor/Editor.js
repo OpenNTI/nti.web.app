@@ -9,10 +9,6 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		'NextThought.editor.embedvideo.Window'
 	],
 
-	mixins: {
-		placeholderFix: 'NextThought.view.form.fields.PlaceholderPolyfill'
-	},
-
 	enableShareControls: false,
 	enablePublishControls: false,
 	enableTextControls: true,
@@ -273,7 +269,6 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	afterRender: function() {
 		var aux, objectsControl;
 		this.callParent(arguments);
-		this.mixins.placeholderFix.constructor.call(this);
 		this.setupEditor();
 
 		this.mon(this.el.down('.action.cancel'), 'click', this.onCancel, this);
@@ -520,7 +515,6 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		me.titleEl = me.el.down('.title input');
 		if (me.titleEl) {
 			me.titleEl.set({tabIndex: tabTracker.next()});
-			me.renderPlaceholder(me.titleEl);
 			me.mon(me.titleEl, {
 				click: 'stop',
 				mousedown: 'stop',

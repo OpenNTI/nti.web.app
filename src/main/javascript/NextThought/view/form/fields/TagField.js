@@ -3,8 +3,7 @@ Ext.define('NextThought.view.form.fields.TagField', {
 	extend: 'Ext.Component',
 	alias: ['widget.tags', 'widget.tokens'],
 	mixins: {
-		field: 'Ext.form.field.Field',
-		placeholderFix: 'NextThought.view.form.fields.PlaceholderPolyfill'
+		field: 'Ext.form.field.Field'
 	},
 	cls: 'token-field',
 	ui: 'tokens',
@@ -81,7 +80,6 @@ Ext.define('NextThought.view.form.fields.TagField', {
 		});
 
 		this.addInputListeners();
-		this.renderPlaceholder(this.inputEl);
 	},
 
 

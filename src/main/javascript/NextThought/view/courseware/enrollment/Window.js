@@ -2,10 +2,6 @@ Ext.define('NextThought.view.courseware.enrollment.Window', {
 	extend: 'NextThought.view.window.Window',
 	alias: 'widget.enrollment-window',
 
-	mixins: {
-		placeholderFix: 'NextThought.view.form.fields.PlaceholderPolyfill'
-	},
-
 	requires: [
 		'NextThought.layout.component.Natural',
 		'NextThought.view.courseware.enrollment.DetailView'
@@ -120,8 +116,6 @@ Ext.define('NextThought.view.courseware.enrollment.Window', {
 		me.getEl().select('.titlebar .tab').each(function(e) {
 			me.mon(e, 'click', 'onTabClicked');
 		});
-
-		me.renderPlaceholder(me.activationCodeEl);
 
 		me.mon(me.checkboxBoxEl, 'click', 'onCheckboxClicked', me);
 
