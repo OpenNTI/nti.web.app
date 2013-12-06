@@ -37,7 +37,13 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 		this.callParent(arguments);
 		this.on({
 			scope: this,
-			single: true,
+			beforeload: function() {
+				var old = p;
+				p = me.promiseToLoaded = new Promise();
+				if (old && !old.isResolved()) {
+					p.then(old);
+				}
+			},
 			load: function() {
 				Promise.pool(Ext.Array.map(
 						me.getRange(),
