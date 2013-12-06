@@ -159,6 +159,64 @@
 
 	}
 
+	&.assignment-list {
+		.item {
+			position: relative;
+			overflow: hidden;
+			padding: 10px 0 10px 60px;
+			box-shadow: 0 1px 0 0 #f7f7f7;
+
+			&:first-of-type {
+				box-shadow: 0 -1px 0 0 #f2f2f2, 0 1px 0 0 #f7f7f7;
+			}
+
+			@include icon('check_gray', $top: 22px, $left: 25px);
+
+			&.over, &.selected {
+				background: #fafafa;
+			}
+
+			&.completed {
+				.status time.completed { display: block; }
+				.status time.due { display: none; }
+
+				&::after {
+					@include sprite($icons,'check_green');
+				}
+
+			}
+
+			.name {
+				font: normal 500 0.9em/2 $font;
+				color: $primary-grey;
+				margin-right: 8em;
+			}
+
+			.status {
+				text-transform: uppercase;
+				font: normal 600 0.6em/1 $font;
+				color: $tertiary-grey;
+				&.due {
+					color: $primary-red;
+				}
+
+				.completed { display: none; }
+				.due { display: block; }
+			}
+
+			.score {
+				white-space: nowrap;
+				font: normal 400 0.8em/3 $font;
+				color: $tertiary-grey;
+				width: 8em;
+				float: right;
+
+				.correct {
+					color: $primary-green;
+				}
+			}
+		}
+	}
 }
 
 .x-container-course-assessment {
@@ -166,14 +224,17 @@
 		padding: 30px 25px 60px;
 		box-shadow: 0 1px 0 0 #f1f1f1;
 
+		& > .body {
+			margin-top: 1em;
+		}
 
-		.subtitle {
+		& > .subtitle {
 			font: normal 600 0.6em/1 $font;
 			color: $tertiary-grey;
 			text-transform: uppercase;
 		}
 
-		.title {
+		& > .title {
 			color: $primary-grey;
 			font: normal 300 1.5em/1.5 $font;
 		}

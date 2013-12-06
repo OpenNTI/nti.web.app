@@ -3,11 +3,14 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 	alias: 'widget.course-assessment-assignments',
 	requires: [
 		'NextThought.view.courseware.assessment.assignments.FilterBar',
-		'NextThought.view.courseware.assessment.assignments.Grouping'
+		'NextThought.view.courseware.assessment.assignments.Grouping',
+		'NextThought.view.courseware.assessment.assignments.List'
 	],
 
 	items: [
 		{xtype: 'course-assessment-assignments-filterbar'},
-		{xtype: 'course-assessment-assignment-group', title: '1. About Geology', subTitle: 'August 19'}
+		{xtype: 'course-assessment-assignment-group', title: '1. About Geology', subTitle: 'August 19', items: [
+			{ xtype: 'course-assessment-assignment-list' }
+		]}
 	]
 });
