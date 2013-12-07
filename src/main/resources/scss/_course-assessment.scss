@@ -5,6 +5,11 @@ canvas.x-component-course-assessment {
 		width: 224px;
 		height: 200px;
 	}
+
+	&.performance {
+		width: 100%;//TODO: figure out container width
+		height: 200px;
+	}
 }
 
 .x-component-course-assessment {
