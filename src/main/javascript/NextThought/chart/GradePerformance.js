@@ -17,8 +17,37 @@ Ext.define('NextThought.chart.GradePerformance', {
 		store: null
 	},
 
+	testAnimationProperties: function() {
+		if (this.hasOwnProperty('canAnimate')) {
+			return this.canAnimate;
+		}
+
+		var ctx = document.createElement('canvas').getContext('2d'),
+			hasDashOffset = ctx.hasOwnProperty('lineDashOffset') || ctx.hasOwnProperty('mozDashOffset'),
+			hasSetLineDash = !!ctx.setLineDash;
+
+		return hasDashOffset && hasSetLineDash;
+	},
+
+
+	startAnimation: function() {
+		this.canAnimate = this.testAnimationProperties();
+		if (this.canAnimate) {
+			this.animate.start();
+		}
+	},
+
+
+	stopAnimation: function() {
+		if (this.animate) {
+			this.animate.stop();
+		}
+	},
+
+
 	afterRender: function() {
 		this.callParent(arguments);
+		this.dashOffset = 0;
 		this.canvas = Ext.getDom(this.el);
 		this.viewWidth = this.el.getWidth();
 		this.viewHeight = this.el.getHeight();
@@ -27,24 +56,56 @@ Ext.define('NextThought.chart.GradePerformance', {
 		this.context = this.canvas.getContext('2d');
 		this.context.imageSmoothingEnabled = true;
 
+		this.animate = Ext.TaskManager.newTask({
+			run: this.redraw,
+			interval: 50,
+			scope: this
+		});
+
+
 		if (!this.context.setLineDash) {
-			this.context.setLineDash = function() {};
+			this.context.setLineDash = function(a) {};
 		}
 
+		this.redraw();
+
+		this.startAnimation();
+
+		this.on({
+			destroy: 'stopAnimation',
+			deactivate: 'stopAnimation',
+			hide: 'stopAnimation',
+			activate: 'startAnimation',
+			show: 'startAnimation'
+		});
+	},
+
+
+	redraw: function() {
+		var ctx = this.context;
+		ctx.canvas.width = ctx.canvas.width;//i know, silly, but this resets the canvas to redraw.
 		this.drawAverages();
 		this.drawGrades();
 	},
 
 
 	drawAverages: function() {
+		this.dashOffset--;
 		var ctx = this.context;
 		ctx.save();
 		try {
+			ctx.lineDashOffset = this.dashOffset;
+			ctx.mozDashOffset = this.dashOffset;
 			ctx.setTransform(1, 0, 0, 1, 0, 0);
 			ctx.beginPath();
 			ctx.setLineDash([10, 4]);
 			ctx.strokeStyle = this.getAverageColor();
 			ctx.lineWidth = this.getAverageWidth();
+
+			ctx.shadowColor = '#ccc';
+			ctx.shadowBlur = 5;
+			ctx.shadowOffsetX = 1;
+			ctx.shadowOffsetY = 1;
 			this.drawLine('AverageGrade');
 		} finally {
 			ctx.restore();
@@ -60,6 +121,11 @@ Ext.define('NextThought.chart.GradePerformance', {
 			ctx.beginPath();
 			ctx.strokeStyle = this.getGradeColor();
 			ctx.lineWidth = this.getGradeWidth();
+
+			ctx.shadowColor = '#666';
+			ctx.shadowBlur = 5;
+			ctx.shadowOffsetX = 1;
+			ctx.shadowOffsetY = 2;
 			this.drawLine('Grade');
 		} finally {
 			ctx.restore();

@@ -80,6 +80,12 @@ Ext.define('NextThought.chart.Grade', {
 			ctx.lineWidth = stroke;
 			ctx.fillStyle = this.getColor();
 			ctx.strokeStyle = this.getColor();
+
+			ctx.shadowColor = '#ddd';
+			ctx.shadowBlur = 5;
+			ctx.shadowOffsetX = 1;
+			ctx.shadowOffsetY = 1;
+
 			ctx.stroke();
 
 			ctx.lineWidth = 0;
@@ -118,6 +124,11 @@ Ext.define('NextThought.chart.Grade', {
 			ctx.beginPath();
 			ctx.arc(0, 0, radius, 0, 2 * Math.PI, false);
 
+			ctx.shadowColor = '#666';
+			ctx.shadowBlur = 5;
+			ctx.shadowOffsetX = 1;
+			ctx.shadowOffsetY = 1;
+
 			ctx.fillStyle = this.getColor();
 			ctx.fill();
 
@@ -126,6 +137,10 @@ Ext.define('NextThought.chart.Grade', {
 
 			this.setFont(font);
 			textbox = ctx.measureText(grade);
+
+			ctx.shadowOffsetX = -1;
+			ctx.shadowOffsetY = -1;
+
 			ctx.fillText(grade, Math.floor(-textbox.width / 2), font.size / 3);
 		} finally {
 			ctx.restore();
