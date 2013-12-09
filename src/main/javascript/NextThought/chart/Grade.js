@@ -1,7 +1,7 @@
 //See Working preview at http://jsfiddle.net/jsg2021/7gaU2/
 Ext.define('NextThought.chart.Grade', {
 	extend: 'Ext.Component',
-	alias: 'widget.grade',
+	alias: 'widget.grade-chart',
 	ui: 'course-assessment',
 	cls: 'grade',
 
@@ -24,6 +24,21 @@ Ext.define('NextThought.chart.Grade', {
 		this.context = this.canvas.getContext('2d');
 		this.context.imageSmoothingEnabled = true;
 
+		this.redraw();
+	},
+
+
+	updateGrade: function() {
+		try {
+			this.redraw();
+		} catch (e) {
+			console.warn(e.stack || e.message || e);
+		}
+	},
+
+
+	redraw: function() {
+		if (!this.context) {return;}
 		this.drawCircle();
 		this.drawDot();
 	},

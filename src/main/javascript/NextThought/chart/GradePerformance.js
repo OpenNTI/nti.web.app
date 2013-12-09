@@ -1,7 +1,7 @@
 //See http://jsfiddle.net/jsg2021/6yfw8/ for a demo
 Ext.define('NextThought.chart.GradePerformance', {
 	extend: 'Ext.Component',
-	alias: 'widget.grade-performance',
+	alias: 'widget.grade-performance-chart',
 	ui: 'course-assessment',
 	cls: 'performance',
 
@@ -32,15 +32,15 @@ Ext.define('NextThought.chart.GradePerformance', {
 
 	startAnimation: function() {
 		this.canAnimate = this.testAnimationProperties();
-		if (this.canAnimate) {
-			this.animate.start();
+		if (this.canAnimate && this.rendered) {
+			this.animateTask.start();//safe to call repeatedly (will noop if already started)
 		}
 	},
 
 
 	stopAnimation: function() {
-		if (this.animate) {
-			this.animate.stop();
+		if (this.animateTask) {
+			this.animateTask.stop();
 		}
 	},
 
@@ -56,7 +56,7 @@ Ext.define('NextThought.chart.GradePerformance', {
 		this.context = this.canvas.getContext('2d');
 		this.context.imageSmoothingEnabled = true;
 
-		this.animate = Ext.TaskManager.newTask({
+		this.animateTask = Ext.TaskManager.newTask({
 			run: this.redraw,
 			interval: 50,
 			scope: this
@@ -67,9 +67,7 @@ Ext.define('NextThought.chart.GradePerformance', {
 			this.context.setLineDash = function(a) {};
 		}
 
-		this.redraw();
-
-		this.startAnimation();
+		this.setStore(this.store);
 
 		this.on({
 			destroy: 'stopAnimation',
@@ -81,8 +79,30 @@ Ext.define('NextThought.chart.GradePerformance', {
 	},
 
 
+
+	applyStore: function(store) {
+		Ext.destroy(this.storeListeners);
+		delete this.storeListeners;
+		if (store) {
+			this.storeListeners = this.mon(store, {
+				destroyable: true,
+				datachanged: 'redraw'
+			});
+		}
+		try {
+			this.redraw();
+			this.startAnimation();
+		} catch (e) {
+			console.warn(e.stack || e.message || e);
+		}
+		return store;
+	},
+
+
 	redraw: function() {
 		var ctx = this.context;
+		if (!ctx) {return;}
+
 		ctx.canvas.width = ctx.canvas.width;//i know, silly, but this resets the canvas to redraw.
 		this.drawAverages();
 		this.drawGrades();
@@ -134,6 +154,12 @@ Ext.define('NextThought.chart.GradePerformance', {
 
 
 	drawLine: function(property) {
+		if (!this.store || !this.store.getCount()) {
+			this.stopAnimation();
+			console.warn('No data for chart:', this.id);
+			return;
+		}
+
 		var pointDistance = (this.canvas.width / (this.store.getCount() - 1)),
 			h = this.canvas.height,
 			currentX = 0,

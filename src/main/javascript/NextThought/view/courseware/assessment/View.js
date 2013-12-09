@@ -6,6 +6,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 	requires: [
 		'NextThought.view.courseware.assessment.Activity',
 		'NextThought.view.courseware.assessment.Navigation',
+		'NextThought.view.courseware.assessment.Performance',
 		'NextThought.view.courseware.assessment.assignments.View'
 	],
 
@@ -19,11 +20,12 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 	body: {
 		xtype: 'container',
 		cls: 'make-white',
-		layout: 'card',
+		layout: { type: 'card', deferredRender: true },
 		activeItem: 1,
 		items: [
 			{ xtype: 'course-assessment-activity', title: 'Activity & Notifications' },
-			{ xtype: 'course-assessment-assignments', title: 'Assignments' }
+			{ xtype: 'course-assessment-assignments', title: 'Assignments' },
+			{ xtype: 'course-assessment-performance', title: 'Grades & Performance' }
 		]
 	},
 

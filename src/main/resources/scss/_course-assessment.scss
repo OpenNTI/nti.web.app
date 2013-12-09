@@ -7,7 +7,7 @@ canvas.x-component-course-assessment {
 	}
 
 	&.performance {
-		width: 100%;//TODO: figure out container width
+		//width: 100%;
 		height: 200px;
 	}
 }
@@ -262,5 +262,23 @@ canvas.x-component-course-assessment {
 			font: normal 300 1.5em/1.5 $font;
 		}
 	}
+
+	&.course-performance {
+		padding-top: 200px;
+	}
 }
 
+.course-performance-header {
+	position: absolute;
+	top: 0; left: 0; width: 769px;
+	background: #fbfbfb;
+	box-shadow: 0 1px 0 0 #e0e0e0, 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
+	line-height: 0;
+	z-index: 2;
+	clip: rect(0,auto,215px,0);
+
+	.grade {float: left; box-shadow: 1px 0 0 0 #eaeaea, 2px 0 0 0 #fff; }
+	.performance {
+		width: 545px;
+	}
+}
