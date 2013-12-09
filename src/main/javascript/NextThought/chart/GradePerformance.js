@@ -15,6 +15,8 @@ Ext.define('NextThought.chart.GradePerformance', {
 		gradeColor: '#8eb737',
 		gradeWidth: 4,
 		store: null,
+		topMargin: 20,
+		bottomMargin: 10,
 		pixelDensity: 2
 	},
 
@@ -162,9 +164,12 @@ Ext.define('NextThought.chart.GradePerformance', {
 		}
 
 		var pointDistance = (this.canvas.width / (this.store.getCount() - 1)),
-			h = this.canvas.height,
+			t = this.getTopMargin() * this.getPixelDensity(),
+			h = this.canvas.height - (t + (this.getBottomMargin() * this.getPixelDensity())),
 			currentX = 0,
 			ctx = this.context;
+
+		ctx.translate(0, t);
 
 		this.store.each(function(rec, x) {
 			var y = (rec.get(property) / 100) * h;
