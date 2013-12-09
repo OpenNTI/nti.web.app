@@ -51,18 +51,38 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 		me.mon(me.navigation, {
 			'show-view': 'changeView'
 		});
+
+		this.activity = this.down('course-assessment-activity');
+		this.assignments = this.down('course-assessment-assignments');
+		this.performance = this.down('course-assessment-performance');
 	},
 
 
 	courseChanged: function(instance) {
+		var me = this;
+		me.instanceId = instance.getId();
 
-		var e = instance.getEnrollment();
+		function isSync() {
+			return (me.instanceId === instance.getId());
+		}
 
-		e.then(function(e) {
+		instance.getEnrollment().then(function(e) {
+			if (!isSync()) { return; }
 
-			Ext.Ajax.request({url: e.getLink('AssignmentHistory')});
-			Ext.Ajax.request({url: e.getLink('AssignmentsByOutlineNode')});
-			Ext.Ajax.request({url: e.getLink('Grades')});
+
+			//Ext.Ajax.request({url: e.getLink('AssignmentHistory')});
+			//Ext.Ajax.request({url: e.getLink('Grades')});
+
+			Service.request(e.getLink('AssignmentsByOutlineNode'))
+					.done(function(txt) {
+						if (!isSync()) { return; }
+						me.assignments.setAssignmentsDataRaw(Ext.decode(txt, true));
+					})
+					.fail(function(reason) {
+						console.error(reason);
+						if (!isSync()) { return; }
+						me.assignments.clearAssignmentsData();
+					});
 		});
 
 	},

@@ -15,5 +15,24 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 				{ xtype: 'course-assessment-assignment-list' }
 			]}
 		]}
-	]
+	],
+
+
+	clearAssignmentsData: function() {},
+
+
+	setAssignmentsDataRaw: function(data) {
+		var ntiid;
+		if (!data) {
+			console.error('No data??');
+			return;
+		}
+		delete data.href;
+
+		for (ntiid in data) {
+			if (data.hasOwnProperty(ntiid)) {
+				console.debug(data[ntiid]);
+			}
+		}
+	}
 });
