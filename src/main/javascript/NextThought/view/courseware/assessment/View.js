@@ -55,6 +55,16 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 
 	courseChanged: function(instance) {
+
+		var e = instance.getEnrollment();
+
+		e.then(function(e) {
+
+			Ext.Ajax.request({url: e.getLink('AssignmentHistory')});
+			Ext.Ajax.request({url: e.getLink('AssignmentsByOutlineNode')});
+			Ext.Ajax.request({url: e.getLink('Grades')});
+		});
+
 	},
 
 

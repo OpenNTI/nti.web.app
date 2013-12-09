@@ -75,6 +75,28 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 	},
 
 
+	getEnrollment: function() {
+		var p = new Promise(),
+			id = this.getId();
+
+		this.stores.forEach(function(o) {
+			if (o.isModel) {
+				p.fulfill(o);
+				return false;
+			}
+		});
+
+		if (!p.isResolved()) {
+			return Ext.getStore('courseware.EnrolledCourses').findCourseBy(function(r) {
+				var i = r && r.get('CourseInstance');
+				return i && i.getId() === id;
+			});
+		}
+
+		return p;
+	},
+
+
 	fireNavigationEvent: function(eventSource) {
 		eventSource.fireEvent('course-selected', this);
 	}
