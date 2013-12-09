@@ -1,5 +1,6 @@
 Ext.define('NextThought.controller.Store', function(){
 
+	//<editor-fold desc="PurchaseHelper">
 	/**
 	 * A "private" utility class to start a purchase and poll for it's completion.
 	 * It should be created with a purchaseRequest, a token object, and a delegate object
@@ -178,6 +179,7 @@ Ext.define('NextThought.controller.Store', function(){
 			}
 		}
 	});
+	//</editor-fold>
 
 
 	return {
