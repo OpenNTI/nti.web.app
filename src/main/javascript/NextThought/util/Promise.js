@@ -72,6 +72,10 @@ var Promise = (function() {
 				},
 
 
+				done: function(fn) { return this.then(fn); },
+				fail: function(fn) { return this.then(undefined, fn); },
+
+
 				resolve: function() {
 					var obj, fn, value, me = this;
 					// check if pending
