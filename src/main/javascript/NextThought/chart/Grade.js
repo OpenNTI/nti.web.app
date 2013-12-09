@@ -39,6 +39,7 @@ Ext.define('NextThought.chart.Grade', {
 
 	redraw: function() {
 		if (!this.context) {return;}
+		this.context.canvas.width += 0; //set the canvas dirty and make it clear on next draw.
 		this.drawCircle();
 		this.drawDot();
 	},
@@ -156,7 +157,7 @@ Ext.define('NextThought.chart.Grade', {
 			ctx.shadowOffsetX = -1;
 			ctx.shadowOffsetY = -1;
 
-			ctx.fillText(grade, Math.floor(-textbox.width / 2), font.size / 3);
+			ctx.fillText(grade, Math.floor(-textbox.width / 2) + 2, font.size / 3);
 		} finally {
 			ctx.restore();
 		}

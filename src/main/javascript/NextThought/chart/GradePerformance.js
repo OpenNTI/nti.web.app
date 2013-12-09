@@ -103,7 +103,7 @@ Ext.define('NextThought.chart.GradePerformance', {
 		var ctx = this.context;
 		if (!ctx) {return;}
 
-		ctx.canvas.width = ctx.canvas.width;//i know, silly, but this resets the canvas to redraw.
+		ctx.canvas.width += 0; //set the canvas dirty and make it clear on next draw.
 		this.drawAverages();
 		this.drawGrades();
 	},
