@@ -7,6 +7,34 @@ Ext.define('NextThought.model.Service', {
 		{ name: 'CapabilityList', type: 'auto'}
 	],
 
+
+	request: function(urlOrConfig) {
+		var p = new Promise(),
+			cfg = {};
+
+		function resolve(q, s, r) {
+			var text = r.responseText;
+			if (!s) {
+				p.reject(r.status + ': ' + text);
+				return;
+			}
+
+			p.fulfill(text);
+		}
+
+		if (Ext.isString(urlOrConfig)) {
+			Ext.apply(cfg, {url: urlOrConfig});
+		} else {
+			Ext.apply(cfg, urlOrConfig);
+		}
+
+		cfg.callback = Ext.Function.createSequence(resolve, cfg.callback, null);
+
+		Ext.Ajax.request(cfg);
+		return p;
+	},
+
+
 	getUserSearchURL: function(username) {
 		var w = this.getWorkspace('Global') || {},
 			l = this.getLinkFrom(w.Links || [], Globals.USER_SEARCH_REL);
@@ -393,35 +421,35 @@ Ext.define('NextThought.model.Service', {
 		);
 	},
 
-	getObjects: function(ntiids, success, failure, scope, safe){
-		if(!Ext.isArray(ntiids)){
+	getObjects: function(ntiids, success, failure, scope, safe) {
+		if (!Ext.isArray(ntiids)) {
 			ntiids = [ntiids];
 		}
 
 		var results = {}, me = this, finishedCount = 0;
 
-		function finish(){
+		function finish() {
 			//get the results in the order they came in
-			var resultArray = Ext.Array.map(ntiids, function(n){
+			var resultArray = Ext.Array.map(ntiids, function(n) {
 				return results[n];
 			});
-			
+
 			Ext.callback(success, scope, [resultArray]);
 		}
 
-		function maybeFinish(name, rec){
+		function maybeFinish(name, rec) {
 			results[name] = rec;
 			finishedCount++;
 
-			if(finishedCount === ntiids.length){
+			if (finishedCount === ntiids.length) {
 				finish();
 			}
 		}
 
-		Ext.each(ntiids, function(n){
-			me.getObject(n, function(u){
+		Ext.each(ntiids, function(n) {
+			me.getObject(n, function(u) {
 				maybeFinish(n, u);
-			}, function(){
+			}, function() {
 				maybeFinish(n, null);
 			}, scope, safe);
 		});

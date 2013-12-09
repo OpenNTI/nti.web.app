@@ -413,7 +413,7 @@ Ext.define('NextThought.controller.Session', {
 							Ext.Error.raise('bad service doc');
 						}
 
-						$AppConfig.service = sDoc;
+						window.Service = $AppConfig.service = sDoc;
 						//If we're already logged in, then just call the success callback.
 						if (!Ext.isEmpty($AppConfig.userObject)) {
 							Ext.callback(successFn, null, arguments);
