@@ -35,6 +35,9 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 			parentContainerEl[data.targetEl.up('.x-reader-pane') ? 'addCls' : 'removeCls']('reader-in-view');
 			parentContainerEl[data.targetEl.is('.course-forum') ? 'addCls' : 'removeCls']('forum-in-view');//really needs to be in callback
 
+			//make sure the parent container doesn't have this class unless it needs it
+			parentContainerEl.removeCls('has-alt-tabbar');
+
 			//If there isn't enough scrolling room to cause the alt-tabbar don't set the margins
 			//to keep the container from only going part of the way up and stopping
 			if (shouldScroll) {
