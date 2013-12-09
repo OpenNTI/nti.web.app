@@ -122,10 +122,10 @@ Ext.define('NextThought.chart.GradePerformance', {
 			ctx.strokeStyle = this.getAverageColor();
 			ctx.lineWidth = this.getAverageWidth();
 
-			ctx.shadowColor = '#ccc';
-			ctx.shadowBlur = 5;
-			ctx.shadowOffsetX = 1;
-			ctx.shadowOffsetY = 1;
+			//ctx.shadowColor = '#ccc';
+			//ctx.shadowBlur = 5;
+			//ctx.shadowOffsetX = 1;
+			//ctx.shadowOffsetY = 1;
 			this.drawLine('AverageGrade');
 		} finally {
 			ctx.restore();
@@ -142,10 +142,10 @@ Ext.define('NextThought.chart.GradePerformance', {
 			ctx.strokeStyle = this.getGradeColor();
 			ctx.lineWidth = this.getGradeWidth();
 
-			ctx.shadowColor = '#666';
-			ctx.shadowBlur = 5;
-			ctx.shadowOffsetX = 1;
-			ctx.shadowOffsetY = 2;
+			//ctx.shadowColor = '#666';
+			//ctx.shadowBlur = 5;
+			//ctx.shadowOffsetX = 1;
+			//ctx.shadowOffsetY = 2;
 			this.drawLine('Grade');
 		} finally {
 			ctx.restore();
