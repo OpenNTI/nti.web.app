@@ -333,7 +333,7 @@ Ext.define('NextThought.model.Service', {
 					destroyable: true,
 					beforerequest: function(connection, options) {
 						var method = options.method,
-							url = options.url.replace(/\/\+\+fields\+\+sharingPreference$/, '');
+							url = options.url && options.url.replace(/\/\+\+fields\+\+sharingPreference$/, '');
 
 						if (method !== 'GET' && cache[url]) {
 							console.debug('Invalidate cache at url' + url);
