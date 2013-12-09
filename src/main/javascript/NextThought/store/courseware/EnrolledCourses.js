@@ -44,7 +44,11 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 					p.then(old);
 				}
 			},
-			load: function() {
+			load: function(me, records, success) {
+				if (!success) {
+					p.reject('Store Failed to load');
+				}
+
 				Promise.pool(Ext.Array.map(
 						me.getRange(),
 						function(r) {
