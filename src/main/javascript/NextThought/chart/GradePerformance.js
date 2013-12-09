@@ -15,7 +15,7 @@ Ext.define('NextThought.chart.GradePerformance', {
 		gradeColor: '#40b450',
 		gradeWidth: 4,
 		store: null,
-		topMargin: 20,
+		topMargin: 30,
 		bottomMargin: 10,
 		pixelDensity: 2
 	},

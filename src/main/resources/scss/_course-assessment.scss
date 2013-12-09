@@ -1,6 +1,15 @@
 
 
 canvas.x-component-course-assessment {
+	& + .label {
+		position: absolute;
+		top: 14px;
+		left: 30px;
+		font: normal 700 0.6em/1 $font;
+		color: $tertiary-grey;
+		text-transform: uppercase;
+	}
+
 	&.grade {
 		width: 224px;
 		height: 200px;
@@ -9,6 +18,19 @@ canvas.x-component-course-assessment {
 	&.performance {
 		//width: 100%;
 		height: 200px;
+
+		& + .label {
+			left: 250px;
+
+			.you {
+				color: #40b450;
+			}
+
+			span + span::before {
+				content: '\00B7';
+				margin: 0.5em;
+			}
+		}
 	}
 }
 
@@ -244,7 +266,7 @@ canvas.x-component-course-assessment {
 
 
 	&.assignment-group {
-		padding: 30px 25px 60px;
+		padding: 30px 30px 60px;
 		box-shadow: 0 1px 0 0 #f1f1f1;
 
 		& > .body {

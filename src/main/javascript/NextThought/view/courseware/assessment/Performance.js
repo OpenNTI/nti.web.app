@@ -17,7 +17,14 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 			layout: 'auto',
 			items: [
 				{ xtype: 'grade-chart' },
-				{ xtype: 'grade-performance-chart' }
+				{ xtype: 'box', cls: 'label', html: 'Cumulative Grade' },
+				{ xtype: 'grade-performance-chart' },
+				{ xtype: 'box', cls: 'label', autoEl: {
+					cn: [
+						{ tag: 'span', cls: 'you', html: 'You'},
+						{ tag: 'span', cls: 'avg', html: 'Class AVG'}
+					]
+				} }
 			]
 		},
 		{xtype: 'course-assessment-assignment-group', title: 'All Grades', items: [
