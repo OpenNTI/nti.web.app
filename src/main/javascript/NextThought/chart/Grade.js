@@ -11,7 +11,8 @@ Ext.define('NextThought.chart.Grade', {
 
 	config: {
 		color: '#8eb737',
-		grade: 90
+		grade: 90,
+		pixelDensity: 2
 	},
 
 	afterRender: function() {
@@ -19,8 +20,8 @@ Ext.define('NextThought.chart.Grade', {
 		this.canvas = Ext.getDom(this.el);
 		this.viewWidth = this.el.getWidth();
 		this.viewHeight = this.el.getHeight();
-		this.canvas.width = this.viewWidth * 2;
-		this.canvas.height = this.viewHeight * 2;
+		this.canvas.width = this.viewWidth * this.getPixelDensity();
+		this.canvas.height = this.viewHeight * this.getPixelDensity();
 		this.context = this.canvas.getContext('2d');
 		this.context.imageSmoothingEnabled = true;
 
@@ -120,14 +121,16 @@ Ext.define('NextThought.chart.Grade', {
 		}
 	},
 
+
 	drawDot: function() {
 		var ctx = this.context,
 			slope = this.canvas.height / this.canvas.width,
 			centerY = (this.canvas.height / 2) + (this.canvas.width / 4),
 			centerX = centerY / slope,
-			radius = Math.floor(this.canvas.width * 0.089285714),
+			radius = Math.floor(this.canvas.width * 0.09),
 			textbox,
 			grade = this.getGradeLetter(),
+			nudge = this.getPixelDensity(),
 			font = {
 				size: Math.floor(radius),
 				weight: 'bold'
@@ -157,7 +160,7 @@ Ext.define('NextThought.chart.Grade', {
 			//ctx.shadowOffsetX = -1;
 			//ctx.shadowOffsetY = -1;
 
-			ctx.fillText(grade, Math.floor(-textbox.width / 2) + 2, font.size / 3);
+			ctx.fillText(grade, Math.floor(-textbox.width / 2) + nudge, font.size / 3);
 		} finally {
 			ctx.restore();
 		}

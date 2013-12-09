@@ -14,7 +14,8 @@ Ext.define('NextThought.chart.GradePerformance', {
 		averageWidth: 3,
 		gradeColor: '#8eb737',
 		gradeWidth: 4,
-		store: null
+		store: null,
+		pixelDensity: 2
 	},
 
 	testAnimationProperties: function() {
@@ -51,8 +52,8 @@ Ext.define('NextThought.chart.GradePerformance', {
 		this.canvas = Ext.getDom(this.el);
 		this.viewWidth = this.el.getWidth();
 		this.viewHeight = this.el.getHeight();
-		this.canvas.width = this.viewWidth * 2;
-		this.canvas.height = this.viewHeight * 2;
+		this.canvas.width = this.viewWidth * this.getPixelDensity();
+		this.canvas.height = this.viewHeight * this.getPixelDensity();
 		this.context = this.canvas.getContext('2d');
 		this.context.imageSmoothingEnabled = true;
 
