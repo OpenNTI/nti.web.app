@@ -12,7 +12,7 @@ Ext.define('NextThought.chart.GradePerformance', {
 	config: {
 		averageColor: '#b8b8b8',
 		averageWidth: 3,
-		gradeColor: '#8eb737',
+		gradeColor: '#40b450',
 		gradeWidth: 4,
 		store: null,
 		topMargin: 20,

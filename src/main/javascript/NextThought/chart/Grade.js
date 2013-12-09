@@ -10,7 +10,7 @@ Ext.define('NextThought.chart.Grade', {
 	},
 
 	config: {
-		color: '#8eb737',
+		color: '#40b450',
 		grade: 90,
 		pixelDensity: 2
 	},
