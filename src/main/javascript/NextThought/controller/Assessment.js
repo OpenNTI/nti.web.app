@@ -5,6 +5,8 @@ Ext.define('NextThought.controller.Assessment', {
 		'assessment.AssessedPart',
 		'assessment.AssessedQuestion',
 		'assessment.AssessedQuestionSet',
+		'assessment.Assignment',
+		'assessment.AssignmentPart',
 		'assessment.DictResponse',
 		'assessment.FreeResponsePart',
 		'assessment.FreeResponseSolution',
