@@ -776,8 +776,12 @@ Ext.define('NextThought.controller.UserData', {
 		var Store = NextThought.store.PageItem,
 			rel = Globals.USER_GENERATED_DATA,
 			pi = cmp.getLocation().pageInfo,
-			ps = Store.make(pi.getLink(rel), containerId, true),
+			ps = pi && Store.make(pi.getLink(rel), containerId, true),
 			me = this;
+
+		if (!pi) {
+			return;
+		}
 
 		containers = containers || [];
 
