@@ -87,7 +87,12 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 
 
 	cleanQuestionsThatAreInQuestionSets: function(items, objects) {
-		var result = [], questionsInSets = [], push = Array.prototype.push, sets = {}, usedQuestions = {};
+		var result = [],
+			questionsInSets = [],
+			push = Array.prototype.push,
+			sets = {},
+			assignments = [],
+			usedQuestions = {};
 
 		function inSet(id) {
 			var i = questionsInSets.length - 1;
@@ -109,19 +114,35 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			return false;
 		}
 
-		//get sets
-		Ext.each(items, function(i) {if (i.isSet) { push.apply(questionsInSets, i.get('questions')); }});
 
-		Ext.each(items, function(i) {
+
+		//get sets
+		items.forEach(function(i) {if (i.isSet) { push.apply(questionsInSets, i.get('questions')); }});
+
+		items.forEach(function(i) {
 			//work around dups
 			if (i.isSet) {
 				if (sets[i.getId()]) {return;}
-				sets[i.getId()] = true;
+				sets[i.getId()] = i;
+			}
+			if (i.isAssignment) {
+				assignments.push(i);
 			}
 			if (i.isSet || (!inSet(i.getId()) && i.getId && !usedQuestions[i.getId()] && hasElement(i.getId()))) {
 				result.push(i);
 				usedQuestions[i.getId()] = true;
 			}
+		});
+
+		//Let question sets know they're part of an assignment.
+		assignments.forEach(function(a) {
+			(a.get('parts') || []).forEach(function(p) {
+				var s = p.get('question_set');
+				s = (s && sets[s.getId()]);
+				if (s) {
+					s.associatedAssignment = a;
+				}
+			});
 		});
 
 		return result;
