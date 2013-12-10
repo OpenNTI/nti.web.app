@@ -15,5 +15,21 @@ Ext.define('NextThought.view.courseware.assessment.assignments.FilterBar', {
 			{ tag: 'input', type: 'text', placeholder: 'Search Assignments', required: 'required' },
 			{ cls: 'clear' }
 		] }
-	])
+	]),
+
+
+
+	getShowType: function() {
+
+	},
+
+
+	getGroupBy: function() {
+
+	},
+
+
+	getSearch: function() {
+
+	}
 });
