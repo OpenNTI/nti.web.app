@@ -3,6 +3,7 @@ Ext.define('NextThought.model.assessment.Assignment', {
 	requires: [
 		'NextThought.model.converters.Items'
 	],
+	isAssignment: true,
 	fields: [
 		{ name: 'containerId', type: 'string' },//lowercase C?
 		{ name: 'content', type: 'string' },

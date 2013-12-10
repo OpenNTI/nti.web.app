@@ -6,7 +6,7 @@ Ext.define('NextThought.model.assessment.AssignmentPart', {
 	fields: [
 		{ name: 'auto_grade', type: 'bool' },
 		{ name: 'content', type: 'string' },
-		{ name: 'question_set', type: 'auto' },
+		{ name: 'question_set', type: 'singleItem' },
 		{ name: 'title', type: 'string' }
 	]
 });
