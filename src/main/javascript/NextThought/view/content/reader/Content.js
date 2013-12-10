@@ -73,12 +73,19 @@ Ext.define('NextThought.view.content.reader.Content', {
 	insertRelatedLinks: function(body, doc) {
 		var position = body.query('#NTIContent .chapter.title')[0],
 			tpl = this.relatedTemplate, last = null,
-			related = this.reader.getRelated(), c = 0,
+			related, c = 0,
 			container = {
 				tag: 'div',
 				cls: 'injected-related-items',
 				html: 'Related Topics: '
 			};
+
+		try {
+			related = this.reader.getRelated();
+		} catch (e) {
+			console.warn('Could not insert related links due to: ', e.stack || e.message || e);
+			return;
+		}
 
 		if (Ext.Object.getKeys(related).length === 0) {
 			return;
@@ -86,8 +93,7 @@ Ext.define('NextThought.view.content.reader.Content', {
 
 		try {
 			container = Ext.DomHelper.insertAfter(position, container);
-		}
-		catch (e) {
+		} catch (er) {
 			try {
 				position = Ext.fly(doc.body).query('#NTIContent .page-contents')[0];
 				container = Ext.DomHelper.insertFirst(position, container);
