@@ -373,7 +373,7 @@ Ext.define('NextThought.model.Service', {
 
 			if (cache.hasOwnProperty(url)) {
 				console.debug('Cache Hit', url, cache[url]);
-				onSuccess.call(this, cache[url]);
+				Ext.defer(onSuccess, 1, this, [cache[url]]);//make this call from its own stack
 				return null;
 			}
 
