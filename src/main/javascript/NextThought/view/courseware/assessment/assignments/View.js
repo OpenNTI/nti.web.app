@@ -84,7 +84,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 		for (ntiid in data) {
 			if (data.hasOwnProperty(ntiid)) {
-				if (ParseUtils.isNTIID(ntiid)) {
+				if (!ParseUtils.isNTIID(ntiid)) {
 					console.warn('[W] Ignoring:', ntiid);
 					continue;
 				}
