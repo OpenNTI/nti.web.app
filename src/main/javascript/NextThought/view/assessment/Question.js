@@ -24,7 +24,6 @@ Ext.define('NextThought.view.assessment.Question', {
 		var parts = this.question.get('parts'),
 				multiPart = (parts.length > 1);
 
-		//TODO: addDockedItem instead?
 		this.down('question-parts').setQuestionAndPart(
 				this.question,
 				this.questionSet,
@@ -72,10 +71,12 @@ Ext.define('NextThought.view.assessment.Question', {
 
 	retrieveAnswerLabel: function() {
 		var sln = this.contentElement && Ext.get(this.contentElement).select('.naqsolution'),
-				firstSln = !Ext.isEmpty(sln) ? sln.elements.first() : null,
-				firstUnits;
-		// NOTE: We will take the first solution's answer as the preferred solution label in case we might have multiple possible answer.
-		// FIXME: does this still apply for a multi-parts question?
+			firstSln = !Ext.isEmpty(sln) ? sln.elements.first() : null,
+			firstUnits;
+
+		// TODO: move this logic into the part that cares. (the question part!) ...OH and don't get it form
+		// the solution content that we're going to take away. :/ (this will return an empty label until we
+		// rework this.)
 		firstUnits = firstSln ? firstSln.getAttribute('data-nti-units') : null;
 
 		if (firstUnits) {
