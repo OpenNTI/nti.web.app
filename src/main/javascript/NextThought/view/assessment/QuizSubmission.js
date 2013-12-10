@@ -129,10 +129,10 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		var unanswered = 0;
 		if (!this.rendered) { return; }
 
-		Ext.Object.each(this.answeredMap, function(k,v) { if (!v) {unanswered++;} });
-		this.statusMessage.update(unanswered === 0
-				? 'All questions answered'
-				: Ext.String.format('{0} questions unanswered', unanswered)
+		Ext.Object.each(this.answeredMap, function(k, v) { if (!v) {unanswered++;} });
+		this.statusMessage.update(unanswered === 0 ?
+								  'All questions answered' :
+								  Ext.String.format('{0} questions unanswered', unanswered)
 		);
 
 		this.statusMessage[((unanswered === 0) ? 'add' : 'remove') + 'Cls']('ready');
@@ -187,7 +187,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 	},
 
 
-	submitClicked: function(e ) {
+	submitClicked: function(e) {
 		var q = this.questionSet,
 			submission = {};
 
