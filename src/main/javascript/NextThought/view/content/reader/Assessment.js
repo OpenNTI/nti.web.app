@@ -15,7 +15,7 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 		this.reader.on('set-content', 'injectAssessments', this);
 	},
 
-	makeAssessmentQuestion: function(q,set) {
+	makeAssessmentQuestion: function(q, set) {
 		var contentElement = this.getContentElement('object', 'data-ntiid', q.getId()),
 			o = this.reader.getComponentOverlay();
 
@@ -73,7 +73,7 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 
 		questionObjs = slice.call(doc.querySelectorAll('object[type$=naquestion][data-ntiid]'));
 
-		Ext.Array.sort(items, function(ar,br) {
+		Ext.Array.sort(items, function(ar, br) {
 			var a = questionObjs.indexOf(me.getRelatedElement(ar.get('NTIID'), questionObjs)),
 				b = questionObjs.indexOf(me.getRelatedElement(br.get('NTIID'), questionObjs));
 			return ((a === b) ? 0 : ((a > b) ? 1 : -1));
