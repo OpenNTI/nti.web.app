@@ -35,6 +35,7 @@ Ext.define('NextThought.view.content.overlay.Panel', {
 	initComponent: function() {
 		var d, el, insert = 'insertBefore', ix = 0;
 		if (!this.contentElement) {
+			try {
 			this.insertedElement = true;
 			d = this.reader.getDocumentElement().getElementsByTagName('object');
 			//TODO: ensure its a 'type=application/vnd.nextthought.*'
@@ -45,9 +46,13 @@ Ext.define('NextThought.view.content.overlay.Panel', {
 
 			el = d[ix];
 			this.contentElement = this.placementHolderTpl[insert](el);
+			} catch (e) {
+				this.insertedElement = false;
+				this.contentElement = null;
+			}
 		}
 
-		if (this.representsUserDataContainer) {
+		if (this.contentElement && this.representsUserDataContainer) {
 			Ext.fly(this.contentElement).set({ 'data-nti-container': true });
 		}
 
@@ -86,18 +91,23 @@ Ext.define('NextThought.view.content.overlay.Panel', {
 
 
 	hide: function() {
-		Ext.fly(this.contentElement).setStyle({display: 'none'});
+		if (this.contentElement) {
+			Ext.fly(this.contentElement).setStyle({display: 'none'});
+		}
 		this.callParent(arguments);
 	},
 
 
 	show: function() {
-		Ext.fly(this.contentElement).setStyle({display: 'block'});
+		if (this.contentElement) {
+			Ext.fly(this.contentElement).setStyle({display: 'block'});
+		}
 		this.callParent(arguments);
 	},
 
 
 	removeContent: function(selector) {
+		if (!this.contentElement) {return;}
 		var el = Ext.get(this.contentElement);
     //		el.select(selector).remove();//Maybe set style display:none?
 		el.select(selector).setStyle({display: 'none'});
@@ -105,6 +115,7 @@ Ext.define('NextThought.view.content.overlay.Panel', {
 
 
 	setupContentElement: function() {
+		if (!this.contentElement) {return;}
 		Ext.fly(this.contentElement).setStyle({
 			overflow: 'hidden',
 			display: 'block',
@@ -142,10 +153,12 @@ Ext.define('NextThought.view.content.overlay.Panel', {
 	syncElementHeight: function() {
 		var h = this.getHeight();
 		try {
-		Ext.fly(this.contentElement).setHeight(h);
+			if (this.contentElement) {
+				Ext.fly(this.contentElement).setHeight(h);
+			}
 		}
 		catch (e) {
-			console.log('no contentElement');
+			console.log(e.stack || e.message || e);
 		}
 		this.self.syncPositioning();
 	}

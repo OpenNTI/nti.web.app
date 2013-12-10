@@ -62,9 +62,11 @@ Ext.define('NextThought.util.Dom', {
 		var me = this,
 			videoObjects = [];
 
-		Ext.each(contentElement.querySelectorAll('object .naqvideo'), function(v) {
-			videoObjects.push(me.parseDomObject(v));
-		});
+		if (contentElement) {
+			Ext.each(contentElement.querySelectorAll('object .naqvideo'), function(v) {
+				videoObjects.push(me.parseDomObject(v));
+			});
+		}
 
 		return videoObjects;
 	},

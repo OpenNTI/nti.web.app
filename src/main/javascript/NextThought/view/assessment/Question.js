@@ -71,7 +71,7 @@ Ext.define('NextThought.view.assessment.Question', {
 
 
 	retrieveAnswerLabel: function() {
-		var sln = Ext.get(this.contentElement).select('.naqsolution'),
+		var sln = this.contentElement && Ext.get(this.contentElement).select('.naqsolution'),
 				firstSln = !Ext.isEmpty(sln) ? sln.elements.first() : null,
 				firstUnits;
 		// NOTE: We will take the first solution's answer as the preferred solution label in case we might have multiple possible answer.
