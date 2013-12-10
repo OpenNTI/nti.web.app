@@ -69,14 +69,14 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 		instance.getEnrollment().then(function(e) {
 			if (!isSync()) { return; }
 
-
-			//Ext.Ajax.request({url: e.getLink('AssignmentHistory')});
-			//Ext.Ajax.request({url: e.getLink('Grades')});
-
-			Service.request(e.getLink('AssignmentsByOutlineNode'))
-					.done(function(txt) {
+			Promise.pool(
+				Service.request(e.getLink('AssignmentHistory')),
+				Service.request(e.getLink('AssignmentsByOutlineNode'))//,
+				//Service.request(e.getLink('Grades'))
+			)
+					.done(function(txts) {//responseTexts are in the order requested
 						if (!isSync()) { return; }
-						me.assignments.setAssignmentsDataRaw(Ext.decode(txt, true));
+						me.assignments.setAssignmentsDataRaw(Ext.decode(txts[1], true));
 					})
 					.fail(function(reason) {
 						console.error(reason);
