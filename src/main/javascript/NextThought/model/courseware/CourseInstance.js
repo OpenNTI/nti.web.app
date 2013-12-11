@@ -3,7 +3,8 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 
 	fields: [
 		{ name: 'isCourse', type: 'bool', defaultValue: true, persist: false },
-		{ name: 'Discussions', type: 'singleItem', persist: false }
+		{ name: 'Discussions', type: 'singleItem', persist: false },
+		{ name: 'Outline', type: 'singleItem', persist: false }
 	],
 
 
@@ -92,6 +93,33 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 				return i && i.getId() === id;
 			});
 		}
+
+		return p;
+	},
+
+
+	getOutline: function() {
+		//cache outline
+		var p = this.__promiseToLoadOutline || new Promise();
+
+		if (this.__promiseToLoadOutline) {
+			return p;
+		}
+
+		this.__promiseToLoadOutline = p;
+
+		Service.request(this.get('Outline').getLink('contents'))
+				.done(function(text) {
+					var json = Ext.decode(text, true);
+					if (!json) {
+						p.reject('Bad response:' + text);
+						return;
+					}
+					p.fulfill(ParseUtils.parseItems(json));
+				})
+				.fail(function(reason) {
+					p.reject(reason);
+				});
 
 		return p;
 	},

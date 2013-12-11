@@ -6,8 +6,11 @@ Ext.define('NextThought.controller.CourseWare', {
 		'courseware.CourseCatalogInstructorInfo',
 		'courseware.CourseCreditLegacyInfo',
 		'courseware.CourseInstance',
+		'courseware.CourseOutline',
 		'courseware.LegacyCommunityBasedCourseInstance',
-		'courseware.CourseInstanceEnrollment'
+		'courseware.CourseInstanceEnrollment',
+		'courseware.navigation.CourseOutlineNode',
+		'courseware.navigation.CourseOutlineContentNode'
 	],
 
 	stores: [
