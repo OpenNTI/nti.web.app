@@ -143,7 +143,17 @@ Ext.define('NextThought.controller.Navigation', {
 
 
 		function localCondition(id, reader) {
-			var c = Ext.getCmp(id);
+			var c = Ext.getCmp(id),
+				card = reader.up('{isOwnerLayout("card")}'),
+				deck = card && card.up();
+
+			try{
+				deck.getLayout().setActiveItem(card);
+			}catch (e) {
+				console.warn('Failed to switch to reader because:', e.stack || e.message || e);
+				return;
+			}
+
 			if (c && c.isNote) {
 				openWindow(reader, c.getRecord(), target.last(), reply ? target : undefined);
 			}

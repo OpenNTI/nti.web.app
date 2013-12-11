@@ -407,7 +407,7 @@ Ext.define('NextThought.view.content.View', {
 		if (this.currentCourse === instance) {
 			return;
 		}
-
+		
 		//force this to blank out if it was unset
 		this.updateState({
 			course: instance && instance.getId()
@@ -420,7 +420,7 @@ Ext.define('NextThought.view.content.View', {
 			background = info && info.toc && getURL(info.toc.querySelector('toc').getAttribute('background'), info.root);
 
 		this.currentCourse = instance;
-		this.reader.clearLocation();
+		//this.reader.clearLocation();
 
 		this.setBackground(background);
 		this.enableTabs(preview ? [] : !!instance);
@@ -452,6 +452,8 @@ Ext.define('NextThought.view.content.View', {
 
 
 	onCourseSelected: function(instance) {
+		//Because courses still use location, it needs to be cleared before setting the new one
+		this.reader.clearLocation();
 		this._setCourse(instance);
 
 		var e = instance.getCourseCatalogEntry();
