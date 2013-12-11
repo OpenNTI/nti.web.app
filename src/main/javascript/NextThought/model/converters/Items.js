@@ -45,19 +45,23 @@ Ext.define('NextThought.model.converters.Items', {
 	COLLECTIONITEM: {
 		type: 'collectionItem',
 		convert: function(v, r) {
-			var values = [], key, result;
+			var values = [], keys = [], key, result;
 			if (v instanceof Object) {
 				for (key in v) {
 					if (v.hasOwnProperty(key) && v[key] instanceof Object) {
+						keys[key] = values.length;
 						values.push(v[key]);
+						if (this.limit !== undefined && values.length > this.limit) {
+							console.warn('Limiting set of items to the (' + this.name + ') field\'s configured limit of: ' + this.limit + ', was: ' + result.length);
+							values.pop();
+							delete keys[key];
+							break;
+						}
 					}
 				}
 				result = ParseUtils.parseItems(values);
-				if (this.limit !== undefined && result.length > this.limit) {
-					console.warn('Limiting set of items to the (' + this.name + ') field\'s configured limit of: ' + this.limit + ', was: ' + result.length);
-					result = result.slice(0, this.limit);
-					result.forEach(function(a) {if (a) {a.stores.push(r);}});
-				}
+				result.forEach(function(a) {if (a) {a.stores.push(r);}});
+				result.INDEX_KEYMAP = keys;
 				return result;
 			}
 

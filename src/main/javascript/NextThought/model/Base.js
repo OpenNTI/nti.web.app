@@ -168,6 +168,14 @@ Ext.define('NextThought.model.Base', {
 	},
 
 
+	getFieldItem: function(field, key) {
+		var f = this.get(field) || [];
+		// let not having an INDEX_KEYMAP throw an exception so we KNOW we don't have one
+		// so that we can fallback to search... if it just doesn't have the key, we can take its word.
+		return f[f.INDEX_KEYMAP[key]];
+	},
+
+
 	//A model may have some derived fields that
 	//are readonly values.  These values depend on other traditional fields.
 	//one such property is 'flagged', it isn't a real field but
