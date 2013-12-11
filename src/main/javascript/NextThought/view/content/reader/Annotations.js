@@ -69,7 +69,8 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			//added: function(){ FilterManager.registerFilterListener(me, me.applyFilter,me); },
 			afterRender: 'insertAnnotationGutter',
 			'load-annotations': 'loadAnnotations',
-			'clear-annotations': 'clearAnnotations'
+			'clear-annotations': 'clearAnnotations',
+			'location-cleared': 'clearAnnotations'
 		});
 
 		me.mon(me.annotationManager.events, 'finish', function(c) {
