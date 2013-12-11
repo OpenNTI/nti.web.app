@@ -70,8 +70,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 	},
 
 
-	setAssignmentsDataRaw: function(data, history) {
-		var ntiid;
+	setAssignmentsDataRaw: function(data, history, outline) {
+		var ntiid, lesson;
 
 		this.clearAssignmentsData();
 
@@ -84,12 +84,19 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 		for (ntiid in data) {
 			if (data.hasOwnProperty(ntiid)) {
-				if (!ParseUtils.isNTIID(ntiid)) {
+				if (!ParseUtils.isNTIID(ntiid)) {//just to be safe
 					console.warn('[W] Ignoring:', ntiid);
 					continue;
 				}
 
-				console.debug(data[ntiid]);
+				lesson = ContentUtils.getLineage(ntiid);//this function is in need to go asynchronous...but i need it here. :(
+				lesson.pop();//discard the root
+				if (lesson.length > 1) {
+					lesson.shift();//discard leaf page
+				}
+				lesson.reverse();
+
+				console.debug(lesson.join('|'), ParseUtils.parseItems(data[ntiid]));
 
 			}
 		}

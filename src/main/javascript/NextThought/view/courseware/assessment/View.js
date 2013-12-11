@@ -66,7 +66,12 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 			return (me.instanceId === instance.getId());
 		}
 
-		instance.getEnrollment().then(function(e) {
+		Promise.pool(
+			instance.getOutline(),
+			instance.getEnrollment()
+		).done(function(outlineAndEnrollment) {
+			var o = outlineAndEnrollment[0],
+				e = outlineAndEnrollment[1];
 			if (!isSync()) { return; }
 
 			Promise.pool(
@@ -78,7 +83,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 						if (!isSync()) { return; }
 						var history = ParseUtils.parseItems(txts[0])[0];
 
-						me.assignments.setAssignmentsDataRaw(Ext.decode(txts[1], true), history);
+						me.assignments.setAssignmentsDataRaw(Ext.decode(txts[1], true), history, o);
 					})
 					.fail(function(reason) {
 						console.error(reason);
