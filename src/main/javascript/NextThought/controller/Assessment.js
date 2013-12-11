@@ -53,18 +53,19 @@ Ext.define('NextThought.controller.Assessment', {
 		this.listen({
 			component: {
 				'assessment-question': {
-					'check-answer': this.checkAnswer
+					'check-answer': 'checkAnswer'
 				},
 
 				'assessment-quiz-submission': {
-					'grade-it': this.grade
+					'grade-it': 'grade',
+					 'submit-assignment': 'submit'
 				}
 			}
 		});
 	},
 
 
-	checkAnswer: function(questionWidget,question,answerValues) {
+	checkAnswer: function(questionWidget, question, answerValues) {
 
 		var containerId = questionWidget.canSubmitIndividually() ? question.getId() : questionWidget.reader.getLocation().NTIID,
 			submission = this.getAssessmentQuestionSubmissionModel().create({
@@ -82,7 +83,7 @@ Ext.define('NextThought.controller.Assessment', {
 				console.error('FAIL', arguments);
 				alert('There was a problem grading your question');
 			},
-			success: function(self,op) {
+			success: function(self, op) {
 				var result = op.getResultSet().records.first();
 				questionWidget.updateWithResults(result);
 			}
@@ -90,17 +91,8 @@ Ext.define('NextThought.controller.Assessment', {
 	},
 
 
-	grade: function(submissionWidget,questionSet,submissionData) {
-
-		var q = this.getAssessmentQuestionSubmissionModel(),
-			s = this.getAssessmentQuestionSetSubmissionModel(),
-			data = {
-				ContainerId: submissionWidget.reader.getLocation().NTIID,
-				questionSetId: questionSet.getId(),
-				questions: []
-			};
-
-		Ext.Object.each(submissionData, function(k,v) {
+	__getQuestionSubmissions: function(data) {
+		return function(k, v) {
 			data.questions.push({
 				'Class': 'QuestionSubmission',
 				MimeType: 'application/vnd.nextthought.assessment.questionsubmission',
@@ -109,7 +101,20 @@ Ext.define('NextThought.controller.Assessment', {
 				questionId: k,
 				parts: v
 			});
-		});
+		};
+	},
+
+
+	grade: function(submissionWidget, questionSet, submissionData) {
+
+		var s = this.getAssessmentQuestionSetSubmissionModel(),
+			data = {
+				ContainerId: submissionWidget.reader.getLocation().NTIID,
+				questionSetId: questionSet.getId(),
+				questions: []
+			};
+
+		Ext.Object.each(submissionData, this.__getQuestionSubmissions(data));
 
 		s.create(data).save({
 			scope: this,
@@ -118,10 +123,34 @@ Ext.define('NextThought.controller.Assessment', {
 				console.error('FAIL', arguments);
 				alert('There was a problem grading your quiz');
 			},
-			success: function(self,op) {
+			success: function(self, op) {
 				var result = op.getResultSet().records.first();
 				submissionWidget.setGradingResult(result);
 			}
 		});
+	},
+
+
+	submit: function(widget, questionSet, data) {
+
+		var s = this.getAssessmentQuestionSetSubmissionModel(),
+			a = this.getAssessmentAssignmentSubmissionModel(),
+			//containerId = widget.reader.getLocation().NTIID,
+			assignmentId = questionSet.associatedAssignment.getId(),
+			qset = {
+				questionSetId: questionSet.getId(),
+				questions: []
+			};
+
+		Ext.Object.each(data, this.__getQuestionSubmissions(qset));
+
+
+		a = a.create({
+			assignmentId: assignmentId,
+			//containerId: containerId,
+			parts: [s.create(qset)]
+		});
+
+		a.save({url: Service.getObjectURL(assignmentId)});
 	}
 });

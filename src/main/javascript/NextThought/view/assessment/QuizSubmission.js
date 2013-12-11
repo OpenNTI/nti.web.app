@@ -189,6 +189,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 
 	submitClicked: function(e) {
 		var q = this.questionSet,
+			isAssignment = !!q.associatedAssignment,
 			submission = {};
 
 		if (!this.submitBtn || this.submitBtn.hasCls('disabled')) {
@@ -205,7 +206,9 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 			return;
 		}
 
-		this.fireEvent('grade-it', this, q, submission);
+
+
+		this.fireEvent(isAssignment ? 'submit-assignment' : 'grade-it', this, q, submission);
 
 		if (e) {
 			e.stopEvent();
