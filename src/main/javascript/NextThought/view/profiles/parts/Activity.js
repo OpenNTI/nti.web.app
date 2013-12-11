@@ -40,6 +40,10 @@ Ext.define('NextThought.view.profiles.parts.Activity', {
 		this.on({
 			el: {scroll: 'onScroll'}
 		});
+
+        if(Ext.is.iOS){
+            this.addCls('scrollable');
+        }
 	},
 
 

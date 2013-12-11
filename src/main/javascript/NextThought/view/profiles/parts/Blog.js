@@ -167,6 +167,11 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 
 		Ext.EventManager.onWindowResize(this.handleWindowResize, this);
 		this.on('destroy', function() {Ext.EventManager.removeResizeListener(this.handleWindowResize, this);}, this);
+
+        if(Ext.is.iOS){
+            this.el.down('.body').addCls('scrollable');
+            this.el.down('.post-view').addCls('scrollable');
+        }
 	},
 
 
