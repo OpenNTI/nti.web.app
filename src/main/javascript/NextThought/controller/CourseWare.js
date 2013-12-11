@@ -9,6 +9,7 @@ Ext.define('NextThought.controller.CourseWare', {
 		'courseware.CourseOutline',
 		'courseware.LegacyCommunityBasedCourseInstance',
 		'courseware.CourseInstanceEnrollment',
+		'courseware.UsersCourseAssignmentHistory',
 		'courseware.navigation.CourseOutlineNode',
 		'courseware.navigation.CourseOutlineContentNode'
 	],

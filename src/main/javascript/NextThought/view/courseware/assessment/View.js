@@ -76,7 +76,9 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 			)
 					.done(function(txts) {//responseTexts are in the order requested
 						if (!isSync()) { return; }
-						me.assignments.setAssignmentsDataRaw(Ext.decode(txts[1], true));
+						var history = ParseUtils.parseItems(txts[0])[0];
+
+						me.assignments.setAssignmentsDataRaw(Ext.decode(txts[1], true), history);
 					})
 					.fail(function(reason) {
 						console.error(reason);

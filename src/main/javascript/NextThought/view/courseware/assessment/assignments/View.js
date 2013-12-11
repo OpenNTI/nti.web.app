@@ -70,7 +70,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 	},
 
 
-	setAssignmentsDataRaw: function(data) {
+	setAssignmentsDataRaw: function(data, history) {
 		var ntiid;
 
 		this.clearAssignmentsData();
