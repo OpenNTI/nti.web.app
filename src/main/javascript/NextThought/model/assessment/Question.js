@@ -42,5 +42,13 @@ Ext.define('NextThought.model.assessment.Question', {
 			all.push.apply(all, p.getVideos());
 		});
 		return all;
+	},
+
+
+	tallyParts: function() {
+		function sum(agg, r) {
+			return agg + (r.tallyParts ? r.tallyParts() : 1);
+		}
+		return (this.get('parts') || []).reduce(sum, 0);
 	}
 });

@@ -4,5 +4,10 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistory', {
 	fields: [
 		{name: 'Items', type: 'collectionItem', persist: false},
 		{name: 'lastViewed', type: 'date', dateFormat: 'timestamp'}
-	]
+	],
+
+
+	getItem: function(id) {
+		return this.getFieldItem('Items', id);
+	}
 });

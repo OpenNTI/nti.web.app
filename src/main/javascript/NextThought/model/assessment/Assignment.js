@@ -11,5 +11,13 @@ Ext.define('NextThought.model.assessment.Assignment', {
 		{ name: 'availableEnding', type: 'date', mapping: 'available_for_submission_ending' },
 		{ name: 'parts', type: 'arrayItem' },
 		{ name: 'title', type: 'string' }
-	]
+	],
+
+
+	tallyParts: function() {
+		function sum(agg, r) {
+			return agg + (r.tallyParts ? r.tallyParts() : 1);
+		}
+		return (this.get('parts') || []).reduce(sum, 0);
+	}
 });

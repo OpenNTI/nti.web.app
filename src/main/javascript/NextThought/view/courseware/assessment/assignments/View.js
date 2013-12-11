@@ -60,6 +60,11 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 	},
 
 
+	refresh: function() {
+
+	},
+
+
 	clearAssignmentsData: function() {
 		var cmp = this.getContent();
 		if (cmp) {
@@ -71,7 +76,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 
 	setAssignmentsDataRaw: function(data, history, outline) {
-		var ntiid, lesson;
+		var ntiid, lesson, raw = [];
 
 		this.clearAssignmentsData();
 
@@ -79,6 +84,29 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 			console.error('No data??');
 			return;
 		}
+
+		function collect(o) {
+			var id = o.getId(),
+				h = history.getItem(id),
+				submission = h && h.get('Submission'),
+				assessment = h && h.get('pendingAssessment');
+
+			raw.push({
+				id: id,
+				lesson: lesson,
+				item: o,
+				history: h,
+				name: o.get('title'),
+				opens: o.get('availableBeginning'),
+				due: o.get('availableEnding'),
+				completed: submission && submission.get('CreatedTime'),
+				correct: assessment && assessment.getCorrectCount(),
+				total: o.tallyParts()
+			});
+		}
+
+		this.history = history;
+		this.outline = outline;
 
 		delete data.href;//all other keys are container ids...so, lets just drop it.
 
@@ -94,12 +122,25 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 				if (lesson.length > 1) {
 					lesson.shift();//discard leaf page
 				}
-				lesson.reverse();
+				lesson.reverse().join('|');
 
-				console.debug(lesson.join('|'), ParseUtils.parseItems(data[ntiid]));
-
+				ParseUtils.parseItems(data[ntiid]).forEach(collect);
 			}
 		}
+
+		this.store = new Ext.data.Store({
+			fields: [
+				{name: 'id', type: 'int'},
+				{name: 'name', type: 'string'},
+				{name: 'due', type: 'date'},
+				{name: 'completed', type: 'date'},
+				{name: 'correct', type: 'int'},
+				{name: 'total', type: 'int'}
+			],
+			data: raw
+		});
+
+		this.refresh();
 	},
 
 

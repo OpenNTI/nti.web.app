@@ -8,5 +8,11 @@ Ext.define('NextThought.model.assessment.AssignmentPart', {
 		{ name: 'content', type: 'string' },
 		{ name: 'question_set', type: 'singleItem' },
 		{ name: 'title', type: 'string' }
-	]
+	],
+
+
+	tallyParts: function() {
+		var s = this.get('question_set');
+		return s ? s.tallyParts() : 0;
+	}
 });

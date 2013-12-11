@@ -60,7 +60,12 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 	courseChanged: function(instance) {
 		var me = this;
-		me.instanceId = instance.getId();
+		me.instanceId = instance && instance.getId();
+
+		if (!instance) {
+			//TODO: clear course data
+			return;
+		}
 
 		function isSync() {
 			return (me.instanceId === instance.getId());
