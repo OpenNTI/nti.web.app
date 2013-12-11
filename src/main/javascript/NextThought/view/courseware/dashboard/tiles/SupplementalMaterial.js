@@ -130,7 +130,7 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.SupplementalMaterialIt
 	},
 
 	totalLoaded: function(total) {
-		this.on('afterrender', Ext.bind(this.renderTotal, this, [total]));
+		this.renderTotal(total);//base class defers call until after render
 		Ext.callback(this.getCallback(), null, [total]);
 	}
 });

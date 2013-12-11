@@ -73,16 +73,15 @@ Ext.define('NextThought.view.courseware.overview.parts.ContentLink', {
 
 
 	appendTotal: function(total) {
+		if (!this.rendered) {
+			this.on('afterrender', Ext.bind(this.appendTotal, this, arguments), this, {single: true});
+			return;
+		}
 		this.commentTpl.append(this.meta, {count: total});
 	},
 
 
 	containerLoaded: function(q, s, r) {
-		if (!this.rendered) {
-			this.on('afterrender', Ext.bind(this.containerLoaded, this, arguments), this, {single: true});
-			return;
-		}
-
 		var total = 0,
 			json = Ext.decode(r && r.responseText, true);
 		if (s && json) {
