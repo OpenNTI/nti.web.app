@@ -39,7 +39,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.InstructorForum', {
 			if (me.ntiids.length === 0) {
 				console.error('Failed to get forum: ', ntiid);
 				Ext.destroy(me);
-				Ext.callback(me.getFinishCallBack());
+				Ext.callback(me.getFinishCallBack(), null, null, 1);
 			}else {
 				me.resolveForum(me.ntiids.shift());
 			}

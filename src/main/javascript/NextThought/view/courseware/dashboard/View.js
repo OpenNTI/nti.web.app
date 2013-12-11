@@ -109,7 +109,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 				}
 
 				if (queue.length === 0) {
-					Ext.callback(callback, me, [tiles]);
+					Ext.callback(callback, me, [tiles], 1);
 				}
 			});
 		});
