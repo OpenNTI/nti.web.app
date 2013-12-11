@@ -61,7 +61,24 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 
 	refresh: function() {
+		var me = this,
+			cmp = me.getContent(),
+			s = me.store,
+			//g = me.getGrouper(),
+			o = [];
 
+		s.clearGrouping();
+		s.group('lesson');
+		s.getGroups().forEach(function(g) {
+
+			o.push(me.newGroupUIConfig({
+				get title() { return g.name; },
+				get subTitle() { return ''; },
+				get store() { return s; }
+			}));
+		});
+
+		cmp.add(o);
 	},
 
 
@@ -130,6 +147,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 		this.store = new Ext.data.Store({
 			fields: [
+				{name: 'lesson', type: 'string'},
 				{name: 'id', type: 'int'},
 				{name: 'name', type: 'string'},
 				{name: 'due', type: 'date'},
@@ -146,13 +164,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 	newGroupUIConfig: function(grouper) {
 		return {xtype: 'course-assessment-assignment-group',
-			title: grouper.getTitle(), subTitle: grouper.getSubTitle(),
+			title: grouper.title, subTitle: grouper.subTitle,
 			items: this.newAssignmentList(grouper)
 		};
 	},
 
 
 	newAssignmentList: function(grouper) {
-		return { xtype: 'course-assessment-assignment-list', store: grouper.getStore() };
+		return { xtype: 'course-assessment-assignment-list', store: grouper.store };
 	}
 });

@@ -37,12 +37,14 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 				},
 
 				isOverDue: function(values) {
-					var due = (new Date(values.due.getTime())).setHours(0, 0, 0, 0),
+					var due = values.due && (new Date(values.due.getTime())).setHours(0, 0, 0, 0),
 						today = (new Date()).setHours(0, 0, 0, 0);
 					return (!this.isTaken(values) && today >= due) ? 'due' : '';
 				},
 
 				getDueDate: function(date) {
+					if (!date) { return ''; }
+
 					var format = 'l, F j',
 						day = (new Date(date.getTime())).setHours(0, 0, 0, 0),
 						today = (new Date()).setHours(0, 0, 0, 0);
@@ -74,19 +76,5 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 	initComponent: function() {
 		this.callParent(arguments);
 		this.tpl.ownerCmp = this;
-
-		//Simulate async server load & event
-		Ext.defer(function() {
-			this.store.loadRawData([
-				{id: 7, name: 'Quiz 8', due: new Date('2013-12-06T00:00:00-06:00'), completed: new Date('2013-12-05T15:30:00-06:00'), correct: 10, total: 15},
-				{id: 6, name: 'Quiz 7', due: new Date('2013-12-04T00:00:00-06:00'), completed: 0, correct: 0, total: 15},
-				{id: 5, name: 'Quiz 6', due: new Date('2013-12-05T00:00:00-06:00'), completed: new Date('2013-12-04T19:30:00-06:00'), correct: 90, total: 100},
-				{id: 4, name: 'Quiz 5', due: new Date('2013-12-04T00:00:00-06:00'), completed: new Date('2013-12-03T18:30:00-06:00'), correct: 8, total: 10},
-				{id: 3, name: 'Quiz 4', due: new Date('2013-12-03T00:00:00-06:00'), completed: new Date('2013-12-02T16:30:00-06:00'), correct: 0, total: 10},
-				{id: 2, name: 'Quiz 3', due: new Date('2013-12-02T00:00:00-06:00'), completed: new Date('2013-12-01T12:30:00-06:00'), correct: 43, total: 50},
-				{id: 1, name: 'Quiz 2', due: new Date('2013-12-01T00:00:00-06:00'), completed: 0, correct: 0, total: 10},
-				{id: 0, name: 'Quiz 1', due: new Date('2013-11-25T00:00:00-06:00'), completed: 0, correct: 0, total: 150}
-			]);
-		},10, this);
 	}
 });
