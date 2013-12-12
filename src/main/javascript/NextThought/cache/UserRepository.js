@@ -136,7 +136,7 @@ Ext.define('NextThought.cache.UserRepository', {
 				username.returnSingle = true;
 			}
 
-			var s = this.getStore(),
+			var promise = new Promise(),
 				result = {},
 				l = username.length,
 				names = [];
@@ -153,16 +153,16 @@ Ext.define('NextThought.cache.UserRepository', {
 					if (username.returnSingle) {
 						result = result.first();
 					}
+					promise.fulfill(result);
 					Ext.callback(callback, scope, [result]);
 				}
 			}
 
 			//Did someone do something stupid and send in an empty array
 			if (Ext.isEmpty(username)) {
-				Ext.callback(callback, scope, [
-					[]
-				]);
-				return;
+				promise.fulfill([]);
+				Ext.callback(callback, scope, [[]]);
+				return promise;
 			}
 
 			Ext.each(
@@ -226,6 +226,8 @@ Ext.define('NextThought.cache.UserRepository', {
 					}
 				},
 				this);
+
+			return promise;
 		},
 
 
