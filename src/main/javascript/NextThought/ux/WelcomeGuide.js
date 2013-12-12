@@ -51,7 +51,7 @@ Ext.define('NextThought.ux.WelcomeGuide', {
 
 	initComponent: function() {
 		this.callParent(arguments);
-		this.down('component[cls=help-iframe]').autoEl.src = (this.link && this.link.href) || this.link;
+		this.down('component[cls=help-iframe]').autoEl.src = getURL((this.link && this.link.href) || this.link);
 		this.on('show', this.addCustomMask, this);
 		this.on('close', this.removeCustomMask, this);
 		if (this.deleteOnDestroy) {
