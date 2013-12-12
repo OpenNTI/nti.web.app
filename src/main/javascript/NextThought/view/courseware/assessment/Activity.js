@@ -46,10 +46,13 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 
 	store: new Ext.data.Store({
 		fields: [
-			{name: 'id', type: 'int'},
+			{name: 'ntiid', type: 'string'},
 			{name: 'label', type: 'string'},
 			{name: 'target', type: 'string'},
 			{name: 'date', type: 'date'}
+		],
+		sorters: [
+			{property: 'date', direction: 'DESC'}
 		]
 	}),
 
@@ -101,7 +104,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 
 	getEventConfig: function(label, target, date) {
 		return {
-			id: target.getId(),
+			ntiid: target.getId(),
 			item: target,
 			label: label,
 			target: target.get('title'),
@@ -122,11 +125,19 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 			dateDue = o.get('availableEnding') || now,
 			dateCompleted = submission && submission.get('CreatedTime');
 
+		function add() {
+			try {
+				return s.add.apply(s, arguments);
+			} catch (er) {
+				console.error(arguments, er.stack || er.message || e);
+			}
+		}
+
 		if (feedback) {
 			feedback.get('Items').forEach(function(f) {
 				var c = f.get('Creator'),
 					str = ' left feedback on',
-					r = s.add(me.getEventConfig(c + str, o, f.get('CreatedTime')));
+					r = add(me.getEventConfig(c + str, o, f.get('CreatedTime')));
 
 				UserRepository.getUser(f).done(function(u) {
 					r.set('label', u + str);
@@ -135,19 +146,19 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 		}
 
 		if (grade) {
-			s.add(me.getEventConfig('Grade Received', o, grade.get('CreatedTime')));
+			add(me.getEventConfig('Grade Received', o, grade.get('CreatedTime')));
 		}
 
 		if (dateOpens < now) {
-			s.add(me.getEventConfig('New Assignment:', o, dateOpens));
+			add(me.getEventConfig('New Assignment:', o, dateOpens));
 		}
 
 		if (dateDue < now && (!dateCompleted || dateCompleted > dateDue)) {
-			s.add(me.getEventConfig('Assignment Past Due:', o, dateDue));
+			add(me.getEventConfig('Assignment Past Due:', o, dateDue));
 		}
 
 		if (dateCompleted) {
-			s.add(me.getEventConfig('Assignment Submitted:', o, dateCompleted));
+			add(me.getEventConfig('Assignment Submitted:', o, dateCompleted));
 		}
 	},
 
