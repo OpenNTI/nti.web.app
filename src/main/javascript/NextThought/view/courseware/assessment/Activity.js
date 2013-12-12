@@ -23,7 +23,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 					{ tag: 'tpl', 'for': '.', cn: [
 						{ cls: 'item {[this.isUnread(values.date)]}', cn: [
 							{ tag: 'time', cls: 'datetime', datetime: '{date:date("c")}', html: '{[this.getTime(values.date)]}'},
-							{ tag: 'span', cls: 'label', html: '{label:htmlEncode}: '},
+							{ tag: 'span', cls: 'label', html: '{label:htmlEncode} '},
 							{ tag: 'span', cls: 'target', html: '{target:htmlEncode}'}
 						]}
 					]}), {
@@ -35,7 +35,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 
 				getTime: function(date) {
 					var format = 'M j',
-						today = new Date((new Date()).setHours(0, 0, 0, 0));
+							today = new Date((new Date()).setHours(0, 0, 0, 0));
 					if (date > today) {
 						format = 'g:i a';
 					}
@@ -63,31 +63,89 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 		this.callParent(arguments);
 		this.tpl.ownerCmp = this;
 		this.setTitle(this.title);
-		this.mon(this.store, 'load', 'maybeNotify');
-
-		//Simulate async server load & event
-		Ext.defer(function() {
-			this.store.loadRawData([
-				{id: 0, label: 'New Quiz', target: 'Quiz 2', date: new Date('2013-12-05T15:30:00-06:00')},
-				{id: 1, label: 'New Feedback', target: 'Quiz 1', date: new Date('2013-12-05T13:30:00-06:00')},
-				{id: 2, label: 'Grade Recieved', target: 'Quiz 1', date: new Date('2013-12-05T01:30:00-06:00')},
-				{id: 3, label: 'Assignment Past Due', target: 'Quiz 1', date: new Date('2013-12-04T12:30:00-06:00')}
-			]);
-			this.maybeNotify(this.store);//fake the load event
-		},10, this);
+		this.mon(this.store, 'datachanged', 'maybeNotify');
 	},
 
 
 	setAssignmentsData: function(assignments, history, outline) {
-/*
-- 'New Feedback' is a feedback item with a created/modified date greater than lastViewed;
-- the same for 'Grade Received';
-- 'New Quiz' is an assignment who's 'available_for_submission_beginning' is less than now and that has no history item.
- */
+		var ntiid, me = this;
+
+		this.clearAssignmentsData();
+
+		if (!assignments) {
+			console.error('No data??');
+			return;
+		}
+
+		this._lastRead = history.get('lastViewed');
+
+		delete assignments.href;//all other keys are container ids...so, lets just drop it.
+
+		function collect(agg, o) { me.collectEvents(o, history); }
+
+		for (ntiid in assignments) {
+			if (assignments.hasOwnProperty(ntiid)) {
+				if (!ParseUtils.isNTIID(ntiid)) {//just to be safe
+					console.warn('[W] Ignoring:', ntiid);
+					continue;
+				}
+
+				ParseUtils.parseItems(assignments[ntiid]).reduce(collect, 0);
+			}
+		}
 	},
 
 
 	clearAssignmentsData: function() { this.clear(); },
+
+
+	getEventConfig: function(label, target, date) {
+		return {
+			id: target.getId(),
+			item: target,
+			label: label,
+			target: target.get('title'),
+			date: date
+		};
+	},
+
+
+	collectEvents: function(o, history) {
+		var me = this,
+			now = new Date(),
+			s = me.store,
+			h = history.getItem(o.getId()),
+			submission = h && h.get('Submission'),
+			feedback = h && h.get('Feedback'),
+			assessment = h && h.get('pendingAssessment'),
+			dateOpens = o.get('availableBeginning'),
+			dateDue = o.get('availableEnding') || now,
+			dateCompleted = submission && submission.get('CreatedTime');
+
+		if (feedback) {
+			feedback.get('Items').forEach(function(f) {
+				var c = f.get('Creator'),
+					str = ' left feedback on',
+					r = s.add(me.getEventConfig(c + str, o, f.get('CreatedTime')));
+
+				UserRepository.getUser(f).done(function(u) {
+					r.set('label', u + str);
+				});
+			});
+		}
+
+		if (dateOpens < now) {
+			s.add(me.getEventConfig('New Assignment:', o, dateOpens));
+		}
+
+		if (dateDue < now && (!dateCompleted || dateCompleted > dateDue)) {
+			s.add(me.getEventConfig('Assignment Past Due:', o, dateDue));
+		}
+
+		if (dateCompleted) {
+			s.add(me.getEventConfig('Assignment Submitted:', o, dateCompleted));
+		}
+	},
 
 
 	setTitle: function(title) {
@@ -118,6 +176,6 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 
 
 	getLastRead: function() {
-		return new Date('2013-12-04T12:00:00-06:00');//TODO: read this from the server's response
+		return this._lastRead || new Date(0);
 	}
 });
