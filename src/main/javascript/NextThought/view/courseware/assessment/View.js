@@ -21,7 +21,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 		xtype: 'container',
 		cls: 'make-white',
 		layout: { type: 'card', deferredRender: true },
-		activeItem: 1,
+		activeItem: 0,
 		items: [
 			{ xtype: 'course-assessment-activity', title: 'Activity & Notifications' },
 			{ xtype: 'course-assessment-assignments', title: 'Assignments' },
@@ -124,7 +124,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 			c += (v.notifications || 0);
 		});
 		this.notifications = c;
-		this.fireEvent('notify', c);
+		this.fireEvent('notify', this, c);
 	},
 
 
