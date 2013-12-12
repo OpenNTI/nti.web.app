@@ -117,7 +117,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 			h = history.getItem(o.getId()),
 			submission = h && h.get('Submission'),
 			feedback = h && h.get('Feedback'),
-			assessment = h && h.get('pendingAssessment'),
+			grade = h && h.get('Grade'),
 			dateOpens = o.get('availableBeginning'),
 			dateDue = o.get('availableEnding') || now,
 			dateCompleted = submission && submission.get('CreatedTime');
@@ -132,6 +132,10 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 					r.set('label', u + str);
 				});
 			});
+		}
+
+		if (grade) {
+			s.add(me.getEventConfig('Grade Received', o, grade.get('CreatedTime')));
 		}
 
 		if (dateOpens < now) {
