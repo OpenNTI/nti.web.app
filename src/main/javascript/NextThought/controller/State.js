@@ -263,7 +263,7 @@ Ext.define('NextThought.controller.State', {
 		}
 
 		if (this.transactions.active && this.transactions.active !== transactionId) {
-			console.warn('Aborting previous transaction ', this.transactions.active, this.transcations[this.transactions.active]);
+			console.warn('Aborting previous transaction ', this.transactions.active, this.transactions[this.transactions.active]);
 			delete this.transactions[this.transactions.active];
 		}
 
