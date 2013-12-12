@@ -92,7 +92,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 	},
 
 
-	setAssignmentsDataRaw: function(data, history, outline) {
+	setAssignmentsData: function(data, history, outline) {
 		var ntiid, lesson, raw = [];
 
 		this.clearAssignmentsData();

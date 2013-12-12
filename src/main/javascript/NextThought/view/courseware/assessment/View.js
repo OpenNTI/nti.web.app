@@ -63,7 +63,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 		me.instanceId = instance && instance.getId();
 
 		if (!instance) {
-			//TODO: clear course data
+			me.clearViews();
 			return;
 		}
 
@@ -86,14 +86,18 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 			)
 					.done(function(txts) {//responseTexts are in the order requested
 						if (!isSync()) { return; }
-						var history = ParseUtils.parseItems(txts[0])[0];
+						var history = ParseUtils.parseItems(txts[0])[0],
+							assignments = Ext.decode(txts[1], true);
 
-						me.assignments.setAssignmentsDataRaw(Ext.decode(txts[1], true), history, o);
+						me.forEachView(function(v) {
+							var fn = v.setAssignmentsData;
+							if (fn) { fn.call(v, assignments, history, o); }
+						});
 					})
 					.fail(function(reason) {
 						console.error(reason);
 						if (!isSync()) { return; }
-						me.assignments.clearAssignmentsData();
+						me.clearViews();
 					});
 		});
 
@@ -102,6 +106,14 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 	forEachView: function(fn, scope) {
 		this.body.items.each(fn, scope || this);
+	},
+
+
+	clearViews: function() {
+		this.forEachView(function(v) {
+			var fn = v.clearAssignmentsData;
+			if (fn) { fn.call(v); }
+		});
 	},
 
 

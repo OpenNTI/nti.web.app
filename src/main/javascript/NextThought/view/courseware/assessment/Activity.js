@@ -71,14 +71,23 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 				{id: 0, label: 'New Quiz', target: 'Quiz 2', date: new Date('2013-12-05T15:30:00-06:00')},
 				{id: 1, label: 'New Feedback', target: 'Quiz 1', date: new Date('2013-12-05T13:30:00-06:00')},
 				{id: 2, label: 'Grade Recieved', target: 'Quiz 1', date: new Date('2013-12-05T01:30:00-06:00')},
-				{id: 3, label: 'Assignment Past Due', target: 'Quiz 1', date: new Date('2013-12-04T12:30:00-06:00')},
-				{id: 4, label: 'Foo', target: 'Discussion', date: new Date('2013-12-03T04:30:00-06:00')},
-				{id: 5, label: 'Bar', target: 'Poll 1', date: new Date('2013-12-02T12:30:00-06:00')},
-				{id: 6, label: 'Baz', target: 'Quiz 1', date: new Date('2013-11-01T18:30:00-06:00')}
+				{id: 3, label: 'Assignment Past Due', target: 'Quiz 1', date: new Date('2013-12-04T12:30:00-06:00')}
 			]);
 			this.maybeNotify(this.store);//fake the load event
 		},10, this);
 	},
+
+
+	setAssignmentsData: function(assignments, history, outline) {
+/*
+- 'New Feedback' is a feedback item with a created/modified date greater than lastViewed;
+- the same for 'Grade Received';
+- 'New Quiz' is an assignment who's 'available_for_submission_beginning' is less than now and that has no history item.
+ */
+	},
+
+
+	clearAssignmentsData: function() { this.clear(); },
 
 
 	setTitle: function(title) {
