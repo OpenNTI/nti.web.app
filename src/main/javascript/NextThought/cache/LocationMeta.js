@@ -12,15 +12,18 @@ Ext.define('NextThought.cache.LocationMeta', {
 
 
 	getMeta: function(ntiid, callback, scope) {
-		var maybe = this.getValue(ntiid);
+		var p = new Promise(),
+			maybe = this.getValue(ntiid);
+
+		p.done(Ext.bind(callback, scope)).fail(Ext.bind(callback, scope, []));
+
 		if (maybe || !ntiid) {
-			Ext.callback(callback, scope, [maybe]);
-			return;
+			p.fulfill(maybe);
+		} else {
+			this.loadMeta(ntiid).then(p);
 		}
 
-		this.loadMeta(ntiid, function(meta) {
-			return Ext.callback(callback, scope, [meta]);
-		});
+		return p;
 	},
 
 
@@ -73,6 +76,7 @@ Ext.define('NextThought.cache.LocationMeta', {
 		return meta;
 	},
 
+
 	/**
 	 * Load meta data for the provided ntiid.  These should be content ids here.
 	 * We can get almost all the meta data we need out of the toc (which is nice for the sample content use case)
@@ -95,50 +99,51 @@ Ext.define('NextThought.cache.LocationMeta', {
 	 * containing book.  If we find one that looks good, we return the meta for the root of the book.  Note in this case
 	 * we must not cache the result by the id we were initially looking up.
 	 *
-	 * @param ntiid the ntiid we want content metadata for
-	 * @param cb completion callback.  If meta can be determined it will be the first arg
+	 * @param {String} ntiid the ntiid we want content metadata for
+	 * @param {Boolean} ignoreCache ignore cache
 	 */
-	loadMeta: function(ntiid, cb, ignoreCache) {
-		var me = this;
+	loadMeta: function(ntiid, ignoreCache) {
+		var me = this,
+			p = new Promise();
 
 		function pageIdLoaded(pi) {
 			var meta = me.createAndCacheMeta(ntiid, pi, ignoreCache);
 			if (!meta) {
 				fail.apply(me, ['createAndCacheMeta failed: ', ntiid, pi, ignoreCache]);
 			}
-			Ext.callback(cb, me, [meta]);
+			p.fulfill(meta);
 		}
 
 		function fail(req, resp) {
 			if (resp && resp.status === 403) {
 				console.log('Unauthorized when requesting page info', ntiid);
-				me.handleUnauthorized(ntiid, cb);
+				me.handleUnauthorized(ntiid, p);
+				return;
 			}
-			else {
-				//console.error('fail', arguments);
-				Ext.callback(cb, me);
-			}
+			//console.error('fail', arguments);
+			p.reject(resp);
 		}
-		$AppConfig.service.getPageInfo(ntiid, pageIdLoaded, fail, me);
+		Service.getPageInfo(ntiid, pageIdLoaded, fail, me);
+
+		return p;
 	},
 
 
-	handleUnauthorized: function(ntiid, cb) {
+	handleUnauthorized: function(ntiid, promise) {
 		var meta = ContentUtils.getLocation(ntiid),
 				bookPrefix;
 
 		if (meta) {
-			$AppConfig.service.getPageInfo(meta.ContentNTIID, function(pageInfo) {
+			Service.getPageInfo(meta.ContentNTIID, function(pageInfo) {
 				if (pageInfo.isPageInfo) {
 					this.attachContentRootToMeta(meta, pageInfo);
 					this.cacheMeta(meta, ntiid, ntiid);
-					Ext.callback(cb, this, [meta]);
-				}
-				else {
-					Ext.callback(cb, this);
+					promise.fulfill(meta);
+				} else {
+					promise.reject();
 				}
 			}, function(req, resp) {
-				Ext.callback(cb, this);
+				promise.reject(resp);
 			}, this);
 		}
 		else {
@@ -146,10 +151,10 @@ Ext.define('NextThought.cache.LocationMeta', {
 			bookPrefix = this.bookPrefixIfQuestion(ntiid);
 			bookPrefix = bookPrefix ? this.findTitleWithPrefix(bookPrefix) : null;
 			if (bookPrefix) {
-				this.loadMeta(bookPrefix.get('NTIID'), cb);
+				this.loadMeta(bookPrefix.get('NTIID')).then(promise);
 			}
 			else {
-				Ext.callback(cb, this);
+				promise.reject();
 			}
 		}
 	},
