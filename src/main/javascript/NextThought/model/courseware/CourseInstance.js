@@ -100,25 +100,13 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 
 	getOutline: function() {
 		//cache outline
-		var p = this.__promiseToLoadOutline || new Promise();
+		var p = new Promise(),
+			o = this.get('Outline');
 
-		if (this.__promiseToLoadOutline) {
-			return p;
-		}
-
-		this.__promiseToLoadOutline = p;
-
-		Service.request(this.get('Outline').getLink('contents'))
-				.done(function(text) {
-					var json = Ext.decode(text, true);
-					if (!json) {
-						p.reject('Bad response:' + text);
-						return;
-					}
-					p.fulfill(ParseUtils.parseItems(json));
-				})
-				.fail(function(reason) {
-					p.reject(reason);
+		o.getContents()
+				.fail(function(reason) { p.reject(reason); })
+				.done(function() {
+					p.fulfill(o);
 				});
 
 		return p;

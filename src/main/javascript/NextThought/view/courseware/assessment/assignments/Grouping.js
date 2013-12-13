@@ -26,6 +26,17 @@ Ext.define('NextThought.view.courseware.assessment.assignments.Grouping', {
 	},
 
 
+	updateSubTitle: function(value) { this.updateEl('.subtitle', value); },
+	updateTitle: function(value) { this.updateEl('.title', value); },
+
+
+	updateEl: function(selector, value) {
+		if (this.rendered) {
+			this.el.select(selector).update(value);
+		}
+	},
+
+
 	initComponent: function() {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, {

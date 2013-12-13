@@ -38,6 +38,19 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 	},
 
 
+	getFields: function() {
+		return [
+			{name: 'lesson', type: 'string'},
+			{name: 'id', type: 'int'},
+			{name: 'name', type: 'string'},
+			{name: 'due', type: 'date'},
+			{name: 'completed', type: 'date'},
+			{name: 'correct', type: 'int'},
+			{name: 'total', type: 'int'}
+		];
+	},
+
+
 	initComponent: function() {
 		this.subviewBackingStores = [];
 		this.callParent(arguments);
@@ -65,18 +78,31 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 			cmp = me.getContent(),
 			s = me.store,
 			//g = me.getGrouper(),
-			o = [];
+			o = [],
+			outline = me.outline;
 
 		s.clearGrouping();
 		s.group('lesson');
+
 		s.getGroups().forEach(function(g) {
 
-			o.push(me.newGroupUIConfig({
-				get title() { return g.name; },
-				get subTitle() { return ''; },
-				get store() { return s; }
-			}));
+			var name = g.name.split('|').last(),
+				group = cmp.add(me.newGroupUIConfig({
+					title: name,
+					subTitle: '',
+					get store() { return new Ext.data.Store({fields: me.getFields(), data: g.children}); },
+					set store(value) { throw 'Read Only'; }
+				}));
+
+			outline.findNode(name).done(function(node) {
+				group.setTitle(node.get('Title'));
+				group.setSubTitle(Ext.Date.format(
+						node.get('AvailableBeginning'),
+						'F j, Y'
+				));
+			});
 		});
+
 
 		cmp.add(o);
 	},
@@ -146,15 +172,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 		}
 
 		this.store = new Ext.data.Store({
-			fields: [
-				{name: 'lesson', type: 'string'},
-				{name: 'id', type: 'int'},
-				{name: 'name', type: 'string'},
-				{name: 'due', type: 'date'},
-				{name: 'completed', type: 'date'},
-				{name: 'correct', type: 'int'},
-				{name: 'total', type: 'int'}
-			],
+			fields: this.getFields(),
 			data: raw
 		});
 
@@ -164,6 +182,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 	newGroupUIConfig: function(grouper) {
 		return {xtype: 'course-assessment-assignment-group',
+			dataPromise: grouper.dataPromise,
 			title: grouper.title, subTitle: grouper.subTitle,
 			items: this.newAssignmentList(grouper)
 		};
