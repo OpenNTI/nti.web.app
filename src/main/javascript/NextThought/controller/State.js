@@ -593,7 +593,7 @@ Ext.define('NextThought.controller.State', {
 
 			result = lastLocation && Ext.Object.getKeys(lastLocation).length > 0 ? lastLocation : defaultState;
 			if (location.hash) {
-				Ext.apply(result, this.interpretFragment(location.hash));
+				Ext.Object.merge(result, this.interpretFragment(location.hash));
 			}
 			return result;
 		}
