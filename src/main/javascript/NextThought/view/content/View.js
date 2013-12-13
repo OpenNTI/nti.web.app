@@ -456,10 +456,12 @@ Ext.define('NextThought.view.content.View', {
 		this.reader.clearLocation();
 		this._setCourse(instance);
 
-		var e = instance.getCourseCatalogEntry();
+		var e = instance.getCourseCatalogEntry(),
+			ntiid = e.get('ContentPackageNTIID');
 		this.setTitle(e.get('Title'));
 		this.pushState({
-			location: e.get('ContentPackageNTIID'),
+			//dirty, i know... TODO: track last content course was at, and restore that.
+			location: PersistentStorage.getProperty('last-location-map', ntiid, ntiid),
 			course: instance.getId()
 		});
 	},
