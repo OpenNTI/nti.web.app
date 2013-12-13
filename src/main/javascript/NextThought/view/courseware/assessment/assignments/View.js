@@ -95,7 +95,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 				}));
 
 			outline.findNode(name).done(function(node) {
-				group.setTitle(node.get('Title'));
+				group.setTitle(node.get('title'));
 				group.setSubTitle(Ext.Date.format(
 						node.get('AvailableBeginning'),
 						'F j, Y'

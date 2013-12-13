@@ -33,14 +33,29 @@ Ext.define('NextThought.model.courseware.CourseOutline', {
 
 
 	findNode: function(id) {
-		var p = new Promise();
+		var p = new Promise(),
+			ns = this.navStore;
+
+		if (!ns) {
+			p.reject('Navigation store not loaded');
+			return p;
+		}
 
 		this.getContents()
 				.fail(function(reason) {p.reject(reason);})
 				.done(function(me) {
-					var node = (me.get('Items') || []).reduce(function(n, o) {
+					var legacy, node = (me.get('Items') || []).reduce(function(n, o) {
 						return n || (o.findNode && o.findNode(id));
 					}, null);
+
+					//hack:
+					if (node) {
+						legacy = ns.getById(id);
+						if (legacy) {
+							node.set('title', legacy.get('label'));
+						}
+					}
+
 					p[node ? 'fulfill' : 'reject'](node);
 				});
 
