@@ -79,10 +79,13 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 
 				markColumn: function(c) {
 					console.log('Marking...');
-					var cls = 'sortedOn';
-					this.getEl().select('.' + cls).removeCls(cls);
-					if (c) {
-						Ext.select(c.getCellSelector()).addCls(cls);
+					var cls = 'sortedOn',
+						el = this.getEl();
+					if (el) {
+						el.select('.' + cls).removeCls(cls);
+						if (c) {
+							Ext.select(c.getCellSelector()).addCls(cls);
+						}
 					}
 				},
 
