@@ -37,7 +37,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.Grouping', {
 	},
 
 
-	initComponent: function() {
+	beforeRender: function() {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, {
 			subtitle: this.getSubTitle(),
