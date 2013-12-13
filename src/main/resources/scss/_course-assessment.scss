@@ -371,6 +371,11 @@ canvas.x-component-course-assessment {
 .x-panel-body-course-assessment {
 	border: 0 none;
 
+	.x-grid-td {
+		border-width: 0;
+		background: none;
+	}
+
 	.x-grid-row-selected,
 	.x-grid-row-focused {
 		.x-grid-td {
@@ -382,10 +387,6 @@ canvas.x-component-course-assessment {
 		.x-grid-td {
 			background: #fafafa !important;
 		}
-	}
-
-	.x-grid-td {
-		border-width: 0;
 	}
 
 	.x-grid-cell-inner {
