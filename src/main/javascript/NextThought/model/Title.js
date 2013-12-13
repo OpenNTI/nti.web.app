@@ -48,6 +48,6 @@ Ext.define('NextThought.model.Title', {
 
 
 	fireNavigationEvent: function(eventSource) {
-		eventSource.fireEvent('set-last-location-or-root', this.get('NTIID'));
+		return eventSource.fireEvent('set-last-location-or-root', this.get('NTIID'));
 	}
 });

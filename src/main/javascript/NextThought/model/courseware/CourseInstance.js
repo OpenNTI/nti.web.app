@@ -66,8 +66,12 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 
 
 	__getLocationInfo: function() {
-		var c = this.getCourseCatalogEntry();
-		return ContentUtils.getLocation(c && c.get('ContentPackageNTIID'));
+		var c = this.getCourseCatalogEntry(),
+			locationInfo = ContentUtils.getLocation(c && c.get('ContentPackageNTIID'));
+		//add a reference to myself so the course tiles can get the course instance form the locationInfo for now
+		locationInfo.courseInstance = this;
+
+		return locationInfo;
 	},
 
 
@@ -115,7 +119,7 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 	},
 
 
-	fireNavigationEvent: function(eventSource) {
-		eventSource.fireEvent('course-selected', this);
+	fireNavigationEvent: function(eventSource, callback) {
+		return eventSource.fireEvent('course-selected', this, callback);
 	}
 });

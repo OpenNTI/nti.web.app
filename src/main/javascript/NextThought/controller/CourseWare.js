@@ -45,6 +45,11 @@ Ext.define('NextThought.controller.CourseWare', {
 				'*': {
 					'course-selected': 'onCourseSelected'
 				}
+			},
+			controller: {
+				'*': {
+					'course-selected': 'onCourseSelected'
+				}
 			}
 		};
 
@@ -118,7 +123,7 @@ Ext.define('NextThought.controller.CourseWare', {
 	},
 
 
-	onCourseSelected: function(instance) {
+	onCourseSelected: function(instance, callback) {
 
 		if (this.fireEvent('show-view', 'content', true) === false) {
 			return false;
@@ -129,6 +134,7 @@ Ext.define('NextThought.controller.CourseWare', {
 		try {
 			this.getMainNav().updateCurrent(false, instance);
 			this.getContentView().onCourseSelected(instance);
+			Ext.callback(callback);
 			return true;
 		} finally {
 			history.endTransaction('navigation-transaction');

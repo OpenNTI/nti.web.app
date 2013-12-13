@@ -7,7 +7,12 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.InstructorForum', {
 			var ntiid = course && course.getAttribute('instructorForum');
 
 			if (!Ext.isEmpty(ntiid)) {
-				this.create({locationInfo: locationInfo, ntiid: ntiid, lastModified: courseNodeRecord.get('date'), finishCallBack: finish});
+				this.create({
+					locationInfo: locationInfo,
+					ntiid: ntiid,
+					lastModified: courseNodeRecord.get('date'),
+					finishCallBack: finish
+				});
 			}else {
 				Ext.callback(finish);
 			}
@@ -83,7 +88,8 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.InstructorForum', {
 		this.view = tile && tile.add({
 			xtype: 'course-dashboard-tiles-instructor-forum-view',
 			record: records[0],
-			contentNtiid: l && l.ContentNTIID
+			contentNtiid: l && l.ContentNTIID,
+			courseInstance: l && l.courseInstance
 		});
 
 		Ext.callback(this.getFinishCallBack(), null, [tile]);

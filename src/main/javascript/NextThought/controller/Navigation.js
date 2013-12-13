@@ -19,7 +19,8 @@ Ext.define('NextThought.controller.Navigation', {
 
 	refs: [
 		{ref: 'viewport', selector: 'master-view'},
-		{ref: 'navigationBar', selector: 'main-navigation'}
+		{ref: 'navigationBar', selector: 'main-navigation'},
+		{ref: 'contentView', selector: 'content-view-container'}
 	],
 
 
@@ -371,37 +372,26 @@ Ext.define('NextThought.controller.Navigation', {
 	},
 
 	/**
-	 *Navigate to the course and push the forum and topic
+	 * Navigate to the course and push the forum and topic
+	 *
+	 * @param {NextThought.model.courseware.CourseInstance} course 
+	 * @param {String} forum ntiid of the forum
+	 * @oaram {String} topic ntiid of the  topic
+	 * @param {String} comment ntiid of the comment
+	 * @param {Function} callback
 	 */
 	goToCourseForum: function(course, forum, topic, comment, callback) {
+		var cmp = this.getContentView();
 
-		function test(ntiid, reader, error) {
-			console.log('test:', arguments);
-			if (error) {
-				return;
-			}
-
-			var cmp = Ext.ComponentQuery.query('content-view-container')[0];
-			if (!course) {
-				return;
-			}
-
-			if (cmp && cmp.isActive()) {
-				Ext.defer(function() {
-					cmp.setActiveTab('course-forum');
-					cmp.courseForum.applyState(forum, topic, comment, callback);
-					history.pushState({active: 'content', content: { activeTab: 'course-forum', current_forum: forum, current_topic: topic}});
-
-					// TODO: Here, Terminate the transaction we started. This is not optimal
-					// since something else could be changing states behind us. So we need to investigate other alternatives.
-					history.endTransaction('navigation-transaction');
-				}, 1);
-			}
+		function showForum() {
+			cmp.setActiveTab('course-forum');
+			cmp.courseForum.applyState(forum, topic, comment, callback);
+			history.pushState({active: 'content', content: { activeTab: 'course-forum', discussion: {forum: forum, topic: topic}}});
 		}
-
-		//var me = this;
-		history.beginTransaction('navigation-transaction');
-		this.fireEvent('set-last-location-or-root', course, test);
+	
+		if (course && course.fireNavigationEvent) {
+			course.fireNavigationEvent(this, showForum);
+		}
 	},
 
 
@@ -470,9 +460,10 @@ Ext.define('NextThought.controller.Navigation', {
 					}
 
 					var board = ParseUtils.parseItems(response.responseText)[0];
+
 					if (board.belongsToCourse()) {
 						callback = Ext.bind(callback, scope);
-						me.goToCourseForum(board.getRelatedCourse().get('NTIID'), topicRecord.get('ContainerId'), topicRecord.getId(), comment, callback);
+						me.goToCourseForum(board.getRelatedCourse(), topicRecord.get('ContainerId'), topicRecord.getId(), comment, callback);
 					}else {
 						r = me.setView('forums');
 						me.fireEvent('show-topic', topicRecord, comment, callback);

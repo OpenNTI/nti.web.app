@@ -40,7 +40,12 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.TopDiscussions', {
 					var comments = record.get('PostCount');
 
 					max = (max > comments) ? max : comments;
-					tiles.push(me.create({ locationInfo: locationInfo, itemNode: record, lastModified: me.board.get('date'), innerWeight: comments}));
+					tiles.push(me.create({
+						locationInfo: locationInfo,
+						itemNode: record,
+						lastModified: me.board.get('date'), 
+						innerWeight: comments
+					}));
 				});
 				//set the max on each tile so we can figure the %
 				Ext.each(tiles, function(item) { item.maxInner = max;});
@@ -80,7 +85,8 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.TopDiscussions', {
 			{xtype: 'container', defaultType: this.defaultType, items: {
 				record: rec,
 				locationInfo: l,
-				contentNtiid: l.ContentNTIID
+				contentNtiid: l.ContentNTIID,
+				courseInstance: l.courseInstance
 			}}
 		];
 
@@ -89,7 +95,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.TopDiscussions', {
 
 
 	onItemClicked: function(view, rec) {
-		this.fireEvent('navigate-to-course-discussion', this.locationInfo.ContentNTIID, rec.get('ContainerId'), rec.getId());
+		this.fireEvent('navigate-to-course-discussion', this.locationInfo.courseInstance, rec.get('ContainerId'), rec.getId());
 	}
 });
 
