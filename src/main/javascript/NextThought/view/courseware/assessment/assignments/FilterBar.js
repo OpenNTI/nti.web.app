@@ -9,7 +9,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.FilterBar', {
 			{ cls: 'label', html: 'All Assignments' }
 		] },
 		{ cls: 'third dropmenu', cn: [
-			{ cls: 'label', html: 'By Lession' }
+			{ cls: 'label', html: 'By Lesson' }
 		] },
 		{ cls: 'third search', cn: [
 			{ tag: 'input', type: 'text', placeholder: 'Search Assignments', required: 'required' },
