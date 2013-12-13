@@ -304,3 +304,113 @@ canvas.x-component-course-assessment {
 		width: 545px;
 	}
 }
+
+
+// Grid Styles
+
+.x-container-course-assessment.grade > .body { margin-top: 0; }
+
+.x-grid-header-ct-course-assessment {
+	background: none !important;
+	border: 0 none !important;
+}
+
+.x-column-header-course-assessment {
+	padding: 0;
+	border: 0 none;
+	border-bottom: {
+		color: #f2f2f2;
+		style: solid;
+		width: 3px !important;
+	}
+	text-shadow: none;
+	color: $tertiary-grey;
+	font: normal 700 0.6em/3 $font;
+	text-transform: uppercase;
+	background: none !important;
+	cursor: pointer;
+
+	&.x-column-header-sort-ASC,
+	&.x-column-header-sort-DESC {
+		overflow: visible;
+		border-bottom: {
+			color: $primary-grey;
+		}
+
+		&::after,
+		&::before {
+			display: block;
+			content: '';
+			width: 3px; height: 3px;
+			bottom: -3px;
+			position: absolute;
+			background: #fff;
+			z-index: 1;
+		}
+
+		&::before { left: -3px; }
+		&::after { right: 0; }
+
+		.x-column-header-text {
+			color: $primary-grey;
+			background: none;
+			padding-right: 0;
+		}
+	}
+
+	.x-column-header-inner {
+		padding: 0;
+
+		&.x-column-header-over {
+			color: $primary-grey;
+			background: none;
+		}
+	}
+}
+
+.x-panel-body-course-assessment {
+	border: 0 none;
+
+	.x-grid-row-selected,
+	.x-grid-row-focused {
+		.x-grid-td {
+			background-color: none !important;
+		}
+	}
+
+	.x-grid-row-over {
+		.x-grid-td {
+			background: #fafafa !important;
+		}
+	}
+
+	.x-grid-td {
+		border-width: 0;
+	}
+
+	.x-grid-cell-inner {
+		padding: 0;
+		line-height: 3;
+	}
+
+	.x-grid-row .x-grid-cell {
+		font: normal 300 0.85em/3 $font;
+		color: $secondary-grey;
+
+		&.sortedOn,
+		&.x-grid-cell-first {
+			color: $primary-grey;
+			font-weight: 600;
+		}
+		&.x-grid-cell-first {
+			color: $primary-blue;
+			cursor: pointer;
+		}
+
+		.check {
+			text-indent: -100px;
+			overflow: hidden;
+			@include icon('check_gray', $top: 1em, $left: 1.6em);
+		}
+	}
+}

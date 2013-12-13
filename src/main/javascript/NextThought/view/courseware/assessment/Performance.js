@@ -5,6 +5,8 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 	cls: 'course-performance',
 
 	requires: [
+		'Ext.grid.Panel',
+		'Ext.grid.column.Date',
 		'NextThought.chart.Grade',
 		'NextThought.chart.GradePerformance'
 	],
@@ -27,8 +29,65 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 				} }
 			]
 		},
-		{xtype: 'course-assessment-assignment-group', title: 'All Grades', items: [
-			//{xtype: 'grid'}
+		{xtype: 'course-assessment-assignment-group', title: 'All Grades',
+			cls: 'assignment-group grades', items: [
+			{
+				xtype: 'grid',
+				ui: 'course-assessment',
+				plain: true,
+				border: false,
+				frame: false,
+				sealedColumns: true,
+				enableColumnHide: false,
+				enableColumnMove: false,
+				enableColumnResize: false,
+				columns: {
+					ui: 'course-assessment',
+					plain: true,
+					border: false,
+					frame: false,
+					items: [
+							 { text: 'Assignment Name', dataIndex: 'name', flex: 1 },
+							 { text: 'Assigned', dataIndex: 'assigned', xtype: 'datecolumn', width: 80, format: 'm/d' },
+							 { text: 'Due', dataIndex: 'due', xtype: 'datecolumn', width: 70, format: 'm/d' },
+							 { text: 'Completed', dataIndex: 'completed', width: 80, renderer: function(v) {
+								 return (v && v.getTime() > 0) ? this.checkMarkTpl : '';
+							 } },
+							 { text: 'Grade', dataIndex: 'Grade', width: 70 },
+							 { text: 'Feedback', dataIndex: 'feedback', width: 140, renderer: function(value) {
+								 return value ? (value + ' Comments') : '';
+							 } }
+						 ].map(function(o) {
+							return Ext.applyIf(o, {
+								ui: 'course-assessment',
+								border: false,
+								sortable: true,
+								menuDisabled: true
+							});
+						})
+				},
+
+				listeners: {
+					sortchange: function(ct, column) { ct.up('grid').markColumn(column); },
+					selectionchange: function(sm, selected) { sm.deselect(selected); },
+					viewready: function(grid) {
+						grid.mon(grid.getView(), 'refresh', function() {
+							grid.markColumn(grid.down('gridcolumn[sortState]'));
+						});
+					}
+				},
+
+				markColumn: function(c) {
+					console.log('Marking...');
+					var cls = 'sortedOn';
+					this.getEl().select('.' + cls).removeCls(cls);
+					if (c) {
+						Ext.select(c.getCellSelector()).addCls(cls);
+					}
+				},
+
+				checkMarkTpl: Ext.DomHelper.markup({cls: 'check', html: '&#10003;'})
+			}
 		]}
 	],
 
@@ -42,46 +101,84 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 
 		this.chartGrade.setGrade(80);
 
-		var store = new Ext.data.Store({
-		    fields: [
-		        {name: 'id', type: 'int'},
-		        {name: 'AverageGrade', type: 'int'},
-		        {name: 'Grade', type: 'int'}
+		var store = this.store = new Ext.data.Store({
+			fields: [
+				{name: 'ntiid', type: 'string'},
+				{name: 'name', type: 'string'},
+				{name: 'assigned', type: 'date'},
+				{name: 'due', type: 'date'},
+				{name: 'completed', type: 'date'},
+				{name: 'Grade', type: 'auto', mapping: 'grade'},// :'( why oh why can't we all get along!?
+				{name: 'AverageGrade', type: 'int', mapping: 'average'},//ignored for now
+				{name: 'feedback', type: 'int'}
 		    ],
-		    data: [
-		        { id: 0, Grade: 77, AverageGrade: 61},
-		        { id: 1, Grade: 17, AverageGrade: 57},
-		        { id: 2, Grade: 74, AverageGrade: 38},
-		        { id: 3, Grade: 24, AverageGrade: 69},
-		        { id: 4, Grade: 1, AverageGrade: 75},
-		        { id: 5, Grade: 8, AverageGrade: 43},
-		        { id: 6, Grade: 45, AverageGrade: 48},
-		        { id: 7, Grade: 95, AverageGrade: 79},
-		        { id: 8, Grade: 5, AverageGrade: 19},
-		        { id: 9, Grade: 57, AverageGrade: 19},
-		        { id: 10, Grade: 48, AverageGrade: 31},
-		        { id: 11, Grade: 2, AverageGrade: 78},
-		        { id: 12, Grade: 69, AverageGrade: 92},
-		        { id: 13, Grade: 50, AverageGrade: 68},
-		        { id: 14, Grade: 57, AverageGrade: 36},
-		        { id: 15, Grade: 48, AverageGrade: 24},
-		        { id: 16, Grade: 92, AverageGrade: 58},
-		        { id: 17, Grade: 70, AverageGrade: 64},
-		        { id: 18, Grade: 72, AverageGrade: 83},
-		        { id: 19, Grade: 48, AverageGrade: 64},
-		        { id: 20, Grade: 28, AverageGrade: 1},
-		        { id: 21, Grade: 23, AverageGrade: 12},
-		        { id: 22, Grade: 63, AverageGrade: 91},
-		        { id: 23, Grade: 32, AverageGrade: 40},
-		        { id: 24, Grade: 26, AverageGrade: 29},
-		        { id: 25, Grade: 30, AverageGrade: 64},
-		        { id: 26, Grade: 33, AverageGrade: 65},
-		        { id: 27, Grade: 40, AverageGrade: 27},
-		        { id: 28, Grade: 88, AverageGrade: 95},
-		        { id: 29, Grade: 94, AverageGrade: 85}
-		    ]
+			sorters: [
+				{property: 'due', direction: 'DESC'}
+			]
 		});
 
+		this.grid.bindStore(store);
 		this.chartPerformance.setStore(store);
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+		//***** Begin Hide charts
+		// No charts until we can get numerical grades. :}
+		this.items.first().hide();
+		this.getEl().setStyle({paddingTop: 0});
+		//***** End Hide charts
+	},
+
+
+	clearAssignmentsData: function() {
+		this.store.removeAll();
+	},
+
+
+	setAssignmentsData: function(data, history, outline) {
+		var ntiid, raw = [];
+
+		this.clearAssignmentsData();
+
+		if (!data) {
+			console.error('No data??');
+			return;
+		}
+
+		function collect(o) {
+			var id = o.getId(),
+				h = history.getItem(id),
+				submission = h && h.get('Submission'),
+				feedback = h && h.get('Feedback'),
+				grade = h && h.get('Grade');
+
+			raw.push({
+				ntiid: id,
+				item: o,
+				name: o.get('title'),
+				assigned: o.get('availableBeginning'),
+				due: o.get('availableEnding'),
+				completed: submission && submission.get('CreatedTime'),
+				grade: grade && grade.get('grade'),
+				average: grade && grade.get('average'),
+				feedback: feedback && feedback.get('Items').length
+			});
+		}
+
+		delete data.href;//all other keys are container ids...so, lets just drop it.
+
+		for (ntiid in data) {
+			if (data.hasOwnProperty(ntiid)) {
+				if (!ParseUtils.isNTIID(ntiid)) {//just to be safe
+					console.warn('[W] Ignoring:', ntiid);
+					continue;
+				}
+				ParseUtils.parseItems(data[ntiid]).forEach(collect);
+			}
+		}
+
+		this.store.loadRawData(raw);
 	}
 });

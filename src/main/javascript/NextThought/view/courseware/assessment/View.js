@@ -21,7 +21,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 		xtype: 'container',
 		cls: 'make-white',
 		layout: { type: 'card', deferredRender: true },
-		activeItem: 0,
+		activeItem: 2,
 		items: [
 			{ xtype: 'course-assessment-activity', title: 'Activity & Notifications' },
 			{ xtype: 'course-assessment-assignments', title: 'Assignments' },
