@@ -18,29 +18,49 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 			tabIndex: this.tabIndexTracker.getNext()
 		});
 
+		this.reader = new FileReader();
+		this.reader.onload = Ext.bind(this.onFileLoaded, this);
 		this.callParent(arguments);
+	},
+
+
+	onFileLoaded: function(event) {
+		this.unmask();
+		this.value.value = event.target.result;
 	},
 
 
 	afterRender: function() {
 		this.callParent(arguments);
+		var reader = this.reader,
+			me = this;
 		this.mon(this.inputField, {
 			scope: this,
 			change: function(e) {
 				var p = this.part,
 					t = e.getTarget(),
-					allowed = p.isFileAcceptable(t.files[0]);
+					file = t.files[0],
+					allowed = p.isFileAcceptable(file);
+
+				me.value = {
+					MimeType: 'application/vnd.nextthought.assessment.uploadedfile',
+					filename: file.name
+				};
 
 				this[allowed ? 'reset' : 'markIncorrect']();
-
 				//p.reason;
+				if (allowed) {
+					me.mask();
+					reader.readAsDataURL(file);
+				}
+
 			}
 		});
 	},
 
 
 	getValue: function() {
-		return this.inputField.getValue();
+		return this.value;
 	},
 
 
