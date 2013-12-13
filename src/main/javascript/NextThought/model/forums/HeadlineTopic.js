@@ -10,5 +10,18 @@ Ext.define('NextThought.model.forums.HeadlineTopic', {
 
 	getActivityLabel: function() {
 		return 'started a discussion:';
+	},
+
+	getActivityItemConfig: function(){
+		var p = new Promise(), result;
+
+		result = {
+			message: Ext.String.ellipsis(this.get('headline').get('title'), 50, true),
+			verb: this.getActivityLabel()
+		};
+
+		p.fulfill(result);
+
+		return p;
 	}
 });

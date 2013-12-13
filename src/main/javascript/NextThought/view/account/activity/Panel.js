@@ -273,47 +273,32 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		}
 
 		function doGroup(group) {
-			var label = groupToLabel(group.name);
+			var me = this,
+				label = groupToLabel(group.name);
 
 			if (label) {
 				items.push({ label: label });
 			}
 
-			function extend() {
-				totalExpected++;
+ 	  		function promiseToResolve(agg, c) {
+				if (!/deleted/i.test(c.get('ChangeType'))) {
+					agg.push(me.changeToActivity(c));
+				}
+				return agg;
 			}
 
-			//We use a similar strategy to the one that Notifications uses
+			Promise.pool(group.children.reduce(promiseToResolve, []))
+				.done(function(items){
+					//get rid of any nulls
+					items = items.filter(function(i){ return i;});
 
-			function maybeFinish() {
-				totalExpected--;
-				if (totalExpected === 0) {
 					me.feedTpl.overwrite(container.getEl(), items);
 					//maybeAddMoreButton();
 					container.updateLayout();
-				}
-			}
-
-			Ext.each(group.children, function(c) {
-				if (/deleted/i.test(c.get('ChangeType'))) {
-					maybeFinish();
-					return;
-				}
-
-				var item = this.changeToActivity(c, maybeFinish, extend);
-
-				if (!item) {
-					return;
-				}
-
-				items.push(item);
-				UserRepository.getUser(item.record && item.record.get('Creator'), function(u) {
-					item.name = u.getName();
-					maybeFinish();
-
+				})
+				.fail(function(reason) {
+					console.error(reason);
 				});
-
-			}, this);
 		}
 
 		if (store.getGroups().length === 0 || store.getCount() === 0) {
@@ -346,11 +331,12 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	},
 
 
-	changeToActivity: function(c, maybeFinish, extend) {
-		var item = c.get('Item'),
+	changeToActivity: function(c) {
+		var me = this, p = new Promise(),
+			item = c.get('Item'),
 			cid = item ? item.get('ContainerId') : undefined,
 			guid = guidGenerator(),
-			activity;
+			activity, activityData;
 
 		function getType(item) {
 			if (!item) {
@@ -366,9 +352,11 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		}
 
 		if (!this.passesFilter(item)) {
-			return;
+			p.fulfill();
+			return p;
 		}
-		activity = this.stream[guid] = Ext.apply({
+
+		activityData = {
 			activity: true,
 			guid: guid,
 			name: c.get('Creator'),
@@ -376,87 +364,44 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			type: getType(item),
 			ContainerId: cid,
 			ContainerIdHash: cid ? IdCache.getIdentifier(cid) : undefined
-		}, this.getMessage(c, cid, guid, maybeFinish, extend));
+		}
 
-		Ext.callback(extend);
-		UserRepository.getUser(c.get('Creator'), function(u) {
-			activity.name = u.getName();
-			Ext.callback(maybeFinish);
-		});
+		Promise.pool(this.getMessage(c, cid), UserRepository.getUser(c.get('Creator')))
+			.done(function(r){
+				activityData.name = r[1].getName();
 
-		return activity;
+				activity = me.stream[guid] = Ext.apply(activityData, r[0]);
+				p.fulfill(activity);
+			})
+			.fail(function(reason){
+				console.error('changeToActivity failed because:', reason);
+				p.reject(reason);
+			});
+
+		return p;
 	},
 
 
-	getMessage: function(change, cid, guid, maybeFinish, extend) {
-		var item = change.get('Item'),
-			type = change.get('ChangeType'),
-			stream = this.stream,
-			result = null;
-
-		//TODO: XXX: FIX this to be better... if/ifelse/else branches are ugly.
-
-		function getName(type) {
-
-			function resolve(meta) {
-
-				stream[guid].verb = 'Shared a ' + type;
-				stream[guid].message = Ext.String.ellipsis(' in &ldquo' + ((meta || {}).label || ''), 50, true) + '&rdquo;';
-
-				Ext.callback(maybeFinish);
-			}
-
-			Ext.callback(extend);
-			if (cid) {
-				LocationMeta.getMeta(cid, resolve);
-				return;
-			}
-			resolve(null);
-		}
-
+	getMessage: function(change, cid) {
+		var p = new Promise(),
+			item = change.get('Item'),
+			type = change.get('ChangeType');
 
 		if (!item) {
 			result = {message: 'Unknown'};
+			p.fulfill(result);
 		}
 
-		else if (item instanceof NextThought.model.User) {
-			result = {
-				name: item.getName(),
-				verb: ((/circled/i).test(type) ? ' added you as a contact.' : '?')
-			};
-		}
+		item.getActivityItemConfig(type, cid)
+			.done( function(result) {
+				p.fulfill(result);
+			})
+			.fail( function(reason) {
+				console.error('getActivityItemConfig failed because: ', reason, type, item.getModelName(), item, change);
+				p.reject('Failed to find a result')
+			});
 
-		else if (item instanceof NextThought.model.Note) {
-			result = {
-				message: Ext.String.format('&ldquo;{0}&rdquo;', Ext.String.ellipsis(item.getBodyText(), 50, true)),
-				verb: item.get('inReplyTo') ? 'said' : 'shared a note'
-			};
-		}
-
-		else if (item instanceof NextThought.model.Highlight) {
-			console.error('does this branch (highlight and redaction) get called??');
-			Ext.defer(getName, 1, this, [item.getModelName().toLowerCase()]);
-			result = {};
-		}
-
-		else if (item instanceof NextThought.model.forums.HeadlineTopic) {
-			result = {
-				message: Ext.String.ellipsis(item.get('headline').get('title'), 50, true),
-				verb: item.getActivityLabel()
-			};
-		}
-
-		else if (item instanceof NextThought.model.forums.Post) {
-			result = {
-				message: Ext.String.format('&ldquo;{0}&ldquo;', Ext.String.ellipsis(item.getBodyText(), 50, true)),
-				verb: 'commented'
-			};
-		}
-
-		if (!result) {
-			console.error('Not sure what activity text to use for ', type, item.getModelName(), item, change);
-		}
-		return result;
+		return p;
 	},
 
 

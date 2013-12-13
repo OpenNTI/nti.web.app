@@ -16,5 +16,31 @@ Ext.define('NextThought.model.Highlight', {
 		{ name: 'applicableRange', type: 'ContentRangeDescription'},
 
 		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false, affectedBy: 'Last Modified'}
-	]
+	],
+
+	getActivityItemConfig: function(type, cid){
+		var p = new Promise(), result = {};
+
+		function getName(t) {
+
+			function resolve(meta) {
+
+				result.verb = 'Shared a ' + t;
+				result.message = Ext.String.ellipsis(' in &ldquo' + ((meta || {}).label || ''), 50, true) + '&rdquo;';
+
+				p.fulfill(result);
+			}
+
+			if (cid) {
+				LocationMeta.getMeta(cid, resolve);
+				return;
+			}
+			resolve(null);
+		}
+
+		console.error('does this branch (highlight and redaction) get called??');
+		Ext.defer(getName, 1, this, [this.getModelName().toLowerCase()]);
+
+		return p;
+	},
 });

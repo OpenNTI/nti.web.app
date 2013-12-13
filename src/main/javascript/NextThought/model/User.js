@@ -226,6 +226,19 @@ Ext.define('NextThought.model.User', {
 		};
 
 		Ext.Ajax.request(req);
+	},
+
+	getActivityItemConfig: function(type){
+		var p = new Promise(), result;
+
+		result = {
+			name: this.getName(),
+			verb: ((/circled/i).test(type) ? ' added you as a contact.' : '?')
+		};
+
+		p.fulfill(result);
+
+		return p;
 	}
 
 }, function() {

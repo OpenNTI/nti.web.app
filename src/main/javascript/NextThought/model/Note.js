@@ -362,5 +362,18 @@ Ext.define('NextThought.model.Note', {
 			ReferencedByCount: data.ReferencedByCount
 		});
 		me.resumeEvents();
+	},
+
+	getActivityItemConfig: function(){
+		var p = new Promise(), result;
+
+		result = {
+			message: Ext.String.format('&ldquo;{0}&rdquo;', Ext.String.ellipsis(this.getBodyText(), 50, true)),
+			verb: this.get('inReplyTo') ? 'said' : 'shared a note'
+		};
+
+		p.fulfill(result);
+
+		return p;
 	}
 });
