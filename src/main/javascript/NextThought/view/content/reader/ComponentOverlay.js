@@ -57,10 +57,10 @@ Ext.define('NextThought.view.content.reader.ComponentOverlay', {
 
 	/**
 	 *
-	 * @param key String|Object
-	 * @param [panel] Object
+	 * @param {String|Object} key
+	 * @param {Object} [panel]
 	 */
-	registerOverlayedPanel: function(key,panel) {
+	registerOverlayedPanel: function(key, panel) {
 
 		if (!panel && Ext.isObject(key)) {
 			panel = key;

@@ -20,6 +20,7 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 
 		this.reader = new FileReader();
 		this.reader.onload = Ext.bind(this.onFileLoaded, this);
+
 		this.callParent(arguments);
 	},
 
@@ -27,6 +28,21 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 	onFileLoaded: function(event) {
 		this.unmask();
 		this.value.value = event.target.result;
+	},
+
+
+	beforeRender: function() {
+		if (this.question.tallyParts() === 1) {
+			this.up('assessment-question')
+					.removeCls('question')
+					.addCls('file-submission');
+		}
+
+		if (this.questionSet && this.questionSet.tallyParts() === 1) {
+			this.questionSet.fireEvent('hide-quiz-submission');
+		}
+
+		this.callParent(arguments);
 	},
 
 

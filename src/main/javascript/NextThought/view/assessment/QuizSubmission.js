@@ -8,6 +8,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 	ui: 'assessment',
 	appendPlaceholder: true,
 	hidden: true,
+	shouldShow: true,
 
 	/* Because we're inheriting from a "Panel" to get the special handling provided by the super class, we can't use
 	 * our typical renderTpl. Instead we're going to take advantage of the Ext.panal.Panel's html config property...
@@ -36,9 +37,10 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		this.hide();
 		this.mon(this.questionSet, {
 			scope: this,
-			'answered': this.updateStatus,
-			'reset': this.reset,
-			'graded': this.graded
+			'answered': 'updateStatus',
+			'reset': 'reset',
+			'graded': 'graded',
+			'hide-quiz-submission': 'disableView'
 		});
 
 		Ext.each(this.questionSet.get('questions'), function(q) {
@@ -47,6 +49,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 
 		this.answeredMap = answeredMap;
 	},
+
 
 	afterRender: function() {
 		this.callParent(arguments);
@@ -63,16 +66,25 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		},1);
 	},
 
+
 	isActive: function() {
 		return this.state === 'active';
 	},
+
 
 	isSubmitted: function() {
 		return this.state === 'submitted';
 	},
 
+
 	isReady: function() {
 		return !this.isActive() && !this.isSubmitted;
+	},
+
+
+	disableView: function() {
+		this.shouldShow = false;
+		this.hide();
 	},
 
 	moveToActive: function() {
@@ -87,6 +99,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		this.submitBtn.removeCls('disabled');
 	},
 
+
 	moveToSubmitted: function() {
 		if (this.isSubmitted()) {
 			return;
@@ -100,6 +113,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		this.submitBtn.removeCls('disabled');
 	},
 
+
 	moveToReady: function() {
 		if (this.isReady()) {
 			return;
@@ -109,12 +123,14 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		delete this.submitted;
 	},
 
+
 	transitionToActive: function() {
 		if (this.isSubmitted()) {
 			this.maybeDoReset(true);
 		}
 		this.moveToActive();
 	},
+
 
 	updateStatus: function(question, part, status, enabling) {
 		if (enabling) {
@@ -161,6 +177,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		return false;
 	},
 
+
 	resetBasedOnButtonClick: function(e) {
 		//If we are in a submitted state we want to reset things
 		if (this.maybeDoReset(true)) {
@@ -172,6 +189,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 			return false;
 		}
 	},
+
 
 	resetClicked: function(e) {
 		if (this.isSubmitted()) {
@@ -217,14 +235,15 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 	},
 
 
-
 	setGradingResult: function(assessedQuestionSet) {
 		this.questionSet.fireEvent('graded', assessedQuestionSet);
 	},
 
 
 	syncTop: function() {
-		this.show();
+		if (this.shouldShow) {
+			this.show();
+		}
 		this.callParent();
 	}
 });

@@ -21,6 +21,8 @@ Ext.define('NextThought.controller.Assessment', {
 		'assessment.MatchingSolution',
 		'assessment.MathPart',
 		'assessment.MathSolution',
+		'assessment.MultipleChoiceMultipleAnswerPart',
+		'assessment.MultipleChoiceMultipleAnswerSolution',
 		'assessment.MultipleChoicePart',
 		'assessment.MultipleChoiceSolution',
 		'assessment.NumericMathPart',
