@@ -18,8 +18,8 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 			tabIndex: this.tabIndexTracker.getNext()
 		});
 
-		this.reader = new FileReader();
-		this.reader.onload = Ext.bind(this.onFileLoaded, this);
+		this.filereader = new FileReader();
+		this.filereader.onload = Ext.bind(this.onFileLoaded, this);
 
 		this.callParent(arguments);
 	},
@@ -48,7 +48,7 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 
 	afterRender: function() {
 		this.callParent(arguments);
-		var reader = this.reader,
+		var reader = this.filereader,
 			me = this;
 		this.mon(this.inputField, {
 			scope: this,
