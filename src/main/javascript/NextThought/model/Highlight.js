@@ -42,5 +42,5 @@ Ext.define('NextThought.model.Highlight', {
 		Ext.defer(getName, 1, this, [this.getModelName().toLowerCase()]);
 
 		return p;
-	},
+	}
 });
