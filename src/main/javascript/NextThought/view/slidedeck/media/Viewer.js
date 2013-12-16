@@ -189,10 +189,10 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			me.el.setStyle('visibility', 'hidden');//layout w/o flicker, animateIn will show it.
 		}
 
-    if (me.videoOnly) {
-      me.el.addCls('video-only');
-    }
-    	//check if we need to restore a type or use the default
+		if (me.videoOnly) {
+			me.el.addCls('video-only');
+		}
+		//check if we need to restore a type or use the default
 		playerType = (me.noTranscript)? 'full-video' : me.getStorageManager().get('media-viewer-player-type') || 'video-focus';
 
 		//TODO: redo this. better.
@@ -387,7 +387,14 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 	exitViewer: function() {
 		console.log('about to exit the video viewer');
-		var annotation = this.down('annotation-view');
+		var annotation = this.down('annotation-view'),
+			transcript = this.down('slidedeck-transcript'),
+			noteOverlay = transcript && transcript.noteOverlay,
+			editor = noteOverlay && noteOverlay.editor;
+
+		if (transcript && !transcript.fireEvent('beforedestroy')) {
+			return;
+		}
 
 		Ext.getBody().removeCls('media-viewer-open').addCls('media-viewer-closing');
 		this.removeCls('ready');
@@ -396,6 +403,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		if (annotation && annotation.destroy()) {
 			annotation.destroy();
 		}
+
 
 		Ext.defer(this.destroy, 1100, this);
 		Ext.defer(this.fireEvent, 1100, this, ['exited', this]);

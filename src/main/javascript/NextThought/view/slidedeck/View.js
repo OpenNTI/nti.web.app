@@ -255,11 +255,17 @@ Ext.define('NextThought.view.slidedeck.View', {
 		}
 
 		function close() {
-			var slide = me.getSlide().slide;
+			var slide = me.getSlide().slide,
+				transcript = me.down('slidedeck-transcript');
+
+			if (transcript && !transcript.fireEvent('beforedestroy')) {
+				return;
+			}
 
 			if (me.fireEvent('beforeexit', me, slide) === false) {
 				return;
 			}
+			
 			me.destroy();
 			me.fireEvent('exited', me, slide);
 		}

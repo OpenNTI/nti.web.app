@@ -92,6 +92,8 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 		me.reader.relayEvents(me, ['save-new-note', 'save-new-series-note']);
 		me.reader.fireEvent('uses-page-preferences', this);
+
+		me.on('beforedestroy','beforeDestroy');
 	},
 
 
@@ -107,6 +109,19 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 			'show-editor': 'showEditorByEl',
 			'show-editor-inline': 'showEditorAtPosition'
 		});
+	},
+
+	beforeDestroy: function(){
+		if (this.editor && this.editor.isActive()) {
+			var msg = 'You are currently creating a note. Please save or cancel it first.';
+			Ext.defer(function() {
+				alert({msg: msg});
+			}, 1);
+
+			return false;
+		}
+
+		return true;
 	},
 
 

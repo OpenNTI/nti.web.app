@@ -272,6 +272,8 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			'mousedown': 'mayBeHideAnnotationView'
 		});
 
+		this.on('beforedestroy', 'beforeDestroy');
+
 		this.on('will-hide-transcript', function() {
 			if (this.annotationView) {
 				this.annotationView.hide();
@@ -553,6 +555,11 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			this.annotationView.refresh();
 		}
 		this.annotationView.show();
+	},
+
+
+	beforeDestroy: function() {
+		return this.noteOverlay && this.noteOverlay.fireEvent('beforedestroy');
 	},
 
 
