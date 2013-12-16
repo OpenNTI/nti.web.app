@@ -47,6 +47,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 	store: new Ext.data.Store({
 		fields: [
 			{name: 'ntiid', type: 'string'},
+			{name: 'containerId', type: 'string'},
 			{name: 'label', type: 'string'},
 			{name: 'target', type: 'string'},
 			{name: 'date', type: 'date'}
@@ -105,6 +106,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 	getEventConfig: function(label, target, date) {
 		return {
 			ntiid: target.getId(),
+			containerId: target.get('containerId'),
 			item: target,
 			label: label,
 			target: target.get('title'),

@@ -107,6 +107,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 		var store = this.store = new Ext.data.Store({
 			fields: [
 				{name: 'ntiid', type: 'string'},
+				{name: 'containerId', type: 'string'},
 				{name: 'name', type: 'string'},
 				{name: 'assigned', type: 'date'},
 				{name: 'due', type: 'date'},
@@ -159,6 +160,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 
 			raw.push({
 				ntiid: id,
+				containerId: o.get('containerId'),
 				item: o,
 				name: o.get('title'),
 				assigned: o.get('availableBeginning'),

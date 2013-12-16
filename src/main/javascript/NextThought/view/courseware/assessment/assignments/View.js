@@ -41,7 +41,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 	getFields: function() {
 		return [
 			{name: 'lesson', type: 'string'},
-			{name: 'id', type: 'int'},
+			{name: 'id', type: 'string'},
+			{name: 'containerId', type: 'string'},
 			{name: 'name', type: 'string'},
 			{name: 'due', type: 'date'},
 			{name: 'completed', type: 'date'},
@@ -136,6 +137,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 			raw.push({
 				id: id,
+				containerId: o.get('containerId'),
 				lesson: lesson,
 				item: o,
 				history: h,

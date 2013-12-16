@@ -42,6 +42,9 @@ Ext.define('NextThought.controller.CourseWare', {
 				'content-view-container': {
 					'get-course-hooks': 'applyCourseHooks'
 				},
+				'course-assessment-activity': { 'itemclick': 'navigateToAssignment' },
+				'course-assessment-assignment-list': { 'itemclick': 'navigateToAssignment' },
+				'course-assessment-assignment-group grid': { 'itemclick': 'navigateToAssignment' },
 				'*': {
 					'course-selected': 'onCourseSelected'
 				}
@@ -180,5 +183,10 @@ Ext.define('NextThought.controller.CourseWare', {
 				});
 
 		return p;
+	},
+
+
+	navigateToAssignment: function(view, record) {
+		this.fireEvent('show-ntiid', record.get('containerId'));
 	}
 });
