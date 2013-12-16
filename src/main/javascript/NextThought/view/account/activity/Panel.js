@@ -249,7 +249,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		this.store.filterBy(this.filterStore, this);
 		this.store.resumeEvents();
 
-		totalExpected = store.getCount();
+		totalExpected = -1;
 		if (this.currentCount !== undefined && totalExpected <= this.currentCount) {
 			console.log('Need to fetch again. Didn\'t return any new data');
 			delete this.currentCount;
@@ -272,13 +272,11 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			return Ext.data.Types.GROUPBYTIME.groupTitle(name, false);
 		}
 
-		function doGroup(group) {
+		function doGroup(group, index, groups) {
 			var me = this,
 				label = groupToLabel(group.name);
 
-			if (label) {
-				items.push({ label: label });
-			}
+			totalExpected = (totalExpected > 0)? totalExpected : groups.length;
 
  	  		function promiseToResolve(agg, c) {
 				if (!/deleted/i.test(c.get('ChangeType'))) {
@@ -288,11 +286,21 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			}
 
 			Promise.pool(group.children.reduce(promiseToResolve, []))
-				.done(function(items){
+				.done(function(results){
 					//get rid of any nulls
-					items = items.filter(function(i){ return i;});
+					results = results.filter(function(i){ return i;});
 
-					me.feedTpl.overwrite(container.getEl(), items);
+					if (label) {
+						items.push({ label: label });
+					}
+
+					items = items.concat(results);
+					
+					totalExpected--;
+
+					if(totalExpected === 0){
+						me.feedTpl.overwrite(container.getEl(), items);
+					}
 					//maybeAddMoreButton();
 					container.updateLayout();
 				})
@@ -441,7 +449,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			me.fireEvent('navigate-to-blog', user, rec.get('ID'));
 		});
 	},
-
+	
 
 	forumTopicClicked: function(rec) {
 		if (this.fireEvent('before-show-topic', rec)) {
