@@ -2,10 +2,14 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 	extend: 'NextThought.view.assessment.input.Base',
 	alias: 'widget.question-input-filepart',
 
+	cls: 'file-submission',
+
 	inputTpl: Ext.DomHelper.markup({
-		tag: 'input',
-		type: 'file',
-		cls: 'file'
+		cn: [
+			{ html: '{label}' },
+			{ tag: 'tpl', 'if': 'date', cn: { html: '{due}' }},
+			{ tag: 'input', type: 'file', cls: 'file' }
+		]
 	}),
 
 	renderSelectors: {
@@ -32,14 +36,24 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 
 
 	beforeRender: function() {
+		this.renderData = Ext.apply(this.renderData || {}, {
+			label: this.part.get('content')
+		});
+
+		var q = this.questionSet,
+			assignment = q && q.associatedAssignment;
+
 		if (this.question.tallyParts() === 1) {
 			this.up('assessment-question')
 					.removeCls('question')
 					.addCls('file-submission');
 		}
 
-		if (this.questionSet && this.questionSet.tallyParts() === 1) {
-			this.questionSet.fireEvent('hide-quiz-submission');
+		if (q && q.tallyParts() === 1) {
+			q.fireEvent('hide-quiz-submission');
+			if (assignment) {
+				this.renderData.label = assignment.get('title');
+			}
 		}
 
 		this.callParent(arguments);
