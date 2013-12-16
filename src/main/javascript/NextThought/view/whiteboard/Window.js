@@ -110,6 +110,10 @@ Ext.define('NextThought.view.whiteboard.Window', {
 			scope: this,
 			'click': this.absorbeClick
 		});
+
+        if(Ext.is.iOS){
+           this.minHeight = 671;
+        }
 	},
 
 

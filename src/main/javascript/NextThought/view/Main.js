@@ -58,6 +58,11 @@ Ext.define('NextThought.view.Main', {
 			return;
 		}
 
+        if(e.browserEvent.touches[1]){
+            this.scrolledY = null;
+            return;
+        }
+
 		// Dispatch mouseenter
 		mouseEnterEvent = document.createEvent('MouseEvents');
 		mouseEnterEvent.initMouseEvent('mouseenter', true, true, window,
@@ -94,10 +99,33 @@ Ext.define('NextThought.view.Main', {
 			return;
 		}
 
-		// If the event target wasn't a scrollable element, then we don't want scrolling
+        // If the event target wasn't a scrollable element, then we don't want scrolling
 		if (!scrollable) {
 			e.preventDefault();
 		}
+
+        // Scroll scrollable element on two-finger scrolling
+        if(e.browserEvent.changedTouches[1]){
+            var scrollableElement = Ext.get(touch.target);
+            while(true){
+                if(scrollableElement.isScrollable()){
+                    break;
+                }
+                else{
+                    if(scrollableElement.parent()){
+                        scrollableElement = scrollableElement.parent();
+                    }
+                    else{
+                        return;
+                    }
+                }
+            }
+            if(!this.scrolledY){
+                this.scrolledY = touch.clientY;
+            }
+            scrollableElement.scrollBy(0, this.scrolledY - touch.clientY);
+            this.scrolledY = touch.clientY;
+        }
 
 		// Dispatch mousemove
 		mouseMoveEvent = document.createEvent('MouseEvents');
@@ -141,7 +169,11 @@ Ext.define('NextThought.view.Main', {
 		if (!touch) {
 			return;
 		}
-		// Dispatch mouseup
+
+        if(e.browserEvent.changedTouches[1]){
+           return;
+        }
+
 		mouseUpEvent = document.createEvent('MouseEvents');
 		mouseUpEvent.initMouseEvent('mouseup', true, true, window,
 			1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
@@ -230,7 +262,7 @@ Ext.define('NextThought.view.Main', {
 
 		if (Ext.is.iOS) {
 			//this.setupTablet();
-			Ext.getDoc().swallowEvent('gesturestart', true);
+			//Ext.getDoc().swallowEvent('gesturestart', true);
 			this.lockOrientation();
 
 			//keep element under body from shrinking. Can cause the screen to go white
@@ -238,14 +270,14 @@ Ext.define('NextThought.view.Main', {
 				me.el.setStyle('min-height', me.el.getHeight() + 'px');
 			},1000);
 
-			//assume that after a blurred input or contentEditable div, that the
-			//keyboard is being dismissed. Make sure window is at (0,0) and not misaligned.
-			document.addEventListener('focusout', function(e) {
-				if (e.target.tagName === 'INPUT' || e.target.isContentEditable) {
-					window.scrollTo(0, 0);
-				}
-			});
 
+            //Adjust the height to get rid of the odd white bar at the bottom
+            //Edit: the top bar is getting cut off a little bit
+            console.log(Ext.get(Ext.query('.viewport')[0]).getHeight());
+            Ext.defer(function(){
+                Ext.get(Ext.query('.viewport')[0]).setHeight(window.outerHeight);
+                Ext.get('view').setHeight(window.outerHeight - Ext.get('nav').getHeight());
+            },500);
 		}
 	},
 
