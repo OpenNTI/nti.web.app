@@ -52,6 +52,11 @@ Ext.define('NextThought.view.assessment.Scoreboard', {
 	},
 
 
+	disableView: function() {
+		this.shouldShow = false;
+		this.hide();
+	},
+
 	updateWithResults: function(assessedQuestionSet) {
 		if (!this.shouldShow || this.questionSet.associatedAssignment) {
 			return;
