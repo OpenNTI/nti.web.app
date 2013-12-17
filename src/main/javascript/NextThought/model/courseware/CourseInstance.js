@@ -12,6 +12,9 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 		var me = this;
 		me._uiData = me._uiData || (function() {
 			var e = me.getCourseCatalogEntry();
+			if (!e) {
+				console.error('CourseCatalogEntry for', this, 'has not been preloaded yet.');
+			}
 			return {
 				id: me.getId(),
 				isCourse: true,
