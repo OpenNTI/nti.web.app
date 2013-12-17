@@ -95,14 +95,15 @@ Ext.define('NextThought.controller.Profile', {
 			o = this.getController('State').interpretFragment(url),
 			v = this.getProfileView();
 
-		v.on('finished-restore', function() {
-			console.debug('Finished restore', o);
-			history.pushState(o, document.title, url);
-			history.endTransaction('showing-profile');
-			Ext.callback(callback, null, [user]);
-		},this, {single: true});
-
-		v.restore(o);
+		v.restore(o)
+			.done(function() {
+				console.debug('Finished restore', o);
+				history.pushState(o, document.title, url);
+				history.endTransaction('showing-profile');
+				Ext.callback(callback, null, [user]);
+			})
+			.fail(function(reason) {
+			});
 
 
 		return true;
