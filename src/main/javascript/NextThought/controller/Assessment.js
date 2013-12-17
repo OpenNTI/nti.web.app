@@ -61,7 +61,7 @@ Ext.define('NextThought.controller.Assessment', {
 
 				'assessment-quiz-submission': {
 					'grade-it': 'grade',
-					 'submit-assignment': 'submit'
+					'submit-assignment': 'submit'
 				}
 			}
 		});

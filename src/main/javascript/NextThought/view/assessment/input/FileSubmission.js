@@ -15,7 +15,9 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 	}),
 
 	renderSelectors: {
-		inputField: 'input[type=file]'
+		inputField: 'input[type=file]',
+		dueEl: 'time.due',
+		labelBoxEl: '.label'
 	},
 
 
@@ -34,6 +36,34 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 	onFileLoaded: function(event) {
 		this.unmask();
 		this.value.value = event.target.result;
+
+		var me = this,
+			q = me.questionSet,
+			p = new Promise(),
+			assignment = q && q.associatedAssignment;
+
+		p.done(function() {
+			if (!assignment || assignment.getDueDate() > new Date()) {
+				me.addCls('good');
+				me.dueEl.update('Submitted On-Time');
+			} else {
+				me.addCls('late');
+				me.dueEl.update('Submitted Late');
+			}
+
+			me.markCorrect();
+		}).fail(function(reason) {
+
+				});
+
+		if (q && q.tallyParts() === 1) {
+			console.debug('Auto submitting...');
+			q.fireEvent('do-submission', {stopEvent: Ext.emptyFn});
+			//eventually pass promise down and let it be fulfilled when submission finishes
+		//} else {
+			//p.fulfill();//nothing to do.
+		}
+		p.fulfill();
 	},
 
 
@@ -80,10 +110,11 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 					filename: file.name
 				};
 
-				this[allowed ? 'reset' : 'markIncorrect']();
+				this[allowed ? 'reset' : 'markBad']();
 				//p.reason;
 				if (allowed) {
 					me.mask();
+					me.labelBoxEl.update(file.name);
 					reader.readAsDataURL(file);
 				}
 
@@ -100,20 +131,17 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 	setValue: function() {},
 
 
-	markCorrect: function() {
-		this.callParent(arguments);
-		this.inputBox.removeCls('incorrect').addCls('correct');
+	markCorrect: function() {},
+
+
+	markIncorrect: function() {},
+
+
+	markBad: function() {
+		this.labelBoxEl.update('That file is not acceptable. Please pick another.');
 	},
-
-
-	markIncorrect: function() {
-		this.callParent(arguments);
-		this.inputBox.removeCls('correct').addCls('incorrect');
-	},
-
 
 	reset: function() {
 		this.callParent(arguments);
-		this.inputBox.removeCls(['incorrect', 'correct']);
 	}
 });

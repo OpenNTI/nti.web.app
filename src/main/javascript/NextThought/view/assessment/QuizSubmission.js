@@ -40,7 +40,8 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 			'answered': 'updateStatus',
 			'reset': 'reset',
 			'graded': 'graded',
-			'hide-quiz-submission': 'disableView'
+			'hide-quiz-submission': 'disableView',
+			'do-submission': 'submitClicked'
 		});
 
 		Ext.each(this.questionSet.get('questions'), function(q) {
@@ -210,13 +211,15 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 			isAssignment = !!q.associatedAssignment,
 			submission = {};
 
-		if (!this.submitBtn || this.submitBtn.hasCls('disabled')) {
-			e.stopEvent();
-			return false;
-		}
+		if (this.shouldShow) {//skip this part if we're being driven by the file-submission UI.
+			if (!this.submitBtn || this.submitBtn.hasCls('disabled')) {
+				if (e) {e.stopEvent();}
+				return false;
+			}
 
-		if (this.isSubmitted()) {
-			return this.resetBasedOnButtonClick(e);
+			if (this.isSubmitted()) {
+				return this.resetBasedOnButtonClick(e);
+			}
 		}
 
 		if (!q.fireEvent('beforesubmit', q, submission)) {

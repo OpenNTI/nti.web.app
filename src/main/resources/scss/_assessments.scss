@@ -1014,6 +1014,19 @@ body.dragging * {
 
 		@include icon('assignment_due', $top: 20px, $left: 30px);
 
+		&.late {
+			.due {color: $primary-red;}
+			&::after {
+				@include sprite($icons,'assignment_late');
+			}
+		}
+		&.good {
+			.due {color: $primary-green;}
+			&::after {
+				@include sprite($icons,'assignment_ontime');
+			}
+		}
+
 		& > .response-container,
 		& > .response-container .inputbox {
 			border: none !important;
