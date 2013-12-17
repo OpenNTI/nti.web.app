@@ -33,13 +33,24 @@ Ext.define('NextThought.Library', {
 
 
 	getStore: function() {
+		var p, me = this;
+
+		p = this.promiseToLoad;
+
 		if (!this.store) {
 			this.store = new NextThought.store.Library({
 				id: 'library',
 				filterOnLoad: false,
 				listeners: {
 					scope: this,
-					load: 'onLoad'
+					load: 'onLoad',
+					beforeload: function() {
+						var old = p;
+						p = me.promiseToLoad = new Promise();
+						if (old && !old.isResolved()) {
+							p.then(old);
+						}
+					}
 				},
 				filters: [
 					{
