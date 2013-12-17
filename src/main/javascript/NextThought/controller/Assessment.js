@@ -189,7 +189,13 @@ Ext.define('NextThought.controller.Assessment', {
 			//containerId: containerId,
 			parts: [s.create(qset)]
 		});
-
-		a.save({url: Service.getObjectURL(assignmentId)});
+		widget.mask();
+		a.save({url: Service.getObjectURL(assignmentId),
+			success: function(self, op) {
+				var result = op.getResultSet().records.first().get('parts').first();//hack
+				widget.unmask();
+				widget.setGradingResult(result);
+			}
+		});
 	}
 });
