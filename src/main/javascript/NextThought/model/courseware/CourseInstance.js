@@ -69,7 +69,9 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 		var c = this.getCourseCatalogEntry(),
 			locationInfo = ContentUtils.getLocation(c && c.get('ContentPackageNTIID'));
 		//add a reference to myself so the course tiles can get the course instance form the locationInfo for now
-		locationInfo.courseInstance = this;
+		if (locationInfo) {
+			locationInfo.courseInstance = this;
+		}
 
 		return locationInfo;
 	},
