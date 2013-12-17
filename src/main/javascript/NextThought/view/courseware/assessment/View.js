@@ -61,6 +61,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 	courseChanged: function(instance, refresh) {
 		var me = this;
 		me.instanceId = instance && instance.getId();
+		me.instance = instance;
 
 		if (!instance) {
 			me.clearViews();

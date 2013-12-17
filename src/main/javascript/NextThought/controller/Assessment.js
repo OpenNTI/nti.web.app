@@ -50,7 +50,9 @@ Ext.define('NextThought.controller.Assessment', {
 		'assessment.input.SymbolicMath'
 	],
 
-	refs: [],
+	refs: [
+		{ ref: 'assignmentView', selector: 'course-assessment' }
+	],
 
 	init: function() {
 		this.fileSubmissions = new Ext.util.MixedCollection();
@@ -179,6 +181,7 @@ Ext.define('NextThought.controller.Assessment', {
 
 		var s = this.getAssessmentQuestionSetSubmissionModel(),
 			a = this.getAssessmentAssignmentSubmissionModel(),
+			progress = this.getAssignmentView(),
 			//containerId = widget.reader.getLocation().NTIID,
 			assignmentId = questionSet.associatedAssignment.getId(),
 			qset = {
@@ -200,8 +203,11 @@ Ext.define('NextThought.controller.Assessment', {
 				var result = op.getResultSet().records.first().get('parts').first();//hack
 				widget.unmask();
 				widget.setGradingResult(result);
+				if (progress.instance) {
+					progress.courseChanged(progress.instance);
+				}
 			},
-			failure: function(){
+			failure: function() {
 				console.error('FAIL', arguments);
 				alert('There was a problem submitting your assignment.');
 				widget.unmask();
