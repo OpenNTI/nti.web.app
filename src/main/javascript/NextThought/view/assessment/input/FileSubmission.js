@@ -38,23 +38,15 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 		this.value.value = event.target.result;
 
 		var me = this,
-			q = me.questionSet,
-			p = new Promise(),
-			assignment = q && q.associatedAssignment;
+			p = new Promise();
 
 		p.done(function() {
-			if (!assignment || assignment.getDueDate() > new Date()) {
-				me.addCls('good');
-				me.dueEl.update('Submitted On-Time');
-			} else {
-				me.addCls('late');
-				me.dueEl.update('Submitted Late');
-			}
-
+			me.markSubmitted(new Date());
 			me.markCorrect();
 		}).fail(function(reason) {
-
-				});
+			console.error(reason);
+			me.markIncorrect();
+		});
 
 		if (q && q.tallyParts() === 1) {
 			console.debug('Auto submitting...');
@@ -120,6 +112,9 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 
 			}
 		});
+
+
+		this.fireEvent('has-been-submitted', this);
 	},
 
 
@@ -135,6 +130,20 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 
 
 	markIncorrect: function() {},
+
+
+	markSubmitted: function(date) {
+		var q = this.questionSet,
+			assignment = q && q.associatedAssignment;
+
+		if (!assignment || assignment.getDueDate() > date) {
+			this.addCls('good');
+			this.dueEl.update('Submitted On-Time');
+		} else {
+			this.addCls('late');
+			this.dueEl.update('Submitted Late');
+		}
+	},
 
 
 	markBad: function() {

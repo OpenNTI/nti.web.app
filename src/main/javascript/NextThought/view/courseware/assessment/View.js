@@ -58,7 +58,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 	},
 
 
-	courseChanged: function(instance) {
+	courseChanged: function(instance, refresh) {
 		var me = this;
 		me.instanceId = instance && instance.getId();
 
@@ -88,6 +88,8 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 						if (!isSync()) { return; }
 						var history = ParseUtils.parseItems(txts[0])[0],
 							assignments = Ext.decode(txts[1], true);
+
+						me.fireEvent('set-assignemnt-history', history);
 
 						me.forEachView(me.callFunction('setAssignmentsData',
 								[assignments, history, o]));

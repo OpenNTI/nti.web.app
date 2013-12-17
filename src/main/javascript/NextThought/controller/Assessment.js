@@ -53,8 +53,14 @@ Ext.define('NextThought.controller.Assessment', {
 	refs: [],
 
 	init: function() {
+		this.fileSubmissions = new Ext.util.MixedCollection();
+
 		this.listen({
 			component: {
+				'*': {
+					'has-been-submitted': 'maybeMarkFileSubmissionAsSubmitted',
+					'set-assignemnt-history': 'applyAssessmentHistory'
+				},
 				'assessment-question': {
 					'check-answer': 'checkAnswer'
 				},
@@ -65,6 +71,36 @@ Ext.define('NextThought.controller.Assessment', {
 				}
 			}
 		});
+	},
+
+
+	maybeMarkFileSubmissionAsSubmitted: function(cmp) {
+		var me = this,
+			h = me.history,
+			q = cmp.questionSet,
+			a = q && q.associatedAssignment,
+			o;
+
+		if (!a) { return; }
+
+		me.fileSubmissions.add(cmp);
+		cmp.on('destroy', function() {
+			me.fileSubmissions.remove(cmp);
+		});
+
+		o = h && h.getItem(a.getId());
+		if (o) {
+			o = o.get('Submission');
+			cmp.markSubmitted(o.get('LastModified'));
+		}
+	},
+
+
+	applyAssessmentHistory: function(history) {
+		this.history = history;
+		this.fileSubmissions.each(function(c) {
+			this.maybeMarkFileSubmissionAsSubmitted(c);
+		}, this);
 	},
 
 

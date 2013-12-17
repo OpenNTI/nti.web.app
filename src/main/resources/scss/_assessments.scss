@@ -1015,12 +1015,14 @@ body.dragging * {
 		@include icon('assignment_due', $top: 20px, $left: 30px);
 
 		&.late {
+			.button { display: none; }
 			.due {color: $primary-red;}
 			&::after {
 				@include sprite($icons,'assignment_late');
 			}
 		}
 		&.good {
+			.button { display: none; }
 			.due {color: $primary-green;}
 			&::after {
 				@include sprite($icons,'assignment_ontime');
