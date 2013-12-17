@@ -46,7 +46,7 @@ Ext.define('NextThought.view.content.View', {
 			id: 'course-forum',
 			xtype: 'course-forum'
 		},{
-			title: 'Your Progress',
+			title: 'Assignments',
 			id: 'course-assessment',
 			xtype: 'course-assessment'
 		},{
