@@ -101,7 +101,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Discussion', {
 			alert('An error occurred showing this discussion.');
 		}
 		else {
-			this.fireEvent('show-topic-with-action', topic);
+			this.fireEvent('show-topic-with-action', this.topic);
 			//this.fireEvent('navigate-to-course-discussion', this.locationInfo.title.get('NTIID'), this.topic.get('ContainerId'), this.topic.getId());
 		}
 	}
