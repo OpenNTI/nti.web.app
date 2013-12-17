@@ -5,6 +5,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 	cls: 'course-performance',
 
 	requires: [
+		'Ext.grid.plugin.BufferedRendererTreeView',
 		'Ext.grid.Panel',
 		'Ext.grid.column.Date',
 		'NextThought.chart.Grade',
