@@ -264,11 +264,11 @@ Ext.define('NextThought.view.chat.Window', function() {
 
 			function getEl(c, sub) { return Ext.get(c.getId() + '-' + sub); }
 
-			function iOSStuff() {
-				//Keep the chat windows from disappearing due to positioning.
-				var target = getEl(this, 'targetEl').setStyle('position', '');
-				Ext.get(target.down('.x-box-layout-ct').id + '-targetEl').setStyle('position', '');
-			}
+//			function iOSStuff() {
+//				//Keep the chat windows from disappearing due to positioning.
+//				var target = getEl(this, 'targetEl').setStyle('position', '');
+//				Ext.get(target.down('.x-box-layout-ct').id + '-targetEl').setStyle('position', '');
+//			}
 
 			this.dropZone = Ext.dd.DropZone.create(this.getEl(), {
 
@@ -294,9 +294,9 @@ Ext.define('NextThought.view.chat.Window', function() {
 				}
 			});
 
-			if (Ext.is.iOS) {
-				iOSStuff();
-			}
+//			if (Ext.is.iOS) {
+//				iOSStuff();
+//			}
 		},
 
 
