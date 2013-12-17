@@ -139,14 +139,10 @@ var Promise = (function() {
 		// promise to return
 			promise = new Promise();
 
-		if(Ext.isEmpty(promises)){
-			Ext.Error.raise('Assertion Error: we cant handle an empty array');
-		}
 
-		//FIXME: We never re-assign toGo after unwrapping promises here.  Obvoiusly
-		//we never send an array as the first arg?
 		if (Object.prototype.toString.call(promises[0]) === '[object Array]') {
 			promises = promises[0];
+			toGo = promises.length;
 		}
 
 		values.length = promises.length;
@@ -177,6 +173,8 @@ var Promise = (function() {
 				checkFinished();
 			});
 		}
+
+		checkFinished();//handle empty array.
 
 		// whenever a promise finishes check to see if they're all finished
 		for (i = 0; i < promises.length; i++) {
