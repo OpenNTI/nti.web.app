@@ -29,6 +29,9 @@ Ext.define('NextThought.view.assessment.Scoreboard', {
 	],
 
 
+	shouldShow: true,
+
+
 	initComponent: function() {
 		this.callParent(arguments);
 		this.addDocked({ dock: 'top', xtype: 'assessment-scoreboard-header', questionSet: this.questionSet});
@@ -38,7 +41,8 @@ Ext.define('NextThought.view.assessment.Scoreboard', {
 		this.mon(this.questionSet, {
 			scope: this,
 			'graded': this.updateWithResults,
-			'reset': this.doReset
+			'reset': this.doReset,
+			'hide-quiz-submission': 'disableView'
 		});
 	},
 
@@ -49,6 +53,10 @@ Ext.define('NextThought.view.assessment.Scoreboard', {
 
 
 	updateWithResults: function(assessedQuestionSet) {
+		if (!this.shouldShow || this.questionSet.associatedAssignment) {
+			return;
+		}
+
 		var questions = assessedQuestionSet.get('questions'),
 			correct = 0, total = questions.length;
 

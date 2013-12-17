@@ -58,7 +58,7 @@ Ext.define('NextThought.controller.Assessment', {
 		this.listen({
 			component: {
 				'*': {
-					'has-been-submitted': 'maybeMarkFileSubmissionAsSubmitted',
+					'has-been-submitted': 'maybeMarkSubmissionAsSubmitted',
 					'set-assignemnt-history': 'applyAssessmentHistory'
 				},
 				'assessment-question': {
@@ -74,12 +74,12 @@ Ext.define('NextThought.controller.Assessment', {
 	},
 
 
-	maybeMarkFileSubmissionAsSubmitted: function(cmp) {
+	maybeMarkSubmissionAsSubmitted: function(cmp) {
 		var me = this,
 			h = me.history,
 			q = cmp.questionSet,
 			a = q && q.associatedAssignment,
-			o;
+			o, s;
 
 		if (!a) { return; }
 
@@ -90,8 +90,13 @@ Ext.define('NextThought.controller.Assessment', {
 
 		o = h && h.getItem(a.getId());
 		if (o) {
-			o = o.get('Submission');
-			cmp.markSubmitted(o.get('Last Modified'));
+			s = o.get('Submission');
+			if (cmp.markSubmitted) {
+				cmp.markSubmitted(s.get('Last Modified'));
+			} else if (cmp.setGradingResult && cmp.shouldShow) {
+				s = o.get('pendingAssessment').get('parts')[0];
+				cmp.setGradingResult(s);
+			}
 		}
 	},
 
@@ -99,7 +104,7 @@ Ext.define('NextThought.controller.Assessment', {
 	applyAssessmentHistory: function(history) {
 		this.history = history;
 		this.fileSubmissions.each(function(c) {
-			this.maybeMarkFileSubmissionAsSubmitted(c);
+			this.maybeMarkSubmissionAsSubmitted(c);
 		}, this);
 	},
 

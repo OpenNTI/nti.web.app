@@ -65,6 +65,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 			s.set({tabIndex: t.getNext()});
 			r.set({tabIndex: t.getNext()});
 		},1);
+		this.fireEvent('has-been-submitted', this);
 	},
 
 
