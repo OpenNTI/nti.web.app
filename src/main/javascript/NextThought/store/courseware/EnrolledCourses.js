@@ -49,23 +49,17 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 					p.reject('Store Failed to load');
 				}
 
-				if(Ext.isEmpty(me.getRange())){
-					p.fulfill(me);
-				}
-				else{
-					Promise.pool(Ext.Array.map(
-							me.getRange(),
-							function(r) {
-								return r.__precacheEntry();
-							})).then(
-						function() {
-							p.fulfill(me);
-						},
-						function(reason) {
-							p.reject(reason);
-						});
-				}
-
+				Promise.pool(Ext.Array.map(
+						me.getRange(),
+						function(r) {
+							return r.__precacheEntry();
+						})).then(
+					function() {
+						p.fulfill(me);
+					},
+					function(reason) {
+						p.reject(reason);
+					});
 			}
 		});
 	},
