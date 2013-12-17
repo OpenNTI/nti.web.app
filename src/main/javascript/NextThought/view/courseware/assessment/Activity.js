@@ -76,6 +76,12 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 		this.notifications = 0;
 		this.fireEvent('notify', 0);
 		this._lastRead = new Date();
+		Ext.Ajax.request({
+			url: this.history.get('href') + '/lastViewed',
+			method: 'PUT',
+			jsonData: this._lastRead
+		});
+
 		this.refresh();
 	},
 
@@ -90,6 +96,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 			return;
 		}
 
+		this.history = history;
 		this._lastRead = history.get('lastViewed');
 
 		delete assignments.href;//all other keys are container ids...so, lets just drop it.
