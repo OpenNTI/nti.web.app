@@ -91,8 +91,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 				group = cmp.add(me.newGroupUIConfig({
 					title: name,
 					subTitle: '',
-					get store() { return new Ext.data.Store({fields: me.getFields(), data: g.children}); },
-					set store(value) { throw 'Read Only'; }
+					store: function() { return new Ext.data.Store({fields: me.getFields(), data: g.children}); }
 				}));
 
 			outline.findNode(name).done(function(node) {
@@ -192,6 +191,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 
 	newAssignmentList: function(grouper) {
-		return { xtype: 'course-assessment-assignment-list', store: grouper.store };
+		console.debug('Creating Assignment List with Grouper', grouper);
+		return { xtype: 'course-assessment-assignment-list', store: grouper.store() };
 	}
 });

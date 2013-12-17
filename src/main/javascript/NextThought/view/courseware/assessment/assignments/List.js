@@ -56,20 +56,28 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 			}),
 
 
-	store: new Ext.data.Store({
-		fields: [
-			{name: 'id', type: 'int'},
-			{name: 'name', type: 'string'},
-			{name: 'due', type: 'date'},
-			{name: 'completed', type: 'date'},
-			{name: 'correct', type: 'int'},
-			{name: 'total', type: 'int'}
-		]
-	}),
-
-
 	clear: function() {
 		this.store.removeAll();
+	},
+
+
+	constructor: function(config) {
+		if (config && !config.store) {
+			config.store = new Ext.data.Store({
+				fields: [
+					{name: 'id', type: 'int'},
+					{name: 'name', type: 'string'},
+					{name: 'due', type: 'date'},
+					{name: 'completed', type: 'date'},
+					{name: 'correct', type: 'int'},
+					{name: 'total', type: 'int'}
+				],
+				data: [
+					{id: 1, name: 'Example', due: new Date(), completed: new Date(), correct: 1, total: 2}
+				]
+			});
+		}
+		this.callParent(arguments);
 	},
 
 
