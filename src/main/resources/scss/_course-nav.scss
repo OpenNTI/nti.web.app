@@ -353,6 +353,23 @@
 
 	.overview-naquestionset{
 		margin-top: 5px;
+
+		&.turned-in-assignment {
+			height: 75px !important;
+			padding: 14px 0;
+
+			&::before{
+				content: '';
+				position: absolute;
+				top: 17px;
+				left: 25px;
+				background: $icons no-repeat;
+				@include sprite($icons, 'assignment_ontime', $dimensions:true);
+			}
+			.tally-box{
+				margin-left: 55px !important;
+			}
+		}
 	}
 
 }

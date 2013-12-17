@@ -46,6 +46,7 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 		config = {
 			quetionSetContainerTitle: n.getAttribute('label'),
 			ntiid: ntiid,
+			questionSetId: ntiid,
 			containerId: containerId,
 			total: n.getAttribute('question-count') || 10
 		};
@@ -69,6 +70,8 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 		};
 
 		Ext.Ajax.request(req);
+
+		this.fireEvent('has-been-submitted', this);
 	},
 
 	containerLoaded: function(q, s, r) {
@@ -105,6 +108,18 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 		this.down('assessment-score').setValue(Math.floor(100 * correct / this.getTotal()) || 0);
 		this.updateLayout();
 	},
+
+
+	markAsTurnedInAssignment: function(){
+		var score = this.down('assessment-score'),
+			button = this.down('button');
+
+		if (score) { score.destroy(); }
+		if (button) { button.setText('Review'); }
+
+		this.addCls('turned-in-assignment');
+	},
+
 
 	reviewClicked: function() {
 		//console.log('navigate to', this.getContainerId());
