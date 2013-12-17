@@ -320,7 +320,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			.done(function(results) {
 				results = results.reduce(function(a,b){
 					return a.concat(b);
-				});
+				}, []);
 				
 				me.feedTpl.overwrite(container.getEl(), results);
 				container.updateLayout();
