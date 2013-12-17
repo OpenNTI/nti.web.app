@@ -200,6 +200,11 @@ Ext.define('NextThought.controller.Assessment', {
 				var result = op.getResultSet().records.first().get('parts').first();//hack
 				widget.unmask();
 				widget.setGradingResult(result);
+			},
+			failure: function(){
+				console.error('FAIL', arguments);
+				alert('There was a problem submitting your assignment.');
+				widget.unmask();
 			}
 		});
 	}
