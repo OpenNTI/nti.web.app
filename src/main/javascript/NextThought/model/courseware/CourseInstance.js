@@ -28,22 +28,26 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 
 
 	__precacheEntry: function() {
-		var p = new Promise(),
+		var p = this.precachePromise,
 			me = this,
 			Cls = NextThought.model.courseware.CourseInstance;
 
-		Cls.load(null, {
-			url: me.getLink('CourseCatalogEntry'),
-			callback: function(rec) {
-				me.__courseCatalogEntry = rec;
-				me.afterEdit(['NTIID']);//let views know the record "changed".
-				if (rec) {
-					p.fulfill(rec);
-				} else {
-					p.reject('No Record, See logs');
-				}
-			}
-		});
+		if(!p){
+			p = this.precachePromise = new Promise();
+
+			Cls.load(null, {
+				url: me.getLink('CourseCatalogEntry'),
+				callback: function(rec) {
+						me.__courseCatalogEntry = rec;
+						me.afterEdit(['NTIID']);//let views know the record "changed".
+						if (rec) {
+							p.fulfill(rec);
+						} else {
+							p.reject('No Record, See logs');
+						}
+					}
+			});
+		}
 
 		return p;
 	},
@@ -125,6 +129,14 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 
 
 	fireNavigationEvent: function(eventSource, callback) {
-		return eventSource.fireEvent('course-selected', this, callback);
+		var me = this;
+
+		return this.__precacheEntry()
+				.done(function() {
+					eventSource.fireEvent('course-selected', me, callback);
+				})
+				.fail(function(reason) {
+					console.error(reason);
+				});
 	}
 });
