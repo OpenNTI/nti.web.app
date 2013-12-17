@@ -26,7 +26,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Discussion', {
 	constructor: function(config) {
 		var n = config.node,
 			i = config.locationInfo;
-
+			
 		config.data = {
 			title: n.getAttribute('title'),
 			icon: getURL(i.root + n.getAttribute('icon')),
@@ -42,8 +42,8 @@ Ext.define('NextThought.view.courseware.overview.parts.Discussion', {
 	beforeRender: function() {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {},this.data);
-    this.idsToLookup = Ext.clone(this.data.ntiid) || [];
-    this.loadTopic(this.idsToLookup.shift());
+    	this.idsToLookup = Ext.clone(this.data.ntiid) || [];
+   		this.loadTopic(this.idsToLookup.shift());
 	},
 
 	afterRender: function() {
@@ -65,14 +65,14 @@ Ext.define('NextThought.view.courseware.overview.parts.Discussion', {
 	},
 
 
-  loadTopic: function(ntiid) {
-    $AppConfig.service.getObject(ntiid,
-        this.onTopicResolved,
-        this.onTopicResolveFailure,
-        this,
-        true
-    );
-  },
+	loadTopic: function(ntiid) {
+		$AppConfig.service.getObject(ntiid,
+			this.onTopicResolved,
+			this.onTopicResolveFailure,
+			this,
+	    	true
+		);
+	},
 
 
 	onTopicResolved: function(topic) {
@@ -101,7 +101,8 @@ Ext.define('NextThought.view.courseware.overview.parts.Discussion', {
 			alert('An error occurred showing this discussion.');
 		}
 		else {
-			this.fireEvent('navigate-to-course-discussion', this.locationInfo.title.get('NTIID'), this.topic.get('ContainerId'), this.topic.getId());
+			this.fireEvent('show-topic-with-action', topic);
+			//this.fireEvent('navigate-to-course-discussion', this.locationInfo.title.get('NTIID'), this.topic.get('ContainerId'), this.topic.getId());
 		}
 	}
 });
