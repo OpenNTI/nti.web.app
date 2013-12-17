@@ -45,7 +45,13 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		});
 
 		Ext.each(this.questionSet.get('questions'), function(q) {
-			answeredMap[q.getId()] = false;
+			var questionMap = {};
+			
+			Ext.each(q.get('parts'), function(p){
+				questionMap[p.id] = false;
+			});
+
+			answeredMap[q.getId()] = questionMap;
 		});
 
 		this.answeredMap = answeredMap;
@@ -138,22 +144,36 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		if (enabling) {
 			this.transitionToActive();
 		}
-		this.answeredMap[question.getId()] = Boolean(status);
+		
+		this.answeredMap[question.getId()][part.id] = Boolean(status);
 		this.reflectStateChange();
 	},
 
 
 	reflectStateChange: function() {
-		var unanswered = 0;
+		var unansweredQuestions = 0;
 		if (!this.rendered) { return; }
 
-		Ext.Object.each(this.answeredMap, function(k, v) { if (!v) {unanswered++;} });
-		this.statusMessage.update(unanswered === 0 ?
+		Ext.Object.each(this.answeredMap, function(key, val){
+			var answered = 0, total = 0;
+
+			Ext.Object.each(val, function(id, done){
+				total++;
+
+				if(done){ answered++; }
+			});
+		
+			if(answered < total){
+				unansweredQuestions++;
+			}
+		});
+
+		this.statusMessage.update(unansweredQuestions === 0 ?
 								  'All questions answered' :
-								  Ext.String.format('{0} questions unanswered', unanswered)
+								  Ext.String.format('{0} questions unanswered', unansweredQuestions)
 		);
 
-		this.statusMessage[((unanswered === 0) ? 'add' : 'remove') + 'Cls']('ready');
+		this.statusMessage[((unansweredQuestions === 0) ? 'add' : 'remove') + 'Cls']('ready');
 	},
 
 
