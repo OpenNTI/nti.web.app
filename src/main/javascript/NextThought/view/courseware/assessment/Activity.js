@@ -68,6 +68,15 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 		this.tpl.ownerCmp = this;
 		this.setTitle(this.title);
 		this.mon(this.store, 'datachanged', 'maybeNotify');
+		this.on('deactivate', 'clearBadge');
+	},
+
+
+	clearBadge: function() {
+		this.notifications = 0;
+		this.fireEvent('notify', 0);
+		this._lastRead = new Date();
+		this.refresh();
 	},
 
 
