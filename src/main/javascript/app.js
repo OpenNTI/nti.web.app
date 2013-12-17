@@ -29,6 +29,9 @@ Ext.application({
 		'NextThought.overrides.*',
 		'NextThought.util.*',
 
+		'Ext.grid.Panel',
+		'Ext.grid.column.Date',
+			  
 		//Require this early so we have it if we need it
 		'NextThought.view.MessageBar',
 		'NextThought.view.MessageBox'
