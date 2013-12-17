@@ -75,6 +75,8 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 	},
 
 	containerLoaded: function(q, s, r) {
+		if(this.alreadyTurnedIn){ return; }
+
 		if (!this.rendered) {
 			this.on('afterrender', Ext.bind(this.containerLoaded, this, arguments), this, {single: true});
 			return;
@@ -85,7 +87,6 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 
 		json = (json.Items || [])[0];
     //		console.debug('Loaded:', r.status, r.responseText);
-
 
 		if (!json) {
 			b = this.down('button');
@@ -110,14 +111,36 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 	},
 
 
-	markAsTurnedInAssignment: function(){
+	showAsTurnedInAssignment: function(){
+		if(!this.rendered){
+			this.on('afterrender', Ext.bind(this.showAsTurnedInAssignment, this, arguments), this, {single: true});
+			return;
+		}
+
 		var score = this.down('assessment-score'),
+			tally = this.down('assessment-tally'),
 			button = this.down('button');
 
 		if (score) { score.destroy(); }
-		if (button) { button.setText('Review'); }
+
+		if (button) {
+			button.setUI('primary');
+			button.setText('Review');
+		}
+		
+		if (tally) { 
+			tally.setTally(0, this.getTotal(), true);
+			tally.message.update(this.getQuetionSetContainerTitle());
+		}
+	},
+
+
+	markAsTurnedInAssignment: function(){		
+		this.alreadyTurnedIn = true;
 
 		this.addCls('turned-in-assignment');
+
+		this.showAsTurnedInAssignment();
 	},
 
 
