@@ -984,7 +984,7 @@ body.dragging * {
 		width: auto;
 		left: 0 !important;
 		right: 0 !important;
-		margin: -5px -60px 0 -30px;
+		margin: 0 -60px 0 -30px;
 		padding: 30px;
 
 		border: {
@@ -993,11 +993,67 @@ body.dragging * {
 			width: 1px 0;
 		}
 
+		.indexed-content {
+			color: $primary-grey;
+			font-size: 1.2em;
+		}
+
 		& > .header {
 			display: none;
 		}
 
 		& > .parts { border-top-width: 0 !important; }
+	}
+
+	.file-submission-part {
+		position: relative;
+		background: #fbfbfb;
+		border-bottom: 1px solid #f2f2f2;
+		padding: 20px 10em 20px 90px;
+		min-height: 85px;
+
+		@include icon('assignment_due', $top: 20px, $left: 30px);
+
+		& > .response-container,
+		& > .response-container .inputbox {
+			border: none !important;
+			position: static !important;
+			background: none !important;
+			min-height: auto !important;
+		}
+
+		& > .footer {
+			display: none;
+		}
+
+		.label {
+			font: normal 500 1.5em/1 $font;
+			color: $primary-grey;
+		}
+		.due {
+			font: normal 700 0.8em/3 $font;
+			text-transform: uppercase;
+			color: $tertiary-grey;
+		}
+
+		.button {
+			cursor: pointer;
+			background: $primary-blue;
+			border-radius: 3px;
+			font: italic 600 1.2em/1 $font;
+			color: #fff;
+			padding: 1em 2em;
+			right: 15px;
+			top: 25px;
+
+			input {
+				position: absolute;
+				top: 0; left: 0; right: 0; bottom: 0;
+				opacity: 0.0;
+			}
+			position: absolute;
+		}
+
 	}
 }
 

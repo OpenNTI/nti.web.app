@@ -2,13 +2,15 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 	extend: 'NextThought.view.assessment.input.Base',
 	alias: 'widget.question-input-filepart',
 
-	cls: 'file-submission',
+	cls: 'file-submission-part',
 
 	inputTpl: Ext.DomHelper.markup({
 		cn: [
-			{ html: '{label}' },
-			{ tag: 'tpl', 'if': 'date', cn: { html: '{due}' }},
-			{ tag: 'input', type: 'file', cls: 'file' }
+			{ cls: 'label', html: '{label}' },
+			{ tag: 'tpl', 'if': 'due', cn: { tag: 'time', cls: 'due', datetime: '{due:date("c")}', html: 'Due {due:date("l, F j")}'}},
+			{ cls: 'submit button', cn: ['Upload a File',
+				{ tag: 'input', type: 'file', cls: 'file' }
+			]}
 		]
 	}),
 
@@ -52,6 +54,7 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 		if (q && q.tallyParts() === 1) {
 			q.fireEvent('hide-quiz-submission');
 			if (assignment) {
+				this.renderData.due = assignment.getDueDate();
 				this.renderData.label = assignment.get('title');
 			}
 		}

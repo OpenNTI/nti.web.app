@@ -14,6 +14,11 @@ Ext.define('NextThought.model.assessment.Assignment', {
 	],
 
 
+	getDueDate: function() {
+		return this.get('availableEnding') || this.get('availableBeginning');
+	},
+
+
 	tallyParts: function() {
 		function sum(agg, r) {
 			return agg + (r.tallyParts ? r.tallyParts() : 1);
