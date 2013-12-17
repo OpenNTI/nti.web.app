@@ -11,7 +11,6 @@ Ext.define('NextThought.controller.Application', {
 	init: function() {
 		this.application.registerInitializeTask(this.launchToken);
 
-		Library.on('loaded', this.restore, this, {single: true});
 		this.application.on('finished-loading', function() {
 			NextThought.isInitialized = true;
 			Globals.removeLoaderSplash();
@@ -59,6 +58,13 @@ Ext.define('NextThought.controller.Application', {
 			console.error('Loading View: ', Globals.getError(e1));
 		}
 
+		Promise.pool(
+			Library.onceLoaded(),
+			Ext.getStore('courseware.EnrolledCourses').onceLoaded())
+			.done(this.restore.bind(this))
+			.fail(function(reason){
+				console.error(reason);
+			});
 
 		Library.load();
 

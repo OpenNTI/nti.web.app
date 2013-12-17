@@ -6,7 +6,8 @@ Ext.define('NextThought.Library', {
 	requires: [
 		'NextThought.store.Library',
 		'NextThought.proxy.JSONP',
-		'NextThought.util.Base64'
+		'NextThought.util.Base64',
+		'NextThought.util.Promise'
 	],
 
 	bufferedToc: {},
@@ -14,6 +15,7 @@ Ext.define('NextThought.Library', {
 	activeVideoLoad: {},
 
 	constructor: function(config) {
+		this.promiseToLoad = new Promise();
 		this.tocs = {};
 		this.addEvents({
 			loaded: true
@@ -22,6 +24,11 @@ Ext.define('NextThought.Library', {
 		this.callParent(arguments);
 		this.mixins.observable.constructor.call(this);
 		this.getStore();// pre-init store so we can reference it by id early on
+	},
+
+
+	onceLoaded: function(){
+		return this.promiseToLoad;
 	},
 
 
@@ -204,7 +211,7 @@ Ext.define('NextThought.Library', {
 		function go() {
 			me.loaded = true;
 			me.fireEvent('loaded', me);
-
+			me.promiseToLoad.fulfill();
 			if (me.store.getCount()) {
 				me.fireEvent('show-books');
 			} else {
