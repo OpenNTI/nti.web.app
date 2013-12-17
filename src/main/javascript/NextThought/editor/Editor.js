@@ -1054,6 +1054,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			p = this.trackedParts[guid];
 			if (p) {
 				if (!p.isDestroyed && p.show) {
+                    if(Ext.is.iOS){
+                        content.blur();
+                    }
 					p.show();
 				}
 				return;
@@ -1158,46 +1161,50 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			return;
 		}
 
-		//pop open a whiteboard:
-		wbWin = Ext.widget('wb-window', { width: 802, value: data, closeAction: 'hide', cancelOnce: false });
-		content = me.el.down('.content');
-		//remember the whiteboard window:
-		wbWin.guid = guid;
-		this.trackedParts[guid] = wbWin;
+        if(Ext.is.iOS){
+            this.el.down('.content').blur();
+        }
 
-		//Hide note nav-helper - to avoid it from being on top of the WB
-		if (Ext.query('.nav-helper')[0]) {
-			Ext.fly(Ext.query('.nav-helper')[0]).hide();
-		}
+        //pop open a whiteboard:
+        wbWin = Ext.widget('wb-window', { width: 802, value: data, closeAction: 'hide', cancelOnce: false });
+        content = me.el.down('.content');
+        //remember the whiteboard window:
+        wbWin.guid = guid;
+        this.trackedParts[guid] = wbWin;
+
+        //Hide note nav-helper - to avoid it from being on top of the WB
+        if (Ext.query('.nav-helper')[0]) {
+            Ext.fly(Ext.query('.nav-helper')[0]).hide();
+        }
 
 
-		if (data) {
-			me.insertObjectThumbnail(content, guid, wbWin.down('whiteboard-editor'), append);
-		}
+        if (data) {
+            me.insertObjectThumbnail(content, guid, wbWin.down('whiteboard-editor'), append);
+        }
 
-		//hook into the window's save and cancel operations:
-		this.mon(wbWin, {
-			save: function(win, wb) {
-				data = wb.getValue();
-				me.insertObjectThumbnail(content, guid, wb, append, true);
-				if (Ext.query('.nav-helper')[0]) {
-					Ext.fly(Ext.query('.nav-helper')[0]).show();
-				}
-				wbWin.hide();
-			},
-			cancel: function() {
-				//if we haven't added the wb to the editor, then clean up, otherwise let the window handle it.
-				if (!data) {
-					me.cleanTrackedParts(guid);
-					wbWin.close();
-				}
+        //hook into the window's save and cancel operations:
+            this.mon(wbWin, {
+            save: function(win, wb) {
+                data = wb.getValue();
+                me.insertObjectThumbnail(content, guid, wb, append, true);
+                if (Ext.query('.nav-helper')[0]) {
+                    Ext.fly(Ext.query('.nav-helper')[0]).show();
+                }
+                wbWin.hide();
+            },
+            cancel: function() {
+                //if we haven't added the wb to the editor, then clean up, otherwise let the window handle it.
+                if (!data) {
+                    me.cleanTrackedParts(guid);
+                    wbWin.close();
+                }
 
-			}
-		});
+            }
+        });
 
-		if (!data) {
-			wbWin.show();
-		}
+        if (!data) {
+            wbWin.show();
+        }
 	},
 
 

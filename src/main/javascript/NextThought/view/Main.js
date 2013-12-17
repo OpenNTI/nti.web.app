@@ -19,6 +19,7 @@ Ext.define('NextThought.view.Main', {
 	id: 'viewport',
 	ui: 'nextthought',
 	minWidth: 1024,
+    touchStartTime: -1,
 
 	items: [
 		{xtype: 'main-navigation', id: 'nav', region: 'north'},
@@ -54,6 +55,7 @@ Ext.define('NextThought.view.Main', {
 			mouseOverEvent,
 			mouseDownEvent;
 
+        this.touchStartTime = e.browserEvent.timeStamp;
 		if (!touch) {
 			return;
 		}
@@ -99,6 +101,8 @@ Ext.define('NextThought.view.Main', {
 			return;
 		}
 
+        this.touchStartTime = 0;
+
         // If the event target wasn't a scrollable element, then we don't want scrolling
 		if (!scrollable) {
 			e.preventDefault();
@@ -123,8 +127,10 @@ Ext.define('NextThought.view.Main', {
             if(!this.scrolledY){
                 this.scrolledY = touch.clientY;
             }
-            scrollableElement.scrollBy(0, this.scrolledY - touch.clientY);
-            this.scrolledY = touch.clientY;
+            if(!scrollable){
+                scrollableElement.scrollBy(0, this.scrolledY - touch.clientY);
+                this.scrolledY = touch.clientY;
+            }
         }
 
 		// Dispatch mousemove
@@ -172,6 +178,20 @@ Ext.define('NextThought.view.Main', {
 
         if(e.browserEvent.changedTouches[1]){
            return;
+        }
+
+        if(touch.target.getAttribute('contenteditable') == null && touch.target.tagName != 'INPUT'){
+            //prevent default clicking and manual clicking, because that causes problems
+            e.preventDefault();
+
+            // Dispatch click if touch lasted a half second or less in duration
+            if (e.browserEvent.timeStamp - this.touchStartTime <= 500) {
+                var clickEvent = document.createEvent('MouseEvents');
+                clickEvent.initMouseEvent('click', true, true, window,
+                    1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
+                    false, false, false, false, 0, null);
+                touch.target.dispatchEvent(clickEvent);
+            }
         }
 
 		mouseUpEvent = document.createEvent('MouseEvents');
