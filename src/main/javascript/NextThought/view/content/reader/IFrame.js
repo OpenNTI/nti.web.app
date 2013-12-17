@@ -267,6 +267,17 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 			}
 		});
 
+        on(doc,'touchend', function(e){
+            //if open notepad editor, close it if touch on reader
+            var notepad = Ext.query('.inline-editor.x-component-notepad-item')[0];
+            if(notepad){
+                var notepadBody = Ext.get(notepad).down('.body');
+                if(notepadBody){
+                    notepadBody.blur();
+                }
+            }
+        });
+
 		on(doc, 'mouseup', function(e) {
 			var fakeEvent = Ext.EventObject.setEvent(e || event),
 					t = me.reader.getScroll().get().top,

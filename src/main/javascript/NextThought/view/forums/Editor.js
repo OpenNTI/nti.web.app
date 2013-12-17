@@ -71,11 +71,26 @@ Ext.define('NextThought.view.forums.Editor', {
 
 		parentCtEl.addCls('scroll-lock' + (hasScrollBar ? ' scroll-padding-right' : '')).scrollTo(0);
 		Ext.EventManager.onWindowResize(this.syncHeight, this, null);
-		Ext.defer(this.syncHeight, 1, this);
+        if(!Ext.is.iOS){
+            Ext.defer(this.syncHeight, 1, this);
 
-		this.titleEl.focus();
-		this.moveCursorToEnd(this.titleEl);
-		//window.scrollTo(this.titleEl.top);
+            this.titleEl.focus();
+            this.moveCursorToEnd(this.titleEl);
+            //window.scrollTo(this.titleEl.top);
+        }
+
+        if(Ext.is.iOS){
+            me.el.down('.editor').setHeight(350);
+            me.el.down('.content').setHeight(215);
+
+
+            this.el.down('.content').on('focus',function(e){
+                me.el.down('.content').scrollBy(0,1000);
+                Ext.defer(function(){
+                    me.el.down('.content').scrollBy(0,1000);
+                },250);
+            });
+        }
 	},
 
 
@@ -111,21 +126,6 @@ Ext.define('NextThought.view.forums.Editor', {
 
 
 	syncHeight: function() {
-    /*  for ipad, everytime a new input is focused, this runs.
-            and changing the height and top makes the editor too small.
-            only run the first two initial times, and keep height the same*/
-		if (Ext.is.iOS) {
-			if (this.syncedIpad) {
-        if (this.syncedIpad > 1) {
-          return;
-        }
-
-				this.syncedIpad++;
-			}
-      else {
-        this.syncedIpad = 1;
-      }
-		}
 		var el = this.contentEl,
 				p = this.ownerCt && Ext.getDom(this.ownerCt.getEl()),
 				top;
