@@ -38,6 +38,7 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 		this.value.value = event.target.result;
 
 		var me = this,
+			q = this.questionSet,
 			p = new Promise();
 
 		p.done(function() {

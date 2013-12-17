@@ -91,7 +91,7 @@ Ext.define('NextThought.controller.Assessment', {
 		o = h && h.getItem(a.getId());
 		if (o) {
 			o = o.get('Submission');
-			cmp.markSubmitted(o.get('LastModified'));
+			cmp.markSubmitted(o.get('Last Modified'));
 		}
 	},
 
