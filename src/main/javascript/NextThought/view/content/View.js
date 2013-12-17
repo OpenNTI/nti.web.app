@@ -455,6 +455,7 @@ Ext.define('NextThought.view.content.View', {
 		//Because courses still use location, it needs to be cleared before setting the new one
 		this.reader.clearLocation();
 		this._setCourse(instance);
+		this.showCourseNavigation();
 
 		var e = instance.getCourseCatalogEntry(),
 			ntiid = e.get('ContentPackageNTIID');
