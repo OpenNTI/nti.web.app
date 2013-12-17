@@ -232,8 +232,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 
 	reloadActivity: function(store) {
 		var container = this.down('box[activitiesHolder]'),
-			totalExpected,
-			items = [], oldestRecord, me = this;
+			oldestRecord, me = this;
 
 		if (store && !store.isStore) {
 			store = null;
@@ -249,8 +248,8 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		this.store.filterBy(this.filterStore, this);
 		this.store.resumeEvents();
 
-		totalExpected = -1;
-		if (this.currentCount !== undefined && totalExpected <= this.currentCount) {
+
+		if (this.currentCount !== undefined && store.getCount() <= this.currentCount) {
 			console.log('Need to fetch again. Didn\'t return any new data');
 			delete this.currentCount;
 			this.fetchMore();
@@ -272,11 +271,9 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			return Ext.data.Types.GROUPBYTIME.groupTitle(name, false);
 		}
 
-		function doGroup(group, index, groups) {
-			var me = this,
+		function doGroup(group) {
+			var p = new Promise(),
 				label = groupToLabel(group.name);
-
-			totalExpected = (totalExpected > 0)? totalExpected : groups.length;
 
  	  		function promiseToResolve(agg, c) {
 				if (!/deleted/i.test(c.get('ChangeType'))) {
@@ -284,29 +281,28 @@ Ext.define('NextThought.view.account.activity.Panel', {
 				}
 				return agg;
 			}
-
+			//wait for the return of changeToActivity for all of the groups childern
+			//we need to pool these promises so the label can be added in the right order
 			Promise.pool(group.children.reduce(promiseToResolve, []))
 				.done(function(results){
+					var parts = [];
 					//get rid of any nulls
 					results = results.filter(function(i){ return i;});
-
+					//add the label if need be
 					if (label) {
-						items.push({ label: label });
+						parts = [{ label: label }];
 					}
-
-					items = items.concat(results);
+					//add the results to the parts regardless
+					parts = parts.concat(results);
 					
-					totalExpected--;
-
-					if(totalExpected === 0){
-						me.feedTpl.overwrite(container.getEl(), items);
-					}
-					//maybeAddMoreButton();
-					container.updateLayout();
+					p.fulfill(parts);
 				})
 				.fail(function(reason) {
-					console.error(reason);
+					//console.error(reason);
+					p.reject(reason);
 				});
+
+			return p;
 		}
 
 		if (store.getGroups().length === 0 || store.getCount() === 0) {
@@ -319,8 +315,19 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			}
 			container.updateLayout();
 		}
-
-		Ext.each(store.getGroups(), doGroup, this);
+		//pool these promises to ensure that the groups get added in the correct order
+		Promise.pool(store.getGroups().map(doGroup))
+			.done(function(results) {
+				results = results.reduce(function(a,b){
+					return a.concat(b);
+				});
+				
+				me.feedTpl.overwrite(container.getEl(), results);
+				container.updateLayout();
+			})
+			.fail(function(reason){
+				console.error(reason);
+			});
 
 		if (store.getCount() > 0 || !store.mayHaveAdditionalPages) {
 			this.removeMask();
