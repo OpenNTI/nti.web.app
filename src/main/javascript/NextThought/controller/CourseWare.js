@@ -177,7 +177,7 @@ Ext.define('NextThought.controller.CourseWare', {
 	onCourseSelected: function(instance, callback) {
 
 		if (!instance.__getLocationInfo()) {
-			console.error('The Content Package for this course has not been loaded');
+			console.error('The Content Package for this course has not been loaded. Check that this user is "enrolled".');
 			return false;
 		}
 
