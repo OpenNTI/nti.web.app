@@ -134,9 +134,13 @@ Ext.define('NextThought.controller.CourseWare', {
 	},
 
 
+	onEnrolledCoursesLoaded: function(store) {
+		this.onCoursesLoaded(this.getEnrolledCoursesView(), store);
+	},
+
+
 	onAdministeredCoursesLoaded: function(store) {
-		var cmp = this.getAdministeredCoursesView();
-		cmp[store.getCount() ? 'show' : 'hide']();
+		this.onCoursesLoaded(this.getAdministeredCoursesView(), store);
 	},
 
 
@@ -159,13 +163,23 @@ Ext.define('NextThought.controller.CourseWare', {
 	},
 
 
-	onEnrolledCoursesLoaded: function(store) {
-		var cmp = this.getEnrolledCoursesView();
-		cmp[store.getCount() ? 'show' : 'hide']();
+	onCoursesLoaded: function(cmp, store) {
+		Library.onceLoaded().then(function() {
+			var content = Library.getCount() && store.getCount();
+			cmp[content ? 'show' : 'hide']();
+			if (!content) {
+				console.debug('Hiding ' + cmp.id + ' because the library or the store (' + store.storeId + ') was empty');
+			}
+		});
 	},
 
 
 	onCourseSelected: function(instance, callback) {
+
+		if (!instance.__getLocationInfo()) {
+			console.error('The Content Package for this course has not been loaded');
+			return false;
+		}
 
 		if (this.fireEvent('show-view', 'content', true) === false) {
 			return false;
