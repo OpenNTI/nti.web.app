@@ -180,19 +180,7 @@ Ext.define('NextThought.view.Main', {
            return;
         }
 
-        if(touch.target.getAttribute('contenteditable') == null && touch.target.tagName != 'INPUT'){
-            //prevent default clicking and manual clicking, because that causes problems
-            e.preventDefault();
 
-            // Dispatch click if touch lasted a half second or less in duration
-            if (e.browserEvent.timeStamp - this.touchStartTime <= 500) {
-                var clickEvent = document.createEvent('MouseEvents');
-                clickEvent.initMouseEvent('click', true, true, window,
-                    1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
-                    false, false, false, false, 0, null);
-                touch.target.dispatchEvent(clickEvent);
-            }
-        }
 
 		mouseUpEvent = document.createEvent('MouseEvents');
 		mouseUpEvent.initMouseEvent('mouseup', true, true, window,
@@ -213,6 +201,21 @@ Ext.define('NextThought.view.Main', {
 			0, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
 			false, false, false, false, 0, null);
 		touch.target.dispatchEvent(mouseOutEvent);
+
+        //Touching on edit whiteboard while keyboard is up isn't clicking, so make sure it gets clicked.
+        if(Ext.get(touch.target).up('.whiteboard-wrapper')){
+            e.preventDefault();
+
+            // Dispatch click if touch lasted a half second or less in duration
+            if (e.browserEvent.timeStamp - this.touchStartTime <= 500) {
+                var clickEvent = document.createEvent('MouseEvents');
+                clickEvent.initMouseEvent('click', true, true, window,
+                    1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
+                    false, false, false, false, 0, null);
+                touch.target.dispatchEvent(clickEvent);
+            }
+        }
+
 	},
 
 
