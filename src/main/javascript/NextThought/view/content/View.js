@@ -60,9 +60,8 @@ Ext.define('NextThought.view.content.View', {
 	tabSpecs: [
 		{label: 'Dashboard', viewId: 'course-dashboard'},
 		{label: 'Lessons', viewId: 'course-book?'},
-		{label: 'Discussions', viewId: 'course-forum'},
-    //		{label: 'Notebook', viewId: ''},
 		{label: 'Assignments', viewId: 'course-assessment'},
+		{label: 'Discussions', viewId: 'course-forum'},
 		{label: 'Course Info', viewId: 'course-info'}
 	],
 
