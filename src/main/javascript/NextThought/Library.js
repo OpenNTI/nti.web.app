@@ -27,7 +27,7 @@ Ext.define('NextThought.Library', {
 	},
 
 
-	onceLoaded: function(){
+	onceLoaded: function() {
 		return this.promiseToLoad;
 	},
 
@@ -60,6 +60,14 @@ Ext.define('NextThought.Library', {
 			});
 		}
 		return this.store;
+	},
+
+
+	getCount: function() {
+		var s = this.getStore(),//we filter out items, but we still can access them...
+		// so get the true count, not the filtered count.
+			o = s.snapshot || s.data;
+		return o.getCount();
 	},
 
 
