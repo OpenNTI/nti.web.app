@@ -87,6 +87,34 @@ Ext.define('NextThought.controller.CourseWare', {
 		this.setupAdministeredCourses((s.getCollection('AdministeredCourses', 'Courses') || {}).href);
 		this.setupAvailableCourses((s.getCollection('AllCourses', 'Courses') || {}).href);
 		this.setupEnrolledCourses((s.getCollection('EnrolledCourses', 'Courses') || {}).href);
+
+		this.filterAdministeredEnrolledCourses();
+	},
+
+
+	filterAdministeredEnrolledCourses: function() {
+		var admin = Ext.getStore('courseware.AdministeredCourses'),
+			enrolled = Ext.getStore('courseware.EnrolledCourses');
+
+		function notAdministrated(o) {
+			var id = o.get('CourseInstance').getId(), found = false;
+			admin.each(function(a) {
+				found = id === a.get('CourseInstance').getId();
+				return !found;
+			});
+
+			return !found;
+		}
+
+		function refilter() {
+			enrolled.filter();
+		}
+
+		enrolled.removeFilter('adminFilter');
+		enrolled.addFilter({ id: 'adminFilter', filterFn: notAdministrated });
+
+		admin.on('load', refilter);
+		enrolled.on('load', refilter);
 	},
 
 
