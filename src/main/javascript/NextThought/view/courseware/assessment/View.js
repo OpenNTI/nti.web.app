@@ -20,41 +20,30 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 	body: {
 		xtype: 'container',
 		cls: 'make-white',
-		layout: { type: 'card', deferredRender: true },
-		activeItem: 1,
-		items: [
-			{ xtype: 'course-assessment-activity', title: 'Activity & Notifications' },
-			{ xtype: 'course-assessment-assignments', title: 'Assignments' },
-			{ xtype: 'course-assessment-performance', title: 'Grades & Performance' }
-		]
+		layout: { type: 'card', deferredRender: true }
 	},
 
 
 	initComponent: function() {
-		var me = this;
-		me.callParent(arguments);
-		me.initCustomScrollOn('content');
-		me.navigation.setTitle(me.title);
+		this.callParent(arguments);
+		this.initCustomScrollOn('content');
+		this.navigation.setTitle(this.title);
+		this.mon(this.body, 'add', 'onViewAdd');
+	},
 
 
-		function monitor(panel) {
-			me.navigation.addView(panel);
-			me.mon(panel, {
-				beforeactivate: 'onBeforeViewChanged',
-				activate: 'onViewChanged',
-				destroy: 'removeNavigationItem',
-				notify: 'onSubViewNotify'
-			});
-		}
-
-		me.forEachView(monitor, this);
-		me.mon(me.navigation, {
-			'show-view': 'changeView'
+	onViewAdd: function(body, item) {
+		this.navigation.addView(item);
+		this.mon(item, {
+			beforeactivate: 'onBeforeViewChanged',
+			activate: 'onViewChanged',
+			destroy: 'removeNavigationItem',
+			notify: 'onSubViewNotify'
 		});
 
-		this.activity = this.down('course-assessment-activity');
-		this.assignments = this.down('course-assessment-assignments');
-		this.performance = this.down('course-assessment-performance');
+		this.mon(this.navigation, {
+			'show-view': 'changeView'
+		});
 	},
 
 
@@ -80,9 +69,17 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 				e = outlineAndEnrollment[1];
 			if (!isSync()) { return; }
 
+			me.body.add([
+				{ xtype: 'course-assessment-activity', title: 'Activity & Notifications' },
+				{ xtype: 'course-assessment-assignments', title: 'Assignments' },
+				{ xtype: 'course-assessment-performance', title: 'Grades & Performance' }
+			]);
+
+			function getLink(rel) { return e.getLink(rel) || instance.getLink(rel); }
+
 			Promise.pool(
-				Service.request(e.getLink('AssignmentHistory')),
-				Service.request(e.getLink('AssignmentsByOutlineNode'))//,
+				Service.request(getLink('AssignmentHistory')),
+				Service.request(getLink('AssignmentsByOutlineNode'))//,
 				//Service.request(e.getLink('Grades'))
 			)
 					.done(function(txts) {//responseTexts are in the order requested
@@ -112,6 +109,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 	clearViews: function() {
 		this.forEachView(this.callFunction('clearAssignmentsData'));
+		this.body.removeAll(true);
 	},
 
 
