@@ -183,16 +183,20 @@ Ext.define('NextThought.view.content.View', {
 
 		if (this.tabs) {
 
+			if (!isFeature('assignments')) {
+				tabs = tabs.filter(function(i) {return i.viewId !== 'course-assessment';});
+			}
+
 			if (!this.courseForum.hasBoard) {
-				tabs = Ext.Array.filter(tabs, function(i) {return i.viewId !== 'course-forum';});
+				tabs = tabs.filter(function(i) {return i.viewId !== 'course-forum';});
 			}
 
 			if (!this.courseInfo.hasInfo) {
-				tabs = Ext.Array.filter(tabs, function(i) {return i.viewId !== 'course-info';});
+				tabs = tabs.filter(function(i) {return i.viewId !== 'course-info';});
 			}
 
 			if (Ext.isArray(this.tabs)) {
-				tabs = Ext.Array.filter(tabs, function(i) { return Ext.Array.contains(tabSet, i.viewId); });
+				tabs = tabs.filter(function(i) { return Ext.Array.contains(tabSet, i.viewId); });
 			}
 		}
 
