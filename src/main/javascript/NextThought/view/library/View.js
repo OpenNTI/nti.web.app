@@ -18,8 +18,15 @@ Ext.define('NextThought.view.library.View', {
 			xtype: 'library-branding-box'
 		},
 		{
+			name: getString('My Administered Courses'),
+			xtype: 'course-collection',
+			store: 'courseware.AdministeredCourses',
+			kind: 'admin'
+		},
+		{
 			name: getString('My Courses'),
-			xtype: 'course-collection'
+			xtype: 'course-collection',
+			kind: 'enrolled'
 		},
 		{
 			hidden: true,

@@ -6,6 +6,7 @@ Ext.define('NextThought.controller.CourseWare', {
 		'courseware.CourseCatalogInstructorInfo',
 		'courseware.CourseCreditLegacyInfo',
 		'courseware.CourseInstance',
+		'courseware.CourseInstanceAdministrativeRole',
 		'courseware.CourseInstanceEnrollment',
 		'courseware.CourseOutline',
 		'courseware.Grade',
@@ -19,6 +20,7 @@ Ext.define('NextThought.controller.CourseWare', {
 	],
 
 	stores: [
+		'courseware.AdministeredCourses',
 		'courseware.AvailableCourses',
 		'courseware.EnrolledCourses',
 		'courseware.Navigation'
@@ -40,7 +42,8 @@ Ext.define('NextThought.controller.CourseWare', {
 		{ ref: 'mainNav', selector: 'main-navigation'},
 		{ ref: 'contentView', selector: 'content-view-container' },
 		{ ref: 'libraryView', selector: 'library-view-container' },
-		{ ref: 'enrolledCoursesView', selector: 'library-view-container course-collection' }
+		{ ref: 'enrolledCoursesView', selector: 'library-view-container course-collection[kind=enrolled]' },
+		{ ref: 'administeredCoursesView', selector: 'library-view-container course-collection[kind=admin]' }
 	],
 
 
@@ -81,6 +84,7 @@ Ext.define('NextThought.controller.CourseWare', {
 
 	onSessionReady: function() {
 		var s = $AppConfig.service;
+		this.setupAdministeredCourses((s.getCollection('AdministeredCourses', 'Courses') || {}).href);
 		this.setupAvailableCourses((s.getCollection('AllCourses', 'Courses') || {}).href);
 		this.setupEnrolledCourses((s.getCollection('EnrolledCourses', 'Courses') || {}).href);
 	},
@@ -97,12 +101,25 @@ Ext.define('NextThought.controller.CourseWare', {
 	},
 
 
+	setupAdministeredCourses: function(source) {
+		var store = this.__setupStore('courseware.AdministeredCourses', source);
+		if (!store) {
+			return;
+		}
+		this.mon(store, 'load', 'onAdministeredCoursesLoaded');
+		store.load();
+	},
+
+
 	setupAvailableCourses: function(source) {
 		var store = this.__setupStore('courseware.AvailableCourses', source);
 		if (!store) {
 			return;
 		}
-		this.mon(store, 'load', 'onAvailableCoursesLoaded');
+		this.mon(store, {
+			beforeload: 'onAvailableCoursesLoading',
+			load: 'onAvailableCoursesLoaded'
+		});
 		store.load();
 	},
 
@@ -114,6 +131,17 @@ Ext.define('NextThought.controller.CourseWare', {
 		}
 		this.mon(store, 'load', 'onEnrolledCoursesLoaded');
 		store.load();
+	},
+
+
+	onAdministeredCoursesLoaded: function(store) {
+		var cmp = this.getAdministeredCoursesView();
+		cmp[store.getCount() ? 'show' : 'hide']();
+	},
+
+
+	onAvailableCoursesLoading: function() {
+		this.TEMP_WORKAROUND_COURSE_TO_CONTENT_MAP = {};
 	},
 
 
