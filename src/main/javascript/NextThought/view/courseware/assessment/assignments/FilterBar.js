@@ -5,7 +5,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.FilterBar', {
 	cls: 'assignment-filterbar',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'third dropmenu', cn: [
+		{ cls: 'third dropmenu disabled', cn: [
 			{ cls: 'label', html: 'All Assignments' }
 		] },
 		{ cls: 'third dropmenu groupBy', cn: [

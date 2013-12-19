@@ -171,6 +171,18 @@ canvas.x-component-course-assessment {
 					@include sprite($icons, 'arrow-course-dropdown');
 				}
 			}
+
+			&.disabled{
+				cursor: default;
+				opacity: 0.5;
+
+				&:hover {
+					color: inherit;
+					&::after{
+						@include sprite($icons, 'arrow-course-dropdown-light');
+					}
+				}
+			}
 		}
 
 		.search {
