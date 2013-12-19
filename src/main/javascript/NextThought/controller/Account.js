@@ -58,6 +58,10 @@ Ext.define('NextThought.controller.Account', {
 					'click': 'showTerms'
 				},
 
+				'settings-menu account-menuitem': {
+					'show-account': 'showAccount'
+				},
+
 				'settings-menu [action=account]': {
 					'click': 'showAccount'
 				},

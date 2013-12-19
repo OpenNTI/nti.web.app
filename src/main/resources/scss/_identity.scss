@@ -1,4 +1,61 @@
+.user-settings-menu {
 
+	&::after{
+		content: '';
+		position: absolute;
+		right: 1px;
+		top: -3px;
+		height: 4px;
+		width: 79px;
+		background-color: white;
+	}
+
+	.account-menu-item{
+		padding: 5px;
+		border-bottom: 1px solid #EDEDED;
+		
+		.avatar{
+			float: left;
+			width: 60px;
+			height: 60px;
+			background-size: cover;
+		}
+
+		.content{
+			margin-left: 75px;
+			font: normal 400 0.9em/2 $font;
+			padding: 8px 0 0 0;
+
+			.username{
+				max-width: 100%;
+				overflow: hidden;
+				@include ellipsis;
+			}
+
+			.links{
+				font-size: 0.8em;
+				font-weight: 500;
+				line-height: 1;
+				color: $primary-blue;
+
+				.profile{
+					cursor: pointer;
+					display: inline;
+
+					&::after{
+						content: ' \00B7  ';
+						font-size: 1.1em;
+					}
+				}
+
+				.account{
+					cursor: pointer;
+					display: inline;
+				}
+			}
+		}
+	}
+}
 
 .x-component.identity {
 	position: fixed;
@@ -6,6 +63,23 @@
 	right: -1px !important;
 	left: auto !important;
 	width: 70px;
+
+	&.menu-showing{
+		overflow: visible;
+
+		&::after{
+			@include animate(fadeIn,0.3s);
+			z-index: -1;
+			content: '';
+			background-color: white;
+			border-left: 1px solid #DCDCDC;
+			position: absolute;
+			top: -15px;
+			bottom: -3px;
+			left: -10px;
+			right: 0;
+		}
+	}
 
 	.undocked &{
 		top: 38px;

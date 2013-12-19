@@ -2,7 +2,8 @@ Ext.define('NextThought.view.menus.Settings', {
 	extend: 'Ext.menu.Menu',
 	alias: 'widget.settings-menu',
 	requires: [
-		'NextThought.view.menus.Presence'
+		'NextThought.view.menus.Presence',
+		'NextThought.view.account.MenuItem'
 	],
 	cls: 'user-settings-menu',
 	ui: 'nt',
@@ -34,13 +35,14 @@ Ext.define('NextThought.view.menus.Settings', {
 			welcomeLink = u.getLink('content.permanent_welcome_page'),
 			childsLink = u.getLink('childrens-privacy');
 
+		items.push({ xtype: 'account-menuitem' });
 
 		if ($AppConfig.service.canChat()) {
 			items.push({ xtype: 'presence-menu'});
 			items.push({ xtype: 'menuseparator'});
 		}
 
-		items.push({ action: 'account', text: 'My Account'});
+		//items.push({ action: 'account', text: 'My Account'});
 
 		if (!Ext.isEmpty(welcomeLink)) {
 			items.push({ action: 'welcome', text: 'Welcome Guide', link: welcomeLink});
