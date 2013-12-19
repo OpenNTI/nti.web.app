@@ -205,9 +205,14 @@ Ext.define('NextThought.controller.CourseWare', {
 
 
 	onCourseSelected: function(instance, callback) {
+		var c;
 
 		if (!instance.__getLocationInfo()) {
-			console.error('The Content Package for this course has not been loaded. Check that this user is "enrolled".');
+			c = instance.getCourseCatalogEntry();
+			console.error('The Content Package for this course has not been loaded. Check that this user is "enrolled".\n' +
+						  '\tInstance ID: ' + instance.getId() + '\n' +
+						  '\tCourseCatalogEntry ID: ' + (c && c.getId()) + '\n' +
+						  '\tContent Package ID:' + (c && c.get('ContentPackageNTIID')));
 			return false;
 		}
 
