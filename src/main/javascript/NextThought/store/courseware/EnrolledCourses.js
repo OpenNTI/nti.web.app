@@ -125,5 +125,29 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 		});
 
 		return promise;
+	},
+
+
+	/**
+	 * I'm replacing the parent class's implementation so that I can know if the iteration was aborted or not.
+	 *
+	 * @param {Function} fn
+	 * @param {Object} [scope]
+	 * @return {Boolean|Number}
+	 */
+	each: function(fn, scope) {
+		var data = this.data.items,
+			dLen = data.length,
+			record, d, ret = false;
+
+		for (d = 0; d < dLen; d++) {
+			record = data[d];
+			if (fn.call(scope || record, record, d, dLen) === false) {
+				ret = d;
+				break;
+			}
+		}
+		return ret;
 	}
+
 });

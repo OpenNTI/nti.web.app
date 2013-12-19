@@ -587,23 +587,13 @@ Ext.define('NextThought.view.content.View', {
 			}
 		}
 
-		me.resolveCourse(course).then(setupCourseUI, noCourse);
+		CourseWareUtils.resolveCourse(course).then(setupCourseUI, noCourse);
 
 		return promise;
 	},
 
 
-	resolveCourse: function(courseInstanceId) {
-		var promise = new Promise();
 
-		if (courseInstanceId) {
-			promise = Ext.getStore('courseware.EnrolledCourses').getCourseInstance(courseInstanceId);
-		} else {
-			promise.fulfill(undefined);
-		}
-
-		return promise;
-	},
 
 
 	activate: function() {

@@ -86,7 +86,6 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 		this.allowTracking = true;
 
 		var store, me = this,
-			courses = Ext.getStore('courseware.EnrolledCourses'),
 			s = PersistentStorage.getProperty(this.persistenceKey, this.persistenceProperty, []);
 
 		function getRecord(v, i, a) {
@@ -106,7 +105,7 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 			}
 
 			if (v.c && ParseUtils.isNTIID(v.i)) {
-				courses.getCourseInstance(v.i).then(f, reject);
+				CourseWareUtils.resolveCourse(v.i).then(f, reject);
 			} else {
 				title = Library.getTitle(v.i);
 				if (title && !title.get('isCourse')) { f(title); }

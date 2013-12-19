@@ -101,10 +101,7 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 		});
 
 		if (!p.isResolved()) {
-			return Ext.getStore('courseware.EnrolledCourses').findCourseBy(function(r) {
-				var i = r && r.get('CourseInstance');
-				return i && i.getId() === id;
-			});
+			return CourseWareUtils.resolveCourseInstanceContainer(id);
 		}
 
 		return p;

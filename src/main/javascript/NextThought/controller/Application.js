@@ -60,11 +60,11 @@ Ext.define('NextThought.controller.Application', {
 
 		Promise.pool(
 			Library.onceLoaded(),
-			Ext.getStore('courseware.EnrolledCourses').onceLoaded())
-			.done(this.restore.bind(this))
-			.fail(function(reason){
-				console.error(reason);
-			});
+			CourseWareUtils.onceLoaded())
+				.done(this.restore.bind(this))
+				.fail(function(reason) {
+					console.error(reason);
+				});
 
 		Library.load();
 

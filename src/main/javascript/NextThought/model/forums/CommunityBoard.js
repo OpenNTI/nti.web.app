@@ -15,8 +15,8 @@ Ext.define('NextThought.model.forums.CommunityBoard', {
 
 	findCourse: function() {
 		var me = this;
-
-		Ext.getStore('courseware.EnrolledCourses').each(function(course) {
+		console.error('This needs to return a promise, not a value');
+		CourseWareUtils.forEachCourse(function(course) {
 			var instance = course.get('CourseInstance');
 			if (me.getId() === instance.get('Discussions').getId()) {
 				me.course = instance;

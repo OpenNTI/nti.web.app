@@ -19,6 +19,7 @@ Ext.define('NextThought.controller.CourseWare', {
 		'courseware.navigation.CourseOutlineContentNode'
 	],
 
+
 	stores: [
 		'courseware.AdministeredCourses',
 		'courseware.AvailableCourses',
@@ -50,6 +51,7 @@ Ext.define('NextThought.controller.CourseWare', {
 	init: function() {
 		this.TEMP_WORKAROUND_COURSE_TO_CONTENT_MAP = {};
 		this.mon(this.application, 'session-ready', 'onSessionReady');
+
 
 		var control = {
 			component: {
@@ -245,19 +247,18 @@ Ext.define('NextThought.controller.CourseWare', {
 
 
 	__getCourseInstance: function(thing) {
-		var s = Ext.getStore('courseware.EnrolledCourses'),
-			m = this.__getCourseMapping(thing),
+		var m = this.__getCourseMapping(thing),
 			p = new Promise();
 
 
-		s.findCourseBy(function(c) {
+		CourseWareUtils.findCourseBy(function(c) {
 			var i = c.get('CourseInstance'),
 				links = i && i.get('Links'),
 				href = links && links.getRelHref('CourseCatalogEntry');
 			return href === m;
 		}).then(
-				function(enrollemnt) {
-					p.fulfill(enrollemnt.get('CourseInstance'));
+				function(o) {
+					p.fulfill(o.get('CourseInstance'));
 				},
 				function(reason) {
 					p.reject(reason);
@@ -270,4 +271,77 @@ Ext.define('NextThought.controller.CourseWare', {
 	navigateToAssignment: function(view, record) {
 		this.fireEvent('show-ntiid', record.get('containerId'));
 	}
+}, function() {
+
+	window.CourseWareUtils = {
+
+		onceLoaded: function() {
+			return Promise.pool(
+				Ext.getStore('courseware.EnrolledCourses').onceLoaded(),
+				Ext.getStore('courseware.AdministeredCourses').onceLoaded()
+			);
+		},
+
+
+		findCourseBy: function() {
+			var promise = new Promise(),
+				enrolled = Ext.getStore('courseware.EnrolledCourses'),
+				admin = Ext.getStore('courseware.AdministeredCourses'),
+				args = Ext.Array.clone(arguments);
+
+			// I would pool, but its most likely to come from enrolled, and if one promise fails in a pool,
+			// the entire pool fails, so it would read poorly in the code only operating on the "failed" case. :}
+			enrolled.findCourseBy.apply(enrolled, args)
+					.done(function(rec) { promise.fulfill(rec); })
+					.fail(function() { admin.findCourseBy.apply(admin, args).then(promise); });
+
+			return promise;
+		},
+
+
+		resolveCourse: function(courseInstanceId) {
+			var promise = new Promise(),
+				enrolled = Ext.getStore('courseware.EnrolledCourses'),
+				admin = Ext.getStore('courseware.AdministeredCourses');
+
+			if (courseInstanceId) {
+				enrolled.getCourseInstance(courseInstanceId)
+						.done(function(rec) {
+							promise.fulfill(rec);
+						})
+						.fail(function() {
+							admin.getCourseInstance(courseInstanceId).then(promise);
+						});
+
+			} else {
+				promise.fulfill(undefined);
+			}
+
+			return promise;
+		},
+
+
+		resolveCourseInstanceContainer: function(courseInstanceId) {
+			function f(r) {
+				var i = r && r.get('CourseInstance');
+				return i && i.getId() === courseInstanceId;
+			}
+			return this.findCourseBy(f);
+		},
+
+
+		forEachCourse: function(fn) {
+			var//promise = new Promise(), //todo: make this promise based
+				enrolled = Ext.getStore('courseware.EnrolledCourses'),
+				admin = Ext.getStore('courseware.AdministeredCourses');
+
+			// the store's each function does not return anything. :| lame.
+			// I cannot know if the iteration was terminated so that i can skip calling the next.
+			// So I overwrote the implementation to return a value. :}
+			if (enrolled.each(fn) === false) {
+				admin.each(fn);
+			}
+		}
+	};
+
 });
