@@ -183,7 +183,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 
 		Ext.each(items, function(item) {
 			var n = item.node,
-				i = item.locationInfo,
+				i = item.locationInfo || {},
 				r = item.courseRecord;
 
 			out.push({
