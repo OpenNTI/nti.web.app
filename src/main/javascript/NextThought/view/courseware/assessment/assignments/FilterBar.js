@@ -17,14 +17,15 @@ Ext.define('NextThought.view.courseware.assessment.assignments.FilterBar', {
 		] }
 	]),
 
-	renderSelectors:{
+	renderSelectors: {
 		groupEl: '.groupBy',
 		searchEl: '.search input'
 	},
 
 	bubbleEvents: ['filters-changed', 'search-changed'],
 
-	afterRender: function(){
+
+	afterRender: function() {
 		this.callParent(arguments);
 		this.currentGrouping = 'lesson';
 		this.searchKey = '';
@@ -36,12 +37,12 @@ Ext.define('NextThought.view.courseware.assessment.assignments.FilterBar', {
 	},
 
 
-	searchKeyPressed: function(e){
+	searchKeyPressed: function(e) {
 		var key = e.keyCode;
 
 		this.searchKey = this.searchEl.getValue();
 
-		if(key === e.ENTER){
+		if (key === e.ENTER) {
 			//refresh the list
 			this.fireEvent('filters-changed');
 			return;
@@ -51,13 +52,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.FilterBar', {
 		this.fireEvent('search-changed', this.searchKey);
 	},
 
-	
-	showGroupByMenu: function(){
+
+	showGroupByMenu: function() {
 		this.groupByMenu.showBy(this.groupEl, 'tl-tl', this.groupByMenu.offset);
 	},
 
 
-	createGroupByMenu: function(){
+	createGroupByMenu: function() {
 		var type = this.currentGrouping,
 			items = [
 				{ text: 'By Lesson', groupBy: 'lesson', checked: type === 'lesson'},
@@ -65,7 +66,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.FilterBar', {
 				{ text: 'By Completion', groupBy: 'completion', checked: type === 'completion'}
 			];
 
-		this.groupByMenu = Ext.widget('menu',{
+		this.groupByMenu = Ext.widget('menu', {
 			ui: 'nt',
 			cls: 'group-by-menu',
 			plain: true,
@@ -74,7 +75,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.FilterBar', {
 			frame: false,
 			border: false,
 			ownerCmp: this,
-			offset: [0,0],
+			offset: [0, 0],
 			defaults: {
 				ui: 'nt-menuitem',
 				xtype: 'menucheckitem',
@@ -92,14 +93,14 @@ Ext.define('NextThought.view.courseware.assessment.assignments.FilterBar', {
 	},
 
 
-	switchOrdering: function(item, status){
-		if(!status){ return; }
+	switchOrdering: function(item, status) {
+		if (!status) { return; }
 		var offset = item.getOffsetsTo(this.groupByMenu),
 			x = offset && offset[1];
 
 		this.groupEl.el.down('.label').update(item.text);
 
-		this.groupByMenu.offset = [0,-x];
+		this.groupByMenu.offset = [0, -x];
 
 		this.currentGrouping = item.groupBy;
 		this.fireEvent('filters-changed');
