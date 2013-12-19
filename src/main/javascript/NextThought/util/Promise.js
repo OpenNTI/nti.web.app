@@ -72,9 +72,14 @@ var Promise = (function() {
 				},
 
 
-				done: function(fn) { return this.then(fn); },
-				fail: function(fn) { return this.then(undefined, fn); },
+				done: function(fn) { this.validateHandler(fn); return this.then(fn); },
+				fail: function(fn) { this.validateHandler(fn); return this.then(undefined, fn); },
 
+				validateHandler: function(fn) {
+					if (typeof fn !== 'function') {
+						throw new TypeError('Expected a function');
+					}
+				},
 
 				resolve: function() {
 					var obj, fn, value, me = this;
