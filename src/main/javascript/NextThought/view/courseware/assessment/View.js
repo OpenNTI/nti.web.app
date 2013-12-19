@@ -80,7 +80,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 			Promise.pool(
 				Service.request(getLink('AssignmentHistory')),
 				Service.request(getLink('AssignmentsByOutlineNode'))//,
-				//Service.request(e.getLink('Grades'))
+				//Service.request(getLink('Grades') || getLink('GradeBook'))
 			)
 					.done(function(txts) {//responseTexts are in the order requested
 						if (!isSync()) { return; }
@@ -96,6 +96,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 						console.error(reason);
 						if (!isSync()) { return; }
 						me.clearViews();
+						//TODO: drop assignments tab...or start off hidden, and show in the above done function.
 					});
 		});
 
