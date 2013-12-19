@@ -271,6 +271,12 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			}
 		};
 
+        if(Ext.is.iOS){
+            //bug in iOS7 that makes html elements relative to the full page height 20px to tall.
+            //Scroll before drawing canvas, to keep canvas from being shifted 20px up from where it should be
+            window.scrollTo(0,0);
+        }
+
 		boundingTop = AnnotationUtils.drawCanvas(me.canvas,
 												 me.content, fakeRectRange, me.self.bgcolor[me.record.get('Class')][state],
 												 [leftOffset, topOffset]);
