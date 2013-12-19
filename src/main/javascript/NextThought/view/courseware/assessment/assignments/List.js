@@ -84,5 +84,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 	initComponent: function() {
 		this.callParent(arguments);
 		this.tpl.ownerCmp = this;
+
+		this.mon(this.store,'datachanged', 'maybeHideParent')
+	},
+
+	maybeHideParent: function(store){
+		var count = store.getCount();
+
+		this.fireEvent((count > 0)? 'show-parent' : 'hide-parent');
 	}
 });

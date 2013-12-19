@@ -285,6 +285,20 @@ canvas.x-component-course-assessment {
 }
 
 .course-assessment-assignments {
+	.show-older-container{
+		height: 1em;
+		line-height: 1em;
+		margin-top: 40px;
+
+		.show-older{
+			display: inline-block;
+			margin-left: 30px;
+			cursor: pointer;
+			color: $primary-blue;
+			font: normal 500 0.9em/1em $font;
+		}
+	}
+
 	.scrollzone {
 		overflow: {x: hidden; y: auto;}
 		position: absolute;//avoid ext's anchor layout

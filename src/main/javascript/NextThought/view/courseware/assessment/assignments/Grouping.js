@@ -43,5 +43,16 @@ Ext.define('NextThought.view.courseware.assessment.assignments.Grouping', {
 			subtitle: this.getSubTitle(),
 			title: this.getTitle()
 		});
+	},
+
+	onAdd: function(cmp){
+		var r = this.callParent(arguments);
+		
+		this.mon(cmp, {
+			'hide-parent': 'hide',
+			'show-parent': 'show'
+		});
+
+		return r;
 	}
 });

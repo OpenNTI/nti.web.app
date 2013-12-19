@@ -18,17 +18,37 @@ Ext.define('NextThought.view.courseware.assessment.assignments.FilterBar', {
 	]),
 
 	renderSelectors:{
-		groupEl: '.groupBy'
+		groupEl: '.groupBy',
+		searchEl: '.search input'
 	},
 
+	bubbleEvents: ['filters-changed', 'search-changed'],
 
 	afterRender: function(){
 		this.callParent(arguments);
 		this.currentGrouping = 'lesson';
+		this.searchKey = '';
 
 		this.createGroupByMenu();
 
-		this.mon(this.groupEl,'click','showGroupByMenu');
+		this.mon(this.groupEl, 'click', 'showGroupByMenu');
+		this.mon(this.searchEl, 'keyup', 'searchKeyPressed');
+	},
+
+
+	searchKeyPressed: function(e){
+		var key = e.keyCode;
+
+		this.searchKey = this.searchEl.getValue();
+
+		if(key === e.ENTER){
+			//refresh the list
+			this.fireEvent('filters-changed');
+			return;
+		}
+
+		//update without refreshing
+		this.fireEvent('search-changed', this.searchKey);
 	},
 
 	
@@ -42,7 +62,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.FilterBar', {
 			items = [
 				{ text: 'By Lesson', groupBy: 'lesson', checked: type === 'lesson'},
 				{ text: 'By Due Date', groupBy: 'due', checked: type === 'due'},
-				{ text: 'By Completion', grouBy: 'completion', checked: type === 'completion'}
+				{ text: 'By Completion', groupBy: 'completion', checked: type === 'completion'}
 			];
 
 		this.groupByMenu = Ext.widget('menu',{
@@ -72,7 +92,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.FilterBar', {
 	},
 
 
-	switchOrdering: function(item){
+	switchOrdering: function(item, status){
+		if(!status){ return; }
 		var offset = item.getOffsetsTo(this.groupByMenu),
 			x = offset && offset[1];
 
@@ -81,6 +102,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.FilterBar', {
 		this.groupByMenu.offset = [0,-x];
 
 		this.currentGrouping = item.groupBy;
+		this.fireEvent('filters-changed');
 	},
 
 
@@ -90,11 +112,11 @@ Ext.define('NextThought.view.courseware.assessment.assignments.FilterBar', {
 
 
 	getGroupBy: function() {
-
+		return this.currentGrouping || 'lesson';
 	},
 
 
 	getSearch: function() {
-
+		return this.searchKey || '';
 	}
 });
