@@ -23,24 +23,24 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 		'lesson': 'lesson',
 		'completion': {
 			'property': 'completed',
-			'getGroupString': function(val){
-				return val.get('completed')? 'Completed' : 'Incomplete';
+			'getGroupString': function(val) {
+				return val.get('completed') ? 'Completed' : 'Incomplete';
 			}
 		},
 		'due': {
 			'property': 'due',
-			'getGroupString': function(val){
+			'getGroupString': function(val) {
 				var now = new Date(),
 					due = val.get('due'),
 					sameDay = now.getDay() === due.getDay(),
 					sameMonth = now.getMonth() === due.getMonth(),
 					sameYear = now.getFullYear() === due.getFullYear();
 
-				if(sameDay && sameMonth && sameYear){
+				if (sameDay && sameMonth && sameYear) {
 					//its due today
-					return 'Today'
+					return 'Today';
 				}
-				return Ext.Date.format(val.get('due'), 'F j, Y')
+				return Ext.Date.format(val.get('due'), 'F j, Y');
 			}
 		}
 	},
@@ -58,28 +58,28 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 	getGrouper: function() {
 		var me = this,
 			bar = me.getFilterBar(),
-			showType = bar.getShowType(),
+			//showType = bar.getShowType(),
 			groupBy = bar.getGroupBy(),
 			search = bar.getSearch(),
 			outline = me.outline;
 
 		//return function that will perform the grouping
-		return function(cmp, store){
+		return function(cmp, store) {
 			var count;
 
 			store.removeFilter('dueFilter');
 			//TODO: handle the show type
 
-			if(groupBy){
+			if (groupBy) {
 				//clear the active stores
 				me.activeStores = [];
 
-				if(groupBy === 'due' && !me.showOlder && !search){
+				if (groupBy === 'due' && !me.showOlder && !search) {
 					//filter out all of the ones due before today
-					count = store.getCount()
+					count = store.getCount();
 					store.filter([{
 						id: 'dueFilter',
-						filterFn: function(rec){
+						filterFn: function(rec) {
 							var now = new Date(),
 								due = rec.get('due');
 
@@ -88,7 +88,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 					}], true);
 
 					//if we filtered out any assignments, add a link to see older ones
-					if(count > store.getCount()){
+					if (count > store.getCount()) {
 						console.log('Some assignments were filtered');
 						//this item has to be the first thing added if its going to be
 						cmp.add({
@@ -100,8 +100,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 							listeners: {
 								'click': {
 									element: 'el',
-									fn: function(e){
-										if(!e.getTarget('.show-older')){ return; }
+									fn: function(e) {
+										if (!e.getTarget('.show-older')) { return; }
 										me.showOlder = true;
 										me.refresh();
 									}
@@ -109,17 +109,17 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 							}
 						});
 					}
-				}	
+				}
 
 				me.showOlder = false;
 
 				store.clearGrouping();
 				store.group(me.grouperMap[groupBy]);
 
-				store.getGroups().forEach(function(g){
+				store.getGroups(false).forEach(function(g) {
 					//add a group cmp for each group
 					var name = g.name.split('|').last(),
-						store =  new Ext.data.Store({fields: me.getFields(), data: g.children, groupName: name}),
+						store = new Ext.data.Store({fields: me.getFields(), data: g.children, groupName: name}),
 						group = cmp.add(me.newGroupUIConfig({
 							store: store
 						}));
@@ -127,7 +127,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 					me.activeStores.push(store);
 
-					if(groupBy === 'lesson'){
+					if (groupBy === 'lesson') {
 						outline.findNode(name).done(function(node) {
 							store.groupName = node.get('title');
 							group.setTitle(node.get('title'));
@@ -140,10 +140,10 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 				});
 			}
 
-			if(search){
+			if (search) {
 				this.filterSearchValue(search);
 			}
-		}
+		};
 	},
 
 
@@ -190,26 +190,20 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 		var cmp = this.getContent(),
 			s = this.store,
 			g = this.getGrouper();
-		
+
 		cmp.removeAll(true);
 
-		if(Ext.isFunction(g)){
+		if (Ext.isFunction(g)) {
 			g.call(this, cmp, s);
 		}
-		
-
 
 		//on keyup in search get all the groups, filter each store, in list.js listen for datachange
 		//if the store is empty hide its parent, else show its parent
-
-
 	},
 
 
-	filterSearchValue: function(val){
-		var me = this;
-
-		this.activeStores.forEach(function(store){
+	filterSearchValue: function(val) {
+		this.activeStores.forEach(function(store) {
 			//if we are grouped by lessons we will have an ntiid here
 			var name = store.groupName.split('|').last();
 
@@ -219,10 +213,10 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 			store.removeFilter('searchFilter');
 			//if the group name doesn't contain the search key
 			//filter all of the assignments whose title doesn't contain it
-			if(name.indexOf(val) < 0){
+			if (name.indexOf(val) < 0) {
 				store.addFilter([{
 					id: 'searchFilter',
-					filterFn: function(rec){
+					filterFn: function(rec) {
 						var name = rec.get('name');
 
 						name = name.toLowerCase();
