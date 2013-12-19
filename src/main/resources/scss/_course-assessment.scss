@@ -253,6 +253,37 @@ canvas.x-component-course-assessment {
 	}
 }
 
+.x-panel-nt.group-by-menu {
+	padding: 0;
+	height: 150px;
+
+	.x-menu-body{
+		padding: 0;
+		.x-menu-item.group-by-option{
+			font: normal 500 0.9em/3.5em $font;
+			line-height: 40px;
+			color: $secondary-grey;
+			padding: 4px 5px 5px 2em;
+			background: #fbfbfb;
+
+			&::hover{
+				color: primary-grey;
+			}
+
+			&.x-menu-item-checked{
+				color: primary-grey;
+				@include icon('arrow-course-dropdown', $top:1.5em, $left:auto, $right:1em);
+
+				&:hover {
+					&::after {
+						@include sprite($icons, 'arrow-course-dropdown');
+					}
+				}
+			}
+		}
+	}
+}
+
 .course-assessment-assignments {
 	.scrollzone {
 		overflow: {x: hidden; y: auto;}
