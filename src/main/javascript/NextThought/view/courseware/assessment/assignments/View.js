@@ -250,8 +250,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 	},
 
 
-	setAssignmentsData: function(data, history, outline, instance) {
-		var ntiid, lesson, raw = [];
+	setAssignmentsData: function(data, history, outline) {
+		var ntiid, lesson, raw = [], me = this;
 
 		this.clearAssignmentsData();
 
@@ -279,7 +279,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 				correct: assessment && assessment.getCorrectCount(),
 				total: o.tallyParts(),
 				submittedCount: o.get('SubmittedCount') || 0,
-				enrolledCount: instance.get('TotalEnrolledCount') || 0
+				enrolledCount: (me.roster && me.roster.length) || 0
 			});
 		}
 

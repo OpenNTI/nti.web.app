@@ -66,10 +66,13 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 		Promise.pool(
 			instance.getOutline(),
-			instance.getEnrollment()
-		).done(function(outlineAndEnrollment) {
-			var o = outlineAndEnrollment[0],
-				e = outlineAndEnrollment[1];
+			instance.getWrapper(),
+			instance.getRoster()
+		).done(function(responses) {
+			var o = responses[0],
+				e = responses[1],
+				r = responses[2];
+
 			if (!isSync()) { return; }
 
 			if (!e.isAdministrative) {
@@ -79,10 +82,13 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 					{ xtype: 'course-assessment-performance', title: 'Grades & Performance' }
 				]);
 			} else {
+				//filter the active user out of the roster since we are administering this thing.
+				r = r.filter(function(o) { return o && !isMe(o.Username); });
+
 				me.body.add([
 					{ xtype: 'course-assessment-admin-activity', title: 'Activity & Notifications' },
-					{ xtype: 'course-assessment-admin-assignments', title: 'Assignments' },
-					{ xtype: 'course-assessment-admin-performance', title: 'Grades & Performance' }
+					{ xtype: 'course-assessment-admin-assignments', title: 'Assignments', roster: r },
+					{ xtype: 'course-assessment-admin-performance', title: 'Grades & Performance', roster: r }
 				]);
 			}
 

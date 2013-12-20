@@ -3,7 +3,9 @@ Ext.define('NextThought.model.courseware.CourseInstanceEnrollment', {
 
 	idProperty: 'href',
 	fields: [
-		{ name: 'CourseInstance', type: 'singleItem', persist: false }
+		{ name: 'CourseInstance', type: 'singleItem', persist: false },
+		{ name: 'Username', type: 'string' },
+		{ name: 'Status', type: 'string', mapping: 'LegacyEnrollmentStatus'}
 	],
 
 

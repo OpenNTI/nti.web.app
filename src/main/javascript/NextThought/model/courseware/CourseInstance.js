@@ -90,7 +90,28 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 	},
 
 
-	getEnrollment: function() {
+	getRoster: function() {
+		var p = new Promise(),
+			r = this.getLink('CourseEnrollmentRoster');
+
+		if (!r) {
+			p.fulfill(null);
+		} else {
+			Service.request(r)
+					.done(function(txt) {
+						var j = Ext.decode(txt, true);
+						p.fulfill(j && j.Items);
+					})
+					.fail(function(reason) {
+						p.reject(reason);
+					});
+		}
+
+		return p;
+	},
+
+
+	getWrapper: function() {
 		var p = new Promise(),
 			id = this.getId();
 
