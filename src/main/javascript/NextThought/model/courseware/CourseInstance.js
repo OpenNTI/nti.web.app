@@ -4,7 +4,8 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 	fields: [
 		{ name: 'isCourse', type: 'bool', defaultValue: true, persist: false },
 		{ name: 'Discussions', type: 'singleItem', persist: false },
-		{ name: 'Outline', type: 'singleItem', persist: false }
+		{ name: 'Outline', type: 'singleItem', persist: false },
+		{ name: 'TotalEnrolledCount', type: 'int'}
 	],
 
 

@@ -7,7 +7,10 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 		'NextThought.view.courseware.assessment.Activity',
 		'NextThought.view.courseware.assessment.Navigation',
 		'NextThought.view.courseware.assessment.Performance',
-		'NextThought.view.courseware.assessment.assignments.View'
+		'NextThought.view.courseware.assessment.assignments.View',
+		'NextThought.view.courseware.assessment.assignments.admin.View',
+		'NextThought.view.courseware.assessment.admin.Activity',
+		'NextThought.view.courseware.assessment.admin.performance.View'
 	],
 
 	mixins: {
@@ -69,11 +72,19 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 				e = outlineAndEnrollment[1];
 			if (!isSync()) { return; }
 
-			me.body.add([
-				{ xtype: 'course-assessment-activity', title: 'Activity & Notifications' },
-				{ xtype: 'course-assessment-assignments', title: 'Assignments' },
-				{ xtype: 'course-assessment-performance', title: 'Grades & Performance' }
-			]);
+			if (!e.isAdministrative) {
+				me.body.add([
+					{ xtype: 'course-assessment-activity', title: 'Activity & Notifications' },
+					{ xtype: 'course-assessment-assignments', title: 'Assignments' },
+					{ xtype: 'course-assessment-performance', title: 'Grades & Performance' }
+				]);
+			} else {
+				me.body.add([
+					{ xtype: 'course-assessment-admin-activity', title: 'Activity & Notifications' },
+					{ xtype: 'course-assessment-admin-assignments-root', title: 'Assignments' },
+					{ xtype: 'course-assessment-admin-performance-root', title: 'Grades & Performance' }
+				]);
+			}
 
 			function getLink(rel) { return e.getLink(rel) || instance.getLink(rel); }
 
@@ -90,7 +101,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 						me.fireEvent('set-assignemnt-history', history);
 
 						me.forEachView(me.callFunction('setAssignmentsData',
-								[assignments, history, o]));
+								[assignments, history, o, instance]));
 					})
 					.fail(function(reason) {
 						console.error(reason);

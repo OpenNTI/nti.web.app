@@ -73,7 +73,7 @@ Ext.define('NextThought.view.courseware.assessment.Navigation', {
 
 
 	addView: function(view) {
-		var id = view.xtype.split(/[\-_\/\\\. ]/).last(),
+		var id = view.xtype,
 			r = this.store.add({mapping: view.xtype, label: view.title, id: id})[0];
 
 		//listen for notify events, and clean ourselves up when the view dies.

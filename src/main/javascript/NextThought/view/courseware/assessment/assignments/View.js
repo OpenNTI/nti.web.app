@@ -156,7 +156,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 			{name: 'due', type: 'date'},
 			{name: 'completed', type: 'date'},
 			{name: 'correct', type: 'int'},
-			{name: 'total', type: 'int'}
+			{name: 'total', type: 'int'},
+			{name: 'submittedCount', type: 'int'},
+			{name: 'enrolledCount', type: 'int'}
 		];
 	},
 
@@ -241,7 +243,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 	},
 
 
-	setAssignmentsData: function(data, history, outline) {
+	setAssignmentsData: function(data, history, outline, instance) {
 		var ntiid, lesson, raw = [];
 
 		this.clearAssignmentsData();
@@ -268,7 +270,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 				due: o.get('availableEnding'),
 				completed: submission && submission.get('CreatedTime'),
 				correct: assessment && assessment.getCorrectCount(),
-				total: o.tallyParts()
+				total: o.tallyParts(),
+				submittedCount: o.get('SubmittedCount') || 0,
+				enrolledCount: instance.get('TotalEnrolledCount') || 0
 			});
 		}
 
@@ -314,7 +318,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 
 	newAssignmentList: function(grouper) {
-		console.debug('Creating Assignment List with Grouper', grouper);
 		return { xtype: 'course-assessment-assignment-list', store: grouper.store };
 	}
 });

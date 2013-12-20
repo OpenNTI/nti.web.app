@@ -1,6 +1,7 @@
 Ext.define('NextThought.model.courseware.CourseInstanceAdministrativeRole', {
 	extend: 'NextThought.model.Base',
 
+	isAdministrative: true,
 	idProperty: 'href',
 	fields: [
 		{ name: 'CourseInstance', type: 'singleItem', persist: false },

@@ -206,6 +206,35 @@ canvas.x-component-course-assessment {
 	}
 
 	&.assignment-list {
+		&.admin {
+			position: relative;
+
+			.header {
+				position: absolute;
+				text-transform: uppercase;
+				right: 0;
+				top: -2.5em;
+				font-size: 0.6em;
+				font-weight: 600;
+				color: $tertiary-grey;
+				width: 10.77em;
+			}
+
+			.item {
+				@include icon('assignment_due', $top: 11px, $left: 10px);
+
+				&.late {
+					&::after {
+						@include sprite($icons,'assignment_late');
+					}
+				}
+
+				.score .completed:not(.c0) {
+					color: $primary-green;
+				}
+			}
+		}
+
 		.item {
 			position: relative;
 			overflow: hidden;
@@ -327,7 +356,7 @@ canvas.x-component-course-assessment {
 		box-shadow: 0 1px 0 0 #f1f1f1;
 
 		& > .body {
-			margin-top: 1em;
+			margin-top: 0.5em;
 		}
 
 		& > .subtitle {

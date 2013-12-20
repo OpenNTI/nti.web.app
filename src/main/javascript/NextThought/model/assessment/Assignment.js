@@ -10,7 +10,8 @@ Ext.define('NextThought.model.assessment.Assignment', {
 		{ name: 'availableBeginning', type: 'date', mapping: 'available_for_submission_beginning' },
 		{ name: 'availableEnding', type: 'date', mapping: 'available_for_submission_ending' },
 		{ name: 'parts', type: 'arrayItem' },
-		{ name: 'title', type: 'string' }
+		{ name: 'title', type: 'string' },
+		{ name: 'SubmittedCount', type: 'int', mapping: 'GradeSubmittedCount'}
 	],
 
 
