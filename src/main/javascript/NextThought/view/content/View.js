@@ -411,16 +411,13 @@ Ext.define('NextThought.view.content.View', {
 			return;
 		}
 		
-		//force this to blank out if it was unset
-		this.updateState({
-			course: instance && instance.getId()
-		});
 
 		//Temporary stop gap
 		var info = instance && instance.__getLocationInfo(),
 			catalogEntry = instance && instance.getCourseCatalogEntry(),
 			preview = catalogEntry && catalogEntry.get('Preview'),
 			background = info && info.toc && getURL(info.toc.querySelector('toc').getAttribute('background'), info.root);
+			
 
 		this.currentCourse = instance;
 		//this.reader.clearLocation();
@@ -448,9 +445,15 @@ Ext.define('NextThought.view.content.View', {
 			this.showContentReader();
 		}
 
-		this.setActiveTab(preview ?
-						  'course-info' :
-						  tab || 'course-book');
+		tab = preview? 'course-info' : tab || 'course-book';
+
+		//force this to blank out if it was unset
+		this.updateState({
+			course: instance && instance.getId(),
+			activeTab: tab
+		});
+
+		this.setActiveTab(tab);
 	},
 
 
@@ -569,7 +572,8 @@ Ext.define('NextThought.view.content.View', {
 					me.reader.clearLocation();
 				}
 
-				me.setActiveTab(tab);
+				//if we have an instance this gets called in _setCourse so there is no need to do it here
+				if (!instance) { me.setActiveTab(tab); }
 			}
 			catch (e) {
 				console.error(e.stack || e.message || e);
