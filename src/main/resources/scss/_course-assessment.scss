@@ -221,11 +221,11 @@ canvas.x-component-course-assessment {
 			}
 
 			.item {
-				@include icon('assignment_due', $top: 11px, $left: 10px);
+				@include icon('assignment_due_small', $top: 17px, $left: 16px);
 
 				&.late {
 					&::after {
-						@include sprite($icons,'assignment_late');
+						@include sprite($icons,'assignment_late_small');
 					}
 				}
 
