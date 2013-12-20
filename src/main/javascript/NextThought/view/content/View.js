@@ -83,7 +83,7 @@ Ext.define('NextThought.view.content.View', {
 			'beforeNavigate': 'onBeforeNavigate',
 			'navigateAbort': 'onNavigationAborted',
 			'navigateCanceled': 'onNavigationCanceled',
-
+			'request-visibility': 'requestReaderVisibility',
 			'location-cleared': 'onLocationCleared'
 		});
 
@@ -360,6 +360,23 @@ Ext.define('NextThought.view.content.View', {
 
 		this.reader.ntiidOnFrameReady = ntiid;
 		return false;
+	},
+
+
+	requestReaderVisibility: function(){
+		var locationInfo = this.reader.getLocation(),
+			pageInfo = locationInfo && locationInfo.pageInfo;
+
+		if(!pageInfo){
+			console.warn('not showing the reader because we dont have a pageinfo');
+			return;
+		}
+
+		if(!this.reader.isVisible(true)){
+			console.warn('showing the content reader because it isnt visible but needs to be');
+			this.showContentReader();
+		}
+		
 	},
 
 
