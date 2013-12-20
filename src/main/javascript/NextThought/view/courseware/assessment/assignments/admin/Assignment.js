@@ -159,7 +159,11 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		});
 
 		s = this.store = new NextThought.store.courseware.AssignmentView({
-			url: a && a.getLink('GradeSubmittedAssignmentHistory')
+			url: a && a.getLink('GradeSubmittedAssignmentHistory'),
+			sorters: {
+				property: 'Creator',
+				direction: 'DESC'
+			}
 		});
 
 
@@ -172,9 +176,25 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 
 	resolveUsers: function(store, records) {
-		console.debug(records);
+
 		var pluck = Ext.Array.pluck,
-			users = pluck(pluck(records, 'data'), 'Creator');
+			users = pluck(pluck(records, 'data'), 'Creator'),
+			phantoms = [];
+
+		this.roster.forEach(function(o) {
+			if (!Ext.Array.contains(users, o.Username)) {
+				phantoms.push(new NextThought.model.courseware.UsersCourseAssignmentHistoryItem({
+					Creator: o.Username
+				}));
+				users.push(o.Username);
+			}
+		});
+
+		if (phantoms.length) {
+			records = records.concat(phantoms);
+			store.add(phantoms);
+		}
+
 		UserRepository.getUser(users)
 				.done(function(users) {
 					var i = users.length - 1,
