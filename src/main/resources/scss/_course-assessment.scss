@@ -438,18 +438,20 @@ canvas.x-component-course-assessment {
 
 			.header {
 				background: #f8f8f8;
+				position: relative;
 				padding: 15px 30px;
-				box-shadow: inset 0 -1px 0 0 #e4e4e4;
+				box-shadow: inset 0 -1px 0 0 #dddddd;
 				&::after {
 					content: '';
-					box-shadow: inset 0 -1px 0 0 #e4e4e4,
-								0 -2px 6px 1px rgba(0,0,0,0.2);
+					box-shadow: 0 -5px 15px 5px rgba(0, 0, 0, 0.2);
 					position: absolute;
 					right: 0;
 					bottom: 0;
 					left: 0;
-					height: 1px;
-					clip: rect(auto,auto,100px,auto);
+					height: 100px;
+					clip: rect(100px, auto, 150px, auto);
+					background: #dddddd;
+					border-radius: 40em / 10px;
 				}
 
 				.title {
@@ -508,9 +510,9 @@ canvas.x-component-course-assessment {
 	padding: 0;
 	border: 0 none;
 	border-bottom: {
-		color: #f2f2f2;
+		color: #f1f1f1;
 		style: solid;
-		width: 3px !important;
+		width: 1px !important;
 	}
 	text-shadow: none;
 	color: $tertiary-grey;
@@ -522,28 +524,29 @@ canvas.x-component-course-assessment {
 	&.x-column-header-sort-ASC,
 	&.x-column-header-sort-DESC {
 		overflow: visible;
-		border-bottom: {
-			color: $primary-grey;
-		}
-
-		&::after,
-		&::before {
-			display: block;
-			content: '';
-			width: 3px; height: 3px;
-			bottom: -3px;
-			position: absolute;
-			background: #fff;
-			z-index: 1;
-		}
-
-		&::before { left: -3px; }
-		&::after { right: 0; }
 
 		.x-column-header-text {
 			color: $primary-grey;
 			background: none;
 			padding-right: 0;
+
+			&::after {
+				content: '';
+				margin-left: 1em;
+			}
+		}
+	}
+
+	&.x-column-header-sort-ASC {
+		.x-column-header-text::after {
+			vertical-align: text-top;
+			@include arrow($width: 8px, $height: 5px);
+		}
+	}
+	&.x-column-header-sort-DESC {
+		.x-column-header-text::after {
+			vertical-align: text-bottom;
+			@include arrow($pointFrom: top, $width: 8px, $height: 5px);
 		}
 	}
 
