@@ -164,8 +164,8 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 			});
 		}
 
-		if (grade) {
-			add(me.getEventConfig('Grade Received', o, grade.get('CreatedTime')));
+		if (grade && grade.get('value')) {
+			add(me.getEventConfig('Grade Received', o, grade.get('Last Modified')));
 		}
 
 		if (dateOpens < now) {

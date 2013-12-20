@@ -163,6 +163,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 			{name: 'completed', type: 'date'},
 			{name: 'correct', type: 'int'},
 			{name: 'total', type: 'int'},
+			{name: 'item', type: 'auto'},
 			{name: 'submittedCount', type: 'int'},
 			{name: 'enrolledCount', type: 'int'}
 		];

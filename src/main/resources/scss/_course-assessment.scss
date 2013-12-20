@@ -602,5 +602,39 @@ canvas.x-component-course-assessment {
 			overflow: hidden;
 			@include icon('check_gray', $top: 1em, $left: 1.6em);
 		}
+
+
+		.late, .ontime, .incomplete {
+			font-weight: 600;
+		}
+		.late { color: $primary-red; }
+		.ontime { color: $primary-green; }
+		.incomplete { color: $tertiary-grey; }
+
+		.student-cell {
+			margin-left: 30px;
+			overflow: hidden;
+			position: relative;
+
+			.avatar {
+				float: left;
+				display: inline-block;
+				line-height: 0;
+				width: 60px; height: 60px;
+				background: {
+					size: cover;
+					position: center center;
+					repeat: no-repeat;
+				}
+			}
+			.name {
+				margin-left: 75px;
+				line-height: 60px;
+				max-width: 100%;
+				overflow: hidden;
+				@include ellipse;
+				color: $primary-grey;
+			}
+		}
 	}
 }

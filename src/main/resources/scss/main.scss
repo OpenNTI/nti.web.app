@@ -143,3 +143,12 @@ input:-moz-placeholder { @include placeholder-style(); }
 		font-size: 0.5em;
 	}
 }
+
+.error-message-component {
+	text-align: center;
+	font-size: 0.9em;
+	line-height: 5;
+	font-style: italic;
+	font-weight: 600;
+	color: $primary-red;
+}

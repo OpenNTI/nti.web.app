@@ -2,6 +2,10 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-assessment-admin-assignments-item',
 
+	requires: [
+		'NextThought.store.courseware.AssignmentView'
+	],
+
 	ui: 'course-assessment',
 	cls: 'course-assessment-admin assignment-item',
 
@@ -80,15 +84,30 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 				border: false,
 				frame: false,
 				items: [
-						   { text: 'Student', dataIndex: 'name', flex: 1, renderer: function(v) {
-							   return this.studentTpl.apply(v);
+						   { text: 'Student', dataIndex: 'Creator', flex: 1, padding: '0 0 0 30', renderer: function(v) {
+							   var u = v && (typeof v === 'string' ? {displayName: 'Resolving...'} : v.getData());
+							   return this.studentTpl.apply(u);
 						   } },
-						   { text: 'Completed', dataIndex: 'completed', width: 80, renderer: function(v) {
-							   return '';
+						   { text: 'Completed', dataIndex: 'Submission', width: 150, renderer: function(v) {
+							   var d = this.dueDate, s = v && v.get('Last Modified');
+							   if (!s) {
+								   return Ext.DomHelper.markup({cls: 'incomplete', html: 'Incomplete'});
+							   }
+							   if (d > s) {
+								   return Ext.DomHelper.markup({cls: 'ontime', html: 'On Time'});
+							   }
+
+							   d = new Duration(Math.abs(s - d) / 1000);
+							   return Ext.DomHelper.createTemplate({cls: 'late', html: '{late} Late'}).apply({
+								   late: d.ago().replace('ago', '').trim()
+							   });
 						   } },
-						   { text: 'Score', dataIndex: 'Grade', width: 70 },
-						   { text: 'Feedback', dataIndex: 'feedback', width: 140, renderer: function(value) {
-							   return value ? (value + ' Comments') : '';
+						   { text: 'Score', dataIndex: 'Grade', width: 90, renderer: function(v) {
+							   return v && v.get('value');
+						   } },
+						   { text: 'Feedback', dataIndex: 'Feedback', width: 140, renderer: function(value) {
+							   var items = ((value && value.get('Items')) || []).length;
+							   return items ? (items + ' Comments') : '';
 						   } }
 					   ].map(function(o) {
 							return Ext.applyIf(o, {
@@ -120,10 +139,17 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 				}
 			},
 
-			studentTpl: Ext.DomHelper.createTemplate({})
+
+
+			studentTpl: Ext.DomHelper.createTemplate({cls: 'student-cell', cn: [
+				{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'} },
+				{ cls: 'name', html: '{displayName}'}
+			]})
 		}],
 
+
 	beforeRender: function() {
+		var a = this.assignment, s, grid;
 		this.callParent();
 		this.renderData = Ext.apply(this.renderData || {}, {
 			assignmentTitle: this.assignmentTitle,
@@ -131,6 +157,39 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			page: this.page,
 			total: this.total
 		});
+
+		s = this.store = new NextThought.store.courseware.AssignmentView({
+			url: a && a.getLink('GradeSubmittedAssignmentHistory')
+		});
+
+
+		grid = this.down('grid');
+		grid.dueDate = a.getDueDate();
+		grid.bindStore(s);
+		this.mon(s, 'load', 'resolveUsers');
+		s.load();
+	},
+
+
+	resolveUsers: function(store, records) {
+		console.debug(records);
+		var pluck = Ext.Array.pluck,
+			users = pluck(pluck(records, 'data'), 'Creator');
+		UserRepository.getUser(users)
+				.done(function(users) {
+					var i = users.length - 1,
+						r, u;
+
+					for (i; i >= 0; i--) {
+						r = records[i];
+						u = users[i];
+						if (u && r && r.get('Creator') === u.getId()) {
+							r.set('Creator', u);
+						} else {
+							console.warn('Skipped record!', i, records, users);
+						}
+					}
+				});
 	},
 
 
