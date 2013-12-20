@@ -294,6 +294,9 @@ Ext.define('NextThought.view.courseware.forum.View', {
 	courseChanged: function(courseInstance) {
 		var s = {content: {discussion: null}};
 
+		//clear out all the views we've pushed
+		this.removeAll(true);
+
 		history.pushState(s); //history is accumulating at this point in the "transaction"
 
 		this.setBoard(courseInstance && courseInstance.get('Discussions'));
