@@ -81,8 +81,8 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 			} else {
 				me.body.add([
 					{ xtype: 'course-assessment-admin-activity', title: 'Activity & Notifications' },
-					{ xtype: 'course-assessment-admin-assignments-root', title: 'Assignments' },
-					{ xtype: 'course-assessment-admin-performance-root', title: 'Grades & Performance' }
+					{ xtype: 'course-assessment-admin-assignments', title: 'Assignments' },
+					{ xtype: 'course-assessment-admin-performance', title: 'Grades & Performance' }
 				]);
 			}
 

@@ -4,6 +4,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 	ui: 'course-assessment',
 	cls: 'assignment-list',
 
+	view: 'student',
 	overItemCls: 'over',
 	selectedItemCls: 'selected',
 	itemSelector: '.item',
@@ -78,6 +79,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 			});
 		}
 		this.callParent(arguments);
+
+		this.on('select', function(s, r) {s.deselect(r);});
 	},
 
 

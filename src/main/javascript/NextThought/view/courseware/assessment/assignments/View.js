@@ -123,7 +123,10 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 						group = cmp.add(me.newGroupUIConfig({
 							store: store
 						}));
-						group.setTitle(name);
+
+					group.setTitle(name);
+					me.mon(group.down('dataview'), 'itemclick', 'onItemClicked');
+
 
 					me.activeStores.push(store);
 
@@ -145,6 +148,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 			}
 		};
 	},
+
+
+	onItemClicked: Ext.emptyFn,
 
 
 	getFields: function() {

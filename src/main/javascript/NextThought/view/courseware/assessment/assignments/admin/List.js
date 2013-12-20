@@ -3,6 +3,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.List', {
 	alias: 'widget.course-assessment-assignment-admin-list',
 	cls: 'assignment-list admin',
 
+	view: 'admin',
+
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header', html: 'Completion'},
 		{ cls: 'list'}

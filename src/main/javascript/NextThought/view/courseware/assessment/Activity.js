@@ -2,6 +2,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 	extend: 'Ext.view.View',
 	alias: 'widget.course-assessment-activity',
 
+	view: 'student',
 	ui: 'course-assessment',
 	cls: 'course-assessment-activity scrollable',
 	preserveScrollOnRefresh: true,

@@ -1,12 +1,23 @@
 Ext.define('NextThought.view.courseware.assessment.assignments.admin.View', {
-	extend: 'NextThought.view.courseware.assessment.assignments.View',
-	alias: 'widget.course-assessment-admin-assignments-root',
+	extend: 'Ext.container.Container',
+	alias: 'widget.course-assessment-admin-assignments',
 	requires: [
-		'NextThought.view.courseware.assessment.assignments.admin.List'
+		'NextThought.view.courseware.assessment.assignments.admin.Root',
+		'NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	],
 
+	layout: 'card',
 
-	newAssignmentList: function(grouper) {
-		return { xtype: 'course-assessment-assignment-admin-list', store: grouper.store };
+	onAdd: function(item) { this.getLayout().setActiveItem(item); },
+
+
+	setAssignmentsData: function() {
+		this.clearAssignmentsData();
+		var root = this.add({ xtype: 'course-assessment-admin-assignments-root' });
+		root.setAssignmentsData.apply(root, arguments);
+	},
+
+	clearAssignmentsData: function() {
+		this.removeAll(true);
 	}
 });
