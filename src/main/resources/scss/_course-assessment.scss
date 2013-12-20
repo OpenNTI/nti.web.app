@@ -434,6 +434,14 @@ canvas.x-component-course-assessment {
 					height: 50px;
 					line-height: 0;
 				}
+
+				.up {
+					@include icon('arrow-up', $top: 19px, $left: 10px);
+				}
+
+				.down {
+					@include icon('arrow-down', $top: 19px, $left: 10px);
+				}
 			}
 
 			.header {
