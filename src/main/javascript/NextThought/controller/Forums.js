@@ -809,18 +809,25 @@ Ext.define('NextThought.controller.Forums', {
 					var topicCmp = Ext.ComponentQuery.query('forums-topic')[0];
 					console.log('Success: ', rec);
 					unmask();
+
 					if (!postCmp.isDestroyed) {
-						if (!isEdit) {
-							if (postCmp.store) {
-								postCmp.store.insert(0, rec);
+
+						try {
+							if (!isEdit) {
+								if (postCmp.store) {
+									postCmp.store.insert(0, rec);
+								}
+								if (topicCmp && postCmp !== topicCmp && topicCmp.store) {
+									topicCmp.store.add(rec);
+								}
 							}
-							if (topicCmp && postCmp !== topicCmp && topicCmp.store) {
-								topicCmp.store.add(rec);
-							}
+						} catch(e) {
+							console.error(e.stack || e.message || e);
+						} finally {
+							editor.deactivate();
+							editor.setValue('');
+							editor.reset();
 						}
-						editor.deactivate();
-						editor.setValue('');
-						editor.reset();
 					}
 
 					Ext.callback(successCallback, null, [editor, postCmp, rec]);
