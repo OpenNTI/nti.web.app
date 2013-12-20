@@ -398,6 +398,7 @@ Ext.define('NextThought.view.content.View', {
 			this.showCourseNavigation();
 		}
 		else {
+			this._setCourse(null);
 			this.showContentReader();
 		}
 
