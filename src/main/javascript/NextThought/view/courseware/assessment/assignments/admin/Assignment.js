@@ -48,6 +48,21 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		{ id: '{id}-body', cls: 'body', cn: ['{%this.renderContainer(out,values)%}'] }
 	]),
 
+
+	renderSelectors: {
+		rootPathEl: '.toolbar .path.part.root',
+		previousEl: '.toolbar .controls .up',
+		nextEl: '.toolbar .controls .down'
+	},
+
+
+	listeners: {
+		rootPathEl: { click: 'fireGoUp' },
+		previousEl: { click: 'firePreviousEvent' },
+		nextEl: { click: 'fireNextEvent' }
+	},
+
+
 	items: [
 		{
 			xtype: 'grid',
@@ -116,5 +131,33 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			page: this.page,
 			total: this.total
 		});
+	},
+
+
+	fireGoUp: function() {
+		this.fireEvent('goup', this);
+	},
+
+
+	firePreviousEvent: function() {
+		//page is 1 based, and we want to go to the previous index
+		var index = this.page - 2;
+
+		if (index < 0) {
+			index = this.total - 1;
+		}
+
+		this.fireEvent('goto', index);
+	},
+
+	fireNextEvent: function() {
+		//page is 1 based, and we want to go to the next index (so, next 0-based index = current page in 1-based)
+		var index = this.page;
+
+		if (index > (this.total - 1)) {
+			index = 0;
+		}
+
+		this.fireEvent('goto', index);
 	}
 });
