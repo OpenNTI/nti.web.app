@@ -3,7 +3,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	alias: 'widget.course-assessment-admin-assignments-item',
 
 	ui: 'course-assessment',
-	cls: 'course-assessment-admin',
+	cls: 'course-assessment-admin assignment-item',
 
 	layout: 'auto',
 	componentLayout: 'natural',
@@ -25,8 +25,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 				//path (bread crumb)
 				{
 					cn: [
-						{ cls: 'path part root', html: 'Assignments'},
-						{ cls: 'path part current', html: '{assignmentTitle}'}
+						{ tag: 'span', cls: 'path part root', html: 'Assignments'},
+						{ tag: 'span', cls: 'path part current', html: '{assignmentTitle}'}
 					]
 				}
 			]
@@ -39,8 +39,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 				{
 					cls: 'subtitle',
 					cn: [
-						{ cls: 'due', html: 'Due {due:date("l, F j")'},
-						{ cls: 'link', html: 'Request a Change'}
+						{ tag: 'span', cls: 'due', html: 'Due {due:date("l F j, Y")}'},
+						{ tag: 'span', cls: 'link', html: 'Request a Change'}
 					]
 				}
 			]
@@ -106,5 +106,15 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			},
 
 			studentTpl: Ext.DomHelper.createTemplate({})
-		}]
+		}],
+
+	beforeRender: function() {
+		this.callParent();
+		this.renderData = Ext.apply(this.renderData || {}, {
+			assignmentTitle: this.assignmentTitle,
+			due: this.due,
+			page: this.page,
+			total: this.total
+		});
+	}
 });

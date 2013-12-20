@@ -11,7 +11,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 	},
 
 
-	onItemClicked: function() {
-		console.debug(arguments);
+	onItemClicked: function(view, rec) {
+		this.fireEvent('assignement-clicked', view, rec);
 	}
 });

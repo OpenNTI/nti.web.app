@@ -71,7 +71,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 					{name: 'due', type: 'date'},
 					{name: 'completed', type: 'date'},
 					{name: 'correct', type: 'int'},
-					{name: 'total', type: 'int'}
+					{name: 'total', type: 'int'},
+					{name: 'item', type: 'auto'}
 				],
 				data: [
 					{id: 1, name: 'Example', due: new Date(), completed: new Date(), correct: 1, total: 2}

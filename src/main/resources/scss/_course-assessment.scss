@@ -350,7 +350,6 @@ canvas.x-component-course-assessment {
 
 .x-container-course-assessment {
 
-
 	&.assignment-group {
 		padding: 30px 30px 60px;
 		box-shadow: 0 1px 0 0 #f1f1f1;
@@ -373,6 +372,110 @@ canvas.x-component-course-assessment {
 
 	&.course-performance {
 		padding-top: 200px;
+	}
+
+
+	&.course-assessment-admin {
+		&.assignment-item {
+			.toolbar {
+				box-shadow: inset 0 -1px 0 0 #f1f1f1;
+				padding: 0 17px 0 30px;
+				font: normal normal 0.75em/49px $font;
+				color: $primary-grey;
+				overflow: hidden;
+				height: 50px;
+
+				.path.part {
+					font-weight: 600;
+					cursor: pointer;
+
+					&.root {
+						color: $primary-blue;
+					}
+
+					&::after {
+						content: ' /  ';
+						color: $tertiary-grey;
+						font-weight: 400;
+						margin: 0.3em;
+					}
+
+					&:last-of-type {
+						cursor: default;
+
+						&::after {
+							content: none;
+						}
+					}
+				}
+
+				.right.controls {
+					display: inline-block;
+					line-height: 0;
+					float: right;
+				}
+
+				.page {
+					vertical-align: top;
+					line-height: 49px;
+					display: inline-block;
+					font-style: italic;
+					color: $primary-grey;
+					margin-right: 25px;
+					span {
+						font-weight: 600;
+					}
+				}
+
+				.up, .down {
+					cursor: pointer;
+					display: inline-block;
+					width: 40px;
+					height: 50px;
+					line-height: 0;
+				}
+			}
+
+			.header {
+				background: #f8f8f8;
+				padding: 15px 30px;
+				box-shadow: inset 0 -1px 0 0 #e4e4e4;
+				&::after {
+					content: '';
+					box-shadow: inset 0 -1px 0 0 #e4e4e4,
+								0 -2px 6px 1px rgba(0,0,0,0.2);
+					position: absolute;
+					right: 0;
+					bottom: 0;
+					left: 0;
+					height: 1px;
+					clip: rect(auto,auto,100px,auto);
+				}
+
+				.title {
+					font: normal 300 1.3em/1 $font;
+					color: $primary-grey;
+				}
+
+				.subtitle {
+					font: normal 600 0.6em/1 $font;
+					text-transform: uppercase;
+					color: $tertiary-grey;
+					margin-top: 1em;
+
+					span {
+						&::after {
+							content: '\00B7';
+							margin: 0.5em;
+							color: $tertiary-grey;
+						}
+						&:last-of-type::after {
+							content: none;
+						}
+					}
+				}
+			}
+		}
 	}
 }
 
