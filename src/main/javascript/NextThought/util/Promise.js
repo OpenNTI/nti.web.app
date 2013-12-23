@@ -164,7 +164,15 @@ var Promise = (function() {
 		}
 
 		function prime(index) {
-			promises[index].then(function(value) {
+			var p = promises[index];
+
+			if (!p || !p.then) {//handle falsy/non-promise @ index
+				toGo--;
+				checkFinished();
+				return;
+			}
+
+			p.then(function(value) {
 				// on success
 				values[index] = value;
 				toGo--;
