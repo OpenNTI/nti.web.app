@@ -5,11 +5,13 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.View', {
 		'NextThought.view.courseware.assessment.admin.performance.Root'
 	],
 
-	layout: 'stack',
+	layout: 'card',
+	onAdd: function(item) { this.getLayout().setActiveItem(item); },
+
 
 	setAssignmentsData: function() {
 		this.clearAssignmentsData();
-		var root = this.pushView({ xtype: 'course-assessment-admin-performance-root' });
+		var root = this.add({ xtype: 'course-assessment-admin-performance-root', roster: this.roster });
 		root.setAssignmentsData.apply(root, arguments);
 	},
 

@@ -90,6 +90,7 @@ canvas.x-component-course-assessment {
 		}
 	}
 
+
 	&.course-assessment-activity {
 		overflow: {x: hidden; y: auto;}
 		color: $primary-grey;
@@ -133,77 +134,6 @@ canvas.x-component-course-assessment {
 		}
 	}
 
-
-	&.assignment-filterbar {
-		box-shadow: inset 0 -1px 0 0 #f1f1f1;
-		background: #fbfbfb;
-		color: $secondary-grey;
-		z-index: 2;
-		position: relative;
-		font: normal 500 0.9em/3.5em $font;
-
-		input {
-			font: normal 500 1em/2 $font;
-			color: $secondary-grey;
-			background: none;
-			border: 0;
-			width: 100%;
-		}
-
-		.third {
-			position: relative;
-			display: inline-block;
-			width: 33.3333333333%;
-			padding: 0 2em;
-			box-shadow: inset -1px 0 0 0 #f1f1f1;
-			&:last-of-type {
-				box-shadow: none;
-			}
-		}
-
-		.dropmenu {
-			cursor: pointer;
-			@include icon('arrow-course-dropdown-light', $top:1.5em, $left:auto, $right:1em);
-
-			&:hover {
-				color: $primary-grey;
-				&::after {
-					@include sprite($icons, 'arrow-course-dropdown');
-				}
-			}
-
-			&.disabled{
-				cursor: default;
-				opacity: 0.5;
-
-				&:hover {
-					color: inherit;
-					&::after{
-						@include sprite($icons, 'arrow-course-dropdown-light');
-					}
-				}
-			}
-		}
-
-		.search {
-			padding-left: 3em;
-			@include icon('rhp-search', $top:1.1em, $left:1.5em);
-			&:hover {
-				color: $primary-grey;
-			}
-
-			input:invalid ~ .clear { display: none; }
-
-			.clear {
-				cursor: pointer;
-				top: 1.2em; right: 1em;
-				position: absolute;
-				background: $icons no-repeat;
-				@include sprite($icons,'clear_line',$dimensions: true);
-			}
-		}
-
-	}
 
 	&.assignment-list {
 		&.admin {
@@ -292,6 +222,188 @@ canvas.x-component-course-assessment {
 			}
 		}
 	}
+
+
+	&.course-assessment-admin.performance {
+
+		.scrollzone {
+			position: absolute;
+			top: 51px; left: 0; right: 0; bottom: 0;
+			padding: 0 2em 2em;
+			font-size: 0.9em;
+			overflow: {
+				x: hidden;
+				y: auto; //scroll
+			}
+		}
+
+		.column-names{
+			position: relative;
+			font: normal 700 0.7em/1 $font;
+			color: $tertiary-grey;
+			text-transform: uppercase;
+			margin: 5em 0 2em;
+
+			.right {
+				float: right;
+				width: 15em;
+			}
+		}
+
+		.list > .item {
+			box-shadow: inset 0 1px 0 0 #f7f7f7;
+			position: relative;
+			overflow: hidden;
+		}
+
+		.avatar {
+			width: 60px;
+			height: 60px;
+			display: inline-block;
+			float: left;
+			background: {
+				size: cover;
+				position: center center;
+				repeat: no-repeat;
+			}
+		}
+
+		.action-items {
+			font: normal 600 0.7em/2 $font;
+			text-transform: uppercase;
+			&:empty {
+				color: $tertiary-grey;
+				&::after { content: 'No Action Items'; }
+			}
+
+			& > div {
+				color: $primary-blue;
+				display: inline-block;
+				&.overdue { color: $primary-red; }
+
+				&::before {
+					content: '\00B7';
+					margin: 0.5em;
+				}
+				&:first-of-type::before { content: none; }
+			}
+		}
+
+		.studentbox {
+			cursor: pointer;
+			position: relative;
+			overflow: hidden;
+
+			.wrap {
+				margin: 15px 0 0 75px;
+			}
+		}
+
+		.gradebox {
+			margin: 11px 0 9px;
+			width: 10.5em;
+			float: right;
+			font: normal 500 1em/1 $font;
+			border: 1px solid #dcdcdc;
+			& > * {
+				font: normal 500 1em/1 $font;
+				padding: 0.7em 1em;
+				margin: 0;
+				background: #fff;
+				color: $secondary-grey;
+				position: relative;
+			}
+
+			input {
+				width: 56%;
+				border-width: 0 1px 0 0;
+				border-right: { style: solid; color: #dcdcdc; }
+			}
+			.dropdown {
+				width: 44%;
+				display: inline-block;
+				&::after {
+					content: '';
+					overflow: hidden;
+					position: absolute;
+					top: 1.8em;
+					right: 1.5em;
+					@include arrow($pointFrom:top, $width: 8px, $height: 5px, $color: $secondary-grey);
+				}
+			}
+		}
+	}
+}
+
+.assignment-filterbar {
+	box-shadow: inset 0 -1px 0 0 #f1f1f1;
+	background: #fbfbfb;
+	color: $secondary-grey;
+	z-index: 2;
+	position: relative;
+	font: normal 500 0.9em/3.5em $font;
+
+	input {
+		font: normal 500 1em/2 $font;
+		color: $secondary-grey;
+		background: none;
+		border: 0;
+		width: 100%;
+	}
+
+	.third {
+		position: relative;
+		display: inline-block;
+		width: 33.3333333333%;
+		padding: 0 2em;
+		box-shadow: inset -1px 0 0 0 #f1f1f1;
+		&:last-of-type {
+			box-shadow: none;
+		}
+	}
+
+	.dropmenu {
+		cursor: pointer;
+		@include icon('arrow-course-dropdown-light', $top:1.5em, $left:auto, $right:1em);
+
+		&:hover {
+			color: $primary-grey;
+			&::after {
+				@include sprite($icons, 'arrow-course-dropdown');
+			}
+		}
+
+		&.disabled{
+			cursor: default;
+			opacity: 0.5;
+
+			&:hover {
+				color: inherit;
+				&::after{
+					@include sprite($icons, 'arrow-course-dropdown-light');
+				}
+			}
+		}
+	}
+
+	.search {
+		padding-left: 3em;
+		@include icon('rhp-search', $top:1.1em, $left:1.5em);
+		&:hover {
+			color: $primary-grey;
+		}
+
+		input:invalid ~ .clear { display: none; }
+
+		.clear {
+			cursor: pointer;
+			top: 1.2em; right: 1em;
+			position: absolute;
+			background: $icons no-repeat;
+			@include sprite($icons,'clear_line',$dimensions: true);
+		}
+	}
+
 }
 
 .x-panel-nt.group-by-menu {
