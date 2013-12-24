@@ -16,7 +16,7 @@ Ext.define('NextThought.util.Parsing', {
 		var key, item, reader, results = [];
 
 		if (!Ext.isArray(items)) {
-			items = items.Items || [items];
+			items = (item && items.Items) || [items];
 		}
 
 		for (key in items) {
