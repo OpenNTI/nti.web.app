@@ -2,6 +2,6 @@ Ext.define('NextThought.model.courseware.GradeBook', {
 	extend: 'NextThought.model.Base',
 
 	fields: [
-			//TBD
+		{name: 'Items', type: 'collectionItem'}
 	]
 });

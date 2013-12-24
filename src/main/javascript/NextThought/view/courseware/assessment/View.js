@@ -106,13 +106,12 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 						if (!isSync()) { return; }
 						var history = ParseUtils.parseItems(txts[0])[0],
 							assignments = Ext.decode(txts[1], true),
-							gradeBook = Ext.decode(txts[2], true);
-
+							gradeBook = txts[2] && ParseUtils.parseItems(Ext.decode(txts[2], true))[0];
 
 						me.fireEvent('set-assignemnt-history', history);
 
 						me.forEachView(me.callFunction('setAssignmentsData',
-								[assignments, history, o, instance]));
+								[assignments, history, o, instance, gradeBook]));
 					})
 					.fail(function(reason) {
 						console.error(reason);
