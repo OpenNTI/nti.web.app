@@ -45,7 +45,7 @@ Ext.define('NextThought.model.converters.Items', {
 	COLLECTIONITEM: {
 		type: 'collectionItem',
 		convert: function(v, r) {
-			var values = [], keys = [], key, result;
+			var values = [], keys = {}, key, result;
 			if (v instanceof Object) {
 				for (key in v) {
 					if (v.hasOwnProperty(key) && v[key] instanceof Object) {
