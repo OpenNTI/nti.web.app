@@ -1,9 +1,8 @@
-Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment', {
+Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 	extend: 'Ext.container.Container',
-	alias: 'widget.course-assessment-admin-assignments-item',
+	alias: 'widget.course-assessment-admin-performance-student',
 
 	requires: [
-		'NextThought.store.courseware.AssignmentView'
 	],
 
 	ui: 'course-assessment',
@@ -29,8 +28,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 				//path (bread crumb)
 				{
 					cn: [
-						{ tag: 'span', cls: 'path part root', html: 'Assignments'},
-						{ tag: 'span', cls: 'path part current', html: '{assignmentTitle}'}
+						{ tag: 'span', cls: 'path part root', html: 'Grades & Performance'},
+						{ tag: 'span', cls: 'path part current', html: '{displayName}'}
 					]
 				}
 			]
@@ -39,14 +38,24 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		{
 			cls: 'header',
 			cn: [
-				{ cls: 'title', html: '{assignmentTitle}' },
-				{
-					cls: 'subtitle',
-					cn: [
-						{ tag: 'span', cls: 'due', html: 'Due {due:date("l F j, Y")}'},
-						{ tag: 'span', cls: 'link', html: 'Request a Change'}
-					]
-				}
+				{ cls: 'grade', cn: [
+					{ cls: 'label', html: 'Course Grade'},
+					{ cls: 'gradebox', cn: [
+						{ tag: 'input', size: 3, type: 'text', value: '{grade}'},
+						{ cls: 'dropdown letter grade', html: '{letter}'}
+					]}
+				]},
+				{ cls: 'user', cn: [
+					{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'}},
+					{ cls: 'wrap', cn: [
+						{ cls: 'title name {presence}', cn: {html: '{displayName}' }},
+						{ cls: 'subtitle actions', cn: [
+							{ tag: 'span', cls: 'profile link', html: 'Profile'},
+							{ tag: 'span', cls: 'email link', html: 'Email'},
+							{ tag: 'span', cls: 'chat link', html: 'Chat'}
+						]}
+					]}
+				]}
 			]
 		},
 		{ id: '{id}-body', cls: 'body', cn: ['{%this.renderContainer(out,values)%}'] }
@@ -84,14 +93,12 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 				border: false,
 				frame: false,
 				items: [
-						   { text: 'Student', dataIndex: 'Creator', flex: 1, padding: '0 0 0 30', renderer: function(v) {
-							   var u = v && (typeof v === 'string' ? {displayName: 'Resolving...'} : v.getData());
-							   return this.studentTpl.apply(u);
-						   } },
+						   { text: 'Assignment', dataIndex: 'name', tdCls: 'padded-cell', padding: '0 0 0 30', flex: 1 },
 						   { text: 'Completed', dataIndex: 'Submission', width: 150, renderer: function(v) {
-							   var d = this.dueDate, s = v && v.get('Last Modified');
+							   var d = new Date(0),
+								   s = v && v.get('Last Modified');
 							   if (!s) {
-								   return Ext.DomHelper.markup({cls: 'incomplete', html: 'Incomplete'});
+								   return Ext.DomHelper.markup({cls: 'incomplete', html: 'Due ' + Ext.Date.format(d, 'd/m')});
 							   }
 							   if (d > s) {
 								   return Ext.DomHelper.markup({cls: 'ontime', html: 'On Time'});
@@ -102,12 +109,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 								   late: d.ago().replace('ago', '').trim()
 							   });
 						   } },
-						   { text: 'Score', dataIndex: 'Grade', width: 90, renderer: function(v) {
-							   return v && v.get('value');
-						   } },
-						   { text: 'Feedback', dataIndex: 'Feedback', width: 140, renderer: function(value) {
-							   var items = ((value && value.get('Items')) || []).length;
-							   return items ? (items + ' Comments') : '';
+						   { text: 'Score', dataIndex: 'Grade', width: 70 },
+						   { text: 'Feedback', dataIndex: 'feedback', width: 140, renderer: function(value) {
+							   return value ? (value + ' Comments') : '';
 						   } }
 					   ].map(function(o) {
 							return Ext.applyIf(o, {
@@ -137,86 +141,93 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 						Ext.select(c.getCellSelector()).addCls(cls);
 					}
 				}
-			},
-
-
-
-			studentTpl: Ext.DomHelper.createTemplate({cls: 'padded-cell student-cell', cn: [
-				{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'} },
-				{ cls: 'name', html: '{displayName}'}
-			]})
+			}
 		}],
 
 
+	initComponent: function() {
+		var grid, store;
+		this.callParent(arguments);
+		grid = this.down('grid');
+		store = this.store = new Ext.data.Store({
+			fields: [
+				{name: 'ntiid', type: 'string'},
+				{name: 'name', type: 'string'},
+				{name: 'Submission', type: 'date'},
+				{name: 'Grade', type: 'auto'},
+				{name: 'feedback', type: 'int'}
+			],
+			sorters: [
+				{property: 'due', direction: 'DESC'}
+			]
+		});
+		grid.bindStore(store);
+	},
+
+
 	beforeRender: function() {
-		var a = this.assignment, s, grid;
 		this.callParent();
 		this.renderData = Ext.apply(this.renderData || {}, {
-			assignmentTitle: this.assignmentTitle,
-			due: this.due,
+			displayName: this.student.toString(),
+			avatarURL: this.student.get('avatarURL'),
+			presence: this.student.getPresence().getName(),
+			grade: '100',
+			letter: 'A',
 			page: this.page,
 			total: this.total
 		});
-
-		s = this.store = new NextThought.store.courseware.AssignmentView({
-			url: a && a.getLink('GradeSubmittedAssignmentHistory'),
-			sorters: {
-				property: 'Creator',
-				direction: 'DESC'
-			}
-		});
-
-
-		grid = this.down('grid');
-		grid.dueDate = a.getDueDate();
-		grid.bindStore(s);
-		this.mon(s, 'load', 'resolveUsers');
-		s.load();
 	},
 
 
-	resolveUsers: function(store, records) {
+	setAssignmentsData: function(data, history, outline, instance, gradeBook) {
+		var ntiid, raw = [];
 
-		var pluck = Ext.Array.pluck,
-			users = pluck(pluck(records, 'data'), 'Creator'),
-			phantoms = [];
-
-		this.roster.forEach(function(o) {
-			if (!Ext.Array.contains(users, o.Username)) {
-				phantoms.push(new NextThought.model.courseware.UsersCourseAssignmentHistoryItem({
-					Creator: o.Username
-				}));
-				users.push(o.Username);
-			}
-		});
-
-		if (phantoms.length) {
-			records = records.concat(phantoms);
-			store.add(phantoms);
+		if (!data) {
+			console.error('No data??');
+			return;
 		}
 
-		UserRepository.getUser(users)
-				.done(function(users) {
-					var i = users.length - 1,
-						r, u;
+		function collect(o) {
+			var id = o.getId(),
+				h = history.getItem(id),
+				submission = h && h.get('Submission'),
+				feedback = h && h.get('Feedback'),
+				grade = h && h.get('Grade');
 
-					for (i; i >= 0; i--) {
-						r = records[i];
-						u = users[i];
-						if (u && r && r.get('Creator') === u.getId()) {
-							r.set('Creator', u);
-						} else {
-							console.warn('Skipped record!', i, records, users);
-						}
-					}
-				});
+			raw.push({
+				ntiid: id,
+				containerId: o.get('containerId'),
+				item: o,
+				name: o.get('title'),
+				assigned: o.get('availableBeginning'),
+				due: o.get('availableEnding'),
+				completed: submission && submission.get('CreatedTime'),
+				Grade: grade && grade.get('grade'),
+				average: grade && grade.get('average'),
+				feedback: feedback && feedback.get('Items').length
+			});
+		}
+
+		delete data.href;//all other keys are container ids...so, lets just drop it.
+
+		for (ntiid in data) {
+			if (data.hasOwnProperty(ntiid)) {
+				if (!ParseUtils.isNTIID(ntiid)) {//just to be safe
+					console.warn('[W] Ignoring:', ntiid);
+					continue;
+				}
+				ParseUtils.parseItems(data[ntiid]).forEach(collect);
+			}
+		}
+
+		this.store.loadRawData(raw);
 	},
 
 
+	//<editor-fold desc="Navigation Events">
 	fireGoUp: function() {
 		this.fireEvent('goup', this);
 	},
-
 
 	firePreviousEvent: function() {
 		//page is 1 based, and we want to go to the previous index
@@ -239,4 +250,5 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 		this.fireEvent('goto', index);
 	}
+	//</editor-fold>
 });

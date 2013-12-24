@@ -574,9 +574,95 @@ canvas.x-component-course-assessment {
 					border-radius: 40em / 10px;
 				}
 
+				.user {
+					overflow: hidden;
+					position: relative;
+					margin: -15px 15em -15px -30px;
+				}
+
+				.avatar {
+					width: 120px;
+					height: 120px;
+					float: left;
+					background: {
+						size: cover;
+						position: center center;
+						repeat: no-repeat;
+					};
+
+					& + .wrap {
+						margin: 2em 0 0 135px;
+
+					}
+				}
+
+
+				.grade {
+					width: 15em;
+					float: right;
+					font-size: 0.8em;
+
+
+					.label {
+						color: $tertiary-grey;
+						font: normal 700 0.8em/3 $font;
+						text-transform: uppercase;
+					}
+
+					.gradebox {
+						overflow: hidden;
+						width: 10.5em;
+						font: normal 500 1em/1 $font;
+						border: 1px solid #dcdcdc;
+						background: #fff;
+						& > * {
+							font: normal 500 1em/1 $font;
+							padding: 0.7em 1em;
+							margin: 0;
+							background: #fff;
+							color: $secondary-grey;
+							position: relative;
+						}
+
+						input {
+							width: 56%;
+							border-width: 0 1px 0 0;
+							border-right: { style: solid; color: #dcdcdc; }
+						}
+						.dropdown {
+							width: 44%;
+							display: inline-block;
+							padding-top: 0.8em;
+							&::after {
+								content: '';
+								overflow: hidden;
+								position: absolute;
+								top: 1.8em;
+								right: 1.5em;
+								@include arrow($pointFrom:top, $width: 8px, $height: 5px, $color: $secondary-grey);
+							}
+						}
+					}
+				}
+
 				.title {
 					font: normal 300 1.3em/1 $font;
 					color: $primary-grey;
+
+					&.name {
+						text-transform: uppercase;
+						font: normal bold 1.2em/1 'Open Sans Condensed', $font;
+						display: inline-block;
+						position: relative;
+						max-width: 100%;
+						@include presence-style-sudo($x:-1em, $y:0.3em, $xSide:'right');
+
+						div {
+							max-width: 100%;
+							overflow: hidden;
+							@include ellipse();
+						}
+					}
 				}
 
 				.subtitle {
@@ -585,7 +671,16 @@ canvas.x-component-course-assessment {
 					color: $tertiary-grey;
 					margin-top: 1em;
 
+					&.actions {
+						margin-top: 0.5em;
+						font-size: 0.8em;
+						font-weight: normal;
+						text-transform: none;
+					}
+
 					span {
+						&.link { color: $primary-blue; cursor: pointer; }
+
 						&::after {
 							content: '\00B7';
 							margin: 0.5em;
@@ -734,8 +829,12 @@ canvas.x-component-course-assessment {
 		.ontime { color: $primary-green; }
 		.incomplete { color: $tertiary-grey; }
 
-		.student-cell {
+		div.padded-cell,
+		&.padded-cell .x-grid-cell-inner{
 			margin-left: 30px;
+		}
+
+		.student-cell {
 			overflow: hidden;
 			position: relative;
 

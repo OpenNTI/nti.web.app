@@ -99,40 +99,50 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	setAssignmentsData: function(assignments, history, outline) {
-		var ntiid, me = this,
-			users = Ext.Array.pluck(this.roster, 'Username');
+	setAssignmentsData: function(assignments, history, outline, instance, gradeBook) {
+		var users = Ext.Array.pluck(this.roster, 'Username');
 
 		this.clearAssignmentsData();
 
+		this.history = history;
+		this.gradeBook = gradeBook;
+		this.gradeBookDefaultPart = gradeBook && gradeBook.getFieldItem('Items', 'default');
 
-		this.store.loadRawData(users.map(function(u) { return { id: u }; }));
+		this.store.loadRawData(users.map(this.getDataFor.bind(this)));
 		UserRepository.getUser(users).done(this.applyUserData.bind(this));
 
-		if (!assignments) {
-			console.error('No data??');
-			return;
-		}
-
-		delete assignments.href;//all other keys are container ids...so, lets just drop it.
-
-		function collect(agg, o) { me.collectEvents(o, history); }
-
-		for (ntiid in assignments) {
-			if (assignments.hasOwnProperty(ntiid)) {
-				if (!ParseUtils.isNTIID(ntiid)) {//just to be safe
-					console.warn('[W] Ignoring:', ntiid);
-					continue;
-				}
-
-				ParseUtils.parseItems(assignments[ntiid]).reduce(collect, 0);
-			}
-		}
 	},
 
 
 	clearAssignmentsData: function() { this.clear(); },
 
+
+	getDataFor: function(username) {
+		return Ext.apply({id: username}, this.getCountsFor(username));
+	},
+
+
+	getCountsFor: function(username) {
+		var d = this.gradeBookDefaultPart,
+			assignments = (d && d.get('Items')) || [],
+			history = this.history,
+			counts = {ungraded: 0, overdue: 0, comments: 0};
+
+		assignments.forEach(function(assignment) {
+			var i = assignment.getFieldItem('Items', username),
+				h = history.getItem(assignment.get('AssignmentId'));
+
+			if (i && !i.get('value')) {counts.ungraded++;}
+			if (!i && assignment.get('DueDate') < new Date()) {counts.overdue++;}
+			//feedbacks, will we have a history item?
+			if (h) {
+				counts.comments += h.get('Items').filter(function(f) {
+					return f.get('Creator') === username;}).length;
+			}
+		});
+
+		return counts;
+	},
 
 
 	applyUserData: function(users) {
@@ -146,11 +156,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				displayName: u.toString()
 			});
 		});
-	},
-
-
-	collectEvents: function(o, history) {
-
 	},
 
 
@@ -198,6 +203,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	onItemClick: function(rec) {
-		console.log('Show User View:', rec);
+		this.fireEvent('student-clicked', this, rec);
 	}
 });
