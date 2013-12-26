@@ -408,6 +408,8 @@ Ext.define('NextThought.view.content.View', {
 			this.getCourseInstance(pageInfo).then(sc, function(reason) {
 				console.error('Could not set course from pageInfo: ', reason);
 			});
+		} else {
+			this._setCourse(null);
 		}
 
 		//TEMP:
@@ -415,7 +417,6 @@ Ext.define('NextThought.view.content.View', {
 			this.showCourseNavigation();
 		}
 		else {
-			this._setCourse(null);
 			this.showContentReader();
 		}
 
