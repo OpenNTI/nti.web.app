@@ -14,6 +14,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	childEls: ['body'],
 	getTargetEl: function() { return this.body; },
 
+	pathRoot: 'Assignments',
+
 	renderTpl: Ext.DomHelper.markup([
 		//toolbar
 		{
@@ -29,8 +31,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 				//path (bread crumb)
 				{
 					cn: [
-						{ tag: 'span', cls: 'path part root', html: 'Assignments'},
-						{ tag: 'span', cls: 'path part current', html: '{assignmentTitle}'}
+						{ tag: 'span', cls: 'path part root', html: '{pathRoot}'},
+						{ tag: 'span', cls: 'path part current', html: '{pathBranch}'}
 					]
 				}
 			]
@@ -148,10 +150,19 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		}],
 
 
+	initComponent: function() {
+		this.callParent(arguments);
+		this.enableBubble(['show-assignment']);
+	},
+
+
 	beforeRender: function() {
 		var a = this.assignment, s, grid;
 		this.callParent();
+		this.pathBranch = this.assignmentTitle;
 		this.renderData = Ext.apply(this.renderData || {}, {
+			pathRoot: this.pathRoot,
+			pathBranch: this.pathBranch,
 			assignmentTitle: this.assignmentTitle,
 			due: this.due,
 			page: this.page,
@@ -172,6 +183,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		grid.bindStore(s);
 		this.mon(s, 'load', 'resolveUsers');
 		s.load();
+
+		this.mon(grid, 'itemclick', 'goToAssignment');
 	},
 
 
@@ -229,6 +242,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		this.fireEvent('goto', index);
 	},
 
+
 	fireNextEvent: function() {
 		//page is 1 based, and we want to go to the next index (so, next 0-based index = current page in 1-based)
 		var index = this.page;
@@ -238,5 +252,20 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		}
 
 		this.fireEvent('goto', index);
+	},
+
+	goToAssignment: function(selModel, record) {
+		var student = record.get('Creator'),
+			path = [
+				this.pathRoot,
+				this.pathBranch,
+				student.toString()
+		];
+
+		if (typeof student === 'string') {
+			return;
+		}
+
+		this.fireEvent('show-assignment', record, student, path, this.store, this.page);
 	}
 });

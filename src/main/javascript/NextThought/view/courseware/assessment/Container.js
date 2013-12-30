@@ -2,7 +2,8 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-assessment-container',
 	requires: [
-		'NextThought.view.courseware.assessment.View'
+		'NextThought.view.courseware.assessment.View',
+		'NextThought.view.courseware.assessment.admin.reader.Panel'
 	],
 
 	items: [{
@@ -15,9 +16,26 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 	onAdd: function(item) { this.getLayout().setActiveItem(item); },
 
 
+	initComponent: function() {
+		this.callParent(arguments);
+		this.on('show-assignment', 'showAssignment');
+	},
+
+
 	showRoot: function() {
 		this.getLayout().setActiveItem(0);
 		Ext.destroy(this.items.getRange(1));
+	},
+
+
+	showAssignment: function(assignemntHistory, student, path, store, page) {
+		Ext.destroy(this.down('course-assessment-admin-reader'));
+		this.mon(this.add({
+			xtype: 'course-assessment-admin-reader'
+		}), {
+			//'goto': 'showAssignmentAt',
+			'goup': 'showRoot'
+		});
 	},
 
 

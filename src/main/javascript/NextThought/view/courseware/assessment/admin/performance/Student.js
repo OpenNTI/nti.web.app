@@ -13,6 +13,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 	childEls: ['body'],
 	getTargetEl: function() { return this.body; },
 
+	pathRoot: 'Grades & Performance',
+
 	renderTpl: Ext.DomHelper.markup([
 		//toolbar
 		{
@@ -28,8 +30,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 				//path (bread crumb)
 				{
 					cn: [
-						{ tag: 'span', cls: 'path part root', html: 'Grades & Performance'},
-						{ tag: 'span', cls: 'path part current', html: '{displayName}'}
+						{ tag: 'span', cls: 'path part root', html: '{pathRoot}'},
+						{ tag: 'span', cls: 'path part current', html: '{pathBranch}'}
 					]
 				}
 			]
@@ -148,6 +150,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 	initComponent: function() {
 		var grid, store;
 		this.callParent(arguments);
+		this.enableBubble(['show-assignment']);
 		grid = this.down('grid');
 		store = this.store = new Ext.data.Store({
 			fields: [
@@ -162,13 +165,17 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 			]
 		});
 		grid.bindStore(store);
+		this.mon(grid, 'itemclick', 'goToAssignment');
 	},
 
 
 	beforeRender: function() {
 		this.callParent();
+		this.pathBranch = this.student.toString();
 		this.renderData = Ext.apply(this.renderData || {}, {
 			displayName: this.student.toString(),
+			pathRoot: this.pathRoot,
+			pathBranch: this.pathBranch,
 			avatarURL: this.student.get('avatarURL'),
 			presence: this.student.getPresence().getName(),
 			grade: '100',
@@ -229,6 +236,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 		this.fireEvent('goup', this);
 	},
 
+
 	firePreviousEvent: function() {
 		//page is 1 based, and we want to go to the previous index
 		var index = this.page - 2;
@@ -240,6 +248,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 		this.fireEvent('goto', index);
 	},
 
+
 	fireNextEvent: function() {
 		//page is 1 based, and we want to go to the next index (so, next 0-based index = current page in 1-based)
 		var index = this.page;
@@ -249,6 +258,16 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 		}
 
 		this.fireEvent('goto', index);
+	},
+
+
+	goToAssignment: function(selModel, record) {
+		var path = [
+				this.pathRoot,
+				this.pathBranch,
+				record.get('name')
+		];
+		this.fireEvent('show-assignment', record, this.student, path, this.store, this.page);
 	}
 	//</editor-fold>
 });
