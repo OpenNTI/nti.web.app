@@ -267,7 +267,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 				this.pathBranch,
 				record.get('name')
 		];
-		this.fireEvent('show-assignment', record, this.student, path, this.store, this.page);
+		this.fireEvent('show-assignment', this, record, this.student, path, this.store, this.store.indexOf(record) + 1);
 	}
 	//</editor-fold>
 });

@@ -6,14 +6,23 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Panel', {
 	],
 	prefix: 'course-assignment',
 
+
 	getToolbarConfig: function() {
 		return {
 			xtype: 'course-assessment-admin-reader-header',
+			parentView: this.parentView,
 			student: this.student,
 			page: this.page,
 			path: this.path,
+			store: this.store,
 			total: this.store.getCount(),
 			assignmentHistory: this.assignmentHistory
 		};
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+		this.relayEvents(this.down('course-assessment-admin-reader-header'), ['goup']);
 	}
 });

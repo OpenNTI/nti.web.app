@@ -28,17 +28,17 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 	},
 
 
-	showAssignment: function(assignemntHistory, student, path, store, page) {
+	showAssignment: function(view, assignemntHistory, student, path, store, page) {
 		Ext.destroy(this.down('course-assessment-admin-reader'));
 		this.mon(this.add({
 			xtype: 'course-assessment-admin-reader',
+			parentView: view,
 			assignmentHistory: assignemntHistory,
 			student: student,
 			path: path,
 			store: store,
 			page: page
 		}), {
-			//'goto': 'showAssignmentAt',
 			'goup': 'showRoot'
 		});
 	},

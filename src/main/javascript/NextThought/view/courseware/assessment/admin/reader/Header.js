@@ -76,5 +76,60 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 			page: this.page,
 			total: this.total
 		});
+
+		this.on({
+			pathEl: {click: 'onPathClicked'},
+			previousEl: { click: 'firePreviousEvent' },
+			nextEl: { click: 'fireNextEvent' }
+		});
+	},
+
+
+	onPathClicked: function(e) {
+		var goHome = !!e.getTarget('.root'),
+			goNowhere = !!e.getTarget('.current'),
+			goUp = !goHome && !goNowhere && !!e.getTarget('.part');
+
+		if (goUp) {
+			this.fireGoUp();
+		} else if (goHome) {
+			this.fireGoUp();
+			this.parentView.fireGoUp();
+		}
+	},
+
+
+	fireGoUp: function() {
+		this.fireEvent('goup', this);
+	},
+
+
+	firePreviousEvent: function() {
+		//page is 1 based, and we want to go to the previous index
+		var index = this.page - 2;
+		if (index < 0) {
+			index = this.total - 1;
+		}
+
+		this.goTo(index);
+	},
+
+
+	fireNextEvent: function() {
+		//page is 1 based, and we want to go to the next index (so, next 0-based index = current page in 1-based)
+		var index = this.page;
+
+		if (index > (this.total - 1)) {
+			index = 0;
+		}
+
+		this.goTo(index);
+	},
+
+
+	goTo: function(index) {
+		var rec = this.store.getAt(index),
+			v = this.parentView;
+		Ext.defer(v.goToAssignment, 1, v, [null, rec]);
 	}
 });

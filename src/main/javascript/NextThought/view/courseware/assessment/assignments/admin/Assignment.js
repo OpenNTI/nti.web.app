@@ -266,6 +266,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			return;
 		}
 
-		this.fireEvent('show-assignment', record, student, path, this.store, this.page);
+		this.fireEvent('show-assignment', this, record, student, path, this.store, this.store.indexOf(record) + 1);
 	}
 });
