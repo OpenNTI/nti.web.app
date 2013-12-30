@@ -68,8 +68,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas', {
 		y -= mask[1];
 
 
-		if (x >= 0 && x <= size
-		&& y >= 0 && y <= size) {
+		if (x >= 0 && x <= size && y >= 0 && y <= size) {
 			this.mouseDown = true;
 			this.lastPoint = start;
 
@@ -95,12 +94,8 @@ Ext.define('NextThought.view.account.settings.PictureCanvas', {
 	onMouseMove: function(e) {
 		if (!this.mouseDown) { return; }
 
-		function clamp(v,min,max) {
-			return v < min
-					? min
-					: v > max
-						? max
-						: v;
+		function clamp(v, min, max) {
+			return (v < min) ? min : ((v > max) ? max : v);
 		}
 
 		function doMove() {
@@ -185,7 +180,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas', {
 			old.remove();
 		}
 
-		if(!window.FileReader){
+		if (!window.FileReader) {
 			this.el.parent().addCls('no-dd');
 		}
 
@@ -210,10 +205,11 @@ Ext.define('NextThought.view.account.settings.PictureCanvas', {
 
 
 	doLegacyUpload: function(fileList) {
-		if(!fileList || fileList.length===0 || !fileList[0]){
+		if (!fileList || fileList.length === 0 || !fileList[0]) {
 			alert({
-				title: getString('avatar.upload.unsupported.title','So Sorry :('),
-				msg: getString('avatar.upload.unsupported.message','Unforseen legacy browser issue.')//I don't even know who would see this in our supported browsers list. (they all support FileAPI)
+				title: getString('avatar.upload.unsupported.title', 'So Sorry :('),
+				//I don't even know who would see this in our supported browsers list. (they all support FileAPI)
+				msg: getString('avatar.upload.unsupported.message', 'Unforseen legacy browser issue.')
 			});
 			return;
 		}
@@ -227,8 +223,8 @@ Ext.define('NextThought.view.account.settings.PictureCanvas', {
 
 		if (file.size > this.ONE_MEGABYTE) {
 			alert({
-				title: getString('avatar.legacy.upload.file.size.too.big.title','We\'re sorry, but...'),
-				msg: getString('avatar.legacy.upload.file.size.too.big.message','the file you selected is too large.')
+				title: getString('avatar.legacy.upload.file.size.too.big.title', 'We\'re sorry, but...'),
+				msg: getString('avatar.legacy.upload.file.size.too.big.message', 'the file you selected is too large.')
 			});
 			return;
 		}
@@ -238,7 +234,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas', {
 
 		Ext.getBody().mask('Uploading...', 'navigation');
 
-		function fin(f,action) {
+		function fin(f, action) {
 			Ext.getBody().unmask();
 			var url = ((action || {}).result || {}).dataurl || false;//prevent an error, and force false if its not there.
 			if (url) {
@@ -306,7 +302,10 @@ Ext.define('NextThought.view.account.settings.PictureCanvas', {
 		var me = this,
 			img = new Image();
 
-		img.onerror = function() { me.clear(); };
+		img.onerror = function() {
+			console.error('Failed to load image?', arguments);
+			me.clear();
+		};
 
 		img.onload = function ImageLoaded() {
 			if (me.fileInputEl) {
@@ -360,7 +359,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas', {
 	},
 
 
-	getMask: function getMask(size,pixAdj) {
+	getMask: function getMask(size, pixAdj) {
 		size = size || 0;
 		pixAdj = pixAdj || 0;
 		var i = this.imageInfo || {selection: {}};
@@ -380,7 +379,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas', {
 		//erase
 		this.el.dom.width = this.mySize.width;
 
-		function drawCorners(x,y,width,height) {
+		function drawCorners(x, y, width, height) {
 			ctx.save();
 			ctx.fillStyle = '#000';
 			ctx.strokeStyle = '#fff';
