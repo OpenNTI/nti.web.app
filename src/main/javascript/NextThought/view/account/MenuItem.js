@@ -50,7 +50,7 @@ Ext.define('NextThought.view.account.MenuItem',{
 
 				if(!me.avatarEl || !me.nameEl){ return; }
 
-				me.avatarEl.set({src: r.get('avatarUrl'), 'data-qtip': name});
+				me.avatarEl.set({style: { backgroundImage: 'url(' + r.get('avatarURL') + ')'}, 'data-qtip': name});
 				me.nameEl.update(name);
 
 				me.monitorUser((r !== user)? r : null );
