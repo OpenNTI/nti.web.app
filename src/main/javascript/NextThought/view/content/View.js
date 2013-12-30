@@ -4,6 +4,7 @@ Ext.define('NextThought.view.content.View', {
 	requires: [
 		'NextThought.view.reader.Panel',
 		'NextThought.view.courseware.View',
+		'NextThought.view.courseware.assessment.Container',
 		'NextThought.view.courseware.assessment.View',
 		'NextThought.view.courseware.dashboard.View',
 		'NextThought.view.courseware.forum.View',
@@ -48,7 +49,7 @@ Ext.define('NextThought.view.content.View', {
 		},{
 			title: 'Assignments',
 			id: 'course-assessment',
-			xtype: 'course-assessment'
+			xtype: 'course-assessment-container'
 		},{
 			title: 'Course Info',
 			id: 'course-info',
@@ -328,8 +329,9 @@ Ext.define('NextThought.view.content.View', {
 		// NOTE: we should probably fire this event for all the children of this view,
 		// since one could have the editor active (in which case we would want to display appropriate warning).
 		// For now, it seems like the reader should be notified and we will add others if we find it necessary.
-		var result = true, active;
-		result = this.reader.fireEvent('beforedeactivate', this);
+		var result = this.reader.fireEvent('beforedeactivate', this),
+			active;
+
 		if (result) {
 			active = this.getLayout().getActiveItem();
 			if (active) {
@@ -363,20 +365,20 @@ Ext.define('NextThought.view.content.View', {
 	},
 
 
-	requestReaderVisibility: function(){
+	requestReaderVisibility: function() {
 		var locationInfo = this.reader.getLocation(),
 			pageInfo = locationInfo && locationInfo.pageInfo;
 
-		if(!pageInfo){
+		if (!pageInfo) {
 			console.warn('not showing the reader because we dont have a pageinfo');
 			return;
 		}
 
-		if(!this.reader.isVisible(true)){
+		if (!this.reader.isVisible(true)) {
 			console.warn('showing the content reader because it isnt visible but needs to be');
 			this.showContentReader();
 		}
-		
+
 	},
 
 
@@ -429,14 +431,13 @@ Ext.define('NextThought.view.content.View', {
 		if (this.currentCourse === instance) {
 			return;
 		}
-		
+
 
 		//Temporary stop gap
 		var info = instance && instance.__getLocationInfo(),
 			catalogEntry = instance && instance.getCourseCatalogEntry(),
 			preview = catalogEntry && catalogEntry.get('Preview'),
 			background = info && info.toc && getURL(info.toc.querySelector('toc').getAttribute('background'), info.root);
-			
 
 		this.currentCourse = instance;
 		//this.reader.clearLocation();
@@ -464,7 +465,7 @@ Ext.define('NextThought.view.content.View', {
 			this.showContentReader();
 		}
 
-		tab = preview? 'course-info' : tab || 'course-book';
+		tab = preview ? 'course-info' : tab || 'course-book';
 
 		//force this to blank out if it was unset
 		this.updateState({
