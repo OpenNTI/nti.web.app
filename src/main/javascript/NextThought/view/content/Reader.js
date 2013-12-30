@@ -83,16 +83,27 @@ Ext.define('NextThought.view.content.Reader', {
 	afterRender: function() {
 		this.callParent(arguments);
 		var DH = Ext.DomHelper,
+			items = this.floatingItems,
 			el = this.getTargetEl();
 
 		this.splash = DH.doInsert(el, {cls: 'no-content-splash initial'}, true, 'beforeEnd');
 		this.splash.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
-		this.floatingItems.add(
-				Ext.widget({xtype: 'content-page-widgets', renderTo: this.el, reader: this}));
+		items.add(
+				(this.pageWidgets = Ext.widget({xtype: 'content-page-widgets', renderTo: this.el, reader: this})));
 
-		this.floatingItems.add(
+		items.add(
 				(this.notfound = Ext.widget({xtype: 'notfound', renderTo: this.splash, hideLibrary: true})));
+	},
+
+
+	beforeDestroy: function() {
+		var items = this.floatingItems;
+		[this.notfound, this.pageWidgets].forEach(function(i) {
+			items.remove(i);
+			Ext.destroy(i);
+		});
+		return this.callParent(arguments);
 	},
 
 
