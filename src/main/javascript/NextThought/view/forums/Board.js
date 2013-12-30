@@ -257,7 +257,7 @@ Ext.define('NextThought.view.forums.Board', {
 			console.log('Need to show newest descendant', d);
 
 			if (d.isPost) {
-				$AppConfig.service.getObject(d.get('ContainerId'),
+				Service.getObject(d.get('ContainerId'),
 					function(o) {
 						this.fireEvent('show-topic', o, d.isComment ? d.get('ID') : undefined);
 						delete this.processingDescendant;

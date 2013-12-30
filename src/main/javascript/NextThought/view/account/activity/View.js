@@ -114,7 +114,7 @@ Ext.define('NextThought.view.account.activity.View', {
 		});
 
 		Ext.each(this.typesFilterArray, function(item) {
-			if (!$AppConfig.service.canFriend() && item.hideIfCoppa) {
+			if (!Service.canFriend() && item.hideIfCoppa) {
 				return;
 			}
 			if (item.me) {
@@ -184,7 +184,7 @@ Ext.define('NextThought.view.account.activity.View', {
 			this.applyState({from: 'community', filter: ['Show All']});
 		}
 
-		if (!$AppConfig.service.canFriend()) {
+		if (!Service.canFriend()) {
 			this.fromMenu.down('menuitem[isContacts]').destroy();
 		}
 	},

@@ -192,7 +192,7 @@ Ext.define('NextThought.controller.Search', {
 		var s = this.getHitStore(),
 				filter = this.modelFilter,
 				partial = this.doPartialSearch,
-				rootUrl = $AppConfig.service.getUserUnifiedSearchURL(),
+				rootUrl = Service.getUserUnifiedSearchURL(),
 				loc = ReaderPanel.get().getLocation().NTIID || 'noNTIID',
 				url = [
 					rootUrl,
@@ -383,7 +383,7 @@ Ext.define('NextThought.controller.Search', {
 			return;
 		}
 
-		$AppConfig.service.getObject(result.hit.getId(), success, failure);
+		Service.getObject(result.hit.getId(), success, failure);
 	},
 
 	blogPostReady: function(cmp, params) {

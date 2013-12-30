@@ -84,7 +84,7 @@ Ext.define('NextThought.view.contacts.outline.View', {
 			outlineLabel: this.getOutlineLabel(),
 			buttons: true,
 			type: this.subType,
-			cancreate: (this.subType !== 'contact' && (this.subType !== 'group' || $AppConfig.service.canCreateDynamicGroups())),
+			cancreate: (this.subType !== 'contact' && (this.subType !== 'group' || Service.canCreateDynamicGroups())),
 			canjoin: this.subType === 'group',
 			hasSearch: this.subType === 'contact'
 		});

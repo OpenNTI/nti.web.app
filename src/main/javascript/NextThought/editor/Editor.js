@@ -248,7 +248,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		this.maybeResizeContentBox = Ext.Function.createBuffered(this.maybeResizeContentBox, 400);//typical key press spacing?
 		this.callParent(arguments);
 
-		this.enableVideo = this.enableVideo && $AppConfig.service.canEmbedVideo();
+		this.enableVideo = this.enableVideo && Service.canEmbedVideo();
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			cancelLabel: this.cancelButtonLabel,
@@ -485,7 +485,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		var me = this, userTokenField, tokens, inputArea, tokenInputWrap, tokenInput;
 		me.sharedListEl = me.el.down('.recipients');
 		if (me.sharedListEl) {
-			if ($AppConfig.service.canShare()) {
+			if (Service.canShare()) {
 				me.sharedList = Ext.widget('user-sharing-list', {
 					renderTo: me.sharedListEl,
 					scrollParentEl: scrollParentEl,

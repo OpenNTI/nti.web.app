@@ -14,7 +14,7 @@ Ext.define('NextThought.mixins.ChatLinks', {
 			this.userObject = this.user;
 		}
 
-		if (!this.userObject || isMe(this.userObject) || !$AppConfig.service.canChat()) {
+		if (!this.userObject || isMe(this.userObject) || !Service.canChat()) {
 			return false;
 		}
 

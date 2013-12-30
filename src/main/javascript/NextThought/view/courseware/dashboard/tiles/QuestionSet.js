@@ -71,7 +71,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.QuestionSet', {
 
 			containerId = ContentUtils.getLineage(items[0].getAttribute('target-ntiid'))[1];
 			req = {
-				url: $AppConfig.service.getContainerUrl(containerId, 'UniqueMinMaxSummary'),
+				url: Service.getContainerUrl(containerId, 'UniqueMinMaxSummary'),
 				scope: this,
 				method: 'GET',
 				params: {

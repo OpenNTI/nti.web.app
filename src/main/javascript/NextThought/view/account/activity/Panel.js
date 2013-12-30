@@ -478,7 +478,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			console.log('Can\t find forum topic to navigate to', arguments);
 		}
 
-		$AppConfig.service.getObject(rec.get('ContainerId'), success, fail, me);
+		Service.getObject(rec.get('ContainerId'), success, fail, me);
 
 	},
 
@@ -496,7 +496,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			console.log('Can\t find blog entry to navigate to', arguments);
 		}
 
-		$AppConfig.service.getObject(rec.get('ContainerId'), success, fail, me);
+		Service.getObject(rec.get('ContainerId'), success, fail, me);
 	},
 
 

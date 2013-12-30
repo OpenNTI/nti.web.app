@@ -419,7 +419,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 
 		//TODO - official way of redaction feature enablement:
-		//if($AppConfig.service.canRedact()){
+		//if(Service.canRedact()){
 		//hack to allow redactions only in legal texts for now...
 		if (redactionRegex.test(this.reader.getLocation().NTIID)) {
 			//inject other menu items:
@@ -531,7 +531,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 
 		//TODO - official way of redaction feature enablement:
-		//if($AppConfig.service.canRedact()){
+		//if(Service.canRedact()){
 		//hack to allow redactions only in legal texts for now...
 		if (redactionRegex.test(this.reader.getLocation().NTIID)) {
 			//inject other menu items:

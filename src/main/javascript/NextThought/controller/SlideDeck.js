@@ -139,7 +139,7 @@ Ext.define('NextThought.controller.SlideDeck', {
 				console.warn('Targets is empty, so we are done here. (we should not get here!)');
 				Ext.callback(callback, scope, [rec]);
 			}
-			$AppConfig.service.getObject(targets.pop(), loaded, fail);
+			Service.getObject(targets.pop(), loaded, fail);
 		}
 
 		function loaded(r) {
@@ -179,7 +179,7 @@ Ext.define('NextThought.controller.SlideDeck', {
 	},
 
 	createStoreForContainer: function(containerId) {
-		var url = $AppConfig.service.getContainerUrl(containerId, Globals.USER_GENERATED_DATA),
+		var url = Service.getContainerUrl(containerId, Globals.USER_GENERATED_DATA),
 			store = NextThought.store.PageItem.make(url, containerId, true);
 
 		store.doesNotParticipateWithFlattenedPage = true;

@@ -66,7 +66,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Discussion', {
 
 
 	loadTopic: function(ntiid) {
-		$AppConfig.service.getObject(ntiid,
+		Service.getObject(ntiid,
 			this.onTopicResolved,
 			this.onTopicResolveFailure,
 			this,

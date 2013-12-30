@@ -72,7 +72,7 @@ Ext.define('NextThought.controller.Navigation', {
 		ids = EA.unique(EA.map(ids, ContentUtils.contentPrefix));
 		Ext.each(ids, function(id) {
 			console.warn('Dropping PageInfos for prefix:', id);
-			$AppConfig.service.dropPageInfosForPrefix(id);
+			Service.dropPageInfosForPrefix(id);
 		});
 	},
 
@@ -177,8 +177,7 @@ Ext.define('NextThought.controller.Navigation', {
 
 		return function(cmp, errorObject) {
 			var reader = (cmp || ReaderPanel.get()),
-					id = findExisting(reader.prefix),
-					service = $AppConfig.service;
+					id = findExisting(reader.prefix);
 
 			function loaded(object) {
 				var c = object.get('ContainerId'),
@@ -214,7 +213,7 @@ Ext.define('NextThought.controller.Navigation', {
 					if (!ref) {
 						console.warn('inReplyTo set but no references found');
 					}
-					service.getObject(ref, afterLoadedAgain, function failure() {
+					Service.getObject(ref, afterLoadedAgain, function failure() {
 						var mockThread;
 						console.log('Root note unresolvable, Will build thread with only reply');
 						mockThread = NextThought.util.UserDataThreader.threadUserData(object) || [];
@@ -249,7 +248,7 @@ Ext.define('NextThought.controller.Navigation', {
 			}
 
 			function continueLoad() {
-				service.getObject(target.last(), loaded, fail, me);
+				Service.getObject(target.last(), loaded, fail, me);
 			}
 
 			if (id) {
@@ -596,7 +595,7 @@ Ext.define('NextThought.controller.Navigation', {
 					onSuccess(object);
 				}
 				else {
-					$AppConfig.service.getObject(ntiid, onSuccess, onFailure, this);
+					Service.getObject(ntiid, onSuccess, onFailure, this);
 				}
 			}, this);
 		}

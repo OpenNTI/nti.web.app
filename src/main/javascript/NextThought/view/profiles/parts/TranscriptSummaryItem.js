@@ -173,7 +173,7 @@ Ext.define('NextThought.view.profiles.parts.TranscriptSummaryItem', {
 			//its cached
 			success(page);
 		}else {
-			$AppConfig.service.getObject(RoomInfo.get('ContainerId'), success, failure, this, true);
+			Service.getObject(RoomInfo.get('ContainerId'), success, failure, this, true);
 		}
 
 

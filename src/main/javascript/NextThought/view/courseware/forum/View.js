@@ -214,7 +214,7 @@ Ext.define('NextThought.view.courseware.forum.View', {
 			return;
 		}
 
-		$AppConfig.service.getObject(forum, function(record) {
+		Service.getObject(forum, function(record) {
 			delete me.currentForum;
 			if (boardId !== me.currentNtiid) {
 				console.warn('Dropping retrieved forum because board changed under us', boardId, me.boardId);
@@ -243,7 +243,7 @@ Ext.define('NextThought.view.courseware.forum.View', {
 		topic = topic || (this.state && this.state.topic);
 		comment = comment || (this.state && this.state.comment);
 
-		$AppConfig.service.getObject(topic, function(record) {
+		Service.getObject(topic, function(record) {
 			delete me.currentTopic;
 			if (boardId !== me.currentNtiid) {
 				console.warn('Dropping retrieved forum because board changed under us', boardId, me.boardId);

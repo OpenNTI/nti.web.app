@@ -254,7 +254,7 @@ Ext.define('NextThought.view.account.coppa.upgraded.Confirm', {
 
 				function s() {
 					console.log('Success update to service doc:', arguments);
-					if ($AppConfig.service.canFriend()) {
+					if (Service.canFriend()) {
 						p.destroy();
 						// NOTE: We would for the sidebar to now reflect the fact that this user
 						// can now have social features. Since we set that early when the app starts,

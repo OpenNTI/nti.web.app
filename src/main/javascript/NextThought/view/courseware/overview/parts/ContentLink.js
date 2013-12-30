@@ -56,7 +56,7 @@ Ext.define('NextThought.view.courseware.overview.parts.ContentLink', {
 		}
 
 		req = {
-			url: $AppConfig.service.getContainerUrl(ntiid, Globals.USER_GENERATED_DATA),
+			url: Service.getContainerUrl(ntiid, Globals.USER_GENERATED_DATA),
 			scope: this,
 			method: 'GET',
 			params: {

@@ -111,7 +111,7 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 			}
 		}
 
-		$AppConfig.service.getObject(containerId, finish, fail, me);
+		Service.getObject(containerId, finish, fail, me);
 	},
 
 	doClicked: function(fragIdx) {

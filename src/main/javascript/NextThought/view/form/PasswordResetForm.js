@@ -103,7 +103,7 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 
 
 	constructor: function() {
-		if (!$AppConfig.service.canChangePassword()) {
+		if (!Service.canChangePassword()) {
 			console.warn('User can\'t change password');
 			this.items = [{
 				xtype: 'box',

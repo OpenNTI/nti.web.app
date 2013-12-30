@@ -167,8 +167,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 
 
 	resolvePageInfo: function(ntiidOrPageInfo, rootId, finish, hasCallback) {
-		var me = this,
-			service = $AppConfig.service;
+		var me = this;
 
 		function success(pageInfo) {
 			if (ntiidOrPageInfo === rootId && !LocationMeta.getValue(rootId)) {
@@ -198,7 +197,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 			success(LocationMeta.getValue(ntiidOrPageInfo).pageInfo);
 		}
 		else {
-			service.getPageInfo(ntiidOrPageInfo, success, failure, me);
+			Service.getPageInfo(ntiidOrPageInfo, success, failure, me);
 		}
 	},
 

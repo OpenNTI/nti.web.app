@@ -39,7 +39,7 @@ Ext.define('NextThought.view.SideBar', {
 	constructor: function() {
 		var contactsType = 'disabled-contacts-view';
 
-		if ($AppConfig.service.canFriend()) {
+		if (Service.canFriend()) {
 			contactsType = 'contacts-view';
 		}
 
@@ -156,7 +156,7 @@ Ext.define('NextThought.view.SideBar', {
 			};
 		};
 
-		if (!$AppConfig.service.canChat()) {
+		if (!Service.canChat()) {
 			this.down('chat-dock').destroy();
 		}
 

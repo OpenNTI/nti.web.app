@@ -23,8 +23,7 @@ Ext.define('NextThought.util.Content', {
 			ids = [ids];
 		}
 
-		var service = $AppConfig.service,
-			me = this,
+		var me = this,
 			lock = ids.length;
 
 		function maybeFinish() {
@@ -56,7 +55,7 @@ Ext.define('NextThought.util.Content', {
 				maybeFinish();
 			}
 
-			service.getPageInfo(id,
+			Service.getPageInfo(id,
 				Ext.bind(me.getContentForPageInfo, me, [parseContent, failure], 1),
 				failure, me);
 		});

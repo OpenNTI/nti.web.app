@@ -50,7 +50,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.InstructorForum', {
 			}
 		}
 
-		$AppConfig.service.getObject(ntiid, me.createView, failure, me);
+		Service.getObject(ntiid, me.createView, failure, me);
 	},
 
 	createView: function(record) {

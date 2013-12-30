@@ -73,7 +73,7 @@ Ext.define('NextThought.util.Views', {
 			return;
 		}
 
-		$AppConfig.service.getObject(id, success, failure, scope);
+		Service.getObject(id, success, failure, scope);
 	}
 
 

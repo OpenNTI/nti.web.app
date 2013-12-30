@@ -588,7 +588,7 @@ Ext.define('NextThought.view.UserDataPanel', {
 			console.log('there was an error retrieving the object.', arguments);
 		}
 
-		$AppConfig.service.getObject(containerId, success, fail, me);
+		Service.getObject(containerId, success, fail, me);
 		return data;
 	},
 

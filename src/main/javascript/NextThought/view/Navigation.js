@@ -76,11 +76,11 @@ Ext.define('NextThought.view.Navigation', {
 
 	afterRender: function() {
 		this.callParent(arguments);
-		if (!$AppConfig.service.canHaveForum()) {
+		if (!Service.canHaveForum()) {
 			this.el.down('.forums').remove();
 		}
 
-		if (!$AppConfig.service.canShare()) {
+		if (!Service.canShare()) {
 			this.el.down('.contacts').remove();
 		}
 

@@ -58,7 +58,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.TopDiscussions', {
 				return;
 			}
 
-			$AppConfig.service.getObject(board,
+			Service.getObject(board,
 				onBoardResolved,
 				onResolveFailure,
 				this,

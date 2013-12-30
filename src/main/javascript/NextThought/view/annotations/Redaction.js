@@ -19,7 +19,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		this.callParent(arguments);
 
 
-		this.allowShare = $AppConfig.service.canShareRedaction();
+		this.allowShare = Service.canShareRedaction();
 		if (!this.allowShare) {
 			this.record.set('sharedWith', []);
 		}

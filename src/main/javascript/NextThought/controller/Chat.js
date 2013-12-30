@@ -374,7 +374,7 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	flattenOccupantsAndEnterRoom: function(occupants, options) {
-		if (!$AppConfig.service.canChat()) {
+		if (!Service.canChat()) {
 			console.log('User not permissioned to chat.');
 			return undefined;
 		}
@@ -415,7 +415,7 @@ Ext.define('NextThought.controller.Chat', {
 	 */
 	enterRoom: function(usersOrList, options) {
 		if (!this.availableForChat) { return; }
-		if (!$AppConfig.service.canChat()) {
+		if (!Service.canChat()) {
 			console.log('User not permissioned to chat.');
 			return;
 		}
@@ -754,14 +754,12 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	rebuildWindow: function(roomInfoId, callback) {
-		var service = $AppConfig.service;
-
 		function success(obj) {
 			this.openChatWindow(obj);
 			Ext.callback(callback);
 		}
 
-		service.getObject(roomInfoId,
+		Service.getObject(roomInfoId,
 				success,
 				function() {
 					alert('Could not recover room info');
@@ -793,7 +791,7 @@ Ext.define('NextThought.controller.Chat', {
 			console.log('Failure');
 		}
 
-		$AppConfig.service.getObject(id, success, failure, this);
+		Service.getObject(id, success, failure, this);
 
 		this.deleteRoomIdStatusAccepted(room.getId());
 

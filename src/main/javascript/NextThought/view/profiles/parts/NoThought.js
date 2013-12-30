@@ -32,7 +32,7 @@ Ext.define('NextThought.view.profiles.parts.NoThought', {
 	},
 
 	initComponent: function() {
-		this.isMe = isMe(this.userObject.get('Username')) && $AppConfig.service.canBlog();
+		this.isMe = isMe(this.userObject.get('Username')) && Service.canBlog();
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {},{isMe: this.isMe});
 		this.mixins.chatLinks.constructor.apply(this);

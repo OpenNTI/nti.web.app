@@ -75,7 +75,7 @@ Ext.define('NextThought.controller.Groups', {
 	onSessionReady: function() {
 		var store = this.getFriendsListStore(),
 			mime = (new store.model()).mimeType,
-			coll = $AppConfig.service.getCollectionFor(mime, 'FriendsLists');
+			coll = Service.getCollectionFor(mime, 'FriendsLists');
 
 		$AppConfig.contactsGroupName = this.getMyContactsId();
 
@@ -492,7 +492,7 @@ Ext.define('NextThought.controller.Groups', {
 				username, displayName, me = this,
 				errors;
 
-		if (!$AppConfig.service.canCreateDynamicGroups()) {
+		if (!Service.canCreateDynamicGroups()) {
 			Ext.Error.raise('Permission denied.  AppUser is not allowed to create dfls');
 		}
 
@@ -540,7 +540,7 @@ Ext.define('NextThought.controller.Groups', {
 			w.close();
 		}
 
-		if (!$AppConfig.service.canFriend()) {
+		if (!Service.canFriend()) {
 			Ext.Error.raise('Permission denied.  AppUser is not allowed to create lists');
 		}
 

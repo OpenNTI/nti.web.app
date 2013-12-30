@@ -202,7 +202,7 @@ Ext.define('NextThought.cache.UserRepository', {
 
 					//if we are given an ntiid call getObject instead of makeRequest
 					if (ParseUtils.isNTIID(name)) {
-						$AppConfig.service.getObject(name, function(u) {
+						Service.getObject(name, function(u) {
 							maybeFinish(name, this.cacheUser(u, true));
 						}, function() {
 							var unresolved = User.getUnresolved('Unknown');//dont show ntiid
@@ -242,7 +242,7 @@ Ext.define('NextThought.cache.UserRepository', {
 		makeRequest: function(username, callbacks, cacheBust) {
 			var me = this,
 				result = null,
-				url = $AppConfig.service.getResolveUserURL(username),
+				url = Service.getResolveUserURL(username),
 				options;
 
 			if (cacheBust) {

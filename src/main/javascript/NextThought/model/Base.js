@@ -570,7 +570,7 @@ Ext.define('NextThought.model.Base', {
 
 		//special case, pageInfos are not editable (no link), but can take sharedPrefs
 		if (!editLink && /^PageInfo$/.test(this.get('Class')) && fieldName && fieldName === 'sharingPreference') {
-			editLink = $AppConfig.service.getObjectURL(this.getId());
+			editLink = Service.getObjectURL(this.getId());
 		}
 
 		//check to make sure we can do this, and we have the info we need

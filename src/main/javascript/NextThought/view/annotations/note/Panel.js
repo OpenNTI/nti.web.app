@@ -204,7 +204,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 			console.log('TODO - this is flagged, consider an indicator, or remove this log.');
 		}
 
-		if ($AppConfig.service.canShare()) {
+		if (Service.canShare()) {
 			me.mon(me.replyButton, 'click', me.onReply, me);
 			if (me.shareButton) {
 				me.mon(me.shareButton, 'click', me.onShare, me);
@@ -707,7 +707,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 			function(wb) {
 				Ext.fly(wb).on('click', this.click, this);
 
-				if (!$AppConfig.service.canShare()) {
+				if (!Service.canShare()) {
 					Ext.fly(wb).select('.overlay').setStyle({bottom: 0});
 					Ext.fly(wb).select('.toolbar').remove();
 				}

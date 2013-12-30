@@ -26,7 +26,7 @@ Ext.define('NextThought.view.reader.Panel', {
 					align: 'stretch'
 				},
 				items: [
-					{ xtype: 'content-toolbar', hidden: true },
+					this.getToolbarConfig(),
 					{ xtype: 'reader-content', flex: 1 }
 				]
 			},{
@@ -69,6 +69,12 @@ Ext.define('NextThought.view.reader.Panel', {
 
 		this.on('beforedeactivate', this.beforeDeactivate, this);
 	},
+
+
+	getToolbarConfig: function() {
+		return { xtype: 'content-toolbar', hidden: true };
+	},
+
 
 	beforeDeactivate: function() {
 		var reader = this.down('reader-content');

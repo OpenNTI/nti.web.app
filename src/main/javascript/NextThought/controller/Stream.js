@@ -27,7 +27,7 @@ Ext.define('NextThought.controller.Stream', {
 		//Load page and root stream stores...
 		var ss = this.getStreamStore();
 
-		$AppConfig.service.getPageInfo(Globals.CONTENT_ROOT,
+		Service.getPageInfo(Globals.CONTENT_ROOT,
 			//success:
 			function(pageInfo) {
 				var p = ss.getProxy();

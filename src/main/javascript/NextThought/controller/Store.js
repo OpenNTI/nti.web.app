@@ -284,7 +284,7 @@ Ext.define('NextThought.controller.Store', function(){
 		onSessionReady: function() {
 			var store = this.getPurchasableStore();
 			store.on('load', 'maybeAddPurchasables', this);
-			store.proxy.url = $AppConfig.service.getPurchasableItemURL();
+			store.proxy.url = Service.getPurchasableItemURL();
 			Library.on('loaded', function() {
 				store.load();
 			}, this, {single: true});
@@ -388,7 +388,7 @@ Ext.define('NextThought.controller.Store', function(){
 
 		refreshPurchasable: function(p) {
 			this.fireEvent('purchase-complete', this, p);
-			$AppConfig.service.getObject(p.getId(),
+			Service.getObject(p.getId(),
 				function(newP) {
 					//p should be the instance of the record out of the store
 					//but just in case look for it in the store and merge into that
@@ -968,7 +968,7 @@ Ext.define('NextThought.controller.Store', function(){
 
 
 		activateWithCode: function(cmp, purchasable, code) {
-			var url = $AppConfig.service.getStoreActivationURL(),
+			var url = Service.getStoreActivationURL(),
 				win = this.getPurchaseWindow(),
 				me = this;
 

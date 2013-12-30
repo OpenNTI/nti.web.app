@@ -18,7 +18,7 @@ Ext.define('NextThought.view.courseware.info.Panel', {
 
 		if (!Ext.isObject(content)) {
 			if (Ext.isString(content)) {
-				$AppConfig.service.getPageInfo(
+				Service.getPageInfo(
 						content,
 						this.loadPage,
 						this.loadPageFailed,

@@ -281,7 +281,7 @@ Ext.define('NextThought.view.content.View', {
 				if (locationInfo.location && locationInfo.location.tagName === 'content:related') {
 					// NOTE: For content related item, we have enough info to actually show it, otherwise,
 					// we will navigation to the parent container.
-					$AppConfig.service.getPageInfo(cid, function(pi) {
+					Service.getPageInfo(cid, function(pi) {
 						if (!Ext.isEmpty(pi)) {
 							pi = Ext.isArray(pi) ? pi[0] : pi;
 

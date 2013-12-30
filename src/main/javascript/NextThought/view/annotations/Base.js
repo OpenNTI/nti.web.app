@@ -60,7 +60,7 @@ Ext.define('NextThought.view.annotations.Base', {
 			isModifiable: r.isModifiable(),
 			isVisible: Boolean(r.phantom || (!c.filter ? true : c.filter.test(r))),
 
-			allowShare: $AppConfig.service.canShare(),
+			allowShare: Service.canShare(),
 
 			isSingleAction: false,
 			renderPriority: -1,

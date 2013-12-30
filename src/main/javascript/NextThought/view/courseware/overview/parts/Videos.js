@@ -331,7 +331,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 	loadPageInfo: function(r) {
 		var ntiid = r.getId();
 
-		$AppConfig.service.getPageInfo(ntiid, this.getCommentCount, this.resetCommentCount, this);
+		Service.getPageInfo(ntiid, this.getCommentCount, this.resetCommentCount, this);
 	},
 
 

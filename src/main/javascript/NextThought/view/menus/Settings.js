@@ -37,7 +37,7 @@ Ext.define('NextThought.view.menus.Settings', {
 
 		items.push({ xtype: 'account-menuitem' });
 
-		if ($AppConfig.service.canChat()) {
+		if (Service.canChat()) {
 			items.push({ xtype: 'presence-menu'});
 			items.push({ xtype: 'menuseparator'});
 		}

@@ -76,9 +76,9 @@ describe('Navigation Controller Tests', function(){
 		}
 
 		it('Expect to look up and object with the NTIID \'book1\'', function(){
-			spyOn($AppConfig.service, 'getObject').andCallFake(mockGetObject);
+			spyOn(Service, 'getObject').andCallFake(mockGetObject);
 			controller.navigateToNtiid('book1');
-			expect($AppConfig.service.getObject).toHaveBeenCalled();
+			expect(Service.getObject).toHaveBeenCalled();
 		});
 	});
 

@@ -69,7 +69,7 @@ Ext.define('NextThought.store.Library', {
 	onBeforeLoad: function() {
 		if (this.proxy instanceof Ext.data.proxy.Server) {//don't resolve the url if we're a memory proxy
 			try {
-				this.proxy.url = getURL($AppConfig.service.getMainLibrary().href);
+				this.proxy.url = getURL(Service.getMainLibrary().href);
 			}
 			catch (e) {
 				console.error(e.message, e.stack || e);

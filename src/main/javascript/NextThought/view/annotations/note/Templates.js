@@ -130,7 +130,7 @@ Ext.define('NextThought.view.annotations.note.Templates', {
 		 * For the general case, it should work as usual, since the user will have the sharing capability.
 		 */
 		shared = !Ext.isEmpty(this.record.get('sharedWith'));
-		canEdit = (mine && $AppConfig.service.canShare()) || (mine && !$AppConfig.service.canShare() && !shared);
+		canEdit = (mine && Service.canShare()) || (mine && !Service.canShare() && !shared);
 		if (canEdit) {
 			items.push(editItem);
 		}
@@ -146,7 +146,7 @@ Ext.define('NextThought.view.annotations.note.Templates', {
 			 */
 
 			//			if(options.user){involved.push(options.user);}
-			//			if(	$AppConfig.service.canChat()
+			//			if(	Service.canChat()
 			//				&& shared
 			//				&& hasUser(involved, $AppConfig.username) ){
 			//				items.push(chatItem);

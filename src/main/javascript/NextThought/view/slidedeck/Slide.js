@@ -122,7 +122,7 @@ Ext.define('NextThought.view.slidedeck.Slide', {
 			finish(this.getPageStore(cahceKey));
 		}
 		else {
-			$AppConfig.service.getPageInfo(containerId, success, failure, this);
+			Service.getPageInfo(containerId, success, failure, this);
 		}
 	},
 

@@ -88,7 +88,7 @@ Ext.define('NextThought.model.courseware.navigation.Node', {
 					return r.data.$pageInfo;
 				}
 
-				$AppConfig.service.getPageInfo(r.getId(), function(p) {
+				Service.getPageInfo(r.getId(), function(p) {
 					r.data.$pageInfo = p;
 					r.afterEdit(['pageInfo']);
 				});

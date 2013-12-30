@@ -186,7 +186,7 @@ Ext.define('NextThought.controller.UserData', {
 
 
 		app.registerInitializeTask(token);
-		$AppConfig.service.getPageInfo(Globals.CONTENT_ROOT, pass, fail, this);
+		Service.getPageInfo(Globals.CONTENT_ROOT, pass, fail, this);
 	},
 
 
@@ -807,7 +807,7 @@ Ext.define('NextThought.controller.UserData', {
 		var me = this,
 			pi = ContentUtils.getLineage(pageInfoId).last() || pageInfoId;
 		//get parent:
-		$AppConfig.service.getPageInfo(pi,
+		Service.getPageInfo(pi,
 				function(topPi) {
 					if (topPi) {
 						topPi.saveField('sharingPreference', {sharedWith: prefs}, function(fieldName, sanitizedValue, pi, refreshedPageInfo) {
@@ -1169,7 +1169,7 @@ Ext.define('NextThought.controller.UserData', {
 		}
 
 		//If a user it not allowed to share, remove any shared with fields
-		if (!$AppConfig.service.canShare()) {
+		if (!Service.canShare()) {
 			shareWith = [];
 		}
 		//apply default sharing

@@ -90,7 +90,7 @@ Ext.define('NextThought.controller.CourseWare', {
 
 
 	onSessionReady: function() {
-		var s = $AppConfig.service;
+		var s = Service;
 		this.setupAdministeredCourses((s.getCollection('AdministeredCourses', 'Courses') || {}).href);
 		this.setupAvailableCourses((s.getCollection('AllCourses', 'Courses') || {}).href);
 		this.setupEnrolledCourses((s.getCollection('EnrolledCourses', 'Courses') || {}).href);

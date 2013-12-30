@@ -76,7 +76,7 @@ Ext.define('NextThought.view.whiteboard.editor.Tools', {
 	},
 
 	maybeRemoveImageFeature: function() {
-		if ($AppConfig.service.canCanvasURL()) {
+		if (Service.canCanvasURL()) {
 			return; //images approved, no delete...
 		}
 

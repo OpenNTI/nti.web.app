@@ -55,7 +55,7 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 
 
 		req = {
-			url: $AppConfig.service.getContainerUrl(containerId, Globals.USER_GENERATED_DATA),
+			url: Service.getContainerUrl(containerId, Globals.USER_GENERATED_DATA),
 			scope: this,
 			method: 'GET',
 			params: {

@@ -74,13 +74,13 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 		// NOTE: we will drive showing the tab or not showing the tab based off the workspace.
 		// Tweak this rule a bit: If the user can't create a blog,
 		// then we should hide this tab for their profile.
-		return !isMe(this.username) ? $AppConfig.service.canWorkspaceBlog() : this.canCreateNewBlog();
+		return !isMe(this.username) ? Service.canWorkspaceBlog() : this.canCreateNewBlog();
 	},
 
 
 	canCreateNewBlog: function() {
 		// We will drive showing the newEntry btn based on whether or not the user has the capability.
-		return isMe(this.username) && $AppConfig.service.canBlog();
+		return isMe(this.username) && Service.canBlog();
 	},
 
 

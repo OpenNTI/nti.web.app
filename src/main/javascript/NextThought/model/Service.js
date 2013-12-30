@@ -519,13 +519,13 @@ Ext.define('NextThought.model.Service', {
 
 
 	canCanvasURL: function() {
-		var coll = $AppConfig.service.getCollectionFor('application/vnd.nextthought.canvasurlshape', 'Pages');
+		var coll = Service.getCollectionFor('application/vnd.nextthought.canvasurlshape', 'Pages');
 		return !!coll;
 	},
 
 
 	canEmbedVideo: function() {
-		var coll = $AppConfig.service.getCollectionFor('application/vnd.nextthought.embeddedvideo', 'Pages');
+		var coll = Service.getCollectionFor('application/vnd.nextthought.embeddedvideo', 'Pages');
 		return !!coll;
 	},
 
@@ -539,13 +539,13 @@ Ext.define('NextThought.model.Service', {
 
 
 	canRedact: function() {
-		var coll = $AppConfig.service.getCollectionFor('application/vnd.nextthought.redaction', 'Pages');
+		var coll = Service.getCollectionFor('application/vnd.nextthought.redaction', 'Pages');
 		return !!coll;
 	},
 
 
 	canWorkspaceBlog: function() {
-		return Boolean($AppConfig.service.getCollection('Blog'));
+		return Boolean(Service.getCollection('Blog'));
 	}
 
 });

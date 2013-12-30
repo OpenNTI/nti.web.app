@@ -419,7 +419,7 @@ Ext.define('NextThought.controller.Session', {
 							Ext.callback(successFn, null, arguments);
 							return;
 						}
-						m.attemptLoginCallback($AppConfig.service, successFn);
+						m.attemptLoginCallback(Service, successFn);
 					}
 					catch (e) {
 						console.error(Globals.getError(e));

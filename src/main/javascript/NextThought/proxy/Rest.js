@@ -67,7 +67,7 @@ Ext.define('NextThought.proxy.Rest', {
 			href = record.getLink('edit') || record.get('href');
 		}
 		else if (action === 'create') {
-			collection = $AppConfig.service.getCollectionFor(mimeType, null) || {};
+			collection = Service.getCollectionFor(mimeType, null) || {};
 			if (!collection.href) {
 				Ext.Error.raise('No HREF found for mimetype ' + mimeType);
 			}

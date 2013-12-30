@@ -11,8 +11,7 @@ Ext.define('NextThought.view.account.activity.note.Popout', {
 
 		popupAfterResolvingParent: function(record, el, viewRef, anchor, cb) {
 
-			var service = $AppConfig.service,
-				me = this,
+			var me = this,
 				ref = record.get('references').first();
 
 			function load(resolvedRecord) {
@@ -30,7 +29,7 @@ Ext.define('NextThought.view.account.activity.note.Popout', {
 				load(record);
 				return;
 			}
-      service.getObject(ref, load, function failure() {
+      Service.getObject(ref, load, function failure() {
 	            var recs = NextThought.util.UserDataThreader.threadUserData(record);
 	            load((recs || []).first());
       }, me);

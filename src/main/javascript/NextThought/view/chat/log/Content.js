@@ -65,7 +65,7 @@ Ext.define('NextThought.view.chat.log.Content', {
 			}
 		}
 		else {
-			href = getURL($AppConfig.service.getCollection('Objects', 'Global').href + '/' + this.ntiid);
+			href = getURL(Service.getCollection('Objects', 'Global').href + '/' + this.ntiid);
 		}
 
 		me.renderData.time = Ext.Date.format(new Date(), 'g:i:sa');

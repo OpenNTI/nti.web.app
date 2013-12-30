@@ -35,7 +35,7 @@ Ext.define('NextThought.view.account.Window', {
 
 	constructor: function() {
 		var me = $AppConfig.userObject,
-				canUploadAvatar = $AppConfig.service.canUploadAvatar(),
+				canUploadAvatar = Service.canUploadAvatar(),
 				availablePanels = canUploadAvatar
 						? [
 									  { xtype: 'avatar-choices' },

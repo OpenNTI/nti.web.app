@@ -19,7 +19,7 @@ Ext.define('NextThought.proxy.UserSearch', {
 		var me	= this,
 			qs	= request.params.query.split(','),
 			q	= Ext.String.trim(qs[qs.length - 1]);
-		request.url = $AppConfig.service.getUserSearchURL(q);
+		request.url = Service.getUserSearchURL(q);
 		request.params = undefined;
 		me.reader.hasContainerId = true;
 		return this.callParent(arguments);

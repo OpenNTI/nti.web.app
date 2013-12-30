@@ -44,7 +44,7 @@ Ext.application({
 					setter: function() { throw 'readonly'; }
 				}
 			});
-			$AppConfig.service = Ext.create('NextThought.model.Service', mockService, $AppConfig.username);
+			Service = Ext.create('NextThought.model.Service', mockService, $AppConfig.username);
 
 			jasmine.getEnv().addReporter(new jasmine.HtmlReporter());
 			jasmine.getEnv().execute();

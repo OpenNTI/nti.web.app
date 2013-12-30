@@ -23,7 +23,7 @@ describe('Groups Controller Tests', function(){
 			btn = jasmine.createSpyObj('button', ['up', 'setDisabled']);
 			w = jasmine.createSpyObj('w', ['showError', 'getGroupName']);
 
-			$AppConfig.service.canCreateDynamicGroups = function(){return true;}
+			Service.canCreateDynamicGroups = function(){return true;}
 
 			btn.up.andReturn(w);
 			w.getGroupName.andReturn('groupname');

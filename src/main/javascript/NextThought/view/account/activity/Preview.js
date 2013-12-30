@@ -291,7 +291,7 @@ Ext.define('NextThought.view.account.activity.Preview', {
 
 		this.respondEl.setVisibilityMode(DISPLAY);
 
-		if ($AppConfig.service.canShare()) {
+		if (Service.canShare()) {
 			this.mon(this.replyEl, 'click', this.showEditor, this);
 		}
 		else {
