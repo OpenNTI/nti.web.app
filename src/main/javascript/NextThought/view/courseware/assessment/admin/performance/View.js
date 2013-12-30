@@ -50,8 +50,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.View', {
 		view.setAssignmentsData.apply(view, this.assignmentsData);
 
 		this.mon(view, {
-			goto: 'showStudentAt',
-			goup: 'showRoot'
+			'goto': 'showStudentAt',
+			'goup': 'showRoot'
 		});
 	},
 

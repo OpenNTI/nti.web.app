@@ -45,8 +45,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.View', {
 			assignment: rec.get('item'),
 			roster: this.roster
 		}), {
-			goto: 'showAssignmentAt',
-			goup: 'showRoot'
+			'goto': 'showAssignmentAt',
+			'goup': 'showRoot'
 		});
 	},
 
