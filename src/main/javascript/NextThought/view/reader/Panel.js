@@ -8,6 +8,7 @@ Ext.define('NextThought.view.reader.Panel', {
 		'NextThought.view.annotations.View'
 	],
 
+	prefix: 'default',
 	ui: 'reader',
 	cls: 'reader-container',
 	layout: 'border',
@@ -27,7 +28,7 @@ Ext.define('NextThought.view.reader.Panel', {
 				},
 				items: [
 					this.getToolbarConfig(),
-					{ xtype: 'reader-content', flex: 1 }
+					{ xtype: 'reader-content', prefix: this.prefix, flex: 1 }
 				]
 			},{
 				width: 258,
@@ -51,7 +52,7 @@ Ext.define('NextThought.view.reader.Panel', {
 				stateful: isFeature('notepad'),
 				stateId: 'notes-and-discussions',
 
-				activeTab: isFeature('notepad') ? 0 : 1,
+				activeTab: 1,
 				items: [
 					{ title: 'Notepad', iconCls: 'notepad', xtype: 'content-notepad', refs: [
 							{ ref: 'readerRef', selector: '#' + this.id + ' reader-content' }

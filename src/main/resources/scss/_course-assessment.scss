@@ -485,216 +485,237 @@ canvas.x-component-course-assessment {
 	&.course-performance {
 		padding-top: 200px;
 	}
+}
 
 
-	&.course-assessment-admin {
-		&.assignment-item {
-			.toolbar {
-				box-shadow: inset 0 -1px 0 0 #f1f1f1;
-				padding: 0 17px 0 30px;
-				font: normal normal 0.75em/49px $font;
-				color: $primary-grey;
-				overflow: hidden;
-				height: 50px;
+.course-assessment-admin {
+	font-size: 16px;//force a base em size
+	&.assignment-item {
+		.toolbar {
+			box-shadow: inset 0 -1px 0 0 #f1f1f1;
+			padding: 0 17px 0 30px;
+			font: normal normal 0.75em/49px $font;
+			color: $primary-grey;
+			overflow: hidden;
+			height: 50px;
 
-				.path.part {
-					font-weight: 600;
-					cursor: pointer;
+			.path.part {
+				font-weight: 600;
+				cursor: pointer;
+				color: $primary-blue;
 
-					&.root {
-						color: $primary-blue;
-					}
+				&.current {
+					color: $primary-grey;
+				}
+
+				&::after {
+					content: ' /  ';
+					color: $tertiary-grey;
+					font-weight: 400;
+					margin: 0.3em;
+				}
+
+				&:last-of-type {
+					cursor: default;
 
 					&::after {
-						content: ' /  ';
-						color: $tertiary-grey;
-						font-weight: 400;
-						margin: 0.3em;
+						content: none;
 					}
-
-					&:last-of-type {
-						cursor: default;
-
-						&::after {
-							content: none;
-						}
-					}
-				}
-
-				.right.controls {
-					display: inline-block;
-					line-height: 0;
-					float: right;
-				}
-
-				.page {
-					vertical-align: top;
-					line-height: 49px;
-					display: inline-block;
-					font-style: italic;
-					color: $primary-grey;
-					margin-right: 25px;
-					span {
-						font-weight: 600;
-					}
-				}
-
-				.up, .down {
-					cursor: pointer;
-					display: inline-block;
-					width: 40px;
-					height: 50px;
-					line-height: 0;
-				}
-
-				.up {
-					@include icon('arrow-up', $top: 19px, $left: 10px);
-				}
-
-				.down {
-					@include icon('arrow-down', $top: 19px, $left: 10px);
 				}
 			}
 
-			.header {
-				background: #f8f8f8;
+			.right.controls {
+				display: inline-block;
+				line-height: 0;
+				float: right;
+			}
+
+			.page {
+				vertical-align: top;
+				line-height: 49px;
+				display: inline-block;
+				font-style: italic;
+				color: $primary-grey;
+				margin-right: 25px;
+				span {
+					font-weight: 600;
+				}
+			}
+
+			.up, .down {
+				cursor: pointer;
+				display: inline-block;
+				width: 40px;
+				height: 50px;
+				line-height: 0;
+			}
+
+			.up {
+				@include icon('arrow-up', $top: 19px, $left: 10px);
+			}
+
+			.down {
+				@include icon('arrow-down', $top: 19px, $left: 10px);
+			}
+		}
+
+		&.reader-header {
+			.toolbar {
+				height: 60px;
+				line-height: 59px;
+
+				.page {
+					line-height: 59px;
+				}
+
+				.up, .down {
+					height: 60px;
+					&::after {
+						top: 24px;
+					}
+				}
+			}
+		}
+
+		.header {
+			background: #f8f8f8;
+			position: relative;
+			padding: 15px 30px;
+			border-bottom: 1px solid #dddddd;
+			&::after {
+				content: '';
+				box-shadow: 0 -5px 15px 5px rgba(0, 0, 0, 0.2);
+				position: absolute;
+				right: 0;
+				bottom: 0;
+				left: 0;
+				height: 100px;
+				clip: rect(100px, auto, 150px, auto);
+				background: #dddddd;
+				border-radius: 40em / 10px;
+			}
+
+			.user {
+				overflow: hidden;
 				position: relative;
-				padding: 15px 30px;
-				box-shadow: inset 0 -1px 0 0 #dddddd;
-				&::after {
-					content: '';
-					box-shadow: 0 -5px 15px 5px rgba(0, 0, 0, 0.2);
-					position: absolute;
-					right: 0;
-					bottom: 0;
-					left: 0;
-					height: 100px;
-					clip: rect(100px, auto, 150px, auto);
-					background: #dddddd;
-					border-radius: 40em / 10px;
+				margin: -15px 15em -15px -30px;
+			}
+
+			.avatar {
+				width: 120px;
+				height: 120px;
+				float: left;
+				background: {
+					size: cover;
+					position: center center;
+					repeat: no-repeat;
+				};
+
+				& + .wrap {
+					margin: 2em 0 0 135px;
+
 				}
-
-				.user {
-					overflow: hidden;
-					position: relative;
-					margin: -15px 15em -15px -30px;
-				}
-
-				.avatar {
-					width: 120px;
-					height: 120px;
-					float: left;
-					background: {
-						size: cover;
-						position: center center;
-						repeat: no-repeat;
-					};
-
-					& + .wrap {
-						margin: 2em 0 0 135px;
-
-					}
-				}
+			}
 
 
-				.grade {
-					width: 15em;
-					float: right;
-					font-size: 0.8em;
+			.grade {
+				width: 15em;
+				float: right;
+				font-size: 0.8em;
 
 
-					.label {
-						color: $tertiary-grey;
-						font: normal 700 0.8em/3 $font;
-						text-transform: uppercase;
-					}
-
-					.gradebox {
-						overflow: hidden;
-						width: 10.5em;
-						font: normal 500 1em/1 $font;
-						border: 1px solid #dcdcdc;
-						background: #fff;
-						& > * {
-							font: normal 500 1em/1 $font;
-							padding: 0.7em 1em;
-							margin: 0;
-							background: #fff;
-							color: $secondary-grey;
-							position: relative;
-						}
-
-						input {
-							width: 56%;
-							border-width: 0 1px 0 0;
-							border-right: { style: solid; color: #dcdcdc; }
-						}
-						.dropdown {
-							width: 44%;
-							display: inline-block;
-							padding-top: 0.8em;
-							&::after {
-								content: '';
-								overflow: hidden;
-								position: absolute;
-								top: 1.8em;
-								right: 1.5em;
-								@include arrow($pointFrom:top, $width: 8px, $height: 5px, $color: $secondary-grey);
-							}
-						}
-					}
-				}
-
-				.title {
-					font: normal 300 1.3em/1 $font;
-					color: $primary-grey;
-
-					&.name {
-						text-transform: uppercase;
-						font: normal bold 1.2em/1 'Open Sans Condensed', $font;
-						display: inline-block;
-						position: relative;
-						max-width: 100%;
-						@include presence-style-sudo($x:-1em, $y:0.3em, $xSide:'right');
-
-						div {
-							max-width: 100%;
-							overflow: hidden;
-							@include ellipse();
-						}
-					}
-				}
-
-				.subtitle {
-					font: normal 600 0.6em/1 $font;
-					text-transform: uppercase;
+				.label {
 					color: $tertiary-grey;
-					margin-top: 1em;
+					font: normal 700 0.8em/3 $font;
+					text-transform: uppercase;
+				}
 
-					&.actions {
-						margin-top: 0.5em;
-						font-size: 0.8em;
-						font-weight: normal;
-						text-transform: none;
+				.gradebox {
+					overflow: hidden;
+					width: 10.5em;
+					font: normal 500 1em/1 $font;
+					border: 1px solid #dcdcdc;
+					background: #fff;
+					& > * {
+						font: normal 500 1em/1 $font;
+						padding: 0.7em 1em;
+						margin: 0;
+						background: #fff;
+						color: $secondary-grey;
+						position: relative;
 					}
 
-					span {
-						&.link { color: $primary-blue; cursor: pointer; }
-
+					input {
+						width: 56%;
+						border-width: 0 1px 0 0;
+						border-right: { style: solid; color: #dcdcdc; }
+					}
+					.dropdown {
+						width: 44%;
+						display: inline-block;
+						padding-top: 0.8em;
 						&::after {
-							content: '\00B7';
-							margin: 0.5em;
-							color: $tertiary-grey;
+							content: '';
+							overflow: hidden;
+							position: absolute;
+							top: 1.8em;
+							right: 1.5em;
+							@include arrow($pointFrom:top, $width: 8px, $height: 5px, $color: $secondary-grey);
 						}
-						&:last-of-type::after {
-							content: none;
-						}
+					}
+				}
+			}
+
+			.title {
+				font: normal 300 1.3em/1 $font;
+				color: $primary-grey;
+
+				&.name {
+					text-transform: uppercase;
+					font: normal bold 1.2em/1 'Open Sans Condensed', $font;
+					display: inline-block;
+					position: relative;
+					max-width: 100%;
+					@include presence-style-sudo($x:-1em, $y:0.3em, $xSide:'right');
+
+					div {
+						max-width: 100%;
+						overflow: hidden;
+						@include ellipse();
+					}
+				}
+			}
+
+			.subtitle {
+				font: normal 600 0.6em/1 $font;
+				text-transform: uppercase;
+				color: $tertiary-grey;
+				margin-top: 1em;
+
+				&.actions {
+					margin-top: 0.5em;
+					font-size: 0.8em;
+					font-weight: normal;
+					text-transform: none;
+				}
+
+				span {
+					&.link { color: $primary-blue; cursor: pointer; }
+
+					&::after {
+						content: '\00B7';
+						margin: 0.5em;
+						color: $tertiary-grey;
+					}
+					&:last-of-type::after {
+						content: none;
 					}
 				}
 			}
 		}
 	}
 }
+
 
 .course-performance-header {
 	position: absolute;
