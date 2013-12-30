@@ -4,7 +4,7 @@ begin
 rescue LoadError
 end
 
-blessc_executable = 'blessc';
+#blessc_executable = 'blessc';
 
 environment = :production
 
@@ -20,6 +20,6 @@ output_style = :compact
 line_comments = false
 
 # execute blessc when the stylesheet is generated
-on_stylesheet_saved do |path|
-	print "\n\n\n##############################################\nWARNING: No Blessc found\nExpect problems in IE\n##############################################\n\n\n\n" unless system(blessc_executable+' '+path+' -f -x')
-end
+#on_stylesheet_saved do |path|
+#	print "\n\n\n##############################################\nWARNING: No Blessc found\nExpect problems in IE\n##############################################\n\n\n\n" unless system(blessc_executable+' '+path+' -f -x')
+#end
