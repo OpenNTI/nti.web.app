@@ -5,11 +5,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 	requires: [
 	],
 
-	mixins: {
-		enableProfiles: 'NextThought.mixins.ProfileLinks',
-		enableChat: 'NextThought.mixins.ChatLinks'
-	},
-
 	profileLinkCard: false,
 
 	ui: 'course-assessment',
@@ -23,75 +18,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 	pathRoot: 'Grades & Performance',
 
 	renderTpl: Ext.DomHelper.markup([
-		//toolbar
-		{
-			cls: 'toolbar',
-			cn: [
-				{ cls: 'right controls', cn: [
-					{ cls: 'page', cn: [
-						{ tag: 'span', html: '{page}'}, ' of ', {tag: 'span', html: '{total}'}
-					] },
-					{ cls: 'up' },
-					{ cls: 'down' }
-				] },
-				//path (bread crumb)
-				{
-					cn: [
-						{ tag: 'span', cls: 'path part root', html: '{pathRoot}'},
-						{ tag: 'span', cls: 'path part current', html: '{pathBranch}'}
-					]
-				}
-			]
-		},
-		//header
-		{
-			cls: 'header',
-			cn: [
-				{ cls: 'grade', cn: [
-					{ cls: 'label', html: 'Course Grade'},
-					{ cls: 'gradebox', cn: [
-						{ tag: 'input', size: 3, type: 'text', value: '{grade}'},
-						{ cls: 'dropdown letter grade', html: '{letter}'}
-					]}
-				]},
-				{ cls: 'user', cn: [
-					{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'}},
-					{ cls: 'wrap', cn: [
-						{ cls: 'title name {presence}', cn: {html: '{displayName}' }},
-						{ cls: 'subtitle actions', cn: [
-							{ tag: 'span', cls: 'profile link', html: 'Profile'},
-							{ tag: 'span', cls: 'email link', html: 'Email'},
-							{ tag: 'span', cls: 'chat link', html: 'Chat'}
-						]}
-					]}
-				]}
-			]
-		},
-		{ id: '{id}-body', cls: 'body', cn: ['{%this.renderContainer(out,values)%}'] }
-	]),
+	 	{ id: '{id}-body', cls: 'body', cn: ['{%this.renderContainer(out,values)%}'] }
+	 ]),
 
 
-	renderSelectors: {
-		rootPathEl: '.toolbar .path.part.root',
-		previousEl: '.toolbar .controls .up',
-		nextEl: '.toolbar .controls .down',
-		nameEl: '.header .user .wrap .name',
-		profileEl: '.header .user .wrap .actions .profile',
-		emailEl: '.header .user .wrap .actions .email',
-		chatEl: '.header .user .wrap .actions .chat'
-	},
-
-
-	listeners: {
-		rootPathEl: { click: 'fireGoUp' },
-		previousEl: { click: 'firePreviousEvent' },
-		nextEl: { click: 'fireNextEvent' },
-		emailEl: { click: 'openEmail'}
-	},
-
-
-	items: [
-		{
+	assessment:{
 			xtype: 'grid',
 			ui: 'course-assessment',
 			plain: true,
@@ -156,13 +87,29 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 					}
 				}
 			}
-		}],
+	},
 
 
 	initComponent: function() {
-		var grid, store;
+		var grid, store, header;
+
 		this.callParent(arguments);
 		this.enableBubble(['show-assignment']);
+
+		this.pathBranch = this.student.toString();
+		
+		header = this.add({
+			xtype: 'course-assessment-admin-performance-header',
+			path: [this.pathRoot, this.pathBranch],
+			student: this.student,
+			page: this.page,
+			total: this.total
+		});
+
+		this.relayEvents(header,['goup','goto']);
+
+		this.add(this.assessment);
+	
 		grid = this.down('grid');
 		store = this.store = new Ext.data.Store({
 			fields: [
@@ -178,53 +125,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 		});
 		grid.bindStore(store);
 		this.mon(grid, 'itemclick', 'goToAssignment');
-	},
-
-
-	beforeRender: function() {
-		this.callParent();
-		this.pathBranch = this.student.toString();
-		this.renderData = Ext.apply(this.renderData || {}, {
-			displayName: this.student.toString(),
-			pathRoot: this.pathRoot,
-			pathBranch: this.pathBranch,
-			avatarURL: this.student.get('avatarURL'),
-			presence: this.student.getPresence().getName(),
-			grade: '100',
-			letter: 'A',
-			page: this.page,
-			total: this.total
-		});
-	},
-
-
-	afterRender: function(){
-		var me = this;
-
-		me.callParent(arguments);
-
-		//so the elements wont take up space when hidden
-		Object.keys(this.renderSelectors).forEach(function(s){ 
-			me[s].setVisibilityMode(Ext.Element.DISPLAY); 
-		});
-
-		//for profile link
-		me.user = me.student;
-		me.enableProfileClicks(me.profileEl);
-
-		if(!me.user.get('email')){
-			me.emailEl.hide();
-		}
-
-		me.maybeShowChat(me.chatEl);
-
-		this.mon(Ext.getStore('PresenceInfo'), 'presence-changed', function(username, presence){
-			if(username === me.user.getId()){
-				me.nameEl.removeCls('dnd away available unavailable');
-				me.nameEl.addCls(presence.getName());
-				me.maybeShowChat(me.chatEl);
-			}
-		});
 	},
 
 
@@ -273,45 +173,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 	},
 
 
-	openEmail: function(){
-		var email = this.student.get('email');
-
-		if(email){
-			Globals.sendEmailTo(email);
-		}
-	},
-
-
 	//<editor-fold desc="Navigation Events">
-	fireGoUp: function() {
-		this.fireEvent('goup', this);
-	},
-
-
-	firePreviousEvent: function() {
-		//page is 1 based, and we want to go to the previous index
-		var index = this.page - 2;
-
-		if (index < 0) {
-			index = this.total - 1;
-		}
-
-		this.fireEvent('goto', index);
-	},
-
-
-	fireNextEvent: function() {
-		//page is 1 based, and we want to go to the next index (so, next 0-based index = current page in 1-based)
-		var index = this.page;
-
-		if (index > (this.total - 1)) {
-			index = 0;
-		}
-
-		this.fireEvent('goto', index);
-	},
-
-
 	goToAssignment: function(selModel, record) {
 		var path = [
 				this.pathRoot,
