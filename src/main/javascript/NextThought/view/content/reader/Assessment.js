@@ -86,6 +86,12 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 	},
 
 
+	setAssignmentFromInstructorProspective: function(assignment, history) {
+		//this.injectedAssignment = assignment;
+		this.injectedAssignmentHistory = history;
+	},
+
+
 	cleanQuestionsThatAreInQuestionSets: function(items, objects) {
 		var result = [],
 			questionsInSets = [],

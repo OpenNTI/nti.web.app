@@ -23,11 +23,15 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Panel', {
 
 	afterRender: function() {
 		this.callParent(arguments);
+		var r = this.down('reader-content'),
+			a = r.getAssessment();
+
 		this.relayEvents(this.down('course-assessment-admin-reader-header'), ['goup']);
 		if (!this.location) {
 			console.error('No location configured');
 		}
+		a.setAssignmentFromInstructorProspective(this.assignment, this.assignmentHistory);
+		r.setLocation(this.location, null, true);
 
-		this.down('reader-content').setLocation(this.location, null, true);
 	}
 });
