@@ -3,6 +3,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 	alias: 'widget.course-assessment-admin-performance-student',
 
 	requires: [
+		'NextThought.view.courseware.assessment.admin.performance.Header'
 	],
 
 	profileLinkCard: false,
@@ -22,7 +23,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 	 ]),
 
 
-	assessment:{
+	assessment: {
 			xtype: 'grid',
 			ui: 'course-assessment',
 			plain: true,
@@ -97,7 +98,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 		this.enableBubble(['show-assignment']);
 
 		this.pathBranch = this.student.toString();
-		
+
 		header = this.add({
 			xtype: 'course-assessment-admin-performance-header',
 			path: [this.pathRoot, this.pathBranch],
@@ -106,10 +107,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 			total: this.total
 		});
 
-		this.relayEvents(header,['goup','goto']);
+		this.relayEvents(header, ['goup', 'goto']);
 
 		this.add(this.assessment);
-	
+
 		grid = this.down('grid');
 		store = this.store = new Ext.data.Store({
 			fields: [
