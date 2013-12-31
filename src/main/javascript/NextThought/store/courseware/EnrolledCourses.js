@@ -31,7 +31,7 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 	},
 	sorters: [
 		{
-			sorterFn: function(a, b) { return a.asUIData().title.strcmp(b.asUIData().title); }
+			sorterFn: function(a, b) { return a.get('CourseInstance').asUIData().title.strcmp(b.get('CourseInstance').asUIData().title); }
 		}
 	],
 
