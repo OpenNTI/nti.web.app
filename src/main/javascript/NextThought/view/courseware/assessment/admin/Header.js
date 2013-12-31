@@ -37,7 +37,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 			cls: 'header',
 			cn: [
 				{ cls: 'grade', cn: [
-					{ cls: 'label', html: 'Assignment Grade'},
+					{ cls: 'label', html: '{gradeTitle} Grade'},
 					{ cls: 'late', html: '{late}'},
 					{ cls: 'gradebox', cn: [
 						{ tag: 'input', size: 3, type: 'text', value: '{grade}'},
@@ -80,6 +80,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			displayName: this.student.toString(),
+			gradeTitle: this.gradeTitle || 'Assignment',
 			path: this.path || [],
 			avatarURL: this.student.get('avatarURL'),
 			presence: this.student.getPresence().getName(),
