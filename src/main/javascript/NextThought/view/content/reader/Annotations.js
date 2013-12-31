@@ -34,6 +34,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		var me = this,
 				reader = me.reader;
 
+		me.up = reader.up.bind(reader);
 		me.mixins.observable.constructor.apply(me);
 
 		reader.on('destroy', 'destroy',
@@ -56,13 +57,15 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			annotationManager: new NextThought.view.annotations.renderer.Manager(reader)
 		});
 
-		this.reader.fireEvent('listens-to-page-stores', this, {
-			scope: this,
-			add: 'storeEventsAdd',
-			'paged-in': 'storeEventsAdd',
-			remove: 'storeEventsRemove',
-			bulkremove: 'storeEventsBulkRemove'
-		});
+		reader.on('afterRender', function() {
+			reader.fireEvent('listens-to-page-stores', this, {
+				scope: this,
+				add: 'storeEventsAdd',
+				'paged-in': 'storeEventsAdd',
+				remove: 'storeEventsRemove',
+				bulkremove: 'storeEventsBulkRemove'
+			});
+		}, this);
 
 		me.mon(reader, {
 			scope: this,
@@ -89,7 +92,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				toggle = t && t.hasCls('active'),
 				line = !toggle && t && parseInt(t.getAttribute('data-line'), 10);
 
-		this.fireEvent('filter-by-line', line);
+		this.fireEvent('filter-by-line', this.reader, line);
 		this.gutterEl.select('[data-line]').removeCls('active');
 		if (t && !toggle) {
 			t.addCls('active');
@@ -261,7 +264,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			this.annotations[oid] = undefined;
 			delete this.annotations[oid];
 			v.cleanup();
-			this.fireEvent('removed-from-line');
+			this.fireEvent('removed-from-line', this.reader);
 		}
 	},
 

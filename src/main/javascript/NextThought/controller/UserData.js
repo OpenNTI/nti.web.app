@@ -2,6 +2,7 @@ Ext.define('NextThought.controller.UserData', {
 	extend: 'Ext.app.Controller',
 
 
+	//<editor-fold desc="Config">
 	requires: [
 		'NextThought.app.domain.Annotation',
 		'NextThought.app.domain.Model',
@@ -56,8 +57,10 @@ Ext.define('NextThought.controller.UserData', {
 	refs: [
 		{ ref: 'activeNoteViewer', selector: 'note-window'}
 	],
+	//</editor-fold>
 
 
+	//<editor-fold desc="Init">
 	init: function() {
 		var me = this;
 
@@ -74,6 +77,7 @@ Ext.define('NextThought.controller.UserData', {
 				'*': {
 					'uses-page-preferences': 'setupPagePreferences',
 					'uses-page-stores': 'setupPageStoreDelegates',
+					'add-flatpage-store-context': 'initPageStores',
 					'listens-to-page-stores': 'listenToPageStores',
 					'open-chat-transcript': 'openChatTranscript',
 					'load-transcript': 'onLoadTranscript',
@@ -159,8 +163,7 @@ Ext.define('NextThought.controller.UserData', {
 			shared: this.incomingSharedChange
 			// circled: //do nothing? Thats what we have been doing :P
 		});
-
-		this.initPageStores();
+		this.flatPageContextMap = {};
 	},
 
 
@@ -188,8 +191,10 @@ Ext.define('NextThought.controller.UserData', {
 		app.registerInitializeTask(token);
 		Service.getPageInfo(Globals.CONTENT_ROOT, pass, fail, this);
 	},
+	//</editor-fold>
 
 
+	//<editor-fold desc="UI Manipulation">
 	showNoteViewer: function(sel, rec) {
 		var me = this,
 			anchorCmp = sel.view.anchorComponent,
@@ -242,8 +247,10 @@ Ext.define('NextThought.controller.UserData', {
 			this.activeNoteWindow.destroy();
 		}
 	},
+	//</editor-fold>
 
 
+	//<editor-fold desc="Socket">
 	changeActionMap: {
 		/**
 		 * Stubs that show what we could handle. They will be called with these args:
@@ -415,6 +422,7 @@ Ext.define('NextThought.controller.UserData', {
 		console.warn('what would we do here? treading as a create.');
 		this.incomingCreatedChange.apply(this, arguments);
 	},
+	//</editor-fold>
 
 
 	onRecordDestroyed: function(record) {
@@ -429,19 +437,33 @@ Ext.define('NextThought.controller.UserData', {
 
 
 	listenToPageStores: function(monitor, listeners) {
-		monitor.mon(this.pageStoreEvents, listeners);
+		var ctx = this.getContext(monitor) || this.flatPageContextMap['main-reader-view'];//this or branch is for the current PresentationView
+		monitor.mon(ctx.pageStoreEvents, listeners);
 	},
 
 
 	setupPageStoreDelegates: function(cmp) {
-		var delegate,
+		function bind(fn, me) {
+			return function() {
+				try {
+					me.setContext(context);
+					return fn.apply(me, arguments);
+				}
+				finally {
+					me.clearContext();
+				}
+			};
+		}
+
+		var context = this.getContext(cmp),
+			delegate,
 			delegates = {
-				clearPageStore: Ext.bind(this.clearPageStore, this),
-				addPageStore: Ext.bind(this.addPageStore, this),
-				getPageStore: Ext.bind(this.getPageStore, this),
-				hasPageStore: Ext.bind(this.hasPageStore, this),
-				applyToStores: Ext.bind(this.applyToStores, this),
-				applyToStoresThatWantItem: Ext.bind(this.applyToStoresThatWantItem, this)
+				clearPageStore: bind(this.clearPageStore, this),
+				addPageStore: bind(this.addPageStore, this),
+				getPageStore: bind(this.getPageStore, this),
+				hasPageStore: bind(this.hasPageStore, this),
+				applyToStores: bind(this.applyToStores, this),
+				applyToStoresThatWantItem: bind(this.applyToStoresThatWantItem, this)
 			};
 
 		for (delegate in delegates) {
@@ -455,11 +477,42 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	initPageStores: function() {
+	//<editor-fold desc="Context Functions">
+	getContext: function(cmp) {
+		if (cmp) {
+			if (!cmp.flatPageStore) {
+				cmp = cmp.up('[flatPageStore]');
+				if (!cmp) {
+					Ext.Error.raise('No context');
+				}
+			}
+
+			var c = this.flatPageContextMap;
+			c[cmp.id] = (c[cmp.id] || {flatPageStore: cmp.flatPageStore});
+
+			return c[cmp.id];
+		}
+
+		return this.currentContext;
+	},
+
+
+	setContext: function(ctx) {
+		this.currentContext = ctx;
+	},
+
+
+	clearContext: function() {
+		delete this.currentContext;
+	},
+
+
+	initPageStores: function(cmpContext) {
 		//init the page store.
-		var currentPageStoresMap = {};
-		this.pageStoreEvents = new Ext.util.Observable();
-		ObjectUtils.defineAttributes(this, {
+		var context = this.getContext(cmpContext),
+			currentPageStoresMap = {};
+		context.pageStoreEvents = new Ext.util.Observable();
+		ObjectUtils.defineAttributes(context, {
 			currentPageStores: {
 				getter: function() {return currentPageStoresMap;},
 				setter: function(s) {
@@ -485,16 +538,14 @@ Ext.define('NextThought.controller.UserData', {
 				}
 			}
 		});
-
-
-		this.flatPageStore = this.getFlatPageStore();
-
 	},
+	//</editor-fold>
 
 
 	clearPageStore: function() {
-		var fp = this.flatPageStore;
-		this.currentPageStores = {};//see above defineAttributes call
+		var ctx = this.getContext(),
+			fp = ctx.flatPageStore;
+		ctx.currentPageStores = {};//see above defineAttributes call
 		fp.removeFilter('lineFilter');
 		fp.removeAll();
 		if (fp.getRange().length !== 0) {
@@ -504,22 +555,24 @@ Ext.define('NextThought.controller.UserData', {
 
 
 	hasPageStore: function(id) {
-		return !id ? false : (this.currentPageStores || {}).hasOwnProperty(id);
+		var ctx = this.getContext();
+		return !id ? false : (ctx.currentPageStores || {}).hasOwnProperty(id);
 	},
 
 
 	addPageStore: function(id, store) {
-		var events = this.pageStoreEvents, monitors = events.managedListeners || [];
+		var ctx = this.getContext(),
+			events = ctx.pageStoreEvents, monitors = events.managedListeners || [];
 		if (this.hasPageStore(id) && this.getPageStore(id) !== store) {
 			console.warn('replacing an existing store??');
 		}
 
 		store.cacheMapId = store.cacheMapId || id;
 
-		this.currentPageStores[id] = store;
+		ctx.currentPageStores[id] = store;
 
 		if (!store.doesNotParticipateWithFlattenedPage) {
-			this.flatPageStore.bind(store);
+			ctx.flatPageStore.bind(store);
 		}
 		store.on({
 			scope: this,
@@ -554,16 +607,16 @@ Ext.define('NextThought.controller.UserData', {
 
 
 	getPageStore: function(id) {
-		var theStore, root;
+		var theStore, root, ctx = this.getContext();
 		if (!id) {
 			Ext.Error.raise('ID required');
 		}
 
 		function bad() { console.error('There is no store for id: ' + id); }
 
-		theStore = this.currentPageStores[id];
+		theStore = ctx.currentPageStores[id];
 		if (!theStore) {
-			root = this.currentPageStores.root;
+			root = ctx.currentPageStores.root;
 			if (root && (id === root.containerId)) {
 				theStore = root;
 			}
@@ -572,8 +625,9 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	getStoreForLine: function(line) {
-		var stores = this.currentPageStores,
+	getStoreForLine: function(view, line) {
+		var ctx = this.getContext(view),
+			stores = ctx.currentPageStores,
 			root = stores.root || {},
 			key, s, potentials = [];
 
@@ -610,16 +664,19 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
+	//<editor-fold desc="Store Iteration">
 	//Calls the provided fn on all the stores.  Optionally takes a predicate
 	//which skips stores that do not match the predicate
 	applyToStores: function(fn, predicate) {
-		Ext.Object.each(this.currentPageStores, function(k) {
-			if (k === 'root') {
-				return;
-			}//root is an alisas of the ntiid
-			if (!Ext.isFunction(predicate) || predicate.apply(null, arguments)) {
-				Ext.callback(fn, null, arguments);
-			}
+		Ext.Object.each(this.flatPageContextMap, function(k, o) {
+			Ext.Object.each(o.currentPageStores, function(k) {
+				if (k === 'root') {
+					return;
+				}//root is an alisas of the ntiid
+				if (!Ext.isFunction(predicate) || predicate.apply(null, arguments)) {
+					Ext.callback(fn, null, arguments);
+				}
+			});
 		});
 	},
 
@@ -631,6 +688,8 @@ Ext.define('NextThought.controller.UserData', {
 
 		this.applyToStores(fn, predicate);
 	},
+	//</editor-fold>
+
 
 
 	onAnnotationViewReady: function(view) {
@@ -655,8 +714,9 @@ Ext.define('NextThought.controller.UserData', {
 
 
 	onAnnotationViewRefreshed: function(view) {
+		var ctx = this.getContext(view);
 		//scrollHeight is === to height until its overflown. "<=" just feels safer :P
-		if (this.flatPageStore.filteredLine && view.getEl().dom.scrollHeight <= view.getHeight()) {
+		if (ctx.flatPageStore.filteredLine && view.getEl().dom.scrollHeight <= view.getHeight()) {
 			this.onAnnotationViewMayNeedPaging(view);
 		}
 	},
@@ -664,15 +724,16 @@ Ext.define('NextThought.controller.UserData', {
 
 	onAnnotationViewMayNeedPaging: function(view) {
 		var me = this,
+			ctx = this.getContext(view),
 			s = view.getStore();
 
 		function maybeFirePagedIn(store, records) {
 			if (records.length) {
-				me.pageStoreEvents.fireEvent('paged-in', store, records);
+				ctx.pageStoreEvents.fireEvent('paged-in', store, records);
 			}
 		}
 
-		if (s !== this.flatPageStore) {
+		if (s !== ctx.flatPageStore) {
 			Ext.log.warn('skipping paging logic...not what we expected');
 			return;
 		}
@@ -682,7 +743,7 @@ Ext.define('NextThought.controller.UserData', {
 			return;
 		}
 
-		s = this.getStoreForLine(s.filteredLine);
+		s = this.getStoreForLine(view, s.filteredLine);
 		if (s && s.getCount() < s.getTotalCount()) {
 			s.on('load', maybeFirePagedIn, s, {single: true});
 			s.nextPage();
@@ -690,8 +751,9 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	onAnnotationsLineFilter: function(line) {
-		var s = this.flatPageStore;
+	onAnnotationsLineFilter: function(cmp, line) {
+		var ctx = this.getContext(cmp),
+			s = ctx.flatPageStore;
 
 		s.removeFilter('lineFilter');
 		if (line) {
@@ -708,8 +770,9 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	maybeRemoveLineFilter: function() {
-		var s = this.flatPageStore;
+	maybeRemoveLineFilter: function(cmp) {
+		var ctx = this.getContext(cmp),
+			s = ctx.flatPageStore;
 		if (s.getCount() === 0) {
 			delete s.filteredLine;
 			s.removeFilter('lineFilter');
@@ -785,23 +848,29 @@ Ext.define('NextThought.controller.UserData', {
 
 		containers = containers || [];
 
-		this.clearPageStore();
+		this.setContext(this.getContext(cmp));
+		try {
+			this.clearPageStore();
 
-		this.addPageStore('root', ps);//add alias of root store
+			this.addPageStore('root', ps);//add alias of root store
 
-		if (!Ext.Array.contains(containers, containerId)) {
-			containers.push(containerId);
+			if (!Ext.Array.contains(containers, containerId)) {
+				containers.push(containerId);
+			}
+
+			Ext.each(containers, function(id) {
+				me.addPageStore(id, (containerId === id) ?//ensure we don't duplicate the root store
+									ps : Store.make(pi.getSubContainerURL(rel, id), id));
+			});
+
+			this.onAnnotationsFilter(cmp);
+		} finally {
+			this.clearContext();
 		}
-
-		Ext.each(containers, function(id) {
-			me.addPageStore(id, (containerId === id) ?//ensure we don't duplicate the root store
-								ps : Store.make(pi.getSubContainerURL(rel, id), id));
-		});
-
-		this.onAnnotationsFilter(cmp);
 	},
 
 
+	//<editor-fold desc="Record Event Handlers (Save, Delete, etc)">
 	saveSharingPrefs: function(pageInfoId, prefs, callback) {
 		//TODO - check to see if it's actually different before save...
 		var me = this,
@@ -1396,4 +1465,5 @@ Ext.define('NextThought.controller.UserData', {
 
 		Ext.each(records, loadTranscript, this);
 	}
+	//</editor-fold>
 });

@@ -20,6 +20,9 @@ Ext.define('NextThought.view.reader.Panel', {
 	initComponent: function() {
 		this.callParent(arguments);
 
+		this.flatPageStore = NextThought.store.FlatPage.create({ storeId: 'FlatPage-' + this.id });
+		this.fireEvent('add-flatpage-store-context', this);
+
 		this.add([{
 				region: 'center',
 				layout: {
@@ -58,7 +61,7 @@ Ext.define('NextThought.view.reader.Panel', {
 							{ ref: 'readerRef', selector: '#' + this.id + ' reader-content' }
 						],
 						disabled: !isFeature('notepad'), hidden: !isFeature('notepad') },
-					{ title: 'Discussion', iconCls: 'discuss', xtype: 'annotation-view', discussion: true }
+					{ title: 'Discussion', iconCls: 'discuss', xtype: 'annotation-view', discussion: true, store: this.flatPageStore }
 				]
 			}
 		]);

@@ -25,7 +25,9 @@ Ext.define('NextThought.view.content.reader.Location', {
 				'change'
 			]));
 
-		reader.fireEvent('uses-page-stores', this);
+		this.up = reader.up.bind(reader);
+		reader.on('afterRender', function() {
+			reader.fireEvent('uses-page-stores', this); }, this);
 
 		Ext.apply(reader, {
 			clearLocation: Ext.bind(this.clearLocation, this),
