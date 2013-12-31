@@ -132,8 +132,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 	},
 
 
-	setAssignmentsData: function(data, history, outline, instance, gradeBook, activity) {
-		var ntiid, raw = [], user = this.student.getId();
+	setAssignmentsData: function(data, history, outline, instance, gradeBook) {
+		var ntiid, raw = [], store = this.store, user = this.student.getId();
 
 		if (!data) {
 			console.error('No data??');
@@ -144,36 +144,40 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 			return gradeBook.getItem(assignment.get('title')).getFieldItem('Items', user);
 		}
 
-		function getSubmission(assignment) {
-			var id = assignment.getId();
-			return activity && activity.reduce(function(a, v) {
-				var m;
-				if (!a && v && v.get('Creator') === user && v.get('assignmentId') === id) {
-					m = v;
-				}
-				return a || m;
-			}, null);
-		}
-
 		function collect(o) {
 
-			var id = o.getId(),
-				submission = getSubmission(o),
-				feedback = null,
+			var id = raw.length,
+				ntiid = o.getId(),
 				grade = getGrade(o);
 
 			raw.push({
-				ntiid: id,
+				id: id,
+				ntiid: ntiid,
 				containerId: o.get('containerId'),
 				item: o,
 				name: o.get('title'),
 				assigned: o.get('availableBeginning'),
 				due: o.get('availableEnding'),
-				completed: submission && submission.get('CreatedTime'),
-				Submission: submission,
+
 				Grade: grade && grade.get('value'),
-				average: grade && grade.get('average'),
-				Feedback: feedback && feedback.get('Items').length
+				average: grade && grade.get('average')
+			});
+
+			Service.request(o.getLink('GradeSubmittedAssignmentHistory')).done(function(json) {
+				var r = store.getById(id);
+				if (r) {
+					json = Ext.decode(json, true) || {};
+					json = json.Items || {};
+					json = json[user];
+					if (json) {
+						json = ParseUtils.parseItems(json)[0];
+						r.set({
+							Submission: json,
+							Feedback: json.get('Feedback').get('Items').length,
+							completed: json.get('CreatedTime')
+						});
+					}
+				}
 			});
 		}
 
@@ -189,7 +193,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 			}
 		}
 
-		this.store.loadRawData(raw);
+		store.loadRawData(raw);
 	},
 
 

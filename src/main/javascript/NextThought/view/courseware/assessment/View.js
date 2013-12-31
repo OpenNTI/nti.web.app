@@ -72,7 +72,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 			var o = responses[0],
 				e = responses[1],
 				r = responses[2],
-				grades, courseActivity;
+				grades;
 
 			if (!isSync()) { return; }
 
@@ -87,10 +87,10 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 				r = r.filter(function(o) { return o && !isMe(o.Username); });
 
 				grades = Service.request(getLink('GradeBook'));
-				courseActivity = Service.request(getLink('CourseActivity'));
 
 				me.body.add([
-					{ xtype: 'course-assessment-admin-activity', title: 'Activity & Notifications' },
+					{ xtype: 'course-assessment-admin-activity', title: 'Activity & Notifications',
+						activityFeedURL: getLink('CourseActivity') },
 					{ xtype: 'course-assessment-admin-assignments', title: 'Assignments', roster: r },
 					{ xtype: 'course-assessment-admin-performance', title: 'Grades & Performance', roster: r }
 				]);
@@ -101,20 +101,18 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 			Promise.pool(
 				Service.request(getLink('AssignmentHistory')),
 				Service.request(getLink('AssignmentsByOutlineNode')),
-				grades,
-				courseActivity
+				grades
 			)
 					.done(function(txts) {//responseTexts are in the order requested
 						if (!isSync()) { return; }
 						var history = ParseUtils.parseItems(txts[0])[0],
 							assignments = Ext.decode(txts[1], true),
-							gradeBook = txts[2] && ParseUtils.parseItems(txts[2])[0],
-							activity = txts[3] && ParseUtils.parseItems(Ext.decode(txts[3], true));
+							gradeBook = txts[2] && ParseUtils.parseItems(txts[2])[0];
 
 						me.fireEvent('set-assignemnt-history', history);
 
 						me.forEachView(me.callFunction('setAssignmentsData',
-								[assignments, history, o, instance, gradeBook, activity]));
+								[assignments, history, o, instance, gradeBook]));
 					})
 					.fail(function(reason) {
 						console.error(reason);
