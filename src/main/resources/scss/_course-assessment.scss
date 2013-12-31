@@ -420,17 +420,50 @@ canvas.x-component-course-assessment {
 			background: #fbfbfb;
 
 			&::hover{
-				color: primary-grey;
+				color: $primary-grey;
 			}
 
 			&.x-menu-item-checked{
-				color: primary-grey;
+				color: $primary-grey;
 				@include icon('arrow-course-dropdown', $top:1.5em, $left:auto, $right:1em);
 
 				&:hover {
 					&::after {
 						@include sprite($icons, 'arrow-course-dropdown');
 					}
+				}
+			}
+		}
+	}
+}
+
+.x-panel-nt.letter-grade-menu {
+	padding: 0;
+	box-shadow: none !important;
+
+	.x-menu-body{
+		padding: 0;
+
+		.x-menu-item.letter-grade-option{
+			font: normal 500 0.8em/1 $font;
+			line-height: 25px;
+			padding: 4px 5px 5px 13px;
+			background: rgba(255,255,255,1);
+
+			&:hover{
+				color: $primary-grey;
+			}
+
+			&.x-menu-item-checked{
+				color: $primary-grey;
+
+				&::after{
+					content: '';
+					overflow: hidden;
+					position: absolute;
+					top: 1.8em;
+					right: 1.7em;
+					@include arrow($pointFrom:top, $width: 8px, $height: 5px, $color: $secondary-grey);
 				}
 			}
 		}

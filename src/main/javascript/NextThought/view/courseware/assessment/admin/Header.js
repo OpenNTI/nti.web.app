@@ -67,28 +67,37 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 		nameEl: '.header .user .wrap .name',
 		profileEl: '.header .user .wrap .actions .profile',
 		emailEl: '.header .user .wrap .actions .email',
-		chatEl: '.header .user .wrap .actions .chat'
+		chatEl: '.header .user .wrap .actions .chat',
+		letterEl: '.header .grade .gradebox .letter',
+		gradeEl: '.header .grade .gradebox input'
 	},
 
 
 	beforeRender: function() {
 		this.callParent();
+
+		this.currentLetter = 'A';
+
 		this.renderData = Ext.apply(this.renderData || {}, {
 			displayName: this.student.toString(),
 			path: this.path || [],
 			avatarURL: this.student.get('avatarURL'),
 			presence: this.student.getPresence().getName(),
 			grade: '100',
-			letter: 'A',
+			letter: this.currentLetter,
 			page: this.page,
 			total: this.total
 		});
+
+		this.createGradeMenu();
 
 		this.on({
 			pathEl: {click: 'onPathClicked'},
 			previousEl: { click: 'firePreviousEvent' },
 			nextEl: { click: 'fireNextEvent' },
-			emailEl: { click: 'openEmail'}
+			emailEl: { click: 'openEmail'},
+			letterEl: { click: 'showGradeMenu'},
+			gradeEl: { blur: 'gradeChanged'}
 		});
 	},
 
@@ -120,6 +129,67 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 			}
 		});
 	},
+
+
+	showGradeMenu: function(){
+		this.gradeMenu.showBy(this.letterEl, 'tl-tl', this.gradeMenu.offset);
+	},
+
+
+	createGradeMenu: function(){
+		var items = [
+			{text: 'A', checked: this.currentLetter === 'A'},
+			{text: 'B', checked: this.currentLetter === 'B'},
+			{text: 'C', checked: this.currentLetter === 'C'},
+			{text: 'D', checked: this.currentLetter === 'D'},
+			{text: 'F', checked: this.currentLetter === 'F'},
+			{text: '-', checked: this.currentLetter === '-'}
+		];
+
+		this.gradeMenu = Ext.widget('menu',{
+			ui: 'nt',
+			cls: 'letter-grade-menu',
+			plain: true,
+			shadow: false,
+			width: 60,
+			minWidth: 60,
+			frame: false,
+			border: false,
+			ownerCmp: this,
+			offset: [-1, -1],
+			defaults: {
+				ui: 'nt-menuitem',
+				xtype: 'menucheckitem',
+				group: 'gradeOptions',
+				cls: 'letter-grade-option',
+				height: 35,
+				plain: true,
+				listeners: {
+					scope: this,
+					'checkchange': 'changeLetterGrade'
+				}
+			},
+			items: items
+		});
+	},
+
+	
+	changeLetterGrade: function(item, status){
+		if(!status){ return; }
+		var offset = item.getOffsetsTo(this.gradeMenu),
+			x = offset &&  offset[1];
+
+		this.letterEl.update(item.text);
+
+		this.gradeMenu.offset = [-1, -x];
+
+		this.currentLetter = item.text;
+	},
+
+
+	gradeChanged: function(e, el){
+		console.debug('Grade changed to:', el.value);
+	},	
 
 
 	openEmail: function(){

@@ -96,6 +96,44 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		this.on({
 			refresh: 'bindInputs'
 		});
+
+		this.createGradeMenu();
+	},
+
+
+	createGradeMenu: function(){
+		this.gradeMenu = Ext.widget('menu',{
+			ui: 'nt',
+			cls: 'letter-grade-menu',
+			plain: true,
+			shadow: false,
+			width: 67,
+			minWidth: 67,
+			frame: false,
+			border: false,
+			ownerCmp: this,
+			offset: [-1, -1],
+			defaults: {
+				ui: 'nt-menuitem',
+				xtype: 'menucheckitem',
+				group: 'gradeOptions',
+				cls: 'letter-grade-option',
+				height: 35,
+				plain: true,
+				listeners: {
+					scope: this,
+					'checkchange': 'changeLetterGrade'
+				}
+			},
+			items: [
+				{text: 'A'},
+				{text: 'B'},
+				{text: 'C'},
+				{text: 'D'},
+				{text: 'F'},
+				{text: '-'}
+			]
+		});
 	},
 
 
@@ -189,15 +227,41 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	onDropDown: function(node) {
-		var rec = this.getRecord(node);
+		var me = this,
+			rec = me.getRecord(node),
+			el = Ext.get(node),
+			dropdown = el && el.down('.gradebox .letter');
 		console.log('show menu for record:', rec);
+		
+		me.gradeMenu.items.each(function(item, index){
+			var x = item.height * index;
+
+			if(item.text === rec.get('letter')){
+				item.setChecked(true, true);
+				me.gradeMenu.offset = [-1, -x];
+			} else {
+				item.setChecked(false, true);
+			}
+		});
+
+		if(dropdown){
+			me.gradeMenu.showBy(dropdown, 'tl-tl', me.gradeMenu.offset);
+			this.activeGradeRecord = rec;
+		}
+	},
+
+
+	changeLetterGrade: function(item){
+		if(!this.activeGradeRecord){ return; }
+
+		this.activeGradeRecord.set('letter', item.text);
 	},
 
 
 	onInputBlur: function(e, input) {
 		var node = e.getTarget(this.itemSelector),
 			rec = node && this.getRecord(node);
-
+			
 		console.log('update record', rec, ' with input value:', input.value);
 	},
 
