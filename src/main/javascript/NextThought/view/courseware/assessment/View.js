@@ -72,7 +72,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 			var o = responses[0],
 				e = responses[1],
 				r = responses[2],
-				grades;
+				grades, courseActivity;
 
 			if (!isSync()) { return; }
 
@@ -87,6 +87,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 				r = r.filter(function(o) { return o && !isMe(o.Username); });
 
 				grades = Service.request(getLink('GradeBook'));
+				courseActivity = Service.request(getLink('CourseActivity'));
 
 				me.body.add([
 					{ xtype: 'course-assessment-admin-activity', title: 'Activity & Notifications' },
@@ -100,18 +101,20 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 			Promise.pool(
 				Service.request(getLink('AssignmentHistory')),
 				Service.request(getLink('AssignmentsByOutlineNode')),
-				grades
+				grades,
+				courseActivity
 			)
 					.done(function(txts) {//responseTexts are in the order requested
 						if (!isSync()) { return; }
 						var history = ParseUtils.parseItems(txts[0])[0],
 							assignments = Ext.decode(txts[1], true),
-							gradeBook = txts[2] && ParseUtils.parseItems(txts[2])[0];
+							gradeBook = txts[2] && ParseUtils.parseItems(txts[2])[0],
+							activity = txts[3] && ParseUtils.parseItems(Ext.decode(txts[3], true));
 
 						me.fireEvent('set-assignemnt-history', history);
 
 						me.forEachView(me.callFunction('setAssignmentsData',
-								[assignments, history, o, instance, gradeBook]));
+								[assignments, history, o, instance, gradeBook, activity]));
 					})
 					.fail(function(reason) {
 						console.error(reason);

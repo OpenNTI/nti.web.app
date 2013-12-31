@@ -40,9 +40,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 				frame: false,
 				items: [
 						   { text: 'Assignment', dataIndex: 'name', tdCls: 'padded-cell', padding: '0 0 0 30', flex: 1 },
-						   { text: 'Completed', dataIndex: 'Submission', width: 150, renderer: function(v) {
-							   var d = new Date(0),
-								   s = v && v.get('Last Modified');
+						   { text: 'Completed', dataIndex: 'completed', width: 150, renderer: function(v, col, rec) {
+							   var d = rec.get('due'),
+								   s = (v && v.get && v.get('Last Modified')) || v;
 							   if (!s) {
 								   return Ext.DomHelper.markup({cls: 'incomplete', html: 'Due ' + Ext.Date.format(d, 'd/m')});
 							   }
@@ -115,13 +115,16 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 		store = this.store = new Ext.data.Store({
 			fields: [
 				{name: 'ntiid', type: 'string'},
+				{name: 'item', type: 'auto'},
 				{name: 'name', type: 'string'},
-				{name: 'Submission', type: 'date'},
+				{name: 'due', type: 'date'},
+				{name: 'completed', type: 'date'},
+				{name: 'Submission', type: 'auto'},
 				{name: 'Grade', type: 'auto'},
 				{name: 'Feedback', type: 'int'}
 			],
 			sorters: [
-				{property: 'due', direction: 'DESC'}
+				{property: 'due', direction: 'ASC'}
 			]
 		});
 		grid.bindStore(store);
@@ -129,20 +132,35 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 	},
 
 
-	setAssignmentsData: function(data, history, outline, instance, gradeBook) {
-		var ntiid, raw = [];
+	setAssignmentsData: function(data, history, outline, instance, gradeBook, activity) {
+		var ntiid, raw = [], user = this.student.getId();
 
 		if (!data) {
 			console.error('No data??');
 			return;
 		}
 
+		function getGrade(assignment) {
+			return gradeBook.getItem(assignment.get('title')).getFieldItem('Items', user);
+		}
+
+		function getSubmission(assignment) {
+			var id = assignment.getId();
+			return activity && activity.reduce(function(a, v) {
+				var m;
+				if (!a && v && v.get('Creator') === user && v.get('assignmentId') === id) {
+					m = v;
+				}
+				return a || m;
+			}, null);
+		}
+
 		function collect(o) {
+
 			var id = o.getId(),
-				h = history.getItem(id),
-				submission = h && h.get('Submission'),
-				feedback = h && h.get('Feedback'),
-				grade = h && h.get('Grade');
+				submission = getSubmission(o),
+				feedback = null,
+				grade = getGrade(o);
 
 			raw.push({
 				ntiid: id,
@@ -152,7 +170,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 				assigned: o.get('availableBeginning'),
 				due: o.get('availableEnding'),
 				completed: submission && submission.get('CreatedTime'),
-				Grade: grade && grade.get('grade'),
+				Submission: submission,
+				Grade: grade && grade.get('value'),
 				average: grade && grade.get('average'),
 				Feedback: feedback && feedback.get('Items').length
 			});
