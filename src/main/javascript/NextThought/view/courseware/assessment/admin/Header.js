@@ -69,14 +69,16 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 		emailEl: '.header .user .wrap .actions .email',
 		chatEl: '.header .user .wrap .actions .chat',
 		letterEl: '.header .grade .gradebox .letter',
-		gradeEl: '.header .grade .gradebox input'
+		gradeEl: '.header .grade .gradebox input',
+		lateEl: '.header .grade .late'
 	},
 
 
 	beforeRender: function() {
 		this.callParent();
 
-		this.currentLetter = 'A';
+		this.currentGrade = '';
+		this.currentLetter = '-';
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			displayName: this.student.toString(),
@@ -84,8 +86,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 			path: this.path || [],
 			avatarURL: this.student.get('avatarURL'),
 			presence: this.student.getPresence().getName(),
-			grade: '100',
-			letter: this.currentLetter,
+			//grade: this.currentGrade,
+			//letter: this.currentLetter,
 			page: this.page,
 			total: this.total
 		});
@@ -106,6 +108,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 		var me = this;
 
 		me.callParent(arguments);
+
+		this.setUpGradebox();
 
 		//so the elements wont take up space when hidden
 		Object.keys(this.renderSelectors).forEach(function(s){ 
@@ -131,8 +135,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 		});
 	},
 
+	//override these
+	setUpGradebox: function(){},
+	changeGrade: function(){},
 
 	showGradeMenu: function(){
+		if (this.letterEl.hasCls('disabled')) { return; }
 		this.gradeMenu.showBy(this.letterEl, 'tl-tl', this.gradeMenu.offset);
 	},
 
@@ -185,11 +193,15 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 		this.gradeMenu.offset = [-1, -x];
 
 		this.currentLetter = item.text;
+
+		this.changeGrade(this.currentGrade, this.currentLetter);
 	},
 
 
 	gradeChanged: function(e, el){
-		console.debug('Grade changed to:', el.value);
+		this.currentGrade = el.value;
+
+		this.changeGrade(this.currentGrade, this.currentLetter);
 	},	
 
 

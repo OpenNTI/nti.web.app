@@ -3,7 +3,7 @@ Ext.define('NextThought.model.courseware.Grade', {
 
 	fields: [
 		{name: 'Username', type: 'string'},
-		{name: 'value', type: 'float'},
+		{name: 'value', type: 'string'},
 		{name: 'AssignmentId', type: 'string'}
 	]
 });

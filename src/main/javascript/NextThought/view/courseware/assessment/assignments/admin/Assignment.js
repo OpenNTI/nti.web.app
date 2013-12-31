@@ -105,7 +105,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 							   });
 						   } },
 						   { text: 'Score', dataIndex: 'Grade', width: 90, renderer: function(v) {
-							   return v && v.get('value');
+							   v = v && v.get('value');
+							   
+							   return v && v.split(' ')[0];
 						   } },
 						   { text: 'Feedback', dataIndex: 'Feedback', width: 140, renderer: function(value) {
 							   var items = ((value && value.get('Items')) || []).length;
@@ -172,8 +174,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		s = this.store = new NextThought.store.courseware.AssignmentView({
 			url: a && a.getLink('GradeSubmittedAssignmentHistory'),
 			sorters: {
-				property: 'Creator',
-				direction: 'DESC'
+				sorterFn: Globals.getCaseInsensitiveNaturalSorter('Creator')
 			}
 		});
 
@@ -222,6 +223,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 							console.warn('Skipped record!', i, records, users);
 						}
 					}
+					
+					store.sort();
 				});
 	},
 
