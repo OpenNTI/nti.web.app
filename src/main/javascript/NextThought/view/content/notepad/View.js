@@ -238,6 +238,9 @@ Ext.define('NextThought.view.content.notepad.View', {
 
 
 	syncScroll: function() {
+		if(!this.rendered){
+			return;
+		}
 		this.getEl().setScrollTop(this.getReaderRef().getScroll().top());
 	},
 
