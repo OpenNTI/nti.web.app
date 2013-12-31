@@ -144,8 +144,6 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 				con = console, tip,
 				meta, g = Globals;
 
-		ContentAPIRegistry.register('reloadCSS', Globals.reloadCSS, Globals);
-
 		function on(dom, event, fn) {
 			if (!Ext.isArray(event)) {
 				event = [event];
