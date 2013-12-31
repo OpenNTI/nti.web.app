@@ -18,12 +18,13 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 	constructor: function(config) {
 		Ext.apply(this, config);
 
-		var reader = this.reader;
+		var me = this,
+			reader = me.reader;
 
-		this.mixins.observable.constructor.apply(this);
+		me.mixins.observable.constructor.apply(me);
 
 		reader.on('destroy', 'destroy',
-				  reader.relayEvents(this, [
+				  reader.relayEvents(me, [
 					  'dismiss-popover',
 					  'display-popover',
 					  'iframe-ready',
@@ -35,16 +36,17 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 				  ]));
 
 		Ext.apply(reader, {
-			getDocumentElement: Ext.bind(this.getDocumentElement, this),
-			getCleanContent: Ext.bind(this.getCleanContent, this)
+			getDocumentElement: me.getDocumentElement.bind(me),
+			getCleanContent: me.getCleanContent.bind(me)
 		});
 
-		this.checkFrame = Ext.bind(this.checkFrame, this);
+		me.checkFrame = me.checkFrame.bind(me);
 
-		this.iframe = this.reader.add(this.getConfig());
+		me.iframe = me.reader.add(me.getConfig());
 
-		this.mon(this.reader, {
-			resize: function() { delete this.lastHeight; },
+		me.mon(me.reader, {
+			destroy: function() { clearInterval(me.syncInterval); },
+			resize: function() { delete me.lastHeight; },
 			scroll: 'dismissPopover'
 		});
 	},
@@ -451,8 +453,10 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 			}
 			if (Ext.Date.now() - this.lastSyncFrame > 1000) {
 				clearInterval(this.syncInterval);
-				this.syncInterval = setInterval(this.checkFrame,
-												this.baseFrameCheckIntervalInMillis * this.frameCheckRateChangeFactor);
+				if (!this.reader.isDestroyed) {
+					this.syncInterval = setInterval(this.checkFrame,
+						this.baseFrameCheckIntervalInMillis * this.frameCheckRateChangeFactor);
+				}
 			}
 		}
 	},
