@@ -86,8 +86,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 		rootPathEl: { click: 'fireGoUp' },
 		previousEl: { click: 'firePreviousEvent' },
 		nextEl: { click: 'fireNextEvent' },
-		emailEl: { click: 'openEmail'},
-		chatEl: { click: 'startChat'}
+		emailEl: { click: 'openEmail'}
 	},
 
 
