@@ -10,21 +10,19 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 
 
 	asUIData: function() {
-		var me = this;
-		me._uiData = me._uiData || (function() {
-			var e = me.getCourseCatalogEntry();
-			if (!e) {
-				console.error('CourseCatalogEntry for', this, 'has not been preloaded yet.');
-			}
-			return {
-				id: me.getId(),
-				isCourse: true,
-				title: (e && e.get('Title')) || 'Missing Catalog Entry',
-				label: (e && e.get('ProviderUniqueID')) || '---',
-				icon: (e && e.get('icon')) || 'missing-icon.png'
-			};
-		}());
-		return me._uiData;
+		var e = this.getCourseCatalogEntry();
+		
+		if (!e) {
+			console.error('CourseCatalogEntry for', this, 'has not been preloaded yet.');
+		}
+		
+		return {
+			id: this.getId(),
+			isCourse: true,
+			title: (e && e.get('Title')) || 'Missing Catalog Entry',
+			label: (e && e.get('ProviderUniqueID')) || '---',
+			icon: (e && e.get('icon')) || 'missing-icon.png'
+		};
 	},
 
 
