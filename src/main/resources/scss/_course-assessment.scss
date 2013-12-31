@@ -702,12 +702,13 @@ canvas.x-component-course-assessment {
 				span {
 					&.link { color: $primary-blue; cursor: pointer; }
 
-					&::after {
+		
+					&::before {
 						content: '\00B7';
 						margin: 0.5em;
 						color: $tertiary-grey;
 					}
-					&:last-of-type::after {
+					&:first-of-type::before {
 						content: none;
 					}
 				}

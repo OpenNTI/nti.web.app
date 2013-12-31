@@ -537,6 +537,33 @@ Ext.define('NextThought.util.Globals', {
 		}
 
 		return v;
+	},
+
+
+	sendEmailTo: function(to, subject, body, cc, bcc) {
+		var href = 'mailto:';
+
+		to = (Ext.isArray(to)) ? to : [to];
+		subject = subject || '';
+		body = body || '';
+		cc = cc || '';
+		bcc = bcc || '';
+
+		if(Ext.isEmpty(to)){
+			console.error('Tried to send an email with no recepients');
+			return;
+		}
+
+		subject = encodeURIComponent(subject);
+		body = encodeURIComponent(body);
+		cc = encodeURIComponent(cc);
+		bcc = encodeURIComponent(bcc);
+
+		href += to.join(',');
+		href += '?subject=' + subject + '&body=' + body + '&cc=' + cc + '&bcc=' + bcc;
+
+		console.debug('Opening email', href);
+		location.href = href;
 	}
 
 },

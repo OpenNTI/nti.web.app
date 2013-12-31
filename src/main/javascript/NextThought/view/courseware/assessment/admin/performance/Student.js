@@ -5,6 +5,13 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 	requires: [
 	],
 
+	mixins: {
+		enableProfiles: 'NextThought.mixins.ProfileLinks',
+		enableChat: 'NextThought.mixins.ChatLinks'
+	},
+
+	profileLinkCard: false,
+
 	ui: 'course-assessment',
 	cls: 'course-assessment-admin assignment-item',
 
@@ -67,14 +74,20 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 	renderSelectors: {
 		rootPathEl: '.toolbar .path.part.root',
 		previousEl: '.toolbar .controls .up',
-		nextEl: '.toolbar .controls .down'
+		nextEl: '.toolbar .controls .down',
+		nameEl: '.header .user .wrap .name',
+		profileEl: '.header .user .wrap .actions .profile',
+		emailEl: '.header .user .wrap .actions .email',
+		chatEl: '.header .user .wrap .actions .chat'
 	},
 
 
 	listeners: {
 		rootPathEl: { click: 'fireGoUp' },
 		previousEl: { click: 'firePreviousEvent' },
-		nextEl: { click: 'fireNextEvent' }
+		nextEl: { click: 'fireNextEvent' },
+		emailEl: { click: 'openEmail'},
+		chatEl: { click: 'startChat'}
 	},
 
 
@@ -186,6 +199,36 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 	},
 
 
+	afterRender: function(){
+		var me = this;
+
+		me.callParent(arguments);
+
+		//so the elements wont take up space when hidden
+		Object.keys(this.renderSelectors).forEach(function(s){ 
+			me[s].setVisibilityMode(Ext.Element.DISPLAY); 
+		});
+
+		//for profile link
+		me.user = me.student;
+		me.enableProfileClicks(me.profileEl);
+
+		if(!me.user.get('email')){
+			me.emailEl.hide();
+		}
+
+		me.maybeShowChat(me.chatEl);
+
+		this.mon(Ext.getStore('PresenceInfo'), 'presence-changed', function(username, presence){
+			if(username === me.user.getId()){
+				me.nameEl.removeCls('dnd away available unavailable');
+				me.nameEl.addCls(presence.getName());
+				me.maybeShowChat(me.chatEl);
+			}
+		});
+	},
+
+
 	setAssignmentsData: function(data, history, outline, instance, gradeBook) {
 		var ntiid, raw = [];
 
@@ -228,6 +271,15 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 		}
 
 		this.store.loadRawData(raw);
+	},
+
+
+	openEmail: function(){
+		var email = this.student.get('email');
+
+		if(email){
+			Globals.sendEmailTo(email);
+		}
 	},
 
 
