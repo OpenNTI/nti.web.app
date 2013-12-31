@@ -28,5 +28,11 @@ Ext.define('NextThought.store.courseware.AvailableCourses', {
 		pageParam: undefined,
 		startParam: undefined,
 		limitParam: undefined
-	}
+	},
+	sorters: [
+		{
+			property: 'Title',
+			direction: 'asc'
+		}
+	]
 });

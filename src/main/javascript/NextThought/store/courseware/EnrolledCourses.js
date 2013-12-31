@@ -29,7 +29,11 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 		startParam: undefined,
 		limitParam: undefined
 	},
-
+	sorters: [
+		{
+			sorterFn: function(a, b) { return a.asUIData().title.strcmp(b.asUIData().title); }
+		}
+	],
 
 	constructor: function() {
 		var p = this.promiseToLoaded = new Promise(),
