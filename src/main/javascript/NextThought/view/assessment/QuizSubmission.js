@@ -46,8 +46,8 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 
 		Ext.each(this.questionSet.get('questions'), function(q) {
 			var questionMap = {};
-			
-			Ext.each(q.get('parts'), function(p){
+
+			Ext.each(q.get('parts'), function(p) {
 				questionMap[p.id] = false;
 			});
 
@@ -144,7 +144,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		if (enabling) {
 			this.transitionToActive();
 		}
-		
+
 		this.answeredMap[question.getId()][part.id] = Boolean(status);
 		this.reflectStateChange();
 	},
@@ -154,16 +154,16 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		var unansweredQuestions = 0;
 		if (!this.rendered) { return; }
 
-		Ext.Object.each(this.answeredMap, function(key, val){
+		Ext.Object.each(this.answeredMap, function(key, val) {
 			var answered = 0, total = 0;
 
-			Ext.Object.each(val, function(id, done){
+			Ext.Object.each(val, function(id, done) {
 				total++;
 
-				if(done){ answered++; }
+				if (done) { answered++; }
 			});
-		
-			if(answered < total){
+
+			if (answered < total) {
 				unansweredQuestions++;
 			}
 		});

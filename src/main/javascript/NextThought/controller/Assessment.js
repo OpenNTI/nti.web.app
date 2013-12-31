@@ -83,33 +83,33 @@ Ext.define('NextThought.controller.Assessment', {
 			a = q && q.associatedAssignment,
 			o, s;
 
-		function add(){
+		function add() {
 			me.fileSubmissions.add(cmp);
 			cmp.on('destroy', function() {
 				me.fileSubmissions.remove(cmp);
 			});
 		}
 
-		if (!a) { 
-			if(cmp.questionSetId){
+		if (!a) {
+			if (cmp.questionSetId) {
 				add();
 
-				if(h){
-					Ext.each(h.get('Items'), function(item){
-						var submission = item.get('Submission')
+				if (h) {
+					Ext.each(h.get('Items'), function(item) {
+						var submission = item.get('Submission'),
 							questionSet = submission && submission.get('parts')[0];
 
-						if(questionSet && questionSet.get('questionSetId') === cmp.questionSetId){
+						if (questionSet && questionSet.get('questionSetId') === cmp.questionSetId) {
 							cmp.markAsTurnedInAssignment();
 						}
 					});
 				}
-				
+
 			}
-			return; 
+			return;
 		}
 
-		
+
 		add();
 		o = h && h.getItem(a.getId());
 		if (o) {
