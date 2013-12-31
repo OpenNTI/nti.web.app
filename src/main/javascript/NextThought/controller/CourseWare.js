@@ -62,7 +62,7 @@ Ext.define('NextThought.controller.CourseWare', {
 					'get-course-hooks': 'applyCourseHooks'
 				},
 				'course-assessment-activity[view=student]': { 'itemclick': 'navigateToAssignment' },
-				'course-assessment-assignment-list[view=sudent]': { 'itemclick': 'navigateToAssignment' },
+				'course-assessment-assignment-list[view=student]': { 'itemclick': 'navigateToAssignment' },
 				'course-assessment-assignment-group grid': { 'itemclick': 'navigateToAssignment' },
 
 
