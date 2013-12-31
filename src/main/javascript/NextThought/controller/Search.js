@@ -87,7 +87,7 @@ Ext.define('NextThought.controller.Search', {
 		var id = hit.get('ContainerId'),
 				sortIndexes = ContentUtils.getSortIndexes(id),
 				type = 'search-result',
-				xtype = this.mimeToXType(hit.get('MimeType'));
+				xtype = this.mimeToXType(hit.get('TargetMimeType'));
 
 		sortIndexes.reverse();
 		if (!Ext.isEmpty(Ext.ClassManager.getNameByAlias('widget.' + xtype))) {
@@ -249,7 +249,7 @@ Ext.define('NextThought.controller.Search', {
 			var models = item.model;
 			if ((everything || item.checked) && models) {
 				Ext.each(Ext.Array.from(models), function(m) {
-					this.modelFilter.addFilter(new Filter('MimeType', Filter.OPERATION_INCLUDE, 'application/vnd.nextthought.' + m));
+					this.modelFilter.addFilter(new Filter('TargetMimeType', Filter.OPERATION_INCLUDE, 'application/vnd.nextthought.' + m));
 				}, this);
 			}
 		}, this);

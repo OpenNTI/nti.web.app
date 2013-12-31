@@ -21,6 +21,7 @@ Ext.define('NextThought.model.Hit', {
 		{ name: 'Snippet', type: 'string' },
 		{ name: 'Title', type: 'string' },
 		{ name: 'Type', type: 'string' },
+		{ name: 'TargetMimeType', type: 'string' },
 		{ name: 'Fragments', type: 'auto'},
 		{ name: 'Score', type: 'auto'},
 		{ name: 'StartMilliSecs', type: 'auto' },
@@ -28,7 +29,7 @@ Ext.define('NextThought.model.Hit', {
 		//This really needs to move up onto a SearchResult object but we don't have that.  The proxy roots at Items
 		{ name: 'PhraseSearch', type: 'auto'},
 		{ name: 'GroupingField', persist: false, type: 'auto', convert: function(o, r) {
-			var mime = r.get('MimeType'),
+			var mime = r.get('TargetMimeType'),
 				group, type;
 
 			if (mime) {
