@@ -28,6 +28,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Panel', {
 			console.error('No location configured');
 		}
 
-		this.down('reader-content').setLocation(this.location);
+		this.down('reader-content').setLocation(this.location, null, true);
 	}
 });
