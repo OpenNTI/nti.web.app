@@ -125,18 +125,25 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 
 	setValue: function(v) {
 		/*
-		filename: "build.xml"
-		url:
-		value: url
+			filename
+			download_url
+			url
+			value
 		*/
 
 		v = this.value = v || {};
 		this.labelBoxEl.update(v.filename || 'Not Submitted');
-		this.markSubmitted(v.CreatedTime || new Date());
+
+		if (v.CreatedTime || v.filename) {
+			this.markSubmitted(v.CreatedTime || new Date());
+		} else {
+			this.addCls('hide-buttons');
+		}
+
 		if (v.url) {
 			this.downloadBtn.addCls('active');
 			this.downloadBtn.set({
-				href: v.url
+				href: v.download_url || v.url
 			});
 		}
 	},

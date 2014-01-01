@@ -1034,6 +1034,12 @@ body.dragging * {
 			}
 		}
 
+		&.hide-buttons {
+			.button {
+				display: none !important;
+			}
+		}
+
 		& > .response-container,
 		& > .response-container .inputbox {
 			border: none !important;
