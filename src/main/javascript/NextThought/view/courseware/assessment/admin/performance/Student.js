@@ -92,14 +92,14 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 
 
 	initComponent: function() {
-		var grid, store, header;
+		var grid, store;
 
 		this.callParent(arguments);
 		this.enableBubble(['show-assignment']);
 
 		this.pathBranch = this.student.toString();
 
-		header = this.add({
+		this.header = this.add({
 			xtype: 'course-assessment-admin-performance-header',
 			path: [this.pathRoot, this.pathBranch],
 			student: this.student,
@@ -107,7 +107,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 			total: this.total
 		});
 
-		this.relayEvents(header, ['goup', 'goto']);
+		this.relayEvents(this.header, ['goup', 'goto']);
 
 		this.add(this.assessment);
 
@@ -141,12 +141,14 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 			return;
 		}
 
+		this.header.setGradeBook(gradeBook);
+
 		function getGrade(assignment) {
 			return gradeBook.getItem(assignment.get('title')).getFieldItem('Items', user);
 		}
 
 		function collect(o) {
-
+			if(o.get('title') === 'Final Grade'){ return; }
 			var id = raw.length,
 				ntiid = o.getId(),
 				grade = getGrade(o);
