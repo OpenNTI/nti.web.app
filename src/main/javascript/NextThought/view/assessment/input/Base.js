@@ -97,6 +97,9 @@ Ext.define('NextThought.view.assessment.input.Base', {
 
 	initComponent: function() {
 		this.callParent(arguments);
+
+		this.isAssignment = Boolean(this.questionSet && this.questionSet.associatedAssignment);
+
 		this.addEvents({
 			'enable-submission': true,
 			'disable-submission': true
@@ -183,7 +186,7 @@ Ext.define('NextThought.view.assessment.input.Base', {
 
 	editAnswer: function() {
 		var ans;
-		if (this.submitted) {
+		if (this.submitted && !this.isAssignment) {
 			ans = this.getValue();
 			this.up('assessment-question').reset(true);
 			this.setValue(ans);
@@ -369,6 +372,10 @@ Ext.define('NextThought.view.assessment.input.Base', {
 		if (part.isCorrect()) { this.markCorrect(); }
 		else {this.markIncorrect(); }
 
+		if (this.isAssignment) {
+			this.setSubmitted();
+		}
+
 		if (this.canHaveAnswerHistory()) {
 			if (!this.historyMenuEl.isVisible()) {
 				this.shouldShowAnswerHistory();
@@ -417,6 +424,10 @@ Ext.define('NextThought.view.assessment.input.Base', {
 
 
 	enableSubmission: function() {
+		if (this.isAssignment) {
+			return;
+		}
+
 		delete this.submissionDisabled;
 		this.checkItBtn.removeCls('disabled');
 		if (this.questionSet) {
