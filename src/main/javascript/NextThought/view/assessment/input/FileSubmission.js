@@ -129,13 +129,16 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 		url:
 		value: url
 		*/
-		this.value = v;
-		this.labelBoxEl.update(v.filename);
-		this.markCorrect();
+
+		v = this.value = v || {};
+		this.labelBoxEl.update(v.filename || 'Not Submitted');
 		this.markSubmitted(v.CreatedTime || new Date());
-		this.downloadBtn.set({
-			href: v.url
-		});
+		if (v.url) {
+			this.downloadBtn.addCls('active');
+			this.downloadBtn.set({
+				href: v.url
+			});
+		}
 	},
 
 
