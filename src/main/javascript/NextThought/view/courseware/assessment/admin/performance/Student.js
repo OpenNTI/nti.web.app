@@ -55,7 +55,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 								   late: d.ago().replace('ago', '').trim()
 							   });
 						   } },
-						   { text: 'Score', dataIndex: 'Grade', width: 70 },
+						   { text: 'Score', dataIndex: 'grade', width: 70 },
 						   { text: 'Feedback', dataIndex: 'Feedback', width: 140, renderer: function(value) {
 							   return value ? (value.get('Items').length + ' Comments') : '';
 						   } }
@@ -121,6 +121,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 				{name: 'completed', type: 'date'},
 				{name: 'Submission', type: 'auto'},
 				{name: 'Grade', type: 'auto'},
+				{name: 'grade', type: 'auto'},
 				{name: 'pendingAssessment', type: 'auto'},
 				{name: 'Feedback', type: 'auto'}
 			],
@@ -162,7 +163,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 				assigned: o.get('availableBeginning'),
 				due: o.get('availableEnding'),
 
-				Grade: grade && grade.get('value'),
+				Grade: grade,
+				grade: grade && grade.get('value'),
 				average: grade && grade.get('average')
 			});
 

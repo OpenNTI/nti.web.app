@@ -116,6 +116,8 @@ Ext.define('NextThought.controller.Assessment', {
 			if (cmp.setGradingResult) {
 				s = o.get('pendingAssessment').get('parts')[0];
 				cmp.setGradingResult(s);
+			} else if (cmp.setHistory) {
+				cmp.setHistory(o);
 			}
 		}
 	},

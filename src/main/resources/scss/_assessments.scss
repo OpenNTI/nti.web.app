@@ -191,6 +191,66 @@ body.dragging * {
 
 }
 
+.feedback-panel{
+	&, & > .x-panel-body {
+		overflow: visible;
+	}
+
+	.x-component-feedback-title{
+		margin: 0 -60px 0 -30px;
+		padding: 0 60px 0 30px;
+		position: relative;
+		border-bottom: 1px solid #f0f0f0;
+
+		h1{
+			font: normal 200 1.6em/1 $font;
+			color: $secondary-grey;
+			margin: 0;
+		}
+
+		.message{
+			font: normal 500 1.1em/2.5 $font;
+			color: $secondary-grey;
+			margin-bottom: 10px;
+		}
+
+		&::after {			
+			content: '';
+			position: absolute;
+			bottom: -1px;
+			height: 300px;
+			left: 0;
+			right: 0;
+			background-color: #f0f0f0;
+			box-shadow: 0 0 5px 0 rgba(0,0,0,0.35);
+			clip: rect(300px, auto, 310px, auto);
+			border-radius: 350em / 5em;
+		}
+	}
+
+	.x-component-comment-box{
+		background-color: #fbfbfb;
+		border: 1px solid #f0f0f0;
+		border-top: none;
+		box-shadow: inset 0 1px 0 0 #fff;
+		overflow: hidden;
+
+		.editor-box{
+			border: 1px solid #dcdcdc;
+			background-color: white;
+			line-height: 39px;
+			margin: 10px;
+
+			&:not(.editor-active)::before{
+				content: 'Add a comment';
+				margin-left: 10px;
+				color: $tertiary-grey;
+				font: italic normal 1em/39px $font;
+			}
+		}
+	}
+}
+
 .x-panel-assessment {
 
 	&.question { //main frame of the question
