@@ -52,6 +52,8 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			tabIndexTracker: o.tabIndexer
 		}));
 
+		Ext.each(questions, function(q) {me.makeAssessmentQuestion(q, set);});
+
 		submission = o.registerOverlayedPanel(guid + 'submission', Ext.widget('assessment-quiz-submission', {
 			reader: r, renderTo: c, questionSet: set,
 			tabIndexTracker: o.tabIndexer
@@ -65,7 +67,6 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			}));
 		}
 
-		Ext.each(questions, function(q) {me.makeAssessmentQuestion(q, set);});
 
 		if (h) {
 			h = h.get('pendingAssessment');
