@@ -26,5 +26,22 @@ Ext.define('NextThought.model.assessment.AssessedQuestionSet', {
 		});
 
 		return correct;
+	},
+
+
+	statics: {
+
+		from: function(set) {
+			var raw = {
+				questionSetId: set.getId(),
+				questions: []
+			};
+
+			set.get('questions').forEach(function(q) {
+				raw.questions.push(NextThought.model.assessment.AssessedQuestion.from(q));
+			});
+
+			return this.create(raw);
+		}
 	}
 });

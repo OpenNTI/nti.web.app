@@ -3,7 +3,8 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 	requires: [
 		'NextThought.view.assessment.Scoreboard',
 		'NextThought.view.assessment.Question',
-		'NextThought.view.assessment.QuizSubmission'
+		'NextThought.view.assessment.QuizSubmission',
+		'NextThought.view.assessment.AssignmentFeedback'
 	],
 
 	uses: [
@@ -14,6 +15,7 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 		Ext.apply(this, config);
 		this.reader.on('set-content', 'injectAssessments', this);
 	},
+
 
 	makeAssessmentQuestion: function(q, set) {
 		var contentElement = this.getContentElement('object', 'data-ntiid', q.getId()),
@@ -37,24 +39,39 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 
 	makeAssessmentQuiz: function(set) {
 		var me = this,
+			h = me.injectedAssignmentHistory,
 			o = me.reader.getComponentOverlay(),
 			c = o.componentOverlayEl,
 			r = me.reader,
 			guid = guidGenerator(),
-			questions = set.get('questions');
+			questions = set.get('questions'),
+			submission;
 
 		o.registerOverlayedPanel(guid + 'scoreboard', Ext.widget('assessment-scoreboard', {
 			reader: r, renderTo: c, questionSet: set,
 			tabIndexTracker: o.tabIndexer
 		}));
 
-		o.registerOverlayedPanel(guid + 'submission', Ext.widget('assessment-quiz-submission', {
+		submission = o.registerOverlayedPanel(guid + 'submission', Ext.widget('assessment-quiz-submission', {
 			reader: r, renderTo: c, questionSet: set,
 			tabIndexTracker: o.tabIndexer
 		}));
 
+		if (set.associatedAssignment) {
+			o.registerOverlayedPanel(guid + 'feedback', Ext.widget('assignment-feedback', {
+				reader: r, renderTo: c, questionSet: set,
+				tabIndexTracker: o.tabIndexer
+			})).show();
+		}
+
 		Ext.each(questions, function(q) {me.makeAssessmentQuestion(q, set);});
 
+		if (h) {
+			h = h.get('pendingAssessment');
+			h = h && h.get('parts');
+			h = h && h[0];
+			submission.setGradingResult(h || NextThought.model.assessment.AssessedQuestionSet.from(set));
+		}
 	},
 
 
@@ -87,7 +104,7 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 
 
 	setAssignmentFromInstructorProspective: function(assignment, history) {
-		//this.injectedAssignment = assignment;
+		this.injectedAssignment = assignment;
 		this.injectedAssignmentHistory = history;
 	},
 
@@ -120,6 +137,10 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			return false;
 		}
 
+
+		if (this.injectedAssignment) {
+			assignments.push(this.injectedAssignment);
+		}
 
 
 		//get sets
