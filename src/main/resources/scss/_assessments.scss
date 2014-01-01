@@ -1028,6 +1028,10 @@ body.dragging * {
 			&::after {
 				@include sprite($icons,'assignment_ontime');
 			}
+			a[href].button {
+				display: block;
+				text-decoration: none;
+			}
 		}
 
 		& > .response-container,

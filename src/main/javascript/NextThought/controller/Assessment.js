@@ -55,7 +55,7 @@ Ext.define('NextThought.controller.Assessment', {
 	],
 
 	init: function() {
-		this.fileSubmissions = new Ext.util.MixedCollection();
+		this.submissionsWidgets = new Ext.util.MixedCollection();
 
 		this.listen({
 			component: {
@@ -84,9 +84,9 @@ Ext.define('NextThought.controller.Assessment', {
 			o, s;
 
 		function add() {
-			me.fileSubmissions.add(cmp);
+			me.submissionsWidgets.add(cmp);
 			cmp.on('destroy', function() {
-				me.fileSubmissions.remove(cmp);
+				me.submissionsWidgets.remove(cmp);
 			});
 		}
 
@@ -113,10 +113,7 @@ Ext.define('NextThought.controller.Assessment', {
 		add();
 		o = h && h.getItem(a.getId());
 		if (o) {
-			s = o.get('Submission');
-			if (cmp.markSubmitted) {
-				cmp.markSubmitted(s.get('Last Modified'));
-			} else if (cmp.setGradingResult && cmp.shouldShow) {
+			if (cmp.setGradingResult) {
 				s = o.get('pendingAssessment').get('parts')[0];
 				cmp.setGradingResult(s);
 			}
@@ -126,7 +123,7 @@ Ext.define('NextThought.controller.Assessment', {
 
 	applyAssessmentHistory: function(history) {
 		this.history = history;
-		this.fileSubmissions.each(function(c) {
+		this.submissionsWidgets.each(function(c) {
 			this.maybeMarkSubmissionAsSubmitted(c);
 		}, this);
 	},

@@ -10,11 +10,13 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 			{ tag: 'tpl', 'if': 'due', cn: { tag: 'time', cls: 'due', datetime: '{due:date("c")}', html: 'Due {due:date("l, F j")}'}},
 			{ cls: 'submit button', cn: ['Upload a File',
 				{ tag: 'input', type: 'file', cls: 'file' }
-			]}
+			]},
+			{ tag: 'a', cls: 'download button', html: 'Download', target: '_blank' }
 		]
 	}),
 
 	renderSelectors: {
+		downloadBtn: 'a.button',
 		inputField: 'input[type=file]',
 		dueEl: 'time.due',
 		labelBoxEl: '.label'
@@ -113,9 +115,6 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 
 			}
 		});
-
-
-		this.fireEvent('has-been-submitted', this);
 	},
 
 
@@ -124,13 +123,24 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 	},
 
 
-	setValue: function() {},
+	setValue: function(v) {
+		/*
+		filename: "build.xml"
+		url:
+		value: url
+		*/
+		this.value = v;
+		this.labelBoxEl.update(v.filename);
+		this.markCorrect();
+		this.markSubmitted(v.CreatedTime || new Date());
+		this.downloadBtn.set({
+			href: v.url
+		});
+	},
 
 
-	markCorrect: function() {},
-
-
-	markIncorrect: function() {},
+	markCorrect: Ext.emptyFn,
+	markIncorrect: Ext.emptyFn,
 
 
 	markSubmitted: function(date) {
