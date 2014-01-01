@@ -76,6 +76,7 @@ Ext.define('NextThought.view.content.reader.ComponentOverlay', {
 		}
 		panel.floatParent = this;
 		this.activeOverlayedPanels[key] = panel;
+		return panel;
 	},
 
 	adjustOverlayedPanels: function() {
