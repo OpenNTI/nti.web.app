@@ -228,6 +228,53 @@ body.dragging * {
 		}
 	}
 
+	.x-component-feedback-box {
+		background-color: #fbfbfb;
+		border: 1px solid #f0f0f0;
+		border-top: none;
+		border-bottom: none;
+
+		.feedback-item {
+			$s: 35px;
+			$m: $s + 10px;
+			border: 0 solid #f0f0f0;
+			border-bottom-width: 1px;
+			position: relative;
+			padding: 30px 20px 40px;
+
+			.avatar {
+				float: left;
+				width: $s;
+				height: $s;
+				border-radius: 2px;
+				cursor: pointer;
+
+				background: {
+					size: cover;
+					position: center center;
+					repeat: no-repeat;
+				}
+			}
+
+			.wrap {
+				font: normal normal 1.1em/1.6 $font;
+				color: $secondary-grey;
+				margin: 0 0 0 $m;
+
+				& > * { margin-right: 0.5em; }
+
+				.name {
+					color: $primary-blue;
+					cursor: pointer;
+				}
+
+				time {
+					color: $tertiary-grey;
+				}
+			}
+		}
+	}
+
 	.x-component-comment-box{
 		background-color: #fbfbfb;
 		border: 1px solid #f0f0f0;
@@ -1138,6 +1185,10 @@ body.dragging * {
 				opacity: 0.0;
 			}
 			position: absolute;
+		}
+
+		a.download.button:not(.active) {
+			display: none;
 		}
 
 	}

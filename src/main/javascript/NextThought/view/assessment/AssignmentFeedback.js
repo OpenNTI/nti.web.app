@@ -27,11 +27,21 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 		},
 		{
 			xtype: 'dataview',
+			ui: 'feedback-box',
 			itemSelector: 'feedback-item',
 			tpl: Ext.DomHelper.markup([
-				{tag: 'tpl', 'for': '.', cn: [
-					'{body}'
-				]}
+				{tag: 'tpl', 'for': '.', cn: {
+					cls: 'feedback-item', cn: [
+						{ cls: 'avatar', style: {backgroundImage: 'url({Creator:avatarURL()})'}},
+						{ cls: 'wrap', cn: [
+							{ cls: 'meta', cn: [
+								{ tag: 'span', cls: 'name', html: '{Creator}'},
+								{ tag: 'time', datetime: '{CreatedTime:date("c")}', html: '{CreatedTime:ago()}'}
+							]},
+							{ cls: 'message', html: '{body}'}
+						]}
+					]
+				}}
 			])
 		},
 		{
@@ -67,7 +77,11 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 			'click': 'showEditor'
 		});
 
-		this.editor = Ext.widget('nti-editor', {ownerCt: this, renderTo: this.comment.feedbackBox});
+		this.editor = Ext.widget('nti-editor', {
+			ownerCt: this,
+			renderTo: this.comment.feedbackBox,
+			enableObjectControls: false //lets not open too much complexity yet.
+		});
 
 		this.mon(this.editor, {
 			'activated-editor': function() {
@@ -97,7 +111,8 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 			jsonData: item.getData()
 		}).done(function() {
 			console.log('Saved feedback');
-			editor.cancel();//short cut to closing and clearing. :P
+			editor.deactivate();
+			editor.setValue('');
 			store.load();
 		}).fail(function(reason) {
 			console.error('faild to save feedback', reason);
@@ -112,9 +127,11 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 			return;
 		}
 
+		this.history = history;
+
 		var s = 'The comments below will only be visible to you and your {0}.',
 			header = this.down('box[name=title]'),
-			feedback = this.history.get('Feedback').get('href');
+			feedback = history.get('Feedback').get('href');
 
 		this.store = new Ext.data.Store({
 			model: NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedback,
@@ -128,6 +145,8 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 			}
 		});
 
+		this.mon(this.store, 'load', 'resolveUsers');
+
 		this.feedbackList.bindStore(this.store);
 		this.store.load();
 
@@ -136,9 +155,34 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 		this.show();
 	},
 
+
 	showEditor: function() {
 		this.editor.activate();
 		this.updateLayout();
+	},
+
+
+	resolveUsers: function(store) {
+		var pluck = Ext.Array.pluck,
+			list = this.feedbackList,
+			records = store.getRange();
+
+		function fill(users) {
+			users.forEach(function(u, i) {
+				var r = records[i],
+					c = r && r.get('Creator');
+				if (c && typeof c === 'string' && u.getId() === c) {
+					r.set('Creator', u);
+				} else {
+					console.warn('Did not resolve', c, 'for:', r, '. Got:', u);
+				}
+			});
+			list.refresh();
+		}
+
+		UserRepository.getUser(pluck(pluck(records, 'data'), 'Creator'))
+				.done(fill);
+
 	}
 
 });
