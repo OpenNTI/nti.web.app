@@ -105,6 +105,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		this.statusMessage.show();
 		this.submitBtn.update('I\'m Finished');
 		this.submitBtn.removeCls('disabled');
+		this.show();
 	},
 
 
@@ -112,6 +113,13 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		if (this.isSubmitted()) {
 			return;
 		}
+
+		var isAssignment = !!this.questionSet.associatedAssignment;
+		if (isAssignment) {
+			this.shouldShow = false;
+			this.hide();
+		}
+
 		console.log('New status is submitted');
 		this.state = 'submitted';
 		this.submitted = true;
