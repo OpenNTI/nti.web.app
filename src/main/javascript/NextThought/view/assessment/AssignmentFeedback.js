@@ -17,11 +17,11 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 			xtype: 'box',
 			ui: 'feedback-title',
 			name: 'title',
-			autoEl: { cn:[
+			autoEl: { cn: [
 				{ tag: 'h1', html: 'Feedback' },
 				{ cls: 'message' }
 			]},
-			renderSelectors:{
+			renderSelectors: {
 				messageEl: '.message'
 			}
 		},
@@ -29,8 +29,8 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 			xtype: 'dataview',
 			itemSelector: 'feedback-item',
 			tpl: Ext.DomHelper.markup([
-				{tag: 'tpl', 'for':'.', cn:[
-
+				{tag: 'tpl', 'for': '.', cn: [
+					'{body}'
 				]}
 			])
 		},
@@ -39,20 +39,20 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 			ui: 'comment-box',
 			name: 'comment',
 			autoEl: { cn: [
-				{cls:'editor-box'}
+				{cls: 'editor-box'}
 			]},
-			renderSelectors:{
+			renderSelectors: {
 				feedbackBox: '.editor-box'
 			}
 		}
 	],
 
-	
-	afterRender: function(){
+
+	afterRender: function() {
 		this.callParent(arguments);
 
 		var commentBox;
-
+		this.feedbackList = this.down('dataview');
 		this.comment = this.down('box[name=comment]');
 
 		commentBox = this.comment.feedbackBox;
@@ -60,20 +60,20 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 		if (this.history) {
 			this.setHistory(this.history);
 		}
-		
+
 		this.fireEvent('has-been-submitted', this);
 
-		this.mon(commentBox,{
+		this.mon(commentBox, {
 			'click': 'showEditor'
 		});
 
 		this.editor = Ext.widget('nti-editor', {ownerCt: this, renderTo: this.comment.feedbackBox});
-	
-		this.mon(this.editor,{
-			'activated-editor': function(){
+
+		this.mon(this.editor, {
+			'activated-editor': function() {
 				commentBox.addCls('editor-active');
 			},
-			'deactivated-editor': function(){
+			'deactivated-editor': function() {
 				commentBox.removeCls('editor-active');
 			},
 			'save': 'addFeedback',
@@ -81,44 +81,62 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 				editor.markError(el, 'You need to type something');
 				return false;
 			}
-		})
+		});
 	},
 
 
-	addFeedback: function(editor){
-		var text = editor.getValue().body,
-			feedback = this.history.get('Feedback');
+	addFeedback: function(editor) {
+		var item = new NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedback(
+						{body: editor.getValue().body}),
+			feedback = this.history.get('Feedback'),
+			store = this.store;
 
 		Service.request({
 			url: feedback.get('href'),
 			method: 'POST',
-			jsonData: {
-				body: text
-			}
-		}).done(function(){
+			jsonData: item.getData()
+		}).done(function() {
 			console.log('Saved feedback');
-		}).fail(function(reason){
+			editor.cancel();//short cut to closing and clearing. :P
+			store.load();
+		}).fail(function(reason) {
 			console.error('faild to save feedback', reason);
 		});
 
 	},
 
 
-	setHistory: function(history){
-		if(!history || !history.get('Feedback')){ 
+	setHistory: function(history) {
+		if (!history || !history.get('Feedback')) {
 			this.hide();
 			return;
 		}
-		
-		var s = 'The comments below will only be visible to you and your {0}.',
-			header = this.down('box[name=title]');
 
-		header.messageEl.update(Ext.String.format(s, (isMe(history.get('Creator'))? 'instructor' : 'student')));
+		var s = 'The comments below will only be visible to you and your {0}.',
+			header = this.down('box[name=title]'),
+			feedback = this.history.get('Feedback').get('href');
+
+		this.store = new Ext.data.Store({
+			model: NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedback,
+			proxy: {
+				type: 'rest',
+				url: feedback,
+				reader: {
+					type: 'json',
+					root: 'Items'
+				}
+			}
+		});
+
+		this.feedbackList.bindStore(this.store);
+		this.store.load();
+
+		header.messageEl.update(Ext.String.format(s, (isMe(history.get('Creator')) ? 'instructor' : 'student')));
 
 		this.show();
 	},
 
-	showEditor: function(){
+	showEditor: function() {
 		this.editor.activate();
 		this.updateLayout();
 	}
