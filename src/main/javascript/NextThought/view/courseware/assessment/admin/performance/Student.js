@@ -121,6 +121,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 				{name: 'completed', type: 'date'},
 				{name: 'Submission', type: 'auto'},
 				{name: 'Grade', type: 'auto'},
+				{name: 'pendingAssessment', type: 'auto'},
 				{name: 'Feedback', type: 'int'}
 			],
 			sorters: [
@@ -164,17 +165,19 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 			});
 
 			Service.request(o.getLink('GradeSubmittedAssignmentHistory')).done(function(json) {
-				var r = store.getById(id);
+				var r = store.getById(id), s;
 				if (r) {
 					json = Ext.decode(json, true) || {};
 					json = json.Items || {};
 					json = json[user];
 					if (json) {
 						json = ParseUtils.parseItems(json)[0];
+						s = json.get('Submission');
 						r.set({
-							Submission: json,
+							pendingAssessment: json.get('pendingAssessment'),
+							Submission: s,
 							Feedback: json.get('Feedback').get('Items').length,
-							completed: json.get('CreatedTime')
+							completed: s && s.get('CreatedTime')
 						});
 					}
 				}
