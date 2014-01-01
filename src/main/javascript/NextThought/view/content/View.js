@@ -514,7 +514,7 @@ Ext.define('NextThought.view.content.View', {
 
 	showContentReader: function() {
 		this.courseBook.layout.setActiveItem('main-reader-view');
-		this.setActiveTab('course-book');
+		//this.setActiveTab('course-book');
 	},
 
 
