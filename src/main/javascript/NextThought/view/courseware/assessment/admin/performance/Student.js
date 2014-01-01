@@ -57,7 +57,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 						   } },
 						   { text: 'Score', dataIndex: 'Grade', width: 70 },
 						   { text: 'Feedback', dataIndex: 'Feedback', width: 140, renderer: function(value) {
-							   return value ? (value + ' Comments') : '';
+							   return value ? (value.get('Items').length + ' Comments') : '';
 						   } }
 					   ].map(function(o) {
 							return Ext.applyIf(o, {
@@ -122,7 +122,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 				{name: 'Submission', type: 'auto'},
 				{name: 'Grade', type: 'auto'},
 				{name: 'pendingAssessment', type: 'auto'},
-				{name: 'Feedback', type: 'int'}
+				{name: 'Feedback', type: 'auto'}
 			],
 			sorters: [
 				{property: 'due', direction: 'ASC'}
@@ -178,7 +178,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 						r.set({
 							pendingAssessment: json.get('pendingAssessment'),
 							Submission: s,
-							Feedback: json.get('Feedback').get('Items').length,
+							Feedback: json.get('Feedback'),
 							completed: s && s.get('CreatedTime')
 						});
 					}
