@@ -146,7 +146,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 
 		function add() {
 			try {
-				return s.add.apply(s, arguments);
+				return s.add.apply(s, arguments)[0];
 			} catch (er) {
 				console.error(arguments, er.stack || er.message || e);
 			}
@@ -158,7 +158,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 					str = ' left feedback on',
 					r = add(me.getEventConfig(c + str, o, f.get('CreatedTime')));
 
-				UserRepository.getUser(f).done(function(u) {
+				UserRepository.getUser(c).done(function(u) {
 					r.set('label', u + str);
 				});
 			});
