@@ -61,7 +61,7 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			o.registerOverlayedPanel(guid + 'feedback', Ext.widget('assignment-feedback', {
 				reader: r, renderTo: c, questionSet: set,
 				tabIndexTracker: o.tabIndexer
-			})).show();
+			}));
 		}
 
 		Ext.each(questions, function(q) {me.makeAssessmentQuestion(q, set);});
