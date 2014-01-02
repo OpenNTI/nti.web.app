@@ -9,7 +9,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.Grouping', {
 	],
 
 	layout: 'auto',
-	componentLayout: 'natural',
+	componentLayout: 'body',
 	childEls: ['body'],
 	getTargetEl: function() { return this.body; },
 
@@ -21,8 +21,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.Grouping', {
 
 
 	config: {
-		subTitle: '',
-		title: ''
+		subTitle: null,
+		title: null
 	},
 
 
@@ -45,9 +45,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.Grouping', {
 		});
 	},
 
-	onAdd: function(cmp){
+	onAdd: function(cmp) {
 		var r = this.callParent(arguments);
-		
+
 		this.mon(cmp, {
 			'hide-parent': 'hide',
 			'show-parent': 'show'
