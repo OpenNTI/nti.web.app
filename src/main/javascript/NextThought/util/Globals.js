@@ -380,7 +380,7 @@ Ext.define('NextThought.util.Globals', {
 
 	getCaseInsensitiveNaturalSorter: function(field) {
 		return function(a, b) {
-			var sa = a.get(field).toLowerCase(), sb = b.get(field).toLowerCase();
+			var sa = (a.get(field) + '').toLowerCase(), sb = (b.get(field) + '').toLowerCase();
 			return Globals.naturalSortComparator(sa, sb);
 		};
 	},

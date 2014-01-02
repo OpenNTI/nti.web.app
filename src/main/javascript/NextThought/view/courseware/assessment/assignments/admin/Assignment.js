@@ -224,6 +224,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 					}
 
 					store.sort();
+				}).fail(function(reason){
+					console.error(reason);
 				});
 	},
 
