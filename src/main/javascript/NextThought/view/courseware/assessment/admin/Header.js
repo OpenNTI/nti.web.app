@@ -2,7 +2,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-assessment-admin-header',
 	ui: 'course-assessment',
-	cls: 'course-assessment-admin assignment-item',
 
 	mixins: {
 		enableProfiles: 'NextThought.mixins.ProfileLinks',

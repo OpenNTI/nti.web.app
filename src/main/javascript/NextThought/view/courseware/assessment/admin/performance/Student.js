@@ -6,89 +6,85 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 		'NextThought.view.courseware.assessment.admin.performance.Header'
 	],
 
+	layout: 'anchor',
+
 	profileLinkCard: false,
 
 	ui: 'course-assessment',
 	cls: 'course-assessment-admin assignment-item',
 
-	layout: 'auto',
-	componentLayout: 'natural',
-	childEls: ['body'],
-	getTargetEl: function() { return this.body; },
-
 	pathRoot: 'Grades & Performance',
 
-	renderTpl: Ext.DomHelper.markup([
-	 	{ id: '{id}-body', cls: 'body', cn: ['{%this.renderContainer(out,values)%}'] }
-	 ]),
-
-
-	assessment: {
-			xtype: 'grid',
+	items: [{
+		xtype: 'grid',
+		flex: 1,
+		anchor: '0 -172',
+		ui: 'course-assessment',
+		plain: true,
+		border: false,
+		frame: false,
+		cls: 'student-performance-overview',
+		scroll: 'vertical',
+		sealedColumns: true,
+		enableColumnHide: false,
+		enableColumnMove: false,
+		enableColumnResize: false,
+		columns: {
 			ui: 'course-assessment',
 			plain: true,
 			border: false,
 			frame: false,
-			sealedColumns: true,
-			enableColumnHide: false,
-			enableColumnMove: false,
-			enableColumnResize: false,
-			columns: {
-				ui: 'course-assessment',
-				plain: true,
-				border: false,
-				frame: false,
-				items: [
-						   { text: 'Assignment', dataIndex: 'name', tdCls: 'padded-cell', padding: '0 0 0 30', flex: 1 },
-						   { text: 'Completed', dataIndex: 'completed', width: 150, renderer: function(v, col, rec) {
-							   var d = rec.get('due'),
+			items: [
+					   { text: 'Assignment', dataIndex: 'name', tdCls: 'padded-cell', padding: '0 0 0 30', flex: 1 },
+					   { text: 'Completed', dataIndex: 'completed', width: 150, renderer: function(v, col, rec) {
+						   var d = rec.get('due'),
 								   s = (v && v.get && v.get('Last Modified')) || v;
-							   if (!s) {
-								   return Ext.DomHelper.markup({cls: 'incomplete', html: 'Due ' + Ext.Date.format(d, 'd/m')});
-							   }
-							   if (d > s) {
-								   return Ext.DomHelper.markup({cls: 'ontime', html: 'On Time'});
-							   }
+						   if (!s) {
+							   return Ext.DomHelper.markup({cls: 'incomplete', html: 'Due ' + Ext.Date.format(d, 'd/m')});
+						   }
+						   if (d > s) {
+							   return Ext.DomHelper.markup({cls: 'ontime', html: 'On Time'});
+						   }
 
-							   d = new Duration(Math.abs(s - d) / 1000);
-							   return Ext.DomHelper.createTemplate({cls: 'late', html: '{late} Late'}).apply({
-								   late: d.ago().replace('ago', '').trim()
-							   });
-						   } },
-						   { text: 'Score', dataIndex: 'grade', width: 70 },
-						   { text: 'Feedback', dataIndex: 'Feedback', width: 140, renderer: function(value) {
-							   return value ? (value.get('Items').length + ' Comments') : '';
-						   } }
-					   ].map(function(o) {
-							return Ext.applyIf(o, {
-								ui: 'course-assessment',
-								border: false,
-								sortable: true,
-								menuDisabled: true
-							});
-						})
-			},
+						   d = new Duration(Math.abs(s - d) / 1000);
+						   return Ext.DomHelper.createTemplate({cls: 'late', html: '{late} Late'}).apply({
+							   late: d.ago().replace('ago', '').trim()
+						   });
+					   } },
+					   { text: 'Score', dataIndex: 'grade', width: 70 },
+					   { text: 'Feedback', dataIndex: 'Feedback', width: 140, renderer: function(value) {
+						   return value ? (value.get('Items').length + ' Comments') : '';
+					   } }
+				   ].map(function(o) {
+						return Ext.applyIf(o, {
+							ui: 'course-assessment',
+							border: false,
+							sortable: true,
+							menuDisabled: true
+						});
+					})
+		},
 
-			listeners: {
-				sortchange: function(ct, column) { ct.up('grid').markColumn(column); },
-				selectionchange: function(sm, selected) { sm.deselect(selected); },
-				viewready: function(grid) {
-					grid.mon(grid.getView(), 'refresh', function() {
-						grid.markColumn(grid.down('gridcolumn[sortState]'));
-					});
-				}
-			},
+		listeners: {
+			sortchange: function(ct, column) { ct.up('grid').markColumn(column); },
+			selectionchange: function(sm, selected) { sm.deselect(selected); },
+			viewready: function(grid) {
+				grid.mon(grid.getView(), 'refresh', function() {
+					grid.markColumn(grid.down('gridcolumn[sortState]'));
+				});
+			}
+		},
 
-			markColumn: function(c) {
-				var cls = 'sortedOn', el = this.getEl();
-				if (el) {
-					el.select('.' + cls).removeCls(cls);
-					if (c) {
-						Ext.select(c.getCellSelector()).addCls(cls);
-					}
+		markColumn: function(c) {
+			var cls = 'sortedOn', el = this.getEl();
+			if (el) {
+				el.select('.' + cls).removeCls(cls);
+				if (c) {
+					Ext.select(c.getCellSelector()).addCls(cls);
 				}
 			}
-	},
+		}
+	}],
 
 
 	initComponent: function() {
@@ -99,7 +95,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 
 		this.pathBranch = this.student.toString();
 
-		this.header = this.add({
+		this.header = this.insert(0, {
 			xtype: 'course-assessment-admin-performance-header',
 			path: [this.pathRoot, this.pathBranch],
 			student: this.student,
@@ -108,8 +104,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 		});
 
 		this.relayEvents(this.header, ['goup', 'goto']);
-
-		this.add(this.assessment);
 
 		grid = this.down('grid');
 		store = this.store = new Ext.data.Store({

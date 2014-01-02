@@ -9,7 +9,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	ui: 'course-assessment',
 	cls: 'course-assessment-admin assignment-item',
 
-	layout: 'auto',
+	layout: 'fit',
 	componentLayout: 'natural',
 	childEls: ['body'],
 	getTargetEl: function() { return this.body; },
@@ -76,6 +76,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			plain: true,
 			border: false,
 			frame: false,
+			cls: 'student-assignment-overview',
+			scroll: 'vertical',
 			sealedColumns: true,
 			enableColumnHide: false,
 			enableColumnMove: false,

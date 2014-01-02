@@ -498,6 +498,8 @@ canvas.x-component-course-assessment {
 	&.assignment-group {
 		padding: 30px 30px 60px;
 		box-shadow: 0 1px 0 0 #f1f1f1;
+		position: relative;
+		overflow: hidden;
 
 		& > .body {
 			margin-top: 0.5em;
@@ -515,9 +517,6 @@ canvas.x-component-course-assessment {
 		}
 	}
 
-	&.course-performance {
-		padding-top: 200px;
-	}
 }
 
 
@@ -752,8 +751,9 @@ canvas.x-component-course-assessment {
 
 
 .course-performance-header {
-	position: absolute;
-	top: 0; left: 0; width: 769px;
+	//position: absolute;
+	//top: 0; left: 0;
+	width: 769px; height: 200px;
 	background: #fbfbfb;
 	box-shadow: 0 1px 0 0 #e0e0e0, 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
 	line-height: 0;
@@ -832,6 +832,13 @@ canvas.x-component-course-assessment {
 
 .x-panel-body-course-assessment {
 	border: 0 none;
+
+	.x-grid-view {
+		overflow: {
+			y: auto;//scroll
+			x: hidden;
+		}
+	}
 
 	.x-grid-td {
 		border-width: 0;
@@ -914,4 +921,17 @@ canvas.x-component-course-assessment {
 			}
 		}
 	}
+}
+
+
+//Grid Views:
+.x-grid {
+	&.student-performance-overview,
+	&.student-assignment-overview {
+		position: absolute;
+		bottom: 0; left: 0; right: 0;
+	}
+
+	&.student-performance-overview { top: 171px; }
+	&.student-assignment-overview { top: 122px; margin-top: 122px; }
 }

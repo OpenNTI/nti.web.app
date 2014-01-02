@@ -9,6 +9,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 		'NextThought.chart.GradePerformance'
 	],
 
+	layout: 'anchor',
 
 	items: [
 		{
@@ -28,6 +29,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 			]
 		},
 		{xtype: 'course-assessment-assignment-group', title: 'All Grades',
+			anchor: '0 -200', layout: 'fit',
 			cls: 'assignment-group grades', items: [
 			{
 				xtype: 'grid',
@@ -35,6 +37,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 				plain: true,
 				border: false,
 				frame: false,
+				scroll: 'vertical',
 				sealedColumns: true,
 				enableColumnHide: false,
 				enableColumnMove: false,
@@ -130,7 +133,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 		//***** Begin Hide charts
 		// No charts until we can get numerical grades. :}
 		this.items.first().hide();
-		this.getEl().setStyle({paddingTop: 0});
+		this.items.last().anchor = '0 0';
 		//***** End Hide charts
 	},
 
