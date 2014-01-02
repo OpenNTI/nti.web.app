@@ -117,7 +117,9 @@ Ext.define('NextThought.view.assessment.Question', {
 			Ext.Error.raise('Couldn\'t find my question? :(');
 		}
 
-		this[q.isCorrect() ? 'markCorrect' : 'markIncorrect']();
+		this[q.isCorrect() ? 'markCorrect' : 'markIncorrect'](assessedQuestionSet.noMark);
+		
+
 		this.down('question-parts').updateWithResults(q);
 	},
 
@@ -190,18 +192,26 @@ Ext.define('NextThought.view.assessment.Question', {
 	},
 
 
-	markCorrect: function() {
-		this.down('question-header').markCorrect();
+	markCorrect: function(noMark) {
+		if (!noMark) {
+			this.down('question-header').markCorrect();
+		}
+
 		var sub = this.down('assessment-multipart-submission');
+		
 		if (sub) {
 			sub.disableSubmission();
 		}
 	},
 
 
-	markIncorrect: function() {
-		this.down('question-header').markIncorrect();
+	markIncorrect: function(noMark) {
+		if (!noMark) {
+			this.down('question-header').markIncorrect();
+		}
+
 		var sub = this.down('assessment-multipart-submission');
+		
 		if (sub) {
 			sub.disableSubmission();
 		}

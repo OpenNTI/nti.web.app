@@ -45,7 +45,24 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			r = me.reader,
 			guid = guidGenerator(),
 			questions = set.get('questions'),
-			submission;
+			submission, pendingAssessment;
+
+		function getPendingAssessment(h){
+			var temp;
+
+			try{
+				temp = h.get('pendingAssessment').get('parts')[0];
+			} catch (e) {
+				swallow(e);	
+			}
+
+			return temp || NextThought.model.assessment.AssessedQuestionSet.from(set);
+		}
+
+		if(h){
+			pendingAssessment = getPendingAssessment(h);
+			set.noMark = Boolean(pendingAssessment.noMark);
+		}
 
 		o.registerOverlayedPanel(guid + 'scoreboard', Ext.widget('assessment-scoreboard', {
 			reader: r, renderTo: c, questionSet: set,
@@ -67,12 +84,8 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			}));
 		}
 
-
-		if (h) {
-			h = h.get('pendingAssessment');
-			h = h && h.get('parts');
-			h = h && h[0];
-			submission.setGradingResult(h || NextThought.model.assessment.AssessedQuestionSet.from(set));
+		if(pendingAssessment){
+			submission.setGradingResult(pendingAssessment);
 		}
 	},
 

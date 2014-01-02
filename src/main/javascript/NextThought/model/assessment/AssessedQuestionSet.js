@@ -32,7 +32,7 @@ Ext.define('NextThought.model.assessment.AssessedQuestionSet', {
 	statics: {
 
 		from: function(set) {
-			var raw = {
+			var out, raw = {
 				questionSetId: set.getId(),
 				questions: []
 			};
@@ -41,7 +41,10 @@ Ext.define('NextThought.model.assessment.AssessedQuestionSet', {
 				raw.questions.push(NextThought.model.assessment.AssessedQuestion.from(q));
 			});
 
-			return this.create(raw);
+			out = this.create(raw);
+			out.noMark = true;
+
+			return out;
 		}
 	}
 });

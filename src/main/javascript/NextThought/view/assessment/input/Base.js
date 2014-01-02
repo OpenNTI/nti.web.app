@@ -100,6 +100,10 @@ Ext.define('NextThought.view.assessment.input.Base', {
 
 		this.isAssignment = Boolean(this.questionSet && this.questionSet.associatedAssignment);
 
+		if(this.isAssignment){
+			this.noMark = Boolean(this.questionSet.noMark);
+		}
+
 		this.addEvents({
 			'enable-submission': true,
 			'disable-submission': true
@@ -369,9 +373,11 @@ Ext.define('NextThought.view.assessment.input.Base', {
 
 		this.setValue(part.get('submittedResponse'));
 
-		if (part.isCorrect()) { this.markCorrect(); }
-		else {this.markIncorrect(); }
-
+		if(!this.noMark){
+			if (part.isCorrect()) { this.markCorrect(); }
+			else {this.markIncorrect(); }
+		}
+		
 		if (this.isAssignment) {
 			this.setSubmitted();
 		}
