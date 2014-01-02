@@ -161,6 +161,8 @@ Ext.define('NextThought.controller.Reader', {
 			return false;
 		}
 
+		this.getContentView().setActiveTab('course-book');
+
 		if (pi && pi.isPartOfCourseNav()) {
 			r.clearLocation();
 			this.getContentView().showCourseNavigationAt(pi);
