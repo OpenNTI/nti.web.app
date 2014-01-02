@@ -51,7 +51,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 							 { text: 'Completed', dataIndex: 'completed', width: 80, renderer: function(v) {
 								 return (v && v.getTime() > 0) ? this.checkMarkTpl : '';
 							 } },
-							 { text: 'Grade', dataIndex: 'Grade', width: 70 },
+							 { text: 'Score', dataIndex: 'grade', width: 70 },
 							 { text: 'Feedback', dataIndex: 'feedback', width: 140, renderer: function(value) {
 								 return value ? (value + ' Comments') : '';
 							 } }
@@ -110,7 +110,8 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 				{name: 'assigned', type: 'date'},
 				{name: 'due', type: 'date'},
 				{name: 'completed', type: 'date'},
-				{name: 'Grade', type: 'auto', mapping: 'grade'},// :'( why oh why can't we all get along!?
+				{name: 'Grade', type: 'auto'},//object
+				{name: 'grade', type: 'auto'},//value
 				{name: 'AverageGrade', type: 'int', mapping: 'average'},//ignored for now
 				{name: 'feedback', type: 'int'}
 		    ],
@@ -164,7 +165,8 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 				assigned: o.get('availableBeginning'),
 				due: o.get('availableEnding'),
 				completed: submission && submission.get('CreatedTime'),
-				grade: grade && grade.get('grade'),
+				Grade: grade,
+				grade: grade && (grade.get('value') || '').split(' ')[0],
 				average: grade && grade.get('average'),
 				feedback: feedback && feedback.get('Items').length
 			});

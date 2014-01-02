@@ -106,7 +106,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 						   } },
 						   { text: 'Score', dataIndex: 'Grade', width: 90, renderer: function(v) {
 							   v = v && v.get('value');
-							   
 							   return v && v.split(' ')[0];
 						   } },
 						   { text: 'Feedback', dataIndex: 'Feedback', width: 140, renderer: function(value) {
@@ -223,7 +222,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 							console.warn('Skipped record!', i, records, users);
 						}
 					}
-					
+
 					store.sort();
 				});
 	},

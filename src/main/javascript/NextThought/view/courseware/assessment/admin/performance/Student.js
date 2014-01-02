@@ -120,8 +120,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 				{name: 'due', type: 'date'},
 				{name: 'completed', type: 'date'},
 				{name: 'Submission', type: 'auto'},
-				{name: 'Grade', type: 'auto'},
-				{name: 'grade', type: 'auto'},
+				{name: 'Grade', type: 'auto'},//object
+				{name: 'grade', type: 'auto'},//value
 				{name: 'pendingAssessment', type: 'auto'},
 				{name: 'Feedback', type: 'auto'}
 			],
@@ -149,7 +149,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 		}
 
 		function collect(o) {
-			if(o.get('title') === 'Final Grade'){ return; }
+			if (o.get('title') === 'Final Grade') { return; }
 			var id = raw.length,
 				ntiid = o.getId(),
 				grade = getGrade(o);
@@ -164,7 +164,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 				due: o.get('availableEnding'),
 
 				Grade: grade,
-				grade: grade && grade.get('value'),
+				grade: grade && (grade.get('value') || '').split(' ')[0],
 				average: grade && grade.get('average')
 			});
 
