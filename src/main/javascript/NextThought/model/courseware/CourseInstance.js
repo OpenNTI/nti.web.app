@@ -11,11 +11,11 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 
 	asUIData: function() {
 		var e = this.getCourseCatalogEntry();
-		
+
 		if (!e) {
 			console.error('CourseCatalogEntry for', this, 'has not been preloaded yet.');
 		}
-		
+
 		return {
 			id: this.getId(),
 			isCourse: true,
@@ -31,7 +31,7 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 			me = this,
 			Cls = NextThought.model.courseware.CourseInstance;
 
-		if(!p){
+		if (!p) {
 			p = this.precachePromise = new Promise();
 
 			Cls.load(null, {
