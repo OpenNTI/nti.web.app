@@ -5,7 +5,7 @@ Ext.define('NextThought.layout.component.Natural', {
 
 
 	beginLayout: function(ownerContext) {
-    this.callParent(arguments);
+    	this.callParent(arguments);
 		if (!ownerContext.bodyContext) {
 			try {
 				ownerContext.bodyContext = ownerContext.getEl('el');
