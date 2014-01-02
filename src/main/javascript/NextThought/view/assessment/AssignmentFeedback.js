@@ -158,6 +158,7 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 
 	showEditor: function() {
 		this.editor.activate();
+		Ext.defer(this.editor.focus, 350, this.editor);
 		this.updateLayout();
 	},
 
