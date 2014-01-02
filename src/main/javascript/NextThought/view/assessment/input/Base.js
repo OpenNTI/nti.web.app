@@ -424,7 +424,7 @@ Ext.define('NextThought.view.assessment.input.Base', {
 
 
 	enableSubmission: function() {
-		if (this.isAssignment) {
+		if (this.isAssignment && this.submitted) {
 			return;
 		}
 
