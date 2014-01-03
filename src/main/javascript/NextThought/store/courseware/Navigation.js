@@ -22,26 +22,28 @@ Ext.define('NextThought.store.courseware.Navigation', {
 
 
 	fillFromOutline: function(outline) {
-		var index = 0, r = [], t, fill, d,
+		var index = 0, r = [], t, fill, maxDepth, depth = 0,
 			tocNodes = this.tocNodes;
 
 		function itr(n) {
 			if (n.isNode) {
 				t = tocNodes.getById(n.getId());
-				fill = {};
+				fill = t ? {
+					label: t.get('label'),
+					tocOutlineNode: t
+				} : {};
 
-				if (t) {
-					Ext.apply(fill, {
-						depth: d,
-						label: t.get('label'),
-						tocOutlineNode: t
-					});
-				}
+				Ext.apply(n, {
+					_max_depth: maxDepth,
+					_depth: depth
+				});
 
 				n.set(Ext.apply({ position: index++ }, fill));
 				r.push(n);
 			}
+			depth++;
 			(n.get('Items') || []).forEach(itr);
+			depth--;
 		}
 
 		//we agreed to just count the depth of the first branch. :}
@@ -50,9 +52,9 @@ Ext.define('NextThought.store.courseware.Navigation', {
 			return i ? (getDepth(i) + 1) : 0;
 		}
 
-		d = this.depth = getDepth(outline);
+		maxDepth = this.depth = getDepth(outline);
 
-		itr(outline);
+		itr(outline, 0);
 		this.add(r);
 
 		this.building = false;

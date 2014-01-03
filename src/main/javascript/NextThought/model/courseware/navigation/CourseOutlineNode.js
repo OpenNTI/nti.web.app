@@ -14,15 +14,19 @@ Ext.define('NextThought.model.courseware.navigation.CourseOutlineNode', {
 		{ name: 'AvailableEnding', type: 'date', dateFormat: 'c'},
 
 		{ name: 'label', type: 'string', mapping: 'title'},
-		{ name: 'depth', type: 'int', persist: false},
 
-		{ name: 'position', type: 'int', persist: false},
-
+		{ name: 'position', type: 'int' },
 
 		{ name: 'type', type: 'Synthetic', persist: false, fn: function(r) {
-			var d = r.get('depth') || 2,
-				c = NextThought.model.courseware.navigation.CourseOutlineContentNode;
-			return r instanceof c ? 'lesson' : 'unit';
+			var d = r._max_depth || 2,
+				myDepth = r._depth,
+				unit = 'unit';
+
+			if (d !== 2) {
+				unit = myDepth > 1 ? 'unit' : 'unit heading';
+			}
+
+			return myDepth === d ? 'lesson' : unit;
 		} },
 
 		{ name: 'date', type: 'Synthetic', persist: false,
