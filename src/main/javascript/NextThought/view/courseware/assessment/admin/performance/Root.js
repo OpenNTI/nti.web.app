@@ -8,11 +8,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header assignment-filterbar', cn: [
-			{ cls: 'third dropmenu disabled', cn: [
+			{ cls: 'third dropmenu show', cn: [
 				{ cls: 'label', html: 'All Students' }
 			] },
-			{ cls: 'third dropmenu', cn: [
-				{ cls: 'label', html: 'By Performance' }
+			{ cls: 'third dropmenu order', cn: [
+				{ cls: 'label', html: 'By Name' }
 			] },
 			{ cls: 'third search', cn: [
 				{ tag: 'input', type: 'text', placeholder: 'Search Students', required: 'required' },
@@ -36,7 +36,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 	renderSelectors: {
 		titleEl: '.header',
-		frameBodyEl: '.list'
+		frameBodyEl: '.list',
+		showEl: '.header .show',
+		orderEl: '.header .order',
+		inputEl: '.header .search input'
 	},
 
 	getTargetEl: function() { return this.frameBodyEl; },
@@ -70,14 +73,193 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
+	afterRender: function(){
+		this.callParent(arguments);
+
+		this.createShowMenu();
+		this.createOrderMenu();
+
+		this.on({
+			showEl: { click: 'showShowMenu'},
+			orderEl: { click: 'showOrderMenu'},
+			inputEl: { keyup: 'changeNameFilter'}
+		});
+	},
+
+
+	createShowMenu: function(){
+		var type = this.currentShow,
+			items = [
+				{ text: 'All Students', type: 'all', checked: type === 'all'},
+				{ text: 'Actionable', type: 'action', checked: type === 'action'},
+				{ text: 'Overdue', type: 'overdue', checked: type === 'overdue'},
+				{ text: 'Ungraded', type: 'ungraded', checked: type === 'ungraded'},
+				{ text: 'Comment', type: 'comment', checked: type === 'comment'}
+			];
+
+		this.showMenu = Ext.widget('menu', {
+			ui: 'nt',
+			cls: 'group-by-menu',
+			plain: true,
+			shadow: false,
+			width: 257,
+			frame: false,
+			border: false,
+			ownerCmp: this,
+			constrainTo: Ext.getBody(),
+			offset: [0, 0],
+			defaults: {
+				ui: 'nt-menuitem',
+				xtype: 'menucheckitem',
+				group: 'groupByOptions',
+				cls: 'group-by-option',
+				height: 50,
+				plain: true,
+				listeners: {
+					scope: this,
+					'checkchange': 'switchShow'
+				}
+			},
+			items: items
+		});
+	},
+
+
+	showShowMenu: function(){
+		this.showMenu.showBy(this.showEl, 'tl-tl?', this.showMenu.offset);
+	},
+
+
+	switchShow: function(item, status){
+		if (!status) { return; }
+
+		var offset = item.getOffsetsTo(this.showMenu),
+			x = offset && offset[1];
+
+		this.showEl.el.down('.label').update(item.text);
+
+		this.showMenu.offset = [0, -x];
+		this.currentShow = item.type;
+
+		this.store.removeFilter('showFilter');
+
+		if (item.type === 'all') { return; }
+
+		this.store.filter([{
+			id: 'showFilter',
+			filterFn: function(rec){
+				var overdue = rec.get('overdue'),
+					ungraded = rec.get('ungraded'),
+					comments = rec.get('comments');
+
+				if (item.type === 'action') {
+					return overdue || ungraded || comments;
+				} 
+
+				if (item.type === 'overdue') {
+					return overdue;
+				}
+
+				if (item.type === 'ungraded') {
+					return ungraded;
+				}
+
+				if (item.type === 'comment') {
+					return comments;
+				}
+			}
+		}], true);
+	},
+
+
+	createOrderMenu: function(){
+		var type = this.currentOrder,
+			items = [
+				{ text: 'By Name', type: 'displayName', checked: type === 'displayName'},
+				{ text: 'By Performance', type: 'grade', checked: type === 'grade'}
+			];
+
+		this.orderMenu = Ext.widget('menu', {
+			ui: 'nt',
+			cls: 'group-by-menu',
+			plain: true,
+			shadow: false,
+			width: 257,
+			frame: false,
+			border: false,
+			ownerCmp: this,
+			offset: [0, 0],
+			defaults: {
+				ui: 'nt-menuitem',
+				xtype: 'menucheckitem',
+				group: 'groupByOptions',
+				cls: 'group-by-option',
+				height: 50,
+				plain: true,
+				listeners: {
+					scope: this,
+					'checkchange': 'switchOrder'
+				}
+			},
+			items: items
+		});
+	},
+
+
+	showOrderMenu: function(){
+		this.orderMenu.showBy(this.orderEl, 'tl-tl', this.orderMenu.offset);
+	},
+
+
+	switchOrder: function(item, status){
+		if (!status) { return; }
+
+		var offset = item.getOffsetsTo(this.orderMenu),
+			x = offset && offset[1];
+
+		this.orderEl.el.down('.label').update(item.text);
+
+		this.orderMenu.offset = [0, -x];
+		this.currentOrder = item.type;
+
+
+		this.store.sort({
+			property: item.type,
+			direction: 'ASC'
+		});
+	},
+
+
+	changeNameFilter: function(){
+		var val = this.searchKey = this.inputEl.getValue();
+
+		this.store.removeFilter('searchFilter');
+
+		if(this.searchKey){
+			val = val.toLowerCase();
+
+			this.store.filter([{
+					id: 'searchFilter',
+					filterFn: function(rec){
+						var name = rec.get('displayName');
+
+						name = name.toLowerCase();
+
+						return name.indexOf(val) >= 0;
+					}
+			}])
+		}
+	},	
+
+
 	constructor: function() {
 		this.store = new Ext.data.Store({
 			fields: [
 				{name: 'id', type: 'string'},
 				{name: 'user', type: 'auto'},
-				{name: 'avatar', type: 'stirng', defaultValue: 'resources/images/icons/unresolved-user.png'},
-				{name: 'displayName', type: 'stirng', defaultValue: 'Resolving...'},
-				{name: 'grade', type: 'string'},
+				{name: 'avatar', type: 'string', defaultValue: 'resources/images/icons/unresolved-user.png'},
+				{name: 'displayName', type: 'string', defaultValue: 'Resolving...'},
+				{name: 'grade', type: 'int'},
 				{name: 'letter', type: 'string', defaultValue: '-'},
 				{name: 'comments', type: 'int', defaultValue: 0},
 				{name: 'ungraded', type: 'int', defaultValue: 0},
@@ -196,6 +378,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				letter = grades && grades[1] || '-';
 
 			r = s.getById(u.getId());
+
 			r.set({
 				user: u,
 				avatar: u.get('avatarURL'),
