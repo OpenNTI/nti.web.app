@@ -46,7 +46,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 
 
 	applyStore: function(store, date, course, locationInfo) {
-		var me = this;
+		var me = this, nodes, que = [];
 		Ext.destroy(this._buildCallback);
 		if (store.building) {
 			this._buildCallback = this.mon(store, {
@@ -61,23 +61,59 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 			this.el.mask('Loading...');
 		}
 
-		this.queryTiles(
-				date, course, locationInfo,
-				store.getCurrentBy(date),
-				function(tiles) {
-					try {
-						me.setTiles(tiles);
+		nodes = store.findByDate(date);
+		if (!nodes.length) {
+			this.el.unmask();
+			return;
+		}
+
+		nodes.forEach(function(node) {
+			var p = new Promise();
+			que.push(p);
+
+			me.queryTiles(
+					date, course, locationInfo,
+					node, function(tiles) {
+						p.fulfill(tiles);
 					}
-					catch (e) {
-						console.error(e.stack || e.message || e);
+			);
+		});
+
+		Promise.pool(que)
+			.done(this.applyTiles.bind(this))
+			.fail(function() { if (me.el) {me.el.unmask();} });
+	},
+
+
+	applyTiles: function(tiles) {
+		try {
+			var video;
+			tiles = tiles.reduce(function(agg, v) { return agg.concat(v); }, []);
+			tiles = tiles.filter(function(o) {
+				if (o && o instanceof NextThought.view.courseware.dashboard.tiles.Videos) {
+					if (!video || video.sources.length < o.sources.length) {
+						video = o;
 					}
-					finally {
-						if (me.el) {
-							me.el.unmask();
-						}
-					}
+					return false;
 				}
-		);
+				return !!o;
+			});
+
+			if (video) {
+				tiles.push(video);
+			}
+
+
+			this.setTiles(tiles);
+		}
+		catch (e) {
+			console.error(e.stack || e.message || e);
+		}
+		finally {
+			if (this.el) {
+				this.el.unmask();
+			}
+		}
 	},
 
 
@@ -128,8 +164,13 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 					push[Ext.isArray(o) ? 'apply' : 'call'](tiles, o);
 				}
 
+				if (!callback) {
+					console.error('Called more than once?');
+				}
+
 				if (queue.length === 0) {
 					Ext.callback(callback, me, [tiles], 1);
+					callback = null;
 				}
 			});
 		});
