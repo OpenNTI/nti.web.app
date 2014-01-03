@@ -16,6 +16,11 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 	},
 
 
+	statics: {
+		dateOverride: null//new Date('2013-12-30')
+	},
+
+
 	courseChanged: function(courseInstance) {
 		if (!courseInstance) {
 			this.tileContainer.removeAll(true);
@@ -23,7 +28,6 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 		}
 
 		var l = courseInstance.__getLocationInfo(),
-			me = this,
 			toc, course,
 			courseNavStore,
 			date = this.self.dateOverride || new Date();//now
@@ -36,13 +40,30 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 				return;
 			}
 
-			if (me.el) {
-				me.el.mask('Loading...');
-			}
+			this.applyStore(courseNavStore, date, course, l);
+		}
+	},
 
-			this.queryTiles(
-				date, course, l,
-				courseNavStore.getCurrentBy(date),
+
+	applyStore: function(store, date, course, locationInfo) {
+		var me = this;
+		Ext.destroy(this._buildCallback);
+		if (store.building) {
+			this._buildCallback = this.mon(store, {
+				destroyable: true,
+				single: true,
+				built: Ext.bind(this.applyStore, this, arguments)
+			});
+			return;
+		}
+
+		if (this.el) {
+			this.el.mask('Loading...');
+		}
+
+		this.queryTiles(
+				date, course, locationInfo,
+				store.getCurrentBy(date),
 				function(tiles) {
 					try {
 						me.setTiles(tiles);
@@ -56,8 +77,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 						}
 					}
 				}
-			);
-		}
+		);
 	},
 
 
