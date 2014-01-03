@@ -7,6 +7,8 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 		'NextThought.view.courseware.assessment.reader.Panel'
 	],
 
+	notifications: 0,
+
 	items: [{
 		title: 'Assignments',
 		id: 'course-assessment-root',
@@ -22,8 +24,27 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 		this.on({
 			'goto-assignment': 'gotoAssignment',
 			'show-assignment': 'showAssignment',
-			'update-assignment-view': 'maybeUpdateAssignmentView'
+			'update-assignment-view': 'maybeUpdateAssignmentView',
+			add: 'onViewAdd'
 		});
+	},
+
+
+	onViewAdd: function(body, item) {
+		this.mon(item, {
+			notify: 'onSubViewNotify'
+		});
+	},
+
+
+	onSubViewNotify: function() {
+		var c = 0;
+		//aggregate all the views notification counts.
+		this.items.each(function(v) {
+			c += (v.notifications || 0);
+		});
+		this.notifications = c;
+		this.fireEvent('notify', this, c);
 	},
 
 
