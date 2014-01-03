@@ -826,14 +826,14 @@ Ext.define('NextThought.model.Base', {
 			fnames = [];//just in case its not found
 			me.fields.each(function(f) {
 				var v = me.get(f.name);
-				if (v === fnames) {
+				if (v === updatedValue || (Ext.isArray(v) && v.indexOf(updatedValue) >= 0)) {
 					fnames = [f.name];
 					return false;
 				}
 			});
 		}
 
-		me.callParent(arguments);
+		me.callParent([fnames]);
 		Ext.each(fnames || [], me.onFieldChanged, me);
 	},
 
