@@ -52,13 +52,16 @@ Ext.define('NextThought.store.courseware.Navigation', {
 			return i ? (getDepth(i) + 1) : 0;
 		}
 
-		maxDepth = this.depth = getDepth(outline);
+		try {
+			maxDepth = this.depth = getDepth(outline);
 
-		itr(outline, 0);
-		this.add(r);
-
-		this.building = false;
-		this.fireEvent('built', this);
+			itr(outline);
+			this.add(r);
+		}
+		finally {
+			this.building = false;
+			this.fireEvent('built', this);
+		}
 	},
 
 
