@@ -105,7 +105,20 @@ Ext.define('NextThought.view.courseware.outline.View', {
 	},
 
 
-	maybeChangeSelection: function(ntiid) {
+	maybeChangeSelection: function(ntiid, fromEvent) {
+		if (this.store.building) {
+			this.store.on({
+				single: true,
+				built: this.maybeChangeSelection.bind(this, ntiid)
+			});
+			return;
+		}
+
+		//prevent asynchronous calls that finish late from messing with us.
+		if (fromEvent && fromEvent !== this.store) {
+			return;
+		}
+
 		var r, sel, C = ContentUtils,
 			store = this.store,
 			lineage = C.getLineage(ntiid),
@@ -147,6 +160,7 @@ Ext.define('NextThought.view.courseware.outline.View', {
 				this.bindStore(store);
 			}
 		}
+
 
 		this.maybeChangeSelection(ntiid);
 	}

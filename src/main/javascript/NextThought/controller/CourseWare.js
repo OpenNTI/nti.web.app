@@ -26,8 +26,7 @@ Ext.define('NextThought.controller.CourseWare', {
 	stores: [
 		'courseware.AdministeredCourses',
 		'courseware.AvailableCourses',
-		'courseware.EnrolledCourses',
-		'courseware.Navigation'
+		'courseware.EnrolledCourses'
 	],
 
 

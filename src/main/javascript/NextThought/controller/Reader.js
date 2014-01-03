@@ -17,7 +17,6 @@ Ext.define('NextThought.controller.Reader', {
 
 
 	stores: [
-		'courseware.Navigation'
 	],
 
 

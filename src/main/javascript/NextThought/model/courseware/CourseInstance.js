@@ -1,6 +1,11 @@
 Ext.define('NextThought.model.courseware.CourseInstance', {
 	extend: 'NextThought.model.Base',
 
+	requires: [
+		'NextThought.store.courseware.Navigation',
+		'NextThought.store.courseware.ToCBasedOutline'
+	],
+
 	fields: [
 		{ name: 'isCourse', type: 'bool', defaultValue: true, persist: false },
 		{ name: 'Discussions', type: 'singleItem', persist: false },
@@ -37,14 +42,15 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 			Cls.load(null, {
 				url: me.getLink('CourseCatalogEntry'),
 				callback: function(rec) {
-						me.__courseCatalogEntry = rec;
-						me.afterEdit(['NTIID']);//let views know the record "changed".
-						if (rec) {
-							p.fulfill(rec);
-						} else {
-							p.reject('No Record, See logs');
-						}
+					me.__courseCatalogEntry = rec;
+					me.afterEdit(['NTIID']);//let views know the record "changed".
+
+					if (rec) {
+						p.fulfill(rec);
+					} else {
+						p.reject('No Record, See logs');
 					}
+				}
 			});
 		}
 
@@ -63,7 +69,10 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 			//This function is wrapping the temporary stop-gap...
 			temp = this.__getLocationInfo();
 			if (temp && temp.toc) {
-				this.navStore = new NextThought.store.courseware.Navigation({data: temp.toc});
+				this.navStore = new NextThought.store.courseware.Navigation({
+					tocNodes: new NextThought.store.courseware.ToCBasedOutline({data: temp.toc}),
+					outlinePromise: this.getOutline()
+				});
 			}
 		}
 

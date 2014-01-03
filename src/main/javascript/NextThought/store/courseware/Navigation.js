@@ -1,7 +1,7 @@
 Ext.define('NextThought.store.courseware.Navigation', {
 	extend: 'Ext.data.Store',
 	requires: [
-		'NextThought.model.courseware.navigation.Node'
+		'NextThought.model.courseware.navigation.CourseOutlineNode'
 	],
 	model: 'NextThought.model.courseware.navigation.Node',
 	sorters: [
@@ -12,6 +12,52 @@ Ext.define('NextThought.store.courseware.Navigation', {
 			}
 		}//We are assuming the dates are in order?
 	],
+
+
+	constructor: function() {
+		this.building = true;
+		this.callParent(arguments);
+		this.outlinePromise.done(this.fillFromOutline.bind(this));
+	},
+
+
+	fillFromOutline: function(outline) {
+		var index = 0, r = [], t, fill, d,
+			tocNodes = this.tocNodes;
+
+		function itr(n) {
+			if (n.isNode) {
+				t = tocNodes.getById(n.getId());
+				fill = {};
+
+				if (t) {
+					Ext.apply(fill, {
+						depth: d,
+						label: t.get('label'),
+						tocOutlineNode: t
+					});
+				}
+
+				n.set(Ext.apply({ position: index++ }, fill));
+				r.push(n);
+			}
+			(n.get('Items') || []).forEach(itr);
+		}
+
+		//we agreed to just count the depth of the first branch. :}
+		function getDepth(n) {
+			var i = ((n && n.get('Items')) || [])[0];
+			return i ? (getDepth(i) + 1) : 0;
+		}
+
+		d = this.depth = getDepth(outline);
+
+		itr(outline);
+		this.add(r);
+
+		this.building = false;
+		this.fireEvent('built', this);
+	},
 
 
 	/**
