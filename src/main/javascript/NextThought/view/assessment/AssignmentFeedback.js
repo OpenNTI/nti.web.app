@@ -28,7 +28,7 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 		{
 			xtype: 'dataview',
 			ui: 'feedback-box',
-			itemSelector: 'feedback-item',
+			itemSelector: '.feedback-item',
 			tpl: Ext.DomHelper.markup([
 				{tag: 'tpl', 'for': '.', cn: {
 					cls: 'feedback-item', cn: [
@@ -150,6 +150,8 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 		this.feedbackList.bindStore(this.store);
 		this.store.load();
 
+		this.mon(this.feedbackList, 'itemclick', 'maybeShowProfile');
+
 		header.messageEl.update(Ext.String.format(s, (isMe(history.get('Creator')) ? 'instructor' : 'student')));
 
 		this.show();
@@ -184,6 +186,13 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 		UserRepository.getUser(pluck(pluck(records, 'data'), 'Creator'))
 				.done(fill);
 
-	}
+	},
 
+
+	maybeShowProfile: function(s, record, item, index, e) {
+		var c = record.get('Creator');
+		if ((e.getTarget('.avatar') || e.getTarget('.name')) && c && c.getProfileUrl) {
+			this.fireEvent('show-profile', c);
+		}
+	}
 });
