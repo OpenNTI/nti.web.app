@@ -79,12 +79,19 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 		this.updateLayout();
 	},
 
+
 	afterRender: function() {
 		this.callParent(arguments);
-
 
 		this.setHistory(this.assignmentHistory);
 
 		this.fireEvent('has-been-submitted', this);
+	},
+
+
+	goTo: function(index) {
+		var rec = this.store.getAt(index),
+			v = this.parentView;
+		Ext.defer(v.goToAssignment, 1, v, [rec]);
 	}
 });

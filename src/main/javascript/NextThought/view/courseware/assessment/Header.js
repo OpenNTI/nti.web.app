@@ -126,6 +126,6 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 
 
 	goTo: function(index) {
-		this.fireEvent('goto', index)
+		this.fireEvent('goto', index);
 	}
 });
