@@ -147,6 +147,10 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 
 		this.mon(this.store, 'load', 'resolveUsers');
 
+		if (this.history.fields.get('feedback')) {
+			this.mon(this.store, 'load', 'updateFeedback');
+		}
+
 		this.feedbackList.bindStore(this.store);
 		this.store.load();
 
@@ -162,6 +166,11 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 		this.editor.activate();
 		Ext.defer(this.editor.focus, 350, this.editor);
 		this.updateLayout();
+	},
+
+
+	updateFeedback: function(store){
+		this.history.set('feedback', store.getCount());
 	},
 
 

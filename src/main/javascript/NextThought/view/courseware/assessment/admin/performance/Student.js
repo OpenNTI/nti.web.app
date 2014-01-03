@@ -114,8 +114,14 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 				{name: 'due', type: 'date'},
 				{name: 'completed', type: 'date'},
 				{name: 'Submission', type: 'auto'},
-				{name: 'Grade', type: 'auto'},//object
-				{name: 'grade', type: 'auto'},//value
+				{name: 'Grade', type: 'singleItem'},//object
+				{name: 'grade', type: 'Synthetic', fn: function(r){
+					var grade = r.get('Grade');
+
+					grade = grade && grade.get('value');
+					grade = grade && grade.split(' ');
+					return grade && parseInt(grade[0], 10);
+				}},//value
 				{name: 'pendingAssessment', type: 'auto'},
 				{name: 'Feedback', type: 'auto'},
 				{name: 'feedback', type: 'auto'}
@@ -130,7 +136,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 
 
 	setAssignmentsData: function(data, history, outline, instance, gradeBook) {
-		var ntiid, raw = [], store = this.store, user = this.student.getId();
+		var me = this, ntiid, raw = [], store = this.store, user = this.student.getId();
 
 		if (!data) {
 			console.error('No data??');
@@ -162,6 +168,14 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 				grade: grade && (grade.get('value') || '').split(' ')[0],
 				average: grade && grade.get('average')
 			});
+
+			if (grade) {
+				me.on('destroy', 'destroy', me.mon(grade, {
+					destroyable: true,
+					scope: me.down('dataview'),
+					'value-changed' : 'refresh'
+				}));
+			}
 
 			Service.request(o.getLink('GradeSubmittedAssignmentHistory')).done(function(json) {
 				var r = store.getById(id), s, f;

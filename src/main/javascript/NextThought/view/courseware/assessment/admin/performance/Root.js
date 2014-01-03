@@ -448,7 +448,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	changeLetterGrade: function(item){
 		if(!this.activeGradeRecord){ return; }
 
-		this.activeGradeRecord.set('letter', item.text);
 		this.changeGrade(this.activeGradeRecord, this.activeGradeRecord.get('grade'), item.text);
 	},
 
@@ -458,6 +457,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		var value = number + ' ' + letter,
 			url = this.gradeBook.get('href');
+
+		rec.set({
+			'grade': number,
+			'letter': letter
+		});
 
 		url += '/no_submit/Final Grade/'+rec.getId();
 
