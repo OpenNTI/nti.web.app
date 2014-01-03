@@ -13,7 +13,7 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 				{ tag: 'span', cls: 'late', html: '{late}'}
 			]}
 		]},
-		{ cls: 'grade-container', cn:[
+		{ cls: 'grade-container', cn: [
 			{ cls: 'title', html: 'assignment grade' },
 			{ cls: 'grade'}
 		]}
@@ -24,11 +24,11 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 		'completedEl': '.quiz-container .turned-in .date',
 		'lateEl': '.quiz-container .turned-in .late',
 		'gradeContainerEl': '.grade-container',
-		'gradeEl': '.grade-container .grade',
+		'gradeEl': '.grade-container .grade'
 	},
 
 
-	beforeRender: function(){
+	beforeRender: function() {
 		this.callParent(arguments);
 
 		if (this.assignmentHistory) {
@@ -39,9 +39,8 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 	},
 
 
-	setHistory: function(history){
-		var rd = {},
-			grade = history && history.get('Grade'),
+	setHistory: function(history) {
+		var grade = history && history.get('Grade'),
 			due = this.assignmentHistory && this.assignmentHistory.get('due'),
 			submission = history && history.get('Submission'),
 			completed = submission && submission.get('CreatedTime'),
@@ -55,22 +54,22 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 
 		this.addCls('submitted');
 
-		if(!this.rendered){ return; }
+		if (!this.rendered) { return; }
 
 		if (completed > due) {
 			overdue = new Duration((completed - due) / 1000);
-			this.lateEl.update(overdue.age().replace('ago','late').trim());
+			this.lateEl.update(overdue.age().replace('ago', 'late').trim());
 			this.removeCls('ontime');
 		} else {
 			this.lateEl.hide();
 			this.addCls('ontime');
 		}
 
-		this.completedEl.update('completed ' + Ext.Date.format(completed,'m/d'));
+		this.completedEl.update('completed ' + Ext.Date.format(completed, 'm/d'));
 
 		grade = grade && grade.get('value');
 
-		if(grade){
+		if (grade) {
 			this.gradeEl.update(grade);
 			this.gradeContainerEl.show();
 		} else {
@@ -80,7 +79,7 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 		this.updateLayout();
 	},
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
 
 
