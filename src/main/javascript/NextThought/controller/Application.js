@@ -63,7 +63,7 @@ Ext.define('NextThought.controller.Application', {
 			CourseWareUtils.onceLoaded())
 				.done(this.restore.bind(this))
 				.fail(function(reason) {
-					console.error(reason);
+					console.error('Failed loading Library or Courses:', reason);
 				});
 
 		Library.load();
