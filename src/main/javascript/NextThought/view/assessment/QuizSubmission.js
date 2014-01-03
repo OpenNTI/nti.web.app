@@ -197,14 +197,22 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 
 	maybeDoReset: function(keepAnswers) {
 		var q = this.questionSet;
-		if (q.fireEvent('beforereset')) {
-			q.fireEvent('reset', keepAnswers);
-			console.log('fired reset');
-			return true;
-		}
+		if (this.resetting) {return;} //some how we're getting called repeatedly...lets not fire an infinte loop of events.
+		try {
+			this.resetting = true;
 
-		console.log('reset aborted');
-		return false;
+			if (q.fireEvent('beforereset')) {
+				q.fireEvent('reset', keepAnswers);
+				console.log('fired reset');
+				return true;
+			}
+
+			console.log('reset aborted');
+			return false;
+		}
+		finally {
+			delete this.resetting;
+		}
 	},
 
 
