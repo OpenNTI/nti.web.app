@@ -169,7 +169,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 
 
 	openEmail: function(){
-		var email = this.student.get('email') || 'andrew.ligon@nextthought.com';
+		var email = this.student.get('email');
 
 		if(email){
 			Globals.sendEmailTo(email);
