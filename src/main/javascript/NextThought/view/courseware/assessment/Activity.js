@@ -51,7 +51,8 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 			{name: 'containerId', type: 'string'},
 			{name: 'label', type: 'string'},
 			{name: 'target', type: 'string'},
-			{name: 'date', type: 'date'}
+			{name: 'date', type: 'date'},
+			{name: 'item', type: 'auto'}
 		],
 		sorters: [
 			{property: 'date', direction: 'DESC'}
@@ -68,8 +69,12 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 		this.callParent(arguments);
 		this.tpl.ownerCmp = this;
 		this.setTitle(this.title);
+		this.enableBubble(['goto-assignment']);
 		this.mon(this.store, 'datachanged', 'maybeNotify');
-		this.on('deactivate', 'clearBadge');
+		this.on({
+			deactivate: 'clearBadge',
+			itemclick: 'goToAssignment'
+		});
 	},
 
 
@@ -211,5 +216,10 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 
 	getLastRead: function() {
 		return this._lastRead || new Date(0);
+	},
+
+
+	goToAssignment: function(s, record) {
+		this.fireEvent('goto-assignment', record.get('item'));
 	}
 });

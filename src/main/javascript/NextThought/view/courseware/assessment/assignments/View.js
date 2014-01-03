@@ -6,6 +6,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 		'NextThought.view.courseware.assessment.assignments.Grouping',
 		'NextThought.view.courseware.assessment.assignments.List'
 	],
+	handlesAssignment: true,
 	layout: 'auto',
 	cls: 'course-assessment-assignments',
 	items: [
@@ -150,7 +151,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 	},
 
 
-	onItemClicked: Ext.emptyFn,
+	onItemClicked: function(s, record) {
+		this.goToAssignment(record);
+	},
 
 
 	getFields: function() {
@@ -173,6 +176,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 	initComponent: function() {
 		this.subviewBackingStores = [];
 		this.callParent(arguments);
+		this.enableBubble(['show-assignment', 'update-assignment-view']);
 
 		this.on('filters-changed', 'refresh');
 		this.on('search-changed', 'filterSearchValue');
@@ -312,6 +316,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 		});
 
 		this.refresh();
+		this.updateViewerReferences();
 	},
 
 
@@ -326,5 +331,33 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 	newAssignmentList: function(grouper) {
 		return { xtype: 'course-assessment-assignment-list', store: grouper.store };
+	},
+
+
+	updateViewerReferences: function() {
+		this.fireEvent('update-assignment-view', this, this.store);
+	},
+
+
+	goToAssignment: function(record) {
+		var path = [
+			'Assignments',
+			record.get('name')
+		];
+
+		this.fireEvent('show-assignment', this, record.get('item'), record, $AppConfig.userObject, path, this.store, this.store.indexOf(record) + 1);
+	},
+
+
+	showAssignment: function(assignemnt, user) {
+		var id = assignemnt && ((assignemnt.getId && assignemnt.getId()) || assignemnt),
+			x = this.store.getById(id);
+
+		if (!x) {
+			console.warn('Assignment not found:', id);
+			return;
+		}
+
+		this.goToAssignment(x);
 	}
 });

@@ -199,17 +199,26 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 	},
 
 
-	changeView: function(view, action, data) {
-
-		var //stateData = Ext.clone(this.getStateData()),
-			c = this.down(view);
-
+	activateView: function(view) {
+		var c = this.down(view);
 		if (!c) {
 			console.error('No view selected from query: ' + view);
 			return;
 		}
-
 		this.body.getLayout().setActiveItem(c);
+		return c;
+	},
+
+
+	changeView: function(view, action, data) {
+
+		var //stateData = Ext.clone(this.getStateData()),
+			c = this.activateView(view);
+
+		if (!c) {
+			return;
+		}
+
 		if (c.performAction) {
 			c.performAction(action, data);
 		} else if (action !== 'view') {
@@ -219,5 +228,17 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 		//stateData.activeTab = c.getStateData();
 		//console.debug('State Data: ', stateData, url);
 		//history.pushState({profile: Ext.clone(stateData)},this.ownerCt.title, url);
+	},
+
+
+	getViewFor: function(assignment, user) {
+		var view;
+		this.body.items.each(function(v) {
+			if (v.handlesAssignment) {
+				view = v;
+			}
+		});
+
+		return view;
 	}
 });

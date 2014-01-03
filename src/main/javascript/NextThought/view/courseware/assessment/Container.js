@@ -20,9 +20,15 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 	initComponent: function() {
 		this.callParent(arguments);
 		this.on({
+			'goto-assignment': 'gotoAssignment',
 			'show-assignment': 'showAssignment',
 			'update-assignment-view': 'maybeUpdateAssignmentView'
 		});
+	},
+
+
+	getRoot: function() {
+		return this.items.first();
 	},
 
 
@@ -32,11 +38,11 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 	},
 
 
-	maybeUpdateAssignmentView: function(view, store){
+	maybeUpdateAssignmentView: function(view, store) {
 		var reader = this.down('reader');
 
 		if (!reader || !reader.parentView.isDestroyed) { return; }
-		
+
 		if (reader.parentView.xtype === view.xtype) {
 			reader.parentView = view;
 			reader.store = store;
@@ -45,11 +51,24 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 	},
 
 
+	gotoAssignment: function(assignment, user) {
+		var r = this.getRoot(),
+			v = r.getViewFor(assignment, user);
+		v = r.activateView(v);
+		if (!v) {
+			console.warn('No view found');
+			return;
+		}
+
+		v.showAssignment(assignment, user);
+	},
+
+
 	showAssignment: function(view, assignement, assignemntHistory, student, path, store, page) {
 		//both course-asessment-reader and the admin-reader extend the reader so this takes care of both
 		Ext.destroy(this.down('reader'));
 		this.mon(this.add({
-			xtype: (isMe(student))?  'course-assessment-reader' : 'course-assessment-admin-reader',
+			xtype: isMe(student) ? 'course-assessment-reader' : 'course-assessment-admin-reader',
 			parentView: view,
 			assignmentHistory: assignemntHistory,
 			student: student,

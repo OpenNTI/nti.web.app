@@ -101,7 +101,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.enableBubble(['show-assignment', 'update-assignment-view']);
+		this.enableBubble(['goto-assignment']);
 
 		this.chartGrade = this.down('grade-chart');
 		this.chartPerformance = this.down('grade-performance-chart');
@@ -134,7 +134,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 		this.grid.bindStore(store);
 		this.chartPerformance.setStore(store);
 
-		this.mon(this.grid,'itemClick', 'goToAssignment');
+		this.mon(this.grid, 'itemClick', 'goToAssignment');
 	},
 
 
@@ -153,18 +153,13 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 	},
 
 
-	updateViewerReferences: function(){
-		this.fireEvent('update-assignment-view', this, this.store);
-	},
-
-
-	goToAssignment: function(selModel, record){
+	goToAssignment: function(selModel, record) {
 		var path = [
 				this.pathRoot,
 				record.get('name')
 		];
 
-		this.fireEvent('show-assignment', this, record.get('item'), record, $AppConfig.userObject, path, this.store, this.store.indexOf(record) + 1);
+		this.fireEvent('goto-assignment', record.get('item'));
 	},
 
 
@@ -217,7 +212,5 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 		}
 
 		this.store.loadRawData(raw);
-
-		this.updateViewerReferences();
 	}
 });
