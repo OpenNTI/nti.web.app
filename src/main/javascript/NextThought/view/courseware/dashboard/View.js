@@ -22,15 +22,21 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 
 
 	courseChanged: function(courseInstance) {
-		if (!courseInstance) {
+		var courseId = courseInstance && courseInstance.getId(),
+			l, toc, course, courseNavStore,
+			date = this.self.dateOverride || new Date();//now
+
+		if (this.course !== courseId) {
 			this.tileContainer.removeAll(true);
+		}
+
+		if (!courseInstance) {
 			return;
 		}
 
-		var l = courseInstance.__getLocationInfo(),
-			toc, course,
-			courseNavStore,
-			date = this.self.dateOverride || new Date();//now
+		this.course = courseId;
+
+		l = courseInstance.__getLocationInfo();
 
 		if (l && l !== ContentUtils.NO_LOCATION) {
 			toc = l.toc.querySelector('toc');
