@@ -40,7 +40,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 						   var d = rec.get('due'),
 								   s = (v && v.get && v.get('Last Modified')) || v;
 						   if (!s) {
-							   return Ext.DomHelper.markup({cls: 'incomplete', html: 'Due ' + Ext.Date.format(d, 'd/m')});
+							   return Ext.DomHelper.markup({cls: 'incomplete', html: 'Due ' + Ext.Date.format(d, 'm/d')});
 						   }
 						   if (d > s) {
 							   return Ext.DomHelper.markup({cls: 'ontime', html: 'On Time'});
@@ -52,8 +52,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 						   });
 					   } },
 					   { text: 'Score', dataIndex: 'grade', width: 70 },
-					   { text: 'Feedback', dataIndex: 'Feedback', width: 140, renderer: function(value) {
-						   return value ? (value.get('Items').length + ' Comments') : '';
+					   { text: 'Feedback', dataIndex: 'feedback', width: 140, renderer: function(value) {
+						   return value ? (value + ' Comments') : '';
 					   } }
 				   ].map(function(o) {
 						return Ext.applyIf(o, {
@@ -117,7 +117,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 				{name: 'Grade', type: 'auto'},//object
 				{name: 'grade', type: 'auto'},//value
 				{name: 'pendingAssessment', type: 'auto'},
-				{name: 'Feedback', type: 'auto'}
+				{name: 'Feedback', type: 'auto'},
+				{name: 'feedback', type: 'auto'}
 			],
 			sorters: [
 				{property: 'due', direction: 'ASC'}
@@ -163,7 +164,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 			});
 
 			Service.request(o.getLink('GradeSubmittedAssignmentHistory')).done(function(json) {
-				var r = store.getById(id), s;
+				var r = store.getById(id), s, f;
 				if (r) {
 					json = Ext.decode(json, true) || {};
 					json = json.Items || {};
@@ -171,10 +172,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 					if (json) {
 						json = ParseUtils.parseItems(json)[0];
 						s = json.get('Submission');
+						f = json.get('Feedback');
 						r.set({
 							pendingAssessment: json.get('pendingAssessment'),
 							Submission: s,
-							Feedback: json.get('Feedback'),
+							Feedback: f,
+							feedback: f && f.get('Items').length,
 							completed: s && s.get('CreatedTime')
 						});
 					}

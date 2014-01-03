@@ -92,8 +92,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 							   var u = v && (typeof v === 'string' ? {displayName: 'Resolving...'} : v.getData());
 							   return this.studentTpl.apply(u);
 						   } },
-						   { text: 'Completed', dataIndex: 'Submission', width: 150, renderer: function(v) {
-							   var d = this.dueDate, s = v && v.get('Last Modified');
+						   { text: 'Completed', dataIndex: 'submission', width: 150, renderer: function(v) {
+							   var d = this.dueDate,
+								   s = (v && v.get && v.get('Last Modified')) || v;
 							   if (!s) {
 								   return Ext.DomHelper.markup({cls: 'incomplete', html: 'Incomplete'});
 							   }
@@ -106,12 +107,10 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 								   late: d.ago().replace('ago', '').trim()
 							   });
 						   } },
-						   { text: 'Score', dataIndex: 'Grade', width: 90, renderer: function(v) {
-							   v = v && v.get('value');
+						   { text: 'Score', dataIndex: 'grade', width: 90, renderer: function(v) {
 							   return v && v.split(' ')[0];
 						   } },
-						   { text: 'Feedback', dataIndex: 'Feedback', width: 140, renderer: function(value) {
-							   var items = ((value && value.get('Items')) || []).length;
+						   { text: 'Feedback', dataIndex: 'feedback', width: 140, renderer: function(items) {
 							   return items ? (items + ' Comments') : '';
 						   } }
 					   ].map(function(o) {
@@ -226,7 +225,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 					}
 
 					store.sort();
-				}).fail(function(reason){
+				}).fail(function(reason) {
 					console.error(reason);
 				});
 	},
