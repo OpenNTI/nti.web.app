@@ -38,12 +38,20 @@ Ext.define('NextThought.view.profiles.Panel', {
 			Ext.Error.raise('No user provided');
 		}
 
-		this.applyConfigs('navigation', {user: u});
-		this.applyConfigs('body', {
+		me.applyConfigs('navigation', {user: u});
+		me.applyConfigs('body', {
 			items: [
 				{ xtype: 'profile-activity', user: u, username: u.getId(),
+					flatPageStore: NextThought.store.FlatPage.create(),
+					xhooks: {
+						initComponent: function() {
+							//"this" being the profile-activity component, not "me" for all three of these "this"s
+							this.callParent(arguments);
+							this.fireEvent('add-flatpage-store-context', this);
+						}
+					},
 					listeners: {
-						afterrender: { fn: 'attachScrollRelay', scope: this, single: true }
+						afterrender: { fn: 'attachScrollRelay', scope: me, single: true }
 					}
 				},
 				{ xtype: 'profile-about', user: u },
@@ -51,7 +59,7 @@ Ext.define('NextThought.view.profiles.Panel', {
 			]
 		});
 
-		this.callParent(arguments);
+		me.callParent(arguments);
 
 		function monitor(panel) {
 			panel.relayEvents(me.navigation, ['name-clicked', 'enable-edit', 'disable-edit']);
@@ -62,12 +70,12 @@ Ext.define('NextThought.view.profiles.Panel', {
 			});
 		}
 
-		this.forEachView(monitor, this);
-		this.mon(this.navigation, {
+		me.forEachView(monitor, me);
+		me.mon(me.navigation, {
 			'show-profile-view': 'changeView'
 		});
 
-		this.on('beforedeactivate', 'onBeforeDeactivate');
+		me.on('beforedeactivate', 'onBeforeDeactivate');
 	},
 
 

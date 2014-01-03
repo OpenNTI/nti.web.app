@@ -27,27 +27,31 @@ Ext.define('NextThought.view.profiles.parts.Activity', {
 
 
 	initComponent: function() {
-		this.fireEvent('uses-page-stores', this);
 		this.callParent(arguments);
 
+		this.on({
+			el: {scroll: 'onScroll'}
+		});
+
+		if (Ext.is.iOS) {
+			this.addCls('scrollable');
+		}
+	},
+
+
+	onAdded: function() {
+		this.callParent(arguments);
+		this.fireEvent('uses-page-stores', this);
 		if (this.user) {
 			this.setUser(this.user);
 		}
 		else {
 			UserRepository.getUser(this.username, this.setUser, this, true);
 		}
-
-		this.on({
-			el: {scroll: 'onScroll'}
-		});
-
-        if(Ext.is.iOS){
-            this.addCls('scrollable');
-        }
 	},
 
 
-	performAction: function(action,param) {
+	performAction: function(action, param) {
 
     //		if(action!=='filter'){
 			//clear filter.
@@ -65,7 +69,7 @@ Ext.define('NextThought.view.profiles.parts.Activity', {
 	},
 
 
-	restore: function(data,finishCallback) {
+	restore: function(data, finishCallback) {
 
 		Ext.callback(finishCallback, null, [this]);
 	},
