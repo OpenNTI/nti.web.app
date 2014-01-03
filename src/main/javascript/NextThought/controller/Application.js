@@ -63,7 +63,21 @@ Ext.define('NextThought.controller.Application', {
 			CourseWareUtils.onceLoaded())
 				.done(this.restore.bind(this))
 				.fail(function(reason) {
-					console.error('Failed loading Library or Courses:', reason);
+					//check library... (it will only have a value if it fails)
+					if (reason[0]) {
+						console.error('Library failed to load:', reason[0]);
+					}
+
+					//check courses
+					reason = reason[1];
+
+					if (!(reason[0] instanceof Ext.data.Store)) {
+						console.error('Enrolled Courses failed to load:', reason[0]);
+					}
+
+					if (!(reason[1] instanceof Ext.data.Store)) {
+						console.error('Administered Courses failed to load:', reason[1]);
+					}
 				});
 
 		Library.load();
