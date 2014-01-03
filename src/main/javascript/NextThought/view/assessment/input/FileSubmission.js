@@ -77,7 +77,7 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 		}
 
 		if (q && q.tallyParts() === 1) {
-			q.fireEvent('hide-quiz-submission');
+			Ext.defer(q.fireEvent, 1, q, ['hide-quiz-submission']);
 			if (assignment) {
 				this.renderData.due = assignment.getDueDate();
 				this.renderData.label = assignment.get('title');
