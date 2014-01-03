@@ -83,6 +83,8 @@ Ext.define('NextThought.view.assessment.Scoreboard', {
 
 
 	setPriorResults: function(assessedQuestionSet) {
+		if (!this.shouldShow) {return;}
+
 		//Sort by date, so that the latest is as 0, and the oldest is at N:
 		var sortedSets = Ext.Array.sort(assessedQuestionSet, function(a, b) {
 			var aDate = a.get('Last Modified').getTime(),
