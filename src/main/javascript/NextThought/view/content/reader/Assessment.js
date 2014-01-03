@@ -39,6 +39,7 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 
 	makeAssessmentQuiz: function(set) {
 		var me = this,
+			isInstructor = this.isInstructorProspective,
 			h = me.injectedAssignmentHistory,
 			o = me.reader.getComponentOverlay(),
 			c = o.componentOverlayEl,
@@ -56,12 +57,16 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 				swallow(e);	
 			}
 
-			return temp || NextThought.model.assessment.AssessedQuestionSet.from(set);
+			if(isInstructor){
+				temp = temp || NextThought.model.assessment.AssessedQuestionSet.from(set);
+			}
+
+			return temp;
 		}
 
 		if(h){
 			pendingAssessment = getPendingAssessment(h);
-			set.noMark = Boolean(pendingAssessment.noMark);
+			set.noMark = Boolean(pendingAssessment && pendingAssessment.noMark);
 		}
 
 		o.registerOverlayedPanel(guid + 'scoreboard', Ext.widget('assessment-scoreboard', {
@@ -119,6 +124,13 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 
 
 	setAssignmentFromInstructorProspective: function(assignment, history) {
+		this.isInstructorProspective = true;
+		this.injectedAssignment = assignment;
+		this.injectedAssignmentHistory = history;
+	},
+
+
+	setAssignmentFromStudentProspective: function(assignment, history) {
 		this.injectedAssignment = assignment;
 		this.injectedAssignmentHistory = history;
 	},

@@ -7,7 +7,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	],
 
 	ui: 'course-assessment',
-	cls: 'course-assessment-admin assignment-item',
+	cls: 'course-assessment-header assignment-item',
 
 	layout: 'fit',
 	componentLayout: 'natural',

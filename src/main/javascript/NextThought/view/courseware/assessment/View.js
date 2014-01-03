@@ -52,17 +52,24 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 	courseChanged: function(instance, refresh) {
 		var me = this;
+
+		function isSync() {
+			return (me.instanceId === (instance && instance.getId()));
+		}
+
+		function getLink(rel, e) { return e.getLink(rel) || instance.getLink(rel); }
+
+		if(!isSync()){
+			me.clearViews();
+		}
+
 		me.instanceId = instance && instance.getId();
 		me.instance = instance;
 
 		if (!instance) {
-			me.clearViews();
 			return;
-		}
+		}	
 
-		function isSync() {
-			return (me.instanceId === instance.getId());
-		}
 
 		Promise.pool(
 			instance.getOutline(),
@@ -72,40 +79,26 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 			var o = responses[0],
 				e = responses[1],
 				r = responses[2],
-				grades;
+				grades = e && e.isAdministrative && Service.request(getLink('GradeBook', e));
 
 			if (!isSync()) { return; }
 
-			if (!e.isAdministrative) {
-				me.body.add([
-					{ xtype: 'course-assessment-activity', title: 'Activity & Notifications' },
-					{ xtype: 'course-assessment-assignments', title: 'Assignments' },
-					{ xtype: 'course-assessment-performance', title: 'Grades & Performance' }
-				]);
-			} else {
-				//filter the active user out of the roster since we are administering this thing.
-				r = r.filter(function(o) { return o && !isMe(o.Username); });
-
-				grades = Service.request(getLink('GradeBook'));
-
-				me.body.add([
-					{ xtype: 'course-assessment-admin-activity', title: 'Activity & Notifications',
-						activityFeedURL: getLink('CourseActivity') },
-					{ xtype: 'course-assessment-admin-assignments', title: 'Assignments', roster: r },
-					{ xtype: 'course-assessment-admin-performance', title: 'Grades & Performance', roster: r }
-				]);
+			if(me.shouldPushViews()){
+				if(e && e.isAdministrative){
+					me.addAdminViews(r, function(rel){ return getLink(rel, e); });
+				} else {
+					me.addStudentViews();
+				}
 			}
-
-			function getLink(rel) { return e.getLink(rel) || instance.getLink(rel); }
-
+			
 			Promise.pool(
-				Service.request(getLink('AssignmentHistory')),
-				Service.request(getLink('AssignmentsByOutlineNode')),
+				instance.getAssignmentHistory(),
+				Service.request(getLink('AssignmentsByOutlineNode', e)),
 				grades
 			)
 					.done(function(txts) {//responseTexts are in the order requested
 						if (!isSync()) { return; }
-						var history = ParseUtils.parseItems(txts[0])[0],
+						var history = txts[0],
 							assignments = Ext.decode(txts[1], true),
 							gradeBook = txts[2] && ParseUtils.parseItems(txts[2])[0];
 
@@ -122,6 +115,33 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 					});
 		});
 
+	},
+
+
+	shouldPushViews: function(){
+		return !this.body.items.getCount();
+	},
+
+
+	addAdminViews: function(roster, getLink){
+		//filter the active user out of the roster since we are administering this thing.
+		var r = roster.filter(function(o) { return o && !isMe(o.Username); });
+
+		this.body.add([
+			{ xtype: 'course-assessment-admin-activity', title: 'Activity & Notifications',
+				activityFeedURL: getLink('CourseActivity') },
+			{ xtype: 'course-assessment-admin-assignments', title: 'Assignments', roster: r },
+			{ xtype: 'course-assessment-admin-performance', title: 'Grades & Performance', roster: r }
+		]);
+	},
+
+	
+	addStudentViews: function(){
+		this.body.add([
+			{ xtype: 'course-assessment-activity', title: 'Activity & Notifications' },
+			{ xtype: 'course-assessment-assignments', title: 'Assignments' },
+			{ xtype: 'course-assessment-performance', title: 'Grades & Performance' }
+		]);
 	},
 
 

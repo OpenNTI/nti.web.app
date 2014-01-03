@@ -3,7 +3,8 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 	alias: 'widget.course-assessment-container',
 	requires: [
 		'NextThought.view.courseware.assessment.View',
-		'NextThought.view.courseware.assessment.admin.reader.Panel'
+		'NextThought.view.courseware.assessment.admin.reader.Panel',
+		'NextThought.view.courseware.assessment.reader.Panel'
 	],
 
 	items: [{
@@ -18,7 +19,10 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 
 	initComponent: function() {
 		this.callParent(arguments);
-		this.on('show-assignment', 'showAssignment');
+		this.on({
+			'show-assignment': 'showAssignment',
+			'update-assignment-view': 'maybeUpdateAssignmentView'
+		});
 	},
 
 
@@ -28,10 +32,24 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 	},
 
 
+	maybeUpdateAssignmentView: function(view, store){
+		var reader = this.down('reader');
+
+		if (!reader || !reader.parentView.isDestroyed) { return; }
+		
+		if (reader.parentView.xtype === view.xtype) {
+			reader.parentView = view;
+			reader.store = store;
+			reader.down('course-assessment-header').store = store;
+		}
+	},
+
+
 	showAssignment: function(view, assignement, assignemntHistory, student, path, store, page) {
-		Ext.destroy(this.down('course-assessment-admin-reader'));
+		//both course-asessment-reader and the admin-reader extend the reader so this takes care of both
+		Ext.destroy(this.down('reader'));
 		this.mon(this.add({
-			xtype: 'course-assessment-admin-reader',
+			xtype: (isMe(student))?  'course-assessment-reader' : 'course-assessment-admin-reader',
 			parentView: view,
 			assignmentHistory: assignemntHistory,
 			student: student,

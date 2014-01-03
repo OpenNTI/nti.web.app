@@ -82,36 +82,23 @@ Ext.define('NextThought.controller.Assessment', {
 			q = cmp.questionSet,
 			a = q && q.associatedAssignment,
 			o, s;
+			
+		a = (a && a.getId && a.getId()) || cmp.assignmentId;
 
 		function add() {
-			me.submissionsWidgets.add(cmp);
-			cmp.on('destroy', function() {
-				me.submissionsWidgets.remove(cmp);
-			});
-		}
-
-		if (!a) {
-			if (cmp.questionSetId) {
-				add();
-
-				if (h) {
-					Ext.each(h.get('Items'), function(item) {
-						var submission = item.get('Submission'),
-							questionSet = submission && submission.get('parts')[0];
-
-						if (questionSet && questionSet.get('questionSetId') === cmp.questionSetId) {
-							cmp.markAsTurnedInAssignment();
-						}
-					});
-				}
-
+			if(!me.submissionsWidgets.contains(cmp)){
+				me.submissionsWidgets.add(cmp);
+				cmp.on('destroy', function() {
+					me.submissionsWidgets.remove(cmp);
+				});
 			}
-			return;
 		}
 
+		if(!a){ return; }
 
 		add();
-		o = h && h.getItem(a.getId());
+		
+		o = h && h.getItem(a);
 		if (o) {
 			if (cmp.setGradingResult) {
 				s = o.get('pendingAssessment').get('parts')[0];

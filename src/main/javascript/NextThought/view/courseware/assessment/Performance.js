@@ -95,9 +95,13 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 		]}
 	],
 
+	pathRoot: 'Grades & Performance',
+
 
 	initComponent: function() {
 		this.callParent(arguments);
+
+		this.enableBubble(['show-assignment', 'update-assignment-view']);
 
 		this.chartGrade = this.down('grade-chart');
 		this.chartPerformance = this.down('grade-performance-chart');
@@ -116,7 +120,11 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 				{name: 'Grade', type: 'auto'},//object
 				{name: 'grade', type: 'auto'},//value
 				{name: 'AverageGrade', type: 'int', mapping: 'average'},//ignored for now
-				{name: 'feedback', type: 'int'}
+				{name: 'feedback', type: 'int'},
+				{name: 'item', type: 'auto'},
+				{name: 'Submission', type: 'auto'},
+				{name: 'pendingAssessment', type: 'auto'},
+				{name: 'Feedback', type: 'auto'}
 		    ],
 			sorters: [
 				{property: 'due', direction: 'DESC'}
@@ -125,6 +133,8 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 
 		this.grid.bindStore(store);
 		this.chartPerformance.setStore(store);
+
+		this.mon(this.grid,'itemClick', 'goToAssignment');
 	},
 
 
@@ -143,6 +153,21 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 	},
 
 
+	updateViewerReferences: function(){
+		this.fireEvent('update-assignment-view', this, this.store);
+	},
+
+
+	goToAssignment: function(selModel, record){
+		var path = [
+				this.pathRoot,
+				record.get('name')
+		];
+
+		this.fireEvent('show-assignment', this, record.get('item'), record, $AppConfig.userObject, path, this.store, this.store.indexOf(record) + 1);
+	},
+
+
 	setAssignmentsData: function(data, history, outline) {
 		var ntiid, raw = [];
 
@@ -158,7 +183,8 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 				h = history.getItem(id),
 				submission = h && h.get('Submission'),
 				feedback = h && h.get('Feedback'),
-				grade = h && h.get('Grade');
+				grade = h && h.get('Grade'),
+				pendingAssessment = h && h.get('pendingAssessment');
 
 			raw.push({
 				ntiid: id,
@@ -171,7 +197,10 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 				Grade: grade,
 				grade: grade && (grade.get('value') || '').split(' ')[0],
 				average: grade && grade.get('average'),
-				feedback: feedback && feedback.get('Items').length
+				Feedback: feedback,
+				feedback: feedback && feedback.get('Items').length,
+				pendingAssessment: pendingAssessment,
+				Submission: submission
 			});
 		}
 
@@ -188,5 +217,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 		}
 
 		this.store.loadRawData(raw);
+
+		this.updateViewerReferences();
 	}
 });
