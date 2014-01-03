@@ -27,6 +27,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 			date = this.self.dateOverride || new Date();//now
 
 		if (this.course !== courseId) {
+			this.hasItems = false;
 			this.tileContainer.removeAll(true);
 		}
 
@@ -111,6 +112,10 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 
 
 			this.setTiles(tiles);
+			if (tiles.length) {
+				this.hasItems = true;
+				this.fireEvent('show-dashboard-tab');
+			}
 		}
 		catch (e) {
 			console.error(e.stack || e.message || e);

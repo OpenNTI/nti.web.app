@@ -92,6 +92,10 @@ Ext.define('NextThought.view.content.View', {
 			'show-assignments-tab': 'updateTabs'
 		});
 
+		this.mon(this.courseDash, {
+			'show-dashboard-tab': 'updateTabs'
+		});
+
 		this.mon(this.courseForum, {
 			scope: this,
 			'set-active-state': 'updateForumState'
@@ -186,6 +190,10 @@ Ext.define('NextThought.view.content.View', {
 			active = this.layout.getActiveItem().id;
 
 		if (this.tabs) {
+
+			if (!this.courseDash.hasItems) {
+				tabs = tabs.filter(function(i) {return i.viewId !== 'course-dashboard';});
+			}
 
 			if (!this.courseAssignments.hasAssignments) {
 				tabs = tabs.filter(function(i) {return i.viewId !== 'course-assessment?';});
