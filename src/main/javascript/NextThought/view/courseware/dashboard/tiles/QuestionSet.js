@@ -15,6 +15,8 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.QuestionSet', {
 				return;
 			}
 
+			containerId = ContentUtils.getLineage(items[0].getAttribute('target-ntiid'))[1];
+
 			function findFirstUncompleted(ntiids, nodes) {
 				var node = nodes.shift();
 				if (Ext.isEmpty(nodes)) {
@@ -47,7 +49,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.QuestionSet', {
 				var rec, nextItemNode, currentItemNode = null,
 					json = Ext.decode(r.responseText, true) || {},
 					totalQuizes = items.length, totalAttempts = 0;
-
+				
 				nextItemNode = findFirstUncompleted(Ext.Array.pluck(json.Items || [], 'questionSetId'), items.slice());
 				if (!s || Ext.isEmpty(json.Items)) {
 					rec = null;
@@ -57,19 +59,41 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.QuestionSet', {
 					totalAttempts = json.Items.length;
 				}
 
-				Ext.callback(finish, null, [me.create({
-					locationInfo: locationInfo,
-					latestAttempt: rec,
-					nextItemNode: nextItemNode,
-					currentItemNode: currentItemNode,
-					totalQuizes: totalQuizes,
-					totalAttempts: totalAttempts,
-					lessonStartDate: courseNodeRecord.get('startDate'),
-					lastModified: courseNodeRecord.get('date')
-				})]);
+				Service.getPageInfo(containerId, function(pageInfo){
+					var items = pageInfo.get('AssessmentItems') || [];
+
+					items = items.filter(function(item){
+						//if we don't have a rec, we don't have a questionSetId. If thats the case
+						//don't show the tile if any of the assessment items are assignments
+						if(rec){
+							return item.isAssignment && item.containsId(rec.get('questionSetId'));
+						}
+						return item.isAssignment;
+					});
+
+					if (items.length > 0) {
+						Ext.callback(finish);
+						return;
+					}
+
+					Ext.callback(finish, null, [me.create({
+						locationInfo: locationInfo,
+						latestAttempt: rec,
+						nextItemNode: nextItemNode,
+						currentItemNode: currentItemNode,
+						totalQuizes: totalQuizes,
+						totalAttempts: totalAttempts,
+						lessonStartDate: courseNodeRecord.get('startDate'),
+						lastModified: courseNodeRecord.get('date')
+					})]);
+				}, function(){
+					Ext.callback(finish);
+				})
+
+				
 			}
 
-			containerId = ContentUtils.getLineage(items[0].getAttribute('target-ntiid'))[1];
+			
 			req = {
 				url: Service.getContainerUrl(containerId, 'UniqueMinMaxSummary'),
 				scope: this,
