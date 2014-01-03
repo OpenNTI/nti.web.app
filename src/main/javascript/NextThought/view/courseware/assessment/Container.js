@@ -54,12 +54,12 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 	gotoAssignment: function(assignment, user) {
 		var r = this.getRoot(),
 			v = r.getViewFor(assignment, user);
-		v = r.activateView(v);
 		if (!v) {
 			console.warn('No view found');
 			return;
 		}
 
+		v = r.activateView(v);
 		v.showAssignment(assignment, user);
 	},
 
