@@ -86,9 +86,10 @@ Ext.define('NextThought.view.content.reader.ComponentOverlay', {
 
 
 	clearOverlayedPanels: function() {
-		var active = this.activeOverlayedPanels;
-		this.activeOverlayedPanels = {};
+		var active = this.activeOverlayedPanels,
+			myReader = this.reader;
 
+		this.activeOverlayedPanels = {};
 		this.tabIndexer.reset(10);
 
 		Ext.Object.each(active, function(k, v) {
@@ -100,7 +101,9 @@ Ext.define('NextThought.view.content.reader.ComponentOverlay', {
 		Ext.each(
 			Ext.ComponentQuery.query('overlayed-panel'),
 			function(o) {
-				o.destroy();
+				if (o.reader === myReader) {
+					o.destroy();
+				}
 			});
 	},
 
