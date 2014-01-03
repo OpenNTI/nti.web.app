@@ -245,17 +245,6 @@ Ext.define('NextThought.view.Main', {
 			}
 		});
 
-		//<editor-fold desc="IE9 message">
-		if (Ext.isIE9m) {
-			setTimeout(function() {
-				Ext.widget('message-bar', {
-					renderTo: Ext.getBody(),
-					messageType: 'ie9',
-					message: 'Internet Explorer 9 will no longer be supported after December 15th, 2013. Please upgrade your browser.'
-				});
-			},1500);//ease in
-		}
-		//</editor-fold>
 
 		Ext.EventManager.onWindowResize(this.onWindowResize, this);
 		this.onWindowResize();

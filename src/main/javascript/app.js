@@ -31,7 +31,7 @@ Ext.application({
 
 		'Ext.grid.Panel',
 		'Ext.grid.column.Date',
-			  
+
 		//Require this early so we have it if we need it
 		'NextThought.view.MessageBar',
 		'NextThought.view.MessageBox'
@@ -80,7 +80,9 @@ Ext.application({
 				['Canvas', 'Range', 'CSS3BoxShadow', 'CSS3BorderRadius'],
 				function(f) {Boolean(!Ext.supports[f] && unsupported.push(f));});
 
-		if (unsupported.length !== 0 || (!Ext.isIE && !(Ext.isGecko && parseFloat(geckoRev[1]) > 4.9) && !Ext.isWebKit)) {
+		if (unsupported.length !== 0 ||
+			(!Ext.isIE && !(Ext.isGecko && parseFloat(geckoRev[1]) > 4.9) && !Ext.isWebKit) ||
+				Ext.isIE9m) {
 			location.replace($AppConfig.server.unsupported);
 		}
 
