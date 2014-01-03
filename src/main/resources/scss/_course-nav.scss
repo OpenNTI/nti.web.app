@@ -45,7 +45,7 @@
 				}
 			}
 
-			&.out-of-view{
+			&:not(.lesson),&.out-of-view{
 				.date{
 					display: none !important;
 				}
