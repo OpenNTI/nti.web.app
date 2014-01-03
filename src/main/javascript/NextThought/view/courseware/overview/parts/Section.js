@@ -35,5 +35,22 @@ Ext.define('NextThought.view.courseware.overview.parts.Section', {
 		if (this.type) {
 			this.addCls(this.type);
 		}
+	},
+
+
+	onAdd: function(item, index){
+		var first = this.items.getCount() === 1;
+
+		this.mon(item,'show','show');
+
+		if(item.isHidden() && first){
+			this.hide();
+			return;
+		}
+
+		if(this.isHidden() && !item.isHidden()){
+			this.show();
+		}
+
 	}
 });

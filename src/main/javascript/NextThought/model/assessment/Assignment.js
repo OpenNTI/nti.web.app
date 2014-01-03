@@ -15,6 +15,16 @@ Ext.define('NextThought.model.assessment.Assignment', {
 	],
 
 
+	containsId: function(id){
+		var items = this.get('parts').filter(function(p){
+			p = p.get('question_set');
+			return p && p.getId() === id;
+		});
+
+		return items.length > 0;
+	},
+
+
 	getDueDate: function() {
 		return this.get('availableEnding') || this.get('availableBeginning');
 	},

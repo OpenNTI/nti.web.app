@@ -18,6 +18,9 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 		align: 'middle'
 	},
 
+
+	hidden: true,
+
 	items: [
 		{ xtype: 'assessment-score' },
 		{ xtype: 'assessment-tally', flex: 1 },
@@ -53,7 +56,9 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 
 		this.callParent([config]);
 
-
+		Service.getPageInfo(ntiid, this.maybeShow.bind(this), function(){
+			console.error('Failed to load page info ', arguments);
+		});
 		req = {
 			url: Service.getContainerUrl(containerId, Globals.USER_GENERATED_DATA),
 			scope: this,
@@ -72,6 +77,20 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 		Ext.Ajax.request(req);
 
 		this.fireEvent('has-been-submitted', this);
+	},
+
+
+	maybeShow: function(pageInfo){
+		var items = pageInfo.get('AssessmentItems') || [],
+			id = this.questionSetId;
+
+		items = items.filter(function(item){
+			return item.isAssignment && item.containsId(id);
+		});
+		
+		if(items.length === 0){
+			this.show();
+		}
 	},
 
 	containerLoaded: function(q, s, r) {
@@ -108,39 +127,6 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 		tally.message.update(this.getQuetionSetContainerTitle());
 		this.down('assessment-score').setValue(Math.floor(100 * correct / this.getTotal()) || 0);
 		this.updateLayout();
-	},
-
-
-	showAsTurnedInAssignment: function(){
-		if(!this.rendered){
-			this.on('afterrender', Ext.bind(this.showAsTurnedInAssignment, this, arguments), this, {single: true});
-			return;
-		}
-
-		var score = this.down('assessment-score'),
-			tally = this.down('assessment-tally'),
-			button = this.down('button');
-
-		if (score) { score.destroy(); }
-
-		if (button) {
-			button.setUI('primary');
-			button.setText('Review');
-		}
-		
-		if (tally) { 
-			tally.setTally(0, this.getTotal(), true);
-			tally.message.update(this.getQuetionSetContainerTitle());
-		}
-	},
-
-
-	markAsTurnedInAssignment: function(){		
-		this.alreadyTurnedIn = true;
-
-		this.addCls('turned-in-assignment');
-
-		this.showAsTurnedInAssignment();
 	},
 
 
