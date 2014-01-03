@@ -2,7 +2,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 	extend: 'NextThought.view.courseware.assessment.admin.Header',
 	alias: 'widget.course-assessment-admin-reader-header',
 
-	cls: 'course-assessment-admin assignment-item reader-header',
+	cls: 'reader-header',
 
 	
 	setUpGradebox: function(){
