@@ -315,11 +315,11 @@ Duration.prototype.value = function() {
 }
 
 Duration.prototype.ago = function() {
-	if (this.seconds == 0) {
+	if (Math.floor(this.seconds) == 0) {
 		return 'just now';
 	}
 	else if (this.seconds < this.Calendar.Seconds.per.Minute) {
-		return this.seconds + ' second' + ((this.seconds > 1) ? 's' : '') + ' ago';
+		return Math.floor(this.seconds) + ' second' + ((Math.floor(this.seconds) > 1) ? 's' : '') + ' ago';
 	}
 	else if (this.seconds < this.Calendar.Seconds.per.Hour) {
 		return Math.floor(this.inMinutes()) + ' minute' + ((this.inMinutes() > 1) ? 's' : '') + ' ago';
