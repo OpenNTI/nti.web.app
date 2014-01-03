@@ -65,33 +65,12 @@ Ext.define('NextThought.store.courseware.Navigation', {
 	},
 
 
-	/**
-	 * @return {Integer}
-	 * @private
-	 */
 	findByDate: function(date) {
-		return this.findBy(function(o) {
-			return o.get('date') >= date;
+		var recs = this.getRange() || [];
+		return recs.filter(function(o) {
+			var open = o.get('AvailableBeginning') || date,
+				close = o.get('AvailableEnding') || date;
+			return o.get('type') === 'lesson' && close >= date && open <= date;
 		});
-	},
-
-
-	/**
-	 *
-	 * @param {Date} date
-	 * @return {NextThought.model.courseware.navigation.Node}
-	 */
-	getCurrentBy: function(date) {
-		var r = this.getAt(this.findByDate(date));
-		if (!r) {
-			r = this.first();
-			if (r && date > r.get('date')) {
-				r = this.last();
-				if (r && date < r.get('date')) {
-					r = null;
-				}
-			}
-		}
-		return r;
 	}
 });
