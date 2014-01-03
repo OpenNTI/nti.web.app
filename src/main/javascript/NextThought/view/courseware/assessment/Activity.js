@@ -220,6 +220,6 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 
 
 	goToAssignment: function(s, record) {
-		this.fireEvent('goto-assignment', record.get('item'));
+		this.fireEvent('goto-assignment', record.get('item'), $AppConfig.userObject);
 	}
 });

@@ -6,6 +6,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.View', {
 		'NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	],
 
+	handlesAssignment: true,
+
 	layout: 'card',
 	onAdd: function(item) { this.getLayout().setActiveItem(item); },
 
@@ -30,11 +32,11 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.View', {
 
 
 	showAssignmentFromClick: function(view, rec) {
-		this.showAssignment(rec);
+		this._doShowAssignment(rec);
 	},
 
 
-	showAssignment: function(rec) {
+	_doShowAssignment: function(rec) {
 		Ext.destroy(this.down('course-assessment-admin-assignments-item'));
 		this.mon(this.add({
 			xtype: 'course-assessment-admin-assignments-item',
@@ -56,6 +58,11 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.View', {
 			console.error('No record at index: ' + index);
 			return;
 		}
-		this.showAssignment(rec);
+		this._doShowAssignment(rec);
+	},
+
+
+	showAssignment: function(assignemnt, user) {
+
 	}
 });

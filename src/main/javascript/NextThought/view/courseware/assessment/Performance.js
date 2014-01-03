@@ -159,7 +159,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 				record.get('name')
 		];
 
-		this.fireEvent('goto-assignment', record.get('item'));
+		this.fireEvent('goto-assignment', record.get('item'), $AppConfig.userObject);
 	},
 
 
