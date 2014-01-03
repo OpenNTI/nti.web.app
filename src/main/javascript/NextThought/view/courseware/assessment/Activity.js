@@ -48,7 +48,6 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 	store: new Ext.data.Store({
 		fields: [
 			{name: 'ntiid', type: 'string'},
-			{name: 'containerId', type: 'string'},
 			{name: 'label', type: 'string'},
 			{name: 'target', type: 'string'},
 			{name: 'date', type: 'date'},
@@ -102,6 +101,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 			return;
 		}
 
+		this.assignments = {};
 		this.history = history;
 		this._lastRead = history.get('lastViewed');
 
@@ -126,9 +126,12 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 
 
 	getEventConfig: function(label, target, date) {
+		if (typeof target === 'string') {
+			target = this.assignments[target];
+		}
+
 		return {
 			ntiid: target.getId(),
-			containerId: target.get('containerId'),
 			item: target,
 			label: label,
 			target: target.get('title'),
@@ -137,52 +140,68 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 	},
 
 
-	collectEvents: function(o, history) {
+	addEvent: function() {
+		var s = this.store;
+		try {
+			return s.add.apply(s, arguments)[0];
+		} catch (er) {
+			console.error(arguments, er.stack || er.message || e);
+		}
+	},
+
+
+	collectEvents: function(o, historyCollection) {
+		var h = historyCollection.getItem(o.getId());
+		this.assignments[o.getId()] = o;
+		this.deriveEvents(o, h);
+	},
+
+
+	deriveEvents: function(assignemnt, historyItem) {
 		var me = this,
 			now = new Date(),
-			s = me.store,
-			h = history.getItem(o.getId()),
-			submission = h && h.get('Submission'),
-			feedback = h && h.get('Feedback'),
-			grade = h && h.get('Grade'),
-			dateOpens = o.get('availableBeginning'),
-			dateDue = o.get('availableEnding') || now,
-			dateCompleted = submission && submission.get('CreatedTime');
+			submission = historyItem && historyItem.get('Submission'),
+			feedback = historyItem && historyItem.get('Feedback'),
+			grade = historyItem && historyItem.get('Grade'),
+			dateCompleted = submission && submission.get('CreatedTime'),
+			dateOpens = assignemnt && assignemnt.get('availableBeginning'),
+			dateDue = (assignemnt && assignemnt.get('availableEnding')) || now;
 
-		function add() {
-			try {
-				return s.add.apply(s, arguments)[0];
-			} catch (er) {
-				console.error(arguments, er.stack || er.message || e);
-			}
-		}
 
 		if (feedback) {
 			feedback.get('Items').forEach(function(f) {
-				var c = f.get('Creator'),
-					str = ' left feedback on',
-					r = add(me.getEventConfig(c + str, o, f.get('CreatedTime')));
-
-				UserRepository.getUser(c).done(function(u) {
-					r.set('label', u + str);
-				});
+				me.addFeedback(f);
 			});
 		}
 
 		if (grade && grade.get('value')) {
-			add(me.getEventConfig('Grade Received', o, grade.get('Last Modified')));
+			me.addEvent(me.getEventConfig('Grade Received', assignemnt, grade.get('Last Modified')));
 		}
 
 		if (dateOpens < now) {
-			add(me.getEventConfig('New Assignment:', o, dateOpens));
+			me.addEvent(me.getEventConfig('New Assignment:', assignemnt, dateOpens));
 		}
 
 		if (dateDue < now && (!dateCompleted || dateCompleted > dateDue)) {
-			add(me.getEventConfig('Assignment Past Due:', o, dateDue));
+			me.addEvent(me.getEventConfig('Assignment Past Due:', assignemnt, dateDue));
 		}
 
 		if (dateCompleted) {
-			add(me.getEventConfig('Assignment Submitted:', o, dateCompleted));
+			me.addEvent(me.getEventConfig('Assignment Submitted:', assignemnt, dateCompleted));
+		}
+	},
+
+
+	addFeedback: function(f) {
+		var c = f.get('Creator'),
+			str = isMe(c) ? ' commented on' : ' left feedback on',
+			label = ((isMe(c) && 'You') || c) + str,
+			r = this.addEvent(this.getEventConfig(label, f.get('AssignmentId'), f.get('CreatedTime')));
+
+		if (!isMe(c)) {
+			UserRepository.getUser(c).done(function(u) {
+				r.set('label', u + str);
+			});
 		}
 	},
 
