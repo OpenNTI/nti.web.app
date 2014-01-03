@@ -50,7 +50,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 	},
 
 
-	courseChanged: function(instance, refresh) {
+	courseChanged: function(instance) {
 		var me = this;
 
 		function isSync() {
@@ -59,7 +59,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 		function getLink(rel, e) { return e.getLink(rel) || instance.getLink(rel); }
 
-		if(!isSync()){
+		if (!isSync()) {
 			me.clearViews();
 		}
 
@@ -68,7 +68,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 		if (!instance) {
 			return;
-		}	
+		}
 
 
 		Promise.pool(
@@ -83,14 +83,14 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 			if (!isSync()) { return; }
 
-			if(me.shouldPushViews()){
-				if(e && e.isAdministrative){
-					me.addAdminViews(r, function(rel){ return getLink(rel, e); });
+			if (me.shouldPushViews()) {
+				if (e && e.isAdministrative) {
+					me.addAdminViews(r, function(rel) { return getLink(rel, e); });
 				} else {
 					me.addStudentViews();
 				}
 			}
-			
+
 			Promise.pool(
 				instance.getAssignmentHistory(),
 				Service.request(getLink('AssignmentsByOutlineNode', e)),
@@ -118,12 +118,12 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 	},
 
 
-	shouldPushViews: function(){
+	shouldPushViews: function() {
 		return !this.body.items.getCount();
 	},
 
 
-	addAdminViews: function(roster, getLink){
+	addAdminViews: function(roster, getLink) {
 		//filter the active user out of the roster since we are administering this thing.
 		var r = roster.filter(function(o) { return o && !isMe(o.Username); });
 
@@ -135,8 +135,8 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 		]);
 	},
 
-	
-	addStudentViews: function(){
+
+	addStudentViews: function() {
 		this.body.add([
 			{ xtype: 'course-assessment-activity', title: 'Activity & Notifications' },
 			{ xtype: 'course-assessment-assignments', title: 'Assignments' },
@@ -153,6 +153,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 	clearViews: function() {
 		this.forEachView(this.callFunction('clearAssignmentsData'));
 		this.body.removeAll(true);
+		this.navigation.clear();
 	},
 
 

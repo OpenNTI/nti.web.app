@@ -108,5 +108,16 @@ Ext.define('NextThought.view.courseware.assessment.Navigation', {
 	},
 
 
-	removeNavigationItem: function(relatedComponent) {}
+	removeNavigationItem: function(relatedComponent) {
+		var s = this.store,
+			r = s.getById(relatedComponent.xtype);
+		if (r) {
+			s.remove(r);
+		}
+	},
+
+
+	clear: function() {
+		this.store.removeAll();
+	}
 });
