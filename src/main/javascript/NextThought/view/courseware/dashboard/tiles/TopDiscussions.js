@@ -24,7 +24,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.TopDiscussions', {
 					console.error('No top topic link for ', board.getId());
 					return;
 				}
-				store.on('load', loadDiscussions, me);
+				store.on('load', loadDiscussions, me, {single: true});
 				//this.bindStore(store);
 				if (!store.loaded) {
 					store.load();
@@ -43,7 +43,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.TopDiscussions', {
 					tiles.push(me.create({
 						locationInfo: locationInfo,
 						itemNode: record,
-						lastModified: me.board.get('date'), 
+						lastModified: me.board.get('date'),
 						innerWeight: comments
 					}));
 				});
