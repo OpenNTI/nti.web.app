@@ -42,6 +42,7 @@ Ext.define('NextThought.view.content.reader.ComponentOverlay', {
 
 		//This may need to be optimized
 		Ext.each(Ext.Object.getValues(this.activeOverlayedPanels), function(p) {
+			if (p.isDestroyed || !p.el) {return;}
 			var minY = p.el.getY(),
 				maxY = minY + p.el.getHeight();
 			if (y >= minY && y <= maxY) {
