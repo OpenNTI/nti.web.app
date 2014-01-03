@@ -16,23 +16,19 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 	}],
 
 	layout: 'card',
-	onAdd: function(item) { this.getLayout().setActiveItem(item); },
-
+	onAdd: function(item) {
+		this.getLayout().setActiveItem(item);
+		this.mon(item, {
+			notify: 'onSubViewNotify'
+		});
+	},
 
 	initComponent: function() {
 		this.callParent(arguments);
 		this.on({
 			'goto-assignment': 'gotoAssignment',
 			'show-assignment': 'showAssignment',
-			'update-assignment-view': 'maybeUpdateAssignmentView',
-			add: 'onViewAdd'
-		});
-	},
-
-
-	onViewAdd: function(body, item) {
-		this.mon(item, {
-			notify: 'onSubViewNotify'
+			'update-assignment-view': 'maybeUpdateAssignmentView'
 		});
 	},
 
