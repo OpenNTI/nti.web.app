@@ -11,6 +11,14 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 
 
 	onItemClicked: function(view, rec) {
-		this.fireEvent('assignement-clicked', view, rec);
+		this.fireEvent('assignement-clicked', rec);
+	},
+
+
+	showAssignment: function(assignment, user) {
+		var id = assignment && ((assignment.getId && assignment.getId()) || assignment),
+			x = this.store.getById(id);
+		this.onItemClicked(null, x);
+		//TODO: drill down and auto-select student
 	}
 });

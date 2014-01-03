@@ -31,7 +31,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.View', {
 	},
 
 
-	showAssignmentFromClick: function(view, rec) {
+	showAssignmentFromClick: function(rec) {
 		this._doShowAssignment(rec);
 	},
 
@@ -63,6 +63,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.View', {
 
 
 	showAssignment: function(assignemnt, user) {
-
+		this.items.first().showAssignment(assignemnt, user);
 	}
 });

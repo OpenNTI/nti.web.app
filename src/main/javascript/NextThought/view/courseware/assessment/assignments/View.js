@@ -349,8 +349,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 	},
 
 
-	showAssignment: function(assignemnt, user) {
-		var id = assignemnt && ((assignemnt.getId && assignemnt.getId()) || assignemnt),
+	showAssignment: function(assignment, user) {
+		var id = assignment && ((assignment.getId && assignment.getId()) || assignment),
 			x = this.store.getById(id);
 
 		if (!x) {
