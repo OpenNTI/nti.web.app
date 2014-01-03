@@ -73,7 +73,7 @@ Ext.define('NextThought.view.content.View', {
 		this.courseBook = this.down('#course-book');
 		this.courseDash = this.down('course-dashboard');
 		this.courseForum = this.down('course-forum');
-		this.courseProgress = this.down('course-assessment');
+		this.courseAssignments = this.down('course-assessment');
 		this.courseNav = this.down('course');
 		this.courseInfo = this.down('course-info');
 
@@ -86,6 +86,10 @@ Ext.define('NextThought.view.content.View', {
 			'navigateCanceled': 'onNavigationCanceled',
 			'request-visibility': 'requestReaderVisibility',
 			'location-cleared': 'onLocationCleared'
+		});
+
+		this.mon(this.courseAssignments, {
+			'show-assignments-tab': 'updateTabs'
 		});
 
 		this.mon(this.courseForum, {
@@ -183,8 +187,8 @@ Ext.define('NextThought.view.content.View', {
 
 		if (this.tabs) {
 
-			if (!isFeature('assignments')) {
-				tabs = tabs.filter(function(i) {return i.viewId !== 'course-assessment';});
+			if (!this.courseAssignments.hasAssignments) {
+				tabs = tabs.filter(function(i) {return i.viewId !== 'course-assessment?';});
 			}
 
 			if (!this.courseForum.hasBoard) {
@@ -450,7 +454,7 @@ Ext.define('NextThought.view.content.View', {
 			this.courseNav,
 			this.courseDash,
 			this.courseForum,
-			this.courseProgress,
+			this.courseAssignments,
 			this.courseInfo
 		], function(e) {
 			if (e.courseChanged) {

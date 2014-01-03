@@ -53,6 +53,8 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 	courseChanged: function(instance) {
 		var me = this;
 
+		me.hasAssignments = false;
+
 		function isSync() {
 			return (me.instanceId === (instance && instance.getId()));
 		}
@@ -100,7 +102,13 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 						if (!isSync()) { return; }
 						var history = txts[0],
 							assignments = Ext.decode(txts[1], true),
-							gradeBook = txts[2] && ParseUtils.parseItems(txts[2])[0];
+							gradeBook = txts[2] && ParseUtils.parseItems(txts[2])[0],
+							assignmentKeys = Object.keys(assignments).filter(function(k) { return k !== 'href'});
+
+						me.hasAssignments = assignmentKeys.length;
+						if (me.hasAssignments) {
+							me.fireEvent('show-assignments-tab');
+						}
 
 						me.fireEvent('set-assignemnt-history', history);
 
@@ -111,7 +119,6 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 						console.error(reason);
 						if (!isSync()) { return; }
 						me.clearViews();
-						//TODO: drop assignments tab...or start off hidden, and show in the above done function.
 					});
 		});
 
