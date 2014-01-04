@@ -266,7 +266,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 		function collect(o) {
 			var id = o.getId(),
-				h = history.getItem(id),
+				h = history && history.getItem(id),
 				submission = h && h.get('Submission'),
 				assessment = h && h.get('pendingAssessment');
 
@@ -275,7 +275,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 				containerId: o.get('containerId'),
 				lesson: lesson,
 				item: o,
-				history: h,
+				//history: h, (not defined as a field, so it isn't accessable anyway)
 				name: o.get('title'),
 				opens: o.get('availableBeginning'),
 				due: o.get('availableEnding'),
@@ -287,7 +287,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 			});
 		}
 
-		this.history = history;
 		this.outline = outline;
 
 		delete data.href;//all other keys are container ids...so, lets just drop it.

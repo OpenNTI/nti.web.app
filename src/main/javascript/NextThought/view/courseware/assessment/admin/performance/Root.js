@@ -247,7 +247,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 						return name.indexOf(val) >= 0;
 					}
-			}])
+			}]);
 		}
 	},	
 
@@ -350,7 +350,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		assignments.forEach(function(assignment) {
 			var i = assignment.getFieldItem('Items', username),
-				h = history.getItem(assignment.get('AssignmentId'));
+				h = history && history.getItem(assignment.get('AssignmentId'));
 
 			if (i && !i.get('value')) {counts.ungraded++;}
 			if (!i && assignment.get('DueDate') < new Date()) {counts.overdue++;}
@@ -375,7 +375,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				value = grade && grade.get('value'),
 				grades = value && value.split(' '),
 				number = grades && grades[0],
-				letter = grades && grades[1] || '-';
+				letter = (grades && grades[1]) || '-';
 
 			r = s.getById(u.getId());
 
