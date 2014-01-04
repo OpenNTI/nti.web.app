@@ -31,7 +31,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 			this.tileContainer.removeAll(true);
 		}
 
-		if (!courseInstance) {
+		if (!courseInstance || $AppConfig.disableDashboard) {
 			return;
 		}
 
