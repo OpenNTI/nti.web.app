@@ -154,25 +154,25 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 	},
 
 
-	getAssignmentHistory: function(){
+	getAssignmentHistory: function() {
 		var p = new Promise(),
 			me = this;
 
 		function getLink(rel, e) { return e.getLink(rel) || me.getLink(rel); }
 
 		this.getWrapper()
-			.done(function(e){
+			.done(function(e) {
 				Service.request(getLink('AssignmentHistory', e))
-					.done(function(txt){
+					.done(function(txt) {
 						var history = ParseUtils.parseItems(txt)[0];
 
 						p.fulfill(history);
 					})
-					.fail(function(reason){
+					.fail(function(reason) {
 						p.reject(reason);
-					})
+					});
 			})
-			.fail(function(reason){
+			.fail(function(reason) {
 				p.reject(reason);
 			});
 
