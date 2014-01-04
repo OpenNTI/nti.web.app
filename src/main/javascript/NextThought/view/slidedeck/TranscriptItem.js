@@ -3,7 +3,9 @@ Ext.define('NextThought.view.slidedeck.TranscriptItem', {
 	isPresentationPartReady: false,
 
 	constructor: function() {
-		this.fireEvent('uses-page-stores', this);
+		this.on('added', function() {
+			this.fireEvent('uses-page-stores', this);
+		}, this);
 	},
 
 	getStore: function() {

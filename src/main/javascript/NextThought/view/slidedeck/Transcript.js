@@ -37,6 +37,10 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			this.setupSingleTranscript(this.transcript);
 			this.hasSlides = false;
 		}
+
+		this.flatPageStore = new NextThought.store.FlatPage();
+		this.fireEvent('add-flatpage-store-context', this);
+
 		this.callParent(arguments);
 
 		this.cmpMap = {};
