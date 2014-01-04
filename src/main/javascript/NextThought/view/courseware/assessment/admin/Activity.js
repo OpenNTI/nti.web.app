@@ -31,7 +31,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Activity', {
 
 	addFeedback: function(f) {
 		var rec = this.callParent(arguments),
-			path = f.get('href').split('/').slice(0, -2).join('/');
+			path = (f.get('href') || '').split('/').slice(0, -2).join('/');
 
 		if (!isMe(rec.get('user'))) {
 			return rec;

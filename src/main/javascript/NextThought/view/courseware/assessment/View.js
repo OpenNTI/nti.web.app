@@ -119,6 +119,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 						console.error(reason);
 						if (!isSync()) { return; }
 						me.clearViews();
+						me.fireEvent('failed-to-load', me.up('[isTabView]'));
 					});
 		});
 

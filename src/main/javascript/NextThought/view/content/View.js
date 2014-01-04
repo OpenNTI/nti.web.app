@@ -18,6 +18,9 @@ Ext.define('NextThought.view.content.View', {
 	},
 	defaultType: 'box',
 	activeItem: 'course-book',
+	defaults: {
+		isTabView: true
+	},
 
 	items: [
 		{
@@ -89,7 +92,13 @@ Ext.define('NextThought.view.content.View', {
 		});
 
 		this.mon(this.courseAssignments, {
-			'show-assignments-tab': 'updateTabs'
+			scope: this,
+			'show-assignments-tab': 'updateTabs',
+			'failed-to-load': function(view) {
+				if (this.layout.getActiveItem() === view) {
+					this.setActiveTab('course-book');
+				}
+			}
 		});
 
 		this.mon(this.courseDash, {
@@ -558,7 +567,7 @@ Ext.define('NextThought.view.content.View', {
 			this.updateTitle();
 		} else {
 			this.on('afterrender', function() {
-				this.layout.setActiveItem(tab);
+				this.layout.setActiveItem(tab || 'course-book');
 				this.updateTitle();
 			}, this);
 		}
