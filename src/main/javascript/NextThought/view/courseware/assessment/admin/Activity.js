@@ -30,8 +30,22 @@ Ext.define('NextThought.view.courseware.assessment.admin.Activity', {
 
 
 	addFeedback: function(f) {
-		console.debug('Feedback', f.raw);
-		this.callParent(arguments);
+		var rec = this.callParent(arguments),
+			path = f.get('href').split('/').slice(0, -2).join('/');
+
+		if (!isMe(rec.get('user'))) {
+			return rec;
+		}
+
+		Service.request(path)
+				.done(function(submission) {
+					console.log(submission);
+				})
+				.fail(function() {
+					console.error('No soup for you.');
+				});
+
+		return rec;
 	},
 
 

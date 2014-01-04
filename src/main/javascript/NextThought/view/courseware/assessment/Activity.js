@@ -206,7 +206,10 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 					user: u
 				});
 			});
+		} else {
+			r.set('user', $AppConfig.userObject);
 		}
+		return r;
 	},
 
 
