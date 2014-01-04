@@ -622,7 +622,8 @@ Ext.define('NextThought.view.forums.Topic', {
 			this.commentContainerEl.addCls('no-more');
 		}
 
-		this.loadMoreEl.update(Math.min(left, 10) + ' more comments');
+		this.loadMoreEl.update(
+				Ext.util.Format.plural(Math.min(left, 10), 'more comment'));
 
 		records = Ext.Array.sort(records, Globals.SortModelsBy('CreatedTime', 'DESC'));
 
