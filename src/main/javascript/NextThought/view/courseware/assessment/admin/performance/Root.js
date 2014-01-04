@@ -73,7 +73,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
 
 		this.createShowMenu();
@@ -87,7 +87,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	createShowMenu: function(){
+	createShowMenu: function() {
 		var type = this.currentShow,
 			items = [
 				{ text: 'All Students', type: 'all', checked: type === 'all'},
@@ -125,12 +125,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	showShowMenu: function(){
+	showShowMenu: function() {
 		this.showMenu.showBy(this.showEl, 'tl-tl?', this.showMenu.offset);
 	},
 
 
-	switchShow: function(item, status){
+	switchShow: function(item, status) {
 		if (!status) { return; }
 
 		var offset = item.getOffsetsTo(this.showMenu),
@@ -147,14 +147,14 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		this.store.filter([{
 			id: 'showFilter',
-			filterFn: function(rec){
+			filterFn: function(rec) {
 				var overdue = rec.get('overdue'),
 					ungraded = rec.get('ungraded'),
 					comments = rec.get('comments');
 
 				if (item.type === 'action') {
 					return overdue || ungraded || comments;
-				} 
+				}
 
 				if (item.type === 'overdue') {
 					return overdue;
@@ -172,7 +172,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	createOrderMenu: function(){
+	createOrderMenu: function() {
 		var type = this.currentOrder,
 			items = [
 				{ text: 'By Name', type: 'displayName', checked: type === 'displayName'},
@@ -206,12 +206,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	showOrderMenu: function(){
+	showOrderMenu: function() {
 		this.orderMenu.showBy(this.orderEl, 'tl-tl', this.orderMenu.offset);
 	},
 
 
-	switchOrder: function(item, status){
+	switchOrder: function(item, status) {
 		if (!status) { return; }
 
 		var offset = item.getOffsetsTo(this.orderMenu),
@@ -230,17 +230,17 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	changeNameFilter: function(){
+	changeNameFilter: function() {
 		var val = this.searchKey = this.inputEl.getValue();
 
 		this.store.removeFilter('searchFilter');
 
-		if(this.searchKey){
+		if (this.searchKey) {
 			val = val.toLowerCase();
 
 			this.store.filter([{
 					id: 'searchFilter',
-					filterFn: function(rec){
+					filterFn: function(rec) {
 						var name = rec.get('displayName');
 
 						name = name.toLowerCase();
@@ -249,7 +249,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 					}
 			}]);
 		}
-	},	
+	},
 
 
 	constructor: function() {
@@ -283,8 +283,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	createGradeMenu: function(){
-		this.gradeMenu = Ext.widget('menu',{
+	createGradeMenu: function() {
+		this.gradeMenu = Ext.widget('menu', {
 			ui: 'nt',
 			cls: 'letter-grade-menu',
 			plain: true,
@@ -425,11 +425,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			el = Ext.get(node),
 			dropdown = el && el.down('.gradebox .letter');
 		console.log('show menu for record:', rec);
-		
-		me.gradeMenu.items.each(function(item, index){
+
+		me.gradeMenu.items.each(function(item, index) {
 			var x = item.height * index;
 
-			if(item.text === rec.get('letter')){
+			if (item.text === rec.get('letter')) {
 				item.setChecked(true, true);
 				me.gradeMenu.offset = [-1, -x];
 			} else {
@@ -437,7 +437,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			}
 		});
 
-		if(dropdown){
+		if (dropdown) {
 			me.gradeMenu.showBy(dropdown, 'tl-tl', me.gradeMenu.offset);
 			this.activeGradeRecord = rec;
 
@@ -445,31 +445,31 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	changeLetterGrade: function(item){
-		if(!this.activeGradeRecord){ return; }
+	changeLetterGrade: function(item) {
+		if (!this.activeGradeRecord) { return; }
 
 		this.changeGrade(this.activeGradeRecord, this.activeGradeRecord.get('grade'), item.text);
 	},
 
 
-	changeGrade: function(rec, number, letter){
-		if(!this.gradeBook){ return; }
+	changeGrade: function(rec, number, letter) {
+		if (!this.gradeBook) { return; }
 
 		var value = number + ' ' + letter,
-			url = this.gradeBook.get('href');
+			url = this.gradeBook.get('href');//this may be broken on FireFox (_dc=1234)
 
 		rec.set({
 			'grade': number,
 			'letter': letter
 		});
 
-		url += '/no_submit/Final Grade/'+rec.getId();
+		url += '/no_submit/Final Grade/' + rec.getId();
 
 		Ext.Ajax.request({
 			url: url,
 			method: 'PUT',
 			jsonData: { value: value },
-			failure: function(){
+			failure: function() {
 				//probably should do something here
 				console.error('Failed to save final grade:', arguments);
 			}
@@ -480,7 +480,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	onInputBlur: function(e, input) {
 		var node = e.getTarget(this.itemSelector),
 			rec = node && this.getRecord(node);
-			
+
 		console.log('update record', rec, ' with input value:', input.value);
 		this.changeGrade(rec, input.value, rec.get('letter'));
 	},
