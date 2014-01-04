@@ -29,18 +29,33 @@ Ext.define('NextThought.view.courseware.assessment.admin.Activity', {
 	},
 
 
+	addFeedback: function(f) {
+		console.debug('Feedback', f.raw);
+		this.callParent(arguments);
+	},
+
+
 	addStudentSubmission: function(s) {
 		var c = s.get('Creator'),
 			str = ' submitted',
 			r = this.addEvent(this.getEventConfig(c + str, s.get('assignmentId'), s.get('CreatedTime')));
 
 		UserRepository.getUser(c).done(function(u) {
-			r.set('label', u + str);
+			r.set({
+				label: u + str,
+				user: u
+			});
 		});
 	},
 
 
 	goToAssignment: function(s, record) {
-		this.fireEvent('goto-assignment', record.get('item'), null);//get from record
+		var user = record.get('user');
+
+		if (isMe(record)) {
+			user = null; //don't know what to do here. We need a reply-to? or a submission object to get the target user.
+		}
+
+		this.fireEvent('goto-assignment', record.get('item'), user);
 	}
 });

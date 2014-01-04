@@ -51,7 +51,8 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 			{name: 'label', type: 'string'},
 			{name: 'target', type: 'string'},
 			{name: 'date', type: 'date'},
-			{name: 'item', type: 'auto'}
+			{name: 'item', type: 'auto'},
+			{name: 'user', type: 'auto'}
 		],
 		sorters: [
 			{property: 'date', direction: 'DESC'}
@@ -200,7 +201,10 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 
 		if (!isMe(c)) {
 			UserRepository.getUser(c).done(function(u) {
-				r.set('label', u + str);
+				r.set({
+					label: u + str,
+					user: u
+				});
 			});
 		}
 	},
