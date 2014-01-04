@@ -14,9 +14,14 @@ Ext.define('NextThought.view.courseware.assessment.admin.Activity', {
 		var me = this;
 		me.callParent(arguments);
 		Service.request(me.activityFeedURL).done(function(json) {
-			json = ParseUtils.parseItems(Ext.decode(json, true));
+			json = Ext.decode(json, true);
+			json.Class = 'CourseActivity'; //doesn't have a class?
 
-			json.forEach(function(o) {
+			var activity = ParseUtils.parseItems([json])[0];
+
+			me.setLastReadFrom(activity);
+
+			activity.get('Items').forEach(function(o) {
 				var m = me.MIME_TYPE_MAP[o.get('MimeType')];
 				if (!m) {
 					console.warn('Unhandled event type', o.get('MimeType'));

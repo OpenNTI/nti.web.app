@@ -82,11 +82,13 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 		this.notifications = 0;
 		this.fireEvent('notify', 0);
 		this._lastRead = new Date();
-		Ext.Ajax.request({
-			url: this.history.get('href') + '/lastViewed',
-			method: 'PUT',
-			jsonData: this._lastRead
-		});
+		if (this._lastViewedURL) {
+			Ext.Ajax.request({
+				url: this._lastViewedURL,
+				method: 'PUT',
+				jsonData: this._lastRead
+			});
+		}
 
 		this.refresh();
 	},
@@ -103,8 +105,8 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 		}
 
 		this.assignments = {};
-		this.history = history;
-		this._lastRead = history.get('lastViewed');
+
+		this.setLastReadFrom(history);
 
 		delete assignments.href;//all other keys are container ids...so, lets just drop it.
 
@@ -152,7 +154,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 
 
 	collectEvents: function(o, historyCollection) {
-		var h = historyCollection.getItem(o.getId());
+		var h = historyCollection && historyCollection.getItem(o.getId());
 		this.assignments[o.getId()] = o;
 		this.deriveEvents(o, h);
 	},
@@ -242,6 +244,13 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 
 	getLastRead: function() {
 		return this._lastRead || new Date(0);
+	},
+
+
+	setLastReadFrom: function(container) {
+		this._lastRead = container && container.get('lastViewed');
+		this._lastViewedURL = container && container.getLink('lastViewed');
+		this.maybeNotify(this.store);
 	},
 
 

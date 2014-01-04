@@ -94,7 +94,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 			}
 
 			Promise.pool(
-				instance.getAssignmentHistory(),
+				!e.isAdministrative && instance.getAssignmentHistory(),
 				Service.request(getLink('AssignmentsByOutlineNode', e)),
 				grades
 			)
