@@ -239,6 +239,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 
 		this.notifications = count;
 		this.fireEvent('notify', count);
+		this.refresh();
 	},
 
 
