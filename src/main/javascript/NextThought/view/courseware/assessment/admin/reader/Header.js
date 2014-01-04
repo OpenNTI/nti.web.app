@@ -21,6 +21,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 			return;
 		}
 
+		//if the submission was late, set the lateEl to X units late.
+
 		if (number) {
 			this.currentGrade = number;
 			this.gradeEl.dom.value = number;

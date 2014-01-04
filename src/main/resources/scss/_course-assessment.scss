@@ -728,7 +728,16 @@ canvas.x-component-course-assessment {
 				width: 15em;
 				float: right;
 				font-size: 0.8em;
+				position: relative;
 
+				.late {
+					position: absolute;
+					left: -11em;
+					text-align: right;
+					width: 10em;
+					line-height: 3;
+					color: $primary-red;
+				}
 
 				.label {
 					color: $tertiary-grey;
