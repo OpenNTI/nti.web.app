@@ -190,6 +190,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 
 	resolveUsers: function(store, records) {
+		records = records || [];
 
 		var pluck = Ext.Array.pluck,
 			users = pluck(pluck(records, 'data'), 'Creator'),
