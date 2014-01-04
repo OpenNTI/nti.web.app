@@ -2,6 +2,7 @@ Ext.define('NextThought.controller.CourseWare', {
 	extend: 'Ext.app.Controller',
 
 	models: [
+		'courseware.CourseActivity',
 		'courseware.CourseCatalogEntry',
 		'courseware.CourseCatalogInstructorInfo',
 		'courseware.CourseCreditLegacyInfo',
