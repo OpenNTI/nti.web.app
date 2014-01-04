@@ -152,7 +152,10 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 		Ext.Object.each(NS, function(clsName, cls) {
 			var fn = cls.getTileFor;
 			if (fn) {
-				fn = Ext.bind(fn, cls);
+				//make each query in to the dashboard tiles release the current
+				// processes so that its long-exec time does not make the course-set
+				// time does not appear to take several seconds/minutes
+				fn = Ext.Function.createBuffered(fn, 1, cls, null);
 				fn.$test = cls.$className;
 				queue.push(fn);
 			}
