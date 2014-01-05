@@ -3,9 +3,11 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.TopDiscussions', {
 	alias: 'widget.course-dashboard-top-discussions',
 
 	statics: {
+		boardMap: {},
 
 		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord, finish) {
-			var me = this, board = course.getAttribute('discussionBoard');
+			var me = this, p,
+				board = course.getAttribute('discussionBoard');
 
 			function onResolveFailure() {
 				console.warn('Could not load the course board', board);
@@ -13,6 +15,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.TopDiscussions', {
 			}
 
 			function onBoardResolved(board) {
+
 				var sId = board && ('dashboard-' + board.getContentsStoreId()),
 					url = board && board.getLink('TopTopics'),
 					instructorForum = course && course.getAttribute('instructorForum'),
@@ -37,15 +40,19 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.TopDiscussions', {
 				var tiles = [], me = this, max = 0;
 
 				Ext.each(records, function(record) {
-					var comments = record.get('PostCount');
+					var comments = record.get('PostCount')
+						id = 'course-dashboard-top-discussions-' + record.getId();
 
 					max = (max > comments) ? max : comments;
-					tiles.push(me.create({
-						locationInfo: locationInfo,
-						itemNode: record,
-						lastModified: me.board.get('date'),
-						innerWeight: comments
-					}));
+					if(!Ext.getCmp(id)){					
+						tiles.push(me.create({
+							id: id,
+							locationInfo: locationInfo,
+							itemNode: record,
+							lastModified: me.board.get('date'),
+							innerWeight: comments
+						}));
+					}
 				});
 				//set the max on each tile so we can figure the %
 				Ext.each(tiles, function(item) { item.maxInner = max;});
@@ -58,12 +65,19 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.TopDiscussions', {
 				return;
 			}
 
-			Service.getObject(board,
-				onBoardResolved,
-				onResolveFailure,
-				this,
-				true
-			);
+			p = this.boardMap[board];
+
+			if(!p){
+				p = this.boardMap[board] = new Promise();
+				Service.getObject(board,
+					function(b) {p.fulfill(b);},
+					function(){ p.reject(); },
+					this,
+					true
+				);
+			}
+
+			p.then(onBoardResolved, onResolveFailure);
 		}
 
 	},
