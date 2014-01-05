@@ -70,7 +70,9 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 
 		nodes = store.findByDate(date);
 		if (!nodes.length) {
-			this.el.unmask();
+			if (this.el) {
+				this.el.unmask();
+			}
 			return;
 		}
 
