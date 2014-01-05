@@ -108,8 +108,12 @@ Ext.define('NextThought.view.courseware.outline.View', {
 
 
 	maybeChangeSelection: function(ntiid, fromEvent) {
+		Ext.destroy(this._waitForBuild);
+		delete this._waitForBuild;
+
 		if (this.store.building) {
-			this.store.on({
+			this._waitForBuild = this.mon(this.store, {
+				destroyable: true,
 				single: true,
 				built: this.maybeChangeSelection.bind(this, ntiid)
 			});
