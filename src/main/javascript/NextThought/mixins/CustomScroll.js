@@ -22,7 +22,7 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 			parentContainerPadding = parentContainerEl && parentContainerEl.getPadding('t'),
 			parentEl = data.adjustmentEl,
 			targetEl = data.targetEl,
-			currentScroll = data.targetEl.getScrollTop(),
+			currentScroll = this.getScrollTop(),
 			delta = currentScroll < parentContainerPadding ? currentScroll : parentContainerPadding,
 			tMargin = -delta,
 			bMargin = -parentContainerPadding + delta,
@@ -179,7 +179,7 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 
 
 	function resolve(el, refEl) {
-		return el && (Ext.get(el) || Ext.getDom(refEl).querySelector(el));
+		return el && (Ext.get(el) || Ext.get(Ext.getDom(refEl).querySelector(el)));
 	}
 
 
@@ -195,6 +195,8 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 		data.targetEl = data.targetEl ? resolve(targetEl, parentContainerEl) : me.getTargetEl();
 		data.adjustmentEl = resolve(adjustmentEl, parentContainerEl);
 		data.secondaryViewEl = secondaryViewEl;
+
+
 
 		if (!data.adjustmentEl) {
 			console.error('No adjustment element found for:', adjustmentEl);
@@ -220,11 +222,6 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 
 			Ext.DomHelper.append(data.targetEl, {style: {height: mb + 'px'}, cls: 'scroll-buffer'});
 		});
-		me.on('activate', adjustOnScroll, me);
-		monitorCardChange(me);
-		monitorLayout.call(me);
-		updateCaches.call(me);
-		updateSideHeight.call(me, mb, true);
 	}
 
 
@@ -251,6 +248,12 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 
 
 	return {
+
+		getScrollTop: function() {
+			return this.mixinData.customScroll.targetEl.getScrollTop();
+		},
+
+
 		initCustomScrollOn: function(adjustmentEl, targetEl, options) {
 
 			if (!isFeature('fancy-scroll')) { return; }

@@ -20,7 +20,7 @@ Ext.define('NextThought.view.courseware.info.View', {
 		this.callParent(arguments);
 		//we set this up to listen to a node that will not scroll...
 		// so that when this view is activated it will reset the view.
-		this.initCustomScrollOn('content');
+		this.initCustomScrollOn('content', '.course-info-panel');
 	},
 
 
@@ -46,7 +46,11 @@ Ext.define('NextThought.view.courseware.info.View', {
 		this.infoOnly = catalogEntry && catalogEntry.get('Preview') === true;
 
 		update(catalogEntry);
-	}
+	},
 
+
+	getScrollTop: function() {
+		return this.infoOnly ? 0 : this.mixins.customScroll.getScrollTop.call(this);
+	},
 
 });
