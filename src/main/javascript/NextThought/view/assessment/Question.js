@@ -162,7 +162,8 @@ Ext.define('NextThought.view.assessment.Question', {
 
 
 	setQuestionContent: function(part) {
-		var root = ContentUtils.getRoot(this.reader.getLocation().NTIID), c, p;
+		var me = this,
+			root = ContentUtils.getRoot(this.reader.getLocation().NTIID), c, p;
 
 		c = this.question.get('content') || '';
 		p = part ? part.get('content') : '';
@@ -177,6 +178,17 @@ Ext.define('NextThought.view.assessment.Question', {
 				 style: {verticalAlign: 'initial'},
 				 html: ContentUtils.fixReferences(c + p, root)
 			 }));
+
+		function santatize(){
+			me.el.select('a[href]').set({target: '_blank'});
+		}
+
+		if (!this.rendered) {
+			me.on('afterrender', santatize);
+		} else {
+			santatize();
+		}
+		
 		this.updateLayout();
 	},
 

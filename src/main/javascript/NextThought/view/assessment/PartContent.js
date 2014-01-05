@@ -17,6 +17,11 @@ Ext.define('NextThought.view.assessment.PartContent', {
 			ordinal: String.fromCharCode(65 + this.ordinal)
 		});
 		return this.callParent(arguments);
-	}
+	},
 
+	afterRender: function() {
+		this.callParent(this);
+
+		this.el.select('a[href]').set({target: '_blank'});
+	}
 });
