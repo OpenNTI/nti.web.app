@@ -136,10 +136,15 @@ Ext.define('NextThought.view.courseware.forum.View', {
 	navigateToForumObject: function(forum, topic, comment, cb) {
 		if (Ext.isFunction(cb)) {
 			this.hasTopicCallback = cb;
+			console.error('tracking...', cb);
 		}
 		//if there is a valid state to restore there has to be a forum
 		if (!forum) {
-			Ext.callback(this.hasTopicCallback, null, [false]);
+			try {
+				Ext.callback(this.hasTopicCallback, null, [false]);
+			} catch (e1) {
+				console.warn(e1.stack || e1.message || e1);
+			}
 			delete this.hasTopicCallback;
 			return;
 		}
@@ -171,8 +176,8 @@ Ext.define('NextThought.view.courseware.forum.View', {
 				}
 				try {
 					Ext.callback(this.hasTopicCallback, null, [true, top]);
-				} catch (e) {
-					console.warn(e.stack || e.message || e);
+				} catch (e2) {
+					console.warn(e2.stack || e2.message || e2);
 				}
 				delete this.hasTopicCallback;
 				return;
@@ -271,7 +276,11 @@ Ext.define('NextThought.view.courseware.forum.View', {
 					setComment();
 				}
 				me.pushViewSafely(cmp);
-				Ext.callback(me.hasTopicCallback, null, [true, cmp]);
+				try {
+					Ext.callback(me.hasTopicCallback, null, [true, cmp]);
+				} catch (e) {
+					console.warn(e.stack || e.message || e);
+				}
 				delete me.hasTopicCallback;
 			}else {
 				me.topicMonitor = me.mon({
