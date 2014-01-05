@@ -51,6 +51,6 @@ Ext.define('NextThought.view.courseware.info.View', {
 
 	getScrollTop: function() {
 		return this.infoOnly ? 0 : this.mixins.customScroll.getScrollTop.call(this);
-	},
+	}
 
 });
