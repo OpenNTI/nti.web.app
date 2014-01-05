@@ -607,8 +607,6 @@ Ext.define('NextThought.view.content.View', {
 
 				if (ntiid) {
 					me.reader.setLocation(ntiid, null, true);
-					//Temp HACK:
-					me.courseNav.navigation.maybeChangeSelection(ntiid);
 				} else {
 					me.reader.clearLocation();
 				}
