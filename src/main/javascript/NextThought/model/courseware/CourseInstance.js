@@ -184,6 +184,27 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 	},
 
 
+	getAssignments: function(){
+		if(this.getAssignmentsPromise){ return this.getAssignmentsPromise; }
+
+		var p = new Promise();
+
+		Service.request(this.getLink('AssignmentsByOutlineNode'))
+			.done(function(json){
+				json = Ext.decode(json, true);
+				
+				p.fulfill(NextThought.model.courseware.AssignmentCollection.fromJson(json));
+			})
+			.fail(function(reason){
+				p.reject(reason);
+			});
+
+		this.getAssignmentsPromise = p;
+
+		return this.getAssignmentsPromise;
+	},
+
+
 	fireNavigationEvent: function(eventSource, callback) {
 		var me = this;
 
