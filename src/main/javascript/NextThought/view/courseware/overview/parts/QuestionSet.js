@@ -1,7 +1,8 @@
 Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 	extend: 'Ext.Panel',
 	alias: [
-		'widget.course-overview-naquestionset'
+		'widget.course-overview-naquestionset',
+		'widget.course-overview-assignment'
 	],
 
 	requires: [
@@ -19,8 +20,6 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 	},
 
 
-	hidden: true,
-
 	items: [
 		{ xtype: 'assessment-score' },
 		{ xtype: 'assessment-tally', flex: 1 },
@@ -34,6 +33,7 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 
 
 	config: {
+		assignment: null,
 		containerId: null,
 		ntiid: null,
 		total: 0,
@@ -46,52 +46,65 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 			containerId = ContentUtils.getLineage(ntiid)[1],
 			req;
 
-		config = {
+		config = Ext.apply(config, {
 			quetionSetContainerTitle: n.getAttribute('label'),
 			ntiid: ntiid,
 			questionSetId: ntiid,
 			containerId: containerId,
 			total: n.getAttribute('question-count') || 10
-		};
+		});
 
 		this.callParent([config]);
-
-		Service.getPageInfo(ntiid, this.maybeShow.bind(this), function(){
-			console.error('Failed to load page info ', arguments);
-		});
-		req = {
-			url: Service.getContainerUrl(containerId, Globals.USER_GENERATED_DATA),
-			scope: this,
-			method: 'GET',
-			params: {
-				accept: NextThought.model.assessment.AssessedQuestionSet.mimeType,
-				batchStart: 0,
-				batchSize: 1,
-				sortOn: 'lastModified',
-				sortOrder: 'descending',
-				filter: 'TopLevel'
-			},
-			callback: this.containerLoaded
-		};
-
-		Ext.Ajax.request(req);
-
-		this.fireEvent('has-been-submitted', this);
-	},
-
-
-	maybeShow: function(pageInfo){
-		var items = pageInfo.get('AssessmentItems') || [],
-			id = this.questionSetId;
-
-		items = items.filter(function(item){
-			return item.isAssignment && item.containsId(id);
-		});
 		
-		if(items.length === 0){
-			this.show();
+		
+		if(!this.assignment){
+			req = {
+				url: Service.getContainerUrl(containerId, Globals.USER_GENERATED_DATA),
+				scope: this,
+				method: 'GET',
+				params: {
+					accept: NextThought.model.assessment.AssessedQuestionSet.mimeType,
+					batchStart: 0,
+					batchSize: 1,
+					sortOn: 'lastModified',
+					sortOrder: 'descending',
+					filter: 'TopLevel'
+				},
+				callback: this.containerLoaded
+			};
+
+			Ext.Ajax.request(req);
+		} else {
+			this.assignmentId = this.assignment.getId();
+			this.setAsAssignment(this.assignment);
+			this.fireEvent('has-been-submitted', this);
 		}
 	},
+
+	
+	setAsAssignment: function(assignment){
+		if(!this.rendered){
+			this.on('afterrender', Ext.bind(this.setAsAssignment, this, arguments), this, {single: true});
+			return; 
+		}
+
+		var score = this.down('assessment-score');
+
+		if (score) { score.destroy(); }		
+
+		this.addCls('assignment');
+		this.setAsNotStarted();
+		this.updateWithScore();
+	},
+
+
+	setAsNotStarted: function(){
+		var b = this.down('button');
+		b.setUI('primary');
+		b.setText('Start');
+		this.addCls('not-started');
+	},
+
 
 	containerLoaded: function(q, s, r) {
 		if(this.alreadyTurnedIn){ return; }
@@ -101,17 +114,14 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 			return;
 		}
 
-		var correct = NaN, b,
+		var correct = NaN,
 			json = Ext.decode(r.responseText, true) || {};
 
 		json = (json.Items || [])[0];
     //		console.debug('Loaded:', r.status, r.responseText);
 
 		if (!json) {
-			b = this.down('button');
-			b.setUI('primary');
-			b.setText('Start');
-			this.addCls('not-started');
+			this.setAsNotStarted();
 		}
 		else {
 			json = ParseUtils.parseItems(json)[0];
@@ -121,17 +131,50 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 		this.updateWithScore(correct);
 	},
 
+
+	setHistory: function(history){
+		if (!history) { 
+			console.warn('No history');
+			return;
+		}
+		
+		var submission = history.get('Submission'),
+			completed = (submission && submission.get('CreatedTime')) || new Date(),
+			due = this.assignment && this.assignment.get('availableEnding');
+
+		this.markAssignmentTurnedIn(completed > due);
+	},
+
+
+	markAssignmentTurnedIn: function(late){
+		var button = this.down('button');
+
+		if (button) { button.setText('Review'); }
+
+		this.addCls('turned-in-assignment');
+	},
+
+
 	updateWithScore: function(correct) {
-		var tally = this.down('assessment-tally');
+		var tally = this.down('assessment-tally'),
+			score = this.down('assessment-score');
+
 		tally.setTally(correct || 0, this.getTotal(), isNaN(correct));
 		tally.message.update(this.getQuetionSetContainerTitle());
-		this.down('assessment-score').setValue(Math.floor(100 * correct / this.getTotal()) || 0);
+		
+		if (score) {
+			score.setValue(Math.floor(100 * correct / this.getTotal()) || 0);
+		}
 		this.updateLayout();
 	},
 
 
 	reviewClicked: function() {
 		//console.log('navigate to', this.getContainerId());
+		if(this.assignment){
+			this.fireEvent('navigate-to-assignment', this.assignmentId);
+			return;
+		}
 		this.fireEvent('navigate-to-href', this, this.getContainerId());
 	}
 });

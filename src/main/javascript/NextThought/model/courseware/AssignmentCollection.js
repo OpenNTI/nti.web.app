@@ -4,16 +4,22 @@ Ext.define('NextThought.model.courseware.AssignmentCollection',{
 	statics: {
 		fromJson: function(json){
 			if (!json) { return null; }
-			var href = json.href;
+			var href = json.href, items = [], key;
 
 			delete json.href;
 
-			return this.create({Items: json, href: href});
+			for (key in json) {
+				if (json.hasOwnProperty(key)) {
+					items.push.apply(items, json[key]);
+				}
+			}
+
+			return this.create({Items: items, href: href});
 		}
 	},
 
 	fields: [
-		{name: 'Items', type: 'collectionItem'}
+		{name: 'Items', type: 'arrayItem'}
 	],
 
 
@@ -23,6 +29,12 @@ Ext.define('NextThought.model.courseware.AssignmentCollection',{
 
 
 	getItem: function(id) {
-		return this.getFieldItem('Items', id);
+		var items = this.get('Items');
+
+		items = items.filter(function(rec){
+			return rec.getId() === id || rec.containsId(id);
+		});
+
+		return items[0];
 	}
 });

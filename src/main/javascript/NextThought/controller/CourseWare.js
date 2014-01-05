@@ -63,7 +63,8 @@ Ext.define('NextThought.controller.CourseWare', {
 					'get-course-hooks': 'applyCourseHooks'
 				},
 				'*': {
-					'course-selected': 'onCourseSelected'
+					'course-selected': 'onCourseSelected',
+					'navigate-to-assignment': 'onNavigateToAssignment'
 				}
 			},
 			controller: {
@@ -150,11 +151,13 @@ Ext.define('NextThought.controller.CourseWare', {
 		if (!store) {
 			return;
 		}
+
 		this.mon(store, {
 			beforeload: 'onAvailableCoursesLoading',
 			load: 'onAvailableCoursesLoaded'
 		});
 		store.load();
+
 	},
 
 
@@ -234,6 +237,17 @@ Ext.define('NextThought.controller.CourseWare', {
 		} finally {
 			history.endTransaction('navigation-transaction');
 		}
+	},
+
+
+	onNavigateToAssignment: function(id){
+		var content = this.getContentView(),
+			tab = content.tabSpecs.reduce(function(a, i){
+				return a || (i.isAssignment && i);
+			}, 0);
+
+		content.onTabClicked(tab);
+		content.down('course-assessment-container').gotoAssignment(id);
 	},
 
 
