@@ -184,7 +184,7 @@ Ext.define('NextThought.view.whiteboard.Window', {
 		var me = this;
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
-			msg: 'All your current progress\nwill be lost',
+			msg: 'All your current progress\nwill be lost.',
 			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 			scope: me,
 			icon: Ext.Msg.WARNING,
