@@ -108,6 +108,10 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 						me.hasAssignments = assignmentKeys.length;
 						if (me.hasAssignments) {
 							me.fireEvent('show-assignments-tab');
+						} else {
+							me.clearViews();
+							me.fireEvent('failed-to-load', me.up('[isTabView]'));
+							return;
 						}
 
 						me.fireEvent('set-assignemnt-history', history);

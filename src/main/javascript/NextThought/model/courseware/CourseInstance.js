@@ -169,6 +169,10 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 						p.fulfill(history);
 					})
 					.fail(function(reason) {
+						if ((reason || '').substr(0, 3) === '404') {
+							p.fulfill(NextThought.model.courseware.UsersCourseAssignmentHistory.getEmpty());
+							return;
+						}
 						p.reject(reason);
 					});
 			})

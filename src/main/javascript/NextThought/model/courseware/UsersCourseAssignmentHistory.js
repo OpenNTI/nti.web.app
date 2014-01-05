@@ -9,5 +9,14 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistory', {
 
 	getItem: function(id) {
 		return this.getFieldItem('Items', id);
+	},
+
+
+	statics: {
+		getEmpty: function() {
+			var e = this.create({lastViewed: new Date()});
+			e.getItem = Ext.emptyFn;
+			return e;
+		}
 	}
 });
