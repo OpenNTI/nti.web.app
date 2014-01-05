@@ -121,7 +121,7 @@ Ext.define('NextThought.util.Sharing', {
 
 
 	getCurrentSharingInfo: function() {
-		return Ext.getCmp('course-book').currentCourse;
+		return Ext.getCmp('content').currentCourse;
 	},
 
 	sharedWithForSharingInfo: function(sharingInfo, scopeProvider) {
