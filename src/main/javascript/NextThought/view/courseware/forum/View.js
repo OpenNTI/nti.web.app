@@ -169,7 +169,11 @@ Ext.define('NextThought.view.courseware.forum.View', {
 				if (comment) {
 					top.goToComment(comment);
 				}
-				Ext.callback(this.hasTopicCallback, null, [true, top]);
+				try {
+					Ext.callback(this.hasTopicCallback, null, [true, top]);
+				} catch (e) {
+					console.warn(e.stack || e.message || e);
+				}
 				delete this.hasTopicCallback;
 				return;
 			}
