@@ -245,7 +245,9 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 			this.fireEvent(v ? 'activate' : 'deactivate', this);
 			this.listViewBodyEl[fnm[v]]();
 			this.postViewEl[fnm[!v]]();
-			this.btnNewEntryEl[(v) ? 'removeCls' : 'addCls']('disabled');
+			if (this.btnNewEntryEl) {
+				this.btnNewEntryEl[(v) ? 'removeCls' : 'addCls']('disabled');
+			}
 		}
 		catch (e) {
 			//console.warn('Swap failed. ListViewEl and PostViewEl are missing!\n',Globals.getError(e));
