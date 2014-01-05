@@ -265,6 +265,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 		}
 
 		function collect(o) {
+			if (o.doNotShow()) { return; }
 			var id = o.getId(),
 				h = history && history.getItem(id),
 				submission = h && h.get('Submission'),

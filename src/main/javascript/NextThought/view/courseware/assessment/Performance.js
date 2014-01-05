@@ -174,6 +174,8 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 		}
 
 		function collect(o) {
+			if (o.doNotShow()) { return; }
+			
 			var id = o.getId(),
 				h = history.getItem(id),
 				submission = h && h.get('Submission'),

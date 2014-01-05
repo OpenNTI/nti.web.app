@@ -5,6 +5,7 @@ Ext.define('NextThought.model.assessment.Assignment', {
 	],
 	isAssignment: true,
 	fields: [
+		{ name: 'category_name', type: 'string'},
 		{ name: 'containerId', type: 'string' },//lowercase C?
 		{ name: 'content', type: 'string' },
 		{ name: 'availableBeginning', type: 'date', mapping: 'available_for_submission_beginning' },
@@ -35,5 +36,10 @@ Ext.define('NextThought.model.assessment.Assignment', {
 			return agg + (r.tallyParts ? r.tallyParts() : 1);
 		}
 		return (this.get('parts') || []).reduce(sum, 0);
+	},
+
+
+	doNotShow: function(){
+		return this.get('category_name') === 'no_submit';
 	}
 });
