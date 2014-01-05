@@ -10,7 +10,8 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 		{ name: 'isCourse', type: 'bool', defaultValue: true, persist: false },
 		{ name: 'Discussions', type: 'singleItem', persist: false },
 		{ name: 'Outline', type: 'singleItem', persist: false },
-		{ name: 'TotalEnrolledCount', type: 'int'}
+		{ name: 'TotalEnrolledCount', type: 'int'},
+		{ name: 'Scopes', type: 'auto' }
 	],
 
 
@@ -92,8 +93,16 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 	},
 
 
-	getScope: function() {
-		return [];
+	getPublicScope: function() { return this.getScope('public'); },
+	getRestrictedScope: function() { return this.getScope('restricted'); },//i don't think this is used
+
+
+	getScope: function(scope) {
+		var s = (this.get('Scopes') || {})[scope] || '';
+		if (typeof s === 'string') {
+			s = s.split(',');
+		}
+		return s;
 	},
 
 

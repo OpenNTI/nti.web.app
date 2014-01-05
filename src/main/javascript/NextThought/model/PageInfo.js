@@ -73,16 +73,16 @@ Ext.define('NextThought.model.PageInfo', {
 	getPublicScope: function() {
 		var l = this.getLocationInfo(),
 			title = l && l.title;
-
+		console.error('[DEPRECATED] User CourseInstance');
 		// FIXME: waiting on content for the right field name. Needs testing too.
 		return (title && title.getScope('public')) || [];
 	},
 
 
-	getRestrictedScope: function() {
+	getRestrictedScope: function() {//i don't think this is used
 		var l = this.getLocationInfo(),
 			title = l && l.title;
-
+		console.error('[DEPRECATED] User CourseInstance');
 		return (title && title.getScope('restricted')) || [];
 	}
 });

@@ -147,7 +147,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 				sharedWith = sharing && sharing.sharedWith,
 				targetEl = this.reader.getEl().up('.x-container-reader.reader-container'),
 				shareInfo = SharingUtils.sharedWithToSharedInfo(
-						SharingUtils.resolveValue(sharedWith), this.reader.getLocation().pageInfo);
+						SharingUtils.resolveValue(sharedWith));
 
 		if (this.editor && !this.editor.isDestroyed) {
 			return false;

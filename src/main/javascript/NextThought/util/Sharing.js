@@ -62,7 +62,7 @@ Ext.define('NextThought.util.Sharing', {
 	},
 
 	//TODO need to check published status for the case of blogs NO?
-	isPublic: function(sharedWith, pageInfo) {
+	isPublic: function(sharedWith, scopeProvider) {
 		if (Ext.isEmpty(sharedWith)) {
 			return false;
 		}
@@ -71,11 +71,11 @@ Ext.define('NextThought.util.Sharing', {
 		var communities = [], sharedWithIds,
 				publicScope;
 
-		if (!pageInfo) {
-			pageInfo = this.getCurrentPageInfo();
+		if (!scopeProvider) {
+			scopeProvider = this.getCurrentSharingInfo();
 		}
 
-		publicScope = (pageInfo && pageInfo.getPublicScope()) || [];
+		publicScope = (scopeProvider && scopeProvider.getPublicScope()) || [];
 		sharedWithIds = Ext.Array.map(sharedWith, function(u) {
 			return u.getId ? u.getId() : u;
 		});
@@ -120,13 +120,11 @@ Ext.define('NextThought.util.Sharing', {
 	},
 
 
-	getCurrentPageInfo: function() {
-		// FIXME: better way to get pageInfo without DQ search?
-		var reader = Ext.ComponentQuery.query('reader-content');
-		return !Ext.isEmpty(reader) && reader[0].getLocation().pageInfo;
+	getCurrentSharingInfo: function() {
+		return Ext.getCmp('course-book').currentCourse;
 	},
 
-	sharedWithForSharingInfo: function(sharingInfo, pageInfo) {
+	sharedWithForSharingInfo: function(sharingInfo, scopeProvider) {
 		if (Ext.isEmpty(sharingInfo)) {
 			return [];
 		}
@@ -134,12 +132,12 @@ Ext.define('NextThought.util.Sharing', {
 				entities = sharingInfo.entities || [],
 				targets;
 
-		if (!pageInfo) {
-			pageInfo = this.getCurrentPageInfo();
+		if (!scopeProvider) {
+			scopeProvider = this.getCurrentSharingInfo();
 		}
 
 		if (isPublic) {
-			targets = (pageInfo && pageInfo.getPublicScope()) || [];
+			targets = (scopeProvider && scopeProvider.getPublicScope()) || [];
 
 			// Use publicScope if defined, otherwise assume public means all communities that a user belongs in.
 			if (!Ext.isEmpty(targets)) {
@@ -155,9 +153,9 @@ Ext.define('NextThought.util.Sharing', {
 	},
 
 
-	sharedWithToSharedInfo: function(sharedWith, pageInfo) {
-		var pi = pageInfo || this.getCurrentPageInfo(),
-				isPublic = this.isPublic(sharedWith, pi),
+	sharedWithToSharedInfo: function(sharedWith, scopeProvider) {
+		var sp = scopeProvider || this.getCurrentSharingInfo(),
+				isPublic = this.isPublic(sharedWith, sp),
 				communities = [],
 				list = [],
 				shareInfo = {publicToggleOn: isPublic};
@@ -180,8 +178,8 @@ Ext.define('NextThought.util.Sharing', {
 		 *  If it's private however, we will return the 'sharedWith' parameter.
 		 */
 		if (isPublic) {
-			if (pi && Ext.isFunction(pi.getPublicScope)) {
-				communities = Ext.Array.merge(communities, pi.getPublicScope());
+			if (sp && Ext.isFunction(sp.getPublicScope)) {
+				communities = Ext.Array.merge(communities, sp.getPublicScope());
 			}
 			Ext.each(sharedWith, function(i) {
 				if (!Ext.Array.contains(communities, i.getId ? i.getId() : i)) {
@@ -204,7 +202,7 @@ Ext.define('NextThought.util.Sharing', {
 		});
 
 		//if its not published use the default sharedInfo
-		if(!published){
+		if (!published) {
 			return this.sharedWithToSharedInfo(sharedWith);
 		}
 
@@ -215,19 +213,19 @@ Ext.define('NextThought.util.Sharing', {
 		};
 	},
 
-	getLongTextFromShareInfo: function(shareInfo, callback, scope, tpl, maxLength){
+	getLongTextFromShareInfo: function(shareInfo, callback, scope, tpl, maxLength) {
 		var explicitEntities = shareInfo.entities,
 			isPublic = shareInfo.publicToggleOn,
 			prefix = isPublic ? 'Public' : 'Only Me',
-			str, others, names=[];
+			str, others, names = [];
 
-		if(Ext.isEmpty(explicitEntities)){
+		if (Ext.isEmpty(explicitEntities)) {
 			Ext.callback(callback, scope, [prefix]);
 			return;
 		}
 
-		UserRepository.getUser(explicitEntities, function(resolvedUsers){
-			Ext.each(resolvedUsers || [], function(u){
+		UserRepository.getUser(explicitEntities, function(resolvedUsers) {
+			Ext.each(resolvedUsers || [], function(u) {
 				var dn = isMe(u) ? 'me' : u.getName();
 
 				if (dn.toLowerCase() !== 'unknown' && !Ext.isEmpty(dn)) {
@@ -237,8 +235,8 @@ Ext.define('NextThought.util.Sharing', {
 			});
 
 			if (tpl) {
-				names = Ext.Array.map(names, function(){ return tpl.apply(arguments); });
-			};
+				names = Ext.Array.map(names, function() { return tpl.apply(arguments); });
+			}
 
 			others = resolvedUsers.length - names.length;
 
@@ -254,23 +252,23 @@ Ext.define('NextThought.util.Sharing', {
 
 	},
 
-	getShortTextFromShareInfo: function(shareInfo, callback, scope){
+	getShortTextFromShareInfo: function(shareInfo, callback, scope) {
 		var explicitEntities = shareInfo.entities,
 			isPublic = shareInfo.publicToggleOn,
 			prefix = isPublic ? 'Public and' : 'Shared with',
 			str;
 
-		if(Ext.isEmpty(explicitEntities)){
+		if (Ext.isEmpty(explicitEntities)) {
 			Ext.callback(callback, scope, [isPublic ? 'Public' : 'Only Me']);
 		} else if (explicitEntities.length > 1) {
 			str = Ext.String.format('{0} {1}', prefix, Ext.util.Format.plural(explicitEntities.length, 'other'));
 			Ext.callback(callback, scope, [str]);
 		} else {
 			//Exactly one, resolve the user then callback
-			UserRepository.getUser(explicitEntities.first(), function(resolved){
+			UserRepository.getUser(explicitEntities.first(), function(resolved) {
 				var dn = resolved.getName();
 
-				if(dn.toLowerCase() === 'unknown' || Ext.isEmpty(dn)){
+				if (dn.toLowerCase() === 'unknown' || Ext.isEmpty(dn)) {
 					str = Ext.String.format('{0} {1}', prefix, '1 other');
 				} else {
 					str = Ext.String.format('{0} {1}', prefix, resolved.getName());
