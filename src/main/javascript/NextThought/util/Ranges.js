@@ -454,7 +454,7 @@ Ext.define('NextThought.util.Ranges', {
 			}
 		}
 		catch (er) {
-			console.error(Globals.getError(er));
+			console.warn(Globals.getError(er));
 		}
 		return rect;
 	}
