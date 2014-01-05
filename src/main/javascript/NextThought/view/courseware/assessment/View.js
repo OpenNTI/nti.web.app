@@ -103,7 +103,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 						var history = txts[0],
 							assignments = Ext.decode(txts[1], true),
 							gradeBook = txts[2] && ParseUtils.parseItems(txts[2])[0],
-							assignmentKeys = Object.keys(assignments).filter(function(k) { return k !== 'href'});
+							assignmentKeys = Object.keys(assignments).filter(function(k) { return k !== 'href'; });
 
 						me.hasAssignments = assignmentKeys.length;
 						if (me.hasAssignments) {
