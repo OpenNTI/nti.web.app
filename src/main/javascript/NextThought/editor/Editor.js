@@ -38,7 +38,6 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		]),
 
 	renderSelectors: {
-		contentEl: '.content',
 		saveButtonEl: '.action.save'
 	},
 
