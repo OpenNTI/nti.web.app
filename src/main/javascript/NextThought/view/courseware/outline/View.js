@@ -134,7 +134,8 @@ Ext.define('NextThought.view.courseware.outline.View', {
 			this.addCls(this.MULTI_LEVEL_NAV_CLS);
 		}
 
-		//start from the page we're on, and go up to find its associated course node...(TODO: look at the course and find the leaf)
+		//start from the page we're on, and go up to find its associated course node...
+		// TODO: look at the course and find the leaf
 		while (!r && lineage.length) {
 			console.log('lineage', lineage);
 			r = store.findRecord('NTIID', lineage.shift(), false, true, true);
