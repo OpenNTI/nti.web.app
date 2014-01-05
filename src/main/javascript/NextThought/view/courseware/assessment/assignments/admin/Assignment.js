@@ -58,14 +58,16 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	renderSelectors: {
 		rootPathEl: '.toolbar .path.part.root',
 		previousEl: '.toolbar .controls .up',
-		nextEl: '.toolbar .controls .down'
+		nextEl: '.toolbar .controls .down',
+		changeDateEl: '.header span.link'
 	},
 
 
 	listeners: {
 		rootPathEl: { click: 'fireGoUp' },
 		previousEl: { click: 'firePreviousEvent' },
-		nextEl: { click: 'fireNextEvent' }
+		nextEl: { click: 'fireNextEvent' },
+		changeDateEl: { click: 'requestDateChange' }
 	},
 
 
@@ -225,7 +227,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 							console.warn('Skipped record!', i, records, users);
 						}
 					}
-					
+
 					me.filledStorePromise.fulfill(store);
 					store.sort();
 				}).fail(function(reason) {
@@ -234,6 +236,17 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 				});
 
 
+	},
+
+
+	requestDateChange: function() {
+		Globals.sendEmailTo(
+				'support@nextthought.com',
+				Ext.String.format('[CHANGE REQUEST] ({0}) {1}: {2}',
+						location.hostname,
+						$AppConfig.username,
+						this.assignmentTitle)
+		);
 	},
 
 
