@@ -8,7 +8,7 @@
 	<link rel="shortcut icon" href="resources/images/favicon.ico">
 	<link rel="stylesheet" id="ext-base" type="text/css" href="ext-4.2/resources/css/ext-all-gray.css">
 	<link rel="stylesheet" id="mathquill-stylesheet" type="text/css" href="resources/lib/mathquill/mathquill.css">
-	<link rel="stylesheet" id="main-stylesheet" type="text/css" href="resources/css/main.css">
+	<link rel="stylesheet" id="main-stylesheet" type="text/css" href="resources/css/main.css?dc=20140105155228">
 	<link rel="stylesheet" id="site-stylesheet" type="text/css" href="resources/css/site.css">
 	<style type="text/css">
 		#loading-mask {
@@ -40,13 +40,16 @@
 	<script type="text/javascript" src="error.reporter.js"></script>
 	<script type="text/javascript" src="resources/strings/strings.js"></script>
 	<script type="text/javascript" src="resources/strings/site.js"></script>
-	<!-- <x-compile> -->
-		<!-- <x-bootstrap> -->
-			<script type="text/javascript" src="ext-4.2/ext-debug.js" id="ext-js-library"></script>
-			<script type="text/javascript" src="bootstrap.js"></script>
-		<!-- </x-bootstrap> -->
-		<script type="text/javascript" src="javascript/app.js"></script>
-	<!-- </x-compile> -->
-	<!-- analytics -->
+<script type="text/javascript" src="javascript/app.min.js?dc=20140105155228"></script>
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-22943650-3', 'nextthought.com');
+ga('send', 'pageview');
+</script>
 </body>
 </html>

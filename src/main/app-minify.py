@@ -11,20 +11,21 @@ BUILDTIME = time.strftime('%Y%m%d%H%M%S')
 def _buildIndexHtml( minify, analytics_key='', app_root='.' ):
 	bust_cache = """\t\t\t<script type="text/javascript">window.disableCaching = true;</script>""" + '\n'
 
-	analytics = """\t<script type="text/javascript">
-\t\tvar _gaq = _gaq || [];
-\t\t_gaq.push(['_setAccount', '%s']);
-\t\t_gaq.push(['_setDomainName', 'nextthought.com']);
-\t\t_gaq.push(['_trackPageview']);
-\t\t(function() {
-\t\t\tvar ga = document.createElement('script');
-\t\t\tga.type = 'text/javascript';
-\t\t\tga.async = true;
-\t\t\tga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-\t\t\tvar s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-\t\t})();
-\t</script>
-""" % (analytics_key, )
+	analytics_domain = 'nextthought.com'
+	if ',' in analytics_key:
+		analytics_key, analytics_domain = analytics_key.split(',')
+
+	analytics = """
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', '%s', '%s');
+ga('send', 'pageview');
+</script>
+""" % (analytics_key, analytics_domain)
 
 	lines = []
 	input_file = 'index.html.in'
@@ -98,15 +99,15 @@ def _minify_app( app_root, extjs_sdk ):
 
 	sencha_bootstrap_command = [ 'sencha',
 				     '-sdk', extjs_sdk,
-				     'compile', 
+				     'compile',
 				     '-classpath=javascript/libs.js,javascript/app.js,javascript/NextThought',
-				     'meta', '-alias', 
+				     'meta', '-alias',
 				     '-out', 'bootstrap.js',
 				     'and',
 				     'meta', '-alt', '-append', '-out', 'bootstrap.js' ]
 	sencha_compile_command = [ 'sencha',
 				   '-sdk', extjs_sdk,
-				   'compile', 
+				   'compile',
 				   '-classpath=javascript/libs.js,javascript/app.js,javascript/NextThought',
 				   'exclude', '-namespace', 'Ext.diag',
 				   'and',
@@ -121,7 +122,7 @@ def _minify_app( app_root, extjs_sdk ):
 
 	subprocess.check_call(sencha_bootstrap_command)
 	subprocess.check_call(sencha_compile_command)
-	
+
 def main():
 	parser = ArgumentParser()
 	parser.add_argument('-a', '--google-analytics', dest='analytics_key', action='store', default='', help="Key value used with Google Analytics.  If no value is specified, then the index-minify.html will not contain Google Analytics code.")
