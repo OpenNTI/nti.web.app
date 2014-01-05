@@ -214,6 +214,19 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 			data.adjustmentEl.setStyle({marginBottom: -mb + 'px'});
 			data.targetEl.setStyle({paddingBottom: (mb + pd) + 'px'});
 			Ext.DomHelper.append(data.targetEl, {style: {height: mb + 'px'}, cls: 'scroll-buffer'});
+			//setReverseMargin.call(this, mb);
+			console.debug([
+				'[CUSTOM SCROLL SETUP]',
+				'this: ' + me.id,
+				'parentContainerEl: ' + parentContainerEl.id,
+				'parentContainerEl paddingTop: ' + mb,
+				'targetEl: ' + data.targetEl.id,
+				'targetEl orginal paddingBottom: ' + pd,
+				'targetEl set marginBottom to: ' + (mb + pd),
+				'adjustmentEl: ' + data.adjustmentEl.id,
+				'adjustmentEl: set margin bottom to: ' + (-mb),
+				'secondaryViewEl: ' + secondaryViewEl
+			].join('\n'));
 		}
 		me.mon(data.targetEl, 'scroll', adjustOnScroll, me);
 
@@ -265,7 +278,7 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 			var me = this;
 
 			if (!me.rendered) {
-				me.on('afterrender', onAfterRender, me);
+				me.on('afterrender', onAfterRender, me, {buffer: 1});//let the layout code finish this event pump
 				return;
 			}
 

@@ -7,9 +7,18 @@ Ext.define('NextThought.view.courseware.View', {
 		'NextThought.view.courseware.overview.View'
 	],
 
+	mixins: {
+		customScroll: 'NextThought.mixins.CustomScroll'
+	},
 
 	navigation: {xtype: 'course-outline'},
 	body: {xtype: 'course-overview', delegate: ['course course-outline']},
+
+
+	initComponent: function() {
+		this.callParent(arguments);
+		this.initCustomScrollOn('content', '.course-overview', {secondaryViewEl: '.nav-outline'});
+	},
 
 
 	clear: function() {

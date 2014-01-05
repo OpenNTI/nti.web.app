@@ -8,6 +8,10 @@ Ext.define('NextThought.view.reader.Panel', {
 		'NextThought.view.annotations.View'
 	],
 
+	mixins: {
+		customScroll: 'NextThought.mixins.CustomScroll'
+	},
+
 	prefix: 'default',
 	ui: 'reader',
 	cls: 'reader-container',
@@ -72,6 +76,9 @@ Ext.define('NextThought.view.reader.Panel', {
 		this.down('annotation-view').anchorComponent = this.down('reader-content');
 
 		this.on('beforedeactivate', this.beforeDeactivate, this);
+
+		// NOTE: check notes on the mixin, as to why we might want to set a secondaryViewEl.
+		this.initCustomScrollOn('content', '.x-panel-body-reader', {secondaryViewEl: '.annotation-view'});
 	},
 
 

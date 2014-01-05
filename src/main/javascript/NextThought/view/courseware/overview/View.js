@@ -8,10 +8,6 @@ Ext.define('NextThought.view.courseware.overview.View', {
 		'NextThought.view.courseware.overview.parts.*'
 	],
 
-	mixins: {
-		customScroll: 'NextThought.mixins.CustomScroll'
-	},
-
 	autoScroll: true,
 
 	SECTION_TITLE_MAP: {
@@ -41,12 +37,6 @@ Ext.define('NextThought.view.courseware.overview.View', {
 		'required': 'course-overview-section',
 		'assessments': 'course-overview-section',
 		'assigments': 'course-overview-section'
-	},
-
-
-	initComponent: function() {
-		this.callParent(arguments);
-		this.initCustomScrollOn('content', undefined, {secondaryViewEl: '.nav-outline'});
 	},
 
 
@@ -96,7 +86,7 @@ Ext.define('NextThought.view.courseware.overview.View', {
 		me.currentPage = r.getId();
 
 		course.getAssignments()
-			.done(function(assignments){
+			.done(function(assignments) {
 				Ext.each(r.getChildren(), function(i) {
 					var c, t;
 					if (i.getAttribute('suppressed') === 'true') {
@@ -131,7 +121,7 @@ Ext.define('NextThought.view.courseware.overview.View', {
 				].concat(items));
 
 			})
-			.fail(function(reason){
+			.fail(function(reason) {
 				console.error(reason);
 			});
 	},

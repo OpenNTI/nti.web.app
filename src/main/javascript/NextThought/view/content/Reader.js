@@ -21,8 +21,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 	mixins: {
 		instanceTracking: 'NextThought.mixins.InstanceTracking',
-		moduleContainer: 'NextThought.mixins.ModuleContainer',
-		customScroll: 'NextThought.mixins.CustomScroll'
+		moduleContainer: 'NextThought.mixins.ModuleContainer'
 	},
 
 	cls: 'x-reader-pane scrollable',
@@ -74,9 +73,6 @@ Ext.define('NextThought.view.content.Reader', {
 					navigateComplete: 'onNavigateComplete',
 					'load-annotations-skipped': 'skipAnnotationsFireReadyOnFinish'
 				});
-
-		// NOTE: check notes on the mixin, as to why we might want to set a secondaryViewEl.
-		this.initCustomScrollOn('content', undefined, {secondaryViewEl: '.annotation-view'});
 	},
 
 
