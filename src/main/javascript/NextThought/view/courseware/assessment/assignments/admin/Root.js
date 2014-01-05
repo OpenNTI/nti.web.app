@@ -17,8 +17,31 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 
 	showAssignment: function(assignment, user) {
 		var id = assignment && ((assignment.getId && assignment.getId()) || assignment),
-			x = this.store.getById(id);
+			x = this.store.getById(id),
+			view = this.up('course-assessment-admin-assignments'), assignment;
+		
 		this.onItemClicked(null, x);
-		//TODO: drill down and auto-select student
+		
+		assignment = view && view.down('course-assessment-admin-assignments-item');
+
+		if (assignment) {
+			assignment.filledStorePromise
+				.done(function(store){
+					
+					store.each(function(rec){
+						var creator = rec.get('Creator'),
+							u = Ext.isString(user)? user : user.getId();
+
+						creator = Ext.isString(creator)? creator : creator.getId();
+
+						if(u === creator){
+							assignment.goToAssignment(null, rec);
+						}
+					});
+				})
+				.fail(function(reason){
+					console.error(reason);
+				});
+		}
 	}
 });

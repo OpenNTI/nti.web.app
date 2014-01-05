@@ -155,6 +155,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	initComponent: function() {
 		this.callParent(arguments);
 		this.enableBubble(['show-assignment']);
+		this.filledStorePromise = new Promise();
 	},
 
 
@@ -192,7 +193,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	resolveUsers: function(store, records) {
 		records = records || [];
 
-		var pluck = Ext.Array.pluck,
+		var pluck = Ext.Array.pluck, me = this,
 			users = pluck(pluck(records, 'data'), 'Creator'),
 			phantoms = [];
 
@@ -224,11 +225,15 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 							console.warn('Skipped record!', i, records, users);
 						}
 					}
-
+					
+					me.filledStorePromise.fulfill(store);
 					store.sort();
 				}).fail(function(reason) {
+					me.filledStorePromise.fail(reason);
 					console.error(reason);
 				});
+
+
 	},
 
 
