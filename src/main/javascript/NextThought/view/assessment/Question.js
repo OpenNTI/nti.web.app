@@ -103,6 +103,7 @@ Ext.define('NextThought.view.assessment.Question', {
 
 	updateWithResults: function(assessedQuestionSet) {
 		var q, id = this.question.getId(),
+			correct,
 			fn = {
 				'null': 'markSubmitted',
 				'true': 'markCorrect',
@@ -125,7 +126,11 @@ Ext.define('NextThought.view.assessment.Question', {
 			Ext.Error.raise('Couldn\'t find my question? :(');
 		}
 
-		this[fn[q.isCorrect()]](assessedQuestionSet.noMark);
+		correct = String(q.isCorrect());
+		if (!fn[correct]) {
+			correct = 'null';
+		}
+		this[fn[correct]](assessedQuestionSet.noMark);
 
 		this.down('question-parts').updateWithResults(q);
 	},
