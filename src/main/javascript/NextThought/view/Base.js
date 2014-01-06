@@ -113,7 +113,7 @@ Ext.define('NextThought.view.Base', {
 			me._setActiveTabAfterRender = me.mon(me, {
 				destroyable: true, single: true,
 				afterrender: function() {
-					me.setActiveItem(tab);
+					me.setActiveTab(tab);
 					delete me._setActiveTabAfterRender;
 				}
 			});
