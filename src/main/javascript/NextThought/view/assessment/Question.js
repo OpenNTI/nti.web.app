@@ -55,10 +55,13 @@ Ext.define('NextThought.view.assessment.Question', {
 
 
 	findLine: function() {
-		var doc = this.contentElement.ownerDocument,
-				range = doc.createRange();
+		var ce = this.contentElement,
+			doc = ce && ce.ownerDocument,
+			range = doc && doc.createRange();
 
-		range.selectNodeContents(this.contentElement);
+		if (range) {
+			range.selectNodeContents(this.contentElement);
+		}
 		return {range: range, rect: this.el.dom.getBoundingClientRect()};
 	},
 
@@ -118,7 +121,7 @@ Ext.define('NextThought.view.assessment.Question', {
 		}
 
 		this[q.isCorrect() ? 'markCorrect' : 'markIncorrect'](assessedQuestionSet.noMark);
-		
+
 
 		this.down('question-parts').updateWithResults(q);
 	},
@@ -179,7 +182,7 @@ Ext.define('NextThought.view.assessment.Question', {
 				 html: ContentUtils.fixReferences(c + p, root)
 			 }));
 
-		function santatize(){
+		function santatize() {
 			me.el.select('a[href]').set({target: '_blank'});
 		}
 
@@ -188,7 +191,7 @@ Ext.define('NextThought.view.assessment.Question', {
 		} else {
 			santatize();
 		}
-		
+
 		this.updateLayout();
 	},
 
@@ -210,7 +213,7 @@ Ext.define('NextThought.view.assessment.Question', {
 		}
 
 		var sub = this.down('assessment-multipart-submission');
-		
+
 		if (sub) {
 			sub.disableSubmission();
 		}
@@ -223,7 +226,7 @@ Ext.define('NextThought.view.assessment.Question', {
 		}
 
 		var sub = this.down('assessment-multipart-submission');
-		
+
 		if (sub) {
 			sub.disableSubmission();
 		}
