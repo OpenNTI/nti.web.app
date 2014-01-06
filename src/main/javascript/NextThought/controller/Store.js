@@ -332,15 +332,8 @@ Ext.define('NextThought.controller.Store', function(){
 				return;
 			}
 
-			var view = this.getLibraryView(),
-				store = this.getPurchasableStore(),
-				preview = this.previewStore || new NextThought.store.Purchasable();
-
-			preview.loadRecords((store.snapshot ? store.snapshot : store).getRange());
-			this.previewStore = preview;
-
-			store.filter(function(r) { return !r.raw.Preview; });
-			preview.filter(function(r) { return !!r.raw.Preview; });
+			var view = this.getLibraryView().getCatalogView(),
+				store = this.getPurchasableStore();
 
 			if (store.getCount() && view && !Ext.getCmp('store-collection')) {
 				view.add({
@@ -351,16 +344,6 @@ Ext.define('NextThought.controller.Store', function(){
 				});
 			}
 
-			if (preview.getCount() && view && !Ext.getCmp('store-preview-collection')) {
-				view.add({
-					store: preview,
-					xtype: 'purchasable-collection',
-					id: 'store-preview-collection',
-					name: getString('Coming Soon')
-				});
-			}
-
-
 			//TODO Ok they want to identify the sample content
 			//so do a nasty hack here that probably breaks
 			//with the next client using the store.  We make an assumption
@@ -368,7 +351,6 @@ Ext.define('NextThought.controller.Store', function(){
 			//entries in the library that match the purchasables items list,
 			//those things are samples. Set a sample property as such
 			store.each(this.updateLibraryWithPurchasable, this);
-			preview.each(this.updateLibraryWithPurchasable, this);
 		},
 
 

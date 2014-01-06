@@ -6,7 +6,7 @@ Ext.define('NextThought.view.contacts.View', {
 	],
 
 	title: 'NextThought: Contacts',
-
+	defaultTab: 'my-contacts',
 
 	items: [
 		{ xtype: 'contact-tab-view', id: 'my-contacts', bodyCls: 'make-white', outlineLabel: 'Contacts' },
@@ -34,66 +34,6 @@ Ext.define('NextThought.view.contacts.View', {
 		{label: 'Groups', viewId: 'my-groups'},
 		{label: 'Distribution Lists', viewId: 'my-lists'}
 	],
-
-
-	updateActiveState: function(type, ntiid) {
-		var state = {};
-		state['current_' + type] = ntiid;
-		this.pushState(state);
-	},
-
-
-	onTabClicked: function(tabSpec) {
-		var active = this.layout.getActiveItem(),
-				targetView = /^([^\?]+)(\?)?$/.exec(tabSpec.viewId) || [tabSpec.viewId],
-				vId = targetView[1],
-				needsChanging = vId !== active.id,
-		//only reset the view if we are already there and the spec flagged that it can be reset.
-				reset = !!targetView[2] && !needsChanging;
-
-		if (Ext.isEmpty(vId)) {
-			return false;
-		}
-
-		if (needsChanging) {
-			this.setActiveTab(vId);
-    //			this.pushState({activeTab: vId});
-		} else if (reset) {
-			console.log('ignore reset');
-		}
-
-		return true;
-	},
-
-  //	pushState: function(s){
-  //		history.pushState({content: s}, this.title, this.getFragment());
-  //	},
-
-
-	getTabs: function() {
-		var tabs = this.tabSpecs,
-			active = this.layout.getActiveItem(),
-			activeId = active && active.id;
-
-		Ext.each(tabs, function(t) {
-			t.selected = (t.viewId.replace(/\?$/, '') === activeId);
-
-		});
-
-		return tabs;
-	},
-
-
-	setActiveTab: function(tab) {
-		if (this.rendered) {
-			this.layout.setActiveItem(tab || 'my-contacts');
-			this.setTitle(this.getTitlePrefix());
-		} else {
-			this.on('afterrender', function() {
-				this.layout.setActiveItem(tab);
-			}, this);
-		}
-	},
 
 
 	getTitlePrefix: function() {
@@ -169,16 +109,6 @@ Ext.define('NextThought.view.contacts.View', {
 
             });
         }
-	},
-
-
-	monitorTabs: function(panel, newTab, oldTab) {
-		if (this.restoring) {
-			return;
-		}
-		var state = {};
-		state[this.getId()] = {source: newTab.source};
-		history.pushState(state, this.title, location.toString());
 	},
 
 

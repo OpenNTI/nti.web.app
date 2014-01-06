@@ -1,13 +1,17 @@
 
 #library {
-	@include scrollbar($track:transparent,$nib:rgba(0,0,0,0.3));
-	overflow: {
-		x: hidden;
-		y: auto; //scroll;
+
+	margin-top: -50px;
+
+	.page {
+		@include scrollbar($track:transparent,$nib:rgba(0,0,0,0.3));
+		overflow: {
+			x: hidden;
+			y: auto; //scroll;
+		}
+		margin-left: -5px;
+		padding-left: 5px;
 	}
-	margin-top: -100px;
-	margin-left: -5px;
-	padding-left: 5px;
 
 
 	@include grid-def($gridSpacing: 6px);

@@ -17,6 +17,7 @@ Ext.define('NextThought.view.content.View', {
 		deferredRender: true
 	},
 	defaultType: 'box',
+	defaultTab: 'course-book',
 	activeItem: 'course-book',
 	defaults: {
 		isTabView: true
@@ -183,13 +184,6 @@ Ext.define('NextThought.view.content.View', {
 	enableTabs: function(enable) {
 		this.tabs = enable;
 		this.updateTabs();
-	},
-
-
-	updateTabs: function() {
-		if (this.isVisible(true)) {
-			this.fireEvent('update-tabs', this);
-		}
 	},
 
 
@@ -561,19 +555,6 @@ Ext.define('NextThought.view.content.View', {
 	},
 
 
-	setActiveTab: function(tab) {
-		if (this.rendered) {
-			this.layout.setActiveItem(tab || 'course-book');
-			this.updateTitle();
-		} else {
-			this.on('afterrender', function() {
-				this.layout.setActiveItem(tab || 'course-book');
-				this.updateTitle();
-			}, this);
-		}
-	},
-
-
 	updateTitle: function() {
 		var tab = this.layout.getActiveItem(),
 			inst = this.currentCourse,
@@ -634,9 +615,6 @@ Ext.define('NextThought.view.content.View', {
 
 		return promise;
 	},
-
-
-
 
 
 	activate: function() {

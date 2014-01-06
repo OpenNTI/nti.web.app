@@ -56,6 +56,8 @@ Ext.define('NextThought.view.navigation.Collection', {
 			itemadd: 'updateCount',
 			itemremove: 'updateCount'
 		});
+
+		this.mon(this.getStore(), 'datachanged', 'updateCount');
 	},
 
 
@@ -63,6 +65,7 @@ Ext.define('NextThought.view.navigation.Collection', {
 		if (this.rendered && this.el.down('.count')) {
 			this.el.down('.count').update(this.store.getCount());
 		}
+		this.fireEvent('count-changed', this.store.getCount());
 	},
 
 

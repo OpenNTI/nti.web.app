@@ -3,56 +3,83 @@ Ext.define('NextThought.view.library.View', {
 	alias: 'widget.library-view-container',
 
 	requires: [
-		'NextThought.view.library.Branding',
-		'NextThought.view.library.Collection',
+		'NextThought.view.library.Page',
 		'NextThought.view.courseware.Collection'
 	],
 
-	cls: 'library-view scrollable',
-	layout: 'auto',
-	defaultType: 'library-collection',
+	extraTabBarCls: 'library',
+	cls: 'library-view',
+	defaultType: 'library-view-page',
+	defaultTab: 'my-courses',
+	activeItem: 0,
+	layout: {
+		type: 'card',
+		deferredRender: true
+	},
 
 	items: [
 		{
-			cls: 'branding',
-			xtype: 'library-branding-box'
+			itemId: 'my-courses',
+			items: [
+				{
+					name: getString('My Administered Courses'),
+					xtype: 'course-collection',
+					store: 'courseware.AdministeredCourses',
+					kind: 'admin'
+				},
+				{
+					name: getString('My Courses'),
+					xtype: 'course-collection',
+					kind: 'enrolled'
+				}
+			]
 		},
+		{ itemId: 'content-catalog' },
 		{
-			name: getString('My Administered Courses'),
-			xtype: 'course-collection',
-			store: 'courseware.AdministeredCourses',
-			kind: 'admin'
-		},
-		{
-			name: getString('My Courses'),
-			xtype: 'course-collection',
-			kind: 'enrolled'
-		},
-		{
-			hidden: true,
-			bookList: true,
-			name: getString('My Books')
+			itemId: 'my-books',
+			items: [
+				{ name: getString('My Books') }
+			]
 		}
+	],
+
+	tabSpecs: [
+		{label: getString('Courses'), viewId: 'my-courses'},
+		{label: getString('Books'), viewId: 'my-books'},
+		{label: getString('Catalog'), viewId: 'content-catalog'}
 	],
 
 
 	initComponent: function() {
 		this.callParent(arguments);
 		this.removeCls('make-white');
-		this.mon(Library, {
-			'show-books': 'showBooks',
-			'hide-books': 'hideBooks'
-		});
+		this.on('update-tab', 'updateTabs');
 	},
 
 
-	showBooks: function() {
-		this.down('[bookList]').show();
-	},
+	getTabs: function() {
+		var me = this,
+			tabs = me.tabSpecs,
+			active = me.layout.getActiveItem(),
+			activeId = active && active.itemId;
 
+		function canShow(o) {
+			return me.getComponent(o.viewId).showPage;
+		}
 
-	hideBooks: function() {
-		this.down('[bookList]').hide();
+		function markSelected(t) {
+			t.selected = (t.viewId === activeId);
+		}
+
+		tabs = tabs.filter(canShow);
+
+		tabs.forEach(markSelected);
+
+		if (active && !active.showPage) {
+			this.setActiveTab((tabs[0] || {}).viewId);
+		}
+
+		return tabs;
 	},
 
 
@@ -60,5 +87,13 @@ Ext.define('NextThought.view.library.View', {
 		var promise = new Promise();
 		promise.fulfill();
 		return promise;
+	},
+
+
+	getCatalogView: function() {
+		if (!this.catalog) {
+			this.catalog = this.getComponent('content-catalog');
+		}
+		return this.catalog;
 	}
 });

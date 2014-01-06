@@ -279,6 +279,14 @@
 		min-width: 100px;
 		white-space: nowrap;
 
+		&.library {
+			width: auto !important;
+			left: 0;
+			right: 0;
+			text-align: center;
+			top: -25px;
+		}
+
 		.main-view-tab {
 			position: relative;
 			display: inline-block;

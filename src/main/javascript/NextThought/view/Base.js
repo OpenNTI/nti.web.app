@@ -51,5 +51,72 @@ Ext.define('NextThought.view.Base', {
 
 	updateBackground: function() {
 		this.fireEvent('new-background', this.backgroundUrl);
+	},
+
+
+	getTitlePrefix: function() {return '';},
+
+
+	getTabs: function() {
+		var tabs = this.tabSpecs,
+			active = this.layout && this.layout.getActiveItem && this.layout.getActiveItem(),
+			activeId = active && active.id;
+
+		Ext.each(tabs, function(t) {
+			t.selected = (t.viewId.replace(/\?$/, '') === activeId);
+		});
+
+		return tabs;
+	},
+
+
+	onTabClicked: function(tabSpec) {
+		if (!this.layout || !this.layout.getActiveItem) {
+			return false;
+		}
+
+		var active = this.layout.getActiveItem(),
+				targetView = /^([^\?]+)(\?)?$/.exec(tabSpec.viewId) || [tabSpec.viewId],
+				vId = targetView[1],
+				needsChanging = vId !== active.id,
+		//only reset the view if we are already there and the spec flagged that it can be reset.
+				reset = !!targetView[2] && !needsChanging;
+
+		if (Ext.isEmpty(vId)) {
+			return false;
+		}
+
+		if (needsChanging) {
+			this.setActiveTab(vId);
+			//			this.pushState({activeTab: vId});
+		} else if (reset) {
+			console.log('ignore reset');
+		}
+
+		return true;
+	},
+
+
+	updateTabs: function() {
+		if (this.isVisible(true)) {
+			this.fireEvent('update-tabs', this);
+		}
+	},
+
+
+	setActiveTab: function(tab) {
+		var me = this;
+		if (this.rendered) {
+			me.layout.setActiveItem(tab || me.defaultTab || 0);
+			me.setTitle(me.getTitlePrefix());
+		} else {
+			me._setActiveTabAfterRender = me.mon(me, {
+				destroyable: true, single: true,
+				afterrender: function() {
+					me.setActiveItem(tab);
+					delete me._setActiveTabAfterRender;
+				}
+			});
+		}
 	}
 });

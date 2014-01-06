@@ -175,7 +175,7 @@ Ext.define('NextThought.view.Views', {
 		me.tabMonitors = [];
 		Ext.each(tabSpecs, function(s) {
 			var id = (idRe.exec(s.viewId) || [])[1],
-					cmp = id && Ext.getCmp(id);
+				cmp = id && (Ext.getCmp(id) || me.getActive().getComponent(id));
 			if (cmp) {
 				me.tabMonitors.push(me.mon(cmp, {
 					activate: 'onTabActivated',
@@ -238,6 +238,13 @@ Ext.define('NextThought.view.Views', {
 
 
 	onViewChanged: function(to, from) {
+		if (from && from.extraTabBarCls) {
+			this.tabs.removeCls(from.extraTabBarCls);
+		}
+		if (to && to.extraTabBarCls) {
+			this.tabs.addCls(to.extraTabBarCls);
+		}
+
 		this.updateTabs(to && to.getTabs && to.getTabs());
 	},
 
