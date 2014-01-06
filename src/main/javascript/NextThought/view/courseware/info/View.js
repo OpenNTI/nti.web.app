@@ -16,11 +16,11 @@ Ext.define('NextThought.view.courseware.info.View', {
 	body: {xtype: 'course-info-panel'},
 
 
-	initComponent: function() {
+	afterRender: function() {
 		this.callParent(arguments);
 		//we set this up to listen to a node that will not scroll...
 		// so that when this view is activated it will reset the view.
-		this.initCustomScrollOn('content', '.course-info-panel');
+		Ext.defer(this.initCustomScrollOn, 5, this,['content', '.course-info-panel']);
 	},
 
 
