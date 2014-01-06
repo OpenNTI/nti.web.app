@@ -41,13 +41,17 @@ Ext.define('NextThought.view.courseware.assessment.admin.Activity', {
 		if (!isMe(rec.get('user'))) {
 			return rec;
 		}
-
+		
 		Service.request(path)
 				.done(function(submission) {
-					console.log(submission);
+					submission = ParseUtils.parseItems(submission)[0];
+
+					rec.set('user', submission.get('Creator'));
 				})
 				.fail(function() {
-					console.error('No soup for you.');
+					console.error(
+						'Failed associate instructor feedback activity to a students assignment.',
+						' Clicking on this feedback item will just take you to the assignment overview of all students, not a particular one');
 				});
 
 		return rec;
