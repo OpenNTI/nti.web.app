@@ -11,6 +11,6 @@ Ext.define('NextThought.model.assessment.AssessedPart', {
 
 	isCorrect: function() {
 		var a = this.get('assessedValue');
-		return (a !== null && a === 1) || a;//true, false, or null
+		return Ext.isNumber(a) ? a === 1 : null;//true, false, or null
 	}
 });
