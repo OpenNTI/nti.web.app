@@ -173,7 +173,7 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 		}
 		
 		newBottom = (Ext.getBody().getBottom() - parent.getBottom()) - oldBottom;
-		console.log(Ext.getBody().getBottom(), parent.getBottom(), oldBottom, newBottom, parent.getBottom() + newBottom);
+		//console.log(Ext.getBody().getBottom(), parent.getBottom(), oldBottom, newBottom, parent.getBottom() + newBottom);
 
 		el.setStyle('bottom', -newBottom + 'px');
 		el.setStyle('height', 'auto'); //make sure the bottom is driving the height
