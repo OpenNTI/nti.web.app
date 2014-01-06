@@ -27,6 +27,10 @@ Ext.define('NextThought.util.Format', {
 
 	avatarURL: function(value) {
 		return (value && value.get && value.get('avatarURL')) || User.BLANK_AVATAR;
+	},
+
+	boolean: function(value, trueString, falseString) {
+		return value ? (trueString || '') : (falseString || '');
 	}
 
 },function() {
@@ -34,4 +38,5 @@ Ext.define('NextThought.util.Format', {
 	Ext.util.Format.ntiCurrency = NTIFormat.currency.bind(NTIFormat);
 	Ext.util.Format.ago = NTIFormat.ago.bind(NTIFormat);
 	Ext.util.Format.avatarURL = NTIFormat.avatarURL.bind(NTIFormat);
+	Ext.util.Format.boolean = NTIFormat.boolean.bind(NTIFormat);
 });
