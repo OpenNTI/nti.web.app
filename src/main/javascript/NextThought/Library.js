@@ -243,7 +243,13 @@ Ext.define('NextThought.Library', {
 		me.purgeTocs();
 
 		if (success) {
-			me.libraryLoaded(Ext.bind(go, me));
+			CourseWareUtils.onceLoaded()
+				.done(function(){
+					me.libraryLoaded(Ext.bind(go, me));
+				})
+				.fail(function(reason){
+					console.error(reason);
+				});
 		}
 		else {
 			console.error('FAILED: load library');
@@ -304,7 +310,8 @@ Ext.define('NextThought.Library', {
 
 	loadToc: function(index, url, ntiid, callback) {
 		var me = this,
-			record = index && index.isModel ? index : null;
+			record = index && index.isModel ? index : null,
+			status = CourseWareUtils.getEnrollmentStatus(ntiid);
 
 		if (!this.loaded && !callback) {
 			Ext.log.warn('The library has not loaded yet');
@@ -318,7 +325,7 @@ Ext.define('NextThought.Library', {
 
 			function strip(e) { Ext.fly(e).remove(); }
 			function permitOrRemove(e) {
-				if (!ContentUtils.hasVisibilityForContent(e)) {
+				if (!ContentUtils.hasVisibilityForContent(e, status)) {
 					Ext.each(me.getAllNodesReferencingContentID(e.getAttribute('target-ntiid'), xml), strip);
 				}
 			}

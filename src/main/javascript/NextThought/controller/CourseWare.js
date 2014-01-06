@@ -359,6 +359,34 @@ Ext.define('NextThought.controller.CourseWare', {
 			if (enrolled.each(fn) === false) {
 				admin.each(fn);
 			}
+		},
+
+
+		getEnrollmentStatus: function(contentNtiid){
+			var me = this,
+				statusMap = me.statusMap, stores = [];
+
+			function clear(){
+				delete me.statusMap;
+			}
+
+			if(!statusMap){
+				statusMap = me.statusMap = {};
+				this.forEachCourse(function(enrollment){
+					statusMap[enrollment.getCourseCatalogEntry().get('ContentPackageNTIID')] = enrollment.get('Status');
+				});	
+
+				stores.push(Ext.getStore('courseware.EnrolledCourses'), Ext.getStore('courseware.AdministeredCourses'));
+
+				stores.forEach(function(store){
+					store.on({
+						single: true,
+						load: clear
+					});
+				});				
+			}
+			
+			return statusMap[contentNtiid];
 		}
 	};
 

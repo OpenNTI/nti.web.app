@@ -5,7 +5,8 @@ Ext.define('NextThought.model.courseware.CourseInstanceAdministrativeRole', {
 	idProperty: 'href',
 	fields: [
 		{ name: 'CourseInstance', type: 'singleItem', persist: false },
-		{ name: 'RoleName', type: 'string' }
+		{ name: 'RoleName', type: 'string' },
+		{ name: 'Status', type: 'string', persist: false, defaultValue: 'ForCredit' }
 	],
 
 

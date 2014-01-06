@@ -87,7 +87,7 @@ Ext.define('NextThought.util.Content', {
 	},
 
 
-	hasVisibilityForContent: function(cnt) {
+	hasVisibilityForContent: function(cnt, status) {
 		var u = $AppConfig.userObject,
 			visibilityKey = cnt.getAttribute('visibility'),
 			attr = this.CONTENT_VISIBILITY_MAP[visibilityKey] || visibilityKey;
@@ -102,7 +102,7 @@ Ext.define('NextThought.util.Content', {
 		// have a 'OUID' on the user record, we will check for its existence.
 		// TODO: we need to define what this 'visibility' means for an AppUser in general (rather than just OU) or
 		// have a convention on how have we resolve it.
-		return u.hasVisibilityField(attr);
+		return u.hasVisibilityField(attr) || attr === status;
 	},
 
 
