@@ -19,7 +19,6 @@ Ext.define('NextThought.util.Format', {
 	},
 
 	ago: function(value, max, format) {
-
 		var d = new Duration(Math.abs(value - new Date()) / 1000);
 		return d.ago();
 	},
@@ -29,14 +28,14 @@ Ext.define('NextThought.util.Format', {
 		return (value && value.get && value.get('avatarURL')) || User.BLANK_AVATAR;
 	},
 
-	boolean: function(value, trueString, falseString) {
+	boolStr: function(value, trueString, falseString) {
 		return value ? (trueString || '') : (falseString || '');
 	}
 
 },function() {
 	window.NTIFormat = this;
 	Ext.util.Format.ntiCurrency = NTIFormat.currency.bind(NTIFormat);
-	Ext.util.Format.ago = NTIFormat.ago.bind(NTIFormat);
-	Ext.util.Format.avatarURL = NTIFormat.avatarURL.bind(NTIFormat);
-	Ext.util.Format.boolean = NTIFormat.boolean.bind(NTIFormat);
+	Ext.util.Format.ago = NTIFormat.ago;
+	Ext.util.Format.avatarURL = NTIFormat.avatarURL;
+	Ext.util.Format.boolStr = NTIFormat.boolStr;
 });
