@@ -405,7 +405,7 @@ Ext.define('NextThought.view.content.View', {
 
 	onLocationCleared: function() {
 		delete this.reader.ntiidOnFrameReady;
-		this.courseBook.getLayout().setActiveItem('main-reader-view');
+		//this.courseBook.getLayout().setActiveItem('main-reader-view');
 	},
 
 

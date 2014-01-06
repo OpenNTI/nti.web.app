@@ -161,7 +161,8 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 
 	function updateSideBottom(el, bMargin) {
 		var data = this.mixinData.customScroll,
-			newBottom, oldBottom;
+			newBottom, oldBottom,
+			parent = el.parent();
 
 		//Get the bottom that was initially set on the element in CSS
 		//and cache it so we can use it every time
@@ -170,10 +171,11 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 		} else {
 			oldBottom = data.desiredBottom = parseInt(el.getStyle('bottom'), 10);//getStyle('bottom') returns '5px'
 		}
+		
+		newBottom = (Ext.getBody().getBottom() - parent.getBottom()) - oldBottom;
+		console.log(Ext.getBody().getBottom(), parent.getBottom(), oldBottom, newBottom, parent.getBottom() + newBottom);
 
-		newBottom = Math.abs(bMargin) + oldBottom;
-
-		el.setStyle('bottom', newBottom + 'px');
+		el.setStyle('bottom', -newBottom + 'px');
 		el.setStyle('height', 'auto'); //make sure the bottom is driving the height
 	}
 
@@ -192,11 +194,10 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 			secondaryViewEl = data.options && data.options.secondaryViewEl;
 
 		data.container = parentContainerEl;
-		data.targetEl = data.targetEl ? resolve(targetEl, parentContainerEl) : me.getTargetEl();
+		data.scrollEl = data.targetEl ? resolve(targetEl, parentContainerEl) : me.getTargetEl();
+		data.targetEl = data.scrollEl;//me.getTargetEl();
 		data.adjustmentEl = resolve(adjustmentEl, parentContainerEl);
-		data.secondaryViewEl = secondaryViewEl;
-
-
+		data.secondaryViewEl = secondaryViewEl = resolve(secondaryViewEl, parentContainerEl);
 
 		if (!data.adjustmentEl) {
 			console.error('No adjustment element found for:', adjustmentEl);
@@ -214,21 +215,33 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 			data.adjustmentEl.setStyle({marginBottom: -mb + 'px'});
 			data.targetEl.setStyle({paddingBottom: (mb + pd) + 'px'});
 			Ext.DomHelper.append(data.targetEl, {style: {height: mb + 'px'}, cls: 'scroll-buffer'});
+
+			me.on('activate', adjustOnScroll, me);
+			monitorCardChange(me);
+			monitorLayout.call(me);
+			updateCaches.call(me);
+			updateSideHeight.call(me, mb, true);
 			//setReverseMargin.call(this, mb);
-			console.debug([
-				'[CUSTOM SCROLL SETUP]',
-				'this: ' + me.id,
-				'parentContainerEl: ' + parentContainerEl.id,
-				'parentContainerEl paddingTop: ' + mb,
-				'targetEl: ' + data.targetEl.id,
-				'targetEl orginal paddingBottom: ' + pd,
-				'targetEl set marginBottom to: ' + (mb + pd),
-				'adjustmentEl: ' + data.adjustmentEl.id,
-				'adjustmentEl: set margin bottom to: ' + (-mb),
-				'secondaryViewEl: ' + secondaryViewEl
-			].join('\n'));
+
+			if($AppConfig.debugCustomScroll){
+				console.debug([
+					'[CUSTOM SCROLL SETUP]',
+					'this: ' + me.id,
+					'parentContainerEl: ' + parentContainerEl.id,
+					'parentContainerEl paddingTop: ' + mb,
+					'targetEl: ' + data.targetEl.id,
+					'targetEl orginal paddingBottom: ' + pd,
+					'targetEl set marginBottom to: ' + (mb + pd),
+					'adjustmentEl: ' + data.adjustmentEl.id,
+					'adjustmentEl: set margin bottom to: ' + (-mb),
+					'secondaryViewEl: ' + (secondaryViewEl && secondaryViewEl.id),
+					'secondaryViewEl height: ' + (secondaryViewEl && secondaryViewEl.getHeight()),
+					'secondaryViewEl bottom: ' + (secondaryViewEl && secondaryViewEl.getStyle('bottom')),
+					'secondaryViewEl margins: ' + (secondaryViewEl && secondaryViewEl.getStyle('margin'))
+				].join('\n'));
+			}
 		}
-		me.mon(data.targetEl, 'scroll', adjustOnScroll, me);
+		me.mon(data.scrollEl, 'scroll', adjustOnScroll, me);
 
 		me.on('add', function(/*container, cmp, index*/) {
 			data.targetEl.el.down('.scroll-buffer').destroy();
@@ -259,11 +272,12 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 		}
 	}
 
-
+	//onAfterRender = Ext.Function.createBuffered(onAfterRender, 1);//let the layout code finish this event pump
+	
 	return {
 
 		getScrollTop: function() {
-			return this.mixinData.customScroll.targetEl.getScrollTop();
+			return this.mixinData.customScroll.scrollEl.getScrollTop();
 		},
 
 
@@ -278,7 +292,7 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 			var me = this;
 
 			if (!me.rendered) {
-				me.on('afterrender', onAfterRender, me, {buffer: 1});//let the layout code finish this event pump
+				me.on('afterrender', onAfterRender, me);
 				return;
 			}
 
