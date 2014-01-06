@@ -522,6 +522,7 @@ canvas.x-component-course-assessment {
 
 .course-assessment-header {
 	font-size: 16px;//force a base em size
+
 	&.assignment-item {
 
 		.toolbar {
@@ -678,6 +679,19 @@ canvas.x-component-course-assessment {
 					height: 60px;
 					&::after {
 						top: 24px;
+					}
+				}
+			}
+
+			.header {
+				.grade {
+					.gradebox {
+						width: 5.5em;
+
+						input {
+							width: 100%;
+							border-width: 0;
+						}
 					}
 				}
 			}

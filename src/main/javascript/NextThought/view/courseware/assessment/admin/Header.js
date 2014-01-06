@@ -63,7 +63,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 		this.on({
 			emailEl: { click: 'openEmail'},
 			letterEl: { click: 'showGradeMenu'},
-			gradeEl: { blur: 'gradeChanged'}
+			gradeEl: { blur: 'gradeChanged', keypress: 'maybeChangeGrade'}
 		});
 	},
 
@@ -158,6 +158,13 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 		this.currentLetter = item.text;
 
 		this.changeGrade(this.currentGrade, this.currentLetter);
+	},
+
+
+	maybeChangeGrade: function(e, el){
+		if(e.getCharCode() === e.ENTER){
+			this.gradeChanged(e, el);
+		}
 	},
 
 

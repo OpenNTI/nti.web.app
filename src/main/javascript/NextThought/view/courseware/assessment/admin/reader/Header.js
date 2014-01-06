@@ -14,6 +14,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 			number = grades && grades[0],
 			letter = (grades && grades[1]) || '-';
 
+		this.letterEl.setStyle({display: 'none'});
+		
 		if (!this.assignmentHistory.get('Submission')) {
 			this.gradeEl.addCls('disabled');
 			this.letterEl.addCls('disabled');
@@ -30,7 +32,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 
 		if (letter) {
 			this.currentLetter = letter;
-			this.letterEl.update(letter);
+			//this.letterEl.update(letter);
 		}
 	},
 

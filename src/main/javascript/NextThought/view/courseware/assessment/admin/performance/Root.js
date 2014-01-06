@@ -396,7 +396,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		this.gridInputListeners = this.mon(inputs, {
 			destroyable: true,
-			blur: 'onInputBlur'
+			blur: 'onInputBlur',
+			keypress: 'onInputChanged'
 		});
 	},
 
@@ -474,6 +475,13 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				console.error('Failed to save final grade:', arguments);
 			}
 		});
+	},
+
+	
+	onInputChanged: function(e, input) {
+		if(e.getCharCode() === e.ENTER){
+			this.onInputBlur(e, input);
+		}
 	},
 
 
