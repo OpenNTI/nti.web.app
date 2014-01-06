@@ -135,6 +135,10 @@
 
 		&.purchasables {
 
+			.activated {
+				opacity: 0.3;
+			}
+
 			.history{
 				border-top: 1px solid #e6e6e6;
 				clear: both;

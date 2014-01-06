@@ -17,7 +17,8 @@ Ext.define('NextThought.view.store.Collection', {
 	]),
 
 	entryTpl: Ext.DomHelper.markup({
-		cls: '{inGrid} purchasable item {Class:lowercase} {featured} row-{rows} col-{cols}', 'data-qtip': '{Title:htmlEncode}', cn: [
+		cls: '{inGrid} purchasable item {Class:lowercase} {featured:boolean("featured")} {Activated:boolean("activated")} row-{rows} col-{cols}',
+		'data-qtip': '{Title:htmlEncode}', cn: [
 			{ cls: 'cover', style: { backgroundImage: 'url({Icon})' }},
 			{ cls: 'meta', cn: [
 				{ cls: 'courseName', html: '{Name}' },
@@ -52,7 +53,7 @@ Ext.define('NextThought.view.store.Collection', {
 			i.inGrid = 'grid-item';
 
 			if (rows > 1 && (x === 0 || i.Featured)) {
-				i.featured = 'featured';
+				i.featured = true;
 				cols = 4;
 			}
 
