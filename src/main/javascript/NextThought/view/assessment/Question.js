@@ -104,9 +104,9 @@ Ext.define('NextThought.view.assessment.Question', {
 	updateWithResults: function(assessedQuestionSet) {
 		var q, id = this.question.getId(),
 			fn = {
-				null: 'markSubmitted',
-				true: 'markCorrect',
-				false: 'markIncorrect'
+				'null': 'markSubmitted',
+				'true': 'markCorrect',
+				'false': 'markIncorrect'
 			};
 
 		if (assessedQuestionSet.isSet) {
