@@ -36,8 +36,6 @@ Ext.define('NextThought.view.assessment.input.ModeledContent', {
 
 		this.mon(this.editor, {
 			'enable-save': 'updateState',
-			'activated-editor': function() {},
-			'deactivated-editor': function() {},
 			'no-body-content': function(editor, el) {
 				editor.markError(el, 'You need to type something');
 				return false;
@@ -81,14 +79,8 @@ Ext.define('NextThought.view.assessment.input.ModeledContent', {
 	},
 
 
-	markCorrect: function() {
-		this.callParent(arguments);
-	},
-
-
-	markIncorrect: function() {
-		this.callParent(arguments);
-	},
+	markCorrect: Ext.emptyFn,
+	markIncorrect: Ext.emptyFn,
 
 
 	reset: function() {

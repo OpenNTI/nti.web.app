@@ -10,6 +10,7 @@ Ext.define('NextThought.model.assessment.AssessedPart', {
 	],
 
 	isCorrect: function() {
-		return this.get('assessedValue') === 1;
+		var a = this.get('assessedValue');
+		return (a !== null && a === 1) || a;//true, false, or null
 	}
 });

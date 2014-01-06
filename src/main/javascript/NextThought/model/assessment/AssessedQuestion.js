@@ -13,11 +13,12 @@ Ext.define('NextThought.model.assessment.AssessedQuestion', {
 
 	isCorrect: function() {
 		var p = this.get('parts') || [],
-			i = p.length - 1;
+			i = p.length - 1, v;
 
 		for (i; i >= 0; i--) {
-			if (!p[i].isCorrect()) {
-				return false;
+			v = p[i].isCorrect();
+			if (!v) {
+				return v;
 			}
 		}
 

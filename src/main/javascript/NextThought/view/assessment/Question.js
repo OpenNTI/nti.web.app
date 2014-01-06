@@ -102,7 +102,12 @@ Ext.define('NextThought.view.assessment.Question', {
 
 
 	updateWithResults: function(assessedQuestionSet) {
-		var q, id = this.question.getId();
+		var q, id = this.question.getId(),
+			fn = {
+				null: 'markSubmitted',
+				true: 'markCorrect',
+				false: 'markIncorrect'
+			};
 
 		if (assessedQuestionSet.isSet) {
 			Ext.each(assessedQuestionSet.get('questions'), function(i) {
@@ -120,8 +125,7 @@ Ext.define('NextThought.view.assessment.Question', {
 			Ext.Error.raise('Couldn\'t find my question? :(');
 		}
 
-		this[q.isCorrect() ? 'markCorrect' : 'markIncorrect'](assessedQuestionSet.noMark);
-
+		this[fn[q.isCorrect()]](assessedQuestionSet.noMark);
 
 		this.down('question-parts').updateWithResults(q);
 	},
@@ -212,11 +216,7 @@ Ext.define('NextThought.view.assessment.Question', {
 			this.down('question-header').markCorrect();
 		}
 
-		var sub = this.down('assessment-multipart-submission');
-
-		if (sub) {
-			sub.disableSubmission();
-		}
+		this.markSubmitted();
 	},
 
 
@@ -225,8 +225,12 @@ Ext.define('NextThought.view.assessment.Question', {
 			this.down('question-header').markIncorrect();
 		}
 
-		var sub = this.down('assessment-multipart-submission');
+		this.markSubmitted();
+	},
 
+
+	markSubmitted: function() {
+		var sub = this.down('assessment-multipart-submission');
 		if (sub) {
 			sub.disableSubmission();
 		}
