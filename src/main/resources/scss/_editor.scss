@@ -26,7 +26,10 @@ span.tab{
 			display: initial !important;
 		}
 
-		@include animate(fadeIn,0.3s);
+		&:not(.no-animation) {
+			@include animate(fadeIn,0.3s);
+		}
+
 		display: none;
 		//overflow: hidden;
 		overflow: visible;

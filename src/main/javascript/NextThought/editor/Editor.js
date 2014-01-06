@@ -1610,6 +1610,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		}
 
+		this.fireEvent('enable-save', r.enableSave);
+
 		this.contentEl[r.clearPlaceholder ? 'removeCls' : 'addCls']('show-placeholder');
 	},
 
@@ -1699,10 +1701,10 @@ Ext.define('NextThought.editor.AbstractEditor', {
 					tmp.appendChild(dom);
 					html = tmp.innerHTML || '';
 				}
-				parsed = html.replace(/\u200B/g, '');
-				
+				parsed = html.replace(/\u200B/ig, '');
+
 				//if the html was only the no width space don't add it to the parts
-				if(!(html.length === 1 && parsed.length === 0)){
+				if (!(html.length === 1 && parsed.length === 0)) {
 					out.push(html);
 				}
 			}

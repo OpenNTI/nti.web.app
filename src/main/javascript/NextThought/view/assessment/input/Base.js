@@ -100,7 +100,7 @@ Ext.define('NextThought.view.assessment.input.Base', {
 
 		this.isAssignment = Boolean(this.questionSet && this.questionSet.associatedAssignment);
 
-		if(this.isAssignment){
+		if (this.isAssignment) {
 			this.noMark = Boolean(this.questionSet.noMark);
 		}
 

@@ -1113,6 +1113,27 @@ body.dragging * {
 		& > .parts { border-top-width: 0 !important; }
 	}
 
+	.modeled-body-part {
+		.editor {
+			.content {
+				min-height: 0;
+				max-height: none;
+				height: 25em;
+			}
+
+			& > div.footer {
+				overflow: visible;
+				position: absolute;
+
+				.action {padding: 0;}
+
+				& > div.right {
+					display: none;
+				}
+			}
+		}
+	}
+
 	.file-submission-part {
 		position: relative;
 		background: #fbfbfb;
