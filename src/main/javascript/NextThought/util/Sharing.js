@@ -216,19 +216,22 @@ Ext.define('NextThought.util.Sharing', {
 	getLongTextFromShareInfo: function(shareInfo, callback, scope, tpl, maxLength) {
 		var explicitEntities = shareInfo.entities,
 			isPublic = shareInfo.publicToggleOn,
-			prefix = isPublic ? 'Public' : 'Only Me',
-			str, others, names = [];
+			prefix = isPublic && 'Public',
+			str, others, names = [], comma = ',';
 
 		if (Ext.isEmpty(explicitEntities)) {
-			Ext.callback(callback, scope, [prefix]);
+			Ext.callback(callback, scope, [prefix || 'Only Me']);
 			return;
 		}
 
+		prefix = prefix || 'Private';
+
 		UserRepository.getUser(explicitEntities, function(resolvedUsers) {
 			Ext.each(resolvedUsers || [], function(u) {
-				var dn = isMe(u) ? 'me' : u.getName();
+				var dn = isMe(u) ? 'me' : u.getName(),
+					onlyMe = prefix === 'Only Me';
 
-				if (dn.toLowerCase() !== 'unknown' && !Ext.isEmpty(dn)) {
+				if (dn.toLowerCase() !== 'unknown' && !Ext.isEmpty(dn) && (!onlyMe || dn !== 'me')) {
 					names.push(dn);
 					return !maxLength || names.length <= maxLength;
 				}
@@ -246,7 +249,10 @@ Ext.define('NextThought.util.Sharing', {
 				names.push(' and ' + names.pop());
 			}
 
-			str = Ext.String.format('{0} {1}', prefix, names.join(','));
+			if(names.length === 0){ comma = ''; }
+			if(names.length === 1){ comma = ' and'; }
+
+			str = Ext.String.format('{0}{1} {2}', prefix, comma, names.join(','));
 			Ext.callback(callback, scope, [str]);
 		});
 
