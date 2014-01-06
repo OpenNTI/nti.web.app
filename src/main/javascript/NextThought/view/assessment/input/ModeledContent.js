@@ -18,12 +18,13 @@ Ext.define('NextThought.view.assessment.input.ModeledContent', {
 
 
 	afterRender: function() {
-		this.callParent(arguments);
 		this.editor = Ext.widget('nti-editor', {
 			ownerCt: this,
 			renderTo: this.inputField,
 			enableObjectControls: false //lets not open too much complexity yet.
 		});
+
+		this.callParent(arguments);
 
 		this.editor.contentEl.set({tabIndex: this.tabIndex});
 		this.editor.activate();
