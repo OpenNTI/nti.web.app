@@ -117,8 +117,7 @@ Ext.define('NextThought.view.content.View', {
 			'beforeactivate': 'onBeforeActivation',
 			'beforedeactivate': 'onBeforeDeActivation',
 			'deactivate': 'onDeactivated',
-			'activate': 'onActivated',
-			'main-tab-clicked': 'onTabClicked'
+			'activate': 'onActivated'
 		});
 
 		this.fireEvent('get-course-hooks', this);
