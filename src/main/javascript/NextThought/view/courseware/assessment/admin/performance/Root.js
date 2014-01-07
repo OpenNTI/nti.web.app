@@ -270,7 +270,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				{name: 'displayName', type: 'string', defaultValue: 'Resolving...'},
 				{name: 'grade', type: 'int'},
 				{name: 'letter', type: 'string', defaultValue: '-'},
-				{name: 'comments', type: 'int', defaultValue: 0},
+				{name: 'comments', type: 'int', mapping: 'feedback', defaultValue: 0},
 				{name: 'ungraded', type: 'int', defaultValue: 0},
 				{name: 'overdue', type: 'int', defaultValue: 0}
 			],
@@ -329,45 +329,73 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	setAssignmentsData: function(assignments, history, outline, instance, gradeBook) {
-		var users = Ext.Array.pluck(this.roster, 'Username');
+		var users = Ext.Array.pluck(this.roster, 'Username'),
+			assignmentHistoryRequests, data = {}, store = this.store,
+			applyUsers = this.applyUserData.bind(this),
+			getCounts = this.getCountsFor.bind(this);
 
 		this.clearAssignmentsData();
 
-		this.history = history;
 		this.gradeBook = gradeBook;
 		this.gradeBookDefaultPart = gradeBook && gradeBook.getFieldItem('Items', 'default');
 
-		this.store.loadRawData(users.map(this.getDataFor.bind(this)));
-		UserRepository.getUser(users).done(this.applyUserData.bind(this));
 
+		assignmentHistoryRequests = assignments.get('Items').map(function(o) {
+			return Service.request(o.getLink('GradeSubmittedAssignmentHistory'));
+		});
+
+		function parse(json) {
+				json = Ext.decode(json, true) || {};
+				json = json.Items || {};
+
+			users.forEach(function(u) {
+				var o = json[u],
+						d, f;
+
+				d = data[u] = (data[u] || {id: u});
+
+				if (o) {
+					o = ParseUtils.parseItems(o)[0];
+					f = o.get('Feedback');
+					f = (f && f.get('Items').length) || 0;
+
+					Ext.apply(d, {
+						feedback: f + (d.feedback || 0)
+					});
+				}
+			});
+		}
+
+
+		Promise.pool(assignmentHistoryRequests)
+				.done(function(list) {
+					var raw = [], k;
+					list.forEach(parse);
+
+					for (k in data) {
+						if (data.hasOwnProperty(k)) {
+							raw.push(Ext.apply(data[k], getCounts(k)));
+						}
+					}
+
+					store.loadRawData(raw);
+					UserRepository.getUser(users).done(applyUsers);
+				});
 	},
 
 
 	clearAssignmentsData: function() { this.clear(); },
 
 
-	getDataFor: function(username) {
-		return Ext.apply({id: username}, this.getCountsFor(username));
-	},
-
-
 	getCountsFor: function(username) {
 		var d = this.gradeBookDefaultPart,
 			assignments = (d && d.get('Items')) || [],
-			history = this.history,
 			counts = {ungraded: 0, overdue: 0, comments: 0};
 
 		assignments.forEach(function(assignment) {
-			var i = assignment.getFieldItem('Items', username),
-				h = history && history.getItem(assignment.get('AssignmentId'));
-
+			var i = assignment.getFieldItem('Items', username);
 			if (i && !i.get('value')) {counts.ungraded++;}
 			if (!i && assignment.get('DueDate') < new Date()) {counts.overdue++;}
-			//feedbacks, will we have a history item?
-			if (h) {
-				counts.comments += h.get('Items').filter(function(f) {
-					return f.get('Creator') === username;}).length;
-			}
 		});
 
 		return counts;
@@ -486,9 +514,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		});
 	},
 
-	
+
 	onInputChanged: function(e, input) {
-		if(e.getCharCode() === e.ENTER){
+		if (e.getCharCode() === e.ENTER) {
 			this.onInputBlur(e, input);
 		}
 	},
