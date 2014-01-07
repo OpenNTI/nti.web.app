@@ -21,6 +21,7 @@ Ext.define('NextThought.controller.CourseWare', {
 		'courseware.UsersCourseAssignmentHistoryItemFeedback',
 		'courseware.UsersCourseAssignmentHistoryItemFeedbackContainer',
 		'courseware.navigation.CourseOutlineNode',
+		'courseware.navigation.CourseOutlineCalendarNode',
 		'courseware.navigation.CourseOutlineContentNode'
 	],
 

@@ -50,11 +50,15 @@
 			@include ellipse;
 		}
 
+		&.disabled {
+			cursor: default;
+		}
+
 
 		&.out-of-view{
 		}
 
-		&.x-item-selected,&.over {
+		&:not(.disabled).over {
 			background: #f0f0f0;
 			box-shadow: inset 3px 0 0 0 #cfcfcf;
 		}
