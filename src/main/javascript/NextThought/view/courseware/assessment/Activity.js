@@ -78,6 +78,39 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 	},
 
 
+	onAdded: function() {
+		function monitorCardChange(cmp, me) {
+			var c = cmp.up('{isOwnerLayout("card")}');
+			me = me || cmp;
+			if (c) {
+				me.mon(c, {
+					deactivate: me.maybeClearBadge,
+					scope: me
+				});
+				monitorCardChange(c, me);
+			}
+		}
+
+		this.callParent(arguments);
+		monitorCardChange(this);
+	},
+
+
+	maybeClearBadge: function(deactivatedCmp) {
+		var c = this;
+		while (c.isVisible()) {
+			c = c.up();
+		}
+
+		if (c === deactivatedCmp) {
+			console.debug('Clear badge');
+			this.clearBadge();
+		} else {
+			console.debug('Not clearing badge ' + (c && c.id));
+		}
+	},
+
+
 	clearBadge: function() {
 		this.notifications = 0;
 		this.fireEvent('notify', 0);
