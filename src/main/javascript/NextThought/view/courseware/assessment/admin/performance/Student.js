@@ -120,7 +120,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 
 					grade = grade && grade.get('value');
 					grade = grade && grade.split(' ');
-					return grade && parseInt(grade[0], 10);
+					return grade && grade[0];
 				}},//value
 				{name: 'pendingAssessment', type: 'auto'},
 				{name: 'Feedback', type: 'auto'},
