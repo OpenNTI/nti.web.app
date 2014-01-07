@@ -344,8 +344,8 @@ Ext.define('NextThought.controller.Store', function(){
 				return !e || (new Date(e) < new Date());
 			}
 
-			store.filter(filter);
-			archive.filter(function(r) { return !filter(r); });
+			store.filter(function(r) { return !filter(r); });
+			archive.filter(filter);
 
 			if (store.getCount() && view && !Ext.getCmp('store-collection')) {
 				view.add({
