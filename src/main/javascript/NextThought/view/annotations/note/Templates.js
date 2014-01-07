@@ -179,21 +179,27 @@ Ext.define('NextThought.view.annotations.note.Templates', {
 			items: items
 		});
 
-		menu.on('mouseover', function() {
-			if (opts.scope.el && opts.scope.el.down('.single') && !opts.scope.el.down('.menu-open')) {
-				opts.scope.el.down('.single').addCls('menu-open');
-			}
-		});
+        //for iPad, if there are mouseover events, touching on the menu item
+        //will perform a mouseenter, mouseleave, and not click.
+        if(!Ext.is.iOS){
+            menu.on('mouseover', function() {
+                console.log('mouseover');
+                if (opts.scope.el && opts.scope.el.down('.single') && !opts.scope.el.down('.menu-open')) {
+                    opts.scope.el.down('.single').addCls('menu-open');
+                }
+            });
 
-		menu.on('mouseleave', function() {
-			menuTimer = setTimeout(function() {
-				menu.close();
-				if (opts.scope.el && opts.scope.el.down('.single')) {
-					opts.scope.el.down('.single').removeCls('menu-open');
-				}
-			}, 100);
-		});
-		menu.on('mouseenter', function() { clearTimeout(menuTimer); });
+            menu.on('mouseleave', function() {
+                console.log('mouseleave');
+                menuTimer = setTimeout(function() {
+                    menu.close();
+                    if (opts.scope.el && opts.scope.el.down('.single')) {
+                        opts.scope.el.down('.single').removeCls('menu-open');
+                    }
+                }, 100);
+            });
+            menu.on('mouseenter', function() { console.log('mouseenter'); clearTimeout(menuTimer); });
+        }
 
 		menu.showBy(more, 'tl-bl?', [2, -7]);
 
