@@ -333,7 +333,19 @@ Ext.define('NextThought.controller.Store', function(){
 			}
 
 			var view = this.getLibraryView().getCatalogView(),
-				store = this.getPurchasableStore();
+				store = this.getPurchasableStore(),
+				archive = this.archiveStore || new NextThought.store.Purchasable();
+
+			archive.loadRecords((store.snapshot ? store.snapshot : store).getRange());
+			this.archiveStore = archive;
+
+			function filter(r) {
+				var e = r.raw.EndDate;
+				return !e || (new Date(e) < new Date());
+			}
+
+			store.filter(filter);
+			archive.filter(function(r) { return !filter(r); });
 
 			if (store.getCount() && view && !Ext.getCmp('store-collection')) {
 				view.add({
@@ -344,6 +356,16 @@ Ext.define('NextThought.controller.Store', function(){
 				});
 			}
 
+			if (archive.getCount() && view && !Ext.getCmp('store-archive-collection')) {
+				view.add({
+					store: archive,
+					xtype: 'purchasable-collection',
+					id: 'store-archive-collection',
+					name: getString('Archive')
+				});
+			}
+
+
 			//TODO Ok they want to identify the sample content
 			//so do a nasty hack here that probably breaks
 			//with the next client using the store.  We make an assumption
@@ -351,6 +373,7 @@ Ext.define('NextThought.controller.Store', function(){
 			//entries in the library that match the purchasables items list,
 			//those things are samples. Set a sample property as such
 			store.each(this.updateLibraryWithPurchasable, this);
+			archive.each(this.updateLibraryWithPurchasable, this);
 		},
 
 
@@ -374,7 +397,7 @@ Ext.define('NextThought.controller.Store', function(){
 				function(newP) {
 					//p should be the instance of the record out of the store
 					//but just in case look for it in the store and merge into that
-					var fromStore = this.getPurchasableStore().getById(p.getId()) || this.previewStore.getById(p.getId());
+					var fromStore = this.getPurchasableStore().getById(p.getId()) || this.archiveStore.getById(p.getId());
 
 
 					if (fromStore && newP.isPurchasable) {
