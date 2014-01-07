@@ -64,6 +64,9 @@
 		
 		.date {
 			color: $tertiary-grey;
+			&.expired {
+				color: $primary-red;
+			}
 			font: normal 700 0.6em/1.2em $font;
 			text-transform: uppercase;
 		}

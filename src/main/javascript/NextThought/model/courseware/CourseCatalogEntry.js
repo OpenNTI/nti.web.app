@@ -27,7 +27,18 @@ Ext.define('NextThought.model.courseware.CourseCatalogEntry', {
 		{ name: 'thumbnail', type: 'string', mapping: 'LegacyPurchasableThumbnail' }, //small/medium
 		{ name: 'poster', type: 'string' }, //medium (promo)
 		{ name: 'background', type: 'string' } //large
-	]
+	],
+
+	isExpired: function() {
+		var d, s;
+		try {
+			d = new Date().getTime() - (new Duration(this.get('Duration')).inSeconds * 1000);
+			s = this.get('StartDate').getTime();
+			return d > s;
+		} catch (e) {}
+
+		return false;
+	}
 });
 
 

@@ -74,6 +74,7 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 					tocNodes: new NextThought.store.courseware.ToCBasedOutline({data: temp.toc}),
 					outlinePromise: this.getOutline()
 				});
+				this.navStore.courseInstance = this;
 			}
 		}
 
