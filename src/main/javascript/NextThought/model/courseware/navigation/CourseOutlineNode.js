@@ -62,7 +62,8 @@ Ext.define('NextThought.model.courseware.navigation.CourseOutlineNode', {
 
 		{ name: 'tocNode', type: 'Synthetic', persist: false, fn: function(r) {
 			var t = r.get('tocOutlineNode');
-			return t & t.get('tocNode');
+
+			return t & t.get && t.get('tocNode');
 		}}
 	],
 
