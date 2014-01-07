@@ -32,7 +32,7 @@ Ext.define('NextThought.model.courseware.CourseCatalogEntry', {
 	isExpired: function() {
 		var d, s;
 		try {
-			d = new Date().getTime() - (new Duration(this.get('Duration')).inSeconds * 1000);
+			d = new Date().getTime() - (new Duration(this.get('Duration')).inSeconds() * 1000);
 			s = this.get('StartDate').getTime();
 			return d > s;
 		} catch (e) {}
