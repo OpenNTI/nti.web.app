@@ -58,7 +58,7 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 
 		if (completed > due) {
 			overdue = new Duration((completed - due) / 1000);
-			this.lateEl.update(overdue.age().replace('ago', 'late').trim());
+			this.lateEl.update(overdue.ago().replace('ago', 'late').trim());
 			this.removeCls('ontime');
 		} else {
 			this.lateEl.hide();
