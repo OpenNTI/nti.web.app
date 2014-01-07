@@ -340,8 +340,8 @@ Ext.define('NextThought.view.courseware.dashboard.widget.QuestionSetView', {
 			this.callParent(arguments);
 
 			this.assignmentId = this.currentItemNode.getId();
-			this.fireEvent('has-been-submitted', this);
 			this.setLatestAssignmentAttempt(false, null, this.currentItemNode, this.nextItemNode);
+			this.fireEvent('has-been-submitted', this);			
 		},
 
 
