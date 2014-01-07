@@ -39,7 +39,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		frameBodyEl: '.list',
 		showEl: '.header .show',
 		orderEl: '.header .order',
-		inputEl: '.header .search input'
+		inputEl: '.header .search input',
+		clearEl: '.header .search .clear'
 	},
 
 	getTargetEl: function() { return this.frameBodyEl; },
@@ -82,7 +83,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		this.on({
 			showEl: { click: 'showShowMenu'},
 			orderEl: { click: 'showOrderMenu'},
-			inputEl: { keyup: 'changeNameFilter'}
+			inputEl: { keyup: 'changeNameFilter'},
+			clearEl: { click: 'clearSearch'}
 		});
 	},
 
@@ -249,6 +251,13 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 					}
 			}]);
 		}
+	},
+
+
+	clearSearch: function() {
+		this.searchKey = '';
+		this.inputEl.dom.value = '';
+		this.store.removeFilter('searchFilter');
 	},
 
 

@@ -19,7 +19,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.FilterBar', {
 
 	renderSelectors: {
 		groupEl: '.groupBy',
-		searchEl: '.search input'
+		searchEl: '.search input',
+		clearEl: '.search .clear'
 	},
 
 	bubbleEvents: ['filters-changed', 'search-changed'],
@@ -34,6 +35,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.FilterBar', {
 
 		this.mon(this.groupEl, 'click', 'showGroupByMenu');
 		this.mon(this.searchEl, 'keyup', 'searchKeyPressed');
+		this.mon(this.clearEl, 'click', 'clearSearch');
 	},
 
 
@@ -50,6 +52,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.FilterBar', {
 
 		//update without refreshing
 		this.fireEvent('search-changed', this.searchKey);
+	},
+
+
+	clearSearch: function(){
+		this.searchEl.dom.value = '';
+		this.searchKey = '';
+		this.fireEvent('search-changed', '');
 	},
 
 
