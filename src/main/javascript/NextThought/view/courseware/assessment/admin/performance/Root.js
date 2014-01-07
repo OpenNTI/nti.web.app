@@ -409,36 +409,64 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	applyUserData: function(users) {
 		var me = this,
 			s = me.store;
-		users.forEach(function(u) {
-			var gradebookentry = me.gradeBook.getItem('Final Grade', 'no_submit'),
-				grade = gradebookentry && gradebookentry.getFieldItem('Items', u.getId()),
-				value = grade && grade.get('value'),
+
+		function getGrade(entry, user) {
+			return entry && entry.getFieldItem('Items', user.getId());
+		}
+
+		function parseGradeValue(grade) {
+			var value = grade && grade.get('value'),
 				grades = value && value.split(' '),
 				number = grades && grades[0],
-				letter = (grades && grades[1]) || '-',
-				r;
+				letter = (grades && grades[1]) || '-';
 
-			r = s.getById(u.getId());
+			return {
+				number: number,
+				letter: letter
+			};
+		}
+
+		function setGrade(r, value) {
+			var v = parseGradeValue(value);
+			r.set({
+				grade: v.number,
+				letter: v.letter
+			});
+		}
+
+		
+		function updateGrade(r, grade) {
+			setGrade(r, grade);
+			me.mon(grade, 'value-changed', function(){
+				setGrade(r, grade);
+			});
+		}
+
+
+		users.forEach(function(u) {
+			var gradebookentry = me.gradeBook.getItem('Final Grade', 'no_submit'),
+				grade = getGrade(gradebookentry, u),
+				r = s.getById(u.getId()), monitor;
 
 			if (grade) {
-				me.mon(grade, 'value-changed', function(key, value){
-					var grades = value && value.split(' '),
-						number = grades && grades[0],
-						letter = grades && grades[1];
-
-					r.set({
-						grade: number,
-						letter: letter
-					});
+				updateGrade(r, grade);
+			} else {
+				monitor = me.mon(gradebookentry, {
+					destroyable: true,
+					'Items-changed': function(key, value){
+						var grade = getGrade(gradebookentry, u);
+						if (grade) {
+							Ext.destroy(monitor);
+							updateGrade(r, grade);
+						}
+					}
 				});
 			}
 
 			r.set({
 				user: u,
 				avatar: u.get('avatarURL'),
-				displayName: u.toString(),
-				grade: number,
-				letter: letter
+				displayName: u.toString()
 			});
 		});
 	},

@@ -17,5 +17,6 @@ Ext.define('NextThought.model.courseware.GradeBookEntry', {
 
 		items.push(rec);
 		items.INDEX_KEYMAP[rec.get('Username')] = key;
+		this.afterEdit(['Items']);
 	}
 });
