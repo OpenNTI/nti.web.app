@@ -393,9 +393,13 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			counts = {ungraded: 0, overdue: 0, comments: 0};
 
 		assignments.forEach(function(assignment) {
+			var due = assignment.get('DueDate');
+
 			var i = assignment.getFieldItem('Items', username);
 			if (i && !i.get('value')) {counts.ungraded++;}
-			if (!i && assignment.get('DueDate') < new Date()) {counts.overdue++;}
+			//If we have a due date and its before now increment the overdue count
+			//if we don't have a due date don't increment the overdue count
+			if (!i && due && due < new Date()) {counts.overdue++;}
 		});
 
 		return counts;
