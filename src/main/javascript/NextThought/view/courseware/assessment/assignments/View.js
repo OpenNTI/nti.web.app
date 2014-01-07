@@ -132,13 +132,17 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 					me.activeStores.push(store);
 
 					if (groupBy === 'lesson') {
-						outline.findNode(name).done(function(node) {
-							store.groupName = node.get('title');
-							group.setTitle(node.get('title'));
-							group.setSubTitle(Ext.Date.format(
-									node.get('AvailableBeginning') || node.get('AvailableEnding'),
-									'F j, Y'
-							));
+						outline.findNode(name)
+								.fail(function() {
+									Ext.destroy(group);
+								})
+								.done(function(node) {
+									store.groupName = node.get('title');
+									group.setTitle(node.get('title'));
+									group.setSubTitle(Ext.Date.format(
+											node.get('AvailableBeginning') || node.get('AvailableEnding'),
+											'F j, Y'
+									));
 						});
 					}
 				});
