@@ -115,7 +115,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 				{name: 'completed', type: 'date'},
 				{name: 'Submission', type: 'auto'},
 				{name: 'Grade', type: 'singleItem'},//object
-				{name: 'grade', type: 'Synthetic', fn: function(r){
+				{name: 'grade', type: 'Synthetic', fn: function(r) {
 					var grade = r.get('Grade');
 
 					grade = grade && grade.get('value');
@@ -199,17 +199,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 			});
 		}
 
-		delete data.href;//all other keys are container ids...so, lets just drop it.
-
-		for (ntiid in data) {
-			if (data.hasOwnProperty(ntiid)) {
-				if (!ParseUtils.isNTIID(ntiid)) {//just to be safe
-					console.warn('[W] Ignoring:', ntiid);
-					continue;
-				}
-				ParseUtils.parseItems(data[ntiid]).forEach(collect);
-			}
-		}
+		data.get('Items').forEach(collect);
 
 		store.loadRawData(raw);
 	},

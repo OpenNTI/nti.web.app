@@ -95,17 +95,16 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 			Promise.pool(
 				!e.isAdministrative && instance.getAssignmentHistory(),
-				Service.request(getLink('AssignmentsByOutlineNode', e)),
+				instance.getAssignments(),
 				grades
 			)
 					.done(function(txts) {//responseTexts are in the order requested
 						if (!isSync()) { return; }
 						var history = txts[0],
-							assignments = Ext.decode(txts[1], true),
-							gradeBook = txts[2] && ParseUtils.parseItems(txts[2])[0],
-							assignmentKeys = Object.keys(assignments).filter(function(k) { return k !== 'href'; });
+							assignments = txts[1],
+							gradeBook = txts[2] && ParseUtils.parseItems(txts[2])[0];
 
-						me.hasAssignments = assignmentKeys.length;
+						me.hasAssignments = !assignments.isEmpty();
 						if (me.hasAssignments) {
 							me.fireEvent('show-assignments-tab');
 						} else {

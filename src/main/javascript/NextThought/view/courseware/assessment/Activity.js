@@ -108,20 +108,9 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 
 		this.setLastReadFrom(history);
 
-		delete assignments.href;//all other keys are container ids...so, lets just drop it.
+		function collect(o) { me.collectEvents(o, history); }
 
-		function collect(agg, o) { me.collectEvents(o, history); }
-
-		for (ntiid in assignments) {
-			if (assignments.hasOwnProperty(ntiid)) {
-				if (!ParseUtils.isNTIID(ntiid)) {//just to be safe
-					console.warn('[W] Ignoring:', ntiid);
-					continue;
-				}
-
-				ParseUtils.parseItems(assignments[ntiid]).reduce(collect, 0);
-			}
-		}
+		assignments.get('Items').forEach(collect);
 	},
 
 
@@ -155,7 +144,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 
 	collectEvents: function(o, historyCollection) {
 		if (o.doNotShow()) { return; }
-		
+
 		var h = historyCollection && historyCollection.getItem(o.getId());
 		this.assignments[o.getId()] = o;
 		this.deriveEvents(o, h);

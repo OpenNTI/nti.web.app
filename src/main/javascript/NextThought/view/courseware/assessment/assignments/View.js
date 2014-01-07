@@ -294,25 +294,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 		this.outline = outline;
 
-		delete data.href;//all other keys are container ids...so, lets just drop it.
-
-		for (ntiid in data) {
-			if (data.hasOwnProperty(ntiid)) {
-				if (!ParseUtils.isNTIID(ntiid)) {//just to be safe
-					console.warn('[W] Ignoring:', ntiid);
-					continue;
-				}
-
-				lesson = ContentUtils.getLineage(ntiid);//this function is in need to go asynchronous...but i need it here. :(
-				lesson.pop();//discard the root
-				if (lesson.length > 1) {
-					lesson.shift();//discard leaf page
-				}
-				lesson.reverse().join('|');
-
-				ParseUtils.parseItems(data[ntiid]).forEach(collect);
-			}
-		}
+		data.get('Items').forEach(collect);
 
 		this.store = new Ext.data.Store({
 			fields: this.getFields(),

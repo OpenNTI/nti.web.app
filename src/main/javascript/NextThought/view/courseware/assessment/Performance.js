@@ -175,7 +175,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 
 		function collect(o) {
 			if (o.doNotShow()) { return; }
-			
+
 			var id = o.getId(),
 				h = history.getItem(id),
 				submission = h && h.get('Submission'),
@@ -201,17 +201,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 			});
 		}
 
-		delete data.href;//all other keys are container ids...so, lets just drop it.
-
-		for (ntiid in data) {
-			if (data.hasOwnProperty(ntiid)) {
-				if (!ParseUtils.isNTIID(ntiid)) {//just to be safe
-					console.warn('[W] Ignoring:', ntiid);
-					continue;
-				}
-				ParseUtils.parseItems(data[ntiid]).forEach(collect);
-			}
-		}
+		data.get('Items').forEach(collect);
 
 		this.store.loadRawData(raw);
 	}
