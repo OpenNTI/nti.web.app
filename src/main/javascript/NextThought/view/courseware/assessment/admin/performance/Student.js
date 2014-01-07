@@ -173,7 +173,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 		this.header.setGradeBook(gradeBook);
 
 		function getGrade(assignment) {
-			return gradeBook.getItem(assignment.get('title')).getFieldItem('Items', user);
+			var grade = gradeBook.getItem(assignment.get('title'));
+			return grade && grade.getFieldItem('Items', user);
 		}
 
 		function collect(o) {

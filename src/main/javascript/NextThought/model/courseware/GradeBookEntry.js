@@ -9,5 +9,13 @@ Ext.define('NextThought.model.courseware.GradeBookEntry', {
 		{name: 'displayName', type: 'string'},
 		{name: 'GradeScheme', type: 'auto'},
 		{name: 'order', type: 'int'}
-	]
+	],
+
+	addItem: function(rec){
+		var items = this.get('Items'),
+			key = items.length;
+
+		items.push(rec);
+		items.INDEX_KEYMAP[rec.get('Username')] = key;
+	}
 });

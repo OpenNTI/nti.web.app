@@ -409,7 +409,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	applyUserData: function(users) {
 		var me = this,
 			s = me.store;
-
 		users.forEach(function(u) {
 			var gradebookentry = me.gradeBook.getItem('Final Grade', 'no_submit'),
 				grade = gradebookentry && gradebookentry.getFieldItem('Items', u.getId()),
@@ -421,16 +420,18 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 			r = s.getById(u.getId());
 
-			me.mon(grade, 'value-changed', function(key, value){
-				var grades = value && value.split(' '),
-					number = grades && grades[0],
-					letter = grades && grades[1];
+			if (grade) {
+				me.mon(grade, 'value-changed', function(key, value){
+					var grades = value && value.split(' '),
+						number = grades && grades[0],
+						letter = grades && grades[1];
 
-				r.set({
-					grade: number,
-					letter: letter
+					r.set({
+						grade: number,
+						letter: letter
+					});
 				});
-			});
+			}
 
 			r.set({
 				user: u,
@@ -499,8 +500,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	changeLetterGrade: function(item) {
-		if (!this.activeGradeRecord) { return; }
+	changeLetterGrade: function(item, status) {
+		if (!this.activeGradeRecord || !status) { return; }
 
 		this.changeGrade(this.activeGradeRecord, this.activeGradeRecord.get('grade'), item.text);
 	},
@@ -510,29 +511,43 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		if (!this.gradeBook) { return; }
 
 		var gradebookentry = this.gradeBook.getItem('Final Grade', 'no_submit'),
-			grade = gradebookentry && gradebookentry.getFieldItem('Items', rec.get('user').getId()),
+			grade = gradebookentry && gradebookentry.getFieldItem('Items', rec.getId()),
 			value = number + ' ' + letter,
 			url = this.gradeBook.get('href');//this may be broken on FireFox (_dc=1234)
 
 		
 		if(!grade){
-			console.error('No finaly grade entry cant save it');
+			console.log('No finaly grade entry');
+
+			rec.set({
+				grade: number,
+				letter: letter
+			});
+
+			url += '/no_submit/Final Grade/' + rec.getId();
+
+			Ext.Ajax.request({
+				url: url,
+				method: 'PUT',
+				jsonData: { value: value },
+				success: function(r){
+					var json = Ext.decode(r.responseText,true),
+						rec = json && ParseUtils.parseItems(json)[0];
+
+					if(rec){
+						gradebookentry.addItem(rec);
+					}
+				},
+				failure: function() {
+					//probably should do something here
+					console.error('Failed to save final grade:', arguments);
+				}
+			});
 			return;
 		}
 
 		grade.set('value', value);
 		grade.save();
-		// url += '/no_submit/Final Grade/' + rec.getId();
-
-		// Ext.Ajax.request({
-		// 	url: url,
-		// 	method: 'PUT',
-		// 	jsonData: { value: value },
-		// 	failure: function() {
-		// 		//probably should do something here
-		// 		console.error('Failed to save final grade:', arguments);
-		// 	}
-		// });
 	},
 
 
