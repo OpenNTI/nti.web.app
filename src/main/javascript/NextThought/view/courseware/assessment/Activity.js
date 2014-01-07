@@ -112,6 +112,9 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 
 
 	clearBadge: function() {
+		if (this.notifications === 0) {
+			return;
+		}
 		this.notifications = 0;
 		this.fireEvent('notify', 0);
 		this._lastRead = new Date();
