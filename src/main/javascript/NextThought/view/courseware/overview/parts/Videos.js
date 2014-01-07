@@ -144,7 +144,8 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 					item = v.sources[0];
 					r.set({
 						poster: item.poster,
-						thumb: item.thumbnail
+						thumb: item.thumbnail,
+						label: v.title
 					});
 
 					me.playlist.push(reader.read({
