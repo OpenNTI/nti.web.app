@@ -51,7 +51,7 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 
 	showRoot: function() {
 		this.getLayout().setActiveItem(0);
-		Ext.destroy(this.items.getRange(1));
+		Ext.destroy(this.items.getRange().slice(1));
 	},
 
 
