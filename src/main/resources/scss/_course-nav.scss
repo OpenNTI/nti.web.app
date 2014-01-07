@@ -446,7 +446,7 @@
 
 .content-link,
 .content-card {
-	a .thumbnail { @include icon('extern-link',$top:0,$left:auto,$right:0,$position:absolute); }
+	a .thumbnail { @include icon('extern-link',$top:0,$left:auto,$right:0); }
 	&:hover a .thumbnail::after {
 		@include sprite($icons,'extern-link_hover');
 	}
