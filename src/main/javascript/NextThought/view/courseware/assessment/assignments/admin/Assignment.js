@@ -109,9 +109,34 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 								   late: d.ago().replace('ago', '').trim()
 							   });
 						   } },
-						   { text: 'Score', dataIndex: 'grade', width: 90, renderer: function(v) {
+						   { text: 'Score', dataIndex: 'Grade', width: 90, renderer: function(v) {
+							   v = v && v.get('value');
 							   return v && v.split(' ')[0];
-						   } },
+						   }, listeners: {
+								headerclick: function(){
+									var store = this.up('grid').getStore(),
+										sorter = Ext.create('Ext.util.Sorter', {
+										direction: this.sortState,
+										sorterFn: function(o1, o2){
+											o1 = o1 && o1.get('Grade');
+											o1 = o1 && o1.get('value');
+											o1 = o1 && o1.split(' ')[0];
+											o1 = o1 || '';
+
+											o2 = o2 && o2.get('Grade');
+											o2 = o2 && o2.get('value');
+											o2 = o2 && o2.split(' ')[0];
+											o2 = o2 || '';
+
+											return Globals.naturalSortComparator(o1,o2);
+										}
+									});
+
+								store.sorters.clear();
+								store.sorters.add('answers', sorter);
+								store.sort();
+							}
+						}},
 						   { text: 'Feedback', dataIndex: 'feedback', width: 140, renderer: function(items) {
 							   return items ? (items + ' Comments') : '';
 						   } }
