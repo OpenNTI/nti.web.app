@@ -137,6 +137,17 @@ Ext.define('NextThought.view.annotations.note.Viewer', {
 		});
 
 		this.on('destroy', 'destroy', keyMap);
+
+        if(Ext.is.iOS){
+            var me = this;
+            Ext.defer(function(){
+                if(me.getHeight() > window.innerHeight){
+                    me.setHeight(window.innerHeight);
+                    me.setY(0);
+                    me.el.down('.context').setHeight(window.innerHeight - 300);
+                }
+            },100);
+        }
 	},
 
 
