@@ -178,7 +178,8 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 
 		this.statusMessage.update(unansweredQuestions === 0 ?
 								  'All questions answered' :
-								  Ext.String.format('{0} questions unanswered', unansweredQuestions)
+								  Ext.String.format('{0} unanswered',
+										  Ext.util.Format.plural(unansweredQuestions, 'question'))
 		);
 
 		this.statusMessage[((unansweredQuestions === 0) ? 'add' : 'remove') + 'Cls']('ready');
