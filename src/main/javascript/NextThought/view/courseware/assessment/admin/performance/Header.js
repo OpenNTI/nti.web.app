@@ -34,20 +34,30 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Header', {
 	changeGrade: function(number, letter) {
 		if (!this.gradebook) { return; }
 
-		var value = number + ' ' + letter,
-			url = this.gradebook.get('href');
+		var gradebookentry = this.gradebook.getItem('Final Grade', 'no_submit'),
+			grade = gradebookentry && gradebookentry.getFieldItem('Items', this.student.getId()),
+			value = number + ' ' + letter;
 
-		url += '/no_submit/Final Grade/' + this.student.getId();
 
-		Ext.Ajax.request({
-			url: url,
-			method: 'PUT',
-			jsonData: { value: value },
-			failure: function() {
-				//probably should do something here
-				console.error('Failed to save final grade:', arguments);
-			}
-		});
+		if(!grade){
+			console.error('No final grade entry cant set it.');
+			return;	
+		}
+
+		grade.set('value', value);
+		grade.save();
+
+		// url += '/no_submit/Final Grade/' + this.student.getId();
+
+		// Ext.Ajax.request({
+		// 	url: url,
+		// 	method: 'PUT',
+		// 	jsonData: { value: value },
+		// 	failure: function() {
+		// 		//probably should do something here
+		// 		console.error('Failed to save final grade:', arguments);
+		// 	}
+		// });
 	},
 
 

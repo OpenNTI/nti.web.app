@@ -408,7 +408,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 	applyUserData: function(users) {
 		var me = this,
-			s = me.store, r;
+			s = me.store;
 
 		users.forEach(function(u) {
 			var gradebookentry = me.gradeBook.getItem('Final Grade', 'no_submit'),
@@ -416,9 +416,21 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				value = grade && grade.get('value'),
 				grades = value && value.split(' '),
 				number = grades && grades[0],
-				letter = (grades && grades[1]) || '-';
+				letter = (grades && grades[1]) || '-',
+				r;
 
 			r = s.getById(u.getId());
+
+			me.mon(grade, 'value-changed', function(key, value){
+				var grades = value && value.split(' '),
+					number = grades && grades[0],
+					letter = grades && grades[1];
+
+				r.set({
+					grade: number,
+					letter: letter
+				});
+			});
 
 			r.set({
 				user: u,
@@ -497,25 +509,30 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	changeGrade: function(rec, number, letter) {
 		if (!this.gradeBook) { return; }
 
-		var value = number + ' ' + letter,
+		var gradebookentry = this.gradeBook.getItem('Final Grade', 'no_submit'),
+			grade = gradebookentry && gradebookentry.getFieldItem('Items', rec.get('user').getId()),
+			value = number + ' ' + letter,
 			url = this.gradeBook.get('href');//this may be broken on FireFox (_dc=1234)
 
-		rec.set({
-			'grade': number,
-			'letter': letter
-		});
+		
+		if(!grade){
+			console.error('No finaly grade entry cant save it');
+			return;
+		}
 
-		url += '/no_submit/Final Grade/' + rec.getId();
+		grade.set('value', value);
+		grade.save();
+		// url += '/no_submit/Final Grade/' + rec.getId();
 
-		Ext.Ajax.request({
-			url: url,
-			method: 'PUT',
-			jsonData: { value: value },
-			failure: function() {
-				//probably should do something here
-				console.error('Failed to save final grade:', arguments);
-			}
-		});
+		// Ext.Ajax.request({
+		// 	url: url,
+		// 	method: 'PUT',
+		// 	jsonData: { value: value },
+		// 	failure: function() {
+		// 		//probably should do something here
+		// 		console.error('Failed to save final grade:', arguments);
+		// 	}
+		// });
 	},
 
 
