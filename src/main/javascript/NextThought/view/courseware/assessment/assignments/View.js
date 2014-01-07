@@ -31,13 +31,11 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 		'due': {
 			'property': 'due',
 			'getGroupString': function(val) {
-				var now = new Date(),
+				var today = (new Date()).setHours(0,0,0),
 					due = val.get('due'),
-					sameDay = now.getDay() === due.getDay(),
-					sameMonth = now.getMonth() === due.getMonth(),
-					sameYear = now.getFullYear() === due.getFullYear();
+					day = (new Date(due.getTime())).setHours(0,0,0);
 
-				if (sameDay && sameMonth && sameYear) {
+				if (day === today) {
 					//its due today
 					return 'Today';
 				}
