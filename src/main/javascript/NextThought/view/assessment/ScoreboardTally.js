@@ -9,7 +9,7 @@ Ext.define('NextThought.view.assessment.ScoreboardTally', {
 		{ cls: 'tally', cn: [
 			{cls: 'stat correct', cn: [{tag: 'span', cls: 'count'},' correct'] },
 			{cls: 'stat incorrect', cn: [{tag: 'span', cls: 'count'},' incorrect'] },
-			{cls: 'stat questions', cn: [{tag: 'span', cls: 'count'},' questions'] }
+			{cls: 'stat questions' }
 		]}
 	]),
 
@@ -20,8 +20,7 @@ Ext.define('NextThought.view.assessment.ScoreboardTally', {
 		correctCount: '.tally .correct .count',
 		incorrectBox: '.tally .incorrect',
 		incorrectCount: '.tally .incorrect .count',
-		questionsBox: '.tally .questions',
-		questionsCount: '.tally .questions .count'
+		questionsBox: '.tally .questions'
 	},
 
 
@@ -65,7 +64,7 @@ Ext.define('NextThought.view.assessment.ScoreboardTally', {
 		function updateTpl() {
 			me.correctCount.update(correct || 0);
 			me.incorrectCount.update(incorrect);
-			me.questionsCount.update(total);
+			me.questionsBox.update(Ext.util.Format.plural(total, 'question'));
 
 			me.correctBox[correct === 0 ? 'hide' : 'show']();
 			me.incorrectBox[noScore || incorrect === 0 ? 'hide' : 'show']();
