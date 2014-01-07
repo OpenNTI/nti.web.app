@@ -11,7 +11,7 @@ Ext.define('NextThought.view.library.View', {
 	cls: 'library-view',
 	defaultType: 'library-view-page',
 	defaultTab: 'my-courses',
-	activeItem: 0,
+	activeItem: 1,
 	layout: {
 		type: 'card',
 		deferredRender: true
