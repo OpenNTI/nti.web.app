@@ -390,7 +390,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	getCountsFor: function(username) {
 		var d = this.gradeBookDefaultPart,
 			assignments = (d && d.get('Items')) || [],
-			counts = {ungraded: 0, overdue: 0, comments: 0};
+			counts = {ungraded: 0, overdue: 0};
 
 		assignments.forEach(function(assignment) {
 			var due = assignment.get('DueDate');
@@ -403,6 +403,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		});
 
 		return counts;
+	},
+
+	updateActionables: function(rec, user){
+		var counts = this.getCountsFor(user.getId());
+
+		rec.set(counts);
 	},
 
 
@@ -462,6 +468,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 					}
 				});
 			}
+
+			me.mon(me.gradeBook, 'Items-changed', function(){
+				me.updateActionables(r, u);
+			});
 
 			r.set({
 				user: u,
