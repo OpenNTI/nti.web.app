@@ -7,6 +7,7 @@ Ext.define('NextThought.view.library.View', {
 		'NextThought.view.courseware.Collection'
 	],
 
+	viewIdProperty: 'itemId',
 	extraTabBarCls: 'library',
 	cls: 'library-view',
 	defaultType: 'library-view-page',
@@ -53,7 +54,9 @@ Ext.define('NextThought.view.library.View', {
 	initComponent: function() {
 		this.callParent(arguments);
 		this.removeCls('make-white');
-		this.on('update-tab', 'updateTabs');
+		this.on({
+			'update-tab': 'updateTabs'
+		});
 	},
 
 

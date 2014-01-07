@@ -2,7 +2,7 @@ Ext.define('NextThought.view.Base', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.view-container',
 	layout: 'fit',
-
+	viewIdProperty: 'id',
 
 	initComponent: function() {
 		this.enableBubble('before-activate-view', 'activate-view', 'new-background');
@@ -60,7 +60,7 @@ Ext.define('NextThought.view.Base', {
 	getTabs: function() {
 		var tabs = this.tabSpecs,
 			active = this.layout && this.layout.getActiveItem && this.layout.getActiveItem(),
-			activeId = active && active.id;
+			activeId = active && active[this.viewIdProperty];
 
 		Ext.each(tabs, function(t) {
 			t.selected = (t.viewId.replace(/\?$/, '') === activeId);
@@ -78,7 +78,7 @@ Ext.define('NextThought.view.Base', {
 		var active = this.layout.getActiveItem(),
 				targetView = /^([^\?]+)(\?)?$/.exec(tabSpec.viewId) || [tabSpec.viewId],
 				vId = targetView[1],
-				needsChanging = vId !== active.id,
+				needsChanging = vId !== active[this.viewIdProperty],
 		//only reset the view if we are already there and the spec flagged that it can be reset.
 				reset = !!targetView[2] && !needsChanging;
 

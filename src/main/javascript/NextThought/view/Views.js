@@ -191,7 +191,8 @@ Ext.define('NextThought.view.Views', {
 
 
 	getTabFromView: function(view) {
-		var id = view && view.id,
+		var a = this.getActive(),
+			id = view && view[(a && a.viewIdProperty) || 'id'],
 			t = id && this.tabs,
 			s = '.main-view-tab[data-view-id="{0}"]';
 		return t && (t.down(Ext.String.format(s, id)) || t.down(Ext.String.format(s, id + '?')));
