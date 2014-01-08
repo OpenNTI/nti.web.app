@@ -42,7 +42,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			cls: 'header',
 			cn: [
 				{ cls: 'controls', cn: [
-					{ tag: 'a', href: '{exportFilesLink}', cls: 'download button {showExportFiles}', html: 'Download Files'}
+					{ tag: 'a', href: '{exportFilesLink}', cls: 'download button hidden', html: 'Download Files'}
 				]},
 				{ cls: 'title', html: '{assignmentTitle}' },
 				{
@@ -200,8 +200,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			due: this.due,
 			page: this.page,
 			total: this.total,
-			exportFilesLink: this.assignment.getLink('ExportFiles'),
-			showExportFiles: this.assignment.getLink('ExportFiles') ? '' : 'hidden'
+			exportFilesLink: this.assignment.getLink('ExportFiles')
 		});
 
 		s = this.store = new NextThought.store.courseware.AssignmentView({
@@ -216,9 +215,18 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		grid.dueDate = a.getDueDate();
 		grid.bindStore(s);
 		this.mon(s, 'load', 'resolveUsers');
+		this.mon(s, 'load', 'maybeShowDownload');
 		s.load();
 
 		this.mon(grid, 'itemclick', 'goToAssignment');
+	},
+
+
+	maybeShowDownload: function(s) {
+		function hasSubmission(r) { return !!r.get('Submission'); }
+		if (s.getRange().filter(hasSubmission).length > 0) {
+			this.el.down('a.download').removeCls('hidden');
+		}
 	},
 
 
