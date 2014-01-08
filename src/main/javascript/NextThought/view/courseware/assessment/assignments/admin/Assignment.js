@@ -10,7 +10,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	cls: 'course-assessment-header assignment-item',
 
 	layout: 'fit',
-	componentLayout: 'natural',
+	componentLayout: 'body',
 	childEls: ['body'],
 	getTargetEl: function() { return this.body; },
 
@@ -41,6 +41,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		{
 			cls: 'header',
 			cn: [
+				{ cls: 'controls', cn: [
+					{ tag: 'a', href: '{exportFilesLink}', cls: 'download button {showExportFiles}', html: 'Download Files'}
+				]},
 				{ cls: 'title', html: '{assignmentTitle}' },
 				{
 					cls: 'subtitle',
@@ -196,7 +199,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			assignmentTitle: this.assignmentTitle,
 			due: this.due,
 			page: this.page,
-			total: this.total
+			total: this.total,
+			exportFilesLink: this.assignment.getLink('ExportFiles'),
+			showExportFiles: this.assignment.getLink('ExportFiles') ? '' : 'hidden'
 		});
 
 		s = this.store = new NextThought.store.courseware.AssignmentView({

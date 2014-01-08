@@ -748,10 +748,13 @@ canvas.x-component-course-assessment {
 				}
 			}
 
+			.controls,
+			.grade {
+				float: right;
+			}
 
 			.grade {
 				width: 15em;
-				float: right;
 				font-size: 0.8em;
 				position: relative;
 
@@ -851,6 +854,26 @@ canvas.x-component-course-assessment {
 					&:first-of-type::before {
 						content: none;
 					}
+				}
+			}
+
+			.button {
+				&.hidden {
+					display: none;
+				}
+				display: block;
+				text-decoration: none;
+				cursor: pointer;
+				background: $primary-blue;
+				border-radius: 3px;
+				font: italic 600 0.9em/1 $font;
+				color: #fff;
+				padding: 0.8em 1.5em;
+				right: 15px;
+				top: 25px;
+				&.download {
+					margin-right: -15px;
+					margin-top: 2px;
 				}
 			}
 		}
