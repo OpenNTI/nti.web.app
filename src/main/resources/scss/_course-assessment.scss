@@ -226,6 +226,13 @@ canvas.x-component-course-assessment {
 
 	&.course-assessment-admin.performance {
 
+		&.show-final-grade {
+			.gradebox,
+			.column-names .right {
+				display: block;
+			}
+		}
+
 		.scrollzone {
 			position: absolute;
 			top: 51px; left: 0; right: 0; bottom: 0;
@@ -247,6 +254,7 @@ canvas.x-component-course-assessment {
 			.right {
 				float: right;
 				width: 15em;
+				display: none;
 			}
 		}
 
@@ -300,6 +308,7 @@ canvas.x-component-course-assessment {
 		}
 
 		.gradebox {
+			display: none;
 			margin: 11px 0 9px;
 			width: 10.5em;
 			float: right;

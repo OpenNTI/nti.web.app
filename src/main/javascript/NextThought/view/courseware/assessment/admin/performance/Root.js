@@ -393,9 +393,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			counts = {ungraded: 0, overdue: 0};
 
 		assignments.forEach(function(assignment) {
-			var due = assignment.get('DueDate');
+			var due = assignment.get('DueDate'),
+				i = assignment.getFieldItem('Items', username);
 
-			var i = assignment.getFieldItem('Items', username);
 			if (i && !i.get('value')) {counts.ungraded++;}
 			//If we have a due date and its before now increment the overdue count
 			//if we don't have a due date don't increment the overdue count
@@ -405,7 +405,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		return counts;
 	},
 
-	updateActionables: function(rec, user){
+	updateActionables: function(rec, user) {
 		var counts = this.getCountsFor(user.getId());
 
 		rec.set(counts);
@@ -414,7 +414,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 	applyUserData: function(users) {
 		var me = this,
-			s = me.store;
+			s = me.store,
+			gradebookentry = me.gradeBook.getItem('Final Grade', 'no_submit');
 
 		function getGrade(entry, user) {
 			return entry && entry.getFieldItem('Items', user.getId());
@@ -440,26 +441,28 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			});
 		}
 
-		
 		function updateGrade(r, grade) {
 			setGrade(r, grade);
-			me.mon(grade, 'value-changed', function(){
+			me.mon(grade, 'value-changed', function() {
 				setGrade(r, grade);
 			});
 		}
 
 
+		if (gradebookentry) {
+			this.addCls('show-final-grade');
+		}
+
 		users.forEach(function(u) {
-			var gradebookentry = me.gradeBook.getItem('Final Grade', 'no_submit'),
-				grade = getGrade(gradebookentry, u),
+			var grade = getGrade(gradebookentry, u),
 				r = s.getById(u.getId()), monitor;
 
 			if (grade) {
 				updateGrade(r, grade);
-			} else {
+			} else if (gradebookentry) {
 				monitor = me.mon(gradebookentry, {
 					destroyable: true,
-					'Items-changed': function(key, value){
+					'Items-changed': function(key, value) {
 						var grade = getGrade(gradebookentry, u);
 						if (grade) {
 							Ext.destroy(monitor);
@@ -469,7 +472,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				});
 			}
 
-			me.mon(me.gradeBook, 'Items-changed', function(){
+			me.mon(me.gradeBook, 'Items-changed', function() {
 				me.updateActionables(r, u);
 			});
 

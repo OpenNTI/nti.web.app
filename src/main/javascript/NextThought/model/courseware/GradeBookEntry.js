@@ -11,7 +11,7 @@ Ext.define('NextThought.model.courseware.GradeBookEntry', {
 		{name: 'order', type: 'int'}
 	],
 
-	addItem: function(rec){
+	addItem: function(rec) {
 		var items = this.get('Items'),
 			key = items.length;
 

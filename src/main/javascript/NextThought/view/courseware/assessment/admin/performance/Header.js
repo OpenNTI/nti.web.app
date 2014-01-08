@@ -4,6 +4,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Header', {
 
 	gradeTitle: 'Course',
 
+	renderSelectors: {
+		gradeboxEl: '.header > .grade'
+	},
+
 	setGradeBook: function(gradebook) {
 		this.gradebook = gradebook;
 		this.setUpGradebox();
@@ -28,6 +32,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Header', {
 			this.currentLetter = letter;
 			this.letterEl.update(letter);
 		}
+
+		this.gradeboxEl[gradebookentry ? 'show' : 'hide']();
 	},
 
 
@@ -40,9 +46,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Header', {
 			url = this.gradebook.get('href');
 
 
-		if(!grade){
+		if (!grade) {
 			console.log('No final grade entry cant set it.');
-		
+
 
 			url += '/no_submit/Final Grade/' + this.student.getId();
 
@@ -50,11 +56,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Header', {
 				url: url,
 				method: 'PUT',
 				jsonData: { value: value },
-				success: function(r){
-					var json = Ext.decode(r.responseText,true),
+				success: function(r) {
+					var json = Ext.decode(r.responseText, true),
 						rec = json && ParseUtils.parseItems(json)[0];
 
-					if(rec){
+					if (rec) {
 						gradebookentry.addItem(rec);
 					}
 				},
@@ -63,7 +69,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Header', {
 					console.error('Failed to save final grade:', arguments);
 				}
 			});
-			return;	
+			return;
 		}
 
 		grade.set('value', value);
