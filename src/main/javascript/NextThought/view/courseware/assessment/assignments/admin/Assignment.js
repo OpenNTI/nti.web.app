@@ -113,11 +113,11 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 							   v = v && v.get('value');
 							   return v && v.split(' ')[0];
 						   }, listeners: {
-								headerclick: function(){
+								headerclick: function() {
 									var store = this.up('grid').getStore(),
 										sorter = Ext.create('Ext.util.Sorter', {
 										direction: this.sortState,
-										sorterFn: function(o1, o2){
+										sorterFn: function(o1, o2) {
 											o1 = o1 && o1.get('Grade');
 											o1 = o1 && o1.get('value');
 											o1 = o1 && o1.split(' ')[0];
@@ -128,7 +128,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 											o2 = o2 && o2.split(' ')[0];
 											o2 = o2 || '';
 
-											return Globals.naturalSortComparator(o1,o2);
+											return Globals.naturalSortComparator(o1, o2);
 										}
 									});
 
