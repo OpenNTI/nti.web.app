@@ -14,13 +14,15 @@ Ext.define('NextThought.ux.SlideDeck', {
 	open: function(el, reader) {
 		var DQ = Ext.DomQuery,
 			root = ContentUtils.getLineage(reader.getLocation().NTIID).last(),
-			toc = Library.getToc(Library.getTitle(root)),
+			title = Library.getTitle(root),
+			toc = Library.getToc(title),
 			ids = [],
 			dom,
 			selector = 'object[type$=nextthought.slide]',
 			obj = Ext.fly(el).is(selector) ? el : Ext.fly(el).findParentNode(selector),
 			startingSlide = (obj && obj.getAttribute('data-ntiid')) || undefined,
 			startingVideo,
+			videoIndex,
 			slidedeckId,
 			store = new Ext.data.Store({proxy: 'memory'});
 
@@ -103,13 +105,16 @@ Ext.define('NextThought.ux.SlideDeck', {
 			slides = Ext.DomQuery.select('object[type="application/vnd.nextthought.slide"]', dom);
 
 			Ext.each(slides, function(dom, i, a) {
-				a[i] = NextThought.model.Slide.fromDom(dom, pageInfo.getId());
+				a[i] = NextThought.model.Slide.fromDom(dom, pageInfo.getId(), videoIndex);
 			});
 
 			store.add(slides);
 		}
 
-		ContentUtils.spider(ids, finish, parse);
+		Library.getVideoIndex(title, function(data) {
+			videoIndex = data;
+			ContentUtils.spider(ids, finish, parse);
+		});
 	}
 
 
