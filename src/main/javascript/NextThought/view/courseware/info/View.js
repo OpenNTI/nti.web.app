@@ -45,13 +45,15 @@ Ext.define('NextThought.view.courseware.info.View', {
 		this.hasInfo = !!catalogEntry;
 		this.infoOnly = catalogEntry && catalogEntry.get('Preview') === true;
 
-		courseInstance.getWrapper()
+		if (courseInstance) {
+			courseInstance.getWrapper()
 				.done(function(e) {
 					update(catalogEntry, e.get('Status'));
 				})
 				.fail(function() {
 					//hide tab?
 				});
+		}
 	},
 
 
