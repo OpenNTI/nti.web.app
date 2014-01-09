@@ -194,6 +194,12 @@ Ext.define('NextThought.util.Parsing', {
 	},
 
 
+	cssEscapeNTIID: function(ntiid) {
+		return ntiid.replace(/:/g, '\\3a ') //no colons
+				.replace(/,/g, '\\2c ');//no commas
+	},
+
+
 	bookPrefixIfQuestionNtiid: function(id) {
 		var ntiid = this.parseNtiid(id);
 		if (!ntiid || ntiid.specific.type !== 'NAQ') {
