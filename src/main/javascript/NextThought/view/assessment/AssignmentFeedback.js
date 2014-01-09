@@ -170,7 +170,13 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 
 
 	updateFeedback: function(store) {
-		this.history.set('feedback', store.getCount());
+		var items = store.getRange();
+
+		this.history.get('Feedback').set({
+			Items: items
+		});
+
+		this.history.afterEdit(['feedback']);
 	},
 
 
