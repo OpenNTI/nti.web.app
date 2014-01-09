@@ -166,7 +166,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 			ntiid: target && target.getId(),
 			item: target,
 			label: label,
-			target: target && target.get('title'),
+			target: (target && target.get('title')) || 'Missing Label',
 			date: date
 		};
 	},
