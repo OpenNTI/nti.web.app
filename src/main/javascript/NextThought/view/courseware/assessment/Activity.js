@@ -156,14 +156,17 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 
 	getEventConfig: function(label, target, date) {
 		if (typeof target === 'string') {
+			if (!this.assignments.hasOwnProperty(target)) {
+				console.warn('No assignment found in the map for:', target);
+			}
 			target = this.assignments[target];
 		}
 
 		return {
-			ntiid: target.getId(),
+			ntiid: target && target.getId(),
 			item: target,
 			label: label,
-			target: target.get('title'),
+			target: target && target.get('title'),
 			date: date
 		};
 	},

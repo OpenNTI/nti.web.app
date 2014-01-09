@@ -28,7 +28,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.Activity', {
 					return;
 				}
 
-				me[m](o);
+				try {
+					me[m](o);
+				} catch (e) {
+					console.error(e.stack || e.message || e);
+				}
 			});
 		});
 	},
