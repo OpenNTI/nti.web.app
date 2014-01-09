@@ -699,7 +699,7 @@ Ext.define('NextThought.model.Base', {
 		//If they aren't both models
 		//they are not equal
 		//type check here?
-		if (!a.isModel || !b.isModel) {
+		if (!a.isModel || !b || !b.isModel) {
 			return false;
 		}
 

@@ -15,7 +15,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 			letter = (grades && grades[1]) || '-';
 
 		this.letterEl.setStyle({display: 'none'});
-		
+
 		if (!this.assignmentHistory.get('Submission')) {
 			this.gradeEl.addCls('disabled');
 			this.letterEl.addCls('disabled');
@@ -23,7 +23,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 			return;
 		}
 
-		//if the submission was late, set the lateEl to X units late.
+		//TODO: if the submission was late, set the lateEl to X units late.
 
 		if (number) {
 			this.currentGrade = number;

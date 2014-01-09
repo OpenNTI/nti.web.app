@@ -142,6 +142,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 						}},
 						   { text: 'Feedback', dataIndex: 'feedback', width: 140, renderer: function(items) {
 							   return items ? (items + ' Comments') : '';
+						   } },
+						   { text: '', dataIndex: 'Submission', sortable: false, width: 40, renderer: function(v) {
+							   return v && Ext.DomHelper.markup({cls: 'actions'});
 						   } }
 					   ].map(function(o) {
 							return Ext.applyIf(o, {
@@ -218,7 +221,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		this.mon(s, 'load', 'maybeShowDownload');
 		s.load();
 
-		this.mon(grid, 'itemclick', 'goToAssignment');
+		this.mon(grid, 'itemclick', 'onItemClick');
 	},
 
 
@@ -316,7 +319,16 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		this.fireEvent('goto', index);
 	},
 
-	goToAssignment: function(selModel, record) {
+	onItemClick: function(v, record, dom, ix, e) {
+		var nib = e.getTarget('.actions');
+		if (nib) {
+			this.getActionsMenu(record).showBy(nib, 'tr-br');
+			return;
+		}
+		this.goToAssignment(v, record);
+	},
+
+	goToAssignment: function(v, record) {
 		var student = record.get('Creator'),
 			path = [
 				this.pathRoot,
@@ -329,5 +341,35 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		}
 
 		this.fireEvent('show-assignment', this, this.assignment, record, student, path, this.store, this.store.indexOf(record) + 1);
+	},
+
+
+	getActionsMenu: function(record) {
+		var menu = Ext.widget('menu', {
+			ui: 'nt',
+			plain: true,
+			shadow: false,
+			frame: false,
+			border: false,
+			ownerCmp: this,
+			constrainTo: Ext.getBody(),
+			defaults: {
+				ui: 'nt-menuitem',
+				plain: true
+			}
+		});
+
+		menu.add(new Ext.Action({
+			text: 'Reset Assignment',
+			scope: this,
+			handler: Ext.bind(record.beginReset, record),
+			itemId: 'delete-assignment-history',
+			ui: 'nt-menuitem', plain: true
+		}));
+
+
+		menu.on('hide', 'destroy');
+
+		return menu;
 	}
 });

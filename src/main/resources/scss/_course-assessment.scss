@@ -1041,6 +1041,11 @@ canvas.x-component-course-assessment {
 			@include icon('check_gray', $top: 1em, $left: 1.6em);
 		}
 
+		.actions {
+			width: 40px;
+			height: 40px;
+			@include icon('more-options', $top: 15px, $left: 9px);
+		}
 
 		.late, .ontime, .incomplete {
 			font-weight: 600;

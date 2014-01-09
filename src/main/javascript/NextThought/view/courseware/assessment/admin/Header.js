@@ -54,8 +54,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 			gradeTitle: this.gradeTitle || 'Assignment',
 			avatarURL: this.student.get('avatarURL'),
 			presence: this.student.getPresence().getName()
-			//grade: this.currentGrade,
-			//letter: this.currentLetter,
 		});
 
 		this.createGradeMenu();
@@ -67,7 +65,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 		});
 	},
 
-	afterRender: function(){
+	afterRender: function() {
 		var me = this;
 
 		me.callParent(arguments);
@@ -75,22 +73,22 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 		this.setUpGradebox();
 
 		//so the elements wont take up space when hidden
-		Object.keys(this.renderSelectors).forEach(function(s){ 
-			me[s].setVisibilityMode(Ext.Element.DISPLAY); 
+		Object.keys(this.renderSelectors).forEach(function(s) {
+			me[s].setVisibilityMode(Ext.Element.DISPLAY);
 		});
 
 		//for profile link
 		me.user = me.student;
 		me.enableProfileClicks(me.profileEl);
 
-		if(!me.user.get('email') && false){
+		if (!me.user.get('email') && false) {
 			me.emailEl.hide();
 		}
 
 		me.maybeShowChat(me.chatEl);
 
-		this.mon(Ext.getStore('PresenceInfo'), 'presence-changed', function(username, presence){
-			if(username === me.user.getId()){
+		this.mon(Ext.getStore('PresenceInfo'), 'presence-changed', function(username, presence) {
+			if (username === me.user.getId()) {
 				me.nameEl.removeCls('dnd away available unavailable');
 				me.nameEl.addCls(presence.getName());
 				me.maybeShowChat(me.chatEl);
@@ -99,16 +97,16 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 	},
 
 	//override these
-	setUpGradebox: function(){},
-	changeGrade: function(){},
+	setUpGradebox: function() {},
+	changeGrade: function() {},
 
-	showGradeMenu: function(){
+	showGradeMenu: function() {
 		if (this.letterEl.hasCls('disabled')) { return; }
 		this.gradeMenu.showBy(this.letterEl, 'tl-tl', this.gradeMenu.offset);
 	},
 
 
-	createGradeMenu: function(){
+	createGradeMenu: function() {
 		var items = [
 			{text: 'A', checked: this.currentLetter === 'A'},
 			{text: 'B', checked: this.currentLetter === 'B'},
@@ -118,7 +116,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 			{text: '-', checked: this.currentLetter === '-'}
 		];
 
-		this.gradeMenu = Ext.widget('menu',{
+		this.gradeMenu = Ext.widget('menu', {
 			ui: 'nt',
 			cls: 'letter-grade-menu',
 			plain: true,
@@ -145,11 +143,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 		});
 	},
 
-	
-	changeLetterGrade: function(item, status){
-		if(!status){ return; }
+
+	changeLetterGrade: function(item, status) {
+		if (!status) { return; }
 		var offset = item.getOffsetsTo(this.gradeMenu),
-			x = offset &&  offset[1];
+			x = offset && offset[1];
 
 		this.letterEl.update(item.text);
 
@@ -161,24 +159,24 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 	},
 
 
-	maybeChangeGrade: function(e, el){
-		if(e.getCharCode() === e.ENTER){
+	maybeChangeGrade: function(e, el) {
+		if (e.getCharCode() === e.ENTER) {
 			this.gradeChanged(e, el);
 		}
 	},
 
 
-	gradeChanged: function(e, el){
+	gradeChanged: function(e, el) {
 		this.currentGrade = el.value;
 
 		this.changeGrade(this.currentGrade, this.currentLetter);
-	},	
+	},
 
 
-	openEmail: function(){
+	openEmail: function() {
 		var email = this.student.get('email');
 
-		if(email){
+		if (email) {
 			Globals.sendEmailTo(email);
 		}
 	}
