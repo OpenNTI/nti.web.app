@@ -62,7 +62,7 @@ Ext.define('NextThought.model.Slide', {
 					'image-thumbnail': root + getImage(),
 					'video': getParam('slidevideo'),
 					'video-type': getParam('slidevideotype'),
-					'video-id': getParam('slidevideoid'),
+					'video-id': getParam('video-ntiid'),
 					'video-thumbnail': getParam('slidevideothumbnail'),
 					'video-start': getParam('slidevideostart'),
 					'video-end': getParam('slidevideoend'),
