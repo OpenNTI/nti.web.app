@@ -31,7 +31,7 @@ Ext.define('NextThought.controller.SlideDeck', {
 					'load-presentation-userdata': 'loadDataForPresentation'
 				},
 				'#main-reader-view reader-content': {
-					'beforeNavigate': 'closeMediaViewer'
+					'beforeNavigate': 'maybeCloseSlideDeck'
 				}
 			},
 			'controller': {
