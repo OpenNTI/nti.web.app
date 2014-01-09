@@ -415,7 +415,7 @@ Ext.define('NextThought.controller.Navigation', {
 					if (!success) { return; }
 					var board = ParseUtils.parseItems(response.responseText)[0];
 					if (board.belongsToCourse()) {
-						me.goToCourseForum(board.getRelatedCourse().get('NTIID'), topic.get('ContainerId'), topic.getId());
+						me.goToCourseForum(board.getRelatedCourse(), topic.get('ContainerId'), topic.getId());
 						r = false;
 					}else {
 						r = me.setView('forums');
