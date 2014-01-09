@@ -452,12 +452,9 @@ canvas.x-component-course-assessment {
 			padding: 4px 5px 5px 2em;
 			background: #fbfbfb;
 
-			&::hover{
-				color: $primary-grey;
-			}
-
 			&.x-menu-item-checked{
 				color: $primary-grey;
+				background: #f0f0f0;
 				@include icon('arrow-course-dropdown', $top:1.5em, $left:auto, $right:1em);
 
 				&:hover {
@@ -465,6 +462,11 @@ canvas.x-component-course-assessment {
 						@include sprite($icons, 'arrow-course-dropdown');
 					}
 				}
+			}
+
+			&.x-menu-item-active{
+				color: #fff !important;
+				background: $primary-blue;
 			}
 		}
 	}
@@ -483,11 +485,8 @@ canvas.x-component-course-assessment {
 			padding: 4px 5px 5px 13px;
 			background: rgba(255,255,255,1);
 
-			&:hover{
-				color: $primary-grey;
-			}
-
 			&.x-menu-item-checked{
+				background: #f0f0f0;
 				color: $primary-grey;
 
 				&::after{
@@ -498,6 +497,11 @@ canvas.x-component-course-assessment {
 					right: 1.7em;
 					@include arrow($pointFrom:top, $width: 8px, $height: 5px, $color: $secondary-grey);
 				}
+			}
+
+			&.x-menu-item-active{
+				color: #fff !important;
+				background: $primary-blue;
 			}
 		}
 	}
