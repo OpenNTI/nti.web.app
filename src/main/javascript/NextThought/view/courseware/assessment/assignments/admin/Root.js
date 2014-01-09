@@ -18,28 +18,36 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 	showAssignment: function(assignment, user) {
 		var id = assignment && ((assignment.getId && assignment.getId()) || assignment),
 			x = this.store.getById(id),
-			view = this.up('course-assessment-admin-assignments'), assignment;
-		
+			view = this.up('course-assessment-admin-assignments'),
+			assignmentView,
+			tab = this.up('[isTabView]').getEl();
+
 		this.onItemClicked(null, x);
-		
-		assignment = view && view.down('course-assessment-admin-assignments-item');
 
-		if (assignment) {
-			assignment.filledStorePromise
-				.done(function(store){
-					
-					store.each(function(rec){
-						var creator = rec.get('Creator'),
-							u = Ext.isString(user)? user : user.getId();
+		assignmentView = view && view.down('course-assessment-admin-assignments-item');
 
-						creator = Ext.isString(creator)? creator : creator.getId();
+		if (assignmentView) {
+			//tab.mask('Loading...', 'navigation');
+			tab.mask('Loading...');
+			assignmentView.filledStorePromise
+				.done(function(store) {
+					store.each(function(rec) {
+						try {
+							var creator = rec.get('Creator'),
+								u = Ext.isString(user) ? user : user.getId();
 
-						if(u === creator){
-							assignment.goToAssignment(null, rec);
+							creator = Ext.isString(creator) ? creator : creator.getId();
+
+							if (u === creator) {
+								assignmentView.goToAssignment(null, rec);
+							}
+						} finally {
+							tab.unmask();
 						}
 					});
 				})
-				.fail(function(reason){
+				.fail(function(reason) {
+					tab.unmask();
 					console.error(reason);
 				});
 		}
