@@ -527,6 +527,169 @@
 	}
 }
 
+.x-component-forum-comment-thread{
+	background-color: $panel-background;
+	margin-bottom: 20px;
+
+	.threaded-forum-editor{
+		position: absolute;
+		z-index: 1;
+	}
+
+	.topic-comment{
+		border: 0 solid #f5f5f5;
+		border-top-width: 1px;
+		position: relative;
+		margin-top: 3px;
+		margin-left: 140px;
+
+		&[data-depth='3']{
+			margin-left: 105px;
+		}
+
+		&[data-depth='2']{
+			margin-left: 70px; 
+		}
+
+		&[data-depth='1']{
+			margin-left: 35px;
+		}
+
+		&[data-depth='0']{
+			margin-left: 0px;
+		}
+
+		.expand {
+			cursor: pointer;
+			position: absolute;
+			top: 0; left: 0;
+			width: 20px;
+			padding-left: 10px;
+			height: 40px;
+
+			&::before{
+				content: '';
+				@include arrow($pointFrom:left, $width: 8px, $height: 5px, $color: $secondary-grey);
+			}
+		}
+
+		.wrap{
+			margin-left: 65px;
+			white-space: nowrap;
+
+			.meta{
+				line-height: 40px !important;
+
+				.name{
+					line-height: 40px;
+					overflow: hidden;
+					white-space: nowrap;
+					@include ellipse;
+					max-width: 10em;
+					display: inline-block;
+					vertical-align: middle;
+				}
+			}
+		}
+
+		.avatar {
+			position: absolute;
+			top: 5px; left: 25px;
+			width: 30px; height: 30px;
+			border-radius: 3px;
+			background:{
+				color: transparent;
+				position: center;
+				repeat: no-repeat;
+				size: cover;
+			}
+		}
+
+		&.expanded:not(.placeholder){
+			padding-bottom: 10px;
+
+			.expand{
+				padding-top: 9px;
+			}
+		}
+
+		&.expanded{
+			.expand{
+				&::before{
+					@include transform-origin(25%, 25%);
+					@include rotate(90deg);
+				}
+			}
+		}
+
+		&.placeholder{
+			cursor: pointer;
+
+			.wrap{
+				.body{
+					cursor: pointer !important;
+				}
+			}
+		}
+
+		&.collapsed, &.placeholder{
+			height: 40px;
+			line-height: 40px;
+
+			.avatar {
+				width: 30px; height: 30px;
+				top: 5px; left: 25px;
+			}
+
+
+			.wrap{
+				display: block;
+				margin-right: 75px;
+				@include ellipse;
+				overflow: hidden;
+				
+				*{
+					display: inline;
+				}
+
+				.meta{
+					display:inline-block;
+					//margin-right: 1em;
+					// width: 24em;
+
+					&::after {
+						color: $tertiary-grey;
+						font-weight: 600;
+						position: static;
+						content: '\00B7';
+						text-decoration: none !important;
+						vertical-align: baseline;
+						display: inline-block;
+						padding: 0 0.6em;
+						background: none;
+						text-decoration: none;
+					}
+				}
+
+				.body{
+					margin: 0 !important;
+					line-height: 40px !important;
+					white-space: nowrap !important;
+					
+
+					img.whiteboard-thumbnail{
+						display: none;
+					}
+				}	
+			}
+
+			.foot{
+				display: none;
+			}
+		}
+	}
+}
+
 @mixin forum-post-editor{
 	border: 1px solid #dcdcdc;
 	background: #fff;

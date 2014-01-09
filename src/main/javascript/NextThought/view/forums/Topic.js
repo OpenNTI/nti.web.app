@@ -15,7 +15,8 @@ Ext.define('NextThought.view.forums.Topic', {
 		'NextThought.view.forums.Comment',
 		'NextThought.view.menus.BlogTogglePublish',
 		'NextThought.ux.SearchHits',
-		'NextThought.layout.component.Natural'
+		'NextThought.layout.component.Natural',
+		'NextThought.view.forums.Comments'
 	],
 
 	onClassExtended: function(cls, data) {
@@ -120,7 +121,12 @@ Ext.define('NextThought.view.forums.Topic', {
 		this.mon(this.record, 'destroy', this.destroy, this);
 		this.on('beforedeactivate', this.onBeforeDeactivate, this);
 		this.on('beforeactivate', this.onBeforeActivate, this);
-		this.buildStore();
+		
+		if(isFeature('threaded-forums')){
+			this.add({xtype: 'forum-comment-thread', topic: this.record});
+		} else {
+			this.buildStore();
+		}		
 	},
 
 
@@ -239,7 +245,13 @@ Ext.define('NextThought.view.forums.Topic', {
 
 		this.mon(this.nextPostEl, 'click', this.navigationClick, this);
 		this.mon(this.prevPostEl, 'click', this.navigationClick, this);
-		this.mon(this.loadMoreEl, 'click', this.fetchNextPage, this);
+		
+
+		if (isFeature('threaded-forums')){
+			this.loadMoreEl.destroy();
+		} else {
+			this.mon(this.loadMoreEl, 'click', this.fetchNextPage, this);
+		}
 
 		this.updateRecord(this.record);
 
@@ -413,6 +425,12 @@ Ext.define('NextThought.view.forums.Topic', {
 
 
 	showEditor: function() {
+
+		if (isFeature('threaded-forums')) {
+			this.down('forum-comment-thread').addRootReply();
+			return;
+		}
+
 		this.clearSearchHit();
 		if (!this.editor.isActive()) {
 			this.editor.reset();

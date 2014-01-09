@@ -7,7 +7,8 @@ Ext.define('NextThought.util.UserDataThreader', {
 		'Highlight': function(r) {return r;},
 		'Note': function(r) {return r;},
 		'TranscriptSummary': function(r) {return r.get('RoomInfo');},
-		'QuizResult': function(r) {return r;}
+		'QuizResult': function(r) {return r;},
+		'GeneralForumComment': function(r) { return r;}
 	},
 
 	//TODO unify this function with buildThreads
@@ -18,11 +19,9 @@ Ext.define('NextThought.util.UserDataThreader', {
 		var data = !Ext.isArray(d) ? [d] : d,
 			tree = {};
 
-		Ext.each(data, function(item) {
-			if (item && item.isThreadable) {
-				this.buildItemTree(item, tree);
-			}
-		}, this);
+		if (data && data[0].isThreadable) {
+			this.buildItemTree(data, tree);
+		}
 
 		this.cleanupTree(tree);
 

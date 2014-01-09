@@ -783,7 +783,7 @@ Ext.define('NextThought.controller.Forums', {
 	saveTopicComment: function(editor, record, valueObject, successCallback) {
 		var postCmp = editor.up('[record]'),
 			postRecord = postCmp && postCmp.record,
-			isEdit = Boolean(record),
+			isEdit = Boolean(record), postLink,
 			commentForum = record || NextThought.model.forums.GeneralForumComment.create();
 
 		commentForum.set({ body: valueObject.body });
@@ -800,10 +800,24 @@ Ext.define('NextThought.controller.Forums', {
 			}
 		}
 
+		isEdit = isEdit && !Ext.isEmpty(commentForum.get('href'));
+
+		if(!isEdit){
+			postLink = postRecord && postRecord.getLink('add');
+
+			while(!postLink && postRecord){
+				postCmp = postCmp.up('[record]');
+				postRecord = postCmp && postCmp.record;
+				postLink = postRecord && postRecord.getLink('add');
+			}
+		} else {
+			postLink = undefined;
+		}
+
 		try {
 
 			commentForum.save({
-				url: isEdit ? undefined : postRecord && postRecord.getLink('add'),//only use postRecord if its a new post.
+				url: postLink,//only use postRecord if its a new post.
 				scope: this,
 				success: function(rec) {
 					var topicCmp = Ext.ComponentQuery.query('forums-topic')[0];
