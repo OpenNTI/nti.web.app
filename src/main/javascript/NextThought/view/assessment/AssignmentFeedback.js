@@ -169,7 +169,7 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 	},
 
 
-	updateFeedback: function(store){
+	updateFeedback: function(store) {
 		this.history.set('feedback', store.getCount());
 	},
 
