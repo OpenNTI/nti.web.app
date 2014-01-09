@@ -116,6 +116,9 @@ var Promise = (function() {
 								}
 								// deal with error thrown
 							} catch (error) {
+								if (!obj.promise.reject) {
+									console.error('UNHANDLED EXECPTION:', error);
+								}
 								obj.promise.changeState(State.REJECTED, error);
 							}
 						}
