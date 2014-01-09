@@ -335,7 +335,7 @@ Ext.define('NextThought.Library', {
 			if (s) {
 				xml = me.tocs[index] = me.parseXML(r.responseText);
 				if (xml) {
-					Ext.each(Ext.DomQuery.select('topic:not([ntiid]),topic[href*=#]', xml), strip);
+					//Ext.each(Ext.DomQuery.select('topic:not([ntiid])[href*=#]', xml), strip);
 					n = Ext.DomQuery.select('[visibility]:not([visibility=everyone])', xml);
 					Ext.each(n, permitOrRemove);
 				}
