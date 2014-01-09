@@ -41,7 +41,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Activity', {
 		if (!isMe(rec.get('user'))) {
 			return rec;
 		}
-		
+
 		Service.request(path)
 				.done(function(submission) {
 					submission = ParseUtils.parseItems(submission)[0];

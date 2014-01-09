@@ -47,6 +47,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 
 	store: new Ext.data.Store({
 		fields: [
+			{name: 'id', type: 'int'},
 			{name: 'ntiid', type: 'string'},
 			{name: 'label', type: 'string'},
 			{name: 'target', type: 'string'},
