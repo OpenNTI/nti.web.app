@@ -7,12 +7,14 @@ Ext.define('NextThought.view.courseware.info.outline.OpenCourseInfo', {
 	ui: 'course-info',
 	cls: 'open-course-info',
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'heading', html: '{heading}' },
-		{ cls: 'content', html: '{message}'},
-		{ tag: 'ul', cn: [
-			{ tag: 'li', html: '{pointfree}'},
-			{ tag: 'li', cls: 'red', html: '{nocredit}'}
-		] },
+		{ cls: 'open-info', cn: [
+			{ cls: 'heading', html: '{heading}' },
+			{ cls: 'content', html: '{message}'},
+			{ tag: 'ul', cn: [
+				{ tag: 'li', html: '{pointfree}'},
+				{ tag: 'li', cls: 'red', html: '{nocredit}'}
+			] }
+		]},
 		{ cls: 'foot', cn: [
 			{ cls: 'edit', html: 'Edit'},
 			{ cls: 'registered', html: '{registered}' }
@@ -28,7 +30,7 @@ Ext.define('NextThought.view.courseware.info.outline.OpenCourseInfo', {
 	},
 
 	beforeRender: function() {
-
+		this.addCls(this.enrollmentStatus || 'open');
 		this.renderData = Ext.apply(this.renderData || {}, {
 			'heading': getString('course-info.open-course-widget.heading'),
 			'message': getString('course-info.open-course-widget.message'),

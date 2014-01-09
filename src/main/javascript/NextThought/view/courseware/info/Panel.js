@@ -11,7 +11,7 @@ Ext.define('NextThought.view.courseware.info.Panel', {
 	],
 
 
-	setContent: function(content) {
+	setContent: function(content, status) {
 		this.removeAll(true);
 
 		var toAdd = [];
@@ -30,7 +30,8 @@ Ext.define('NextThought.view.courseware.info.Panel', {
 		if (this.up('course-info').infoOnly) {
 			toAdd.push({
 				xtype: 'course-info-not-started',
-				info: content
+				info: content,
+				enrollmentStatus: status
 			});
 		}
 
@@ -40,7 +41,8 @@ Ext.define('NextThought.view.courseware.info.Panel', {
 			videoUrl: content.get('Video')
 		},{
 			xtype: 'course-info-description',
-			info: content
+			info: content,
+			enrollmentStatus: status
 		},{
 			xtype: 'course-info-instructors',
 			info: content

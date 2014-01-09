@@ -6,7 +6,7 @@ Ext.define('NextThought.view.courseware.info.parts.NotStarted', {
 
 	ui: 'course-info',
 
-	headerTpl: Ext.DomHelper.createTemplate({ cls: 'course-info-header-bar', cn: [
+	headerTpl: Ext.DomHelper.createTemplate({ cls: 'course-info-header-bar {status}', cn: [
 		{ cls: 'col-left', cn: [
 			{ cls: 'label', html: 'Course Starts' },
 			{ cls: 'date', html: '{startDate:date("F j, Y")}'}
@@ -37,6 +37,7 @@ Ext.define('NextThought.view.courseware.info.parts.NotStarted', {
 
 		Ext.apply(data || {}, {
 			startDate: i.get('StartDate'),
+			status: this.enrollmentStatus,
 			enroll: 'Enroll for Credit',
 			enrollUrl: e.url,
 			registered: getString('course-info.description-widget.open-enrolled')

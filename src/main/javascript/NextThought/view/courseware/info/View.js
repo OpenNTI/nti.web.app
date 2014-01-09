@@ -28,14 +28,14 @@ Ext.define('NextThought.view.courseware.info.View', {
 		var me = this,
 			catalogEntry = courseInstance && courseInstance.getCourseCatalogEntry();
 
-		function update(info) {
+		function update(info, status) {
 			me.hasInfo = !!info;
 
 			me[me.infoOnly?'addCls':'removeCls']('info-only');
 			me.navigation.margin = (me.infoOnly? '105':'0')+' 5 5 0';
 
-			me.body.setContent(info);
-			me.navigation.setContent(info);
+			me.body.setContent(info, status);
+			me.navigation.setContent(info, status);
 		}
 
 
@@ -45,7 +45,13 @@ Ext.define('NextThought.view.courseware.info.View', {
 		this.hasInfo = !!catalogEntry;
 		this.infoOnly = catalogEntry && catalogEntry.get('Preview') === true;
 
-		update(catalogEntry);
+		courseInstance.getWrapper()
+				.done(function(e) {
+					update(catalogEntry, e.get('Status'));
+				})
+				.fail(function() {
+					//hide tab?
+				});
 	},
 
 

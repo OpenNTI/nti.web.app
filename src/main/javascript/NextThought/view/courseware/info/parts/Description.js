@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.courseware.info.parts.Description',{
+Ext.define('NextThought.view.courseware.info.parts.Description', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-info-description',
 
@@ -16,7 +16,7 @@ Ext.define('NextThought.view.courseware.info.parts.Description',{
 				] },
 				{ cls: 'cell', cn: [
 					{ cls: 'label', html: 'Credit Hours'},
-					{ cls: 'value', cn: [
+					{ cls: 'value {enrollmentStatus}', cn: [
 						{ tag: 'tpl', 'if': 'creditHours', cn: {
 							cls: 'enroll-for-credit', cn: [
 								'{creditHours:plural("Credit")} Available. ',
@@ -100,6 +100,8 @@ Ext.define('NextThought.view.courseware.info.parts.Description',{
 			creditHours: c && c.get('Hours'),
 			enrollLabel: e.label,
 			enrollUrl: e.url,
+
+			enrollmentStatus: this.enrollmentStatus,
 
 			nocredit: getString('course-info.description-widget.for-no-credit'),
 			inopen: getString('course-info.description-widget.open-enrolled')

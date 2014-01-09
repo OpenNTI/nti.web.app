@@ -8,7 +8,7 @@ Ext.define('NextThought.view.courseware.info.outline.View', {
 		'NextThought.view.courseware.info.outline.OpenCourseInfo'
 	],
 
-	setContent: function(info) {
+	setContent: function(info, status) {
 		this.removeAll(true);
 
 		if (Ext.isString(info)) {
@@ -23,7 +23,8 @@ Ext.define('NextThought.view.courseware.info.outline.View', {
 			info: info
 		},{
 			xtype: 'course-info-outline-open-course',
-			info: info
+			info: info,
+			enrollmentStatus: status
 		});
 	}
 });
