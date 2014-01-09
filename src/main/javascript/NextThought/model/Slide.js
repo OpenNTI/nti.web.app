@@ -31,7 +31,7 @@ Ext.define('NextThought.model.Slide', {
 
 
 	statics: {
-		fromDom: function(dom,containerId) {
+		fromDom: function(dom, containerId) {
 
 			function getParam(name) {
 				var el = DQ.select('param[name="' + name + '"]', dom)[0];
@@ -41,8 +41,8 @@ Ext.define('NextThought.model.Slide', {
 			function getImage() {
 				var el = DQ.select('[itemprop] img', dom)[0], v = null;
 				if (el) {
-					v = el.getAttribute('data-nti-image-thumbnail')
-						|| el.getAttribute('data-nti-image-quarter');
+					v = el.getAttribute('data-nti-image-thumbnail') ||
+						el.getAttribute('data-nti-image-quarter');
 				}
 				return v;
 			}
