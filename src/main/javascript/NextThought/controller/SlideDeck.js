@@ -49,10 +49,6 @@ Ext.define('NextThought.controller.SlideDeck', {
 			return false;
 		}
 
-		if (!Ext.isEmpty(startingVideo) && !Ext.isEmpty(startingSlide)) {
-			Ext.Error.raise('Cannot set both starting video and slide. Pick one.');
-		}
-
 		SlideDeck.open(contentNTIID, slideDeckId, startingVideo, startingSlide);
 	},
 

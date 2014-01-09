@@ -86,6 +86,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 				{name: 'poster', type: 'string'},
 				{name: 'thumb', type: 'string'},
 				{name: 'comments', type: 'auto'},
+				{name: 'slidedeck', type: 'string'},
 				{name: 'hasTranscripts', type: 'boolean'}
 			],
 			data: this.convertItems(config.items || [])
@@ -136,7 +137,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 			store.each(function(r) {
 				var v = me.videoIndex[r.getId()], item;
 				if (v) {
-					r.set('hasTranscripts', !Ext.isEmpty(v.transcripts));
+					r.set('hasTranscripts', !Ext.isEmpty(v.transcripts) || !Ext.isEmpty(v.slidedeck));
 					if (me.curtainEl && selected.contains(r)) {
 						me.playBtnEl[r.get('hasTranscripts') ? 'addCls' : 'removeCls']('transcripts');
 					}
@@ -145,7 +146,8 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 					r.set({
 						poster: item.poster,
 						thumb: item.thumbnail,
-						label: v.title
+						label: v.title,
+						slidedeck: v.slidedeck
 					});
 
 					me.playlist.push(reader.read({
@@ -427,10 +429,21 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 		e.stopEvent();
 
 		var m = this.getSelectedVideo(),
-			li = this.locationInfo;
+			li = this.locationInfo,
+			slide;
 
 		if (e.getTarget('.launch-player')) {
-			this.fireEvent('start-media-player', this.videoIndex[m.getId()], m.getId(), getURL(li.root));
+			slide = m.get('slidedeck');
+			if (Ext.isEmpty(slide)) {
+				this.fireEvent('start-media-player', this.videoIndex[m.getId()], m.getId(), getURL(li.root));
+			} else {
+				this.fireEvent('open-slide-deck', li.ContentNTIID, slide,
+					new NextThought.model.PlaylistItem(Ext.apply(
+							{
+								NTIID: m.getId()
+							},
+							this.videoIndex[m.getId()])));
+			}
 			return;
 		}
 

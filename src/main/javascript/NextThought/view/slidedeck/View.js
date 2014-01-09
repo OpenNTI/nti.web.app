@@ -133,11 +133,12 @@ Ext.define('NextThought.view.slidedeck.View', {
 	buildTranscriptStore: function(playList) {
 		var s = new Ext.data.Store({proxy: 'memory'}),
 			transcripts = [],
+			Model = NextThought.model.transcript.TranscriptItem,
 			reader = Ext.ComponentQuery.query('reader-content')[0].getContent(),
 			videoObjects = this.getUniqueVideoObjects(playList);
 
 		Ext.each(videoObjects, function(v) {
-			var m = NextThought.model.transcript.TranscriptItem.fromDom(v, reader.basePath);
+			var m = Model[v.isModel ? 'fromVideo' : 'fromDom'](v, reader.basePath);
 			if (m) {
 				transcripts.push(m);
 			}
@@ -153,13 +154,13 @@ Ext.define('NextThought.view.slidedeck.View', {
 
 		Ext.each(playList, function(v) {
 			var frag = v.get('dom-clone'),
-				video = frag.querySelector('object[type$=ntivideo]');
+				video = (frag && frag.querySelector('object[type$=ntivideo]')) || v;
 
 			vObjects.push(video);
 		});
 
 		vObjects = Ext.Array.filter(vObjects, function(i) {
-			var id = Ext.fly(i).getAttribute('data-ntiid'),
+			var id = i.isModel ? i.getId() : i.getAttribute('data-ntiid'),
 				ret = !Ext.Array.contains(uniqueIds, id);
 
 			uniqueIds.push(id);

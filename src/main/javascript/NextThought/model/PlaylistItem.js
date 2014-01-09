@@ -163,9 +163,9 @@ Ext.define('NextThought.model.PlaylistItem', {
 
 	getAssociatedVideoId: function() {
 		var frag = this.get('dom-clone'),
-			video = frag.querySelector('object[type$=ntivideo]');
+			video = (frag && frag.querySelector('object[type$=ntivideo]')) || this.get('NTIID');
 
-		return video && video.getAttribute('data-ntiid');
+		return (video && video.getAttribute && video.getAttribute('data-ntiid')) || video;
 	}
 
 
