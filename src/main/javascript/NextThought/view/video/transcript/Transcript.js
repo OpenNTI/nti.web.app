@@ -221,12 +221,12 @@ Ext.define('NextThought.view.video.transcript.Transcript', {
 
 
 	getTranscriptJsonpUrl: function() {
-		return this.transcript.get('basePath') + this.transcript.get('jsonpUrl');
+		return this.transcript.get('jsonpUrl');
 	},
 
 
 	getTranscriptUrl: function() {
-		return this.transcript.get('basePath') + this.transcript.get('url');
+		return this.transcript.get('url');
 	},
 
 

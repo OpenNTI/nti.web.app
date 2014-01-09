@@ -141,17 +141,26 @@ Ext.define('NextThought.Library', {
 		var me = this,
 			title = me.getTitle(index),
 			t = me.getToc(title),
+			root = title.get('root'),
 			url;
 
+		function makeAbsolute(o) {
+			o.src = getURL(o.src, root);
+			o.srcjsonp = getURL(o.srcjsonp, root);
+			return o;
+		}
+
 		function parse(q, s, resp) {
+			var vi, n, cb, r;
+
 			if (!s) {
 				delete me.activeVideoLoad[index];
 				failure(resp);
 				return;
 			}
 
-			var cb = me.activeVideoLoad[index],
-				r = resp.responseText;
+			cb = me.activeVideoLoad[index];
+			r = resp.responseText;
 
 			if (Ext.isString(r)) {
 				try {
@@ -163,8 +172,18 @@ Ext.define('NextThought.Library', {
 				}
 			}
 
-			me.videoIndex[index] = (r && r.Items) || r;
+			vi = me.videoIndex[index] = (r && r.Items) || r;
 			delete me.activeVideoLoad[index];
+
+			for (n in vi) {
+				if (vi.hasOwnProperty(n)) {
+					n = vi[n];
+					if (n && !Ext.isEmpty(n.transcripts)) {
+						n.transcripts = n.transcripts.map(makeAbsolute);
+					}
+				}
+			}
+
 			Ext.callback(cb, me, [me.videoIndex[index]]);
 		}
 
@@ -244,10 +263,10 @@ Ext.define('NextThought.Library', {
 
 		if (success) {
 			CourseWareUtils.onceLoaded()
-				.done(function(){
+				.done(function() {
 					me.libraryLoaded(Ext.bind(go, me));
 				})
-				.fail(function(reason){
+				.fail(function(reason) {
 					console.error(reason);
 				});
 		}
