@@ -233,6 +233,29 @@ canvas.x-component-course-assessment {
 			}
 		}
 
+		.button {
+			&[href=""], &.hidden {
+				display: none;
+				& ~ .column-names {
+					margin-top: 7em;
+				}
+			}
+
+			float: left;
+			display: inline-block;
+			text-decoration: none;
+			cursor: pointer;
+			background: $primary-blue;
+			border-radius: 3px;
+			font: italic 600 0.9em/1 $font;
+			color: #fff;
+			padding: 0.8em 1.5em;
+			right: 15px;
+			top: 25px;
+			margin: 1em 0 0;
+
+		}
+
 		.scrollzone {
 			position: absolute;
 			top: 51px; left: 0; right: 0; bottom: 0;
@@ -249,7 +272,8 @@ canvas.x-component-course-assessment {
 			font: normal 700 0.7em/1 $font;
 			color: $tertiary-grey;
 			text-transform: uppercase;
-			margin: 5em 0 2em;
+			margin: 7em 0 2em;
+
 
 			.right {
 				float: right;

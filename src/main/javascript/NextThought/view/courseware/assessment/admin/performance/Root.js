@@ -22,6 +22,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		{
 			cls: 'scrollzone scrollable',
 			cn: [
+				{ tag: 'a', href: '{exportLink}', cls: 'download button', html: 'Export'},
 				{
 					cls: 'column-names',
 					cn: [
@@ -40,7 +41,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		showEl: '.header .show',
 		orderEl: '.header .order',
 		inputEl: '.header .search input',
-		clearEl: '.header .search .clear'
+		clearEl: '.header .search .clear',
+		exportButton: 'a.download.button'
 	},
 
 	getTargetEl: function() { return this.frameBodyEl; },
@@ -79,6 +81,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		this.createShowMenu();
 		this.createOrderMenu();
+
+		if (this.gradeBook) {
+			this.exportButton.set({
+				href: this.gradeBook.getLink('ExportContents')
+			});
+		}
 
 		this.on({
 			showEl: { click: 'showShowMenu'},
@@ -339,6 +347,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		this.gradeBook = gradeBook;
 		this.gradeBookDefaultPart = gradeBook && gradeBook.getFieldItem('Items', 'default');
 
+		if (this.exportButton) {
+			this.exportButton.set({
+				href: gradeBook.getLink('ExportContents')
+			});
+		}
 
 		assignmentHistoryRequests = assignments.get('Items').map(function(o) {
 			return Service.request(o.getLink('GradeSubmittedAssignmentHistory'));
