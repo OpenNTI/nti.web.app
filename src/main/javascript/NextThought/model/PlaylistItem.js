@@ -55,16 +55,20 @@ Ext.define('NextThought.model.PlaylistItem', {
 			return false;
 		},
 
-		fromDom: function(dom) {
+		fromDom: function(dom, videoIndex) {
+			function getParam(name) {
+				var el = Ext.DomQuery.select('param[name="' + name + '"]', dom)[0];
+				return el ? el.getAttribute('value') : null;
+			}
 			dom = Ext.getDom(dom);
 			var i,
 				frag = (dom.ownerDocument || document).createDocumentFragment(),
 				el = Ext.get(dom),
-				titleParam = el.down('param[name=title]'),
-				title = titleParam && titleParam.getAttribute('value'),
+				title = getParam('title'),
+				videoIndexId = getParam('video-ntiid'),
 				o = {
 					'title': title,
-					'sources': el.query('object[type$=videosource]'),
+					'sources': el.query('object[type$=videosource]').map(DomUtils.parseDomObject),
 					'dom-clone': frag,
 					'NTIID': dom.getAttribute('data-ntiid')
 				},
@@ -74,12 +78,13 @@ Ext.define('NextThought.model.PlaylistItem', {
 					return c;
 				};
 
-			for (i = 0; i < o.sources.length; i++) {
-				o.sources[i] = (DomUtils.parseDomObject(o.sources[i]));
+			if (videoIndexId && videoIndex) {
+				Ext.apply(o, videoIndex[videoIndexId]);
 			}
-			Ext.Array.sort(o.sources, sourceComparator);
 
 			frag.appendChild(dom.cloneNode(true));
+
+			Ext.Array.sort(o.sources, sourceComparator);
 
 			return this.create(o);
 		},

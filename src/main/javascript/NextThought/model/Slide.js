@@ -47,10 +47,11 @@ Ext.define('NextThought.model.Slide', {
 				return v;
 			}
 
-			var DQ = Ext.DomQuery,
-				el = Ext.get(dom),
+			var DQ = Ext.DomQuery, vid,
+				el = Ext.get(dom.parentNode || dom),
 				frag = (dom.ownerDocument || document).createDocumentFragment(),
 				root = ContentUtils.getRoot(containerId),
+				query = 'object[type$=video][data-ntiid="{0}"]',
 				nodes,
 				o = {
 					'Class': 'Slide',
@@ -62,7 +63,7 @@ Ext.define('NextThought.model.Slide', {
 					'image-thumbnail': root + getImage(),
 					'video': getParam('slidevideo'),
 					'video-type': getParam('slidevideotype'),
-					'video-id': getParam('video-ntiid'),
+					'video-id': (vid = getParam('slidevideoid')),
 					'video-thumbnail': getParam('slidevideothumbnail'),
 					'video-start': getParam('slidevideostart'),
 					'video-end': getParam('slidevideoend'),
@@ -70,9 +71,10 @@ Ext.define('NextThought.model.Slide', {
 					'dom-clone': frag
 				};
 
-			nodes = el.select('object[type$=ntivideo]');
+			query = Ext.String.format(query, ParseUtils.cssEscapeNTIID(vid));
+			nodes = el.select(query);
 			if (nodes.first()) {
-				o.media = NextThought.model.PlaylistItem.fromDom(nodes.first());
+				o.media = NextThought.model.PlaylistItem.fromDom(nodes.first(), videoIndex);
 				o.media.set('mediaId', o.ordinal);
 				o.media.set('start', o['video-start'] || 0.0);
 				o.media.set('end', o['video-end'] || -1.0);
