@@ -17,15 +17,21 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 			xtype: 'container',
 			layout: 'auto',
 			items: [
-				{ xtype: 'grade-chart' },
-				{ xtype: 'box', cls: 'label', html: 'Cumulative Grade' },
-				{ xtype: 'grade-performance-chart' },
-				{ xtype: 'box', cls: 'label', autoEl: {
-					cn: [
-						{ tag: 'span', cls: 'you', html: 'You'},
-						{ tag: 'span', cls: 'avg', html: 'Class AVG'}
-					]
-				} }
+				//{ xtype: 'grade-chart' },
+				//{ xtype: 'box', cls: 'label', html: 'Cumulative Grade' },
+				//{ xtype: 'grade-performance-chart' },
+				//{ xtype: 'box', cls: 'label', autoEl: {
+				//	cn: [
+				//		{ tag: 'span', cls: 'you', html: 'You'},
+				//		{ tag: 'span', cls: 'avg', html: 'Class AVG'}
+				//	]
+				//} }
+
+				{ xtype: 'box', cls: 'grade-value', html: 'Not yet entered.', grade: true },
+				{ xtype: 'box', cls: 'label', html: 'Course Grade' },
+
+				{ xtype: 'box', cls: 'assignments-completed', html: '', msgTpl: '{0} of {1}' },
+				{ xtype: 'box', cls: 'label', html: 'Assignments Completed' }
 			]
 		},
 		{xtype: 'course-assessment-assignment-group', title: 'All Grades',
@@ -103,11 +109,13 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 
 		this.enableBubble(['goto-assignment']);
 
-		this.chartGrade = this.down('grade-chart');
-		this.chartPerformance = this.down('grade-performance-chart');
+		//this.chartGrade = this.down('grade-chart');
+		//this.chartPerformance = this.down('grade-performance-chart');
+		this.tempGrade = this.down('[grade]');
+		this.tempCount = this.down('box[msgTpl]');
 		this.grid = this.down('grid');
 
-		this.chartGrade.setGrade(80);
+		//this.chartGrade.setGrade(80);
 
 		var store = this.store = new Ext.data.Store({
 			fields: [
@@ -132,19 +140,30 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 		});
 
 		this.grid.bindStore(store);
-		this.chartPerformance.setStore(store);
+		//this.chartPerformance.setStore(store);
 
 		this.mon(this.grid, 'itemClick', 'goToAssignment');
+
+		this.mon(store, 'datachanged', 'updateHeader');
 	},
 
 
-	afterRender: function() {
-		this.callParent(arguments);
-		//***** Begin Hide charts
-		// No charts until we can get numerical grades. :}
-		this.items.first().hide();
-		this.items.last().anchor = '0 0';
-		//***** End Hide charts
+	updateHeader: function() {
+		function complete(o) {return !!o.get('completed'); }
+
+		var tpl = this.tempCount.msgTpl,
+			t = this.store.getCount(),
+			c = this.store.getRange().filter(complete).length;
+		this.tempCount.update(Ext.String.format(tpl, c, t));
+
+		if (this.finalGrade && !Ext.isEmpty(this.finalGrade.trim())) {
+			t = this.finalGrade.split(/\W/);
+			this.tempGrade.update(Ext.DomHelper.markup([
+				{tag: 'span', cls: 'score-grade', html: t[0]},
+				'&nbsp;',
+				{tag: 'span', cls: 'letter-grade', html: t[1]}
+			]));
+		}
 	},
 
 
@@ -154,17 +173,12 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 
 
 	goToAssignment: function(selModel, record) {
-		var path = [
-				this.pathRoot,
-				record.get('name')
-		];
-
 		this.fireEvent('goto-assignment', record.get('item'), $AppConfig.userObject);
 	},
 
 
 	setAssignmentsData: function(data, history, outline) {
-		var ntiid, raw = [];
+		var raw = [], me = this;
 
 		this.clearAssignmentsData();
 
@@ -174,14 +188,17 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 		}
 
 		function collect(o) {
-			if (o.doNotShow()) { return; }
-
 			var id = o.getId(),
 				h = history.getItem(id),
 				submission = h && h.get('Submission'),
 				feedback = h && h.get('Feedback'),
 				grade = h && h.get('Grade'),
 				pendingAssessment = h && h.get('pendingAssessment');
+
+			if (o.doNotShow()) {
+				me.maybeSetFinalGrade(o, h, grade);
+				return;
+			}
 
 			raw.push({
 				ntiid: id,
@@ -204,5 +221,19 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 		data.get('Items').forEach(collect);
 
 		this.store.loadRawData(raw);
+	},
+
+
+	maybeSetFinalGrade: function(assignment, history, grade) {
+		if (!Ext.String.endsWith(assignment.get('NTIID'), ':Final_Grade')) {
+			return;
+		}
+
+		try {
+			this.finalGrade = grade && grade.get('value');
+			this.updateHeader();
+		} catch (e) {
+			console.error(e.stack || e.message || e);
+		}
 	}
 });

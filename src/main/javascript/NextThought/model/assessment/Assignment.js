@@ -16,8 +16,8 @@ Ext.define('NextThought.model.assessment.Assignment', {
 	],
 
 
-	containsId: function(id){
-		var items = this.get('parts').filter(function(p){
+	containsId: function(id) {
+		var items = this.get('parts').filter(function(p) {
 			p = p.get('question_set');
 			return p && p.getId() === id;
 		});
@@ -39,7 +39,7 @@ Ext.define('NextThought.model.assessment.Assignment', {
 	},
 
 
-	doNotShow: function(){
-		return this.get('category_name') === 'no_submit';
+	doNotShow: function() {
+		return this.get('category_name') === 'no_submit' && this.get('title') === 'Final Grade';
 	}
 });

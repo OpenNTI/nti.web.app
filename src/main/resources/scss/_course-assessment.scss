@@ -2,12 +2,7 @@
 
 canvas.x-component-course-assessment {
 	& + .label {
-		position: absolute;
 		top: 14px;
-		left: 30px;
-		font: normal 700 0.6em/1 $font;
-		color: $tertiary-grey;
-		text-transform: uppercase;
 	}
 
 	&.grade {
@@ -33,6 +28,9 @@ canvas.x-component-course-assessment {
 		}
 	}
 }
+
+
+
 
 .x-component-course-assessment {
 	&.nav-outline{
@@ -921,6 +919,32 @@ canvas.x-component-course-assessment {
 	.grade {float: left; box-shadow: 1px 0 0 0 #eaeaea, 2px 0 0 0 #fff; }
 	.performance {
 		width: 545px;
+	}
+
+	.label {
+		position: absolute;
+		top: 28px;
+		left: 30px;
+		font: normal 700 0.6em/1 $font;
+		color: $tertiary-grey;
+		text-transform: uppercase;
+		z-index: 1;
+	}
+
+	.grade-value, .assignments-completed {
+		position: absolute;
+		top: 3.125em;
+		left: 30px;
+
+		font: italic normal 1em/1 $font;
+		color: $secondary-grey;
+	}
+
+	.assignments-completed {
+		left: 385px;
+		& + .label {
+			left: 385px;
+		}
 	}
 }
 
