@@ -438,7 +438,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 				this.fireEvent('start-media-player', this.videoIndex[m.getId()], m.getId(), getURL(li.root));
 			} else {
 				this.fireEvent('open-slide-deck', li.ContentNTIID, slide,
-					new NextThought.model.PlaylistItem(Ext.apply(
+					NextThought.model.PlaylistItem.create(Ext.apply(
 							{
 								NTIID: m.getId()
 							},
