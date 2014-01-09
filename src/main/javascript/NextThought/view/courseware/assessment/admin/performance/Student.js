@@ -51,15 +51,15 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 							   late: d.ago().replace('ago', '').trim()
 						   });
 					   } },
-					   { text: 'Score', dataIndex: 'Grade', width: 70, renderer: function(val){
+					   { text: 'Score', dataIndex: 'Grade', width: 70, renderer: function(val) {
 							val = val && val.get('value');
 							return val && val.split(' ')[0];
 					   } , listeners: {
-							headerclick: function(){
+							headerclick: function() {
 								var store = this.up('grid').getStore(),
 									sorter = Ext.create('Ext.util.Sorter', {
 										direction: this.sortState,
-										sorterFn: function(o1, o2){
+										sorterFn: function(o1, o2) {
 											o1 = o1 && o1.get('Grade');
 											o1 = o1 && o1.get('value');
 											o1 = o1 && o1.split(' ')[0];
@@ -70,7 +70,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 											o2 = o2 && o2.split(' ')[0];
 											o2 = o2 || '';
 
-											return Globals.naturalSortComparator(o1,o2);
+											return Globals.naturalSortComparator(o1, o2);
 										}
 									});
 
@@ -80,7 +80,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 							}
 						}},
 					   { text: 'Feedback', dataIndex: 'feedback', width: 140, renderer: function(value) {
-						   return value ? (value + ' Comments') : '';
+						   return value ? Ext.util.Format.plural(value, 'Comment') : '';
 					   } }
 				   ].map(function(o) {
 						return Ext.applyIf(o, {
@@ -163,7 +163,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 
 
 	setAssignmentsData: function(data, history, outline, instance, gradeBook) {
-		var me = this, ntiid, raw = [], store = this.store, user = this.student.getId();
+		var me = this, raw = [], store = this.store, user = this.student.getId();
 
 		if (!data) {
 			console.error('No data??');

@@ -56,7 +56,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 							 } },
 							 { text: 'Score', dataIndex: 'grade', width: 70 },
 							 { text: 'Feedback', dataIndex: 'feedback', width: 140, renderer: function(value) {
-								 return value ? (value + ' Comments') : '';
+								 return value ? Ext.util.Format.plural(value, 'Comment') : '';
 							 } }
 						 ].map(function(o) {
 							return Ext.applyIf(o, {

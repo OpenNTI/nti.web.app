@@ -141,7 +141,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 							}
 						}},
 						   { text: 'Feedback', dataIndex: 'feedback', width: 140, renderer: function(items) {
-							   return items ? (items + ' Comments') : '';
+							   return items ? Ext.util.Format.plural(items, 'Comment') : '';
 						   } },
 						   { text: '', dataIndex: 'Submission', sortable: false, width: 40, renderer: function(v) {
 							   return v && Ext.DomHelper.markup({cls: 'actions'});
