@@ -11,20 +11,13 @@ Ext.define('NextThought.ux.SlideDeck', {
 	],
 
 
-	open: function(el, reader) {
-		var DQ = Ext.DomQuery,
-			root = ContentUtils.getLineage(reader.getLocation().NTIID).last(),
-			title = Library.getTitle(root),
-			toc = Library.getToc(title),
-			ids = [],
-			dom,
+	openFromDom: function(el, reader) {
+		var DQ = Ext.DomQuery, dom,
+			ntiid = reader.getLocation().NTIID,
 			selector = 'object[type$=nextthought.slide]',
 			obj = Ext.fly(el).is(selector) ? el : Ext.fly(el).findParentNode(selector),
 			startingSlide = (obj && obj.getAttribute('data-ntiid')) || undefined,
-			startingVideo,
-			videoIndex,
-			slidedeckId,
-			store = new Ext.data.Store({proxy: 'memory'});
+			startingVideo, slidedeckId;
 
 		function getParam(name) {
 			var el = DQ.select('param[name="' + name + '"]', obj)[0];
@@ -42,7 +35,22 @@ Ext.define('NextThought.ux.SlideDeck', {
 			}
 		}
 
-		slidedeckId = getParam('slidedeckid') || 'default';
+		slidedeckId = getParam('slidedeckid');
+
+		this.open(ntiid, slidedeckId, startingVideo, startingSlide);
+	},
+
+
+	open: function(ntiidInContent, slidedeckId, startingVideo, startingSlide) {
+		slidedeckId = slidedeckId || 'default';
+
+		var root = ContentUtils.getLineage(ntiidInContent).last(),
+			title = Library.getTitle(root),
+			toc = Library.getToc(title),
+			ids = [],
+			videoIndex,
+			store = new Ext.data.Store({proxy: 'memory'});
+
 
 		console.debug('opening slidedesk id: ' + slidedeckId);
 
@@ -92,7 +100,6 @@ Ext.define('NextThought.ux.SlideDeck', {
 			p.on('destroy', function() {
 				p.fireEvent('resume-annotation-manager', this);
 			});
-			p.mon(reader, 'navigateComplete', 'destroy', p);
 		}
 
 

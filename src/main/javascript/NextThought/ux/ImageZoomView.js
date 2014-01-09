@@ -188,7 +188,7 @@ Ext.define('NextThought.ux.ImageZoomView', {
 		if (w) {
 			w.close();
 		}
-		SlideDeck.open(this.refEl, this.reader);
+		SlideDeck.openFromDom(this.refEl, this.reader);
 		e.stopEvent();
 		return false;
 	},

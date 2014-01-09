@@ -335,7 +335,7 @@ Ext.define('NextThought.view.content.reader.Content', {
 
 		if (/^slide/i.test(target)) {
 			this.pauseAllVideos();
-			SlideDeck.open(el, this.reader);
+			SlideDeck.openFromDom(el, this.reader);
 			return false;
 		}
 

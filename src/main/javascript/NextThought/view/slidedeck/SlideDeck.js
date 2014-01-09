@@ -30,6 +30,6 @@ Ext.define('NextThought.view.slidedeck.SlideDeck', {
 
 
 	onSlideDeckClicked: function(e) {
-		 SlideDeck.open(this.contentElement, this.reader);
+		 SlideDeck.openFromDom(this.contentElement, this.reader);
 	}
 });

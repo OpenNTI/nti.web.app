@@ -37,6 +37,6 @@ Ext.define('NextThought.view.slidedeck.slidevideo.SlideVideo', {
 
 
 	onSlideVideoClicked: function(e) {
-		SlideDeck.open(this.contentElement, this.reader);
+		SlideDeck.openFromDom(this.contentElement, this.reader);
 	}
 });

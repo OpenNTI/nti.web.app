@@ -24,29 +24,46 @@ Ext.define('NextThought.controller.SlideDeck', {
 				'*': {
 					'change-media-in-player': 'changeMediaInPlayer',
 					'start-media-player': 'launchMediaPlayer',
+					'open-slide-deck': 'openSlideDeck',
 					'profile-link-clicked': 'maybeCloseMediaViewer'
 				},
 				'slidedeck-transcript': {
 					'load-presentation-userdata': 'loadDataForPresentation'
+				},
+				'#main-reader-view reader-content': {
+					'beforeNavigate': 'closeMediaViewer'
 				}
 			},
 			'controller': {
 				'*': {
 					'show-object': 'maybeShowMediaPlayer',
-					 'before-show-profile': 'maybeCloseSlideDeck'
+					'before-show-profile': 'maybeCloseSlideDeck'
 				}
 			}
 		},this);
 	},
 
 
+	openSlideDeck: function(contentNTIID, slideDeckId, startingVideo, startingSlide) {
+		if (!this.maybeCloseSlideDeck()) {
+			return false;
+		}
+
+		if (!Ext.isEmpty(startingVideo) && !Ext.isEmpty(startingSlide)) {
+			Ext.Error.raise('Cannot set both starting video and slide. Pick one.');
+		}
+
+		SlideDeck.open(contentNTIID, slideDeckId, startingVideo, startingSlide);
+	},
+
+
 	maybeCloseSlideDeck: function() {
-		var v = this.getActiveSlideDeck();
+		var active = this.getActiveMediaViewer() || this.getActiveSlideDeck();
+		if (!active) {return true;}
 
 		//TODO: make this query for open editors and return false to abort
-		if (v) {
-			v.destroy();
-		}
+		active.destroy();
+		return true; //false will cancel the event, TODO: return false if there is an editor open
 	},
 
 
