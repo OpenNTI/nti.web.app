@@ -160,6 +160,14 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			offset = Ext.get(el).getHeight() - Ext.get(dom).getHeight(),
 			top = offset - dom.scrollTop;
 
+        //Keep iPad from opening popouts when scrolling
+        if(Ext.is.iOS){
+            this.cancelPopupTimeout();
+            Ext.defer(function(){
+                this.cancelPopupTimeout();
+            },500, this);
+        }
+
 		this.lastScrollTop = dom.scrollTop;
 
 		//if the difference in el and doms height and dom scroll top is zero then we are at the bottom
@@ -424,6 +432,11 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		var activityTarget = e.getTarget('div.activity:not(.deleted)', null, true),
 			guid, item, rec, me = this, className;
 
+        //For iPad, open popout on long touch, not on click
+        if(Ext.is.iOS){
+            this.cancelPopupTimeout();
+        }
+
 		guid = (activityTarget || {}).id;
 		item = this.stream[guid];
 		rec = (item || {}).record;
@@ -521,7 +534,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			}
 		}
 
-		if (this.isScrolling) {
+		if (this.isScrolling && !Ext.is.iOS) {
 			this.performAfterScrollAction = Ext.bind(this.itemHover, this, arguments);
 			return;
 		}
