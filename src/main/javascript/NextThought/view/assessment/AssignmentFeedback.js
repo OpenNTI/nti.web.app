@@ -40,7 +40,7 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 							]},
 							{ cls: 'message', html: '{body}'},
 							{tag: 'tpl', 'if': 'isMe(Creator)', cn: { cls: 'footer', cn: [
-								{ tag: 'span', cls: 'link edit', html: 'Edit'},
+								//{ tag: 'span', cls: 'link edit', html: 'Edit'},
 								{ tag: 'span', cls: 'link delete', html: 'Delete'}
 							]}}
 						]}
