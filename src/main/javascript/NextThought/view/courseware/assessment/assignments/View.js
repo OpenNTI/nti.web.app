@@ -142,7 +142,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 					me.activeStores.push(store);
 
 					if (groupBy === 'lesson') {
-						me.instance.getOutline().done(resolve).fail(drop);
+						me.data.instance.getOutline().done(resolve).fail(drop);
 					}
 				});
 			}
@@ -183,6 +183,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 		this.on('filters-changed', 'refresh');
 		this.on('search-changed', 'filterSearchValue');
+
+		this.store = new Ext.data.Store({ fields: this.getFields() });
 	},
 
 
@@ -258,23 +260,39 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 
 	setAssignmentsData: function(assignments, history, instance) {
-		var lesson, raw = [], me = this;
-
 		this.clearAssignmentsData();
-
-		this.instance = instance;
 
 		if (!assignments) {
 			console.error('No assignments??');
 			return;
 		}
 
+		this.data = {
+			assigments: assignments,
+			history: history,
+			instance: instance
+		};
+
+		//Becasue this view has special derived fields, we must just listen for changes on the
+		// assignments collection itself and trigger a refresh. This cannot simply be a store
+		// of HistoryItems.
+		this.applyAssignmentsData();
+
+		//TODO: listen for changes on the assignments object
+
+		this.updateViewerReferences();
+	},
+
+
+	applyAssignmentsData: function() {
+		var lesson, raw = [], d = this.data,
+			history = d.history,
+			assignments = d.assigments;
+
 		function collect(o) {
 			if (o.doNotShow()) { return; }
 			var id = o.getId(),
-				h = history && history.getItem(id),
-				submission = h && h.get('Submission'),
-				assessment = h && h.get('pendingAssessment');
+				h = history && history.getItem(id);
 
 			lesson = ContentUtils.getLineage(o.get('containerId'));//this function is in need to go asynchronous...but i need it here. :(
 			lesson.pop();//discard the root
@@ -288,27 +306,22 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 				containerId: o.get('containerId'),
 				lesson: lesson,
 				item: o,
-				//history: h, (not defined as a field, so it isn't accessable anyway)
 				name: o.get('title'),
 				opens: o.get('availableBeginning'),
 				due: o.get('availableEnding'),
-				completed: submission && submission.get('CreatedTime'),
-				correct: assessment && assessment.getCorrectCount(),
+
+				completed: h && h.get('completed'),
+				correct: h && h.get('correct'),
+
 				total: o.tallyParts(),
 				submittedCount: o.get('SubmittedCount') || 0,
-				enrolledCount: (me.roster && me.roster.length) || 0
+				enrolledCount: assignments.getRoster().length || 0
 			});
 		}
 
-		assignments.get('Items').forEach(collect);
-
-		this.store = new Ext.data.Store({
-			fields: this.getFields(),
-			data: raw
-		});
-
+		assignments.each(collect);
+		this.store.loadRawData(raw);
 		this.refresh();
-		this.updateViewerReferences();
 	},
 
 

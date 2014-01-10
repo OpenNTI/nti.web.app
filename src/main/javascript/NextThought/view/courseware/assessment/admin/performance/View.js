@@ -12,7 +12,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.View', {
 
 	setAssignmentsData: function() {
 		this.clearAssignmentsData();
-		var root = this.add({ xtype: 'course-assessment-admin-performance-root', roster: this.roster });
+		var root = this.add({ xtype: 'course-assessment-admin-performance-root' });
 		root.setAssignmentsData.apply(root, arguments);
 
 		this.assignmentsData = Ext.Array.clone(arguments);
@@ -43,8 +43,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.View', {
 			xtype: 'course-assessment-admin-performance-student',
 			student: rec.get('user'),
 			page: this.store.indexOf(rec) + 1,
-			total: this.store.getCount(),
-			roster: this.roster
+			total: this.store.getCount()
 		});
 
 		view.setAssignmentsData.apply(view, this.assignmentsData);

@@ -5,23 +5,59 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 		{name: 'Feedback', type: 'singleItem', persist: false},
 		{name: 'Grade', type: 'singleItem', persist: false},
 		{name: 'Submission', type: 'singleItem', persist: false},
-		{name: 'pendingAssessment', type: 'singleItem'},
+		{name: 'pendingAssessment', type: 'singleItem', persist: false},
 
-		{name: 'feedback', type: 'Synthetic', fn: function(r) {
+		//set by the Assignment model when loading history. This will be unset for all other uses.
+		{name: 'item', type: 'auto', persist: false},
+
+		//<editor-fold desc="Synthetic fields derived from server data and the assocated assignment.">
+		{name: 'ntiid', type: 'Synthetic', persist: false, fn: function(r) {
+			var i = this.get('item');
+			return i && i.get('ntiid');
+		}},
+
+		{name: 'ContainerId', type: 'Synthetic', persist: false, fn: function(r) {
+			var i = this.get('item');
+			return i && i.get('containerId');
+		}},
+
+		{name: 'name', type: 'Synthetic', persist: false, fn: function(r) {
+			var i = this.get('item');
+			return i && i.get('title');
+		}},
+
+		{name: 'due', type: 'Synthetic', persist: false, fn: function(r) {
+			var i = this.get('item');
+			return i && i.getDueDate();
+		}},
+
+		{name: 'feedback', type: 'Synthetic', persist: false, fn: function(r) {
 			var f = r.get('Feedback');
 			f = (f && f.get('Items')) || [];
 			return f.length;
 		}},
 
-		{name: 'submission', type: 'Synthetic', fn: function(r) {
+		{name: 'correct', type: 'Synthetic', persist: false, fn: function(r) {
+			var a = r.get('pendingAssessment');
+			return (a && a.getCorrectCount()) || 0;
+		}},
+
+		{name: 'completed', type: 'Synthetic', persist: false, fn: function(r) {
+			var s = r.get('Submission');
+			return s && s.get('CreatedTime');
+		}},
+
+		{name: 'submission', type: 'Synthetic', persist: false, fn: function(r) {
 			var s = r.get('Submission');
 			return s && s.get('Last Modified');
 		}},
 
-		{name: 'grade', type: 'Synthetic', fn: function(r) {
+		{name: 'grade', type: 'Synthetic', persist: false, fn: function(r) {
 			var s = r.get('Grade');
-			return (s && s.get('value')) || '';
+			s = s && (s.get('value') || '').split(' ')[0];
+			return s || '';
 		}}
+		//</editor-fold>
 	],
 
 

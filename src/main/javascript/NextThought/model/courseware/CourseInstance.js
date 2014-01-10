@@ -117,7 +117,11 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 			Service.request(r)
 					.done(function(txt) {
 						var j = Ext.decode(txt, true);
-						p.fulfill(j && j.Items);
+						j = j && j.Items;
+						//filter the active user out of the roster since we are administering this thing.
+						j = j && j.filter(function(o) { return o && !isMe(o.Username); });
+
+						p.fulfill(j);
 					})
 					.fail(function(reason) {
 						p.reject(reason);
@@ -200,12 +204,13 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 		if (this.getAssignmentsPromise) { return this.getAssignmentsPromise; }
 
 		var p = new Promise();
-
-		Service.request(this.getLink('AssignmentsByOutlineNode'))
-			.done(function(json) {
-				json = Ext.decode(json, true);
-
-				p.fulfill(NextThought.model.courseware.AssignmentCollection.fromJson(json));
+		Promise.pool(
+			this.getRoster(),
+			Service.request(this.getLink('AssignmentsByOutlineNode'))
+		)
+			.done(function(rosterAndJson) {
+				var json = Ext.decode(rosterAndJson[1], true);
+				p.fulfill(NextThought.model.courseware.AssignmentCollection.fromJson(json, rosterAndJson[0]));
 			})
 			.fail(function(reason) {
 				p.reject(reason);
@@ -223,9 +228,14 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 				link = this.getLink('GradeBook');
 
 			if (link) {
-				Service.request(link)
-						.done(function(json) {
+				Promise.pool(
+					this.getRoster(),
+					Service.request(link)
+				)
+						.done(function(rosterAndjson) {
+							var json = rosterAndjson[1];
 							json = ParseUtils.parseItems(json)[0];
+
 							p.fulfill(json);
 						})
 						.fail(function(r) { p.reject(r); });
@@ -235,6 +245,7 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 		}
 		return this._gradebookPromise;
 	},
+
 
 	fireNavigationEvent: function(eventSource, callback) {
 		var me = this;

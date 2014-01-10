@@ -37,8 +37,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 				listeners: {
 					beforeedit: {
 						element: 'el',
-						fn: function(editor, e){
-							if(!e.record){ return false; }
+						fn: function(editor, e) {
+							if (!e.record) { return false; }
 
 							var noSubmit = e.record.get('item').get('category_name') === 'no_submit',
 								gradeRec = e.record.get('Grade'),
@@ -57,7 +57,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 					},
 					validateedit: {
 						element: 'el',
-						fn: function(editor, e){
+						fn: function(editor, e) {
 							var grade = e.record.get('Grade');
 
 							grade.set('value', e.value + ' -');
@@ -155,8 +155,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 
 
 	initComponent: function() {
-		var grid, store;
-
 		this.callParent(arguments);
 		this.enableBubble(['show-assignment']);
 
@@ -172,38 +170,13 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 
 		this.relayEvents(this.header, ['goup', 'goto']);
 
-		grid = this.down('grid');
-		store = this.store = new Ext.data.Store({
-			fields: [
-				{name: 'ntiid', type: 'string'},
-				{name: 'item', type: 'auto'},
-				{name: 'name', type: 'string'},
-				{name: 'due', type: 'date'},
-				{name: 'completed', type: 'date'},
-				{name: 'Submission', type: 'auto'},
-				{name: 'Grade', type: 'singleItem'},//object
-				{name: 'grade', type: 'Synthetic', fn: function(r) {
-					var grade = r.get('Grade');
 
-					grade = grade && grade.get('value');
-					grade = grade && grade.split(' ');
-					return grade && grade[0];
-				}},//value
-				{name: 'pendingAssessment', type: 'auto'},
-				{name: 'Feedback', type: 'auto'},
-				{name: 'feedback', type: 'auto'}
-			],
-			sorters: [
-				{property: 'due', direction: 'ASC'}
-			]
-		});
-		grid.bindStore(store);
-		this.mon(grid, 'itemclick', 'maybeGoToAssignment');
+		this.mon(this.down('grid'), 'itemclick', 'maybeGoToAssignment');
 	},
 
 
 	setAssignmentsData: function(assignments, history, instance, gradeBook) {
-		var me = this, raw = [], store = this.store, user = this.student.getId();
+		var user = this.student.getId();
 
 		if (!assignments) {
 			console.error('No assignments??');
@@ -212,74 +185,17 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 
 		this.header.setGradeBook(gradeBook);
 
-		function getGrade(assignment) {
-			var grade = gradeBook.getItem(assignment.get('title'));
-			return grade && grade.getFieldItem('Items', user);
-		}
-
-		function collect(o) {
-			if (o.get('title') === 'Final Grade') { return; }
-			var id = raw.length,
-				ntiid = o.getId(),
-				grade = getGrade(o);
-
-			raw.push({
-				id: id,
-				ntiid: ntiid,
-				containerId: o.get('containerId'),
-				item: o,
-				name: o.get('title'),
-				assigned: o.get('availableBeginning'),
-				due: o.get('availableEnding'),
-
-				Grade: grade,
-				grade: grade && (grade.get('value') || '').split(' ')[0],
-				average: grade && grade.get('average')
-			});
-
-			if (grade) {
-				me.on('destroy', 'destroy', me.mon(grade, {
-					destroyable: true,
-					scope: me.down('dataview'),
-					'value-changed' : 'refresh'
-				}));
-			}
-
-			Service.request(o.getLink('GradeSubmittedAssignmentHistory')).done(function(json) {
-				var r = store.getById(id), s, f;
-				if (r) {
-					json = Ext.decode(json, true) || {};
-					json = json.Items || {};
-					json = json[user];
-					if (json) {
-						json = ParseUtils.parseItems(json)[0];
-						s = json.get('Submission');
-						f = json.get('Feedback');
-						r.set({
-							pendingAssessment: json.get('pendingAssessment'),
-							Submission: s,
-							Feedback: f,
-							feedback: f && f.get('Items').length,
-							completed: s && s.get('CreatedTime')
-						});
-					}
-				}
-			});
-		}
-
-		assignments.get('Items').forEach(collect);
-
-		store.loadRawData(raw);
+		this.down('grid').bindStore(assignments.getViewForStudent(user));
 	},
 
-	maybeGoToAssignment: function(view, record, node, index, e){
+	maybeGoToAssignment: function(view, record, node, index, e) {
 		var selModel = view.getSelectionModel(),
 			selection = selModel && selModel.selection,
 			dataIndex = selection && selection.columnHeader.dataIndex,
 			noSubmit = record.get('item').get('category_name') === 'no_submit';
-			
+
 		//if we didn't click on the grade cell or we don't have a grade yet
-		if (noSubmit) {	
+		if (noSubmit) {
 			return;
 		}
 

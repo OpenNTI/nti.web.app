@@ -101,12 +101,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	manageFocus: function(e, el){
+	manageFocus: function(e, el) {
 		if (!e.getTarget('.dropdown')) { return; }
 
 		var me = this,
 			node = Ext.get(el).parent('.item'),
-			record = node && me.getRecord(node);
+			record = node && me.getRecord(node),
 			chr = e.getCharCode();
 
 		if (!record) {
@@ -114,12 +114,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			return;
 		}
 
-		if (chr >= 65 && chr <= 70 && chr != 69) {
+		if (chr >= 65 && chr <= 70 && chr !== 69) {
 			me.changeGrade(record, record.get('grade'), String.fromCharCode(chr))
-				.done(function(){
+				.done(function() {
 					var node = me.getNode(record);
 
-					if(!node){
+					if (!node) {
 						console.error('No node for record', record);
 					}
 
@@ -127,7 +127,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				});
 		}
 
-		if( chr === e.ENTER || chr === e.SPACE || chr === e.UP || chr === e.DOWN){
+		if (chr === e.ENTER || chr === e.SPACE || chr === e.UP || chr === e.DOWN) {
 			me.onDropDown(node, record);
 		}
 	},
@@ -373,8 +373,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	setAssignmentsData: function(assignments, history, instance, gradeBook) {
-		var users = Ext.Array.pluck(this.roster, 'Username'),
-			assignmentHistoryRequests, data = {}, store = this.store,
+		var users = [],
+			data = {}, store = this.store, raw = [],
 			applyUsers = this.applyUserData.bind(this),
 			getCounts = this.getCountsFor.bind(this);
 
@@ -389,47 +389,17 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			});
 		}
 
-		assignmentHistoryRequests = assignments.get('Items').map(function(o) {
-			return Service.request(o.getLink('GradeSubmittedAssignmentHistory'));
+		assignments.getRoster().forEach(function(r) {
+			var u = r.Username;
+			users.push(u);
+			raw.push(Ext.apply({id: u}, getCounts(u)));
 		});
 
-		function parse(json) {
-				json = Ext.decode(json, true) || {};
-				json = json.Items || {};
+		store.loadRawData(raw);
+		UserRepository.getUser(users).done(applyUsers);
 
-			users.forEach(function(u) {
-				var o = json[u],
-						d, f;
-
-				d = data[u] = (data[u] || {id: u});
-
-				if (o) {
-					o = ParseUtils.parseItems(o)[0];
-					f = o.get('Feedback');
-					f = (f && f.get('Items').length) || 0;
-
-					Ext.apply(d, {
-						feedback: f + (d.feedback || 0)
-					});
-				}
-			});
-		}
-
-
-		Promise.pool(assignmentHistoryRequests)
-				.done(function(list) {
-					var raw = [], k;
-					list.forEach(parse);
-
-					for (k in data) {
-						if (data.hasOwnProperty(k)) {
-							raw.push(Ext.apply(data[k], getCounts(k)));
-						}
-					}
-
-					store.loadRawData(raw);
-					UserRepository.getUser(users).done(applyUsers);
-				});
+		assignments.getViewMaster()
+				.done(function(list) {});
 	},
 
 
@@ -453,6 +423,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		return counts;
 	},
+
 
 	updateActionables: function(rec, user) {
 		var counts = this.getCountsFor(user.getId());
@@ -607,15 +578,15 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			url = this.gradeBook.get('href');//this may be broken on FireFox (_dc=1234)
 
 
-		function maybeFocus(){
+		function maybeFocus() {
 			var el = me.getNode(rec);
 
-			if(fromEnter){
+			if (fromEnter) {
 				Ext.fly(el).down('input').focus(10);
 			}
 		}
-		
-		if(!grade){
+
+		if (!grade) {
 			console.log('No finaly grade entry');
 
 			rec.set({
@@ -629,11 +600,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				url: url,
 				method: 'PUT',
 				jsonData: { value: value },
-				success: function(r){
-					var json = Ext.decode(r.responseText,true),
+				success: function(r) {
+					var json = Ext.decode(r.responseText, true),
 						rec = json && ParseUtils.parseItems(json)[0];
 
-					if(rec){
+					if (rec) {
 						gradebookentry.addItem(rec);
 						maybeFocus();
 						p.fulfill();
@@ -649,8 +620,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		grade.set('value', value);
 		grade.save({
-			callback: function(q, s, r){
-				if(s){
+			callback: function(q, s) {
+				if (s) {
 					maybeFocus();
 				}
 			}
@@ -673,7 +644,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	saveGradeFromInput: function(e, input, fromEnter){
+	saveGradeFromInput: function(e, input, fromEnter) {
 		var node = e.getTarget(this.itemSelector),
 			rec = node && this.getRecord(node);
 

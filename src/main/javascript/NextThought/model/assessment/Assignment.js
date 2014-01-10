@@ -41,5 +41,85 @@ Ext.define('NextThought.model.assessment.Assignment', {
 
 	doNotShow: function() {
 		return this.get('category_name') === 'no_submit' && this.get('title') === 'Final Grade';
+	},
+
+
+	setGradeBookEntryFrom: function(gradebook) {
+		var t = this.get('title'), c = this.get('category');
+		this.setGradeBookEntry(
+			gradebook.getItem(t, c));
+	},
+
+
+	setGradeBookEntry: function(gradeBookEntry) {
+		//replace the Grade object in the individual submissions with the gradebook version
+	},
+
+
+	getSubmittedHistoryStore: function() {
+		if (!this._submittedHistoryStore) {
+			var s = this._submittedHistoryStore = new NextThought.store.courseware.AssignmentView({
+				url: this.getLink('GradeSubmittedAssignmentHistory')
+			});
+			s.promise = new Promise();
+
+			s.on({
+				single: true,
+				load: function() {
+					s.promise.fulfill(s);
+				}
+			});
+
+			s.on('load', '_resolveParts', this);
+
+			s.load();
+		}
+
+		return this._submittedHistoryStore;
+	},
+
+
+	_resolveParts: function(store, records) {
+		records = records || [];
+
+		function fill(users) {
+			var i = users.length - 1, r, u;
+
+			for (i; i >= 0; i--) {
+				r = records[i];
+				u = users[i];
+				if (u && r && r.get('Creator') === u.getId()) {
+					r.set('Creator', u);
+				} else {
+					console.warn('Skipped record!', i, records, users);
+				}
+			}
+
+			store.sort();
+		}
+
+		var me = this,
+			pluck = Ext.Array.pluck,
+			users = pluck(pluck(records, 'data'), 'Creator'),
+			phantoms = [];
+
+		(this.roster || []).forEach(function(o) {
+			if (!Ext.Array.contains(users, o.Username)) {
+				phantoms.push(NextThought.model.courseware.UsersCourseAssignmentHistoryItem.create({
+					Creator: o.Username
+				}));
+				users.push(o.Username);
+			}
+		});
+
+		if (phantoms.length) {
+			records = records.concat(phantoms);
+			store.add(phantoms);
+		}
+
+		//fill in the assignment into the history item so the synthetic fields can derive values from it.
+		records.forEach(function(r) {r.set('item', me);});
+		//then resolve users...
+		UserRepository.getUser(users).done(fill);
 	}
 });

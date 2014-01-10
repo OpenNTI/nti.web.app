@@ -27,8 +27,12 @@ Ext.define('NextThought.store.courseware.AssignmentView', {
 		startParam: undefined,
 		limitParam: undefined
 	},
+	sorters: {
+		sorterFn: Globals.getCaseInsensitiveNaturalSorter('Creator')
+	},
 
 	constructor: function() {
+		this.proxy = Ext.clone(this.proxy);//get a local instance copy
 		this.callParent(arguments);
 		//Allow shortcutting the url setting.
 		if (this.url) {

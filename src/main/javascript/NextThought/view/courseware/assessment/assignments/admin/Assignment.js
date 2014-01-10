@@ -193,7 +193,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 
 	beforeRender: function() {
-		var a = this.assignment, s, grid;
+		var a = this.assignment, s, grid, p = this.filledStorePromise;
 		this.callParent();
 		this.pathBranch = this.assignmentTitle;
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -206,21 +206,21 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			exportFilesLink: this.assignment.getLink('ExportFiles')
 		});
 
-		s = this.store = new NextThought.store.courseware.AssignmentView({
-			url: a && a.getLink('GradeSubmittedAssignmentHistory'),
-			sorters: {
-				sorterFn: Globals.getCaseInsensitiveNaturalSorter('Creator')
-			}
-		});
+		s = this.store = a.getSubmittedHistoryStore();
 
+		if (!s.loading && s.getCount() > 0) {
+			p.fulfill(s);
+		} else {
+			s.on({
+				single: true,
+				load: p.fulfill.bind(p)
+			});
+		}
 
 		grid = this.down('grid');
 		grid.dueDate = a.getDueDate();
 		grid.bindStore(s);
-		this.mon(s, 'load', 'resolveUsers');
 		this.mon(s, 'load', 'maybeShowDownload');
-		s.load();
-
 		this.mon(grid, 'itemclick', 'onItemClick');
 	},
 
@@ -230,53 +230,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		if (s.getRange().filter(hasSubmission).length > 0) {
 			this.el.down('a.download').removeCls('hidden');
 		}
-	},
-
-
-	resolveUsers: function(store, records) {
-		records = records || [];
-
-		var pluck = Ext.Array.pluck, me = this,
-			users = pluck(pluck(records, 'data'), 'Creator'),
-			phantoms = [];
-
-		this.roster.forEach(function(o) {
-			if (!Ext.Array.contains(users, o.Username)) {
-				phantoms.push(new NextThought.model.courseware.UsersCourseAssignmentHistoryItem({
-					Creator: o.Username
-				}));
-				users.push(o.Username);
-			}
-		});
-
-		if (phantoms.length) {
-			records = records.concat(phantoms);
-			store.add(phantoms);
-		}
-
-		UserRepository.getUser(users)
-				.done(function(users) {
-					var i = users.length - 1,
-						r, u;
-
-					for (i; i >= 0; i--) {
-						r = records[i];
-						u = users[i];
-						if (u && r && r.get('Creator') === u.getId()) {
-							r.set('Creator', u);
-						} else {
-							console.warn('Skipped record!', i, records, users);
-						}
-					}
-
-					me.filledStorePromise.fulfill(store);
-					store.sort();
-				}).fail(function(reason) {
-					me.filledStorePromise.fail(reason);
-					console.error(reason);
-				});
-
-
 	},
 
 
