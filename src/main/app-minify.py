@@ -138,6 +138,7 @@ def gzip_files(file_paths):
 			with open( gz_path, 'wb' ) as f:
 				gf = gzip.GzipFile( path, 'wb', 9, f, path_mod_time)
 				gf.write(contents)
+				gf.close()
 			os.utime(gz_path, (path_mod_time, path_mod_time))
 
 
