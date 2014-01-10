@@ -184,8 +184,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 		}
 
 		this.header.setGradeBook(gradeBook);
-
-		this.down('grid').bindStore(assignments.getViewForStudent(user));
+		this.store = assignments.getViewForStudent(user);
+		this.down('grid').bindStore(this.store);
 	},
 
 	maybeGoToAssignment: function(view, record, node, index, e) {
