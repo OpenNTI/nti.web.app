@@ -72,6 +72,19 @@ var Promise = (function() {
 				},
 
 
+				hasHandler: function(name) {
+					var me = this,
+						i = (me.cache || []).length - 1, c,
+						has = false;
+					for (i; i >= 0 && !has; i--) {
+						c = me.cache[i];
+						has = typeof c[name] === 'function' || c.hasHandler(name);
+					}
+
+					return has;
+				},
+
+
 				done: function(fn) { this.validateHandler(fn); return this.then(fn); },
 				fail: function(fn) { this.validateHandler(fn); return this.then(undefined, fn); },
 
@@ -116,7 +129,7 @@ var Promise = (function() {
 								}
 								// deal with error thrown
 							} catch (error) {
-								if (!obj.promise.reject) {
+								if (!obj.promise.hasHandler('reject')) {
 									console.error('UNHANDLED EXECPTION:', error);
 								}
 								obj.promise.changeState(State.REJECTED, error);
