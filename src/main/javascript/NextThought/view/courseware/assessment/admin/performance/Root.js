@@ -372,7 +372,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	setAssignmentsData: function(assignments, history, outline, instance, gradeBook) {
+	setAssignmentsData: function(assignments, history, instance, gradeBook) {
 		var users = Ext.Array.pluck(this.roster, 'Username'),
 			assignmentHistoryRequests, data = {}, store = this.store,
 			applyUsers = this.applyUserData.bind(this),

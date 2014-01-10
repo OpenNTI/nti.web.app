@@ -149,18 +149,20 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 
 	getOutline: function() {
 		//cache outline
-		var p = new Promise(),
-			o = this.get('Outline'),
-			me = this;
+		if (!this._outlinePromise) {
+			var p = this._outlinePromise = new Promise(),
+				o = this.get('Outline'),
+				me = this;
 
-		o.getContents()
-				.fail(function(reason) { p.reject(reason); })
-				.done(function() {
-					o.navStore = me.getNavigationStore();
-					p.fulfill(o);
-				});
+			o.getContents()
+					.fail(function(reason) { p.reject(reason); })
+					.done(function() {
+						o.navStore = me.getNavigationStore();
+						p.fulfill(o);
+					});
+		}
 
-		return p;
+		return this._outlinePromise;
 	},
 
 

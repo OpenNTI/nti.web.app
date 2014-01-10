@@ -131,8 +131,8 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 	},
 
 
-	setAssignmentsData: function(assignments, history, outline) {
-		var ntiid, me = this;
+	setAssignmentsData: function(assignments, history) {
+		var me = this;
 
 		this.clearAssignmentsData();
 

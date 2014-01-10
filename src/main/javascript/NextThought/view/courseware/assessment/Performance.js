@@ -177,7 +177,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 	},
 
 
-	setAssignmentsData: function(data, history, outline) {
+	setAssignmentsData: function(data, history) {
 		var raw = [], me = this;
 
 		this.clearAssignmentsData();

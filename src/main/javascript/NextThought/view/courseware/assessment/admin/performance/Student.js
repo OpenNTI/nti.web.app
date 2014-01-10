@@ -162,7 +162,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 	},
 
 
-	setAssignmentsData: function(data, history, outline, instance, gradeBook) {
+	setAssignmentsData: function(data, history, instance, gradeBook) {
 		var me = this, raw = [], store = this.store, user = this.student.getId();
 
 		if (!data) {

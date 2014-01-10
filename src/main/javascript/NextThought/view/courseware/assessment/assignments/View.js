@@ -59,8 +59,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 			bar = me.getFilterBar(),
 			//showType = bar.getShowType(),
 			groupBy = bar.getGroupBy(),
-			search = bar.getSearch(),
-			outline = me.outline;
+			search = bar.getSearch();
 
 		//return function that will perform the grouping
 		return function(cmp, store) {
@@ -123,6 +122,19 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 							store: store
 						}));
 
+					function fill(node) {
+						store.groupName = node.get('title');
+						group.setTitle(node.get('title'));
+						group.setSubTitle(Ext.Date.format(
+								node.get('AvailableBeginning') || node.get('AvailableEnding'),
+								'F j, Y'
+						));
+					}
+
+					function drop() { Ext.destroy(group); }
+
+					function resolve(o) { o.findNode(name).done(fill).fail(drop); }
+
 					group.setTitle(name);
 					me.mon(group.down('dataview'), 'itemclick', 'onItemClicked');
 
@@ -130,18 +142,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 					me.activeStores.push(store);
 
 					if (groupBy === 'lesson') {
-						outline.findNode(name)
-								.fail(function() {
-									Ext.destroy(group);
-								})
-								.done(function(node) {
-									store.groupName = node.get('title');
-									group.setTitle(node.get('title'));
-									group.setSubTitle(Ext.Date.format(
-											node.get('AvailableBeginning') || node.get('AvailableEnding'),
-											'F j, Y'
-									));
-						});
+						me.instance.getOutline().done(resolve).fail(drop);
 					}
 				});
 			}
@@ -256,10 +257,12 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 	},
 
 
-	setAssignmentsData: function(data, history, outline) {
-		var ntiid, lesson, raw = [], me = this;
+	setAssignmentsData: function(data, history, instance) {
+		var lesson, raw = [], me = this;
 
 		this.clearAssignmentsData();
+
+		this.instance = instance;
 
 		if (!data) {
 			console.error('No data??');
@@ -272,6 +275,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 				h = history && history.getItem(id),
 				submission = h && h.get('Submission'),
 				assessment = h && h.get('pendingAssessment');
+
+			lesson = ContentUtils.getLineage(o.get('containerId'));//this function is in need to go asynchronous...but i need it here. :(
+			lesson.pop();//discard the root
+			if (lesson.length > 1) {
+				lesson.shift();//discard leaf page
+			}
+			lesson.reverse().join('|');
 
 			raw.push({
 				id: id,
@@ -289,8 +299,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 				enrolledCount: (me.roster && me.roster.length) || 0
 			});
 		}
-
-		this.outline = outline;
 
 		data.get('Items').forEach(collect);
 

@@ -74,13 +74,11 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 
 		Promise.pool(
-			instance.getOutline(),
 			instance.getWrapper(),
 			instance.getRoster()
 		).done(function(responses) {
-			var o = responses[0],
-				e = responses[1],
-				r = responses[2],
+			var e = responses[0],
+				r = responses[1],
 				grades = e && e.isAdministrative && Service.request(getLink('GradeBook', e));
 
 			if (!isSync()) { return; }
@@ -116,7 +114,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 						me.fireEvent('set-assignemnt-history', history);
 
 						me.forEachView(me.callFunction('setAssignmentsData',
-								[assignments, history, o, instance, gradeBook]));
+								[assignments, history, instance, gradeBook]));
 					})
 					.fail(function(reason) {
 						console.error(reason);
