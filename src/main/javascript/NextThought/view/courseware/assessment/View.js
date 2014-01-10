@@ -77,15 +77,13 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 			instance.getWrapper(),
 			instance.getRoster()
 		).done(function(responses) {
-			var e = responses[0],
-				r = responses[1],
-				grades = e && e.isAdministrative && Service.request(getLink('GradeBook', e));
+			var e = responses[0];
 
 			if (!isSync()) { return; }
 
 			if (me.shouldPushViews()) {
 				if (e && e.isAdministrative) {
-					me.addAdminViews(r, function(rel) { return getLink(rel, e); });
+					me.addAdminViews(responses[1], function(rel) { return getLink(rel, e); });
 				} else {
 					me.addStudentViews();
 				}
@@ -94,13 +92,13 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 			Promise.pool(
 				!e.isAdministrative && instance.getAssignmentHistory(),
 				instance.getAssignments(),
-				grades
+				e.isAdministrative && instance.getGradeBook()
 			)
-					.done(function(txts) {//responseTexts are in the order requested
+					.done(function(objs) {//responseTexts are in the order requested
 						if (!isSync()) { return; }
-						var history = txts[0],
-							assignments = txts[1],
-							gradeBook = txts[2] && ParseUtils.parseItems(txts[2])[0];
+						var history = objs[0],
+							assignments = objs[1],
+							gradeBook = objs[2];
 
 						me.hasAssignments = !assignments.isEmpty();
 						if (me.hasAssignments) {

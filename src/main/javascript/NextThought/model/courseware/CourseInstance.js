@@ -217,6 +217,25 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 	},
 
 
+	getGradeBook: function() {
+		if (!this._gradebookPromise) {
+			var p = this._gradebookPromise = new Promise(),
+				link = this.getLink('GradeBook');
+
+			if (link) {
+				Service.request(link)
+						.done(function(json) {
+							json = ParseUtils.parseItems(json)[0];
+							p.fulfill(json);
+						})
+						.fail(function(r) { p.reject(r); });
+			} else {
+				p.reject('Not present');
+			}
+		}
+		return this._gradebookPromise;
+	},
+
 	fireNavigationEvent: function(eventSource, callback) {
 		var me = this;
 
