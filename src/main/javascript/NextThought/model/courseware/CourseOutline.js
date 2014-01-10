@@ -56,7 +56,11 @@ Ext.define('NextThought.model.courseware.CourseOutline', {
 						}
 					}
 
-					p[node ? 'fulfill' : 'reject'](node);
+					if (node) {
+						p.fulfill(node);
+					} else {
+						p.reject('Not found');
+					}
 				});
 
 		return p;
