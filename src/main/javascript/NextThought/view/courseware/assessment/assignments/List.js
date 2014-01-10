@@ -18,7 +18,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 							]},
 							{ cls: 'name', html: '{name:htmlEncode}'},
 							{ cls: 'status {[this.isOverDue(values)]}', cn: [
-								{ tag: 'time', cls: 'due', datetime: '{due:date("c")}', html: 'Due {[this.getDueDate(values.due)]}'},
+								{ tag: 'time', cls: 'due', datetime: '{due:date("c")}', html: '{[this.getDueDate(values.due)]}'},
 								{ tag: 'time', cls: 'completed', datetime: '{completed:date("c")}', html: 'Completed {completed:date("n/j")}'}
 							]}
 						]}
@@ -40,7 +40,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 				isOverDue: function(values) {
 					var due = values.due && (new Date(values.due.getTime())).setHours(0, 0, 0, 0),
 						today = (new Date()).setHours(0, 0, 0, 0);
-					return (!this.isTaken(values) && today >= due) ? 'due' : '';
+					return (  values.due && !this.isTaken(values) && today >= due) ? 'due' : '';
 				},
 
 				getDueDate: function(date) {
@@ -48,11 +48,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 
 					var format = 'l, F j',
 						day = (new Date(date.getTime())).setHours(0, 0, 0, 0),
-						today = (new Date()).setHours(0, 0, 0, 0);
+						today = (new Date()).setHours(0, 0, 0, 0)
+						html = 'Due ' ;
 					if (day === today) {
-						return 'Today';
+						html += 'Today';
 					}
-					return Ext.Date.format(date, format);
+					html += Ext.Date.format(date, format);
+					return html;
 				}
 			}),
 

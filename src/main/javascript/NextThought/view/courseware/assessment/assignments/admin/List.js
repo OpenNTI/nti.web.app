@@ -26,7 +26,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.List', {
 							]},
 							{ cls: 'name', html: '{name:htmlEncode}'},
 							{ cls: 'status', cn: [
-								{ tag: 'time', cls: 'due', datetime: '{due:date("c")}', html: 'Due {[this.getDueDate(values)]}'}
+								{ tag: 'time', cls: 'due', datetime: '{due:date("c")}', html: '{[this.getDueDate(values)]}'}
 							]}
 						]}
 					]}), {
@@ -36,7 +36,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.List', {
 					var date = (values && values.due) || new Date(0),
 						due = (new Date(date.getTime())).setHours(0, 0, 0, 0),
 						today = (new Date()).setHours(0, 0, 0, 0);
-					return (due < today) ? 'late' : '';
+
+					return ((values && values.due) && due < today) ? 'late' : '';
 				},
 
 				getDueDate: function(values) {
@@ -45,11 +46,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.List', {
 					var format = 'l, F j',
 						date = values.due,
 						day = (new Date(date.getTime())).setHours(0, 0, 0, 0),
-						today = (new Date()).setHours(0, 0, 0, 0);
+						today = (new Date()).setHours(0, 0, 0, 0),
+						html = 'Due ';
 					if (day === today) {
-						return 'Today';
+						html += 'Today';
 					}
-					return Ext.Date.format(date, format);
+					html += Ext.Date.format(date, format);
+					return html;
 				}
 			})
 
