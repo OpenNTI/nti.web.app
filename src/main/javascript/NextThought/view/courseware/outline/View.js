@@ -6,8 +6,6 @@ Ext.define('NextThought.view.courseware.outline.View', {
 	cls: 'nav-outline scrollable',
 	preserveScrollOnRefresh: true,
 
-	MULTI_LEVEL_NAV_CLS: 'multi-level',
-
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header', cn: [
 			'Outline'
@@ -127,9 +125,6 @@ Ext.define('NextThought.view.courseware.outline.View', {
 			lineage = C.getLineage(ntiid),
 			root = lineage.last();
 
-		if (this.store.depth > 2) {
-			this.addCls(this.MULTI_LEVEL_NAV_CLS);
-		}
 
 		//start from the page we're on, and go up to find its associated course node...
 		// TODO: look at the course and find the leaf
@@ -163,7 +158,6 @@ Ext.define('NextThought.view.courseware.outline.View', {
 	maybeChangeStoreOrSelection: function(ntiid, store) {
 
 		if (this.store !== store) {
-			this.removeCls(this.MULTI_LEVEL_NAV_CLS);
 			this.clear();
 			if (store) {
 				this.bindStore(store);

@@ -82,7 +82,7 @@
 		}
 	}
 
-	&.multi-level {
+	&:not(.multi-level) {//the "not" is just disabling the selector without restructuring the css.
 
 		.outline-row {
 			&.lesson {

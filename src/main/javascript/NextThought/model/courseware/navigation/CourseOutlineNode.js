@@ -20,10 +20,10 @@ Ext.define('NextThought.model.courseware.navigation.CourseOutlineNode', {
 		{ name: 'type', type: 'Synthetic', persist: false, fn: function(r) {
 			var d = r._max_depth || 2,
 				myDepth = r._depth,
-				unit = 'unit';
+				unit = 'unit heading';
 
 			if (d !== 2) {
-				unit = myDepth > 1 ? 'unit' : 'unit heading';
+				unit = myDepth > 1 ? 'unit' : unit;
 			}
 
 			return myDepth === d ? 'lesson' : unit;
