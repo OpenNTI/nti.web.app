@@ -29,6 +29,46 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 		enableColumnHide: false,
 		enableColumnMove: false,
 		enableColumnResize: false,
+		selType: 'cellmodel',
+		plugins: [
+			{
+				ptype: 'cellediting',
+				clicksToEdit: 1,
+				listeners: {
+					beforeedit: {
+						element: 'el',
+						fn: function(editor, e){
+							if(!e.record){ return false; }
+
+							var noSubmit = e.record.get('item').get('category_name') === 'no_submit',
+								gradeRec = e.record.get('Grade'),
+								value = gradeRec && gradeRec.get('value'),
+								grades = value && value.split(' '),
+								grade = grades && grades[0];
+
+							if (!gradeRec && noSubmit) {
+								e.record.set('Grade', NextThought.model.courseware.Grade.create());
+							} else if (!gradeRec) {
+								return false;
+							}
+
+							e.value = grade;
+						}
+					},
+					validateedit: {
+						element: 'el',
+						fn: function(editor, e){
+							var grade = e.record.get('Grade');
+
+							grade.set('value', e.value + ' -');
+							grade.save();
+
+							return false;
+						}
+					}
+				}
+			}
+		],
 		columns: {
 			ui: 'course-assessment',
 			plain: true,
@@ -51,10 +91,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 							   late: d.ago().replace('ago', '').trim()
 						   });
 					   } },
-					   { text: 'Score', dataIndex: 'Grade', width: 70, renderer: function(val) {
+					   { text: 'Score', componentCls: 'score', dataIndex: 'Grade', width: 70, editor: 'textfield', renderer: function(val) {
 							val = val && val.get('value');
 							return val && val.split(' ')[0];
-					   } , listeners: {
+					   } ,listeners: {
 							headerclick: function() {
 								var store = this.up('grid').getStore(),
 									sorter = Ext.create('Ext.util.Sorter', {
@@ -158,7 +198,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 			]
 		});
 		grid.bindStore(store);
-		this.mon(grid, 'itemclick', 'goToAssignment');
+		this.mon(grid, 'itemclick', 'maybeGoToAssignment');
 	},
 
 
@@ -232,6 +272,21 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 		store.loadRawData(raw);
 	},
 
+	maybeGoToAssignment: function(view, record, node, index, e){
+		var selModel = view.getSelectionModel(),
+			selection = selModel && selModel.selection,
+			dataIndex = selection && selection.columnHeader.dataIndex,
+			noSubmit = record.get('item').get('category_name') === 'no_submit';
+			
+		//if we didn't click on the grade cell or we don't have a grade yet
+		if (noSubmit) {	
+			return;
+		}
+
+		if (dataIndex !== 'Grade' || !record.get('Grade')) {
+			this.goToAssignment(selModel, record);
+		}
+	},
 
 	//<editor-fold desc="Navigation Events">
 	goToAssignment: function(selModel, record) {

@@ -1042,7 +1042,7 @@ canvas.x-component-course-assessment {
 	}
 
 	.x-grid-row-over {
-		.x-grid-td {
+		.x-grid-td, .x-grid-td.x-grid-cell.x-grid-cell-selected {
 			background: #fafafa !important;
 		}
 	}
@@ -1055,6 +1055,11 @@ canvas.x-component-course-assessment {
 	.x-grid-row .x-grid-cell {
 		font: normal 300 0.85em/3 $font;
 		color: $secondary-grey;
+
+
+		&.x-grid-cell-selected {
+			background-color: inherit !important;
+		}
 
 		&.sortedOn,
 		&.x-grid-cell-first {
@@ -1128,4 +1133,13 @@ canvas.x-component-course-assessment {
 
 	&.student-performance-overview { top: 171px; }
 	&.student-assignment-overview { top: 122px; margin-top: 122px; }
+
+	.x-grid-cell-editor{
+		input{
+			font: normal 300 0.8em/1 $font;
+			height: 40px !important;
+			border: 1px solid #dcdcdc;
+			background-image: none;
+		}
+	}
 }
