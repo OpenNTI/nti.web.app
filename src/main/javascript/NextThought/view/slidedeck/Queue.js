@@ -127,7 +127,10 @@ Ext.define('NextThought.view.slidedeck.Queue', {
 
 		}
 		this.getSelectionModel().select(slide);
-		this.fireEvent('slide-selected', this.getRecord(n));
+
+		if (n) {
+			this.fireEvent('slide-selected', this.getRecord(n));
+		}
 	},
 
 	// moves the active slide into view when navigating or
