@@ -3,5 +3,9 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedbac
 
 	fields: [
 		{name: 'Items', type: 'arrayItem', persist: false}
-	]
+	],
+
+	getCount: function() {
+		return (this.get('Items') || []).length;
+	}
 });

@@ -372,9 +372,46 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
+	setAssignmentStores: function(stores) {
+		var me = this,
+			feedbackMap = me._feedbackMap = {},
+			feedbackListeners = [];
+
+
+		function gatherFeedbacks(i) {
+			var f = i.get('Feedback'),
+				c = f && f.get('Creator');
+
+			function updateRow() {
+				var r = me.store.getById(c);
+				if (r) {
+					me.updateActionables(r, c);
+				} else {
+					console.warn('Not updating row:', c);
+				}
+			}
+
+			if (f) {
+				(feedbackMap[c] = feedbackMap[c] || []).push(f);
+				feedbackListeners.push(me.mon(f, {
+					destroyable: true,
+					'items-changed': updateRow
+				}));
+				updateRow();
+			}
+		}
+
+		function itr(s) { s.each(gatherFeedbacks); }
+
+		Ext.destroy(me._feedbackListeners);
+		me._feedbackListeners = feedbackListeners;
+		stores.forEach(itr);
+	},
+
+
 	setAssignmentsData: function(assignments, history, instance, gradeBook) {
 		var users = [],
-			data = {}, store = this.store, raw = [],
+			store = this.store, raw = [],
 			applyUsers = this.applyUserData.bind(this),
 			getCounts = this.getCountsFor.bind(this);
 
@@ -399,7 +436,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		UserRepository.getUser(users).done(applyUsers);
 
 		assignments.getViewMaster()
-				.done(function(list) {});
+				.done(this.setAssignmentStores.bind(this));
 	},
 
 
@@ -409,7 +446,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	getCountsFor: function(username) {
 		var d = this.gradeBookDefaultPart,
 			assignments = (d && d.get('Items')) || [],
-			counts = {ungraded: 0, overdue: 0};
+			feedbacks = (this._feedbackMap || {})[username] || [],
+			counts = {
+				comments: feedbacks.reduce(function(agg, o) {return agg + o.getCount();}, 0),
+				ungraded: 0,
+				overdue: 0
+			};
 
 		assignments.forEach(function(assignment) {
 			var due = assignment.get('DueDate'),
@@ -421,14 +463,14 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			if (!i && due && due < new Date()) {counts.overdue++;}
 		});
 
+
+
 		return counts;
 	},
 
 
-	updateActionables: function(rec, user) {
-		var counts = this.getCountsFor(user.getId());
-
-		rec.set(counts);
+	updateActionables: function(rec, username) {
+		rec.set(this.getCountsFor(username));
 	},
 
 
@@ -493,7 +535,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			}
 
 			me.mon(me.gradeBook, 'Items-changed', function() {
-				me.updateActionables(r, u);
+				me.updateActionables(r, u.getId());
 			});
 
 			r.set({
