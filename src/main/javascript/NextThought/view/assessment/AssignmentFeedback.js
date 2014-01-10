@@ -40,7 +40,7 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 							]},
 							{ cls: 'message', html: '{body}'},
 							{tag: 'tpl', 'if': 'isMe(Creator)', cn: { cls: 'footer', cn: [
-								//{ tag: 'span', cls: 'link edit', html: 'Edit'},
+								{ tag: 'span', cls: 'link edit', html: 'Edit'},
 								{ tag: 'span', cls: 'link delete', html: 'Delete'}
 							]}}
 						]}
@@ -208,6 +208,47 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 	},
 
 
+	openEditorFor: function(record, el){
+		var me = this;
+
+
+		el.select('.message,.footer').remove();
+		Ext.destroy(me.editEditor);
+		me.editEditor = Ext.widget('nti-editor', {
+			ownerCt: this,
+			renderTo: el.down('.wrap'),
+			record: record,
+			listeners: {
+				save: function(editor, record, value) {
+					editor.mask('Saving...');
+					record.suspendEvents()
+					record.set('body', value.body);
+					record.save({
+						callback: function(q, s, r){
+							record.resumeEvents();
+							editor.unmask();
+							if(!s){
+								alert({title: 'Oops!', msg: 'Something went wrong.'});
+								console.error('Failled to update feedback');
+								return;
+							}
+							Ext.destroy(editor);
+							me.refresh();
+						}
+					});
+				},
+				cancel: function(){
+					me.refresh();
+				}
+			}
+		});
+
+		me.editEditor.editBody(record.get('body'));
+
+		me.editEditor.activate();
+	},
+
+
 	onFeedbackClick: function(s, record, item, index, e) {
 		var c = record.get('Creator'),
 			store = this.store;
@@ -215,7 +256,7 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 		if ((e.getTarget('.avatar') || e.getTarget('.name')) && c && c.getProfileUrl) {
 			this.fireEvent('show-profile', c);
 		} else if (e.getTarget('.link.edit')) {
-			console.log('show editor');
+			this.openEditorFor(record, Ext.get(item));
 		} else if (e.getTarget('.link.delete')) {
 			record.destroy({callback: function() {
 				store.load();
