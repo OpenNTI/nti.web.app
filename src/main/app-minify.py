@@ -5,6 +5,7 @@ from argparse import ArgumentParser
 import os
 import subprocess
 import time
+import gzip
 
 BUILDTIME = time.strftime('%Y%m%d%H%M%S')
 
@@ -123,6 +124,23 @@ def _minify_app( app_root, extjs_sdk ):
 	subprocess.check_call(sencha_bootstrap_command)
 	subprocess.check_call(sencha_compile_command)
 
+	gzip_files((output_file,))
+
+def gzip_files(file_paths):
+	"Compress files that are known to exist"
+	# Write a .gz version for nginx http://nginx.org/en/docs/http/ngx_http_gzip_static_module.html
+	for path in file_paths:
+		gz_path = path + '.gz'
+		path_mod_time = os.stat(path).st_mtime
+		if not os.path.isfile(gz_path) or os.stat(gz_path).st_mtime < path_mod_time:
+			with open(path, 'rb') as f:
+				contents = f.read()
+			with open( gz_path, 'wb' ) as f:
+				gf = gzip.GzipFile( path, 'wb', 9, f, path_mod_time)
+				gf.write(contents)
+			os.utime(gz_path, (path_mod_time, path_mod_time))
+
+
 def main():
 	parser = ArgumentParser()
 	parser.add_argument('-a', '--google-analytics', dest='analytics_key', action='store', default='', help="Key value used with Google Analytics.  If no value is specified, then the index-minify.html will not contain Google Analytics code.")
@@ -135,6 +153,8 @@ def main():
 
 	_buildMinifyIndexHtml(args.analytics_key)
 	_buildUnminifyIndexHtml(args.analytics_key)
+
+
 
 	# Clean-up:
 	if os.path.exists('index.html.out'):
