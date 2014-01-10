@@ -176,7 +176,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 		this.fireEvent('goto-assignment', record.get('item'), $AppConfig.userObject);
 	},
 
-
+	//This is a read-only view from the STUDENT'S perspective. READ: updates when students navigate to it.
 	setAssignmentsData: function(assignments, history) {
 		var raw = [], me = this;
 
