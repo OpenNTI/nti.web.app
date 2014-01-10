@@ -275,7 +275,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 
 
 	getLastRead: function() {
-		return this._lastRead || new Date(0);
+		return this._lastRead || new Date();//don't show the notifications until we load the last view time.
 	},
 
 
