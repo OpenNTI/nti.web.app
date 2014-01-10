@@ -109,7 +109,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 							return;
 						}
 
-						me.fireEvent('set-assignemnt-history', history);
+						me.fireEvent('set-assignment-history', history);
 
 						me.forEachView(me.callFunction('setAssignmentsData',
 								[assignments, history, instance, gradeBook]));

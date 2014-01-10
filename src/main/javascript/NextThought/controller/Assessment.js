@@ -62,7 +62,7 @@ Ext.define('NextThought.controller.Assessment', {
 			component: {
 				'*': {
 					'has-been-submitted': 'maybeMarkSubmissionAsSubmitted',
-					'set-assignemnt-history': 'applyAssessmentHistory'
+					'set-assignment-history': 'applyAssessmentHistory'
 				},
 				'assessment-question': {
 					'check-answer': 'checkAnswer'
@@ -83,11 +83,11 @@ Ext.define('NextThought.controller.Assessment', {
 			q = cmp.questionSet,
 			a = q && q.associatedAssignment,
 			o, s;
-			
+
 		a = (a && a.getId && a.getId()) || cmp.assignmentId;
 
 		function add() {
-			if(!me.submissionsWidgets.contains(cmp)){
+			if (!me.submissionsWidgets.contains(cmp)) {
 				me.submissionsWidgets.add(cmp);
 				cmp.on('destroy', function() {
 					me.submissionsWidgets.remove(cmp);
@@ -95,10 +95,10 @@ Ext.define('NextThought.controller.Assessment', {
 			}
 		}
 
-		if(!a){ return; }
+		if (!a) { return; }
 
 		add();
-		
+
 		o = h && h.getItem(a);
 		if (o) {
 			if (cmp.setGradingResult) {

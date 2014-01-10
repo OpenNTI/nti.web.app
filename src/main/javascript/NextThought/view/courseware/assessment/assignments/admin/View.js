@@ -17,7 +17,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.View', {
 		var root = this.add({ xtype: 'course-assessment-admin-assignments-root', roster: this.roster });
 		root.setAssignmentsData.apply(root, arguments);
 		this.store = root.store;
-		this.mon(root, 'assignement-clicked', 'showAssignmentFromClick');
+		this.mon(root, 'assignment-clicked', 'showAssignmentFromClick');
 	},
 
 	clearAssignmentsData: function() {
@@ -62,7 +62,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.View', {
 	},
 
 
-	showAssignment: function(assignemnt, user) {
-		this.items.first().showAssignment(assignemnt, user);
+	showAssignment: function(assignment, user) {
+		this.items.first().showAssignment(assignment, user);
 	}
 });

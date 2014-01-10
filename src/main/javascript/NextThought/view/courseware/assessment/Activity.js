@@ -191,15 +191,15 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 	},
 
 
-	deriveEvents: function(assignemnt, historyItem) {
+	deriveEvents: function(assignment, historyItem) {
 		var me = this,
 			now = new Date(),
 			submission = historyItem && historyItem.get('Submission'),
 			feedback = historyItem && historyItem.get('Feedback'),
 			grade = historyItem && historyItem.get('Grade'),
 			dateCompleted = submission && submission.get('CreatedTime'),
-			dateOpens = assignemnt && assignemnt.get('availableBeginning'),
-			dateDue = (assignemnt && assignemnt.get('availableEnding')) || now;
+			dateOpens = assignment && assignment.get('availableBeginning'),
+			dateDue = (assignment && assignment.get('availableEnding')) || now;
 
 
 		if (feedback) {
@@ -209,19 +209,19 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 		}
 
 		if (grade && grade.get('value')) {
-			me.addEvent(me.getEventConfig('Grade Received', assignemnt, grade.get('Last Modified')));
+			me.addEvent(me.getEventConfig('Grade Received', assignment, grade.get('Last Modified')));
 		}
 
 		if (dateOpens < now) {
-			me.addEvent(me.getEventConfig('New Assignment:', assignemnt, dateOpens));
+			me.addEvent(me.getEventConfig('New Assignment:', assignment, dateOpens));
 		}
 
 		if (dateDue < now && (!dateCompleted || dateCompleted > dateDue)) {
-			me.addEvent(me.getEventConfig('Assignment Past Due:', assignemnt, dateDue));
+			me.addEvent(me.getEventConfig('Assignment Past Due:', assignment, dateDue));
 		}
 
 		if (dateCompleted) {
-			me.addEvent(me.getEventConfig('Assignment Submitted:', assignemnt, dateCompleted));
+			me.addEvent(me.getEventConfig('Assignment Submitted:', assignment, dateCompleted));
 		}
 	},
 

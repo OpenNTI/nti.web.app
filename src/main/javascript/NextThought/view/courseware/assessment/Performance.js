@@ -177,13 +177,13 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 	},
 
 
-	setAssignmentsData: function(data, history) {
+	setAssignmentsData: function(assignments, history) {
 		var raw = [], me = this;
 
 		this.clearAssignmentsData();
 
-		if (!data) {
-			console.error('No data??');
+		if (!assignments) {
+			console.error('No assignments??');
 			return;
 		}
 
@@ -218,7 +218,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 			});
 		}
 
-		data.get('Items').forEach(collect);
+		assignments.get('Items').forEach(collect);
 
 		this.store.loadRawData(raw);
 	},

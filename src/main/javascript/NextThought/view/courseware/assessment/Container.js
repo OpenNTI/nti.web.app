@@ -81,19 +81,19 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 	},
 
 
-	showAssignment: function(view, assignement, assignemntHistory, student, path, store, page) {
+	showAssignment: function(view, assignment, assignmentHistory, student, path, store, page) {
 		//both course-asessment-reader and the admin-reader extend the reader so this takes care of both
 		Ext.destroy(this.down('reader'));
 		this.mon(this.add({
 			xtype: isMe(student) ? 'course-assessment-reader' : 'course-assessment-admin-reader',
 			parentView: view,
-			assignmentHistory: assignemntHistory,
+			assignmentHistory: assignmentHistory,
 			student: student,
 			path: path,
 			store: store,
 			page: page,
-			location: assignement.getId(),
-			assignment: assignement
+			location: assignment.getId(),
+			assignment: assignment
 		}), {
 			'goup': 'showRoot'
 		});

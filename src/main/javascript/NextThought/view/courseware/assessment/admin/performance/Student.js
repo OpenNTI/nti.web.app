@@ -162,11 +162,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 	},
 
 
-	setAssignmentsData: function(data, history, instance, gradeBook) {
+	setAssignmentsData: function(assignments, history, instance, gradeBook) {
 		var me = this, raw = [], store = this.store, user = this.student.getId();
 
-		if (!data) {
-			console.error('No data??');
+		if (!assignments) {
+			console.error('No assignments??');
 			return;
 		}
 
@@ -227,7 +227,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 			});
 		}
 
-		data.get('Items').forEach(collect);
+		assignments.get('Items').forEach(collect);
 
 		store.loadRawData(raw);
 	},

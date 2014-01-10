@@ -257,15 +257,15 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 	},
 
 
-	setAssignmentsData: function(data, history, instance) {
+	setAssignmentsData: function(assignments, history, instance) {
 		var lesson, raw = [], me = this;
 
 		this.clearAssignmentsData();
 
 		this.instance = instance;
 
-		if (!data) {
-			console.error('No data??');
+		if (!assignments) {
+			console.error('No assignments??');
 			return;
 		}
 
@@ -300,7 +300,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 			});
 		}
 
-		data.get('Items').forEach(collect);
+		assignments.get('Items').forEach(collect);
 
 		this.store = new Ext.data.Store({
 			fields: this.getFields(),
