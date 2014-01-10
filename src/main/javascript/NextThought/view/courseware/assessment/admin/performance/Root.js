@@ -585,7 +585,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		});
 
 		if (dropdown) {
-			me.gradeMenu.show().hide();
+			me.activeGradeRecord = rec;
 			me.gradeMenu.showBy(dropdown, 'tl-tl', me.gradeMenu.offset);
 		}
 	},
@@ -593,20 +593,27 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 	changeLetterGrade: function(item, status) {
 		if (!this.activeGradeRecord || !status) { return; }
-
 		this.changeGrade(this.activeGradeRecord, this.activeGradeRecord.get('grade'), item.text);
 	},
 
 
-	changeGrade: function(rec, number, letter) {
+	changeGrade: function(rec, number, letter, fromEnter) {
 		if (!this.gradeBook) { return; }
 
-		var p = new Promise(),
-			gradebookentry = this.gradeBook.getItem('Final Grade', 'no_submit'),
+		var p = new Promise(), me = this,
+			gradebookentry = me.gradeBook.getItem('Final Grade', 'no_submit'),
 			grade = gradebookentry && gradebookentry.getFieldItem('Items', rec.getId()),
 			value = number + ' ' + letter,
 			url = this.gradeBook.get('href');//this may be broken on FireFox (_dc=1234)
 
+
+		function maybeFocus(){
+			var el = me.getNode(rec);
+
+			if(fromEnter){
+				Ext.fly(el).down('input').focus(10);
+			}
+		}
 		
 		if(!grade){
 			console.log('No finaly grade entry');
@@ -628,6 +635,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 					if(rec){
 						gradebookentry.addItem(rec);
+						maybeFocus();
 						p.fulfill();
 					}
 				},
@@ -640,7 +648,13 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		}
 
 		grade.set('value', value);
-		grade.save();
+		grade.save({
+			callback: function(q, s, r){
+				if(s){
+					maybeFocus();
+				}
+			}
+		});
 
 		p.fulfill();
 		return p;
@@ -649,17 +663,22 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 	onInputChanged: function(e, input) {
 		if (e.getCharCode() === e.ENTER) {
-			this.onInputBlur(e, input);
+			this.saveGradeFromInput(e, input, true);
 		}
 	},
 
 
 	onInputBlur: function(e, input) {
+		this.saveGradeFromInput(e, input, false);
+	},
+
+
+	saveGradeFromInput: function(e, input, fromEnter){
 		var node = e.getTarget(this.itemSelector),
 			rec = node && this.getRecord(node);
 
 		console.log('update record', rec, ' with input value:', input.value);
-		this.changeGrade(rec, input.value, rec.get('letter'));
+		this.changeGrade(rec, input.value, rec.get('letter'), fromEnter);
 	},
 
 
