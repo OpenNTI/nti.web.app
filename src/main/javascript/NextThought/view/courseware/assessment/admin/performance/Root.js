@@ -52,8 +52,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 					{ tag: 'tpl', 'for': '.', cn: [
 						{ cls: 'item', cn: [
 							{ cls: 'gradebox', cn: [
-								{ tag: 'input', size: 3, type: 'text', value: '{grade}'},
-								{ cls: 'dropdown letter grade', html: '{letter}'}
+								{ tag: 'input', size: 3, tabindex: '1', type: 'text', value: '{grade}'},
+								{ cls: 'dropdown letter grade', tabindex: '1', html: '{letter}'}
 							]},
 							{ cls: 'studentbox', cn: [
 								{ cls: 'avatar', style: {backgroundImage: 'url({avatar})'}},
@@ -94,6 +94,42 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			inputEl: { keyup: 'changeNameFilter'},
 			clearEl: { click: 'clearSearch'}
 		});
+
+		this.mon(this.frameBodyEl, {
+			keydown: 'manageFocus'
+		});
+	},
+
+
+	manageFocus: function(e, el){
+		if (!e.getTarget('.dropdown')) { return; }
+
+		var me = this,
+			node = Ext.get(el).parent('.item'),
+			record = node && me.getRecord(node);
+			chr = e.getCharCode();
+
+		if (!record) {
+			console.error('No record for node', node);
+			return;
+		}
+
+		if (chr >= 65 && chr <= 70 && chr != 69) {
+			me.changeGrade(record, record.get('grade'), String.fromCharCode(chr))
+				.done(function(){
+					var node = me.getNode(record);
+
+					if(!node){
+						console.error('No node for record', record);
+					}
+
+					Ext.fly(node).down('.dropdown').focus(10);
+				});
+		}
+
+		if( chr === e.ENTER || chr === e.SPACE || chr === e.UP || chr === e.DOWN){
+			me.onDropDown(node, record);
+		}
 	},
 
 
@@ -325,12 +361,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				}
 			},
 			items: [
+				{text: '-'},
 				{text: 'A'},
 				{text: 'B'},
 				{text: 'C'},
 				{text: 'D'},
-				{text: 'F'},
-				{text: '-'}
+				{text: 'F'}
 			]
 		});
 	},
@@ -528,11 +564,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	onDropDown: function(node) {
+	onDropDown: function(node, record) {
 		var me = this,
-			rec = me.getRecord(node),
+			rec = record || me.getRecord(node),
 			el = Ext.get(node),
-			dropdown = el && el.down('.gradebox .letter');
+			dropdown = el && el.down('.gradebox .letter'),
+			current;
 		console.log('show menu for record:', rec);
 
 		me.gradeMenu.items.each(function(item, index) {
@@ -541,15 +578,15 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			if (item.text === rec.get('letter')) {
 				item.setChecked(true, true);
 				me.gradeMenu.offset = [-1, -x];
+				current = item;
 			} else {
 				item.setChecked(false, true);
 			}
 		});
 
 		if (dropdown) {
+			me.gradeMenu.show().hide();
 			me.gradeMenu.showBy(dropdown, 'tl-tl', me.gradeMenu.offset);
-			this.activeGradeRecord = rec;
-
 		}
 	},
 
@@ -564,7 +601,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	changeGrade: function(rec, number, letter) {
 		if (!this.gradeBook) { return; }
 
-		var gradebookentry = this.gradeBook.getItem('Final Grade', 'no_submit'),
+		var p = new Promise(),
+			gradebookentry = this.gradeBook.getItem('Final Grade', 'no_submit'),
 			grade = gradebookentry && gradebookentry.getFieldItem('Items', rec.getId()),
 			value = number + ' ' + letter,
 			url = this.gradeBook.get('href');//this may be broken on FireFox (_dc=1234)
@@ -590,6 +628,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 					if(rec){
 						gradebookentry.addItem(rec);
+						p.fulfill();
 					}
 				},
 				failure: function() {
@@ -597,11 +636,14 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 					console.error('Failed to save final grade:', arguments);
 				}
 			});
-			return;
+			return p;
 		}
 
 		grade.set('value', value);
 		grade.save();
+
+		p.fulfill();
+		return p;
 	},
 
 

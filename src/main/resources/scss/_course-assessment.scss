@@ -353,6 +353,13 @@ canvas.x-component-course-assessment {
 			.dropdown {
 				width: 44%;
 				display: inline-block;
+				line-height: 1.35em;
+
+				&:focus{
+					background-color: $primary-blue;
+					color: white;
+				}
+
 				&::after {
 					content: '';
 					overflow: hidden;
