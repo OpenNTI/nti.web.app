@@ -47,7 +47,7 @@ Ext.define('NextThought.view.forums.Comments',{
 								{ tag: 'span', cls: 'edit link', html: 'Edit'},
 								{ tag: 'span', cls: 'delete link', html: 'Delete'}
 							]},
-							{ tag: 'tpl', 'if': '!isModifiable && !flagged', cn: [
+							{ tag: 'tpl', 'if': '!isModifiable', cn: [
 								{ tag: 'span', cls: 'flag link {[values.flagged? "on" : "off"]}', html: 'Report'}
 							]}
 						]},
@@ -259,6 +259,7 @@ Ext.define('NextThought.view.forums.Comments',{
 		me.editor.record = record;
 		me.editor.editBody((record && record.get('body')) || []);
 		me.editor.activate();
+		me.editor.focus();
 
 		me.editor.alignTo(el, 'tl-tl');
 
