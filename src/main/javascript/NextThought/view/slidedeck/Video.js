@@ -43,9 +43,22 @@ Ext.define('NextThought.view.slidedeck.Video', {
 	},
 
 
-	initComponent: function() {
+	refreshHeight: function() {
 		this.height = (this.playerHeight + 65);
+		this.setHeight(this.height);
+		console.log(this.height);
+		if (this.rendered) {
+			this.updateLayout();
+		}
+	},
+
+	playerConfigOverrides: function(type) {
+		return {reserveControlSpace: true};
+	},
+
+	initComponent: function() {
 		this.callParent(arguments);
+		this.refreshHeight();
 		this.firstSelection = true;
 		//default the value
 		if (typeof(this.linkWithSlides) !== 'boolean') {
@@ -53,6 +66,7 @@ Ext.define('NextThought.view.slidedeck.Video', {
 		}
 
 		this.loadFirstEntry = false;
+		this.on('height-change', 'refreshHeight');
 	},
 
 

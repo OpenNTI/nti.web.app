@@ -40,6 +40,8 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 		observable: 'Ext.util.Observable'
 	},
 
+	CONTROL_HEIGHT: 30,
+
 	PLAYER_TPL: Ext.DomHelper.createTemplate({
 		name: '{id}',
 		id: '{id}',
@@ -136,7 +138,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 		this.id = config.parentId + '-kaltura-video';
 		this.player = null;
 		this.width = config.width;
-		this.height = config.height;
+		this.height = config.height + ((config.reserveControlSpace && this.CONTROL_HEIGHT) || 0);
 		this.currentPosition = 0;
 		this.currentState = -1;
 		this.makeNotReady();

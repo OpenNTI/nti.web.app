@@ -39,7 +39,7 @@ Ext.define('NextThought.view.video.Video', {
 	loadFirstEntry: true,
 	playerWidth: 640,
 	playerHeight: function() {
-		return Math.round(this.playerWidth * this.ASPECT_RATIO);
+		return Math.round(this.playerWidth * this.ASPECT_RATIO) + this.getControlHight();
 	},
 
 	renderTpl: Ext.DomHelper.markup([
@@ -233,6 +233,9 @@ Ext.define('NextThought.view.video.Video', {
 	},
 
 
+	playerConfigOverrides: function(name) { return {}; },
+
+
 	playerSetup: function() {
 		this.log('Initializing the players.');
 		var me = this,
@@ -247,12 +250,12 @@ Ext.define('NextThought.view.video.Video', {
 				return;
 			}
 
-			var p = me.players[cls.type] = cls.create({
+			var p = me.players[cls.type] = cls.create(Ext.apply({
 				el: Ext.get(me.el.down('.video-wrapper')),
 				parentId: me.id,
 				width: me.playerWidth,
 				height: me.playerHeight
-			});
+			}, me.playerConfigOverrides(cls.type)));
 
 			me.on('destroy', 'destroy',
 					me.relayEvents(p, [
@@ -497,6 +500,13 @@ Ext.define('NextThought.view.video.Video', {
 	},
 
 
+	getControlHight: function() {
+		var l = this.players,
+			k = this.activeVideoService;
+
+		return (k && l && l[k] && l[k].CONTROL_HEIGHT) || 0;
+	},
+
 	maybeSwitchPlayers: function(service) {
 		var me = this;
 
@@ -529,6 +539,7 @@ Ext.define('NextThought.view.video.Video', {
 
 		});
 
+		this.fireEvent('height-change');
 	},
 
 
