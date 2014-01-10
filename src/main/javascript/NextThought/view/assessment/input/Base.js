@@ -74,7 +74,7 @@ Ext.define('NextThought.view.assessment.input.Base', {
 			return (/^data:/i.test(url) || Globals.HOST_PREFIX_PATTERN.test(url)) ? original : attr + '="' + root + url + '"';
 		}
 
-		if (!html.replace) {
+		if (!html || !html.replace) {
 			return html;
 		}
 
@@ -373,11 +373,11 @@ Ext.define('NextThought.view.assessment.input.Base', {
 
 		this.setValue(part.get('submittedResponse'));
 
-		if(!this.noMark){
+		if (!this.noMark) {
 			if (part.isCorrect()) { this.markCorrect(); }
 			else {this.markIncorrect(); }
 		}
-		
+
 		if (this.isAssignment) {
 			this.setSubmitted();
 		}

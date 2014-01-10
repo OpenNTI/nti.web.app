@@ -48,23 +48,23 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			questions = set.get('questions'),
 			submission, pendingAssessment;
 
-		function getPendingAssessment(h){
+		function getPendingAssessment(h) {
 			var temp;
 
-			try{
+			try {
 				temp = h.get('pendingAssessment').get('parts')[0];
 			} catch (e) {
-				swallow(e);	
+				swallow(e);
 			}
 
-			if(isInstructor){
+			if (isInstructor) {
 				temp = temp || NextThought.model.assessment.AssessedQuestionSet.from(set);
 			}
 
 			return temp;
 		}
 
-		if(h){
+		if (h) {
 			pendingAssessment = getPendingAssessment(h);
 			set.noMark = Boolean(pendingAssessment && pendingAssessment.noMark);
 		}
@@ -89,7 +89,7 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			}));
 		}
 
-		if(pendingAssessment){
+		if (pendingAssessment) {
 			submission.setGradingResult(pendingAssessment);
 		}
 	},
@@ -137,6 +137,14 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 
 
 	cleanQuestionsThatAreInQuestionSets: function(items, objects) {
+		items = items.slice();
+		//move assignments to the front.
+		items.sort(function(a, b) {
+			var c = a.isAssignment,
+				d = b.isAssignment;
+			return c === d ? 0 : (c && !d) ? -1 : 1;
+		});
+
 		var result = [],
 			questionsInSets = [],
 			push = Array.prototype.push,
@@ -164,6 +172,9 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			return false;
 		}
 
+		function pushSetQuestions(i) {
+			if (i.isSet) { push.apply(questionsInSets, i.get('questions')); }
+		}
 
 		if (this.injectedAssignment) {
 			assignments.push(this.injectedAssignment);
@@ -171,16 +182,22 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 
 
 		//get sets
-		items.forEach(function(i) {if (i.isSet) { push.apply(questionsInSets, i.get('questions')); }});
+		items.forEach(pushSetQuestions);
 
 		items.forEach(function(i) {
+			if (i.isAssignment) {
+				assignments.push(i);
+				i.get('parts').forEach(function(qset) {
+					qset = qset.get('question_set');
+					sets[qset.getId()] = qset;
+					pushSetQuestions(qset);
+					result.push(qset);
+				});
+			}
 			//work around dups
 			if (i.isSet) {
 				if (sets[i.getId()]) {return;}
 				sets[i.getId()] = i;
-			}
-			if (i.isAssignment) {
-				assignments.push(i);
 			}
 			if (i.isSet || (!inSet(i.getId()) && i.getId && !usedQuestions[i.getId()] && hasElement(i.getId()))) {
 				result.push(i);
