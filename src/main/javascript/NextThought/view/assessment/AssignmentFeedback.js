@@ -38,7 +38,11 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 								{ tag: 'span', cls: 'name', html: '{Creator}'},
 								{ tag: 'time', datetime: '{CreatedTime:date("c")}', html: '{CreatedTime:ago()}'}
 							]},
-							{ cls: 'message', html: '{body}'}
+							{ cls: 'message', html: '{body}'},
+							{tag: 'tpl', 'if': 'isMe(Creator)', cn: { cls: 'footer', cn: [
+								{ tag: 'span', cls: 'link edit', html: 'Edit'},
+								{ tag: 'span', cls: 'link delete', html: 'Delete'}
+							]}}
 						]}
 					]
 				}}
@@ -154,7 +158,7 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 		this.feedbackList.bindStore(this.store);
 		this.store.load();
 
-		this.mon(this.feedbackList, 'itemclick', 'maybeShowProfile');
+		this.mon(this.feedbackList, 'itemclick', 'onFeedbackClick');
 
 		header.messageEl.update(Ext.String.format(s, (isMe(history.get('Creator')) ? 'instructor' : 'student')));
 
@@ -204,10 +208,18 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 	},
 
 
-	maybeShowProfile: function(s, record, item, index, e) {
-		var c = record.get('Creator');
+	onFeedbackClick: function(s, record, item, index, e) {
+		var c = record.get('Creator'),
+			store = this.store;
+
 		if ((e.getTarget('.avatar') || e.getTarget('.name')) && c && c.getProfileUrl) {
 			this.fireEvent('show-profile', c);
+		} else if (e.getTarget('.link.edit')) {
+			console.log('show editor');
+		} else if (e.getTarget('.link.delete')) {
+			record.destroy({callback: function() {
+				store.load();
+			}});
 		}
 	}
 });
