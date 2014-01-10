@@ -271,6 +271,30 @@ body.dragging * {
 				time {
 					color: $tertiary-grey;
 				}
+
+				.footer {
+					.link {
+						color: $primary-blue;
+					}
+					span {
+						display: inline-block;
+						&::after{
+							color: $tertiary-grey;
+							font: normal 500 12px/20px $font;
+							text-decoration: none !important;
+							position: static;
+							content: '\00B7';
+							vertical-align: baseline;
+							display: inline;
+							padding: 0 0.5em;
+							background: none;
+						}
+						&:last-of-type::after {
+							content: '';
+							display: none;
+						}
+					}
+				}
 			}
 		}
 	}
