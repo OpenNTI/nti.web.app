@@ -515,6 +515,15 @@ Ext.define('NextThought.controller.Account', {
 		if (!this.privacyWin) {
 			this.privacyWin = this.createWin('Privacy', getURL(link));
 		}
+
+        if (Ext.is.iPad) {
+            this.privacyWin.on('afterrender', function() {
+                var iframe = this.el.down('.x-fit-item');
+                iframe.parent().el.setStyle('-webkit-overflow-scrolling', 'touch');
+                iframe.parent().el.setStyle('overflow', 'auto');
+            });
+        }
+
 		this.privacyWin.show();
 	},
 

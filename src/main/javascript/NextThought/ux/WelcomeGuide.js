@@ -57,6 +57,14 @@ Ext.define('NextThought.ux.WelcomeGuide', {
 		if (this.deleteOnDestroy) {
 			this.on('destroy', this.deleteLink, this);
 		}
+
+        if(Ext.is.iOS){
+            this.on('afterrender', function(){
+                var iframe = this.el.down('iframe');
+                iframe.parent().el.setStyle('-webkit-overflow-scrolling', 'touch');
+                iframe.parent().el.setStyle('overflow', 'auto');
+            },this);
+        }
 	},
 
 	addCustomMask: function() {
