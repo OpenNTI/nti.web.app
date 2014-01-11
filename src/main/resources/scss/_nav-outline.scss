@@ -86,7 +86,7 @@
 
 		.outline-row {
 			&.lesson {
-				font-style: italic;
+				//font-style: italic;
 			}
 
 			&.unit, &.heading {
@@ -96,12 +96,15 @@
 
 			&.unit:not(.heading) {
 				padding: 0 2.1em;
-				line-height: 4;
+				line-height: 2.3;
+				background: #f4f4f4 !important;
 				font-weight: 600;
-
-				.label {
-					border-top: 1px dotted #e5e5e5;
-				}
+				box-shadow: inset 0 1px 0 0 #efefef, inset 0 -1px 0 0 #efefef;
+				margin-bottom: 0.5em;
+				color: $secondary-grey;
+				//.label {
+					//border-top: 1px dotted #e5e5e5;
+				//}
 			}
 
 			&.heading {
