@@ -36,7 +36,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 		},
 		{xtype: 'course-assessment-assignment-group', title: 'All Grades',
 			anchor: '0 -200', layout: 'fit',
-			cls: 'assignment-group grades', items: [
+			cls: 'assignment-group grades scrollable', items: [
 			{
 				xtype: 'grid',
 				ui: 'course-assessment',

@@ -12,7 +12,7 @@ Ext.define('NextThought.view.courseware.forum.View', {
 		customScroll: 'NextThought.mixins.CustomScroll'
 	},
 
-	cls: 'course-forum',
+	cls: 'course-forum scrollable',
 
 	layout: 'stack',
 
