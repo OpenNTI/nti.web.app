@@ -45,7 +45,7 @@ Ext.define('NextThought.model.assessment.Assignment', {
 
 
 	setGradeBookEntryFrom: function(gradebook) {
-		var t = this.get('title'), c = this.get('category');
+		var t = this.get('title'), c = this.get('category_name');
 		this.setGradeBookEntry(
 			gradebook.getItem(t, c));
 	},
