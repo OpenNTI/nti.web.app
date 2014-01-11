@@ -19,9 +19,7 @@ Ext.define('NextThought.model.courseware.CourseCatalogEntry', {
 		{ name: 'Title', type: 'string', persist: false },
 		{ name: 'Video', type: 'string', persist: false },
 
-		{ name: 'Preview', type: 'Synthetic', fn: function() {
-			return this.get('StartDate') > Ext.Date.parse('2014-01-01', 'Y-m-d');
-		} },
+		{ name: 'Preview', type: 'bool' },
 
 		{ name: 'icon', type: 'string', mapping: 'LegacyPurchasableIcon' }, //small
 		{ name: 'thumbnail', type: 'string', mapping: 'LegacyPurchasableThumbnail' }, //small/medium
