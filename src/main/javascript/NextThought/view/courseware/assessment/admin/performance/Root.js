@@ -26,8 +26,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				{
 					cls: 'column-names',
 					cn: [
-						{cls: 'right', html: 'Course Grade'},
-						{html: 'Student'}
+						{cls: 'right grade', html: 'Course Grade'},
+						{cls: 'descending student', html: 'Student'}
 					]
 				},
 				{ cls: 'list'}
@@ -42,7 +42,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		itemEl: '.header .item',
 		inputEl: '.header .search input',
 		clearEl: '.header .search .clear',
-		exportButton: 'a.download.button'
+		exportButton: 'a.download.button',
+		studentEl: '.scrollzone .column-names .student',
+		gradeEl: '.scrollzone .column-names .grade'
 	},
 
 	getTargetEl: function() { return this.frameBodyEl; },
@@ -81,6 +83,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		this.createStudentMenu();
 		this.createItemMenu();
+		
+		this.studentSort();
 
 		if (this.gradeBook) {
 			this.exportButton.set({
@@ -92,7 +96,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			studentEl: { click: 'showStudentMenu'},
 			itemEl: { click: 'showItemMenu'},
 			inputEl: { keyup: 'changeNameFilter'},
-			clearEl: { click: 'clearSearch'}
+			clearEl: { click: 'clearSearch'},
+			studentEl: { click: 'studentSort'},
+			gradeEl: { click: 'gradeSort'}
 		});
 
 		this.mon(this.frameBodyEl, {
@@ -319,6 +325,42 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 					}
 			}]);
 		}
+	},
+
+
+	studentSort: function() {
+		var isDescending = this.studentEl.hasCls('descending'),
+			sorter = {
+				fn: Globals.getNaturalSorter('displayName'),
+				direction: isDescending? 'ASC': 'DESC'
+			};
+
+
+		this.gradeEl.removeCls('sorted ascending descending');
+
+		this.studentEl.addCls('sorted');
+		this.studentEl[isDescending? 'removeCls': 'addCls']('descending');
+		this.studentEl[isDescending? 'addCls': 'removeCls']('ascending');
+
+		this.store.sort(sorter);
+
+	},
+
+
+	gradeSort: function() {
+		var isDescending = this.gradeEl.hasCls('descending'),
+			sorter = {
+				property: 'grade',
+				direction: isDescending? 'ASC': 'DESC'
+			};
+
+		this.studentEl.removeCls('sorted ascending descending');
+
+		this.gradeEl.addCls('sorted');
+		this.gradeEl[isDescending? 'removeCls': 'addCls']('descending');
+		this.gradeEl[isDescending? 'addCls': 'removeCls']('ascending');
+
+		this.store.sort(sorter);
 	},
 
 
@@ -569,6 +611,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				displayName: u.toString()
 			});
 		});
+
+		s.sort();
 	},
 
 

@@ -225,9 +225,12 @@ canvas.x-component-course-assessment {
 	&.course-assessment-admin.performance {
 
 		&.show-final-grade {
-			.gradebox,
-			.column-names .right {
+			.gradebox {
 				display: block;
+			}
+
+			.column-names .right{
+				display: inline-block
 			}
 		}
 
@@ -272,11 +275,40 @@ canvas.x-component-course-assessment {
 			text-transform: uppercase;
 			margin: 7em 0 2em;
 
+			.student{
+				position: relative;
+				display: inline-block;
+				cursor: pointer;
+			}
 
 			.right {
+				cursor: pointer;
+				position: relative;
 				float: right;
-				width: 15em;
+				margin-right: 7em;
 				display: none;
+			}
+
+			.sorted{
+				color: $secondary-grey;
+
+				&::after{
+					content: '';
+					position: absolute;
+					right: -10px;
+				}
+
+				&.ascending::after{
+					top: -2px;
+					vertical-align: text-top;
+					@include arrow($width: 8px, $height: 5px, $color: $secondary-grey);
+				}
+
+				&.descending::after{
+					top: 2px;
+					vertical-align: text-bottom;
+					@include arrow($pointFrom: top, $width: 8px, $height: 5px, $color: $secondary-grey);
+				}
 			}
 		}
 
