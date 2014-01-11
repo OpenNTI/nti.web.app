@@ -195,12 +195,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			filterFn: function(rec) {
 				var user = rec.get('user'), i;
 
-				function passes(enroll){
-					if(item.type === 'open'){
+				function passes(enroll) {
+					if (item.type === 'open') {
 						return enroll === 'Open';
 					}
 
-					if(item.type === 'enrolled'){
+					if (item.type === 'enrolled') {
 						return enroll !== 'Open';
 					}
 				}
@@ -259,44 +259,44 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	switchItem: function(item, status) {
-		    if (!status) { return; }
+		if (!status) { return; }
 
-        var offset = item.getOffsetsTo(this.itemMenu),
-            x = offset && offset[1];
+		var offset = item.getOffsetsTo(this.itemMenu),
+				x = offset && offset[1];
 
-        this.itemEl.el.down('.label').update(item.text);
+		this.itemEl.el.down('.label').update(item.text);
 
-        this.itemMenu.offset = [0, -x];
-        this.currentItem = item.type;
+		this.itemMenu.offset = [0, -x];
+		this.currentItem = item.type;
 
-        this.store.removeFilter('itemFilter');
+		this.store.removeFilter('itemFilter');
 
-        if (item.type === 'all') { return; }
+		if (item.type === 'all') { return; }
 
-        this.store.filter([{
-            id: 'itemFilter',
-            filterFn: function(rec) {
-                var overdue = rec.get('overdue'),
-                    ungraded = rec.get('ungraded'),
-                    comments = rec.get('comments');
+		this.store.filter([{
+			id: 'itemFilter',
+			filterFn: function(rec) {
+			var overdue = rec.get('overdue'),
+				ungraded = rec.get('ungraded'),
+				comments = rec.get('comments');
 
-                if (item.type === 'action') {
-                    return overdue || ungraded || comments;
-                }
+				if (item.type === 'action') {
+					return overdue || ungraded || comments;
+				}
 
-                if (item.type === 'overdue') {
-                    return overdue;
-                }
+				if (item.type === 'overdue') {
+					return overdue;
+				}
 
-                if (item.type === 'ungraded') {
-                    return ungraded;
-                }
+				if (item.type === 'ungraded') {
+					return ungraded;
+				}
 
-                if (item.type === 'comment') {
-                    return comments;
-                }
-            }
-        }], true);
+				if (item.type === 'comment') {
+					return comments;
+				}
+		   }
+	   }], true);
 	},
 
 
