@@ -43,12 +43,6 @@ Ext.define('NextThought.overrides.tip.QuickTip', {
 			}
 		});
 
-		if (Ext.is.iOS) {
-			Ext.apply(config, {
-				dismissDelay: 2000,
-				hideDelay: 0
-			});
-		}
 		this.callParent([config]);
 	},
 
@@ -57,6 +51,9 @@ Ext.define('NextThought.overrides.tip.QuickTip', {
 	},
 
 	onTargetOver: function(e, dom, opts) {
+        if(Ext.is.iOS){
+            return;
+        }
 		delete this.readerOffsets;
 		if (opts.reader) {
 			this.readerOffsets = opts.reader.getAnnotationOffsets();
