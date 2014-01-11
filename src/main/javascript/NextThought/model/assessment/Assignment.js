@@ -53,6 +53,17 @@ Ext.define('NextThought.model.assessment.Assignment', {
 
 	setGradeBookEntry: function(gradeBookEntry) {
 		//replace the Grade object in the individual submissions with the gradebook version
+		if (!gradeBookEntry) {
+			console.error('falsy gradebook entry?');
+			return;
+		}
+
+		this._gradeBookEntry = gradeBookEntry;
+
+		var s = this._submittedHistoryStore;//optimization, everyone else should get it from the getter.
+		if (s && !s.isLoading() && s.getCount() > 0) {
+			this._updateGradeInstance();
+		}
 	},
 
 
@@ -117,9 +128,43 @@ Ext.define('NextThought.model.assessment.Assignment', {
 			store.add(phantoms);
 		}
 
+		this._updateGradeInstance(records);
+
 		//fill in the assignment into the history item so the synthetic fields can derive values from it.
 		records.forEach(function(r) {r.set('item', me);});
 		//then resolve users...
 		UserRepository.getUser(users).done(fill);
+	},
+
+
+	_updateGradeInstance: function(records) {
+		var recs = records || this.getSubmittedHistoryStore().getRange(),
+			gbe = this._gradeBookEntry;
+
+		if (!gbe) {return;}
+
+		function update(rec) {
+			var u = rec.get('Creator'),
+				submissionGrade = rec.get('Grade'),
+				gradebookGrade = gbe.getFieldItem('Items', u);
+
+			if (submissionGrade && submissionGrade.get('Username') !== u) {
+				console.warn('Record creator does not match username of its own grade object', rec);
+			}
+
+			if (!gradebookGrade) {
+				return;
+			}
+
+			if (gradebookGrade.get('Username') !== u) {
+				console.error('Record creator does not match username of the grade object from the GradeBook entry', rec, u, gbe);
+				return;
+			}
+
+			rec.set('Grade', gradebookGrade);
+		}
+
+		recs.forEach(update);
 	}
+
 });
