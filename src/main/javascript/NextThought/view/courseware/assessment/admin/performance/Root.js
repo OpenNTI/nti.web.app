@@ -8,11 +8,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header assignment-filterbar', cn: [
-			{ cls: 'third dropmenu show', cn: [
+			{ cls: 'third dropmenu student', cn: [
 				{ cls: 'label', html: 'All Students' }
 			] },
-			{ cls: 'third dropmenu order', cn: [
-				{ cls: 'label', html: 'By Name' }
+			{ cls: 'third dropmenu item', cn: [
+				{ cls: 'label', html: 'All Items' }
 			] },
 			{ cls: 'third search', cn: [
 				{ tag: 'input', type: 'text', placeholder: 'Search Students', required: 'required' },
@@ -38,8 +38,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	renderSelectors: {
 		titleEl: '.header',
 		frameBodyEl: '.list',
-		showEl: '.header .show',
-		orderEl: '.header .order',
+		studentEl: '.header .student',
+		itemEl: '.header .item',
 		inputEl: '.header .search input',
 		clearEl: '.header .search .clear',
 		exportButton: 'a.download.button'
@@ -79,8 +79,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		this.createShowMenu();
-		this.createOrderMenu();
+		this.createStudentMenu();
+		this.createItemMenu();
 
 		if (this.gradeBook) {
 			this.exportButton.set({
@@ -89,8 +89,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		}
 
 		this.on({
-			showEl: { click: 'showShowMenu'},
-			orderEl: { click: 'showOrderMenu'},
+			studentEl: { click: 'showStudentMenu'},
+			itemEl: { click: 'showItemMenu'},
 			inputEl: { keyup: 'changeNameFilter'},
 			clearEl: { click: 'clearSearch'}
 		});
@@ -133,17 +133,15 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	createShowMenu: function() {
+	createStudentMenu: function() {
 		var type = this.currentShow,
 			items = [
 				{ text: 'All Students', type: 'all', checked: type === 'all'},
-				{ text: 'Actionable', type: 'action', checked: type === 'action'},
-				{ text: 'Overdue', type: 'overdue', checked: type === 'overdue'},
-				{ text: 'Ungraded', type: 'ungraded', checked: type === 'ungraded'},
-				{ text: 'Comment', type: 'comment', checked: type === 'comment'}
+				{ text: 'Open Students', type: 'open', checked: type === 'open'},
+				{ text: 'In Class Students', type: 'enrolled', checked: type === 'enrolled'}
 			];
 
-		this.showMenu = Ext.widget('menu', {
+		this.studentMenu = Ext.widget('menu', {
 			ui: 'nt',
 			cls: 'group-by-menu',
 			plain: true,
@@ -163,7 +161,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				plain: true,
 				listeners: {
 					scope: this,
-					'checkchange': 'switchShow'
+					'checkchange': 'switchStudent'
 				}
 			},
 			items: items
@@ -171,61 +169,63 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	showShowMenu: function() {
-		this.showMenu.showBy(this.showEl, 'tl-tl?', this.showMenu.offset);
+	showStudentMenu: function() {
+		this.studentMenu.showBy(this.studentEl, 'tl-tl?', this.studentMenu.offset);
 	},
 
 
-	switchShow: function(item, status) {
+	switchStudent: function(item, status) {
 		if (!status) { return; }
 
-		var offset = item.getOffsetsTo(this.showMenu),
+		var me = this,
+			offset = item.getOffsetsTo(this.studentMenu),
 			x = offset && offset[1];
 
-		this.showEl.el.down('.label').update(item.text);
+		me.studentEl.el.down('.label').update(item.text);
 
-		this.showMenu.offset = [0, -x];
-		this.currentShow = item.type;
+		me.studentMenu.offset = [0, -x];
+		me.currentStudent = item.type;
 
-		this.store.removeFilter('showFilter');
+		me.store.removeFilter('studentFilter');
 
 		if (item.type === 'all') { return; }
 
 		this.store.filter([{
-			id: 'showFilter',
+			id: 'studentFilter',
 			filterFn: function(rec) {
-				var overdue = rec.get('overdue'),
-					ungraded = rec.get('ungraded'),
-					comments = rec.get('comments');
+				var user = rec.get('user'), i;
 
-				if (item.type === 'action') {
-					return overdue || ungraded || comments;
+				function passes(enroll){
+					if(item.type === 'open'){
+						return enroll === 'Open';
+					}
+
+					if(item.type === 'enrolled'){
+						return enroll !== 'Open';
+					}
 				}
 
-				if (item.type === 'overdue') {
-					return overdue;
-				}
-
-				if (item.type === 'ungraded') {
-					return ungraded;
-				}
-
-				if (item.type === 'comment') {
-					return comments;
+				for (i = 0; i < me.roster.length; i++) {
+					if (me.roster[i].Username === user.get('Username')) {
+						return !passes(me.roster[i].LegacyFilterStatus);
+					}
 				}
 			}
 		}], true);
 	},
 
 
-	createOrderMenu: function() {
-		var type = this.currentOrder,
+	createItemMenu: function() {
+		var type = this.currentItem,
 			items = [
-				{ text: 'By Name', type: 'displayName', checked: type === 'displayName'},
-				{ text: 'By Performance', type: 'grade', checked: type === 'grade'}
+				{ text: 'All Items', type: 'all', checked: type === 'all'},
+				{ text: 'Actionable Items', type: 'action', checked: type === 'action'},
+				{ text: 'Overdue Items', type: 'overdue', checked: type === 'overdue'},
+				{ text: 'Ungraded Items', type: 'ungraded', checked: type === 'ungraded'},
+				{ text: 'Commented Items', type: 'comment', checked: type === 'comment'}
 			];
 
-		this.orderMenu = Ext.widget('menu', {
+		this.itemMenu = Ext.widget('menu', {
 			ui: 'nt',
 			cls: 'group-by-menu',
 			plain: true,
@@ -234,6 +234,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			frame: false,
 			border: false,
 			ownerCmp: this,
+			constrainTo: Ext.getBody(),
 			offset: [0, 0],
 			defaults: {
 				ui: 'nt-menuitem',
@@ -244,7 +245,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				plain: true,
 				listeners: {
 					scope: this,
-					'checkchange': 'switchOrder'
+					'checkchange': 'switchItem'
 				}
 			},
 			items: items
@@ -252,27 +253,50 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	showOrderMenu: function() {
-		this.orderMenu.showBy(this.orderEl, 'tl-tl', this.orderMenu.offset);
+	showItemMenu: function() {
+		this.itemMenu.showBy(this.itemEl, 'tl-tl?', this.itemMenu.offset);
 	},
 
 
-	switchOrder: function(item, status) {
-		if (!status) { return; }
+	switchItem: function(item, status) {
+		    if (!status) { return; }
 
-		var offset = item.getOffsetsTo(this.orderMenu),
-			x = offset && offset[1];
+        var offset = item.getOffsetsTo(this.itemMenu),
+            x = offset && offset[1];
 
-		this.orderEl.el.down('.label').update(item.text);
+        this.itemEl.el.down('.label').update(item.text);
 
-		this.orderMenu.offset = [0, -x];
-		this.currentOrder = item.type;
+        this.itemMenu.offset = [0, -x];
+        this.currentItem = item.type;
 
+        this.store.removeFilter('itemFilter');
 
-		this.store.sort({
-			property: item.type,
-			direction: 'ASC'
-		});
+        if (item.type === 'all') { return; }
+
+        this.store.filter([{
+            id: 'itemFilter',
+            filterFn: function(rec) {
+                var overdue = rec.get('overdue'),
+                    ungraded = rec.get('ungraded'),
+                    comments = rec.get('comments');
+
+                if (item.type === 'action') {
+                    return overdue || ungraded || comments;
+                }
+
+                if (item.type === 'overdue') {
+                    return overdue;
+                }
+
+                if (item.type === 'ungraded') {
+                    return ungraded;
+                }
+
+                if (item.type === 'comment') {
+                    return comments;
+                }
+            }
+        }], true);
 	},
 
 
@@ -426,7 +450,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			});
 		}
 
-		assignments.getRoster().forEach(function(r) {
+		this.roster = assignments.getRoster();
+		this.roster.forEach(function(r) {
 			var u = r.Username;
 			users.push(u);
 			raw.push(Ext.apply({id: u}, getCounts(u)));
