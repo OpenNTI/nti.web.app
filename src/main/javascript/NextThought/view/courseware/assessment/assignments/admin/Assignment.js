@@ -195,6 +195,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	beforeRender: function() {
 		var a = this.assignment, s, grid, p = this.filledStorePromise;
 		this.callParent();
+		this.exportFilesLink = this.assignment.getLink('ExportFiles');
 		this.pathBranch = this.assignmentTitle;
 		this.renderData = Ext.apply(this.renderData || {}, {
 			pathRoot: this.pathRoot,
@@ -203,7 +204,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			due: this.due,
 			page: this.page,
 			total: this.total,
-			exportFilesLink: this.assignment.getLink('ExportFiles')
+			exportFilesLink: this.exportFilesLink
 		});
 
 		s = this.store = a.getSubmittedHistoryStore();
@@ -220,13 +221,32 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		grid = this.down('grid');
 		grid.dueDate = a.getDueDate();
 		grid.bindStore(s);
-		this.mon(s, 'load', 'maybeShowDownload');
+		this.maybeShowDownload();
 		this.mon(grid, 'itemclick', 'onItemClick');
 	},
 
 
-	maybeShowDownload: function(s) {
-		function hasSubmission(r) { return !!r.get('Submission'); }
+	maybeShowDownload: function() {
+		if (Ext.isEmpty(this.exportFilesLink)) {
+			return;
+		}
+
+		Ext.destroy(this._maybeShowDownload);
+		if (!this.rendered) {
+			this._maybeShowDownload = this.mon(this, {
+				destroyable: true, single: true,
+				afterRender: 'maybeShowDownload'
+			});
+			return;
+		}
+
+		var s = this.store;
+		if (s.getCount() === 0 || s.isLoading()) {
+			this.mon(s, {load: 'maybeShowDownload', single: true});
+			return;
+		}
+
+		function hasSubmission(r) { return !!r.get('submission'); }
 		if (s.getRange().filter(hasSubmission).length > 0) {
 			this.el.down('a.download').removeCls('hidden');
 		}
