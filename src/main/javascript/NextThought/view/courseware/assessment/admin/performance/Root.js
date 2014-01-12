@@ -140,7 +140,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	createStudentMenu: function() {
-		var type = this.currentShow,
+		var type = this.currentStudent || 'enrolled',
 			items = [
 				{ text: 'All Students', type: 'all', checked: type === 'all'},
 				{ text: 'Open Students', type: 'open', checked: type === 'open'},
@@ -172,6 +172,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			},
 			items: items
 		});
+
+		this.switchStudent(
+			this.studentMenu.down('[type=enrolled]'),
+			true);
 	},
 
 
@@ -183,11 +187,14 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	switchStudent: function(item, status) {
 		if (!status) { return; }
 
-		var me = this,
-			offset = item.getOffsetsTo(this.studentMenu),
+		var me = this, offset, x;
+		try {
+			offset = item.getOffsetsTo(this.studentMenu);
 			x = offset && offset[1];
-
-		me.studentEl.el.down('.label').update(item.text);
+			me.studentEl.el.down('.label').update(item.text);
+		} catch (e) {
+			swallow(e);
+		}
 
 		me.studentMenu.offset = [0, -x];
 		me.currentStudent = item.type;
