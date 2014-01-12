@@ -43,7 +43,7 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 
 	isAssignment: function(id) {
 		//Its an assignment unless its listed in the "NotItems"
-		return !this.getItem(id, 'NotItems');
+		return (!!this.getItem(id)) || (!this.getItem(id, 'NotItems'));
 	},
 
 
