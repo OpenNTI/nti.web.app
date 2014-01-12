@@ -302,7 +302,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 
 	cleanupFilters: function() {
-		var filters = Ext.Object.keys(this._filters),
+		var filters = Ext.Object.getKeys(this._filters),
 			store = this.store,
 			last = filters.length - 1;
 
