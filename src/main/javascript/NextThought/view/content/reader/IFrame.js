@@ -267,16 +267,16 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 			}
 		});
 
-        on(doc,'touchend', function(e){
-            //if open notepad editor, close it if touch on reader
-            var notepad = Ext.query('.inline-editor.x-component-notepad-item')[0];
-            if(notepad){
-                var notepadBody = Ext.get(notepad).down('.body');
-                if(notepadBody){
-                    notepadBody.blur();
-                }
-            }
-        });
+		on(doc, 'touchend', function(e) {
+			//if open notepad editor, close it if touch on reader
+			var notepad = Ext.query('.inline-editor.x-component-notepad-item')[0];
+			if (notepad) {
+				notepad = Ext.get(notepad).down('.body');
+				if (notepad) {
+					notepad.blur();
+				}
+			}
+		});
 
 		on(doc, 'mouseup', function(e) {
 			var fakeEvent = Ext.EventObject.setEvent(e || event),
@@ -360,10 +360,9 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 
 
 		on(doc, 'mouseover', function(e) {
-			var d = doc,
-					evt = Ext.EventObject.setEvent(e || event),
-					target = evt.getTarget('a.footnote') || evt.getTarget('a.ntiglossaryentry'),
-					targetType, href, popContent;
+			var evt = Ext.EventObject.setEvent(e || event),
+				target = evt.getTarget('a.footnote') || evt.getTarget('a.ntiglossaryentry'),
+				targetType, href, popContent;
 
 			function getId(e, type) {
 				if (!Ext.fly(e).hasCls(type)) {
@@ -375,10 +374,10 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 			function getPopoverContent(href) {
 				var fn, clonedFn, redactedPlaceholder;
 				try {
-					fn = d.querySelector(href);
+					fn = doc.querySelector(href);
 				}
 				catch (e) {
-					fn = d.getElementById(href.substring(1));
+					fn = doc.getElementById(href.substring(1));
 				}
 
 				if (!fn) {
