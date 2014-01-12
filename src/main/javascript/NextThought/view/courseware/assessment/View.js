@@ -51,7 +51,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 
 	courseChanged: function(instance) {
-		var me = this;
+		var me = this, el = Ext.get('course-assessment-root');
 
 		me.hasAssignments = false;
 
@@ -72,6 +72,9 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 			return;
 		}
 
+		if (el) {
+			el.mask('Loading...', 'loading');
+		}
 
 		instance.getWrapper().done(function(e) {
 			if (!isSync()) { return; }
@@ -99,9 +102,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 						if (me.hasAssignments) {
 							me.fireEvent('show-assignments-tab');
 						} else {
-							me.clearViews();
-							me.fireEvent('failed-to-load', me.up('[isTabView]'));
-							return;
+							throw false;
 						}
 
 						me.fireEvent('set-assignment-history', history);
@@ -112,12 +113,17 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 						me.forEachView(me.callFunction('setAssignmentsData',
 								[assignments, history, instance, gradeBook]));
+
+						if (el) { el.unmask(); }
 					})
 					.fail(function(reason) {
-						console.error(reason);
+						if (reason !== false) {
+							console.error(reason);
+						}
 						if (!isSync()) { return; }
 						me.clearViews();
 						me.fireEvent('failed-to-load', me.up('[isTabView]'));
+						if (el) { el.unmask(); }
 					});
 		});
 
