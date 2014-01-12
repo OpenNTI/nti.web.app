@@ -55,9 +55,8 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 		});
 
 		this.callParent([config]);
-		
-		
-		if(!this.assignment){
+
+		if (config.xtype !== 'course-overview-assignment') {
 			req = {
 				url: Service.getContainerUrl(containerId, Globals.USER_GENERATED_DATA),
 				scope: this,
@@ -74,23 +73,25 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 			};
 
 			Ext.Ajax.request(req);
-		} else {
+		} else if (this.assignment) {
 			this.assignmentId = this.assignment.getId();
 			this.setAsAssignment(this.assignment);
 			this.fireEvent('has-been-submitted', this);
+		} else {
+			this.hide();
 		}
 	},
 
-	
-	setAsAssignment: function(assignment){
-		if(!this.rendered){
+
+	setAsAssignment: function(assignment) {
+		if (!this.rendered) {
 			this.on('afterrender', Ext.bind(this.setAsAssignment, this, arguments), this, {single: true});
-			return; 
+			return;
 		}
 
 		var score = this.down('assessment-score');
 
-		if (score) { score.destroy(); }		
+		if (score) { score.destroy(); }
 
 		this.addCls('assignment');
 		this.setAsNotStarted();
@@ -98,7 +99,7 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 	},
 
 
-	setAsNotStarted: function(){
+	setAsNotStarted: function() {
 		var b = this.down('button');
 		b.setUI('primary');
 		b.setText('Start');
@@ -107,7 +108,7 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 
 
 	containerLoaded: function(q, s, r) {
-		if(this.alreadyTurnedIn){ return; }
+		if (this.alreadyTurnedIn) { return; }
 
 		if (!this.rendered) {
 			this.on('afterrender', Ext.bind(this.containerLoaded, this, arguments), this, {single: true});
@@ -132,12 +133,12 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 	},
 
 
-	setHistory: function(history){
-		if (!history) { 
+	setHistory: function(history) {
+		if (!history) {
 			console.warn('No history');
 			return;
 		}
-		
+
 		var submission = history.get('Submission'),
 			completed = (submission && submission.get('CreatedTime')) || new Date(),
 			due = this.assignment && this.assignment.get('availableEnding');
@@ -146,7 +147,7 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 	},
 
 
-	markAssignmentTurnedIn: function(late){
+	markAssignmentTurnedIn: function(late) {
 		var button = this.down('button');
 
 		if (button) { button.setText('Review'); }
@@ -161,7 +162,7 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 
 		tally.setTally(correct || 0, this.getTotal(), isNaN(correct));
 		tally.message.update(this.getQuetionSetContainerTitle());
-		
+
 		if (score) {
 			score.setValue(Math.floor(100 * correct / this.getTotal()) || 0);
 		}
@@ -171,7 +172,7 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 
 	reviewClicked: function() {
 		//console.log('navigate to', this.getContainerId());
-		if(this.assignment){
+		if (this.assignment) {
 			this.fireEvent('navigate-to-assignment', this.assignmentId);
 			return;
 		}

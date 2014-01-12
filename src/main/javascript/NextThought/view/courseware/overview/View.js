@@ -140,8 +140,9 @@ Ext.define('NextThought.view.courseware.overview.View', {
 		type = type && ('course-overview-' + type.toLowerCase());
 
 		if (type === 'course-overview-naquestionset') {
-			assignment = assignments.getItem(node.getAttribute('target-ntiid'));
+			assignment = assignments.isAssignment(node.getAttribute('target-ntiid'));
 			type = assignment ? 'course-overview-assignment' : type;
+			assignment = assignments.getItem(node.getAttribute('target-ntiid'));
 		}
 
 		if (type && Ext.ClassManager.getByAlias('widget.' + type)) {
