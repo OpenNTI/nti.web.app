@@ -3,7 +3,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.QuestionSet', {
 	alias: 'widget.course-dashboard-question-set',
 
 	statics: {
-		getTileFor: function(effectiveDate, course, locationInfo, courseNodeRecord, finish) {
+		getTileForX: function(effectiveDate, course, locationInfo, courseNodeRecord, finish) {
 			var DQ = Ext.DomQuery, me = this,
 				items = this.getChildrenNodes(courseNodeRecord);
 
@@ -15,22 +15,22 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.QuestionSet', {
 			}
 
 			locationInfo.courseInstance.getAssignments()
-				.done(function(assignments){
+				.done(function(assignments) {
 					var id = items[0].getAttribute('target-ntiid'),
 						assignment = assignments.getItem(id);
 
-					if (assignment) {
+					if (assignments.isAssignment(id)) {
 						me.getTilesForAssignment(assignment, assignments, items, locationInfo, courseNodeRecord, finish);
 					} else {
 						me.getTileForAssessment(items, locationInfo, courseNodeRecord, finish);
 					}
 				})
-				.fail(function(reason){
+				.fail(function(reason) {
 					console.error(reason);
 				});
 		},
 
-		getTileForAssessment: function(items, locationInfo, courseNodeRecord, finish){
+		getTileForAssessment: function(items, locationInfo, courseNodeRecord, finish) {
 			var req, me = this, containerId = ContentUtils.getLineage(items[0].getAttribute('target-ntiid'))[1];
 
 			function findFirstUncompleted(ntiids, nodes) {
@@ -64,9 +64,9 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.QuestionSet', {
 				var rec, nextItemNode, currentItemNode = null,
 					json = Ext.decode(r.responseText, true) || {},
 					totalQuizes = items.length, totalAttempts = 0;
-				
+
 				nextItemNode = findFirstUncompleted(Ext.Array.pluck(json.Items || [], 'questionSetId'), items.slice());
-				
+
 				if (!s || Ext.isEmpty(json.Items)) {
 					rec = null;
 				}else {
@@ -74,7 +74,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.QuestionSet', {
 					currentItemNode = findQuizSetNode(rec.get('questionSetId'), items.slice());
 					totalAttempts = json.Items.length;
 				}
-				
+
 				Ext.callback(finish, null, [me.create({
 					locationInfo: locationInfo,
 					latestAttempt: rec,
@@ -104,15 +104,15 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.QuestionSet', {
 			Ext.Ajax.request(req);
 		},
 
-		getTilesForAssignment: function(assignment, assignments, items, locationInfo, courseNodeRecord, finish){
-			function getNextAssignment(a, as){
+		getTilesForAssignment: function(assignment, assignments, items, locationInfo, courseNodeRecord, finish) {
+			function getNextAssignment(a, as) {
 				var next, difference;
 
-				as.get('Items').forEach(function(item){
+				as.get('Items').forEach(function(item) {
 					var due = item.get('availableBeginning'),
 						diff = due && (a.get('availableBeginning') - due);
 
-					if ( diff && diff > 0 && diff < difference) {
+					if ((diff && (diff > 0)) && (diff < difference)) {
 						next = item;
 						difference = diff;
 					}
@@ -122,7 +122,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.QuestionSet', {
 
 			Ext.callback(finish, null, [this.create({
 				locationInfo: locationInfo,
-				nextItemNode: getNextAssignment(assignment, assignments),
+				nextItemNode: null,//getNextAssignment(assignment, assignments),
 				currentItemNode: assignment,
 				totalQuizes: items.length,
 				lessonStartDate: courseNodeRecord.get('startDate'),
@@ -142,7 +142,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.QuestionSet', {
 	defaultType: 'course-dashboard-tiles-question-set-view',
 
 	constructor: function(configs) {
-		var xtype = configs.isAssignment? 'course-dashboard-tiles-assignment-view' : 'course-dashboard-tiles-question-set-view';
+		var xtype = configs.isAssignment ? 'course-dashboard-tiles-assignment-view' : 'course-dashboard-tiles-question-set-view';
 
 		configs.items = [
 			{xtype: 'container', defaultType: xtype, items: [
@@ -154,7 +154,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.QuestionSet', {
 					totalAttempts: configs.totalAttempts,
 					lessonStartDate: configs.lessonStartDate,
 					lessonEndDate: configs.lastModified,
-					isAssignment: true
+					isAssignment: true//??
 				 }
 			]}
 		];
