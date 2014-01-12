@@ -2,9 +2,9 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 	extend: 'NextThought.model.Base',
 
 	statics: {
-		fromJson: function(assignments, notAssignments, roster) {
+		fromJson: function(assignments, notAssignments, rosterPromise) {
 			if (!assignments) { return null; }
-			var href = assignments.href;
+			var href = assignments.href, collection;
 
 			function build(json) {
 				var items = [], key;
@@ -18,11 +18,18 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 				return items;
 			}
 
-			return this.create({
+
+
+			collection = this.create({
 				Items: build(assignments),
 				NotItems: build(notAssignments),
-				Roster: roster,
 				href: href});
+
+			rosterPromise.done(function(r) {
+				collection.set('Roster', r);
+			});
+
+			return collection;
 		}
 	},
 
@@ -35,9 +42,14 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 
 	constructor: function() {
 		this.callParent(arguments);
+		this.on('Roster-changed', 'pushRoster');
+	},
+
+
+	pushRoster: function() {
 		//pass the roster down if we have it.
 		var r = this.get('Roster');
-		this.each(function(a) { a.roster = r; });
+		this.each(function(a) { a.setRoster(r); });
 	},
 
 

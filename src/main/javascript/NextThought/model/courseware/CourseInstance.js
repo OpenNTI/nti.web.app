@@ -212,17 +212,17 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 	getAssignments: function() {
 		if (this.getAssignmentsPromise) { return this.getAssignmentsPromise; }
 
-		var p = new Promise();
+		var p = new Promise(),
+			roster = this.getRoster();
 		Promise.pool(
-			this.getRoster(),
 			Service.request(this.getLink('AssignmentsByOutlineNode')),
 			Service.request(this.getLink('NonAssignmentAssessmentItemsByOutlineNode'))
 		)
-			.done(function(rosterAndJson) {
-				var assignments = Ext.decode(rosterAndJson[1], true),
-					nonAssignments = Ext.decode(rosterAndJson[2], true);
+			.done(function(json) {
+				var assignments = Ext.decode(json[0], true),
+					nonAssignments = Ext.decode(json[1], true);
 				p.fulfill(NextThought.model.courseware.AssignmentCollection.fromJson(
-						assignments, nonAssignments, rosterAndJson[0]));
+						assignments, nonAssignments, roster));
 			})
 			.fail(function(reason) {
 				p.reject(reason);

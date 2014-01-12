@@ -478,11 +478,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	setAssignmentsData: function(assignments, history, instance, gradeBook) {
-		var users = [],
-			store = this.store, raw = [],
-			applyUsers = this.applyUserData.bind(this),
-			getCounts = this.getCountsFor.bind(this);
-
 		this.clearAssignmentsData();
 
 		this.gradeBook = gradeBook;
@@ -494,7 +489,24 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			});
 		}
 
-		this.roster = assignments.getRoster();
+		this.assignments = assignments;
+		this.mon(assignments, {
+			'Roster-changed': 'applyRoster'
+		});
+
+
+		this.applyRoster();
+	},
+
+
+	applyRoster: function() {
+		var users = [],
+			store = this.store, raw = [],
+			applyUsers = this.applyUserData.bind(this),
+			getCounts = this.getCountsFor.bind(this);
+
+		this.roster = this.assignments.getRoster() || [];
+
 		this.roster.forEach(function(r) {
 			var u = r.get('Username');
 			users.push(u);
@@ -504,7 +516,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		store.loadRawData(raw);
 		UserRepository.getUser(users).done(applyUsers);
 
-		assignments.getViewMaster()
+		this.assignments.getViewMaster()
 				.done(this.setAssignmentStores.bind(this));
 	},
 

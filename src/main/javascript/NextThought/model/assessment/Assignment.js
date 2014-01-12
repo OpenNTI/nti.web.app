@@ -94,6 +94,16 @@ Ext.define('NextThought.model.assessment.Assignment', {
 	},
 
 
+	setRoster: function(roster) {
+		this.roster = roster;
+		var s = this._submittedHistoryStore;//optimization, everyone else should get it from the getter.
+		if (s && !s.isLoading() && s.getCount() > 0) {
+			this._resolveParts(s, s.getRange());
+		}
+		this.fireEvent('roster-set');
+	},
+
+
 	_resolveParts: function(store, records) {
 		records = records || [];
 

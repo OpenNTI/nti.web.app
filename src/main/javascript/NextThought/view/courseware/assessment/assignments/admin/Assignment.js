@@ -207,9 +207,10 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 					var r = (this._roster = this._roster || this.myView.assignment.roster),
 						c = item.get('Creator');
 					c = typeof c === 'string' ? c : c.getId();
-					r = c && r[c];
-
-					return r && r.get('Status') !== 'Open';
+					r = r && c && r[c];
+					console.log(c, !r || r.get('Status') !== 'Open');
+					//if no roster, can't filter...
+					return !r || r.get('Status') !== 'Open';
 			    }
 			}
 		};
@@ -223,7 +224,20 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 	afterRender: function() {
 		this.callParent(arguments);
+		this.initFilters();
+	},
 
+
+	refilter: function() {
+		this.store.filter();
+	},
+
+
+	initFilters: function() {
+		this.mon(this.assignment, {
+			buffer: 1,
+			'roster-set': 'refilter'
+		});
 		var el = this.openEnrolledCheckboxEl;
 		this.onFiltersClicked({getTarget: function() {return el;}});
 	},

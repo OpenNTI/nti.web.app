@@ -322,6 +322,16 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 		assignments.each(collect);
 		this.store.loadRawData(raw);
 		this.refresh();
+
+		this.mon(assignments, 'Roster-changed', 'updateEnrolledCount')
+	},
+
+
+	updateEnrolledCount: function(v) {
+		var c = v && v.length || 0;
+		this.store.each(function(r) {
+			r.set('enrolledCount', c);
+		});
 	},
 
 
