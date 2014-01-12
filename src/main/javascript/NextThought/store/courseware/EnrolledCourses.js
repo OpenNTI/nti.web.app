@@ -29,13 +29,16 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 		startParam: undefined,
 		limitParam: undefined
 	},
-	sorters: [
-		{
-			sorterFn: function(a, b) { return a.get('CourseInstance').asUIData().title.strcmp(b.get('CourseInstance').asUIData().title); }
-		}
-	],
 
 	constructor: function() {
+		function sort(s) {
+			s.sort([{
+				sorterFn: function(a, b) {
+					return	a.get('CourseInstance').asUIData().title.strcmp(
+							b.get('CourseInstance').asUIData().title); }
+			}]);
+		}
+
 		var p = this.promiseToLoaded = new Promise(),
 			me = this;
 		this.callParent(arguments);
@@ -49,6 +52,7 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 				}
 			},
 			load: function(me, records, success) {
+				me.sorters.clear();//don't sort on uiData() until precache is done.
 				if (!success) {
 					p.reject('Store Failed to load');
 				}
@@ -59,6 +63,7 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 							return r.__precacheEntry();
 						})).then(
 					function() {
+						sort(me);
 						p.fulfill(me);
 					},
 					function(reason) {
