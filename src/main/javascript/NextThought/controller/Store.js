@@ -352,7 +352,7 @@ Ext.define('NextThought.controller.Store', function(){
 					store: store,
 					xtype: 'purchasable-collection',
 					id: 'store-collection',
-					name: getString('Available for Purchase')
+					name: getString('store.catalog','Available for Purchase')
 				});
 			}
 
@@ -361,7 +361,7 @@ Ext.define('NextThought.controller.Store', function(){
 					store: archive,
 					xtype: 'purchasable-collection',
 					id: 'store-archive-collection',
-					name: getString('Archive')
+					name: getString('store.catalog.archive', 'Archive')
 				});
 			}
 
