@@ -138,7 +138,7 @@ Ext.define('NextThought.view.video.transcript.Transcript', {
 				return (item.get('startTime') >= start) && (item.get('startTime') <= end);
 			}
 
-			return (item.get('startTime') >= start) && (item.get('endTime') <= end);
+			return (item.get('startTime') >= start) && (item.get('startTime') <= end);
 		}
 
 		var start = this.transcript.get('desired-time-start'),
