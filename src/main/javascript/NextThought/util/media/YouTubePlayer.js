@@ -212,7 +212,8 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 
 	stop: function() {
 		if (this.player) {
-			this.player.clearVideo();
+			this.player.stopVideo();
+			//this.player.clearVideo();
 		}
 	},
 
