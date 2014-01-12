@@ -2,24 +2,33 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 	extend: 'NextThought.model.Base',
 
 	statics: {
-		fromJson: function(json, roster) {
-			if (!json) { return null; }
-			var href = json.href, items = [], key;
+		fromJson: function(assignments, notAssignments, roster) {
+			if (!assignments) { return null; }
+			var href = assignments.href;
 
-			delete json.href;
+			function build(json) {
+				var items = [], key;
+				delete json.href;
 
-			for (key in json) {
-				if (json.hasOwnProperty(key)) {
-					items.push.apply(items, json[key]);
+				for (key in json) {
+					if (json.hasOwnProperty(key)) {
+						items.push.apply(items, json[key]);
+					}
 				}
+				return items;
 			}
 
-			return this.create({Items: items, Roster: roster, href: href});
+			return this.create({
+				Items: build(assignments),
+				NotItems: build(notAssignments),
+				Roster: roster,
+				href: href});
 		}
 	},
 
 	fields: [
 		{name: 'Items', type: 'arrayItem'},
+		{name: 'NotItems', type: 'arrayItem'},//silly name, I know.
 		{name: 'Roster', type: 'auto'}
 	],
 
@@ -29,6 +38,12 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 		//pass the roster down if we have it.
 		var r = this.get('Roster');
 		this.each(function(a) { a.roster = r; });
+	},
+
+
+	isAssignment: function(id) {
+		//Its an assignment unless its listed in the "NotItems"
+		return !this.getItem(id, 'NotItems');
 	},
 
 
@@ -49,8 +64,8 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 	},
 
 
-	getItem: function(id) {
-		var items = this.get('Items');
+	getItem: function(id, field) {
+		var items = this.get(field || 'Items');
 
 		items = items.filter(function(rec) {
 			return rec.getId() === id || rec.containsId(id);
