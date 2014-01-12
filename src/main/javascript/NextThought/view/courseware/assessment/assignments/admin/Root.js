@@ -34,8 +34,11 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 			gridView = assignmentView.down('grid dataview').loadMask;
 			gridView.disable(true);
 
-			//tab.mask('Loading...', 'navigation');
-			tab.mask('Loading...');
+			if (user) {
+				//tab.mask('Loading...', 'navigation');
+				tab.mask('Loading...');
+			}
+
 			assignmentView.filledStorePromise
 				.done(function(store) {
 					store.each(function(rec) {
