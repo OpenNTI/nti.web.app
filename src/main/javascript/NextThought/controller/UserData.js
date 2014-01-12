@@ -1098,6 +1098,8 @@ Ext.define('NextThought.controller.UserData', {
 			position = Ext.fly(node).getXY(),
 			me = this;
 
+		position[0] += offsets.left;
+
 		function adjustPosition(position) {
 			var horizontalSpaceNeeded = me.popoverWidget.getWidth() / 2;
 
