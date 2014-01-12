@@ -15,7 +15,7 @@ Ext.define('NextThought.view.courseware.overview.View', {
 		'discussions': 'Discussions',
 		'additional': 'Additional Resources',
 		'required': 'Required Resources',
-		'assessments': 'Assessments',
+		'assessments': 'Practice Questions',
 		'assignments': 'Assignments'
 	},
 
