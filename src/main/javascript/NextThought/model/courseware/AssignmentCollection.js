@@ -68,7 +68,7 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 		var items = this.get(field || 'Items');
 
 		items = items.filter(function(rec) {
-			return rec.getId() === id || rec.containsId(id);
+			return rec.getId() === id || (rec.containsId && rec.containsId(id));
 		});
 
 		return items[0];
