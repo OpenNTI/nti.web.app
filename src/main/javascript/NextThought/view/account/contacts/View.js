@@ -344,6 +344,27 @@ Ext.define('NextThought.view.account.contacts.View', {
 			}
 		});
 
+        if(Ext.is.iOS){
+            var me = this;
+            this.searchButton.down('input').on('keypress', function(){
+                Ext.defer(function(){
+                    me.contactSearch.setHeight(160);
+                    me.contactSearch.setY(424);
+                    me.contactSearch.el.setRight(0);
+                },500);
+            });
+            this.searchButton.down('input').on('focus', function(){
+                me.contactSearch.setHeight(160);
+                me.contactSearch.setY(424);
+                me.contactSearch.el.setRight(0);
+            });
+            this.searchButton.down('input').on('blur', function(){
+                me.contactSearch.setHeight(526);
+                me.contactSearch.setY(58);
+                me.contactSearch.el.setRight(0);
+            });
+        }
+
 		this.mon(Ext.getStore('PresenceInfo'), 'presence-changed', function(username, presence) {
 			if (isMe(username)) {
 				if (presence.isOnline()) {
