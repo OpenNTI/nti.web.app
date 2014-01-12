@@ -72,7 +72,7 @@ Ext.define('NextThought.view.courseware.info.parts.Description', {
 			s = i.get('Schedule') || {},
 			c = (i.get('Credit') || [])[0],
 			e = (c && c.get('Enrollment')) || {},
-			p = Ext.Array.pluck(i.prerequisites || [], 'title'),
+			p = Ext.Array.pluck(i.get('Prerequisites') || [], 'title'),
 			start = Ext.Date.format(i.get('StartDate'), 'Y-m-d');
 
 		function fo(d) {
