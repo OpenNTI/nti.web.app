@@ -11,6 +11,10 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 
 
 	onItemClicked: function(view, rec) {
+		if (!rec) {
+			console.error('Ignoring click because no record was passed.', arguments);
+			return;
+		}
 		this.fireEvent('assignment-clicked', rec);
 	},
 
