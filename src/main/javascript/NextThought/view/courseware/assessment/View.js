@@ -106,7 +106,9 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 						me.fireEvent('set-assignment-history', history);
 
-						assignments.applyGradeBook(gradeBook);
+						if (e.isAdministrative) {
+							assignments.applyGradeBook(gradeBook);
+						}
 
 						me.forEachView(me.callFunction('setAssignmentsData',
 								[assignments, history, instance, gradeBook]));
