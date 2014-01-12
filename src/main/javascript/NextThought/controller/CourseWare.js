@@ -241,9 +241,9 @@ Ext.define('NextThought.controller.CourseWare', {
 	},
 
 
-	onNavigateToAssignment: function(id){
+	onNavigateToAssignment: function(id) {
 		var content = this.getContentView(),
-			tab = content.tabSpecs.reduce(function(a, i){
+			tab = content.tabSpecs.reduce(function(a, i) {
 				return a || (i.isAssignment && i);
 			}, 0);
 
@@ -296,8 +296,9 @@ Ext.define('NextThought.controller.CourseWare', {
 
 		onceLoaded: function() {
 			return Promise.pool(
-				Ext.getStore('courseware.EnrolledCourses').onceLoaded(),
-				Ext.getStore('courseware.AdministeredCourses').onceLoaded()
+				Ext.getStore('courseware.AvailableCourses').onceLoaded(),
+				Ext.getStore('courseware.AdministeredCourses').onceLoaded(),
+				Ext.getStore('courseware.EnrolledCourses').onceLoaded()
 			);
 		},
 
@@ -363,30 +364,30 @@ Ext.define('NextThought.controller.CourseWare', {
 		},
 
 
-		getEnrollmentStatus: function(contentNtiid){
+		getEnrollmentStatus: function(contentNtiid) {
 			var me = this,
 				statusMap = me.statusMap, stores = [];
 
-			function clear(){
+			function clear() {
 				delete me.statusMap;
 			}
 
-			if(!statusMap){
+			if (!statusMap) {
 				statusMap = me.statusMap = {};
-				this.forEachCourse(function(enrollment){
+				this.forEachCourse(function(enrollment) {
 					statusMap[enrollment.getCourseCatalogEntry().get('ContentPackageNTIID')] = enrollment.get('Status');
-				});	
+				});
 
 				stores.push(Ext.getStore('courseware.EnrolledCourses'), Ext.getStore('courseware.AdministeredCourses'));
 
-				stores.forEach(function(store){
+				stores.forEach(function(store) {
 					store.on({
 						single: true,
 						load: clear
 					});
-				});				
+				});
 			}
-			
+
 			return statusMap[contentNtiid];
 		}
 	};

@@ -426,11 +426,12 @@ Ext.define('NextThought.view.content.View', {
 				console.error('Could not set course from pageInfo: ', reason);
 			});
 		} else {
+			console.debug('Removing Course, map did not contain ID?');
 			this._setCourse(null);
 		}
 
 		//TEMP:
-		if (pageInfo.isPartOfCourseNav()) {
+		if (pageInfo.isPartOfCourseNav() && this.currentCourse) {
 			this.showCourseNavigation();
 		}
 		else {

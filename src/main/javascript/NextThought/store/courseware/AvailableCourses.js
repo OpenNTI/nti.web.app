@@ -34,5 +34,32 @@ Ext.define('NextThought.store.courseware.AvailableCourses', {
 			property: 'Title',
 			direction: 'asc'
 		}
-	]
+	],
+
+	constructor: function() {
+		var p = this.promiseToLoaded = new Promise(),
+			me = this;
+		this.callParent(arguments);
+		this.on({
+			scope: this,
+			beforeload: function() {
+				var old = p;
+				p = me.promiseToLoaded = new Promise();
+				if (old && !old.isResolved()) {
+					p.then(old);
+				}
+			},
+			load: function(me, records, success) {
+				if (!success) {
+					p.reject('Store Failed to load');
+				}
+				p.fulfill(me);
+			}
+		});
+	},
+
+
+	onceLoaded: function() {
+		return this.promiseToLoaded;
+	}
 });
