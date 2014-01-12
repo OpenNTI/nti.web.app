@@ -172,6 +172,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			},
 			items: items
 		});
+		this.studentMenu.show().hide();
 
 		this.switchStudent(
 			this.studentMenu.down('[type=enrolled]'),
@@ -206,23 +207,17 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		this.store.filter([{
 			id: 'studentFilter',
 			filterFn: function(rec) {
-				var user = rec.get('user'), i;
+				var user = rec.get('user'), i,
+					r = me.roster[user.getId()];
 
 				function passes(enroll) {
 					if (item.type === 'open') {
 						return enroll === 'Open';
 					}
 
-					if (item.type === 'enrolled') {
-						return enroll !== 'Open';
-					}
+					return enroll !== 'Open';
 				}
-
-				for (i = 0; i < me.roster.length; i++) {
-					if (me.roster[i].get('Username') === user.get('Username')) {
-						return !passes(me.roster[i].get('Status'));
-					}
-				}
+				return r && passes(r.get('Status'));
 			}
 		}], true);
 	},
