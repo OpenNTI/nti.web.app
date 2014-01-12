@@ -82,6 +82,10 @@ Ext.define('NextThought.view.courseware.outline.View', {
 	afterRender: function() {
 		this.callParent(arguments);
 		this.mon(this.frameBodyEl, 'scroll', 'handleScrolling');
+
+        if(Ext.is.iOS){
+            Ext.apply(this,{overItemCls: ''});
+        }
 	},
 
 
