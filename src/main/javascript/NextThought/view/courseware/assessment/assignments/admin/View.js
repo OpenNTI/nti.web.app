@@ -38,6 +38,12 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.View', {
 
 	_doShowAssignment: function(rec) {
 		Ext.destroy(this.down('course-assessment-admin-assignments-item'));
+		if (!rec) {
+			console.error('No Record passed, showing root.');
+			this.showRoot();
+			return;
+		}
+
 		this.mon(this.add({
 			xtype: 'course-assessment-admin-assignments-item',
 			assignmentTitle: rec.get('name'),
