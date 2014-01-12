@@ -72,7 +72,8 @@ Ext.define('NextThought.view.courseware.overview.View', {
 			locInfo,
 			items = [],
 			sections = {},
-			course = me.up('course').currentCourse;
+			course = me.up('course').currentCourse,
+			el = Ext.get('course-nav');
 		//console.debug('Select???',arguments);
 
 		if (!r || r.getId() === me.currentPage || !course || !course.getAssignments) {
@@ -84,6 +85,8 @@ Ext.define('NextThought.view.courseware.overview.View', {
 		me.clear();
 
 		me.currentPage = r.getId();
+
+		el.mask('Loading', 'loading');
 
 		course.getAssignments()
 			.done(function(assignments) {
@@ -119,7 +122,7 @@ Ext.define('NextThought.view.courseware.overview.View', {
 				me.add([
 					{xtype: 'course-overview-header', record: r}
 				].concat(items));
-
+				el.unmask();
 			})
 			.fail(function(reason) {
 				console.error(reason);
