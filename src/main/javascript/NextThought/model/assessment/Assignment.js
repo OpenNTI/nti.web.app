@@ -115,11 +115,12 @@ Ext.define('NextThought.model.assessment.Assignment', {
 			phantoms = [];
 
 		(this.roster || []).forEach(function(o) {
-			if (!Ext.Array.contains(users, o.Username)) {
+			var u = o.get('Username');
+			if (!Ext.Array.contains(users, u)) {
 				phantoms.push(NextThought.model.courseware.UsersCourseAssignmentHistoryItem.create({
-					Creator: o.Username
+					Creator: u
 				}));
-				users.push(o.Username);
+				users.push(u);
 			}
 		});
 

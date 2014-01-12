@@ -166,3 +166,28 @@
 
 	}
 }
+
+
+span.nti-checkbox {
+	display: inline-block;
+	position: relative;
+	padding-left: 25px;
+	margin: 0.5em;
+	cursor: pointer;
+
+	&.disabled {
+		cursor: default;
+		opacity: 0.5;
+	}
+
+	&::after { margin-top: -7px; }
+	@include icon('checkbox-14', $top:50%, $left:0);
+
+	&:not(.checked):hover::after {
+		@include sprite($icons, 'checkbox-14_hover');
+	}
+
+	&.checked::after {
+		@include sprite($icons, 'checkbox-14_active');
+	}
+}

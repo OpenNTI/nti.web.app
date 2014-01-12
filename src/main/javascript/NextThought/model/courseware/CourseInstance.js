@@ -121,6 +121,15 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 						//filter the active user out of the roster since we are administering this thing.
 						j = j && j.filter(function(o) { return o && !isMe(o.Username); });
 
+						j = ParseUtils.parseItems(j);
+						j.forEach(function(i) {
+							var n = i.get('Username');
+							if (j.hasOwnProperty(n)) {
+								console.warn('Replacing key? ' + n);
+							}
+							j[n] = i;
+						});
+
 						p.fulfill(j);
 					})
 					.fail(function(reason) {

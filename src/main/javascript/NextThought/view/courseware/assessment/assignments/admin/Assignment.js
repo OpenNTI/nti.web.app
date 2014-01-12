@@ -51,6 +51,16 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 						{ tag: 'span', cls: 'due', html: 'Due {due:date("l F j, Y")}'},
 						{ tag: 'span', cls: 'link', html: 'Request a Change'}
 					]
+				},
+				{
+					cls: 'filters',
+					cn: [
+						{tag: 'span', cls: 'label', html: 'Show:'},
+						{tag: 'span', cls: 'nti-checkbox checked', html: 'In Class', 'data-qtip': 'Show In Class Students',
+							'data-filter-id': 'not:open-enrolled'},
+						{tag: 'span', cls: 'nti-checkbox checked', html: 'Open', 'data-qtip': 'Show Open Enrolled Students',
+							'data-filter-id': 'open-enrolled'}
+					]
 				}
 			]
 		},
@@ -62,7 +72,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		rootPathEl: '.toolbar .path.part.root',
 		previousEl: '.toolbar .controls .up',
 		nextEl: '.toolbar .controls .down',
-		changeDateEl: '.header span.link'
+		changeDateEl: '.header span.link',
+		filtersEl: '.header .filters',
+		openEnrolledCheckboxEl: '.header .filters .nti-checkbox[data-filter-id="open-enrolled"]'
 	},
 
 
@@ -70,7 +82,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		rootPathEl: { click: 'fireGoUp' },
 		previousEl: { click: 'firePreviousEvent' },
 		nextEl: { click: 'fireNextEvent' },
-		changeDateEl: { click: 'requestDateChange' }
+		changeDateEl: { click: 'requestDateChange' },
+		filtersEl: { click: 'onFiltersClicked' }
 	},
 
 
@@ -186,9 +199,33 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 
 	initComponent: function() {
+		this._filters = {
+			'open-enrolled': {
+				id: 'open-enrolled',
+				myView: this,
+			    filterFn: function(item) {
+					var r = (this._roster = this._roster || this.myView.assignment.roster),
+						c = item.get('Creator');
+					c = typeof c === 'string' ? c : c.getId();
+					r = c && r[c];
+
+					return r && r.get('Status') !== 'Open';
+			    }
+			}
+		};
 		this.callParent(arguments);
 		this.enableBubble(['show-assignment']);
 		this.filledStorePromise = new Promise();
+
+		this.on('destroy', 'cleanupFilters');
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		var el = this.openEnrolledCheckboxEl;
+		this.onFiltersClicked({getTarget: function() {return el;}});
 	},
 
 
@@ -264,6 +301,68 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	},
 
 
+	cleanupFilters: function() {
+		var filters = Ext.Object.keys(this._filters),
+			store = this.store,
+			last = filters.length - 1;
+
+		filters.forEach(function(id, i) {
+			store.removeFilter(id, i === last);
+		});
+	},
+
+
+	onFiltersClicked: function(e) {
+		var checked, cls = 'checked',
+			el = e.getTarget('.nti-checkbox', null, true),
+			filter;
+		if (!el || el.hasCls('disabled')) {
+			return;
+		}
+
+		filter = el.getAttribute('data-filter-id');
+		if (!filter) {
+			el.addCls('disabled');
+			return;
+		}
+
+		checked = el.toggleCls(cls).hasCls(cls);
+
+		this.applyFilter(filter, !checked);
+	},
+
+
+	applyFilter: function(filterName, state) {
+		if (!state) {
+			this.store.removeFilter(filterName);
+			return;
+		}
+
+		this.store.addFilter(this.getFilter(filterName));
+	},
+
+
+	getFilter: function(name) {
+		var not = name && name.substr(0, 4) === 'not:' && name.substr(4);
+		if (!this._filters[name]) {
+			if (not) {
+				not = this.getFilter(not);
+				this._filters[name] = {
+					id: name,
+					filterFn: function(item) {
+						return !not.filterFn.call(not.scope || not, item);
+					}
+				};
+			} else {
+				//maybe later we can build it... :P
+				Ext.Error.raise('No filter by the name ' + name + 'Found');
+			}
+		}
+
+		return this._filters[name];
+	},
+
+
 	fireGoUp: function() {
 		this.fireEvent('goup', this);
 	},
@@ -292,6 +391,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		this.fireEvent('goto', index);
 	},
 
+
 	onItemClick: function(v, record, dom, ix, e) {
 		var nib = e.getTarget('.actions');
 		if (nib) {
@@ -300,6 +400,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		}
 		this.goToAssignment(v, record);
 	},
+
 
 	goToAssignment: function(v, record) {
 		var student = record.get('Creator'),

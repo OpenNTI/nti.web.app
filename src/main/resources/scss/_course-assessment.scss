@@ -941,6 +941,16 @@ canvas.x-component-course-assessment {
 					margin-top: 2px;
 				}
 			}
+
+			.filters {
+			    font-size: 0.9em;
+			    margin-top: 0.5em;
+				color: $secondary-grey;
+
+				.nti-checkbox {
+					padding-left: 20px;
+				}
+			}
 		}
 	}
 }
@@ -1164,7 +1174,7 @@ canvas.x-component-course-assessment {
 	}
 
 	&.student-performance-overview { top: 171px; }
-	&.student-assignment-overview { top: 122px; margin-top: 122px; }
+	&.student-assignment-overview { top: 162px; margin-top: 162px; }
 
 	.x-grid-cell-editor{
 		input{

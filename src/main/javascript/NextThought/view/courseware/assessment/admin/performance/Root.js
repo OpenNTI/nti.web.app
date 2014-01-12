@@ -212,8 +212,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				}
 
 				for (i = 0; i < me.roster.length; i++) {
-					if (me.roster[i].Username === user.get('Username')) {
-						return !passes(me.roster[i].LegacyFilterStatus);
+					if (me.roster[i].get('Username') === user.get('Username')) {
+						return !passes(me.roster[i].get('Status'));
 					}
 				}
 			}
@@ -494,7 +494,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		this.roster = assignments.getRoster();
 		this.roster.forEach(function(r) {
-			var u = r.Username;
+			var u = r.get('Username');
 			users.push(u);
 			raw.push(Ext.apply({id: u}, getCounts(u)));
 		});
