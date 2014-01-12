@@ -43,7 +43,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		inputEl: '.header .search input',
 		clearEl: '.header .search .clear',
 		exportButton: 'a.download.button',
-		studentEl: '.scrollzone .column-names .student',
+		nameEl: '.scrollzone .column-names .student',
 		gradeEl: '.scrollzone .column-names .grade'
 	},
 
@@ -83,7 +83,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		this.createStudentMenu();
 		this.createItemMenu();
-		
+
 		this.studentSort();
 
 		if (this.gradeBook) {
@@ -97,7 +97,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			itemEl: { click: 'showItemMenu'},
 			inputEl: { keyup: 'changeNameFilter'},
 			clearEl: { click: 'clearSearch'},
-			studentEl: { click: 'studentSort'},
+			nameEl: { click: 'studentSort'},
 			gradeEl: { click: 'gradeSort'}
 		});
 
@@ -329,18 +329,18 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	studentSort: function() {
-		var isDescending = this.studentEl.hasCls('descending'),
+		var isDescending = this.nameEl.hasCls('descending'),
 			sorter = {
 				fn: Globals.getNaturalSorter('displayName'),
-				direction: isDescending? 'ASC': 'DESC'
+				direction: isDescending ? 'ASC' : 'DESC'
 			};
 
 
 		this.gradeEl.removeCls('sorted ascending descending');
 
-		this.studentEl.addCls('sorted');
-		this.studentEl[isDescending? 'removeCls': 'addCls']('descending');
-		this.studentEl[isDescending? 'addCls': 'removeCls']('ascending');
+		this.nameEl.addCls('sorted');
+		this.nameEl[isDescending ? 'removeCls' : 'addCls']('descending');
+		this.nameEl[isDescending ? 'addCls' : 'removeCls']('ascending');
 
 		this.store.sort(sorter);
 
@@ -351,14 +351,14 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		var isDescending = this.gradeEl.hasCls('descending'),
 			sorter = {
 				property: 'grade',
-				direction: isDescending? 'ASC': 'DESC'
+				direction: isDescending ? 'ASC' : 'DESC'
 			};
 
-		this.studentEl.removeCls('sorted ascending descending');
+		this.nameEl.removeCls('sorted ascending descending');
 
 		this.gradeEl.addCls('sorted');
-		this.gradeEl[isDescending? 'removeCls': 'addCls']('descending');
-		this.gradeEl[isDescending? 'addCls': 'removeCls']('ascending');
+		this.gradeEl[isDescending ? 'removeCls' : 'addCls']('descending');
+		this.gradeEl[isDescending ? 'addCls' : 'removeCls']('ascending');
 
 		this.store.sort(sorter);
 	},
