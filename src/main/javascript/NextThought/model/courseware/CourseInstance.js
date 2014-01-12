@@ -27,7 +27,7 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 			isCourse: true,
 			title: (e && e.get('Title')) || 'Missing Catalog Entry',
 			label: (e && e.get('ProviderUniqueID')) || '---',
-			icon: (e && e.get('icon')) || 'missing-icon.png'
+			icon: (e && e.get('thumbnail')) || 'missing-icon.png'
 		};
 	},
 

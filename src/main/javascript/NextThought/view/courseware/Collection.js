@@ -10,13 +10,13 @@ Ext.define('NextThought.view.courseware.Collection', {
 
 	prepareData: function(data, index, record) {
 		var i = Ext.Object.chain(this.callParent(arguments)),
-			course = record.getCourseCatalogEntry();
+			course = record.get('CourseInstance').asUIData();
 
 		if (course) {
 			Ext.apply(i, {
-				icon: course.get('icon'),
-				title: course.get('Title'),
-				courseName: course.get('ProviderUniqueID')
+				icon: course.icon,
+				title: course.title,
+				courseName: course.label
 			});
 		}
 
