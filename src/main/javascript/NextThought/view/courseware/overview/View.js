@@ -72,21 +72,20 @@ Ext.define('NextThought.view.courseware.overview.View', {
 			locInfo,
 			items = [],
 			sections = {},
-			course = me.up('course').currentCourse,
-			el = Ext.get('course-nav');
+			course = me.up('course').currentCourse;
+
 		//console.debug('Select???',arguments);
 
 		if (!r || r.getId() === me.currentPage || !course || !course.getAssignments) {
 			return;
 		}
+		this.buildingOverwiew = true;
+		me.maybeMask();
 
 		locInfo = ContentUtils.getLocation(r.getId());
-
 		me.clear();
-
 		me.currentPage = r.getId();
 
-		el.mask('Loading', 'loading');
 
 		course.getAssignments()
 			.done(function(assignments) {
@@ -122,11 +121,30 @@ Ext.define('NextThought.view.courseware.overview.View', {
 				me.add([
 					{xtype: 'course-overview-header', record: r}
 				].concat(items));
-				el.unmask();
+				this.maybeUnmask();
 			})
 			.fail(function(reason) {
 				console.error(reason);
 			});
+	},
+
+
+	maybeMask: function() {
+		var el = this.rendered && Ext.get('course-nav');
+		if ((!el || !el.dom) && this.buildingOverwiew) {
+			this.on({single: true, afterrender: 'maybeMask'});
+			return;
+		}
+		el.mask('Loading...', 'loading');
+	},
+
+
+	maybeUnmask: function() {
+		delete this.buildingOverwiew;
+		var el = this.rendered && Ext.get('course-nav');
+		if (el && el.dom) {
+			el.unmask();
+		}
 	},
 
 
