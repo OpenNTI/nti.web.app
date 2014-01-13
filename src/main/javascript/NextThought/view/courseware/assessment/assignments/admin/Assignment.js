@@ -208,7 +208,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 						c = item.get('Creator');
 					c = typeof c === 'string' ? c : c.getId();
 					r = r && c && r[c];
-					console.log(c, !r || r.get('Status') !== 'Open');
 					//if no roster, can't filter...
 					return !r || r.get('Status') !== 'Open';
 			    }
