@@ -88,12 +88,13 @@ Ext.define('NextThought.store.forums.Comments',{
 		}
 
 		function flattenThread(thread, depth){
-			if (!thread || Ext.Object.isEmpty(thread)) { return; }
+			if (!thread || Ext.Object.isEmpty(thread) || Ext.isEmpty(thread)) { return; }
 			thread.sort(commentCompare);
 
 			thread.forEach(function(t){
 				t.threadLoaded = true;
 				t.set('depth', depth);
+				t.set('threadShowing', true);
 				flatTree.push(t);
 
 				flattenThread(t.children, depth + 1);
@@ -114,10 +115,6 @@ Ext.define('NextThought.store.forums.Comments',{
 		this.insert(index + 1, flatList);
 
 		parent.threadLoaded = true;
-
-		flatList.forEach(function(item){
-			item.set('threadShowing', true);
-		});
 
 		this.__applyFilters();	
 	},
