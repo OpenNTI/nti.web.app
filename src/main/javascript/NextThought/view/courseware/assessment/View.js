@@ -72,7 +72,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 			return;
 		}
 
-		this.maybeMask();
+		me.maybeMask();
 
 		instance.getWrapper().done(function(e) {
 			if (!isSync()) { return; }

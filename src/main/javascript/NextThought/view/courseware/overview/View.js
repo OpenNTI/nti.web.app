@@ -121,10 +121,11 @@ Ext.define('NextThought.view.courseware.overview.View', {
 				me.add([
 					{xtype: 'course-overview-header', record: r}
 				].concat(items));
-				this.maybeUnmask();
+				me.maybeUnmask();
 			})
 			.fail(function(reason) {
 				console.error(reason);
+				me.maybeUnmask();
 			});
 	},
 
