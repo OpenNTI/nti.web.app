@@ -371,14 +371,16 @@ Ext.define('NextThought.view.assessment.input.Base', {
 		var parts = assessedQuestion.get('parts'),
 			part = parts[this.ordinal], id;
 
-		this.part.set({
-			explanation: part.get && part.get('explanation'),
-			solutions: part.get && part.get('solutions')
-		});
+		if (part.get) {
+			this.part.set({
+				explanation: part.get('explanation'),
+				solutions: part.get('solutions')
+			});
+		}
 
 		this.setValue((part.get && part.get('submittedResponse')) || part);
 
-		if (!this.noMark) {
+		if (!this.noMark && part.isModel) {
 			if (part.isCorrect()) { this.markCorrect(); }
 			else {this.markIncorrect(); }
 		}
