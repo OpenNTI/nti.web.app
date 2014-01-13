@@ -110,6 +110,7 @@ Ext.define('NextThought.cache.LocationMeta', {
 			var meta = me.createAndCacheMeta(ntiid, pi, ignoreCache);
 			if (!meta) {
 				fail.apply(me, ['createAndCacheMeta failed: ', ntiid, pi, ignoreCache]);
+				return;
 			}
 			p.fulfill(meta);
 		}
@@ -123,6 +124,7 @@ Ext.define('NextThought.cache.LocationMeta', {
 			//console.error('fail', arguments);
 			p.reject(resp);
 		}
+
 		Service.getPageInfo(ntiid, pageIdLoaded, fail, me);
 
 		return p;
