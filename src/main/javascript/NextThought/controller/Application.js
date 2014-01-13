@@ -78,6 +78,14 @@ Ext.define('NextThought.controller.Application', {
 					if (!(reason[1] instanceof Ext.data.Store)) {
 						console.error('Administered Courses failed to load:', reason[1]);
 					}
+
+					Ext.DomHelper.overwrite(Ext.getBody(), {
+						cls: 'empty-state error',
+						cn: [
+							{tag: 'h1', html: 'There was an error communicating with the server'},
+							{ html: 'Please try again in a few moments.'}
+						]
+					});
 				});
 
 		Library.load();
