@@ -68,7 +68,7 @@ Ext.define('NextThought.view.assessment.Header', {
 			this.question = assessmentParent.question;
 
 			//HACK: there should be a more correct way to get the problem name/number...
-			id = this.question.getId().split('.').last() + '.';
+			id = '';//this.question.getId().split('.').last() + '.';
 
 			this.videos = this.question.getVideos() || [];
 		}
