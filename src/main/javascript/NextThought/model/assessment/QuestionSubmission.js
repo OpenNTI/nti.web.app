@@ -7,5 +7,7 @@ Ext.define('NextThought.model.assessment.QuestionSubmission', {
 	fields: [
 		{ name: 'questionId', type: 'string' },
 		{ name: 'parts', type: 'auto' }
-	]
+	],
+
+	isCorrect: function() { return null; }
 });
