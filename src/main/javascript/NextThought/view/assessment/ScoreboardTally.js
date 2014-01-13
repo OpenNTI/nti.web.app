@@ -34,9 +34,25 @@ Ext.define('NextThought.view.assessment.ScoreboardTally', {
 		this.questionsBox.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
 	},
 
+	setGreyText: function(text) {
+		this.correctBox.hide();
+		this.incorrectBox.hide();
+		this.questionsBox.show().update(text);
+	},
 
+	setGreenText: function() {
+		this.incorrectBox.hide();
+		this.questionsBox.hide();
+		this.correctBox.show().update(text);
+	},
 
-	setTally: function(correct,total, noScore) {
+	setRedText: function() {
+		this.correctBox.hide();
+		this.questionsBox.hide();
+		this.incorrectBox.show().update(text);
+	},
+
+	setTally: function(correct, total, noScore) {
 		//force Integers or NaN
 		correct = parseInt(correct, 10);
 		total = parseInt(total, 10);
