@@ -44,7 +44,11 @@ Ext.define('NextThought.Library', {
 				listeners: {
 					scope: this,
 					load: 'onLoad',
-					beforeload: function() {
+					beforeload: function(s) {
+						if (s.isLoading()) {
+							return false;
+						}
+
 						var old = p;
 						p = me.promiseToLoad = new Promise();
 						if (old && !old.isResolved()) {
