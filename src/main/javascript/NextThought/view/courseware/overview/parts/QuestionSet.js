@@ -94,6 +94,7 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 		var score = this.down('assessment-score'),
 			tally = this.down('assessment-tally'),
 			format = 'l, F j',
+			opens = assignment.get('availableBeginning'),
 			date = assignment.get('availableEnding'),
 			day = (new Date(date.getTime())).setHours(0, 0, 0, 0),
 			today = (new Date()).setHours(0, 0, 0, 0),
@@ -112,8 +113,9 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 		this.updateWithScore();
 		tally.setGreyText(html);
 
-		if (assignment.get('availableBeginning') > new Date()) {
+		if (opens && opens > new Date()) {
 			this.down('button').destroy();
+			tally.setGreyText('Available on ' + Ext.Date.format(opens, format));
 		}
 	},
 
