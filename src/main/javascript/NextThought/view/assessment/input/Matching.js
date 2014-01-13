@@ -298,10 +298,15 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 
 
 	mark: function() {
-		var s = this.part.get('solutions')[0],
-			c = s.get('value'), me = this,
+		var s = (this.part.get('solutions') || [])[0],
+			c = (s && s.get('value')) || {}, me = this,
 			values = Ext.clone(this.part.get('values')),
 			labels = Ext.clone(this.part.get('labels'));
+
+		if (!s) {
+			//no solution... get it from the assessed question.
+			return;
+		}
 
 		function m(e) {
 			var key = asInt(e,'data-target'),
