@@ -1,16 +1,16 @@
-describe("User Repository/Store/Cache Behavior", function(){
+describe('User Repository/Store/Cache Behavior', function() {
 	var TUR;
 
-	beforeEach(function(){
+	beforeEach(function() {
 		TUR = {};
 		/*jslint sub:true */ //no way to ignore reserved property if using don notation
-		TUR['__proto__'] = NextThought.cache.UserRepository['__proto__'];
+		TUR = Ext.Object.chain(NextThought.cache.UserRepository);
 		TUR.constructor();
 		console.log('Creating a new user repository');
 	});
 
 
-	function createUser(username, additional){
+	function createUser(username, additional) {
 		var cfg = Ext.applyIf(additional || {}, {
 			'Username': username
 		});
@@ -18,16 +18,16 @@ describe("User Repository/Store/Cache Behavior", function(){
 		return NextThought.model.User.create(cfg);
 	}
 
-	function createList(username){
+	function createList(username) {
 		return NextThought.model.FriendsList.create({Username: username, NTIID: 'ntiid'+username});
 	}
 
 
-	it('Defines UserRepository', function(){
+	it('Defines UserRepository', function() {
 		expect(UserRepository).toBeTruthy();
 	});
 
-	it('Owns a store', function(){
+	it('Owns a store', function() {
 		var s;
 		expect(TUR.store).toBeNull();
 
@@ -37,7 +37,7 @@ describe("User Repository/Store/Cache Behavior", function(){
 		expect(TUR.getStore()).toBe(s);
 	});
 
-	describe('Presence handling', function(){
+	describe('Presence handling', function() {
 		var hans;
 
 		beforeEach(function(){
@@ -82,7 +82,7 @@ describe("User Repository/Store/Cache Behavior", function(){
 		});
 	});
 
-	describe('resolveFromStore', function(){
+	describe('resolveFromStore', function() {
 
 		var hans, terrorists;
 
@@ -110,7 +110,7 @@ describe("User Repository/Store/Cache Behavior", function(){
 		});
 	});
 
-	describe('cacheUser', function(){
+	describe('cacheUser', function() {
 
 		var hans, terrorists;
 
@@ -146,82 +146,82 @@ describe("User Repository/Store/Cache Behavior", function(){
 		});
 	});
 
-	describe('getUser', function(){
+	describe('getUser', function() {
 
-		function mockMakeRequest(repo, users){
-			spyOn(repo, 'makeRequest').andCallFake(function(username, callbacks){
+		function mockMakeRequest(repo, users) {
+			spyOn(repo, 'makeRequest').andCallFake(function(username, callbacks) {
 				var user = users[username],
 					callback = user ? callbacks.success : callbacks.failure;
 
-				if(user){
+				if (user) {
 					user.summaryObject = false;
 				}
 				Ext.callback(callback, callbacks.scope, [user]);
 			});
-		};
+		}
 
 		var scope = {}, hans, holly;
 
-		beforeEach(function(){
+		beforeEach(function() {
 			hans = createUser('hans');
-			holly =  createUser('holly');
+			holly = createUser('holly');
 			mockMakeRequest(TUR, {
 				'hans': hans,
 				'holly': holly
 			});
 		});
 
-		function createCallbackExpecting(expected, s){
-			return function(users){
+		function createCallbackExpecting(expected, s) {
+			return function(users) {
 				var returnedUserNames;
 				expect(this).toBe(s);
-				if(Ext.isArray(expected)){
+				if (Ext.isArray(expected)) {
 					expect(Ext.isArray(users)).toBeTruthy();
 					returnedUserNames = Ext.Array.pluck(users, 'data');
 					returnedUserNames = Ext.Array.pluck(returnedUserNames, 'Username');
 					expect(returnedUserNames).toEqual(expected);
 				}
-				else{
+				else {
 					expect(users.isModel).toBeTruthy();
 					expect(users.get('Username')).toBe('hans');
 				}
-			}
+			};
 		}
 
-		describe('Callsback with what it receives', function(){
-			it('Gives a single object if asked for one', function(){
+		describe('Callsback with what it receives', function() {
+			it('Gives a single object if asked for one', function() {
 				TUR.getUser('hans', createCallbackExpecting('hans', scope), scope);
 			});
 
-			it('Gives an array if asked for one', function(){
+			it('Gives an array if asked for one', function() {
 				TUR.getUser(['hans', 'holly'], createCallbackExpecting(['hans', 'holly'], scope), scope);
 			});
 		});
 
-		describe('Will take many tupes of input', function(){
-			it('handles a string', function(){
+		describe('Will take many tupes of input', function() {
+			it('handles a string', function() {
 				TUR.getUser('hans', createCallbackExpecting('hans', scope), scope);
 			});
 
-			it('handles a model', function(){
+			it('handles a model', function() {
 				TUR.getUser(hans, createCallbackExpecting('hans', scope), scope);
 			});
 
-			it('handles a json string', function(){
+			it('handles a json string', function() {
 				var data = {Class: 'User', Username: 'hans'};
 				TUR.getUser(data, createCallbackExpecting('hans', scope), scope);
 			});
 		});
 
-		describe('Handles friendslists', function(){
-			it('Gives back list for uname', function(){
+		describe('Handles friendslists', function() {
+			it('Gives back list for uname', function() {
 				var fl = createList('foo');
 				TUR.precacheUser(fl);
 
 				TUR.getUser(['foo'], createCallbackExpecting([fl.get('Username')], scope), scope);
 			});
 
-			it('Gives back list for fl', function(){
+			it('Gives back list for fl', function() {
 				var fl = createList('foo');
 				TUR.precacheUser(fl);
 
@@ -229,12 +229,12 @@ describe("User Repository/Store/Cache Behavior", function(){
 			});
 		});
 
-		describe('Resolves users remotely at the right time', function(){
-			it('Will return summary objects unless asked not to', function(){
+		describe('Resolves users remotely at the right time', function() {
+			it('Will return summary objects unless asked not to', function() {
 				TUR.cacheUser(hans);
 
 				expect(hans.summaryObject).toBeTruthy();
-				TUR.getUser('hans', function(users){
+				TUR.getUser('hans', function(users) {
 					expect(this).toBe(scope);
 					expect(users).toBe(hans);
 					expect(users.summaryObject).toBeTruthy();
@@ -244,12 +244,12 @@ describe("User Repository/Store/Cache Behavior", function(){
 				TUR.getStore().remove(hans);
 			});
 
-			it('Allways preferes non summary objects', function(){
+			it('Allways preferes non summary objects', function() {
 				hans.summaryObject = false;
 				TUR.cacheUser(hans);
 
 				expect(hans.summaryObject).toBeFalsy();
-				TUR.getUser('hans', function(users){
+				TUR.getUser('hans', function(users) {
 					expect(this).toBe(scope);
 					expect(users).toBe(hans);
 					expect(users.summaryObject).toBeFalsy();
@@ -260,11 +260,11 @@ describe("User Repository/Store/Cache Behavior", function(){
 				TUR.getStore().remove(hans);
 			});
 
-			it('Will refresh a summary object if asked', function(){
+			it('Will refresh a summary object if asked', function() {
 				TUR.cacheUser(hans);
 
 				expect(hans.summaryObject).toBeTruthy();
-				TUR.getUser('hans', function(users){
+				TUR.getUser('hans', function(users) {
 					expect(this).toBe(scope);
 					expect(users).toBe(hans);
 					expect(users.summaryObject).toBeFalsy();
@@ -274,9 +274,9 @@ describe("User Repository/Store/Cache Behavior", function(){
 				TUR.getStore().remove(hans);
 			});
 
-			it('Will return placeholders if resolution fails', function(){
+			it('Will return placeholders if resolution fails', function() {
 
-				TUR.getUser('Igor', function(users){
+				TUR.getUser('Igor', function(users) {
 					expect(this).toBe(scope);
 					expect(users).toBeTruthy(hans);
 					expect(users.get('Username')).toEqual('Igor');
@@ -285,11 +285,11 @@ describe("User Repository/Store/Cache Behavior", function(){
 				expect(TUR.makeRequest).toHaveBeenCalled();
 			});
 
-			it('Handles a mix of these cases appropriately', function(){
+			it('Handles a mix of these cases appropriately', function() {
 				TUR.cacheUser(hans);
 				expect(hans.summaryObject).toBeTruthy();
 
-				TUR.getUser(['hans', holly, 'Igor'], function(users){
+				TUR.getUser(['hans', holly, 'Igor'], function(users) {
 					expect(this).toBe(scope);
 
 					expect(users.length).toEqual(3);
@@ -308,23 +308,23 @@ describe("User Repository/Store/Cache Behavior", function(){
 		});
 	});
 
-	describe('getUser maintains order', function(){
-		function mockMakeRequest(repo, users){
+	describe('getUser maintains order', function() {
+		function mockMakeRequest(repo, users) {
 			var result = {
-				finishUser: function(u){
+				finishUser: function(u) {
 					this[u]();
 				}
 			};
 
-		spyOn(repo, 'makeRequest').andCallFake(function(username, callbacks){
+		spyOn(repo, 'makeRequest').andCallFake(function(username, callbacks) {
 				var user = users[username],
 					callback = user ? callbacks.success : callbacks.failure;
 
-				if(user){
+				if (user) {
 					user.summaryObject = false;
 				}
 
-				result[username] = function(){
+				result[username] = function() {
 					Ext.callback(callback, callbacks.scope, [user]);
 				};
 			});
@@ -334,20 +334,20 @@ describe("User Repository/Store/Cache Behavior", function(){
 
 		var hans, holly, makeRequest;
 
-		beforeEach(function(){
+		beforeEach(function() {
 			hans = createUser('hans');
-			holly =  createUser('holly');
+			holly = createUser('holly');
 			makeRequest = mockMakeRequest(TUR, {
 				'hans': hans,
 				'holly': holly
 			});
 		});
 
-		it('maintaines order independent of response order', function(){
+		it('maintaines order independent of response order', function() {
 			var names = ['hans', 'holly'];
 
-			TUR.getUser(names, function(users){
-				var resolvedNames = Ext.Array.map(users, function(u){ return u.getId()});
+			TUR.getUser(names, function(users) {
+				var resolvedNames = Ext.Array.map(users, function(u) { return u.getId()});
 				expect(resolvedNames).toEqual(names);
 			});
 
@@ -360,32 +360,32 @@ describe("User Repository/Store/Cache Behavior", function(){
 		});
 	});
 
-	describe('makeRequest', function(){
+	describe('makeRequest', function() {
 
 		var mockAjax, realAjax;
 
-		beforeEach(function(){
+		beforeEach(function() {
 			realAjax = Ext.Ajax;
 			mockAjax = {
-				request: function(cfg){
+				request: function(cfg) {
 					var r = {};
 					r.options = {callback: cfg.callback, scope: cfg.scope};
-					r.finish = function(object){
+					r.finish = function(object) {
 						var i, cb = this.options.callback,
 							resp = {},
 							respObject = { Items: []};
 
-						for( i in object.Items){
+						//for (i in object.Items) {
 							//respObject.Items[i] = object.Items[i];
-						}
+						//}
 
 						resp.responseText = JSON.stringify(object);
 						Ext.callback(cb, this.options.scope, [{}, true, resp]);
-					}
-					r.fail = function(){
+					};
+					r.fail = function() {
 						var cb = this.options.callback;
 						Ext.callback(cb, this.options.scope, [{}, false, null]);
-					}
+					};
 					return r;
 				}
 			};
@@ -395,11 +395,11 @@ describe("User Repository/Store/Cache Behavior", function(){
 			spyOn(mockAjax, 'request').andCallThrough();
 		});
 
-		afterEach(function(){
+		afterEach(function() {
 			Ext.Ajax = realAjax;
 		});
 
-		function setupRequest(user){
+		function setupRequest(user) {
 			var callbacks = jasmine.createSpyObj('callbacks', ['failure', 'success']),
 				req;
 			TUR.makeRequest('harry', callbacks);
@@ -413,12 +413,12 @@ describe("User Repository/Store/Cache Behavior", function(){
 			return {request: req, callbacks: callbacks};
 		}
 
-		function responseForItems(items){
-			if(!Ext.isArray(items)){
+		function responseForItems(items) {
+			if(!Ext.isArray(items)) {
 				items = [items];
 			}
 
-			items = Ext.Array.map(items, function(i){
+			items = Ext.Array.map(items, function(i) {
 				var i = i.data || i;
 
 				i.Presence = (i.Presence && i.Presence.data) || i.Presence;
@@ -429,7 +429,7 @@ describe("User Repository/Store/Cache Behavior", function(){
 			return {Items: items};
 		}
 
-		it('Failure callback will be called', function(){
+		it('Failure callback will be called', function() {
 			var req = setupRequest('harry');
 			req.request.fail();
 
@@ -438,7 +438,7 @@ describe("User Repository/Store/Cache Behavior", function(){
 			expect(TUR.activeRequests['harry']).toBeUndefined();
 		});
 
-		it('Calls failure callback if user doesnt resolve', function(){
+		it('Calls failure callback if user doesnt resolve', function() {
 			var req = setupRequest('harry');
 			req.request.finish(responseForItems([]));
 
@@ -447,7 +447,7 @@ describe("User Repository/Store/Cache Behavior", function(){
 			expect(TUR.activeRequests['harry']).toBeUndefined();
 		});
 
-		it('Returns non summary object', function(){
+		it('Returns non summary object', function() {
 			var r = setupRequest('harry'),
 				user = createUser('harry'),
 				scb = r.callbacks.success,
@@ -467,7 +467,7 @@ describe("User Repository/Store/Cache Behavior", function(){
 
 		});
 
-		it('Gracefully handles multiple users being returned', function(){
+		it('Gracefully handles multiple users being returned', function() {
 			var r = setupRequest('harry'),
 				user1 = createUser('harry'),
 				user2 = createUser('harry'),
@@ -485,7 +485,7 @@ describe("User Repository/Store/Cache Behavior", function(){
 			expect(result.get('Username')).toBe('harry');
 		});
 
-		it('Wont make requests if in flight', function(){
+		it('Wont make requests if in flight', function() {
 			var r = setupRequest('harry'),
 				firstCbs = r.callbacks,
 				user = createUser('harry'),

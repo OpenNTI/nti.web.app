@@ -80,6 +80,23 @@ var mockService = {
 			],
 			'Class': 'Workspace',
 			'Title': 'Library'
+		},
+		{
+			'Links': [
+				{
+					Class: 'Link',
+					href: '/dataserver2/ResolveUser/',
+					rel: 'ResolveUser',
+					type: 'application/vnd.nextthought.link'
+				},{
+					Class: 'Link',
+					href: '/dataserver2/ResolveUsers',
+					rel: 'ResolveUsers',
+					type: 'application/vnd.nextthought.link'
+				}
+			],
+			'Class': 'Workspace',
+			'Title': 'Global'
 		}
 	],
 	'Class': 'Service'
@@ -87,10 +104,6 @@ var mockService = {
 
 var NTITestUtils = {
 	newInstanceOfSingleton: function(singleton) {
-		var obj = {};
-		/*jslint sub:true */ //no way to ignore reserved property if using dot notation
-		obj['__proto__'] = singleton['__proto__'];
-		/*jslint sub:false */
-		return obj;
+		return Ext.Object.chain(singleton);
 	}
-}
+};
