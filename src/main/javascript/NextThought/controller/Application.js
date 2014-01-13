@@ -82,7 +82,7 @@ Ext.define('NextThought.controller.Application', {
 					Ext.DomHelper.overwrite(Ext.getBody(), {
 						cls: 'empty-state error-message-component',
 						cn: [
-							{tag: 'h1', html: 'There was an error communicating with the server'},
+							{tag: 'h1', html: 'There was an error communicating with the server.'},
 							{ html: 'Please try again in a few moments.'}
 						]
 					});
