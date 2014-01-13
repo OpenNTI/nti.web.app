@@ -73,7 +73,7 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 				if (button === 'yes') {
 					Service.request({url: record.get('href'), method: 'DELETE'})
 							.fail(function() {
-								alert('Sorry, i could not do that.');
+								alert('Sorry, I could not do that.');
 								console.error(arguments);
 							})
 							.done(function() {
