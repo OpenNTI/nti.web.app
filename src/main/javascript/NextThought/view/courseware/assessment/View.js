@@ -51,7 +51,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 
 	courseChanged: function(instance) {
-		var me = this, el = Ext.get('course-assessment-root');
+		var me = this;
 		delete me.finished;
 		me.hasAssignments = false;
 
@@ -112,8 +112,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 						me.forEachView(me.callFunction('setAssignmentsData',
 								[assignments, history, instance, gradeBook]));
 
-						me.finished = true;
-						if (el && el.dom) { el.unmask(); }
+						me.maybeUnmask();
 					})
 					.fail(function(reason) {
 						if (reason !== false) {
@@ -122,7 +121,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 						if (!isSync()) { return; }
 						me.clearViews();
 						me.fireEvent('failed-to-load', me.up('[isTabView]'));
-						if (el && el.dom) { el.unmask(); }
+						me.maybeUnmask();
 					});
 		});
 
@@ -130,11 +129,22 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 
 	maybeMask: function() {
-		var el = this.getEl();
-		if (el && el.dom && !this.finished) {
-			el.mask('Loading...', 'loading');
+		var el = Ext.get('course-assessment-root');
+		if (el && el.dom) {
+			if (!this.finished) {
+				el.mask('Loading...', 'loading');
+			}
 		} else {
 			this.on({single: true, afterRender: 'maybeMask'});
+		}
+	},
+
+
+	maybeUnmask: function() {
+		this.finished = true;
+		var el = Ext.get('course-assessment-root');
+		if (el && el.dom) {
+			el.unmask();
 		}
 	},
 
