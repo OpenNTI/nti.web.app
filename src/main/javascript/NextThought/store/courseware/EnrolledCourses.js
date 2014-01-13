@@ -55,6 +55,7 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 				me.sorters.clear();//don't sort on uiData() until precache is done.
 				if (!success) {
 					p.reject('Store Failed to load');
+					return;
 				}
 
 				Promise.pool(Ext.Array.map(

@@ -271,7 +271,7 @@ Ext.define('NextThought.Library', {
 					me.libraryLoaded(Ext.bind(go, me));
 				})
 				.fail(function(reason) {
-					console.error(reason);
+					me.promiseToLoad.reject(['CoureWare failed to load.', reason]);
 				});
 		}
 		else {
