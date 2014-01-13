@@ -6,7 +6,8 @@ Ext.define('NextThought.model.forums.GeneralForumComment', {
 	fields: [
 		{ name: 'Deleted', type: 'boolean', persist: false },
 		{ name: 'inReplyTo', type: 'string' },
-		{ name: 'RecursiveLikeCount', type: 'int'},
+		{ name: 'RecursiveLikeCount', type: 'int', persist: false},
+		{ name: 'ReferencedByCount', type: 'int', persist: false},
 		{ name: 'references', type: 'auto', defaultValue: []},
 		//for the view ui
 		{ name: 'bodyContent', type: 'string', persist: false},
@@ -18,6 +19,9 @@ Ext.define('NextThought.model.forums.GeneralForumComment', {
 		}},
 		{ name: 'liked', type: 'Synthetic', fn: function(rec){
 			return rec.isLiked();
+		}},
+		{ name: 'repliedTo', type: 'Synthetic', fn: function(rec){
+			return rec.parent && rec.parent.get('Creator');
 		}}
 	],
 
@@ -60,5 +64,20 @@ Ext.define('NextThought.model.forums.GeneralForumComment', {
 		};
 
 		return this.threadFilter;
+	},
+
+
+	addChild: function(child){
+		if (!this.children) { return; }
+
+		var count, p = this;
+
+		this.children.push(child);
+
+		while(p){
+			count = p.get('ReferencedByCount') || 0;
+			p.set('ReferencedByCount', count + 1)
+			p = p.parent;
+		}
 	}
 });

@@ -303,6 +303,10 @@ Ext.define('NextThought.view.courseware.forum.View', {
 		});
 	},
 
+	getScrollTop: function(){
+		return 0;
+	},
+
 
 	courseChanged: function(courseInstance) {
 		var s = {content: {discussion: null}};

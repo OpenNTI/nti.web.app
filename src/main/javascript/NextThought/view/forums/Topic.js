@@ -54,10 +54,11 @@ Ext.define('NextThought.view.forums.Topic', {
 				{cls: 'favorite'},
 				{cls: 'like'}
 			]},
+			{ cls: 'avatar', style: { backgroundImage: 'url({headline.Creator:avatarURL()});'}},
 			{ cls: 'title', html: '{title}' },
 			{ cls: 'meta', cn: [
 				{ tag: 'tpl', 'if': 'showName', cn: { tag: 'span', cls: 'name link', html: '{headline.Creator}'}},
-				{ tag: 'span', cls: 'datetime', html: '{CreatedTime:date("F j, Y")} at {CreatedTime:date("g:i A")}'},
+				{ tag: 'span', cls: 'datetime', html: '{CreatedTime:ago}'},
 				{ tag: 'tpl', 'if': 'headline.isModifiable || showPermissions', cn: [
 					{ tag: 'span', cls: 'state link {publish-state:lowercase}', html: '{publish-state}'}
 				]},
@@ -75,6 +76,7 @@ Ext.define('NextThought.view.forums.Topic', {
 				]},
 				{ cls: 'comment-box', cn: [
 					{ cls: 'response', cn: [
+						{ tag: 'span', html: '{PostCount:plural("Comment")}'},
 						{ tag: 'tpl', 'if': 'canReply', cn: [
 							{ tag: 'span', cls: 'reply link', html: 'Add a Comment' }
 						]},
@@ -91,6 +93,7 @@ Ext.define('NextThought.view.forums.Topic', {
 
 
 	renderSelectors: {
+		avatarEl: '.avatar',
 		bodyEl: '.body',
 		nameEl: '.meta .name',
 		liked: '.controls .like',
@@ -212,6 +215,7 @@ Ext.define('NextThought.view.forums.Topic', {
 			me.user = u;
 			if (me.rendered) {
 				me.nameEl.update(u.getName());
+				me.avatarEl.setStyle({ backgroundImage: 'url('+u.get('avatarURL')+')'});
 			}
 		});
 	},

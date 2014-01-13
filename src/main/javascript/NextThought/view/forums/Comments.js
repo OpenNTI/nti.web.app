@@ -8,53 +8,63 @@ Ext.define('NextThought.view.forums.Comments',{
 	],
 
 	ui: 'forum-comment-thread',
-	itemSelector: '.topic-comment',
+	itemSelector: '.topic-comment-container',
 
 	disableSelection: true,
 
 	tpl: Ext.DomHelper.markup([
 		{ cls: 'new-root'},
 		{ tag: 'tpl', 'for': '.', cn:[
-			{ tag: 'tpl', 'if': 'Deleted', cn: {
-				cls: 'topic-comment placeholder {[values.threadShowing? "expanded" : "collapsed"]}',
-				'data-depth': '{depth}',
-				cn: [
-					{ cls: 'expand'},
-					{ cls: 'wrap', 'data-commentid': '{ID}', cn: [
-						{ cls: 'body', html: 'This item has been deleted.'}
-					]}
-				]
-			}},
-			{ tag: 'tpl', 'if': '!Deleted', cn: {
-				cls: 'topic-comment {[values.threadShowing? "expanded" : "collapsed"]}',
-				'data-depth': '{depth}',
-				cn: [
-					{ cls: 'controls', cn: [
-						{cls: 'favorite-spacer'},
-						{cls: 'like {[values.liked? "on" : "off"]}'}
-					]},
-					{ cls: 'expand'},
-					{ cls: 'avatar', style: { backgroundImage: 'url({creatorAvatarURL});'}},
-					{ cls: 'wrap', 'data-commentid': '{ID}', cn: [
-						{ cls: 'meta', cn: [
-							{ tag: 'span', html: '{displayName}', cls: 'name link'},
-							{ tag: 'span', cls: 'datetime', html: '{CreatedTime:date("F j, Y")} at {CreatedTime:date("g:i A")}'}
+			{ cls: 'topic-comment-container {[values.threadShowing? "expanded" : "collapsed"]}', 'data-depth': '{depth}', cn: [
+				{ tag: 'tpl', 'if': 'Deleted', cn: {
+					cls: 'topic-comment placeholder toggle {[values.threadShowing? "expanded" : "collapsed"]}',
+					'data-depth': '{depth}',
+					cn: [
+						{ cls: 'wrap', 'data-commentid': '{ID}', cn: [
+							{ cls: 'body', html: 'This item has been deleted.'}
+						]}
+					]
+				}},
+				{ tag: 'tpl', 'if': '!Deleted', cn: {
+					cls: 'topic-comment {[values.threadShowing? "expanded" : "collapsed"]} {[values.depth === 0? "toggle" : ""]}',
+					'data-depth': '{depth}',
+					cn: [
+						{ cls: 'controls', cn: [
+							{cls: 'favorite-spacer'},
+							{cls: 'like {[values.liked? "on" : "off"]}'}
 						]},
-						{ cls: 'body', html: '{bodyContent}'},
-						{ cls: 'foot', cn: [
-							{ tag: 'span', cls: 'reply link', html: 'Reply'},
-							{ tag: 'tpl', 'if': 'isModifiable', cn: [
-								{ tag: 'span', cls: 'edit link', html: 'Edit'},
-								{ tag: 'span', cls: 'delete link', html: 'Delete'}
+						{ cls: 'commentAvatar', style: { backgroundImage: 'url({Creator:avatarURL()});'}},
+						{ cls: 'wrap', 'data-commentid': '{ID}', cn: [
+							{ cls: 'meta', cn: [
+								{ tag: 'span', html: '{Creator}', cls: 'name link'},
+								{ tag: 'tpl', 'if': 'depth &gt; 4', cn: [
+									{ tag: 'span', html: 'Replied to {repliedTo}'}
+								]},
+								{ tag: 'tpl', 'if': 'depth &lt; 5', cn: [
+									{ tag: 'span', cls: 'datetime nodot', html: '{CreatedTime:ago}'}
+								]}
 							]},
-							{ tag: 'tpl', 'if': '!isModifiable', cn: [
-								{ tag: 'span', cls: 'flag link {[values.flagged? "on" : "off"]}', html: 'Report'}
-							]}
-						]},
-						{ cls: 'editor-box' }
-					]}
-				]
-			}}
+							{ cls: 'body', html: '{bodyContent}'},
+							{ cls: 'foot', cn: [
+								{ tag: 'tpl', 'if': 'depth === 0', cn: [
+									{ tag: 'span', cls: 'comments link toggle', html: '{ReferencedByCount:plural("Comment")}'},
+								]},								
+								{ tag: 'span', cls: 'reply link', html: 'Reply'},
+								{ tag: 'tpl', 'if': 'isModifiable', cn: [
+									{ tag: 'span', cls: 'edit link', html: 'Edit'},
+									{ tag: 'span', cls: 'delete link', html: 'Delete'}
+								]},
+								{ tag: 'tpl', 'if': '!isModifiable', cn: [
+									{ tag: 'span', cls: 'flag link {[values.flagged? "on" : "off"]}', html: 'Report'}
+								]}
+							]},
+
+							{ cls: 'editor-box' }
+						]}
+					]
+				}},
+				{ cls: 'load-box'}
+			]}
 		]}
 	]),
 
@@ -83,13 +93,14 @@ Ext.define('NextThought.view.forums.Comments',{
 		var me = this;
 
 		this.callParent(arguments);
-		
+
 		me.editor = Ext.widget('nti-editor', {ownerCt: me, renderTo: me.el, record: null, saveCallback: function(editor, postCmp, record){
 			if(me.isNewRecord){
 				me.store.insertSingleRecord(record);
 			}
 		}});
-		me.editor.addCls('threaded-forum-editor');		
+		me.editor.addCls('threaded-forum-editor');	
+		me.el.selectable();
 	},	
 
 
@@ -119,11 +130,13 @@ Ext.define('NextThought.view.forums.Comments',{
 
 	onStoreAdd: function(store, records){
 		records.forEach(this.fillInData);
+		this.clearLoadBox();
 	},
 
 	
 	onStoreUpdate: function(store, record){
 		this.fillInData(record);
+		this.clearLoadBox();
 	},
 
 
@@ -133,8 +146,7 @@ Ext.define('NextThought.view.forums.Comments',{
 				.then(function(user){
 					record.set({
 						'bodyContent': body,
-						'displayName': user.get('displayName'),
-						'creatorAvatarURL': user.get('avatarURL')
+						'Creator': user
 					});
 				})
 				.fail(function(reason){
@@ -144,40 +156,64 @@ Ext.define('NextThought.view.forums.Comments',{
 		}, this);
 	},
 
+
+	clearLoadBox: function(){
+		if (!this.currentLoadBox) { return; }
+		this.currentLoadBox.unmask();
+		this.currentLoadBox.setHeight(0);
+	},	
+
+
+	maskLoadBox: function(el){
+		this.currentLoadBox = el.down('.load-box');
+		this.currentLoadBox.setHeight(40);
+		this.currentLoadBox.mask('Loading...');
+	},
+
+
 	onItemClick: function(record, item, index, e){
 		var record, load, me = this, width,
 			el = Ext.get(item),
 			box;
 
-		if (el.hasCls('placeholder')) {
-			if (el.hasCls('collapsed')) {
-				me.store.showCommentThread(record);
+		function loadThread(){ 
+			if(!record.threadLoaded){
+				me.maskLoadBox(el);
+			}
+
+			me.store.showCommentThread(record);
+		}
+
+		if(e.getTarget('.body') && record.get('threadShowing')){
+			e.preventDefault();
+			return;
+		}
+
+		width = el.down('.wrap').getWidth();
+
+		if (e.getTarget('.reply') && !this.editor.isActive()) {
+			this.isNewRecord = true;
+			newRecord = record.makeReply();
+
+			if(!record.threadLoaded){
+				me.store.on('add', function(){
+					var el = me.getNode(record);
+					
+					el = Ext.get(el);
+
+					me.openEditor(newRecord, el.down('.editor-box'), width);	
+				}, me, {single: true});
+				loadThread();
 			} else {
-				me.store.hideCommentThread(record);
+				this.openEditor(newRecord, el.down('.editor-box'), width);			
 			}
 			return;
 		}
 
-		if (el.hasCls('collapsed')) {
-			me.store.showCommentThread(record);
-			return;
-		}
-
-		if (e.getTarget('.expand')) {
-			me.store.hideCommentThread(record);
-			return;
-		}
-		width = el.down('.wrap').getWidth();
-
-		if (e.getTarget('.reply')) {
-			this.isNewRecord = true;
-			newRecord = record.makeReply();
-			this.openEditor(newRecord, el.down('.editor-box'), width);			
-		}
-
-		if (e.getTarget('.edit')) {
+		if (e.getTarget('.edit') && !this.editor.isActive()) {
 			delete this.isNewRecord;
 			this.openEditor(record, el.down('.body'), width);
+			return;
 		}
 
 		if (e.getTarget('.delete')) {
@@ -217,6 +253,7 @@ Ext.define('NextThought.view.forums.Comments',{
 					}
 				}
 			});
+			return;
 		}
 
 		if (e.getTarget('.flag') && !record.isFlagged()) {
@@ -225,6 +262,7 @@ Ext.define('NextThought.view.forums.Comments',{
 				delete me.flagging;
 				if (btn === 'ok') { record.flag(me); }
 			});
+			return;
 		}
 
 		if (e.getTarget('.name')) {
@@ -237,10 +275,21 @@ Ext.define('NextThought.view.forums.Comments',{
 				.fail(function(reason){
 					console.error(reason);
 				});
+			return;
 		}
 
 		if(e.getTarget('.like')) {
 			record.like();
+			return;
+		}
+
+
+		if(e.getTarget('.toggle') && record.get('depth') === 0){
+			if(record.get('threadShowing')){
+				me.store.hideCommentThread(record);
+			} else {
+				loadThread();
+			}
 		}
 
 	},

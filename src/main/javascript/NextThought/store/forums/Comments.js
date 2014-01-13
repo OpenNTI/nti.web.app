@@ -116,7 +116,7 @@ Ext.define('NextThought.store.forums.Comments',{
 		parent.threadLoaded = true;
 
 		flatList.forEach(function(item){
-			me.__addFilter(item.getThreadFilter(), true);
+			item.set('threadShowing', true);
 		});
 
 		this.__applyFilters();	
@@ -158,9 +158,12 @@ Ext.define('NextThought.store.forums.Comments',{
 				this.add(record);
 			}
 			parent.children = parent.children || [];
-			parent.children.push(record);
+			parent.addChild(record);
 			record.parent = parent;
-			record.set('depth', parent.get('depth') + 1);
+			record.set({
+				depth: parent.get('depth') + 1,
+				threadShowing: true
+			});
 			record.threadLoaded = true;
 
 			for(i = parentIndex + 1; i < count; i++){

@@ -29,7 +29,7 @@
 
 	.pager {
 		position: absolute;
-		top: 3px; right: 0;
+		top: 3px; right: 5px;
 
 		div{
 			width: 38px;
@@ -110,6 +110,7 @@
 
 	.forum-list-item {
 		margin: 30px 0 0 0;
+		padding: 0 10px 0 10px;
 		cursor: pointer;
 		border: 0 solid $border-grey;
 		border-bottom-width: 1px;
@@ -185,7 +186,7 @@
 @mixin topic-list-item {
 
 	.topic-list-item {
-		padding: 30px 0 0 0;
+		padding: 30px 10px 0 10px;
 		cursor: pointer;
 		border: 0 solid $border-grey;
 		border-bottom-width: 1px;
@@ -239,6 +240,7 @@
 
 
 @mixin forum-navigation{
+	padding: 0 5px 0 5px;
 	height: 52px;
 	position: relative;
 	@include post-navigation;
@@ -269,7 +271,7 @@
 
 	.controls {
 		position: absolute;
-		top: 8px; right: 0;
+		top: 8px; right: 5px;
 	}
 }
 
@@ -528,7 +530,7 @@
 }
 
 .x-component-forum-comment-thread{
-	background-color: $panel-background;
+	background-color: white;
 	margin-bottom: 20px;
 
 	.threaded-forum-editor{
@@ -536,52 +538,130 @@
 		z-index: 1;
 	}
 
-	.topic-comment{
-		border: 0 solid #f5f5f5;
-		border-top-width: 1px;
+	.topic-comment-container{
 		position: relative;
-		margin-top: 3px;
-		margin-left: 140px;
-
-		&[data-depth='3']{
-			margin-left: 105px;
-		}
-
-		&[data-depth='2']{
-			margin-left: 70px; 
-		}
-
-		&[data-depth='1']{
-			margin-left: 35px;
-		}
+		padding: 0 30px 0 65px;
 
 		&[data-depth='0']{
-			margin-left: 0px;
+			background-color: white;
+			margin-top: 0;
+			padding-left: 0;
 		}
 
-		.expand {
-			cursor: pointer;
-			position: absolute;
-			top: 0; left: 0;
-			width: 20px;
-			padding-left: 10px;
-			height: 40px;
+		&.expanded{
 
 			&::before{
 				content: '';
-				@include arrow($pointFrom:left, $width: 8px, $height: 5px, $color: $secondary-grey);
+				position: absolute;
+				z-index: 1;
+				top: -1px; bottom: -1px; left: 0;
+				width: 3px;
+				background-color: $primary-blue;
+			}
+		}
+	}
+
+	.topic-comment{
+		position: relative;
+		padding-left: 140px;
+		background-color: $panel-background;
+		-webkit-font-smoothing: antialiased;
+
+		&:hover{
+			.wrap{
+
+
+				.meta{
+					.datetime.nodot{
+						visibility: visible;
+					}
+				}
+
+				.foot{
+					.link{
+						color: $primary-blue;
+					}
+				}
 			}
 		}
 
+		&:not(:hover){
+			.wrap{
+
+				.meta{
+					.datetime.nodot{
+						visibility: hidden;
+					}
+				}
+
+				.foot{
+					.link:not(.comments){
+						color: $tertiary-grey;
+					}
+				}
+			}
+		}
+
+
+		&.toggle:not(.expanded){
+			cursor: pointer;
+
+			.wrap{
+				.body{
+					cursor: pointer;
+				}
+			}
+		}
+
+		&[data-depth='4']{
+			padding-left: 105px;
+
+			.commentAvatar{
+				left: 130px;
+			}
+		}
+
+		&[data-depth='3']{
+			padding-left: 70px;
+
+			.commentAvatar{
+				left: 95px;
+			}
+		}
+
+		&[data-depth='2']{
+			padding-left: 35px;
+			.commentAvatar{
+				left: 55px;
+			} 
+		}
+
+		&[data-depth='1'], &[data-depth='0']{
+			
+			border: 0 solid #f5f5f5;
+			border-top-width: 1px;
+			padding-left: 0px;
+
+			.commentAvatar{
+				left: 25px;
+			}
+		}
+
+		&[data-depth='0']{
+			background-color: white;
+		}
+
 		.wrap{
+			line-height: 1.2;
+			padding-top: 10px;
 			margin-left: 65px;
 			white-space: nowrap;
 
 			.meta{
-				line-height: 40px !important;
+				padding-top: 10px;
 
 				.name{
-					line-height: 40px;
+					line-height: 1.2;
 					overflow: hidden;
 					white-space: nowrap;
 					@include ellipse;
@@ -589,12 +669,30 @@
 					display: inline-block;
 					vertical-align: middle;
 				}
+
+				.datetime.nodot{
+					display: inline-block;
+					vertical-align: middle;
+					
+					&::before{
+						content: '';
+						padding: 0 0.4em;
+					}
+				}
+			}
+
+			.body{
+				margin: 10px 0 !important;
+			}
+
+			.foot{
+				padding-bottom: 15px;
 			}
 		}
 
-		.avatar {
+		.commentAvatar {
 			position: absolute;
-			top: 5px; left: 25px;
+			top: 15px; left: 165px;
 			width: 30px; height: 30px;
 			border-radius: 3px;
 			background:{
@@ -603,24 +701,7 @@
 				repeat: no-repeat;
 				size: cover;
 			}
-		}
-
-		&.expanded:not(.placeholder){
-			padding-bottom: 10px;
-
-			.expand{
-				padding-top: 9px;
-			}
-		}
-
-		&.expanded{
-			.expand{
-				&::before{
-					@include transform-origin(25%, 25%);
-					@include rotate(90deg);
-				}
-			}
-		}
+		}		
 
 		&.placeholder{
 			cursor: pointer;
@@ -632,7 +713,7 @@
 			}
 		}
 
-		&.collapsed, &.placeholder{
+		&.placeholder{
 			height: 40px;
 			line-height: 40px;
 
@@ -978,6 +1059,7 @@
 
 #forums, 
 .course-forum{
+	-webkit-font-smoothing: antialiased;
 	@include scrollbar(#ffffff, $tertiary-grey);
 	overflow:{
 		x: hidden;
@@ -1011,13 +1093,12 @@
 
 	& > div.x-component,
 	& > div.x-container, {
-		width: 700px;
-		margin: 60px auto 0 auto;
 
 		&.forums-topic-editor-box{
 			margin: 0 auto;
 
 			.header-container {
+				padding: 0 5px 0 5px;
 				height: 52px;
 				.header {
 					@include forum-navigation;
@@ -1054,15 +1135,33 @@
 		}
 
 		&.topic-post {
+			position: relative;
 			margin-top: 0;
 			.header-container {
 				height: 52px;
 				z-index: 3;
 			}
 
+			.avatar {
+				position: absolute;
+				width: 60px; height: 60px;
+				top: 35px; left: 30px;
+				border-radius: 3px;
+				background:{
+					color: transparent;
+					position: center;
+					repeat: no-repeat;
+					size: cover;
+				}
+			}
+
 			& > .wrap {
-				padding-top: 30px;
+				padding: 30px 25px 0 25px;
 				position: relative;
+
+				.meta{
+					margin-left: 75px;
+				}
 
 				.meta,
 				.foot {
@@ -1085,6 +1184,7 @@
 			}
 
 			.title{
+				margin-left: 70px;
 				cursor: default;
 				white-space: normal;
 			}
