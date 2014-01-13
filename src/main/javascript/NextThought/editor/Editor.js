@@ -571,11 +571,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 
-	/**
-	 *  @see http://stackoverflow.com/questions/2176861/javascript-get-clipboard-data-on-paste-event-cross-browser/
-	 */
 	handlePaste: function(e, elem) {
-		console.debug('Called');
 
 		elem = e.getTarget('.content', Number.MAX_VALUE);
 		if (!elem) {
@@ -585,61 +581,39 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 		var be = e.browserEvent,
 			cd = be ? be.clipboardData : null,
-			sel = window.getSelection(),
+			sel = window.getSelection(), types,
 			savedRange = RangeUtils.saveRange(sel.getRangeAt(0)),
+			docFrag = document.createDocumentFragment(),
 			offScreenBuffer = document.createElement('div');
 
-		document.body.appendChild(offScreenBuffer);
-		offScreenBuffer.style.position = 'absolute';
-		offScreenBuffer.style.left = '-1000px';
-		offScreenBuffer.style.top = '-1000px';
-		offScreenBuffer.contentEditable = true;
-		offScreenBuffer.focus();
+		docFrag.appendChild(offScreenBuffer);
 
-		// Webkit - get data from clipboard, put into editdiv, cleanup, then cancel event
+		e.stopEvent();
+
+		offScreenBuffer.innerHTML = '[Unsupported Clipboard Data]';
+
 		if (cd && cd.getData) {
-			e.stopEvent();
-			if (/text\/html/.test(cd.types)) {
+			types = Ext.toArray(cd.types).toString();
+
+			if (/text\/html/.test(types)) {
 				offScreenBuffer.innerHTML = cd.getData('text/html');
 			}
-			else if (/text\/plain/.test(cd.types)) {
+			else if (/text\/plain/.test(types)) {
 				offScreenBuffer.innerHTML = cd.getData('text/plain');
 			}
-			else {
-				offScreenBuffer.innerHTML = '';
-			}
-			this.waitForPasteData(offScreenBuffer, savedRange, elem);
-			return false;
+		} else if (window.clipboardData) {//IE
+			offScreenBuffer.innerHTML = window.clipboardData.getData('Text');
 		}
 
-		// Everything else allow browser to paste content into it, then cleanup
-		offScreenBuffer.innerHTML = '';
-		this.waitForPasteData(offScreenBuffer, savedRange, elem);
-		return true;
-	},
+		this.processPaste(offScreenBuffer, savedRange, elem);
 
-
-	waitForPasteData: function(offScreenBuffer, savedRange, elem, callCount) {
-		var me = this;
-		callCount = callCount || 0;
-		if (offScreenBuffer.childNodes && offScreenBuffer.childNodes.length > 0) {
-			setTimeout(function() {
-				me.processPaste(offScreenBuffer, savedRange, elem);
-			}, 20);
-		}
-		else if (callCount < 100) {
-			setTimeout(function() {
-				me.waitForPasteData(offScreenBuffer, savedRange, elem, callCount + 1);
-			}, 20);
-		}
-		else {
-			console.log('timed out waiting for paste');
-			document.body.removeChild(offScreenBuffer);
-		}
+		return false;
 	},
 
 
 	processPaste: function(offScreenBuffer, savedRange, elem) {
+		Ext.fly(offScreenBuffer).select('script,meta').remove();
+
 		var pasteData = offScreenBuffer.innerHTML, range, frag;
 
 		try {
@@ -653,10 +627,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		try {
 			pasteData = pasteData
 				.replace(/\s*(style|class)=".+?"\s*/ig, ' ')
-				.replace(/<span.*?>&nbsp;<\/span>/ig, '&nbsp;')
-				.replace(/<meta.*?>/ig, '');
+				.replace(/<span.*?>&nbsp;<\/span>/ig, '&nbsp;');
 
-			pasteData = this.sanitizeHTML(pasteData);
 			frag = range.createContextualFragment(pasteData);
 			range.deleteContents();
 			range.insertNode(frag);
@@ -670,29 +642,6 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			console.log(pasteData, e2);
 		}
 		elem.focus();
-		document.body.removeChild(offScreenBuffer);
-	},
-
-
-	// NOTE: since users can copy and paste HTML into the editor,
-	// sanitize it to avoid allowing to insert client-side script (i.e <script></script>)
-	// which can lead to security holes.
-	sanitizeHTML: function(str) {
-		var tagsToReplace = {
-			'&': '&amp;',
-			'<': '&lt;',
-			'>': '&gt;'
-		};
-
-		function replaceTag(tag) {
-			return tagsToReplace[tag] || tag;
-		}
-
-		function safe_tags_replace(str) {
-			return str.replace(/[&<>]/g, replaceTag);
-		}
-
-		return safe_tags_replace(str);
 	},
 
 
