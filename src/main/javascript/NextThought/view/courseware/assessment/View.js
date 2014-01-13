@@ -52,7 +52,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 	courseChanged: function(instance) {
 		var me = this, el = Ext.get('course-assessment-root');
-
+		delete me.finished;
 		me.hasAssignments = false;
 
 		function isSync() {
@@ -72,9 +72,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 			return;
 		}
 
-		if (el) {
-			el.mask('Loading...', 'loading');
-		}
+		this.maybeMask();
 
 		instance.getWrapper().done(function(e) {
 			if (!isSync()) { return; }
@@ -114,7 +112,8 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 						me.forEachView(me.callFunction('setAssignmentsData',
 								[assignments, history, instance, gradeBook]));
 
-						if (el) { el.unmask(); }
+						me.finished = true;
+						if (el && el.dom) { el.unmask(); }
 					})
 					.fail(function(reason) {
 						if (reason !== false) {
@@ -123,10 +122,20 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 						if (!isSync()) { return; }
 						me.clearViews();
 						me.fireEvent('failed-to-load', me.up('[isTabView]'));
-						if (el) { el.unmask(); }
+						if (el && el.dom) { el.unmask(); }
 					});
 		});
 
+	},
+
+
+	maybeMask: function() {
+		var el = this.getEl();
+		if (el && el.dom && !this.finished) {
+			el.mask('Loading...', 'loading');
+		} else {
+			this.on({single: true, afterRender: 'maybeMask'});
+		}
 	},
 
 
