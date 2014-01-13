@@ -83,7 +83,9 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 							.done(function() {
 								record.set({
 									href: '',
-									Submission: null
+									Submission: null,
+									Grade: null,
+									Feedback: null
 								});
 							});
 
