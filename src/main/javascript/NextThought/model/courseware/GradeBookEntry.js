@@ -1,9 +1,9 @@
 Ext.define('NextThought.model.courseware.GradeBookEntry', {
 	extend: 'NextThought.model.Base',
-
+	requires: ['NextThought.model.converters.Date'],
 	fields: [
 		{name: 'AssignmentId', type: 'string'},
-		{name: 'DueDate', type: 'date', dateFormat: 'c'},
+		{name: 'DueDate', type: 'ISODate'},
 		{name: 'Items', type: 'collectionItem'},
 		{name: 'Name', type: 'string'},
 		{name: 'displayName', type: 'string'},

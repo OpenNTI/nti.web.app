@@ -1,6 +1,6 @@
 Ext.define('NextThought.model.courseware.navigation.CourseOutlineNode', {
 	extend: 'NextThought.model.Base',
-
+	requires: ['NextThought.model.converters.Date'],
 	isNode: true,
 
 	fields: [
@@ -10,8 +10,8 @@ Ext.define('NextThought.model.courseware.navigation.CourseOutlineNode', {
 		{ name: 'description', type: 'string'},
 		{ name: 'title', type: 'string'},
 
-		{ name: 'AvailableBeginning', type: 'date', dateFormat: 'c'},
-		{ name: 'AvailableEnding', type: 'date', dateFormat: 'c'},
+		{ name: 'AvailableBeginning', type: 'ISODate'},
+		{ name: 'AvailableEnding', type: 'ISODate'},
 
 		{ name: 'label', type: 'string', mapping: 'title'},
 

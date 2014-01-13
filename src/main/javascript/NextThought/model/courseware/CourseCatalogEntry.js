@@ -2,7 +2,7 @@ Ext.define('NextThought.model.courseware.CourseCatalogEntry', {
 	alternateClassName: 'NextThought.model.courseware.CourseCatalogLegacyEntry',
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.courseware.coursecataloglegacyentry',
-
+	requires: ['NextThought.model.converters.Date'],
 	idProperty: 'ProviderUniqueID',
 	fields: [
 		{ name: 'Communities', type: 'auto', persist: false },
@@ -15,12 +15,11 @@ Ext.define('NextThought.model.courseware.CourseCatalogEntry', {
 		{ name: 'ProviderDepartmentTitle', type: 'string', persist: false },
 		{ name: 'ProviderUniqueID', type: 'string', persist: false },
 		{ name: 'Schedule', type: 'auto', persist: false },
-		{ name: 'StartDate', type: 'date', dateFormat: 'Y-m-d', persist: false },
+		{ name: 'StartDate', type: 'ISODate', persist: false },
+		{ name: 'EndDate', type: 'ISODate', persist: false },
 		{ name: 'Title', type: 'string', persist: false },
 		{ name: 'Video', type: 'string', persist: false },
-
 		{ name: 'Preview', type: 'bool' },
-
 		{ name: 'icon', type: 'string', mapping: 'LegacyPurchasableIcon' }, //small
 		{ name: 'thumbnail', type: 'string', mapping: 'LegacyPurchasableThumbnail' }, //small/medium
 		{ name: 'poster', type: 'string' }, //medium (promo)

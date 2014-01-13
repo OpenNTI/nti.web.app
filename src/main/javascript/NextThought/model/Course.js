@@ -1,9 +1,7 @@
 Ext.define('NextThought.model.Course', {
 	extend: 'NextThought.model.Base',
 
-	requires: [
-
-	],
+	requires: ['NextThought.model.converters.Date'],
 
 	fields: [
 		{ name: 'Featured', type: 'bool', persist: false, defaultValue: false },
@@ -21,9 +19,9 @@ Ext.define('NextThought.model.Course', {
 		{ name: 'StripeConnectKey', type: 'singleitem', persist: false },
 		{ name: 'Items', type: 'auto', persist: false },
 		{ name: 'isCourse', type: 'bool', persist: false, defaultValue: false },
-		{ name: 'StartDate', type: 'date', persist: false, dateFormat: 'Y-m-d'},
+		{ name: 'StartDate', type: 'ISODate', persist: false },
 		{ name: 'courseName', type: 'string', persist: false, defaultValue: '' },
-		{ name: 'HasHistory', type: 'bool', persist: false, affectedBy: 'Last Modified', convert: function(v,r) {
+		{ name: 'HasHistory', type: 'bool', persist: false, affectedBy: 'Last Modified', convert: function(v, r) {
 			return r && r.hasHistory();
 		}}
 	],
