@@ -112,7 +112,7 @@ Ext.define('NextThought.view.assessment.Question', {
 
 		if (assessedQuestionSet.isSet) {
 			Ext.each(assessedQuestionSet.get('questions'), function(i) {
-				if (i.getId() === id) {
+				if (i.getId() === id || i.get('questionId') === id) {
 					q = i;
 					return false;
 				}
