@@ -213,6 +213,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 			s = this.store,
 			g = this.getGrouper();
 
+		s.removeFilter('open');
 		cmp.removeAll(true);
 
 		if (Ext.isFunction(g)) {
@@ -362,8 +363,15 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 		var path = [
 			'Assignments',
 			record.get('name')
-		];
+				], now = new Date();
 
+		this.store.filter({
+			id: 'open',
+			filterFn: function(rec) {
+				var d = rec.get('opens');
+				return !d || d < now;
+			}
+		});
 		this.fireEvent('show-assignment', this, record.get('item'), record, $AppConfig.userObject, path, this.store, this.store.indexOf(record) + 1);
 	},
 
