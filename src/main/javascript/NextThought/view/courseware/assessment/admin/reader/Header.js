@@ -18,6 +18,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 
 		if (!this.assignmentHistory.get('Submission')) {
 			this.gradeEl.addCls('disabled');
+			this.gradeEl.set({disabled: 'disabled'});
 			this.letterEl.addCls('disabled');
 			this.lateEl.update('No Submission');
 			return;
