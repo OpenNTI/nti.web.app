@@ -159,7 +159,7 @@ Ext.define('NextThought.view.content.View', {
 					}
 				}
 				catch (e) {
-					console.error('error', e);
+					console.warn('"hack" threw an exception...so it did not set the location back to the "id" of the view.... WHAT was this for??', e);
 				}
 			}
 		}
