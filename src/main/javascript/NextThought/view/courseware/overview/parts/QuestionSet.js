@@ -111,6 +111,10 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 		this.setAsNotStarted();
 		this.updateWithScore();
 		tally.setGreyText(html);
+
+		if (assignment.get('availableBeginning') > new Date()) {
+			this.down('button').destroy();
+		}
 	},
 
 
