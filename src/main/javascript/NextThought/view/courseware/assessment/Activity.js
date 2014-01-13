@@ -229,7 +229,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 	addFeedback: function(f) {
 		var c = f.get('Creator'),
 			str = isMe(c) ? ' commented on' : ' left feedback on',
-			label = ((isMe(c) && 'You') || c) + str,
+			label = ((isMe(c) && 'You') || '--') + str,
 			r = this.addEvent(this.getEventConfig(label, f.get('AssignmentId'), f.get('CreatedTime')));
 
 		if (!isMe(c)) {

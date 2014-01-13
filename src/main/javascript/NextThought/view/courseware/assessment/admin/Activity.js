@@ -65,7 +65,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Activity', {
 	addStudentSubmission: function(s) {
 		var c = s.get('Creator'),
 			str = ' submitted',
-			r = this.addEvent(this.getEventConfig(c + str, s.get('assignmentId'), s.get('CreatedTime')));
+			r = this.addEvent(this.getEventConfig('--' + str, s.get('assignmentId'), s.get('CreatedTime')));
 
 		UserRepository.getUser(c).done(function(u) {
 			r.set({
