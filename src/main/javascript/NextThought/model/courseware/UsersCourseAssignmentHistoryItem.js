@@ -67,8 +67,12 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 			title: 'Are you sure?',
 			msg: 'This will reset this assignment for this student. It is not recoverable.' +
 				 '\nFeedback and work will be deleted.',
-			icon: Ext.Msg.WARNING,
-			buttons: Ext.Msg.YES | Ext.Msg.CANCEL,
+			icon: 'warning-red',
+			buttonText: true,
+			buttons: {
+				cancel: 'Cancel',
+				yes: 'caution:Yes'
+			},
 			fn: function(button) {
 				if (button === 'yes') {
 					Service.request({url: record.get('href'), method: 'DELETE'})
