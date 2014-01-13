@@ -173,6 +173,9 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 
 
 	goToAssignment: function(selModel, record) {
+		if (!record || record.get('assigned') > new Date()) {
+			return;
+		}
 		this.fireEvent('goto-assignment', record.get('item'), $AppConfig.userObject);
 	},
 
