@@ -35,18 +35,30 @@ Ext.define('NextThought.view.assessment.ScoreboardTally', {
 	},
 
 	setGreyText: function(text) {
+		if (!this.rendered) {
+			this.on({single: true, afterrender: this.setGreyText.bind(this, [text])});
+			return;
+		}
 		this.correctBox.hide();
 		this.incorrectBox.hide();
 		this.questionsBox.show().update(text);
 	},
 
-	setGreenText: function() {
+	setGreenText: function(text) {
+		if (!this.rendered) {
+			this.on({single: true, afterrender: this.setGreenText.bind(this, [text])});
+			return;
+		}
 		this.incorrectBox.hide();
 		this.questionsBox.hide();
 		this.correctBox.show().update(text);
 	},
 
-	setRedText: function() {
+	setRedText: function(text) {
+		if (!this.rendered) {
+			this.on({single: true, afterrender: this.setRedText.bind(this, [text])});
+			return;
+		}
 		this.correctBox.hide();
 		this.questionsBox.hide();
 		this.incorrectBox.show().update(text);
