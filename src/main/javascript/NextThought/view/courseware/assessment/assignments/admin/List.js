@@ -34,25 +34,16 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.List', {
 
 				getStatusCls: function(values) {
 					var date = (values && values.due) || new Date(0),
+						opens = values.opens || new Date(),
 						due = (new Date(date.getTime())).setHours(0, 0, 0, 0),
-						today = (new Date()).setHours(0, 0, 0, 0);
+						today = (new Date()).setHours(0, 0, 0, 0),
+						cls = opens > today ? 'closed ' : '';
 
-					return ((values && values.due) && due < today) ? 'late' : '';
+					return cls + (((values && values.due) && due < today) ? 'late' : '');
 				},
 
 				getDueDate: function(values) {
-					if (!values || !values.due) { return ''; }
-
-					var format = 'l, F j',
-						date = values.due,
-						day = (new Date(date.getTime())).setHours(0, 0, 0, 0),
-						today = (new Date()).setHours(0, 0, 0, 0),
-						html = 'Due ';
-					if (day === today) {
-						html += 'Today';
-					}
-					html += Ext.Date.format(date, format);
-					return html;
+					return this.ownerCmp.getDueDate(values);
 				}
 			})
 

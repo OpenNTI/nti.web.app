@@ -175,6 +175,11 @@ canvas.x-component-course-assessment {
 
 			@include icon('check_gray', $top: 22px, $left: 25px);
 
+			&.closed {
+				cursor: default !important;
+				opacity: 0.5;
+			}
+
 			&.over, &.selected {
 				background: #fafafa;
 			}

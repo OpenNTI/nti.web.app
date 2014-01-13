@@ -154,7 +154,10 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 	},
 
 
-	onItemClicked: function(s, record) {
+	onItemClicked: function(s, record, dom) {
+		if (Ext.fly(dom).hasCls('closed')) {
+			return;
+		}
 		this.goToAssignment(record);
 	},
 
@@ -166,6 +169,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 			{name: 'containerId', type: 'string'},
 			{name: 'name', type: 'string'},
 			{name: 'due', type: 'date'},
+			{name: 'opens', type: 'date'},
 			{name: 'completed', type: 'date'},
 			{name: 'correct', type: 'int'},
 			{name: 'total', type: 'int'},
@@ -323,12 +327,12 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 		this.store.loadRawData(raw);
 		this.refresh();
 
-		this.mon(assignments, 'Roster-changed', 'updateEnrolledCount')
+		this.mon(assignments, 'Roster-changed', 'updateEnrolledCount');
 	},
 
 
 	updateEnrolledCount: function(v) {
-		var c = v && v.length || 0;
+		var c = (v && v.length) || 0;
 		this.store.each(function(r) {
 			r.set('enrolledCount', c);
 		});
@@ -364,7 +368,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 	},
 
 
-	showAssignment: function(assignment, user) {
+	showAssignment: function(assignment) {
 		var id = assignment && ((assignment.getId && assignment.getId()) || assignment),
 			x = this.store.getById(id);
 

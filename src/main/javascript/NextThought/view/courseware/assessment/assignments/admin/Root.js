@@ -15,6 +15,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 			console.error('Ignoring click because no record was passed.', arguments);
 			return;
 		}
+		//This is the admin view... we will let instructors view them no matter what. (so we will ignore the closed state)
 		this.fireEvent('assignment-clicked', rec);
 	},
 
