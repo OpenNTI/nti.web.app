@@ -4,10 +4,12 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.InstructorForum', {
 
 	statics: {
 		getTileFor: function(effictiveDate, course, locationInfo, courseNodeRecord, finish) {
-			var ntiid = course && course.getAttribute('instructorForum');
+			var ntiid = course && course.getAttribute('instructorForum'),
+				id = 'course-dashboard-tiles-instructor-forum=' + ntiid;
 
-			if (!Ext.isEmpty(ntiid)) {
+			if (!Ext.isEmpty(ntiid) && !Ext.getCmp(id)) {
 				this.create({
+					id: id,
 					locationInfo: locationInfo,
 					ntiid: ntiid,
 					lastModified: courseNodeRecord.get('date'),
