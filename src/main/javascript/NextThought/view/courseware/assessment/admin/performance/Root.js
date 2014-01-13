@@ -207,8 +207,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		this.store.filter([{
 			id: 'studentFilter',
 			filterFn: function(rec) {
-				var user = rec.get('user'), i,
-					r = me.roster[user.getId()];
+				var user = rec.getId(),
+					r = me.roster[user];
 
 				function passes(enroll) {
 					if (item.type === 'open') {
