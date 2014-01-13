@@ -12,7 +12,7 @@ Ext.define('NextThought.view.library.View', {
 	cls: 'library-view',
 	defaultType: 'library-view-page',
 	defaultTab: 'my-courses',
-	activeItem: 1,
+	activeItem: 0,
 	layout: {
 		type: 'card',
 		deferredRender: true
@@ -79,7 +79,8 @@ Ext.define('NextThought.view.library.View', {
 		tabs.forEach(markSelected);
 
 		if (active && !active.showPage) {
-			this.setActiveTab((tabs[0] || {}).viewId);
+			//if the active tab isn't showing set it to the last time, which for now is the course catalog
+			this.setActiveTab((tabs[tabs.length - 1] || {}).viewId);
 		}
 
 		return tabs;
