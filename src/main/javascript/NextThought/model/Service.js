@@ -51,7 +51,19 @@ Ext.define('NextThought.model.Service', {
 		if (!l) {
 			return null;
 		}
+
 		return getURL(this.forceTrailingSlash(l) + (username ? encodeURIComponent(username) : ''));
+	},
+
+
+	getBulkResolveUserURL: function() {
+		var w = this.getWorkspace('Global') || {},
+			l = this.getLinkFrom(w.Links || [], Globals.BULK_USER_RESOLVE_REL);
+		if (!l) {
+			return null;
+		}
+
+		return getURL(this.forceTrailingSlash(l));
 	},
 
 

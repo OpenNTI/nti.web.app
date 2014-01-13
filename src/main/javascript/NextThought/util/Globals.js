@@ -7,6 +7,7 @@ Ext.define('NextThought.util.Globals', {
 	RECURSIVE_USER_GENERATED_DATA: 'RecursiveUserGeneratedData',
 	USER_GENERATED_DATA: 'UserGeneratedData',
 	USER_SEARCH_REL: 'UserSearch',
+	BULK_USER_RESOLVE_REL: 'ResolveUsers',
 	USER_RESOLVE_REL: 'ResolveUser',
 	USER_GENERATED_DATA_SEARCH_REL: 'UGDSearch',
 	USER_UNIFIED_SEARCH_REL: 'UnifiedSearch',

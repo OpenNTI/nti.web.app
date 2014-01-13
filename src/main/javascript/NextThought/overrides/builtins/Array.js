@@ -25,7 +25,7 @@ Ext.define('NextThought.overrides.builtins.Array', {});
 			value = initialValue;
 			isValueSet = true;
 		}
-		for (; length > index; ++index) {
+		for (length; length > index; ++index) {
 			if (!this.hasOwnProperty(index)) { continue; }
 			if (isValueSet) {
 				value = callback(value, this[index], index, this);
@@ -41,8 +41,17 @@ Ext.define('NextThought.overrides.builtins.Array', {});
 	}
 
 
-	(function(o,a) {
-		Ext.Object.each(a, function(k,v) {
+	 function chunk(chunkSize) {
+	    var r = [], i = 0, len = this.length;
+	    for (i; i < len; i += chunkSize) {
+	        r.push(this.slice(i, i + chunkSize));
+		}
+	    return r;
+	}
+
+
+	(function(o, a) {
+		Ext.Object.each(a, function(k, v) {
 			if (!o[k]) {
 				o[k] = v;
 				if (Object.defineProperty) {
@@ -54,7 +63,8 @@ Ext.define('NextThought.overrides.builtins.Array', {});
 		first: function first() { return this[0]; },
 		last: function last() { return this[this.length - 1]; },
 		peek: function peek() { return this[this.length - 1]; },
-		reduce: reduce
+		reduce: reduce,
+		chunk: chunk
 	}));
 
 }());
