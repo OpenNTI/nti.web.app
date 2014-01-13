@@ -55,10 +55,10 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 				{
 					cls: 'filters',
 					cn: [
-						{tag: 'span', cls: 'label', html: 'Show:'},
-						{tag: 'span', cls: 'nti-checkbox checked', html: 'In Class', 'data-qtip': 'Show In Class Students',
+						//{tag: 'span', cls: 'label', html: 'Show:'},
+						{tag: 'span', cls: 'nti-checkbox checked', html: 'Enrolled Students', 'data-qtip': 'Show Enrolled Students',
 							'data-filter-id': 'not:open-enrolled'},
-						{tag: 'span', cls: 'nti-checkbox checked', html: 'Open', 'data-qtip': 'Show Open Enrolled Students',
+						{tag: 'span', cls: 'nti-checkbox checked', html: 'Open Students', 'data-qtip': 'Show Open Students',
 							'data-filter-id': 'open-enrolled'}
 					]
 				}

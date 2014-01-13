@@ -953,6 +953,9 @@ canvas.x-component-course-assessment {
 				color: $secondary-grey;
 
 				.nti-checkbox {
+					&:first-of-type {
+						margin-left: 0;
+					}
 					padding-left: 20px;
 				}
 			}
