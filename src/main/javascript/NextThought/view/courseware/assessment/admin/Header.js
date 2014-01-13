@@ -80,8 +80,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 		//for profile link
 		me.user = me.student;
 		me.enableProfileClicks(me.profileEl);
-
-		if (!me.user.get('email') && false) {
+		
+		if (!me.user.get('email')) {
 			me.emailEl.hide();
 		}
 

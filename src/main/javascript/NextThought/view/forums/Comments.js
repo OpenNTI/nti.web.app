@@ -47,7 +47,7 @@ Ext.define('NextThought.view.forums.Comments',{
 							{ cls: 'body', html: '{bodyContent}'},
 							{ cls: 'foot', cn: [
 								{ tag: 'tpl', 'if': 'depth === 0', cn: [
-									{ tag: 'span', cls: 'comments link toggle', html: '{ReferencedByCount:plural("Comment")}'},
+									{ tag: 'span', cls: 'comments link toggle', html: '{ReferencedByCount:plural("Comment")}'}
 								]},								
 								{ tag: 'span', cls: 'reply link', html: 'Reply'},
 								{ tag: 'tpl', 'if': 'isModifiable', cn: [
