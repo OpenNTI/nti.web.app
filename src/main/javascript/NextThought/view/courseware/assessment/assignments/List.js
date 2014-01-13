@@ -30,7 +30,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 				},
 
 				getStatusCls: function(values) {
-					return this.isOpen(values) + this.isTaken(values) ? 'completed' : '';
+					return this.isOpen(values) + (this.isTaken(values) ? 'completed' : '');
 				},
 
 				isOpen: function(values) {
@@ -46,6 +46,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 				isOverDue: function(values) {
 					var due = values.due && (new Date(values.due.getTime())).setHours(0, 0, 0, 0),
 						today = (new Date()).setHours(0, 0, 0, 0);
+
 					return (values.due && !this.isTaken(values) && today >= due) ? 'due' : '';
 				},
 
