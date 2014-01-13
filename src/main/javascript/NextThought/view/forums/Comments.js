@@ -9,12 +9,13 @@ Ext.define('NextThought.view.forums.Comments',{
 
 	ui: 'forum-comment-thread',
 	itemSelector: '.topic-comment-container',
+	preserveScrollOnRefresh: true,
 
 	disableSelection: true,
 
 	tpl: Ext.DomHelper.markup([
 		{ cls: 'new-root'},
-		{ tag: 'tpl', 'for': '.', cn:[
+		{ tag: 'tpl', 'for': '.', cn: [
 			{ cls: 'topic-comment-container {[values.threadShowing? "expanded" : "collapsed"]}', 'data-depth': '{depth}', cn: [
 				{ tag: 'tpl', 'if': 'Deleted', cn: {
 					cls: 'topic-comment placeholder toggle {[values.threadShowing? "expanded" : "collapsed"]}',
