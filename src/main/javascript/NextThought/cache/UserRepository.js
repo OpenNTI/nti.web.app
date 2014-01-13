@@ -213,11 +213,26 @@ Ext.define('NextThought.cache.UserRepository', {
 						}, this);
 					} else {
 						toResolve.push(name);
+						//Legacy Path begin:
+						this.makeRequest(name, {
+							scope: this,
+							failure: function() {
+								var unresolved = User.getUnresolved(name);
+								//	console.log('resturning unresolved user', name);
+								maybeFinish(name, unresolved);
+							},
+							success: function(u) {
+								//Note we recache the user here no matter what
+								//if we requestsd it we cache the new values
+								maybeFinish(name, this.cacheUser(u, true));
+							}
+						}, cacheBust);
+						//Legacy Path END
 					}
 				},
 				this);
 
-			if (toResolve.length > 0) {
+			if (toResolve.length > 0 && false) {
 				this.makeBulkRequest(toResolve)
 					.done(function(users) {
 						//Note we recache the user here no matter what
