@@ -131,11 +131,11 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 						));
 					}
 
-					function drop() { group.setTitle(''); }
+					function drop() {}
 
 					function resolve(o) { o.findNode(name).done(fill).fail(drop); }
 
-					group.setTitle(name);
+					group.setTitle('');//lets never show the NTIID
 					me.mon(group.down('dataview'), 'itemclick', 'onItemClicked');
 
 
