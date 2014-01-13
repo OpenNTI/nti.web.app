@@ -131,7 +131,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 						));
 					}
 
-					function drop() { Ext.destroy(group); }
+					function drop() { group.setTitle(''); }
 
 					function resolve(o) { o.findNode(name).done(fill).fail(drop); }
 
