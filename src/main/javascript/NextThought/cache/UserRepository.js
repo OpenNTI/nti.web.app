@@ -137,16 +137,18 @@ Ext.define('NextThought.cache.UserRepository', {
 			}
 
 			var promise = new Promise(),
+				me = this,
 				result = {},
 				l = username.length,
-				names = [];
+				names = [],
+				toResolve = [];
 
 			function maybeFinish(k, v) {
 				result[k] = v;
 				l -= 1;
 
 				if (l === 0) {
-					result = Ext.Array.map(names, function(n) {
+					result = names.map(function(n) {
 						return result[n];
 					});
 
@@ -210,25 +212,88 @@ Ext.define('NextThought.cache.UserRepository', {
 							maybeFinish(name, unresolved);
 						}, this);
 					} else {
-						this.makeRequest(name, {
-							scope: this,
-							failure: function() {
-								var unresolved = User.getUnresolved(name);
-								//	console.log('resturning unresolved user', name);
-								maybeFinish(name, unresolved);
-							},
-							success: function(u) {
-								//Note we recache the user here no matter what
-								//if we requestsd it we cache the new values
-								maybeFinish(name, this.cacheUser(u, true));
-							}
-						}, cacheBust);
+						toResolve.push(name);
 					}
 				},
 				this);
 
+			if (toResolve.length > 0) {
+				this.makeBulkRequest(toResolve)
+					.done(function(users) {
+						//Note we recache the user here no matter what
+						//if we requestsd it we cache the new values
+						users.forEach(function(u) {
+							maybeFinish(u.getId(), me.cacheUser(u, true));
+						});
+					});
+			}
+
 			return promise;
 		},
+
+
+		makeBulkRequest: function(usernames, fromChunking) {
+			var p = new Promise(), me = this;
+
+			if (Ext.isArray(usernames)) {
+				//add placeholders while we resolve. (so subsequent requests don't get made)
+				usernames.map(User.getUnresolved.bind(User)).map(this.cacheUser.bind(this));
+			} else if (usernames === true && fromChunking) {
+				usernames = (Ext.isArray(fromChunking) && fromChunking) || [];
+			}
+
+			function failed(reason) {
+				console.error('Failed:', reason);
+				p.reject(reason);
+			}
+
+			function rebuild(lists) {
+				var agg = [], i = 0, len = lists.length;
+				for (i; i < len; i++) {
+					agg = agg.concat(lists[i]);
+				}
+				p.fulfill(agg);
+			}
+
+
+			function parse(json) {
+				var u = [];
+				json = (Ext.decode(json, true) || {}).Items || {};
+				usernames.forEach(function(n) {
+					var o = json[n];
+					if (o) {
+						o = User.create(json[n], n);
+						o.summaryObject = false;
+						me.updatePresenceFromResolve([o]);
+					} else {
+						o = User.getUnresolved(n);
+					}
+					u.push(o);
+				});
+				p.fulfill(u);
+			}
+
+
+			if (usernames.length > 100) {
+				Promise.pool(usernames.chunk(100).map(this.makeBulkRequest.bind(this, true)))
+						.done(rebuild)
+						.fail(failed);
+
+				return p;
+			}
+
+			Service.request({
+				url: Service.getBulkResolveUserURL(),
+				method: 'POST',
+				jsonData: {usernames: usernames}
+			})
+					.done(parse)
+					.fail(failed);
+
+
+			return p;
+		},
+
 
 
 		/**
@@ -275,21 +340,15 @@ Ext.define('NextThought.cache.UserRepository', {
 					console.warn('many matching users: "', username, '"', list);
 				}
 
-				Ext.each(list, function(u) {
-					var presence;
+				list.forEach(function(u) {
 					if (u.get('Username') === username) {
 						result = u;
-
-						//check if we already have a presence info for them
-						presence = Ext.getStore('PresenceInfo').getPresenceOf(result.get('Username'));
-						if (presence) {
-							result.set('Presence', presence);
-						}
-
-						result.summaryObject = false;
+						u.summaryObject = false;
 						return false;
 					}
 				});
+
+				me.updatePresenceFromResolve(list);
 
 				if (result && callbacks && callbacks.success) {
 					callbacks.success.call(callbacks.scope || this, result);
@@ -304,7 +363,6 @@ Ext.define('NextThought.cache.UserRepository', {
 					if (this.debug && (!r.loggedWarn || !r.loggedWarn[username])) {
 						if (!r.loggedWarn) { r.loggedWarn = {}; }
 						r.loggedWarn[username] = true;
-						console.warn('{requestID:' + r.requestId + '} result is null', url, r.responseText);
 					}
 				}
 			}
@@ -320,7 +378,7 @@ Ext.define('NextThought.cache.UserRepository', {
 				return null;
 			}
 
-			console.debug('\n\n\n\nRequesting ' + username, '\n\n\n\n');
+
 			this.activeRequests[username] = Ext.Ajax.request({
 				url: url,
 				scope: me,
@@ -329,6 +387,17 @@ Ext.define('NextThought.cache.UserRepository', {
 			});
 
 			return result;
+		},
+
+
+		updatePresenceFromResolve: function(list) {
+			list.forEach(function(u) {
+				//check if we already have a presence info for them
+				var presence = Ext.getStore('PresenceInfo').getPresenceOf(u.get('Username'));
+				if (presence) {
+					u.set('Presence', presence);
+				}
+			});
 		},
 
 		presenceChanged: function(username, presence) {
