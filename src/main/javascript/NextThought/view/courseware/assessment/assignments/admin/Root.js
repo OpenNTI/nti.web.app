@@ -42,21 +42,24 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 
 			assignmentView.filledStorePromise
 				.done(function(store) {
-					store.each(function(rec) {
-						try {
+					var recs = store.snapshot || store.data;
+					try {
+						recs.each(function(rec) {
+
 							var creator = rec.get('Creator'),
-								u = Ext.isString(user) ? user : user.getId();
+									u = Ext.isString(user) ? user : user.getId();
 
 							creator = Ext.isString(creator) ? creator : creator.getId();
 
 							if (u === creator) {
 								assignmentView.goToAssignment(null, rec);
 							}
-						} finally {
-							gridView.enable();
-							tab.unmask();
-						}
-					});
+
+						});
+					} finally {
+						gridView.enable();
+						tab.unmask();
+					}
 				})
 				.fail(function(reason) {
 					gridView.enable();
