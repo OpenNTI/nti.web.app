@@ -34,9 +34,9 @@ Ext.define('NextThought.view.assessment.input.FreeResponse', {
 
 		this.mon(this.inputField, {
 			scope: this,
-			blur: function(e,dom) {dom.setAttribute('placeholder', 'Answer');},
-			focus: function(e,dom) {dom.removeAttribute('placeholder');},
-			keyup: function(e,dom) {
+			blur: function(e, dom) { dom.setAttribute('placeholder', 'Answer'); },
+			focus: function(e, dom) { dom.removeAttribute('placeholder'); },
+			keyup: function(e, dom) {
 				if (dom.value === '') { this.disableSubmission(); }
 				else { this.enableSubmission(); }
 			},
@@ -77,7 +77,7 @@ Ext.define('NextThought.view.assessment.input.FreeResponse', {
 	},
 
 
-	keyFilter: function(e,dom) {
+	keyFilter: function(e, dom) {
 		if (e.getKey() === e.ENTER) {
 			this.submitOrTabNext(dom);
 			e.stopEvent();
@@ -102,14 +102,14 @@ Ext.define('NextThought.view.assessment.input.FreeResponse', {
 	markCorrect: function() {
 		this.callParent(arguments);
 		this.inputBox.removeCls('incorrect').addCls('correct');
-		this.inputField.set({readOnly: true});
+		this.inputField.set({disabled: 'disabled', readOnly: true});
 	},
 
 
 	markIncorrect: function() {
 		this.callParent(arguments);
 		this.inputBox.removeCls('correct').addCls('incorrect');
-		this.inputField.set({readOnly: true});
+		this.inputField.set({disabled: 'disabled', readOnly: true});
 	},
 
 
@@ -117,6 +117,7 @@ Ext.define('NextThought.view.assessment.input.FreeResponse', {
 		this.callParent(arguments);
 		this.inputBox.removeCls(['incorrect', 'correct']);
 		this.inputField.dom.removeAttribute('readOnly');
+		this.inputField.dom.removeAttribute('disabled');
 		this.inputField.dom.value = '';
     //		this.inputField.focus();
 	}
