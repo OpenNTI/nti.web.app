@@ -144,7 +144,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			items = [
 				{ text: 'All Students', type: 'all', checked: type === 'all'},
 				{ text: 'Open Students', type: 'open', checked: type === 'open'},
-				{ text: 'In Class Students', type: 'enrolled', checked: type === 'enrolled'}
+				{ text: 'Enrolled Students', type: 'enrolled', checked: type === 'enrolled'}
 			];
 
 		this.studentMenu = Ext.widget('menu', {
