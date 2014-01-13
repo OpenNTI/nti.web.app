@@ -5,6 +5,8 @@ Ext.define('NextThought.model.assessment.AssessedPart', {
 		'NextThought.util.Parsing'
 	],
 	fields: [
+		{ name: 'explanation', type: 'auto'},
+		{ name: 'solutions', type: 'auto'},
 		{ name: 'submittedResponse', type: 'auto' },
 		{ name: 'assessedValue', type: 'int' }
 	],
