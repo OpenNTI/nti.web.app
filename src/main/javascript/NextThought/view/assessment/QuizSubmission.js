@@ -277,7 +277,11 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 
 
 	setGradingResult: function(assessedQuestionSet) {
-		this.questionSet.fireEvent('graded', assessedQuestionSet);
+		try {
+			this.questionSet.fireEvent('graded', assessedQuestionSet);
+		} catch (e) {
+			console.error(e.stack || e.message || e);
+		}
 	},
 
 
