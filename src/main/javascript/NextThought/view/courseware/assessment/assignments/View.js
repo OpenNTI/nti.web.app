@@ -359,12 +359,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 	},
 
 
-	goToAssignment: function(record) {
-		var path = [
-			'Assignments',
-			record.get('name')
-				], now = new Date();
-
+	applyPagerFilter: function() {
+		var now = new Date();
 		this.store.filter({
 			id: 'open',
 			filterFn: function(rec) {
@@ -372,6 +368,16 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 				return !d || d < now;
 			}
 		});
+	},
+
+
+	goToAssignment: function(record) {
+		var path = [
+			'Assignments',
+			record.get('name')
+		];
+
+		this.applyPagerFilter();
 		this.fireEvent('show-assignment', this, record.get('item'), record, $AppConfig.userObject, path, this.store, this.store.indexOf(record) + 1);
 	},
 

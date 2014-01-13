@@ -19,6 +19,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 		this.fireEvent('assignment-clicked', rec);
 	},
 
+	applyPagerFilter: Ext.emptyFn,//admins can see all assignments at any time.
 
 	showAssignment: function(assignment, user) {
 		var id = assignment && ((assignment.getId && assignment.getId()) || assignment),
