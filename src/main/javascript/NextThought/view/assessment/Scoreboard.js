@@ -38,6 +38,9 @@ Ext.define('NextThought.view.assessment.Scoreboard', {
 
 		this.hide();//we have to pre-render then hide. We hide until after grading, or preset the previously taken quiz.
 
+		this.isAssignment = Boolean(this.questionSet && this.questionSet.associatedAssignment);
+		this.shouldShow = !this.isAssignment;
+
 		this.mon(this.questionSet, {
 			scope: this,
 			'graded': this.updateWithResults,
