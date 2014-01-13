@@ -28,6 +28,7 @@ Ext.define('NextThought.view.courseware.assessment.reader.Panel', {
 			a = r.getAssessment();
 
 		r.getScroll().lock();
+		r.pageWidgets.hide();
 
 		function done() {
 			r.getScroll().unlock();
