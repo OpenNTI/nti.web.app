@@ -66,7 +66,7 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 	},
 
 
-	beforeRender: function(){
+	beforeRender: function() {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -92,7 +92,9 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 			this.fireGoUp();
 		} else if (goHome) {
 			this.fireGoUp();
-			this.parentView && this.parentView.fireGoUp();
+			if (this.parentView) {
+				this.parentView.fireGoUp();
+			}
 		}
 	},
 
