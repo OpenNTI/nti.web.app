@@ -378,7 +378,7 @@ Ext.define('NextThought.view.assessment.input.Base', {
 			});
 		}
 
-		this.setValue((part.get && part.get('submittedResponse')) || part);
+		this.setValue(part.get ? part.get('submittedResponse') : part);
 
 		if (!this.noMark && part.isModel) {
 			if (part.isCorrect()) { this.markCorrect(); }
