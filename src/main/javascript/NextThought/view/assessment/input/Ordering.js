@@ -81,7 +81,11 @@ Ext.define('NextThought.view.assessment.input.Ordering', {
 			if (val.hasOwnProperty(ordinal)) {
 				text = this.el.down('.draggable-area[data-ordinal="' + val[ordinal] + '"]');
 				label = this.el.down('.ordinal .label[data-part="' + ordinal + '"]');
-				text.appendTo(label.parent());
+				if(text && label && label.parent()) {
+					text.appendTo(label.parent());
+				} else {
+					console.error('Bad Response from server', val);
+				}
 			}
 		}
 	},
