@@ -13,6 +13,8 @@ Ext.define('NextThought.view.forums.Comments',{
 
 	disableSelection: true,
 
+	updateFromMeMap: {},
+
 	tpl: Ext.DomHelper.markup([
 		{ cls: 'new-root'},
 		{ tag: 'tpl', 'for': '.', cn: [
@@ -118,9 +120,10 @@ Ext.define('NextThought.view.forums.Comments',{
 		});
 
 		this.mon(s,{
-			'load': 'onStoreAdd',
-			'add': 'onStoreAdd',
-			'update': 'onStoreUpdate'
+			scope: this,
+			load: 'onStoreAdd',
+			add: 'onStoreAdd',
+			update: 'onStoreUpdate'
 		});
 
 		this.bindStore(s);
@@ -130,7 +133,7 @@ Ext.define('NextThought.view.forums.Comments',{
 
 
 	onStoreAdd: function(store, records){
-		records.forEach(this.fillInData);
+		records.forEach(this.fillInData, this);
 		this.clearLoadBox();
 	},
 
@@ -142,9 +145,17 @@ Ext.define('NextThought.view.forums.Comments',{
 
 
 	fillInData: function(record){
+		var me = this;
+
+		if (me.updateFromMeMap[record.getId()]) {
+			delete me.updateFromMeMap[record.getId()];
+			return;
+		}
+
 		record.compileBodyContent(function(body){
 			UserRepository.getUser(record.get('Creator'))
 				.then(function(user){
+					me.updateFromMeMap[record.getId()] = true;
 					record.set({
 						'bodyContent': body,
 						'Creator': user
