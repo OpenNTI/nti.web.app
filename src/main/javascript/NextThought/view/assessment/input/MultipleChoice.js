@@ -66,13 +66,14 @@ Ext.define('NextThought.view.assessment.input.MultipleChoice', {
 
 
 	getValue: function() {
-		var val = [];
+		var val = null;
 
 		Ext.each(this.getEl().query('.control.checked'), function(e) {
+			val = val || [];//on first occurance, replace null with an array.
 			val.push(parseInt(e.getAttribute('data-index'), 10));
 		});
 
-		return val;
+		return val;//null if unanswered
 	},
 
 
@@ -107,7 +108,7 @@ Ext.define('NextThought.view.assessment.input.MultipleChoice', {
 	},
 
 
-	mark: function() {
+	mark: function(correct) {
 		var c = {};
 
 		// Extract the solutions. A solution may or may not be an array
@@ -121,7 +122,9 @@ Ext.define('NextThought.view.assessment.input.MultipleChoice', {
 
 		Ext.each(this.getEl().query('.control.checked'), function(e) {
 			var x = parseInt(e.getAttribute('data-index'), 10),
-				cls = c[x] === true ? 'correct' : 'incorrect';
+			//if we do not have the solutions, use the whole question's correctness as the marker.
+				cls = (c.hasOwnProperty(x) ? c[x] === true : correct) ?
+					'correct' : 'incorrect';
 
 			Ext.fly(e).up('.choice').addCls(cls);
 		});
@@ -130,13 +133,13 @@ Ext.define('NextThought.view.assessment.input.MultipleChoice', {
 
 	markCorrect: function() {
 		this.callParent();
-		this.mark();
+		this.mark(true);
 	},
 
 
 	markIncorrect: function() {
 		this.callParent();
-		this.mark();
+		this.mark(false);
 	},
 
 
