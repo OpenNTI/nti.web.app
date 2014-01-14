@@ -4,7 +4,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 	statics: {
 		PARTNER_ID: '1500101',
-		UICONF_ID: '15491291',
+		UICONF_ID: $AppConfig.kalturaUIID || '15491291',
 		kind: 'video',
 		type: 'kaltura',
 
@@ -78,12 +78,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 				{ tag: 'title', html: '{id}-sandbox' },
 				{ tag: 'meta', 'http-equiv': 'X-UA-Compatible', 'content': 'IE=edge' },
 				{ tag: 'script', type: 'text/javascript', src: ('{basePath}resources/lib/jQuery-1.8.0min.js') },
-				{ tag: 'script', type: 'text/javascript', src:
-						(location.protocol + '//cdnapisec.kaltura.com/p/1500101/sp/150010100/embedIframeJs/uiconf_id/15491291/partner_id/1500101') },
-						//(location.protocol+'//cdnapisec.kaltura.com/html5/html5lib/v1.7.0.12/mwEmbedLoader.php') },
-						//(location.protocol+'//cdnapisec.kaltura.com/html5/html5lib/v1.7.4/mwEmbedLoader.php') },
-						//(location.protocol+'//cdnapisec.kaltura.com/html5/html5lib/v1.8.9/mwEmbedLoader.php') },
-						//(location.protocol+'//html5.kaltura.org/js') },
+				{ tag: 'script', type: 'text/javascript', src: '{scheme}//cdnapisec.kaltura.com/p/{partnerid}/sp/150010100/embedIframeJs/uiconf_id/{uiconfid}/partner_id/{partnerid}'},
 				{ tag: 'style', type: 'text/css', cn: [
 					'body, html { margin: 0; padding: 0; overflow:hidden; }'
 				]}
@@ -163,7 +158,10 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 					height: this.height,
 					width: this.width,
 					basePath: location.protocol + '//' + location.host + location.pathname,
-					code: this.buildWrapperCode()
+					code: this.buildWrapperCode(),
+					sheme: location.protocol,
+					partnerid: this.PARTNER_ID,
+					uiconfid: this.UICONF_ID
 				},
 				playerSetupTask = {interval: 50},
 				me = this;
