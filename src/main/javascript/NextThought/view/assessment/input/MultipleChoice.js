@@ -108,22 +108,27 @@ Ext.define('NextThought.view.assessment.input.MultipleChoice', {
 	},
 
 
-	mark: function(correct) {
-		var c = {};
+	mark: function(correctnessOfQuestion) {
+		var c = null;
 
 		// Extract the solutions. A solution may or may not be an array
 		// Ext.each handles this case for us.
 		Ext.each(this.part.get('solutions'), function(s) {
+			c = c || {};
 			var value = s.get('value');
 			Ext.each(value, function(s) {c[s] = true;});
 		});
 
 		this.getEl().select('.choice').removeCls(['correct', 'incorrect']);
 
+		if(c === null) {
+			return;
+		}
+
 		Ext.each(this.getEl().query('.control.checked'), function(e) {
 			var x = parseInt(e.getAttribute('data-index'), 10),
 			//if we do not have the solutions, use the whole question's correctness as the marker.
-				cls = (c.hasOwnProperty(x) ? c[x] === true : correct) ?
+				cls = (c.hasOwnProperty(x) ? c[x] === true : correctnessOfQuestion) ?
 					'correct' : 'incorrect';
 
 			Ext.fly(e).up('.choice').addCls(cls);
