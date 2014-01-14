@@ -680,6 +680,8 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 		inject: function inject() {
 
+			var leadWithExpirementalHTML5 = false;
+
 			window.playerId = '%id%';
 			window.host = window.top;
 
@@ -760,8 +762,9 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 			window.addEventListener('message', handleMessage, false);
 
-			// Force HTML5 player over Flash player
-			mw.setConfig('KalturaSupport.LeadWithHTML5', JSON.parse('%LEAD_HTML5%'));
+
+
+
 			// Allow AirPlay
 			mw.setConfig('EmbedPlayer.WebKitAllowAirplay', true);
 			// Do not rewrite video tags willy-nilly
@@ -780,9 +783,20 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 			//mw.setConfig( 'EmbedPlayer.WebKitPlaysInline', true );
 
 			if (VideoSupports.m3u8) {
+				//Note this does nothing for me, I think they only use it so you can turn it off on ios devices.
+				//IE the only respect false.
 				//May help with the quality negotiations
 				mw.setConfig('Kaltura.UseAppleAdaptive', true);
+				//If the above ever starts working we may need html5
+				//leadWithExpirementalHTML5 = true;
 			}
+
+			if(!leadWithExpirementalHTML5){
+				leadWithExpirementalHTML5 = JSON.parse('%LEAD_HTML5%');
+			}
+
+			// Force HTML5 player over Flash player
+			mw.setConfig('KalturaSupport.LeadWithHTML5', leadWithExpirementalHTML5);
 
 			//IPad settings
 			//mw.setConfig('EmbedPlayer.EnableIpadHTMLControls', false); //enables native controls with native fullscreen
@@ -795,7 +809,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 				wid: '_%PARTNER_ID%',
 				uiconf_id: '%UICONF_ID%',
 				flashvars: {
-					'mediaProxy.preferedFlavorBR': 1500,//This makes the 1.5Mbps stream preferd
+					'mediaProxy.preferedFlavorBR': 600, //A low quality stream but one that should have video as well as audio
 					externalInterfaceDisabled: false,
 					akamaiHD: {
 						loadingPolicy: 'preInitialize',
