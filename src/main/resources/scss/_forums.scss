@@ -570,8 +570,6 @@
 
 		&:hover{
 			.wrap{
-
-
 				.meta{
 					.datetime.nodot{
 						visibility: visible;
@@ -588,7 +586,6 @@
 
 		&:not(:hover){
 			.wrap{
-
 				.meta{
 					.datetime.nodot{
 						visibility: hidden;
@@ -597,7 +594,7 @@
 
 				.foot{
 					.link:not(.comments){
-						color: $tertiary-grey;
+						color: $tertiary-grey !important;
 					}
 				}
 			}

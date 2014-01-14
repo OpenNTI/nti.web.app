@@ -14,6 +14,7 @@ Ext.define('NextThought.view.forums.Comments',{
 	disableSelection: true,
 
 	updateFromMeMap: {},
+	wbData: {},
 
 	tpl: Ext.DomHelper.markup([
 		{ cls: 'new-root'},
@@ -52,7 +53,7 @@ Ext.define('NextThought.view.forums.Comments',{
 								{ tag: 'tpl', 'if': 'depth === 0', cn: [
 									{ tag: 'span', cls: 'comments link toggle', html: '{ReferencedByCount:plural("Comment")}'}   
 								]},								
-								{ tag: 'span', cls: 'reply link', html: 'Reply'},
+								{ tag: 'span', cls: 'reply thread-reply link', html: 'Reply'},
 								{ tag: 'tpl', 'if': 'isModifiable', cn: [
 									{ tag: 'span', cls: 'edit link', html: 'Edit'},
 									{ tag: 'span', cls: 'delete link', html: 'Delete'}
@@ -165,7 +166,9 @@ Ext.define('NextThought.view.forums.Comments',{
 					console.error(reason);
 				})
 			
-		}, this);
+		}, this, function(id, data){
+			me.wbData[id] = data;
+		}, 226);
 	},
 
 
@@ -183,17 +186,42 @@ Ext.define('NextThought.view.forums.Comments',{
 	},
 
 
+	whiteboardContainerClick: function(record, container, e, el){
+		var me = this,
+			guid = container && container.up('.body-divider').getAttribute('id');
+
+		if (container && me.wbData[guid]) {
+			container = e.getTarget('.reply:not(.thread-reply)', null, true);
+			if (container) {
+				me.replyTo(record, el)
+					.done(function(){
+						me.editor.addWhiteboard(Ext.clone(me.wbData[guid]), guid + '-reply');
+					});
+			} else {
+				Ext.widget('wb-window', { width: 802, value: me.wbData[guid], readonly: true}).show();
+			}
+		}
+	},
+
+
+	loadThread: function(record, el){
+		if(!record.threadLoaded){
+			this.maskLoadBox(el);
+		}
+
+		this.store.showCommentThread(record);
+	},
+
+
 	onItemClick: function(record, item, index, e){
-		var record, load, me = this, width,
+		var record, load, me = this, width, 
+			t = e.getTarget('.whiteboard-container', null, true),
 			el = Ext.get(item),
 			box;
-
-		function loadThread(){ 
-			if(!record.threadLoaded){
-				me.maskLoadBox(el);
-			}
-
-			me.store.showCommentThread(record);
+			
+		if (t) {
+			this.whiteboardContainerClick(record, t, e, el);
+			return;
 		}
 
 		if(e.getTarget('.body') && record.get('threadShowing')){
@@ -204,67 +232,22 @@ Ext.define('NextThought.view.forums.Comments',{
 		width = el.down('.wrap').getWidth();
 
 		if (e.getTarget('.reply') && !this.editor.isActive()) {
-			this.isNewRecord = true;
-			newRecord = record.makeReply();
-
-			if(!record.threadLoaded){
-				me.store.on('add', function(){
-					var el = me.getNode(record);
-					
-					el = Ext.get(el);
-
-					me.openEditor(newRecord, el.down('.editor-box'), width);	
-				}, me, {single: true});
-				loadThread();
-			} else {
-				this.openEditor(newRecord, el.down('.editor-box'), width);			
-			}
+			this.replyTo(record, el, width);
 			return;
 		}
 
 		if (e.getTarget('.edit') && !this.editor.isActive()) {
 			delete this.isNewRecord;
-			this.openEditor(record, el.down('.body'), width);
+			t = el.down('.body');
+			t.hide();
+			this.openEditor(record, t, width, function(){
+				t.show();
+			});
 			return;
 		}
 
 		if (e.getTarget('.delete')) {
-			/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
-			Ext.Msg.show({
-				msg: 'This will permanently remove this comment.',
-				buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
-				scope: me,
-				icon: 'warning-red',
-				buttonText: {'ok': 'Delete'},
-				title: 'Are you sure?',
-				fn: function(str) {
-					if (str === 'ok') {
-						var href = record.get('href'),
-							depth = record.get('depth');
-
-						if (!href) {
-							console.error('The record doesnt have an href!?!?!');
-							return;
-						}
-
-						Service.request({
-							url: href,
-							method: 'DELETE'
-						}).done(function(){
-							record.convertToPlaceholder();
-							record.set({
-								'depth': depth,
-								'threadShowing': true,
-								'Deleted': true
-							});
-
-						}).fail(function(reason){
-							console.error(reason);
-						});
-
-					}
-				}
-			});
+			this.deleteRecord(record);
 			return;
 		}
 
@@ -300,14 +283,80 @@ Ext.define('NextThought.view.forums.Comments',{
 			if(record.get('threadShowing')){
 				me.store.hideCommentThread(record);
 			} else {
-				loadThread();
+				me.loadThread(record, el);
 			}
 		}
 
 	},
 
 
-	openEditor: function(record, el, width) {
+	replyTo: function(record, el, width){
+		var me = this,
+			p = new Promise();
+
+		me.isNewRecord = true;
+		newRecord = record.makeReply();
+
+		if(!record.threadLoaded){
+			me.store.on('add', function(){
+				var el = me.getNode(record);
+				
+				el = Ext.get(el);
+
+				me.openEditor(newRecord, el.down('.editor-box'), width);	
+				p.fulfill();
+			}, me, {single: true});
+			me.loadThread(record, el);
+		} else {
+			me.openEditor(newRecord, el.down('.editor-box'), width);
+			p.fulfill();			
+		}
+
+		return p;
+	},
+
+
+	deleteRecord: function(record){
+		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
+		Ext.Msg.show({
+			msg: 'This will permanently remove this comment.',
+			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+			scope: this,
+			icon: 'warning-red',
+			buttonText: {'ok': 'Delete'},
+			title: 'Are you sure?',
+			fn: function(str) {
+				if (str === 'ok') {
+					var href = record.get('href'),
+						depth = record.get('depth');
+
+					if (!href) {
+						console.error('The record doesnt have an href!?!?!');
+						return;
+					}
+
+					Service.request({
+						url: href,
+						method: 'DELETE'
+					}).done(function(){
+						record.convertToPlaceholder();
+						record.set({
+							'depth': depth,
+							'threadShowing': true,
+							'Deleted': true
+						});
+
+					}).fail(function(reason){
+						console.error(reason);
+					});
+
+				}
+			}
+		});
+	},
+
+
+	openEditor: function(record, el, width, cancelCallback) {
 		var me = this,
 			oldHeight = el.getHeight();
 
@@ -334,6 +383,7 @@ Ext.define('NextThought.view.forums.Comments',{
 			'grew': size,
 			'shrank': size,
 			'deactivated-editor': function(){
+				Ext.callback(cancelCallback);
 				el.setHeight(oldHeight);
 			}
 		});
