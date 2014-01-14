@@ -18,7 +18,7 @@ Ext.define('NextThought.view.forums.Comments',{
 		{ tag: 'tpl', 'for': '.', cn: [
 			{ cls: 'topic-comment-container {[values.threadShowing? "expanded" : "collapsed"]}', 'data-depth': '{depth}', cn: [
 				{ tag: 'tpl', 'if': 'Deleted', cn: {
-					cls: 'topic-comment placeholder toggle {[values.threadShowing? "expanded" : "collapsed"]}',
+					cls: 'topic-comment placeholder {[values.threadShowing? "expanded" : "collapsed"]}',
 					'data-depth': '{depth}',
 					cn: [
 						{ cls: 'wrap', 'data-commentid': '{ID}', cn: [

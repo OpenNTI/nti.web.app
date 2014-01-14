@@ -307,7 +307,9 @@ Ext.define('NextThought.model.Base', {
 			'ID': 1,
 			'MimeType': 1,
 			'NTIID': 1,
-			'OID': 1
+			'OID': 1,
+			'inReplyTo': 1,
+			'references': 1
 		};
 		me.placeholder = true;
 		me.fields.each(function(f) {
