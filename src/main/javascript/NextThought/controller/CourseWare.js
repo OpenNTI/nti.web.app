@@ -1,6 +1,7 @@
 Ext.define('NextThought.controller.CourseWare', {
 	extend: 'Ext.app.Controller',
 
+	//<editor-fold desc="Config">
 	models: [
 		'courseware.AssignmentCollection',
 		'courseware.CourseActivity',
@@ -47,10 +48,12 @@ Ext.define('NextThought.controller.CourseWare', {
 	refs: [
 		{ ref: 'mainNav', selector: 'main-navigation'},
 		{ ref: 'contentView', selector: 'content-view-container' },
+		{ ref: 'courseAssignmentsView', selector: 'content-view-container course-assessment' },
 		{ ref: 'libraryView', selector: 'library-view-container' },
 		{ ref: 'enrolledCoursesView', selector: 'library-view-container course-collection[kind=enrolled]' },
 		{ ref: 'administeredCoursesView', selector: 'library-view-container course-collection[kind=admin]' }
 	],
+	//</editor-fold>
 
 
 	init: function() {
@@ -60,6 +63,9 @@ Ext.define('NextThought.controller.CourseWare', {
 
 		var control = {
 			component: {
+				'#main-reader-view reader-content': {
+					'beforeNavigate': 'onBeforeContentReaderNavigation'
+				},
 				'content-view-container': {
 					'get-course-hooks': 'applyCourseHooks'
 				},
@@ -79,6 +85,7 @@ Ext.define('NextThought.controller.CourseWare', {
 	},
 
 
+	//<editor-fold desc="Store Setup">
 	applyCourseHooks: function(observable) {
 		Ext.apply(observable, {
 			getCourseInstance: Ext.bind(this.__getCourseInstance, this),
@@ -209,6 +216,42 @@ Ext.define('NextThought.controller.CourseWare', {
 				console.debug('Hiding ' + cmp.id + ' because the library or the store (' + store.storeId + ') was empty');
 			}
 		});
+	},
+	//</editor-fold>
+
+
+	onBeforeContentReaderNavigation: function(ntiid) {
+		var view = this.getCourseAssignmentsView(),
+			collection = view.assignmentsCollection,
+			currentCourse = view.instance, potentials, store, lin;
+
+		if (!collection) {
+			if (currentCourse) {
+				console.debug('Blocking navigation until we have assignment information');
+				return false; //we can't know yet, deny.
+			}
+			console.warn('No Course, may be allowing navigation to restructed content if course isn\'t set yet??');
+			return true;
+		}
+
+		//not in a course, ignore.
+		if (!currentCourse) {return true;}
+
+		//the main content reader cannot access assignments. It must go through the assignments tab.
+		potentials = collection.pageContainsAssignment(ntiid);
+		if (potentials) {
+			console.log('Go to the assignment:', potentials);
+			//call onNavigateToAssignment()?
+			return false;
+		}
+
+		store = currentCourse.getNavigationStore();
+		lin = ContentUtils.getLineage(ntiid);
+		// the last item in the lineage is the root of the content.
+		// the next to last entry is the first branch from the root
+		// of the content (so its a unit or a lesson... if we can
+		// find it in the nav store, its available.)
+		return !!store.getById(lin[lin.length - 2]);
 	},
 
 

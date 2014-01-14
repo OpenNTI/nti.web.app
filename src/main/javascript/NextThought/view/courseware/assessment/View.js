@@ -53,6 +53,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 	courseChanged: function(instance) {
 		var me = this;
 		delete me.finished;
+		delete me.assignmentsCollection;
 		me.hasAssignments = false;
 
 		function isSync() {
@@ -96,6 +97,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 							assignments = objs[1],
 							gradeBook = objs[2];
 
+						me.assignmentsCollection = assignments;
 						me.hasAssignments = !assignments.isEmpty();
 						if (me.hasAssignments) {
 							me.fireEvent('show-assignments-tab');

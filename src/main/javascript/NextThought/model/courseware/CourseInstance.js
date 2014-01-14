@@ -114,8 +114,10 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 		if (!r) {
 			p.fulfill(null);
 		} else {
+			console.time('Getting Roster: ' + r);
 			Service.request(r)
 					.done(function(txt) {
+						console.time('Roster Recieved, Parsing: ' + r);
 						var j = Ext.decode(txt, true);
 						j = j && j.Items;
 						//filter the active user out of the roster since we are administering this thing.
@@ -129,7 +131,8 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 							}
 							j[n] = i;
 						});
-
+						console.timeEnd('Roster Recieved, Parsing: ' + r);
+						console.timeEnd('Getting Roster: ' + r);
 						p.fulfill(j);
 					})
 					.fail(function(reason) {

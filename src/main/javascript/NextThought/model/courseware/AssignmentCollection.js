@@ -4,7 +4,16 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 	statics: {
 		fromJson: function(assignments, notAssignments, rosterPromise) {
 			if (!assignments) { return null; }
-			var href = assignments.href, collection;
+			var ASSIGNMENT = 'application/vnd.nextthought.assessment.assignment',
+				href = assignments.href, collection, hitmap = {}, nodemap = {};
+
+			function filter(i) {
+				return i.MimeType === ASSIGNMENT && i.NTIID;
+			}
+
+			function count(c, i) {
+				return c + (filter(i) ? NaN : 1);//NaN will mean we saw an assignment.
+			}
 
 			function build(json) {
 				var items = [], key;
@@ -13,14 +22,16 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 				for (key in json) {
 					if (json.hasOwnProperty(key)) {
 						items.push.apply(items, json[key]);
+						hitmap[key] = json[key].reduce(count, 0);
+						nodemap[key] = json[key].filter(filter);
 					}
 				}
 				return items;
 			}
 
-
-
 			collection = this.create({
+				HitMap: hitmap,
+				NodeMap: nodemap,
 				Items: build(assignments),
 				NotItems: build(notAssignments),
 				href: href});
@@ -34,6 +45,8 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 	},
 
 	fields: [
+		{name: 'HitMap', type: 'auto'},
+		{name: 'NodeMap', type: 'auto'},
 		{name: 'Items', type: 'arrayItem'},
 		{name: 'NotItems', type: 'arrayItem'},//silly name, I know.
 		{name: 'Roster', type: 'auto'}
@@ -50,6 +63,21 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 		//pass the roster down if we have it.
 		var r = this.get('Roster');
 		this.each(function(a) { a.setRoster(r); });
+	},
+
+
+	pageContainsAssignment: function(ntiid) {
+		var p = this.get('HitMap')[ntiid];
+
+		// If p is NaN, we directly saw an assignment when we built the collection on this ntiid.
+		// If p is 0, there was a reference with 0 items in it. Indicating there is something we cannot see.
+		// If p is undefiend, there is nothing known about that ntiid.
+		// If p is greater than 0, there are assessment items (but no assignments) on that ntiid.
+		if (isNaN(p) || p === 0) {
+			return this.get('NodeMap')[ntiid];//return canidate assignment IDs
+		}
+
+		return false;
 	},
 
 

@@ -6,16 +6,19 @@ Ext.define('NextThought.model.courseware.CourseOutline', {
 	],
 
 	getContents: function() {
-		var me = this,
+		var me = this, l,
 			p = me.__promiseToLoadContents || new Promise();
 
 		if (me.__promiseToLoadContents) {
 			return p;
 		}
 
+		l = me.getLink('contents');
+
+		console.time('Requesting Course Outline: ' + l);
 		me.__promiseToLoadContents = p;
 
-		Service.request(me.getLink('contents'))
+		Service.request(l)
 				.fail(function(reason) { p.reject(reason); })
 				.done(function(text) {
 					var json = Ext.decode(text, true), items;
@@ -25,6 +28,7 @@ Ext.define('NextThought.model.courseware.CourseOutline', {
 					}
 					items = ParseUtils.parseItems(json);
 					me.set('Items', items);
+					console.timeEnd('Requesting Course Outline: ' + l);
 					p.fulfill(me);
 				});
 
