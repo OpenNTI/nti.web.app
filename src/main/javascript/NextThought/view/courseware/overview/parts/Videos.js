@@ -295,7 +295,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 			//'player-command-play':'hideCurtain',
 			//'player-command-stop':'showCurtain',
 			//'player-command-pause':'showCurtain',
-			'player-event-play': 'hideCurtain',
+			//'player-event-play': 'hideCurtain',
 			'player-event-ended': 'showCurtain',
 			//'player-event-pause': 'showCurtain',
 			'player-error': 'onPlayerError'
@@ -459,7 +459,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 		}
 		else {
 			console.log('Masking z curtain');
-			this.curtainEl.mask('Loading...');
+			this.hideCurtain();
 			this.player.resumePlayback();
 		}
 	}
