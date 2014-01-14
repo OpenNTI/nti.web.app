@@ -161,7 +161,7 @@ Ext.define('NextThought.view.account.VideoSettings', {
 
 	renderTpl: Ext.DomHelper.markup({
 										cls: 'prefer-flash-checkbox',
-										html: 'Prefer flash video player when possible.',
+										html: 'Prefer experimental HTML5 video when possible.',
 										tabIndex: 0,
 										role: 'button'
 									}),

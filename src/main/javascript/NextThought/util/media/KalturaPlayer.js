@@ -141,7 +141,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 		this.handleMessage = Ext.bind(this.handleMessage, this);
 
 		$AppConfig.Preferences.getPreference('WebApp', function(value) {
-			me.LEAD_HTML5 = value ? (!value.get('preferFlashVideo')).toString() : 'true';
+			me.LEAD_HTML5 = value ? value.get('preferFlashVideo').toString() : 'false';
 			me.playerSetup();
 		});
 	},
