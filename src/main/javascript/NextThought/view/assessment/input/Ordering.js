@@ -68,6 +68,25 @@ Ext.define('NextThought.view.assessment.input.Ordering', {
 	},
 
 
+	setValue: function(val) {
+		if (!this.rendered) {
+			this.on({
+				single: true,
+				afterrender: this.setValue.bind(this, val)
+			});
+			return;
+		}
+		var ordinal, text, label;
+		for (ordinal in val) {
+			if (val.hasOwnProperty(ordinal)) {
+				text = this.el.down('.draggable-area[data-ordinal="' + val[ordinal] + '"]');
+				label = this.el.down('.ordinal .label[data-part="' + ordinal + '"]');
+				text.appendTo(label.parent());
+			}
+		}
+	},
+
+
 	getValue: function() {
 		var val = {};
 
