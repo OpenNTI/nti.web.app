@@ -9,11 +9,44 @@ Ext.define('NextThought.cache.UserRepository', {
 		constructor: function() {
 			Ext.apply(this, {
 				store: null,
-				activeRequests: {}
+				activeRequests: {},
+				_activeBulkRequests: new Ext.util.MixedCollection(),
+				_queuedBulkRequests: new Ext.util.MixedCollection(),
+				_pendingResolve: {}
 			});
+
+			var active = this._activeBulkRequests,
+				queued = this._queuedBulkRequests,
+				task = Ext.util.TaskManager.newTask({
+				interval: 250,
+				run: function() {
+					var t;
+					function removeWhenDone(t) {
+						return function() {
+							active.remove(t);
+						};
+					}
+					while (active.getCount() < 10 && queued.getCount() > 0) {
+						t = queued.removeAt(0);
+						if (t) {
+							t = t();
+							active.add(t);
+							t.always(removeWhenDone(t));
+						} else {
+							task.stop();
+						}
+					}
+					if (queued.getCount() === 0) {
+						task.stop();
+					}
+				}
+			});
+
+			queued.on('add', 'start', task);
 		},
 
 
+		//<editor-fold desc="Private Interfaces">
 		getStore: function() {
 			if (!this.store) {
 				this.store = Ext.data.Store.create({model: 'NextThought.model.User'});
@@ -129,8 +162,10 @@ Ext.define('NextThought.cache.UserRepository', {
 			var s = this.getStore();
 			return s.getById(key) || s.findRecord('Username', key, 0, false, true, true) || s.findRecord('NTIID', key, 0, false, true, true);
 		},
+		//</editor-fold>
 
-		getUser: function(username, callback, scope, forceFullResolve, cacheBust) {
+		//<editor-fold desc="Public Interface">
+			getUser: function(username, callback, scope, forceFullResolve, cacheBust) {
 			if (!Ext.isArray(username)) {
 				username = [username];
 				username.returnSingle = true;
@@ -214,25 +249,30 @@ Ext.define('NextThought.cache.UserRepository', {
 					} else {
 						toResolve.push(name);
 						//Legacy Path begin:
-						this.makeRequest(name, {
-							scope: this,
-							failure: function() {
-								var unresolved = User.getUnresolved(name);
-								//	console.log('resturning unresolved user', name);
-								maybeFinish(name, unresolved);
-							},
-							success: function(u) {
-								//Note we recache the user here no matter what
-								//if we requestsd it we cache the new values
-								maybeFinish(name, this.cacheUser(u, true));
-							}
-						}, cacheBust);
+						if (!isFeature('bulk-resolve-users')) {
+							this.makeRequest(name, {
+								scope: this,
+								failure: function() {
+									var unresolved = User.getUnresolved(name);
+									//	console.log('resturning unresolved user', name);
+									maybeFinish(name, unresolved);
+								},
+								success: function(u) {
+									//Note we recache the user here no matter what
+									//if we requestsd it we cache the new values
+									maybeFinish(name, this.cacheUser(u, true));
+								}
+							}, cacheBust);
+						} else {
+							console.debug('Defer to Bulk Resolve...', name);
+						}
 						//Legacy Path END
 					}
 				},
 				this);
 
-			if (toResolve.length > 0 && false) {
+			if (toResolve.length > 0 && isFeature('bulk-resolve-users')) {
+				console.debug('Resolving in bulk...', toResolve.length);
 				this.makeBulkRequest(toResolve)
 					.done(function(users) {
 						//Note we recache the user here no matter what
@@ -245,17 +285,13 @@ Ext.define('NextThought.cache.UserRepository', {
 
 			return promise;
 		},
+			//</editor-fold>
 
 
-		makeBulkRequest: function(usernames, fromChunking) {
-			var p = new Promise(), me = this;
-
-			if (Ext.isArray(usernames)) {
-				//add placeholders while we resolve. (so subsequent requests don't get made)
-				usernames.map(User.getUnresolved.bind(User)).map(this.cacheUser.bind(this));
-			} else if (usernames === true && fromChunking) {
-				usernames = (Ext.isArray(fromChunking) && fromChunking) || [];
-			}
+		makeBulkRequest: function(usernames) {
+			var me = this,
+				p = new Promise(),
+				chunkSize = 100;
 
 			function failed(reason) {
 				console.error('Failed:', reason);
@@ -263,52 +299,128 @@ Ext.define('NextThought.cache.UserRepository', {
 			}
 
 			function rebuild(lists) {
-				var agg = [], i = 0, len = lists.length;
-				for (i; i < len; i++) {
-					agg = agg.concat(lists[i]);
-				}
-				p.fulfill(agg);
+				p.fulfill(me.__recompose(usernames, lists));
 			}
 
-
-			function parse(json) {
-				var u = [];
-				json = (Ext.decode(json, true) || {}).Items || {};
-				usernames.forEach(function(n) {
-					var o = json[n];
-					if (o) {
-						o = User.create(json[n], n);
-						o.summaryObject = false;
-						me.updatePresenceFromResolve([o]);
-					} else {
-						o = User.getUnresolved(n);
-					}
-					u.push(o);
-				});
-				p.fulfill(u);
-			}
-
-
-			if (usernames.length > 100) {
-				Promise.pool(usernames.chunk(100).map(this.makeBulkRequest.bind(this, true)))
-						.done(rebuild)
-						.fail(failed);
-
-				return p;
-			}
-
-			Service.request({
-				url: Service.getBulkResolveUserURL(),
-				method: 'POST',
-				jsonData: {usernames: usernames}
-			})
-					.done(parse)
+			Promise.pool(usernames.chunk(chunkSize).map(me.__chunkBulkRequest.bind(me)))
+					.done(rebuild)
 					.fail(failed);
-
 
 			return p;
 		},
 
+
+		__recompose: function(names, lists) {
+			var agg = new Array(names.length),
+				i = lists.length - 1,
+				x, list, u, m = {};
+
+			names.forEach(function(n, i) { m[n] = i; });
+
+			//because we may not have the same lists of requested items,
+			// we must rebuild based on usernames.
+			for (i; i >= 0; i--) {
+				list = lists[i] || [];
+				for (x = (list.length - 1); x >= 0; x--) {
+					u = list[x].getId();
+					if (m.hasOwnProperty(u)) {
+						agg[m[u]] = list[x];
+					}
+				}
+			}
+			return agg;
+		},
+
+
+		__chunkBulkRequest: function(names) {
+			var p = new Promise(), me = this,
+				divert = [], requestNames,
+				active = me._pendingResolve;
+
+			requestNames = names.filter(function(n) {
+				var a = active[n];
+				if (a && divert.indexOf(a) === -1) {
+					divert.push(a);
+				}
+				return !a;
+			});
+
+			if (requestNames.length > 0) {
+				divert.push(me.__bulkRequest(requestNames));
+			}
+
+			Promise.pool(divert)
+				.done(function(lists) {
+					p.fulfill(me.__recompose(names, lists));
+				})
+				.fail(function(reason) {
+					console.error('Failed:', reason);
+					p.reject(reason);
+				});
+
+			return p;
+		},
+
+
+		__bulkRequest: function(names) {
+			var p = new Promise(),
+				me = this,
+				active = me._pendingResolve,
+				requestQue = me._queuedBulkRequests;
+
+			names.forEach(function(n) { active[n] = p; });
+
+			function fire() {
+				var working = new Promise();
+				setTimeout(function() {
+					console.log('Requesting ' + names.length);
+					Service.request({
+						url: Service.getBulkResolveUserURL(),
+						method: 'POST',
+						jsonData: {usernames: names}
+					})
+						.always(function recieve(json) {
+							var u = [], i = names.length - 1, o, n;
+
+							json = (Ext.decode(json, true) || {}).Items || {};
+
+							//large sets, use as little extra function calls as possible.
+							for (i; i >= 0; i--) {
+								n = names[i];
+								o = json[n];
+								if (o) {
+									o = User.create(json[n], n);
+									o.summaryObject = false;
+									me.updatePresenceFromResolve([o]);
+								} else {
+									o = User.getUnresolved(n);
+								}
+								u.push(o);
+							}
+
+
+							//schedual cleanup.
+							setTimeout(function() {
+								console.debug('Cleanup...');
+								var i = names.length - 1;
+								for (i; i >= 0; i--) {
+									delete active[names[i]];
+								}
+							}, 60000);
+
+
+							p.fulfill(u);
+							working.fulfill();
+
+						});
+				},1);
+				return working;
+			}
+
+			requestQue.add(fire);
+
+			return p;
+		},
 
 
 		/**
