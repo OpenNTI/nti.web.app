@@ -62,6 +62,13 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 		function getLink(rel, e) { return e.getLink(rel) || instance.getLink(rel); }
 
+		function resetView() {
+			if (!isSync()) { return; }
+			me.clearViews();
+			me.fireEvent('failed-to-load', me.up('[isTabView]'));
+			me.maybeUnmask();
+		}
+
 		if (!isSync()) {
 			me.clearViews();
 		}
@@ -102,7 +109,8 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 						if (me.hasAssignments) {
 							me.fireEvent('show-assignments-tab');
 						} else {
-							throw false;
+							resetView();
+							return;
 						}
 
 						me.fireEvent('set-assignment-history', history);
@@ -117,13 +125,8 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 						me.maybeUnmask();
 					})
 					.fail(function(reason) {
-						if (reason !== false) {
-							console.error(reason);
-						}
-						if (!isSync()) { return; }
-						me.clearViews();
-						me.fireEvent('failed-to-load', me.up('[isTabView]'));
-						me.maybeUnmask();
+						console.error(reason);
+						resetView();
 					});
 		});
 
