@@ -30,6 +30,10 @@ Ext.define('NextThought.util.Format', {
 
 	boolStr: function(value, trueString, falseString) {
 		return value ? (trueString || '') : (falseString || '');
+	},
+
+	displayName: function(value) {
+		return Ext.isString(value)? 'Resolving...' : value;
 	}
 
 },function() {
@@ -38,4 +42,5 @@ Ext.define('NextThought.util.Format', {
 	Ext.util.Format.ago = NTIFormat.ago;
 	Ext.util.Format.avatarURL = NTIFormat.avatarURL;
 	Ext.util.Format.boolStr = NTIFormat.boolStr;
+	Ext.util.Format.displayName = NTIFormat.displayName;
 });

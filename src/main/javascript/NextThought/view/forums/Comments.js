@@ -40,7 +40,7 @@ Ext.define('NextThought.view.forums.Comments',{
 						{ cls: 'commentAvatar', style: { backgroundImage: 'url({Creator:avatarURL()});'}},
 						{ cls: 'wrap', 'data-commentid': '{ID}', cn: [
 							{ cls: 'meta', cn: [
-								{ tag: 'span', html: '{Creator}', cls: 'name link'},
+								{ tag: 'span', html: '{Creator:displayName()}', cls: 'name link'},
 								{ tag: 'tpl', 'if': 'depth &gt; 4', cn: [
 									{ tag: 'span', html: 'Replied to {repliedTo}'}
 								]},
