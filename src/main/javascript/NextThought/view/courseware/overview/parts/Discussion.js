@@ -10,7 +10,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Discussion', {
 		{ cls: 'meta', cn: [
 			{ cls: 'label', html: '{label}'},
 			{ cls: 'title', html: '{title}'},
-			{ cls: 'comments', html: '{comments:plural("Comment")}'}
+			{ cls: 'comments', html: '{sublabel}'}
 		]}
 	]),
 
@@ -32,7 +32,8 @@ Ext.define('NextThought.view.courseware.overview.parts.Discussion', {
 			icon: getURL(i.root + n.getAttribute('icon')),
 			ntiid: n.getAttribute('ntiid').split(' '),
 			label: n.getAttribute('label'),
-			comments: 0
+			comments: 0,
+			sublabel: 'Comment'
 		};
 
 		this.callParent([config]);
@@ -80,7 +81,16 @@ Ext.define('NextThought.view.courseware.overview.parts.Discussion', {
 			console.warn('Got something other than what we were expecting. Was expecting a Topic, got:', topic);
 		}
 		this.topic = topic;
-		this.data.comments = topic.get('PostCount') || 0;
+
+		if(topic.get('TopicCount') !== undefined){
+			this.data.comments = topic.get('TopicCount');
+			this.data.sublabel = Ext.util.Format.plural(this.data.comments, 'Discussion');
+		}
+		else if(topic.get('PostCount') !== undefined){
+			this.data.comments = topic.get('PostCount') || 0;
+			this.data.sublabel =  Ext.util.Format.plural(this.data.comments, 'Comment');
+		}
+
 		if (this.rendered) {
 			this.renderTpl.overwrite(this.el, this.data);
 		}
@@ -97,12 +107,24 @@ Ext.define('NextThought.view.courseware.overview.parts.Discussion', {
 
 
 	onClick: function() {
+		var c = (this.up('course') || {}).currentCourse;
+
 		if (!this.topic) {
 			alert('An error occurred showing this discussion.');
 		}
 		else {
-			this.fireEvent('show-topic-with-action', this.topic);
-			//this.fireEvent('navigate-to-course-discussion', this.locationInfo.title.get('NTIID'), this.topic.get('ContainerId'), this.topic.getId());
+			if (/topic$/i.test(this.topic.get('Class'))) {
+				this.fireEvent('show-topic-with-action', this.topic);
+			}
+			else if(/forum/i.test(this.topic.get('Class'))) {
+
+				if(c){
+					this.fireEvent('navigate-to-course-discussion', c, this.topic.getId());
+				}
+				else{
+					alert('An error occurred showing this discussion');
+				}
+			}
 		}
 	}
 });
