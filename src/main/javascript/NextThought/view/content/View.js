@@ -27,7 +27,7 @@ Ext.define('NextThought.view.content.View', {
 		{
 			id: 'course-book',
 			xtype: 'container',
-			layout: { type: 'card', deferredRender: true },
+			layout: { type: 'card', deferredRender: false },
 			activeItem: 'main-reader-view',
 			items: [
 				{ xtype: 'course', id: 'course-nav' },
