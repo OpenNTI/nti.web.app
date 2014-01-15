@@ -2,12 +2,29 @@ Ext.define('NextThought.util.Promise', {});
 //Heavily influenced by http://modernjavascript.blogspot.com/2013/08/promisesa-understanding-by-doing.html
 var Promise = (function() {
 	var State = {
-			PENDING: 0,
-			FULFILLED: 1,
-			REJECTED: 2
-		},
-		p =	function() {
-			var Promise = {
+		PENDING: 0,
+		FULFILLED: 1,
+		REJECTED: 2
+	},
+	nextId = 1,
+	p =	function p() {
+
+		function getCtx() {
+			try {
+				if (ctx === p.pool) {
+					ctx = ctx.caller;
+				}
+				var c = ((ctx.$owner && ctx.$owner.$className) || '') + '#' + (ctx.$name || '');
+				if (c === '#') {
+					c = ctx.toString();
+				}
+				return c;
+			} catch (e) {}
+		}
+
+		var ctx = p.caller,
+			Promise = {
+				ctx: getCtx(),
 				State: State,//handy ref
 				state: State.PENDING,
 
@@ -84,9 +101,19 @@ var Promise = (function() {
 					return has;
 				},
 
+				maybeReportError: function(obj, error) {
+					var me = this, id = me.id, ctx = me.ctx;
+					setTimeout(function() {
+						if (!obj.promise.hasHandler('reject')) {
+							console.error('POTENTIALLY UNHANDLED EXECPTION:', id, error, ctx);
+						}
+					}, 1000);
+				},
+
 
 				done: function(fn) { this.validateHandler(fn); return this.then(fn); },
 				fail: function(fn) { this.validateHandler(fn); return this.then(undefined, fn); },
+				always: function(fn) {this.validateHandler(fn); return this.then(fn, fn); },
 
 				validateHandler: function(fn) {
 					if (typeof fn !== 'function') {
@@ -129,9 +156,7 @@ var Promise = (function() {
 								}
 								// deal with error thrown
 							} catch (error) {
-								if (!obj.promise.hasHandler('reject')) {
-									console.error('UNHANDLED EXECPTION:', error);
-								}
+								me.maybeReportError(obj, error);
 								obj.promise.changeState(State.REJECTED, error);
 							}
 						}
@@ -144,8 +169,8 @@ var Promise = (function() {
 				}
 			};
 
-			return Object.create(Promise);
-		};
+		return Object.create(Promise, {id: {value: nextId++}});
+	};
 
 
 	p.State = State;
