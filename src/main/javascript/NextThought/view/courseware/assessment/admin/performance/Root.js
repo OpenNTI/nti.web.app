@@ -506,6 +506,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			getCounts = this.getCountsFor.bind(this);
 
 		this.roster = this.assignments.getRoster() || [];
+		if (this.roster.length === 0) {
+			return;
+		}
 
 		this.roster.forEach(function(r) {
 			var u = r.get('Username');
