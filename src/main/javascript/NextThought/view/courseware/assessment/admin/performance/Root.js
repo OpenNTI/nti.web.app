@@ -517,7 +517,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		});
 
 		store.loadRawData(raw);
-		UserRepository.getUser(users).done(applyUsers);
+		UserRepository.makeBulkRequest(users).done(applyUsers);
 
 		this.assignments.getViewMaster()
 				.done(this.setAssignmentStores.bind(this));
