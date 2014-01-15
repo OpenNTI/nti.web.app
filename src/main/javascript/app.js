@@ -74,21 +74,30 @@ Ext.application({
 			NextThought.isReady = true;
 		}
 
-		var me = this,
+		var me = this, ios, isIE11p,
 			unsupported = [], g, geckoRev = /rv:(\d+\.\d+)/.exec(Ext.userAgent) || [];
 
 		Ext.each(//firefox doesn't report supporting: CSS3DTransform, so we'll omit it.
 				['Canvas', 'Range', 'CSS3BoxShadow', 'CSS3BorderRadius'],
 				function(f) {Boolean(!Ext.supports[f] && unsupported.push(f));});
 
-		if (unsupported.length !== 0 ||
-			(!Ext.isIE && !(Ext.isGecko && parseFloat(geckoRev[1]) > 4.9) && !Ext.isWebKit) ||
-				Ext.isIE9m) {
-			location.replace($AppConfig.server.unsupported);
+		function iOSversion() {
+			if (/iP(hone|od|ad)/.test(navigator.platform)) {
+				var v = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
+				return [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
+			}
 		}
 
-		if (Ext.isSafari && Ext.safariVersion <= 6) {
-			Ext.getBody().addCls('disable-animations');
+		ios = iOSversion();
+
+		Ext.isIE11p = isIE11p = !Ext.isIE && /Trident/i.test(navigator.userAgent);
+
+		if (unsupported.length !== 0 ||
+				(!Ext.isIE && !isIE11p && !(Ext.isGecko && parseFloat(geckoRev[1]) > 24) && !Ext.isWebKit) ||
+				(Ext.isIE9m) ||
+				(Ext.isSafari && Ext.safariVersion <= 6) ||
+				(ios && ios[0] < 6)) {
+			location.replace($AppConfig.server.unsupported);
 		}
 
 		if (!Globals.validateConfig()) {
