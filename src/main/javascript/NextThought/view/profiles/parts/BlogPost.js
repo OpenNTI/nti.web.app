@@ -11,6 +11,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost', {
 
 	constructor: function() {
 		this.mixins.HeaderLock.disable.call(this);
+		this.notThreaded = true;
 		this.callParent(arguments);
 	},
 

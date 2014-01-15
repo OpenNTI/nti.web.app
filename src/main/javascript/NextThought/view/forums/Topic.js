@@ -125,7 +125,7 @@ Ext.define('NextThought.view.forums.Topic', {
 		this.on('beforedeactivate', this.onBeforeDeactivate, this);
 		this.on('beforeactivate', this.onBeforeActivate, this);
 		
-		if(isFeature('threaded-forums')){
+		if (isFeature('threaded-forums') && this.notThreaded !== true) {
 			this.add({xtype: 'forum-comment-thread', topic: this.record});
 		} else {
 			this.buildStore();
