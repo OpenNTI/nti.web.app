@@ -153,29 +153,37 @@ Ext.define('NextThought.controller.Reader', {
 
 	setLocation: function(ntiid) {
 		var r = this.getContentReader(),
-			pi = Ext.isString(ntiid) ?
-				 this.getPageInfoModel().create({ ID: ntiid, NTIID: ntiid }) : ntiid;
+			id = !Ext.isString(ntiid) ?
+				 ntiid.getId() : ntiid;
 
-		if (this.fireEvent('show-view', 'content', true) === false) {
-			return false;
+		function go(pi) {
+
+			if (this.fireEvent('show-view', 'content', true) === false) {
+				return false;
+			}
+
+			this.getContentView().setActiveTab('course-book');
+
+			if (pi && pi.isPartOfCourseNav()) {
+				r.clearLocation();
+				this.getContentView().showCourseNavigationAt(pi);
+				//update state... resolve which legacy course this is and set it.
+				return true;
+			}
+
+			if (!r.ntiidOnFrameReady) {
+				r.setLocation.apply(r, arguments);
+			}
+			else {
+				r.ntiidOnFrameReady = Array.prototype.slice.call(arguments);
+			}
 		}
 
-		this.getContentView().setActiveTab('course-book');
-
-		if (pi && pi.isPartOfCourseNav()) {
-			r.clearLocation();
-			this.getContentView().showCourseNavigationAt(pi);
-			//update state... resolve which legacy course this is and set it.
-			return true;
+		function fail() {
+			console.error(arguments);
 		}
 
-		if (!r.ntiidOnFrameReady) {
-			r.setLocation.apply(r, arguments);
-		}
-		else {
-			r.ntiidOnFrameReady = Array.prototype.slice.call(arguments);
-		}
-
+		Service.getPageInfo(id, go, fail, this);
 
 		return true;
 	},
