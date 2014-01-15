@@ -146,7 +146,7 @@ Ext.define('NextThought.model.assessment.Assignment', {
 		//fill in the assignment into the history item so the synthetic fields can derive values from it.
 		records.forEach(function(r) {r.set('item', me);});
 		//then resolve users...
-		UserRepository.makeBulkRequest(users).done(fill);
+		UserRepository.getUser(users).done(fill);
 	},
 
 
