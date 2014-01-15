@@ -554,12 +554,6 @@ Ext.define('NextThought.util.Content', {
 					type = a.getAttribute && a.getAttribute('type') === 'application/vnd.nextthought.content',
 					p = a.parentNode;
 
-				//TEMP: Workaround for broken mime type on content links for CS1323
-				if (!type && a.getAttribute && ParseUtils.isNTIID(a.getAttribute('href'))) {
-					console.warn('Assuming MimeType is incorrect! Expected: application/vnd.nextthought.content, got:', a.getAttribute('type'));
-					type = true;
-				}
-
 				if (type && p && p.tagName !== 'toc' && aId && a.getAttribute('href') === id) {
 					pass = !!Ext.fly(a.parentNode).first('object[mimeType$=relatedworkref][ntiid="' + aId + '"]', true);
 				}
