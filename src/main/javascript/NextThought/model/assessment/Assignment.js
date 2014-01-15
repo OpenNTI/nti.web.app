@@ -106,15 +106,24 @@ Ext.define('NextThought.model.assessment.Assignment', {
 		records = records || [];
 
 		function fill(users) {
-			var i = users.length - 1, r, u;
+			var i = users.length - 1, r, u, c;
 
 			for (i; i >= 0; i--) {
 				r = records[i];
 				u = users[i];
-				if (u && r && r.get('Creator') === u.getId()) {
-					r.set('Creator', u);
+				if (u) {
+					c = r && r.get('Creator');
+					if (c && c === u.getId()) {
+						r.set('Creator', u);
+					} else if (typeof c !== 'string') {
+						if (c.getId() !== u.getId()) {
+							console.warn('Already model, but ids do not match');
+						}
+					} else {
+						console.warn('Skipped record!');
+					}
 				} else {
-					console.warn('Skipped record!', i, records.length, users.length);
+					console.error('No user');
 				}
 			}
 
