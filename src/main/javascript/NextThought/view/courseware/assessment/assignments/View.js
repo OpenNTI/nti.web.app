@@ -332,7 +332,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 	},
 
 
-	updateEnrolledCount: function(v) {
+	updateEnrolledCount: function(f, v) {
 		var c = (v && v.length) || 0;
 		this.store.each(function(r) {
 			r.set('enrolledCount', c);
