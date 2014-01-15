@@ -148,24 +148,29 @@ Ext.define('NextThought.view.forums.Comments',{
 	fillInData: function(record){
 		var me = this;
 
-		if (me.updateFromMeMap[record.getId()]) {
-			delete me.updateFromMeMap[record.getId()];
-			return;
-		}
-
-		record.compileBodyContent(function(body){
+		if( typeof record.get('Creator') === 'string'){
 			UserRepository.getUser(record.get('Creator'))
 				.then(function(user){
-					me.updateFromMeMap[record.getId()] = true;
 					record.set({
-						'bodyContent': body,
 						'Creator': user
 					});
 				})
 				.fail(function(reason){
 					console.error(reason);
-				})
-			
+				});
+		}
+
+		record.compileBodyContent(function(body){
+			var index = record.index || me.store.indexOf(record);
+
+			me.store.suspendEvents();
+
+			record.set({
+				'bodyContent': body
+			});
+
+			me.store.resumeEvents();
+			me.refreshNode(index);
 		}, this, function(id, data){
 			me.wbData[id] = data;
 		}, 226);
