@@ -254,7 +254,7 @@ Ext.define('NextThought.view.forums.Forum', {
 
 
 	onScroll: function(e, dom) {
-		var el = dom.lastChild,
+		var el = dom.querySelector('.topic-list'),
 			direction = (this.lastScrollTop || 0) - dom.scrollTop,
 			offset = Ext.get(el).getHeight() - Ext.get(dom).getHeight(),
 			top = offset - dom.scrollTop;

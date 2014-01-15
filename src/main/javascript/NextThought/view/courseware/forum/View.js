@@ -230,7 +230,7 @@ Ext.define('NextThought.view.courseware.forum.View', {
 				return;
 			}
 			var storeId = record.getContentsStoreId(),
-				store = Ext.getStore(storeId) || record.buildContentsStore(),
+				store = Ext.getStore(storeId) || record.buildContentsStore({pageSize: 10}),
 				cmp = Ext.widget('course-forum-topic-list', {
 					record: record,
 					store: store
