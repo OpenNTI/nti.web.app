@@ -114,7 +114,7 @@ Ext.define('NextThought.model.assessment.Assignment', {
 				if (u && r && r.get('Creator') === u.getId()) {
 					r.set('Creator', u);
 				} else {
-					console.warn('Skipped record!', i, records, users);
+					console.warn('Skipped record!', i, records.length, users.length);
 				}
 			}
 
@@ -146,7 +146,7 @@ Ext.define('NextThought.model.assessment.Assignment', {
 		//fill in the assignment into the history item so the synthetic fields can derive values from it.
 		records.forEach(function(r) {r.set('item', me);});
 		//then resolve users...
-		UserRepository.getUser(users).done(fill);
+		UserRepository.makeBulkRequest(users).done(fill);
 	},
 
 
