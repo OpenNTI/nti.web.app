@@ -3,8 +3,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	alias: 'widget.course-assessment-admin-assignments-item',
 
 	requires: [
-		'NextThought.store.courseware.AssignmentView',
-		'NextThought.store.MockPage'
+		'NextThought.store.courseware.AssignmentView'
 	],
 
 	ui: 'course-assessment',
@@ -258,11 +257,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			exportFilesLink: this.exportFilesLink
 		});
 		
-		s = this.store =  NextThought.store.MockPage.create({
-			bind: a.getSubmittedHistoryStore(),
-			model: 'NextThought.model.courseware.UsersCourseAssignmentHistoryItem',
-			data: a.getSubmittedHistoryStore().getRange()
-		});
+		s = this.store = a.getSubmittedHistoryStore();
 
 		if (!s.loading && s.getCount() > 0) {
 			p.fulfill(s);
