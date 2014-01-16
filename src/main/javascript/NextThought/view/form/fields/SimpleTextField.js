@@ -103,6 +103,10 @@ Ext.define('NextThought.view.form.fields.SimpleTextField', {
     });
     this.mon(e, Ext.EventManager.getKeyEvent(), this.keyDown, this);
 
+	if(this.inputEl){
+		this.inputEl.on('paste', this.onPaste, this);
+	}
+
     this.mon(this.clearEl, 'click', function() {
       this.clearValue();
     }, this);
@@ -143,9 +147,19 @@ Ext.define('NextThought.view.form.fields.SimpleTextField', {
   },
 
 
+  onPaste: function(e){
+	  var me = this;
+	  if (!me.pasteTask) {
+		  me.pasteTask = new Ext.util.DelayedTask(me.keyPressed, me, [e]);
+	  }
+	  // since we can't get the paste data, we'll give the area a chance to populate
+	  me.pasteTask.delay(1);
+  },
+
+
   keyPressed: function(event) {
     var e = this.inputEl,
-            k = event.getKey(),
+            k = event.getKey && event.getKey(),
             v = this.getValue(),
             c = this.clearEl;
 
@@ -155,7 +169,7 @@ Ext.define('NextThought.view.form.fields.SimpleTextField', {
 
     e.removeCls('error');
 
-    if (k === event.ENTER || k === event.ESC) {
+    if (k && (k === event.ENTER || k === event.ESC)) {
       this.fireEvent('commit', v, this);
     }
 
