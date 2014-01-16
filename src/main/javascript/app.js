@@ -14,6 +14,8 @@
 //@require @packageOverrides
 
 
+Ext.USE_NATIVE_JSON = true;
+
 //disable script cache-busting _dc=... get string args
 Ext.Loader.setConfig('disableCaching',
 		window.disableCaching !== undefined ?
