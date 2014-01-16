@@ -458,7 +458,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas', {
 		c.width = c.height = s.size;
 		ctx = c.getContext('2d');
 		ctx.drawImage(i.image, -s.x, -s.y, i.width, i.height);
-		return c.toDataURL('image/png');
+		return c.toDataURL('image/jpeg', .7); //second arg is quality argument [0.0, 1.0]
 	},
 
 
