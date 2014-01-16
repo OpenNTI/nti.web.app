@@ -229,186 +229,148 @@ canvas.x-component-course-assessment {
 			}
 		}
 	}
+}
 
+.course-assessment-admin.performance {
 
-	&.course-assessment-admin.performance {
-
-		&.show-final-grade {
-			.gradebox {
-				display: block;
-			}
-
-			.column-names .right{
-				display: inline-block
-			}
-		}
-
-		.button {
-			&[href=""], &.hidden {
-				display: none;
-				& ~ .column-names {
-					margin-top: 7em;
-				}
-			}
-
-			float: left;
-			display: inline-block;
-			text-decoration: none;
-			cursor: pointer;
-			background: $primary-blue;
-			border-radius: 3px;
-			font: italic 600 0.9em/1 $font;
-			color: #fff;
-			padding: 0.8em 1.5em;
-			right: 15px;
-			top: 25px;
-			margin: 1em 0 0;
-
-		}
-
-		.scrollzone {
-			position: absolute;
-			top: 51px; left: 0; right: 0; bottom: 0;
-			padding: 0 2em 2em;
-			font-size: 0.9em;
-			overflow: {
-				x: hidden;
-				y: auto; //scroll
-			}
-		}
-
-		.column-names{
-			position: relative;
-			font: normal 700 0.7em/1 $font;
-			color: $tertiary-grey;
-			text-transform: uppercase;
-			margin: 7em 0 2em;
-
-			.student{
-				position: relative;
-				display: inline-block;
-				cursor: pointer;
-			}
-
-			.right {
-				cursor: pointer;
-				position: relative;
-				float: right;
-				margin-right: 7em;
-				display: none;
-			}
-
-			.sorted{
-				color: $secondary-grey;
-
-				&::after{
-					content: '';
-					position: absolute;
-					right: -10px;
-				}
-
-				&.ascending::after{
-					top: -2px;
-					vertical-align: text-top;
-					@include arrow($width: 8px, $height: 5px, $color: $secondary-grey);
-				}
-
-				&.descending::after{
-					top: 2px;
-					vertical-align: text-bottom;
-					@include arrow($pointFrom: top, $width: 8px, $height: 5px, $color: $secondary-grey);
-				}
-			}
-		}
-
-		.list > .item {
-			box-shadow: inset 0 1px 0 0 #f7f7f7;
-			position: relative;
-			overflow: hidden;
-		}
-
-		.avatar {
-			width: 60px;
-			height: 60px;
-			display: inline-block;
-			float: left;
-			background: {
-				size: cover;
-				position: center center;
-				repeat: no-repeat;
-			}
-		}
-
-		.action-items {
-			font: normal 600 0.7em/2 $font;
-			text-transform: uppercase;
-			&:empty {
-				color: $tertiary-grey;
-				&::after { content: 'No Action Items'; }
-			}
-
-			& > div {
-				color: $primary-blue;
-				display: inline-block;
-				&.overdue { color: $primary-red; }
-
-				&::before {
-					content: '\00B7';
-					margin: 0.5em;
-				}
-				&:first-of-type::before { content: none; }
-			}
-		}
-
-		.studentbox {
-			cursor: pointer;
-			position: relative;
-			overflow: hidden;
-
-			.wrap {
-				margin: 15px 0 0 75px;
-			}
-		}
-
+	&.show-final-grade {
 		.gradebox {
+			display: block;
+		}
+
+		.column-names .right{
+			display: inline-block
+		}
+	}
+
+	.button {
+		&[href=""], &.hidden {
 			display: none;
-			margin: 11px 0 9px;
-			width: 10.5em;
-			float: right;
+			& ~ .column-names {
+				margin-top: 7em;
+			}
+		}
+
+		display: inline-block;
+		text-decoration: none;
+		cursor: pointer;
+		background: $primary-blue;
+		border-radius: 3px;
+		font: italic 600 0.9em/1 $font;
+		color: #fff;
+		padding: 0.8em 1.5em;
+		right: 15px;
+		top: 25px;
+		margin: 1em 2em;
+
+	}
+
+	& > .tools {
+		position: relative;
+		overflow: hidden;
+	}
+
+	.x-panel-course-assessment.x-grid {
+		padding: 0 2em 2em;
+		//margin: 0 0 2em 0;
+	}
+
+
+
+	.x-grid-data-row .x-grid-cell,
+	.list > .item {
+		box-shadow: inset 0 -1px 0 0 #f7f7f7;
+		position: relative;
+		overflow: hidden;
+		.x-grid-cell-inner {
+			line-height: normal;
+		}
+	}
+
+	.avatar {
+		width: 60px;
+		height: 60px;
+		display: inline-block;
+		float: left;
+		background: {
+			size: cover;
+			position: center center;
+			repeat: no-repeat;
+		}
+	}
+
+	.action-items {
+		font: normal 600 0.7em/2 $font;
+		text-transform: uppercase;
+		&:empty {
+			color: $tertiary-grey;
+			&::after { content: 'No Action Items'; }
+		}
+
+		& > div {
+			color: $primary-blue;
+			display: inline-block;
+			&.overdue { color: $primary-red; }
+
+			&::before {
+				content: '\00B7';
+				margin: 0.5em;
+			}
+			&:first-of-type::before { content: none; }
+		}
+	}
+
+	.studentbox {
+		cursor: pointer;
+		position: relative;
+		overflow: hidden;
+
+		.wrap {
+			margin: 15px 0 0 75px;
+
+			.name {
+				color: $secondary-grey !important;
+			}
+		}
+	}
+
+	.gradebox {
+		display: none;
+		margin: 11px 0 9px;
+		width: 10.5em;
+		font: normal 500 1em/1 $font;
+		border: 1px solid #dcdcdc;
+		& > * {
 			font: normal 500 1em/1 $font;
-			border: 1px solid #dcdcdc;
-			& > * {
-				font: normal 500 1em/1 $font;
-				padding: 0.7em 1em;
-				margin: 0;
-				background: #fff;
-				color: $secondary-grey;
-				position: relative;
+			padding: 0.7em 1em;
+			margin: 0;
+			background: #fff;
+			color: $secondary-grey;
+			position: relative;
+		}
+
+		input {
+			width: 56%;
+			border-width: 0 1px 0 0;
+			border-right: { style: solid; color: #dcdcdc; }
+		}
+		.dropdown {
+			width: 44%;
+			display: inline-block;
+			line-height: 1.35em;
+
+			&:focus{
+				background-color: $primary-blue;
+				color: white;
 			}
 
-			input {
-				width: 56%;
-				border-width: 0 1px 0 0;
-				border-right: { style: solid; color: #dcdcdc; }
-			}
-			.dropdown {
-				width: 44%;
-				display: inline-block;
-				line-height: 1.35em;
-
-				&:focus{
-					background-color: $primary-blue;
-					color: white;
-				}
-
-				&::after {
-					content: '';
-					overflow: hidden;
-					position: absolute;
-					top: 1.8em;
-					right: 1.5em;
-					@include arrow($pointFrom:top, $width: 8px, $height: 5px, $color: $secondary-grey);
-				}
+			&::after {
+				content: '';
+				overflow: hidden;
+				position: absolute;
+				top: 1.8em;
+				right: 1.5em;
+				@include arrow($pointFrom:top, $width: 8px, $height: 5px, $color: $secondary-grey);
 			}
 		}
 	}

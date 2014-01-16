@@ -1,80 +1,142 @@
 Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
-	extend: 'Ext.view.View',
+	extend: 'Ext.container.Container',
 	alias: 'widget.course-assessment-admin-performance-root',
 
 	ui: 'course-assessment',
 	cls: 'course-assessment-admin performance',
-	preserveScrollOnRefresh: true,
 
-	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'header assignment-filterbar', cn: [
-			{ cls: 'third dropmenu student', cn: [
-				{ cls: 'label', html: 'All Students' }
-			] },
-			{ cls: 'third dropmenu item', cn: [
-				{ cls: 'label', html: 'All Items' }
-			] },
-			{ cls: 'third search', cn: [
-				{ tag: 'input', type: 'text', placeholder: 'Search Students', required: 'required' },
-				{ cls: 'clear' }
-			] }
-		]},
+	layout: 'anchor',
+
+	items: [
 		{
-			cls: 'scrollzone scrollable',
-			cn: [
-				{ tag: 'a', href: '{exportLink}', cls: 'download button', html: 'Export'},
+			xtype: 'box',
+			autoEl: { cls: 'header', cn: [
+				{ cls: 'assignment-filterbar', cn: [
+					{ cls: 'third dropmenu student', cn: [
+						{ cls: 'label', html: 'All Students' }
+					] },
+					{ cls: 'third dropmenu item', cn: [
+						{ cls: 'label', html: 'All Items' }
+					] },
+					{ cls: 'third search', cn: [
+						{ tag: 'input', type: 'text', placeholder: 'Search Students', required: 'required' },
+						{ cls: 'clear' }
+					] }
+				]},
 				{
-					cls: 'column-names',
+					cls: 'tools',
 					cn: [
-						{cls: 'right grade', html: 'Course Grade'},
-						{cls: 'descending student', html: 'Student'}
+						{ tag: 'a', href: '{exportLink}', cls: 'download button', html: 'Export'}
 					]
-				},
-				{ cls: 'list'}
-			]
-		}
-	]),
-
-	renderSelectors: {
-		titleEl: '.header',
-		frameBodyEl: '.list',
-		studentEl: '.header .student',
-		itemEl: '.header .item',
-		inputEl: '.header .search input',
-		clearEl: '.header .search .clear',
-		exportButton: 'a.download.button',
-		nameEl: '.scrollzone .column-names .student',
-		gradeEl: '.scrollzone .column-names .grade'
-	},
-
-	getTargetEl: function() { return this.frameBodyEl; },
-	itemSelector: '.item',
-	tpl: new Ext.XTemplate(
-			Ext.DomHelper.markup(
-					{ tag: 'tpl', 'for': '.', cn: [
-						{ cls: 'item', cn: [
-							{ cls: 'gradebox', cn: [
-								{ tag: 'input', size: 3, tabindex: '1', type: 'text', value: '{grade}'},
-								{ cls: 'dropdown letter grade', tabindex: '1', html: '{letter}'}
-							]},
-							{ cls: 'studentbox', cn: [
-								{ cls: 'avatar', style: {backgroundImage: 'url({avatar})'}},
-								{ cls: 'wrap', cn: [
-									{ cls: 'name', html: '{displayName}'},
-									{ cls: 'action-items', cn: [
-										{ tag: 'tpl', 'if': 'overdue &gt; 0', cn: {cls: 'overdue', html: '{overdue:plural("Assignment")} Overdue'}},
-										{ tag: 'tpl', 'if': 'ungraded &gt; 0', cn: { html: '{ungraded:plural("Ungraded Assignment")}'}},
-										{ tag: 'tpl', 'if': 'comments &gt; 0', cn: { html: '{comments:plural("Comment")}'}}
-									]}
+				}
+			]},
+			renderSelectors: {
+				studentEl: '.student',
+				itemEl: '.item',
+				inputEl: '.search input',
+				clearEl: '.search .clear',
+				exportButton: 'a.download.button'
+			}
+		},{
+			anchor: '0 -115',
+			xtype: 'grid',
+			ui: 'course-assessment',
+			plain: true,
+			border: false,
+			frame: false,
+			scroll: 'vertical',
+			sealedColumns: true,
+			enableColumnHide: false,
+			enableColumnMove: false,
+			enableColumnResize: false,
+			columns: {
+				ui: 'course-assessment',
+				plain: true,
+				border: false,
+				frame: false,
+				items: [
+					{ text: 'Student', dataIndex: 'name', flex: 1, xtype: 'templatecolumn', tpl: Ext.DomHelper.markup([
+						{ cls: 'studentbox', cn: [
+							{ cls: 'avatar', style: {backgroundImage: 'url({avatar})'}},
+							{ cls: 'wrap', cn: [
+								{ cls: 'name', html: '{displayName}'},
+								{ cls: 'action-items', cn: [
+									{ tag: 'tpl', 'if': 'overdue &gt; 0', cn: {cls: 'overdue', html: '{overdue:plural("Assignment")} Overdue'}},
+									{ tag: 'tpl', 'if': 'ungraded &gt; 0', cn: { html: '{ungraded:plural("Ungraded Assignment")}'}},
+									{ tag: 'tpl', 'if': 'comments &gt; 0', cn: { html: '{comments:plural("Comment")}'}}
 								]}
 							]}
 						]}
-					]}
-			), {
-			}),
+					])},
+					{ text: 'Student', dataIndex: 'grade', width: 150, xtype: 'templatecolumn', tpl: Ext.DomHelper.markup([
+						{ cls: 'gradebox', cn: [
+							{ tag: 'input', size: 3, tabindex: '1', type: 'text', value: '{grade}'},
+							{ cls: 'dropdown letter grade', tabindex: '1', html: '{letter}'}
+						]}
+					])}
+				].map(function(o) {
+					return Ext.applyIf(o, {
+						ui: 'course-assessment',
+						border: false,
+						sortable: true,
+						menuDisabled: true
+					});
+				})
+			},
 
-	clear: function() {
-		this.backingStore.removeAll();
+			listeners: {
+				sortchange: function(ct, column) { ct.up('grid').markColumn(column); },
+				selectionchange: function(sm, selected) { sm.deselect(selected); },
+				viewready: function(grid) {
+					grid.mon(grid.getView(), 'refresh', function() {
+						grid.markColumn(grid.down('gridcolumn[sortState]'));
+					});
+				}
+			},
+
+			markColumn: function(c) {
+				console.log('Marking...');
+				var cls = 'sortedOn',
+						el = this.getEl();
+				if (el) {
+					el.select('.' + cls).removeCls(cls);
+					if (c) {
+						Ext.select(c.getCellSelector()).addCls(cls);
+					}
+				}
+			}
+		}
+	],
+
+
+	//<editor-fold desc="Init">
+	constructor: function() {
+		this.backingStore = new Ext.data.Store({
+			fields: [
+				{name: 'id', type: 'string'},
+				{name: 'user', type: 'auto'},
+				{name: 'avatar', type: 'string', defaultValue: 'resources/images/icons/unresolved-user.png'},
+				{name: 'displayName', type: 'string', defaultValue: 'Resolving...'},
+				{name: 'grade', type: 'int'},
+				{name: 'letter', type: 'string', defaultValue: '-'},
+				{name: 'comments', type: 'int', mapping: 'feedback', defaultValue: 0},
+				{name: 'ungraded', type: 'int', defaultValue: 0},
+				{name: 'overdue', type: 'int', defaultValue: 0}
+			],
+			sorters: [
+			]
+		});
+		this.store = new NextThought.store.MockPage({autoLoad: true, bind: this.backingStore});
+		this.callParent(arguments);
+	},
+
+
+	initComponent: function() {
+		this.callParent(arguments);
+		//this.on({ refresh: 'bindInputs' });
+		this.down('grid').bindStore(this.store);
+		this.header = this.down('box');
+		this.createGradeMenu();
 	},
 
 
@@ -84,27 +146,22 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		this.createStudentMenu();
 		this.createItemMenu();
 
-		this.studentSort();
-
 		if (this.gradeBook) {
-			this.exportButton.set({
+			this.header.exportButton.set({
 				href: this.gradeBook.getLink('ExportContents')
 			});
 		}
 
-		this.on({
-			studentEl: { click: 'showStudentMenu'},
-			itemEl: { click: 'showItemMenu'},
-			inputEl: { keyup: 'changeNameFilter'},
-			clearEl: { click: 'clearSearch'},
-			nameEl: { click: 'studentSort'},
-			gradeEl: { click: 'gradeSort'}
+		this.mon(this.header, {
+			studentEl: { click: 'showStudentMenu', scope: this},
+			itemEl: { click: 'showItemMenu', scope: this},
+			inputEl: { keyup: 'changeNameFilter', scope: this},
+			clearEl: { click: 'clearSearch', scope: this}
 		});
 
-		this.mon(this.frameBodyEl, {
-			keydown: 'manageFocus'
-		});
+		//this.mon(this.frameBodyEl, { keydown: 'manageFocus' });
 	},
+	//</editor-fold>
 
 
 	manageFocus: function(e, el) {
@@ -139,6 +196,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
+	//<editor-fold desc="Header Managements">
 	createStudentMenu: function() {
 		var type = this.currentStudent || 'enrolled',
 			items = [
@@ -181,7 +239,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	showStudentMenu: function() {
-		this.studentMenu.showBy(this.studentEl, 'tl-tl?', this.studentMenu.offset);
+		this.studentMenu.showBy(this.header.studentEl, 'tl-tl?', this.studentMenu.offset);
 	},
 
 
@@ -192,7 +250,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		try {
 			offset = item.getOffsetsTo(this.studentMenu);
 			x = offset && offset[1];
-			me.studentEl.el.down('.label').update(item.text);
+			me.header.studentEl.el.down('.label').update(item.text);
 		} catch (e) {
 			swallow(e);
 		}
@@ -262,7 +320,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	showItemMenu: function() {
-		this.itemMenu.showBy(this.itemEl, 'tl-tl?', this.itemMenu.offset);
+		this.itemMenu.showBy(this.header.itemEl, 'tl-tl?', this.itemMenu.offset);
 	},
 
 
@@ -272,7 +330,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		var offset = item.getOffsetsTo(this.itemMenu),
 				x = offset && offset[1];
 
-		this.itemEl.el.down('.label').update(item.text);
+		this.header.itemEl.el.down('.label').update(item.text);
 
 		this.itemMenu.offset = [0, -x];
 		this.currentItem = item.type;
@@ -309,7 +367,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	changeNameFilter: function() {
-		var val = this.searchKey = this.inputEl.getValue();
+		var val = this.searchKey = this.header.inputEl.getValue();
 
 		this.backingStore.removeFilter('searchFilter');
 
@@ -330,6 +388,15 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
+	clearSearch: function() {
+		this.searchKey = '';
+		this.header.inputEl.dom.value = '';
+		this.backingStore.removeFilter('searchFilter');
+	},
+	//</editor-fold>
+
+
+	//<editor-fold desc="Column Sorters">
 	studentSort: function() {
 		var isDescending = this.nameEl.hasCls('descending'),
 			sorter = {
@@ -364,83 +431,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		this.backingStore.sort(sorter);
 	},
+	//</editor-fold>
 
 
-	clearSearch: function() {
-		this.searchKey = '';
-		this.inputEl.dom.value = '';
-		this.backingStore.removeFilter('searchFilter');
-	},
-
-
-	constructor: function() {
-		this.backingStore = new Ext.data.Store({
-			fields: [
-				{name: 'id', type: 'string'},
-				{name: 'user', type: 'auto'},
-				{name: 'avatar', type: 'string', defaultValue: 'resources/images/icons/unresolved-user.png'},
-				{name: 'displayName', type: 'string', defaultValue: 'Resolving...'},
-				{name: 'grade', type: 'int'},
-				{name: 'letter', type: 'string', defaultValue: '-'},
-				{name: 'comments', type: 'int', mapping: 'feedback', defaultValue: 0},
-				{name: 'ungraded', type: 'int', defaultValue: 0},
-				{name: 'overdue', type: 'int', defaultValue: 0}
-			],
-			sorters: [
-			]
-		});
-		this.store = new NextThought.store.MockPage({autoLoad: true, bind: this.backingStore});
-		this.callParent(arguments);
-	},
-
-
-	initComponent: function() {
-		this.callParent(arguments);
-		this.tpl.ownerCmp = this;
-		this.on({
-			refresh: 'bindInputs'
-		});
-
-		this.createGradeMenu();
-	},
-
-
-	createGradeMenu: function() {
-		this.gradeMenu = Ext.widget('menu', {
-			ui: 'nt',
-			cls: 'letter-grade-menu',
-			plain: true,
-			shadow: false,
-			width: 67,
-			minWidth: 67,
-			frame: false,
-			border: false,
-			ownerCmp: this,
-			offset: [-1, -1],
-			defaults: {
-				ui: 'nt-menuitem',
-				xtype: 'menucheckitem',
-				group: 'gradeOptions',
-				cls: 'letter-grade-option',
-				height: 35,
-				plain: true,
-				listeners: {
-					scope: this,
-					'checkchange': 'changeLetterGrade'
-				}
-			},
-			items: [
-				{text: '-'},
-				{text: 'A'},
-				{text: 'B'},
-				{text: 'C'},
-				{text: 'D'},
-				{text: 'F'}
-			]
-		});
-	},
-
-
+	//<editor-fold desc="Data Bindings">
 	setAssignmentStores: function(stores) {
 		var me = this,
 			feedbackMap = me._feedbackMap = {},
@@ -484,8 +478,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		this.gradeBook = gradeBook;
 		this.gradeBookDefaultPart = gradeBook && gradeBook.getFieldItem('Items', 'default');
 
-		if (this.exportButton) {
-			this.exportButton.set({
+		if (this.header.exportButton) {
+			this.header.exportButton.set({
 				href: gradeBook.getLink('ExportContents')
 			});
 		}
@@ -522,6 +516,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		this.assignments.getViewMaster()
 				.done(this.setAssignmentStores.bind(this));
+	},
+
+
+	clear: function() {
+		this.backingStore.removeAll();
 	},
 
 
@@ -632,8 +631,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		s.sort();
 	},
+	//</editor-fold>
 
 
+	//<editor-fold desc="Event Handlers">
 	bindInputs: function() {
 		var inputs = this.el.select(this.itemSelector + ' input');
 		Ext.destroy(this.gridInputListeners);
@@ -661,6 +662,42 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		}
 
 		this.callParent(arguments);
+	},
+
+
+	createGradeMenu: function() {
+		this.gradeMenu = Ext.widget('menu', {
+			ui: 'nt',
+			cls: 'letter-grade-menu',
+			plain: true,
+			shadow: false,
+			width: 67,
+			minWidth: 67,
+			frame: false,
+			border: false,
+			ownerCmp: this,
+			offset: [-1, -1],
+			defaults: {
+				ui: 'nt-menuitem',
+				xtype: 'menucheckitem',
+				group: 'gradeOptions',
+				cls: 'letter-grade-option',
+				height: 35,
+				plain: true,
+				listeners: {
+					scope: this,
+					'checkchange': 'changeLetterGrade'
+				}
+			},
+			items: [
+				{text: '-'},
+				{text: 'A'},
+				{text: 'B'},
+				{text: 'C'},
+				{text: 'D'},
+				{text: 'F'}
+			]
+		});
 	},
 
 
@@ -785,4 +822,5 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	onItemClick: function(rec) {
 		this.fireEvent('student-clicked', this, rec);
 	}
+	//</editor-fold>
 });
