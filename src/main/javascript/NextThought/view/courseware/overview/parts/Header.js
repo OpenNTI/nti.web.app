@@ -6,7 +6,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Header', {
 	cls: 'overview-header',
 
 	renderTpl: Ext.DomHelper.markup([
-		{tag: 'tpl', 'if': 'date', cn: {cls: 'date {expired}', html: '{date:date("l, F jS")}'}},
+		{tag: 'tpl', 'if': 'date', cn: {cls: 'date {expired}', html: '{startDate:date("l, F jS")}'}},
 		{tag: 'tpl', 'if': '!date', cn: {cls: 'date', html: ' '}},
 		{cls: 'title', html: '{label}'}
 	]),
