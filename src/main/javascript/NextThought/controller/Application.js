@@ -61,8 +61,9 @@ Ext.define('NextThought.controller.Application', {
 		Promise.pool(
 			Library.onceLoaded(),
 			CourseWareUtils.onceLoaded())
-				.done(this.restore.bind(this))
-				.fail(function(reason) {
+				.then(
+				this.restore.bind(this),
+				function(reason) {//failure
 					//check library... (it will only have a value if it fails)
 					if (reason[0]) {
 						console.error('Library failed to load:', reason[0]);
