@@ -530,7 +530,9 @@ Ext.define('NextThought.view.video.Video', {
 			v.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
 			if (v.isVisible()) {
-				if (k !== service) { v.hide(); v.stop(); }
+				if (k !== service) {
+					v.hide();
+				}
 				//else leave it visible
 			}
 			//not visible
