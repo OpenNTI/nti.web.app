@@ -515,7 +515,10 @@ Ext.define('NextThought.view.video.Video', {
 			console.warn('Attempting to switch to non-existent player ' + service);
 			service = 'none';
 		}
-		me.activeVideoService = service;
+
+		if (me.activeVideoService !== service) {
+			me.stopPlayback();
+		}
 
 		//TODO: make each player handle switching.
 		Ext.Object.each(me.playerIds, function(k, id) {
@@ -527,18 +530,16 @@ Ext.define('NextThought.view.video.Video', {
 			v.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
 			if (v.isVisible()) {
-				if (k !== service) { v.hide(); }
+				if (k !== service) { v.hide(); v.stop(); }
 				//else leave it visible
 			}
 			//not visible
 			else if (k === service) {
 				v.show();
-				me.debug('Stopping playback because not visible....');
-				me.stopPlayback();
 			}
-
 		});
 
+		me.activeVideoService = service;
 		this.fireEvent('height-change');
 	},
 
