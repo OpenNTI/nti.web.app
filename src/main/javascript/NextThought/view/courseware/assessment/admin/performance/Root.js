@@ -671,7 +671,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			return;
 		}
 
-		this.callParent(arguments);
+		this.fireEvent('student-clicked', this, record);
 	},
 
 
@@ -826,11 +826,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		console.log('update record', rec, ' with input value:', input.value);
 		this.changeGrade(rec, input.value, rec.get('letter'), fromEnter);
-	},
-
-
-	onItemClick: function(rec) {
-		this.fireEvent('student-clicked', this, rec);
 	}
 	//</editor-fold>
 });
