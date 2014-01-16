@@ -527,12 +527,9 @@ Ext.define('NextThought.model.Service', {
 		return !!coll;
 	},
 
-
-	//TODO - this is a temporary measure to prevent anyone other than nextthought employees or the 2 law professors access to share a redaction,
-	//       until permissioning of actions can be accomplished.
-	// JSG: 28/10/2013 - Can we remove this yet?
+	
 	canShareRedaction: function() {
-		return (/(@nextthought\.com$)|(^sehenderson@ou\.edu$)|(^stephen\.henderson@aya\.yale\.edu$)|(^thai@post\.harvard\.edu$)/).test($AppConfig.username);
+		return false;
 	},
 
 
