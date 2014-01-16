@@ -133,7 +133,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 	initComponent: function() {
 		this.callParent(arguments);
-		//this.on({ refresh: 'bindInputs' });
+		this.supported = true;
 		this.grid = this.down('grid');
 		this.grid.bindStore(this.store);
 		this.header = this.down('box');
@@ -142,10 +142,25 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	afterRender: function() {
+		var observer,
+			MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+
 		this.callParent(arguments);
 
 		this.createStudentMenu();
 		this.createItemMenu();
+
+		if (MutationObserver) {
+			observer = new MutationObserver(this.bindInputs.bind(this));
+			observer.observe(
+					Ext.getDom(this.grid.getEl()),
+					{ childList: true, subtree: true });
+			this.on('destroy', 'disconnect', observer);
+		} else {
+			console.warn('Hidding Grade boxes because browser does not suppport MutationObserver. Chrome 18+, FF 14+, Safari 6+, IE11');
+			this.supported = false;
+			this.removeCls('show-final-grade');
+		}
 
 		if (this.gradeBook) {
 			this.header.exportButton.set({
@@ -161,7 +176,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		});
 
 		this.mon(this.grid, {
-			cellclick: 'handleEvent'
+			cellclick: 'onCellClick'
 		});
 		//this.mon(this.frameBodyEl, { keydown: 'manageFocus' });
 	},
@@ -599,7 +614,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		}
 
 
-		if (gradebookentry) {
+		if (gradebookentry && this.supported) {
 			this.addCls('show-final-grade');
 		}
 
@@ -641,12 +656,18 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		var v = this.grid.getView();
 		return v.getNode.apply(v, arguments);
 	},
+
+
+	getRecord: function(node) {
+		var v = this.grid.getView();
+		return v.getRecord.apply(v, arguments);
+	},
 	//</editor-fold>
 
 
 	//<editor-fold desc="Event Handlers">
 	bindInputs: function() {
-		var inputs = this.el.select(this.itemSelector + ' input');
+		var inputs = this.grid.view.getEl().select('.gradebox input');
 		Ext.destroy(this.gridInputListeners);
 
 		this.gridInputListeners = this.mon(inputs, {
@@ -657,7 +678,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	handleEvent: function(me, td, cellIndex, record, tr, rowIndex, e) {
+	onCellClick: function(me, td, cellIndex, record, tr, rowIndex, e) {
 		var isControl = !!e.getTarget('.gradebox');
 		if (isControl && e.type === 'click') {
 			try {
@@ -821,7 +842,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	saveGradeFromInput: function(e, input, fromEnter) {
-		var node = e.getTarget(this.itemSelector),
+		var node = e.getTarget(this.grid.view.itemSelector),
 			rec = node && this.getRecord(node);
 
 		console.log('update record', rec, ' with input value:', input.value);
