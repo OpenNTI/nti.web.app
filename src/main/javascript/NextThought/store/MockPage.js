@@ -9,7 +9,7 @@ Ext.define('NextThought.store.MockPage', {
 	remoteFilter: false,
 
 
-	constructor: function(){
+	constructor: function() {
 		this.callParent(arguments);
 		if (!this.bind) {
 			console.error('Cant create a mock page store without binding it');
@@ -28,37 +28,42 @@ Ext.define('NextThought.store.MockPage', {
 	},
 
 
-	__bindStore: function(store){
+	__bindStore: function(store) {
 		this.loadData(store.getRange());
 	},
 
 
-	getRange: function(start, end){
+	getRange: function(start, end) {
 		return this.data.getRange(start, end);
 	},
 
 
-	getTotalCount: function(){
+	getTotalCount: function() {
 		return this.data.getCount() || 0;
 	},
 
 
-	addFilter: function(){
+	addFilter: function() {
 		return this.bind.addFilter.apply(this.bind, arguments);
 	},
 
-	
-	filter: function(){
+
+	filter: function() {
 		return this.bind.filter.apply(this.bind, arguments);
 	},
 
 
-	clearFilter: function(){
+	clearFilter: function() {
 		return this.bind.clearFilter.apply(this.bind, arguments);
 	},
 
 
-	removeFilter: function(){
+	removeFilter: function() {
 		return this.bind.removeFilter.apply(this.bind, arguments);
+	},
+
+
+	sort: function() {
+		return this.bind.sort.apply(this.bind, arguments);
 	}
 });
