@@ -74,7 +74,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			}),
 
 	clear: function() {
-		this.store.removeAll();
+		this.backingStore.removeAll();
 	},
 
 
@@ -200,11 +200,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		me.studentMenu.offset = [0, -x];
 		me.currentStudent = item.type;
 
-		me.store.removeFilter('studentFilter');
+		me.backingStore.removeFilter('studentFilter');
 
 		if (item.type === 'all') { return; }
 
-		this.store.filter([{
+		this.backingStore.filter([{
 			id: 'studentFilter',
 			filterFn: function(rec) {
 				var user = rec.getId(),
@@ -277,11 +277,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		this.itemMenu.offset = [0, -x];
 		this.currentItem = item.type;
 
-		this.store.removeFilter('itemFilter');
+		this.backingStore.removeFilter('itemFilter');
 
 		if (item.type === 'all') { return; }
 
-		this.store.filter([{
+		this.backingStore.filter([{
 			id: 'itemFilter',
 			filterFn: function(rec) {
 			var overdue = rec.get('overdue'),
@@ -311,12 +311,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	changeNameFilter: function() {
 		var val = this.searchKey = this.inputEl.getValue();
 
-		this.store.removeFilter('searchFilter');
+		this.backingStore.removeFilter('searchFilter');
 
 		if (this.searchKey) {
 			val = val.toLowerCase();
 
-			this.store.filter([{
+			this.backingStore.filter([{
 					id: 'searchFilter',
 					filterFn: function(rec) {
 						var name = rec.get('displayName');
@@ -344,7 +344,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		this.nameEl[isDescending ? 'removeCls' : 'addCls']('descending');
 		this.nameEl[isDescending ? 'addCls' : 'removeCls']('ascending');
 
-		this.store.sort(sorter);
+		this.backingStore.sort(sorter);
 
 	},
 
@@ -362,19 +362,19 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		this.gradeEl[isDescending ? 'removeCls' : 'addCls']('descending');
 		this.gradeEl[isDescending ? 'addCls' : 'removeCls']('ascending');
 
-		this.store.sort(sorter);
+		this.backingStore.sort(sorter);
 	},
 
 
 	clearSearch: function() {
 		this.searchKey = '';
 		this.inputEl.dom.value = '';
-		this.store.removeFilter('searchFilter');
+		this.backingStore.removeFilter('searchFilter');
 	},
 
 
 	constructor: function() {
-		this.store = new Ext.data.Store({
+		this.backingStore = new Ext.data.Store({
 			fields: [
 				{name: 'id', type: 'string'},
 				{name: 'user', type: 'auto'},
@@ -389,6 +389,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			sorters: [
 			]
 		});
+		this.store = new NextThought.store.MockPage({autoLoad: true, bind: this.backingStore});
 		this.callParent(arguments);
 	},
 
@@ -451,7 +452,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				c = f && f.get('Creator');
 
 			function updateRow() {
-				var r = me.store.getById(c);
+				var r = me.backingStore.getById(c);
 				if (r) {
 					me.updateActionables(r, c);
 				} else {
@@ -501,7 +502,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 	applyRoster: function() {
 		var users = [],
-			store = this.store, raw = [],
+			store = this.backingStore, raw = [],
 			applyUsers = this.applyUserData.bind(this),
 			getCounts = this.getCountsFor.bind(this);
 
@@ -560,7 +561,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 	applyUserData: function(users) {
 		var me = this,
-			s = me.store,
+			s = me.backingStore,
 			gradebookentry = me.gradeBook.getItem('Final Grade', 'no_submit');
 
 		function getGrade(entry, user) {

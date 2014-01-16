@@ -15,16 +15,18 @@ Ext.define('NextThought.store.MockPage', {
 			console.error('Cant create a mock page store without binding it');
 			return;
 		}
-
-		this.mon(this.bind, {
+		var bind = this.bind;
+		this.mon(bind, {
 			scope: this,
 			datachanged: '__bindStore',
 			load: '__bindStore'
 		});
 
-		//this.bind.promise.done(this.__bindStore.bind(this));
+		this.data.getByKey = function() {
+			return bind.data.getByKey.apply(bind.data, arguments);
+		};
 
-		this.__bindStore(this.bind);
+		this.__bindStore(bind);
 	},
 
 
@@ -34,7 +36,10 @@ Ext.define('NextThought.store.MockPage', {
 
 
 	getRange: function(start, end) {
-		return this.data.getRange(start, end);
+		if (end === undefined) {
+			end = this.data.getCount() - 1;
+		}
+		return this.data.getRange(start || 0, end);
 	},
 
 
