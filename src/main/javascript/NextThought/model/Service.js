@@ -504,22 +504,9 @@ Ext.define('NextThought.model.Service', {
 		return this.hasCapability('nti.platform.customization.can_change_password');
 	},
 
-
-	//Right now the cabability isn't enough so hack some crap in client
-	//side which I'm sure will break terribly at some point.  Logic is
-	//users with the capability and (those users that have no role field or a role field
-	//not equal to student) should be allowed to create them.  The purpose
-	//is to further restrict the capability for mathcounts users that are students
-	//as specified by the unverified role field.
-	//
-	//Note this already breaks for coppa student accounts that get upgraded to none coppa
-	//status.  Their role changs from student to other.
+	//Removed crazy filter logic after consoluting Greg and Jason on 1/16/2014. -cutz
 	canCreateDynamicGroups: function() {
-		var roleField = $AppConfig.userObject.get('role');
-		if (!this.hasCapability('nti.platform.p2p.dynamicfriendslists')) {
-			return false;
-		}
-		return !roleField || roleField.toLowerCase() !== 'student';
+		return this.hasCapability('nti.platform.p2p.dynamicfriendslists');
 	},
 
 
