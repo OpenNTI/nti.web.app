@@ -323,11 +323,11 @@
 
 	&.has-alt-tabbar{
 
-		&:not(.forum-in-view):not(.reader-in-view){
+		&:not(.reader-in-view){
 			#view-tabs{
 				height: 48px;
 				background: white;
-				z-index: 100;
+				z-index: 500;
 				min-width: 1024px;
 				max-width: 1024px;
 				box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
@@ -347,7 +347,7 @@
 			}
 		}
 
-		&.forum-in-view{
+		/*&.forum-in-view{
 			#view-tabs {
 				z-index: 100;
 				display: inline-block;
@@ -361,7 +361,7 @@
 					}
 				}
 			}
-		}
+		}*/
 		#view-tabs:not(:empty) ~ #content{
 			.content-toolbar{
 				.goup{

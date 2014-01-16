@@ -26,7 +26,7 @@ Ext.define('NextThought.view.courseware.forum.View', {
 
 	initComponent: function() {
 		this.callParent(arguments);
-		this.initCustomScrollOn('content');
+		this.initCustomScrollOn('content', undefined, { turnOff: true });
 	},
 
 
@@ -303,9 +303,9 @@ Ext.define('NextThought.view.courseware.forum.View', {
 		});
 	},
 
-	getScrollTop: function(){
-		return 0;
-	},
+	// getScrollTop: function(){
+	// 	return 0;
+	// },
 
 
 	courseChanged: function(courseInstance) {
@@ -335,6 +335,13 @@ Ext.define('NextThought.view.courseware.forum.Board', {
 
 	scrollParentCls: '.course-forum',
 
+
+	initComponent: function(){
+		this.callParent(arguments);
+		this.mixins.HeaderLock.disable();
+	},
+	
+
 	afterRender: function() {
 		this.callParent(arguments);
 		var header = this.el.down('.forum-forum-list');
@@ -344,6 +351,7 @@ Ext.define('NextThought.view.courseware.forum.Board', {
 			header.addCls('course-forum-list');
 		}
 	},
+
 
 	onHeaderClick: function(e) {
 		if (e.getTarget('.new-forum')) {
@@ -369,6 +377,13 @@ Ext.define('NextThought.view.courseware.forum.ForumList', {
 	},
 
 	scrollParentCls: '.course-forum',
+
+
+	initComponent: function(){
+		this.callParent(arguments);
+		this.mixins.HeaderLock.disable();
+	},
+
 
 	onHeaderClick: function(e) {
 		if (e.getTarget('.path')) {
