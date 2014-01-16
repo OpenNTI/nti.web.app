@@ -134,7 +134,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	initComponent: function() {
 		this.callParent(arguments);
 		//this.on({ refresh: 'bindInputs' });
-		this.down('grid').bindStore(this.store);
+		this.grid = this.down('grid');
+		this.grid.bindStore(this.store);
 		this.header = this.down('box');
 		this.createGradeMenu();
 	},
@@ -159,6 +160,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			clearEl: { click: 'clearSearch', scope: this}
 		});
 
+		this.mon(this.grid, {
+			cellclick: 'handleEvent'
+		});
 		//this.mon(this.frameBodyEl, { keydown: 'manageFocus' });
 	},
 	//</editor-fold>
@@ -631,6 +635,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		s.sort();
 	},
+
+
+	getNode: function(record) {
+		var v = this.grid.getView();
+		return v.getNode.apply(v, arguments);
+	},
 	//</editor-fold>
 
 
@@ -647,12 +657,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	handleEvent: function(e) {
+	handleEvent: function(me, td, cellIndex, record, tr, rowIndex, e) {
 		var isControl = !!e.getTarget('.gradebox');
 		if (isControl && e.type === 'click') {
 			try {
 				if (e.getTarget('.dropdown')) {
-					this.onDropDown(e.getTarget(this.itemSelector));
+					this.onDropDown(td, record);
 				}
 			}
 			finally {
@@ -703,7 +713,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 	onDropDown: function(node, record) {
 		var me = this,
-			rec = record || me.getRecord(node),
+			rec = record || me.grid.getRecord(node),
 			el = Ext.get(node),
 			dropdown = el && el.down('.gradebox .letter'),
 			current;

@@ -337,7 +337,7 @@ canvas.x-component-course-assessment {
 	.gradebox {
 		display: none;
 		margin: 11px 0 9px;
-		width: 10.5em;
+		width: 10.7em;
 		font: normal 500 1em/1 $font;
 		border: 1px solid #dcdcdc;
 		& > * {
@@ -368,7 +368,7 @@ canvas.x-component-course-assessment {
 				content: '';
 				overflow: hidden;
 				position: absolute;
-				top: 1.8em;
+				top: 2em;
 				right: 1.5em;
 				@include arrow($pointFrom:top, $width: 8px, $height: 5px, $color: $secondary-grey);
 			}
