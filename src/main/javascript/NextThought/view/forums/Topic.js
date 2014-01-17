@@ -251,7 +251,7 @@ Ext.define('NextThought.view.forums.Topic', {
 		this.mon(this.prevPostEl, 'click', this.navigationClick, this);
 		
 
-		if (isFeature('threaded-forums')){
+		if (isFeature('threaded-forums') && !this.notThreaded){
 			this.loadMoreEl.destroy();
 		} else {
 			this.mon(this.loadMoreEl, 'click', this.fetchNextPage, this);
@@ -430,7 +430,7 @@ Ext.define('NextThought.view.forums.Topic', {
 
 	showEditor: function() {
 
-		if (isFeature('threaded-forums')) {
+		if (isFeature('threaded-forums') && !this.notThreaded) {
 			this.down('forum-comment-thread').addRootReply();
 			return;
 		}
