@@ -13,6 +13,8 @@
 // DO NOT DELETE - this directive is required for Sencha Cmd packages to work.
 //@require @packageOverrides
 
+window.URL = window.URL || window.webkitURL;
+window.Blob = window.Blob || window.webkitBlob;
 
 Ext.USE_NATIVE_JSON = true;
 

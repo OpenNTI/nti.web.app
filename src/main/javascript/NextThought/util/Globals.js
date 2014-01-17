@@ -95,7 +95,7 @@ Ext.define('NextThought.util.Globals', {
 			if ($AppConfig.server.host) {
 				console.warn('Bad host config', $AppConfig.server.host, 'using domain', document.domain);
 			}
-			$AppConfig.server.host = '//' + location.host;
+			$AppConfig.server.host = location.protocol + '//' + location.host;
 		}
 
 		if (!/^\/.+\/$/.test($AppConfig.server.data)) {
@@ -132,7 +132,7 @@ Ext.define('NextThought.util.Globals', {
 		var head, doc = document,
 			script, onLoadFn, onErrorFn;
 
-		function buildCallback(cb,scope) {
+		function buildCallback(cb, scope) {
 			return function() {
 				script.onload = null;
 				script.onreadystatechange = null;
@@ -395,20 +395,18 @@ Ext.define('NextThought.util.Globals', {
 	 * @param {Function} [g] - Getter function, where the value in the array is passed, and the getter returns the comparable.
 	 * @param {Boolean} [natural] - Sort strings naturally (1 2...10 vs 1 10 2 20 ...etc)
 	 */
-	SortModelsBy: function(key,dir,g,natural) {
+	SortModelsBy: function(key, dir, g, natural) {
 		function $(v) {
 			return (g ? g(v) : v).get(key);
 		}
 
 		var n = Globals.naturalSortComparator;
 
-		return function(a,b) {
+		return function(a, b) {
 			var c = 0, $a = $(a), $b = $(b);
 
 			if ($a !== $b) {
-				c = natural && Ext.isString($a)
-						? n($a, $b)
-						: $a < $b ? -1 : 1;
+				c = natural && Ext.isString($a) ? n($a, $b) : $a < $b ? -1 : 1;
 
 				//FIXME this seems backwards. If a < b it would sort to a lower
 				//position and be -1.  That is the proper order for ascending
@@ -482,7 +480,7 @@ Ext.define('NextThought.util.Globals', {
 		};
 	},
 
-	getURL: function(u,root) {
+	getURL: function(u, root) {
 		if (!u) {return '';}
 		if (!Globals.HOST_PREFIX_PATTERN.test(u) && u.indexOf('//') !== 0) {
 			if (!Ext.isEmpty(root)) {
@@ -558,7 +556,7 @@ Ext.define('NextThought.util.Globals', {
 		cc = cc || '';
 		bcc = bcc || '';
 
-		if(Ext.isEmpty(to)){
+		if (Ext.isEmpty(to)) {
 			console.error('Tried to send an email with no recepients');
 			return;
 		}
