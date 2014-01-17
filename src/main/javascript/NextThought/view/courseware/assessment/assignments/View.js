@@ -155,7 +155,10 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 
 	onItemClicked: function(s, record, dom) {
-		if (Ext.fly(dom).hasCls('closed')) {
+		var date = Ext.Date.format(record.get('opens'), 'l F j \\a\\t g:i A');
+
+		if (Ext.fly(dom).hasCls('closed')) {			
+			alert('This assignment will be availble on ' + date);
 			return;
 		}
 		this.goToAssignment(record);

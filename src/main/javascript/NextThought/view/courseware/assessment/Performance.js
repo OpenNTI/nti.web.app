@@ -173,7 +173,10 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 
 
 	goToAssignment: function(selModel, record) {
+		var date = Ext.Date.format(record.get('assigned'), 'l F j \\a\\t g:i A');
+			
 		if (!record || record.get('assigned') > new Date()) {
+			alert('This assignment will be availble on ' + date);
 			return;
 		}
 		this.fireEvent('goto-assignment', record.get('item'), $AppConfig.userObject);
