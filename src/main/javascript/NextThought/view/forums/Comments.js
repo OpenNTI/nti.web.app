@@ -52,8 +52,8 @@ Ext.define('NextThought.view.forums.Comments',{
 							{ cls: 'body', html: '{bodyContent}'},
 							{ cls: 'foot', cn: [
 								{ tag: 'tpl', 'if': 'depth === 0', cn: [
-									{ tag: 'span', cls: 'comments link toggle', html: '{ReferencedByCount:plural("Comment")}'}   
-								]},								
+									{ tag: 'span', cls: 'comments link toggle', html: '{ReferencedByCount:plural("Comment")}'}
+								]},
 								{ tag: 'span', cls: 'reply thread-reply link', html: 'Reply'},
 								{ tag: 'tpl', 'if': 'isModifiable', cn: [
 									{ tag: 'span', cls: 'edit link', html: 'Edit'},
@@ -82,10 +82,10 @@ Ext.define('NextThought.view.forums.Comments',{
 	},
 
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 
-		if(!this.topic){
+		if (!this.topic) {
 			console.error('Cant create a comments view without a topic...');
 			return;
 		}
@@ -94,24 +94,24 @@ Ext.define('NextThought.view.forums.Comments',{
 	},
 
 
-	afterRender: function(){
+	afterRender: function() {
 		var me = this;
 
 		this.callParent(arguments);
 
-		me.editor = Ext.widget('nti-editor', {ownerCt: me, renderTo: me.el, record: null, saveCallback: function(editor, postCmp, record){
-			if(me.isNewRecord){
+		me.editor = Ext.widget('nti-editor', {ownerCt: me, renderTo: me.el, record: null, saveCallback: function(editor, postCmp, record) {
+			if (me.isNewRecord) {
 				me.store.insertSingleRecord(record);
 			}
 
 			me.editor.deactivate();
 		}});
-		me.editor.addCls('threaded-forum-editor');	
+		me.editor.addCls('threaded-forum-editor');
 		me.el.selectable();
-	},	
+	},
 
 
-	buildStore: function(){
+	buildStore: function() {
 		var s = NextThought.store.forums.Comments.create({
 			storeId: this.topic.get('Class') + '-' + this.topic.get('NTIID'),
 			url: this.topic.getLink('contents')
@@ -123,7 +123,7 @@ Ext.define('NextThought.view.forums.Comments',{
 			filter: 'TopLevel'
 		});
 
-		this.mon(s,{
+		this.mon(s, {
 			scope: this,
 			load: 'onStoreAdd',
 			add: 'onStoreAdd',
@@ -137,36 +137,36 @@ Ext.define('NextThought.view.forums.Comments',{
 	},
 
 
-	onStoreAdd: function(store, records){
+	onStoreAdd: function(store, records) {
 		records.forEach(this.fillInData, this);
 		this.clearLoadBox();
 		this.fireEvent('realign-editor');
 	},
 
-	
-	onStoreUpdate: function(store, record){
+
+	onStoreUpdate: function(store, record) {
 		this.fillInData(record);
 		this.clearLoadBox();
 		this.fireEvent('realign-editor');
 	},
 
 
-	fillInData: function(record){
+	fillInData: function(record) {
 		var me = this;
 
-		if( typeof record.get('Creator') === 'string'){
+		if (typeof record.get('Creator') === 'string') {
 			UserRepository.getUser(record.get('Creator'))
-				.then(function(user){
+				.then(function(user) {
 					record.set({
 						'Creator': user
 					});
 				})
-				.fail(function(reason){
+				.fail(function(reason) {
 					console.error(reason);
 				});
 		}
 
-		record.compileBodyContent(function(body){
+		record.compileBodyContent(function(body) {
 			var index;
 
 			me.store.suspendEvents();
@@ -177,22 +177,22 @@ Ext.define('NextThought.view.forums.Comments',{
 
 			me.store.resumeEvents();
 
-			if(me.store.filtersCleared){
+			if (me.store.filtersCleared) {
 				me.recordsToRefresh.push(record);
 			} else {
 				index = me.store.indexOf(record);
 				me.refreshNode(index);
 			}
-		}, this, function(id, data){
+		}, this, function(id, data) {
 			me.wbData[id] = data;
 		}, 226);
 	},
 
 
-	refreshQueue: function(){
+	refreshQueue: function() {
 		var me = this;
 
-		me.recordsToRefresh.forEach(function(rec){
+		me.recordsToRefresh.forEach(function(rec) {
 			var index = me.store.indexOf(rec);
 
 			me.refreshNode(index);
@@ -202,21 +202,21 @@ Ext.define('NextThought.view.forums.Comments',{
 	},
 
 
-	clearLoadBox: function(){
+	clearLoadBox: function() {
 		if (!this.currentLoadBox) { return; }
 		this.currentLoadBox.unmask();
 		this.currentLoadBox.setHeight(0);
-	},	
+	},
 
 
-	maskLoadBox: function(el){
+	maskLoadBox: function(el) {
 		this.currentLoadBox = el.down('.load-box');
 		this.currentLoadBox.setHeight(40);
 		this.currentLoadBox.mask('Loading...');
 	},
 
 
-	whiteboardContainerClick: function(record, container, e, el){
+	whiteboardContainerClick: function(record, container, e, el) {
 		var me = this,
 			guid = container && container.up('.body-divider').getAttribute('id');
 
@@ -224,7 +224,7 @@ Ext.define('NextThought.view.forums.Comments',{
 			container = e.getTarget('.reply:not(.thread-reply)', null, true);
 			if (container) {
 				me.replyTo(record, el)
-					.done(function(){
+					.done(function() {
 						me.editor.addWhiteboard(Ext.clone(me.wbData[guid]), guid + '-reply');
 					});
 			} else {
@@ -234,8 +234,8 @@ Ext.define('NextThought.view.forums.Comments',{
 	},
 
 
-	loadThread: function(record, el){
-		if(!record.threadLoaded){
+	loadThread: function(record, el) {
+		if (!record.threadLoaded) {
 			this.maskLoadBox(el);
 		}
 
@@ -243,18 +243,18 @@ Ext.define('NextThought.view.forums.Comments',{
 	},
 
 
-	onItemClick: function(record, item, index, e){
-		var record, load, me = this, width, 
+	onItemClick: function(record, item, index, e) {
+		var load, me = this, width,
 			t = e.getTarget('.whiteboard-container', null, true),
 			el = Ext.get(item),
 			box;
-			
+
 		if (t) {
 			this.whiteboardContainerClick(record, t, e, el);
 			return;
 		}
 
-		if(e.getTarget('.body') && record.get('threadShowing')){
+		if (e.getTarget('.body') && record.get('threadShowing')) {
 			e.preventDefault();
 			return;
 		}
@@ -270,7 +270,7 @@ Ext.define('NextThought.view.forums.Comments',{
 			delete this.isNewRecord;
 			t = el.down('.body');
 			t.hide();
-			this.openEditor(record, t, width, function(){
+			this.openEditor(record, t, width, function() {
 				t.show();
 			}, true);
 			return;
@@ -292,25 +292,25 @@ Ext.define('NextThought.view.forums.Comments',{
 
 		if (e.getTarget('.name')) {
 			UserRepository.getUser(record.get('Creator'))
-				.done(function(u){
-					if(!isMe(u)){
+				.done(function(u) {
+					if (!isMe(u)) {
 						me.fireEvent('show-profile', u);
 					}
 				})
-				.fail(function(reason){
+				.fail(function(reason) {
 					console.error(reason);
 				});
 			return;
 		}
 
-		if(e.getTarget('.like')) {
+		if (e.getTarget('.like')) {
 			record.like();
 			return;
 		}
 
 
-		if(e.getTarget('.toggle') && record.get('depth') === 0){
-			if(record.get('threadShowing')){
+		if (e.getTarget('.toggle') && record.get('depth') === 0) {
+			if (record.get('threadShowing')) {
 				me.store.hideCommentThread(record);
 			} else {
 				me.loadThread(record, el);
@@ -322,33 +322,33 @@ Ext.define('NextThought.view.forums.Comments',{
 	},
 
 
-	replyTo: function(record, el, width){
-		var me = this,
+	replyTo: function(record, el, width) {
+		var me = this, newRecord,
 			p = new Promise();
 
 		me.isNewRecord = true;
 		newRecord = record.makeReply();
 
-		if(!record.threadLoaded && record.get('ReferencedByCount')){
-			me.store.on('add', function(){
+		if (!record.threadLoaded && record.get('ReferencedByCount')) {
+			me.store.on('add', function() {
 				var el = me.getNode(record);
-				
+
 				el = Ext.get(el);
 
-				me.openEditor(newRecord, el.down('.editor-box'), width);	
+				me.openEditor(newRecord, el.down('.editor-box'), width);
 				p.fulfill();
 			}, me, {single: true});
 			me.loadThread(record, el);
 		} else {
 			me.openEditor(newRecord, el.down('.editor-box'), width);
-			p.fulfill();			
+			p.fulfill();
 		}
 
 		return p;
 	},
 
 
-	deleteRecord: function(record){
+	deleteRecord: function(record) {
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
 			msg: 'This will permanently remove this comment.',
@@ -370,7 +370,7 @@ Ext.define('NextThought.view.forums.Comments',{
 					Service.request({
 						url: href,
 						method: 'DELETE'
-					}).done(function(){
+					}).done(function() {
 						record.convertToPlaceholder();
 						record.set({
 							'depth': depth,
@@ -378,7 +378,7 @@ Ext.define('NextThought.view.forums.Comments',{
 							'Deleted': true
 						});
 
-					}).fail(function(reason){
+					}).fail(function(reason) {
 						console.error(reason);
 					});
 
@@ -394,14 +394,14 @@ Ext.define('NextThought.view.forums.Comments',{
 
 		width = width || el.getWidth();
 
-		function size(){
+		function size() {
 			el.setHeight(me.editor.getHeight());
 		}
 
 		me.editor.record = record;
 		me.editor.editBody((record && record.get('body')) || []);
 		me.editor.activate();
-		
+
 		Ext.defer(me.editor.focus, 100, me.editor);
 
 		me.editor.alignTo(el, 'tl-tl');
@@ -411,20 +411,20 @@ Ext.define('NextThought.view.forums.Comments',{
 
 		Ext.destroy(this.boxMonitor);
 
-		refreshMon = me.mon(me,{
+		refreshMon = me.mon(me, {
 			destroyable: true,
-			'realign-editor': function(){
+			'realign-editor': function() {
 				//if there isn't a record its a new top level comment and we don't need to resize/realign anything
-				if(!record){
+				if (!record) {
 					return;
 				}
 				//if i'm editing get the node for the record, if its a reply get its parent node
-				var parentId = (isEdit)? false : record.get('inReplyTo'),
+				var parentId = isEdit ? false : record.get('inReplyTo'),
 					parent = parentId && me.store.getById(parentId),
-					node = (isEdit)? me.getNodeByRecord(record) : parent && me.getNodeByRecord(parent);
+					node = isEdit ? me.getNodeByRecord(record) : parent && me.getNodeByRecord(parent);
 
 				//if we have a node, if its an edit get the body if its a reply get the editor-box
-				node = node && (isEdit)? Ext.fly(node).down('.body') : Ext.fly(node).down('.editor-box');
+				node = node && isEdit ? Ext.fly(node).down('.body') : Ext.fly(node).down('.editor-box');
 
 				if (!node) {
 					console.error('Failed to find new node to align editor to, so closing it');
@@ -439,27 +439,27 @@ Ext.define('NextThought.view.forums.Comments',{
 			}
 		});
 
-		me.boxMonitor = me.mon(this.editor,{
+		me.boxMonitor = me.mon(this.editor, {
 			destroyable: true,
 			'grew': size,
 			'shrank': size,
-			'deactivated-editor': function(){
-				//if there isn't a record its a new top level comment 
-				if(!record){
+			'deactivated-editor': function() {
+				//if there isn't a record its a new top level comment
+				if (!record) {
 					el.setHeight(oldHeight);
 					return;
 				}
 				//if I'm editing get the node for the record, if its a reply get its parent node
-				var parentId = (isEdit)? false : record.get('inReplyTo'),
+				var parentId = isEdit ? false : record.get('inReplyTo'),
 					parent = parentId && me.store.getById(parentId),
-					node = (isEdit)? me.getNodeByRecord(record) : parent && me.getNodeByRecord(parent);
+					node = isEdit ? me.getNodeByRecord(record) : parent && me.getNodeByRecord(parent);
 
 				// if we have a node, if its an edit get the body if its a reply get the editor-box
-				node = node && (isEdit)? Ext.fly(node).down('.body') : Ext.fly(node).down('.editor-box');
+				node = node && isEdit ? Ext.fly(node).down('.body') : Ext.fly(node).down('.editor-box');
 
 				Ext.destroy(refreshMon);
 				Ext.callback(cancelCallback);
-				
+
 				if (!node) {
 					console.error('Cant find the node to set the old height back on...');
 					return;
@@ -472,7 +472,7 @@ Ext.define('NextThought.view.forums.Comments',{
 	},
 
 
-	addRootReply: function(){
+	addRootReply: function() {
 		this.isNewRecord = true;
 		this.openEditor(null, this.el.down('.new-root'));
 	},
