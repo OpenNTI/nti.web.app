@@ -39,6 +39,11 @@ Ext.define('NextThought.model.assessment.FilePart', {
 	__checkMime: function(mime) {
 		var me = this,
 			allowedMimes = this.get('AllowedMimeTypes') || ['*/*'];
+
+		if (Ext.isEmpty(mime)) {
+			mime = '-/-';
+		}
+
 		return allowedMimes.some(function(o) {
 			return me.__getRegExp(o).test(mime);
 		});
