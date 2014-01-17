@@ -247,6 +247,11 @@ Ext.define('NextThought.controller.CourseWare', {
 
 		store = currentCourse.getNavigationStore();
 		lin = ContentUtils.getLineage(ntiid);
+
+		if (currentCourse.__getLocationInfo().NTIID !== lin.last()) {
+			return true;//not in the same content...
+		}
+
 		// the last item in the lineage is the root of the content.
 		// the next to last entry is the first branch from the root
 		// of the content (so its a unit or a lesson... if we can
