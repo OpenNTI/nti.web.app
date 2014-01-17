@@ -43,12 +43,11 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 
 			assignmentView.filledStorePromise
 				.done(function(store) {
-					var recs = store.snapshot || store.data;
+					var recs = (store.snapshot || store.data);
 					try {
 						recs.each(function(rec) {
-
-							var creator = rec.get('Creator'),
-									u = Ext.isString(user) ? user : user.getId();
+							var creator = (rec && rec.get && rec.get('Creator')) || rec,
+								u = Ext.isString(user) ? user : user.getId();
 
 							creator = Ext.isString(creator) ? creator : creator.getId();
 

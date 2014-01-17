@@ -257,9 +257,10 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			total: this.total,
 			exportFilesLink: this.exportFilesLink
 		});
-		
-		s = this.store = NextThought.store.MockPage.create({
-			bind: a.getSubmittedHistoryStore(),
+
+		s = a.getSubmittedHistoryStore();
+		this.store = NextThought.store.MockPage.create({
+			bind: s,
 			model: 'NextThought.model.courseware.UserCourseAssignmentHistoryItem'
 		});
 
@@ -274,7 +275,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 		grid = this.down('grid');
 		grid.dueDate = a.getDueDate();
-		grid.bindStore(s);
+		grid.bindStore(this.store);
 		this.maybeShowDownload();
 		this.mon(grid, 'itemclick', 'onItemClick');
 	},
