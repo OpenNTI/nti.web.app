@@ -516,9 +516,7 @@ Ext.define('NextThought.view.video.Video', {
 			service = 'none';
 		}
 
-		if (me.activeVideoService !== service) {
-			me.stopPlayback();
-		}
+		me.stopPlayback();
 
 		//TODO: make each player handle switching.
 		Ext.Object.each(me.playerIds, function(k, id) {
