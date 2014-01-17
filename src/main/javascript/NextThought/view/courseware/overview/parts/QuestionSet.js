@@ -129,8 +129,6 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 
 
 	containerLoaded: function(q, s, r) {
-		if (this.alreadyTurnedIn) { return; }
-
 		if (!this.rendered) {
 			this.on('afterrender', Ext.bind(this.containerLoaded, this, arguments), this, {single: true});
 			return;
@@ -159,6 +157,8 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 			console.warn('No history');
 			return;
 		}
+
+		this.on('afterrender', Ext.bind(this.setHistory, this, arguments), this, {single: true});
 
 		var submission = history.get('Submission'),
 			completed = (submission && submission.get('CreatedTime')) || new Date(),
