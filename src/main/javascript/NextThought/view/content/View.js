@@ -420,7 +420,7 @@ Ext.define('NextThought.view.content.View', {
 
 
 		//TEMP:
-		var sc = Ext.bind(this._setCourse, this);
+		var sc = Ext.bind(this._setCourse, this, ['passive'], true);
 		if (this.isPartOfCourse(pageInfo)) {
 			this.getCourseInstance(pageInfo).then(sc, function(reason) {
 				console.error('Could not set course from pageInfo: ', reason);
@@ -475,10 +475,14 @@ Ext.define('NextThought.view.content.View', {
 		});
 
 		this.updateTabs();
-		if (instance) {
-			this.showCourseNavigation();
+		if (tab !== 'passive') {
+			if (instance) {
+				this.showCourseNavigation();
+			} else {
+				this.showContentReader();
+			}
 		} else {
-			this.showContentReader();
+			tab = false;
 		}
 
 		tab = preview ? 'course-info' : tab || 'course-book';
@@ -511,8 +515,12 @@ Ext.define('NextThought.view.content.View', {
 
 
 	showCourseNavigation: function() {
-		this.courseBook.getLayout().setActiveItem('course-nav');
-		//this.setActiveTab('course-book');
+		var me = this;
+		clearTimeout(me.viewSwitch);
+		me.viewSwitch = setTimeout(function() {
+			me.courseBook.getLayout().setActiveItem('course-nav');
+			//this.setActiveTab('course-book');
+		}, 100);
 	},
 
 
@@ -529,8 +537,12 @@ Ext.define('NextThought.view.content.View', {
 
 
 	showContentReader: function() {
-		this.courseBook.layout.setActiveItem('main-reader-view');
-		//this.setActiveTab('course-book');
+		var me = this;
+		clearTimeout(me.viewSwitch);
+		me.viewSwitch = setTimeout(function() {
+			me.courseBook.layout.setActiveItem('main-reader-view');
+			//this.setActiveTab('course-book');
+		}, 100);
 	},
 
 
