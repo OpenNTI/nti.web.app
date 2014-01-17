@@ -36,9 +36,12 @@ Ext.define('NextThought.store.MockPage', {
 
 
 	getRange: function(start, end) {
+		var max = this.data.getCount() - 1;
 		if (end === undefined) {
-			end = this.data.getCount() - 1;
+			end = max;
 		}
+
+		end = Math.min(max, end);
 		return this.data.getRange(start || 0, end);
 	},
 
