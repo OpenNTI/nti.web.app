@@ -102,6 +102,8 @@ Ext.define('NextThought.view.forums.Comments',{
 			if(me.isNewRecord){
 				me.store.insertSingleRecord(record);
 			}
+
+			me.editor.deactive();
 		}});
 		me.editor.addCls('threaded-forum-editor');	
 		me.el.selectable();
@@ -249,7 +251,7 @@ Ext.define('NextThought.view.forums.Comments',{
 			t.hide();
 			this.openEditor(record, t, width, function(){
 				t.show();
-			});
+			}, true);
 			return;
 		}
 
@@ -365,7 +367,7 @@ Ext.define('NextThought.view.forums.Comments',{
 	},
 
 
-	openEditor: function(record, el, width, cancelCallback) {
+	openEditor: function(record, el, width, cancelCallback, isEdit) {
 		var me = this, refreshMon,
 			oldHeight = el.getHeight();
 
@@ -390,11 +392,13 @@ Ext.define('NextThought.view.forums.Comments',{
 		refreshMon = me.mon(me,{
 			destroyable: true,
 			'realign-editor': function(){
-				var parentId = record.get('inReplyTo'),
+				//if i'm editing get the node for the record, if its a reply get its parent node
+				var parentId = (isEdit)? false : record.get('inReplyTo'),
 					parent = parentId && me.store.getById(parentId),
-					el = me.getNodeByRecord(parent);
+					el = (isEdit)? me.getNodeByRecord(record) : parent && me.getNodeByRecord(parent);
 
-				el =  el && Ext.fly(el).down('.editor-box');
+				//if we have a node, if its an edit get the body if its a reply get the editor-box
+				el =  el && (isEdit)? Ext.fly(el).down('.body') : Ext.fly(el).down('.editor-box');
 
 				if (!el) {
 					console.error('Failed to find new node to align editor to, so closing it');
@@ -402,6 +406,7 @@ Ext.define('NextThought.view.forums.Comments',{
 					return;
 				}
 
+				//resize the editor and el to fit and realign the editor
 				el.setHeight(me.editor.getHeight());
 				me.editor.setWidth(width || el.getWidth());
 				me.editor.alignTo(el, 'tl-tl');
@@ -413,11 +418,13 @@ Ext.define('NextThought.view.forums.Comments',{
 			'grew': size,
 			'shrank': size,
 			'deactivated-editor': function(){
-				var parentId = record.get('inReplyTo'),
+				//if I'm editing get the node for the record, if its a reply get its parent node
+				var parentId = (isEdit)? false : record.get('inReplyTo'),
 					parent = parentId && me.store.getById(parentId),
-					el = me.getNodeByRecord(parent);
+					el = (isEdit)? me.getNodeByRecord(record) : parent && me.getNodeByRecord(parent);
 
-				el = el && Ext.fly(el).down('.editor-box');
+				// if we have a node, if its an edit get the body if its a reply get the editor-box
+				el = el && (isEdit)? Ext.fly(el).down('.body') : Ext.fly(el).down('.editor-box');
 
 				Ext.destroy(refreshMon);
 				Ext.callback(cancelCallback);
@@ -427,6 +434,7 @@ Ext.define('NextThought.view.forums.Comments',{
 					return;
 				}
 
+				//restore the height of the element before the editor was opened
 				el.setHeight(oldHeight);
 			}
 		});
