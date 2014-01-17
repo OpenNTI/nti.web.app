@@ -12,7 +12,7 @@ Ext.define('NextThought.view.forums.Comments',{
 	preserveScrollOnRefresh: true,
 
 	disableSelection: true,
-	loadMask: false,
+	//loadMask: false,
 	updateFromMeMap: {},
 	wbData: {},
 	recordsToRefresh: [],
