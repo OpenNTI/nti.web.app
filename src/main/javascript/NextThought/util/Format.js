@@ -33,12 +33,12 @@ Ext.define('NextThought.util.Format', {
 	},
 
 	displayName: function(value) {
-		return Ext.isString(value)? 'Resolving...' : value;
+		return Ext.isString(value) ? 'Resolving...' : value;
 	}
 
 },function() {
 	window.NTIFormat = this;
-	Ext.util.Format.ntiCurrency = NTIFormat.currency.bind(NTIFormat);
+	Ext.util.Format.ntiCurrency = Ext.bind(NTIFormat.currency, NTIFormat);//PhantomJS doesn't support .bind()
 	Ext.util.Format.ago = NTIFormat.ago;
 	Ext.util.Format.avatarURL = NTIFormat.avatarURL;
 	Ext.util.Format.boolStr = NTIFormat.boolStr;

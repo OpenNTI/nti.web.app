@@ -621,11 +621,11 @@ Ext.define('NextThought.view.video.Video', {
 				{mime: 'video/mpegurl', key: 'm3u8'},
 				{mime: 'audio/mpegurl', key: 'm3u8'}
 			];
-
-	while ((o = types.pop()) !== undefined) {
-		i = !!video.canPlayType(o.mime);
-		this.supports[o.key] = this.supports[o.key] || i;
-		//console.debug('Browser suggests that it ' + (i ? 'might be able to' : 'cannot') + ' play ' + o.key + ' (' + o.mime + ')');
+	if (video && video.canPlayType) {
+		while ((o = types.pop()) !== undefined) {
+			i = !!video.canPlayType(o.mime);
+			this.supports[o.key] = this.supports[o.key] || i;
+			//console.debug('Browser suggests that it ' + (i ? 'might be able to' : 'cannot') + ' play ' + o.key + ' (' + o.mime + ')');
+		}
 	}
-
 });

@@ -79,28 +79,47 @@ Ext.application({
 		}
 
 		var me = this, ios, isIE11p,
-			unsupported = [], g, geckoRev = /rv:(\d+\.\d+)/.exec(Ext.userAgent) || [];
+			reasons = {},
+			unsupported = [], g,
+			geckoRev = /rv:(\d+\.\d+)/.exec(Ext.userAgent) || [];
 
 		Ext.each(//firefox doesn't report supporting: CSS3DTransform, so we'll omit it.
 				['Canvas', 'Range', 'CSS3BoxShadow', 'CSS3BorderRadius'],
 				function(f) {Boolean(!Ext.supports[f] && unsupported.push(f));});
 
-		function iOSversion() {
+
+		Ext.isIE11p = isIE11p = !Ext.isIE && /Trident/i.test(navigator.userAgent);
+
+		ios = (function() {
 			if (/iP(hone|od|ad)/.test(navigator.platform)) {
 				var v = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
 				return [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
 			}
+		}());
+
+
+		if (unsupported.length > 0) {
+			reasons.push('Required html5 features are not present: ' + unsupported.join(','));
 		}
 
-		ios = iOSversion();
+		if (!Ext.isIE && !isIE11p && !(Ext.isGecko && parseFloat(geckoRev[1]) > 23.9) && !Ext.isWebKit) {
+			reasons.push('This version of FireFox is not supported.');
+		}
 
-		Ext.isIE11p = isIE11p = !Ext.isIE && /Trident/i.test(navigator.userAgent);
+		if (Ext.isIE9m) {
+			reasons.push('Please use IE10 or newer');
+		}
 
-		if (unsupported.length !== 0 ||
-				(!Ext.isIE && !isIE11p && !(Ext.isGecko && parseFloat(geckoRev[1]) > 23.9) && !Ext.isWebKit) ||
-				(Ext.isIE9m) ||
-				(Ext.isSafari && Ext.safariVersion < 6) ||
-				(ios && ios[0] < 6)) {
+		if (Ext.isSafari && Ext.safariVersion < 6 && !Ext.isPhantomJS) {
+			reasons.push('Please use the latest Safari available. Currently only 6+ is supported.');
+		}
+
+		if (ios && ios[0] < 6) {
+			reasons.push('iOS 6 is the oldest iOS Safari we support.');
+		}
+
+		if (reasons.length > 0) {
+			console.error(reasons.join('\n'));
 			location.replace($AppConfig.server.unsupported);
 		}
 
