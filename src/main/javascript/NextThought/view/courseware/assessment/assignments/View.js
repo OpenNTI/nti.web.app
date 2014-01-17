@@ -307,7 +307,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 			if (lesson.length > 1) {
 				lesson.shift();//discard leaf page
 			}
-			lesson.reverse().join('|');
+			lesson = lesson.reverse().join('|');
 
 			raw.push({
 				id: id,
