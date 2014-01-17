@@ -475,13 +475,24 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 	playerStateChangeHandler: function(event) {
 		var state = event.data[0],
-				stateMap = {
-					'playing': 'doPlayHandler',
-					'paused': 'doPauseHandler',
-					'stop': 'doStopHandler'
-				};
+			stateMap = {
+				'playing': 'doPlayHandler',
+				'paused': 'doPauseHandler',
+				'stop': 'doStopHandler'
+			};
 
-		if (Ext.isFunction(this[stateMap[state]])) {
+		if (!this.el) {
+			console.error('No element reference. Runaway video!?');
+		} else if (this.el.isVisible(true)) {
+			console.warn('Still got events for a Video that is not visible: ' + state);
+			if (state === 'playing') {
+				console.warn('Stopping hidden player and short circuit state change handler.');
+				this.stop();
+				return;
+			}
+		}
+
+		if (this[stateMap[state]]) {
 			console.log(this.id, ' Handling state', state);
 			this[stateMap[state]]();
 		}
