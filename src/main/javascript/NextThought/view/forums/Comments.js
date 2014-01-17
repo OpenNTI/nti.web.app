@@ -103,7 +103,7 @@ Ext.define('NextThought.view.forums.Comments',{
 				me.store.insertSingleRecord(record);
 			}
 
-			me.editor.deactive();
+			me.editor.deactivate();
 		}});
 		me.editor.addCls('threaded-forum-editor');	
 		me.el.selectable();
@@ -380,7 +380,8 @@ Ext.define('NextThought.view.forums.Comments',{
 		me.editor.record = record;
 		me.editor.editBody((record && record.get('body')) || []);
 		me.editor.activate();
-		me.editor.focus();
+		
+		Ext.defer(me.editor.focus, 100, me.editor);
 
 		me.editor.alignTo(el, 'tl-tl');
 
