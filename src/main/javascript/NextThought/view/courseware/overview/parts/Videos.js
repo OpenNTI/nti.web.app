@@ -432,7 +432,17 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 			li = this.locationInfo,
 			slide;
 
+
 		if (e.getTarget('.launch-player')) {
+			if (this.player) {
+				if (this.player.isPlaying()) {
+					console.debug('Pausing video for media');
+					this.player.pausePlayback();
+				} else {
+					console.warn('Player did not report being in a state where the media viewer would interfere');
+				}
+			}
+
 			slide = m.get('slidedeck');
 			if (Ext.isEmpty(slide)) {
 				this.fireEvent('start-media-player', this.videoIndex[m.getId()], m.getId(), getURL(li.root));
