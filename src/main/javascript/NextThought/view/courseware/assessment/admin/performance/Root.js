@@ -6,6 +6,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	cls: 'course-assessment-admin performance',
 
 	layout: 'anchor',
+	viewRoot: true,
 
 	items: [
 		{
@@ -55,7 +56,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				border: false,
 				frame: false,
 				items: [
-					{ text: 'Student', dataIndex: 'name', flex: 1, xtype: 'templatecolumn', tpl: Ext.DomHelper.markup([
+					{ text: 'Student', dataIndex: 'displayName', flex: 1, xtype: 'templatecolumn', tpl: Ext.DomHelper.markup([
 						{ cls: 'studentbox', cn: [
 							{ cls: 'avatar', style: {backgroundImage: 'url({avatar})'}},
 							{ cls: 'wrap', cn: [
@@ -67,7 +68,18 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 								]}
 							]}
 						]}
-					])},
+					]), listeners: {
+							headerclick: function() {
+								var store = this.up('grid').getStore(),
+									sorter = {
+										direction: this.sortState,
+										sorterFn: Globals.getNaturalSorter('displayName')
+									};
+								store.sorters.clear();
+								store.sorters.add('displayName', sorter);
+								store.sort();
+							}
+					}},
 					{ text: 'Grade', dataIndex: 'grade', width: 160, xtype: 'templatecolumn', tpl: Ext.DomHelper.markup([
 						{ cls: 'gradebox', cn: [
 							{ tag: 'input', size: 3, tabindex: '1', type: 'text', value: '{grade}'},
@@ -95,7 +107,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			},
 
 			markColumn: function(c) {
-				console.log('Marking...');
+				//console.log('Marking...');
 				var cls = 'sortedOn',
 						el = this.getEl();
 				if (el) {
@@ -411,44 +423,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		this.searchKey = '';
 		this.header.inputEl.dom.value = '';
 		this.backingStore.removeFilter('searchFilter');
-	},
-	//</editor-fold>
-
-
-	//<editor-fold desc="Column Sorters">
-	studentSort: function() {
-		var isDescending = this.nameEl.hasCls('descending'),
-			sorter = {
-				fn: Globals.getNaturalSorter('displayName'),
-				direction: isDescending ? 'ASC' : 'DESC'
-			};
-
-
-		this.gradeEl.removeCls('sorted ascending descending');
-
-		this.nameEl.addCls('sorted');
-		this.nameEl[isDescending ? 'removeCls' : 'addCls']('descending');
-		this.nameEl[isDescending ? 'addCls' : 'removeCls']('ascending');
-
-		this.backingStore.sort(sorter);
-
-	},
-
-
-	gradeSort: function() {
-		var isDescending = this.gradeEl.hasCls('descending'),
-			sorter = {
-				property: 'grade',
-				direction: isDescending ? 'ASC' : 'DESC'
-			};
-
-		this.nameEl.removeCls('sorted ascending descending');
-
-		this.gradeEl.addCls('sorted');
-		this.gradeEl[isDescending ? 'removeCls' : 'addCls']('descending');
-		this.gradeEl[isDescending ? 'addCls' : 'removeCls']('ascending');
-
-		this.backingStore.sort(sorter);
 	},
 	//</editor-fold>
 
