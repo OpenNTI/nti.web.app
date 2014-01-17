@@ -98,13 +98,30 @@ Ext.define('NextThought.cache.AbstractStorage', function() {
 },function() {
 	var w = window,
 		Cls = this,
+		ss = w.sessionStorage,
+		ls = w.localStorage,
 		fallback = {
-			removeItem: Ext.emptyFn,
-			setItem: Ext.emptyFn,
-			getItem: Ext.emptyFn,
-			clear: Ext.emptyFn
+			data: {},
+			removeItem: function(k) {delete this.data[k];},
+			setItem: function(k, v) {this.data[k] = v; console.warn('[WARNING] Using fake storage to workaround missing broswer support for Storage API');},
+			getItem: function(k) {return this.data[k];},
+			clear: function() {this.data = {};}
 		};
 
-	window.TemporaryStorage = new Cls(w.sessionStorage || fallback, true);
-	window.PersistentStorage = new Cls(w.localStorage || fallback);
+	function isStorageSupported(storage) {
+		var testKey = 'test';
+		try {
+			storage.setItem(testKey, '1');
+			storage.removeItem(testKey);
+			return true;
+		} catch (error) {
+			return false;
+		}
+	}
+
+	if (!isStorageSupported(ss)) { ss = null; }
+	if (!isStorageSupported(ls)) { ls = ss; }
+
+	window.TemporaryStorage = new Cls(ss || fallback, true);
+	window.PersistentStorage = new Cls(ls || fallback);
 });
