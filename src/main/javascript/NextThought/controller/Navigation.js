@@ -460,8 +460,9 @@ Ext.define('NextThought.controller.Navigation', {
 
 					var board = ParseUtils.parseItems(response.responseText)[0];
 
+					callback = callback ? callback.bind(scope) : null;
+
 					if (board.belongsToCourse()) {
-						callback = Ext.bind(callback, scope);
 						me.goToCourseForum(board.getRelatedCourse(), topicRecord.get('ContainerId'), topicRecord.getId(), comment, callback);
 					}else {
 						r = me.setView('forums');
