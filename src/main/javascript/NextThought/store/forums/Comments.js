@@ -122,15 +122,17 @@ Ext.define('NextThought.store.forums.Comments',{
 	//silently clear the filters, so the indexs will be correct for the insertions
 	__clearFilters: function(){
 		this.filterCache = this.filters.items.slice();
-
+		this.filtersCleared = true;
 		this.clearFilter(true);
 	},
 
 	//add the filters back, so the view will look the same as before
 	__applyFilters: function(){
 		var filters = this.filters.getRange();
-
+		
 		this.filter(this.filterCache.concat(filters), true);
+		delete this.filtersCleared;
+		this.fireEvent('filters-applied')
 	},
 
 
@@ -138,7 +140,9 @@ Ext.define('NextThought.store.forums.Comments',{
 		var filters = this.filters.getRange();
 
 		this.clearFilter();
+
 		this.filter([filter].concat(filters));
+		delete this.filtersCleared;
 	},
 
 	//insert a single record into the right spot in the store

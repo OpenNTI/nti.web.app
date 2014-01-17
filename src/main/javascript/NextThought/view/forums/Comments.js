@@ -15,6 +15,7 @@ Ext.define('NextThought.view.forums.Comments',{
 
 	updateFromMeMap: {},
 	wbData: {},
+	recordsToRefresh: [],
 
 	tpl: Ext.DomHelper.markup([
 		{ cls: 'new-root'},
@@ -126,7 +127,8 @@ Ext.define('NextThought.view.forums.Comments',{
 			scope: this,
 			load: 'onStoreAdd',
 			add: 'onStoreAdd',
-			update: 'onStoreUpdate'
+			update: 'onStoreUpdate',
+			'filters-applied': 'refreshQueue'
 		});
 
 		this.bindStore(s);
@@ -165,7 +167,7 @@ Ext.define('NextThought.view.forums.Comments',{
 		}
 
 		record.compileBodyContent(function(body){
-			var index = me.store.indexOf(record);
+			var index;
 
 			me.store.suspendEvents();
 
@@ -174,10 +176,29 @@ Ext.define('NextThought.view.forums.Comments',{
 			});
 
 			me.store.resumeEvents();
-			me.refreshNode(index);
+
+			if(me.store.filtersCleared){
+				me.recordsToRefresh.push(record);
+			} else {
+				index = me.store.indexOf(record);
+				me.refreshNode(index);
+			}
 		}, this, function(id, data){
 			me.wbData[id] = data;
 		}, 226);
+	},
+
+
+	refreshQueue: function(){
+		var me = this;
+
+		me.recordsToRefresh.forEach(function(rec){
+			var index = me.store.indexOf(rec);
+
+			me.refreshNode(index);
+		});
+
+		me.recordsToRefresh = [];
 	},
 
 
@@ -423,7 +444,7 @@ Ext.define('NextThought.view.forums.Comments',{
 			'grew': size,
 			'shrank': size,
 			'deactivated-editor': function(){
-				//if there isn't a record its a new top level comment
+				//if there isn't a record its a new top level comment 
 				if(!record){
 					el.setHeight(oldHeight);
 					return;
