@@ -95,6 +95,9 @@ Ext.define('NextThought.view.courseware.forum.View', {
 		function finish() {
 			console.log('Pushing board for record', board, store);
 			me.store = store;
+			//make sure there aren't any other boards forums or topics
+			Ext.destroy(me.down('course-forum-board, course-forum-topic-list, forums-topic'));
+
 			me.add({xtype: 'course-forum-board', record: board, store: store, loadMask: {
 				margin: '100px 0 0 0',
 				msg: 'Loading...'
@@ -235,6 +238,10 @@ Ext.define('NextThought.view.courseware.forum.View', {
 					record: record,
 					store: store
 				});
+
+			//make sure there aren't any other topic lists or topics
+			Ext.destroy(me.down('course-forum-topic-list, forums-topic'));
+
 			me.pushViewSafely(cmp);
 			me.setTopic(topic, comment);
 		}, function() {
@@ -275,6 +282,9 @@ Ext.define('NextThought.view.courseware.forum.View', {
 					//Ext.defer(setComment, 10000, this);
 					setComment();
 				}
+				//make sure there aren't any other topics
+				Ext.destroy(me.down('forums-topic'));
+
 				me.pushViewSafely(cmp);
 				try {
 					Ext.callback(me.hasTopicCallback, null, [true, cmp]);
@@ -293,7 +303,9 @@ Ext.define('NextThought.view.courseware.forum.View', {
 								//Ext.defer(setComment, 10000, this);
 								setComment();
 							}
-							Ext.destroy(me.topicMonitor);
+							//make sure there aren't any other topics
+							Ext.destroy(me.down('forums-topic'), me.topicMonitor);
+
 							me.pushViewSafely(cmp);
 						}
 					}
