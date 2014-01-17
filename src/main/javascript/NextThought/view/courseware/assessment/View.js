@@ -109,6 +109,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 						if (me.hasAssignments) {
 							me.fireEvent('show-assignments-tab');
 						} else {
+							console.debug('The assignments call returned no assignments...keeping tab hidden.');
 							resetView();
 							return;
 						}
@@ -125,7 +126,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 						me.maybeUnmask();
 					})
 					.fail(function(reason) {
-						console.error(reason);
+						console.error('No Assignments will be shown:', reason);
 						resetView();
 					});
 		});
