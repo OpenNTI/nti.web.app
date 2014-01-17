@@ -1,6 +1,6 @@
 (function() {
 
-	var seenErrors = {}.
+	var seenErrors = {},
 		XMLHttpFactories = [
 		    function() {return new XMLHttpRequest();},
 		    function() {return new ActiveXObject('Msxml2.XMLHTTP');},
