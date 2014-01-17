@@ -98,7 +98,11 @@ Ext.define('NextThought.view.assessment.input.FreeResponse', {
 		if (!Ext.isString(str)) {
 			str = (str.value || [])[0] || '';
 		}
-		this.inputField.dom.value = str;
+
+		var d = document.createElement('div');
+		d.innerHTML = str;
+
+		this.inputField.dom.value = d.textContent;
 	},
 
 
