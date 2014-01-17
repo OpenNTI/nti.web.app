@@ -115,6 +115,16 @@ Ext.define('NextThought.view.forums.Topic', {
 	},
 
 
+	constructor: function(){
+		this.callParent(arguments);
+
+		if (this.topicListStore === undefined || this.currentIndex === undefined) {
+			this.noNavArrows = true;
+			Ext.Error.raise('Not given the topic list store or current index, cant implment the navigation arrows');
+		}
+	},
+
+
 	initComponent: function() {
 		this.mixins.HeaderLock.constructor.call(this);
 		this.callParent(arguments);
@@ -361,44 +371,43 @@ Ext.define('NextThought.view.forums.Topic', {
 
 
 	updateRecord: function(record) {
-		function reflectPrevAndNext(cmp, s) {
-			if (!s) {
-				return;
-			}
+		if (this.noNavArrows) { return; }
+		 
+		var count = this.topicListStore.getCount();
 
-			var max = s.getCount() - 1,
-				idx = s.find('NTIID', record.get('NTIID'));
-
-			//NOTE: the particular the record and its copy in the store may be different.
-			if (!record.store) {
-				record.store = s;
-			}
-
-			if (idx > 0) {
-				cmp.nextPostEl.removeCls('disabled');
-			}
-
-			if (idx < max) {
-				cmp.prevPostEl.removeCls('disabled');
-			}
+		if (this.currentIndex > 0) {
+			this.prevRecord = this.topicListStore.getAt(this.currentIndex - 1);
+			this.prevPostEl.removeCls('disabled');
 		}
 
-		if (!record.store) {
-			this.fireEvent('topic-navigation-store', this, this.record, reflectPrevAndNext);
-		} else {
-			console.log('update next and prev...with store', record.store);
-			reflectPrevAndNext(this, record.store);
+		if (this.currentIndex < (count - 1)) {
+			this.nextRecord = this.topicListStore.getAt(this.currentIndex + 1);
+			this.nextPostEl.removeCls('disabled');
 		}
 	},
 
 
 	navigationClick: function(e) {
 		e.stopEvent();
-		var direction = Boolean(e.getTarget('.next')),
+
+		var direction = Boolean(e.getTarget('.next')), rec,
 			disabled = Boolean(e.getTarget('.disabled'));
 
 		if (!disabled) {
-			this.fireEvent('navigate-topic', this, this.record, direction ? 'next' : 'prev');
+			if (direction && this.nextRecord) {
+				rec = this.nextRecord;
+			}
+
+			if (!direction && this.prevRecord) {
+				rec = this.prevRecord;
+			}
+
+			if (rec) {
+				this.fireEvent('navigate-topic', this, rec);
+				this.destroy();
+			} else {
+				console.error('Dont have the next or prev topic to navigate to');
+			}
 		}
 
 		return false;

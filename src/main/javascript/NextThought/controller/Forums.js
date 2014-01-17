@@ -73,7 +73,7 @@ Ext.define('NextThought.controller.Forums', {
 					'select': this.loadTopic
 				},
 				'forums-topic': {
-					'navigate-topic': this.switchTopic,
+					'navigate-topic': this.loadTopic,
 					'delete-post': this.deleteObject,
 					'edit-topic': this.showTopicEditor,
 					'topic-navigation-store': this.enableTopicNavigation
@@ -917,34 +917,17 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	switchTopic: function(cmp, record, direction) {
-		var s = record.store,
-			dx = (direction === 'next' ? -1 : 1),
-			r, sid;
-
-		if (!s) {
-			sid = 'CommunityForum' + '-' + record.get('ContainerId');
-			s = Ext.StoreManager.lookup(sid);
-		}
-		r = s && s.find('ID', record.get('ID'), 0, false, true, true);
-		r = s && s.getAt(r + dx);
-		if (r) {
-			if (cmp) {
-				cmp.destroy();
-			}
-			this.loadTopic(null, r);
-		}
-	},
-
-
 	loadTopic: function(selModel, record, silent) {
 		if (Ext.isArray(record)) { record = record[0]; }
 		var c = this.getStackContainer(selModel),
-			o = c.items.last();
+			o = c.items.last(),
+			forum = c.down('course-forum-topic-list, forums-topic-list'),
+			store = forum && forum.store,
+			index = store && store.indexOf(record);
 
 		if (o && !o.getPath) { o = null; }
 
-		c.add({xtype: 'forums-topic', record: record, path: o && o.getPath(), stateKey: 'topic'});
+		c.add({xtype: 'forums-topic', topicListStore: store, currentIndex: index, record: record, path: o && o.getPath(), stateKey: 'topic'});
 
 		if (silent !== true && (selModel || {}).suppressPushState !== true) {
 			this.pushState({'topic': record.get('ID'), comment: undefined});
