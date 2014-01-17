@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.forums.Comments',{
+Ext.define('NextThought.view.forums.Comments', {
 	extend: 'Ext.view.View',
 	alias: 'widget.forum-comment-thread',
 
@@ -12,7 +12,9 @@ Ext.define('NextThought.view.forums.Comments',{
 	preserveScrollOnRefresh: true,
 
 	disableSelection: true,
-	//loadMask: false,
+	loadMask: {
+		renderTo: 'view'
+	},
 	updateFromMeMap: {},
 	wbData: {},
 	recordsToRefresh: [],
@@ -113,6 +115,7 @@ Ext.define('NextThought.view.forums.Comments',{
 
 	buildStore: function() {
 		var s = NextThought.store.forums.Comments.create({
+			parentTopic: this.topic,
 			storeId: this.topic.get('Class') + '-' + this.topic.get('NTIID'),
 			url: this.topic.getLink('contents')
 		});

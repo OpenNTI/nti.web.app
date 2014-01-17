@@ -1,4 +1,4 @@
-Ext.define('NextThought.store.forums.Comments',{
+Ext.define('NextThought.store.forums.Comments', {
 	extend: 'NextThought.store.NTI',
 
 	requires: [
@@ -7,28 +7,28 @@ Ext.define('NextThought.store.forums.Comments',{
 
 	model: 'NextThought.model.forums.GeneralForumComment',
 
-	constructor: function(){
+	constructor: function() {
 		this.callParent(arguments);
 
 		this.on('load', 'topLevelLoaded');
 	},
 
 
-	topLevelLoaded: function(store, records){
-		records.forEach(function(rec){
+	topLevelLoaded: function(store, records) {
+		records.forEach(function(rec) {
 			rec.set('depth', 0);
 		});
 	},
 
 
-	hideCommentThread: function(comment){
+	hideCommentThread: function(comment) {
 		this.__addFilter(comment.getThreadFilter(), true);
 		comment.set('threadShowing', false);
 	},
 
-	
-	showCommentThread: function(comment){
-		if(!comment){
+
+	showCommentThread: function(comment) {
+		if (!comment) {
 			console.error('Cant show thread for a comment thats not loaded:', id);
 			return;
 		}
@@ -36,13 +36,13 @@ Ext.define('NextThought.store.forums.Comments',{
 		this.removeFilter(comment.getThreadFilter().id, true);
 		comment.set('threadShowing', true);
 
-		if(!comment.threadLoaded){
+		if (!comment.threadLoaded) {
 			this.__loadCommentThread(comment);
 		}
 	},
 
 
-	__loadCommentThread: function(comment){
+	__loadCommentThread: function(comment) {
 		var url = comment.getLink('replies'), req;
 
 		if (!url) { return; }
@@ -54,8 +54,8 @@ Ext.define('NextThought.store.forums.Comments',{
 			params: {
 				accepts: comment.get('MimeType')
 			},
-			callback: function( q, s, r){
-				if(!s){
+			callback: function(q, s, r) {
+				if (!s) {
 					console.error('Failed to load threaded replies');
 					return;
 				}
@@ -75,23 +75,24 @@ Ext.define('NextThought.store.forums.Comments',{
 		Ext.Ajax.request(req);
 	},
 
-	__flattenReplies: function( tree, currentDepth){
+
+	__flattenReplies: function(tree, currentDepth) {
 		var flatTree = [];
 
-		function commentCompare(a, b){
+		function commentCompare(a, b) {
 			a = a.get('CreatedTime');
 			b = b.get('CreatedTime');
 
 			if (a === b) { return 0;}
 
-			return (a < b)? -1 : 1;
+			return (a < b) ? -1 : 1;
 		}
 
-		function flattenThread(thread, depth){
+		function flattenThread(thread, depth) {
 			if (!thread || Ext.Object.isEmpty(thread) || Ext.isEmpty(thread)) { return; }
 			thread.sort(commentCompare);
 
-			thread.forEach(function(t){
+			thread.forEach(function(t) {
 				t.threadLoaded = true;
 				t.set('depth', depth);
 				t.set('threadShowing', true);
@@ -101,13 +102,13 @@ Ext.define('NextThought.store.forums.Comments',{
 			});
 		}
 
-		flattenThread(tree, currentDepth+1);
+		flattenThread(tree, currentDepth + 1);
 
 		return flatTree;
 	},
 
 
-	__insertFlatThread: function(flatList, parent){
+	__insertFlatThread: function(flatList, parent) {
 		this.__clearFilters();
 		var me = this,
 			index = this.indexOf(parent);
@@ -116,27 +117,29 @@ Ext.define('NextThought.store.forums.Comments',{
 
 		parent.threadLoaded = true;
 
-		this.__applyFilters();	
+		this.__applyFilters();
 	},
 
+
 	//silently clear the filters, so the indexs will be correct for the insertions
-	__clearFilters: function(){
+	__clearFilters: function() {
 		this.filterCache = this.filters.items.slice();
 		this.filtersCleared = true;
 		this.clearFilter(true);
 	},
 
+
 	//add the filters back, so the view will look the same as before
-	__applyFilters: function(){
+	__applyFilters: function() {
 		var filters = this.filters.getRange();
-		
+
 		this.filter(this.filterCache.concat(filters), true);
 		delete this.filtersCleared;
-		this.fireEvent('filters-applied')
+		this.fireEvent('filters-applied');
 	},
 
 
-	__addFilter: function(filter){
+	__addFilter: function(filter) {
 		var filters = this.filters.getRange();
 
 		this.clearFilter();
@@ -145,32 +148,37 @@ Ext.define('NextThought.store.forums.Comments',{
 		delete this.filtersCleared;
 	},
 
+
 	//insert a single record into the right spot in the store
-	insertSingleRecord: function(record){
+	insertSingleRecord: function(record) {
 		this.__clearFilters();
 
 		var parentId = record.get('inReplyTo'), i, current,
 			parent = this.getById(parentId),
 			parentIndex = parent && this.indexOf(parent),
-			count =this.getCount();
+			count = this.getCount(),
+			depth = (parent && parent.get('depth')) || 0;
 
 		try {
-			if(!parent){
+			if (!parent) {
 				this.add(record);
 			}
-			parent.children = parent.children || [];
-			parent.addChild(record);
-			record.parent = parent;
+
+			if (parentId !== this.parentTopic.getId()) {
+				parent.children = parent.children || [];
+				parent.addChild(record);
+			}
+
 			record.set({
-				depth: parent.get('depth') + 1,
+				depth: depth + 1,
 				threadShowing: true
 			});
 			record.threadLoaded = true;
 
-			for(i = parentIndex + 1; i < count; i++){
+			for (i = parentIndex + 1; i < count; i++) {
 				current = this.getAt(i);
 
-				if(current.get('depth') <= parent.get('depth')){
+				if (current.get('depth') <= depth) {
 					this.insert(i, record);
 					return;
 				}
