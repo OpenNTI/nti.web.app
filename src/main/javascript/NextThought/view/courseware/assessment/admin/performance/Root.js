@@ -68,7 +68,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 							]}
 						]}
 					])},
-					{ text: 'Student', dataIndex: 'grade', width: 160, xtype: 'templatecolumn', tpl: Ext.DomHelper.markup([
+					{ text: 'Grade', dataIndex: 'grade', width: 160, xtype: 'templatecolumn', tpl: Ext.DomHelper.markup([
 						{ cls: 'gradebox', cn: [
 							{ tag: 'input', size: 3, tabindex: '1', type: 'text', value: '{grade}'},
 							{ cls: 'dropdown letter grade', tabindex: '1', html: '{letter}'}
