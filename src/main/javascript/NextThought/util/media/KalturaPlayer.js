@@ -483,7 +483,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 		if (!this.el) {
 			console.error('No element reference. Runaway video!?');
-		} else if (this.el.isVisible(true)) {
+		} else if (!this.el.isVisible(true)) {
 			console.warn('Still got events for a Video that is not visible: ' + state);
 			if (state === 'playing') {
 				console.warn('Stopping hidden player and short circuit state change handler.');
