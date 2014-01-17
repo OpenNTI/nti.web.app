@@ -136,12 +136,14 @@ Ext.define('NextThought.view.forums.Comments',{
 	onStoreAdd: function(store, records){
 		records.forEach(this.fillInData, this);
 		this.clearLoadBox();
+		this.fireEvent('realign-editor');
 	},
 
 	
 	onStoreUpdate: function(store, record){
 		this.fillInData(record);
 		this.clearLoadBox();
+		this.fireEvent('realign-editor');
 	},
 
 
@@ -290,6 +292,8 @@ Ext.define('NextThought.view.forums.Comments',{
 			} else {
 				me.loadThread(record, el);
 			}
+
+			me.fireEvent('realign-editor');
 		}
 
 	},
@@ -302,7 +306,7 @@ Ext.define('NextThought.view.forums.Comments',{
 		me.isNewRecord = true;
 		newRecord = record.makeReply();
 
-		if(!record.threadLoaded){
+		if(!record.threadLoaded && record.get('ReferencedByCount')){
 			me.store.on('add', function(){
 				var el = me.getNode(record);
 				
@@ -362,7 +366,7 @@ Ext.define('NextThought.view.forums.Comments',{
 
 
 	openEditor: function(record, el, width, cancelCallback) {
-		var me = this,
+		var me = this, refreshMon,
 			oldHeight = el.getHeight();
 
 		width = width || el.getWidth();
@@ -383,12 +387,46 @@ Ext.define('NextThought.view.forums.Comments',{
 
 		Ext.destroy(this.boxMonitor);
 
+		refreshMon = me.mon(me,{
+			destroyable: true,
+			'realign-editor': function(){
+				var parentId = record.get('inReplyTo'),
+					parent = parentId && me.store.getById(parentId),
+					el = me.getNodeByRecord(parent);
+
+				el =  el && Ext.fly(el).down('.editor-box');
+
+				if (!el) {
+					console.error('Failed to find new node to align editor to, so closing it');
+					me.editor.deactive();
+					return;
+				}
+
+				el.setHeight(me.editor.getHeight());
+				me.editor.setWidth(width || el.getWidth());
+				me.editor.alignTo(el, 'tl-tl');
+			}
+		});
+
 		me.boxMonitor = me.mon(this.editor,{
 			destroyable: true,
 			'grew': size,
 			'shrank': size,
 			'deactivated-editor': function(){
+				var parentId = record.get('inReplyTo'),
+					parent = parentId && me.store.getById(parentId),
+					el = me.getNodeByRecord(parent);
+
+				el = el && Ext.fly(el).down('.editor-box');
+
+				Ext.destroy(refreshMon);
 				Ext.callback(cancelCallback);
+				
+				if (!el) {
+					console.error('Cant find the node to set the old height back on...');
+					return;
+				}
+
 				el.setHeight(oldHeight);
 			}
 		});
