@@ -597,6 +597,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 			if (/text\/html/.test(types)) {
 				offScreenBuffer.innerHTML = cd.getData('text/html');
+				Ext.fly(offScreenBuffer).select('script,meta,style,title,head,object,embed,applet,img').remove();
+				offScreenBuffer.innerHTML = offScreenBuffer.innerHTML.trim().replace(/[\n\r]+/g, '');
 			}
 			else if (/text\/plain/.test(types)) {
 				offScreenBuffer.innerHTML = cd.getData('text/plain');
