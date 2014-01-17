@@ -35,7 +35,7 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 	__precacheEntry: function() {
 		var p = this.precachePromise,
 			me = this,
-			Cls = NextThought.model.courseware.CourseInstance;
+			Cls = NextThought.model.courseware.CourseCatalogEntry;
 
 		if (!p) {
 			p = this.precachePromise = new Promise();
