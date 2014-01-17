@@ -99,7 +99,7 @@ Ext.application({
 		if (unsupported.length !== 0 ||
 				(!Ext.isIE && !isIE11p && !(Ext.isGecko && parseFloat(geckoRev[1]) > 23.9) && !Ext.isWebKit) ||
 				(Ext.isIE9m) ||
-				(Ext.isSafari && Ext.safariVersion <= 6) ||
+				(Ext.isSafari && Ext.safariVersion < 6) ||
 				(ios && ios[0] < 6)) {
 			location.replace($AppConfig.server.unsupported);
 		}
