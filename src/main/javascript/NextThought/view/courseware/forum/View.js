@@ -26,7 +26,7 @@ Ext.define('NextThought.view.courseware.forum.View', {
 
 	initComponent: function() {
 		this.callParent(arguments);
-		this.initCustomScrollOn('content', undefined, { turnOff: true });
+		this.initCustomScrollOn('content');
 	},
 
 
@@ -315,9 +315,9 @@ Ext.define('NextThought.view.courseware.forum.View', {
 		});
 	},
 
-	// getScrollTop: function(){
-	// 	return 0;
-	// },
+	getScrollTop: function() {
+		return 0;
+	},
 
 
 	courseChanged: function(courseInstance) {
