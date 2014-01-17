@@ -525,19 +525,10 @@ Ext.define('NextThought.view.video.Video', {
 			var v = Ext.get(id);
 			if (!v) {
 				console.warn('Skipping ' + id + ' because dom does not contain it.');
-				return;
-			}
-			v.setVisibilityMode(Ext.dom.Element.DISPLAY);
-
-			if (v.isVisible()) {
-				if (k !== service) {
-					v.hide();
-				}
-				//else leave it visible
-			}
-			//not visible
-			else if (k === service) {
-				v.show();
+			} else {
+				v.setVisibilityMode(Ext.dom.Element.DISPLAY);
+				//hide/show handle checking if they need to do anything...lets not worry about it and just call them.
+				v[(k === service) ? 'show' : 'hide']();
 			}
 		});
 
