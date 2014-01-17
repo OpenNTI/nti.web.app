@@ -33,7 +33,7 @@ Ext.define('NextThought.view.assessment.Score', {
 			series: [{ type: 'score', angleField: 'p', correctColor: this.correctColor, incorrectColor: this.incorrectColor, textColor: this.textColor, style: this.chartStyle }]
 		});
 
-		this.setValue(this.value || 80);
+		this.setValue(this.value || 0);
 	},
 
 

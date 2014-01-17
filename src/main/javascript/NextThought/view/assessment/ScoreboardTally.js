@@ -26,11 +26,11 @@ Ext.define('NextThought.view.assessment.ScoreboardTally', {
 
 	afterRender: function() {
 		this.callParent(arguments);
-		this.correctCount.update('16');
-		this.incorrectCount.update('4');
+		this.correctCount.update('');
+		this.incorrectCount.update('');
 
-		this.correctBox.setVisibilityMode(Ext.dom.Element.DISPLAY);
-		this.incorrectBox.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		this.correctBox.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
+		this.incorrectBox.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
 		this.questionsBox.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
 	},
 
