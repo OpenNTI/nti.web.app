@@ -132,26 +132,32 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 						   }, listeners: {
 								headerclick: function() {
 									var store = this.up('grid').getStore(),
-										sorter = Ext.create('Ext.util.Sorter', {
-										direction: this.sortState,
-										sorterFn: function(o1, o2) {
-											o1 = o1 && o1.get('Grade');
-											o1 = o1 && o1.get('value');
-											o1 = o1 && o1.split(' ')[0];
-											o1 = o1 || '';
+										sorter = new Ext.util.Sorter({
+											direction: this.sortState,
+											sorterFn: function(o1, o2) {
+												o1 = o1 && o1.get('Grade');
+												o1 = o1 && o1.get('value');
+												o1 = o1 && o1.split(' ')[0];
+												o1 = o1 || '';
 
-											o2 = o2 && o2.get('Grade');
-											o2 = o2 && o2.get('value');
-											o2 = o2 && o2.split(' ')[0];
-											o2 = o2 || '';
+												o2 = o2 && o2.get('Grade');
+												o2 = o2 && o2.get('value');
+												o2 = o2 && o2.split(' ')[0];
+												o2 = o2 || '';
 
-											return Globals.naturalSortComparator(o1, o2);
-										}
+												return Globals.naturalSortComparator(o1, o2);
+											}
 									});
 
 								store.sorters.clear();
-								store.sorters.add('answers', sorter);
+								store.sorters.add('Grade', sorter);
 								store.sort();
+								if (store.bind) {
+									store = store.bind;
+									store.sorters.clear();
+									store.sorters.add('Grade', sorter);
+									store.sort();
+								}
 							}
 						}},
 						   { text: 'Feedback', dataIndex: 'feedback', width: 140, renderer: function(items) {

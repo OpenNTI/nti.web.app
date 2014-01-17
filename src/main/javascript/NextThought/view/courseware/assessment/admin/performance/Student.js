@@ -97,7 +97,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 					   } ,listeners: {
 							headerclick: function() {
 								var store = this.up('grid').getStore(),
-									sorter = Ext.create('Ext.util.Sorter', {
+									sorter = {
 										direction: this.sortState,
 										sorterFn: function(o1, o2) {
 											o1 = o1 && o1.get('Grade');
@@ -112,11 +112,17 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 
 											return Globals.naturalSortComparator(o1, o2);
 										}
-									});
+									};
 
 								store.sorters.clear();
 								store.sorters.add('answers', sorter);
 								store.sort();
+								if (store.bind) {
+									store = store.bind;
+									store.sorters.clear();
+									store.sorters.add('Grade', sorter);
+									store.sort();
+								}
 							}
 						}},
 					   { text: 'Feedback', dataIndex: 'feedback', width: 140, renderer: function(value) {
