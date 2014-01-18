@@ -51,8 +51,9 @@ Ext.define('NextThought.controller.Application', {
 
 
 	openViewport: function() {
+		var v;
 		try {
-			Ext.widget('master-view');
+			v = Ext.widget('master-view');
 		}
 		catch (e1) {
 			console.error('Loading View: ', Globals.getError(e1));
@@ -80,6 +81,8 @@ Ext.define('NextThought.controller.Application', {
 						console.error('Administered Courses failed to load:', reason[1]);
 					}
 
+					Ext.destroy(v);
+					
 					Ext.DomHelper.overwrite(Ext.getBody(), {
 						cls: 'empty-state error-message-component',
 						cn: [
