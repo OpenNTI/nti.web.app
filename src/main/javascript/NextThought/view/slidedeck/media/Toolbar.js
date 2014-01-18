@@ -53,12 +53,12 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar', {
 		exitEl: '.back-button'
 	},
 
-	clsToName: function(cls){
+	clsToName: function(cls) {
 		var map = {
 			'video-focus': 'Split Video',
 			'transcript-focus': 'Split Transcript',
 			'full-video': 'Full Video'
-		}
+		};
 
 		return map[cls];
 	},

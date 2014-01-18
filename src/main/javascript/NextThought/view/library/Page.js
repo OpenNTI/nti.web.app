@@ -28,8 +28,9 @@ Ext.define('NextThought.view.library.Page', {
 
 
 	onAdd: function(child) {
+		var monitor;
 		if (child.is('dataview')) {
-			var monitor = this.mon(child, {
+			monitor = this.mon(child, {
 				destroyable: true,
 				'count-changed': 'hideOrShow',
 				destroy: function() {Ext.destroy(monitor);}

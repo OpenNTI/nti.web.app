@@ -177,7 +177,7 @@ Ext.define('NextThought.view.account.activity.Popout', {
 			}
 
 			UserRepository.getUser(record.get('Creator'), function(user) {
-				var pop, sidebar;
+				var pop, sidebar, me = this;
 
 				function align() {
 
@@ -207,33 +207,32 @@ Ext.define('NextThought.view.account.activity.Popout', {
 					}
 				});
 
-                if(Ext.is.iOS){
-                    //Make the comments in popouts scrollable
-                    if(pop.el.down('.replies')){
-                        pop.el.down('.replies').addCls('scrollable');
-                    }
+				if (Ext.is.iOS) {
+					//Make the comments in popouts scrollable
+					if (pop.el.down('.replies')) {
+						pop.el.down('.replies').addCls('scrollable');
+					}
 
-                    //If popout decides to change position when typing, put it back
-                    if(pop.el.down('.content')){
-                        var me = this;
-                        pop.el.down('.respond').down('.content').on('focus',function(){
-                            Ext.defer(function(){
-                                pop.firstY = pop.getY();
-                            },100);
-                        });
-                        pop.el.down('.respond').down('.content').on('keydown',function(){
-                            window.clearTimeout(me.popYTimeout);
-                            me.timeElapsed = 0;
-                            me.popYTimeout = window.setInterval(function(){
-                                if((pop.getY() != pop.firstY) || me.timeElapsed >= 900){
-                                    pop.setY(pop.firstY);
-                                    window.clearInterval(me.popYTimeout);
-                                }
-                                me.timeElapsed += 100;
-                            },100);
-                        });
-                    }
-                }
+					//If popout decides to change position when typing, put it back
+					if (pop.el.down('.content')) {
+						pop.el.down('.respond').down('.content').on('focus', function() {
+							Ext.defer(function() {
+								pop.firstY = pop.getY();
+							},100);
+						});
+						pop.el.down('.respond').down('.content').on('keydown', function() {
+							window.clearTimeout(me.popYTimeout);
+							me.timeElapsed = 0;
+							me.popYTimeout = window.setInterval(function() {
+								if ((pop.getY() !== pop.firstY) || me.timeElapsed >= 900) {
+									pop.setY(pop.firstY);
+									window.clearInterval(me.popYTimeout);
+								}
+								me.timeElapsed += 100;
+							},100);
+						});
+					}
+				}
 
 				if (viewRef) {
 					if (viewRef.cancelPopupTimeout) {

@@ -78,14 +78,14 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Header', {
 		// url += '/no_submit/Final Grade/' + this.student.getId();
 
 		// Ext.Ajax.request({
-		// 	url: url,
-		// 	method: 'PUT',
-		// 	jsonData: { value: value },
-		// 	failure: function() {
-		// 		//probably should do something here
-		// 		console.error('Failed to save final grade:', arguments);
-		// 	}
-		// });
+		// url: url,
+		//	method: 'PUT',
+		//	jsonData: { value: value },
+		//	failure: function() {
+		//		//probably should do something here
+		//		console.error('Failed to save final grade:', arguments);
+		//	}
+		//	});
 	},
 
 

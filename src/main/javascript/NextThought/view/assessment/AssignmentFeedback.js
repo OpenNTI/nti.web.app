@@ -208,7 +208,7 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 	},
 
 
-	openEditorFor: function(record, el){
+	openEditorFor: function(record, el) {
 		var me = this;
 
 
@@ -221,13 +221,17 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 			listeners: {
 				save: function(editor, record, value) {
 					editor.mask('Saving...');
-					record.suspendEvents()
+					if (!record) {
+						console.error('No record!');
+						return;
+					}
+					record.suspendEvents();
 					record.set('body', value.body);
 					record.save({
-						callback: function(q, s, r){
+						callback: function(q, s, r) {
 							record.resumeEvents();
 							editor.unmask();
-							if(!s){
+							if (!s) {
 								alert({title: 'Oops!', msg: 'Something went wrong.'});
 								console.error('Failled to update feedback');
 								return;
@@ -237,7 +241,7 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 						}
 					});
 				},
-				cancel: function(){
+				cancel: function() {
 					me.refresh();
 				}
 			}

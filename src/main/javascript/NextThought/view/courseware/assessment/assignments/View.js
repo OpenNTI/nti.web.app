@@ -47,12 +47,12 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 	/**
 	 * Groupers: (Interpreting the images from Aaron)
-	 * 	-> Completion - (Incomplete/Complete) Incomplete sorted to the top, then by due date...then by name?
-	 * 	-> Date Due - Grouped by Date (Completion date if present, or by due if not complete?) then sorted by name?
-	 * 	-> Lession - Grouped by where they fall in the content, then sorted by order given by content?
+	 *	->Completion - (Incomplete/Complete) Incomplete sorted to the top, then by due date...then by name?
+	 *	->Date Due - Grouped by Date (Completion date if present, or by due if not complete?) then sorted by name?
+	 *	->Lession - Grouped by where they fall in the content, then sorted by order given by content?
 	 *
-	 * 	-> type menu is fixed to 'all' (wildcard, for now)...it will filter the set down. (just like search)
-	 * 	-> search filters down on name only. (for now)
+	 *	->type menu is fixed to 'all' (wildcard, for now)...it will filter the set down. (just like search)
+	 *	->search filters down on name only. (for now)
 	 */
 	getGrouper: function() {
 		var me = this,

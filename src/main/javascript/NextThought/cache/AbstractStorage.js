@@ -1,11 +1,11 @@
 Ext.define('NextThought.cache.AbstractStorage', function() {
 
-	function prefix(v) {
+	var prefix = function prefix(v) {
 		if (!prefix.val) {
 			prefix.val = Base64.encode($AppConfig.username).concat('-');
 		}
 		return prefix.val.concat(v);
-	}
+	};
 
 	return {
 

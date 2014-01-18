@@ -160,13 +160,13 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			offset = Ext.get(el).getHeight() - Ext.get(dom).getHeight(),
 			top = offset - dom.scrollTop;
 
-        //Keep iPad from opening popouts when scrolling
-        if(Ext.is.iOS){
-            this.cancelPopupTimeout();
-            Ext.defer(function(){
-                this.cancelPopupTimeout();
-            },500, this);
-        }
+		//Keep iPad from opening popouts when scrolling
+		if (Ext.is.iOS) {
+			this.cancelPopupTimeout();
+			Ext.defer(function() {
+				this.cancelPopupTimeout();
+			}, 500, this);
+		}
 
 		this.lastScrollTop = dom.scrollTop;
 
@@ -283,7 +283,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			var p = new Promise(),
 				label = groupToLabel(group.name);
 
- 	  		function promiseToResolve(agg, c) {
+			function promiseToResolve(agg, c) {
 				if (!/deleted/i.test(c.get('ChangeType'))) {
 					agg.push(me.changeToActivity(c));
 				}
@@ -292,17 +292,17 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			//wait for the return of changeToActivity for all of the groups childern
 			//we need to pool these promises so the label can be added in the right order
 			Promise.pool(group.children.reduce(promiseToResolve, []))
-				.done(function(results){
+				.done(function(results) {
 					var parts = [];
 					//get rid of any nulls
-					results = results.filter(function(i){ return i;});
+					results = results.filter(function(i) {return i;});
 					//add the label if need be
 					if (label) {
 						parts = [{ label: label }];
 					}
 					//add the results to the parts regardless
 					parts = parts.concat(results);
-					
+
 					p.fulfill(parts);
 				})
 				.fail(function(reason) {
@@ -326,14 +326,14 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		//pool these promises to ensure that the groups get added in the correct order
 		Promise.pool(store.getGroups().map(doGroup))
 			.done(function(results) {
-				results = results.reduce(function(a,b){
+				results = results.reduce(function(a, b) {
 					return a.concat(b);
 				}, []);
-				
+
 				me.feedTpl.overwrite(container.getEl(), results);
 				container.updateLayout();
 			})
-			.fail(function(reason){
+			.fail(function(reason) {
 				console.error(reason);
 			});
 
@@ -387,16 +387,16 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			type: getType(item),
 			ContainerId: cid,
 			ContainerIdHash: cid ? IdCache.getIdentifier(cid) : undefined
-		}
+		};
 
 		Promise.pool(this.getMessage(c, cid), UserRepository.getUser(c.get('Creator')))
-			.done(function(r){
+			.done(function(r) {
 				activityData.name = r[1].getName();
 
 				activity = me.stream[guid] = Ext.apply(activityData, r[0]);
 				p.fulfill(activity);
 			})
-			.fail(function(reason){
+			.fail(function(reason) {
 				console.error('changeToActivity failed because:', reason);
 				p.reject(reason);
 			});
@@ -416,12 +416,12 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		}
 
 		item.getActivityItemConfig(type, cid)
-			.done( function(result) {
+			.done(function(result) {
 				p.fulfill(result);
 			})
-			.fail( function(reason) {
+			.fail(function(reason) {
 				console.error('getActivityItemConfig failed because: ', reason, type, item.getModelName(), item, change);
-				p.reject('Failed to find a result')
+				p.reject('Failed to find a result');
 			});
 
 		return p;
@@ -432,10 +432,10 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		var activityTarget = e.getTarget('div.activity:not(.deleted)', null, true),
 			guid, item, rec, me = this, className;
 
-        //For iPad, open popout on long touch, not on click
-        if(Ext.is.iOS){
-            this.cancelPopupTimeout();
-        }
+		//For iPad, open popout on long touch, not on click
+		if (Ext.is.iOS) {
+			this.cancelPopupTimeout();
+		}
 
 		guid = (activityTarget || {}).id;
 		item = this.stream[guid];
@@ -469,7 +469,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			me.fireEvent('navigate-to-blog', user, rec.get('ID'));
 		});
 	},
-	
+
 
 	forumTopicClicked: function(rec) {
 		if (this.fireEvent('before-show-topic', rec)) {

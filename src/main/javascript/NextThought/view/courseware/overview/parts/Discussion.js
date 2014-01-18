@@ -43,8 +43,8 @@ Ext.define('NextThought.view.courseware.overview.parts.Discussion', {
 	beforeRender: function() {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {},this.data);
-    	this.idsToLookup = Ext.clone(this.data.ntiid) || [];
-   		this.loadTopic(this.idsToLookup.shift());
+		this.idsToLookup = Ext.clone(this.data.ntiid) || [];
+		this.loadTopic(this.idsToLookup.shift());
 	},
 
 	afterRender: function() {
@@ -71,7 +71,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Discussion', {
 			this.onTopicResolved,
 			this.onTopicResolveFailure,
 			this,
-	    	true
+			true
 		);
 	},
 

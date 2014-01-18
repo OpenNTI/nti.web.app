@@ -40,11 +40,11 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.TopDiscussions', {
 				var tiles = [], me = this, max = 0;
 
 				Ext.each(records, function(record) {
-					var comments = record.get('PostCount')
+					var comments = record.get('PostCount'),
 						id = 'course-dashboard-top-discussions-' + record.getId();
 
 					max = (max > comments) ? max : comments;
-					if(!Ext.getCmp(id)){					
+					if (!Ext.getCmp(id)) {
 						tiles.push(me.create({
 							id: id,
 							locationInfo: locationInfo,
@@ -67,11 +67,11 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.TopDiscussions', {
 
 			p = this.boardMap[board];
 
-			if(!p){
+			if (!p) {
 				p = this.boardMap[board] = new Promise();
 				Service.getObject(board,
 					function(b) {p.fulfill(b);},
-					function(){ p.reject(); },
+					function() { p.reject(); },
 					this,
 					true
 				);

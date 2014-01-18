@@ -70,8 +70,8 @@ Ext.define('NextThought.view.account.Identity', {
 
 		this.mon(this.menu, {
 			'mouseenter': 'cancelHideShowEvents',
-			'show': function(){ me.addCls('menu-showing')},
-			'hide': function(){ me.removeCls('menu-showing')}
+			'show': function() { me.addCls('menu-showing');},
+			'hide': function() { me.removeCls('menu-showing');}
 		});
 
 		this.enableProfileClicks(this.avatar);

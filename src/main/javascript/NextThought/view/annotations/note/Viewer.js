@@ -96,13 +96,13 @@ Ext.define('NextThought.view.annotations.note.Viewer', {
 		m.setRecord(this.record);
 		m.on('destroy', 'destroy', this);
 
-		this.reader.fireEvent('request-visibility')
+		this.reader.fireEvent('request-visibility');
 	},
 
 	afterRender: function() {
 		this.callParent();
 
-		var resized = false;
+		var resized, keyMap, me = this;
 
 		function closeOnCardChange(cmp, me) {
 			var c = cmp.up('{isOwnerLayout("card")}');
@@ -121,11 +121,11 @@ Ext.define('NextThought.view.annotations.note.Viewer', {
 		resized = this.resizeView(this.reader);
 
 		//if for some reason we tried to position the note off screen
-		if(!resized){
+		if (!resized) {
 			this.resizeView(this.reader.up('view-container'));
 		}
 
-		var keyMap = this.keyMap = new Ext.util.KeyMap({
+		keyMap = this.keyMap = new Ext.util.KeyMap({
 			target: this.el,
 			binding: [
 				{
@@ -138,16 +138,15 @@ Ext.define('NextThought.view.annotations.note.Viewer', {
 
 		this.on('destroy', 'destroy', keyMap);
 
-        if(Ext.is.iOS){
-            var me = this;
-            Ext.defer(function(){
-                if(me.getHeight() > window.innerHeight){
-                    me.setHeight(window.innerHeight);
-                    me.setY(0);
-                    me.el.down('.context').setHeight(window.innerHeight - 300);
-                }
-            },100);
-        }
+		if (Ext.is.iOS) {
+			Ext.defer(function() {
+				if (me.getHeight() > window.innerHeight) {
+					me.setHeight(window.innerHeight);
+					me.setY(0);
+					me.el.down('.context').setHeight(window.innerHeight - 300);
+				}
+			},100);
+		}
 	},
 
 
@@ -158,12 +157,12 @@ Ext.define('NextThought.view.annotations.note.Viewer', {
 
 
 	resizeView: function(reference) {
-		var position, height, width, newPosition
+		var position, height, width, newPosition,
 			viewportHeight = Ext.Element.getViewportHeight();
 
 		if (reference) {
 			position = reference.getPosition();
-			
+
 			if (position[0] > 0) {
 				position[0] -= 10;
 				position[1] += 10;

@@ -23,7 +23,9 @@ var Promise = (function() {
 		}
 
 		var ctx = p.caller,
-			Promise = {
+			Promise;
+
+		Promise = {
 				ctx: getCtx(),
 				State: State,//handy ref
 				state: State.PENDING,

@@ -16,8 +16,9 @@ Ext.define('NextThought.cache.UserRepository', {
 		});
 
 		var active = this._activeBulkRequests,
-			queued = this._queuedBulkRequests,
-			task = Ext.util.TaskManager.newTask({
+			queued = this._queuedBulkRequests, task;
+
+		task = Ext.util.TaskManager.newTask({
 			interval: 250,
 			run: function() {
 				var t;
