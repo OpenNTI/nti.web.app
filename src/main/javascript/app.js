@@ -79,7 +79,7 @@ Ext.application({
 		}
 
 		var me = this, ios, isIE11p,
-			reasons = {},
+			reasons = [],
 			unsupported = [], g,
 			geckoRev = /rv:(\d+\.\d+)/.exec(Ext.userAgent) || [];
 
