@@ -191,7 +191,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 		}
 
 		me.get().win.onerror = function() {
-			con.warn('iframe error: ', JSON.stringify(arguments));
+			(con || console).warn('iframe error: ', JSON.stringify(arguments));
 		};
 
 		//Move classes down from main body to sub-iframe body for content rendering reference:
