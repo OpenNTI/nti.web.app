@@ -120,7 +120,10 @@ Ext.define('NextThought.view.forums.Topic', {
 
 		if (this.topicListStore === undefined || this.currentIndex === undefined) {
 			this.noNavArrows = true;
-			Ext.Error.raise('Not given the topic list store or current index, cant implment the navigation arrows');
+			
+			if ($AppConfig.debug) {
+				Ext.Error.raise('Not given the topic list store or current index, cant implment the navigation arrows');
+			} 
 		}
 	},
 
