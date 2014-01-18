@@ -147,6 +147,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 				});
 			}
 
+			store.clearGrouping();
+
 			if (search) {
 				this.filterSearchValue(search);
 			}
@@ -157,7 +159,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 	onItemClicked: function(s, record, dom) {
 		var date = Ext.Date.format(record.get('opens'), 'l F j \\a\\t g:i A');
 
-		if (Ext.fly(dom).hasCls('closed')) {			
+		if (Ext.fly(dom).hasCls('closed')) {
 			alert('This assignment will be availble on ' + date);
 			return;
 		}
@@ -338,7 +340,11 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 	updateEnrolledCount: function(f, v) {
 		var c = (v && v.length) || 0;
 		this.store.each(function(r) {
-			r.set('enrolledCount', c);
+			try {
+				r.set('enrolledCount', c);
+			} catch (e) {
+				console.warn(e.stack || e.message || e);
+			}
 		});
 	},
 
