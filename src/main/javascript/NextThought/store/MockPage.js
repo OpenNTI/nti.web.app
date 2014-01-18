@@ -23,7 +23,9 @@ Ext.define('NextThought.store.MockPage', {
 		});
 
 		this.data.getByKey = function() {
-			return bind.data.getByKey.apply(bind.data, arguments);
+			if (bind && bind.data && bind.data.getByKey) {
+				return bind.data.getByKey.apply(bind.data, arguments);
+			}
 		};
 
 		this.__bindStore(bind);
