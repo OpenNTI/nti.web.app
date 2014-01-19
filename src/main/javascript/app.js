@@ -110,8 +110,9 @@ Ext.application({
 			reasons.push('Please use IE10 or newer');
 		}
 
-		if (Ext.isSafari && Ext.safariVersion < 6 && !Ext.isPhantomJS) {
-			reasons.push('Please use the latest Safari available. Currently only 6+ is supported.');
+		Ext.isPhantomJS = false;//TODO: detect Phantom and set this.
+		if (Ext.isSafari && Ext.safariVersion < 5.1 && !Ext.isPhantomJS) {
+			reasons.push('Please use the latest Safari available. Currently only 5.1+ is supported.');
 		}
 
 		if (ios && ios[0] < 6) {
