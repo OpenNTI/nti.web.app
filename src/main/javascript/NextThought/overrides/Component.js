@@ -39,6 +39,12 @@ Ext.define('NextThought.overrides.Component', {
 	isOwnerLayout: function(type) {
 		var o = this.ownerLayout;
 		return o && o.type === type;
+	},
+
+
+	isLayout: function(type) {
+		var o = this.layout;
+		return o && o.type === type;
 	}
 
 

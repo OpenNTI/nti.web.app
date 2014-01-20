@@ -483,7 +483,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 
 		function success(r) {
 			if (me.fireEvent('before-show-topic', r)) {
-				me.fireEvent('show-topic-with-action', r, rec.get('ID'));
+				me.fireEvent('show-topic-with-action', r, rec);
 			}
 		}
 

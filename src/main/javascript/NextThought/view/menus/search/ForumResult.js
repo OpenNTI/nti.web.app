@@ -4,7 +4,7 @@ Ext.define('NextThought.view.menus.search.ForumResult', {
 
 
 	isComment: function(hit) {
-		return (/.*?generalforumcomment$/).test(hit.get('MimeType'));
+		return (/.*?generalforumcomment$/).test(hit.get('TargetMimeType'));
 	},
 
 
@@ -15,13 +15,7 @@ Ext.define('NextThought.view.menus.search.ForumResult', {
 			me.fireEvent('highlight-topic-hit', me, fragIdx, component);
 		}
 
-		if (Ext.isEmpty(this.record)) {
-			// If we don't have a record that means the record
-			// could have been deleted or an error happened on load.
-			this.displayNavigationError();
-		}
-
-		this.fireEvent('show-topic-with-action', this.record, me.comment ? this.hit.get('ID') : undefined, function(success, cmp) {
+		function action(success, cmp){
 			if (success) {
 				component = cmp;
 				if (cmp.ready) {
@@ -34,6 +28,26 @@ Ext.define('NextThought.view.menus.search.ForumResult', {
 					});
 				}
 			}
-		});
+		}
+
+		if (Ext.isEmpty(this.record)) {
+			// If we don't have a record that means the record
+			// could have been deleted or an error happened on load.
+			me.displayNavigationError();
+		}
+
+		//if its a comment, get the comment so we can scroll to it in threaded forums
+		if (me.isComment(me.hit)) {
+			Service.getObject(me.hit.get('NTIID'), function(comment){
+				me.fireEvent('show-topic-with-action', me.record, comment, action);
+			}, function(){
+				console.error('Faild to load comment' + me.hit.get('NTIID'), arguments);
+				me.fireEvent('show-topic-with-action', me.record, undefined, action);
+			}, me);
+
+			return;
+		}
+
+		me.fireEvent('show-topic-with-action', me.record, undefined, action);
 	}
 });

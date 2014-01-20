@@ -115,15 +115,15 @@ Ext.define('NextThought.view.forums.Topic', {
 	},
 
 
-	constructor: function(){
+	constructor: function() {
 		this.callParent(arguments);
 
 		if (this.topicListStore === undefined || this.currentIndex === undefined) {
 			this.noNavArrows = true;
-			
+
 			if ($AppConfig.debug) {
 				Ext.Error.raise('Not given the topic list store or current index, cant implment the navigation arrows');
-			} 
+			}
 		}
 	},
 
@@ -228,7 +228,7 @@ Ext.define('NextThought.view.forums.Topic', {
 			me.user = u;
 			if (me.rendered) {
 				me.nameEl.update(u.getName());
-				me.avatarEl.setStyle({ backgroundImage: 'url('+u.get('avatarURL')+')'});
+				me.avatarEl.setStyle({ backgroundImage: 'url(' + u.get('avatarURL') + ')'});
 			}
 		});
 	},
@@ -262,9 +262,9 @@ Ext.define('NextThought.view.forums.Topic', {
 
 		this.mon(this.nextPostEl, 'click', this.navigationClick, this);
 		this.mon(this.prevPostEl, 'click', this.navigationClick, this);
-		
 
-		if (isFeature('threaded-forums') && !this.notThreaded){
+
+		if (isFeature('threaded-forums') && !this.notThreaded) {
 			this.loadMoreEl.destroy();
 		} else {
 			this.mon(this.loadMoreEl, 'click', this.fetchNextPage, this);
@@ -303,7 +303,7 @@ Ext.define('NextThought.view.forums.Topic', {
 				scope: this,
 				//'activated-editor':Ext.bind(box.hide,box),
 				//'deactivated-editor':Ext.bind(box.show,box),
-				'no-body-content': function(editor,bodyEl) {
+				'no-body-content': function(editor, bodyEl) {
 					editor.markError(bodyEl, 'You need to type something');
 					return false;
 				}
@@ -355,7 +355,7 @@ Ext.define('NextThought.view.forums.Topic', {
 
 	onReady: function() {
 		console.debug('ready', arguments);
-		
+
 		if (this.scrollToComment) {
 			this.scrollCommentIntoView(this.scrollToComment);
 		}
@@ -375,7 +375,7 @@ Ext.define('NextThought.view.forums.Topic', {
 
 	updateRecord: function(record) {
 		if (this.noNavArrows) { return; }
-		 
+
 		var count = this.topicListStore.getCount();
 
 		if (this.currentIndex > 0) {
@@ -664,10 +664,10 @@ Ext.define('NextThought.view.forums.Topic', {
 		Ext.each(records, function(item, index) {
 			var guid = IdCache.getComponentId(item, null, me.commentIdPrefix);
 
-			if(me.getComponent(guid)){
+			if (me.getComponent(guid)) {
 				//We might want to update the item, instead of just dropping it.
-				console.log("Record already exists.");
-			}else{
+				console.log('Record already exists.');
+			} else {
 				me.insert(index, {record: item, id: guid});
 			}
 		});
@@ -690,14 +690,27 @@ Ext.define('NextThought.view.forums.Topic', {
 	},
 
 
-	goToComment: function(commentId) {
-		if (!this.ready) {
-			this.scrollToComment = commentId;
+	goToComment: function(comment) {
+		var thread;
+
+		if (isFeature('threaded-forums')) {
+			thread = this.down('forum-comment-thread');
+
+			if (thread) {
+				thread.goToComment(comment);
+			}
 			return;
 		}
 
-		if (commentId) {
-			this.scrollCommentIntoView(commentId);
+		comment = comment.get('ID');
+
+		if (!this.ready) {
+			this.scrollToComment = comment;
+			return;
+		}
+
+		if (comment) {
+			this.scrollCommentIntoView(comment);
 			this.fireEvent('commentReady');
 		}
 		else {

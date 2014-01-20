@@ -12,9 +12,10 @@ Ext.define('NextThought.view.forums.Comments', {
 	preserveScrollOnRefresh: true,
 
 	disableSelection: true,
-	loadMask: {
-		renderTo: 'view'
-	},
+	// loadMask: {
+	// 	renderTo: 'view'
+	// },
+	loadMask: false,
 	updateFromMeMap: {},
 	wbData: {},
 	recordsToRefresh: [],
@@ -22,7 +23,7 @@ Ext.define('NextThought.view.forums.Comments', {
 	tpl: Ext.DomHelper.markup([
 		{ cls: 'new-root'},
 		{ tag: 'tpl', 'for': '.', cn: [
-			{ cls: 'topic-comment-container {[values.threadShowing? "expanded" : "collapsed"]}', 'data-depth': '{depth}', cn: [
+			{ cls: 'topic-comment-container {[values.threadShowing? "expanded" : "collapsed"]}', 'data-depth': '{depth}', tabindex: -1, cn: [
 				{ tag: 'tpl', 'if': 'Deleted', cn: {
 					cls: 'topic-comment placeholder {[values.threadShowing? "expanded" : "collapsed"]}',
 					'data-depth': '{depth}',
@@ -97,9 +98,23 @@ Ext.define('NextThought.view.forums.Comments', {
 
 
 	afterRender: function() {
-		var me = this;
+		var me = this, maskMon,
+			scrollEl;
 
 		this.callParent(arguments);
+
+		scrollEl = me.up('{isLayout("card")}').el;
+
+		if (me.store.loading || this.notLoadedYet) {
+			maskMon = me.mon(me.store, {
+				destroyable: true,
+				load: function() {
+					Ext.destroy(maskMon);
+					scrollEl.unmask();
+				}
+			});
+			scrollEl.mask();
+		}
 
 		me.editor = Ext.widget('nti-editor', {ownerCt: me, renderTo: me.el, record: null, saveCallback: function(editor, postCmp, record) {
 			if (me.isNewRecord) {
@@ -110,6 +125,10 @@ Ext.define('NextThought.view.forums.Comments', {
 		}});
 		me.editor.addCls('threaded-forum-editor');
 		me.el.selectable();
+
+		if (me.scrollToComment) {
+			me.goToComment(me.scrollToComment);
+		}
 	},
 
 
@@ -135,12 +154,14 @@ Ext.define('NextThought.view.forums.Comments', {
 		});
 
 		this.bindStore(s);
-
+		this.notLoadedYet = true;
+		//Ext.defer(this.store.load, 5000, this.store);
 		this.store.load();
 	},
 
 
 	onStoreAdd: function(store, records) {
+		delete this.notLoadedYet;
 		records.forEach(this.fillInData, this);
 		this.clearLoadBox();
 		this.fireEvent('realign-editor');
@@ -487,5 +508,52 @@ Ext.define('NextThought.view.forums.Comments', {
 			items.push(this.editor);
 		}
 		return items;
+	},
+
+
+	goToComment: function(comment) {
+		if (!this.rendered) {
+			this.scrollToComment = comment;
+			return;
+		}
+
+		var me = this, addMon,
+			refs = comment.get('references');
+
+		if (Ext.isEmpty(refs)) {
+			me.srollCommentIntoView(comment);
+		}
+
+		refs.forEach(function(ref) {
+			var rec = me.store.getById(ref);
+
+			if (rec && rec.get('depth') === 0) {
+				me.mon(me.store, {
+					single: true,
+					buffer: 1,
+					add: function() {
+						Ext.destroy(addMon);
+
+						me.scrollCommentIntoView(comment);
+					}
+				});
+				me.store.showCommentThread(rec);
+			}
+		});
+	},
+
+
+	scrollCommentIntoView: function(comment) {
+		var node = this.getNode(comment);
+
+		node = Ext.get(node);
+
+		if (!node) {
+			console.error('couldnt find a node for the comment to scrollto');
+			return;
+		}
+
+		node.scrollIntoView(node.getScrollingEl());
+		node.focus();
 	}
 });

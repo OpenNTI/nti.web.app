@@ -160,9 +160,12 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 	}
 
 	function updateSideBottom(el, bMargin) {
+		if (!el.dom) { return; }
+
 		var data = this.mixinData.customScroll,
 			newBottom, oldBottom,
-			parent = el.parent();
+			parent = el.parent(),
+			parentBottom = parent ? parent.getBottom() : 0;
 
 		//Get the bottom that was initially set on the element in CSS
 		//and cache it so we can use it every time
@@ -171,8 +174,8 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 		} else {
 			oldBottom = data.desiredBottom = parseInt(el.getStyle('bottom'), 10);//getStyle('bottom') returns '5px'
 		}
-		
-		newBottom = (Ext.getBody().getBottom() - parent.getBottom()) - oldBottom;
+
+		newBottom = (Ext.getBody().getBottom() - parentBottom) - oldBottom;
 		//console.log(Ext.getBody().getBottom(), parent.getBottom(), oldBottom, newBottom, parent.getBottom() + newBottom);
 
 		el.setStyle('bottom', -newBottom + 'px');
@@ -223,7 +226,7 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 			updateSideHeight.call(me, mb, true);
 			//setReverseMargin.call(this, mb);
 
-			if($AppConfig.debugCustomScroll){
+			if ($AppConfig.debugCustomScroll) {
 				console.debug([
 					'[CUSTOM SCROLL SETUP]',
 					'this: ' + me.id,
@@ -271,9 +274,7 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 			monitorCardChange(c, me);
 		}
 	}
-
 	//onAfterRender = Ext.Function.createBuffered(onAfterRender, 1);//let the layout code finish this event pump
-	
 	return {
 
 		getScrollTop: function() {
