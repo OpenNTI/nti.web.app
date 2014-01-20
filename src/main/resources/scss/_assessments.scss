@@ -1231,6 +1231,12 @@ body.dragging * {
 			right: 15px;
 			top: 25px;
 
+			&.disabled {
+				background: $tertiary-grey;
+				color: $secondary-grey;
+				cursor: default;
+			}
+
 			input {
 				position: absolute;
 				top: 0; left: 0; right: 0; bottom: 0;

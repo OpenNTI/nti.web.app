@@ -8,8 +8,8 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 		cn: [
 			{ cls: 'label', html: '{label}' },
 			{ tag: 'tpl', 'if': 'due', cn: { tag: 'time', cls: 'due', datetime: '{due:date("c")}', html: 'Due {due:date("l, F j")}'}},
-			{ cls: 'submit button', cn: ['Upload a File',
-				{ tag: 'input', type: 'file', cls: 'file' }
+			{ cls: 'submit button {enable:boolStr("","disabled")}', cn: ['Upload a File',
+				 { tag: 'tpl', 'if': 'enable', cn: { tag: 'input', type: 'file', cls: 'file' }}
 			]},
 			{ tag: 'a', cls: 'download button', html: 'Download', target: '_blank' }
 		]
@@ -17,6 +17,7 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 
 	renderSelectors: {
 		downloadBtn: 'a.button',
+		submitBtn: '.submit.button',
 		inputField: 'input[type=file]',
 		dueEl: 'time.due',
 		labelBoxEl: '.label'
@@ -28,8 +29,12 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 			tabIndex: this.tabIndexTracker.getNext()
 		});
 
-		this.filereader = new FileReader();
-		this.filereader.onload = Ext.bind(this.onFileLoaded, this);
+		try {
+			this.filereader = new FileReader();
+			this.filereader.onload = Ext.bind(this.onFileLoaded, this);
+		} catch (e) {
+			this.filereader = false;
+		}
 
 		this.callParent(arguments);
 	},
@@ -64,7 +69,8 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 
 	beforeRender: function() {
 		this.renderData = Ext.apply(this.renderData || {}, {
-			label: this.part.get('content')
+			label: this.part.get('content'),
+			enable: !!this.filereader
 		});
 
 		var q = this.questionSet,
@@ -92,29 +98,39 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 		this.callParent(arguments);
 		var reader = this.filereader,
 			me = this;
-		this.mon(this.inputField, {
-			scope: this,
-			change: function(e) {
-				var p = this.part,
-					t = e.getTarget(),
-					file = t.files[0],
-					allowed = p.isFileAcceptable(file);
 
-				me.value = {
-					MimeType: 'application/vnd.nextthought.assessment.uploadedfile',
-					filename: file.name
-				};
+		if (this.inputField) {
+			this.mon(this.inputField, {
+				scope: this,
+				change: function(e) {
+					var p = this.part,
+						t = e.getTarget(),
+						file = t.files[0],
+						allowed = p.isFileAcceptable(file);
 
-				this[allowed ? 'reset' : 'markBad']();
-				//p.reason;
-				if (allowed) {
-					me.mask();
-					me.labelBoxEl.update(file.name);
-					reader.readAsDataURL(file);
+					me.value = {
+						MimeType: 'application/vnd.nextthought.assessment.uploadedfile',
+						filename: file.name
+					};
+
+					this[allowed ? 'reset' : 'markBad']();
+					//p.reason;
+					if (allowed) {
+						me.mask();
+						me.labelBoxEl.update(file.name);
+						reader.readAsDataURL(file);
+					}
+
 				}
+			});
+		} else {
+			this.mon(this.submitBtn, 'click', 'unsupported');
+		}
+	},
 
-			}
-		});
+
+	unsupported: function() {
+		alert('This browser does not support HTML5 file submission.');
 	},
 
 
