@@ -116,7 +116,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 
 
 				//remember last ntiid for this book if it is truthy
-				if (ntiid) {
+				if (ntiid && rootId) {
 					PersistentStorage.updateProperty('last-location-map', rootId, ntiid);
 				}
 

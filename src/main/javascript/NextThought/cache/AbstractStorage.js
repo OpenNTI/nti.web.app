@@ -62,21 +62,24 @@ Ext.define('NextThought.cache.AbstractStorage', function() {
 		updateProperty: function(key, property, value) {
 			var o = this.get(key) || {}, v = o, p;
 
+			try {
+				property = property.split('/');
 
-			property = property.split('/');
+				//comment this loop out if property-paths are causing problems.
+				while (o && property.length > 1) {
+					p = property.shift();
+					o = (o[p] = (o[p] || {}));//ensure the path exits
+				}
 
-			//comment this loop out if property-paths are causing problems.
-			while (o && property.length > 1) {
-				p = property.shift();
-				o = (o[p] = (o[p] || {}));//ensure the path exits
+				o[property[0]] = value;
+				if (value === undefined) {
+					delete o[property[0]];
+				}
+
+				return this.set(key, v);
+			} catch (e) {
+				console.warn('Storage property did not get set.', arguments, e.stack || e.message || e);
 			}
-
-			o[property[0]] = value;
-			if (value === undefined) {
-				delete o[property[0]];
-			}
-
-			return this.set(key, v);
 		},
 
 

@@ -141,13 +141,14 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	openEditor: function() {
-		var tabPanel, lineInfo = this.data.box.activeLineInfo,
-				prefs = this.getPagePreferences(this.reader.getLocation().NTIID),
-				sharing = prefs && prefs.sharing,
-				sharedWith = sharing && sharing.sharedWith,
-				targetEl = this.reader.getEl().up('.x-container-reader.reader-container'),
-				shareInfo = SharingUtils.sharedWithToSharedInfo(
-						SharingUtils.resolveValue(sharedWith));
+		var me = this,
+			tabPanel, lineInfo = this.data.box.activeLineInfo,
+			prefs = this.getPagePreferences(this.reader.getLocation().NTIID),
+			sharing = prefs && prefs.sharing,
+			sharedWith = sharing && sharing.sharedWith,
+			targetEl = this.reader.getEl().up('.x-container-reader.reader-container'),
+			shareInfo = SharingUtils.sharedWithToSharedInfo(
+					SharingUtils.resolveValue(sharedWith));
 
 		if (this.editor && !this.editor.isDestroyed) {
 			return false;
@@ -212,7 +213,6 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
     if (Ext.is.iPad) {
-      var me = this;
       Ext.defer(function() {
         var contentEl = me.editor.el.down('.content'),
             footerHeight = me.editor.el.down('.footer').getHeight(),

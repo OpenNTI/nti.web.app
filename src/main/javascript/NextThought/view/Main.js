@@ -55,15 +55,15 @@ Ext.define('NextThought.view.Main', {
 			mouseOverEvent,
 			mouseDownEvent;
 
-        this.touchStartTime = e.browserEvent.timeStamp;
+		this.touchStartTime = e.browserEvent.timeStamp;
 		if (!touch) {
 			return;
 		}
 
-        if(e.browserEvent.touches[1]){
-            this.scrolledY = null;
-            return;
-        }
+		if (e.browserEvent.touches[1]) {
+			this.scrolledY = null;
+			return;
+		}
 
 		// Dispatch mouseenter
 		mouseEnterEvent = document.createEvent('MouseEvents');
@@ -92,6 +92,7 @@ Ext.define('NextThought.view.Main', {
 		var touch = e.browserEvent.touches[0],
 			changedTouch = e.browserEvent.changedTouches[0],
 			scrollable = e.getTarget('.scrollable'),
+			scrollableElement,
 			mouseMoveEvent,
 			mouseLeaveEvent,
 			mouseOutEvent,
@@ -101,37 +102,37 @@ Ext.define('NextThought.view.Main', {
 			return;
 		}
 
-        this.touchStartTime = 0;
+		this.touchStartTime = 0;
 
-        // If the event target wasn't a scrollable element, then we don't want scrolling
+		// If the event target wasn't a scrollable element, then we don't want scrolling
 		if (!scrollable) {
 			e.preventDefault();
 		}
 
-        // Scroll scrollable element on two-finger scrolling
-        if(e.browserEvent.changedTouches[1]){
-            var scrollableElement = Ext.get(touch.target);
-            while(true){
-                if(scrollableElement.isScrollable()){
-                    break;
-                }
-                else{
-                    if(scrollableElement.parent()){
-                        scrollableElement = scrollableElement.parent();
-                    }
-                    else{
-                        return;
-                    }
-                }
-            }
-            if(!this.scrolledY){
-                this.scrolledY = touch.clientY;
-            }
-            if(!scrollable){
-                scrollableElement.scrollBy(0, this.scrolledY - touch.clientY);
-                this.scrolledY = touch.clientY;
-            }
-        }
+		// Scroll scrollable element on two-finger scrolling
+		if (e.browserEvent.changedTouches[1]) {
+			scrollableElement = Ext.get(touch.target);
+			while (true) {
+				if (scrollableElement.isScrollable()) {
+					break;
+				}
+				else {
+					if (scrollableElement.parent()) {
+						scrollableElement = scrollableElement.parent();
+					}
+					else {
+						return;
+					}
+				}
+			}
+			if (!this.scrolledY) {
+				this.scrolledY = touch.clientY;
+			}
+			if (!scrollable) {
+				scrollableElement.scrollBy(0, this.scrolledY - touch.clientY);
+				this.scrolledY = touch.clientY;
+			}
+		}
 
 		// Dispatch mousemove
 		mouseMoveEvent = document.createEvent('MouseEvents');
@@ -168,6 +169,7 @@ Ext.define('NextThought.view.Main', {
 
 	onTouchEnd: function(e) {
 		var touch = e.browserEvent.changedTouches[0],
+			clickEvent,
 			mouseUpEvent,
 			mouseLeaveEvent,
 			mouseOutEvent;
@@ -176,9 +178,9 @@ Ext.define('NextThought.view.Main', {
 			return;
 		}
 
-        if(e.browserEvent.changedTouches[1]){
-           return;
-        }
+		if (e.browserEvent.changedTouches[1]) {
+			return;
+		}
 
 
 
@@ -202,19 +204,19 @@ Ext.define('NextThought.view.Main', {
 			false, false, false, false, 0, null);
 		touch.target.dispatchEvent(mouseOutEvent);
 
-        //Touching on edit whiteboard while keyboard is up isn't clicking, so make sure it gets clicked.
-        if(Ext.get(touch.target).up('.whiteboard-wrapper')){
-            e.preventDefault();
+		//Touching on edit whiteboard while keyboard is up isn't clicking, so make sure it gets clicked.
+		if (Ext.get(touch.target).up('.whiteboard-wrapper')) {
+			e.preventDefault();
 
-            // Dispatch click if touch lasted a half second or less in duration
-            if (e.browserEvent.timeStamp - this.touchStartTime <= 500) {
-                var clickEvent = document.createEvent('MouseEvents');
-                clickEvent.initMouseEvent('click', true, true, window,
-                    1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
-                    false, false, false, false, 0, null);
-                touch.target.dispatchEvent(clickEvent);
-            }
-        }
+			// Dispatch click if touch lasted a half second or less in duration
+			if (e.browserEvent.timeStamp - this.touchStartTime <= 500) {
+				clickEvent = document.createEvent('MouseEvents');
+				clickEvent.initMouseEvent('click', true, true, window,
+						1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
+						false, false, false, false, 0, null);
+				touch.target.dispatchEvent(clickEvent);
+			}
+		}
 
 	},
 
@@ -283,13 +285,13 @@ Ext.define('NextThought.view.Main', {
 			},1000);
 
 
-            //Adjust the height to get rid of the odd white bar at the bottom
-            //Edit: the top bar is getting cut off a little bit
-            console.log(Ext.get(Ext.query('.viewport')[0]).getHeight());
-            Ext.defer(function(){
-                Ext.get(Ext.query('.viewport')[0]).setHeight(window.outerHeight);
-                Ext.get('view').setHeight(window.outerHeight - Ext.get('nav').getHeight());
-            },500);
+			//Adjust the height to get rid of the odd white bar at the bottom
+			//Edit: the top bar is getting cut off a little bit
+			console.log(Ext.get(Ext.query('.viewport')[0]).getHeight());
+			Ext.defer(function() {
+				Ext.get(Ext.query('.viewport')[0]).setHeight(window.outerHeight);
+				Ext.get('view').setHeight(window.outerHeight - Ext.get('nav').getHeight());
+			},500);
 		}
 	},
 
@@ -412,7 +414,7 @@ Ext.define('NextThought.view.Main', {
 
 
 	lockOrientation: function() {
-		var optWindow, iframe;
+		var optWindow, iframe, me = this;
 
 		/*If user rotates to portrait, display screen saying to rotate it.
 		 * if they rotate back to landscape, destroy screen*/
