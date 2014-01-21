@@ -8,7 +8,8 @@ Ext.define('NextThought.util.UserDataThreader', {
 		'Note': function(r) {return r;},
 		'TranscriptSummary': function(r) {return r.get('RoomInfo');},
 		'QuizResult': function(r) {return r;},
-		'GeneralForumComment': function(r) { return r;}
+		'GeneralForumComment': function(r) { return r;},
+		'PersonalBlogComment': function(r) { return r;}
 	},
 
 	//TODO unify this function with buildThreads
@@ -32,7 +33,7 @@ Ext.define('NextThought.util.UserDataThreader', {
 		var tree = {};
 
 		if (bins) {
-			Ext.Object.each(bins, function(k,o) {
+			Ext.Object.each(bins, function(k, o) {
 				if (o && o[0].isThreadable) {
 					this.buildItemTree(o, tree);
 				}
@@ -46,7 +47,7 @@ Ext.define('NextThought.util.UserDataThreader', {
 
 	cleanupTree: function(tree) {
 		//take all children off the main collection... make them accessible only by following the children pointers.
-		Ext.Object.each(tree, function(k,o,a) {
+		Ext.Object.each(tree, function(k, o, a) {
 			//turn children object into array
 			o.children = o.children ? Ext.Object.getValues(o.children) : o.children;
 			if (o.parent) { delete a[k]; }
