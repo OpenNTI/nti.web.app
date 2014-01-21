@@ -160,7 +160,9 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 
 	manageMaskSize: function(width, height) {
-		this.loadMask.setHeight(height);
+		if (this.loadMask && this.loadMask.setHeight) {
+			this.loadMask.setHeight(height);
+		}
 	},
 
 
