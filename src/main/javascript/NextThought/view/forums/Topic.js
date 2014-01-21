@@ -2,6 +2,8 @@ Ext.define('NextThought.view.forums.Topic', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.forums-topic',
 
+	threaded: true,
+
 	mixins: {
 		flagActions: 'NextThought.mixins.FlagActions',
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
@@ -138,7 +140,7 @@ Ext.define('NextThought.view.forums.Topic', {
 		this.on('beforedeactivate', this.onBeforeDeactivate, this);
 		this.on('beforeactivate', this.onBeforeActivate, this);
 
-		if (isFeature('threaded-forums') && this.notThreaded !== true) {
+		if (this.threaded) {
 			this.add({xtype: 'forum-comment-thread', topic: this.record});
 		} else {
 			this.buildStore();
@@ -264,7 +266,7 @@ Ext.define('NextThought.view.forums.Topic', {
 		this.mon(this.prevPostEl, 'click', this.navigationClick, this);
 
 
-		if (isFeature('threaded-forums') && !this.notThreaded) {
+		if (this.threaded) {
 			this.loadMoreEl.destroy();
 		} else {
 			this.mon(this.loadMoreEl, 'click', this.fetchNextPage, this);
@@ -442,7 +444,7 @@ Ext.define('NextThought.view.forums.Topic', {
 
 	showEditor: function() {
 
-		if (isFeature('threaded-forums') && !this.notThreaded) {
+		if (this.threaded) {
 			this.down('forum-comment-thread').addRootReply();
 			return;
 		}
@@ -693,7 +695,7 @@ Ext.define('NextThought.view.forums.Topic', {
 	goToComment: function(comment) {
 		var thread;
 
-		if (isFeature('threaded-forums')) {
+		if (this.threaded) {
 			thread = this.down('forum-comment-thread');
 
 			if (thread) {
