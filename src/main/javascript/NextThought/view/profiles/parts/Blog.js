@@ -543,6 +543,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 			ownerCt: this,
 			renderTo: this.postViewEl,
 			record: record,
+			topicListStore: s,
 			selectedSections: action,
 			queryObject: query,
 			listeners: {
