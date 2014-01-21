@@ -131,11 +131,15 @@ Ext.define('NextThought.view.content.overlay.Panel', {
 	syncTop: function() {
 		if (!this.contentElement) {return;}
 		try {
-			var o = this.reader.getAnnotationOffsets(),
-				myTop = Ext.fly(this.contentElement).getY(),
-				ctTop = this.el.up('.x-reader-pane').getY(),
-				top = (myTop + ctTop) - o.scrollTop;
-			this.el.setY(top);
+			if (!this.reader.isDestroyed) {
+				var o = this.reader.getAnnotationOffsets(),
+					myTop = Ext.fly(this.contentElement).getY(),
+					ctTop = this.el.up('.x-reader-pane').getY(),
+					top = (myTop + ctTop) - o.scrollTop;
+				this.el.setY(top);
+			} else {
+				this.destroy();
+			}
 		}
 		catch (e) {
 			console.debug(e.message);
