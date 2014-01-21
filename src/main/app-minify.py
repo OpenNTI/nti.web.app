@@ -9,7 +9,7 @@ import gzip
 
 BUILDTIME = time.strftime('%Y%m%d%H%M%S')
 
-def _buildIndexHtml( minify, analytics_key='', app_root='.' ):
+def _buildIndexHtml( minify, analytics_key='', app_root='.', itunes_id=None ):
 	bust_cache = """\t\t\t<script type="text/javascript">window.disableCaching = true;</script>""" + '\n'
 
 	analytics_domain = 'nextthought.com'
@@ -35,7 +35,7 @@ ga('send', 'pageview');
 	with open( os.path.join( app_root, input_file ), 'rb' ) as file:
 		lines = file.readlines()
 
-	output = ''
+	output = []
 	in_bootstrap = False
 	for line in lines:
 		if minify and in_bootstrap:
@@ -57,18 +57,21 @@ ga('send', 'pageview');
 			line = analytics
 		elif '<!-- analytics -->' in line and analytics_key is '':
 			line = ''
-		output = output + line
+		elif '<!-- x-itunes -->' in line and itunes_id:
+			line = '<meta name="apple-itunes-app" content="app-id=%s" />\n' % itunes_id
 
-	return output
+		output.append(line)
 
-def _buildMinifyIndexHtml(analytics_key):
-	contents = _buildIndexHtml( True, analytics_key )
+	return ''.join(output)
+
+def _buildMinifyIndexHtml(analytics_key, itunes_id):
+	contents = _buildIndexHtml( True, analytics_key, itunes_id=itunes_id )
 
 	with open( 'index-minify.html', 'wb' ) as file:
 		file.write(contents)
 
-def _buildUnminifyIndexHtml(analytics_key):
-	contents = _buildIndexHtml( False, analytics_key )
+def _buildUnminifyIndexHtml(analytics_key, itunes_id):
+	contents = _buildIndexHtml( False, analytics_key, itunes_id=itunes_id )
 
 	with open( 'index-unminify.html', 'wb' ) as file:
 		file.write(contents)
@@ -155,12 +158,13 @@ def main():
 	parser.add_argument('--app_root', dest='app_root', action='store', default='.', help="Directory of the App index.html file")
 	parser.add_argument('--extjs_sdk', dest='extjs_sdk', action='store', default='ext-4.2', help="ExtJS SDK location")
 	parser.add_argument('--closure', dest='closure', action='store_true', default=False, help="Apply the Closure compressor")
+	parser.add_argument('--itunes', dest='itunes', action='store', default=None, help="The iTunes AppID to advertise")
 	args = parser.parse_args()
 
 	_minify_app(args.app_root, args.extjs_sdk, args.closure)
 
-	_buildMinifyIndexHtml(args.analytics_key)
-	_buildUnminifyIndexHtml(args.analytics_key)
+	_buildMinifyIndexHtml(args.analytics_key, args.itunes)
+	_buildUnminifyIndexHtml(args.analytics_key, args.itunes)
 
 
 
