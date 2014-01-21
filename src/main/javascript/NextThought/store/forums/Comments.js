@@ -157,13 +157,9 @@ Ext.define('NextThought.store.forums.Comments', {
 			parent = this.getById(parentId),
 			parentIndex = parent && this.indexOf(parent),
 			count = this.getCount(),
-			depth = (parent && parent.get('depth')) || 0;
+			depth = (parent && parent.get('depth')) || -1;
 
 		try {
-			if (!parent) {
-				this.add(record);
-			}
-
 			if (parent && parentId !== this.parentTopic.getId()) {
 				parent.children = parent.children || [];
 				parent.addChild(record);
@@ -175,12 +171,14 @@ Ext.define('NextThought.store.forums.Comments', {
 			});
 			record.threadLoaded = true;
 
-			for (i = parentIndex + 1; i < count; i++) {
-				current = this.getAt(i);
+			if (parent) {
+				for (i = parentIndex + 1; i < count; i++) {
+					current = this.getAt(i);
 
-				if (current.get('depth') <= depth) {
-					this.insert(i, record);
-					return;
+					if (current.get('depth') <= depth) {
+						this.insert(i, record);
+						return;
+					}
 				}
 			}
 
