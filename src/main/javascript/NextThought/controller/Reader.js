@@ -152,13 +152,14 @@ Ext.define('NextThought.controller.Reader', {
 
 
 	setLocation: function(ntiid, callback) {
-		var r = this.getContentReader(),
-			v = this.getContentView(),
+		var me = this,
+			r = me.getContentReader(),
+			v = me.getContentView(),
 			id = !Ext.isString(ntiid) ?
 				 ntiid.getId() : ntiid;
 
 		function go(pi) {
-			if (this.fireEvent('show-view', 'content', true) === false) {
+			if (me.fireEvent('show-view', 'content', true) === false) {
 				return false;
 			}
 
@@ -169,9 +170,9 @@ Ext.define('NextThought.controller.Reader', {
 				v.showCourseNavigationAt(pi);
 				//update state... resolve which legacy course this is and set it.
 				return true;
-			} else {
-				v.showContentReader();
 			}
+
+			v.showContentReader();
 
 			if (!r.ntiidOnFrameReady) {
 				r.setLocation.call(r, pi, callback);
@@ -182,7 +183,22 @@ Ext.define('NextThought.controller.Reader', {
 		}
 
 		function fail(req, resp) {
-			console.error(resp.responseText);
+			var location = ContentUtils.getLocation(id),
+				data;
+			if (resp.status === 404 && location) {
+
+				data = DomUtils.parseDomObject(location.location);
+				data['attribute-data-href'] = getURL(data['attribute-href'], location.root);
+				data.title = data['attribute-label'];
+				data.ntiid = data['attribute-ntiid'];
+				data.thumbnail = data['attribute-icon'];
+				data.description = data['attribute-desc'];
+
+
+				me.showCardTarget(r, data, false, callback);
+			} else {
+				console.error(resp.responseText);
+			}
 		}
 
 		Service.getPageInfo(id, go, fail, this);
