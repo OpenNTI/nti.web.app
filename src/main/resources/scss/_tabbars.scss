@@ -77,7 +77,7 @@
 
 
 .nti-secondary-tabbar {
-	div.x-tab {
+	.x-tab {
 		&.x-tab-top-active {
 			$experimental-support-for-svg: true;
 			@include background-image(linear-gradient(top, #6dae1d 0%,#8fd03f 100%));
@@ -104,7 +104,7 @@
 
 		.x-tab-wrap {padding: 0;}
 
-		a {
+		.x-tab-button {
 			.x-ie & {&,&:active {
 				left: 0;
 				top: 0;

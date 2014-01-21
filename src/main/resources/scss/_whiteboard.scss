@@ -43,7 +43,7 @@
 	}
 
 	em.button,
-	a[role=button]{
+	.whiteboard-color-button{
 		@include color-button-base;
 		$g: linear-gradient(left top,
 			rgba(249,249,249,1) 45%,
@@ -72,17 +72,17 @@
 
 	}
 
-	&.black {em.button,a[role=button]  { background: #333333; border-color: #333333; }}
-	&.grey1 {em.button,a[role=button]  { background: #858585; border-color: #707070; }}
-	&.grey2 {em.button,a[role=button]  { background: #e1e1e1; border-color: #acacac; }}
-	&.white {em.button,a[role=button]  { background: #ffffff; border-color: #b3b3b3; div {opacity: 0.9;} }}
-	&.red {em.button,a[role=button]    { background: #d34f39; border-color: #c6452f; }}
-	&.blue {em.button,a[role=button]   { background: #2b89c5; border-color: #2880b9; }}
-	&.green {em.button,a[role=button]  { background: #a0c94c; border-color: #82a835; }}
-	&.orange {em.button,a[role=button] { background: #fa8700; border-color: #d97704; }}
-	&.magenta {em.button,a[role=button]{ background: #b42789; border-color: #b42789; }}
-	&.purple {em.button,a[role=button] { background: #6f3d93; border-color: #6f3d93; }}
-	&.yellow {em.button,a[role=button] { background: #fff02a; border-color: #d9d15d; div {opacity: 0.93;} }}
+	&.black {em.button,.whiteboard-color-button  { background: #333333; border-color: #333333; }}
+	&.grey1 {em.button,.whiteboard-color-button  { background: #858585; border-color: #707070; }}
+	&.grey2 {em.button,.whiteboard-color-button  { background: #e1e1e1; border-color: #acacac; }}
+	&.white {em.button,.whiteboard-color-button  { background: #ffffff; border-color: #b3b3b3; div {opacity: 0.9;} }}
+	&.red {em.button,.whiteboard-color-button    { background: #d34f39; border-color: #c6452f; }}
+	&.blue {em.button,.whiteboard-color-button   { background: #2b89c5; border-color: #2880b9; }}
+	&.green {em.button,.whiteboard-color-button  { background: #a0c94c; border-color: #82a835; }}
+	&.orange {em.button,.whiteboard-color-button { background: #fa8700; border-color: #d97704; }}
+	&.magenta {em.button,.whiteboard-color-button{ background: #b42789; border-color: #b42789; }}
+	&.purple {em.button,.whiteboard-color-button { background: #6f3d93; border-color: #6f3d93; }}
+	&.yellow {em.button,.whiteboard-color-button { background: #fff02a; border-color: #d9d15d; div {opacity: 0.93;} }}
 }
 
 .x-panel-nt,
@@ -120,7 +120,7 @@
 	.x-btn-new-medium,
 	.x-btn-history-medium {
 
-		&, a {
+		&, .x-btn-button {
 			width: 50px;
 			height: 30px;
 		}
@@ -245,7 +245,7 @@
 				&.underline { background-position: -236px -1236px !important; }
 			}
 
-			a {
+			.x-btn-button {
 				@include button-base(30px, 3px);
 				span.x-btn-icon-el {
 					@include button-base(30px, 3px);
@@ -338,7 +338,7 @@
 				}
 			}
 
-			a {
+			.whiteboard-tool-option-button {
 				@include whiteboard-toolbar-common;
 				display: block;
 				position: relative;
@@ -428,7 +428,7 @@
 	}
 
 	.whiteboard-tool {
-		a{
+		.whiteboard-tool-button{
 			@include whiteboard-tool-button-common;
 			display: block;
 			background: none;
