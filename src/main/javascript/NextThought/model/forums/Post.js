@@ -11,7 +11,7 @@ Ext.define('NextThought.model.forums.Post', {
 		{ name: 'title', type: 'string' }
 	],
 
-	getActivityItemConfig: function(){
+	getActivityItemConfig: function() {
 		var p = new Promise(), result;
 
 		result = {

@@ -12,7 +12,7 @@ Ext.define('NextThought.model.forums.HeadlineTopic', {
 		return 'started a discussion:';
 	},
 
-	getActivityItemConfig: function(){
+	getActivityItemConfig: function() {
 		var p = new Promise(), result;
 
 		result = {
