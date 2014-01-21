@@ -151,7 +151,7 @@ Ext.define('NextThought.controller.Reader', {
 	},
 
 
-	setLocation: function(ntiid) {
+	setLocation: function(ntiid, callback) {
 		var r = this.getContentReader(),
 			v = this.getContentView(),
 			id = !Ext.isString(ntiid) ?
@@ -174,10 +174,10 @@ Ext.define('NextThought.controller.Reader', {
 			}
 
 			if (!r.ntiidOnFrameReady) {
-				r.setLocation.apply(r, arguments);
+				r.setLocation.call(r, pi, callback);
 			}
 			else {
-				r.ntiidOnFrameReady = Array.prototype.slice.call(arguments);
+				r.ntiidOnFrameReady = [pi, callback];
 			}
 		}
 
