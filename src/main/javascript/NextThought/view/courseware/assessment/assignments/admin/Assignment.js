@@ -101,6 +101,47 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			enableColumnHide: false,
 			enableColumnMove: false,
 			enableColumnResize: false,
+			selType: 'cellmodel',
+			plugins: [
+				{
+					ptype: 'cellediting',
+					clicksToEdit: 1,
+					listeners: {
+						beforeedit: {
+							element: 'el',
+							fn: function(editor, e) {
+								if (!e.record) { return false; }
+
+								var noSubmit = e.record.get('item').get('category_name') === 'no_submit',
+									gradeRec = e.record.get('Grade'),
+									value = gradeRec && gradeRec.get('value'),
+									grades = value && value.split(' '),
+									grade = grades && grades[0];
+
+								if (!gradeRec && noSubmit) {
+									e.record.set('Grade', NextThought.model.courseware.Grade.create());
+								} else if (!gradeRec) {
+									return false;
+								}
+
+								e.value = grade;
+								editor.getEditor(e.record, e.column).offsets = [-4, 9];
+							}
+						},
+						validateedit: {
+							element: 'el',
+							fn: function(editor, e) {
+								var grade = e.record.get('Grade');
+
+								grade.set('value', e.value + ' -');
+								grade.save();
+
+								return false;
+							}
+						}
+					}
+				}
+			],
 			columns: {
 				ui: 'course-assessment',
 				plain: true,
@@ -126,10 +167,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 								   late: d.ago().replace('ago', '').trim()
 							   });
 						   } },
-						   { text: 'Score', dataIndex: 'Grade', width: 90, renderer: function(v) {
-							   v = v && v.get('value');
-							   return v && v.split(' ')[0];
-						   }, listeners: {
+						   { text: 'Score', componentCls: 'score', dataIndex: 'Grade', width: 90,
+							   editor: 'textfield',
+							   renderer: function(v) {
+								   v = v && v.get('value');
+								   return v && v.split(' ')[0];
+							   },
+							   listeners: {
 								headerclick: function() {
 									var store = this.up('grid').getStore(),
 										sorter = new Ext.util.Sorter({
@@ -417,12 +461,25 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 
 	onItemClick: function(v, record, dom, ix, e) {
-		var nib = e.getTarget('.actions');
+		var nib = e.getTarget('.actions'),
+			selModel = v.getSelectionModel(),
+			selection = selModel && selModel.selection,
+			dataIndex = selection && selection.columnHeader.dataIndex,
+			noSubmit = record.get('item').get('category_name') === 'no_submit';
+
 		if (nib) {
 			this.getActionsMenu(record).showBy(nib, 'tr-br');
 			return;
 		}
-		this.goToAssignment(v, record);
+
+		//if we didn't click on the grade cell or we don't have a grade yet
+		if (noSubmit) {
+			return;
+		}
+
+		if (dataIndex !== 'Grade' || !record.get('Grade')) {
+			this.goToAssignment(selModel, record);
+		}
 	},
 
 
