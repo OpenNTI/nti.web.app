@@ -29,6 +29,24 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 		enableColumnHide: false,
 		enableColumnMove: false,
 		enableColumnResize: false,
+		viewConfig: {
+			xhooks: {
+				walkCells: function(pos, direction, e, preventWrap, verifierFn, scope) {
+					return this.callParent([pos, direction, e, preventWrap, function(newPos) {
+						var newerPos = false;
+						if (newPos.column === 2) {
+							return true;
+						}
+						newerPos = this.walkCells(newPos, direction, e, preventWrap);
+						if (newerPos) {
+							Ext.apply(newPos, newerPos);
+							return true;
+						}
+						return false;
+					}, this]);
+				}
+			}
+		},
 		selType: 'cellmodel',
 		plugins: [
 			{
