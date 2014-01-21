@@ -95,7 +95,7 @@ def _combine_javascript( output_file, input_files ):
 				for line in input.readlines():
 					output.write( line )
 
-def _minify_app( app_root, extjs_sdk ):
+def _minify_app( app_root, extjs_sdk, closure ):
 	output_file = 'javascript/app.min.js'
 
 	sencha_bootstrap_command = [ 'sencha',
@@ -106,20 +106,27 @@ def _minify_app( app_root, extjs_sdk ):
 				     '-out', 'bootstrap.js',
 				     'and',
 				     'meta', '-alt', '-append', '-out', 'bootstrap.js' ]
-	sencha_compile_command = [ 'sencha',
-				   '-sdk', extjs_sdk,
-				   'compile',
-				   '-classpath=javascript/libs.js,javascript/app.js,javascript/NextThought',
-				   'exclude', '-namespace', 'Ext.diag',
-				   'and',
-				   '-option', 'debug:false',
-				   'page',
-				   '-r',
-				   '-str',
-				   '-y',
-				   '-cla', output_file,
-				   '-i', 'index.html.in',
-				   '-o', 'index.html.out' ]
+	sencha_compile_command = [
+		'sencha',
+		'-sdk', extjs_sdk,
+		'compile',
+		'-classpath=javascript/libs.js,javascript/app.js,javascript/NextThought',
+		'exclude', '-namespace', 'Ext.diag',
+		'and',
+		'-option', 'debug:false',
+		'page',
+		'-r', # Remove text references
+		'-str', # Strip comments
+		'-y', # YUI compressor
+	]
+	if closure:
+		sencha_compile_command.append('--closure')  # Compress with closure compiler
+		#'-u', # uglify...doesn't work "[ERR] java.lang.UnsupportedOperationException: Not Yet Implemented]"
+	sencha_compile_command.extend([
+		'-cla', output_file, # class file
+		'-i', 'index.html.in',
+		'-o', 'index.html.out'
+	])
 
 	subprocess.check_call(sencha_bootstrap_command)
 	subprocess.check_call(sencha_compile_command)
@@ -147,10 +154,10 @@ def main():
 	parser.add_argument('-a', '--google-analytics', dest='analytics_key', action='store', default='', help="Key value used with Google Analytics.  If no value is specified, then the index-minify.html will not contain Google Analytics code.")
 	parser.add_argument('--app_root', dest='app_root', action='store', default='.', help="Directory of the App index.html file")
 	parser.add_argument('--extjs_sdk', dest='extjs_sdk', action='store', default='ext-4.2', help="ExtJS SDK location")
-
+	parser.add_argument('--closure', dest='closure', action='store_true', default=False, help="Apply the Closure compressor")
 	args = parser.parse_args()
 
-	_minify_app(args.app_root, args.extjs_sdk)
+	_minify_app(args.app_root, args.extjs_sdk, args.closure)
 
 	_buildMinifyIndexHtml(args.analytics_key)
 	_buildUnminifyIndexHtml(args.analytics_key)
