@@ -36,7 +36,7 @@
 
 	function hook() {
 		var onerror = window.onerror || function() {};
-		window.onerror = function(msg, url, line) {
+		window.onerror = function(msg, url, line, char) {
 			var me = this, args = arguments, collectedLog = '[]', message, count;
 			function escape(s) {
 				return (s || '').toString().replace(/"/g, '\\"');
@@ -44,7 +44,8 @@
 			try {
 				message = '{"message":"' + escape(msg) +
 										'","file":"' + escape(url) +
-										'","line":"' + escape(line);
+										'","line":"' + escape(line) +
+										'","char":"' + escape(char);
 
 				count = seenErrors[message] = (seenErrors[message] || 0) + 1;
 				if (count > 1 && count % 100 !== 0) {
