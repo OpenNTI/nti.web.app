@@ -25,7 +25,11 @@ Ext.define('NextThought.view.courseware.assessment.reader.Panel', {
 	afterRender: function() {
 		this.callParent(arguments);
 		var r = this.down('reader-content'),
-			a = r.getAssessment();
+			a = r.getAssessment(),
+			now = new Date(),
+			assignment = this.assignment,
+			history = this.assignmentHistory,
+			completed = history && history.get('completed');
 
 		r.getScroll().lock();
 		r.pageWidgets.hide();
@@ -38,7 +42,12 @@ Ext.define('NextThought.view.courseware.assessment.reader.Panel', {
 		if (!this.location) {
 			console.error('No location configured');
 		}
-		a.setAssignmentFromStudentProspective(this.assignment, this.assignmentHistory);
+		a.setAssignmentFromStudentProspective(assignment, history);
+
+		if (assignment.get('availableEnding') >= now || !completed) {
+			r.getNoteOverlay().disable();
+		}
+
 		r.setLocation(this.location, done, true);
 
 	}

@@ -398,14 +398,15 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 					 }
 				 });
 
-		menu.add({
-					 text: 'Add Note',
-					 handler: function(el, e) {
-						 me.clearSelection();
-						 me.fireEvent('create-note', range, rect2, 'plain');
-					 }
-				 });
-
+		if (!this.reader.getNoteOverlay().disabled) {
+			menu.add({
+						 text: 'Add Note',
+						 handler: function(el, e) {
+							 me.clearSelection();
+							 me.fireEvent('create-note', range, rect2, 'plain');
+						 }
+					 });
+		}
 
 		function redaction(block) {
 			return function() {

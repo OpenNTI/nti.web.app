@@ -10,6 +10,14 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	],
 
 
+	disable: function() {
+		this.disabled = true;
+		if (!this.container) {return;}
+
+		this.container.hide();
+	},
+
+
 	constructor: function(config) {
 		Ext.apply(this, config);
 		this.mixins.observable.constructor.call(this);
@@ -104,6 +112,10 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 							 buffer: 400
 						 });
 		}
+
+		if (this.disabled) {
+			this.disable();
+		}
 	},
 
 
@@ -141,6 +153,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	openEditor: function() {
+		if (this.disabled) {return;}
+
 		var me = this,
 			tabPanel, lineInfo = this.data.box.activeLineInfo,
 			prefs = this.getPagePreferences(this.reader.getLocation().NTIID),
