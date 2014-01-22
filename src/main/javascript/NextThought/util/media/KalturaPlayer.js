@@ -179,6 +179,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 			if (me.playerDeactivated) {
 				stopTask('Deactivated during setup task. Stopping');
+				me.cleanup();
 				return;
 			}
 
@@ -190,7 +191,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 				return;
 			}
 
-			if (doc && doc.readyState === 'complete') {
+			if (!me.playerDeactivated && doc && doc.readyState === 'complete') {
 				stopTask();
 				try {
 					doc.open();
@@ -332,7 +333,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 
 		//If this source is already loaded treat it like a media ready event
-		if (sourceActuallyChanging && !force) {
+		if (!sourceActuallyChanging && !force) {
 			console.log('Short circuiting load because currentSource is already source', source, this.currentSource);
 			this.mediaReadyHandler();
 			if (offset) {
@@ -427,6 +428,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 			return;
 		}
 		console.log('deactivate');
+		delete this.currentSource;
 		this.playerDeactivated = true;
 		this.fireEvent('player-event-ended', 'kaltura');
 		this.cleanup();
