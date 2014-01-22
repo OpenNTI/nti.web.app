@@ -705,7 +705,7 @@
 
 
 		&.placeholder{
-			height: 40px;
+			overflow: hidden;
 			line-height: 40px;
 
 			.avatar {
@@ -756,7 +756,7 @@
 			}
 
 			.foot{
-				display: none;
+				display: block;
 			}
 		}
 	}

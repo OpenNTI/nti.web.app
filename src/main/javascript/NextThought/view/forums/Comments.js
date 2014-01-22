@@ -29,7 +29,12 @@ Ext.define('NextThought.view.forums.Comments', {
 					'data-depth': '{depth}',
 					cn: [
 						{ cls: 'wrap', 'data-commentid': '{ID}', cn: [
-							{ cls: 'body', html: 'This item has been deleted.'}
+							{ cls: 'body', html: 'This item has been deleted.'},
+							{ cls: 'foot', cn: [
+								{ tag: 'tpl', 'if': 'depth == 0 &amp;&amp; ReferencedByCount &gt; 0', cn: [
+									{ tag: 'span', cls: 'comments link toggle', html: '{ReferencedByCount:plural("Comment")}'}
+								]}
+							]}
 						]}
 					]
 				}},
