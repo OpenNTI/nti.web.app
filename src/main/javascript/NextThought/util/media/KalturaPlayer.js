@@ -418,10 +418,6 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 	stop: function() {
 		this.sendCommand('doStop');
-		//The flash player will auto play on media change once its started once.
-		// Stopping and then changing media does not resolve it. So, as a quick fix,
-		// we will blow away the dom node and let it get recreated.
-		this.deactivate();
 	},
 
 
