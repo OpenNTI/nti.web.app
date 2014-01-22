@@ -291,6 +291,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		me.backingStore.removeFilter('studentFilter');
 
+		this.updateExportEl(item.type);
+
 		if (item.type === 'all') { return; }
 
 		this.backingStore.filter([{
@@ -309,6 +311,33 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				return r && passes(r.get('Status'));
 			}
 		}], true);
+	},
+
+
+	updateExportEl: function(type) {
+		var base = this.gradeBook.getLink('ExportContents');
+
+		if (!base || !this.header.exportButton) {
+			console.error('No link or no el to update');
+			return;
+		}
+
+		if (type === 'all') {
+			this.header.exportButton.update('Export All Students');
+			this.header.exportButton.set({
+				href: base
+			});
+		} else if (type === 'enrolled') {
+			this.header.exportButton.update('Export Enrolled Students');
+			this.header.exportButton.set({
+				href: base + '?LegacyEnrollmentStatus=ForCredit'
+			});
+		} else if (type === 'open') {
+			this.header.exportButton.update('Export Open Students');
+			this.header.exportButton.set({
+				href: base + '?LegacyEnrollmentStatus=Open'
+			});
+		}
 	},
 
 
