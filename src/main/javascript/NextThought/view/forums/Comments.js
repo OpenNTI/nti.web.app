@@ -504,6 +504,7 @@ Ext.define('NextThought.view.forums.Comments', {
 
 
 	addRootReply: function() {
+		if (this.editor.isActive()) { return; }
 		this.isNewRecord = true;
 		this.openEditor(null, this.el.down('.new-root'));
 	},
