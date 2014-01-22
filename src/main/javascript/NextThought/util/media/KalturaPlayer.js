@@ -418,6 +418,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 	stop: function() {
 		this.sendCommand('doStop');
+		this.deactivate();
 	},
 
 
