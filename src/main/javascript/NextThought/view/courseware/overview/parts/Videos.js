@@ -392,16 +392,16 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 		}
 
 		if (this.player) {
-			//this.player.stopPlayback();
-			Ext.destroy(this.player);
-			delete this.player;
-			//idx = this.getSelectedVideoIndex(rec);
-			//if (idx >= 0) {
-				//this.player.playlistSeek(idx);
-			//}
-			//else {
-				//console.error('No playlist index for rec', rec);
-			//}
+			this.player.stopPlayback();
+			//Ext.destroy(this.player);
+			//delete this.player;
+			idx = this.getSelectedVideoIndex(rec);
+			if (idx >= 0) {
+				this.player.playlistSeek(idx);
+			}
+			else {
+				console.error('No playlist index for rec', rec);
+			}
 		}
 
 		if (this.curtainEl) {

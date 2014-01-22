@@ -820,15 +820,15 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 				wid: '_%PARTNER_ID%',
 				uiconf_id: '%UICONF_ID%',
 				flashvars: {
-					//'mediaProxy.preferedFlavorBR': 600, //A low quality stream but one that should have video as well as audio
-					//externalInterfaceDisabled: false,
-					//akamaiHD: {
-						//loadingPolicy: 'preInitialize',
-						//asyncInit: 'true'
-					//},
-					//twoPhaseManifest: 'true',
-					//streamerType: 'hdnetworkmanifest',
-					streamerType: 'auto',
+					'mediaProxy.preferedFlavorBR': 600, //A low quality stream but one that should have video as well as audio
+					externalInterfaceDisabled: false,
+					akamaiHD: {
+						loadingPolicy: 'preInitialize',
+						asyncInit: 'true'
+					},
+					twoPhaseManifest: 'true',
+					streamerType: 'hdnetworkmanifest',
+					//streamerType: 'auto',
 					autoPlay: false
 				},
 				params: {
