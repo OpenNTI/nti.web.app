@@ -609,15 +609,18 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 
 	onPlaybackError: function() {
-		var me = this;
+		var me = this,
+			ctx = me.getPlayerContext(),
+			playerMode = ctx && ctx.playerMode;
 
 		setTimeout(function() {
 			Ext.Error.raise({
-				msg: Ext.String.format('Kaltura Playback Error: PartnerID: {0}, UIConf: {1}, LEAD_HTML5: {3}, Current Source: {2}',
+				msg: Ext.String.format('Kaltura Playback Error: PartnerID: {0}, UIConf: {1}, LEAD_HTML5: {3}, Mode: {4}, Current Source: {2}',
 					me.PARTNER_ID,
 					me.UICONF_ID,
 					me.currentSource,
-					me.LEAD_HTML5
+					me.LEAD_HTML5,
+					playerMode
 				)
 			});
 		}, 1);
@@ -780,6 +783,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 				}
 
 				console.log(window.playerId, 'Player is ', player.tagName);
+				window.playerMode = player.tagName === 'OBJECT' ? 'Flash' : 'HTML5';
 			}
 
 
