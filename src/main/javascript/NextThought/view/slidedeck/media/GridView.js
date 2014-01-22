@@ -151,12 +151,13 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 			sections = {},
 			videos = [];
 
-		function iter(key,v) {
+		function iter(key) {
+			var v = data[key], section;
 			if (key !== v.ntiid) {
 				console.error(key, '!=', v);
 			}
 
-			var section = ContentUtils.getLineage(key, true)[1];
+			section = ContentUtils.getLineage(key, true)[1];
 
 			if (!sections.hasOwnProperty(section)) {
 				sections[section] = NextThought.model.PlaylistItem({section: section, sources: []});
@@ -173,7 +174,8 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 			}
 		}
 
-		Ext.Object.each(data, iter);
+		//Ext.Object.each(data, iter);
+		data._order.forEach(iter);
 
 
 		this.store = new Ext.data.Store({
@@ -181,8 +183,8 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 			proxy: 'memory',
 			data: videos,
 			sorters: [
-				Globals.getNaturalSorter('section'),
-				Globals.getNaturalSorter('title')
+				//Globals.getNaturalSorter('section'),
+				//Globals.getNaturalSorter('title')
 			]
 		});
 

@@ -144,7 +144,7 @@ Ext.define('NextThought.Library', {
 
 		var me = this,
 			title = me.getTitle(index),
-			t = me.getToc(title),
+			toc = me.getToc(title), t = toc,
 			root = title.get('root'),
 			url;
 
@@ -154,8 +154,12 @@ Ext.define('NextThought.Library', {
 			return o;
 		}
 
+		function query(tag, id) {
+			return tag + '[ntiid="' + ParseUtils.cssEscapeNTIID(id) + '"]';
+		}
+
 		function parse(q, s, resp) {
-			var vi, n, cb, r;
+			var vi, n, cb, r, keys, keyOrder = [], containers;
 
 			if (!s) {
 				delete me.activeVideoLoad[index];
@@ -176,6 +180,28 @@ Ext.define('NextThought.Library', {
 				}
 			}
 
+			containers = (r && r.Containers) || {};
+			keys = Ext.Object.getKeys(containers);
+			keys.sort(function(a, b) {
+				var c = toc.querySelector(query('topic', a)),
+					d = toc.querySelector(query('topic', b)),
+					p;
+
+				try {
+					p = c.compareDocumentPosition(d);
+					return ((p & Node.DOCUMENT_POSITION_PRECEDING) === Node.DOCUMENT_POSITION_PRECEDING) ? 1 : -1;
+				} catch (e) {
+					console.error(e.stack || e.message || e);
+					return 0;
+				}
+			});
+
+			keys.forEach(function(k) {
+				//console.dir(containers[k]);
+				keyOrder.push.apply(keyOrder, containers[k]);
+			});
+
+
 			vi = me.videoIndex[index] = (r && r.Items) || r;
 			delete me.activeVideoLoad[index];
 
@@ -188,6 +214,8 @@ Ext.define('NextThought.Library', {
 				}
 			}
 
+			vi._order = keyOrder;
+			//console.dir(keyOrder);
 			Ext.callback(cb, me, [me.videoIndex[index]]);
 		}
 
