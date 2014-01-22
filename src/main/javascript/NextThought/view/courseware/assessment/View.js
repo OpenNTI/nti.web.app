@@ -32,6 +32,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 		this.initCustomScrollOn('content');
 		this.navigation.setTitle(this.title);
 		this.mon(this.body, 'add', 'onViewAdd');
+		this.clearViews();
 	},
 
 
@@ -54,7 +55,6 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 		var me = this;
 		delete me.finished;
 		delete me.assignmentsCollection;
-		me.hasAssignments = false;
 
 		function isSync() {
 			return (me.instanceId === (instance && instance.getId()));
@@ -65,7 +65,6 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 		function resetView() {
 			if (!isSync()) { return; }
 			me.clearViews();
-			me.fireEvent('failed-to-load', me.up('[isTabView]'));
 			me.maybeUnmask();
 		}
 
@@ -106,10 +105,9 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 						me.assignmentsCollection = assignments;
 						me.hasAssignments = !assignments.isEmpty();
-						if (me.hasAssignments) {
-							me.fireEvent('show-assignments-tab');
-						} else {
-							console.debug('The assignments call returned no assignments...keeping tab hidden.');
+
+						if (!me.hasAssignments) {
+							console.debug('The assignments call returned no assignments...');
 							resetView();
 							return;
 						}
@@ -188,6 +186,8 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 		this.forEachView(this.callFunction('clearAssignmentsData'));
 		this.body.removeAll(true);
 		this.navigation.clear();
+
+		//Do empty state here.
 	},
 
 

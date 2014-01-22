@@ -198,10 +198,6 @@ Ext.define('NextThought.view.content.View', {
 				tabs = tabs.filter(function(i) {return i.viewId !== 'course-dashboard';});
 			}
 
-			if (!this.courseAssignments.hasAssignments) {
-				tabs = tabs.filter(function(i) {return i.viewId !== 'course-assessment?';});
-			}
-
 			if (!this.courseForum.hasBoard) {
 				tabs = tabs.filter(function(i) {return i.viewId !== 'course-forum';});
 			}
