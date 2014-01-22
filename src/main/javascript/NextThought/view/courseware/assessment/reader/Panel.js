@@ -44,9 +44,9 @@ Ext.define('NextThought.view.courseware.assessment.reader.Panel', {
 		}
 		a.setAssignmentFromStudentProspective(assignment, history);
 
-		if (assignment.get('availableEnding') >= now || !completed) {
+		//if (assignment.get('availableEnding') >= now || !completed) {
 			r.getNoteOverlay().disable();
-		}
+		//}
 
 		r.setLocation(this.location, done, true);
 
