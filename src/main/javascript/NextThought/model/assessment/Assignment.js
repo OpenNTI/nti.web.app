@@ -136,13 +136,13 @@ Ext.define('NextThought.model.assessment.Assignment', {
 			users = {},
 			phantoms = [];
 
-		pluck(pluck(records, 'data'), 'Creator').forEach(function(creator){
+		pluck(pluck(records, 'data'), 'Creator').forEach(function(creator) {
 			users[creator] = true;
 		});
 
 		(this.roster || []).forEach(function(o) {
 			var u = o.get('Username');
-			if(!users[u]) {
+			if (!users[u]) {
 				phantoms.push(NextThought.model.courseware.UsersCourseAssignmentHistoryItem.create({
 					Creator: u
 				}));
@@ -154,8 +154,10 @@ Ext.define('NextThought.model.assessment.Assignment', {
 			records = records.concat(phantoms);
 			//This triggers a sort so the same thing applies as above, 2.5 seconds on my machine.  This this sort is pointless
 			//we resort after resolving and filling in, it would be nice to find a way to not sort on the add.
-			//We could probably call insert directly setting requireSort to false to achieve that.
+			//So, to prevent the sort and just append, set remoteSort true for the duration of the add, then turn it off.
+			store.remoteSort = true;
 			store.add(phantoms);
+			store.remoteSort = false;
 		}
 
 		this._updateGradeInstance(records);
