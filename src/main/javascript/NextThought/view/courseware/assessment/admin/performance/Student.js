@@ -81,7 +81,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 
 							v = v && v.split(' ')[0];
 
-							if (v !== e.value) {
+							if (v !== e.value && !Ext.isEmpty(e.value)) {
 								grade.set('value', e.value + ' -');
 								grade.save();
 							}
