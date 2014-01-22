@@ -42,6 +42,7 @@ Ext.define('NextThought.view.video.OverlayedPanel', {
 			reader = config.reader,
 			data = DomUtils.parseDomObject(dom),
 			description = el.down('span.description'),
+			loc = ContentUtils.getLocation(reader.getLocation().NTIID),
 			playlist = [];
 
 		playlist.push(NextThought.model.PlaylistItem.fromDom(dom));
@@ -54,6 +55,7 @@ Ext.define('NextThought.view.video.OverlayedPanel', {
 		Ext.apply(config, {
 			layout: 'fit',
 			items: [{
+				width: 640,
 				xtype: 'content-video',
 				data: data,
 				playlist: playlist,
@@ -65,6 +67,37 @@ Ext.define('NextThought.view.video.OverlayedPanel', {
 		this.playlist = playlist;
 
 		this.callParent([config]);
+
+		Library.getVideoIndex(loc.title, this.fillVideo, this);
+	},
+
+
+	fillVideo: function(index) {
+		var id = this.data['attribute-data-ntiid'],
+			poster = index[id].sources[0].poster;
+
+		this.setBackground(poster);
+	},
+
+
+	setBackground: function(src) {
+		if (!this.el) {
+			this.on('afterrender', this.setBackground.bind(this, src), this, {single: true});
+			return;
+		}
+
+		this.down('content-video').getEl().setStyle({
+			backgroundImage: 'url(' + src + ')',
+			backgroundSize: '640px',
+			backgroundRepeat: 'no-repeat'
+		});
+
+		this.mon(this.down('content-video').getEl(), 'click', 'play');
+	},
+
+
+	play: function() {
+		this.down('content-video').resumePlayback(true);
 	},
 
 
