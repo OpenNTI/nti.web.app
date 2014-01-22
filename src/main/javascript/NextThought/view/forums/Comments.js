@@ -278,6 +278,11 @@ Ext.define('NextThought.view.forums.Comments', {
 			el = Ext.get(item),
 			box;
 
+		if (me.editor.isActive()) {
+			me.refocusEditor();
+			return;
+		}
+
 		if (t) {
 			this.whiteboardContainerClick(record, t, e, el);
 			return;
@@ -290,12 +295,14 @@ Ext.define('NextThought.view.forums.Comments', {
 
 		width = el.down('.wrap').getWidth();
 
-		if (e.getTarget('.reply') && !this.editor.isActive()) {
+		if (e.getTarget('.reply')) {
+			this.refocusVerb = 'creating';
 			this.replyTo(record, el, width);
 			return;
 		}
 
-		if (e.getTarget('.edit') && !this.editor.isActive()) {
+		if (e.getTarget('.edit')) {
+			this.refocusVerb = 'editing';
 			delete this.isNewRecord;
 			t = el.down('.body');
 			t.hide();
@@ -504,9 +511,23 @@ Ext.define('NextThought.view.forums.Comments', {
 
 
 	addRootReply: function() {
-		if (this.editor.isActive()) { return; }
+		if (this.editor.isActive()) {
+			this.refocusEditor();
+			return;
+		}
+		this.refocusVerb = 'creating';
 		this.isNewRecord = true;
 		this.openEditor(null, this.el.down('.new-root'));
+	},
+
+
+	refocusEditor: function() {
+		var msg = 'You are currently ' + (this.refocusVerb || 'creating') + ' a reply, please save or cancel it first.';
+
+		if (!this.editor.isActive()) { return; }
+		this.editor.el.scrollCompletelyIntoView(this.el.getScrollingEl());
+		this.editor.focus();
+		alert({msg: msg});
 	},
 
 
