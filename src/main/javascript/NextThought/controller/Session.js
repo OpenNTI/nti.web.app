@@ -441,7 +441,10 @@ Ext.define('NextThought.controller.Session', {
 
 		function onFailure() {
 			console.log('could not resolve app user', arguments);
-			failureCallback.call(me);
+			Ext.callback(failureCallback, me);
+			if (!failureCallback) {
+				alert('There was an unknown error fetching your profile');
+			}
 		}
 
 		function onSuccess(user, prefs) {
