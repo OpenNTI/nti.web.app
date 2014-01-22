@@ -157,7 +157,11 @@ Ext.define('NextThought.store.forums.Comments', {
 			parent = this.getById(parentId),
 			parentIndex = parent && this.indexOf(parent),
 			count = this.getCount(),
-			depth = (parent && parent.get('depth')) || -1;
+			depth = (parent && parent.get('depth')) || 0;
+
+		if (!parent) {
+			depth = -1;
+		}
 
 		try {
 			if (parent && parentId !== this.parentTopic.getId()) {
