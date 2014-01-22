@@ -521,7 +521,7 @@ Ext.define('NextThought.view.forums.Comments', {
 			refs = comment.get('references');
 
 		if (Ext.isEmpty(refs)) {
-			me.srollCommentIntoView(comment);
+			me.scrollCommentIntoView(comment);
 		}
 
 		refs.forEach(function(ref) {
@@ -553,7 +553,6 @@ Ext.define('NextThought.view.forums.Comments', {
 			return;
 		}
 
-		node.scrollIntoView(node.getScrollingEl());
-		node.focus();
+		node.scrollCompletelyIntoView(node.getScrollingEl());
 	}
 });

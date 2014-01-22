@@ -35,10 +35,51 @@ Ext.define('NextThought.overrides.dom.Element', {
 	},
 
 
+	scrollCompletelyIntoView: function(container, hscroll, animate) {
+		var me = this,
+            dom = me.dom,
+            offsets = me.getOffsetsTo(container = Ext.getDom(container) || Ext.getBody().dom),
+        // el's box
+            left = offsets[0] + container.scrollLeft,
+            top = offsets[1] + container.scrollTop,
+            bottom = top + dom.offsetHeight,
+            right = left + dom.offsetWidth,
+        // ct's box
+            ctClientHeight = container.clientHeight,
+            ctScrollTop = parseInt(container.scrollTop, 10),
+            ctScrollLeft = parseInt(container.scrollLeft, 10),
+            ctBottom = ctScrollTop + ctClientHeight,
+            ctRight = ctScrollLeft + container.clientWidth,
+            newPos;
+
+	    if (dom.offsetHeight > ctClientHeight || top < ctScrollTop) {
+	      newPos = top - this.getHeight();
+	    } else if (bottom > ctBottom) {
+	      newPos = (bottom - ctClientHeight) + this.getHeight();
+	    }
+	    if (newPos != null) {
+	      me.scrollChildFly.attach(container).scrollTo('top', newPos, animate);
+	    }
+
+	    if (hscroll !== false) {
+	      newPos = null;
+	      if (dom.offsetWidth > container.clientWidth || left < ctScrollLeft) {
+	        newPos = left;
+	      } else if (right > ctRight) {
+	        newPos = right - container.clientWidth;
+	      }
+	      if (newPos != null) {
+	        me.scrollChildFly.attach(container).scrollTo('left', newPos, animate);
+	      }
+	    }
+	    return me;
+	},
+
+
 	/**
 	 *
-	 * @param el
-	 * @param [bufferZone]
+	 * @param {Node} el
+	 * @param {Number} [bufferZone]
 	 * @return {*}
 	 */
 	isOnScreenRelativeTo: function(el, bufferZone) {
