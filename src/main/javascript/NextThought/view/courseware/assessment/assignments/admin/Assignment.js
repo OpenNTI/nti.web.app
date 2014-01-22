@@ -149,10 +149,15 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 						validateedit: {
 							element: 'el',
 							fn: function(editor, e) {
-								var grade = e.record.get('Grade');
+								var grade = e.record.get('Grade'),
+									v = grade.get('value');
 
-								grade.set('value', e.value + ' -');
-								grade.save();
+								v = v && v.split(' ')[0];
+
+								if (v !== e.value) {
+									grade.set('value', e.value + ' -');
+									grade.save();
+								}
 
 								return false;
 							}
