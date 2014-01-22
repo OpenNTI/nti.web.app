@@ -476,6 +476,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 	playerStateChangeHandler: function(event) {
 		var state = event.data[0],
 			stateMap = {
+				'playbackError': 'onPlaybackError',
 				'playing': 'doPlayHandler',
 				'paused': 'doPauseHandler',
 				'stop': 'doStopHandler'
@@ -603,8 +604,33 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 	playerErrorHandler: function() {
 		console.error(this.id, ' kaltura error ', arguments);
 		this.fireEvent('player-error', 'kaltura');
+		//this.onPlaybackError();
 	},
 
+
+	onPlaybackError: function() {
+		var me = this;
+
+		setTimeout(function() {
+			Ext.Error.raise({
+				msg: Ext.String.format('Kaltura Playback Error: PartnerID: {0}, UIConf: {1}, LEAD_HTML5: {3}, Current Source: {2}',
+					me.PARTNER_ID,
+					me.UICONF_ID,
+					me.currentSource,
+					me.LEAD_HTML5
+				)
+			});
+		}, 1);
+	},
+
+
+	entryFailedHandler: function() {
+		this.onPlaybackError();
+	},
+
+	entryNotAvailable: function() {
+		this.onPlaybackError();
+	},
 
 	maybeDoBufferedLoad: function(force) {
 		if (!Ext.isEmpty(this.bufferedLoad)) {
