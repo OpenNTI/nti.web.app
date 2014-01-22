@@ -51,6 +51,13 @@ Ext.define('NextThought.cache.UserRepository', {
 	getStore: function() {
 		if (!this.store) {
 			this.store = Ext.data.Store.create({model: 'NextThought.model.User'});
+			//By default getById on the store is order n.  given we need to call this to both cache
+			//and retrieve data that makes resolving a big chunk of users n^2.  Mixed collection
+			//supports constant lookups if you can do it by key (which we can for users) so replace
+			//the implementation with something faster.
+			this.store.getById = function(theId){
+				return (this.snapshot || this.data).getByKey(theId);
+			}
 		}
 		return this.store;
 	},
@@ -255,7 +262,7 @@ Ext.define('NextThought.cache.UserRepository', {
 							scope: this,
 							failure: function() {
 								var unresolved = User.getUnresolved(name);
-								//	console.log('resturning unresolved user', name);
+								//console.log('resturning unresolved user', name);
 								maybeFinish(name, unresolved);
 							},
 							success: function(u) {

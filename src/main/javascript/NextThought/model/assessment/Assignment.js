@@ -126,27 +126,35 @@ Ext.define('NextThought.model.assessment.Assignment', {
 					console.error('No user');
 				}
 			}
-
+			//The natural sorts are a hotspot 2.5 seconds for 5,000 records on my very fast machine. -cutz,
+			//if we don't have to use the natural sorter that will probably speed things up.
 			store.sort();
 		}
 
 		var me = this,
 			pluck = Ext.Array.pluck,
-			users = pluck(pluck(records, 'data'), 'Creator'),
+			users = {},
 			phantoms = [];
+
+		pluck(pluck(records, 'data'), 'Creator').forEach(function(creator){
+			users[creator] = true;
+		});
 
 		(this.roster || []).forEach(function(o) {
 			var u = o.get('Username');
-			if (!Ext.Array.contains(users, u)) {
+			if(!users[u]) {
 				phantoms.push(NextThought.model.courseware.UsersCourseAssignmentHistoryItem.create({
 					Creator: u
 				}));
-				users.push(u);
+				users[u] = true;
 			}
 		});
 
 		if (phantoms.length) {
 			records = records.concat(phantoms);
+			//This triggers a sort so the same thing applies as above, 2.5 seconds on my machine.  This this sort is pointless
+			//we resort after resolving and filling in, it would be nice to find a way to not sort on the add.
+			//We could probably call insert directly setting requireSort to false to achieve that.
 			store.add(phantoms);
 		}
 
@@ -155,7 +163,7 @@ Ext.define('NextThought.model.assessment.Assignment', {
 		//fill in the assignment into the history item so the synthetic fields can derive values from it.
 		records.forEach(function(r) {r.set('item', me);});
 		//then resolve users...
-		UserRepository.makeBulkRequest(users).done(fill);
+		UserRepository.makeBulkRequest(Object.keys(users)).done(fill);
 	},
 
 
