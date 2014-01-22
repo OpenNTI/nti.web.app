@@ -13,13 +13,17 @@ Ext.define('NextThought.model.Service', {
 			cfg = {};
 
 		function resolve(q, s, r) {
-			var text = r.responseText;
+			var value = r.responseText;
 			if (!s) {
 				p.reject(r.status + ': ' + text);
 				return;
 			}
 
-			p.fulfill(text);
+			if (q.method === 'HEAD') {
+				value = r;
+			}
+
+			p.fulfill(value);
 		}
 
 		if (Ext.isString(urlOrConfig)) {
