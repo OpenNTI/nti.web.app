@@ -257,7 +257,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 			return;
 		}
 
-		console.log(this.id, ' Posting message to kaltura player', type, name, data);
+		console.log(this.id + ' Posting message to kaltura player(' + context.playerId + ')', type, name, data);
 
 		context.postMessage(Ext.encode({ type: type, name: name, data: data }), '*');
 	},
@@ -270,7 +270,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 			this.commandQueue.push(['command', name, data]);
 			return;
 		}
-		console.debug('Invoking command ', name, 'with', data);
+		console.debug(this.id + ': Invoking command ', name, 'with', data);
 		this.sendMessage('command', name, data);
 	},
 
@@ -517,7 +517,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 				return;
 			}
 
-			console.log('Firing player ready', this);
+			console.log(this.id + ' Firing player ready');
 			this.isReady = true;
 			this.fireEvent('player-ready', 'kaltura');
 		}, 250, null, null);
@@ -648,7 +648,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 
 	changeMediaHandler: function() {
-		console.error('****** CHANGE MEDIA HANDLER *****', arguments);
+		console.debug(this.id + ' ****** CHANGE MEDIA HANDLER *****');
 		this.changingMediaSource = false;
 		this.changeMediaAttempt = 0;
 		clearTimeout(this.changeMediaTimeout);
