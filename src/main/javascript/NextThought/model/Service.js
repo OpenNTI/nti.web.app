@@ -15,7 +15,7 @@ Ext.define('NextThought.model.Service', {
 		function resolve(q, s, r) {
 			var value = r.responseText;
 			if (!s) {
-				p.reject(r.status + ': ' + text);
+				p.reject(r.status + ': ' + value);
 				return;
 			}
 
