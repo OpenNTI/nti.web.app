@@ -440,6 +440,8 @@ Ext.define('NextThought.view.forums.Comments', {
 
 		Ext.destroy(this.boxMonitor);
 
+		me.editor.el.scrollCompletelyIntoView(me.el.getScrollingEl());
+
 		refreshMon = me.mon(me, {
 			destroyable: true,
 			'realign-editor': function() {
