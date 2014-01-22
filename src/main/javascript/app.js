@@ -61,7 +61,8 @@ Ext.application({
 		'SlideDeck',
 		'State',
 		'Store',
-		'Stream'
+		'Stream',
+		'Updates'
 	],
 
 	launch: function() {
