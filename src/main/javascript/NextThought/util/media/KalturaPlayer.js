@@ -782,8 +782,8 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 					player.addJsListener(events[i], makeHandler(events[i]));
 				}
 
-				console.log(window.playerId, 'Player is ', player.tagName);
 				window.playerMode = player.tagName === 'OBJECT' ? 'Flash' : 'HTML5';
+				console.log(window.playerId, 'Player is ', playerMode);
 			}
 
 
