@@ -90,7 +90,7 @@ Ext.define('NextThought.view.assessment.input.FreeResponse', {
 	},
 
 	getValue: function() {
-		return this.inputField.getValue();
+		return this.inputField.getValue().trim();
 	},
 
 
