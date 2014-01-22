@@ -120,7 +120,7 @@ Ext.define('NextThought.view.forums.Topic', {
 	constructor: function() {
 		this.callParent(arguments);
 
-		if (this.topicListStore === undefined || this.currentIndex === undefined) {
+		if (!this.topicListStore || this.currentIndex === undefined) {
 			this.noNavArrows = true;
 
 			if ($AppConfig.debug) {
@@ -377,17 +377,20 @@ Ext.define('NextThought.view.forums.Topic', {
 
 	updateRecord: function(record) {
 		if (this.noNavArrows) { return; }
+		try {
+			var count = this.topicListStore.getCount();
 
-		var count = this.topicListStore.getCount();
+			if (this.currentIndex > 0) {
+				this.prevRecord = this.topicListStore.getAt(this.currentIndex - 1);
+				this.prevPostEl.removeCls('disabled');
+			}
 
-		if (this.currentIndex > 0) {
-			this.prevRecord = this.topicListStore.getAt(this.currentIndex - 1);
-			this.prevPostEl.removeCls('disabled');
-		}
-
-		if (this.currentIndex < (count - 1)) {
-			this.nextRecord = this.topicListStore.getAt(this.currentIndex + 1);
-			this.nextPostEl.removeCls('disabled');
+			if (this.currentIndex < (count - 1)) {
+				this.nextRecord = this.topicListStore.getAt(this.currentIndex + 1);
+				this.nextPostEl.removeCls('disabled');
+			}
+		} catch (e) {
+			console.error(e.stack || e.message || e);
 		}
 	},
 
