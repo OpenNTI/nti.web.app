@@ -330,11 +330,11 @@ Ext.define('NextThought.util.Globals', {
 			return naturalSort.insensitive ? s.toLowerCase() : s;
 		}
 
-		var re = /(^-?[0-9]+(\.?[0-9]*)[df]?e?[0-9]?$|^0x[0-9a-f]+$|[0-9]+)/gi,
-	        sre = /(^[ ]*|[ ]*$)/g,
-	        dre = /(^([\w ]+,?[\w ]+)?[\w ]+,?[\w ]+\d+:\d+(:\d+)?[\w ]?|^\d{1,4}[\/\-]\d{1,4}[\/\-]\d{1,4}|^\w+, \w+ \d+, \d{4})/,
-	        hre = /^0x[0-9a-f]+$/i,
-	        ore = /^0/,
+		var re = naturalSort.re = (naturalSort.re || /(^-?[0-9]+(\.?[0-9]*)[df]?e?[0-9]?$|^0x[0-9a-f]+$|[0-9]+)/gi),
+	        sre = naturalSort.sre = (naturalSort.sre || /(^[ ]*|[ ]*$)/g),
+	        dre = naturalSort.dre = (naturalSort.dre || /(^([\w ]+,?[\w ]+)?[\w ]+,?[\w ]+\d+:\d+(:\d+)?[\w ]?|^\d{1,4}[\/\-]\d{1,4}[\/\-]\d{1,4}|^\w+, \w+ \d+, \d{4})/),
+	        hre = naturalSort.hre = (naturalSort.hre || /^0x[0-9a-f]+$/i),
+	        ore = naturalSort.ore = (naturalSort.ore || /^0/),
 			// convert all to strings strip whitespace
 	        x = i(a).replace(sre, '') || '',
 	        y = i(b).replace(sre, '') || '',
