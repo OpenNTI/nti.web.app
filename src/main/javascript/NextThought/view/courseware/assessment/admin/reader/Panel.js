@@ -37,6 +37,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Panel', {
 		if (!this.location) {
 			console.error('No location configured');
 		}
+		r.getNoteOverlay().disable();
 		a.setAssignmentFromInstructorProspective(this.assignment, this.assignmentHistory);
 		r.setLocation(this.location, done, true);
 
