@@ -20,9 +20,10 @@ Ext.define('NextThought.model.assessment.Question', {
 
 
 	tallyParts: function() {
-		function sum(agg, r) {
-			return agg + (r.tallyParts ? r.tallyParts() : 1);
-		}
-		return (this.get('parts') || []).reduce(sum, 0);
+		return 1;
+		// function sum(agg, r) {
+		// 	return agg + (r.tallyParts ? r.tallyParts() : 1);
+		// }
+		// return (this.get('parts') || []).reduce(sum, 0);
 	}
 });
