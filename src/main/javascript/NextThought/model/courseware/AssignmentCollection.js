@@ -172,7 +172,7 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 				}
 			}
 			assignmentStores.forEach(itr);
-			v.add(recs);
+			v.insert(0, recs);
 			v.sort();
 		}
 
