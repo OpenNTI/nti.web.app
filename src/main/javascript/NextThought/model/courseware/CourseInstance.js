@@ -118,20 +118,24 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 			Service.request(r)
 					.done(function(txt) {
 						console.time('Roster Recieved, Parsing: ' + r);
-						var j = Ext.decode(txt, true);
+						var j = Ext.decode(txt, true), map = {};
 						j = j && j.Items;
 						//filter the active user out of the roster since we are administering this thing.
 						j = j && j.filter(function(o) { return o && !isMe(o.Username); });
 
 						j = ParseUtils.parseItems(j);
 						if (j) {
+							//used in the open/enrolled filters so the filter function doesn't
+							// have to search for the username in the roster, can simply get the hash.
 							j.forEach(function(i) {
 								var n = i.get('Username');
-								if (j.hasOwnProperty(n)) {
+								if (map.hasOwnProperty(n)) {
 									console.warn('Replacing key? ' + n);
 								}
-								j[n] = i;
+								map[n] = i;
 							});
+							//don't modify the array while iterating.
+							j.map = map;
 						}
 						console.timeEnd('Roster Recieved, Parsing: ' + r);
 						console.timeEnd('Getting Roster: ' + r);

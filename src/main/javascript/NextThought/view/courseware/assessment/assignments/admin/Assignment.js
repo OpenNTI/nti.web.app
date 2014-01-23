@@ -278,7 +278,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 				id: 'open-enrolled',
 				myView: this,
 			    filterFn: function(item) {
-					var r = (this._roster = this._roster || this.myView.assignment.roster),
+					var r = (this._roster = this._roster || this.myView.assignment.roster.map),
 						c = item.get('Creator');
 					c = typeof c === 'string' ? c : c.getId();
 					r = r && c && r[c];
