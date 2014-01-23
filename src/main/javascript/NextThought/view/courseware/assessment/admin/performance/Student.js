@@ -102,13 +102,17 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 					   { text: 'Assignment', dataIndex: 'name', tdCls: 'padded-cell', padding: '0 0 0 30', flex: 1 },
 					   { text: 'Completed', dataIndex: 'completed', width: 150, renderer: function(v, col, rec) {
 						   var d = rec.get('due'),
-								   s = (v && v.get && v.get('Last Modified')) || v;
+							   s = (v && v.get && v.get('Last Modified')) || v;
 
 						   if (!s) {
 							   return Ext.DomHelper.markup({cls: 'incomplete', html: 'Due ' + Ext.Date.format(d, 'm/d')});
 						   }
 						   if (d > s) {
 							   return Ext.DomHelper.markup({cls: 'ontime', html: 'On Time'});
+						   }
+
+						   if (!d) {
+							   return Ext.DomHelper.markup({cls: 'ontime', html: 'Submitted ' + Ext.Date.format(s, 'm/d')});
 						   }
 
 						   d = new Duration(Math.abs(s - d) / 1000);

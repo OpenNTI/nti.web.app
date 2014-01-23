@@ -185,7 +185,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 							   if (d > s) {
 								   return Ext.DomHelper.markup({cls: 'ontime', html: 'On Time'});
 							   }
-
+							   if (!d) {
+								   return Ext.DomHelper.markup({cls: 'ontime', html: 'Submitted ' + Ext.Date.format(s, 'm/d')});
+							   }
 							   d = new Duration(Math.abs(s - d) / 1000);
 							   return Ext.DomHelper.createTemplate({cls: 'late', html: '{late} Late'}).apply({
 								   late: d.ago().replace('ago', '').trim()
