@@ -81,8 +81,12 @@ Ext.define('NextThought.controller.Application', {
 						console.error('Administered Courses failed to load:', reason[1]);
 					}
 
-					Ext.destroy(v);
-					
+					try {
+						Ext.destroy(v);
+					} catch (e) {
+						console.error(e.stack || e.message || e);
+					}
+
 					Ext.DomHelper.overwrite(Ext.getBody(), {
 						cls: 'empty-state error-message-component',
 						cn: [
