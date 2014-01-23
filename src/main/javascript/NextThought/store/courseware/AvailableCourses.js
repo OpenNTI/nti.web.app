@@ -52,6 +52,7 @@ Ext.define('NextThought.store.courseware.AvailableCourses', {
 			load: function(me, records, success) {
 				if (!success) {
 					p.reject('Store Failed to load');
+					return;
 				}
 				p.fulfill(me);
 			}
