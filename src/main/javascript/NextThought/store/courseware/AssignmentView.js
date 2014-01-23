@@ -3,6 +3,7 @@ Ext.define('NextThought.store.courseware.AssignmentView', {
 	model: 'NextThought.model.courseware.UsersCourseAssignmentHistoryItem',
 	proxy: {
 		type: 'ajax',
+		timeout: 3600000,//hour
 		headers: {
 			'Accept': 'application/vnd.nextthought.collection+json',
 			'Content-Type': 'application/json'
