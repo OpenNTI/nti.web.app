@@ -172,12 +172,16 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 				}
 			}
 			assignmentStores.forEach(itr);
+
+			//v.loading = false;
+			//v.fireEvent('load', v, [], true, {});
 			v.insert(0, recs);
 			v.sort();
 		}
 
 		if (!this._studentViews[student]) {
 			v = this._studentViews[student] = new NextThought.store.courseware.AssignmentView({proxy: 'memory'});
+			//v.loading = true;
 			this.getViewMaster().done(build);
 		}
 
