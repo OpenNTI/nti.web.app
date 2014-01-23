@@ -68,6 +68,7 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 						p.fulfill(me);
 					},
 					function(reason) {
+						reason = reason.filter(function(o) {return !o || !o.isModel;});//don't send fulfilled promise values with the error.
 						p.reject(reason);
 					});
 			}
