@@ -178,9 +178,8 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		var me = this, playerType;
 
 		function cleanup() {
-			if (Ext.getBody().hasCls('media-viewer-closing')) {
-				Ext.getBody().removeCls('media-viewer-open media-viewer-closing');
-			}
+			Ext.getBody().removeCls('media-viewer-open media-viewer-closing');
+
 			Ext.EventManager.removeResizeListener(me.adjustOnResize, me);
 		}
 
@@ -193,10 +192,17 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			me.el.addCls('video-only');
 		}
 		//check if we need to restore a type or use the default
-		playerType = (me.noTranscript)? 'full-video' : me.getStorageManager().get('media-viewer-player-type') || 'video-focus';
+		playerType = (me.noTranscript) ? 'full-video' : me.getStorageManager().get('media-viewer-player-type') || 'video-focus';
 
 		//TODO: redo this. better.
-		me.toolbar = Ext.widget({xtype: 'media-toolbar', renderTo: me.headerEl, currentType: playerType, video: me.video, floatParent: me, noTranscript: me.noTranscript});
+		me.toolbar = Ext.widget({
+			xtype: 'media-toolbar',
+			renderTo: me.headerEl,
+			currentType: playerType,
+			video: me.video,
+			floatParent: me,
+			noTranscript: me.noTranscript
+		});
 		me.identity = Ext.widget({xtype: 'identity', renderTo: me.toolbar.getEl(), floatParent: me.toolbar});
 		me.gridView = Ext.widget({xtype: 'media-grid-view', renderTo: me.gridViewEl, floatParent: me, source: me.video});
 
@@ -224,7 +230,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 	},
 
 
-	getStorageManager: function(){
+	getStorageManager: function() {
 		return TemporaryStorage;
 	},
 
@@ -233,14 +239,14 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		if (!store) { return; }
 		var me = this, index = store.indexOf(this.video);
 
-		function isHeader(video){
+		function isHeader(video) {
 			return video && video.get('sources') && video.get('sources').length === 0;
 		}
 
-		function getPrevFromIndex(i){
+		function getPrevFromIndex(i) {
 			var prev;
 
-			if((i - 1) >= 0){
+			if ((i - 1) >= 0) {
 				prev = store.getAt(i - 1);
 			}
 
@@ -251,10 +257,10 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			return prev;
 		}
 
-		function getNextFromIndex(i){
+		function getNextFromIndex(i) {
 			var next;
 
-			if((i + 1) < store.getCount()){
+			if ((i + 1) < store.getCount()) {
 				next = store.getAt(i + 1);
 			}
 
@@ -266,7 +272,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 		}
 
 		this.prevVideo = getPrevFromIndex(index);
-		this.nextVideo = getNextFromIndex(index); 
+		this.nextVideo = getNextFromIndex(index);
 
 		if (this.videoplayer) {
 			this.videoplayer.setPrev(this.prevVideo);
