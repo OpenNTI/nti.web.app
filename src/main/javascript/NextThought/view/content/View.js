@@ -599,6 +599,7 @@ Ext.define('NextThought.view.content.View', {
 				if (instance) {
 					me._setCourse(instance, tab);
 					me.courseForum.restoreState(forum, topic);
+					me.courseNav.restoreState(st);
 				}
 
 				if (ntiid) {

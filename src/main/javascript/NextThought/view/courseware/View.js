@@ -31,8 +31,8 @@ Ext.define('NextThought.view.courseware.View', {
 		this.navigation.clear();
 		this.body.clear();
 	},
-	
-	
+
+
 	unmask: function() {
 		console.log('Unmasking...');
 		if (this.el) {
@@ -57,5 +57,13 @@ Ext.define('NextThought.view.courseware.View', {
 		this.store = courseInstance.getNavigationStore();
 
 		this.navigation.maybeChangeStoreOrSelection(courseInstance.getId(), this.store);
+	},
+
+	restoreState: function(state) {
+		var outline = this.down('course-outline');
+
+		if (outline) {
+			outline.maybeChangeSelection(state.location);
+		}
 	}
 });
