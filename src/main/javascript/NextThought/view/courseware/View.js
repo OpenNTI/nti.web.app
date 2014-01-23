@@ -22,8 +22,22 @@ Ext.define('NextThought.view.courseware.View', {
 
 
 	clear: function() {
+		this.mon(this.body, {
+			single: true,
+			buffer: 1,
+			add: 'unmask'
+		});
+		this.el.mask('Loading', 'loading');
 		this.navigation.clear();
 		this.body.clear();
+	},
+	
+	
+	unmask: function() {
+		console.log('Unmasking...');
+		if (this.el) {
+			this.el.unmask();
+		}
 	},
 
 
@@ -32,10 +46,11 @@ Ext.define('NextThought.view.courseware.View', {
 			return;
 		}
 
+		this.clear();
 		this.currentCourse = courseInstance;
+
 		if (!courseInstance) {
 			delete this.currentCourse;
-			this.clear();
 			return;
 		}
 
