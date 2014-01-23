@@ -104,7 +104,13 @@ Ext.define('NextThought.view.content.View', {
 		});
 
 		this.mon(this.courseDash, {
-			'show-dashboard-tab': 'updateTabs'
+			scope: this,
+			'hide-dashboard-tab': function(view) {
+				this.updateTabs();
+				if (this.layout.getActiveItem() === view) {
+					this.setActiveTab('course-book');
+				}
+			}
 		});
 
 		this.mon(this.courseForum, {

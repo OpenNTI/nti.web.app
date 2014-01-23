@@ -27,7 +27,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 			date = this.self.dateOverride || new Date();//now
 
 		if (this.course !== courseId) {
-			this.hasItems = false;
+			this.hasItems = true;
 			this.tileContainer.removeAll(true);
 		}
 
@@ -73,6 +73,8 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 			if (this.el) {
 				this.el.unmask();
 			}
+			this.hasItems = false;
+			this.fireEvent('hide-dashboard-tab', this);
 			return;
 		}
 
@@ -114,9 +116,9 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 
 
 			this.setTiles(tiles);
-			if (tiles.length) {
-				this.hasItems = true;
-				this.fireEvent('show-dashboard-tab');
+			if (!tiles.length) {
+				this.hasItems = false;
+				this.fireEvent('hide-dashboard-tab', this);
 			}
 		}
 		catch (e) {
