@@ -94,7 +94,9 @@ Ext.define('NextThought.view.SideBar', {
 
 	destroy: function() {
 		Ext.EventManager.removeResizeListener(this.viewportMonitor, this);
-		this.toggle.remove();
+		if (this.toggle) {
+			this.toggle.remove();
+		}
 	},
 
 

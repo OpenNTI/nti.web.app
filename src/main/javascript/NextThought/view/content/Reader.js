@@ -95,10 +95,14 @@ Ext.define('NextThought.view.content.Reader', {
 
 	beforeDestroy: function() {
 		var items = this.floatingItems;
-		[this.notfound, this.pageWidgets].forEach(function(i) {
-			items.remove(i);
-			Ext.destroy(i);
-		});
+		if (items) {
+			[this.notfound, this.pageWidgets].forEach(function(i) {
+				if (i) {
+					items.remove(i);
+					Ext.destroy(i);
+				}
+			});
+		}
 		return this.callParent(arguments);
 	},
 
