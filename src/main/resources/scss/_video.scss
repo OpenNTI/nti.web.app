@@ -1,0 +1,89 @@
+.curtain {
+	position: absolute;
+	left: 0; top: 0; bottom: 0;
+	cursor: pointer;
+	//set the base size for all the subsequent ems
+	font-size: 16px;
+	background: {
+		position: center center;
+		repeat: no-repeat;
+	}
+
+	&.content-video-curtain{
+		right: auto; bottom: auto;
+		width: 640px !important;
+		height: 360px !important;
+	}
+
+	.ctr {
+		position: absolute;
+		overflow: visible;
+		left: 50%;
+		top: 50%;
+		.play {
+			position: relative;
+			top: -1.375em;//half the line-height
+			left: -50%;
+		}
+	}
+
+	.play {
+		position: relative;
+		border-radius: 5em;
+		font: normal 400 1.1em/2.75em 'Open Sans Condensed', $font;
+		min-height: 48px;
+		min-width: 45px;
+		color: #fff;
+
+		.blur-clip,.blur {
+			border-radius: 5em;
+			position: absolute;
+			top: 0; left: 0;
+			bottom: 0; right: 0;
+			overflow: hidden;
+		}
+
+		.blur {
+			background: {
+				position: center center;
+				size: 512px auto;
+				repeat: no-repeat;
+			}
+			@include blur-effect();
+		}
+
+		.launch-player {
+			display: none;
+		}
+
+		.label {
+			background-color: rgba(0,0,0,0.68);
+			box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15),//stroke
+						0 0 3px 0 black;//shadow
+			border-radius: 5em;
+			overflow: hidden;
+			padding: 0 15px 0 50px;
+			max-width: 400px;
+			@include ellipse();
+			@include icon('play',$top:3px,$left:3px);
+			&::before {content:'';}
+		}
+
+		&.transcripts {
+
+			.launch-player{
+				display: block;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				width: 50px;
+				border-radius: 50px;
+				@include icon('play-transcript', $position:absolute, $top:2px, $left:5px);
+			}
+
+			.label{
+				padding-right: 60px;
+			}
+		}
+	}
+}

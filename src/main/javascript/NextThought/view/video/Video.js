@@ -85,6 +85,16 @@ Ext.define('NextThought.view.video.Video', {
 	},
 
 
+	refreshHeight: function() {
+		this.height = this.playerHeight;
+		this.setHeight(this.height);
+		console.log(this.height);
+		if (this.rendered) {
+			this.updateLayout();
+		}
+	},
+
+
 	constructor: function(config) {
 
 		if (!Ext.isEmpty(config.url)) {

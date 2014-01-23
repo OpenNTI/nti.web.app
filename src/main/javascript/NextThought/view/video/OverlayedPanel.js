@@ -32,12 +32,14 @@ Ext.define('NextThought.view.video.OverlayedPanel', {
 		}
 	},
 
+
 	constructor: function(config) {
 		if (!config || !config.contentElement) {
 			throw 'you must supply a contentElement';
 		}
 
-		var dom = config.contentElement,
+		var me = this,
+			dom = config.contentElement,
 			el = Ext.get(dom),
 			reader = config.reader,
 			data = DomUtils.parseDomObject(dom),
@@ -56,10 +58,39 @@ Ext.define('NextThought.view.video.OverlayedPanel', {
 			layout: 'fit',
 			items: [{
 				width: 640,
+				xtype: 'box',
+				autoEl: { cls: 'curtain content-video-curtain', cn: [
+					{ cls: 'ctr', cn: [
+						{ cls: 'play', cn: [
+							{cls: 'blur-clip', cn: {cls: 'blur'}},
+							{ cls: 'label', 'data-qtip': 'Play' },
+							{cls: 'launch-player', 'data-qtip': 'Play with transcript'}
+						] }
+					] }
+				]}
+			},{
+				width: 640,
 				xtype: 'content-video',
 				data: data,
 				playlist: playlist,
-				contentElement: dom
+				contentElement: dom,
+				listeners: {
+					'height-change': 'refreshHeight',
+					'player-command-activate': function() {
+						var video = me.down('content-video');
+
+						if (!me.fromClick) {
+							delete me.fromClick;
+							Ext.defer(video.deactivatePlayer, 1, video);
+						}
+						//console.log(me);
+					}
+				},
+				xhooks: {
+					playerConfigOverrides: function(type) {
+						return {reserveControlSpace: true};
+					}
+				}
 			}]
 		});
 
@@ -74,29 +105,35 @@ Ext.define('NextThought.view.video.OverlayedPanel', {
 
 	fillVideo: function(index) {
 		var id = this.data['attribute-data-ntiid'],
-			poster = index[id].sources[0].poster;
+			poster = index[id].sources[0].poster,
+			label = index[id].title;
 
-		this.setBackground(poster);
+		this.setBackground(poster, label);
 	},
 
 
-	setBackground: function(src) {
+	setBackground: function(src, label) {
 		if (!this.el) {
 			this.on('afterrender', this.setBackground.bind(this, src), this, {single: true});
 			return;
 		}
 
-		this.down('content-video').getEl().setStyle({
+		this.down('content-video').getEl().setStyle({cursor: 'pointer'});
+
+		this.down('box').getEl().setStyle({
 			backgroundImage: 'url(' + src + ')',
 			backgroundSize: '640px',
-			backgroundRepeat: 'no-repeat'
+			backgroundPosition: '0 0'
 		});
+
+		this.down('box').getEl().down('.label').update(label);
 
 		this.mon(this.down('content-video').getEl(), 'click', 'play');
 	},
 
 
 	play: function() {
+		this.fromClick = true;
 		this.down('content-video').resumePlayback(true);
 	},
 
