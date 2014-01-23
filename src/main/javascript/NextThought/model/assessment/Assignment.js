@@ -182,7 +182,8 @@ Ext.define('NextThought.model.assessment.Assignment', {
 		if (!gbe) {return;}
 
 		function update(rec) {
-			var u = rec.get('Creator'),
+			var c = rec.get('Creator'),
+				u = typeof c === 'string' ? c : c.getId(),
 				submissionGrade = rec.get('Grade'),
 				gradebookGrade = gbe.getFieldItem('Items', u);
 
