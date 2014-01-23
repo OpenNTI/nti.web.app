@@ -537,7 +537,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		UserRepository.makeBulkRequest(users).done(applyUsers);
 
 		this.assignments.getViewMaster()
-				.done(this.setAssignmentStores.bind(this));
+				.done(this.setAssignmentStores.bind(this))
+				.fail(function() {
+					alert('Failed to load grade & performance view.');
+				});
 	},
 
 

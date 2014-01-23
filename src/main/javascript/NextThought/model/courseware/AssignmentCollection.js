@@ -159,8 +159,13 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 		}
 
 		function build(assignmentStores) {
+
 			var recs = [];
 			function itr(s) {
+				if (!s) {
+					console.error('Missing STORE!!');
+					return;
+				}
 				var i = s.findBy(findFn);
 				if (i >= 0) {
 					recs.push(s.getAt(i));

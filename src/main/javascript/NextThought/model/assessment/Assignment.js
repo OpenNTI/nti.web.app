@@ -71,14 +71,19 @@ Ext.define('NextThought.model.assessment.Assignment', {
 
 	getSubmittedHistoryStore: function() {
 		if (!this._submittedHistoryStore) {
-			var s = this._submittedHistoryStore = new NextThought.store.courseware.AssignmentView({
-				url: this.getLink('GradeSubmittedAssignmentHistory')
-			});
+			var url = this.getLink('GradeSubmittedAssignmentHistory'),
+				s = this._submittedHistoryStore = new NextThought.store.courseware.AssignmentView({ url: url });
+
 			s.promise = new Promise();
 
 			s.on({
 				single: true,
-				load: function() {
+				load: function(me, records, successful) {
+					if (!successful) {
+						console.error('Failed to load: ' + url);
+						s.promise.reject();
+						return;
+					}
 					s.promise.fulfill(s);
 				}
 			});
@@ -102,7 +107,8 @@ Ext.define('NextThought.model.assessment.Assignment', {
 	},
 
 
-	_resolveParts: function(store, records) {
+	_resolveParts: function(store, records, success) {
+		if (!success) {return;}
 		records = records || [];
 
 		function fill(users) {
