@@ -348,6 +348,13 @@ Ext.define('NextThought.view.assessment.input.Ordering', {
 		var me = this;
 		this.dropZone = new Ext.dd.DropZone(this.getEl(), {
 			getTargetFromEvent: function(e) {
+                if(Ext.is.iOS){
+                    var toReturn = Ext.get(document.elementFromPoint(e.browserEvent.clientX, e.browserEvent.clientY));
+                    if(toReturn.dom.className.indexOf('draggable-area') < 0){
+                        toReturn = toReturn.up('.draggable-area');
+                    }
+                    return toReturn;
+                }
 				return e.getTarget('.draggable-area', null, true);
 			},
 			onNodeEnter: function(target, dd, e, data) {

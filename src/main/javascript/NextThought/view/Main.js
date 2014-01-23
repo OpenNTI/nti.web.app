@@ -109,6 +109,13 @@ Ext.define('NextThought.view.Main', {
 			e.preventDefault();
 		}
 
+        //Don't scroll page if dragging an element in quiz
+        var currTarget = Ext.get(touch.target);
+        if( touch.target.className.indexOf('draggable-area') != -1 ||
+                currTarget.up('.draggable-area')){
+            e.preventDefault();
+        }
+
 		// Scroll scrollable element on two-finger scrolling
 		if (e.browserEvent.changedTouches[1]) {
 			scrollableElement = Ext.get(touch.target);
