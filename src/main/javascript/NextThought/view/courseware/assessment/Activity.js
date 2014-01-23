@@ -123,7 +123,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 			Ext.Ajax.request({
 				url: this._lastViewedURL,
 				method: 'PUT',
-				jsonData: this._lastRead
+				jsonData: this._lastRead.getTime() / 1000
 			});
 		}
 
