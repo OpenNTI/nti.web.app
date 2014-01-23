@@ -5,7 +5,6 @@ Ext.define('NextThought.view.content.Reader', {
 	//<editor-fold desc="Config">
 	requires: [
 		'NextThought.proxy.JSONP',
-		'NextThought.util.Base64',
 		'NextThought.view.ResourceNotFound',
 		'NextThought.view.content.PageWidgets',
 		'NextThought.view.content.reader.Content',

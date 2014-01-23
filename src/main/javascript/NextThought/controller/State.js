@@ -610,7 +610,7 @@ Ext.define('NextThought.controller.State', {
 		if (!username) {
 			console.error('unknown username for state mgmt.');
 		}
-		return Base64.encode('state-' + username);
+		return B64.encode('state-' + username);
 	},
 
 

@@ -224,7 +224,7 @@ Ext.define('NextThought.controller.Session', {
 
 	login: function(app) {
 		function success() {
-			me.sessionId = Base64.encodeURLFriendly($AppConfig.username);//weak obfuscation
+			me.sessionId = B64.encodeURLFriendly($AppConfig.username);//weak obfuscation
 			TemporaryStorage.set(me.sessionTrackerKey, me.sessionId);
 			me.sessionStarted = true;
 			console.log('fireing session-ready');//card 1768

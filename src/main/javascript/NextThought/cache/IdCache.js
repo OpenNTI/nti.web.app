@@ -9,7 +9,7 @@ Ext.define('NextThought.cache.IdCache', {
 	getIdentifier: function(id)
 	{
 		if (!id) { return null; }
-		return Base64.encode(id);
+		return B64.encode(id);
 	},
 
 	getComponentId: function(rec, subRecordField, prefix) {

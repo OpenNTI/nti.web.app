@@ -134,7 +134,7 @@ Ext.define('NextThought.proxy.JSONP', {
 
 		//1) decode content
 		if (/base64/i.test(enc)) {
-			content.content = Base64.decode(content.content);
+			content.content = B64.decode(content.content);
 		}
 		else if (/json/i.test(enc)) {
 			if (Ext.isString(content.content)) {

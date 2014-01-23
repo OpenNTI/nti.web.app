@@ -4,7 +4,7 @@
  * TODO: de-lint
  */
 Ext.define('NextThought.util.Base64', {
-	alternateClassName: 'Base64',
+	alternateClassName: 'B64',
 	singleton: true,
 
 	_isBase64Re: /^([A-Za-z0-9+\/]{4})*([A-Za-z0-9+\/]{4}|[A-Za-z0-9+\/]{3}=|[A-Za-z0-9+\/]{2}==)$/,
@@ -46,7 +46,7 @@ Ext.define('NextThought.util.Base64', {
 			chr1, chr2, chr3, enc1, enc2, enc3, enc4,
 			i = 0;
 
-		input = Base64._utf8_encode(input);
+		input = this._utf8_encode(input);
 
 		while (i < input.length) {
 
@@ -105,7 +105,7 @@ Ext.define('NextThought.util.Base64', {
 
 		}
 
-		output = Base64._utf8_decode(output);
+		output = this._utf8_decode(output);
 
 		return output;
 
@@ -170,5 +170,5 @@ Ext.define('NextThought.util.Base64', {
 	}
 
 }, function() {
-	window.Base64 = this;
+	window.B64 = this;
 });

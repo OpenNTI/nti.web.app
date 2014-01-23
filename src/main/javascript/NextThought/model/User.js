@@ -115,7 +115,7 @@ Ext.define('NextThought.model.User', {
 
 
 		if ($AppConfig.obscureUsernames) {
-			id = Base64.encodeURLFriendly(id);
+			id = B64.encodeURLFriendly(id);
 		}
 
 		if (!Ext.isArray(subPages) && arguments.length > 0) {
@@ -192,7 +192,7 @@ Ext.define('NextThought.model.User', {
 
 			function filter(u) {
 				if ($AppConfig.obscureUsernames) {
-					return Base64.decodeURLFriendly(u) || u;
+					return B64.decodeURLFriendly(u) || u;
 				}
 				return u;
 			}
