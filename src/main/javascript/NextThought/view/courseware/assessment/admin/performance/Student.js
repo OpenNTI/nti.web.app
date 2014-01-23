@@ -58,7 +58,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 						fn: function(editor, e) {
 							if (!e.record) { return false; }
 
-							var noSubmit = e.record.get('item').get('category_name') === 'no_submit',
+							var item = e.record.get('item'),
+								noSubmit = item && item.get && (item.get('category_name') === 'no_submit'),
 								gradeRec = e.record.get('Grade'),
 								value = gradeRec && gradeRec.get('value'),
 								grades = value && value.split(' '),
@@ -102,6 +103,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 					   { text: 'Completed', dataIndex: 'completed', width: 150, renderer: function(v, col, rec) {
 						   var d = rec.get('due'),
 								   s = (v && v.get && v.get('Last Modified')) || v;
+
 						   if (!s) {
 							   return Ext.DomHelper.markup({cls: 'incomplete', html: 'Due ' + Ext.Date.format(d, 'm/d')});
 						   }

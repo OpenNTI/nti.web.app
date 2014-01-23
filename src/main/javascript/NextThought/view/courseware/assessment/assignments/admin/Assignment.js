@@ -130,7 +130,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 							fn: function(editor, e) {
 								if (!e.record) { return false; }
 
-								var noSubmit = e.record.get('item').get('category_name') === 'no_submit',
+								var item = e.record.get('item'),
+									noSubmit = item && item.get && (item.get('category_name') === 'no_submit'),
 									gradeRec = e.record.get('Grade'),
 									value = gradeRec && gradeRec.get('value'),
 									grades = value && value.split(' '),
@@ -488,7 +489,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			selModel = v.getSelectionModel(),
 			selection = selModel && selModel.selection,
 			dataIndex = selection && selection.columnHeader.dataIndex,
-			noSubmit = record.get('item').get('category_name') === 'no_submit';
+			item = record.get('item'),
+			noSubmit = item && item.get && (item.get('category_name') === 'no_submit');
 
 		if (nib) {
 			this.getActionsMenu(record).showBy(nib, 'tr-br');
