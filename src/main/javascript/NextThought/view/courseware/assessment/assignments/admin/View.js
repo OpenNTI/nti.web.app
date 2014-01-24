@@ -68,6 +68,17 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.View', {
 
 
 	showAssignment: function(assignment, user) {
-		this.items.first().showAssignment(assignment, user);
+		var root = this.items.first();
+
+		if (!root) {
+			this.on({
+				single: true,
+				buffer: 1,
+				add: Ext.bind(this.showAssignment, this, arguments)
+			});
+			return;
+		}
+
+		root.showAssignment(assignment, user);
 	}
 });
