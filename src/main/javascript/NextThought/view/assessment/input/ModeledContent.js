@@ -68,9 +68,9 @@ Ext.define('NextThought.view.assessment.input.ModeledContent', {
 	setValue: function(o) {
 		if (!o || !o.value) {
 			console.warn('We did not understand this:', arguments);
-			return;
+		} else {
+			this.editor.editBody(o.value);
 		}
-		this.editor.editBody(o.value);
 
 		if (this.isAssignment) {
 			this.editor.contentEl.set({contentEditable: false});
