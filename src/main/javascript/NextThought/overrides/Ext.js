@@ -28,6 +28,7 @@ Ext.define('NextThought.overrides.Ext', {
 },function() {
 
 	var EC = Ext.cache,
+		removeAllEvents = Ext.EventManager.removeAll,
 		Element = Ext.dom.Element,
 		get = Ext.getElementById;
 
@@ -80,6 +81,13 @@ Ext.define('NextThought.overrides.Ext', {
 		return el;
 	};
 
+	Ext.EventManager.removeAll = function() {
+		try {
+			removeAllEvents.apply(this, arguments);
+		} catch (e) {
+			console.warn(e.stack || e.message || e);
+		}
+	};
 
 	//do our own GC... (mostly copied verbatim, added lint fixes and try/catch)
 	function garbageCollect() {
@@ -111,7 +119,7 @@ Ext.define('NextThought.overrides.Ext', {
 
 					if (clean) {
 						if (Ext.enableListenerCollection) {
-							Ext.EventManager.removeAll(d);
+							Ext.EventManager.removeAll(eid);
 						}
 						delete EC[eid];
 					}
