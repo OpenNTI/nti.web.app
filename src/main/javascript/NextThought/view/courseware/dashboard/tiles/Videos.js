@@ -99,6 +99,10 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Videos', {
 				'destroy': 'widgetDestroyed'
 			},
 			xhooks: {
+				hideCurtain: function() {
+					this.callParent(arguments);
+					this.addCls('playing');
+				},
 				showCurtain: function() {
 					this.callParent(arguments);
 					this.removeCls('hide-list playing');
