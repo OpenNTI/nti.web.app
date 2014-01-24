@@ -24,6 +24,9 @@ Ext.define('NextThought.view.assessment.input.SingleChoice', {
 
 	getValue: function() {
 		var r = this.callParent();
+		if (r === null) {
+			return null;
+		}
 		return r && r[0];
 	}
 });
