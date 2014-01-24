@@ -113,6 +113,11 @@ Ext.define('NextThought.overrides.Ext', {
 
 					try {
 						clean = !d || (!d.parentNode || (!d.offsetParent && !Ext.getElementById(eid)));
+						if (d.id !== eid) {
+							//this is just an access check, if d.id throws an access denied, clean it out.
+							//This should never happen...so don't put anything really long here.
+							swallow();
+						}
 					} catch (e) {
 						clean = true;
 					}
