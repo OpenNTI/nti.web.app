@@ -183,7 +183,7 @@ Ext.define('NextThought.Library', {
 			containers = (r && r.Containers) || {};
 			keys = Ext.Object.getKeys(containers);
 			keys.sort(function(a, b) {
-				var c = toc.querySelector(query('topic', a)),
+				var c = toc.querySelector(query('topic', a)) || toc.querySelector(query('toc', a)),
 					d = toc.querySelector(query('topic', b)),
 					p;
 
