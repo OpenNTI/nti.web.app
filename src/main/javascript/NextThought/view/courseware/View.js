@@ -27,7 +27,9 @@ Ext.define('NextThought.view.courseware.View', {
 			buffer: 1,
 			add: 'unmask'
 		});
-		this.el.mask('Loading', 'loading');
+		if (this.el) {
+			this.el.mask('Loading', 'loading');
+		}
 		this.navigation.clear();
 		this.body.clear();
 	},
