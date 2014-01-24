@@ -139,20 +139,29 @@ Ext.define('NextThought.model.assessment.Assignment', {
 
 		var me = this,
 			pluck = Ext.Array.pluck,
-			users = {},
+			userSet = {},
+			users = [],
 			phantoms = [];
 
-		pluck(pluck(records, 'data'), 'Creator').forEach(function(creator) {
-			users[creator] = true;
+		users = pluck(pluck(records, 'data'), 'Creator');
+		users.forEach(function(creator) {
+			if(typeof creator !== 'string' && creator.get){
+				creator = creator.get('Username');
+			}
+			userSet[creator] = true;
 		});
 
+		//Note: We conditionally push onto users here, but then concat all of phantom below, so if
+		//We have multiple records in records with the same user here we end up in an inconsistent state.
+		//It is expected that there should only be 1 record per creator which is a contract with the view,
+		//not necessarily the data
 		(this.roster || []).forEach(function(o) {
 			var u = o.get('Username');
-			if (!users[u]) {
+			if (!userSet[u]) {
 				phantoms.push(NextThought.model.courseware.UsersCourseAssignmentHistoryItem.create({
 					Creator: u
 				}));
-				users[u] = true;
+				users.push(u);
 			}
 		});
 
@@ -171,7 +180,8 @@ Ext.define('NextThought.model.assessment.Assignment', {
 		//fill in the assignment into the history item so the synthetic fields can derive values from it.
 		records.forEach(function(r) {r.set('item', me);});
 		//then resolve users...
-		UserRepository.makeBulkRequest(Object.keys(users)).done(fill);
+
+		UserRepository.makeBulkRequest(users).done(fill);
 	},
 
 
