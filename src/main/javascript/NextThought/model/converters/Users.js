@@ -6,7 +6,7 @@ Ext.define('NextThought.model.converters.Users', {
 
 	USERLIST: {
 		type: 'UserList',
-		convert: function(v,record) {
+		convert: function(v, record) {
 			var a = arguments,
 				u = [];
 			try {
@@ -36,17 +36,24 @@ Ext.define('NextThought.model.converters.Users', {
 	AVATARURL: {
 		type: 'AvatarURL',
 		sortType: 'asUCString',
-		convert: function convert(v) {
-			var re = convert.re = (convert.re || /https/i),
+		convert: function convert(v, rec) {
+			var re = convert.re = (convert.re || /https/i), url,
 				needsSecure = re.test(location.protocol) || $AppConfig.server.forceSSL;
 
-			function secure(v,i,a) {
+			if (!v && rec) {
+				url = $AppConfig.server.data.split('/');
+				if (!url.last()) { url.pop() }
+				url.push('users', rec.get('Username'), '@@avatar');
+				return url.join('/');
+			}
+
+			function secure(v, i, a) {
 				v = v.replace('www.gravatar.com', 'secure.gravatar.com').replace('http:', 'https:');
 				if (a) {a[i] = v;}
 				return v;
 			}
 
-			function o(v,i,a) {
+			function o(v, i, a) {
 
 				if (needsSecure) {
 					v = secure(v, i, a);
@@ -68,9 +75,9 @@ Ext.define('NextThought.model.converters.Users', {
 	AVATARURLLIST: {
 		type: 'AvatarURLList',
 		sortType: 'asUCString',
-		convert: function convert(v) {
-			Ext.each(v, function(o,i,a) {
-				a[i] = Ext.data.Types.AVATARURL.convert(o);
+		convert: function convert(v, rec) {
+			Ext.each(v, function(o, i, a) {
+				a[i] = Ext.data.Types.AVATARURL.convert(o, rec);
 			});
 			return v;
 		}
