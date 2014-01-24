@@ -95,7 +95,12 @@ Ext.define('NextThought.view.content.View', {
 
 		this.mon(this.courseAssignments, {
 			scope: this,
-			'show-assignments-tab': 'updateTabs',
+			'hide-assignments-tab': function(view) {
+				this.updateTabs();
+				if (this.layout.getActiveItem() === view) {
+					this.setActiveTab('course-book');
+				}
+			},
 			'failed-to-load': function(view) {
 				if (this.layout.getActiveItem() === view) {
 					this.setActiveTab('course-book');
@@ -202,6 +207,10 @@ Ext.define('NextThought.view.content.View', {
 
 			if (!this.courseDash.hasItems) {
 				tabs = tabs.filter(function(i) {return i.viewId !== 'course-dashboard';});
+			}
+
+			if (!this.courseAssignments.showTab) {
+				tabs = tabs.filter(function(i) {return i.viewId !== 'course-assessment';});
 			}
 
 			if (!this.courseForum.hasBoard) {

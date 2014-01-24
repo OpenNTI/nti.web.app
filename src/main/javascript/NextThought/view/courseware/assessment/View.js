@@ -53,6 +53,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 	courseChanged: function(instance) {
 		var me = this;
+		me.showTab = true;
 		delete me.finished;
 		delete me.assignmentsCollection;
 
@@ -62,10 +63,29 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 		function getLink(rel, e) { return e.getLink(rel) || instance.getLink(rel); }
 
-		function resetView() {
+		function resetView(noAssignments) {
 			if (!isSync()) { return; }
 			me.clearViews();
 			me.maybeUnmask();
+
+			//Do empty state here.
+			if (!noAssignments) {
+				me.body.add({
+					xtype: 'box',
+					autoEl: {
+						cn: {
+							cls: 'empty-state',
+							cn: [
+								{cls: 'header', html: 'No assignments available at this time.'}//,
+								//{cls: 'sub', html: 'Empty.'}
+							]
+						}
+					}
+				});
+			} else {
+				me.showTab = false;
+				me.fireEvent('hide-assignments-tab', me);
+			}
 		}
 
 		if (!isSync()) {
@@ -108,7 +128,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 						if (!me.hasAssignments) {
 							console.debug('The assignments call returned no assignments...');
-							resetView();
+							resetView(false);
 							return;
 						}
 
@@ -125,7 +145,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 					})
 					.fail(function(reason) {
 						console.error('No Assignments will be shown:', reason);
-						resetView();
+						resetView(true);
 					});
 		});
 
@@ -186,8 +206,6 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 		this.forEachView(this.callFunction('clearAssignmentsData'));
 		this.body.removeAll(true);
 		this.navigation.clear();
-
-		//Do empty state here.
 	},
 
 
