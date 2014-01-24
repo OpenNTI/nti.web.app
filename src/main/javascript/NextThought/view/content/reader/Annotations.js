@@ -354,13 +354,15 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		}
 
 		var me = this,
-				rect2 = RectUtils.getFirstNonBoundingRect(range),
-				record = AnnotationUtils.selectionToHighlight(range, null, me.getDocumentElement()),
-				menu,
-				define,
-				offset,
-				redactionRegex = /USSC-HTML|Howes_converted|USvJones2012_converted/i,
-				innerDocOffset;
+			rect2 = RectUtils.getFirstNonBoundingRect(range),
+			record = AnnotationUtils.selectionToHighlight(range, null, me.getDocumentElement()),
+			menu,
+			define,
+			offset,
+			redactionRegex = /USSC-HTML|Howes_converted|USvJones2012_converted/i,
+			innerDocOffset,
+			frame = me.reader.getIframe().get(),
+			win = frame && frame.win;
 
 		if (!record) {
 			return;
@@ -388,6 +390,13 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		define = me.getDefinitionMenuItem(range);
 		if (define) {
 			menu.add(define);
+		}
+
+		if (win && $AppConfig.allowPrintingContent) {
+			menu.add({
+				text: 'Print',
+				handler: function() { win.print(); }
+			});
 		}
 
 		menu.add({
