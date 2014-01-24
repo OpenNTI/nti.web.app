@@ -91,6 +91,9 @@ Ext.application({
 
 		Ext.isIE11p = isIE11p = !Ext.isIE && /Trident/i.test(navigator.userAgent);
 
+		// allow PhantomJS through the browser block - at least far enough for our headless login test
+		Ext.isPhantomJS = /PhantomJS/i.test(navigator.userAgent);
+
 		ios = (function() {
 			if (/iP(hone|od|ad)/.test(navigator.platform)) {
 				var v = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
@@ -111,7 +114,6 @@ Ext.application({
 			reasons.push('Please use IE10 or newer');
 		}
 
-		Ext.isPhantomJS = false;//TODO: detect Phantom and set this.
 		if (Ext.isSafari && Ext.safariVersion < 5.1 && !Ext.isPhantomJS) {
 			reasons.push('Please use the latest Safari available. Currently only 5.1+ is supported.');
 		}
