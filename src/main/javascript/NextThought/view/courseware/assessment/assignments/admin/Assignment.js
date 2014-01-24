@@ -165,6 +165,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 								if (v !== e.value && !Ext.isEmpty(e.value)) {
 									grade.set('value', e.value + ' -');
+									grade.phantom = false;
 									grade.save({
 										url: grade.get('href')
 									});
