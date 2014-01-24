@@ -142,7 +142,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 					me.activeStores.push(store);
 
 					if (groupBy === 'lesson') {
-						me.data.instance.getOutline().done(resolve).fail(drop);
+						resolve(me.data.outline);
 					}
 				});
 			}
@@ -270,27 +270,36 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 
 	setAssignmentsData: function(assignments, history, instance) {
-		this.clearAssignmentsData();
+		var me = this;
+
+		me.clearAssignmentsData();
 
 		if (!assignments) {
 			console.error('No assignments??');
 			return;
 		}
 
-		this.data = {
+		me.data = {
 			assigments: assignments,
 			history: history,
 			instance: instance
 		};
 
-		//Becasue this view has special derived fields, we must just listen for changes on the
-		// assignments collection itself and trigger a refresh. This cannot simply be a store
-		// of HistoryItems.
-		this.applyAssignmentsData();
+		function finish(outline) {
+			me.data.outline = outline;
+			//Becasue this view has special derived fields, we must just listen for changes on the
+			// assignments collection itself and trigger a refresh. This cannot simply be a store
+			// of HistoryItems.
+			me.applyAssignmentsData();
+			//TODO: listen for changes on the assignments object
+			me.updateViewerReferences();
+		}
 
-		//TODO: listen for changes on the assignments object
-
-		this.updateViewerReferences();
+		instance.getOutline()
+				.done(finish)
+				.fail(function(reason) {
+					console.error('Failed to get course outline!', reason);
+				});
 	},
 
 
@@ -301,7 +310,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 		function collect(o) {
 			if (o.doNotShow()) { return; }
-			var id = o.getId(),
+			var id = o.getId(), node,
 				h = history && history.getItem(id);
 
 			lesson = ContentUtils.getLineage(o.get('containerId'));//this function is in need to go asynchronous...but i need it here. :(
@@ -309,7 +318,15 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 			if (lesson.length > 1) {
 				lesson.shift();//discard leaf page
 			}
-			lesson = lesson.reverse().join('|');
+			//make the sorter keep the order
+			node = d.outline.getNode(lesson[0]) || 'ZZZ'; //no node? ZZZ is at the bottom.
+			if (node.get) {
+				node = node.index;
+				node = (node && node.pad && node.pad(3)) || 'ZZZ';
+			}
+
+			lesson = node + '|' + lesson.reverse().join('|');
+
 
 			raw.push({
 				id: id,

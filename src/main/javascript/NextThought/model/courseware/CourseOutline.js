@@ -37,10 +37,9 @@ Ext.define('NextThought.model.courseware.CourseOutline', {
 
 
 	findNode: function(id) {
-		var p = new Promise(),
-			ns = this.navStore;
+		var p = new Promise();
 
-		if (!ns) {
+		if (!this.navStore) {
 			p.reject('Navigation store not loaded');
 			return p;
 		}
@@ -48,18 +47,7 @@ Ext.define('NextThought.model.courseware.CourseOutline', {
 		this.getContents()
 				.fail(function(reason) {p.reject(reason);})
 				.done(function(me) {
-					var legacy, node = (me.get('Items') || []).reduce(function(n, o) {
-						return n || (o.findNode && o.findNode(id));
-					}, null);
-
-					//hack:
-					if (node) {
-						legacy = ns.getById(id);
-						if (legacy) {
-							node.set('title', legacy.get('label'));
-						}
-					}
-
+					var node = me.getNode(id);
 					if (node) {
 						p.fulfill(node);
 					} else {
@@ -68,5 +56,22 @@ Ext.define('NextThought.model.courseware.CourseOutline', {
 				});
 
 		return p;
+	},
+
+
+	getNode: function(id) {
+		var legacy, node = (this.get('Items') || []).reduce(function(n, o) {
+			return n || (o.findNode && o.findNode(id));
+		}, null);
+
+		//hack:
+		if (node) {
+			legacy = this.navStore.getById(id);
+			if (legacy) {
+				node.set('title', legacy.get('label'));
+			}
+		}
+
+		return node;
 	}
 });
