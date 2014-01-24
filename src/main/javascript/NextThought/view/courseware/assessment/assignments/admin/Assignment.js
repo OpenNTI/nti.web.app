@@ -131,14 +131,22 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 								if (!e.record) { return false; }
 
 								var item = e.record.get('item'),
-									noSubmit = item && item.get && (item.get('category_name') === 'no_submit'),
+									student = e.record.get('Creator'),
+									noSubmit = item && item.get && (item.get('category_name') !== 'default'),
 									gradeRec = e.record.get('Grade'),
 									value = gradeRec && gradeRec.get('value'),
 									grades = value && value.split(' '),
 									grade = grades && grades[0];
 
 								if (!gradeRec && noSubmit) {
-									e.record.set('Grade', NextThought.model.courseware.Grade.create());
+									e.record.set('Grade', NextThought.model.courseware.Grade.create({
+										href: [item._gradeBook.get('href'),
+											   encodeURIComponent(item.get('category_name')),
+											   encodeURIComponent(item.get('title')),
+											   student.get ? student.getId() : student
+											  ].join('/')
+
+									}));
 								} else if (!gradeRec) {
 									return false;
 								}
@@ -157,7 +165,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 								if (v !== e.value && !Ext.isEmpty(e.value)) {
 									grade.set('value', e.value + ' -');
-									grade.save();
+									grade.save({
+										url: grade.get('href')
+									});
 								}
 
 								return false;
