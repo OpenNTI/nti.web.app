@@ -55,9 +55,9 @@ Ext.define('NextThought.cache.UserRepository', {
 			//and retrieve data that makes resolving a big chunk of users n^2.  Mixed collection
 			//supports constant lookups if you can do it by key (which we can for users) so replace
 			//the implementation with something faster.
-			this.store.getById = function(theId){
+			this.store.getById = function(theId) {
 				return (this.snapshot || this.data).getByKey(theId);
-			}
+			};
 		}
 		return this.store;
 	},
@@ -115,7 +115,7 @@ Ext.define('NextThought.cache.UserRepository', {
 	},
 
 
-	searchUser: function(query) {
+	/*searchUser: function(query) {
 		var fieldsToMatch = ['Username', 'alias', 'realname', 'email'],
 			regex = new RegExp(query),
 			matches;
@@ -133,7 +133,7 @@ Ext.define('NextThought.cache.UserRepository', {
 			return matched;
 		});
 		return matches;
-	},
+	},*/
 
 
 	mergeUser: function(fromStore, newUser) {
@@ -155,9 +155,9 @@ Ext.define('NextThought.cache.UserRepository', {
 				this.mergeUser(fromStore, user);
 				return fromStore;
 			}
-			else {
-				s.remove(fromStore);
-			}
+
+			s.remove(fromStore);
+
 		}
 		if (this.isDebug) {
 			console.debug('Adding resolved user to store', user.getId(), user);
@@ -210,9 +210,7 @@ Ext.define('NextThought.cache.UserRepository', {
 			return promise;
 		}
 
-		Ext.each(
-			username,
-			function(o) {
+		username.forEach(function(o) {
 				var name, r;
 
 				if (Ext.isString(o)) {
@@ -236,7 +234,7 @@ Ext.define('NextThought.cache.UserRepository', {
 				}
 				names.push(name);
 
-				r = this.resolveFromStore(name);
+				r = me.resolveFromStore(name);
 				if (r && r.raw && (!forceFullResolve || !r.summaryObject)) {
 					maybeFinish(name, r);
 					return;
@@ -248,27 +246,24 @@ Ext.define('NextThought.cache.UserRepository', {
 				//if we are given an ntiid call getObject instead of makeRequest
 				if (ParseUtils.isNTIID(name)) {
 					Service.getObject(name, function(u) {
-						maybeFinish(name, this.cacheUser(u, true));
+						maybeFinish(name, me.cacheUser(u, true));
 					}, function() {
-						var unresolved = User.getUnresolved('Unknown');//dont show ntiid
 						//failed to get by ntiid
-						maybeFinish(name, unresolved);
-					}, this);
+						maybeFinish(name, User.getUnresolved('Unknown'));//dont show ntiid
+					});
 				} else {
 					toResolve.push(name);
 					//Legacy Path begin:
 					if (!isFeature('bulk-resolve-users')) {
-						this.makeRequest(name, {
-							scope: this,
+						me.makeRequest(name, {
+							scope: me,
 							failure: function() {
-								var unresolved = User.getUnresolved(name);
-								//console.log('resturning unresolved user', name);
-								maybeFinish(name, unresolved);
+								maybeFinish(name, User.getUnresolved(name));
 							},
 							success: function(u) {
 								//Note we recache the user here no matter what
 								//if we requestsd it we cache the new values
-								maybeFinish(name, this.cacheUser(u, true));
+								maybeFinish(name, me.cacheUser(u, true));
 							}
 						}, cacheBust);
 					} else {
@@ -276,12 +271,11 @@ Ext.define('NextThought.cache.UserRepository', {
 					}
 					//Legacy Path END
 				}
-			},
-			this);
+			});
 
 		if (toResolve.length > 0 && isFeature('bulk-resolve-users')) {
 			console.debug('Resolving in bulk...', toResolve.length);
-			this.makeBulkRequest(toResolve)
+			me.makeBulkRequest(toResolve)
 				.done(function(users) {
 					//Note we recache the user here no matter what
 					//if we requestsd it we cache the new values
@@ -320,9 +314,11 @@ Ext.define('NextThought.cache.UserRepository', {
 
 
 	__recompose: function(names, lists) {
-		var agg = new Array(names.length),
+		var agg = [],
 			i = lists.length - 1,
 			x, list, u, m = {};
+
+		agg.length = names.length;//JSLint doesn't like the Array(size) constructor. SO, lets just do the two-step version. (declare, then assign length :|)
 
 		names.forEach(function(n, i) { m[n] = i; });
 
@@ -441,12 +437,12 @@ Ext.define('NextThought.cache.UserRepository', {
 
 
 	__makeRequest: function(req) {
-		var w = this.worker, p, a;
+		var w = this.worker, p, a = {};
 		if (!w) {
 			return this.__foregroundRequest(req);
 		}
 
-		a = w.active = w.active || {};
+		a = w.active = w.active || a;
 
 		p = new Promise();
 		if (a.hasOwnProperty(p.id)) {
@@ -485,8 +481,9 @@ Ext.define('NextThought.cache.UserRepository', {
 	 * user while its still resolving, the record will not have a 'raw' property and it will have 'placeholder' set true
 	 * in the 'data' property.
 	 *
-	 * @param username
-	 * @param callbacks
+	 * @param {String} username
+	 * @param {Object} callbacks
+	 * @param {Boolean} cacheBust
 	 */
 	makeRequest: function(username, callbacks, cacheBust) {
 		var me = this,
@@ -587,9 +584,9 @@ Ext.define('NextThought.cache.UserRepository', {
 	presenceChanged: function(username, presence) {
 		var u = this.getStore().getById(username), newPresence;
 		if (this.debug) {console.log('User repository recieved a presence change for ', username, arguments);}
-		newPresence = (presence && presence.isPresenceInfo)
-				? presence
-				: NextThought.model.PresenceInfo.createFromPresenceString(presence, username);
+		newPresence = (presence && presence.isPresenceInfo) ?
+					  presence :
+					  NextThought.model.PresenceInfo.createFromPresenceString(presence, username);
 
 		if (u) {
 			if (this.debug) {

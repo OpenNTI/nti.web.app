@@ -19,7 +19,7 @@ Ext.define('NextThought.view.Main', {
 	id: 'viewport',
 	ui: 'nextthought',
 	minWidth: 1024,
-    touchStartTime: -1,
+	touchStartTime: -1,
 
 	items: [
 		{xtype: 'main-navigation', id: 'nav', region: 'north'},
@@ -91,6 +91,7 @@ Ext.define('NextThought.view.Main', {
 	onTouchMove: function(e) {
 		var touch = e.browserEvent.touches[0],
 			changedTouch = e.browserEvent.changedTouches[0],
+			currTarget,
 			scrollable = e.getTarget('.scrollable'),
 			scrollableElement,
 			mouseMoveEvent,
@@ -109,12 +110,11 @@ Ext.define('NextThought.view.Main', {
 			e.preventDefault();
 		}
 
-        //Don't scroll page if dragging an element in quiz
-        var currTarget = Ext.get(touch.target);
-        if( touch.target.className.indexOf('draggable-area') != -1 ||
-                currTarget.up('.draggable-area')){
-            e.preventDefault();
-        }
+		//Don't scroll page if dragging an element in quiz
+		currTarget = Ext.get(touch.target);
+		if (touch.target.className.indexOf('draggable-area') !== -1 || currTarget.up('.draggable-area')) {
+			e.preventDefault();
+		}
 
 		// Scroll scrollable element on two-finger scrolling
 		if (e.browserEvent.changedTouches[1]) {
@@ -303,7 +303,7 @@ Ext.define('NextThought.view.Main', {
 	},
 
 
-	setupTablet: function() {
+	/*setupTablet: function() {
 		var me = this,
 			o = { height: '100%', width: '100%', overflow: 'hidden', webkitOverflowScrolling: 'none' },
 			cache = {};
@@ -417,7 +417,7 @@ Ext.define('NextThought.view.Main', {
 		};
 
 		this.lockOrientation();
-	},
+	},*/
 
 
 	lockOrientation: function() {

@@ -42,7 +42,7 @@ Ext.define('NextThought.model.converters.Users', {
 
 			if (!v && rec) {
 				url = $AppConfig.server.data.split('/');
-				if (!url.last()) { url.pop() }
+				if (!url.last()) { url.pop(); }
 				url.push('users', rec.get('Username'), '@@avatar');
 				return url.join('/');
 			}

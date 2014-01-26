@@ -57,7 +57,7 @@ Ext.define('NextThought.overrides.dom.Element', {
 	    } else if (bottom > ctBottom) {
 	      newPos = (bottom - ctClientHeight) + this.getHeight();
 	    }
-	    if (newPos != null) {
+	    if (newPos !== null) {
 	      me.scrollChildFly.attach(container).scrollTo('top', newPos, animate);
 	    }
 
@@ -68,7 +68,7 @@ Ext.define('NextThought.overrides.dom.Element', {
 	      } else if (right > ctRight) {
 	        newPos = right - container.clientWidth;
 	      }
-	      if (newPos != null) {
+	      if (newPos !== null) {
 	        me.scrollChildFly.attach(container).scrollTo('left', newPos, animate);
 	      }
 	    }
