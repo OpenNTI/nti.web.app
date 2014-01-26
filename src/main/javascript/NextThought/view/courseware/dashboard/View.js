@@ -174,9 +174,9 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 
 
 		Ext.each(queue.slice(), function(fn) {
-			console.log(fn.$test + ' Started');
+			console.debug(fn.$test + ' Started');
 			fn(date, course, location, courseNode, function finish(o) {
-				console.log(fn.$test + ' Finished');
+				console.debug(fn.$test + ' Finished');
 				queue.pop();
 				if (o) {
 					push[Ext.isArray(o) ? 'apply' : 'call'](tiles, o);
