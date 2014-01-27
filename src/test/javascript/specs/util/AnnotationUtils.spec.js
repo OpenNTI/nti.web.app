@@ -93,13 +93,16 @@ describe('Annotation Utils', function() {
 		beforeEach(function() { setup(); });
 
 		it('should load the test page', function() {
-			var req = new XMLHttpRequest(),
-				flag = false;
+			var flag = false, req;
 
 			runs(function() {
-				req.open('GET', getURL('/annotation-test.html'), true);
-				req.onreadystatechange = function() {if (req.readyState === 4) { flag = true; }};
-				req.send('');
+				Ext.Ajax.request({
+					url: getURL('/annotation-test.html'),
+					callback: function(q, s, r) {
+						flag = true;
+						req = r;
+					}
+				});
 			});
 
 			waitsFor(function() { return flag; }, 'Could not load page?', 1000);
