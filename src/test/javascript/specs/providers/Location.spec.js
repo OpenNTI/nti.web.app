@@ -1,24 +1,25 @@
-describe('Library Store', function(){
+describe('Library Store', function() {
 
-	function isTopicElement(v){
+	function isTopicElement(v) {
 		expect(v).toBeTruthy();
 		expect(v.tagName).toBeTruthy();
 		expect(v.tagName).toBe('topic');
 	}
 
-	beforeEach(function(){
+	beforeEach(function() {
 		Library.clearListeners(); //don't invoke the UI
 		Library.getStore().removeAll();
 		Library.load();
 
 		waitsFor(
-			function(){ return Library.loaded; },
-			"Library load never completed",
+			function() { return Library.loaded; },
+			'Library load never completed',
 			4000
 		);
 	});
 
-	it('can determine navigation', function(){
+
+	it('can determine navigation', function() {
 		var n = ContentUtils.getNavigationInfo('book2-1-1');
 
 		expect(n).toBeTruthy();
@@ -34,7 +35,7 @@ describe('Library Store', function(){
 	});
 
 
-	it('can find the section', function(){
+	it('can find the section', function() {
 		var l = ContentUtils.find('book2-1-1');
 		expect(l).toBeTruthy();
 		expect(l.toc).toBeTruthy();
