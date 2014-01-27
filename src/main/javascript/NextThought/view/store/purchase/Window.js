@@ -173,7 +173,12 @@ Ext.define('NextThought.view.store.purchase.Window', {
 
 		h = footer.getY() - el.getY();
 		el.setHeight(h);
-		Ext.defer(this.getEl().repaint, 10, this.getEl());
+		el = this.getEl();
+		Ext.defer(function() {
+			if (el.dom) {
+				el.repaint();
+			}
+		}, 10);
 	},
 
 
@@ -191,8 +196,12 @@ Ext.define('NextThought.view.store.purchase.Window', {
 			if (!errorEl || !errorEl.getY || !el || !el.getY) {
 				return;
 			}
-			var h = errorEl.getY() - el.getY();
-			el.setHeight(h);
+			try {
+				var h = errorEl.getY() - el.getY();
+				el.setHeight(h);
+			} catch (e) {
+				console.warn(e.stack || e.message || e);
+			}
 		}
 
 		this.errorLabelEl.update(label || 'Error:');

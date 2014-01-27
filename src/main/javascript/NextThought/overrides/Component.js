@@ -18,7 +18,7 @@ Ext.define('NextThought.overrides.Component', {
 		}
 
 		if (this.tooltip) {
-			if (!Ext.isObject(this.tooltip)) {
+			if (!Ext.isObject(this.tooltip) && Ext.QuickTips) {
 				Ext.QuickTips.register({
 					target: this.getEl().id,
 					text: this.tooltip
