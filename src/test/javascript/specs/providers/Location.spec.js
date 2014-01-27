@@ -53,19 +53,19 @@ describe('Library Store', function() {
 
 
 
-	it('can find the title of the section', function(){
+	it('can find the title of the section', function() {
 		expect(ContentUtils.findTitle('book1-1-1')).toBe('section b');
 	});
 
 
 
-	it('can find the title of the book', function(){
+	it('can find the title of the book', function() {
 		var t = ContentUtils.getTitle('/book2/eclipse-toc.xml');
 		expect(t.get('title')).toBe('book2');
 	});
 
 
-	it('can handle Structured NTI IDs', function(){
+	it('can handle Structured NTI IDs', function() {
 		expect(ContentUtils.find('tag:nextthought.com,2011-07-14:AOPS-HTML-prealgebra-69')).toBeTruthy();
 	});
 });
