@@ -65,11 +65,10 @@ Ext.define('NextThought.util.Ranges', {
 		if (!node) {
 			return null;
 		}
-		n = Ext.fly(node);
-		if (n.is(selector)) {
-			return n;
+		if (Ext.DomQuery.is(node, selector)) {
+			return Ext.get(node);
 		}
-		return n.up(selector);
+		return Ext.fly(node).up(selector);
 	},
 
 
@@ -210,10 +209,10 @@ Ext.define('NextThought.util.Ranges', {
 			start, end, newStart, newEnd;
 
 		function test(c) {
-			return c.nodeType === Node.TEXT_NODE
-				|| Anchors.isNodeIgnored(c)
-				|| /^(a|b|i|u|img|li)$/i.test(c.tagName);
-      //				|| c.childNodes.length === 1;
+			return c.nodeType === Node.TEXT_NODE ||
+				   Anchors.isNodeIgnored(c) ||
+				   /^(a|b|i|u|img|li)$/i.test(c.tagName); // ||
+				   //c.childNodes.length === 1;
 		}
 
 		function walkOut(node, direction) {
@@ -260,14 +259,14 @@ Ext.define('NextThought.util.Ranges', {
 
 
 	expandRange: function(range, doc) {
-		var object = this.nodeIfObjectOrInObject(range.commonAncestorContainer)
-				|| this.nodeIfObjectOrInObject(range.startContainer),
+		var object = this.nodeIfObjectOrInObject(range.commonAncestorContainer) ||
+					 this.nodeIfObjectOrInObject(range.startContainer),
 			r;
 
 		if (!object) {
-			if (range.startContainer === range.endContainer
-				&& range.startContainer.nodeType !== Node.TEXT_NODE
-				&& range.startOffset + 1 === range.endOffset) {
+			if (range.startContainer === range.endContainer &&
+				range.startContainer.nodeType !== Node.TEXT_NODE &&
+				range.startOffset + 1 === range.endOffset) {
 				object = this.nodeIfObjectOrInObject(range.startContainer.childNodes[range.startOffset]);
 			}
 		}
