@@ -17,7 +17,7 @@ module.exports = function(config) {
 		'ext-4.2/ext-all-debug.js',
 		'bootstrap.js',
 		'config.js',
-		{pattern: 'ext-4.2/**/*.js', included: false},
+		//{pattern: 'ext-4.2/**/*.js', included: false},
 		{pattern: 'mock/**/*', included: false},
 		{pattern: 'resources/**/*', included: false},
 		{pattern: 'javascript/libs.js', included: false},

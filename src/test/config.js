@@ -8,6 +8,13 @@ var $AppConfig = {
 	server: {
 		host: location.toString().split(/[?#]/)[0].split('/').slice(0, -1).join('/') + '/mock',
 		data: '/dataserver/'
+	},
+	Preferences: {
+		getPreference: function(key, cb, scope) {
+			if (cb && cb.call) {
+				cb.call(scope || this);
+			}
+		}
 	}
 };
 
@@ -80,6 +87,30 @@ var mockService = {
 			],
 			'Class': 'Workspace',
 			'Title': 'Library'
+		},
+		{
+			'Items': [
+				{
+					//'href': '/courses/.json',
+					'accepts': [],
+					'Class': 'Collection',
+					'Title': 'AdministeredCourses'
+				},
+				{
+					//'href': '/courses/.json',
+					'accepts': [],
+					'Class': 'Collection',
+					'Title': 'AllCourses'
+				},
+				{
+					//'href': '/courses/.json',
+					'accepts': [],
+					'Class': 'Collection',
+					'Title': 'EnrolledCourses'
+				}
+			],
+			'Class': 'Workspace',
+			'Title': 'Courses'
 		},
 		{
 			'Links': [

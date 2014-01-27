@@ -37,15 +37,6 @@ Ext.application({
 
 	launch: function() {
 		function go() {
-			$AppConfig.userObject = Ext.create('NextThought.model.User', mockUser, 'test@nextthought.com', mockUser);
-			ObjectUtils.defineAttributes($AppConfig, {
-				username: {
-					getter: function() { try { return this.userObject.getId(); } catch (e) {console.error(e.stack);} },
-					setter: function() { throw 'readonly'; }
-				}
-			});
-			Service = Ext.create('NextThought.model.Service', mockService, $AppConfig.username);
-
 			jasmine.getEnv().addReporter(new jasmine.HtmlReporter());
 			jasmine.getEnv().execute();
 		}
@@ -55,6 +46,7 @@ Ext.application({
 		window.app = this;
 
 		Globals.loadScripts([
+			'karma.paths.js',
 			'javascript/specs/example.spec.js',
 			'javascript/specs/Library.spec.js',
 			'javascript/specs/cache/LocationMeta.spec.js',

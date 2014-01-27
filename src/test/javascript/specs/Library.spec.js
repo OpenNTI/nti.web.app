@@ -1,25 +1,16 @@
-describe('Library Store', function(){
+describe('Library Store', function() {
 
-
-	function isTopicElement(v){
-		expect(v).toBeTruthy();
-		expect(v.tagName).toBeTruthy();
-		expect(v.tagName).toBe('topic');
-	}
-
-
-
-
-
-	beforeEach(function(){
+	beforeEach(function() {
 		Library.clearListeners(); //don't invoke the UI
 		Library.getStore().removeAll();
 		Library.load();
 
+		app.getController('CourseWare').onSessionReady();
+
 		waitsFor(
-			function(){ return Library.loaded; },
-			"Library load never completed",
-			4000
+			function() { return Library.loaded; },
+			'Library load never completed',
+			30000
 		);
 	});
 
@@ -28,7 +19,7 @@ describe('Library Store', function(){
 
 
 
-	it('should have titles (for tests)', function(){
+	it('should have titles (for tests)', function() {
 		expect(Library.getStore().count()).toBeGreaterThan(0);
 	});
 

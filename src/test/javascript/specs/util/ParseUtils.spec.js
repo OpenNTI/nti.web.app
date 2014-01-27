@@ -1,42 +1,45 @@
-describe("Check Parsing Utility Functions", function() {
+describe('Check Parsing Utility Functions', function() {
 
-	describe("parseItems", function(){
+	describe('parseItems', function() {
 
-		it("This Change blew up on Alpha", function(){
+		it('This Change blew up on Alpha', function() {
 			var changeJSON = {
-				"Creator":"chris.utz@nextthought.com",
-				"Last Modified":1334086521.476041,
-				"ChangeType":"Shared",
-				"ID":"tag:nextthought.com,2011-10:chris.utz@nextthought.com-OID-0x1e24:5573657273",
-				"Item":{
-					"startAnchor":"a0000000144",
-					"startOffset":0,
-					"CreatedTime":1334086514.851546,
-					"startHighlightedText":"You know how to add, subtract, multiply, and divide. In fact, you may already know how to solve many of the problems in this chapter. So why do we start this book with an entire chapter on arithmetic? ",
-					"MimeType":"application/vnd.nextthought.highlight",
-					"endAnchor":"",
-					"top":0,
-					"tags":[],
-					"NTIID":"tag:nextthought.com,2011-10:chris.utz@nextthought.com-OID-0x1e24:5573657273",
-					"AutoTags":[],
-					"Class":"Highlight",
-					"startXpath":"id(\"NTIContent\")/DIV[1]/P[1]/text()[1]",
-					"endOffset":29,
-					"endXpath":"id(\"NTIContent\")/DIV[1]/P[1]/text()[1]",
-					"ID":"tag:nextthought.com,2011-10:chris.utz@nextthought.com-OID-0x1e24:5573657273",
-					"endHighlightedText":"You know how to add, subtract",
-					"startHighlightedFullText":"You know how to add, subtract, multiply, and divide. In fact, you may already know how to solve many of the problems in this chapter. So why do we start this book with an entire chapter on arithmetic? ",
-					"anchorPoint":"",
-					"ContainerId":"tag:nextthought.com,2011-10:AOPS-HTML-prealgebra.0",
-					"Creator":"chris.utz@nextthought.com",
-					"Last Modified":1334086521.475648,
-					"OID":"tag:nextthought.com,2011-10:chris.utz@nextthought.com-OID-0x1e24:5573657273",
-					"sharedWith":["jason.madden@nextthought.com"],
-					"anchorType":"",
-					"endHighlightedFullText":"You know how to add, subtract, multiply, and divide. In fact, you may already know how to solve many of the problems in this chapter. So why do we start this book with an entire chapter on arithmetic? ",
-					"left":0
+				'Creator': 'chris.utz@nextthought.com',
+				'Last Modified': 1334086521.476041,
+				'ChangeType': 'Shared',
+				'ID': 'tag:nextthought.com,2011-10:chris.utz@nextthought.com-OID-0x1e24:5573657273',
+				'Item': {
+					'startAnchor': 'a0000000144',
+					'startOffset': 0,
+					'CreatedTime': 1334086514.851546,
+					'startHighlightedText': 'You know how to add, subtract, multiply, and divide. In fact, you may already know how to solve many of the ' +
+											'problems in this chapter. So why do we start this book with an entire chapter on arithmetic? ',
+					'MimeType': 'application/vnd.nextthought.highlight',
+					'endAnchor': '',
+					'top': 0,
+					'tags': [],
+					'NTIID': 'tag:nextthought.com,2011-10:chris.utz@nextthought.com-OID-0x1e24:5573657273',
+					'AutoTags': [],
+					'Class': 'Highlight',
+					'startXpath': 'id(\'NTIContent\')/DIV[1]/P[1]/text()[1]',
+					'endOffset': 29,
+					'endXpath': 'id(\'NTIContent\')/DIV[1]/P[1]/text()[1]',
+					'ID': 'tag:nextthought.com,2011-10:chris.utz@nextthought.com-OID-0x1e24:5573657273',
+					'endHighlightedText': 'You know how to add, subtract',
+					'startHighlightedFullText': 'You know how to add, subtract, multiply, and divide. In fact, you may already know how to solve many of the ' +
+												'problems in this chapter. So why do we start this book with an entire chapter on arithmetic? ',
+					'anchorPoint': '',
+					'ContainerId': 'tag:nextthought.com,2011-10:AOPS-HTML-prealgebra.0',
+					'Creator': 'chris.utz@nextthought.com',
+					'Last Modified': 1334086521.475648,
+					'OID': 'tag:nextthought.com,2011-10:chris.utz@nextthought.com-OID-0x1e24:5573657273',
+					'sharedWith': ['jason.madden@nextthought.com'],
+					'anchorType': '',
+					'endHighlightedFullText': 'You know how to add, subtract, multiply, and divide. In fact, you may already know how to solve many of the ' +
+											  'problems in this chapter. So why do we start this book with an entire chapter on arithmetic? ',
+					'left': 0
 				},
-				"Class":"Change"
+				'Class': 'Change'
 			},
 			result;
 
@@ -47,32 +50,32 @@ describe("Check Parsing Utility Functions", function() {
 
 	});
 
-	describe("NTIID parsing", function(){
+	describe('NTIID parsing', function() {
 
-		var parse = ParseUtils.parseNtiid;
+		var parse = ParseUtils.parseNTIID;
 
-		function theParts(ntiid){
+		function theParts(ntiid) {
 			var parts = [];
 
-			if(!ntiid){
+			if (!ntiid) {
 				return null;
 			}
 
-			if(ntiid.authority){
+			if (ntiid.authority) {
 				parts.push(ntiid.authority.name);
 				parts.push(ntiid.authority.date);
 			}
-			else{
+			else {
 				parts.push(null);
 				parts.push(null);
 			}
 
-			if(ntiid.specific){
+			if (ntiid.specific) {
 				parts.push(ntiid.specific.provider);
 				parts.push(ntiid.specific.type);
 				parts.push(ntiid.specific.typeSpecific);
 			}
-			else{
+			else {
 				parts.push(null);
 				parts.push(null);
 				parts.push(null);
@@ -81,17 +84,17 @@ describe("Check Parsing Utility Functions", function() {
 			return parts;
 		}
 
-		it('Handles complete junk', function(){
+		it('Handles complete junk', function() {
 			var id = 'http://foobar.com';
 			expect(parse(id)).toBeFalsy();
 		});
 
-		it('Handles bad authority', function(){
+		it('Handles bad authority', function() {
 			var id = 'tag:foo:a-b-c';
 			expect(parse(id)).toBeFalsy();
 		});
 
-		it('Parses ntiid', function(){
+		it('Parses ntiid', function() {
 			var id = 'tag:a,b:c-d-e',
 				r = parse(id);
 
@@ -101,7 +104,7 @@ describe("Check Parsing Utility Functions", function() {
 			expect(r.toURLSuffix()).toEqual('#!d/c/e');
 		});
 
-		it('Parses ntiid with no provider', function(){
+		it('Parses ntiid with no provider', function() {
 			var id = 'tag:a,b:d-e',
 				r = parse(id);
 
@@ -111,7 +114,7 @@ describe("Check Parsing Utility Functions", function() {
 			expect(r.toURLSuffix()).toEqual('#!d/e');
 		});
 
-		it('Handles : in the typespecify part', function(){
+		it('Handles : in the typespecify part', function() {
 			var id = 'tag:a,b:c-d-e:f',
 				r = parse(id);
 
@@ -121,7 +124,7 @@ describe("Check Parsing Utility Functions", function() {
 			expect(r.toURLSuffix()).toEqual('#!d/c/e%3Af');
 		});
 
-		it('Escapes provider when setting provider', function(){
+		it('Escapes provider when setting provider', function() {
 			var id = 'tag:a,b:c-d-e:f',
 				r = parse(id);
 
@@ -133,10 +136,10 @@ describe("Check Parsing Utility Functions", function() {
 		});
 	});
 
-	describe("parseNTIFragment", function(){
+	describe('parseNTIFragment', function() {
 		var parse = ParseUtils.parseNtiFragment;
 
-		it('Parses result of ntiid', function(){
+		it('Parses result of ntiid', function() {
 			var fragment = '#!d/c/e',
 				expected = 'tag:nextthought.com,2011-10:c-d-e',
 				r = parse(fragment);
@@ -145,7 +148,7 @@ describe("Check Parsing Utility Functions", function() {
 			expect(r.toString()).toEqual(expected);
 		});
 
-		it('Parses result of ntiid with no provider', function(){
+		it('Parses result of ntiid with no provider', function() {
 			var fragment = '#!d/e',
 				expected = 'tag:nextthought.com,2011-10:d-e',
 				r = parse(fragment);
@@ -154,7 +157,7 @@ describe("Check Parsing Utility Functions", function() {
 			expect(r.toString()).toEqual(expected);
 		});
 
-		it('Parses result of ntiid with : in type specific part', function(){
+		it('Parses result of ntiid with : in type specific part', function() {
 			var fragment = '#!d/c/e%3Af',
 				expected = 'tag:nextthought.com,2011-10:c-d-e:f',
 				r = parse(fragment);

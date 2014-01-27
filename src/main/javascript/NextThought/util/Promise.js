@@ -1,6 +1,18 @@
-Ext.define('NextThought.util.Promise', {});
+/**
+ *  Well crap. These are now starting to pop up in browsers. (Chrome 34 dev has it, and collides with our name...) I was trying to get some tests to work in
+ *  Karma, and noticed we were getting a "TypeError: Promise constructor takes a function argument"... that was odd to me becasue our Promise class did not take
+ *  any arguments in the constructor... so that lead me to discover Futures have been given a global name "Promise" and that our implementation almost exactly
+ *  matches except for the constructor. The standard has a callback to do all the work then reject/fulfill within. :/ Ours, you construct the Promise and return
+ *  turn it while you do your work asynchronously. Grr.
+ *
+ *
+ *  See: http://www.html5rocks.com/en/tutorials/es6/promises/
+ *
+ *  All that to say, I'm blanking out the global version so we don't get the error.
+ */
+
 //Heavily influenced by http://modernjavascript.blogspot.com/2013/08/promisesa-understanding-by-doing.html
-var Promise = (function() {
+window.Promise = (function() {
 	var State = {
 		PENDING: 0,
 		FULFILLED: 1,
@@ -268,3 +280,6 @@ var Promise = (function() {
 
 	return p;
 }());
+
+
+Ext.define('NextThought.util.Promise', {});

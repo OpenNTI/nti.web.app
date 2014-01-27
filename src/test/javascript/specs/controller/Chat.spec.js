@@ -1,8 +1,8 @@
-describe('Chat Controller Tests', function(){
+describe('Chat Controller Tests', function() {
 
 	var controller, socket, oldUserRepo;
 
-	beforeEach(function(){
+	beforeEach(function() {
 		var userRepo = NTITestUtils.newInstanceOfSingleton(UserRepository);
 
 		//Swizzle out the global UserRepository so we don't pollute global state
@@ -27,13 +27,13 @@ describe('Chat Controller Tests', function(){
 		controller.init(app);
 	});
 
-	afterEach(function(){
+	afterEach(function() {
 		UserRepository = oldUserRepo;
 	});
 
-	function precacheUsers(repo){
+	function precacheUsers(repo) {
 
-		function userForName(name){
+		function userForName(name) {
 			return new NextThought.model.User({Username: name});
 		}
 
@@ -45,92 +45,92 @@ describe('Chat Controller Tests', function(){
 		repo.cacheUser(userForName('user2'));
 		repo.cacheUser(userForName('user1'));
 		//set users to online
-		Ext.getStore('PresenceInfo').setPresenceOf($AppConfig.username, NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username,'available'));
-		Ext.getStore('PresenceInfo').setPresenceOf('user2', NextThought.model.PresenceInfo.createPresenceInfo('user2','available'));
+		Ext.getStore('PresenceInfo').setPresenceOf($AppConfig.username, NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username, 'available'));
+		Ext.getStore('PresenceInfo').setPresenceOf('user2', NextThought.model.PresenceInfo.createPresenceInfo('user2', 'available'));
 	};
 
-	it('Is not using the global UserRepo for tests', function(){
+	it('Is not using the global UserRepo for tests', function() {
 		expect(UserRepository).toBeTruthy();
 		expect(UserRepository).not.toBe(oldUserRepo);
 	});
 
-	it('Listens for several socket events', function(){
+	it('Listens for several socket events', function() {
 		var expectedEvents = ['disconnect', 'serverkill', 'chat_enteredRoom', 'chat_exitedRoom',
 							  'chat_roomMembershipChanged', 'chat_setPresenceOfUsersTo',
 							  'chat_recvMessage', 'chat_recvMessageForShadow'];
 
-		Ext.each(expectedEvents, function(e){
+		Ext.each(expectedEvents, function(e) {
 			expect(Ext.isFunction(socket.control[e])).toBeTruthy();
 		});
 	});
 
-	describe('Exit room tests', function(){
-		function createRoomWithOccupants( cid, occupants){
+	describe('Exit room tests', function() {
+		function createRoomWithOccupants(cid, occupants) {
 			return NextThought.model.RoomInfo.create({'Occupants': occupants, 'id': cid});
 		}
 
-		function createChatWindowWithRoom(room){
+		function createChatWindowWithRoom(room) {
 			return Ext.widget('chat-window', {roomInfo: room});
 		}
 
 		var oldRoom, win, currentUser, list;
-		beforeEach(function(){
+		beforeEach(function() {
 			currentUser = $AppConfig.username;
-			list = [ currentUser, 'user2'];
+			list = [currentUser, 'user2'];
 			oldRoom = createRoomWithOccupants('tag:ntiidd-1', list);
 			win = createChatWindowWithRoom(oldRoom);
 			//Overrides
-			controller.getRoomInfoFromSession = function(id){ return oldRoom; };
-			controller.getChatWindow = function(cid){ return win; };
+			controller.getRoomInfoFromSession = function(id) { return oldRoom; };
+			controller.getChatWindow = function(cid) { return win; };
 		});
 
-		afterEach(function(){
+		afterEach(function() {
 			win.close();
 		});
 
-		it("checks if we disable the input field when only one user is left in the chat", function(){
-			var	changedMessage = {'ID': 'tag:ntiidd-1', 'Occupants': [currentUser], 'Class': "RoomInfo", 'NTIID': 'tag:ntiidd-1'};
+		it('checks if we disable the input field when only one user is left in the chat', function() {
+			var	changedMessage = {'ID': 'tag:ntiidd-1', 'Occupants': [currentUser], 'Class': 'RoomInfo', 'NTIID': 'tag:ntiidd-1'};
 
 			expect(win.roomInfo.get('Occupants')).toEqual([currentUser, 'user2']);
-			expect( win.down('chat-entry').isDisabled()).toBeFalsy();
+			expect(win.down('chat-entry').isDisabled()).toBeFalsy();
 
 			//Now let's assume user2 exits the chat and we get 'chat_roomMembershipChanged' socket event
 			controller.onMembershipOrModerationChanged(changedMessage);
 
 			expect(win.roomInfo.get('Occupants')).toEqual([currentUser]);
-			expect( win.down('chat-entry').isDisabled()).toBeTruthy();
+			expect(win.down('chat-entry').isDisabled()).toBeTruthy();
 
 		});
 
-		it('checks if when room changes, the list of original occupants stay the same', function(){
-			var	changedMessage = {'ID': 'tag:ntiidd-1', 'Occupants': [currentUser], 'Class': "RoomInfo", 'NTIID': 'tag:ntiidd-1'};
+		it('checks if when room changes, the list of original occupants stay the same', function() {
+			var	changedMessage = {'ID': 'tag:ntiidd-1', 'Occupants': [currentUser], 'Class': 'RoomInfo', 'NTIID': 'tag:ntiidd-1'};
 
 			//Assume we set the original Occupants list( it usually gets sets when a user enters a room.
 			win.roomInfo.setOriginalOccupants(list.slice());
 
-			expect( win.roomInfo.getOriginalOccupants()).toEqual(list);
-			expect( win.roomInfo.get('Occupants')).toEqual([currentUser, 'user2']);
+			expect(win.roomInfo.getOriginalOccupants()).toEqual(list);
+			expect(win.roomInfo.get('Occupants')).toEqual([currentUser, 'user2']);
 
 			//Now let's assume user2 exits the chat and we change the roomInfo.
 			controller.onMembershipOrModerationChanged(changedMessage);
 
-			expect( win.roomInfo.getOriginalOccupants()).toEqual(list);
-			expect( win.roomInfo.get('Occupants')).toEqual([currentUser]);
+			expect(win.roomInfo.getOriginalOccupants()).toEqual(list);
+			expect(win.roomInfo.get('Occupants')).toEqual([currentUser]);
 
 		});
 	});
 
-	describe('Chat state Tests', function(){
+	describe('Chat state Tests', function() {
 
-		describe('Publish state Test', function(){
+		describe('Publish state Test', function() {
 
-			function createRoomWithStatus(username, state){
+			function createRoomWithStatus(username, state) {
 				var room = NextThought.model.RoomInfo.create();
 				room.setRoomState(username, state);
 				return room;
 			}
 
-			it('Does not publish duplicate states', function(){
+			it('Does not publish duplicate states', function() {
 				var room = createRoomWithStatus('user1', 'composing');
 
 				spyOn(controller, 'postMessage');
@@ -140,7 +140,7 @@ describe('Chat Controller Tests', function(){
 				expect(controller.postMessage).not.toHaveBeenCalled();
 			});
 
-			it('Publishing new state calls post with correct data', function(){
+			it('Publishing new state calls post with correct data', function() {
 				var room = createRoomWithStatus('user1', 'composing'),
 					args, statePayload;
 				spyOn(controller, 'postMessage');
@@ -163,29 +163,31 @@ describe('Chat Controller Tests', function(){
 
 		});
 
-		describe('OnMessage Tests', function(){
-			function createMessage( containerId, channel, user, body){
-				return { 'ContainerId': containerId, 'Creator': user, 'channel': channel, Class: "MessageInfo", body: body || '' };
+		describe('OnMessage Tests', function() {
+			function createMessage(containerId, channel, user, body) {
+				return { 'ContainerId': containerId, 'Creator': user, 'channel': channel, Class: 'MessageInfo', body: body || '' };
 			}
 
 			var room, win;
-			beforeEach( function(){
+			beforeEach(function() {
 				room = NextThought.model.RoomInfo.create();
 				win = Ext.widget('chat-window', {roomInfo: room});
 				//set channel map
 				controller.setChannelMap();
 				//Override this method for the purpose of this test.
-				controller.getChatWindow = function(cid){
+				controller.getChatWindow = function(/*cid*/) {
 					return win;
 				};
 			});
 
-			afterEach(function(){
+			afterEach(function() {
 				win.close();
 			});
 
-			it("Checks if we change state to 'active' when a user receive his own message", function(){
-				var user ='user1', msg = createMessage('ntiid-1', 'DEFAULT', user, ['Hey!']);
+			it('Checks if we change state to \'active\' when a user receive his own message', function() {
+				var user = 'user1',
+					msg = createMessage('ntiid-1', 'DEFAULT', user, ['Hey!']);
+
 				spyOn(controller, 'updateChatState').andCallThrough();
 
 				//Arbitrary set room to composing
@@ -196,8 +198,8 @@ describe('Chat Controller Tests', function(){
 				expect(room.getRoomState(user)).toEqual('active');
 			});
 
-			it('Checks if we call the appropriate method based on channel type', function(){
-				var msg = createMessage('ntiid-1', 'STATE', 'user1', {state:'paused'});
+			it('Checks if we call the appropriate method based on channel type', function() {
+				var msg = createMessage('ntiid-1', 'STATE', 'user1', {state: 'paused'});
 				spyOn(controller, 'onReceiveStateChannel').andCallThrough();
 				spyOn(controller, 'onMessageDefaultChannel').andCallThrough();
 				spyOn(controller, 'updateChatState').andCallThrough();
@@ -207,35 +209,35 @@ describe('Chat Controller Tests', function(){
 				expect(controller.updateChatState).toHaveBeenCalledWith('user1', 'paused', win, false);
 				expect(controller.onMessageDefaultChannel).not.toHaveBeenCalled();
 				//FIXME: it fails, because we call the body of the method not the name of the method.
-//				expect(controller.onReceiveStateChannel).toHaveBeenCalled();
+				//expect(controller.onReceiveStateChannel).toHaveBeenCalled();
 			});
 		});
 	});
-	
-	describe('linkClicked tests',function(){
-		it('Passing external',function(){
+
+	describe('linkClicked tests', function() {
+		it('Passing external', function() {
 			var link = 'www.google.com',
-				result = controller.getHashChange(link,"www.facebook.com");
+				result = controller.getHashChange(link, 'www.facebook.com');
 
 			expect(result).toBeNull();
 		});
 
-		it('Passing internal',function(){
-			var link = 'www.google.com/#!hash';
-				result = controller.getHashChange(link,"www.google.com");
+		it('Passing internal', function() {
+			var link = 'www.google.com/#!hash',
+				result = controller.getHashChange(link, 'www.google.com');
 
 			expect(result).toBe('!hash');
 		});
 	});
 
-	describe('PresenceInfo tests',function(){
+	describe('PresenceInfo tests', function() {
 		var userNames, presenceObjects;
-		beforeEach(function(){
+		beforeEach(function() {
 			var i;
-			userNames = ['firstName','secondName','thirdName'];
+			userNames = ['firstName', 'secondName', 'thirdName'];
 			presenceObjects = {};
 
-			for(i = 0; i < userNames.length; i++){
+			for (i = 0; i < userNames.length; i++) {
 				presenceObjects[userNames[i]] = {
 					'Class' : 'PresenceInfo',
 					'username' : userNames[i],
@@ -245,46 +247,46 @@ describe('Chat Controller Tests', function(){
 				};
 			}
 
-			spyOn(socket,'emit');
+			spyOn(socket, 'emit');
 		});
 
-		it("chat_setPresence is emitted in onSessionReady", function(){
+		it('chat_setPresence is emitted in onSessionReady', function() {
 			controller.onSessionReady();
 
-			expect(socket.emit).toHaveBeenCalledWith('chat_setPresence',jasmine.any(Object),jasmine.any(Function));
+			expect(socket.emit).toHaveBeenCalledWith('chat_setPresence', jasmine.any(Object), jasmine.any(Function));
 		});
 
-		describe('test maybeHandleChatEvents', function(){
+		describe('test maybeHandleChatEvents', function() {
 
-			beforeEach(function(){
+			beforeEach(function() {
 				controller.mockChatEventHandler = Ext.emptyFn;
 
-				spyOn(controller,'mockChatEventHandler');
+				spyOn(controller, 'mockChatEventHandler');
 			});
 
-			afterEach(function(){
+			afterEach(function() {
 				delete controller.mockChatEventHandler;
 				controller.availableForChat = false;
 			});
 
-			it('availableForChat is false',function(){
+			it('availableForChat is false', function() {
 				var fn;
 
 				controller.availableForChat = false;
 
-				fn = controller.createHandlerForChatEvents(controller.mockChatEventHandler,'mock event');
+				fn = controller.createHandlerForChatEvents(controller.mockChatEventHandler, 'mock event');
 
 				fn.apply(controller);
 
 				expect(controller.mockChatEventHandler).not.toHaveBeenCalled();
 			});
 
-			it('availableForChat is true',function(){
+			it('availableForChat is true', function() {
 				var fn;
 
 				controller.availableForChat = true;
 
-				fn = controller.createHandlerForChatEvents(controller.mockChatEventHandler,'mock event');
+				fn = controller.createHandlerForChatEvents(controller.mockChatEventHandler, 'mock event');
 
 				fn.apply(controller);
 
@@ -292,25 +294,25 @@ describe('Chat Controller Tests', function(){
 			});
 		});
 
-		describe('handleSetPresence', function(){
+		describe('handleSetPresence', function() {
 
-			function checkSetPresence(){
+			function checkSetPresence() {
 				var i, presence,
 					store = controller.getPresenceInfoStore();
 
 				controller.handleSetPresence(presenceObjects);
 
-				for(i = 0; i < userNames.length; i++){
-					presence = store.getPresenceOf(userNames[i])
+				for (i = 0; i < userNames.length; i++) {
+					presence = store.getPresenceOf(userNames[i]);
 					expect(presence.get('username')).toBe(userNames[i]);
 					expect(presence.get('type')).toBe('available');
 				}
 			}
 
-			it('Passing key value json without the current user',checkSetPresence);
+			it('Passing key value json without the current user', checkSetPresence);
 
-			it('Passing key value json with the current user',function(){
-				var current = $AppConfig.userObject
+			it('Passing key value json with the current user', function() {
+				var current = $AppConfig.userObject;
 
 				presenceObjects[current.get('Username')] = {
 					'Class' : 'PresenceInfo',
@@ -318,7 +320,7 @@ describe('Chat Controller Tests', function(){
 					'type' : 'available',
 					'show' : 'chat',
 					'status' : ''
-				}
+				};
 
 				checkSetPresence();
 				expect(controller.availableForChat).toBeTruthy();
@@ -328,51 +330,50 @@ describe('Chat Controller Tests', function(){
 			});
 		});
 
-		describe("changePresence Tests",function(){
+		describe('changePresence Tests', function() {
 
-			it("Passing just a type", function(){
-				var model = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username,'unavailable', 'chat','');
+			it('Passing just a type', function() {
+				var model = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username, 'unavailable', 'chat', null);
 
 				controller.changePresence('unavailable');
 
-				expect(socket.emit).toHaveBeenCalledWith('chat_setPresence',model.asJSON(), jasmine.any(Function));
+				expect(socket.emit).toHaveBeenCalledWith('chat_setPresence', model.asJSON(), jasmine.any(Function));
 			});
 
 		});
 
-		describe("change presence event handler tests", function(){
-			beforeEach(function(){
-				spyOn(controller,'changePresence').andCallThrough();
+		describe('change presence event handler tests', function() {
+			beforeEach(function() {
+				spyOn(controller, 'changePresence').andCallThrough();
 			});
 
-			it("set-chat-type test", function(){
+			it('set-chat-type test', function() {
 				var show = $AppConfig.userObject.get('Presence').get('show'),
 					status = $AppConfig.userObject.get('Presence').get('status'),
-					presence = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username,'unavailable',show,status || '');
+					presence = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username, 'unavailable', show, status || null);
 
-				controller.changeType("unavailable");
+				controller.changeType('unavailable');
 				expect(controller.changePresence).toHaveBeenCalledWith('unavailable', show, status);//the default values for show and status
-				expect(socket.emit).toHaveBeenCalledWith("chat_setPresence", presence.asJSON(), jasmine.any(Function));
+				expect(socket.emit).toHaveBeenCalledWith('chat_setPresence', presence.asJSON(), jasmine.any(Function));
 			});
 
-			it("set-chat-show test", function(){
+			it('set-chat-show test', function() {
 				var status = $AppConfig.userObject.get('Presence').get('status'),
-					presence = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username, 'available','chat',status || '');
+					presence = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username, 'available', 'chat', status || null);
 
-				controller.changeShow("chat");
-				expect(controller.changePresence).toHaveBeenCalledWith("available","chat",status);
-				expect(socket.emit).toHaveBeenCalledWith("chat_setPresence", presence.asJSON(), jasmine.any(Function));
+				controller.changeShow('chat');
+				expect(controller.changePresence).toHaveBeenCalledWith('available', 'chat', status);
+				expect(socket.emit).toHaveBeenCalledWith('chat_setPresence', presence.asJSON(), jasmine.any(Function));
 			});
 
-			it("set-chat-status test", function(){
+			it('set-chat-status test', function() {
 				var show = $AppConfig.userObject.get('Presence').get('show'),
 					type = $AppConfig.userObject.get('Presence').get('type'),
-					presence = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username,type,show,'');
-				//the state is set to '' because isFeature(custom-status) is false causing the status to be set to ''
+					presence = NextThought.model.PresenceInfo.createPresenceInfo($AppConfig.username, type, show, 'New Status');
 
-				controller.changeStatus("New Status");
-				expect(controller.changePresence).toHaveBeenCalledWith(type, show, "New Status");
-				expect(socket.emit).toHaveBeenCalledWith("chat_setPresence", presence.asJSON(), jasmine.any(Function));
+				controller.changeStatus('New Status');
+				expect(controller.changePresence).toHaveBeenCalledWith(type, show, 'New Status');
+				expect(socket.emit).toHaveBeenCalledWith('chat_setPresence', presence.asJSON(), jasmine.any(Function));
 			});
 		});
 	});
