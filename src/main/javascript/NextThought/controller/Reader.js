@@ -185,7 +185,7 @@ Ext.define('NextThought.controller.Reader', {
 		function fail(req, resp) {
 			var location = ContentUtils.getLocation(id),
 				data;
-			if (resp.status === 404 && location) {
+			if (resp && resp.status === 404 && location) {
 
 				data = DomUtils.parseDomObject(location.location);
 				data['attribute-data-href'] = getURL(data['attribute-href'], location.root);
@@ -196,7 +196,7 @@ Ext.define('NextThought.controller.Reader', {
 
 
 				me.showCardTarget(r, data, false, callback);
-			} else {
+			} else if (resp) {
 				console.error(resp.responseText);
 			}
 		}

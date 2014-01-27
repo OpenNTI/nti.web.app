@@ -102,7 +102,7 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 
 		function fail(req, resp) {
 			console.log('there was an error retrieving the object.', arguments);
-			if (resp.status === 404) {
+			if (resp && resp.status === 404) {
 				me.deleted = true;
 			}
 			fillInName();
