@@ -6,7 +6,7 @@ var $AppConfig = {
 	debugSocket: true,
 	debugSocketVerbosely: true,
 	server: {
-		host: location.toString().split(/[?#]/)[0].split('/').slice(0, -1).join('/') + '/mock',
+		host: location.toString().split(/[?#]/)[0].split('/').slice(0, -1).join('/') + (window.testRoot || '/') + 'mock',
 		data: '/dataserver/'
 	},
 	Preferences: {

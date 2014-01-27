@@ -2,76 +2,74 @@
 // Generated on Thu Nov 07 2013 17:51:02 GMT-0600 (CST)
 
 module.exports = function(config) {
-  config.set({
+	config.set({
 
-    // base path, that will be used to resolve files and exclude
-    basePath: './',
-
-
-    // frameworks to use
-    frameworks: ['jasmine'],
+		// base path, that will be used to resolve files and exclude
+		basePath: './',
 
 
-    // list of files / patterns to load in the browser
-    files: [
-		'ext-4.2/ext-all-debug.js',
-		'bootstrap.js',
-		'config.js',
-		//{pattern: 'ext-4.2/**/*.js', included: false},
-		{pattern: 'mock/**/*', included: false},
-		{pattern: 'resources/**/*', included: false},
-		{pattern: 'javascript/libs.js', included: false},
-		{pattern: 'javascript/NextThought/**/*.js', included: false},
-		'karma.paths.js',
-		'javascript/specs/**/*.js'
-    ],
+		// frameworks to use
+		frameworks: ['jasmine'],
 
 
-    // list of files to exclude
-    exclude: [
-		'run-jasmine.js'
-    ],
+		// list of files / patterns to load in the browser
+		files: [
+			'ext-4.2/ext-all-debug.js',
+			'karma.paths.js',
+			'bootstrap.js',
+			'config.js',
+			{pattern: 'ext-4.2/src/ux/ajax/*.js', included: false},
+			{pattern: 'mock/**/*', included: false},
+			{pattern: 'resources/lib/**/*', included: false},
+			{pattern: 'javascript/libs.js', included: false},
+			{pattern: 'javascript/NextThought/**/*.js', included: false},
+			{pattern: 'javascript/specs/**/*.js', included: false},
+			'javascript/app.js'
+		],
 
 
-    // test results reporter to use
-    // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-    reporters: ['progress'],
+		// list of files to exclude
+		exclude: [],
 
 
-    // web server port
-    port: 9876,
+		// test results reporter to use
+		// possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
+		reporters: ['progress'],
+
+		// web server port
+		port: 9876,
 
 
-    // enable / disable colors in the output (reporters and logs)
-    colors: true,
+		// enable / disable colors in the output (reporters and logs)
+		colors: true,
 
 
-    // level of logging
-    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
+		// level of logging
+		// possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+		logLevel: config.LOG_ERROR,
 
 
-    // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: true,
+		// enable / disable watching file and executing tests whenever any file changes
+		autoWatch: true,
 
 
-    // Start these browsers, currently available:
-    // - Chrome
-    // - ChromeCanary
-    // - Firefox
-    // - Opera (has to be installed with `npm install karma-opera-launcher`)
-    // - Safari (only Mac; has to be installed with `npm install karma-safari-launcher`)
-    // - PhantomJS
-    // - IE (only Windows; has to be installed with `npm install karma-ie-launcher`)
-    browsers: ['Chrome'],
+		// Start these browsers, currently available:
+		// - Chrome
+		// - ChromeCanary
+		// - Firefox
+		// - Opera (has to be installed with `npm install karma-opera-launcher`)
+		// - Safari (only Mac; has to be installed with `npm install karma-safari-launcher`)
+		// - PhantomJS
+		// - IE (only Windows; has to be installed with `npm install karma-ie-launcher`)
+		browsers: ['Chrome'],
 
 
-    // If browser does not capture in given timeout [ms], kill it
-    captureTimeout: 60000,
+		// If browser does not capture in given timeout [ms], kill it
+		captureTimeout: 60000,
 
 
-    // Continuous Integration mode
-    // if true, it capture browsers, run tests and exit
-    singleRun: true
-  });
+		// Continuous Integration mode
+		// if true, it capture browsers, run tests and exit
+		singleRun: 0
+	});
 };
