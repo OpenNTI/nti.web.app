@@ -1,13 +1,17 @@
 var tests = [];
-for (var file in window.__karma__.files) {
-  if (window.__karma__.files.hasOwnProperty(file)) {
-    if (/spec\.js$/.test(file)) {
-      tests.push(file);
-    }
-  }
-}
+(function() {
+	var file, files = window.__karma__.files;
+	for (file in files) {
+		if (files.hasOwnProperty(file)) {
+			if (/spec\.js$/.test(file)) {
+				tests.push(file);
+			}
+		}
+	}
+}());
 
-// make it async
+
+/** make it async */
 window.__karma__.loaded = function() {};
 
 
@@ -58,27 +62,11 @@ Ext.application({
 		});
 		window.Service = NextThought.model.Service.create(mockService, $AppConfig.username);
 
+		setupSimlets();
+
 		NextThought.phantomRender = true;
 
 		window.app = this;
 		Globals.loadScripts(tests, window.__karma__.start);
 	}
 });
-
-var uxCheck = setInterval(function() {
-	function fail(a, s, b) {
-		if (!s || b.status === 404) {
-			console.error('You need to move or link the <ext>/examples/ux directory to <ext>/src/ux');
-		}
-	}
-
-	var r = {
-		url: Ext.Loader.getPath('Ext') + '/ux/ajax/SimManager.js',
-		callback: fail
-	};
-
-	try {
-		Ext.Ajax.request(r);
-		clearInterval(uxCheck);
-	} catch (e) {}
-},1000);

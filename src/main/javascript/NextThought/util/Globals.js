@@ -495,11 +495,11 @@ Ext.define('NextThought.util.Globals', {
 	getResourceURL: function(name) {
 		var url, d = document.createElement('div');
 		d.setAttribute('class', name);
-		document.body.appendChild(d);
-		url = Ext.fly(d).getStyle('background-image');
-		document.body.removeChild(d);
 		try {
-		return (/^url\("?([^"\)]+)"?\)$/).exec(url)[1];
+			document.body.appendChild(d);
+			url = Ext.fly(d).getStyle('background-image');
+			document.body.removeChild(d);
+			return (/^url\("?([^"\)]+)"?\)$/).exec(url)[1];
 		}
 		catch (e) {
 			return null;

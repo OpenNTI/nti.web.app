@@ -14,16 +14,15 @@ module.exports = function(config) {
 
 		// list of files / patterns to load in the browser
 		files: [
-			'ext-4.2/ext-all-debug.js',
-			'karma.paths.js',
-			'bootstrap.js',
-			'config.js',
 			{pattern: 'ext-4.2/src/ux/ajax/*.js', included: false},
-			{pattern: 'mock/**/*', included: false},
 			{pattern: 'resources/lib/**/*', included: false},
 			{pattern: 'javascript/libs.js', included: false},
 			{pattern: 'javascript/NextThought/**/*.js', included: false},
 			{pattern: 'javascript/specs/**/*.js', included: false},
+			'ext-4.2/ext-all-debug.js',
+			'karma.paths.js',
+			'bootstrap.js',
+			'config.js',
 			'javascript/app.js'
 		],
 
@@ -70,6 +69,6 @@ module.exports = function(config) {
 
 		// Continuous Integration mode
 		// if true, it capture browsers, run tests and exit
-		singleRun: 0
+		singleRun: true
 	});
 };
