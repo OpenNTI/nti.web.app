@@ -225,6 +225,8 @@ Ext.define('NextThought.view.courseware.enrollment.Window', {
 			return;
 		}
 
+		this.confirmEl.addCls('disabled');
+
 		var checkState = this.checkboxEl.dom.checked;
 
 		this.down('[onConfirm]').onConfirm(this, null, checkState);
