@@ -592,8 +592,13 @@ function() {
 
 	function makeImage(prop) {
 		var src = Globals[prop];
+		src = getResourceURL(src);
+		if (!src) {
+			console.warn('No Image for: ' + prop);
+			return;
+		}
 		Globals[prop] = new Image();
-		Globals[prop].src = getResourceURL(src);
+		Globals[prop].src = src;
 	}
 	makeImage('CANVAS_URL_SHAPE_BROKEN_IMAGE');
 	makeImage('CANVAS_BROKEN_IMAGE');
