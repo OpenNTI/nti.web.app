@@ -123,7 +123,7 @@ $button-text-weights: 500,500,600,500;
 .x-btn-blue-large,
 .x-btn-blue-medium {
 	cursor: pointer;
-	a {
+	.x-btn-button {
 		padding: 8px 20px;
 		letter-spacing: 0.1em;
 		background: #3fb3f6;

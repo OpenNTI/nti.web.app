@@ -24,7 +24,7 @@
 	}
 
 	.x-btn-account-small {
-		&, a[role=button] {
+		&, .x-btn-button {
 			height: 35px;
 		}
 
@@ -172,7 +172,7 @@
 	.footer {
 		.x-btn-flat-medium {
 			cursor: pointer;
-			a[role=button] {
+			.x-btn-button {
 				background: none;
 				border: none;
 				padding: 12px 20px;
@@ -197,11 +197,11 @@
 		}
 
 		.x-btn-flat-blue-medium {
-			&, a[role=button]{
+			&, .x-btn-button{
 				border-radius: 0 0 3px 0;
 			}
 			cursor: pointer;
-			a[role=button] {
+			.x-btn-button {
 				background: $primary-blue;
 				border: 1px solid $border-blue;
 				padding: 12px 20px;
@@ -219,7 +219,7 @@
 
 
 			&.x-btn-disabled {
-				a[role=button] {
+				.x-btn-button {
 					span { opacity: 1; }
 
 					cursor: default;
