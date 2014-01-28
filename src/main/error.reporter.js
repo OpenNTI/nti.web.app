@@ -37,36 +37,47 @@
 	function hook() {
 		var onerror = window.onerror || function() {};
 		window.onerror = function(msg, url, line, column, errObj) {
-			var me = this, args = arguments, collectedLog = '[]', message, count;
+			var me = this, args = arguments, collectedLog = '[]', message = '', data = {}, count;
 			function escape(s) {
 				return (s || '').toString().replace(/"/g, '\\"');
 			}
 			try {
-				message = '{"message":"' + escape(msg) +
-										'","file":"' + escape(url) +
-										'","line":"' + escape(line) +
-										'","char":"' + escape(column) +
-						  errObj ? '","stacktrace":"' + escape(errObj.stack || errObj) : '';
-
-				count = seenErrors[message] = (seenErrors[message] || 0) + 1;
+				count = seenErrors[msg] = (seenErrors[msg] || 0) + 1;
 				if (count > 1 && count % 100 !== 0) {
 					return;
 				}
 
-				message += '","count":' + count;
-				if (console.getCollected) {
-					collectedLog = console.getCollected();
-					message += ',"capturedLog":' + collectedLog;
-				}
+				try {
+					data = {
+						message: msg,
+						file: url,
+						line: line,
+						char: column,
+						stacktrace: errObj && (errObj.stack || errObj)
+					};
 
-				message += '}';
+					if (console.getCollected) {
+						data.collectedLog = console.getCollected();
+					}
+
+					message = JSON.stringify(data);
+				} catch (e) {
+					message = '{"message":"' + escape(msg) +
+								'","file":"' + escape(url) +
+								'","line":"' + escape(line) +
+								'","char":"' + escape(column) +
+								'","count":' + count +
+							  	',"JSON": "Not defined"' +
+							  '}';
+				}
 
 				sendRequest(
 						'/dataserver2/@@send-crash-report',
 						function() {onerror.apply(me, args);},
 						message
 				);
-			} catch (e) {
+
+			} catch (e2) {
 				onerror.apply(me, args);
 			}
 		};

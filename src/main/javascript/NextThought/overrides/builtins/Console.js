@@ -35,7 +35,7 @@ Ext.define('NextThought.overrides.builtins.Console', function() {
 
 	console.getCollected = function() {
 		try {
-			return Ext.encode(log);
+			return log;
 		}
 		finally {
 			log = [];
