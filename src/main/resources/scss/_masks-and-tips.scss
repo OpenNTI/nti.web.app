@@ -147,8 +147,8 @@
 .message-bar{
 	color: $secondary-grey;
 	background-color: #fffbe3;
-	border: 3px solid #f5e28a;
-	border-width: 0 0 0 3px;
+	border-width: 0;
+	border-bottom: 3px solid #f5e28a;
 	position: fixed;
 	left: 0;
 	right: 0;
@@ -156,7 +156,7 @@
 	z-index: 999999;
 	text-align: center;
 	line-height: 32px;
-	padding: 2px 210px 0 210px;
+	padding: 2px 20% 0;
 	box-shadow: 0 1px 5px 0px rgba(0,0,0,.5);
 
 	a{
@@ -175,14 +175,17 @@
 
 	.remember{
 		display: inline-block;
-		position: absolute;
-		//position: relative;
-		//float: right;
-		right: 0px;
-		top: 0px;
+		//position: absolute;
+		position: relative;
+		float: right;
+		//right: 0px;
+		//top: 0px;
 		text-align: left;
 		padding-left: 25px;
-		width: 200px;
+		//width: 200px;
+		width: 33%;
+		margin: 0 -33% 0 3%;
+
 		&::after{
 			content: ' ';
 			position: absolute;
