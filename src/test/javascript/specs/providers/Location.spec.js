@@ -2,8 +2,8 @@ describe('Library Store', function() {
 
 	function isTopicElement(v) {
 		expect(v).toBeTruthy();
-		expect(v.tagName).toBeTruthy();
-		expect(v.tagName).toBe('topic');
+		expect(v && v.tagName).toBeTruthy();
+		expect(v && v.tagName).toBe('topic');
 	}
 
 	beforeEach(function() {
@@ -20,23 +20,15 @@ describe('Library Store', function() {
 
 
 	it('can determine navigation', function() {
-		var n = ContentUtils.getNavigationInfo('book2-1-1');
-
+		var n = ContentUtils.getNavigationInfo('tag:nextthought.com,2011-10:test-HTML-book2-1-1');
 		expect(n).toBeTruthy();
-		isTopicElement(n.current);
-		isTopicElement(n.next);
-		isTopicElement(n.previous);
-
-		expect(n.hasNext).toBeTruthy();
-		expect(n.hasPrevious).toBeTruthy();
-
-		expect(n.nextRef).toBeTruthy();
-		expect(n.previousRef).toBeTruthy();
+		expect(n.next).toBe('tag:nextthought.com,2011-10:test-HTML-book2-1-2');
+		expect(n.previous).toBe('tag:nextthought.com,2011-10:test-HTML-book2-1-0');
 	});
 
 
 	it('can find the section', function() {
-		var l = ContentUtils.find('book2-1-1');
+		var l = ContentUtils.find('tag:nextthought.com,2011-10:test-HTML-book2-1-1');
 		expect(l).toBeTruthy();
 		expect(l.toc).toBeTruthy();
 		expect(l.NTIID).toBeTruthy();
@@ -54,13 +46,13 @@ describe('Library Store', function() {
 
 
 	it('can find the title of the section', function() {
-		expect(ContentUtils.findTitle('book1-1-1')).toBe('section b');
+		expect(ContentUtils.findTitle('tag:nextthought.com,2011-10:test-HTML-book1-1-1')).toBe('section b');
 	});
 
 
 
 	it('can find the title of the book', function() {
-		var t = ContentUtils.getTitle('/book2/eclipse-toc.xml');
+		var t = Library.getTitle('/book2/eclipse-toc.xml');
 		expect(t.get('title')).toBe('book2');
 	});
 

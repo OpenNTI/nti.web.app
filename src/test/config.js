@@ -179,10 +179,10 @@ window.setupSimlets = function() {
 
 	simlets[$AppConfig.server.host + '/book1/eclipse-toc.xml'] = {
 		type: 'basic',
-		responseText: '<toc href="file1" label="book1" ntiid="book1">' +
-					  '<topic href="file2" label="chapter1" ntiid="book1-1" thumbnail="donttrimme">' +
-					  '<topic href="file3" label="section a" ntiid="book1-1-0" thumbnail="donttrimme"/>' +
-					  '<topic href="file4" label="section b" ntiid="book1-1-1" thumbnail="donttrimme"/>' +
+		responseText: '<toc href="file1" label="book1" ntiid="tag:nextthought.com,2011-10:test-HTML-book1">' +
+					  '<topic href="file2" label="chapter1" ntiid="tag:nextthought.com,2011-10:test-HTML-book1-1" thumbnail="donttrimme">' +
+					  '<topic href="file3" label="section a" ntiid="tag:nextthought.com,2011-10:test-HTML-book1-1-0" thumbnail="donttrimme"/>' +
+					  '<topic href="file4" label="section b" ntiid="tag:nextthought.com,2011-10:test-HTML-book1-1-1" thumbnail="donttrimme"/>' +
 					  '</topic>' +
 					  '</toc>'
 	};
@@ -190,11 +190,11 @@ window.setupSimlets = function() {
 
 	simlets[$AppConfig.server.host + '/book2/eclipse-toc.xml'] = {
 		type: 'basic',
-		responseText: '<toc href="file1" label="book2" ntiid="book2">' +
-					  '<topic href="file2" label="a" ntiid="book2-1" thumbnail="donttrimme">' +
-					  '<topic href="file3" label="b" ntiid="book2-1-0" thumbnail="donttrimme"/>' +
-					  '<topic href="file4" label="c" ntiid="book2-1-1" thumbnail="donttrimme"/>' +
-					  '<topic href="file4" label="c" ntiid="book2-1-2" thumbnail="donttrimme"/>' +
+		responseText: '<toc href="file1" label="book2" ntiid="tag:nextthought.com,2011-10:test-HTML-book2">' +
+					  '<topic href="file2" label="a" ntiid="tag:nextthought.com,2011-10:test-HTML-book2-1" thumbnail="donttrimme">' +
+					  '<topic href="file3" label="b" ntiid="tag:nextthought.com,2011-10:test-HTML-book2-1-0" thumbnail="donttrimme"/>' +
+					  '<topic href="file4" label="c" ntiid="tag:nextthought.com,2011-10:test-HTML-book2-1-1" thumbnail="donttrimme"/>' +
+					  '<topic href="file4" label="c" ntiid="tag:nextthought.com,2011-10:test-HTML-book2-1-2" thumbnail="donttrimme"/>' +
 					  '</topic>' +
 					  '</toc>'
 	};
