@@ -79,8 +79,8 @@ Ext.define('NextThought.view.library.View', {
 		tabs.forEach(markSelected);
 
 		if (active && !active.showPage) {
-			//if the active tab isn't showing set it to the last time, which for now is the course catalog
-			this.setActiveTab((tabs[tabs.length - 1] || {}).viewId);
+			//if the active tab isn't showing set it to the first one, which for now is the course catalog
+			this.setActiveTab((tabs[0] || {}).viewId);
 		}
 
 		return tabs;
