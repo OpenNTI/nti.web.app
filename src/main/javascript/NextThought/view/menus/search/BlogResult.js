@@ -82,6 +82,10 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 			var tags = r.get('headline').get('tags'), tagMsg;
 			me.renderData = Ext.apply(me.renderData, r.getData());
 
+			tags = tags.filter(function(t) {
+				return !ParseUtils.isNTIID(t);
+			});
+
 			//check how many tags there are and display accordingly
 			if (Ext.isEmpty(tags)) {
 				//no tags display nothing
