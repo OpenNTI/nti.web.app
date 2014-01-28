@@ -58,11 +58,12 @@ Ext.define('NextThought.view.content.Navigation', {
 
 
 	onUpHover: function(e) {
+		var scrollEl = this.up('[getMainTabbarMenu]');
 		e.stopEvent();
 		if (!e.getTarget('.has-alt-tabbar') || this.hasNoTabbar) { return; }
 
 		if (!this.upMenu && !this.hasNoTabbar) {
-			this.upMenu = this.buildMainTabbarMenu();
+			this.upMenu = scrollEl.getMainTabbarMenu();
 			if (!this.upMenu) {
 				this.hasNoTabbar = true;
 				return;
@@ -187,27 +188,6 @@ Ext.define('NextThought.view.content.Navigation', {
 		//TODO: clean them out
 	},
 
-
-	buildMainTabbarMenu: function() {
-		var tabView = Ext.get('view-tabs').dom,
-			children = tabView && tabView.children,
-			items = [];
-
-
-		Ext.each(children, function(item) {
-			items.push({
-				text: item.innerText,
-				viewId: item.getAttribute('data-view-id'),
-				cls: /Lessons/i.test(item.innerText) ? 'current' : ''
-			});
-		});
-
-		if (Ext.isEmpty(items)) {
-			return;
-		}
-
-		return Ext.widget('jump-menu', Ext.apply({}, { ownerButton: this, items: items }));
-	},
 
 
 	buildMenu: function(pathPartEl, locationInfo, parent) {

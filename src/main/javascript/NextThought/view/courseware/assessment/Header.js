@@ -76,7 +76,10 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 		});
 
 		this.on({
-			pathEl: {click: 'onPathClicked'},
+			pathEl: {
+				click: 'onPathClicked',
+				mouseover: 'onPathHover'
+			},
 			previousEl: { click: 'firePreviousEvent' },
 			nextEl: { click: 'fireNextEvent' }
 		});
@@ -99,6 +102,20 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 				console.log(pV.id + 'does not implement fireGoUp');
 			}
 		}
+	},
+
+
+	onPathHover: function(e) {
+		var part = e.getTarget('.path');
+
+		if (!part) { return; }
+
+		return this.onPartHover(e, part);
+	},
+
+
+	onPartHover: function(e, part) {
+		return true;
 	},
 
 

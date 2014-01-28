@@ -282,8 +282,41 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 		},
 
 
-		initCustomScrollOn: function(adjustmentEl, targetEl, options) {
+		getMainTabbarMenu: function() {
+			var tabView = Ext.get('view-tabs').dom,
+			children = tabView && tabView.children,
+			items = [];
 
+			Ext.each(children, function(item) {
+				items.push({
+					text: item.innerText,
+					viewId: item.getAttribute('data-view-id'),
+					cls: /Lessons/i.test(item.innerText) ? 'current' : ''
+				});
+			});
+
+			if (Ext.isEmpty(items)) {
+				return;
+			}
+
+			this.upMenu = Ext.widget('jump-menu', Ext.apply({}, { ownerButton: this, items: items }));
+
+			this.mon(this.upMenu, {
+				scope: this,
+				click: function(menu, item) {
+					console.log('tab item clicked: ', arguments);
+					this.fireEvent('main-tab-clicked', item);
+				}
+			});
+
+			this.on('destroy', 'destroy', this.upMenu);
+
+			return this.upMenu;
+		},
+
+
+		initCustomScrollOn: function(adjustmentEl, targetEl, options) {
+			this.enableBubble('main-tab-clicked');
 			if (!isFeature('fancy-scroll')) { return; }
 			if (Ext.is.iOS) { return; }
 

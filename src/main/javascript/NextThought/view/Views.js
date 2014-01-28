@@ -102,6 +102,7 @@ Ext.define('NextThought.view.Views', {
 		});
 
 		this.mon(this.tabs, 'click', 'onTabClicked');
+		this.on('main-tab-clicked', 'onTabMenuClick');
 
 		this.items.each(function(p) {
 			this.mon(p, {
@@ -216,6 +217,17 @@ Ext.define('NextThought.view.Views', {
 	},
 
 
+	onTabMenuClick: function(item) {
+		var cmp = this.getActive();
+
+		if (cmp) {
+			cmp.onTabClicked(item);
+		} else {
+			console.error('Wut?!?!?!');
+		}
+	},
+
+
 	onTabClicked: function(e) {
 		var cmp = this.getActive(),
 				t = e.getTarget('.main-view-tab', null, true),
@@ -257,7 +269,7 @@ Ext.define('NextThought.view.Views', {
 
 	/**
 	 *
-	 * @param id
+	 * @param {String} id
 	 * @return {boolean} True if the result of this means that the active view is the view that was asked for.
 	 */
 	onActivateView: function(id) {

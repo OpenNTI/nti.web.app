@@ -39,6 +39,26 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 	},
 
 
+	onPathClick: function() {
+		if (this.upMenu) {
+			this.upMenu.stopHide();
+			this.upMenu.stopShow();
+		}
+
+		this.callParent(arguments);
+	},
+
+	onPartHover: function(e, part) {
+		if (!e.getTarget('.has-alt-tabbar')) { return; }
+		var scrollEl = this.up('[getMainTabbarMenu]');
+
+		this.upMenu = scrollEl.getMainTabbarMenu();
+		this.upMenu.startShow(part, 'tl-bl', [-10, 5]);
+
+		this.on('destroy', 'destroy', this.upMenu);
+	},
+
+
 	setHistory: function(history) {
 		var grade = history && history.get('Grade'),
 			due = this.assignmentHistory && this.assignmentHistory.get('due'),

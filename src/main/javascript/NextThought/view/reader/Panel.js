@@ -21,6 +21,8 @@ Ext.define('NextThought.view.reader.Panel', {
 		plain: true
 	},
 
+	scrollTargetSelector: '.x-panel-body-reader',
+
 	initComponent: function() {
 		this.callParent(arguments);
 
@@ -78,7 +80,7 @@ Ext.define('NextThought.view.reader.Panel', {
 		this.on('beforedeactivate', this.beforeDeactivate, this);
 
 		// NOTE: check notes on the mixin, as to why we might want to set a secondaryViewEl.
-		this.initCustomScrollOn('content', '.x-panel-body-reader', {secondaryViewEl: '.annotation-view'});
+		this.initCustomScrollOn('content', this.scrollTargetSelector, {secondaryViewEl: '.annotation-view'});
 	},
 
 

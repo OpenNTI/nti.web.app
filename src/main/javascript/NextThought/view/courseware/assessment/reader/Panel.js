@@ -5,6 +5,9 @@ Ext.define('NextThought.view.courseware.assessment.reader.Panel', {
 		'NextThought.view.courseware.assessment.reader.Header'
 	],
 	prefix: 'course-assignment',
+	cls: 'reader-container assignment-reader',
+
+	scrollTargetSelector: '.assignment-reader .x-panel-body-reader',
 
 
 	getToolbarConfig: function() {
