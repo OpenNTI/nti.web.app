@@ -34,8 +34,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 				},
 
 				isOpen: function(values) {
-					var opens = values.opens || new Date(),
-						today = new Date();
+					var opens = (values.opens || new Date()).getTime(),
+						today = (new Date()).setHours(0, 0, 0, 0);
 					return opens > today ? 'closed ' : '';
 				},
 
@@ -103,7 +103,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 
 		var format = 'l, F j',
 			date = values.due,
-			opens = values.opens || new Date(),
+			opens = values.opens || new Date(0),
 			day = (new Date(date.getTime())).setHours(0, 0, 0, 0),
 			today = (new Date()).setHours(0, 0, 0, 0),
 			html = 'Due ';

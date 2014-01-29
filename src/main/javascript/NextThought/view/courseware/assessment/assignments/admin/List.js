@@ -34,7 +34,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.List', {
 
 				getStatusCls: function(values) {
 					var date = (values && values.due) || new Date(0),
-						opens = values.opens || new Date(),
+						opens = (values.opens || new Date((new Date()).setHours(0, 0, 0, 0))).getTime(),
 						due = (new Date(date.getTime())).setHours(0, 0, 0, 0),
 						today = (new Date()).setHours(0, 0, 0, 0),
 						cls = opens > today ? 'closed ' : '';
