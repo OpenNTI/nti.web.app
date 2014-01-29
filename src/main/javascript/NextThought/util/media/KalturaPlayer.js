@@ -733,6 +733,9 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 		inject: function inject() {
 
+			console.log = console.log || function() {};
+			console.debug = console.debug || console.log || function() {};
+
 			var leadWithExpirementalHTML5 = false,
 				vars = {
 					externalInterfaceDisabled: false,
