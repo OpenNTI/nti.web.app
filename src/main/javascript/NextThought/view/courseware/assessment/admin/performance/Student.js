@@ -247,6 +247,19 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 		}
 	},
 
+	applyPagerFilter: function() {
+		//admins can see all assignments at any time.
+		this.store.filter({
+			id: 'open',
+			filterFn: function(rec) {
+				var item = rec && rec.get('item'),
+					parts = item && item.get('parts');
+
+				return parts && parts.length; //ensure there are submit parts (if no submit parts, its not to be subbmitted in the platform)
+			}
+		});
+	},
+
 	//<editor-fold desc="Navigation Events">
 	goToAssignment: function(selModel, record) {
 		var path = [
@@ -255,6 +268,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 				record.get('name')
 		];
 
+		this.applyPagerFilter();
 		this.fireEvent('show-assignment', this, record.get('item'), record, this.student, path, this.store, this.store.indexOf(record) + 1);
 	}
 	//</editor-fold>
