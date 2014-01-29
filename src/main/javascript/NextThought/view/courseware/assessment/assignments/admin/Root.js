@@ -19,7 +19,17 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 		this.fireEvent('assignment-clicked', rec);
 	},
 
-	applyPagerFilter: Ext.emptyFn,//admins can see all assignments at any time.
+
+	applyPagerFilter: function() {
+		//admins can see all assignments at any time.
+		this.store.filter({
+			id: 'open',
+			filterFn: function(rec) {
+				return rec.get('total') > 0; //ensure there are submit parts (if no submit parts, its not to be subbmitted in the platform)
+			}
+		});
+	},
+
 
 	showAssignment: function(assignment, user) {
 		var id = assignment && ((assignment.getId && assignment.getId()) || assignment),
