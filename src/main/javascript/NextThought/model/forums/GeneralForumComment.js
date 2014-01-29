@@ -22,6 +22,9 @@ Ext.define('NextThought.model.forums.GeneralForumComment', {
 		}},
 		{ name: 'repliedTo', type: 'Synthetic', fn: function(rec) {
 			return rec.parent && rec.parent.get('Creator');
+		}},
+		{ name: 'likeCount', type: 'Synthetic', fn: function(rec) {
+			return rec.getFriendlyLikeCount && rec.getFriendlyLikeCount();
 		}}
 	],
 

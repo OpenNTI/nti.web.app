@@ -42,7 +42,7 @@ Ext.define('NextThought.view.forums.Comments', {
 					cn: [
 						{ cls: 'controls', cn: [
 							{cls: 'favorite-spacer'},
-							{cls: 'like {[values.liked? "on" : "off"]}'}
+							{cls: 'like {[values.liked? "on" : "off"]}', html: '{likeCount}'}
 						]},
 						{ cls: 'commentAvatar', style: { backgroundImage: 'url({Creator:avatarURL()});'}},
 						{ cls: 'wrap', 'data-commentid': '{ID}', cn: [
