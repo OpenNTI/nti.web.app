@@ -175,7 +175,9 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 
 	play: function() {
 		if (this.player.playVideo) {
-			this.player.playVideo();
+			if (!Ext.is.iOS) {
+				this.player.playVideo();
+			}
 		}
 	},
 
