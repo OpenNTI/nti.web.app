@@ -59,7 +59,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 							if (!e.record) { return false; }
 
 							var item = e.record.get('item'),
-								noSubmit = item && item.get && (item.get('category_name') === 'no_submit'),
+								noSubmit = item && item.tallyParts && item.tallyParts() === 0,
 								gradeRec = e.record.get('Grade'),
 								value = gradeRec && gradeRec.get('value'),
 								grades = value && value.split(' '),
