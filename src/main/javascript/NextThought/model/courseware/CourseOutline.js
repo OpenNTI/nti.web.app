@@ -73,5 +73,21 @@ Ext.define('NextThought.model.courseware.CourseOutline', {
 		}
 
 		return node;
+	},
+
+
+	isVisible: function(ntiid) {
+		var i = 0, rec,
+			lineage = ContentUtils.getLineage(ntiid) || [];
+
+		for (i = 0; i < lineage.length; i++) {
+			rec = this.getNode(lineage[i]);
+
+			if (rec && rec.get('AvailableBeginning') < new Date()) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 });

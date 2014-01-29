@@ -195,7 +195,12 @@ Ext.define('NextThought.view.content.Navigation', {
 			menus = me.menuMap || {},
 			cfg = { ownerButton: me, items: [] },
 			key = locationInfo ? locationInfo.NTIID : null,
-			currentNode = locationInfo ? locationInfo.location : null;
+			currentNode = locationInfo ? locationInfo.location : null,
+			content = Ext.getCmp('content'),
+			currentCourse = content && content.currentCourse,
+			outline = currentCourse && currentCourse.getOutline();
+
+		outline = outline && outline.value;
 
 		if (!currentNode) {
 			return pathPartEl;
@@ -212,6 +217,14 @@ Ext.define('NextThought.view.content.Navigation', {
 		if (Ext.isEmpty(cfg.items)) {
 			return;
 		}
+
+		cfg.items = (cfg.items || []).reduce(function(prev, cur) {
+			if (outline && outline.isVisible(cur.ntiid)) {
+				prev.push(cur);
+			}
+
+			return prev;
+		}, []);
 
 		m = menus[key] = Ext.widget('jump-menu', Ext.apply({}, cfg));
 		m.hostEl = pathPartEl;
