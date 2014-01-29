@@ -397,7 +397,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 			id: 'open',
 			filterFn: function(rec) {
 				var d = rec.get('opens');
-				return !d || d < now;
+				return (!d || d < now) && //ensure the assignment is open.
+					   rec.get('total') > 0; //ensure there are submit parts (if no submit parts, its not to be subbmitted in the platform)
 			}
 		});
 	},
