@@ -418,14 +418,15 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 	showAssignment: function(assignment) {
 		var id = assignment && ((assignment.getId && assignment.getId()) || assignment),
 			x = this.store.getById(id),
-			parts = x && x.get('parts');
+			item = x && x.get('item'),
+			parts = (item && item.get('parts')) || [];
 
 		if (!x) {
 			console.warn('Assignment not found:', id);
 			return;
 		}
 
-		if (!parts || parts.length === 0) {
+		if (parts.length === 0) {
 			console.warn('Cannot show an assignment that does not have submit parts.');
 			return;
 		}
