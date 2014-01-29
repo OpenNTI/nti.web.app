@@ -29,6 +29,15 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 							vid[1])
 				}
 			});
+		},
+
+		PlayerState: {//echo's YouTube's state map
+			BUFFERING: 3,
+			CUED: 5,
+			ENDED: 0,
+			PAUSED: 2,
+			PLAYING: 1,
+			UNSTARTED: -1
 		}
 	},
 
@@ -77,8 +86,8 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 			{tag: 'head', cn: [
 				{ tag: 'title', html: '{id}-sandbox' },
 				{ tag: 'meta', 'http-equiv': 'X-UA-Compatible', 'content': 'IE=edge' },
-				{ tag: 'script', type: 'text/javascript', src: ('{basePath}resources/lib/jQuery-1.8.0min.js') },
-				{ tag: 'script', type: 'text/javascript', src: '{scheme}//cdnapisec.kaltura.com/p/{partnerid}/sp/150010100/embedIframeJs/uiconf_id/{uiconfid}/partner_id/{partnerid}'},
+				{ tag: 'script', type: 'text/javascript', src: '{scheme}//cdnapisec.kaltura.com/p/{partnerid}' +
+															   '/sp/150010100/embedIframeJs/uiconf_id/{uiconfid}/partner_id/{partnerid}'},
 				{ tag: 'style', type: 'text/css', cn: [
 					'body, html { margin: 0; padding: 0; overflow:hidden; }'
 				]}
@@ -86,9 +95,9 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 			{tag: 'body', cn: [
 				{
 					id: '{id}', name: '{id}', style: {
-					width: '{width}px',
-					height: '{height}px'
-				}
+						width: '{width}px',
+						height: '{height}px'
+					}
 				},
 				{
 					tag: 'script',
@@ -135,10 +144,12 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 		this.width = config.width;
 		this.height = config.height + ((config.reserveControlSpace && this.CONTROL_HEIGHT) || 0);
 		this.currentPosition = 0;
-		this.currentState = -1;
+		this.currentState = this.self.PlayerState.UNSTARTED;
 		this.makeNotReady();
 
 		this.handleMessage = Ext.bind(this.handleMessage, this);
+
+		this.USE_PROGRESSIVE = isFeature('kaltura.progressive').toString();
 
 		$AppConfig.Preferences.getPreference('WebApp', function(value) {
 			me.LEAD_HTML5 = value ? value.get('preferFlashVideo').toString() : 'false';
@@ -389,7 +400,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 		}, this.changeMediaTimeoutMillis);
 
 		this.currentPosition = 0;
-		this.setCurrentState(-1);
+		this.setCurrentState(this.self.PlayerState.UNSTARTED);
 
 		if (offset) {
 			this.seek(offset);
@@ -540,7 +551,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 			delete me.blockPause;
 		}, 1000);
 		console.warn(this.id, ' kaltura fired play handler called', this.currentState, arguments);
-		this.setCurrentState(1);
+		this.setCurrentState(this.self.PlayerState.PLAYING);
 		this.fireEvent('player-event-play', 'kaltura');
 	},
 
@@ -556,7 +567,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 			return;
 		}
 
-		this.setCurrentState(2);
+		this.setCurrentState(this.self.PlayerState.PAUSED);
 		this.fireEvent('player-event-pause', 'kaltura');
 	},
 
@@ -567,7 +578,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 			return;
 		}
 		this.deactivate();
-		this.setCurrentState(3);
+		this.setCurrentState(this.self.PlayerState.ENDED);
 		this.fireEvent('player-event-ended', 'kaltura');
 
 		//As an optimization if we are a child of the overview-part
@@ -722,7 +733,19 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 		inject: function inject() {
 
-			var leadWithExpirementalHTML5 = false;
+			var leadWithExpirementalHTML5 = false,
+				vars = {
+					'mediaProxy.preferedFlavorBR': 600, //A low quality stream but one that should have video as well as audio
+					externalInterfaceDisabled: false,
+					akamaiHD: {
+						loadingPolicy: 'preInitialize',
+						asyncInit: 'true'
+					},
+					twoPhaseManifest: 'true',
+					streamerType: 'hdnetworkmanifest',
+					//streamerType: 'auto',
+					autoPlay: false
+				};
 
 			window.playerId = '%id%';
 			window.host = window.top;
@@ -794,7 +817,12 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 				try {
 					eventData = JSON.parse(event.data);
 					player = document.getElementById(playerId);
-					//console.debug('From '+playerId+', to app:', eventData);
+					console.debug('Player Command to: ' + playerId + ', command: ' + eventData.name + ', data:', eventData.data);
+
+					if (eventData.name === 'doStop' && player.evaluate('{video.player.state}') !== 'playing') {
+						console.warn('Skipping doStop commmand because player is not playing.');
+						return;
+					}
 					player.sendNotification(eventData.name, eventData.data);
 				}
 				catch (er) {
@@ -847,22 +875,19 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 			//mw.setConfig('debug', true);
 
+			if (JSON.parse('%USE_PROGRESSIVE%')) {
+				console.debug('Kaltura being instructed to be progressive download...');
+				vars = {
+					externalInterfaceDisabled: false,
+					autoPlay: false
+				};
+			}
+
 			kWidget.embed({
 				targetId: playerId,
 				wid: '_%PARTNER_ID%',
 				uiconf_id: '%UICONF_ID%',
-				flashvars: {
-					'mediaProxy.preferedFlavorBR': 600, //A low quality stream but one that should have video as well as audio
-					externalInterfaceDisabled: false,
-					akamaiHD: {
-						loadingPolicy: 'preInitialize',
-						asyncInit: 'true'
-					},
-					twoPhaseManifest: 'true',
-					streamerType: 'hdnetworkmanifest',
-					//streamerType: 'auto',
-					autoPlay: false
-				},
+				flashvars: vars,
 				params: {
 					wmode: 'transparent'
 				},
