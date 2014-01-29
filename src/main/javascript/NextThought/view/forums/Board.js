@@ -79,6 +79,11 @@ Ext.define('NextThought.view.forums.Board', {
 		return isFeature('mutable-forums') && this.record.getLink('add');
 	},
 
+	//the forum creation window will call this when a forum is created or edited
+	onSaveSuccess: function() {
+		this.fillInNewestDescendant();
+	},
+
 
 	fillInNewestDescendant: function() {
 		var map = {}, me = this;
@@ -173,12 +178,12 @@ Ext.define('NextThought.view.forums.Board', {
 		//Don't sort them by creation time on client side either
 		// s.sorters.clear();
 		this.mon(s, 'load', function(store, records) {
-			//make sure we can scroll
-			this.ownerCt.el.unmask();
+				//make sure we can scroll
+				this.ownerCt.el.unmask();
 
-			if (this.getHeight() < this.ownerCt.getHeight()) {
-				this.fetchNextPage();
-			}
+				if (this.getHeight() < this.ownerCt.getHeight()) {
+					this.fetchNextPage();
+				}
 		}, this);
 
 		s.loadPage(1);

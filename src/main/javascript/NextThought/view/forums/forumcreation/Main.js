@@ -8,7 +8,13 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 	items: [
 		{xtype: 'container', layout: 'anchor', cls: 'input-wrapper', items: [
 			{xtype: 'simpletext', name: 'title', cls: 'input-box', inputType: 'text', placeholder: 'Title'},
-			{xtype: 'box', autoEl: {tag: 'textarea', name: 'description', placeholder: 'Description...'}, name: 'description', cls: 'input-box textarea', emptyText: 'Description...'}
+			{
+				xtype: 'box',
+				autoEl: {tag: 'textarea', name: 'description', placeholder: 'Description...'},
+				name: 'description',
+				cls: 'input-box textarea',
+				emptyText: 'Description...'
+			}
 		]},
 		{xtype: 'box', hidden: true, name: 'error', autoEl: {cls: 'error-box', tag: 'div',
 			cn: [
@@ -45,8 +51,8 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 		if (record) {
 			this.down('[name=title]').update(record.get('title'));
 			this.down('[name=description]').el.update(record.get('description'));
-			
-			if(!sharing.isDestroyed){
+
+			if (!sharing.isDestroyed) {
 				//if there is no ACL the record is open to the entire DFL
 				if (Ext.isEmpty(record.get('ACL'))) {
 					sharing.setValue(true);
@@ -197,7 +203,16 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 	},
 
 	onSaveSuccess: function() {
-		this.up('forumcreation-window').close();
+		var win = this.up('forumcreation-window');
+
+		if (win) {
+
+			if (win.ownerCmp && win.ownerCmp.onSaveSuccess) {
+				win.ownerCmp.onSaveSuccess();
+			}
+
+			win.close();
+		}
 	},
 
 	onSaveFailure: function(proxy, response, operation) {
