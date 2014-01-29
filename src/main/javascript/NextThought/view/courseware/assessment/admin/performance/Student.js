@@ -58,13 +58,17 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 						fn: function(editor, e) {
 							if (!e.record) { return false; }
 
-							var gradeRec = e.record.get('Grade'),
+							var item = e.record.get('item'),
+								noSubmit = item && item.get && (item.get('category_name') === 'no_submit'),
+								gradeRec = e.record.get('Grade'),
 								value = gradeRec && gradeRec.get('value'),
 								grades = value && value.split(' '),
 								grade = grades && grades[0];
 
-							if (!gradeRec) {
+							if (!gradeRec && noSubmit) {
 								e.record.set('Grade', NextThought.model.courseware.Grade.create());
+							} else if (!gradeRec) {
+								return false;
 							}
 
 							e.value = grade;

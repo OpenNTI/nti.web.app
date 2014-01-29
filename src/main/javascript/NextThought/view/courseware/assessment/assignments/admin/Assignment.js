@@ -132,12 +132,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 								var item = e.record.get('item'),
 									student = e.record.get('Creator'),
+									noSubmit = item && item.get && (item.get('category_name') !== 'default'),
 									gradeRec = e.record.get('Grade'),
 									value = gradeRec && gradeRec.get('value'),
 									grades = value && value.split(' '),
 									grade = grades && grades[0];
 
-								if (!gradeRec) {
+								if (!gradeRec && noSubmit) {
 									e.record.set('Grade', NextThought.model.courseware.Grade.create({
 										href: [item._gradeBook.get('href'),
 											   encodeURIComponent(item.get('category_name')),
@@ -146,6 +147,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 											  ].join('/')
 
 									}));
+								} else if (!gradeRec) {
+									return false;
 								}
 
 								e.value = grade;
