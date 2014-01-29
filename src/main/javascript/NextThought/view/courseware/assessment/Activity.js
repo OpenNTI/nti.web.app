@@ -199,7 +199,9 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 			grade = historyItem && historyItem.get('Grade'),
 			dateCompleted = submission && submission.get('CreatedTime'),
 			dateOpens = assignment && assignment.get('availableBeginning'),
-			dateDue = (assignment && assignment.get('availableEnding')) || now;
+			dateDue = (assignment && assignment.get('availableEnding')) || now,
+			parts = assignment.get('parts') || [],
+			hasParts = parts.length > 0;
 
 
 		if (feedback) {
@@ -216,7 +218,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 			me.addEvent(me.getEventConfig('New Assignment:', assignment, dateOpens));
 		}
 
-		if (dateDue < now && (!dateCompleted || dateCompleted > dateDue)) {
+		if (dateDue < now && (!dateCompleted || dateCompleted > dateDue) && hasParts) {
 			me.addEvent(me.getEventConfig('Assignment Past Due:', assignment, dateDue));
 		}
 
