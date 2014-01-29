@@ -58,17 +58,13 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 						fn: function(editor, e) {
 							if (!e.record) { return false; }
 
-							var item = e.record.get('item'),
-								noSubmit = item && item.get && (item.get('category_name') === 'no_submit'),
-								gradeRec = e.record.get('Grade'),
+							var gradeRec = e.record.get('Grade'),
 								value = gradeRec && gradeRec.get('value'),
 								grades = value && value.split(' '),
 								grade = grades && grades[0];
 
-							if (!gradeRec && noSubmit) {
+							if (!gradeRec) {
 								e.record.set('Grade', NextThought.model.courseware.Grade.create());
-							} else if (!gradeRec) {
-								return false;
 							}
 
 							e.value = grade;
@@ -101,24 +97,32 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 			items: [
 					   { text: 'Assignment', dataIndex: 'name', tdCls: 'padded-cell', padding: '0 0 0 30', flex: 1 },
 					   { text: 'Completed', dataIndex: 'completed', width: 150, renderer: function(v, col, rec) {
-						   var d = rec.get('due'),
-							   s = (v && v.get && v.get('Last Modified')) || v;
+							var d = rec.get('due'),
+								s = (v && v.get && v.get('Last Modified')) || v,
+								item = rec.get('item'),
+								parts = item && item.get('parts');
 
-						   if (!s) {
-							   return Ext.DomHelper.markup({cls: 'incomplete', html: 'Due ' + Ext.Date.format(d, 'm/d')});
-						   }
-						   if (d > s) {
-							   return Ext.DomHelper.markup({cls: 'ontime', html: 'On Time'});
-						   }
+							if (!parts || !parts.length) {
+								return '';
+							}
 
-						   if (!d) {
-							   return Ext.DomHelper.markup({cls: 'ontime', html: 'Submitted ' + Ext.Date.format(s, 'm/d')});
-						   }
+							if (!s) {
+								return Ext.DomHelper.markup({cls: 'incomplete', html: 'Due ' + Ext.Date.format(d, 'm/d')});
+							}
 
-						   d = new Duration(Math.abs(s - d) / 1000);
-						   return Ext.DomHelper.createTemplate({cls: 'late', html: '{late} Late'}).apply({
-							   late: d.ago().replace('ago', '').trim()
-						   });
+							if (d > s) {
+								return Ext.DomHelper.markup({cls: 'ontime', html: 'On Time'});
+							}
+
+							if (!d) {
+								return Ext.DomHelper.markup({cls: 'ontime', html: 'Submitted ' + Ext.Date.format(s, 'm/d')});
+							}
+
+							d = new Duration(Math.abs(s - d) / 1000);
+
+							return Ext.DomHelper.createTemplate({cls: 'late', html: '{late} Late'}).apply({
+								late: d.ago().replace('ago', '').trim()
+							});
 					   } },
 					   { text: 'Score', componentCls: 'score', dataIndex: 'Grade', width: 70, editor: 'textfield', renderer: function(val) {
 							val = val && val.get('value');

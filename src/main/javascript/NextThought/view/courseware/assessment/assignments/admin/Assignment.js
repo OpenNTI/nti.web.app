@@ -132,13 +132,12 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 								var item = e.record.get('item'),
 									student = e.record.get('Creator'),
-									noSubmit = item && item.get && (item.get('category_name') !== 'default'),
 									gradeRec = e.record.get('Grade'),
 									value = gradeRec && gradeRec.get('value'),
 									grades = value && value.split(' '),
 									grade = grades && grades[0];
 
-								if (!gradeRec && noSubmit) {
+								if (!gradeRec) {
 									e.record.set('Grade', NextThought.model.courseware.Grade.create({
 										href: [item._gradeBook.get('href'),
 											   encodeURIComponent(item.get('category_name')),
@@ -147,8 +146,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 											  ].join('/')
 
 									}));
-								} else if (!gradeRec) {
-									return false;
 								}
 
 								e.value = grade;
@@ -187,22 +184,25 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 							   var u = v && (typeof v === 'string' ? {displayName: 'Resolving...'} : v.getData());
 							   return this.studentTpl.apply(u);
 						   } },
-						   { text: 'Completed', dataIndex: 'submission', width: 150, renderer: function(v) {
-							   var d = this.dueDate,
-								   s = (v && v.get && v.get('Last Modified')) || v;
-							   if (!s) {
-								   return Ext.DomHelper.markup({cls: 'incomplete', html: 'Incomplete'});
-							   }
-							   if (d > s) {
-								   return Ext.DomHelper.markup({cls: 'ontime', html: 'On Time'});
-							   }
-							   if (!d) {
-								   return Ext.DomHelper.markup({cls: 'ontime', html: 'Submitted ' + Ext.Date.format(s, 'm/d')});
-							   }
-							   d = new Duration(Math.abs(s - d) / 1000);
-							   return Ext.DomHelper.createTemplate({cls: 'late', html: '{late} Late'}).apply({
-								   late: d.ago().replace('ago', '').trim()
-							   });
+						   { text: 'Completed', dataIndex: 'submission', width: 150, renderer: function(v, col, rec) {
+								var d = this.dueDate,
+									s = (v && v.get && v.get('Last Modified')) || v;
+
+								if (!s) {
+									return Ext.DomHelper.markup({cls: 'incomplete', html: 'Incomplete'});
+								}
+								if (d > s) {
+									return Ext.DomHelper.markup({cls: 'ontime', html: 'On Time'});
+								}
+								if (!d) {
+									return Ext.DomHelper.markup({cls: 'ontime', html: 'Submitted ' + Ext.Date.format(s, 'm/d')});
+								}
+
+								d = new Duration(Math.abs(s - d) / 1000);
+
+								return Ext.DomHelper.createTemplate({cls: 'late', html: '{late} Late'}).apply({
+									late: d.ago().replace('ago', '').trim()
+								});
 						   } },
 						   { text: 'Score', componentCls: 'score', dataIndex: 'Grade', width: 90,
 							   editor: 'textfield',
@@ -331,7 +331,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 
 	beforeRender: function() {
-		var a = this.assignment, s, grid, p = this.filledStorePromise;
+		var a = this.assignment, s, grid, p = this.filledStorePromise,
+			parts = this.assignment.get('parts');
+
 		this.callParent();
 		this.exportFilesLink = this.assignment.getLink('ExportFiles');
 		this.pathBranch = this.assignmentTitle;
@@ -362,6 +364,11 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 		grid = this.down('grid');
 		grid.dueDate = a.getDueDate();
+
+		if (!parts || !parts.length) {
+			grid.down('[dataIndex=submission]').hide();
+		}
+
 		grid.bindStore(this.store);
 		this.maybeShowDownload();
 		this.mon(grid, 'itemclick', 'onItemClick');
