@@ -1230,6 +1230,7 @@ body.dragging * {
 			padding: 1em 2em;
 			right: 15px;
 			top: 25px;
+			overflow: hidden;
 
 			&.disabled {
 				background: $tertiary-grey;
@@ -1239,8 +1240,9 @@ body.dragging * {
 
 			input {
 				position: absolute;
-				top: 0; left: 0; right: 0; bottom: 0;
-				opacity: 0.0;
+				top: 0; right: 0;
+				opacity: 0;
+				font-size: 3em;
 			}
 			position: absolute;
 		}
