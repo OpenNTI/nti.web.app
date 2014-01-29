@@ -735,16 +735,9 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 			var leadWithExpirementalHTML5 = false,
 				vars = {
-					'mediaProxy.preferedFlavorBR': 600, //A low quality stream but one that should have video as well as audio
 					externalInterfaceDisabled: false,
-					akamaiHD: {
-						loadingPolicy: 'preInitialize',
-						asyncInit: 'true'
-					},
-					twoPhaseManifest: 'true',
-					streamerType: 'hdnetworkmanifest',
-					//streamerType: 'auto',
-					autoPlay: false
+					autoPlay: false,
+					streamerType: 'http'
 				};
 
 			window.playerId = '%id%';
@@ -875,12 +868,16 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 			//mw.setConfig('debug', true);
 
-			if (JSON.parse('%USE_PROGRESSIVE%')) {
-				console.debug('Kaltura being instructed to be progressive download...');
-				vars = {
-					externalInterfaceDisabled: false,
-					autoPlay: false
+			if (!JSON.parse('%USE_PROGRESSIVE%')) {
+				console.debug('Kaltura being instructed to be streaming...');
+				vars.streamerType = 'hdnetworkmanifest';
+				vars.twoPhaseManifest = 'true';
+				vars.akamaiHD = {
+					loadingPolicy: 'preInitialize',
+					asyncInit: 'true'
 				};
+			} else {
+				console.debug('Kaltura being instructed to be progressive download...');
 			}
 
 			kWidget.embed({
