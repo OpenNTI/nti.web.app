@@ -34,6 +34,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 	showAssignment: function(assignment, user) {
 		var id = assignment && ((assignment.getId && assignment.getId()) || assignment),
 			x = this.store.getById(id),
+			parts = x && x.get('parts'),
 			view = this.up('course-assessment-admin-assignments'),
 			assignmentView, gridView,
 			tab = this.up('[isTabView]').getEl();
@@ -41,6 +42,11 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 		this.onItemClicked(null, x);
 
 		assignmentView = view && view.down('course-assessment-admin-assignments-item');
+
+		if (!parts || parts.length === 0) {
+			console.warn('Cannot show an assignment that does not have submit parts.');
+			return;
+		}
 
 		if (assignmentView) {
 			gridView = assignmentView.down('grid dataview').loadMask;
