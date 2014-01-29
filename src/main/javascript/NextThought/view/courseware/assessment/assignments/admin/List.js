@@ -37,9 +37,12 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.List', {
 						opens = (values.opens || new Date((new Date()).setHours(0, 0, 0, 0))).getTime(),
 						due = (new Date(date.getTime())).setHours(0, 0, 0, 0),
 						today = (new Date()).setHours(0, 0, 0, 0),
-						cls = opens > today ? 'closed ' : '';
+						cls = opens > today ? 'closed ' : '',
+						item = values.item,
+						parts = (item && item.get && item.get('parts')) || [],
+						kind = parts.length > 0 ? '' : 'no_submit ';
 
-					return cls + (((values && values.due) && due < today) ? 'late' : '');
+					return kind + cls + (((values && values.due) && due < today) ? 'late' : '');
 				},
 
 				getDueDate: function(values) {

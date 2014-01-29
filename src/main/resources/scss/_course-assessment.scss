@@ -176,6 +176,10 @@ canvas.x-component-course-assessment {
 
 			@include icon('check_gray', $top: 22px, $left: 25px);
 
+			&.no_submit {
+				&, &.over, &.selected { cursor: default !important; }
+			}
+
 			&.closed {
 				&, &.over, &.selected {
 					cursor: default !important;

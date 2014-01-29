@@ -30,7 +30,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 				},
 
 				getStatusCls: function(values) {
-					return this.isOpen(values) + (this.isTaken(values) ? 'completed' : '');
+					return this.isOpen(values) + (this.isTaken(values) ? 'completed' : '') + this.getKind(values);
+				},
+
+				getKind: function(values) {
+					var item = values.item,
+						parts = (item && item.get && item.get('parts')) || [];
+					return parts.length > 0 ? '' : ' no_submit ';
 				},
 
 				isOpen: function(values) {
