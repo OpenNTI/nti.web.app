@@ -530,8 +530,6 @@ Ext.define('NextThought.view.video.Video', {
 			service = 'none';
 		}
 
-		me.stopPlayback();
-
 		//TODO: make each player handle switching.
 		Ext.Object.each(me.playerIds, function(k, id) {
 			var v = Ext.get(id);
@@ -543,6 +541,10 @@ Ext.define('NextThought.view.video.Video', {
 				v[(k === service) ? 'show' : 'hide']();
 			}
 		});
+
+		if (me.activeVideoService !== service) {
+			me.stopPlayback();
+		}
 
 		me.activeVideoService = service;
 		this.fireEvent('height-change');
