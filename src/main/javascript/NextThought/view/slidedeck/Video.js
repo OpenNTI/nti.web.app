@@ -255,7 +255,7 @@ Ext.define('NextThought.view.slidedeck.Video', {
 		video = slide.get('media');
 		this.playlistSeek(this.getVideoInfoIndex(video));
 		if (p || this.firstSelection) {
-			this.resumePlayback();
+			this.resumePlayback(true);
 		}
 		delete this.firstSelection;
 	},
