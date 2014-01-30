@@ -92,5 +92,27 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 				}
 			}
 		});
+	},
+
+
+	buildGrade: function() {
+		//if we already have a grade don't set a new one
+		if (this.get('Grade')) { return; }
+
+		var item = this.get('item'),
+			student = this.get('Creator'),
+			grade = NextThought.model.courseware.Grade.create({
+				href: [
+						item._gradeBook.get('href'),
+						encodeURIComponent(item.get('category_name')),
+						encodeURIComponent(item.get('title')),
+						student.get ? student.getId() : student
+					  ].join('/')
+
+			});
+
+		grade.phantom = false;
+
+		this.set('Grade', grade);
 	}
 });
