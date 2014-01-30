@@ -218,6 +218,7 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 			ownerCt: this,
 			renderTo: el.down('.wrap'),
 			record: record,
+			enableObjectControls: false, //lets not open too much complexity yet.
 			listeners: {
 				save: function(editor, record, value) {
 					editor.mask('Saving...');
@@ -241,8 +242,12 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 						}
 					});
 				},
-				cancel: function() {
-					me.refresh();
+				'deactivated-editor': function() {
+					var view = me.down('dataview');
+
+					if (view) {
+						view.refresh();
+					}
 				}
 			}
 		});
