@@ -16,13 +16,14 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 
 		this.letterEl.setStyle({display: 'none'});
 
-		if (!this.assignmentHistory.get('Submission')) {
-			this.gradeEl.addCls('disabled');
-			this.gradeEl.set({disabled: 'disabled'});
-			this.letterEl.addCls('disabled');
-			this.lateEl.update('No Submission');
-			return;
-		}
+		//Commenting this out, because we want to allow grades to be entered even if there isn't a submisson
+		// if (!this.assignmentHistory.get('Submission')) {
+		// 	this.gradeEl.addCls('disabled');
+		// 	this.gradeEl.set({disabled: 'disabled'});
+		// 	this.letterEl.addCls('disabled');
+		// 	this.lateEl.update('No Submission');
+		// 	return;
+		// }
 
 		//TODO: if the submission was late, set the lateEl to X units late.
 
