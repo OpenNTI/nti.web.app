@@ -2,8 +2,10 @@
 
 	All commands are assuming the path is relative to this checkout.
 
-- **Build Dependencies:** `Compass`, `Sass`, [`Blesscss`][BLESS], [`Sencha Cmd`][SENCHACMD], `ExtJS` library.
+- **Build Dependencies:** `bundler`, [`Sencha Cmd`][SENCHACMD], `ExtJS` library.
 - **Run-Time Dependencies:** Login, Data Server
+
+(FYI: If you do not already have `Ruby` and the `gem` command… I will leave you to figure out how to install it :] It seems to be bundled with MacOS, or XCode, so you should already have it.)
 
 ### Getting Started
 
@@ -18,16 +20,18 @@
 				-classpath=src/main/javascript/NextThought \
 				meta -alias -out src/main/bootstrap.js and \
 				meta -alt -append -out src/main/bootstrap.js
+
+
 2. Setup CSS Compiler…
-  1. Install `Compass`:
-     * If you do not already have `Ruby` and the `gem` command… I will leave you to figure out how to install it :] 
-     * In your term: `sudo gem install sass compass oily_png compass-growl`
-     * ***Optional Parts:***
-         * `oily_png`: an optional library that speeds up sprite generation 
-         * `compass-growl`
-  2. Install [Blesscss][BLESS] for IE stupidness.
-     * This is unfortunately going to use yet another language, and its package manager. We need `npm` to install `blesscss`.  If you do not already have `npm`, use the package manager for your system to install it.
-     * In the term: `sudo npm install bless -g`
+  1. Setup Ruby environment: `~/.gemrc`: 
+     * In your `~/.profile`, `~/.bash_profile`, or `~/.bashrc` and add a new environment variable called `GEM_HOME` with a value of: `~/.gem/ruby/<ruby version>` (on MacOS 10.9, the ruby version is `2.0.0`)
+     * Add `$GEM_HOME/bin` to your path.
+     * Create the `~/.gemrc` file:
+         - In your terminal type: `echo "gem: --no-document --user-install" > ~/.gemrc`  
+         This will instruct the ruby package manager to install gems in your local user directory instead of they system directory. (lets not muddy the OS shall we?) The `--no-document` argument is an optimization for not generating the docs and debugging symbols. (it installs much faster)
+     * Now type: `gem install bundler`
+  2. Install our bundle.
+     * type: `bundle install`
   3. you can now compile the styles: `compass compile`
   
 
@@ -42,9 +46,8 @@ I have a few aliases setup in bash to help shorten many sets of commands. They m
 
 If you don't have Growl, I'd recommend removing the strings `&>/dev/null`
 
-### Login & Server section...
- 
+### Login App & Server...
+See buildout docs.
  
 [EXTJS]: http://www.sencha.com/products/extjs/download/
 [SENCHACMD]: http://www.sencha.com/products/sencha-cmd/download/
-[BLESS]: http://blesscss.com/
