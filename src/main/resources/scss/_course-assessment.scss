@@ -805,6 +805,10 @@ canvas.x-component-course-assessment {
 					width: 10em;
 					line-height: 3;
 					color: $primary-red;
+
+					&.good{
+						color: $primary-green;
+					}
 				}
 
 				.label {
