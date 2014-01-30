@@ -116,13 +116,13 @@ Ext.define('NextThought.view.content.reader.ResourceManagement', {
 
 	activateOverlays: function(reader, doc) {
 		var me = this;
-		Ext.Object.each(me.OVERLAY_DOM_QUERY_XTYPE_MAP, function(query,xtype) {
+		Ext.Object.each(me.OVERLAY_DOM_QUERY_XTYPE_MAP, function(query, xtype) {
 			me.activateOverlayedPanel(reader, doc, query, xtype);
 		});
 	},
 
 
-	activateOverlayedPanel: function(reader,doc, query, widgetXType) {
+	activateOverlayedPanel: function(reader, doc, query, widgetXType) {
 		var me = reader,
 			o = me.getComponentOverlay(),
 			els = doc.querySelectorAll(query);
@@ -144,8 +144,7 @@ Ext.define('NextThought.view.content.reader.ResourceManagement', {
 			activators = {
 				'nti-data-resizeable': Ext.bind(this.activateZoomBox, this)
 			};
-
-		function get(el,attr) { return el ? el.getAttribute(attr) : null; }
+		function get(el, attr) { return el ? el.getAttribute(attr) : null; }
 
 		function getStyle(el) {
 			var s = (get(el, 'style') || '').replace(/\s+/ig, '').split(';'), r = {};
@@ -164,6 +163,17 @@ Ext.define('NextThought.view.content.reader.ResourceManagement', {
 					caption: caption
 				},false);
 
+			if (Ext.is.iOS) {
+				var button = Ext.get(el).down('.bar-cell.slide'),
+					comment = Ext.get(el).down('.mark');
+				button.on('mouseover', function() {
+					button.dom.click();
+				});
+				comment.on('mouseover', function() {
+					comment.dom.click();
+				});
+			}
+
 			if (!title && !caption) {
 				Ext.fly(el).addCls('no-details');
 			}
@@ -175,8 +185,8 @@ Ext.define('NextThought.view.content.reader.ResourceManagement', {
 			}
 			el.querySelector('.wrapper').appendChild(target);
 
-			width = (parseInt(getStyle(target).width || get(target, 'width'), 10) || Ext.fly(target).getWidth())
-				+ Ext.get(el).getBorderWidth('lr');
+			width = (parseInt(getStyle(target).width || get(target, 'width'), 10) || Ext.fly(target).getWidth()) +
+				Ext.get(el).getBorderWidth('lr');
 
 			Ext.get(el).setWidth(width);
 
@@ -188,7 +198,7 @@ Ext.define('NextThought.view.content.reader.ResourceManagement', {
 	},
 
 
-	activateZoomBox: function(containerEl, toolbarEl,basePath) {
+	activateZoomBox: function(containerEl, toolbarEl, basePath) {
 		try {
 			Ext.fly(containerEl.querySelector('a.zoom')).removeCls('disabled');
 			var img = containerEl.querySelector('img[id]:not([id^=ext])'),
