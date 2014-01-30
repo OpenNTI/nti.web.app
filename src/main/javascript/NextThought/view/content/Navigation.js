@@ -218,13 +218,16 @@ Ext.define('NextThought.view.content.Navigation', {
 			return;
 		}
 
-		cfg.items = (cfg.items || []).reduce(function(prev, cur) {
-			if (outline && outline.isVisible(cur.ntiid)) {
-				prev.push(cur);
-			}
+		//if we don't have an outline we aren't in a course so don't filter out items
+		if (outline) {
+			cfg.items = (cfg.items || []).reduce(function(prev, cur) {
+				if (outline.isVisible(cur.ntiid)) {
+					prev.push(cur);
+				}
 
-			return prev;
-		}, []);
+				return prev;
+			}, []);
+		}
 
 		m = menus[key] = Ext.widget('jump-menu', Ext.apply({}, cfg));
 		m.hostEl = pathPartEl;
