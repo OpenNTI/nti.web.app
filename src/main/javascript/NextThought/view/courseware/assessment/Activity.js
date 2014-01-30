@@ -222,7 +222,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 			me.addEvent(me.getEventConfig('Assignment Past Due:', assignment, dateDue));
 		}
 
-		if (dateCompleted) {
+		if (dateCompleted && submission && (submission.get('parts') || []).length > 0) {
 			me.addEvent(me.getEventConfig('Assignment Submitted:', assignment, dateCompleted));
 		}
 	},
