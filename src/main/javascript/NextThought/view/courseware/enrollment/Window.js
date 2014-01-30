@@ -137,8 +137,18 @@ Ext.define('NextThought.view.courseware.enrollment.Window', {
 		}
 
 		h = footer.getY() - el.getY();
+		if (h < 100) {
+			h = 100;
+			Ext.defer(this.updateContentHeight, 500, this);
+		}
+
 		el.setHeight(h);
-		Ext.defer(this.getEl().repaint, 10, this.getEl());
+		el = this.getEl();
+		Ext.defer(function() {
+			if (el.dom) {
+				el.repaint();
+			}
+		}, 10);
 	},
 
 

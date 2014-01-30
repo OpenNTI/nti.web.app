@@ -206,7 +206,7 @@ Ext.define('NextThought.view.contacts.oobe.Window', {
 	},
 
 
-	onSelectionChange: function(sel,recs) {
+	onSelectionChange: function(sel, recs) {
 		var e = this.confirmEl,
 			plural = (recs || []).length !== 1;
 		if (e) {
