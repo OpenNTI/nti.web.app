@@ -128,7 +128,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 						beforeedit: {
 							element: 'el',
 							fn: function(editor, e) {
-								if (!e.record) { return false; }
+								if (!e.record || e.field !== 'Grade') { return false; }
 
 								var item = e.record.get('item'),
 									student = e.record.get('Creator'),
