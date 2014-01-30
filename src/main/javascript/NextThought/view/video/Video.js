@@ -171,7 +171,7 @@ Ext.define('NextThought.view.video.Video', {
 		Ext.TaskManager.start(this.taskMediaHeartBeat);
 		this.on('destroy', function cleanUpTask() {Ext.TaskManager.stop(this.taskMediaHeartBeat);});
 
-		this.checkForFlash();
+		//this.checkForFlash();
 	},
 
 
@@ -606,26 +606,6 @@ Ext.define('NextThought.view.video.Video', {
 	log: function() {
 		if (this.self.debug) {
 			console.log.apply(console, arguments);
-		}
-	},
-
-
-	checkForFlash: function() {
-		//We were doing the flash check just for IE.  But it seems like we need
-		//it everywhere b/c apperantly we can't force the youtube video api to use html5,
-		//only suggest it.
-		console.debug('Checking for flash...');
-		if (!swfobject.hasFlashPlayerVersion('9.0.18') && !Ext.is.iPad) {
-			Ext.widget('message-bar', {
-				renderTo: Ext.getBody(),
-				messageType: 'flash-required',
-				message: {cls: 'message',
-					tag: 'span',
-					cn: [
-						'Portions of this application may require Adobe Flash Player to work correctly.',
-						{tag: 'a', href: 'http://get.adobe.com/flashplayer/', html: 'Download it here.', target: '_blank'}
-					]}
-			});
 		}
 	}
 
