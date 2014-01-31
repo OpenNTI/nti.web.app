@@ -71,7 +71,13 @@ Ext.define('NextThought.model.Note', {
 
 				r.resolveNotePreview(function(s) {
 					r.data.$preview = s;
-					r.afterEdit(['preview']);
+					try {
+						r.afterEdit(['preview']);
+					} catch (e) {
+						console.error(e.stack || e.message || e);//setDirty is caught here...
+						// would be nice to figure out why the store doesn't have a group for this record. :/
+						// store/view destroyed?
+					}
 				},150);
 
 				return '';

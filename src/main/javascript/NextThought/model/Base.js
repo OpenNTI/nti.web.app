@@ -835,8 +835,12 @@ Ext.define('NextThought.model.Base', {
 			});
 		}
 
-		me.callParent([fnames]);
-		Ext.each(fnames || [], me.onFieldChanged, me);
+		try {
+			me.callParent([fnames]);
+		}
+		finally {
+			Ext.each(fnames || [], me.onFieldChanged, me);
+		}
 	},
 
 
