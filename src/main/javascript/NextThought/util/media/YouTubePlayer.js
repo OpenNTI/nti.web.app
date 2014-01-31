@@ -43,6 +43,8 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 		this.playerTpl.append(this.parentEl, {id: this.id});
 		console.log(this.id);
 
+		this.userActivatedPlayer = false;
+
 		this.player = new YT.Player(this.id, {
 			width: this.width,
 			height: this.height,
@@ -113,7 +115,7 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 			this.playerSetup();
 			oldSource = this.currentSource;
 			this.currentSource = null;
-			this.parent.setVideoAndPosition(oldSource, this.currentStartAt);
+			this.parent.issueCommand('youtube', 'load', [oldSource, this.currentStartAt, 'medium']);
 			this.parent.resumePlayback();
 		}
 		else {
