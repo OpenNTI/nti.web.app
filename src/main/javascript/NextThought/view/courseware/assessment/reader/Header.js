@@ -66,7 +66,7 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 			completed = submission && submission.get('CreatedTime'),
 			overdue;
 
-		if (!history || !history.get('Submission')) {
+		if (!history || !submission || (submission.get('parts') || []) === 0) {
 			this.removeCls('submitted');
 			this.updateLayout();
 			return;
