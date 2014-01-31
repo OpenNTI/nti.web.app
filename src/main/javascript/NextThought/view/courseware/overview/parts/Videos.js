@@ -472,7 +472,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 		else {
 			console.log('Masking z curtain');
 			this.hideCurtain();
-			this.player.resumePlayback();
+			this.player.resumePlayback(true);
 		}
 	}
 });
