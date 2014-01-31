@@ -529,6 +529,11 @@ Ext.define('NextThought.view.video.Video', {
 			service = 'none';
 		}
 
+		if (me.activeVideoService !== service) {
+			me.stopPlayback();
+		}
+
+
 		//TODO: make each player handle switching.
 		Ext.Object.each(me.playerIds, function(k, id) {
 			var v = Ext.get(id);
@@ -537,12 +542,7 @@ Ext.define('NextThought.view.video.Video', {
 			} else {
 				v.setVisibilityMode(Ext.dom.Element.DISPLAY);
 				//hide/show handle checking if they need to do anything...lets not worry about it and just call them.
-				if (k === service) {
-					v.show();
-				} else {
-					me.issueCommand(k, 'stop', null, true);
-					v.hide();
-				}
+				v[(k === service) ? 'show' : 'hide']();
 			}
 		});
 
