@@ -449,7 +449,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas', {
 	},
 
 
-	getValue: function() {
+	getValue: function(event) {
 
 		var i = this.imageInfo,
 			s = i.selection,
@@ -458,6 +458,12 @@ Ext.define('NextThought.view.account.settings.PictureCanvas', {
 		c.width = c.height = s.size;
 		ctx = c.getContext('2d');
 		ctx.drawImage(i.image, -s.x, -s.y, i.width, i.height);
+
+
+		if (event && event.shiftKey) {
+			return c.toDataURL();
+		}
+
 		return c.toDataURL('image/jpeg', 0.7); //second arg is quality argument [0.0, 1.0]
 	},
 

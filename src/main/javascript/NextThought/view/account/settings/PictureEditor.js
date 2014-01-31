@@ -28,8 +28,8 @@ Ext.define('NextThought.view.account.settings.PictureEditor', {
 			defaults: {
 				scale: 'medium',
 				ui: 'flat',
-				handler: function(btn) {
-					btn.up('picture-editor').buttonHandler(btn, Boolean(btn.save));
+				handler: function(btn, event) {
+					btn.up('picture-editor').buttonHandler(btn, Boolean(btn.save), event);
 				}
 			},
 			items: [
@@ -76,7 +76,7 @@ Ext.define('NextThought.view.account.settings.PictureEditor', {
 	},
 
 
-	buttonHandler: function(btn, isSave) {
+	buttonHandler: function(btn, isSave, event) {
 		var me = this,
 			u = $AppConfig.userObject,
 			c = me.down('picture-canvas'),
@@ -84,7 +84,7 @@ Ext.define('NextThought.view.account.settings.PictureEditor', {
 			url;
 
 		if (isSave) {
-			url = c.getValue();
+			url = c.getValue(event);
 			u.saveField('avatarURL', url,
 
 				function good() {
