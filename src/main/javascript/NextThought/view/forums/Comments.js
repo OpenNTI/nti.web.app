@@ -195,11 +195,15 @@ Ext.define('NextThought.view.forums.Comments', {
 
 		record.compileBodyContent(function(body) {
 			var index;
+			if (!me.store) {
+				//We were probably destroyed before this came back.
+				return;
+			}
 
 			me.store.suspendEvents();
 
 			record.set({
-				'bodyContent': body
+				bodyContent: body
 			});
 
 			me.store.resumeEvents();
