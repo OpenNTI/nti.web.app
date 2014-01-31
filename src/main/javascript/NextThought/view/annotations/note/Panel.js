@@ -333,6 +333,9 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 
 	fillInShare: function(sharedWith) {
 		var tpl = Ext.DomHelper.createTemplate({tag: 'name', 'data-profile-idx': '{1}', html: '{0}'});
+		if (!this.responseBox || this.isDestroyed) {
+			return;
+		}
 
 		this.responseBox[(sharedWith || []).length === 0 ? 'removeCls' : 'addCls']('shared');
 		if (Ext.isEmpty(sharedWith)) {
