@@ -141,7 +141,7 @@ Ext.define('NextThought.model.User', {
 		Ext.Ajax.request(Ext.apply({
 		   url: this.getLink('edit'),
 		   method: 'PUT',
-		   jsonData: this.getData()
+		   jsonData: this.asJSON()
 	   }, ops));
 	},
 
