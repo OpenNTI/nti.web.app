@@ -83,7 +83,7 @@ Ext.define('NextThought.view.library.View', {
 			this.setActiveTab((tabs[0] || {}).viewId);
 		}
 
-		return tabs;
+		return tabs.length === 1 ? [] : tabs;
 	},
 
 
