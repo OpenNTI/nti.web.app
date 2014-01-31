@@ -106,13 +106,14 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
     //		SAJ: We should probably also give up after X tries and just go to the next source
     //		or playlist entry.
 		if (error.data === 5) {
+			this.isReady = false;
 			console.warn('There was an issue with the YouTube HTML5 player. Cleaning-up and trying again.');
 			this.cleanup();
 			this.playerSetup();
 			oldSource = this.currentSource;
 			this.currentSource = null;
-			this.load(oldSource, this.currentStartAt);
-			this.resumePlayback();
+			this.parent.setVideoAndPosition(oldSource, this.currentStartAt);
+			this.parent.resumePlayback();
 		}
 		else {
 			console.warn('The YouTube Player experienced an unrecoverable error.');
@@ -169,6 +170,7 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 		//The HTML5 YouTube video player doesn't seem to send status changes like the FlashYouTube player. :/
 		// If you have an HTML5 player... this will not crash but will not hide the currtain either. TODO: figure out the player event api.
 		console.debug(this.id, 'Loading...', source, 'ready=False');
+
 		this.player.cueVideoById({ videoId: source, startSeconds: offset, suggestedQuality: 'medium' });
 		this.pause(); //-- pause has zero effect since "ready is false"
 	},

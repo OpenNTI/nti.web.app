@@ -266,6 +266,7 @@ Ext.define('NextThought.view.video.Video', {
 			var p = me.players[cls.type] = cls.create(Ext.apply({
 				el: Ext.get(me.el.down('.video-wrapper')),
 				parentId: me.id,
+				parent: me,
 				width: me.playerWidth,
 				height: me.playerHeight
 			}, me.playerConfigOverrides(cls.type)));
