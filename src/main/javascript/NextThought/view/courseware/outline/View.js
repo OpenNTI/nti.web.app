@@ -83,9 +83,9 @@ Ext.define('NextThought.view.courseware.outline.View', {
 		this.callParent(arguments);
 		this.mon(this.frameBodyEl, 'scroll', 'handleScrolling');
 
-        if(Ext.is.iOS){
-            Ext.apply(this,{overItemCls: ''});
-        }
+		if (Ext.is.iOS) {
+			Ext.apply(this, {overItemCls: ''});
+		}
 	},
 
 
@@ -93,10 +93,12 @@ Ext.define('NextThought.view.courseware.outline.View', {
 		var selected = this.getSelectedNodes()[0],
 			selectedEl = Ext.get(selected);
 
-		if (selectedEl.getY() < this.frameBodyEl.getY()) {
-			selectedEl.addCls('out-of-view');
-		} else {
-			selectedEl.removeCls('out-of-view');
+		if (selectedEl && this.frameBodyEl) {
+			if (selectedEl.getY() < this.frameBodyEl.getY()) {
+				selectedEl.addCls('out-of-view');
+			} else {
+				selectedEl.removeCls('out-of-view');
+			}
 		}
 	},
 
