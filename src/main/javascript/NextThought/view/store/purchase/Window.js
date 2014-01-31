@@ -55,7 +55,7 @@ Ext.define('NextThought.view.store.purchase.Window', {
 		]
 		},
 		{
-			id: '{id}-body', cls: 'container-body', html: '{%this.renderContainer(out,values)%}'
+			id: '{id}-body', cls: 'container-body scrollable', html: '{%this.renderContainer(out,values)%}'
 		},
 		{
 			cls: 'error', cn: [
