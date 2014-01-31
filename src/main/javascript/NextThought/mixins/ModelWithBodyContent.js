@@ -35,40 +35,40 @@ Ext.define('NextThought.mixins.ModelWithBodyContent', {
 	NOTE_BODY_DIVIDER_TPL: Ext.DomHelper.createTemplate({ id: '{0}', cls: 'body-divider', html: '{1}' }).compile(),
 
 	WHITEBOARD_THUMBNAIL_TPL: Ext.DomHelper.createTemplate({
-	   id: '{0}',
-	   cls: 'body-divider',
-	   cn: [
-		   {
-			   onclick: '{2}',
-			   cls: 'whiteboard-container',
-			   cn: [
-				   {
-					   cls: 'whiteboard-wrapper',
-					   cn: [
-						   {
-							   cls: 'overlay'
-						   },
-						   {
-							   tag: 'img',
-							   src: '{1}',
-							   cls: 'whiteboard-thumbnail',
-							   alt: 'Whiteboard Thumbnail',
-							   border: 0,
-							   width: '{3}'
-						   }
-					   ]
-				   },
-				   {
-					   cls: 'toolbar',
-					   cn: [
-						   { cls: 'reply', html: 'Reply with image' },
-						   { cls: 'checkbox include', html: 'Include image' }
-					   ]
-				   }
-			   ]
-		   }
-	   ]
-  }).compile(),
+		id: '{0}',
+		cls: 'body-divider',
+		cn: [
+			{
+				onclick: '{2}',
+				cls: 'whiteboard-container',
+				cn: [
+					{
+						cls: 'whiteboard-wrapper',
+						cn: [
+							{
+								cls: 'overlay'
+							},
+							{
+								tag: 'img',
+								src: '{1}',
+								cls: 'whiteboard-thumbnail',
+								alt: 'Whiteboard Thumbnail',
+								border: 0,
+								width: '{3}'
+							}
+						]
+					},
+					{
+						cls: 'toolbar',
+						cn: [
+							{ cls: 'reply', html: 'Reply with image' },
+							{ cls: 'checkbox include', html: 'Include image' }
+						]
+					}
+				]
+			}
+		]
+	}).compile(),
 
 	whiteboardRenderer: function(o, clickHandlerMaker, size, callback, scope) {
 		var id = guidGenerator(),
@@ -76,11 +76,11 @@ Ext.define('NextThought.mixins.ModelWithBodyContent', {
 				Canvas = NextThought.view.whiteboard.Canvas;
 		Canvas.getThumbnail(o, function(thumbnail) {
 			var t = me.WHITEBOARD_THUMBNAIL_TPL.apply([
-														  id,
-														  thumbnail,
-														  clickHandlerMaker(id, o) || '',
-														  size || ''
-													  ]);
+				id,
+				thumbnail,
+				clickHandlerMaker(id, o) || '',
+				size || ''
+			]);
 			Ext.callback(callback, scope, [t]);
 		});
 	},
@@ -103,8 +103,8 @@ Ext.define('NextThought.mixins.ModelWithBodyContent', {
 
 
 		var p, width = node.getAttribute('data-width'),
-			url = node.getAttribute('data-url'),
-			type = node.getAttribute('data-type');
+				url = node.getAttribute('data-url'),
+				type = node.getAttribute('data-type');
 
 		p = Ext.widget({
 			xtype: 'content-video',
@@ -152,11 +152,12 @@ Ext.define('NextThought.mixins.ModelWithBodyContent', {
 			else {
 				fn = me[me.rendererForPart[o.MimeType] || ''];
 				if (Ext.isFunction(fn)) {
-					fn.call(me, o, Ext.bind(clickHandlerMaker, scope), Ext.isObject(size) ? size[o.MimeType]
-							: size, function(t) {
-						text.push(t);
-						render(i - 1);
-					}, me);
+					fn.call(me, o, Ext.bind(clickHandlerMaker, scope),
+							Ext.isObject(size) ? size[o.MimeType] : size,
+							function(t) {
+								text.push(t);
+								render(i - 1);
+							}, me);
 				}
 				else {
 					console.error('Not rendering part we don\'t understand', o);
@@ -167,6 +168,7 @@ Ext.define('NextThought.mixins.ModelWithBodyContent', {
 
 		render(body.length - 1);
 	},
+
 
 	hasTerm: function(term) {
 		var found = false,
