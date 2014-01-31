@@ -190,19 +190,22 @@ Ext.define('NextThought.controller.Search', {
 		}
 
 		var s = this.getHitStore(),
-				filter = this.modelFilter,
-				partial = this.doPartialSearch,
-				rootUrl = Service.getUserUnifiedSearchURL(),
-				loc = ReaderPanel.get().getLocation().NTIID || 'noNTIID',
-				url = [
-					rootUrl,
-					loc,
-					'/',
-					value,
-					partial ? '*' : ''
-				], selectedMimeTypes = [], me = this;
+			filter = this.modelFilter,
+			partial = this.doPartialSearch,
+			rootUrl = Service.getUserUnifiedSearchURL(),
+			currentCourse = Ext.getCmp('content').currentCourse,
+			loc = (currentCourse && currentCourse.getContentPackageNTIID()) ||
+				  ReaderPanel.get().getLocation().NTIID ||
+				  'noNTIID',
+			url = [
+				rootUrl,
+				loc,
+				'/',
+				value,
+				partial ? '*' : ''
+			],
+			selectedMimeTypes = [], me = this;
 
-		//clear old results from both store and search results.
 		this.clearSearchResults();
 		s.removeAll();
 
