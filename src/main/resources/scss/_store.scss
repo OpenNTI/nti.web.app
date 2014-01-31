@@ -700,6 +700,16 @@
 					cursor: text;
 				}
 			}
+
+			tr.failed {
+				td:first-of-type {
+					color: $primary-red;
+				}
+
+				td:not(:first-of-type){
+					visibility: hidden;
+				}
+			}
 		}
 	}
 }

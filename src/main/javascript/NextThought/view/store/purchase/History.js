@@ -52,8 +52,10 @@ Ext.define('NextThought.view.store.purchase.History', {
 		}
 
 		var data = [], obj = Ext.decode(resp.responseText) || {};
+
 		Ext.each(ParseUtils.parseItems(obj.Items || ''), function(h) {
-			var d = h.getData(), q;
+			var d = h.getData(), q, state = h.get('state');
+
 			d.Order = (d.Order && d.Order.getData()) || {};
 			d.Pricing = (d.Pricing && d.Pricing.getData()) || {};
 			d.key = isMe(d.Creator) ? $AppConfig.userObject : d.Creator;
@@ -65,7 +67,7 @@ Ext.define('NextThought.view.store.purchase.History', {
 			d.Price = NTIFormat.currency(d.Pricing.TotalPurchasePrice, d.Pricing.Currency);
 
 
-			console.log(d);
+			//console.log(d);
 
 			if (!Ext.isEmpty(d.InvitationCode)) {
 				d.type = 'bulk';
@@ -77,6 +79,11 @@ Ext.define('NextThought.view.store.purchase.History', {
 				d.Action = 'Redeemed';
 				d.Time = d.RedemptionTime;
 				d.Price = 'n/a';
+			}
+
+			if (state !== 'Success') {
+				d.Action = 'Failed Purchase';
+				d.type = 'failed';
 			}
 
 			data.push(d);
