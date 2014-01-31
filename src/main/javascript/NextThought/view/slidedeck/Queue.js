@@ -6,7 +6,7 @@ Ext.define('NextThought.view.slidedeck.Queue', {
 	allowDeselect: false,
 	overItemCls: 'over',
 	itemSelector: 'div.item-wrap',
-	cls: 'slidedeck-queue',
+	cls: 'slidedeck-queue scrollable',
 
 	tpl: Ext.DomHelper.markup({tag: 'tpl', 'for': '.', cn: [
 			{cls: 'item-wrap', cn: [{
