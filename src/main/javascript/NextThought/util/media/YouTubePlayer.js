@@ -125,7 +125,7 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 		switch (event.data) {
 			case -1: type = 'unstarted'; break;
 			case YT.PlayerState.ENDED: type = 'ended'; break;
-			case YT.PlayerState.PLAYING: type = 'play'; break;
+			case YT.PlayerState.PLAYING: type = 'play'; this.userActivatedPlayer = true; break;
 			case YT.PlayerState.PAUSED: type = 'pause'; break;
 			case YT.PlayerState.BUFFERING: type = 'buffering'; break;
 			case YT.PlayerState.CUED: type = 'cued'; this.playerReady(); break;
@@ -175,9 +175,10 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 
 	play: function() {
 		if (this.player.playVideo) {
-			if (!Ext.is.iOS) {
-				this.player.playVideo();
+			if (Ext.is.iOS && !this.userActivatedPlayer) {//we have to wait for the player to have been touched, but after that, we can interact with it just as normal.
+				return;
 			}
+			this.player.playVideo();
 		}
 	},
 
