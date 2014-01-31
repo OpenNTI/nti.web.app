@@ -148,12 +148,12 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 
 
 	getCurrentTime: function() {
-		return this.player.getCurrentTime();
+		return this.player && this.player.getCurrentTime();
 	},
 
 
 	getPlayerState: function() {
-		return this.player.getPlayerState();
+		return this.player && this.player.getPlayerState();
 	},
 
 
@@ -180,7 +180,7 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 
 
 	play: function() {
-		if (this.player.playVideo) {
+		if (this.player && this.player.playVideo) {
 			if (Ext.is.iOS && !this.userActivatedPlayer) {//we have to wait for the player to have been touched, but after that, we can interact with it just as normal.
 				return;
 			}
@@ -204,7 +204,7 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 
 
 	pause: function() {
-		if (!this.isReady) { return; }
+		if (!this.isReady || !this.player) { return; }
 		if (this.player.pauseVideo) {
 			this.player.pauseVideo();
 		}
@@ -212,7 +212,7 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 
 
 	seek: function(offset, seekAhead) {
-		if (!this.isReady) { return;}
+		if (!this.isReady || !this.player) { return;}
 		this.currentStartAt = offset;
 		this.player.seekTo(offset, seekAhead);
 		this.pause();
