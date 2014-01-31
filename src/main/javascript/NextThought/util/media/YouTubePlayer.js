@@ -46,6 +46,7 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 			width: this.width,
 			height: this.height,
 			playerVars: {
+				html5: 1,
 				modestbranding: 1,
 				autohide: 1,
 				wmode: 'transparent',
