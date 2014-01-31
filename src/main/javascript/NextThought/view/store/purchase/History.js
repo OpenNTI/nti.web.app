@@ -54,7 +54,7 @@ Ext.define('NextThought.view.store.purchase.History', {
 		var data = [], obj = Ext.decode(resp.responseText) || {};
 
 		Ext.each(ParseUtils.parseItems(obj.Items || ''), function(h) {
-			var d = h.getData(), q, state = h.get('state');
+			var d = h.getData(), q, state = h.get('State');
 
 			d.Order = (d.Order && d.Order.getData()) || {};
 			d.Pricing = (d.Pricing && d.Pricing.getData()) || {};
