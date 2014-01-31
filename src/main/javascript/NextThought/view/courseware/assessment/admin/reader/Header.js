@@ -21,7 +21,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 			this.assignmentHistory.buildGrade();
 		}
 
-		if (submission) {
+		if (submission && (submission.get('parts') || []).length > 0) {
 			if (this.assignmentHistory.get('due') < submission.get('CreatedTime')) {
 				this.lateEl.update('Late');
 			} else {
