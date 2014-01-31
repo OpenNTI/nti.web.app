@@ -30,6 +30,7 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 		this.player = null;
 		this.width = config.width;
 		this.height = config.height;
+		this.parent = config.parent;
 
 		this.playerSetup();
 	},
