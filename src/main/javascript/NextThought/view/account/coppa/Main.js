@@ -168,7 +168,9 @@ Ext.define('NextThought.view.account.coppa.Main', {
 		box.show();
 
 		//set error state on specific field
+		if (field) {
 			field.addCls('error');
+		}
 
 		this.up('window').updateLayout();
 	},
