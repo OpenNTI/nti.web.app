@@ -173,24 +173,32 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 							   return this.studentTpl.apply(u);
 						   } },
 						   { text: 'Completed', dataIndex: 'submission', width: 150, renderer: function(v, col, rec) {
-								var d = this.dueDate,
-									s = (v && v.get && v.get('Last Modified')) || v;
+							   var d = this.dueDate,
+								   s = (v && v.get && v.get('Last Modified')) || v,
+								   item = rec.get('item'),
+								   parts = item && item.get('parts'),
+								   submission = rec.get('Submission');
 
-								if (!s) {
-									return Ext.DomHelper.markup({cls: 'incomplete', html: 'Incomplete'});
-								}
-								if (d > s) {
-									return Ext.DomHelper.markup({cls: 'ontime', html: 'On Time'});
-								}
-								if (!d) {
-									return Ext.DomHelper.markup({cls: 'ontime', html: 'Submitted ' + Ext.Date.format(s, 'm/d')});
-								}
 
-								d = new Duration(Math.abs(s - d) / 1000);
+							   if (!parts || !parts.length) {
+								   return '';
+							   }
 
-								return Ext.DomHelper.createTemplate({cls: 'late', html: '{late} Late'}).apply({
-									late: d.ago().replace('ago', '').trim()
-								});
+							   if (!s || ((submission && submission.get('parts')) || []).length === 0) {
+								   return Ext.DomHelper.markup({cls: 'incomplete', html: 'Incomplete'});
+							   }
+							   if (d > s) {
+								   return Ext.DomHelper.markup({cls: 'ontime', html: 'On Time'});
+							   }
+							   if (!d) {
+								   return Ext.DomHelper.markup({cls: 'ontime', html: 'Submitted ' + Ext.Date.format(s, 'm/d')});
+							   }
+
+							   d = new Duration(Math.abs(s - d) / 1000);
+
+							   return Ext.DomHelper.createTemplate({cls: 'late', html: '{late} Late'}).apply({
+								   late: d.ago().replace('ago', '').trim()
+							   });
 						   } },
 						   { text: 'Score', componentCls: 'score', dataIndex: 'Grade', width: 90,
 							   editor: 'textfield',
@@ -199,9 +207,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 								   return v && v.split(' ')[0];
 							   },
 							   listeners: {
-								headerclick: function() {
-									var store = this.up('grid').getStore(),
-										sorter = new Ext.util.Sorter({
+								   headerclick: function() {
+									   var store = this.up('grid').getStore(),
+											   sorter = new Ext.util.Sorter({
 											direction: this.sortState,
 											sorterFn: function(o1, o2) {
 												o1 = o1 && o1.get('Grade');

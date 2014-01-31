@@ -100,13 +100,15 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 							var d = rec.get('due'),
 								s = (v && v.get && v.get('Last Modified')) || v,
 								item = rec.get('item'),
-								parts = item && item.get('parts');
+								parts = item && item.get('parts'),
+								submission = rec.get('Submission');
+
 
 							if (!parts || !parts.length) {
 								return '';
 							}
 
-							if (!s) {
+							if (!s || ((submission && submission.get('parts')) || []).length === 0) {
 								return Ext.DomHelper.markup({cls: 'incomplete', html: 'Due ' + Ext.Date.format(d, 'm/d')});
 							}
 
@@ -118,8 +120,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 								return Ext.DomHelper.markup({cls: 'ontime', html: 'Submitted ' + Ext.Date.format(s, 'm/d')});
 							}
 
-							d = new Duration(Math.abs(s - d) / 1000);
 
+							d = new Duration(Math.abs(s - d) / 1000);
 							return Ext.DomHelper.createTemplate({cls: 'late', html: '{late} Late'}).apply({
 								late: d.ago().replace('ago', '').trim()
 							});
