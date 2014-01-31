@@ -215,9 +215,9 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 
 
 	stop: function() {
-		if (this.player && this.player.clearVideo) {
-			//this.player.stopVideo();
-			this.player.clearVideo();
+		if (this.player && this.player.stopVideo) {
+			this.player.stopVideo();
+			//this.player.clearVideo();
 			//this.player.pauseVideo();
 		}
 	},
