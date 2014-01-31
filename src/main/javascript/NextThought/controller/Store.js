@@ -341,7 +341,7 @@ Ext.define('NextThought.controller.Store', function(){
 
 			function filter(r) {
 				var e = r.raw.EndDate;
-				return !e || (new Date(e) < new Date());
+				return e && (new Date(e) < new Date());
 			}
 
 			store.filter(function(r) { return !filter(r); });
@@ -352,7 +352,7 @@ Ext.define('NextThought.controller.Store', function(){
 					store: store,
 					xtype: 'purchasable-collection',
 					id: 'store-collection',
-					name: getString('store.catalog','Available for Purchase')
+					name: getString('store.catalog', 'Available for Purchase')
 				});
 			}
 
