@@ -88,15 +88,16 @@ Ext.define('NextThought.view.account.contacts.GroupChat', {
 	},
 
 	//Make sure all the tokens are also selected in the contacts view
-	addTokensBack: function(){
-		if(!this.fromItemSelect){ return; }//the only time they would be out of sync is if an item had just been selected
+	addTokensBack: function() {
+		//the only time they would be out of sync is if an item had just been selected
+		if (!this.fromItemSelect) { return; }
 
 		var me = this,
 			tokens = this.tokensEl.query('.token');
 
 		delete this.fromItemSelect;
 
-		Ext.each(tokens, function(t){
+		Ext.each(tokens, function(t) {
 			var username = t.getAttribute('data-username');
 
 			me.selectId(username);
@@ -121,18 +122,18 @@ Ext.define('NextThought.view.account.contacts.GroupChat', {
 		}
 	},
 
-	
-	selectId: function(id){
+
+	selectId: function(id) {
 		var recs = this.contactSearch.getStore().getRange(),
 			rec;
 
-		Ext.each(recs, function(r){
-			if(r.get('Username') === id){
+		Ext.each(recs, function(r) {
+			if (r.get('Username') === id) {
 				rec = r;
 			}
 		});
 
-		if(rec){
+		if (rec) {
 			this.contactSearch.getSelectionModel().select(rec, true, true);
 		}
 	},
@@ -202,12 +203,12 @@ Ext.define('NextThought.view.account.contacts.GroupChat', {
 			],
 			sorters: [{
 				//Put users first
-				sorterFn: function(a,b) {
+				sorterFn: function(a, b) {
 					var c = a.isGroup,
 						d = b.isGroup;
-					return c === d
-							? 0
-							: c ? 1 : -1;
+					return c === d ?
+						   0 :
+						   c ? 1 : -1;
 				},
 				direction: 'ASC'
 			},{
@@ -222,23 +223,29 @@ Ext.define('NextThought.view.account.contacts.GroupChat', {
 		data = online.getRange();
 		data.push.apply(data, listsAndGroups.getRange());
 
+		function nulls(o) {return !!o;}
+
 		this.searchStore.loadData(data);
 		this.searchStore.mon(online, {
 			scope: this.searchStore,
-			add: function(s,r) {this.add(r);this.filter();},
-			remove: function(s,r) {this.remove(r);}
+			add: function(s, r) { if (!r) {return;} this.add(r);this.filter(); },
+			remove: function(s, r) {this.remove(r); }
 		});
+
 		this.searchStore.mon(listsAndGroups, {
 			scope: this.searchStore,
-			load: function(s,r) {this.add(r);this.filter();},
-			add: function(s,r) {this.add(r);this.filter();},
-			remove: function(s,r) {this.remove(r);}
+			load: function(s, r) {
+				this.add((r || []).filter(nulls));
+				this.filter();
+			},
+			add: function(s, r) {this.add(r);this.filter();},
+			remove: function(s, r) {this.remove(r);}
 		});
 
 		//Keep the store's selection model up to date with the tokens
-		this.mon(this.searchStore,{
-			'filterchange' : 'addTokensBack',
-			buffer : 100
+		this.mon(this.searchStore, {
+			filterchange: 'addTokensBack',
+			buffer: 100
 		});
 
 
@@ -263,12 +270,12 @@ Ext.define('NextThought.view.account.contacts.GroupChat', {
 	},
 
 
-	itemDeselect: function(v,rec) {
+	itemDeselect: function(v, rec) {
 		this.removeToken(rec);
 	},
 
 
-	itemSelect: function(v,rec) {
+	itemSelect: function(v, rec) {
 		this.addToken(rec);
 		this.fromItemSelect = true;
 		this.searchStore.search('');//clear out the search results once we select an item
