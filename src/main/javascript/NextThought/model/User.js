@@ -80,7 +80,6 @@ Ext.define('NextThought.model.User', {
 
 
 	getData: function() {
-		/*
 		var k, v, f = this.callParent(arguments);
 
 		for (k in f) {
@@ -90,9 +89,9 @@ Ext.define('NextThought.model.User', {
 					f[k] = v.getData.apply(v, arguments);
 				}
 			}
-		}*/
+		}
 
-		return this.asJSON();
+		return f;
 	},
 
 
