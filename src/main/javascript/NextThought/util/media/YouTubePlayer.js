@@ -66,7 +66,7 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 		var me = this,
 			state = NaN;
 
-		console.debug(this.id, 'PlayerReady called', this.onReadyLoadSource, arguments);
+		//console.debug(this.id, 'PlayerReady called', this.onReadyLoadSource, arguments);
 		this.isReady = true;
 		this.fireEvent('player-ready', 'youtube');
 
@@ -214,9 +214,10 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 
 
 	stop: function() {
-		if (this.player) {
-			this.player.stopVideo();
+		if (this.player && this.player.pauseVideo) {
+			//this.player.stopVideo();
 			//this.player.clearVideo();
+			this.player.pauseVideo();
 		}
 	},
 

@@ -809,14 +809,15 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 
 			function handleMessage(event) {
-				var eventData, player;
+				var eventData, player, state;
 				try {
 					eventData = JSON.parse(event.data);
 					player = document.getElementById(playerId);
 					console.debug('Player Command to: ' + playerId + ', command: ' + eventData.name + ', data:', eventData.data);
 
-					if (eventData.name === 'doStop' && player.evaluate('{video.player.state}') !== 'playing') {
-						console.warn('Skipping doStop commmand because player is not playing.');
+					state = player.evaluate('{video.player.state}');
+					if (eventData.name === 'doStop' && (state && state !== 'playing')) {
+						console.warn('Skipping doStop commmand because player is not playing: ' + state);
 						return;
 					}
 					player.sendNotification(eventData.name, eventData.data);

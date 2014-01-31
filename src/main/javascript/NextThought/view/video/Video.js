@@ -195,8 +195,7 @@ Ext.define('NextThought.view.video.Video', {
 		//		If loadFirstEntry is true, we load the first playlist entry. For some subclasses this behavior is not desired.
 		if (this.loadFirstEntry) {
 			item = this.playlist[this.playlistIndex];
-			this.activeVideoService = item && item.activeSource().service;
-			this.maybeSwitchPlayers(this.activeVideoService);
+			this.maybeSwitchPlayers(item && item.activeSource().service);
 			if (item) {
 				this.setVideoAndPosition(item.activeSource().source);
 			}
@@ -538,13 +537,14 @@ Ext.define('NextThought.view.video.Video', {
 			} else {
 				v.setVisibilityMode(Ext.dom.Element.DISPLAY);
 				//hide/show handle checking if they need to do anything...lets not worry about it and just call them.
-				v[(k === service) ? 'show' : 'hide']();
+				if (k === service) {
+					v.show();
+				} else {
+					me.issueCommand(k, 'stop', null, true);
+					v.hide();
+				}
 			}
 		});
-
-		if (me.activeVideoService !== service) {
-			me.stopPlayback();
-		}
 
 		me.activeVideoService = service;
 		this.fireEvent('height-change');
@@ -552,25 +552,25 @@ Ext.define('NextThought.view.video.Video', {
 
 
 	playlistSeek: function(newIndex) {
-		var source, item;
+		var source, item, service;
 		if ((newIndex >= 0) && (newIndex < this.playlist.length)) {
 			if (this.playlistIndex !== newIndex || this.activeVideoService === 'none') {
 				this.playlistIndex = newIndex;
 				item = this.playlist[this.playlistIndex];
-				this.activeVideoService = item && item.activeSource().service;
+				service = item && item.activeSource().service;
 				this.log('Playlist seek setting active service to ', this.activeVideoService);
 				while (item && Ext.Array.contains(this.self.playerBlacklist, this.activeVideoService)) {
 					if (!item.useNextSource()) {
-						this.activeVideoService = 'none';
+						service = 'none';
 						this.log('Active service is none');
 						this.currentVideoId = null;
-						this.maybeSwitchPlayers(this.activeVideoService);
+						this.maybeSwitchPlayers(service);
 						return false;
 					}
 					this.activeVideoService = item.activeSource().service;
 				}
 				source = item && item.activeSource().source;
-				this.maybeSwitchPlayers(this.activeVideoService);
+				this.maybeSwitchPlayers(service);
 				this.setVideoAndPosition(source, item && item.get('start'));
 			}
 			return true;
