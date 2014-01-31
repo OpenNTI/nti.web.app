@@ -12,10 +12,10 @@ Ext.define('NextThought.model.User', {
 		{ name: 'email', type: 'string' },
 		{ name: 'realname', type: 'string' },
 		{ name: 'avatarURL', type: 'AvatarURL' },
-		{ name: 'AvatarURLChoices', type: 'AvatarURLList' },
+		{ name: 'AvatarURLChoices', type: 'AvatarURLList', persist: false },
 		{ name: 'accepting', type: 'UserList' },
 		{ name: 'ignoring', type: 'UserList' },
-		{ name: 'status', type: 'Synthetic', fn: function(record) {
+		{ name: 'status', type: 'Synthetic', persist: false, fn: function(record) {
 			//The presence isn't always a PresenceInfo in testing
 			if (record.get('Presence') && record.get('Presence').getDisplayText) {
 				return record.get('Presence').getDisplayText();
@@ -25,7 +25,7 @@ Ext.define('NextThought.model.User', {
 		{ name: 'opt_in_email_communication', type: 'boolean' },
 		{ name: 'following', type: 'UserList' },
 		{ name: 'Communities', type: 'UserList' },
-		{ name: 'displayName', type: 'Synthetic', fn: function(r) {
+		{ name: 'displayName', type: 'Synthetic', persist: false, fn: function(r) {
 			return r.getName();
 		} },
 		{ name: 'about', type: 'string'},
@@ -80,6 +80,7 @@ Ext.define('NextThought.model.User', {
 
 
 	getData: function() {
+		/*
 		var k, v, f = this.callParent(arguments);
 
 		for (k in f) {
@@ -89,9 +90,9 @@ Ext.define('NextThought.model.User', {
 					f[k] = v.getData.apply(v, arguments);
 				}
 			}
-		}
+		}*/
 
-		return f;
+		return this.asJSON();
 	},
 
 
