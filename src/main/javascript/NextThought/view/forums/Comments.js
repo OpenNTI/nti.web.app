@@ -539,13 +539,17 @@ Ext.define('NextThought.view.forums.Comments', {
 
 
 	goToComment: function(comment) {
+		if (!comment) {
+			return;
+		}
+
 		if (!this.rendered) {
 			this.scrollToComment = comment;
 			return;
 		}
 
 		var me = this, addMon,
-			refs = comment.get('references');
+			refs = comment.get && comment.get('references');
 
 		if (Ext.isEmpty(refs)) {
 			me.scrollCommentIntoView(comment);
