@@ -4,6 +4,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 	requires: [
 		'NextThought.store.courseware.AssignmentView',
+		'NextThought.view.courseware.assessment.admin.Grid',
 		'NextThought.store.MockPage'
 	],
 
@@ -90,190 +91,16 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 	items: [
 		{
-			xtype: 'grid',
-			ui: 'course-assessment',
-			plain: true,
-			border: false,
-			frame: false,
+			xtype: 'course-admin-grid',
 			cls: 'student-assignment-overview',
-			scroll: 'vertical',
-			sealedColumns: true,
-			enableColumnHide: false,
-			enableColumnMove: false,
-			enableColumnResize: false,
-			viewConfig: {
-				xhooks: {
-					walkCells: function(pos, direction, e, preventWrap, verifierFn, scope) {
-						return this.callParent([pos, direction, e, preventWrap, function(newPos) {
-							var newerPos = false;
-							if (newPos.column === 2) {
-								return true;
-							}
-							newerPos = this.walkCells(newPos, direction, e, preventWrap);
-							if (newerPos) {
-								Ext.apply(newPos, newerPos);
-								return true;
-							}
-							return false;
-						}, this]);
-					}
-				}
+			gradeEditorOffsets: [-4, 9],
+			columnOverrides: {
+				0: { text: 'Student', dataIndex: 'Creator', flex: 1, padding: '0 0 0 30',
+					renderer: function(v) {
+					   var u = v && (typeof v === 'string' ? {displayName: 'Resolving...'} : v.getData());
+					   return this.studentTpl.apply(u);
+				   } }
 			},
-			selType: 'cellmodel',
-			plugins: [
-				{
-					ptype: 'cellediting',
-					clicksToEdit: 1,
-					listeners: {
-						beforeedit: {
-							element: 'el',
-							fn: function(editor, e) {
-								if (!e.record || e.field !== 'Grade') { return false; }
-
-								var gradeRec = e.record.get('Grade'),
-									value = gradeRec && gradeRec.get('value'),
-									grades = value && value.split(' '),
-									grade = grades && grades[0];
-
-								if (!gradeRec) {
-									e.record.buildGrade();
-								}
-
-								e.value = grade;
-								editor.getEditor(e.record, e.column).offsets = [-4, 9];
-							}
-						},
-						validateedit: {
-							element: 'el',
-							fn: function(editor, e) {
-								var grade = e.record.get('Grade'),
-									v = grade.get('value');
-
-								v = v && v.split(' ')[0];
-
-								if (v !== e.value && !Ext.isEmpty(e.value)) {
-									grade.set('value', e.value + ' -');
-									grade.save();
-								}
-
-								return false;
-							}
-						}
-					}
-				}
-			],
-			columns: {
-				ui: 'course-assessment',
-				plain: true,
-				border: false,
-				frame: false,
-				items: [
-						   { text: 'Student', dataIndex: 'Creator', flex: 1, padding: '0 0 0 30', renderer: function(v) {
-							   var u = v && (typeof v === 'string' ? {displayName: 'Resolving...'} : v.getData());
-							   return this.studentTpl.apply(u);
-						   } },
-						   { text: 'Completed', dataIndex: 'submission', width: 150, renderer: function(v, col, rec) {
-							   var d = this.dueDate,
-								   s = (v && v.get && v.get('Last Modified')) || v,
-								   item = rec.get('item'),
-								   parts = item && item.get('parts'),
-								   submission = rec.get('Submission');
-
-
-							   if (!parts || !parts.length) {
-								   return '';
-							   }
-
-							   if (!s || ((submission && submission.get('parts')) || []).length === 0) {
-								   return Ext.DomHelper.markup({cls: 'incomplete', html: 'Incomplete'});
-							   }
-							   if (d > s) {
-								   return Ext.DomHelper.markup({cls: 'ontime', html: 'On Time'});
-							   }
-							   if (!d) {
-								   return Ext.DomHelper.markup({cls: 'ontime', html: 'Submitted ' + Ext.Date.format(s, 'm/d')});
-							   }
-
-							   d = new Duration(Math.abs(s - d) / 1000);
-
-							   return Ext.DomHelper.createTemplate({cls: 'late', html: '{late} Late'}).apply({
-								   late: d.ago().replace('ago', '').trim()
-							   });
-						   } },
-						   { text: 'Score', componentCls: 'score', dataIndex: 'Grade', width: 90,
-							   editor: 'textfield',
-							   renderer: function(v) {
-								   v = v && v.get('value');
-								   return v && v.split(' ')[0];
-							   },
-							   listeners: {
-								   headerclick: function() {
-									   var store = this.up('grid').getStore(),
-											   sorter = new Ext.util.Sorter({
-											direction: this.sortState,
-											sorterFn: function(o1, o2) {
-												o1 = o1 && o1.get('Grade');
-												o1 = o1 && o1.get('value');
-												o1 = o1 && o1.split(' ')[0];
-												o1 = o1 || '';
-
-												o2 = o2 && o2.get('Grade');
-												o2 = o2 && o2.get('value');
-												o2 = o2 && o2.split(' ')[0];
-												o2 = o2 || '';
-
-												return Globals.naturalSortComparator(o1, o2);
-											}
-									});
-
-								store.sorters.clear();
-								store.sorters.add('Grade', sorter);
-								store.sort();
-								if (store.bind) {
-									store = store.bind;
-									store.sorters.clear();
-									store.sorters.add('Grade', sorter);
-									store.sort();
-								}
-							}
-						}},
-						   { text: 'Feedback', dataIndex: 'feedback', width: 140, renderer: function(items) {
-							   return items ? Ext.util.Format.plural(items, 'Comment') : '';
-						   } },
-						   { text: '', dataIndex: 'Submission', sortable: false, width: 40, renderer: function(v) {
-							   return v && Ext.DomHelper.markup({cls: 'actions'});
-						   } }
-					   ].map(function(o) {
-							return Ext.applyIf(o, {
-								ui: 'course-assessment',
-								border: false,
-								sortable: true,
-								menuDisabled: true
-							});
-						})
-			},
-
-			listeners: {
-				sortchange: function(ct, column) { ct.up('grid').markColumn(column); },
-				selectionchange: function(sm, selected) { sm.deselect(selected); },
-				viewready: function(grid) {
-					grid.mon(grid.getView(), 'refresh', function() {
-						grid.markColumn(grid.down('gridcolumn[sortState]'));
-					});
-				}
-			},
-
-			markColumn: function(c) {
-				var cls = 'sortedOn', el = this.getEl();
-				if (el) {
-					el.select('.' + cls).removeCls(cls);
-					if (c) {
-						Ext.select(c.getCellSelector()).addCls(cls);
-					}
-				}
-			},
-
-
 
 			studentTpl: Ext.DomHelper.createTemplate({cls: 'padded-cell student-cell', cn: [
 				{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'} },
@@ -501,17 +328,11 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 
 	onItemClick: function(v, record, dom, ix, e) {
-		var nib = e.getTarget('.actions'),
-			selModel = v.getSelectionModel(),
+		var selModel = v.getSelectionModel(),
 			selection = selModel && selModel.selection,
 			dataIndex = selection && selection.columnHeader.dataIndex,
 			item = record.get('item'),
 			noSubmit = item && item.get && (item.get('category_name') === 'no_submit');
-
-		if (nib) {
-			this.getActionsMenu(record).showBy(nib, 'tr-br');
-			return;
-		}
 
 		//if we didn't click on the grade cell or we don't have a grade yet
 		if (noSubmit) {
@@ -537,35 +358,5 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		}
 
 		this.fireEvent('show-assignment', this, this.assignment, record, student, path, this.store, this.store.indexOf(record) + 1);
-	},
-
-
-	getActionsMenu: function(record) {
-		var menu = Ext.widget('menu', {
-			ui: 'nt',
-			plain: true,
-			shadow: false,
-			frame: false,
-			border: false,
-			ownerCmp: this,
-			constrainTo: Ext.getBody(),
-			defaults: {
-				ui: 'nt-menuitem',
-				plain: true
-			}
-		});
-
-		menu.add(new Ext.Action({
-			text: 'Reset Assignment',
-			scope: this,
-			handler: Ext.bind(record.beginReset, record),
-			itemId: 'delete-assignment-history',
-			ui: 'nt-menuitem', plain: true
-		}));
-
-
-		menu.on('hide', 'destroy');
-
-		return menu;
 	}
 });
