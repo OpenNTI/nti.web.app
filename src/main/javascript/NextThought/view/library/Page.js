@@ -7,7 +7,7 @@ Ext.define('NextThought.view.library.Page', {
 	],
 
 	defaultType: 'library-collection',
-	showPage: true,
+	showPage: false,
 	cls: 'page scrollable',
 
 	items: [
@@ -47,7 +47,7 @@ Ext.define('NextThought.view.library.Page', {
 		}
 
 		var v = this.query('dataview');
-		this.showPage = !v.length || v.reduce(has, 0) > 0;
+		this.showPage = v.reduce(has, 0) > 0;
 		this.fireEvent('update-tab');
 	}
 });
