@@ -197,6 +197,7 @@ Ext.define('NextThought.controller.Reader', {
 
 				me.showCardTarget(r, data, false, callback);
 			} else if (resp) {
+				r.fireEvent('navigation-failed', r, id, resp);
 				console.error(resp.responseText);
 			}
 		}
