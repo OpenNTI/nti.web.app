@@ -191,7 +191,7 @@ Ext.define('NextThought.view.content.reader.Scroll', {
 
 
 	to: function(top, animate) {
-		if (!this.scrollingEl) {
+		if (!this.scrollingEl || !this.scrollingEl.dom) {
 			return;
 		}
 		this.scrollingEl.scrollTo('top', top, animate !== false);
