@@ -106,7 +106,7 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 	getScope: function(scope) {
 		var s = (this.get('Scopes') || {})[scope] || '';
 		if (typeof s === 'string') {
-			s = s.split(',');
+			s = s.split(' ');
 		}
 		return s;
 	},
