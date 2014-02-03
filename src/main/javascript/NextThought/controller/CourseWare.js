@@ -225,17 +225,13 @@ Ext.define('NextThought.controller.CourseWare', {
 			collection = view.assignmentsCollection,
 			currentCourse = view.instance, potentials, store, lin;
 
-		if (!collection) {
-			if (currentCourse) {
-				console.debug('Blocking navigation until we have assignment information');
-				return false; //we can't know yet, deny.
-			}
-			console.warn('No Course, may be allowing navigation to restructed content if course isn\'t set yet??');
-			return true;
-		}
-
 		//not in a course, ignore.
 		if (!currentCourse) {return true;}
+
+		if (!collection) {
+			console.debug('Blocking navigation until we have assignment information');
+			return false; //we can't know yet, deny.
+		}
 
 		//the main content reader cannot access assignments. It must go through the assignments tab.
 		potentials = collection.pageContainsAssignment(ntiid);
@@ -261,6 +257,7 @@ Ext.define('NextThought.controller.CourseWare', {
 		// the next to last entry is the first branch from the root
 		// of the content (so its a unit or a lesson... if we can
 		// find it in the nav store, its available.)
+		//TODO: This needs to go away. Favor scoped reader navigation.
 		return !!store.getById(lin[lin.length - 2]);
 	},
 
