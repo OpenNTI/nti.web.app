@@ -64,6 +64,7 @@ Ext.define('NextThought.controller.Reader', {
 			component: {
 				'*': {
 					'set-location': 'setLocation',
+					'set-location-rooted': 'setLocationRooted',
 					'set-last-location-or-root': 'setLastLocation',
 					'suspend-annotation-manager': 'suspendManager',
 					'resume-annotation-manager': 'resumeManager'
@@ -145,13 +146,22 @@ Ext.define('NextThought.controller.Reader', {
 		//TODO: this should start a session transaction that ends with a "state replacement" so there is no "back"
 			this.fireEvent('show-view', 'library', true);
 			r.clearLocation();
+			r.currentRoot = null;
 			this.getMainNav().updateCurrent(true);
 			this.getSwitcher().track(loc && loc.title, true);
 		}
 	},
 
 
-	setLocation: function(ntiid, callback) {
+	/**
+	 * This is the random-access mothod to navigate to any content.
+	 *
+	 * @param {String} ntiid
+	 * @param {Function} [callback] Function that will be called back on success.
+	 * @param {Boolean} [silent] Presently not used.
+	 * @return {Boolean} Always returns true. :/
+	 */
+	setLocation: function(ntiid, callback, silent) {
 		var me = this,
 			r = me.getContentReader(),
 			v = me.getContentView(),
@@ -208,24 +218,51 @@ Ext.define('NextThought.controller.Reader', {
 	},
 
 
+	setLocationRooted: function(ntiid, callback, silent) {
+		var reader = this.getContentReader(),
+			oldRoot = reader.currentRoot;
+
+		reader.currentRoot = ntiid;
+
+		function call(a, er) {
+			if (er && er.status !== undefined && Ext.Ajax.isHTTPErrorCode(er.status)) {
+				reader.currentRoot = oldRoot;
+			}
+
+			Ext.callback(callback, null, [ntiid, a, er]);
+		}
+
+		this.setLocation(ntiid, call, silent === true);
+	},
+
+
+	/**
+	 * This is (and should) only be called by navigating to a BOOK.
+	 * {@see NextThought.model.Title#fireNavigationEvent()}
+	 *
+	 * @param {String} ntiid
+	 * @param {Function} [callback]
+	 * @param {Boolean} [silent]
+	 */
 	setLastLocation: function(ntiid, callback, silent) {
-		var lastNtiid = PersistentStorage.getProperty('last-location-map', ntiid, ntiid);
+		var reader = this.getContentReader(),
+			lastNtiid = PersistentStorage.getProperty('last-location-map', ntiid, ntiid);
+
 		if (!ParseUtils.isNTIID(lastNtiid)) {
 			lastNtiid = ntiid;
 		}
-
 
 		function call(a, errorDetails) {
 			var error = (errorDetails || {}).error;
 			if (error && error.status !== undefined && Ext.Ajax.isHTTPErrorCode(error.status)) {
 				PersistentStorage.removeProperty('last-location-map', ntiid);
+				reader.currentRoot = null;
 			}
 
-			if (Ext.isFunction(callback)) {
-				Ext.callback(callback, null, [ntiid, a, error]);
-			}
+			Ext.callback(callback, null, [ntiid, a, error]);
 		}
 
+		reader.currentRoot = ntiid;
 		this.getContentView()._setCourse(null);
 		this.setLocation(lastNtiid, call, silent === true);
 	},
@@ -313,7 +350,7 @@ Ext.define('NextThought.controller.Reader', {
 		pw[fn]();
 
 		pw.clearBookmark();
-		pg.updateState(t);
+		pg.updateState(t, reader.currentRoot);
 
 		//Do not track content packages if they are marked as courseware...track the course instead.
 		if (cw.__isPartOfCourse(pageInfo)) {
@@ -327,7 +364,7 @@ Ext.define('NextThought.controller.Reader', {
 		//If there is no origin, we treat this as normal. (Read the location from the location provder) The origin is
 		// to direct the navbar to use the origins' id instead of the current one (because we know th current one will
 		// not resolve from our library... its a card)
-		this.getContentNavigation().updateLocation(t || origin);
+		this.getContentNavigation().updateLocation(t || origin, reader.currentRoot);
 	},
 
 

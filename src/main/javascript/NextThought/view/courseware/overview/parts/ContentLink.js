@@ -92,6 +92,15 @@ Ext.define('NextThought.view.courseware.overview.parts.ContentLink', {
 	},
 
 
+	navigateToTarget: function() {
+		if (ParseUtils.isNTIID(this.target)) {
+			return this.fireEvent('set-location-rooted', this.target);
+		}
+
+		return this.callParent(arguments);
+	},
+
+
 	onCardClicked: function(e) {
 		if (e && e.getTarget('.comment')) {
 			e.stopEvent();

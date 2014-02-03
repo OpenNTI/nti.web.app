@@ -27,8 +27,8 @@ Ext.define('NextThought.view.content.Pager', {
 	showControls: function() { this.el.show(); },
 
 
-	updateState: function(ntiid) {
-		var info = ntiid && ContentUtils.getNavigationInfo(ntiid),
+	updateState: function(ntiid, rootId) {
+		var info = ntiid && ContentUtils.getNavigationInfo(ntiid, rootId),
 			next = this.nextEl,
 			prev = this.prevEl,
 			nextTitle = info && info.next && ContentUtils.findTitle(info.next, null),
