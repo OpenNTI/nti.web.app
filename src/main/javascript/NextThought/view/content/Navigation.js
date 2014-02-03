@@ -129,16 +129,17 @@ Ext.define('NextThought.view.content.Navigation', {
 			rootIdIdx++; //slice is not inclusive, so push the index one up
 			// so that our slice gets the new root.
 			lineage = lineage.slice(0, rootIdIdx);
-			names = names.slice(0, rootIdIdx);
+			//No need to slice names... we're reversed so the 0th item is the leaf, the nth item is the root.
+			//names = names.slice(0, rootIdIdx);
 
 			//From this point on the logic should be unchanged... lineage manipulation is complete.
 		}
 
 		lineage.pop(); // don't let the root show
 		// first was the 2nd item in the array... which is where the 'back' arrow will take you
-		this.upEl[(!lineage.first()) ? 'hide' : 'show']();
+		this.upEl[(!lineage.first() && !rootId) ? 'hide' : 'show']();
 		this.upEl.set({
-			'data-qtip': 'Go up to ' + names[1]
+			'data-qtip': 'Go up to ' + (names[1] || '')
 		});
 
 
