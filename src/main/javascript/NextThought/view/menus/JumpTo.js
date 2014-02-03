@@ -26,9 +26,8 @@ Ext.define('NextThought.view.menus.JumpTo', {
 
 
 	initComponent: function() {
-		var me = this;
 		this.callParent(arguments);
-		this.on('click', this.handleClick, this);
+		this.on('click', 'handleClick', this);
 	},
 
 

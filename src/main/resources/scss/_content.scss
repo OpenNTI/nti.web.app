@@ -220,19 +220,26 @@
 			}
 		}
 
-		.x-box-scroller-bottom .x-menu-scroll-bottom {
-			background-image: url(../images/elements/menu-arrow-down-active.png);
-			opacity: 0.5;
-			&.x-menu-scroll-bottom-hover {
-				opacity: 1;
-			}
-			&.x-menu-scroll-bottom-disabled {
-				opacity: 0 !important;
+		.x-box-scroller-bottom {
+			position: absolute;
+			left: 0; right: 0;
+			top: initial;
+			bottom: 4px;
+
+			.x-menu-scroll-bottom {
+				background: #fff url(../images/elements/menu-arrow-down-active.png) no-repeat center 0;
+				opacity: 0.5;
+				&.x-menu-scroll-bottom-hover {
+					opacity: 1;
+				}
+				&.x-menu-scroll-bottom-disabled {
+					opacity: 0 !important;
+				}
 			}
 		}
 
 		.x-box-scroller-top .x-menu-scroll-top {
-			background-image: url(../images/elements/menu-arrow-up-active.png);
+			background: #fff url(../images/elements/menu-arrow-up-active.png) no-repeat center 0;
 			opacity: 0.5;
 			&.x-menu-scroll-top-hover {
 				opacity: 1;

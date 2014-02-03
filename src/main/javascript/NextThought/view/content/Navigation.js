@@ -80,7 +80,7 @@ Ext.define('NextThought.view.content.Navigation', {
 			this.on('destroy', 'destroy', this.upMenu);
 		}
 
-		this.upMenu.startShow(this.upEl, 'tl-bl', [-10, -20]);
+		this.upMenu.startShow(this.upEl, 'tl-bl', [-10, -25]);
 	},
 
 
@@ -260,8 +260,8 @@ Ext.define('NextThought.view.content.Navigation', {
 				}
 			},
 			'mouseenter': function() {
-				m.maxHeight = Ext.Element.getViewportHeight() - (pathPartEl.getX() + (pathPartEl.getHeight() - 30));
-				m.startShow(pathPartEl, 'tl-bl', [-10, -20]);
+				m.maxHeight = Ext.Element.getViewportHeight() - (pathPartEl.getX() + pathPartEl.getHeight() + 40);
+				m.startShow(pathPartEl, 'tl-bl', [-10, -25]);
 			},
 			'click': function() {
 				m.stopHide();
