@@ -844,6 +844,42 @@ Ext.define('NextThought.model.Base', {
 	},
 
 
+	/**
+	 *
+	 * JSG - Yanked from the Ext.data.Model#callStore() so we can patch it.
+	 *
+     * @inheritDoc
+     */
+	callStore: function(fn) {
+		var args = Ext.Array.clone(arguments),
+			stores = this.stores,
+			i = 0,
+			len = stores.length,
+			store;
+
+		args[0] = this;
+		for (i; i < len; ++i) {
+			store = stores[i];
+			if (store && Ext.isFunction(store[fn])) {
+
+				//Some of our synthetic fields trigger this call before there are groups defined...
+				// the store's group updating code does not ensure a group exists before acting on it,
+				// so lets fake out the store and let it think that its not groupped yet.
+				if (store.isGrouped && store.isGrouped() && store.groups.getCount() === 0) {
+					store.isGrouped = Ext.emptyFn;
+				}
+
+				store[fn].apply(store, args);
+
+				//Remove our fake out.
+				if (store.isGrouped === Ext.emptyFn) {
+					delete store.isGrouped;
+				}
+			}
+		}
+	},
+
+
 	//Methods for updating all copies of an object in memory when one changes,
 	//ideally we have one in memory object that is just referenced everywhere.
 	//We are a bit far away from that (mostly because of how we represent threads)
