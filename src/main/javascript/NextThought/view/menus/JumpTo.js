@@ -37,11 +37,6 @@ Ext.define('NextThought.view.menus.JumpTo', {
 			return;
 		}
 
-		if (item.rememberLastLocation) {
-			this.fireEvent('set-last-location-or-root', item.ntiid);
-			return;
-		}
-
 		this.fireEvent('set-location', item.ntiid);
 	},
 

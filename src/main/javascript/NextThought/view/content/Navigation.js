@@ -208,11 +208,8 @@ Ext.define('NextThought.view.content.Navigation', {
 
 		if (currentNode.tagName === 'toc') {
 			return pathPartEl;
-			//this.enumerateBookSiblings(locationInfo,cfg.items);
 		}
-    //		else {
 		this.enumerateTopicSiblings(currentNode, cfg.items, parent);
-    //		}
 
 		if (Ext.isEmpty(cfg.items)) {
 			return;
@@ -250,25 +247,11 @@ Ext.define('NextThought.view.content.Navigation', {
 				me.fireEvent('set-location', key);
 			}
 		});
-    //		}
 
 		this.menuMap = menus;
 
 		return pathPartEl;
 	},
-
-
-  //	enumerateBookSiblings: function(locInfo,items){
-  //		Library.each(function(o){
-  //			var id = o.get('NTIID');
-  //			items.push({
-  //				rememberLastLocation: true,
-  //				text	: o.get('title'),
-  //				ntiid	: id,
-  //				cls		: id===locInfo.ntiid?'current':''
-  //			});
-  //		});
-  //	},
 
 
 	enumerateTopicSiblings: function(node, items, parent) {
