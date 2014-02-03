@@ -88,6 +88,12 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 	},
 
 
+	isExpired: function() {
+		var c = this.getCourseCatalogEntry();
+		return c && c.isExpired();
+	},
+
+
 	__getLocationInfo: function() {
 		var locationInfo = ContentUtils.getLocation(this.getContentPackageNTIID());
 		//add a reference to myself so the course tiles can get the course instance form the locationInfo for now

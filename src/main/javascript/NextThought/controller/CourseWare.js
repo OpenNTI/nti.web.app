@@ -252,6 +252,11 @@ Ext.define('NextThought.controller.CourseWare', {
 			return true;//not in the same content...
 		}
 
+
+		if (currentCourse.isExpired()) {
+			return true;
+		}
+
 		// the last item in the lineage is the root of the content.
 		// the next to last entry is the first branch from the root
 		// of the content (so its a unit or a lesson... if we can
