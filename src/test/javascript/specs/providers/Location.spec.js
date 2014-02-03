@@ -36,7 +36,7 @@ describe('Library Store', function() {
 		expect(typeof l.NTIID === 'string').toBeTruthy();
 		expect(typeof l.ContentNTIID === 'string').toBeTruthy();
 
-		expect(Object.prototype.toString.call(l.toc)).toBe('[object Document]');
+		expect(Object.prototype.toString.call(l.toc)).toMatch('[object(.*?)+Document]');
 		expect(Object.prototype.toString.call(l.location)).toBe('[object Element]');
 
 		isTopicElement(l.location);
