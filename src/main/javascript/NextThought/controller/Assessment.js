@@ -135,7 +135,7 @@ Ext.define('NextThought.controller.Assessment', {
 			callback: function() {questionWidget.unmask();},
 			failure: function() {
 				console.error('FAIL', arguments);
-				alert('There was a problem grading your question');
+				alert('There was a problem grading your question.');
 			},
 			success: function(self, op) {
 				var result = op.getResultSet().records.first();
@@ -175,7 +175,7 @@ Ext.define('NextThought.controller.Assessment', {
 			callback: function() {},
 			failure: function() {
 				console.error('FAIL', arguments);
-				alert('There was a problem grading your quiz');
+				alert('There was a problem grading your quiz.');
 			},
 			success: function(self, op) {
 				var result = op.getResultSet().records.first();
