@@ -710,13 +710,13 @@ Ext.define('NextThought.util.Content', {
 
 
 
-	getNavigationInfo: function(ntiid) {
+	getNavigationInfo: function(ntiid, rootId) {
 		if (!ntiid) {
 			Ext.Error.raise('No NTIID');
 		}
 
 		var loc = this.find(ntiid),
-			info = {},
+			info, nodes = [],
 			topicOrTocRegex = /topic|toc/i,
 			slice = Array.prototype.slice;
 
@@ -766,20 +766,34 @@ Ext.define('NextThought.util.Content', {
 		function sibling(node, previous) {
 			if (!node) {return null;}
 
-			var siblingMethod = previous ? 'previousSibling' : 'nextSibling', //figure direction
-				siblingNode = node[siblingMethod]; //execute directional sibling method
+			var siblingProp = previous ? 'previousSibling' : 'nextSibling', //figure direction
+				siblingNode = node[siblingProp]; //read directional sibling property (pointer ref)
 
 			//If the sibling is TOC or topic, we are done here...
 			return (isTopicOrToc(siblingNode)) ? siblingNode :
 					//If not, recurse in the same direction
-					sibling(node[siblingMethod], previous);
+					sibling(node[siblingProp], previous);
 		}
 
 		loc = loc ? loc.location : null;
 		if (loc) {
-			info.previous = getRef(child(sibling(loc, true)) || loc.parentNode);
-			info.next = getRef(child(loc, true) || sibling(loc, false) || sibling(loc.parentNode, false));
+			nodes.push(getRef(child(sibling(loc, true)) || loc.parentNode));
+			nodes.push(getRef(child(loc, true) || sibling(loc, false) || sibling(loc.parentNode, false)));
 		}
+
+		//If we have a rootId, lets make that what we consider the root.
+		if (rootId) {
+			//replace siblings that fall outside of our given root.
+			nodes = nodes.map(function(n) {
+				var l = (n && this.getLineage(n)) || [];
+				return (l.indexOf(rootId) < 0) ? null : n;
+			});
+		}
+
+		info = {
+			previous: nodes[0],
+			next: nodes[1]
+		};
 
 		return info;
 	}

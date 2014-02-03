@@ -84,7 +84,7 @@ Ext.define('NextThought.view.content.Navigation', {
 	},
 
 
-	updateLocation: function(ntiid) {
+	updateLocation: function(ntiid, rootId) {
 		this.currentNtiid = ntiid;
 		var me = this,
 			C = ContentUtils,
@@ -93,7 +93,7 @@ Ext.define('NextThought.view.content.Navigation', {
 			names = C.getLineage(ntiid, true),
 			parent = lineage.last(),
 			page = lineage[0] ? C.getLocation(lineage[0]) : null,
-			path = me.getBreadcrumbPath(), i = 0;
+			path = me.getBreadcrumbPath(), i = 0, rootIdIdx;
 
 		function buildPathPart(v, i, a) {
 			var e,
@@ -111,14 +111,36 @@ Ext.define('NextThought.view.content.Navigation', {
 			path.add(e);
 		}
 
-		lineage.pop(); // don't let the book show
+		me.cleanupMenus(); //cleanup before proceeding.
+
+		// If passed, lets get the index of the rootId so we know where in the
+		// lineage to cut to Re-Root the tree.
+		rootIdIdx = lineage.indexOf(rootId);
+		if (rootId && rootIdIdx < 0) {
+			//if there is a rootId, but we did not find it in the lineage, we're
+			// out of bounds, and should return without doing anything.
+			return;
+		}
+
+		// If no rootId was sent, then it would return -1 in the indexOf,
+		// so because of the above check, we know that if we have an index above
+		// -1 we are to cut the lineage at that point.
+		if (rootIdIdx >= 0) {
+			rootIdIdx++; //slice is not inclusive, so push the index one up
+			// so that our slice gets the new root.
+			lineage = lineage.slice(0, rootIdIdx);
+			names = names.slice(0, rootIdIdx);
+
+			//From this point on the logic should be unchanged... lineage manipulation is complete.
+		}
+
+		lineage.pop(); // don't let the root show
 		// first was the 2nd item in the array... which is where the 'back' arrow will take you
 		this.upEl[(!lineage.first()) ? 'hide' : 'show']();
 		this.upEl.set({
 			'data-qtip': 'Go up to ' + names[1]
 		});
 
-		me.cleanupMenus();
 
 		if (!loc || !loc.NTIID || !page) {
 			me.hide();
