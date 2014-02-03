@@ -529,14 +529,14 @@ Ext.define('NextThought.controller.Navigation', {
 				state = this.getController('State');
 
 		//Are we an nttid?
-		if (ParseUtils.parseNtiid(newBase)) {
+		if (ParseUtils.isNTIID(newBase)) {
 			this.navigateToNtiid(newBase, newFragment);
 			return true;
 		}
 
 		//Is href an exteranl url whose base does not match the current base (i.e. not in our app)?
-		if (ContentUtils.isExternalUri(href) && (newBase.indexOf(currentBase) !== 0
-				|| (/\/content\//.test(href) && !/\.html$/.test(href)))) {
+		if (ContentUtils.isExternalUri(href) &&
+			(newBase.indexOf(currentBase) !== 0 || (/\/content\//.test(href) && !/\.html$/.test(href)))) {
 			try {
 				window.open(href, '_blank');
 			}
