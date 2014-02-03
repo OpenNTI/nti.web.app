@@ -715,7 +715,8 @@ Ext.define('NextThought.util.Content', {
 			Ext.Error.raise('No NTIID');
 		}
 
-		var loc = this.find(ntiid),
+		var me = this,
+			loc = me.find(ntiid),
 			info, nodes = [],
 			topicOrTocRegex = /topic|toc/i,
 			slice = Array.prototype.slice;
@@ -785,7 +786,7 @@ Ext.define('NextThought.util.Content', {
 		if (rootId) {
 			//replace siblings that fall outside of our given root.
 			nodes = nodes.map(function(n) {
-				var l = (n && this.getLineage(n)) || [];
+				var l = (n && me.getLineage(n)) || [];
 				return (l.indexOf(rootId) < 0) ? null : n;
 			});
 		}
