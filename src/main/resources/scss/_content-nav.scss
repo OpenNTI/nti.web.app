@@ -114,7 +114,12 @@
 		top: 0;
 		opacity: 0.2;
 
-		&:hover {
+		&.disabled {
+			opacity: 0.1;
+			cursor: default;
+		}
+
+		&:not(.disabled):hover {
 			opacity: 1;
 		}
 	}
