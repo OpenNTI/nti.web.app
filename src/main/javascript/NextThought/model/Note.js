@@ -72,7 +72,7 @@ Ext.define('NextThought.model.Note', {
 				r.resolveNotePreview(function(s) {
 					r.data.$preview = s;
 					try {
-						r.afterEdit(['preview']);
+						r.afterEdit(['preview', 'GroupingField']);
 					} catch (e) {
 						console.error(e.stack || e.message || e);//setDirty is caught here...
 						// would be nice to figure out why the store doesn't have a group for this record. :/
