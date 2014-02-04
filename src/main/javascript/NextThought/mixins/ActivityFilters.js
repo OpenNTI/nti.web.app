@@ -23,7 +23,7 @@ Ext.define('NextThought.mixins.ActivityFilters', {
 		'notes': 'onlyMe',
 		'bookmarks': 'Bookmarks',
 		'inCommunity': 'inCommunity',
-		'notInCommunity': 'notInCommunity'
+		'IFollow': 'IFollow'
 	},
 
 	setUpMenu: function(key) {

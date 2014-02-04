@@ -23,7 +23,13 @@ Ext.define('NextThought.view.account.activity.View', {
 
 	mimeTypesMap: {
 		'all': ['all'],
-		'discussions': ['forums.personalblogcomment', 'forums.personalblogentrypost', 'forums.communityheadlinepost', 'forums.generalforumcomment', 'forums.communityheadlinetopic'],
+		'discussions': [
+			'forums.personalblogcomment',
+			'forums.personalblogentrypost',
+			'forums.communityheadlinepost',
+			'forums.generalforumcomment',
+			'forums.communityheadlinetopic'
+		],
 		'notes': ['highlight', 'note'],
 		'contact': ['user']
 	},
@@ -31,7 +37,7 @@ Ext.define('NextThought.view.account.activity.View', {
 	filtersMap: {
 		'bookmarks': 'Bookmarks',
 		'inCommunity': 'inCommunity',
-		'notInCommunity': 'notInCommunity'
+		'IFollow': 'IFollow'
 	},
 
 	filtersTpl: Ext.DomHelper.createTemplate(
@@ -62,7 +68,7 @@ Ext.define('NextThought.view.account.activity.View', {
 	items: [
 		{xtype: 'user-history-panel', stateId: 'rhp-activity-history'},
 		{xtype: 'activity-panel', filter: 'inCommunity', stateId: 'rhp-activity-community', autoRefresh: true},
-		{xtype: 'activity-panel', filter: 'notInCommunity', stateId: 'rhp-activity-contacts'}
+		{xtype: 'activity-panel', filter: 'IFollow', stateId: 'rhp-activity-contacts'}
 	],
 
 
@@ -77,7 +83,7 @@ Ext.define('NextThought.view.account.activity.View', {
 		this.callParent(arguments);
 		var i,
 			history = this.down('user-history-panel'),
-			contacts = this.down('activity-panel[filter=notInCommunity]'),
+			contacts = this.down('activity-panel[filter=IFollow]'),
 			community = this.down('activity-panel[filter=inCommunity]');
 
 		this.store = Ext.getStore('Stream');
@@ -108,7 +114,7 @@ Ext.define('NextThought.view.account.activity.View', {
 			},
 			items: [
 				{cls: 'option', text: 'Only Me', type: 'onlyme', checked: false, isMe: true, tabFilter: 'onlyMe'},
-				{cls: 'option', text: 'My Contacts', type: 'contacts', checked: false, isContacts: true, tabFilter: 'notInCommunity'},
+				{cls: 'option', text: 'My Contacts', type: 'contacts', checked: false, isContacts: true, tabFilter: 'IFollow'},
 				{cls: 'option', text: 'Everyone', type: 'community', checked: false, isCommunity: true, tabFilter: 'inCommunity'}
 			]
 		});
@@ -304,8 +310,8 @@ Ext.define('NextThought.view.account.activity.View', {
 		var selectedTab = this.fromMenu.down('menuitem[checked]'),
 			v = selectedTab && selectedTab.tabFilter;
 
-		if (v === 'notInCommunity') {
-			return this.down('activity-panel[filter=notInCommunity]');
+		if (v === 'IFollow') {
+			return this.down('activity-panel[filter=IFollow]');
 		}
 
 		if (v === 'inCommunity') {

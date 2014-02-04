@@ -153,7 +153,7 @@ Ext.define('NextThought.controller.UserData', {
 		});
 
 		Socket.register({
-			'data_noticeIncomingChange': function(c) {me.incomingChange(c);}
+			'data_noticeIncomingChange': function(c) {me.onIncomingChange(c);}
 		});
 
 		Ext.apply(this.changeActionMap, {
@@ -269,7 +269,7 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	incomingChange: function withMeta(change, meta, reCalled) {
+	onIncomingChange: function withMeta(change, meta, reCalled) {
 		//fancy callback that calls this function back with addtional arguments
 		function reCall(meta) {
 			var c = ParseUtils.parseItems([change.raw])[0];
@@ -296,9 +296,7 @@ Ext.define('NextThought.controller.UserData', {
 		//only call this on first call
 		if (!reCalled) {
 			//update the stream
-			this.getController('Stream').incomingChange(change);
-			this.getController('Profile').incomingChange(change);
-			this.getController('Forums').incomingChange(change);
+			this.callOnAllControllersWith('incomingChange', change);
 		}
 
 		//callback with ourself, only if we haven't already and there is a containerId to resolve

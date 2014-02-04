@@ -30,13 +30,15 @@ Ext.define('NextThought.controller.Stream', {
 		Service.getPageInfo(Globals.CONTENT_ROOT,
 			//success:
 			function(pageInfo) {
-				var p = ss.getProxy();
-				p.extraParams = Ext.apply(p.extraParams || {},{
-		            exclude: 'application/vnd.nextthought.redaction'
-		        });
-				p.url = pageInfo.getLink(Globals.RECURSIVE_STREAM);
+				var url = pageInfo.getLink(Globals.RECURSIVE_STREAM);
 
-				ss.load();
+				ss.proxy.proxyConfig.url = url;
+
+				// There will be one store per view. This will just be a coordination store.
+				// Socket events will add to here. And it is the responsibility of the
+				// subsequent stores to listen for those adds.
+				ss.setProxy({type: 'memory', url: url});
+				ss.load(); //technically this is just firing an event "beforeload" that the substores use to get the resolved url.
 			},
 			//failure:
 			function() {

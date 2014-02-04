@@ -27,6 +27,11 @@ Ext.define('NextThought.store.Stream', {
 	pageSize: 100,
 
 	proxy: {
+		extraParams: {
+			exclude: 'application/vnd.nextthought.redaction',
+			sortOn: 'Last Modified',
+			sortOrder: 'descending'
+		},
 		type: 'rest',
 		limitParam: 'batchSize',
 		pageParam: undefined,
@@ -66,6 +71,33 @@ Ext.define('NextThought.store.Stream', {
 			direction: 'DESC'
 		}
 	],
+
+
+	constructor: function() {
+		var s, me = this;
+		me.callParent(arguments);
+
+		if (!me.hasSource() && me.storeId !== 'Stream') {
+			me.setProxy(Ext.clone(me.getProxy().proxyConfig));
+
+			s = Ext.getStore('Stream');
+			me.mon(s, {
+				single: true,
+				beforeload: function() {
+					me.proxy.url = s.proxy.url;
+					if (me.hasOwnProperty('requestedToLoad')) {
+						me.load(me.requestedToLoad);
+					}
+				}
+			});
+		}
+	},
+
+
+	hasSource: function() {
+		return !!this.getProxy().url;
+	},
+
 
 	/**
 	 * Like last but doesn't include any filtering
@@ -115,10 +147,12 @@ Ext.define('NextThought.store.Stream', {
 	},
 
 	load: function(options) {
-		if (!this.proxy.url) {
+		if (!this.hasSource()) {
+			this.requestedToLoad = options;
 			return;
 		}
 
+		delete this.requestedToLoad;
 
 		options = Ext.applyIf(options || {}, {start: null});
 

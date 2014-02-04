@@ -34,16 +34,18 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			activitiesHolder: 1,
 			xtype: 'box',
 			autoEl: {
-				cn: [{
-					cls: 'activity loading',
-					cn: [{cls: 'name', tag: 'span', html: 'Loading...'},' please wait.']
-				}]
+				cls: 'user-data-panel',
+				cn: []
 			}
 		}
 	],
 
 
 	feedTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+		{tag: 'tpl', 'if': 'length == 0', cn: {
+			cls: 'history nothing rhp-empty-list',
+			html: 'No Activity Yet'
+		}},
 		{tag: 'tpl', 'for': '.', cn: [
 			{tag: 'tpl', 'if': 'activity', cn: [
 				{
@@ -70,16 +72,27 @@ Ext.define('NextThought.view.account.activity.Panel', {
 
 
 	initComponent: function() {
-		this.callParent(arguments);
-		this.store = Ext.getStore('Stream');
+		var me = this;
 
-		//FIXME, eww more datachanged listening.
-		//use add, remove, load, and refresh instead like for FLs
-		this.mon(this.store, {
-			scope: this,
-			datachanged: this.maybeReload,
-			//load: this.maybeReload,
-			//load: function(){ this.removeMask(); },
+		me.callParent(arguments);
+		me.stream = {};
+
+		me.store = NextThought.store.Stream.create();
+		me.store.proxy.extraParams = Ext.clone(Ext.apply(me.store.proxy.extraParams || {}, {
+			filters: this.filter,
+			filterOperator: '1'
+		}));
+
+
+		this.mon(me.store, {
+			scope: me,
+			load: function() { me.removeMask(); },
+			//datachanged: 'maybeReload',
+			add: function(change) {
+				//FIXME, figure out where this belongs...and insert it.
+				me.store.add(change);
+				me.reloadActivity();
+			},
 			clear: function() {
 				console.log('stream clear', arguments);
 			},
@@ -88,6 +101,8 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			},
 			update: function() {
 				console.log('stream update', arguments);
+				//refresh view
+				me.reloadActivity();
 			}
 		});
 
@@ -97,17 +112,16 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		//we don't listen to contacts-updated b/c we don't want to do a lot of work when people add/remove
 		//contacts
 		this.mon(Ext.getStore('FriendsList'), {
-			scope: this,
+			scope: me,
 			'contacts-refreshed': 'maybeReload'
 		});
 
 		this.on({
-			scope: this,
-			activate: 'onActivate',
+			scope: me,
 			'scroll-stopped': 'onScrollStopped'
 		});
 
-		this.mixins.activityFilter.setUpMenu.call(this, this.filter);
+		me.mixins.activityFilter.setUpMenu.call(me, me.filter);
 	},
 
 
@@ -252,7 +266,8 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		this.store.clearFilter(true);
 		this.store.sort();
 		//For bonus points tell the user how far back they are asking for
-		oldestRecord = this.store.unfilteredLast();
+		oldestRecord = this.store.last();
+
 		this.store.filterBy(this.filterStore, this);
 		this.store.resumeEvents();
 
@@ -673,17 +688,6 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	},
 
 
-	onActivate: function() {
-		//Suspend events and let the last sort take care of it
-		this.store.suspendEvents();
-		this.store.clearFilter(true);
-		this.store.filterBy(this.filterStore, this);
-		this.store.resumeEvents();
-		this.store.sort();
-		//Now the listeners on the store will take care of rendering.
-	},
-
-
 	getStore: function() {
 		return this.store;
 	},
@@ -694,36 +698,19 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	},
 
 
-	applyFilters: function(mimeTypes, filterTypes) {
-		if (Ext.isEmpty(mimeTypes) && Ext.isEmpty(filterTypes)) {
+	applyFilters: function(mimeTypes) {
+		if (Ext.isEmpty(mimeTypes)) {
 			return;
 		}
-		Ext.Array.remove(filterTypes, 'onlyMe');
-		if (!Ext.Array.contains(filterTypes, 'notInCommunity') && !Ext.Array.contains(filterTypes, 'inCommunity')) {
-			filterTypes.push(this.filter);
-		}
 
-		this.filter = (Ext.Array.contains(filterTypes, 'notInCommunity')) ? 'notInCommunity' : 'inCommunity';
+
 		this.mimeTypes = mimeTypes;
 
 		var s = this.getStore();
 
-		// Since we want 'Everyone' to imply a combination of things in your contacts
-		// and those that are publicly shared with your community
-		// We'll stop passing the 'inCommunity' filter, since that would only return things that are publicly shared.
-		if (this.filter === 'inCommunity') {
-			Ext.Array.remove(filterTypes, this.filter);
-		}
-
-    //		console.debug('current filter', this.filter);
-    //		console.debug('Filter types: ', filterTypes);
 		s.removeAll();
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
-			sortOn: 'relevance',
-			sortOrder: 'descending',
-			filters: filterTypes.join(','),
-			filterOperator: (filterTypes.length > 1) ? '0' : '1',
 			accept: mimeTypes.join(',')
 		});
 
