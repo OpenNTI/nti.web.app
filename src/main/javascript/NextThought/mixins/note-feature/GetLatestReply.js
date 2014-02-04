@@ -23,7 +23,7 @@ Ext.define('NextThought.mixins.note-feature.GetLatestReply', {
 			if (items.length === 1 && items[0].getId() === me.record.getId()) {
 				items = (items[0].children || []).slice();
 			}
-			else {
+			else if (items.length !== 0) {
 				console.warn('There was an unexpected result from the reply store.');
 			}
 			me.record.children = items;
