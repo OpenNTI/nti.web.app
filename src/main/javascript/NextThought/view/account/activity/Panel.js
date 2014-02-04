@@ -86,7 +86,10 @@ Ext.define('NextThought.view.account.activity.Panel', {
 
 		this.mon(me.store, {
 			scope: me,
-			load: function() { me.removeMask(); },
+			load: function() {
+				me.removeMask();
+				me.reloadActivity();
+			},
 			//datachanged: 'maybeReload',
 			add: function(change) {
 				//FIXME, figure out where this belongs...and insert it.
@@ -706,17 +709,17 @@ Ext.define('NextThought.view.account.activity.Panel', {
 
 		this.mimeTypes = mimeTypes;
 
-		var s = this.getStore();
+		var s = this.getStore(),
+			accepts = mimeTypes.join(','),
+			extras = s.proxy.extraParams || {},
+			current = extras.accept || '';
 
-		s.removeAll();
-
-		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
-			accept: mimeTypes.join(',')
-		});
-
-		this.addMask();
-
-		s.load();
+		if (current !== accepts) {
+			s.removeAll();
+			s.proxy.extraParams = Ext.apply(extras, { accept: accepts });
+			this.addMask();
+			s.load();
+		}
 	}
 
 });
