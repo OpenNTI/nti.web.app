@@ -126,16 +126,13 @@ Ext.define('NextThought.view.profiles.parts.Activity', {
 		}
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {},{
-			filter: 'TopLevel',
 			sortOn: 'createdTime',
 			sortOrder: 'descending',
-			exclude: Ext.Array.map([
+			exclude: [
 				'redaction',
 				'bookmark',
-				'forums.PersonalBlogComment',
-				'forums.GeneralForumComment',
 				'assessment.AssessedQuestion'
-			], makeMime).join(',')
+			].map(makeMime).join(',')
 		});
 
 		if (!this.hasPageStore(s.storeId)) {
