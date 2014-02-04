@@ -223,7 +223,7 @@
 		.x-box-scroller-bottom {
 			position: absolute;
 			left: 0; right: 0;
-			top: initial;
+			top: auto; height: 8px;
 			bottom: 4px;
 
 			.x-menu-scroll-bottom {
