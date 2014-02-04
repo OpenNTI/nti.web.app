@@ -278,17 +278,26 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		function onSuccess(pricing) {
 			unmask();
 
-			this.couponEl.removeCls(['invalid', 'valid']);
+			me.couponEl.removeCls(['invalid', 'valid']);
 			if (sendingCoupon) {
-				this.couponEl.addCls(pricing.get('Coupon') ? 'valid' : 'invalid');
+				me.couponEl.addCls(pricing.get('Coupon') ? 'valid' : 'invalid');
 			}
 
 
-			this.publishQuantityAndPrice(pricing.get('Quantity'), pricing.get('PurchasePrice'), pricing.get('Currency'));
+			me.publishQuantityAndPrice(pricing.get('Quantity'), pricing.get('PurchasePrice'), pricing.get('Currency'));
 		}
 
-		function onFailure() {
+		function onFailure(q, r) {
 			unmask();
+
+			var json = Ext.decode(r.responseText, true);
+
+			me.handleError({
+				get: function(p) {
+					return p === 'Param' ? json.field : (p === 'Message' ? json.message : '');
+				}
+			});
+
 			//What to actually do here, if we can't price we really can't let them purchase.
 			//maybe let it go and up the final pricing before submission works, then if
 			//that fails abort?
@@ -296,6 +305,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		}
 
 		console.log('Pricing purchase info', desc);
+		this.up('window').hideError();
 		this.getEl().mask('Calculating price.');
 		this.lastPricingDesc = desc;
 		this.fireEvent('price-purchase', this, desc, onSuccess, onFailure, this);
