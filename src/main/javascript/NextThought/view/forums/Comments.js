@@ -60,7 +60,7 @@ Ext.define('NextThought.view.forums.Comments', {
 								{ tag: 'tpl', 'if': 'depth === 0', cn: [
 									{ tag: 'span', cls: 'comments link toggle', html: '{ReferencedByCount:plural("Comment")}'}
 								]},
-								{ tag: 'span', cls: 'reply thread-reply link', html: 'Reply'},
+								{ tag: 'tpl', 'if': 'this.owner.canReply(this.ownerTopic)', cn: { tag: 'span', cls: 'reply thread-reply link', html: 'Reply'} },
 								{ tag: 'tpl', 'if': 'isModifiable', cn: [
 									{ tag: 'span', cls: 'edit link', html: 'Edit'},
 									{ tag: 'span', cls: 'delete link', html: 'Delete'}
@@ -96,7 +96,13 @@ Ext.define('NextThought.view.forums.Comments', {
 			return;
 		}
 
+		this.tpl.ownerTopic = this.topic;
 		this.buildStore();
+	},
+
+
+	canReply: function(topic) {
+		return Boolean(topic && topic.getLink('add'));
 	},
 
 
