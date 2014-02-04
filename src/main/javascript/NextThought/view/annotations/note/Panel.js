@@ -689,6 +689,14 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 
 
 	setContent: function(text) {
+		if (!this.rendered) {
+			this.on({
+				single: true,
+				afterrender: Ext.bind(this.setContent, this, arguments)
+			});
+			return;
+		}
+
 		var search = this.up('[getSearchTerm]'), re;
 		if (search) {
 			search = search.getSearchTerm();
