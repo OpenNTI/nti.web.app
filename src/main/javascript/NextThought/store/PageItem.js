@@ -286,6 +286,18 @@ Ext.define('NextThought.store.PageItem', function() {
 			coordinator.fireEvent('removed-item', idsToBoradcast, isMove, silent);
 		},
 
+
+		suspendEvents: function() {
+			coordinator.suspendEvents.apply(coordinator, arguments);
+			return this.callParent(arguments);
+		},
+
+
+		resumeEvents: function() {
+			coordinator.resumeEvents.apply(coordinator, arguments);
+			return this.callParent(arguments);
+		},
+
 		addFromEvent: function(records) {
 			//don't fire more coordinator events
 			coordinator.suspendEvents();
