@@ -43,8 +43,8 @@ Ext.define('NextThought.chart.series.Score', {
 		        fill: this.textColor,
 		        font: 'normal 400 14px "Open Sans", Verdana',
 				'text-anchor': 'middle',
-				x: this.centerX + 2,
-				y: this.centerY + 1
+				x: (this.centerX + 2) || -10000,
+				y: (this.centerY + 1) || -10000
 		    });
 		}
 
@@ -52,8 +52,8 @@ Ext.define('NextThought.chart.series.Score', {
 			label.setAttributes({
 				text: val + (val >= 100 ? '' : '\u008C%'),
 				fill: val === 0 ? this.incorrectColor : this.textColor,
-				x: this.centerX + (val >= 100 ? 0 : 2),
-				y: this.centerY + 1
+				x: (this.centerX + (val >= 100 ? 0 : 2)) || -10000,
+				y: (this.centerY + 1) || -10000
 			});
 
 			label.show(true);
