@@ -267,8 +267,61 @@ Ext.define('NextThought.view.account.contacts.GroupChat', {
 		});
 
 		this.syncListHeight();
+
+		if (Ext.is.iOS) {
+			var me = this;
+			this.el.down('.inputArea').down('input').on('keypress', function() {
+				Ext.defer(function() {
+					console.log('KEYPRESS');
+					me.contactSearch.el.setHeight(114);
+					me.contactSearch.el.setY(385);
+					me.contactSearch.el.setRight(0);
+				},500);
+			});
+
+			this.el.down('.inputArea').down('input').on('focus', function() {
+				Ext.defer(function() {
+					if (window.innerHeight < 600) {
+						me.contactSearch.el.setHeight(114);
+						me.contactSearch.el.setY(385);
+						me.contactSearch.el.setRight(0);
+					}
+					else {
+						me.el.down('inputArea').down('input').blur();
+					}
+				},250);
+			});
+			this.el.down('.inputArea').down('input').on('blur', function() {
+				me.contactSearch.el.setHeight(401);
+				me.contactSearch.el.setY(58);
+				me.contactSearch.el.setRight(0);
+			});
+
+			this.mon(this.el, 'mouseover', this.mousedOver, this);
+		}
+
 	},
 
+	mousedOver: function(e) {
+		if (window.innerHeight < 600) {
+			if (!this.ipadOver && e.target.className.indexOf('nib') != -1) {
+				this.ipadOver = true;
+				e.preventDefault();
+				var touch = e.target;
+				var clickEvent = document.createEvent('MouseEvents');
+				clickEvent.initMouseEvent('click', true, true, window,
+					1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
+					false, false, false, false, 0, null);
+				touch.dispatchEvent(clickEvent);
+			}
+			else {
+				this.ipadOver = false;
+			}
+		}
+		else {
+			this.ipadOver = false;
+		}
+	},
 
 	itemDeselect: function(v, rec) {
 		this.removeToken(rec);
@@ -276,6 +329,16 @@ Ext.define('NextThought.view.account.contacts.GroupChat', {
 
 
 	itemSelect: function(v, rec) {
+		if (Ext.is.iOS) {
+			var me = this;
+			if (this.cantselect) {
+				return;
+			}
+			this.cantselect = true;
+			Ext.defer(function() {
+				me.cantselect = false;
+			},500);
+		}
 		this.addToken(rec);
 		this.fromItemSelect = true;
 		this.searchStore.search('');//clear out the search results once we select an item

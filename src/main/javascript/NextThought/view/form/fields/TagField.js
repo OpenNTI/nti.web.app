@@ -104,7 +104,9 @@ Ext.define('NextThought.view.form.fields.TagField', {
 			this.onBeforeRemoveToken(p);
 			p.remove();
 		}
-		this.inputEl.focus();
+		if (!Ext.is.iOS) {
+			this.inputEl.focus();
+		}
 	},
 
 
