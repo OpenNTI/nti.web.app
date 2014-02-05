@@ -1443,13 +1443,13 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	getBody: function(parts) {
-		var r = [],
+		var r = [], me = this,
 			objectPartRegex = /class=".*object-part.*"/i,
 			i, p, part;
 
 
 		function stripTrailingBreak(text) {
-			return text.replace(/<br\/?>$/i, '');
+			return text.replace(/<br\/?>$/i, '').replace(me.REGEX_INITIAL_CHAR, '');
 		}
 
 		parts = parts || [];
