@@ -11,6 +11,7 @@ Ext.define('NextThought.view.profiles.parts.Activity', {
 		'NextThought.view.profiles.parts.TranscriptSummaryItem',
 		'NextThought.view.profiles.parts.Joined',
 		'NextThought.view.profiles.parts.ForumActivityItem',
+		'NextThought.view.profiles.parts.NoteReply',
 		'NextThought.store.ProfileItem'
 	],
 
