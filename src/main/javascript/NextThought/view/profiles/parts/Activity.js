@@ -207,9 +207,10 @@ Ext.define('NextThought.view.profiles.parts.Activity', {
 			cmps.push(lastHighlightContainer);
 		}
 
-		Ext.each(records || [], function(i) {
+		(records || []).forEach(function(i) {
 			var c = (i.get('Class') || 'default').toLowerCase(),
-				n = 'profile-activity-' + c + '-item',
+				reply = (i.isTopLevel && !i.isTopLevel() && '-reply') || '',
+				n = 'profile-activity-' + c + reply + '-item',
 				alias = 'widget.' + n;
 
 			if (c === 'highlight') {
@@ -229,7 +230,7 @@ Ext.define('NextThought.view.profiles.parts.Activity', {
 			}
 
 			cmps.push({record: i, root: true, xtype: n});
-		},this);
+		});
 
 		return cmps;
 	},
@@ -255,13 +256,13 @@ Ext.define('NextThought.view.profiles.parts.Activity', {
 		console.log('loaded ', records.length, ' items ');
 
 		//For now we only do top level stuff
-		records = Ext.Array.filter(records, function(rec) {
+		records = records.filter(function(rec) {
 
 			//If it responds to isTopLevel and it is
 			//not top level we don't want it.
-			if (rec.isTopLevel && !rec.isTopLevel()) {
-				return false;
-			}
+			//if (rec.isTopLevel && !rec.isTopLevel()) {
+				//return false;
+			//}
 
 			//To we are a root (toplevel) object here
 			//we also don't want placeholders.  The ds only sends
