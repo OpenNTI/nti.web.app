@@ -19,8 +19,8 @@ Ext.define('NextThought.mixins.ActivityFilters', {
 	},
 
 	filtersMap: {
-		'all': 'onlyMe',
-		'notes': 'onlyMe',
+		'all': 'OnlyMe',
+		'notes': 'OnlyMe',
 		'bookmarks': 'Bookmarks',
 		'inCommunity': 'inCommunity',
 		'IFollow': 'IFollow'

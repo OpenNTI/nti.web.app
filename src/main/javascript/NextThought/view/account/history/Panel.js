@@ -22,7 +22,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 	stateful: true,
 
 	storeId: 'noteHighlightStore',
-	filter: 'onlyMe,Bookmarks',
+	filter: 'OnlyMe,Bookmarks',
 	filterOperator: '0',
 	filterMap: {
 		'application/vnd.nextthought.bookmarks': 'Bookmarks'
@@ -191,7 +191,8 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
 			sortOn: 'createdTime',
-			sortOrder: 'descending'
+			sortOrder: 'descending',
+			filter: 'OnlyMe'
 		});
 
 		this.store = s;
@@ -408,7 +409,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 			fo = (filterTypes.length > 1) ? '0' : '1';
 
 		if (Ext.isEmpty(filterTypes)) {
-			filterTypes = ['onlyMe', 'Bookmarks'];
+			filterTypes = ['OnlyMe', 'Bookmarks'];
 			fo = '0';
 		}
 
@@ -427,9 +428,9 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 		me.applyFilterParams();
 
-		s.clearFilter(true);
-		s.addFilter([function(rec) {
-			if (Ext.Array.contains(filterTypes, 'onlyMe')) {
+		//s.clearFilter(true);
+		/*s.addFilter([function(rec) {
+			if (Ext.Array.contains(filterTypes, 'OnlyMe')) {
 				if (isMe(rec.get('Creator'))) {
 					return true;
 				}
@@ -442,7 +443,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 			}
 
 			return false;
-		}], false);
+		}], false);*/
 
 		s.currentPage = 1;
 		s.load();
