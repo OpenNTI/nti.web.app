@@ -242,6 +242,17 @@ Ext.define('NextThought.view.SideBar', {
 			size = this.host.getSize();
 
 		if (!this.host.isVisible()) {
+			if (Ext.is.iOS) {
+				var searchInput = this.el.down('.search').down('input'),
+					groupInput = this.el.down('.x-component-group-chat').down('input');
+				if (searchInput) {
+					searchInput.blur();
+				}
+				if (groupInput) {
+					groupInput.blur();
+				}
+			}
+
 			if (d) {
 				d.hide();
 			}
