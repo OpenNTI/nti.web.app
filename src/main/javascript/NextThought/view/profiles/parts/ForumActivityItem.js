@@ -77,7 +77,7 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
 							{
 								cls: 'reply-options',
 								cn: [
-									{ cls: 'reply', html: 'Add a comment' }
+									{ cls: 'link reply', html: 'Add a comment' }
 								]
 							}
 						]}
@@ -355,13 +355,13 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItemReply', {
 			{ cls: 'respond', cn: [
 				{cls: 'reply-options', cn: [
 					{tag: 'tpl', 'if': 'isModifiable', cn: [
-						{cls: 'edit', html: 'Edit'}
+						{cls: 'link edit', html: 'Edit'}
 					]},
 					{tag: 'tpl', 'if': '!isModifiable && !Deleted', cn: [
-						{ cls: 'flag', html: 'Report' }
+						{ cls: 'link flag', html: 'Report' }
 					]},
 					{tag: 'tpl', 'if': 'isModifiable', cn: [
-						{ cls: 'delete', html: 'Delete' }
+						{ cls: 'link delete', html: 'Delete' }
 					]}
 				]}
 			]}

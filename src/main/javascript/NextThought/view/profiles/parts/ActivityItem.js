@@ -492,7 +492,7 @@ Ext.define('NextThought.view.profiles.parts.ActivityItem', {
 				{
 					cls: 'reply-options',
 					cn: [
-						{ cls: 'reply', html: 'Add a comment' }
+						{ cls: 'link reply', html: 'Add a comment' }
 					]
 				}
 			]}
@@ -592,10 +592,10 @@ Ext.define('NextThought.view.profiles.parts.ActivityItemReply', {
 						{
 							cls: 'reply-options',
 							cn: [
-								{ cls: 'reply', html: 'Reply' },
-								{ cls: 'edit', html: 'Edit' },
-								{ cls: 'flag', html: 'Report' },
-								{ cls: 'delete', html: 'Delete' }
+								{ cls: 'link reply', html: 'Reply' },
+								{ cls: 'link edit', html: 'Edit' },
+								{ cls: 'link flag', html: 'Report' },
+								{ cls: 'link delete', html: 'Delete' }
 							]
 						}
 					]

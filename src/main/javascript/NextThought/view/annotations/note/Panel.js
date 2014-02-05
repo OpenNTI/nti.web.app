@@ -65,9 +65,9 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 						{
 							cls: 'reply-options',
 							cn: [
-								{ cls: 'reply', html: 'Reply' },
-								{ cls: 'share', html: 'Share' },
-								{ cls: 'more', 'data-qtip': 'Options', html: '&nbsp;'}
+								{ cls: 'link reply', html: 'Reply' },
+								{ cls: 'link share', html: 'Share' },
+								{ cls: 'link more', 'data-qtip': 'Options', html: '&nbsp;'}
 							]
 						},
 						{ tag: 'span', cls: 'time' }

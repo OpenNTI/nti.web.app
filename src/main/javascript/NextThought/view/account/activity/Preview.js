@@ -107,7 +107,7 @@ Ext.define('NextThought.view.account.activity.Preview', {
 				{
 					cls: 'reply-options',
 					cn: [
-						{ cls: 'reply', html: 'Add a comment' }
+						{ cls: 'link reply', html: 'Add a comment' }
 					]
 				}
 			]}
