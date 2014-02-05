@@ -138,7 +138,7 @@ Ext.define('NextThought.view.content.notepad.Editor', {
 				//don't let manipulations here effect the dom
 				dom = Ext.getDom(div).cloneNode(true);
 				div = Ext.fly(dom, '__editer-flyweight');
-				html = (div.getHTML() || '').replace(/\u200B/g, '');
+				html = (div.getHTML() || '').replace(/\u200B|\u2060/ig, '');
 				out.push(html);
 			}
 			catch (er) {

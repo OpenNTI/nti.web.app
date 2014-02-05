@@ -129,6 +129,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	//default value (U+2060 -- allow the cursor into the placeholder div, but don't take any space)
 	defaultValue: '&#8288;',
 
+	REGEX_INITIAL_CHAR: /\u200B|\u2060/ig, //used to identify and strip out
 
 	wbThumbnailTpm: Ext.DomHelper.createTemplate(
 		{
@@ -321,10 +322,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	onSave: function(e) {
 		e.stopEvent();
-		var v = this.getValue(),
-			re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g;
+		var v = this.getValue();
 
-		if (!Ext.isArray(v.body) || v.body.join('').replace(re, '') === '') {
+		if (DomUtils.isEmpty(v.body)) {
 			if (!this.fireEvent('no-body-content', this, this.contentEl)) {
 				this.markError(this.contentEl, 'You need to type something');
 				return;
@@ -1243,7 +1243,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	insertObjectThumbnail: function(content, guid, obj, append, scrollIntoView) {
-		var me = this,
+		var me = this, re = me.REGEX_INITIAL_CHAR,
 			el = Ext.get(guid),
 			mime = (obj || obj.data).MimeType,
 			placeholder,
@@ -1261,7 +1261,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		if (!el) {
 
 			Ext.each(content.query('> div'), function(n) {
-				if (n.firstChild === n.lastChild && n.firstChild && n.firstChild.nodeValue === '\u200B') {
+				var v = n.firstChild === n.lastChild && n.firstChild && n.firstChild.nodeValue;
+				if (v && (v.length === 1 && re.test(v))) {
 					Ext.removeNode(n);
 				}
 			});
@@ -1444,11 +1445,11 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	getBody: function(parts) {
 		var r = [],
 			objectPartRegex = /class=".*object-part.*"/i,
-			i, p, part, me = this;
+			i, p, part;
 
 
 		function stripTrailingBreak(text) {
-			return text.replace(/<br\/?>$/, '');
+			return text.replace(/<br\/?>$/i, '');
 		}
 
 		parts = parts || [];
@@ -1489,7 +1490,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			}
 		}
 
-		r = Ext.Array.filter(r, function(i) {
+		r = r.filter(function(i) {
 			var tmp;
 
 			if (!Ext.isString(i)) {
@@ -1500,7 +1501,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				return false;
 			}
 			//if we are just whitespace and html whitespace
-			tmp = i.replace(/<br\/?>/g, '');
+			tmp = i.replace(/<br\/?>/ig, '');
 			return !Ext.isEmpty(tmp.trim());
 		});
 
@@ -1541,13 +1542,12 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	maybeEnableSave: function() {
 		function isNoteBodyEmpty() {
 			var d = Ext.getDom(me.el.down('.content')),
-				html = d && d.innerHTML, v, parts = d.querySelectorAll('.object-part');
+				html = d && d.innerHTML,
+				parts = d && d.querySelectorAll('.object-part');
 
-			html = v = html.replace(/\u200B/g, '').replace(/<div>/g, '').replace(/<\/div>/g, '').replace(/&nbsp;/g, ' ');
-			html = html.replace(/<br\/?>/g, '');
 			return {
-				clearPlaceholder: !Ext.isEmpty(parts) || !Ext.isEmpty(v),
-				enableSave: !Ext.isEmpty(Ext.Object.getKeys(parts)) || !Ext.isEmpty(html.trim())
+				clearPlaceholder: !Ext.isEmpty(parts) || !DomUtils.isEmpty(html),
+				enableSave: !Ext.isEmpty(Ext.Object.getKeys(parts)) || !DomUtils.isEmpty(html)
 			};
 		}
 
@@ -1586,7 +1586,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			var d = document.createElement('div'),
 				mime, fnName;
 			if (typeof part === 'string') {
-				d.innerHTML += part.replace(/\u200B/g, '');
+				d.innerHTML += part.replace(me.REGEX_INITIAL_CHAR, '');
 				c.appendChild(d);
 			}
 			else {
@@ -1633,7 +1633,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		//Sanitize some new line stuff that various browsers produce.
 		//See http://stackoverflow.com/a/12832455 and http://jsfiddle.net/sathyamoorthi/BmTNP/5/
 		var out = [],
-			sel = this.el.select('.content > *');
+			sel = this.el.select('.content > *'),
+			reInitialChar = this.REGEX_INITIAL_CHAR;
 
 		sel.each(function(div) {
 			var html, parsed, tmp, dom;
@@ -1660,7 +1661,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 					tmp.appendChild(dom);
 					html = tmp.innerHTML || '';
 				}
-				parsed = html.replace(/\u200B/ig, '');
+				parsed = html.replace(reInitialChar, '');
 
 				//if the html was only the no width space don't add it to the parts
 				if (!(html.length === 1 && parsed.length === 0)) {
@@ -1785,18 +1786,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		catch (e) {
 			console.log('Removing all ranges from selection failed: ', e.message);
 		}
-	}//,
-
-
-	/*updatePrefs: function (v) {
-	 if(this.sharedList){
-	 this.sharedList.setValue(
-	 SharingUtils.sharedWithToSharedInfo(
-	 SharingUtils.resolveValue()));
-	 }
-	 }*/
-
-
+	}
 
 
 }, function() {

@@ -152,10 +152,9 @@ Ext.define('NextThought.view.forums.Editor', {
 	onSave: function(e) {
 		e.stopEvent();
 		var v = this.getValue(),
-				re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g,
-				trimEndRe = /((<p><br><\/?p>)|(<br\/?>))*$/g, l;
+			trimEndRe = /((<p><br><\/?p>)|(<br\/?>))*$/g, l;
 
-		if (!Ext.isArray(v.body) || v.body.join('').replace(re, '') === '') {
+		if (DomUtils.isEmpty(v.body)) {
 			console.error('bad forum post');
 			this.markError(this.contentEl, 'You need to type something');
 			return;

@@ -385,7 +385,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	editorSaved: function() {
 		var v = this.editor.getValue(),
 			me = this,
-			r = me.record, re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g;
+			r = me.record;
 
 		function callback(success, record) {
 			if (me.isDestroyed) {
@@ -429,8 +429,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 			}
 		}
 
-		if (!Ext.isArray(v.body) || v.body.join('').replace(re, '') === '') {
-			console.warn("Note's body is required");
+		if (DomUtils.isEmpty(v.body)) {
 			me.editor.markError(me.editorEl.down('.content'), 'Please enter text before you save');
 			return;
 		}

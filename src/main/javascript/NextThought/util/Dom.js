@@ -121,7 +121,7 @@ Ext.define('NextThought.util.Dom', {
 
 
 	isEmpty: function isEmpty(value) {
-		var re = isEmpty.re = (isEmpty.re || /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g);
+		var re = isEmpty.re = (isEmpty.re || /((&nbsp;)|(\u2060)|(\u200B)|(<br\/?>)|(<\/?div>))*/ig);
 
 		value = (Ext.isArray(value) && value.join('')) || String(value);
 

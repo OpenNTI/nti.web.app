@@ -172,11 +172,10 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 	onSave: function(e) {
 		e.stopEvent();
 		var v = this.getValue(),
-			re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g, t,
+			t,
 			trimEndRe = /((<p><br><\/?p>)|(<br\/?>))*$/g, l;
 
-		if (!Ext.isArray(v.body) || v.body.join('').replace(re, '') === '') {
-			console.error('bad blog post');
+		if (DomUtils.isEmpty(v.body)) {
 			this.markError(this.editorBodyEl, 'You need to type something');
 			return;
 		}
@@ -187,14 +186,12 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 		}
 
 		if (Ext.isEmpty(v.title)) {
-			console.error('You need a title');
 			this.markError(this.titleWrapEl, 'You need a title');
 			this.titleWrapEl.addCls('error-on-bottom');
 			return;
 		}
 
 		if (/^[^a-z0-9]+$/i.test(v.title)) {
-			console.error('Title cant be all special chars');
 			this.markError(this.titleWrapEl, "Title can't be all special characters.");
 			this.titleWrapEl.addCls('error-on-bottom');
 			return;
