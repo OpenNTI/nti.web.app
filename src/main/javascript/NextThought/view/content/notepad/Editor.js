@@ -17,8 +17,8 @@ Ext.define('NextThought.view.content.notepad.Editor', {
 		tabIndex: -1,
 		cn: [
 			{ //inner div for IE
-			//default value (allow the cursor in to this placeholder div, but don't take any space)
-				html: '&#8203;'
+			//default value (U+2060 -- allow the cursor in to this placeholder div, but don't take any space)
+				html: '&#8288;'
 			}
 		]
 	}),

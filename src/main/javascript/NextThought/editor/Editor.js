@@ -74,8 +74,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 						tabIndex: -1,
 						cn: [
 							{ //inner div for IE
-								//default value (allow the cursor in to this placeholder div, but don't take any space)
-								html: '&#8203;'
+								//default value (U+2060 -- allow the cursor in to this placeholder div, but don't take any space)
+								html: '&#8288;'
 							}
 						]
 					}
@@ -126,8 +126,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	supportedTypingAttributes: ['bold', 'underline', 'italic'],
 
-	//default value (allow the cursor into the placeholder div, but don't take any space)
-	defaultValue: '&#8203;',
+	//default value (U+2060 -- allow the cursor into the placeholder div, but don't take any space)
+	defaultValue: '&#8288;',
 
 
 	wbThumbnailTpm: Ext.DomHelper.createTemplate(
