@@ -985,7 +985,8 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	onEdit: function() {
+	onEdit: function(e) {
+		if (e && e.stopEvent) {e.stopEvent();}
 		if (this.replyMode) { return; }
 
 		this.text.hide();
@@ -1022,7 +1023,8 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	onDelete: function() {
+	onDelete: function(e) {
+		if (e && e.stopEvent) {e.stopEvent();}
 		this.record.destroy();
 	},
 
@@ -1055,12 +1057,14 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	onChat: function() {
+	onChat: function(e) {
+		if (e && e.stopEvent) {e.stopEvent();}
 		this.fireEvent('chat', this.record);
 	},
 
 
-	onFlag: function() {
+	onFlag: function(e) {
+		if (e && e.stopEvent) {e.stopEvent();}
 		this.record.flag(this);
 	},
 
@@ -1097,13 +1101,15 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 		}
 	},
 
-	onReply: function() {
+	onReply: function(e) {
+		if (e && e.stopEvent) {e.stopEvent();}
 		this.replyMode = true;
 		this.activateReplyEditor();
 	},
 
 
-	onShare: function() {
+	onShare: function(e) {
+		if (e && e.stopEvent) {e.stopEvent();}
 		this.fireEvent('share', this.record);
 	}
 

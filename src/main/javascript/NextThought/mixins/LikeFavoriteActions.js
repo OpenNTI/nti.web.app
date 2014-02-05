@@ -18,7 +18,8 @@ Ext.define('NextThought.mixins.LikeFavoriteActions', {
 	},
 
 
-	likeClicked: function() {
+	likeClicked: function(e) {
+		if (e && e.stopEvent) {e.stopEvent();}
 		var rec = this.getRecord();
 		if (!rec) {
 			console.warn('No record to like', this);
@@ -28,7 +29,8 @@ Ext.define('NextThought.mixins.LikeFavoriteActions', {
 	},
 
 
-	favoriteClicked: function() {
+	favoriteClicked: function(e) {
+		if (e && e.stopEvent) {e.stopEvent();}
 		var rec = this.getRecord();
 		if (!rec) {
 			console.warn('No record to favorite', this);

@@ -16,7 +16,8 @@ Ext.define('NextThought.mixins.FlagActions', {
 	},
 
 
-	flagActionClickHandler: function() {
+	flagActionClickHandler: function(e) {
+		if (e && e.stopEvent) {e.stopEvent();}
 		var me = this,
 			rec = me.getRecord();
 		me.flagging = true;
