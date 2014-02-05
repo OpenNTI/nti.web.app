@@ -71,8 +71,8 @@ Ext.define('NextThought.view.account.contacts.View', {
 			isContact: function(values) {
 				var a = Ext.getStore('all-contacts-store'),
 						o = Ext.getStore('online-contacts-store');
-				return (values.Class !== 'User' || o.contains(values.Username) || a.contains(values.Username))
-						? 'contact' : 'not-contact';
+				return (values.Class !== 'User' || o.contains(values.Username) || a.contains(values.Username)) ?
+					'contact' : 'not-contact';
 			}
 		}),
 
@@ -165,7 +165,7 @@ Ext.define('NextThought.view.account.contacts.View', {
 			el = i.down('.avatar');
 		//NextThought.view.account.contacts.management.Popout.popup(record,el,item,[-1, 0]);
 		//if they aren't a contact just show the card
-		if(i.hasCls('not-contact') && e.getTarget('.nib')){
+		if (i.hasCls('not-contact') && e.getTarget('.nib')) {
 			e.stopPropagation();
 			this.startPopupTimeout(view, record, item, 0);
 			return;
@@ -308,9 +308,9 @@ Ext.define('NextThought.view.account.contacts.View', {
 					sorterFn: function(a, b) {
 						var c = store.contains(a.get('Username')),
 								d = store.contains(b.get('Username'));
-						return c === d
-								? 0
-								: c ? -1 : 1;
+						return c === d ?
+							0 :
+							c ? -1 : 1;
 					},
 					direction: 'ASC'
 				},
@@ -344,26 +344,26 @@ Ext.define('NextThought.view.account.contacts.View', {
 			}
 		});
 
-        if(Ext.is.iOS){
-            var me = this;
-            this.searchButton.down('input').on('keypress', function(){
-                Ext.defer(function(){
-                    me.contactSearch.setHeight(160);
-                    me.contactSearch.setY(424);
-                    me.contactSearch.el.setRight(0);
-                },500);
-            });
-            this.searchButton.down('input').on('focus', function(){
-                me.contactSearch.setHeight(160);
-                me.contactSearch.setY(424);
-                me.contactSearch.el.setRight(0);
-            });
-            this.searchButton.down('input').on('blur', function(){
-                me.contactSearch.setHeight(526);
-                me.contactSearch.setY(58);
-                me.contactSearch.el.setRight(0);
-            });
-        }
+		if (Ext.is.iOS) {
+			var me = this;
+			this.searchButton.down('input').on('keypress', function() {
+				Ext.defer(function() {
+					me.contactSearch.setHeight(160);
+					me.contactSearch.setY(424);
+					me.contactSearch.el.setRight(0);
+				},500);
+			});
+			this.searchButton.down('input').on('focus', function() {
+				me.contactSearch.setHeight(160);
+				me.contactSearch.setY(424);
+				me.contactSearch.el.setRight(0);
+			});
+			this.searchButton.down('input').on('blur', function() {
+				me.contactSearch.setHeight(526);
+				me.contactSearch.setY(58);
+				me.contactSearch.el.setRight(0);
+			});
+		}
 
 		this.mon(Ext.getStore('PresenceInfo'), 'presence-changed', function(username, presence) {
 			if (isMe(username)) {
