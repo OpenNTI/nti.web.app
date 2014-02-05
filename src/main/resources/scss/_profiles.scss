@@ -384,8 +384,13 @@
 	.profile-activity-item {
 		margin: 0;
 		padding: 0;
-		z-index: 1;
 		border-bottom-width: 0;
+		z-index: 1;
+
+		&.note {
+			padding: 0;
+			border-bottom-width: 0;
+		}
 
 		.whiteboard-container{
 			cursor: default;
