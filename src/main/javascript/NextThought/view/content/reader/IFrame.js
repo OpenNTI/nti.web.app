@@ -446,15 +446,29 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 	checkFrame: function() {
 		var doc = this.getDocumentElement(), html;
 		if (doc) {
-			html = doc.getElementsByTagName('html');
-			if (!Ext.isEmpty(html)) {
-				this.syncFrame(html[0]);
-			}
-			if (Ext.Date.now() - this.lastSyncFrame > 1000) {
+			try {
+				html = doc.getElementsByTagName('html');
+				if (!Ext.isEmpty(html)) {
+					this.syncFrame(html[0]);
+				}
+				if (Ext.Date.now() - this.lastSyncFrame > 1000) {
+					clearInterval(this.syncInterval);
+					if (!this.reader.isDestroyed) {
+						this.syncInterval = setInterval(this.checkFrame,
+							this.baseFrameCheckIntervalInMillis * this.frameCheckRateChangeFactor);
+					}
+				}
+			} catch (er) {
 				clearInterval(this.syncInterval);
 				if (!this.reader.isDestroyed) {
-					this.syncInterval = setInterval(this.checkFrame,
-						this.baseFrameCheckIntervalInMillis * this.frameCheckRateChangeFactor);
+					/*alert({
+						icon: Ext.Msg.WARNING,
+						title: 'Alert',
+						msg: 'A fatal error has occured.',
+						closable: false,
+						buttons: null
+					});*/
+					throw er; //re-raise
 				}
 			}
 		}
