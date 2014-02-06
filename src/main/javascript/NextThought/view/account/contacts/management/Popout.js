@@ -173,7 +173,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout', {
 	getListCount: function() {
 		var u = this.record.get('Username'),
 			s = this.groupsList.store,
-			k = s.queryBy(function(a) { return a.hasFriend(u) && !a.isDFL; }),
+			k = s.queryBy(function(a) { return a && a.hasFriend && a.hasFriend(u) && !a.isDFL; }),
 			c = k.getCount();
 
 		// NOTE: remove my contact list because it's a hidden group that will always be there.
@@ -182,7 +182,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout', {
 	},
 
 
-	getPointerStyle: function(x,y) {
+	getPointerStyle: function(x, y) {
 		var el = this.getTargetEl(),
 			t = el.getY(),
 			b = t + el.getHeight();

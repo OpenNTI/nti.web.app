@@ -130,9 +130,21 @@ Ext.define('NextThought.controller.Groups', {
 		rec = store.findRecord('Username', id, 0, false, true, true);
 		if (!rec) {
 			me.createGroupUnguarded('My Contacts', id, store.getContacts(), function(success, rec) {
-				rec.hidden = true;
-				me.setContactGroup(rec);
+				if (rec && rec.isModel) {
+					rec.hidden = true;
+					me.setContactGroup(rec);
+				} else {
+					alert({
+						icon: Ext.Msg.WARNING,
+						title: 'Error',
+						msg: 'There was an unknown error, please try again later.',
+						closable: false,
+						buttons: null
+					});
+					throw arguments;
+				}
 			});
+
 			return;
 		}
 
@@ -142,8 +154,8 @@ Ext.define('NextThought.controller.Groups', {
 
 
 	setContactGroup: function(record) {
-		this.contactGroup = record;
 		var store = this.getFriendsListStore();
+		this.contactGroup = (record instanceof Ext.data.Model && record.hasFriend) && record;
 		store.suspendEvents(false);
 		store.filter(function(rec) {return !rec.hidden;});
 		store.resumeEvents();
@@ -287,6 +299,11 @@ Ext.define('NextThought.controller.Groups', {
 				console.warn('membership adjustment failed reverting to old value', group, oldValue, arguments);
 				group.set('friends', oldValue);
 			};
+		}
+
+		if (!contacts) {
+			Ext.callback(callback);
+			return;
 		}
 
 		//TODO simplify this further
