@@ -34,6 +34,12 @@ Ext.define('NextThought.view.profiles.parts.Activity', {
 	},
 
 
+	onAdd: function(cmp) {
+		this.callParent(arguments);
+		cmp.addCls('activity-event-item');
+	},
+
+
 	onAdded: function() {
 		this.callParent(arguments);
 		this.fireEvent('uses-page-stores', this);
