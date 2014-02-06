@@ -239,12 +239,15 @@ Ext.define('NextThought.view.SideBar', {
 	syncUp: function() {
 		var x = Ext.Element.getViewportWidth() - this.getWidth(),
 			d = this.down('chat-dock'),
-			size = this.host.getSize();
+			size = this.host && this.host.getSize(),
+			searchInput, groupInput;
+
+		if (!this.host) {return;}
 
 		if (!this.host.isVisible()) {
 			if (Ext.is.iOS) {
-				var searchInput = this.el.down('.search').down('input'),
-					groupInput = this.el.down('.x-component-group-chat').down('input');
+				searchInput = this.el.down('.search').down('input');
+				groupInput = this.el.down('.x-component-group-chat').down('input');
 				if (searchInput) {
 					searchInput.blur();
 				}
