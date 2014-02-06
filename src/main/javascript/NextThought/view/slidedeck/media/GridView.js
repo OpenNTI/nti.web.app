@@ -82,7 +82,7 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 			itemclick: function(cmp, record, item) {
 				var selectionChanged = cmp.getSelectedNodes()[0] !== item;
 
-				if(!selectionChanged){
+				if (!selectionChanged) {
 					cmp.fireEvent('hide-grid');
 					return;
 				}
@@ -136,6 +136,9 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 		s.onNavKey = Ext.Function.createInterceptor(s.onNavKey, function() {
 			me.fromKey = true;
 		});
+		if (Ext.is.iOS) {
+			this.addCls('scrollable');
+		}
 	},
 
 
