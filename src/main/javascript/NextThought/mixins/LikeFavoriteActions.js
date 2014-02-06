@@ -9,12 +9,17 @@ Ext.define('NextThought.mixins.LikeFavoriteActions', {
 			if (me.liked) { me.mon(me.liked, 'click', me.likeClicked, me); }
 			if (me.favorites) { me.mon(me.favorites, 'click', me.favoriteClicked, me); }
 
-			me.reflectLikeAndFavorite(this.getRecord());
-			me.listenForLikeAndFavoriteChanges(this.getRecord());
+			me.reflectLikeAndFavorite(me.getRecord());
+			me.listenForLikeAndFavoriteChanges(me.getRecord());
+			me.mun('destroy', 'tearDownLikeAndFavorite', me);
+			me.on('destroy', 'tearDownLikeAndFavorite', me);
 		}
 
-		this.on('afterrender', onAfterRender, this, {single: true});
-		this.on('destroy', this.tearDownLikeAndFavorite, this);
+		if (this.rendered) {
+			onAfterRender();
+		} else {
+			this.on('afterrender', onAfterRender, this, {single: true});
+		}
 	},
 
 

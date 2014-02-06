@@ -229,6 +229,11 @@
 	}
 
 
+	.reply-event {
+		position: relative;
+		overflow: hidden;
+		background: $panel-background;
+	}
 
 	.blogged-event,
 	.transcriptsummary-event {
@@ -361,6 +366,7 @@
 	.note-replies .note-container {
 		background: none;
 	}
+
 
 	.note-container {
 		position: relative;
