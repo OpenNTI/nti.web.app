@@ -79,7 +79,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 
 		me.store = NextThought.store.Stream.create();
 		me.store.proxy.extraParams = Ext.clone(Ext.apply(me.store.proxy.extraParams || {}, {
-			filters: this.filter,
+			filter: this.filter,
 			filterOperator: '1'
 		}));
 
