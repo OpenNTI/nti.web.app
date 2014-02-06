@@ -56,9 +56,15 @@ Ext.define('NextThought.view.BoundPanel', {
 		if (this.down('[emptyState=true]')) {
 			this.down('[emptyState=true]').destroy();
 		}
-		this.removeCls('empty');
 		this.emptyState = false;
-		this.addCls('scrollable');
+		if (!this.isDestroyed) {
+			try {
+				this.removeCls('empty');
+				this.addCls('scrollable');
+			} catch (e) {
+				console.error(e.stack || e.message || e);
+			}
+		}
 	},
 
 
