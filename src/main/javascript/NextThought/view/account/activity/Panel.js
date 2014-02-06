@@ -271,7 +271,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		//For bonus points tell the user how far back they are asking for
 		oldestRecord = this.store.last();
 
-		this.store.filterBy(this.filterStore, this);
+		//this.store.filterBy(this.filterStore, this);
 		this.store.resumeEvents();
 
 
