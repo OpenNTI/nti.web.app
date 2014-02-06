@@ -155,8 +155,9 @@ Ext.define('NextThought.view.content.overlay.Panel', {
 
 
 	syncElementHeight: function() {
-		var h = this.getHeight();
+		if (!this.rendered) {return;}
 		try {
+			var h = this.getHeight();
 			if (this.contentElement) {
 				Ext.fly(this.contentElement).setHeight(h);
 			}
