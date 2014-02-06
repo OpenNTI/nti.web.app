@@ -16,7 +16,6 @@ Ext.define('NextThought.controller.Profile', {
 	views: [
 		'profiles.Panel',
 		'profiles.parts.Activity',
-		'profiles.parts.ActivityItem',
 		'profiles.parts.Blog',
 		'profiles.parts.BlogEditor',
 		'profiles.TabPanel'

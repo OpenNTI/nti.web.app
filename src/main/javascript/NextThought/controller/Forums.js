@@ -33,8 +33,7 @@ Ext.define('NextThought.controller.Forums', {
 		'forums.Forum',
 		'forums.Topic',
 		'forums.View',
-		'forums.forumcreation.Window',
-		'profiles.parts.ForumActivityItem'
+		'forums.forumcreation.Window'
 	],
 
 	refs: [
