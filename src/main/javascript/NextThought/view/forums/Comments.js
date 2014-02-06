@@ -563,6 +563,7 @@ Ext.define('NextThought.view.forums.Comments', {
 
 		if (Ext.isEmpty(refs)) {
 			me.scrollCommentIntoView(comment);
+			return;
 		}
 
 		refs.forEach(function(ref) {
