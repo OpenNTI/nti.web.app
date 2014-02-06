@@ -68,8 +68,14 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 			s = this.submitBtn,
 			t = this.tabIndexTracker;
 		setTimeout(function() {
-			s.set({tabIndex: t.getNext()});
-			r.set({tabIndex: t.getNext()});
+			try {
+				s.set({tabIndex: t.getNext()});
+				r.set({tabIndex: t.getNext()});
+			} catch (e) {
+				if (!this.isDestroyed) {
+					throw e;
+				}
+			}
 		},1);
 		this.fireEvent('has-been-submitted', this);
 	},
