@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.profiles.parts.Blogged', {
+Ext.define('NextThought.view.profiles.parts.events.Blogged', {
 	extend: 'Ext.Component',
 	alias: 'widget.profile-activity-personalblogentry-item',
 

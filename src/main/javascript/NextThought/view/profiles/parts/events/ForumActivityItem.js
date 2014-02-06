@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.profiles.parts.ForumActivityItem', {
+Ext.define('NextThought.view.profiles.parts.events.ForumActivityItem', {
 	extend: 'Ext.container.Container',
 	alias: [
 		'widget.profile-activity-communityheadlinetopic-item',

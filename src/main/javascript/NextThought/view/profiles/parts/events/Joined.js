@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.profiles.parts.Joined', {
+Ext.define('NextThought.view.profiles.parts.events.Joined', {
 	extend: 'Ext.Component',
 	alias: 'widget.joined-event',
 

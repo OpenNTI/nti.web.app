@@ -5,13 +5,7 @@ Ext.define('NextThought.view.profiles.parts.Activity', {
 	//<editor-fold desc="Config">
 
 	requires: [
-		'NextThought.view.profiles.parts.ActivityItem',
-		'NextThought.view.profiles.parts.HighlightContainer',
-		'NextThought.view.profiles.parts.Blogged',
-		'NextThought.view.profiles.parts.TranscriptSummaryItem',
-		'NextThought.view.profiles.parts.Joined',
-		'NextThought.view.profiles.parts.ForumActivityItem',
-		'NextThought.view.profiles.parts.NoteReply',
+		'NextThought.view.profiles.parts.events.*',
 		'NextThought.store.ProfileItem'
 	],
 

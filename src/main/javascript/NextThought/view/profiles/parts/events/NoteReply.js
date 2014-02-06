@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.profiles.parts.NoteReply', {
+Ext.define('NextThought.view.profiles.parts.events.NoteReply', {
 	extend: 'NextThought.view.annotations.note.Panel',
 	alias: 'widget.profile-activity-note-reply-item',
 	defaultType: 'profile-activity-item-reply',

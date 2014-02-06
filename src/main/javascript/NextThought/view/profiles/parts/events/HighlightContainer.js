@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.profiles.parts.HighlightContainer', {
+Ext.define('NextThought.view.profiles.parts.events.HighlightContainer', {
 	extend: 'Ext.Component',
 	alias: 'widget.profile-activity-highlight-container',
 
