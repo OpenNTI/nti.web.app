@@ -100,6 +100,7 @@ Ext.define('NextThought.view.profiles.parts.events.PostReply', {
 		}
 
 		function failed() {
+			me.destroy();
 			throw arguments;//let the error reporter tell us about this.
 		}
 
