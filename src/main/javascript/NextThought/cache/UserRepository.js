@@ -21,13 +21,13 @@ Ext.define('NextThought.cache.UserRepository', {
 		task = Ext.util.TaskManager.newTask({
 			interval: 250,
 			run: function() {
-				var t;
+				var t, i = $AppConfig.userBatchResolveRequestStagger || 20;
 				function removeWhenDone(t) {
 					return function() {
 						active.remove(t);
 					};
 				}
-				while (active.getCount() < 10 && queued.getCount() > 0) {
+				for (i; i > 0 && queued.getCount() > 0; i--) {
 					t = queued.removeAt(0);
 					if (t) {
 						t = t();
@@ -294,7 +294,7 @@ Ext.define('NextThought.cache.UserRepository', {
 	makeBulkRequest: function(usernames) {
 		var me = this,
 			p = new Promise(),
-			chunkSize = 100;
+			chunkSize = $AppConfig.userBatchResolveChunkSize || 500;
 
 		function failed(reason) {
 			console.error('Failed:', reason);
