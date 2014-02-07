@@ -29,7 +29,9 @@ Ext.define('NextThought.store.courseware.AssignmentView', {
 		limitParam: undefined
 	},
 	sorters: {
-		sorterFn: Globals.getCaseInsensitiveNaturalSorter('Creator')
+		property: 'Creator',
+		transform: function(r) {return r && r.toString().toLowerCase();}
+		//sorterFn: Globals.getCaseInsensitiveNaturalSorter('Creator')
 	},
 
 	constructor: function() {
