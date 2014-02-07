@@ -136,6 +136,9 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 		};
 
 		Ext.TaskManager.start(task);
+		this.on('destroy', function() {
+			Ext.TaskManager.stop(task);
+		});
 	},
 
 
@@ -444,6 +447,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 
 
 	checkFrame: function() {
+		if (this.reader.isDestroyed) {clearInterval(this.syncInterval); return;}
 		var doc = this.getDocumentElement(), html;
 		if (doc) {
 			try {
@@ -478,6 +482,8 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 	syncFrame: function(content) {
 		var i = this.get(), h, contentHeight = 150, ii;
 		//We need the buffer because otherwise the end of the doc would go offscreen
+
+		if (this.reader.isDestroyed) {clearInterval(this.syncInterval); return;}
 
 		if (!i) {
 			console.warn('Cannot syncFrame, the iFrame is not ready');
