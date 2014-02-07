@@ -188,12 +188,6 @@ Ext.define('NextThought.util.Parsing', {
 	},
 
 
-	/** @deprecated */
-	parseNtiid: function(id) {
-		return this.parseNTIID(id);
-	},
-
-
 	/**
 	 * CSS escape ids
 	 * @param {string} id

@@ -53,7 +53,7 @@ Ext.define('NextThought.util.Views', {
 
 
 	convertToTranscriptId: function(roomInfoId, uname) {
-		var id = ParseUtils.parseNtiid(roomInfoId);
+		var id = ParseUtils.parseNTIID(roomInfoId);
 		if (!id) {
 			return null;
 		}
