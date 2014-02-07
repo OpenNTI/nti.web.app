@@ -132,6 +132,7 @@ Ext.define('NextThought.view.profiles.parts.Activity', {
 			exclude: [
 				'redaction',
 				'bookmark',
+				'forums.GeneralForumComment',
 				'assessment.AssessedQuestion'
 			].map(makeMime).join(',')
 		});
