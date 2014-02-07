@@ -21,7 +21,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Activity', {
 
 			me.setLastReadFrom(activity);
 
-			me.store.suspendEvents(true);
+			me.store.suspendEvents();
 			activity.get('Items').forEach(function(o) {
 				var m = me.MIME_TYPE_MAP[o.get('MimeType')];
 				if (!m) {
@@ -35,8 +35,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.Activity', {
 					console.error(e.stack || e.message || e);
 				}
 			});
-
 			me.store.resumeEvents();
+			me.refresh();
 		});
 	},
 
