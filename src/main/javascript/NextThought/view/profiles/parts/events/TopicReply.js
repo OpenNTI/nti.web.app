@@ -6,8 +6,8 @@ Ext.define('NextThought.view.profiles.parts.events.TopicReply', {
 	onClick: function() {
 		var p = this.post;
 
-		if (me.fireEvent('before-show-topic', p)) {
-			me.fireEvent('show-topic', p, this.record.get('ID'));
+		if (this.fireEvent('before-show-topic', p)) {
+			this.fireEvent('show-topic', p, this.record.get('ID'));
 		}
 	}
 });
