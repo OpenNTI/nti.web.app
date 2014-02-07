@@ -370,6 +370,7 @@ Ext.define('NextThought.cache.UserRepository', {
 	__bulkRequest: function(names) {
 		var p = new Promise(),
 			me = this,
+			store = me.getStore(),
 			active = me._pendingResolve,
 			requestQue = me._queuedBulkRequests;
 
@@ -387,6 +388,8 @@ Ext.define('NextThought.cache.UserRepository', {
 
 						json = (json || {}).Items || {};
 
+						store.suspendEvents(true);
+
 						//large sets, use as little extra function calls as possible.
 						for (i; i >= 0; i--) {
 							n = names[i];
@@ -401,6 +404,8 @@ Ext.define('NextThought.cache.UserRepository', {
 							}
 							u.push(o);
 						}
+
+						store.resumeEvents();
 
 
 						//schedual cleanup.

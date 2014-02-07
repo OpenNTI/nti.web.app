@@ -911,7 +911,8 @@ Ext.define('NextThought.model.Base', {
 		//that has the same id.  If it isn't the exact record call the function
 		//fname on it with the provided args
 		Ext.data.StoreManager.each(function(s) {
-			var recById = s.getById(rec.getId()), fnHook = function() {return false;};
+			var recById = (s.snapshot || s.data).getByKey(rec.getId()) || s.getById(rec.getId()),
+				fnHook = function() {return false;};
 
 			//This record has been filtered out and may potentially throw an error if we attempt to call store group
 			// functions. So, we let this record update and the store think its ungroupped while it updates.
