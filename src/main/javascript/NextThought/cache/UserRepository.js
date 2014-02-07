@@ -394,6 +394,7 @@ Ext.define('NextThought.cache.UserRepository', {
 							if (o) {
 								o = User.create(json[n], n);
 								o.summaryObject = false;
+								me.cacheUser(o);
 								me.updatePresenceFromResolve([o]);
 							} else {
 								o = User.getUnresolved(n);
