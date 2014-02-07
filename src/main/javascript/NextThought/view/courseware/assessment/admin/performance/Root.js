@@ -136,7 +136,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				{name: 'overdue', type: 'int', defaultValue: 0}
 			],
 			sorters: [
-			]
+			],
+			getById: function(id) {
+				return (this.snapshot || this.data).getByKey(id);
+			}
 		});
 		this.store = new NextThought.store.MockPage({autoLoad: true, bind: this.backingStore});
 		this.callParent(arguments);
