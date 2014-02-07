@@ -627,6 +627,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			this.addCls('show-final-grade');
 		}
 
+		s.suspendEvents(true);
+
 		users.forEach(function(u) {
 			var grade = getGrade(gradebookentry, u),
 				r = s.getById(u.getId()), monitor;
@@ -658,6 +660,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		});
 
 		s.sort();
+
+		s.resumeEvents();
 	},
 
 
