@@ -3,6 +3,11 @@ Ext.define('NextThought.proxy.reader.Json', {
 	alias: 'reader.nti',
 	initialConfig: {root: 'Items'},
 
+	collectionTypes: {
+		'application/vnd.nextthought.collection': 1,
+		'application/vnd.nextthought.searchresults': 1
+	},
+
 	readRecords: function(data) {
 		var records = [], key,
 			items = data.Items, item,
@@ -18,7 +23,7 @@ Ext.define('NextThought.proxy.reader.Json', {
 			return [];
 		}
 
-		if (mimeType === 'application/vnd.nextthought.collection' || (mimeType === undefined && items)) {
+		if (this.collectionTypes[mimeType] || (mimeType === undefined && items)) {
 			for (key in items) {
 				if (items.hasOwnProperty(key)) {
 					item = items[key];
