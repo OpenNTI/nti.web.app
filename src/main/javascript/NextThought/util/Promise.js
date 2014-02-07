@@ -38,7 +38,7 @@ window.Promise = (function() {
 			Promise;
 
 		Promise = {
-				ctx: getCtx(),
+				//ctx: getCtx(),
 				State: State,//handy ref
 				state: State.PENDING,
 
