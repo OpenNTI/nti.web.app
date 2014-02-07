@@ -294,7 +294,7 @@ Ext.define('NextThought.cache.UserRepository', {
 	makeBulkRequest: function(usernames) {
 		var me = this,
 			p = new Promise(),
-			chunkSize = $AppConfig.userBatchResolveChunkSize || 500;
+			chunkSize = $AppConfig.userBatchResolveChunkSize || 200;
 
 		function failed(reason) {
 			console.error('Failed:', reason);
