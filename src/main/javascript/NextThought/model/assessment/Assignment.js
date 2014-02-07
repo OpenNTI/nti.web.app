@@ -116,7 +116,7 @@ Ext.define('NextThought.model.assessment.Assignment', {
 
 		function fill(users) {
 			var i = users.length - 1, r, u, c;
-
+			store.suspendEvents(true);
 			for (i; i >= 0; i--) {
 				r = records[i];
 				u = users[i];
@@ -138,6 +138,8 @@ Ext.define('NextThought.model.assessment.Assignment', {
 			//The natural sorts are a hotspot 2.5 seconds for 5,000 records on my very fast machine. -cutz,
 			//if we don't have to use the natural sorter that will probably speed things up.
 			store.sort();
+
+			store.resumeEvents();
 		}
 
 		var me = this,
@@ -148,7 +150,7 @@ Ext.define('NextThought.model.assessment.Assignment', {
 
 		users = pluck(pluck(records, 'data'), 'Creator');
 		users.forEach(function(creator) {
-			if(typeof creator !== 'string' && creator.get){
+			if (typeof creator !== 'string' && creator.get) {
 				creator = creator.get('Username');
 			}
 			userSet[creator] = true;
