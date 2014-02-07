@@ -381,6 +381,7 @@
 		}
 	}
 
+	&.reply-event .profile-activity-item .content-callout::before{ display: none; }
 
 	.profile-activity-item {
 		margin: 0;
@@ -608,6 +609,9 @@
 
 			@include like-and-favorite;
 			.favorite-spacer{display: none;}
+			&.reply {
+				.favorite-spacer{display: block;}
+			}
 
 			& > * { margin-top: 20px; }
 			.controls {margin: 0 -20px 0 0;}

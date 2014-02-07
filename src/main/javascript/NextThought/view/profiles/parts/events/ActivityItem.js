@@ -183,6 +183,9 @@ Ext.define('NextThought.view.profiles.parts.events.ActivityItem', {
 	},
 
 
+	fillIn: function() {},
+
+
 	maybeFillIn: function() {
 		var me = this,
 			D = Ext.dom.Element.DISPLAY,
@@ -195,6 +198,8 @@ Ext.define('NextThought.view.profiles.parts.events.ActivityItem', {
 		}
 
 		me.loaded = true;
+
+		me.fillIn();
 
 		me.getItemReplies();
 		this.setRecordTitle();

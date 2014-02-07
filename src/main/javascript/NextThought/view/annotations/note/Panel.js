@@ -205,26 +205,35 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 		}
 
 		if (Service.canShare()) {
-			me.mon(me.replyButton, 'click', me.onReply, me);
+			if (me.replyButton) { me.mon(me.replyButton, 'click', me.onReply, me); }
 			if (me.shareButton) {
 				me.mon(me.shareButton, 'click', me.onShare, me);
 			}
 		}
 		else {
-			me.replyButton.remove();
+			if (me.replyButton) {
+				me.replyButton.remove();
+			}
 			if (me.shareButton) {
 				me.shareButton.remove();
 			}
 		}
 
-		me.mon(me.editorEl.down('.cancel'), 'click', me.deactivateReplyEditor, me);
-		me.mon(me.editorEl.down('.save'), 'click', me.editorSaved, me);
+		if (me.editorEl) {
+			me.mon(me.editorEl.down('.cancel'), 'click', me.deactivateReplyEditor, me);
+			me.mon(me.editorEl.down('.save'), 'click', me.editorSaved, me);
 
-		me.mon(me.editorEl.down('.content'), {
-			scope: me,
-			keypress: me.editorKeyPressed,
-			keydown: me.editorKeyDown
-		});
+			me.mon(me.editorEl.down('.content'), {
+				scope: me,
+				keypress: me.editorKeyPressed,
+				keydown: me.editorKeyDown
+			});
+
+			if (this.editorEl.down('.title')) {
+				this.editorEl.down('.title').setVisibilityMode(Ext.dom.Element.DISPLAY);
+			}
+		}
+
 
 		if (me.title) {
 			me.mon(me.title, 'click', function(e) {
@@ -235,10 +244,6 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 					me.fireEvent('navigate-to-href', me, a.href);
 				}
 			}, this);
-		}
-
-		if (this.editorEl.down('.title')) {
-			this.editorEl.down('.title').setVisibilityMode(Ext.dom.Element.DISPLAY);
 		}
 
 		if (me.replyToId === me.record.getId()) {

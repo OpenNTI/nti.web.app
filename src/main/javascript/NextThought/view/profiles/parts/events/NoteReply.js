@@ -1,38 +1,55 @@
 Ext.define('NextThought.view.profiles.parts.events.NoteReply', {
-	extend: 'NextThought.view.annotations.note.Panel',
+	extend: 'NextThought.view.profiles.parts.events.ActivityItem',
 	alias: 'widget.profile-activity-note-reply-item',
-	defaultType: 'profile-activity-item-reply',
 
-	ui: 'activity',
+	ui: 'profile',
 	cls: 'reply-event',
 
 	renderTpl: Ext.DomHelper.markup([
 		{
-			cls: 'reply profile-activity-reply-item',
+			cls: 'note profile-activity-item',
 			cn: [
-				{ cls: 'avatar' },
-				{ cls: 'meta', cn: [
+				{ cls: 'content-callout', onclick: 'void(0)', cn: [
+					{ cls: 'icon' },
+					{ cn: [
+						{ cls: 'location link'},
+						{ cls: 'context', cn: [
+							{tag: 'canvas'},
+							{cls: 'text'}
+						] }
+					]}
+				]},
+				{ cls: 'item reply profile-activity-reply-item', cn: [
+					{ cls: 'avatar' },
 					{ cls: 'controls', cn: [
 						{ cls: 'favorite-spacer' },
+						//{ cls: 'favorite' },
 						{ cls: 'like' }
 					]},
-					{ tag: 'span', cls: 'name' },
-					' said'
-				]},
-				{ cls: 'body' },
-				{ cls: 'respond',
-					cn: [
-						{
-							cls: 'reply-options',
-							cn: [
-								{ cls: 'time' },
-								{ cls: 'link reply', html: 'Reply' },
-								{ cls: 'link edit', html: 'Edit' },
-								{ cls: 'link flag', html: 'Report' },
-								{ cls: 'link delete', html: 'Delete' }
-							]
-						}
-					]
+					{ cls: 'meta', cn: [
+						{ cn: [
+							{ tag: 'span', cls: 'name' },
+							{ tag: 'span', cls: '', html: ' replied to ' },
+							{ tag: 'span', cls: 'name other', html: '{other}' }
+
+						] },
+						{ cls: 'stamp', cn: [
+							{tag: 'span', cls: 'time'}
+						]}
+					]},
+					{ cls: 'body' },
+					{ cls: 'editme' },
+					{
+						cls: 'foot',
+						cn: [
+							{ cls: 'comments', 'data-label': ' Comment', html: ' ' },
+							{ cls: 'edit', html: 'Edit' },
+							{ cls: 'flag', html: 'Report' },
+							{ cls: 'delete', html: 'Delete' }
+
+						]
+					}
+				]
 				}
 			]
 		},
@@ -43,76 +60,52 @@ Ext.define('NextThought.view.profiles.parts.events.NoteReply', {
 		}
 	]),
 
-
 	renderSelectors: {
-		noteBody: '.reply',
-		avatar: '.avatar',
-		editEl: '.reply-options .edit',
-		flagEl: '.reply-options .flag',
-		deleteEl: '.reply-options .delete'
+		responseBox: '.editme',
+		repliedToEl: '.name.other'
 	},
 
 
+	fillIn: function() {
+		var me = this,
+			replyTo = me.record.get('inReplyTo'),
+			parsed = ParseUtils.parseNTIID(replyTo),
+			el = me.repliedToEl;
+
+		if (/^missing$/i.test(parsed.specific.type)) {
+			el.update('[Deleted]');
+			el.removeCls('name');
+			return;
+		}
+
+		function resolved(u) {
+			if (el.dom) {
+				el.update(u.getName());
+				me.mon(el, 'click', function() {
+					me.fireEvent('show-profile', u);
+				});
+			}
+		}
+
+		function fill(o) {
+			if (el.dom) {
+				UserRepository.getUser(o.get('Creator')).then(resolved, error);
+			}
+		}
+
+		function error() {
+			if (el.dom) {
+				el.removeCls('name');
+				el.update('[Missing]');
+			}
+		}
+
+		Service.getObject(replyTo, fill, error);
+	},
+
+
+	setRecordTitle: Ext.emptyFn,
+	//getItemReplies: Ext.emptyFn,
 	fillInReplies: Ext.emptyFn,
-	loadReplies: Ext.emptyFn,
-
-
-	afterRender: function() {
-		var D = Ext.dom.Element.DISPLAY;
-		this.flagEl.setVisibilityMode(D);
-		this.editEl.setVisibilityMode(D);
-		this.deleteEl.setVisibilityMode(D);
-
-		this.callParent(arguments);
-		this.mon(this.deleteEl, 'click', this.onDelete, this);
-		this.mon(this.editEl, 'click', this.onEdit, this);
-		this.on({ el: {click: 'goToObject', scope: this}});
-	},
-
-
-	setRecord: function() {
-		this.callParent(arguments);
-
-		if (!this.rendered) {
-			return;
-		}
-
-		if (isMe(this.record.get('Creator'))) {
-			this.flagEl.hide();
-		}
-		else {
-			this.editEl.hide();
-			this.deleteEl.hide();
-			this.flagEl.addCls('last');
-		}
-	},
-
-
-	goToObject: function() {
-		var rec = this.record,
-			cid;
-
-		//Show purchase window if we're purchase-able
-		if (this.requiresPurchase) {
-			this.fireEvent('show-purchasable', this, this.purchasable);
-			return;
-		}
-
-		//If we are a placholder find a reply to navigate to
-		if (!rec || rec.placeholder) {
-			Ext.each(this.down('[record]'), function(cmp) {
-				if (cmp.record && !cmp.record.placholder) {
-					rec = cmp.record;
-					return false; //break
-				}
-				return true;
-			});
-		}
-
-		cid = rec ? rec.get('ContainerId') : null;
-
-		if (rec && cid) {
-			this.fireEvent('navigation-selected', cid, rec, null);
-		}
-	}
+	loadReplies: Ext.emptyFn
 });
