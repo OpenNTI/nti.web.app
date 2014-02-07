@@ -37,20 +37,16 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 			return f.length;
 		}},
 
-		{name: 'correct', type: 'Synthetic', persist: false, fn: function(r) {
+		{name: 'correct', type: 'int', persist: false, convert: function(v, r) {
 			var a = r.get('pendingAssessment');
 			return (a && a.getCorrectCount()) || 0;
 		}},
 
-		{name: 'completed', type: 'Synthetic', persist: false, fn: function(r) {
-			var s = r.get('Submission');
-			return s && s.get('CreatedTime');
-		}},
-
-		{name: 'submission', type: 'Synthetic', persist: false, fn: function(r) {
+		{name: 'completed', type: 'date', dateFormat: 'timestamp', persist: false, mapping: 'Submission.CreatedTime'},
+		{name: 'submission', type: 'date', dateFormat: 'timestamp', persist: false, convert: function(v, r) {
 			var s = r.get('Submission');
 			return s && s.get('Last Modified');
-		}},
+		} },
 
 		{name: 'grade', type: 'Synthetic', persist: false, fn: function(r) {
 			var s = r.get('Grade');
