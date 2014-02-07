@@ -12,35 +12,41 @@ Ext.define('NextThought.view.profiles.parts.events.PostReply', {
 		flagActions: 'NextThought.mixins.FlagActions'
 	},
 
-	renderTpl: Ext.DomHelper.markup({ cls: 'reply profile-activity-reply-item', cn: [
-		{ cls: 'avatar', style: {backgroundImage: 'url({Creator:avatarURL})'}},
-		{ cls: 'meta', cn: [
-			{ cls: 'controls', cn: [
-				{ cls: 'favorite-spacer' },
-				{ cls: 'like', id: '{id}-liked' }
+	renderTpl: Ext.DomHelper.markup([
+		{ cls: 'reply profile-activity-reply-item', cn: [
+			{ cls: 'avatar', style: {backgroundImage: 'url({Creator:avatarURL})'}},
+			{ cls: 'meta', cn: [
+				{ cls: 'controls', cn: [
+					{ cls: 'favorite-spacer' },
+					{ cls: 'like', id: '{id}-liked' }
+				]},
+				{ cls: 'head', cn: [
+					{ tag: 'span', cls: 'link name', html: '{Creator:displayName}'},
+					' commented on ',
+					'the',//{ tag: 'span', cls: '{isOwn}', html: '{someones}', 'data-target': '{other}'},
+					' {thisthing}: ',
+					{ tag: 'span', cls: 'link title', html: '{title}'},
+					{ cls: 'time', html: '{date}', style: 'line-height: 2'}
+				]}
 			]},
-			{ cls: 'head', cn: [
-				{ tag: 'span', cls: 'link name', html: '{Creator:displayName}'},
-				' commented on ',
-				'the',//{ tag: 'span', cls: '{isOwn}', html: '{someones}', 'data-target': '{other}'},
-				' {thisthing}: ',
-				{ tag: 'span', cls: 'link title', html: '{title}'}
-			]}
-		]},
-		{ cls: 'body', id: '{id}-body' },
-		{ cls: 'respond',
-			cn: [
-				{
-					cls: 'reply-options',
-					cn: [
-						{ cls: 'time', html: '{date}'}
-					]
-				}
-			]
-		}
-	]}),
+			{ cls: 'body', id: '{id}-body' }
+		]}
+	]),
 
 	childEls: ['body', 'liked'],
+
+	onClassExtended: function(cls, data) {
+		data.renderSelectors = Ext.applyIf(data.renderSelectors || {},cls.superclass.renderSelectors);
+
+		var tpl = this.prototype.renderTpl;
+
+		if (!data.renderTpl) {
+			data.renderTpl = tpl;
+		}
+		else {
+			data.renderTpl = data.renderTpl.replace('{super}', tpl);
+		}
+	},
 
 	initComponent: function() {
 		var record = this.record;

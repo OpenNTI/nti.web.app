@@ -1,6 +1,6 @@
 Ext.define('NextThought.mixins.forum-feature.Path', {
 
-	pathTpl: new Ext.XTemplate(Ext.DomHelper.markup({
+	pathPartTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		tag: 'span',
 		cls: 'path-part',
 		html: '{[values.title!==\'Discussion Board\'? values.title : values.Creator]}',
@@ -12,7 +12,7 @@ Ext.define('NextThought.mixins.forum-feature.Path', {
 
 	fillInPath: function(data) {
 		if (!data) {
-			this.fireEvent('fill-in-path', this, this.record, Ext.bind(this.fillInPath, this));
+			this.fireEvent('forums:fill-in-path', this, this.record, Ext.bind(this.fillInPath, this));
 			return;
 		}
 
@@ -24,7 +24,7 @@ Ext.define('NextThought.mixins.forum-feature.Path', {
 		///OK! lets do this finally
 		var me = this,
 			el = me.pathEl,
-			t = me.pathTpl;
+			t = me.pathPartTpl;
 
 		data = data.slice();
 		data.unshift('forums');

@@ -83,9 +83,6 @@ Ext.define('NextThought.controller.Forums', {
 				'forums-topic-comment': {
 					'delete-topic-comment': this.deleteObject
 				},
-				'activity-preview-topic': {
-					'fill-in-path': this.fillInPath
-				},
 				'activity-preview-topic > nti-editor': {
 					'save': this.saveTopicComment
 				},
@@ -93,8 +90,7 @@ Ext.define('NextThought.controller.Forums', {
 					'save': this.saveTopicComment
 				},
 				'profile-forum-activity-item': {
-					'delete-post': this.deleteObject,
-					'fill-in-path': this.fillInPath
+					'delete-post': this.deleteObject
 				},
 				'activity-preview-topic-reply': {
 					'delete-topic-comment': this.deleteObject
@@ -120,7 +116,8 @@ Ext.define('NextThought.controller.Forums', {
 					'highlight-topic-hit': this.highlightSearchResult
 				},
 				'*': {
-					'show-topic': this.presentTopic
+					'show-topic': this.presentTopic,
+					'forums:fill-in-path': this.fillInPath
 				}
 			},
 			controller: {
@@ -166,7 +163,7 @@ Ext.define('NextThought.controller.Forums', {
 			Ext.callback(callback, cmp, [parts]);
 		}
 
-		function getObject(url,ix) {
+		function getObject(url, ix) {
 			var req = {
 				url: url,
 				success: function(rep) {
