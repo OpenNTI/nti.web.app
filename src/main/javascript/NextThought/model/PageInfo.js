@@ -56,10 +56,7 @@ Ext.define('NextThought.model.PageInfo', {
 			toc = l && l.toc,
 			ntiid = (l && l.NTIID) || '--';
 
-		ntiid = '[ntiid="' + ntiid
-					.replace(/:/g, '\\3a ') //no colons
-					.replace(/,/g, '\\2c ') +//no commas
-				'"]';
+		ntiid = '[ntiid="' + ParseUtils.escapeId(ntiid) + '"]';
 
 		if (!l || !toc) {return false;}
 

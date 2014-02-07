@@ -85,9 +85,7 @@ Ext.define('NextThought.view.contacts.SubView', {
 
 
 	scrollIntoView: function(rec) {
-		var query = Ext.String.format('[recordId="{0}"]', rec.getId()
-									.replace(/:/g, '\\3a ') //no colons
-									.replace(/,/g, '\\2c ')), //no commas
+		var query = Ext.String.format('[recordId="{0}"]', ParseUtils.escapeId(rec.getId())),
 			cmp = this.body.down(query);
 
 		if (cmp) {

@@ -155,7 +155,7 @@ Ext.define('NextThought.Library', {
 		}
 
 		function query(tag, id) {
-			return tag + '[ntiid="' + ParseUtils.cssEscapeNTIID(id) + '"]';
+			return tag + '[ntiid="' + ParseUtils.escapeId(id) + '"]';
 		}
 
 		function parse(q, s, resp) {
@@ -447,7 +447,7 @@ Ext.define('NextThought.Library', {
 
 		function getNodesForKey(keys) {
 			var nodes = [];
-			ntiid = ntiid.replace(/:/g, '\\3a ').replace(/,/g, '\\2c ');  //no colons, no commas.
+			ntiid = ParseUtils.escapeId(ntiid);
 			Ext.each(keys, function(k) {
 				nodes = Ext.Array.merge(nodes, Ext.DomQuery.select(
 					'[' + k + '="' + ntiid + '"]',

@@ -118,10 +118,7 @@ Ext.define('NextThought.model.courseware.navigation.Node', {
 		if (!this.associatedNode) {
 			ntiid = n.getAttribute('topic-ntiid') || '';
 			this.associatedNode = /topic/i.test(n.nodeName) ? n : Ext.DomQuery.selectNode(
-					'topic[ntiid="' + ntiid
-							.replace(/:/g, '\\3a ') //no colons
-							.replace(/,/g, '\\2c ') +//no commas
-							'"]',
+					'topic[ntiid="' + ParseUtils.escapeId(ntiid) + '"]',
 					n.ownerDocument);
 			if (!this.associatedNode) {
 				console.warn('Could not find associated topic', n);

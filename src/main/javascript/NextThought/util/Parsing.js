@@ -194,14 +194,20 @@ Ext.define('NextThought.util.Parsing', {
 	},
 
 
-	cssEscapeNTIID: function(ntiid) {
-		return ntiid.replace(/:/g, '\\3a ') //no colons
-				.replace(/,/g, '\\2c ');//no commas
+	/**
+	 * CSS escape ids
+	 * @param {string} id
+	 * @return {string} CSS-friendly string to use in a selector
+	 */
+	escapeId: function(id) {
+		return id.replace(/:/g, '\\3a ') //no colons
+				.replace(/,/g, '\\2c ')//no commas
+				.replace(/\./g, '\\2e ');//no periods
 	},
 
 
 	bookPrefixIfQuestionNtiid: function(id) {
-		var ntiid = this.parseNtiid(id);
+		var ntiid = this.parseNTIID(id);
 		if (!ntiid || ntiid.specific.type !== 'NAQ') {
 			return null;
 		}

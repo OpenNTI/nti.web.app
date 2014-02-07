@@ -71,7 +71,7 @@ Ext.define('NextThought.model.Slide', {
 					'dom-clone': frag
 				};
 
-			query = Ext.String.format(query, ParseUtils.cssEscapeNTIID(vid));
+			query = Ext.String.format(query, ParseUtils.escapeId(vid));
 			nodes = el.select(query);
 			if (nodes.first()) {
 				o.media = NextThought.model.PlaylistItem.fromDom(nodes.first(), videoIndex);

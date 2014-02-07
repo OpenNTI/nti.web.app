@@ -26,19 +26,12 @@ Ext.define('NextThought.view.BoundPanel', {
 	},
 
 
-	escapeId: function(id) {
-		return id
-				.replace(/:/g, '\\3a ') //no colons
-				.replace(/,/g, '\\2c '); //no commas
-	},
-
-
 	getComponentConfigForRecord: function(rec) {
 		if (rec.hidden || (this.filter && !this.filter(rec))) {
 			return null;
 		}
 
-		return {record: rec, recordId: this.escapeId(rec.getId())};
+		return {record: rec, recordId: ParseUtils.escapeId(rec.getId())};
 	},
 
 
@@ -145,7 +138,7 @@ Ext.define('NextThought.view.BoundPanel', {
 		var me = this;
 
 		function itr(i) {
-			if (i.recordId === this.escapeId(record.getId())) {
+			if (i.recordId === ParseUtils.escapeId(record.getId())) {
 				me.removeItem(i, true);
 				return false;
 			}
