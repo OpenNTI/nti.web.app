@@ -271,7 +271,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		//For bonus points tell the user how far back they are asking for
 		oldestRecord = this.store.last();
 
-		//this.store.filterBy(this.filterStore, this);
+		this.store.filterBy(this.filterStore, this);
 		this.store.resumeEvents();
 
 
@@ -595,63 +595,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	},
 
 
-	//Right now things in the contacts are things shared
-	//directly to you, or creators that are connected to you.  Circled change
-	//also belong here.
-	belongsInMyContacts: function(change, flStore, communities, noVerify) {
-		var belongs = false,
-			username = $AppConfig.username,
-			item = change.get('Item'),
-			sharedWith = item.get('sharedWith') || [],
-			creator = item.get('Creator');
-
-		if (/circled/i.test(change.get('ChangeType'))) {
-			belongs = true;
-		}
-
-		belongs = belongs || Ext.Array.contains(sharedWith, username);
-		if (!belongs && flStore && flStore.isConnected) {
-			belongs = flStore.isConnected(creator);
-		}
-
-		//Just log an error for now so we know there isn't
-		//a missing condition we didn't consider
-		if (!noVerify && !belongs && !this.belongsInCommunity(change, flStore, communities, true)) {
-			console.error('Danger, dropping change that does not pass either filter', change);
-		}
-		return belongs;
-	},
-
-	//FIXME: There is no community tab anymore, it is intended to be everything in the stream.
-	//When we made that change we fixed one place filtering was happening but we didn't ever
-	//Fix the logic here.  This is a quick and dirty fix (setting accepted=true) but the filtering
-	//strategy needs to be cleaned up
-	//If there is a community in the shared with list
-	//it goes in the community tag
-	belongsInCommunity: function(change, flStore, communities, noVerify) {
-		var item = change.get('Item'),
-			sharedWith = item.get('sharedWith') || [],
-			accepted = true, belongsInContacts;
-
-
-		//Just log an error for now so we know there isn't
-		//a missing condition we didn't consider
-		belongsInContacts = this.belongsInMyContacts(change, flStore, communities, true);
-		if (!noVerify && !accepted && !belongsInContacts) {
-			console.error('Danger, dropping change that does not pass either filter', change);
-		}
-
-		//If it belongs in our contacts, it's also game.
-		return accepted || belongsInContacts;
-	},
-
-
 	filterStore: function(change) {
-		var communities = ($AppConfig.userObject.getCommunities() || []),
-			community = (this.filter === 'inCommunity'),
-			flStore = Ext.getStore('FriendsList'),
-			me = this, communityNames = [];
-
 		//Filter out "Modified" change events for community headline
 		//topics.  See trello 1269
 		function filterModifiedTopics(c) {
@@ -672,22 +616,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			return true;
 		}
 
-		if (!filterModifiedTopics(change)) {
-			return false;
-		}
-
-		// Strip away all DFL in communities.
-		Ext.each(communities, function(c) {
-			if (c.isCommunity) {
-				communityNames.push(c.get('Username'));
-			}
-		});
-
-		if (community) {
-			return me.belongsInCommunity(change, flStore, communityNames);
-		}
-
-		return me.belongsInMyContacts(change, flStore, communityNames);
+		return filterModifiedTopics(change);
 	},
 
 
