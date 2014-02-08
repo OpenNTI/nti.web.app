@@ -890,38 +890,43 @@ Ext.define('NextThought.model.Base', {
 		//Allow a way to turn it off
 		if (this.dontNotifyOtherObjects === false) {return;}
 
-		var active = this.self.idsBeingGloballyUpdated[fname];
+		var active = this.self.idsBeingGloballyUpdated[fname],
+			recId = rec.getId(),
+			fnHook = Ext.emptyFn;
 
 
-		if (!rec.getId()) {return;}
+		if (!recId) {return;}
 
 		if (!active) {
 			this.self.idsBeingGloballyUpdated[fname] = active = {};
 		}
 
-		if (active[rec.getId()]) {
+		if (active[recId]) {
 			return;
 		}
 
 		//If we haven't already started calling fname on other in memory objects
 		//set the flag and notify.  Make sure we clear it at the end
-		active[rec.getId()] = true;
+		active[recId] = true;
 		//console.time('looking for objects');
 		//Use the store manager to iterate all stores looking for an object
 		//that has the same id.  If it isn't the exact record call the function
 		//fname on it with the provided args
 		Ext.data.StoreManager.each(function(s) {
-			var recById = (s.snapshot || s.data).getByKey(rec.getId()),
-				fnHook = function() {return false;};
+			var recById = (s.snapshot || s.data).getByKey(recId);
+
+			if(!recById){
+				return true; //keep going
+			}
 
 			//This record has been filtered out and may potentially throw an error if we attempt to call store group
 			// functions. So, we let this record update and the store think its ungroupped while it updates.
-			if (recById && !s.data.contains(recById) && s.isGrouped()) {
+			if (s.isGrouped() && !s.data.contains(recById)) {
 				s.isGrouped = fnHook;
 			}
 
 			//Ok we found one and it isn't the same object
-			if (recById && rec !== recById && rec.get('MimeType') === recById.get('MimeType') && Ext.isFunction(recById[fname])) {
+			if (rec !== recById && rec.get('MimeType') === recById.get('MimeType') && Ext.isFunction(recById[fname])) {
 				try {
 					recById[fname].apply(recById, args);
 				}
