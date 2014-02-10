@@ -12,189 +12,140 @@
  */
 
 //Heavily influenced by http://modernjavascript.blogspot.com/2013/08/promisesa-understanding-by-doing.html
-window.Promise = (function() {
-	var State = {
-		PENDING: 0,
-		FULFILLED: 1,
-		REJECTED: 2
-	},
-	nextId = 1,
-	p =	function p() {
+window.Promise = (function(Global) {
 
-		function getCtx() {
-			try {
-				if (ctx === p.pool) {
-					ctx = ctx.caller;
-				}
-				var c = ((ctx.$owner && ctx.$owner.$className) || '') + '#' + (ctx.$name || '');
-				if (c === '#') {
-					c = ctx.toString();
-				}
-				return c;
-			} catch (e) {}
+	function then(onFulfilled, onRejected) {
+		var chain = onFulfilled && onFulfilled.then ? onFulfilled : null,
+			promise = chain || new Promise(),
+			me = this;
+
+		if (chain) {
+			onFulfilled = undefined;//don't set it as a function in the cache
 		}
 
-		var ctx = p.caller,
-			Promise;
+		// initialize array
+		me.cache = me.cache || [];
 
-		Promise = {
-				//ctx: getCtx(),
-				State: State,//handy ref
-				state: State.PENDING,
+		setTimeout(function() {//async it
+			me.cache.push({
+				fulfill: onFulfilled,
+				reject: onRejected,
+				promise: promise
+			});
+			resolve.call(me);
+		}, 1);
 
-				isResolved: function() { return this.state !== State.PENDING; },
+		return promise;
+	}
 
-				changeState: function(state, value) {
-					// catch changing to same state (perhaps trying to change the value)
-					if (this.state === state) {
-						throw new Error('Cannot transition to same state: ' + state);
-					}
+	function changeState(state, value) {
+		// catch changing to same state (perhaps trying to change the value)
+		if (this.state === state) {
+			throw new Error('Cannot transition to same state: ' + state);
+		}
 
-					// trying to change out of fulfilled or rejected
-					if (this.state === State.FULFILLED || this.state === State.REJECTED) {
-						throw new Error('cannot transition from current state: ' + state);
-					}
+		// trying to change out of fulfilled or rejected
+		if (this.state === State.FULFILLED || this.state === State.REJECTED) {
+			throw new Error('cannot transition from current state: ' + state);
+		}
 
-					// if second argument isn't given at all (passing undefined allowed)
-					if (state === State.FULFILLED && arguments.length < 2) {
-						throw new Error('transition to fulfilled must have a non null value');
-					}
+		// if second argument isn't given at all (passing undefined allowed)
+		if (state === State.FULFILLED && arguments.length < 2) {
+			throw new Error('transition to fulfilled must have a non null value');
+		}
 
-					// if a null reason is passed in
-					if (state === State.REJECTED && value === null) {
-						throw new Error('transition to rejected must have a non null reason');
-					}
+		// if a null reason is passed in
+		if (state === State.REJECTED && value === null) {
+			throw new Error('transition to rejected must have a non null reason');
+		}
 
-					//change state
-					this.state = state;
-					this.value = value;
-					this.resolve();
-					return this.state;
-				},
+		//change state
+		this.state = state;
+		this.value = value;
+		resolve.call(this);
+		return this.state;
+	}
 
+	function fulfill(value) { changeState.call(this, State.FULFILLED, value); }
+	function reject(reason) { changeState.call(this, State.REJECTED, reason); }
 
-				fulfill: function(value) { this.changeState(State.FULFILLED, value); },
-				reject: function(reason) { this.changeState(State.REJECTED, reason); },
+	function resolve() {
+		var obj, fn, value, me = this;
+		// check if pending
+		if (this.state === State.PENDING) {
+			return;
+		}
 
-
-				then: function(onFulfilled, onRejected) {
-
-					var chain = onFulfilled && onFulfilled.then ? onFulfilled : null,
-						promise = chain || Object.create(Promise),
-						me = this;
-
-					if (chain) {
-						onFulfilled = undefined;//don't set it as a function in the cache
-					}
-
-					// initialize array
-					me.cache = me.cache || [];
-
-					this.async(function() {
-						me.cache.push({
-							fulfill: onFulfilled,
-							reject: onRejected,
-							promise: promise
-						});
-						me.resolve();
-					});
-
-					return promise;
-				},
-
-
-				hasHandler: function(name) {
-					var me = this,
-						i = (me.cache || []).length - 1, c,
-						has = false;
-					for (i; i >= 0 && !has; i--) {
-						c = me.cache[i];
-						has = typeof c[name] === 'function' || c.hasHandler(name);
-					}
-
-					return has;
-				},
-
-				maybeReportError: function(obj, error) {
-					var me = this, id = me.id, ctx = me.ctx;
-					setTimeout(function() {
-						if (!obj.promise.hasHandler('reject')) {
-							console.error('POTENTIALLY UNHANDLED EXECPTION:', id, error, ctx);
-						}
-					}, 1000);
-				},
-
-
-				done: function(fn) { this.validateHandler(fn); return this.then(fn); },
-				fail: function(fn) { this.validateHandler(fn); return this.then(undefined, fn); },
-				always: function(fn) {this.validateHandler(fn); return this.then(fn, fn); },
-
-				validateHandler: function(fn) {
-					if (typeof fn !== 'function') {
-						throw new TypeError('Expected a function');
-					}
-				},
-
-				resolve: function() {
-					var obj, fn, value, me = this;
-					// check if pending
-					if (this.state === State.PENDING) {
-						return;
-					}
-
-					function chain(obj, state) {
-						return function(v) {
-							obj.promise.changeState(state, v);
-						};
-					}
-
-					// for each 'then'
-					while (me.cache && me.cache.length) {
-						obj = me.cache.shift();
-
-						fn = me.state === State.FULFILLED ? obj.fulfill : obj.reject;
-
-						if (typeof fn !== 'function') {
-							obj.promise.changeState(this.state, me.value);
-						} else {
-							// fulfill promise with value or reject with error
-							try {
-								value = fn(me.value);
-
-								// deal with promise returned
-								if (value && typeof value.then === 'function') {
-									value.then(chain(obj, State.FULFILLED), chain(obj, State.REJECTED));
-									// deal with other value returned
-								} else {
-									obj.promise.changeState(State.FULFILLED, value);
-								}
-								// deal with error thrown
-							} catch (error) {
-								me.maybeReportError(obj, error);
-								obj.promise.changeState(State.REJECTED, error);
-							}
-						}
-					}
-				},
-
-
-				async: function(fn) {
-					setTimeout(fn, 5);
-				}
+		function chain(obj, state) {
+			return function(v) {
+				changeState.call(obj.promise, state, v);
 			};
+		}
 
-		return Object.create(Promise, {id: {value: nextId++}});
+		// for each 'then'
+		while (me.cache && me.cache.length) {
+			obj = me.cache.shift();
+
+			fn = me.state === State.FULFILLED ? obj.fulfill : obj.reject;
+
+			if (typeof fn !== 'function') {
+				changeState.call(obj.promise, this.state, me.value);
+			} else {
+				// fulfill promise with value or reject with error
+				try {
+					value = fn(me.value);
+
+					// deal with promise returned
+					if (value && typeof value.then === 'function') {
+						value.then(chain(obj, State.FULFILLED), chain(obj, State.REJECTED));
+						// deal with other value returned
+					} else {
+						changeState(obj.promise, State.FULFILLED, value);
+					}
+					// deal with error thrown
+				} catch (error) {
+					console.error('Exception while resolving promise:', error.stack || error.message || error);
+					changeState.call(obj.promise, State.REJECTED, error);
+				}
+			}
+		}
+	}
+
+	var nextId = 1, Cls, p, State = { PENDING: 0, FULFILLED: 1, REJECTED: 2 };
+
+	Cls = function(worker) {
+		this.id = (nextId++);
+		this.state = State.PENDING;
+
+		if (worker) {
+			setTimeout(worker.bind(Global, fulfill.bind(this), reject.bind(this)), 0);
+		} else {
+			console.error('No callback');
+		}
 	};
 
+	p = Cls.prototype;
+	p.isResolved = function() { return this.state !== State.PENDING; };
 
-	p.State = State;
+	p.then = then;
+
+	p.done = function(fn) { this.validateHandler(fn); return this.then(fn); };
+	p.fail = function(fn) { this.validateHandler(fn); return this.then(undefined, fn); };
+	p.always = function(fn) {this.validateHandler(fn); return this.then(fn, fn); };
+	p.validateHandler = function(fn) { if (typeof fn !== 'function') { throw new TypeError('Expected a function'); } };
 
 
-	p.pool = function() {
+	p.fulfill = fulfill;
+	p.reject = reject;
+
+	Cls.State = p.State = State;
+
+
+	Cls.pool = function() {
 		// get promises
 		var promises = [].slice.call(arguments, 0),
 			values = [],
-			state = State.FULFILLED,
+			state = 'fulfill',
 			toGo = promises.length, i,
 		// promise to return
 			promise = new Promise();
@@ -215,7 +166,7 @@ window.Promise = (function() {
 				return;
 			}
 			// set the state with all values if all are complete
-			promise.changeState(state, values);
+			promise[state](values);
 		}
 
 		function prime(index) {
@@ -237,7 +188,7 @@ window.Promise = (function() {
 				values[index] = value;
 				toGo--;
 				// set error state
-				state = State.REJECTED;
+				state = 'reject';
 				checkFinished();
 			});
 		}
@@ -253,33 +204,9 @@ window.Promise = (function() {
 		return promise;
 	};
 
-	p.toPromise = function(fn) {
-		return function() {
 
-			// promise to return
-			var promise = new Promise();
-
-			//on error we want to reject the promise
-			function errorFn(data) {
-				promise.reject(data);
-			}
-
-			// fulfill on success
-			function successFn(data) {
-				promise.fulfill(data);
-			}
-
-			// run original function with the error and success functions
-			// that will set the promise state when done
-			fn.apply(this,
-					[errorFn, successFn].concat([].slice.call(arguments, 0)));
-
-			return promise;
-		};
-	};
-
-	return p;
-}());
+	return Cls;
+}(window));
 
 
 Ext.define('NextThought.util.Promise', {});
