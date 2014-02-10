@@ -707,7 +707,7 @@ Ext.define('NextThought.view.forums.Topic', {
 			return;
 		}
 
-		comment = comment.get('ID');
+		comment = comment && comment.get('ID');
 
 		if (!this.ready) {
 			this.scrollToComment = comment;
