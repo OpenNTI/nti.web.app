@@ -151,14 +151,10 @@
 	.x-window-body {
 		.x-form-field, .x-form-display-field, & {
 			color: $primary-grey;
-			font: 24px $font !important;
-			font-weight: 400 !important;
-			font-style: italic !important;
+			font: italic 400 1.3em/1.5 $font !important;
 
 			div.message {
-				font: 14px $font !important;
-				font-style: normal !important;
-				font-weight: 300 !important;
+				font: normal 300 0.7em/1.7 $font !important;
 
 				a, a:link, a:visited, a:active {
 					color: $primary-blue;
