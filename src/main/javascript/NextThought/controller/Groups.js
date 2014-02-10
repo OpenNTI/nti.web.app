@@ -134,14 +134,21 @@ Ext.define('NextThought.controller.Groups', {
 					rec.hidden = true;
 					me.setContactGroup(rec);
 				} else {
+
 					alert({
-						icon: Ext.Msg.WARNING,
-						title: 'Error',
-						msg: 'There was an unknown error, please try again later.',
-						closable: false,
-						buttons: null
+						icon: Ext.Msg.ERROR,
+						title: 'Oops! :(',
+						msg: 'There was an error initializing your contacts. ' +
+							 'You will not be able to add/remove contacts until this is resolved. ' +
+							 'This error has been reported and we are working on it.'
 					});
-					throw arguments;
+					setTimeout(function() {
+						//ensure this is caught by the error reporter. (and not Ext's layout engine or event handlers)
+						Ext.Error.raise(JSON.stringify({
+							msg: 'Failed to create contacts groupd',
+							object: rec
+						}));
+					}, 1);
 				}
 			});
 
