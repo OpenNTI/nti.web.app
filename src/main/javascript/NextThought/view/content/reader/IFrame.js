@@ -120,7 +120,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 
 		task.run = function() {
 			var doc = me.getDocumentElement();
-			if (doc.body || doc.readyState === 'complete') {
+			if ((doc.body || doc.readyState === 'complete') && me.get()) {
 				Ext.TaskManager.stop(task);
 				doc.open();
 				doc.write(BLANK_DOC);
@@ -513,7 +513,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 
 
 	get: function() {
-		var iframe, el = this.iframe.el;
+		var iframe, el = this.iframe && this.iframe.el;
 		if (!el) {
 			return null;
 		}
