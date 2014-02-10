@@ -119,6 +119,10 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 
 
 	getRoster: function() {
+		if (this.__roster) {
+			return this.__roster;
+		}
+
 		var p = PromiseFactory.make(),
 			r = this.getLink('CourseEnrollmentRoster');
 
@@ -133,7 +137,6 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 						j = j && j.Items;
 						//filter the active user out of the roster since we are administering this thing.
 						j = j && j.filter(function(o) { return o && !isMe(o.Username); });
-
 						j = ParseUtils.parseItems(j);
 						if (j) {
 							//used in the open/enrolled filters so the filter function doesn't
@@ -157,6 +160,7 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 					});
 		}
 
+		this.__roster = p;
 		return p;
 	},
 
