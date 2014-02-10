@@ -106,8 +106,11 @@ Ext.define('NextThought.view.menus.Presence', {
 
 	savePreferenceValues: function(record, key, type, show, status) {
 		var me = this;
+		if (!record) {
+			console.error('No record??');
+		}
 
-		if (record.isFuture) {
+		if (!record || record.isFuture) {
 			$AppConfig.Preferences.getPreference(key, function(value) {
 				if (value) {
 					me.updatePreference(value, type, show, status);

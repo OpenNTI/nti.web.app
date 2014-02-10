@@ -1,135 +1,135 @@
-describe('Transcript Summary Item tests', function(){
-	var testBody, view, noop = function(){};
+describe('Transcript Summary Item tests', function() {
+	var testBody, view, noop = function() {};
 
-	beforeEach(function(){
+	beforeEach(function() {
 		testBody = document.createElement('div');
 		document.body.appendChild(testBody);
-		view = Ext.create('NextThought.view.profiles.parts.TranscriptSummaryItem',{
-			renderTo : testBody,
-			initComponent : noop,
-			afterRender : noop
+		view = Ext.create('NextThought.view.profiles.parts.events.TranscriptSummaryItem', {
+			renderTo: testBody,
+			initComponent: noop,
+			afterRender: noop
 		});
 	});
 
-	afterEach(function(){
+	afterEach(function() {
 		document.body.removeChild(testBody);
 	});
 
-	describe('No array passed', function(){
-		it('Passing nothing',function(){
+	describe('No array passed', function() {
+		it('Passing nothing', function() {
 			var result = view.stringifyNames();
 
 			expect(result).toBe('no one');
 		});
 
-		it('Passing a string no less',function(){
+		it('Passing a string no less', function() {
 			var result = view.stringifyNames('me');
 
 			expect(result).toBe('me');
 		});
 
-		it('Passing a string and a less',function(){
-			var result = view.stringifyNames('me',5);
+		it('Passing a string and a less', function() {
+			var result = view.stringifyNames('me', 5);
 
 			expect(result).toBe('me');
-		})
-	})
-
-	describe('One name in the array',function(){
-		var names;
-		beforeEach( function(){
-			names = ['me'];
-		});
-		it("Passing no less",function(){
-			var result = view.stringifyNames(names);
-
-			expect(result).toBe("me");
-		});
-
-		it("Passing less", function(){
-			var result = view.stringifyNames(names, 5);
-
-			expect(result).toBe("me");
 		});
 	});
 
-	describe('Two names in the array',function(){
+	describe('One name in the array', function() {
 		var names;
-		beforeEach(function(){
-			names = ['me','you'];
+		beforeEach(function() {
+			names = ['me'];
 		});
-
-		it('Passing no less',function(){
+		it('Passing no less', function() {
 			var result = view.stringifyNames(names);
 
-			expect(result).toBe("me and you");
+			expect(result).toBe('me');
 		});
 
-		it('Passing less of 1',function(){
+		it('Passing less', function() {
+			var result = view.stringifyNames(names, 5);
+
+			expect(result).toBe('me');
+		});
+	});
+
+	describe('Two names in the array', function() {
+		var names;
+		beforeEach(function() {
+			names = ['me', 'you'];
+		});
+
+		it('Passing no less', function() {
+			var result = view.stringifyNames(names);
+
+			expect(result).toBe('me and you');
+		});
+
+		it('Passing less of 1', function() {
 			var result = view.stringifyNames(names, 1);
 
-			expect(result).toBe("me and 1 other");
+			expect(result).toBe('me and 1 other');
 		});
 
-		it('Passing less of 2',function(){
+		it('Passing less of 2', function() {
 			var result = view.stringifyNames(names, 2);
 
-			expect(result).toBe("2 others");
+			expect(result).toBe('2 others');
 		});
 
-		it('Passing less of 3',function(){
+		it('Passing less of 3', function() {
 			var result = view.stringifyNames(names, 3);
 
 			expect(result).toBe('2 others');
 		});
 	});
 
-	describe('Five names in the array',function(){
+	describe('Five names in the array', function() {
 		var names;
-		beforeEach(function(){
-			names = ['me','you','him','her','guy'];
+		beforeEach(function() {
+			names = ['me', 'you', 'him', 'her', 'guy'];
 		});
 
-		it('Passing no less',function(){
+		it('Passing no less', function() {
 			var result = view.stringifyNames(names);
 
 			expect(result).toBe('me, you, him, her, and guy');
-		})
+		});
 
-		it('Passing less of 1',function(){
-			var result = view.stringifyNames(names,1);
+		it('Passing less of 1', function() {
+			var result = view.stringifyNames(names, 1);
 
 			expect(result).toBe('me, you, him, her, and 1 other');
-		})
+		});
 
-		it('Passing less of 2',function(){
+		it('Passing less of 2', function() {
 			var result = view.stringifyNames(names, 2);
 
 			expect(result).toBe('me, you, him, and 2 others');
 		});
 
-		it('Passing less of 3',function(){
+		it('Passing less of 3', function() {
 			var result = view.stringifyNames(names, 3);
 
 			expect(result).toBe('me, you, and 3 others');
 		});
 
-		it('Passing less of 4',function(){
+		it('Passing less of 4', function() {
 			var result = view.stringifyNames(names, 4);
 
 			expect(result).toBe('me and 4 others');
 		});
 
-		it('Passing less of 5',function(){
+		it('Passing less of 5', function() {
 			var result = view.stringifyNames(names, 5);
 
 			expect(result).toBe('5 others');
-		})
+		});
 
-		it('Passing less of 6',function(){
+		it('Passing less of 6', function() {
 			var result = view.stringifyNames(names, 6);
 
 			expect(result).toBe('5 others');
-		})
+		});
 	});
 });

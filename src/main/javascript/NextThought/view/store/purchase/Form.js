@@ -290,7 +290,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		function onFailure(q, r) {
 			unmask();
 
-			var json = Ext.decode(r.responseText, true);
+			var json = Ext.decode(r && r.responseText, true) || {};
 
 			me.handleError({
 				get: function(p) {
@@ -471,7 +471,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 		var el = this.getEl(),
 			msg = errorModel.message || (errorModel.get && errorModel.get('Message')) || 'An unknown error occurred.',
 			p = errorModel.param || (errorModel.get && errorModel.get('Param')) || '',
-			field = el.down('input[name="' + p + '"]') || el.down('input[name^=' + (p.split('_')[0]) + ']');
+			field = el && (el.down('input[name="' + p + '"]') || el.down('input[name^=' + (p.split('_')[0]) + ']'));
 
 		if (field) {
 			field.addCls('invalid');

@@ -1,72 +1,72 @@
-describe("ForumActivityItem link tests",function(){
-	var testBody, noop = function(){};
+describe('ForumActivityItem link tests', function() {
+	var testBody, noop = function() {};
 
-	beforeEach(function(){
+	beforeEach(function() {
 		testBody = document.createElement('div');
 		document.body.appendChild(testBody);
 	});
 
-	afterEach(function(){
+	afterEach(function() {
 		document.body.removeChild(testBody);
 	});
-	describe("profile-forum-activity-item",function(){
+	describe('profile-forum-activity-item', function() {
 		var ActivityItem;
 
-		beforeEach(function(){
-			ActivityItem = Ext.create('NextThought.view.profiles.parts.ForumActivityItem',{
+		beforeEach(function() {
+			ActivityItem = Ext.create('NextThought.view.profiles.parts.events.ForumActivityItem', {
 				renderTo: testBody,
 				beforeRender: noop,
 				afterRender: noop,
 				initComponent: noop
 			});
 
-			spyOn(ActivityItem,'fireEvent');
+			spyOn(ActivityItem, 'fireEvent');
 		});
 
-		it('passing external link',function(){
+		it('passing external link', function() {
 			var e = {
 				stopEvent: noop,
-				getTarget: function(){
+				getTarget: function() {
 					return {
-						href : 'www.google.com'
-					}
+						href: 'www.google.com'
+					};
 				}
 			};
 
 			ActivityItem.bodyClickHandler(e);
 
-			expect(ActivityItem.fireEvent).toHaveBeenCalledWith('navigate-to-href',ActivityItem,'www.google.com');
+			expect(ActivityItem.fireEvent).toHaveBeenCalledWith('navigate-to-href', ActivityItem, 'www.google.com');
 		});
 
 	});
 
-	describe("profile-forum-activity-item-reply",function(){
+	describe('profile-forum-activity-item-reply', function() {
 		var ActivityItemReply;
 
-		beforeEach(function(){
-			ActivityItemReply = Ext.create('NextThought.view.profiles.parts.ForumActivityItemReply',{
+		beforeEach(function() {
+			ActivityItemReply = Ext.create('NextThought.view.profiles.parts.ForumActivityItemReply', {
 				renderTo: testBody,
 				beforeRender: noop,
 				afterRender: noop,
 				initComponent: noop
 			});
 
-			spyOn(ActivityItemReply,'fireEvent');
+			spyOn(ActivityItemReply, 'fireEvent');
 		});
 
-		it('passing external link',function(){
+		it('passing external link', function() {
 			var e = {
 				stopEvent: noop,
-				getTarget: function(){
+				getTarget: function() {
 					return {
-						href : 'www.google.com'
-					}
+						href: 'www.google.com'
+					};
 				}
 			};
 
 			ActivityItemReply.bodyClickHandler(e);
 
-			expect(ActivityItemReply.fireEvent).toHaveBeenCalledWith('navigate-to-href',ActivityItemReply,'www.google.com');
+			expect(ActivityItemReply.fireEvent).toHaveBeenCalledWith('navigate-to-href', ActivityItemReply, 'www.google.com');
 		});
-	})
+	});
 });

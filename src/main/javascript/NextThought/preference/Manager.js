@@ -34,9 +34,9 @@ Ext.define('NextThought.preference.Manager', {
 
 		for (i = 0; i < keys.length; i++) {
 			//if we haven't loaded the value return it
-			if (value.isFuture) { return value; }
+			if (value && value.isFuture) { return value; }
 
-			if (value.get(keys[i])) {
+			if (value && value.get(keys[i])) {
 				value = value.get(keys[i]);
 			}else {
 				console.log('Invalid preference');
@@ -132,7 +132,7 @@ Ext.define('NextThought.preference.Manager', {
 						nextValue = value.get(path[i]);
 
 						//if a parent preference isn't load yet, init it to an empty one
-						if (nextValue.isFuture) {
+						if (nextValue && nextValue.isFuture) {
 							result = Ext.create(name + '.' + path[i]);
 							value.set(path[i], result);
 							value = result;
@@ -142,7 +142,7 @@ Ext.define('NextThought.preference.Manager', {
 					}
 
 					name = name + '.' + path[i].toLowerCase();
-			}else {
+			} else {
 				name = name + '.' + path[i];
 
 				result = Ext.create(name, json);
