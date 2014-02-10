@@ -13,11 +13,39 @@ Ext.define('NextThought.view.courseware.assessment.admin.Activity', {
 	setAssignmentsData: function() {
 		var me = this;
 		me.callParent(arguments);
-		Service.request(me.activityFeedURL).done(function(json) {
+
+		me.activityFeedURL = Ext.urlAppend(
+				me.activityFeedURL,
+				Ext.Object.toQueryString({
+					batchSize: 20,
+					batchStart: 0
+				})
+		);
+
+		me.loadPage();
+	},
+
+
+	onLoadMore: function() {
+		this.loadPage();
+	},
+
+
+	loadPage: function() {
+		var me = this;
+		me.mask();
+		return Service.request(me.activityFeedURL).done(function(json) {
+			if (me.isDestroyed) {return;}
+
 			json = Ext.decode(json, true);
+
 			json.Class = 'CourseActivity'; //doesn't have a class?
 
-			var activity = ParseUtils.parseItems([json])[0];
+			var activity = ParseUtils.parseItems([json])[0],
+				links = Ext.data.Types.LINKS.convert(json.Links);
+
+			me.activityFeedURL = links.getRelHref('batch-next');
+			me.loadMoreLink[(me.activityFeedURL) ? 'removeCls' : 'addCls']('hidden');
 
 			me.setLastReadFrom(activity);
 
@@ -37,8 +65,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.Activity', {
 			});
 			me.store.resumeEvents();
 			me.refresh();
+			me.unmask();
 		});
 	},
+
+
+	deriveEvents: Ext.emptyFn,
 
 
 	addFeedback: function(f) {

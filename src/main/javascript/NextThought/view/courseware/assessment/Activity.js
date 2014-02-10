@@ -9,12 +9,14 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header', html: '{title}'},
-		{ cls: 'list'}
+		{ cls: 'list'},
+		{ cls: 'more hidden', html: 'More', tabIndex: 0}
 	]),
 
 	renderSelectors: {
 		titleEl: '.header',
-		frameBodyEl: '.list'
+		frameBodyEl: '.list',
+		loadMoreLink: '.more'
 	},
 
 	getTargetEl: function() { return this.frameBodyEl; },
@@ -74,9 +76,13 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 		this.mon(this.store, 'datachanged', 'maybeNotify');
 		this.on({
 			deactivate: 'clearBadge',
-			itemclick: 'goToAssignment'
+			itemclick: 'goToAssignment',
+			loadMoreLink: { click: 'onLoadMore' }
 		});
 	},
+
+
+	onLoadMore: function() {},
 
 
 	onAdded: function() {

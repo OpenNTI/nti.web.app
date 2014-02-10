@@ -130,6 +130,18 @@ canvas.x-component-course-assessment {
 				}
 			}
 		}
+
+		.more {
+			&.hidden {visibility: hidden;}
+			display: block;
+			font: normal 600 0.7em/2 $font;
+			text-align: center;
+			text-transform: uppercase;
+			text-decoration: none;
+			color: $primary-blue;
+			margin: 2em;
+			cursor: pointer;
+		}
 	}
 
 
