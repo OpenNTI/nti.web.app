@@ -256,7 +256,7 @@ Ext.define('NextThought.view.profiles.About', {
 				box;
 
 			el = Ext.get(el);
-			
+
 			if (info.shouldBeShown) {
 				me.updateField(el, info.field, user.get(info.field));
 				el[(info.editable ? 'add' : 'remove') + 'Cls']('editable');
@@ -267,9 +267,9 @@ Ext.define('NextThought.view.profiles.About', {
 			el.el.dom.setAttribute('data-empty', 'true');
 			box = el.parent('.field');
 			dataFields = box.query('[data-field]');
-			if(dataFields.length > 1){
-				if(dataFields[0].getAttribute('data-empty')){
-					if(dataFields[1].getAttribute('data-empty')){
+			if (dataFields.length > 1) {
+				if (dataFields[0].getAttribute('data-empty')) {
+					if (dataFields[1].getAttribute('data-empty')) {
 						Ext.destroy(el, box);
 					}
 				}
