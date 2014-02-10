@@ -31,6 +31,27 @@ Ext.define('NextThought.view.courseware.assessment.admin.Activity', {
 	},
 
 
+	mask: function() {
+		if (!this.rendered) {return;}
+		this.callParent(arguments);
+	},
+
+
+	unmask: function() {
+		if (!this.rendered || this.isDestroyed) {return;}
+		this.callParent(arguments);
+	},
+
+
+	setMoreLinkState: function(state) {
+		if (!this.rendered) {
+			this.on({afterrender: this.setMoreLinkState.bind(this, state), single: true});
+			return;
+		}
+		this.loadMoreLink[state ? 'removeCls' : 'addCls']('hidden');
+	},
+
+
 	loadPage: function() {
 		var me = this;
 		me.mask();
@@ -45,7 +66,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Activity', {
 				links = Ext.data.Types.LINKS.convert(json.Links);
 
 			me.activityFeedURL = links.getRelHref('batch-next');
-			me.loadMoreLink[(me.activityFeedURL) ? 'removeCls' : 'addCls']('hidden');
+			me.setMoreLinkState(!!me.activityFeedURL);
 
 			me.setLastReadFrom(activity);
 
