@@ -1,22 +1,13 @@
-/**
- *  Well crap. These are now starting to pop up in browsers. (Chrome 34 dev has it, and collides with our name...) I was trying to get some tests to work in
- *  Karma, and noticed we were getting a "TypeError: Promise constructor takes a function argument"... that was odd to me becasue our Promise class did not take
- *  any arguments in the constructor... so that lead me to discover Futures have been given a global name "Promise" and that our implementation almost exactly
- *  matches except for the constructor. The standard has a callback to do all the work then reject/fulfill within. :/ Ours, you construct the Promise and return
- *  turn it while you do your work asynchronously. Grr.
- *
- *
- *  See: http://www.html5rocks.com/en/tutorials/es6/promises/
- *
- *  All that to say, I'm blanking out the global version so we don't get the error.
- */
+/** force our implementation for now. */
+window.Promise = null;
 
-//Heavily influenced by http://modernjavascript.blogspot.com/2013/08/promisesa-understanding-by-doing.html
-window.Promise = (function(Global) {
+//TODO: use native promises asap
+window.Promise = window.Promise || (function(Global) {
 
+	//<editor-fold desc="Private shared methods">
 	function then(onFulfilled, onRejected) {
 		var chain = onFulfilled && onFulfilled.then ? onFulfilled : null,
-			promise = chain || new Promise(),
+			promise = chain || PromiseFactory.make(),
 			me = this;
 
 		if (chain) {
@@ -110,6 +101,7 @@ window.Promise = (function(Global) {
 			}
 		}
 	}
+	//</editor-fold>
 
 	var nextId = 1, Cls, p, State = { PENDING: 0, FULFILLED: 1, REJECTED: 2 };
 
@@ -118,95 +110,135 @@ window.Promise = (function(Global) {
 		this.state = State.PENDING;
 
 		if (worker) {
-			setTimeout(worker.bind(Global, fulfill.bind(this), reject.bind(this)), 0);
+			try {
+				worker.call(Global, fulfill.bind(this), reject.bind(this));
+			} catch (e) {
+				reject.call(this, e);
+			}
 		} else {
-			console.error('No callback');
+			//The spec expects the constructor of a promise to take a callback that will do the work... our implementation was not so contained. We have more
+			// of a Deffered promise model. Where we get an empty Promise object and externally fulfill/reject it.
+			console.debug('No callback This invocation will break with native Promises');
 		}
 	};
 
 	p = Cls.prototype;
-	p.isResolved = function() { return this.state !== State.PENDING; };
 
 	p.then = then;
-
-	p.done = function(fn) { this.validateHandler(fn); return this.then(fn); };
-	p.fail = function(fn) { this.validateHandler(fn); return this.then(undefined, fn); };
-	p.always = function(fn) {this.validateHandler(fn); return this.then(fn, fn); };
-	p.validateHandler = function(fn) { if (typeof fn !== 'function') { throw new TypeError('Expected a function'); } };
-
-
-	p.fulfill = fulfill;
-	p.reject = reject;
-
-	Cls.State = p.State = State;
-
-
-	Cls.pool = function() {
-		// get promises
-		var promises = [].slice.call(arguments, 0),
-			values = [],
-			state = 'fulfill',
-			toGo = promises.length, i,
-		// promise to return
-			promise = new Promise();
-
-
-		if (Object.prototype.toString.call(promises[0]) === '[object Array]') {
-			promises = promises[0];
-			toGo = promises.length;
-		}
-
-		values.length = promises.length;
-
-
-		// whenever a promise completes
-		function checkFinished() {
-			// check if all the promises have returned
-			if (toGo) {
-				return;
-			}
-			// set the state with all values if all are complete
-			promise[state](values);
-		}
-
-		function prime(index) {
-			var p = promises[index];
-
-			if (!p || !p.then) {//handle falsy/non-promise @ index
-				toGo--;
-				checkFinished();
-				return;
-			}
-
-			p.then(function(value) {
-				// on success
-				values[index] = value;
-				toGo--;
-				checkFinished();
-			}, function(value) {
-				// on error
-				values[index] = value;
-				toGo--;
-				// set error state
-				state = 'reject';
-				checkFinished();
-			});
-		}
-
-		checkFinished();//handle empty array.
-
-		// whenever a promise finishes check to see if they're all finished
-		for (i = 0; i < promises.length; i++) {
-			prime(i);
-		}
-
-		// promise at the end
-		return promise;
-	};
-
 
 	return Cls;
 }(window));
 
 
-Ext.define('NextThought.util.Promise', {});
+Ext.applyIf(Promise.prototype, {
+	done: function(fn) { this.validateHandler(fn); return this.then(fn); },
+	fail: function(fn) { this.validateHandler(fn); return this.then(undefined, fn); },
+	always: function(fn) {this.validateHandler(fn); return this.then(fn, fn); },
+	validateHandler: function(fn) { if (typeof fn !== 'function') { throw new TypeError('Expected a function'); } },
+
+	replace: function(oldPromise) {
+		if (this.state === 0) {
+			this.then(
+					oldPromise.fulfill.bind(oldPromise),
+					oldPromise.reject.bind(oldPromise)
+			);
+		}
+	}
+});
+
+
+/**
+ * The standard calls this "all"...
+ * TODO: refactor to name this "all" and only define it if it is not already defined.
+ * @return {Promise}
+ */
+Promise.pool = function() {
+	// get promises
+	var promises = [].slice.call(arguments, 0),
+		values = [],
+		state = 'fulfill',
+		toGo = promises.length, i,
+	// promise to return
+		promise = PromiseFactory.make();
+
+
+	if (Object.prototype.toString.call(promises[0]) === '[object Array]') {
+		promises = promises[0];
+		toGo = promises.length;
+	}
+
+	values.length = promises.length;
+
+
+	// whenever a promise completes
+	function checkFinished() {
+		// check if all the promises have returned
+		if (toGo) {
+			return;
+		}
+		// set the state with all values if all are complete
+		promise[state](values);
+	}
+
+	function prime(index) {
+		var p = promises[index];
+
+		if (!p || !p.then) {//handle falsy/non-promise @ index
+			toGo--;
+			checkFinished();
+			return;
+		}
+
+		p.then(function(value) {
+			// on success
+			values[index] = value;
+			toGo--;
+			checkFinished();
+		}, function(value) {
+			// on error
+			values[index] = value;
+			toGo--;
+			// set error state
+			state = 'reject';
+			checkFinished();
+		});
+	}
+
+	checkFinished();//handle empty array.
+
+	// whenever a promise finishes check to see if they're all finished
+	for (i = 0; i < promises.length; i++) {
+		prime(i);
+	}
+
+	// promise at the end
+	return promise;
+};
+
+
+
+Ext.define('NextThought.util.Promise', {
+	singleton: true,
+
+	make: function() {
+		var o = {state: 0},
+		//because we used a "deferred" promise model (fulfullment/rejection happens externally) we have to construct it and bring the fulfull/reject
+		// functions to the surface.
+			p = new Promise(function(f, r) {
+				function clean(i) {
+					delete p.fulfill; delete o.fulfill;
+					delete p.reject; delete o.reject;
+					p.state = i; o.state = i;
+				}
+
+				o.fulfill = function(value) {f(value); clean(1);};
+				o.reject = function(reason) {r(reason); clean(2);};
+			});
+
+		Ext.applyIf(p, o);
+
+		return p;
+	}
+
+}, function() { window.PromiseFactory = this; });
+
