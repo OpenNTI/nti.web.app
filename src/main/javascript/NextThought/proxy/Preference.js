@@ -6,9 +6,10 @@ Ext.define('NextThought.proxy.Preference', {
 	url: '',
 	appendId: false, //default
 	reader: {
-    type: 'nti',
-    root: 'Items'
-  },
+		type: 'nti',
+		root: 'Items'
+	},
+
 	constructor: function(config) {
 		Ext.copyTo(this.reader, config, 'model');
 		this.callParent(arguments);
@@ -16,10 +17,7 @@ Ext.define('NextThought.proxy.Preference', {
 	},
 
 	buildUrl: function(request) {
-		var me = this,
-			id = request.params.id;
-
-		request.url = id;
+		request.url = request.params.id;
 		return this.callParent(arguments);
 	},
 

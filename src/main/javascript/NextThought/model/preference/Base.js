@@ -11,7 +11,7 @@ Ext.define('NextThought.model.preference.Base', {
 
 	subPreferences: [],
 
-	proxy: Ext.create('proxy.preference', {reader: 'json'}),
+	proxy: {type: 'preference', reader: 'json'},
 
 	getResourceUrl: function() {
 		return $AppConfig.Preferences.baseUrl;
