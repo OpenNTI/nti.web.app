@@ -19,7 +19,7 @@ Ext.define('NextThought.cache.UserRepository', {
 			queued = this._queuedBulkRequests, task;
 
 		task = Ext.util.TaskManager.newTask({
-			interval: 250,
+			interval: 50,
 			run: function() {
 				var t, i = $AppConfig.userBatchResolveRequestStagger || 20;
 				function removeWhenDone(t) {
@@ -273,8 +273,7 @@ Ext.define('NextThought.cache.UserRepository', {
 			});
 
 		if (toResolve.length > 0 && isFeature('bulk-resolve-users')) {
-			console.debug('Resolving in bulk...', toResolve.length);
-			me.makeBulkRequest(toResolve)
+			me.bulkResolve(toResolve)
 				.done(function(users) {
 					//Note we recache the user here no matter what
 					//if we requestsd it we cache the new values
@@ -286,10 +285,68 @@ Ext.define('NextThought.cache.UserRepository', {
 
 		return promise;
 	},
-		//</editor-fold>
+	//</editor-fold>
 
 
 	//<editor-fold desc="Bulk Request">
+	/**
+	 * Perform a bulk resolve. (and gather as many concurent resolves as posible w/o delaying too long)
+	 * @param {String[]} names
+	 * @return {Promise}
+	 */
+	bulkResolve: (function() {
+		var toResolve = [],
+			pending = [],
+			work = Ext.Function.createBuffered(function() {
+				var job = pending,
+					load = toResolve;
+				toResolve = []; pending = [];
+				console.debug('Resolving in bulk...', load.length);
+				this.makeBulkRequest(load)
+						.done(function(v) {
+							job.forEach(function(p) {p.fulfill(v);});
+						})
+						.fail(function(v) {
+							job.forEach(function(p) {p.reject(v);});
+						});
+			}, 10);
+
+		function toWork(names, fulfill, reject) {
+			toResolve = toResolve.concat(names);
+			pending.push({
+				fulfill: fulfill,
+				reject: reject
+			});
+			work.call(this);
+		}
+
+		return function(names) {
+			var me = this;
+			return new Promise(function(fulfill, reject) {
+				function success(v) {
+					var fulfillment = [], x, i;
+					for (i = v.length - 1; i >= 0; i--) {
+						for (x = names.length - 1; x >= 0; x--) {
+							if (names[x] === v[i].getId()) {
+								fulfillment.push(v[i]);
+							}
+						}
+					}
+
+					if (fulfillment.length === names.length) {
+						fulfill(fulfillment);
+					} else {
+						console.error('Length missmatch!', names, fulfillment, v);
+						reject('Length Missmatch.');
+					}
+				}
+
+				toWork.call(me, names, success, reject);
+			});
+		};
+	}()),
+
+
 	makeBulkRequest: function(usernames) {
 		var me = this,
 			p = PromiseFactory.make(),
