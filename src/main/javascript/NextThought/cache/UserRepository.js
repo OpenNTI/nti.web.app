@@ -173,7 +173,7 @@ Ext.define('NextThought.cache.UserRepository', {
 	//</editor-fold>
 
 	//<editor-fold desc="Public Interface">
-		getUser: function(username, callback, scope, forceFullResolve, cacheBust) {
+	getUser: function(username, callback, scope, forceFullResolve, cacheBust) {
 		if (!Ext.isArray(username)) {
 			username = [username];
 			username.returnSingle = true;
@@ -240,7 +240,6 @@ Ext.define('NextThought.cache.UserRepository', {
 					return;
 				}
 
-				//console.log('Resolving user on server', name);
 				result[name] = null;
 
 				//if we are given an ntiid call getObject instead of makeRequest
@@ -545,12 +544,6 @@ Ext.define('NextThought.cache.UserRepository', {
 				if (callbacks && callbacks.failure) {
 					callbacks.failure.call(callbacks.scope || this);
 				}
-
-
-				if (this.debug && (!r.loggedWarn || !r.loggedWarn[username])) {
-					if (!r.loggedWarn) { r.loggedWarn = {}; }
-					r.loggedWarn[username] = true;
-				}
 			}
 		}
 
@@ -610,11 +603,45 @@ Ext.define('NextThought.cache.UserRepository', {
 function() {
 	window.UserRepository = this;
 	function worker() {
+		var keep = {
+			Class: 1,
+			Links: 1,
+			MimeType: 1,
+			NTIID: 1,
+			Username: 1,
+			alias: 1,
+			realname: 1,
+			//profile fields (can't drop these) It would be nice to not to include these until we view the profile. (separate call?)
+			about: 1,
+			affiliation: 1,
+			description: 1,
+			home_page: 1,
+			location: 1,
+			role: 1
+		};
+
 		self.addEventListener('message', function(e) {
 			var resp = {};
-			fetch(e.data, function(json) {
+			fetch(e.data, function(json, shell) {
+				var i, l, o, p;
+
 				resp.id = e.data.id;
 				resp.result = JSON.parse(json);
+				if (shell) {
+					l = (resp.result || {}).Items || {};
+					for (i in l) {
+						if (l.hasOwnProperty(i)) {
+							o = l[i];
+							for (p in o) {
+								if (o.hasOwnProperty(p) && !keep[p]) {
+									delete o[p];
+								}
+							}
+							o.shell = true;
+						}
+					}
+				}
+
 				self.postMessage(resp);
 			});
 		}, false);
@@ -622,10 +649,13 @@ function() {
 		function fetch(data, fn) {
 			var req = new XMLHttpRequest();
 			req.open('POST', data.url, true);
+			if (!data.hasOwnProperty('shell')) {
+				data.shell = true;
+			}
 			req.onreadystatechange = function() {
 				if (req.readyState === 4) {
 					if (req.status === 200) {
-						fn(req.responseText);
+						fn(req.responseText, data.shell);
 					} else {
 						fn('Error: ' + req.status);
 					}
