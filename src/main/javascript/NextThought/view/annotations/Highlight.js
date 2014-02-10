@@ -89,6 +89,16 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		if (!this.compElements.first().hasCls(this.mouseOverCls)) {
 			this.compElements.addCls(this.mouseOverCls);
 			this.render();
+
+			if (Ext.is.iOS) {
+				var me = this;
+				Ext.defer(function() {
+					var menu = Ext.get(Ext.query('.x-menu .x-component-nt-annotaion')[0]).el.up('.x-menu');
+					me.mon(Ext.getCmp(menu.id), 'destroy', function() {
+						me.onMouseOut();
+					});
+				},250);
+			}
 		}
 	},
 
@@ -271,11 +281,11 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			}
 		};
 
-        if(Ext.is.iOS){
-            //bug in iOS7 that makes html elements relative to the full page height 20px to tall.
-            //Scroll before drawing canvas, to keep canvas from being shifted 20px up from where it should be
-            window.scrollTo(0,0);
-        }
+		if (Ext.is.iOS) {
+			//bug in iOS7 that makes html elements relative to the full page height 20px to tall.
+			//Scroll before drawing canvas, to keep canvas from being shifted 20px up from where it should be
+			window.scrollTo(0, 0);
+		}
 
 		boundingTop = AnnotationUtils.drawCanvas(me.canvas,
 												 me.content, fakeRectRange, me.self.bgcolor[me.record.get('Class')][state],
@@ -405,8 +415,8 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		valid = this.validToWrapEntireNodeFaster(node);
 
 		//Easy case, the node is completely surronded and valid, wrap the node
-		if ((startToStart === AFTER || startToStart === SAME)
-				&& (endToEnd === BEFORE || endToEnd === SAME) && valid) {
+		if ((startToStart === AFTER || startToStart === SAME) &&
+			(endToEnd === BEFORE || endToEnd === SAME) && valid) {
 			newRange = node.ownerDocument.createRange();
 			newRange.selectNode(node);
 			nodeList.push(this.doWrap(newRange));
