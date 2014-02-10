@@ -120,7 +120,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 					c = typeof c === 'string' ? c : c.getId();
 					r = r && c && r[c];
 					//if no roster, can't filter...
-					return !r || r.get('Status') !== 'Open';
+					return !r || r.Status !== 'Open';
 			    }
 			}
 		};

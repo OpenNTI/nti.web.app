@@ -161,7 +161,7 @@ Ext.define('NextThought.model.assessment.Assignment', {
 		//It is expected that there should only be 1 record per creator which is a contract with the view,
 		//not necessarily the data
 		(this.roster || []).forEach(function(o) {
-			var u = o.get('Username');
+			var u = o.Username;
 			if (!userSet[u]) {
 				phantoms.push(NextThought.model.courseware.UsersCourseAssignmentHistoryItem.create({
 					Creator: u

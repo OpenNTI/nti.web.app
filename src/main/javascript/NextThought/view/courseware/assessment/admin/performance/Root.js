@@ -311,7 +311,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 					return enroll !== 'Open';
 				}
-				return r && passes(r.get('Status'));
+				return r && passes(r.Status);
 			}
 		}], true);
 	},
@@ -531,7 +531,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		}
 
 		this.roster.forEach(function(r) {
-			var u = r.get('Username');
+			var u = r.Username;
 			users.push(u);
 			raw.push(Ext.apply({id: u}, getCounts(u)));
 		});

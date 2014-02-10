@@ -137,12 +137,20 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 						j = j && j.Items;
 						//filter the active user out of the roster since we are administering this thing.
 						j = j && j.filter(function(o) { return o && !isMe(o.Username); });
-						j = ParseUtils.parseItems(j);
+
 						if (j) {
 							//used in the open/enrolled filters so the filter function doesn't
 							// have to search for the username in the roster, can simply get the hash.
 							j.forEach(function(i) {
-								var n = i.get('Username');
+								var n = i.Username;
+								i.Status = i.LegacyEnrollmentStatus;
+
+								//remove excess properties (free up memory)
+								delete i.LegacyEnrollmentStatus;
+								delete i.Class;
+								delete i.CourseInstance;
+								delete i.MimeType;
+
 								if (map.hasOwnProperty(n)) {
 									console.warn('Replacing key? ' + n);
 								}
