@@ -19,7 +19,7 @@ Ext.define('NextThought.model.Highlight', {
 	],
 
 	getActivityItemConfig: function(type, cid){
-		var p = new Promise(), result = {};
+		var p = PromiseFactory.make(), result = {};
 
 		function getName(t) {
 

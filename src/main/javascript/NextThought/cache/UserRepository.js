@@ -179,7 +179,7 @@ Ext.define('NextThought.cache.UserRepository', {
 			username.returnSingle = true;
 		}
 
-		var promise = new Promise(),
+		var promise = PromiseFactory.make(),
 			me = this,
 			result = {},
 			l = username.length,
@@ -293,7 +293,7 @@ Ext.define('NextThought.cache.UserRepository', {
 	//<editor-fold desc="Bulk Request">
 	makeBulkRequest: function(usernames) {
 		var me = this,
-			p = new Promise(),
+			p = PromiseFactory.make(),
 			chunkSize = $AppConfig.userBatchResolveChunkSize || 200;
 
 		function failed(reason) {
@@ -338,7 +338,7 @@ Ext.define('NextThought.cache.UserRepository', {
 
 
 	__chunkBulkRequest: function(names) {
-		var p = new Promise(), me = this,
+		var p = PromiseFactory.make(), me = this,
 			divert = [], requestNames,
 			active = me._pendingResolve;
 
@@ -368,7 +368,7 @@ Ext.define('NextThought.cache.UserRepository', {
 
 
 	__bulkRequest: function(names) {
-		var p = new Promise(),
+		var p = PromiseFactory.make(),
 			me = this,
 			store = me.getStore(),
 			active = me._pendingResolve,
@@ -377,7 +377,7 @@ Ext.define('NextThought.cache.UserRepository', {
 		names.forEach(function(n) { active[n] = p; });
 
 		function fire() {
-			var working = new Promise();
+			var working = PromiseFactory.make();
 			setTimeout(function() {
 				me.__makeRequest({
 					url: Service.getBulkResolveUserURL(),
@@ -433,7 +433,7 @@ Ext.define('NextThought.cache.UserRepository', {
 
 
 	__foregroundRequest: function() {
-		var p = new Promise();
+		var p = PromiseFactory.make();
 		console.log('Requesting in foreground');
 		Service.request.apply(Service, arguments)
 				.done(function(txt) {p.fulfill(Ext.decode(txt, true));})
@@ -450,7 +450,7 @@ Ext.define('NextThought.cache.UserRepository', {
 
 		a = w.active = w.active || a;
 
-		p = new Promise();
+		p = PromiseFactory.make();
 		if (a.hasOwnProperty(p.id)) {
 			console.error('ASSERTION FAILED');
 			return;

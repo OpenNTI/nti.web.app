@@ -9,7 +9,7 @@ Ext.define('NextThought.model.Service', {
 
 
 	request: function(urlOrConfig) {
-		var p = new Promise(),
+		var p = PromiseFactory.make(),
 			cfg = {};
 
 		function resolve(q, s, r) {

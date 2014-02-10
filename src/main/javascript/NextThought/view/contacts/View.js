@@ -113,7 +113,7 @@ Ext.define('NextThought.view.contacts.View', {
 
 
 	restore: function(state) {
-		var promise = new Promise();
+		var promise = PromiseFactory.make();
 		promise.fulfill();
 		return promise;
 

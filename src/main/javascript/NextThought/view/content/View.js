@@ -591,7 +591,7 @@ Ext.define('NextThought.view.content.View', {
 
 
 	restore: function(state) {
-		var promise = new Promise(),
+		var promise = PromiseFactory.make(),
 			st = state.content,
 			course = st.course,
 			ntiid = st.location,

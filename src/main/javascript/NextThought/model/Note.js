@@ -371,7 +371,7 @@ Ext.define('NextThought.model.Note', {
 	},
 
 	getActivityItemConfig: function(){
-		var p = new Promise(), result;
+		var p = PromiseFactory.make(), result;
 
 		result = {
 			message: Ext.String.format('&ldquo;{0}&rdquo;', Ext.String.ellipsis(this.getBodyText(), 50, true)),

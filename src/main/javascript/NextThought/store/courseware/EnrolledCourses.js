@@ -39,17 +39,15 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 			}]);
 		}
 
-		var p = this.promiseToLoaded = new Promise(),
+		var p = this.promiseToLoaded = PromiseFactory.make(),
 			me = this;
 		this.callParent(arguments);
 		this.on({
 			scope: this,
 			beforeload: function() {
 				var old = p;
-				p = me.promiseToLoaded = new Promise();
-				if (old && !old.isResolved()) {
-					p.then(old);
-				}
+				p = me.promiseToLoaded = PromiseFactory.make();
+				p.replace(old);
 			},
 			load: function(me, records, success) {
 				me.sorters.clear();//don't sort on uiData() until precache is done.
@@ -85,19 +83,21 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 
 
 	getCourseInstance: function(courseInstanceId) {
-		var promise = new Promise(),
+		var promise = PromiseFactory.make(),
 			me = this;
 
 		this.onceLoaded().then(function() {
+			var found = false;
 			me.each(function(r) {
 				var instance = r.get('CourseInstance');
 				if (instance && instance.getId() === courseInstanceId) {
 					promise.fulfill(instance);
+					found = true;
 					return false;//stop iteration
 				}
 			});
 
-			if (promise.state !== Promise.State.FULFILLED) {
+			if (!found) {
 				promise.reject('Not found');
 			}
 		}, function(reason) { promise.reject(reason); });
@@ -107,7 +107,7 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 
 
 	findCourse: function() {
-		var promise = new Promise(),
+		var promise = PromiseFactory.make(),
 			me = this,
 			args = Ext.Array.clone(arguments);
 
@@ -125,7 +125,7 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 
 
 	findCourseBy: function() {
-		var promise = new Promise(),
+		var promise = PromiseFactory.make(),
 			me = this,
 			args = Ext.Array.clone(arguments);
 

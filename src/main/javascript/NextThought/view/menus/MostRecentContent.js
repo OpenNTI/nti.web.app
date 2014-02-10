@@ -89,7 +89,7 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 			s = PersistentStorage.getProperty(this.persistenceKey, this.persistenceProperty, []);
 
 		function getRecord(v, i, a) {
-			var promise = new Promise(),
+			var promise = PromiseFactory.make(),
 				title;
 
 			function f(o) {

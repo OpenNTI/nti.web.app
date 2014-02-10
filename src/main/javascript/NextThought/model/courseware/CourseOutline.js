@@ -7,7 +7,7 @@ Ext.define('NextThought.model.courseware.CourseOutline', {
 
 	getContents: function() {
 		var me = this, l,
-			p = me.__promiseToLoadContents || new Promise();
+			p = me.__promiseToLoadContents || PromiseFactory.make();
 
 		if (me.__promiseToLoadContents) {
 			return p;
@@ -37,7 +37,7 @@ Ext.define('NextThought.model.courseware.CourseOutline', {
 
 
 	findNode: function(id) {
-		var p = new Promise();
+		var p = PromiseFactory.make();
 
 		if (!this.navStore) {
 			p.reject('Navigation store not loaded');

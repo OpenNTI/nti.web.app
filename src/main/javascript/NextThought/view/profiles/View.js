@@ -26,7 +26,7 @@ Ext.define('NextThought.view.profiles.View', {
 
 	restore: function(state) {
 		state = (state || {});
-		var promise = new Promise(),
+		var promise = PromiseFactory.make(),
 			user = (state.profile || {}).username,
 			me = this;
 

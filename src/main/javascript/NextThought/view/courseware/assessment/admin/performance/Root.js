@@ -781,7 +781,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	changeGrade: function(rec, number, letter, fromEnter) {
 		if (!this.gradeBook) { return; }
 
-		var p = new Promise(), me = this,
+		var p = PromiseFactory.make(), me = this,
 			gradebookentry = me.gradeBook.getItem('Final Grade', 'no_submit'),
 			grade = gradebookentry && gradebookentry.getFieldItem('Items', rec.getId()),
 			value = number + ' ' + letter,

@@ -126,7 +126,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		};
 		this.callParent(arguments);
 		this.enableBubble(['show-assignment']);
-		this.filledStorePromise = new Promise();
+		this.filledStorePromise = PromiseFactory.make();
 
 		this.on('destroy', 'cleanupFilters');
 	},

@@ -15,7 +15,7 @@ Ext.define('NextThought.Library', {
 	activeVideoLoad: {},
 
 	constructor: function(config) {
-		this.promiseToLoad = new Promise();
+		this.promiseToLoad = PromiseFactory.make();
 		this.tocs = {};
 		this.addEvents({
 			loaded: true
@@ -50,10 +50,8 @@ Ext.define('NextThought.Library', {
 						}
 
 						var old = p;
-						p = me.promiseToLoad = new Promise();
-						if (old && !old.isResolved()) {
-							p.then(old);
-						}
+						p = me.promiseToLoad = PromiseFactory.make();
+						p.replace(old);
 					}
 				},
 				filters: [

@@ -68,7 +68,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.TopDiscussions', {
 			p = this.boardMap[board];
 
 			if (!p) {
-				p = this.boardMap[board] = new Promise();
+				p = this.boardMap[board] = PromiseFactory.make();
 				Service.getObject(board,
 					function(b) {p.fulfill(b);},
 					function() { p.reject(); },

@@ -13,7 +13,7 @@ Ext.define('NextThought.model.forums.HeadlineTopic', {
 	},
 
 	getActivityItemConfig: function() {
-		var p = new Promise(), result;
+		var p = PromiseFactory.make(), result;
 
 		result = {
 			message: Ext.String.ellipsis(this.get('headline').get('title'), 50, true),

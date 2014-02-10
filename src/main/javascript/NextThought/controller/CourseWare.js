@@ -322,7 +322,7 @@ Ext.define('NextThought.controller.CourseWare', {
 
 	__getCourseInstance: function(thing) {
 		var m = this.__getCourseMapping(thing),
-			p = new Promise();
+			p = PromiseFactory.make();
 
 
 		CourseWareUtils.findCourseBy(function(c) {
@@ -354,7 +354,7 @@ Ext.define('NextThought.controller.CourseWare', {
 
 
 		findCourseBy: function() {
-			var promise = new Promise(),
+			var promise = PromiseFactory.make(),
 				enrolled = Ext.getStore('courseware.EnrolledCourses'),
 				admin = Ext.getStore('courseware.AdministeredCourses'),
 				args = Ext.Array.clone(arguments);
@@ -370,7 +370,7 @@ Ext.define('NextThought.controller.CourseWare', {
 
 
 		resolveCourse: function(courseInstanceId) {
-			var promise = new Promise(),
+			var promise = PromiseFactory.make(),
 				enrolled = Ext.getStore('courseware.EnrolledCourses'),
 				admin = Ext.getStore('courseware.AdministeredCourses');
 
@@ -401,7 +401,7 @@ Ext.define('NextThought.controller.CourseWare', {
 
 
 		forEachCourse: function(fn) {
-			var//promise = new Promise(), //todo: make this promise based
+			var//promise = PromiseFactory.make(), //todo: make this promise based
 				enrolled = Ext.getStore('courseware.EnrolledCourses'),
 				admin = Ext.getStore('courseware.AdministeredCourses');
 

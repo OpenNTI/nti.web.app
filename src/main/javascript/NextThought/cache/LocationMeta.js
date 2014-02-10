@@ -12,7 +12,7 @@ Ext.define('NextThought.cache.LocationMeta', {
 
 
 	getMeta: function(ntiid, callback, scope) {
-		var p = new Promise(),
+		var p = PromiseFactory.make(),
 			maybe = this.getValue(ntiid);
 
 		p.done(Ext.bind(callback, scope)).fail(Ext.bind(callback, scope, []));
@@ -104,7 +104,7 @@ Ext.define('NextThought.cache.LocationMeta', {
 	 */
 	loadMeta: function(ntiid, ignoreCache) {
 		var me = this,
-			p = new Promise();
+			p = PromiseFactory.make();
 
 		function pageIdLoaded(pi) {
 			var meta = me.createAndCacheMeta(ntiid, pi, ignoreCache);

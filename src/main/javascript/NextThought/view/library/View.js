@@ -88,7 +88,7 @@ Ext.define('NextThought.view.library.View', {
 
 
 	restore: function(state) {
-		var promise = new Promise();
+		var promise = PromiseFactory.make();
 		promise.fulfill();
 		return promise;
 	},

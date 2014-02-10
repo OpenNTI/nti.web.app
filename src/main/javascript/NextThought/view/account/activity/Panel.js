@@ -298,7 +298,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		}
 
 		function doGroup(group) {
-			var p = new Promise(),
+			var p = PromiseFactory.make(),
 				label = groupToLabel(group.name);
 
 			function promiseToResolve(agg, c) {
@@ -373,7 +373,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 
 
 	changeToActivity: function(c) {
-		var me = this, p = new Promise(),
+		var me = this, p = PromiseFactory.make(),
 			item = c.get('Item'),
 			cid = item ? item.get('ContainerId') : undefined,
 			guid = guidGenerator(),
@@ -424,7 +424,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 
 
 	getMessage: function(change, cid) {
-		var p = new Promise(),
+		var p = PromiseFactory.make(),
 			item = change.get('Item'),
 			type = change.get('ChangeType');
 

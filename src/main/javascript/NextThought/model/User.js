@@ -229,7 +229,7 @@ Ext.define('NextThought.model.User', {
 	},
 
 	getActivityItemConfig: function(type){
-		var p = new Promise(), result;
+		var p = PromiseFactory.make(), result;
 
 		result = {
 			name: this.getName(),

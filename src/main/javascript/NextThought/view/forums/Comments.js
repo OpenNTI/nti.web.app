@@ -368,7 +368,7 @@ Ext.define('NextThought.view.forums.Comments', {
 
 	replyTo: function(record, el, width) {
 		var me = this, newRecord,
-			p = new Promise();
+			p = PromiseFactory.make();
 
 		me.isNewRecord = true;
 		newRecord = record.makeReply();

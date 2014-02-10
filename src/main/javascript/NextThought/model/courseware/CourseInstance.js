@@ -38,7 +38,7 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 			Cls = NextThought.model.courseware.CourseCatalogEntry;
 
 		if (!p) {
-			p = this.precachePromise = new Promise();
+			p = this.precachePromise = PromiseFactory.make();
 
 			Cls.load(null, {
 				url: me.getLink('CourseCatalogEntry'),
@@ -119,7 +119,7 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 
 
 	getRoster: function() {
-		var p = new Promise(),
+		var p = PromiseFactory.make(),
 			r = this.getLink('CourseEnrollmentRoster');
 
 		if (!r) {
@@ -162,17 +162,23 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 
 
 	getWrapper: function() {
-		var p = new Promise(),
-			id = this.getId();
+		var p, s = this.stores,
+			id = this.getId(), found = false;
 
-		this.stores.forEach(function(o) {
-			if (o.isModel) {
-				p.fulfill(o);
-				return false;
+		p = new Promise(function(fulfill, reject) {
+			s.forEach(function(o) {
+				if (o.isModel) {
+					fulfill(o);
+					found = true;
+					return false;
+				}
+			});
+			if (!found) {
+				reject('not found');
 			}
 		});
 
-		if (!p.isResolved()) {
+		if (!found) {
 			return CourseWareUtils.resolveCourseInstanceContainer(id);
 		}
 
@@ -183,7 +189,7 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 	getOutline: function() {
 		//cache outline
 		if (!this._outlinePromise) {
-			var p = this._outlinePromise = new Promise(),
+			var p = this._outlinePromise = PromiseFactory.make(),
 				o = this.get('Outline'),
 				me = this;
 
@@ -200,7 +206,7 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 
 
 	getAssignmentHistory: function() {
-		var p = new Promise(),
+		var p = PromiseFactory.make(),
 			me = this;
 
 		function getLink(rel, e) { return e.getLink(rel) || me.getLink(rel); }
@@ -232,7 +238,7 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 	getAssignments: function() {
 		if (this.getAssignmentsPromise) { return this.getAssignmentsPromise; }
 
-		var p = new Promise(),
+		var p = PromiseFactory.make(),
 			roster = this.getRoster();
 		Promise.pool(
 			Service.request(this.getLink('AssignmentsByOutlineNode')),
@@ -256,7 +262,7 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 
 	getGradeBook: function() {
 		if (!this._gradebookPromise) {
-			var p = this._gradebookPromise = new Promise(),
+			var p = this._gradebookPromise = PromiseFactory.make(),
 				link = this.getLink('GradeBook');
 
 			if (link) {

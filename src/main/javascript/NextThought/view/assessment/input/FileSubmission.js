@@ -46,7 +46,7 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 
 		var me = this,
 			q = this.questionSet,
-			p = new Promise();
+			p = PromiseFactory.make();
 
 		p.done(function() {
 			me.markSubmitted(new Date());
