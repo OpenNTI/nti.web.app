@@ -144,10 +144,12 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 
 	initContentFrame: function() {
 		var me = this,
-				base = location.pathname.toString().replace('index.html', ''),
-				doc = me.getDocumentElement(),
-				con = console, tip,
-				meta, g = Globals;
+			base = location.pathname.toString().replace('index.html', ''),
+			doc = me.getDocumentElement(),
+			con = console, tip,
+			meta, g = Globals;
+
+		if (me.reader.isDestroyed) {return;}
 
 		function on(dom, event, fn) {
 			if (!Ext.isArray(event)) {
@@ -270,7 +272,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 			}
 		});
 
-		on(doc, 'touchend', function(e) {
+		on(doc, 'touchend', function() {
 			//if open notepad editor, close it if touch on reader
 			var notepad = Ext.query('.inline-editor.x-component-notepad-item')[0];
 			if (notepad) {
@@ -315,14 +317,14 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 		}
 		else {
 			//NOTE: Are we using these listeners for iPad?
-			on(doc, 'touchstart', function(e) {
+			on(doc, 'touchstart', function() {
 				Ext.menu.Manager.hideAll();
 			});
 
 			on(doc, 'selectionchange', function(e) {
 				function selectionChange(e) {
 					var fakeEvent = Ext.EventObject.setEvent(e || event),
-						t = me.reader.getScroll().get().top,
+						//t = me.reader.getScroll().get().top,
 						s = me.get().win.getSelection();
 
 					if (!s.isCollapsed) {
