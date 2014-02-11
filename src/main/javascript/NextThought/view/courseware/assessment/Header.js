@@ -92,15 +92,20 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 			goUp = !goHome && !goNowhere && !!e.getTarget('.part'),
 			pV = this.parentView;
 
-		if (goUp) {
-			this.fireGoUp();
-		} else if (goHome) {
-			this.fireGoUp();
-			if (pV && pV.fireGoUp) {
-				pV.fireGoUp();
-			} else if (pV) {
-				console.log(pV.id + 'does not implement fireGoUp');
+		Ext.suspendLayouts();
+		try {
+			if (goUp) {
+				this.fireGoUp();
+			} else if (goHome) {
+
+				if (pV && pV.fireGoUp) {
+					pV.fireGoUp();
+				} else if (pV) { console.log(pV.id + 'does not implement fireGoUp'); }
+
+				this.fireGoUp();
 			}
+		} finally {
+			Ext.resumeLayouts();
 		}
 	},
 
