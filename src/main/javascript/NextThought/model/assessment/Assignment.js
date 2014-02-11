@@ -74,7 +74,7 @@ Ext.define('NextThought.model.assessment.Assignment', {
 
 	getSubmittedHistoryStore: function() {
 		if (!this._submittedHistoryStore) {
-			var url = this.getLink('GradeSubmittedAssignmentHistory'),
+			var url = this.getLink('GradeSubmittedAssignmentHistorySummaries'),
 				s = this._submittedHistoryStore = new NextThought.store.courseware.AssignmentView({ url: url });
 
 			s.promise = PromiseFactory.make();
