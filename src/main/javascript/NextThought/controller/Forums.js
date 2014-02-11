@@ -145,11 +145,12 @@ Ext.define('NextThought.controller.Forums', {
 
 	fillInPath: function(cmp, record, callback) {
 		var i = 0,
+			len = record.isComment ? 3 : 2,
 			parts = [],
 			r = record,
 			href = r.get('href').split('/');
 
-		for (i; i < 2; i++) {
+		for (i; i < len; i++) {
 			href.pop();
 			parts.push(getURL(href.join('/')));
 		}
@@ -168,7 +169,7 @@ Ext.define('NextThought.controller.Forums', {
 				url: url,
 				success: function(rep) {
 					var o = parts[ix] = ParseUtils.parseItems(rep.responseText)[0];
-					if (!/board$|forum$/i.test(o.get('Class'))) {
+					if (!/board$|forum$|Topic$/i.test(o.get('Class'))) {
 						console.error('Unexpected object: ', o, ' from: ', url, 'and: ', r.get('href'));
 						parts[ix] = null;
 						return;
@@ -238,9 +239,8 @@ Ext.define('NextThought.controller.Forums', {
 
 		vVal = v.record.get('ID');
 
-		function equals(a,b) {
-			return a.community === b.community
-				&& a.isUser === b.isUser;
+		function equals(a, b) {
+			return a.community === b.community && a.isUser === b.isUser;
 		}
 
 		if (Ext.isObject(val) && val.isUser) {
@@ -483,7 +483,7 @@ Ext.define('NextThought.controller.Forums', {
 
 			var r = {
 				url: href,
-				callback: function(req,s,resp) {
+				callback: function(req, s, resp) {
 					try {
 						pair[1] = ParseUtils.parseItems(resp.responseText)[0];
 					}
@@ -659,7 +659,7 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	loadRootMaybeFinish: function(urls,boards,store) {
+	loadRootMaybeFinish: function(urls, boards, store) {
 		urls.handled--;
 		var r = boards.first(),
 			me = this;
@@ -684,7 +684,7 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	loadRootRequest: function(url,community,success,failure,scope) {
+	loadRootRequest: function(url, community, success, failure, scope) {
 		Ext.Ajax.request({url: url, community: community, success: success, failure: failure, scope: scope});
 	},
 
@@ -693,7 +693,7 @@ Ext.define('NextThought.controller.Forums', {
 		function makeUrl(c) { return c && c.getLink('DiscussionBoard'); }
 
 		//Just for now...
-		function fn(resp,req) {
+		function fn(resp, req) {
 			me.loadRootCallBack(resp, req, boards, urls, store);
 		}
 
@@ -718,7 +718,7 @@ Ext.define('NextThought.controller.Forums', {
 
 		root = view.add({store: store, xtype: 'forums-root', stateKey: 'root'});
 
-		Ext.each(urls, function(url,i) {
+		Ext.each(urls, function(url, i) {
 
 			if (!url) { maybeFinish(); return; }
 
@@ -798,10 +798,10 @@ Ext.define('NextThought.controller.Forums', {
 
 		isEdit = isEdit && !Ext.isEmpty(commentForum.get('href'));
 
-		if(!isEdit){
+		if (!isEdit) {
 			postLink = postRecord && postRecord.getLink('add');
 
-			while(!postLink && postRecord){
+			while (!postLink && postRecord) {
 				postCmp = postCmp.up('[record]');
 				postRecord = postCmp && postCmp.record;
 				postLink = postRecord && postRecord.getLink('add');
@@ -831,7 +831,7 @@ Ext.define('NextThought.controller.Forums', {
 									topicCmp.store.add(rec);
 								}
 							}
-						} catch(e) {
+						} catch (e) {
 							console.error(e.stack || e.message || e);
 						} finally {
 							editor.deactivate();
@@ -933,7 +933,7 @@ Ext.define('NextThought.controller.Forums', {
 
 	applyTopicToStores: function(topic) {
 		var recordForStore;
-		this.getController('UserData').applyToStoresThatWantItem(function(id,store) {
+		this.getController('UserData').applyToStoresThatWantItem(function(id, store) {
 			if (store) {
 				if (store.findRecord('NTIID', topic.get('NTIID'), 0, false, true, true)) {
 					console.warn('Store already has item with id: ' + topic.get('NTIID'), topic);
@@ -1011,7 +1011,7 @@ Ext.define('NextThought.controller.Forums', {
 			post.save({
 				url: isEdit ? undefined : forumRecord && forumRecord.getLink('add'),//only use postRecord if its a new post.
 				scope: this,
-				success: function(post,operation) {
+				success: function(post, operation) {
 					var entry = isEdit ? record : ParseUtils.parseItems(operation.response.responseText)[0];
 
 					if (autoPublish !== undefined) {
