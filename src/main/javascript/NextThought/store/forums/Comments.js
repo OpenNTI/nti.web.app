@@ -167,6 +167,8 @@ Ext.define('NextThought.store.forums.Comments', {
 			if (parent && parentId !== this.parentTopic.getId()) {
 				parent.children = parent.children || [];
 				parent.addChild(record);
+				parent.set('threadShowing', true);
+				parent.threadLoaded = true;
 			}
 
 			record.set({
