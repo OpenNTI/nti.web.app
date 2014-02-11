@@ -102,15 +102,14 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 						var d = this.dueDate || rec.get('due'),
 							s = (v && v.get && v.get('Last Modified')) || v,
 							item = rec.get('item'),
-							parts = item && item.get('parts'),
-							submission = rec.get('Submission');
+							parts = item && item.get('parts');
 
 
 						if (!parts || !parts.length) {
 							return '';
 						}
 
-						if (!s || ((submission && submission.get('parts')) || []).length === 0) {
+						if (!s) {
 							return Ext.DomHelper.markup({cls: 'incomplete', html: 'Due ' + Ext.Date.format(d, 'm/d')});
 						}
 
@@ -176,7 +175,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 				   } },
 
 
-				   { text: '', dataIndex: 'Submission', sortable: false, width: 40, renderer: function(v) {
+				   { text: '', dataIndex: 'submission', sortable: false, width: 40, renderer: function(v) {
 					   return v && Ext.DomHelper.markup({cls: 'actions'});
 				   } }
 			   ]
