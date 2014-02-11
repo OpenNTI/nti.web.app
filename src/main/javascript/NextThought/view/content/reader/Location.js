@@ -30,10 +30,11 @@ Ext.define('NextThought.view.content.reader.Location', {
 			reader.fireEvent('uses-page-stores', this); }, this);
 
 		Ext.apply(reader, {
-			clearLocation: Ext.bind(this.clearLocation, this),
-			getLocation: Ext.bind(this.getLocation, this),
-			getRelated: Ext.bind(this.getRelated, this),
-			setLocation: Ext.bind(this.setLocation, this)
+			clearLocation: this.clearLocation.bind(this),
+			getLocation: this.getLocation.bind(this),
+			getRelated: this.getRelated.bind(this),
+			setLocation: this.setLocation.bind(this),
+			relatedItemHandler: this.relatedItemHandler.bind(this)
 		});
 
 		this.callParent(arguments);
@@ -272,8 +273,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 		var m = el.relatedInfo;
 
 		if (m.type === 'index' || m.type === 'link') {
-			console.log('Resolve the reader');
-			//this.setLocation(m.id);
+			this.setLocation(m.id);
 		}
 		else if (/http...*/.test(m.href)) {
 			Ext.widget('window', {

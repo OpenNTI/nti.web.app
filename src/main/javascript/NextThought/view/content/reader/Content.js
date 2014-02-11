@@ -72,6 +72,7 @@ Ext.define('NextThought.view.content.reader.Content', {
 
 	insertRelatedLinks: function(body, doc) {
 		var position = body.query('#NTIContent .chapter.title')[0],
+			reader = this.reader,
 			tpl = this.relatedTemplate, last = null,
 			related, c = 0,
 			container = {
@@ -81,7 +82,7 @@ Ext.define('NextThought.view.content.reader.Content', {
 			};
 
 		try {
-			related = this.reader.getRelated();
+			related = reader.getRelated();
 		} catch (e) {
 			console.warn('Could not insert related links due to: ', e.stack || e.message || e);
 			return;
@@ -108,7 +109,7 @@ Ext.define('NextThought.view.content.reader.Content', {
 		if (!tpl) {
 			tpl = Ext.DomHelper.createTemplate({
 				tag: 'a', href: '{0}',
-				onclick: 'NTIRelatedItemHandler(this);return false;',
+				onclick: 'window.top.ReaderPanel.get(\'{3}\').relatedItemHandler(this);return false;',
 				cls: 'related c{2}', html: '{1}'}).compile();
 
 			this.relatedTemplate = tpl;
@@ -116,7 +117,7 @@ Ext.define('NextThought.view.content.reader.Content', {
 
 		Ext.Object.each(related, function(key, value) {
 			c++;
-			last = tpl.append(container, [key, value.label, c]);
+			last = tpl.append(container, [key, value.label, c, reader.prefix]);
 			last.relatedInfo = value;
 		});
 
