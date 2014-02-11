@@ -139,7 +139,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 		};
 
 		Ext.TaskManager.start(task);
-		this.on('destroy', function() {
+		me.reader.on('destroy', function() {
 			Ext.TaskManager.stop(task);
 		});
 	},
