@@ -1,4 +1,5 @@
 Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
+	alternateClassName: 'NextThought.model.courseware.UsersCourseAssignmentHistoryItemSummary',
 	extend: 'NextThought.model.Base',
 
 	fields: [
@@ -31,10 +32,11 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 			return i && i.getDueDate();
 		}},
 
+
 		{name: 'feedback', type: 'Synthetic', persist: false, fn: function(r) {
 			var f = r.get('Feedback');
 			f = (f && f.get('Items')) || [];
-			return f.length;
+			return f.length || r.raw.FeedbackCount;
 		}},
 
 		{name: 'correct', type: 'int', persist: false, convert: function(v, r) {
@@ -42,11 +44,20 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 			return (a && a.getCorrectCount()) || 0;
 		}},
 
-		{name: 'completed', type: 'date', dateFormat: 'timestamp', persist: false, mapping: 'Submission.CreatedTime'},
-		{name: 'submission', type: 'date', dateFormat: 'timestamp', persist: false, convert: function(v, r) {
-			var s = r.get('Submission');
-			return s && s.get('Last Modified');
+
+		{name: 'completed', type: 'date', dateFormat: 'timestamp', persist: false, mapping: 'SubmissionCreatedTime', convert: function(v, r) {
+			if (!v) {
+				var s = r.get('Submission');
+				return (s && this.type.convert.call(this, s.raw.CreatedTime));
+			}
+			return v;
+		}},
+
+
+		{name: 'submission', type: 'string', persist: false, convert: function(v, r) {
+			return (r.raw.hasOwnProperty('SubmissionCreatedTime') || r.raw.hasOwnProperty('Submission')) ? 'true' : '';
 		} },
+
 
 		{name: 'grade', type: 'Synthetic', persist: false, fn: function(r) {
 			var s = r.get('Grade');
@@ -55,6 +66,14 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 		}}
 		//</editor-fold>
 	],
+
+
+	constructor: function() {
+		this.callParent(arguments);
+		if (this.raw.Class === 'UsersCourseAssignmentHistoryItemSummary') {
+			this.isSummary = true;
+		}
+	},
 
 
 	beginReset: function() {
