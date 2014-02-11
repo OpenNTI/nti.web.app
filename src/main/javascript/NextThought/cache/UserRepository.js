@@ -383,7 +383,7 @@ Ext.define('NextThought.cache.UserRepository', {
 		for (i; i >= 0; i--) {
 			list = lists[i] || [];
 			for (x = (list.length - 1); x >= 0; x--) {
-				u = list[x].getId();
+				u = list[x] && list[x].getId();
 				if (m.hasOwnProperty(u)) {
 					agg[m[u]] = list[x];
 				}
