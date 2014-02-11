@@ -37,6 +37,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.View', {
 
 
 	showStudent: function(rec) {
+		if (!rec.get('user')) {
+			console.warn('No user, view not ready');
+			return;
+		}
+
 		Ext.destroy(this.down('course-assessment-admin-performance-student'));
 
 		var view = this.add({
