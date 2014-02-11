@@ -93,9 +93,9 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 		active.always(function() {
 			active = me._showAssignmentPromise = new Promise(function(fulfill, reject) {
 				var r = assignmentHistory,
-					link = r.getLink('UsersCourseAssignmentHistoryItem');
+					link = r && r.getLink && r.getLink('UsersCourseAssignmentHistoryItem');
 
-				if (!r.isSummary) {
+				if (!r || !r.isSummary) {
 					fulfill(r);
 					return;
 				}
@@ -133,9 +133,10 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 						'goup': 'showRoot'
 					});
 				})
-				.fail(function() {
-						alert(':(');
-					});
+				.fail(function(reason) {
+					alert({title: 'Well, this is embarrassing!', msg: 'There was an unforeseen error loading this assignment. A report has been logged.'});
+					setTimeout(function() { throw reason; }, 1);
+				});
 		});
 	},
 
