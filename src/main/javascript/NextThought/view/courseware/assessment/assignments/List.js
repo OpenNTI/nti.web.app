@@ -119,7 +119,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 		}
 
 		if (day === today) {
-			html += 'Today';
+			html += 'Today ';
 		}
 		html += Ext.Date.format(date, format);
 
