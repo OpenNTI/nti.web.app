@@ -147,6 +147,11 @@ Ext.applyIf(Promise.prototype, {
 });
 
 
+Ext.applyIf(Promise, {
+	resolve: function(v) { return new Promise(function(f) {f.call(this, v);}); },
+	reject: function(v) { return new Promise(function(f, r) {r.call(this, v);}); }
+});
+
 /**
  * The standard calls this "all"...
  * TODO: refactor to name this "all" and only define it if it is not already defined.
@@ -214,6 +219,7 @@ Promise.pool = function() {
 	// promise at the end
 	return promise;
 };
+
 
 
 
