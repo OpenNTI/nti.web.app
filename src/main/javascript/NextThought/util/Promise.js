@@ -91,7 +91,7 @@ window.Promise = window.Promise || (function(Global) {
 						value.then(chain(obj, State.FULFILLED), chain(obj, State.REJECTED));
 						// deal with other value returned
 					} else {
-						changeState(obj.promise, State.FULFILLED, value);
+						changeState.call(obj.promise, State.FULFILLED, value);
 					}
 					// deal with error thrown
 				} catch (error) {
