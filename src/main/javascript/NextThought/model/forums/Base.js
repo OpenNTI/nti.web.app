@@ -21,7 +21,7 @@ Ext.define('NextThought.model.forums.Base', {
 		store.proxy.extraParams = Ext.apply(
 			store.proxy.extraParams || {},
 			Ext.apply({
-				sortOn: 'CreatedTime',
+				sortOn: 'createdTime',
 				sortOrder: 'descending'
 			}, extraParams));
 

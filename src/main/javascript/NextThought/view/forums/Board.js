@@ -172,7 +172,7 @@ Ext.define('NextThought.view.forums.Board', {
 		//console.log('The board view is activated');
 		//Sort them by last modified
 		//	s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
-		//		sortOn: 'Last Modified',
+		//		sortOn: 'lastModified',
 		//		sortOrder: 'descending'
 		//	});
 		//Don't sort them by creation time on client side either

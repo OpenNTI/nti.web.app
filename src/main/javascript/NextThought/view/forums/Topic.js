@@ -156,7 +156,7 @@ Ext.define('NextThought.view.forums.Topic', {
 		});
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {},{
-			sortOn: 'CreatedTime',
+			sortOn: 'createdTime',
 			sortOrder: 'descending'
 		});
 

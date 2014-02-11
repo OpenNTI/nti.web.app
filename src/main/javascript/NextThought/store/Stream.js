@@ -29,7 +29,7 @@ Ext.define('NextThought.store.Stream', {
 	proxy: {
 		extraParams: {
 			exclude: 'application/vnd.nextthought.redaction',
-			sortOn: 'Last Modified',
+			sortOn: 'lastModified',
 			sortOrder: 'descending'
 		},
 		type: 'rest',

@@ -149,7 +149,7 @@ Ext.define('NextThought.view.forums.Comments', {
 		});
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {},{
-			sortOn: 'CreatedTime',
+			sortOn: 'createdTime',
 			sortOrder: 'ascending',
 			filter: 'TopLevel'
 		});
