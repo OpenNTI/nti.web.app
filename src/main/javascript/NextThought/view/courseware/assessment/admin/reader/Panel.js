@@ -4,7 +4,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Panel', {
 	requires: [
 		'NextThought.view.courseware.assessment.admin.reader.Header'
 	],
-	prefix: 'course-assignment',
+	prefix: 'course-assignment-admin',
 
 
 	getToolbarConfig: function() {
