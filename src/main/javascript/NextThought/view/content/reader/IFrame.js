@@ -120,7 +120,10 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 
 		task.run = function() {
 			var doc = me.getDocumentElement();
-			if ((doc.body || doc.readyState === 'complete') && me.get()) {
+			if (!me.reader || me.reader.isDestroyed) {
+				Ext.TaskManager.stop(task);
+			}
+			if (doc && (doc.body || doc.readyState === 'complete') && me.get()) {
 				Ext.TaskManager.stop(task);
 				doc.open();
 				doc.write(BLANK_DOC);
