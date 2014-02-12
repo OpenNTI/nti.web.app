@@ -63,8 +63,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 								{ cls: 'name', html: '{displayName}'},
 								{ cls: 'action-items', cn: [
 									{ tag: 'tpl', 'if': 'overdue &gt; 0', cn: {cls: 'overdue', html: '{overdue:plural("Assignment")} Overdue'}},
-									{ tag: 'tpl', 'if': 'ungraded &gt; 0', cn: { html: '{ungraded:plural("Ungraded Assignment")}'}},
-									{ tag: 'tpl', 'if': 'comments &gt; 0', cn: { html: '{comments:plural("Comment")}'}}
+									{ tag: 'tpl', 'if': 'ungraded &gt; 0', cn: { html: '{ungraded:plural("Ungraded Assignment")}'}}
 								]}
 							]}
 						]}
@@ -350,8 +349,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				{ text: 'All Items', type: 'all', checked: type === 'all'},
 				{ text: 'Actionable Items', type: 'action', checked: type === 'action'},
 				{ text: 'Overdue Items', type: 'overdue', checked: type === 'overdue'},
-				{ text: 'Ungraded Items', type: 'ungraded', checked: type === 'ungraded'},
-				{ text: 'Commented Items', type: 'comment', checked: type === 'comment'}
+				{ text: 'Ungraded Items', type: 'ungraded', checked: type === 'ungraded'}
 			];
 
 		this.itemMenu = Ext.widget('menu', {
@@ -460,43 +458,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	//<editor-fold desc="Data Bindings">
-	setAssignmentStores: function(stores) {
-		var me = this,
-			feedbackMap = me._feedbackMap = {},
-			feedbackListeners = [];
-
-
-		function gatherFeedbacks(i) {
-			var f = i.get('Feedback'),
-				c = f && f.get('Creator');
-
-			function updateRow() {
-				var r = me.backingStore.getById(c);
-				if (r) {
-					me.updateActionables(r, c);
-				} else {
-					console.warn('Not updating row:', c);
-				}
-			}
-
-			if (f) {
-				(feedbackMap[c] = feedbackMap[c] || []).push(f);
-				feedbackListeners.push(me.mon(f, {
-					destroyable: true,
-					'items-changed': updateRow
-				}));
-				updateRow();
-			}
-		}
-
-		function itr(s) { s.each(gatherFeedbacks); }
-
-		Ext.destroy(me._feedbackListeners);
-		me._feedbackListeners = feedbackListeners;
-		stores.forEach(itr);
-	},
-
-
 	setAssignmentsData: function(assignments, history, instance, gradeBook) {
 		this.clearAssignmentsData();
 
@@ -513,7 +474,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		this.mon(assignments, {
 			'Roster-changed': 'applyRoster'
 		});
-
 
 		this.applyRoster();
 	},
@@ -538,12 +498,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		store.loadRawData(raw);
 		UserRepository.makeBulkRequest(users).done(applyUsers);
-
-		this.assignments.getViewMaster()
-				.done(this.setAssignmentStores.bind(this))
-				.fail(function() {
-					alert('Failed to load grade & performance view.');
-				});
 	},
 
 
@@ -558,9 +512,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	getCountsFor: function(username) {
 		var d = this.gradeBookDefaultPart,
 			assignments = (d && d.get('Items')) || [],
-			feedbacks = (this._feedbackMap || {})[username] || [],
 			counts = {
-				comments: feedbacks.reduce(function(agg, o) {return agg + o.getCount();}, 0),
 				ungraded: 0,
 				overdue: 0
 			};
