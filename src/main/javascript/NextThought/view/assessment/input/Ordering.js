@@ -81,7 +81,7 @@ Ext.define('NextThought.view.assessment.input.Ordering', {
 			if (val.hasOwnProperty(ordinal)) {
 				text = this.el.down('.draggable-area[data-ordinal="' + val[ordinal] + '"]');
 				label = this.el.down('.ordinal .label[data-part="' + ordinal + '"]');
-				if(text && label && label.parent()) {
+				if (text && label && label.parent()) {
 					text.appendTo(label.parent());
 				} else {
 					console.error('Bad Response from server', val);
@@ -129,7 +129,7 @@ Ext.define('NextThought.view.assessment.input.Ordering', {
 
 
 	editAnswer: function() {
-		if (this.submitted) {
+		if (this.submitted && !this.isAssignment) {
 			this.up('assessment-question').reset();
 			this.disableSubmission();
 		}
@@ -137,7 +137,7 @@ Ext.define('NextThought.view.assessment.input.Ordering', {
 
 
 	mark: function() {
-		var s = (this.part.get('solutions') || []) [0],
+		var s = (this.part.get('solutions') || [])[0],
 			c = (s && s.get('value')) || {}, i = 0, me = this,
 			values = Ext.clone(this.part.get('values')),
 			labels = Ext.clone(this.part.get('labels'));
@@ -188,7 +188,7 @@ Ext.define('NextThought.view.assessment.input.Ordering', {
 
 	reset: function() {
 		this.el.select('.ordinal .draggable-area').removeCls(['correct', 'incorrect']);
-    //		this.resetOrder();
+	//		this.resetOrder();
 		this.callParent();
 	},
 
@@ -209,8 +209,9 @@ Ext.define('NextThought.view.assessment.input.Ordering', {
 
 	quickSort: function(a) {
 		/**
-		 * @adaptation of the quick sort algorithm found at http://en.literateprograms.org/Quicksort_(JavaScript)
-		 * While  we could easily do the swapping with a basic sort algorithm or remove all the items and add them again in order, and the performance would still be great,
+		 * adaptation of the quick sort algorithm found at http://en.literateprograms.org/Quicksort_(JavaScript)
+		 * While  we could easily do the swapping with a basic sort algorithm or remove all the items
+		 * and add them again in order, and the performance would still be great,
 		 * since the size of the set is small,
 		 * it's good to use this algorithm and hopefully reduce the number of comparison and swaps we need to do.
 		 */
@@ -255,7 +256,7 @@ Ext.define('NextThought.view.assessment.input.Ordering', {
 			ap = ad.up('.ordinal'),
 			bp = bd.up('.ordinal');
 
-    //		console.log('Will swap draggable parts of index: ', a, ' ', b);
+	//		console.log('Will swap draggable parts of index: ', a, ' ', b);
 		ap.select('.draggable-area').remove();
 		bp.select('.draggable-area').remove();
 		ap.dom.appendChild(bd.dom);
@@ -348,13 +349,13 @@ Ext.define('NextThought.view.assessment.input.Ordering', {
 		var me = this;
 		this.dropZone = new Ext.dd.DropZone(this.getEl(), {
 			getTargetFromEvent: function(e) {
-                if(Ext.is.iOS){
-                    var toReturn = Ext.get(document.elementFromPoint(e.browserEvent.clientX, e.browserEvent.clientY));
-                    if(toReturn.dom.className.indexOf('draggable-area') < 0){
-                        toReturn = toReturn.up('.draggable-area');
-                    }
-                    return toReturn;
-                }
+				if (Ext.is.iOS) {
+					var toReturn = Ext.get(document.elementFromPoint(e.browserEvent.clientX, e.browserEvent.clientY));
+					if (toReturn.dom.className.indexOf('draggable-area') < 0) {
+						toReturn = toReturn.up('.draggable-area');
+					}
+					return toReturn;
+				}
 				return e.getTarget('.draggable-area', null, true);
 			},
 			onNodeEnter: function(target, dd, e, data) {
@@ -374,14 +375,14 @@ Ext.define('NextThought.view.assessment.input.Ordering', {
 				}
 
 				// NOTE: We could also swap onNodeOver however it doesn't feel right.
-        //				Ext.defer(me.swapNodes, 250, me, [target, dd]);
+		//				Ext.defer(me.swapNodes, 250, me, [target, dd]);
 				return Ext.dd.DropZone.prototype.dropAllowed;
 			},
 
 			onNodeDrop: function(target, dd, e, data) { me.swapNodes(target, dd); }
 		});
 	}
-}, function(){
+}, function() {
 	if (!isFeature('v3matching')) {
 		this.addXtype('question-input-matchingpart');
 	}
