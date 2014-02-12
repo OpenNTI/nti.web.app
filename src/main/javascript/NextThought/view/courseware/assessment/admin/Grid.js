@@ -136,36 +136,19 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 						   val = val && val.get('value');
 						   return val && val.split(' ')[0];
 					   },
-					   listeners: {
-						   headerclick: function() {
-							   var store = this.up('grid').getStore(),
-									   sorter = new Ext.util.Sorter({
-										   direction: this.sortState,
-										   sorterFn: function(o1, o2) {
-											   o1 = o1 && o1.get('Grade');
-											   o1 = o1 && o1.get('value');
-											   o1 = o1 && o1.split(' ')[0];
-											   o1 = o1 || '';
-
-											   o2 = o2 && o2.get('Grade');
-											   o2 = o2 && o2.get('value');
-											   o2 = o2 && o2.split(' ')[0];
-											   o2 = o2 || '';
-
-											   return Globals.naturalSortComparator(o1, o2);
-										   }
-									   });
-
-							   store.sorters.clear();
-							   store.sorters.add('Grade', sorter);
-							   store.sort();
-							   if (store.bind) {
-								   store = store.bind;
-								   store.sorters.clear();
-								   store.sorters.add('Grade', sorter);
-								   store.sort();
-							   }
-						   }
+					   doSort: function(state) {
+						   var store = this.up('grid').getStore(),
+							   sorter = new Ext.util.Sorter({
+								   direction: state,
+								   property: 'Grade',
+								   root: 'data',
+								   transform: function(o) {
+									   o = o && o.get('value');
+									   o = o && o.split(' ')[0];
+									   return o || '';
+								   }
+							   });
+						   store.sort(sorter);
 					   }
 				   },
 
