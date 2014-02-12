@@ -107,6 +107,7 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 									completed: null,
 									SubmissionCreatedTime: null,
 									Submission: null,
+									submission: null,
 									Grade: null,
 									Feedback: null
 								});
