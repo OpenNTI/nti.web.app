@@ -131,9 +131,11 @@ Ext.define('NextThought.controller.Profile', {
 
 
 	applyBlogPostToStores: function(entry) {
-		var recordForStore;
+		var seen = {},
+			recordForStore;
+
 		this.getController('UserData').applyToStoresThatWantItem(function(id, store) {
-			if (store) {
+			if (store && !seen[id]) {
 				console.log(store, entry);
 
 				if (store.findRecord('NTIID', entry.get('NTIID'), 0, false, true, true)) {
@@ -145,6 +147,8 @@ Ext.define('NextThought.controller.Profile', {
 					// store, so we need a new instance.  Read it out of the orginal raw value.
 					recordForStore = ParseUtils.parseItems([entry.raw])[0];
 				}
+
+				seen[id] = true;
 
 				//The store will handle making all the threading/placement, etc
 				store.add(recordForStore);
