@@ -327,7 +327,7 @@ Ext.define('NextThought.cache.UserRepository', {
 					var fulfillment = [], x, i;
 					for (i = v.length - 1; i >= 0; i--) {
 						for (x = names.length - 1; x >= 0; x--) {
-							if (names[x] === v[i].getId()) {
+							if (v[i] && names[x] === v[i].getId()) {
 								fulfillment.push(v[i]);
 							}
 						}
