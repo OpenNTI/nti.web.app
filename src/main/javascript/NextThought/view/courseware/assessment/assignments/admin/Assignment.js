@@ -151,6 +151,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 
 	initComponent: function() {
+		this._masked = 0;
 		this._filters = {
 			'open-enrolled': {
 				id: 'open-enrolled',
@@ -168,27 +169,59 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		this.callParent(arguments);
 		this.enableBubble(['show-assignment']);
 		this.filledStorePromise = PromiseFactory.make();
-
+		this.mon(this.assignment, { buffer: 1, 'roster-set': 'refilter' });
 		this.on('destroy', 'cleanupFilters');
 	},
 
 
 	afterRender: function() {
 		this.callParent(arguments);
+		if (this._masked) {
+			this._showMask();
+		}
 		this.initFilters();
 	},
 
 
+	_showMask: function() {
+		var el = this.el;
+		this._maskIn = setTimeout(function() {
+			if (el && el.dom) {
+				el.mask('Loading', 'loading', true);
+			}
+		}, 1);
+	},
+
+
+	mask: function() {
+		this._masked++;
+		if (!this.rendered) {
+			return;
+		}
+		this._showMask();
+	},
+
+
+	unmask: function() {
+		this._masked--;
+		if (this._masked <= 0) {
+			this._masked = 0;
+			clearTimeout(this._maskIn);
+			if (this.el && this.el.dom) {
+				this.el.unmask();
+			}
+		}
+	},
+
+
 	refilter: function() {
-		this.store.filter();
+		if (this.store) {
+			this.store.filter();
+		}
 	},
 
 
 	initFilters: function() {
-		this.mon(this.assignment, {
-			buffer: 1,
-			'roster-set': 'refilter'
-		});
 		var el = this.openEnrolledCheckboxEl;
 		this.onFiltersClicked({getTarget: function() {return el;}});
 	},
@@ -225,6 +258,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 				load: p.fulfill.bind(p)
 			});
 		}
+
+		this.mask();
+		p.always(this.unmask.bind(this));
 
 		grid = this.down('grid');
 		grid.dueDate = a.getDueDate();
@@ -304,17 +340,22 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 		checked = el.toggleCls(cls).hasCls(cls);
 
-		this.applyFilter(filter, !checked);
+		this.mask();
+		Ext.defer(this.applyFilter, 1, this, [filter, !checked]);
 	},
 
 
 	applyFilter: function(filterName, state) {
-		if (!state) {
-			this.store.removeFilter(filterName);
-			return;
+		try {
+			var s = this.store;
+			if (!state) {
+				s.removeFilter(filterName);
+			} else {
+				s.addFilter(this.getFilter(filterName));
+			}
+		} finally {
+			this.unmask();
 		}
-
-		this.store.addFilter(this.getFilter(filterName));
 	},
 
 
