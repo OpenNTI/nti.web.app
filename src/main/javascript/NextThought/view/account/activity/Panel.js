@@ -83,30 +83,17 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			filterOperator: '1'
 		}));
 
+		this.mon(Ext.getStore('Stream'), {
+			add: function(s, changes) {
+				me.store.add(changes);
+			}
+		});
 
 		this.mon(me.store, {
 			scope: me,
-			load: function() {
-				me.removeMask();
-				me.reloadActivity();
-			},
-			//datachanged: 'maybeReload',
-			add: function(change) {
-				//FIXME, figure out where this belongs...and insert it.
-				me.store.add(change);
-				me.reloadActivity();
-			},
-			clear: function() {
-				console.log('stream clear', arguments);
-			},
-			remove: function() {
-				console.log('stream remove', arguments);
-			},
-			update: function() {
-				console.log('stream update', arguments);
-				//refresh view
-				me.reloadActivity();
-			}
+			load: 'maybeReload',
+			datachanged: 'maybeReload',
+			update: 'maybeReload'
 		});
 
 		//Our contacts/community split makes us dependent on knowing our contacts.
@@ -257,7 +244,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 
 	reloadActivity: function(store) {
 		var container = this.down('box[activitiesHolder]'),
-			oldestRecord, me = this;
+			groups, me = this;
 
 		if (store && !store.isStore) {
 			store = null;
@@ -327,7 +314,8 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			return p;
 		}
 
-		if (store.getGroups().length === 0 || store.getCount() === 0) {
+		groups = store.getGroups();
+		if (groups.length === 0 || store.getCount() === 0) {
 			Ext.DomHelper.overwrite(container.getEl(), []); //Make sure the initial mask clears
 			if (!store.mayHaveAdditionalPages) {
 				Ext.DomHelper.overwrite(container.getEl(), {
@@ -338,7 +326,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			container.updateLayout();
 		}
 		//pool these promises to ensure that the groups get added in the correct order
-		Promise.pool(store.getGroups().map(doGroup))
+		Promise.pool(groups.map(doGroup))
 			.done(function(results) {
 				results = results.reduce(function(a, b) {
 					return a.concat(b);
