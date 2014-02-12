@@ -137,7 +137,7 @@ Ext.applyIf(Promise.prototype, {
 	validateHandler: function(fn) { if (typeof fn !== 'function') { throw new TypeError('Expected a function'); } },
 
 	replace: function(oldPromise) {
-		if (this.state === 0) {
+		if (oldPromise.state === 0 && oldPromise.fulfill && oldPromise.reject) {
 			this.then(
 					oldPromise.fulfill.bind(oldPromise),
 					oldPromise.reject.bind(oldPromise)
