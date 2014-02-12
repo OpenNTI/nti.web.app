@@ -95,11 +95,12 @@ describe('Base Model Tests', function() {
 	describe('affectedBy', function() {
 
 		it('Affecting fields trigger affected by fields to be reconverted', function() {
-			var model = NextThought.model.TestBase.create({'Last Modified': 0});
+			var model = NextThought.model.TestBase.create({'Last Modified': 0}),
+				now = new Date(new Date().setHours(0, 0, 0, 0));
 
-			expect(model.get('GroupingField')).toBe('I Older');
+			expect(model.get('GroupingField').toString()).toBe(new Date(0).toString());
 			model.set('Last Modified', new Date().getTime() / 1000);
-			expect(model.get('GroupingField')).toBe('A ');
+			expect(model.get('GroupingField').toString()).toBe(now.toString());
 		});
 	});
 });

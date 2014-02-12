@@ -3,6 +3,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 	alias: ['widget.user-history-panel'],
 
 	requires: [
+		'NextThought.model.UIViewHeader',
 		'NextThought.model.events.Bus',
 		'NextThought.store.PageItem',
 		'NextThought.util.Time',
@@ -58,44 +59,16 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag: 'tpl', 'for': '.', cn: [
-			'{%this.insertGroupTitle(values,out)%}',
-			'{%this.getTemplateFor(values,out)%}']
-		}
+			{tag: 'tpl', 'if': 'values.divider', cn: { cls: 'divider history', cn: [{tag: 'span', html: '{label}'}] }},
+			{tag: 'tpl', 'if': '!values.divider', cn: ['{%this.getTemplateFor(values,out)%}']}
+		]}
 	]), {
 		getTemplateFor: function(values, out) {
 			if (!this.subTemplates || !this.subTemplates[values.MimeType]) {
-				return console.log('No tpl for...', values);
+				console.log('No tpl for:', values.MimeType);
+				return Ext.DomHelper.createTemplate({cls: 'history hidden x-hidden'}).applyOut(values, out);//you can't NOT create a row! throws off the view
 			}
 			return this.subTemplates[values.MimeType].applyOut(values, out);
-		},
-
-		insertGroupTitle: function(values, out) {
-			var label = Ext.data.Types.GROUPBYTIME.groupTitle(values.GroupingField, 'Today');
-
-			if (label === 'Today') {
-				this.todayCount = (this.todayCount !== undefined) ? this.todayCount + 1 : 0;
-			}
-
-			if (this.todayCount < 2 && this.itemAdded) {
-				this.itemAdded = false;
-			}
-
-			if (this.todayCount === 2 && (this.itemAdded || this.itemAdded !== undefined)) {
-				this.itemAdded = true;
-			}
-
-			if (this.todayCount > 2) {
-				delete this.itemAdded;
-			}
-
-			// Detect if the grouping type change from the previous else and make we insert the new group title.
-			if (!Ext.isEmpty(label) && (!this.previousGrouping || this.previousGrouping !== label || this.alreadyLoaded || (this.itemAdded && label === 'Today'))) {
-				this.previousGrouping = label;
-				return Ext.DomHelper.createTemplate({ cls: 'divider', cn: [
-					{tag: 'span', html: label}
-				] }).applyOut({}, out);
-			}
-			return '';
 		}
 	}),
 
@@ -176,23 +149,48 @@ Ext.define('NextThought.view.account.history.Panel', {
 			s.load();
 		}
 
-		var s = NextThought.store.PageItem.create({
+		var registry = this.tpl.subTemplates,
+			s = NextThought.store.PageItem.create({
 			id: this.storeId,
-			groupField: this.grouping,
-			groupDir: 'ASC',
 			sortOnLoad: true,
 			statefulFilters: false,
 			remoteSort: false,
 			remoteFilter: false,
 			remoteGroup: false,
 			filterOnLoad: true,
-			sortOnFilter: true
+			sortOnFilter: true,
+			groupers: [
+				{
+					direction: 'DESC',
+					property: 'GroupingField'
+				}
+			],
+			sorters: [
+				{
+					direction: 'ASC',
+					sorterFn: function(a, b) {
+						return a.isHeader === b.isHeader ? 0 : a.isHeader ? -1 : 1;
+					}
+				},
+				{
+					direction: 'DESC',
+					property: 'CreatedTime'
+				}
+			],
+			filters: [
+				function(item) {
+					var m = item.get('MimeType'),
+						f = !m || registry.hasOwnProperty(m);
+					if (!f) {console.warn('Got more than we asked for! ' + item.get('MimeType'));}
+					return f;
+				}
+			]
 		});
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
 			sortOn: 'createdTime',
 			sortOrder: 'descending',
-			filter: 'OnlyMe'
+			filter: this.filter
 		});
 
 		this.store = s;
@@ -200,24 +198,44 @@ Ext.define('NextThought.view.account.history.Panel', {
 		this.applyFilterParams();
 
 		this.mon(this.store, {
-			scope: this,
 			add: 'recordsAdded',
 			load: 'storeLoaded'
 		});
 
-		s.filter([function(rec) {
-			if (isMe(rec.get('Creator'))) {
-				return true;
-			}
-			return rec.isFavorited() || rec.isBookmark;
-		}]);
 
+		this.bindStore(this.store);
 		if (this.rendered) {
 			load();
 		} else {
 			this.on('afterrender', load);
 		}
-		this.bindStore(this.store);
+	},
+
+
+	insertDividers: function() {
+		var s = this.store,
+			headers = [];
+
+		s.getGroups().forEach(function(g) {
+			var d = g.name && (Ext.isDate(g.name) ? g.name : new Date(g.name)),
+				label;
+			if (!(s.snapshot || s.data).getByKey(d)) {
+				label = Ext.data.Types.GROUPBYTIME.groupTitle(d);
+				if (label) {
+					headers.push(NextThought.model.UIViewHeader.create({
+						GroupingField: d,
+						label: label
+					}, d.toString()));
+				}
+			} else {
+				console.log('already there');
+			}
+		});
+
+		if (headers.length) {
+			Ext.data.Store.prototype.add.call(s, headers);
+			this.refresh();
+		}
 	},
 
 
@@ -226,7 +244,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 			Ext.apply(this.store.proxy.extraParams, {
 				filterOperator: this.filterOperator,
 				filter: this.filter,
-				accept: this.getMimeTypes().join(',')
+				accepts: this.getMimeTypes().join(',')
 			});
 		}
 	},
@@ -234,14 +252,13 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 	recordsAdded: function(store, records) {
 		console.debug(' UserDataPanel Store added records:', arguments);
-		delete this.tpl.todayCount;
-		this.tpl.itemAdded = true;
 		Ext.each(records, this.fillInData, this);
 	},
 
 
 	storeLoaded: function(store) {
 		Ext.each(store.getRange(), this.fillInData, this);
+		this.insertDividers();
 
 		this.maybeShowMoreItems();
 	},
@@ -300,6 +317,8 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 
 	rowHover: function(view, record, item, index, e) {
+		if (record.isHeader) {return;}
+
 		var popout = NextThought.view.account.activity.Popout,
 			target = Ext.get(item),
 			me = this,
@@ -413,11 +432,20 @@ Ext.define('NextThought.view.account.history.Panel', {
 			fo = '0';
 		}
 
+		function all(i) {
+			var re = all.re = all.re || /all$/i;
+			return re.test(i);
+		}
+
 		me.filter = filterTypes.join(',');
 		me.filterOperator = (filterTypes.length > 1) ? fo : undefined;
-		this.getMimeTypes = function() {
-			return mimeTypes;
-		};
+		if (mimeTypes.filter(all) > 0) {
+			if (this.hasOwnProperty('getMimeTypes')) {
+				delete this.getMimeTypes;//reset to class def
+			}
+		} else {
+			this.getMimeTypes = function() { return mimeTypes; };
+		}
 
 		if (!s || s.storeId === 'ext-empty-store') {
 			return;
@@ -427,23 +455,6 @@ Ext.define('NextThought.view.account.history.Panel', {
 		s.removeAll();
 
 		me.applyFilterParams();
-
-		//s.clearFilter(true);
-		/*s.addFilter([function(rec) {
-			if (Ext.Array.contains(filterTypes, 'OnlyMe')) {
-				if (isMe(rec.get('Creator'))) {
-					return true;
-				}
-
-				if (Ext.Array.contains(filterTypes, 'Bookmarks')) {
-					return rec.isFavorited() || rec.isBookmark;
-				}
-			} else if (Ext.Array.contains(filterTypes, 'Bookmarks')) {
-				return rec.isFavorited() || rec.isBookmark;
-			}
-
-			return false;
-		}], false);*/
 
 		s.currentPage = 1;
 		s.load();

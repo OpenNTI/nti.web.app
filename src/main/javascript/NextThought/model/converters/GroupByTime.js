@@ -1,12 +1,14 @@
 Ext.define('NextThought.model.converters.GroupByTime', {
-	override: 'Ext.data.Types',
-	requires: ['Ext.data.SortTypes'],
-
-	GROUPBYTIME: {
+	requires: ['Ext.data.SortTypes']
+}, function() {
+	Ext.data.Types.GROUPBYTIME = {
 		type: 'groupByTime',
-		sortType: 'asUCString',
+		sortType: Ext.data.SortTypes.asUCString,
 
-		groupStringForElapsedTime: function(n, v) {
+		DAY: 86400,//seconds in a day
+		WEEK: 604800, //seconds in a week
+
+		groupForElapsedTime: function(n, v) {
 			var now = new Date(n.getFullYear(), n.getMonth(), n.getDate()),
 				oneDayAgo = Ext.Date.add(now, Ext.Date.DAY, -1),
 				twoDaysAgo = Ext.Date.add(now, Ext.Date.DAY, -2),
@@ -16,10 +18,11 @@ Ext.define('NextThought.model.converters.GroupByTime', {
 				fourWeeksAgo = Ext.Date.add(now, Ext.Date.DAY, -4 * 7),
 				oneMonthAgo = Ext.Date.add(now, Ext.Date.MONTH, -1),
 				twoMonthsAgo = Ext.Date.add(now, Ext.Date.MONTH, -2),
-				oneYearAgo = Ext.Date.add(now, Ext.Date.YEAR, -1);
+				oneYearAgo = Ext.Date.add(now, Ext.Date.YEAR, -1),
+				weekday, nextWeekday;
 
 
-			function betweenExclusive(date, start, end) {
+			function between(date, start, end) {
 				var t = date.getTime();
 				return start.getTime() < t && t <= end.getTime();
 			}
@@ -31,45 +34,68 @@ Ext.define('NextThought.model.converters.GroupByTime', {
 			//software it actually does this well.	Today, Yesterday, Wed, tue, ..., Last week,
 			//two weeks ago, three weeks ago, last month, this year, last year
 
-			//TODO: make this better...serously. Grouping is better sort prefix is still wacky.
+			if (between(v, oneDayAgo, now)) { return now; }//Today
 
-			if (betweenExclusive(v, oneDayAgo, now)) { return 'A '; }
+			if (between(v, twoDaysAgo, oneDayAgo)) { return oneDayAgo; }//Yesterday
 
-			if (betweenExclusive(v, twoDaysAgo, oneDayAgo)) { return 'B Yesterday'; }
+			if (between(v, oneWeekAgo, twoDaysAgo)) {
+				nextWeekday = twoDaysAgo;
 
-			if (betweenExclusive(v, oneWeekAgo, twoDaysAgo)) {
-				//C<elapsed time ago><day string>
-				return 'C' + (now.getTime() - v.getTime()) + Ext.Date.format(v, ' l');
+				do {
+					weekday = nextWeekday;
+					nextWeekday = Ext.Date.add(weekday, Ext.Date.DAY, -1);
+					if (between(v, nextWeekday, weekday)) {
+						return weekday;
+					}
+				} while (weekday > oneWeekAgo);
+
 			}
 
-			if (betweenExclusive(v, twoWeeksAgo, oneWeekAgo)) { return 'D Last week'; }
+			if (between(v, twoWeeksAgo, oneWeekAgo)) { return oneWeekAgo; }//Last Week
 
-			if (betweenExclusive(v, threeWeeksAgo, twoWeeksAgo)) { return 'E 2 weeks ago'; }
+			if (between(v, threeWeeksAgo, twoWeeksAgo)) { return twoWeeksAgo; }// Two Weeks ago
 
-			if (betweenExclusive(v, fourWeeksAgo, threeWeeksAgo)) { return 'F 3 weeks ago'; }
+			if (between(v, fourWeeksAgo, threeWeeksAgo)) { return threeWeeksAgo; }// Three Weeks ago
 
-			if (betweenExclusive(v, twoMonthsAgo, oneMonthAgo)) { return 'G Last month'; }
+			if (between(v, twoMonthsAgo, oneMonthAgo)) { return oneMonthAgo; }// Last Month
 
-			if (betweenExclusive(v, oneYearAgo, twoMonthsAgo)) { return 'H Last year'; }
+			if (between(v, oneYearAgo, twoMonthsAgo)) { return oneYearAgo; }// Last Year
 
-			return 'I Older';
+			return new Date(0); //Older
 		},
 
-		groupTitle: function(groupLabel, defaultValue) {
-			var groupName = groupLabel || '',
-				regex = /^[A-Z]\d{0,}\s/;
+		groupTitle: function(groupValue, defaultValue, forceNow) {
+			var d = (forceNow || new Date()).setHours(0, 0, 0, 0), c, now = new Date(d);
+			if (!groupValue) {
+				return defaultValue;
+			}
 
-			return groupName.replace(regex, '') || defaultValue;
+			d = (d - groupValue.getTime()) / 1000;
+
+			if (groupValue.getTime() === 0) { return 'Older'; }
+
+			if (d <= 0) { return defaultValue; }//Today
+
+			c = d / this.DAY;
+			if (c < 2) { return 'Yesterday'; }
+			if (c < 7) { return Ext.Date.format(groupValue, 'l'); }//Sunday, Monday, Tuesday, etc...
+
+			c = d / this.WEEK;
+			if (c < 2) { return 'Last week'; }
+			if (c < 3) { return '2 weeks ago'; }
+			if (c < 4) { return '3 weeks ago'; }
+
+			if (groupValue < Ext.Date.add(now, Ext.Date.MONTH, -2)) { return 'Last year'; }
+
+			return 'Last month';
 		},
 
-		convert: function(r,o) {
+		convert: function(r, o) {
 			if (!r && this.mapping) { r = o.get(this.mapping); }
 
 			var now = new Date(),
 				v = Ext.isDate(r) ? r : new Date(r * 1000);
-			return this.type.groupStringForElapsedTime(now, v);
+			return this.type.groupForElapsedTime(now, v);
 		}
-	}
-}, function() {
-	this.GROUPBYTIME.sortType = Ext.data.SortTypes.asUCString;
+	};
 });
