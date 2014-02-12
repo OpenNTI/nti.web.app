@@ -19,8 +19,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 		xhooks: {
 			walkCells: function(pos, direction, e, preventWrap, verifierFn, scope) {
 				return this.callParent([pos, direction, e, preventWrap, function(newPos) {
-					var newerPos = false;
-					if (newPos.column === 2) {
+					var newerPos = false,
+						grid = this.up('grid');
+
+					if (newPos.column === grid.tabIndex) {
 						return true;
 					}
 					newerPos = this.walkCells(newPos, direction, e, preventWrap);
@@ -130,7 +132,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 
 
 
-				   { text: 'Score', componentCls: 'score', dataIndex: 'Grade', name: 'grade', width: 70,/*90*/
+				   { text: 'Score', componentCls: 'score', dataIndex: 'Grade', allowTab: true, name: 'grade', width: 70,/*90*/
 					   editor: 'textfield',
 					   renderer: function(val) {
 						   val = val && val.get('value');
@@ -164,6 +166,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 			   ]
 	},
 
+	tabIndex: 2,
+
 	nameOrder: ['name', 'completed', 'grade', 'feedback', 'submission'],
 
 	markColumn: function(c) {
@@ -185,16 +189,21 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 			Ext.apply(me.columns.items, config.columnOverrides);
 		}
 
-
-		(config.nameOrder || me.nameOrder || []).forEach(function(i) {
+		(config.nameOrder || me.nameOrder || []).forEach(function(name, i) {
 			var col, index;
 
 			for (index in me.columns.items) {
 				if (me.columns.items.hasOwnProperty(index)) {
 					col = me.columns.items[index];
 
-					if (col.name === i) {
+					if (col.name === name) {
+						//get the new index of the student column
+						if (col.allowTab) {
+							config.tabIndex = items.length;
+						}
+
 						items.push(col);
+
 						return;
 					}
 				}
@@ -204,7 +213,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 				if (config.extraColumns.hasOwnProperty(index)) {
 					col = config.extraColumns[index];
 
-					if (col.name === i) {
+					if (col.name === name) {
 						items.push(col);
 						return;
 					}
