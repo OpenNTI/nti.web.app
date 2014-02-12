@@ -61,7 +61,12 @@ Ext.define('NextThought.store.Stream', {
 		}
 	},
 
-	groupField: 'EventTime',
+	groupers: [
+		{
+			property: 'EventTime',
+			direction: 'DESC'
+		}
+	],
 
 	//Note this matches the default sort order
 	//that we get when we request things on the ds
