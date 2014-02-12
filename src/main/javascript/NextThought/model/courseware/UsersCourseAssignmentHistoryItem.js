@@ -94,7 +94,7 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 			fn: function(button) {
 				if (button === 'yes') {
 					Service.request({
-						url: (record.isSummary && record.getLink('UsersCourseAssignmentHistoryItem')) || record.get('href'),
+						url: record.getLink('UsersCourseAssignmentHistoryItem') || record.get('href'),
 						method: 'DELETE'})
 							.fail(function() {
 								alert('Sorry, I could not do that.');
