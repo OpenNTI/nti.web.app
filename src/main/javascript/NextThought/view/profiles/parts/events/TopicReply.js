@@ -1,6 +1,9 @@
 Ext.define('NextThought.view.profiles.parts.events.TopicReply', {
 	extend: 'NextThought.view.profiles.parts.events.PostReply',
-	alias: 'widget.profile-activity-generalforumcomment-item',
+	alias: [
+		'widget.profile-activity-generalforumcomment-item',
+		'widget.profile-activity-generalforumcomment-reply-item'
+	],
 	description: 'discussion',
 
 	childEls: ['body', 'liked', 'pathEl'],
