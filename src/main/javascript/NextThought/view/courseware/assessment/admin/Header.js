@@ -22,6 +22,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 			{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'}},
 			{ cls: 'wrap', cn: [
 				{ cls: 'title name {presence}', cn: {html: '{displayName}' }},
+				{ cls: 'username', cn: {html: '({Username})'}},
 				{ cls: 'subtitle actions', cn: [
 					{ tag: 'span', cls: 'profile link', html: 'Profile'},
 					{ tag: 'span', cls: 'email link', html: 'Email'},
@@ -34,6 +35,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 
 	renderSelectors: {
 		nameEl: '.header .user .wrap .name',
+		usernameEl: '.header .user .wrap .username',
 		profileEl: '.header .user .wrap .actions .profile',
 		emailEl: '.header .user .wrap .actions .email',
 		chatEl: '.header .user .wrap .actions .chat',
@@ -46,11 +48,26 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 	beforeRender: function() {
 		this.callParent();
 
+		var status = 'Open', roster, Username = this.student.get('Username');
+
 		this.currentGrade = '';
 		this.currentLetter = '-';
 
+		if (this.assignmentHistory) {
+			roster = this.assignmentHistory.get('item').roster;
+
+			(roster || []).forEach(function(r) {
+				if (r.Username === Username) {
+					status === Username;
+				}
+			});
+		}
+
+
+		this.showingUsername = status !== 'Open';
 		this.renderData = Ext.apply(this.renderData || {}, {
 			displayName: this.student.toString(),
+			Username: status === 'Open' ? '' : Username,
 			gradeTitle: this.gradeTitle || 'Assignment',
 			avatarURL: this.student.get('avatarURL'),
 			presence: this.student.getPresence().getName()
@@ -80,7 +97,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 		//for profile link
 		me.user = me.student;
 		me.enableProfileClicks(me.profileEl);
-		
+
 		if (!me.user.get('email')) {
 			me.emailEl.hide();
 		}
@@ -94,7 +111,25 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 				me.maybeShowChat(me.chatEl);
 			}
 		});
+
+		if (!this.showingUsername) {
+			this.usernameEl.hide();
+		}
 	},
+
+
+	setRoster: function(roster) {
+		if (!this.student || !roster) { return; }
+
+		var username = this.student.get('Username'),
+			status = roster.map[username].Status;
+
+		if (status !== 'Open') {
+			this.usernameEl.update('(' + username + ')');
+			this.usernameEl.show();
+		}
+	},
+
 
 	//override these
 	setUpGradebox: function() {},

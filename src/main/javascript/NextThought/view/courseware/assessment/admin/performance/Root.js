@@ -79,6 +79,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 								store.sort();
 							}
 					}},
+					{ text: 'Username', dataIndex: 'Username'},
 					{ text: 'Grade', dataIndex: 'grade', width: 160, xtype: 'templatecolumn', tpl: Ext.DomHelper.markup([
 						{ cls: 'gradebox', cn: [
 							{ tag: 'input', size: 3, tabindex: '1', type: 'text', value: '{grade}'},
@@ -126,8 +127,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			fields: [
 				{name: 'id', type: 'string'},
 				{name: 'user', type: 'auto'},
+				{name: 'Status', type: 'string', defaultValue: 'Open'},
 				{name: 'avatar', type: 'string', defaultValue: 'resources/images/icons/unresolved-user.png'},
 				{name: 'displayName', type: 'string', defaultValue: 'Resolving...'},
+				{name: 'Username', type: 'string', defaultValue: ''},
 				{name: 'grade', type: 'int'},
 				{name: 'letter', type: 'string', defaultValue: '-'},
 				{name: 'comments', type: 'int', mapping: 'feedback', defaultValue: 0},
@@ -493,7 +496,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		this.roster.forEach(function(r) {
 			var u = r.Username;
 			users.push(u);
-			raw.push(Ext.apply({id: u}, getCounts(u)));
+			raw.push(Ext.apply({id: u, Status: r.Status}, getCounts(u)));
 		});
 
 		store.loadRawData(raw);
@@ -607,7 +610,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			r.set({
 				user: u,
 				avatar: u.get('avatarURL'),
-				displayName: u.toString()
+				displayName: u.toString(),
+				Username: r.get('Status') === 'Open' ? '' : u.get('Username')
 			});
 		});
 

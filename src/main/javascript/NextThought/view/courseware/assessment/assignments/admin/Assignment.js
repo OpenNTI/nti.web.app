@@ -94,14 +94,26 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			xtype: 'course-admin-grid',
 			cls: 'student-assignment-overview',
 			gradeEditorOffsets: [-4, 9],
+			nameOrder: ['creator', 'username', 'completed', 'grade', 'feedback', 'submission'],
 			columnOverrides: {
-				0: { text: 'Student', dataIndex: 'Creator', flex: 1, padding: '0 0 0 30',
+				0: { text: 'Student', dataIndex: 'Creator', name: 'creator', flex: 1, padding: '0 0 0 30',
 					renderer: function(v) {
 					   var u = v && (typeof v === 'string' ? {displayName: 'Resolving...'} : v.getData());
 					   return this.studentTpl.apply(u);
 				   } }
 			},
+			extraColumns: [
+				{ text: 'Username', dataIndex: 'Creator', name: 'username', renderer: function(v, g, record) {
+					var r = this.ownerCt && this.ownerCt.assignment.roster.map,
+						username = (v.get && v.get('Username')) || v;
 
+					if (r[username].Status === 'Open') {
+						return '';
+					}
+
+					return username;
+				}}
+			],
 			studentTpl: Ext.DomHelper.createTemplate({cls: 'padded-cell student-cell', cn: [
 				{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'} },
 				{ cls: 'name', html: '{displayName}'}

@@ -95,10 +95,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 		},
 
 		items: [
-				   { text: 'Assignment', dataIndex: 'name', tdCls: 'padded-cell', padding: '0 0 0 30', flex: 1 },
+				   { text: 'Assignment', dataIndex: 'name', name: 'name', tdCls: 'padded-cell', padding: '0 0 0 30', flex: 1 },
 
 
-				   { text: 'Completed', dataIndex: 'completed',/*submission?*/ width: 150, renderer: function(v, col, rec) {
+				   { text: 'Completed', dataIndex: 'completed', name: 'completed',/*submission?*/ width: 150, renderer: function(v, col, rec) {
 						var d = this.dueDate || rec.get('due'),
 							s = (v && v.get && v.get('Last Modified')) || v,
 							item = rec.get('item'),
@@ -130,7 +130,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 
 
 
-				   { text: 'Score', componentCls: 'score', dataIndex: 'Grade', width: 70,/*90*/
+				   { text: 'Score', componentCls: 'score', dataIndex: 'Grade', name: 'grade', width: 70,/*90*/
 					   editor: 'textfield',
 					   renderer: function(val) {
 						   val = val && val.get('value');
@@ -170,17 +170,18 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 				   },
 
 
-				   { text: 'Feedback', dataIndex: 'feedback', width: 140, renderer: function(value) {
+				   { text: 'Feedback', dataIndex: 'feedback', name: 'feedback', width: 140, renderer: function(value) {
 					   return value ? Ext.util.Format.plural(value, 'Comment') : '';
 				   } },
 
 
-				   { text: '', dataIndex: 'submission', sortable: false, width: 40, renderer: function(v) {
+				   { text: '', dataIndex: 'submission', name: 'submission', sortable: false, width: 40, renderer: function(v) {
 					   return v && Ext.DomHelper.markup({cls: 'actions'});
 				   } }
 			   ]
 	},
 
+	nameOrder: ['name', 'completed', 'grade', 'feedback', 'submission'],
 
 	markColumn: function(c) {
 		var cls = 'sortedOn', el = this.getEl();
@@ -194,13 +195,41 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 
 
 	constructor: function(config) {
-		var me = this;
+		var me = this, items = [];
 
 		me.columns = Ext.clone(me.self.prototype.columns);
 		if (config.columnOverrides) {
 			Ext.apply(me.columns.items, config.columnOverrides);
 		}
 
+
+		(config.nameOrder || me.nameOrder || []).forEach(function(i) {
+			var col, index;
+
+			for (index in me.columns.items) {
+				if (me.columns.items.hasOwnProperty(index)) {
+					col = me.columns.items[index];
+
+					if (col.name === i) {
+						items.push(col);
+						return;
+					}
+				}
+			}
+
+			for (index in config.extraColumns) {
+				if (config.extraColumns.hasOwnProperty(index)) {
+					col = config.extraColumns[index];
+
+					if (col.name === i) {
+						items.push(col);
+						return;
+					}
+				}
+			}
+		});
+
+		me.columns.items = items;
 
 		me.callParent(arguments);
 		me.on({

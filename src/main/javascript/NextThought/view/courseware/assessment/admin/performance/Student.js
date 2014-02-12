@@ -53,6 +53,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 			return;
 		}
 
+		this.header.setRoster(assignments.get('Roster'));
 		this.header.setGradeBook(gradeBook);
 		this.store = assignments.getViewForStudent(user);
 		this.down('grid').bindStore(this.store);
