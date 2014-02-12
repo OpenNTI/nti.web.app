@@ -177,6 +177,10 @@ Ext.define('NextThought.model.assessment.Assignment', {
 			//So, to prevent the sort and just append, set remoteSort true for the duration of the add, then turn it off.
 			store.remoteSort = true;
 			store.add(phantoms);
+			//Apparently Add ignores the filter :{
+			if (store.isFiltered()) {
+				store.filter();
+			}
 			store.remoteSort = false;
 		}
 
