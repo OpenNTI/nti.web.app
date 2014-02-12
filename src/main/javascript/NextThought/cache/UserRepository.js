@@ -376,15 +376,15 @@ Ext.define('NextThought.cache.UserRepository', {
 
 		agg.length = names.length;//JSLint doesn't like the Array(size) constructor. SO, lets just do the two-step version. (declare, then assign length :|)
 
-		names.forEach(function(n, i) { m[n] = i; });
+		names.forEach(function(n, ix) { m[n] = ix; });
 
 		//because we may not have the same lists of requested items,
 		// we must rebuild based on usernames.
 		for (i; i >= 0; i--) {
 			list = lists[i] || [];
 			for (x = (list.length - 1); x >= 0; x--) {
-				u = list[x] && list[x].getId();
-				if (m.hasOwnProperty(u)) {
+				u = list[x] && list[x].getId && list[x].getId();
+				if (u && m.hasOwnProperty(u)) {
 					agg[m[u]] = list[x];
 				}
 			}
