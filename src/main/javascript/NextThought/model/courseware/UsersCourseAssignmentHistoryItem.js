@@ -37,6 +37,9 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 			var f = r.get('Feedback');
 			f = (f && f.get('Items')) || [];
 			return f.length || r.raw.FeedbackCount;
+		}, convert: function() {
+			this.sortType = Ext.data.SortTypes.asInt;
+			return this.type.convert.apply(this, arguments);
 		}},
 
 		{name: 'correct', type: 'int', persist: false, convert: function(v, r) {
@@ -50,7 +53,7 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 				var s = r.get('Submission');
 				return (s && this.type.convert.call(this, s.raw.CreatedTime));
 			}
-			return v;
+			return this.type.convert.call(this, v);
 		}},
 
 

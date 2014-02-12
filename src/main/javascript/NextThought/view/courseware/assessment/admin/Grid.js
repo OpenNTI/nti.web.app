@@ -139,7 +139,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 					   listeners: {
 						   headerclick: function() {
 							   var store = this.up('grid').getStore(),
-									   sorter = {
+									   sorter = new Ext.util.Sorter({
 										   direction: this.sortState,
 										   sorterFn: function(o1, o2) {
 											   o1 = o1 && o1.get('Grade');
@@ -154,10 +154,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 
 											   return Globals.naturalSortComparator(o1, o2);
 										   }
-									   };
+									   });
 
 							   store.sorters.clear();
-							   store.sorters.add('answers', sorter);
+							   store.sorters.add('Grade', sorter);
 							   store.sort();
 							   if (store.bind) {
 								   store = store.bind;
