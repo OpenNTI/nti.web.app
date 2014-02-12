@@ -103,17 +103,46 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 				   } }
 			},
 			extraColumns: [
-				{ text: 'Username', dataIndex: 'Creator', name: 'username', renderer: function(v, g, record) {
-					var r = this.ownerCt && this.ownerCt.assignment.roster.map,
-						username = (v.get && v.get('Username')) || v;
+				{ text: 'Username', dataIndex: 'Creator', name: 'username',
+					renderer: function(v, g, record) {
+						var r = this.ownerCt && this.ownerCt.assignment.roster.map,
+							username = (v.get && v.get('Username')) || v;
 
-					if (r[username].Status === 'Open') {
-						return '';
+						if (r[username].Status === 'Open') {
+							return '';
+						}
+
+						return username;
+					},
+					listeners: {
+						headerclick: function() {
+							var r = this.up('[assignment]').assignment.roster.map,
+								store = this.up('grid').getStore(),
+									sorter = new Ext.util.Sorter({
+										direction: this.sortState,
+										property: 'Creator',
+										transform: function(o) {
+											//JSG: Don't do as I do, this is saving several function calls per sort comparison,
+											// for a large dataset. (read: carefull optimization) The perfered and more
+											// traditional method of getting record fields is still required and you will
+											// get my rebuke if I find this copied.
+											var u = ((o && o.data && o.data.Username) || o) || '';
+											return (r[u] !== 'Open' && u) || '';
+										}
+									});
+
+							if (store.bind) {
+								store = store.bind;
+							}
+							store.sorters.clear();
+							store.sorters.add('Username', sorter);
+							store.sort();
+						}
 					}
-
-					return username;
-				}}
+				}
 			],
+
+
 			studentTpl: Ext.DomHelper.createTemplate({cls: 'padded-cell student-cell', cn: [
 				{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'} },
 				{ cls: 'name', html: '{displayName}'}
