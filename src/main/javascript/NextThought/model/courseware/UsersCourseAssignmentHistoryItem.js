@@ -42,13 +42,14 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 			return this.type.convert.apply(this, arguments);
 		}},
 
-		{name: 'correct', type: 'int', persist: false, convert: function(v, r) {
+		{name: 'correct', type: 'int', persist: false, affectedBy: 'pendingAssessment', convert: function(v, r) {
 			var a = r.get('pendingAssessment');
 			return (a && a.getCorrectCount()) || 0;
 		}},
 
 
-		{name: 'completed', type: 'date', dateFormat: 'timestamp', persist: false, mapping: 'SubmissionCreatedTime', convert: function(v, r) {
+		{name: 'completed', type: 'date', dateFormat: 'timestamp', persist: false, mapping: 'SubmissionCreatedTime', affectedBy: 'Submission',
+			convert: function(v, r) {
 			if (!v) {
 				var s = r.get('Submission');
 				return (s && this.type.convert.call(this, s.raw.CreatedTime));
@@ -57,7 +58,7 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 		}},
 
 
-		{name: 'submission', type: 'string', persist: false, convert: function(v, r) {
+		{name: 'submission', type: 'string', persist: false, affectedBy: 'Submission', convert: function(v, r) {
 			return (r.raw.hasOwnProperty('SubmissionCreatedTime') || r.raw.hasOwnProperty('Submission')) ? 'true' : '';
 		} },
 
@@ -101,8 +102,10 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 								console.error(arguments);
 							})
 							.done(function() {
+								delete record.isSummary;
 								record.set({
-									href: '',
+									completed: null,
+									SubmissionCreatedTime: null,
 									Submission: null,
 									Grade: null,
 									Feedback: null
