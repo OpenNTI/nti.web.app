@@ -28,12 +28,12 @@ Ext.define('NextThought.store.MockPage', {
 			}
 		};
 
-		this.__bindStore(bind);
+		this.__bindStore();
 	},
 
 
-	__bindStore: function(store) {
-		this.loadData(store.getRange());
+	__bindStore: function() {
+		this.loadData(this.bind.getRange());
 	},
 
 
