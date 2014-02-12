@@ -138,11 +138,14 @@ Ext.define('NextThought.view.account.activity.Panel', {
 
 		this.getTypesMenu().show().hide();
 
-		this.on('resize', function() {
-			if (this.el.isMasked()) {
-				this.addMask();
-			}
-		}, this);
+		this.on({
+			resize: function() {
+				if (this.el.isMasked()) {
+					this.addMask();
+				}
+			},
+			show: { fn: 'redrawIfDirty', buffer: 10 }
+		});
 
 		this.mixins.activityFilter.afterRender.apply(this);
 	},
@@ -226,9 +229,19 @@ Ext.define('NextThought.view.account.activity.Panel', {
 	},
 
 
+	redrawIfDirty: function() {
+		if (this.viewIsDirty) {
+			delete this.viewIsDirty;
+			this.maybeReload();
+		}
+	},
+
+
 	maybeReload: function() {
 		if (this.isVisible() && this.rendered) {
 			this.reloadActivity();
+		} else {
+			this.viewIsDirty = true;
 		}
 	},
 
