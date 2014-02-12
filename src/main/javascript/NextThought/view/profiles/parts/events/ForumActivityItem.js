@@ -233,7 +233,7 @@ Ext.define('NextThought.view.profiles.parts.events.ForumActivityItem', {
 	},
 
 
-	fillInReplies: function(s,recs) {
+	fillInReplies: function(s, recs) {
 		this.removeAll(true);
 		if (recs) {
 			this.add(Ext.Array.map(recs, function(r) {
@@ -280,7 +280,7 @@ Ext.define('NextThought.view.profiles.parts.events.ForumActivityItem', {
 				scope: this,
 				'activated-editor': Ext.bind(box.hide, box, [false]),
 				'deactivated-editor': Ext.bind(box.show, box, [false]),
-				'no-body-content': function(editor,bodyEl) {
+				'no-body-content': function(editor, bodyEl) {
 					editor.markError(bodyEl, 'You need to type something');
 					return false;
 				}
@@ -336,6 +336,7 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItemReply', {
 	alias: 'widget.profile-forum-activity-item-reply',
 
 	mixins: {
+		enableProfiles: 'NextThought.mixins.ProfileLinks',
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
 		flagActions: 'NextThought.mixins.FlagActions'
 	},
@@ -423,6 +424,8 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItemReply', {
 			metaEl = this.metaEl,
 			avatarEl = this.avatarEl,
 			show, hide;
+
+		this.enableProfileClicks(this.avatarEl, this.nameEl);
 
 		this.record.addObserverForField(this, 'body', this.updateContent, this);
 		this.reflectLikeAndFavorite(this.record);
