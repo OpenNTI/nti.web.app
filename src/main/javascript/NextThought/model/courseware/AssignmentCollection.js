@@ -149,7 +149,7 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 	 * @return {Ext.data.Store}
 	 */
 	getViewForStudent: function(student) {
-		var v;
+		var v, mv;
 		this._studentViews = this._studentViews || {};
 
 		function findFn(o) {
@@ -158,31 +158,31 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 			return show && (typeof c === 'string' ? c : c.getId()) === student;
 		}
 
-		function build(assignmentStores) {
-
-			var recs = [];
-			function itr(s) {
-				if (!s) {
-					console.error('Missing STORE!!');
-					return;
-				}
-				var i = s.findBy(findFn);
-				if (i >= 0) {
-					recs.push(s.getAt(i));
-				}
-			}
-			assignmentStores.forEach(itr);
-
-			//v.loading = false;
-			//v.fireEvent('load', v, [], true, {});
-			v.insert(0, recs);
-			v.sort();
-		}
-
 		if (!this._studentViews[student]) {
 			v = this._studentViews[student] = new NextThought.store.courseware.AssignmentView({proxy: 'memory'});
-			//v.loading = true;
-			this.getViewMaster().done(build);
+			mv = this.getViewMaster();
+			v._building = new Promise(function(fulfill, reject) {
+				function build(assignmentStores) {
+					var recs = [];
+					function itr(s) {
+						if (!s) {
+							console.error('Missing STORE!!');
+							return;
+						}
+						var i = s.findBy(findFn);
+						if (i >= 0) {
+							recs.push(s.getAt(i));
+						}
+					}
+					assignmentStores.forEach(itr);
+
+					v.insert(0, recs);
+					v.sort();
+					fulfill(v);
+				}
+
+				mv.done(build).fail(reject);
+			});
 		}
 
 		return this._studentViews[student];

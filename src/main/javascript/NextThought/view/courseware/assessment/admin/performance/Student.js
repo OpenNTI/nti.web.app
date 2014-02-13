@@ -25,6 +25,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 
 
 	initComponent: function() {
+		this._masked = 0;
 		this.callParent(arguments);
 		this.enableBubble(['show-assignment']);
 
@@ -42,11 +43,50 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 
 
 		this.mon(this.down('grid'), 'itemclick', 'maybeGoToAssignment');
+		this.mask();
+	},
+
+	afterRender: function() {
+		this.callParent(arguments);
+		if (this._masked) {
+			this._showMask();
+		}
+	},
+
+
+	_showMask: function() {
+		var el = this.el;
+		this._maskIn = setTimeout(function() {
+			if (el && el.dom) {
+				el.mask('Loading', 'loading', true);
+			}
+		}, 1);
+	},
+
+
+	mask: function() {
+		this._masked++;
+		if (!this.rendered) {
+			return;
+		}
+		this._showMask();
+	},
+
+
+	unmask: function() {
+		this._masked--;
+		if (this._masked <= 0) {
+			this._masked = 0;
+			clearTimeout(this._maskIn);
+			if (this.el && this.el.dom) {
+				this.el.unmask();
+			}
+		}
 	},
 
 
 	setAssignmentsData: function(assignments, history, instance, gradeBook) {
-		var user = this.student.getId();
+		var user = this.student.getId(), promise;
 
 		if (!assignments) {
 			console.error('No assignments??');
@@ -57,6 +97,17 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 		this.header.setGradeBook(gradeBook);
 		this.store = assignments.getViewForStudent(user);
 		this.down('grid').bindStore(this.store);
+
+		promise = this.store._building || Promise.fulfill();
+		promise
+				.done(this.unmask.bind(this))
+				.fail(this.onError.bind(this));
+	},
+
+
+	onError: function(reason) {
+		alert({title: 'Well, this is embarrassing!', msg: 'There was an unforeseen error loading this view. A report has been logged.'});
+		setTimeout(function() { throw reason; }, 1);
 	},
 
 	maybeGoToAssignment: function(view, record, node, index, e) {
