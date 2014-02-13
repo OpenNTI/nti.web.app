@@ -97,7 +97,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			},
 
 			listeners: {
-				sortchange: function(ct, column) { ct.up('grid').markColumn(column); },
+				sortchange: function(ct, column) {
+					ct.items.each(function(c) { c.tdCls = ''; }, ct);
+					ct.up('grid').markColumn(column);
+				},
 				selectionchange: function(sm, selected) { sm.deselect(selected); },
 				viewready: function(grid) {
 					grid.mon(grid.getView(), 'refresh', function() {
@@ -107,12 +110,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			},
 
 			markColumn: function(c) {
-				//console.log('Marking...');
-				var cls = 'sortedOn',
-						el = this.getEl();
+				var cls = 'sortedOn', el = this.getEl();
 				if (el) {
 					el.select('.' + cls).removeCls(cls);
 					if (c) {
+						c.tdCls = 'sortedOn';
 						Ext.select(c.getCellSelector()).addCls(cls);
 					}
 				}
