@@ -380,13 +380,13 @@ Ext.define('NextThought.view.assessment.input.Base', {
 
 		this.setValue(part.get ? part.get('submittedResponse') : part);
 
+		if (this.isAssignment) {
+			this.setSubmitted();
+		}
+
 		if (!this.noMark && part.isModel) {
 			if (part.isCorrect()) { this.markCorrect(); }
 			else {this.markIncorrect(); }
-		}
-
-		if (this.isAssignment) {
-			this.setSubmitted();
 		}
 
 		if (this.canHaveAnswerHistory()) {
