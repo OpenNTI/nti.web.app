@@ -22,21 +22,23 @@ Ext.define('NextThought.view.courseware.View', {
 
 
 	clear: function() {
-		this.mon(this.body, {
+		var me = this;
+		me.mon(me.body, {
 			single: true,
 			buffer: 1,
 			add: 'unmask'
 		});
-		if (this.el) {
-			this.el.mask('Loading', 'loading');
-		}
-		this.navigation.clear();
-		this.body.clear();
+		Ext.defer(function() {
+			if (me.el && me.el.dom) {
+				me.el.mask('Loading', 'loading');
+			}
+		}, 1);
+		me.navigation.clear();
+		me.body.clear();
 	},
 
 
 	unmask: function() {
-		console.log('Unmasking...');
 		if (this.el) {
 			this.el.unmask();
 		}
