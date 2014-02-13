@@ -161,8 +161,10 @@ Ext.application({
 if (location.toString().indexOf('index.html') > 0) {
 	location.replace(location.toString().replace('index.html', ''));
 }
-
-if (location.search && history.replaceState) {
+else if (location.toString().indexOf('#') > 0 && location.hash === '') {
+	location.replace(location.toString().split(/[#\?]/)[0]);
+}
+else if (location.search && history.replaceState) {
 	//lets cleanup our search string too, shall we?
 	history.replaceState(document.title, history.state, location.pathname);
 }
