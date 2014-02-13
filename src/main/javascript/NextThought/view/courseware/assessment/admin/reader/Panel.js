@@ -6,6 +6,16 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Panel', {
 	],
 	prefix: 'course-assignment-admin',
 
+	mixins: {
+		ParentViewInteractions: 'NextThought.view.courseware.assessment.reader.ParentViewInteractions'
+	},
+
+
+	constructor: function() {
+		this.callParent(arguments);
+		this.mixins.ParentViewInteractions.constructor.call(this);
+	},
+
 
 	getToolbarConfig: function() {
 		return {

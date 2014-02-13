@@ -4,10 +4,21 @@ Ext.define('NextThought.view.courseware.assessment.reader.Panel', {
 	requires: [
 		'NextThought.view.courseware.assessment.reader.Header'
 	],
+
+	mixins: {
+		ParentViewInteractions: 'NextThought.view.courseware.assessment.reader.ParentViewInteractions'
+	},
+
 	prefix: 'course-assignment',
 	cls: 'reader-container assignment-reader',
 
 	scrollTargetSelector: '.assignment-reader .x-panel-body-reader',
+
+
+	constructor: function() {
+		this.callParent(arguments);
+		this.mixins.ParentViewInteractions.constructor.call(this);
+	},
 
 
 	getToolbarConfig: function() {
@@ -29,7 +40,6 @@ Ext.define('NextThought.view.courseware.assessment.reader.Panel', {
 		this.callParent(arguments);
 		var r = this.down('reader-content'),
 			a = r.getAssessment(),
-			now = new Date(),
 			assignment = this.assignment,
 			history = this.assignmentHistory,
 			completed = history && history.get('completed');
