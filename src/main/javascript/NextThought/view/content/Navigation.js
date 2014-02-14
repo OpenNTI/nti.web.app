@@ -13,6 +13,8 @@ Ext.define('NextThought.view.content.Navigation', {
 	breadcrumbSepTpl: Ext.DomHelper.createTemplate({tag: 'span', html: ' / '}).compile(),
 	breadcrumbTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'part', html: '{0}'}).compile(),
 
+	MAX_PATH_LENGTH: 2,
+
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'goup', 'data-qtip': 'Go up a level'},
 		{cls: 'breadcrumb'}
@@ -89,11 +91,12 @@ Ext.define('NextThought.view.content.Navigation', {
 		var me = this,
 			C = ContentUtils,
 			loc = C.getLocation(ntiid),
-			lineage = C.getLineage(ntiid),
+			lineage = C.getLineage(ntiid), leftOvers,
 			names = C.getLineage(ntiid, true),
 			parent = lineage.last(),
 			page = lineage[0] ? C.getLocation(lineage[0]) : null,
-			path = me.getBreadcrumbPath(), i = 0, rootIdIdx;
+			path = me.getBreadcrumbPath(), i = 0, rootIdIdx,
+			pathLength = 0;
 
 		function buildPathPart(v, i, a) {
 			var e,
@@ -101,14 +104,16 @@ Ext.define('NextThought.view.content.Navigation', {
 				label = l.label;
 
 			e = me.breadcrumbTpl.insertFirst(me.breadcrumb, [label], true);
+			path.add(e);
 
 			if (i < (a.length - 1)) {
 				path.add(me.breadcrumbSepTpl.insertFirst(me.breadcrumb));
 			}
 
-			me.buildMenu(e, l, parent);
+			if (a === lineage) {//only put menus on the rooted content
+				me.buildMenu(e, l, parent);
+			}
 
-			path.add(e);
 		}
 
 		me.cleanupMenus(); //cleanup before proceeding.
@@ -126,8 +131,8 @@ Ext.define('NextThought.view.content.Navigation', {
 		// so because of the above check, we know that if we have an index above
 		// -1 we are to cut the lineage at that point.
 		if (rootIdIdx >= 0) {
-			rootIdIdx++; //slice is not inclusive, so push the index one up
-			// so that our slice gets the new root.
+			leftOvers = lineage.slice(rootIdIdx);
+			rootIdIdx++; //slice is not inclusive, so push the index one up so that our slice gets the new root.
 			lineage = lineage.slice(0, rootIdIdx);
 			//No need to slice names... we're reversed so the 0th item is the leaf, the nth item is the root.
 			//names = names.slice(0, rootIdIdx);
@@ -152,7 +157,7 @@ Ext.define('NextThought.view.content.Navigation', {
 			me.show();
 		}
 
-		if (lineage.length <= 1) {
+		if ((lineage.length + leftOvers.length) <= 1) {
 			if (me.hasChildren(loc.location)) {
 				path.add(me.breadcrumbTpl.insertFirst(me.breadcrumb, [me.levelLabels[lineage.length]], true));
 				me.buildMenu(path.last(), C.getLocation(me.getFirstTopic(loc.location)), parent);
@@ -163,14 +168,33 @@ Ext.define('NextThought.view.content.Navigation', {
 			}
 			else {
 				path.add = Ext.Function.createSequence(path.add, function(e) {
-					e.addCls('no-children');
+					Ext.fly(e).addCls('no-children');
 				}, me);
 				path.add(me.breadcrumbTpl.insertFirst(me.breadcrumb, [me.levelLabels[NaN]], true));
 			}
 		}
 
-		for (i; i < 2 && i < lineage.length; i++) {
+		for (i; i < this.MAX_PATH_LENGTH && i < lineage.length; i++) {
 			buildPathPart.call(this, lineage[i], i, lineage);
+			pathLength++;
+		}
+
+		path.add = Ext.Function.createSequence(path.add, function(e) {
+			Ext.fly(e).addCls('locked');
+			me.mon(Ext.fly(e), 'click', 'onUp');
+		}, me);
+
+		if (pathLength && pathLength < this.MAX_PATH_LENGTH && leftOvers.length) {
+			path.add(me.breadcrumbSepTpl.insertFirst(me.breadcrumb));
+		}
+
+		for (i = 0; pathLength < this.MAX_PATH_LENGTH && i < leftOvers.length; i++) {
+			buildPathPart.call(this, leftOvers[i], i, leftOvers);
+			pathLength++;
+		}
+
+		if (path.last() && path.last().getHTML() === ' / ') {
+			path.removeElement(path.last(), true);
 		}
 	},
 
@@ -214,7 +238,7 @@ Ext.define('NextThought.view.content.Navigation', {
 
 
 	buildMenu: function(pathPartEl, locationInfo, parent) {
-		var me = this, m, k,
+		var me = this, m,
 			menus = me.menuMap || {},
 			cfg = { ownerButton: me, items: [] },
 			key = locationInfo ? locationInfo.NTIID : null,
@@ -372,7 +396,7 @@ Ext.define('NextThought.view.content.Navigation', {
 		node = this.getFirstTopic(n);
 
 		for (node; node && node.nextSibling; node = node.nextSibling) {
-			if (!/topic/i.test(node.tagName) || parseInt(node.getAttribute('levelnum'), 10) > 2) {
+			if (!/topic/i.test(node.tagName) || (node.getAttribute('href') || '').indexOf('#') >= 0) {
 				continue;
 			}
 			num++;
