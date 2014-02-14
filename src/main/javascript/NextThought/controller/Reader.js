@@ -153,6 +153,24 @@ Ext.define('NextThought.controller.Reader', {
 	},
 
 
+	getRootForLocation: function(id) {
+		var info = ContentUtils.getLocation(id),
+			node;
+		if (!info) {
+			//not enough info... no root.
+			return null;
+		}
+
+		node = info.location;
+		while (node && node.parentNode) {
+			if (node.parentNode === node.ownerDocument.firstChild) {break;}
+			node = node.parentNode;
+		}
+
+		return node.getAttribute('ntiid');
+	},
+
+
 	/**
 	 * This is the random-access mothod to navigate to any content.
 	 *
@@ -183,7 +201,8 @@ Ext.define('NextThought.controller.Reader', {
 
 			v.showContentReader();
 
-			r.currentRoot = id;
+			//this will be rewritten for setLocationRooted(), this is just the default. If you go to a "book" by way of library root gets blanked.
+			r.currentRoot = me.getRootForLocation(id);
 
 			if (!r.ntiidOnFrameReady) {
 				r.setLocation(pi, callback);

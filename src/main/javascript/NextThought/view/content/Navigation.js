@@ -140,6 +140,7 @@ Ext.define('NextThought.view.content.Navigation', {
 			//From this point on the logic should be unchanged... lineage manipulation is complete.
 		}
 
+		leftOvers.pop();
 		lineage.pop(); // don't let the root show
 		// first was the 2nd item in the array... which is where the 'back' arrow will take you
 		this.upEl[(!lineage.first() && !rootId) ? 'hide' : 'show']();
