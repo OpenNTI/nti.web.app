@@ -722,8 +722,19 @@ function() {
 		}
 	}
 	try {
-		this.worker = new Worker(URL.createObjectURL(new Blob(['(', worker.toString(), ')()'], {type: 'text/javascript'})));
+		var re = /(__cov_\$[^\[]+\['\d+'\])(\[\d+\])?(\+\+)[;,]\s*/ig,//istanbul's (code coverage) instrumentation pattern
+			code = worker.toString();
+
+		//unit tests' coverage reporter doesn't instrument the generated
+		// code correctly and causes code execution to halt. So, strip it out for now.
+		code = code.replace(re, '');
+
+		this.worker = new Worker(URL.createObjectURL(new Blob(['(', code, ')();'], {type: 'text/javascript'})));
 		this.worker.onmessage = this.__workerMessage.bind(this);
+		this.worker.onerror = function() {
+			delete UserRepository.worker;
+			console.error('No Worker for bulk resolve');
+		};
 	} catch (e) {
 		console.error('No Worker for bulk resolve');
 	}
