@@ -33,16 +33,6 @@ Ext.define('NextThought.overrides.builtins.Console', function() {
 	Ext.copyTo(originalLogFns, console, fns, true);
 
 
-	console.getCollected = function() {
-		try {
-			return log;
-		}
-		finally {
-			log = [];
-		}
-	};
-
-
 	function collect(string) {
 		if (log.last() !== string) {
 			log.push(string);
@@ -128,12 +118,24 @@ Ext.define('NextThought.overrides.builtins.Console', function() {
 		}
 	}
 
+	try {
+		console.getCollected = function() {
+			try {
+				return log;
+			}
+			finally {
+				log = [];
+			}
+		};
 
-	console.enable = enableLogging;
-	console.disable = disableLogging;
+		console.enable = enableLogging;
+		console.disable = disableLogging;
 
-	if (!$AppConfig.enableLogging) {
-		console.disable();
+		if (!$AppConfig.enableLogging) {
+			console.disable();
+		}
+	} catch (e) {
+		console.error(e.stack || e.message || e);
 	}
 
 	return {};
