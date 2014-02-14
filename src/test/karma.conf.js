@@ -30,10 +30,16 @@ module.exports = function(config) {
 		// list of files to exclude
 		exclude: [],
 
+		preprocessors: { 'javascript/NextThought/**/*.js': ['coverage'] },
+
+		coverageReporter: { type: 'html', dir: 'coverage/' },
 
 		// test results reporter to use
 		// possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-		reporters: ['progress'],
+		reporters: [
+			'progress',
+			'coverage'
+		],
 
 		// web server port
 		port: 9876,
