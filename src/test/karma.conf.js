@@ -14,7 +14,7 @@ module.exports = function(config) {
 
 		// list of files / patterns to load in the browser
 		files: [
-			{pattern: 'ext-4.2/src/ux/ajax/*.js', included: false},
+			{pattern: 'ext-4.2/examples/ux/ajax/*.js', included: false},
 			{pattern: 'resources/lib/**/*', included: false},
 			{pattern: 'javascript/libs.js', included: false},
 			{pattern: 'javascript/NextThought/**/*.js', included: false},

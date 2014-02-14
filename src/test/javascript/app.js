@@ -14,6 +14,7 @@ var tests = [];
 /** make it async */
 window.__karma__.loaded = function() {};
 
+Ext.Loader.setPath('Ext.ux.ajax', Ext.Loader.getPath('Ext').replace(/\/src$/, '/') + 'examples/ux/ajax');
 
 Ext.application({
 	name: 'NextThought',
