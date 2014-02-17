@@ -330,22 +330,42 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 						//t = me.reader.getScroll().get().top,
 						s = me.get().win.getSelection();
 
-					if (!s.isCollapsed) {
-						me.reader.onContextMenuHandler(
-							{
-								getTarget: function() {
-									return fakeEvent.getTarget.apply(fakeEvent, arguments);
-								},
+					if (s.rangeCount > 0) {
+						var df = s.getRangeAt(0).cloneContents(),
+							n = df.firstChild;
 
-								preventDefault: function() {
-									fakeEvent.preventDefault();
-								},
 
-								stopPropagation: function() {
-									fakeEvent.stopPropagation();
+						function showMenu() {
+							me.reader.onContextMenuHandler(
+								{
+									getTarget: function() {
+										return fakeEvent.getTarget.apply(fakeEvent, arguments);
+									},
+
+									preventDefault: function() {
+										fakeEvent.preventDefault();
+									},
+
+									stopPropagation: function() {
+										fakeEvent.stopPropagation();
+									}
 								}
-							}
-						);
+							);
+						}
+
+						if (!n) {
+							clearInterval(this.showMenuTimer);
+						}
+						else if (!df.querySelector('.application-highlight')) {
+							this.showMenuTimer = setTimeout(showMenu, 250);
+						}
+						else {
+							clearInterval(this.showMenuTimer);
+						}
+
+					}
+					else {
+						clearInterval(this.showMenuTimer);
 					}
 				}
 
