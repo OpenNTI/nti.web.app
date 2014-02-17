@@ -155,16 +155,34 @@ Ext.define('NextThought.controller.Reader', {
 
 	getRootForLocation: function(id) {
 		var info = ContentUtils.getLocation(id),
-			node;
+			node, n;
 		if (!info) {
 			//not enough info... no root.
 			return null;
 		}
 
-		node = info.location;
+		function getActualPath(n) {
+			var results = [];
+			while (n && n.parentNode) {
+				results.push(n.nodeName + '[' + n.getAttribute('ntiid') + ']');
+				n = n.parentNode;
+			}
+
+			return results.reverse().join('\n\t-> ');
+		}
+
+		n = node = info.location;
 		while (node && node.parentNode) {
 			if (node.parentNode === node.ownerDocument.firstChild) {break;}
 			node = node.parentNode;
+			if (/\.blocker/i.test(node.getAttribute('ntiid'))) {
+				console.error(
+						'\n\n\n\nBLOCKER NODE DETECTED IN HIERARCHY!!\n\nDerived Path:\n',
+						ContentUtils.getLineage(id).reverse().join('\n\t-> '),
+						'\n\nActual Path:\n',
+						getActualPath(n),
+						'\n\n\n\n');
+			}
 		}
 
 		return node.getAttribute('ntiid');
@@ -247,6 +265,8 @@ Ext.define('NextThought.controller.Reader', {
 		function call(a, er) {
 			if (er && er.status !== undefined && Ext.Ajax.isHTTPErrorCode(er.status)) {
 				reader.currentRoot = oldRoot;
+			} else {
+				reader.currentRoot = ntiid;//make sure it sicks
 			}
 
 			Ext.callback(callback, null, [ntiid, a, er]);
@@ -359,6 +379,7 @@ Ext.define('NextThought.controller.Reader', {
 			pg = this.getContentPager(),
 			pw = this.getContentPageWidgets(),
 			mn = this.getMainNav(),
+			nav = this.getContentNavigation(),
 			origin = pageInfo && pageInfo.contentOrig,
 			l = pageInfo && pageInfo.getLocationInfo(),
 			t = pageInfo && pageInfo.get('NTIID'),
@@ -384,7 +405,7 @@ Ext.define('NextThought.controller.Reader', {
 		//If there is no origin, we treat this as normal. (Read the location from the location provder) The origin is
 		// to direct the navbar to use the origins' id instead of the current one (because we know th current one will
 		// not resolve from our library... its a card)
-		this.getContentNavigation().updateLocation(t || origin, reader.currentRoot);
+		nav.updateLocation(t || origin, reader.currentRoot);
 	},
 
 

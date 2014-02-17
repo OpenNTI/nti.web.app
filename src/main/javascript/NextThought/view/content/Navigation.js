@@ -91,12 +91,12 @@ Ext.define('NextThought.view.content.Navigation', {
 		var me = this,
 			C = ContentUtils,
 			loc = C.getLocation(ntiid),
-			lineage = C.getLineage(ntiid), leftOvers,
+			lineage = C.getLineage(ntiid), leftOvers = [],
 			names = C.getLineage(ntiid, true),
 			parent = lineage.last(),
 			page = lineage[0] ? C.getLocation(lineage[0]) : null,
 			path = me.getBreadcrumbPath(), i = 0, rootIdIdx,
-			pathLength = 0;
+			pathLength = 0, allowMenus = true;
 
 		function buildPathPart(v, i, a) {
 			var e,
@@ -110,7 +110,7 @@ Ext.define('NextThought.view.content.Navigation', {
 				path.add(me.breadcrumbSepTpl.insertFirst(me.breadcrumb));
 			}
 
-			if (a === lineage) {//only put menus on the rooted content
+			if (a === lineage && allowMenus) {//only put menus on the rooted content
 				me.buildMenu(e, l, parent);
 			}
 
@@ -124,7 +124,8 @@ Ext.define('NextThought.view.content.Navigation', {
 		if (rootId && rootIdIdx < 0) {
 			//if there is a rootId, but we did not find it in the lineage, we're
 			// out of bounds, and should return without doing anything.
-			return;
+			//return;
+			allowMenus = false;
 		}
 
 		// If no rootId was sent, then it would return -1 in the indexOf,
