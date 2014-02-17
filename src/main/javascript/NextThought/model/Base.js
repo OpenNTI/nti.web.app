@@ -869,11 +869,14 @@ Ext.define('NextThought.model.Base', {
 					store.isGrouped = Ext.emptyFn;
 				}
 
-				store[fn].apply(store, args);
-
-				//Remove our fake out.
-				if (store.isGrouped === Ext.emptyFn) {
-					delete store.isGrouped;
+				try {
+					store[fn].apply(store, args);
+				}
+				finally {
+					//Remove our fake out.
+					if (store.isGrouped === Ext.emptyFn) {
+						delete store.isGrouped;
+					}
 				}
 			}
 		}
