@@ -184,11 +184,10 @@ Ext.define('NextThought.model.assessment.Assignment', {
 			store.remoteSort = false;
 		}
 
-		this._updateGradeInstance(records);
-
 		//fill in the assignment into the history item so the synthetic fields can derive values from it.
 		store.suspendEvents(true);
 		records.forEach(function(r) {r.set('item', me);});
+		me._updateGradeInstance(records);
 		store.resumeEvents();
 		//then resolve users...
 
