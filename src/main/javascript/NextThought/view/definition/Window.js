@@ -67,6 +67,7 @@ Ext.define('NextThought.view.definition.Window', {
 		});
 	},
 
+	syncHeight: Ext.emptyFn,//not needed here.
 
 	fixMask: function() {
 		var m = this.maskEl = this.zIndexManager.mask;
@@ -124,7 +125,7 @@ Ext.define('NextThought.view.definition.Window', {
 
 					return false;
 				};
-				me.show();
+				me.showAt(me.x, me.y);
 			});
 		});
 	},
