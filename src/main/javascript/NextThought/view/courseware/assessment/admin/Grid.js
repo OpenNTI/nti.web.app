@@ -1,6 +1,9 @@
 Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 	extend: 'Ext.grid.Panel',
 	alias: 'widget.course-admin-grid',
+	require: [
+		'Ext.grid.plugin.BufferedRenderer'
+	],
 
 	gradeEditorOffsets: [0, 0],
 
@@ -16,6 +19,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 	enableColumnResize: false,
 
 	viewConfig: {
+		loadMask: false,
 		xhooks: {
 			walkCells: function(pos, direction, e, preventWrap, verifierFn, scope) {
 				return this.callParent([pos, direction, e, preventWrap, function(newPos) {
@@ -39,6 +43,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 
 	selType: 'cellmodel',
 	plugins: [
+		{
+			ptype: 'bufferedrenderer'
+		},
 		{
 			ptype: 'cellediting',
 			clicksToEdit: 1,

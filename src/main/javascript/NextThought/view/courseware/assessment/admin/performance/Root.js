@@ -2,6 +2,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-assessment-admin-performance-root',
 
+	require: [
+		'Ext.grid.plugin.BufferedRenderer'
+	],
+
 	ui: 'course-assessment',
 	cls: 'course-assessment-admin performance',
 
@@ -50,6 +54,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			enableColumnHide: false,
 			enableColumnMove: false,
 			enableColumnResize: false,
+			plugins: [{ptype: 'bufferedrenderer'}],
 			columns: {
 				ui: 'course-assessment',
 				plain: true,
@@ -145,7 +150,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				return (this.snapshot || this.data).getByKey(id);
 			}
 		});
-		this.store = new NextThought.store.MockPage({autoLoad: true, bind: this.backingStore});
+		this.store = this.backingStore;
 		this.callParent(arguments);
 	},
 
