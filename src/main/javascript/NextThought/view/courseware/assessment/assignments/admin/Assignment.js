@@ -174,6 +174,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			this._showMask();
 		}
 		this.initFilters();
+		this.down('grid').bindStore(this.store);
 	},
 
 
@@ -263,7 +264,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			grid.down('[dataIndex=submission]').hide();
 		}
 
-		grid.bindStore(this.store);
 		this.maybeShowDownload();
 		this.mon(grid, 'itemclick', 'onItemClick');
 	},
