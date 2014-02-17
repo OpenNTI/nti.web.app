@@ -132,22 +132,21 @@ Ext.define('NextThought.view.definition.Window', {
 
 	getDocumentElement: function() {
 		var iframe = this.down('[cls=definition]').el.dom;
-		return iframe.contentDocument
-				|| (iframe.contentWindow || window.frames[iframe.name]).document;
+		return iframe.contentDocument || (iframe.contentWindow || window.frames[iframe.name]).document;
 	},
 
 
 	queryDefinition: function(cb, scope) {
-    var u = this.pageInfo.getLink('Glossary'), req;
+		var u = this.pageInfo.getLink('Glossary'), req;
 
-    if (!u) {u = this.fallbackURL;}
-    else {u += '/';}
+		if (!u) {u = this.fallbackURL;}
+		else {u += '/';}
 
 		req = {
 			url: getURL(u + encodeURIComponent(this.term)),
 			async: true,
 			scope: this,
-			callback: function(q,s,r) {
+			callback: function(q, s, r) {
 				var dom = r.responseText;
 				Ext.callback(cb, scope || this, [dom]);
 			}
@@ -168,7 +167,7 @@ Ext.define('NextThought.view.definition.Window', {
 			url: me.xslUrl,
 			async: true,
 			scope: me,
-			callback: function(q,s,r) {
+			callback: function(q, s, r) {
 				var xsldoc, xslt, dom, p;
 				if (!window.hasOwnProperty('XSLTProcessor')) {
 					try {
