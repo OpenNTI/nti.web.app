@@ -175,7 +175,7 @@ Ext.define('NextThought.controller.Reader', {
 		while (node && node.parentNode) {
 			if (node.parentNode === node.ownerDocument.firstChild) {break;}
 			node = node.parentNode;
-			if (/\.blocker/i.test(node.getAttribute('ntiid'))) {
+			if (/\.blocker/i.test(node.getAttribute && node.getAttribute('ntiid'))) {
 				console.error(
 						'\n\n\n\nBLOCKER NODE DETECTED IN HIERARCHY!!\n\nDerived Path:\n',
 						ContentUtils.getLineage(id).reverse().join('\n\t-> '),
@@ -185,7 +185,7 @@ Ext.define('NextThought.controller.Reader', {
 			}
 		}
 
-		return node.getAttribute('ntiid');
+		return (node && node.getAttribute && node.getAttribute('ntiid')) || null;
 	},
 
 
