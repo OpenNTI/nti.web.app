@@ -37,7 +37,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 			item = x && x.get('item'),
 			parts = (item && item.get('parts')) || [],
 			view = this.up('course-assessment-admin-assignments'),
-			assignmentView, gridView,
+			assignmentView, gridViewMask,
 			tab = this.up('[isTabView]').getEl();
 
 		this.onItemClicked(null, x);
@@ -50,8 +50,10 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 		}
 
 		if (assignmentView) {
-			gridView = assignmentView.down('grid dataview').loadMask;
-			gridView.disable(true);
+			gridViewMask = assignmentView.down('grid dataview').loadMask;
+			if (gridViewMask && gridViewMask.disable) {
+				gridViewMask.disable(true);
+			}
 
 			if (user && tab && tab.dom) {
 				//tab.mask('Loading...', 'navigation');
@@ -74,12 +76,16 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 
 						});
 					} finally {
-						gridView.enable();
+						if (gridViewMask && gridViewMask.enable) {
+							gridViewMask.enable();
+						}
 						tab.unmask();
 					}
 				})
 				.fail(function(reason) {
-					gridView.enable();
+					if (gridViewMask && gridViewMask.enable) {
+						gridViewMask.enable();
+					}
 					tab.unmask();
 					console.error(reason);
 				});
