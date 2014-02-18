@@ -734,7 +734,7 @@ Ext.define('NextThought.util.Content', {
 
 			//decide if this is a navigate-able thing, it most be a topic or toc, it must
 			//have an href, and that href must NOT have a anchor
-			if (topicOrToc && href && href.lastIndexOf('#') === -1) {
+			if (topicOrToc && href && href.lastIndexOf('#') === -1 && !node.hasAttribute('suppressed')) {
 				result = true;
 			}
 
