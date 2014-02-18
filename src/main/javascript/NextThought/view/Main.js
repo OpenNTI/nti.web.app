@@ -112,7 +112,7 @@ Ext.define('NextThought.view.Main', {
 
 		//Don't scroll page if dragging an element in quiz
 		currTarget = Ext.get(touch.target);
-		if (currTarget && (currTarget.hasCls('draggable-area') !== -1 || currTarget.up('.draggable-area'))) {
+		if (currTarget && (currTarget.hasCls('draggable-area') || currTarget.up('.draggable-area'))) {
 			e.preventDefault();
 		}
 
