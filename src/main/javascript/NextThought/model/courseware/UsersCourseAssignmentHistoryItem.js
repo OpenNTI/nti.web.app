@@ -103,13 +103,15 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 							})
 							.done(function() {
 								delete record.isSummary;
+								delete record.raw.SubmissionCreatedTime;
+								delete record.raw.Submission;
+								delete record.raw.FeedbackCount;
 								record.set({
-									completed: null,
-									SubmissionCreatedTime: null,
 									Submission: null,
-									submission: null,
 									Grade: null,
-									Feedback: null
+									Feedback: null,
+									completed: null,
+									submission: null
 								});
 							});
 
