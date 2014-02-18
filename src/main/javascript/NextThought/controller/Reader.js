@@ -203,6 +203,9 @@ Ext.define('NextThought.controller.Reader', {
 			v = me.getContentView(),
 			id = !Ext.isString(ntiid) ? ntiid.getId() : ntiid;
 
+		//this will be rewritten for setLocationRooted(), this is just the default. If you go to a "book" by way of library root gets blanked.
+		r.currentRoot = me.getRootForLocation(id);
+
 		function go(pi) {
 			if (me.fireEvent('show-view', 'content', true) === false) {
 				return false;
@@ -218,9 +221,6 @@ Ext.define('NextThought.controller.Reader', {
 			}
 
 			v.showContentReader();
-
-			//this will be rewritten for setLocationRooted(), this is just the default. If you go to a "book" by way of library root gets blanked.
-			r.currentRoot = me.getRootForLocation(id);
 
 			if (!r.ntiidOnFrameReady) {
 				r.setLocation(pi, callback);
@@ -273,6 +273,7 @@ Ext.define('NextThought.controller.Reader', {
 		}
 
 		this.setLocation(ntiid, call, silent === true);
+		reader.currentRoot = ntiid; //setLocation is async, and in its init ca
 	},
 
 
