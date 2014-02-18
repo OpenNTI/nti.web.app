@@ -97,23 +97,32 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			columnOverrides: {
 				0: { text: 'Student', dataIndex: 'Creator', name: 'creator', flex: 1, padding: '0 0 0 30',
 					renderer: function(v) {
-					   var u = v && (typeof v === 'string' ? {displayName: 'Resolving...'} : v.getData());
-					   return this.studentTpl.apply(u);
-				   } }
+						try {
+							var u = v && (typeof v === 'string' ? {displayName: 'Resolving...'} : v.getData());
+							return this.studentTpl.apply(u);
+						} catch (e) {
+							return '';
+						}
+					} }
 			},
 			extraColumns: [
 				{ text: 'Username', dataIndex: 'Creator', name: 'username',
-					renderer: function(v, g, record) {
-						var r = this.ownerCt && this.ownerCt.assignment.roster.map,
-							username = (v.get && v.get('Username')) || v;
+					renderer: function(v) {
+						try {
+							var r = this.ownerCt.assignment.roster.map,
+								username = (v.get && v.get('Username')) || v;
 
-						if (r[username].Status === 'Open') {
+							if (r[username].Status === 'Open') {
+								return '';
+							}
+
+							return username;
+						} catch (e) {
 							return '';
 						}
-
-						return username;
 					},
 					doSort: function(state) {
+						try {
 						var r = this.up('[assignment]').assignment.roster.map,
 							store = this.up('grid').getStore(),
 							sorter = new Ext.util.Sorter({
@@ -131,6 +140,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 							});
 
 						store.sort(sorter);
+						} catch (e) {
+							console.error(e.stack || e.message || e);
+						}
 					}
 				}
 			],
