@@ -112,6 +112,9 @@ Ext.define('NextThought.view.content.Navigation', {
 
 			if (a === lineage && allowMenus) {//only put menus on the rooted content
 				me.buildMenu(e, l, parent);
+			} else {
+				Ext.fly(e).addCls('locked');
+				me.mon(Ext.fly(e), 'click', 'onUp');
 			}
 
 		}
@@ -180,11 +183,6 @@ Ext.define('NextThought.view.content.Navigation', {
 			buildPathPart.call(this, lineage[i], i, lineage);
 			pathLength++;
 		}
-
-		path.add = Ext.Function.createSequence(path.add, function(e) {
-			Ext.fly(e).addCls('locked');
-			me.mon(Ext.fly(e), 'click', 'onUp');
-		}, me);
 
 		if (pathLength && pathLength < this.MAX_PATH_LENGTH && leftOvers.length) {
 			path.add(me.breadcrumbSepTpl.insertFirst(me.breadcrumb));

@@ -47,12 +47,19 @@
 
 			&:hover,
 			&:last-of-type:not(.no-children) {
-				color: $primary-grey;
+				color: $primary-grey !important;
 			}
 
 			&.no-children,
 			&:last-of-type {
 				max-width: none;
+			}
+
+			&.locked {
+				cursor: default;
+				&:hover {
+					color: inherit;
+				}
 			}
 
 			&.no-children:last-of-type{
