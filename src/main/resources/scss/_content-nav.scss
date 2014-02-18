@@ -47,7 +47,7 @@
 
 			&:hover,
 			&:last-of-type:not(.no-children) {
-				color: $primary-grey !important;
+				color: $primary-grey;
 			}
 
 			&.no-children,
@@ -57,7 +57,7 @@
 
 			&.locked {
 				cursor: default;
-				&:hover {
+				&:not(:last-of-type):hover {
 					color: inherit;
 				}
 			}
