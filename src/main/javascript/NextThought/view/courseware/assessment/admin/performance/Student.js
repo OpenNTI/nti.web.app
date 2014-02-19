@@ -47,7 +47,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 			'reader-initializing': 'applyPagerFilter'
 		});
 		this.mon(this.down('grid'), 'itemclick', 'maybeGoToAssignment');
-		this.mask();
 	},
 
 	afterRender: function() {
@@ -105,6 +104,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 			load: 'unmask'
 		});
 		this.down('grid').bindStore(this.store);
+		this.store.load();
 	},
 
 
@@ -123,6 +123,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 			this.goToAssignment(selModel, record);
 		}
 	},
+
 
 	applyPagerFilter: function() {
 		clearTimeout(this.__cleanupFilter);
