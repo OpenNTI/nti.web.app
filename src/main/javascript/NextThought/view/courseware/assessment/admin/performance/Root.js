@@ -146,6 +146,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				{name: 'Username', type: 'string', defaultValue: ''},
 				{name: 'grade', type: 'int'},
 				{name: 'letter', type: 'string', defaultValue: '-'},
+				{name: 'action', type: 'int'},
 				{name: 'ungraded', type: 'int', defaultValue: 0},
 				{name: 'overdue', type: 'int', defaultValue: 0},
 				{name: 'Status', type: 'string', mapping: 'LegacyEnrollmentStatus'}
@@ -373,8 +374,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		this.itemMenu.offset = [0, -x];
 		this.currentItem = item.type;
 
-		if (item.type === 'all') { return; }
-
 		this.updateFilter();
 	},
 
@@ -393,18 +392,33 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	updateFilter: function() {
-		var filters = [];
+		var filters = [],
+			s = this.store;
 
 		if (this.currentItem && !/all/i.test(this.currentItem)) {
-			filters.push({property: this.currentItem});
+			filters.push({
+				property: this.currentItem,
+				filterFn: function(r) {
+					return Boolean(r && r.get(this.property));
+				}
+			});
 		}
 
 		if (!Ext.isEmpty(this.searchKey)) {
-			filters.push({property: 'search', value: this.searchKey.toLowerCase()});
+			filters.push({
+				re: new RegExp(RegExp.escape(this.searchKey), 'i'),
+				filterFn: function(r) {
+					return this.re.test(r.get('displayName'));
+				}
+			});
 		}
 
-		this.store.filters.removeAll();
-		this.store.filter(filters);
+		if (!filters.length) {
+			s.clearFilter();
+		} else {
+			s.filters.removeAll();
+			s.filter(filters);
+		}
 	},
 	//</editor-fold>
 
@@ -480,7 +494,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			if (!i && due && due < new Date()) {counts.overdue++;}
 		});
 
-
+		counts.action = counts.ungraded + counts.overdue;
 
 		return counts;
 	},
