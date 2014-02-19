@@ -55,11 +55,10 @@ Ext.define('NextThought.proxy.courseware.Roster', {
 			delete p.sort;
 		}
 
-		return Ext.urlAppend(this.url, Ext.Object.toQueryString(
-				Ext.applyIf(p, {
-					filter: 'LegacyEnrollmentStatusForCredit',
-					sortOn: 'realname'
-				})
-		));
+		if (Ext.isEmpty(this.url)) {
+			Ext.Error.raise('URL required');
+		}
+
+		return this.url;
 	}
 });
