@@ -3,7 +3,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	alias: 'widget.course-assessment-admin-performance-root',
 
 	requires: [
-		'Ext.grid.plugin.BufferedRenderer',
 		'NextThought.proxy.courseware.Roster'
 	],
 

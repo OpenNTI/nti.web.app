@@ -1,9 +1,7 @@
 Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 	extend: 'Ext.grid.Panel',
 	alias: 'widget.course-admin-grid',
-	requires: [
-		'Ext.grid.plugin.BufferedRenderer'
-	],
+	requires: [],
 
 	gradeEditorOffsets: [0, 0],
 
