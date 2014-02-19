@@ -13,6 +13,9 @@ Ext.define('NextThought.store.courseware.AssignmentView', {
 			type: 'nti',
 			root: 'Items',
 			totalProperty: 'FilteredTotalItemCount',
+			collectionTypes: {
+				'application/vnd.nextthought.assessment.userscourseassignmenthistory': 1
+			},
 			onItemRead: function(item) {
 				if (Ext.isArray(item)) {
 					item = {Creator: item[0], Class: 'UsersCourseAssignmentHistoryItem'};
@@ -87,6 +90,12 @@ Ext.define('NextThought.store.courseware.AssignmentView', {
 		if (this.url) {
 			this.proxy.url = this.url;
 			delete this.url;
+		}
+
+		if (this.disablePaging) {
+			this.proxy.startParam = undefined;
+			this.proxy.limitParam = undefined;
+			this.proxy.idParam = undefined;
 		}
 	}
 });

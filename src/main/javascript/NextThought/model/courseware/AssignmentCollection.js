@@ -31,7 +31,7 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 
 			collection = this.create({
 				Roster: rosterURL,
-				BaseURL: historyBaseURL,
+				BaseURL: (historyBaseURL || '').split('/').slice(0, -1).join('/'),
 				HitMap: hitmap,
 				NodeMap: nodemap,
 				Items: build(assignments),
@@ -130,15 +130,65 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 	 * @return {Ext.data.Store}
 	 */
 	getViewForStudent: function(student) {
-		var url, store;
-		this._studentViews = this._studentViews || {};
+		var url, store, me = this;
+		me._studentViews = me._studentViews || {};
 
-		if (!this._studentViews[student]) {
-			url = [this.get('BaseURL'), student].join('/');
-			store = this._studentViews[student] = new NextThought.store.courseware.AssignmentView({ url: url });
+		function fill(s, recs, good) {
+			if (!good) {return;}
+			var rec, id, exists = {}, toAdd = [],
+				get = me.getItem.bind(me),
+				r = recs.length - 1;
+
+			for (r; r >= 0; r--) {
+				rec = recs[r];
+				try {
+					id = rec.get('Submission').get('assignmentId');
+					rec.set('item', get(id));
+					exists[id] = rec;
+				} catch (e) {
+					console.warn(e.stack || e.message || e);
+				}
+			}
+
+			me.each(function(a) {
+				var r = exists[a.getId()],
+					gbe = a._gradeBookEntry,
+					grade = gbe && gbe.getFieldItem('Items', student);
+
+				if (!r) {
+					toAdd.push(NextThought.model.courseware.UsersCourseAssignmentHistoryItem.create({
+						Creator: student,
+						item: a,
+						Grade: grade
+					}));
+				} else if (grade) {
+					r.set('Grade', grade);
+				}
+			});
+
+			if (toAdd.length) {
+				s.add(toAdd);
+			}
+		}
+
+		if (!me._studentViews[student]) {
+			url = [me.get('BaseURL'), student].join('/');
+			store = me._studentViews[student] = new NextThought.store.courseware.AssignmentView({
+				url: url,
+				filters: [],
+				sorters: [],
+				buffered: false,
+				disablePaging: true
+			});
+
+			store.on({
+				load: fill,
+				prefetch: fill
+			});
+
 			store.load();
 		}
 
-		return this._studentViews[student];
+		return me._studentViews[student];
 	}
 });
