@@ -22,7 +22,7 @@
 				meta -alt -append -out src/main/bootstrap.js
 
 
-2. Setup CSS Compiler…
+3. Setup CSS Compiler…
   1. Setup Ruby environment: `~/.gemrc`: 
      * In your `~/.profile`, `~/.bash_profile`, or `~/.bashrc` and add a new environment variable called `GEM_HOME` with a value of: `~/.gem/ruby/<ruby version>` (on MacOS 10.9, the ruby version is `2.0.0`)
      * Add `$GEM_HOME/bin` to your path.
@@ -33,7 +33,18 @@
   2. Install our bundle.
      * type: `bundle install`
   3. you can now compile the styles: `compass compile`
-  
+
+### Unit-Tests
+
+The unit tests in this project are written in javascript and use the `Jasmine` assertion framework.  You can run the unit tests by making your `src/test` directory served by a http server[^*][#httpserver] or using [karma][karma] to run them.
+
+##### Setting up Karma (Optional, but recommended)
+Dependencies: `npm`, and thus `node.js`
+
+1. npm install -g karma 
+2. npm install -g karma-coverage
+3. from `src/test` type `karma start`
+
 
 ### Might be helpfull:
 
@@ -48,6 +59,12 @@ If you don't have Growl, I'd recommend removing the strings `&>/dev/null`
 
 ### Login App & Server...
 See buildout docs.
- 
+
+
+###### Notes
+* <a name="httpwebservernote"></a>You can run `python -m SimpleHTTPServer` from any directory to serve it over http on your local machine.
+
+[karma]: http://karma-runner.github.io
+[#httpserver]: #httpwebservernote
 [EXTJS]: http://www.sencha.com/products/extjs/download/
 [SENCHACMD]: http://www.sencha.com/products/sencha-cmd/download/
