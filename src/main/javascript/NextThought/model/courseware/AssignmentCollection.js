@@ -135,14 +135,15 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 
 		function fill(s, recs, good) {
 			if (!good) {return;}
-			var rec, id, exists = {}, toAdd = [],
+			var rec, id, exists = {},
+				toAdd = [], toRemove = [],
 				get = me.getItem.bind(me),
 				r = recs.length - 1;
 
 			for (r; r >= 0; r--) {
 				rec = recs[r];
 				try {
-					id = rec.get('Submission').get('assignmentId');
+					id = rec.getAssignmentId();
 					rec.set('item', get(id));
 					exists[id] = rec;
 				} catch (e) {
@@ -153,22 +154,29 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 			me.each(function(a) {
 				var r = exists[a.getId()],
 					gbe = a._gradeBookEntry,
-					grade = gbe && gbe.getFieldItem('Items', student);
+					grade = gbe && gbe.getFieldItem('Items', student),
+					show = !a.doNotShow();
 
-				if (!r) {
+				if (!r && show) {
 					toAdd.push(NextThought.model.courseware.UsersCourseAssignmentHistoryItem.create({
 						Creator: student,
 						item: a,
 						Grade: grade
 					}));
-				} else if (grade) {
+				} else if (grade && show) {
 					r.set('Grade', grade);
+				}
+
+				if (r && !show) {
+					toRemove.push(r);
 				}
 			});
 
 			if (toAdd.length) {
 				s.add(toAdd);
 			}
+
+			s.remove(toRemove, true);
 		}
 
 		if (!me._studentViews[student]) {
@@ -185,8 +193,6 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 				load: fill,
 				prefetch: fill
 			});
-
-			store.load();
 		}
 
 		return me._studentViews[student];

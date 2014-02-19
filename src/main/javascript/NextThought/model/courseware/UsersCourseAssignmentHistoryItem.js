@@ -24,7 +24,7 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 
 		{name: 'name', type: 'Synthetic', persist: false, fn: function(r) {
 			var i = this.get('item');
-			return i && i.get('title');
+			return i && i.get('title') || 'Missing';
 		}},
 
 		{name: 'due', type: 'Synthetic', persist: false, fn: function(r) {
@@ -77,6 +77,17 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 		if (this.raw.Class === 'UsersCourseAssignmentHistoryItemSummary') {
 			this.isSummary = true;
 		}
+	},
+
+
+	getAssignmentId: function() {
+		var r = this.raw,
+			g = r.Grade,
+			s = r.Submission,
+			p = r.pendingAssessment,
+			i = this.get('item');
+
+		return (i && i.getId()) || (g && g.AssignmentId) || (s && s.assignmentId) || (p && p.assignmentId);
 	},
 
 
