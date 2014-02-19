@@ -219,10 +219,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		}
 
 		this.mon(this.header, {
-			studentEl: { click: 'showStudentMenu', scope: this},
-			itemEl: { click: 'showItemMenu', scope: this},
-			inputEl: { keyup: 'changeNameFilter', scope: this},
-			clearEl: { click: 'clearSearch', scope: this}
+			studentEl: {click: 'showStudentMenu', scope: this},
+			itemEl: {click: 'showItemMenu', scope: this},
+			inputEl: {keyup: 'changeNameFilter', scope: this, buffer: 350},
+			clearEl: {click: 'clearSearch', scope: this}
 		});
 
 		this.mon(this.grid, {
@@ -297,15 +297,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		this.updateExportEl(item.type);
 
-		me.store.removeFilter('LegacyEnrollmentStatus');
-
-		if (item.type === 'all') { return; }
-
-		me.store.filter([{
-			id: 'LegacyEnrollmentStatus',
-			property: 'LegacyEnrollmentStatus',
-			value: item.type
-		}], true);
+		this.updateFilter();
 	},
 
 
@@ -390,53 +382,42 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		this.itemMenu.offset = [0, -x];
 		this.currentItem = item.type;
 
-		this.store.removeFilter('itemFilter');
-
 		if (item.type === 'all') { return; }
 
-		this.store.filter([{
-			id: 'itemFilter',
-			filterFn: function(rec) {
-			var overdue = rec.get('overdue'),
-				ungraded = rec.get('ungraded');
-
-				if (item.type === 'action') {
-					return overdue || ungraded || comments;
-				}
-
-				if (item.type === 'overdue') {
-					return overdue;
-				}
-
-				if (item.type === 'ungraded') {
-					return ungraded;
-				}
-		   }
-	   }], true);
+		this.updateFilter();
 	},
 
 
 	changeNameFilter: function() {
-		var val = this.searchKey = this.header.inputEl.getValue();
-
-		this.store.removeFilter('searchFilter');
-
-		if (this.searchKey) {
-			val = val.toLowerCase();
-
-			this.store.filter([{
-					id: 'searchFilter',
-					property: 'search',
-					value: val
-			}]);
-		}
+		this.searchKey = this.header.inputEl.getValue();
+		this.updateFilter();
 	},
 
 
 	clearSearch: function() {
 		this.searchKey = '';
 		this.header.inputEl.dom.value = '';
-		this.store.removeFilter('searchFilter');
+		this.updateFilter();
+	},
+
+
+	updateFilter: function() {
+		var filters = [];
+
+		if (this.currentStudent && !/all/i.test(this.currentStudent)) {
+			filters.push({property: 'LegacyEnrollmentStatus', value: this.currentStudent});
+		}
+
+		if (this.currentItem && !/all/i.test(this.currentItem)) {
+			filters.push({property: 'notices', value: this.currentItem});
+		}
+
+		if (!Ext.isEmpty(this.searchKey)) {
+			filters.push({property: 'search', value: this.searchKey.toLowerCase()});
+		}
+
+		this.store.filters.removeAll();
+		this.store.filter(filters);
 	},
 	//</editor-fold>
 
@@ -464,7 +445,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	applyRoster: function(s, rec) {
+	applyRoster: function(s, rec, success) {
+		if (!success) {return;}
+
 		var users = [],
 			recsMap = {},
 			applyUsers = this.applyUserData.bind(this, recsMap),

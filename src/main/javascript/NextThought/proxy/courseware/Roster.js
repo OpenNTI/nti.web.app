@@ -13,10 +13,7 @@ Ext.define('NextThought.proxy.courseware.Roster', {
 	reader: {
 		type: 'json',
 		root: 'Items',
-		totalProperty: 'FilteredTotalItemCount'//,
-		//readRecords: function() {
-			//return Ext.data.reader.Json.prototype.readRecords.apply(this, arguments);
-		//}
+		totalProperty: 'FilteredTotalItemCount'
 	},
 
 	noCache: false,
@@ -33,19 +30,13 @@ Ext.define('NextThought.proxy.courseware.Roster', {
 	startParam: 'batchStart',
 	limitParam: 'batchSize',
 
-	setURL: function(url) {
-		this.url = url;
-	},
+
+	setURL: function(url) { this.url = url; },
 
 
 	buildUrl: function(op) {
-		var filter, sort, dir,
+		var sort, dir,
 			p = op.params;
-
-		if (p.filter) {
-			filter = Ext.decode(p.filter)[0];
-			p.filter = filter.property + filter.value;
-		}
 
 		if (p.sort) {
 			dir = {
@@ -54,7 +45,7 @@ Ext.define('NextThought.proxy.courseware.Roster', {
 			};
 			sort = Ext.decode(p.sort)[0];
 			p.sortOn = sort.property;
-			p.sortOrder = dir[(sort.direction || 'asc').toLowerCase()];
+			p.sortOrder = dir[(sort.direction || 'asc').toLowerCase()] || sort.direction || dir.asc;
 			delete p.sort;
 		}
 
