@@ -11,28 +11,72 @@ Ext.define('NextThought.store.courseware.AssignmentView', {
 		url: 'tbd',
 		reader: {
 			type: 'nti',
-			root: 'Items'
+			root: 'Items',
+			totalProperty: 'FilteredTotalItemCount',
+			onItemRead: function(item) {
+				if (Ext.isArray(item)) {
+					item = {Creator: item[0], Class: 'UsersCourseAssignmentHistoryItem'};
+				}
+				return item;
+			}
 		},
 
 		noCache: false,
 
-		//Don't send any params with this store load.
 		groupParam: undefined,
 		groupDirectionParam: undefined,
-		sortParam: undefined,
-		filterParam: undefined,
 		directionParam: undefined,
-		idParam: undefined,
-		//When we start paging, we will define these
+
+		sortParam: 'sort',
+		filterParam: 'filter',
+		idParam: 'batchAround',
+
 		pageParam: undefined,
-		startParam: undefined,
-		limitParam: undefined
+		startParam: 'batchStart',
+		limitParam: 'batchSize',
+
+
+		buildUrl: function(op) {
+			var filter, sort, dir,
+				p = op.params;
+
+			if (p.filter) {
+				filter = Ext.decode(p.filter)[0];
+				p.filter = filter.property + filter.value;
+			}
+
+			if (p.sort) {
+				dir = {
+					asc: 'ascending',
+					desc: 'descending'
+				};
+				sort = Ext.decode(p.sort)[0];
+				p.sortOn = sort.property;
+				p.sortOrder = dir[(sort.direction || 'asc').toLowerCase()];
+				delete p.sort;
+			}
+
+
+			return Ext.urlAppend(this.url, Ext.Object.toQueryString(
+					Ext.applyIf(p, {
+						filter: 'LegacyEnrollmentStatusForCredit',
+						sortOn: 'realname'
+					})
+			));
+		}
 	},
-	sorters: {
-		property: 'Creator',
-		transform: function(r) {return r && r.toString().toLowerCase();}
-		//sorterFn: Globals.getCaseInsensitiveNaturalSorter('Creator')
-	},
+
+	filters: [
+		{id: 'LegacyEnrollmentStatus', property: 'LegacyEnrollmentStatus', value: 'ForCredit'}
+	],
+
+	sorters: [
+		{property: 'realname', direction: 'ascending'}
+	],
+
+	pageSize: 50,
+
+	buffered: true,
 
 	constructor: function() {
 		this.proxy = Ext.clone(this.proxy);//get a local instance copy

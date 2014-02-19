@@ -1,7 +1,7 @@
 Ext.define('NextThought.view.forums.Comment', {
 	extend: 'Ext.Component',
 	alias: 'widget.forums-topic-comment',
-	require: [
+	requires: [
 		'NextThought.editor.Editor'
 	],
 

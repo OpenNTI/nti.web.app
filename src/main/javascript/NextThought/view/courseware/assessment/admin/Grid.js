@@ -1,7 +1,7 @@
 Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 	extend: 'Ext.grid.Panel',
 	alias: 'widget.course-admin-grid',
-	require: [
+	requires: [
 		'Ext.grid.plugin.BufferedRenderer'
 	],
 
@@ -44,9 +44,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 	selType: 'cellmodel',
 	plugins: [
 		{
-			ptype: 'bufferedrenderer'
-		},
-		{
+			//ptype: 'bufferedrenderer'
+		//},
+		//{
 			ptype: 'cellediting',
 			clicksToEdit: 1,
 			listeners: {

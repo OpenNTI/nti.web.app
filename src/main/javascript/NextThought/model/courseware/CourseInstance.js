@@ -118,61 +118,6 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 	},
 
 
-	getRoster: function() {
-		if (this.__roster) {
-			return this.__roster;
-		}
-
-		var p = PromiseFactory.make(),
-			r = this.getLink('CourseEnrollmentRoster');
-
-		if (!r) {
-			p.fulfill(null);
-		} else {
-			console.time('Getting Roster: ' + r);
-			Service.request(r)
-					.done(function(txt) {
-						console.time('Roster Recieved, Parsing: ' + r);
-						var j = Ext.decode(txt, true), map = {};
-						j = j && j.Items;
-						//filter the active user out of the roster since we are administering this thing.
-						j = j && j.filter(function(o) { return o && !isMe(o.Username); });
-
-						if (j) {
-							//used in the open/enrolled filters so the filter function doesn't
-							// have to search for the username in the roster, can simply get the hash.
-							j.forEach(function(i) {
-								var n = i.Username;
-								i.Status = i.LegacyEnrollmentStatus;
-
-								//remove excess properties (free up memory)
-								delete i.LegacyEnrollmentStatus;
-								delete i.Class;
-								delete i.CourseInstance;
-								delete i.MimeType;
-
-								if (map.hasOwnProperty(n)) {
-									console.warn('Replacing key? ' + n);
-								}
-								map[n] = i;
-							});
-							//don't modify the array while iterating.
-							j.map = map;
-						}
-						console.timeEnd('Roster Recieved, Parsing: ' + r);
-						console.timeEnd('Getting Roster: ' + r);
-						p.fulfill(j);
-					})
-					.fail(function(reason) {
-						p.reject(reason);
-					});
-		}
-
-		this.__roster = p;
-		return p;
-	},
-
-
 	getWrapper: function() {
 		var p, s = this.stores,
 			id = this.getId(), found = false;
@@ -250,44 +195,38 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 	getAssignments: function() {
 		if (this.getAssignmentsPromise) { return this.getAssignmentsPromise; }
 
-		var p = PromiseFactory.make(),
-			roster = this.getRoster();
+		var p = PromiseFactory.make(), me = this,
+			roster = me.getLink('CourseEnrollmentRoster');
 		Promise.pool(
-			Service.request(this.getLink('AssignmentsByOutlineNode')),
-			Service.request(this.getLink('NonAssignmentAssessmentItemsByOutlineNode'))
+			Service.request(me.getLink('AssignmentsByOutlineNode')),
+			Service.request(me.getLink('NonAssignmentAssessmentItemsByOutlineNode')),
+			me.getLink('GradeBook') ? me._getGradeBook() : Promise.fulfill()
 		)
 			.done(function(json) {
 				var assignments = Ext.decode(json[0], true),
-					nonAssignments = Ext.decode(json[1], true);
+					nonAssignments = Ext.decode(json[1], true),
+					gradeBook = json[2];
 				p.fulfill(NextThought.model.courseware.AssignmentCollection.fromJson(
-						assignments, nonAssignments, roster));
+						assignments, nonAssignments, roster, gradeBook, me.getLink('AssignmentHistory')));
 			})
 			.fail(function(reason) {
 				p.reject(reason);
 			});
 
-		this.getAssignmentsPromise = p;
+		me.getAssignmentsPromise = p;
 
-		return this.getAssignmentsPromise;
+		return me.getAssignmentsPromise;
 	},
 
 
-	getGradeBook: function() {
+	_getGradeBook: function() {
 		if (!this._gradebookPromise) {
 			var p = this._gradebookPromise = PromiseFactory.make(),
 				link = this.getLink('GradeBook');
 
 			if (link) {
-				Promise.pool(
-					this.getRoster(),
-					Service.request(link)
-				)
-						.done(function(rosterAndjson) {
-							var json = rosterAndjson[1];
-							json = ParseUtils.parseItems(json)[0];
-
-							p.fulfill(json);
-						})
+				Service.request(link)
+						.done(function(json) { p.fulfill(ParseUtils.parseItems(json)[0]); })
 						.fail(function(r) { p.reject(r); });
 			} else {
 				p.reject('Not present');

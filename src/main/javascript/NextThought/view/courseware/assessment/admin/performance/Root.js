@@ -2,8 +2,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-assessment-admin-performance-root',
 
-	require: [
-		'Ext.grid.plugin.BufferedRenderer'
+	requires: [
+		'Ext.grid.plugin.BufferedRenderer',
+		'NextThought.proxy.courseware.Roster'
 	],
 
 	ui: 'course-assessment',
@@ -130,7 +131,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 	//<editor-fold desc="Init">
 	constructor: function() {
-		this.backingStore = new Ext.data.Store({
+		this.store = new Ext.data.Store({
+			proxy: 'nti.roster',
+			pageSize: 50,
+			buffered: true,
 			fields: [
 				{name: 'id', type: 'string'},
 				{name: 'user', type: 'auto'},
@@ -143,14 +147,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				{name: 'comments', type: 'int', mapping: 'feedback', defaultValue: 0},
 				{name: 'ungraded', type: 'int', defaultValue: 0},
 				{name: 'overdue', type: 'int', defaultValue: 0}
-			],
-			sorters: [
-			],
-			getById: function(id) {
-				return (this.snapshot || this.data).getByKey(id);
-			}
+			]
 		});
-		this.store = this.backingStore;
 		this.callParent(arguments);
 	},
 
@@ -202,50 +200,17 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		this.mon(this.grid, {
 			cellclick: 'onCellClick'
 		});
-		//this.mon(this.frameBodyEl, { keydown: 'manageFocus' });
 	},
 	//</editor-fold>
 
 
-	manageFocus: function(e, el) {
-		if (!e.getTarget('.dropdown')) { return; }
-
-		var me = this,
-			node = Ext.get(el).parent('.item'),
-			record = node && me.getRecord(node),
-			chr = e.getCharCode();
-
-		if (!record) {
-			console.error('No record for node', node);
-			return;
-		}
-
-		if (chr >= 65 && chr <= 70 && chr !== 69) {
-			me.changeGrade(record, record.get('grade'), String.fromCharCode(chr))
-				.done(function() {
-					var node = me.getNode(record);
-
-					if (!node) {
-						console.error('No node for record', record);
-					}
-
-					Ext.fly(node).down('.dropdown').focus(10);
-				});
-		}
-
-		if (chr === e.ENTER || chr === e.SPACE || chr === e.UP || chr === e.DOWN) {
-			me.onDropDown(node, record);
-		}
-	},
-
-
 	//<editor-fold desc="Header Managements">
 	createStudentMenu: function() {
-		var type = this.currentStudent || 'enrolled',
+		var type = this.currentStudent || 'ForCredit',
 			items = [
-				{ text: 'All Students', type: 'all', checked: type === 'all'},
-				{ text: 'Open Students', type: 'open', checked: type === 'open'},
-				{ text: 'Enrolled Students', type: 'enrolled', checked: type === 'enrolled'}
+				//{ text: 'All Students', type: 'all', checked: type === 'all'},
+				{ text: 'Open Students', type: 'Open', checked: type === 'Open'},
+				{ text: 'Enrolled Students', type: 'ForCredit', checked: type === 'ForCredit'}
 			];
 
 		this.studentMenu = Ext.widget('menu', {
@@ -276,7 +241,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		this.studentMenu.show().hide();
 
 		this.switchStudent(
-			this.studentMenu.down('[type=enrolled]'),
+			this.studentMenu.down('[type=ForCredit]'),
 			true);
 	},
 
@@ -301,50 +266,40 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		me.studentMenu.offset = [0, -x];
 		me.currentStudent = item.type;
 
-		me.backingStore.removeFilter('studentFilter');
 
 		this.updateExportEl(item.type);
 
-		if (item.type === 'all') { return; }
+		//if (item.type === 'all') { return; }
 
-		this.backingStore.filter([{
-			id: 'studentFilter',
-			filterFn: function(rec) {
-				var user = rec.getId(),
-					r = me.roster.map[user];
-
-				function passes(enroll) {
-					if (item.type === 'open') {
-						return enroll === 'Open';
-					}
-
-					return enroll !== 'Open';
-				}
-				return r && passes(r.Status);
-			}
+		//me.store.removeFilter('LegacyEnrollmentStatus');
+		this.store.filter([{
+			id: 'LegacyEnrollmentStatus',
+			property: 'LegacyEnrollmentStatus',
+			value: item.type
 		}], true);
 	},
 
 
 	updateExportEl: function(type) {
-		var base = this.gradeBook.getLink('ExportContents');
+		var base = this.gradeBook && this.gradeBook.getLink('ExportContents');
 
 		if (!base || !this.header.exportButton) {
 			console.error('No link or no el to update');
 			return;
 		}
 
-		if (type === 'all') {
+		/*if (type === 'all') {
 			this.header.exportButton.update('Export All Students');
 			this.header.exportButton.set({
 				href: base
 			});
-		} else if (type === 'enrolled') {
+		} else*/
+		if (type === 'ForCredit') {
 			this.header.exportButton.update('Export Enrolled Students');
 			this.header.exportButton.set({
 				href: base + '?LegacyEnrollmentStatus=ForCredit'
 			});
-		} else if (type === 'open') {
+		} else if (type === 'Open') {
 			this.header.exportButton.update('Export Open Students');
 			this.header.exportButton.set({
 				href: base + '?LegacyEnrollmentStatus=Open'
@@ -406,11 +361,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		this.itemMenu.offset = [0, -x];
 		this.currentItem = item.type;
 
-		this.backingStore.removeFilter('itemFilter');
+		this.store.removeFilter('itemFilter');
 
 		if (item.type === 'all') { return; }
 
-		this.backingStore.filter([{
+		this.store.filter([{
 			id: 'itemFilter',
 			filterFn: function(rec) {
 			var overdue = rec.get('overdue'),
@@ -440,12 +395,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	changeNameFilter: function() {
 		var val = this.searchKey = this.header.inputEl.getValue();
 
-		this.backingStore.removeFilter('searchFilter');
+		this.store.removeFilter('searchFilter');
 
 		if (this.searchKey) {
 			val = val.toLowerCase();
 
-			this.backingStore.filter([{
+			this.store.filter([{
 					id: 'searchFilter',
 					filterFn: function(rec) {
 						var name = rec.get('displayName');
@@ -462,17 +417,20 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	clearSearch: function() {
 		this.searchKey = '';
 		this.header.inputEl.dom.value = '';
-		this.backingStore.removeFilter('searchFilter');
+		this.store.removeFilter('searchFilter');
 	},
 	//</editor-fold>
 
 
 	//<editor-fold desc="Data Bindings">
-	setAssignmentsData: function(assignments, history, instance, gradeBook) {
+	setAssignmentsData: function(assignments) {
 		this.clearAssignmentsData();
 
-		this.gradeBook = gradeBook;
+		var s = this.store,
+			gradeBook = this.gradeBook = assignments.gradeBook;
 		this.gradeBookDefaultPart = gradeBook && gradeBook.getFieldItem('Items', 'default');
+
+		this.updateExportEl(this.currentStudent);
 
 		if (this.header.exportButton) {
 			this.header.exportButton.set({
@@ -481,26 +439,20 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		}
 
 		this.assignments = assignments;
-		this.mon(assignments, {
-			'Roster-changed': 'applyRoster'
-		});
-
-		this.applyRoster();
+		this.mon(s, {load: 'applyRoster', prefetch: 'applyRoster'});
+		s.getProxy().setURL(assignments.getRosterURL());
+		s.load();
 	},
 
 
 	applyRoster: function() {
 		var users = [],
-			store = this.backingStore, raw = [],
+			store = this.store, raw = [],
 			applyUsers = this.applyUserData.bind(this),
 			getCounts = this.getCountsFor.bind(this);
 
-		this.roster = this.assignments.getRoster() || [];
-		if (this.roster.length === 0) {
-			return;
-		}
 
-		this.roster.forEach(function(r) {
+		users.forEach(function(r) {
 			var u = r.Username;
 			users.push(u);
 			raw.push(Ext.apply({id: u, Status: r.Status}, getCounts(u)));
@@ -512,7 +464,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	clear: function() {
-		this.backingStore.removeAll();
+		//this.store.removeAll();
 	},
 
 
@@ -550,7 +502,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 	applyUserData: function(users) {
 		var me = this,
-			s = me.backingStore,
+			s = me.store,
 			gradebookentry = me.gradeBook.getItem('Final Grade', 'no_submit');
 
 		function getGrade(entry, user) {

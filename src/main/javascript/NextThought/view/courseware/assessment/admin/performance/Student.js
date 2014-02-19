@@ -88,8 +88,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 	},
 
 
-	setAssignmentsData: function(assignments, history, instance, gradeBook) {
-		var user = this.student.getId(), promise;
+	setAssignmentsData: function(assignments) {
+		var user = this.student.getId();
 
 		if (!assignments) {
 			console.error('No assignments??');
@@ -97,21 +97,15 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 		}
 
 		this.header.setRoster(assignments.get('Roster'));
-		this.header.setGradeBook(gradeBook);
+		this.header.setGradeBook(assignments.gradeBook);
 		this.store = assignments.getViewForStudent(user);
+		this.store.on({
+			beforeload: 'mask',
+			load: 'unmask'
+		});
 		this.down('grid').bindStore(this.store);
-
-		promise = this.store._building || Promise.fulfill();
-		promise
-				.done(this.unmask.bind(this))
-				.fail(this.onError.bind(this));
 	},
 
-
-	onError: function(reason) {
-		alert({title: 'Well, this is embarrassing!', msg: 'There was an unforeseen error loading this view. A report has been logged.'});
-		setTimeout(function() { throw reason; }, 1);
-	},
 
 	maybeGoToAssignment: function(view, record, node, index, e) {
 		var selModel = view.getSelectionModel(),

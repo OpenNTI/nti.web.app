@@ -114,14 +114,12 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 			Promise.pool(
 				!e.isAdministrative && instance.getAssignmentHistory(),
-				instance.getAssignments(),
-				e.isAdministrative && instance.getGradeBook()
+				instance.getAssignments()
 			)
 					.done(function(objs) {//responseTexts are in the order requested
 						if (!isSync()) { return; }
 						var history = objs[0],
-							assignments = objs[1],
-							gradeBook = objs[2];
+							assignments = objs[1];
 
 						me.assignmentsCollection = assignments;
 						me.hasAssignments = !assignments.isEmpty();
@@ -134,12 +132,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 						me.fireEvent('set-assignment-history', history);
 
-						if (e.isAdministrative) {
-							assignments.applyGradeBook(gradeBook);
-						}
-
-						me.forEachView(me.callFunction('setAssignmentsData',
-								[assignments, history, instance, gradeBook]));
+						me.forEachView(me.callFunction('setAssignmentsData', [assignments, history, instance]));
 
 						me.maybeUnmask();
 					})

@@ -2,7 +2,7 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 	extend: 'NextThought.model.Base',
 
 	statics: {
-		fromJson: function(assignments, notAssignments, rosterPromise) {
+		fromJson: function(assignments, notAssignments, rosterURL, gradeBook, historyBaseURL) {
 			if (!assignments) { return null; }
 			var ASSIGNMENT = 'application/vnd.nextthought.assessment.assignment',
 				href = assignments.href, collection, hitmap = {}, nodemap = {};
@@ -30,15 +30,17 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 			}
 
 			collection = this.create({
+				Roster: rosterURL,
+				BaseURL: historyBaseURL,
 				HitMap: hitmap,
 				NodeMap: nodemap,
 				Items: build(assignments),
 				NotItems: build(notAssignments),
 				href: href});
 
-			rosterPromise.done(function(r) {
-				collection.set('Roster', r);
-			});
+			if (gradeBook) {
+				collection.applyGradeBook(gradeBook);
+			}
 
 			return collection;
 		}
@@ -49,21 +51,9 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 		{name: 'NodeMap', type: 'auto'},
 		{name: 'Items', type: 'arrayItem'},
 		{name: 'NotItems', type: 'arrayItem'},//silly name, I know.
-		{name: 'Roster', type: 'auto'}
+		{name: 'Roster', type: 'string'},
+		{name: 'BaseURL', type: 'string'}
 	],
-
-
-	constructor: function() {
-		this.callParent(arguments);
-		this.on('Roster-changed', 'pushRoster');
-	},
-
-
-	pushRoster: function() {
-		//pass the roster down if we have it.
-		var r = this.get('Roster');
-		this.each(function(a) { a.setRoster(r); });
-	},
 
 
 	pageContainsAssignment: function(ntiid) {
@@ -120,26 +110,17 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 	 * history items load, we force the Grade instance to be the shared instance.
 	 *
 	 * @param {NextThought.model.courseware.GradeBook} gradeBook
+	 * @private
 	 */
 	applyGradeBook: function(gradeBook) {
-		this._gradeBook = gradeBook;
+		this.gradeBook = gradeBook;
 		this.each(function(a) {
 			a.setGradeBookEntryFrom(gradeBook);
 		});
 	},
 
 
-	getRoster: function() {
-		return this.get('Roster') || [];
-	},
-
-
-	/**
-	 * Get an aggrigate view of all students and assignments.
-	 */
-	getViewMaster: function() {
-		return Promise.pool(this.map(function(a) { return a.getSubmittedHistoryStore().promise; }));
-	},
+	getRosterURL: function() { return this.get('Roster'); },
 
 
 	/**
@@ -149,54 +130,15 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 	 * @return {Ext.data.Store}
 	 */
 	getViewForStudent: function(student) {
-		var v, mv;
+		var url, store;
 		this._studentViews = this._studentViews || {};
 
-		function findFn(o) {
-			var c = o.get('Creator'), i = o.get('item'),
-				show = !i || !i.doNotShow();
-			return show && (typeof c === 'string' ? c : c.getId()) === student;
-		}
-
 		if (!this._studentViews[student]) {
-			v = this._studentViews[student] = new NextThought.store.courseware.AssignmentView({proxy: 'memory'});
-			mv = this.getViewMaster();
-			v._building = new Promise(function(fulfill, reject) {
-				function build(assignmentStores) {
-					var recs = [];
-					function itr(s) {
-						if (!s) {
-							console.error('Missing STORE!!');
-							return;
-						}
-						var i = s.findBy(findFn);
-						if (i >= 0) {
-							recs.push(s.getAt(i));
-						}
-					}
-					assignmentStores.forEach(itr);
-
-					v.insert(0, recs);
-					v.sort();
-					fulfill(v);
-				}
-
-				mv.done(build).fail(reject);
-			});
+			url = [this.get('BaseURL'), student].join('/');
+			store = this._studentViews[student] = new NextThought.store.courseware.AssignmentView({ url: url });
+			store.load();
 		}
 
 		return this._studentViews[student];
-	},
-
-
-	/**
-	 * This will build or return the existing store of students accross an assignment.
-	 *
-	 * @param {String} assignmentId - assignment id to drill down on.
-	 * @return {Ext.data.Store}
-	 */
-	getViewForAssignment: function(assignmentId) {
-		var a = this.getItem(assignmentId);
-		return a && a.getSubmittedHistoryStore();
 	}
 });

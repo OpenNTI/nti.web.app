@@ -57,10 +57,10 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 					cls: 'filters',
 					cn: [
 						//{tag: 'span', cls: 'label', html: 'Show:'},
-						{tag: 'span', cls: 'nti-checkbox checked', html: 'Enrolled Students', 'data-qtip': 'Show Enrolled Students',
-							'data-filter-id': 'not:open-enrolled'},
-						{tag: 'span', cls: 'nti-checkbox checked', html: 'Open Students', 'data-qtip': 'Show Open Students',
-							'data-filter-id': 'open-enrolled'}
+						{tag: 'span', cls: 'nti-radiobutton checked', html: 'Enrolled Students', 'data-qtip': 'Show Enrolled Students',
+							'data-filter-id': 'ForCredit'},
+						{tag: 'span', cls: 'nti-radiobutton', html: 'Open Students', 'data-qtip': 'Show Open Students',
+							'data-filter-id': 'Open'}
 					]
 				}
 			]
@@ -75,7 +75,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		nextEl: '.toolbar .controls .down',
 		changeDateEl: '.header span.link',
 		filtersEl: '.header .filters',
-		openEnrolledCheckboxEl: '.header .filters .nti-checkbox[data-filter-id="open-enrolled"]'
+		openEnrolledCheckboxEl: '.header .filters .nti-radiobutton[data-filter-id="open-enrolled"]'
 	},
 
 
@@ -97,52 +97,35 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			columnOverrides: {
 				0: { text: 'Student', dataIndex: 'Creator', name: 'creator', flex: 1, padding: '0 0 0 30',
 					renderer: function(v) {
-						try {
-							var u = v && (typeof v === 'string' ? {displayName: 'Resolving...'} : v.getData());
-							return this.studentTpl.apply(u);
-						} catch (e) {
-							return '';
-						}
+					   var u = v && (typeof v === 'string' ? {displayName: 'Resolving...'} : v.getData());
+					   return this.studentTpl.apply(u);
+					},
+					doSort: function(state) {
+						this.up('grid').getStore().sort(new Ext.util.Sorter({
+							direction: state,
+							property: 'realname'
+						}));
 					} }
 			},
 			extraColumns: [
 				{ text: 'Username', dataIndex: 'Creator', name: 'username',
-					renderer: function(v) {
-						try {
-							var r = this.ownerCt.assignment.roster.map,
-								username = (v.get && v.get('Username')) || v;
+					renderer: function(v, g, record) {
+						var username = (v.get && v.get('Username')) || v,
+							f = record.store && record.store.filters;
 
-							if (r[username].Status === 'Open') {
-								return '';
-							}
+						f = f && f.getByKey('LegacyEnrollmentStatus');
 
-							return username;
-						} catch (e) {
+						if (!f || f.value === 'Open') {
 							return '';
 						}
+
+						return username;
 					},
 					doSort: function(state) {
-						try {
-						var r = this.up('[assignment]').assignment.roster.map,
-							store = this.up('grid').getStore(),
-							sorter = new Ext.util.Sorter({
-								direction: state,
-								property: 'Creator',
-								root: 'data',
-								transform: function(o) {
-									//JSG: Don't do as I do, this is saving several function calls per sort comparison,
-									// for a large dataset. (read: carefull optimization) The perfered and more
-									// traditional method of getting record fields is still required and you will
-									// get my rebuke if I find this copied.
-									var u = ((o && o.data && o.data.Username) || o) || '';
-									return (r[u] !== 'Open' && u) || '';
-								}
-							});
-
-						store.sort(sorter);
-						} catch (e) {
-							console.error(e.stack || e.message || e);
-						}
+						this.up('grid').getStore().sort(new Ext.util.Sorter({
+							direction: state,
+							property: 'username'
+						}));
 					}
 				}
 			],
@@ -157,25 +140,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 	initComponent: function() {
 		this._masked = 0;
-		this._filters = {
-			'open-enrolled': {
-				id: 'open-enrolled',
-				myView: this,
-			    filterFn: function(item) {
-					var r = (this._roster = this._roster || this.myView.assignment.roster.map),
-						c = item.get('Creator');
-					c = typeof c === 'string' ? c : c.getId();
-					r = r && c && r[c];
-					//if no roster, can't filter...
-					return !r || r.Status !== 'Open';
-			    }
-			}
-		};
 		this.callParent(arguments);
 		this.enableBubble(['show-assignment']);
 		this.filledStorePromise = PromiseFactory.make();
-		this.mon(this.assignment, { buffer: 1, 'roster-set': 'refilter' });
-		this.on('destroy', 'cleanupFilters');
 	},
 
 
@@ -184,7 +151,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		if (this._masked) {
 			this._showMask();
 		}
-		this.initFilters();
 		this.down('grid').bindStore(this.store);
 	},
 
@@ -217,19 +183,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 				this.el.unmask();
 			}
 		}
-	},
-
-
-	refilter: function() {
-		if (this.store) {
-			this.store.filter();
-		}
-	},
-
-
-	initFilters: function() {
-		var el = this.openEnrolledCheckboxEl;
-		this.onFiltersClicked({getTarget: function() {return el;}});
 	},
 
 
@@ -314,20 +267,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	},
 
 
-	cleanupFilters: function() {
-		var filters = Ext.Object.getKeys(this._filters),
-			store = this.store,
-			last = filters.length - 1;
-
-		filters.forEach(function(id, i) {
-			store.removeFilter(id, i === last);
-		});
-	},
-
-
 	onFiltersClicked: function(e) {
 		var checked, cls = 'checked',
-			el = e.getTarget('.nti-checkbox', null, true),
+			el = e.getTarget('.nti-radiobutton', null, true),
 			filter;
 		if (!el || el.hasCls('disabled')) {
 			return;
@@ -339,45 +281,24 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			return;
 		}
 
-		checked = el.toggleCls(cls).hasCls(cls);
+		checked = el.hasCls(cls);
 
-		this.mask();
-		Ext.defer(this.applyFilter, 1, this, [filter, !checked]);
+		if (!checked) {
+			el.parent().select('.nti-radiobutton').removeCls(cls);
+			el.addCls(cls);
+
+			this.mask();
+			Ext.defer(this.applyFilter, 1, this, [filter]);
+		}
 	},
 
 
-	applyFilter: function(filterName, state) {
+	applyFilter: function(filter) {
 		try {
-			var s = this.store;
-			if (!state) {
-				s.removeFilter(filterName);
-			} else {
-				s.addFilter(this.getFilter(filterName));
-			}
+			this.store.filter([{id: 'LegacyEnrollmentStatus', property: 'LegacyEnrollmentStatus', value: filter}]);
 		} finally {
 			this.unmask();
 		}
-	},
-
-
-	getFilter: function(name) {
-		var not = name && name.substr(0, 4) === 'not:' && name.substr(4);
-		if (!this._filters[name]) {
-			if (not) {
-				not = this.getFilter(not);
-				this._filters[name] = {
-					id: name,
-					filterFn: function(item) {
-						return !not.filterFn.call(not.scope || not, item);
-					}
-				};
-			} else {
-				//maybe later we can build it... :P
-				Ext.Error.raise('No filter by the name ' + name + 'Found');
-			}
-		}
-
-		return this._filters[name];
 	},
 
 

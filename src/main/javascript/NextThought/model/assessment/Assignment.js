@@ -75,38 +75,22 @@ Ext.define('NextThought.model.assessment.Assignment', {
 	getSubmittedHistoryStore: function() {
 		if (!this._submittedHistoryStore) {
 			var url = this.getLink('GradeSubmittedAssignmentHistorySummaries'),
-				s = this._submittedHistoryStore = new NextThought.store.courseware.AssignmentView({ url: url });
-
-			s.promise = PromiseFactory.make();
+				s = this._submittedHistoryStore = new NextThought.store.courseware.AssignmentView({
+					url: url,
+					remoteFilter: true,
+					remoteSort: true
+				});
 
 			s.on({
-				single: true,
-				load: function(me, records, successful) {
-					if (!successful) {
-						console.error('Failed to load: ' + url);
-						s.promise.reject();
-						return;
-					}
-					s.promise.fulfill(s);
-				}
+				scope: this,
+				load: '_resolveParts',
+				prefetch: '_resolveParts'
 			});
-
-			s.on('load', '_resolveParts', this);
 
 			s.load();
 		}
 
 		return this._submittedHistoryStore;
-	},
-
-
-	setRoster: function(roster) {
-		this.roster = roster;
-		var s = this._submittedHistoryStore;//optimization, everyone else should get it from the getter.
-		if (s && !s.isLoading() && s.getCount() > 0) {
-			this._resolveParts(s, s.getRange());
-		}
-		this.fireEvent('roster-set');
 	},
 
 
@@ -135,9 +119,6 @@ Ext.define('NextThought.model.assessment.Assignment', {
 					console.error('No user');
 				}
 			}
-			//The natural sorts are a hotspot 2.5 seconds for 5,000 records on my very fast machine. -cutz,
-			//if we don't have to use the natural sorter that will probably speed things up.
-			store.sort();
 
 			store.resumeEvents();
 		}
@@ -145,44 +126,17 @@ Ext.define('NextThought.model.assessment.Assignment', {
 		var me = this,
 			pluck = Ext.Array.pluck,
 			userSet = {},
-			users = [],
-			phantoms = [];
+			users;
 
 		users = pluck(pluck(records, 'data'), 'Creator');
-		users.forEach(function(creator) {
+		users = users.map(function(creator) {
 			if (typeof creator !== 'string' && creator.get) {
 				creator = creator.get('Username');
 			}
 			userSet[creator] = true;
+			return creator;
 		});
 
-		//Note: We conditionally push onto users here, but then concat all of phantom below, so if
-		//We have multiple records in records with the same user here we end up in an inconsistent state.
-		//It is expected that there should only be 1 record per creator which is a contract with the view,
-		//not necessarily the data
-		(this.roster || []).forEach(function(o) {
-			var u = o.Username;
-			if (!userSet[u]) {
-				phantoms.push(NextThought.model.courseware.UsersCourseAssignmentHistoryItem.create({
-					Creator: u
-				}));
-				users.push(u);
-			}
-		});
-
-		if (phantoms.length) {
-			records = records.concat(phantoms);
-			//This triggers a sort so the same thing applies as above, 2.5 seconds on my machine.  This this sort is pointless
-			//we resort after resolving and filling in, it would be nice to find a way to not sort on the add.
-			//So, to prevent the sort and just append, set remoteSort true for the duration of the add, then turn it off.
-			store.remoteSort = true;
-			store.add(phantoms);
-			//Apparently Add ignores the filter :{
-			if (store.isFiltered()) {
-				store.filter();
-			}
-			store.remoteSort = false;
-		}
 
 		//fill in the assignment into the history item so the synthetic fields can derive values from it.
 		store.suspendEvents(true);

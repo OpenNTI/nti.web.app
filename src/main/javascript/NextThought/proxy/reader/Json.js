@@ -8,6 +8,8 @@ Ext.define('NextThought.proxy.reader.Json', {
 		'application/vnd.nextthought.searchresults': 1
 	},
 
+	onItemRead: Ext.identityFn,
+
 	readRecords: function(data) {
 		var records = [], key,
 			items = data.Items, item,
@@ -26,7 +28,7 @@ Ext.define('NextThought.proxy.reader.Json', {
 		if (this.collectionTypes[mimeType] || (mimeType === undefined && items)) {
 			for (key in items) {
 				if (items.hasOwnProperty(key)) {
-					item = items[key];
+					item = this.onItemRead(items[key]);
 
 					if (typeof item === 'string') {
 						console.warn('IGNORING: Received string item at key:', key, item);
@@ -38,7 +40,7 @@ Ext.define('NextThought.proxy.reader.Json', {
 						continue;
 					}
 
-					records.push(items[key]);
+					records.push(item);
 				}
 			}
 

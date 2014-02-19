@@ -1,7 +1,7 @@
 Ext.define('NextThought.controller.Navigation', {
 	extend: 'Ext.app.Controller',
 
-	require: [
+	requires: [
 		'NextThought.util.UserDataThreader',
 		'NextThought.ux.WelcomeGuide'
 	],
