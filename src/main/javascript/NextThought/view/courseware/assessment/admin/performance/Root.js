@@ -73,26 +73,44 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 								]}
 							]}
 						]}
-					]), listeners: {
-							headerclick: function() {
-								var store = this.up('grid').getStore(),
-									sorter = {
-										direction: this.sortState,
-										sorterFn: Globals.getNaturalSorter('displayName')
-									};
-								store.sorters.clear();
-								store.sorters.add('displayName', sorter);
-								store.sort();
-							}
-					}},
-					{ text: 'Username', dataIndex: 'Username'},
+					]),
+						doSort: function(state) {
+							this.up('grid').getStore().sort({
+								direction: state,
+								property: 'realname'
+							});
+						}
+					},
+
+
+
+					{ text: 'Username', dataIndex: 'Username',
+						doSort: function(state) {
+							this.up('grid').getStore().sort({
+								direction: state,
+								property: 'username'
+							});
+						}
+					},
+
+
+
 					{ text: 'Grade', dataIndex: 'grade', width: 160, xtype: 'templatecolumn', tpl: Ext.DomHelper.markup([
 						{ cls: 'gradebox', cn: [
 							{ tag: 'input', size: 3, tabindex: '1', type: 'text', value: '{grade}'},
 							{ cls: 'dropdown letter grade', tabindex: '1', html: '{letter}'}
 						]}
-					])}
-				].map(function(o) {
+					]),
+						doSort: function(state) {
+							this.up('grid').getStore().sort({
+								direction: state,
+								property: 'FinalGradeValue'
+							});
+						}
+					}
+
+
+			    ].map(function(o) {
 					return Ext.applyIf(o, {
 						ui: 'course-assessment',
 						border: false,
@@ -135,18 +153,28 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			proxy: 'nti.roster',
 			pageSize: 50,
 			buffered: true,
+			remoteFilter: true,
+			remoteSort: true,
+
 			fields: [
-				{name: 'id', type: 'string'},
+				{name: 'id', type: 'string', mapping: 'Username'},
 				{name: 'user', type: 'auto'},
-				{name: 'Status', type: 'string', defaultValue: 'Open'},
 				{name: 'avatar', type: 'string', defaultValue: 'resources/images/icons/unresolved-user.png'},
 				{name: 'displayName', type: 'string', defaultValue: 'Resolving...'},
 				{name: 'Username', type: 'string', defaultValue: ''},
 				{name: 'grade', type: 'int'},
 				{name: 'letter', type: 'string', defaultValue: '-'},
-				{name: 'comments', type: 'int', mapping: 'feedback', defaultValue: 0},
 				{name: 'ungraded', type: 'int', defaultValue: 0},
-				{name: 'overdue', type: 'int', defaultValue: 0}
+				{name: 'overdue', type: 'int', defaultValue: 0},
+				{name: 'Status', type: 'string', mapping: 'LegacyEnrollmentStatus'}
+			],
+
+			filters: [
+				{id: 'LegacyEnrollmentStatus', property: 'LegacyEnrollmentStatus', value: 'ForCredit'}
+			],
+
+			sorters: [
+				{property: 'realname', direction: 'ascending'}
 			]
 		});
 		this.callParent(arguments);
@@ -269,10 +297,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		this.updateExportEl(item.type);
 
-		//if (item.type === 'all') { return; }
+		me.store.removeFilter('LegacyEnrollmentStatus');
 
-		//me.store.removeFilter('LegacyEnrollmentStatus');
-		this.store.filter([{
+		if (item.type === 'all') { return; }
+
+		me.store.filter([{
 			id: 'LegacyEnrollmentStatus',
 			property: 'LegacyEnrollmentStatus',
 			value: item.type
@@ -369,8 +398,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			id: 'itemFilter',
 			filterFn: function(rec) {
 			var overdue = rec.get('overdue'),
-				ungraded = rec.get('ungraded'),
-				comments = rec.get('comments');
+				ungraded = rec.get('ungraded');
 
 				if (item.type === 'action') {
 					return overdue || ungraded || comments;
@@ -382,10 +410,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 				if (item.type === 'ungraded') {
 					return ungraded;
-				}
-
-				if (item.type === 'comment') {
-					return comments;
 				}
 		   }
 	   }], true);
@@ -402,13 +426,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 			this.store.filter([{
 					id: 'searchFilter',
-					filterFn: function(rec) {
-						var name = rec.get('displayName');
-
-						name = name.toLowerCase();
-
-						return name.indexOf(val) >= 0;
-					}
+					property: 'search',
+					value: val
 			}]);
 		}
 	},
@@ -441,24 +460,27 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		this.assignments = assignments;
 		this.mon(s, {load: 'applyRoster', prefetch: 'applyRoster'});
 		s.getProxy().setURL(assignments.getRosterURL());
-		s.load();
+		//s.load();
 	},
 
 
-	applyRoster: function() {
+	applyRoster: function(s, rec) {
 		var users = [],
-			store = this.store, raw = [],
-			applyUsers = this.applyUserData.bind(this),
+			recsMap = {},
+			applyUsers = this.applyUserData.bind(this, recsMap),
 			getCounts = this.getCountsFor.bind(this);
 
+		s.suspendEvents(true);
 
-		users.forEach(function(r) {
-			var u = r.Username;
+		rec.forEach(function(r) {
+			var u = r.get('Username');
 			users.push(u);
-			raw.push(Ext.apply({id: u, Status: r.Status}, getCounts(u)));
+			recsMap[u] = r;
+			r.set(getCounts(u));
 		});
 
-		store.loadRawData(raw);
+		s.resumeEvents();
+
 		UserRepository.makeBulkRequest(users).done(applyUsers);
 	},
 
@@ -500,7 +522,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	applyUserData: function(users) {
+	applyUserData: function(recsMap, users) {
 		var me = this,
 			s = me.store,
 			gradebookentry = me.gradeBook.getItem('Final Grade', 'no_submit');
@@ -543,16 +565,16 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		s.suspendEvents(true);
 
-		users.forEach(function(u) {
+		users.forEach(function(u, i) {
 			var grade = getGrade(gradebookentry, u),
-				r = s.getById(u.getId()), monitor;
+				r = recsMap[u.getId()], monitor;
 
 			if (grade) {
 				updateGrade(r, grade);
 			} else if (gradebookentry) {
 				monitor = me.mon(gradebookentry, {
 					destroyable: true,
-					'Items-changed': function(key, value) {
+					'Items-changed': function() {
 						var grade = getGrade(gradebookentry, u);
 						if (grade) {
 							Ext.destroy(monitor);
@@ -573,8 +595,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				Username: r.get('Status') === 'Open' ? '' : u.get('Username')
 			});
 		});
-
-		s.sort();
 
 		s.resumeEvents();
 	},

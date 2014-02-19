@@ -13,7 +13,10 @@ Ext.define('NextThought.proxy.courseware.Roster', {
 	reader: {
 		type: 'json',
 		root: 'Items',
-		totalProperty: 'FilteredTotalItemCount'
+		totalProperty: 'FilteredTotalItemCount'//,
+		//readRecords: function() {
+			//return Ext.data.reader.Json.prototype.readRecords.apply(this, arguments);
+		//}
 	},
 
 	noCache: false,
