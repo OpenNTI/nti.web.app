@@ -47,6 +47,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.View', {
 		var view = this.add({
 			xtype: 'course-assessment-admin-performance-student',
 			student: rec.get('user'),
+			status: rec.get('Status'),
 			page: this.store.indexOf(rec) + 1,
 			total: this.store.getCount()
 		});

@@ -12,8 +12,8 @@ Ext.define('NextThought.proxy.courseware.Roster', {
 
 	reader: {
 		type: 'json',
-		root: 'Items',
-		totalProperty: 'FilteredTotalItemCount'
+		root: 'Items'//,
+		//totalProperty: 'FilteredTotalItemCount'
 	},
 
 	noCache: false,
@@ -23,36 +23,30 @@ Ext.define('NextThought.proxy.courseware.Roster', {
 	directionParam: undefined,
 	pageParam: undefined,
 
-	sortParam: 'sort',
-	filterParam: 'filter',
-	idParam: 'batchAround',
+	sortParam: undefined, //'sort',
+	filterParam: undefined, //'filter',
+	idParam: undefined, //'batchAround',
 
-	startParam: 'batchStart',
-	limitParam: 'batchSize',
+	startParam: undefined, //'batchStart',
+	limitParam: undefined, //'batchSize',
+
+
+	setSource: function(source) {
+		//ForCredit, or Open
+		this.source = source;
+	},
 
 
 	setURL: function(url) { this.url = url; },
 
 
-	buildUrl: function(op) {
-		var sort, dir,
-			p = op.params;
-
-		if (p.sort) {
-			dir = {
-				asc: 'ascending',
-				desc: 'descending'
-			};
-			sort = Ext.decode(p.sort)[0];
-			p.sortOn = sort.property;
-			p.sortOrder = dir[(sort.direction || 'asc').toLowerCase()] || sort.direction || dir.asc;
-			delete p.sort;
-		}
-
+	buildUrl: function() {
 		if (Ext.isEmpty(this.url)) {
 			Ext.Error.raise('URL required');
 		}
 
-		return this.url;
+		return Ext.String.urlAppend(this.url, Ext.Object.toQueryString({
+			filter: 'LegacyEnrollmentStatus' + (this.source || 'ForCredit')
+		}));
 	}
 });

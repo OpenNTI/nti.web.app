@@ -98,6 +98,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 		me.user = me.student;
 		me.enableProfileClicks(me.profileEl);
 
+
+		if (this.status !== 'Open') {
+			this.usernameEl.update('(' + me.user.getId() + ')');
+			this.usernameEl.show();
+		}
+
 		if (!me.user.get('email')) {
 			me.emailEl.hide();
 		}
@@ -114,19 +120,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 
 		if (!this.showingUsername) {
 			this.usernameEl.hide();
-		}
-	},
-
-
-	setRoster: function(roster) {
-		if (!this.student || !roster) { return; }
-
-		var username = this.student.get('Username'),
-			status = roster.map[username].Status;
-
-		if (status !== 'Open') {
-			this.usernameEl.update('(' + username + ')');
-			this.usernameEl.show();
 		}
 	},
 

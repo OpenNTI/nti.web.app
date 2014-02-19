@@ -35,6 +35,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 			xtype: 'course-assessment-admin-performance-header',
 			path: [this.pathRoot, this.pathBranch],
 			student: this.student,
+			status: this.status,
 			page: this.page,
 			total: this.total
 		});
@@ -96,10 +97,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 			return;
 		}
 
-		this.header.setRoster(assignments.get('Roster'));
 		this.header.setGradeBook(assignments.gradeBook);
 		this.store = assignments.getViewForStudent(user);
 		this.store.on({
+			scope: this,
 			beforeload: 'mask',
 			load: 'unmask'
 		});

@@ -73,25 +73,18 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 								]}
 							]}
 						]}
-					]),
-						doSort: function(state) {
-							this.up('grid').getStore().sort({
-								direction: state,
-								property: 'realname'
-							});
+					])},
+
+
+
+					{ text: 'Username', dataIndex: 'Username', renderer: function(v, cellStuff, r) {
+						try {
+							return r.get('Status') === 'ForCredit' ? v : '';
+						} catch (e) {
+							console.error(e.stack || e.message || e);
+							return '';
 						}
-					},
-
-
-
-					{ text: 'Username', dataIndex: 'Username',
-						doSort: function(state) {
-							this.up('grid').getStore().sort({
-								direction: state,
-								property: 'username'
-							});
-						}
-					},
+					} },
 
 
 
@@ -100,14 +93,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 							{ tag: 'input', size: 3, tabindex: '1', type: 'text', value: '{grade}'},
 							{ cls: 'dropdown letter grade', tabindex: '1', html: '{letter}'}
 						]}
-					]),
-						doSort: function(state) {
-							this.up('grid').getStore().sort({
-								direction: state,
-								property: 'FinalGradeValue'
-							});
-						}
-					}
+					])}
 
 
 			    ].map(function(o) {
@@ -151,10 +137,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	constructor: function() {
 		this.store = new Ext.data.Store({
 			proxy: 'nti.roster',
-			pageSize: 50,
-			buffered: true,
-			remoteFilter: true,
-			remoteSort: true,
 
 			fields: [
 				{name: 'id', type: 'string', mapping: 'Username'},
@@ -170,12 +152,18 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			],
 
 			filters: [
-				{id: 'LegacyEnrollmentStatus', property: 'LegacyEnrollmentStatus', value: 'ForCredit'}
+				{property: 'LegacyEnrollmentStatus', value: 'ForCredit'}
 			],
 
 			sorters: [
-				{property: 'realname', direction: 'ascending'}
-			]
+				{property: 'displayName', direction: 'ascending'}
+			],
+
+
+			setSource: function(source) {
+				this.getProxy().setSource(source);
+				this.reload();
+			}
 		});
 		this.callParent(arguments);
 	},
@@ -294,9 +282,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		me.studentMenu.offset = [0, -x];
 		me.currentStudent = item.type;
 
+		x = me.down('[dataIndex="Username"]');
+		x[item.type === 'ForCredit' ? 'show' : 'hide']();
 
 		this.updateExportEl(item.type);
 
+		this.store.setSource(item.type);
 		this.updateFilter();
 	},
 
@@ -404,12 +395,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	updateFilter: function() {
 		var filters = [];
 
-		if (this.currentStudent && !/all/i.test(this.currentStudent)) {
-			filters.push({property: 'LegacyEnrollmentStatus', value: this.currentStudent});
-		}
-
 		if (this.currentItem && !/all/i.test(this.currentItem)) {
-			filters.push({property: 'notices', value: this.currentItem});
+			filters.push({property: this.currentItem});
 		}
 
 		if (!Ext.isEmpty(this.searchKey)) {
@@ -441,7 +428,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		this.assignments = assignments;
 		this.mon(s, {load: 'applyRoster', prefetch: 'applyRoster'});
 		s.getProxy().setURL(assignments.getRosterURL());
-		//s.load();
 	},
 
 
