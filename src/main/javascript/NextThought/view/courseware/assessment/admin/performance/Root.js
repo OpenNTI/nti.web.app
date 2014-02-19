@@ -166,6 +166,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				this.reload();
 			}
 		});
+		this.onUpdate = Ext.Function.createBuffered(this.onUpdate, 200, null, null);
 		this.callParent(arguments);
 	},
 
@@ -424,6 +425,13 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	//<editor-fold desc="Data Bindings">
+	onUpdate: function() {
+		var s = this.store;
+		if (s.isFiltered()) {s.filter();}//refilter
+		s.sort();
+	},
+
+
 	setAssignmentsData: function(assignments) {
 		this.clearAssignmentsData();
 
@@ -463,6 +471,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		});
 
 		s.resumeEvents();
+		this.onUpdate();
 
 		UserRepository.makeBulkRequest(users).done(applyUsers);
 	},
@@ -502,6 +511,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 	updateActionables: function(rec, username) {
 		rec.set(this.getCountsFor(username));
+		this.onUpdate();
 	},
 
 
@@ -580,6 +590,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		});
 
 		s.resumeEvents();
+		this.onUpdate();
 	},
 
 
