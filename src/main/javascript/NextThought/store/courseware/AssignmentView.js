@@ -52,17 +52,19 @@ Ext.define('NextThought.store.courseware.AssignmentView', {
 				};
 				sort = Ext.decode(p.sort)[0];
 				p.sortOn = sort.property;
-				p.sortOrder = dir[(sort.direction || 'asc').toLowerCase()];
+				p.sortOrder = dir[(sort.direction || 'asc').toLowerCase()] || sort.direction;
 				delete p.sort;
 			}
 
-
+			return this.url;
+			/*
 			return Ext.urlAppend(this.url, Ext.Object.toQueryString(
 					Ext.applyIf(p, {
 						filter: 'LegacyEnrollmentStatusForCredit',
 						sortOn: 'realname'
 					})
 			));
+			*/
 		}
 	},
 
