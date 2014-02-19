@@ -348,27 +348,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 				total: o.tallyParts(),
 				submittedCount: o.get('SubmittedCount') || 0,
-				enrolledCount: assignments.getRoster().length || 0
+				enrolledCount: d.instance.get('TotalEnrolledCount')
 			});
 		}
 
 		assignments.each(collect);
 		this.store.loadRawData(raw);
 		this.refresh();
-
-		this.mon(assignments, 'Roster-changed', 'updateEnrolledCount');
-	},
-
-
-	updateEnrolledCount: function(f, v) {
-		var c = (v && v.length) || 0;
-		this.store.each(function(r) {
-			try {
-				r.set('enrolledCount', c);
-			} catch (e) {
-				console.warn(e.stack || e.message || e);
-			}
-		});
 	},
 
 
