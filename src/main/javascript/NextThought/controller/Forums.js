@@ -621,7 +621,14 @@ Ext.define('NextThought.controller.Forums', {
 		}
 
 		this.popToLastViewMatchingPredicate(predicate);
-		this.pushNecessaryViews(toShowHref, cid ? 'comment' : 'topic', cb, scope);
+
+		//FIXME: Do this better.  Type property on the models, make sure we are in the right course, etc...
+		var type = cid ? 'comment' : 'topic';
+		if(record && record instanceof NextThought.model.forums.Forum){
+			type = 'forum';
+		}
+
+		this.pushNecessaryViews(toShowHref, type, cb, scope);
 	},
 
 
