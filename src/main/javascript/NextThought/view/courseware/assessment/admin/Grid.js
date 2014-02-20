@@ -105,35 +105,46 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 				   { text: 'Assignment', dataIndex: 'name', name: 'name', tdCls: 'padded-cell', padding: '0 0 0 30', flex: 1 },
 
 
-				   { text: 'Completed', dataIndex: 'completed', name: 'completed',/*submission?*/ width: 150, renderer: function(v, col, rec) {
-						var d = this.dueDate || rec.get('due'),
-							s = (v && v.get && v.get('Last Modified')) || v,
-							item = rec.get('item'),
-							parts = item && item.get('parts');
+				   { text: 'Completed', dataIndex: 'completed', name: 'completed',/*submission?*/ width: 150,
+					   renderer: function(v, col, rec) {
+						   var d = this.dueDate || rec.get('due'),
+								   s = (v && v.get && v.get('Last Modified')) || v,
+								   item = rec.get('item'),
+								   parts = item && item.get('parts');
 
 
-						if (!parts || !parts.length) {
-							return '';
-						}
+						   if (!parts || !parts.length) {
+							   return '';
+						   }
 
-						if (!s) {
-							return Ext.DomHelper.markup({cls: 'incomplete', html: 'Due ' + Ext.Date.format(d, 'm/d')});
-						}
+						   if (!s) {
+							   return Ext.DomHelper.markup({cls: 'incomplete', html: 'Due ' + Ext.Date.format(d, 'm/d')});
+						   }
 
-						if (d > s) {
-							return Ext.DomHelper.markup({cls: 'ontime', html: 'On Time'});
-						}
+						   if (d > s) {
+							   return Ext.DomHelper.markup({cls: 'ontime', html: 'On Time'});
+						   }
 
-						if (!d) {
-							return Ext.DomHelper.markup({cls: 'ontime', html: 'Submitted ' + Ext.Date.format(s, 'm/d')});
-						}
+						   if (!d) {
+							   return Ext.DomHelper.markup({cls: 'ontime', html: 'Submitted ' + Ext.Date.format(s, 'm/d')});
+						   }
 
 
-						d = new Duration(Math.abs(s - d) / 1000);
-						return Ext.DomHelper.createTemplate({cls: 'late', html: '{late} Late'}).apply({
-							late: d.ago().replace('ago', '').trim()
-						});
-				   } },
+						   d = new Duration(Math.abs(s - d) / 1000);
+						   return Ext.DomHelper.createTemplate({cls: 'late', html: '{late} Late'}).apply({
+							   late: d.ago().replace('ago', '').trim()
+						   });
+					   },
+					   doSort: function(state) {
+						   var store = this.up('grid').getStore(),
+								   sorter = new Ext.util.Sorter({
+									   direction: state,
+									   property: store.remoteSort ? 'SubmissionCreatedTime' : 'completed'
+								   });
+
+						   store.sort(sorter);
+					   }
+				   },
 
 
 
@@ -147,7 +158,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 						   var store = this.up('grid').getStore(),
 							   sorter = new Ext.util.Sorter({
 								   direction: state,
-								   property: 'Grade',
+								   property: store.remoteSort ? 'GradeValue' : 'Grade',
+								   //the transform and root are ignored on remote sort
 								   root: 'data',
 								   transform: function(o) {
 									   o = o && o.get('value');
@@ -160,9 +172,20 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 				   },
 
 
-				   { text: 'Feedback', dataIndex: 'feedback', name: 'feedback', width: 140, renderer: function(value) {
-					   return value ? Ext.util.Format.plural(value, 'Comment') : '';
-				   } },
+				   { text: 'Feedback', dataIndex: 'feedback', name: 'feedback', width: 140,
+					   renderer: function(value) {
+						   return value ? Ext.util.Format.plural(value, 'Comment') : '';
+					   },
+					   doSort: function(state) {
+						   var store = this.up('grid').getStore(),
+							   sorter = new Ext.util.Sorter({
+								   direction: state,
+								   property: store.remoteSort ? 'FeedbackCount' : 'feedback'
+							   });
+
+						   store.sort(sorter);
+					   }
+				   },
 
 
 				   { text: '', dataIndex: 'submission', name: 'submission', sortable: false, width: 40, renderer: function(v) {
