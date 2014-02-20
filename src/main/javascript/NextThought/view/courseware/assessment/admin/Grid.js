@@ -105,7 +105,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 				   { text: 'Assignment', dataIndex: 'name', name: 'name', tdCls: 'padded-cell', padding: '0 0 0 30', flex: 1 },
 
 
-				   { text: 'Completed', dataIndex: 'completed', name: 'completed',/*submission?*/ width: 150,
+				   { text: 'Completed', dataIndex: 'completed', name: 'completed', width: 150,
 					   renderer: function(v, col, rec) {
 						   var d = this.dueDate || rec.get('due'),
 								   s = (v && v.get && v.get('Last Modified')) || v,
@@ -136,11 +136,17 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 						   });
 					   },
 					   doSort: function(state) {
+						   function get(o) { o = o.data; return o.completed || o.due; }
 						   var store = this.up('grid').getStore(),
-								   sorter = new Ext.util.Sorter({
-									   direction: state,
-									   property: store.remoteSort ? 'dateSubmitted' : 'completed'
-								   });
+							   sorter = new Ext.util.Sorter({
+								   direction: state,
+								   property: 'dateSubmitted',
+								   //not invoked if remote sort.
+								   sorterFn: function(a, b) {
+									   var v1 = get(a), v2 = get(b);
+									   return v1 > v2 ? 1 : (v1 < v2 ? -1 : 0);
+								   }
+							   });
 
 						   store.sort(sorter);
 					   }
@@ -180,7 +186,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 						   var store = this.up('grid').getStore(),
 							   sorter = new Ext.util.Sorter({
 								   direction: state,
-								   property: store.remoteSort ? 'feedbackCount' : 'feedback'
+								   property: store.remoteSort ? 'feedbackCount' : 'feedback',
+
+								   root: 'data',
+								   transform: function(o) {
+									   return o || 0;
+								   }
 							   });
 
 						   store.sort(sorter);
