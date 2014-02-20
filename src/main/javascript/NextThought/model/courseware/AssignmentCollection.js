@@ -140,6 +140,8 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 				get = me.getItem.bind(me),
 				r = recs.length - 1;
 
+			s.suspendEvents(true);
+
 			for (r; r >= 0; r--) {
 				rec = recs[r];
 				try {
@@ -172,11 +174,14 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 				}
 			});
 
-			if (toAdd.length) {
-				s.add(toAdd);
-			}
-
 			s.remove(toRemove, true);
+			if (toAdd.length) { s.add(toAdd); }
+
+			s.sort();
+
+			s.resumeEvents();
+
+			//s.fireEvent();
 		}
 
 		if (!me._studentViews[student]) {
