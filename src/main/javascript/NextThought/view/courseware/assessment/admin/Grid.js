@@ -180,7 +180,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 		if (el) {
 			el.select('.' + cls).removeCls(cls);
 			if (c) {
-				c.tdCls = 'sortedOn';
+				c.tdCls = ('sortedOn ' + (c.tdCls || '')).trim();
 				Ext.select(c.getCellSelector()).addCls(cls);
 			}
 		}
@@ -232,7 +232,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 		me.callParent(arguments);
 		me.on({
 			sortchange: function(ct, column) {
-				ct.items.each(function(c) { c.tdCls = ''; }, ct);
+				ct.items.each(function(c) { c.tdCls = c.tdCls.replace(/sortedOn/g, '').trim(); }, ct);
 				me.markColumn(column);
 			},
 			selectionchange: function(sm, selected) { sm.deselect(selected); },
