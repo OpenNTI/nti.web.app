@@ -203,6 +203,11 @@ Ext.define('NextThought.controller.Reader', {
 			v = me.getContentView(),
 			id = !Ext.isString(ntiid) ? ntiid.getId() : ntiid;
 
+		if (!r) {
+			console.error('No reader, not setting location');
+			return;
+		}
+
 		//this will be rewritten for setLocationRooted(), this is just the default. If you go to a "book" by way of library root gets blanked.
 		r.currentRoot = me.getRootForLocation(id);
 
