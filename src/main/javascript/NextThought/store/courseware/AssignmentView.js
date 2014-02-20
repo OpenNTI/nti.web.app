@@ -18,6 +18,9 @@ Ext.define('NextThought.store.courseware.AssignmentView', {
 			},
 			onItemRead: function(item) {
 				if (Ext.isArray(item)) {
+					if (item[1] !== null) {
+						return item[1];
+					}
 					item = {Creator: item[0], Class: 'UsersCourseAssignmentHistoryItem'};
 				}
 				return item;
