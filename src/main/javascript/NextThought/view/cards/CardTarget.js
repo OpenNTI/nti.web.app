@@ -77,6 +77,20 @@ Ext.define('NextThought.view.cards.CardTarget', {
 			});
 			return;
 		}
+
+		//Not supported in mobile. Telling them to update to latest version would be confusing.
+		if (Ext.is.iOS) {
+			this.add({
+				xtype: 'box',
+				renderTpl: Ext.DomHelper.markup({
+					cls: 'no-support', 'data-link': data.href, cn: [
+						{ cls: 'message', html: 'Your mobile device does not support viewing this content with this application.'}
+					]
+				})
+			});
+			return;
+		}
+
 		//if we are in FF < v.19 or we don't detect a native support ask them to update
 		//after FF 19 there is a native viewer that is on by default
 		if ((version && version <= 18) || (!nativeSupport && !Ext.isGecko)) {
@@ -93,6 +107,7 @@ Ext.define('NextThought.view.cards.CardTarget', {
 			});
 			return;
 		}
+
 		//If we are FF 19+ or we detect a native viewer show it
 		this.add({
 			xtype: 'box',
@@ -109,7 +124,7 @@ Ext.define('NextThought.view.cards.CardTarget', {
 			}
 		});
 
-		this.mon(this.reader,'allow-custom-scrolling', function(){
+		this.mon(this.reader, 'allow-custom-scrolling', function() {
 			return false;
 		}, this);
 	},
