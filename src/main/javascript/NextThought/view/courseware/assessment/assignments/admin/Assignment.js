@@ -295,6 +295,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 	applyFilter: function(filter) {
 		try {
+			var c = this.down('gridcolumn[name="username"]');
+			c[filter === 'ForCredit' ? 'show' : 'hide']();
+
 			this.store.filter([{id: 'LegacyEnrollmentStatus', property: 'LegacyEnrollmentStatus', value: filter}]);
 		} finally {
 			this.unmask();
