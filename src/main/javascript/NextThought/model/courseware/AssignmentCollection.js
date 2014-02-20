@@ -189,7 +189,7 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 			store = me._studentViews[student] = new NextThought.store.courseware.AssignmentView({
 				url: url,
 				filters: [],
-				sorters: [],
+				sorters: ['due'],
 				buffered: false,
 				disablePaging: true
 			});
