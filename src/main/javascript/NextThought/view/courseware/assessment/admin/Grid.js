@@ -232,7 +232,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 		me.callParent(arguments);
 		me.on({
 			sortchange: function(ct, column) {
-				ct.items.each(function(c) { c.tdCls = c.tdCls.replace(/sortedOn/g, '').trim(); }, ct);
+				ct.items.each(function(c) { c.tdCls = (c.tdCls || '').replace(/sortedOn/g, '').trim(); }, ct);
 				me.markColumn(column);
 			},
 			selectionchange: function(sm, selected) { sm.deselect(selected); },
