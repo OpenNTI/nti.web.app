@@ -200,7 +200,7 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 		Promise.pool(
 			Service.request(me.getLink('AssignmentsByOutlineNode')),
 			Service.request(me.getLink('NonAssignmentAssessmentItemsByOutlineNode')),
-			me.getLink('GradeBook') ? me._getGradeBook() : Promise.fulfill()
+			me.getLink('GradeBook') ? me._getGradeBook() : Promise.resolve()
 		)
 			.done(function(json) {
 				var assignments = Ext.decode(json[0], true),
