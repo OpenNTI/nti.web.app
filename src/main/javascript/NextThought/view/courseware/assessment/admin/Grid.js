@@ -139,7 +139,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 						   var store = this.up('grid').getStore(),
 								   sorter = new Ext.util.Sorter({
 									   direction: state,
-									   property: store.remoteSort ? 'SubmissionCreatedTime' : 'completed'
+									   property: store.remoteSort ? 'dateSubmitted' : 'completed'
 								   });
 
 						   store.sort(sorter);
@@ -158,7 +158,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 						   var store = this.up('grid').getStore(),
 							   sorter = new Ext.util.Sorter({
 								   direction: state,
-								   property: store.remoteSort ? 'GradeValue' : 'Grade',
+								   property: store.remoteSort ? 'gradeValue' : 'Grade',
 								   //the transform and root are ignored on remote sort
 								   root: 'data',
 								   transform: function(o) {
@@ -180,7 +180,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 						   var store = this.up('grid').getStore(),
 							   sorter = new Ext.util.Sorter({
 								   direction: state,
-								   property: store.remoteSort ? 'FeedbackCount' : 'feedback'
+								   property: store.remoteSort ? 'feedbackCount' : 'feedback'
 							   });
 
 						   store.sort(sorter);
