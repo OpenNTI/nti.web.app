@@ -413,7 +413,6 @@
 			position: relative;
 			border: 1px solid #eaeaea;
 			background: $panel-background;
-			position: relative;
 
 			.missing-context-info{
 				box-shadow: none;
@@ -568,7 +567,7 @@
 					position: absolute;
 					left: 0; right: 0;
 					bottom: 0; height: 10px;
-					@include background-image(linear-gradient(top,  rgba(251,251,251,0) 0%,rgba(251,251,251,1) 100%));
+					@include background-image(linear-gradient(top, rgba(251,251,251,0) 0%, rgba(251,251,251,1) 100%));
 				}
 			}
 		}
@@ -755,7 +754,6 @@
 				position: center;
 				repeat: no-repeat;
 				size: cover;
-				size: cover;
 			}
 		}
 
@@ -900,8 +898,11 @@
 
 		.header {
 			padding: 0 20px;
-			border: 1px solid #eaeaea;
-			border-width: 0 0 1px 0;
+			border: {
+				style: solid;
+				color: #eaeaea;
+				width: 0 0 1px 0;
+			}
 			font: normal 500 14px/38px $font;
 			color: $tertiary-grey;
 		}
@@ -980,10 +981,13 @@
 									right: -7px;
 									width: 0;
 									height: 0;
-									border: 1em solid transparent;
+									border: {
+										style: solid;
+										color: transparent;
+										width: 21px 7px 0 0;
+									}
 									border-top-color: #e1f4fe;
 									top: 0;
-									border-width: 21px 7px 0 0;
 								}
 							}
 						}
@@ -1099,7 +1103,6 @@
 			margin-top: 4px;
 			color: red;
 			font-style: italic;
-			margin-top: 4px;
 			font-weight: 300;
 			&::before{
 				content: '*'
@@ -1142,7 +1145,7 @@
 
 
 .profile-about {
-	backrgound: #fff;
+	background: #fff;
 
 	.label {
 		text-transform: uppercase;
