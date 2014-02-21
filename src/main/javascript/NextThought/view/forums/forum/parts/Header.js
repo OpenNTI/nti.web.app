@@ -56,8 +56,8 @@ Ext.define('NextThought.view.forums.forum.parts.Header', {
 		this.prevEl[(currentPage > 1) ? 'removeCls' : 'addCls']('disabled');
 		this.nextEl[(currentPage < total) ? 'removeCls' : 'addCls']('disabled');
 
-		this.currentEl.update(currentPage);
-		this.totalEl.update(total);
+		this.currentEl.update(currentPage || '0');
+		this.totalEl.update(total || '0');
 	},
 
 

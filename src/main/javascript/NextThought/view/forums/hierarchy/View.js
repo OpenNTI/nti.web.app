@@ -76,7 +76,9 @@ Ext.define('NextThought.view.forums.hierarchy.View', {
 		var cfg = {};
 
 		if (!record || !record.isModel) {
-			if (this.currentRecord.activeNTIID) {
+			if (this.currentRecord.activeRecord) {
+				record = this.currentRecord.activeRecord;
+			} else if (this.currentRecord.activeNTIID) {
 				record = this.store.getById(this.currentRecord.activeNTIID);
 			} else {
 				record = this.store.getAt(0);
