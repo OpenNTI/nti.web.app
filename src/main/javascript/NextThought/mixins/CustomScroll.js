@@ -123,40 +123,46 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 
 		el = Ext.get(el);
 		//if the element has a bottom set, use it to drive the height
-		if (el.getStyle('bottom') !== 'auto') {
-			updateSideBottom.call(this, el, heightAdjustOffset || 0);
-			return;
-		}
-    //		if(!cmp ) {
-    //			cmp = data.reverseMarginCmp = Ext.getCmp(el.id);
-    //			if( cmp ) {
-    //				f = Ext.bind(updateCaches,this);
-    //				this.mon(cmp,{
-    //					resize: f,
-    //					afterlayout: f
-    //				});
-    //			}
-    //		}
-
-		if (!Ext.isNumber(data.cachedTargetHeight)) {
-			data.cachedTargetHeight = el.getHeight() || 'not-set-yet';
-			if (data.cachedTargetHeight === +el.getAttribute(attr)) {
-				data.cachedTargetHeight += data.lastHeightAdjustOffset || (o || 0);
+		try {
+			if (el.getStyle('bottom') !== 'auto') {
+				updateSideBottom.call(this, el, heightAdjustOffset || 0);
+				return;
 			}
-			//console.debug('data',data.cachedTargetHeight, el.getAttribute(attr));
+	    //		if(!cmp ) {
+	    //			cmp = data.reverseMarginCmp = Ext.getCmp(el.id);
+	    //			if( cmp ) {
+	    //				f = Ext.bind(updateCaches,this);
+	    //				this.mon(cmp,{
+	    //					resize: f,
+	    //					afterlayout: f
+	    //				});
+	    //			}
+	    //		}
+
+			if (!Ext.isNumber(data.cachedTargetHeight)) {
+				data.cachedTargetHeight = el.getHeight() || 'not-set-yet';
+				if (data.cachedTargetHeight === +el.getAttribute(attr)) {
+					data.cachedTargetHeight += data.lastHeightAdjustOffset || (o || 0);
+				}
+				//console.debug('data',data.cachedTargetHeight, el.getAttribute(attr));
+			}
+
+			if (!Ext.isNumber(data.cachedTargetHeight)) {
+				//not set yet
+				return;
+			}
+
+			nH = (data.cachedTargetHeight - o);// - data.secondaryViewElInitialMargin;
+			el.setHeight(nH);
+
+			o = {};
+			o[attr] = nH;
+			el.set(o);
+		} finally {
+			if (this.realignSidebar) {
+				this.realignSidebar();
+			}
 		}
-
-		if (!Ext.isNumber(data.cachedTargetHeight)) {
-			//not set yet
-			return;
-		}
-
-		nH = (data.cachedTargetHeight - o);// - data.secondaryViewElInitialMargin;
-		el.setHeight(nH);
-
-		o = {};
-		o[attr] = nH;
-		el.set(o);
 	}
 
 	function updateSideBottom(el, bMargin) {
@@ -230,7 +236,7 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 			updateSideHeight.call(me, mb, true);
 			//setReverseMargin.call(this, mb);
 
-			if ($AppConfig.debugCustomScroll) {
+			if ($AppConfig.debugCustomScroll || true) {
 				console.debug([
 					'[CUSTOM SCROLL SETUP]',
 					'this: ' + me.id,
@@ -244,7 +250,8 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 					'secondaryViewEl: ' + (secondaryViewEl && secondaryViewEl.id),
 					'secondaryViewEl height: ' + (secondaryViewEl && secondaryViewEl.getHeight()),
 					'secondaryViewEl bottom: ' + (secondaryViewEl && secondaryViewEl.getStyle('bottom')),
-					'secondaryViewEl margins: ' + (secondaryViewEl && secondaryViewEl.getStyle('margin'))
+					'secondaryViewEl margins: ' + (secondaryViewEl && secondaryViewEl.getStyle('margin')),
+					'add scrollbuffer:' + !this.noScrollBuffer
 				].join('\n'));
 			}
 		}

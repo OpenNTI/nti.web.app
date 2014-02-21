@@ -11,7 +11,7 @@ Ext.define('NextThought.view.forums.topic.View', {
 		'NextThought.view.forums.topic.Navigation'
 	],
 
-	navigation: { xtype: 'forums-topic-nav' },
+	navigation: { xtype: 'forums-topic-nav', region: 'east', margin: 0},
 	body: { xtype: 'forums-topic-body' },
 
 	storeCfg: {
@@ -24,7 +24,7 @@ Ext.define('NextThought.view.forums.topic.View', {
 	setCurrentBody: function() {
 		this.callParent(arguments);
 
-		this.initCustomScrollOn('content', '.topic-container', {secondaryViewEl: '.nav-outline'});
+		this.initCustomScrollOn('content', '.topic-container', {secondaryViewEl: '.topic-nav'});
 	},
 
 
@@ -51,5 +51,13 @@ Ext.define('NextThought.view.forums.topic.View', {
 
 		this.store.load();
 		this.setCurrentBody(record);
+	},
+
+
+	realignSidebar: function() {
+		var viewportHeight = Ext.Element.getViewHeight(),
+			top = this.navigation.getY();
+
+		this.navigation.updateGridHeight(viewportHeight - top);
 	}
 });

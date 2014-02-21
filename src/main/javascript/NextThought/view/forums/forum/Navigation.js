@@ -57,7 +57,7 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 
 
 	setActiveRecord: function(record) {
-		this.select([record]);
+		this.select([record], false, true);
 	},
 
 
