@@ -233,6 +233,11 @@
 		position: relative;
 		overflow: hidden;
 		background: $panel-background;
+
+
+		.body {
+			padding-bottom: 1em;
+		}
 	}
 
 	.blogged-event,
