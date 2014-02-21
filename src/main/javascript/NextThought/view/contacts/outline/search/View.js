@@ -39,6 +39,10 @@ Ext.define('NextThought.view.contacts.outline.search.View', {
 	constructor: function(config) {
 		this.buildStore();
 		this.callParent(arguments);
+		this.mon(Ext.getStore('FriendsList'), {
+			scope: this,
+			'update': 'refresh'
+		});
 	},
 
 	rowClicked: function(view, record, item, index, e) {
