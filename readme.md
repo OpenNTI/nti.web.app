@@ -61,6 +61,25 @@ If you don't have Growl, I'd recommend removing the strings `&>/dev/null`
 See buildout docs.
 
 
+#### Git Pre-Commit Hook:
+
+	#!/bin/sh
+	set -e
+
+	FILES=`git diff --cached --name-only`
+
+	for f in $FILES
+	do
+		/opt/local/Library/Frameworks/Python.framework/Versions/2.7/bin/gjslint --strict --disable=0005,0220 --max_line_length=160 $f
+		LINT=`/opt/local/bin/jslint $f 2>&1`
+		if echo $LINT | grep 'No errors found' ; then
+			exit 0
+		else
+			echo "$LINT";
+			exit 1
+		fi
+	done
+
 ###### Notes
 * <a name="httpwebservernote"></a>You can run `python -m SimpleHTTPServer` from any directory to serve it over http on your local machine.
 
