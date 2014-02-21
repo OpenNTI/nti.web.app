@@ -323,23 +323,27 @@ Ext.define('NextThought.view.assessment.input.Ordering', {
 
 			onStartDrag: function() {
 				var el = this.getProxy().el.down('.draggable-area'),
-					w = this.dragData.sourceEl.getWidth() + 'px',
-					h = this.dragData.sourceEl.getHeight() + 'px',
-					m = this.dragData.sourceEl.up('.ordinal'),
-					leftMargin = m && m.down('.label').getWidth() + 6;
+					e = this.dragData.sourceEl,
+					w = e.getWidth() + 'px',
+					h = e.getHeight() + 'px',
+					m = e.up('.ordinal'),
+					leftMargin = e.getX() + 6;
+
+				this.initPageX = this.lastPageX = this.startPageX =
+				this.minX = this.maxX = leftMargin;
+
+				if (el) {
+					el.setStyle({
+						'width': w,
+						'height': h//, 'marginLeft': leftMargin + 'px'
+					});
+				}
 
 				//NOTE: We only want to drag vertically
 				this.setXConstraint(0, 0);
 				// Center drag and drop proxy on cursor pointer
 				this.setDelta(0, 40);
 
-				if (el) {
-					el.setStyle({
-						'width': w,
-						'height': h,
-						'marginLeft': leftMargin + 'px'
-					});
-				}
 				this.dragData.sourceEl.addCls('selected');
 			}
 		});
