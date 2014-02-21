@@ -335,7 +335,15 @@
 	&.has-alt-tabbar{
 
 		.toggle-opposite-tabs{
-			display: initial;
+			display: inline-block;
+
+			&::after{
+				display: initial;
+			}
+
+			&::before{
+				display: initial;
+			}
 		}
 
 		&:not(.reader-in-view){

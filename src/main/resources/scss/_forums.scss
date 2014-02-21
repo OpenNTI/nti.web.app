@@ -6,11 +6,40 @@
 	overflow: hidden;
 	height: 50px;
 
+	// .path {
+	// 	width: 630px;
+	// 	@inlude flexbox;
+
+	// 	.menu-dropdown{
+	// 		@include flex(1);
+	// 	}
+
+	// 	.crumb-container {
+	// 		@include flexbox;
+	// 		@include flex(1);
+
+	// 		.back-part {
+	// 			@include flex(1);
+	// 		}
+
+	// 		.title-part {
+	// 			@include flex(3);
+	// 		}
+	// 	}
+	// }
+
 	.path .part {
+		display: inline-block;
 		text-transform: uppercase;
 		font-weight: 600;
 		cursor: pointer;
 		color: $primary-blue;
+		max-width: 100px;
+		position: relative;
+		margin-right: 5px;
+		padding-right: 8px;
+		@include ellipse;
+		overflow: hidden;
 
 		&.current {
 			color: $primary-grey;
@@ -20,10 +49,12 @@
 			content: ' /  ';
 			color: $tertiary-grey;
 			font-weight: 400;
-			margin: 0.3em;
+			position: absolute;
+			right: 0;
 		}
 
 		&:last-of-type {
+			max-width: 200px;
 			cursor: default;
 
 			&::after {
@@ -177,11 +208,12 @@
 		border-bottom-width: 1px;
 		padding-top: 0 !important;
 		padding-bottom: 0 !important;
+		padding-left: 15px;
 	}
 
 	.topic-list-item {
-		padding: 10px 10px 0 10px;
-		height: 80px;
+		padding-top: 10px;
+		height: 81px;
 		cursor: pointer;
 		border: 0 solid #f1f1f1;
 		border-bottom-width: 1px;
@@ -208,10 +240,9 @@
 
 		.avatar {
 			position: absolute;
-			top: 10px;
-			left: 10px;
-			width: 60px;
-			height: 60px;
+			top: 0; left: 0;
+			width: 80px;
+			height: 80px;
 			background:{
 				color: transparent;
 				position: center;
@@ -221,25 +252,35 @@
 		}
 
 		.header {
-			margin-left: 70px;
+			margin-left: 90px;
 			
 			.author {
-				font: normal 500 0.8em/1 $font;
+				width: 600px;
+				font: normal 600 0.75em/1  $font;
 				color: $primary-blue;
+				@include ellipse;
+				overflow: hidden;
+				text-transform: uppercase;
 			}
 
 			.title {
 				color: $primary-grey;
-				font: normal 300 1.1em/35px $font;
+				font: normal 400 1.25em/1.5 $font;
+				width: 600px;
 				@include ellipse;
 				overflow: hidden;
+				margin-bottom: 5px;
 			}
 		}
 
 		.meta {
-			margin: 0 0 0 70px;
-			font: normal 400 0.7em/1 $font;
-			color: $secondary-grey-alt;
+			margin: 0 0 0 90px;
+			font: normal 600 0.625em/1 $font;
+			color: $tertiary-grey;
+
+			.matches {
+				color: #fa8700 ;
+			}
 
 			& > span {
 				display: inline-block;
@@ -1120,8 +1161,68 @@
 		width: 260px !important;
 
 		&.topic-nav{
+			.x-grid-header-ct{
+				display: none;
+			}
+
+			.topic-nav-header{
+				height: 50px;
+				background: white;
+				box-shadow: inset 0 -1px 0 0 #f1f1f1;
+
+				&::after{
+					content: '';
+					position: absolute;
+					top: 0;
+					bottom: 0;
+					right: auto; left: 0;
+					width: 10px;
+					background: none;
+					overflow: hidden;
+					box-shadow: inset 2px 0 3px -2px rgba(0, 0, 0, 0.3);
+					z-index: 2;
+				}
+
+				.new-topic{
+					cursor: pointer;
+					color: $primary-blue;
+					height: 50px;
+					width: 150px;
+					padding-left: 40px;
+					font: normal 600 14px/50px "Open Sans", sans-serif;					
+					@include icon('comment-small-dark_hover', $top: 15px, $left: 15px);
+				}
+			}
+
+			.x-grid-body{
+				top: 50px !important;
+			}
+
 			.nav-outline{
 				background-color: #fbfbfb;
+
+				.x-grid-row-selected{
+					.x-grid-td{
+						background-color: none;
+						border: none !important;
+
+					}
+
+					.outline-row{
+						background: $primary-blue;
+						box-shadow: inset -1px 0 0 1px #107eed,1px 0 0 0px #107eed;
+
+						&:hover{
+							background: $primary-blue;
+						}
+
+						.author,.meta{
+							color: #c5eaff;
+						}
+
+						.title{color: #ffffff;}
+					}
+				}
 
 				&::after{
 					right: auto;
@@ -1138,25 +1239,14 @@
 					padding: 10px 15px;
 					border-bottom: 1px solid #ededed;
 
-					&.x-item-selected{
-						background: $primary-blue;
-						box-shadow: inset -1px 0 0 1px #107eed,1px 0 0 0px #107eed;
-
-						.author,.meta{
-							color: #c5eaff;
-						}
-
-						.title{color: #ffffff;}
-					}
-
-					&:not(.x-item-selected):hover{
+					&:hover{
 						background: #fff;
 						border-bottom-color: #cfcfcf;
 						box-shadow: 0 -1px 0 0 #cfcfcf;
 					}
 
 					.author {
-						font: normal 600 0.7em/1 $font;
+						font: normal 600 0.8em/1 $font;
 						text-transform: uppercase;
 						color: $primary-blue;
 						overflow: hidden;
@@ -1167,7 +1257,7 @@
 						min-height: 50px;
 						max-height: 5.5em;
 						overflow: hidden;
-						font: italic 400 1.1em/1.1em "Open Sans", sans-serif;
+						font: italic 400 1.2em/1.1em "Open Sans", sans-serif;
 						margin: 0 0 10px -10px;
 						padding-left: 10px;
 						color: #494949;
@@ -1176,7 +1266,7 @@
 					}
 
 					.meta {
-						font: normal 400 0.7em/1 $font;
+						font: normal 400 0.8em/1 $font;
 						color: $tertiary-grey;
 
 						span{
@@ -1200,10 +1290,15 @@
 		}
 
 		&.topic-list-nav{
+
+			.outline-list{
+				background: #f0f0f0;
+			}
+			
 			.outline-row {
 				background: #ffffff;
 				color: #757474;
-				font: normal 600 0.9em/2.8em "Open Sans", sans-serif;
+				font: normal 600 1em/2.8em "Open Sans", sans-serif;
 				padding: 0 0.35em 0 1.39em;
 				cursor: pointer;
 
@@ -1215,6 +1310,21 @@
 				&.x-item-selected{
 					color: #ffffff;
 					background-color: $primary-blue;
+				}
+			}
+
+			.new-forum{
+				cursor: pointer;
+				color: $secondary-grey;
+				font: normal 500 0.9em/50px $font;
+				height: 50px;
+				padding-left: 40px;
+				@include icon('editor-attach_hover', $top: 19px, $left: 22px);
+
+				&:hover{
+					color: $primary-blue;
+
+					@include icon('editor-attach_blue', $top: 19px, $left: 22px);
 				}
 			}
 		}
@@ -1236,7 +1346,14 @@
 			}
 
 			.header {
+				display: block !important;
 				background: none;
+
+				@include icon('arrow-course-dropdown-light', $side:'before', $top: 20px, $left: auto, $right: 10px);
+
+				&::before{
+					display: none;
+				}
 			}
 		}
 	}
@@ -1299,7 +1416,7 @@
 		&.topic-list-body {
 			.topic-list-header{
 				height: 90px;
-				padding: 29px 10px;
+				padding: 29px 15px;
 				background-color: #f8f8f8;
 				box-shadow: 0 -3px 8px 3px rgba(0, 0, 0, 0.25);
 

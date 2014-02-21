@@ -756,7 +756,7 @@ Ext.define('NextThought.model.Base', {
 
 	/**
 	 * @private
-	 * @property {Boolean} destroyDoesNotClearListeners
+	 * property {Boolean} destroyDoesNotClearListeners
 	 */
 	destroyDoesNotClearListeners: false,
 
@@ -916,9 +916,10 @@ Ext.define('NextThought.model.Base', {
 		//that has the same id.  If it isn't the exact record call the function
 		//fname on it with the provided args
 		Ext.data.StoreManager.each(function(s) {
-			var recById = (s.snapshot || s.data).getByKey(recId);
+			var data = s.snapshot || s.data,
+				recById = data && data.getByKey && data.getByKey(recId);
 
-			if(!recById){
+			if (!recById) {
 				return true; //keep going
 			}
 

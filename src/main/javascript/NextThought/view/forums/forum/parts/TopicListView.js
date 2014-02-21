@@ -23,6 +23,9 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 						{ cls: 'title', html: '{title}'}
 					]},
 					{ cls: 'meta', cn: [
+						{ tag: 'tpl', 'if': 'matches', cn: [
+							{ tag: 'span', cls: 'matches', html: '{matches:plural("Match", "Matches")} for &ldquo;{searchTerm}&rdquo;'}
+						]},
 						{ tag: 'span', cls: 'count', html: '{PostCount:plural(parent.kind)}'},
 						{ tag: 'tpl', 'if': 'values[\'NewestDescendant\'] && values[\'NewestDescendant\'].isComment', cn: [
 							{ tag: 'span', cls: 'active', html: '{NewestDescendant.data.Creator:displayName} replied {NewestDescendant.data.CreatedTime:ago}'}
@@ -48,12 +51,14 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 		var me = this;
 		me.callParent(arguments);
 
+		me.tpl.searchTerm = 'adsfasdf';
+
 		me.updateView();
 
 		if (me.filterBar) {
 			me.mon(me.filterBar, {
 				'sorters-changed': 'updateView',
-				'search-changed': 'updateSearch'
+				'search-changed': 'updateView'
 			});
 		}
 
@@ -68,10 +73,12 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 	},
 
 
-	fillInData: function(records) {
-		records.forEach(function(record) {
+	fillInData: function(records, search) {
+		(records || []).forEach(function(record) {
 			var newest = record.get('NewestDescendant'),
 				creator = newest && newest.get('Creator');
+
+			record.setMatchCount(search);
 
 			if (creator) {
 				UserRepository.getUser(creator, function(u) {
@@ -96,7 +103,7 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 
 		if (record.get('isGroupHeader')) { return; }
 
-		this.fireEvent('show-topic-list', this, this.record, record.getId());
+		this.fireEvent('show-topic-list', this, this.record, record);
 	},
 
 
@@ -142,6 +149,17 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 			sortOn: 'LikeCount',
 			sortOrder: 'descending'
 		}
+	},
+
+
+	getSorter: function(by, searchTerm, batchAround) {
+		var sort = this.sorters[by];
+
+		sort.searchTerm = searchTerm ? searchTerm : '';
+
+		sort.batchAround = batchAround ? batchAround : '';
+
+		return sort;
 	},
 
 
@@ -221,7 +239,7 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 			single: true,
 			load: 'updateView'
 		});
-
+		this.store.currentPage = 1;
 		this.store.load();
 	},
 
@@ -232,42 +250,18 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 
 		if (!this.fromMe) {
 			this.fromMe = true;
-			this.reloadStore(this.sorters[by]);
+			this.reloadStore(this.getSorter(by, search));
 			return;
 		}
 
+		this.tpl.searchTerm = search;
+
 		if (records) {
-			this.fillInData(records);
+			this.fillInData(records, search);
 		}
 
 		delete this.fromMe;
 
-		this.store.clearFilter();
 		this.setGrouper(by);
-		this.updateSearch(search);
-	},
-
-
-	updateSearch: function(search) {
-		this.store.removeFilter('search-filter');
-
-		if (!search) { return; }
-
-		search = search.toLowerCase();
-
-		this.store.addFilter({
-			id: 'search-filter',
-			filterFn: function(rec) {
-				if (rec.get('isGroupHeader')) { return true; }
-
-				var title = rec.get('title'),
-					name = rec.get('Creator').getName();
-
-				title = title.toLowerCase();
-				name = name.toLowerCase();
-
-				return title.indexOf(search) >= 0 || name.indexOf(search) >= 0;
-			}
-		}, true);
 	}
 });

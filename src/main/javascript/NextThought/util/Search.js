@@ -7,13 +7,31 @@ Ext.define('NextThought.util.Search', {
 	trimRe: /^["'\s]+|["'\s]+$/ig,
 	trimPunctuationReStr: '[\\?!()"\'`{}\\[\\]:;,\\.\\^%&#\\*@$&\\+-<>=_~\\s]', //This matches the regex the DS uses
 
+	//keep a cache of regex generated
+	_regexcache: {},
+
 	/**
+	 * If we have a cached regex for str return it otherwhise generate it
+	 * @param  {string} str the term to search for
+	 * @param  {boolean} partial Set true to match the entire word not just the substring.
+	 * @param  {boolean} wholeWordOnly add \b to the end
+	 * @return {RegExp} the regex that matches str
+	 */
+	getRegExCache: function(str, partial, wholeWordOnly) {
+		var re = this._regexcache[str];
+
+		if (re) { return re; }
+
+		return this._regexcache = this.searchRe(str, partial, wholeWordOnly);
+	},
+
+	 /*
 	 *
 	 * @param string
 	 * @param partial Set true to match the entire word not just the substring.
 	 * @return {RegExp}
 	 */
-	searchRe: function(string,partial,wholeWordOnly) {
+	searchRe: function(string, partial, wholeWordOnly) {
 		var tokens, str, bound = partial ? '[^\\s\\)\\(\\.]*' : '';
 
 		str = string.replace(this.trimRe, '').replace(this.ignoredWordsRe, '');

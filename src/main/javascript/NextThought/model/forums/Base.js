@@ -5,7 +5,10 @@ Ext.define('NextThought.model.forums.Base', {
 
 	fields: [
 		{name: 'isGroupHeader', type: 'boolean', persist: false, defaultValue: false},
-		{name: 'groupName', type: 'string', persist: false}
+		{name: 'groupName', type: 'string', persist: false},
+		//View only
+		{name: 'matches', type: 'int', persist: false, defaultValue: 0},
+		{name: 'searchTerm', type: 'string', persist: false, defaultValue: ''}
 	],
 
 	getContentsStoreId: function() {
@@ -47,5 +50,50 @@ Ext.define('NextThought.model.forums.Base', {
 		path = path.split('/');
 		path.pop();
 		return path.join('/');
+	},
+
+
+	getMatchCount: function(term) {
+		if (!term) { return 0; }
+
+		var me = this,
+			re = SearchUtils.getRegExCache(term),
+			count = 0, terms = me.searchProps || [];
+
+		if (!re) { return 0; }
+
+		function getMatches(val) {
+			if (Ext.isString(val)) {
+				count += (val.match(re) || []).length;
+			} else if (Ext.isArray(val)) {
+				debugger;
+				val.forEach(function(v) {
+					getMatches(v);
+				});
+			}
+		}
+
+		terms.forEach(function(prop) {
+			var val = me.get(prop);
+
+			getMatches(val);
+		});
+
+		return count;
+	},
+
+
+	setMatchCount: function(term) {
+		var headline = this.get('headline'),
+			count = this.getMatchCount(term);
+
+		if (headline && term) {
+			count += headline.getMatchCount(term);
+		}
+
+		this.set({
+			'matches': count,
+			'searchTerm': term
+		});
 	}
 });

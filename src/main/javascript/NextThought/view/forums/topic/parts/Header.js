@@ -7,8 +7,8 @@ Ext.define('NextThought.view.forums.topic.parts.Header', {
 	pathTpl: Ext.DomHelper.markup([
 		{cls: 'path', cn: [
 			{tag: 'span', cls: 'part toggle-opposite-tabs menu-dropdown', html: 'discussions'},
-			{tag: 'span', cls: 'part back-part', html: '{path}'},
-			{tag: 'span', cls: 'part title-part current', html: '{title}'}
+			{tag: 'span', cls: 'part back-part', 'data-qtip': '{path}', html: '{path}'},
+			{tag: 'span', cls: 'part title-part current', 'data-qtip': '{title}' , html: '{title}'}
 		]}
 	]),
 
@@ -43,14 +43,16 @@ Ext.define('NextThought.view.forums.topic.parts.Header', {
 			this.mon(this.nextEl, 'click', 'goToNext');
 		}
 
-		if (this.previousIndex) {
+		//it might be the first element index 0
+		if (this.previousIndex > -1) {
 			this.prevEl.removeCls('disabled');
 			this.mon(this.prevEl, 'click', 'goToPrev');
 		}
 
 		this.mon(this.headerEl, {
 			'click': 'closeView',
-			'mouseover': 'showTabMenu'
+			'mouseover': 'showTabMenu',
+			'mouseout': 'hideTabMenu'
 		});
 	},
 
@@ -62,6 +64,12 @@ Ext.define('NextThought.view.forums.topic.parts.Header', {
 
 	goToPrev: function() {
 		this.fireEvent('goto-index', this.previousIndex);
+	},
+
+	hideTabMenu: function() {
+		if (this.tabMenu) {
+			this.tabMenu.stopShow();
+		}
 	},
 
 
@@ -93,7 +101,7 @@ Ext.define('NextThought.view.forums.topic.parts.Header', {
 			this.on('destroy', 'destroy', this.tabMenu);
 		}
 
-		this.tabMenu.startShow(dropdown, 'tl-bl');
+		this.tabMenu.startShow(dropdown, 'tl-bl', [-10, -10]);
 	},
 
 
