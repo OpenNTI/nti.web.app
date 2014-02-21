@@ -124,7 +124,7 @@ Ext.define('NextThought.view.forums.forum.parts.FilterBar', {
 
 
 	getSortBy: function() {
-		return this.currentSort || 'lesson';
+		return this.currentSort || 'active';
 	},
 
 

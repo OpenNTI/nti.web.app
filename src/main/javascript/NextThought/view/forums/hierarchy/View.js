@@ -67,6 +67,10 @@ Ext.define('NextThought.view.forums.hierarchy.View', {
 			load: 'setCurrentBody'
 		});
 
+		if (this.currentRecord.activeRecord) {
+			//this.store.proxy.extraParams = Ext.apply(this.store.proxy.extraParams || {}, {batchAround: this.currentRecord.activeRecord.get('OID')});
+		}
+
 		this.store.load();
 
 		this.navigation.setCurrent(record, store);
@@ -86,7 +90,10 @@ Ext.define('NextThought.view.forums.hierarchy.View', {
 			}
 		}
 
+		//delete this.store.proxy.extraParams.batchAround;
+
 		cfg.currentIndex = this.store.indexOf(record);
+		cfg.total = this.store.getTotalCount();
 
 		//if there is an index lower than us
 		if (cfg.currentIndex > 0) {

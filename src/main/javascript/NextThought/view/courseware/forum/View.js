@@ -2,6 +2,8 @@ Ext.define('NextThought.view.courseware.forum.View', {
 	extend: 'NextThought.view.forums.Container',
 	alias: 'widget.course-forum',
 
+	isCourseForum: true,
+
 	mixins: {
 		customScroll: 'NextThought.mixins.CustomScroll'
 	},
@@ -41,8 +43,11 @@ Ext.define('NextThought.view.courseware.forum.View', {
 		var id, store, me = this;
 
 		function finish() {
+			if (!me.isActive()) {
+				me.on('activate', finish, me, {single: true});
+			}
 
-			me.fireEvent('show-forum-list', me, forumList);
+			me.fireEvent('maybe-show-forum-list', me, forumList);
 		}
 
 
@@ -57,6 +62,7 @@ Ext.define('NextThought.view.courseware.forum.View', {
 		}
 
 		this.currentForumList = forumList;
+		this.hasBoard = true;
 
 		if ((forumList.get('Creator') || {}).isModel) {
 			finish();
@@ -82,12 +88,6 @@ Ext.define('NextThought.view.courseware.forum.View', {
 
 
 	courseChanged: function(courseInstance) {
-		var s = {content: {discussion: null}};
-		//clear out all the views we've pushed
-		this.removeAll(true);
-
-		history.pushState(s); //history is accumulating at this point in the "transaction"
-
 		this.setForumList(courseInstance && courseInstance.get('Discussions'));
 	}
 });

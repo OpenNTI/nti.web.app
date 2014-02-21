@@ -14,6 +14,7 @@ Ext.define('NextThought.view.forums.topic.parts.Header', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header-container', cn: { cls: '{headerCls} navigation-bar', cn: [
+			{tag: 'span', cls: 'location', html: ''},
 			{cls: 'pager', cn: [
 				{cls: 'prev disabled'},
 				{cls: 'next disabled'}
@@ -24,7 +25,8 @@ Ext.define('NextThought.view.forums.topic.parts.Header', {
 	renderSelectors: {
 		headerEl: '.navigation-bar',
 		prevEl: '.header-container .pager .prev',
-		nextEl: '.header-container .pager .next'
+		nextEl: '.header-container .pager .next',
+		locationEl: '.header-container .location'
 	},
 
 
@@ -37,6 +39,10 @@ Ext.define('NextThought.view.forums.topic.parts.Header', {
 
 		tpl = new Ext.XTemplate(me.pathTpl);
 		tpl.insertFirst(me.headerEl, {path: forumTitle, title: topicTitle}, true);
+
+		if (this.current >= 0 && this.total) {
+			//this.locationEl.update((this.current + 1) + ' of ' + this.total);
+		}
 
 		if (this.nextIndex) {
 			this.nextEl.removeCls('disabled');

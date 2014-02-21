@@ -343,15 +343,23 @@ Ext.define('NextThought.controller.CourseWare', {
 	},
 
 
-	onNavigateToForum: function(board, course) {
+	onNavigateToForum: function(board, course, silent) {
 		if (!course) { return; }
+
+		var contentView = this.getContentView();
+
+		if (silent) {
+			if (contentView.currentCourse === course) {
+				return contentView.down('[isForumContainer]');
+			}
+		}
 
 		if (this.fireEvent('show-view', 'content', true) === false) {
 			return false;
 		}
 
 		this.getMainNav().updateCurrent(false, course);
-		return this.getContentView().onCourseSelected(course, 'course-forum').down('[isForumContainer]');
+		return contentView.onCourseSelected(course, 'course-forum').down('[isForumContainer]');
 	}
 }, function() {
 

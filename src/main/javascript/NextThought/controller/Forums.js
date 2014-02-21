@@ -50,6 +50,14 @@ Ext.define('NextThought.controller.Forums', {
 					'render': 'loadBoardList',
 					'active-state-changed': 'setActiveState'
 				},
+				'course-forum': {
+					'maybe-show-forum-list': function() {
+						//if we aren't restoring a state
+						if (!this.hasStateToRestore) {
+							this.loadForumList.apply(this, arguments);
+						}
+					}
+				},
 				'forums-forum-nav': {
 					'new-forum': 'showForumEditor'
 				},
@@ -234,6 +242,17 @@ Ext.define('NextThought.controller.Forums', {
 			me.handleRestoreState(state, promise);
 		}
 
+		//there is a state restoring
+		this.stateRestoring = true;
+
+		if (s.active !== 'forums') {
+			promise.fulfill();
+			return;
+		}
+
+		//we are restoring a state
+		this.hasStateToRestore = true;
+
 		//TODO: convert this entire chain of events to promises...
 		//make sure loadRoot has finished
 		if (me.loadingRoot) {
@@ -280,6 +299,10 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
+	/**
+	 * Takes a forum model, and navigates to it
+	 * @param  {NextThought.model.forums.base} record either a board, forum, or topic
+	 */
 	presentTopic: function(record) {
 		var me = this;
 
@@ -399,12 +422,14 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	loadForumList: function(cmp, record, activeForumId, silent, wait) {
-		if (this.loadingRoot) {
-			console.error('tried setting a forum list before the root loaded', record);
-			return;
-		}
-
+	/**
+	 * Navigates to the parent of the record and sets the forum list
+	 * @param  {Ext.Component} cmp   who fired the event, looks for its forum container parent
+	 * @param  {NextThoguht.model.forums.Board} record    the forum list to navigate to
+	 * @param  {NTIID} activeForumId   the forum to select
+	 * @param  {Boolean} wait   the calle will set the topic and forum
+	 */
+	loadForumList: function(cmp, record, activeForumId, wait) {
 		if (Ext.isArray(record)) { record = record[0]; }
 
 		var p = PromiseFactory.make(),
@@ -414,6 +439,10 @@ Ext.define('NextThought.controller.Forums', {
 		record.activeNTIID = activeForumId;
 
 		function finish(v) {
+			//once we get here the state restoring is done
+			delete me.hasStateToRestore;
+			delete me.stateRestoring;
+
 			if (v.showForumList) {
 				if (wait) {
 					p.fulfill(v);
@@ -421,16 +450,9 @@ Ext.define('NextThought.controller.Forums', {
 					view.showForumList(record);
 				}
 			}
-
-			community = community.isModel ? community.get('ID') : community;
-
-			//the forums container is in charge of updating the controller when it sets its active records
-			// if (silent !== true) {
-			// 	//The communities board we are viewing
-			// 	me.pushState({board: {community: community, isUser: true}, forum: undefined, topic: undefined, comment: undefined}, v);
-			// }
 		}
 
+		//If we have a view we can go ahead and set the forum list
 		if (view) {
 			if (community.isModel) {
 				community = community.get('ID');
@@ -446,9 +468,14 @@ Ext.define('NextThought.controller.Forums', {
 
 			finish(view);
 		} else {
+			//otherwise we need to go to the course of the forums tab first
 			record.findCourse()
 				.done(function(course) {
-					view = me.callOnAllControllersWith('onNavigateToForum', record, course);
+					//if there is a state to restore that we aren't incharge of pass true as the last argument, to keep
+					//it from switching the tab.
+					view = me.callOnAllControllersWith('onNavigateToForum', record, course, me.stateRestoring && !me.hasStateToRestore);
+					//set a flag to keep the view from updating the state
+					view.ignoreStateUpdate = me.stateRestoring && !me.hasStateToRestore;
 					finish(view);
 				});
 		}
@@ -457,8 +484,14 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-
-	loadTopicList: function(cmp, record, activeTopic, callback, silent) {
+	/**
+	 * Navigate to a forum's container and display the forum
+	 * @param  {Ext.Component}   cmp   who fired the event, looks for its forum container parent
+	 * @param  {NextThoguht.model.forums.Board}   record   the forum list to navigate to
+	 * @param  {NextThought.model.forums.Topic}   activeTopic    the forum to select
+	 * @param  {Function}   callback
+	 */
+	loadTopicList: function(cmp, record, activeTopic, callback) {
 		if (Ext.isArray(record)) { record = record[0]; }
 
 		if (!record.isModel) { return; }
@@ -473,10 +506,6 @@ Ext.define('NextThought.controller.Forums', {
 			if (callback && Ext.isFunction(callback)) {
 				callback.call(this, topicView, v);
 			}
-
-			// if (silent !== true) {
-			// 	me.pushState({'forum': record.get('ID'), topic: activeTopic && activeTopic.get('ID'), comment: undefined}, v); //The forum we are viewing
-			// }
 		}
 
 		UserRepository.getUser(record.get('Creator'), function(c) {
@@ -489,7 +518,7 @@ Ext.define('NextThought.controller.Forums', {
 			//get the forum list and add it first
 			Service.getObject(record.get('ContainerId'), function(forumList) {
 				if (forumList) {
-					me.loadForumList(null, forumList, record.getId(), true, true)
+					me.loadForumList(null, forumList, record.getId(), true)
 						.done(function(v) {
 							finish(v, forumList);
 						});
@@ -501,6 +530,14 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
+	/**
+	 * Loads a topic
+	 * @param  {Ext.Component}   cmp    the one who fired the event, look for its parent forum container
+	 * @param  {NextThought.model.forums.Topic}   record   the topic to show
+	 * @param  {NextThought.model.forums.Comment}   comment   the comment to show
+	 * @param  {Function} cb   is called back with the view
+	 * @param  {Object}   scope   scope for the call back
+	 */
 	loadTopic: function(cmp, record, comment, cb, scope) {
 		if (!record) {
 			console.error('Cant present a topic with an empty record');

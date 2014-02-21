@@ -26,7 +26,15 @@ Ext.define('NextThought.view.forums.topic.Body', {
 
 		Ext.destroy(header, topicContainer);
 
-		header = this.add({xtype: 'forums-topic-header', record: record, forum: forum, nextIndex: cfg.nextIndex, previousIndex: cfg.previousIndex});
+		header = this.add({
+			xtype: 'forums-topic-header',
+			record: record,
+			forum: forum,
+			current: cfg.currentIndex,
+			total: cfg.total,
+			nextIndex: cfg.nextIndex,
+			previousIndex: cfg.previousIndex
+		});
 
 		topicContainer = this.add({xtype: 'container', cls: 'topic-container scroll-content', isTopicContainer: true});
 

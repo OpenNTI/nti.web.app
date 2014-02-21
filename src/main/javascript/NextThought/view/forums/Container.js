@@ -82,15 +82,23 @@ Ext.define('NextThought.view.forums.Container', {
 
 	//list of forums
 	showForumList: function(forumList) {
-		var forumView;
+		var me = this,
+			forumView;
 
-		this.forumList = forumList;
+		me.forumList = forumList;
 
-		forumView = this.setViewWithRecord('forums-forum-view', forumList);
+		forumView = me.setViewWithRecord('forums-forum-view', forumList);
 
-		this.mon(forumView, 'active-record-changed', 'activeTopicListChanged');
+		me.mon(forumView, {
+			'active-record-changed': 'activeTopicListChanged',
+			'pop-view': function() {
+				if (!me.isCourseForum) {
+					me.showBoardList();
+				}
+			}
+		});
 
-		this.getLayout().setActiveItem(forumView);
+		me.getLayout().setActiveItem(forumView);
 
 		Ext.destroy(this.down('forums-topic-view'));
 
@@ -110,10 +118,13 @@ Ext.define('NextThought.view.forums.Container', {
 		this.mon(topicView, 'active-record-changed', 'activeTopicChanged');
 		this.mon(topicView, {
 			single: true,
+			//go back to the forum-list we were at
 			'pop-view': function() {
+				delete me.topicList.activeRecord;
 				me.updateState();
 				me.showForumList(me.forumList);
 			},
+			//a new record was added
 			'new-record': function(record) {
 				forum = me.down('forums-forum-view');
 
@@ -130,7 +141,13 @@ Ext.define('NextThought.view.forums.Container', {
 		return topicView;
 	},
 
-
+	/**
+	 * Loads the correct forums and opens an editor with the topic
+	 * @param  {NextThought.model.forums.Topic} topic   the topic to edit
+	 * @param  {NextThought.model.forums.Forum} topicList   the topicList the topic belongs to
+	 * @param  {NextThought.model.forums.Board} forumList   the forumList the topicList belongs to
+	 * @param  {Function} closeCallback   what to do when the editor closes
+	 */
 	showTopicEditor: function(topic, topicList, forumList, closeCallback) {
 		var topicView = this.showTopicList(null, forumList);
 
@@ -153,6 +170,10 @@ Ext.define('NextThought.view.forums.Container', {
 
 	//only use this when a view is popping or changing the active record, otherwise the controller will take care of it
 	updateState: function() {
+		if (!this.isActive()) {
+			return;
+		}
+
 		this.fireEvent('active-state-changed', this.forumList, this.topicList, this.topicList.activeRecord, this.title);
 	}
 });
