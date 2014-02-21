@@ -9,6 +9,13 @@ Ext.define('NextThought.view.profiles.parts.BlogPost', {
 	cls: 'entry',
 	defaultType: 'profile-blog-comment',
 
+	pathTpl: Ext.DomHelper.markup([
+		{cls: 'path', cn: [
+			{tag: 'span', cls: 'part back-part', 'data-qtip': '{path}', html: '{path}'},
+			{tag: 'span', cls: 'part title-part current', 'data-qtip': '{title}' , html: '{title}'}
+		]}
+	]),
+
 	constructor: function() {
 		this.mixins.HeaderLock.disable.call(this);
 		this.threaded = false;

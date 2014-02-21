@@ -6,6 +6,10 @@
 	overflow: hidden;
 	height: 50px;
 
+	&.blog-post {
+		background: white;
+	}
+
 	// .path {
 	// 	width: 630px;
 	// 	@inlude flexbox;
