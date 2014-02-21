@@ -20,8 +20,8 @@ Ext.define('NextThought.view.contacts.outline.search.View', {
 		isContact: function(values) {
 			var a = Ext.getStore('all-contacts-store'),
 				o = Ext.getStore('online-contacts-store');
-			return (values.Class !== 'User' || o.contains(values.Username) || a.contains(values.Username))
-				? 'contact' : 'not-contact';
+			return (values.Class !== 'User' || o.contains(values.Username) || a.contains(values.Username)) ?
+				   'contact' : 'not-contact';
 		}
 	}),
 
@@ -46,11 +46,10 @@ Ext.define('NextThought.view.contacts.outline.search.View', {
 	},
 
 	rowClicked: function(view, record, item, index, e) {
-		var i = Ext.fly(item),
-			el = i.down('.avatar');
+		var i = Ext.fly(item);
 		//NextThought.view.account.contacts.management.Popout.popup(record,el,item,[-1, 0]);
 		//if they aren't a contact show the card
-		if( i.hasCls('not-contact') && e.getTarget('.nib')){
+		if (i.hasCls('not-contact') && e.getTarget('.nib')) {
 			e.stopPropagation();
 			this.startPopupTimeout(view, record, item, 0);
 			return;
@@ -127,9 +126,7 @@ Ext.define('NextThought.view.contacts.outline.search.View', {
 					sorterFn: function(a, b) {
 						var c = flStore.find('Username', a.get('Username')),
 							d = flStore.find('Username', b.get('Username'));
-						return c === d
-							? 0
-							: c ? -1 : 1;
+						return c === d ? 0 : c ? -1 : 1;
 					},
 					direction: 'ASC'
 				},
