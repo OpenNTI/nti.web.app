@@ -47,7 +47,8 @@ Ext.define('NextThought.controller.Forums', {
 			component: {
 				'forums-container': {
 					'restore-forum-state': 'restoreState',
-					'render': 'loadBoardList'
+					'render': 'loadBoardList',
+					'active-state-changed': 'setActiveState'
 				},
 				'forums-forum-nav': {
 					'new-forum': 'showForumEditor'
@@ -243,9 +244,33 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	pushState: function(s, view) {
-		var title = view && view.title;
+	setActiveState: function(board, forum, topic, title) {
+		if (!board) {
+			console.error('No forum state to set', arguments);
+			return;
+		}
 
+		var s,
+			comm = board.get('Creator'),
+			forum = forum && forum.get('ID'),
+			topic = topic && topic.get('ID');
+
+		comm = comm.isModel ? comm.get('ID') : comm;
+
+		s = {
+			board: {
+				community: comm,
+				isUser: true
+			},
+			forum: forum,
+			topic: topic
+		};
+
+		this.pushState(s, title);
+	},
+
+
+	pushState: function(s, title) {
 		history.pushState({active: 'forums', forums: s}, title);
 	},
 
@@ -256,19 +281,24 @@ Ext.define('NextThought.controller.Forums', {
 
 
 	presentTopic: function(record) {
+		var me = this;
+
 		if (!record) {
 			console.error('Cant present an empty record');
 			return;
 		}
 
 		if (record.isBoard) {
-			this.loadForumList(null, record);
+			me.loadForumList(null, record);
 		} else if (record.isForum) {
-			this.loadTopicList(null, record);
+			//if we have a forum load its board and show it as the active one
+			Service.getObject(record.get('ContainerId'), function(obj) {
+				me.loadForumList(null, obj, record.getId());
+			});
 		} else if (record.isTopic) {
-			this.loadTopic(null, record);
+			me.loadTopic(null, record);
 		} else if (record.isComment) {
-			this.loadComment(null, record);
+			me.loadComment(null, record);
 		}
 
 	},
@@ -370,6 +400,11 @@ Ext.define('NextThought.controller.Forums', {
 
 
 	loadForumList: function(cmp, record, activeForumId, silent, wait) {
+		if (this.loadingRoot) {
+			console.error('tried setting a forum list before the root loaded', record);
+			return;
+		}
+
 		if (Ext.isArray(record)) { record = record[0]; }
 
 		var p = PromiseFactory.make(),
@@ -389,10 +424,11 @@ Ext.define('NextThought.controller.Forums', {
 
 			community = community.isModel ? community.get('ID') : community;
 
-			if (silent !== true) {
-				//The communities board we are viewing
-				me.pushState({board: {community: community, isUser: true}, forum: undefined, topic: undefined, comment: undefined}, v);
-			}
+			//the forums container is in charge of updating the controller when it sets its active records
+			// if (silent !== true) {
+			// 	//The communities board we are viewing
+			// 	me.pushState({board: {community: community, isUser: true}, forum: undefined, topic: undefined, comment: undefined}, v);
+			// }
 		}
 
 		if (view) {
@@ -438,9 +474,9 @@ Ext.define('NextThought.controller.Forums', {
 				callback.call(this, topicView, v);
 			}
 
-			if (silent !== true) {
-				me.pushState({'forum': record.get('ID'), topic: activeTopic && activeTopic.get('ID'), comment: undefined}, v); //The forum we are viewing
-			}
+			// if (silent !== true) {
+			// 	me.pushState({'forum': record.get('ID'), topic: activeTopic && activeTopic.get('ID'), comment: undefined}, v); //The forum we are viewing
+			// }
 		}
 
 		UserRepository.getUser(record.get('Creator'), function(c) {

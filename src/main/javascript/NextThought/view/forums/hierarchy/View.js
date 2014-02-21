@@ -101,6 +101,7 @@ Ext.define('NextThought.view.forums.hierarchy.View', {
 		//setCurrent returns true if it updated the active record, false otherwise
 		if (this.body.setCurrent(record, this.currentRecord, cfg)) {
 			this.navigation.setActiveRecord(record);
+			this.fireEvent('active-record-changed', record);
 		}
 	},
 

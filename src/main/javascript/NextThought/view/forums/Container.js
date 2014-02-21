@@ -88,6 +88,8 @@ Ext.define('NextThought.view.forums.Container', {
 
 		forumView = this.setViewWithRecord('forums-forum-view', forumList);
 
+		this.mon(forumView, 'active-record-changed', 'activeTopicListChanged');
+
 		this.getLayout().setActiveItem(forumView);
 
 		Ext.destroy(this.down('forums-topic-view'));
@@ -105,11 +107,12 @@ Ext.define('NextThought.view.forums.Container', {
 		this.setViewWithRecord('forums-forum-view', forumList);
 		topicView = this.setViewWithRecord('forums-topic-view', topicList);
 
+		this.mon(topicView, 'active-record-changed', 'activeTopicChanged');
 		this.mon(topicView, {
 			single: true,
 			'pop-view': function() {
 				me.updateState();
-				me.showForumList();
+				me.showForumList(me.forumList);
 			},
 			'new-record': function(record) {
 				forum = me.down('forums-forum-view');
@@ -135,27 +138,21 @@ Ext.define('NextThought.view.forums.Container', {
 	},
 
 
-	//only use this when a view is popping, otherwise the controller will take care of it
+	activeTopicListChanged: function(topicList) {
+		this.topicList = topicList;
+		this.updateState();
+	},
+
+
+	activeTopicChanged: function(topic) {
+		//if the active topic is changed we have to have a topic list
+		this.topicList.activeRecord = topic;
+		this.updateState();
+	},
+
+
+	//only use this when a view is popping or changing the active record, otherwise the controller will take care of it
 	updateState: function() {
-		if (!this.forumList) {
-			console.error('No forum list to set the state for...');
-			return;
-		}
-
-		var comm = this.forumList.get('Creator'), s,
-			forum = this.topicList && this.topicList.get('ID');
-
-		comm = comm.isModel ? comm.get('ID') : comm;
-
-		s = {
-			board: {
-				community: comm,
-				isUser: true
-			},
-			forum: forum,
-			topic: undefined //since this is only used on pop topic will neve be set
-		};
-
-		history.pushState({active: 'forums', forums: s});
+		this.fireEvent('active-state-changed', this.forumList, this.topicList, this.topicList.activeRecord, this.title);
 	}
 });
