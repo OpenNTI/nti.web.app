@@ -62,23 +62,26 @@ See buildout docs.
 
 
 #### Git Pre-Commit Hook:
+Put this bash script in the `.git/hooks/pre-commit`:
 
 	#!/bin/sh
-	set -e
+	FILES=`git diff --cached --name-only | grep -i ".js$"`
 
-	FILES=`git diff --cached --name-only`
-
-	for f in $FILES
-	do
-		/opt/local/Library/Frameworks/Python.framework/Versions/2.7/bin/gjslint --strict --disable=0005,0220 --max_line_length=160 $f
-		LINT=`/opt/local/bin/jslint $f 2>&1`
-		if echo $LINT | grep 'No errors found' ; then
-			exit 0
-		else
-			echo "$LINT";
-			exit 1
-		fi
-	done
+    for f in $FILES
+    do
+    	CHECK=(
+    		"/opt/local/bin/jslint $(pwd)/$f continue closure"
+    		"/usr/local/bin/gjslint --strict --disable=0005,0220 --max_line_length=160 $(pwd)/$f"
+    		)
+    	for LINTER in "${CHECK[@]}"
+    	do
+    		LINT=`$LINTER`;
+    		if ! echo $LINT | grep -i -s 'no error' > /dev/null ; then
+    			echo "\n\n$LINT\n\n";
+    			exit 1
+    		fi
+    	done
+    done
 
 ###### Notes
 * <a name="httpwebservernote"></a>You can run `python -m SimpleHTTPServer` from any directory to serve it over http on your local machine.
