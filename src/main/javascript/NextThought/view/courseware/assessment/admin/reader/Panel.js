@@ -7,6 +7,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Panel', {
 	prefix: 'course-assignment-admin',
 
 	mixins: {
+		customScroll: 'NextThought.mixins.CustomScroll',
 		ParentViewInteractions: 'NextThought.view.courseware.assessment.reader.ParentViewInteractions'
 	},
 
