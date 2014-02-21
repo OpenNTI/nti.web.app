@@ -23,7 +23,7 @@ Ext.define('NextThought.view.content.overlay.Panel', {
 
 	constructor: function() {
 		this.callParent(arguments);
-		this.setupContentElement();
+		Ext.defer(this.setupContentElement, 1, this);
 	},
 
 
@@ -116,6 +116,7 @@ Ext.define('NextThought.view.content.overlay.Panel', {
 
 	setupContentElement: function() {
 		if (!this.contentElement) {return;}
+		this.removeContent('.hidden,INPUT,object,param');
 		Ext.fly(this.contentElement).setStyle({
 			overflow: 'hidden',
 			display: 'block',
@@ -124,7 +125,6 @@ Ext.define('NextThought.view.content.overlay.Panel', {
 			'white-space': 'nowrap'
 		}).addCls('overlayed');
 
-		this.removeContent('.hidden,INPUT,object,param');
 	},
 
 
