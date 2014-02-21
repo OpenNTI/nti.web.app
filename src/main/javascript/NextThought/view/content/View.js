@@ -120,7 +120,13 @@ Ext.define('NextThought.view.content.View', {
 
 		this.mon(this.courseForum, {
 			scope: this,
-			'set-active-state': 'updateForumState'
+			'set-active-state': 'updateForumState',
+			'hide-forum-tab': function(view) {
+				this.updateTabs();
+				if (this.layout.getActiveItem() === view) {
+					this.setActiveTab('course-book');
+				}
+			}
 		});
 
 		this.on({
@@ -473,6 +479,19 @@ Ext.define('NextThought.view.content.View', {
 		this.setBackground(background);
 		this.enableTabs(preview ? [] : !!instance);
 
+		if (tab !== 'passive') {
+			if (instance) {
+				this.showCourseNavigation();
+			} else {
+				this.showContentReader();
+			}
+		} else {
+			tab = false;
+		}
+
+		tab = preview ? 'course-info' : tab || 'course-book';
+		this.setActiveTab(tab);
+
 
 		Ext.each([
 			this.courseNav,
@@ -487,24 +506,12 @@ Ext.define('NextThought.view.content.View', {
 		});
 
 		this.updateTabs();
-		if (tab !== 'passive') {
-			if (instance) {
-				this.showCourseNavigation();
-			} else {
-				this.showContentReader();
-			}
-		} else {
-			tab = false;
-		}
-
-		tab = preview ? 'course-info' : tab || 'course-book';
 
 		//force this to blank out if it was unset
 		this.updateState({
 			course: instance && instance.getId(),
 			activeTab: tab
 		});
-		this.setActiveTab(tab);
 	},
 
 

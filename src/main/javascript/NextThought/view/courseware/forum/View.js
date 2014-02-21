@@ -43,17 +43,22 @@ Ext.define('NextThought.view.courseware.forum.View', {
 		var id, store, me = this;
 
 		function finish() {
+			var silent = me.ownerCt.getLayout().getActiveItem() !== me;
+
 			if (!me.isActive()) {
 				me.on('activate', finish, me, {single: true});
+				return;
 			}
 
-			me.fireEvent('maybe-show-forum-list', me, forumList);
+			me.fireEvent('maybe-show-forum-list', me, forumList, silent);
 		}
 
 
 		if (!forumList) {
+			delete this.hasBoard;
 			delete this.currentForumList;
 			this.removeAll(true);
+			this.fireEvent('hide-forum-tab');
 			return;
 		}
 
@@ -62,7 +67,6 @@ Ext.define('NextThought.view.courseware.forum.View', {
 		}
 
 		this.currentForumList = forumList;
-		this.hasBoard = true;
 
 		if ((forumList.get('Creator') || {}).isModel) {
 			finish();
@@ -88,6 +92,7 @@ Ext.define('NextThought.view.courseware.forum.View', {
 
 
 	courseChanged: function(courseInstance) {
+		this.hasBoard = true;
 		this.setForumList(courseInstance && courseInstance.get('Discussions'));
 	}
 });

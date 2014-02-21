@@ -12,17 +12,17 @@ Ext.define('NextThought.model.forums.CommunityBoard', {
 
 		if (me.course) {
 			p.fulfill(me.course);
-		}
-
-		CourseWareUtils.findCourseBy(function(course) {
+		} else {
+			CourseWareUtils.findCourseBy(function(course) {
 			var instance = course.get('CourseInstance');
 
 			return me.getId() === instance.get('Discussions').getId();
-		}).done(function(course) {
-			course = course.get('CourseInstance');
-			me.course = course;
-			p.fulfill(course);
-		});
+			}).done(function(course) {
+				course = course.get('CourseInstance');
+				me.course = course;
+				p.fulfill(course);
+			});
+		}
 
 		return p;
 	}

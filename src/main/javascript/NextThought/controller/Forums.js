@@ -51,10 +51,10 @@ Ext.define('NextThought.controller.Forums', {
 					'active-state-changed': 'setActiveState'
 				},
 				'course-forum': {
-					'maybe-show-forum-list': function() {
+					'maybe-show-forum-list': function(cmp, forumsList, silent) {
 						//if we aren't restoring a state
 						if (!this.hasStateToRestore) {
-							this.loadForumList.apply(this, arguments);
+							this.loadForumList.call(this, cmp, forumsList, null, null, silent);
 						}
 					}
 				},
@@ -270,9 +270,10 @@ Ext.define('NextThought.controller.Forums', {
 		}
 
 		var s,
-			comm = board.get('Creator'),
-			forum = forum && forum.get('ID'),
-			topic = topic && topic.get('ID');
+			comm = board.get('Creator');
+
+		forum = forum && forum.get('ID');
+		topic = topic && topic.get('ID');
 
 		comm = comm.isModel ? comm.get('ID') : comm;
 
@@ -428,8 +429,9 @@ Ext.define('NextThought.controller.Forums', {
 	 * @param  {NextThoguht.model.forums.Board} record    the forum list to navigate to
 	 * @param  {NTIID} activeForumId   the forum to select
 	 * @param  {Boolean} wait   the calle will set the topic and forum
+	 * @param  {Boolean} silent if true don't switch to the discussion tab
 	 */
-	loadForumList: function(cmp, record, activeForumId, wait) {
+	loadForumList: function(cmp, record, activeForumId, wait, silent) {
 		if (Ext.isArray(record)) { record = record[0]; }
 
 		var p = PromiseFactory.make(),
@@ -471,9 +473,10 @@ Ext.define('NextThought.controller.Forums', {
 			//otherwise we need to go to the course of the forums tab first
 			record.findCourse()
 				.done(function(course) {
+					var s = (me.stateRestoring && !me.hasStateToRestore) || silent;
 					//if there is a state to restore that we aren't incharge of pass true as the last argument, to keep
 					//it from switching the tab.
-					view = me.callOnAllControllersWith('onNavigateToForum', record, course, me.stateRestoring && !me.hasStateToRestore);
+					view = me.callOnAllControllersWith('onNavigateToForum', record, course, s);
 					//set a flag to keep the view from updating the state
 					view.ignoreStateUpdate = me.stateRestoring && !me.hasStateToRestore;
 					finish(view);
