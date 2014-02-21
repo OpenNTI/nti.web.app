@@ -152,6 +152,12 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			this._showMask();
 		}
 		this.down('grid').bindStore(this.store);
+		var filter = this.store.filters.getByKey('LegacyEnrollmentStatus');
+		if (filter) {
+			filter = filter.value;
+			this.el.select('[data-filter-id]').removeCls('checked');
+			this.el.select('[data-filter-id="' + filter + '"]').addCls('checked');
+		}
 	},
 
 
