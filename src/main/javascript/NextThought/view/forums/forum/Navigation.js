@@ -109,5 +109,9 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 		if (e.getTarget('.new-forum') && this.canCreateForums()) {
 			this.fireEvent('new-forum', this);
 		}
+
+		if (e.getTarget('.header')) {
+			this.fireEvent('pop-view');
+		}
 	}
 });

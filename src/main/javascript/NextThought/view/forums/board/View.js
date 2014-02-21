@@ -2,6 +2,8 @@ Ext.define('NextThought.view.forums.board.View', {
 	extend: 'NextThought.view.forums.hierarchy.View',
 	alias: 'widget.forums-board-view',
 
+	cls: 'forum-board-view',
+
 	requires: [
 		'NextThought.view.forums.board.Body',
 		'NextThought.view.forums.board.Navigation'

@@ -27,6 +27,12 @@
 	// 		}
 	// 	}
 	// }
+	
+	.path {
+		float: left;
+		display: inline-block;
+		width: 600px;
+	}
 
 	.path .part {
 		display: inline-block;
@@ -64,7 +70,7 @@
 	}
 	.pager {
 		position: absolute;
-		top: 3px; right: 5px;
+		top: 0; right: 5px;
 
 
 		div{
@@ -1123,6 +1129,25 @@
 	}
 }
 
+#forums {
+	overflow: auto;
+	background: white;
+
+
+	.forum-board-view{
+		.forum-nav{
+			display: none;
+		}
+
+		.forum-body{
+			width: auto !important;
+			height: auto !important;
+			right: 0 !important;
+			left: 0 !important;
+		}
+	}
+}
+
 #forums, 
 .course-forum{
 	-webkit-font-smoothing: antialiased;
@@ -1346,6 +1371,7 @@
 			}
 
 			.header {
+				cursor: pointer;
 				display: block !important;
 				background: none;
 
@@ -1362,6 +1388,7 @@
 		overflow-x: hidden;
 		background-color: white;
 		
+		&.scroll-content,
 		.scroll-content {
 			overflow-y: auto;
 			position: absolute;
