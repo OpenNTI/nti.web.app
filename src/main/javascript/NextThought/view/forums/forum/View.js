@@ -18,6 +18,12 @@ Ext.define('NextThought.view.forums.forum.View', {
 	setCurrentBody: function() {
 		this.callParent(arguments);
 
-		this.initCustomScrollOn('content', '.topic-list');
+		this.initCustomScrollOn('content', '.topic-list', {secondaryViewEl: '.nav-outline'});
+	},
+
+	newRecordAdded: function() {
+		if (this.body.store) {
+			this.body.store.load();
+		}
 	}
 });

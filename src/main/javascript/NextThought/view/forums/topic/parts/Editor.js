@@ -175,8 +175,9 @@ Ext.define('NextThought.view.forums.topic.parts.Editor', {
 	},
 
 
-	onSaveSuccess: function(record) {
-		this.fireEvent('goto-record', record);
+	onSaveSuccess: function(record, isEdit) {
+		this.savedSuccess = true;
+		this.fireEvent(isEdit ? 'goto-record' : 'new-record', record);
 		this.destroy();
 	},
 

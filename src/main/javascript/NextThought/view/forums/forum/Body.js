@@ -26,6 +26,8 @@ Ext.define('NextThought.view.forums.forum.Body', {
 			return;
 		}
 
+		this.store = store;
+
 		Ext.destroy(topicList, filterBar, header);
 
 		filterBar = this.add({xtype: 'forums-forum-filterbar'});

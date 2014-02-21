@@ -66,7 +66,6 @@ Ext.define('NextThought.model.forums.Base', {
 			if (Ext.isString(val)) {
 				count += (val.match(re) || []).length;
 			} else if (Ext.isArray(val)) {
-				debugger;
 				val.forEach(function(v) {
 					getMatches(v);
 				});

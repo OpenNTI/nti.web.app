@@ -16,6 +16,10 @@ Ext.define('NextThought.view.forums.topic.Body', {
 	setCurrent: function(record, forum, cfg) {
 		if (!record) { return; }
 
+		if (this.editor && !this.editor.savedSuccess) {
+			return false;
+		}
+
 		var topicContainer = this.down('[isTopicContainer]'),
 			topic, comment,
 			header = this.down('forums-topic-header');
@@ -41,6 +45,8 @@ Ext.define('NextThought.view.forums.topic.Body', {
 
 		this.relayEvents(header, ['goto-index', 'pop-view']);
 
+		this.currentRecord = record;
+
 		return true;
 	},
 
@@ -64,6 +70,6 @@ Ext.define('NextThought.view.forums.topic.Body', {
 		});
 
 		me.relayEvents(header, ['pop-view']);
-		me.relayEvents(me.editor, ['goto-record', 'pop-view']);
+		me.relayEvents(me.editor, ['goto-record', 'pop-view', 'new-record']);
 	}
 });

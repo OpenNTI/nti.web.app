@@ -86,7 +86,7 @@ Ext.define('NextThought.view.forums.Container', {
 
 	//list of topics
 	showTopicList: function(topicList, forumList) {
-		var topicView, me = this;
+		var topicView, me = this, forum;
 
 		this.setViewWithRecord('forums-forum-view', forumList);
 		topicView = this.setViewWithRecord('forums-topic-view', topicList);
@@ -95,6 +95,15 @@ Ext.define('NextThought.view.forums.Container', {
 			single: true,
 			'pop-view': function() {
 				me.showForumList(forumList);
+			},
+			'new-record': function(record) {
+				forum = me.down('forums-forum-view');
+
+				if (forum) {
+					forum.newRecordAdded(record);
+				} else {
+					console.error('No forum view to add the topic to.', record);
+				}
 			}
 		});
 

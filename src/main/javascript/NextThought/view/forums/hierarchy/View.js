@@ -33,10 +33,11 @@ Ext.define('NextThought.view.forums.hierarchy.View', {
 		if (this.body) {
 			this.mon(this.body, {
 				'goto-index': 'setCurrentIndex',
-				'goto-record': 'setCurrentBody'
+				'goto-record': 'setCurrentBody',
+				'new-record': 'newRecordAdded'
 			});
 
-			this.relayEvents(this.body, ['pop-view']);
+			this.relayEvents(this.body, ['pop-view', 'new-record']);
 		}
 	},
 
@@ -109,5 +110,8 @@ Ext.define('NextThought.view.forums.hierarchy.View', {
 
 		this.setCurrentBody(record);
 		this.navigation.setActiveRecord(record);
-	}
+	},
+
+
+	newRecordAdded: function() {}
 });

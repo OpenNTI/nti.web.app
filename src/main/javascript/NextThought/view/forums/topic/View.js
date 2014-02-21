@@ -15,14 +15,16 @@ Ext.define('NextThought.view.forums.topic.View', {
 	body: { xtype: 'forums-topic-body' },
 
 	storeCfg: {
-		pageSize: 10
+		pageSize: 10,
+		buffered: true,
+		sorters: []
 	},
 
 
 	setCurrentBody: function() {
 		this.callParent(arguments);
 
-		this.initCustomScrollOn('content', '.topic-container');
+		this.initCustomScrollOn('content', '.topic-container', {secondaryViewEl: '.nav-outline'});
 	},
 
 
@@ -36,5 +38,18 @@ Ext.define('NextThought.view.forums.topic.View', {
 
 		this.navigation.setCurrent(topicList, store);
 		this.body.showEditor(topic, topicList, closeCallback);
+	},
+
+	//used in the saved comment handler
+	getTopic: function() {
+		return this.body.currentRecord;
+	},
+
+
+	newRecordAdded: function(record) {
+		//this.store.proxy.extraParams = Ext.apply(this.store.proxy.extraParams || {}, { batchAround: record.getId()});
+
+		this.store.load();
+		this.setCurrentBody(record);
 	}
 });
