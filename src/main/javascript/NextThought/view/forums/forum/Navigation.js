@@ -4,30 +4,50 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 
 	cls: 'topic-list-nav forum-nav',
 	itemSelector: '.outline-row',
-	tpl: Ext.DomHelper.markup({
+
+	selModel: {
+		allowDeselect: false,
+		toggleOnClick: false,
+		deselectOnContainerClick: false
+	},
+
+	tpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls: 'nav-outline forum-outline', cn: [
-			{cls: 'header', html: 'Forums'},
+			{cls: 'header toggle-opposite-tabs', html: 'Forums'},
 			{cls: 'outline-list', cn: [
 				{tag: 'tpl', 'for': '.', cn: [
 					{cls: 'outline-row', 'data-qtip': '{title}', cn: [
 						{cls: 'label', html: '{title}'}
 					]}
+				]},
+				{tag: 'tpl', 'if': 'this.showButton(values,out)', cn: [
+					{cls: 'new-forum', html: 'Add a Forum'}
 				]}
 			]}
 		]
+	}), {
+		showButton: function(value, out) {
+			return this.canCreateForums;
+		}
 	}),
 
 
 	afterRender: function() {
 		this.callParent(arguments);
 
-		this.mon(this.el, 'mouseover', 'maybeShowMenu');
+		this.mon(this.el, {
+			mouseover: 'maybeShowMenu',
+			mouseout: 'maybeHideShowMenu',
+			click: 'maybeShowNewForum'
+		});
 	},
 
 
 	setCurrent: function(record, store) {
 		this.record = record;
 		this.bindStore(store);
+
+		this.tpl.canCreateForums = this.canCreateForums();
 	},
 
 
@@ -41,6 +61,13 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 	},
 
 
+	maybeHideShowMenu: function(e) {
+		if (e.getTarget('.header') && this.tabMenu) {
+			this.tabMenu.stopShow();
+		}
+	},
+
+
 	maybeShowMenu: function(e) {
 		var header = e.getTarget('.header'), main;
 
@@ -49,7 +76,7 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 		main = this.up('[getMainTabbarMenu]');
 
 		if (!this.tabMenu) {
-			this.tabMenu = main.getMainTabbarMenu();
+			this.tabMenu = main.getMainTabbarMenu(260);
 
 			if (!this.tabMenu) {
 				this.hasNoTabbar = true;
@@ -70,5 +97,17 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 		}
 
 		this.tabMenu.startShow(header, 'tl-tl');
+	},
+
+
+	canCreateForums: function() {
+		return isFeature('mutable-forums') && this.record.getLink('add');
+	},
+
+
+	maybeShowNewForum: function(e) {
+		if (e.getTarget('.new-forum') && this.canCreateForums()) {
+			this.fireEvent('new-forum', this);
+		}
 	}
 });

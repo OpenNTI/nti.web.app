@@ -1,6 +1,6 @@
-Ext.define('NextThought.view.forums.forumcreation.Main', {
+Ext.define('NextThought.view.forums.old.forumcreation.Main', {
 	extend: 'Ext.container.Container',
-	alias: 'widget.forumcreation-main-view',
+	alias: 'widget.forumcreation-old-main-view',
 
 
 	cls: 'forumcreation-main-view',

@@ -46,73 +46,73 @@ Ext.define('NextThought.controller.Forums', {
 		this.listen({
 			component: {
 				'forums-container': {
-					'restore-forum-state': this.restoreState,
-					'render': this.loadBoardList
+					'restore-forum-state': 'restoreState',
+					'render': 'loadBoardList'
 				},
 
 				'forums-container > *': {
-					'pop-view': this.popView
+					'pop-view': 'popView'
 				},
 
 				'course-forum > *': {
-					'pop-view': this.popView
+					'pop-view': 'popView'
 				},
 
-				'forums-board': {
-					'new-forum': this.showForumEditor
+				'forums-forum-nav': {
+					'new-forum': 'showForumEditor'
 				},
 				'forumcreation-main-view': {
-					'save-forum': this.saveForum
+					'save-forum': 'saveForum'
 				},
 				'forums-forum': {
-					'new-topic': this.showTopicEditor
+					'new-topic': 'showTopicEditor'
 				},
 				'forums-topic-topic': {
-					'navigate-topic': this.loadTopic,
-					'delete-post': this.deleteObject,
-					'edit-topic': this.showTopicEditor,
-					'topic-navigation-store': this.enableTopicNavigation
+					'navigate-topic': 'loadTopic',
+					'delete-post': 'deleteObject',
+					'edit-topic': 'showTopicEditor',
+					'topic-navigation-store': 'enableTopicNavigation'
 				},
 				'forums-topic-editor': {
-					'save-post': this.saveTopicPost
+					'save-post': 'saveTopicPost'
 				},
 				'forums-topic-comment': {
-					'delete-topic-comment': this.deleteObject
+					'delete-topic-comment': 'deleteObject'
 				},
 				'activity-preview-topic > nti-editor': {
-					'save': this.saveTopicComment
+					'save': 'saveTopicComment'
 				},
 				'activity-preview-topic-reply > nti-editor': {
-					'save': this.saveTopicComment
+					'save': 'saveTopicComment'
 				},
 				'profile-forum-activity-item': {
-					'delete-post': this.deleteObject
+					'delete-post': 'deleteObject'
 				},
 				'activity-preview-topic-reply': {
-					'delete-topic-comment': this.deleteObject
+					'delete-topic-comment': 'deleteObject'
 				},
 				'profile-forum-activity-item nti-editor': {
-					'save': this.saveTopicComment
+					'save': 'saveTopicComment'
 				},
 				'profile-forum-activity-item-reply > nti-editor': {
-					'save': this.saveTopicComment
+					'save': 'saveTopicComment'
 				},
 				'profile-forum-activity-item-reply': {
-					'delete-topic-comment': this.deleteObject
+					'delete-topic-comment': 'deleteObject'
 				},
 				'#forums > forums-topic nti-editor': {
-					'save': this.saveTopicComment
+					'save': 'saveTopicComment'
 				},
 
 				'#content > course-forum nti-editor': {
-					'save': this.saveTopicComment
+					'save': 'saveTopicComment'
 				},
 
 				'search-result': {
-					'highlight-topic-hit': this.highlightSearchResult
+					'highlight-topic-hit': 'highlightSearchResult'
 				},
 				'*': {
-					'show-topic': 'presentTopic',
+					'show-topic': 'loadTopic',
 					'forums:fill-in-path': 'fillInPath',
 					'show-forum-list': 'loadForumList',
 					'show-topic-list': 'loadTopicList',

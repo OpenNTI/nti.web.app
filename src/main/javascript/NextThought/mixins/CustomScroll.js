@@ -286,7 +286,7 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 		},
 
 
-		getMainTabbarMenu: function() {
+		getMainTabbarMenu: function(width) {
 			var tabView = Ext.get('view-tabs').dom,
 			children = tabView && tabView.children,
 			items = [];
@@ -303,7 +303,7 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 				return;
 			}
 
-			this.upMenu = Ext.widget('jump-menu', Ext.apply({}, { ownerButton: this, items: items }));
+			this.upMenu = Ext.widget('jump-menu', { ownerButton: this, items: items, width: width });
 
 			this.mon(this.upMenu, {
 				scope: this,
