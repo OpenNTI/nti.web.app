@@ -346,6 +346,10 @@ Ext.define('NextThought.controller.CourseWare', {
 	onNavigateToForum: function(board, course) {
 		if (!course) { return; }
 
+		if (this.fireEvent('show-view', 'content', true) === false) {
+			return false;
+		}
+
 		this.getMainNav().updateCurrent(false, course);
 		return this.getContentView().onCourseSelected(course, 'course-forum').down('[isForumContainer]');
 	}

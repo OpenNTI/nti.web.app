@@ -49,15 +49,6 @@ Ext.define('NextThought.controller.Forums', {
 					'restore-forum-state': 'restoreState',
 					'render': 'loadBoardList'
 				},
-
-				'forums-container > *': {
-					'pop-view': 'popView'
-				},
-
-				'course-forum > *': {
-					'pop-view': 'popView'
-				},
-
 				'forums-forum-nav': {
 					'new-forum': 'showForumEditor'
 				},
@@ -121,8 +112,8 @@ Ext.define('NextThought.controller.Forums', {
 			},
 			controller: {
 				'*': {
-					'show-object': this.navigateToForumContent,
-					'show-topic': this.presentTopic
+					'show-object': 'navigateToForumContent',
+					'show-topic': 'presentTopic'
 				}
 			}
 		});
@@ -185,22 +176,52 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	//An array denoting the precedence of data in state
-	stateKeyPrecedence: ['board', 'forum', 'topic', 'comment'],
+	buildUrlFromState: function(state) {
+		var path = ['users'];
+
+		if (!state.board) { return; }
+
+		path.push(state.board.community);
+		path.push('DiscussionBoard');
+
+		if (state.forum) {
+			path.push(state.forum);
+		}
+
+		if (state.topic) {
+			path.push(state.topic);
+		}
+
+		return $AppConfig.server.data + path.join('/');
+	},
 
 
 	handleRestoreState: function(state, promise) {
-		console.log('Handle restore of state here', state);
-		this.popToLastKnownMatchingState(state);
-		this.pushKnownState(state);
+		var me = this,
+			url = me.buildUrlFromState(state), req;
 
-		if (promise) {
-			promise.fulfill();
+		if (!url) {
+			//we can't restore the state but don't blow up
+			promise.fulfull();
 		}
-		else {
-			//Ruh roh
-			console.error('No forum container to fire finish restoring.  Expect problems', this);
-		}
+
+		req = {
+			url: url,
+			method: 'GET',
+			success: function(resp, req) {
+				var json = Ext.JSON.decode(resp.responseText, true),
+					obj = ParseUtils.parseItems(json)[0];
+
+				me.presentTopic(obj);
+				promise.fulfill();
+			},
+			failure: function() {
+				console.error('Failded to get:', url, arguments);
+				promise.fulfill();
+			}
+		};
+
+		Ext.Ajax.request(req);
 	},
 
 
@@ -222,358 +243,10 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	doesViewMatchState: function(v, key, val) {
-		var vVal;
-		if (!v.record || v.stateKey !== key) {
-			return false;
-		}
+	pushState: function(s, view) {
+		var title = view && view.title;
 
-		vVal = v.record.get('ID');
-
-		function equals(a, b) {
-			return a.community === b.community && a.isUser === b.isUser;
-		}
-
-		if (Ext.isObject(val) && val.isUser) {
-			vVal = v.record.get('Creator');
-			if (vVal.isModel) {
-				vVal = vVal.get('Username');
-			}
-			vVal = {
-				isUser: true,
-				community: vVal
-			};
-		}
-
-		return Ext.isObject(vVal) ? equals(vVal, val) : vVal === val;
-	},
-
-
-	pushKnownState: function(state) {
-		var c = this.getForumViewContainer(),
-			community = state && state.board && state.board.community,
-			stackOrder = this.stateKeyPrecedence,
-			stateKey = (c.peek() || {}).stateKey,
-			i = stackOrder.indexOf(stateKey),
-			toLoad = [],
-			me = this;
-
-		function getBaseUrl(rec) {
-			var base = rec && rec.get('href');
-
-			if (!base && stateKey !== 'root') {
-				return null;
-			}
-
-			if (!base && community) {
-				Ext.each($AppConfig.userObject.getCommunities(), function(r) {
-					if (r.get('Username') === community) {
-						base = r.getLink('DiscussionBoard');
-						return false;
-					}
-					return true;
-				});
-			}
-
-			return base;
-		}
-
-
-		if (i < 0 && stateKey !== 'root') {
-			return;
-		}
-
-		for (i = i + 1; i < stackOrder.length; i++) {
-			if (!state[stackOrder[i]]) {
-				break;
-			}
-
-			toLoad.push([stackOrder[i], state[stackOrder[i]]]);
-		}
-
-		this.pushViews(getBaseUrl(c.peek().record), toLoad, null, null, true);
-	},
-
-
-	pushNecessaryViews: function(href, recordType, cb, scope) {
-		var c = this.getForumViewContainer(),
-			stackOrder = this.stateKeyPrecedence,
-			showingStateKey = (c.peek() || {}).stateKey,
-			i, toLoad = [], parts = [], base, pieces,
-			state = {},
-			me = this;
-
-		//First order of business is to figure out the base url
-		//followed by the ids that need to load.  Unlike state we work
-		//backwards here.  We also assume our record is topic
-		//this may need to change breifly for comments but it is a start
-
-		//The idea here is to pop pieces off the end of the href we want to show
-		//collecting ids for each of the views between where we are and where we are going
-		//Stop when we run out of parts to show or we get to something that looks
-		//like the top view
-		i = stackOrder.indexOf(recordType);
-		pieces = href.split('/');
-		for (i; i >= 0; i--) {
-			if (showingStateKey === stackOrder[i]) {
-				break;
-			}
-			if (Ext.isEmpty(pieces)) {
-				Ext.callback(cb, scope, [false]);
-				return;
-			}
-			parts.push(pieces.pop());
-		}
-		parts.reverse();
-		base = pieces.join('/');
-
-
-		console.log('Show from', base, 'Parts ', parts);
-
-		i = stackOrder.indexOf(recordType);
-		Ext.each(parts, function(part) {
-			toLoad.push([stackOrder[i], part]);
-			i--;
-		}, this, true);
-
-		toLoad.reverse();
-		//Ok we have built up what we need to show.Show it
-		this.pushViews(base, toLoad, cb, scope);
-
-	},
-
-
-	//Fetch all the needed records
-	//and start pushing views.  Note we do this silently so state does not get updated
-	//in many chunks.  We gather state as it is needed and push it once at
-	//the end if requested.  This keeps back and forward (at least within this function) working
-	//like you would expect.  There are still issues with state not being transactional
-	//with the action the user expects.  For instance coming from another tab has
-	//a state change for the tab showing and then our state change.  We should
-	//fix that.
-	pushViews: function(base, toLoad, cb, scope, silent) {
-		var stackOrder = this.stateKeyPrecedence,
-			state = {},
-			comment,
-			me = this;
-
-		function stateForKey(key, rec) {
-			var community;
-			if (key === 'board') {
-				community = rec.get('Creator');
-				if (community.isModel) {
-					community = rec.get('Username');
-				}
-				return {isUser: true, community: community};
-			}
-			return rec.get('ID');
-		}
-
-		console.log('Need to push views. Base', base, 'toLoad', toLoad);
-
-		if (toLoad.last() && toLoad.last()[0] === 'comment') {
-			comment = toLoad.pop();
-		}
-
-		this.getRecords(base, toLoad, function(records) {
-			var j = records.first() ? (stackOrder.indexOf(records.first()[0])) : (stackOrder.length - 1),
-				maybeTopic, shouldFireCallBack = true;
-
-			Ext.each(records, function(pair, index, allItems) {
-
-				try {
-					var rec = pair.last(),
-						type = Ext.String.capitalize(pair.first()),
-						f = me.getForumViewContainer();
-
-					if (!rec) {
-						//Error callback here?
-						return false;
-					}
-
-					// NOTE: When we push views as a bulk, we only want to activate the last item.
-					// Thus we suspend activating views till we're on the last item.
-					// This allows us to only load store based on 'activate' events
-					if (index < allItems.length - 1) {
-						f.suspendActivateEvents();
-					} else {
-						f.resumeActivateEvents();
-					}
-
-					me['load' + type](null, rec, true);
-					state[pair[0]] = stateForKey(pair[0], pair[1]);
-					j++;
-
-					return true;
-				}
-				catch (e) {
-					console.warn('Something went wrong.', e.stack || e.message || e);
-					return false;
-				}
-			});
-
-			for (j; j < stackOrder.length; j++) {
-				state[stackOrder[j]] = undefined;
-			}
-
-			//If we have a comment push it onto the last view
-			//which should be the topic.  Also make sure we push it into
-			//state since we just blanked it out
-			maybeTopic = me.getForumViewContainer().peek();
-			if (maybeTopic.goToComment) {
-				if (comment) {
-					maybeTopic.on('commentReady', function() { Ext.callback(cb, scope, [true]);}, null, { single: true});
-					maybeTopic.goToComment(comment[1]);
-					state[comment[0]] = comment[1];
-					shouldFireCallBack = false;
-				}
-				else {
-					maybeTopic.goToComment(null);
-				}
-			}
-
-
-			//Push state if not requested to be silent
-			if (silent !== true) {
-				this.pushState(state);
-			}
-
-			//callback
-			if (shouldFireCallBack) {
-				Ext.callback(cb, scope, [true, maybeTopic]);
-			}
-		});
-	},
-
-
-	getRecords: function(base, ids, callback) {
-		var href = getURL(base),
-			finish = ids.length,
-			me = this;
-
-
-		if (!base || Ext.isEmpty(ids)) {
-			if (ids[0]) {
-				ids[0][1] = null;
-			}
-			Ext.callback(callback, me, [ids]);
-			return;
-		}
-
-		function maybeFinish() {
-			finish--;
-			if (finish === 0) {
-				Ext.callback(callback, me, [ids]);
-			}
-		}
-
-		Ext.each(ids, function(pair) {
-
-			//Only "board" level will have a non-string. And its already accounted for in the base.
-			href += (!Ext.isString(pair[1]) ? '' : '/' + pair[1]);
-
-			var r = {
-				url: href,
-				callback: function(req, s, resp) {
-					try {
-						pair[1] = ParseUtils.parseItems(resp.responseText)[0];
-					}
-					catch (e) {
-						var msgCfg = {
-							icon: Ext.Msg.ERROR,
-							title: 'Oops!',
-							msg: 'There was a problem looking up that resource.\nPlease try again later.'
-						};
-
-						pair[1] = null;
-						console.error('Could not load record', Globals.getError(e));
-						if (resp.status === 404) {
-							msgCfg.title = 'Not Found!';
-							msgCfg.msg = 'The object you are looking for no longer exists.';
-						}
-						else if (resp.status === 403) {
-							msgCfg.title = 'Sorry.';
-							msgCfg.msg = 'You do not have access to this resource.';
-						}
-						alert(msgCfg);
-					}
-					maybeFinish();
-				}
-			};
-
-			Ext.Ajax.request(r);
-		});
-	},
-
-
-	popToLastKnownMatchingState: function(state) {
-		var me = this;
-		function predicate(item, i) {
-			var part = me.stateKeyPrecedence[i - 1];
-			return part && state[part] && me.doesViewMatchState(item, part, state[part]);
-		}
-
-		this.popToLastViewMatchingPredicate(predicate);
-	},
-
-
-	popToLastViewMatchingPredicate: function(predicate) {
-		var c = this.getForumViewContainer(), i, item,
-			lastKnownMatcher, part; //Skip the root element
-
-		if (c.items.getCount() <= 1 || !Ext.isFunction(predicate)) {
-			return;
-		}
-
-		lastKnownMatcher = c.items.getAt(0);
-
-		for (i = 1; i < c.items.getCount(); i++) {
-			item = c.items.getAt(i);
-			if (!predicate(item, i)) {
-				break;
-			}
-			lastKnownMatcher = item;
-		}
-
-		while (c.peek() !== lastKnownMatcher) {
-			c.popView();
-		}
-	},
-
-
-	popView: function(view) {
-		var stack = view.ownerCt,
-			keyIx = Ext.Array.indexOf(this.stateKeyPrecedence, view.stateKey),
-			state = {};
-
-		//assert that the view is the top of the stack
-		if (stack.peek() !== view) {
-			console.error('View was not at the top of stack when it requested to pop.', view);
-			return false;
-		}
-
-		try {
-			stack.popView();//this should destroy view for us, but just in case...
-			if (!view.isDestroyed) {
-				view.destroy();
-			}
-
-			for (keyIx; keyIx >= 0 && keyIx < this.stateKeyPrecedence.length; keyIx++) {
-				state[this.stateKeyPrecedence[keyIx]] = undefined;
-			}
-
-			this.pushState(state);
-
-		} catch (e) {
-			console.warn(Globals.getError(e));
-		}
-
-		return true;
-	},
-
-
-	pushState: function(s) {
-		history.pushState({forums: s});
+		history.pushState({active: 'forums', forums: s}, title);
 	},
 
 
@@ -582,29 +255,27 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	presentTopic: function(cmp, record, comment, cb, scope) {
+	presentTopic: function(record) {
 		if (!record) {
-			console.error('Cant present a topic with an empty record');
+			console.error('Cant present an empty record');
 			return;
 		}
 
-		var me = this;
+		if (record.isBoard) {
+			this.loadForumList(null, record);
+		} else if (record.isForum) {
+			this.loadTopicList(null, record);
+		} else if (record.isTopic) {
+			this.loadTopic(null, record);
+		} else if (record.isComment) {
+			this.loadComment(null, record);
+		}
 
-		Service.getObject(record.get('ContainerId'), function(topicList) {
-			if (topicList) {
-				topicList.comment = comment;
-				me.loadTopicList(cmp, topicList, record.getId(), function() {
-					if (cb) {
-						cb.apply(scope, arguments);
-					}
-				});
-			}
-		});
 	},
 
 
 	loadCommunityBoards: function() {
-		var p = PromiseFactory.make(),
+		var p = PromiseFactory.make(), me = this,
 			communities = $AppConfig.userObject.getCommunities();
 
 		function onBoardLoad(resp, req) {
@@ -690,6 +361,7 @@ Ext.define('NextThought.controller.Forums', {
 					//TODO: if there is only one board go ahead and load it
 					if (view.showBoardList) {
 						view.showBoardList(store);
+						me.fireEvent('root-loaded');
 					}
 				}
 			});
@@ -715,15 +387,17 @@ Ext.define('NextThought.controller.Forums', {
 				}
 			}
 
+			community = community.isModel ? community.get('ID') : community;
+
 			if (silent !== true) {
 				//The communities board we are viewing
-				me.pushState({board: {community: community, isUser: true}, forum: undefined, topic: undefined, comment: undefined});
+				me.pushState({board: {community: community, isUser: true}, forum: undefined, topic: undefined, comment: undefined}, v);
 			}
 		}
 
 		if (view) {
 			if (community.isModel) {
-				community = community.get('Username');
+				community = community.get('ID');
 			} else {
 				UserRepository.getUser(community)
 					.done(function(c) {
@@ -748,24 +422,24 @@ Ext.define('NextThought.controller.Forums', {
 
 
 
-	loadTopicList: function(cmp, record, activeTopicId, callback, silent) {
+	loadTopicList: function(cmp, record, activeTopic, callback, silent) {
 		if (Ext.isArray(record)) { record = record[0]; }
 
 		if (!record.isModel) { return; }
 
 		var me = this, view = this.getCardContainer(cmp);
 
-		record.activeNTIID = activeTopicId;
+		record.activeRecord = activeTopic;
 
 		function finish(v, forumList) {
 			var topicView = v.showTopicList(record, forumList);
 
 			if (callback && Ext.isFunction(callback)) {
-				callback.call(this, topicView);
+				callback.call(this, topicView, v);
 			}
 
 			if (silent !== true) {
-				me.pushState({'forum': record.get('ID'), topic: undefined, comment: undefined}); //The forum we are viewing
+				me.pushState({'forum': record.get('ID'), topic: activeTopic && activeTopic.get('ID'), comment: undefined}, v); //The forum we are viewing
 			}
 		}
 
@@ -779,7 +453,7 @@ Ext.define('NextThought.controller.Forums', {
 			//get the forum list and add it first
 			Service.getObject(record.get('ContainerId'), function(forumList) {
 				if (forumList) {
-					me.loadForumList(null, forumList, record.getId(), null, true)
+					me.loadForumList(null, forumList, record.getId(), true, true)
 						.done(function(v) {
 							finish(v, forumList);
 						});
@@ -791,9 +465,46 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
+	loadTopic: function(cmp, record, comment, cb, scope) {
+		if (!record) {
+			console.error('Cant present a topic with an empty record');
+			return;
+		}
+
+		var me = this;
+
+		Service.getObject(record.get('ContainerId'), function(topicList) {
+			if (topicList) {
+				topicList.comment = comment;
+				me.loadTopicList(cmp, topicList, record, function(topicView, view) {
+					if (cb) {
+						cb.apply(scope, arguments);
+					}
+				});
+			}
+		});
+	},
+
+
+	loadComment: function(cmp, record, cb, scope) {
+		if (!record) {
+			console.error('Cant present comment with no record');
+			return;
+		}
+
+		var me = this;
+
+		Service.getObject(record.get('ContainerId'), function(topic) {
+			if (topic) {
+				me.loadTopic(cmp, topic, record, cb, scope);
+			}
+		});
+	},
+
+
 	saveTopicComment: function(editor, record, valueObject, successCallback) {
-		var postCmp = editor.up('[record]'),
-			postRecord = postCmp && postCmp.record,
+		var postCmp = editor.up('forums-topic-view') || editor.up('record'),
+			postRecord = (postCmp && postCmp.getTopic && postCmp.getTopic()) || (postCmp && postCmp.record),
 			isEdit = Boolean(record), postLink,
 			commentForum = record || NextThought.model.forums.GeneralForumComment.create();
 
@@ -944,24 +655,6 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	loadTopic: function(selModel, record, silent) {
-		if (Ext.isArray(record)) { record = record[0]; }
-		var c = this.getCardContainer(selModel),
-			o = c.items.last(),
-			forum = c.down('course-forum-topic-list, forums-topic-list'),
-			store = forum && forum.store,
-			index = store && store.indexOf(record);
-
-		if (o && !o.getPath) { o = null; }
-
-		c.add({xtype: 'forums-topic', topicListStore: store, currentIndex: index, record: record, path: o && o.getPath(), stateKey: 'topic'});
-
-		if (silent !== true && (selModel || {}).suppressPushState !== true) {
-			this.pushState({'topic': record.get('ID'), comment: undefined});
-		}
-	},
-
-
 	applyTopicToStores: function(topic) {
 		var recordForStore;
 		this.getController('UserData').applyToStoresThatWantItem(function(id, store) {
@@ -1023,7 +716,7 @@ Ext.define('NextThought.controller.Forums', {
 				me.applyTopicToStores(entry);
 			}
 
-			Ext.callback(editorCmp.onSaveSuccess, editorCmp, [entry]);
+			Ext.callback(editorCmp.onSaveSuccess, editorCmp, [entry, isEdit]);
 		}
 
 		if (editorCmp.el) {

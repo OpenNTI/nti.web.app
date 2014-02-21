@@ -7,7 +7,7 @@ Ext.define('NextThought.view.forums.Container', {
 	],
 
 	cls: 'forums-view',
-
+	title: 'NextThought: Discussions',
 	layout: 'card',
 	isForumContainer: true,
 
@@ -16,6 +16,15 @@ Ext.define('NextThought.view.forums.Container', {
 		id: 'forums-container-root',
 		xtype: 'forums-board-view'
 	}],
+
+
+	restore: function(state) {
+		var p = PromiseFactory.make();
+
+		this.fireEvent('restore-forum-state', state, p);
+
+		return p;
+	},
 
 
 	afterRender: function() {
@@ -75,6 +84,8 @@ Ext.define('NextThought.view.forums.Container', {
 	showForumList: function(forumList) {
 		var forumView;
 
+		this.forumList = forumList;
+
 		forumView = this.setViewWithRecord('forums-forum-view', forumList);
 
 		this.getLayout().setActiveItem(forumView);
@@ -88,13 +99,17 @@ Ext.define('NextThought.view.forums.Container', {
 	showTopicList: function(topicList, forumList) {
 		var topicView, me = this, forum;
 
+		this.forumList = forumList || this.forumList;
+		this.topicList = topicList;
+
 		this.setViewWithRecord('forums-forum-view', forumList);
 		topicView = this.setViewWithRecord('forums-topic-view', topicList);
 
 		this.mon(topicView, {
 			single: true,
 			'pop-view': function() {
-				me.showForumList(forumList);
+				me.updateState();
+				me.showForumList();
 			},
 			'new-record': function(record) {
 				forum = me.down('forums-forum-view');
@@ -117,5 +132,30 @@ Ext.define('NextThought.view.forums.Container', {
 		var topicView = this.showTopicList(null, forumList);
 
 		topicView.showEditor(topic, topicList, closeCallback);
+	},
+
+
+	//only use this when a view is popping, otherwise the controller will take care of it
+	updateState: function() {
+		if (!this.forumList) {
+			console.error('No forum list to set the state for...');
+			return;
+		}
+
+		var comm = this.forumList.get('Creator'), s,
+			forum = this.topicList && this.topicList.get('ID');
+
+		comm = comm.isModel ? comm.get('ID') : comm;
+
+		s = {
+			board: {
+				community: comm,
+				isUser: true
+			},
+			forum: forum,
+			topic: undefined //since this is only used on pop topic will neve be set
+		};
+
+		history.pushState({active: 'forums', forums: s});
 	}
 });
