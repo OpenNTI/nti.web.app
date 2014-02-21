@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.forums.Editor', {
+Ext.define('NextThought.view.forums.topic.parts.Editor', {
 	extend: 'NextThought.editor.Editor',
 	alias: 'widget.forums-topic-editor',
 
@@ -11,17 +11,9 @@ Ext.define('NextThought.view.forums.Editor', {
 
 	headerTplOrder: '{title}{toolbar}',
 
-	renderTpl: Ext.DomHelper.markup(
-			[
-				{ cls: 'header-container', cn: { cls: 'header', cn: [
-					{ tag: 'tpl', 'if': '!isEdit', cn: { cls: 'controls', cn: [
-						{ cls: 'new-topic disabled', html: 'New Discussion'}
-					] }},
-					{ cls: 'path', cn: ['{path} / ', {tag: 'span', cls: 'title-part', html: '{title}'}]}
-				]}
-				},
-				{ cls: 'forums-topic-editor', cn: { cls: 'editor active', html: '{super}' } }
-			]),
+	renderTpl: Ext.DomHelper.markup([
+		{ cls: 'forums-topic-editor', cn: { cls: 'editor active', html: '{super}' } }
+	]),
 
 
 	renderSelectors: {
@@ -37,16 +29,6 @@ Ext.define('NextThought.view.forums.Editor', {
 	initComponent: function() {
 		this.callParent(arguments);
 		this.addEvents(['save-post']);
-	},
-
-
-	beforeRender: function() {
-		this.callParent(arguments);
-		var rd = this.renderData = this.renderData || {};
-
-		rd.path = this.path;
-		rd.isEdit = Boolean(this.record);
-		rd.title = rd.isEdit ? this.record.get('title') : 'New Topic';
 	},
 
 
@@ -71,36 +53,36 @@ Ext.define('NextThought.view.forums.Editor', {
 
 		parentCtEl.addCls('scroll-lock' + (hasScrollBar ? ' scroll-padding-right' : '')).scrollTo(0);
 		Ext.EventManager.onWindowResize(this.syncHeight, this, null);
-        if(!Ext.is.iOS){
-            Ext.defer(this.syncHeight, 1, this);
+		if (!Ext.is.iOS) {
+			Ext.defer(this.syncHeight, 1, this);
 
-            this.titleEl.focus();
-            this.moveCursorToEnd(this.titleEl);
-            //window.scrollTo(this.titleEl.top);
-        }
+			this.titleEl.focus();
+			this.moveCursorToEnd(this.titleEl);
+			//window.scrollTo(this.titleEl.top);
+		}
 
-        if(Ext.is.iOS){
-            me.el.down('.editor').setHeight(350);
-            me.el.down('.content').setHeight(215);
+		if (Ext.is.iOS) {
+			me.el.down('.editor').setHeight(350);
+			me.el.down('.content').setHeight(215);
 
 
-            this.el.down('.content').on('focus',function(e){
-                me.el.down('.content').scrollBy(0,1000);
-                Ext.defer(function(){
-                    me.el.down('.content').scrollBy(0,1000);
-                },250);
-            });
-        }
+			this.el.down('.content').on('focus', function(e) {
+				me.el.down('.content').scrollBy(0, 1000);
+				Ext.defer(function() {
+					me.el.down('.content').scrollBy(0, 1000);
+				},250);
+			});
+		}
 	},
 
 
-	destroy: function() {
-		var container = this.ownerCt.getEl();
-		container.removeCls('scroll-lock scroll-padding-right');
-		Ext.EventManager.onWindowResize(this.syncHeight, this, null);
-		console.log(arguments);
-		return this.callParent(arguments);
-	},
+	// destroy: function() {
+	// 	var container = this.ownerCt.getEl();
+	// 	container.removeCls('scroll-lock scroll-padding-right');
+	// 	Ext.EventManager.onWindowResize(this.syncHeight, this, null);
+	// 	console.log(arguments);
+	// 	return this.callParent(arguments);
+	// },
 
 
 	onBeforeDeactivate: function() {
@@ -109,10 +91,10 @@ Ext.define('NextThought.view.forums.Editor', {
 		 *   and we like that behavior, don't warn the user if the editor is open, since it will still be there when we can back.
 		 *   If we change at some point, just uncomment the following lines to display a warning message.
 		 */
-    //		if(this.isVisible()){
-    //			this.warnBeforeDismissingEditor();
-    //		}
-    //		return !this.isVisible();
+	//		if(this.isVisible()){
+	//			this.warnBeforeDismissingEditor();
+	//		}
+	//		return !this.isVisible();
 		return true;
 	},
 
@@ -152,9 +134,10 @@ Ext.define('NextThought.view.forums.Editor', {
 	onSave: function(e) {
 		e.stopEvent();
 		var v = this.getValue(),
-			trimEndRe = /((<p><br><\/?p>)|(<br\/?>))*$/g, l;
+				re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g,
+				trimEndRe = /((<p><br><\/?p>)|(<br\/?>))*$/g, l;
 
-		if (DomUtils.isEmpty(v.body)) {
+		if (!Ext.isArray(v.body) || v.body.join('').replace(re, '') === '') {
 			console.error('bad forum post');
 			this.markError(this.contentEl, 'You need to type something');
 			return;
@@ -188,11 +171,12 @@ Ext.define('NextThought.view.forums.Editor', {
 
 		//console.debug('Save:',v);
 		//If new there will not be a record on this, it will be undefined
-		this.fireEvent('save-post', this, this.record, v.title, v.tags, v.body, v.publish);
+		this.fireEvent('save-post', this, this.record, this.forum, v.title, v.tags, v.body, v.publish);
 	},
 
 
-	onSaveSuccess: function() {
+	onSaveSuccess: function(record) {
+		this.fireEvent('goto-record', record);
 		this.destroy();
 	},
 
@@ -213,8 +197,13 @@ Ext.define('NextThought.view.forums.Editor', {
 
 	onCancel: function(e) {
 		e.stopEvent();
-
-		//TODO: Logic... if edit go back to post, if new just destroy and go back to list.
-		this.destroy();
+		if (this.closeCallback) {
+			this.destroy();
+			this.closeCallback.call();
+		} else if (this.record) {
+			this.fireEvent('goto-record', this.record);
+		} else {
+			this.fireEvent('pop-view');
+		}
 	}
 });

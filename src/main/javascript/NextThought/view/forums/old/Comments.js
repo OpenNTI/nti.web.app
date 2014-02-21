@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.forums.Comments', {
+Ext.define('NextThought.view.forums.old.Comments', {
 	extend: 'Ext.view.View',
 	alias: 'widget.forum-comment-thread',
 
@@ -60,7 +60,7 @@ Ext.define('NextThought.view.forums.Comments', {
 								{ tag: 'tpl', 'if': 'depth === 0', cn: [
 									{ tag: 'span', cls: 'comments link toggle', html: '{ReferencedByCount:plural("Comment")}'}
 								]},
-								{ tag: 'tpl', 'if': 'this.owner.canReply(this.ownerTopic)', cn: { tag: 'span', cls: 'reply thread-reply link', html: 'Reply'} },
+								{ tag: 'span', cls: 'reply thread-reply link', html: 'Reply'},
 								{ tag: 'tpl', 'if': 'isModifiable', cn: [
 									{ tag: 'span', cls: 'edit link', html: 'Edit'},
 									{ tag: 'span', cls: 'delete link', html: 'Delete'}
@@ -96,13 +96,7 @@ Ext.define('NextThought.view.forums.Comments', {
 			return;
 		}
 
-		this.tpl.ownerTopic = this.topic;
 		this.buildStore();
-	},
-
-
-	canReply: function(topic) {
-		return Boolean(topic && topic.getLink('add'));
 	},
 
 
@@ -149,7 +143,7 @@ Ext.define('NextThought.view.forums.Comments', {
 		});
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {},{
-			sortOn: 'createdTime',
+			sortOn: 'CreatedTime',
 			sortOrder: 'ascending',
 			filter: 'TopLevel'
 		});
@@ -201,15 +195,11 @@ Ext.define('NextThought.view.forums.Comments', {
 
 		record.compileBodyContent(function(body) {
 			var index;
-			if (!me.store) {
-				//We were probably destroyed before this came back.
-				return;
-			}
 
 			me.store.suspendEvents();
 
 			record.set({
-				bodyContent: body
+				'bodyContent': body
 			});
 
 			me.store.resumeEvents();
@@ -368,7 +358,7 @@ Ext.define('NextThought.view.forums.Comments', {
 
 	replyTo: function(record, el, width) {
 		var me = this, newRecord,
-			p = PromiseFactory.make();
+			p = new Promise();
 
 		me.isNewRecord = true;
 		newRecord = record.makeReply();
@@ -549,21 +539,16 @@ Ext.define('NextThought.view.forums.Comments', {
 
 
 	goToComment: function(comment) {
-		if (!comment) {
-			return;
-		}
-
 		if (!this.rendered) {
 			this.scrollToComment = comment;
 			return;
 		}
 
 		var me = this, addMon,
-			refs = comment.get && comment.get('references');
+			refs = comment.get('references');
 
 		if (Ext.isEmpty(refs)) {
 			me.scrollCommentIntoView(comment);
-			return;
 		}
 
 		refs.forEach(function(ref) {

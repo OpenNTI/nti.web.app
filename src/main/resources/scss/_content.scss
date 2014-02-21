@@ -328,7 +328,15 @@
 		}
 	}
 
+	.toggle-opposite-tabs{
+		display: none;
+	}
+
 	&.has-alt-tabbar{
+
+		.toggle-opposite-tabs{
+			display: initial;
+		}
 
 		&:not(.reader-in-view){
 			#view-tabs{
@@ -354,21 +362,11 @@
 			}
 		}
 
-		/*&.forum-in-view{
+		&.forum-in-view{
 			#view-tabs {
-				z-index: 100;
-				display: inline-block;
-				width: auto !important;
-
-				.main-view-tab{
-					display: block;
-					&.selected:not(.disabled),
-					&:not(.disabled):hover{
-						background: rgba(0,0,0,0.1);
-					}
-				}
+				display: none;
 			}
-		}*/
+		}
 		#view-tabs:not(:empty) ~ #content{
 			.content-toolbar{
 				.goup{

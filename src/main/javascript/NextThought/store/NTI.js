@@ -57,8 +57,10 @@ Ext.define('NextThought.store.NTI', {
 	},
 
 
-	remove: function(records) {
+	remove: function(records, m, silent) {
 		this.callParent(arguments);
+
+		if (silent) { return; }
 
 		Ext.each(records, function(record) {
 			record.fireEvent('destroy', record);

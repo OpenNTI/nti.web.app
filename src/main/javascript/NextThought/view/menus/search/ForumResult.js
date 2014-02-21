@@ -15,7 +15,7 @@ Ext.define('NextThought.view.menus.search.ForumResult', {
 			me.fireEvent('highlight-topic-hit', me, fragIdx, component);
 		}
 
-		function action(success, cmp){
+		function action(success, cmp) {
 			if (success) {
 				component = cmp;
 				if (cmp.ready) {
@@ -38,16 +38,16 @@ Ext.define('NextThought.view.menus.search.ForumResult', {
 
 		//if its a comment, get the comment so we can scroll to it in threaded forums
 		if (me.isComment(me.hit)) {
-			Service.getObject(me.hit.get('NTIID'), function(comment){
-				me.fireEvent('show-topic-with-action', me.record, comment, action);
-			}, function(){
+			Service.getObject(me.hit.get('NTIID'), function(comment) {
+				me.fireEvent('show-topic', me, me.record, comment, action);
+			}, function() {
 				console.error('Faild to load comment' + me.hit.get('NTIID'), arguments);
-				me.fireEvent('show-topic-with-action', me.record, undefined, action);
+				me.fireEvent('show-topic', me, me.record, undefined, action);
 			}, me);
 
 			return;
 		}
 
-		me.fireEvent('show-topic-with-action', me.record, undefined, action);
+		me.fireEvent('show-topic', me, me.record, undefined, action);
 	}
 });

@@ -41,14 +41,11 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 				me = this;
 
 		//if the board is under a course set up the sharing if not get rid of the option
-		board.findCourse()
-			.done(function(course) {
-				if (course) {
-					sharing.setValue(false);
-				} else {
-					sharing.destroy();
-				}
-			});
+		if (board && board.belongsToCourse()) {
+			sharing.setValue(false);
+		} else {
+			sharing.destroy();
+		}
 
 		//If we are editing inintialize here
 		if (record) {

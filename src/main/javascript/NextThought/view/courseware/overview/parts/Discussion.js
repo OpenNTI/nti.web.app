@@ -26,7 +26,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Discussion', {
 	constructor: function(config) {
 		var n = config.node,
 			i = config.locationInfo;
-			
+
 		config.data = {
 			title: n.getAttribute('title'),
 			icon: getURL(i.root + n.getAttribute('icon')),
@@ -82,13 +82,13 @@ Ext.define('NextThought.view.courseware.overview.parts.Discussion', {
 		}
 		this.topic = topic;
 
-		if(topic.get('TopicCount') !== undefined){
+		if (topic.get('TopicCount') !== undefined) {
 			this.data.comments = topic.get('TopicCount');
 			this.data.sublabel = Ext.util.Format.plural(this.data.comments, 'Discussion');
 		}
-		else if(topic.get('PostCount') !== undefined){
+		else if (topic.get('PostCount') !== undefined) {
 			this.data.comments = topic.get('PostCount') || 0;
-			this.data.sublabel =  Ext.util.Format.plural(this.data.comments, 'Comment');
+			this.data.sublabel = Ext.util.Format.plural(this.data.comments, 'Comment');
 		}
 
 		if (this.rendered) {
@@ -114,14 +114,14 @@ Ext.define('NextThought.view.courseware.overview.parts.Discussion', {
 		}
 		else {
 			if (/topic$/i.test(this.topic.get('Class'))) {
-				this.fireEvent('show-topic-with-action', this.topic);
+				this.fireEvent('show-topic', this, this.topic);
 			}
-			else if(/forum/i.test(this.topic.get('Class'))) {
+			else if (/forum/i.test(this.topic.get('Class'))) {
 
-				if(c){
-					this.fireEvent('navigate-to-course-discussion', c, this.topic.getId());
+				if (c) {
+					this.fireEvent('show-topic-list', this, this.topic);
 				}
-				else{
+				else {
 					alert('An error occurred showing this discussion');
 				}
 			}

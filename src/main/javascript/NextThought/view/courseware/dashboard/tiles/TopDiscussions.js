@@ -19,7 +19,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.TopDiscussions', {
 				var sId = board && ('dashboard-' + board.getContentsStoreId()),
 					url = board && board.getLink('TopTopics'),
 					instructorForum = course && course.getAttribute('instructorForum'),
-					store = Ext.getStore(sId) || (board && board.buildContentsStore({storeId: sId, pageSize: 4, url: url},{ exclude: instructorForum }));
+					store = Ext.getStore(sId) || (board && board.buildContentsStore('', {storeId: sId, pageSize: 4, url: url},{ exclude: instructorForum }));
 
 				me.board = board;
 				store.sorters.removeAll();
@@ -109,7 +109,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.TopDiscussions', {
 
 
 	onItemClicked: function(view, rec) {
-		this.fireEvent('navigate-to-course-discussion', this.locationInfo.courseInstance, rec.get('ContainerId'), rec.getId());
+		this.fireEvent('show-topic', this, rec);
 	}
 });
 

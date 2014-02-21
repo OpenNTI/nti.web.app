@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.forums.Comment', {
+Ext.define('NextThought.view.forums.old.Comment', {
 	extend: 'Ext.Component',
 	alias: 'widget.forums-topic-comment',
 	requires: [

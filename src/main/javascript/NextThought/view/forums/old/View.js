@@ -1,9 +1,9 @@
-Ext.define('NextThought.view.forums.View', {
+Ext.define('NextThought.view.forums.old.View', {
 	extend: 'NextThought.view.Base',
 	alias: 'widget.forums-view-container',
 	requires: [
 		'NextThought.layout.container.Stack',
-		'NextThought.view.forums.Board'
+		'NextThought.view.forums.old.Board'
 	],
 
 	cls: 'forums-view scrollable',
@@ -20,7 +20,7 @@ Ext.define('NextThought.view.forums.View', {
 
 
 	restore: function(state) {
-		var promise = PromiseFactory.make();
+		var promise = new Promise();
 		this.fireEvent('restore-forum-state', state, promise);
 		return promise;
 	},

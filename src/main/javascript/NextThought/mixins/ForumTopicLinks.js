@@ -14,9 +14,7 @@ Ext.define('NextThought.mixins.ForumTopicLinks', {
 
 
 	forumClickHandler: function() {
-		if (this.fireEvent('before-show-topic', this.record)) {
-			this.fireEvent('show-topic', this.record);
-		}
+		this.fireEvent('show-topic', this, this.record);
 	},
 
 	navigateToTopicForEdit: function(e) {
@@ -35,20 +33,16 @@ Ext.define('NextThought.mixins.ForumTopicLinks', {
 			}
 		}
 
-		this.fireEvent('show-topic-with-action', this.record, null, openInEditMode, this);
+		this.fireEvent('show-topic', this, this.record, null, openInEditMode, this);
 	},
 
 
 	forumClickHandlerGoToComment: function() {
-		if (this.fireEvent('before-show-topic', this.record)) {
-			this.fireEvent('show-topic', this.record, this.record);
-		}
+		this.fireEvent('show-topic', this, this.record, this.record);
 	},
 
 
 	forumClickHandlerGoToComments: function() {
-		if (this.fireEvent('before-show-topic', this.record)) {
-			this.fireEvent('show-topic', this.record, true);
-		}
+		this.fireEvent('show-topic', this, this.record, true);
 	}
 });

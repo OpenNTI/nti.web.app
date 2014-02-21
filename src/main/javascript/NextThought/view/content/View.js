@@ -456,6 +456,7 @@ Ext.define('NextThought.view.content.View', {
 
 	_setCourse: function(instance, tab) {
 		if (this.currentCourse === instance) {
+			this.setActiveTab(tab);
 			return;
 		}
 
@@ -503,15 +504,14 @@ Ext.define('NextThought.view.content.View', {
 			course: instance && instance.getId(),
 			activeTab: tab
 		});
-
 		this.setActiveTab(tab);
 	},
 
 
-	onCourseSelected: function(instance) {
+	onCourseSelected: function(instance, tab) {
 		//Because courses still use location, it needs to be cleared before setting the new one
 		this.reader.clearLocation();
-		this._setCourse(instance);
+		this._setCourse(instance, tab);
 		this.showCourseNavigation();
 
 		var e = instance.getCourseCatalogEntry(),
@@ -522,6 +522,8 @@ Ext.define('NextThought.view.content.View', {
 			location: PersistentStorage.getProperty('last-location-map', ntiid, ntiid),
 			course: instance.getId()
 		});
+
+		return this;
 	},
 
 

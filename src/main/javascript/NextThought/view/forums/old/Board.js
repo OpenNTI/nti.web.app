@@ -7,7 +7,7 @@
  * When a user selects one we will add that view (Forum) onto the stack, suppressing this one. (The stack and impl
  * to be handled in the controller)
  */
-Ext.define('NextThought.view.forums.Board', {
+Ext.define('NextThought.view.forums.old.Board', {
 	extend: 'Ext.view.View',
 	alias: ['widget.forums-board', 'widget.forums-forum-list'],
 	mixins: {
@@ -130,7 +130,7 @@ Ext.define('NextThought.view.forums.Board', {
 
 
 	initComponent: function() {
-		this.mixins.HeaderLock.constructor.call(this);
+		//this.mixins.HeaderLock.constructor.call(this);
 		this.callParent(arguments);
 		this.on('refresh', this.fillInNewestDescendant, this);
 	},
@@ -172,7 +172,7 @@ Ext.define('NextThought.view.forums.Board', {
 		//console.log('The board view is activated');
 		//Sort them by last modified
 		//	s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
-		//		sortOn: 'lastModified',
+		//		sortOn: 'Last Modified',
 		//		sortOrder: 'descending'
 		//	});
 		//Don't sort them by creation time on client side either
@@ -231,6 +231,11 @@ Ext.define('NextThought.view.forums.Board', {
 		else if (e.getTarget('.new-forum')) {
 			this.fireEvent('new-forum', this);
 		}
+	},
+
+
+	onItemClick: function(record) {
+		this.fireEvent('show-topic-list', this, record);
 	},
 
 

@@ -6,7 +6,7 @@
  * When a user selects one we will add that view (Topic) onto the stack, suppressing this one. (The stack and impl
  * to be handled in the controller)
  */
-Ext.define('NextThought.view.forums.Forum', {
+Ext.define('NextThought.view.forums.old.Forum', {
 	extend: 'Ext.view.View',
 	alias: ['widget.forums-forum', 'widget.forums-topic-list'],
 

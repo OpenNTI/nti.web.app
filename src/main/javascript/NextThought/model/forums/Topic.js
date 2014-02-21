@@ -7,6 +7,7 @@ Ext.define('NextThought.model.forums.Topic', {
 		{ name: 'PostCount', type: 'int', persist: false },
 		{ name: 'title', type: 'string' },
 		{ name: 'PublicationState', type: 'string', persist: false },
-		{ name: 'NewestDescendant', type: 'singleitem', persist: false }
+		{ name: 'NewestDescendant', type: 'singleitem', persist: false },
+		{ name: 'NewestDescendantCreatedTime', type: 'date', persist: false, dateFormat: 'timestamp'}
 	]
 });

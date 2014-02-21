@@ -487,9 +487,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 
 
 	forumTopicClicked: function(rec) {
-		if (this.fireEvent('before-show-topic', rec)) {
-			this.fireEvent('show-topic-with-action', rec);
-		}
+		this.fireEvent('show-topic', this, rec);
 	},
 
 
@@ -497,9 +495,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		var me = this;
 
 		function success(r) {
-			if (me.fireEvent('before-show-topic', r)) {
-				me.fireEvent('show-topic-with-action', r, rec);
-			}
+			me.fireEvent('show-topic', me, r, rec);
 		}
 
 		function fail() {

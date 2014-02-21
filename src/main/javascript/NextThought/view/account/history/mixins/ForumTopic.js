@@ -32,8 +32,6 @@ Ext.define('NextThought.view.account.history.mixins.ForumTopic', {
 	},
 
 	clicked: function(view, rec) {
-		if (view.fireEvent('before-show-topic', rec)) {
-			view.fireEvent('show-topic', rec);
-		}
+		view.fireEvent('show-topic', view, rec);
 	}
 });

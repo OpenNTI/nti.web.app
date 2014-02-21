@@ -61,9 +61,7 @@ Ext.define('NextThought.view.account.activity.topic.Preview', {
 
 
 	navigateToItem: function() {
-		if (this.fireEvent('before-show-topic', this.record)) {
-			this.fireEvent('show-topic', this.record);
-		}
+		this.fireEvent('show-topic', this, this.record);
 	},
 
 
@@ -112,9 +110,7 @@ Ext.define('NextThought.view.account.activity.topic.Reply', {
 			return;
 		}
 
-		if (me.fireEvent('before-show-topic', r)) {
-			me.fireEvent('show-topic', r, cid);
-		}
+		me.fireEvent('show-topic', this, r, cid);
 	},
 
 	handleDestroy: function() {

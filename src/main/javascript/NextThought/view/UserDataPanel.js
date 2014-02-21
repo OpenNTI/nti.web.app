@@ -141,7 +141,7 @@ Ext.define('NextThought.view.UserDataPanel', {
 	},
 
 
-	removeBookmark: function(store,record) {
+	removeBookmark: function(store, record) {
 		Ext.data.Store.prototype.remove.call(store, record);
 	},
 
@@ -215,7 +215,7 @@ Ext.define('NextThought.view.UserDataPanel', {
 	},
 
 
-	buildStore: function(filter,id,grouping) {
+	buildStore: function(filter, id, grouping) {
 		var s = NextThought.store.PageItem.create({id: id, groupField: grouping, groupDir: 'ASC'});
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {},{
@@ -327,7 +327,7 @@ Ext.define('NextThought.view.UserDataPanel', {
 	},
 
 
-	onScroll: function(e,dom) {
+	onScroll: function(e, dom) {
 		var el = dom.lastChild,
 				offsets = Ext.fly(el).getOffsetsTo(dom),
 				top = offsets[1] + dom.scrollTop,
@@ -389,9 +389,7 @@ Ext.define('NextThought.view.UserDataPanel', {
 
 
 	forumTopicClicked: function(rec) {
-		if (this.fireEvent('before-show-topic', rec)) {
-			this.fireEvent('show-topic', rec);
-		}
+		this.fireEvent('show-topic', this, rec);
 	},
 
 

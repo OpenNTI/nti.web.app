@@ -31,7 +31,7 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.AbstractForumView', {
 
 		if (snip.getHeight() < snip.dom.scrollHeight) {
 			content = ContentUtils.getHTMLSnippet(snip.getHTML(), this.snippetSize || 150);
-			content = content + Ext.DomHelper.markup({cls: 'ellipse', cn:[{},{},{}]});
+			content = content + Ext.DomHelper.markup({cls: 'ellipse', cn: [{}, {}, {}]});
 			snip.setHTML(content);
 			snip.addCls('overflowing');
 		}
@@ -67,7 +67,7 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.AbstractForumView', {
 		if (e.getTarget('.controls')) {
 			return;
 		}
-		
-		this.fireEvent('navigate-to-course-discussion', this.courseInstance, this.record.get('ContainerId'), this.record.getId());
+
+		this.fireEvent('show-topic', this, this.record);
 	}
 });

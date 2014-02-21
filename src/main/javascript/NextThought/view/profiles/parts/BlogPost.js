@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.profiles.parts.BlogPost', {
-	extend: 'NextThought.view.forums.Topic',
+	extend: 'NextThought.view.forums.old.Topic',
 	alias: 'widget.profile-blog-post',
 
 	requires: [

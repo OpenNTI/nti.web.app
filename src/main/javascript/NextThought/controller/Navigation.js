@@ -31,16 +31,13 @@ Ext.define('NextThought.controller.Navigation', {
 					exited: 'slideViewExited'
 				},
 				'*': {
-					'before-show-topic': 'beforeTopicShow',
 					'go-to-library': 'goToLibrary',
 					'go-to-help': 'goToHelp',
 					'navigation-selected': 'navigate',
 					'navigate-to-href': 'navigateToHref',
 					'navigate-to-blog': 'gotoBlog',
 					'navigation-failed': 'readerNavigationFailed',
-					'view-selected': 'setView',
-					'navigate-to-course-discussion': 'goToCourseForum',
-					'show-topic-with-action': 'navigateToTopicAndCallback'
+					'view-selected': 'setView'
 				},
 				'view-container': {
 					'activate': 'trackActiveNavTab'
@@ -51,7 +48,8 @@ Ext.define('NextThought.controller.Navigation', {
 					'show-ntiid': 'navigateToNtiid',
 					'show-object': 'navigateToContent',
 					'show-view': 'setView',
-					'content-dropped': 'dropCachedEntries'
+					'content-dropped': 'dropCachedEntries',
+					'navigate-to-forum': 'onNavigateToForum'
 				}
 			}
 		});
@@ -148,9 +146,9 @@ Ext.define('NextThought.controller.Navigation', {
 				card = reader.up('{isOwnerLayout("card")}'),
 				deck = card && card.up();
 
-			try{
+			try {
 				deck.getLayout().setActiveItem(card);
-			}catch (e) {
+			} catch (e) {
 				console.warn('Failed to switch to reader because:', e.stack || e.message || e);
 				return;
 			}
@@ -370,110 +368,6 @@ Ext.define('NextThought.controller.Navigation', {
 		this.fireEvent('show-profile', user, args);
 	},
 
-	/**
-	 * Navigate to the course and push the forum and topic
-	 *
-	 * @param {NextThought.model.courseware.CourseInstance} course 
-	 * @param {String} forum ntiid of the forum
-	 * @oaram {String} topic ntiid of the  topic
-	 * @param {String} comment ntiid of the comment
-	 * @param {Function} callback
-	 */
-	goToCourseForum: function(course, forum, topic, comment, callback) {
-		var cmp = this.getContentView();
-
-		function showForum() {
-			cmp.setActiveTab('course-forum');
-			cmp.courseForum.applyState(forum, topic, comment, callback);
-			history.pushState({active: 'content', content: { activeTab: 'course-forum', discussion: {forum: forum, topic: topic}}});
-		}
-	
-		if (course && course.fireNavigationEvent) {
-			course.fireNavigationEvent(this, showForum);
-		}
-	},
-
-
-	beforeTopicShow: function(topic) {
-		console.log('implement beforeTopicShow...about to set the Forums View');
-		var me = this, request,
-				link = topic && topic.get('href'), r;
-		if (link) {
-			//We can get the link to board from the content link
-			//doing this prevents having to to two requests to get the forum, then board.
-			//assumes the content url looks like base/board/forum/topic
-			if (link.slice(-1) === '/') {
-				//so we need to get from 0 to the 3rd from the end to avoid the '' from the trailing /
-				link = link.split('/').slice(0, -3).join('/');
-			}else {
-				link = link.split('/').slice(0, -2).join('/');
-			}
-
-			request = {
-				url: link,
-				callback: function(request, success, response) {
-					if (!success) { return; }
-					var board = ParseUtils.parseItems(response.responseText)[0];
-					if (board.belongsToCourse()) {
-						me.goToCourseForum(board.getRelatedCourse(), topic.get('ContainerId'), topic.getId());
-						r = false;
-					}else {
-						r = me.setView('forums');
-					}
-				}
-			};
-
-			Ext.Ajax.request(request);
-
-			return r;//WTF? asynchonous! this will be undefined. what was this supposed to be?
-		}
-
-		return this.setView('forums');
-	},
-
-	// TODO: we should move to where we get rid of 'beforeTopicShow' as is, because it was designed to be synchronous
-	// and it's no longer the case, as we're making an server request.
-	// move the code shared with beforeTopicShow into a function
-	// that they can both share rather than just copying.
-	navigateToTopicAndCallback: function(topicRecord, comment, callback, scope) {
-		console.log('implement beforeTopicShow...about to set the Forums View');
-
-		var me = this,
-				link = topicRecord && topicRecord.get('href'), r, req;
-
-		if (link) {
-			// Get the board url: assumes the content url looks like base/board/forum/topic
-			if (link.slice(-1) === '/') {
-				link = link.split('/').slice(0, -3).join('/');
-			}else {
-				link = link.split('/').slice(0, -2).join('/');
-			}
-
-			req = {
-				url: link,
-				callback: function(request, success, response) {
-					if (!success) {
-						console.error('Could not find the board this topic belongs to: ', topicRecord, arguments);
-						Ext.callback(callback, scope, [false]);
-						return;
-					}
-
-					var board = ParseUtils.parseItems(response.responseText)[0];
-
-					callback = callback ? callback.bind(scope) : null;
-
-					if (board.belongsToCourse()) {
-						me.goToCourseForum(board.getRelatedCourse(), topicRecord.get('ContainerId'), topicRecord.getId(), comment, callback);
-					}else {
-						r = me.setView('forums');
-						me.fireEvent('show-topic', topicRecord, comment, callback);
-					}
-				}
-			};
-			Ext.Ajax.request(req);
-		}
-	},
-
 
 	navigateAndScrollToSearchHit: function(ntiid, result, fragment) {
 		function callback(reader) {
@@ -510,10 +404,10 @@ Ext.define('NextThought.controller.Navigation', {
 	 * tab.  Internal urls and app state fragments are handled inside the application.  Lastly all other
 	 * fragments will be handled by calling sender.navigateToFragment, if it exists, with the provided href.
 	 *
-	 * @param sender The object requesting navigation
-	 * @param href A string representing the location to navigate to
+	 * @param {Object} sender The object requesting navigation
+	 * @param {String} href A string representing the location to navigate to
 	 *
-	 * @return a boolean indicating whether navigation was handled
+	 * @return {Boolean} a boolean indicating whether navigation was handled
 	 *
 	 * TODO Work an error callback into here.  Right now we are at the mercy of many of the
 	 * same problems that plague error callbacks in the location provider
@@ -620,5 +514,12 @@ Ext.define('NextThought.controller.Navigation', {
 		}
 		console.log('Dont know how to navigate to object', obj);
 		return true;
+	},
+
+
+	onNavigateToForum: function(board, course) {
+		if (course) { return; }
+
+		return this.setView('forums');
 	}
 });

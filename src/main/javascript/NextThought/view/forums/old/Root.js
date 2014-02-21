@@ -2,7 +2,7 @@
  * This will contain a list of Boards.
  *
  */
-Ext.define('NextThought.view.forums.Root', {
+Ext.define('NextThought.view.forums.old.Root', {
 	extend: 'Ext.view.View',
 	alias: ['widget.forums-root', 'widget.forums-board-list'],
 
@@ -24,6 +24,8 @@ Ext.define('NextThought.view.forums.Root', {
 			//allow reselect since we don't style the selected state, this has no
 			// visual effect other than the ability to click on it again
 			selModel.deselect(record);
+
+			this.fireEvent('show-forum-list', this, record);
 		}
 	},
 

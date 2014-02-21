@@ -58,7 +58,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.InstructorForum', {
 	createView: function(record) {
 		var me = this,
 			storeId = 'instructor-forum-topic-' + record.getContentsStoreId(),
-			store = Ext.getStore(storeId) || record.buildContentsStore({
+			store = Ext.getStore(storeId) || record.buildContentsStore('', {
 				storeId: storeId,
 				pageSize: 1,
 				proxyOverride: {

@@ -1,12 +1,6 @@
 Ext.define('NextThought.view.courseware.forum.View', {
-	extend: 'Ext.container.Container',
+	extend: 'NextThought.view.forums.Container',
 	alias: 'widget.course-forum',
-	requires: [
-		'NextThought.layout.container.Stack',
-		'NextThought.view.forums.Forum',
-		'NextThought.view.ResourceNotFound'
-	],
-
 
 	mixins: {
 		customScroll: 'NextThought.mixins.CustomScroll'
@@ -14,29 +8,25 @@ Ext.define('NextThought.view.courseware.forum.View', {
 
 	cls: 'course-forum scrollable',
 
-	layout: 'stack',
+	items: [{
+		title: 'Forums',
+		id: 'course-forums-container-root',
+		xtype: 'forums-forum-view'
+	}],
 
 	listeners: {
-		'activate': 'onActivate',
-		'add': 'onViewPushed',
-		'remove': 'onViewPopped',
 		'beforedeactivate': 'handleDeactivate'
 	},
 
 
 	initComponent: function() {
 		this.callParent(arguments);
-		this.initCustomScrollOn('content');
+		// this.initCustomScrollOn('.forum-nav', '.scroll-content');
 	},
 
 
 	handleDeactivate: function() {
-		var c = this.peek(),
-			p = this.el.up('.forum-in-view');
-
-		if (c && c.unlockHeader) {
-			c.unlockHeader();
-		}
+		var p = this.el.up('.forum-in-view');
 
 		if (p) {
 			p.removeCls('forum-in-view');
@@ -44,151 +34,73 @@ Ext.define('NextThought.view.courseware.forum.View', {
 	},
 
 
-	onActivate: function() {
-		var c = this.peek();
-		if (c && c.lockHeader && c.isVisible()) {
-			c.lockHeader();//maybe this is already handled by this, but maybe we should check if we should lock?
-		}
-
-		if (this.store) {
-			this.store.load();
-		}
-	},
-
-
 	typePrefix: 'course-forum',
 
 
-	onViewPushed: function(me, viewPushed) {
-		var type;
-
-		if (viewPushed.xtype === 'forums-topic') {
-			type = 'topic';
-		}else if (viewPushed.xtype === 'course-forum-topic-list') {
-			type = 'forum';
-		}
-
-		if (type) {
-			this.fireEvent('set-active-state', type, viewPushed.record.getId());
-		}
-	},
-
-
-	onViewPopped: function(me, viewPopped) {
-		var type;
-
-		if (viewPopped.xtype === 'forums-topic') {
-			type = 'topic';
-		}else if (viewPopped.xtype === 'course-forum-topic-list') {
-			type = 'forum';
-		}
-
-		if (type) {
-			this.fireEvent('set-active-state', type, undefined);
-		}
-	},
-
-
-	setBoard: function(board) {
+	setForumList: function(forumList) {
 		var id, store, me = this;
 
 		function finish() {
-			console.log('Pushing board for record', board, store);
-			me.store = store;
-			//make sure there aren't any other boards forums or topics
-			Ext.destroy(me.down('course-forum-board, course-forum-topic-list, forums-topic'));
+			me.showForumList(forumList);
 
-			me.add({xtype: 'course-forum-board', record: board, store: store, loadMask: {
-				margin: '100px 0 0 0',
-				msg: 'Loading...'
-			}});
-			if (me.currentForum) {
-				console.log('Restoring state', me.currentForum, me.currentTopic);
-				me.restoreState(me.currentForum, me.currentTopic);
-			}
+			me.fireEvent('forum-list-loaded');
+			//TODO: push state
 		}
 
-		this.hasBoard = !!board;
-		if (!board) {
-			console.log('Clearing board ', board);
+		this.hasBoard = !!forumList;
+
+		if (!forumList) {
 			delete this.currentBoard;
 			this.removeAll(true);
 			return;
 		}
 
-		if (this.currentBoard === board) {
+		if (this.currentForumList === forumList) {
 			return;
 		}
 
-		this.currentBoard = board;
-		id = board.getContentsStoreId();
-		store = Ext.getStore(id) || board.buildContentsStore();
+		this.currentForumList = forumList;
 
-		if ((board.get('Creator') || {}).isModel) {
+		if ((forumList.get('Creator') || {}).isModel) {
 			finish();
 			return;
 		}
 
-		UserRepository.getUser(board.get('Creator'), function(u) {
-			board.set('Creator', u);
+		UserRepository.getUser(forumList.get('Creator'), function(u) {
+			forumList.set('Creator', u);
 			finish();
 		});
 	},
 
 
 	navigateToForumObject: function(forum, topic, comment, cb) {
+		var me = this;
+
 		if (Ext.isFunction(cb)) {
-			this.hasTopicCallback = cb;
+			me.hasTopicCallback = cb;
 			console.error('tracking...', cb);
 		}
 		//if there is a valid state to restore there has to be a forum
 		if (!forum) {
 			try {
-				Ext.callback(this.hasTopicCallback, null, [false]);
+				Ext.callback(me.hasTopicCallback, null, [false]);
 			} catch (e1) {
 				console.warn(e1.stack || e1.message || e1);
 			}
-			delete this.hasTopicCallback;
+			delete me.hasTopicCallback;
 			return;
 		}
+
 		//wait until the board is loaded
-		var top = this.peek();
-		if (!this.hasBoard || !top) {
-			this.currentForum = forum;
-			this.currentTopic = topic;
-			this.currentComment = comment;
+		if (!me.currentForumList) {
+			me.on('forum-list-loaded', function() {
+				me.setTopicList(forum, topic, comment, me.hasTopicCallback);
+			});
+
 			return;
 		}
 
-		if (top.xtype === 'course-forum-board') {
-			this.setForum(forum, topic, comment);
-			return;
-		}
-
-		if (top.xtype === 'course-forum-topic-list') {
-			if (top.record.getId() === forum) {
-				this.setForum(undefined, topic, comment);
-				return;
-			}
-		}
-
-		if (top.xtype === 'forums-topic') {
-			if (top.record.getId() === topic) {
-				if (comment) {
-					top.goToComment(comment);
-				}
-				try {
-					Ext.callback(this.hasTopicCallback, null, [true, top]);
-				} catch (e2) {
-					console.warn(e2.stack || e2.message || e2);
-				}
-				delete this.hasTopicCallback;
-				return;
-			}
-		}
-
-		this.popView();
-		this.navigateToForumObject.apply(this, arguments);
+		me.setTopicList(forum, topic, comment, me.hasTopicCallback);
 	},
 
 
@@ -209,12 +121,7 @@ Ext.define('NextThought.view.courseware.forum.View', {
 	},
 
 
-	pushViewSafely: function(c) {
-		this.add(c);
-	},
-
-
-	setForum: function(forum, topic, comment) {
+	setTopicList: function(forum, topic, comment) {
 		var me = this, boardId = this.currentNtiid;
 
 		forum = forum || (this.state && this.state.forum);
@@ -222,187 +129,33 @@ Ext.define('NextThought.view.courseware.forum.View', {
 		comment = comment || (this.state && this.state.comment);
 
 		if (!forum) {
-			this.setTopic(topic, comment);
+			console.error('Cant set forum with no forum');
 			return;
 		}
 
 		Service.getObject(forum, function(record) {
-			delete me.currentForum;
-			if (boardId !== me.currentNtiid) {
-				console.warn('Dropping retrieved forum because board changed under us', boardId, me.boardId);
-				return;
-			}
-			var storeId = record.getContentsStoreId(),
-				store = Ext.getStore(storeId) || record.buildContentsStore({pageSize: 10}),
-				cmp = Ext.widget('course-forum-topic-list', {
-					record: record,
-					store: store
-				});
+			record.activeNTIID = topic;
 
-			//make sure there aren't any other topic lists or topics
-			Ext.destroy(me.down('course-forum-topic-list, forums-topic'));
+			var cmp = me.showTopicList(record, me.currentForumList);
 
-			me.pushViewSafely(cmp);
-			me.setTopic(topic, comment);
+			Ext.callback(me.hasTopicCallback, null, [true, cmp]);
 		}, function() {
 			console.error('Failed to load forum:', forum);
 		});
 	},
 
 
-	setTopic: function(topic, comment) {
-		var me = this, boardId = this.currentNtiid;
-		if (!topic) {
-			return;
-		}
-
-		topic = topic || (this.state && this.state.topic);
-		comment = comment || (this.state && this.state.comment);
-
-		Service.getObject(topic, function(record) {
-			delete me.currentTopic;
-			if (boardId !== me.currentNtiid) {
-				console.warn('Dropping retrieved forum because board changed under us', boardId, me.boardId);
-				return;
-			}
-			console.log(comment);
-			var storeId = record.getContentsStoreId(),
-				store = Ext.getStore(storeId) || record.buildContentsStore(),
-				top = me.peek(),
-				cmp = Ext.widget('forums-topic', {
-					record: record,
-					store: store
-				});
-
-			function setComment() {
-				cmp.goToComment(comment);
-			}
-			if (top.xtype === 'course-forum-topic-list') {
-				if (comment) {
-					//Ext.defer(setComment, 10000, this);
-					setComment();
-				}
-				//make sure there aren't any other topics
-				Ext.destroy(me.down('forums-topic'));
-
-				me.pushViewSafely(cmp);
-				try {
-					Ext.callback(me.hasTopicCallback, null, [true, cmp]);
-				} catch (e) {
-					console.warn(e.stack || e.message || e);
-				}
-				delete me.hasTopicCallback;
-			}else {
-				me.topicMonitor = me.mon({
-					destroyable: true,
-					single: true,
-					scope: me,
-					'add': function(v, cmp) {
-						if (cmp.xtype === 'course-forum-topic-list') {
-							if (comment) {
-								//Ext.defer(setComment, 10000, this);
-								setComment();
-							}
-							//make sure there aren't any other topics
-							Ext.destroy(me.down('forums-topic'), me.topicMonitor);
-
-							me.pushViewSafely(cmp);
-						}
-					}
-				});
-			}
-
-		});
-	},
-
-	getScrollTop: function() {
-		return 0;
-	},
+	//override our parents implementation of this to keep from pushing a board list
+	showBoardList: function() {},
 
 
 	courseChanged: function(courseInstance) {
 		var s = {content: {discussion: null}};
-
 		//clear out all the views we've pushed
 		this.removeAll(true);
 
 		history.pushState(s); //history is accumulating at this point in the "transaction"
 
-		this.setBoard(courseInstance && courseInstance.get('Discussions'));
-	}
-});
-
-
-Ext.define('NextThought.view.courseware.forum.Board', {
-	extend: 'NextThought.view.forums.Board',
-	alias: 'widget.course-forum-board',
-
-	requires: [
-		'NextThought.view.forums.Forum'
-	],
-
-	selModel: {
-		suppressPushState: true
-	},
-
-	scrollParentCls: '.course-forum',
-
-
-	initComponent: function(){
-		this.callParent(arguments);
-		this.mixins.HeaderLock.disable();
-	},
-	
-
-	afterRender: function() {
-		this.callParent(arguments);
-		var header = this.el.down('.forum-forum-list');
-
-		if (header) {
-			header.removeCls('forum-forum-list');
-			header.addCls('course-forum-list');
-		}
-	},
-
-
-	onHeaderClick: function(e) {
-		if (e.getTarget('.new-forum')) {
-			e.stopEvent();
-			this.fireEvent('new-forum', this);
-			return false;
-		}
-	}
-});
-
-
-
-Ext.define('NextThought.view.courseware.forum.ForumList', {
-	extend: 'NextThought.view.forums.Forum',
-	alias: 'widget.course-forum-topic-list',
-
-	requires: [
-		'NextThought.view.forums.Topic'
-	],
-
-	selModel: {
-		suppressPushState: true
-	},
-
-	scrollParentCls: '.course-forum',
-
-
-	initComponent: function(){
-		this.callParent(arguments);
-		this.mixins.HeaderLock.disable();
-	},
-
-
-	onHeaderClick: function(e) {
-		if (e.getTarget('.path')) {
-			this.fireEvent('pop-view', this);
-		}
-		else if (e.getTarget('.new-topic')) {
-			this.fireEvent('new-topic', this);
-		}
+		this.setForumList(courseInstance && courseInstance.get('Discussions'));
 	}
 });

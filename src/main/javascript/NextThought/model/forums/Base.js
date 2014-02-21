@@ -3,14 +3,22 @@ Ext.define('NextThought.model.forums.Base', {
 
 	requires: ['NextThought.util.Store'],
 
+	fields: [
+		{name: 'isGroupHeader', type: 'boolean', persist: false, defaultValue: false},
+		{name: 'groupName', type: 'string', persist: false}
+	],
+
 	getContentsStoreId: function() {
 		return this.get('Class') + '-' + this.get('NTIID');
 	},
 
 
-	buildContentsStore: function(cfg, extraParams) {
-		var store = NextThought.store.NTI.create(Ext.apply({
-			storeId: this.getContentsStoreId(),
+	buildContentsStore: function(idSuffix, cfg, extraParams) {
+		var store,
+			id = this.getContentsStoreId() + idSuffix;
+
+		store = Ext.getStore(id) || NextThought.store.NTI.create(Ext.apply({
+			storeId: id,
 			url: this.getLink('contents'),
 			sorters: [{
 				property: 'CreatedTime',

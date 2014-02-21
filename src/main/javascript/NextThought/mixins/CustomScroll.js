@@ -33,7 +33,7 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 			// we control that behavior by adding this cls "reader-in-view" to the parent of the parentContainerEl
 			// TODO: Move this logic into a callback.
 			parentContainerEl[data.targetEl.up('.x-reader-pane') ? 'addCls' : 'removeCls']('reader-in-view');
-			parentContainerEl[data.targetEl.is('.course-forum') ? 'addCls' : 'removeCls']('forum-in-view');//really needs to be in callback
+			parentContainerEl[data.targetEl.up('.course-forum') ? 'addCls' : 'removeCls']('forum-in-view');//really needs to be in callback
 
 			//make sure the parent container doesn't have this class unless it needs it
 			parentContainerEl.removeCls('has-alt-tabbar');
@@ -217,7 +217,11 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 			pd = data.targetEl.getPadding('b');
 			data.adjustmentEl.setStyle({marginBottom: -mb + 'px'});
 			data.targetEl.setStyle({paddingBottom: (mb + pd) + 'px'});
-			Ext.DomHelper.append(data.targetEl, {style: {height: mb + 'px'}, cls: 'scroll-buffer'});
+
+			if (!this.noScrollBuffer) {
+				Ext.DomHelper.append(data.targetEl, {style: {height: mb + 'px'}, cls: 'scroll-buffer'});
+			}
+
 
 			me.on('activate', adjustOnScroll, me);
 			monitorCardChange(me);

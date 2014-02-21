@@ -26,14 +26,15 @@ Ext.define('NextThought.controller.Forums', {
 	],
 
 	views: [
-		'forums.Editor',
-		'forums.Root',
-		'forums.Board',
-		'forums.Comment',
-		'forums.Forum',
-		'forums.Topic',
-		'forums.View',
-		'forums.forumcreation.Window'
+		// 'forums.Editor',
+		// 'forums.Root',
+		// 'forums.Board',
+		// 'forums.Comment',
+		// 'forums.Forum',
+		// 'forums.Topic',
+		// 'forums.View',
+		// 'forums.forumcreation.Window',
+		//'profiles.parts.ForumActivityItem'
 	],
 
 	refs: [
@@ -44,12 +45,12 @@ Ext.define('NextThought.controller.Forums', {
 
 		this.listen({
 			component: {
-				'forums-view-container': {
+				'forums-container': {
 					'restore-forum-state': this.restoreState,
-					'render': this.loadRoot
+					'render': this.loadBoardList
 				},
 
-				'forums-view-container > *': {
+				'forums-container > *': {
 					'pop-view': this.popView
 				},
 
@@ -57,21 +58,16 @@ Ext.define('NextThought.controller.Forums', {
 					'pop-view': this.popView
 				},
 
-				'forums-root': {
-					'select': this.loadBoard
-				},
 				'forums-board': {
-					'select': this.loadForum,
 					'new-forum': this.showForumEditor
 				},
 				'forumcreation-main-view': {
 					'save-forum': this.saveForum
 				},
 				'forums-forum': {
-					'new-topic': this.showTopicEditor,
-					'select': this.loadTopic
+					'new-topic': this.showTopicEditor
 				},
-				'forums-topic': {
+				'forums-topic-topic': {
 					'navigate-topic': this.loadTopic,
 					'delete-post': this.deleteObject,
 					'edit-topic': this.showTopicEditor,
@@ -116,8 +112,11 @@ Ext.define('NextThought.controller.Forums', {
 					'highlight-topic-hit': this.highlightSearchResult
 				},
 				'*': {
-					'show-topic': this.presentTopic,
-					'forums:fill-in-path': this.fillInPath
+					'show-topic': 'presentTopic',
+					'forums:fill-in-path': 'fillInPath',
+					'show-forum-list': 'loadForumList',
+					'show-topic-list': 'loadTopicList',
+					'new-topic': 'showNewTopicEditor'
 				}
 			},
 			controller: {
@@ -130,16 +129,8 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	getStackContainer: function(ref) {
-		var view;
-		//'[isStackContainer]'
-		if (!ref) {
-			return this.getForumViewContainer();
-		}
-
-		view = ref.view || ref;
-
-		return view.up('[isStackContainer]');
+	getCardContainer: function(cmp) {
+		return cmp && cmp.up('[isForumContainer]');
 	},
 
 
@@ -591,158 +582,138 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	presentTopic: function(record, commentId, cb, scope) {
-		var callback = arguments.length > 2 ? cb : undefined,
-			cid = arguments.length > 1 ? commentId : undefined,
-			toShowHref = record && record.get ? record.get('href') : record;
-
-		if (!record || !toShowHref) {
-			Ext.callback(callback, scope, [false]);
+	presentTopic: function(cmp, record, comment, cb, scope) {
+		if (!record) {
+			console.error('Cant present a topic with an empty record');
 			return;
 		}
 
-		if (!Ext.isEmpty(cid)) {
-			toShowHref = toShowHref + '/' + cid;
-		}
+		var me = this;
 
-		console.log('should navigate to forum topic: ', record, cid, callback);
-
-		//The idea here is similar to state restoration.  Pop us down to the last
-		//stack view that matches (which is worst case the root).  Then using the
-		//href on the passed record build record hrefs that we need, fetch them,
-		//and then build the necessary stores.
-
-		//First we pop down the first view whose records href is a prefix of ours
-		//or the root
-		function predicate(item, i) {
-			var rec = item.record,
-				href = rec ? rec.get('href') : undefined;
-			return rec && href && toShowHref.indexOf(href) === 0;
-		}
-
-		this.popToLastViewMatchingPredicate(predicate);
-
-		//FIXME: Do this better.  Type property on the models, make sure we are in the right course, etc...
-		var type = cid ? 'comment' : 'topic';
-		if(record && record instanceof NextThought.model.forums.Forum){
-			type = 'forum';
-		}
-
-		this.pushNecessaryViews(toShowHref, type, cb, scope);
-	},
-
-
-	showLevel: function(selModel, level, record, cfg, storeCfg, extraParams, viewContainer) {
-		var c = this.getStackContainer(selModel || viewContainer),
-			store, cmpCfg, storeId = record.getContentsStoreId(),
-			prefix = c.typePrefix || 'forums';
-
-		store = Ext.getStore(storeId) || record.buildContentsStore(storeCfg, extraParams);
-
-		cmpCfg = Ext.applyIf({xtype: prefix + '-' + level + '-list', record: record, store: store}, cfg || {});
-		c.add(cmpCfg);
-	},
-
-
-	loadRootCallBack: function(resp, req, boards, urls, store) {
-		var o = ParseUtils.parseItems(resp.responseText),
-				c;
-
-			if (req && req.community) {
-				c = req.community;
-				Ext.each(o, function(o) {
-					o.communityUsername = c.getId();
-					if (o.get('Creator') === c.getId()) { o.set('Creator', c); }});
+		Service.getObject(record.get('ContainerId'), function(topicList) {
+			if (topicList) {
+				topicList.comment = comment;
+				me.loadTopicList(cmp, topicList, record.getId(), function() {
+					if (cb) {
+						cb.apply(scope, arguments);
+					}
+				});
 			}
+		});
+	},
 
-			Ext.each(o, function(b) {
+
+	loadCommunityBoards: function() {
+		var p = PromiseFactory.make(),
+			communities = $AppConfig.userObject.getCommunities();
+
+		function onBoardLoad(resp, req) {
+			var objs = ParseUtils.parseItems(resp.responseText),
+				comm = req.community, boards = [];
+
+
+			objs.forEach(function(o) {
 				//We create forums on the backend, so if the board has 0, don't show it.
-				if (b.get('ForumCount') > -1) {
-					boards.push(b);
+				// except I don't think this applies anymore
+				if (o.get('ForumCount') > -1) {
+					if (comm) {
+						o.communityUsername = comm.getId();
+
+						if (o.get('Creator') === comm.getId()) {
+							o.set('Creator', comm);
+						}
+					}
+
+					boards.push(o);
 				}
 			});
 
-			this.loadRootMaybeFinish(urls, boards, store);
-	},
-
-
-	loadRootMaybeFinish: function(urls, boards, store) {
-		urls.handled--;
-		var r = boards.first(),
-			me = this;
-		if (urls.handled === 0) {
-			console.log('List of boards:', boards);
-			store.add(boards);
-			if (boards.length === 1) {
-				me.loadBoard(null, r, true);
-				me.replaceState({
-					board: {
-						community: r.communityUsername,
-						isUser: true
-					},
-					forum: undefined,
-					topic: undefined,
-					comment: undefined
-				});
+			if (req.promise) {
+				req.promise.fulfill(boards);
+			} else {
+				console.error('We didnt have a promise to fulfill, panic');
 			}
-			delete me.loadingRoot;
-			me.fireEvent('root-loaded');
 		}
+
+		function loadCommunityBoard(community) {
+			var prom = PromiseFactory.make(),
+				url = community.getLink('DiscussionBoard');
+
+			Ext.Ajax.request({
+				url: url,
+				community: community,
+				promise: prom,
+				success: onBoardLoad,
+				failure: function() {
+					prom.fulfill([]);
+				}
+			});
+
+			return prom;
+		}
+
+		Promise.pool(communities.map(loadCommunityBoard))
+			.done(function(results) {
+				results = results.reduce(function(a, b) {
+					return a.concat(b);
+				}, []);
+
+				p.fulfill(results);
+			})
+			.fail(function(reason) {
+				console.error('Faild to load boards because:', reason);
+				//if we fail for some reason don't break it, just show no boards
+				p.fulfill([]);
+			});
+
+		return p;
 	},
 
 
-	loadRootRequest: function(url, community, success, failure, scope) {
-		Ext.Ajax.request({url: url, community: community, success: success, failure: failure, scope: scope});
-	},
-
-
-	loadRoot: function(view) {
-		function makeUrl(c) { return c && c.getLink('DiscussionBoard'); }
-
-		//Just for now...
-		function fn(resp, req) {
-			me.loadRootCallBack(resp, req, boards, urls, store);
-		}
-
-		function maybeFinish() {
-			me.loadRootMaybeFinish(urls, boards, store);
-		}
-
+	loadBoardList: function(view) {
 		console.log('Loadroot called', view);
 
-		var communities = $AppConfig.userObject.getCommunities(),
-			urls = Ext.Array.map(communities, makeUrl),
-			boards = [],
-			me = this,
-			root,
+		var me = this,
 			store = NextThought.store.NTI.create({
 				model: 'NextThought.model.forums.Forum', id: 'flattened-boards-forums'
 			});
 
 		me.loadingRoot = true;
 
-		urls.handled = urls.length;
+		me.loadCommunityBoards()
+			.done(function(boards) {
+				delete me.loadingRoot;
 
-		root = view.add({store: store, xtype: 'forums-root', stateKey: 'root'});
+				if (boards) {
+					store.add(boards);
 
-		Ext.each(urls, function(url, i) {
+					//TODO: if there is only one board go ahead and load it
+					if (view.showBoardList) {
+						view.showBoardList(store);
+					}
+				}
+			});
 
-			if (!url) { maybeFinish(); return; }
-
-			me.loadRootRequest(url, communities[i], fn, maybeFinish, me);
-			//Ext.Ajax.request({ url: url, community: communities[i], success: fn, failure: maybeFinish, scope: me});
-		});
 	},
 
 
-	loadBoard: function(selModel, record, silent, cfg) {
+	loadForumList: function(cmp, record, activeForumId, silent, wait) {
 		if (Ext.isArray(record)) { record = record[0]; }
 
-		var me = this,
+		var p = PromiseFactory.make(),
+			me = this, view = this.getCardContainer(cmp),
 			community = record.get('Creator');
 
-		function finish() {
-			me.showLevel(selModel, 'forum', record, Ext.applyIf({stateKey: 'board'},cfg || {}), {pageSize: 10});
+		record.activeNTIID = activeForumId;
+
+		function finish(v) {
+			if (v.showForumList) {
+				if (wait) {
+					p.fulfill(v);
+				} else {
+					view.showForumList(record);
+				}
+			}
 
 			if (silent !== true) {
 				//The communities board we are viewing
@@ -750,27 +721,49 @@ Ext.define('NextThought.controller.Forums', {
 			}
 		}
 
-		if (community.isModel) {
-			community = community.get('Username');
-		}
-		else {
-			UserRepository.getUser(community, function(c) {
-				record.set('Creator', c);
-				finish();
-			});
-			return;
+		if (view) {
+			if (community.isModel) {
+				community = community.get('Username');
+			} else {
+				UserRepository.getUser(community)
+					.done(function(c) {
+						record.set('Creator', c);
+						finish(view);
+					});
+
+				return p;
+			}
+
+			finish(view);
+		} else {
+			record.findCourse()
+				.done(function(course) {
+					view = me.callOnAllControllersWith('onNavigateToForum', record, course);
+					finish(view);
+				});
 		}
 
-		finish();
+		return wait ? p : true;
 	},
 
 
-	loadForum: function(selModel, record, silent) {
-		if (Ext.isArray(record)) { record = record[0]; }
-		var me = this;
 
-		function finish() {
-			me.showLevel(selModel, 'topic', record, {stateKey: 'forum'} ,{pageSize: 10});
+	loadTopicList: function(cmp, record, activeTopicId, callback, silent) {
+		if (Ext.isArray(record)) { record = record[0]; }
+
+		if (!record.isModel) { return; }
+
+		var me = this, view = this.getCardContainer(cmp);
+
+		record.activeNTIID = activeTopicId;
+
+		function finish(v, forumList) {
+			var topicView = v.showTopicList(record, forumList);
+
+			if (callback && Ext.isFunction(callback)) {
+				callback.call(this, topicView);
+			}
+
 			if (silent !== true) {
 				me.pushState({'forum': record.get('ID'), topic: undefined, comment: undefined}); //The forum we are viewing
 			}
@@ -778,8 +771,23 @@ Ext.define('NextThought.controller.Forums', {
 
 		UserRepository.getUser(record.get('Creator'), function(c) {
 			record.set('Creator', c);
-			finish();
 		});
+
+		if (view) {
+			finish(view);
+		} else {
+			//get the forum list and add it first
+			Service.getObject(record.get('ContainerId'), function(forumList) {
+				if (forumList) {
+					me.loadForumList(null, forumList, record.getId(), null, true)
+						.done(function(v) {
+							finish(v, forumList);
+						});
+				}
+			}, function(req, resp) {
+				console.error('Faild to load forum-list for topic:', req, resp);
+			},me, true);
+		}
 	},
 
 
@@ -883,20 +891,36 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	showTopicEditor: function(cmp, topicRecord) {
-		var c = this.getStackContainer(cmp),
-			o = c.items.last();
+	showNewTopicEditor: function(cmp, topicList, closeCallback) {
+		this.showTopicEditor(cmp, null, topicList, closeCallback);
+	},
 
-		while (o && !o.getPath) {
-			o = o.prev();
+
+	showTopicEditor: function(cmp, topicRecord, topicList, closeCallback) {
+		var view = this.getCardContainer(cmp);
+
+		function finish(v, forumList) {
+			v.showTopicEditor(topicRecord, topicList, forumList, closeCallback);
 		}
 
-		if (o && !o.getPath) {
-
-			o = null;
+		if (topicRecord) {
+			UserRepository.getUser(topicRecord.get('Creator'), function(c) {
+				topicRecord.set('Creator', c);
+			});
 		}
 
-		c.add({xtype: 'forums-topic-editor', record: topicRecord, path: o && o.getPath()});
+		if (view) {
+			finish(view);
+		} else {
+			Service.getObject(topicList.get('ContainerId'), function(forumList) {
+				if (forumList) {
+					me.loadForum(null, forum, topicList.getId(), null, true)
+						.done(function(v) {
+							finish(v, forumList);
+						});
+				}
+			});
+		}
 	},
 
 
@@ -922,7 +946,7 @@ Ext.define('NextThought.controller.Forums', {
 
 	loadTopic: function(selModel, record, silent) {
 		if (Ext.isArray(record)) { record = record[0]; }
-		var c = this.getStackContainer(selModel),
+		var c = this.getCardContainer(selModel),
 			o = c.items.last(),
 			forum = c.down('course-forum-topic-list, forums-topic-list'),
 			store = forum && forum.store,
@@ -962,11 +986,10 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	saveTopicPost: function(editorCmp, record, title, tags, body, autoPublish) {
+	saveTopicPost: function(editorCmp, record, forum, title, tags, body, autoPublish) {
 		var isEdit = Boolean(record),
-			cmp = editorCmp.prev(),
+			cmp = editorCmp.up('forums-topic-view'),
 			post = isEdit ? record.get('headline') : NextThought.model.forums.CommunityHeadlinePost.create(),
-			forumRecord = cmp && cmp.record,
 			me = this;
 
 		// NOTE: Forums entries are PUBLIC only.
@@ -1000,7 +1023,7 @@ Ext.define('NextThought.controller.Forums', {
 				me.applyTopicToStores(entry);
 			}
 
-			Ext.callback(editorCmp.onSaveSuccess, editorCmp, []);
+			Ext.callback(editorCmp.onSaveSuccess, editorCmp, [entry]);
 		}
 
 		if (editorCmp.el) {
@@ -1016,7 +1039,7 @@ Ext.define('NextThought.controller.Forums', {
 		try {
 			post.getProxy().on('exception', editorCmp.onSaveFailure, editorCmp, {single: true});
 			post.save({
-				url: isEdit ? undefined : forumRecord && forumRecord.getLink('add'),//only use postRecord if its a new post.
+				url: isEdit ? undefined : forum && forum.getLink('add'),//only use postRecord if its a new post.
 				scope: this,
 				success: function(post, operation) {
 					var entry = isEdit ? record : ParseUtils.parseItems(operation.response.responseText)[0];

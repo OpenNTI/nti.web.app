@@ -76,7 +76,8 @@ Ext.define('NextThought.controller.CourseWare', {
 			},
 			controller: {
 				'*': {
-					'course-selected': 'onCourseSelected'
+					'course-selected': 'onCourseSelected',
+					'navigate-to-forum': 'onNavigateToForum'
 				}
 			}
 		};
@@ -263,7 +264,7 @@ Ext.define('NextThought.controller.CourseWare', {
 
 
 	onCourseSelected: function(instance, callback) {
-		var c;
+		var c, view;
 
 		if (!instance.__getLocationInfo()) {
 			c = instance.getCourseCatalogEntry();
@@ -282,8 +283,8 @@ Ext.define('NextThought.controller.CourseWare', {
 
 		try {
 			this.getMainNav().updateCurrent(false, instance);
-			this.getContentView().onCourseSelected(instance);
-			Ext.callback(callback);
+			view = this.getContentView().onCourseSelected(instance);
+			Ext.callback(callback, this, [view]);
 			return true;
 		} finally {
 			history.endTransaction('navigation-transaction');
@@ -339,6 +340,14 @@ Ext.define('NextThought.controller.CourseWare', {
 				});
 
 		return p;
+	},
+
+
+	onNavigateToForum: function(board, course) {
+		if (!course) { return; }
+
+		this.getMainNav().updateCurrent(false, course);
+		return this.getContentView().onCourseSelected(course, 'course-forum').down('[isForumContainer]');
 	}
 }, function() {
 

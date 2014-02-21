@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.forums.Topic', {
+Ext.define('NextThought.view.forums.old.Topic', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.forums-topic',
 
@@ -14,11 +14,11 @@ Ext.define('NextThought.view.forums.Topic', {
 
 	requires: [
 		'NextThought.editor.Editor',
-		'NextThought.view.forums.Comment',
+		'NextThought.view.forums.old.Comment',
 		'NextThought.view.menus.BlogTogglePublish',
 		'NextThought.ux.SearchHits',
 		'NextThought.layout.component.Natural',
-		'NextThought.view.forums.Comments'
+		'NextThought.view.forums.old.Comments'
 	],
 
 	onClassExtended: function(cls, data) {
@@ -119,7 +119,6 @@ Ext.define('NextThought.view.forums.Topic', {
 
 	constructor: function() {
 		this.callParent(arguments);
-
 		if (!this.topicListStore || this.currentIndex === undefined) {
 			this.noNavArrows = true;
 
@@ -156,7 +155,7 @@ Ext.define('NextThought.view.forums.Topic', {
 		});
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {},{
-			sortOn: 'createdTime',
+			sortOn: 'CreatedTime',
 			sortOrder: 'descending'
 		});
 
@@ -707,7 +706,7 @@ Ext.define('NextThought.view.forums.Topic', {
 			return;
 		}
 
-		comment = comment && comment.get('ID');
+		comment = comment.get('ID');
 
 		if (!this.ready) {
 			this.scrollToComment = comment;

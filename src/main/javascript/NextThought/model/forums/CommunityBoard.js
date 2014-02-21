@@ -5,28 +5,25 @@ Ext.define('NextThought.model.forums.CommunityBoard', {
 		{name: 'title', type: 'auto', persist: false}
 	],
 
-	getRelatedCourse: function() {
-		return this.course || this.findCourse();
-	},
-
-	belongsToCourse: function() {
-		return !!this.getRelatedCourse();
-	},
 
 	findCourse: function() {
-		var me = this;
+		var p = PromiseFactory.make(),
+			me = this;
+
 		if (me.course) {
-			return me.course;
+			p.fulfill(me.course);
 		}
 
-		console.error('This needs to return a promise, not a value');
-		CourseWareUtils.forEachCourse(function(course) {
+		CourseWareUtils.findCourseBy(function(course) {
 			var instance = course.get('CourseInstance');
-			if (me.getId() === instance.get('Discussions').getId()) {
-				me.course = instance;
-			}
+
+			return me.getId() === instance.get('Discussions').getId();
+		}).done(function(course) {
+			course = course.get('CourseInstance');
+			me.course = course;
+			p.fulfill(course);
 		});
 
-		return me.course || null;
+		return p;
 	}
 });

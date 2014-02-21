@@ -5,7 +5,7 @@ Ext.define('NextThought.view.Views', {
 		'Ext.layout.container.Card',
 		'NextThought.view.contacts.View',
 		'NextThought.view.content.View',
-		'NextThought.view.forums.View',
+		//'NextThought.view.forums.View',
 		'NextThought.view.library.View',
 		'NextThought.view.profiles.View'
 	],
@@ -26,7 +26,7 @@ Ext.define('NextThought.view.Views', {
 		{id: 'profile', xtype: 'profile-view-container', associatedParent: 'contacts'},
 		{id: 'library', xtype: 'library-view-container'},
 		{id: 'content', xtype: 'content-view-container'},
-		{id: 'forums', xtype: 'forums-view-container'},
+		{id: 'forums', xtype: 'forums-container'},
 		{id: 'contacts', xtype: 'contacts-view-container'}
 	],
 

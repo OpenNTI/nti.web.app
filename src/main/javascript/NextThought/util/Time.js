@@ -1,6 +1,31 @@
 Ext.define('NextThought.util.Time', {
 	singleton: true,
 
+	getTimeGroupHeader: function(time) {
+		var now = new Date(), t = time.getTime(),
+			oneDayAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1),
+			twoDaysAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 2),
+			oneWeekAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1 * 7);
+
+		function between(start, end) {
+			return start.getTime() < t && t <= end.getTime();
+		}
+
+		if (between(oneDayAgo, now)) {
+			return 'Today';
+		}
+
+		if (between(twoDaysAgo, oneDayAgo)) {
+			return 'Yesterday';
+		}
+
+		if (between(oneWeekAgo, twoDaysAgo)) {
+			return Ext.Date.format(time, ' l');
+		}
+
+		return new Duration(Math.abs(now - time) / 1000).ago();
+	},
+
 	//yanked & modifed from: http://stackoverflow.com/questions/6108819/javascript-timestamp-to-relative-time-eg-2-seconds-ago-one-week-ago-etc-best
 	timeDifference: function(current, previous) {
 
