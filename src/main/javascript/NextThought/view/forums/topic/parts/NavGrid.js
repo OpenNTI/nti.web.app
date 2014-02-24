@@ -14,6 +14,8 @@ Ext.define('NextThought.view.forums.topic.parts.NavGrid', {
 		pruneRemoved: false
 	},
 
+	cls: 'topic-grid',
+
 	ui: 'course-assessment',
 	plain: true,
 	border: false,
