@@ -156,6 +156,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		var filter = this.store.filters.getByKey('LegacyEnrollmentStatus');
 		if (filter) {
 			filter = filter.value;
+			this.updateColumns(filter);
 			this.el.select('[data-filter-id]').removeCls('checked');
 			this.el.select('[data-filter-id="' + filter + '"]').addCls('checked');
 		}
@@ -274,6 +275,12 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	},
 
 
+	updateColumns: function(filter) {
+		var c = this.down('gridcolumn[name="username"]');
+		c[filter === 'ForCredit' ? 'show' : 'hide']();
+	},
+
+
 	onFiltersClicked: function(e) {
 		var checked, cls = 'checked',
 			el = e.getTarget('.nti-radiobutton', null, true),
@@ -302,8 +309,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 	applyFilter: function(filter) {
 		try {
-			var c = this.down('gridcolumn[name="username"]');
-			c[filter === 'ForCredit' ? 'show' : 'hide']();
+			this.updateColumns(filter);
 
 			this.store.filter([{id: 'LegacyEnrollmentStatus', property: 'LegacyEnrollmentStatus', value: filter}]);
 		} finally {
