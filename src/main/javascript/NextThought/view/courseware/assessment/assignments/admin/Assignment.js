@@ -90,6 +90,11 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 
 	items: [
+		   //FIXME: under ExtJS 4.2.1 this grid does not render any rows. Not sure why,
+		   // as the height of the container *IS* published. The debuging messages for
+		   // view resize indicate the buffered renderer knows how tall it is. Another
+		   // instance of this grid renders rows just fine. (see Student.js)
+		   // As far as I know, this is the last show-stopper for Ext 4.2.1.
 		{
 			xtype: 'course-admin-grid',
 			cls: 'student-assignment-overview',
