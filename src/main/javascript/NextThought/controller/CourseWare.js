@@ -348,16 +348,22 @@ Ext.define('NextThought.controller.CourseWare', {
 
 		var contentView = this.getContentView();
 
+		//if its silent, don't switch to the course or switch the tab
 		if (silent) {
-			if (contentView.currentCourse === course) {
-				return contentView.down('[isForumContainer]');
-			}
+			return contentView.currentCourse === course && contentView.down('[isForumContainer]');
 		}
 
 		if (this.fireEvent('show-view', 'content', true) === false) {
 			return false;
 		}
 
+		//if we are already in the course just switch the tab
+		if (contentView.currentCourse === course) {
+			contentView.setActiveTab('course-forum');
+			return contentView.down('[isForumContainer]');
+		}
+
+		//finally if we aren't in the course switch to it
 		this.getMainNav().updateCurrent(false, course);
 		return contentView.onCourseSelected(course, 'course-forum').down('[isForumContainer]');
 	}
