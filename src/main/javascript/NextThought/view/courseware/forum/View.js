@@ -43,6 +43,8 @@ Ext.define('NextThought.view.courseware.forum.View', {
 		var id, store, me = this;
 
 		function finish() {
+			//we already have a board loaded, so don't overwrite it
+			if (me.forumList === forumList) { return; }
 			var silent = me.ownerCt.getLayout().getActiveItem() !== me;
 
 			if (!me.isActive()) {

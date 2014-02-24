@@ -58,9 +58,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 		var me = this,
 			bar = me.getFilterBar(),
 			//showType = bar.getShowType(),
-			groupBy = bar.getGroupBy(),
-			search = bar.getSearch();
+			groupBy = bar && bar.getGroupBy(),
+			search = bar && bar.getSearch();
 
+		//be defensive
+		if (!bar) {
+			return function() {};
+		}
 		//return function that will perform the grouping
 		return function(cmp, store) {
 			var count;

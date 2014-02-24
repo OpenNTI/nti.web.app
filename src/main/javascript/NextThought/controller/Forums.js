@@ -130,7 +130,11 @@ Ext.define('NextThought.controller.Forums', {
 
 
 	getCardContainer: function(cmp) {
-		return cmp && cmp.up('[isForumContainer]');
+		if (!cmp) { return null;}
+
+		if (cmp.isForumContainer) { return cmp; }
+
+		return cmp.up('[isForumContainer]');
 	},
 
 
@@ -478,7 +482,7 @@ Ext.define('NextThought.controller.Forums', {
 					//it from switching the tab.
 					view = me.callOnAllControllersWith('onNavigateToForum', record, course, s);
 					//set a flag to keep the view from updating the state
-					view.ignoreStateUpdate = me.stateRestoring && !me.hasStateToRestore;
+					view.ignoreStateUpdate = s;
 					finish(view);
 				});
 		}

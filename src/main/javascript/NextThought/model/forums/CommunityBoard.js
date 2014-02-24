@@ -14,9 +14,9 @@ Ext.define('NextThought.model.forums.CommunityBoard', {
 			p.fulfill(me.course);
 		} else {
 			CourseWareUtils.findCourseBy(function(course) {
-			var instance = course.get('CourseInstance');
+				var instance = course.get('CourseInstance');
 
-			return me.getId() === instance.get('Discussions').getId();
+				return me.getId() === instance.get('Discussions').getId();
 			}).done(function(course) {
 				course = course.get('CourseInstance');
 				me.course = course;
