@@ -115,7 +115,8 @@ Ext.define('NextThought.model.assessment.Assignment', {
 					} else {
 						console.warn('Skipped record!');
 					}
-				} else {
+				//the record already has a user object
+				} else if (r && (typeof r.get('Creator') === 'string')) {
 					console.error('No user');
 				}
 			}
