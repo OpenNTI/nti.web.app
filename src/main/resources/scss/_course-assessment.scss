@@ -1161,14 +1161,12 @@ canvas.x-component-course-assessment {
 
 //Grid Views:
 .x-grid {
-	&.student-performance-overview,
-	&.student-assignment-overview {
+	&.student-performance-overview {
 		position: absolute;
 		bottom: 0; left: 0; right: 0;
 	}
 
 	&.student-performance-overview { top: 171px; }
-	&.student-assignment-overview { top: 162px; margin-top: 162px; }
 
 	.x-grid-cell-editor{
 		input{

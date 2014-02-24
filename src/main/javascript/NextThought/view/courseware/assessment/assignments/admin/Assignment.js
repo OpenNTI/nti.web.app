@@ -3,6 +3,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	alias: 'widget.course-assessment-admin-assignments-item',
 
 	requires: [
+		'NextThought.layout.component.CustomTemplate',
 		'NextThought.store.courseware.AssignmentView',
 		'NextThought.view.courseware.assessment.admin.Grid'
 	],
@@ -11,7 +12,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	cls: 'course-assessment-header assignment-item',
 
 	layout: 'fit',
-	componentLayout: 'body',
+	componentLayout: 'customtemplate',
 	childEls: ['body'],
 	getTargetEl: function() { return this.body; },
 
@@ -65,7 +66,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 				}
 			]
 		},
-		{ id: '{id}-body', cls: 'body', cn: ['{%this.renderContainer(out,values)%}'] }
+		{ id: '{id}-body', cls: 'x-panel-body body', cn: ['{%this.renderContainer(out,values)%}'] }
 	]),
 
 
