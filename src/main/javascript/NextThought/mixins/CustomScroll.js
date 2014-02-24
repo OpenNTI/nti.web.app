@@ -236,7 +236,7 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 			updateSideHeight.call(me, mb, true);
 			//setReverseMargin.call(this, mb);
 
-			if ($AppConfig.debugCustomScroll || true) {
+			if ($AppConfig.debugCustomScroll) {
 				console.debug([
 					'[CUSTOM SCROLL SETUP]',
 					'this: ' + me.id,
