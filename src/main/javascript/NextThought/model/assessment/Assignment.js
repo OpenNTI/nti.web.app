@@ -72,6 +72,9 @@ Ext.define('NextThought.model.assessment.Assignment', {
 	},
 
 
+	getGradeBookEntry: function() { return this._gradeBookEntry; },
+
+
 	getSubmittedHistoryStore: function() {
 		if (!this._submittedHistoryStore) {
 			var url = this.getLink('GradeSubmittedAssignmentHistorySummaries'),
@@ -157,25 +160,7 @@ Ext.define('NextThought.model.assessment.Assignment', {
 		if (!gbe) {return;}
 
 		function update(rec) {
-			var c = rec.get('Creator'),
-				u = typeof c === 'string' ? c : c.getId(),
-				submissionGrade = rec.get('Grade'),
-				gradebookGrade = gbe.getFieldItem('Items', u);
-
-			if (submissionGrade && submissionGrade.get('Username') !== u) {
-				console.warn('Record creator does not match username of its own grade object', rec);
-			}
-
-			if (!gradebookGrade) {
-				return;
-			}
-
-			if (gradebookGrade.get('Username') !== u) {
-				console.error('Record creator does not match username of the grade object from the GradeBook entry', rec, u, gbe);
-				return;
-			}
-
-			rec.set('Grade', gradebookGrade);
+			gbe.updateHistoryItem(rec);
 		}
 
 		recs.forEach(update);

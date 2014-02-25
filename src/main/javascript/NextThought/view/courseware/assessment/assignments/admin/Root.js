@@ -59,8 +59,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 			Service.request([store.getProxy().url, user].join('/'))
 				.done(function(res) {
 
-					console.debug(res);
-
+					assignmentHistory = ParseUtils.parseItems(res)[0];
+					item.getGradeBookEntry().updateHistoryItem(assignmentHistory);
 
 					pageSource = NextThought.proxy.courseware.PageSource.create({
 						current: assignmentHistory,
