@@ -158,7 +158,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 		];
 
 		this.applyPagerFilter();
-		this.fireEvent('show-assignment', this, record.get('item'), record, this.student, path, this.store);
+		this.fireEvent('show-assignment', this, record.get('item'), record, this.student, path,
+				NextThought.util.PageSource.create({
+					store: this.store,
+					current: this.store.indexOf(record)
+				})
+		);
 	}
 	//</editor-fold>
 });
