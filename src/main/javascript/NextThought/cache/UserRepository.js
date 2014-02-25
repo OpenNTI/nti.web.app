@@ -399,10 +399,17 @@ Ext.define('NextThought.cache.UserRepository', {
 			active = me._pendingResolve;
 
 		requestNames = names.filter(function(n) {
-			var a = active[n];
+			var a = active[n], u;
 			if (a && divert.indexOf(a) === -1) {
 				divert.push(a);
+			} else {
+				u = me.getStore().getById(n);
+				if (u) {
+					a = Promise.resolve([u]);
+					divert.push(a);
+				}
 			}
+
 			return !a;
 		});
 
