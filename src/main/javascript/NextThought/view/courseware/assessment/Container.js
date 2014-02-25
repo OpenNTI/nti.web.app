@@ -83,7 +83,7 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 	},
 
 
-	showAssignment: function(view, assignment, assignmentHistory, student, path, store, page) {
+	showAssignment: function(view, assignment, assignmentHistory, student, path, pageSource, page) {
 		var me = this,
 			active = me._showAssignmentPromise || Promise.resolve();
 
@@ -123,10 +123,14 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 						assignmentHistory: history,
 						student: student,
 						path: path,
-						store: store,
-						page: page,
 						location: assignment.getId(),
-						assignment: assignment
+						assignment: assignment,
+
+						//don't pass a store here, if old code calls this with a store, just null this out.
+						pageSource: pageSource && pageSource.isStore ? null : pageSource,
+
+						store: pageSource && pageSource.isStore ? pageSource : null,//deprecated -- update to use pageSource
+						page: page//deprecated
 					}), {
 						'goup': 'showRoot'
 					});
