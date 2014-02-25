@@ -373,6 +373,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 		if (!pageSource) {
 			pageSource = NextThought.proxy.courseware.PageSource.create({
+				batchAroundParam: 'batchAroundCreator',
 				current: record,
 				model: this.store.getProxy().getModel(),
 				url: NextThought.proxy.courseware.PageSource.urlFrom(this.store),

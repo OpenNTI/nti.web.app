@@ -55,7 +55,13 @@ Ext.define('NextThought.util.PageSource', {
 		}
 		this.current = n;
 		return this.store.getAt(n);
-	}
+	},
+
+
+	hasNext: function() { return this.store && this.getTotal() > 1; },
+
+
+	hasPrevious: function() { return this.store && this.getTotal() > 1; }
 });
 
 

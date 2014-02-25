@@ -63,6 +63,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 					item.getGradeBookEntry().updateHistoryItem(assignmentHistory);
 
 					pageSource = NextThought.proxy.courseware.PageSource.create({
+						batchAroundParam: 'batchAroundCreator',
 						current: assignmentHistory,
 						model: store.getProxy().getModel(),
 						url: NextThought.proxy.courseware.PageSource.urlFrom(store),

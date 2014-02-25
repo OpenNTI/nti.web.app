@@ -24,20 +24,23 @@ Ext.define('NextThought.proxy.courseware.PageSource', {
 		idExtractor: Ext.identityFn,
 		current: null,
 		url: '',
-		model: null
+		model: null,
+		batchAroundParam: 'batchAround'
 	},
 
 
 	constructor: function(cfg) {
 		this.initConfig(cfg);
 
-		var getIdOf = this.getIdExtractor() || Ext.identityFn;
+		var getIdOf = this.getIdExtractor() || Ext.identityFn,
+			p = {
+				batchSize: 3,
+				batchStart: 0
+			};
 
-		this.url = Ext.urlAppend(this.url, Ext.Object.toQueryString({
-			batchAround: getIdOf(this.current),
-			batchSize: 3,
-			batchStart: 0
-		}));
+		p[this.getBatchAroundParam()] = getIdOf(this.current);
+
+		this.url = Ext.urlAppend(this.url, Ext.Object.toQueryString(p));
 
 		Service.request(this.url)
 				.done(this.update.bind(this))
@@ -48,15 +51,29 @@ Ext.define('NextThought.proxy.courseware.PageSource', {
 
 
 	update: function(rep) {
-		//FilteredTotalItemCount
+		var rawTotal = 'TotalItemCount',
+			total = 'Filtered' + rawTotal;
+
+		rep = Ext.decode(rep, true) || {};
+
+		this.total = rep.hasOwnProperty(total) ? rep[total] :
+					 rep.hasOwnProperty(rawTotal) ? rep[rawTotal] :
+					 null;
+
+		//todo: fill in next/prev from results
+
 
 	},
 
 
+	//we do not care about the actual page number.
+	// The consumers of this function should expect
+	// that it might return null.
 	getPageNumber: function() { return null; },
 
-
-	getTotal: function() {
-		return 0;
-	}
+	getNext: function() { return this.next || null; },
+	getPrevious: function() { return this.previous || null; },
+	getTotal: function() { return this.total || ''; },
+	hasNext: function() { return !!this.next; },
+	hasPrevious: function() { return !!this.previous; }
 });
