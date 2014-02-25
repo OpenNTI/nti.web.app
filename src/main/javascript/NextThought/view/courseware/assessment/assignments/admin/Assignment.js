@@ -365,7 +365,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 				this.pathRoot,
 				this.pathBranch,
 				student.toString()
-		];
+			];
 
 		if (typeof student === 'string') {
 			return;

@@ -33,14 +33,23 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 
 
 	showAssignment: function(assignment, user) {
+
+		function mask(on) {
+			if (tab && tab.dom) {
+				tab[on ? 'mask' : 'unmask']('Loading...');
+			}
+		}
+
 		var id = assignment && ((assignment.getId && assignment.getId()) || assignment),
-			x = this.store.getById(id),
+			me = this,
+			x = me.store.getById(id),
 			item = x && x.get('item'),
 			parts = (item && item.get('parts')) || [],
-			//tab = this.up('[isTabView]').getEl(),
-			view, assignmentView, assignmentHistory, pageSource, store;
+			tab = me.up('[isTabView]').getEl(),
+			view, assignmentView, store, username;
 
-		this.onItemClicked(null, x);
+
+		me.onItemClicked(null, x);
 
 
 		if (parts.length === 0) {
@@ -48,33 +57,40 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 			return;
 		}
 
-		view = this.up('course-assessment-admin-assignments');
+		view = me.up('course-assessment-admin-assignments');
 		assignmentView = view && view.down('course-assessment-admin-assignments-item');
 
-		if (assignmentView) {
-			assignmentHistory = null;//Load from server
+		if (user && assignmentView) {
+			mask(true);
+
 			store = assignmentView.store;
-			user = user && ((user.getId && user.getId()) || user);
+			username = user && ((user.getId && user.getId()) || user);
 
-			Service.request([store.getProxy().url, user].join('/'))
+			Service.request([store.getProxy().url, username].join('/'))
 				.done(function(res) {
+					var assignmentHistory = ParseUtils.parseItems(res)[0];
+					if (assignmentHistory.get('Creator') !== username) {
+						Ext.Error.raise('Username did not match!');
+					}
 
-					assignmentHistory = ParseUtils.parseItems(res)[0];
 					item.getGradeBookEntry().updateHistoryItem(assignmentHistory);
 
-					pageSource = NextThought.proxy.courseware.PageSource.create({
-						batchAroundParam: 'batchAroundCreator',
-						current: assignmentHistory,
-						model: store.getProxy().getModel(),
-						url: NextThought.proxy.courseware.PageSource.urlFrom(store),
-						idExtractor: function(o) {
-							var u = o && o.get('Creator');
-							return u && ((u.getId && u.getId()) || u);
-						}
+					//Should be a cache hit... so lets be
+					UserRepository.getUser(username)
+							.done(function(user) {
+								mask(false);
+								assignmentHistory.set('Creator', user);
+								assignmentView.fireGoToAssignment(null, assignmentHistory);
+							})
+							.fail(function(reason) {
+								mask(false);
+								console.error('Could not resove ', username, ' because ', reason);
+							});
+				})
+				.fail(function(reason) {
+						mask(false);
+						console.error('Failure Reason: ', reason);
 					});
-					assignmentView.fireGoToAssignment(null, assignmentHistory, pageSource);
-
-				});
 		}
 	}
 });
