@@ -593,6 +593,14 @@ canvas.x-component-course-assessment {
 			color: $primary-grey;
 			overflow: hidden;
 			height: 50px;
+			white-space: nowrap;
+
+			.path-items {
+				overflow: hidden;
+				text-overflow: ellipsis;
+				max-width: 520px;
+				display: inline-block;
+			}
 
 			.path.part {
 				font-weight: 600;
