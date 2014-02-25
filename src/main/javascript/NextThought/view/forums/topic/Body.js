@@ -20,7 +20,7 @@ Ext.define('NextThought.view.forums.topic.Body', {
 			return false;
 		}
 
-		var topicContainer = this.down('[isTopicContainer]'),
+		var me = this, topicContainer = this.down('[isTopicContainer]'),
 			topic, comment,
 			header = this.down('forums-topic-header');
 
@@ -48,6 +48,15 @@ Ext.define('NextThought.view.forums.topic.Body', {
 		this.mon(topic, {
 			'create-root-reply': function() {
 				comment.addRootReply();
+			},
+			'record-deleted': function() {
+				if (cfg.nextIndex) {
+					me.fireEvent('record-deleted', cfg.nextIndex);
+				} else if (cfg.previousIndex >= 0) {
+					me.fireEvent('record-deleted', cfg.previousIndex);
+				} else {
+					me.fireEvent('record-deleted', 1);
+				}
 			}
 		});
 

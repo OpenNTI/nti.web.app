@@ -91,7 +91,6 @@ Ext.define('NextThought.view.forums.topic.parts.Topic', {
 		this.addEvents(['delete-post', 'show-post', 'ready', 'commentReady']);
 		this.enableBubble(['delete-post', 'show-post']);
 		this.on('ready', this.onReady, this);
-		this.mon(this.record, 'destroy', this.destroy, this);
 		this.on('beforedeactivate', this.onBeforeDeactivate, this);
 		this.on('beforeactivate', this.onBeforeActivate, this);
 	},
@@ -283,7 +282,12 @@ Ext.define('NextThought.view.forums.topic.parts.Topic', {
 
 
 	fireDeleteEvent: function() {
-		this.fireEvent('delete-post', this.record, this);
+		var me = this;
+
+		me.fireEvent('delete-post', me.record, me, function(cmp) {
+			me.fireEvent('record-deleted');
+			me.destroy();
+		});
 	},
 
 

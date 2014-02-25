@@ -34,7 +34,8 @@ Ext.define('NextThought.view.forums.hierarchy.View', {
 			this.mon(this.body, {
 				'goto-index': 'setCurrentIndex',
 				'goto-record': 'setCurrentBody',
-				'new-record': 'newRecordAdded'
+				'new-record': 'newRecordAdded',
+				'record-deleted': 'recordDeleted'
 			});
 
 			this.relayEvents(this.body, ['pop-view', 'new-record']);
@@ -67,9 +68,9 @@ Ext.define('NextThought.view.forums.hierarchy.View', {
 			load: 'setCurrentBody'
 		});
 
-		if (this.currentRecord.activeRecord) {
-			//this.store.proxy.extraParams = Ext.apply(this.store.proxy.extraParams || {}, {batchAround: this.currentRecord.activeRecord.get('OID')});
-		}
+		//if (this.currentRecord.activeRecord) {
+		//	this.store.proxy.extraParams = Ext.apply(this.store.proxy.extraParams || {}, {batchAround: this.currentRecord.activeRecord.get('OID')});
+		//}
 
 		this.store.load();
 
@@ -119,6 +120,9 @@ Ext.define('NextThought.view.forums.hierarchy.View', {
 		this.setCurrentBody(record);
 		this.navigation.setActiveRecord(record);
 	},
+
+
+	recordDeleted: function() {},
 
 
 	newRecordAdded: function() {}

@@ -937,7 +937,7 @@ Ext.define('NextThought.controller.Forums', {
 
 		function maybeDeleteFromStore(id, store) {
 			var r;
-			if (store) {
+			if (store && !store.buffered) {
 				r = store.findRecord('NTIID', idToDestroy, 0, false, true, true);
 				if (!r) {
 					console.warn('Could not remove, the store did not have item with id: ' + idToDestroy, r);

@@ -46,6 +46,15 @@ Ext.define('NextThought.view.forums.topic.View', {
 	},
 
 
+	recordDeleted: function(activeIndex) {
+		var active = this.store.getAt(activeIndex);
+
+		this.currentRecord.activeRecord = active;
+
+		this.setCurrent(this.currentRecord);
+	},
+
+
 	newRecordAdded: function(record) {
 		//this.store.proxy.extraParams = Ext.apply(this.store.proxy.extraParams || {}, { batchAround: record.getId()});
 
