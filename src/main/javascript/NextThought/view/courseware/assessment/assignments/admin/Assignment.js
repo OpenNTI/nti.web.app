@@ -163,6 +163,15 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			this._showMask();
 		}
 		this.down('grid').bindStore(this.store);
+		this.syncFilterToUI();
+	},
+
+
+	syncFilterToUI: function() {
+		if (!this.rendered) {
+			this.on({afterrender: 'syncFilterToUI', single: true});
+			return;
+		}
 		var filter = this.store.filters.getByKey('LegacyEnrollmentStatus');
 		if (filter) {
 			filter = filter.value;
@@ -337,14 +346,17 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	},
 
 
-	applyFilter: function(filter) {
+	applyFilter: function(filter, silent) {
 		try {
 			this.updateColumns(filter);
 
 			this.store.filter([{id: 'LegacyEnrollmentStatus', property: 'LegacyEnrollmentStatus', value: filter}]);
 		} finally {
-			this.unmask();
+			if (silent !== true) {
+				this.unmask();
+			}
 		}
+		return this;
 	},
 
 
