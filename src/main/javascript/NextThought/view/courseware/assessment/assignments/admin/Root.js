@@ -76,11 +76,26 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 					assignmentHistory.set('item', item);
 					item.getGradeBookEntry().updateHistoryItem(assignmentHistory);
 
-					//Should be a cache hit... so lets be
+					//Should be a cache hit... so lets just do the most straight forward thing.
 					UserRepository.getUser(username)
-							.done(function(user) {
-								mask(false);
+							.then(function(user) {
 								assignmentHistory.set('Creator', user);
+
+								var inst = me.data.instance,
+									url = [user.get('href'), 'Courses', 'EnrolledCourses',
+										   encodeURIComponent(inst.getCourseCatalogEntry().getId())].join('/');
+
+								return Service.request(url);
+
+							})
+							.then(function(json) {
+								json = Ext.decode(json, true) || {};
+								return json.LegacyEnrollmentStatus || 'ForCredit';
+							})
+							.done(function(status) {
+								mask(false);
+
+								assignmentView.applyFilter(status);
 								assignmentView.fireGoToAssignment(null, assignmentHistory);
 							})
 							.fail(function(reason) {

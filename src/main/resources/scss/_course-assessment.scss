@@ -647,7 +647,6 @@ canvas.x-component-course-assessment {
 
 				&.disabled {
 					cursor: default;
-					opacity: 0.2;
 				}
 				&:not(.disabled):hover {
 					opacity: 1;
@@ -656,10 +655,18 @@ canvas.x-component-course-assessment {
 
 			.up {
 				@include icon('arrow-up', $top: 19px, $left: 10px);
+
+				&.disabled::after {
+					@include sprite($icons, 'arrow-up_inactive');
+				}
 			}
 
 			.down {
 				@include icon('arrow-down', $top: 19px, $left: 10px);
+
+				&.disabled::after {
+					@include sprite($icons, 'arrow-down_inactive');
+				}
 			}
 		}
 
