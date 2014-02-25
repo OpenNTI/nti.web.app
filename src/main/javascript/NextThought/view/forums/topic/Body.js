@@ -16,7 +16,7 @@ Ext.define('NextThought.view.forums.topic.Body', {
 	setCurrent: function(record, forum, cfg) {
 		if (!record) { return; }
 
-		if (this.editor && !this.editor.savedSuccess) {
+		if (this.editor && !this.editor.savedSuccess && !this.editor.isClosed) {
 			return false;
 		}
 

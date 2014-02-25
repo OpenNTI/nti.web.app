@@ -77,11 +77,11 @@ Ext.define('NextThought.view.forums.topic.parts.Editor', {
 
 
 	// destroy: function() {
-	// 	var container = this.ownerCt.getEl();
-	// 	container.removeCls('scroll-lock scroll-padding-right');
-	// 	Ext.EventManager.onWindowResize(this.syncHeight, this, null);
-	// 	console.log(arguments);
-	// 	return this.callParent(arguments);
+	//	var container = this.ownerCt.getEl();
+	//	container.removeCls('scroll-lock scroll-padding-right');
+	//	Ext.EventManager.onWindowResize(this.syncHeight, this, null);
+	//	console.log(arguments);
+	//	return this.callParent(arguments);
 	// },
 
 
@@ -198,6 +198,8 @@ Ext.define('NextThought.view.forums.topic.parts.Editor', {
 
 	onCancel: function(e) {
 		e.stopEvent();
+
+		this.isClosed = true;
 		if (this.closeCallback) {
 			this.destroy();
 			this.closeCallback.call();

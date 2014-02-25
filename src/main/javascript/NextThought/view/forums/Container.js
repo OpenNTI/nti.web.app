@@ -151,7 +151,7 @@ Ext.define('NextThought.view.forums.Container', {
 	 * @param  {Function} closeCallback   what to do when the editor closes
 	 */
 	showTopicEditor: function(topic, topicList, forumList, closeCallback) {
-		var topicView = this.showTopicList(null, forumList);
+		var topicView = this.showTopicList(topicList, forumList);
 
 		topicView.showEditor(topic, topicList, closeCallback);
 	},
