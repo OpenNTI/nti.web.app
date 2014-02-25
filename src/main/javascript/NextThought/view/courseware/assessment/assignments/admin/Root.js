@@ -2,6 +2,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 	extend: 'NextThought.view.courseware.assessment.assignments.View',
 	alias: 'widget.course-assessment-admin-assignments-root',
 	requires: [
+		'NextThought.proxy.courseware.PageSource',
 		'NextThought.view.courseware.assessment.assignments.admin.List'
 	],
 
@@ -37,7 +38,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 			item = x && x.get('item'),
 			parts = (item && item.get('parts')) || [],
 			//tab = this.up('[isTabView]').getEl(),
-			view, assignmentView, assignmentHistory;
+			view, assignmentView, assignmentHistory, pageSource, store;
 
 		this.onItemClicked(null, x);
 
@@ -51,10 +52,28 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 		assignmentView = view && view.down('course-assessment-admin-assignments-item');
 
 		if (assignmentView) {
-			assignmentHistory = {};//Load from server, pass "pager" instance with it.
-			assignmentView.fireGoToAssignment(null, assignmentHistory /*, pager*/);
-		}
+			assignmentHistory = null;//Load from server
+			store = assignmentView.store;
+			user = user && ((user.getId && user.getId()) || user);
 
-		return null;
+			Service.request([store.getProxy().url, user].join('/'))
+				.done(function(res) {
+
+					console.debug(res);
+
+
+					pageSource = NextThought.proxy.courseware.PageSource.create({
+						current: assignmentHistory,
+						model: store.getProxy().getModel(),
+						url: NextThought.proxy.courseware.PageSource.urlFrom(store),
+						idExtractor: function(o) {
+							var u = o && o.get('Creator');
+							return u && ((u.getId && u.getId()) || u);
+						}
+					});
+					assignmentView.fireGoToAssignment(null, assignmentHistory, pageSource);
+
+				});
+		}
 	}
 });

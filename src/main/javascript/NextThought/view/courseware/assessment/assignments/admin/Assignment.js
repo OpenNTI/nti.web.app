@@ -3,6 +3,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	alias: 'widget.course-assessment-admin-assignments-item',
 
 	requires: [
+		'NextThought.proxy.courseware.PageSource',
 		'NextThought.layout.component.CustomTemplate',
 		'NextThought.store.courseware.AssignmentView',
 		'NextThought.view.courseware.assessment.admin.Grid'
@@ -25,7 +26,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			cn: [
 				{ cls: 'right controls', cn: [
 					{ cls: 'page', cn: [
-						{ tag: 'span', html: '{page}'}, ' of ', {tag: 'span', html: '{total}'}
+						{ tag: 'tpl', 'if': 'page', cn: [
+							{ tag: 'span', html: '{page}'}, ' of ']},
+						{tag: 'span', html: '{total}'}
 					] },
 					{ cls: 'up' },
 					{ cls: 'down' }
@@ -356,7 +359,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	},
 
 
-	fireGoToAssignment: function(v, record, pager) {
+	fireGoToAssignment: function(v, record, pageSource) {
 		var student = record.get('Creator'),
 			path = [
 				this.pathRoot,
@@ -368,10 +371,18 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			return;
 		}
 
-		if (!pager) {
-			pager = {};//New pager based on current sort/filter
+		if (!pageSource) {
+			pageSource = NextThought.proxy.courseware.PageSource.create({
+				current: record,
+				model: this.store.getProxy().getModel(),
+				url: NextThought.proxy.courseware.PageSource.urlFrom(this.store),
+				idExtractor: function(o) {
+					var u = o && o.get('Creator');
+					return u && ((u.getId && u.getId()) || u);
+				}
+			});
 		}
 
-		this.fireEvent('show-assignment', this, this.assignment, record, student, path, pager);
+		this.fireEvent('show-assignment', this, this.assignment, record, student, path, pageSource);
 	}
 });
