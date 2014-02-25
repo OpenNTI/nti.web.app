@@ -21,6 +21,7 @@ Ext.define('NextThought.proxy.courseware.PageSource', {
 	},
 
 	config: {
+		modelAugmentationHook: Ext.identityFn,
 		idExtractor: Ext.identityFn,
 		current: null,
 		url: '',
@@ -36,13 +37,12 @@ Ext.define('NextThought.proxy.courseware.PageSource', {
 			update: true
 		});
 
-		var getIdOf = this.getIdExtractor() || Ext.identityFn,
-			p = {
+		var p = {
 				batchSize: 3,
 				batchStart: 0
 			};
 
-		p[this.getBatchAroundParam()] = getIdOf(this.current);
+		p[this.getBatchAroundParam()] = this._getIdOf(this.current);
 
 		this.url = Ext.urlAppend(this.url, Ext.Object.toQueryString(p));
 
@@ -54,11 +54,42 @@ Ext.define('NextThought.proxy.courseware.PageSource', {
 	},
 
 
-	update: function(reply) {
-		var rawTotal = 'TotalItemCount',
-			total = 'Filtered' + rawTotal;
+	_makeRecord: function(json) {
+		var Model = this.getModel(),
+			idProp = Model.create().idProperty;
 
+		if (Ext.isArray(json)) {
+			json = json[1] || {Creator: json[0], Class: 'UsersCourseAssignmentHistoryItem'};
+		}
+
+		return this.getModelAugmentationHook().call(this, Model.create(json, json[idProp]));
+	},
+
+
+	_getIdOf: function(o) {
+		return (this.getIdExtractor() || Ext.identityFn).call(this, o);
+	},
+
+
+	_indexOfCurrentIn: function(list) {
+		var id = this._getIdOf(this.current);
+		list = list.map(this._getIdOf.bind(this));
+		return list.indexOf(id);
+	},
+
+
+	update: function(reply) {
 		reply = Ext.decode(reply, true) || {};
+
+		function username(o) {
+			return (o && o.get && o.get('Creator')) || o;
+		}
+
+		var me = this,
+			rawTotal = 'TotalItemCount',
+			total = 'Filtered' + rawTotal,
+			items = ((reply && reply.Items) || []).map(me._makeRecord.bind(me)),
+			idx = me._indexOfCurrentIn(items);
 
 		this.total = reply.hasOwnProperty(total) ? reply[total] :
 					 reply.hasOwnProperty(rawTotal) ? reply[rawTotal] :
@@ -71,11 +102,27 @@ Ext.define('NextThought.proxy.courseware.PageSource', {
 		// we are "currently" at is in the middle, and the next/prevous
 		// items are on either side.
 
-		//BUG: on inital inspection the 'current' item, the one we are
-		// batching around is not in the result.
+		me.previous = items[idx - 1] || null;
+		me.next = items[idx + 1] || null;
 
+		//Meh, this isn't generic at all... but required.
+		UserRepository.getUser(items.map(username))
+				.then(function(u) {
+					var x = u.length - 1;
+					if (u.length !== items.length) {
+						Ext.Error.raise('Resolved length does not match request length');
+					}
 
-		this.fireEvent('update', this);
+					for (x; x >= 0; x--) {
+						if (items[x].get('Creator') !== u[x].getId()) {
+							Ext.Error.raise('Username missmatch! ' + items[x].get('Creator') + ' != ' + u[x].getId());
+						}
+						items[x].set('Creator', u[x]);
+					}
+				})
+				.done(function() {
+					me.fireEvent('update', me);
+				});
 	},
 
 

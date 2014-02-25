@@ -391,6 +391,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 	fireGoToAssignment: function(v, record, pageSource) {
 		var student = record.get('Creator'),
+			item = record.get('item'), //Assignment Instance
 			path = [
 				this.pathRoot,
 				this.pathBranch,
@@ -410,6 +411,11 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 				idExtractor: function(o) {
 					var u = o && o.get('Creator');
 					return u && ((u.getId && u.getId()) || u);
+				},
+				modelAugmentationHook: function(rec) {
+					rec.set('item', item); //Assignment instances are shared across all history item instances. (this gives them the meta data)
+					item.getGradeBookEntry().updateHistoryItem(rec);
+					return rec;
 				}
 			});
 		}

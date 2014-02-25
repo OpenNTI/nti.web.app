@@ -73,6 +73,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 						Ext.Error.raise('Username did not match!');
 					}
 
+					assignmentHistory.set('item', item);
 					item.getGradeBookEntry().updateHistoryItem(assignmentHistory);
 
 					//Should be a cache hit... so lets be
