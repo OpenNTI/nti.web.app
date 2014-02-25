@@ -48,26 +48,18 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 	beforeRender: function() {
 		this.callParent();
 
-		var status = 'Open', roster, Username = this.student.get('Username');
+		var status = this.status || 'Open',
+			Username = this.student.get('Username');
 
 		this.currentGrade = '';
 		this.currentLetter = '-';
 
-		if (this.assignmentHistory) {
-			roster = this.assignmentHistory.get('item').roster;
-
-			(roster || []).forEach(function(r) {
-				if (r.Username === Username) {
-					status === Username;
-				}
-			});
-		}
-
 
 		this.showingUsername = status !== 'Open';
+
 		this.renderData = Ext.apply(this.renderData || {}, {
 			displayName: this.student.toString(),
-			Username: status === 'Open' ? '' : Username,
+			Username: this.showingUsername ? Username : '',
 			gradeTitle: this.gradeTitle || 'Assignment',
 			avatarURL: this.student.get('avatarURL'),
 			presence: this.student.getPresence().getName()
@@ -99,9 +91,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 		me.enableProfileClicks(me.profileEl);
 
 
-		if (this.status !== 'Open') {
-			this.usernameEl.update('(' + me.user.getId() + ')');
-			this.usernameEl.show();
+		if (me.showingUsername) {
+			me.usernameEl.update('(' + me.user.getId() + ')');
+			me.usernameEl.show();
 		}
 
 		if (!me.user.get('email')) {
