@@ -2,6 +2,10 @@ Ext.define('NextThought.util.PageSource', {
 
 	isPageSource: true,
 
+	mixins: {
+		observable: 'Ext.util.Observable'
+	},
+
 	config: {
 		store: null,
 		current: 0
@@ -9,6 +13,7 @@ Ext.define('NextThought.util.PageSource', {
 
 
 	constructor: function(cfg) {
+		this.mixins.observable.constructor.call(this);
 		this.initConfig(cfg);
 
 		if (this.store.isPageSource) {

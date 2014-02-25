@@ -30,7 +30,11 @@ Ext.define('NextThought.proxy.courseware.PageSource', {
 
 
 	constructor: function(cfg) {
+		this.mixins.observable.constructor.call(this);
 		this.initConfig(cfg);
+		this.addEvents({
+			update: true
+		});
 
 		var getIdOf = this.getIdExtractor() || Ext.identityFn,
 			p = {
@@ -63,6 +67,7 @@ Ext.define('NextThought.proxy.courseware.PageSource', {
 		//todo: fill in next/prev from results
 
 
+		this.fireEvent('update', this);
 	},
 
 
