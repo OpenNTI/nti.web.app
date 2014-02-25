@@ -228,7 +228,7 @@ Ext.define('NextThought.model.User', {
 		Ext.Ajax.request(req);
 	},
 
-	getActivityItemConfig: function(type){
+	getActivityItemConfig: function(type) {
 		var p = PromiseFactory.make(), result;
 
 		result = {
