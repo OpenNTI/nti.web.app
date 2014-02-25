@@ -54,17 +54,25 @@ Ext.define('NextThought.proxy.courseware.PageSource', {
 	},
 
 
-	update: function(rep) {
+	update: function(reply) {
 		var rawTotal = 'TotalItemCount',
 			total = 'Filtered' + rawTotal;
 
-		rep = Ext.decode(rep, true) || {};
+		reply = Ext.decode(reply, true) || {};
 
-		this.total = rep.hasOwnProperty(total) ? rep[total] :
-					 rep.hasOwnProperty(rawTotal) ? rep[rawTotal] :
+		this.total = reply.hasOwnProperty(total) ? reply[total] :
+					 reply.hasOwnProperty(rawTotal) ? reply[rawTotal] :
 					 null;
 
 		//todo: fill in next/prev from results
+		// The docs say batchAround(Creator) should put the id in the
+		// middle of the batch, if it can.  We set the batch size
+		// specifically to three. So in all but the edge cases the item
+		// we are "currently" at is in the middle, and the next/prevous
+		// items are on either side.
+
+		//BUG: on inital inspection the 'current' item, the one we are
+		// batching around is not in the result.
 
 
 		this.fireEvent('update', this);
