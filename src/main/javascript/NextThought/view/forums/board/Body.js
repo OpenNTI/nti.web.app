@@ -4,7 +4,7 @@ Ext.define('NextThought.view.forums.board.Body', {
 
 	cls: 'forum-body scroll-content',
 
-	require: [
+	requires: [
 		'NextThought.view.forums.old.Root'
 	],
 

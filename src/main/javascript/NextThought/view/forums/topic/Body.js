@@ -2,7 +2,7 @@ Ext.define('NextThought.view.forums.topic.Body', {
 	extend: 'NextThought.view.forums.hierarchy.Body',
 	alias: 'widget.forums-topic-body',
 
-	require: [
+	requires: [
 		'NextThought.view.forums.topic.parts.*'
 	],
 

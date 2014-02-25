@@ -4,7 +4,7 @@ Ext.define('NextThought.view.forums.forum.Body', {
 
 	cls: 'topic-list-body forum-body',
 
-	require: [
+	requires: [
 		'NextThought.view.forums.forum.parts.*'
 	],
 

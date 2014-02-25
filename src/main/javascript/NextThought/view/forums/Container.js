@@ -2,8 +2,10 @@ Ext.define('NextThought.view.forums.Container', {
 	extend: 'NextThought.view.Base',
 	alias: 'widget.forums-container',
 
-	require: [
-		'NextThought.view.forums.board.View'
+	requires: [
+		'NextThought.view.forums.board.View',
+		'NextThought.view.forums.forum.View',
+		'NextThought.view.forums.topic.View'
 	],
 
 	cls: 'forums-view',

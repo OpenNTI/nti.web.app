@@ -2,7 +2,7 @@ Ext.define('NextThought.view.forums.topic.parts.NavGrid', {
 	extend: 'Ext.grid.Panel',
 	alias: 'widget.forums-topic-nav-grid',
 
-	require: [
+	requires: [
 		'NextThought.view.forums.topic.parts.NavHeader'
 	],
 
