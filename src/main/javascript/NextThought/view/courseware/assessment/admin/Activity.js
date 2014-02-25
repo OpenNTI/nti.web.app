@@ -68,8 +68,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.Activity', {
 			me.activityFeedURL = links.getRelHref('batch-next');
 			me.setMoreLinkState(!!me.activityFeedURL);
 
-			me.setLastReadFrom(activity);
-
 			me.store.suspendEvents();
 			activity.get('Items').forEach(function(o) {
 				var m = me.MIME_TYPE_MAP[o.get('MimeType')];
@@ -87,6 +85,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Activity', {
 			me.store.resumeEvents();
 			me.refresh();
 			me.unmask();
+			me.setLastReadFrom(activity);
 		});
 	},
 

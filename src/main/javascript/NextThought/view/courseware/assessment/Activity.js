@@ -149,11 +149,11 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 
 		this.assignments = {};
 
-		this.setLastReadFrom(history);
-
 		function collect(o) { me.collectEvents(o, history); }
 
 		assignments.get('Items').forEach(collect);
+
+		this.setLastReadFrom(history);
 	},
 
 
