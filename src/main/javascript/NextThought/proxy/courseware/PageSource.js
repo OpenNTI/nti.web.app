@@ -133,7 +133,7 @@ Ext.define('NextThought.proxy.courseware.PageSource', {
 
 	getNext: function() { return this.next || null; },
 	getPrevious: function() { return this.previous || null; },
-	getTotal: function() { return this.total || ''; },
+	getTotal: function() { return this.total || '?'; },
 	hasNext: function() { return !!this.next; },
 	hasPrevious: function() { return !!this.previous; }
 });
