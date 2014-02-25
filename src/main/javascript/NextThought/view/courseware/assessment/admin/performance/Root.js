@@ -161,6 +161,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 			setSource: function(source) {
+				this.currentPage = 1;
 				this.getProxy().setSource(source);
 				this.reload();
 			}
