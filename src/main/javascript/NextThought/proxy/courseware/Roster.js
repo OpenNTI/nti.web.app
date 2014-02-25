@@ -11,9 +11,26 @@ Ext.define('NextThought.proxy.courseware.Roster', {
 	},
 
 	reader: {
-		type: 'json',
-		root: 'Items'//,
 		//totalProperty: 'FilteredTotalItemCount'
+		type: 'json',
+		root: 'Items',
+		readRecords: function() {
+			var data = this.self.prototype.readRecords.apply(this, arguments),
+				list = (data && data.records) || [],
+				i = list.length - 1, o, u;
+
+			for (i; i >= 0; i--) {
+				o = list[i] && list[i].raw;
+				u = o && o.UserProfile;
+				if (u) {
+					delete o.UserProfile;
+					UserRepository.cacheUser(User.create(u, u.Username));
+				}
+			}
+
+			return data;
+		}
+
 	},
 
 	noCache: false,
