@@ -136,7 +136,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.Activity', {
 		var user = record.get('user');
 
 		if (isMe(record)) {
-			user = null; //don't know what to do here. We need a reply-to? or a submission object to get the target user.
+			//don't know what to do here. We need a reply-to?
+			// or a submission object to get the target user.
+			user = null;
 		}
 
 		this.fireEvent('goto-assignment', record.get('item'), user);
