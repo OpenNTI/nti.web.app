@@ -421,6 +421,11 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 		];
 
 		this.applyPagerFilter();
-		this.fireEvent('show-assignment', this, record.get('item'), record, $AppConfig.userObject, path, this.store, this.store.indexOf(record) + 1);
+		this.fireEvent('show-assignment', this, record.get('item'), record, $AppConfig.userObject, path,
+				NextThought.util.PageSource.create({
+					store: this.store,
+					current: this.store.indexOf(record)
+				})
+		);
 	}
 });
