@@ -12,22 +12,22 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 		{name: 'item', type: 'auto', persist: false},
 
 		//<editor-fold desc="Synthetic fields derived from server data and the assocated assignment.">
-		{name: 'ntiid', type: 'Synthetic', persist: false, fn: function(r) {
+		{name: 'ntiid', type: 'Synthetic', persist: false, fn: function() {
 			var i = this.get('item');
 			return i && i.get('ntiid');
 		}},
 
-		{name: 'ContainerId', type: 'Synthetic', persist: false, fn: function(r) {
+		{name: 'ContainerId', type: 'Synthetic', persist: false, fn: function() {
 			var i = this.get('item');
 			return i && i.get('containerId');
 		}},
 
-		{name: 'name', type: 'Synthetic', persist: false, fn: function(r) {
+		{name: 'name', type: 'Synthetic', persist: false, fn: function() {
 			var i = this.get('item');
-			return i && i.get('title') || 'Missing';
+			return (i && i.get('title')) || 'Missing';
 		}},
 
-		{name: 'due', type: 'Synthetic', persist: false, fn: function(r) {
+		{name: 'due', type: 'Synthetic', persist: false, fn: function() {
 			var i = this.get('item');
 			return i && i.getDueDate();
 		}},
@@ -59,7 +59,8 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 
 
 		{name: 'submission', type: 'string', persist: false, affectedBy: 'Submission', convert: function(v, r) {
-			return (r.raw.hasOwnProperty('SubmissionCreatedTime') || r.raw.hasOwnProperty('Submission')) ? 'true' : '';
+			r = r.raw || {};
+			return (r.hasOwnProperty('SubmissionCreatedTime') || r.hasOwnProperty('Submission')) ? 'true' : '';
 		} },
 
 
@@ -74,7 +75,7 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 
 	constructor: function() {
 		this.callParent(arguments);
-		if (this.raw.Class === 'UsersCourseAssignmentHistoryItemSummary') {
+		if (this.raw && this.raw.Class === 'UsersCourseAssignmentHistoryItemSummary') {
 			this.isSummary = true;
 		}
 	},
