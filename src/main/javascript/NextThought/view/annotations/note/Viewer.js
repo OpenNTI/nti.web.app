@@ -140,11 +140,14 @@ Ext.define('NextThought.view.annotations.note.Viewer', {
 
 		if (Ext.is.iOS) {
 			Ext.defer(function() {
-				if (me.getHeight() > window.innerHeight) {
-					me.setHeight(window.innerHeight);
-					me.setY(0);
-					me.el.down('.context').setHeight(window.innerHeight - 300);
+				//Start with window less than screensize
+				if (me.getHeight() > window.innerHeight - 20) {
+					me.setHeight(window.innerHeight - 20);
+					me.el.down('.context').setHeight(window.innerHeight - 320);
 				}
+				//Keep window from growing beyond the screen
+				me.setY(20);
+				Ext.apply(me, {'maxHeight': window.innerHeight - 20}); //keep from growing off screen
 			},100);
 		}
 	},
