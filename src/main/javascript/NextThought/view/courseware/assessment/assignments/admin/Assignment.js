@@ -26,12 +26,12 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			cn: [
 				{ cls: 'right controls', cn: [
 					{ cls: 'page', cn: [
-						{ tag: 'tpl', 'if': 'page', cn: [
-							{ tag: 'span', html: '{page}'}, ' of ']},
-						{tag: 'span', html: '{total}'}
+						{tag: 'tpl', 'if': 'page', cn: [{ tag: 'span', html: '{page}'}, ' of ']},
+						{tag: 'tpl', 'if': '!page', cn: ['Total: ']},
+						{tag: 'span', cls: 'total', html: '{total}'}
 					] },
-					{ cls: 'up' },
-					{ cls: 'down' }
+					{ cls: 'up {noPrev:boolStr("disabled")}' },
+					{ cls: 'down {noNext:boolStr("disabled")}' }
 				] },
 				//path (bread crumb)
 				{
@@ -77,6 +77,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		rootPathEl: '.toolbar .path.part.root',
 		previousEl: '.toolbar .controls .up',
 		nextEl: '.toolbar .controls .down',
+		totalEl: '.toolbar .controls .page .total',
 		changeDateEl: '.header span.link',
 		filtersEl: '.header .filters',
 		openEnrolledCheckboxEl: '.header .filters .nti-radiobutton[data-filter-id="open-enrolled"]'
@@ -152,6 +153,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		this.callParent(arguments);
 		this.enableBubble(['show-assignment']);
 		this.filledStorePromise = PromiseFactory.make();
+		this.mon(this.pageSource, 'update', 'onPagerUpdate');
 	},
 
 
@@ -168,6 +170,24 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			this.el.select('[data-filter-id]').removeCls('checked');
 			this.el.select('[data-filter-id="' + filter + '"]').addCls('checked');
 		}
+	},
+
+
+	onPagerUpdate: function() {
+		if (!this.rendered) {
+			this.on({afterrender: 'onPagerUpdate', single: true});
+			return;
+		}
+
+		if (this.pageSource.hasNext()) {
+			this.nextEl.removeCls('disabled');
+		}
+
+		if (this.pageSource.hasPrevious()) {
+			this.previousEl.removeCls('disabled');
+		}
+
+		this.totalEl.update(this.pageSource.getTotal());
 	},
 
 
@@ -216,6 +236,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			due: this.due,
 			page: this.pageSource.getPageNumber(),
 			total: this.pageSource.getTotal(),
+			noNext: !this.pageSource.hasNext(),
+			noPrev: !this.pageSource.hasPrevious(),
 			exportFilesLink: this.exportFilesLink
 		});
 
@@ -331,12 +353,20 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	},
 
 
-	firePreviousEvent: function() {
+	firePreviousEvent: function(e) {
+		if (e.getTarget('.disabled')) {
+			e.stopEvent();
+			return;
+		}
 		this.fireEvent('goto', this.pageSource.getPrevious());
 	},
 
 
-	fireNextEvent: function() {
+	fireNextEvent: function(e) {
+		if (e.getTarget('.disabled')) {
+			e.stopEvent();
+			return;
+		}
 		this.fireEvent('goto', this.pageSource.getNext());
 	},
 

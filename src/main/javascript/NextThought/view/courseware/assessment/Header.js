@@ -12,12 +12,12 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 			cn: [
 				{ cls: 'right controls', cn: [
 					{ cls: 'page', cn: [
-						{ tag: 'tpl', 'if': 'page', cn: [
-							{ tag: 'span', html: '{page}'}, ' of ']},
-						{tag: 'span', html: '{total}'}
+						{tag: 'tpl', 'if': 'page', cn: [{ tag: 'span', html: '{page}'}, ' of ']},
+						{tag: 'tpl', 'if': '!page', cn: ['Total: ']},
+						{tag: 'span', cls: 'total', html: '{total}'}
 					] },
-					{ cls: 'up' },
-					{ cls: 'down' }
+					{ cls: 'up {noPrev:boolStr("disabled")}' },
+					{ cls: 'down {noNext:boolStr("disabled")}' }
 				] },
 				//path (bread crumb)
 				{
@@ -38,6 +38,7 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 	]),
 
 	renderSelectors: {
+		totalEl: '.toolbar .page .total',
 		pathEl: '.toolbar .path-items',
 		previousEl: '.toolbar .controls .up',
 		nextEl: '.toolbar .controls .down'
@@ -74,8 +75,12 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 		this.renderData = Ext.apply(this.renderData || {}, {
 			path: this.path || [],
 			page: this.pageSource.getPageNumber(),
-			total: this.pageSource.getTotal()
+			total: this.pageSource.getTotal(),
+			noNext: !this.pageSource.hasNext(),
+			noPrev: !this.pageSource.hasPrevious()
 		});
+
+		this.mon(this.pageSource, 'update', 'onPagerUpdate');
 
 		this.on({
 			pathEl: {
@@ -85,6 +90,24 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 			previousEl: { click: 'firePreviousEvent' },
 			nextEl: { click: 'fireNextEvent' }
 		});
+	},
+
+
+	onPagerUpdate: function() {
+		if (!this.rendered) {
+			this.on({afterrender: 'onPagerUpdate', single: true});
+			return;
+		}
+
+		if (this.pageSource.hasNext()) {
+			this.nextEl.removeCls('disabled');
+		}
+
+		if (this.pageSource.hasPrevious()) {
+			this.previousEl.removeCls('disabled');
+		}
+
+		this.totalEl.update(this.pageSource.getTotal());
 	},
 
 
@@ -131,12 +154,20 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 	},
 
 
-	firePreviousEvent: function() {
+	firePreviousEvent: function(e) {
+		if (e.getTarget('.disabled')) {
+			e.stopEvent();
+			return;
+		}
 		this.goTo(this.pageSource.getPrevious());
 	},
 
 
-	fireNextEvent: function() {
+	fireNextEvent: function(e) {
+		if (e.getTarget('.disabled')) {
+			e.stopEvent();
+			return;
+		}
 		this.goTo(this.pageSource.getNext());
 	},
 
