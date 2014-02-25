@@ -71,8 +71,8 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			path: this.path || [],
-			page: this.page,
-			total: this.total
+			page: this.pageSource.getPageNumber(),
+			total: this.pageSource.getTotal()
 		});
 
 		this.on({
@@ -130,29 +130,16 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 
 
 	firePreviousEvent: function() {
-		//page is 1 based, and we want to go to the previous index
-		var index = this.page - 2;
-		if (index < 0) {
-			index = this.total - 1;
-		}
-
-		this.goTo(index);
+		this.goTo(this.pageSource.getPrevious());
 	},
 
 
 	fireNextEvent: function() {
-		//page is 1 based, and we want to go to the next index (so, next 0-based index = current page in 1-based)
-		var index = this.page;
-
-		if (index > (this.total - 1)) {
-			index = 0;
-		}
-
-		this.goTo(index);
+		this.goTo(this.pageSource.getNext());
 	},
 
 
-	goTo: function(index) {
-		this.fireEvent('goto', index);
+	goTo: function(rec) {
+		this.fireEvent('goto', rec);
 	}
 });

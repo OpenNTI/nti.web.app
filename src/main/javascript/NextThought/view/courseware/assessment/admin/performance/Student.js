@@ -36,8 +36,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 			path: [this.pathRoot, this.pathBranch],
 			student: this.student,
 			status: this.status,
-			page: this.page,
-			total: this.total
+			pageSource: this.pageSource
 		});
 
 		this.relayEvents(this.header, ['goup', 'goto']);
@@ -159,7 +158,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 		];
 
 		this.applyPagerFilter();
-		this.fireEvent('show-assignment', this, record.get('item'), record, this.student, path, this.store, this.store.indexOf(record) + 1);
+		this.fireEvent('show-assignment', this, record.get('item'), record, this.student, path, this.store);
 	}
 	//</editor-fold>
 });

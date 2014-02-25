@@ -35,9 +35,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 		var id = assignment && ((assignment.getId && assignment.getId()) || assignment),
 			x = this.store.getById(id),
 			item = x && x.get('item'),
-			parts = (item && item.get('parts')) || [];
+			parts = (item && item.get('parts')) || [],
 			//tab = this.up('[isTabView]').getEl(),
-			//view, assignmentView;
+			view, assignmentView, assignmentHistory;
 
 		this.onItemClicked(null, x);
 
@@ -47,11 +47,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 			return;
 		}
 
-		//view = this.up('course-assessment-admin-assignments');
-		//assignmentView = view && view.down('course-assessment-admin-assignments-item');
-		//if (assignmentView) {
-			//assignmentView.goToAssignment(null, rec);
-		//}
+		view = this.up('course-assessment-admin-assignments');
+		assignmentView = view && view.down('course-assessment-admin-assignments-item');
+
+		if (assignmentView) {
+			assignmentHistory = {};//Load from server, pass "pager" instance with it.
+			assignmentView.fireGoToAssignment(null, assignmentHistory /*, pager*/);
+		}
 
 		return null;
 	}

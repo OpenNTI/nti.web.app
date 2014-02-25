@@ -27,10 +27,8 @@ Ext.define('NextThought.view.courseware.assessment.reader.Panel', {
 			xtype: 'course-assessment-reader-header',
 			parentView: this.parentView,
 			student: this.student,
-			page: this.page,
+			pageSource: this.pageSource,
 			path: this.path,
-			store: this.store,
-			total: this.store.getCount(),
 			assignmentHistory: this.assignmentHistory,
 			assignmentId: this.assignment.getId()
 		};

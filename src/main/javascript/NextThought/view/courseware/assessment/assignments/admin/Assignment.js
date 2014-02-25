@@ -211,8 +211,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			pathBranch: this.pathBranch,
 			assignmentTitle: this.assignmentTitle,
 			due: this.due,
-			page: this.page,
-			total: this.total,
+			page: this.pageSource.getPageNumber(),
+			total: this.pageSource.getTotal(),
 			exportFilesLink: this.exportFilesLink
 		});
 
@@ -329,26 +329,12 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 
 	firePreviousEvent: function() {
-		//page is 1 based, and we want to go to the previous index
-		var index = this.page - 2;
-
-		if (index < 0) {
-			index = this.total - 1;
-		}
-
-		this.fireEvent('goto', index);
+		this.fireEvent('goto', this.pageSource.getPrevious());
 	},
 
 
 	fireNextEvent: function() {
-		//page is 1 based, and we want to go to the next index (so, next 0-based index = current page in 1-based)
-		var index = this.page;
-
-		if (index > (this.total - 1)) {
-			index = 0;
-		}
-
-		this.fireEvent('goto', index);
+		this.fireEvent('goto', this.pageSource.getNext());
 	},
 
 
@@ -370,7 +356,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	},
 
 
-	fireGoToAssignment: function(v, record) {
+	fireGoToAssignment: function(v, record, pager) {
 		var student = record.get('Creator'),
 			path = [
 				this.pathRoot,
@@ -382,6 +368,10 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			return;
 		}
 
-		this.fireEvent('show-assignment', this, this.assignment, record, student, path, this.store, this.store.indexOf(record) + 1);
+		if (!pager) {
+			pager = {};//New pager based on current sort/filter
+		}
+
+		this.fireEvent('show-assignment', this, this.assignment, record, student, path, pager);
 	}
 });

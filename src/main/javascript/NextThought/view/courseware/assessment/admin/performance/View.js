@@ -48,25 +48,17 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.View', {
 			xtype: 'course-assessment-admin-performance-student',
 			student: rec.get('user'),
 			status: rec.get('Status'),
-			page: this.store.indexOf(rec) + 1,
-			total: this.store.getCount()
+			pageSource: NextThought.util.PageSource.create({
+				store: this.store,
+				current: this.store.indexOf(rec)
+			})
 		});
 
 		view.setAssignmentsData.apply(view, this.assignmentsData);
 
 		this.mon(view, {
-			'goto': 'showStudentAt',
+			'goto': 'showStudent',
 			'goup': 'showRoot'
 		});
-	},
-
-
-	showStudentAt: function(index) {
-		var rec = this.store.getAt(index);
-		if (!rec) {
-			console.error('No record at index: ' + index);
-			return;
-		}
-		this.showStudent(rec);
 	}
 });

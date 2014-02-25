@@ -2,6 +2,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.View', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-assessment-admin-assignments',
 	requires: [
+		'NextThought.util.PageSource',
 		'NextThought.view.courseware.assessment.assignments.admin.Root',
 		'NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	],
@@ -48,22 +49,15 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.View', {
 			xtype: 'course-assessment-admin-assignments-item',
 			assignmentTitle: rec.get('name'),
 			due: rec.get('due'),
-			page: this.store.indexOf(rec) + 1,
-			total: this.store.getCount(),
-			assignment: rec.get('item')
+			assignment: rec.get('item'),
+			pageSource: NextThought.util.PageSource.create({
+				store: this.store,
+				current: this.store.indexOf(rec)
+			})
 		}), {
-			'goto': 'showAssignmentAt',
+			'goto': '_doShowAssignment',
 			'goup': 'showRoot'
 		});
-	},
-
-	showAssignmentAt: function(index) {
-		var rec = this.store.getAt(index);
-		if (!rec) {
-			console.error('No record at index: ' + index);
-			return;
-		}
-		this._doShowAssignment(rec);
 	},
 
 

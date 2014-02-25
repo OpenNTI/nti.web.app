@@ -23,10 +23,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Panel', {
 			xtype: 'course-assessment-admin-reader-header',
 			parentView: this.parentView,
 			student: this.student,
-			page: this.page,
 			path: this.path,
-			store: this.store,
-			total: this.store.getCount(),
+			pageSource: this.pageSource,
 			assignmentHistory: this.assignmentHistory
 		};
 	},
