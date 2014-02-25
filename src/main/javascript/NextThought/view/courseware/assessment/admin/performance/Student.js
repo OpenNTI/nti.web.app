@@ -46,7 +46,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 			'reader-closing': 'maybeRemoveFilter',
 			'reader-initializing': 'applyPagerFilter'
 		});
-		this.mon(this.down('grid'), 'itemclick', 'maybeGoToAssignment');
+		this.mon(this.down('grid'), 'itemclick', 'maybeShowAssignment');
 	},
 
 	afterRender: function() {
@@ -108,7 +108,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 	},
 
 
-	maybeGoToAssignment: function(view, record, node, index, e) {
+	maybeShowAssignment: function(view, record, node, index, e) {
 		var selModel = view.getSelectionModel(),
 			selection = selModel && selModel.selection,
 			dataIndex = selection && selection.columnHeader.dataIndex,
@@ -120,7 +120,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 		}
 
 		if (dataIndex !== 'Grade' || !record.get('Grade')) {
-			this.goToAssignment(selModel, record);
+			this.showAssignment(selModel, record);
 		}
 	},
 
@@ -151,7 +151,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 	},
 
 	//<editor-fold desc="Navigation Events">
-	goToAssignment: function(selModel, record) {
+	showAssignment: function(selModel, record) {
 		var path = [
 				this.pathRoot,
 				this.pathBranch,

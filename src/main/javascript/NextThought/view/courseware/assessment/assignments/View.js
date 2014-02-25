@@ -173,7 +173,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 			alert('This assignment will be availble on ' + date);
 			return;
 		}
-		this.goToAssignment(record);
+		this._showAssignment(record);
 	},
 
 
@@ -394,17 +394,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 	},
 
 
-	goToAssignment: function(record) {
-		var path = [
-			'Assignments',
-			record.get('name')
-		];
-
-		this.applyPagerFilter();
-		this.fireEvent('show-assignment', this, record.get('item'), record, $AppConfig.userObject, path, this.store, this.store.indexOf(record) + 1);
-	},
-
-
 	showAssignment: function(assignment) {
 		var id = assignment && ((assignment.getId && assignment.getId()) || assignment),
 			x = this.store.getById(id),
@@ -421,6 +410,17 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 			return;
 		}
 
-		this.goToAssignment(x);
+		this._showAssignment(x);
+	},
+
+
+	_showAssignment: function(record) {
+		var path = [
+			'Assignments',
+			record.get('name')
+		];
+
+		this.applyPagerFilter();
+		this.fireEvent('show-assignment', this, record.get('item'), record, $AppConfig.userObject, path, this.store, this.store.indexOf(record) + 1);
 	}
 });

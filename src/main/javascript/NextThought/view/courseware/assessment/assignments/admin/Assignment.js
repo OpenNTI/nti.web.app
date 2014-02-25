@@ -365,12 +365,12 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		}
 
 		if (dataIndex !== 'Grade' || !record.get('Grade')) {
-			this.goToAssignment(selModel, record);
+			this.fireGoToAssignment(selModel, record);
 		}
 	},
 
 
-	goToAssignment: function(v, record) {
+	fireGoToAssignment: function(v, record) {
 		var student = record.get('Creator'),
 			path = [
 				this.pathRoot,

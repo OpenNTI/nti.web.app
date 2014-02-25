@@ -132,7 +132,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Activity', {
 	},
 
 
-	goToAssignment: function(s, record) {
+	fireGoToAssignment: function(s, record) {
 		var user = record.get('user');
 
 		if (isMe(record)) {

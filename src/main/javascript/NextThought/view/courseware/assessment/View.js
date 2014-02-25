@@ -277,7 +277,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 
 	getViewFor: function(assignment, user) {
-		var view;
+		var view = null;
 		this.body.items.each(function(v) {
 			if (v.handlesAssignment) {
 				view = v;

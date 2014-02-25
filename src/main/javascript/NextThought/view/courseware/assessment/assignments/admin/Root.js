@@ -35,60 +35,24 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 		var id = assignment && ((assignment.getId && assignment.getId()) || assignment),
 			x = this.store.getById(id),
 			item = x && x.get('item'),
-			parts = (item && item.get('parts')) || [],
-			view = this.up('course-assessment-admin-assignments'),
-			assignmentView, gridViewMask,
-			tab = this.up('[isTabView]').getEl();
+			parts = (item && item.get('parts')) || [];
+			//tab = this.up('[isTabView]').getEl(),
+			//view, assignmentView;
 
 		this.onItemClicked(null, x);
 
-		assignmentView = view && view.down('course-assessment-admin-assignments-item');
 
 		if (parts.length === 0) {
 			console.warn('Cannot show an assignment that does not have submit parts.');
 			return;
 		}
 
-		if (assignmentView) {
-			gridViewMask = assignmentView.down('grid dataview').loadMask;
-			if (gridViewMask && gridViewMask.disable) {
-				gridViewMask.disable(true);
-			}
+		//view = this.up('course-assessment-admin-assignments');
+		//assignmentView = view && view.down('course-assessment-admin-assignments-item');
+		//if (assignmentView) {
+			//assignmentView.goToAssignment(null, rec);
+		//}
 
-			if (user && tab && tab.dom) {
-				//tab.mask('Loading...', 'navigation');
-				tab.mask('Loading...');
-			}
-
-			assignmentView.filledStorePromise
-				.done(function(store) {
-					var recs = (store.snapshot || store.data);
-					try {
-						recs.each(function(rec) {
-							var creator = (rec && rec.get && rec.get('Creator')) || rec,
-								u = Ext.isString(user) ? user : user.getId();
-
-							creator = Ext.isString(creator) ? creator : creator.getId();
-
-							if (u === creator) {
-								assignmentView.goToAssignment(null, rec);
-							}
-
-						});
-					} finally {
-						if (gridViewMask && gridViewMask.enable) {
-							gridViewMask.enable();
-						}
-						tab.unmask();
-					}
-				})
-				.fail(function(reason) {
-					if (gridViewMask && gridViewMask.enable) {
-						gridViewMask.enable();
-					}
-					tab.unmask();
-					console.error(reason);
-				});
-		}
+		return null;
 	}
 });

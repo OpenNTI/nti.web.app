@@ -76,7 +76,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 		this.mon(this.store, 'datachanged', 'maybeNotify');
 		this.on({
 			deactivate: 'clearBadge',
-			itemclick: 'goToAssignment',
+			itemclick: 'fireGoToAssignment',
 			loadMoreLink: { click: 'onLoadMore' }
 		});
 	},
@@ -294,7 +294,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 	},
 
 
-	goToAssignment: function(s, record) {
+	fireGoToAssignment: function(s, record) {
 		this.fireEvent('goto-assignment', record.get('item'), $AppConfig.userObject);
 	}
 });

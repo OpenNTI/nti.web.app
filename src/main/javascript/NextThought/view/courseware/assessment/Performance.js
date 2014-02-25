@@ -142,7 +142,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 		this.grid.bindStore(store);
 		//this.chartPerformance.setStore(store);
 
-		this.mon(this.grid, 'itemClick', 'goToAssignment');
+		this.mon(this.grid, 'itemClick', 'fireGoToAssignment');
 
 		this.mon(store, 'datachanged', 'updateHeader');
 	},
@@ -172,9 +172,9 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 	},
 
 
-	goToAssignment: function(selModel, record) {
+	fireGoToAssignment: function(selModel, record) {
 		var date = Ext.Date.format(record.get('assigned'), 'l F j \\a\\t g:i A');
-			
+
 		if (!record || record.get('assigned') > new Date()) {
 			alert('This assignment will be availble on ' + date);
 			return;
