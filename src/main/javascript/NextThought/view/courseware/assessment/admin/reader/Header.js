@@ -60,9 +60,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 	},
 
 
-	goTo: function(index) {
-		var rec = this.store.getAt(index),
-			v = this.parentView;
-		Ext.defer(v.fireGoToAssignment, 1, v, [null, rec]);
+	goTo: function(rec) {
+		var v = this.parentView;
+		Ext.defer(v.fireGoToAssignment, 1, v, [rec]);
 	}
 });
