@@ -46,12 +46,12 @@ Ext.define('NextThought.store.courseware.AssignmentView', {
 			var filter, sort, dir,
 				p = op.params;
 
-			if (p.filter) {
+			if (p && p.filter) {
 				filter = Ext.decode(p.filter)[0];
 				p.filter = filter.property + filter.value;
 			}
 
-			if (p.sort) {
+			if (p && p.sort) {
 				dir = {
 					asc: 'ascending',
 					desc: 'descending'
