@@ -28,18 +28,17 @@ Ext.define('NextThought.view.forums.forum.parts.Header', {
 		nextEl: '.controls .pager .next'
 	},
 
-	beforeRender: function() {
-		this.callParent(arguments);
-		this.renderData = Ext.apply(this.renderData || {}, this.record.getData());
-	},
-
 
 	afterRender: function() {
 		var me = this, total;
 
-		me.mon(me.newTopicEl, 'click', function() {
-			me.fireEvent('new-topic', me, me.record);
-		});
+		if (!me.record.getLink('add')) {
+			me.newTopicEl.destroy();
+		} else {
+			me.mon(me.newTopicEl, 'click', function() {
+				me.fireEvent('new-topic', me, me.record);
+			});
+		}
 
 		me.updatePosition();
 		me.mon(me.store, 'load', 'updatePosition');

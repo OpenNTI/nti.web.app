@@ -18,9 +18,22 @@ Ext.define('NextThought.view.forums.topic.parts.NavHeader', {
 
 		me.callParent(arguments);
 
-		me.mon(me.newTopicEl, 'click', function() {
-			me.fireEvent('maybe-new-topic');
-		});
+		if (me.shouldHide) {
+			me.hideNewTopic();
+		} else {
+			me.mon(me.newTopicEl, 'click', function() {
+				me.fireEvent('maybe-new-topic');
+			});
+		}
+	},
+
+	hideNewTopic: function() {
+		if (!this.rendered) {
+			this.shouldHide = true;
+			return;
+		}
+
+		this.newTopicEl.destroy();
 	}
 
 });

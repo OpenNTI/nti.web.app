@@ -52,9 +52,13 @@ Ext.define('NextThought.view.forums.topic.parts.NavGrid', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		var navHeader = this.down('forums-topic-nav-header');
+		this.navHeader = this.down('forums-topic-nav-header');
 
-		this.mon(navHeader, 'maybe-new-topic', 'maybeShowTopicEditor');
+		if (this.record && !this.record.getLink('add')) {
+			this.navHeader.hideNewTopic();
+		} else {
+			this.mon(this.navHeader, 'maybe-new-topic', 'maybeShowTopicEditor');
+		}
 
 		this.on('cellclick', 'onItemClick');
 	},
@@ -72,6 +76,10 @@ Ext.define('NextThought.view.forums.topic.parts.NavGrid', {
 	setCurrent: function(record, store) {
 		this.record = record;
 		this.bindStore(store);
+
+		if (this.rendered && !this.record.getLink('add')) {
+			this.navHeader.hideNewTopic();
+		}
 	},
 
 
