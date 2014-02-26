@@ -155,15 +155,26 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 	getSorter: function(by, searchTerm, batchAround) {
 		var sort = this.sorters[by];
 
-		sort.searchTerm = searchTerm ? searchTerm : '';
+		sort.searchTerm = searchTerm || '';
 
-		sort.batchAround = batchAround ? batchAround : '';
+		sort.batchAround = batchAround || '';
 
 		return sort;
 	},
 
 
 	setGrouper: function(by) {
+
+		function getHeader(name, value) {
+			var header = NextThought.model.forums.CommunityHeadlineTopic.create();
+
+			header.set(grouper.property, value);
+			header.set('isGroupHeader', true);
+			header.set('groupName', name);
+
+			return header;
+		}
+
 		var me = this, headers = [],
 			grouper = this.groupers[by];
 
@@ -183,7 +194,8 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 				sorterFn: function(a, b) {
 					if (a.get('isGroupHeader')) {
 						return 1;
-					} else if (b.get('isGroupHeader')) {
+					}
+					if (b.get('isGroupHeader')) {
 						return -1;
 					}
 
@@ -192,17 +204,6 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 			});
 
 			me.store.group(grouper, 'DESC');
-
-			function getHeader(name, value) {
-				var header = NextThought.model.forums.CommunityHeadlineTopic.create();
-
-				header.set(grouper.property, value);
-				header.set('isGroupHeader', true);
-				header.set('groupName', name);
-
-				return header;
-			}
-
 			me.store.getGroups(false).forEach(function(g) {
 				if (Ext.isEmpty(g.children) || g.name === 'Today') { return; }
 				var child = g.children[0],
@@ -245,6 +246,8 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 
 
 	updateView: function(store, records) {
+		//since this is called as an event handler the second arg may not be an array of records.
+		records = (Ext.isArray(records) && records) || null;
 		var by = this.filterBar.getSortBy(),
 			search = this.filterBar.getSearch();
 
