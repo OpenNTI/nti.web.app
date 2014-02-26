@@ -9,7 +9,7 @@ Ext.define('NextThought.view.forums.forum.View', {
 		'NextThought.view.forums.forum.Navigation'
 	],
 
-	navigation: { xtype: 'forums-forum-nav', margin: '0 0 5 0', override: true},
+	navigation: { xtype: 'forums-forum-nav', margin: 0, override: true},
 	body: { xtype: 'forums-forum-body'},
 
 	storeCfg: {},
