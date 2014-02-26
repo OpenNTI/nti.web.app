@@ -432,14 +432,17 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			}
 		});
 
+		function stop(e) {e.stopPropagation();}
 		me.mon(me.contentEl, {
 			scope: me,
-			keydown: me.onKeyDown,
-			keyup: me.onKeyup,
-			paste: me.handlePaste,
-			click: me.handleClick,
-			contextmenu: me.handleContext,
-			mouseup: me.onMouseUp
+			keydown: 'onKeyDown',
+			keyup: 'onKeyup',
+			paste: 'handlePaste',
+			click: 'handleClick',
+			contextmenu: 'handleContext',
+			mouseup: 'onMouseUp',
+			mousedown: stop,
+			mousemove: stop
 		});
 
 		me.on('destroy', function() {
@@ -815,6 +818,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	onMouseUp: function(e) {
+		e.stopPropagation();
 		this.detectTypingAttributes(e);
 	},
 
