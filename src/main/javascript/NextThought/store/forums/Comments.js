@@ -15,7 +15,7 @@ Ext.define('NextThought.store.forums.Comments', {
 
 
 	topLevelLoaded: function(store, records) {
-		records.forEach(function(rec) {
+		(records || []).forEach(function(rec) {
 			rec.set('depth', 0);
 		});
 	},

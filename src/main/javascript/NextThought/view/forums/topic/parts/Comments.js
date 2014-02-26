@@ -165,7 +165,7 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 
 	onStoreAdd: function(store, records) {
 		delete this.notLoadedYet;
-		records.forEach(this.fillInData, this);
+		(records || []).forEach(this.fillInData, this);
 		this.clearLoadBox();
 		this.fireEvent('realign-editor');
 	},
