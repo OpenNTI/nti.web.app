@@ -143,8 +143,8 @@ Ext.define('NextThought.view.SideBar', {
 		 *
 		 * @see {Ext.dom.Element#translateXY}
 		 *
-		 * @param x {Number/Number[]}
-		 * @param y {Number}
+		 * @param {Number/Number[]} x
+		 * @param {Number} y
 		 * @return {{x: Number, y: Number}}
 		 */
 		this.el.translateXY = function(x, y) {
@@ -239,10 +239,10 @@ Ext.define('NextThought.view.SideBar', {
 	syncUp: function() {
 		var x = Ext.Element.getViewportWidth() - this.getWidth(),
 			d = this.down('chat-dock'),
-			size = this.host && this.host.getSize(),
+			size = this.host && this.host.el && this.host.getSize(),
 			searchInput, groupInput;
 
-		if (!this.host) {return;}
+		if (!this.host || !this.host.el) {return;}
 
 		if (!this.host.isVisible()) {
 			if (Ext.is.iOS) {
