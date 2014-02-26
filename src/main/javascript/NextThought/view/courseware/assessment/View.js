@@ -110,6 +110,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 				} else {
 					me.addStudentViews();
 				}
+				me.onViewChanged();
 			}
 
 			Promise.pool(
@@ -235,6 +236,10 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 
 	onViewChanged: function(activeCmp) {
+		if (!activeCmp) {
+			activeCmp = this.body.getLayout().getActiveItem();
+		}
+
 		this.navigation.updateSelection(activeCmp);
 	},
 
