@@ -6,6 +6,7 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 	itemSelector: '.outline-row',
 
 	selModel: {
+		preventFocus: true,
 		allowDeselect: false,
 		toggleOnClick: false,
 		deselectOnContainerClick: false

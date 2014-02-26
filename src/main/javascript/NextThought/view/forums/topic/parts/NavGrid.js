@@ -11,6 +11,7 @@ Ext.define('NextThought.view.forums.topic.parts.NavGrid', {
 	},
 
 	selModel: {
+		preventFocus: true,
 		pruneRemoved: false
 	},
 
