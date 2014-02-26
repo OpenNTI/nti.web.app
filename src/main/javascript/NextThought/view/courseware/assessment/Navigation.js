@@ -99,12 +99,12 @@ Ext.define('NextThought.view.courseware.assessment.Navigation', {
 
 
 	updateSelection: function(active, fromUser) {
-		var view = active.xtype || active,
-			i = this.store.findBy(function(r) {
+		var view = active && (active.xtype || active),
+			i = view && this.store.findBy(function(r) {
 				return r.get('type') === 'view' && r.get('mapping') === view;
 			});
 
-		this.getSelectionModel().select(i, false, fromUser !== true);
+		this.getSelectionModel().select(i || 0, false, fromUser !== true);
 	},
 
 
