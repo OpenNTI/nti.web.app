@@ -233,7 +233,7 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 			monitorCardChange(me);
 			monitorLayout.call(me);
 			updateCaches.call(me);
-			updateSideHeight.call(me, mb, true);
+			//updateSideHeight.call(me, mb, true);
 			//setReverseMargin.call(this, mb);
 
 			if ($AppConfig.debugCustomScroll) {
