@@ -462,7 +462,9 @@ Ext.define('NextThought.view.content.View', {
 
 	_setCourse: function(instance, tab) {
 		if (this.currentCourse === instance) {
-			this.setActiveTab(tab);
+			if (tab !== 'passive') {
+				this.setActiveTab(tab);
+			}
 			return;
 		}
 
