@@ -6,7 +6,7 @@ Ext.define('NextThought.view.forums.topic.parts.Header', {
 
 	pathTpl: Ext.DomHelper.markup([
 		{cls: 'path', cn: [
-			{tag: 'span', cls: 'part toggle-opposite-tabs menu-dropdown', html: 'discussions'},
+			{tag: 'span', cls: 'part toggle-opposite-tabs menu-dropdown back-part', html: 'discussions'},
 			{tag: 'span', cls: 'part back-part', 'data-qtip': '{path}', html: '{path}'},
 			{tag: 'span', cls: 'part title-part current', 'data-qtip': '{title}' , html: '{title}'}
 		]}
@@ -40,9 +40,9 @@ Ext.define('NextThought.view.forums.topic.parts.Header', {
 		tpl = new Ext.XTemplate(me.pathTpl);
 		tpl.insertFirst(me.headerEl, {path: forumTitle, title: topicTitle}, true);
 
-		if (this.current >= 0 && this.total) {
-			//this.locationEl.update((this.current + 1) + ' of ' + this.total);
-		}
+		//if (this.current >= 0 && this.total) {
+		//	this.locationEl.update((this.current + 1) + ' of ' + this.total);
+		//}
 
 		if (this.nextIndex) {
 			this.nextEl.removeCls('disabled');
@@ -115,6 +115,11 @@ Ext.define('NextThought.view.forums.topic.parts.Header', {
 		if (!e.getTarget('.back-part')) {
 			return;
 		}
-		this.fireEvent('pop-view');
+
+		if (e.getTarget('.menu-dropdown')) {
+			this.fireEvent('pop-to-root');
+		} else {
+			this.fireEvent('pop-view');
+		}
 	}
 });

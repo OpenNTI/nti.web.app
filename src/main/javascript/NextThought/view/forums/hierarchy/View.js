@@ -38,7 +38,7 @@ Ext.define('NextThought.view.forums.hierarchy.View', {
 				'record-deleted': 'recordDeleted'
 			});
 
-			this.relayEvents(this.body, ['pop-view', 'new-record']);
+			this.relayEvents(this.body, ['pop-view', 'new-record', 'pop-to-root']);
 		}
 	},
 

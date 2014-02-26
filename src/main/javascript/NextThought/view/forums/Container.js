@@ -135,6 +135,11 @@ Ext.define('NextThought.view.forums.Container', {
 				} else {
 					console.error('No forum view to add the topic to.', record);
 				}
+			},
+			'pop-to-root': function() {
+				delete me.topicList;
+				me.updateState();
+				me.showRoot();
 			}
 		});
 
@@ -176,6 +181,6 @@ Ext.define('NextThought.view.forums.Container', {
 			return;
 		}
 
-		this.fireEvent('active-state-changed', this.forumList, this.topicList, this.topicList.activeRecord, this.title);
+		this.fireEvent('active-state-changed', this.forumList, this.topicList, this.topicList && this.topicList.activeRecord, this.title);
 	}
 });

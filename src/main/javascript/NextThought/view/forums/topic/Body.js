@@ -60,7 +60,7 @@ Ext.define('NextThought.view.forums.topic.Body', {
 			}
 		});
 
-		this.relayEvents(header, ['goto-index', 'pop-view']);
+		this.relayEvents(header, ['goto-index', 'pop-view', 'pop-to-root']);
 
 		this.currentRecord = record;
 
