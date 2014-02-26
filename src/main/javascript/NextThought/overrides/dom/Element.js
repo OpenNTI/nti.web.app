@@ -2,6 +2,28 @@ Ext.define('NextThought.overrides.dom.Element', {
 	override: 'Ext.dom.Element',
   //	requires: ['NextThought.util.Rects'],
 
+	constructor: function() {
+		this.callParent(arguments);
+
+		this.on({
+			scope: this,
+			buffer: 200,
+			scroll: this._scrollStopped
+		});
+	},
+
+
+	_scrollStopped: function(e) {
+		var me = this,
+			d = me.dom,
+			c = Ext.EventManager.getEventListenerCache(d, 'scrollstop') || [];
+
+		c.forEach(function(listener) {
+			listener.wrap.call(c.scope || d, e);
+		});
+	},
+
+
 	getScrollingEl: function() {
 
 		var el = this, found = 0, max = 100, flow;
