@@ -1,36 +1,13 @@
 
 @mixin post-navigation {
-	box-shadow: inset 0 -1px 0 0 #f1f1f1;
 	padding: 0 17px 0 30px;
-	font: normal normal 0.75em/49px $font;
+	font: normal normal 0.75em/0 $font;
 	overflow: hidden;
 	height: 50px;
 
 	&.blog-post {
 		background: white;
 	}
-
-	// .path {
-	// 	width: 630px;
-	// 	@inlude flexbox;
-
-	// 	.menu-dropdown{
-	// 		@include flex(1);
-	// 	}
-
-	// 	.crumb-container {
-	// 		@include flexbox;
-	// 		@include flex(1);
-
-	// 		.back-part {
-	// 			@include flex(1);
-	// 		}
-
-	// 		.title-part {
-	// 			@include flex(3);
-	// 		}
-	// 	}
-	// }
 	
 	.path {
 		float: left;
@@ -39,6 +16,7 @@
 	}
 
 	.path .part {
+		line-height: 50px;
 		display: inline-block;
 		text-transform: uppercase;
 		font-weight: 600;
@@ -354,8 +332,6 @@
 }
 
 @mixin post-view {
-	border: 0 solid #f1f1f1;
-	border-width: 1px 0 0 0;
 	position: relative;
 
 	.navigation-bar {
@@ -1187,30 +1163,16 @@
 	}
 
 	.forum-nav{
-		width: 260px !important;
-
 		&.topic-nav{
+			background: #fbfbfb;
 			.x-grid-header-ct{
 				display: none;
 			}
 
 			.topic-nav-header{
 				height: 50px;
-				background: white;
-				box-shadow: inset 0 -1px 0 0 #f1f1f1;
-
-				&::after{
-					content: '';
-					position: absolute;
-					top: 0;
-					bottom: 0;
-					right: auto; left: 0;
-					width: 10px;
-					background: none;
-					overflow: hidden;
-					box-shadow: inset 2px 0 3px -2px rgba(0, 0, 0, 0.3);
-					z-index: 2;
-				}
+				border: 0 solid #f1f1f1;
+				border-bottom-width: 1px !important;
 
 				.new-topic{
 					cursor: pointer;
@@ -1223,12 +1185,14 @@
 				}
 			}
 
-			.x-grid-body{
-				top: 50px !important;
-			}
+			.x-grid-body {background: none;}
 
 			.nav-outline{
-				background-color: #fbfbfb;
+				background: none;
+
+				&::after {
+					display: none;
+				}
 
 				.x-grid-row-selected{
 					.x-grid-td{
@@ -1237,29 +1201,19 @@
 
 					}
 
-					.outline-row{
-						background: $primary-blue;
-						box-shadow: inset -1px 0 0 1px #107eed,1px 0 0 0px #107eed;
-
-						&:hover{
+					.outline-row {
+						&, &:hover {
 							background: $primary-blue;
-						}
+							box-shadow: inset -3px 1px 0 0px #107eed;
+							border-bottom-color: #107eed;
 
-						.author,.meta{
-							color: #c5eaff;
-						}
+							.author,.meta{
+								color: #c5eaff;
+							}
 
-						.title{color: #ffffff;}
+							.title{color: #ffffff;}
+						}
 					}
-				}
-
-				.x-grid-table::after{
-					content: '';
-					bottom: 0; right: auto;
-					top: 0; left: 0;
-					box-shadow: inset 2px 0 3px -2px rgba(0, 0, 0, 0.3);
-					position: absolute;
-					width: 1px;
 				}
 
 				.header{
@@ -1318,13 +1272,13 @@
 				}
 			}
 
-
 		}
 
 		&.topic-list-nav{
+			background: #f0f0f0;
 
 			.outline-list{
-				background: #f0f0f0;
+				margin-top: 10px;
 			}
 			
 			.outline-row {
@@ -1406,16 +1360,9 @@
 
 	.topic-view{
 		.forum-nav{
-			left: auto !important;
-			right: 0 !important;
-			bottom: 5px !important;
-			height: auto !important;
+			border: 0 solid #EDEDED;
+			border-left-width: 1px !important;
 			overflow-y: hidden;
-		}
-
-		.forum-body{
-			left: 0 !important;
-			right: auto !important;
 		}
 	}
 
@@ -1545,6 +1492,8 @@
 			.header-container {
 				height: 50px;
 				z-index: 3;
+				border: 0 solid #f1f1f1;
+				border-bottom-width: 1px !important;
 			}
 
 			.avatar {

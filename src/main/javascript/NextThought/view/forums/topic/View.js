@@ -11,7 +11,7 @@ Ext.define('NextThought.view.forums.topic.View', {
 		'NextThought.view.forums.topic.Navigation'
 	],
 
-	navigation: { xtype: 'forums-topic-nav', region: 'east', margin: 0},
+	navigation: { xtype: 'forums-topic-nav', region: 'east', margin: 0, override: true},
 	body: { xtype: 'forums-topic-body' },
 
 	storeCfg: {
