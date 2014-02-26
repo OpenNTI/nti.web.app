@@ -1188,8 +1188,6 @@
 			.x-grid-body {background: none;}
 
 			.nav-outline{
-				background: none;
-
 				&::after {
 					display: none;
 				}
@@ -1277,9 +1275,9 @@
 		&.topic-list-nav{
 			background: #f0f0f0;
 
-			.outline-list{
-				margin-top: 10px;
-			}
+			// .outline-list{
+			// 	margin-top: 10px;
+			// }
 			
 			.outline-row {
 				background: #ffffff;
@@ -1316,6 +1314,7 @@
 		}
 
 		.nav-outline{
+			background: none;
 			left: 0; right: 0;
 
 			&::after{
@@ -1332,9 +1331,10 @@
 			}
 
 			.header {
+				color: $secondary-grey;
 				cursor: pointer;
 				display: block !important;
-				background: none;
+				background: #fff;
 
 				@include icon('arrow-course-dropdown-light', $side:'before', $top: 20px, $left: auto, $right: 10px);
 

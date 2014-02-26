@@ -876,27 +876,7 @@ Ext.define('NextThought.controller.Forums', {
 			}
 		}
 
-		try {
-			if (editorCmp.el) {
-				editorCmp.el.mask('Saving...');
-			}
-			//If we are creating a course and the forum is for enrolled students only
-			if (!open && !isEdit) {
-				if (board.getRelatedCourse()) {
-					//set the forums ACL to restricted
-					forum.set('ACL', [{
-			            'Action': 'Allow',
-			            'Class': 'ForumACE',
-			            'Entities': board.getRelatedCourse().getScope('restricted'),
-			            'MimeType': 'application/vnd.nextthought.forums.ace',
-			            'Permissions': [
-			                'Read',
-			                'Create'
-			            ]
-			        }]);
-				}
-			}
-
+		function updateForum() {
 			forum.set({
 				title: title,
 				description: description
@@ -921,6 +901,39 @@ Ext.define('NextThought.controller.Forums', {
 					unmask();
 				}
 			});
+		}
+
+		try {
+			if (editorCmp.el) {
+				editorCmp.el.mask('Saving...');
+			}
+			//If we are creating a course and the forum is for enrolled students only
+			if (!open && !isEdit) {
+				board.findCourse()
+					.done(function(course) {
+						if (course) {
+							//set the forums ACL to restricted
+							forum.set('ACL', [{
+					            'Action': 'Allow',
+					            'Class': 'ForumACE',
+					            'Entities': course.getScope('restricted'),
+					            'MimeType': 'application/vnd.nextthought.forums.ace',
+					            'Permissions': [
+					                'Read',
+					                'Create'
+					            ]
+					        }]);
+						}
+
+						updateForum();
+					})
+					.fail(function(reason) {
+						console.error('Failed to find course', reason);
+						alert('An error occured saving the forum, please try again later.');
+					});
+			} else {
+				updateForum();
+			}
 		}catch (e) {
 			console.error('An error occurred saving forum', Globals.getError(e));
 			unmask();
