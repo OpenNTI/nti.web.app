@@ -87,7 +87,7 @@ Ext.define('NextThought.view.forums.hierarchy.View', {
 			} else if (this.currentRecord.activeNTIID) {
 				record = this.store.getById(this.currentRecord.activeNTIID);
 			} else {
-				record = this.store.getAt(0);
+				record = this.store.getCount() > 0 ? this.store.getAt(0) : null;
 			}
 		}
 

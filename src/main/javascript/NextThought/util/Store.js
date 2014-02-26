@@ -8,8 +8,14 @@ Ext.define('NextThought.util.Store', {
 			return;
 		}
 
+		//work around ExtJS bug (the bug is fixed in 4.2.1)
+		if (records && records.isStore) {
+			records = records.getRange();
+		}
 
-		var users = Ext.Array.map(records || [], function(r) {return r.get('Creator');});
+		records = records || [];
+
+		var users = records.map(function(r) {return r.get('Creator');});
 
 		function apply(r, i) {
 			var u = users[i],
@@ -30,7 +36,7 @@ Ext.define('NextThought.util.Store', {
 			users = u;
 
 			store.suspendEvents(true);
-			Ext.each(records, apply);
+			records.forEach(apply);
 			store.resumeEvents();
 
 		});
