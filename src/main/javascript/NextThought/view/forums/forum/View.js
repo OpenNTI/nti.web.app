@@ -18,7 +18,7 @@ Ext.define('NextThought.view.forums.forum.View', {
 	setCurrentBody: function() {
 		this.callParent(arguments);
 
-		this.initCustomScrollOn('content', '.topic-list', {secondaryViewEl: '.nav-outline'});
+		this.initCustomScrollOn('content', '.topic-list', {secondaryViewEl: '.topic-list-nav'});
 	},
 
 	newRecordAdded: function() {
