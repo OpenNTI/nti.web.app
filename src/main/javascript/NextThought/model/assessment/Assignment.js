@@ -101,6 +101,11 @@ Ext.define('NextThought.model.assessment.Assignment', {
 		if (!success) {return;}
 		records = records || [];
 
+		//work around a ExtJS 4.2.0 bug (fixed in 4.2.1)
+		if (records && records.isStore) {
+			records = [];
+		}
+
 		function fill(users) {
 			var i = users.length - 1, r, u, c;
 			store.suspendEvents(true);
