@@ -77,7 +77,7 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 		main = this.up('[getMainTabbarMenu]');
 
 		if (!this.tabMenu) {
-			this.tabMenu = main.getMainTabbarMenu(260);
+			this.tabMenu = main.getMainTabbarMenu(260, 'Discussions');
 
 			if (!this.tabMenu) {
 				this.hasNoTabbar = true;

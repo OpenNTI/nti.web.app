@@ -293,16 +293,18 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 		},
 
 
-		getMainTabbarMenu: function(width) {
+		getMainTabbarMenu: function(width, current) {
 			var tabView = Ext.get('view-tabs').dom,
 			children = tabView && tabView.children,
 			items = [];
+
+			current = current || 'Lessons';
 
 			Ext.each(children, function(item) {
 				items.push({
 					text: item.innerText,
 					viewId: item.getAttribute('data-view-id'),
-					cls: /Lessons/i.test(item.innerText) ? 'current' : ''
+					cls: item.innerText.toLowerCase() === current.toLowerCase() ? 'current' : ''
 				});
 			});
 

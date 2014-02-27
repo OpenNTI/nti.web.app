@@ -87,7 +87,7 @@ Ext.define('NextThought.view.forums.topic.parts.Header', {
 		main = this.up('[getMainTabbarMenu]');
 
 		if (!this.tabMenu) {
-			this.tabMenu = main.getMainTabbarMenu();
+			this.tabMenu = main.getMainTabbarMenu(200, 'Discussions');
 
 			if (!this.tabMenu) {
 				this.hasNoTabbar = true;
