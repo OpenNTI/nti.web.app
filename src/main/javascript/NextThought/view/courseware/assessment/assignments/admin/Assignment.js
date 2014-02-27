@@ -94,11 +94,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 
 	items: [
-		   //FIXME: under ExtJS 4.2.1 this grid does not render any rows. Not sure why,
-		   // as the height of the container *IS* published. The debuging messages for
-		   // view resize indicate the buffered renderer knows how tall it is. Another
-		   // instance of this grid renders rows just fine. (see Student.js)
-		   // As far as I know, this is the last show-stopper for Ext 4.2.1.
 		{
 			xtype: 'course-admin-grid',
 			cls: 'student-assignment-overview',
@@ -148,6 +143,14 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		}],
 
 
+	constructor: function(config) {
+		this.items = Ext.clone(this.items);
+		this.store = config.assignment.getSubmittedHistoryStore();
+		this.items[0].store = this.store;
+		this.callParent(arguments);
+	},
+
+
 	initComponent: function() {
 		this._masked = 0;
 		this.callParent(arguments);
@@ -162,7 +165,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		if (this._masked) {
 			this._showMask();
 		}
-		this.down('grid').bindStore(this.store);
 		this.syncFilterToUI();
 	},
 
@@ -232,7 +234,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 
 	beforeRender: function() {
-		var a = this.assignment, s, grid, p = this.filledStorePromise,
+		var a = this.assignment, s = this.store, grid, p = this.filledStorePromise,
 			parts = this.assignment.get('parts');
 
 		this.callParent();
@@ -249,8 +251,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			noPrev: !this.pageSource.hasPrevious(),
 			exportFilesLink: this.exportFilesLink
 		});
-
-		s = this.store = a.getSubmittedHistoryStore();
 
 		if (!s.loading && s.getCount() > 0) {
 			p.fulfill(s);
