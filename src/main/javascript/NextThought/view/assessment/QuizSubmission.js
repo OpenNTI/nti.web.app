@@ -237,11 +237,27 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 
 
 	resetClicked: function(e) {
-		if (this.isSubmitted()) {
-			return this.resetBasedOnButtonClick(e);
+		var me = this;
+
+		if (me.isSubmitted()) {
+			return me.resetBasedOnButtonClick(e);
 		}
 
-		this.maybeDoReset(false);
+		Ext.MessageBox.alert({
+			title: 'Are you sure?',
+			msg: 'This will reset this assignment',
+			icon: 'warning-red',
+			buttonText: true,
+			buttons: {
+				cancel: 'Cancel',
+				yes: 'caution:Yes'
+			},
+			fn: function(button) {
+				if (button === 'yes') {
+					me.maybeDoReset(false);
+				}
+			}
+		});
 
 		if (e) {
 			e.stopEvent();
