@@ -208,8 +208,10 @@ Ext.define('NextThought.controller.Reader', {
 			return;
 		}
 
-		//this will be rewritten for setLocationRooted(), this is just the default. If you go to a "book" by way of library root gets blanked.
-		r.currentRoot = me.getRootForLocation(id);
+		//If we have a root set, update it, if not, leave it alone.
+		if (r.currentRoot) {
+			r.currentRoot = me.getRootForLocation(id);
+		}
 
 		function go(pi) {
 			if (me.fireEvent('show-view', 'content', true) === false) {
@@ -278,7 +280,7 @@ Ext.define('NextThought.controller.Reader', {
 		}
 
 		this.setLocation(ntiid, call, silent === true);
-		reader.currentRoot = ntiid; //setLocation is async, and in its init ca
+		reader.currentRoot = ntiid; //setLocation is async, and in its init can set this to a less restrictive root.
 	},
 
 
@@ -299,16 +301,16 @@ Ext.define('NextThought.controller.Reader', {
 		}
 
 		function call(a, errorDetails) {
+			reader.currentRoot = null;//just in case
 			var error = (errorDetails || {}).error;
 			if (error && error.status !== undefined && Ext.Ajax.isHTTPErrorCode(error.status)) {
 				PersistentStorage.removeProperty('last-location-map', ntiid);
-				reader.currentRoot = null;
 			}
 
 			Ext.callback(callback, null, [ntiid, a, error]);
 		}
 
-		reader.currentRoot = ntiid;
+		reader.currentRoot = null;
 		this.getContentView()._setCourse(null);
 		this.setLocation(lastNtiid, call, silent === true);
 	},
