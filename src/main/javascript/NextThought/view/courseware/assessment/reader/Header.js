@@ -112,6 +112,6 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 
 	goTo: function(rec) {
 		var v = this.parentView;
-		Ext.defer(v.fireGoToAssignment, 1, v, [v, rec]);
+		Ext.defer(v.showAssignment, 1, v, [rec]);
 	}
 });
