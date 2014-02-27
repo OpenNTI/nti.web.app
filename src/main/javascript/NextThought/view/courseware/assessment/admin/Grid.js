@@ -15,6 +15,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 	enableColumnHide: false,
 	enableColumnMove: false,
 	enableColumnResize: false,
+	columnLines: false,
+	rowLines: false,
 
 	viewConfig: {
 		loadMask: false,

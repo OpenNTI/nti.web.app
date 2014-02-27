@@ -54,6 +54,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			enableColumnHide: false,
 			enableColumnMove: false,
 			enableColumnResize: false,
+			columnLines: false, rowLines: false,
 			plugins: [{ptype: 'bufferedrenderer'}],
 			columns: {
 				ui: 'course-assessment',
