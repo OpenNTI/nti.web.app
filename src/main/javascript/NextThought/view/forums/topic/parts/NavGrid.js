@@ -26,6 +26,8 @@ Ext.define('NextThought.view.forums.topic.parts.NavGrid', {
 	enableColumnHide: false,
 	enableColumnMove: false,
 	enableColumnResize: false,
+	columnLines: false,
+	rowLines: false,
 
 	dockedItems: {
 		xtype: 'forums-topic-nav-header',
