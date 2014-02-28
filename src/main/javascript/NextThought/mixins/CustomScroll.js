@@ -234,9 +234,9 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 
 			Ext.each(children, function(item) {
 				items.push({
-					text: item.innerText,
+					text: item.textContent,
 					viewId: item.getAttribute('data-view-id'),
-					cls: item.innerText.toLowerCase() === current.toLowerCase() ? 'current' : ''
+					cls: item.textContent.toLowerCase() === current.toLowerCase() ? 'current' : ''
 				});
 			});
 
