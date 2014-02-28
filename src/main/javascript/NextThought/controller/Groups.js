@@ -25,7 +25,6 @@ Ext.define('NextThought.controller.Groups', {
 		'account.codecreation.Main',
 		'account.contacts.createlist.Main',
 		'contacts.Panel',
-		'contacts.TabPanel',
 		'contacts.Card',
 		'contacts.oobe.Window'
 	],
