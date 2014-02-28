@@ -199,7 +199,7 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 			me.store.suspendEvents();
 
 			record.set({
-				'bodyContent': body
+				'bodyContent': DomUtils.adjustLinks(body, window.location.href)
 			});
 
 			me.store.resumeEvents();

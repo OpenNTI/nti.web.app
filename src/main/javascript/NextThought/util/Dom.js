@@ -104,10 +104,20 @@ Ext.define('NextThought.util.Dom', {
 	 * do the right thing.
 	 */
 	adjustLinks: function(dom, baseUrl) {
+		var string, tempDom;
+
 		if (!dom) {
 			return;
 		}
-		Ext.each(dom.query('a[href]') || [], function(link) {
+
+		if (Ext.isString(dom)) {
+			string = true;
+			tempDom = document.createElement('div');
+			tempDom.innerHTML = dom;
+			dom = tempDom;
+		}
+
+		Ext.each(Ext.fly(dom).query('a[href]') || [], function(link) {
 			var href = Ext.fly(link).getAttribute('href') || '',
 				base = baseUrl.split('#')[0],
 				changeTarget = href.indexOf(base) !== 0;
@@ -117,6 +127,8 @@ Ext.define('NextThought.util.Dom', {
 				Ext.fly(link).set({target: '_blank'});
 			}
 		});
+
+		return string ? dom.innerHTML : dom;
 	},
 
 
