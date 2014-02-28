@@ -69,6 +69,10 @@ Put this bash script in the `.git/hooks/pre-commit`:
 
     for f in $FILES
     do
+    	if [ ! -f $f ]; then  #file was deleted
+    		continue
+    	fi
+
     	CHECK=(
     		"/opt/local/bin/jslint $(pwd)/$f continue closure"
     		"/usr/local/bin/gjslint --strict --disable=0005,0220 --max_line_length=160 $(pwd)/$f"
