@@ -97,7 +97,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		{
 			xtype: 'course-admin-grid',
 			cls: 'student-assignment-overview',
-			gradeEditorOffsets: [-4, 9],
 			nameOrder: ['creator', 'username', 'completed', 'grade', 'feedback', 'submission'],
 			columnOverrides: {
 				0: { text: 'Student', dataIndex: 'Creator', name: 'creator', flex: 1, padding: '0 0 0 30',

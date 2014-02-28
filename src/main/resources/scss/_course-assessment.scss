@@ -1089,9 +1089,33 @@ canvas.x-component-course-assessment {
 		}
 	}
 
+	.x-grid-row-over {
+		.score {
+			position: relative;
+			overflow: visible;
+
+			&::before {
+				content: '';
+				position: absolute;
+				background: #fff;
+				border: 1px solid #b8b8b8;
+
+				top: 10px; bottom: 10px;
+				left: -4px; right: 4px;
+			}
+
+			& > div {
+				position: relative;
+				z-index: 2;
+			}
+		}
+
+	}
+
 	.x-grid-td {
 		border-width: 0;
 		background: none;
+		vertical-align: middle;
 	}
 
 	.x-grid-row-selected,
@@ -1109,7 +1133,7 @@ canvas.x-component-course-assessment {
 
 	.x-grid-cell-inner {
 		padding: 0;
-		line-height: 3;
+		line-height: 60px;
 	}
 
 	.x-grid-row .x-grid-cell {
@@ -1153,6 +1177,10 @@ canvas.x-component-course-assessment {
 		div.padded-cell,
 		&.padded-cell .x-grid-cell-inner{
 			margin-left: 30px;
+		}
+
+		&.score {
+			cursor: text;
 		}
 
 		.student-cell {

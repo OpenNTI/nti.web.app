@@ -3,7 +3,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 	alias: 'widget.course-admin-grid',
 	requires: [],
 
-	gradeEditorOffsets: [0, 0],
+	gradeEditorOffsets: [-4, 0],
 
 	ui: 'course-assessment',
 	plain: true,
@@ -157,6 +157,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 
 
 				   { text: 'Score', componentCls: 'score', dataIndex: 'Grade', allowTab: true, name: 'grade', width: 70,/*90*/
+					   tdCls: 'score',
 					   editor: 'textfield',
 					   renderer: function(val) {
 						   val = val && val.get('value');
@@ -266,6 +267,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 		me.columns.items = items;
 
 		me.callParent(arguments);
+
+		if (Ext.getVersion('extjs').isLessThan('4.2.1')) {
+			me.gradeEditorOffsets = Ext.clone(me.gradeEditorOffsets);
+			me.gradeEditorOffsets[1] += 10;
+		}
+
 		me.on({
 			sortchange: function(ct, column) {
 				ct.items.each(function(c) { c.tdCls = (c.tdCls || '').replace(/sortedOn/g, '').trim(); }, ct);
