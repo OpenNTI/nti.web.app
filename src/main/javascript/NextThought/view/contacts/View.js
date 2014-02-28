@@ -45,21 +45,7 @@ Ext.define('NextThought.view.contacts.View', {
 		var me = this;
 
 		me.callParent(arguments);
-    //		me.tabs = me.down('contacts-tabs');
-    //		me.mon(me.tabs, 'tabchange', me.monitorTabs, me);
-    //		me.on('resize', function () {
-    //			me.tabs.setHeight(me.getHeight());
-    //		});
-
 		this.removeCls('make-white');
-
-
-		//		this.on({
-		//			'beforeactivate':'onBeforeActivation',
-		//            'beforedeactivate': 'onBeforeDeActivation',
-		//			'deactivate':'onDeactivated',
-		//			'activate': 'onActivated'
-		//		});
 
 		if (Ext.is.iOS) {
 			this.on('afterrender', function() {
@@ -116,15 +102,6 @@ Ext.define('NextThought.view.contacts.View', {
 		var promise = PromiseFactory.make();
 		promise.fulfill();
 		return promise;
-
-    //		var myState = state[this.getId()], tab;
-    //		if (myState && myState.source) {
-    //			tab = this.down('[source="' + myState.source + '"]');
-    //			this.restoring = true;
-    //			this.tabs.setActiveTab(tab);
-    //			delete this.restoring;
-    //			this.updateLayout();
-    //		}
 	}
 });
 
