@@ -39,6 +39,11 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 		]}
 	]),
 
+	emptyText: Ext.DomHelper.markup({
+		cls: 'empty-forum',
+		html: 'There are no active topics. Be the first to start a discussion.'
+	}),
+
 
 	collectData: function() {
 		var r = this.callParent(arguments);
@@ -54,6 +59,13 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 		me.tpl.searchTerm = 'adsfasdf';
 
 		me.updateView();
+
+		if (!me.record.getLink('add')) {
+			me.emptyText = Ext.DomHelper.markup({
+				cls: 'empty-forum',
+				html: 'There are currently no active topics in this discussion forum.'
+			});
+		}
 
 		if (me.filterBar) {
 			me.mon(me.filterBar, {
