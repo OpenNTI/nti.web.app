@@ -1,191 +1,99 @@
 Ext.define('NextThought.mixins.CustomScroll', function() {
-
 	/*
 	 * Mixin to add the fancy scroll that scrolls the whole page.
 	 * This mixin assumes we are mixed into a view(an observable)
 	 */
-
 	function adjustOnScroll() {
 		/**
 		 * NOTE: To Achieve the desired behavior of scrolling the whole parent view as
 		 * the page scrolls till we hit the top menu-bar,
 		 * we will are handling it by manipulating top and bottom margin.
 		 **/
-		try {
-			//give it a chance to prevent the custom scroll after the first time through.
-			if (!this.isVisible() || (this.allowCustomScrolling && !this.allowCustomScrolling() && this.alreadySetMargin)) {
-				return;
-			}
+		//give it a chance to prevent the custom scroll after the first time through.
+		if (!this.isVisible() || (this.allowCustomScrolling && !this.allowCustomScrolling() && this.alreadySetMargin)) {
+			return;
+		}
 
 		var data = this.mixinData.customScroll,
-			parentContainerEl = data.container,
-			parentContainerPadding = parentContainerEl && parentContainerEl.getPadding('t'),
-			parentEl = data.adjustmentEl,
+			container = data.container,
 			targetEl = data.targetEl,
+			adjustmentEl = data.adjustmentEl,
+			containerTop = container.getPadding('t'),
 			currentScroll = this.getScrollTop(),
-			delta = currentScroll < parentContainerPadding ? currentScroll : parentContainerPadding,
-			tMargin = -delta,
-			bMargin = -parentContainerPadding + delta,
-			shouldScroll = (targetEl.el.dom.scrollHeight - targetEl.getHeight()) >= Math.abs(bMargin);
+			//if we are already at the top, don't go higher
+			topChange = currentScroll < containerTop ? currentScroll : containerTop,
+			shouldScroll = (targetEl.el.dom.scrollHeight - targetEl.getHeight()) >= Math.abs(topChange),
+			shouldHaveAlt = (topChange / containerTop) > data.tolerance;
 
-			// console.log(shouldScroll, targetEl.el.dom.scrollHeight, targetEl.getHeight(), bMargin, tMargin);
-			// NOTE: If we have a reader, we don't want to show the alternate tabbar,
-			// we control that behavior by adding this cls "reader-in-view" to the parent of the parentContainerEl
-			// TODO: Move this logic into a callback.
-			parentContainerEl[data.targetEl.up('.x-reader-pane') ? 'addCls' : 'removeCls']('reader-in-view');
-			parentContainerEl[data.targetEl.up('.course-forum') ? 'addCls' : 'removeCls']('forum-in-view');//really needs to be in callback
+		if (shouldScroll || !this.alreadySetMargin) {
+			container[shouldHaveAlt ? 'addCls' : 'removeCls'](['has-alt-tabbar', data.altClass]);
+			adjustmentEl.setStyle({
+				marginTop: -topChange + 'px',
+				marginBottom: topChange + 'px'
+			});
 
-			//make sure the parent container doesn't have this class unless it needs it
-			parentContainerEl.removeCls('has-alt-tabbar');
+			this.alreadySetMargin = true;
 
-			//If there isn't enough scrolling room to cause the alt-tabbar don't set the margins
-			//to keep the container from only going part of the way up and stopping
-			if (shouldScroll) {
-				parentContainerEl[delta > 30 ? 'addCls' : 'removeCls']('has-alt-tabbar');
-				parentEl.setStyle({marginTop: tMargin + 'px', marginBottom: bMargin + 'px'});
-				//console.log('Scrolling', 'margin top:' + tMargin, 'margin bottom' + bMargin);
-
-				this.alreadySetMargin = true;
-				setReverseMargin.apply(this, [bMargin]);
-
-
-				clearTimeout(data.finalCall);
-				if (data.finalTime) {
-					delete data.finalTime;
-				} else {
-					data.finalCall = Ext.defer(function() {
-						data.finalTime = true;
-						adjustOnScroll.call(this);
-					}, 500, this);
-				}
-			} else {
-				//Even if the container isn't going to move, we want to set the margins
-				//the first time through to get them in the initial right place.
-				if (!this.alreadySetMargin) {
-					this.alreadySetMargin = true;
-					parentEl.setStyle({marginTop: tMargin + 'px', marginBottom: bMargin + 'px'});
-					setReverseMargin.apply(this, [bMargin]);
-				}
-			}
-
-
-			// NOTE: we need to make sure the main tabbar width matches the parentEl width
-			// since we will show the main tabbar on top of it. Better way to do this?
-			if (!data.mainTabbar) {
-				data.mainTabbar = Ext.get('view-tabs');
-			}
-			if (data.mainTabbar.getWidth() !== parentEl.getWidth()) {
-				data.mainTabbar.setStyle({width: parentEl.getWidth() + 'px'});
-			}
-		}
-		catch (e) {
-			console.error(e.stack || e.message || e);
-		}
-	}
-
-
-	function setReverseMargin(bottomMargin) {
-		try {
-			updateSideHeight.call(this, -bottomMargin);
-		}
-		catch (e) {
-			console.error(e.stack || e.message || e);
-		}
-	}
-
-
-	function updateCaches() {
-		var data = this.mixinData.customScroll;
-		delete data.cachedTargetHeight;
-		updateSideHeight.call(this);
-	}
-
-
-	function updateSideHeight(heightAdjustOffset, noCache) {
-		var data = this.mixinData.customScroll, nH,
-			el = data.secondaryViewEl,
-        //			cmp = data.reverseMarginCmp, f,
-			o = heightAdjustOffset || 0,
-			attr = 'custom-scroll-height-adjustment';
-
-		if (!noCache) {
-			o = data.lastHeightAdjustOffset = o || data.lastHeightAdjustOffset || 0;
-		}
-
-		if (!el) { return; }
-
-		if (Ext.isString(el)) {
-			el = data.secondaryViewEl = resolve(el, data.container) || el;
-			if (Ext.isString(el)) {
-				return;//doesn't exist (yet?)
-			}
-		}
-
-		el = Ext.get(el);
-		//if the element has a bottom set, use it to drive the height
-		try {
-			if (el.getStyle('bottom') !== 'auto') {
-				updateSideBottom.call(this, el, heightAdjustOffset || 0);
-				return;
-			}
-	    //		if(!cmp ) {
-	    //			cmp = data.reverseMarginCmp = Ext.getCmp(el.id);
-	    //			if( cmp ) {
-	    //				f = Ext.bind(updateCaches,this);
-	    //				this.mon(cmp,{
-	    //					resize: f,
-	    //					afterlayout: f
-	    //				});
-	    //			}
-	    //		}
-
-			if (!Ext.isNumber(data.cachedTargetHeight)) {
-				data.cachedTargetHeight = el.getHeight() || 'not-set-yet';
-				if (data.cachedTargetHeight === +el.getAttribute(attr)) {
-					data.cachedTargetHeight += data.lastHeightAdjustOffset || (o || 0);
-				}
-				//console.debug('data',data.cachedTargetHeight, el.getAttribute(attr));
-			}
-
-			if (!Ext.isNumber(data.cachedTargetHeight)) {
-				//not set yet
-				return;
-			}
-
-			nH = (data.cachedTargetHeight - o);// - data.secondaryViewElInitialMargin;
-			el.setHeight(nH);
-
-			o = {};
-			o[attr] = nH;
-			el.set(o);
-		} finally {
 			if (this.realignSidebar) {
 				this.realignSidebar();
 			}
+
+			if (data.secondaryViewEl) {
+				adjustSecondaryView(data.secondaryViewEl, adjustmentEl);
+			}
+		}
+
+
+		// NOTE: we need to make sure the main tabbar width matches the parentEl width
+		// since we will show the main tabbar on top of it. Better way to do this?
+		if (!data.mainTabbar) {
+			data.mainTabbar = Ext.get('view-tabs');
+		}
+		if (data.mainTabbar.getWidth() !== adjustmentEl.getWidth()) {
+			data.mainTabbar.setStyle({width: adjustmentEl.getWidth() + 'px'});
 		}
 	}
 
-	function updateSideBottom(el, bMargin) {
-		if (!el.dom) { return; }
 
-		var data = this.mixinData.customScroll,
-			newBottom, oldBottom,
-			parent = el.parent(),
-			parentBottom = parent ? parent.getBottom() : 0;
+	function adjustSecondaryView(el, parentEl) {
+		var newBottom, oldBottom,
+			bodyBottom = Ext.getBody().getBottom(),
+			parentBottom = parentEl ? parentEl.getBottom() : 0;
 
-		//Get the bottom that was initially set on the element in CSS
-		//and cache it so we can use it every time
-		if (data.desiredBottom) {
-			oldBottom = data.desiredBottom;
-		} else {
-			oldBottom = data.desiredBottom = parseInt(el.getStyle('bottom'), 10);//getStyle('bottom') returns '5px'
+		oldBottom = el.getAttribute('data-desired-bottom');
+
+		oldBottom = parseInt(oldBottom, 10);
+
+		if (!oldBottom && oldBottom !== 0) {
+			oldBottom = 0;
+			console.error('Adjusting secondary view that hasnt been init yet');
 		}
 
-		newBottom = (Ext.getBody().getBottom() - parentBottom) - oldBottom;
-		//console.log(Ext.getBody().getBottom(), parent.getBottom(), oldBottom, newBottom, parent.getBottom() + newBottom);
+		if (bodyBottom <= parentBottom) {
+			newBottom = (parentBottom - bodyBottom) + oldBottom;
+		} else {
+			newBottom = -(bodyBottom - parentBottom) - oldBottom;
+		}
 
-		el.setStyle('bottom', -newBottom + 'px');
-		el.setStyle('height', 'auto'); //make sure the bottom is driving the height
+		el.setStyle({
+			'bottom': newBottom + 'px',
+			'height': 'auto' //make sure the bottom is driving the height
+		});
+	}
+
+	//add a div to buffer the height of the targetEl to reach the bottom of the screen when
+	//the adjusmentEl is at the top
+	function addScrollBuffer() {
+		var data = this.mixinData.customScroll,
+			h = data.container.getPadding('t') || 0,
+			buffer = data.targetEl.el.down('.scroll-buffer');
+
+		if (data.noBuffer) {
+			return;
+		}
+
+		Ext.destroy(buffer);
+		Ext.DomHelper.append(data.targetEl, { style: { height: h + 'px'}, cls: 'scroll-buffer'});
 	}
 
 
@@ -194,19 +102,56 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 	}
 
 
+	function initSecondaryView(el, containerTop) {
+		var bottom, elHeight = el.getHeight();
+			windowHeight = Ext.Element.getViewportHeight();
+
+		//if we've already computed it, don't reset it
+		if (el.getAttribute('data-desired-bottom')) {
+			return;
+		}
+
+		//if el has a bottom use it to drive the height
+		if (el.getStyle('bottom') !== 'auto') {
+			bottom = parseInt(el.getStyle('bottom'), 10);
+		} else {
+			if (elHeight) {
+				//the difference in the window height and the el height when it is at the top
+				bottom = windowHeight - (containerTop + elHeight);
+			} else {
+				bottom = 0;
+			}
+
+			if (bottom < 0) {
+				console.warn('SecondaryViewEl is taller than the window');
+			}
+
+			el.setStyle('position', 'absolute');
+		}
+
+		el.dom.setAttribute('data-desired-bottom', bottom);
+	}
+
+
 	function onAfterRender() {
-		var parentContainerEl = Ext.get('view'), mb, pd,
-			me = this,
-			data = me.mixinData.customScroll,
+		var container = Ext.get('view'),
+			data = this.mixinData.customScroll,
 			adjustmentEl = data.adjustmentEl,
 			targetEl = data.targetEl,
-			secondaryViewEl = data.options && data.options.secondaryViewEl;
+			secondaryViewEl = data.options && data.options.secondaryViewEl,
+			tolerance = data.options && data.options.tolerance,
+			altClass = data.options && data.options.altClass,
+			containerTop, targetBottom;
 
-		data.container = parentContainerEl;
-		data.scrollEl = data.targetEl ? resolve(targetEl, parentContainerEl) : me.getTargetEl();
-		data.targetEl = data.scrollEl;//me.getTargetEl();
-		data.adjustmentEl = resolve(adjustmentEl, parentContainerEl);
-		data.secondaryViewEl = secondaryViewEl = resolve(secondaryViewEl, parentContainerEl);
+		data.container = container;
+		data.targetEl = data.targetEl ? resolve(targetEl, container) : this.getTargetEl();
+		data.adjustmentEl = resolve(adjustmentEl, container);
+		//the % of the top to allow the adjustmentEl to move before adding alt classes
+		data.tolerance = tolerance || 0.3;
+		//a class to add along with has has-alt-tabbar
+		data.altClass = altClass;
+
+		data.noBuffer = data.options && data.options.noBuffer;
 
 		if (!data.adjustmentEl) {
 			console.error('No adjustment element found for:', adjustmentEl);
@@ -218,50 +163,32 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 			return;
 		}
 
-		if (parentContainerEl) {
-			mb = parentContainerEl.getPadding('t');
-			pd = data.targetEl.getPadding('b');
-			data.adjustmentEl.setStyle({marginBottom: -mb + 'px'});
-			data.targetEl.setStyle({paddingBottom: (mb + pd) + 'px'});
+		containerTop = container.getPadding('t');
+		targetBottom = data.targetEl.getPadding('b');
+		data.adjustmentEl.setStyle({marginBottom: -containerTop + 'px'});
+		data.targetEl.setStyle({paddingBottom: (containerTop + targetBottom) + 'px'});
 
-			if (!this.noScrollBuffer) {
-				Ext.DomHelper.append(data.targetEl, {style: {height: mb + 'px'}, cls: 'scroll-buffer'});
-			}
+		addScrollBuffer.call(this);
 
-
-			me.on('activate', adjustOnScroll, me);
-			monitorCardChange(me);
-			monitorLayout.call(me);
-			updateCaches.call(me);
-			//updateSideHeight.call(me, mb, true);
-			//setReverseMargin.call(this, mb);
-
-			if ($AppConfig.debugCustomScroll) {
-				console.debug([
-					'[CUSTOM SCROLL SETUP]',
-					'this: ' + me.id,
-					'parentContainerEl: ' + parentContainerEl.id,
-					'parentContainerEl paddingTop: ' + mb,
-					'targetEl: ' + data.targetEl.id,
-					'targetEl orginal paddingBottom: ' + pd,
-					'targetEl set marginBottom to: ' + (mb + pd),
-					'adjustmentEl: ' + data.adjustmentEl.id,
-					'adjustmentEl: set margin bottom to: ' + (-mb),
-					'secondaryViewEl: ' + (secondaryViewEl && secondaryViewEl.id),
-					'secondaryViewEl height: ' + (secondaryViewEl && secondaryViewEl.getHeight()),
-					'secondaryViewEl bottom: ' + (secondaryViewEl && secondaryViewEl.getStyle('bottom')),
-					'secondaryViewEl margins: ' + (secondaryViewEl && secondaryViewEl.getStyle('margin')),
-					'add scrollbuffer:' + !this.noScrollBuffer
-				].join('\n'));
-			}
+		if (secondaryViewEl) {
+			data.secondaryViewEl = resolve(secondaryViewEl, container);
+			initSecondaryView(data.secondaryViewEl, container.getTop());
 		}
-		me.mon(data.scrollEl, 'scroll', adjustOnScroll, me);
 
-		me.on('add', function(/*container, cmp, index*/) {
-			data.targetEl.el.down('.scroll-buffer').destroy();
+		if (this.realignSidebar) {
+			this.realignSidebar();
+		}
 
-			Ext.DomHelper.append(data.targetEl, {style: {height: mb + 'px'}, cls: 'scroll-buffer'});
-		});
+		this.on('activate', adjustOnScroll, this);
+		monitorCardChange(this);
+		monitorLayout.call(this);
+
+		this.mon(data.targetEl, 'scroll', adjustOnScroll, this);
+		this.mon(data.targetEl, 'scrollstop', adjustOnScroll, this);
+
+		Ext.EventManager.onWindowResize(adjustOnScroll, this);
+
+		this.on('add', addScrollBuffer, this);
 	}
 
 
@@ -269,7 +196,7 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 		this.mon(this.up(), 'afterlayout', function() {
 			//Go through adjustOnScroll like its the first time
 			delete this.alreadySetMargin;
-			adjustOnScroll.call(this);
+			adjustOnScroll.call(this, true);
 		}, this);
 	}
 
@@ -285,14 +212,19 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 			monitorCardChange(c, me);
 		}
 	}
-	//onAfterRender = Ext.Function.createBuffered(onAfterRender, 1);//let the layout code finish this event pump
+
+
 	return {
 
 		getScrollTop: function() {
-			return this.mixinData.customScroll.scrollEl.getScrollTop();
+			return this.mixinData.customScroll.targetEl.getScrollTop();
 		},
 
-
+		/**
+		 * Returns a menu with all of the tab options for courses
+		 * @param  {Int} width How wide to make the menu
+		 * @return {jump-menu} the menu of tab options
+		 */
 		getMainTabbarMenu: function(width, current) {
 			var tabView = Ext.get('view-tabs').dom,
 			children = tabView && tabView.children,
@@ -327,7 +259,12 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 			return this.upMenu;
 		},
 
-
+		/**
+		 * Set correct styles for the elements, and start listening to scroll to update
+		 * @param  {String} adjustmentEl Selector for the element to move
+		 * @param  {String} targetEl     Selector for the element to monitor scroll on
+		 * @param  {Object} options      what options to use such as secondaryViewEl
+		 */
 		initCustomScrollOn: function(adjustmentEl, targetEl, options) {
 			this.enableBubble('main-tab-clicked');
 			if (!isFeature('fancy-scroll')) { return; }

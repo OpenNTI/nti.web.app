@@ -80,7 +80,7 @@ Ext.define('NextThought.view.reader.Panel', {
 		this.on('beforedeactivate', this.beforeDeactivate, this);
 
 		// NOTE: check notes on the mixin, as to why we might want to set a secondaryViewEl.
-		this.initCustomScrollOn('content', this.scrollTargetSelector, {secondaryViewEl: '.annotation-view'});
+		this.initCustomScrollOn('content', this.scrollTargetSelector, {secondaryViewEl: '.annotation-view', altClass: 'reader-in-view'});
 	},
 
 
