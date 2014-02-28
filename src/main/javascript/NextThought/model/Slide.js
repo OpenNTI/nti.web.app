@@ -52,6 +52,7 @@ Ext.define('NextThought.model.Slide', {
 				frag = (dom.ownerDocument || document).createDocumentFragment(),
 				root = ContentUtils.getRoot(containerId),
 				query = 'object[type$=video][data-ntiid="{0}"]',
+				query2 = 'object[type$=video][data-ntiid]',
 				nodes,
 				o = {
 					'Class': 'Slide',
@@ -73,6 +74,11 @@ Ext.define('NextThought.model.Slide', {
 
 			query = Ext.String.format(query, ParseUtils.escapeId(vid));
 			nodes = el.select(query);
+
+			if (!nodes.first()) {
+				nodes = Ext.fly(dom).select(query2);
+			}
+
 			if (nodes.first()) {
 				o.media = NextThought.model.PlaylistItem.fromDom(nodes.first(), videoIndex);
 				o.media.set('mediaId', o.ordinal);
