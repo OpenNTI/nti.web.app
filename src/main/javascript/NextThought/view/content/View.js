@@ -149,6 +149,7 @@ Ext.define('NextThought.view.content.View', {
 
 
 	onTabClicked: function(tabSpec) {
+		tabSpec = tabSpec || {};
 		var active = this.layout.getActiveItem(),
 			targetView = /^([^\?]+)(\?)?$/.exec(tabSpec.viewId) || [tabSpec.viewId],
 			vId = targetView[1],

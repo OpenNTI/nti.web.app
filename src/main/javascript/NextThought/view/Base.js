@@ -74,7 +74,7 @@ Ext.define('NextThought.view.Base', {
 		if (!this.layout || !this.layout.getActiveItem) {
 			return false;
 		}
-
+		tabSpec = tabSpec || {};
 		var active = this.layout.getActiveItem(),
 				targetView = /^([^\?]+)(\?)?$/.exec(tabSpec.viewId) || [tabSpec.viewId],
 				vId = targetView[1],
