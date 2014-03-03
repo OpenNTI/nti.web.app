@@ -42,8 +42,14 @@ Ext.define('NextThought.controller.Forums', {
 	],
 
 	init: function() {
+		var me = this;
 
-		this.listen({
+		me.getApplication().on('finished-loading', function() {
+			delete me.hasStateToRestore;
+			delete me.stateRestoring;
+		});
+
+		me.listen({
 			component: {
 				'forums-container': {
 					'restore-forum-state': 'restoreState',
