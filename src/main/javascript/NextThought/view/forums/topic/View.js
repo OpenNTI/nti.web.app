@@ -15,7 +15,7 @@ Ext.define('NextThought.view.forums.topic.View', {
 	body: { xtype: 'forums-topic-body' },
 
 	storeCfg: {
-		pageSize: 10,
+		pageSize: 50,
 		buffered: true,
 		sorters: []
 	},

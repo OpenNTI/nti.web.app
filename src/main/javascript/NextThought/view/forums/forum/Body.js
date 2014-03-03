@@ -10,7 +10,7 @@ Ext.define('NextThought.view.forums.forum.Body', {
 
 
 	storeCfg: {
-		pageSize: 10
+		pageSize: 50
 	},
 
 
