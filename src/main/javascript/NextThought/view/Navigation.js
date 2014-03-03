@@ -132,7 +132,8 @@ Ext.define('NextThought.view.Navigation', {
 							}
 						},
 						show: function(m) {
-							this.reactivate = this.containerNode.down('.active').removeCls('active');
+							var el = this.containerNode.down('.active');
+							this.reactivate = el && el.removeCls('active');
 							this.ownerNode.addCls('active');
 							m.down('nti-searchfield').focus(true, true);
 						}
