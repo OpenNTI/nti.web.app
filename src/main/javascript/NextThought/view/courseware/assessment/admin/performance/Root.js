@@ -144,7 +144,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				{name: 'avatar', type: 'string', defaultValue: 'resources/images/icons/unresolved-user.png'},
 				{name: 'displayName', type: 'string', defaultValue: 'Resolving...'},
 				{name: 'Username', type: 'string', defaultValue: ''},
-				{name: 'grade', type: 'int'},
+				{name: 'grade', type: 'string'},
 				{name: 'letter', type: 'string', defaultValue: '-'},
 				{name: 'action', type: 'int'},
 				{name: 'ungraded', type: 'int', defaultValue: 0},
@@ -469,6 +469,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			users.push(u);
 			recsMap[u] = r;
 			r.set(getCounts(u));
+			r.commit(true);
 		});
 
 		s.resumeEvents();
@@ -543,6 +544,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				grade: v.number,
 				letter: v.letter
 			});
+			r.commit(true);
 		}
 
 		function updateGrade(r, grade) {
@@ -588,6 +590,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				displayName: u.toString(),
 				Username: r.get('Status') === 'Open' ? '' : u.get('Username')
 			});
+			r.commit(true);
 		});
 
 		s.resumeEvents();
@@ -727,7 +730,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		}
 
 		if (!grade) {
-			console.log('No finaly grade entry');
+			console.log('No final grade entry');
 
 			rec.set({
 				grade: number,
@@ -751,6 +754,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 					}
 				},
 				failure: function() {
+					rec.reject();
 					//probably should do something here
 					console.error('Failed to save final grade:', arguments);
 				}
@@ -763,6 +767,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			callback: function(q, s) {
 				if (s) {
 					maybeFocus();
+				} else {
+					grade.reject();
 				}
 			}
 		});

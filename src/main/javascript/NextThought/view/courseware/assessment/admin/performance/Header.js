@@ -73,7 +73,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Header', {
 		}
 
 		grade.set('value', value);
-		grade.save();
+		grade.save({
+			failure: function() {
+				grade.reject();
+			}
+		});
 
 		// url += '/no_submit/Final Grade/' + this.student.getId();
 

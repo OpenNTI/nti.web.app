@@ -34,7 +34,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 
 		//TODO: if the submission was late, set the lateEl to X units late.
 
-		if (number) {
+		if (number || number === '') {
 			this.currentGrade = number;
 			this.gradeEl.dom.value = number;
 		}
@@ -47,7 +47,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 
 
 	changeGrade: function(number, letter) {
-		var grade = this.assignmentHistory.get('Grade'),
+		var me = this,
+			grade = this.assignmentHistory.get('Grade'),
 			value = number + ' ' + letter;
 
 		if (!grade) {
@@ -56,7 +57,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 		}
 
 		grade.set('value', value);
-		grade.save();
+		grade.save({
+			failure: function() {
+				grade.reject();
+				me.setUpGradebox();
+			}
+		});
 	},
 
 

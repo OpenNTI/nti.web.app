@@ -78,7 +78,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 
 						if (v !== e.value && !Ext.isEmpty(e.value)) {
 							grade.set('value', e.value + ' -');
-							grade.save();
+							grade.save({
+								failure: function() {
+									grade.reject();
+								}
+							});
 						}
 
 						return false;
