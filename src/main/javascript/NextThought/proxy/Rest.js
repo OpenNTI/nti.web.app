@@ -6,6 +6,8 @@ Ext.define('NextThought.proxy.Rest', {
 		'NextThought.proxy.reader.Json'
 	],
 
+	timeout: 3600000,//hour
+
 	reader: {
 		type: 'nti',
 		root: 'Items'
