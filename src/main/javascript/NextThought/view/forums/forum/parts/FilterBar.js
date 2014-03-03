@@ -9,7 +9,7 @@ Ext.define('NextThought.view.forums.forum.parts.FilterBar', {
 			{ cls: 'label', html: 'All Discussions' }
 		] },
 		{ cls: 'third dropmenu groupBy', cn: [
-			{ cls: 'label', html: 'By Most Recent' }
+			{ cls: 'label', html: 'By Most Recent Activity' }
 		] },
 		{ cls: 'third search', cn: [
 			{ tag: 'input', type: 'text', placeholder: 'Search Discussions', required: 'required' },
@@ -70,11 +70,11 @@ Ext.define('NextThought.view.forums.forum.parts.FilterBar', {
 	createGroupByMenu: function() {
 		var type = this.currentSort,
 			items = [
-				{ text: 'By Most Recent', groupBy: 'active', checked: type === 'active'},
+				{ text: 'By Most Recent Activity', groupBy: 'active', checked: type === 'active'},
+				{ text: 'By Creation', groupBy: 'created', checked: type === 'created'},
 				{ text: 'By Comment Count', groupBy: 'comment', checked: type === 'comment'},
 				{ text: 'By Likes', groupBy: 'likes', checked: type === 'likes'}
 				//{ text: 'By Author', groupBy: 'creator', checked: type === 'creator'}
-				//{ text: 'By Creation', groupBy: 'created', checked: type === 'created'},
 			];
 
 		this.groupByMenu = Ext.widget('menu', {

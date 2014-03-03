@@ -136,11 +136,32 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 
 				return TimeUtils.getTimeGroupHeader(created);
 			}
+		},
+		created: {
+			direction: 'DESC',
+			property: 'CreatedTime',
+			sorterFn: function(a, b) {
+				a = new Date(a.get('CreatedTime')).setHours(0, 0, 0);
+				b = new Date(b.get('CreatedTime')).setHours(0, 0, 0);
+
+				return a - b;
+			},
+			getGroupString: function(val) {
+				var created = new Date(val.get('CreatedTime'));
+
+				created.setHours(0, 0, 0, 0);
+
+				return TimeUtils.getTimeGroupHeader(created);
+			}
 		}
 	},
 
 
 	sorters: {
+		created: {
+			sortOn: 'CreatedTime',
+			sortOrder: 'descending'
+		},
 		creator: {
 			direction: 'ASC',
 			property: 'Creator'
