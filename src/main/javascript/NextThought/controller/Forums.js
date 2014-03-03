@@ -374,6 +374,11 @@ Ext.define('NextThought.controller.Forums', {
 			var prom = PromiseFactory.make(),
 				url = community.getLink('DiscussionBoard');
 
+			if (!url) {
+				prom.fulfill([]);
+				return prom;
+			}
+
 			Ext.Ajax.request({
 				url: url,
 				community: community,
