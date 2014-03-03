@@ -16,5 +16,25 @@ Ext.define('NextThought.model.courseware.Grade', {
 			return v;
 		}},
 		{name: 'AssignmentId', type: 'string'}
-	]
+	],
+
+
+	save: function(config) {
+
+		function failed() {
+			Ext.MessageBox.alert({
+				title: 'Error',
+				msg: 'There was an error saving the grade value.',
+				icon: 'warning-red',
+				buttonText: true,
+				buttons: {
+					ok: 'Ok'
+				}
+			});
+		}
+
+		config.failure = Ext.Function.createSequence(config.failure || Ext.emptyFn, failed, null);
+
+		return this.callParent(arguments);
+	}
 });
