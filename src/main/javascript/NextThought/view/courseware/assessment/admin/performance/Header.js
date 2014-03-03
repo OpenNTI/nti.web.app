@@ -43,7 +43,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Header', {
 		var gradebookentry = this.gradebook.getItem('Final Grade', 'no_submit'),
 			grade = gradebookentry && gradebookentry.getFieldItem('Items', this.student.getId()),
 			value = number + ' ' + letter,
-			url = this.gradebook.get('href');
+			url = this.gradebook.get('href').split(/\?#/)[0];
 
 
 		if (!grade) {

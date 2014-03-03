@@ -82,7 +82,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 								assignmentHistory.set('Creator', user);
 
 								var inst = me.data.instance,
-									url = [user.get('href'), 'Courses', 'EnrolledCourses',
+									url = [user.get('href').split(/\?#/)[0], 'Courses', 'EnrolledCourses',
 										   encodeURIComponent(inst.getCourseCatalogEntry().getId())].join('/');
 
 								return Service.request(url);
