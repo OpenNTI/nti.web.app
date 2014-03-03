@@ -199,18 +199,27 @@ Ext.define('NextThought.controller.Assessment', {
 
 		Ext.Object.each(data, this.__getQuestionSubmissions(qset));
 
+		function safelyCall(fnName, scope) {
+			try {
+				scope[fnName]();
+			}
+			catch (e) {
+				console.warn(e.stack || e.message || e);
+			}
+		}
 
 		a = a.create({
 			assignmentId: assignmentId,
 			//containerId: containerId,
 			parts: [s.create(qset)]
 		});
-		widget.mask();
+		safelyCall('mask', widget);
 		a.save({url: Service.getObjectURL(assignmentId),
 			success: function(self, op) {
 				var result = op.getResultSet().records.first().get('parts').first();//hack
-				widget.unmask();
+				safelyCall('unmask', widget);
 				widget.setGradingResult(result);
+
 				if (progress.instance) {
 					progress.courseChanged(progress.instance);
 				}
@@ -218,7 +227,7 @@ Ext.define('NextThought.controller.Assessment', {
 			failure: function() {
 				console.error('FAIL', arguments);
 				alert('There was a problem submitting your assignment.');
-				widget.unmask();
+				safelyCall('unmask', widget);
 			}
 		});
 	}
