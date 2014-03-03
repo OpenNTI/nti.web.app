@@ -715,7 +715,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			gradebookentry = me.gradeBook.getItem('Final Grade', 'no_submit'),
 			grade = gradebookentry && gradebookentry.getFieldItem('Items', rec.getId()),
 			value = number + ' ' + letter,
-			url = this.gradeBook.get('href').split(/\?#/)[0];
+			url = this.gradeBook.get('href').split(/[\?#]/)[0];
 
 
 		function maybeFocus() {

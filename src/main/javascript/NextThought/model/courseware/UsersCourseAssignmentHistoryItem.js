@@ -140,7 +140,7 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 		var item = this.get('item'),
 			student = this.get('Creator'),
 			gradeBook = item._gradeBook && item._gradeBook.get('href'),
-			base = gradeBook && gradeBook.split(/\?#/)[0],
+			base = gradeBook && gradeBook.split(/[\?#]/)[0],
 			grade = item && NextThought.model.courseware.Grade.create({
 				href: [
 						base || '/???/',

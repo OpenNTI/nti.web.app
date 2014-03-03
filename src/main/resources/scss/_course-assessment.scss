@@ -1093,6 +1093,7 @@ canvas.x-component-course-assessment {
 		.score {
 			position: relative;
 			overflow: visible;
+			display: block;
 
 			&::before {
 				content: '';
@@ -1101,7 +1102,8 @@ canvas.x-component-course-assessment {
 				border: 1px solid #b8b8b8;
 
 				top: 10px; bottom: 10px;
-				left: -4px; right: 4px;
+				left: -4px; right: 5px;
+				z-index: 1;
 			}
 
 			& > div {
