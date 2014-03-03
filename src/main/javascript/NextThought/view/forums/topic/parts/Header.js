@@ -35,7 +35,7 @@ Ext.define('NextThought.view.forums.topic.parts.Header', {
 
 		var me = this,
 			forumTitle = this.forum.get('title'),
-			topicTitle = this.record ? this.record.get('title') : 'New Discussion', tpl;
+			topicTitle = (this.record && this.record.get) ? this.record.get('title') : 'New Discussion', tpl;
 
 		tpl = new Ext.XTemplate(me.pathTpl);
 		tpl.insertFirst(me.headerEl, {path: forumTitle, title: topicTitle}, true);
