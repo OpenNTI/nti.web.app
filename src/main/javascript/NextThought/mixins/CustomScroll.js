@@ -103,7 +103,7 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 
 
 	function initSecondaryView(el, containerTop) {
-		var bottom, elHeight = el.getHeight();
+		var bottom, elHeight = el.getHeight(),
 			windowHeight = Ext.Element.getViewportHeight();
 
 		//if we've already computed it, don't reset it
@@ -196,7 +196,9 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 		this.mon(this.up(), 'afterlayout', function() {
 			//Go through adjustOnScroll like its the first time
 			delete this.alreadySetMargin;
-			adjustOnScroll.call(this, true);
+			if (!this.destroying && !this.isDestroyed) {
+				adjustOnScroll.call(this, true);
+			}
 		}, this);
 	}
 
@@ -217,7 +219,11 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 	return {
 
 		getScrollTop: function() {
-			return this.mixinData.customScroll.targetEl.getScrollTop();
+			try {
+				return this.mixinData.customScroll.targetEl.getScrollTop();
+			} catch (e) {
+				return 0;
+			}
 		},
 
 		/**
