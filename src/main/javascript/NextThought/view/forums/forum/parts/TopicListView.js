@@ -159,7 +159,7 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 
 	sorters: {
 		created: {
-			sortOn: 'CreatedTime',
+			sortOn: 'createdTime',
 			sortOrder: 'descending'
 		},
 		creator: {
