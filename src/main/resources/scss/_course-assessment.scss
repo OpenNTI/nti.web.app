@@ -450,6 +450,11 @@ canvas.x-component-course-assessment {
 			color: $primary-grey;
 		}
 
+		input:invalid {
+			outline: none;
+			box-shadow: none;
+		}
+
 		input:invalid ~ .clear { display: none; }
 
 		.clear {
