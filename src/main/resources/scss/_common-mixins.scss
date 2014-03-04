@@ -77,7 +77,6 @@
 
 @mixin icon($name,$top:0,$left:0,$right:auto,$side:'after',$sprite:$icons,$position:relative,$hover:false,$active:false){
 	position: $position;
-	myiconname: $name;
 
 	@if $hover {
 		&:target,
