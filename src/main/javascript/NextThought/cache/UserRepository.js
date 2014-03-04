@@ -690,7 +690,13 @@ function() {
 				var i, l, o, p;
 
 				resp.id = e.data.id;
+				try {
 				resp.result = JSON.parse(json);
+				} catch (er) {
+					console.error(json + '\n', er.stack || er.message || er);
+					resp.result = {};
+				}
+
 				if (shell) {
 					l = (resp.result || {}).Items || {};
 					for (i in l) {
