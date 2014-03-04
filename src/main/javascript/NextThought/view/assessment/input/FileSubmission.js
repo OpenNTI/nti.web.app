@@ -96,36 +96,48 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 
 	afterRender: function() {
 		this.callParent(arguments);
-		var reader = this.filereader,
-			me = this;
+
+		this.dueString = this.dueEl.getHTML();
 
 		if (this.inputField) {
-			this.mon(this.inputField, {
-				scope: this,
-				change: function(e) {
-					var p = this.part,
-						t = e.getTarget(),
-						file = t.files[0],
-						allowed = p.isFileAcceptable(file);
-
-					me.value = {
-						MimeType: 'application/vnd.nextthought.assessment.uploadedfile',
-						filename: file.name
-					};
-
-					this[allowed ? 'reset' : 'markBad']();
-					//p.reason;
-					if (allowed) {
-						me.mask();
-						me.labelBoxEl.update(file.name);
-						reader.readAsDataURL(file);
-					}
-
-				}
-			});
+			this.monitor();
 		} else {
 			this.mon(this.submitBtn, 'click', 'unsupported');
 		}
+	},
+
+
+	monitor: function() {
+		var reader = this.filereader,
+			me = this;
+
+		this.mon(this.inputField, {
+			scope: this,
+			change: function(e) {
+				var p = this.part,
+					t = e.getTarget(),
+					file = t.files[0],
+					allowed = p.isFileAcceptable(file);
+
+				me.value = {
+					MimeType: 'application/vnd.nextthought.assessment.uploadedfile',
+					filename: file.name
+				};
+
+				this[allowed ? 'reset' : 'markBad']();
+
+				if (allowed) {
+					me.mask();
+					me.labelBoxEl.update(file.name);
+					reader.readAsDataURL(file);
+				}
+				//reset it to be clickable again
+				t = Ext.DomHelper.insertAfter(me.inputField, { tag: 'input', type: 'file', cls: 'file' }, true);
+				me.inputField.remove();
+				me.inputField = t;
+				me.monitor();
+			}
+		});
 	},
 
 
@@ -188,6 +200,11 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 	},
 
 	reset: function() {
+		if (this.hasCls('good') || this.hasCls('late')) {
+			this.removeCls('good late');
+			this.labelBoxEl.update(this.renderData.label);
+			this.dueEl.update(this.dueString);
+		}
 		this.callParent(arguments);
 	}
 });
