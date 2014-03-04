@@ -33,7 +33,11 @@ Ext.define('NextThought.overrides.grid.plugin.BufferedRenderer', {
 
 	init: function(grid) {
 		this.callParent(arguments);
-		this.__monitorActivation(grid);
+		if (!grid.ownerCt) {
+			grid.on('added', this.__monitorActivation.bind(this, grid), null, {single: true, buffer: 1});
+		} else {
+			this.__monitorActivation(grid);
+		}
 	},
 
 
@@ -41,12 +45,13 @@ Ext.define('NextThought.overrides.grid.plugin.BufferedRenderer', {
 		function monitorCardChange(cmp, me) {
 			var c = cmp.up('{isOwnerLayout("card")}');
 			me = me || cmp;
+			//console.log(c && c.id, ' - ', grid.id);
 			if (c) {
 				me.mon(c, {
 					buffer: 1,
 					show: function() {
 						if (grid.isVisible(true)) {
- 							grid.updateLayout({defer: false});
+							grid.updateLayout({defer: false});
 						}
 					}
 				});
