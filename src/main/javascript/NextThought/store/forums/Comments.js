@@ -52,7 +52,7 @@ Ext.define('NextThought.store.forums.Comments', {
 			scope: this,
 			method: 'GET',
 			params: {
-				accepts: comment.get('MimeType')
+				accept: comment.get('MimeType')
 			},
 			callback: function(q, s, r) {
 				if (!s) {

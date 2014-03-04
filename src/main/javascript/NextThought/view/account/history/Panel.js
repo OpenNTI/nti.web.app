@@ -244,7 +244,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 			Ext.apply(this.store.proxy.extraParams, {
 				filterOperator: this.filterOperator,
 				filter: this.filter,
-				accepts: this.getMimeTypes().join(',')
+				accept: this.getMimeTypes().join(',')
 			});
 		}
 	},
