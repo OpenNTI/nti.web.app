@@ -55,7 +55,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 					cls: 'subtitle',
 					cn: [
 						{ tag: 'span', cls: 'due', html: 'Due {due:date("l F j, Y")}'},
-						{ tag: 'span', cls: 'link arrow', 'data-pattern': '%t Students (%n)'}
+						{ tag: 'span', cls: 'link arrow'}
 					]
 				}
 			]
@@ -139,6 +139,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		this.store = config.assignment.getSubmittedHistoryStore();
 		this.items[0].store = this.store;
 		this.callParent(arguments);
+		this.mon(this.store, 'load', 'updateFilterCount');
 	},
 
 
@@ -150,6 +151,10 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		this.mon(this.pageSource, 'update', 'onPagerUpdate');
 
 		this.filterMenu = this.down('course-assessment-admin-assignments-item-filter');
+		this.mon(this.filterMenu, {
+			filter: 'doFilter',
+			search: {fn: 'doSearch', buffer: 450}
+		});
 	},
 
 
@@ -167,11 +172,28 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			this.on({afterrender: 'syncFilterToUI', single: true});
 			return;
 		}
-		var filter = this.store.filters.getByKey('LegacyEnrollmentStatus');
+		var f = this.store.filters,
+			filter = f.getByKey('LegacyEnrollmentStatus'),
+			search = f.getByKey('search');
+
 		if (filter) {
 			filter = filter.value;
 			this.updateColumns(filter);
 		}
+
+		this.filterMenu.setState(filter, (search && search.value) || '');
+		this.updateFilterCount();
+	},
+
+
+	updateFilterCount: function() {
+		if (!this.rendered) {
+			this.on('afterrender', 'updateFilterCount', this);
+			return;
+		}
+
+		this.filtersEl.update(this.filterMenu.getFilterLabel(this.store.getTotalCount()));
+		this.filtersEl.repaint();
 	},
 
 
@@ -264,6 +286,11 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 		this.maybeShowDownload();
 		this.mon(grid, 'itemclick', 'onItemClick');
+
+		this.mon(s, {
+			beforeload: 'mask',
+			load: 'unmask'
+		});
 	},
 
 
@@ -312,27 +339,18 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 
 	onFiltersClicked: function() {
-		this.filterMenu.showBy(this.filtersEl);
+		this.filterMenu.showBy(this.filtersEl, 'tl-tl', [0, -39]);
+	},
+
+
+	doSearch: function(str) {
+		this.store.filter([{id: 'search', property: 'usernameSearchTerm', value: str}]);
 	},
 
 
 	doFilter: function(filter) {
-		this.mask();
-		Ext.defer(this.applyFilter, 1, this, [filter]);
-	},
-
-
-	applyFilter: function(filter, silent) {
-		try {
-			this.updateColumns(filter);
-
-			this.store.filter([{id: 'LegacyEnrollmentStatus', property: 'LegacyEnrollmentStatus', value: filter}]);
-		} finally {
-			if (silent !== true) {
-				this.unmask();
-			}
-		}
-		return this;
+		this.updateColumns(filter);
+		this.store.filter([{id: 'LegacyEnrollmentStatus', property: 'LegacyEnrollmentStatus', value: filter}]);
 	},
 
 

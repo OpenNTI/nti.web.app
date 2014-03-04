@@ -43,12 +43,17 @@ Ext.define('NextThought.store.courseware.AssignmentView', {
 
 
 		buildUrl: function(op) {
-			var filter, sort, dir,
+			var sort, dir,
 				p = op.params;
 
 			if (p && p.filter) {
-				filter = Ext.decode(p.filter)[0];
-				p.filter = filter.property + filter.value;
+				Ext.decode(p.filter).forEach(function(filter) {
+					if (filter.property === 'LegacyEnrollmentStatus') {
+						p.filter = filter.property + filter.value;
+					} else if (filter.property === 'usernameSearchTerm') {
+						p.usernameSearchTerm = filter.value;
+					}
+				});
 			}
 
 			if (p && p.sort) {
@@ -63,14 +68,6 @@ Ext.define('NextThought.store.courseware.AssignmentView', {
 			}
 
 			return this.url;
-			/*
-			return Ext.urlAppend(this.url, Ext.Object.toQueryString(
-					Ext.applyIf(p, {
-						filter: 'LegacyEnrollmentStatusForCredit',
-						sortOn: 'realname'
-					})
-			));
-			*/
 		}
 	},
 

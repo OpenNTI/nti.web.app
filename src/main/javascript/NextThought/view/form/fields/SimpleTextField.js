@@ -61,7 +61,13 @@ Ext.define('NextThought.view.form.fields.SimpleTextField', {
 	reset: function() { this.clearValue(true); },
 
 
-	getValue: function() { return this.inputEl.getValue(); },
+	getValue: function() {
+		if (this._value !== undefined) {
+			return this._value;
+		}
+
+	   return this.inputEl.getValue();
+	},
 
 
 	setValue: function(v) { this.update(v); },
@@ -74,6 +80,11 @@ Ext.define('NextThought.view.form.fields.SimpleTextField', {
 	},
 
 	update: function(v) {
+		if (!this.rendered) {
+			this._value = v;
+			this.on({afterrender: this.update.bind(this, v), single: true});
+			return;
+		}
 		this.inputEl.dom.value = v;
 		this.__maybeTagEmpty(v);
 		if (!this.readOnly) {
@@ -110,6 +121,7 @@ Ext.define('NextThought.view.form.fields.SimpleTextField', {
 		}
 
 		this.lastValue = this.getValue();
+		delete this._value;
 	},
 
 
