@@ -119,22 +119,24 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 								   parts = item && item.get('parts');
 
 
-						   if (!parts || !parts.length) {
+						   if (!s && !d) {
 							   return '';
 						   }
 
-						   if (!s) {
+						   //if no submission or it is a non-submit assigment
+						   if (!s || (!parts || !parts.length)) {
 							   return Ext.DomHelper.markup({cls: 'incomplete', html: 'Due ' + Ext.Date.format(d, 'm/d')});
 						   }
-
+						   //if the submisson is before the due date
 						   if (d > s) {
 							   return Ext.DomHelper.markup({cls: 'ontime', html: 'On Time'});
 						   }
-
+						   //if we don't have a due data to tell how late it was
 						   if (!d) {
 							   return Ext.DomHelper.markup({cls: 'ontime', html: 'Submitted ' + Ext.Date.format(s, 'm/d')});
 						   }
 
+						   //if we get here the submission was late
 
 						   d = new Duration(Math.abs(s - d) / 1000);
 						   return Ext.DomHelper.createTemplate({cls: 'late', html: '{late} Late'}).apply({
