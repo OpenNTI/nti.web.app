@@ -1,6 +1,7 @@
 Ext.define('NextThought.model.courseware.Grade', {
 	extend: 'NextThought.model.Base',
 
+	mimeType: 'application/vnd.nextthought.grade',
 	fields: [
 		{name: 'Username', type: 'string'},
 		{name: 'value', type: 'string', convert: function(v) {
