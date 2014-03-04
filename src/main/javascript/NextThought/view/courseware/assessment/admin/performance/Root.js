@@ -478,16 +478,13 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	getCountsFor: function(username) {
-		var d = this.gradeBookDefaultPart,
-			assignments = (d && d.get('Items')) || [],
-			counts = {
+		var counts = {
 				ungraded: 0,
 				overdue: 0
 			};
-
-		assignments.forEach(function(assignment) {
-			var due = assignment.get('DueDate'),
-				i = assignment.getFieldItem('Items', username);
+		this.assignments.get('Items').forEach(function(assignment) {
+			var due = assignment.getDueDate(),
+				i = assignment.getGradeBookEntry().getFieldItem('Items', username);
 
 			if (i && !i.get('value')) {counts.ungraded++;}
 			//If we have a due date and its before now increment the overdue count
