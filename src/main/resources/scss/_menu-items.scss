@@ -283,6 +283,45 @@ label.x-menu-item-cmp {
 		}
 	}
 }
+
+
+.x-menu-item-cmp.search-box {
+	border-top: 1px solid #F1F1F1;
+	background: #f8f8f8;
+	height: 61px;
+	overflow: hidden;
+	@include icon('rhp-search',$top:21px,$left:19px);
+
+	input {
+		margin: 10px;
+		padding: 0 26px 0 30px;
+
+		background: #fff;
+		border: 1px solid #dcdcdc;
+
+		font: normal 400 1em/1.5 $font;
+		color: $primary-grey;
+
+		height: 40px;
+		width: auto;
+		min-width: 0;
+		max-width: 100%;
+	}
+
+	input:not(:empty) > .clear {display: block;}
+
+	.clear {
+		display: none;
+		@include icon('clear_line');
+		position: absolute;
+		top: 22px;
+		right: 15px;
+		left: auto;
+
+		margin: 0;
+		width: 16px;
+		height: 16px;
+		padding: 0;
+		border-width: 0;
 	}
 }
-

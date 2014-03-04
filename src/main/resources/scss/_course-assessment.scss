@@ -1231,3 +1231,12 @@ canvas.x-component-course-assessment {
 		}
 	}
 }
+
+
+//Custom filter Menu
+.x-panel-nt.no-checkboxes.student-filter-search {
+	label.x-menu-item-cmp,
+	.x-menu-item{
+		padding-left: 10px;
+	}
+}
