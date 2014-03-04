@@ -95,7 +95,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 							.done(function(status) {
 								mask(false);
 
-								assignmentView.applyFilter(status, true).syncFilterToUI();
+								assignmentView.doFilter(status);
+								assignmentView.syncFilterToUI();
 								assignmentView.fireGoToAssignment(null, assignmentHistory);
 							})
 							.fail(function(reason) {
