@@ -162,7 +162,10 @@ label.x-menu-item-cmp {
 
 	&.selection-selected,
 	&.x-menu-item-checked {
-		background: transparent url(../images/icons/menu_check.png) no-repeat 10px 50%;
+		@include icon('menu_check', $top: 50%, $left: 10px);
+		&::after {
+			margin-top: -5px;
+		}
 	}
 
 	&.multiselect,
