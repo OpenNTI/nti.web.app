@@ -941,33 +941,28 @@ canvas.x-component-course-assessment {
 				&.hidden {
 					display: none;
 				}
-				display: block;
-				text-decoration: none;
+				display: inline-block;
 				cursor: pointer;
-				background: $primary-blue;
-				border-radius: 3px;
-				font: italic 600 0.9em/1 $font;
-				color: #fff;
-				padding: 0.8em 1.5em;
-				right: 15px;
-				top: 25px;
+				width: 42px;
+				height: 36px;
+				overflow: hidden;
+				text-indent: 100px;
+				white-space: nowrap;
+
+				&.email {
+					@include icon('mail', $left: 10px, $top: 10px, $hover:true, $active:true);
+				}
+
 				&.download {
-					margin-right: -15px;
-					margin-top: 2px;
+					@include icon('download', $left: 11px, $top: 8px, $hover:true, $active:true);
 				}
 			}
 
-			.filters {
-			    font-size: 0.9em;
-			    margin-top: 0.5em;
-				color: $secondary-grey;
-
-				.nti-radiobutton {
-					&:first-of-type {
-						margin-left: 0;
-					}
-					padding-left: 20px;
-				}
+			.controls {
+				background: #fff;
+				border: 1px solid #e3e3e3;
+				border-radius: 3px;
+				white-space: nowrap;
 			}
 		}
 	}

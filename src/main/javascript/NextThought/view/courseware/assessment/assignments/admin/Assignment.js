@@ -48,7 +48,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			cls: 'header',
 			cn: [
 				{ cls: 'controls', cn: [
-					{ tag: 'a', href: '{exportFilesLink}', cls: 'download button hidden', html: 'Download Files'}
+					{ tag: 'a', href: '{exportFilesLink}', cls: 'download button hidden', html: 'Download Files'},
+					{ tag: 'a', href: '#request_change', cls: 'email button', html: 'Request a Change'}
 				]},
 				{ cls: 'title', html: '{assignmentTitle}' },
 				{
@@ -69,7 +70,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		previousEl: '.toolbar .controls .up',
 		nextEl: '.toolbar .controls .down',
 		totalEl: '.toolbar .controls .page .total',
-		//changeDateEl: '.header span.link',
+		changeDateEl: '.header .controls .mail',
 		filtersEl: '.header span.link'
 	},
 
@@ -78,7 +79,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		rootPathEl: { click: 'fireGoUp' },
 		previousEl: { click: 'firePreviousEvent' },
 		nextEl: { click: 'fireNextEvent' },
-		//changeDateEl: { click: 'requestDateChange' },
+		changeDateEl: { click: 'requestDateChange' },
 		filtersEl: { click: 'onFiltersClicked' }
 	},
 
@@ -158,8 +159,20 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	},
 
 
+	_setupButtons: function(el) {
+		var tip = el.textContent;
+		Ext.fly(el).set({
+			title: tip,
+			'data-qtip': tip
+		});
+	},
+
+
 	afterRender: function() {
 		this.callParent(arguments);
+
+		this.el.query('a.button').forEach(this._setupButtons);
+
 		if (this._masked) {
 			this._showMask();
 		}
@@ -265,7 +278,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			exportFilesLink: this.exportFilesLink
 		});
 
-		if (!s.loading && s.getCount() > 0) {
+		if (!s.loading) {
 			p.fulfill(s);
 		} else {
 			s.on({
@@ -314,14 +327,19 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			return;
 		}
 
-		function hasSubmission(r) { return !!r.get('submission'); }
-		if (s.getRange().filter(hasSubmission).length > 0) {
-			this.el.down('a.download').removeCls('hidden');
-		}
+		//function hasSubmission(r) { return !!r.get('submission'); }
+		//if (s.getRange().filter(hasSubmission).length > 0) {
+
+		//the store is now buffered, and we cannot make this determination client side...
+		// so always show it even if there are no submissions ('cause we can't know if there are or not)
+		this.el.down('a.download').removeCls('hidden');
+		//}
 	},
 
 
-	requestDateChange: function() {
+	requestDateChange: function(e) {
+		e.stopEvent();
+
 		Globals.sendEmailTo(
 				'support@nextthought.com',
 				Ext.String.format('[CHANGE REQUEST] ({0}) {1}: {2}',
@@ -329,6 +347,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 						$AppConfig.username,
 						this.assignmentTitle)
 		);
+
+		return false;
 	},
 
 
