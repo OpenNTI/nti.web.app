@@ -6,6 +6,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.FilterMenu'
 	],
 
 	requires: [
+		'NextThought.view.courseware.assessment.assignments.admin.FilterMenuItem',
 		'NextThought.view.menus.SearchItem'
 	],
 
@@ -14,14 +15,14 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.FilterMenu'
 	showSeparator: false,
 	shadow: false,
 	frame: false,
-	cls: 'no-checkboxes no-footer student-filter-search',
+	cls: 'no-checkboxes no-footer blue-menu-items student-filter-search',
 	hideMode: 'display',
 	autoHide: false,
 
 
 	defaults: {
 		ui: 'nt',
-		xtype: 'menucheckitem',
+		xtype: 'student-admin-filter-menu-item',
 		group: 'student-filter',
 		plain: true
 		//cls: '',

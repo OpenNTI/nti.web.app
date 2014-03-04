@@ -6,7 +6,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		'NextThought.proxy.courseware.PageSource',
 		'NextThought.layout.component.CustomTemplate',
 		'NextThought.store.courseware.AssignmentView',
-		'NextThought.view.courseware.assessment.admin.Grid'
+		'NextThought.view.courseware.assessment.admin.Grid',
+		'NextThought.view.courseware.assessment.assignments.admin.FilterMenu'
 	],
 
 	ui: 'course-assessment',
@@ -54,17 +55,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 					cls: 'subtitle',
 					cn: [
 						{ tag: 'span', cls: 'due', html: 'Due {due:date("l F j, Y")}'},
-						{ tag: 'span', cls: 'link', html: 'Request a Change'}
-					]
-				},
-				{
-					cls: 'filters',
-					cn: [
-						//{tag: 'span', cls: 'label', html: 'Show:'},
-						{tag: 'span', cls: 'nti-radiobutton checked', html: 'Enrolled Students', 'data-qtip': 'Show Enrolled Students',
-							'data-filter-id': 'ForCredit'},
-						{tag: 'span', cls: 'nti-radiobutton', html: 'Open Students', 'data-qtip': 'Show Open Students',
-							'data-filter-id': 'Open'}
+						{ tag: 'span', cls: 'link arrow', 'data-pattern': '%t Students (%n)'}
 					]
 				}
 			]
@@ -78,9 +69,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		previousEl: '.toolbar .controls .up',
 		nextEl: '.toolbar .controls .down',
 		totalEl: '.toolbar .controls .page .total',
-		changeDateEl: '.header span.link',
-		filtersEl: '.header .filters',
-		openEnrolledCheckboxEl: '.header .filters .nti-radiobutton[data-filter-id="open-enrolled"]'
+		//changeDateEl: '.header span.link',
+		filtersEl: '.header span.link'
 	},
 
 
@@ -88,7 +78,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		rootPathEl: { click: 'fireGoUp' },
 		previousEl: { click: 'firePreviousEvent' },
 		nextEl: { click: 'fireNextEvent' },
-		changeDateEl: { click: 'requestDateChange' },
+		//changeDateEl: { click: 'requestDateChange' },
 		filtersEl: { click: 'onFiltersClicked' }
 	},
 
@@ -101,8 +91,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			columnOverrides: {
 				0: { text: 'Student', dataIndex: 'Creator', name: 'creator', flex: 1, padding: '0 0 0 30',
 					renderer: function(v) {
-					   var u = v && (typeof v === 'string' ? {displayName: 'Resolving...'} : v.getData());
-					   return this.studentTpl.apply(u);
+						var u = v && (typeof v === 'string' ? {displayName: 'Resolving...'} : v.getData());
+						return this.studentTpl.apply(u);
 					},
 					doSort: function(state) {
 						this.up('grid').getStore().sort(new Ext.util.Sorter({
@@ -115,7 +105,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 				{ text: 'Username', dataIndex: 'Creator', name: 'username',
 					renderer: function(v, g, record) {
 						var username = (v.get && v.get('Username')) || v,
-							f = record.store && record.store.filters;
+								f = record.store && record.store.filters;
 
 						f = f && f.getByKey('LegacyEnrollmentStatus');
 
@@ -139,7 +129,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 				{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'} },
 				{ cls: 'name', html: '{displayName}'}
 			]})
-		}],
+		},
+		{xtype: 'course-assessment-admin-assignments-item-filter'}
+	],
 
 
 	constructor: function(config) {
@@ -156,6 +148,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		this.enableBubble(['show-assignment']);
 		this.filledStorePromise = PromiseFactory.make();
 		this.mon(this.pageSource, 'update', 'onPagerUpdate');
+
+		this.filterMenu = this.down('course-assessment-admin-assignments-item-filter');
 	},
 
 
@@ -177,8 +171,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		if (filter) {
 			filter = filter.value;
 			this.updateColumns(filter);
-			this.el.select('[data-filter-id]').removeCls('checked');
-			this.el.select('[data-filter-id="' + filter + '"]').addCls('checked');
 		}
 	},
 
@@ -234,7 +226,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 	beforeRender: function() {
 		var a = this.assignment, s = this.store, grid, p = this.filledStorePromise,
-			parts = this.assignment.get('parts');
+				parts = this.assignment.get('parts');
 
 		this.callParent();
 		this.exportFilesLink = this.assignment.getLink('ExportFiles');
@@ -319,29 +311,14 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	},
 
 
-	onFiltersClicked: function(e) {
-		var checked, cls = 'checked',
-			el = e.getTarget('.nti-radiobutton', null, true),
-			filter;
-		if (!el || el.hasCls('disabled')) {
-			return;
-		}
+	onFiltersClicked: function() {
+		this.filterMenu.showBy(this.filtersEl);
+	},
 
-		filter = el.getAttribute('data-filter-id');
-		if (!filter) {
-			el.addCls('disabled');
-			return;
-		}
 
-		checked = el.hasCls(cls);
-
-		if (!checked) {
-			el.parent().select('.nti-radiobutton').removeCls(cls);
-			el.addCls(cls);
-
+	doFilter: function(filter) {
 		this.mask();
 		Ext.defer(this.applyFilter, 1, this, [filter]);
-		}
 	},
 
 
@@ -384,10 +361,10 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 	onItemClick: function(v, record, dom, ix, e) {
 		var selModel = v.getSelectionModel(),
-			selection = selModel && selModel.selection,
-			dataIndex = selection && selection.columnHeader.dataIndex,
-			item = record.get('item'),
-			noSubmit = item && item.get && (item.get('category_name') === 'no_submit');
+				selection = selModel && selModel.selection,
+				dataIndex = selection && selection.columnHeader.dataIndex,
+				item = record.get('item'),
+				noSubmit = item && item.get && (item.get('category_name') === 'no_submit');
 
 		//if we didn't click on the grade cell or we don't have a grade yet
 		if (noSubmit) {
@@ -402,12 +379,12 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 	fireGoToAssignment: function(v, record, pageSource) {
 		var student = record.get('Creator'),
-			item = record.get('item'), //Assignment Instance
-			path = [
-				this.pathRoot,
-				this.pathBranch,
-				student.toString()
-			];
+				item = record.get('item'), //Assignment Instance
+				path = [
+					this.pathRoot,
+					this.pathBranch,
+					student.toString()
+				];
 
 		if (typeof student === 'string') {
 			return;

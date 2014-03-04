@@ -1235,8 +1235,19 @@ canvas.x-component-course-assessment {
 
 //Custom filter Menu
 .x-panel-nt.no-checkboxes.student-filter-search {
+	font-size: 0.9em;
+
 	label.x-menu-item-cmp,
 	.x-menu-item{
 		padding-left: 10px;
+	}
+
+	.filter-menu-item-with-count {
+		position: relative;
+		overflow: hidden;
+
+		.count {
+			float: right;
+		}
 	}
 }

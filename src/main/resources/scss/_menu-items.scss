@@ -215,6 +215,21 @@ label.x-menu-item-cmp {
 }
 
 
+.blue-menu-items {
+	&.no-checkboxes .x-menu-item-checked,
+	&:not(.no-checkboxes) .x-menu-item-active {
+		background: $primary-blue;
+		color: #fff !important;
+		font-weight: 600;
+	}
+
+	.x-menu-item-active {
+		background: #f0f0f0;
+	}
+}
+
+
+
 .x-menu-item-cmp.search-box {
 	border-top: 1px solid #F1F1F1;
 	background: #f8f8f8;
