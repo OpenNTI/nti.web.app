@@ -272,9 +272,14 @@ body.dragging * {
 					color: $tertiary-grey;
 				}
 
+				.message {
+					@include note-body;
+				}
+
 				.footer {
 					.link {
 						color: $primary-blue;
+						cursor: pointer;
 					}
 					span {
 						display: inline-block;
