@@ -2,13 +2,6 @@ Ext.define('NextThought.view.menus.BlogTogglePublish', {
 	extend: 'Ext.menu.Menu',
 	alias: 'widget.blog-toggle-publish',
 
-	ui: 'nt',
-	plain: true,
-	showSeparator: false,
-	shadow: false,
-	frame: false,
-	border: false,
-	hideMode: 'display',
 	parentItem: this,
 	defaults: {
 		ui: 'nt-menuitem',

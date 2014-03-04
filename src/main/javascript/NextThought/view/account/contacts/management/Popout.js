@@ -90,10 +90,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout', {
 		var me = this;
 		this.groupsListMenu = Ext.widget({
 			xtype: 'menu',
-			ui: 'nt',
-			plain: true,
 			width: 350,
-			shadow: false,
 			items: [{xtype: 'management-group-list', allowSelect: true}]
 		});
 

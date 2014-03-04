@@ -88,11 +88,11 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar', {
 		this.renderData = Ext.apply(this.renderData || {}, { type: t, title: title, description: description, sectionNumber: sectionNumber });
 	},
 
-	
-	afterRender: function(){
+
+	afterRender: function() {
 		this.callParent(arguments);
-		
-		if(this.noTranscript){
+
+		if (this.noTranscript) {
 			this.pickerEl.removeCls('hasTranscript');
 		}
 		this.pickerEl.removeCls('video-focus').addCls(this.currentType);
@@ -132,13 +132,8 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar', {
 		});
 
 		this.videoPicker = Ext.widget('menu', {
-			ui: 'nt',
 			cls: 'video-player-options-menu',
-			plain: true,
-			shadow: false,
 			width: 215,
-			frame: false,
-			border: false,
 			ownerCmp: me,
 			defaults: {
 				ui: 'nt-menuitem',

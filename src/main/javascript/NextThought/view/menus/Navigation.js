@@ -11,12 +11,6 @@ Ext.define('NextThought.view.menus.Navigation', {
   overflowY: 'scroll',
 
   ignoreParentClicks: true,
-  plain: true,
-  showSeparator: false,
-  shadow: false,
-  frame: false,
-  border: false,
-  hideMode: 'display',
 
   initComponent: function() {
     this.callParent(arguments);

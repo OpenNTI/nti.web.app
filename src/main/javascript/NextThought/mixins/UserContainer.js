@@ -23,13 +23,6 @@ Ext.define('NextThought.mixins.UserContainer', {
 	setupActions: function(group, ignoreChatOption) {
 		var allHidden = true, items, listOrGroup = group && Ext.String.capitalize(group.readableType),
 			menuCfg = {
-				ui: 'nt',
-				plain: true,
-				showSeparator: false,
-				shadow: false,
-				frame: false,
-				border: false,
-				hideMode: 'display',
 				parentItem: this
 			};
 
@@ -343,7 +336,7 @@ Ext.define('NextThought.mixins.UserContainer', {
 	},
 
 
-	forcefullyRemoveUser: function(item,group) {
+	forcefullyRemoveUser: function(item, group) {
 		var me = this,
 			menu = item && item.up ? item.up('menu') : null,
 			//use the menu's reference, if we called with user instead, use it
@@ -364,7 +357,7 @@ Ext.define('NextThought.mixins.UserContainer', {
 	},
 
 
-	areYouSure: function(msg,callback) {
+	areYouSure: function(msg, callback) {
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
 			msg: msg,

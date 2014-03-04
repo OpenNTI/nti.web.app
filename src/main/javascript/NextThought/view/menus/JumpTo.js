@@ -1,13 +1,6 @@
 Ext.define('NextThought.view.menus.JumpTo', {
 	extend: 'Ext.menu.Menu',
 	alias: 'widget.jump-menu',
-	ui: 'nt',
-	plain: true,
-	showSeparator: false,
-	shadow: false,
-	frame: false,
-	border: false,
-	hideMode: 'display',
 	minWidth: 200,
 	maxWidth: 500,
 

@@ -78,13 +78,8 @@ Ext.define('NextThought.view.forums.forum.parts.FilterBar', {
 			];
 
 		this.groupByMenu = Ext.widget('menu', {
-			ui: 'nt',
 			cls: 'group-by-menu',
-			plain: true,
-			shadow: false,
 			width: 257,
-			frame: false,
-			border: false,
 			ownerCmp: this,
 			offset: [0, 0],
 			defaults: {

@@ -6,13 +6,6 @@ Ext.define('NextThought.view.form.fields.SearchAdvancedOptions', {
 		'NextThought.model.Hit'
 	],
 
-	ui: 'nt',
-	plain: true,
-	showSeparator: false,
-	shadow: false,
-	frame: false,
-	border: false,
-	hideMode: 'display',
 	minWidth: 200,
 
 	defaults: {

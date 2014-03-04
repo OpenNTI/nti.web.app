@@ -55,7 +55,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.FilterBar', {
 	},
 
 
-	clearSearch: function(){
+	clearSearch: function() {
 		this.searchEl.dom.value = '';
 		this.searchKey = '';
 		this.fireEvent('search-changed', '');
@@ -76,13 +76,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.FilterBar', {
 			];
 
 		this.groupByMenu = Ext.widget('menu', {
-			ui: 'nt',
 			cls: 'group-by-menu',
-			plain: true,
-			shadow: false,
 			width: 257,
-			frame: false,
-			border: false,
 			ownerCmp: this,
 			offset: [0, 0],
 			defaults: {

@@ -339,8 +339,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			el.parent().select('.nti-radiobutton').removeCls(cls);
 			el.addCls(cls);
 
-			this.mask();
-			Ext.defer(this.applyFilter, 1, this, [filter]);
+		this.mask();
+		Ext.defer(this.applyFilter, 1, this, [filter]);
 		}
 	},
 

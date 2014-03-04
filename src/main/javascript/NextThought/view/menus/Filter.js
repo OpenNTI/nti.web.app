@@ -4,13 +4,7 @@ Ext.define('NextThought.view.menus.Filter', {
 	requires: [
 		'NextThought.view.menus.LabeledSeparator'
 	],
-	ui: 'nt',
-	plain: true,
-	showSeparator: false,
-	shadow: false,
-	frame: false,
-	border: false,
-	hideMode: 'display',
+
 	minWidth: 300,
 	maxWidth: 500,
 	defaults: {
@@ -173,14 +167,10 @@ Ext.define('NextThought.view.menus.Filter', {
 			return nothing[0].text;
 		}
 
-		what = (things.length > 0
-				? Ext.String.format('{0} and {1}', things.join(', '), lastThing)
-				: lastThing)
-				|| 'Everything';
-		who = (from.length > 0
-				? Ext.String.format('{0} and {1}', from.join(', '), lastFrom)
-				: lastFrom)
-				|| 'Everyone';
+		what = (things.length && Ext.String.format('{0} and {1}', things.join(', '), lastThing)) ||
+			   lastThing || 'Everything';
+		who = (from.length && Ext.String.format('{0} and {1}', from.join(', '), lastFrom)) ||
+			  lastFrom || 'Everyone';
 
 		return Ext.String.format('{0} from {1}',
 				Ext.String.ellipsis(what, 30, false),

@@ -25,92 +25,22 @@
 
 }
 
-.custom-share-menu{
-	.x-menu-item{
-		&.share-with  {
-			padding-left: 30px;
-			&.current,
-			&.selection-item-over,
-			&.x-menu-item-over,
-			&.x-menu-item-active {
-				border:{
-					radius: 0;
-					border-width: 0;
-					style: none;
-				}
-				background-color: $primary-blue;
-				color: white !important;
-			}
-		}
 
 
-		&.share-with::after {
-			background: $icons no-repeat;
-			content: ' ';
-			top: 0;
-			left: 0;
-			position: absolute;
-		}
-
-		&.onlyme-menu-item::after {
-			top: 12px;
-			left: 12px;
-			@include sprite($icons, 'share-options-lock', $dimensions: true);
-		}
-		&.onlyme-menu-item:hover::after {
-			@include sprite($icons, 'share-options-lock', $dimensions: true);
-		}
-		&.community-menu-item::after {
-			top: 11px;
-			left: 11px;
-			@include sprite($icons, 'share-options-globe', $dimensions: true);
-		}
-		&.community-menu-item:hover::after {
-			@include sprite($icons, 'share-options-globe_hover', $dimensions: true);
-		}
-		&.group-menu-item::after {
-			top: 13px;
-			left: 10px;
-			@include sprite($icons, 'share-options-groups', $dimensions: true);
-		}
-		&.group-menu-item:hover::after {
-			@include sprite($icons, 'share-options-groups_hover', $dimensions: true);
-		}
-		&.list-menu-item::after {
-			top: 13px;
-			left: 10px;
-			@include sprite($icons, 'create-list', $dimensions: true);
-		}
-		&.list-menu-item:hover::after {
-			@include sprite($icons, 'lists-white_hover', $dimensions: true);
-		}
-		&.custom-menu-item::after {
-			top: 11px;
-			left: 11px;
-			@include sprite($icons, 'share-options-gear', $dimensions: true);
-		}
-		&.custom-menu-item:hover::after {
-			@include sprite($icons, 'share-options-gear_hover', $dimensions: true);
-		}
-	}
+.x-menu-nt { //the combobox drop list uses this class,
+//don't combine with x-panel-nt to reduce css size.
+	@include animate(fadeIn,0.3s);
+	//This looks suspicious, but this is the only real way to get the
+	//crisp edges on the top/left while still giving a soft shadow to the right & bottom.
+	box-shadow: 3px 3px 3px -3px rgba(0,0,0,0.3);
 }
 
-
-
-
-
-.x-menu-nt,
 .x-panel-nt {
 	@include animate(fadeIn,0.3s);
 	//This looks suspicious, but this is the only real way to get the
 	//crisp edges on the top/left while still giving a soft shadow to the right & bottom.
 	box-shadow: 3px 3px 3px -3px rgba(0,0,0,0.3);
 
-	.x-menu-list-ct,
-	.x-menu-body {
-		border: 1px solid #dcdcdc !important;//TODO: everywhere we declare a menu with border:false needs to drop that property so we can drop the !important.
-		background: #ffffff
-	}
 	.x-menu-body {
 		padding: 0 0 10px 0;
 	}
@@ -121,10 +51,9 @@
 }
 
 
-
-.selection-list-ct,
-.x-menu-list-ct,
+.x-menu-list-ct, //the combobox drop list uses this class
 .x-menu-body {
+	border: 1px solid #dcdcdc;
 	background: #ffffff;
 }
 
@@ -143,7 +72,6 @@ label.x-menu-item-cmp {
 	padding: 12px 10px 8px 15px;
 }
 
-.selection-list-item,
 .x-menu-item {
 	color: $secondary-grey !important;
 	font-size: 1em;
@@ -160,7 +88,6 @@ label.x-menu-item-cmp {
 		padding: 15px 10px 5px 30px;
 	}
 
-	&.selection-selected,
 	&.x-menu-item-checked {
 		@include icon('menu_check', $top: 50%, $left: 10px);
 		&::after {
@@ -168,14 +95,12 @@ label.x-menu-item-cmp {
 		}
 	}
 
-	&.multiselect,
 	&.x-menu-item-checked,
 	&.x-menu-item-unchecked{
 		padding: 5px 10px 5px 30px;
 	}
 
 	&.current,
-	&.selection-item-over,
 	&.x-menu-item-over,
 	&.x-menu-item-active {
 		border:{
@@ -231,6 +156,7 @@ label.x-menu-item-cmp {
 	}
 }
 
+
 .x-box-scroller-bottom {
 	position: absolute;
 	left: 0; right: 0;
@@ -275,9 +201,10 @@ label.x-menu-item-cmp {
 
 	.selection-list-item,
 	.x-menu-item {
+
 		&.selection-selected,
 		&.x-menu-item-checked {
-			background-image: none;
+			&::after { content: none; }
 		}
 
 		padding-left: 15px;

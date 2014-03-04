@@ -32,7 +32,7 @@ Ext.define('NextThought.view.annotations.note.Templates', {
 	},
 
 
-	replyOptionsScroll: function(e,el,opts) {
+	replyOptionsScroll: function(e, el, opts) {
 		var menu = opts.optionsEl;
 		menu.removeCls('active');
 	},
@@ -167,39 +167,33 @@ Ext.define('NextThought.view.annotations.note.Templates', {
 
 
 		menu = Ext.widget('menu', {
-			ui: 'nt',
-			plain: true,
 			cls: 'reply-options-menu ' + theme,
-			showSeparator: false,
-			shadow: false,
-			frame: false,
-			border: false,
 			closeAction: 'destroy',
 			parentItem: this,
 			items: items
 		});
 
-        //for iPad, if there are mouseover events, touching on the menu item
-        //will perform a mouseenter, mouseleave, and not click.
-        if(!Ext.is.iOS){
-            menu.on('mouseover', function() {
-                console.log('mouseover');
-                if (opts.scope.el && opts.scope.el.down('.single') && !opts.scope.el.down('.menu-open')) {
-                    opts.scope.el.down('.single').addCls('menu-open');
-                }
-            });
+		//for iPad, if there are mouseover events, touching on the menu item
+		//will perform a mouseenter, mouseleave, and not click.
+		if (!Ext.is.iOS) {
+			menu.on('mouseover', function() {
+				console.log('mouseover');
+				if (opts.scope.el && opts.scope.el.down('.single') && !opts.scope.el.down('.menu-open')) {
+					opts.scope.el.down('.single').addCls('menu-open');
+				}
+			});
 
-            menu.on('mouseleave', function() {
-                console.log('mouseleave');
-                menuTimer = setTimeout(function() {
-                    menu.close();
-                    if (opts.scope.el && opts.scope.el.down('.single')) {
-                        opts.scope.el.down('.single').removeCls('menu-open');
-                    }
-                }, 100);
-            });
-            menu.on('mouseenter', function() { console.log('mouseenter'); clearTimeout(menuTimer); });
-        }
+			menu.on('mouseleave', function() {
+				console.log('mouseleave');
+				menuTimer = setTimeout(function() {
+					menu.close();
+					if (opts.scope.el && opts.scope.el.down('.single')) {
+						opts.scope.el.down('.single').removeCls('menu-open');
+					}
+				}, 100);
+			});
+			menu.on('mouseenter', function() { console.log('mouseenter'); clearTimeout(menuTimer); });
+		}
 
 		menu.showBy(more, 'tl-bl?', [2, -7]);
 
@@ -222,7 +216,7 @@ Ext.define('NextThought.view.annotations.note.Templates', {
 		clearTimeout(this.moreReplyOptionsMouseOutTimer);
 	},
 
-	areYouSure: function(msg,callback) {
+	areYouSure: function(msg, callback) {
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
 			msg: msg,

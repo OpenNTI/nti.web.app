@@ -92,13 +92,6 @@ Ext.define('NextThought.view.account.activity.View', {
 		});
 
 		this.fromMenu = Ext.widget('menu', {
-			ui: 'nt',
-			plain: true,
-			showSeparator: false,
-			shadow: false,
-			frame: false,
-			border: false,
-			hideMode: 'display',
 			title: 'Show Activity From',
 			cls: 'menu from-menu',
 			width: 258,

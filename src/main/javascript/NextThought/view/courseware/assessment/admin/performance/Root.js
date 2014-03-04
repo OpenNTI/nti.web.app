@@ -233,13 +233,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			];
 
 		this.studentMenu = Ext.widget('menu', {
-			ui: 'nt',
 			cls: 'group-by-menu',
-			plain: true,
-			shadow: false,
 			width: 257,
-			frame: false,
-			border: false,
 			ownerCmp: this,
 			constrainTo: Ext.getBody(),
 			offset: [0, 0],
@@ -333,13 +328,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			];
 
 		this.itemMenu = Ext.widget('menu', {
-			ui: 'nt',
 			cls: 'group-by-menu',
-			plain: true,
-			shadow: false,
 			width: 257,
-			frame: false,
-			border: false,
 			ownerCmp: this,
 			constrainTo: Ext.getBody(),
 			offset: [0, 0],
@@ -644,14 +634,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 	createGradeMenu: function() {
 		this.gradeMenu = Ext.widget('menu', {
-			ui: 'nt',
 			cls: 'letter-grade-menu',
-			plain: true,
-			shadow: false,
 			width: 67,
 			minWidth: 67,
-			frame: false,
-			border: false,
 			ownerCmp: this,
 			offset: [-1, -1],
 			defaults: {

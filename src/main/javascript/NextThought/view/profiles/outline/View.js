@@ -44,9 +44,6 @@ Ext.define('NextThought.view.profiles.outline.View', {
 
 		this.groupsListMenu = Ext.widget({
 			xtype: 'menu',
-			ui: 'nt',
-			plain: true,
-			shadow: false,
 			width: 255,
 			items: [{xtype: 'management-group-list', allowSelect: true}]
 		});

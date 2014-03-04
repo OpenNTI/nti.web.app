@@ -375,13 +375,6 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		this.reader.creatingAnnotation = true;
 
 		menu = Ext.widget('menu', {
-			ui: 'nt',
-			plain: true,
-			showSeparator: false,
-			shadow: false,
-			frame: false,
-			border: false,
-			hideMode: 'display',
 			closeAction: 'destroy',
 			minWidth: 150,
 			defaults: {ui: 'nt-annotaion', plain: true }
@@ -499,13 +492,6 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		this.reader.creatingAnnotation = true;
 
 		menu = Ext.widget('menu', {
-			ui: 'nt',
-			plain: true,
-			showSeparator: false,
-			shadow: false,
-			frame: false,
-			border: false,
-			hideMode: 'display',
 			closeAction: 'destroy',
 			minWidth: 150,
 			defaults: {ui: 'nt-annotaion', plain: true }
@@ -584,11 +570,11 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 	/**
 	 *
-	 * @param type
-	 * @param record - annotation record (highlight, note, redaction, etc)
-	 * @param [browserRange] - optional, if we already have a range from the browser, that can be used instead of resolving it
+	 * @param {String} type
+	 * @param {Ext.data.Model} record - annotation record (highlight, note, redaction, etc)
+	 * @param {Range} [browserRange] - optional, if we already have a range from the browser, that can be used instead of resolving it
 	 *                         from the record
-	 * @param [onCreated] - Function
+	 * @param {Function} [onCreated] - Function
 	 * @return {*}
 	 */
 	createAnnotationWidget: function(type, record, browserRange, onCreated) {

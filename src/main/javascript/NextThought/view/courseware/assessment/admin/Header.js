@@ -137,14 +137,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 		];
 
 		this.gradeMenu = Ext.widget('menu', {
-			ui: 'nt',
 			cls: 'letter-grade-menu',
-			plain: true,
-			shadow: false,
 			width: 60,
 			minWidth: 60,
-			frame: false,
-			border: false,
 			ownerCmp: this,
 			offset: [-1, -1],
 			defaults: {

@@ -2,13 +2,8 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 	extend: 'Ext.menu.Menu',
 	alias: 'widget.most-recent-content-switcher',
 
-	border: false, frame: false,
-
 	ui: 'content-switcher',
-	showSeparator: false,
 	layout: 'auto',
-
-	plain: true,
 
 	autoRender: true,
 	renderTo: Ext.getBody(),

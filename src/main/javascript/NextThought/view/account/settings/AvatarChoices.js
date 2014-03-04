@@ -96,13 +96,6 @@ Ext.define('NextThought.view.account.settings.AvatarChoices', {
 		me.hasGravatar = Boolean(gravatar);
 
 		me.moreOptionsMenu = Ext.widget('menu', {
-			ui: 'nt',
-			plain: true,
-			showSeparator: false,
-			shadow: false,
-			frame: false,
-			border: false,
-			hideMode: 'display',
 			defaults: { plain: true },
 			layout: 'auto',
 			width: 350,

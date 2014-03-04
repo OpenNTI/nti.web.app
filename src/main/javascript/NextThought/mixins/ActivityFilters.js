@@ -29,13 +29,6 @@ Ext.define('NextThought.mixins.ActivityFilters', {
 	setUpMenu: function(key) {
 		this.key = key;
 		this.typesMenu = Ext.widget('menu', {
-			ui: 'nt',
-			plain: true,
-			showSeparator: false,
-			shadow: false,
-			frame: false,
-			border: false,
-			hideMode: 'display',
 			title: 'Activity Type',
 			cls: 'menu types-menu',
 			width: 258,

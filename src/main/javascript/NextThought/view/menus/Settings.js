@@ -6,13 +6,6 @@ Ext.define('NextThought.view.menus.Settings', {
 		'NextThought.view.account.MenuItem'
 	],
 	cls: 'user-settings-menu',
-	ui: 'nt',
-	plain: true,
-	showSeparator: false,
-	shadow: false,
-	frame: false,
-	border: false,
-	hideMode: 'display',
 	width: 260,
 
 	defaults: {

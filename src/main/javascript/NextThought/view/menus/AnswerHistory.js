@@ -4,13 +4,6 @@ Ext.define('NextThought.view.menus.AnswerHistory', {
 	requires: [
 		'NextThought.view.menus.LabeledSeparator'
 	],
-	ui: 'nt',
-	plain: true,
-	showSeparator: false,
-	shadow: false,
-	frame: false,
-	border: false,
-	hideMode: 'display',
 	cls: 'answer_history_menu',
 	overflowHandler: 'Scroller',
 	constrain: true,

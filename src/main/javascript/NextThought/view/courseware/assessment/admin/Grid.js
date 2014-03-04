@@ -304,11 +304,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 
 	getActionsMenu: function(record) {
 		var menu = Ext.widget('menu', {
-			ui: 'nt',
-			plain: true,
-			shadow: false,
-			frame: false,
-			border: false,
 			ownerCmp: this,
 			constrainTo: Ext.getBody(),
 			defaults: {

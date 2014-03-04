@@ -1,10 +1,7 @@
 Ext.define('NextThought.view.account.contacts.management.Options', {
 	extend: 'Ext.menu.Menu',
 	alias: 'widget.person-options-menu',
-	ui: 'nt',
 	cls: 'person-options-menu',
-	plain: true,
-	shadow: false,
 	width: 350,
 	defaults: {
 		ui: 'nt-menuitem',

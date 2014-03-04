@@ -341,13 +341,6 @@ Ext.define('NextThought.view.video.transcript.Transcript', {
 	buildContextMenu: function() {
 		var me = this,
 			menu = Ext.widget('menu', {
-			ui: 'nt',
-			plain: true,
-			showSeparator: false,
-			shadow: false,
-			frame: false,
-			border: false,
-			hideMode: 'display',
 			closeAction: 'destroy',
 			minWidth: 150,
 			defaults: {ui: 'nt-annotaion', plain: true }

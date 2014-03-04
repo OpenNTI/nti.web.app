@@ -67,7 +67,7 @@ Ext.define('NextThought.view.annotations.Base', {
 
 			prefix: c.prefix || 'default',
 
-			requestRender: Ext.Function.createBuffered(me.requestRender, 10, me),
+			requestRender: Ext.Function.createBuffered(me.requestRender, 10, me, null),
 
 			manager: c.getAnnotations().getManager()
 		});
@@ -121,7 +121,7 @@ Ext.define('NextThought.view.annotations.Base', {
 	},
 
 
-	createElement: function(tag,parent,cls,css,id) {
+	createElement: function(tag, parent, cls, css, id) {
 		var el = document.createElement(tag);
 		if (cls) { Ext.get(el).addCls(cls); }
 		if (css) { el.setAttribute('style', css); }
@@ -142,7 +142,7 @@ Ext.define('NextThought.view.annotations.Base', {
 
 	/**
 	 * Query inside the reader frame
-	 * @param selector
+	 * @param {String} selector
 	 */
 	query: function(selector) {
 		return Ext.query(selector, this.doc);
@@ -289,13 +289,6 @@ Ext.define('NextThought.view.annotations.Base', {
 
 		return Ext.widget('menu', {
 			items: items,
-			ui: 'nt',
-			plain: true,
-			showSeparator: false,
-			shadow: false,
-			frame: false,
-			border: false,
-			hideMode: 'display',
 			minWidth: 150,
 			defaults: {ui: 'nt-annotaion', plain: true }
 		});
@@ -303,7 +296,7 @@ Ext.define('NextThought.view.annotations.Base', {
 
 
 	getMenu: function(isLeaf, item) {
-		var m = this.buildMenu((item) ? [item] : []);
+		var m = this.buildMenu(item ? [item] : []);
 
     if (m) {
 		    m.on('hide', function() {
@@ -315,7 +308,7 @@ Ext.define('NextThought.view.annotations.Base', {
 	},
 
 
-	attachEvent: function(event,dom,fn,scope) {
+	attachEvent: function(event, dom, fn, scope) {
 		if (!Ext.isArray(event)) {
 			event = [event];
 		}
