@@ -61,6 +61,6 @@ Ext.define('NextThought.model.assessment.FilePart', {
 
 	__checkSize: function(size) {
 		var max = this.get('MaxFileSize') || Infinity;
-		return size < max;
+		return size < max && size > 0;
 	}
 });
