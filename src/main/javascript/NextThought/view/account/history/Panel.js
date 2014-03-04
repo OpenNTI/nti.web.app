@@ -187,11 +187,22 @@ Ext.define('NextThought.view.account.history.Panel', {
 			]
 		});
 
+		function makeMime(v) {
+			return 'application/vnd.nextthought.' + v.toLowerCase();
+		}
+
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
 			sortOn: 'createdTime',
 			sortOrder: 'descending',
-			filter: this.filter
+			filter: this.filter,
+			exclude: [
+				 'redaction',
+				 'assessment.AssessedQuestion',
+				 'assessment.AssessedQuestionSet'
+			 ].map(makeMime).join(',')
 		});
+
+
 
 		this.store = s;
 
