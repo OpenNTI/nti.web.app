@@ -201,7 +201,7 @@ Ext.define('NextThought.controller.Assessment', {
 
 		function safelyCall(fnName, scope) {
 			try {
-				scope[fnName]();
+				scope[fnName].apply(scope, Array.prototype.slice.call(arguments, 2));
 			}
 			catch (e) {
 				console.warn(e.stack || e.message || e);
@@ -227,6 +227,7 @@ Ext.define('NextThought.controller.Assessment', {
 			failure: function() {
 				console.error('FAIL', arguments);
 				alert('There was a problem submitting your assignment.');
+				safelyCall('maybeDoReset', widget, true);
 				safelyCall('unmask', widget);
 			}
 		});
