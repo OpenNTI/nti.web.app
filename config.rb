@@ -16,7 +16,7 @@ images_dir = "src/main/resources/images/"
 javascripts_dir = "src/main/javascript/"
 relative_assets = true
 
-output_style = :compact
+output_style = :compressed
 line_comments = false
 
 # execute blessc when the stylesheet is generated

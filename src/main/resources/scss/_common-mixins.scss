@@ -74,8 +74,27 @@
 	}
 }
 
-@mixin icon($name,$top:0,$left:0,$right:auto,$side:'after',$sprite:$icons,$position:relative){
+
+@mixin icon($name,$top:0,$left:0,$right:auto,$side:'after',$sprite:$icons,$position:relative,$hover:false,$active:false){
 	position: $position;
+	myiconname: $name;
+
+	@if $hover {
+		&:target,
+		&:hover {
+			&::#{$side} {
+				background-position: sprite-position($sprite, #{$name}_hover);
+			}
+		}
+	}
+
+	@if $active {
+		&:active{
+			&::#{$side} {
+				background-position: sprite-position($sprite, #{$name}_active);
+			}
+		}
+	}
 
 	&::#{$side} {
 		content: '';
@@ -85,8 +104,10 @@
 		left: $left;
 		right: $right;
 		background: $sprite no-repeat;
+		$disable-magic-sprite-selectors: true;
 		@include sprite($sprite,$name,$dimensions: true);
 	}
+
 }
 
 @mixin element($name,$top:0,$left:0,$right:auto,$side:'after',$position:relative){
