@@ -159,15 +159,25 @@ Ext.define('NextThought.mixins.ActivityFilters', {
 			mimeTypes = [],
 			filterTypes = [];
 
+		function gatherMimes(m) {
+			if (m === 'all') {
+				mimeTypes = ['*/*'];
+				return false;
+			}
+			mimeTypes.push('application/vnd.nextthought.' + m);
+		}
+
 			Ext.each(allItems, function(item) {
 				var mt = this.mimeTypesMap[item.filter],
 					ft = this.filtersMap[item.filter];
 
 				if ((everything || item.checked)) {
 					if (mt) {
-						Ext.each(Ext.Array.from(mt), function(m) {
-							mimeTypes.push('application/vnd.nextthought.' + m);
-						}, this);
+						mt = Ext.Array.from(mt, false);
+						//if the each was terminated (returns non-boolean.. the index), terminate here as well.
+						if (!Ext.isBoolean(Ext.each(mt, gatherMimes))) {
+							return false;
+						}
 					}
 
 					if (ft && !Ext.Array.contains(filterTypes, ft)) {

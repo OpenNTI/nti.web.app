@@ -432,20 +432,10 @@ Ext.define('NextThought.view.account.history.Panel', {
 			fo = '0';
 		}
 
-		function all(i) {
-			var re = all.re = all.re || /all$/i;
-			return re.test(i);
-		}
-
 		me.filter = filterTypes.join(',');
 		me.filterOperator = (filterTypes.length > 1) ? fo : undefined;
-		if (mimeTypes.filter(all) > 0) {
-			if (this.hasOwnProperty('getMimeTypes')) {
-				delete this.getMimeTypes;//reset to class def
-			}
-		} else {
-			this.getMimeTypes = function() { return mimeTypes; };
-		}
+
+		this.getMimeTypes = function() { return mimeTypes; };
 
 		if (!s || s.storeId === 'ext-empty-store') {
 			return;
