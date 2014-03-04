@@ -111,7 +111,9 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		this.statusMessage.show();
 		this.submitBtn.update('I\'m Finished');
 		this.submitBtn.removeCls('disabled');
-		this.show();
+		if (this.shouldShow) {
+			this.show();
+		}
 	},
 
 
