@@ -33,7 +33,11 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 			'getGroupString': function(val) {
 				var today = (new Date()).setHours(0, 0, 0),
 					due = val.get('due'),
-					day = (new Date(due.getTime())).setHours(0, 0, 0);
+					day = due && (new Date(due.getTime())).setHours(0, 0, 0);
+
+				if (!due) {
+					return '';
+				}
 
 				if (day === today) {
 					//its due today
@@ -139,14 +143,16 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 					function resolve(o) { o.findNode(name).done(fill).fail(drop); }
 
-					group.setTitle('');//lets never show the NTIID
 					me.mon(group.down('dataview'), 'itemclick', 'onItemClicked');
 
 
 					me.activeStores.push(store);
 
 					if (groupBy === 'lesson') {
+						group.setTitle('');//lets never show the NTIID
 						resolve(me.data.outline);
+					} else {
+						group.setTitle(name);
 					}
 				});
 			}
