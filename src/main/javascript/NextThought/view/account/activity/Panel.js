@@ -313,12 +313,12 @@ Ext.define('NextThought.view.account.activity.Panel', {
 						results = results.filter(function(i) {return !!i;});
 
 						if (results.length) {
-						//add the label if need be
-						if (label) {
-							parts = [{ label: label }];
-						}
-						//add the results to the parts regardless
-						parts = parts.concat(results);
+							//add the label if need be
+							if (label) {
+								parts = [{ label: label }];
+							}
+							//add the results to the parts regardless
+							parts = parts.concat(results);
 						}
 						fulfill(parts);
 					})
@@ -366,7 +366,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		if (!item) {
 			return false;
 		}
-		if (!this.mimeTypes) {
+		if (!this.mimeTypes || this.mimeTypes[0] === '*/*') {
 			return true;
 		}
 		return Ext.Array.contains(this.mimeTypes, item.get('MimeType'));
