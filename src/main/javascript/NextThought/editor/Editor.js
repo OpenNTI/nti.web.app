@@ -1615,6 +1615,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			}
 		});
 
+		Ext.fly(c).select('a[href]').set({target: '_blank'});
 		this.maybeEnableSave();
 		return me;
 	},
