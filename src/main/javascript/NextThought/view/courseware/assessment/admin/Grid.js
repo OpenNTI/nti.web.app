@@ -108,110 +108,122 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 		},
 
 		items: [
-				   { text: 'Assignment', dataIndex: 'name', name: 'name', tdCls: 'padded-cell', padding: '0 0 0 30', flex: 1 },
+					{ text: 'Assignment', dataIndex: 'name', name: 'name', tdCls: 'padded-cell', padding: '0 0 0 30', flex: 1 },
 
 
-				   { text: 'Completed', dataIndex: 'completed', name: 'completed', width: 150,
-					   renderer: function(v, col, rec) {
-						   var d = this.dueDate || rec.get('due'),
-								   s = (v && v.get && v.get('Last Modified')) || v,
-								   item = rec.get('item'),
-								   parts = item && item.get('parts');
+					{ text: 'Completed', dataIndex: 'completed', name: 'completed', width: 150,
+						renderer: function(v, col, rec) {
+							var d = this.dueDate || rec.get('due'),
+								s = (v && v.get && v.get('Last Modified')) || v,
+								item = rec.get('item'),
+								parts = item && item.get('parts');
 
 
-						   if (!s && !d) {
-							   return '';
-						   }
+							if (!s && !d) {
+								return '';
+							}
 
-						   //if no submission or it is a non-submit assigment
-						   if (!s || (!parts || !parts.length)) {
-							   return Ext.DomHelper.markup({cls: 'incomplete', html: 'Due ' + Ext.Date.format(d, 'm/d')});
-						   }
-						   //if the submisson is before the due date
-						   if (d > s) {
-							   return Ext.DomHelper.markup({cls: 'ontime', html: 'On Time'});
-						   }
-						   //if we don't have a due data to tell how late it was
-						   if (!d) {
-							   return Ext.DomHelper.markup({cls: 'ontime', html: 'Submitted ' + Ext.Date.format(s, 'm/d')});
-						   }
+							//if no submission or it is a non-submit assigment
+							if (!s || (!parts || !parts.length)) {
+								return Ext.DomHelper.markup({cls: 'incomplete', html: 'Due ' + Ext.Date.format(d, 'm/d')});
+							}
+							//if the submisson is before the due date
+							if (d > s) {
+								return Ext.DomHelper.markup({cls: 'ontime', html: 'On Time'});
+							}
+							//if we don't have a due data to tell how late it was
+							if (!d) {
+								return Ext.DomHelper.markup({cls: 'ontime', html: 'Submitted ' + Ext.Date.format(s, 'm/d')});
+							}
 
-						   //if we get here the submission was late
+							//if we get here the submission was late
 
-						   d = new Duration(Math.abs(s - d) / 1000);
-						   return Ext.DomHelper.createTemplate({cls: 'late', html: '{late} Late'}).apply({
-							   late: d.ago().replace('ago', '').trim()
-						   });
-					   },
-					   doSort: function(state) {
-						   function get(o) { o = o.data; return o.completed || o.due; }
-						   var store = this.up('grid').getStore(),
-							   sorter = new Ext.util.Sorter({
-								   direction: state,
-								   property: 'dateSubmitted',
-								   //not invoked if remote sort.
-								   sorterFn: function(a, b) {
-									   var v1 = get(a), v2 = get(b);
-									   return v1 > v2 ? 1 : (v1 < v2 ? -1 : 0);
-								   }
-							   });
+							d = new Duration(Math.abs(s - d) / 1000);
+							return Ext.DomHelper.createTemplate({cls: 'late', html: '{late} Late'}).apply({
+								late: d.ago().replace('ago', '').trim()
+							});
+						},
+						doSort: function(state) {
+							function get(o) { o = o.data; return o.completed || o.due; }
+							var store = this.up('grid').getStore(),
+								sorters = [
+									{
+										direction: state,
+										property: 'dateSubmitted',
+										sorterFn: function(a, b) {
+											var v1 = !!a.get('completed'),
+												v2 = !!b.get('completed');
 
-						   store.sort(sorter);
-					   }
-				   },
+											return v1 && !v2 ? -1 : (!v1 && v2 ? 1 : 0);
+										}
+									},
+									{
+										direction: state,
+										property: 'dateSubmitted',
+										//not invoked if remote sort.
+										sorterFn: function(a, b) {
+											var v1 = get(a), v2 = get(b);
+											return v1 > v2 ? 1 : (v1 < v2 ? -1 : 0);
+										}
+									}
+							  ];
 
-
-
-				   { text: 'Score', componentCls: 'score', dataIndex: 'Grade', allowTab: true, name: 'grade', width: 70,/*90*/
-					   tdCls: 'score',
-					   editor: 'textfield',
-					   renderer: function(val) {
-						   val = val && val.get('value');
-						   return val && val.split(' ')[0];
-					   },
-					   doSort: function(state) {
-						   var store = this.up('grid').getStore(),
-							   sorter = new Ext.util.Sorter({
-								   direction: state,
-								   property: store.remoteSort ? 'gradeValue' : 'Grade',
-								   //the transform and root are ignored on remote sort
-								   root: 'data',
-								   transform: function(o) {
-									   o = o && o.get('value');
-									   o = o && o.split(' ')[0];
-									   return o || '';
-								   }
-							   });
-						   store.sort(sorter);
-					   }
-				   },
+							store.sort(sorters);
+						}
+					},
 
 
-				   { text: 'Feedback', dataIndex: 'feedback', name: 'feedback', width: 140,
-					   renderer: function(value) {
-						   return value ? Ext.util.Format.plural(value, 'Comment') : '';
-					   },
-					   doSort: function(state) {
-						   var store = this.up('grid').getStore(),
-							   sorter = new Ext.util.Sorter({
-								   direction: state,
-								   property: store.remoteSort ? 'feedbackCount' : 'feedback',
 
-								   root: 'data',
-								   transform: function(o) {
-									   return o || 0;
-								   }
-							   });
+					{ text: 'Score', componentCls: 'score', dataIndex: 'Grade', allowTab: true, name: 'grade', width: 70,/*90*/
+						tdCls: 'score',
+						editor: 'textfield',
+						renderer: function(val) {
+							val = val && val.get('value');
+							return val && val.split(' ')[0];
+						},
+						doSort: function(state) {
+							var store = this.up('grid').getStore(),
+								sorter = new Ext.util.Sorter({
+									direction: state,
+									property: store.remoteSort ? 'gradeValue' : 'Grade',
+									//the transform and root are ignored on remote sort
+									root: 'data',
+									transform: function(o) {
+										o = o && o.get('value');
+										o = o && o.split(' ')[0];
+										return o || '';
+									}
+								});
+							store.sort(sorter);
+						}
+					},
 
-						   store.sort(sorter);
-					   }
-				   },
+
+					{ text: 'Feedback', dataIndex: 'feedback', name: 'feedback', width: 140,
+						renderer: function(value) {
+							return value ? Ext.util.Format.plural(value, 'Comment') : '';
+						},
+						doSort: function(state) {
+							var store = this.up('grid').getStore(),
+								sorter = new Ext.util.Sorter({
+									direction: state,
+									property: store.remoteSort ? 'feedbackCount' : 'feedback',
+
+									root: 'data',
+									transform: function(o) {
+										return o || 0;
+									}
+								});
+
+							store.sort(sorter);
+						}
+					},
 
 
-				   { text: '', dataIndex: 'submission', name: 'submission', sortable: false, width: 40, renderer: function(v) {
-					   return v && Ext.DomHelper.markup({cls: 'actions'});
-				   } }
-			   ]
+					{ text: '', dataIndex: 'submission', name: 'submission', sortable: false, width: 40, renderer: function(v) {
+						return v && Ext.DomHelper.markup({cls: 'actions'});
+					} }
+				]
 	},
 
 	tabIndex: 2,
