@@ -24,5 +24,17 @@ Ext.define('NextThought.overrides.builtins.String', function() {
 
 	String.prototype.hash = hashMe;
 	String.hash = hash;
+
+	String.commonPrefix = function commonPrefix(words) {
+		var maxWord = words.reduce(function max(a, b) { return a > b ? a : b; }),
+			prefix = words.reduce(function min(a, b) { return a > b ? b : a; });
+
+		while (maxWord.indexOf(prefix) !== 0) {
+			prefix = prefix.slice(0, -1);
+		}
+
+		return prefix;
+	};
+
 	return {};
 });
