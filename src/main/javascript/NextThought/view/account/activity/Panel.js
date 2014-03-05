@@ -309,15 +309,17 @@ Ext.define('NextThought.view.account.activity.Panel', {
 				Promise.pool(group.children.reduce(promiseToResolve, []))
 					.done(function(results) {
 						var parts = [];
-						//get rid of any nulls
-						results = results.filter(function(i) {return i;});
+
+						results = results.filter(function(i) {return !!i;});
+
+						if (results.length) {
 						//add the label if need be
 						if (label) {
 							parts = [{ label: label }];
 						}
 						//add the results to the parts regardless
 						parts = parts.concat(results);
-
+						}
 						fulfill(parts);
 					})
 					.fail(function(reason) {
@@ -406,7 +408,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		};
 
 		return new Promise(function(fulfill, reject) {
-			Promise.pool(this.getMessage(c, cid), UserRepository.getUser(c.get('Creator')))
+			Promise.pool(me.getMessage(c, cid), UserRepository.getUser(c.get('Creator')))
 				.done(function(r) {
 					activityData.name = r[1].getName();
 
