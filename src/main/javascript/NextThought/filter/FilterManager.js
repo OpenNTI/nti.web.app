@@ -1,3 +1,5 @@
+//TODO: find a way to generalize this and make this class responsible for all filter operations for UGD calls.
+
 Ext.define('NextThought.filter.FilterManager', {
 	singleton: true,
 	requires: [
