@@ -23,8 +23,15 @@ Ext.define('NextThought.util.PageSource', {
 
 
 	getTotal: function() {
-		var s = this.store;
-		return s.getTotalCount() || s.getCount();
+		var s = this.store,
+			count = s.getCount(),
+			total = s.getTotalCount();
+
+		if (s.isFiltered() && !s.remoteFilter) {
+			return count;
+		}
+
+		return total;
 	},
 
 
