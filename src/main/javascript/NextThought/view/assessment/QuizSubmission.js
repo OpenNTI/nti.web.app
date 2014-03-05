@@ -302,6 +302,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 
 	setGradingResult: function(assessedQuestionSet) {
 		try {
+			assessedQuestionSet = assessedQuestionSet || NextThought.model.assessment.AssessedQuestionSet.from(this.questionSet);
 			this.questionSet.fireEvent('graded', assessedQuestionSet);
 		} catch (e) {
 			console.error(e.stack || e.message || e);
