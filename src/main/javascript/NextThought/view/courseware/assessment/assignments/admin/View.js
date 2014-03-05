@@ -68,7 +68,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.View', {
 			this.on({
 				single: true,
 				buffer: 1,
-				add: Ext.bind(this.showAssignment, this, arguments)
+				add: this.showAssignment.bind(this, assignment, user)
 			});
 			return;
 		}
