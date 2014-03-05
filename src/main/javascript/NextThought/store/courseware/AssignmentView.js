@@ -42,9 +42,9 @@ Ext.define('NextThought.store.courseware.AssignmentView', {
 		limitParam: 'batchSize',
 
 
-		buildUrl: function(op) {
+		buildUrl: function(request) {
 			var sort, dir,
-				p = op.params;
+				p = request.params;
 
 			if (p && p.filter) {
 				Ext.decode(p.filter).forEach(function(filter) {
