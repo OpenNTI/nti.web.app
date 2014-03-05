@@ -944,7 +944,42 @@ Ext.define('NextThought.controller.UserData', {
 		cmp.getPagePreferences = Ext.bind(this.getPreferences, this);
 	},
 
-
+	/**
+	 * Returns preferences for the given ntiid.  Currently this functions primary responsibility is
+	 * to determine the intial sharedWith list that userdata (new notes) should have the sharedWith list
+	 * defaulted to.
+	 *
+	 * Details on determing a ntiids default sharedWith.  This piggy backs off of the original sharingPreferneces
+	 * that the server has long been sending back as part of the PageInfo, with some additional steps/complications
+	 * to make the sharing default to something sane(?) for both open and for credit students when in the context
+	 * of a course.
+	 *
+	 * The current business logic is as follows.  In the context of a book use whatever the content default is,
+	 * or whatever the user has overriden it to.  For a course, students enrolled for credit should default to
+	 * the for credit dfl unless they have changed the default.  In courses, open users default to whatever public means for that
+	 * course unless they have changed the default..  I don't think this business logic will make sense at even
+	 * the next step forward in formalizing CourseInstances so we should revist both the current business logic and implementation
+	 * at that point in time.
+	 *
+	 * Meeting the business case for the books and content is currently done using the same implementation.
+	 * This is possible because we piggy back on some of the implementation details of how the communities and dfls are setup
+	 * for legacy community based courses.  Obviously this level of coupling to implementation details is extermely fragile.
+	 * This is one place where moving things further into the server can help immensly.  That will come with time.
+	 *
+	 * We start with the sharingPreferences, which by default for course content packages are configured to be the for credit dfl.
+	 * Given the list of default entites we then attempt to validate it.  The list of entities is valid iff we can resolve all
+	 * usernames/ntiids in it to Entities (users, friendslists, dfls, or communities) AND entites that are friendslists, dfls, or communities
+	 * are in our set of friendslists, dfls, communities we own or are a member of.  If the sharedWith list is found to be valid, we use it
+	 * as is.  If the default sharing entites are found to be invalid or if we never found the default sharingPreferences to begin with,
+	 * we default to whatever 'public' means for the 'title' this ntiid belong to.  Note: this last detail also has assumptions
+	 * baked in around one content package per course, and the lack of cross content/course references.  When we have courses
+	 * references books external to their content package this will break.
+	 *
+	 *
+	 * @param ntiid
+	 * @returns An object encasuplating the prefences for the given ntiid.  Sharing related preferences are found beneath
+	 * the 'sharing' key
+	 */
 	getPreferences: function(ntiid) {
 		if (!this.preferenceMap || !ntiid) {
 			return null;
