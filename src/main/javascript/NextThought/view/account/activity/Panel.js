@@ -294,8 +294,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		}
 
 		function doGroup(group) {
-			var p = PromiseFactory.make(),
-				label = groupToLabel(group.name);
+			var label = groupToLabel(group.name);
 
 			function promiseToResolve(agg, c) {
 				if (!/deleted/i.test(c.get('ChangeType'))) {
@@ -303,28 +302,29 @@ Ext.define('NextThought.view.account.activity.Panel', {
 				}
 				return agg;
 			}
-			//wait for the return of changeToActivity for all of the groups childern
-			//we need to pool these promises so the label can be added in the right order
-			Promise.pool(group.children.reduce(promiseToResolve, []))
-				.done(function(results) {
-					var parts = [];
-					//get rid of any nulls
-					results = results.filter(function(i) {return i;});
-					//add the label if need be
-					if (label) {
-						parts = [{ label: label }];
-					}
-					//add the results to the parts regardless
-					parts = parts.concat(results);
 
-					p.fulfill(parts);
-				})
-				.fail(function(reason) {
-					//console.error(reason);
-					p.reject(reason);
-				});
+			return new Promise(function(fulfill, reject) {
+				//wait for the return of changeToActivity for all of the groups childern
+				//we need to pool these promises so the label can be added in the right order
+				Promise.pool(group.children.reduce(promiseToResolve, []))
+					.done(function(results) {
+						var parts = [];
+						//get rid of any nulls
+						results = results.filter(function(i) {return i;});
+						//add the label if need be
+						if (label) {
+							parts = [{ label: label }];
+						}
+						//add the results to the parts regardless
+						parts = parts.concat(results);
 
-			return p;
+						fulfill(parts);
+					})
+					.fail(function(reason) {
+						//console.error(reason);
+						reject(reason);
+					});
+			});
 		}
 
 		groups = store.getGroups();
@@ -338,6 +338,8 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			}
 			container.updateLayout();
 		}
+
+
 		//pool these promises to ensure that the groups get added in the correct order
 		Promise.pool(groups.map(doGroup))
 			.done(function(results) {
@@ -370,7 +372,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 
 
 	changeToActivity: function(c) {
-		var me = this, p = PromiseFactory.make(),
+		var me = this,
 			item = c.get('Item'),
 			cid = item ? item.get('ContainerId') : undefined,
 			guid = guidGenerator(),
@@ -390,8 +392,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		}
 
 		if (!this.passesFilter(item)) {
-			p.fulfill();
-			return p;
+			return Promise.resolve();
 		}
 
 		activityData = {
@@ -404,42 +405,31 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			ContainerIdHash: cid ? IdCache.getIdentifier(cid) : undefined
 		};
 
-		Promise.pool(this.getMessage(c, cid), UserRepository.getUser(c.get('Creator')))
-			.done(function(r) {
-				activityData.name = r[1].getName();
+		return new Promise(function(fulfill, reject) {
+			Promise.pool(this.getMessage(c, cid), UserRepository.getUser(c.get('Creator')))
+				.done(function(r) {
+					activityData.name = r[1].getName();
 
-				activity = me.stream[guid] = Ext.apply(activityData, r[0]);
-				p.fulfill(activity);
-			})
-			.fail(function(reason) {
-				console.error('changeToActivity failed because:', reason);
-				p.reject(reason);
-			});
-
-		return p;
+					activity = me.stream[guid] = Ext.apply(activityData, r[0]);
+					fulfill(activity);
+				})
+				.fail(function(reason) {
+					console.error('changeToActivity failed because:', reason);
+					reject(reason);
+				});
+		});
 	},
 
 
 	getMessage: function(change, cid) {
-		var p = PromiseFactory.make(),
-			item = change.get('Item'),
+		var item = change.get('Item'),
 			type = change.get('ChangeType');
 
 		if (!item) {
-			result = {message: 'Unknown'};
-			p.fulfill(result);
+			return Promise.resolve({message: 'Unknown'});
 		}
 
-		item.getActivityItemConfig(type, cid)
-			.done(function(result) {
-				p.fulfill(result);
-			})
-			.fail(function(reason) {
-				console.error('getActivityItemConfig failed because: ', reason, type, item.getModelName(), item, change);
-				p.reject('Failed to find a result');
-			});
-
-		return p;
+		return item.getActivityItemConfig(type, cid);
 	},
 
 

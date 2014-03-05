@@ -150,9 +150,9 @@ Ext.define('NextThought.model.Note', {
 	/**
 	 * Asynchronously loads replies using the "replies" link type
 	 *
-	 * @param callback {Function}
-	 * @param scope {Object}
-	 * @param additionalParams {Object} An optional object describing params to send to the server.
+	 * @param {Function} callback
+	 * @param {Object} scope
+	 * @param {Object} additionalParams An optional object describing params to send to the server.
 	 *          Ext: { sortOn: 'lastModified', sortOrder: 'descending' }
 	 */
 	loadReplies: function(callback, scope, additionalParams) {
@@ -370,16 +370,10 @@ Ext.define('NextThought.model.Note', {
 		me.resumeEvents();
 	},
 
-	getActivityItemConfig: function(){
-		var p = PromiseFactory.make(), result;
-
-		result = {
+	getActivityItemConfig: function() {
+		return Promise.resolve({
 			message: Ext.String.format('&ldquo;{0}&rdquo;', Ext.String.ellipsis(this.getBodyText(), 50, true)),
 			verb: this.get('inReplyTo') ? 'said' : 'shared a note'
-		};
-
-		p.fulfill(result);
-
-		return p;
+		});
 	}
 });

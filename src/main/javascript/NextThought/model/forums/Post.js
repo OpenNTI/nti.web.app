@@ -12,15 +12,9 @@ Ext.define('NextThought.model.forums.Post', {
 	],
 
 	getActivityItemConfig: function() {
-		var p = PromiseFactory.make(), result;
-
-		result = {
+		return Promise.resolve({
 			message: Ext.String.format('&ldquo;{0}&ldquo;', Ext.String.ellipsis(this.getBodyText(), 50, true)),
 			verb: 'commented'
-		};
-
-		p.fulfill(result);
-
-		return p;
+		});
 	}
 });

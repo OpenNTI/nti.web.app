@@ -16,15 +16,9 @@ Ext.define('NextThought.model.forums.HeadlineTopic', {
 
 
 	getActivityItemConfig: function() {
-		var p = PromiseFactory.make(), result;
-
-		result = {
+		return Promise.resolve({
 			message: Ext.String.ellipsis(this.get('headline').get('title'), 50, true),
 			verb: this.getActivityLabel()
-		};
-
-		p.fulfill(result);
-
-		return p;
+		});
 	}
 });

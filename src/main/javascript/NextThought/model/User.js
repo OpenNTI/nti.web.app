@@ -229,16 +229,10 @@ Ext.define('NextThought.model.User', {
 	},
 
 	getActivityItemConfig: function(type) {
-		var p = PromiseFactory.make(), result;
-
-		result = {
+		return Promise.resolve({
 			name: this.getName(),
 			verb: ((/circled/i).test(type) ? ' added you as a contact.' : '?')
-		};
-
-		p.fulfill(result);
-
-		return p;
+		});
 	}
 
 }, function() {
