@@ -18,7 +18,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 		this.letterEl.setStyle({display: 'none'});
 
 		if (!grade) {
-			this.assignmentHistory.buildGrade();
+			try {
+				this.assignmentHistory.buildGrade();
+			} catch (noGrade) {
+				console.warn(noGrade.stack || noGrade.message || noGrade);
+				this.gradeBoxEl.hide();
+			}
 		}
 
 		if (submission && (submission.get('parts') || []).length > 0) {
@@ -52,7 +57,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 			value = number + ' ' + letter;
 
 		if (!grade) {
-			console.error('No assignmentHistroy set cant change the grade');
+			console.error('No assignmentHistroy set, cannot change the grade');
 			return;
 		}
 

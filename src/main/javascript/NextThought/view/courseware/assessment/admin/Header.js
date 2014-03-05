@@ -41,7 +41,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 		chatEl: '.header .user .wrap .actions .chat',
 		letterEl: '.header .grade .gradebox .letter',
 		gradeEl: '.header .grade .gradebox input',
-		lateEl: '.header .grade .late'
+		lateEl: '.header .grade .late',
+		gradeBoxEl: '.header .grade'
 	},
 
 

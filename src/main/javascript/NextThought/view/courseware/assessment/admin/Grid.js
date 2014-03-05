@@ -61,6 +61,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 							grade = grades && grades[0];
 
 						if (!gradeRec) {
+							//this might throw an exception, if it does, it will interupt
+							// the edit so the cell editor will not open :)
 							e.record.buildGrade();
 						}
 
