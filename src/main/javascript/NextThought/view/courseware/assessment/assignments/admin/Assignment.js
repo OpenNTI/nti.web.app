@@ -70,7 +70,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		previousEl: '.toolbar .controls .up',
 		nextEl: '.toolbar .controls .down',
 		totalEl: '.toolbar .controls .page .total',
-		changeDateEl: '.header .controls .mail',
+		changeDateEl: '.header .controls .email',
 		filtersEl: '.header span.link'
 	},
 
