@@ -41,7 +41,7 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 
 	emptyText: Ext.DomHelper.markup({
 		cls: 'empty-forum',
-		html: 'There are no active topics. Be the first to start a discussion.'
+		html: 'There are no active discussions. Be the first to start one.'
 	}),
 
 
@@ -63,7 +63,7 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 		if (!me.record.getLink('add')) {
 			me.emptyText = Ext.DomHelper.markup({
 				cls: 'empty-forum',
-				html: 'There are currently no active topics in this discussion forum.'
+				html: 'There are currently no active discussions in this forum.'
 			});
 		}
 
