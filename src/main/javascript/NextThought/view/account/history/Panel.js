@@ -23,7 +23,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 	stateful: true,
 
 	storeId: 'noteHighlightStore',
-	filter: 'OnlyMe,Bookmarks',
+	filter: 'MeOnly,Bookmarks',
 	filterOperator: '0',
 	filterMap: {
 		'application/vnd.nextthought.bookmarks': 'Bookmarks'
@@ -439,7 +439,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 			fo = (filterTypes.length > 1) ? '0' : '1';
 
 		if (Ext.isEmpty(filterTypes)) {
-			filterTypes = ['OnlyMe', 'Bookmarks'];
+			filterTypes = ['MeOnly', 'Bookmarks'];
 			fo = '0';
 		}
 
