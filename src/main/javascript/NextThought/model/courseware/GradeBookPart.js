@@ -7,5 +7,21 @@ Ext.define('NextThought.model.courseware.GradeBookPart', {
 		{name: 'displayName', type: 'string'},
 		{name: 'gradeScheme', type: 'auto'},
 		{name: 'order', type: 'int'}
-	]
+	],
+
+
+	findGradeBookEntryFor: function(assignmentId) {
+		var items = this.get('Items'),
+			map = items.INDEX_KEYMAP,
+			assignment, item;
+
+		for (assignment in map) {
+			if (map.hasOwnProperty(assignment)) {
+				item = items[map[assignment]];
+				if (item.get('AssignmentId') === assignmentId) {
+					return [assignment];
+				}
+			}
+		}
+	}
 });

@@ -133,30 +133,37 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 	},
 
 
+	/**
+	 * @throws Ext.Error if not successful.
+	 */
 	buildGrade: function() {
 		//if we already have a grade don't set a new one
 		if (this.get('Grade')) { return; }
 
 		var item = this.get('item'),
 			student = this.get('Creator'),
-			gradeBook = item._gradeBook && item._gradeBook.get('href'),
-			base = gradeBook && gradeBook.split(/[\?#]/)[0],
-			grade = item && NextThought.model.courseware.Grade.create({
-				href: [
-						base || '/???/',
-						encodeURIComponent(item.get('category_name')),
-						encodeURIComponent(item.get('title')),
-						student.get ? student.getId() : student
-					  ].join('/')
+			gradeBook = item._gradeBook,
+			gradeBookRef = gradeBook && gradeBook.get('href'),
+			base = gradeBookRef && gradeBookRef.split(/[\?#]/)[0],
+			path = item && gradeBook && gradeBook.findGradeBookEntryFor(item.getId()),
+			grade = path && item && NextThought.model.courseware.Grade.create({
+				href: [base || '/???/']
+							  .concat(path.map(encodeURIComponent))
+							  .concat([student.get ? student.getId() : student])
+					  .join('/')
 
 			});
+
+		if (item && !path) {
+			Ext.Error.raise('Could not find a GradeBookEntry for ' + item.getId());
+		}
 
 		if (grade) {
 			grade.phantom = false;
 
 			this.set('Grade', grade);
 		} else {
-			console.error('No Assignment associated!!!');
+			Ext.Error.raise('No Assignment associated!');
 		}
 	}
 });
