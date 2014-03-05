@@ -288,7 +288,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 
 
 	setLastReadFrom: function(container) {
-		this._lastRead = container && container.get('lastViewed');
+		this._lastRead = (container && container.get('lastViewed')) || new Date(0);
 		this._lastViewedURL = container && container.getLink('lastViewed');
 		this.maybeNotify(this.store);
 	},
