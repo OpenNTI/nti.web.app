@@ -112,7 +112,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.Activity', {
 			}).fail(function(r) {
 				console.error(
 					'Failed associate instructor feedback activity to a students assignment.',
-					' Clicking on this feedback item will just take you to the assignment overview of all students, not a particular one', r);
+					' Clicking on this feedback item will just take you to the assignment overview of all students, not a particular one, because:\n',
+						r, '\n', f.get('href'));
 			});
 		}
 
