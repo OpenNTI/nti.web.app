@@ -73,6 +73,10 @@ Ext.define('NextThought.view.forums.topic.Body', {
 			topicContainer = this.down('[isTopicContainer]'),
 			header = this.down('forum-topic-header');
 
+		if (this.editor && !this.editor.savedSuccess && !this.editor.isClosed) {
+			return false;
+		}
+
 		Ext.destroy(header, topicContainer);
 
 		header = me.add({xtype: 'forums-topic-header', record: record, forum: forum});
@@ -88,5 +92,7 @@ Ext.define('NextThought.view.forums.topic.Body', {
 
 		me.relayEvents(header, ['pop-view']);
 		me.relayEvents(me.editor, ['goto-record', 'pop-view', 'new-record']);
+
+		return true;
 	}
 });

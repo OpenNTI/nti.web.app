@@ -31,13 +31,14 @@ Ext.define('NextThought.view.forums.topic.View', {
 	showEditor: function(topic, topicList, closeCallback) {
 		var store = topicList.buildContentsStore('', this.storeCfg);
 
-		this.currentRecord = topicList;
-		this.store = store;
+		if (this.body.showEditor(topic, topicList, closeCallback)) {
+			this.currentRecord = topicList;
+			this.store = store;
 
-		this.store.load();
+			this.store.load();
 
-		this.navigation.setCurrent(topicList, store);
-		this.body.showEditor(topic, topicList, closeCallback);
+			this.navigation.setCurrent(topicList, store);
+		}
 	},
 
 	//used in the saved comment handler
