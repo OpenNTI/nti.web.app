@@ -203,10 +203,10 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 
 
 	collectEvents: function(o, historyCollection) {
+		this.assignments[o.getId()] = o;
 		if (o.doNotShow()) { return; }
 
 		var h = historyCollection && historyCollection.getItem(o.getId());
-		this.assignments[o.getId()] = o;
 		this.deriveEvents(o, h);
 	},
 
