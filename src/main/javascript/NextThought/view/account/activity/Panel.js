@@ -431,6 +431,10 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			return Promise.resolve({message: 'Unknown'});
 		}
 
+		if (!item.getActivityItemConfig) {
+			return Promise.resolve({message: item.$className + ': Type not implemented'});
+		}
+
 		return item.getActivityItemConfig(type, cid);
 	},
 
