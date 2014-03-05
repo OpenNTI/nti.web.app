@@ -163,27 +163,39 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 
 
 	getEventConfig: function(label, target, date) {
+		var a = this.assignments;
 		if (typeof target === 'string') {
-			if (!this.assignments.hasOwnProperty(target)) {
-				console.warn('No assignment found in the map for:', target);
+			if (!a.hasOwnProperty(target)) {
+				console.error('Dropping event, no assignment found in the map for:', target);
+				setTimeout(function() {
+					function trim(i) { return i.substring(p.length); }
+
+					var keys = Object.keys(a),
+						p = String.commonPrefix(keys);
+
+					throw new Error('Content ID change? No assignment found for: ' +
+									trim(target) +
+									' in: [' + keys.map(trim).join(', ') + ']');
+				}, 1);
+				return null;
 			}
-			target = this.assignments[target];
+			target = a[target];
 		}
 
 		return {
 			ntiid: target && target.getId(),
 			item: target,
 			label: label,
-			target: (target && target.get('title')) || 'Missing Label',
+			target: (target && target.get('title')),
 			date: date
 		};
 	},
 
 
-	addEvent: function() {
+	addEvent: function(r) {
 		var s = this.store;
 		try {
-			return s.add.apply(s, arguments)[0];
+			return (r && s.add.apply(s, arguments)[0]) || null;
 		} catch (er) {
 			console.error(arguments, er.stack || er.message || e);
 		}
@@ -242,16 +254,19 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 			label = ((isMe(c) && 'You') || '--') + str,
 			r = this.addEvent(this.getEventConfig(label, f.get('AssignmentId'), f.get('CreatedTime')));
 
-		if (!isMe(c)) {
-			UserRepository.getUser(c).done(function(u) {
-				r.set({
-					label: u + str,
-					user: u
+		if (r) {
+			if (!isMe(c)) {
+				UserRepository.getUser(c).done(function(u) {
+					r.set({
+						label: u + str,
+						user: u
+					});
 				});
-			});
-		} else {
-			r.set('user', $AppConfig.userObject);
+			} else {
+				r.set('user', $AppConfig.userObject);
+			}
 		}
+
 		return r;
 	},
 

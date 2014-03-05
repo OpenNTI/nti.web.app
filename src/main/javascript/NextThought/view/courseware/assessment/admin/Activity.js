@@ -97,7 +97,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Activity', {
 		var rec = this.callParent(arguments),
 			path = (f.get('href') || '').split('/').slice(0, -2).join('/');//EWWW... url nastyness
 
-		if (isMe(rec.get('user'))) {
+		if (rec && isMe(rec.get('user'))) {
 			Service.request(path).done(function(submission) {
 				submission = ParseUtils.parseItems(submission)[0];
 				var user = submission.get('Creator');
@@ -124,13 +124,14 @@ Ext.define('NextThought.view.courseware.assessment.admin.Activity', {
 		var c = s.get('Creator'),
 			str = ' submitted',
 			r = this.addEvent(this.getEventConfig('--' + str, s.get('assignmentId'), s.get('CreatedTime')));
-
-		UserRepository.getUser(c).done(function(u) {
-			r.set({
-				label: u + str,
-				user: u
+		if (r) {
+			UserRepository.getUser(c).done(function(u) {
+				r.set({
+					label: u + str,
+					user: u
+				});
 			});
-		});
+		}
 	},
 
 
