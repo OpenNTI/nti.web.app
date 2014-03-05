@@ -11,7 +11,7 @@ Ext.define('NextThought.filter.FilterManager', {
 	},
 
 
-	getScope: function(scope ) {
+	getScope: function(scope) {
 		if (!this.scopes[scope]) {
 			this.scopes[scope] = new Ext.util.Observable();
 			this.scopes[scope].addEvents('change');
@@ -60,7 +60,7 @@ Ext.define('NextThought.filter.FilterManager', {
 	 *
 	 * All union/intersection/include/exclude data will be dropped.
 	 *
-	 * @param [scope] - id of the filter menu this filter is associated to.
+	 * @param {String} [scope] - id of the filter menu this filter is associated to.
 	 */
 	getServerListParams: function(scope) {
 		var filter = this.getCurrentFilter(scope),
