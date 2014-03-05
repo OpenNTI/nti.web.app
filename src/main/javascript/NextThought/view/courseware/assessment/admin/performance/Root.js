@@ -294,7 +294,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		var base = this.gradeBook && this.gradeBook.getLink('ExportContents');
 
 		if (!base || !this.header.exportButton) {
-			console.error('No link or no el to update');
 			return;
 		}
 
