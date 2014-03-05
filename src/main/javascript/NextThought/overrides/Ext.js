@@ -6,8 +6,8 @@ Ext.define('NextThought.overrides.Ext', {
 	 * This will apply `cfg` to `o` recursively.  This is handy for situations like adding a username to all the
 	 * component configs in your component's item array prior to them becoming instantiated by initComponent.
 	 *
-	 * @param o {Object} The object or array to apply to.
-	 * @param cfg {Object} The values to apply to the object in the first arg.
+	 * @param {Object} o The object or array to apply to.
+	 * @param {Object} cfg The values to apply to the object in the first arg.
 	 * @return {*}
 	 */
 	applyRecursively: function applyRecursively(o, cfg) {
@@ -66,7 +66,7 @@ Ext.define('NextThought.overrides.Ext', {
 				src;
 			try {
 				src = Globals.HOST_PREFIX_PATTERN.exec(frame.getAttribute('src'));
-				if (src[3] === document.domain || src[1] === 'javascript') {
+				if (src && (src[3] === document.domain || src[1] === 'javascript')) {
 					el = win.document.getElementById(id) || false;
 				}
 			//for iframes where we cannot access its content(Cross Origin Content) ignore.
