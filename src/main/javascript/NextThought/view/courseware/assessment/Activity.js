@@ -27,7 +27,8 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 						{ cls: 'item {[this.isUnread(values.date)]}', cn: [
 							{ tag: 'time', cls: 'datetime', datetime: '{date:date("c")}', html: '{[this.getTime(values.date)]}'},
 							{ tag: 'span', cls: 'label', html: '{label:htmlEncode} '},
-							{ tag: 'span', cls: 'target', html: '{target:htmlEncode}'}
+							{ tag: 'span', cls: 'target', html: '{target:htmlEncode}'},
+							{ tag: 'tpl', 'if': 'suffix', cn: { tag: 'span', cls: 'label suffix', html: '{suffix:htmlEncode}'}}
 						]}
 					]}), {
 				//template functions
@@ -55,7 +56,8 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 			{name: 'target', type: 'string'},
 			{name: 'date', type: 'date'},
 			{name: 'item', type: 'auto'},
-			{name: 'user', type: 'auto'}
+			{name: 'user', type: 'auto'},
+			{name: 'suffix', type: 'auto'}
 		],
 		sorters: [
 			{property: 'date', direction: 'DESC'}

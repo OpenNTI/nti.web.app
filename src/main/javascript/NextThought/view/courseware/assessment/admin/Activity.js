@@ -95,23 +95,26 @@ Ext.define('NextThought.view.courseware.assessment.admin.Activity', {
 
 	addFeedback: function(f) {
 		var rec = this.callParent(arguments),
-			path = (f.get('href') || '').split('/').slice(0, -2).join('/');
+			path = (f.get('href') || '').split('/').slice(0, -2).join('/');//EWWW... url nastyness
 
-		if (!isMe(rec.get('user'))) {
-			return rec;
+		if (isMe(rec.get('user'))) {
+			Service.request(path).done(function(submission) {
+				submission = ParseUtils.parseItems(submission)[0];
+				var user = submission.get('Creator');
+				rec.set('user', user);
+
+				return UserRepository.getUser(submission.get('Creator'));
+
+			}).then(function(u) {
+
+				rec.set('suffix', ' for ' + u);
+
+			}).fail(function(r) {
+				console.error(
+					'Failed associate instructor feedback activity to a students assignment.',
+					' Clicking on this feedback item will just take you to the assignment overview of all students, not a particular one', r);
+			});
 		}
-
-		Service.request(path)
-				.done(function(submission) {
-					submission = ParseUtils.parseItems(submission)[0];
-
-					rec.set('user', submission.get('Creator'));
-				})
-				.fail(function() {
-					console.error(
-						'Failed associate instructor feedback activity to a students assignment.',
-						' Clicking on this feedback item will just take you to the assignment overview of all students, not a particular one');
-				});
 
 		return rec;
 	},
