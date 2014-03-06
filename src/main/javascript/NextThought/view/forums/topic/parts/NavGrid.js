@@ -63,6 +63,10 @@ Ext.define('NextThought.view.forums.topic.parts.NavGrid', {
 		}
 
 		this.on('cellclick', 'onItemClick');
+
+		if (Ext.is.iOS) {
+			Ext.apply(this, {maxHeight: 510});
+		}
 	},
 
 
