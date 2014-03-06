@@ -12,10 +12,10 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 			Ext.DomHelper.markup(
 					{ tag: 'tpl', 'for': '.', cn: [
 						{ cls: 'item {[this.getStatusCls(values)]}', cn: [
-							{ cls: 'score', cn: [
+							/*{ cls: 'score', cn: [
 								{ tag: 'span', cls: '{[this.getCorrectCls(values)]}', html: '{correct}'},
 								' / {total}'
-							]},
+							]},*/
 							{ cls: 'name', html: '{name:htmlEncode}'},
 							{ cls: 'status {[this.isOverDue(values)]}', cn: [
 								{ tag: 'time', cls: 'due', datetime: '{due:date("c")}', html: '{[this.getDueDate(values)]}'},
