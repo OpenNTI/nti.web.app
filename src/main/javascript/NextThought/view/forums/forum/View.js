@@ -14,6 +14,8 @@ Ext.define('NextThought.view.forums.forum.View', {
 
 	storeCfg: {},
 
+	model: 'NextThought.model.forums.CommunityForum',
+
 
 	setCurrentBody: function() {
 		this.callParent(arguments);

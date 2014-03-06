@@ -2,6 +2,10 @@ Ext.define('NextThought.view.forums.hierarchy.View', {
 	extend: 'NextThought.view.navigation.AbstractPanel',
 	alias: 'widget.forums-hierachy-view',
 
+	requires: [
+		'NextThought.proxy.PageSource'
+	],
+
 	mixins: {
 		customScroll: 'NextThought.mixins.CustomScroll'
 	},
@@ -72,6 +76,8 @@ Ext.define('NextThought.view.forums.hierarchy.View', {
 		//	this.store.proxy.extraParams = Ext.apply(this.store.proxy.extraParams || {}, {batchAround: this.currentRecord.activeRecord.get('OID')});
 		//}
 
+		delete store.proxy.extraParams.sorters;
+
 		this.store.load();
 
 		this.navigation.setCurrent(record, store);
@@ -79,8 +85,6 @@ Ext.define('NextThought.view.forums.hierarchy.View', {
 
 
 	setCurrentBody: function(record) {
-		var cfg = {};
-
 		if (!record || !record.isModel) {
 			if (this.currentRecord.activeRecord) {
 				record = this.currentRecord.activeRecord;
@@ -91,23 +95,23 @@ Ext.define('NextThought.view.forums.hierarchy.View', {
 			}
 		}
 
-		//delete this.store.proxy.extraParams.batchAround;
-
-		cfg.currentIndex = this.store.indexOf(record);
-		cfg.total = this.store.getTotalCount();
-
-		//if there is an index lower than us
-		if (cfg.currentIndex > 0) {
-			cfg.previousIndex = cfg.currentIndex - 1;
+		//if we don't have a page source and we have a model to use, create a page source
+		if (!this.pageSource && this.model) {
+			this.pageSource = NextThought.proxy.PageSource.create({
+				current: record,
+				model: this.model,
+				url: NextThought.proxy.PageSource.urlFrom(this.store),
+				idExtractor: function(o) {
+					return o && o.get('OID');
+				}
+			});
+		} else {
+			this.pageSource.setCurrent(record);
 		}
 
-		//if there is an index higher than us
-		if (cfg.currentIndex < this.store.getCount() - 1) {
-			cfg.nextIndex = cfg.currentIndex + 1;
-		}
 
 		//setCurrent returns true if it updated the active record, false otherwise
-		if (this.body.setCurrent(record, this.currentRecord, cfg)) {
+		if (this.body.setCurrent(record, this.currentRecord, this.pageSource)) {
 			this.navigation.setActiveRecord(record);
 			this.fireEvent('active-record-changed', record);
 		}

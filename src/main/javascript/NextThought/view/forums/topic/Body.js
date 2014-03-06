@@ -13,7 +13,7 @@ Ext.define('NextThought.view.forums.topic.Body', {
 	},
 
 
-	setCurrent: function(record, forum, cfg) {
+	setCurrent: function(record, forum, pageSource) {
 		if (!record) { return; }
 
 		if (this.editor && !this.editor.savedSuccess && !this.editor.isClosed) {
@@ -30,10 +30,7 @@ Ext.define('NextThought.view.forums.topic.Body', {
 			xtype: 'forums-topic-header',
 			record: record,
 			forum: forum,
-			current: cfg.currentIndex,
-			total: cfg.total,
-			nextIndex: cfg.nextIndex,
-			previousIndex: cfg.previousIndex
+			pageSource: pageSource
 		});
 
 		topicContainer = this.add({xtype: 'container', cls: 'topic-container scroll-content', isTopicContainer: true});
@@ -60,7 +57,7 @@ Ext.define('NextThought.view.forums.topic.Body', {
 			}
 		});
 
-		this.relayEvents(header, ['goto-index', 'pop-view', 'pop-to-root']);
+		this.relayEvents(header, ['goto-record', 'pop-view', 'pop-to-root']);
 
 		this.currentRecord = record;
 

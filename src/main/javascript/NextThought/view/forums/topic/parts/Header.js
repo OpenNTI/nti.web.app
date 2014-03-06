@@ -40,20 +40,12 @@ Ext.define('NextThought.view.forums.topic.parts.Header', {
 		tpl = new Ext.XTemplate(me.pathTpl);
 		tpl.insertFirst(me.headerEl, {path: forumTitle, title: topicTitle}, true);
 
-		//if (this.current >= 0 && this.total) {
-		//	this.locationEl.update((this.current + 1) + ' of ' + this.total);
-		//}
+		this.updateNavigation();
 
-		if (this.nextIndex) {
-			this.nextEl.removeCls('disabled');
-			this.mon(this.nextEl, 'click', 'goToNext');
-		}
+		this.mon(this.nextEl, 'click', 'goToNext');
+		this.mon(this.prevEl, 'click', 'goToPrev');
 
-		//it might be the first element index 0
-		if (this.previousIndex > -1) {
-			this.prevEl.removeCls('disabled');
-			this.mon(this.prevEl, 'click', 'goToPrev');
-		}
+		this.mon(this.pageSource, 'update', 'updateNavigation');
 
 		this.mon(this.headerEl, {
 			'click': 'closeView',
@@ -63,13 +55,35 @@ Ext.define('NextThought.view.forums.topic.parts.Header', {
 	},
 
 
-	goToNext: function() {
-		this.fireEvent('goto-index', this.nextIndex);
+	updateNavigation: function() {
+		if (!this.rendered) { return; }
+
+		//if we have a next or previous enable the navigation arrows.
+		if (this.pageSource.hasNext()) {
+			this.nextEl.removeCls('disabled');
+		} else {
+			this.nextEl.addCls('disabled');
+		}
+
+		if (this.pageSource.hasPrevious()) {
+			this.prevEl.removeCls('disabled');
+		} else {
+			this.prevEl.addCls('disabled');
+		}
 	},
 
 
-	goToPrev: function() {
-		this.fireEvent('goto-index', this.previousIndex);
+	goToNext: function(e) {
+		if (!e.getTarget('.disabled')) {
+			this.fireEvent('goto-record', this.pageSource.getNext(true));
+		}
+	},
+
+
+	goToPrev: function(e) {
+		if (!e.getTarget('.disabled')) {
+			this.fireEvent('goto-record', this.pageSource.getPrevious(true));
+		}
 	},
 
 	hideTabMenu: function() {

@@ -20,6 +20,8 @@ Ext.define('NextThought.view.forums.topic.View', {
 		sorters: []
 	},
 
+	model: 'NextThought.model.forums.CommunityHeadlineTopic',
+
 
 	setCurrentBody: function() {
 		this.callParent(arguments);

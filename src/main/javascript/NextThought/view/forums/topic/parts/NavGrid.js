@@ -90,7 +90,7 @@ Ext.define('NextThought.view.forums.topic.parts.NavGrid', {
 
 
 	setActiveRecord: function(record) {
-		this.record.activeRecord = record.getId();
+		this.record.activeRecord = record;
 		this.view.select([record]);
 	},
 
