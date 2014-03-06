@@ -599,10 +599,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			types = Ext.toArray(cd.types).toString();
 
 			if (/text\/html/.test(types)) {
-				console.debug('Pasting html...', cd.getData('text/html'));
-				offScreenBuffer.innerHTML = (cd.getData('text/html') || '').replace(/[\n\r]+/ig, ' ');
-				Ext.fly(offScreenBuffer).select('script,meta,style,title,head,object,embed,applet,img').remove();
-				offScreenBuffer.innerHTML = offScreenBuffer.innerHTML.trim().replace(/[\n\r]+/g, ' ');
+				offScreenBuffer.innerHTML = DomUtils.sanitizeExternalContentForInput(cd.getData('text/html'));
 			}
 			else if (/text\/plain/.test(types)) {
 				offScreenBuffer.innerHTML = cd.getData('text/plain');
