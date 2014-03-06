@@ -26,6 +26,7 @@ Ext.define('NextThought.view.forums.topic.Body', {
 
 		Ext.destroy(header, topicContainer);
 
+		delete pageSource.disabled;
 		header = this.add({
 			xtype: 'forums-topic-header',
 			record: record,
@@ -65,7 +66,7 @@ Ext.define('NextThought.view.forums.topic.Body', {
 	},
 
 
-	showEditor: function(record, forum, closeCallback) {
+	showEditor: function(record, forum, pageSource, closeCallback) {
 		var me = this,
 			topicContainer = this.down('[isTopicContainer]'),
 			header = this.down('forum-topic-header');
@@ -76,7 +77,9 @@ Ext.define('NextThought.view.forums.topic.Body', {
 
 		Ext.destroy(header, topicContainer);
 
-		header = me.add({xtype: 'forums-topic-header', record: record, forum: forum});
+		pageSource.disabled = true;
+
+		header = me.add({xtype: 'forums-topic-header', record: record, forum: forum, pageSource: pageSource});
 
 		topicContainer = me.add({xtype: 'container', cls: 'topic-container scroll-content', isTopicContainer: true});
 

@@ -31,9 +31,10 @@ Ext.define('NextThought.view.forums.topic.View', {
 
 
 	showEditor: function(topic, topicList, closeCallback) {
-		var store = topicList.buildContentsStore('', this.storeCfg);
+		var store = topicList.buildContentsStore('', this.storeCfg),
+			pageSource = this.getPageSource(null);
 
-		if (this.body.showEditor(topic, topicList, closeCallback)) {
+		if (this.body.showEditor(topic, topicList, pageSource, closeCallback)) {
 			this.currentRecord = topicList;
 			this.store = store;
 

@@ -56,7 +56,7 @@ Ext.define('NextThought.view.forums.topic.parts.Header', {
 
 
 	updateNavigation: function() {
-		if (!this.rendered) { return; }
+		if (!this.rendered || !this.pageSource || this.pageSource.disabled) { return; }
 
 		//if we have a next or previous enable the navigation arrows.
 		if (this.pageSource.hasNext()) {

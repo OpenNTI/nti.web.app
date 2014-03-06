@@ -84,17 +84,7 @@ Ext.define('NextThought.view.forums.hierarchy.View', {
 	},
 
 
-	setCurrentBody: function(record) {
-		if (!record || !record.isModel) {
-			if (this.currentRecord.activeRecord) {
-				record = this.currentRecord.activeRecord;
-			} else if (this.currentRecord.activeNTIID) {
-				record = this.store.getById(this.currentRecord.activeNTIID);
-			} else {
-				record = this.store.getCount() > 0 ? this.store.getAt(0) : null;
-			}
-		}
-
+	getPageSource: function(record) {
 		//if we don't have a page source and we have a model to use, create a page source
 		if (!this.pageSource && this.model) {
 			this.pageSource = NextThought.proxy.PageSource.create({
@@ -108,6 +98,25 @@ Ext.define('NextThought.view.forums.hierarchy.View', {
 		} else {
 			this.pageSource.setCurrent(record);
 		}
+
+		return this.pageSource;
+	},
+
+
+	setCurrentBody: function(record) {
+		var pageSource;
+
+		if (!record || !record.isModel) {
+			if (this.currentRecord.activeRecord) {
+				record = this.currentRecord.activeRecord;
+			} else if (this.currentRecord.activeNTIID) {
+				record = this.store.getById(this.currentRecord.activeNTIID);
+			} else {
+				record = this.store.getCount() > 0 ? this.store.getAt(0) : null;
+			}
+		}
+
+		pageSource = this.getPageSource(record);
 
 
 		//setCurrent returns true if it updated the active record, false otherwise
