@@ -39,10 +39,10 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 					return parts.length > 0 ? '' : ' no_submit ';
 				},
 
-				isOpen: function(values) {
-					var opens = (values.opens || new Date((new Date()).setHours(0, 0, 0, 0))).getTime(),
-						today = (new Date()).setHours(0, 0, 0, 0);
-					return opens > today ? 'closed ' : '';
+				isOpen: function(v) {
+					//0 is always less than current time, if it doesn't have an opens value its always open.
+					var opens = (v && v.opens && v.opens.getTime()) || 0;
+					return opens > (new Date().getTime()) ? 'closed ' : '';
 				},
 
 				isTaken: function(values) {
@@ -50,10 +50,10 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 				},
 
 				isOverDue: function(values) {
-					var due = values.due && (new Date(values.due.getTime())).setHours(0, 0, 0, 0),
-						today = (new Date()).setHours(0, 0, 0, 0);
+					var due = values.due && values.due.getTime(),
+						now = new Date().getTime();
 
-					return (values.due && !this.isTaken(values) && today >= due) ? 'due' : '';
+					return (values.due && !this.isTaken(values) && now >= due) ? 'due' : '';
 				},
 
 				getDueDate: function(values) {

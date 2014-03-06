@@ -33,16 +33,17 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.List', {
 				//template functions
 
 				getStatusCls: function(values) {
-					var date = (values && values.due) || new Date(0),
-						opens = (values.opens || new Date((new Date()).setHours(0, 0, 0, 0))).getTime(),
-						due = (new Date(date.getTime())).setHours(0, 0, 0, 0),
-						today = (new Date()).setHours(0, 0, 0, 0),
-						cls = opens > today ? 'closed ' : '',
+					var now = new Date().getTime(),
+						due = ((values && values.due) || new Date(now)).getTime(),//if no due date give, use now
+						opens = (values.opens || new Date(0)).getTime(),//if no open date given, use epoc
+
+						cls = opens > now ? 'closed ' : '',
+
 						item = values.item,
 						parts = (item && item.get && item.get('parts')) || [],
 						kind = parts.length > 0 ? '' : 'no_submit ';
 
-					return kind + cls + (((values && values.due) && due < today) ? 'late' : '');
+					return kind + cls + (((values && values.due) && due < now) ? 'late' : '');
 				},
 
 				getDueDate: function(values) {
