@@ -2,8 +2,15 @@ Ext.define('NextThought.overrides.builtins.Node', {});
 	//Patch-in features that might be missing.
 (function() {
 	window.Node = window.Node || function() {};
+	window.NodeFilter = window.NodeFilter || {};
 
-	Ext.applyIf(window.Node.prototype, {
+	Ext.applyIf(NodeFilter, {
+		SHOW_ELEMENT: 1,
+		SHOW_COMMENT: 128
+	});
+
+
+	Ext.applyIf(Node.prototype, {
 		DOCUMENT_POSITION_DISCONNECTED: 1,
 		DOCUMENT_POSITION_PRECEDING: 2,
 		DOCUMENT_POSITION_FOLLOWING: 4,
