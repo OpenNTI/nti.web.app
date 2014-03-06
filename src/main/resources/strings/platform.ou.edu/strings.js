@@ -16,8 +16,8 @@ NTIStrings['course-info.course-supoprt.photo'] = 'resources/images/platform.ou.e
 NTIStrings['course-info.course-supoprt.phone'] = '(405) 325-HELP';
 NTIStrings['course-info.course-supoprt.link1.Label'] = 'Submit Request';
 NTIStrings['course-info.course-supoprt.link1.URL'] = 'http://www.ou.edu/content/ouit/help/ticket.html';
-NTIStrings['course-info.course-supoprt.link2.Label'] = 'platformhelp@ou.edu';
-NTIStrings['course-info.course-supoprt.link2.URL'] = 'mailto:platformhelp@ou.edu';
+NTIStrings['course-info.course-supoprt.link2.Label'] = 'janux@ou.edu';
+NTIStrings['course-info.course-supoprt.link2.URL'] = 'mailto:janux@ou.edu';
 NTIStrings['course-info.course-supoprt.link3.Label'] = 'Service Centers';
 NTIStrings['course-info.course-supoprt.link3.URL'] = 'http://www.ou.edu/content/ouit/help/personal.html';
 
