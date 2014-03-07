@@ -56,7 +56,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 		synchronousRender: false,
 		scrollToLoadBuffer: 100,
 		trailingBufferZone: 100,
-		numFromEdge: 10,
+		numFromEdge: 50,
 		leadingBufferZone: 150
 	},
 
