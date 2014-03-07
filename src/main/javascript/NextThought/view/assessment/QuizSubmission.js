@@ -290,7 +290,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		}
 
 
-
+		Ext.getBody().mask('Submitting...', 'navigation');
 		this.fireEvent(isAssignment ? 'submit-assignment' : 'grade-it', this, q, submission);
 
 		if (e) {
@@ -304,6 +304,16 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		try {
 			assessedQuestionSet = assessedQuestionSet || NextThought.model.assessment.AssessedQuestionSet.from(this.questionSet);
 			this.questionSet.fireEvent('graded', assessedQuestionSet);
+			Ext.getBody().unmask();
+		} catch (e) {
+			console.error(e.stack || e.message || e);
+		}
+	},
+
+
+	onFailure: function() {
+		try {
+			Ext.getBody().unmask();
 		} catch (e) {
 			console.error(e.stack || e.message || e);
 		}

@@ -59,6 +59,8 @@
 }
 
 .main-navigation {
+	.x-masked & {z-index: 99;}//below the extjs mask z-index
+
 	background: #ebebec;
 	padding-left: 100px;
 	height: 57px;

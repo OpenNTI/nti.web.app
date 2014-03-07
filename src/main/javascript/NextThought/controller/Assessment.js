@@ -176,6 +176,7 @@ Ext.define('NextThought.controller.Assessment', {
 			failure: function() {
 				console.error('FAIL', arguments);
 				alert('There was a problem grading your quiz.');
+				submissionWidget.onFailure();
 			},
 			success: function(self, op) {
 				var result = op.getResultSet().records.first();
@@ -218,7 +219,7 @@ Ext.define('NextThought.controller.Assessment', {
 			success: function(self, op) {
 				var result = op.getResultSet().records.first().get('parts').first();//hack
 				safelyCall('unmask', widget);
-				widget.setGradingResult(result);
+				safelyCall('setGradingResult', widget, result);
 
 				if (progress.instance) {
 					progress.courseChanged(progress.instance);
@@ -227,6 +228,7 @@ Ext.define('NextThought.controller.Assessment', {
 			failure: function() {
 				console.error('FAIL', arguments);
 				alert('There was a problem submitting your assignment.');
+				safelyCall('onFailure', widget);
 				safelyCall('maybeDoReset', widget, true);
 				safelyCall('unmask', widget);
 			}
