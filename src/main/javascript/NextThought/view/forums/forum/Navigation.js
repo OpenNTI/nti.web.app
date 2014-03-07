@@ -36,10 +36,16 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		this.mon(this.el, {
+		var me = this;
+
+		me.mon(me.el, {
 			mouseover: 'maybeShowMenu',
 			mouseout: 'maybeHideShowMenu',
 			click: 'maybeShowNewForum'
+		});
+
+		me.on('select', function(cmp, record) {
+			me.fireEvent('update-body', record);
 		});
 	},
 
@@ -49,11 +55,6 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 		this.bindStore(store);
 
 		this.tpl.canCreateForums = this.canCreateForums();
-	},
-
-
-	onItemClick: function(record) {
-		this.fireEvent('update-body', record);
 	},
 
 
