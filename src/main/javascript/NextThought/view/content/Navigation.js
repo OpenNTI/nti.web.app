@@ -28,16 +28,15 @@ Ext.define('NextThought.view.content.Navigation', {
 
 	renderSelectors: {upEl: '.goup', breadcrumb: '.breadcrumb'},
 
-	listeners: {
-		afterrender: 'hide',
-		click: {element: 'upEl', fn: 'onUp'},
-		mouseover: {element: 'upEl', fn: 'onUpHover'}
-	},
-
-
 	initComponent: function() {
 		this.callParent(arguments);
 		this.enableBubble('main-tab-clicked');
+		this.on({
+			afterrender: 'hide',
+			destroy: 'cleanupMenus',
+			click: {element: 'upEl', fn: 'onUp'},
+			mouseover: {element: 'upEl', fn: 'onUpHover'}
+		});
 	},
 
 	onUp: function(e) {
