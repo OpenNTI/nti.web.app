@@ -25,7 +25,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 				direction = direction === 'right' ? 'down' : direction === 'left' ? 'up' : direction;
 
 				var r = this.callParent([pos, direction, e, preventWrap, function(newPos) {
-					var newerPos = false,
+					var newerPos,
 						grid = this.up('grid');
 
 					if (newPos.column === grid.tabIndex) {
@@ -40,10 +40,14 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 				}, this]);
 
 				//console.log(r);
-				//if (r) {
+
+				if (r && !this.editingPlugin.editing) {
 					//maybe force the editor back on?
-				//}
-				return r;
+					this.editingPlugin.startEdit(this.getRecord(r.row), this.ownerCt.columns[r.column]);
+				}
+
+
+				return r; //this value is flawless. I don't know why the cell editor doesn't show sometimes.
 			}
 		}
 	},
