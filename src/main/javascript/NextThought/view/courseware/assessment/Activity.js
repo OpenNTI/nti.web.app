@@ -167,16 +167,18 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 		if (typeof target === 'string') {
 			if (!a.hasOwnProperty(target)) {
 				console.error('Dropping event, no assignment found in the map for:', target);
-				setTimeout(function() {
+
+				Error.raiseForReport((function() {
 					function trim(i) { return i.substring(p.length); }
 
 					var keys = Object.keys(a),
 						p = String.commonPrefix(keys);
 
-					throw new Error('Content ID change? No assignment found for: ' +
+					return ('Content ID change? No assignment found for: ' +
 									trim(target) +
 									' in: [' + keys.map(trim).join(', ') + ']');
-				}, 1);
+				}()));
+
 				return null;
 			}
 			target = a[target];

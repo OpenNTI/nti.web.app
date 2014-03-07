@@ -626,8 +626,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 			ctx = me.getPlayerContext(),
 			playerMode = ctx && ctx.playerMode;
 
-		setTimeout(function() {
-			Ext.Error.raise({
+		Error.raiseForReport({
 				msg: Ext.String.format('Kaltura Playback Error: PartnerID: {0}, UIConf: {1}, LEAD_HTML5: {3}, Mode: {4}, Current Source: {2}',
 					me.PARTNER_ID,
 					me.UICONF_ID,
@@ -636,7 +635,6 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 					playerMode
 				)
 			});
-		}, 1);
 	},
 
 

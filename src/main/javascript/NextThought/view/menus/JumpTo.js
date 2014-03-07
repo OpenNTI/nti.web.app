@@ -35,6 +35,15 @@ Ext.define('NextThought.view.menus.JumpTo', {
 
 	afterRender: function() {
 		this.callParent(arguments);
+
+		var owner = this.up();
+
+		if (owner) {
+			this.mon(owner, 'destroy', 'destroy');
+		} else {
+			Error.raiseForReport('No Parent for menu?? ' + this.$className);
+		}
+
 		if (!Ext.is.iPad) { // iPad doesn't need/want these
 			this.mon(this, {
 				scope: this,
