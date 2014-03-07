@@ -645,14 +645,14 @@ Ext.define('NextThought.controller.Forums', {
 					if (!postCmp.isDestroyed) {
 
 						try {
-							if (!isEdit) {
-								if (postCmp.store) {
+							/*if (!isEdit) {
+								if (postCmp.store && !postCmp.store.buffered) {
 									postCmp.store.insert(0, rec);
 								}
 								if (topicCmp && postCmp !== topicCmp && topicCmp.store) {
 									topicCmp.store.add(rec);
 								}
-							}
+							}*/
 						} catch (e) {
 							console.error(e.stack || e.message || e);
 						} finally {
