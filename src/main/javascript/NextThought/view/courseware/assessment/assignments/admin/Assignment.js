@@ -364,13 +364,21 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 
 	doSearch: function(str) {
+		this.down('grid').getSelectionModel().deselectAll(true);
 		this.store.filter([{id: 'search', property: 'usernameSearchTerm', value: str}]);
 	},
 
 
 	doFilter: function(filter) {
 		this.updateColumns(filter);
-		this.store.filter([{id: 'LegacyEnrollmentStatus', property: 'LegacyEnrollmentStatus', value: filter}]);
+		try {
+			this.down('grid').getSelectionModel().deselectAll(true);
+			this.store.filter([
+				{id: 'LegacyEnrollmentStatus', property: 'LegacyEnrollmentStatus', value: filter}
+			]);
+		} catch (e) {
+			console.log('Meh');
+		}
 	},
 
 
