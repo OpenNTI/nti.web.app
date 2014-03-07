@@ -53,7 +53,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 	},
 
 	verticalScroller: {
-		synchronousRender: false,
+		synchronousRender: true,
 		scrollToLoadBuffer: 100,
 		trailingBufferZone: 100,
 		numFromEdge: 50,
