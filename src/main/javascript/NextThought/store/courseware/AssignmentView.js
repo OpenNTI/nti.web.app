@@ -79,7 +79,7 @@ Ext.define('NextThought.store.courseware.AssignmentView', {
 		{property: 'realname', direction: 'ascending'}
 	],
 
-	pageSize: 200,
+	pageSize: 1000,
 
 	buffered: true,
 
