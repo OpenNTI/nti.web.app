@@ -57,8 +57,11 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 
 	function adjustSecondaryView(el, parentEl) {
 		var newBottom, oldBottom,
+		//getBottom() is deprecated...
 			bodyBottom = Ext.getBody().getBottom(),
 			parentBottom = parentEl ? parentEl.getBottom() : 0;
+
+		if (!el) {return;}
 
 		oldBottom = el.getAttribute('data-desired-bottom');
 
