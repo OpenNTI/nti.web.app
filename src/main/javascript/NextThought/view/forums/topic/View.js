@@ -26,7 +26,9 @@ Ext.define('NextThought.view.forums.topic.View', {
 	setCurrentBody: function() {
 		this.callParent(arguments);
 
-		this.initCustomScrollOn('content', '.topic-container', {secondaryViewEl: '.topic-nav', altClass: 'forum-in-view'});
+		if (this.up('[isCourseForum]')) {
+			this.initCustomScrollOn('content', '.topic-container', {secondaryViewEl: '.topic-nav', altClass: 'forum-in-view'});
+		}
 	},
 
 

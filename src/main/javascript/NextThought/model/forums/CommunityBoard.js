@@ -10,7 +10,7 @@ Ext.define('NextThought.model.forums.CommunityBoard', {
 		var p = PromiseFactory.make(),
 			me = this;
 
-		if (me.course) {
+		if (me.course || me.course === false) {
 			p.fulfill(me.course);
 		} else {
 			CourseWareUtils.findCourseBy(function(course) {
@@ -21,6 +21,10 @@ Ext.define('NextThought.model.forums.CommunityBoard', {
 				course = course.get('CourseInstance');
 				me.course = course;
 				p.fulfill(course);
+			}).fail(function(reason) {
+				console.log(reason);
+				me.course = false;
+				p.fulfill(false);
 			});
 		}
 

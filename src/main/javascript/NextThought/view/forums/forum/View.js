@@ -20,7 +20,9 @@ Ext.define('NextThought.view.forums.forum.View', {
 	setCurrentBody: function() {
 		this.callParent(arguments);
 
-		this.initCustomScrollOn('content', '.topic-list', {secondaryViewEl: '.topic-list-nav', altClass: 'forum-in-view', noBuffer: true});
+		if (this.up('[isCourseForum]')) {
+			this.initCustomScrollOn('content', '.topic-list', {secondaryViewEl: '.topic-list-nav', altClass: 'forum-in-view', noBuffer: true});
+		}
 	},
 
 	newRecordAdded: function() {

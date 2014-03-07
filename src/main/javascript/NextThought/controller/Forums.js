@@ -413,6 +413,12 @@ Ext.define('NextThought.controller.Forums', {
 	loadBoardList: function(view) {
 		console.log('Loadroot called', view);
 
+		//don't need to load the boards more than once
+		if (this.boardStore && view.showBoardList) {
+			view.showBoardList(this.boardStore);
+			return;
+		}
+
 		var me = this,
 			store = NextThought.store.NTI.create({
 				model: 'NextThought.model.forums.Forum', id: 'flattened-boards-forums'
@@ -426,6 +432,8 @@ Ext.define('NextThought.controller.Forums', {
 
 				if (boards) {
 					store.add(boards);
+
+					me.boardStore = store;
 
 					//TODO: if there is only one board go ahead and load it
 					if (view.showBoardList) {
@@ -469,33 +477,33 @@ Ext.define('NextThought.controller.Forums', {
 			}
 		}
 
-		//If we have a view we can go ahead and set the forum list
-		if (view) {
-			if (community.isModel) {
-				community = community.get('ID');
+		function maybeFinish() {
+			//If we have a view we can go ahead and set the forum list
+			if (view) {
+				finish(view);
 			} else {
-				UserRepository.getUser(community)
-					.done(function(c) {
-						record.set('Creator', c);
+				//otherwise we need to go to the course of the forums tab first
+				record.findCourse()
+					.done(function(course) {
+						var s = (me.stateRestoring && !me.hasStateToRestore) || silent;
+						//if there is a state to restore that we aren't incharge of pass true as the last argument, to keep
+						//it from switching the tab.
+						view = me.callOnAllControllersWith('onNavigateToForum', record, course, s);
+						//set a flag to keep the view from updating the state
+						view.ignoreStateUpdate = s;
 						finish(view);
 					});
-
-				return p;
 			}
+		}
 
-			finish(view);
-		} else {
-			//otherwise we need to go to the course of the forums tab first
-			record.findCourse()
-				.done(function(course) {
-					var s = (me.stateRestoring && !me.hasStateToRestore) || silent;
-					//if there is a state to restore that we aren't incharge of pass true as the last argument, to keep
-					//it from switching the tab.
-					view = me.callOnAllControllersWith('onNavigateToForum', record, course, s);
-					//set a flag to keep the view from updating the state
-					view.ignoreStateUpdate = s;
-					finish(view);
+		if (!community.isModel) {
+			UserRepository.getUser(community)
+				.done(function(c) {
+					record.set('Creator', c);
+					maybeFinish();
 				});
+		} else {
+			maybeFinish();
 		}
 
 		return wait ? p : true;

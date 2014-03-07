@@ -520,6 +520,7 @@ Ext.define('NextThought.controller.Navigation', {
 	onNavigateToForum: function(board, course, silent) {
 		if (course) { return; }
 
-		return this.setView('forums');
+		this.setView('forums');
+		return Ext.getCmp('forums');
 	}
 });
