@@ -52,6 +52,13 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 		}
 	},
 
+	verticalScroller: {
+		synchronousRender: false,
+		scrollToLoadBuffer: 100,
+		trailingBufferZone: 100,
+		numFromEdge: 10,
+		leadingBufferZone: 150
+	},
 
 	selType: 'cellmodel',
 	plugins: [
