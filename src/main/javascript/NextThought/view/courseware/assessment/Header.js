@@ -13,7 +13,6 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 				{ cls: 'right controls', cn: [
 					{ cls: 'page', cn: [
 						{tag: 'tpl', 'if': 'page', cn: [{ tag: 'span', html: '{page}'}, ' of ']},
-						{tag: 'tpl', 'if': '!page', cn: ['Total: ']},
 						{tag: 'span', cls: 'total', html: '{total}'}
 					] },
 					{ cls: 'up {noPrev:boolStr("disabled")}' },
