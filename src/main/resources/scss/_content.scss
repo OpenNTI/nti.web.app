@@ -121,6 +121,18 @@
 			top: -25px;
 		}
 
+		&.forums {
+			.main-view-tab {
+				color: $tertiary-grey;
+				@include icon('profile_back_arrow', $left: -6spx, $top: 8px);
+
+				&:hover{
+					background: none !important;
+					color: $tertiary-grey !important;
+				}
+			}
+		}
+
 		.main-view-tab {
 			position: relative;
 			display: inline-block;

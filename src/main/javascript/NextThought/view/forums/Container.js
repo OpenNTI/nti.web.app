@@ -12,6 +12,7 @@ Ext.define('NextThought.view.forums.Container', {
 	title: 'NextThought: Discussions',
 	layout: 'card',
 	isForumContainer: true,
+	extraTabBarCls: 'forums',
 
 	items: [{
 		title: 'Board',
@@ -37,6 +38,41 @@ Ext.define('NextThought.view.forums.Container', {
 
 	onAdd: function(item) {
 		this.getLayout().setActiveItem(item);
+	},
+
+
+	getTabs: function() {
+		if (!this.forumList) {
+			return;
+		}
+
+		var board = this.forumList.get('title'),
+			community = this.forumList.get('Creator');
+
+		if (Ext.isString(community)) {
+			console.error('Boards community isnt resolved yet');
+			return;
+		}
+
+		community = community.toString();
+
+		return [{
+			label: community + '-' + board
+		}];
+	},
+
+
+	onTabClicked: function() {
+		delete this.forumList;
+		this.showRoot();
+		this.updateTabs();
+	},
+
+
+	updateTabs: function() {
+		if (!this.isCourseForum) {
+			this.callParent(arguments);
+		}
 	},
 
 
@@ -95,6 +131,8 @@ Ext.define('NextThought.view.forums.Container', {
 			'active-record-changed': 'activeTopicListChanged',
 			'pop-view': function() {
 				if (!me.isCourseForum) {
+					delete me.forumList;
+					me.updateTabs();
 					me.showBoardList();
 				}
 			}
@@ -103,6 +141,8 @@ Ext.define('NextThought.view.forums.Container', {
 		me.getLayout().setActiveItem(forumView);
 
 		Ext.destroy(this.down('forums-topic-view'));
+
+		this.updateTabs();
 
 		return forumView;
 	},
@@ -137,11 +177,17 @@ Ext.define('NextThought.view.forums.Container', {
 				}
 			},
 			'pop-to-root': function() {
+				if (!me.isCourseForum) {
+					delete me.forumList;
+				}
 				delete me.topicList;
+				me.updateTabs();
 				me.updateState();
 				me.showRoot();
 			}
 		});
+
+		this.updateTabs();
 
 		this.getLayout().setActiveItem(topicView);
 
