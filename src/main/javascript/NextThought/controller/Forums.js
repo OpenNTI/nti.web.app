@@ -106,11 +106,8 @@ Ext.define('NextThought.controller.Forums', {
 				'profile-forum-activity-item-reply': {
 					'delete-topic-comment': 'deleteObject'
 				},
-				'#forums > forums-topic nti-editor': {
-					'save': 'saveTopicComment'
-				},
 
-				'#content > course-forum nti-editor': {
+				'forums-topic-body nti-editor': {
 					'save': 'saveTopicComment'
 				},
 
