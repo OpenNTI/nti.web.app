@@ -91,6 +91,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			nameOrder: ['creator', 'username', 'completed', 'grade', 'feedback', 'submission'],
 			columnOverrides: {
 				0: { text: 'Student', dataIndex: 'Creator', name: 'creator', flex: 1, padding: '0 0 0 30',
+					possibleSortStates: ['ASC', 'DESC'],//restore the default order of state(since the grid reverses it)
 					renderer: function(v) {
 						var u = v && (typeof v === 'string' ? {displayName: 'Resolving...'} : v.getData());
 						return this.studentTpl.apply(u);
@@ -104,6 +105,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			},
 			extraColumns: [
 				{ text: 'Username', dataIndex: 'Creator', name: 'username',
+					possibleSortStates: ['ASC', 'DESC'],//restore the default order of state(since the grid reverses it)
 					renderer: function(v, g, record) {
 						var username = (v.get && v.get('Username')) || v,
 								f = record.store && record.store.filters;

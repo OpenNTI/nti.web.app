@@ -117,7 +117,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 			ui: 'course-assessment',
 			border: false,
 			sortable: true,
-			menuDisabled: true
+			menuDisabled: true,
+			//reverse the default state order (descending first)
+			possibleSortStates: ['DESC', 'ASC']
 		},
 
 		items: [
@@ -317,6 +319,16 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 			},
 			itemclick: {fn: 'onItemClicked', scope: this}
 		});
+	},
+
+
+	bindStore: function(store) {
+		var res = this.callParent(arguments),
+			sorts = store.getSorters();
+
+		//debugger;
+
+		return res;
 	},
 
 
