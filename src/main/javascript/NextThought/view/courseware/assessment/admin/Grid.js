@@ -11,7 +11,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 	frame: false,
 
 	scroll: 'vertical',
-	sealedColumns: true,
 	enableColumnHide: false,
 	enableColumnMove: false,
 	enableColumnResize: false,
@@ -21,8 +20,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 	viewConfig: {
 		loadMask: false,
 		xhooks: {
-			walkCells: function(pos, direction, e, preventWrap, verifierFn, scope) {
-				return this.callParent([pos, direction, e, preventWrap, function(newPos) {
+			walkCells: function(pos, direction, e, preventWrap) {
+				preventWrap = false;
+				direction = direction === 'right' ? 'down' : direction === 'left' ? 'up' : direction;
+
+				var r = this.callParent([pos, direction, e, preventWrap, function(newPos) {
 					var newerPos = false,
 						grid = this.up('grid');
 
@@ -36,6 +38,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 					}
 					return false;
 				}, this]);
+
+				//console.log(r);
+				//if (r) {
+					//maybe force the editor back on?
+				//}
+				return r;
 			}
 		}
 	},
@@ -43,52 +51,44 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 
 	selType: 'cellmodel',
 	plugins: [
+		//{ ptype: 'bufferedrenderer' },
 		{
-			//ptype: 'bufferedrenderer'
-		//},
-		//{
 			ptype: 'cellediting',
 			clicksToEdit: 1,
 			listeners: {
-				beforeedit: {
-					element: 'el',
-					fn: function(editor, e) {
-						if (!e.record || e.field !== 'Grade') { return false; }
+				beforeedit: function(editor, e) {
+					//if (!e.record || e.field !== 'Grade') { return false; }
 
-						var gradeRec = e.record.get('Grade'),
+					var gradeRec = e.record.get('Grade'),
 							value = gradeRec && gradeRec.get('value'),
-							grades = value && value.split(' '),
-							grade = grades && grades[0];
+							grades = value && value.split(' ');
 
-						if (!gradeRec) {
-							//this might throw an exception, if it does, it will interupt
-							// the edit so the cell editor will not open :)
-							e.record.buildGrade();
-						}
-
-						e.value = grade;
-						editor.getEditor(e.record, e.column).offsets = e.grid.gradeEditorOffsets;
-					}
+					e.value = (grades && grades[0]) || '';
+					editor.getEditor(e.record, e.column).offsets = e.grid.gradeEditorOffsets;
 				},
-				validateedit: {
-					element: 'el',
-					fn: function(editor, e) {
-						var grade = e.record.get('Grade'),
-							v = grade.get('value');
+				//validateedit: function(ed, e) {},
+				edit: function(editor, e) {
+					var grade = e.record.get('Grade'),
+						v = grade && grade.get('value');
 
-						v = v && v.split(' ')[0];
+					v = v && v.split(' ')[0];
 
-						if (v !== e.value && !Ext.isEmpty(e.value)) {
-							grade.set('value', e.value + ' -');
-							grade.save({
-								failure: function() {
-									grade.reject();
-								}
-							});
+					if (v !== e.value && !Ext.isEmpty(e.value)) {
+						if (!grade) {
+							//this might throw an exception, if it does, it will interupt the edit
+							e.record.buildGrade();
+							grade = e.record.get('Grade');
 						}
 
-						return false;
+						grade.set('value', e.value + ' -');
+						grade.save({
+							failure: function() {
+								grade.reject();
+							}
+						});
 					}
+
+					return false;
 				}
 			}
 		}
@@ -298,7 +298,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 				ct.items.each(function(c) { c.tdCls = (c.tdCls || '').replace(/sortedOn/g, '').trim(); }, ct);
 				me.markColumn(column);
 			},
-			selectionchange: function(sm, selected) { sm.deselect(selected); },
+			//selectionchange: function(sm, selected) { sm.deselect(selected); },
 			viewready: function(grid) {
 				grid.mon(grid.getView(), 'refresh', function() {
 					grid.markColumn(grid.down('gridcolumn[sortState]'));

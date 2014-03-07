@@ -118,7 +118,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 			return;
 		}
 
-		if (dataIndex !== 'Grade' || !record.get('Grade')) {
+		if (dataIndex !== 'Grade') {
 			this.showAssignment(selModel, record);
 		}
 	},

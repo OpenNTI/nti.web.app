@@ -409,7 +409,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			return;
 		}
 
-		if (dataIndex !== 'Grade' || !record.get('Grade')) {
+		if (dataIndex !== 'Grade') {
 			this.fireGoToAssignment(selModel, record);
 		}
 	},
