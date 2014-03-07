@@ -65,7 +65,9 @@ Ext.define('NextThought.view.chat.Window', function() {
 		initComponent: function() {
 			this.callParent(arguments);
 
-			this.defaultFocus = this.down('chat-entry');
+			if (!Ext.is.iOS) {
+				this.defaultFocus = this.down('chat-entry');
+			}
 
 			var entry = this.down('chat-entry');
 			if (!this.roomInfo) {
