@@ -80,7 +80,10 @@ Ext.define('NextThought.view.reader.Panel', {
 		this.on('beforedeactivate', this.beforeDeactivate, this);
 
 		// NOTE: check notes on the mixin, as to why we might want to set a secondaryViewEl.
-		this.initCustomScrollOn('content', this.scrollTargetSelector, {secondaryViewEl: '.x-panel-notes-and-discussion', altClass: 'reader-in-view'});
+		this.initCustomScrollOn('content', this.scrollTargetSelector,
+				//Not sure why yet, but with Notepad enabled, and previously active (so the app restores state with that tab active)
+				//this causes the secondaryViewEl to have a very odd bottom value (making the notes & discussions unusable)
+				{secondaryViewEl: '.x-panel-notes-and-discussion', altClass: 'reader-in-view'});
 	},
 
 
