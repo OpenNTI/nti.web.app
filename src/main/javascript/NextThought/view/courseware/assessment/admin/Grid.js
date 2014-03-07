@@ -324,9 +324,37 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 
 	bindStore: function(store) {
 		var res = this.callParent(arguments),
-			sorts = store.getSorters();
+			sorts = store.getSorters(), s, sort,
+			cols = this.columns, c, col;
 
-		//debugger;
+		function sortForCol(col, sort) {
+			var p = col.getSortParam();
+			if (p === 'Creator') {
+				p = col.name === 'username' ? 'username' : 'realname';
+			}
+			return p === sort.property;
+		}
+
+		function toState(sort) {
+			if (/^asc/i.test(sort.direction)) { return 'ASC'; }
+			return 'DESC';
+		}
+
+		for (c = cols.length - 1; c >= 0; c--) {
+			col = cols[c];
+
+			for (s = sorts.length - 1; s >= 0; s--) {
+				sort = sorts[s];
+				if (sortForCol(col, sort)) {
+					try {
+						col.setSortState(toState(sort), true, true);
+					} catch (e) {
+						console.warn('Not marking the intial sort orders because:', e.stack || e.message || e);
+					}
+				}
+			}
+		}
+
 
 		return res;
 	},
