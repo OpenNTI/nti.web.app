@@ -486,6 +486,11 @@ Ext.define('NextThought.controller.UserData', {
 			}
 
 			var c = this.flatPageContextMap;
+			if (!c.hasOwnProperty(cmp.id)) {
+				cmp.on('destroy', function() {
+					delete c[cmp.id];
+				});
+			}
 			c[cmp.id] = (c[cmp.id] || {flatPageStore: cmp.flatPageStore});
 
 			return c[cmp.id];
@@ -779,7 +784,8 @@ Ext.define('NextThought.controller.UserData', {
 
 
 	onAnnotationsFilter: function(cmp) {
-		var listParams = FilterManager.getServerListParams(),
+		var ctx = this.getContext(cmp),
+			listParams = FilterManager.getServerListParams(),
 			filter = ['TopLevel'];
 
 		if (listParams.filter) {
@@ -797,7 +803,7 @@ Ext.define('NextThought.controller.UserData', {
 		}
 
 		function containerStorePredicate(k, s) {
-			return s.hasOwnProperty('containerId');
+			return s.hasOwnProperty('containerId') && !!ctx.currentPageStores[s.containerId];
 		}
 
 		this.applyToStores(function(k, s) {
@@ -976,8 +982,8 @@ Ext.define('NextThought.controller.UserData', {
 	 * references books external to their content package this will break.
 	 *
 	 *
-	 * @param ntiid
-	 * @returns An object encasuplating the prefences for the given ntiid.  Sharing related preferences are found beneath
+	 * @param {String} ntiid
+	 * @return {Object} An object encasuplating the prefences for the given ntiid.  Sharing related preferences are found beneath
 	 * the 'sharing' key
 	 */
 	getPreferences: function(ntiid) {
