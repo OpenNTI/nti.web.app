@@ -43,15 +43,17 @@ Ext.define('NextThought.view.forums.topic.Body', {
 			comment.goToComment(forum.comment);
 		}
 
-		this.mon(topic, {
+		Ext.destroy(this.topicMonitors);
+		this.topicMonitors = this.mon(topic, {
+			destroyable: true,
 			'create-root-reply': function() {
 				comment.addRootReply();
 			},
 			'record-deleted': function() {
-				if (cfg.nextIndex) {
-					me.fireEvent('record-deleted', cfg.nextIndex);
-				} else if (cfg.previousIndex >= 0) {
-					me.fireEvent('record-deleted', cfg.previousIndex);
+				if (pageSource.hasNext()) {
+					me.fireEvent('record-deleted', pageSource.getNext());
+				} else if (pageSource.hasPrevious()) {
+					me.fireEvent('record-deleted', pageSource.getPrevious());
 				} else {
 					me.fireEvent('record-deleted', 1);
 				}

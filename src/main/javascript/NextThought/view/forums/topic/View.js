@@ -56,7 +56,7 @@ Ext.define('NextThought.view.forums.topic.View', {
 
 
 	recordDeleted: function(activeIndex) {
-		var active = this.store.getAt(activeIndex);
+		var active = Ext.isNumber(activeIndex) ? this.store.getAt(activeIndex) : activeIndex;
 
 		this.currentRecord.activeRecord = active;
 
