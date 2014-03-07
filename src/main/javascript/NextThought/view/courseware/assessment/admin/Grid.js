@@ -18,7 +18,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 	rowLines: false,
 
 	viewConfig: {
-		loadMask: false,
+		loadMask: true,
 		xhooks: {
 			walkCells: function(pos, direction, e, preventWrap) {
 				preventWrap = false;
