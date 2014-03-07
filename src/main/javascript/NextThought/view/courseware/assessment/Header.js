@@ -11,8 +11,8 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 			cls: 'toolbar',
 			cn: [
 				{ cls: 'right controls', cn: [
-					{ cls: 'page', cn: [
-						{tag: 'tpl', 'if': 'page', cn: [{ tag: 'span', html: '{page}'}, ' of ', {tag: 'span', cls: 'total', html: '{total}'}]}
+					{ cls: 'page {page:boolStr("","x-hidden")}', cn: [
+						{ tag: 'span', html: '{page}'}, ' of ', {tag: 'span', cls: 'total', html: '{total}'}
 					] },
 					{ cls: 'up {noPrev:boolStr("disabled")}' },
 					{ cls: 'down {noNext:boolStr("disabled")}' }
