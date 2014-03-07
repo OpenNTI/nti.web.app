@@ -26,6 +26,8 @@ Ext.define('NextThought.view.forums.topic.View', {
 	setCurrentBody: function() {
 		this.callParent(arguments);
 
+		this.realignSidebar();
+
 		if (this.up('[isCourseForum]')) {
 			this.initCustomScrollOn('content', '.topic-container', {secondaryViewEl: '.topic-nav', altClass: 'forum-in-view'});
 		}
@@ -43,6 +45,7 @@ Ext.define('NextThought.view.forums.topic.View', {
 			this.store.load();
 
 			this.navigation.setCurrent(topicList, store);
+			this.realignSidebar();
 		}
 	},
 
