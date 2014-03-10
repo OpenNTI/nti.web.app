@@ -865,7 +865,7 @@ Ext.define('NextThought.model.Base', {
 				//Some of our synthetic fields trigger this call before there are groups defined...
 				// the store's group updating code does not ensure a group exists before acting on it,
 				// so lets fake out the store and let it think that its not groupped yet.
-				if (store.isGrouped && store.isGrouped() && store.groups.getCount() === 0) {
+				if (store.isGrouped && store.isGrouped()) {
 					store.isGrouped = Ext.emptyFn;
 				}
 
