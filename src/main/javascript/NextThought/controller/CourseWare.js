@@ -189,6 +189,8 @@ Ext.define('NextThought.controller.CourseWare', {
 			return;
 		}
 
+		this.mon(store, 'load', 'markEnrolledCourses');
+
 		this.mon(store, {
 			beforeload: 'onAvailableCoursesLoading',
 			load: 'onAvailableCoursesLoaded'
@@ -202,8 +204,32 @@ Ext.define('NextThought.controller.CourseWare', {
 		if (!store) {
 			return;
 		}
+		this.mon(store, 'load', 'markEnrolledCourses');
 		this.mon(store, 'load', 'onEnrolledCoursesLoaded');
 		store.load();
+	},
+
+
+	markEnrolledCourses: function() {
+		var enrolled = Ext.getStore('courseware.EnrolledCourses'),
+			catalog = Ext.getStore('courseware.AvailableCourses');
+
+
+		//The catalog is going to be bigger, so lets iterate it, on the outer loop.
+		catalog.each(function(entry) {
+			var instanceRef = entry.getLink('CourseInstance'),
+				found = false;
+
+			enrolled.each(function(e) {
+				var i = e.get('CourseInstance') || e;
+				if (instanceRef === getURL(i.get('href'))) {
+					found = true;
+				}
+				return !found;//stop iterating on finding
+			});
+
+			entry.set('enrolled', found);
+		});
 	},
 
 
@@ -226,6 +252,7 @@ Ext.define('NextThought.controller.CourseWare', {
 		var me = this, view = this.getLibraryView().getCatalogView(),
 			archiveStore, archived, now = new Date(),
 			contentMap = me.TEMP_WORKAROUND_COURSE_TO_CONTENT_MAP;
+
 		store.each(function(o) {
 			var k = o.get('ContentPackageNTIID');
 			if (!contentMap.hasOwnProperty(k)) {
@@ -378,6 +405,7 @@ Ext.define('NextThought.controller.CourseWare', {
 				function() {//not enrolled
 					me.toggleEnrollmentStatus(course)
 							.then(function() {
+								course.set('enrolled', true);
 								me.transitionToComponent(win, {xtype: 'enrollment-complete', record: course, enrolled: true});
 							})
 							.fail(function(reason) {
@@ -403,6 +431,7 @@ Ext.define('NextThought.controller.CourseWare', {
 				.then(function(enrollment) {//found to be enrolled, lets drop...
 					me.toggleEnrollmentStatus(course, enrollment)
 							.then(function() {
+								course.set('enrolled', false);
 								me.transitionToComponent(win, {xtype: 'enrollment-complete', record: course, enrolled: false});
 							})
 							.fail(function(reason) {

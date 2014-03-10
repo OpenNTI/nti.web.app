@@ -9,7 +9,7 @@ Ext.define('NextThought.view.courseware.coursecatalog.Collection', {
 
 
 	entryTpl: Ext.DomHelper.markup({
-		cls: '{inGrid} item {Class:lowercase} {featured:boolStr("featured")} {Activated:boolStr("activated")} row-{rows} col-{cols}',
+		cls: '{inGrid} item {Class:lowercase} {featured:boolStr("featured")} {enrolled:boolStr("activated")} row-{rows} col-{cols}',
 		'data-qtip': '{Title:htmlEncode}', cn: [
 			{ tag: 'tpl', 'if': 'featured', cn:
 				{ cls: 'cover', style: { backgroundImage: 'url({icon})' }}},
