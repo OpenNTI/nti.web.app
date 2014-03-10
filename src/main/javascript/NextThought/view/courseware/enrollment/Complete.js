@@ -28,7 +28,7 @@ Ext.define('NextThought.view.courseware.enrollment.Complete', {
 
 	beforeRender: function() {
 		var rec = this.record,
-			enroll = !this.enrolled,
+			enroll = this.enrolled,
 			prefix = enroll ? 'enroll' : 'unenroll',
 			preview = this.record.get('Preview') ? 'preview' : 'active',
 			tplReplacement, win;
