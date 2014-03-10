@@ -14,7 +14,9 @@ Ext.define('NextThought.view.forums.topic.parts.Header', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header-container', cn: { cls: '{headerCls} navigation-bar', cn: [
-			{tag: 'span', cls: 'location', html: ''},
+			{cls: 'page', cn: [
+				{tag: 'span', cls: 'current', html: ''}, ' of ', {tag: 'span', cls: 'total', html: ''}
+			]},
 			{cls: 'pager', cn: [
 				{cls: 'prev disabled'},
 				{cls: 'next disabled'}
@@ -26,7 +28,9 @@ Ext.define('NextThought.view.forums.topic.parts.Header', {
 		headerEl: '.navigation-bar',
 		prevEl: '.header-container .pager .prev',
 		nextEl: '.header-container .pager .next',
-		locationEl: '.header-container .location'
+		pageEl: '.header-container .page',
+		currentEl: '.header-container .page .current',
+		totalEl: '.header-container .page .total'
 	},
 
 
@@ -39,6 +43,9 @@ Ext.define('NextThought.view.forums.topic.parts.Header', {
 
 		tpl = new Ext.XTemplate(me.pathTpl);
 		tpl.insertFirst(me.headerEl, {path: forumTitle, title: topicTitle}, true);
+
+		//make sure it defaults to hidden
+		this.pageEl.hide();
 
 		this.updateNavigation();
 
@@ -58,6 +65,8 @@ Ext.define('NextThought.view.forums.topic.parts.Header', {
 	updateNavigation: function() {
 		if (!this.rendered || !this.pageSource || this.pageSource.disabled) { return; }
 
+		var current = this.pageSource.getPageNumber();
+
 		//if we have a next or previous enable the navigation arrows.
 		if (this.pageSource.hasNext()) {
 			this.nextEl.removeCls('disabled');
@@ -69,6 +78,14 @@ Ext.define('NextThought.view.forums.topic.parts.Header', {
 			this.prevEl.removeCls('disabled');
 		} else {
 			this.prevEl.addCls('disabled');
+		}
+
+		if (current) {
+			this.pageEl.show();
+			this.currentEl.update(current);
+			this.totalEl.update(this.pageSource.getTotal());
+		} else {
+			this.pageEl.hide();
 		}
 	},
 

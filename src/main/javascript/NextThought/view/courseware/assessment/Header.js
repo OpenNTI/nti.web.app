@@ -11,8 +11,8 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 			cls: 'toolbar',
 			cn: [
 				{ cls: 'right controls', cn: [
-					{ cls: 'page {page:boolStr("","x-hidden")}', cn: [
-						{ tag: 'span', html: '{page}'}, ' of ', {tag: 'span', cls: 'total', html: '{total}'}
+					{ cls: 'page', cn: [
+						{ tag: 'span', cls: 'currentPage', html: '{page}'}, ' of ', {tag: 'span', cls: 'total', html: '{total}'}
 					] },
 					{ cls: 'up {noPrev:boolStr("disabled")}' },
 					{ cls: 'down {noNext:boolStr("disabled")}' }
@@ -37,6 +37,8 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 
 	renderSelectors: {
 		totalEl: '.toolbar .page .total',
+		currentPageEl: '.toolbar .page .currentPage',
+		pageEl: '.toolbar .page',
 		pathEl: '.toolbar .path-items',
 		previousEl: '.toolbar .controls .up',
 		nextEl: '.toolbar .controls .down'
@@ -78,6 +80,8 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 			noPrev: !this.pageSource.hasPrevious()
 		});
 
+		this.onPagerUpdate();
+
 		this.mon(this.pageSource, 'update', 'onPagerUpdate');
 
 		this.on({
@@ -97,6 +101,8 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 			return;
 		}
 
+		var current = this.pageSource.getPageNumber();
+
 		if (this.pageSource.hasNext()) {
 			this.nextEl.removeCls('disabled');
 		}
@@ -105,7 +111,13 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 			this.previousEl.removeCls('disabled');
 		}
 
-		this.totalEl.update(this.pageSource.getTotal());
+		if (current) {
+			this.pageEl.show();
+			this.currentPageEl.update(current);
+			this.totalEl.update(this.pageSource.getTotal());
+		} else {
+			this.pageEl.hide();
+		}
 	},
 
 

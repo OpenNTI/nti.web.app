@@ -1375,6 +1375,20 @@
 	div.x-component,
 	div.x-container, {
 
+		.header-container{
+			.page {
+				vertical-align: top;
+				line-height: 49px;
+				display: inline-block;
+				font-style: italic;
+				color: $primary-grey;
+				margin-right: 25px;
+				span {
+					font-weight: 600;
+				}
+			}
+		}
+
 		&.forums-topic-editor-box{
 			margin: 0 auto;
 

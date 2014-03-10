@@ -152,14 +152,40 @@ Ext.define('NextThought.proxy.PageSource', {
 		me.previous = items[idx - 1] || null;
 		me.next = items[idx + 1] || null;
 
+		me.updatePageNumber(reply.Links, idx);
+
 		me.fireEvent('update');
+	},
+
+
+	updatePageNumber: function(links, current) {
+		var nextLink, prevLink;
+
+		//if the current is the first one, we are the first item in the list
+		if (current === 0) {
+			this.currentPage = 1;
+			return;
+		}
+
+		links.forEach(function(link) {
+			if (link.rel === 'batch-next') {
+				nextLink = link.href;
+			} else {
+				prevLink = link.href;
+			}
+		});
+
+		if (nextLink) {
+			nextLink = Ext.urlDecode(nextLink);
+			this.currentPage = nextLink && nextLink.batchStart - 1;
+		}
 	},
 
 
 	//we do not care about the actual page number.
 	// The consumers of this function should expect
 	// that it might return null.
-	getPageNumber: function() { return null; },
+	getPageNumber: function() { return this.currentPage || null; },
 
 
 	getNext: function(set) {
