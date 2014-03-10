@@ -119,13 +119,14 @@ Ext.define('NextThought.controller.Forums', {
 					'forums:fill-in-path': 'fillInPath',
 					'show-forum-list': 'loadForumList',
 					'show-topic-list': 'loadTopicList',
-					'new-topic': 'showNewTopicEditor'
+					'new-topic': 'showNewTopicEditor',
+					'goto-forum-item': 'presentForumItem'
 				}
 			},
 			controller: {
 				'*': {
 					'show-object': 'navigateToForumContent',
-					'show-topic': 'presentTopic'
+					'show-topic': 'presentForumItem'
 				}
 			}
 		});
@@ -228,7 +229,7 @@ Ext.define('NextThought.controller.Forums', {
 				var json = Ext.JSON.decode(resp.responseText, true),
 					obj = ParseUtils.parseItems(json)[0];
 
-				me.presentTopic(obj);
+				me.presentForumItem(obj);
 				promise.fulfill();
 			},
 			failure: function() {
@@ -308,10 +309,10 @@ Ext.define('NextThought.controller.Forums', {
 
 
 	/**
-	 * Takes a forum model, and navigates to it
+	 * Takes any of the forum models, and navigates to it
 	 * @param  {NextThought.model.forums.base} record either a board, forum, or topic
 	 */
-	presentTopic: function(record) {
+	presentForumItem: function(record) {
 		var me = this;
 
 		if (!record) {
@@ -1051,7 +1052,7 @@ Ext.define('NextThought.controller.Forums', {
 
 		if (obj instanceof NextThought.model.forums.Base) {
 			if (me.fireEvent('show-view', 'forums', true)) {
-				me.presentTopic(obj);
+				me.presentForumItem(obj);
 				return false;
 			}
 		}

@@ -107,24 +107,11 @@ Ext.define('NextThought.view.courseware.overview.parts.Discussion', {
 
 
 	onClick: function() {
-		var c = (this.up('course') || {}).currentCourse;
-
 		if (!this.topic) {
 			alert('An error occurred showing this discussion.');
 		}
 		else {
-			if (/topic$/i.test(this.topic.get('Class'))) {
-				this.fireEvent('show-topic', this, this.topic);
-			}
-			else if (/forum/i.test(this.topic.get('Class'))) {
-
-				if (c) {
-					this.fireEvent('show-topic-list', this, this.topic);
-				}
-				else {
-					alert('An error occurred showing this discussion');
-				}
-			}
+			this.fireEvent('goto-forum-item', this.topic);
 		}
 	}
 });
