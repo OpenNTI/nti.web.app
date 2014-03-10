@@ -39,6 +39,20 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
+	requestDelete: function(url) {
+		return this.request({url: url, method: 'DELETE'});
+	},
+
+
+	post: function(url, data) {
+		return this.request({
+			url: url,
+			method: 'POST',
+			jsonData: data
+		});
+	},
+
+
 	getUserSearchURL: function(username) {
 		var w = this.getWorkspace('Global') || {},
 			l = this.getLinkFrom(w.Links || [], Globals.USER_SEARCH_REL);
@@ -531,7 +545,7 @@ Ext.define('NextThought.model.Service', {
 		return !!coll;
 	},
 
-	
+
 	canShareRedaction: function() {
 		return false;
 	},

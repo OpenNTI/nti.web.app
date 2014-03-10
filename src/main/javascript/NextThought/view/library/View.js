@@ -4,7 +4,8 @@ Ext.define('NextThought.view.library.View', {
 
 	requires: [
 		'NextThought.view.library.Page',
-		'NextThought.view.courseware.Collection'
+		'NextThought.view.courseware.Collection',
+		'NextThought.view.courseware.coursecatalog.Collection'
 	],
 
 	viewIdProperty: 'itemId',
@@ -35,12 +36,14 @@ Ext.define('NextThought.view.library.View', {
 				}
 			]
 		},
-		{ itemId: 'content-catalog' },
 		{
 			itemId: 'my-books',
 			items: [
 				{ name: getString('My Books') }
 			]
+		},
+		{
+			itemId: 'content-catalog'
 		}
 	],
 

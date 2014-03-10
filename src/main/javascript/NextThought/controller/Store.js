@@ -194,7 +194,7 @@ Ext.define('NextThought.controller.Store', function() {
 			'store.PurchaseAttempt',
 			'store.StripePricedPurchasable',
 			'store.StripePurchaseError',
-			'Course'
+			'Course'//keep this around to filter them out
 		],
 
 		stores: [
@@ -202,9 +202,6 @@ Ext.define('NextThought.controller.Store', function() {
 		],
 
 		views: [
-			'courseware.enrollment.Window',
-			'courseware.enrollment.Confirm',
-			'courseware.enrollment.Complete',
 			'store.purchase.Window',
 			'store.purchase.Form',
 			'store.purchase.History',
@@ -214,10 +211,8 @@ Ext.define('NextThought.controller.Store', function() {
 		],
 
 		refs: [
-			{ ref: 'navigationMenu', selector: 'navigation-menu'},//drop after we switch to new library
 			{ ref: 'libraryView', selector: 'library-view-container'},
-			{ ref: 'purchaseWindow', selector: 'purchase-window'},
-			{ ref: 'enrollmentWindow', selector: 'enrollment-window'}
+			{ ref: 'purchaseWindow', selector: 'purchase-window'}
 		],
 
 		init: function() {
@@ -255,21 +250,9 @@ Ext.define('NextThought.controller.Store', function() {
 						'price-purchase': 'pricePurchase'
 					},
 
-					'enrollment-detailview': {
-						'show-enrollment-confirmation': 'showEnrollmentConfirmation'
-					},
-					'enrollment-confirm': {
-						'show-enrollment-complete': 'showEnrollmentComplete'
-					},
-					'enrollment-complete': {
-						'close': 'forceCloseWindow'
-					},
-
 					'*': {
 						'show-purchasable': 'showPurchaseWindow',
-						'unauthorized-navigation': 'maybeShowPurchasableForContent',
-						'enrollment-enrolled-complete': 'courseEnrolled',
-						'enrollment-dropped-complete': 'courseDropped'
+						'unauthorized-navigation': 'maybeShowPurchasableForContent'
 					}
 				},
 				'controller': {
@@ -291,39 +274,6 @@ Ext.define('NextThought.controller.Store', function() {
 		},
 
 
-		enrollmentChanged: function() {
-			var purchasables = this.getPurchasableStore(),
-				library = Library.getStore();
-
-			//TODO: move all course work into the CourseWare controller.
-			Ext.getStore('courseware.EnrolledCourses').load();
-
-			library.on({
-				single: true,
-				load: function() {
-					purchasables.load();
-				}
-			});
-
-			//reload the library
-			library.load();
-
-			//Refresh the user
-			$AppConfig.userObject.refresh();
-		},
-
-
-		courseEnrolled: function() {
-			this.enrollmentChanged();
-		},
-
-
-		courseDropped: function(win, rec) {
-			this.enrollmentChanged();
-			this.fireEvent('content-dropped', rec);
-		},
-
-
 		//TODO a way to have this collection show up only if there are purchasable
 		//items that have not yet been purchased?
 		maybeAddPurchasables: function() {
@@ -340,8 +290,11 @@ Ext.define('NextThought.controller.Store', function() {
 				return e && (new Date(e) < new Date());
 			}
 
-			store.filter(function(r) { return !filter(r); });
-			archive.filter(filter);
+			function notFilter(r) { return !filter(r); }
+			function courses(r) { return !r.isCourse; }
+
+			store.filter([courses, notFilter]);
+			archive.filter([courses, filter]);
 
 			if (store.getCount() && view && !Ext.getCmp('store-collection')) {
 				view.add({
@@ -410,60 +363,28 @@ Ext.define('NextThought.controller.Store', function() {
 
 		purhcasableCollectionSelection: function(cmp, record) {
 			Ext.menu.Manager.hideAll();
-
-			if (record instanceof NextThought.model.store.Purchasable) {
-				this.showPurchasable(record);
-			}
-			else if (record instanceof this.getCourseModel()) {
-				this.showEnrollment(record);
-			}
+			this.showPurchasable(record);
 		},
 
 
-		showPurchaseWindow: function(sender, purchasable, callback) {
-			if (purchasable instanceof this.getCourseModel()) {
-				this.showEnrollment(purchasable, callback);
-				return;
-			}
+		showPurchaseWindow: function(sender, purchasable) {
 			this.showPurchasable(purchasable);
 		},
 
 
 		maybeShowPurchasableForContent: function(sender, ntiid) {
-			function filter(item) {
-				// For course, we will only care about the ones that we're not enrolled in,
-				// since we want to decide if we should prompt the user with an enroll message.
-				if (item instanceof NextThought.model.Course) {
-					return item.getLink('enroll');
-				}
-				return true;
-			}
-
-			var purchasable = ntiid && ContentUtils.purchasableForContentNTIID(ntiid, filter);
+			var purchasable = ntiid && ContentUtils.purchasableForContentNTIID(ntiid);
 
 			if (!ntiid) {
 				console.error('No ntiid!');
 			}
 
 			if (purchasable) {
-				if (purchasable instanceof this.getCourseModel()) {
-					this.showEnrollment(purchasable);
-					return !purchasable;
-				}
 				this.showPurchasable(purchasable);
 			}
 			return !purchasable;
 		},
 
-
-		showEnrollment: function(course, callback) {
-			var win = this.getEnrollmentWindow();
-			if (win) {
-				console.error('Enrollment already in progress.  How did you manage this', win);
-				return null;
-			}
-			return this.getView('courseware.enrollment.Window').create({record: course, callback: callback});
-		},
 
 
 		/**
@@ -568,76 +489,6 @@ Ext.define('NextThought.controller.Store', function() {
 			else {
 				this.transitionToComponent(win, cfg);
 			}
-
-		},
-
-
-		toggleEnrollmentStatus: function(rec, callback) {
-			var url = rec.getLink('enroll') || rec.getLink('unenroll'),
-				req = {
-					url: getURL(url),
-					method: 'POST',
-					jsonData: Ext.encode({courseId: rec.getId()}),
-					scope: this,
-					callback: callback
-				};
-
-			Ext.Ajax.request(req);
-		},
-
-
-		showEnrollmentConfirmation: function(view, course) {
-			var me = this,
-				win = me.getEnrollmentWindow();
-
-			if (!win) {
-				console.error('Expected a purchase window', arguments);
-				return;
-			}
-
-			if (course.getLink('enroll')) {
-				me.toggleEnrollmentStatus(course, function(q, s, r) {
-					if (!s) {
-						console.log(r.responseText);
-						win.showError('An unknown error occurred.  Please try again later.');
-						win.setConfirmState(false);
-						return;
-					}
-
-					me.transitionToComponent(win, {xtype: 'enrollment-complete', record: course});
-				});
-				return;
-			}
-
-			me.transitionToComponent(win, {xtype: 'enrollment-confirm', record: course});
-		},
-
-
-		showEnrollmentComplete: function(view, course) {
-			var me = this,
-				win = this.getEnrollmentWindow();
-
-			if (!win) {
-				console.error('Expected a purchase window', arguments);
-				return;
-			}
-
-			if (course.getLink('unenroll')) {
-				me.toggleEnrollmentStatus(course, function(q, s, r) {
-					if (!s) {
-						console.log(r.responseText);
-						win.showError('An unknown error occurred. Please try again later.');
-						win.setConfirmState(false);
-						return;
-					}
-
-					me.transitionToComponent(win, {xtype: 'enrollment-complete', record: course});
-				});
-			}
-			else {
-				this.transitionToComponent(win, {xtype: 'enrollment-complete', record: course});
-			}
-
 
 		},
 

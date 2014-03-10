@@ -35,6 +35,17 @@ Ext.define('NextThought.model.courseware.CourseCatalogEntry', {
 		} catch (e) {}
 
 		return false;
+	},
+
+
+	findByMyCourseInstance: function() {
+
+		var myCoursInstance = this.getLink('CourseInstance');
+
+		return function(instance) {
+			var i = instance.get('CourseInstance') || instance;
+			return myCoursInstance === getURL(i.get('href'));
+		};
 	}
 });
 

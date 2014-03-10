@@ -21,7 +21,6 @@ Ext.define('NextThought.view.store.Collection', {
 		'data-qtip': '{Title:htmlEncode}', cn: [
 			{ cls: 'cover', style: { backgroundImage: 'url({Icon})' }},
 			{ cls: 'meta', cn: [
-				{ cls: 'courseName', html: '{Name}' },
 				{ cls: 'title', html: '{Title}' },
 				{ cls: 'author', html: '{Provider}' },
 				{tag: 'tpl', 'if': 'Amount', cn: { cls: 'price', html: '{Amount:ntiCurrency(values.Currency)}'}},

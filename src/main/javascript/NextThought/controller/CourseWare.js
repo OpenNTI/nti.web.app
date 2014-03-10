@@ -41,7 +41,11 @@ Ext.define('NextThought.controller.CourseWare', {
 		'courseware.assessment.assignments.View',
 		'courseware.assessment.Activity',
 		'courseware.assessment.Navigation',
-		'courseware.assessment.Performance'
+		'courseware.assessment.Performance',
+		'courseware.coursecatalog.Collection',
+		'courseware.enrollment.Window',
+		'courseware.enrollment.Confirm',
+		'courseware.enrollment.Complete'
 	],
 
 
@@ -51,7 +55,8 @@ Ext.define('NextThought.controller.CourseWare', {
 		{ ref: 'courseAssignmentsView', selector: 'content-view-container course-assessment' },
 		{ ref: 'libraryView', selector: 'library-view-container' },
 		{ ref: 'enrolledCoursesView', selector: 'library-view-container course-collection[kind=enrolled]' },
-		{ ref: 'administeredCoursesView', selector: 'library-view-container course-collection[kind=admin]' }
+		{ ref: 'administeredCoursesView', selector: 'library-view-container course-collection[kind=admin]' },
+		{ ref: 'enrollmentWindow', selector: 'enrollment-window'}
 	],
 	//</editor-fold>
 
@@ -66,18 +71,40 @@ Ext.define('NextThought.controller.CourseWare', {
 				'#main-reader-view reader-content': {
 					'beforeNavigate': 'onBeforeContentReaderNavigation'
 				},
+
 				'content-view-container': {
 					'get-course-hooks': 'applyCourseHooks'
 				},
+
+				'enrollment-detailview': {
+					'show-enrollment-confirmation': 'showEnrollmentConfirmation'
+				},
+
+				'enrollment-confirm': {
+					'show-enrollment-complete': 'showEnrollmentComplete'
+				},
+
+				'enrollment-complete': {
+					'close': 'forceCloseWindow'
+				},
+
+				'course-catalog-collection': {
+					'select': 'onCourseCatalogItemSelect'
+				},
+
 				'*': {
 					'course-selected': 'onCourseSelected',
-					'navigate-to-assignment': 'onNavigateToAssignment'
+					'navigate-to-assignment': 'onNavigateToAssignment',
+					'unauthorized-navigation': 'maybeShowEnroll',
+					'enrollment-enrolled-complete': 'courseEnrolled',
+					'enrollment-dropped-complete': 'courseDropped'
 				}
 			},
 			controller: {
 				'*': {
 					'course-selected': 'onCourseSelected',
-					'navigate-to-forum': 'onNavigateToForum'
+					'navigate-to-forum': 'onNavigateToForum',
+					'unauthorized-navigation': 'maybeShowEnroll'
 				}
 			}
 		};
@@ -157,6 +184,7 @@ Ext.define('NextThought.controller.CourseWare', {
 
 	setupAvailableCourses: function(source) {
 		var store = this.__setupStore('courseware.AvailableCourses', source);
+
 		if (!store) {
 			return;
 		}
@@ -166,7 +194,6 @@ Ext.define('NextThought.controller.CourseWare', {
 			load: 'onAvailableCoursesLoaded'
 		});
 		store.load();
-
 	},
 
 
@@ -196,7 +223,8 @@ Ext.define('NextThought.controller.CourseWare', {
 
 
 	onAvailableCoursesLoaded: function(store) {
-		var me = this,
+		var me = this, view = this.getLibraryView().getCatalogView(),
+			archiveStore, archived, now = new Date(),
 			contentMap = me.TEMP_WORKAROUND_COURSE_TO_CONTENT_MAP;
 		store.each(function(o) {
 			var k = o.get('ContentPackageNTIID');
@@ -205,6 +233,43 @@ Ext.define('NextThought.controller.CourseWare', {
 			} else {
 				console.error('Assertion Failed! There is another mapping to content package: ' + k);
 			}
+		});
+
+		if (!store.getCount()) {
+			return;
+		}
+
+		function archivedFilter(r) {
+			var e = r.raw.EndDate;
+			return e && (new Date(e) < now);
+		}
+
+		function activeFilter(r) { return !archivedFilter(r); }
+
+		archived = store.getRange().filter(archivedFilter);
+
+		view.add({
+			store: store,
+			hidden: false,
+			xtype: 'course-catalog-collection',
+			id: 'course-catalog-collection',
+			name: getString('course.catalog', 'Available Courses')
+		});
+
+		//Do archived courses here.
+		if (!archived || archived.length === 0) {
+			return;
+		}
+
+		store.filter(activeFilter);//don't remove, so we can still find them.
+		archiveStore = NextThought.store.courseware.AvailableCourses.create({proxy: 'memory', data: archived});
+
+		view.add({
+			store: archiveStore,
+			hidden: false,
+			xtype: 'course-catalog-collection',
+			id: 'course-catalog-archive-collection',
+			name: getString('course.catalog.archived', 'Archived Courses')
 		});
 	},
 
@@ -217,6 +282,159 @@ Ext.define('NextThought.controller.CourseWare', {
 				console.debug('Hiding ' + cmp.id + ' because the library or the store (' + store.storeId + ') was empty');
 			}
 		});
+	},
+	//</editor-fold>
+
+
+	//<editor-fold desc="Enrollment/Drop Interaction">
+	toggleEnrollmentStatus: function(catelogEntry, enrollement) {
+		var collection = (Service.getCollection('EnrolledCourses', 'Courses') || {}).href;
+		if (enrollement) {
+			return Service.requestDelete(enrollement.get('href'));
+		}
+
+		return Service.post(collection, catelogEntry.raw);
+	},
+
+
+	enrollmentChanged: function() {
+		var library = Library.getStore();
+
+		library.on({
+			single: true,
+			scope: this,
+			load: 'reloadEnrolledStores'
+		});
+
+		//reload the library
+		library.load();
+
+		//Refresh the user?
+		$AppConfig.userObject.refresh();
+	},
+
+
+	reloadEnrolledStores: function() {
+		//reload enrolled/administered
+		Ext.getStore('courseware.EnrolledCourses').load();
+	},
+
+
+	courseEnrolled: function() {
+		this.enrollmentChanged();
+	},
+
+
+	courseDropped: function(win, rec) {
+		this.enrollmentChanged();
+		this.fireEvent('content-dropped', rec);
+	},
+	//</editor-fold>
+
+
+	maybeShowEnroll: function(sender, ntiid) {
+		//var course = ntiid && this.courseForNtiid(ntiid);
+		/*if (course && !course.isEnrolled()) {
+			this.showEnrollment(course);
+		}
+		return !course;
+		*/
+	},
+
+
+	onCourseCatalogItemSelect: function(sel, record) {
+		this.showEnrollmentWindow(record);
+		return false;//prevent the Store from handling this as the base class is a store view.
+	},
+
+
+	//<editor-fold desc="Enrollment Window">
+	showEnrollmentWindow: function(course, callback) {
+		var win = this.getEnrollmentWindow();
+		if (win) {
+			console.error('Enrollment already in progress.  How did you manage this', win);
+			return null;
+		}
+
+		return this.getView('courseware.enrollment.Window').create({record: course, callback: callback});
+	},
+
+
+	showEnrollmentConfirmation: function(view, course) {
+		var me = this,
+			enrolledStore = Ext.getStore('courseware.EnrolledCourses'),
+			win = me.getEnrollmentWindow();
+
+		if (!win) {
+			console.error('Expected a course window', arguments);
+			return;
+		}
+
+		enrolledStore.findCourseBy(course.findByMyCourseInstance())
+				.then(
+				function() { //found, enrolled
+					me.transitionToComponent(win, {xtype: 'enrollment-confirm', record: course, enrolled: true});
+				},
+				function() {//not enrolled
+					me.toggleEnrollmentStatus(course)
+							.then(function() {
+								me.transitionToComponent(win, {xtype: 'enrollment-complete', record: course, enrolled: true});
+							})
+							.fail(function(reason) {
+								console.log(reason);
+								win.showError('An unknown error occurred.  Please try again later.');
+								win.setConfirmState(false);
+							});
+				});
+	},
+
+
+	showEnrollmentComplete: function(view, course) {
+		var me = this,
+			enrolledStore = Ext.getStore('courseware.EnrolledCourses'),
+			win = this.getEnrollmentWindow();
+
+		if (!win) {
+			console.error('Expected a purchase window', arguments);
+			return;
+		}
+
+		enrolledStore.findCourseBy(course.findByMyCourseInstance())
+				.then(function(enrollment) {//found to be enrolled, lets drop...
+					me.toggleEnrollmentStatus(course, enrollment)
+							.then(function() {
+								me.transitionToComponent(win, {xtype: 'enrollment-complete', record: course, enrolled: false});
+							})
+							.fail(function(reason) {
+								console.log(reason);
+								win.showError('An unknown error occurred. Please try again later.');
+								win.setConfirmState(false);
+							});
+				},
+				function() {//no found, not enrolled
+					this.transitionToComponent(win, {xtype: 'enrollment-complete', record: course, enrolled: false});
+				});
+	},
+
+
+	transitionToComponent: function(win, cfg) {
+		win.hideError();
+		win.removeAll(true);
+		return win.add(cfg);
+	},
+
+
+	forceCloseWindow: function(cmp, w) {
+		var win = this.getEnrollmentWindow();
+
+		if (!win) {
+			console.error('Expected a enrollment window', arguments);
+			return;
+		}
+
+		win.forceClosing = true;
+		win.close();
+		delete win.forceClosing;
 	},
 	//</editor-fold>
 

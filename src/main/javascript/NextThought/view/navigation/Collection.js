@@ -33,7 +33,7 @@ Ext.define('NextThought.view.navigation.Collection', {
 	onClassExtended: function(cls, data) {
 		data.entryTpl = data.entryTpl || cls.superclass.entryTpl || false;
 
-		var tpl = cls.superclass.tpl;
+		var tpl = cls.superclass.__tpl || cls.superclass.tpl;
 
 		if (!data.tpl) {
 			data.tpl = tpl;
@@ -41,10 +41,15 @@ Ext.define('NextThought.view.navigation.Collection', {
 		//Allow the subclass to redefine the template and include the super's template
 		else {
 			data.tpl = data.tpl.replace('{super}', tpl);
+			tpl = data.tpl;
 		}
 
-		//merge in subclass's templates
-		data.tpl = data.tpl.replace('{entry}', data.entryTpl || '');
+		data.__tpl = tpl;
+
+		if (data.entryTpl) {
+			//merge in subclass's templates
+			data.tpl = data.tpl.replace('{entry}', data.entryTpl || '');
+		}
 	},
 
 

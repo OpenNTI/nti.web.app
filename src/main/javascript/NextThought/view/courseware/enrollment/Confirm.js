@@ -23,8 +23,8 @@ Ext.define('NextThought.view.courseware.enrollment.Confirm', {
 	beforeRender: function() {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {},{
-			enroll: this.record.getLink('unenroll') ? 'drop' : 'enroll in',
-			detail: getString(this.record.getLink('unenroll') ? 'drop.detail' : 'enroll.detail')
+			enroll: this.enrolled ? 'drop' : 'enroll in',
+			detail: getString(this.enrolled ? 'drop.detail' : 'enroll.detail')
 		});
 	},
 

@@ -28,20 +28,20 @@ Ext.define('NextThought.view.courseware.enrollment.Complete', {
 
 	beforeRender: function() {
 		var rec = this.record,
-			enroll = !Ext.isEmpty(this.record.getLink('enroll')),
+			enroll = !this.enrolled,
 			prefix = enroll ? 'enroll' : 'unenroll',
 			preview = this.record.get('Preview') ? 'preview' : 'active',
-			tplReplacment, win;
+			tplReplacement, win;
 
 		this.callParent(arguments);
 
 		tplReplacement = {
-			headerHtml: getString('enrollment.'+prefix+'.'+preview+'.header', null, true) || getString('enrollment.'+prefix+'.header'),
-			descriptionHtml: getString('enrollment.'+prefix+'.'+preview+'.description', null, true) || getString('enrollment.'+prefix+'.description')
+			headerHtml: getString('enrollment.' + prefix + '.' + preview + '.header', null, true) || getString('enrollment.' + prefix + '.header'),
+			descriptionHtml: getString('enrollment.' + prefix + '.' + preview + '.description', null, true) || getString('enrollment.' + prefix + '.description')
 		};
 
-		Ext.Object.each(tplReplacement, function(key, val){
-			this.renderTpl = this.renderTpl.replace('%'+key+'%', val);
+		Ext.Object.each(tplReplacement, function(key, val) {
+			this.renderTpl = this.renderTpl.replace('%' + key + '%', val);
 		}, this);
 
 		this.renderData = Ext.apply(this.renderData || {}, this.record.data);
@@ -50,8 +50,8 @@ Ext.define('NextThought.view.courseware.enrollment.Complete', {
 		win.headerEl.select('.tab').addCls('visited locked');
 		win.on({
 			single: true,
-			close: function(){
-				win.fireEvent(Ext.String.format('enrollment-{0}ed-complete',enroll?'enroll':'dropp'),win, rec);
+			close: function() {
+				win.fireEvent(Ext.String.format('enrollment-{0}ed-complete', enroll ? 'enroll' : 'dropp'), win, rec);
 			}
 		});
 	},

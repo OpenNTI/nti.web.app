@@ -58,6 +58,7 @@ Ext.define('NextThought.view.courseware.info.outline.OpenCourseInfo', {
 			unenroll = p && p.getLink('unenroll'),
 			me = this;
 		if (p) {
+			//Fix me:
 			this.fireEvent('show-purchasable', this, p, function() {
 				if (unenroll) {
 					console.log('Purchasable called back. To the library we go');
