@@ -231,17 +231,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 
 	_showMask: function() {
-		var me = this,
-			el = me.el;
-
-		me._maskIn = setTimeout(function() {
-			var gridMask = (me.down('gridview') || {}).loadMask;
-			if (gridMask && !gridMask.isDestroyed) {
-				if (gridMask.isVisible()) {
-					gridMask.hide();
-				}
-				gridMask.disable();
-			}
+		var el = this.el;
+		this._maskIn = setTimeout(function() {
 			if (el && el.dom) {
 				el.mask('Loading', 'loading', true);
 			}
@@ -260,14 +251,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 	unmask: function() {
 		this._masked--;
-		var gridMask = (this.down('gridview') || {}).loadMask;
 		if (this._masked <= 0) {
 			this._masked = 0;
 			clearTimeout(this._maskIn);
-			if (gridMask && !gridMask.isDestroyed) {
-				gridMask.enable();
-			}
-
 			if (this.el && this.el.dom) {
 				this.el.unmask();
 			}
