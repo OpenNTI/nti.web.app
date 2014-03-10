@@ -17,7 +17,7 @@ Ext.define('NextThought.view.contacts.outline.View', {
 		{ cls: 'header', cn: [
 			'{outlineLabel}'
 		]},
-		{ cls: 'outline-list scrollable'},
+		{ cls: 'outline-list'},
 		{ tag: 'tpl', 'if': 'buttons', cn: { cls: 'buttons', cn: [
 			{ tag: 'tpl', 'if': 'canjoin', cn: {
 				cls: 'join join-{type} contact-button', html: 'Join {type:capitalize}' } },
@@ -64,7 +64,7 @@ Ext.define('NextThought.view.contacts.outline.View', {
 
 	initComponent: function() {
 		this.callParent(arguments);
-		this.addCls('nav-outline make-white');
+		this.addCls('nav-outline make-white scrollable');
 		if (this.subType === 'contact') {
 			this.mixins.contactSearching.constructor.apply(this, arguments);
 		}
