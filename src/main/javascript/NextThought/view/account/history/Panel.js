@@ -181,7 +181,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 				function(item) {
 					var m = item.get('MimeType'),
 						f = !m || registry.hasOwnProperty(m);
-					if (!f) {console.warn('Got more than we asked for! ' + item.get('MimeType'));}
+					if (!f) {console.warn('Unregistered Type: ' + item.get('MimeType'), 'This component does not know how to render this item.');}
 					return f;
 				}
 			]
