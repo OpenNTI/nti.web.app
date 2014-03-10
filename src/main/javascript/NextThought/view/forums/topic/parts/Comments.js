@@ -423,8 +423,7 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 
 
 	openEditor: function(record, el, width, cancelCallback, isEdit) {
-		var me = this, refreshMon,
-			oldHeight = el.getHeight();
+		var me = this, refreshMon;
 
 		width = width || el.getWidth();
 
@@ -482,7 +481,7 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 			'deactivated-editor': function() {
 				//if there isn't a record its a new top level comment
 				if (!record) {
-					el.setHeight(oldHeight);
+					el.setHeight(undefined);
 					return;
 				}
 				//if I'm editing get the node for the record, if its a reply get its parent node
@@ -501,8 +500,8 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 					return;
 				}
 
-				//restore the height of the element before the editor was opened
-				node.setHeight(oldHeight);
+				//set the height to undefined, so that it can account for any height changes after an edit
+				node.setHeight(undefined);
 			}
 		});
 	},
