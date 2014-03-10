@@ -317,7 +317,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 					grid.markColumn(grid.down('gridcolumn[sortState]'));
 				});
 			},
-			itemclick: {fn: 'onItemClicked', scope: this}
+			itemclick: {fn: 'onItemClicked', scope: this},
+			select: function(cmp, record) {
+				me.selModel.deselect(record);
+			}
 		});
 	},
 
