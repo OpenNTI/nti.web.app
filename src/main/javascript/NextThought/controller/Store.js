@@ -1,4 +1,4 @@
-Ext.define('NextThought.controller.Store', function(){
+Ext.define('NextThought.controller.Store', function() {
 
 	//<editor-fold desc="PurchaseHelper">
 	/**
@@ -76,8 +76,8 @@ Ext.define('NextThought.controller.Store', function(){
 				method: 'POST',
 				scope: this,
 				callback: function(req, s, resp) {
+					var result;
 					try {
-						var result;
 						if (!s) {
 							console.error('Purchase attempt was unsuccessful', arguments);
 							this.delegate.purchaseAttemptRequestFailed.call(this.scope, this, resp);
@@ -111,8 +111,8 @@ Ext.define('NextThought.controller.Store', function(){
 					method: 'GET',
 					scope: this,
 					callback: function(req, s, resp) {
+						var result;
 						try {
-							var result;
 							if (!s) {
 								console.error('Purchase attempt poll was unsuccesful.  Will keep trying', arguments);
 								this.processPurchaseAttempt(purchaseAttempt);
@@ -141,12 +141,12 @@ Ext.define('NextThought.controller.Store', function(){
 
 
 		processPurchaseAttempt: function(purchaseAttempt, immediate) {
+			var now = new Date().getTime();
+
 			if (purchaseAttempt && purchaseAttempt.isComplete()) {
 				this.handleCompletedPaymentAttempt(purchaseAttempt);
 				return;
 			}
-
-			var now = new Date().getTime();
 
 			if (this.startedPollingAt + this.maxWaitInMillis < now) {
 				//Hmm, not good.  We didn't complete in the time we wanted to wait.
@@ -292,7 +292,7 @@ Ext.define('NextThought.controller.Store', function(){
 
 
 		enrollmentChanged: function() {
-			var purchasables = this.getPurchasableStore().load(),
+			var purchasables = this.getPurchasableStore(),
 				library = Library.getStore();
 
 			//TODO: move all course work into the CourseWare controller.
@@ -313,7 +313,7 @@ Ext.define('NextThought.controller.Store', function(){
 		},
 
 
-		courseEnrolled: function(win, rec) {
+		courseEnrolled: function() {
 			this.enrollmentChanged();
 		},
 
@@ -328,15 +328,11 @@ Ext.define('NextThought.controller.Store', function(){
 		//items that have not yet been purchased?
 		maybeAddPurchasables: function() {
 
-			if (!(this.getPurchasableStore().snapshot ? this.getPurchasableStore().snapshot : this.getPurchasableStore()).getCount()) {
-				return;
-			}
-
 			var view = this.getLibraryView().getCatalogView(),
 				store = this.getPurchasableStore(),
 				archive = this.archiveStore || new NextThought.store.Purchasable();
 
-			archive.loadRecords((store.snapshot ? store.snapshot : store).getRange());
+			archive.loadRecords((store.snapshot || store.data).getRange());
 			this.archiveStore = archive;
 
 			function filter(r) {
@@ -443,11 +439,12 @@ Ext.define('NextThought.controller.Store', function(){
 				return true;
 			}
 
+			var purchasable = ntiid && ContentUtils.purchasableForContentNTIID(ntiid, filter);
+
 			if (!ntiid) {
 				console.error('No ntiid!');
 			}
 
-			var purchasable = ntiid && ContentUtils.purchasableForContentNTIID(ntiid, filter);
 			if (purchasable) {
 				if (purchasable instanceof this.getCourseModel()) {
 					this.showEnrollment(purchasable);
@@ -472,7 +469,8 @@ Ext.define('NextThought.controller.Store', function(){
 		/**
 		 * Show the detail/purchase view for the given purchasable
 		 *
-		 * @param purchasable The Purchasable object to show
+		 * @param {NextThought.model.store.Purchasable} purchasable The Purchasable object to show
+		 * @param {Boolean} showHistory
 		 */
 		showPurchasable: function(purchasable, showHistory) {
 			var win = this.getPurchaseWindow();
@@ -495,7 +493,7 @@ Ext.define('NextThought.controller.Store', function(){
 		},
 
 
-		navigateToPurchasable: function(obj, fragment) {
+		navigateToPurchasable: function(obj) {
 			var me = this;
 
 			if (obj instanceof NextThought.model.store.Purchasable) {
@@ -683,10 +681,11 @@ Ext.define('NextThought.controller.Store', function(){
 		 *
 		 * Validates the given coupon code for the provided purchasable item.
 		 *
-		 * @param cmp The owner cmp
-		 * @param purchaseDesc an object containing the Purchasable, Quantity, and Coupon.  Ommitted quantity is assumed 1, Coupon is optional.
-		 * @param success The success callback called if the provided coupone is valid
-		 * @param failure The failure callback called if we are unable to validate the coupon for any reason
+		 * @param {Ext.Component} sender The owner cmp
+		 * @param {Object} desc an object containing the Purchasable, Quantity, and Coupon.  Ommitted quantity is assumed 1, Coupon is optional.
+		 * @param {Function} success The success callback called if the provided coupone is valid
+		 * @param {Function} failure The failure callback called if we are unable to validate the coupon for any reason
+		 * @param {Object} scope
 		 */
 		pricePurchase: function(sender, desc, success, failure, scope) {
 			var purchaseDesc = desc || {},
@@ -729,11 +728,11 @@ Ext.define('NextThought.controller.Store', function(){
 
 			try {
 				this.doPricingRequest(purchasable.getLink('pricing'), data, function(r, s, response) {
+					var result;
 					if (sender !== this) {
 						delete win.lockPurchaseAction;
 					}
 					try {
-						var result;
 						if (!s) {
 							console.error('Pricing call failed', arguments);
 							Ext.callback(failure, scope, [r, response]);
@@ -771,9 +770,9 @@ Ext.define('NextThought.controller.Store', function(){
 		/**
 		 * Called to generate a stripe payment token from purchase information
 		 *
-		 * @param cmp the owner cmp
-		 * @param purchasable the purchasable object
-		 * @param cardinfo to provide to stripe in exchange for a token
+		 * @param {NextThought.view.store.purchase.Form} cmp the owner cmp
+		 * @param {Object} desc
+		 * @param {Object} cardinfo to provide to stripe in exchange for a token
 		 */
 		createPurchase: function(cmp, desc, cardinfo) {
 			var purchasable = desc.Purchasable || {},
@@ -853,14 +852,15 @@ Ext.define('NextThought.controller.Store', function(){
 		/**
 		 * Make the purchase for purhcasable using tokenObject
 		 *
-		 * @param cmp the owner cmp
-		 * @param purchaseDesc an object containing the Purchasable, Quantity, and Coupon.  Ommitted quantity is assumed 1, Coupon is optional.
-		 * @param tokenObject the stripe token object
+		 * @param {Component} cmp the owner cmp
+		 * @param {Object} purchaseDescription an object containing the Purchasable, Quantity, and Coupon.  Ommitted quantity is assumed 1, Coupon is optional.
+		 * @param {Object} tokenObject the stripe token object
+		 * @param {NextThought.model.store.StripePricedPurchasable} pricingInfo
 		 */
 		submitPurchase: function(cmp, purchaseDescription, tokenObject, pricingInfo) {
 
 			var purchasable = purchaseDescription.Purchasable,
-				tokenId = (tokenObject || {}).id,
+				//tokenId = (tokenObject || {}).id,
 				win = this.getPurchaseWindow(), delegate,
 				me = this;
 
@@ -893,24 +893,24 @@ Ext.define('NextThought.controller.Store', function(){
 
 			delegate = {
 				purchaseAttemptCompleted: function(helper, purchaseAttempt) {
-					this.refreshPurchasable(purchasable);
-					this.transitionToComponent(win, {xtype: 'purchase-complete', purchaseDescription: purchaseDescription, purchaseAttempt: purchaseAttempt});
+					me.refreshPurchasable(purchasable);
+					me.transitionToComponent(win, {xtype: 'purchase-complete', purchaseDescription: purchaseDescription, purchaseAttempt: purchaseAttempt});
 					done();
 				},
 				purchaseAttemptFailed: function(helper, purchaseAttempt) {
-					this.showFormWithError(win, cmp, purchasable, purchaseAttempt.get('Error'), tokenObject);
+					me.showFormWithError(win, cmp, purchasable, purchaseAttempt.get('Error'), tokenObject);
 					done();
 				},
-				purchaseAttemptTimedOut: function(helper, purchaseAttempt) {
-					this.showFormWithError(win, cmp, purchasable, 'Purchase timed out.', tokenObject);
+				purchaseAttemptTimedOut: function(/*helper, purchaseAttempt*/) {
+					me.showFormWithError(win, cmp, purchasable, 'Purchase timed out.', tokenObject);
 					done();
 				},
-				purchaseAttemptRequestFailed: function(helper, responseOrMsg, exception) {
-					this.showFormWithError(win, cmp, purchasable, responseOrMsg, tokenObject);
+				purchaseAttemptRequestFailed: function(helper, responseOrMsg/*, exception*/) {
+					me.showFormWithError(win, cmp, purchasable, responseOrMsg, tokenObject);
 					done();
 				},
-				purchaseAttemptCompletedWithUnknownStatus: function(helper, purchaseAttempt) {
-					this.showFormWithError(win, cmp, purchasable, 'Unable to complete purchase at this time.', tokenObject);
+				purchaseAttemptCompletedWithUnknownStatus: function(/*helper, purchaseAttempt*/) {
+					me.showFormWithError(win, cmp, purchasable, 'Unable to complete purchase at this time.', tokenObject);
 					done();
 				}
 			};
@@ -987,7 +987,7 @@ Ext.define('NextThought.controller.Store', function(){
 				return false;
 			}
 			win.lockPurchaseAction = true;
-			this.safelyMaskWindow(win, 'Redeeming activation code.');
+			me.safelyMaskWindow(win, 'Redeeming activation code.');
 
 
 			if (!url) {
@@ -999,20 +999,20 @@ Ext.define('NextThought.controller.Store', function(){
 			try {
 				this.doActivateWithCode(url, {purchasableID: purchasable.getId(), invitation_code: code}, function(r, s, response) {
 					try {
-						this.safelyUnmaskWindow(win);
+						me.safelyUnmaskWindow(win);
 						delete win.lockPurchaseAction;
 						if (!s) {
 							win.showError('The activation key you entered is invalid.', 'Activation Key');
 						}
 						else {
-							this.refreshPurchasable(purchasable);
-							this.transitionToComponent(win, {xtype: 'purchase-complete', purchaseDescription: {Purchasable: purchasable}});
+							me.refreshPurchasable(purchasable);
+							me.transitionToComponent(win, {xtype: 'purchase-complete', purchaseDescription: {Purchasable: purchasable}});
 						}
 					}
 					catch (error) {
 						console.error('An unexpected exception occurred in activation code callback', Globals.getError(error), arguments);
 						win.showError('A problem occurred redeeming your activation key');
-						this.safelyUnmaskWindow(win);
+						me.safelyUnmaskWindow(win);
 						delete win.lockPurchaseAction;
 					}
 				});
@@ -1020,7 +1020,7 @@ Ext.define('NextThought.controller.Store', function(){
 			catch (e) {
 				console.error('An unexpected exception occurred in activation code callback', Globals.getError(e), arguments);
 				win.showError('A problem occurred redeeming your activation key');
-				this.safelyUnmaskWindow(win);
+				me.safelyUnmaskWindow(win);
 				delete win.lockPurchaseAction;
 			}
 		},
@@ -1029,7 +1029,7 @@ Ext.define('NextThought.controller.Store', function(){
 		/**
 		 * Handler for canceling an in progress purchase.
 		 *
-		 * @param btn the button triggering the cancel
+		 * @param {Ext.Component} btn the button triggering the cancel
 		 */
 		purchaseWindowCancel: function(btn) {
 			btn.up('window').close();
