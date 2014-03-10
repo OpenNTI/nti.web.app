@@ -73,27 +73,42 @@ Ext.define('NextThought.view.account.history.Panel', {
 	}),
 
 
-	registerSubType: function(key, itemTpl) {
-		if (!this.tpl.subTemplates) {
-			this.tpl.subTemplates = {};
+	registerSubType: function reg(key, itemTpl) {
+		var me = this;
+
+		if (!me.tpl.subTemplates) {
+			me.tpl.subTemplates = {};
 		}
-		this.tpl.subTemplates[key] = itemTpl;
+
+
+		(!Ext.isArray(key) ? [key] : key).forEach(function(key) {
+			me.tpl.subTemplates[key] = itemTpl;
+		});
 	},
 
 
 	registerFillData: function(key, fn) {
-		if (!this.fillData) {
-			this.fillData = {};
+		var me = this;
+		if (!me.fillData) {
+			me.fillData = {};
 		}
-		this.fillData[key] = fn;
+
+		(!Ext.isArray(key) ? [key] : key).forEach(function(key) {
+			me.fillData[key] = fn;
+		});
 	},
 
 
 	registerClickHandler: function(key, fn) {
-		if (!this.clickHandlers) {
-			this.clickHandlers = {};
+		var me = this;
+
+		if (!me.clickHandlers) {
+			me.clickHandlers = {};
 		}
-		this.clickHandlers[key] = fn;
+
+		(!Ext.isArray(key) ? [key] : key).forEach(function(key) {
+			me.clickHandlers[key] = fn;
+		});
 	},
 
 
@@ -166,12 +181,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 				}
 			],
 			sorters: [
-				{
-					direction: 'ASC',
-					sorterFn: function(a, b) {
-						return a.isHeader === b.isHeader ? 0 : a.isHeader ? -1 : 1;
-					}
-				},
+				function(a, b) { return a.isHeader === b.isHeader ? 0 : a.isHeader ? -1 : 1; },
 				{
 					direction: 'DESC',
 					property: 'CreatedTime'
@@ -198,7 +208,9 @@ Ext.define('NextThought.view.account.history.Panel', {
 			exclude: [
 				 'redaction',
 				 'assessment.AssessedQuestion',
-				 'assessment.AssessedQuestionSet'
+				 'assessment.AssessedQuestionSet',
+				 'forums.communityheadlinepost',
+				 'forums.personalblogentrypost'
 			 ].map(makeMime).join(',')
 		});
 
