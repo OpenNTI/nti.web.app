@@ -66,7 +66,7 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 				ntiid = req && req.ntiid, p;
 
 			if (resp.status === 403) {
-				p = ContentUtils.purchasableForContentNTIID(ntiid) || CourseWareUtils.courseForNtiid(ntiid);
+				p = CourseWareUtils.courseForNtiid(ntiid) || ContentUtils.purchasableForContentNTIID(ntiid);
 				if (p) {
 					me.handlePurchasable(p, el);
 					Ext.callback(fin);
