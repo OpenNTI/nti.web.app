@@ -116,7 +116,7 @@ Ext.define('NextThought.view.menus.search.Result', {
 	//This code assumes matches within fragments don't overlap, which I was told can be guarenteed
 	wrapFragmentHits: function() {
 		var fragments = this.hit.get('Fragments'),
-			wrappedFragmentText = [];
+			wrappedFragmentText = [],
 			me = this;
 
 		Ext.each(fragments, function(fragment, index) {
@@ -137,9 +137,7 @@ Ext.define('NextThought.view.menus.search.Result', {
 					}
 
 					newString += wrappedText.slice(0, match[0]);
-					newString += '<span>';
-					newString += wrappedText.slice(match[0], match[1]);
-					newString += '</span>';
+					newString += Ext.DomHelper.markup({tag: 'span', html: wrappedText.slice(match[0], match[1])});
 					newString += wrappedText.slice(match[1]);
 					wrappedText = newString;
 				});
