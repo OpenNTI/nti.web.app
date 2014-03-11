@@ -103,7 +103,7 @@ Ext.define('NextThought.view.courseware.enrollment.Window', {
 		var enrolling = !this.record.get('enrolled');
 		this.renderData = Ext.applyIf(this.renderData || {}, this.record.getData());
 		this.renderData = Ext.apply(this.renderData, {enrollProcess: enrolling});
-		this.renderData.by = this.renderData.Author || this.renderData.Provider;
+		this.renderData.by = this.renderData.Author || this.renderData.ProviderUniqueID;
 	},
 
 
