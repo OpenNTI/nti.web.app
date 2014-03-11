@@ -138,8 +138,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 								return '';
 							}
 
-							//if no submission or it is a non-submit assigment
-							if (!s || (!parts || !parts.length)) {
+							//if no submission
+							if (!s) {
 								return Ext.DomHelper.markup({cls: 'incomplete', html: 'Due ' + Ext.Date.format(d, 'm/d')});
 							}
 							//if the submisson is before the due date
@@ -161,15 +161,18 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 						doSort: function(state) {
 							function get(o) { o = o.data; return o.completed || o.due; }
 							var store = this.up('grid').getStore(),
+								groupModifier = state === 'ASC' ? 1 : -1,
 								sorters = [
 									{
 										direction: state,
 										property: 'dateSubmitted',
 										sorterFn: function(a, b) {
 											var v1 = !!a.get('completed'),
-												v2 = !!b.get('completed');
+												v2 = !!b.get('completed'),
+												v = v1 && !v2 ? -1 : (!v1 && v2 ? 1 : 0);
 
-											return v1 && !v2 ? -1 : (!v1 && v2 ? 1 : 0);
+											//keep the completed items on top
+											return groupModifier * v;
 										}
 									},
 									{
@@ -204,9 +207,18 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 									//the transform and root are ignored on remote sort
 									root: 'data',
 									transform: function(o) {
+										var f;
+
 										o = o && o.get('value');
 										o = o && o.split(' ')[0];
-										return o || '';
+
+										//convert it to a number so the sort makes sense
+										f = parseFloat(o, 10);
+
+										if (!isFinite(f)) {
+											f = o;
+										}
+										return f || '';
 									}
 								});
 							store.sort(sorter);
