@@ -36,7 +36,7 @@ Ext.define('NextThought.view.courseware.enrollment.Window', {
 				{ cls: 'close' }
 			]},
 			{ cls: 'info', cn: [
-				{ cls: 'bookcover', style: {backgroundImage: 'url({Icon})'} },
+				{ cls: 'bookcover', style: {backgroundImage: 'url({icon})'} },
 				{ cls: 'meta', cn: [
 					{cls: 'course', html: '{Name}'},
 					{cls: 'title', html: '{Title}'},
