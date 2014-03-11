@@ -1,7 +1,7 @@
 Ext.define('NextThought.mixins.store-feature.Purchasable', {
 
 	needsActionTplMap: {
-		'application/vnd.nextthought.course': 'needsEnrollmentTpl',
+		'application/vnd.nextthought.courseware.coursecataloglegacyentry': 'needsEnrollmentTpl',
 		'application/vnd.nextthought.purchasable': 'needsPurchaseTpl',
 		'application/vnd.nextthought.store.purchasable': 'needsPurchaseTpl'
 	},
@@ -22,10 +22,10 @@ Ext.define('NextThought.mixins.store-feature.Purchasable', {
 	needsEnrollmentTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{ cls: 'missing-context-msg', html: 'You are not enrolled in this course.' },
 		{ cls: 'missing-context-info', cn: [
-			{ cls: 'bookcover', style: {backgroundImage: 'url({Icon})'} },
+			{ cls: 'bookcover', style: {backgroundImage: 'url({icon})'} },
 			{ cls: 'meta', cn: [
 				{ cls: 'title', html: '{Title}'},
-				{ cls: 'byline', html: 'By {[values.Author||values.Provider]}'},
+				{ cls: 'byline', html: 'By {[values.Author||values.ProviderUniqueID]}'},
 				{ cls: 'buy-this', cn: { cls: 'button', html: 'Enroll Now' } }
 			]}
 		]}

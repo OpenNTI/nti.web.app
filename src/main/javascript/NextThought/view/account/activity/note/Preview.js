@@ -61,22 +61,17 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 		}
 
 		function error(req, resp) {
-			function filter(item) {
-				if (item instanceof NextThought.model.Course) {
-					return Boolean(item.getLink('enroll'));
-				}
-				return true;
-			}
-
 			req = resp.request;
 			var el = me.context.up('.context'),
-				ntiid = req && req.ntiid,
-				p = ContentUtils.purchasableForContentNTIID(ntiid, filter);
+				ntiid = req && req.ntiid, p;
 
-			if (resp.status === 403 && p) {
-				me.handlePurchasable(p, el);
-				Ext.callback(fin);
-				return;
+			if (resp.status === 403) {
+				p = ContentUtils.purchasableForContentNTIID(ntiid) || CourseWareUtils.courseForNtiid(ntiid);
+				if (p) {
+					me.handlePurchasable(p, el);
+					Ext.callback(fin);
+					return;
+				}
 			}
 
 			metaHandled = false;
@@ -223,7 +218,7 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 	navigateToItem: function() {
 		//Show purchase window if we're purchase-able
 		if (this.requiresPurchase) {
-			this.fireEvent('show-purchasable', this, this.purchasable);
+			this.purchasable.fireAcquisitionEvent(this);
 			return;
 		}
 

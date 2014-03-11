@@ -274,21 +274,16 @@ Ext.define('NextThought.view.profiles.parts.events.ActivityItem', {
 		}
 
 		function error(req, resp) {
-			function filter(item) {
-				if (item instanceof NextThought.model.Course) {
-					return Boolean(item.getLink('enroll'));
-				}
-				return true;
-			}
-
 			req = resp.request;
 			var el = me.context.up('.content-callout'),
-				ntiid = req && req.ntiid,
-				p = ContentUtils.purchasableForContentNTIID(ntiid, filter);
+				ntiid = req && req.ntiid, p;
 
 			if (resp.status === 403) {
-				me.handlePurchasable(p, el);
-				return;
+				p = ContentUtils.purchasableForContentNTIID(ntiid) || CourseWareUtils.courseForNtiid(ntiid);
+				if (p) {
+					me.handlePurchasable(p, el);
+					return;
+				}
 			}
 
 			metaHandled = false;
@@ -386,7 +381,7 @@ Ext.define('NextThought.view.profiles.parts.events.ActivityItem', {
 
 		//Show purchase window if we're purchase-able
 		if (this.requiresPurchase) {
-			this.fireEvent('show-purchasable', this, this.purchasable);
+			this.purchasable.fireAcquisitionEvent(this);
 			return;
 		}
 
