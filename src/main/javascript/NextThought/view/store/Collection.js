@@ -45,6 +45,9 @@ Ext.define('NextThought.view.store.Collection', {
 	collectData: function(records, index) {
 		var rows = this.rowSpan,
 			data = this.callParent(arguments),
+		//Unspoken gotcha: index is the index of the updated record, since we set the first to be featrued by
+		// default, 0 is false, so it still gets set as featured.  If we ever change this logic, this check
+		// will no longer be sufficiant.
 			updating = !!index;
 
 		Ext.each(data.items, function(i, x) {
