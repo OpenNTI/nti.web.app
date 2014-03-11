@@ -364,6 +364,29 @@ Ext.define('NextThought.util.Content', {
 		return true;
 	},
 
+
+	getContentPrefix: function(ntiid) {
+		var root = ContentUtils.getLineage(ntiid).last();
+
+		// NOTE: A Purchasable could represent both a book, you don't have access to,
+		// or a course you're not enrolled in. Here we try to resolve the root id by
+		// first looking if it's something in our library
+		// if not, we will use what we think the root content should be.
+
+		if (!root) {
+			//NOTE this again assumes 1-to-1 purchase to content root.
+			root = ParseUtils.ntiidPrefix(ntiid);
+			root = root ? Library.findTitleWithPrefix(root) : null;
+			root = root ? root.get('NTIID') : null;
+
+			// If we still don't have a root,  use what we think the root content should be.
+			root = root || ParseUtils.ntiidPrefix(ntiid);
+		}
+
+		return root;
+	},
+
+
 	/**
 	 * Returns a Purchasable if we have one in the store that looks
 	 * like it would contain the following ntiid.
@@ -380,28 +403,7 @@ Ext.define('NextThought.util.Content', {
 			return found;
 		}
 
-		function getPrefix(ntiid) {
-			var root = ContentUtils.getLineage(ntiid).last();
-
-			// NOTE: A Purchasable could represent both a book, you don't have access to,
-			// or a course you're not enrolled in. Here we try to resolve the root id by
-			// first looking if it's something in our library
-			// if not, we will use what we think the root content should be.
-
-			if (!root) {
-				//NOTE this again assumes 1-to-1 purchase to content root.
-				root = ParseUtils.ntiidPrefix(ntiid);
-				root = root ? Library.findTitleWithPrefix(root) : null;
-				root = root ? root.get('NTIID') : null;
-
-				// If we still don't have a root,  use what we think the root content should be.
-				root = root || ParseUtils.ntiidPrefix(ntiid);
-			}
-
-			return root;
-		}
-
-		var prefix = getPrefix(ntiid),
+		var prefix = this.getContentPrefix(ntiid),
 			purchasableStore = Ext.getStore('Purchasable'),
 			purchasable, index;
 
