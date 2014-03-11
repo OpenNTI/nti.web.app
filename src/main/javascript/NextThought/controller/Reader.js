@@ -140,9 +140,10 @@ Ext.define('NextThought.controller.Reader', {
 	maybeClearLocation: function(rec) {
 		var r = this.getContentReader(),
 			loc = r.getLocation(),
-			ntiid = loc && loc.ContentNTIID;
+			ntiid = loc && loc.ContentNTIID,
+			c = ntiid && CourseWareUtils.courseForNtiid(ntiid);
 
-		if (!rec || !ntiid || Ext.Array.contains(rec.get('Items'), ntiid)) {
+		if (!rec || !ntiid || (c && c.getId() === rec.getId())) {
 		//TODO: this should start a session transaction that ends with a "state replacement" so there is no "back"
 			this.fireEvent('show-view', 'library', true);
 			r.clearLocation();
