@@ -167,7 +167,7 @@ Ext.define('NextThought.proxy.PageSource', {
 			return;
 		}
 
-		links.forEach(function(link) {
+		(links || []).forEach(function(link) {
 			if (link.rel === 'batch-next') {
 				nextLink = link.href;
 			} else {
