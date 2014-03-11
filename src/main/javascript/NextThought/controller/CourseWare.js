@@ -621,7 +621,7 @@ Ext.define('NextThought.controller.CourseWare', {
 	window.CourseWareUtils = {
 		courseForNtiid: function(ntiid) {
 			function fn(rec) {
-				return prefix && prefix === ContentUtils.getContentPrefix(rec.get('ContentPackageNTIID'));
+				return prefix && prefix === ParseUtils.ntiidPrefix(rec.get('ContentPackageNTIID'));
 			}
 
 			var prefix = ContentUtils.getContentPrefix(ntiid),
