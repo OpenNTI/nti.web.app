@@ -36,9 +36,9 @@ Ext.define('NextThought.view.menus.search.Result', {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {},{
-			title: 'Resolving...',
+			title: '&nbsp;',
       chapter: '',
-      section: 'Resolving...',
+      section: '&nbsp;',
 			name: name,
 			fragments: Ext.pluck(hit.get('Fragments'), 'text')
 		});
