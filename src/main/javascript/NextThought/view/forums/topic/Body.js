@@ -68,6 +68,15 @@ Ext.define('NextThought.view.forums.topic.Body', {
 	},
 
 
+	addIncomingComment: function(comment) {
+		var comments = this.down('forums-topic-comment-thread');
+
+		if (comments) {
+			comments.addIncomingComment(comment);
+		}
+	},
+
+
 	showEditor: function(record, forum, pageSource, closeCallback) {
 		var me = this,
 			topicContainer = this.down('[isTopicContainer]'),

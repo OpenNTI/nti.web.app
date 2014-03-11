@@ -518,6 +518,13 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 	},
 
 
+	addIncomingComment: function(comment) {
+		if (this.topic.get('NTIID') === comment.get('ContainerId')) {
+			this.store.insertSingleRecord(comment);
+		}
+	},
+
+
 	refocusEditor: function() {
 		var msg = 'You are currently ' + (this.refocusVerb || 'creating') + ' a reply, please save or cancel it first.';
 

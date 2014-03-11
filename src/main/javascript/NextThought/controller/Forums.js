@@ -38,7 +38,8 @@ Ext.define('NextThought.controller.Forums', {
 	],
 
 	refs: [
-		{ ref: 'forumViewContainer', selector: 'forums-view-container#forums'}
+		{ ref: 'courseForum', selector: 'forums-container[isCourseForum]'},
+		{ ref: 'globalForum', selector: 'forums-container:not([isCourseForum])'}
 	],
 
 	init: function() {
@@ -996,6 +997,24 @@ Ext.define('NextThought.controller.Forums', {
 		});
 	},
 
+
+	getActiveForumContainer: function() {
+		var global = this.getGlobalForum(),
+			globalActive = global && global.isActive(),
+			course = this.getCourseForum(),
+			courseActive = course && course.isActive();
+
+		if (globalActive && !courseActive) {
+			return global;
+		}
+
+		if (!globalActive && courseActive) {
+			return course;
+		}
+
+		console.error('Both global and course forums are active...?');
+	},
+
 	//Socket handling
 	incomingChange: function(change) {
 		function updateRecordFieldCount(id, field) {
@@ -1013,9 +1032,9 @@ Ext.define('NextThought.controller.Forums', {
 			});
 		}
 
-
 		var item,
-			maybeTopic = this.getForumViewContainer().peek();
+			container = this.getActiveForumContainer(),
+			topic = container && container.down('forums-topic-view');
 
 		if (!change.isModel) {
 			change = ParseUtils.parseItems([change])[0];
@@ -1023,8 +1042,8 @@ Ext.define('NextThought.controller.Forums', {
 
 		item = change.get('Item');
 		if (item && /generalforumcomment$/.test(item.get('MimeType'))) {
-			if (maybeTopic && maybeTopic.addIncomingComment) {
-				maybeTopic.addIncomingComment(item);
+			if (topic && topic.addIncomingComment) {
+				topic.addIncomingComment(item);
 				return;
 			}
 			updateRecordFieldCount(item.get('ContainerId'), 'PostCount');

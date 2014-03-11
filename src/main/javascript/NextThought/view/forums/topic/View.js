@@ -77,5 +77,10 @@ Ext.define('NextThought.view.forums.topic.View', {
 			top = this.navigation.getY();
 
 		this.navigation.updateGridHeight(viewportHeight - top);
+	},
+
+
+	addIncomingComment: function(comment) {
+		this.body.addIncomingComment(comment);
 	}
 });
