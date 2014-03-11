@@ -8,6 +8,9 @@ end
 
 environment = :production
 
+sass_options = {:sourcemap => true,}
+enable_sourcemaps = true
+
 # Set this to the root of your project when deployed:
 http_path = "./"
 css_dir = "src/main/resources/css"
