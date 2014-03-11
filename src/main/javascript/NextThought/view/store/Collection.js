@@ -78,7 +78,7 @@ Ext.define('NextThought.view.store.Collection', {
 	},
 
 
-	onItemUpdate: function(rec, index, node) {
+	onItemUpdate: function(node) {
 		var desc = Ext.fly(node).down('.description', true),
 			prev = Ext.fly(node).down('.history', true),
 			pos, e, texts, bottom,
@@ -146,13 +146,20 @@ Ext.define('NextThought.view.store.Collection', {
 
 	detectOverflow: function() {
 		console.log('Detecting overflow...');
-		Ext.each(this.getNodes(), function(v) {this.onItemUpdate(null, null, v);},this);
+		Ext.each(this.getNodes(), function(v) {this.onItemUpdate(v);},this);
 	},
 
 
 	refresh: function() {
 		this.callParent(arguments);
-
 		this.detectOverflow();
+	},
+
+	onUpdate: function(store, rec) {
+		this.callParent(arguments);
+		var n = this.getNode(rec);
+		if (n) {
+			this.onItemUpdate(n);
+		}
 	}
 });
