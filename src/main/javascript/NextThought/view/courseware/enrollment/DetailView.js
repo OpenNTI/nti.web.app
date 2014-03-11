@@ -19,7 +19,7 @@ Ext.define('NextThought.view.courseware.enrollment.DetailView', {
 
 
 	setupRenderData: function() {
-		if (this.record.getLink('unenroll')) {
+		if (this.record.get('enrolled')) {
 			this.confirmLabel = getString('course-enrollment-drop', 'Drop');
 		} else {
 			this.confirmLabel = getString('course-enrollment-enroll', 'Enroll');
