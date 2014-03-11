@@ -365,7 +365,7 @@ Ext.define('NextThought.controller.CourseWare', {
 		if (course) {
 			Ext.getStore('courseware.EnrolledCourses').findCourseBy(course.findByMyCourseInstance())
 					//if this promise fulfills, you are enrolled, so put a handler on the failure.
-					.fail(this.showEnrollWindow.bind(this, course));
+					.fail(this.showEnrollmentWindow.bind(this, course));
 		}
 		return !course;
 	},
