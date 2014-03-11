@@ -77,6 +77,7 @@ Ext.define('NextThought.view.menus.search.Result', {
 				console.log('Container maybe a content object?');
 				ContentUtils.findContentObject(containerId, function(obj, meta) {
 					if (obj && meta && /ntivideo/.test(obj.mimeType || obj.MimeType)) {
+						me.videoObject = obj;
 						me.fillInContentMeta(meta, true);
 						me.renderData.section = obj.title;
 						if (me.rendered) {
