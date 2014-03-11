@@ -360,34 +360,8 @@ Ext.define('NextThought.controller.CourseWare', {
 	//</editor-fold>
 
 
-	courseForNtiid: function(ntiid) {
-		function fn(rec) {
-			return prefix && prefix === ContentUtils.getContentPrefix(rec.get('ContentPackageNTIID'));
-		}
-
-		var prefix = ContentUtils.getContentPrefix(ntiid),
-			store = Ext.getStore('courseware.AvailableCourses'),
-			course, index;
-
-		store = store.snapshot || store;
-
-		if (prefix) {
-			index = store.findBy(fn);
-			if (!Ext.isObject(index)) {
-				course = index >= 0 ? store.getAt(index) : null;
-			}
-			else {
-				course = index;
-			}
-		}
-
-		return course;
-
-	},
-
-
 	maybeShowEnroll: function(sender, ntiid) {
-		var course = ntiid && this.courseForNtiid(ntiid);
+		var course = ntiid && CourseWareUtils.courseForNtiid(ntiid);
 		if (course) {
 			Ext.getStore('courseware.EnrolledCourses').findCourseBy(course.findByMyCourseInstance())
 					//if this promise fulfills, you are enrolled, so put a handler on the failure.
@@ -645,6 +619,31 @@ Ext.define('NextThought.controller.CourseWare', {
 }, function() {
 
 	window.CourseWareUtils = {
+		courseForNtiid: function(ntiid) {
+			function fn(rec) {
+				return prefix && prefix === ContentUtils.getContentPrefix(rec.get('ContentPackageNTIID'));
+			}
+
+			var prefix = ContentUtils.getContentPrefix(ntiid),
+					store = Ext.getStore('courseware.AvailableCourses'),
+					course, index;
+
+			store = store.snapshot || store;
+
+			if (prefix) {
+				index = store.findBy(fn);
+				if (!Ext.isObject(index)) {
+					course = index >= 0 ? store.getAt(index) : null;
+				}
+				else {
+					course = index;
+				}
+			}
+
+			return course;
+
+		},
+
 
 		onceLoaded: function() {
 			return Promise.pool(
