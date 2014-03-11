@@ -97,7 +97,8 @@ Ext.define('NextThought.controller.CourseWare', {
 					'navigate-to-assignment': 'onNavigateToAssignment',
 					'unauthorized-navigation': 'maybeShowEnroll',
 					'enrollment-enrolled-complete': 'courseEnrolled',
-					'enrollment-dropped-complete': 'courseDropped'
+					'enrollment-dropped-complete': 'courseDropped',
+					'show-enrollment': 'showEnrollmentWindow'
 				}
 			},
 			controller: {
@@ -383,7 +384,6 @@ Ext.define('NextThought.controller.CourseWare', {
 		return course;
 
 	},
-
 
 
 	maybeShowEnroll: function(sender, ntiid) {

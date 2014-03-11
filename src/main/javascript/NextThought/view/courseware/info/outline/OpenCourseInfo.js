@@ -54,24 +54,11 @@ Ext.define('NextThought.view.courseware.info.outline.OpenCourseInfo', {
 	//</editor-fold>
 
 	showEnrollWindow: function() {
-		var p = ContentUtils.purchasableForContentNTIID(this.getInfo().get('ContentPackageNTIID')),
-			unenroll = p && p.getLink('unenroll'),
-			me = this;
-		if (p) {
-			//Fix me:
-			this.fireEvent('show-purchasable', this, p, function() {
-				if (unenroll) {
-					console.log('Purchasable called back. To the library we go');
-					me.fireEvent('go-to-library', me);
-				}
-			});
-		}
-		else {
-			alert({
-				title: getString('missing.purchasable.item.title', 'Oops!'),
-				msg: getString('missing.purchasable.item.message', 'It appears you are trying to edit an item that does not exist.')
-			});
-			console.error('No purchasable found for ', this.getInfo());
-		}
+		var me = this;
+		this.fireEvent('show-enrollment', me.getInfo(), function(enrolled) {
+			if (!enrolled) {
+				me.fireEvent('go-to-library', me);
+			}
+		});
 	}
 });

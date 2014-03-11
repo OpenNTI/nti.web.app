@@ -22,7 +22,7 @@ Ext.define('NextThought.view.courseware.enrollment.Complete', {
 	onConfirm: function() {
 		var win = this.up('window') || {};
 		this.fireEvent('close', this);
-		Ext.callback(win.callback, win);
+		Ext.callback(win.callback, win, [this.enrolled]);
 	},
 
 
