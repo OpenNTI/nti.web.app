@@ -9,8 +9,8 @@ Ext.define('NextThought.util.Parsing', {
 	],
 
 	/**
-	 * @param items
-	 * @param [supplemental] Properties to add to the parsed items (such as flags)
+	 * @param {String|String[]|Object|Object[]} items
+	 * @param {Object} [supplemental] Properties to add to the parsed items (such as flags)
 	 */
 	parseItems: function(items, supplemental) {
 		var key, item, reader, results = [];
@@ -99,7 +99,7 @@ Ext.define('NextThought.util.Parsing', {
 	 * Parses an id and returns an object containing the split portions
 	 * See http://excelsior.nextthought.com/server-docs/ntiid-structure/
 
-	 * @param id
+	 * @param {String} id
 	 * @return {Object} an object containing the components of the id
 	 */
 	parseNTIID: function(id) {
@@ -200,16 +200,18 @@ Ext.define('NextThought.util.Parsing', {
 	},
 
 
-	bookPrefixIfQuestionNtiid: function(id) {
+	/**
+	 * Returns the prefix of the content ntiid we think this ntiid would reside beneath
+	 * @param {String} id
+	 * @return {String}
+	 */
+	ntiidPrefix: function(id) {
 		var ntiid = this.parseNTIID(id);
-		if (!ntiid || ntiid.specific.type !== 'NAQ') {
-			return null;
+		if (ntiid) {
+			ntiid.specific.type = 'HTML';
+			ntiid.specific.typeSpecific = ntiid.specific.typeSpecific.split('.').first();
 		}
-
-		ntiid.specific.type = 'HTML';
-		ntiid.specific.typeSpecific = ntiid.specific.typeSpecific.split('.').first();
-
-		return ntiid.toString();
+		return ntiid && ntiid.toString();
 	},
 
 
@@ -278,8 +280,8 @@ Ext.define('NextThought.util.Parsing', {
 	/*! @source https://gist.github.com/1129031 */
 	(function(DOMParser) {
 	    'use strict';
-	    var DOMParser_proto = DOMParser.prototype
-, real_parseFromString = DOMParser_proto.parseFromString;
+	    var DOMParser_proto = DOMParser.prototype,
+			real_parseFromString = DOMParser_proto.parseFromString;
 
 	    // Firefox/Opera/IE throw errors on unsupported types
 	    try {
@@ -300,8 +302,7 @@ Ext.define('NextThought.util.Parsing', {
 				    doc_elt.innerHTML = markup;
 				    first_elt = doc_elt.firstElementChild;
 
-				    if (doc_elt.childElementCount === 1
-						    && first_elt.localName.toLowerCase() === 'html') {
+				    if (doc_elt.childElementCount === 1 && first_elt.localName.toLowerCase() === 'html') {
 					    doc.replaceChild(first_elt, doc_elt);
 				    }
 			    }

@@ -67,7 +67,7 @@ Ext.define('NextThought.controller.Navigation', {
 		var EA = Ext.Array,
 			ids = [rec.getId()].concat(rec.get('Items'));
 
-		ids = EA.unique(EA.map(ids, ContentUtils.contentPrefix));
+		ids = EA.unique(EA.map(ids, ParseUtils.ntiidPrefix));
 		Ext.each(ids, function(id) {
 			console.warn('Dropping PageInfos for prefix:', id);
 			Service.dropPageInfosForPrefix(id);

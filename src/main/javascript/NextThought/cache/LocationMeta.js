@@ -167,7 +167,7 @@ Ext.define('NextThought.cache.LocationMeta', {
 	},
 
 	bookPrefixIfQuestion: function(id) {
-		return ParseUtils.bookPrefixIfQuestionNtiid(id);
+		return ParseUtils.ntiidPrefix(id);
 	}
 
 },

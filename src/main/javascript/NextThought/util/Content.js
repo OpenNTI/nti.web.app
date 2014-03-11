@@ -288,23 +288,11 @@ Ext.define('NextThought.util.Content', {
 	},
 
 
-	//Returns the prefix of the content ntiid we think this ntiid
-	//would reside beneath
-	contentPrefix: function(id) {
-		var ntiid = ParseUtils.parseNTIID(id);
-		if (ntiid) {
-			ntiid.specific.type = 'HTML';
-			ntiid.specific.typeSpecific = ntiid.specific.typeSpecific.split('.').first();
-		}
-		return ntiid && ntiid.toString();
-	},
-
-
 	/**
 	 *  Looks in content for the content object with the given id
 	 */
 	findContentObject: function(id, cb, scope) {
-		var titleNtiidPrefix = this.contentPrefix(id),
+		var titleNtiidPrefix = ParseUtils.ntiidPrefix(id),
 			title = titleNtiidPrefix ? Library.findTitleWithPrefix(titleNtiidPrefix) : null;
 		if (!title) {
 			Ext.callback(cb, scope);
@@ -349,7 +337,7 @@ Ext.define('NextThought.util.Content', {
 
 
 	findRelatedContentObject: function(id, cb, scope) {
-		var titleNTiidPrefix = this.contentPrefix(id),
+		var titleNTiidPrefix = ParseUtils.ntiidPrefix(id),
 			title = titleNTiidPrefix ? Library.findTitleWithPrefix(titleNTiidPrefix) : null,
 			toc, locationInfo, container;
 
@@ -402,12 +390,12 @@ Ext.define('NextThought.util.Content', {
 
 			if (!root) {
 				//NOTE this again assumes 1-to-1 purchase to content root.
-				root = ParseUtils.bookPrefixIfQuestionNtiid(ntiid);
+				root = ParseUtils.ntiidPrefix(ntiid);
 				root = root ? Library.findTitleWithPrefix(root) : null;
 				root = root ? root.get('NTIID') : null;
 
 				// If we still don't have a root,  use what we think the root content should be.
-				root = root || ContentUtils.contentPrefix(ntiid);
+				root = root || ParseUtils.ntiidPrefix(ntiid);
 			}
 
 			return root;
