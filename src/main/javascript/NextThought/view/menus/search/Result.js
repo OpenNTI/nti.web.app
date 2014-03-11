@@ -7,6 +7,10 @@ Ext.define('NextThought.view.menus.search.Result', {
 
 	requires: ['NextThought.util.Search'],
 
+	mixins: {
+		purchasable: 'NextThought.mixins.store-feature.Purchasable'
+	},
+
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'title', html: '{title}', cn: [
 			{tag: 'tpl', 'if': 'chapter', cn: [' / ', {cls: 'chapter', html: '{chapter}'}]},
@@ -48,7 +52,7 @@ Ext.define('NextThought.view.menus.search.Result', {
 
 	fillInData: function() {
 		var me = this,
-			hit = me.hit,
+			hit = me.hit, p,
 			containerId = hit.get('ContainerId'),
 			name = hit.get('Creator');
 
@@ -65,29 +69,67 @@ Ext.define('NextThought.view.menus.search.Result', {
 			});
 		}
 
-		LocationMeta.getMeta(containerId, function(meta) {
-			if (meta) {
-				me.fillInContentMeta(meta);
+		LocationMeta.getMeta(containerId)
+				.then(function(meta) {
+					if (meta) {
+						me.fillInContentMeta(meta);
 
-				if (me.rendered) {
-					me.renderTpl.overwrite(me.el, me.renderData);
-				}
-			}
-			else {
-				console.log('Container maybe a content object?');
-				ContentUtils.findContentObject(containerId, function(obj, meta) {
-					if (obj && meta && /ntivideo/.test(obj.mimeType || obj.MimeType)) {
-						me.videoObject = obj;
-						me.fillInContentMeta(meta, true);
-						me.renderData.section = obj.title;
 						if (me.rendered) {
 							me.renderTpl.overwrite(me.el, me.renderData);
 						}
+
+						p = CourseWareUtils.courseForNtiid(containerId) || ContentUtils.purchasableForContentNTIID(containerId);
+						if (p) {
+							me.handlePurchasable(p);
+						}
 					}
+				})
+				.fail(function() {
+					ContentUtils.findContentObject(containerId, function(obj, meta) {
+						if (obj && meta && /ntivideo/.test(obj.mimeType || obj.MimeType)) {
+							me.videoObject = obj;
+							me.fillInContentMeta(meta, true);
+							me.renderData.section = obj.title;
+							if (me.rendered) {
+								me.renderTpl.overwrite(me.el, me.renderData);
+							}
+						} else if (!obj || !meta) {
+							p = CourseWareUtils.courseForNtiid(containerId) || ContentUtils.purchasableForContentNTIID(containerId);
+							if (p) {
+								me.handlePurchasable(p);
+							}
+						}
+					});
 				});
-			}
-		}, me);
 	},
+
+
+	handlePurchasable: function(purchasable) {
+		if (!this.rendered) {
+			this.on({
+				afterrender: this.handlePurchasable.bind(this, purchasable),
+				single: true
+			});
+			return;
+		}
+
+		var me = this,
+			title = me.el.down('.title'),
+			tpl = me.needsActionTplMap[purchasable.get('MimeType')];
+
+		me.requiresPurchase = true;
+		me.purchasable = purchasable;
+		me.addCls('purchase');
+		if (tpl) {
+			me[tpl].overwrite(title, purchasable.getData(), true);
+		}
+
+		Ext.DomHelper.append(me.el.down('.wrap').setStyle({position: 'relative'}), {
+			cls: 'purchasable-mask',
+			style: {top: (title.getY() - me.el.getY()) + 'px'}
+		});
+	},
+
 
 	fillInContentMeta: function(meta, dontScrewWithLineage) {
 		var lin = ContentUtils.getLineage(meta.NTIID),
@@ -175,6 +217,13 @@ Ext.define('NextThought.view.menus.search.Result', {
 			selector = '.fragment',
 			fragNode = target.is(selector) ? e.target : target.parent(selector, true),
 			fragIdx, toFlash;
+
+
+		if (this.requiresPurchase) {
+			this.purchasable.fireAcquisitionEvent(this);
+			return;
+		}
+
 
 		if (fragNode) {
 			fragIdx = Ext.fly(fragNode).getAttribute('ordinal');

@@ -13,9 +13,10 @@ Ext.define('NextThought.cache.LocationMeta', {
 
 	getMeta: function(ntiid, callback, scope) {
 		var p = PromiseFactory.make(),
-			maybe = this.getValue(ntiid);
+			maybe = this.getValue(ntiid),
+			cb = callback || Ext.emptyFn;
 
-		p.done(Ext.bind(callback, scope)).fail(Ext.bind(callback, scope, []));
+		p.then(Ext.bind(cb, scope), Ext.bind(cb, scope, []));
 
 		if (maybe || !ntiid) {
 			p.fulfill(maybe);
