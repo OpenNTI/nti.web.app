@@ -40,5 +40,14 @@ Ext.define('NextThought.model.store.Purchasable', {
 
 	hasHistory: function() {
 		return Boolean(this.getLink('history'));
+	},
+
+
+	fireAcquisitionEvent: function(eventSource, callback) {
+		try {
+			return eventSource.fireEvent('show-purchasable', eventSource, this);
+		} finally {
+			Ext.callback(callback);
+		}
 	}
 });

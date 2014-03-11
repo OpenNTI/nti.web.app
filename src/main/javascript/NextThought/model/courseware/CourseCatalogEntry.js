@@ -48,6 +48,11 @@ Ext.define('NextThought.model.courseware.CourseCatalogEntry', {
 			var i = instance.get('CourseInstance') || instance;
 			return myCoursInstance === getURL(i.get('href'));
 		};
+	},
+
+
+	fireAcquisitionEvent: function(eventSource, callback) {
+		return eventSource.fireEvent('show-enrollment', this, callback);
 	}
 });
 
