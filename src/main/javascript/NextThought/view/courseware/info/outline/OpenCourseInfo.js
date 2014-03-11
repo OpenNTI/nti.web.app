@@ -55,7 +55,7 @@ Ext.define('NextThought.view.courseware.info.outline.OpenCourseInfo', {
 
 	showEnrollWindow: function() {
 		var me = this;
-		this.fireEvent('show-enrollment', me.getInfo(), function(enrolled) {
+		me.getInfo().fireAcquisitionEvent(me, function(enrolled) {
 			if (!enrolled) {
 				me.fireEvent('go-to-library', me);
 			}
