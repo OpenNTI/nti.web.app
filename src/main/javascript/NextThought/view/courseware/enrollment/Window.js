@@ -100,7 +100,7 @@ Ext.define('NextThought.view.courseware.enrollment.Window', {
 
 	beforeRender: function() {
 		this.callParent(arguments);
-		var enrolling = this.record.getLink('enroll');
+		var enrolling = !this.record.get('enrolled');
 		this.renderData = Ext.applyIf(this.renderData || {}, this.record.getData());
 		this.renderData = Ext.apply(this.renderData, {enrollProcess: enrolling});
 		this.renderData.by = this.renderData.Author || this.renderData.Provider;

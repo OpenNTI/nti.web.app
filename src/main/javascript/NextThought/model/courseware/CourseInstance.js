@@ -38,21 +38,25 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 			Cls = NextThought.model.courseware.CourseCatalogEntry;
 
 		if (!p) {
-			p = this.precachePromise = PromiseFactory.make();
+			this.precachePromise = new Promise(function(fulfill, reject) {
 
-			Cls.load(null, {
-				url: me.getLink('CourseCatalogEntry'),
-				callback: function(rec) {
-					me.__courseCatalogEntry = rec;
-					me.afterEdit(['NTIID']);//let views know the record "changed".
+				Cls.load(null, {
+					url: me.getLink('CourseCatalogEntry'),
+					callback: function(rec) {
+						me.__courseCatalogEntry = rec;
+						me.afterEdit(['NTIID']);//let views know the record "changed".
 
-					if (rec) {
-						p.fulfill(rec);
-					} else {
-						p.reject('No Record, See logs');
+						if (rec) {
+							rec.set('enrolled', true);//if we come from here, we are enrolled.
+							fulfill(rec);
+						} else {
+							reject('No Record, See logs');
+						}
 					}
-				}
+				});
 			});
+
+			p = this.precachePromise;
 		}
 
 		return p;
