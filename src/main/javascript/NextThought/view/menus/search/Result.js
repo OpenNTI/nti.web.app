@@ -3,6 +3,8 @@ Ext.define('NextThought.view.menus.search.Result', {
 	alias: 'widget.search-result',
 	cls: 'search-result',
 
+	SYSTEM_CREATOR: 'system',
+
 	requires: ['NextThought.util.Search'],
 
 	renderTpl: Ext.DomHelper.markup([
@@ -13,7 +15,7 @@ Ext.define('NextThought.view.menus.search.Result', {
 		{
 			cls: 'wrap',
 			cn: [
-				{tag: 'tpl', 'if': 'name', cn: [{cls: 'name', html: '{name}'}]},
+				{tag: 'tpl', 'if': 'name', cn: [{cls: 'name hello', html: '{name}'}]},
 				{cls: 'fragments', cn: [
 					{tag: 'tpl', 'for': 'fragments', cn: [
 						{cls: 'fragment', ordinal: '{#}', html: '{.}'}
@@ -52,8 +54,9 @@ Ext.define('NextThought.view.menus.search.Result', {
 
 		if (isMe(name)) {
 			me.renderData.name = 'me';
-		}
-		else if (name) {
+		} else if (name === this.SYSTEM_CREATOR) {
+			me.renderData.name = '';
+		} else if (name) {
 			UserRepository.getUser(name, function(user) {
 				me.renderData.name = user.getName();
 				if (me.rendered) {
