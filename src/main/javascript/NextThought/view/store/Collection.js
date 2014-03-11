@@ -42,16 +42,17 @@ Ext.define('NextThought.view.store.Collection', {
 		}
 	},
 
-	collectData: function() {
+	collectData: function(records, index) {
 		var rows = this.rowSpan,
-			data = this.callParent(arguments);
+			data = this.callParent(arguments),
+			updating = !!index;
 
 		Ext.each(data.items, function(i, x) {
 			var cols = 2;
 
 			i.inGrid = 'grid-item';
 
-			if (rows > 1 && (x === 0 || i.Featured)) {
+			if (rows > 1 && !updating && (x === 0 || i.Featured)) {
 				i.featured = true;
 				cols = 4;
 			}
