@@ -77,11 +77,6 @@ Ext.define('NextThought.view.menus.search.Result', {
 						if (me.rendered) {
 							me.renderTpl.overwrite(me.el, me.renderData);
 						}
-
-						p = CourseWareUtils.courseForNtiid(containerId) || ContentUtils.purchasableForContentNTIID(containerId);
-						if (p) {
-							me.handlePurchasable(p);
-						}
 					}
 				})
 				.fail(function() {
