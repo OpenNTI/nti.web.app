@@ -382,7 +382,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 	getSiblingInput: function(e, direction) {
 		var current = e.getTarget(this.view.itemSelector);
 		if (current) {
-			return Ext.fly(current[direction + 'Sibling']).down('input', true);
+			current = Ext.fly(current[direction + 'Sibling']);
+			return current && current.down('input', true);
 		}
 	},
 
