@@ -41,8 +41,8 @@ Ext.define('NextThought.view.menus.search.Result', {
 
 		this.renderData = Ext.apply(this.renderData || {},{
 			title: '&nbsp;',
-      chapter: '',
-      section: '&nbsp;',
+			chapter: '',
+			section: '&nbsp;',
 			name: name,
 			fragments: Ext.pluck(hit.get('Fragments'), 'text')
 		});
@@ -121,6 +121,8 @@ Ext.define('NextThought.view.menus.search.Result', {
 		me.addCls('purchase');
 		if (tpl) {
 			me[tpl].overwrite(title, purchasable.getData(), true);
+		} else {
+			Error.raiseForReport('Need Template for: ' + purchasable.get('MimeType'));
 		}
 
 		Ext.DomHelper.append(me.el.down('.wrap').setStyle({position: 'relative'}), {
