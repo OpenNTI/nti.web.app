@@ -10,12 +10,44 @@ Ext.define('NextThought.model.Base', {
 
 	],
 
+
 	mixins: {
 		hasLinks: 'NextThought.mixins.HasLinks'
 	},
 
 	inheritableStatics: {
 		idsBeingGloballyUpdated: {}
+	},
+
+	statics: {
+		/**
+		 * Fact: creating elements is *kind of* expensive.
+		 * Fact: JavaScript is thread-safe, because its not threaded. Its Evented. No more than one block of code runs at a time.
+		 * Fact: Anchor tags implement the Location API. Setting a value to the href attribute populates:
+		 *  #host, #hostname, #protocol, #port, #pathname, #search, #hash and #origin
+		 *  AND modifiying those attribute updates #href.
+		 *
+		 *  Given those, we can safely make a single instance and share it for use of URL normalization and parsing.
+		 *
+		 *  ALWAYS set the href before using. NEVER rely on its previous value. Think of this the same way you would the return value of Ext.fly().
+		 *  As in temporary!  Assume once your 'atomic' like action is finished, the value is useless. Reaquire, or re-init.
+		 */
+		__SHARED_LOCATION_INTERFACE: document.createElement('a'),
+
+		/**
+		 * Gives you the shared location interface intialized to a given ref.
+		 *
+		 * ALWAYS set the href before using. NEVER rely on its previous value. Think of this the same way you would the return value of Ext.fly().
+		 * As in temporary!  Assume once your 'atomic' like action is finished, the value is useless. Reaquire.
+		 *
+		 * @param {String} ref
+		 * @return {Location}
+		 */
+		getLocationInterfaceAt: function(ref) {
+			var a = this.__SHARED_LOCATION_INTERFACE;
+			a.setAttribute('href', ref);
+			return a;
+		}
 	},
 
 	idProperty: 'NTIID',
@@ -38,13 +70,23 @@ Ext.define('NextThought.model.Base', {
 		{ name: 'OID', type: 'string', persist: false },
 		{ name: 'accepts', type: 'auto', persist: false, defaultValue: [] },
 		{ name: 'href', type: 'string', persist: false, convert: function(v) {
-			var a = document.createElement('a'), q;
-			a.setAttribute('href', v);
-			q = Ext.Object.fromQueryString(a.search);
-			delete q._dc;
-			a.search = Ext.Object.toQueryString(q);
-			//if this wasn't absolute, it is now.
-			return a.href.replace(/\?$/, '');
+			var a = NextThought.model.Base.getLocationInterfaceAt(v), q;
+
+			if (a.search) {
+				q = Ext.Object.fromQueryString(a.search);
+				delete q._dc;
+				a.search = Ext.Object.toQueryString(q);
+			}
+
+			//do we ever want fragments in the model href??
+			//if (a.hash) {
+				//a.hash = '';
+			//}
+
+			//if the value wasn't absolute, it is now.
+			return a.href
+					//trim empty search & fragment tokens
+					.replace(/[\?&#]+$/, '');
 		} },
 		{ name: 'tags', type: 'auto', defaultValue: [] },
 		{ name: 'editied', type: 'bool', persist: false, convert: function(v, r) {
