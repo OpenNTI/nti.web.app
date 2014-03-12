@@ -1096,7 +1096,11 @@ canvas.x-component-course-assessment {
 			overflow: visible;
 			display: block;
 
-			&::before {
+			input {
+				border-color: #b8b8b8;
+			}
+
+			/*&::before {
 				content: '';
 				position: absolute;
 				background: #fff;
@@ -1110,7 +1114,7 @@ canvas.x-component-course-assessment {
 			& > div {
 				position: relative;
 				z-index: 2;
-			}
+			}*/
 		}
 
 	}
@@ -1137,6 +1141,10 @@ canvas.x-component-course-assessment {
 	.x-grid-cell-inner {
 		padding: 0;
 		line-height: 60px;
+	}
+
+	input {
+		border: 1px solid #fff;
 	}
 
 	.x-grid-row .x-grid-cell {
@@ -1184,6 +1192,21 @@ canvas.x-component-course-assessment {
 
 		&.score {
 			cursor: text;
+			overflow: visible;
+			.x-grid-cell-inner {
+				overflow: visible;
+			}
+
+			input {
+				font: normal normal 1em/1 'Open Sans';
+				width: 100%;
+				padding: 0.7em 0.3em;
+				margin-left: -0.3em;
+				&:hover,
+				&:focus {
+					border-color: #b8b8b8;
+				}
+			}
 		}
 
 		.student-cell {

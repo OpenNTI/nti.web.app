@@ -18,8 +18,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 	rowLines: false,
 
 	viewConfig: {
-		loadMask: true,
-		xhooks: {
+		loadMask: true
+		/*, xhooks: {
 			walkCells: function(pos, direction, e, preventWrap) {
 				preventWrap = false;
 				direction = direction === 'right' ? 'down' : direction === 'left' ? 'up' : direction;
@@ -39,17 +39,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 					return false;
 				}, this]);
 
-				//console.log(r);
-
-				if (r && !this.editingPlugin.editing) {
-					//maybe force the editor back on?
-					this.editingPlugin.startEdit(this.getRecord(r.row), this.ownerCt.columns[r.column]);
-				}
-
+				console.log('cell walk: ', r);
 
 				return r; //this value is flawless. I don't know why the cell editor doesn't show sometimes.
 			}
-		}
+		}*/
 	},
 
 	verticalScroller: {
@@ -61,51 +55,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 	},
 
 	selType: 'cellmodel',
-	plugins: [
-		//{ ptype: 'bufferedrenderer' },
-		{
-			ptype: 'cellediting',
-			clicksToEdit: 1,
-			listeners: {
-				beforeedit: function(editor, e) {
-					//if (!e.record || e.field !== 'Grade') { return false; }
-
-					var gradeRec = e.record.get('Grade'),
-							value = gradeRec && gradeRec.get('value'),
-							grades = value && value.split(' ');
-
-					e.value = (grades && grades[0]) || '';
-					editor.getEditor(e.record, e.column).offsets = e.grid.gradeEditorOffsets;
-				},
-				//validateedit: function(ed, e) {},
-				edit: function(editor, e) {
-					var grade = e.record.get('Grade'),
-						v = grade && grade.get('value');
-
-					v = v && v.split(' ')[0];
-
-					if (v !== e.value && !Ext.isEmpty(e.value)) {
-						if (!grade) {
-							//this might throw an exception, if it does, it will interupt the edit
-							e.record.buildGrade();
-							grade = e.record.get('Grade');
-						}
-
-						grade.set('value', e.value + ' -');
-						grade.save({
-							failure: function() {
-								grade.reject();
-							}
-						});
-					}
-
-					return false;
-				}
-			}
-		}
-	],
-
-
 
 	columns: {
 		ui: 'course-assessment',
@@ -192,13 +141,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 
 
 
-					{ text: 'Score', componentCls: 'score', dataIndex: 'Grade', allowTab: true, name: 'grade', width: 70,/*90*/
+					{ text: 'Score', xtype: 'templatecolumn', componentCls: 'score', dataIndex: 'Grade', allowTab: true, name: 'grade', width: 70,/*90*/
 						tdCls: 'score',
 						editor: 'textfield',
-						renderer: function(val) {
-							val = val && val.get('value');
-							return val && val.split(' ')[0];
-						},
+						tpl: Ext.DomHelper.markup({tag: 'input', type: 'text', value: '{grade}'}),
 						doSort: function(state) {
 							var store = this.up('grid').getStore(),
 								sorter = new Ext.util.Sorter({
@@ -330,7 +276,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 			itemclick: {fn: 'onItemClicked', scope: this},
 			select: function(cmp, record) {
 				me.selModel.deselect(record);
-			}
+			},
+			afterrender: 'monitorSubTree'
 		});
 	},
 
@@ -370,6 +317,96 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 
 
 		return res;
+	},
+
+
+	monitorSubTree: function() {
+		var MutationObserver = window.MutationObserver || window.WebKitMutationObserver,
+			observer;
+
+		if (!MutationObserver) {
+			alert('Browser Missing Feature Support\nPlease use Chrome 18+, FF 14+, Safari 6+ or IE11');
+			return;
+		}
+
+		observer = new MutationObserver(this.bindInputs.bind(this));
+		observer.observe(Ext.getDom(this.getEl()), { childList: true, subtree: true });
+		this.on('destroy', 'disconnect', observer);
+	},
+
+
+	bindInputs: function() {
+		var inputs = this.view.getEl().select('.score input');
+		Ext.destroy(this.gridInputListeners);
+
+		this.gridInputListeners = this.mon(inputs, {
+			destroyable: true,
+			blur: 'onInputBlur',
+			keypress: 'onInputKeyPress',
+			keydown: 'onInputKeyPress'
+		});
+	},
+
+
+	getRecordFromEvent: function(e) {
+		var v = this.view,
+			n = e.getTarget(v.itemSelector);
+		return v.getRecord(n);
+	},
+
+
+	onInputBlur: function(e, dom) {
+		var record = this.getRecordFromEvent(e),
+			value = Ext.fly(dom).getValue();
+		console.debug('blur', record, value);
+		if (record) {
+			this.editGrade(record, value);
+		}
+	},
+
+
+	onInputKeyPress: function(e, dom) {
+		var newInput, key = e.getKey(), direction = 'next';
+		if (key === e.ENTER || key === e.DOWN || key === e.UP) {
+			e.stopEvent();
+
+			if (key === e.UP) {direction = 'previous';}
+			newInput = this.getSiblingInput(e, direction);
+			if (newInput) {
+				newInput.focus();
+			}
+		}
+	},
+
+
+	getSiblingInput: function(e, direction) {
+		var current = e.getTarget(this.view.itemSelector);
+		if (current) {
+			return Ext.fly(current[direction + 'Sibling']).down('input', true);
+		}
+	},
+
+
+	editGrade: function(record, value) {
+		var grade = record.get('Grade'),
+			v = grade && grade.get('value');
+
+		v = v && v.split(' ')[0];
+
+		if (v !== value && !Ext.isEmpty(value)) {
+			if (!grade) {
+				//this might throw an exception...what should we do?
+				record.buildGrade();
+				grade = record.get('Grade');
+			}
+
+			grade.set('value', value + ' -');
+			grade.save({
+				failure: function() {
+					grade.reject();
+				}
+			});
+		}
 	},
 
 
