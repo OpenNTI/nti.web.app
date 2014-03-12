@@ -82,5 +82,10 @@ Ext.define('NextThought.view.forums.topic.View', {
 
 	addIncomingComment: function(comment) {
 		this.body.addIncomingComment(comment);
+	},
+
+
+	showSearchHit: function(hit, frag) {
+		this.body.showSearchHit(hit, frag);
 	}
 });

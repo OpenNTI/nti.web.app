@@ -15,13 +15,14 @@ Ext.define('NextThought.view.menus.search.ForumResult', {
 			me.fireEvent('highlight-topic-hit', me, fragIdx, component);
 		}
 
-		function action(success, cmp) {
-			if (success) {
+		function action(cmp) {
+			if (cmp) {
 				component = cmp;
 				if (cmp.ready) {
 					highlight();
 				}else {
 					me.mon(cmp, {
+						single: true,
 						'commentReady': highlight,
 						'highlight-ready': highlight,
 						scope: me

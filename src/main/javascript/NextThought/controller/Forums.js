@@ -576,7 +576,7 @@ Ext.define('NextThought.controller.Forums', {
 				topicList.comment = comment;
 				me.loadTopicList(cmp, topicList, record, function(topicView, view) {
 					if (cb) {
-						cb.apply(scope, arguments);
+						cb.call(scope, view.down('forums-topic-view'));
 					}
 				});
 			}

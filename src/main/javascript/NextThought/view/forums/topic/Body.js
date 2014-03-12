@@ -37,10 +37,18 @@ Ext.define('NextThought.view.forums.topic.Body', {
 		topicContainer = this.add({xtype: 'container', cls: 'topic-container scroll-content', isTopicContainer: true});
 
 		topic = topicContainer.add({xtype: 'forums-topic-topic', record: record, forum: forum});
-		comment = topicContainer.add({xtype: 'forums-topic-comment-thread', topic: record});
+		comment = topicContainer.add({xtype: 'forums-topic-comment-thread', topic: record, activeComment: forum.comment});
 
-		if (forum.comment) {
-			comment.goToComment(forum.comment);
+		//wait until the comments are loaded to fire highlight-ready
+		if (!comment.ready) {
+			me.mon(comment, {
+				single: true,
+				ready: function() {
+					me.fireEvent('highlight-ready');
+				}
+			});
+		} else {
+			me.fireEvent('highlight-ready');
 		}
 
 		Ext.destroy(this.topicMonitors);
@@ -73,6 +81,20 @@ Ext.define('NextThought.view.forums.topic.Body', {
 
 		if (comments) {
 			comments.addIncomingComment(comment);
+		}
+	},
+
+
+	showSearchHit: function(hit, frag) {
+		var topic = this.down('forums-topic-topic'),
+			comments = this.down('forums-topic-comment-thread');
+
+		if (comments && hit.get('Type') === 'GeneralForumComment') {
+			comments.showSearchHit(hit, frag);
+		}
+
+		if (topic && hit.get('Type') === 'CommunityHeadlinePost') {
+			topic.showSearchHit(hit, frag);
 		}
 	},
 
