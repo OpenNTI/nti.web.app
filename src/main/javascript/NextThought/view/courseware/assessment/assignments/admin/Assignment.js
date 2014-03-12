@@ -462,6 +462,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 				modelAugmentationHook: function(rec) {
 					rec.set('item', item); //Assignment instances are shared across all history item instances. (this gives them the meta data)
 					item.getGradeBookEntry().updateHistoryItem(rec);
+
+					try {rec.buildGrade();} catch (e) {Error.raiseForReport(e);}
 					return rec;
 				}
 			});

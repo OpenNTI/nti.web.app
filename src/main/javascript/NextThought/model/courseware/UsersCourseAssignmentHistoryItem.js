@@ -142,6 +142,7 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 
 		var item = this.get('item'),
 			student = this.get('Creator'),
+			username = student.get ? student.getId() : student,
 			gradeBook = item._gradeBook,
 			gradeBookRef = gradeBook && gradeBook.get('href'),
 			base = gradeBookRef && gradeBookRef.split(/[\?#]/)[0],
@@ -149,9 +150,9 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 			grade = path && item && NextThought.model.courseware.Grade.create({
 				href: [base || '/???/']
 							  .concat(path.map(encodeURIComponent))
-							  .concat([student.get ? student.getId() : student])
-					  .join('/')
-
+							  .concat([username])
+					  .join('/'),
+				Username: username
 			});
 
 		if (item && !path) {

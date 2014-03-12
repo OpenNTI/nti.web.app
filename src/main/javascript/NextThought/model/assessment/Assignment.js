@@ -166,6 +166,7 @@ Ext.define('NextThought.model.assessment.Assignment', {
 
 		function update(rec) {
 			gbe.updateHistoryItem(rec);
+			try {rec.buildGrade();} catch (e) {Error.raiseForReport(e);}
 		}
 
 		recs.forEach(update);

@@ -15,6 +15,10 @@ Ext.define('NextThought.model.courseware.GradeBookEntry', {
 		var items = this.get('Items'),
 			key = items.length;
 
+		if (Ext.isEmpty(rec.get('Username'))) {
+			Ext.Error.raise('No Username');
+		}
+
 		items.push(rec);
 		items.INDEX_KEYMAP[rec.get('Username')] = key;
 		this.afterEdit(['Items']);
@@ -26,12 +30,12 @@ Ext.define('NextThought.model.courseware.GradeBookEntry', {
 			submissionGrade = item.get('Grade'),
 			gradebookGrade = this.getFieldItem('Items', u);
 
-		if (submissionGrade && submissionGrade.get('Username') !== u) {
-			console.warn('Record creator does not match username of its own grade object', item);
-		}
-
 		if (!gradebookGrade) {
 			return;
+		}
+
+		if (submissionGrade && submissionGrade.get('Username') !== u) {
+			console.warn('Record creator does not match username of its own grade object', item);
 		}
 
 		if (gradebookGrade.get('Username') !== u) {
