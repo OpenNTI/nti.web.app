@@ -678,7 +678,7 @@ Ext.define('NextThought.util.Content', {
 						if (iconPath.substr(0, this.root.length) !== this.root) {
 							iconPath = this.root + this.icon;
 						}
-						return this.baseURI + iconPath;
+						return iconPath;
 					},
 					getPathLabel: function(ntiid) {
 						var lineage = me.getLineage(ntiid || this.NTIID, true),
