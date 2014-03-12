@@ -50,10 +50,14 @@ Ext.define('NextThought.view.menus.search.Result', {
 		this.fillInData();
 	},
 
+	getNTIID: function() {
+		return this.hit.get('ContainerId');
+	},
+
 	fillInData: function() {
 		var me = this,
 			hit = me.hit, p,
-			containerId = hit.get('ContainerId'),
+			containerId = me.getNTIID(),
 			name = hit.get('Creator');
 
 		if (isMe(name)) {
