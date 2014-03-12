@@ -328,7 +328,10 @@ Ext.define('NextThought.view.profiles.parts.events.ActivityItem', {
 						if (meta) {
 							try {
 								me.locationEl.update(meta.getPathLabel());
-								me.context.update(meta.location && meta.location.getAttribute('desc'));
+								me.context.update((meta.location && meta.location.getAttribute('desc')) || 'No description or excerpt for this content.');
+								me.locationIcon.setStyle({
+									backgroundImage: Ext.String.format('url({0})', meta.getIcon())
+								});
 							} catch (e) {
 								console.error(e.stack || e.message || e);
 							}
