@@ -37,7 +37,15 @@ Ext.define('NextThought.model.Base', {
 		{ name: 'NTIID', type: 'string', useNull: true },
 		{ name: 'OID', type: 'string', persist: false },
 		{ name: 'accepts', type: 'auto', persist: false, defaultValue: [] },
-		{ name: 'href', type: 'string', persist: false },
+		{ name: 'href', type: 'string', persist: false, convert: function(v) {
+			var a = document.createElement('a'), q;
+			a.setAttribute('href', v);
+			q = Ext.Object.fromQueryString(a.search);
+			delete q._dc;
+			a.search = Ext.Object.toQueryString(q);
+			//if this wasn't absolute, it is now.
+			return a.href.replace(/\?$/, '');
+		} },
 		{ name: 'tags', type: 'auto', defaultValue: [] },
 		{ name: 'editied', type: 'bool', persist: false, convert: function(v, r) {
 			var cd = r.get('CreatedTime'), lm = r.get('Last Modified');
