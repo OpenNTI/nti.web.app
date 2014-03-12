@@ -132,6 +132,12 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 
 		this.callParent(arguments);
 
+		this.canReply = this.topic && this.topic.getLink('add');
+
+		if (!this.canReply) {
+			this.addCls('no-reply');
+		}
+
 		scrollEl = me.up('{isLayout("card")}').el;
 
 		if (me.store.loading || this.notLoadedYet) {

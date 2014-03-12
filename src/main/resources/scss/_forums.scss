@@ -622,6 +622,12 @@
 		}
 	}
 
+	&.no-reply {
+		.reply {
+			display: none;
+		}
+	}
+
 	.topic-comment{
 		position: relative;
 		padding-left: 140px;
