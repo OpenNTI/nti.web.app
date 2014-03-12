@@ -23,5 +23,21 @@ Ext.define('NextThought.model.courseware.GradeBookPart', {
 				}
 			}
 		}
+	},
+
+
+	buildEntry: function(name, id) {
+		var items = this.get('Items'),
+			entry = NextThought.model.courseware.GradeBookEntry.create({AssignmentId: id, Items: {}, Name: name}),
+			key = items.length;
+
+		if (Ext.isEmpty(name)) {
+			Ext.Error.raise('No name');
+		}
+
+		items.push(entry);
+		items.INDEX_KEYMAP[name] = key;
+
+		this.afterEdit(['Items']);
 	}
 });

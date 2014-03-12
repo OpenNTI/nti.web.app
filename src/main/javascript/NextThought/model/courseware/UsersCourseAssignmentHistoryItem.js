@@ -160,7 +160,7 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 		}
 
 		if (grade) {
-			gradeBook.add(grade);
+			gradeBook.add(grade, item.getId());
 			grade.phantom = false;
 
 			this.set('Grade', grade);

@@ -12,20 +12,36 @@ Ext.define('NextThought.model.courseware.GradeBook', {
 	},
 
 
-	add: function(grade) {
+	add: function(grade, assignmentId) {
 		var path = grade.get('href')
 				.replace(this.get('href'), '')//remove the prefix
 				.replace(/^\//, '')//remove the initial separator
 				.split('/')//make into a list
 				.map(decodeURIComponent),//decode back into normal value
-			book = this.getFieldItem('Items', path[0]),
-			entry = book && book.getFieldItem('Items', path[1]);
+			book = this.getFieldItem('Items', path[0]) || this.buildBook(path[0]),
+			entry = book && (book.getFieldItem('Items', path[1]) || book.buildEntry(path[1], assignmentId));
 
 		if (entry) {
 			entry.addItem(grade);
 		} else {
 			console.warn('Coud not add built grade object to the gradebook.' + path, book, entry);
 		}
+	},
+
+
+	buildBook: function(name) {
+		var items = this.get('Items'),
+			book = NextThought.model.courseware.GradeBookPart.create({Items: {}, Name: name}),
+			key = items.length;
+
+		if (Ext.isEmpty(name)) {
+			Ext.Error.raise('No name');
+		}
+
+		items.push(book);
+		items.INDEX_KEYMAP[name] = key;
+
+		this.afterEdit(['Items']);
 	},
 
 
