@@ -14,12 +14,16 @@ Ext.define('NextThought.model.courseware.GradeBook', {
 
 	add: function(grade, assignmentId) {
 		var path = grade.get('href')
-				.replace(this.get('href'), '')//remove the prefix
+				.replace(this.get('href').split(/[\?#]/)[0], '')//remove the prefix
 				.replace(/^\//, '')//remove the initial separator
 				.split('/')//make into a list
 				.map(decodeURIComponent),//decode back into normal value
 			book = this.getFieldItem('Items', path[0]) || this.buildBook(path[0]),
 			entry = book && (book.getFieldItem('Items', path[1]) || book.buildEntry(path[1], assignmentId));
+
+		if (path.length > 3) {
+			Ext.Error.raise('Bad PATH!' + path);
+		}
 
 		if (entry) {
 			entry.addItem(grade);
