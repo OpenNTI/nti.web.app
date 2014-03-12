@@ -624,7 +624,7 @@ Ext.define('NextThought.controller.CourseWare', {
 				return prefix && prefix === ParseUtils.ntiidPrefix(rec.get('ContentPackageNTIID'));
 			}
 
-			var prefix = ContentUtils.getContentPrefix(ntiid),
+			var prefix = ParseUtils.ntiidPrefix(ntiid),
 					store = Ext.getStore('courseware.AvailableCourses'),
 					course, index;
 
