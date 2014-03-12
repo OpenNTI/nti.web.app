@@ -358,7 +358,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 	onInputBlur: function(e, dom) {
 		var record = this.getRecordFromEvent(e),
 			value = Ext.fly(dom).getValue();
-		console.debug('blur', record, value);
+
 		if (record) {
 			this.editGrade(record, value);
 		}
@@ -388,22 +388,33 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 
 
 	editGrade: function(record, value) {
-		var grade = record.get('Grade'),
+		var view = this.view,
+			grade = record.get('Grade'),
 			v = grade && grade.get('value');
 
 		v = v && v.split(' ')[0];
 
 		if (v !== value && !Ext.isEmpty(value)) {
+			Ext.fly(view.getNode(record)).setStyle({opacity: '0.3'});
+
 			if (!grade) {
 				//this might throw an exception...what should we do?
 				record.buildGrade();
 				grade = record.get('Grade');
 			}
 
+			console.debug('saving: ' + value, 'to', grade.get('href'));
+
 			grade.set('value', value + ' -');
 			grade.save({
 				failure: function() {
 					grade.reject();
+				},
+				callback: function() {
+					var n = view.getNode(record);
+					if (n) {
+						Ext.fly(n).setStyle({opacity: 1});
+					}
 				}
 			});
 		}
