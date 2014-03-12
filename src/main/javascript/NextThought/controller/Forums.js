@@ -603,7 +603,7 @@ Ext.define('NextThought.controller.Forums', {
 	saveTopicComment: function(editor, record, valueObject, successCallback) {
 		var postCmp = editor.up('forums-topic-view') || editor.up('[record]'),
 			postRecord = (postCmp && postCmp.getTopic && postCmp.getTopic()) || (postCmp && postCmp.record),
-			isEdit = Boolean(record), postLink,
+			isEdit = Boolean(record) && !record.phantom, postLink,
 			commentForum = record || NextThought.model.forums.GeneralForumComment.create();
 
 		commentForum.set({ body: valueObject.body });
