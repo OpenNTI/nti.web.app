@@ -159,6 +159,7 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 		}
 
 		if (grade) {
+			gradeBook.add(grade);
 			grade.phantom = false;
 
 			this.set('Grade', grade);
