@@ -90,12 +90,12 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			cls: 'student-assignment-overview',
 			nameOrder: ['creator', 'username', 'completed', 'grade', 'feedback', 'submission'],
 			columnOverrides: {
-				0: { text: 'Student', dataIndex: 'Creator', name: 'creator', flex: 1, padding: '0 0 0 30',
+				0: { text: 'Student', xtype: 'templatecolumn', dataIndex: 'Creator', name: 'creator', flex: 1, padding: '0 0 0 30',
 					possibleSortStates: ['ASC', 'DESC'],//restore the default order of state(since the grid reverses it)
-					renderer: function(v) {
-						var u = v && (typeof v === 'string' ? {displayName: 'Resolving...'} : v.getData());
-						return this.studentTpl.apply(u);
-					},
+					tpl: Ext.DomHelper.markup({cls: 'padded-cell student-cell', cn: [
+						{ cls: 'avatar', style: {backgroundImage: 'url({Creator:avatarURL})'} },
+						{ cls: 'name', html: '{Creator:displayName}'}
+					]}),
 					doSort: function(state) {
 						this.up('grid').getStore().sort(new Ext.util.Sorter({
 							direction: state,
@@ -125,13 +125,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 						}));
 					}
 				}
-			],
-
-
-			studentTpl: Ext.DomHelper.createTemplate({cls: 'padded-cell student-cell', cn: [
-				{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'} },
-				{ cls: 'name', html: '{displayName}'}
-			]})
+			]
 		},
 		{xtype: 'course-assessment-admin-assignments-item-filter'}
 	],

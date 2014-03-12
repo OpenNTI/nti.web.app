@@ -226,10 +226,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 					},
 
 
-					{ text: 'Feedback', dataIndex: 'feedback', name: 'feedback', width: 140,
-						renderer: function(value) {
-							return value ? Ext.util.Format.plural(value, 'Comment') : '';
-						},
+					{ text: 'Feedback', xtype: 'templatecolumn', dataIndex: 'feedback', name: 'feedback', width: 140,
+						tpl: Ext.DomHelper.markup('{feedback:pluralIf("Comment")}'),
 						doSort: function(state) {
 							var store = this.up('grid').getStore(),
 								sorter = new Ext.util.Sorter({
