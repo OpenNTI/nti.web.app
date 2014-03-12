@@ -34,6 +34,10 @@ Ext.define('NextThought.util.Format', {
 
 	displayName: function(value) {
 		return Ext.isString(value) ? 'Resolving...' : value;
+	},
+
+	pluralIf: function(value) {
+		return (value && this.plural.apply(this, arguments)) || '';
 	}
 
 },function() {
@@ -43,4 +47,5 @@ Ext.define('NextThought.util.Format', {
 	Ext.util.Format.avatarURL = NTIFormat.avatarURL;
 	Ext.util.Format.boolStr = NTIFormat.boolStr;
 	Ext.util.Format.displayName = NTIFormat.displayName;
+	Ext.util.Format.pluralIf = NTIFormat.pluralIf;
 });
