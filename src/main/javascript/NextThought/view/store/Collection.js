@@ -34,11 +34,19 @@ Ext.define('NextThought.view.store.Collection', {
 
 	afterRender: function() {
 		this.callParent(arguments);
-		var container = this.up('library-view-container');
+		var container = this.up('library-view-container'),
+			page = this.up('library-view-page');
+
 		if (container) {
 			this.mon(container, 'activate', 'refresh', this);
 		} else {
 			console.warn('no container?');
+		}
+
+		if (page) {
+			this.mon(page, 'activate', 'refresh', this);
+		} else {
+			console.warn('no page?');
 		}
 	},
 
