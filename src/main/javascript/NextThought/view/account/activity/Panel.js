@@ -341,6 +341,12 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			container.updateLayout();
 		}
 
+		function maybeClearMask() {
+			if (store.getCount() > 0 || (!store.mayHaveAdditionalPages && !store.loading)) {
+				me.removeMask();
+			}
+		}
+
 
 		//pool these promises to ensure that the groups get added in the correct order
 		Promise.pool(groups.map(doGroup))
@@ -350,15 +356,13 @@ Ext.define('NextThought.view.account.activity.Panel', {
 				}, []);
 
 				me.feedTpl.overwrite(container.getEl(), results);
+				maybeClearMask();
 				container.updateLayout();
 			})
 			.fail(function(reason) {
+				maybeClearMask();
 				console.error(reason);
 			});
-
-		if (store.getCount() > 0 || !store.mayHaveAdditionalPages) {
-			this.removeMask();
-		}
 	},
 
 
