@@ -56,7 +56,7 @@ Ext.define('NextThought.view.forums.topic.parts.Topic', {
 				]},
 				{ cls: 'comment-box', cn: [
 					{ cls: 'response', cn: [
-						{ tag: 'span', html: '{PostCount:plural("Comment")}'},
+						{ tag: 'span', cls: 'reply-count', html: '{PostCount:plural("Comment")}'},
 						{ tag: 'tpl', 'if': 'canReply', cn: [
 							{ tag: 'span', cls: 'reply link', html: 'Add a Comment' }
 						]},
@@ -79,6 +79,7 @@ Ext.define('NextThought.view.forums.topic.parts.Topic', {
 		editEl: '.meta .edit',
 		deleteEl: '.meta .delete',
 		commentBoxEl: '.comment-box',
+		replyCountEl: '.comment-box .reply-count',
 		responseEl: '.comment-box .response',
 		replyLinkEl: '.comment-box .response .reply',
 		reportLinkEl: '.comment-box .response .report',
@@ -159,6 +160,8 @@ Ext.define('NextThought.view.forums.topic.parts.Topic', {
 		h.addObserverForField(this, 'title', this.updateField, this);
 		h.addObserverForField(this, 'tags', this.updateField, this);
 		h.addObserverForField(this, 'body', this.updateContent, this);
+
+		this.record.addObserverForField(this, 'PostCount', this.updateReplyCount, this);
 
 
 		if (this.nameEl) {
@@ -245,6 +248,11 @@ Ext.define('NextThought.view.forums.topic.parts.Topic', {
 	updateContent: function() {
 		var h = this.record.get('headline');
 		h.compileBodyContent(this.setContent, this, this.mapWhiteboardData, {'application/vnd.nextthought.embeddedvideo': 640});
+	},
+
+
+	updateReplyCount: function(key, value) {
+		this.replyCountEl.update(Ext.util.Format.plural(value, 'Comment'));
 	},
 
 
