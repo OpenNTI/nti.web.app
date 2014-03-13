@@ -83,20 +83,13 @@ Ext.define('NextThought.controller.Forums', {
 				'forums-topic-editor': {
 					'save-post': 'saveTopicPost'
 				},
-				'forums-topic-comment': {
-					'delete-topic-comment': 'deleteObject'
-				},
+
+				//Why is this so specific?
 				'activity-preview-topic > nti-editor': {
 					'save': 'saveTopicComment'
 				},
 				'activity-preview-topic-reply > nti-editor': {
 					'save': 'saveTopicComment'
-				},
-				'profile-forum-activity-item': {
-					'delete-post': 'deleteObject'
-				},
-				'activity-preview-topic-reply': {
-					'delete-topic-comment': 'deleteObject'
 				},
 				'profile-forum-activity-item nti-editor': {
 					'save': 'saveTopicComment'
@@ -104,12 +97,22 @@ Ext.define('NextThought.controller.Forums', {
 				'profile-forum-activity-item-reply > nti-editor': {
 					'save': 'saveTopicComment'
 				},
-				'profile-forum-activity-item-reply': {
-					'delete-topic-comment': 'deleteObject'
-				},
-
 				'forums-topic-body nti-editor': {
 					'save': 'saveTopicComment'
+				},
+
+				//Why aren't these of the same type?
+				'forums-topic-comment': {
+					'delete-topic-comment': 'deleteObject'
+				},
+				'profile-forum-activity-item': {
+					'delete-post': 'deleteObject'
+				},
+				'activity-preview-topic-reply': {
+					'delete-topic-comment': 'deleteObject'
+				},
+				'profile-forum-activity-item-reply': {
+					'delete-topic-comment': 'deleteObject'
 				},
 
 				'search-result': {
