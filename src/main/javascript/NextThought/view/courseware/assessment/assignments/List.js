@@ -107,7 +107,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 	getDueDate: function(values) {
 		if (!values || !values.due) { return ''; }
 
-		var format = 'l, F j',
+		var format = 'l, g:i A, F j',
 			date = values.due,
 			opens = values.opens || new Date(0),
 			day = (new Date(date.getTime())).setHours(0, 0, 0, 0),

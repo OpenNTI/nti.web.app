@@ -55,7 +55,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 				{
 					cls: 'subtitle',
 					cn: [
-						{ tag: 'span', cls: 'due', html: 'Due {due:date("l F j, Y")}'},
+						{ tag: 'span', cls: 'due', html: 'Due {due:date("l, g:i A, F j, Y")}'},
 						{ tag: 'span', cls: 'link arrow'}
 					]
 				}
