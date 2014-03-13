@@ -153,17 +153,21 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 
 	setValue: function(v) {
 		/*
+		We're expecting a RAW object here. Not a model. So the times will be the raw timestamps.
+			CreatedTime
 			filename
 			download_url
 			url
 			value
 		*/
 
-		v = this.value = v || {};
+		v = v || {};
+		this.value = v;
+
 		this.labelBoxEl.update(v.filename || 'Not Submitted');
 
 		if (v.CreatedTime || v.filename) {
-			this.markSubmitted(v.CreatedTime || new Date());
+			this.markSubmitted(Ext.Date.parse(v.CreatedTime, 'timestamp') || new Date());
 		} else {
 			this.addCls('hide-buttons');
 		}
