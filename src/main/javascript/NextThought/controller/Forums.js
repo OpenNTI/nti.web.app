@@ -800,24 +800,34 @@ Ext.define('NextThought.controller.Forums', {
 		}
 
 		function finish(entry) {
-			if (!isEdit) {
-				//This is how the views are reading the display name... pre-set the Creator as your userObject.
-				if (isMe(entry.get('Creator'))) {
-					entry.set('Creator', $AppConfig.userObject);
-				}
-				try {
-					if (cmp && cmp.store) {
+			var record;
+			//This is how the views are reading the display name... pre-set the Creator as your userObject.
+			if (isMe(entry.get('Creator'))) {
+				entry.set('Creator', $AppConfig.userObject);
+			}
+
+			try {
+				if (cmp && cmp.store) {
+					if (isEdit) {
+						record = cmp.store.getById(entry.getId());
+
+						if (record) {
+							record.copyFrom(entry);
+							//force the view to update
+							record.afterEdit('title');
+							//since headline is a model it is not copied properly
+							record.set('headline', entry.get('headline'));
+						}
+					} else if (!isEdit) {
 						cmp.store.insert(0, entry);
 					}
 				}
-				catch (e) {
-					console.error('Could not insert post into widget', Globals.getError(e));
-				}
-
+			} catch (e) {
+				console.error('Could not insert post into widget', Global.getError(e));
+			} finally {
 				me.applyTopicToStores(entry);
+				Ext.callback(editorCmp.onSaveSuccess, editorCmp, [entry, isEdit]);
 			}
-
-			Ext.callback(editorCmp.onSaveSuccess, editorCmp, [entry, isEdit]);
 		}
 
 		if (editorCmp.el) {
@@ -850,7 +860,7 @@ Ext.define('NextThought.controller.Forums', {
 					//so we set it back on the original record to trigger other instances of the entry to be updated.
 					//Not doing this reflects itself by the body of the topic not updating in the activity view
 					if (isEdit && record) {
-						record.set('headline', record.get('headline'));
+						record.afterEdit('headline');
 					}
 
 					unmask();
