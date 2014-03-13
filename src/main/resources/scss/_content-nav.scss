@@ -21,6 +21,7 @@
 
 	.breadcrumb {
 		margin-left: 60px;
+		position: relative;
 
 		&, * {
 			color: $tertiary-grey;
@@ -31,18 +32,12 @@
 			text-transform: uppercase;
 		}
 
-		//span:not(.part){
-			//.x-ie &,
-			//.x-ie10 &,
-			//.x-gecko & {
-			//	top: -25px;
-			//	position: relative;
-			//}
-		//}
+		.part:not(.no-children):not(:first-of-type)::before {
+			content: '\00a0/\00a0';
+			color: $tertiary-grey;
+		}
 
-		span.part {
-			display: inline-block;
-			max-width: 35%;
+		.part {
 			cursor: pointer;
 
 			&:hover,
@@ -50,9 +45,9 @@
 				color: $primary-grey;
 			}
 
-			&.no-children,
-			&:last-of-type {
-				max-width: none;
+			&:not(:last-of-type) {
+				display: inline-block;
+				max-width: 35%;
 			}
 
 			&.locked {

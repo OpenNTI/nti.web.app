@@ -10,7 +10,6 @@ Ext.define('NextThought.view.content.Navigation', {
 	ui: 'content-navigation',
 	cls: 'jumpto',
 
-	breadcrumbSepTpl: Ext.DomHelper.createTemplate({tag: 'span', html: ' / '}).compile(),
 	breadcrumbTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'part', html: '{0}'}).compile(),
 
 	MAX_PATH_LENGTH: 2,
@@ -105,10 +104,6 @@ Ext.define('NextThought.view.content.Navigation', {
 			e = me.breadcrumbTpl.insertFirst(me.breadcrumb, [label], true);
 			path.add(e);
 
-			if (i < (a.length - 1)) {
-				path.add(me.breadcrumbSepTpl.insertFirst(me.breadcrumb));
-			}
-
 			if (a === lineage && allowMenus) {//only put menus on the rooted content
 				me.buildMenu(e, l, parent);
 			} else {
@@ -165,10 +160,6 @@ Ext.define('NextThought.view.content.Navigation', {
 			if (me.hasChildren(loc.location)) {
 				path.add(me.breadcrumbTpl.insertFirst(me.breadcrumb, [me.levelLabels[lineage.length]], true));
 				me.buildMenu(path.last(), C.getLocation(me.getFirstTopic(loc.location)), parent);
-
-				if (lineage.length === 1) {
-					path.add(me.breadcrumbSepTpl.insertFirst(me.breadcrumb));
-				}
 			}
 			else {
 				path.add = Ext.Function.createSequence(path.add, function(e) {
@@ -181,10 +172,6 @@ Ext.define('NextThought.view.content.Navigation', {
 		for (i; i < this.MAX_PATH_LENGTH && i < lineage.length; i++) {
 			buildPathPart.call(this, lineage[i], i, lineage);
 			pathLength++;
-		}
-
-		if (pathLength && pathLength < this.MAX_PATH_LENGTH && leftOvers.length) {
-			path.add(me.breadcrumbSepTpl.insertFirst(me.breadcrumb));
 		}
 
 		for (i = 0; pathLength < this.MAX_PATH_LENGTH && i < leftOvers.length; i++) {
