@@ -45,7 +45,7 @@ Ext.define('NextThought.util.CSS', {
 			}
 		}
 
-		console.debug(rule.cssText);
+		//console.debug(rule.cssText);
 	}
 
 
