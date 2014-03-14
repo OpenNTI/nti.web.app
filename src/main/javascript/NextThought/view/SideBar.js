@@ -3,6 +3,7 @@ Ext.define('NextThought.view.SideBar', {
 	alias: 'widget.main-sidebar',
 
 	requires: [
+		'NextThought.view.account.notifications.Panel',
 		'NextThought.view.account.activity.View',
 		'NextThought.view.account.contacts.DisabledView',
 		'NextThought.view.account.contacts.View',
@@ -53,7 +54,9 @@ Ext.define('NextThought.view.SideBar', {
 						region: 'center',
 						items: [
 							{ xtype: contactsType },
-							{ xtype: 'activity-view' }
+							{ xtype: 'activity-view' },
+							{ xtype: 'notifications-panel' }
+
 						]
 					},
 					{ xtype: 'chat-dock', region: 'south'}

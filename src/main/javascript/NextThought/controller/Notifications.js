@@ -9,21 +9,23 @@ Ext.define('NextThought.controller.Notifications', {
 
 	models: [],
 
-	views: [],
+	views: ['account.notifications.Panel'],
 
 	refs: [],
 
 	init: function() {
+		this.notificationStore = NextThought.store.Stream.create({storeId: 'notifications'});
 		this.application.on('session-ready', this.onSessionReady, this);
 	},
 
 	onSessionReady: function() {
-		//Load page and root stream stores...
-
+		var store = this.notificationStore;
 		Service.getPageInfo(Globals.CONTENT_ROOT,
 				//success:
 				function(pageInfo) {
 					var url = pageInfo.getLink(Globals.MESSAGE_INBOX);
+					store.url = store.proxy.url = url;
+					store.load();
 				},
 				//failure:
 				function() {

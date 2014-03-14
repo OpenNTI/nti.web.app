@@ -1,13 +1,12 @@
-Ext.define('NextThought.view.account.history.Panel', {
+Ext.define('NextThought.view.account.notifications.Panel', {
 	extend: 'Ext.view.View',
-	alias: ['widget.user-history-panel'],
+	alias: ['widget.notifications-panel'],
 
 	requires: [
 		'NextThought.model.UIViewHeader',
 		'NextThought.model.events.Bus',
 		'NextThought.store.PageItem',
 		'NextThought.util.Time',
-		'NextThought.model.converters.GroupByTime',
 		'NextThought.view.account.history.mixins.Note',
 		'NextThought.view.account.history.mixins.ForumTopic',
 		'NextThought.view.account.history.mixins.BlogEntry',
@@ -16,41 +15,20 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 	],
 
-	mixins: {
-		'activityFilter': 'NextThought.mixins.ActivityFilters'
+	iconCls: 'inbox',
+	title: 'Notifications',
+	tabConfig: {
+		tooltip: 'Notifications'
 	},
-
-	stateful: true,
-
-	storeId: 'noteHighlightStore',
-	filter: 'MeOnly,Bookmarks',
-	filterOperator: '0',
-	filterMap: {
-		'application/vnd.nextthought.bookmarks': 'Bookmarks'
-	},
-
-	mimeType: [
-		'note',
-		'highlight',
-		'contact',
-		'forums.personalblogcomment',
-		'forums.personalblogentrypost',
-		'forums.communityheadlinepost',
-		'forums.generalforumcomment'
-	],
-
-	grouping: 'GroupingField',
 
 	ui: 'history',
 	cls: 'user-data-panel scrollable',
 	preserveScrollOnRefresh: true,
-
 	deferEmptyText: true,
-
 	emptyText: Ext.DomHelper.markup([
 		{
 			cls: 'history nothing rhp-empty-list',
-			html: 'No Activity Yet'
+			html: 'All caught up'
 		}
 	]),
 
@@ -113,29 +91,21 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 
 	initComponent: function() {
+		var Types = NextThought.view.account.history.mixins;
 		this.callParent(arguments);
+		this.types = [
+			Types.Note.create({panel: this}),
+			Types.Highlight.create({panel: this}),
+			Types.ForumTopic.create({panel: this}),
+			Types.BlogEntry({panel: this}),
+			Types.Bookmark.create({panel: this})
+		];
 
-		this.noteItem = new NextThought.view.account.history.mixins.Note({panel: this});
-		this.highlightItem = new NextThought.view.account.history.mixins.Highlight({panel: this});
-		this.forumTopicItem = new NextThought.view.account.history.mixins.ForumTopic({panel: this});
-		this.blogEntryItem = new NextThought.view.account.history.mixins.BlogEntry({panel: this});
-		this.bookmarkItem = new NextThought.view.account.history.mixins.Bookmark({panel: this});
-
-		this.buildStore();
+		this.highlightItem = this.types[1];
 
 		this.on('resize', 'manageMaskSize');
 
-		this.setUpMenu('history');
-	},
-
-
-	getMimeTypes: function() {
-		this.mimeTypes = [];
-		Ext.each(this.mimeType, function(t) {
-			this.mimeTypes.push('application/vnd.nextthought.' + RegExp.escape(t));
-		}, this);
-
-		return this.mimeTypes;
+		this.buildStore();
 	},
 
 
@@ -155,83 +125,63 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 
 	buildStore: function() {
-		if (NextThought.store.PageItem.prototype.proxy.url === 'tbd') {
+		//function makeMime(v) { return 'application/vnd.nextthought.' + v.toLowerCase(); }
+
+		if (!Ext.getStore('notifications').url) {
 			Ext.defer(this.buildStore, 100, this);
 			return;
 		}
 
-		function load() {
-			s.load();
-		}
-
 		var registry = this.tpl.subTemplates,
 			s = NextThought.store.PageItem.create({
-			id: this.storeId,
-			sortOnLoad: true,
-			statefulFilters: false,
-			remoteSort: false,
-			remoteFilter: false,
-			remoteGroup: false,
-			filterOnLoad: true,
-			sortOnFilter: true,
-			groupers: [
-				{
-					direction: 'DESC',
-					property: 'GroupingField'
-				}
-			],
-			sorters: [
-				function(a, b) { return a.isHeader === b.isHeader ? 0 : a.isHeader ? -1 : 1; },
-				{
-					direction: 'DESC',
-					property: 'CreatedTime'
-				}
-			],
-			filters: [
-				function(item) {
-					var m = item.get('MimeType'),
-						f = !m || registry.hasOwnProperty(m);
-					if (!f) {console.warn('Unregistered Type: ' + item.get('MimeType'), 'This component does not know how to render this item.');}
-					return f;
-				}
-			]
-		});
+				storeId: this.storeId,
+				sortOnLoad: true,
+				statefulFilters: false,
+				remoteSort: false,
+				remoteFilter: false,
+				remoteGroup: false,
+				filterOnLoad: true,
+				sortOnFilter: true,
+				groupers: [
+					{
+						direction: 'DESC',
+						property: 'GroupingField'
+					}
+				],
+				sorters: [
+					function(a, b) { return a.isHeader === b.isHeader ? 0 : a.isHeader ? -1 : 1; },
+					{
+						direction: 'DESC',
+						property: 'CreatedTime'
+					}
+				],
+				filters: [
+					function(item) {
+						var m = item.get('MimeType'),
+							f = !m || registry.hasOwnProperty(m);
+						if (!f) {console.warn('Unregistered Type: ' + item.get('MimeType'), 'This component does not know how to render this item.');}
+						return f;
+					}
+				]
+			});
 
-		function makeMime(v) {
-			return 'application/vnd.nextthought.' + v.toLowerCase();
-		}
 
+		s.proxy.url = Ext.getStore('notifications').url;
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
 			sortOn: 'createdTime',
-			sortOrder: 'descending',
-			filter: this.filter,
-			exclude: [
-				 'redaction',
-				 'assessment.AssessedQuestion',
-				 'assessment.AssessedQuestionSet',
-				 'forums.communityheadlinepost',
-				 'forums.personalblogentrypost'
-			 ].map(makeMime).join(',')
+			sortOrder: 'descending'
 		});
-
-
 
 		this.store = s;
 
-		this.applyFilterParams();
 
-		this.mon(this.store, {
+		this.mon(s, {
 			add: 'recordsAdded',
 			load: 'storeLoaded'
 		});
 
-
-		this.bindStore(this.store);
-		if (this.rendered) {
-			load();
-		} else {
-			this.on('afterrender', load);
-		}
+		this.bindStore(s);
+		s.load();
 	},
 
 
@@ -262,19 +212,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 	},
 
 
-	applyFilterParams: function() {
-		if (this.store) {
-			Ext.apply(this.store.proxy.extraParams, {
-				filterOperator: this.filterOperator,
-				filter: this.filter,
-				accept: this.getMimeTypes().join(',')
-			});
-		}
-	},
-
-
 	recordsAdded: function(store, records) {
-		console.debug(' UserDataPanel Store added records:', arguments);
 		Ext.each(records, this.fillInData, this);
 	},
 
@@ -282,7 +220,6 @@ Ext.define('NextThought.view.account.history.Panel', {
 	storeLoaded: function(store) {
 		Ext.each(store.getRange(), this.fillInData, this);
 		this.insertDividers();
-
 		this.maybeShowMoreItems();
 	},
 
@@ -316,9 +253,6 @@ Ext.define('NextThought.view.account.history.Panel', {
 		this.mon(this.el, {
 			scroll: 'onScroll'
 		});
-
-		this.getTypesMenu().show().hide();
-		this.mixins.activityFilter.afterRender.apply(this);
 	},
 
 
@@ -438,38 +372,5 @@ Ext.define('NextThought.view.account.history.Panel', {
 			this.prefetchNext();
 		}
 
-	},
-
-
-	applyFilters: function(mimeTypes, filterTypes) {
-		if (Ext.isEmpty(mimeTypes) && Ext.isEmpty(filterTypes)) {
-			return;
-		}
-
-		var me = this,
-			s = me.getStore(),
-			fo = (filterTypes.length > 1) ? '0' : '1';
-
-		if (Ext.isEmpty(filterTypes)) {
-			filterTypes = ['MeOnly', 'Bookmarks'];
-			fo = '0';
-		}
-
-		me.filter = filterTypes.join(',');
-		me.filterOperator = (filterTypes.length > 1) ? fo : undefined;
-
-		this.getMimeTypes = function() { return mimeTypes; };
-
-		if (!s || s.storeId === 'ext-empty-store') {
-			return;
-		}
-
-
-		s.removeAll();
-
-		me.applyFilterParams();
-
-		s.currentPage = 1;
-		s.load();
 	}
 });
