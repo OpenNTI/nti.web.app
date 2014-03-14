@@ -61,7 +61,7 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 			bodyBottom = Ext.getBody().getBottom(),
 			parentBottom = parentEl ? parentEl.getBottom() : 0;
 
-		if (!el) {return;}
+		if (!el || !el.dom) {return;}
 
 		oldBottom = el.getAttribute('data-desired-bottom');
 
