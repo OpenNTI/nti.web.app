@@ -223,6 +223,7 @@ Ext.define('NextThought.controller.Profile', {
 	},
 
 
+	//refresher: this is called in the UserData controller in the socket change event handler.
 	incomingChange: function(change) {
 		if (!change.isModel) {
 			change = ParseUtils.parseItems([change])[0];
@@ -291,7 +292,7 @@ Ext.define('NextThought.controller.Profile', {
 			}
 		}
 
-		
+
 
 		post.set({
 			'title': title,
