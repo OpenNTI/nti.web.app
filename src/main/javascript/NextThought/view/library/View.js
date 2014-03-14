@@ -54,6 +54,14 @@ Ext.define('NextThought.view.library.View', {
 	],
 
 
+	invertParentsPaddingToMargins: function(sides) {
+		this.items.each(function(page) {
+			page.updateSidePadding(sides);
+		});
+		this.callParent(arguments);
+	},
+
+
 	initComponent: function() {
 		this.callParent(arguments);
 		this.removeCls('make-white');

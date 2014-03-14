@@ -24,6 +24,8 @@ Ext.define('NextThought.view.library.Page', {
 		this.hideOrShow = Ext.Function.createBuffered(this.hideOrShow, 1, null, null);
 		this.callParent([config]);
 		this.enableBubble(['update-tab']);
+		this.cssRule = CSSUtils.getRule('main-view-container-sytles', '#' + this.id);
+		CSSUtils.set(this.cssRule, {width: 'auto'}, true);
 	},
 
 
@@ -49,5 +51,14 @@ Ext.define('NextThought.view.library.Page', {
 		var v = this.query('dataview');
 		this.showPage = v.reduce(has, 0) > 0;
 		this.fireEvent('update-tab');
+	},
+
+	updateSidePadding: function(sides) {
+		function toPx(i) { return (i && i + 'px') || i; }
+
+		CSSUtils.set(this.cssRule, {
+			paddingLeft: toPx(sides.left),
+			paddingRight: toPx(sides.right)
+		});
 	}
 });

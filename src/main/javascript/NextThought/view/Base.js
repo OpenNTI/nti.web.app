@@ -8,6 +8,26 @@ Ext.define('NextThought.view.Base', {
 		this.enableBubble('before-activate-view', 'activate-view', 'new-background');
 		this.callParent(arguments);
 		this.addCls('main-view-container make-white');
+		this.on('added', 'monitorSizeAdjustments');
+	},
+
+
+	monitorSizeAdjustments: function(me, ct) {
+		var sheet;
+		if (this.foceScrollZoneOut) {
+			this.cssRule = CSSUtils.getRule('main-view-container-sytles', '#' + this.id);
+			this.cssRule.style.setProperty('width', 'auto', 'important');
+			this.cssRule.style.setProperty('left', '0', 'important');
+			this.mon(ct, 'sides-adjusted', 'invertParentsPaddingToMargins');
+		}
+	},
+
+
+	invertParentsPaddingToMargins: function(sides) {
+		CSSUtils.set(this.cssRule, {
+			marginLeft: (-sides.left) + 'px',
+			marginRight: (-sides.right) + 'px'
+		}, true);
 	},
 
 

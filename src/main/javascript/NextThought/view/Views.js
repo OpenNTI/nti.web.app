@@ -24,7 +24,7 @@ Ext.define('NextThought.view.Views', {
 	},
 	items: [
 		{id: 'profile', xtype: 'profile-view-container', associatedParent: 'contacts'},
-		{id: 'library', xtype: 'library-view-container'},
+		{id: 'library', xtype: 'library-view-container', foceScrollZoneOut: true},
 		{id: 'content', xtype: 'content-view-container'},
 		{id: 'forums', xtype: 'forums-container'},
 		{id: 'contacts', xtype: 'contacts-view-container'}
@@ -126,7 +126,7 @@ Ext.define('NextThought.view.Views', {
 		function scale(delta) {
 			rp = Math.floor(delta / ip.scale);
 			lp = (delta - rp) + 'px';
-			rp = rp + 'px';
+			rp += 'px';
 		}
 
 		if (w > minWidth) {
@@ -149,6 +149,8 @@ Ext.define('NextThought.view.Views', {
 		//this.tabs.setLocalX(parseInt(lp,10));
 		this.el.setStyle({paddingLeft: lp, paddingRight: rp});
 		this.nav.setStyle({paddingLeft: lp});
+
+		this.fireEvent('sides-adjusted', {left: (lp && parseInt(lp, 10)) || lp, right: (rp && parseInt(rp, 10)) || rp});
 		this.updateLayout();
 	},
 
