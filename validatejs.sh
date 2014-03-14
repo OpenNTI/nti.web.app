@@ -2,6 +2,15 @@
 PRINT_DOTS="true"
 PRINT_JUST_NAMES="false"
 JUST_THE_NEXT="false"
+FILES=
+VCSLIST=
+LIST="find src/main/javascript -name \*.js"
+
+if [ -d .svn ]; then
+	VCSLIST="svn status | cut -c9-"
+elif [ -d .git ]; then
+	VCSLIST="git diff --name-only | grep -i '.js$'"
+fi
 
 #do fancy stuff when no args present
 if [ -z "$1" ]; then
@@ -35,13 +44,14 @@ unparam=true	vars=false		white=false		widget=false	window=false
 POSIBLE_FLAGS
 
 LINT_OPTS='continue closure'
-FILES=`find src/main/javascript -name \*.js | sort -u`
 ERRORS=false
 
 if [ "$1" != "" ] ; then
 	if [ "$1" ==  "-ls" ] ; then
 		PRINT_JUST_NAMES="true"
 		PRINT_DOTS="false"
+	elif [ "$1" ==  "-diff" ] ; then
+		LIST=$VCSLIST
 	elif [ "$1" ==  "-next" ] ; then
 		PRINT_JUST_NAMES="true"
 		JUST_THE_NEXT="true"
@@ -53,40 +63,56 @@ if [ "$1" != "" ] ; then
 			FILES=$1
 			PRINT_DOTS="false"
 		else
-			echo " $1 does not exist"
+			echo " $1 is not a file"
 			exit 1
 		fi
 	fi
 fi
 
+if [ -z "$FILES" ]; then
+	FILES=`eval $LIST | sort -u`
+fi
+
 for f in $FILES
 do
-	OUTPUT=`jslint "$f" $LINT_OPTS`
-	if [[ "$OUTPUT" != "No error found" ]] ; then
-		ERRORS=true
+	if [ ! -f $f ]; then  #file was deleted
+		continue
+	fi
+	
+	CHECK=( 
+		"jslint $(pwd)/$f $LINE_OPTS"
+		"gjslint --strict --disable=0005,0220 --max_line_length=160 $(pwd)/$f"
+		)
+	
+	for LINTER in "${CHECK[@]}"
+	do
+		LINT=`$LINTER`;
+		if ! echo $LINT | grep -i -s 'no error' > /dev/null ; then
+			ERRORS=true
 
-		if [ "$PRINT_JUST_NAMES" = "true" ]; then
-			echo "$f"
-			if [ "$JUST_THE_NEXT" = "true" ] ; then
-				exit
+			if [ "$PRINT_JUST_NAMES" = "true" ]; then
+				echo "$f"
+				if [ "$JUST_THE_NEXT" = "true" ] ; then
+					exit
+				fi
+			else
+				if [ "$PRINT_DOTS" = "true" ]; then
+					echo "" >&2
+					echo "Has errors: $f:" >&2
+				fi
+				echo "$LINT" >&2
+				echo "" >&2
+				echo "" >&2
+				if [ "$PRINT_DOTS" = "true" ]; then
+					echo -n "x"
+				fi
 			fi
 		else
 			if [ "$PRINT_DOTS" = "true" ]; then
-				echo "" >&2
-				echo "Has errors: $f:" >&2
-			fi
-			echo "$OUTPUT" >&2
-			echo "" >&2
-			echo "" >&2
-			if [ "$PRINT_DOTS" = "true" ]; then
-				echo -n "x"
+				echo -n "."
 			fi
 		fi
-	else
-		if [ "$PRINT_DOTS" = "true" ]; then
-			echo -n "."
-		fi
-	fi
+	done	
 done
 
 if [ "$PRINT_DOTS" = "true" ]; then
