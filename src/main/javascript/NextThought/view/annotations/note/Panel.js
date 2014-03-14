@@ -737,14 +737,18 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 			this.on('afterrender', Ext.bind(this.setContext, this, arguments), this, {single: true});
 			return;
 		}
-		var r = this.record, newContext, reader = this.reader;
+		var r = this.record, newContext, reader = this.reader,
+			rangeDesc = r.get('applicableRange'),
+			cid = r.get('ContainerId');
+
 		try {
 			this.context.setHTML('');
-			if (!reader) {
-				reader = Ext.ComponentQuery.query('reader-content')[0];
+			newContext = doc && RangeUtils.getContextAroundRange(rangeDesc, doc, cleanRoot, cid);
+			if (!newContext) {
+				reader = reader || ReaderPanel.get('default');
+				//last ditch...TODO: remove this dependancy:
+				newContext = reader.getDomContextForRecord(r, doc, cleanRoot);
 			}
-			// The reader should know about the things it contains, so ask it for the context node.
-			newContext = reader.getDomContextForRecord(r, doc, cleanRoot);
 
 			if (newContext) {
 				newContext = this.fixUpCopiedContext(newContext);
