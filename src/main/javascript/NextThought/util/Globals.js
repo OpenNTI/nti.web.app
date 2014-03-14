@@ -3,6 +3,7 @@ Ext.define('NextThought.util.Globals', {
 
 
 	/* DATASERVER 2 Constants*/
+	MESSAGE_INBOX: 'RUGDByOthersThatIMightBeInterestedIn',
 	RECURSIVE_STREAM: 'RecursiveStream',
 	RECURSIVE_USER_GENERATED_DATA: 'RecursiveUserGeneratedData',
 	USER_GENERATED_DATA: 'UserGeneratedData',
@@ -123,10 +124,10 @@ Ext.define('NextThought.util.Globals', {
 	/**
 	 * Loads a script into the dom
 	 *
-	 * @param url
-	 * @param [onLoad]
-	 * @param [onError]
-	 * @param [scope]
+	 * @param {String} url
+	 * @param {Function} [onLoad]
+	 * @param {Function} [onError]
+	 * @param {Object} [scope]
 	 */
 	loadScript: function(url, onLoad, onError, scope, bustCache) {
 		var head, doc = document,
@@ -149,7 +150,7 @@ Ext.define('NextThought.util.Globals', {
 			url = url.url;
 		}
 
-		head = typeof doc !== 'undefined' && (doc.head || doc.getElementsByTagName('head')[0]);
+		head = doc && (doc.head || doc.getElementsByTagName('head')[0]);
 		script = doc.createElement('script');
 		onLoadFn = buildCallback(onLoad, scope);
 		onErrorFn = buildCallback(onError, scope);
@@ -203,10 +204,10 @@ Ext.define('NextThought.util.Globals', {
 	/**
 	 * Load a stylesheet file (.css) into the DOM.
 	 *
-	 * @param url
-	 * @param [onLoad]
-	 * @param [onFail]
-	 * @param [scope] Context object to execute the onLoad/onFail callbacks
+	 * @param {String} url
+	 * @param {Function} [onLoad]
+	 * @param {Function} [onFail]
+	 * @param {Object} [scope] Context object to execute the onLoad/onFail callbacks
 	 */
 	loadStyleSheet: function(url, onLoad, onFail, scope) {
 		var t, i = 0, doc = document, head, link, call, check;
@@ -332,7 +333,8 @@ Ext.define('NextThought.util.Globals', {
 
 		var re = naturalSort.re = (naturalSort.re || /(^-?[0-9]+(\.?[0-9]*)[df]?e?[0-9]?$|^0x[0-9a-f]+$|[0-9]+)/gi),
 	        sre = naturalSort.sre = (naturalSort.sre || /(^[ ]*|[ ]*$)/g),
-	        dre = naturalSort.dre = (naturalSort.dre || /(^([\w ]+,?[\w ]+)?[\w ]+,?[\w ]+\d+:\d+(:\d+)?[\w ]?|^\d{1,4}[\/\-]\d{1,4}[\/\-]\d{1,4}|^\w+, \w+ \d+, \d{4})/),
+	        dre = naturalSort.dre =
+				  (naturalSort.dre || /(^([\w ]+,?[\w ]+)?[\w ]+,?[\w ]+\d+:\d+(:\d+)?[\w ]?|^\d{1,4}[\/\-]\d{1,4}[\/\-]\d{1,4}|^\w+, \w+ \d+, \d{4})/),
 	        hre = naturalSort.hre = (naturalSort.hre || /^0x[0-9a-f]+$/i),
 	        ore = naturalSort.ore = (naturalSort.ore || /^0/),
 			// convert all to strings strip whitespace
