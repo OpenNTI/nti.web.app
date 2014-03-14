@@ -71,10 +71,26 @@ Ext.define('NextThought.util.PageSource', {
 	},
 
 
-	hasNext: function() { return this.store && this.getTotal() > 1; },
+	hasNext: function() {
+		if (!this.store) { return false; }
+		var n = this.getCurrentPosition() + 1;
+
+		if (n < this.getTotal()) {
+			return true;
+		}
+		return false;
+	},
 
 
-	hasPrevious: function() { return this.store && this.getTotal() > 1; }
+	hasPrevious: function() {
+		if (!this.store) { return false; }
+		var n = this.getCurrentPosition() - 1;
+
+		if (n >= 0) {
+			return true;
+		}
+		return false;
+	}
 });
 
 
