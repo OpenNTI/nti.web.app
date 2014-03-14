@@ -146,7 +146,10 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 					type: 'json',
 					root: 'Items'
 				}
-			}
+			},
+			sorters: [
+				{ property: 'CreatedTime' }
+			]
 		});
 
 		this.mon(this.store, 'load', 'resolveUsers');
