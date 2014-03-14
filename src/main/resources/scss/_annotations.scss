@@ -206,6 +206,17 @@
 	}
 }
 
+.x-panel-notes-and-discussion .x-panel-body-notes-and-discussion{
+	position: absolute !important;
+	top: 60px;
+	bottom: 0;
+	height: auto !important;
+
+	& > .x-component {
+		position: absolute; top: 0; bottom: 0; height: auto !important;
+	}
+}
+
 .x-component-annotation-view {
 	@include scrollbar(#fbfbfb, $tertiary-grey);
 	overflow: {
