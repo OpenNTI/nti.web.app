@@ -9,8 +9,9 @@ LIST="find src/main/javascript -name \*.js"
 if [ -d .svn ]; then
 	VCSLIST="svn status | cut -c9-"
 elif [ -d .git ]; then
-	VCSLIST="git diff --name-only | grep -i '.js$'"
+	VCSLIST="git diff --name-only"
 fi
+VCSLIST="$VCSLIST | grep -i '.js$'"
 
 #do fancy stuff when no args present
 if [ -z "$1" ]; then
