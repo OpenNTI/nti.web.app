@@ -161,7 +161,8 @@ Ext.define('NextThought.view.content.Reader', {
 				cid = r.get('ContainerId');
 
 		doc = doc || this.getDocumentElement();
-		cleanRoot = cleanRoot && this.getCleanContent();
+		cleanRoot = cleanRoot || this.getCleanContent();
+
 		return RangeUtils.getContextAroundRange(rangeDesc, doc, cleanRoot, cid);
 	},
 
