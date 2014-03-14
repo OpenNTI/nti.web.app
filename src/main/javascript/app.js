@@ -54,6 +54,7 @@ Ext.application({
 		'Google',
 		'Groups',
 		'Navigation',
+		'Notifications',
 		'Profile',
 		'Reader',
 		'Search',
