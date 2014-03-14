@@ -21,6 +21,7 @@ Ext.define('NextThought.overrides.builtins.Console', function() {
 		timeEnd: Ext.emptyFn
 	});
 
+	console.deprecated = console.debug.bind(console, 'DEPRECATED:');
 
 	var log = [],
 		fns = ['log', 'debug', 'info', 'warn', 'error', 'group', 'trace', 'groupCollapsed', 'groupEnd', 'time', 'timeEnd'],

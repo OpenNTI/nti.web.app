@@ -137,6 +137,7 @@ Ext.applyIf(Promise.prototype, {
 	validateHandler: function(fn) { if (typeof fn !== 'function') { throw new TypeError('Expected a function'); } },
 
 	replace: function(oldPromise) {
+		console.deprecated('[Bad Practice!] Promises that need replacing need to be rejected with a "reason" of "replace" and remade.');
 		if (oldPromise.state === 0 && oldPromise.fulfill && oldPromise.reject) {
 			this.then(
 					oldPromise.fulfill.bind(oldPromise),
@@ -151,6 +152,7 @@ Ext.applyIf(Promise, {
 	resolve: function(v) { return new Promise(function(f) {f.call(this, v);}); },
 	reject: function(v) { return new Promise(function(f, r) {r.call(this, v);}); }
 });
+
 
 /**
  * The standard calls this "all"...
@@ -227,22 +229,34 @@ Ext.define('NextThought.util.Promise', {
 	singleton: true,
 
 	make: function() {
+		function clean(i) {
+			delete p.fulfill; delete o.fulfill;
+			delete p.reject; delete o.reject;
+			p.state = i; o.state = i;
+		}
+
 		var o = {state: 0},
 		//because we used a "deferred" promise model (fulfullment/rejection happens externally) we have to construct it and bring the fulfull/reject
 		// functions to the surface.
 			p = new Promise(function(f, r) {
-				function clean(i) {
-					delete p.fulfill; delete o.fulfill;
-					delete p.reject; delete o.reject;
-					p.state = i; o.state = i;
-				}
-
 				o.fulfill = function(value) {f(value); clean(1);};
 				o.reject = function(reason) {r(reason); clean(2);};
 			});
 
 		Ext.applyIf(p, o);
-
+		console.deprecated('[Bad Practice!] Promises should be not made without a guarantee. See this line.');
+		/**
+		 * Prferred pattern ex:
+		 * new Promise(function (fulfill, reject) {//the Guarantee
+		 *     //do something async here
+		 *     ajax(somerequest)
+		 *          .then(process)
+		 *          .done(function(procesResults) {
+		 *              fullfill(procesResults);
+		 *          })
+		 *          .fail(reject);
+		 * });
+		 */
 		return p;
 	}
 
