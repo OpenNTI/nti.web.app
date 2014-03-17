@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.account.history.mixins.Feedback', {
-	extend: 'NextThought.view.account.history.mixins.Note',
+	extend: 'NextThought.view.account.history.mixins.Grade',
 	keyVal: 'application/vnd.nextthought.assessment.userscourseassignmenthistoryitemfeedback',
 	alias: 'widget.history-item-feedback',
 
@@ -13,32 +13,5 @@ Ext.define('NextThought.view.account.history.mixins.Feedback', {
 				]}
 			]
 		}
-	])),
-
-	clicked: function(view, rec) {
-		var course = CourseWareUtils.courseForNtiid(rec.get('assignmentContainer'));
-
-		CourseWareUtils.findCourseBy(course.findByMyCourseInstance())
-			.then(function(instance) {
-				instance = instance.get('CourseInstance') || instance;
-				return instance.fireNavigationEvent(view);
-			})
-			.done(function() {
-				view.fireEvent('navigate-to-assignment', rec.get('AssignmentId'));
-			})
-			.fail(function(reason) {
-				console.error(reason);
-			});
-	},
-
-	fillInData: function(rec) {
-		if (rec.get('assignmentName')) {
-			return;
-		}
-		Service.getObject(rec.get('AssignmentId'), function(assignment) {
-			rec.set('assignmentContainer', assignment.get('ContainerId'));
-			rec.set('assignmentName', assignment.get('title'));
-		});
-	}
-
+	]))
 });
