@@ -39,6 +39,6 @@ Ext.define('NextThought.view.account.history.mixins.ForumComment', {
 	},
 
 	clicked: function(view, rec) {
-		view.fireEvent('show-topic', view, rec);
+		view.fireEvent('show-topic-comment', view, rec);
 	}
 });

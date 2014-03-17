@@ -123,6 +123,7 @@ Ext.define('NextThought.controller.Forums', {
 					'forums:fill-in-path': 'fillInPath',
 					'show-forum-list': 'loadForumList',
 					'show-topic-list': 'loadTopicList',
+					'show-topic-comment': 'loadComment',
 					'new-topic': 'showNewTopicEditor',
 					'goto-forum-item': 'presentForumItem'
 				}
