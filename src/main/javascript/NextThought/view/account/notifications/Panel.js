@@ -12,7 +12,8 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		'NextThought.view.account.history.mixins.BlogEntry',
 		'NextThought.view.account.history.mixins.Highlight',
 		'NextThought.view.account.history.mixins.Bookmark',
-		'NextThought.view.account.history.mixins.Grade'
+		'NextThought.view.account.history.mixins.Grade',
+		'NextThought.view.account.history.mixins.Feedback'
 
 	],
 
@@ -110,7 +111,8 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 			Types.ForumTopic.create({panel: this}),
 			Types.BlogEntry({panel: this}),
 			Types.Bookmark.create({panel: this}),
-			Types.Grade.create({panel: this})
+			Types.Grade.create({panel: this}),
+			Types.Feedback.create({panel: this})
 		];
 
 		this.highlightItem = this.types[1];
