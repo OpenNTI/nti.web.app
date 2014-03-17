@@ -4,7 +4,7 @@ Ext.define('NextThought.view.account.activity.View', {
 	alias: 'widget.activity-view',
 	requires: [
 		'NextThought.view.account.activity.Panel',
-		'NextThought.view.account.history.View'
+		'NextThought.view.account.history.Panel'
 	],
 
 	stateful: true,
@@ -159,7 +159,7 @@ Ext.define('NextThought.view.account.activity.View', {
 		});
 
 
-		me.mon(el, 'mouseleave', function() {
+		me.mon(me.el, 'mouseleave', function() {
 			if (me.fromMenu.isVisible()) {
 				me.fromHideTimeout = Ext.defer(m.hide, 500, m);
 			}

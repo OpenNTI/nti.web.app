@@ -112,9 +112,42 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 
 		this.highlightItem = this.types[1];
 
-		this.on('resize', 'manageMaskSize');
+		this.on({
+			'resize': 'manageMaskSize'
+		});
 
 		this.buildStore();
+		this.setBadgeValue(10);
+	},
+
+
+	addBadge: function() {
+		var tab = this.tab;
+		if (!tab) {
+			console.error('no tab to badge');
+		}
+
+		if (!tab.rendered) {
+			if (!tab.isListening('afterrender', this.addBadge, this)) {
+				tab.on('afterrender', this.addBadge, this);
+			}
+			return;
+		}
+		this.badge = Ext.DomHelper.append(tab.getEl(), {cls: 'badge', html: this.badgeValue},true);
+		delete tab.badge;
+	},
+
+
+	setBadgeValue: function(count) {
+		var v = count || '&nbsp;';
+
+		this.badgeValue = v;
+
+		if (!this.badge) {
+			return;
+		}
+
+		this.badge.update(v);
 	},
 
 

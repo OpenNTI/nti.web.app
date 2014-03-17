@@ -7,7 +7,6 @@ Ext.define('NextThought.view.SideBar', {
 		'NextThought.view.account.activity.View',
 		'NextThought.view.account.contacts.DisabledView',
 		'NextThought.view.account.contacts.View',
-		'NextThought.view.account.history.View',
 		'NextThought.view.chat.Dock'
 	],
 
@@ -294,11 +293,10 @@ Ext.define('NextThought.view.SideBarTab', {
 
 Ext.define('NextThought.view.SideBarTabPanel', {
 	extend: 'Ext.tab.Panel',
+	alias: 'widget.sidebar-tabpanel',
 	requires: [
-		'NextThought.mixins.IsListening',
 		'Ext.layout.container.boxOverflow.None'
 	],
-	alias: 'widget.sidebar-tabpanel',
 	ui: 'sidebar',
 	plain: true,
 	cls: 'sidebar-panel-container',
@@ -322,6 +320,10 @@ Ext.define('NextThought.view.SideBarTabPanel', {
 		item.tabConfig = Ext.applyIf(item.tabConfig || {}, {
 			xtype: 'sidebar-tab'
 		});
-		return this.callParent([item, index]);
+		var r = this.callParent([item, index]);
+		if (item.addBadge) {
+			item.addBadge();
+		}
+		return r;
 	}
 });
