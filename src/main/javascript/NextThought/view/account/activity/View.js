@@ -81,8 +81,7 @@ Ext.define('NextThought.view.account.activity.View', {
 
 	initComponent: function() {
 		this.callParent(arguments);
-		var i,
-			history = this.down('user-history-panel'),
+		var history = this.down('user-history-panel'),
 			contacts = this.down('activity-panel[filter=IFollow]'),
 			community = this.down('activity-panel[filter=inCommunity]');
 
@@ -137,54 +136,43 @@ Ext.define('NextThought.view.account.activity.View', {
 
 	afterRender: function() {
 		this.callParent(arguments);
-		var filterEl = this.filtersTpl.append(this.el, null, true);
+		var me = this,
+			filterEl = me.filtersTpl.append(me.el, null, true),
+			m = this.fromMenu;
 
-		//this.switchPanel('history');
-		this.mon(filterEl, {
-			scope: this,
-			'click': 'handleClick'
-		});
+		me.mon(filterEl, { 'click': 'handleClick' });
+		me.on({ 'deactivate': 'resetNotificationCount' });
 
-		this.mon(this, {
-			scope: this,
-			'deactivate': 'resetNotificationCount'
-		});
-
-		this.mon(this.fromMenu, {
-			scope: this,
+		me.mon(m, {
 			'show': function() {
-				this.el.down('.filters-container .tabs .from').addCls('selected');
+				me.el.down('.filters-container .tabs .from').addCls('selected');
 			},
 			'hide': function() {
 				filterEl.down('.tabs .from').removeCls('selected');
 			},
 			'mouseenter': function() {
-				clearTimeout(this.fromHideTimeout);
+				clearTimeout(me.fromHideTimeout);
 			},
 			'mouseleave': function() {
-				this.fromHideTimeout = Ext.defer(function() {
-						this.fromMenu.hide();
-					}, 500, this);
+				me.fromHideTimeout = Ext.defer(m.hide, 500, m);
 			}
 		});
 
 
-		this.el.on('mouseleave', function() {
-			if (this.fromMenu.isVisible()) {
-				this.fromHideTimeout = Ext.defer(function() {
-					this.fromMenu.hide();
-				}, 500, this);
+		me.mon(el, 'mouseleave', function() {
+			if (me.fromMenu.isVisible()) {
+				me.fromHideTimeout = Ext.defer(m.hide, 500, m);
 			}
-		}, this);
+		});
 
-		this.fromMenu.show().hide();
+		m.show().hide();
 
-		if (!this.stateApplied) {
-			this.applyState({from: 'community', filter: ['Show All']});
+		if (!me.stateApplied) {
+			me.applyState({from: 'community', filter: ['Show All']});
 		}
 
 		if (!Service.canFriend()) {
-			this.fromMenu.down('menuitem[isContacts]').destroy();
+			me.fromMenu.down('menuitem[isContacts]').destroy();
 		}
 	},
 
@@ -230,7 +218,7 @@ Ext.define('NextThought.view.account.activity.View', {
 	},
 
 
-	stopAutoRefresh: function(p) {
+	stopAutoRefresh: function() {
 		if (this.autoRefreshTimer) {
 			console.log('Stopping refresh cycle');
 			clearTimeout(this.autoRefreshTimer);
@@ -275,7 +263,7 @@ Ext.define('NextThought.view.account.activity.View', {
 
 	scheduleNextRefresh: function(p) {
 		var me = this;
-		me.currentRefreshInterval = me.currentRefreshInterval * me.adjustmentFactor;
+		me.currentRefreshInterval *= me.adjustmentFactor;
 		if (me.currentRefreshInterval > me.maxRefreshInterval) {
 			me.currentRefreshInterval = me.maxRefreshInterval;
 		}
@@ -335,7 +323,8 @@ Ext.define('NextThought.view.account.activity.View', {
 	},
 
 	showTypesMenu: function() {
-		var active = this.getActivePanel(),
+		var me = this,
+			active = me.getActivePanel(),
 			menu = active.getTypesMenu();
 
 		if (menu.isVisible()) {
@@ -343,27 +332,25 @@ Ext.define('NextThought.view.account.activity.View', {
 			return;
 		}
 
-		Ext.destroy(this.menuMonitor);
+		Ext.destroy(me.menuMonitor);
 
-		this.menuMonitor = this.mon(menu, {
-			scope: this,
+		this.menuMonitor = me.mon(menu, {
+			destroyable: true,
 			'show': function() {
-				this.el.down('.filters-container .activity-filters .tabs .types').addCls('selected');
+				me.el.down('.filters-container .activity-filters .tabs .types').addCls('selected');
 			},
 			'hide': function() {
-				this.el.down('.filters-container .activity-filters .tabs .types').removeCls('selected');
+				me.el.down('.filters-container .activity-filters .tabs .types').removeCls('selected');
 			},
 			'mouseenter': function() {
-				clearTimeout(this.typesHideTimeout);
+				clearTimeout(me.typesHideTimeout);
 			},
 			'mouseleave': function() {
-				this.typesHideTimeout = Ext.defer(function() {
-						menu.hide();
-					}, 500, this);
+				me.typesHideTimeout = Ext.defer(menu.hide, 500, menu);
 			}
 		});
 
-		menu.showBy(this.el.down('.filters-container'), 'bl-tl', [0, 0]);
+		menu.showBy(me.el.down('.filters-container'), 'bl-tl', [0, 0]);
 	},
 
 	updateNotificationCountFromStore: function(store, records) {
@@ -387,12 +374,13 @@ Ext.define('NextThought.view.account.activity.View', {
 
 
 	onAdded: function() {
-		this.callParent(arguments);
+		var me = this;
+		me.callParent(arguments);
 		//sigh
 		Ext.defer(function() {
-			this.setNotificationCountValue(
-				this.monitoredInstance.get('NotificationCount'));
-		}, 1, this);
+			me.setNotificationCountValue(
+				me.monitoredInstance.get('NotificationCount'));
+		}, 1);
 	},
 
 
