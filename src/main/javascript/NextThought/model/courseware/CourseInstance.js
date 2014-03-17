@@ -240,12 +240,16 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 	},
 
 
-	fireNavigationEvent: function(eventSource, callback) {
+	fireNavigationEvent: function(eventSource) {
 		var me = this;
 
 		return this.__precacheEntry()
 				.done(function() {
-					eventSource.fireEvent('course-selected', me, callback);
+					return new Promise(function(fulfill) {
+						eventSource.fireEvent('course-selected', me, function() {
+							fulfill();
+						});
+					});
 				})
 				.fail(function(reason) {
 					console.error(reason);
