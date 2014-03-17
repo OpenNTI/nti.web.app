@@ -41,10 +41,19 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 			{tag: 'tpl', 'if': '!values.divider', cn: ['{%this.getTemplateFor(values,out)%}']}
 		]}
 	]), {
+		ISCHANGE: /change$/,
+
 		getTemplateFor: function(values, out) {
+			if (this.ISCHANGE.test(values.MimeType)) {
+				Ext.apply(values, values.Item.getData());
+				delete values.Item;
+				values.FromChange = true;
+			}
+
 			if (!this.subTemplates || !this.subTemplates[values.MimeType]) {
 				console.log('No tpl for:', values.MimeType);
-				return Ext.DomHelper.createTemplate({cls: 'history hidden x-hidden'}).applyOut(values, out);//you can't NOT create a row! throws off the view
+				//you cannot omit creating a row! throws off the view
+				return Ext.DomHelper.createTemplate({cls: 'history hidden x-hidden'}).applyOut(values, out);
 			}
 			return this.subTemplates[values.MimeType].applyOut(values, out);
 		}
@@ -157,6 +166,9 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 				],
 				filters: [
 					function(item) {
+						if (/change$/i.test(item.get('MimeType')) && item.get('Item')) {
+							item = item.get('Item');
+						}
 						var m = item.get('MimeType'),
 							f = !m || registry.hasOwnProperty(m);
 						if (!f) {console.warn('Unregistered Type: ' + item.get('MimeType'), 'This component does not know how to render this item.');}
@@ -226,7 +238,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 
 	maybeShowMoreItems: function() {
 		//if we can't scroll
-		if (this.el.isVisible() && this.el.getHeight() >= this.el.dom.scrollHeight) {
+		if (this.el && this.el.isVisible() && this.el.getHeight() >= this.el.dom.scrollHeight) {
 			this.prefetchNext();
 		}
 	},
