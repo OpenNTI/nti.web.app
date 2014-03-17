@@ -11,6 +11,7 @@ Ext.define('NextThought.model.forums.GeneralForumComment', {
 		{ name: 'references', type: 'auto', defaultValue: []},
 		//for the view ui
 		{ name: 'bodyContent', type: 'string', persist: false},
+		{ name: 'bodyPreview', type: 'string', persist: false},
 		{ name: 'threadShowing', type: 'boolean', persist: false},
 		{ name: 'depth', type: 'number', persist: false},
 		{ name: 'creatorAvatarURL', type: 'AvatarUrl'},

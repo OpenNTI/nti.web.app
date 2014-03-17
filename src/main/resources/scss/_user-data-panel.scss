@@ -98,7 +98,6 @@
 
 		&.note,
 		&.post,
-		&.comment,
 		&.highlight,
 		&.favorite{
 			margin: 0 20px;
@@ -153,7 +152,7 @@
 			}
 		}
 
-		&.post, &.comment{
+		&.post{
 			cursor: pointer;
 			position: relative;
 			border-top: 1px solid #eaeaea;
@@ -178,12 +177,36 @@
 			}
 		}
 
-		&.grade {
+		&.comment {
+			text-transform: uppercase;
 			padding: 3px 12px 20px 20px;
-			font: normal 600 0.8em $font;
+			font: normal 700 0.65em $font;
 			color: $tertiary-grey;
 
 			.link {
+				color: $primary-blue;
+				text-transform: uppercase !important;
+			}
+
+			.body {
+				font-size: 1.11em;
+				font-weight: 500;
+				text-transform: none;
+				color: $primary-grey;
+				font-style: italic;
+			}
+		}
+
+		&.grade {
+			text-transform: uppercase;
+			padding: 3px 12px 20px 20px;
+			font: normal 700 0.65em $font;
+			color: $tertiary-grey;
+
+			.link {
+				font-size: 1.11em;
+				font-weight: 500;
+				text-transform: none;
 				color: $primary-blue;
 			}
 		}
