@@ -146,7 +146,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 
 		if (!assignments) {
 			console.error('No data??');
-			return;
+			return Promise.reject('No data?');
 		}
 
 		this.assignments = {};
@@ -156,6 +156,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 		assignments.get('Items').forEach(collect);
 
 		this.setLastReadFrom(history);
+		return Promise.resolve();
 	},
 
 

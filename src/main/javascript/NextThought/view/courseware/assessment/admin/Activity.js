@@ -22,7 +22,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Activity', {
 				})
 		);
 
-		me.loadPage();
+		return me.loadPage();
 	},
 
 

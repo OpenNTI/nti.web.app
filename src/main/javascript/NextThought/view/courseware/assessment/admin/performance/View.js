@@ -12,12 +12,13 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.View', {
 
 	setAssignmentsData: function() {
 		this.clearAssignmentsData();
-		var root = this.add({ xtype: 'course-assessment-admin-performance-root' });
-		root.setAssignmentsData.apply(root, arguments);
+		var root = this.add({ xtype: 'course-assessment-admin-performance-root' }),
+			p = root.setAssignmentsData.apply(root, arguments);
 
 		this.assignmentsData = Ext.Array.clone(arguments);
 		this.store = root.store;
 		this.mon(root, 'student-clicked', 'showStudentFromClick');
+		return p;
 	},
 
 	clearAssignmentsData: function() {

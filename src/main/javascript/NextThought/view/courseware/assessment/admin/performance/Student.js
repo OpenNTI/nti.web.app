@@ -92,7 +92,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 
 		if (!assignments) {
 			console.error('No assignments??');
-			return;
+			return Promise.reject('no data?');
 		}
 
 		this.header.setGradeBook(assignments.gradeBook);
@@ -104,6 +104,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 		});
 		this.down('grid').bindStore(this.store);
 		this.store.load();
+		return Promise.resolve();
 	},
 
 

@@ -292,7 +292,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 		if (!assignments) {
 			console.error('No assignments??');
-			return;
+			return Promise.reject('No data');
 		}
 
 		me.data = {
@@ -311,7 +311,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 			me.updateViewerReferences();
 		}
 
-		instance.getOutline()
+		return instance.getOutline()
 				.done(finish)
 				.fail(function(reason) {
 					console.error('Failed to get course outline!', reason);

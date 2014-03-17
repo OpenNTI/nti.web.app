@@ -191,7 +191,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 
 		if (!assignments) {
 			console.error('No assignments??');
-			return;
+			return Promise.reject('No Data?');
 		}
 
 		function collect(o) {
@@ -228,6 +228,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 		assignments.get('Items').forEach(collect);
 
 		this.store.loadRawData(raw);
+		return Promise.resolve();
 	},
 
 

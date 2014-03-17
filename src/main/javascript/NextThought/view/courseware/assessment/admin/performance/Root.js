@@ -440,6 +440,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		this.assignments = assignments;
 		this.mon(s, {load: 'applyRoster', prefetch: 'applyRoster'});
 		s.getProxy().setURL(assignments.getRosterURL());
+		return Promise.resolve();
 	},
 
 

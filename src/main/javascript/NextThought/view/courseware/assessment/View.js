@@ -96,12 +96,12 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 		me.instance = instance;
 
 		if (!instance) {
-			return;
+			return Promise.resolve();
 		}
 
 		me.maybeMask();
 
-		instance.getWrapper().done(function(e) {
+		return instance.getWrapper().done(function(e) {
 			if (!isSync()) { return; }
 
 			if (me.shouldPushViews()) {
@@ -113,7 +113,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 				me.onViewChanged();
 			}
 
-			Promise.pool(
+			return Promise.pool(
 				!e.isAdministrative && instance.getAssignmentHistory(),
 				instance.getAssignments()
 			)
@@ -133,9 +133,10 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 						me.fireEvent('set-assignment-history', history);
 
-						me.forEachView(me.callFunction('setAssignmentsData', [assignments, history, instance]));
-
-						me.maybeUnmask();
+						return Promise.pool(me.forEachView(me.callFunction('setAssignmentsData', [assignments, history, instance])))
+								.done(function() {
+									me.maybeUnmask();
+								});
 					})
 					.fail(function(reason) {
 						console.error('No Assignments will be shown:', reason);
@@ -192,7 +193,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 
 	forEachView: function(fn, scope) {
-		this.body.items.each(fn, scope || this);
+		return this.body.items.items.map(fn, scope || this);
 	},
 
 
