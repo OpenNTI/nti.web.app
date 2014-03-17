@@ -78,8 +78,9 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 		}
 
 		v = r.activateView(v);
-
-		v.showAssignment(assignment, user);
+		this.activeCourseSetup.done(function() {
+			v.showAssignment(assignment, user);
+		});
 	},
 
 
@@ -141,12 +142,13 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 	courseChanged: function() {
 		var args = arguments;
 		this.showRoot();
-		this.items.each(function(o) {
+		this.activeCourseSetup = Promise.pool(this.items.items.map(function(o) {
 			try {
-				o.courseChanged.apply(o, args);
+				return o.courseChanged.apply(o, args);
 			} catch (e) {
 				console.error(e.stack || e.message || e);
+				return Promise.reject(e);
 			}
-		});
+		}));
 	}
 });
