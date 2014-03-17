@@ -16,7 +16,9 @@ Ext.define('NextThought.model.courseware.Grade', {
 
 			return v;
 		}},
-		{name: 'AssignmentId', type: 'string'}
+		{name: 'AssignmentId', type: 'string'},
+		{name: 'assignmentName', type: 'string', persist: false},
+		{name: 'assignmentContainer', type: 'string', persist: false}
 	],
 
 

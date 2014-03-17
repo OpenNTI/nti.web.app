@@ -9,7 +9,8 @@ Ext.define('NextThought.model.Change', {
 		{ name: 'ID', type: 'string' },
 		{ name: 'ChangeType', type: 'string' },
 		{ name: 'Item', type: 'singleItem' },
-		{ name: 'EventTime', mapping: 'Last Modified', type: 'groupByTime', affectedBy: 'Last Modified'}
+		{ name: 'EventTime', mapping: 'Last Modified', type: 'groupByTime', affectedBy: 'Last Modified'},
+		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false, affectedBy: 'Last Modified'}
 	],
 
 	getItemValue: function(field) {

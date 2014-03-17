@@ -11,9 +11,12 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		'NextThought.view.account.history.mixins.ForumTopic',
 		'NextThought.view.account.history.mixins.BlogEntry',
 		'NextThought.view.account.history.mixins.Highlight',
-		'NextThought.view.account.history.mixins.Bookmark'
+		'NextThought.view.account.history.mixins.Bookmark',
+		'NextThought.view.account.history.mixins.Grade'
 
 	],
+
+	ISCHANGE: /change$/,
 
 	iconCls: 'inbox',
 	title: 'Notifications',
@@ -45,8 +48,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 
 		getTemplateFor: function(values, out) {
 			if (this.ISCHANGE.test(values.MimeType)) {
-				Ext.apply(values, values.Item.getData());
-				delete values.Item;
+				values = values.Item.getData();
 				values.FromChange = true;
 			}
 
@@ -107,7 +109,8 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 			Types.Highlight.create({panel: this}),
 			Types.ForumTopic.create({panel: this}),
 			Types.BlogEntry({panel: this}),
-			Types.Bookmark.create({panel: this})
+			Types.Bookmark.create({panel: this}),
+			Types.Grade.create({panel: this})
 		];
 
 		this.highlightItem = this.types[1];
@@ -164,6 +167,15 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		}
 
 		this.badge.update(v);
+	},
+
+
+	unwrap: function(record) {
+		if (this.ISCHANGE.test(record.get('MimeType'))) {
+			return record.get('Item');
+		}
+
+		return record;
 	},
 
 
@@ -300,6 +312,8 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 
 
 	fillInData: function(rec) {
+		rec = this.unwrap(rec);
+
 		if (Ext.isFunction(this.fillData && this.fillData[rec.get('MimeType')])) {
 			this.fillData[rec.get('MimeType')](rec);
 		}
@@ -334,6 +348,8 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 
 
 	rowClicked: function(view, rec, item) {
+		rec = this.unwrap(rec);
+
 		if (Ext.isFunction(this.clickHandlers && this.clickHandlers[rec.get('MimeType')])) {
 			this.clickHandlers[rec.get('MimeType')](view, rec);
 		}

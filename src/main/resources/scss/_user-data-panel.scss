@@ -178,6 +178,16 @@
 			}
 		}
 
+		&.grade {
+			padding: 3px 12px 20px 20px;
+			font: normal 600 0.8em $font;
+			color: $tertiary-grey;
+
+			.link {
+				color: $primary-blue;
+			}
+		}
+
 		&.highlight{
 			.body {
 				span {

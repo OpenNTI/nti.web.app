@@ -4,6 +4,9 @@ Ext.define('NextThought.model.assessment.Assignment', {
 	isAssignment: true,
 	fields: [
 		{ name: 'category_name', type: 'string'},
+		{ name: 'ContainerId', type: 'string', persist: false, convert: function(v, rec) {
+			return v || (rec && rec.raw.containerId);
+		}},
 		{ name: 'containerId', type: 'string' },//lowercase C?
 		{ name: 'content', type: 'string' },
 		{ name: 'availableBeginning', type: 'ISODate', mapping: 'available_for_submission_beginning' },
