@@ -117,7 +117,6 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		});
 
 		this.buildStore();
-		this.setBadgeValue(10);
 	},
 
 
@@ -135,6 +134,23 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		}
 		this.badge = Ext.DomHelper.append(tab.getEl(), {cls: 'badge', html: this.badgeValue},true);
 		delete tab.badge;
+	},
+
+
+	maybeNotify: function() {
+		var count = 0,
+			cap = this.store.pageSize - 1,
+			lastViewed = new Date(0);
+		this.store.each(function(c) {
+			if (c.get('Last Modified') > lastViewed) {
+				count++;
+			}
+		});
+
+		if (count > cap) {
+			count = cap + '+';
+		}
+		this.setBadgeValue(count);
 	},
 
 
@@ -184,6 +200,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 				remoteGroup: false,
 				filterOnLoad: true,
 				sortOnFilter: true,
+				pageSize: 50,
 				groupers: [
 					{
 						direction: 'DESC',
@@ -223,6 +240,11 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		this.mon(s, {
 			add: 'recordsAdded',
 			load: 'storeLoaded'
+		});
+
+		this.mon(s, {
+			add: 'maybeNotify',
+			load: 'maybeNotify'
 		});
 
 		this.bindStore(s);
@@ -377,12 +399,16 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 
 
 	onUpdate: function(store, record) {
-		var item, r = this.callParent(arguments);
-		if (this.activeTargetRecord === record) {
-			item = this.getNode(record);
-			this.showPopup(record, item);
+		try {
+			var item, r = this.callParent(arguments);
+			if (this.activeTargetRecord === record) {
+				item = this.getNode(record);
+				this.showPopup(record, item);
+			}
+			return r;
+		} catch (e) {
+			console.error(e);
 		}
-		return r;
 	},
 
 
