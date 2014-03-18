@@ -28,6 +28,7 @@ Ext.define('NextThought.util.media.VimeoPlayer', {
 		this.parentEl = Ext.get(config.el);
 		this.id = config.parentId + '-vimeo-' + this.self.kind;
 		this.playerId = this.id + '-player';
+		this.playerState = NextThought.Video.UNSTARTED;
 		this.player = null;
 		this.width = config.width;
 		this.height = config.height;
@@ -60,7 +61,6 @@ Ext.define('NextThought.util.media.VimeoPlayer', {
 	playerSetup: function() {
 		// Inject Player Markup
 		this.frameTpl.append(this.parentEl, {id: this.id, height: this.height, width: this.width});
-		console.log(this.id);
 		this.el = Ext.get(this.id);
 		window.addEventListener('message', this.handleMessage, false);
 	},
@@ -94,14 +94,19 @@ Ext.define('NextThought.util.media.VimeoPlayer', {
 			return;
 		}
 
-		data = JSON.stringify({
+		if (!this.playerReadyForCommands) {
+			//console.error(this.id, 'not ready', arguments); //uncomment to debug
+			return;
+		}
+
+		data = {
 			method: method,
 			value: params
-		});
+		};
 
-		console.log(this.id + ' Posting message to vimeo player(' + this.playerId + ')', data);
+		console.log(this.id + ' Posting message to vimeo player', data);
 
-		context.postMessage(Ext.encode({ }), this.playerSourceURL);
+		context.postMessage(Ext.encode(data), this.playerSourceURL);
 	},
 
 
@@ -110,7 +115,7 @@ Ext.define('NextThought.util.media.VimeoPlayer', {
 		// we should always register our listeners when we become ready.
 
 		this.playerReadyForCommands = true;
-		this.postMessage('addEventListener', 'loadProgress');
+		//this.postMessage('addEventListener', 'loadProgress');
 		this.postMessage('addEventListener', 'playProgress');
 		this.postMessage('addEventListener', 'play');
 		this.postMessage('addEventListener', 'pause');
@@ -118,6 +123,11 @@ Ext.define('NextThought.util.media.VimeoPlayer', {
 		this.postMessage('addEventListener', 'seek');
 
 		this.isReady = true;
+
+		if (this.seekWhenReady) {
+			this.seek(this.seekWhenReady);
+			delete this.seekWhenReady;
+		}
 	},
 
 
@@ -136,11 +146,9 @@ Ext.define('NextThought.util.media.VimeoPlayer', {
 	},
 
 
-	togglePlayback: function(e) {},
-
-
-	notify: function(e) {
-		this.fireEvent('player-event-' + e.type, this.id, this);
+	notify: function(type) {
+		//We must fire: play, pause, ended
+		this.fireEvent('player-event-' + type, this.id, this);
 	},
 
 
@@ -149,35 +157,79 @@ Ext.define('NextThought.util.media.VimeoPlayer', {
 	},
 
 
+	onPlayProgress: function(event) {
+		this.currentPosition = event.data.seconds;
+	},
+
+
 	getCurrentTime: function() {
-		return 0;//
+		return this.currentPosition;
 	},
 
 
 	getPlayerState: function() {
-		return 0; //YT style state enum
+		//we must track this ourselves
+		//return YT style state enum
+		return this.playerState;
 	},
 
 
-	play: function() {},
+	play: function() {
+		this.postMessage('play');
+	},
 
 
-	pause: function() {},
+	onPlay: function() {
+		this.playerState = NextThought.Video.PLAYING;
+		this.notify('play');
+	},
 
 
-	seek: function(offset) {},
+	pause: function() {
+		this.postMessage('pause');
+	},
 
 
-	stop: function() {},
+	onPause: function() {
+		this.playerState = NextThought.Video.PAUSED;
+		this.notify('pause');
+	},
+
+
+	seek: function(offset) {
+		this.postMessage('seekTo', offset);
+	},
+
+
+	onSeek: function(event) {
+		this.currentPosition = event.data.seconds;
+		this.notify('seek');
+	},
+
+
+	stop: function() {
+		this.currentPosition = 0;
+		this.playerState = NextThought.Video.UNSTARTED;
+		this.postMessage('unload');
+	},
+
+
+	onFinish: function() {
+		this.playerState = NextThought.Video.ENDED;
+		this.notify('ended');
+	},
 
 
 	activate: Ext.emptyFn,
 
 
-	deactivate: function() {},
+	deactivate: function() {
+		this.stop();
+	},
 
 
 	cleanPlayer: function() {
+		this.playerState = NextThought.Video.UNSTARTED;
 		delete this.playerReadyForCommands;
 		this.isReady = false;
 		if (this.player) {
