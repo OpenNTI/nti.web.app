@@ -34,15 +34,25 @@ Ext.define('NextThought.view.account.activity.topic.Popout', {
 				popup(o);
 			}
 
+			function failure() {
+				el.addCls('deleted');
+				el.clearListeners();
+				console.error('There was a probelm loading the topic or blog', arguments);
+			}
+
+			if (record instanceof NextThought.model.forums.PersonalBlogEntryPost) {
+				Service.getObject(record.get('ContainerId'), function(container) {
+					popup(container);
+				}, failure);
+
+				return;
+			}
+
 
 			request = {
 				url: getURL(record.getParentHref()),
 				success: success,
-				failure: function() {
-					el.addCls('deleted');
-					el.clearListeners();
-					console.error('There was a problem loading the topic.');
-				}
+				failure: failure
 			};
 
 			if (record instanceof NextThought.model.forums.Topic) {
