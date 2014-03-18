@@ -32,8 +32,16 @@ Ext.define('NextThought.util.Format', {
 		return value ? (trueString || '') : (falseString || '');
 	},
 
-	displayName: function(value) {
-		return Ext.isString(value) ? 'Resolving...' : value;
+	displayName: function(value, me) {
+		if (isMe(value)) {
+			return me || 'you';
+		}
+
+		if (Ext.isString(value)) {
+			return 'Resolving';
+		}
+
+		return value;
 	},
 
 	pluralIf: function(value) {

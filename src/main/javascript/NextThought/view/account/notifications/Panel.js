@@ -100,14 +100,16 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		var Types = NextThought.view.account.history.mixins;
 		this.callParent(arguments);
 		this.types = [
-			Types.Note.create({panel: this}),
+			Types.NoteNotification.create({panel: this}),
 			Types.Highlight.create({panel: this}),
 			Types.ForumTopic.create({panel: this}),
 			Types.BlogEntry({panel: this}),
 			Types.Bookmark.create({panel: this}),
 			Types.Grade.create({panel: this}),
 			Types.Feedback.create({panel: this}),
-			Types.ForumComment.create({panel: this})
+			Types.ForumComment.create({panel: this}),
+			Types.BlogEntryPost.create({panel: this}),
+			Types.Contact.create({panel: this})
 		];
 
 		this.highlightItem = this.types[1];

@@ -1,19 +1,13 @@
 Ext.define('NextThought.view.account.history.mixins.Grade', {
-	extend: 'NextThought.view.account.history.mixins.Note',
+	extend: 'NextThought.view.account.history.mixins.Base',
 	keyVal: 'application/vnd.nextthought.grade',
 	alias: 'widget.history-item-grade',
 
-	tpl: new Ext.XTemplate(Ext.DomHelper.markup([
-		{
-			cls: 'history grade {assignmentName:boolStr("","x-hidden")}',
-			cn: [
-				{cls: 'body', cn: [
-					'Grade received {assignmentName:boolStr("for ")}',
-					{tag: 'span', cls: 'link', html: '{assignmentName}'}
-				]}
-			]
-		}
-	])),
+	showCreator: false,
+	verb: 'Grade recieved for',
+	quotePreview: false,
+	previewField: 'assignmentName',
+	itemCls: 'grade',
 
 	clicked: function(view, rec) {
 		var course = CourseWareUtils.courseForNtiid(rec.get('assignmentContainer'));
