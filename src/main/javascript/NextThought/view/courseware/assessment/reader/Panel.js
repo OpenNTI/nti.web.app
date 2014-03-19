@@ -14,6 +14,7 @@ Ext.define('NextThought.view.courseware.assessment.reader.Panel', {
 	cls: 'reader-container assignment-reader',
 
 	scrollTargetSelector: '.assignment-reader .x-panel-body-reader',
+	secondaryElSelector: '.assignment-reader .x-panel-notes-and-discussion',
 
 
 	constructor: function() {
