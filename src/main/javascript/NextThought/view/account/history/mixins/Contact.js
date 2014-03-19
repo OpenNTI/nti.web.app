@@ -3,6 +3,10 @@ Ext.define('NextThought.view.account.history.mixins.Contact', {
 	alias: 'widget.history-item-contact',
 	keyVal: 'application/vnd.nextthought.user',
 
+	requires: [
+		'NextThought.view.account.contacts.management.Popout'
+	],
+
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{
 			cls: 'history notification contact',

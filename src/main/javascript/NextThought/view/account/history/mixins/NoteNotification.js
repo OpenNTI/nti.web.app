@@ -7,6 +7,14 @@ Ext.define('NextThought.view.account.history.mixins.NoteNotification', {
 	verb: 'shared a note',
 	previewField: 'preview',
 
+	getVerb: function(values) {
+		if (values.inReplyTo) {
+			return 'commented';
+		}
+
+		return 'shared a note';
+	},
+
 	fillInData: function(rec) {
 		this.callParent(arguments);
 		LocationMeta.getMeta(rec.get('ContainerId'), function(meta) {

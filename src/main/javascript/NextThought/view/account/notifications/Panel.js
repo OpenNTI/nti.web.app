@@ -7,6 +7,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		'NextThought.model.events.Bus',
 		'NextThought.store.PageItem',
 		'NextThought.util.Time',
+		'NextThought.view.account.contacts.management.Popout',
 		'NextThought.view.account.history.mixins.*'
 
 	],
@@ -379,6 +380,8 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		var popout,
 			target = Ext.get(item),
 			me = this;
+
+		record = this.unwrap(record);
 
 		if (record && record.getClassForModel) {
 			popout = record.getClassForModel('widget.activity-popout-', NextThought.view.account.activity.Popout);

@@ -28,28 +28,38 @@ Ext.define('NextThought.view.account.history.mixins.Base', {
 		}
 
 		//build the generic tpl
-		var verb = this.verb, previewCls = 'preview',
-			prev = this.previewField ? '{' + this.previewField + '}' : '',
-			creator = this.showCreator ? '{Creator:displayName("You")}' : '';
+		var me = this,
+			previewCls = 'preview',
+			prev = me.previewField ? '{' + me.previewField + '}' : '',
+			creator = me.showCreator ? '{Creator:displayName("You")}' : '';
 
-		if (!this.showCreator) {
+		if (!me.showCreator) {
 			previewCls += ' link';
 		}
 
-		if (this.quotePreview) {
+		if (me.quotePreview) {
 			previewCls += ' quote';
 		}
 
 		return new Ext.XTemplate(Ext.DomHelper.markup([
 			{
-				cls: 'history notification ' + this.itemCls,
+				cls: 'history notification ' + me.itemCls,
 				cn: [
 					{tag: 'span', cls: 'creator link', html: creator},
-					{tag: 'span', cls: 'verb', html: verb},
+					{tag: 'span', cls: 'verb', html: '{[this.getVerb(values)]}'},
 					{tag: 'span', cls: previewCls, html: prev}
 				]
 			}
-		]));
+		]), {
+			getVerb: function(values) {
+				return me.getVerb(values);
+			}
+		});
+	},
+
+
+	getVerb: function() {
+		return this.verb;
 	},
 
 

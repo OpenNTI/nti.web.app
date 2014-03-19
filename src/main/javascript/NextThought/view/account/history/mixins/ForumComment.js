@@ -7,7 +7,7 @@ Ext.define('NextThought.view.account.history.mixins.ForumComment', {
 	itemCls: 'comment',
 	showCreator: true,
 	previewField: 'bodyPreview',
-	quoteBody: true,
+	quotePreview: false,
 	verb: 'commented',
 
 	fillInData: function(rec) {
