@@ -406,11 +406,12 @@ Ext.define('NextThought.controller.CourseWare', {
 				},
 				function() {//not enrolled
 					me.toggleEnrollmentStatus(course)
-							.then(function() {
+							.then(
+							function() {
 								course.set('enrolled', true);
 								me.transitionToComponent(win, {xtype: 'enrollment-complete', record: course, enrolled: true});
-							})
-							.fail(function(reason) {
+							},
+							function(reason) {
 								console.log(reason);
 								win.showError('An unknown error occurred.  Please try again later.');
 								win.setConfirmState(false);
@@ -432,11 +433,12 @@ Ext.define('NextThought.controller.CourseWare', {
 		enrolledStore.findCourseBy(course.findByMyCourseInstance())
 				.then(function(enrollment) {//found to be enrolled, lets drop...
 					me.toggleEnrollmentStatus(course, enrollment)
-							.then(function() {
+							.then(
+							function() {
 								course.set('enrolled', false);
 								me.transitionToComponent(win, {xtype: 'enrollment-complete', record: course, enrolled: false});
-							})
-							.fail(function(reason) {
+							},
+							function(reason) {
 								console.log(reason);
 								win.showError('An unknown error occurred. Please try again later.');
 								win.setConfirmState(false);
@@ -572,24 +574,18 @@ Ext.define('NextThought.controller.CourseWare', {
 
 
 	__getCourseInstance: function(thing) {
-		var m = this.__getCourseMapping(thing),
-			p = PromiseFactory.make();
+		var m = this.__getCourseMapping(thing);
 
-
-		CourseWareUtils.findCourseBy(function(c) {
-			var i = c.get('CourseInstance'),
-				links = i && i.get('Links'),
-				href = links && links.getRelHref('CourseCatalogEntry');
-			return href === m;
-		}).then(
-				function(o) {
-					p.fulfill(o.get('CourseInstance'));
-				},
-				function(reason) {
-					p.reject(reason);
+		return CourseWareUtils.findCourseBy(
+				function(c) {
+					var i = c.get('CourseInstance'),
+							links = i && i.get('Links'),
+							href = links && links.getRelHref('CourseCatalogEntry');
+					return href === m;
+				})
+				.then(function(o) {
+					return o.get('CourseInstance');
 				});
-
-		return p;
 	},
 
 
@@ -607,13 +603,8 @@ Ext.define('NextThought.controller.CourseWare', {
 		}
 
 		return CourseWareUtils.findCourseBy(courseEntry.findByMyCourseInstance())
-			.done(function(course) {
-				course = course.get('CourseInstance');
-
-				return course.fireNavigationEvent(me);
-			})
-			.fail(function(reason) {
-				console.error(reason);
+			.then(function(course) {
+				return course.get('CourseInstance').fireNavigationEvent(me);
 			});
 	},
 
@@ -682,40 +673,29 @@ Ext.define('NextThought.controller.CourseWare', {
 
 
 		findCourseBy: function() {
-			var promise = PromiseFactory.make(),
-				enrolled = Ext.getStore('courseware.EnrolledCourses'),
+			var enrolled = Ext.getStore('courseware.EnrolledCourses'),
 				admin = Ext.getStore('courseware.AdministeredCourses'),
 				args = Ext.Array.clone(arguments);
 
 			// I would pool, but its most likely to come from enrolled, and if one promise fails in a pool,
 			// the entire pool fails, so it would read poorly in the code only operating on the "failed" case. :}
-			enrolled.findCourseBy.apply(enrolled, args)
-					.done(function(rec) { promise.fulfill(rec); })
-					.fail(function() { admin.findCourseBy.apply(admin, args).then(promise); });
-
-			return promise;
+			return enrolled.findCourseBy.apply(enrolled, args)
+					.fail(function() { return admin.findCourseBy.apply(admin, args); });
 		},
 
 
 		resolveCourse: function(courseInstanceId) {
-			var promise = PromiseFactory.make(),
-				enrolled = Ext.getStore('courseware.EnrolledCourses'),
+			var enrolled = Ext.getStore('courseware.EnrolledCourses'),
 				admin = Ext.getStore('courseware.AdministeredCourses');
 
 			if (courseInstanceId) {
-				enrolled.getCourseInstance(courseInstanceId)
-						.done(function(rec) {
-							promise.fulfill(rec);
-						})
+				return enrolled.getCourseInstance(courseInstanceId)
 						.fail(function() {
-							admin.getCourseInstance(courseInstanceId).then(promise);
+							return admin.getCourseInstance(courseInstanceId);
 						});
-
-			} else {
-				promise.fulfill(undefined);
 			}
 
-			return promise;
+			return Promise.reject('no id');
 		},
 
 
@@ -729,8 +709,7 @@ Ext.define('NextThought.controller.CourseWare', {
 
 
 		forEachCourse: function(fn) {
-			var//promise = PromiseFactory.make(), //todo: make this promise based
-				enrolled = Ext.getStore('courseware.EnrolledCourses'),
+			var enrolled = Ext.getStore('courseware.EnrolledCourses'),
 				admin = Ext.getStore('courseware.AdministeredCourses');
 
 			// the store's each function does not return anything. :| lame.
