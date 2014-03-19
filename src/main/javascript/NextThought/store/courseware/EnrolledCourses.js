@@ -83,62 +83,53 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 
 
 	getCourseInstance: function(courseInstanceId) {
-		var promise = PromiseFactory.make(),
-			me = this;
+		var me = this;
 
-		this.onceLoaded().then(function() {
-			var found = false;
-			me.each(function(r) {
-				var instance = r.get('CourseInstance');
-				if (instance && instance.getId() === courseInstanceId) {
-					promise.fulfill(instance);
-					found = true;
-					return false;//stop iteration
-				}
-			});
+		return this.onceLoaded()
+				.then(function() {
+					var found = false;
+					me.each(function(r) {
+						var instance = r.get('CourseInstance');
+						if (instance && instance.getId() === courseInstanceId) {
+							found = instance;
+							return false;//stop iteration
+						}
+					});
 
-			if (!found) {
-				promise.reject('Not found');
-			}
-		}, function(reason) { promise.reject(reason); });
-
-		return promise;
+					if (!found) {
+						throw 'getCourseInstance: Not found: ' + courseInstanceId;
+					}
+					return found;
+				});
 	},
 
 
 	findCourse: function() {
-		var promise = PromiseFactory.make(),
-			me = this,
+		var me = this,
 			args = Ext.Array.clone(arguments);
 
-		this.onceLoaded().then(function() {
+		return this.onceLoaded().then(function() {
 			var i = me.find.apply(me, args);
 			if (i >= 0) {
-				promise.fulfill(me.getAt(i));
-			} else {
-				promise.reject('Not found');
+				return me.getAt(i);
 			}
+			throw 'findCourse: Not found';
 		});
-
-		return promise;
 	},
 
 
 	findCourseBy: function() {
-		var promise = PromiseFactory.make(),
-			me = this,
+		var me = this,
 			args = Ext.Array.clone(arguments);
 
-		this.onceLoaded().then(function() {
+		return this.onceLoaded().then(function() {
 			var i = me.findBy.apply(me, args);
 			if (i >= 0) {
-				promise.fulfill(me.getAt(i));
-			} else {
-				promise.reject('Not found');
+				return me.getAt(i);
 			}
-		});
 
-		return promise;
+			throw 'findCourseBy: Not found';
+		});
 	},
 
 

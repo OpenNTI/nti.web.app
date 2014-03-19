@@ -6,56 +6,40 @@ Ext.define('NextThought.model.courseware.CourseOutline', {
 	],
 
 	getContents: function() {
-		var me = this, l,
-			p = me.__promiseToLoadContents || PromiseFactory.make();
+		var me = this, l;
 
-		if (me.__promiseToLoadContents) {
-			return p;
+		if (!me.__promiseToLoadContents) {
+
+			l = me.getLink('contents');
+
+			console.time('Requesting Course Outline: ' + l);
+			me.__promiseToLoadContents = Service.request(l)
+					.then(function(text) { return Ext.decode(text); })
+					.then(function(json) { return ParseUtils.parseItems(json); })
+					.done(function(items) {
+						me.set('Items', items);
+						console.timeEnd('Requesting Course Outline: ' + l);
+						return me;
+					});
 		}
 
-		l = me.getLink('contents');
-
-		console.time('Requesting Course Outline: ' + l);
-		me.__promiseToLoadContents = p;
-
-		Service.request(l)
-				.fail(function(reason) { p.reject(reason); })
-				.done(function(text) {
-					var json = Ext.decode(text, true), items;
-					if (!json) {
-						p.reject('Bad response:' + text);
-						return;
-					}
-					items = ParseUtils.parseItems(json);
-					me.set('Items', items);
-					console.timeEnd('Requesting Course Outline: ' + l);
-					p.fulfill(me);
-				});
-
-		return p;
+		return me.__promiseToLoadContents;
 	},
 
 
 	findNode: function(id) {
-		var p = PromiseFactory.make();
-
 		if (!this.navStore) {
-			p.reject('Navigation store not loaded');
-			return p;
+			return Promise.reject('Navigation store not loaded');
 		}
 
-		this.getContents()
-				.fail(function(reason) {p.reject(reason);})
-				.done(function(me) {
-					var node = me.getNode(id);
-					if (node) {
-						p.fulfill(node);
-					} else {
-						p.reject('Not found');
+		return this.getContents()
+				.then(function(me) { return me.getNode(id); })
+				.done(function(node) {
+					if (!node) {
+						throw 'Not found';
 					}
+					return node;//probably not needed
 				});
-
-		return p;
 	},
 
 

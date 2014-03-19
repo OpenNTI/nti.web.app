@@ -9,33 +9,33 @@ Ext.define('NextThought.model.Service', {
 
 
 	request: function(urlOrConfig) {
-		var p = PromiseFactory.make(),
-			cfg = {};
+		var cfg = {};
 
-		function resolve(q, s, r) {
-			var value = r.responseText;
-			if (!s) {
-				p.reject(r.status + ': ' + value);
-				return;
+		return new Promise(function(fulfill, reject) {
+			function resolve(q, s, r) {
+				var value = r.responseText;
+				if (!s) {
+					reject(r.status + ': ' + value);
+					return;
+				}
+
+				if (q.method === 'HEAD') {
+					value = r;
+				}
+
+				fulfill(value);
 			}
 
-			if (q.method === 'HEAD') {
-				value = r;
+			if (Ext.isString(urlOrConfig)) {
+				Ext.apply(cfg, {url: urlOrConfig});
+			} else {
+				Ext.apply(cfg, urlOrConfig);
 			}
 
-			p.fulfill(value);
-		}
+			cfg.callback = Ext.Function.createSequence(resolve, cfg.callback, null);
 
-		if (Ext.isString(urlOrConfig)) {
-			Ext.apply(cfg, {url: urlOrConfig});
-		} else {
-			Ext.apply(cfg, urlOrConfig);
-		}
-
-		cfg.callback = Ext.Function.createSequence(resolve, cfg.callback, null);
-
-		Ext.Ajax.request(cfg);
-		return p;
+			Ext.Ajax.request(cfg);
+		});
 	},
 
 
@@ -48,6 +48,15 @@ Ext.define('NextThought.model.Service', {
 		return this.request({
 			url: url,
 			method: 'POST',
+			jsonData: data
+		});
+	},
+
+
+	put: function(url, data) {
+		return this.request({
+			url: url,
+			method: 'PUT',
 			jsonData: data
 		});
 	},

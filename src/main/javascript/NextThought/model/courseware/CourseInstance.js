@@ -150,16 +150,15 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 	getOutline: function() {
 		//cache outline
 		if (!this._outlinePromise) {
-			var p = this._outlinePromise = PromiseFactory.make(),
-				o = this.get('Outline'),
+			var o = this.get('Outline'),
 				me = this;
 
-			o.getContents()
-					.fail(function(reason) { p.reject(reason); })
+			this._outlinePromise = o.getContents()
 					.done(function() {
 						o.navStore = me.getNavigationStore();
-						p.fulfill(o);
+						return o;
 					});
+
 		}
 
 		return this._outlinePromise;
@@ -167,57 +166,45 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 
 
 	getAssignmentHistory: function() {
-		var p = PromiseFactory.make(),
-			me = this;
+		var me = this;
 
 		function getLink(rel, e) { return e.getLink(rel) || me.getLink(rel); }
 
-		this.getWrapper()
+		return this.getWrapper()
 			.done(function(e) {
 				Service.request(getLink('AssignmentHistory', e))
 					.done(function(txt) {
-						var history = ParseUtils.parseItems(txt)[0];
-
-						p.fulfill(history);
+						return ParseUtils.parseItems(txt)[0];
 					})
 					.fail(function(reason) {
 						if ((reason || '').substr(0, 3) === '404') {
-							p.fulfill(NextThought.model.courseware.UsersCourseAssignmentHistory.getEmpty());
-							return;
+							return NextThought.model.courseware.UsersCourseAssignmentHistory.getEmpty();
 						}
-						p.reject(reason);
+						throw reason;
 					});
-			})
-			.fail(function(reason) {
-				p.reject(reason);
 			});
-
-		return p;
 	},
 
 
 	getAssignments: function() {
 		if (this.getAssignmentsPromise) { return this.getAssignmentsPromise; }
 
-		var p = PromiseFactory.make(), me = this,
+		var me = this,
 			roster = me.getLink('CourseEnrollmentRoster');
-		Promise.pool(
+
+		me.getAssignmentsPromise = Promise.all([
 			Service.request(me.getLink('AssignmentsByOutlineNode')),
 			Service.request(me.getLink('NonAssignmentAssessmentItemsByOutlineNode')),
 			me.getLink('GradeBook') ? me._getGradeBook() : Promise.resolve()
-		)
+		])
 			.done(function(json) {
 				var assignments = Ext.decode(json[0], true),
 					nonAssignments = Ext.decode(json[1], true),
 					gradeBook = json[2];
-				p.fulfill(NextThought.model.courseware.AssignmentCollection.fromJson(
-						assignments, nonAssignments, roster, gradeBook, me.getLink('AssignmentHistory')));
-			})
-			.fail(function(reason) {
-				p.reject(reason);
-			});
 
-		me.getAssignmentsPromise = p;
+				return NextThought.model.courseware.AssignmentCollection.fromJson(
+						assignments, nonAssignments, roster, gradeBook, me.getLink('AssignmentHistory'));
+			});
 
 		return me.getAssignmentsPromise;
 	},
@@ -225,16 +212,16 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 
 	_getGradeBook: function() {
 		if (!this._gradebookPromise) {
-			var p = this._gradebookPromise = PromiseFactory.make(),
-				link = this.getLink('GradeBook');
+			var p, link = this.getLink('GradeBook');
 
 			if (link) {
-				Service.request(link)
-						.done(function(json) { p.fulfill(ParseUtils.parseItems(json)[0]); })
-						.fail(function(r) { p.reject(r); });
+				p = Service.request(link)
+						.done(function(json) { return ParseUtils.parseItems(json)[0]; });
 			} else {
-				p.reject('Not present');
+				p = Promise.reject('Not present');
 			}
+
+			this._gradebookPromise = p;
 		}
 		return this._gradebookPromise;
 	},
@@ -253,6 +240,7 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 				})
 				.fail(function(reason) {
 					console.error(reason);
+					throw reason;//don't let the fact that we log the error "unfail" the chain.
 				});
 	}
 });
