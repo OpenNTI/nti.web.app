@@ -532,8 +532,9 @@ Ext.define('NextThought.controller.CourseWare', {
 
 		try {
 			this.getMainNav().updateCurrent(false, instance);
-			view = this.getContentView().onCourseSelected(instance);
-			Ext.callback(callback, this, [view]);
+			view = this.getContentView();
+			view.onCourseSelected(instance)
+				.then(callback);
 			return true;
 		} finally {
 			history.endTransaction('navigation-transaction');
@@ -592,6 +593,31 @@ Ext.define('NextThought.controller.CourseWare', {
 	},
 
 
+	handleNavigation: function(cid, rec, meta) {
+		if (!meta.isCourse) {
+			return Promise.fulfill();
+		}
+
+		var courseEntry, me = this;
+
+		courseEntry = CourseWareUtils.courseForNtiid(cid);
+
+		if (!courseEntry) {
+			return Promise.reject('This isnt the course youre looking for');
+		}
+
+		return CourseWareUtils.findCourseBy(courseEntry.findByMyCourseInstance())
+			.done(function(course) {
+				course = course.get('CourseInstance');
+
+				return course.fireNavigationEvent(me);
+			})
+			.fail(function(reason) {
+				console.error(reason);
+			});
+	},
+
+
 	onNavigateToForum: function(board, course, silent) {
 		if (!course) { return; }
 
@@ -614,7 +640,8 @@ Ext.define('NextThought.controller.CourseWare', {
 
 		//finally if we aren't in the course switch to it
 		this.getMainNav().updateCurrent(false, course);
-		return contentView.onCourseSelected(course, 'course-forum').down('[isForumContainer]');
+		contentView.onCourseSelected(course, 'course-forum').down('[isForumContainer]');
+		return contentView;
 	}
 }, function() {
 

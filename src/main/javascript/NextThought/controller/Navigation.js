@@ -296,20 +296,26 @@ Ext.define('NextThought.controller.Navigation', {
 
 
 	navigate: function(cid, rec, options) {
-		var me = this;
+		var me = this, perform = this.performAnd.bind(this, 'handleNavigation', cid, rec);
 		//We don't want to do a content navigation until we are pretty sure
 		//thats what we want.  On failure it shows a page not found and
 		//if we handle this navigation in some other way we don't want that happening.
-		LocationMeta.getMeta(cid, function(meta) {
-			if (meta) {
-				this.doContentNavigation(cid, rec, options);
-			}
-			else {
-				this.navigateToNtiid(cid, null, rec, options, function() {
+
+		LocationMeta.getMeta(cid)
+			.then(perform)
+			.done(function() {
+				me.doContentNavigation(cid, rec, options);
+			})
+			.fail(function(reason) {
+				if (reason) {
+					console.error(reason);
+					return;
+				}
+
+				me.navigateToNtiid(cid, null, rec, options, function() {
 					me.doContentNavigation(cid, rec, options);
 				});
-			}
-		}, this);
+			});
 	},
 
 

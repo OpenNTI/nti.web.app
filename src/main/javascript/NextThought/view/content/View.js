@@ -471,10 +471,17 @@ Ext.define('NextThought.view.content.View', {
 
 
 		//Temporary stop gap
-		var info = instance && instance.__getLocationInfo(),
+		var info = instance && instance.__getLocationInfo(), me = this,
 			catalogEntry = instance && instance.getCourseCatalogEntry(),
 			preview = catalogEntry && catalogEntry.get('Preview'),
-			background = info && info.toc && getURL(info.toc.querySelector('toc').getAttribute('background'), info.root);
+			background = info && info.toc && getURL(info.toc.querySelector('toc').getAttribute('background'), info.root),
+			subs = [
+				this.courseNav,
+				this.courseDash,
+				this.courseForum,
+				this.courseAssignmentsContainer,
+				this.courseInfo
+			];
 
 		this.currentCourse = instance;
 		//this.reader.clearLocation();
@@ -495,45 +502,43 @@ Ext.define('NextThought.view.content.View', {
 		tab = preview ? 'course-info' : tab || 'course-book';
 		this.setActiveTab(tab);
 
+		return Promise.all(subs.map(
+			function(e) {
+				if (e.courseChanged) {
+					return e.courseChanged(instance);
+				}
+			}))
+			.done(function() {
+				me.updateTabs();
 
-		Ext.each([
-			this.courseNav,
-			this.courseDash,
-			this.courseForum,
-			this.courseAssignmentsContainer,
-			this.courseInfo
-		], function(e) {
-			if (e.courseChanged) {
-				e.courseChanged(instance);
-			}
-		});
-
-		this.updateTabs();
-
-		//force this to blank out if it was unset
-		this.updateState({
-			course: instance && instance.getId(),
-			activeTab: tab
-		});
+				//force this to blank out if it was unset
+				me.updateState({
+					course: instance && instance.getId(),
+					activeTab: tab
+				});
+			});
 	},
 
 
 	onCourseSelected: function(instance, tab) {
+		var me = this;
 		//Because courses still use location, it needs to be cleared before setting the new one
 		this.reader.clearLocation();
-		this._setCourse(instance, tab);
-		this.showCourseNavigation();
+		return this._setCourse(instance, tab)
+			.then(function() {
+				me.showCourseNavigation();
 
-		var e = instance.getCourseCatalogEntry(),
-			ntiid = e.get('ContentPackageNTIID');
-		this.setTitle(e.get('Title'));
-		this.pushState({
-			//dirty, i know... TODO: track last content course was at, and restore that.
-			location: PersistentStorage.getProperty('last-location-map', ntiid, ntiid),
-			course: instance.getId()
-		});
+				var e = instance.getCourseCatalogEntry(),
+					ntiid = e.get('ContentPackageNTIID');
+				me.setTitle(e.get('Title'));
+				me.pushState({
+					//dirty, i know... TODO: track last content course was at, and restore that.
+					location: PersistentStorage.getProperty('last-location-map', ntiid, ntiid),
+					course: instance.getId()
+				});
 
-		return this;
+				return me;
+			});
 	},
 
 

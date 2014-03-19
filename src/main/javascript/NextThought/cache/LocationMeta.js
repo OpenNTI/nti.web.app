@@ -16,6 +16,10 @@ Ext.define('NextThought.cache.LocationMeta', {
 			maybe = this.getValue(ntiid),
 			cb = callback || Ext.emptyFn;
 
+		if (!ntiid) {
+			return Promise.reject('No ntiid passed');
+		}
+
 		p.then(Ext.bind(cb, scope), Ext.bind(cb, scope, []));
 
 		if (maybe || !ntiid) {
