@@ -106,9 +106,9 @@ Promise = window.Promise || (function(global) {
 	//</editor-fold>
 
 	var WHEN_THEN = {},
-		nextId = 1, Cls, p, State = { PENDING: 0, FULFILLED: 1, REJECTED: 2 };
+		nextId = 1, Promise, p, State = { PENDING: 0, FULFILLED: 1, REJECTED: 2 };
 
-	Cls = function(worker) {
+	Promise = function(worker) {
 		this.id = (nextId++);
 		this.state = State.PENDING;
 
@@ -125,11 +125,11 @@ Promise = window.Promise || (function(global) {
 		}
 	};
 
-	p = Cls.prototype;
+	p = Promise.prototype;
 
 	p.then = then;
 
-	return Cls;
+	return Promise;
 }(window));
 
 
@@ -172,20 +172,39 @@ Ext.applyIf(Promise, {
  *
  * I strongly recommend examining your code and your structure before commiting to using this as a final solution.
  */
-Ext.define('Deffered', {
-	extend: 'Promise',
+Deffered = (function() {
 
-	constructor: function() {
-		var p = this;
+	function apply(d, src) {
+		var k;
+		for (k in src) {
+			if (src.hasOwnProperty(k) && d[k] === undefined) {
+				d[k] = src[k];
+			}
+		}
+		return d;
+	}
 
+	var Deffered = function() {
+		var o = false;
 		function wtf(f, r) {
-			p.fulfill = function(value) {f(value);};
-			p.reject = function(reason) {r(reason);};
+			o = {
+				fulfill: function(value) {f(value);},
+				reject: function(reason) {r(reason);}
+			};
 		}
 
-		this.callParent([wtf]);
-	}
-});
+		this.superclass.constructor.call(this, wtf);
+		if (!o) {
+			throw new Error('Contract broken!');
+		}
+		apply(this, o);
+	};
+
+	Deffered.prototype.superclass = Promise.prototype;
+	apply(Deffered.prototype, Promise.prototype);
+
+	return Deffered;
+}());
 
 
 /**
