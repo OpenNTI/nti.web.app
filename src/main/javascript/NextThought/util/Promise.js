@@ -8,12 +8,11 @@ Promise = window.Promise || (function(global) {
 
 	//<editor-fold desc="Private shared methods">
 	function then(onFulfilled, onRejected) {
-		var chain = onFulfilled && onFulfilled.then ? onFulfilled : null,
-			promise = chain || new Promise(WHEN_THEN),
+		var promise = new Promise(WHEN_THEN),
 			me = this;
 
-		if (chain) {
-			onFulfilled = undefined;//don't set it as a function in the cache
+		if (onFulfilled && onFulfilled.then) {
+			Ext.Error.raise('Cannot `then` a promise with another promise this way.');
 		}
 
 		// initialize array
@@ -156,8 +155,11 @@ Ext.applyIf(Promise.prototype, {
 
 Ext.applyIf(Promise, {
 	resolve: function(v) { return new Promise(function(f) {f.call(this, v);}); },
-	reject: function(v) { return new Promise(function(f, r) {r.call(this, v);}); }
+	reject: function(v) { return new Promise(function(f, r) {r.call(this, v);}); },
+	wait: function(t) { return new Promise(function(f) {setTimeout(f, t);});}
 });
+
+wait = Promise.wait;
 
 
 /**
