@@ -179,111 +179,111 @@ Ext.define('NextThought.cache.UserRepository', {
 			username.returnSingle = true;
 		}
 
-		var promise = PromiseFactory.make(),
-			me = this,
+		//Did someone do something stupid and send in an empty array
+		if (Ext.isEmpty(username)) {
+			Ext.callback(callback, scope, [[]]);
+			return Promise.resolve([]);
+		}
+
+		var me = this,
 			result = {},
 			l = username.length,
 			names = [],
 			toResolve = [];
 
-		function maybeFinish(k, v) {
-			result[k] = v;
-			l -= 1;
+		return new Promise(function(fulfill) {
 
-			if (l === 0) {
-				result = names.map(function(n) {
-					return result[n];
-				});
+			function maybeFinish(k, v) {
+				result[k] = v;
+				l -= 1;
 
-				if (username.returnSingle) {
-					result = result.first();
+				if (l === 0) {
+					result = names.map(function(n) {
+						return result[n];
+					});
+
+					if (username.returnSingle) {
+						result = result.first();
+					}
+					fulfill(result);
+					Ext.callback(callback, scope, [result]);
 				}
-				promise.fulfill(result);
-				Ext.callback(callback, scope, [result]);
 			}
-		}
 
-		//Did someone do something stupid and send in an empty array
-		if (Ext.isEmpty(username)) {
-			promise.fulfill([]);
-			Ext.callback(callback, scope, [[]]);
-			return promise;
-		}
+			username.forEach(function(o) {
+					var name, r;
 
-		username.forEach(function(o) {
-				var name, r;
+					if (Ext.isString(o)) {
+						name = o;
+					}
+					else if (o.getId !== undefined) {
+						if (o.isUnresolved && o.isUnresolved() === true) {
+							names.push(o.getId());
+							maybeFinish(o.getId(), o);
+							return;
+						}
+						name = o.getId();
+					}
+					else {
+						//JSON representation of User
+						r = ParseUtils.parseItems(o)[0];
+						if (!r || !r.getModelName) {
+							Ext.Error.raise({message: 'Unknown result', object: r});
+						}
+						name = r.getId();
+					}
+					names.push(name);
 
-				if (Ext.isString(o)) {
-					name = o;
-				}
-				else if (o.getId !== undefined) {
-					if (o.isUnresolved && o.isUnresolved() === true) {
-						names.push(o.getId());
-						maybeFinish(o.getId(), o);
+					r = me.resolveFromStore(name);
+					if (r && r.raw && (!forceFullResolve || !r.summaryObject)) {
+						maybeFinish(name, r);
 						return;
 					}
-					name = o.getId();
-				}
-				else {
-					//JSON representation of User
-					r = ParseUtils.parseItems(o)[0];
-					if (!r || !r.getModelName) {
-						Ext.Error.raise({message: 'Unknown result', object: r});
-					}
-					name = r.getId();
-				}
-				names.push(name);
 
-				r = me.resolveFromStore(name);
-				if (r && r.raw && (!forceFullResolve || !r.summaryObject)) {
-					maybeFinish(name, r);
-					return;
-				}
+					result[name] = null;
 
-				result[name] = null;
-
-				//if we are given an ntiid call getObject instead of makeRequest
-				if (ParseUtils.isNTIID(name)) {
-					Service.getObject(name, function(u) {
-						maybeFinish(name, me.cacheUser(u, true));
-					}, function() {
-						//failed to get by ntiid
-						maybeFinish(name, User.getUnresolved('Unknown'));//dont show ntiid
-					});
-				} else {
-					toResolve.push(name);
-					//Legacy Path begin:
-					if (!isFeature('bulk-resolve-users')) {
-						me.makeRequest(name, {
-							scope: me,
-							failure: function() {
-								maybeFinish(name, User.getUnresolved(name));
-							},
-							success: function(u) {
-								//Note we recache the user here no matter what
-								//if we requestsd it we cache the new values
-								maybeFinish(name, me.cacheUser(u, true));
-							}
-						}, cacheBust);
+					//if we are given an ntiid call getObject instead of makeRequest
+					if (ParseUtils.isNTIID(name)) {
+						Service.getObject(name, function(u) {
+							maybeFinish(name, me.cacheUser(u, true));
+						}, function() {
+							//failed to get by ntiid
+							maybeFinish(name, User.getUnresolved('Unknown'));//dont show ntiid
+						});
 					} else {
-						console.debug('Defer to Bulk Resolve...', name);
+						toResolve.push(name);
+						//Legacy Path begin:
+						if (!isFeature('bulk-resolve-users')) {
+							me.makeRequest(name, {
+								scope: me,
+								failure: function() {
+									maybeFinish(name, User.getUnresolved(name));
+								},
+								success: function(u) {
+									//Note we recache the user here no matter what
+									//if we requestsd it we cache the new values
+									maybeFinish(name, me.cacheUser(u, true));
+								}
+							}, cacheBust);
+						} else {
+							console.debug('Defer to Bulk Resolve...', name);
+						}
+						//Legacy Path END
 					}
-					//Legacy Path END
-				}
-			});
-
-		if (toResolve.length > 0 && isFeature('bulk-resolve-users')) {
-			me.bulkResolve(toResolve)
-				.done(function(users) {
-					//Note we recache the user here no matter what
-					//if we requestsd it we cache the new values
-					users.forEach(function(u) {
-						maybeFinish(u.getId(), me.cacheUser(u, true));
-					});
 				});
-		}
 
-		return promise;
+			if (toResolve.length > 0 && isFeature('bulk-resolve-users')) {
+				me.bulkResolve(toResolve)
+					.done(function(users) {
+						//Note we recache the user here no matter what
+						//if we requestsd it we cache the new values
+						users.forEach(function(u) {
+							maybeFinish(u.getId(), me.cacheUser(u, true));
+						});
+					});
+			}
+
+		});
 	},
 	//</editor-fold>
 
@@ -349,23 +349,18 @@ Ext.define('NextThought.cache.UserRepository', {
 
 	makeBulkRequest: function(usernames) {
 		var me = this,
-			p = PromiseFactory.make(),
 			chunkSize = $AppConfig.userBatchResolveChunkSize || 200;
 
-		function failed(reason) {
-			console.error('Failed:', reason);
-			p.reject(reason);
-		}
-
 		function rebuild(lists) {
-			p.fulfill(me.__recompose(usernames, lists));
+			return me.__recompose(usernames, lists);
 		}
 
-		Promise.pool(usernames.chunk(chunkSize).map(me.__chunkBulkRequest.bind(me)))
+		return Promise.pool(usernames.chunk(chunkSize).map(me.__chunkBulkRequest.bind(me)))
 				.done(rebuild)
-				.fail(failed);
-
-		return p;
+				.fail(function failed(reason) {
+					console.error('Failed:', reason);
+					throw reason;
+				});
 	},
 
 
@@ -394,7 +389,7 @@ Ext.define('NextThought.cache.UserRepository', {
 
 
 	__chunkBulkRequest: function(names) {
-		var p = PromiseFactory.make(), me = this,
+		var me = this,
 			divert = [], requestNames,
 			active = me._pendingResolve;
 
@@ -417,91 +412,88 @@ Ext.define('NextThought.cache.UserRepository', {
 			divert.push(me.__bulkRequest(requestNames));
 		}
 
-		Promise.pool(divert)
+		return Promise.pool(divert)
 			.done(function(lists) {
-				p.fulfill(me.__recompose(names, lists));
+				return me.__recompose(names, lists);
 			})
 			.fail(function(reason) {
 				console.error('Failed:', reason);
-				p.reject(reason);
+				throw reason;
 			});
-
-		return p;
 	},
 
 
 	__bulkRequest: function(names) {
-		var p = PromiseFactory.make(),
-			me = this,
+		var me = this,
 			store = me.getStore(),
 			active = me._pendingResolve,
-			requestQue = me._queuedBulkRequests;
+			requestQue = me._queuedBulkRequests, p;
 
-		names.forEach(function(n) { active[n] = p; });
+		function recieve(json) {
+			var u = [], i = names.length - 1, o, n;
 
-		function fire() {
-			var working = PromiseFactory.make();
-			setTimeout(function() {
-				me.__makeRequest({
-					url: Service.getBulkResolveUserURL(),
-					method: 'POST',
-					jsonData: {usernames: names}
-				}).always(function recieve(json) {
-						var u = [], i = names.length - 1, o, n;
+			json = (json || {}).Items || {};
 
-						json = (json || {}).Items || {};
+			store.suspendEvents(true);
 
-						store.suspendEvents(true);
+			//large sets, use as little extra function calls as possible.
+			for (i; i >= 0; i--) {
+				n = names[i];
+				o = json[n];
+				if (o) {
+					o = User.create(json[n], n);
+					o.summaryObject = false;
+					me.cacheUser(o, true);
+					me.updatePresenceFromResolve([o]);
+				} else {
+					o = User.getUnresolved(n);
+				}
+				u.push(o);
+			}
 
-						//large sets, use as little extra function calls as possible.
-						for (i; i >= 0; i--) {
-							n = names[i];
-							o = json[n];
-							if (o) {
-								o = User.create(json[n], n);
-								o.summaryObject = false;
-								me.cacheUser(o, true);
-								me.updatePresenceFromResolve([o]);
-							} else {
-								o = User.getUnresolved(n);
-							}
-							u.push(o);
-						}
-
-						store.resumeEvents();
+			store.resumeEvents();
 
 
-						//schedual cleanup.
-						setTimeout(function() {
-							console.debug('Cleanup...');
-							var i = names.length - 1;
-							for (i; i >= 0; i--) {
-								delete active[names[i]];
-							}
-						}, 60000);
+			//schedual cleanup.
+			wait(60000).then(function() {
+				console.debug('Cleanup...');
+				var i = names.length - 1;
+				for (i; i >= 0; i--) {
+					delete active[names[i]];
+				}
+			});
 
-
-						p.fulfill(u);
-						working.fulfill();
-
-					});
-			},1);
-			return working;
+			return u;
 		}
 
-		requestQue.add(fire);
+		function fire(fulfill) {
+
+			wait(1)
+				.then(function() {
+					return me.__makeRequest({
+						url: Service.getBulkResolveUserURL(),
+						method: 'POST',
+						jsonData: {usernames: names}
+					});
+				})
+				.always(recieve)
+				.done(fulfill);
+		}
+
+		p = new Promise(function(fulfill, reject) {
+			requestQue.add(fire.bind(null, fulfill, reject));
+		});
+
+		names.forEach(function(n) { active[n] = p; });
 
 		return p;
 	},
 
 
 	__foregroundRequest: function() {
-		var p = PromiseFactory.make();
 		console.log('Requesting in foreground');
-		Service.request.apply(Service, arguments)
-				.done(function(txt) {p.fulfill(Ext.decode(txt, true));})
-				.fail(function(e) {p.reject(e);});
-		return p;
+		return Service.request.apply(Service, arguments)
+				.then(function(txt) { return Ext.decode(txt, true); });
 	},
 
 
@@ -513,7 +505,10 @@ Ext.define('NextThought.cache.UserRepository', {
 
 		a = w.active = w.active || a;
 
-		p = PromiseFactory.make();
+		p = new Deffered();//required to be a Deffered, since our worker communication
+		// is "evented", we cannot pass a callback. Though, I'm sure we can reorganize
+		// this logic to make it more 'proper'
+
 		if (a.hasOwnProperty(p.id)) {
 			console.error('ASSERTION FAILED');
 			return;

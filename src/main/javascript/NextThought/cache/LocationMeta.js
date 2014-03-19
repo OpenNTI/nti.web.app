@@ -12,21 +12,20 @@ Ext.define('NextThought.cache.LocationMeta', {
 
 
 	getMeta: function(ntiid, callback, scope) {
-		var p = PromiseFactory.make(),
-			maybe = this.getValue(ntiid),
+		var maybe = this.getValue(ntiid), p,
 			cb = callback || Ext.emptyFn;
 
 		if (!ntiid) {
 			return Promise.reject('No ntiid passed');
 		}
 
-		p.then(Ext.bind(cb, scope), Ext.bind(cb, scope, []));
-
 		if (maybe || !ntiid) {
-			p.fulfill(maybe);
+			p = Promise.resolve(maybe);
 		} else {
-			this.loadMeta(ntiid).then(p);
+			p = this.loadMeta(ntiid);
 		}
+
+		p.then(Ext.bind(cb, scope), Ext.bind(cb, scope, []));
 
 		return p;
 	},
@@ -108,62 +107,65 @@ Ext.define('NextThought.cache.LocationMeta', {
 	 * @param {Boolean} ignoreCache ignore cache
 	 */
 	loadMeta: function(ntiid, ignoreCache) {
-		var me = this,
-			p = PromiseFactory.make();
+		var me = this;
+		return new Promise(function(fulfill, reject) {
 
-		function pageIdLoaded(pi) {
-			var meta = me.createAndCacheMeta(ntiid, pi, ignoreCache);
-			if (!meta) {
-				fail.apply(me, ['createAndCacheMeta failed: ', ntiid, pi, ignoreCache]);
-				return;
+			function pageIdLoaded(pi) {
+				var meta = me.createAndCacheMeta(ntiid, pi, ignoreCache);
+				if (!meta) {
+					fail.apply(me, ['createAndCacheMeta failed: ', ntiid, pi, ignoreCache]);
+					return;
+				}
+				fulfill(meta);
 			}
-			p.fulfill(meta);
-		}
 
-		function fail(req, resp) {
-			if (resp && resp.status === 403) {
-				console.log('Unauthorized when requesting page info', ntiid);
-				me.handleUnauthorized(ntiid, p);
-				return;
+			function fail(req, resp) {
+				if (resp && resp.status === 403) {
+					console.log('Unauthorized when requesting page info', ntiid);
+					return me.handleUnauthorized(ntiid);
+				}
+				//console.error('fail', arguments);
+				reject(resp);
 			}
-			//console.error('fail', arguments);
-			p.reject(resp);
-		}
 
-		Service.getPageInfo(ntiid, pageIdLoaded, fail, me);
-
-		return p;
+			Service.getPageInfo(ntiid, pageIdLoaded, fail, me);
+		});
 	},
 
 
-	handleUnauthorized: function(ntiid, promise) {
-		var meta = ContentUtils.getLocation(ntiid),
+	handleUnauthorized: function(ntiid) {
+		var me = this;
+
+		return new Promise(function(fulfill, reject) {
+			var meta = ContentUtils.getLocation(ntiid),
 				bookPrefix;
 
-		if (meta) {
-			Service.getPageInfo(meta.ContentNTIID, function(pageInfo) {
-				if (pageInfo.isPageInfo) {
-					this.attachContentRootToMeta(meta, pageInfo);
-					this.cacheMeta(meta, ntiid, ntiid);
-					promise.fulfill(meta);
-				} else {
-					promise.reject();
-				}
-			}, function(req, resp) {
-				promise.reject(resp);
-			}, this);
-		}
-		else {
+			if (meta) {
+				Service.getPageInfo(meta.ContentNTIID,
+						function(pageInfo) {
+							if (pageInfo.isPageInfo) {
+								me.attachContentRootToMeta(meta, pageInfo);
+								me.cacheMeta(meta, ntiid, ntiid);
+								fulfill(meta);
+								return;
+							}
+							reject();
+						},
+						function(req, resp) { reject(resp); });
+				return;
+			}
+
 			console.log('Looking to see if ntiid is question', ntiid);
 			bookPrefix = this.bookPrefixIfQuestion(ntiid);
 			bookPrefix = bookPrefix ? this.findTitleWithPrefix(bookPrefix) : null;
 			if (bookPrefix) {
-				this.loadMeta(bookPrefix.get('NTIID')).then(promise);
+				this.loadMeta(bookPrefix.get('NTIID')).then(fulfill, reject);
 			}
 			else {
-				promise.reject();
+				reject();
 			}
-		}
+
+		});
 	},
 
 
