@@ -1,6 +1,8 @@
 /** force our implementation for now. */
 window.Promise = null;
 
+//TODO: Adapt these node.js tests to our platform so we can unit test our promise polyfill. https://github.com/promises-aplus/promises-tests
+
 //TODO: use native promises asap
 Promise = window.Promise || (function(global) {
 
