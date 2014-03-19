@@ -79,15 +79,9 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 		}
 
 		nodes.forEach(function(node) {
-			var p = PromiseFactory.make();
-			que.push(p);
-
-			me.queryTiles(
-					date, course, locationInfo,
-					node, function(tiles) {
-						p.fulfill(tiles);
-					}
-			);
+			que.push(new Promise(function(fulfill) {
+				me.queryTiles(date, course, locationInfo, node, fulfill);
+			}));
 		});
 
 		Promise.pool(que)

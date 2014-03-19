@@ -144,7 +144,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		this._masked = 0;
 		this.callParent(arguments);
 		this.enableBubble(['show-assignment']);
-		this.filledStorePromise = PromiseFactory.make();
 		this.mon(this.pageSource, 'update', 'onPagerUpdate');
 
 		this.filterMenu = this.down('course-assessment-admin-assignments-item-filter');
@@ -267,8 +266,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 
 	beforeRender: function() {
-		var a = this.assignment, s = this.store, grid, p = this.filledStorePromise,
-				parts = this.assignment.get('parts');
+		var a = this.assignment, s = this.store, grid, p,
+			parts = this.assignment.get('parts');
 
 		this.callParent();
 		this.exportFilesLink = this.assignment.getLink('ExportFiles');
@@ -285,14 +284,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			exportFilesLink: this.exportFilesLink
 		});
 
-		if (!s.loading) {
-			p.fulfill(s);
-		} else {
-			s.on({
-				single: true,
-				load: p.fulfill.bind(p)
-			});
-		}
+		p = new Promise(function(fulfill, reject) {
+			if (!s.loading) {
+				fulfill(s);
+			} else {
+				s.on({ single: true, load: fulfill });
+			}
+		});
 
 		this.mask();
 		p.always(this.unmask.bind(this));

@@ -697,7 +697,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	changeGrade: function(rec, number, letter, fromEnter) {
 		if (!this.gradeBook) { return; }
 
-		var p = PromiseFactory.make(), me = this,
+		var me = this,
 			gradebookentry = me.gradeBook.getItem('Final Grade', 'no_submit'),
 			grade = gradebookentry && gradebookentry.getFieldItem('Items', rec.getId()),
 			value = number + ' ' + letter,
@@ -722,27 +722,26 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 			url += '/no_submit/Final Grade/' + rec.getId();
 
-			Ext.Ajax.request({
+			return Service.request({
 				url: url,
 				method: 'PUT',
-				jsonData: { value: value },
-				success: function(r) {
-					var json = Ext.decode(r.responseText, true),
-						rec = json && ParseUtils.parseItems(json)[0];
-
-					if (rec) {
+				jsonData: { value: value }
+			})
+					.then(function(r) {
+						var json = ParseUtils.parseItems(Ext.decode(r.responseText))[0];
+						if (!json) {throw 'Bad Value';}//skip the next step, and jump to the fail()
+						return json;
+					})
+					.then(function(rec) {
 						gradebookentry.addItem(rec);
 						maybeFocus();
-						p.fulfill();
-					}
-				},
-				failure: function() {
-					rec.reject();
-					//probably should do something here
-					console.error('Failed to save final grade:', arguments);
-				}
-			});
-			return p;
+					})
+					.fail(function(reason) {
+						rec.reject();
+						//probably should do something here
+						console.error('Failed to save final grade:', arguments);
+						throw reason;
+					});
 		}
 
 		grade.set('value', value);
