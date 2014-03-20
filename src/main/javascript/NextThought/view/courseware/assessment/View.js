@@ -101,49 +101,52 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 		me.maybeMask();
 
-		return instance.getWrapper().done(function(e) {
-			if (!isSync()) { return; }
+		return instance.getWrapper()
+				.then(function addViews(e) {
+					if (!isSync()) { return; }
 
-			if (me.shouldPushViews()) {
-				if (e && e.isAdministrative) {
-					me.addAdminViews(function(rel) { return getLink(rel, e); });
-				} else {
-					me.addStudentViews();
-				}
-				me.onViewChanged();
-			}
+					if (me.shouldPushViews()) {
+						if (e && e.isAdministrative) {
+							me.addAdminViews(function(rel) { return getLink(rel, e); });
+						} else {
+							me.addStudentViews();
+						}
+						me.onViewChanged();
+					}
 
-			return Promise.all([
-				!e.isAdministrative && instance.getAssignmentHistory(),
-				instance.getAssignments()
-			])
-					.done(function(objs) {//responseTexts are in the order requested
-						if (!isSync()) { return; }
-						var history = objs[0],
+					return Promise.all([
+								!e.isAdministrative && instance.getAssignmentHistory(),
+								instance.getAssignments()
+					]);
+				})
+				.then(function applyData(objs) {
+					if (!isSync()) { return; }
+
+					var history = objs[0],
 							assignments = objs[1];
 
-						me.assignmentsCollection = assignments;
-						me.hasAssignments = !assignments.isEmpty();
+					me.assignmentsCollection = assignments;
+					me.hasAssignments = !assignments.isEmpty();
 
-						if (!me.hasAssignments) {
-							console.debug('The assignments call returned no assignments...');
-							resetView(false);
-							return;
-						}
+					if (!me.hasAssignments) {
+						console.debug('The assignments call returned no assignments...');
+						resetView(false);
+						return;
+					}
 
-						me.fireEvent('set-assignment-history', history);
+					me.fireEvent('set-assignment-history', history);
 
-						return Promise.all(me.forEachView(me.callFunction('setAssignmentsData', [assignments, history, instance])))
-								.done(function() {
-									me.maybeUnmask();
-								});
-					})
-					.fail(function(reason) {
-						console.error('No Assignments will be shown:', reason);
-						resetView(true);
-					});
-		});
-
+					return Promise.all(me.forEachView(
+							me.callFunction('setAssignmentsData', [assignments, history, instance])));
+				})
+				.done(function() {
+					me.maybeUnmask();
+				})
+				.fail(function(reason) {
+					console.error('No Assignments will be shown:', reason);
+					resetView(true);
+					throw reason;
+				});
 	},
 
 
@@ -208,7 +211,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 		return function(v) {
 			var fn = v[name];
 			if (fn) {
-				try { fn.apply(v, args); }
+				try { return fn.apply(v, args); }
 				catch (e) {console.error(e.stack || e.message || e);}
 			}
 		};
