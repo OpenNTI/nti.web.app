@@ -47,8 +47,7 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 			beforeload: function() {
 				var old = p;
 				p = me.promiseToLoaded = new Deffered();
-				old.then(function() {return p;});
-				old.fulfill(me);
+				p.then(function() { old.fulfill(me); });
 			},
 			load: function(me, records, success) {
 				me.sorters.clear();//don't sort on uiData() until precache is done.

@@ -51,8 +51,7 @@ Ext.define('NextThought.Library', {
 
 						var old = p;
 						p = me.promiseToLoad = new Deffered();
-						old.then(function() {return p;});
-						old.fulfill();
+						p.then(function() { old.fulfill(me); });
 					}
 				},
 				filters: [

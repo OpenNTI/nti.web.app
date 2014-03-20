@@ -45,8 +45,7 @@ Ext.define('NextThought.store.courseware.AvailableCourses', {
 			beforeload: function() {
 				var old = p;
 				p = me.promiseToLoaded = new Deffered();
-				old.then(function() {return p;});
-				old.fulfill(me);
+				p.then(function() { old.fulfill(me); });
 			},
 			load: function(me, records, success) {
 				if (!success) {
