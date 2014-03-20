@@ -3,7 +3,8 @@ window.Promise = null;
 
 //TODO: Adapt these node.js tests to our platform so we can unit test our promise polyfill. https://github.com/promises-aplus/promises-tests
 
-//TODO: use native promises asap
+//We won't use the native ones for now. (especially since we're in ES5 mode)
+//See: http://www.html5rocks.com/en/tutorials/es6/promises/
 Promise = window.Promise || (function(global) {
 
 	//<editor-fold desc="Private shared methods">
