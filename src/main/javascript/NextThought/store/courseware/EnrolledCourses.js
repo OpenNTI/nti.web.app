@@ -39,15 +39,16 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 			}]);
 		}
 
-		var p = this.promiseToLoaded = PromiseFactory.make(),
+		var p = this.promiseToLoaded = new Deffered(),
 			me = this;
 		this.callParent(arguments);
 		this.on({
 			scope: this,
 			beforeload: function() {
 				var old = p;
-				p = me.promiseToLoaded = PromiseFactory.make();
-				p.replace(old);
+				p = me.promiseToLoaded = new Deffered();
+				old.then(function() {return p;});
+				old.fulfill(me);
 			},
 			load: function(me, records, success) {
 				me.sorters.clear();//don't sort on uiData() until precache is done.
@@ -87,19 +88,22 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 
 		return this.onceLoaded()
 				.then(function() {
-					var found = false;
-					me.each(function(r) {
-						var instance = r.get('CourseInstance');
-						if (instance && instance.getId() === courseInstanceId) {
-							found = instance;
-							return false;//stop iteration
-						}
-					});
+					return new Promise(function(fulfill, not) {
+						var found = false;
+						me.each(function(r) {
+							var instance = r.get('CourseInstance');
+							if (instance && instance.getId() === courseInstanceId) {
+								found = instance;
+								return false;//stop iteration
+							}
+						});
 
-					if (!found) {
-						throw 'getCourseInstance: Not found: ' + courseInstanceId;
-					}
-					return found;
+						if (!found) {
+							return not('getCourseInstance: Not found: ' + courseInstanceId);
+						}
+
+						fulfill(found);
+					});
 				});
 	},
 
@@ -109,11 +113,13 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 			args = Ext.Array.clone(arguments);
 
 		return this.onceLoaded().then(function() {
-			var i = me.find.apply(me, args);
-			if (i >= 0) {
-				return me.getAt(i);
-			}
-			throw 'findCourse: Not found';
+					return new Promise(function(fulfill, not) {
+						var i = me.find.apply(me, args);
+						if (i >= 0) {
+							return fulfill(me.getAt(i));
+						}
+						return not('findCourse: Not found');
+					});
 		});
 	},
 
@@ -123,13 +129,15 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 			args = Ext.Array.clone(arguments);
 
 		return this.onceLoaded().then(function() {
-			var i = me.findBy.apply(me, args);
-			if (i >= 0) {
-				return me.getAt(i);
-			}
+					return new Promise(function(fulfill, not) {
+						var i = me.findBy.apply(me, args);
+						if (i >= 0) {
+							return fulfill(me.getAt(i));
+						}
 
-			throw 'findCourseBy: Not found';
-		});
+						not('findCourseBy: Not found');
+					});
+				});
 	},
 
 

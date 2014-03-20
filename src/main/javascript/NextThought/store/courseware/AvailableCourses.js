@@ -37,16 +37,16 @@ Ext.define('NextThought.store.courseware.AvailableCourses', {
 	],
 
 	constructor: function() {
-		var p = this.promiseToLoaded = PromiseFactory.make(),
+		var p = this.promiseToLoaded = new Deffered(),
 			me = this;
 		this.callParent(arguments);
 		this.on({
 			scope: this,
 			beforeload: function() {
 				var old = p;
-				p = me.promiseToLoaded = PromiseFactory.make();
-				p.replace(old);
-
+				p = me.promiseToLoaded = new Deffered();
+				old.then(function() {return p;});
+				old.fulfill(me);
 			},
 			load: function(me, records, success) {
 				if (!success) {

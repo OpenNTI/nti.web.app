@@ -46,7 +46,16 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 
 		var me = this,
 			q = this.questionSet,
-			p = PromiseFactory.make();
+			p;
+
+		if (q && q.tallyParts() === 1) {
+			console.debug('Auto submitting...');
+			q.fireEvent('do-submission', {stopEvent: Ext.emptyFn});
+			//eventually pass promise down and let it be fulfilled when submission finishes
+		}// else {
+			p = Promise.resolve();//nothing to do.
+		//}
+
 
 		p.done(function() {
 			me.markSubmitted(new Date());
@@ -55,15 +64,6 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 			console.error(reason);
 			me.markIncorrect();
 		});
-
-		if (q && q.tallyParts() === 1) {
-			console.debug('Auto submitting...');
-			q.fireEvent('do-submission', {stopEvent: Ext.emptyFn});
-			//eventually pass promise down and let it be fulfilled when submission finishes
-		//} else {
-			//p.fulfill();//nothing to do.
-		}
-		p.fulfill();
 	},
 
 

@@ -26,24 +26,23 @@ Ext.define('NextThought.view.profiles.View', {
 
 	restore: function(state) {
 		state = (state || {});
-		var promise = PromiseFactory.make(),
-			user = (state.profile || {}).username,
+		var user = (state.profile || {}).username,
 			me = this;
 
 		if (!me.isActive() || (state.hasOwnProperty('active') && state.active !== this.id)) {
-			promise.fulfill();
-		} else {
+			return Promise.resolve();
+		}
+
+		return new Promise(function(fulfill) {
 			console.debug('Setting user in profile:', user);
 			me.setUser(state.profile || {}, function(panel) {
 				var name = (panel && panel.displayName) || user;
 					name = (panel && panel.user && panel.user.get('displayName')) || name;
 				console.debug('fire finish');
 				me.setTitle('Profile: ' + name);
-				promise.fulfill();
+				fulfill();
 			});
-		}
-
-		return promise;
+		});
 	},
 
 

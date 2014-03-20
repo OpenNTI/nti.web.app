@@ -15,7 +15,7 @@ Ext.define('NextThought.Library', {
 	activeVideoLoad: {},
 
 	constructor: function(config) {
-		this.promiseToLoad = PromiseFactory.make();
+		this.promiseToLoad = new Deffered();//XXX: Restructure this so we don't have to use a Deffered()
 		this.tocs = {};
 		this.addEvents({
 			loaded: true
@@ -50,8 +50,9 @@ Ext.define('NextThought.Library', {
 						}
 
 						var old = p;
-						p = me.promiseToLoad = PromiseFactory.make();
-						p.replace(old);
+						p = me.promiseToLoad = new Deffered();
+						old.then(function() {return p;});
+						old.fulfill();
 					}
 				},
 				filters: [

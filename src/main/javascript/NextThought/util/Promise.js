@@ -33,12 +33,14 @@ Promise = window.Promise || (function(global) {
 	function changeState(state, value) {
 		// catch changing to same state (perhaps trying to change the value)
 		if (this.state === state) {
-			throw new Error('Cannot transition to same state: ' + state);
+			console.warn('Cannot transition to same state: ' + state);
+			return;
 		}
 
 		// trying to change out of fulfilled or rejected
 		if (this.state === State.FULFILLED || this.state === State.REJECTED) {
-			throw new Error('cannot transition from current state: ' + state);
+			console.warn('cannot transition from current state: ' + state);
+			return;
 		}
 
 		// if second argument isn't given at all (passing undefined allowed)
@@ -139,17 +141,8 @@ Ext.applyIf(Promise.prototype, {
 	//this is only here to be compliant to the api.
 	'catch': function(fn) { return this.fail.apply(this, arguments); },
 	always: function(fn) {this.validateHandler(fn); return this.then(fn, fn); },
-	validateHandler: function(fn) { if (typeof fn !== 'function') { throw new TypeError('Expected a function'); } },
 
-	replace: function(oldPromise) {
-		console.deprecated('[Bad Practice!] Promises that need replacing need to be rejected with a "reason" of "replace" and remade.');
-		if (oldPromise.state === 0 && oldPromise.fulfill && oldPromise.reject) {
-			this.then(
-					oldPromise.fulfill.bind(oldPromise),
-					oldPromise.reject.bind(oldPromise)
-			);
-		}
-	}
+	validateHandler: function(fn) { if (typeof fn !== 'function') { throw new TypeError('Expected a function'); } }
 });
 
 

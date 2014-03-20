@@ -7,27 +7,23 @@ Ext.define('NextThought.model.forums.CommunityBoard', {
 
 
 	findCourse: function() {
-		var p = PromiseFactory.make(),
-			me = this;
+		var me = this;
 
 		if (me.course || me.course === false) {
-			p.fulfill(me.course);
-		} else {
-			CourseWareUtils.findCourseBy(function(course) {
-				var instance = course.get('CourseInstance');
+			return Promise.resolve(me.course);
+		}
 
+		return CourseWareUtils.findCourseBy(function(course) {
+				var instance = course.get('CourseInstance');
 				return me.getId() === instance.get('Discussions').getId();
 			}).done(function(course) {
 				course = course.get('CourseInstance');
 				me.course = course;
-				p.fulfill(course);
+				return course;
 			}).fail(function(reason) {
 				console.log(reason);
 				me.course = false;
-				p.fulfill(false);
+				return false;
 			});
-		}
-
-		return p;
 	}
 });

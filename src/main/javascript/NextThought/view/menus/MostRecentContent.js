@@ -84,36 +84,32 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 			s = PersistentStorage.getProperty(this.persistenceKey, this.persistenceProperty, []);
 
 		function getRecord(v, i, a) {
-			var promise = PromiseFactory.make(),
-				title;
+			var title;
 
-			function f(o) {
-				a[i] = o;
-				if (o) {
-					o.lastTracked = Ext.Date.parse(v.l, 'timestamp');
+			return new Promise(function(fulfill, reject) {
+				function f(o) {
+					a[i] = o;
+					if (o) {
+						o.lastTracked = Ext.Date.parse(v.l, 'timestamp');
+					}
+					fulfill(o);
 				}
-				promise.fulfill(o);
-			}
 
-			function reject() {
-				promise.fulfill(null);
-			}
+				if (v.c && ParseUtils.isNTIID(v.i)) {
+					CourseWareUtils.resolveCourse(v.i).then(f, reject);
+				} else {
+					title = Library.getTitle(v.i);
+					if (title && !title.get('isCourse')) { f(title); }
+					else { reject(); }
+				}
 
-			if (v.c && ParseUtils.isNTIID(v.i)) {
-				CourseWareUtils.resolveCourse(v.i).then(f, reject);
-			} else {
-				title = Library.getTitle(v.i);
-				if (title && !title.get('isCourse')) { f(title); }
-				else { reject(); }
-			}
-
-			return promise;
+			});
 		}
 
 		try {
 			store = this.getStore();
 
-			Promise.pool(Ext.Array.map(s, getRecord)).then(function(records) {
+			Promise.all(Ext.Array.map(s, getRecord)).then(function(records) {
 				store.loadRecords(Ext.Array.clean(records));
 				if (store.getCount()) {
 					me.fireEvent('update-current', store.getAt(0));

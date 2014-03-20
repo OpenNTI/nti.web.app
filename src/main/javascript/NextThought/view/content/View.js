@@ -608,8 +608,7 @@ Ext.define('NextThought.view.content.View', {
 
 
 	restore: function(state) {
-		var promise = PromiseFactory.make(),
-			st = state.content,
+		var st = state.content,
 			course = st.course,
 			ntiid = st.location,
 			tab = st.activeTab,
@@ -640,22 +639,17 @@ Ext.define('NextThought.view.content.View', {
 			catch (e) {
 				console.error(e.stack || e.message || e);
 			}
-			finally {
-				promise.fulfill();
-			}
 		}
 
 		function noCourse() {
 			console.warn('Dropping state for course that is not accessible.');
-			promise.fulfill();
 			if (state.active === me.id) {
 				me.fireEvent('go-to-library');
 			}
 		}
 
-		CourseWareUtils.resolveCourse(course).then(setupCourseUI, noCourse);
-
-		return promise;
+		return CourseWareUtils.resolveCourse(course)
+				.then(setupCourseUI, noCourse);
 	},
 
 
