@@ -150,5 +150,6 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 				return Promise.reject(e);
 			}
 		}));
+		return this.activeCourseSetup;
 	}
 });
