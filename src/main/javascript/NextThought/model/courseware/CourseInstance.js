@@ -171,9 +171,9 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 		function getLink(rel, e) { return e.getLink(rel) || me.getLink(rel); }
 
 		return this.getWrapper()
-			.done(function(e) {
-				Service.request(getLink('AssignmentHistory', e))
-					.done(function(txt) {
+			.then(function(e) {
+				return Service.request(getLink('AssignmentHistory', e))
+					.then(function(txt) {
 						return ParseUtils.parseItems(txt)[0];
 					})
 					.fail(function(reason) {

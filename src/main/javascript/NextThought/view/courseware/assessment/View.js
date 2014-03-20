@@ -123,7 +123,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 					if (!isSync()) { return; }
 
 					var history = objs[0],
-							assignments = objs[1];
+						assignments = objs[1];
 
 					me.assignmentsCollection = assignments;
 					me.hasAssignments = !assignments.isEmpty();
