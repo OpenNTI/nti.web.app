@@ -538,17 +538,6 @@ Ext.define('NextThought.util.Globals', {
 	},
 
 
-	getExternalizedString: function(key, defaultValue, noKey) {
-		var v = (window.NTIStrings || {})[key] || defaultValue || (!noKey && key) || '';
-
-		if (v instanceof Array) {
-			v = v[Math.floor(Math.random() * 100) % v.length];
-		}
-
-		return v;
-	},
-
-
 	sendEmailTo: function(to, subject, body, cc, bcc) {
 		var href = 'mailto:';
 
@@ -604,6 +593,4 @@ function() {
 	}
 	makeImage('CANVAS_URL_SHAPE_BROKEN_IMAGE');
 	makeImage('CANVAS_BROKEN_IMAGE');
-
-	window.getString = this.getExternalizedString;
 });
