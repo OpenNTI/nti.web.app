@@ -196,7 +196,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 
 		function collect(o) {
 			var id = o.getId(),
-				h = history.getItem(id),
+				h = history && history.getItem(id),
 				submission = h && h.get('Submission'),
 				feedback = h && h.get('Feedback'),
 				grade = h && h.get('Grade'),
