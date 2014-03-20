@@ -591,7 +591,7 @@ Ext.define('NextThought.controller.CourseWare', {
 
 	handleNavigation: function(cid, rec, meta) {
 		if (!meta.isCourse) {
-			return Promise.fulfill();
+			return Promise.resolve();
 		}
 
 		var courseEntry, me = this;

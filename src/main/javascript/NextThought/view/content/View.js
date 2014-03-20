@@ -466,7 +466,7 @@ Ext.define('NextThought.view.content.View', {
 			if (tab !== 'passive') {
 				this.setActiveTab(tab);
 			}
-			return Promise.fulfill();
+			return Promise.resolve();
 		}
 
 
