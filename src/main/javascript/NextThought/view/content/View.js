@@ -650,7 +650,11 @@ Ext.define('NextThought.view.content.View', {
 
 		return CourseWareUtils.resolveCourse(course)
 				.then(setupCourseUI,/*or*/ noCourse)
-				.then(setReader, /*or*/ setTab);
+				.then(setReader, /*or*/ setTab)
+				.fail(function(reason) {
+					//catch the reason... (and let the restore)
+					console.error('Potentially, failed to restore the state', reason);
+				});
 	},
 
 
