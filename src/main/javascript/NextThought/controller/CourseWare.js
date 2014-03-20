@@ -631,8 +631,8 @@ Ext.define('NextThought.controller.CourseWare', {
 
 		//finally if we aren't in the course switch to it
 		this.getMainNav().updateCurrent(false, course);
-		contentView.onCourseSelected(course, 'course-forum').down('[isForumContainer]');
-		return contentView;
+		contentView.onCourseSelected(course, 'course-forum');
+		return contentView.down('[isForumContainer]');
 	}
 }, function() {
 
