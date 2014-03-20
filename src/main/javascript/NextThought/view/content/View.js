@@ -639,8 +639,13 @@ Ext.define('NextThought.view.content.View', {
 
 		function setReader(input) {
 			//clearLocation doesn't pay attention to its arguments.
-			me.reader[(ntiid ? 'set' : 'clear') + 'Location'](ntiid, null, true);
-			return input;//don't mutate the value...
+			return new Promise(function(fulfill, reject) {
+				function fin(reader) {
+					if (!reader) {reject('setLocation aborted'); return;}
+					fulfill(input);//don't mutate the value...
+				}
+				me.reader[(ntiid ? 'set' : 'clear') + 'Location'](ntiid, fin, true);
+			});
 		}
 
 		function setTab(reason) {
