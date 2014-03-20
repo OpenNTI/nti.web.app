@@ -4,7 +4,8 @@ Ext.define('NextThought.view.courseware.info.View', {
 
 	requires: [
 		'NextThought.view.courseware.info.outline.View',
-		'NextThought.view.courseware.info.Panel'
+		'NextThought.view.courseware.info.Panel',
+		'NextThought.view.courseware.info.Roster'
 	],
 
 	mixins: {
@@ -13,14 +14,16 @@ Ext.define('NextThought.view.courseware.info.View', {
 
 
 	navigation: {xtype: 'course-info-outline'},
-	body: {xtype: 'course-info-panel'},
+	body: {
+		xtype: 'course-info-panel'
+	},
 
 
 	afterRender: function() {
 		this.callParent(arguments);
 		//we set this up to listen to a node that will not scroll...
 		// so that when this view is activated it will reset the view.
-		Ext.defer(this.initCustomScrollOn, 5, this,['content', '.course-info-panel']);
+		Ext.defer(this.initCustomScrollOn, 5, this, ['content', '.course-info-panel']);
 	},
 
 
@@ -31,8 +34,8 @@ Ext.define('NextThought.view.courseware.info.View', {
 		function update(info, status) {
 			me.hasInfo = !!info;
 
-			me[me.infoOnly?'addCls':'removeCls']('info-only');
-			me.navigation.margin = (me.infoOnly? '105':'0')+' 5 5 0';
+			me[me.infoOnly ? 'addCls' : 'removeCls']('info-only');
+			me.navigation.margin = (me.infoOnly ? '105' : '0') + ' 5 5 0';
 
 			me.body.setContent(info, status);
 			me.navigation.setContent(info, status);
