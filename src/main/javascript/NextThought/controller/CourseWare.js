@@ -664,11 +664,11 @@ Ext.define('NextThought.controller.CourseWare', {
 
 
 		onceLoaded: function() {
-			return Promise.pool(
+			return Promise.all([
 				Ext.getStore('courseware.AvailableCourses').onceLoaded(),
 				Ext.getStore('courseware.AdministeredCourses').onceLoaded(),
 				Ext.getStore('courseware.EnrolledCourses').onceLoaded()
-			);
+			]);
 		},
 
 

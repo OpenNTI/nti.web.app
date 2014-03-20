@@ -142,7 +142,7 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 	courseChanged: function() {
 		var args = arguments;
 		this.showRoot();
-		this.activeCourseSetup = Promise.pool(this.items.items.map(function(o) {
+		this.activeCourseSetup = Promise.all(this.items.items.map(function(o) {
 			try {
 				return o.courseChanged.apply(o, args);
 			} catch (e) {

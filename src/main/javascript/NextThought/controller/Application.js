@@ -39,9 +39,9 @@ Ext.define('NextThought.controller.Application', {
 			console.error('Loading View: ', Globals.getError(e1));
 		}
 
-		Promise.pool(
+		Promise.all([
 			Library.onceLoaded(),
-			CourseWareUtils.onceLoaded())
+			CourseWareUtils.onceLoaded()])
 				.then(
 				this.restore.bind(this),
 				function(reason) {//failure

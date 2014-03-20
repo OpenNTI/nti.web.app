@@ -84,7 +84,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 			}));
 		});
 
-		Promise.pool(que)
+		Promise.all(que)
 			.done(this.applyTiles.bind(this))
 			.fail(function() { if (me.el) {me.el.unmask();} });
 	},

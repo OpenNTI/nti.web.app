@@ -355,7 +355,7 @@ Ext.define('NextThought.cache.UserRepository', {
 			return me.__recompose(usernames, lists);
 		}
 
-		return Promise.pool(usernames.chunk(chunkSize).map(me.__chunkBulkRequest.bind(me)))
+		return Promise.all(usernames.chunk(chunkSize).map(me.__chunkBulkRequest.bind(me)))
 				.done(rebuild)
 				.fail(function failed(reason) {
 					console.error('Failed:', reason);
@@ -412,7 +412,7 @@ Ext.define('NextThought.cache.UserRepository', {
 			divert.push(me.__bulkRequest(requestNames));
 		}
 
-		return Promise.pool(divert)
+		return Promise.all(divert)
 			.done(function(lists) {
 				return me.__recompose(names, lists);
 			})

@@ -57,7 +57,7 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 					return;
 				}
 
-				Promise.pool(Ext.Array.map(
+				Promise.all(Ext.Array.map(
 						me.getRange(),
 						function(r) {
 							return r.__precacheEntry();

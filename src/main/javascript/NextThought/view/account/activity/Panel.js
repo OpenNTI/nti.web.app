@@ -306,7 +306,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			return new Promise(function(fulfill, reject) {
 				//wait for the return of changeToActivity for all of the groups childern
 				//we need to pool these promises so the label can be added in the right order
-				Promise.pool(group.children.reduce(promiseToResolve, []))
+				Promise.all(group.children.reduce(promiseToResolve, []))
 					.done(function(results) {
 						var parts = [];
 
@@ -349,7 +349,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 
 
 		//pool these promises to ensure that the groups get added in the correct order
-		Promise.pool(groups.map(doGroup))
+		Promise.all(groups.map(doGroup))
 			.done(function(results) {
 				results = results.reduce(function(a, b) {
 					return a.concat(b);
@@ -412,7 +412,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		};
 
 		return new Promise(function(fulfill, reject) {
-			Promise.pool(me.getMessage(c, cid), UserRepository.getUser(c.get('Creator')))
+			Promise.all(me.getMessage(c, cid), UserRepository.getUser(c.get('Creator')))
 				.done(function(r) {
 					activityData.name = r[1].getName();
 

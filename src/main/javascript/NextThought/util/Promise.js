@@ -259,22 +259,6 @@ Promise.all = Promise.all || function(promises) {
 };
 
 
-/**
- * Not sure we need this flexibility. Most the places we call this use the Array arg.
- *
- * @param {...Promise|Promise[]} var_args
- * @return {Promise}
- */
-Promise.pool = function(var_args) {
-	var waitOn = var_args;
-	if (Object.prototype.toString.call(var_args) !== '[object Array]') {
-		waitOn = Array.prototype.slice.call(arguments);
-	}
-
-	return Promise.all(waitOn);
-};
-
-
 Ext.define('NextThought.util.Promise', {
 	singleton: true,
 

@@ -113,10 +113,10 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 				me.onViewChanged();
 			}
 
-			return Promise.pool(
+			return Promise.all([
 				!e.isAdministrative && instance.getAssignmentHistory(),
 				instance.getAssignments()
-			)
+			])
 					.done(function(objs) {//responseTexts are in the order requested
 						if (!isSync()) { return; }
 						var history = objs[0],
@@ -133,7 +133,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 						me.fireEvent('set-assignment-history', history);
 
-						return Promise.pool(me.forEachView(me.callFunction('setAssignmentsData', [assignments, history, instance])))
+						return Promise.all(me.forEachView(me.callFunction('setAssignmentsData', [assignments, history, instance])))
 								.done(function() {
 									me.maybeUnmask();
 								});

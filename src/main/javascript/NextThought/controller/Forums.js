@@ -395,7 +395,7 @@ Ext.define('NextThought.controller.Forums', {
 			return prom;
 		}
 
-		Promise.pool(communities.map(loadCommunityBoard))
+		Promise.all(communities.map(loadCommunityBoard))
 			.done(function(results) {
 				results = results.reduce(function(a, b) {
 					return a.concat(b);
