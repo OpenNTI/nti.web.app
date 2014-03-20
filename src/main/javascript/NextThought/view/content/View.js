@@ -620,36 +620,37 @@ Ext.define('NextThought.view.content.View', {
 		tab = (tab === 'null') ? null : tab;
 
 		function setupCourseUI(instance) {
-			try {
-				if (instance) {
-					me._setCourse(instance, tab);
-					me.courseForum.restoreState(forum, topic);
-					me.courseNav.restoreState(st);
-				}
-
-				if (ntiid) {
-					me.reader.setLocation(ntiid, null, true);
-				} else {
-					me.reader.clearLocation();
-				}
-
-				//if we have an instance this gets called in _setCourse so there is no need to do it here
-				if (!instance) { me.setActiveTab(tab); }
-			}
-			catch (e) {
-				console.error(e.stack || e.message || e);
-			}
+				return me._setCourse(instance, tab)
+						.then(function() {
+							me.courseForum.restoreState(forum, topic);
+							me.courseNav.restoreState(st);
+							return instance;//restore the promise value
+						});
 		}
 
-		function noCourse() {
+		function noCourse(reason) {
 			console.warn('Dropping state for course that is not accessible.');
 			if (state.active === me.id) {
 				me.fireEvent('go-to-library');
 			}
+			throw reason;//make sure the promise chain is continuing to be directed to the fail branches
+		}
+
+
+		function setReader(input) {
+			//clearLocation doesn't pay attention to its arguments.
+			me.reader[(ntiid ? 'set' : 'clear') + 'Location'](ntiid, null, true);
+			return input;//don't mutate the value...
+		}
+
+		function setTab(reason) {
+			me.setActiveTab(tab);
+			throw reason;
 		}
 
 		return CourseWareUtils.resolveCourse(course)
-				.then(setupCourseUI, noCourse);
+				.then(setupCourseUI,/*or*/ noCourse)
+				.then(setReader, /*or*/ setTab);
 	},
 
 
