@@ -7,14 +7,14 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 	],
 
 	ui: 'course-assessment',
-	cls: 'course-performance make-white',
+	cls: 'course-info-roster course-performance make-white',
 
 	layout: 'anchor',
 
 
 	items: [
 		{
-			cls: 'course-performance-header',
+			cls: 'nti-header',
 			xtype: 'container',
 			layout: 'auto',
 			items: [
@@ -36,7 +36,7 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 					xtype: 'grid',
 					scroll: 'vertical',
 					columns: [
-						{ text: 'Name', dataIndex: 'realname', flex: 1 },
+						{ text: 'Name', dataIndex: 'realname', padding: '0 0 0 30', flex: 1 },
 						{ text: 'Username', dataIndex: 'username' },
 						{ text: 'Status', dataIndex: 'status' },
 						{ text: '', dataIndex: '' }//disclosure column
