@@ -1,6 +1,6 @@
-Ext.define('NextThought.view.courseware.assessment.assignments.admin.FilterMenuItem', {
+Ext.define('NextThought.ux.FilterMenuItem', {
 	extend: 'Ext.menu.CheckItem',
-	alias: 'widget.student-admin-filter-menu-item',
+	alias: 'widget.filter-menu-item',
 
 	childEls: ['countEl'],
 

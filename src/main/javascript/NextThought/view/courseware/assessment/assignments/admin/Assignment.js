@@ -7,7 +7,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		'NextThought.layout.component.CustomTemplate',
 		'NextThought.store.courseware.AssignmentView',
 		'NextThought.view.courseware.assessment.admin.Grid',
-		'NextThought.view.courseware.assessment.assignments.admin.FilterMenu'
+		'NextThought.ux.FilterMenu'
 	],
 
 	ui: 'course-assessment',
@@ -127,7 +127,14 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 				}
 			]
 		},
-		{xtype: 'course-assessment-admin-assignments-item-filter'}
+		{
+			xtype: 'filter-menupanel',
+			searchPlaceHolderText: 'Search Students',
+			filters: [
+				{ text: 'Enrolled Students', filter: 'ForCredit'},
+				{ text: 'Open Students', filter: 'Open'}
+			]
+		}
 	],
 
 
@@ -146,7 +153,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		this.enableBubble(['show-assignment']);
 		this.mon(this.pageSource, 'update', 'onPagerUpdate');
 
-		this.filterMenu = this.down('course-assessment-admin-assignments-item-filter');
+		this.filterMenu = this.down('filter-menupanel');
 		this.mon(this.filterMenu, {
 			filter: 'doFilter',
 			search: {fn: 'doSearch', buffer: 450}

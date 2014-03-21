@@ -1,13 +1,10 @@
-Ext.define('NextThought.view.courseware.assessment.assignments.admin.FilterMenu', {
+Ext.define('NextThought.ux.FilterMenu', {
 	extend: 'Ext.menu.Menu',
-	alias: [
-		'widget.course-assessment-admin-assignments-item-filter',
-		'widget.test-filter'
-	],
+	alias: 'widget.filter-menupanel',
 
 	requires: [
-		'NextThought.view.courseware.assessment.assignments.admin.FilterMenuItem',
-		'NextThought.view.menus.SearchItem'
+		'NextThought.ux.FilterMenuItem',
+		'NextThought.ux.SearchItem'
 	],
 
 	ui: 'nt',
@@ -15,32 +12,40 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.FilterMenu'
 	showSeparator: false,
 	shadow: false,
 	frame: false,
-	cls: 'no-checkboxes no-footer blue-menu-items student-filter-search',
+
+	cls: 'no-checkboxes no-footer blue-menu-items filter-search',
 	hideMode: 'display',
 	autoHide: false,
 
 
 	defaults: {
 		ui: 'nt',
-		xtype: 'student-admin-filter-menu-item',
-		group: 'student-filter',
+		xtype: 'filter-menu-item',
+		group: 'main-filter-group',
 		plain: true
 	},
 
+	searchPlaceHolderText: 'Search',
 
-	items: [
-		{ xtype: 'label', text: 'Display' },
-		{ text: 'Enrolled Students', filter: 'ForCredit'},
-		{ text: 'Open Students', filter: 'Open'},
-		{
-			xtype: 'search-menu-item',
-			placeholder: 'Search Students'
-		}
+	filters: [
+		//{ text: 'All Students', filter: '*'},
+		//{ text: 'Enrolled Students', filter: 'ForCredit'},
+		//{ text: 'Open Students', filter: 'Open'}
 	],
-
 
 	initComponent: function() {
 		this.callParent(arguments);
+		if (!Ext.isArray(this.filters)) {
+			console.warn('Need an array of filter menu item configs... blanking out filters list');
+			this.filters = [];
+		}
+
+		this.add([].concat(
+				{ xtype: 'label', text: 'Display' },
+				this.filters,
+				{ xtype: 'search-menu-item', placeholder: this.searchPlaceHolderText }
+		));
+
 		this.search = this.down('search-menu-item');
 		this.search.enableBubble('commit', 'changed');
 
