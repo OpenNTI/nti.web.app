@@ -65,7 +65,15 @@ Ext.define('NextThought.model.converters.GroupByTime', {
 		},
 
 		groupTitle: function(groupValue, defaultValue, forceNow) {
-			var d = (forceNow || new Date()).setHours(0, 0, 0, 0), c, now = new Date(d);
+			var d = (forceNow || new Date()).setHours(0, 0, 0, 0), c, now = new Date(d),
+				tollerance = 0.0099;
+
+			function under(c, i) {
+				var d = (i - c);
+				d = d > 0 && d < tollerance;//account for DST shifts
+				return c < i && !d;
+			}
+
 			if (!groupValue) {
 				return defaultValue;
 			}
@@ -77,13 +85,14 @@ Ext.define('NextThought.model.converters.GroupByTime', {
 			if (d <= 0) { return defaultValue; }//Today
 
 			c = d / this.DAY;
-			if (c < 2) { return 'Yesterday'; }
-			if (c < 7) { return Ext.Date.format(groupValue, 'l'); }//Sunday, Monday, Tuesday, etc...
+			if (under(c, 2)) { return 'Yesterday'; }
+			if (under(c, 7)) { return Ext.Date.format(groupValue, 'l'); }//Sunday, Monday, Tuesday, etc...
 
 			c = d / this.WEEK;
-			if (c < 2) { return 'Last week'; }
-			if (c < 3) { return '2 weeks ago'; }
-			if (c < 4) { return '3 weeks ago'; }
+
+			if (under(c, 2)) { return 'Last week'; }
+			if (under(c, 3)) { return '2 weeks ago'; }
+			if (under(c, 4)) { return '3 weeks ago'; }
 
 			if (groupValue < Ext.Date.add(now, Ext.Date.MONTH, -2)) { return 'Last year'; }
 
