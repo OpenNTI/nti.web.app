@@ -2,7 +2,6 @@ Ext.define('NextThought.ux.Grouping', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.grouping',
 	ui: 'nt',
-	cls: 'grouping',
 
 	layout: 'auto',
 	componentLayout: 'body',
@@ -19,6 +18,12 @@ Ext.define('NextThought.ux.Grouping', {
 	config: {
 		subTitle: null,
 		title: null
+	},
+
+
+	initComponent: function() {
+		this.addCls('grouping');
+		return this.callParent(arguments);
 	},
 
 
