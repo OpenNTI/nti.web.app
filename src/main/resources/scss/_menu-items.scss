@@ -248,9 +248,8 @@ label.x-menu-item-cmp {
 		color: $primary-grey;
 
 		height: 40px;
-		width: auto;
-		min-width: 0;
-		max-width: 100%;
+		width: 92%;//fallback...
+		@include experimental-value(width, calc(100% - 20px));
 	}
 
 	input:not(:empty) > .clear {display: block;}
