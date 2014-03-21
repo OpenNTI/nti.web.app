@@ -22,10 +22,18 @@ Ext.define('NextThought.view.courseware.info.outline.View', {
 			xtype: 'course-info-outline-menu',
 			info: info,
 			showRoster: showRoster
-		},{
-			xtype: 'course-info-outline-open-course',
-			info: info,
-			enrollmentStatus: status
 		});
+
+		if (!showRoster) {
+			this.add({
+				xtype: 'course-info-outline-open-course',
+				info: info,
+				enrollmentStatus: status
+			});
+		//} else {
+			//add chart and totals here? (Seems wastefull of vertical space to add it to
+			// the header above the grid) -- when dev tools closed or unpined it still
+			// feels very crunched with a pie chart above the grid.
+		}
 	}
 });
