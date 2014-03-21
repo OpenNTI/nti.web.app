@@ -35,6 +35,13 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 			items: [
 				{
 					xtype: 'grid',
+					/*verticalScroller: {
+						synchronousRender: true,
+						scrollToLoadBuffer: 100,
+						trailingBufferZone: 100,
+						numFromEdge: 50,
+						leadingBufferZone: 150
+					},*/
 					scroll: 'vertical',
 					columns: [
 						{
@@ -60,7 +67,7 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 							width: 60,
 							text: '', dataIndex: 'Creator',
 							tpl: Ext.DomHelper.markup({
-								cls: 'disclosure'
+								cls: 'disclosure', 'data-qtip': 'TODO: Diclosure menu goes here'
 							})
 						}
 					]
