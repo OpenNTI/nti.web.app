@@ -17,7 +17,7 @@ Ext.define('NextThought.view.account.history.mixins.Base', {
 		}
 
 		this.panel.registerSubType(this.keyVal, this.getTpl());
-		this.panel.registerFillData(this.keyVal, Ext.bind(this.fillInData, this));
+		this.panel.registerFillData(this.keyVal, this.fillInData.bind(this));
 		this.panel.registerClickHandler(this.keyVal, this.clicked);
 	},
 
@@ -43,7 +43,7 @@ Ext.define('NextThought.view.account.history.mixins.Base', {
 
 		return new Ext.XTemplate(Ext.DomHelper.markup([
 			{
-				cls: 'history notification ' + me.itemCls,
+				cls: 'history notification {hidden:boolStr("x-hidden")} ' + me.itemCls,
 				cn: [
 					{tag: 'span', cls: 'creator link', html: creator},
 					{tag: 'span', cls: 'verb', html: '{[this.getVerb(values)]}'},

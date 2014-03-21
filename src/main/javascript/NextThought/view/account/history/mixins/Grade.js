@@ -10,7 +10,11 @@ Ext.define('NextThought.view.account.history.mixins.Grade', {
 	itemCls: 'grade',
 
 	clicked: function(view, rec) {
-		var course = CourseWareUtils.courseForNtiid(rec.get('assignmentContainer'));
+		var course = rec.course;
+		if (!course) {
+			alert({title: 'Uh...', msg: 'This isn`t suppossed to happen...'});
+			return;
+		}
 
 		CourseWareUtils.findCourseBy(course.findByMyCourseInstance())
 			.then(function(instance) {
@@ -26,12 +30,21 @@ Ext.define('NextThought.view.account.history.mixins.Grade', {
 	},
 
 	fillInData: function(rec) {
-		if (rec.get('assignmentName')) {
-			return;
-		}
+		var me = this;
 		Service.getObject(rec.get('AssignmentId'), function(assignment) {
-			rec.set('assignmentContainer', assignment.get('ContainerId'));
-			rec.set('assignmentName', assignment.get('title'));
+			var cid = assignment.get('ContainerId'),
+				course = CourseWareUtils.courseForNtiid(cid);
+			if (!course) {
+				me.itemCls += ' x-hidden';
+			}
+			rec.course = course;
+			rec.set({
+				assignmentContainer: cid,
+				assignmentName: assignment.get('title')
+			});
+		}, function() {
+			rec.data.hidden = true;//secret..shhh
+			rec.set('assignmentName', 'Not Found');
 		});
 	}
 
