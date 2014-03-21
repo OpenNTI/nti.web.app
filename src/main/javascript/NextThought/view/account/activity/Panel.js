@@ -296,21 +296,19 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		function doGroup(group) {
 			var label = groupToLabel(group.name);
 
-			function promiseToResolve(agg, c) {
+			function resolve(c) {
 				if (!/deleted/i.test(c.get('ChangeType'))) {
-					agg.push(me.changeToActivity(c));
+					return me.changeToActivity(c);
 				}
-				return agg;
 			}
 
-			return new Promise(function(fulfill, reject) {
-				//wait for the return of changeToActivity for all of the groups childern
-				//we need to pool these promises so the label can be added in the right order
-				Promise.all(group.children.reduce(promiseToResolve, []))
-					.done(function(results) {
+			//wait for the return of changeToActivity for all of the groups childern
+			//we need to pool these promises so the label can be added in the right order
+			return Promise.all(group.children.map(resolve).filter(Ext.identityFn))
+					.then(function(results) {
 						var parts = [];
 
-						results = results.filter(function(i) {return !!i;});
+						results = results.filter(Ext.identityFn);
 
 						if (results.length) {
 							//add the label if need be
@@ -320,13 +318,9 @@ Ext.define('NextThought.view.account.activity.Panel', {
 							//add the results to the parts regardless
 							parts = parts.concat(results);
 						}
-						fulfill(parts);
-					})
-					.fail(function(reason) {
-						//console.error(reason);
-						reject(reason);
+
+						return parts;
 					});
-			});
 		}
 
 		groups = store.getGroups();
@@ -411,19 +405,20 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			ContainerIdHash: cid ? IdCache.getIdentifier(cid) : undefined
 		};
 
-		return new Promise(function(fulfill, reject) {
-			Promise.all(me.getMessage(c, cid), UserRepository.getUser(c.get('Creator')))
-				.done(function(r) {
-					activityData.name = r[1].getName();
 
-					activity = me.stream[guid] = Ext.apply(activityData, r[0]);
-					fulfill(activity);
-				})
-				.fail(function(reason) {
-					console.error('changeToActivity failed because:', reason);
-					reject(reason);
-				});
-		});
+		return Promise.all([
+			me.getMessage(c, cid),
+			UserRepository.getUser(c.get('Creator'))
+		])
+			.done(function(r) {
+				activityData.name = r[1].getName();
+				activity = me.stream[guid] = Ext.apply(activityData, r[0]);
+				return activity;
+			})
+			.fail(function(reason) {
+				console.error('changeToActivity failed because:', reason);
+				throw reason;
+			});
 	},
 
 
@@ -480,9 +475,10 @@ Ext.define('NextThought.view.account.activity.Panel', {
 
 	blogEntryClicked: function(rec) {
 		var me = this;
-		UserRepository.getUser(rec.get('Creator'), function(user) {
-			me.fireEvent('navigate-to-blog', user, rec.get('ID'));
-		});
+		UserRepository.getUser(rec.get('Creator'))
+				.then(function(user) {
+					me.fireEvent('navigate-to-blog', user, rec.get('ID'));
+				});
 	},
 
 
