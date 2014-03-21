@@ -18,7 +18,7 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 				{ xtype: 'box', cls: 'label', html: 'Enrollment Breakdown' }
 			]
 		}, {
-			xtype: 'course-assessment-assignment-group',
+			xtype: 'grouping',
 			title: 'Roster',
 			anchor: '0 -200',
 			layout: 'fit',

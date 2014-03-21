@@ -36,7 +36,6 @@ Ext.define('NextThought.controller.CourseWare', {
 
 	views: [
 		'courseware.assessment.assignments.FilterBar',
-		'courseware.assessment.assignments.Grouping',
 		'courseware.assessment.assignments.List',
 		'courseware.assessment.assignments.View',
 		'courseware.assessment.Activity',

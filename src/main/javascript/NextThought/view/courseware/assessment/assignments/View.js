@@ -2,8 +2,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-assessment-assignments',
 	requires: [
+		'NextThought.ux.Grouping',
 		'NextThought.view.courseware.assessment.assignments.FilterBar',
-		'NextThought.view.courseware.assessment.assignments.Grouping',
 		'NextThought.view.courseware.assessment.assignments.List'
 	],
 	handlesAssignment: true,
@@ -13,7 +13,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 		{xtype: 'course-assessment-assignments-filterbar'},
 		{xtype: 'container', rel: 'content', cls: 'scrollzone scrollable'}
 			/* Exmaple items:
-				{xtype: 'course-assessment-assignment-group', title: '1. About Geology', subTitle: 'August 19', items: [
+				{xtype: 'grouping', title: '1. About Geology', subTitle: 'August 19', items: [
 					{ xtype: 'course-assessment-assignment-list' }
 				]}
 			*/
@@ -369,7 +369,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 
 	newGroupUIConfig: function(grouper) {
-		return {xtype: 'course-assessment-assignment-group',
+		return {
+			xtype: 'grouping',
 			dataPromise: grouper.dataPromise,
 			title: grouper.title, subTitle: grouper.subTitle,
 			items: this.newAssignmentList(grouper)

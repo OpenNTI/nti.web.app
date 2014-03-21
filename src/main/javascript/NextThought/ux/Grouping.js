@@ -1,12 +1,8 @@
-Ext.define('NextThought.view.courseware.assessment.assignments.Grouping', {
+Ext.define('NextThought.ux.Grouping', {
 	extend: 'Ext.container.Container',
-	alias: 'widget.course-assessment-assignment-group',
-	ui: 'course-assessment',
-	cls: 'assignment-group',
-
-	requires: [
-		'NextThought.layout.component.Natural'
-	],
+	alias: 'widget.grouping',
+	ui: 'nt',
+	cls: 'grouping',
 
 	layout: 'auto',
 	componentLayout: 'body',

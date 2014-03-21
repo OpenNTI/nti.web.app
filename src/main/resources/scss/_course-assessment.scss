@@ -559,33 +559,6 @@ canvas.x-component-course-assessment {
 	}
 }
 
-.x-container-course-assessment {
-
-	&.assignment-group {
-		padding: 30px 30px 60px;
-		box-shadow: 0 1px 0 0 #f1f1f1;
-		position: relative;
-		overflow: hidden;
-
-		& > .body {
-			margin-top: 0.5em;
-		}
-
-		& > .subtitle {
-			font: normal 600 0.6em/1 $font;
-			color: $tertiary-grey;
-			text-transform: uppercase;
-		}
-
-		& > .title {
-			color: $primary-grey;
-			font: normal 300 1.5em/1.5 $font;
-		}
-	}
-
-}
-
-
 .course-assessment-header {
 	font-size: 16px;//force a base em size
 
