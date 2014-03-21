@@ -112,11 +112,11 @@
 		.badge {
 			position: absolute;
 			top: 8px;
-			right: -2px;
+			right: -8px;
 			font: italic 600 10px $font;
 			color: $primary-blue;
 			z-index: 10;
-			text-align: right;
+			text-align: left;
 			width: 15px;
 		}
 
