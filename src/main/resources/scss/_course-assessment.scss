@@ -947,15 +947,7 @@ canvas.x-component-course-assessment {
 	}
 }
 
-.course-performance-header {
-	//position: absolute;
-	//top: 0; left: 0;
-	width: 769px; height: 200px;
-	background: #fbfbfb;
-	box-shadow: 0 1px 0 0 #e0e0e0, 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
-	line-height: 0;
-	z-index: 2;
-	clip: rect(0,auto,215px,0);
+.nti-header {
 
 	.grade {float: left; box-shadow: 1px 0 0 0 #eaeaea, 2px 0 0 0 #fff; }
 	.performance {

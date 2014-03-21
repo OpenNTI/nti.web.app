@@ -4,39 +4,57 @@
 	position: relative;
 	overflow: hidden;
 
-	& > .body {
-		margin-top: 0.5em;
-	}
+	& > .header {
+		.body {
+			margin-top: 0.5em;
+		}
 
-	& > .subtitle {
-		font: normal 600 0.6em/1 $font;
-		color: $tertiary-grey;
-		text-transform: uppercase;
-	}
-
-	& > .title {
-		color: $primary-grey;
-		font: normal 300 1.5em/1.5 $font;
-	}
-
-	& > .tools {
-		.tool {
-			text-transform: uppercase;
+		.subtitle {
 			font: normal 600 0.6em/1 $font;
+			color: $tertiary-grey;
+			text-transform: uppercase;
+		}
 
-			&.link { color: $primary-blue; cursor: pointer; }
+		.title {
+			color: $primary-grey;
+			font: normal 300 1.5em/1.5 $font;
+		}
 
+		.tools {
+			font: normal 600 0.6em/1 $font;
+			text-transform: uppercase;
 
-			&::before {
-				content: '\00B7';
-				margin: 0.5em;
-				color: $tertiary-grey;
-			}
+			.tool {
 
-			&:first-of-type::before {
-				display: none;
-				content: none;
+				&.link {
+					color: $primary-blue;
+					cursor: pointer;
+				}
+
+				&::before {
+					content: '\00B7';
+					margin: 0.5em;
+					color: $tertiary-grey;
+				}
+
+				&:first-of-type::before {
+					display: none;
+					content: none;
+				}
 			}
 		}
 	}
+}
+
+
+.x-container.nti-header {
+	position: relative;
+	width: 769px; height: 200px;
+	background: #fbfbfb;
+	box-shadow: 0 1px 0 0 #e0e0e0, 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
+	line-height: 0;
+	z-index: 2;
+	clip: rect(0,auto,215px,0);
+
+
 }

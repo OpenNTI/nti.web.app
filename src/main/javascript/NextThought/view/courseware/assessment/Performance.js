@@ -13,7 +13,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 
 	items: [
 		{
-			cls: 'course-performance-header',
+			cls: 'nti-header course-performance-header',
 			xtype: 'container',
 			layout: 'auto',
 			items: [

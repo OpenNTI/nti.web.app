@@ -9,9 +9,11 @@ Ext.define('NextThought.ux.Grouping', {
 	getTargetEl: function() { return this.body; },
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'subtitle', html: '{subtitle}' },
-		{ cls: 'title', html: '{title}' },
-		{ id: '{id}-toolsEl', cls: 'tools' },
+		{ cls: 'header', cn: [
+			{ cls: 'subtitle', html: '{subtitle}' },
+			{ cls: 'title', html: '{title}' },
+			{ id: '{id}-toolsEl', cls: 'tools' }
+		]},
 		{ id: '{id}-body', cls: 'body', cn: ['{%this.renderContainer(out,values)%}'] }
 	]),
 
