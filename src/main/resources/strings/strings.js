@@ -1,5 +1,3 @@
-window.NTIStrings = window.NTIStrings || {};
-
 //Define externalized strings using the following form
 //NTIStrings['key'] = 'value'
 NTIStrings['UnresolvedUsernamePattern'] = 'username';
@@ -44,4 +42,3 @@ NTIStrings['enrollment.enroll.header'] = 'Congratulations!';
 NTIStrings['enrollment.enroll.description'] = 'Your enrollment was successful. This course is open, and you can start participating right away. Visit My Courses to access your materials and get started today.';
 NTIStrings['enrollment.unenroll.header'] = 'Goodbye!';
 NTIStrings['enrollment.unenroll.description'] = 'You are no longer enrolled in this course.';
-
