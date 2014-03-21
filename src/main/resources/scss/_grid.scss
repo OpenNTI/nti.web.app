@@ -140,7 +140,12 @@
 	.x-grid-row-selected,
 	.x-grid-row-focused {
 		.x-grid-td {
-			background-color: none !important;
+			border: {
+				top-width: 0 !important;
+				bottom-width: 0 !important;
+			}
+			background: none;
+			background-color: initial !important;
 		}
 	}
 
