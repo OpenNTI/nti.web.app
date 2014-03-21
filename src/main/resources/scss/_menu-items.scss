@@ -270,3 +270,23 @@ label.x-menu-item-cmp {
 		border-width: 0;
 	}
 }
+
+
+//Custom filter Menu
+.x-panel-nt.no-checkboxes.filter-search {
+	font-size: 0.9em;
+
+	label.x-menu-item-cmp,
+	.x-menu-item{
+		padding-left: 10px;
+	}
+
+	.filter-menu-item-with-count {
+		position: relative;
+		overflow: hidden;
+
+		.count {
+			float: right;
+		}
+	}
+}

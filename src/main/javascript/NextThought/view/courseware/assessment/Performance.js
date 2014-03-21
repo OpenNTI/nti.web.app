@@ -39,41 +39,18 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 			cls: 'assignment-group grades scrollable', items: [
 			{
 				xtype: 'grid',
-				ui: 'course-assessment',
-				plain: true,
-				border: false,
-				frame: false,
-				scroll: 'vertical',
-				sealedColumns: true,
-				enableColumnHide: false,
-				enableColumnMove: false,
-				enableColumnResize: false,
-				columnLines: false, rowLines: false,
-				columns: {
-					ui: 'course-assessment',
-					plain: true,
-					border: false,
-					frame: false,
-					items: [
-							 { text: 'Assignment Name', dataIndex: 'name', flex: 1 },
-							 { text: 'Assigned', dataIndex: 'assigned', xtype: 'datecolumn', width: 80, format: 'm/d' },
-							 { text: 'Due', dataIndex: 'due', xtype: 'datecolumn', width: 70, format: 'm/d' },
-							 { text: 'Completed', dataIndex: 'completed', width: 80, renderer: function(v) {
-								 return (v && v.getTime() > 0) ? this.checkMarkTpl : '';
-							 } },
-							 { text: 'Score', dataIndex: 'grade', width: 70 },
-							 { text: 'Feedback', dataIndex: 'feedback', width: 140, renderer: function(value) {
-								 return value ? Ext.util.Format.plural(value, 'Comment') : '';
-							 } }
-						 ].map(function(o) {
-							return Ext.applyIf(o, {
-								ui: 'course-assessment',
-								border: false,
-								sortable: true,
-								menuDisabled: true
-							});
-						})
-				},
+				columns: [
+						{ text: 'Assignment Name', dataIndex: 'name', flex: 1 },
+						{ text: 'Assigned', dataIndex: 'assigned', xtype: 'datecolumn', width: 80, format: 'm/d' },
+						{ text: 'Due', dataIndex: 'due', xtype: 'datecolumn', width: 70, format: 'm/d' },
+						{ text: 'Completed', dataIndex: 'completed', width: 80, renderer: function(v) {
+							return (v && v.getTime() > 0) ? this.checkMarkTpl : '';
+						} },
+						{ text: 'Score', dataIndex: 'grade', width: 70 },
+						{ text: 'Feedback', dataIndex: 'feedback', width: 140, renderer: function(value) {
+							return value ? Ext.util.Format.plural(value, 'Comment') : '';
+						} }
+					],
 
 				listeners: {
 					sortchange: function(ct, column) { ct.up('grid').markColumn(column); },

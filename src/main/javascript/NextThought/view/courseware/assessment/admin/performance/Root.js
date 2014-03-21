@@ -45,66 +45,46 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		},{
 			anchor: '0 -115',
 			xtype: 'grid',
-			ui: 'course-assessment',
-			plain: true,
-			border: false,
-			frame: false,
+
 			scroll: 'vertical',
-			sealedColumns: true,
-			enableColumnHide: false,
-			enableColumnMove: false,
-			enableColumnResize: false,
-			columnLines: false, rowLines: false,
+
 			plugins: [{ptype: 'bufferedrenderer'}],
-			columns: {
-				ui: 'course-assessment',
-				plain: true,
-				border: false,
-				frame: false,
-				items: [
-					{ text: 'Student', dataIndex: 'displayName', flex: 1, xtype: 'templatecolumn', tpl: Ext.DomHelper.markup([
-						{ cls: 'studentbox', cn: [
-							{ cls: 'avatar', style: {backgroundImage: 'url({avatar})'}},
-							{ cls: 'wrap', cn: [
-								{ cls: 'name', html: '{displayName}'},
-								{ cls: 'action-items', cn: [
-									{ tag: 'tpl', 'if': 'overdue &gt; 0', cn: {cls: 'overdue', html: '{overdue:plural("Assignment")} Overdue'}},
-									{ tag: 'tpl', 'if': 'ungraded &gt; 0', cn: { html: '{ungraded:plural("Ungraded Assignment")}'}}
-								]}
+			columns: [
+				{ text: 'Student', dataIndex: 'displayName', flex: 1, xtype: 'templatecolumn', tpl: Ext.DomHelper.markup([
+					{ cls: 'studentbox', cn: [
+						{ cls: 'avatar', style: {backgroundImage: 'url({avatar})'}},
+						{ cls: 'wrap', cn: [
+							{ cls: 'name', html: '{displayName}'},
+							{ cls: 'action-items', cn: [
+								{ tag: 'tpl', 'if': 'overdue &gt; 0', cn: {cls: 'overdue', html: '{overdue:plural("Assignment")} Overdue'}},
+								{ tag: 'tpl', 'if': 'ungraded &gt; 0', cn: { html: '{ungraded:plural("Ungraded Assignment")}'}}
 							]}
 						]}
-					])},
+					]}
+				])},
 
 
 
-					{ text: 'Username', dataIndex: 'Username', renderer: function(v, cellStuff, r) {
-						try {
-							return r.get('Status') === 'ForCredit' ? v : '';
-						} catch (e) {
-							console.error(e.stack || e.message || e);
-							return '';
-						}
-					} },
+				{ text: 'Username', dataIndex: 'Username', renderer: function(v, cellStuff, r) {
+					try {
+						return r.get('Status') === 'ForCredit' ? v : '';
+					} catch (e) {
+						console.error(e.stack || e.message || e);
+						return '';
+					}
+				} },
 
 
 
-					{ text: 'Grade', dataIndex: 'grade', width: 160, xtype: 'templatecolumn', tpl: Ext.DomHelper.markup([
-						{ cls: 'gradebox', cn: [
-							{ tag: 'input', size: 3, tabindex: '1', type: 'text', value: '{grade}'},
-							{ cls: 'dropdown letter grade', tabindex: '1', html: '{letter}'}
-						]}
-					])}
+				{ text: 'Grade', dataIndex: 'grade', width: 160, xtype: 'templatecolumn', tpl: Ext.DomHelper.markup([
+					{ cls: 'gradebox', cn: [
+						{ tag: 'input', size: 3, tabindex: '1', type: 'text', value: '{grade}'},
+						{ cls: 'dropdown letter grade', tabindex: '1', html: '{letter}'}
+					]}
+				])}
 
 
-			    ].map(function(o) {
-					return Ext.applyIf(o, {
-						ui: 'course-assessment',
-						border: false,
-						sortable: true,
-						menuDisabled: true
-					});
-				})
-			},
+			],
 
 			listeners: {
 				sortchange: function(ct, column) {

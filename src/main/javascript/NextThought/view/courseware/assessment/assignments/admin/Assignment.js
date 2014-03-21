@@ -92,7 +92,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			columnOverrides: {
 				0: { text: 'Student', xtype: 'templatecolumn', dataIndex: 'Creator', name: 'creator', flex: 1, padding: '0 0 0 30',
 					possibleSortStates: ['ASC', 'DESC'],//restore the default order of state(since the grid reverses it)
-					tpl: Ext.DomHelper.markup({cls: 'padded-cell student-cell', cn: [
+					tpl: Ext.DomHelper.markup({cls: 'padded-cell user-cell student-cell', cn: [
 						{ cls: 'avatar', style: {backgroundImage: 'url({Creator:avatarURL})'} },
 						{ cls: 'name', html: '{Creator:displayName}'}
 					]}),

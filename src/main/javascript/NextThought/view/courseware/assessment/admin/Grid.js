@@ -3,47 +3,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 	alias: 'widget.course-admin-grid',
 	requires: [],
 
-	gradeEditorOffsets: [-4, 0],
-
-	ui: 'course-assessment',
-	plain: true,
-	border: false,
-	frame: false,
-
 	scroll: 'vertical',
-	enableColumnHide: false,
-	enableColumnMove: false,
-	enableColumnResize: false,
-	columnLines: false,
-	rowLines: false,
 
 	viewConfig: {
 		loadMask: true
-		/*, xhooks: {
-			walkCells: function(pos, direction, e, preventWrap) {
-				preventWrap = false;
-				direction = direction === 'right' ? 'down' : direction === 'left' ? 'up' : direction;
-
-				var r = this.callParent([pos, direction, e, preventWrap, function(newPos) {
-					var newerPos,
-						grid = this.up('grid');
-
-					if (newPos.column === grid.tabIndex) {
-						return true;
-					}
-					newerPos = this.walkCells(newPos, direction, e, preventWrap);
-					if (newerPos) {
-						Ext.apply(newPos, newerPos);
-						return true;
-					}
-					return false;
-				}, this]);
-
-				console.log('cell walk: ', r);
-
-				return r; //this value is flawless. I don't know why the cell editor doesn't show sometimes.
-			}
-		}*/
 	},
 
 	verticalScroller: {
@@ -57,16 +20,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 	selType: 'cellmodel',
 
 	columns: {
-		ui: 'course-assessment',
-		plain: true,
-		border: false,
-		frame: false,
-
 		defaults: {
-			ui: 'course-assessment',
-			border: false,
-			sortable: true,
-			menuDisabled: true,
 			//reverse the default state order (descending first)
 			possibleSortStates: ['DESC', 'ASC']
 		},
@@ -141,7 +95,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 
 
 
-					{ text: 'Score', xtype: 'templatecolumn', componentCls: 'score', dataIndex: 'Grade', allowTab: true, name: 'grade', width: 70,/*90*/
+					{ text: 'Score', xtype: 'templatecolumn', componentCls: 'text score', dataIndex: 'Grade', allowTab: true, name: 'grade', width: 70,/*90*/
 						tdCls: 'score',
 						editor: 'textfield',
 						tpl: Ext.DomHelper.markup({tag: 'input', type: 'text', value: '{grade}'}),
@@ -256,11 +210,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 		me.columns.items = items;
 
 		me.callParent(arguments);
-
-		if (Ext.getVersion('extjs').isLessThan('4.2.1')) {
-			me.gradeEditorOffsets = Ext.clone(me.gradeEditorOffsets);
-			me.gradeEditorOffsets[1] += 10;
-		}
 
 		me.on({
 			sortchange: function(ct, column) {

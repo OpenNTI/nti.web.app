@@ -286,7 +286,7 @@ canvas.x-component-course-assessment {
 		overflow: hidden;
 	}
 
-	.x-panel-course-assessment.x-grid {
+	.x-panel.x-grid {
 		padding: 0 2em 2em;
 		//margin: 0 0 2em 0;
 	}
@@ -1021,217 +1021,20 @@ canvas.x-component-course-assessment {
 
 .x-container-course-assessment.grade > .body { margin-top: 0; }
 
-.x-grid-header-ct-course-assessment {
-	background: none !important;
-	border: 0 none !important;
-}
 
-.x-column-header-course-assessment {
-	padding: 0;
-	border: 0 none;
-	border-bottom: {
-		color: #f1f1f1;
-		style: solid;
-		width: 1px !important;
-	}
-	text-shadow: none;
-	color: $tertiary-grey;
-	font: normal 700 0.6em/3 $font;
-	text-transform: uppercase;
-	background: none !important;
-	cursor: pointer;
-
-	&.x-column-header-sort-ASC,
-	&.x-column-header-sort-DESC {
-		overflow: visible;
-
-		.x-column-header-text {
-			color: $primary-grey;
-			background: none;
-			padding-right: 0;
-
-			&::after {
-				content: '';
-				margin-left: 1em;
-			}
-		}
-	}
-
-	&.x-column-header-sort-ASC {
-		.x-column-header-text::after {
-			vertical-align: text-top;
-			@include arrow($width: 8px, $height: 5px);
-		}
-	}
-	&.x-column-header-sort-DESC {
-		.x-column-header-text::after {
-			vertical-align: text-bottom;
-			@include arrow($pointFrom: top, $width: 8px, $height: 5px);
-		}
-	}
-
-	.x-column-header-inner {
-		padding: 0;
-
-		&.x-column-header-over {
-			color: $primary-grey;
-			background: none;
-		}
-	}
-}
-
-.x-panel-body-course-assessment {
-	border: 0 none;
-
-	.x-grid-view {
-		overflow: {
-			y: auto;//scroll
-			x: hidden;
-		}
-	}
-
-	.x-grid-row-over {
-		.score {
-			position: relative;
-			overflow: visible;
-			display: block;
-
-			input {
-				border-color: #b8b8b8;
-			}
-
-			/*&::before {
-				content: '';
-				position: absolute;
-				background: #fff;
-				border: 1px solid #b8b8b8;
-
-				top: 10px; bottom: 10px;
-				left: -4px; right: 5px;
-				z-index: 1;
-			}
-
-			& > div {
-				position: relative;
-				z-index: 2;
-			}*/
-		}
-
-	}
-
-	.x-grid-td {
-		border-width: 0;
-		background: none;
-		vertical-align: middle;
-	}
-
-	.x-grid-row-selected,
-	.x-grid-row-focused {
-		.x-grid-td {
-			background-color: none !important;
-		}
-	}
-
-	.x-grid-row-over {
-		.x-grid-td, .x-grid-td.x-grid-cell.x-grid-cell-selected {
-			background: #fafafa !important;
-		}
-	}
-
-	.x-grid-cell-inner {
-		padding: 0;
-		line-height: 60px;
-	}
-
-	input {
-		border: 1px solid #fff;
-	}
-
+.x-grid-body {
 	.x-grid-row .x-grid-cell {
-		font: normal 300 0.85em/3 $font;
-		color: $secondary-grey;
-
-
-		&.x-grid-cell-selected {
-			background-color: inherit !important;
-		}
-
-		&.sortedOn,
-		&.x-grid-cell-first {
-			color: $primary-grey;
-			font-weight: 600;
-		}
-		&.x-grid-cell-first {
-			color: $primary-blue;
-			cursor: pointer;
-		}
-
-		.check {
-			text-indent: -100px;
-			overflow: hidden;
-			@include icon('check_gray', $top: 1em, $left: 1.6em);
-		}
-
-		.actions {
-			width: 40px;
-			height: 40px;
-			@include icon('more-options', $top: 15px, $left: 9px);
-		}
-
 		.late, .ontime, .incomplete {
 			font-weight: 600;
 		}
-		.late { color: $primary-red; }
-		.ontime { color: $primary-green; }
-		.incomplete { color: $tertiary-grey; }
-
-		div.padded-cell,
-		&.padded-cell .x-grid-cell-inner{
-			margin-left: 30px;
+		.late {
+			color: $primary-red;
 		}
-
-		&.score {
-			cursor: text;
-			overflow: visible;
-			.x-grid-cell-inner {
-				overflow: visible;
-			}
-
-			input {
-				font: normal normal 1em/1 'Open Sans';
-				width: 100%;
-				padding: 0.7em 0.3em;
-				margin-left: -0.3em;
-				&:hover,
-				&:focus {
-					border-color: #b8b8b8;
-				}
-			}
+		.ontime {
+			color: $primary-green;
 		}
-
-		.student-cell {
-			overflow: hidden;
-			position: relative;
-
-			.avatar {
-				float: left;
-				display: inline-block;
-				line-height: 0;
-				width: 60px; height: 60px;
-				background: {
-					size: cover;
-					position: center center;
-					repeat: no-repeat;
-				}
-			}
-			.name {
-				margin-left: 75px;
-				line-height: 60px;
-				max-width: 100%;
-				overflow: hidden;
-				@include ellipse;
-				color: $primary-grey;
-			}
+		.incomplete {
+			color: $tertiary-grey;
 		}
 	}
 }
@@ -1245,33 +1048,5 @@ canvas.x-component-course-assessment {
 	}
 
 	&.student-performance-overview { top: 171px; }
-
-	.x-grid-cell-editor{
-		input{
-			font: normal 300 0.8em/1 $font;
-			height: 40px !important;
-			border: 1px solid #dcdcdc;
-			background-image: none;
-		}
-	}
 }
 
-
-//Custom filter Menu
-.x-panel-nt.no-checkboxes.student-filter-search {
-	font-size: 0.9em;
-
-	label.x-menu-item-cmp,
-	.x-menu-item{
-		padding-left: 10px;
-	}
-
-	.filter-menu-item-with-count {
-		position: relative;
-		overflow: hidden;
-
-		.count {
-			float: right;
-		}
-	}
-}
