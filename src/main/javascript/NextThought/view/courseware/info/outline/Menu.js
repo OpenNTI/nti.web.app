@@ -109,8 +109,8 @@ Ext.define('NextThought.view.courseware.info.outline.Menu', {
 	view: function(selModel, rec) {
 		var viewId = rec.get('view'),
 			ci = this.up('course-info'),
-			current;
-		if (current) {
+			current = ci.body.getLayout().getActiveItem();
+		if (current && current.itemId === viewId) {
 			if (viewId === 'info') {
 				this.scrollTo(selModel, rec);
 			}
