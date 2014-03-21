@@ -1187,15 +1187,20 @@ body.dragging * {
 			}
 		}
 		&.good {
-			.button { display: none; }
-			.due {color: $primary-green;}
+			.button {
+				display: none;
+			}
+			.due {
+				color: $primary-green;
+			}
 			&::after {
-				@include sprite($icons,'assignment_ontime');
+				@include sprite($icons, 'assignment_ontime');
 			}
-			a.active.button {
-				display: block;
-				text-decoration: none;
-			}
+		}
+
+		a.active.button {
+			display: block;
+			text-decoration: none;
 		}
 
 		&.hide-buttons {
