@@ -12,8 +12,10 @@ Ext.define('NextThought.view.account.history.mixins.BlogEntryPost', {
 
 	clicked: function(view, rec) {
 		var u = rec.get('Creator'),
-			postId = rec.get('ID');
+			postId = rec.get('ContainerId');
 
-		view.fireEvent('navigate-to-blog', u, postId);
+		Service.getObject(postId, function(post) {
+			view.fireEvent('navigate-to-blog', u, post.get('ID'));
+		});
 	}
 });
