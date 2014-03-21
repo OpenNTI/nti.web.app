@@ -44,7 +44,7 @@ Ext.define('NextThought.view.courseware.info.outline.Menu', {
 		this.getSelectionModel().select(0);
 		this.on({
 			scope: this,
-			select: 'scrollTo'
+			select: 'view'
 		});
 	},
 
@@ -52,21 +52,30 @@ Ext.define('NextThought.view.courseware.info.outline.Menu', {
 	buildStore: function() {
 		var ifo = this.getInfo(),
 			i = ifo && ifo.get('Instructors'),
-			plural = (i && i.length > 1) ? 's' : '';
+			plural = (i && i.length > 1) ? 's' : '';//this is wrong way to go about it
 
 		if (!this.menuStore) {
 			this.menuStore = new Ext.data.Store({
 				fields: [
 					{ name: 'hash', type: 'string' },
-					{ name: 'label', type: 'string' }
+					{ name: 'label', type: 'string' },
+					{ name: 'view', type: 'string', defaultValue: 'info' }
 				],
 				data: [
 					{ hash: 'top', label: 'About' },
 					{ hash: 'course-info-instructors', label: 'Course Instructor' + plural },
 					//{ hash: 'course-info-faq', label: 'Frequently Asked Questions' },
-					{ hash: 'course-info-support', label: 'Tech Support' }
+					{ hash: 'course-info-support', label: 'Tech Support' },
+					{ hash: 'top', view: 'roster', label: 'Roster'}
 				]
 			});
+
+			if (!this.showRoster) {
+				this.menuStore.filter({
+					property: 'view',
+					value: 'info'
+				});
+			}
 		}
 
 		return this.menuStore;
@@ -75,7 +84,7 @@ Ext.define('NextThought.view.courseware.info.outline.Menu', {
 
 	scrollTo: function(selModel, record) {
 		//This is going to be very dirty so that we can just get it done.
-		var hash = record.get('hash'),
+		var hash = (record && record.get('hash')) || 'top',
 			ci = this.up('course-info'),
 			scrollingThing = ci.down('course-info-panel').getEl(),
 			scrollReference = ci.down('course-info-panel').child().getEl(),
@@ -94,6 +103,23 @@ Ext.define('NextThought.view.courseware.info.outline.Menu', {
 
 		scrollTargetY = scrollTarget.getEl().getOffsetsTo(scrollReference)[1];
 		scrollingThing.scrollTo('top', scrollTargetY, true);
+	},
+
+
+	view: function(selModel, rec) {
+		var viewId = rec.get('view'),
+			ci = this.up('course-info'),
+			current;
+		if (current) {
+			if (viewId === 'info') {
+				this.scrollTo(selModel, rec);
+			}
+			return;
+		}
+
+		//switch!
+		this.scrollTo();//scroll the course info up
+		ci.body.getLayout().setActiveItem(viewId);
 	}
 
 });

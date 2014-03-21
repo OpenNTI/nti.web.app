@@ -8,7 +8,7 @@ Ext.define('NextThought.view.courseware.info.outline.View', {
 		'NextThought.view.courseware.info.outline.OpenCourseInfo'
 	],
 
-	setContent: function(info, status) {
+	setContent: function(info, status, showRoster) {
 		this.removeAll(true);
 
 		if (Ext.isString(info)) {
@@ -20,7 +20,8 @@ Ext.define('NextThought.view.courseware.info.outline.View', {
 
 		this.add({
 			xtype: 'course-info-outline-menu',
-			info: info
+			info: info,
+			showRoster: showRoster
 		},{
 			xtype: 'course-info-outline-open-course',
 			info: info,

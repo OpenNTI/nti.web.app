@@ -15,7 +15,12 @@ Ext.define('NextThought.view.courseware.info.View', {
 
 	navigation: {xtype: 'course-info-outline'},
 	body: {
-		xtype: 'course-info-panel'
+		xtype: 'container',
+		layout: 'card',
+		items: [
+			{ xtype: 'course-info-panel', itemId: 'info' },
+			{ xtype: 'course-info-roster', itemId: 'roster' }
+		]
 	},
 
 
@@ -31,14 +36,16 @@ Ext.define('NextThought.view.courseware.info.View', {
 		var me = this,
 			catalogEntry = courseInstance && courseInstance.getCourseCatalogEntry();
 
-		function update(info, status) {
+		function update(info, status, showRoster) {
 			me.hasInfo = !!info;
 
 			me[me.infoOnly ? 'addCls' : 'removeCls']('info-only');
 			me.navigation.margin = (me.infoOnly ? '105' : '0') + ' 5 5 0';
 
-			me.body.setContent(info, status);
-			me.navigation.setContent(info, status);
+			me.body.getLayout().setActiveItem('info');//always reset
+			me.body.getComponent('info').setContent(info, status);
+			me.body.getComponent('roster').setContent(showRoster && courseInstance);
+			me.navigation.setContent(info, status, showRoster);
 		}
 
 
@@ -49,14 +56,16 @@ Ext.define('NextThought.view.courseware.info.View', {
 		this.infoOnly = catalogEntry && catalogEntry.get('Preview') === true;
 
 		if (courseInstance) {
-			courseInstance.getWrapper()
+			return courseInstance.getWrapper()
 				.done(function(e) {
-					update(catalogEntry, e.get('Status'));
+					update(catalogEntry, e.get('Status'), !!e.isAdministrative);
 				})
 				.fail(function() {
 					//hide tab?
 				});
 		}
+
+		return Promise.resolve();
 	},
 
 
