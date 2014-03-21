@@ -87,7 +87,7 @@ Ext.define('NextThought.ux.FilterMenu', {
 
 
 	getFilterLabel: function(count) {
-		var search = this.search.getValue(),
+		var search = this.search && this.search.getValue(),
 			item = this.down('menuitem[checked]') || {text: '???'},
 			prefix = item.text;
 
@@ -95,6 +95,6 @@ Ext.define('NextThought.ux.FilterMenu', {
 			prefix = Ext.String.format('Search {1}: {0}', search, prefix);
 		}
 
-		return Ext.String.format('{0} ({1})', prefix, count);
+		return Ext.String.format('{0} ({1})', prefix, count || item.count);
 	}
 });

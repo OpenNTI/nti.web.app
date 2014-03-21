@@ -5,12 +5,13 @@ Ext.define('NextThought.ux.Grouping', {
 
 	layout: 'auto',
 	componentLayout: 'body',
-	childEls: ['body'],
+	childEls: ['body', 'toolsEl'],
 	getTargetEl: function() { return this.body; },
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'subtitle', html: '{subtitle}' },
 		{ cls: 'title', html: '{title}' },
+		{ id: '{id}-toolsEl', cls: 'tools' },
 		{ id: '{id}-body', cls: 'body', cn: ['{%this.renderContainer(out,values)%}'] }
 	]),
 
@@ -38,6 +39,15 @@ Ext.define('NextThought.ux.Grouping', {
 	},
 
 
+	getRefItems: function() {
+		var r = this.callParent(arguments);
+		if (this.tools) {
+			r.push.apply(r, this.tools.filter(function(c) {return c && c.isComponent;}));
+		}
+		return r;
+	},
+
+
 	beforeRender: function() {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -45,6 +55,23 @@ Ext.define('NextThought.ux.Grouping', {
 			title: this.getTitle()
 		});
 	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+		var tools = this.toolsEl;
+		if (this.tools) {
+			if (!Ext.isArray(this.tools)) {this.tools = [this.tools];}
+			this.tools = this.tools.map(function(t) {
+				return Ext.widget(Ext.applyIf(t, {
+					xtype: 'box',
+					renderTo: tools
+				}));
+			});
+			this.on('destroy', Ext.destroy.bind(Ext, this.tools));
+		}
+	},
+
 
 	onAdd: function(cmp) {
 		var r = this.callParent(arguments);

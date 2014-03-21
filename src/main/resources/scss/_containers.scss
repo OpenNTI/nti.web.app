@@ -18,4 +18,25 @@
 		color: $primary-grey;
 		font: normal 300 1.5em/1.5 $font;
 	}
+
+	& > .tools {
+		.tool {
+			text-transform: uppercase;
+			font: normal 600 0.6em/1 $font;
+
+			&.link { color: $primary-blue; cursor: pointer; }
+
+
+			&::before {
+				content: '\00B7';
+				margin: 0.5em;
+				color: $tertiary-grey;
+			}
+
+			&:first-of-type::before {
+				display: none;
+				content: none;
+			}
+		}
+	}
 }
