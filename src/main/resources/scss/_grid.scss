@@ -149,7 +149,7 @@
 			background: #fafafa !important;
 		}
 
-		.disclosure::after {
+		&.x-grid-row .x-grid-cell .disclosure::after {
 			background-position: sprite-position($icons, 'options-menu-card_hover');
 		}
 	}

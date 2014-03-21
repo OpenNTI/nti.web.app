@@ -3,7 +3,8 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 	alias: 'widget.course-info-roster',
 
 	requires: [
-		'NextThought.ux.FilterMenu'
+		'NextThought.ux.FilterMenu',
+		'NextThought.proxy.courseware.Roster'
 	],
 
 	ui: 'course-assessment',
@@ -36,10 +37,32 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 					xtype: 'grid',
 					scroll: 'vertical',
 					columns: [
-						{ text: 'Name', dataIndex: 'realname', padding: '0 0 0 30', flex: 1 },
+						{
+							text: 'Student',
+							xtype: 'templatecolumn',
+							dataIndex: 'realname',
+							padding: '0 0 0 30',
+							flex: 1,
+							possibleSortStates: ['ASC', 'DESC'],//restore the default order of state(since the grid reverses it)
+							tpl: Ext.DomHelper.markup({
+								cls: 'padded-cell user-cell', cn: [
+									{ cls: 'avatar', style: {backgroundImage: 'url({Creator:avatarURL})'} },
+									{ cls: 'name', html: '{Creator:displayName}'}
+								]
+							})
+						},
 						{ text: 'Username', dataIndex: 'username' },
-						{ text: 'Status', dataIndex: 'status' },
-						{ text: '', dataIndex: '' }//disclosure column
+						{ text: 'Status', sortable: false, dataIndex: 'LegacyEnrollmentStatus' },
+						{
+							//disclosure column
+							sortable: false,
+							xtype: 'templatecolumn',
+							width: 60,
+							text: '', dataIndex: 'Creator',
+							tpl: Ext.DomHelper.markup({
+								cls: 'disclosure'
+							})
+						}
 					]
 				}
 			]
@@ -67,7 +90,26 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 			}
 		});
 
+		this.on({
+			el: {
+				mousewheel: 'onPushScroll',
+				DOMMouseScroll: 'onPushScroll'
+			}
+		});
+
 		this.filterMenu.setState('ForCredit');
+
+		this.mon(this.filterMenu, {
+			filter: 'doFilter',
+			search: {fn: 'doSearch', buffer: 450}
+		});
+	},
+
+
+	onPushScroll: function pushScroll(e) {
+		var d = e.getWheelDelta();
+
+		console.debug(d);
 	},
 
 
@@ -78,7 +120,7 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 		}
 
 		var el = this.filterLink.el;
-		el.update(this.filterMenu.getFilterLabel());
+		el.update(this.filterMenu.getFilterLabel(this.store.getTotalCount()));
 		el.repaint();
 	},
 
@@ -98,10 +140,59 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 						filter: 'LegacyEnrollmentStatusForCredit'
 					}));
 
+		this.buildStore(roster);
+		this.filterMenu.setState('*');
+
 		Service.request(smallRequestURLToGetCounts)
 				.then(JSON.parse)
 				.then(this.fillCounts.bind(this))
 				.fail(this.clearCounts.bind(this));
+	},
+
+
+	buildStore: function(url) {
+		this.store = Ext.data.Store.create({
+			fields: [
+				{name: 'id', type: 'string', mapping: 'Username'},
+				{name: 'username', type: 'string', mapping: 'Username', convert: function(v, r) {
+					return (r.raw.LegacyEnrollmentStatus === 'ForCredit' && v) || ''; }},
+				{name: 'Creator', type: 'singleItem', mapping: 'UserProfile' },
+				{name: 'LegacyEnrollmentStatus', type: 'string'}
+			],
+			proxy: {
+				type: 'nti.roster',
+				url: url,
+				source: '*'
+			},
+			pageSize: 50,
+			buffered: true,
+			remoteSort: true,
+			remoteFilter: true
+		});
+
+		this.down('grid').bindStore(this.store);
+		//TODO: only load if we're visible!
+		this.store.load();
+		Ext.destroy(this.storeMonitors);
+		this.storeMonitors = this.mon(this.store, {destroyable: true, load: 'updateFilterCount'});
+	},
+
+
+	doSearch: function(str) {
+		this.down('grid').getSelectionModel().deselectAll(true);
+		this.store.filter([{id: 'search', property: 'usernameSearchTerm', value: str}]);
+	},
+
+
+	doFilter: function(filter) {
+		try {
+			this.down('grid').getSelectionModel().deselectAll(true);
+			this.store.filter([
+				{id: 'LegacyEnrollmentStatus', property: 'LegacyEnrollmentStatus', value: filter}
+			]);
+		} catch (e) {
+			console.log('Meh');
+		}
 	},
 
 
