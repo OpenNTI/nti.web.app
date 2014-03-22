@@ -20,7 +20,7 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 			xtype: 'container',
 			layout: 'auto',
 			items: [
-				{ xtype: 'pie-chart', cls: 'roster', title: 'Enrollment Breakdown' }
+				{ xtype: 'pie-chart', cls: 'roster', title: 'Enrollment Breakdown', series: [] }
 			]
 		}, {
 			xtype: 'grouping',
@@ -86,16 +86,9 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 	],
 
 
-	afterRender: function() {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.filterMenu = this.down('filter-menupanel');
-		this.filterLink = this.down('[itemId=filtermenu]');
-		this.mon(this.filterLink, {
-			el: {
-				scope: this,
-				click: 'onFilterClicked'
-			}
-		});
 
 		this.on({
 			el: {
@@ -109,6 +102,18 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 		this.mon(this.filterMenu, {
 			filter: 'doFilter',
 			search: {fn: 'doSearch', buffer: 450}
+		});
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+		this.filterLink = this.down('[itemId=filtermenu]');
+		this.mon(this.filterLink, {
+			el: {
+				scope: this,
+				click: 'onFilterClicked'
+			}
 		});
 	},
 
@@ -203,10 +208,19 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 	},
 
 
+	setSeries: function(total, open, forCredit) {
+		this.down('pie-chart').setSeries([
+			{value: open || 0, label: 'Open'},
+			{value: forCredit || 0, label: 'For Credit'}
+		]);
+	},
+
+
 	clearCounts: function() {
 		this.setCount('*', 0);
 		this.setCount('Open', 0);
 		this.setCount('ForCredit', 0);
+		this.setSeries();
 	},
 
 
@@ -227,6 +241,7 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 		this.setCount('*', total);
 		this.setCount('Open', open);
 		this.setCount('ForCredit', forCredit);
+		this.setSeries(total, open, forCredit);
 		this.updateFilterCount();
 	}
 });

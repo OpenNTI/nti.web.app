@@ -16,7 +16,10 @@ Ext.define('NextThought.view.courseware.info.View', {
 	navigation: {xtype: 'course-info-outline'},
 	body: {
 		xtype: 'container',
-		layout: 'card',
+		layout: {
+			type: 'card',
+			deferredRender: true
+		},
 		items: [
 			{ xtype: 'course-info-panel', itemId: 'info' },
 			{ xtype: 'course-info-roster', itemId: 'roster' }
