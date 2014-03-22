@@ -374,6 +374,15 @@
 
 
 .course-info-roster {
+	.nti-header {
+		.pie {
+			float: left;
+			box-shadow: 1px 0 0 0 #eaeaea, 2px 0 0 0 #fff;
+			width: 224px;
+			height: 200px;
+		}
+	}
+
 	.grouping {
 		padding: 0;
 		& > .header {

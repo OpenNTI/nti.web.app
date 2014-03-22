@@ -1,0 +1,20 @@
+
+.x-component-chart {
+	position: relative;
+
+	canvas {
+		width: 100%;
+		height: auto;
+	}
+
+	.label {
+		position: absolute;
+		top: 14px !important;
+		left: 30px;
+		font: normal 700 0.6em/1 $font;
+		color: $tertiary-grey;
+		text-transform: uppercase;
+		z-index: 1;
+	}
+
+}

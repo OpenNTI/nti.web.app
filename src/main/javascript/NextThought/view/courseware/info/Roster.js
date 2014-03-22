@@ -4,6 +4,7 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 
 	requires: [
 		'NextThought.ux.FilterMenu',
+		'NextThought.chart.Pie',
 		'NextThought.proxy.courseware.Roster'
 	],
 
@@ -19,8 +20,7 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 			xtype: 'container',
 			layout: 'auto',
 			items: [
-				{ xtype: 'grade-chart' },
-				{ xtype: 'box', cls: 'label', html: 'Enrollment Breakdown' }
+				{ xtype: 'pie-chart', cls: 'roster', title: 'Enrollment Breakdown' }
 			]
 		}, {
 			xtype: 'grouping',
