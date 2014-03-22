@@ -7,10 +7,17 @@ Ext.define('NextThought.chart.Pie', {
 	renderTpl: Ext.DomHelper.markup([
 		{tag: 'canvas', id: '{id}-canvasEl'},
 		{id: '{id}-titleEl', cls: 'label title', html: '{title}'},
-		{id: '{id}-legendEl', cls: 'legend'}
+		{id: '{id}-legendEl', tag: 'ul', cls: 'legend'}
 	]),
 
 	childEls: ['canvasEl', 'titleEl', 'legendEl'],
+
+	legendary: new Ext.XTemplate(Ext.DomHelper.markup([
+		{ tag: 'tpl', 'for': 'series', cn: [
+			{ tag: 'li', cls: 'series label', html: '{label}', style: {color: '{color}'}, 'data-value': '{percent}'}
+		]},
+		{ tag: 'li', cls: 'total label', html: 'Total: {total}' }
+	])),
 
 	config: {
 		title: '',
@@ -24,12 +31,26 @@ Ext.define('NextThought.chart.Pie', {
 	},
 
 
+
 	updateSeries: function(v) {
 		function sum(a, v) { return a + v.value; }
-		function deg(v) { return (v.value / total) * 360; }
+		function p(v) { return v.value / total; }
+		function str(p, i) {
+			return {
+				percent: (p * 100).toFixed(0),
+				label: v[i].label,
+				color: colors[i % colors.length]
+			};
+		}
 
-		var total = v && v.reduce && v.reduce(sum, 0);
-		this.data = (v && v.map && v.map(deg)) || [];
+		var total = v && v.reduce && v.reduce(sum, 0),
+			colors = this.colors;
+		this.data = (v && v.map && v.map(p)) || [];
+
+		if (this.rendered) {
+			this.legendary.overwrite(this.legendEl, {total: total, series: this.data.map(str)});
+			this.redraw();
+		}
 	},
 
 
@@ -37,7 +58,6 @@ Ext.define('NextThought.chart.Pie', {
 		this.addCls('pie');
 		this.callParent(arguments);
 		this.renderData.title = this.getTitle();
-		this.updateSeries(this.getSeries());
 	},
 
 
@@ -53,7 +73,7 @@ Ext.define('NextThought.chart.Pie', {
 		this.context = this.canvas.getContext('2d');
 		this.context.imageSmoothingEnabled = true;
 
-		this.redraw();
+		this.updateSeries(this.getSeries());
 	},
 
 
@@ -64,7 +84,7 @@ Ext.define('NextThought.chart.Pie', {
 	},
 
 
-	degreesToRadians: function(degrees) { return (degrees * Math.PI) / 180; },
+	percentToRadians: function(percent) { return ((percent * 360) * Math.PI) / 180; },
 
 
 	sumTo: function(i) {
@@ -80,8 +100,8 @@ Ext.define('NextThought.chart.Pie', {
 		var ctx = this.context,
 			radius = Math.floor(this.canvas.width / 4),
 
-			startingAngle = this.degreesToRadians(this.sumTo(i)),
-			arcSize = this.degreesToRadians(this.data[i]),
+			startingAngle = this.percentToRadians(this.sumTo(i)),
+			arcSize = this.percentToRadians(this.data[i]),
 			endingAngle = startingAngle + arcSize;
 
 		ctx.save();

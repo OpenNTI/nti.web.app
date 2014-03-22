@@ -17,4 +17,29 @@
 		z-index: 1;
 	}
 
+	ul.legend {
+		position: absolute;
+		bottom: 0; left: 0; right: 0;
+		list-style-type:none;
+		margin: 0; padding: 0 30px;
+
+		.label {
+			list-style-type:none;
+			position: static;
+			float: left;
+			width: 50%;
+			display: inline-block;
+			line-height: 2;
+			&[data-value]::before {
+				content: attr(data-value) "% - ";
+			}
+		}
+
+		.total {
+			color: $secondary-grey;
+			display: block;
+			width: 100%;
+			text-align: center;
+		}
+	}
 }
