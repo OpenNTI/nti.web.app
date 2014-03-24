@@ -4,7 +4,7 @@ Ext.define('NextThought.view.account.history.mixins.Grade', {
 	alias: 'widget.history-item-grade',
 
 	showCreator: false,
-	verb: 'Grade recieved for',
+	verb: 'Grade received for',
 	quotePreview: false,
 	previewField: 'assignmentName',
 	itemCls: 'grade',
