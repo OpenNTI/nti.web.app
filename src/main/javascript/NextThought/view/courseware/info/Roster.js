@@ -67,7 +67,7 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 							width: 60,
 							text: '', dataIndex: 'Creator',
 							tpl: Ext.DomHelper.markup({
-								cls: 'disclosure', 'data-qtip': 'TODO: Diclosure menu goes here'
+								cls: 'disclosure'
 							})
 						}
 					]
@@ -89,6 +89,9 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 	initComponent: function() {
 		this.callParent(arguments);
 		this.filterMenu = this.down('filter-menupanel');
+		this.grid = this.down('grid');
+
+		this.buildDisclosureMenu();
 
 		this.on({
 			el: {
@@ -113,6 +116,37 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 			el: {
 				scope: this,
 				click: 'onFilterClicked'
+			}
+		});
+
+		this.mon(this.grid, 'itemClick', 'maybeShowDisclosureMenu');
+	},
+
+
+	buildDisclosureMenu: function() {
+		var me = this,
+			items = [
+				{ text: 'Participation Report', handler: Ext.bind(me.showParticipationReport, me)}
+			];
+
+		me.disclosureMenu = Ext.widget('menu', {
+			cls: 'roster-disclosure-menu',
+			width: 200,
+			ownerCt: this,
+			offset: [0, 0],
+			defaults: {
+				ui: 'nt-menuitem',
+				xtype: 'menuitem',
+				cls: 'roster-disclosure-option',
+				height: 40,
+				plain: true
+			},
+			items: items
+		});
+
+		me.mon(me.disclosureMenu, {
+			close: function() {
+				delete me.activeParticipationLink;
 			}
 		});
 	},
@@ -169,7 +203,8 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 				{name: 'username', type: 'string', mapping: 'Username', convert: function(v, r) {
 					return (r.raw.LegacyEnrollmentStatus === 'ForCredit' && v) || ''; }},
 				{name: 'Creator', type: 'singleItem', mapping: 'UserProfile' },
-				{name: 'LegacyEnrollmentStatus', type: 'string'}
+				{name: 'LegacyEnrollmentStatus', type: 'string'},
+				{name: 'Links', type: 'auto'}
 			],
 			proxy: {
 				type: 'nti.roster',
@@ -243,5 +278,47 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 		this.setCount('ForCredit', forCredit);
 		this.setSeries(total, open, forCredit);
 		this.updateFilterCount();
+	},
+
+
+	maybeShowDisclosureMenu: function(grid, record, node, i, e) {
+		var disclosure = e.getTarget('.disclosure'),
+			pdfLink;
+
+		if (!disclosure) {
+			return;
+		}
+
+		(record.get('Links') || []).forEach(function(link) {
+			if (link.rel === 'report-StudentParticipationReport.pdf') {
+				pdfLink = link.href;
+			}
+		});
+
+		if (!pdfLink) {
+			console.error('No link for the student participation report');
+			return;
+		}
+
+		this.activeParticipationLink = pdfLink;
+
+		this.disclosureMenu.showBy(disclosure);
+
+	},
+
+
+	showParticipationReport: function() {
+		if (!this.activeParticipationLink) {
+			console.error('Cant open the particitpation report without a link');
+			return;
+		}
+
+		var win = Ext.widget('iframe-window', {
+			width: 700,
+			saveText: 'Save Report',
+			link: this.activeParticipationLink
+		});
+
+		win.show();
 	}
 });

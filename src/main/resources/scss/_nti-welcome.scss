@@ -1,5 +1,5 @@
 
-.guide-window, .tos-window {
+.guide-window, .tos-window, .iframe-window {
 	@extend .nti-window;
 	background-color: $quad-grey;
 	box-shadow: 0 10px 40px rgba(0,0,0,0.61);
@@ -50,5 +50,11 @@
 		.yes-checkbox{ //tos
 			margin-top: 4px;
 		}
+	}
+}
+
+.iframe-window {
+	.iframe-save {
+		font: normal 500 0.9em/35px $font;
 	}
 }
