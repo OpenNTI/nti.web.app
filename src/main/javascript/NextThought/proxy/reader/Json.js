@@ -15,6 +15,7 @@ Ext.define('NextThought.proxy.reader.Json', {
 			items = data.Items, item,
 			mimeType = data.MimeType,
 			links = data.Links,
+			lastViewed = data.lastViewed,
 			baseModel = this.model,
 			result, i, record, modelName;
 
@@ -44,7 +45,7 @@ Ext.define('NextThought.proxy.reader.Json', {
 				}
 			}
 
-      data.Items = records;
+			data.Items = records;
 		} else {
 			data = [data];
 		}
@@ -52,6 +53,9 @@ Ext.define('NextThought.proxy.reader.Json', {
 		try {
 
 			result = this.callParent([data]);
+			if (lastViewed) {
+				result.lastViewed = Ext.Date.parse(lastViewed, 'timestamp', true);
+			}
 			if (links && Ext.isArray(links)) {
 				result.links = {};
 				Ext.each(links, function(l) {result.links[l.rel] = l.href;});
@@ -101,7 +105,7 @@ Ext.define('NextThought.proxy.reader.Json', {
 
 	__rebuildRecordAsType: function(Model, id, data) {
 		var convertedValues,
-			record = new Model(undefined, id, data, convertedValues = {});
+				record = new Model(undefined, id, data, convertedValues = {});
 
 		if (this.model !== Model) {
 			this.model = Model;

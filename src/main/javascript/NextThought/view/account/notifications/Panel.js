@@ -116,7 +116,8 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		this.highlightItem = this.types[1];
 
 		this.on({
-			'resize': 'manageMaskSize'
+			'resize': 'manageMaskSize',
+			'deactivate': 'clearBadge'
 		});
 
 		this.buildStore();
@@ -143,7 +144,11 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 	maybeNotify: function() {
 		var count = 0,
 			cap = this.store.pageSize - 1,
-			lastViewed = new Date(0);
+			lastViewed = this.store.lastViewed || new Date(0),
+			links = this.store.batchLinks || {};
+
+		this._lastViewedURL = links.lastViewed;
+
 		this.store.each(function(c) {
 			if (c.get('Last Modified') > lastViewed) {
 				count++;
@@ -154,6 +159,21 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 			count = cap + '+';
 		}
 		this.setBadgeValue(count);
+	},
+
+
+	clearBadge: function() {
+		if (this.badgeValue === 0) {
+			return;
+		}
+
+		this.lastViewed = new Date();
+		this.setBadgeValue(0);
+
+		if (this._lastViewedURL) {
+			Service.put(this._lastViewedURL, this.lastViewed.getTime() / 1000);
+		}
+
 	},
 
 

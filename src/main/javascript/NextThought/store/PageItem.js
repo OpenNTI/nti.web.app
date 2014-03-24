@@ -15,8 +15,7 @@ Ext.define('NextThought.store.PageItem', function() {
 		pageSize: 20,
 
 		/**
-		 * @property
-		 * @cfg {Boolean} Stores added to the location provider will automatically forward their events to who ever
+		 * {Boolean} Stores added to the location provider will automatically forward their events to who ever
 		 * listens to the location provider.  Set this to true to prevent this automatic behavior.
 		 */
 		doesNotShareEventsImplicitly: false,
@@ -69,7 +68,9 @@ Ext.define('NextThought.store.PageItem', function() {
 			if (resultSet && resultSet.links) {
 				this.batchLinks = resultSet.links;
 			}
-
+			if (resultSet && resultSet.lastViewed) {
+				this.lastViewed = resultSet.lastViewed;
+			}
 			return this.callParent(arguments);
 		},
 
