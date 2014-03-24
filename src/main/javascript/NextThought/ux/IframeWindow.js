@@ -49,7 +49,7 @@ Ext.define('NextThought.ux.IframeWindow', {
 					text: 'Close',
 					cls: 'x-btn-blue-large dismiss',
 					action: 'cancel',
-					style: { float: 'right'},
+					style: { 'float': 'right'},
 					handler: function(b, e) {
 						e.stopEvent(); b.up('window').close();
 					}
