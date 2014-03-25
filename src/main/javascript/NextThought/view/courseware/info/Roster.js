@@ -156,9 +156,10 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 						filter: 'LegacyEnrollmentStatusForCredit'
 					}));
 
+		this.down('grid').bindStore(Ext.getStore('ext-empty-store'));
+
 		if (Ext.isEmpty(roster) || !roster) {
 			if (this.store) {this.store.removeAll();}
-			this.down('grid').bindStore(Ext.getStore('ext-empty-store'));
 			return;
 		}
 
