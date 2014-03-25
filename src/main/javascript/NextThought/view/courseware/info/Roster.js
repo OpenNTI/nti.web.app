@@ -63,6 +63,7 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 						{
 							//disclosure column
 							sortable: false,
+							hidden: !isFeature('roster-reports'),
 							xtype: 'templatecolumn',
 							width: 60,
 							text: '', dataIndex: 'Creator',
