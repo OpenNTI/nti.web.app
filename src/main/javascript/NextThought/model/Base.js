@@ -59,10 +59,10 @@ Ext.define('NextThought.model.Base', {
 			if (!Ext.isString(v)) {console.error('The ContainerId value is unacceptable:', v);v = null;}
 			return v; }
 		},
-		{ name: 'CreatedTime', type: 'date', persist: false, dateFormat: 'timestamp', defaultValue: new Date() },
+		{ name: 'CreatedTime', type: 'date', persist: false, dateFormat: 'timestamp', defaultValue: new Date(0) },
 		{ name: 'Creator', type: 'auto', persist: false },
 		{ name: 'ID', type: 'string', persist: false },
-		{ name: 'Last Modified', type: 'date', persist: false, dateFormat: 'timestamp', defaultValue: new Date() },
+		{ name: 'Last Modified', type: 'date', persist: false, dateFormat: 'timestamp', defaultValue: new Date(0) },
 		{ name: 'LikeCount', type: 'int', persist: false },
 		{ name: 'Links', type: 'links', persist: false, defaultValue: [] },
 		{ name: 'MimeType', type: 'string', useNull: true },
