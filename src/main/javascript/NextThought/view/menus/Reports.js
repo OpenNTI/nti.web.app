@@ -21,6 +21,8 @@ Ext.define('NextThought.view.menus.Reports', {
 			return;
 		}
 
+		this.on('hide', 'destroy');
+
 		var items = [], me = this;
 
 		(me.links || []).forEach(function(link) {
@@ -28,15 +30,36 @@ Ext.define('NextThought.view.menus.Reports', {
 				items.push({
 					text: link.title,
 					pdf: link.href,
-					handler: me.reportItemClicked
+					handler: Ext.bind(me.reportItemClicked, me)
 				});
 			}
 		});
+
+		if (this.items.length === 0 && items.length === 1 && this.showIfOne) {
+			this.showReport(items[0].pdf);
+			me.hide();
+			return;
+		}
 
 		if (!Ext.isEmpty(items)) {
 			items.unshift({ xtype: 'labeledseparator', text: 'Reports', height: 1});
 			me.add(items);
 		}
+
+		if (this.showByEl) {
+			this.showBy(this.showByEl);
+		}
+	},
+
+
+	showReport: function(href) {
+		var win = Ext.widget('iframe-window', {
+				width: 700,
+				saveText: 'Save Report',
+				link: href
+			});
+
+		win.show();
 	},
 
 
@@ -46,12 +69,6 @@ Ext.define('NextThought.view.menus.Reports', {
 			return;
 		}
 
-		var win = Ext.widget('iframe-window', {
-			width: 700,
-			saveText: 'Save Report',
-			link: item.pdf
-		});
-
-		win.show();
+		this.showReport(item.pdf);
 	}
 });

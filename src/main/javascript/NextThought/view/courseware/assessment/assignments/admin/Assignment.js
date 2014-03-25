@@ -48,6 +48,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			cls: 'header',
 			cn: [
 				{ cls: 'controls', cn: [
+					{ tag: 'a', href: '#', cls: 'reports', html: 'Reports'},
 					{ tag: 'a', href: '{exportFilesLink}', cls: 'download button hidden', html: 'Download Files'},
 					{ tag: 'a', href: '#request_change', cls: 'email button', html: 'Request a Change'}
 				]},
@@ -71,7 +72,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		nextEl: '.toolbar .controls .down',
 		totalEl: '.toolbar .controls .page .total',
 		changeDateEl: '.header .controls .email',
-		filtersEl: '.header span.link'
+		filtersEl: '.header span.link',
+		reportsEl: '.header .controls .reports'
 	},
 
 
@@ -173,12 +175,28 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	afterRender: function() {
 		this.callParent(arguments);
 
+		var gradeBookEntry = this.assignment.getGradeBookEntry(),
+			reportLinks = gradeBookEntry && gradeBookEntry.getReportLinks(),
+			reportsEl = this.reportsEl;
+
 		this.el.query('a.button').forEach(this._setupButtons);
 
 		if (this._masked) {
 			this._showMask();
 		}
 		this.syncFilterToUI();
+
+		if (reportLinks && reportLinks.length > 0 && isFeature('analytic-reports')) {
+			this.mon(reportsEl, 'click', function() {
+				var menu = Ext.widget('report-menu', {
+						links: reportLinks,
+						showIfOne: true,
+						showByEl: reportsEl
+					});
+			});
+		} else {
+			reportsEl.destroy();
+		}
 	},
 
 

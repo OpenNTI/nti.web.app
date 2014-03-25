@@ -5,7 +5,8 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 	requires: [
 		'NextThought.ux.FilterMenu',
 		'NextThought.chart.Pie',
-		'NextThought.proxy.courseware.Roster'
+		'NextThought.proxy.courseware.Roster',
+		'NextThought.view.menus.Reports'
 	],
 
 	ui: 'course-assessment',
@@ -63,7 +64,7 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 						{
 							//disclosure column
 							sortable: false,
-							hidden: !isFeature('roster-reports'),
+							hidden: !isFeature('analytic-reports'),
 							xtype: 'templatecolumn',
 							width: 60,
 							text: '', dataIndex: 'Creator',
@@ -259,17 +260,15 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 
 
 	maybeShowDisclosureMenu: function(grid, record, node, i, e) {
-		var disclosure = e.getTarget('.disclosure'),
-			pdfLink, menu;
+		var disclosure = e.getTarget('.disclosure'), menu;
 
 		if (!disclosure) {
 			return;
 		}
 
 		menu = Ext.widget('report-menu', {
-			links: record.get('Links')
+			links: record.get('Links'),
+			showByEl: disclosure
 		});
-
-		menu.showBy(disclosure);
 	}
 });

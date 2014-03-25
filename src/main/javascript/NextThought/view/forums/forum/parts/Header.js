@@ -2,10 +2,15 @@ Ext.define('NextThought.view.forums.forum.parts.Header', {
 	extend: 'Ext.Component',
 	alias: 'widget.forums-forum-header',
 
+	requires: [
+		'NextThought.view.menus.Reports'
+	],
+
 	cls: 'topic-list-header',
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'new-topic', html: 'New Discussion'},
+		{tag: 'a', cls: 'report-link', html: 'Report'},
 		{cls: 'controls', cn: [
 			{cls: 'position', cn: [
 				{tag: 'span', cls: 'bold', html: 'Page'},
@@ -22,6 +27,7 @@ Ext.define('NextThought.view.forums.forum.parts.Header', {
 
 	renderSelectors: {
 		newTopicEl: '.new-topic',
+		reportEl: '.report-link',
 		currentEl: '.controls .position .current',
 		totalEl: '.controls .position .total',
 		prevEl: '.controls .pager .prev',
@@ -38,6 +44,12 @@ Ext.define('NextThought.view.forums.forum.parts.Header', {
 			me.mon(me.newTopicEl, 'click', function() {
 				me.fireEvent('new-topic', me, me.record);
 			});
+		}
+
+		if (me.record.getReportLinks().length > 0 && isFeature('analytic-reports')) {
+			me.mon(me.reportEl, 'click', 'showReportMenu');
+		} else {
+			me.reportEl.destroy();
 		}
 
 		me.updatePosition();
@@ -78,5 +90,16 @@ Ext.define('NextThought.view.forums.forum.parts.Header', {
 			this.fireEvent('page-change');
 			this.store.nextPage();
 		}
+	},
+
+
+	showReportMenu: function() {
+		var reports = this.record.getReportLinks(), menu;
+
+		menu = Ext.widget('report-menu', {
+			links: this.record.getReportLinks(),
+			showIfOne: true,
+			showByEl: this.reportEl
+		});
 	}
 });

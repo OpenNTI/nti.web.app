@@ -44,7 +44,7 @@ Ext.define('NextThought.ux.IframeWindow', {
 			defaults: { xtype: 'button', ui: 'blue', scale: 'large'},
 			items: [
 				//{text: 'Save', cls: 'x-btn-flat-large save', action: 'save', href: '{url}', style: { float: 'left'}},
-				{ xtype: 'component', cls: 'iframe-save', save: true, autoEl: { tag: 'a', href: '{url}', html: 'Save'}},
+				{ xtype: 'component', cls: 'iframe-save', save: true, autoEl: { tag: 'a', href: '{url}', html: 'Save', target: '_blank'}},
 				{
 					text: 'Close',
 					cls: 'x-btn-blue-large dismiss',

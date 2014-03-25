@@ -9,5 +9,19 @@ Ext.define('NextThought.mixins.HasLinks', {
 
 	hasLink: function(rel) {
 		return !!this.getLink(rel);
+	},
+
+
+	getReportLinks: function() {
+		var links = this.get('Links').links || (this.raw && this.raw.Links),
+			reports = [];
+
+		(links || []).forEach(function(link) {
+			if (link.rel.indexOf('report-') === 0) {
+				reports.push(link);
+			}
+		});
+
+		return reports;
 	}
 });
