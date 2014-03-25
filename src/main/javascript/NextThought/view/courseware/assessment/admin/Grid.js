@@ -95,9 +95,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 
 
 
-					{ text: 'Score', xtype: 'templatecolumn', componentCls: 'text score', dataIndex: 'Grade', allowTab: true, name: 'grade', width: 70,/*90*/
-						tdCls: 'score',
-						editor: 'textfield',
+					{ text: 'Score', xtype: 'templatecolumn',
+						componentCls: 'score',
+						dataIndex: 'Grade', allowTab: true, name: 'grade', width: 70,/*90*/
+						tdCls: 'text score',
+						//editor: 'textfield',
 						tpl: Ext.DomHelper.markup({tag: 'input', type: 'text', value: '{grade}'}),
 						doSort: function(state) {
 							var store = this.up('grid').getStore(),
