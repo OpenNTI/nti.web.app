@@ -102,12 +102,15 @@ Ext.define('NextThought.chart.Pie', {
 
 			startingAngle = this.percentToRadians(this.sumTo(i)),
 			arcSize = this.percentToRadians(this.data[i]),
-			endingAngle = startingAngle + arcSize;
+			endingAngle = startingAngle + arcSize,
+			endingRadius = radius * 0.5;
 
 		ctx.save();
 
 		ctx.beginPath();
-		ctx.moveTo(0, 0);
+
+		ctx.moveTo(endingRadius * Math.cos(startingAngle),
+					endingRadius * Math.sin(startingAngle));
 
 		ctx.arc(0, 0, radius, startingAngle, endingAngle, false);
 		ctx.arc(0, 0, radius * 0.5, endingAngle, startingAngle, true);
@@ -116,6 +119,11 @@ Ext.define('NextThought.chart.Pie', {
 
 		ctx.fillStyle = this.colors[i % this.colors.length];
 		ctx.fill();
+
+		ctx.lineWidth = 5;
+		ctx.globalCompositeOperation = 'destination-out';
+		ctx.strokeStyle = '#000';
+		ctx.stroke();
 
 		ctx.restore();
 	},
@@ -133,10 +141,12 @@ Ext.define('NextThought.chart.Pie', {
 			ctx.translate(centerX, centerY);
 			ctx.rotate(-Math.PI / 2);
 
+			/*
 			ctx.shadowColor = '#ddd';
 			ctx.shadowBlur = 5;
 			ctx.shadowOffsetX = 1;
 			ctx.shadowOffsetY = 1;
+			*/
 
 			for (i; i < len; i++) {
 				this.drawSegment(i);
