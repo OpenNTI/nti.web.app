@@ -179,13 +179,19 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 
 	setContent: function(instance) {
 		var roster = instance && instance.getLink('CourseEnrollmentRoster'),
-			smallRequestURLToGetCounts = Ext.String.urlAppend(
+			smallRequestURLToGetCounts = roster && !Ext.isEmpty(roster) && Ext.String.urlAppend(
 					roster,
 					Ext.Object.toQueryString({
 						batchSize: 1,
 						batchStart: 0,
 						filter: 'LegacyEnrollmentStatusForCredit'
 					}));
+
+		if (Ext.isEmpty(roster) || !roster) {
+			if (this.store) {this.store.removeAll();}
+			this.down('grid').bindStore(Ext.getStore('ext-empty-store'));
+			return;
+		}
 
 		this.buildStore(roster);
 		this.filterMenu.setState('*');
