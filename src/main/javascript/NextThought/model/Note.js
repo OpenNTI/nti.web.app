@@ -256,10 +256,10 @@ Ext.define('NextThought.model.Note', {
 		// NOTE: If there is a title set it.
 		// If the note has no title and the body is Whiteboard only, set it to 'Whiteboard',
 		// If the note has no title, set a snippet of the body.
-		if (Ext.isEmpty(body) && !Ext.isEmpty(t)) {
+		if (!Ext.isEmpty(t)) {
 			snip = Ext.String.ellipsis(t, max, false);
 		}
-		else {
+		else if (!Ext.isEmpty(body)) {
 			onlyObject = this.isWhiteboardOnly(body);
 
 			if (onlyObject) {
@@ -271,6 +271,9 @@ Ext.define('NextThought.model.Note', {
 			}, null, null, null);
 
 			return;
+		} else {
+			snip = '';
+			t = '';
 		}
 
 		Ext.callback(cb, null, [snip, t]);
