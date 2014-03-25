@@ -156,10 +156,10 @@ Ext.define('NextThought.cache.LocationMeta', {
 			}
 
 			console.log('Looking to see if ntiid is question', ntiid);
-			bookPrefix = this.bookPrefixIfQuestion(ntiid);
-			bookPrefix = bookPrefix ? this.findTitleWithPrefix(bookPrefix) : null;
+			bookPrefix = me.bookPrefixIfQuestion(ntiid);
+			bookPrefix = bookPrefix ? me.findTitleWithPrefix(bookPrefix) : null;
 			if (bookPrefix) {
-				this.loadMeta(bookPrefix.get('NTIID')).then(fulfill, reject);
+				me.loadMeta(bookPrefix.get('NTIID')).then(fulfill, reject);
 			}
 			else {
 				reject();
