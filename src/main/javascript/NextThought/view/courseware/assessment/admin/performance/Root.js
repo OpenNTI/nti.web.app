@@ -140,6 +140,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				{property: 'displayName', direction: 'ascending'}
 			],
 
+			remoteSort: false,
+			remoteFilter: false,
 
 			setSource: function(source) {
 				this.currentPage = 1;
@@ -147,6 +149,15 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				this.reload();
 			}
 		});
+
+		Ext.apply(this.store.proxy, {
+			sortParam: undefined,
+			filterParam: undefined,
+			idParam: undefined,
+			startParam: undefined,
+			limitParam: undefined
+		});
+
 		this.onUpdate = Ext.Function.createBuffered(this.onUpdate, 200, null, null);
 		this.callParent(arguments);
 	},
