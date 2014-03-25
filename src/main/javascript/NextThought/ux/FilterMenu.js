@@ -95,6 +95,6 @@ Ext.define('NextThought.ux.FilterMenu', {
 			prefix = Ext.String.format('Search {1}: {0}', search, prefix);
 		}
 
-		return Ext.String.format('{0} ({1})', prefix, count || item.count);
+		return Ext.String.format('{0} ({1})', prefix, count || item.count || 0);
 	}
 });
