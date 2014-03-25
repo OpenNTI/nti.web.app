@@ -79,28 +79,31 @@ Ext.define('NextThought.view.chat.View', {
 		this.on('status-change', this.trackChatState, this);
 		this.maybeShowFlagIcon();
 
-		if (Ext.is.iPad) {
+		if (Ext.is.iOS) {
 			var me = this;
-
-      //After dismissing keyboard, reset Y to original position
+			var topWindow = me.el.up('.x-window-chat-window');
+			var logView = topWindow.down('.chat-log-view');
+			//On focusing input, shrink window to fit, and position where visible
 			me.el.down('input').on('focus', function() {
-				console.log('input focused');
+				me.windowheight = topWindow.getHeight();
+				me.logheight = logView.getHeight();
 				if (!me.hasOwnProperty('initialY')) {
 					me.initialY = me.el.up('.x-window-chat-window').getY();
-					console.log('initialY:' + me.initialY);
+					me.el.down('input').blur();
+				}
+				else {
+					me.chatY = topWindow.getY();
+					topWindow.setY(me.initialY + 70);
+					topWindow.setHeight(255);
+					logView.setHeight(177);
 				}
 			}, me);
-
+			//On blur, restore height, and positioning of chat window
 			me.el.down('input').on('blur', function() {
-				console.log('input blurred');
-				Ext.Function.defer(function() {
-					console.log('deferred function');
-					var topWindow = me.el.up('.x-window-chat-window');
-					if (me.hasOwnProperty('initialY')) {
-						topWindow.setY(me.initialY);
-					}
-				}, 100);
-			}, me);
+				topWindow.setY(me.chatY);
+				topWindow.setHeight(me.windowheight);
+				logView.setHeight(me.logheight);
+			},me);
 
       //pressing key can hide keyboard and move view up. Stop top from changing.
       var chatWindow = this.el.up('.x-window');
