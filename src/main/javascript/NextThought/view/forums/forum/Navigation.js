@@ -13,7 +13,7 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 	},
 
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup({
-		cls: 'nav-outline forum-outline', cn: [
+		cls: 'nav-outline forum-outline scrollable', cn: [
 			{cls: 'header toggle-opposite-tabs', html: 'Forums'},
 			{cls: 'outline-list', cn: [
 				{tag: 'tpl', 'for': '.', cn: [
