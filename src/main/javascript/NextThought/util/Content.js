@@ -493,9 +493,13 @@ Ext.define('NextThought.util.Content', {
 			if (id) {
 				lineage.push(id);
 			}
-			else if (node.nodeType !== Node.DOCUMENT_NODE) {
+			else if (!justLabels && node.nodeType !== Node.DOCUMENT_NODE) {
 				console.error(node, 'no id');
 				break;
+			}
+			else {
+				console.error('Missing Label:', node);
+				lineage.push('Missing Label');
 			}
 
 			link = this.isSymLinked(node, leaf.toc);
@@ -683,9 +687,9 @@ Ext.define('NextThought.util.Content', {
 					getPathLabel: function(ntiid) {
 						var lineage = me.getLineage(ntiid || this.NTIID, true),
 							sep = lineage.length <= 2 ? ' / ' : ' /.../ ',
-							base = lineage.last(),
+							base = lineage.last() || '',
 							leaf = lineage.first();
-						return lineage.length === 1 ? base : base + sep + leaf;
+						return lineage.length <= 1 ? base : base + sep + leaf;
 					}
 				},r);
 		}
