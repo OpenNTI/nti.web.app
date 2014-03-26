@@ -2,10 +2,7 @@ Ext.define('NextThought.view.account.history.mixins.ForumComment', {
 	extend: 'NextThought.view.account.history.mixins.Base',
 	alias: 'widget.history-item-forum-comment',
 
-	keyVal: [
-		'application/vnd.nextthought.forums.generalforumcomment',
-		'application/vnd.nextthought.forums.personalblogcomment'
-	],
+	keyVal: 'application/vnd.nextthought.forums.generalforumcomment',
 
 	itemCls: 'comment',
 	showCreator: true,
