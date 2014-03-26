@@ -28,6 +28,11 @@ Ext.define('NextThought.model.courseware.CourseCatalogEntry', {
 		{ name: 'enrolled', type: 'bool' }
 	],
 
+
+	isActive: function() {
+		return Boolean(this.get('enrolled'));
+	},
+
 	isExpired: function() {
 		var d, s;
 		try {

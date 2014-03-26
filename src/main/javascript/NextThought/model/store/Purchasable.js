@@ -25,6 +25,11 @@ Ext.define('NextThought.model.store.Purchasable', {
 		}}
 	],
 
+
+	isActive: function() {
+		return Boolean(this.get('Activated'));
+	},
+
 	isPurchasable: true,
 
 	//TODO we want the pricing link on the actual purchasable
