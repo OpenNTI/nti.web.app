@@ -77,11 +77,15 @@ Ext.define('NextThought.view.account.Identity', {
 		this.enableProfileClicks(this.avatar);
 
 		if (Ext.is.iOS) {
+			var me = this;
 			// Prevent the save/copy image menu from appearing
 			this.el.down('img').setStyle('-webkit-touch-callout', 'none');
 			// Prevent the status menu from appearing after a click
 			this.el.down('img').dom.addEventListener('click', function(e) {
 				me.cancelHideShowEvents();
+				Ext.defer(function() {
+					me.cancelHideShowEvents();
+				},50);
 			});
 		}
 	},
@@ -98,9 +102,17 @@ Ext.define('NextThought.view.account.Identity', {
 
 		this.cancelHideShowEvents();
 
-		this.showTimout = setTimeout(function() {
-			me.menu.showBy(me.el, 'tr-br', [0, 0]);
-		}, 0);//instant!
+		if (!Ext.is.iOS) {
+			this.showTimout = setTimeout(function() {
+				me.menu.showBy(me.el, 'tr-br', [0, 0]);
+			}, 0);//instant!
+		}
+		else {
+			//Delay so that we can avoid showing when clicking
+			this.showTimout = setTimeout(function() {
+				me.menu.showBy(me.el, 'tr-br', [0, 0]);
+			}, 400);
+		}
 	},
 
 
