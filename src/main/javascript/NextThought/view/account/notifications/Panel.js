@@ -109,6 +109,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 			Types.Grade.create({panel: this}),
 			Types.Feedback.create({panel: this}),
 			Types.ForumComment.create({panel: this}),
+			Types.BlogComment.create({panel: this}),
 			Types.BlogEntryPost.create({panel: this}),
 			Types.Contact.create({panel: this})
 		];
