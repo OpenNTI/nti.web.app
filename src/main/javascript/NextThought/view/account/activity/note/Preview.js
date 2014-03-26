@@ -65,13 +65,12 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 			var el = me.context.up('.context'),
 				ntiid = req && req.ntiid, p;
 
-			if (resp.status === 403) {
-				p = CourseWareUtils.courseForNtiid(ntiid) || ContentUtils.purchasableForContentNTIID(ntiid);
-				if (p) {
-					me.handlePurchasable(p, el);
-					Ext.callback(fin);
-					return;
-				}
+			p = CourseWareUtils.courseForNtiid(ntiid) || ContentUtils.purchasableForContentNTIID(ntiid);
+			//The 404 is returned for card objects
+			if ([403, 404].indexOf(resp.status) >= 0 && p) {
+				me.handlePurchasable(p, el);
+				Ext.callback(fin);
+				return;
 			}
 
 			metaHandled = false;
@@ -153,24 +152,26 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 			});
 		}
 
-		LocationMeta.getMeta(cid, function(meta) {
-			metaInfo = meta;
+		LocationMeta.getMeta(cid)
+				.then(function(meta) {
+					metaInfo = meta;
 
-			function upLoc() {
-				if (!me.locationEl) { return; }
+					function upLoc() {
+						if (!me.locationEl) { return; }
 
-				if (metaInfo) {
-					me.locationEl.update(metaInfo.getPathLabel());
-					return;
-				}
-				if (metaHandled) {
-					me.locationEl.remove();
-					Ext.callback(fin);
-				}
-			}
+						if (metaInfo) {
+							me.locationEl.update(metaInfo.getPathLabel());
+							return;
+						}
+						if (metaHandled) {
+							me.locationEl.remove();
+							Ext.callback(fin);
+						}
+					}
 
-			C.spider(cid, upLoc, parse, error);
-		}, me);
+					C.spider(cid, upLoc, parse, error);
+				})
+				.fail(error.bind(this, null));
 	},
 
 
