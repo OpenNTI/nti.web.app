@@ -35,10 +35,7 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 
 		var me = this,
 			r = me.record,
-			cid = r.get('ContainerId'),
-			metaInfo,
-			C = ContentUtils,
-			metaHandled = true;
+			cid = r.get('ContainerId');
 
 		if (r.focusRecord) {
 			this.on('add', function(container, newChild, idx) {
@@ -55,123 +52,102 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 			this.add({record: r.children.first(), autoFillInReplies: false});
 		}
 
-		function parse(content) {
-			var dom = C.parseXML(C.fixReferences(content, metaInfo.absoluteContentRoot));
-			me.setContext(dom);
+		LocationMeta.getMeta(cid)
+				.then(this.fillInMeta.bind(this), this.fillInMetaFromObject.bind(this, cid))
+				.fail(this.maybeRestricted.bind(this, cid));
+	},
+
+
+	maybeRestricted: function(ntiid) {
+		var el = this.context.up('.context'), p;
+
+		p = CourseWareUtils.courseForNtiid(ntiid) || ContentUtils.purchasableForContentNTIID(ntiid);
+		if (p && !p.isActive()) {
+			this.handlePurchasable(p, el);
 		}
+	},
 
-		function error(req, resp) {
-			req = resp.request;
-			var el = me.context.up('.context'),
-				ntiid = req && req.ntiid, p;
 
-			p = CourseWareUtils.courseForNtiid(ntiid) || ContentUtils.purchasableForContentNTIID(ntiid);
-			//The 404 is returned for card objects
-			if ([403, 404].indexOf(resp.status) >= 0 && p) {
-				me.handlePurchasable(p, el);
-				Ext.callback(fin);
-				return;
-			}
-
-			metaHandled = false;
-
-			ContentUtils.findContentObject(cid, function(obj, meta) {
-				if (me.isDestroyed) { return; }
-
-				//TOOD need a generic framework for various objects here
-				if (obj && /ntivideo/.test(obj.mimeType || obj.MimeType)) {
-					var src, sources, contextEl;
-					console.log('Need to set context being video', obj);
-					if (meta) {
-						try {
-						me.locationEl.update(meta.getPathLabel());
-						if (me.context) {
-							contextEl = me.context.up('.context');
-							if (contextEl) {
-								contextEl.addCls('video-context');
-							}
-							me.context.setHTML('');
+	fillInMeta: function(meta) {
+		var me = this, C = ContentUtils;
+		return new Promise(function(fulfill, reject) {
+			C.spider(meta.NTIID,
+					function spiderComplete() {
+						if (me.locationEl) {
+							me.locationEl.update(meta.getPathLabel());
 						}
+						fulfill();
+					},
+					function parse(content) {
+						me.setContext(C.parseXML(C.fixReferences(content, meta.absoluteContentRoot)));
+					},
+					reject);
+		});
+	},
 
-						sources = obj.sources;
 
-						if (!Ext.isEmpty(sources)) {
-							src = sources.first().thumbnail;
-						}
+	fillInMetaFromObject: function(ntiid) {
+		var me = this;
+		return new Promise(function(fulfill, reject) {
+			var rj = setTimeout(reject.bind(me, 'Timeout'), 30000);
 
-						Ext.DomHelper.append(me.context, [
-							{html: obj.title},
-							{
-								tag: 'img',
-								cls: 'video-thumbnail',
-								src: src
-							}]);
-						} catch (e) {
-							console.error(e.stack || e.message || e);
-						}
+			ContentUtils.findContentObject(ntiid, function(obj, meta) {
+				var context;
+				clearTimeout(rj);
+				if (!me.isDestroyed) {
+					//TOOD need a generic framework for various objects here
+					if (obj && /ntivideo/.test(obj.mimeType || obj.MimeType)) {
+						me.handleVideo(obj, meta);
 					}
-				}
-				else {
-					if (resp.status === 404) {
-						/*
-						* JSG:
-						* I do not believe we ever wanted to show the "enroll" nor "purchase" windows if we 404
-						* on getting a PageInfo. That just means we asked for a page that did not exist...not
-						* that we were denied that request. (that would be a 401, or 403)
-						* I believe [this block][the_block] was falsly triggering the "enroll" action.
-						*
-						* Looking at the commit history, this was added Aug 18th, this year (2013).  I seriously
-						* *doubt* the server would ever return 404 for a resourse that was infact denided access.
-						* And lets be clear, we're inspecting the response from the DataServer about a given
-						* PageInfo for the ContainerId. It would not send a 404 unless it did not know of the id
-						* requested.
-						*
-						* the_block:
-						* if (p) {
-						*	me.handlePurchasable(p, el);
-						*	Ext.callback(fin);
-						*	return;
-						* }
-						*/
-
+					else {
 						meta = ContentUtils.getLocation(ntiid);
 						if (meta) {
-							try {
-								me.locationEl.update(meta.getPathLabel());
-								me.context.update(meta.location && meta.location.getAttribute('desc'));
-							} catch (e2) {
-								console.error(e2.stack || e2.message || e2);
-							}
-							Ext.callback(fin);
-							return;
+							//handle a card
+							context = (meta.location && meta.location.getAttribute('desc')) || 'No description or excerpt for this content.';
+							me.locationEl.update(meta.getPathLabel());
+							me.context.update(context);
+						} else {
+							return reject();
 						}
 					}
-					el.remove();
 				}
-				Ext.callback(fin);
+				fulfill();
 			});
-		}
+		});
+	},
 
-		LocationMeta.getMeta(cid)
-				.then(function(meta) {
-					metaInfo = meta;
 
-					function upLoc() {
-						if (!me.locationEl) { return; }
-
-						if (metaInfo) {
-							me.locationEl.update(metaInfo.getPathLabel());
-							return;
-						}
-						if (metaHandled) {
-							me.locationEl.remove();
-							Ext.callback(fin);
-						}
+	handleVideo: function(obj, meta) {
+		var me = this, src, sources, contextEl;
+		console.log('Need to set context being video', obj);
+		if (meta) {
+			try {
+				me.locationEl.update(meta.getPathLabel());
+				if (me.context) {
+					contextEl = me.context.up('.context');
+					if (contextEl) {
+						contextEl.addCls('video-context');
 					}
+					me.context.setHTML('');
+				}
 
-					C.spider(cid, upLoc, parse, error);
-				})
-				.fail(error.bind(this, null));
+				sources = obj.sources;
+
+				if (!Ext.isEmpty(sources)) {
+					src = sources.first().thumbnail;
+				}
+
+				Ext.DomHelper.append(me.context, [
+					{html: obj.title},
+					{
+						tag: 'img',
+						cls: 'video-thumbnail',
+						src: src
+					}]);
+			} catch (e) {
+				console.error(e.stack || e.message || e);
+			}
+		}
 	},
 
 
