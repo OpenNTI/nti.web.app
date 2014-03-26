@@ -301,7 +301,23 @@ Ext.define('NextThought.controller.Navigation', {
 		//thats what we want.  On failure it shows a page not found and
 		//if we handle this navigation in some other way we don't want that happening.
 
+		function recover(reason) {
+			if (reason && reason.status === 404) {
+				return new Promise(function(fulfill, reject) {
+
+					ContentUtils.findRelatedContentObject(cid, function(c) {
+						if (c) { LocationMeta.getMeta(c).then(fulfill, reject); }
+						else {reject();}
+					});
+
+
+				});
+			}
+			throw reason;
+		}
+
 		LocationMeta.getMeta(cid)
+			.fail(recover)
 			.then(perform)
 			.done(function() {
 				me.doContentNavigation(cid, rec, options);
