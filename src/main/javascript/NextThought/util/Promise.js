@@ -264,7 +264,7 @@ Ext.define('NextThought.util.Promise', {
 	singleton: true,
 
 	make: function() {
-		console.deprecated('[Bad Practice!] Promises should be not made without a guarantee. See this line.');
+		console.error('[Bad Practice!] Promises should be not made without a guarantee. See this line.');
 		/**
 		 * Do NOT just replace .make() with "new Deffered()". Actually take the time to evaluate.
 		 *
