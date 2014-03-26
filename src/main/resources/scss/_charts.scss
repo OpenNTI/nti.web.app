@@ -30,6 +30,7 @@
 			width: 50%;
 			display: inline-block;
 			line-height: 2;
+			white-space: nowrap;
 			&[data-value]::before {
 				content: attr(data-value) "% - ";
 			}
