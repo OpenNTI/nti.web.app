@@ -493,13 +493,15 @@ Ext.define('NextThought.util.Content', {
 			if (id) {
 				lineage.push(id);
 			}
-			else if (!justLabels && node.nodeType !== Node.DOCUMENT_NODE) {
-				console.error(node, 'no id');
-				break;
-			}
-			else {
-				console.error('Missing Label:', node);
-				lineage.push('Missing Label');
+			else if (node.nodeType !== Node.DOCUMENT_NODE) {
+				if (!justLabels) {
+					console.error(node, 'no id');
+					break;
+				}
+				else {
+					console.error('Missing Label:', node);
+					lineage.push('Missing Label');
+				}
 			}
 
 			link = this.isSymLinked(node, leaf.toc);
