@@ -43,7 +43,8 @@ Ext.define('NextThought.view.courseware.assessment.Navigation', {
 			{name: 'label', type: 'string'},
 			{name: 'count', type: 'int', defaultValue: 0},
 			{name: 'type', type: 'string', defaultValue: 'view'},//or filter
-			{name: 'mapping', type: 'string'}
+			{name: 'mapping', type: 'string'},
+			{name: 'view', type: 'string'}
 		],
 		data: [
 			//{id: 'activity', label: 'Activity & Notifications', mapping: '', count: 6},
@@ -74,7 +75,7 @@ Ext.define('NextThought.view.courseware.assessment.Navigation', {
 
 	addView: function(view) {
 		var id = view.xtype,
-			r = this.store.add({mapping: view.xtype, label: view.title, id: id})[0];
+			r = this.store.add({mapping: view.xtype, label: view.title, view: view.label, id: id})[0];
 
 		//listen for notify events, and clean ourselves up when the view dies.
 		view.on('destroy', 'destroy',

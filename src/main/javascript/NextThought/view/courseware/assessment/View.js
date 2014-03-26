@@ -178,19 +178,19 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 	addAdminViews: function(getLink) {
 		this.body.add([
-			{ xtype: 'course-assessment-admin-activity', title: 'Activity & Notifications',
+			{ xtype: 'course-assessment-admin-activity', title: 'Activity & Notifications', label: 'notifications',
 				activityFeedURL: getLink('CourseActivity') },
-			{ xtype: 'course-assessment-admin-assignments', title: 'Assignments' },
-			{ xtype: 'course-assessment-admin-performance', title: 'Grades & Performance' }
+			{ xtype: 'course-assessment-admin-assignments', title: 'Assignments', label: 'assignments' },
+			{ xtype: 'course-assessment-admin-performance', title: 'Grades & Performance', label: 'performance' }
 		]);
 	},
 
 
 	addStudentViews: function() {
 		this.body.add([
-			{ xtype: 'course-assessment-activity', title: 'Activity & Notifications' },
-			{ xtype: 'course-assessment-assignments', title: 'Assignments' },
-			{ xtype: 'course-assessment-performance', title: 'Grades & Performance' }
+			{ xtype: 'course-assessment-activity', title: 'Activity & Notifications', label: 'notifications'},
+			{ xtype: 'course-assessment-assignments', title: 'Assignments', label: 'assignments'},
+			{ xtype: 'course-assessment-performance', title: 'Grades & Performance', label: 'performance'}
 		]);
 	},
 
@@ -294,5 +294,17 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 		});
 
 		return view;
+	},
+
+
+	selectMenuItem: function(viewId) {
+		var record = this.navigation.store.findRecord('view', viewId);
+
+		if (!record) {
+			console.error('No record for view id', viewId);
+			return;
+		}
+
+		this.navigation.selModel.select(record);
 	}
 });

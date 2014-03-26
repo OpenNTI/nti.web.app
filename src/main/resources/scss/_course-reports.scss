@@ -1,0 +1,21 @@
+#course-reports {
+
+	.report-card {
+		background-color: white;
+		width: 300px;
+		height: 200px;
+		float: left;
+		margin: 5px;
+		padding: 5px;
+
+		.title {
+			color: $primary-grey;
+			font: normal 600 1.1em/30px $font;
+		}
+
+		.description {
+			color: $primary-grey;
+			font: normal 400 1em/1 $font;
+		}
+	}
+}

@@ -18,7 +18,7 @@ Ext.define('NextThought.view.courseware.info.outline.View', {
 
 		this.show();
 
-		this.add({
+		this.menu = this.add({
 			xtype: 'course-info-outline-menu',
 			info: info,
 			showRoster: showRoster
@@ -35,5 +35,9 @@ Ext.define('NextThought.view.courseware.info.outline.View', {
 			// the header above the grid) -- when dev tools closed or unpined it still
 			// feels very crunched with a pie chart above the grid.
 		}
+	},
+
+	getMenu: function() {
+		return this.menu || this.down('course-info-outline-menu');
 	}
 });

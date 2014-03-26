@@ -74,6 +74,18 @@ Ext.define('NextThought.view.courseware.info.View', {
 
 	getScrollTop: function() {
 		return this.infoOnly ? 0 : this.mixins.customScroll.getScrollTop.call(this);
-	}
+	},
 
+
+	selectMenuItem: function(viewId) {
+		var menu = this.navigation.getMenu(),
+			record = menu && menu.store.findRecord('view', viewId);
+
+		if (!record) {
+			console.error('No record for view id', viewId);
+			return;
+		}
+
+		menu.selModel.select(record);
+	}
 });

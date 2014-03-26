@@ -58,6 +58,10 @@ Ext.define('NextThought.view.content.View', {
 			title: 'Course Info',
 			id: 'course-info',
 			xtype: 'course-info'
+		},{
+			title: 'Course Reports',
+			id: 'course-reports',
+			xtype: 'course-reports'
 		}
 	],
 
@@ -67,7 +71,8 @@ Ext.define('NextThought.view.content.View', {
 		{label: 'Lessons', viewId: 'course-book?'},
 		{label: 'Assignments', viewId: 'course-assessment?', isAssignment: true},
 		{label: 'Discussions', viewId: 'course-forum'},
-		{label: 'Course Info', viewId: 'course-info'}
+		{label: 'Course Info', viewId: 'course-info'},
+		{label: 'Course Reports', viewId: 'course-reports'}
 	],
 
 
@@ -81,6 +86,7 @@ Ext.define('NextThought.view.content.View', {
 		this.courseAssignmentsContainer = this.down('course-assessment-container');
 		this.courseNav = this.down('course');
 		this.courseInfo = this.down('course-info');
+		this.courseReports = this.down('course-reports');
 
 		this.removeCls('make-white');
 
@@ -126,6 +132,21 @@ Ext.define('NextThought.view.content.View', {
 				if (this.layout.getActiveItem() === view) {
 					this.setActiveTab('course-book');
 				}
+			}
+		});
+
+		this.mon(this.courseReports, {
+			scope: this,
+			'goto-roster': function() {
+				this.setActiveTab('course-info');
+				this.courseInfo.selectMenuItem('roster');
+			},
+			'goto-discussions': function() {
+				this.setActiveTab('course-forum');
+			},
+			'goto-assignment': function() {
+				this.setActiveTab('course-assessment');
+				this.courseAssignments.selectMenuItem('assignments');
 			}
 		});
 
@@ -226,6 +247,10 @@ Ext.define('NextThought.view.content.View', {
 
 			if (!this.courseInfo.hasInfo) {
 				tabs = tabs.filter(function(i) {return i.viewId !== 'course-info';});
+			}
+
+			if (!this.courseReports.hasLinks) {
+				tabs = tabs.filter(function(i) {return i.viewId !== 'course-reports';});
 			}
 
 			if (Ext.isArray(this.tabs)) {
@@ -480,7 +505,8 @@ Ext.define('NextThought.view.content.View', {
 				this.courseDash,
 				this.courseForum,
 				this.courseAssignmentsContainer,
-				this.courseInfo
+				this.courseInfo,
+				this.courseReports
 			];
 
 		this.currentCourse = instance;
