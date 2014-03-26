@@ -10,7 +10,7 @@ Ext.define('NextThought.ux.IframeWindow', {
 	header: false,
 	items: [{
 		xtype: 'component',
-		cls: 'help-iframe',
+		cls: 'iframe',
 		autoEl: {
 			tag: 'iframe',
 			src: '{url}',
@@ -64,7 +64,7 @@ Ext.define('NextThought.ux.IframeWindow', {
 		var url = getURL((this.link && this.link.href) || this.link),
 			save = this.down('component[save]');
 
-		this.down('component[cls=help-iframe]').autoEl.src = url;
+		this.down('component[cls=iframe]').autoEl.src = url;
 		save.autoEl.href = url;
 		save.autoEl.html = this.saveText || 'Save';
 
@@ -78,7 +78,31 @@ Ext.define('NextThought.ux.IframeWindow', {
 				iframe.parent().el.setStyle('overflow', 'auto');
 			},this);
 		}
+
+		if (this.width === 'max') {
+			this.fillScreen();
+		}
 	},
+
+
+	fillScreen: function() {
+		var maxWidth = Ext.Element.getViewWidth() - 50, //window width - padding
+			maxHeight = Ext.Element.getViewHeight() - 20 - 55, //window height - padding - bottom bar
+			aspect = 842 / 595, //width / height
+			height, width;
+
+		height = maxHeight;
+		width = aspect * height;
+
+		while (width >= maxWidth) {
+			height = height - 1;
+			width = aspect * height;
+		}
+
+		this.setHeight(height + 55);
+		this.setWidth(width);
+	},
+
 
 	addCustomMask: function() {
 		var mask = this.zIndexManager.mask;
