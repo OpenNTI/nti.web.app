@@ -475,10 +475,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			};
 		this.assignments.get('Items').forEach(function(assignment) {
 			var due = assignment.getDueDate(),
+				parts = (assignment.get('parts') || []).length,
 				entry = assignment.getGradeBookEntry(),
-				i = entry && entry.getFieldItem('Items', username);
+				i = entry && entry.getFieldItem('Items', username),
+				g = ((i && i.get('value')) || '').toString().split(' ')[0].trim();
 
-			if (i && !i.get('value')) {counts.ungraded++;}
+			if (i && parts > 0 && Ext.isEmpty(g)) { counts.ungraded++; }
 			//If we have a due date and its before now increment the overdue count
 			//if we don't have a due date don't increment the overdue count
 			if (!i && due && due < new Date()) {counts.overdue++;}
