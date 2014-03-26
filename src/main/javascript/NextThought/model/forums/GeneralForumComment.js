@@ -4,6 +4,8 @@ Ext.define('NextThought.model.forums.GeneralForumComment', {
 	isComment: true,
 
 	fields: [
+		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false, affectedBy: 'Last Modified'},
+
 		{ name: 'Deleted', type: 'boolean', persist: false },
 		{ name: 'inReplyTo', type: 'string' },
 		{ name: 'RecursiveLikeCount', type: 'int', persist: false},
