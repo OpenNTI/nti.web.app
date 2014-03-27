@@ -23,7 +23,7 @@ Ext.define('NextThought.view.forums.topic.parts.Topic', {
 		data.renderSelectors = Ext.applyIf(data.renderSelectors || {}, cls.superclass.renderSelectors);
 	},
 
-	cls: 'topic-post list scrollable',
+	cls: 'topic-post list',
 	scrollParentCls: '.forums-view',
 
 

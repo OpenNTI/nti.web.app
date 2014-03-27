@@ -6,7 +6,7 @@ Ext.define('NextThought.view.forums.topic.Body', {
 		'NextThought.view.forums.topic.parts.*'
 	],
 
-	cls: 'topic-body forum-body',
+	cls: 'topic-body forum-body scrollable',
 
 	allowSelectionChange: function() {
 		return !this.editor;
