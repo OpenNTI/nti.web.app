@@ -79,6 +79,7 @@ Ext.define('NextThought.view.courseware.overview.View', {
 		if (!r || r.getId() === me.currentPage || !course || !course.getAssignments) {
 			return;
 		}
+
 		this.buildingOverwiew = true;
 		me.maybeMask();
 
@@ -88,7 +89,11 @@ Ext.define('NextThought.view.courseware.overview.View', {
 
 
 		course.getAssignments()
-			.done(function(assignments) {
+			.then(function(assignments) {
+				if (me.currentPage !== r.getId()) {
+					return;
+				}
+
 				Ext.each(r.getChildren(), function(i) {
 					var c, t;
 					if (i.getAttribute('suppressed') === 'true') {
@@ -118,15 +123,11 @@ Ext.define('NextThought.view.courseware.overview.View', {
 					}
 				});
 
-				me.add([
-					{xtype: 'course-overview-header', record: r}
-				].concat(items));
-				me.maybeUnmask();
+				me.removeAll(true);//make sure its a clean slate
+				me.add([{xtype: 'course-overview-header', record: r}].concat(items));
 			})
-			.fail(function(reason) {
-				console.error(reason);
-				me.maybeUnmask();
-			});
+			.fail(function(reason) { console.error(reason); })
+			.done(me.maybeUnmask.bind(me));
 	},
 
 
