@@ -28,10 +28,10 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 						]},
 						{ tag: 'span', cls: 'count', html: '{PostCount:plural(parent.kind)}'},
 						{ tag: 'tpl', 'if': 'values[\'NewestDescendant\'] && values[\'NewestDescendant\'].isComment', cn: [
-							{ tag: 'span', cls: 'active', html: '{NewestDescendant.data.Creator:displayName} replied {NewestDescendant.data.CreatedTime:ago}'}
+							{ tag: 'span', cls: 'active', html: '{NewestDescendant.data.Creator:displayName("You")} replied {NewestDescendant.data.CreatedTime:ago}'}
 						]},
 						{ tag: 'tpl', 'if': '!values[\'NewestDescendant\'] || !values[\'NewestDescendant\'].isComment', cn: [
-							{ tag: 'span', cls: 'active', html: '{Creator:displayName} posted {CreatedTime:ago}'}
+							{ tag: 'span', cls: 'active', html: '{Creator:displayName("You")} posted {CreatedTime:ago}'}
 						]}
 					]}
 				]}

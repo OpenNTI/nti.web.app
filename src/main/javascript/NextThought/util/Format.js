@@ -33,8 +33,8 @@ Ext.define('NextThought.util.Format', {
 	},
 
 	displayName: function(value, me) {
-		if (isMe(value)) {
-			return me || 'you';
+		if (isMe(value) && me) {
+			return me;
 		}
 
 		if (Ext.isString(value)) {
