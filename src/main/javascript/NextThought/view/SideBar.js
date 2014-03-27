@@ -54,7 +54,7 @@ Ext.define('NextThought.view.SideBar', {
 						items: [
 							{ xtype: contactsType },
 							{ xtype: 'activity-view' },
-							{ xtype: 'notifications-panel' }
+							{ xtype: 'notifications-panel', hidden: !isFeature('notifications') }
 
 						]
 					},
