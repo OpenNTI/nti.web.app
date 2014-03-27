@@ -71,7 +71,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 		}
 		//return function that will perform the grouping
 		return function(cmp, store) {
-			var count;
+			var count, groups;
 
 			store.removeFilter('dueFilter');
 			//TODO: handle the show type
@@ -122,13 +122,17 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 				store.clearGrouping();
 				store.group(me.grouperMap[groupBy]);
 
+				groups = [];
+
 				store.getGroups(false).forEach(function(g) {
 					//add a group cmp for each group
 					var name = g.name.split('|').last(),
 						store = new Ext.data.Store({fields: me.getFields(), data: g.children, groupName: name}),
-						group = cmp.add(me.newGroupUIConfig({
+						group = Ext.widget(me.newGroupUIConfig({
 							store: store
 						}));
+
+					groups.push(group);
 
 					function fill(node) {
 						store.groupName = node.get('title');
@@ -155,6 +159,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 						group.setTitle(name);
 					}
 				});
+
+				groups.reduce(function(p, v) {
+					return p.then(function() {
+						return wait(100).then(function() {
+							cmp.add(v); return wait(1);});
+					});
+				}, wait(10));
 			}
 
 			store.clearGrouping();

@@ -8,6 +8,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 	overItemCls: 'over',
 	selectedItemCls: 'selected',
 	itemSelector: '.item',
+	shrinkWrap: false,
 	tpl: new Ext.XTemplate(
 			Ext.DomHelper.markup(
 					{ tag: 'tpl', 'for': '.', cn: [
