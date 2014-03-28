@@ -144,7 +144,13 @@ Ext.define('NextThought.view.courseware.reports.View', {
 			me.navigation.addItem(me.configMap[id]);
 		});
 
-		me.navigation.selectItem('course-report');
+		if (!me.rendered) {
+			me.on('afterrender', function() {
+				me.navigation.selectItem('course-report');
+			});
+		} else {
+			me.navigation.selectItem('course-report');
+		}
 	},
 
 
@@ -161,11 +167,11 @@ Ext.define('NextThought.view.courseware.reports.View', {
 	showReport: function(id) {
 		 var name = this.eventsMap[id];
 
-		 if (Ext.isFunction(this[name])) {
-		 	this[name].call(this);
-		 } else {
-		 	this.fireEvent(name);
-		 }
+		if (Ext.isFunction(this[name])) {
+			this[name].call(this);
+		} else {
+			this.fireEvent(name);
+		}
 	},
 
 
