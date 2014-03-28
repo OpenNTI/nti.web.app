@@ -537,8 +537,8 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 	}()),
 
 
-	playerUpdatePlayheadHandler: function(data) {
-		this.currentPosition = data;
+	playerUpdatePlayheadHandler: function(event) {
+		this.currentPosition = event.data[0];
 	},
 
 
