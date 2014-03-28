@@ -2,6 +2,10 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 	extend: 'Ext.view.View',
 	alias: 'widget.forums-forum-topic-list-view',
 
+	require: [
+		'NextThought.view.menus.Reports'
+	],
+
 	cls: 'topic-list list scrollable scroll-content',
 	itemSelector: '.topic-list-item',
 	preserveScrollOnRefresh: true,
@@ -117,12 +121,21 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 
 
 	onItemClick: function(record, node, index, e) {
-		if (e.getTarget('.controls')) {
+		var controls = e.getTarget('.controls'),
+			reports = e.getTarget('.reports');
+
+		if (controls && controls != e.getTarget()) {
 			e.stopEvent();
 			if (e.getTarget('.favorite')) {
 				record.favorite();
 			} else if (e.getTarget('.like')) {
 				record.like();
+			} else if (reports) {
+				Ext.widget('report-menu', {
+					links: record.getReportLinks(),
+					showIfOne: true,
+					showByEl: reports
+				});
 			}
 			return;
 		}

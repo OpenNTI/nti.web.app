@@ -2,6 +2,10 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 	extend: 'NextThought.view.forums.hierarchy.Navigation',
 	alias: 'widget.forums-forum-nav',
 
+	requires: [
+		'NextThought.view.menus.Reports'
+	],
+
 	cls: 'topic-list-nav forum-nav',
 	itemSelector: '.outline-row',
 
@@ -129,6 +133,21 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 
 		if (e.getTarget('.header')) {
 			this.fireEvent('pop-view');
+		}
+	},
+
+
+	onItemClick: function(record, node, index, e) {
+		if (e.getTarget('.report-icon')) {
+			e.stopEvent();
+
+			Ext.widget('report-menu', {
+				links: record.getReportLinks(),
+				showIfOne: true,
+				showByEl: node
+			});
+
+			return false;
 		}
 	}
 });
