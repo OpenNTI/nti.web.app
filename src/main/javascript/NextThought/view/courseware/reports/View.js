@@ -49,7 +49,7 @@ Ext.define('NextThought.view.courseware.reports.View', {
 				'This is a really long description with multiple sentences',
 				{tag: 'a', cls: 'target', html: 'view'}
 			]}),
-			src: 'http://i.imgur.com/zl30tvO.gif'
+			src: 'resources/images/elements/report_student.gif'
 		},
 		'forum-report': {
 			xtype: 'course-report-gif',
@@ -67,7 +67,7 @@ Ext.define('NextThought.view.courseware.reports.View', {
 				'This is a really long description with multiple sentences',
 				{tag: 'a', cls: 'target', html: 'view'}
 			]}),
-			src: 'http://i.imgur.com/zl30tvO.gif'
+			src: 'resources/images/elements/report_forum.gif'
 		},
 		'topic-report': {
 			xtype: 'course-report-gif',
@@ -85,7 +85,7 @@ Ext.define('NextThought.view.courseware.reports.View', {
 				'This is a really long description with multiple sentences',
 				{tag: 'a', cls: 'target', html: 'view'}
 			]}),
-			src: 'http://i.imgur.com/zl30tvO.gif'
+			src: 'resources/images/elements/report_discussion.gif'
 		}
 	},
 
