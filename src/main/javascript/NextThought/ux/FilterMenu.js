@@ -61,7 +61,7 @@ Ext.define('NextThought.ux.FilterMenu', {
 
 
 	setState: function(filter, search) {
-		var item = this.down('[filter="' + filter + '"]') || this.down('menuitem');
+		var item = this.down('[filter="' + filter + '"]') || this.down('[filter]');
 
 		if (item) {
 			item.setChecked(true, true);

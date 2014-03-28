@@ -100,8 +100,6 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 			}
 		});
 
-		this.filterMenu.setState('ForCredit');
-
 		this.mon(this.filterMenu, {
 			filter: 'doFilter',
 			search: {fn: 'doSearch', buffer: 450}
