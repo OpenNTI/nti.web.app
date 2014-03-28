@@ -134,7 +134,11 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 						return;
 					}
 
-					me.fireEvent('set-assignment-history', history);
+					try {
+						me.fireEvent('set-assignment-history', history);
+					} catch (e) {
+						Error.raiseForReport(e);
+					}
 
 					return Promise.all(me.forEachView(
 							me.callFunction('setAssignmentsData', [assignments, history, instance])));

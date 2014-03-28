@@ -13,6 +13,7 @@ Ext.define('NextThought.view.content.reader.ComponentOverlay', {
 			scope: this,
 			'set-content': 'clearOverlayedPanels',
 			'content-updated': 'clearOverlayedPanels',
+			'destroy': 'clearOverlayedPanels',
 			'image-loaded': 'adjustOverlayedPanels',
 			'afterRender': 'insertComponentOverlay',
 			'afterLayout': function() {

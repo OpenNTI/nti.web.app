@@ -114,7 +114,11 @@ Ext.define('NextThought.controller.Assessment', {
 	applyAssessmentHistory: function(history) {
 		this.history = history;
 		this.submissionsWidgets.each(function(c) {
-			this.maybeMarkSubmissionAsSubmitted(c);
+			try {
+				this.maybeMarkSubmissionAsSubmitted(c);
+			} catch (e) {
+				Error.raiseForReport(e);
+			}
 		}, this);
 	},
 
