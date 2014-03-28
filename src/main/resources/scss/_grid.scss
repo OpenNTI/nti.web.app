@@ -67,7 +67,10 @@
 	font: normal 700 0.6em/3 $font;
 	text-transform: uppercase;
 	background: none !important;
-	cursor: pointer;
+
+	&.sortable {
+		cursor: pointer;
+	}
 
 	&.x-column-header-sort-ASC,
 	&.x-column-header-sort-DESC {
@@ -102,8 +105,13 @@
 		padding: 0;
 
 		&.x-column-header-over {
-			color: $primary-grey;
 			background: none;
+		}
+	}
+
+	&.sortable {
+		.x-column-header-inner.x-column-header-over {
+			color: $primary-grey;
 		}
 	}
 }
