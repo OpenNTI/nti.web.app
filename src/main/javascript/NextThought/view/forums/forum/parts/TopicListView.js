@@ -46,12 +46,14 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 		showReport: function(value) {
 			var show = false;
 
-			((value.Links && value.Links.asJSON()) || []).forEach(function(link) {
-				if (link.rel.indexOf('report-') >= 0) {
-					show = true;
-					return false;
-				}
-			});
+			if (isFeature('analytic-reports')) {
+				((value.Links && value.Links.asJSON()) || []).forEach(function(link) {
+					if (link.rel.indexOf('report-') >= 0) {
+						show = true;
+						return false;
+					}
+				});
+			}
 
 			return show;
 		}
@@ -124,7 +126,7 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 		var controls = e.getTarget('.controls'),
 			reports = e.getTarget('.reports');
 
-		if (controls && controls != e.getTarget()) {
+		if (controls && controls !== e.getTarget()) {
 			e.stopEvent();
 			if (e.getTarget('.favorite')) {
 				record.favorite();

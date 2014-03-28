@@ -40,12 +40,14 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 		showReport: function(value, out) {
 			var show = false;
 
-			(value.Links.asJSON() || []).forEach(function(link) {
-				if (link.rel.indexOf('report-') >= 0) {
-					show = true;
-					return false;
-				}
-			});
+			if (isFeature('analytic-reports')) {
+				(value.Links.asJSON() || []).forEach(function(link) {
+					if (link.rel.indexOf('report-') >= 0) {
+						show = true;
+						return false;
+					}
+				});
+			}
 
 			return show;
 		}

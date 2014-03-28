@@ -46,9 +46,6 @@ Ext.define('NextThought.view.forums.topic.parts.Topic', {
 				{ tag: 'tpl', 'if': 'headline.isModifiable', cn: [
 					{ tag: 'span', cls: 'edit link', html: 'Edit'},
 					{ tag: 'span', cls: 'delete link', html: 'Delete'}
-				]},
-				{ tag: 'tpl', 'if': 'showReports', cn: [
-					{ tag: 'span', cls: 'reports link', html: 'Reports'}
 				]}
 			]},
 			{ cls: 'body' },
@@ -82,7 +79,6 @@ Ext.define('NextThought.view.forums.topic.parts.Topic', {
 		flagEl: '.report.link',
 		editEl: '.meta .edit',
 		deleteEl: '.meta .delete',
-		reportsEl: '.meta .reports',
 		commentBoxEl: '.comment-box',
 		replyCountEl: '.comment-box .reply-count',
 		responseEl: '.comment-box .response',
@@ -118,8 +114,7 @@ Ext.define('NextThought.view.forums.topic.parts.Topic', {
 		r = this.renderData = Ext.apply(this.renderData || {}, r.getData());
 		Ext.apply(r, {
 			showName: true,
-			canReply: this.canReply(),
-			showReports: this.record.getReportLinks().length > 0 && isFeature('analytic-reports')
+			canReply: this.canReply()
 		});
 
 
@@ -183,10 +178,6 @@ Ext.define('NextThought.view.forums.topic.parts.Topic', {
 
 		if (this.editEl) {
 			this.mon(this.editEl, 'click', this.onEditPost, this);
-		}
-
-		if (this.reportsEl) {
-			this.mon(this.reportsEl, 'click', 'showReportsMenu', this);
 		}
 
 		this.setPublishAndSharingState();
@@ -337,15 +328,6 @@ Ext.define('NextThought.view.forums.topic.parts.Topic', {
 	onEditPost: function(e) {
 		e.stopEvent();
 		this.fireEvent('edit-topic', this, this.record, this.forum);
-	},
-
-
-	showReportsMenu: function() {
-		var win = Ext.widget('report-menu', {
-			links: this.record.getReportLinks(),
-			showIfOne: true,
-			showByEl: this.reportsEl
-		});
 	},
 
 

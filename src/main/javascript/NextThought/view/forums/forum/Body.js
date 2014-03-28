@@ -17,7 +17,7 @@ Ext.define('NextThought.view.forums.forum.Body', {
 	setCurrent: function(record) {
 		if (!record) { return; }
 
-		var topicList = this.down('forums-forum-topic-list-view'),
+		var topicList = this.down('forums-forum-wtopic-list-view'),
 			filterBar = this.down('forums-forum-filterbar'),
 			header = this.down('forums-forum-header'),
 			store = record.buildContentsStore('topic-list-view', this.storeCfg);
