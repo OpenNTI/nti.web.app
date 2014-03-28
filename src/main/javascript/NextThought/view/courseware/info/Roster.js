@@ -157,13 +157,14 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 
 		this.down('grid').bindStore(Ext.getStore('ext-empty-store'));
 
+		this.filterMenu.setState('*');
+
 		if (Ext.isEmpty(roster) || !roster) {
 			if (this.store) {this.store.removeAll();}
 			return;
 		}
 
 		this.buildStore(roster);
-		this.filterMenu.setState('*');
 
 		Service.request(smallRequestURLToGetCounts)
 				.then(JSON.parse)
@@ -209,6 +210,7 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 
 	doFilter: function(filter) {
 		try {
+			this.currentFilter = filter;
 			this.down('grid').getSelectionModel().deselectAll(true);
 			this.store.filter([
 				{id: 'LegacyEnrollmentStatus', property: 'LegacyEnrollmentStatus', value: filter}

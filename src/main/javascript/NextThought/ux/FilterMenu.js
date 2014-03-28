@@ -88,7 +88,7 @@ Ext.define('NextThought.ux.FilterMenu', {
 
 	getFilterLabel: function(count) {
 		var search = this.search && this.search.getValue(),
-			item = this.down('menuitem[checked]') || {text: '???'},
+			item = this.down('menuitem[checked]') || {text: ''},
 			prefix = item.text;
 
 		if (search) {
