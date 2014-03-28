@@ -37,6 +37,7 @@
 			}
 
 			.heading {
+				overflow: hidden;
 				@include ellipse;
 				font: normal 300 1.1em/1.5 $font;
 			}
