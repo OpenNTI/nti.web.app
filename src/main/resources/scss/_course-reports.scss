@@ -1,5 +1,7 @@
 #course-reports {
 	.report-card {
+		overflow: auto;
+
 		.description {
 			.title {
 				color: $primary-grey;
