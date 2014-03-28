@@ -53,6 +53,16 @@ Ext.define('NextThought.view.menus.Reports', {
 
 
 	showReport: function(href) {
+		/*
+		....Report.pdf#view=FitH&toolbar=0&navpanes=0&statusbar=0&page=1
+
+		http://partners.adobe.com/public/developer/en/acrobat/PDFOpenParameters.pdf
+
+		Chrome ignores most Open PDF Paramaters. Only Safari's, FireFox's & Adobe's viewer seem to honor them...meaning we can't control how the PDF will look
+		if we let the window get too big in Chrome. We have to figure out what the size the window should be for 100% and that be its max...otherwise chrome
+		will not scale the pdf up.
+		 */
+
 		var win = Ext.widget('iframe-window', {
 				width: 'max',
 				saveText: 'Open in new window',
