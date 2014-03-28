@@ -2,16 +2,19 @@ Ext.define('NextThought.view.courseware.reports.parts.Link', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-report-link',
 
-	cls: 'report-card',
+	cls: 'report-card overview-section',
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'description', cn: [
 			{cls: 'title', html: '{title}'},
 			{cls: 'about', html: '{about}'}
 		]},
-		{cls: 'link target', cn: [
-			{cls: 'sub-heading', html: '{courseNumber}'},
-			{cls: 'heading', html: '{courseName}'}
+		{cls: 'content-card link target', cn: [
+			{cls: 'thumbnail'},
+			{cls: 'meta', cn: [
+				{cls: 'sub-heading', html: '{courseNumber}'},
+				{cls: 'heading', html: '{courseName}'}
+			]}
 		]}
 	]),
 

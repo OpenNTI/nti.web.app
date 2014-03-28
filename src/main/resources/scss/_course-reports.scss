@@ -23,11 +23,14 @@
 		.link {
 			cursor: pointer;
 			width: 500px;
-			height: 100px;
+			height: 125px;
 			margin: 0 auto;
-			padding: 20px 5px 5px 100px;
 			color: $primary-grey;
-			background-color: $quad-grey;
+
+			.thumbnail {
+				background: $elements;
+				background-position: sprite-position($elements, 'reports-image');
+			}
 
 			.sub-heading {
 				font: normal 600 0.6em/2 $font;
