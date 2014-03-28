@@ -31,8 +31,15 @@
 			display: inline-block;
 			line-height: 2;
 			white-space: nowrap;
-			&[data-value]::before {
-				content: attr(data-value) "% - ";
+
+			&[data-sub]::after {
+				color: $primary-grey;
+				content: attr(data-value) "% - " attr(data-sub);
+				display: block;
+				line-height: 1em;
+				overflow: hidden;
+				@include ellipse;
+				//text-align: center;
 			}
 		}
 

@@ -14,7 +14,7 @@ Ext.define('NextThought.chart.Pie', {
 
 	legendary: new Ext.XTemplate(Ext.DomHelper.markup([
 		{ tag: 'tpl', 'for': 'series', cn: [
-			{ tag: 'li', cls: 'series label', html: '{label}', style: {color: '{color}'}, 'data-value': '{percent}'}
+			{ tag: 'li', cls: 'series label', html: '{label}', style: {color: '{color}'}, 'data-value': '{percent}', 'data-sub': '{sub}', 'data-qtip': '{sub}'}
 		]},
 		{ tag: 'li', cls: 'total label', html: 'Total: {total}' }
 	])),
@@ -39,7 +39,8 @@ Ext.define('NextThought.chart.Pie', {
 			return {
 				percent: (p * 100).toFixed(0),
 				label: v[i].label,
-				color: colors[i % colors.length]
+				color: colors[i % colors.length],
+				sub: v[i].value
 			};
 		}
 
@@ -132,7 +133,7 @@ Ext.define('NextThought.chart.Pie', {
 	drawPie: function() {
 		var ctx = this.context,
 			centerX = this.canvas.width / 2,
-			centerY = this.canvas.height / 2,
+			centerY = this.canvas.height / 2 - 10,
 			len = this.data.length, i = 0;
 
 		ctx.save();
