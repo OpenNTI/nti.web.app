@@ -6,7 +6,7 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 	itemSelector: '.topic-list-item',
 	preserveScrollOnRefresh: true,
 
-	tpl: Ext.DomHelper.markup([
+	tpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{ tag: 'tpl', 'for': '.', cn: [
 			{ tag: 'tpl', 'if': 'isGroupHeader', cn: [
 				{ cls: 'topic-list-header-item topic-list-item', html: '{groupName}'}
@@ -15,7 +15,8 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 				{ cls: 'topic-list-item', cn: [
 					{ cls: 'controls', cn: [
 						{ cls: 'favorite {favoriteState}' },
-						{ cls: 'like {likeState} {[values.LikeCount==0?\"\":"keep"]}', html: '{[values.LikeCount==0?\"\":values.LikeCount]}' }
+						{ cls: 'like {likeState} {[values.LikeCount==0?\"\":"keep"]}', html: '{[values.LikeCount==0?\"\":values.LikeCount]}' },
+						{ tag: 'tpl', 'if': 'this.showReport(values)', cn: { cls: 'reports off', 'data-qtip': 'Reports'} }
 					]},
 					{ cls: 'avatar', style: 'background: url({Creator:avatarURL})'},
 					{ cls: 'header', cn: [
@@ -37,7 +38,20 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 				]}
 			]}
 		]}
-	]),
+	]), {
+		showReport: function(value) {
+			var show = false;
+
+			((value.Links && value.Links.asJSON()) || []).forEach(function(link) {
+				if (link.rel.indexOf('report-') >= 0) {
+					show = true;
+					return false;
+				}
+			});
+
+			return show;
+		}
+	}),
 
 	emptyText: Ext.DomHelper.markup({
 		cls: 'empty-forum',

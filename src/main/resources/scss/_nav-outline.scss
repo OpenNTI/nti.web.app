@@ -50,6 +50,16 @@
 			@include ellipse;
 		}
 
+		.report-icon {
+			cursor: pointer;
+			top: 0; right: 0;
+			width: 40px; height: 40px;
+
+			display: none;
+
+			@include icon('reports-gray-card_hover', $position: absolute, $top: 12px, $left: 12px);
+		}
+
 		&.disabled {
 			cursor: default;
 			color: $tertiary-grey;
@@ -59,16 +69,39 @@
 		&.out-of-view{
 		}
 
-		&:not(.disabled).over {
-			background: #f0f0f0;
-			box-shadow: inset 3px 0 0 0 #cfcfcf;
-		}
+		&:not(.disabled) {
+			&:hover,
+			&.over {
+				background: #f0f0f0;
+				box-shadow: inset 3px 0 0 0 #cfcfcf;
 
-		&.x-item-selected {
-			color: #ffffff;
-			font-weight: 600;
-			background: $primary-blue;
-			box-shadow: inset 3px 0 0 0 #107eed;
+				.report-icon {
+					display: block;
+
+					&:hover::after {
+						background-position: sprite-position($icons, 'reports-gray_hover');
+					}
+				}
+			}
+
+			&.x-item-selected {
+				color: #ffffff;
+				font-weight: 600;
+				background: $primary-blue;
+				box-shadow: inset 3px 0 0 0 #107eed;
+
+				.report-icon {
+					display: block;
+
+					&::after {
+						background-position: sprite-position($icons, 'reports-white_default');
+					}
+
+					&:hover::after {
+						background-position: sprite-position($icons, 'reports-white_hover');
+					}
+				}
+			}
 		}
 
 		&.unit {

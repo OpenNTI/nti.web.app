@@ -218,11 +218,22 @@
 		.controls {
 			position: absolute;
 			overflow: hidden;
-			top: 0; right: 0;
+			top: 0; right: 0; bottom: 0;
 			@include like-and-favorite;
 
 			.off:not(.keep) {
 				visibility: hidden;
+			}
+
+			.reports {
+				cursor: pointer;
+				right: 14px; bottom: 10px;
+				width: 16px; height: 15px;
+
+				@include icon('reports-gray-card_hover', $position: absolute);
+				&:hover::after {
+					background-position: sprite-position($icons, 'reports-blue_hover');
+				}
 			}
 		}
 

@@ -19,8 +19,8 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 				{tag: 'tpl', 'for': '.', cn: [
 					{cls: 'outline-row', 'data-qtip': '{title}', cn: [
 						{cls: 'label', html: '{title}'},
-						{tag: 'tpl', 'if': 'this.showReport(values, out)', cn: [
-							{cls: 'report-icon'}
+						{tag: 'tpl', 'if': 'this.showReport(values)', cn: [
+							{cls: 'report-icon', 'data-qtip': 'Reports'}
 						]}
 					]}
 				]},

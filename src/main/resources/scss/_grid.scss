@@ -157,6 +157,10 @@
 		&.x-grid-row .x-grid-cell .disclosure::after {
 			background-position: sprite-position($icons, 'options-menu-card_hover');
 		}
+
+		&.x-grid-row .x-grid-cell .disclosure.report::after {
+			background-position: sprite-position($icons, 'reports-gray-card_hover');
+		}
 	}
 
 	.x-grid-cell-inner {
@@ -194,15 +198,25 @@
 		}
 
 		.actions {
+			cursor: pointer;
 			width: 40px;
 			height: 40px;
 			@include icon('more-options', $top: 15px, $left: 9px);
 		}
 
 		.disclosure {
+			cursor: pointer;
 			width: 40px;
 			height: 40px;
 			@include icon('options-menu', $top: 6px, $left: 5.5px, $hover: true);
+
+			&.report {
+				@include icon('reports-gray_default', $top: 12px, $left: 12px);
+
+				&:hover::after {
+					background-position: sprite-position($icons, 'reports-blue_hover');
+				}
+			}
 		}
 
 

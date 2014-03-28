@@ -3,7 +3,7 @@
 		.description {
 			.title {
 				color: $primary-grey;
-				font: normal 300 1.5em/40px $font; 
+				font: normal 300 1.5em/2 $font;
 				padding: 15px 30px;
 			}
 
@@ -30,12 +30,12 @@
 			background-color: $quad-grey;
 
 			.sub-heading {
-				font: normal 600 0.6em/20px $font;
+				font: normal 600 0.6em/2 $font;
 			}
 
 			.heading {
 				@include ellipse;
-				font: normal 300 1.1em/20px $font;
+				font: normal 300 1.1em/1.5 $font;
 			}
 		}
 

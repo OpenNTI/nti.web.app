@@ -69,7 +69,7 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 							width: 60,
 							text: '', dataIndex: 'Creator',
 							tpl: Ext.DomHelper.markup({
-								cls: 'disclosure'
+								cls: 'disclosure report'
 							})
 						}
 					]
