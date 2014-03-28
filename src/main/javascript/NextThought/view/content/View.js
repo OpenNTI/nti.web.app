@@ -59,7 +59,7 @@ Ext.define('NextThought.view.content.View', {
 			id: 'course-info',
 			xtype: 'course-info'
 		},{
-			title: 'Course Reports',
+			title: 'Reports',
 			id: 'course-reports',
 			xtype: 'course-reports'
 		}
