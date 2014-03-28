@@ -1,79 +1,171 @@
 Ext.define('NextThought.view.courseware.reports.View', {
-	extend: 'Ext.container.Container',
+	extend: 'NextThought.view.navigation.AbstractPanel',
 	alias: 'widget.course-reports',
 
 	requires: [
-		'NextThought.view.courseware.reports.parts.ReportCard',
+		'NextThought.view.courseware.reports.parts.Link',
+		'NextThought.view.courseware.reports.parts.Gif',
 		'NextThought.view.menus.Reports'
 	],
 
-	defaults: {
-		xtype: 'course-report-card'
+	mixins: {
+		customScroll: 'NextThought.mixins.CustomScroll'
 	},
 
-	showStudentReports: true,
-	showForumReports: true,
-	showTopicReports: true,
-	showAssignmentReports: true,
+	ids: ['course-report', 'student-report', 'forum-report', 'topic-report'], //assignment-report
 
-	// items: [
-	// 	{xtype: 'box', tpl: {html: 'Reports'}}
-	// ],
+	configMap: {
+		'course-report': {
+			xtype: 'course-report-link',
+			id: 'course-report',
+			title: 'Course Report',
+			about: Ext.DomHelper.markup({tag: 'span', cn: [
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences'
+			]}),
+			courseNumber: '',
+			courseName: ''
+		},
+		'student-report': {
+			xtype: 'course-report-gif',
+			id: 'student-report',
+			title: 'Student Reports',
+			about: Ext.DomHelper.markup({tag: 'span', cn: [
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				{tag: 'a', cls: 'target', html: 'view'}
+			]}),
+			src: 'http://i.imgur.com/zl30tvO.gif'
+		},
+		'forum-report': {
+			xtype: 'course-report-gif',
+			id: 'forum-report',
+			title: 'Forum Reports',
+			about: Ext.DomHelper.markup({tag: 'span', cn: [
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				{tag: 'a', cls: 'target', html: 'view'}
+			]}),
+			src: 'http://i.imgur.com/zl30tvO.gif'
+		},
+		'topic-report': {
+			xtype: 'course-report-gif',
+			id: 'topic-report',
+			title: 'Discussion Reports',
+			about: Ext.DomHelper.markup({tag: 'span', cn: [
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				{tag: 'a', cls: 'target', html: 'view'}
+			]}),
+			src: 'http://i.imgur.com/zl30tvO.gif'
+		}
+	},
+
+	eventsMap: {
+		'course-report': 'courseReportClicked',
+		'student-report': 'goto-roster',
+		'forum-report': 'goto-discussions',
+		'topic-report': 'goto-discussions',
+		'assignment-report': 'goto-assignment'
+	},
+
+	navigation: {xtype: 'course-reports-navigation'},
+	body: {
+		xtype: 'container',
+		cls: 'make-white',
+		layout: 'fit'
+	},
+
+
+	initComponent: function() {
+		this.callParent(arguments);
+		this.initCustomScrollOn('content');
+		this.mon(this.navigation, 'show-view', 'showView');
+	},
+
+
+	clearViews: function() {
+		this.body.removeAll(true);
+		this.navigation.clear();
+	},
 
 
 	courseChanged: function(course) {
-		this.reportLinks = course && course.getReportLinks();
+		var me = this,
+			entry = course && course.getCourseCatalogEntry();
 
-		if (Ext.isEmpty(this.reportLinks) || !isFeature('analytic-reports')) {
-			this.hasLinks = false;
+		me.reportLinks = course && course.getReportLinks();
+
+		if (Ext.isEmpty(me.reportLinks) || !isFeature('analytic-reports')) {
+			me.hasLinks = false;
 			return;
 		}
 
-		this.hasLinks = true;
-
-		if (this.reportLinks.length > 1) {
-			console.error('For now we are assuming that the course report is the only link this will need to be fixed if theres going to be more than one');
+		if (me.reportLinks.length > 1) {
+			console.error('More than one report link on the course, expecting only one...');
 		}
 
-		this.courseReport = this.reportLinks[0];
+		me.courseReport = me.reportLinks[0];
 
-		this.add({
-			title: 'Course Report',
-			description: 'Longer description text that is a few sentences long. Longer description text that is a few sentences long. Longer description text that is a few sentences long. Longer description text that is a few sentences long.',
-			handleClick: Ext.bind(this.courseReportClicked, this)
+		me.hasLinks = true;
+
+		me.configMap['course-report'].courseNumber = entry.getId();
+		me.configMap['course-report'].courseName = entry.get('Title');
+
+		me.ids.forEach(function(id) {
+			me.navigation.addItem(me.configMap[id]);
 		});
 
-		if (this.showStudentReports) {
-			this.add({
-				title: 'Student Particpation',
-				description: 'Longer description text that is a few sentences long. Longer description text that is a few sentences long. Longer description text that is a few sentences long. Longer description text that is a few sentences long.',
-				handleClick: Ext.bind(this.studentReportClicked, this)
-			});
-		}
+		me.navigation.selectItem('course-report');
+	},
 
-		if (this.showForumReports) {
-			this.add({
-				title: 'Forum Report',
-				description: 'Longer description text that is a few sentences long. Longer description text that is a few sentences long. Longer description text that is a few sentences long. Longer description text that is a few sentences long.',
-				handleClick: Ext.bind(this.forumReportClicked, this)
-			});
-		}
 
-		if (this.showTopicReports) {
-			this.add({
-				title: 'Topic Report',
-				description: 'Longer description text that is a few sentences long. Longer description text that is a few sentences long. Longer description text that is a few sentences long. Longer description text that is a few sentences long.',
-				handleClick: Ext.bind(this.topicReportClicked, this)
-			});
-		}
+	showView: function(id) {
+		var item;
 
-		if (this.showAssignmentReports) {
-			this.add({
-				title: 'Assignment Report',
-				description: 'Longer description text that is a few sentences long. Longer description text that is a few sentences long. Longer description text that is a few sentences long. Longer description text that is a few sentences long.',
-				handleClick: Ext.bind(this.assignmentReportClicked, this)
-			});
-		}
+		this.body.removeAll(true);
+		item = this.body.add(this.configMap[id]);
+
+		this.mon(item, 'show-report', 'showReport');
+	},
+
+
+	showReport: function(id) {
+		 var name = this.eventsMap[id];
+
+		 if (Ext.isFunction(this[name])) {
+		 	this[name].call(this);
+		 } else {
+		 	this.fireEvent(name);
+		 }
 	},
 
 
@@ -87,25 +179,5 @@ Ext.define('NextThought.view.courseware.reports.View', {
 			links: [this.courseReport],
 			showIfOne: true
 		});
-	},
-
-
-	forumReportClicked: function() {
-		this.fireEvent('goto-discussions');
-	},
-
-
-	topicReportClicked: function() {
-		this.fireEvent('goto-discussions');
-	},
-
-
-	studentReportClicked: function() {
-		this.fireEvent('goto-roster');
-	},
-
-
-	assignmentReportClicked: function() {
-		this.fireEvent('goto-assignment');
 	}
 });

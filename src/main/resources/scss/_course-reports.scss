@@ -1,21 +1,48 @@
 #course-reports {
-
 	.report-card {
-		background-color: white;
-		width: 300px;
-		height: 200px;
-		float: left;
-		margin: 5px;
-		padding: 5px;
+		.description {
+			.title {
+				color: $primary-grey;
+				font: normal 300 1.5em/40px $font; 
+				padding: 15px 30px;
+			}
 
-		.title {
-			color: $primary-grey;
-			font: normal 600 1.1em/30px $font;
+			.about {
+				color: $primary-grey;
+				font: normal 300 1em/1.5 $font;
+				padding: 0 30px;
+				margin-bottom: 50px;
+
+				a.target {
+					cursor: pointer;
+					color: $primary-blue;
+				}
+			}
 		}
 
-		.description {
+		.link {
+			cursor: pointer;
+			width: 500px;
+			height: 100px;
+			margin: 0 auto;
+			padding: 20px 5px 5px 100px;
 			color: $primary-grey;
-			font: normal 400 1em/1 $font;
+			background-color: $quad-grey;
+
+			.sub-heading {
+				font: normal 600 0.6em/20px $font;
+			}
+
+			.heading {
+				@include ellipse;
+				font: normal 300 1.1em/20px $font;
+			}
+		}
+
+		.gif {
+			width: 500px;
+			display: block;
+			margin: 0 auto;
 		}
 	}
 }

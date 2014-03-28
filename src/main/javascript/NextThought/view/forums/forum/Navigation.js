@@ -18,7 +18,10 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 			{cls: 'outline-list', cn: [
 				{tag: 'tpl', 'for': '.', cn: [
 					{cls: 'outline-row', 'data-qtip': '{title}', cn: [
-						{cls: 'label', html: '{title}'}
+						{cls: 'label', html: '{title}'},
+						{tag: 'tpl', 'if': 'this.showReport(values, out)', cn: [
+							{cls: 'report-icon'}
+						]}
 					]}
 				]},
 				{tag: 'tpl', 'if': 'this.showButton(values,out)', cn: [
@@ -29,6 +32,18 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 	}), {
 		showButton: function(value, out) {
 			return this.canCreateForums;
+		},
+		showReport: function(value, out) {
+			var show = false;
+
+			(value.Links.asJSON() || []).forEach(function(link) {
+				if (link.rel.indexOf('report-') >= 0) {
+					show = true;
+					return false;
+				}
+			});
+
+			return show;
 		}
 	}),
 
