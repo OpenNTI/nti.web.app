@@ -22,7 +22,7 @@ Ext.define('NextThought.view.courseware.reports.View', {
 
 
 	courseChanged: function(course) {
-		this.reportLinks = course.getReportLinks();
+		this.reportLinks = course && course.getReportLinks();
 
 		if (Ext.isEmpty(this.reportLinks) || !isFeature('analytic-reports')) {
 			this.hasLinks = false;
