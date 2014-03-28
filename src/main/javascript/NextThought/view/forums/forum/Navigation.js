@@ -22,10 +22,10 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 			{cls: 'outline-list', cn: [
 				{tag: 'tpl', 'for': '.', cn: [
 					{cls: 'outline-row', 'data-qtip': '{title}', cn: [
-						{cls: 'label', html: '{title}'},
 						{tag: 'tpl', 'if': 'this.showReport(values)', cn: [
 							{cls: 'report-icon', 'data-qtip': 'Reports'}
-						]}
+						]},
+						{cls: 'label', html: '{title}'}
 					]}
 				]},
 				{tag: 'tpl', 'if': 'this.showButton(values,out)', cn: [
