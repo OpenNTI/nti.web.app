@@ -414,14 +414,23 @@ Ext.define('NextThought.controller.Store', function() {
 		},
 
 
-		navigateToPurchasable: function(obj) {
-			var me = this;
+		// navigateToPurchasable: function(obj) {
+		// 	var me = this;
 
+		// 	if (obj instanceof NextThought.model.store.Purchasable) {
+		// 		me.showPurchasable(obj);
+		// 		return false;
+		// 	}
+		// 	return true;
+		// },
+
+
+		getHandlerForNavigationToObject: function(obj, fragment) {
 			if (obj instanceof NextThought.model.store.Purchasable) {
-				me.showPurchasable(obj);
-				return false;
+				return this.showPurchasable.bind(this);
 			}
-			return true;
+
+			return false;
 		},
 
 

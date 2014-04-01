@@ -495,7 +495,8 @@ Ext.define('NextThought.controller.Navigation', {
 				me = this;
 
 		function onSuccess(obj) {
-			me.fireEvent('show-object', obj, fragment, rec, options);
+			//me.fireEvent('show-object', obj, fragment, rec, options);
+			me.navigateToContent(obj, fragment);
 		}
 
 		function onFailure() {
@@ -523,7 +524,7 @@ Ext.define('NextThought.controller.Navigation', {
 	},
 
 
-	navigateToContent: function(obj, fragment) {
+	navigateToContentOld: function(obj, fragment) {
 		function scroll(content) {
 			if (content && fragment) {
 				content.getScroll().toTarget(fragment);
@@ -536,6 +537,41 @@ Ext.define('NextThought.controller.Navigation', {
 		}
 		console.log('Dont know how to navigate to object', obj);
 		return true;
+	},
+
+
+	navigateToContent: function(obj, fragment) {
+		var getHandlers = this.performAnd('getHandlerForNavigationToObject', obj, fragment);
+
+		getHandlers
+			.done(function(handlers) {
+				if (handlers.length > 1) {
+					console.error('More than one handler for object navigation:', handlers.length, obj);
+					return;
+				}
+
+				handlers[0].call(null, obj, fragment);
+			})
+			.fail(function(reason) {
+				console.error('Error getting handlers for object navigation:', obj, reason);
+			});
+	},
+
+
+	getHandlerForNavigationToObject: function(obj, fragment) {
+		var me = this;
+
+		if (obj.isPageinfo) {
+			return me.handleNavigationToContent.bind(me);
+		}
+
+		if (obj instanceof NextThought.model.Note) {
+			return function(obj) {
+				me.navigate(obj.get('ContainerId'), obj);
+			}
+		}
+
+		return false;
 	},
 
 

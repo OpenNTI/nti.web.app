@@ -438,5 +438,46 @@ Ext.define('NextThought.controller.Profile', {
 				alert('Sorry, could not delete that');
 			}
 		});
+	},
+
+
+	getHandlerForNavigationToObject: function(obj, fragment) {
+		var me = this;
+
+		function finishNavigation(user, postId, commentId) {
+			var title = 'Thoughts',
+				args = [title];
+
+			if (postId) {
+				args.push(postId);
+			}
+
+			if (postId && commentId) {
+				args.push('comments');
+				args.push(commentId);
+			}
+
+			me.showProfile(user, args);
+		}
+
+		if (obj instanceof NextThought.model.forums.PersonalBlogEntry) {
+			return function(obj) {
+				UserRepository.getUser(obj.get('Creator'), function(user) {
+					finishNavigation(user, obj.get('ID'));
+				});
+			}
+		}
+
+		if (obj instanceof NextThought.model.forums.PersonalBlogComment) {
+			return function(obj) {
+				Service.getObject(obj.get('ContainerId'), function(post) {
+					UserRepository.getUser(post.get('Creator'), function(user) {
+						finishNavigation(user, post.get('ID'), obj.get('ID'));
+					});
+				});
+			}
+		}
+
+		return false;
 	}
 });

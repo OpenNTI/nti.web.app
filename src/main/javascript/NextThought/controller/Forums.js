@@ -130,7 +130,7 @@ Ext.define('NextThought.controller.Forums', {
 			},
 			controller: {
 				'*': {
-					'show-object': 'navigateToForumContent',
+					//'show-object': 'navigateToForumContent',
 					'show-topic': 'presentForumItem'
 				}
 			}
@@ -1083,12 +1083,24 @@ Ext.define('NextThought.controller.Forums', {
 	navigateToForumContent: function(obj, fragment) {
 		var me = this;
 
-		if (obj instanceof NextThought.model.forums.Base) {
-			if (me.fireEvent('show-view', 'forums', true)) {
-				me.presentForumItem(obj);
-				return false;
-			}
+		if (me.fireEvent('show-view', 'forums', true)) {
+			me.presentForumItem(obj);
+			return false;
 		}
+
 		return true;
+	},
+
+
+	getHandlerForNavigationToObject: function(obj, fragment) {
+		//if its not a forum we don't want to handle it
+		if (!obj instanceof NextThought.model.forums.Base) { return false; }
+
+		//if its one of the types we handle navigation to handle it
+		if (obj.isBoard || obj.isForum || (obj.isTopic && !obj.isBlogEntry) || (obj.isComment && !obj.isBlogComment)) {
+			return this.navigateToForumContent.bind(this);
+		}
+
+		return false;
 	}
 });

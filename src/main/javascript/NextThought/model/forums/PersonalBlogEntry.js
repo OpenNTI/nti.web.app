@@ -1,6 +1,8 @@
 Ext.define('NextThought.model.forums.PersonalBlogEntry', {
 	extend: 'NextThought.model.forums.HeadlineTopic',
 
+	isBlogEntry: true,
+
 	mixins: {
 	publishActions: 'NextThought.mixins.ModelWithPublish'
 	},
