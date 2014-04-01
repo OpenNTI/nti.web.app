@@ -71,8 +71,8 @@ Ext.define('NextThought.view.content.View', {
 		{label: 'Lessons', viewId: 'course-book?'},
 		{label: 'Assignments', viewId: 'course-assessment?', isAssignment: true},
 		{label: 'Discussions', viewId: 'course-forum'},
-		{label: 'Course Info', viewId: 'course-info'},
-		{label: 'Reports', viewId: 'course-reports'}
+		{label: 'Reports', viewId: 'course-reports'},
+		{label: 'Course Info', viewId: 'course-info'}
 	],
 
 
