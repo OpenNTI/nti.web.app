@@ -80,54 +80,55 @@ Ext.define('NextThought.view.definition.Window', {
 	},
 
 
+	fillIn: function(content) {
+		var me = this,
+			doc = this.getDocumentElement().open();
+
+		doc.write(content);
+		doc.close();
+		doc.onclick = function(e) {
+			e = Ext.EventObject.setEvent(e || event);
+			e.stopEvent();
+			var t = e.getTarget('a[href]', null, true);
+
+			if (t) {
+				me.loadDefinition(decodeURIComponent(t.getAttribute('href')));
+			}
+
+			return false;
+		};
+		me.showAt(me.x, me.y);
+	},
+
+
 	loadDefinition: function(term) {
 		var me = this;
 		me.term = term;
 
-		me.queryDefinition(function(dom) {
-			me.getXSLTProcessor(function(processor) {
-				if (!processor) {
-					me.close();
-					alert('You do not have a dictionary installed');
-					return;
-				}
 
-				var o, domtree, outputtree, doc;
-				if (window.hasOwnProperty('XSLTProcessor') && window.XMLSerializer && window.DOMParser) {
-					domtree = new DOMParser().parseFromString(dom, 'text/xml');
-					outputtree = processor.transformToDocument(domtree);
-					o = new XMLSerializer().serializeToString(outputtree);
-				}
-				else {
-					domtree = new ActiveXObject('Msxml2.DOMDocument');
-					domtree.loadXML(dom);
-					processor.input = domtree;
-					processor.transform();
-					o = processor.output;
-				}
-
-				if (o.indexOf('&lt;/a&gt;') >= 0) {
-					o = Ext.String.htmlDecode(o);
-				}
-
-				doc = this.getDocumentElement().open();
-
-				doc.write(o);
-				doc.close();
-				doc.onclick = function(e) {
-					e = Ext.EventObject.setEvent(e || event);
-					e.stopEvent();
-					var t = e.getTarget('a[href]', null, true);
-
-					if (t) {
-						me.loadDefinition(decodeURIComponent(t.getAttribute('href')));
-					}
-
-					return false;
-				};
-				me.showAt(me.x, me.y);
-			});
-		});
+		me.getXSLTProcessor()
+				.then(function(processor) {
+					return me.queryDefinition()
+							.then(function(text) {
+								return Promise.resolve()
+										.then(me._hasStandardParts)
+										.then(me._parse.bind(me, processor, text), me._ieParse.bind(me, processor, text));
+							})
+							.then(function(o) {
+								if (o.indexOf('&lt;/a&gt;') >= 0) {
+									o = Ext.String.htmlDecode(o);
+								}
+								return o;
+							});
+				})
+				.done(function(o) {
+					me.fillIn(o);
+				})
+				.fail(function(e) {
+					me.hide();
+					alert('An error occured looking up definitions.\nPlease try again later.');
+					Error.raiseForReport(e);
+				});
 	},
 
 
@@ -137,60 +138,87 @@ Ext.define('NextThought.view.definition.Window', {
 	},
 
 
-	queryDefinition: function(cb, scope) {
-		var u = this.pageInfo.getLink('Glossary'), req;
+	queryDefinition: function() {
+		var u = this.pageInfo.getLink('Glossary');
+		if (!u) {
+			console.warn('PageInfo ', this.pageInfo.raw, 'did not contain a glocery rel link');
+			u = this.fallbackURL;
+		}
 
-		if (!u) {u = this.fallbackURL;}
-		else {u += '/';}
+		if (u.split(/\//g).last() !== '') {
+			u += '/';
+		}
 
-		req = {
-			url: getURL(u + encodeURIComponent(this.term)),
-			async: true,
-			scope: this,
-			callback: function(q, s, r) {
-				var dom = r.responseText;
-				Ext.callback(cb, scope || this, [dom]);
-			}
-		};
-
-		Ext.Ajax.request(req);
+		return Service.request(getURL(u + encodeURIComponent(this.term)));
 	},
 
 
-	getXSLTProcessor: function(cb, scope) {
-		var me = this, req;
+	_parse: function(processor, text) {
+		var domtree, outputtree;
+		domtree = new DOMParser().parseFromString(text, 'text/xml');
+		outputtree = processor.transformToDocument(domtree);
+		return new XMLSerializer().serializeToString(outputtree);
+	},
+
+
+	_ieParse: function(processor, text) {
+		var domtree = new ActiveXObject('Msxml2.DOMDocument');
+		domtree.loadXML(text);
+		processor.input = domtree;
+		processor.transform();
+		return processor.output;
+	},
+
+
+	_buildProcessor: function(text) {
+		var dom = new DOMParser().parseFromString(text, 'text/xml'),
+			p = new XSLTProcessor();
+
+		p.importStylesheet(dom);
+		return p;
+	},
+
+
+	_ieBuildProcessor: function(text) {
+		try {
+			var xsldoc = new ActiveXObject('Msxml2.FreeThreadedDOMDocument'),
+				xslt = new ActiveXObject('Msxml2.XSLTemplate');
+			xsldoc.loadXML(text);
+			xslt.stylesheet = xsldoc;
+			return xslt.createProcessor();
+		} catch (e) {
+			throw 'Dictionary may not be installed, or not configured properly.' + (e.stack || e.message || e);
+		}
+	},
+
+
+	_hasStandardParts: function() {
+		if (!window.XSLTProcessor || !window.XMLSerializer || !window.DOMParser) {
+			throw 'do IE path';
+		}
+	},
+
+
+	getXSLTProcessor: function() {
+		var me = this;
 		if (me.self.xsltProcessor) {
-			Ext.callback(cb, scope || me, [me.self.xsltProcessor]);
-			return;
+			return Promise.resolve(me.self.xsltProcessor);
 		}
 
-		req = {
-			url: me.xslUrl,
-			async: true,
-			scope: me,
-			callback: function(q, s, r) {
-				var xsldoc, xslt, dom, p;
-				if (!window.hasOwnProperty('XSLTProcessor')) {
-					try {
-					xsldoc = new ActiveXObject('Msxml2.FreeThreadedDOMDocument');
-					xsldoc.loadXML(r.responseText);
-					xslt = new ActiveXObject('Msxml2.XSLTemplate');
-					xslt.stylesheet = xsldoc;
-					p = xslt.createProcessor();
-					} catch (e) {
-						console.error('Dictionary may not be installed, or not configured properly.', e.message);
-					}
-				}
-				else {
-					dom = new DOMParser().parseFromString(r.responseText, 'text/xml');
-					p = new XSLTProcessor();
-					p.importStylesheet(dom);
-				}
-				me.self.xsltProcessor = p;
-				Ext.callback(cb, scope || me, [p]);
-			}
-		};
-
-		Ext.Ajax.request(req);
+		return Service.request(me.xslUrl)
+				.then(function(text) {
+					return Promise.resolve()
+							.then(me._hasStandardParts)
+							.then(function() {
+								return me._buildProcessor(text);
+							//IE doesn't have DOMParser AND XSLTProcessor as top level objects.
+							}, function() {
+								return me._ieBuildProcessor(text);
+							});
+				})
+				.done(function(p) {
+					me.self.xsltProcessor = p;
+					return p;
+				});
 	}
 });
