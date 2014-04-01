@@ -314,8 +314,8 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		this.isMasked = false;
 	},
 
-	
-	onAnimationEnd: function(){
+
+	onAnimationEnd: function() {
 		this.maybeLoadData();
 	},
 
@@ -391,14 +391,14 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	},
 
 
-	highlightAtTime: function(seconds){
+	highlightAtTime: function(seconds) {
 		var cmp = this.down('video-transcript'),
 			cEl = cmp.el && cmp.el.down('.current'),
 			scrollingEl = this.el.getScrollingEl(),
 			tEl = cmp && cmp.getElementAtTime && cmp.getElementAtTime(seconds);
 		//if we have an element for that time and its not the time we just highlighted
-		if(tEl && this.currentTime !== seconds){
-			if(cEl){
+		if (tEl && this.currentTime !== seconds) {
+			if (cEl) {
 				cEl.removeCls('current');
 			}
 
@@ -498,7 +498,10 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	showAnnotationView: function(store) {
 		var me = this, classList = 'presentation-note-slider annotation-view dark';
 		if (!this.annotationView) {
-			classList += (this.accountForScrollbars)? ' scroll-margin-right' : '';
+			classList += (this.accountForScrollbars) ? ' scroll-margin-right' : '';
+			if (Ext.is.iOS) {
+				classList += ' scrollable';
+			}
 			this.annotationView = this.add({
 				xtype: 'annotation-view',
 				floating: true,
