@@ -23,7 +23,12 @@
 		list-style-type:none;
 		margin: 0; padding: 0 30px;
 
+		.label:nth-child(2n):not(.total) {
+			text-align: right;
+		}
+
 		.label {
+			text-align: left;
 			list-style-type:none;
 			position: static;
 			float: left;
