@@ -12,7 +12,7 @@ Ext.define('NextThought.view.courseware.reports.View', {
 		customScroll: 'NextThought.mixins.CustomScroll'
 	},
 
-	ids: ['course-report', 'student-report', 'forum-report', 'topic-report'], //assignment-report
+	ids: ['course-report', 'student-report', 'forum-report', 'topic-report', 'assignment-report'], //assignment-report
 
 	configMap: {
 		'course-report': {
@@ -73,6 +73,24 @@ Ext.define('NextThought.view.courseware.reports.View', {
 			xtype: 'course-report-gif',
 			id: 'topic-report',
 			title: 'Discussion Reports',
+			about: Ext.DomHelper.markup({tag: 'span', cn: [
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				'This is a really long description with multiple sentences',
+				{tag: 'a', cls: 'target', html: 'view'}
+			]}),
+			src: 'resources/images/elements/report_discussion.gif'
+		},
+		'assignment-report': {
+			xtype: 'course-report-gif',
+			id: 'assignment-report',
+			title: 'Assignment Reports',
 			about: Ext.DomHelper.markup({tag: 'span', cn: [
 				'This is a really long description with multiple sentences',
 				'This is a really long description with multiple sentences',
