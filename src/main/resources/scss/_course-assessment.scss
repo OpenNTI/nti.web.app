@@ -251,7 +251,7 @@ canvas.x-component-course-assessment {
 			.report {
 				display: none;
 				top: 22px;//60/2 - 16/2
-				right: 20px;
+				right: 31px;
 				@include icon('reports-gray_hover', $position:absolute);
 
 				&:hover {
