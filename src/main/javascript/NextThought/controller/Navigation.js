@@ -562,7 +562,15 @@ Ext.define('NextThought.controller.Navigation', {
 		var me = this;
 
 		if (obj.isPageinfo) {
-			return me.handleNavigationToContent.bind(me);
+			return function(obj, fragment) {
+				function scroll(content) {
+					if (content && fragment) {
+						content.getScroll().toTarget(fragment);
+					}
+				}
+
+				me.fireEvent('set-location', obj, scroll);
+			}
 		}
 
 		if (obj instanceof NextThought.model.Note) {

@@ -608,6 +608,33 @@ Ext.define('NextThought.controller.CourseWare', {
 	},
 
 
+	getHandlerForNavigationToObject: function(obj, fragment) {
+		var me = this;
+
+		if (obj instanceof NextThought.model.assessment.Assignment) {
+			return function(obj, fragment) {
+				var catalogEntry = CourseWareUtils.courseForNtiid(obj.getId());
+
+				CourseWareUtils.findCourseBy(catalogEntry.findByMyCourseInstance())
+					.done(function(course) {
+						var instance = course.get('CourseInstance');
+
+						instance.fireNavigationEvent(me)
+							.done(function() {
+								me.onNavigateToAssignment(obj.getId());
+							})
+							.fail(function(reason) {
+								console.error(reason);
+							});
+					})
+					.fail(function(reason) {
+						console.error(reason);
+					});
+			};
+		}
+	},
+
+
 	onNavigateToForum: function(board, course, silent) {
 		if (!course) { return; }
 
