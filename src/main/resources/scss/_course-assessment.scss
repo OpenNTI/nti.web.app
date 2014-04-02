@@ -202,6 +202,10 @@ canvas.x-component-course-assessment {
 
 			&.over, &.selected {
 				background: #fafafa;
+
+				.report{
+					display: block;
+				}
 			}
 
 			&.completed {
@@ -241,6 +245,17 @@ canvas.x-component-course-assessment {
 
 				.correct {
 					color: $primary-green;
+				}
+			}
+
+			.report {
+				display: none;
+				top: 22px;//60/2 - 16/2
+				right: 20px;
+				@include icon('reports-gray_hover', $position:absolute);
+
+				&:hover {
+					@include icon('reports-blue_hover', $position:absolute);
 				}
 			}
 		}

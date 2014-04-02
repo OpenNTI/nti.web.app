@@ -63,7 +63,7 @@ Ext.define('NextThought.ux.IframeWindow', {
 
 		var url = getURL((this.link && this.link.href) || this.link),
 			save = this.down('component[save]'),
-			extraParams = '#view=FitH&toolbar=0&navpanes=0&statusbar=0&page=2';
+			extraParams = '#view=FitH&toolbar=0&navpanes=0&statusbar=0&page=1';
 
 		this.down('component[cls=iframe]').autoEl.src = url.substr(-3, 3) === 'pdf' ? url + extraParams : url;
 		save.autoEl.href = url;

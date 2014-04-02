@@ -48,7 +48,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			cls: 'header',
 			cn: [
 				{ cls: 'controls', cn: [
-					{ tag: 'a', href: '#', cls: 'reports', html: 'Reports'},
+					//{ tag: 'a', href: '#', cls: 'reports', html: 'Reports'},
 					{ tag: 'a', href: '{exportFilesLink}', cls: 'download button hidden', html: 'Download Files'},
 					{ tag: 'a', href: '#request_change', cls: 'email button', html: 'Request a Change'}
 				]},
@@ -185,18 +185,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			this._showMask();
 		}
 		this.syncFilterToUI();
-
-		if (reportLinks && reportLinks.length > 0 && isFeature('analytic-reports')) {
-			this.mon(reportsEl, 'click', function() {
-				var menu = Ext.widget('report-menu', {
-						links: reportLinks,
-						showIfOne: true,
-						showByEl: reportsEl
-					});
-			});
-		} else {
-			reportsEl.destroy();
-		}
 	},
 
 

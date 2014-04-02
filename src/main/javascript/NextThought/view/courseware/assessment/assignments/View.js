@@ -207,7 +207,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 			{name: 'total', type: 'int'},
 			{name: 'item', type: 'auto'},
 			{name: 'submittedCount', type: 'int'},
-			{name: 'enrolledCount', type: 'int'}
+			{name: 'enrolledCount', type: 'int'},
+			{name: 'reportLinks', type: 'auto'}
 		];
 	},
 
@@ -338,7 +339,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 		function collect(o) {
 			if (o.doNotShow()) { return; }
 			var id = o.getId(), node,
-				h = history && history.getItem(id);
+				h = history && history.getItem(id),
+				gradeBookEntry = o.getGradeBookEntry();
 
 			lesson = ContentUtils.getLineage(o.get('containerId'));//this function is in need to go asynchronous...but i need it here. :(
 			lesson.pop();//discard the root
@@ -354,7 +356,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 			lesson = node + '|' + lesson.reverse().join('|');
 
-
 			raw.push({
 				id: id,
 				containerId: o.get('containerId'),
@@ -369,7 +370,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 				total: o.tallyParts(),
 				submittedCount: o.get('SubmittedCount') || 0,
-				enrolledCount: d.instance.get('TotalEnrolledCount')
+				enrolledCount: d.instance.get('TotalEnrolledCount'),
+				reportLinks: gradeBookEntry && gradeBookEntry.getReportLinks()
 			});
 		}
 

@@ -3,6 +3,10 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.List', {
 	alias: 'widget.course-assessment-assignment-admin-list',
 	cls: 'assignment-list admin',
 
+	requires: [
+		'NextThought.view.menus.Reports'
+	],
+
 	view: 'admin',
 
 	renderTpl: Ext.DomHelper.markup([
@@ -23,6 +27,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.List', {
 							{ cls: 'score', cn: [
 								{ tag: 'span', cls: 'completed c{submittedCount}', html: '{submittedCount}'},
 								' / {enrolledCount}'
+							]},
+							{ tag: 'tpl', 'if': 'this.hasReportLink(values)', cn: [
+								{ cls: 'report'}
 							]},
 							{ cls: 'name', html: '{name:htmlEncode}'},
 							{ cls: 'status', cn: [
@@ -48,7 +55,26 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.List', {
 
 				getDueDate: function(values) {
 					return this.ownerCmp.getDueDate(values);
+				},
+
+				hasReportLink: function(values) {
+					return values.reportLinks && values.reportLinks.length;
 				}
-			})
+			}),
+
+	onItemClick: function(record, node, index, e) {
+		var link = e.getTarget('.report');
+
+		if (link) {
+			e.stopEvent();
+			Ext.widget('report-menu', {
+				links: record.get('reportLinks'),
+				showIfOne: true,
+				showByEl: link
+			});
+
+			return false;
+		}
+	}
 
 });
