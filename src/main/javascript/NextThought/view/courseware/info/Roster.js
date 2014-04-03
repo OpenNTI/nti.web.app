@@ -160,7 +160,7 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 		this.filterMenu.setState('*');
 
 		if (Ext.isEmpty(roster) || !roster) {
-			if (this.store) {this.store.removeAll();}
+			if (this.store) {this.store.destroyStore();}
 			return;
 		}
 
