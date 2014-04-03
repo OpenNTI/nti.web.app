@@ -323,7 +323,7 @@ Ext.define('NextThought.util.Anchors', {
 
 			//console.debug('Given an empty content range description, returning a range wrapping the container', searchWithin);
 			resultRange = docElement.createRange();
-			resultRange.selectNodeContents(searchWithin);
+			resultRange.selectNode(searchWithin);
 			return resultRange;
 		},
 
