@@ -1,0 +1,21 @@
+//iPad Specific styling
+@media only screen and (device-width: 768px) {
+  .topic-comment{
+	.like:not(.on):not(.liked) {
+	  visibility: visible !important;
+	}
+	&:not(:hover){
+	  .wrap{
+		.meta{
+		  .datetime.nodot{
+			visibility: visible !important;
+		  }
+		}
+	  }
+	}
+  }
+
+  .scrollable {
+	-webkit-overflow-scrolling: touch;
+  }
+}

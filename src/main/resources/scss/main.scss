@@ -73,6 +73,8 @@
 
 @import "static-resources";
 
+@import "ipad";
+
 .x-panel-default,
 .x-border-layout-ct { background: inherit; }
 
@@ -132,9 +134,6 @@ input:-moz-placeholder { @include placeholder-style(); }
 	overflow: hidden !important;
 }
 
-.scrollable {
-	-webkit-overflow-scrolling: touch;
-}
 
 
 .empty-state{
