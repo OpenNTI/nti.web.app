@@ -16,6 +16,7 @@ Ext.define('NextThought.view.forums.hierarchy.View', {
 	// body: { xtype: 'forums-hierarchy-body'},
 
 	storeCfg: {},
+	storeExtraParams: {},
 
 
 	afterRender: function() {
@@ -61,7 +62,7 @@ Ext.define('NextThought.view.forums.hierarchy.View', {
 
 
 	setCurrent: function(record) {
-		var store = record.buildContentsStore('', this.storeCfg);
+		var store = record.buildContentsStore('', this.storeCfg, this.storeExtraParams);
 
 		this.currentRecord = record;
 		this.store = store;

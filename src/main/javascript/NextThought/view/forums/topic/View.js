@@ -22,6 +22,18 @@ Ext.define('NextThought.view.forums.topic.View', {
 
 	model: 'NextThought.model.forums.CommunityHeadlineTopic',
 
+	setExtraParams: function(record) {
+		var topicViewStore = Ext.getStore(record.getContentsStoreId('', 'topic-list-view'));
+
+		this.storeExtraParams = topicViewStore.proxy.extraParams;
+	},
+
+	setCurrent: function(record) {
+		this.setExtraParams(record);
+
+		this.callParent(arguments);
+	},
+
 
 	setCurrentBody: function() {
 		this.callParent(arguments);
@@ -35,7 +47,8 @@ Ext.define('NextThought.view.forums.topic.View', {
 
 
 	showEditor: function(topic, topicList, closeCallback) {
-		var store = topicList.buildContentsStore('', this.storeCfg),
+		this.setExtraParams(topicList);
+		var store = topicList.buildContentsStore('', this.storeCfg, this.storeExtraParams),
 			pageSource = this.getPageSource(null);
 
 		if (this.body.showEditor(topic, topicList, pageSource, closeCallback)) {

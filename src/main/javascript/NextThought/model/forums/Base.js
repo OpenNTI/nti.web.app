@@ -11,14 +11,16 @@ Ext.define('NextThought.model.forums.Base', {
 		{name: 'searchTerm', type: 'string', persist: false, defaultValue: ''}
 	],
 
-	getContentsStoreId: function() {
-		return this.get('Class') + '-' + this.get('NTIID');
+	getContentsStoreId: function(prefix, suffix) {
+		prefix = prefix || '';
+		suffix = suffix || '';
+		return prefix + this.get('Class') + '-' + this.get('NTIID') + suffix;
 	},
 
 
 	buildContentsStore: function(idSuffix, cfg, extraParams) {
 		var store,
-			id = this.getContentsStoreId() + idSuffix;
+			id = this.getContentsStoreId('', idSuffix);
 
 		store = Ext.getStore(id) || NextThought.store.NTI.create(Ext.apply({
 			storeId: id,
