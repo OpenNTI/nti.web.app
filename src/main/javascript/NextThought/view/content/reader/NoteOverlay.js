@@ -543,7 +543,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	rangeForLineInfo: function(line, style) {
 		var range = line.range,
-				maybeContainer = range.commonAncestorContainer ? Ext.fly(range.commonAncestorContainer) : null,
+				maybeContainer = range.commonAncestorContainer || null,
 				containerSelector = 'object[data-nti-container]',
 				container, c;
 
@@ -556,10 +556,11 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		if (range.startContainer === range.endContainer
 				&& range.startContainer.nodeType !== Node.TEXT_NODE
 				&& range.startOffset + 1 === range.endOffset) {
-			maybeContainer = Ext.fly(range.startContainer.childNodes[range.startOffset]);
+			maybeContainer = range.startContainer.childNodes[range.startOffset];
 		}
 
 		//OK we are style suppressed
+		maybeContainer = Ext.fly(maybeContainer);
 		container = maybeContainer.is(containerSelector) ? maybeContainer : maybeContainer.up(containerSelector);
 		c = container ? container.getAttribute('data-ntiid') : null;
 		if (container && c) {
