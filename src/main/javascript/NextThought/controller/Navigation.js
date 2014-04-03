@@ -545,6 +545,11 @@ Ext.define('NextThought.controller.Navigation', {
 
 		getHandlers
 			.done(function(handlers) {
+				if (Ext.isEmpty(handlers)) {
+					console.error('No handlers for object navigation:', obj);
+					return;
+				}
+
 				if (handlers.length > 1) {
 					console.error('More than one handler for object navigation:', handlers.length, obj);
 					return;
@@ -561,7 +566,7 @@ Ext.define('NextThought.controller.Navigation', {
 	getHandlerForNavigationToObject: function(obj, fragment) {
 		var me = this;
 
-		if (obj.isPageinfo) {
+		if (obj.isPageInfo) {
 			return function(obj, fragment) {
 				function scroll(content) {
 					if (content && fragment) {
@@ -570,13 +575,13 @@ Ext.define('NextThought.controller.Navigation', {
 				}
 
 				me.fireEvent('set-location', obj, scroll);
-			}
+			};
 		}
 
 		if (obj instanceof NextThought.model.Note) {
 			return function(obj) {
 				me.navigate(obj.get('ContainerId'), obj);
-			}
+			};
 		}
 
 		return false;
