@@ -13,7 +13,8 @@ Ext.define('NextThought.view.annotations.Base', {
 
 	statics: {
 		NOT_FOUND: -3,
-		NOT_VISIBLE: -4
+		NOT_VISIBLE: -4,
+		HIDDEN: undefined
 	},
 
 	onClassExtended: function(cls, data, hooks) {
