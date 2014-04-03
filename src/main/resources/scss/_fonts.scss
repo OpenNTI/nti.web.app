@@ -509,6 +509,225 @@
     font-style: normal;
 }
 
+//Latin Modern fonts for mathjax renderings
+@font-face {
+    font-family: 'LatinModernMathJax_Alphabets';
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Alphabets-Regular.eot');
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Alphabets-Regular.eot?#iefix') format('embedded-opentype'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Alphabets-Regular.woff') format('woff'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Alphabets-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'LatinModernMathJax_Arrows';
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Arrows-Regular.eot');
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Arrows-Regular.eot?#iefix') format('embedded-opentype'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Arrows-Regular.woff') format('woff'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Arrows-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'LatinModernMathJax_DoubleStruck';
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_DoubleStruck-Regular.eot');
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_DoubleStruck-Regular.eot?#iefix') format('embedded-opentype'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_DoubleStruck-Regular.woff') format('woff'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_DoubleStruck-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'LatinModernMathJax_Fraktur';
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Fraktur-Regular.eot');
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Fraktur-Regular.eot?#iefix') format('embedded-opentype'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Fraktur-Regular.woff') format('woff'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Fraktur-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'LatinModernMathJax_Latin';
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Latin-Regular.eot');
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Latin-Regular.eot?#iefix') format('embedded-opentype'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Latin-Regular.woff') format('woff'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Latin-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'LatinModernMathJax_Main';
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Main-Regular.eot');
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Main-Regular.eot?#iefix') format('embedded-opentype'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Main-Regular.woff') format('woff'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Main-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'LatinModernMathJax_Marks';
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Marks-Regular.eot');
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Marks-Regular.eot?#iefix') format('embedded-opentype'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Marks-Regular.woff') format('woff'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Marks-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'LatinModernMathJax_Misc';
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Misc-Regular.eot');
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Misc-Regular.eot?#iefix') format('embedded-opentype'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Misc-Regular.woff') format('woff'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Misc-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'LatinModernMathJax_Monospace';
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Monospace-Regular.eot');
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Monospace-Regular.eot?#iefix') format('embedded-opentype'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Monospace-Regular.woff') format('woff'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Monospace-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'LatinModernMathJax_NonUnicode';
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_NonUnicode-Regular.eot');
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_NonUnicode-Regular.eot?#iefix') format('embedded-opentype'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_NonUnicode-Regular.woff') format('woff'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_NonUnicode-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'LatinModernMathJax_Normal';
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Normal-Regular.eot');
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Normal-Regular.eot?#iefix') format('embedded-opentype'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Normal-Regular.woff') format('woff'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Normal-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'LatinModernMathJax_Operators';
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Operators-Regular.eot');
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Operators-Regular.eot?#iefix') format('embedded-opentype'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Operators-Regular.woff') format('woff'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Operators-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'LatinModernMathJax_SansSerif';
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_SansSerif-Regular.eot');
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_SansSerif-Regular.eot?#iefix') format('embedded-opentype'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_SansSerif-Regular.woff') format('woff'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_SansSerif-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'LatinModernMathJax_Script';
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Script-Regular.eot');
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Script-Regular.eot?#iefix') format('embedded-opentype'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Script-Regular.woff') format('woff'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Script-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'LatinModernMathJax_Shapes';
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Shapes-Regular.eot');
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Shapes-Regular.eot?#iefix') format('embedded-opentype'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Shapes-Regular.woff') format('woff'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Shapes-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'LatinModernMathJax_Size1';
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Size1-Regular.eot');
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Size1-Regular.eot?#iefix') format('embedded-opentype'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Size1-Regular.woff') format('woff'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Size1-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'LatinModernMathJax_Size2';
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Size2-Regular.eot');
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Size2-Regular.eot?#iefix') format('embedded-opentype'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Size2-Regular.woff') format('woff'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Size2-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'LatinModernMathJax_Size3';
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Size3-Regular.eot');
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Size3-Regular.eot?#iefix') format('embedded-opentype'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Size3-Regular.woff') format('woff'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Size3-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'LatinModernMathJax_Size4';
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Size4-Regular.eot');
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Size4-Regular.eot?#iefix') format('embedded-opentype'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Size4-Regular.woff') format('woff'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Size4-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'LatinModernMathJax_Size5';
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Size5-Regular.eot');
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Size5-Regular.eot?#iefix') format('embedded-opentype'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Size5-Regular.woff') format('woff'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Size5-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'LatinModernMathJax_Size6';
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Size6-Regular.eot');
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Size6-Regular.eot?#iefix') format('embedded-opentype'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Size6-Regular.woff') format('woff'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Size6-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'LatinModernMathJax_Size7';
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Size7-Regular.eot');
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Size7-Regular.eot?#iefix') format('embedded-opentype'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Size7-Regular.woff') format('woff'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Size7-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'LatinModernMathJax_Symbols';
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Symbols-Regular.eot');
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Symbols-Regular.eot?#iefix') format('embedded-opentype'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Symbols-Regular.woff') format('woff'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Symbols-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'LatinModernMathJax_Variants';
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Variants-Regular.eot');
+    src: url('../lib/fonts/lmmathjax/LatinModernMathJax_Variants-Regular.eot?#iefix') format('embedded-opentype'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Variants-Regular.woff') format('woff'),
+         url('../lib/fonts/lmmathjax/LatinModernMathJax_Variants-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+// Latin Modern fonts for normal text
 @font-face {
     font-family: 'Latin Modern Roman';
     src: url('../lib/fonts/lmroman/lmroman10-bold-webfont.eot');
