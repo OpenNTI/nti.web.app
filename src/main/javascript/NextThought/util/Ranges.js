@@ -451,6 +451,11 @@ Ext.define('NextThought.util.Ranges', {
 				}
 				rect = node.getBoundingClientRect();
 			}
+
+			//if it is still the zero rect and the common ancestor is an object, use the ancestors bounding rect
+			if (RectUtils.isZeroRect(rect) && r.commonAncestorContainer && r.commonAncestorContainer.tagName === 'OBJECT') {
+				rect = r.commonAncestorContainer.getBoundingClientRect();
+			}
 		}
 		catch (er) {
 			console.warn(Globals.getError(er));
