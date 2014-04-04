@@ -23,9 +23,9 @@ Ext.define('NextThought.view.forums.topic.View', {
 	model: 'NextThought.model.forums.CommunityHeadlineTopic',
 
 	setExtraParams: function(record) {
-		var topicViewStore = Ext.getStore(record.getContentsStoreId('', 'topic-list-view'));
+		var store = Ext.getStore(record.getContentsStoreId('', 'topic-list-view'));
 
-		this.storeExtraParams = topicViewStore.proxy.extraParams;
+		this.storeExtraParams = store && store.getProxy().extraParams;
 	},
 
 	setCurrent: function(record) {
