@@ -1,7 +1,7 @@
-Ext.define('NextThought.view.account.history.mixins.Grade', {
-	extend: 'NextThought.view.account.history.mixins.Base',
+Ext.define('NextThought.view.account.notifications.types.Grade', {
+	extend: 'NextThought.view.account.notifications.types.Base',
 	keyVal: 'application/vnd.nextthought.grade',
-	alias: 'widget.history-item-grade',
+	alias: 'widget.notification-item-grade',
 
 	showCreator: false,
 	verb: 'Grade received for',

@@ -1,6 +1,6 @@
-Ext.define('NextThought.view.account.history.mixins.NoteNotification', {
-	extend: 'NextThought.view.account.history.mixins.Base',
-	alias: 'widget.history-item-note-notification',
+Ext.define('NextThought.view.account.notifications.types.Note', {
+	extend: 'NextThought.view.account.notifications.types.Base',
+	alias: 'widget.notification-item-note',
 	keyVal: 'application/vnd.nextthought.note',
 
 	showCreator: true,

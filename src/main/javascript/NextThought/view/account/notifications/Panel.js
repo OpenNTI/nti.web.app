@@ -8,9 +8,13 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		'NextThought.store.PageItem',
 		'NextThought.util.Time',
 		'NextThought.view.account.contacts.management.Popout',
-		'NextThought.view.account.history.mixins.*'
+		'NextThought.view.account.notifications.types.*'
 
 	],
+
+
+	//Focus tab from user click, and clicking on an item or loading more will clear the badge.
+
 
 	ISCHANGE: /change$/,
 
@@ -33,6 +37,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 
 
 	itemSelector: '.history',
+
 
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag: 'tpl', 'for': '.', cn: [
@@ -98,14 +103,12 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 
 
 	initComponent: function() {
-		var Types = NextThought.view.account.history.mixins;
+		var Types = NextThought.view.account.notifications.types;
 		this.callParent(arguments);
 		this.types = [
-			Types.NoteNotification.create({panel: this}),
-			Types.Highlight.create({panel: this}),
+			Types.Note.create({panel: this}),
 			Types.ForumTopic.create({panel: this}),
 			Types.BlogEntry({panel: this}),
-			Types.Bookmark.create({panel: this}),
 			Types.Grade.create({panel: this}),
 			Types.Feedback.create({panel: this}),
 			Types.ForumComment.create({panel: this}),
