@@ -20,15 +20,7 @@ Ext.define('NextThought.view.courseware.reports.View', {
 			id: 'course-report',
 			title: 'Course Report',
 			about: Ext.DomHelper.markup({tag: 'span', cn: [
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences'
+				'The Course Summary Report includes information about student enrollment, self-assessments, assignments, student activity, and discussions.'
 			]}),
 			courseNumber: '',
 			courseName: ''
@@ -38,16 +30,9 @@ Ext.define('NextThought.view.courseware.reports.View', {
 			id: 'student-report',
 			title: 'Student Reports',
 			about: Ext.DomHelper.markup({tag: 'span', cn: [
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				{tag: 'a', cls: 'target', html: 'view'}
+				'The Student Participation Report includes information about a student\'s forum and discussion participation as ' +
+				'well as assignments. To view or download reports for individual students visit the ',
+				{tag: 'a', cls: 'target', html: 'course roster'}, '.'
 			]}),
 			src: 'resources/images/elements/report_student.gif'
 		},
@@ -56,16 +41,9 @@ Ext.define('NextThought.view.courseware.reports.View', {
 			id: 'forum-report',
 			title: 'Forum Reports',
 			about: Ext.DomHelper.markup({tag: 'span', cn: [
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				{tag: 'a', cls: 'target', html: 'view'}
+				'The Forum Participation Report includes information about weekly forum participation, top commenters, and comment activity per student. ' +
+				'You can view and download forum reports from the ',
+				{tag: 'a', cls: 'target', html: 'Discussions tab'}, '.'
 			]}),
 			src: 'resources/images/elements/report_forum.gif'
 		},
@@ -74,16 +52,9 @@ Ext.define('NextThought.view.courseware.reports.View', {
 			id: 'topic-report',
 			title: 'Discussion Reports',
 			about: Ext.DomHelper.markup({tag: 'span', cn: [
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				{tag: 'a', cls: 'target', html: 'view'}
+				'The Discussion Participation Report includes information about weekly participation, top commenters, and comment activity per student. ' +
+				'These reports can be found alongside each ',
+				{tag: 'a', cls: 'target', html: 'discussion'}, '.'
 			]}),
 			src: 'resources/images/elements/report_discussion.gif'
 		},
