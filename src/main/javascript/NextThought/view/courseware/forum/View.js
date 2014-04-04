@@ -85,7 +85,7 @@ Ext.define('NextThought.view.courseware.forum.View', {
 	restoreState: function(forum, topic, comment) {
 		if (!forum) { return; }
 		forum.comment = comment;
-		me.fireEvent('show-topic-list', forum, topic);
+		this.fireEvent('show-topic-list', forum, topic);
 	},
 
 
