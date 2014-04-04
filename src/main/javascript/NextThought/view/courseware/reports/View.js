@@ -103,7 +103,7 @@ Ext.define('NextThought.view.courseware.reports.View', {
 				'This is a really long description with multiple sentences',
 				{tag: 'a', cls: 'target', html: 'view'}
 			]}),
-			src: 'resources/images/elements/report_discussion.gif'
+			src: 'resources/images/elements/assignment_report.gif'
 		}
 	},
 
