@@ -58,7 +58,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.List', {
 				},
 
 				hasReportLink: function(values) {
-					return values.reportLinks && values.reportLinks.length;
+					return values.reportLinks && values.reportLinks.length && isFeature('analytic-reports') && false;
 				}
 			}),
 
