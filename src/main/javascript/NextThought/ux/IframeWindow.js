@@ -9,8 +9,9 @@ Ext.define('NextThought.ux.IframeWindow', {
 	modal: true,
 	header: false,
 	items: [{
-		xtype: 'component',
-		cls: 'iframe',
+		xtype: 'box',
+		itemId: 'iframe',
+		cls: 'iframe loading',
 		autoEl: {
 			tag: 'iframe',
 			src: '{url}',
@@ -44,7 +45,7 @@ Ext.define('NextThought.ux.IframeWindow', {
 			defaults: { xtype: 'button', ui: 'blue', scale: 'large'},
 			items: [
 				//{text: 'Save', cls: 'x-btn-flat-large save', action: 'save', href: '{url}', style: { float: 'left'}},
-				{ xtype: 'component', cls: 'iframe-save', save: true, autoEl: { tag: 'a', href: '{url}', html: 'Save', target: '_blank'}},
+				{ xtype: 'box', cls: 'iframe-save', save: true, autoEl: { tag: 'a', href: '{url}', html: 'Save', target: '_blank'}},
 				{
 					text: 'Close',
 					cls: 'x-btn-blue-large dismiss',
@@ -62,12 +63,34 @@ Ext.define('NextThought.ux.IframeWindow', {
 		this.callParent(arguments);
 
 		var url = getURL((this.link && this.link.href) || this.link),
-			save = this.down('component[save]'),
+			save = this.down('box[save]'),
+			iframe = this.down('box[itemId=iframe]'),
 			extraParams = '#view=FitH&toolbar=0&navpanes=0&statusbar=0&page=1';
 
-		this.down('component[cls=iframe]').autoEl.src = url.substr(-3, 3) === 'pdf' ? url + extraParams : url;
+		iframe.autoEl.src = url.substr(-3, 3) === 'pdf' ? url + extraParams : url;
 		save.autoEl.href = url;
 		save.autoEl.html = this.saveText || 'Save';
+
+		iframe.on({
+			afterRender: function(cmp) {
+				var parent = cmp.el.parent(),
+					loaded = false,
+					masked = false,
+					p = wait(100).then(function() {
+						if (!loaded) {
+							masked = true;
+							parent.mask('Loading...', 'navigation');
+						}
+					});
+
+				cmp.el.on('load', function() {
+					loaded = true;
+					if (masked) {
+						p.then(parent.unmask.bind(parent));
+					}
+				});
+			}
+		});
 
 		this.on('show', this.addCustomMask, this);
 		this.on('close', this.removeCustomMask, this);
@@ -87,16 +110,16 @@ Ext.define('NextThought.ux.IframeWindow', {
 
 
 	fillScreen: function() {
-		var maxWidth = Ext.Element.getViewWidth() - 50, //window width - padding
-			maxHeight = Ext.Element.getViewHeight() - 20 - 55, //window height - padding - bottom bar
-			aspect = 842 / 595, //width / height
-			height, width;
+		var aspect = 842 / 595, //width / height
+			height, width,
+			MAX_WIDTH = (Ext.Element.getViewWidth() - 50), //window width - padding
+			MAX_HEIGHT = (Ext.Element.getViewHeight() - 20 - 55); //window height - padding - bottom bar
 
-		height = maxHeight;
-		width = aspect * height;
+		height = MAX_HEIGHT;
+		width = aspect * MAX_HEIGHT;
 
-		while (width >= maxWidth) {
-			height = height - 1;
+		while (width >= MAX_WIDTH) {
+			height--;
 			width = aspect * height;
 		}
 
