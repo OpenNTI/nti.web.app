@@ -537,8 +537,10 @@ canvas.x-component-course-assessment {
 					content: '';
 					overflow: hidden;
 					position: absolute;
-					top: 1.8em;
+					top: 2.5em;
 					right: 1.7em;
+					left: auto;
+					background: none;
 					@include arrow($pointFrom:top, $width: 8px, $height: 5px, $color: $secondary-grey);
 				}
 			}
