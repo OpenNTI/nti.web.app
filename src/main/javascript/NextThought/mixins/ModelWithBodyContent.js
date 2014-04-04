@@ -146,7 +146,8 @@ Ext.define('NextThought.mixins.ModelWithBodyContent', {
 				}]);
 			}
 			else if (typeof o === 'string') {
-				text.push(o.replace(/\s*(style|class)=".*?"\s*/ig, ' ').replace(/<span.*?>&nbsp;<\/span>/ig, '&nbsp;'));
+				text.push(o.replace(/\s*(class)=".*?"\s*/ig, ' ')
+						.replace(/<span.*?>&nbsp;<\/span>/ig, '&nbsp;'));
 				render(i - 1);
 			}
 			else {
