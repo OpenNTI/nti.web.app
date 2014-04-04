@@ -7,7 +7,7 @@ Ext.define('NextThought.view.account.notifications.types.ForumTopic', {
 
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{
-			cls: 'history post',
+			cls: 'item post',
 			cn: [
 				{cls: 'title', html: '{title} by:'},
 				{cls: 'author', html: '{creatorName}'},
@@ -24,7 +24,7 @@ Ext.define('NextThought.view.account.notifications.types.ForumTopic', {
 			rec.user = $AppConfig.userObject;
 		}
 		else {
-			UserRepository.getUser(u, function(user) {
+			UserRepository.getUser(u).then(function(user) {
 				rec.set({'creatorName': user.getName()});
 				rec.user = user;
 			});

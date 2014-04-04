@@ -24,7 +24,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		tooltip: 'Notifications'
 	},
 
-	ui: 'history',
+	ui: 'notifications',
 	cls: 'user-data-panel scrollable',
 	preserveScrollOnRefresh: true,
 	deferEmptyText: true,
@@ -36,12 +36,12 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 	]),
 
 
-	itemSelector: '.history',
+	itemSelector: '.item',
 
 
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag: 'tpl', 'for': '.', cn: [
-			{tag: 'tpl', 'if': 'values.divider', cn: { cls: 'divider history', cn: [{tag: 'span', html: '{label}'}] }},
+			{tag: 'tpl', 'if': 'values.divider', cn: { cls: 'divider item', cn: [{tag: 'span', html: '{label}'}] }},
 			{tag: 'tpl', 'if': '!values.divider', cn: ['{%this.getTemplateFor(values,out)%}']}
 		]}
 	]), {
@@ -140,7 +140,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 			}
 			return;
 		}
-		this.badge = Ext.DomHelper.append(tab.getEl(), {cls: 'badge', html: this.badgeValue},true);
+		this.badge = Ext.DomHelper.append(tab.getEl(), {cls: 'badge red', html: this.badgeValue},true);
 		delete tab.badge;
 	},
 
@@ -182,7 +182,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 
 
 	setBadgeValue: function(count) {
-		var v = count || '&nbsp;';
+		var v = count || '';
 
 		this.badgeValue = v;
 

@@ -120,6 +120,27 @@
 			width: 15px;
 		}
 
+
+		.badge.red {
+			position: absolute;
+			border-radius: 10em;
+			background: $primary-red;
+			color: #fff;
+
+			top: 6px;
+			right: auto;
+			left: 55%;
+			line-height: 1;
+			font-size: 0.55em;
+			font-weight: 500;
+			padding: 0.3em 0.5em;
+			border: 2px solid #ebebec;
+			width: auto;
+			text-indent: 0em;
+
+			&:empty {display: none;}
+		}
+
 		.x-tab-button {
 			position: relative;
 			width: 50px;
@@ -138,7 +159,7 @@
 
 		&.contacts { left: 7px; @include sprite($icons, 'rhp-contacts', $dimensions: true); }
 		&.activity { left: 9px; @include sprite($icons, 'rhp-activity', $dimensions: true); }
-		&.inbox { left: 11px; @include sprite($icons, 'rhp-inbox', $dimensions: true); }
+		&.inbox { left: 14px; top: 16px; @include sprite($icons, 'rhp-notification', $dimensions: true); }
 
 		&.history { left: 10px; @include sprite($icons, 'rhp-history', $dimensions: true); }
 	}
@@ -150,7 +171,7 @@
 		span.x-tab-icon-el{
 			&.contacts { @include sprite($icons, 'rhp-contacts_active', $dimensions: true); }
 			&.activity { @include sprite($icons, 'rhp-activity_active', $dimensions: true); }
-			&.inbox { @include sprite($icons, 'rhp-inbox_active', $dimensions: true); }
+			&.inbox { @include sprite($icons, 'rhp-notification_active', $dimensions: true); }
 
 			&.history { @include sprite($icons, 'rhp-history_active', $dimensions: true); }
 		}

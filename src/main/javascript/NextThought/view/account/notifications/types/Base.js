@@ -5,8 +5,6 @@ Ext.define('NextThought.view.account.notifications.types.Base', {
 
 	showCreator: true,
 	verb: '',
-	previewField: '',
-	quotePreview: true,
 	itemCls: '',
 
 	constructor: function(config) {
@@ -28,30 +26,35 @@ Ext.define('NextThought.view.account.notifications.types.Base', {
 
 		//build the generic tpl
 		var me = this,
-			previewCls = 'preview',
-			prev = me.previewField ? '{' + me.previewField + '}' : '',
-			creator = me.showCreator ? '{Creator:displayName("You")}' : '';
+			previewCls = 'preview';
 
 		if (!me.showCreator) {
 			previewCls += ' link';
 		}
 
-		if (me.quotePreview) {
-			previewCls += ' quote';
-		}
-
 		return new Ext.XTemplate(Ext.DomHelper.markup([
 			{
-				cls: 'history notification {hidden:boolStr("x-hidden")} ' + me.itemCls,
+				cls: 'item notification {hidden:boolStr("x-hidden")} ' + previewCls + ' ' + me.itemCls,
 				cn: [
-					{tag: 'span', cls: 'creator link', html: creator},
-					{tag: 'span', cls: 'verb', html: '{[this.getVerb(values)]}'},
-					{tag: 'span', cls: previewCls, html: prev}
+					{ cls: 'icon', style: {backgroundImage: '{[this.getIcon(values)]}'}},
+					{ cls: 'wrap', cn: [
+						{ tag: 'span', cls: 'creator link', html: '{[this.getName(values)]}'}, ' ',
+						{ tag: 'span', cls: 'verb', html: '{[this.getVerb(values)]}'}, ' ',
+						{ tag: 'time', cls: 'time', datetime: '{CreatedTime:date("c")}', html: '{CreatedTime:ago()}'}
+					]}
 				]
 			}
 		]), {
 			getVerb: function(values) {
 				return me.getVerb(values);
+			},
+
+			getName: function(values) {
+				return me.getDisplayName(values);
+			},
+
+			getIcon: function(values) {
+				return me.getIcon(values);
 			}
 		});
 	},
@@ -61,6 +64,17 @@ Ext.define('NextThought.view.account.notifications.types.Base', {
 		return this.verb;
 	},
 
+	getDisplayName: function(values) {
+		if (!values || !this.showCreator) { return ''; }
+
+		return NTIFormat.displayName(values.Creator || values, 'You');
+	},
+
+	getIcon: function(values) {
+		if (!values || !this.showCreator) { return ''; }
+		return (values && ('url(' + NTIFormat.avatarURL(values.Creator || values) + ')')) || '';
+	},
+
 
 	fillInData: function(rec) {
 		var u = rec.get('Creator');
@@ -68,7 +82,7 @@ Ext.define('NextThought.view.account.notifications.types.Base', {
 		if (isMe(u)) {
 			rec.set('Creator', $AppConfig.userObject);
 		} else {
-			UserRepository.getUser(u, function(user) {
+			UserRepository.getUser(u).then(function(user) {
 				rec.set({'Creator': user});
 			});
 		}
@@ -76,7 +90,6 @@ Ext.define('NextThought.view.account.notifications.types.Base', {
 
 	clicked: function(view, rec) {
 		var cid = rec.get('ContainerId');
-
 		view.fireEvent('navigation-selected', cid, rec);
 	}
 });

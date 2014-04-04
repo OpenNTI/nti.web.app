@@ -25,7 +25,9 @@ Ext.define('NextThought.util.Format', {
 
 
 	avatarURL: function(value) {
-		return (value && value.get && value.get('avatarURL')) || User.BLANK_AVATAR;
+		return (value && value.get && value.get('avatarURL')) ||
+			   (value && value.avatarURL) ||
+			   User.BLANK_AVATAR;
 	},
 
 	boolStr: function(value, trueString, falseString) {
@@ -41,7 +43,7 @@ Ext.define('NextThought.util.Format', {
 			return 'Resolving';
 		}
 
-		return value;
+		return value && (value.displayName || value);
 	},
 
 	pluralIf: function(value) {

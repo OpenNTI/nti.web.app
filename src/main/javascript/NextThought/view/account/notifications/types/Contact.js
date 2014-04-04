@@ -7,17 +7,22 @@ Ext.define('NextThought.view.account.notifications.types.Contact', {
 		'NextThought.view.account.contacts.management.Popout'
 	],
 
-	tpl: new Ext.XTemplate(Ext.DomHelper.markup([
-		{
-			cls: 'history notification contact',
-			cn: [
-				{tag: 'span', cls: 'creator link', html: '{displayName}'},
-				{tag: 'span', cls: 'verb', html: 'added you as a contact'}
-			]
-		}
-	])),
+	verb: 'added you as a contact.',
 
-	fillInData: function() {},
+	fillInData: function(rec) {
+	},
+
+
+	getDisplayName: function(values) {
+		if (!values || !this.showCreator) { return ''; }
+		return NTIFormat.displayName(values, 'You');
+	},
+
+
+	getIcon: function(values) {
+		return (values && ('url(' + NTIFormat.avatarURL(values) + ')')) || '';
+	},
+
 
 	clicked: function(view, rec) {
 		view.fireEvent('show-profile', rec);
