@@ -272,10 +272,10 @@ Ext.define('NextThought.model.Note', {
 			}, null, null, null);
 
 			return;
+		} else {
+			snip = '';
+			t = '';
 		}
-
-		snip = '';
-		t = '';
 
 		Ext.callback(cb, null, [snip, t]);
 	},
