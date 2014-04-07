@@ -39,6 +39,12 @@
 		.creator {
 			color: $primary-grey;
 			font-weight: 600;
+
+			display: inline-block;
+			max-width: 63%;
+			overflow: hidden;
+			vertical-align: top;
+			@include ellipse;
 		}
 
 		.time {
