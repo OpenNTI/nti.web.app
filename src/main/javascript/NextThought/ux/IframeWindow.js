@@ -8,6 +8,11 @@ Ext.define('NextThought.ux.IframeWindow', {
 	layout: 'fit',
 	modal: true,
 	header: false,
+
+	config: {
+		loadingText: 'Loading...'
+	},
+
 	items: [{
 		xtype: 'box',
 		itemId: 'iframe',
@@ -62,7 +67,8 @@ Ext.define('NextThought.ux.IframeWindow', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		var url = getURL((this.link && this.link.href) || this.link),
+		var me = this,
+			url = getURL((this.link && this.link.href) || this.link),
 			save = this.down('box[save]'),
 			iframe = this.down('box[itemId=iframe]'),
 			extraParams = '#view=FitH&toolbar=0&navpanes=0&statusbar=0&page=1';
@@ -79,7 +85,7 @@ Ext.define('NextThought.ux.IframeWindow', {
 					p = wait(100).then(function() {
 						if (!loaded) {
 							masked = true;
-							parent.mask('Loading...', 'navigation');
+							parent.mask(me.getLoadingText(), 'navigation');
 						}
 					});
 

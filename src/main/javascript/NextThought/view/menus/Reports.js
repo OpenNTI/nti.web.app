@@ -66,7 +66,8 @@ Ext.define('NextThought.view.menus.Reports', {
 		var win = Ext.widget('iframe-window', {
 				width: 'max',
 				saveText: 'Open in new window',
-				link: href
+				link: href,
+				loadingText: 'Generating Report...'
 			});
 
 		win.show();
