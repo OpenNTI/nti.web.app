@@ -26,7 +26,7 @@ Ext.define('NextThought.view.account.settings.Preferences', {
 			{
 				tag: 'span',
 				cls: 'not-ready nti-checkbox email',
-				html: 'Send emails periodically of interesting changes',
+				html: 'Send emails periodically of interesting changes.',
 				tabIndex: 0,
 				role: 'button',
 				'aria-role': 'button',
