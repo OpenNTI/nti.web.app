@@ -20,8 +20,8 @@
 			float: left;
 			display: inline-block;
 			position: relative;
-			width: 37px;
-			height: 37px;
+			width: 30px;
+			height: 30px;
 			background: {
 				color: transparent;
 				size: cover;
@@ -30,7 +30,7 @@
 		}
 
 		.wrap {
-			margin-left: 42px;
+			margin-left: 34px;
 			padding-left: 5px;
 			overflow: hidden;
 			position: relative;
@@ -60,7 +60,7 @@
 
 		&.grade {
 			.icon {
-				@include icon('assignment_ontime_small');
+				@include icon('assignment_ontime_small', $top: 1px, $left: 1px);
 			}
 
 			.link {
