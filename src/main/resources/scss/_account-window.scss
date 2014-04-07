@@ -346,38 +346,27 @@
 	}
 
 
-	.video-settings{
+	.account-preferences{
+		padding: 1px 20px;
 
-		.prefer-flash-checkbox{
-			padding: 20px;
-			padding-left: 40px;
-			cursor: pointer;
+		.nti-checkbox {
+			&.not-ready {
+				opacity: 0.5;
+				cursor: default;
+			}
+
 			color: $secondary-grey;
-			font: {
-				family: $font;
-				size: 14px;
-				weight: normal;
-			}
-			&::after{
-				content: ' ';
-				position: absolute;
-				top: 20px; left: 15px;
-				background: $icons no-repeat;
-				@include sprite($icons, 'checkbox-light-unchecked', $dimensions: true);
-			}
+			font: normal normal 0.9em/2 $font;
+		}
 
-			&:hover::after{
-				@include sprite($icons, 'checkbox-light-unchecked_hover', $dimensions: true);
-			}
+		fieldset {
+			border: 1px solid $border-grey;
+			margin: 20px 0 40px;
+		}
 
-			&.checked{
-				&::after{
-					@include sprite($icons, 'checkbox-light-checked', $dimensions: true);
-				}
-				&:hover::after{
-					@include sprite($icons, 'checkbox-light-checked_hover', $dimensions: true);
-				}
-			}
+		legend {
+			color: $secondary-grey;
+			font: normal 600 0.9em $font;
 		}
 	}
 

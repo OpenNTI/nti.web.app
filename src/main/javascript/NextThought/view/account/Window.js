@@ -5,6 +5,7 @@ Ext.define('NextThought.view.account.Window', {
 	requires: [
 		'Ext.toolbar.Spacer',//not sure what below this class needs it, but it synchronously loads if not required. :/
 		'NextThought.view.form.PasswordResetForm',
+		'NextThought.view.account.settings.Preferences',
 		'NextThought.view.account.settings.RandomGravatarPicker',
 		'NextThought.view.account.settings.AvatarChoices',
 		'NextThought.view.account.settings.PictureEditor'
@@ -36,21 +37,16 @@ Ext.define('NextThought.view.account.Window', {
 	constructor: function() {
 		var me = $AppConfig.userObject,
 				canUploadAvatar = Service.canUploadAvatar(),
-				availablePanels = canUploadAvatar
-						? [
+				availablePanels = canUploadAvatar ? [
 									  { xtype: 'avatar-choices' },
 									  { xtype: 'picture-editor'},
 									  { xtype: 'password-reset-form' }
-								  ]
-						: [
+								  ] : [
 									  { xtype: 'random-gravatar-picker' },
 									  { xtype: 'password-reset-form' }
-								  ],
-				canVideoSetting = isFeature('video-settings');
+								  ];
 
-		if (canVideoSetting) {
-			availablePanels.push({xtype: 'video-settings'});
-		}
+		availablePanels.push({xtype: 'account-preferences'});
 
 		this.items = [
 			{
@@ -97,11 +93,11 @@ Ext.define('NextThought.view.account.Window', {
 				layout: { type: 'hbox', align: 'stretch', pack: 'start' },
 
 				items: [
-					canUploadAvatar
-							? {text: 'Edit Profile Picture', associatedPanel: 'avatar-choices', pressed: true}
-							: {text: 'Change Avatar', associatedPanel: 'random-gravatar-picker', pressed: true},
+					canUploadAvatar ?
+						{text: 'Edit Profile Picture', associatedPanel: 'avatar-choices', pressed: true} :
+						{text: 'Change Avatar', associatedPanel: 'random-gravatar-picker', pressed: true},
 					{text: 'Change Password', associatedPanel: 'password-reset-form'},
-					{text: 'Video Settings', associatedPanel: 'video-settings', hidden: !canVideoSetting},
+					{text: 'Preferences', associatedPanel: 'account-preferences'},
 					{ disabled: true, flex: 1 }
 				]
 			},
@@ -148,53 +144,6 @@ Ext.define('NextThought.view.account.Window', {
 			c.getLayout().setActiveItem(p);
 			c[btn.pressed ? 'show' : 'hide']();
 			this.updateLayout();
-		}
-	}
-});
-
-//TODO if this becomse permanant use it somewhere else
-Ext.define('NextThought.view.account.VideoSettings', {
-	extend: 'Ext.Component',
-	alias: 'widget.video-settings',
-
-	cls: 'video-settings',
-
-	renderTpl: Ext.DomHelper.markup({
-										cls: 'prefer-flash-checkbox',
-										html: 'Prefer experimental HTML5 video when possible.',
-										tabIndex: 0,
-										role: 'button'
-									}),
-
-	renderSelectors: {
-		preferFlashEl: '.prefer-flash-checkbox'
-	},
-
-	afterRender: function() {
-		this.callParent(arguments);
-		this.mon(this.preferFlashEl, {
-			scope: this,
-			click: this.checkboxClicked
-		});
-		this.updateCheckbox();
-	},
-
-	updateCheckbox: function() {
-		var me = this;
-		$AppConfig.Preferences.getPreference('WebApp', function(value) {
-			if (value) {
-				me.currentPreference = value;
-				me.preferFlashEl[value.get('preferFlashVideo') ? 'addCls' : 'removeCls']('checked');
-			}
-		});
-	},
-
-	checkboxClicked: function() {
-		var prefer = !this.preferFlashEl.hasCls('checked'); // the dom hasn't updated with the new class yet
-		if (this.currentPreference) {
-			this.currentPreference.set('preferFlashVideo', prefer);
-			this.currentPreference.save();
-			this.preferFlashEl[prefer ? 'addCls' : 'removeCls']('checked');
 		}
 	}
 });

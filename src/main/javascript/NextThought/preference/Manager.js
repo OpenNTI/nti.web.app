@@ -21,11 +21,15 @@ Ext.define('NextThought.preference.Manager', {
 
 		if (value && (value.isFuture || this.hasFutures(value))) {
 			//we haven't loaded it yet or it has sub preferences that haven't been loaded
-			this.loadSubPreference(key, cb, scope);
-		}else {
-			//either we have loaded it or it wasn't a valid preference
-			Ext.callback(cb, scope, [value]);
+			return this.loadSubPreference(key, cb, scope);
 		}
+
+		//either we have loaded it or it wasn't a valid preference
+		Ext.callback(cb, scope, [value]);
+		if (!value) {
+			return Promise.reject('Invalid Preference');
+		}
+		return Promise.resolve(value);
 	},
 
 	getSubPreference: function(key) {
@@ -58,7 +62,9 @@ Ext.define('NextThought.preference.Manager', {
 
 			if (cur && cur.isFuture) {
 				return true;
-			}else if (cur) {
+			}
+
+			if (cur) {
 				hasFuture = hasFuture || this.hasFutures(cur);
 			}
 		}
@@ -72,7 +78,7 @@ Ext.define('NextThought.preference.Manager', {
 			startingIndex = Ext.Array.indexOf(urls, '++preferences++') + 1;
 
 		for (i = startingIndex; i < urls.length; i++) {
-			if (i + 1 > length) {
+			if (i + 1 > urls.length) {
 				className += '.' + urls[i];
 			}else {
 				className += '.' + urls[i].toLowerCase();
@@ -94,23 +100,28 @@ Ext.define('NextThought.preference.Manager', {
 	},
 
 	loadSubPreference: function(key, cb, scope) {
-		var request,
-			url = this.baseUrl + '/' + key;
+		var me = this,
+			url = me.baseUrl + '/' + key;
 
-		NextThought.model.preference.Base.load(url, {
-			scope: this,
-			failure: function(rec, op) {
-				Ext.callback(cb, scope, [false]);
-			},
-			success: function(rec, op) {
-				var model, json = op.response.responseText;
+		return new Promise(function(fulfill, reject) {
+			NextThought.model.preference.Base.load(url, {
+				failure: function(rec, op) {
+					reject(op.response);
+					Ext.callback(cb, scope, [false]);
+				},
+				success: function(rec, op) {
+					var model, json = op.response.responseText;
 
-				json = Ext.JSON.decode(json);
-				//mostly because we get an array back with the testing sim
-				json = (Ext.isArray(json)) ? json[0] : json;
-				model = this.setSubPreference(json);
-				Ext.callback(cb, scope, [model]);
-			}
+					json = Ext.JSON.decode(json);
+					//mostly because we get an array back with the testing sim
+					json = (Ext.isArray(json)) ? json[0] : json;
+					model = me.setSubPreference(json);
+
+					fulfill(model);
+
+					Ext.callback(cb, scope, [model]);
+				}
+			});
 		});
 	},
 

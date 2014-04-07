@@ -9,7 +9,6 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		'NextThought.util.Time',
 		'NextThought.view.account.contacts.management.Popout',
 		'NextThought.view.account.notifications.types.*'
-
 	],
 
 
