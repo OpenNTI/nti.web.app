@@ -38,8 +38,12 @@ Ext.define('NextThought.controller.Notifications', {
 
 	//refresher: this is called in the UserData controller in the socket change event handler.
 	incomingChange: function(change) {
+		var store = this.notificationStore;
+		if (!store) { return; }
 		if (!change.isModel) {
 			change = ParseUtils.parseItems([change])[0];
 		}
+
+		store.add(change);
 	}
 });

@@ -227,6 +227,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		}
 
 		var registry = this.tpl.subTemplates,
+			parentStore = Ext.getStore('notifications'),
 			s = NextThought.store.PageItem.create({
 				storeId: this.storeId,
 				sortOnLoad: true,
@@ -264,7 +265,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 			});
 
 
-		s.proxy.url = Ext.getStore('notifications').url;
+		s.proxy.url = parentStore.url;
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
 			sortOn: 'createdTime',
 			sortOrder: 'descending'
@@ -272,6 +273,9 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 
 		this.store = s;
 
+		this.mon(parentStore, {
+			add: function(store, recs) { s.add(recs); }
+		});
 
 		this.mon(s, {
 			add: 'recordsAdded',
