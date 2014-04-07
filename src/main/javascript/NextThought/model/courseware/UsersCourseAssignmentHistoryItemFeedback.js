@@ -4,23 +4,21 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedbac
 	isFeedBack: true,
 
 	fields: [
-		{name: 'AssignmentId', type: 'string'},
-		{name: 'body', type: 'auto'},
-		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false, affectedBy: 'Last Modified'},
-		{name: 'assignmentName', type: 'string', persist: false},
-		{name: 'assignmentContainer', type: 'string', persist: false}
+		{ name: 'AssignmentId', type: 'string' },
+		{ name: 'body', type: 'auto' },
+		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false, affectedBy: 'Last Modified' },
+		{ name: 'assignmentName', type: 'string', persist: false },
+		{ name: 'assignmentContainer', type: 'string', persist: false }
 	],
 
 
 	getFeedbackContainerURL: function() {
 		var href = this.get('href');
-
 		return href && href.split('/').slice(0, -1).join('/');
 	},
 
 	getSubmissionURL: function() {
 		var href = this.get('href');
-
 		return href && href.split('/').slice(0, -2).join('/');
 	},
 
@@ -32,7 +30,7 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedbac
 		}
 
 		this.containerPromise = Service.request(url)
-			.done(function(resp) {
+			.then(function(resp) {
 				return ParseUtils.parseItems(resp)[0];
 			});
 
@@ -49,11 +47,11 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedbac
 		}
 
 		me.submissionPromise = Service.request(url)
-			.done(function(resp) {
+			.then(function(resp) {
 				var submission = ParseUtils.parseItems(resp)[0];
 
 				if (!me.containerPromise) {
-					Promise.resovle(submission.get('Feedback'));
+					me.containerPromise = Promise.resolve(submission.get('Feedback'));
 				}
 
 				return submission;
