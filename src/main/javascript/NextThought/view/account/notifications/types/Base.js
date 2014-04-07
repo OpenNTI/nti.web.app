@@ -71,12 +71,14 @@ Ext.define('NextThought.view.account.notifications.types.Base', {
 	},
 
 	getIcon: function(values) {
-		if (!values || !this.showCreator) { return ''; }
+		if (!values || !this.showCreator) { return 'none'; }
 		return (values && ('url(' + NTIFormat.avatarURL(values.Creator || values) + ')')) || '';
 	},
 
 
 	fillInData: function(rec) {
+		if (!this.showCreator) {return;}
+
 		var u = rec.get('Creator');
 
 		if (isMe(u)) {
