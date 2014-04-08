@@ -145,7 +145,12 @@
 		@include text-pre-wrap;
 	}
 
-	p{margin: 1em 0;}
+	p{
+		margin:0;
+		&:empty::before {
+			content: ' ';
+		}
+	}
 
 	em, em strong{
 		font-style: italic !important;
@@ -469,7 +474,11 @@
 	}
 
 	p {
-		margin: 1em 0;
+		margin: 0;
+
+		&:empty::before{
+			content: ' ';
+		}
 	}
 
 	strong, em strong {
