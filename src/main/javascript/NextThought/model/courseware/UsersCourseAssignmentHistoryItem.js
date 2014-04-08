@@ -167,5 +167,40 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 		} else {
 			Ext.Error.raise('No Assignment associated!');
 		}
+	},
+
+
+	getSubmissionStatus: function(due) {
+		due = due || this.get('due');
+
+		var completed = this.get('completed');
+
+		completed = (completed && completed.get && completed.get('LastModified')) || completed;
+
+		if (!due && !completed) {
+			console.error('Can not get the submission status without a due or completed date');
+			return;
+		}
+
+		//if there's no submission
+		if (!completed) {
+			return {cls: 'incomplete', html: 'Due ' + Ext.Date.format(due, 'm/d')};
+		}
+
+		//if its submitted before it was due
+		if (completed < due) {
+			return {cls: 'ontime', html: 'On Time'};
+		}
+
+		//if no due date we can't tell how late it is...
+		if (!due) {
+			return {cls: 'ontime', html: 'Submitted ' + Ext.Date.format(completed, 'm/d')};
+		}
+
+		//if we get here it was late
+		due = new Duration(Math.abs(completed - due) / 1000);
+		due = due.ago().replace('ago', '').trim();
+
+		return {cls: 'late', html: due + ' Late'};
 	}
 });

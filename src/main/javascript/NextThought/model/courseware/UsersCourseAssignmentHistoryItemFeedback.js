@@ -8,7 +8,8 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedbac
 		{ name: 'body', type: 'auto' },
 		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false, affectedBy: 'Last Modified' },
 		{ name: 'assignmentName', type: 'string', persist: false },
-		{ name: 'assignmentContainer', type: 'string', persist: false }
+		{ name: 'assignmentContainer', type: 'string', persist: false },
+		{ name: 'assignmentDueDate', type: 'date', persist: false}
 	],
 
 

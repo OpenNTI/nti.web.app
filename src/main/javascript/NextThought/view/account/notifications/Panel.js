@@ -8,7 +8,8 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		'NextThought.store.PageItem',
 		'NextThought.util.Time',
 		'NextThought.view.account.contacts.management.Popout',
-		'NextThought.view.account.notifications.types.*'
+		'NextThought.view.account.notifications.types.*',
+		'NextThought.view.account.activity.feedback.*'
 	],
 
 

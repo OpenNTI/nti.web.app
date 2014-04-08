@@ -46,7 +46,8 @@ Ext.define('NextThought.view.account.notifications.types.Feedback', {
 			rec.course = course;
 			rec.set({
 				assignmentContainer: cid,
-				assignmentName: assignment.get('title')
+				assignmentName: assignment.get('title'),
+				assignmentDueDate: assignment.getDueDate()
 			});
 		}, function() {
 			rec.data.hidden = true;//secret..shhh
