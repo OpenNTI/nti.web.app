@@ -235,7 +235,7 @@ Ext.define('NextThought.controller.Session', {
 			app.getController('Application').openViewport();
 		}
 
-		function showLogin(timedout) {
+		function showLogin(reason) {
 			var o = {},
 					url = $AppConfig.server.login;
 
@@ -249,7 +249,7 @@ Ext.define('NextThought.controller.Session', {
 
 			url = Ext.String.urlAppend(url, Ext.Object.toQueryString(o));
 
-			if (timedout) {
+			if (reason === 'timedout') {
 				alert({
 					icon: Ext.Msg.ERROR,
 					title: 'Request Timeout',
@@ -303,7 +303,7 @@ Ext.define('NextThought.controller.Session', {
 						if (r && r.timedout) {
 							console.log('Request timed out: ', r.request.options.url);
 						}
-						throw r.timedout;
+						throw 'timedout';
 					})
 				.then(m.performHandshake.bind(m));
 	},
