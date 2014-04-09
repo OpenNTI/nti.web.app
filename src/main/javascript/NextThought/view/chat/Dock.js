@@ -10,7 +10,7 @@ Ext.define('NextThought.view.chat.Dock', {
 	title: 'Chats',
 
 	ui: 'chat-dock',
-	cls: 'chat-dock',
+	cls: 'chat-dock scrollable',
 	defaultType: 'chat-dock-item',
 	collapseMode: 'header',
 	collapsible: true,
@@ -45,8 +45,7 @@ Ext.define('NextThought.view.chat.Dock', {
 
 	afterRender: function() {
 		this.callParent(arguments);
-
-		if (Ext.is.iPad) {
+		if (Ext.is.iOS) {
 			this.placeholder.getEl().un('click', this.floatCollapsedPanel, this);
 			this.placeholder.getEl().on('click', this.expand, this);
 			this.mon(this.down('header'), 'click', this.collapse, this);
@@ -57,7 +56,7 @@ Ext.define('NextThought.view.chat.Dock', {
 
 		this.placeholder.focus = Ext.emptyFn;
 
-		if (!Ext.is.iPad) {
+		if (!Ext.is.iOS) {
 			//remove the default click handler
 			this.placeholder.getEl().un('click', this.floatCollapsedPanel, this);
 

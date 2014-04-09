@@ -2,7 +2,7 @@ Ext.define('NextThought.view.forums.board.Body', {
 	extend: 'NextThought.view.forums.hierarchy.Body',
 	alias: 'widget.forums-board-body',
 
-	cls: 'forum-body scroll-content',
+	cls: 'forum-body scroll-content scrollable',
 
 	requires: [
 		'NextThought.view.forums.old.Root'
