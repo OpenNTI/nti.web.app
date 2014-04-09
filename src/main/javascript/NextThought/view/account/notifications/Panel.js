@@ -120,8 +120,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		this.highlightItem = this.types[1];
 
 		this.on({
-			'resize': 'manageMaskSize',
-			'deactivate': 'clearBadge'
+			'resize': 'manageMaskSize'
 		});
 
 		this.buildStore();
@@ -140,8 +139,27 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 			}
 			return;
 		}
+
+		this.mon(tab, 'click', 'maybeClearBadge');
 		this.badge = Ext.DomHelper.append(tab.getEl(), {cls: 'badge red', html: this.badgeValue},true);
 		delete tab.badge;
+	},
+
+
+	maybeClearBadge: function() {
+		var me = this,
+			manager = me.ownerLayout;
+		if (!manager || manager.getActiveItem() === me) {
+			return;
+		}
+
+		wait(1)//let the tab cancel activation...which will happen in the current event pump, after which,
+		// we test if we were activated and if so, start the clear counter timer
+				.then(function() {
+					if (manager.getActiveItem() === me) {
+						me.beginClearBadge();
+					}
+				});
 	},
 
 
@@ -166,13 +184,19 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 	},
 
 
+	beginClearBadge: function(delay) {
+		this.store.lastViewed = new Date();
+		wait(delay || 3000).then(this.clearBadge.bind(this));
+	},
+
+
 	clearBadge: function() {
 		if (this.badgeValue === 0) {
 			return;
 		}
 
-		this.lastViewed = new Date();
-		this.setBadgeValue(0);
+
+		this.maybeNotify();
 
 		if (this._lastViewedURL) {
 			Service.put(this._lastViewedURL, this.lastViewed.getTime() / 1000);
@@ -380,6 +404,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 
 		if (Ext.isFunction(this.clickHandlers && this.clickHandlers[rec.get('MimeType')])) {
 			this.clickHandlers[rec.get('MimeType')](view, rec);
+			this.beginClearBadge(1000);
 		}
 	},
 
@@ -434,6 +459,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		me.activeTargetRecord = record;
 
 		popout.popup(record, target, me, undefined, fin);
+		me.beginClearBadge();
 	},
 
 
@@ -487,6 +513,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 
 		if (wantedDirection && top > triggerZone) {
 			this.prefetchNext();
+			this.beginClearBadge();
 		}
 
 	}
