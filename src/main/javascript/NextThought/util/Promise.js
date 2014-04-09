@@ -99,7 +99,7 @@ Promise = window.Promise || (function(global) {
 					}
 					// deal with error thrown
 				} catch (error) {
-					console.error('Exception while resolving promise:', error.stack || error.message || error);
+					console.error('Exception while resolving promise:', error && (error.stack || error.message || error));
 					changeState.call(obj.promise, State.REJECTED, error);
 				}
 			}
