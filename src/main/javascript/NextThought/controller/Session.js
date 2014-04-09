@@ -237,15 +237,15 @@ Ext.define('NextThought.controller.Session', {
 
 		function showLogin(reason) {
 			var o = {},
-					url = $AppConfig.server.login;
+				url = $AppConfig.server.login;
 
-			if (location.pathname !== '/') {
-				o['return'] = location.pathname;
+			if (location.pathname !== '/' || location.hash || location.search) {
+				o['return'] = location.href;
 			}
 
-			if ($AppConfig.server.host !== ('//' + document.domain)) {
+			/*if ($AppConfig.server.host !== ('//' + document.domain)) {
 				o.host = $AppConfig.server.host;
-			}
+			}*/
 
 			url = Ext.String.urlAppend(url, Ext.Object.toQueryString(o));
 
