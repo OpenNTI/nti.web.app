@@ -29,6 +29,7 @@ Ext.define('NextThought.controller.Session', {
 
 
 	init: function() {
+		this.ServiceInterface = NextThought.model.Service.create({});//we don't have the service doc yet, but we need the ajax helpers
 		this.listen({
 			component: {
 				'settings-menu [action=logout]': {
@@ -262,7 +263,8 @@ Ext.define('NextThought.controller.Session', {
 		}
 
 		var me = this;
-		me.attemptLogin(success, showLogin);
+
+		me.attemptLogin().then(success, showLogin);
 	},
 
 
@@ -288,75 +290,56 @@ Ext.define('NextThought.controller.Session', {
 	},
 
 
-	attemptLogin: function(successCallback, failureCallback) {
+	attemptLogin: function() {
 		var m = this,
-				s = $AppConfig.server,
-				d = s.data, ping = 'logon.ping',
-				r;
+			s = $AppConfig.server,
+			d = s.data,
+			ping = 'logon.ping';
 
-		try {
 
-			r = {
-				timeout: 60000,
-				url: getURL(d + ping),
-				callback: function(q, s, r) {
-					var l = m.getLink(r, 'logon.handshake');
-					if (!s || !l) {
-						if (r.timedout) {
+		return m.ServiceInterface.request({ timeout: 60000, url: getURL(d + ping)})
+				.then(function(r) { var l = m.getLink(r, 'logon.handshake'); if (!l) {throw '';} return l;})
+				.fail(function(r) {
+						if (r && r.timedout) {
 							console.log('Request timed out: ', r.request.options.url);
 						}
-						return Ext.callback(failureCallback, m, [r.timedout]);
-					}
-
-					return m.performHandshake(l, successCallback, failureCallback);
-				}
-			};
-			Ext.Ajax.request(r);
-		}
-		catch (err) {
-			alert('Could not request handshake from Server.\n' + err.message);
-		}
+						throw r.timedout;
+					})
+				.then(m.performHandshake.bind(m));
 	},
 
 
-	performHandshake: function(link, successCallback, failureCallback) {
+	performHandshake: function(link) {
 		var m = this,
-				u = decodeURIComponent(Ext.util.Cookies.get('username')),
-				handshakeTimer = setTimeout(m.handshakeRecovery, 30000),
-				r;
+			u = decodeURIComponent(Ext.util.Cookies.get('username')),
+			handshakeTimer = setTimeout(m.handshakeRecovery, 30000);
 
 		//NOTE: handshakeTimer will retry if it doesn't return before 30 seconds because it's been reported that
 		//you can get into a bad state duringn handshake, so we want to interrupt that and try again.
-		r = {
+
+		return m.ServiceInterface.request({
 			method: 'POST',
 			timeout: 60000,
 			url: getURL(link),
+			callback: function() {clearTimeout(handshakeTimer);},
 			params: {
 				username: u
-			},
-			callback: function(q, s, r) {
-				clearTimeout(handshakeTimer);
-				var l = m.getLink(r, 'logon.continue');
-				if (!s || !l) {
-					return failureCallback.call(m);
-				}
-				m.maybeTakeImmediateAction(r);
-				m.logoutURL = m.getLink(r, 'logon.logout');
-
-
-				Ext.Object.each({
-					'content.permanent_general_privacy_page': 'privacy_policy',
-					'content.permanent_tos_page': 'terms_of_service'
-				}, function(server, local) {
-					$AppConfig.links[local] = m.getLink(r, server);
-				});
-
-
-				return m.resolveService(successCallback, failureCallback);
 			}
-		};
+		})
+				.then(function(r) { if (!m.getLink(r, 'logon.continue')) { throw 'no link'; } return r; })
+				.then(function(r) {
+					m.maybeTakeImmediateAction(r);
+					m.logoutURL = m.getLink(r, 'logon.logout');
 
-		Ext.Ajax.request(r);
+					Ext.Object.each({
+						'content.permanent_general_privacy_page': 'privacy_policy',
+						'content.permanent_tos_page': 'terms_of_service'
+					}, function(server, local) {
+						$AppConfig.links[local] = m.getLink(r, server);
+					});
+
+					return m.resolveService();
+				});
 	},
 
 
@@ -384,126 +367,94 @@ Ext.define('NextThought.controller.Session', {
 	},
 
 
-	resolveService: function(successFn, failureFn) {
+	resolveService: function() {
 		var m = this,
-				s = $AppConfig.server, r;
+			s = $AppConfig.server;
 
-		try {
-			r = {
-				url: getURL(s.data),
-				timeout: 20000,
-				headers: {
-					'Accept': 'application/vnd.nextthought.workspace+json'
-				},
-				scope: this,
-				callback: function(q, success, r) {
-					if (!success) {
-						alert({title: getString('Apologies'), msg: getString('Cannot load page.')});
-						m.handleLogout();
-						console.log('Could not resolve service document\nrequest:', q, '\n\nresponse:', r, '\n\n');
-						return;
+		return m.ServiceInterface.request({
+			url: getURL(s.data),
+			timeout: 20000,
+			headers: {
+				'Accept': 'application/vnd.nextthought.workspace+json'
+			},
+			scope: this
+		})
+				.then(function(doc) {
+					doc = NextThought.model.Service.create(Ext.decode(doc));
+
+					if (!m.findResolveSelfWorkspace(doc)) {
+						console.error('Could not locate ResolveSelf link in:', doc);
+						Ext.Error.raise('bad service doc');
 					}
-					try {
-						var sDoc = Ext.decode(r.responseText);
-						sDoc = NextThought.model.Service.create(sDoc);
 
+					window.Service = $AppConfig.service = doc;
 
-						if (!m.findResolveSelfWorkspace(sDoc)) {
-							console.error('Could not locate ResolveSelf link in:', sDoc);
-							Ext.Error.raise('bad service doc');
-						}
-
-						window.Service = $AppConfig.service = sDoc;
-						//If we're already logged in, then just call the success callback.
-						if (!Ext.isEmpty($AppConfig.userObject)) {
-							Ext.callback(successFn, null, arguments);
-							return;
-						}
-						m.attemptLoginCallback(Service, successFn);
+					if (Ext.isEmpty($AppConfig.userObject)) {
+						return m.attemptLoginCallback(doc);
 					}
-					catch (e) {
-						console.error(Globals.getError(e));
-						failureFn.call(m);
-					}
-				}
-			};
-			Ext.Ajax.request(r);
-		}
-		catch (e) {
-			console.error('AttemptLogin Exception: ', Globals.getError(e));
-		}
+				})
+				.fail(function(r) {
+					alert({title: getString('Apologies'), msg: getString('Cannot load page.')});
+					m.handleLogout();
+					console.log('Could not resolve service document\nrequest:', q, '\n\nresponse:', r, '\n\n');
+					throw r;
+				});
 	},
 
 
-	attemptLoginCallback: function(service, successCallback, failureCallback) {
-		var me = this, href, workspace, r;
+	attemptLoginCallback: function(service) {
+		var href, workspace;
+
 		Socket.setup();
-
-		function onFailure() {
-			console.log('could not resolve app user', arguments);
-			Ext.callback(failureCallback, me);
-			if (!failureCallback) {
-				alert('There was an unknown error fetching your profile');
-			}
-		}
-
-		function onSuccess(user, prefs) {
-			//we set the user's presence in the chat session-ready controller so we don't need to do it here.
-			//user.data.Presence = NextThought.model.PresenceInfo.createFromPresenceString('Online');
-			user.summaryObject = false;
-			$AppConfig.userObject = UserRepository.cacheUser(user, true);
-			$AppConfig.Preferences = NextThought.preference.Manager.create({href: user.get('href').split('?')[0] + '/++preferences++'});
-			console.debug('Set app user to ', $AppConfig.userObject);
-			ObjectUtils.defineAttributes($AppConfig, {
-				username: {
-					getter: function() {
-						try {
-							return this.userObject.getId();
-						} catch (e) {
-							console.error(e.stack);
-						}
-						return null;
-					},
-					setter: function() { throw 'readonly'; }
-				}
-			});
-			successCallback.call(me);
-		}
 
 		workspace = this.findResolveSelfWorkspace(service);
 		href = service.getLinkFrom((workspace || {}).Links || [], 'ResolveSelf');
 
 		if (!href) {
 			console.error('No link found to resolve app user', arguments);
-			onFailure();
-			return;
+			return Promise.reject('No link found to resolve app user.');
 		}
 
-		r = {
+		return service.request({
 			url: getURL(href),
 			scope: this,
 			headers: {
 				Accept: 'application/json'
-			},
-			callback: function(q, success, r) {
-				var json, user;
-				if (!success) {
-					onFailure(arguments);
-					return;
-				}
-
-				json = Ext.decode(r.responseText, true);
-				user = json ? ParseUtils.parseItems(json) : null;
-				user = user ? user.first() : null;
-
-				if (user && user.get('Username') === workspace.Title) {
-					onSuccess(user, json.Preferences);
-				}
-				else {
-					onFailure(arguments);
-				}
 			}
-		};
-		Ext.Ajax.request(r);
+		})
+				.then(function(r) { return ParseUtils.parseItems(Ext.decode(r))[0]; })
+				.then(function(user) {
+					if (user && user.get('Username') === workspace.Title) {
+						return user;
+					}
+					throw 'Mismatch';
+				})
+				.then(function(user) {
+					//we set the user's presence in the chat session-ready controller so we don't need to do it here.
+					//user.data.Presence = NextThought.model.PresenceInfo.createFromPresenceString('Online');
+					user.summaryObject = false;
+					$AppConfig.userObject = UserRepository.cacheUser(user, true);
+					$AppConfig.Preferences = NextThought.preference.Manager.create({href: user.get('href').split('?')[0] + '/++preferences++'});
+					console.debug('Set app user to ', $AppConfig.userObject);
+					ObjectUtils.defineAttributes($AppConfig, {
+						username: {
+							getter: function() {
+								try {
+									return this.userObject.getId();
+								} catch (e) {
+									console.error(e.stack);
+								}
+								return null;
+							},
+							setter: function() { throw 'readonly'; }
+						}
+					});
+
+					return user;
+				})
+				.fail(function onFailure(reason) {
+					console.log('could not resolve app user', reason);
+					throw ['failed loading profile', reason];
+				});
 	}
 });
