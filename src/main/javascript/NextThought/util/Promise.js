@@ -122,7 +122,7 @@ Promise = window.Promise || (function(global) {
 			}
 		} else if (worker !== WHEN_THEN) {
 			//The spec expects the constructor of a promise to take a callback that will do the work... our implementation was not so contained. We have more
-			// of a Deffered promise model. Where we get an empty Promise object and externally fulfill/reject it.
+			// of a Deferred promise model. Where we get an empty Promise object and externally fulfill/reject it.
 			console.error('No callback This invocation will break with native Promises');
 		}
 	};
@@ -157,18 +157,18 @@ wait = Promise.wait;
 
 
 /**
- * Deffered promise.
+ * Deferred promise.
  * I guess there _MIGHT_ be some cases where we want this pattern. :/ I don't like it. But here you go.
  *
  * This will make a promise that you may or may NOT be able to keep.
  *    -- There is no guarantee that fulfill or reject will get called.
  *
  * This version of the promise is no better than the callback-hell model.  Keep in mind that
- * Deffered's do not force execution of their promise, the are not Guaranteed to resolve.
+ * Deferred's do not force execution of their promise, the are not Guaranteed to resolve.
  *
  * I strongly recommend examining your code and your structure before commiting to using this as a final solution.
  */
-Deffered = (function() {
+Deferred = (function() {
 
 	function apply(d, src) {
 		var k;
@@ -180,7 +180,7 @@ Deffered = (function() {
 		return d;
 	}
 
-	var Deffered = function() {
+	var Deferred = function() {
 		var o = false;
 		function wtf(f, r) {
 			o = {
@@ -196,10 +196,10 @@ Deffered = (function() {
 		apply(this, o);
 	};
 
-	Deffered.prototype.superclass = Promise.prototype;
-	apply(Deffered.prototype, Promise.prototype);
+	Deferred.prototype.superclass = Promise.prototype;
+	apply(Deferred.prototype, Promise.prototype);
 
-	return Deffered;
+	return Deferred;
 }());
 
 
@@ -266,7 +266,7 @@ Ext.define('NextThought.util.Promise', {
 	make: function() {
 		console.error('[Bad Practice!] Promises should be not made without a guarantee. See this line.');
 		/**
-		 * Do NOT just replace .make() with "new Deffered()". Actually take the time to evaluate.
+		 * Do NOT just replace .make() with "new Deferred()". Actually take the time to evaluate.
 		 *
 		 * Prferred pattern ex:
 		 * new Promise(function (fulfill, reject) {//the Guarantee
@@ -279,7 +279,7 @@ Ext.define('NextThought.util.Promise', {
 		 *          .fail(reject);
 		 * });
 		 */
-		return new Deffered();
+		return new Deferred();
 	}
 
 }, function() { window.PromiseFactory = this; });

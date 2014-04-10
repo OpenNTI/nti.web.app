@@ -39,14 +39,14 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 			}]);
 		}
 
-		var p = this.promiseToLoaded = new Deffered(),
+		var p = this.promiseToLoaded = new Deferred(),
 			me = this;
 		this.callParent(arguments);
 		this.on({
 			scope: this,
 			beforeload: function() {
 				var old = p;
-				p = me.promiseToLoaded = new Deffered();
+				p = me.promiseToLoaded = new Deferred();
 				p.then(function() { old.fulfill(me); });
 			},
 			load: function(me, records, success) {

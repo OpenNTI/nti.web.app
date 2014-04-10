@@ -505,7 +505,7 @@ Ext.define('NextThought.cache.UserRepository', {
 
 		a = w.active = w.active || a;
 
-		p = new Deffered();//required to be a Deffered, since our worker communication
+		p = new Deferred();//required to be a Deferred, since our worker communication
 		// is "evented", we cannot pass a callback. Though, I'm sure we can reorganize
 		// this logic to make it more 'proper'
 
