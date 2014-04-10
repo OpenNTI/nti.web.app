@@ -74,6 +74,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.View', {
 			return;
 		}
 
-		root.showAssignment(assignment, user);
+		return root.showAssignment(assignment, user);
 	}
 });

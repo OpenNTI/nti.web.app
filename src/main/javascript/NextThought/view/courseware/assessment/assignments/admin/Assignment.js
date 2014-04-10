@@ -443,12 +443,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 	fireGoToAssignment: function(v, record, pageSource) {
 		var student = record.get('Creator'),
-				item = record.get('item'), //Assignment Instance
-				path = [
-					this.pathRoot,
-					this.pathBranch,
-					student.toString()
-				];
+			item = record.get('item'), //Assignment Instance
+			path = [
+				this.pathRoot,
+				this.pathBranch,
+				student.toString()
+			],
+			container = this.up('[rootContainerShowAssignment]');
 
 		if (typeof student === 'string') {
 			return;
@@ -474,6 +475,12 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			});
 		}
 
-		this.fireEvent('show-assignment', this, this.assignment, record, student, path, pageSource);
+		if (!container) {
+			console.error('No container with rootContainerShowAssignment');
+			return;
+		}
+
+		return container.rootContainerShowAssignment(this, this.assignment, record, student, path, pageSource);
+		// this.fireEvent('show-assignment', this, this.assignment, record, student, path, pageSource);
 	}
 });

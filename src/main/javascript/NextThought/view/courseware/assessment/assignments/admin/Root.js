@@ -66,7 +66,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 			store = assignmentView.store;
 			username = user && ((user.getId && user.getId()) || user);
 
-			Service.request([store.getProxy().url, username].join('/'))
+			return Service.request([store.getProxy().url, username].join('/'))
 				.done(function(res) {
 					var assignmentHistory = ParseUtils.parseItems(res)[0];
 					if (assignmentHistory.get('Creator') !== username) {
@@ -77,7 +77,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 					item.getGradeBookEntry().updateHistoryItem(assignmentHistory);
 
 					//Should be a cache hit... so lets just do the most straight forward thing.
-					UserRepository.getUser(username)
+					return UserRepository.getUser(username)
 							.then(function(user) {
 								assignmentHistory.set('Creator', user);
 
@@ -97,7 +97,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 
 								assignmentView.doFilter(status);
 								assignmentView.syncFilterToUI();
-								assignmentView.fireGoToAssignment(null, assignmentHistory);
+								return assignmentView.fireGoToAssignment(null, assignmentHistory);
 							})
 							.fail(function(reason) {
 								mask(false);
@@ -105,9 +105,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 							});
 				})
 				.fail(function(reason) {
-						mask(false);
-						console.error('Failure Reason: ', reason);
-					});
+					mask(false);
+					console.error('Failure Reason: ', reason);
+				});
 		}
 	}
 });

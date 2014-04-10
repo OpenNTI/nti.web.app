@@ -30,6 +30,8 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 			'show-assignment': 'showAssignment',
 			'update-assignment-view': 'maybeUpdateAssignmentView'
 		});
+
+		this.rootContainerShowAssignment = this.showAssignment.bind(this);
 	},
 
 
@@ -78,9 +80,11 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 		}
 
 		v = r.activateView(v);
-		this.activeCourseSetup.done(function() {
-			v.showAssignment(assignment, user);
-		});
+
+		return this.activeCourseSetup
+			.then(function() {
+				return v.showAssignment(assignment, user);
+			});
 	},
 
 
@@ -88,7 +92,7 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 		var me = this,
 			active = me._showAssignmentPromise || Promise.resolve();
 
-		active.always(function() {
+		return active.always(function() {
 			active = me._showAssignmentPromise = new Promise(function(fulfill, reject) {
 				var r = assignmentHistory,
 					link = r && r.getLink && r.getLink('UsersCourseAssignmentHistoryItem');
@@ -115,10 +119,11 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 
 			});
 
-			active.done(function(history) {
-					//both course-asessment-reader and the admin-reader extend the reader so this takes care of both
-					Ext.destroy(me.down('reader'));
-					me.mon(me.add({
+			 return active.done(function(history) {
+			 		//both course-asessment-reader and the admin-reader extend the reader so this takes care of both
+			 		Ext.destroy(me.down('reader'));
+
+			 		var reader = me.add({
 						xtype: isMe(student) ? 'course-assessment-reader' : 'course-assessment-admin-reader',
 						parentView: view,
 						assignmentHistory: history,
@@ -127,9 +132,13 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 						location: assignment.getId(),
 						assignment: assignment,
 						pageSource: pageSource
-					}), {
+					});
+
+					me.mon(reader, {
 						'goup': 'showRoot'
 					});
+
+					return reader;
 				})
 				.fail(function(reason) {
 					alert({title: 'Well, this is embarrassing!', msg: 'There was an unforeseen error loading this assignment. A report has been logged.'});

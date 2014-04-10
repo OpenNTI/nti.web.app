@@ -543,14 +543,14 @@ Ext.define('NextThought.controller.CourseWare', {
 	},
 
 
-	onNavigateToAssignment: function(id) {
+	onNavigateToAssignment: function(id, user) {
 		var content = this.getContentView(),
 			tab = content.tabSpecs.reduce(function(a, i) {
 				return a || (i.isAssignment && i);
 			}, 0);
 
 		content.onTabClicked(tab);
-		content.down('course-assessment-container').gotoAssignment(id);
+		return content.down('course-assessment-container').gotoAssignment(id, user);
 	},
 
 
@@ -611,24 +611,56 @@ Ext.define('NextThought.controller.CourseWare', {
 	getHandlerForNavigationToObject: function(obj, fragment) {
 		var me = this;
 
+		function navigateToAssignment(assignment, user) {
+			var assignmentId = assignment.getId ? assignment.getId() : assignment,
+				catalogEntry = CourseWareUtils.courseForNtiid(assignmentId);
+
+			if (!catalogEntry) {
+				console.error('No catalogEntry for assignment:', assignment, obj);
+				return Promise.reject();
+			}
+
+			return CourseWareUtils.findCourseBy(catalogEntry.findByMyCourseInstance())
+				.done(function(course) {
+					var instance = course.get('CourseInstance');
+
+					return instance.fireNavigationEvent(me)
+						.done(function() {
+							return me.onNavigateToAssignment(assignmentId, user);
+						});
+				});
+		}
+
 		if (obj instanceof NextThought.model.assessment.Assignment) {
 			return function(obj, fragment) {
-				var catalogEntry = CourseWareUtils.courseForNtiid(obj.getId());
+				navigateToAssignment(obj.getId());
+			};
+		}
 
-				CourseWareUtils.findCourseBy(catalogEntry.findByMyCourseInstance())
-					.done(function(course) {
-						var instance = course.get('CourseInstance');
+		if (obj instanceof NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedbackContainer) {
+			return function(obj, fragment) {
+				var item = obj.get('Items')[0], creator,
+					assignmentId = item && item.get('AssignmentId');
 
-						instance.fireNavigationEvent(me)
-							.done(function() {
-								me.onNavigateToAssignment(obj.getId());
-							})
-							.fail(function(reason) {
-								console.error(reason);
-							});
+				if (!assignmentId) {
+					console.error('No assignment id in the feedback:', obj);
+					return;
+				}
+
+				item.getSubmission()
+					.done(function(HistoryItem) {
+						var creator = HistoryItem.get('Creator');
+
+						return navigateToAssignment(assignmentId, creator);
 					})
-					.fail(function(reason) {
-						console.error(reason);
+					.done(function(reader) {
+						var feedback = reader.down('assignment-feedback');
+
+						if (!feedback) {
+							reader.down('reader-content').scrollToSelector = 'assignment-feedback';
+						} else {
+							feedback.maybeScrollIntoView();
+						}
 					});
 			};
 		}

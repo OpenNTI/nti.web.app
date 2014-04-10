@@ -430,7 +430,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 			return;
 		}
 
-		this._showAssignment(x);
+		return this._showAssignment(x);
 	},
 
 
@@ -438,10 +438,16 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 		var path = [
 			'Assignments',
 			record.get('name')
-		];
+		], container = this.up('[rootContainerShowAssignment]');
 
 		this.applyPagerFilter();
-		this.fireEvent('show-assignment', this, record.get('item'), record, $AppConfig.userObject, path,
+
+		if (!container) {
+			console.error('No container with rootContainerShowAssignment');
+			return;
+		}
+
+		return container.rootContainerShowAssignment(this, record.get('item'), record, $AppConfig.userObject, path,
 				NextThought.util.PageSource.create({
 					store: this.store,
 					current: this.store.indexOf(record)

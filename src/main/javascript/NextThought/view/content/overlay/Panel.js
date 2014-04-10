@@ -145,7 +145,20 @@ Ext.define('NextThought.view.content.overlay.Panel', {
 			console.debug(e.message);
 			clearInterval(this.interval);
 		}
+
+		this.maybeScrollIntoView();
 	},
+
+
+	maybeScrollIntoView: Ext.Function.createBuffered(function() {
+		var offset = this.getHeight(),
+			reader = this.reader;
+
+		if (reader.scrollToSelector && this.is(reader.scrollToSelector)) {
+			reader.getScroll().toNode(this.contentElement, false, null, -offset);
+			delete reader.scrollToSelector;
+		}
+	}, 250),
 
 
 	afterLayout: function() {

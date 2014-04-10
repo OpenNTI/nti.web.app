@@ -164,12 +164,12 @@ Ext.define('NextThought.view.content.reader.Scroll', {
 	/**
 	 * Scroll to some element, but allow options to decide whether or not to scroll.
 	 *
-	 * @param n - the node you want to scroll to
-	 * @param onlyIfNotVisible - pass true here if you want this function to decide if it should scroll or not,
+	 * @param {Node} n - the node you want to scroll to
+	 * @param {boolean} onlyIfNotVisible - pass true here if you want this function to decide if it should scroll or not,
 	 *                           based on its visibility on screen
-	 * @param bottomThreshold - if you want to scroll if the target is close to the bottom, specify a threshold.
+	 * @param {Number} bottomThreshold - if you want to scroll if the target is close to the bottom, specify a threshold.
 	 */
-	toNode: function(n, onlyIfNotVisible, bottomThreshold) {
+	toNode: function(n, onlyIfNotVisible, bottomThreshold, verticalOffset) {
 		while (n && n.nodeType === Node.TEXT_NODE) {
 			n = n.parentNode;
 		}
@@ -186,7 +186,7 @@ Ext.define('NextThought.view.content.reader.Scroll', {
 			return;
 		}
 
-		this.to(o - 10);
+		this.to(o - (verticalOffset || 0) - 10);
 	},
 
 
