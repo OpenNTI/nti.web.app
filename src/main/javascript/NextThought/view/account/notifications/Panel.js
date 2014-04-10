@@ -198,8 +198,8 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 
 		this.maybeNotify();
 
-		if (this._lastViewedURL) {
-			Service.put(this._lastViewedURL, this.lastViewed.getTime() / 1000);
+		if (this._lastViewedURL && this.store && this.store.lastViewed) {
+			Service.put(this._lastViewedURL, this.store.lastViewed.getTime() / 1000);
 		}
 
 	},
