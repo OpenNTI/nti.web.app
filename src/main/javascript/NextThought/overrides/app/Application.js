@@ -1,6 +1,11 @@
 Ext.define('NextThought.overrides.app.Application', {
 	override: 'Ext.app.Application',
 
+	init: function() {
+		this.callParent(arguments);
+
+		NextThought.finishedLoading = new Deferred();
+	},
 
 
 	beginInitializeTask: function(name) {
@@ -67,6 +72,9 @@ Ext.define('NextThought.overrides.app.Application', {
 		Ext.Array.remove(this.initTasks, task);
 		if (!this.initTasks.length) {
 			this.registerInitializeTask = this.finishInitializeTask = Ext.emptyFn;
+			wait(100).then(function() {
+				NextThought.finishedLoading.fulfill();
+			});
 			this.fireEvent('finished-loading');
 		}
 	}

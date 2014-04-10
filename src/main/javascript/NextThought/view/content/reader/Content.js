@@ -229,12 +229,12 @@ Ext.define('NextThought.view.content.reader.Content', {
 	parseHTML: function(request) {
 		function toObj(a, k, v) {
 			var i = a.length - 1, o = {};
-			for (i; i >= 0; i--) { o[k.exec(a[i])[2]] = Ext.htmlDecode(v.exec(a[i])[1]); }
+			for (i; i >= 0; i--) { o[(k.exec(a[i]) || [])[2]] = Ext.htmlDecode((v.exec(a[i]) || [])[1]); }
 			return o;
 		}
 
 		function metaObj(m) {
-			return toObj(m, /(name|http\-equiv)="([^"]+)"/i, /content="([^"]+)"/i);
+			return toObj(m, /(name|http\-equiv)="([^"]+)"/i, /content="([^"]*)"/i);
 		}
 
 		function cssObj(m) {

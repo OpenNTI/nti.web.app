@@ -296,7 +296,8 @@ Ext.define('NextThought.controller.Navigation', {
 
 
 	navigate: function(cid, rec, options) {
-		var me = this, perform = this.performAnd.bind(this, 'handleNavigation', cid, rec);
+		var me = this, perform = this.performAnd.bind(this, 'handleNavigation', cid, rec),
+			performAfter = this.performAnd.bind(this, 'afterHandleNavigation', cid, rec);
 		//We don't want to do a content navigation until we are pretty sure
 		//thats what we want.  On failure it shows a page not found and
 		//if we handle this navigation in some other way we don't want that happening.
@@ -319,9 +320,13 @@ Ext.define('NextThought.controller.Navigation', {
 		LocationMeta.getMeta(cid)
 			.fail(recover)
 			.then(perform)
-			.done(function() {
-				me.doContentNavigation(cid, rec, options);
+			.then(function() {
+				return me.doContentNavigation(cid, rec, options);
 			})
+			.fail(function(reason) {
+				console.log(reason);
+			})
+			.then(performAfter)
 			.fail(function(reason) {
 				if (reason) {
 					console.error(reason);
@@ -344,7 +349,7 @@ Ext.define('NextThought.controller.Navigation', {
 				reply, targets;
 
 		if (!this.fireEvent('show-view', 'content', true)) {
-			return;
+			return Promise.reject();
 		}
 
 		if (rec) {
@@ -359,7 +364,7 @@ Ext.define('NextThought.controller.Navigation', {
 			callback = this.scrollToObject(targets, reply);
 		}
 
-		this.maybeLoadNewPage(ntiid, callback);
+		return this.maybeLoadNewPage(ntiid, callback);
 	},
 
 
@@ -401,7 +406,18 @@ Ext.define('NextThought.controller.Navigation', {
 
 
 	maybeLoadNewPage: function(id, cb) {
-		this.fireEvent('set-location', id, cb);
+		var me = this;
+
+		return new Promise(function(fulfill, reject) {
+			me.fireEvent('set-location', id, function(a, er) {
+				if (er && er.status !== undefined) {
+					return reject(er);
+				}
+
+				cb.apply(window, arguments);
+				fulfill(a);
+			});
+		});
 	},
 
 
@@ -541,9 +557,13 @@ Ext.define('NextThought.controller.Navigation', {
 
 
 	navigateToContent: function(obj, fragment) {
-		var getHandlers = this.performAnd('getHandlerForNavigationToObject', obj, fragment);
+		var getHandlers = this.performAnd('getHandlerForNavigationToObject', obj, fragment),
+			app = this.application;
 
-		getHandlers
+		NextThought.finishedLoading
+			.then(function() {
+				return getHandlers;
+			})
 			.done(function(handlers) {
 				if (Ext.isEmpty(handlers)) {
 					console.error('No handlers for object navigation:', obj);

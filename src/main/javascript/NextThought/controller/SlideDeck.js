@@ -13,6 +13,8 @@ Ext.define('NextThought.controller.SlideDeck', {
 		'slidedeck.media.Viewer'
 	],
 
+	videoMimeTypeRegEx: /vnd.nextthought.ntivideo/,
+
 	refs: [
 		{ ref: 'activeMediaViewer', selector: 'media-viewer' },
 		{ ref: 'activeSlideDeck', selector: 'slidedeck-overlay' }
@@ -269,7 +271,7 @@ Ext.define('NextThought.controller.SlideDeck', {
 
 		if (!obj.isModel) {
 			mime = obj.mimeType || obj.MimeType;
-			if (/vnd.nextthought.ntivideo/.test(mime)) {
+			if (this.videoMimeTypeRegEx.test(mime)) {
 				this.launchMediaPlayer(obj, obj.ntiid, obj.basePath, rec, options);
 				return false;
 			}
@@ -298,5 +300,32 @@ Ext.define('NextThought.controller.SlideDeck', {
 			return false;
 		}
 		return true;
+	},
+
+
+	handleNavigation: function(containerId, rec) {
+		return new Promise(function(fulfill, reject) {
+			ContentUtils.findContentObject(containerId, function(object) {
+				if (object) {
+					reject(true);
+				} else {
+					fulfill();
+				}
+			});
+		});
+	},
+
+
+	afterHandleNavigation: function(containerId, rec) {
+		var me = this;
+
+		return Promise(function(fulfill, reject) {
+			ContentUtils.findContentObject(containerId, function(object) {
+				if (object) {
+					me.launchMediaPlayer(object, object.ntiid, object.basePath, rec);
+					fulfill();
+				}
+			});
+		});
 	}
 });
