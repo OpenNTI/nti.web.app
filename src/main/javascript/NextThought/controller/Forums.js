@@ -1032,15 +1032,22 @@ Ext.define('NextThought.controller.Forums', {
 	//Socket handling
 	incomingChange: function(change) {
 		function updateRecordFieldCount(id, field) {
+			var old;
+
 			if (!id || !field) {
 				return;
 			}
 
 			Ext.StoreManager.each(function(s) {
-				var found = s.getById(id);
+				var found = s.getById(id), current;
 				if (found) {
-					found.set(field, found.get(field) + 1);
-					return false; //Note we break here because set will have updated the remaining instances;
+					current = found.get(field);
+					old = old || current;
+
+					//if we haven't already updated
+					if (current !== old + 1) {
+						found.set(field, found.get(field) + 1);
+					}//return false; //Note we break here because set will have updated the remaining instances;
 				}
 				return true;
 			});
@@ -1058,7 +1065,6 @@ Ext.define('NextThought.controller.Forums', {
 		if (item && /generalforumcomment$/.test(item.get('MimeType'))) {
 			if (topic && topic.addIncomingComment) {
 				topic.addIncomingComment(item);
-				return;
 			}
 			updateRecordFieldCount(item.get('ContainerId'), 'PostCount');
 		}

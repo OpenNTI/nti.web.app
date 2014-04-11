@@ -163,6 +163,7 @@ Ext.define('NextThought.view.forums.topic.parts.Topic', {
 		h.addObserverForField(this, 'body', this.updateContent, this);
 
 		this.record.addObserverForField(this, 'PostCount', this.updateReplyCount, this);
+		this.currentPostCount = this.record.get('PostCount');
 
 
 		if (this.nameEl) {
@@ -254,6 +255,15 @@ Ext.define('NextThought.view.forums.topic.parts.Topic', {
 
 	updateReplyCount: function(key, value) {
 		this.replyCountEl.update(Ext.util.Format.plural(value, 'Comment'));
+	},
+
+
+	commentAdded: function() {
+		var oldPostCount = this.record.get('PostCount');
+
+		if (this.currentPostCount === oldPostCount) {
+			this.replyCountEl.update(Ext.util.Format.plural(this.currentPostCount + 1, 'Comment'));
+		}
 	},
 
 

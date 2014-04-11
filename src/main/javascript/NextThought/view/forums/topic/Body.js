@@ -77,10 +77,12 @@ Ext.define('NextThought.view.forums.topic.Body', {
 
 
 	addIncomingComment: function(comment) {
-		var comments = this.down('forums-topic-comment-thread');
+		var comments = this.down('forums-topic-comment-thread'),
+			topic = this.down('forums-topic-topic');
 
 		if (comments) {
 			comments.addIncomingComment(comment);
+			topic.commentAdded();
 		}
 	},
 
