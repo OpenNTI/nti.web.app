@@ -12,6 +12,8 @@ Ext.define('NextThought.controller.Assessment', {
 		'assessment.AssignmentSubmissionPendingAssessment',
 		'assessment.DictResponse',
 		'assessment.FilePart',
+		'assessment.FillInTheBlankWithWordBankPart',
+		'assessment.FillInTheBlankWithWordBankSolution',
 		'assessment.FreeResponsePart',
 		'assessment.FreeResponseSolution',
 		'assessment.Hint',
