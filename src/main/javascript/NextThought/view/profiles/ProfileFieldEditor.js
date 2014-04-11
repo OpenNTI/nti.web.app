@@ -10,7 +10,8 @@ Ext.define('NextThought.view.profiles.ProfileFieldEditor', {
 	revertInvalid: false,
 	alignment: 'l-l',
 
-	autoSize: {width: 'boundEl'},
+	maxWidth: 620,
+	autoSize: {width: 'field'},
 
 	controlTemplateObj: {
 		cls: 'controls',
@@ -29,15 +30,15 @@ Ext.define('NextThought.view.profiles.ProfileFieldEditor', {
 			'canceledit': 'resetBoundEl'
 		});
 
-        if(Ext.is.iOS){
-            //Set width of the inputs to less than the length of the upper element, to
-            //prevent the save and cancel boxes from going offscreen
-            this.autoSize = false;
-            this.width = 600;
-            if(Ext.query('.about.field')[0]){
-                this.width = Ext.get(Ext.query('.about.field')[0]).getWidth() - 150;
-            }
-        }
+		if (Ext.is.iOS) {
+			//Set width of the inputs to less than the length of the upper element, to
+			//prevent the save and cancel boxes from going offscreen
+			this.autoSize = false;
+			this.width = 600;
+			if (Ext.query('.about.field')[0]) {
+				this.width = Ext.get(Ext.query('.about.field')[0]).getWidth() - 150;
+			}
+		}
 
 	},
 
@@ -52,9 +53,10 @@ Ext.define('NextThought.view.profiles.ProfileFieldEditor', {
 		var me = this, oldWidth = me.autoSize.width;
 		//Ensure the editor is wide enough to see something...
 		function resetWidth() { me.autoSize.width = oldWidth; }
+
 		if (t.getWidth() < 150) {
 			me.autoSize.width = 150;
-        }
+		}
 
 		this.on({deactivate: resetWidth, single: true});
 
