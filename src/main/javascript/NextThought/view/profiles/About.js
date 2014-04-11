@@ -331,6 +331,9 @@ Ext.define('NextThought.view.profiles.About', {
 
 		if (nameInfo.editable || Ext.isFunction(fn)) {
 			this.on('name-clicked', fn);
+		} else {
+			console.warn('Name isn`t editable and reguest-alias-change isn`t a feature');
+			this.fireEvent('uneditable-name');
 		}
 
 		function validateAgainstSchema(value) {

@@ -63,6 +63,7 @@ Ext.define('NextThought.view.profiles.Panel', {
 
 		function monitor(panel) {
 			panel.relayEvents(me.navigation, ['name-clicked', 'enable-edit', 'disable-edit']);
+			me.navigation.relayEvents(panel, ['uneditable-name']);
 			me.mon(panel, {
 				beforeactivate: 'onBeforeViewChanged',
 				activate: 'onViewChanged',
@@ -191,9 +192,7 @@ Ext.define('NextThought.view.profiles.Panel', {
 		stateData.activeTab = c.getStateData();
 		//set state
 		url = u.getProfileUrl(
-				Ext.isEmpty(stateData.activeTab)
-						? null
-						: stateData.activeTab.split('/'));
+				Ext.isEmpty(stateData.activeTab) ? null : stateData.activeTab.split('/'));
 
 		console.debug('State Data: ', stateData, url);
 		history.pushState({profile: Ext.clone(stateData)},this.ownerCt.title, url);

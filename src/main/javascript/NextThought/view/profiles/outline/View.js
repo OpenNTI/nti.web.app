@@ -55,7 +55,8 @@ Ext.define('NextThought.view.profiles.outline.View', {
 		this.on({
 			avatarEl: {click: 'onControlsClicked'},
 			controlsEl: {click: 'onControlsClicked'},
-			nameEl: {click: 'onNameClicked'}
+			nameEl: {click: 'onNameClicked'},
+			'uneditable-name': 'markNameUneditable'
 		});
 	},
 
@@ -77,6 +78,10 @@ Ext.define('NextThought.view.profiles.outline.View', {
 		}
 		if (!Service.canChat()) {
 			this.controlsEl.down('.button').destroy();
+		}
+
+		if (this.nameUneditable) {
+			this.markNameUneditable();
 		}
 
 		this.updateButton();
@@ -348,6 +353,15 @@ Ext.define('NextThought.view.profiles.outline.View', {
 		this.fireEvent(event);
 		this[cls]('editing');
 		button.update(label)[ucls]('edit')[cls]('editing');
+	},
+
+
+	markNameUneditable: function() {
+		this.nameUneditable = true;
+
+		if (this.rendered) {
+			this.nameEl.addCls('read-only');
+		}
 	},
 
 

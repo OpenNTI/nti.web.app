@@ -83,7 +83,7 @@
 				cursor: pointer;
 				@include icon('edit-15_hover', $left:auto, $top: 5px, $right: 5px);
 
-				.name{
+				.name:not(.read-only){
 					cursor: pointer;
 					color: $primary-grey;
 					z-index: 1000;
