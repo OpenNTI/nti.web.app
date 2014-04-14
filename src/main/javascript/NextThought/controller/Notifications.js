@@ -44,6 +44,8 @@ Ext.define('NextThought.controller.Notifications', {
 			change = ParseUtils.parseItems([change])[0];
 		}
 
-		store.add(change);
+		if (change.isNotable()) {
+			store.add(change);
+		}
 	}
 });

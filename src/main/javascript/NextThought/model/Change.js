@@ -4,6 +4,8 @@ Ext.define('NextThought.model.Change', {
 		'NextThought.model.converters.GroupByTime'
 	],
 
+	NOTABLE_PROPERTY: 'RUGDByOthersThatIMightBeInterestedIn',
+
 	idProperty: 'ID',
 	fields: [
 		{ name: 'ID', type: 'string' },
@@ -22,5 +24,10 @@ Ext.define('NextThought.model.Change', {
 		}
 
 		return i.get(field);
+	},
+
+
+	isNotable: function() {
+		return !!(this.raw || {})[this.NOTABLE_PROPERTY];
 	}
 });
