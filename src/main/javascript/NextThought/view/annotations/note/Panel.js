@@ -739,11 +739,19 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 		}
 		var r = this.record, newContext, reader = this.reader,
 			rangeDesc = r.get('applicableRange'),
-			cid = r.get('ContainerId');
+			cid = r.get('ContainerId'),
+			page = doc.querySelector('#NTIContent');
 
 		try {
+			//if the range is empty and the cid is a page
+			if (rangeDesc.isEmpty && page && page.getAttribute('data-page-ntiid') === cid) {
+				this.context.destroy();
+				return;
+			}
+
 			this.context.setHTML('');
 			newContext = doc && RangeUtils.getContextAroundRange(rangeDesc, doc, cleanRoot, cid);
+
 			if (!newContext) {
 				reader = reader || ReaderPanel.get('default');
 				//last ditch...TODO: remove this dependancy:
