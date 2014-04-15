@@ -38,6 +38,9 @@ Ext.define('NextThought.view.content.overlay.Panel', {
 			try {
 			this.insertedElement = true;
 			d = this.reader.getDocumentElement().getElementsByTagName('object');
+			d = Array.prototype.slice.call(d);
+			d = d.filter(function(e) { return !e.matches('object object'); });
+
 			//TODO: ensure its a 'type=application/vnd.nextthought.*'
 			if (this.appendPlaceholder) {
 				insert = 'insertAfter';
@@ -109,8 +112,10 @@ Ext.define('NextThought.view.content.overlay.Panel', {
 	removeContent: function(selector) {
 		if (!this.contentElement) {return;}
 		var el = Ext.get(this.contentElement);
-    //		el.select(selector).remove();//Maybe set style display:none?
-		el.select(selector).setStyle({display: 'none'});
+		el.select(selector)
+				//Maybe set style display:none?
+				//.remove();
+				.setStyle({display: 'none'});
 	},
 
 
