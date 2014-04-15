@@ -1,6 +1,13 @@
 Ext.define('NextThought.overrides.builtins.Node', {});
 	//Patch-in features that might be missing.
 (function() {
+
+	var EP = Element.prototype;
+
+	Ext.applyIf(EP, {
+		matches: EP.matches || EP.webkitMatchesSelector || EP.mozMatchesSelector || EP.msMatchesSelector || EP.oMatchesSelector
+	});
+
 	window.Node = window.Node || function() {};
 	window.NodeFilter = window.NodeFilter || {};
 
