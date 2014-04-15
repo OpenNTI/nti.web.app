@@ -670,6 +670,7 @@ function() {
 			Username: 1,
 			alias: 1,
 			realname: 1,
+			href: 1,
 			//profile fields (can't drop these) It would be nice to not to include these until we view the profile. (separate call?)
 			about: 1,
 			affiliation: 1,
