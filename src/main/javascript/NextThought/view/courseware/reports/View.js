@@ -12,7 +12,7 @@ Ext.define('NextThought.view.courseware.reports.View', {
 		customScroll: 'NextThought.mixins.CustomScroll'
 	},
 
-	ids: ['course-report', 'student-report', 'forum-report', 'topic-report'],// 'assignment-report'],
+	ids: ['course-report', 'student-report', 'forum-report', 'topic-report', 'assignment-report'],
 
 	configMap: {
 		'course-report': {
