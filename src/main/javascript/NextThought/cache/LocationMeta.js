@@ -122,7 +122,7 @@ Ext.define('NextThought.cache.LocationMeta', {
 			function fail(req, resp) {
 				if (resp && resp.status === 403) {
 					console.log('Unauthorized when requesting page info', ntiid);
-					return me.handleUnauthorized(ntiid);
+					return me.handleUnauthorized(ntiid).then(fulfill, reject);
 				}
 				//console.error('fail', arguments);
 				reject(resp);
