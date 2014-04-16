@@ -292,6 +292,12 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 
 		this.store = s;
 		s.backingStore = parentStore;
+		ObjectUtils.defineAttributes(s, {
+			lastViewed: {
+				getter: function() {return parentStore.lastViewed;},
+				setter: function(v) {parentStore.lastViewed = v;}
+			}
+		});
 
 		this.mon(parentStore, {
 			add: function(store, recs) { s.add(recs); },
