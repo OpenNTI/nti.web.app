@@ -3,7 +3,8 @@ Ext.define('NextThought.mixins.QuestionContent', {
 
 	typeToComponent: {
 		//'text/html': 'NextThought.view.assessment.components.Base',
-		'application/vnd.nextthought.contentsequence': 'assessment-components-sequence'
+		'application/vnd.nextthought.contentsequence': 'assessment-components-sequence',
+		'application/vnd.nextthought.naqwordbank': 'assessment-components-wordbank'
 	},
 
 	contentComponents: [],
@@ -41,7 +42,8 @@ Ext.define('NextThought.mixins.QuestionContent', {
 				id = guidGenerator(),
 				added = me.addObject(type, {
 					renderTo: id,
-					domObject: object
+					domObject: object,
+					record: me.part || me.question
 				}, me.rendered && !dontRender);
 
 			if (added) {

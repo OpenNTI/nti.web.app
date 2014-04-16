@@ -4,6 +4,10 @@ Ext.define('NextThought.view.assessment.PartContent', {
 
 	cls: 'part-content',
 
+	mixins: {
+		questionContent: 'NextThought.mixins.QuestionContent'
+	},
+
 	renderTpl: Ext.DomHelper.markup(
 			[
 				{ cls: 'ordinal', html: '{ordinal}.' },
@@ -12,8 +16,14 @@ Ext.define('NextThought.view.assessment.PartContent', {
 	),
 
 	initComponent: function() {
+		var c = this.part.get('content');
+
+		if (c) {
+			c = this.buildContent(c, true);
+		}
+
 		this.renderData = Ext.apply(this.renderData || {}, {
-			content: this.part.get('content'),
+			content: c,
 			ordinal: String.fromCharCode(65 + this.ordinal)
 		});
 		return this.callParent(arguments);

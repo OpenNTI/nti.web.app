@@ -8,6 +8,11 @@ Ext.define('NextThought.view.assessment.Question', {
 	],
 
 
+	mixins: {
+		questionContent: 'NextThought.mixins.QuestionContent'
+	},
+
+
 	representsUserDataContainer: true,
 
 	cls: 'question scrollable',
@@ -135,6 +140,7 @@ Ext.define('NextThought.view.assessment.Question', {
 		this.down('question-parts').updateWithResults(q);
 	},
 
+
 	gatherQuestionResponse: function(questionSet, collection) {
 		var id = this.question.getId(), values = [];
 		Ext.each(this.query('abstract-question-input'), function(p) {
@@ -188,7 +194,7 @@ Ext.define('NextThought.view.assessment.Question', {
 		this.update(
 			Ext.DomHelper.markup({
 				 style: {verticalAlign: 'initial'},
-				 html: ContentUtils.fixReferences(c + p, root)
+				 html: this.buildContent(ContentUtils.fixReferences(c + p, root))
 			 }));
 
 		function santatize() {
