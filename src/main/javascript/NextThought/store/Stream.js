@@ -100,6 +100,15 @@ Ext.define('NextThought.store.Stream', {
 	},
 
 
+	onProxyLoad: function(operation) {
+		var resultSet = operation.getResultSet();
+		delete this.batchLinks;
+		if (resultSet && resultSet.links) {
+			this.batchLinks = resultSet.links;
+		}
+		return this.callParent(arguments);
+	},
+
 	hasSource: function() {
 		return !!this.getProxy().url;
 	},
