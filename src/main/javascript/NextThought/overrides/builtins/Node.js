@@ -39,4 +39,8 @@ Ext.define('NextThought.overrides.builtins.Node', {});
 						});
 		}
 	});
+
+	NodeList.prototype.toArray = function() {
+		return Array.prototype.slice.call(this);
+	};
 }());
