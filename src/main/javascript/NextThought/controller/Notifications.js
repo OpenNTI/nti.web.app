@@ -14,13 +14,27 @@ Ext.define('NextThought.controller.Notifications', {
 	refs: [],
 
 	init: function() {
-		var store = NextThought.store.Stream.create({
+		this.notificationStore = NextThought.store.Stream.create({
 			storeId: 'notifications',
 			autoLoad: false,
-			pageSize: 50
+			pageSize: 50,
+			proxy: {
+				type: 'rest',
+				pageParam: undefined,
+				limitParam: 'batchSize',
+				startParam: 'batchBefore',
+				reader: {
+					type: 'nti',
+					root: 'Items',
+					totalProperty: 'FilteredTotalItemCount'
+				},
+				headers: {
+					'Accept': 'application/vnd.nextthought.collection+json'
+				},
+				model: 'NextThought.model.Change'
+			}
 		});
-		store.getProxy().extraParams = {};
-		this.notificationStore = store;
+
 		this.application.on('session-ready', this.onSessionReady, this);
 	},
 
