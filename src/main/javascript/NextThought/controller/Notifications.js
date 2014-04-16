@@ -48,6 +48,8 @@ Ext.define('NextThought.controller.Notifications', {
 						console.error('No Notifications url');
 						url = 'bad-notifications-url';
 					}
+
+					store.proxy.proxyConfig.url = url;
 					store.url = store.proxy.url = url;
 					store.lastViewed = new Date(0);
 
