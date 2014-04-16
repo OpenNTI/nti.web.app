@@ -30,6 +30,10 @@ Ext.define('NextThought.controller.Notifications', {
 				//success:
 				function(pageInfo) {
 					var url = pageInfo.getLink(Globals.MESSAGE_INBOX);
+					if (!url) {
+						console.error('No Notifications url');
+						url = 'bad-notifications-url';
+					}
 					store.url = store.proxy.url = url;
 					store.lastViewed = new Date(0);
 
