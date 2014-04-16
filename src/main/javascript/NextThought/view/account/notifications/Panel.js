@@ -165,9 +165,10 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 
 	maybeNotify: function() {
 		var count = 0,
-			cap = this.store.pageSize - 1,
-			lastViewed = this.store.lastViewed || new Date(0),
-			links = this.store.batchLinks || {};
+			store = this.store.backingStore,
+			cap = store.pageSize - 1,
+			lastViewed = store.lastViewed || new Date(0),
+			links = store.batchLinks || {};
 
 		this._lastViewedURL = links.lastViewed;
 
@@ -253,6 +254,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		var registry = this.tpl.subTemplates,
 			parentStore = Ext.getStore('notifications'),
 			s = NextThought.store.PageItem.create({
+				proxy: 'memory',
 				storeId: this.storeId,
 				sortOnLoad: true,
 				statefulFilters: false,
@@ -261,7 +263,6 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 				remoteGroup: false,
 				filterOnLoad: true,
 				sortOnFilter: true,
-				pageSize: 50,
 				groupers: [
 					{
 						direction: 'DESC',
@@ -289,30 +290,25 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 			});
 
 
-		s.proxy.url = parentStore.url;
-		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
-			sortOn: 'createdTime',
-			sortOrder: 'descending'
-		});
-
 		this.store = s;
+		s.backingStore = parentStore;
 
 		this.mon(parentStore, {
-			add: function(store, recs) { s.add(recs); }
+			add: function(store, recs) { s.add(recs); },
+			load: function(store, recs) { s.loadRecords(recs); }
 		});
 
 		this.mon(s, {
 			add: 'recordsAdded',
-			load: 'storeLoaded'
+			refresh: 'storeLoaded'
 		});
 
 		this.mon(s, {
 			add: 'maybeNotify',
-			load: 'maybeNotify'
+			refresh: 'maybeNotify'
 		});
 
 		this.bindStore(s);
-		s.load();
 	},
 
 
@@ -486,6 +482,8 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 
 	prefetchNext: Ext.Function.createBuffered(function() {
 		var s = this.getStore(), max;
+
+		s = s && s.backingStore;
 
 		if (!s.hasOwnProperty('data')) {
 			return;

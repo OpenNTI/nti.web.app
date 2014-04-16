@@ -14,7 +14,13 @@ Ext.define('NextThought.controller.Notifications', {
 	refs: [],
 
 	init: function() {
-		this.notificationStore = NextThought.store.Stream.create({storeId: 'notifications'});
+		var store = NextThought.store.Stream.create({
+			storeId: 'notifications',
+			autoLoad: false,
+			pageSize: 50
+		});
+		store.getProxy().extraParams = {};
+		this.notificationStore = store;
 		this.application.on('session-ready', this.onSessionReady, this);
 	},
 
@@ -25,7 +31,19 @@ Ext.define('NextThought.controller.Notifications', {
 				function(pageInfo) {
 					var url = pageInfo.getLink(Globals.MESSAGE_INBOX);
 					store.url = store.proxy.url = url;
-					store.load();
+					store.lastViewed = new Date(0);
+
+					Service.request(url + '/lastViewed')
+							.then(function(lastViewed) {
+								store.lastViewed = new Date(parseFloat(lastViewed) * 1000);
+							})
+							.fail(function() {
+								console.warn('Could not resolve notification`s lastViewed');
+							})
+							.then(function() {
+								console.debug('Loading notifications...');
+								store.load();
+							});
 				},
 				//failure:
 				function() {
