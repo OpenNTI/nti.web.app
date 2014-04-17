@@ -39,7 +39,12 @@ Ext.define('NextThought.view.content.overlay.Panel', {
 			this.insertedElement = true;
 			d = this.reader.getDocumentElement().getElementsByTagName('object');
 			d = Array.prototype.slice.call(d);
-			d = d.filter(function(e) { return !Ext.fly(e).is('object object'); });
+
+			d = d.filter(function rootObjects(e) {
+				var p = e.parentNode;
+				if (p && p.nodeName === 'OBJECT') { return false; }
+				return p ? rootObjects(p) : true;
+			});
 
 			//TODO: ensure its a 'type=application/vnd.nextthought.*'
 			if (this.appendPlaceholder) {
