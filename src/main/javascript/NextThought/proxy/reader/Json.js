@@ -36,7 +36,7 @@ Ext.define('NextThought.proxy.reader.Json', {
 						continue;
 					}
 
-					if (!item.Class || !ParseUtils.findModel(item.Class)) {
+					if (!ParseUtils.findModel(item)) {
 						console.warn('IGNORING: Received object that does not match a model', item);
 						continue;
 					}
@@ -73,7 +73,7 @@ Ext.define('NextThought.proxy.reader.Json', {
 							modelName = record.get('Class');
 							if (record.modelName.substr(-modelName.length) !== modelName) {
 								result.records[i] = this.__rebuildRecordAsType(
-										ParseUtils.findModel(modelName), record.getId(), record.raw);
+										ParseUtils.findModel(record.raw), record.getId(), record.raw);
 								delete record.raw;
 							}
 						}

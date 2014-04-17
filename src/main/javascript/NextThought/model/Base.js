@@ -105,10 +105,22 @@ Ext.define('NextThought.model.Base', {
 
 
 	onClassExtended: function(cls, data) {
-		var mime = {mimeType: 'application/vnd.nextthought.' + data.$className.replace(/^.*?model\./, '').toLowerCase()};
+		var map,
+			type,
+			mime = {mimeType: 'application/vnd.nextthought.' + data.$className.replace(/^.*?model\./, '').toLowerCase()};
 		data.proxy = {type: 'nti', model: cls};
 		Ext.applyIf(cls, mime);//Allow overriding
 		Ext.applyIf(data, mime);//Allow overriding
+
+		type = data.mimeType || cls.mimeType;
+
+		map = NextThought.model.MAP = NextThought.model.MAP || {};
+		//console.log(type);
+		if (map[type] !== undefined) {
+			Ext.Error.raise('Cannot have more than one model per mimetype: ' + type);
+		}
+
+		map[type] = data.$className || cls.$className;
 
 		//We don't want to be turning null into empty strings so we must set useNull
 		//Failure to do so creates havok with server side validation and also

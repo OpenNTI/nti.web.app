@@ -1,6 +1,7 @@
 Ext.define('NextThought.model.courseware.CourseCatalogInstructorInfo', {
 	alternateClassName: 'NextThought.model.courseware.CourseCatalogInstructorLegacyInfo',
-	extend: 'Ext.data.Model',
+	mimeType: 'application/vnd.nextthought.courseware.coursecataloginstructorlegacyinfo',
+	extend: 'NextThought.model.Base',
 
 	idProperty: 'Username',
 	fields: [

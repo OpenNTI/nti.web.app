@@ -1,5 +1,6 @@
 Ext.define('NextThought.model.assessment.Question', {
 	extend: 'NextThought.model.Base',
+	mimeType: 'application/vnd.nextthought.naquestion',
 	requires: [
 		'NextThought.model.converters.Items',
 		'NextThought.util.Parsing'

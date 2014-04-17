@@ -1,5 +1,6 @@
 Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistory', {
 	extend: 'NextThought.model.Base',
+	mimeType: 'application/vnd.nextthought.assessment.userscourseassignmenthistory',
 
 	fields: [
 		{name: 'Items', type: 'collectionItem', persist: false},

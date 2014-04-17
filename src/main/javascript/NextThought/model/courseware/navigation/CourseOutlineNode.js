@@ -1,5 +1,6 @@
 Ext.define('NextThought.model.courseware.navigation.CourseOutlineNode', {
 	extend: 'NextThought.model.Base',
+	mimeType: 'application/vnd.nextthought.courses.courseoutlinenode',
 	requires: ['NextThought.model.converters.Date'],
 	isNode: true,
 

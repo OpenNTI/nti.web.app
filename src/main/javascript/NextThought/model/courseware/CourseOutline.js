@@ -1,5 +1,6 @@
 Ext.define('NextThought.model.courseware.CourseOutline', {
 	extend: 'NextThought.model.Base',
+	mimeType: 'application/vnd.nextthought.courses.courseoutline',
 
 	fields: [
 		{name: 'Items', type: 'auto', persist: false}

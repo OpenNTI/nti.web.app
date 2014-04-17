@@ -8,7 +8,7 @@ Ext.define('NextThought.model.assessment.WordBank', {
 });
 
 Ext.define('NextThought.model.assessment.wordbank.WordEntry', {
-	extend: 'Ext.data.Model',
+	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.naqwordentry',
 	fields: [
 		{ name: 'Class', type: 'string', defaultValue: 'WordEntry', persist: false },

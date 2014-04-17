@@ -30,7 +30,7 @@ Ext.define('NextThought.util.Parsing', {
 					continue;
 				}
 
-				reader = this.getReaderForModel(item.Class);
+				reader = this.getReaderFor(item);
 				if (!reader) {
 					console.debug('No reader for item: ', item);
 					continue;
@@ -48,7 +48,7 @@ Ext.define('NextThought.util.Parsing', {
 	},
 
 
-	findModel: function(name) {
+	findModel: function(data) {
 		function recurse(dir, modelName) {
 			var sub, o = dir[modelName];
 
@@ -57,7 +57,7 @@ Ext.define('NextThought.util.Parsing', {
 			}
 
 			for (sub in dir) {
-				if (dir.hasOwnProperty(sub)) {
+				if (dir.hasOwnProperty(sub) && sub !== 'MAP') {
 					if (!dir[sub].$isClass && !dir[sub].singleton) {
 						o = recurse(dir[sub], modelName);
 						if (o) {return o;}
@@ -68,16 +68,34 @@ Ext.define('NextThought.util.Parsing', {
 			return null;
 		}
 
+		var name, m;
+
+		if (data.MimeType) {
+			m = NextThought.model.MAP[data.MimeType];
+			m = m && Ext.ClassManager.get(m);
+			if (m) {
+				return m;
+			}
+
+			console.warn('No model for mimeType: ' + data.MimeType + '. Falling back to classname resolution: ' + data.Class);
+		}
+
+		if (Ext.isString(data)) {
+			name = data;
+		} else if (data.Class) {
+			name = data.Class;
+		}
+
 		return recurse(NextThought.model, name);
 	},
 
 
-	getReaderForModel: function(modelName) {
+	getReaderFor: function(item) {
 		this.readers = this.readers || [];
 
-		var o = this.findModel(modelName);
+		var o = this.findModel(item);
 		if (!o) {
-			console.error('no model found for ' + modelName);
+			console.error('no model found for ', item);
 			return;
 		}
 
