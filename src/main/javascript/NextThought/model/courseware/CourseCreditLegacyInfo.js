@@ -1,5 +1,5 @@
 Ext.define('NextThought.model.courseware.CourseCreditLegacyInfo', {
-	extend: 'Ext.data.Model',
+	extend: 'NextThought.model.Base',
 
 	fields: [
 		{ name: 'Class', type: 'string' },

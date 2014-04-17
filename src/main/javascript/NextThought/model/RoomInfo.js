@@ -1,5 +1,7 @@
 Ext.define('NextThought.model.RoomInfo', {
 	extend: 'NextThought.model.Base',
+	mimeType: 'application/vnd.nextthought._meeting',
+
 	idProperty: 'ID',
 	fields: [
 		{ name: 'Active', type: 'bool' },

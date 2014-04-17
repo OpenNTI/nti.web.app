@@ -2,6 +2,8 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 	alternateClassName: 'NextThought.model.courseware.UsersCourseAssignmentHistoryItemSummary',
 	extend: 'NextThought.model.Base',
 
+	mimeType: 'application/vnd.nextthought.assessment.userscourseassignmenthistoryitem',
+
 	fields: [
 		{name: 'Feedback', type: 'singleItem', persist: false},
 		{name: 'Grade', type: 'singleItem', persist: false},
