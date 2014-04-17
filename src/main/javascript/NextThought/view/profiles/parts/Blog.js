@@ -45,7 +45,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 	 *
 	 * This may seem dangerous, but {@link Ext.Component#isOwnerLayout} is a function that I injected into the system.
 	 * @see NextThought.overrides.Component#isOwnerLayout
-	 * @param name
+	 * @param {String} name
 	 * @return {boolean}
 	 */
 	isOwnerLayout: function(name) {
@@ -168,10 +168,10 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 		Ext.EventManager.onWindowResize(this.handleWindowResize, this);
 		this.on('destroy', function() {Ext.EventManager.removeResizeListener(this.handleWindowResize, this);}, this);
 
-        if(Ext.is.iOS){
-            this.el.down('.body').addCls('scrollable');
-            this.el.down('.post-view').addCls('scrollable');
-        }
+		if (Ext.is.iOS) {
+			this.el.down('.body').addCls('scrollable');
+			this.el.down('.post-view').addCls('scrollable');
+		}
 	},
 
 
@@ -330,6 +330,12 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 	handleNoVisiblePosts: function() {
 		var me = this;
 		me.addCls('make-white');
+
+		if (me.noPostPlaceholder) {
+			console.log('Already have an empty blog placeholder in place, dont add another one');
+			return;
+		}
+
 		me.noPostPlaceholder = me.add({
 			xtype: 'no-thought',
 			userObject: me.user,
@@ -400,7 +406,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 	},
 
 
-	restore: function(data,finishCallback) {
+	restore: function(data, finishCallback) {
 		var me = this;
 
 		if (Ext.isEmpty(data)) {
