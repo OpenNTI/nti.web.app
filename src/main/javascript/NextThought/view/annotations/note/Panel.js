@@ -740,7 +740,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 		var r = this.record, newContext, reader = this.reader,
 			rangeDesc = r.get('applicableRange'),
 			cid = r.get('ContainerId'),
-			page = doc.querySelector('#NTIContent');
+			page = doc && doc.querySelector('#NTIContent');
 
 		try {
 			//if the range is empty and the cid is a page
