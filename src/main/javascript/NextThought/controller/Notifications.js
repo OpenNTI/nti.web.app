@@ -49,8 +49,6 @@ Ext.define('NextThought.controller.Notifications', {
 						url = 'bad-notifications-url';
 					}
 
-					store.proxy.proxyConfig.url = url;
-					store.url = store.proxy.url = url;
 					store.lastViewed = new Date(0);
 
 					Service.request(url + '/lastViewed')
@@ -61,7 +59,10 @@ Ext.define('NextThought.controller.Notifications', {
 								console.warn('Could not resolve notification`s lastViewed');
 							})
 							.then(function() {
-								console.debug('Loading notifications...');
+								store.proxy.proxyConfig.url = url;
+								store.url = store.proxy.url = url;
+
+								console.debug('Loading notifications: ' + url);
 								store.load();
 							});
 				},
