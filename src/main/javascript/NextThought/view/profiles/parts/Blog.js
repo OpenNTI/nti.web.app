@@ -95,6 +95,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 				}
 
 				if (me.canCreateNewBlog()) {
+					me.createEmptyStore();
 					me.handleNoVisiblePosts();
 				}
 				else {
@@ -307,6 +308,29 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 
 		this.store.load();
 	},
+
+
+	createEmptyStore: function() {
+		if (!this.rendered) {
+			this.on('afterrender', Ext.bind(this.createEmptyStore, this, arguments), this, {single: true});
+			return;
+		}
+
+		if (this.store) {
+			console.error('We already have a store, dont override it with an emtpy on');
+			return;
+		}
+
+		this.store = NextThought.store.Blog.create({storeId: 'blog-' + this.username});
+
+		this.mon(this.store, {
+			scope: this,
+			add: this.addedContents,
+			load: this.loadedContents,
+			remove: this.removedContent
+		});
+	},
+
 
 
 	addedContents: function(store, records, index) {
