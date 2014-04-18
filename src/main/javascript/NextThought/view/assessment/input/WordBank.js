@@ -15,7 +15,7 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 	inputTpl: Ext.DomHelper.markup({ cls: 'fill-in', html: '{lineWithBlank}' }),
 
 
-	blankTpl: Ext.DomHelper.createTemplate({ tag: 'span', cls: 'blank drop target', html: '&nbsp;' }),
+	blankTpl: Ext.DomHelper.createTemplate({ tag: 'span', cls: 'blank dropzone target' }),
 
 
 	renderSelectors: {
@@ -40,13 +40,53 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 		}
 
 		blanks = this.inputBox.query('input.nqablankfield');//TODO: input[type="blank"]
+		this.blankInputs = blanks;
 
-		blanks.forEach(this.setupBlank.bind(this));
+		blanks = blanks.map(this.setupBlank.bind(this));
+		this.blankDrops = blanks;
+		if (blanks.length) {
+			this.setupDropZones(blanks);
+		}
 	},
 
 
 	setupBlank: function(input) {
-		this.blankTpl.insertAfter(input, input.dataset);
+		return this.blankTpl.insertAfter(input, input.dataset);
+	},
+
+
+	setupDropZones: function(dropzones) {
+		var id = this.id,
+			me = this,
+			common = {
+				//<editor-fold desc="Boilerplate">
+				// If the mouse is over a target node, return that node. This is provided as the "target" parameter in all "onNodeXXXX" node event
+				// handling functions
+				getTargetFromEvent: function(e) { return e.getTarget('.blank.target'); },
+
+				// On entry into a target node, highlight that node.
+				onNodeEnter: function(target, dd, e, data) { Ext.fly(target).addCls('drop-hover'); },
+
+				// On exit from a target node, unhighlight that node.
+				onNodeOut: function(target, dd, e, data) { Ext.fly(target).removeCls('drop-hover'); },
+
+				// While over a target node, return the default drop allowed
+				onNodeOver: function(target, dd, e, data) { return Ext.dd.DropZone.prototype.dropAllowed; }
+				//</editor-fzold>
+			},
+			dropOnAnswer = {
+				onNodeDrop: function(target, dd, e, data) {
+					var el = data.sourceEl.cloneNode(true);
+					Ext.fly(el).removeCls('dragging');
+					target.appendChild(el);
+					Ext.fly(data.sourceEl).addCls('used').setStyle({visibility: 'hidden'});
+					return true;
+				}
+			};
+
+		this.dropZones = dropzones.map(function(zone) {
+			return new Ext.dd.DropZone(zone, Ext.apply(dropOnAnswer, common));
+		});
 	},
 
 

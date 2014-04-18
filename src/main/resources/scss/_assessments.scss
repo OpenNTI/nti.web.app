@@ -1286,20 +1286,39 @@ body.dragging * {
 
 		.blank {
 			display: inline-block;
-			min-width: 8em;
 			margin-right: 1em;
+			border-radius: 3px;
 
 			position: relative;
+
+			&.drop-hover {
+				background: rgba(0, 0, 0, 0.3)
+			}
+
+			.target.drag {
+				color: #fff;
+				cursor: default;
+				background: $primary-blue;
+				margin: 0;
+			}
+
+			&:empty {
+				min-width: 8em;&::before {
+					content: '(drop)';
+					visibility: hidden;
+				}
+			}
 
 			&::after {
 				$o: -4px;
 				content: '';
 				position: absolute;
-				top: $o; left: $o; right: $o; bottom: $o;
+				height: 24px;
+				left: $o; right: $o; bottom: $o;
 
 				border: 2px solid $border-grey;
 				border-radius: 3px;
-				clip: rect(1.5em auto auto auto);
+				clip: rect(20px auto auto auto);
 			}
 		}
 	}
