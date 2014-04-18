@@ -4,6 +4,7 @@ Ext.define('NextThought.model.assessment.FillInTheBlankWithWordBankPart', {
 		'NextThought.model.assessment.WordBank'
 	],
 	fields: [
+		{ name: 'input', type: 'string' },
 		{ name: 'wordbank', type: 'singleItem' }
 	]
 });

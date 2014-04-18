@@ -4,13 +4,35 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 		'widget.question-input-fillintheblankwithwordbankpart'
 	],
 
+
+	renderTpl: Ext.DomHelper.markup([
+		{ cls: 'wordbank-ct' },
+		'{super}'
+	]),
+
+
 	inputTpl: Ext.DomHelper.markup({ cls: 'fill-in', html: '{lineWithBlank}' }),
+
+
+	renderSelectors: {
+		wordBankEl: '.wordbank-ct'
+	},
+
 
 	beforeRender: function() {
 		this.callParent(arguments);
 		Ext.apply(this.renderData, {
-			lineWithBlank: this.part.get('partBody')
+			lineWithBlank: this.part.get('input')
 		});
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+		var wordbank = this.part.get('wordbank');
+		if (wordbank) {
+			this.wordbank = Ext.widget({xtype: 'assessment-components-wordbank', record: this.part, renderTo: this.wordBankEl});
+		}
 	},
 
 
