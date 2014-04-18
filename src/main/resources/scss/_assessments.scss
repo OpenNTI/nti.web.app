@@ -1282,6 +1282,25 @@ body.dragging * {
 			min-height: 0;
 		}
 
+		input {display: none;}
+
+		.blank {
+			display: inline-block;
+			min-width: 8em;
+			margin-right: 1em;
+
+			position: relative;
+
+			&::after {
+				$o: -4px;
+				content: '';
+				position: absolute;
+				top: $o; left: $o; right: $o; bottom: $o;
+
+				border: 2px solid $border-grey;
+				clip: rect(1.5em auto auto auto);
+			}
+		}
 	}
 }
 
