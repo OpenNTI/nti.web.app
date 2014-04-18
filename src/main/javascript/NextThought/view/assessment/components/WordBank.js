@@ -24,5 +24,84 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 		});
 
 		return this.callParent(arguments);
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+		this.setupDragging();
+	},
+
+
+	getDragProxy: function() {
+		var proxy = this.dragProxy;
+
+		if (!proxy) {
+			proxy = this.dragProxy = new Ext.dd.StatusProxy({
+				cls: 'dd-assessment-proxy-ghost',
+				id: this.id + '-drag-status-proxy',
+				repairDuration: 1000
+				//repair : Ext.emptyFn <--to help debug
+			});
+		}
+		return proxy;
+	},
+
+
+	setupDragging: function() {
+		var cfg, me = this, z;
+
+		cfg = {
+			animRepair: true,
+			proxy: this.getDragProxy(),
+
+			getDragData: function(e) {
+				var sourceEl = e.getTarget('.drag', 10), d;
+				if (sourceEl) {
+					d = sourceEl.cloneNode(true);
+					d.id = Ext.id();
+					return {
+						sourceEl: sourceEl,
+						repairXY: Ext.fly(sourceEl).getXY(),
+						ddel: d
+					};
+				}
+			},
+
+			getRepairXY: function() {
+				return this.dragData.repairXY;
+			},
+
+			onBeforeDrag: function() {
+				return !me.submitted;
+			},
+
+			onStartDrag: function() {
+				var data = this.dragData,
+						co = Ext.fly(data.sourceEl).up('.component-overlay'),
+						so = data.sourceEl,
+						el = this.getProxy().getDragEl(),
+						dx = Math.floor(el.getWidth() / 2),
+						dy = -Math.floor(el.getHeight() / 2);
+
+				// Center drag and drop proxy on cursor pointer
+				this.setDelta(dx, dy);
+
+				data.sheild = Ext.DomHelper.insertFirst(co, {cls: 'sheild'}, true);
+				Ext.getBody().addCls('dragging');
+				Ext.fly(so).addCls('dragging');
+			},
+
+			onEndDrag: function(data) {
+				Ext.destroy(data.sheild);
+				Ext.getBody().removeCls('dragging');
+				Ext.fly(data.sourceEl).removeCls('dragging');
+			}
+		};
+
+		z = this.dragZones = [];
+		this.el.select('.target.drag').each(function(e) {
+			z.push(new Ext.dd.DragZone(e, cfg));
+		});
 	}
 });
