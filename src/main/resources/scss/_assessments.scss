@@ -1298,6 +1298,7 @@ body.dragging * {
 				top: $o; left: $o; right: $o; bottom: $o;
 
 				border: 2px solid $border-grey;
+				border-radius: 3px;
 				clip: rect(1.5em auto auto auto);
 			}
 		}
