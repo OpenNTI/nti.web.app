@@ -138,7 +138,7 @@ Ext.define('NextThought.view.forums.topic.parts.Topic', {
 
 
 	afterRender: function() {
-		if (Ext.is.iPad) {
+		if (Ext.is.iOS) {
 			if (this.topicOpen) {
 				this.destroy();
 				return;

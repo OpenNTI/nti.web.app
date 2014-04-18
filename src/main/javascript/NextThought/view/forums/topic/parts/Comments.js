@@ -488,7 +488,17 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 
 		Ext.destroy(this.boxMonitor);
 
-		me.editor.el.scrollCompletelyIntoView(me.el.getScrollingEl());
+		if (!Ext.is.iOS) {
+			me.editor.el.scrollCompletelyIntoView(me.el.getScrollingEl());
+		}
+		else {
+			//Blur editor when first appears, to allow user to focus and bring up keyboard
+			Ext.defer(function() {
+				me.editor.el.down('.content').blur();
+			}, 250);
+			//scrollCompletelyIntoView was causing trouble occasionally in iPad
+			me.editor.el.scrollIntoView(me.el.getScrollingEl());
+		}
 
 		refreshMon = me.mon(me, {
 			destroyable: true,
