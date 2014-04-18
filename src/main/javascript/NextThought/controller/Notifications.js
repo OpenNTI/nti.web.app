@@ -26,7 +26,7 @@ Ext.define('NextThought.controller.Notifications', {
 				reader: {
 					type: 'nti',
 					root: 'Items',
-					totalProperty: 'FilteredTotalItemCount'
+					totalProperty: 'TotalItemCount'
 				},
 				headers: {
 					'Accept': 'application/vnd.nextthought.collection+json'
