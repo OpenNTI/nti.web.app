@@ -101,9 +101,7 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 		}
 
 		this.notLoadedYet = true;
-		this.initialLoad = PromiseFactory.make();
-		this.buildStore();
-
+		this.initialLoad = new Promise(this.buildStore.bind(this));
 		this.buildReadyPromise();
 	},
 
@@ -138,17 +136,17 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 			this.addCls('no-reply');
 		}
 
-		scrollEl = me.up('{isLayout("card")}').el;
+		scrollEl = me.up('{isLayout("card")}');
 
-		if (me.store.loading || this.notLoadedYet) {
+		if ((me.store.loading || this.notLoadedYet) && scrollEl) {
 			maskMon = me.mon(me.store, {
 				destroyable: true,
 				load: function() {
 					Ext.destroy(maskMon);
-					scrollEl.unmask();
+					scrollEl.el.unmask();
 				}
 			});
-			scrollEl.mask();
+			scrollEl.el.mask();
 		}
 
 		me.editor = Ext.widget('nti-editor', {ownerCt: me, renderTo: me.el, record: null, saveCallback: function(editor, postCmp, record) {
@@ -167,12 +165,13 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 	},
 
 
-	buildStore: function() {
-		var s = NextThought.store.forums.Comments.create({
-			parentTopic: this.topic,
-			storeId: this.topic.get('Class') + '-' + this.topic.get('NTIID'),
-			url: this.topic.getLink('contents')
-		});
+	buildStore: function(fulfill, reject) {
+		var me = this,
+			s = NextThought.store.forums.Comments.create({
+				parentTopic: me.topic,
+				storeId: me.topic.get('Class') + '-' + me.topic.get('NTIID'),
+				url: me.topic.getLink('contents')
+			});
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {},{
 			sortOn: 'CreatedTime',
@@ -180,16 +179,25 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 			filter: 'TopLevel'
 		});
 
-		this.mon(s, {
-			scope: this,
-			load: 'onStoreAdd',
-			add: 'onStoreAdd',
+		function storeLoad() {
+			if (me.notLoadedYet) {
+				delete me.notLoadedYet;
+				fulfill();
+			}
+
+			me.onStoreAdd.apply(me, arguments);
+		}
+
+		me.mon(s, {
+			scope: me,
+			load: storeLoad,
+			add: storeLoad,
 			update: 'onStoreUpdate',
 			'filters-applied': 'refreshQueue'
 		});
 
-		this.bindStore(s);
-		this.store.load();
+		me.bindStore(s);
+		me.store.load();
 	},
 
 
@@ -393,28 +401,27 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 
 
 	replyTo: function(record, el, width) {
-		var me = this, newRecord,
-			p = PromiseFactory.make();
+		var me = this, newRecord;
 
-		me.isNewRecord = true;
-		newRecord = record.makeReply();
+		return new Promise(function(fulfill, reject) {
+			me.isNewRecord = true;
+			newRecord = record.makeReply();
 
-		if (!record.threadLoaded && record.get('ReferencedByCount')) {
-			me.store.on('add', function() {
-				var el = me.getNode(record);
+			if (!record.threadLoaded && record.get('ReferencedByCount')) {
+				me.store.on('add', function() {
+					var el = me.getNode(record);
 
-				el = Ext.get(el);
+					el = Ext.get(el);
 
+					me.openEditor(newRecord, el.down('.editor-box'), width);
+					fulfill();
+				}, me, {single: true});
+				me.loadThread(record, el);
+			} else {
 				me.openEditor(newRecord, el.down('.editor-box'), width);
-				p.fulfill();
-			}, me, {single: true});
-			me.loadThread(record, el);
-		} else {
-			me.openEditor(newRecord, el.down('.editor-box'), width);
-			p.fulfill();
-		}
-
-		return p;
+				fulfill();
+			}
+		});
 	},
 
 
@@ -584,41 +591,41 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 	goToComment: function(comment) {
 		if (!this.rendered) {
 			this.scrollToComment = comment;
-			return;
+			return Promise.resolve();
 		}
 
-		var p = PromiseFactory.make(),
-			me = this,
-			refs = comment.get('references');
+		var me = this;
 
-		if (Ext.isEmpty(refs)) {
+		return new Promise(function(fulfill, reject) {
+			var refs = comment.get('references');
+
+			if (Ext.isEmpty(refs)) {
+				me.initialLoad.done(function() {
+					me.scrollCommentIntoView(comment);
+					fulfill();
+				});
+
+				return;
+			}
+
 			me.initialLoad.done(function() {
-				me.scrollCommentIntoView(comment);
-				p.fulfill();
-			});
+				refs.forEach(function(ref) {
+					var rec = me.store.getById(ref);
 
-			return;
-		}
-
-		me.initialLoad.done(function() {
-			refs.forEach(function(ref) {
-				var rec = me.store.getById(ref);
-
-				if (rec && rec.get('depth') === 0) {
-					me.mon(me.store, {
-						single: true,
-						buffer: 1,
-						add: function() {
-							me.scrollCommentIntoView(comment);
-							p.fulfill();
-						}
-					});
-					me.store.showCommentThread(rec);
-				}
+					if (rec && rec.get('depth') === 0) {
+						me.mon(me.store, {
+							single: true,
+							buffer: 1,
+							add: function() {
+								me.scrollCommentIntoView(comment);
+								fulfill();
+							}
+						});
+						me.store.showCommentThread(rec);
+					}
+				});
 			});
 		});
-
-		return p;
 	},
 
 

@@ -85,7 +85,7 @@ Ext.define('NextThought.controller.Forums', {
 				},
 
 				//Why is this so specific?
-				'activity-preview-topic > nti-editor': {
+				'activity-preview-topic nti-editor': {
 					'save': 'saveTopicComment'
 				},
 				'activity-preview-topic-reply > nti-editor': {

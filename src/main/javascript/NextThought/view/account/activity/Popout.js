@@ -180,6 +180,7 @@ Ext.define('NextThought.view.account.activity.Popout', {
 				var pop, sidebar, me = this;
 
 				function align() {
+					if (!pop) { return; }
 
 					pop.maxHeight = Ext.dom.Element.getViewportHeight();
 					if (Ext.getBody().contains(pop.refEl)) {

@@ -4,7 +4,8 @@ Ext.define('NextThought.view.account.activity.topic.Preview', {
 
 	requires: [
 		'NextThought.mixins.forum-feature.Path',
-		'NextThought.view.account.activity.note.Reply'
+		'NextThought.view.account.activity.note.Reply',
+		'NextThought.view.forums.topic.parts.Comments'
 	],
 
 	mixins: {
@@ -14,6 +15,8 @@ Ext.define('NextThought.view.account.activity.topic.Preview', {
 	renderSelectors: {
 		pathEl: '.path'
 	},
+
+	threadedReplies: true,
 
 	defaultType: 'activity-preview-topic-reply',
 
@@ -55,13 +58,18 @@ Ext.define('NextThought.view.account.activity.topic.Preview', {
 
 
 	showReplies: function() {
-		this.callParent(arguments);
-		this.buildStore();
+		this.navigateToItem('show-topic', this, this.record);
 	},
 
 
 	navigateToItem: function() {
-		this.fireEvent('show-topic', this, this.record);
+		var pop = this.up('activity-popout');
+
+		this.fireEvent('show-topic', this, this.record, this.record.focusRecord);
+
+		if (pop) {
+			pop.destroy();
+		}
 	},
 
 
@@ -70,7 +78,8 @@ Ext.define('NextThought.view.account.activity.topic.Preview', {
 		this.record.get('headline').compileBodyContent(this.setBody, this, null, this.self.WhiteboardSize);
 		this.fillInPath();
 		//Load the last comment or the this.record.focusRecord (if its set)
-		if (this.record.focusRecord) {
+
+		if (this.record.focusRecord && !this.threadedReplies) {
 			this.add({record: this.record.focusRecord});
 		}
 	},
@@ -78,6 +87,38 @@ Ext.define('NextThought.view.account.activity.topic.Preview', {
 	afterRender: function() {
 		this.callParent(arguments);
 		this.mon(this.pathEl, 'click', this.navigateToItem, this);
+
+		if (!this.threadedReplies) { return; }
+
+		var me = this,
+			comments = me.add({xtype: 'forums-topic-comment-thread', topic: me.record, activeComment: me.record.focusRecord});
+
+		if (me.record.focusRecord) {
+			comments.store.addFilter({
+				id: 'flyoutComment',
+				filterFn: function(record) {
+					var refs = record.get('references') || [];
+
+					//if the record is the focus record
+					if (me.record.focusRecord.getId() === record.getId()) {
+						return true;
+					}
+
+					//if the record's references contain the focus record
+					if (refs.indexOf(me.record.focusRecord.getId()) >= 0) {
+						return true;
+					}
+
+					//if the record shares a ancestor with the focus record
+					if (!Ext.isEmpty(Ext.Array.intersect(refs, me.record.focusRecord.get('references')))) {
+						return true;
+					}
+
+					//if the record is a child of the focus record
+					return (me.record.focusRecord.get('references') || []).indexOf(record.getId()) >= 0;
+				}
+			});
+		}
 	},
 
 	destroy: function() {
