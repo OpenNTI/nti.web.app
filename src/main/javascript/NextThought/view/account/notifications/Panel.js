@@ -192,7 +192,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 
 
 	clearBadge: function() {
-		if (this.badgeValue === 0) {
+		if (!this.badgeValue) {
 			return;
 		}
 
