@@ -41,7 +41,8 @@ Ext.define('NextThought.util.Globals', {
 	}),
 
 	//Holy mother of perl! JSLint really hates the javascript protocol. :( We have to really obfuscate that string for it not to complain.
-	EMPTY_WRITABLE_IFRAME_SRC: ('javascript' + (function() {return ':';}())),
+	//EMPTY_WRITABLE_IFRAME_SRC: ('javascript' + (function() {return ':';}())),
+	EMPTY_WRITABLE_IFRAME_SRC: 'resources/writableSource.html',
 
 	ANIMATE_NO_FLASH: {
 		listeners: {
