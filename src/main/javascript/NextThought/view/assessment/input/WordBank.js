@@ -4,6 +4,7 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 		'widget.question-input-fillintheblankwithwordbankpart'
 	],
 
+	cls: 'wordbank-input',
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'wordbank-ct' },

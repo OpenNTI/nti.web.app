@@ -340,6 +340,8 @@ body.dragging * {
 			padding: 17px 40px 15px 40px;
 			background: #ffffff;
 			color: $primary-grey;
+			overflow: hidden;
+			position: relative;
 
 			.labels{
 				padding: 10px 15px 0 0;
@@ -463,6 +465,8 @@ body.dragging * {
 		box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.2);
 		display: inline-block;
 		padding: 0 15px;
+		font: normal normal 1em/2 $font;
+		margin: 15px 5px 15px 0;
 		@include experimental-value(cursor,grab);
 
 		&:active,
@@ -725,404 +729,408 @@ body.dragging * {
 
 		& > .x-panel-body-assessment {
 			padding: 20px;
-			.response-container {
-				position: relative;
+		}
+	}
+
+	.response-container {
+		position: relative;
+		min-height: 38px;
+		background: #ffffff;
+		border: 1px solid $tertiary-grey;
+
+		.inputbox {
+			color: $primary-grey;
+			min-height: 38px;
+
+			@include icon('circle-x-red-18',$top: 10px, $left: 10px);
+			&::after{
+				display: none;
+			}
+
+			.mathquill-editable,
+			.mathquill-rendered-math {
+				font: {
+					family: $font;
+					weight: normal;
+					size: 14px;
+					style: normal;
+				}
+
+				border: none;
 				min-height: 38px;
+				min-width: 100%;
+				padding: 12px 8px 5px 8px !important;
+
+				&[data-label]::after{
+					@include placeholder-style();
+					content: attr(data-label);
+					margin: 0.3em;
+				}
+			}
+
+			& > .label {
+				position: absolute;
+				display: inline-block;
+				white-space: nowrap;
+				@include placeholder-style();
+				padding: 0 0.3em;
+				line-height: 38px;
+				top: 0;
+			}
+
+			&.correct, &.incorrect{
+				&, input.answer-field {
+					color: #f35252;
+					font-weight: 600;
+				}
+				padding-left: 28px;
+				input.answer-field {
+					left: 28px;
+				}
+				&::after {
+					display: block;
+				}
+			}
+			&.correct{
+				&, input.answer-field {
+					color: #8eb737;
+					font-weight: normal;
+				}
+
+				&::after {
+					@include sprite($icons,'circle-check-green-18');
+				}
+			}
+
+			input.answer-field {
+				@extend .assessment-content;
+				color: $primary-grey;
+				margin: 5px 10px 4px;
+				border: none;
+				padding: 0;
+				position: absolute;
+				left: 0; right: 0;
+				min-height: 28px; // mainly a fix for IE
+				min-width: 85%;	// mainly a fix for IE
+			}
+		}
+
+		.historyMenu{
+			display: block;
+			position: absolute;
+			top: 9px;
+			right: 5px;
+			width: 32px;
+			height: 20px;
+
+			&::after{
+				content: ' ';
+				background: $icons no-repeat;
+				@include sprite($icons,'answer-history',$dimensions: true);
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+
+			&:hover{
+				&::after{
+					@include sprite($icons,'answer-history_active',$dimensions: true);
+				}
+			}
+		}
+
+		.choice {
+			@extend .assessment-content;
+			cursor: pointer;
+			position: relative;
+			color: $primary-grey;
+			vertical-align: middle;
+			min-height: 38px;
+			background: #ffffff;
+			border: 0px solid $tertiary-grey;
+			border-bottom-width: 1px;
+			&:last-of-type { border-bottom-width: 0px; }
+			padding-left: 54px;
+
+			span {
+				line-height: 38px;
+			}
+
+			.label {
+				height: 38px;
+				font-weight: bold;
+				margin-right: 10px;
+			}
+			.control {
+				position: absolute;
+				top: 0; left: 0;
+				display: inline-block;
+				width: 54px;
+				height: 38px;
+				border: none;
+				border-left: 6px solid white;
+				&.checked {
+					border-color: $primary-blue;
+				}
+			}
+
+			&.drop-hover {
+				box-shadow: 0 0 3px 1px $primary-blue;
+				border-color: $primary-blue;
+				z-index: 3;
+			}
+		}
+
+		.choice.target {
+			padding: 20px 40px;
+		}
+
+		.multi, .single {
+			.choice, .choice:hover {
+
+				&.correct .control {
+					&,&.checked{
+						border-color: #9ac73c;
+						@include icon('circle-check-green-18',$top:10px,$left:9px, $position:absolute);
+					}
+				}
+
+				&.incorrect .control{
+					&,&.checked{
+						border-color: #f35252;
+						@include icon('circle-x-red-18',$top:10px,$left:9px, $position:absolute);
+					}
+				}
+			}
+		}
+
+		.multi .choice {
+			.control {
+				@include icon('checkbox-14', $top:12px,$left:20px, $position:absolute);
+				&.checked::after { @include sprite($icons,'checkbox-14_active'); }
+			}
+
+			&:hover .control{
+				&::after { @include sprite($icons,'checkbox-14_hover'); }
+				&.checked::after{
+					@include sprite($icons,'checkbox-14_active');
+				}
+			}
+		}
+
+		.single .choice {
+			.control {
+				@include icon('radio-button-16', $top:10px,$left:10px, $position:absolute);
+				&.checked::after { @include sprite($icons,'radio-button-16_active'); }
+			}
+			&:hover .control{
+				&::after { @include sprite($icons,'radio-button-16_hover'); }
+				&.checked::after{
+					@include sprite($icons,'radio-button-16_active');
+				}
+			}
+		}
+
+		.ordering-dd-zone{
+			display: table;
+			table-layout: fixed;
+
+			.ordinal{
+				@extend .assessment-content;
+				position: relative;
+				display: table-row;
+				color: $primary-grey;
+				vertical-align: middle;
 				background: #ffffff;
-				border: 1px solid $tertiary-grey;
+				border: 0 solid $tertiary-grey;
+				border-bottom-width: 1px;
+				&:last-of-type {
+					border-bottom-width: 0px;
+					.draggable-area{ border-bottom-width: 0px;}
+					.label{ border-bottom-width: 0px;}
+				}
 
-				.inputbox {
-					color: $primary-grey;
-					min-height: 38px;
+				&.selected{
+					opacity: 0.3;
+				}
 
-					@include icon('circle-x-red-18',$top: 10px, $left: 10px);
-					&::after{
-						display: none;
+				.text{
+					line-height: 26px;
+					min-width: 54px;
+				}
+
+				.label {
+					display: table-cell;
+					min-width: 54px;
+					padding-left: 20px;
+					padding-right: 20px;
+					font-weight: bold;
+					background-color: rgba(209,209,209, 0.6);
+					border: 0 solid $tertiary-grey-alt;
+					border-bottom-width: 1px;
+					border-right-width: 1px;
+				}
+
+				&.target-hover{
+					.label{
+						background-color: $panel-background;
 					}
+				}
 
-					.mathquill-editable,
-					.mathquill-rendered-math {
-						font: {
-							family: $font;
-							weight: normal;
-							size: 14px;
-							style: normal;
+				@include draggable-zone;
+
+				.draggable-area{
+
+					.controls{
+						.control {
+							position: absolute;
+							top: 7px; left: 0;
+							width: 20px;
+							height: 38px;
+							border: none;
+							display: none;
+
+							&::after{
+								position: absolute;
+								left: 0px; top: 12px;
+								content: ' ';
+								background: $icons no-repeat;
+								@include sprite($icons,'circle-check-green-18',$dimensions: true);
+							}
 						}
-
-						border: none;
-						min-height: 38px;
-						min-width: 100%;
-						padding: 12px 8px 5px 8px !important;
-
-						&[data-label]::after{
-							@include placeholder-style();
-							content: attr(data-label);
-							margin: 0.3em;
-						}
-					}
-
-					& > .label {
-						position: absolute;
-						display: inline-block;
-						white-space: nowrap;
-						@include placeholder-style();
-						padding: 0 0.3em;
-						line-height: 38px;
-						top: 0;
 					}
 
 					&.correct, &.incorrect{
-						&, input.answer-field {
-							color: #f35252;
-							font-weight: 600;
-						}
-						padding-left: 28px;
-						input.answer-field {
-							left: 28px;
-						}
-						&::after {
-							display: block;
-						}
-					}
-					&.correct{
-						&, input.answer-field {
-							color: #8eb737;
-							font-weight: normal;
-						}
-
-						&::after {
-							@include sprite($icons,'circle-check-green-18');
-						}
-					}
-
-					input.answer-field {
-						@extend .assessment-content;
-						color: $primary-grey;
-						margin: 5px 10px 4px;
-						border: none;
-						padding: 0;
-						position: absolute;
-						left: 0; right: 0;
-						min-height: 28px; // mainly a fix for IE
-						min-width: 85%;	// mainly a fix for IE
-					}
-				}
-
-				.historyMenu{
-					display: block;
-					position: absolute;
-					top: 9px;
-					right: 5px;
-					width: 32px;
-					height: 20px;
-
-					&::after{
-						content: ' ';
-						background: $icons no-repeat;
-						@include sprite($icons,'answer-history',$dimensions: true);
-						position: absolute;
-						top: 0;
-						left: 0;
-					}
-
-					&:hover{
-						&::after{
-							@include sprite($icons,'answer-history_active',$dimensions: true);
-						}
-					}
-				}
-
-				.choice {
-					@extend .assessment-content;
-					cursor: pointer;
-					position: relative;
-					color: $primary-grey;
-					vertical-align: middle;
-					min-height: 38px;
-					background: #ffffff;
-					border: 0px solid $tertiary-grey;
-					border-bottom-width: 1px;
-					&:last-of-type { border-bottom-width: 0px; }
-					padding-left: 54px;
-
-					span {
-						line-height: 38px;
-					}
-
-					.label {
-						height: 38px;
-						font-weight: bold;
-						margin-right: 10px;
-					}
-					.control {
-						position: absolute;
-						top: 0; left: 0;
-						display: inline-block;
-						width: 54px;
-						height: 38px;
-						border: none;
-						border-left: 6px solid white;
-						&.checked {
-							border-color: $primary-blue;
-						}
-					}
-
-					&.drop-hover {
-						box-shadow: 0 0 3px 1px $primary-blue;
-						border-color: $primary-blue;
-						z-index: 3;
-					}
-				}
-
-				.choice.target {
-					padding: 20px 40px;
-				}
-
-				.multi, .single {
-					.choice, .choice:hover {
-
-						&.correct .control {
-							&,&.checked{
-								border-color: #9ac73c;
-								@include icon('circle-check-green-18',$top:10px,$left:9px, $position:absolute);
-							}
-						}
-
-						&.incorrect .control{
-							&,&.checked{
-								border-color: #f35252;
-								@include icon('circle-x-red-18',$top:10px,$left:9px, $position:absolute);
-							}
-						}
-					}
-				}
-
-				.multi .choice {
-					.control {
-						@include icon('checkbox-14', $top:12px,$left:20px, $position:absolute);
-						&.checked::after { @include sprite($icons,'checkbox-14_active'); }
-					}
-
-					&:hover .control{
-						&::after { @include sprite($icons,'checkbox-14_hover'); }
-						&.checked::after{
-							@include sprite($icons,'checkbox-14_active');
-						}
-					}
-				}
-
-				.single .choice {
-					.control {
-						@include icon('radio-button-16', $top:10px,$left:10px, $position:absolute);
-						&.checked::after { @include sprite($icons,'radio-button-16_active'); }
-					}
-					&:hover .control{
-						&::after { @include sprite($icons,'radio-button-16_hover'); }
-						&.checked::after{
-							@include sprite($icons,'radio-button-16_active');
-						}
-					}
-				}
-
-				.ordering-dd-zone{
-					display: table;
-					table-layout: fixed;
-
-					.ordinal{
-						@extend .assessment-content;
-						position: relative;
-						display: table-row;
-						color: $primary-grey;
-						vertical-align: middle;
-						background: #ffffff;
-						border: 0 solid $tertiary-grey;
-						border-bottom-width: 1px;
-						&:last-of-type {
-							border-bottom-width: 0px;
-							.draggable-area{ border-bottom-width: 0px;}
-							.label{ border-bottom-width: 0px;}
-						}
-
-						&.selected{
-							opacity: 0.3;
+						.controls .control{
+							display: inline-block;
 						}
 
 						.text{
-							line-height: 26px;
-							min-width: 54px;
-						}
-
-						.label {
-							display: table-cell;
-							min-width: 54px;
-							padding-left: 20px;
-							padding-right: 20px;
-							font-weight: bold;
-							background-color: rgba(209,209,209, 0.6);
-							border: 0 solid $tertiary-grey-alt;
-							border-bottom-width: 1px;
-							border-right-width: 1px;
-						}
-
-						&.target-hover{
-							.label{
-								background-color: $panel-background;
-							}
-						}
-
-						@include draggable-zone;
-
-						.draggable-area{
-
-							.controls{
-								.control {
-									position: absolute;
-									top: 7px; left: 0;
-									width: 20px;
-									height: 38px;
-									border: none;
-									display: none;
-
-									&::after{
-										position: absolute;
-										left: 0px; top: 12px;
-										content: ' ';
-										background: $icons no-repeat;
-										@include sprite($icons,'circle-check-green-18',$dimensions: true);
-									}
-								}
-							}
-
-							&.correct, &.incorrect{
-								.controls .control{
-									display: inline-block;
-								}
-
-								.text{
-									margin-left: 38px;
-								}
-							}
-
-							&.incorrect .controls .control{
-								&::after{
-									@include sprite($icons,'circle-x-red-18',$dimensions: true);
-								}
-							}
-						}
-					}
-				}
-
-
-				.solution {
-					@extend .assessment-content;
-					padding: 10px 20px 15px 20px;
-					.close {
-						opacity: 0.8;
-						cursor: pointer;
-						position: absolute;
-						right: 17px; top: 16px;
-						background: $icons no-repeat;
-						@include sprite($icons,'window-control-close',$dimensions: true);
-						&:hover{
-							opacity: 1;
+							margin-left: 38px;
 						}
 					}
 
-					.answer {
-						font-weight: 600;
-						color: #8eb737;
-
-						.solution-choice-text {
-							font-weight: normal;
-							margin-left: 10px;
+					&.incorrect .controls .control{
+						&::after{
+							@include sprite($icons,'circle-x-red-18',$dimensions: true);
 						}
-
-						.ordering-solution{
-							span{
-								display: inline-block;
-								padding-right: 20px;
-								vertical-align: middle;
-								color: $primary-grey;
-
-								&.solution-ordering-text{
-									color: $primary-green;
-								}
-							}
-						}
-					}
-					.explanation {
-						color: $secondary-grey;
 					}
 				}
 			}
-			.footer {
-				position: relative;
-				overflow: hidden;
-
-				.left {
-					float: left;
-					.action { float: left; }
-				}
-				.right {
-					float: right;
-					.action { float: right; }
-				}
+		}
 
 
-				.mathsymbol {
-					opacity: 0.6;
-					&:hover{ opacity: 1; }
-					margin-top: 4px;
-					cursor: pointer;
-					width: 36px;
-					height: 36px;
-					background: url(../images/old_sprites/spr_math_symbols.png) 0 0 no-repeat;
-					float: left;
-
-					&.sqrt { background-position: -2px -2px; }
-					&.square { background-position: -42px -2px; }
-					&.parens { background-position: -82px -2px; }
-					&.approx { background-position: -122px -2px; }
-					&.pi { background-position: -162px -2px; }
-				}
-
-				.action {
-					color: $secondary-grey;
-					cursor: pointer;
-					padding: 12px 20px;
-					font: {
-						size: 14px;
-						style: normal;
-						weight: normal;
-					}
-
-					&.check {
-						background: $primary-blue;
-						border: 1px solid $border-blue;
-						color: #ffffff;
-						font: {
-							style: italic;
-							weight: 700;
-						}
-
-						&.wrong {
-							background: #F35252;
-							border-color: #d84343;
-						}
-
-						&.disabled {
-							cursor: default;
-							border-color: #d0d0d0;
-							background: rgba(184,184,184,0.5);
-							color: rgba(255,255,255,0.7);
-						}
-					}
-
+		.solution {
+			@extend .assessment-content;
+			padding: 10px 20px 15px 20px;
+			.close {
+				opacity: 0.8;
+				cursor: pointer;
+				position: absolute;
+				right: 17px; top: 16px;
+				background: $icons no-repeat;
+				@include sprite($icons,'window-control-close',$dimensions: true);
+				&:hover{
+					opacity: 1;
 				}
 			}
 
+			.answer {
+				font-weight: 600;
+				color: #8eb737;
+
+				.solution-choice-text {
+					font-weight: normal;
+					margin-left: 10px;
+				}
+
+				.ordering-solution{
+					span{
+						display: inline-block;
+						padding-right: 20px;
+						vertical-align: middle;
+						color: $primary-grey;
+
+						&.solution-ordering-text{
+							color: $primary-green;
+						}
+					}
+				}
+			}
+			.explanation {
+				color: $secondary-grey;
+			}
 		}
 	}
+
+	.x-panel-body-assessment {
+		.footer {
+			position: relative;
+			overflow: hidden;
+
+			.left {
+				float: left;
+				.action { float: left; }
+			}
+			.right {
+				float: right;
+				.action { float: right; }
+			}
+
+
+			.mathsymbol {
+				opacity: 0.6;
+				&:hover{ opacity: 1; }
+				margin-top: 4px;
+				cursor: pointer;
+				width: 36px;
+				height: 36px;
+				background: url(../images/old_sprites/spr_math_symbols.png) 0 0 no-repeat;
+				float: left;
+
+				&.sqrt { background-position: -2px -2px; }
+				&.square { background-position: -42px -2px; }
+				&.parens { background-position: -82px -2px; }
+				&.approx { background-position: -122px -2px; }
+				&.pi { background-position: -162px -2px; }
+			}
+
+			.action {
+				color: $secondary-grey;
+				cursor: pointer;
+				padding: 12px 20px;
+				font: {
+					size: 14px;
+					style: normal;
+					weight: normal;
+				}
+
+				&.check {
+					background: $primary-blue;
+					border: 1px solid $border-blue;
+					color: #ffffff;
+					font: {
+						style: italic;
+						weight: 700;
+					}
+
+					&.wrong {
+						background: #F35252;
+						border-color: #d84343;
+					}
+
+					&.disabled {
+						cursor: default;
+						border-color: #d0d0d0;
+						background: rgba(184,184,184,0.5);
+						color: rgba(255,255,255,0.7);
+					}
+				}
+
+			}
+		}
+	}
+
 
 	&.file-submission {
 		width: auto;
@@ -1262,6 +1270,24 @@ body.dragging * {
 		}
 
 	}
+
+
+	.wordbank-input {
+		font-size: 14px;
+
+		.inputbox,
+		.response-container {
+			border: 0;
+			background: none;
+			min-height: 0;
+		}
+
+	}
+}
+
+.wordbank {
+	overflow: hidden;
+	position: relative;
 }
 
 .x-dd-drag-ghost{
