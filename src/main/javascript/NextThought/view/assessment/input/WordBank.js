@@ -62,7 +62,10 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 				//<editor-fold desc="Boilerplate">
 				// If the mouse is over a target node, return that node. This is provided as the "target" parameter in all "onNodeXXXX" node event
 				// handling functions
-				getTargetFromEvent: function(e) { return e.getTarget('.blank.target'); },
+				getTargetFromEvent: function(e) {
+					var n = e.getTarget('.blank.target');
+					return (n && n.childNodes.length > 0) ? null : n;
+				},
 
 				// On entry into a target node, highlight that node.
 				onNodeEnter: function(target, dd, e, data) { Ext.fly(target).addCls('drop-hover'); },
@@ -76,10 +79,28 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 			},
 			dropOnAnswer = {
 				onNodeDrop: function(target, dd, e, data) {
-					var el = data.sourceEl.cloneNode(true);
-					Ext.fly(el).removeCls('dragging');
+					var source = data.sourceEl,
+						el = source.cloneNode(true);
+
+					el.removeAttribute('id');
+					Ext.fly(el).select('[id]').set({id: undefined});
+
 					target.appendChild(el);
-					Ext.fly(data.sourceEl).addCls('used').setStyle({visibility: 'hidden'});
+
+					el = Ext.get(el);
+					el.removeCls('dragging');
+
+					el.on('click', function(e) {
+						if (e.getTarget('.reset')) {
+							el.remove();
+							Ext.fly(source).removeCls('used');
+						}
+					});
+
+					if (el.hasCls('unique')) {
+						Ext.fly(source).addCls('used');
+					}
+
 					return true;
 				}
 			};

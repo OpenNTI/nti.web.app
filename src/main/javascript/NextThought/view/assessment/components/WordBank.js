@@ -6,7 +6,7 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 
 	renderTpl: Ext.DomHelper.markup({ 'tag': 'tpl', 'for': 'entries', cn: [
 		{
-			cls: 'target wordentry drag',
+			cls: 'target wordentry drag {parent.unique:boolStr("unique")}',
 			'data-wid': '{wid:htmlEncode}',
 			'data-lang': '{lang:htmlEncode}',
 			'data-word': '{word:htmlEncode}',
@@ -20,6 +20,7 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 			e = (bank && bank.get('entries')) || [];
 
 		Ext.apply(this.renderData, {
+			unique: bank.get('unique'),
 			entries: e.map(function(e) {return e.getData();})
 		});
 

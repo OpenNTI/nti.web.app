@@ -479,8 +479,9 @@ body.dragging * {
 			@include experimental-value(cursor,grabbing);
 		}
 
+		&.used,
 		&.dropped,
-		&.dragging {
+		&.dragging.unique {
 			visibility: hidden;
 		}
 
