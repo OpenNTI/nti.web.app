@@ -64,7 +64,7 @@ Ext.define('NextThought.view.annotations.note.Templates', {
 			e.stopEvent();
 			var menuCls = 'onFlag', me = this;
 
-			TemplatesForNotes.areYouSure('Reporting this item cannot be undone', function(btn) {
+			TemplatesForNotes.reportInappropriate(function(btn) {
 				if (btn !== 'ok') { return; }
 				if (me[menuCls]) {
 					me[menuCls]();
@@ -216,15 +216,15 @@ Ext.define('NextThought.view.annotations.note.Templates', {
 		clearTimeout(this.moreReplyOptionsMouseOutTimer);
 	},
 
-	areYouSure: function(msg, callback) {
+	reportInappropriate: function(callback) {
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
-			msg: msg,
+			msg: 'This action cannot be undone.',
 			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 			icon: 'warning-red',
 			buttonText: {'ok': 'Report'},
 			ui: 'caution',
-			title: 'Are you sure?',
+			title: 'Report content as inappropriate?',
 			fn: callback
 		});
 	}

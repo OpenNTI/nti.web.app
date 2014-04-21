@@ -360,7 +360,7 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 
 		if (e.getTarget('.flag') && !record.isFlagged()) {
 			me.flagging = true;
-			TemplatesForNotes.areYouSure('Reporting this object cannot be undone.', function(btn) {
+			TemplatesForNotes.reportInappropriate(function(btn) {
 				delete me.flagging;
 				if (btn === 'ok') { record.flag(me); }
 			});

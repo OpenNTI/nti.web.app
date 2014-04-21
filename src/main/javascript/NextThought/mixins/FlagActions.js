@@ -21,8 +21,7 @@ Ext.define('NextThought.mixins.FlagActions', {
 		var me = this,
 			rec = me.getRecord();
 		me.flagging = true;
-		TemplatesForNotes.areYouSure('Reporting this object cannot be undone.',
-				function(btn) {
+		TemplatesForNotes.reportInappropriate(function(btn) {
 					delete me.flagging;
 					if (btn === 'ok') { rec.flag(me); }});
 	},
