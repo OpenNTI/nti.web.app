@@ -63,16 +63,9 @@ Ext.define('NextThought.view.courseware.reports.View', {
 			id: 'assignment-report',
 			title: 'Assignment Reports',
 			about: Ext.DomHelper.markup({tag: 'span', cn: [
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				'This is a really long description with multiple sentences',
-				{tag: 'a', cls: 'target', html: 'view'}
+				'The Assignment Report includes information about submissions, results, and answers on a particular assignment. ' +
+				'You can view and download these reports from the ' +
+				{tag: 'a', cls: 'target', html: 'Assignments tab'}, '.'
 			]}),
 			src: 'resources/images/elements/assignment_report.gif'
 		}
