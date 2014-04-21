@@ -15,7 +15,7 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 	inputTpl: Ext.DomHelper.markup({ cls: 'fill-in', html: '{lineWithBlank}' }),
 
 
-	blankTpl: Ext.DomHelper.createTemplate({ tag: 'span', cls: 'blank dropzone target' }),
+	blankTpl: Ext.DomHelper.createTemplate({ tag: 'span', cls: 'blank dropzone target', 'data-input': '{inputName}' }),
 
 
 	renderSelectors: {
@@ -45,7 +45,7 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 			});
 		}
 
-		blanks = this.inputBox.query('input.nqablankfield');//TODO: input[type="blank"]
+		blanks = this.inputBox.query('input.nqablankfield');//[type="blankfield"]');
 		this.blankInputs = blanks;
 
 		blanks = blanks.map(this.setupBlank.bind(this));
@@ -57,7 +57,9 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 
 
 	setupBlank: function(input) {
-		return this.blankTpl.insertAfter(input, input.dataset);
+		return this.blankTpl.insertAfter(input, Ext.apply({
+			inputName: input.getAttribute('name')
+		}, input.dataset));
 	},
 
 
@@ -68,8 +70,7 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 				   (!data.part || me.ordinal.toFixed(0) === data.part);
 		}
 
-		var id = this.id,
-			me = this,
+		var me = this,
 			common = {
 				//<editor-fold desc="Boilerplate">
 				// If the mouse is over a target node, return that node. This is provided as the "target" parameter in all "onNodeXXXX" node event
@@ -100,26 +101,10 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 				onNodeDrop: function(target, dd, e, data) {
 					if (!isValid(data)) {return false;}
 
-					var source = data.sourceEl,
-						el = source.cloneNode(true);
-
-					el.removeAttribute('id');
-					Ext.fly(el).select('[id]').set({id: undefined});
-
-					target.appendChild(el);
-
-					el = Ext.get(el);
-					el.removeCls('dragging');
-
-					el.on('click', function(e) {
-						if (e.getTarget('.reset')) {
-							el.remove();
-							Ext.fly(source).removeCls('used');
-						}
-					});
-
-					if (el.hasCls('unique')) {
-						Ext.fly(source).addCls('used');
+					try {
+						me.setFieldValue(data.sourceEl, target);
+					} catch (er) {
+						return false;
 					}
 
 					return true;
@@ -132,17 +117,93 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 	},
 
 
-	getValue: function() {},
+	setFieldValue: function(dragSource, dropTarget) {
+		var el = dragSource.cloneNode(true),
+			dom = el, me = this,
+			input = dropTarget.previousSibling;
+
+		if (input.getAttribute('name') !== dropTarget.dataset.input) {
+			Ext.Error.raise('Bad DOM');
+		}
+
+		el = Ext.get(dom);
+
+		dom.resetDD = function() {
+			input.value = '';
+			dropTarget.removeChild(dom);
+			Ext.fly(dragSource).removeCls('used');
+			me.checkSubmissionState();
+		};
+
+		dom.removeAttribute('id');
+		Ext.fly(dom).select('[id]').set({id: undefined});
+
+		dropTarget.appendChild(dom);
+
+		input.value = dragSource.dataset.wid;
+
+		el.removeCls('dragging');
+		el.select('.reset').on('click', dom.resetDD);
+
+		if (el.hasCls('unique')) {
+			Ext.fly(dragSource).addCls('used');
+		}
+
+		me.checkSubmissionState();
+	},
 
 
-	setValue: function(str) {},
+	checkSubmissionState: function() {
+		var k, v = this.getValue(),
+			allFilledIn = true;
+
+		console.log('Test', v);
+
+		for (k in v) {
+			if (v.hasOwnProperty(k)) {
+				allFilledIn = !!v[k];
+				if (!allFilledIn) {
+					break;
+				}
+			}
+		}
 
 
-	markCorrect: function() { this.callParent(arguments); },
+		this[allFilledIn ?
+			 'enableSubmission' :
+			 'disableSubmission']();
+	},
 
 
-	markIncorrect: function() { this.callParent(arguments); },
+	getValue: function() {
+		var value = {};
+
+		(this.blankInputs || []).forEach(function(input) {
+			var name = input.getAttribute('name');
+			value[name] = input.value || false;
+		});
+
+		return value;
+	},
 
 
-	reset: function() { this.callParent(arguments); }
+	setValue: function(value) {
+		console.log(value);
+	},
+
+
+	//markCorrect: function() { this.callParent(arguments); },
+
+
+	//markIncorrect: function() { this.callParent(arguments); },
+
+
+	reset: function() {
+		this.callParent(arguments);
+
+		this.el.query('.dropzone .wordentry').forEach(function(pill) {
+			pill = Ext.getDom(pill);
+			pill.resetDD();
+		});
+	}
 });

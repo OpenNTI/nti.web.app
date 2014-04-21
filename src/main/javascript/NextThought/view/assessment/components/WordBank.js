@@ -9,7 +9,6 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 			cls: 'target wordentry drag {parent.unique:boolStr("unique")}',
 			'data-wid': '{wid:htmlEncode}',
 			'data-lang': '{lang:htmlEncode}',
-			'data-word': '{word:htmlEncode}',
 			'data-question': '{parent.question}',
 			'data-part': '{parent.part}',
 			cn: [{cls: 'reset'}, '{word}']
@@ -65,6 +64,8 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 				var sourceEl = e.getTarget('.drag', 10), d;
 				if (sourceEl) {
 					d = sourceEl.cloneNode(true);
+					d.removeAttribute('id');
+					Ext.fly(d).select('[id]').set({id: undefined});
 					d.id = Ext.id();
 					return Ext.apply({
 						sourceEl: sourceEl,
