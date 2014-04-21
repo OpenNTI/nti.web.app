@@ -4,7 +4,9 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 		'widget.question-input-fillintheblankwithwordbankpart'
 	],
 
+
 	cls: 'wordbank-input',
+
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'wordbank-ct' },
@@ -189,6 +191,36 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 
 	setValue: function(value) {
 		console.log(value);
+
+		var inputName, wordId, dropTarget, dragSource;
+
+		for (inputName in value) {
+			if (value.hasOwnProperty(inputName)) {
+				wordId = value[inputName];
+				dropTarget = Ext.getDom(this.el.select('.dropzone[data-input="' + inputName + '"]').first());
+				dragSource = this.getWordBankItem(wordId);
+
+				this.setFieldValue(dragSource, dropTarget);
+			}
+		}
+	},
+
+
+	getWordBankItem: function(wid) {
+		var shared = this.up('assessment-question').contentComponents,
+			wordBank = this.wordbank,
+			sharedWordBank = shared.filter(function(i) {return i.is('assessment-components-wordbank');})[0],
+			item;
+
+		if (wordBank) {
+			item = wordBank.getItem(wid);
+		}
+
+		if (!item && sharedWordBank) {
+			item = sharedWordBank.getItem(wid);
+		}
+
+		return item;
 	},
 
 

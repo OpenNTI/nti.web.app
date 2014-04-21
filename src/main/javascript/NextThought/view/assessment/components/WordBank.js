@@ -38,6 +38,15 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 	},
 
 
+	getItem: function(wid) {
+		if (!this.rendered) {
+			Ext.Error.raise('Not rendered.');
+		}
+
+		return Ext.getDom(this.el.select('.wordentry[data-wid="' + wid + '"]').first());
+	},
+
+
 	getDragProxy: function() {
 		var proxy = this.dragProxy;
 
