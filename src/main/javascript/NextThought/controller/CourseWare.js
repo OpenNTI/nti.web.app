@@ -450,6 +450,10 @@ Ext.define('NextThought.controller.CourseWare', {
 
 
 	transitionToComponent: function(win, cfg) {
+		if (!win) {
+			console.error('No window!', arguments);
+			return;
+		}
 		win.hideError();
 		win.removeAll(true);
 		return win.add(cfg);
