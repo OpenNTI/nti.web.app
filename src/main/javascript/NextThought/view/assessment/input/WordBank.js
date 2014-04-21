@@ -35,8 +35,14 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 		this.callParent(arguments);
 		var blanks,
 			wordbank = this.part.get('wordbank');
+
 		if (wordbank) {
-			this.wordbank = Ext.widget({xtype: 'assessment-components-wordbank', record: this.part, renderTo: this.wordBankEl});
+			this.wordbank = Ext.widget({
+				xtype: 'assessment-components-wordbank',
+				record: this.part, renderTo: this.wordBankEl,
+				partNumber: this.ordinal,
+				questionId: this.question.getId()
+			});
 		}
 
 		blanks = this.inputBox.query('input.nqablankfield');//TODO: input[type="blank"]
@@ -56,6 +62,12 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 
 
 	setupDropZones: function(dropzones) {
+
+		function isValid(data) {
+			return data.question === me.question.getId() &&
+				   (!data.part || me.ordinal.toFixed(0) === data.part);
+		}
+
 		var id = this.id,
 			me = this,
 			common = {
@@ -74,11 +86,20 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 				onNodeOut: function(target, dd, e, data) { Ext.fly(target).removeCls('drop-hover'); },
 
 				// While over a target node, return the default drop allowed
-				onNodeOver: function(target, dd, e, data) { return Ext.dd.DropZone.prototype.dropAllowed; }
+				onNodeOver: function(target, dd, e, data) {
+					var p = Ext.dd.DropZone.prototype;
+					if (!isValid(data)) {
+						return p.dropNotAllowed;
+					}
+
+					return p.dropAllowed;
+				}
 				//</editor-fzold>
 			},
 			dropOnAnswer = {
 				onNodeDrop: function(target, dd, e, data) {
+					if (!isValid(data)) {return false;}
+
 					var source = data.sourceEl,
 						el = source.cloneNode(true);
 

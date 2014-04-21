@@ -10,6 +10,8 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 			'data-wid': '{wid:htmlEncode}',
 			'data-lang': '{lang:htmlEncode}',
 			'data-word': '{word:htmlEncode}',
+			'data-question': '{parent.question}',
+			'data-part': '{parent.part}',
 			cn: [{cls: 'reset'}, '{word}']
 		}
 	]}),
@@ -17,10 +19,13 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 
 	beforeRender: function() {
 		var bank = this.record.get('wordbank'),
-			e = (bank && bank.get('entries')) || [];
+			e = (bank && bank.get('entries')) || [],
+			num = Ext.isNumber(this.partNumber) ? this.partNumber : undefined;
 
 		Ext.apply(this.renderData, {
 			unique: bank.get('unique'),
+			part: num,
+			question: this.questionId,
 			entries: e.map(function(e) {return e.getData();})
 		});
 
@@ -61,11 +66,11 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 				if (sourceEl) {
 					d = sourceEl.cloneNode(true);
 					d.id = Ext.id();
-					return {
+					return Ext.apply({
 						sourceEl: sourceEl,
 						repairXY: Ext.fly(sourceEl).getXY(),
 						ddel: d
-					};
+					}, sourceEl.dataset);
 				}
 			},
 
