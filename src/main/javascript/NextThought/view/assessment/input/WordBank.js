@@ -47,7 +47,7 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 			});
 		}
 
-		blanks = this.inputBox.query('input.nqablankfield');//[type="blankfield"]');
+		blanks = this.inputBox.query('input[type="blankfield"]');
 		this.blankInputs = blanks;
 
 		blanks = blanks.map(this.setupBlank.bind(this));
