@@ -177,7 +177,7 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 
 		var completed = this.get('completed');
 
-		completed = (completed && completed.get && completed.get('LastModified')) || completed;
+		completed = (completed && completed.get && completed.get('Last Modified')) || completed;
 
 		if (!due && !completed) {
 			console.error('Can not get the submission status without a due or completed date');
