@@ -24,7 +24,7 @@ Ext.define('NextThought.model.converters.GroupByTime', {
 
 			function between(date, start, end) {
 				var t = date.getTime();
-				return start.getTime() < t && t <= end.getTime();
+				return start.getTime() <= t && t <= end.getTime();
 			}
 
 
@@ -102,9 +102,11 @@ Ext.define('NextThought.model.converters.GroupByTime', {
 		convert: function(r, o) {
 			if (!r && this.mapping) { r = o.get(this.mapping); }
 
-			var now = new Date(),
+			var now = new Date(), g,
 				v = Ext.isDate(r) ? r : new Date(r * 1000);
-			return this.type.groupForElapsedTime(now, v);
+			g = this.type.groupForElapsedTime(now, v);
+			console.log(r, v, g);
+			return g;
 		}
 	};
 });
