@@ -528,7 +528,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 
 		s = s && s.backingStore;
 
-		if (!s.hasOwnProperty('data')) {
+		if (!s || !s.hasOwnProperty('data')) {
 			return;
 		}
 
