@@ -59,7 +59,7 @@ Ext.define('NextThought.model.converters.GroupByTime', {
 
 			if (between(v, twoMonthsAgo, oneMonthAgo)) { return oneMonthAgo; }// Last Month
 
-			if (between(v, oneYearAgo, twoMonthsAgo)) { return oneYearAgo; }// Last Year
+			if (between(v, oneYearAgo, twoMonthsAgo)) { return oneYearAgo; }// This Year
 
 			return new Date(0); //Older
 		},
@@ -94,7 +94,7 @@ Ext.define('NextThought.model.converters.GroupByTime', {
 			if (under(c, 3)) { return '2 weeks ago'; }
 			if (under(c, 4)) { return '3 weeks ago'; }
 
-			if (groupValue < Ext.Date.add(now, Ext.Date.MONTH, -2)) { return 'Last year'; }
+			if (groupValue < Ext.Date.add(now, Ext.Date.MONTH, -2)) { return 'This year'; }
 
 			return 'Last month';
 		},
