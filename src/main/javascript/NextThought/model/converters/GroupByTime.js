@@ -15,7 +15,7 @@ Ext.define('NextThought.model.converters.GroupByTime', {
 				oneWeekAgo = Ext.Date.add(now, Ext.Date.DAY, -1 * 7),
 				twoWeeksAgo = Ext.Date.add(now, Ext.Date.DAY, -2 * 7),
 				threeWeeksAgo = Ext.Date.add(now, Ext.Date.DAY, -3 * 7),
-				fourWeeksAgo = Ext.Date.add(now, Ext.Date.DAY, -4 * 7),
+				//fourWeeksAgo = Ext.Date.add(now, Ext.Date.DAY, -4 * 7),
 				oneMonthAgo = Ext.Date.add(now, Ext.Date.MONTH, -1),
 				twoMonthsAgo = Ext.Date.add(now, Ext.Date.MONTH, -2),
 				oneYearAgo = Ext.Date.add(now, Ext.Date.YEAR, -1),
@@ -55,7 +55,7 @@ Ext.define('NextThought.model.converters.GroupByTime', {
 
 			if (between(v, threeWeeksAgo, twoWeeksAgo)) { return twoWeeksAgo; }// Two Weeks ago
 
-			if (between(v, fourWeeksAgo, threeWeeksAgo)) { return threeWeeksAgo; }// Three Weeks ago
+			if (between(v, oneMonthAgo, threeWeeksAgo)) { return threeWeeksAgo; }// Three Weeks ago
 
 			if (between(v, twoMonthsAgo, oneMonthAgo)) { return oneMonthAgo; }// Last Month
 
