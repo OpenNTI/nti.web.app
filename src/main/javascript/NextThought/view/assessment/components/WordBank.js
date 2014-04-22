@@ -31,7 +31,7 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 			num = Ext.isNumber(this.partNumber) ? this.partNumber : undefined;
 
 		Ext.apply(this.renderData, {
-			unique: bank.get('unique'),
+			unique: bank && bank.get('unique'),
 			part: num,
 			ownerCmp: this,
 			question: this.questionId,

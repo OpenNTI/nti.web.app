@@ -1283,6 +1283,7 @@ body.dragging * {
 			border: 0;
 			background: none;
 			min-height: 0;
+			line-height: 3;
 		}
 
 		input {display: none;}
@@ -1317,7 +1318,7 @@ body.dragging * {
 				content: '';
 				position: absolute;
 				height: 24px;
-				left: $o; right: $o; bottom: $o;
+				left: $o; right: $o; bottom: 0;
 
 				border: 2px solid $border-grey;
 				border-radius: 3px;
