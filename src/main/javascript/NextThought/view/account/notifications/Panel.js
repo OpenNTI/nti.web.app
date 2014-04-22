@@ -451,6 +451,8 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 			return;
 		}
 
+		console.debug('Row Info:', record.data);
+
 		me.lastHoverEvent = new Date();
 
 		me.activeTargetRecordId = record.getId();
