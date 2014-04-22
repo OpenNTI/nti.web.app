@@ -468,7 +468,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		}
 
 		me.cancelPopupTimeout();
-		me.popupDelay = 1;
+		me.popupDelay = 250;
 		clearTimeout(me.resetDelayTimer);
 
 		me.activeTargetDom = item;
