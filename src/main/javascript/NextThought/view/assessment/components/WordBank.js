@@ -4,16 +4,25 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 
 	cls: 'wordbank',
 
-	renderTpl: Ext.DomHelper.markup({ 'tag': 'tpl', 'for': 'entries', cn: [
+	renderTpl: new Ext.XTemplate(Ext.DomHelper.markup({ 'tag': 'tpl', 'for': 'entries', cn: [
 		{
 			cls: 'target wordentry drag {parent.unique:boolStr("unique")}',
 			'data-wid': '{wid:htmlEncode}',
 			'data-lang': '{lang:htmlEncode}',
 			'data-question': '{parent.question}',
 			'data-part': '{parent.part}',
-			cn: [{cls: 'reset'}, '{word}']
+			cn: [{cls: 'reset'}, '{[this.parseWord(values.word, parent.ownerCmp)]}']
 		}
-	]}),
+	]}), {
+		parseWord: function(word, cmp) { return cmp.parseWordEntry(word); }
+	}),
+
+
+
+	parseWordEntry: function(word) {
+		console.log('TODO: Parse this: ', word);
+		return word;
+	},
 
 
 	beforeRender: function() {
@@ -24,6 +33,7 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 		Ext.apply(this.renderData, {
 			unique: bank.get('unique'),
 			part: num,
+			ownerCmp: this,
 			question: this.questionId,
 			entries: e.map(function(e) {return e.getData();})
 		});
