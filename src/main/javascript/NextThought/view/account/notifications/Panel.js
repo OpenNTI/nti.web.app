@@ -254,11 +254,12 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 			return;
 		}
 
-		var registry = this.tpl.subTemplates,
+		var me = this,
+			registry = me.tpl.subTemplates,
 			parentStore = Ext.getStore('notifications'),
 			s = NextThought.store.PageItem.create({
 				proxy: 'memory',
-				storeId: this.storeId,
+				storeId: me.storeId,
 				sortOnLoad: true,
 				statefulFilters: false,
 				remoteSort: false,
@@ -293,7 +294,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 			});
 
 
-		this.store = s;
+		me.store = s;
 		s.backingStore = parentStore;
 		ObjectUtils.defineAttributes(s, {
 			lastViewed: {
@@ -302,22 +303,27 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 			}
 		});
 
-		this.mon(parentStore, {
+		me.mon(parentStore, {
 			add: function(store, recs) { s.add(recs); s.sort(); },
-			load: function(store, recs) { s.loadRecords(recs, {addRecords: true}); s.sort(); }
+			load: function(store, recs) {
+				console.log('parent load');
+				s.loadRecords(recs, {addRecords: true});
+				s.sort();
+				me.maybeLoadMoreIfNothingNew();
+			}
 		});
 
-		this.mon(s, {
+		me.mon(s, {
 			add: 'recordsAdded',
 			refresh: 'storeLoaded'
 		});
 
-		this.mon(s, {
+		me.mon(s, {
 			add: 'maybeNotify',
 			refresh: 'maybeNotify'
 		});
 
-		this.bindStore(s);
+		me.bindStore(s);
 	},
 
 
@@ -336,8 +342,8 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 						label: label
 					}, d.toString()));
 				}
-			} else {
-				console.log('already there');
+			//} else {
+				//console.log('already there');
 			}
 		});
 
@@ -363,6 +369,15 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 	maybeShowMoreItems: function() {
 		//if we can't scroll
 		if (this.el && this.el.isVisible() && this.el.getHeight() >= this.el.dom.scrollHeight) {
+			this.prefetchNext();
+		}
+	},
+
+
+	maybeLoadMoreIfNothingNew: function() {
+		if (this.currentCount !== undefined && this.store.getCount() <= this.currentCount) {
+			console.log('Need to fetch again. Didn\'t return any new data');
+			delete this.currentCount;
 			this.prefetchNext();
 		}
 	},
@@ -516,6 +531,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 			return;
 		}
 
+		this.currentCount = s.getCount();
 		max = s.getPageFromRecordIndex(s.getTotalCount());
 		if (s.currentPage < max && !s.isLoading()) {
 			s.clearOnPageLoad = false;
