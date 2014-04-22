@@ -120,6 +120,8 @@ body.dragging * {
 
 	img {
 		margin: 1em 0 0 0;
+		max-width: 100%;
+		height: auto !important;
 	}
 
 	sup {
