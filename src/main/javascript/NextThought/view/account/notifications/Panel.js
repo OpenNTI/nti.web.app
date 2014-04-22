@@ -277,7 +277,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 					function(a, b) { return a.isHeader === b.isHeader ? 0 : a.isHeader ? -1 : 1; },
 					{
 						direction: 'DESC',
-						property: 'CreatedTime'
+						property: 'Last Modified'
 					}
 				],
 				filters: [

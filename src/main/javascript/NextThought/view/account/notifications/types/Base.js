@@ -40,11 +40,21 @@ Ext.define('NextThought.view.account.notifications.types.Base', {
 					{ cls: 'wrap', cn: [
 						{ tag: 'span', cls: 'creator link', html: '{[this.getName(values)]}'}, ' ',
 						{ tag: 'span', cls: 'verb', html: '{[this.getVerb(values)]}'}, ' ',
-						{ tag: 'time', cls: 'time', datetime: '{CreatedTime:date("c")}', html: '{CreatedTime:ago()}'}
+						{ tag: 'time', cls: 'time',
+							datetime: '{[this.getTime(values)]}', html: '{Time:ago()}'}
 					]}
 				]
 			}
 		]), {
+			getTime: function(values) {
+				var t = values['Last Modified'];
+				if (!t || t.getTime() === 0) {
+					t = values.CreatedTime;
+				}
+				values.Time = t;
+				return Ext.util.Format.date(t, 'c');
+			},
+
 			getVerb: function(values) {
 				return me.getVerb(values);
 			},
