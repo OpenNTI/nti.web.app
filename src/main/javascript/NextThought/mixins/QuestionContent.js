@@ -3,6 +3,7 @@ Ext.define('NextThought.mixins.QuestionContent', {
 
 	typeToComponent: {
 		//'text/html': 'NextThought.view.assessment.components.Base',
+		'application/vnd.nextthought.ntiaudio': 'box',
 		'application/vnd.nextthought.contentsequence': 'assessment-components-sequence',
 		'application/vnd.nextthought.naqwordbank': 'assessment-components-wordbank'
 	},
@@ -30,8 +31,14 @@ Ext.define('NextThought.mixins.QuestionContent', {
 			dom = this.parseDomString(dom);
 		}
 
+		function topLevelOnly(o) {
+			var p = o.parentNode;
+			if (p && p.nodeName === 'OBJECT') { return false; }
+			return p ? topLevelOnly(p) : true;
+		}
+
 		var me = this,
-			objects = dom.querySelectorAll('#tempdom > object').toArray();
+			objects = dom.querySelectorAll('object').toArray().filter(topLevelOnly);
 
 		me.contentComponents = [];
 		me.contentComponentsToRender = [];
@@ -39,6 +46,7 @@ Ext.define('NextThought.mixins.QuestionContent', {
 		objects.forEach(function(object) {
 			var type = object.getAttribute('type'),
 				placeholder,
+				container = object.parentNode,
 				id = guidGenerator(),
 				added = me.addObject(type, {
 					renderTo: id,
@@ -51,8 +59,8 @@ Ext.define('NextThought.mixins.QuestionContent', {
 				placeholder = document.createElement('div');
 				placeholder.setAttribute('id', id);
 
-				dom.insertBefore(placeholder, object);
-				dom.removeChild(object);
+				container.insertBefore(placeholder, object);
+				container.removeChild(object);
 			}
 		});
 

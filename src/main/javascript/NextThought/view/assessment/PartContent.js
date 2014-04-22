@@ -19,7 +19,7 @@ Ext.define('NextThought.view.assessment.PartContent', {
 		var c = this.part.get('content');
 
 		if (c) {
-			c = this.buildContent(c, true);
+			c = this.buildContent(c);
 		}
 
 		this.renderData = Ext.apply(this.renderData || {}, {

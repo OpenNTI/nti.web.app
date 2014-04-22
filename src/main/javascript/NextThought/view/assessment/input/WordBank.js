@@ -5,6 +5,10 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 	],
 
 
+	mixins: {
+		questionContent: 'NextThought.mixins.QuestionContent'
+	},
+
 	cls: 'wordbank-input',
 
 
@@ -28,7 +32,7 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 	beforeRender: function() {
 		this.callParent(arguments);
 		Ext.apply(this.renderData, {
-			lineWithBlank: this.part.get('input')
+			lineWithBlank: this.buildContent(this.part.get('input'))
 		});
 	},
 
