@@ -303,8 +303,8 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		});
 
 		this.mon(parentStore, {
-			add: function(store, recs) { s.add(recs);s.sort(); },
-			load: function(store, recs) { s.loadRecords(recs);s.sort(); }
+			add: function(store, recs) { s.add(recs); s.sort(); },
+			load: function(store, recs) { s.loadRecords(recs, {addRecords: true}); s.sort(); }
 		});
 
 		this.mon(s, {
