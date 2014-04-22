@@ -306,7 +306,6 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		me.mon(parentStore, {
 			add: function(store, recs) { s.add(recs); s.sort(); },
 			load: function(store, recs) {
-				console.log('parent load');
 				s.loadRecords(recs, {addRecords: true});
 				s.sort();
 				me.maybeLoadMoreIfNothingNew();
