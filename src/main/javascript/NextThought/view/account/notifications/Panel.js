@@ -36,6 +36,9 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 	]),
 
 
+	popupDelay: 1200,
+
+
 	itemSelector: '.item',
 
 
@@ -384,6 +387,13 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 			'activate': 'maybeShowMoreItems'
 		});
 
+		this.on({
+			el: {
+				mouseleave: 'cancelPopupTimeout',
+				scope: this
+			}
+		});
+
 		this.lastScroll = 0;
 		this.mon(this.el, {
 			scroll: 'onScroll'
@@ -412,22 +422,28 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 
 
 	rowHover: function(view, record, item, index, e) {
-		if (record.isHeader) {return;}
 
-		var popout = NextThought.view.account.activity.Popout,
-			target = Ext.get(item),
-			me = this,
+		var me = this,
 			cls = record.get('Class');
 
-		if (!record || me.activeTargetDom === item || cls === 'Highlight' || cls === 'Bookmark') {
+		if (record.isHeader) {
+			me.cancelPopupTimeout();
 			return;
 		}
 
+		if (!record ||
+			me.activeTargetRecordId === record.getId() ||
+			cls === 'Highlight' || cls === 'Bookmark') {
+			return;
+		}
+
+		me.lastHoverEvent = new Date();
+
+		me.activeTargetRecordId = record.getId();
+
 		me.cancelPopupTimeout();
 
-		me.hoverTimeout = Ext.defer(this.showPopup, 1200, me, [record, item]);//make sure the user wanted it...wait for the pause.
-
-		target.on('mouseout', me.cancelPopupTimeout, me, {single: true});
+		me.hoverTimeout = Ext.defer(this.showPopup, me.popupDelay, me, [record, item]);//make sure the user wanted it...wait for the pause.
 	},
 
 
@@ -448,15 +464,13 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 			if (!pop) {
 				return;
 			}
-			pop.on('destroy', function() {
-				delete me.activeTargetDom;
-				delete me.activeTargetRecord;
-			}, pop);
+			pop.on('destroy', 'cancelPopupTimeout', me);
 		}
 
 		me.cancelPopupTimeout();
+		me.popupDelay = 1;
+		clearTimeout(me.resetDelayTimer);
 
-		target.un('mouseout', me.cancelPopupTimeout, me, {single: true});
 		me.activeTargetDom = item;
 		me.activeTargetRecord = record;
 
@@ -466,9 +480,16 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 
 
 	cancelPopupTimeout: function() {
-		delete this.activeTargetDom;
-		delete this.activeTargetRecord;
-		clearTimeout(this.hoverTimeout);
+		var me = this;
+		delete me.activeTargetDom;
+		delete me.activeTargetRecord;
+		clearTimeout(me.hoverTimeout);
+		clearTimeout(me.resetDelayTimer);
+		me.resetDelayTimer = setTimeout(function() {
+			me.popupDelay = 1200;
+		},
+				//wait 5 seconds to restore the initial delay
+				5000);
 	},
 
 
