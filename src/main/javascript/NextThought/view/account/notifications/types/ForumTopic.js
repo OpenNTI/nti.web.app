@@ -19,6 +19,10 @@ Ext.define('NextThought.view.account.notifications.types.ForumTopic', {
 
 	fillInData: function(rec) {
 		var u = rec.get('Creator');
+		if (!Ext.isString(u)) {
+			return;
+		}
+
 		if (isMe(u)) {
 			rec.set({'creatorName': 'Me'});
 			rec.user = $AppConfig.userObject;

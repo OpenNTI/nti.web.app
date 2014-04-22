@@ -12,6 +12,11 @@ Ext.define('NextThought.view.account.notifications.types.ForumComment', {
 
 	fillInData: function(rec) {
 		this.callParent(arguments);
+
+		if (!Ext.isEmpty(rec.get('bodyPreview'))) {
+			return;
+		}
+
 		//get the preview
 		if (rec.getActivityItemConfig) {
 			rec.getActivityItemConfig()

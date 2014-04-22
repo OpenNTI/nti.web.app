@@ -81,6 +81,10 @@ Ext.define('NextThought.view.account.notifications.types.Base', {
 
 		var u = rec.get('Creator');
 
+		if (!Ext.isString(u)) {
+			return;
+		}
+
 		if (isMe(u)) {
 			rec.set('Creator', $AppConfig.userObject);
 		} else {

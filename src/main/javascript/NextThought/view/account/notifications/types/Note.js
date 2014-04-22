@@ -17,6 +17,11 @@ Ext.define('NextThought.view.account.notifications.types.Note', {
 
 	fillInData: function(rec) {
 		this.callParent(arguments);
+
+		if (!Ext.isEmpty(rec.get('location')) || !Ext.isEmpty(rec.get('path'))) {
+			return;
+		}
+
 		LocationMeta.getMeta(rec.get('ContainerId'), function(meta) {
 			var lineage = [],
 				location = '';

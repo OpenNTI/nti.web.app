@@ -36,6 +36,9 @@ Ext.define('NextThought.view.account.notifications.types.Feedback', {
 	fillInData: function(rec) {
 		this.callParent(arguments);
 		var me = this;
+
+		if (rec.get('assignmentContainer') || rec.data.hidden) {return;}
+
 		Service.getObject(rec.get('AssignmentId'), function(assignment) {
 			var cid = assignment.get('ContainerId'),
 					course = CourseWareUtils.courseForNtiid(cid);
