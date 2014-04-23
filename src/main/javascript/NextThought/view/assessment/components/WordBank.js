@@ -11,17 +11,59 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 			'data-lang': '{lang:htmlEncode}',
 			'data-question': '{parent.question}',
 			'data-part': '{parent.part}',
-			cn: [{cls: 'reset'}, '{[this.parseWord(values.word, parent.ownerCmp)]}']
+			'data-word': '{word:htmlEncode}',
+			cn: [{cls: 'reset'}, '{[this.parseWord(values, parent.ownerCmp)]}']
 		}
 	]}), {
-		parseWord: function(word, cmp) { return cmp.parseWordEntry(word); }
+		parseWord: function(values, cmp) { return cmp.parseWordEntry(values.content || values.word); }
 	}),
 
 
+	audioTeplate: new Ext.XTemplate(Ext.DomHelper.markup({
+		tag: 'button', cls: 'x-component-assessment audio-clip', cn: {
+			tag: 'audio', cn: {tag: 'tpl', 'for': 'sources', cn: [
+				{tag: 'source', 'data-source': '{service}', src: '{source}', type: '{type}'}
+			]}
+		}
+	})),
+
+
+	parseDomString: function(dom) {
+		var a = document.createElement('div');
+
+		a.id = 'tempdom';
+		a.innerHTML = dom;
+
+		return a;
+	},
+
 
 	parseWordEntry: function(word) {
-		console.log('TODO: Parse this: ', word);
-		return word;
+		var d = this.parseDomString(word),
+			tpl = this.audioTeplate,
+			elements = d.querySelectorAll('object[type$=ntiaudio]'),
+			x = elements.length - 1, c, o, p;
+
+		for (x; x >= 0; x--) {
+			o = elements[x];
+			tpl.insertAfter(o, {
+				sources: o.querySelectorAll('object[type$=audiosource]').toArray().map(DomUtils.parseDomObject)});
+			o.parentNode.removeChild(o);
+		}
+
+		elements = d.querySelectorAll('p');
+		x = elements.length - 1;
+		for (x; x >= 0; x--) {
+			o = elements[x];
+			p = o.parentNode;
+			c = o.getChildren();
+			if (c.length === 1) {
+				p.insertBefore(c[0], o);
+				p.removeChild(o);
+			}
+		}
+
+		return d.innerHTML;
 	},
 
 
@@ -44,7 +86,51 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 
 	afterRender: function() {
 		this.callParent(arguments);
+		this.setupAudioClips();
 		this.setupDragging();
+	},
+
+
+	setupAudioClips: function() {
+		var me = this;
+
+		function toggle(e) {
+			e.stopEvent();
+			var el = e.getTarget(),
+				p = el.querySelector('audio');
+
+			if (p.paused) { p.play(); }
+			else { p.load(); }
+			el.blur();
+		}
+
+
+		function playing(e) { e.getTarget('button.audio-clip', 0, true).addCls('playing'); }
+		function stopped(e) { e.getTarget('button.audio-clip', 0, true).removeCls('playing'); }
+
+
+		function cannotPlay(e) {
+			var el = e.getTarget('button.audio-clip', 0, true);
+			el.addCls('noplay');
+			el.set({
+				title: 'Cannot play this audio clip.'
+			});
+		}
+
+
+
+		this.el.select('audio').each(function(audio) {
+			me.mon(audio, {
+				abort: stopped,
+				emptied: stopped,
+				ended: stopped,
+				pause: stopped,
+				play: playing
+			});
+			me.mon(audio.down('source:last-of-type'), { error: cannotPlay });
+			me.mon(audio.parent(), { click: toggle });
+			Ext.getDom(audio).load();
+		});
 	},
 
 
@@ -82,10 +168,11 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 			getDragData: function(e) {
 				var sourceEl = e.getTarget('.drag', 10), d;
 				if (sourceEl) {
-					d = sourceEl.cloneNode(true);
-					d.removeAttribute('id');
-					Ext.fly(d).select('[id]').set({id: undefined});
-					d.id = Ext.id();
+					d = document.createElement('div');
+					d.className = sourceEl.className;
+					Ext.DomHelper.append(d, {cls: 'reset'});
+					Ext.DomHelper.append(d, sourceEl.dataset.word);
+
 					return Ext.apply({
 						sourceEl: sourceEl,
 						repairXY: Ext.fly(sourceEl).getXY(),

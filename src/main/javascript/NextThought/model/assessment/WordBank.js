@@ -13,6 +13,7 @@ Ext.define('NextThought.model.assessment.wordbank.WordEntry', {
 	fields: [
 		{ name: 'Class', type: 'string', defaultValue: 'WordEntry', persist: false },
 		{ name: 'MimeType', type: 'string', defaultValue: 'application/vnd.nextthought.naqwordentry'},
+		{ name: 'content', type: 'string' },
 		{ name: 'lang', type: 'string' },
 		{ name: 'wid', type: 'string' },
 		{ name: 'word', type: 'string' }

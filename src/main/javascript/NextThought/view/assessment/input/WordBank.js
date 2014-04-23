@@ -133,6 +133,8 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 		}
 
 		el = Ext.get(dom);
+		el.select('*:not(.reset)').remove();
+		Ext.DomHelper.append(el, dragSource.dataset.word);
 
 		dom.resetDD = function() {
 			input.value = '';
