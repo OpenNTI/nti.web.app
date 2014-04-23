@@ -67,5 +67,14 @@ Ext.define('NextThought.view.assessment.components.AudioClip', {
 
 	playing: function() { this.addCls('playing'); },
 	stopped: function() { this.removeCls('playing'); },
-	cannotPlay: function() { this.stopped(); this.dead = true; this.addCls('noplay'); }
+
+
+	cannotPlay: function() {
+		this.stopped();
+		this.dead = true;
+		this.addCls('noplay');
+		this.el.set({
+			title: 'Cannot play this audio clip.'
+		});
+	}
 });
