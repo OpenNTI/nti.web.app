@@ -489,6 +489,7 @@ Ext.define('NextThought.view.content.View', {
 	_setCourse: function(instance, tab) {
 		if (this.currentCourse === instance) {
 			if (tab !== 'passive') {
+				tab = tab || (this.isPreview) ? 'course-info' : null;
 				this.setActiveTab(tab);
 			}
 			return Promise.resolve();
@@ -527,6 +528,8 @@ Ext.define('NextThought.view.content.View', {
 
 		tab = preview ? 'course-info' : tab || 'course-book';
 		this.setActiveTab(tab);
+
+		this.isPreview = preview;
 
 		return Promise.all(subs.map(
 			function(e) {
