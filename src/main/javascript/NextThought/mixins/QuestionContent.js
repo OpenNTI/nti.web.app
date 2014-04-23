@@ -98,7 +98,8 @@ Ext.define('NextThought.mixins.QuestionContent', {
 	 * @return {bool} whether or not we have a component for the type
 	 */
 	addObject: function(type, config, create) {
-		var name = config.compName || (type && this.typeToComponent[type]);
+		var placeholderEl, parent,
+			name = config.compName || (type && this.typeToComponent[type]);
 
 		if (!name) {
 			console.error('Unsupported question content type:', type, config);
@@ -107,7 +108,15 @@ Ext.define('NextThought.mixins.QuestionContent', {
 
 		//if we are suppose to create it create it and add the component to the list
 		if (create) {
+			placeholderEl = Ext.getDom(config.renderTo);
+			parent = placeholderEl.parentNode;
 			this.contentComponents.push(Ext.widget(name, config));
+
+			while (placeholderEl.lastChild) {
+				parent.insertBefore(placeholderEl.lastChild, placeholderEl);
+			}
+			parent.removeChild(placeholderEl);
+
 		} else {
 			//if we are suppose to wait just add the config to the toRender list
 			config.compName = name;
