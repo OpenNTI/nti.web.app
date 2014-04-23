@@ -3,7 +3,7 @@ Ext.define('NextThought.mixins.QuestionContent', {
 
 	typeToComponent: {
 		//'text/html': 'NextThought.view.assessment.components.Base',
-		'application/vnd.nextthought.ntiaudio': 'box',
+		'application/vnd.nextthought.ntiaudio': 'assessment-components-audio-clip',
 		'application/vnd.nextthought.contentsequence': 'assessment-components-sequence',
 		'application/vnd.nextthought.naqwordbank': 'assessment-components-wordbank'
 	},

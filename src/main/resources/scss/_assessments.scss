@@ -1333,6 +1333,41 @@ body.dragging * {
 	position: relative;
 }
 
+
+.x-component-assessment.audio-clip {
+	display: inline-block;
+	cursor: pointer;
+	padding: 0;
+	border: 0;
+	background: none;
+	@include icon('audio-icon');
+	@include sprite-dimensions($icons, 'audio-icon');
+
+	&.playing {
+		opacity: 0.7;
+	}
+
+	&:hover{
+		&.playing {
+			opacity: 1;
+		}
+
+		&:not(.noplay)::after {
+			background-position: sprite-position($icons, 'audio-icon_hover');
+		}
+	}
+
+	&:active{
+		&:not(.noplay)::after {
+			background-position: sprite-position($icons, 'audio-icon_hover');
+		}
+	}
+
+	&.noplay {
+		background-position: sprite-position($icons, 'audio-icon_error');
+	}
+}
+
 .x-dd-drag-ghost{
 	@include draggable-zone;
 	top: -30px;
