@@ -1340,6 +1340,9 @@ body.dragging * {
 	padding: 0;
 	border: 0;
 	background: none;
+	margin-right: 8px;
+	vertical-align: text-bottom;//looks good so far
+
 	@include icon('audio-icon');
 	@include sprite-dimensions($icons, 'audio-icon');
 
