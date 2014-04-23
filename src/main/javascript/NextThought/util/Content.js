@@ -5,6 +5,10 @@ Ext.define('NextThought.util.Content', {
 
 	requires: ['NextThought.Library'],
 
+	mixins: {
+		observable: 'Ext.util.Observable'
+	},
+
 	CONTENT_VISIBILITY_MAP: {
 		'OU': 'OUID'
 	},
@@ -659,6 +663,8 @@ Ext.define('NextThought.util.Content', {
 			return this.NO_LOCATION;
 		}
 
+		me.listenToLibrary();
+
 		r = me.cache[i];
 		if (!r) {
 			r = me.find(i);
@@ -704,6 +710,23 @@ Ext.define('NextThought.util.Content', {
 		return r;
 	},
 
+
+	listenToLibrary: function() {
+		if (this.libraryMon) {
+			return;
+		}
+
+		this.libraryMon = this.mon(Library, {
+			destroyable: true,
+			loaded: 'clearCache'
+		});
+	},
+
+
+	clearCache: function() {
+		this.cache = {};
+		this.findCache = {};
+	},
 
 
 	getNavigationInfo: function(ntiid, rootId) {

@@ -2,6 +2,10 @@ Ext.define('NextThought.cache.LocationMeta', {
 	alias: 'LocationMeta',
 	singleton: true,
 
+	mixins: {
+		observable: 'Ext.util.Observable'
+	},
+
 	meta: {},
 	ids: {},
 
@@ -108,6 +112,9 @@ Ext.define('NextThought.cache.LocationMeta', {
 	 */
 	loadMeta: function(ntiid, ignoreCache) {
 		var me = this;
+
+		me.listenToLibrary();
+
 		return new Promise(function(fulfill, reject) {
 
 			function pageIdLoaded(pi) {
@@ -130,6 +137,26 @@ Ext.define('NextThought.cache.LocationMeta', {
 
 			Service.getPageInfo(ntiid, pageIdLoaded, fail, me);
 		});
+	},
+
+
+	listenToLibrary: function() {
+		var me = this;
+
+		if (me.libraryMon) {
+			return;
+		}
+
+		me.libraryMon = me.mon(Library, {
+			'destroyable': true,
+			'loaded': 'clearCache'
+		});
+	},
+
+
+	clearCache: function() {
+		this.meta = {};
+		this.ids = {};
 	},
 
 
