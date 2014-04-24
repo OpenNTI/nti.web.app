@@ -1333,6 +1333,12 @@ body.dragging * {
 		.response-container {
 			line-height: 2;
 		}
+		.blank {
+			margin-right: auto;
+			&::after {
+				clip: rect(25px auto auto auto);
+			}
+		}
 		input {
 			text-align: center;
 			font: normal normal 1em/1 $font;
