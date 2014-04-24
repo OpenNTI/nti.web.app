@@ -574,6 +574,12 @@ canvas.x-component-course-assessment {
 		top: 0; left: 0; right: 0; bottom: 0;
 		margin-top: 50px;//toolbar
 	}
+
+	.x-container.grouping > .header {
+		.title {
+			padding-right: 4.5em;
+		}
+	}
 }
 
 .course-assessment-header {
