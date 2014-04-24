@@ -150,13 +150,14 @@ Ext.define('NextThought.view.content.overlay.Panel', {
 			} else {
 				this.destroy();
 			}
+
+			this.maybeScrollIntoView();
 		}
 		catch (e) {
 			console.debug(e.message);
 			clearInterval(this.interval);
 		}
 
-		this.maybeScrollIntoView();
 	},
 
 
