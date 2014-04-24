@@ -164,6 +164,12 @@
 
 					position: relative;
 
+					.whiteboard-container {
+						.toolbar {
+							display: none;
+						}
+					}
+
 					&::before {
 						content: ' ';
 						overflow: hidden;
