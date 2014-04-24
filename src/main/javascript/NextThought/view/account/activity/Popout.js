@@ -117,7 +117,7 @@ Ext.define('NextThought.view.account.activity.Popout', {
 	},
 
 	detectBlurClick: function(e) {
-		if (!e.getTarget('.' + this.cls)) {
+		if (!e.getTarget('.' + this.cls) && !this.preview.openEditor) {
 			clearTimeout(this.hideTimer);
 			//this.hideTimer = Ext.defer(function(){this.fireEvent('blur');},1, this);
 			this.maybeHidePopout();
@@ -127,7 +127,9 @@ Ext.define('NextThought.view.account.activity.Popout', {
 	},
 
 	detectBlur: function(e) {
-		if (!e.getTarget('.' + this.cls) && !e.getTarget('#' + this.refEl && this.refEl.id) && !e.getTarget('.x-menu') && !e.getTarget('.contact-popout')) {
+		var isMe = e.getTarget('.' + this.cls) || e.getTarget('#' + this.refEl && this.refEl.id) || e.getTarget('.x-menu') || e.getTarget('.contact-popout');
+
+		if (!isMe && !this.preview.openEditor) {
 			clearTimeout(this.hideTimer);
 			this.hideTimer = Ext.defer(function() {this.fireEvent('blur');}, 500, this);
 		}

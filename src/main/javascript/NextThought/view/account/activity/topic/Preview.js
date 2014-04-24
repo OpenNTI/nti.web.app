@@ -119,6 +119,15 @@ Ext.define('NextThought.view.account.activity.topic.Preview', {
 				}
 			});
 		}
+
+		me.mon(comments, {
+			'activated-editor': function() {
+				me.openEditor = true;
+			},
+			'deactivated-editor': function() {
+				delete me.openEditor;
+			}
+		});
 	},
 
 	destroy: function() {

@@ -156,6 +156,7 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 
 			me.editor.deactivate();
 		}});
+		me.relayEvents(me.editor, ['activated-editor', 'deactivated-editor']);
 		me.editor.addCls('threaded-forum-editor');
 		me.el.selectable();
 
