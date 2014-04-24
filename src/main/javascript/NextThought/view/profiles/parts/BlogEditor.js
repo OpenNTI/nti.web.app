@@ -223,7 +223,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 		if (response && response.responseText) {
 			error = JSON.parse(response.responseText) || {};
 			if (error.code === 'TooLong') {
-				msg = 'Could not save your Thought. The title is too long. It can only be 140 characters or less';
+				msg = 'Could not save your Thought. The title is too long. It can only be 140 characters or less.';
 			}
 		}
 		alert({title: 'Error', msg: msg, icon: 'warning-red'});

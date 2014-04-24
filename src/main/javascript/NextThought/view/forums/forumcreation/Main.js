@@ -228,7 +228,7 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 			error = Ext.decode(response.responseText, true) || {};
 
 			if (error.code === 'TooLong') {
-				msg.message = 'Could not save your Discussion. The title is too long. It can only be 140 characters or less';
+				msg.message = 'Could not save your Discussion. The title is too long. It can only be 140 characters or less.';
 				msg.field = 'title';
 			} else if (error.code === 'ImpossibleToMakeSpecificPartSafe') {
 				msg.message = 'Could not save your forum. The title cannot be all special characters.';
