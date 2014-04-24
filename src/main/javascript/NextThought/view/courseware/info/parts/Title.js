@@ -34,6 +34,13 @@ Ext.define('NextThought.view.courseware.info.parts.Title', {
 		var me = this;
 		this.callParent(arguments);
 
+		this.buildVideo();
+	},
+
+
+	buildVideo: function() {
+		Ext.destroy(this.video, this.videoMonitor);
+
 		if (!Ext.isEmpty(this.videoUrl)) {
 			this.video = Ext.widget({
 				xtype: 'content-video',
@@ -43,17 +50,31 @@ Ext.define('NextThought.view.courseware.info.parts.Title', {
 				renderTo: this.videoEl,
 				floatParent: this
 			});
-			this.mon(this.video, {
+			this.video.mon(this, 'destroy', 'destroy', this.video);
+
+			this.videoMonitor = this.mon(this.video, {
+				destroyable: true,
 				'beforeRender': {
 					fn: function() {
 						me.addCls('has-video');
 					},
 					single: true
+				},
+				'player-event-ended': {
+					fn: 'showCurtain',
+					scope: this,
+					buffer: 1000
 				}
 			});
-			this.on('destroy', 'destroy', this.video);
 		}
 	},
+
+
+	showCurtain: function() {
+		this.removeCls('playing');
+		this.buildVideo();
+	},
+
 
 	curtainClicked: function(e) {
 		if (e && e.shiftKey && this.player.canOpenExternally()) {
