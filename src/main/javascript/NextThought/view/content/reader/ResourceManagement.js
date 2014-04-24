@@ -72,6 +72,56 @@ Ext.define('NextThought.view.content.reader.ResourceManagement', {
 	}])),
 
 
+	AUDIO_SNIPPET_TEMPLATE: new Ext.XTemplate(Ext.DomHelper.markup([
+		{ tag: 'button', id: '{id}', cls: 'x-component-assessment audio-clip', cn: { tag: 'audio',
+				cn: { tag: 'tpl', 'for': 'sources', cn: [
+					{ tag: 'source', src: '{source}', type: '{type}'}]}}}
+	])),
+
+	AUDIO_SNIPPET_CODE_TEMPLATES: {
+		init: function(document, id) {
+			var btn = document.getElementById(id),
+				audio = btn.querySelector('audio'),
+				sources = audio.querySelectorAll('source'),
+				lastsource = sources[sources.length - 1];
+
+			function stopped() {
+				btn.classList.remove('playing');
+			}
+
+			function play() {
+				Array.prototype.forEach.call(
+						document.querySelectorAll('audio'),
+						function(a) {
+							if (a !== audio) {a.load();}
+						});
+			}
+
+			function noplay() {
+				btn.onclick = null;
+				btn.classList.add('noplay');
+			}
+
+			function click() {
+				btn.blur();
+				if (audio.paused) {
+					audio.play();
+					btn.classList.add('playing');
+				} else {audio.load();}
+			}
+
+			btn.addEventListener('click', click, false);
+
+			lastsource.addEventListener('error', noplay, false);
+			audio.addEventListener('play', play, false);
+
+			['abort', 'ended', 'emptied', 'pause'].forEach(function(e) {
+				audio.addEventListener(e, stopped, false);
+			});
+		}
+
+	},
+
 	OVERLAY_DOM_QUERY_XTYPE_MAP: {
 		'object[type$=nticard]': 'overlay-card',
 		'object[type$=nticard-target]': 'overlay-card-target',
@@ -93,6 +143,7 @@ Ext.define('NextThought.view.content.reader.ResourceManagement', {
 	manage: function(reader) {
 		this.activateOverlays.apply(this, arguments);
 		this.activateAnnotatableItems.apply(this, arguments);
+		this.activateAudioSnippets.apply(this, arguments);
 		this.manageYouTubeVideos();
 	},
 
@@ -134,6 +185,23 @@ Ext.define('NextThought.view.content.reader.ResourceManagement', {
 				tabIndexTracker: o.tabIndexer,
 				contentElement: el
 			}));
+		});
+	},
+
+
+	activateAudioSnippets: function(reader, doc) {
+		var tpl = this.AUDIO_SNIPPET_TEMPLATE,
+			code = this.AUDIO_SNIPPET_CODE_TEMPLATES;
+
+		Array.prototype.forEach.call(doc.querySelectorAll('object[type$=ntiaudio]'), function(snip) {
+			var id = guidGenerator(),
+				obj = Ext.apply(DomUtils.parseDomObject(snip), {
+					sources: Array.prototype.map.call(snip.querySelectorAll('object[type$=audiosource]'), DomUtils.parseDomObject),
+					id: id
+				});
+			tpl.insertBefore(snip, obj);
+			code.init(doc, id);
+			Ext.fly(snip).remove();
 		});
 	},
 
