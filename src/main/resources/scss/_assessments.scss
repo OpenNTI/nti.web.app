@@ -1275,6 +1275,7 @@ body.dragging * {
 	}
 
 
+	.shortanswer-input,
 	.wordbank-input {
 		font-size: 14px;
 
@@ -1307,7 +1308,8 @@ body.dragging * {
 			}
 
 			&:empty {
-				min-width: 8em;&::before {
+				min-width: 8em;
+				&::before {
 					content: '(drop)';
 					visibility: hidden;
 				}
@@ -1324,6 +1326,21 @@ body.dragging * {
 				border-radius: 3px;
 				clip: rect(20px auto auto auto);
 			}
+		}
+	}
+	.shortanswer-input {
+		.inputbox,
+		.response-container {
+			line-height: 2;
+		}
+		input {
+			text-align: center;
+			font: normal normal 1em/1 $font;
+			color: $secondary-grey;
+			display: inline-block;
+			padding: 0; margin: 0;
+			border: 0;
+			background: none;
 		}
 	}
 }

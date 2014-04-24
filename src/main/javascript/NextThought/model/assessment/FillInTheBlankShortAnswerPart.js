@@ -1,9 +1,8 @@
 Ext.define('NextThought.model.assessment.FillInTheBlankShortAnswerPart', {
-	extend: 'NextThought.model.assessment.FreeResponsePart',
+	extend: 'NextThought.model.assessment.Part',
 	fields: [
-		{ name: 'content', type: 'string', convert: function(v) {
-			console.debug(v);
-			return v;
-		}}
+		//remove this field so we do not render it in the 'content' area
+		{ name: 'content', type: 'string', mapping: '++does+not+exist++'},
+		{ name: 'input', type: 'string', mapping: 'content'}
 	]
 });

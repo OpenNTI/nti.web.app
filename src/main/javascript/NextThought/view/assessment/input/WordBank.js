@@ -32,7 +32,7 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 	beforeRender: function() {
 		this.callParent(arguments);
 		Ext.apply(this.renderData, {
-			lineWithBlank: this.buildContent(this.part.get('input'))
+			lineWithBlank: this.buildContent(this.filterHTML(this.part.get('input')))
 		});
 	},
 
