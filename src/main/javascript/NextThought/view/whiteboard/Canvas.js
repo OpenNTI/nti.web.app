@@ -51,6 +51,7 @@ Ext.define('NextThought.view.whiteboard.Canvas', {
 		data.MimeType	= 'application/vnd.nextthought.canvas';
 		data.Class	= 'Canvas';
 		data.viewportRatio = this.viewportRatio;
+		data.NTIID = this.drawData.NTIID;
 
 
 		for (i; i >= 0; i--) {
@@ -66,7 +67,7 @@ Ext.define('NextThought.view.whiteboard.Canvas', {
 		this.mon(this, 'resize', this.hasResized, this);
 	},
 
-	hasResized: function(cmp,width,height) {
+	hasResized: function(cmp, width, height) {
 		height = Math.round(width / (this.viewportRatio || 1));
 		this.el.setStyle({
 			width: width + 'px',
@@ -150,7 +151,7 @@ Ext.define('NextThought.view.whiteboard.Canvas', {
 
 		drawScene: function(data, canvas, finished) {
 
-			function draw(x,cb) {
+			function draw(x, cb) {
 				if (x < 0) {
 					if (cb && cb.call) {
 						cb.call(this);
