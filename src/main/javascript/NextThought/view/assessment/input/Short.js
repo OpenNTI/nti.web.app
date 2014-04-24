@@ -21,10 +21,11 @@ Ext.define('NextThought.view.assessment.input.Short', {
 
 
 	afterRender: function() {
-		var tpl = this.blankTpl;
-		this.callParent(arguments);
-		this.blankInputs = this.inputBox.query('input[type="blankfield"]');
-		this.blankInputs.forEach(function(i) {
+		var me = this,
+			tpl = me.blankTpl;
+		me.callParent(arguments);
+		me.blankInputs = me.inputBox.query('input[type="blankfield"]');
+		me.blankInputs.forEach(function(i) {
 			var blank = tpl.insertBefore(i),
 				size = i.getAttribute('maxlength');
 
@@ -33,11 +34,37 @@ Ext.define('NextThought.view.assessment.input.Short', {
 				i.setAttribute('size', size);
 			}
 		});
+
+		me.mon(new Ext.dom.CompositeElement(me.blankInputs), {
+			buffer: 300,
+			keyup: 'checkSubmissionState'
+		});
+	},
+
+
+	checkSubmissionState: function() {
+		var k, v = this.getValue(),
+			allFilledIn = true;
+
+		for (k in v) {
+			if (v.hasOwnProperty(k)) {
+				allFilledIn = !!v[k];
+				if (!allFilledIn) {
+					break;
+				}
+			}
+		}
+
+
+		this[allFilledIn ?
+			 'enableSubmission' :
+			 'disableSubmission']();
 	},
 
 
 	getValue: function() {
 		var value = {};
+
 		(this.blankInputs || []).forEach(function(input) {
 			var name = input.getAttribute('name');
 			value[name] = input.value || false;
