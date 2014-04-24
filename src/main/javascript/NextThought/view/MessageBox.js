@@ -86,6 +86,22 @@ Ext.define('NextThought.view.MessageBox', {
 			title: 'Attention...'
 		});
 
+
+		function wrap(str, width, brk) {
+			if (str.length > width) {
+				var left, right, p = width;
+				p = str.lastIndexOf(' ', p);
+				if (p > 0) {
+					left = str.substring(0, p);
+					right = str.substring(p + 1);
+					return left + brk + wrap(right, width, brk);
+				}
+			}
+			return str;
+		}
+
+		cfg.msg = wrap(cfg.msg, 60, '\n');
+
 		cfg.msg = cfg.title + '<div class="message">' + cfg.msg + '</div>';
 		cfg.msg = cfg.msg.replace(/\n/, '<br/>');
 		Ext.defer(this.toFront, 10, this);
