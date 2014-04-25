@@ -26,13 +26,13 @@ Ext.define('NextThought.view.courseware.View', {
 			console.error('Empty course outline. Course Is not usable.');
 			me.unmask();
 
-			me.outlineError = Ext.DomHelper.append('course-nav', {
+			/*me.outlineError = Ext.DomHelper.append('course-nav', {
 				cls: 'x-mask opaque', cn: {
 					cls: 'empty-state', cn: [
 						{ tag: 'h1', html: 'Content Error.'},
 						{ html: 'The course outline is empty.'}
 					] }
-			});
+			});*/
 		});
 	},
 
