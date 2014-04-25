@@ -32,7 +32,7 @@ Ext.define('NextThought.view.courseware.View', {
 						{ tag: 'h1', html: 'Content Error.'},
 						{ html: 'The course outline is empty.'}
 					] }
-			}, true);
+			});
 		});
 	},
 
@@ -45,8 +45,10 @@ Ext.define('NextThought.view.courseware.View', {
 			add: 'unmask'
 		});
 
-		Ext.destroy(me.outlineError);
-		delete me.outlineError;
+		if (me.outlineError) {
+			Ext.fly(me.outlineError).remove();
+			delete me.outlineError;
+		}
 
 		Ext.defer(function() {
 			if (me.el && me.el.dom) {
