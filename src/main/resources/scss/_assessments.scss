@@ -1411,6 +1411,19 @@ body.dragging * {
 		cursor: default;
 		background-position: sprite-position($icons, 'audio-icon_error');
 	}
+
+
+	.drag:hover &:not(.noplay) {
+		opacity: 0.6;
+
+		&:active,
+		&:hover {
+			opacity: 1;
+		}
+		&::after {
+			background-position: sprite-position($icons, 'audio-icon_white');
+		}
+	}
 }
 
 .x-dd-drag-ghost{
