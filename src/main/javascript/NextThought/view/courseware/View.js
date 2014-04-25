@@ -17,7 +17,15 @@ Ext.define('NextThought.view.courseware.View', {
 
 	initComponent: function() {
 		this.callParent(arguments);
-		this.initCustomScrollOn('content', '.course-overview', {secondaryViewEl: '.nav-outline'});
+
+		var me = this;
+
+		me.initCustomScrollOn('content', '.course-overview', {secondaryViewEl: '.nav-outline'});
+
+		me.mon(me.navigation, 'empty-outline', function() {
+			alert('Empty course outline');
+			me.unmask();
+		});
 	},
 
 

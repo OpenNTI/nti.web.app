@@ -513,7 +513,11 @@ Ext.define('NextThought.controller.CourseWare', {
 		// of the content (so its a unit or a lesson... if we can
 		// find it in the nav store, its available.)
 		//TODO: This needs to go away. Favor scoped reader navigation.
-		return !!store.getById(lin[lin.length - 2]);
+		if (!store.getCount()) {
+			return true;
+		}
+
+		return !!store.getById(lin[Math.max(0, lin.length - 2)]);
 	},
 
 

@@ -157,6 +157,10 @@ Ext.define('NextThought.view.courseware.outline.View', {
 			this.getSelectionModel().select(r);
 		} else {
 			this.getSelectionModel().deselectAll();
+
+			if (!store.getCount()) {
+				this.fireEvent('empty-outline');
+			}
 		}
 	},
 
