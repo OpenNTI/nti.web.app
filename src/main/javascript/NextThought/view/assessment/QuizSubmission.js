@@ -18,8 +18,8 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 	 */
 	html: Ext.DomHelper.markup([
 		{ cls: 'buttons', cn: [
-			{tag: 'a', href: '#', cls: 'reset', html: '{{{NextThought.view.assessment.QuizSubmission.cancel}}}'},
-			{tag: 'a', href: '#', cls: 'submit tabable disabled', html: '{{{NextThought.view.assessment.QuizSubmission.finished}}}'}
+			{tag: 'a', href: '#', cls: 'reset', html: getString('NextThought.view.assessment.QuizSubmission.cancel')},
+			{tag: 'a', href: '#', cls: 'submit tabable disabled', html: getString('NextThought.view.assessment.QuizSubmission.finished')}
 		] },
 		{ cls: 'status' }
 	]),
@@ -186,14 +186,9 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 
 		this.statusMessage.update(unansweredQuestions === 0 ?
 								getString('NextThought.view.assessment.QuizSubmission.all-answered') :
-								Ext.String.format(
-									'{0}' + getString('NextThought.view.assessment.QuizSubmission.unanswered'),
-									Ext.util.Format.plural(
-										unansweredQuestions,
-										getString('NextThought.view.assessment.QuizSubmission.question'),
-										getString('NextThought.view.assessment.QuizSubmission.question-plural')
-									)
-								)
+								getFormattedString('NextThought.view.assessment.QuizSubmission.unanswered', {
+									questions: Ext.util.Format.plural(unansweredQuestions, 'question')
+								})
 		);
 
 		this.statusMessage[((unansweredQuestions === 0) ? 'add' : 'remove') + 'Cls']('ready');

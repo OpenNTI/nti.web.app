@@ -227,7 +227,7 @@ NTIStrings['NextThought.view.assessment.QuizSubmission.cancel'] = 'Cancel';
 NTIStrings['NextThought.view.assessment.QuizSubmission.finished'] = 'I\'m Finished!';
 NTIStrings['NextThought.view.assessment.QuizSubmission.redo'] = 'Try Again';
 NTIStrings['NextThought.view.assessment.QuizSubmission.all-answered'] = 'All questions answered';
-NTIStrings['NextThought.view.assessment.QuizSubmission.unanswered'] = 'unanswered';
+NTIStrings['NextThought.view.assessment.QuizSubmission.unanswered'] = '{questions} unanswered';
 NTIStrings['NextThought.view.assessment.QuizSubmission.question'] = 'question';
 NTIStrings['NextThought.view.assessment.QuizSubmission.question-plural'] = 'questions';
 NTIStrings['NextThought.view.assessment.QuizSubmission.warning-title'] = 'Are you sure?';
@@ -479,6 +479,7 @@ NTIStrings['NextThought.view.courseware.overview.View.additional'] = 'Additional
 NTIStrings['NextThought.view.courseware.overview.View.required'] = 'Required Resources';
 NTIStrings['NextThought.view.courseware.overview.View.assessment'] = 'Practice Questions';
 NTIStrings['NextThought.view.courseware.overview.View.assignments'] = 'Assignments';
+NTIStrings['NextThought.view.courseware.overview.View.session'] = 'Session Overview';
 NTIStrings['NextThought.view.courseware.overview.View.loading'] = 'Loading...';
 NTIStrings['NextThought.view.courseware.overview.parts.QuestionSet.review'] = 'Review';
 NTIStrings['NextThought.view.courseware.overview.parts.QuestionSet.due'] = 'Due';
@@ -715,6 +716,5 @@ NTIStrings['NextThought.view.profiles.parts.NoThought.start'] = 'Get Started!';
 NTIStrings['NextThought.view.profiles.parts.NoThought.empty'] = 'I\'m still collecting my thoughts...';
 NTIStrings['NextThought.view.profiles.parts.NoThought.back'] = 'Go Back';
 NTIStrings['NextThought.view.profiles.parts.NoThought.chat'] = 'Chat';
-NTIStrings['PluralForms'] = {"question":{"forms":["{#} questions","{#} question"],"ranges":{"0":0,"1":1,"2":0}},"Comment":{"forms":["{#} Comments","{#} Comment"],"ranges":{"0":0,"1":1,"2":0}},"Instructor":{"forms":["{#} Instructors","{#} Instructor"],"ranges":{"0":0,"1":1,"2":0}},"Credit":{"forms":["{#} Credits","{#} Credit"],"ranges":{"0":0,"1":1,"2":0}},"Match":{"forms":["{#} Matches","{#} Match"],"ranges":{"0":0,"1":1,"2":0}},"Like":{"forms":["{#} Likes","{#} Like"],"ranges":{"0":0,"1":1,"2":0}},"Tag":{"forms":["{#} Tags","{#} Tag"],"ranges":{"0":0,"1":1,"2":0}},"other":{"forms":["{#} others","{#} other"],"ranges":{"0":0,"1":1,"2":0}}};
 
-
+NTIStrings['PluralForms'] = {"question":{"forms":["{#} questions","{#} question"],"ranges":{"0":0,"1":1,"undefined":0}},"Comment":{"forms":["{#} Comments","{#} Comment"],"ranges":{"0":0,"1":1,"undefined":0}},"Instructor":{"forms":["{#} Instructors","{#} Instructor"],"ranges":{"0":0,"1":1,"undefined":0}},"Credit":{"forms":["{#} Credits","{#} Credit"],"ranges":{"0":0,"1":1,"undefined":0}},"Match":{"forms":["{#} Matches","{#} Match"],"ranges":{"0":0,"1":1,"undefined":0}},"Like":{"forms":["{#} Likes","{#} Like"],"ranges":{"0":0,"1":1,"undefined":0}},"Tag":{"forms":["{#} Tags","{#} Tag"],"ranges":{"0":0,"1":1,"undefined":0}},"other":{"forms":["{#} others","{#} other"],"ranges":{"0":0,"1":1,"undefined":0}}};
