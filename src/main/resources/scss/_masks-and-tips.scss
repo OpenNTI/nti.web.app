@@ -97,6 +97,11 @@
 		opacity: 0;
 	}
 
+	&.opaque {
+		background: white;
+		opacity: 1;
+	}
+
 	&.nti-black-clear{
 		opacity: 0.6;
 		background: rgba(0,0,0, 0.9);

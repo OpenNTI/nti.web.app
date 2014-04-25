@@ -23,8 +23,16 @@ Ext.define('NextThought.view.courseware.View', {
 		me.initCustomScrollOn('content', '.course-overview', {secondaryViewEl: '.nav-outline'});
 
 		me.mon(me.navigation, 'empty-outline', function() {
-			alert('Empty course outline');
+			console.error('Empty course outline. Course Is not usable.');
 			me.unmask();
+
+			me.outlineError = Ext.DomHelper.append('course-nav', {
+				cls: 'x-mask opaque', cn: {
+					cls: 'empty-state', cn: [
+						{ tag: 'h1', html: 'Content Error.'},
+						{ html: 'The course outline is empty.'}
+					] }
+			}, true);
 		});
 	},
 
@@ -36,6 +44,10 @@ Ext.define('NextThought.view.courseware.View', {
 			buffer: 1,
 			add: 'unmask'
 		});
+
+		Ext.destroy(me.outlineError);
+		delete me.outlineError;
+
 		Ext.defer(function() {
 			if (me.el && me.el.dom) {
 				me.el.mask('Loading', 'loading');
