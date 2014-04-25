@@ -45,8 +45,8 @@ Ext.define('NextThought.view.assessment.input.Ordering', {
 
 		for (i; i < values.length; i++) {
 			m.push({
-				label: labels[i],
-				value: values[i]
+				label: this.filterHTML(labels[i]),
+				value: this.filterHTML(values[i])
 			});
 		}
 
