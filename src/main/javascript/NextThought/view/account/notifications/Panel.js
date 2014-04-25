@@ -31,7 +31,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 	emptyText: Ext.DomHelper.markup([
 		{
 			cls: 'history nothing rhp-empty-list',
-			html: '{{{NextThought.view.account.notifications.Panel.empty-state}}}'
+			html: getString('NextThought.view.account.notifications.Panel.empty-state')
 		}
 	]),
 

@@ -86,8 +86,8 @@ Ext.define('NextThought.view.account.contacts.View', {
 		this.noContactsEmptyText = Ext.DomHelper.markup({
 			cls: 'rhp-no-contacts',
 			cn: [
-				{ html: '{{{NextThought.view.account.contacts.View.no-contacts}}}' },
-				{ tag: 'a', cls: 'button', role: 'button', href: '#', html: '{{{NextThought.view.account.contacts.View.add-contacts}}}' }
+				{ html: getString('NextThought.view.account.contacts.View.no-contacts') },
+				{ tag: 'a', cls: 'button', role: 'button', href: '#', html: getString('NextThought.view.account.contacts.View.add-contacts') }
 			]
 		});
 
