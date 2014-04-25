@@ -18,18 +18,18 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls: 'nav-outline forum-outline scrollable', cn: [
-			{cls: 'header toggle-opposite-tabs', html: 'Forums'},
+			{cls: 'header toggle-opposite-tabs', html: '{{{NextThought.view.forums.forum.Navigation.header}}}'},
 			{cls: 'outline-list', cn: [
 				{tag: 'tpl', 'for': '.', cn: [
 					{cls: 'outline-row', 'data-qtip': '{title}', cn: [
 						{tag: 'tpl', 'if': 'this.showReport(values)', cn: [
-							{cls: 'report-icon', 'data-qtip': 'Reports'}
+							{cls: 'report-icon', 'data-qtip': '{{{NextThought.view.forums.forum.Navigation.reports}}}'}
 						]},
 						{cls: 'label', html: '{title}'}
 					]}
 				]},
 				{tag: 'tpl', 'if': 'this.showButton(values,out)', cn: [
-					{cls: 'new-forum', html: 'Add a Forum'}
+					{cls: 'new-forum', html: '{{{NextThought.view.forums.forum.Navigation.addforum}}}'}
 				]}
 			]}
 		]

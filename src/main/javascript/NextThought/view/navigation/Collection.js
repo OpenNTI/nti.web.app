@@ -24,7 +24,7 @@ Ext.define('NextThought.view.navigation.Collection', {
 			{ cls: 'meta', cn: [
 				{ cls: 'title', html: '{title}' },
 				{ cls: 'author', html: '{author}' },
-				{ tag: 'tpl', 'if': 'sample', cn: { cls: 'sample', html: 'Sample' }}
+				{ tag: 'tpl', 'if': 'sample', cn: { cls: 'sample', html: '{{{NextThought.view.navigation.Collection.sample}}}' }}
 			]}
 		]
 	}),

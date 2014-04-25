@@ -35,6 +35,8 @@ Ext.define('NextThought.util.Format', {
 	},
 
 	boolStr: function(value, trueString, falseString) {
+		trueString = trueString && getString(trueString);
+		falseString = falseString && getString(falseString);
 		return value ? (trueString || '') : (falseString || '');
 	},
 

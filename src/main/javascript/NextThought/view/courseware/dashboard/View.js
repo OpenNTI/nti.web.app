@@ -65,7 +65,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 		}
 
 		if (this.el) {
-			this.el.mask('Loading...');
+			this.el.mask(getString('NextThought.view.courseware.dashboard.View.loading'));
 		}
 
 		nodes = store.findByDate(date);

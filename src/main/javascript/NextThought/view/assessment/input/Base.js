@@ -28,7 +28,7 @@ Ext.define('NextThought.view.assessment.input.Base', {
 				cls: 'right',
 				cn: [
 					{cls: 'action check'},
-					{cls: 'action solution', html: 'Show Solution'}
+					{cls: 'action solution', html: '{{{NextThought.view.assessment.input.Base.show-solution}}}'}
 				]
 			}]
 		}
@@ -235,7 +235,12 @@ Ext.define('NextThought.view.assessment.input.Base', {
 
 		answer.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
-		b.update(label.replace('{0}', this.hintActive ? 'Hint' : 'Solution'));
+		b.update(
+			label.replace(
+				'{0}',
+				this.hintActive ? getString('NextThought.view.assessment.input.Base.hint') : getString('NextThought.view.assessment.input.Base.solution')
+			)
+		);
 
 		if (this.hintActive) {
 			answer.hide();
@@ -429,7 +434,7 @@ Ext.define('NextThought.view.assessment.input.Base', {
 		this.updateSolutionButton();
 		this.checkItBtn.show();
 		this.footer.show();
-		this.checkItBtn.removeCls('wrong').update('Check It!');
+		this.checkItBtn.removeCls('wrong').update(getString('NextThought.view.assessment.input.Base.check'));
 		this.hideSolution();
 		this.disableSubmission();
 		this.updateLayout();

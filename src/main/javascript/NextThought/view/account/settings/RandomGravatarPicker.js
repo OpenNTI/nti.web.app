@@ -68,7 +68,7 @@ Ext.define('NextThought.view.account.settings.RandomGravatarPicker', {
 
 
 
-	onSelect: function(view,record) {
+	onSelect: function(view, record) {
 		var me = this,
 			url = record.get('url'),
 			el = me.el,
@@ -86,7 +86,10 @@ Ext.define('NextThought.view.account.settings.RandomGravatarPicker', {
 		},function bad() {
 			me.selectCurrent();
 			el.unmask();
-			alert('Oops!\nSomething went wrong.');
+			alert({
+				title: getString('NextThought.view.account.settings.RandomGravatarPicker.error-title'),
+				msg: getString('NextThought.view.account.settings.NextThought.view.account.settings.RandomGravatarPicker.error-title.error-msg')
+			});
 		});
 	}
 

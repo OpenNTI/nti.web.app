@@ -170,7 +170,7 @@ Ext.define('NextThought.view.profiles.parts.Activity', {
 					fn: function(cmp) {
 						Ext.defer(function() {
 							if (cmp.el && cmp.el.dom) {
-								cmp.el.mask('Loading...');
+								cmp.el.mask(getString('NextThought.view.profiles.outline.View.loading'));
 							}
 						},1);
 					},

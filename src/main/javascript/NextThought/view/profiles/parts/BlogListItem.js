@@ -12,16 +12,16 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 		{ cls: 'controls', cn: [{cls: 'favorite'},{cls: 'like'}]},
 		{ cls: 'title', html: '{title}' },
 		{ cls: 'meta', cn: [
-			{ tag: 'span', cls: 'datetime', html: '{CreatedTime:date("F j, Y")} at {CreatedTime:date("g:i A")}'},
+			{ tag: 'span', cls: 'datetime', html: '{CreatedTime:date("F j, Y")} {{{NextThought.view.profiles.parts.BlogListItem.at}}} {CreatedTime:date("g:i A")}'},
 			{ tag: 'span', cls: 'state link', html: '{publish-state}'},
 			{ tag: 'tpl', 'if': 'headline.isModifiable', cn: [
-				{ tag: 'span', cls: 'edit link', html: 'Edit'},
-				{ tag: 'span', cls: 'delete link', html: 'Delete'}
+				{ tag: 'span', cls: 'edit link', html: '{{{NextThought.view.profiles.parts.BlogListItem.edit}}}'},
+				{ tag: 'span', cls: 'delete link', html: '{{{NextThought.view.profiles.parts.BlogListItem.delete}}}'}
 			]}//flag?
 		]},
 		{ cls: 'body' },
 		{ cls: 'foot', cn: [
-			{ tag: 'span', cls: 'comment-count', html: '{PostCount} Comment{[values.PostCount===1 ? "" : "s"]}' },
+			{ tag: 'span', cls: 'comment-count', html: '{PostCount:plural("Comment")}' },
 			{ tag: 'span', cls: 'tags', cn: [
 				{tag: 'tpl', 'for': 'headline.tags', cn: [
 					{tag: 'span', cls: 'tag', html: '{.}'}
@@ -37,7 +37,7 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 
 	ellipsis: Ext.DomHelper.markup({cls: 'ellipsis', cn: [{},{},{}]}),
 
-	moreTpl: Ext.DomHelper.createTemplate({cn: {tag: 'a', cls: 'more', html: 'Read More', href: '#'}}),
+	moreTpl: Ext.DomHelper.createTemplate({cn: {tag: 'a', cls: 'more', html: getString('NextThought.view.profiles.parts.BlogListItem.more'), href: '#'}}),
 
 
 	renderSelectors: {
@@ -208,12 +208,12 @@ Ext.define('NextThought.view.profiles.parts.BlogListItem', {
 		var me = this;
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
-			msg: 'Deleting your thought will permanently remove it and any comments.',
+			msg: getString('NextThought.view.profiles.parts.BlogListItem.warning'),
 			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 			scope: me,
 			icon: 'warning-red',
-			buttonText: {'ok': 'Delete'},
-			title: 'Are you sure?',
+			buttonText: {'ok': getString('NextThought.view.profiles.parts.BlogListItem.deletebutton')},
+			title: getString('NextThought.view.profiles.parts.BlogListItem.confirm'),
 			fn: function(str) {
 				if (str === 'ok') {
 					me.fireEvent('delete-post', me.record, me);

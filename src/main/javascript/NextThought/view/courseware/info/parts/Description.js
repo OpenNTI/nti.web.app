@@ -11,15 +11,15 @@ Ext.define('NextThought.view.courseware.info.parts.Description', {
 		{ cls: 'fields', cn: [
 			{ cls: 'row', cn: [
 				{ cls: 'cell', cn: [
-					{ cls: 'label', html: 'Prerequisites' },
+					{ cls: 'label', html: '{{{NextThought.view.courseware.info.parts.Description.prereqs}}}' },
 					{ cls: 'value', cn: { tag: 'tpl', 'for': 'prerequisites', cn: {html: '{.}'}} }
 				] },
 				{ cls: 'cell', cn: [
-					{ cls: 'label', html: 'Credit Hours'},
+					{ cls: 'label', html: '{{{NextThought.view.courseware.info.parts.Description.hours}}}'},
 					{ cls: 'value {enrollmentStatus}', cn: [
 						{ tag: 'tpl', 'if': 'creditHours', cn: {
 							cls: 'enroll-for-credit', cn: [
-								'{creditHours:plural("Credit")} Available. ',
+								'{creditHours:plural("Credit")} {{{NextThought.view.courseware.info.parts.Description.available}}}. ',
 								{ tag: 'a', target: '_blank', href: '{enrollUrl}', html: '{enrollLabel}'}
 							] } },
 						{ cls: 'open', cn: [
@@ -40,22 +40,22 @@ Ext.define('NextThought.view.courseware.info.parts.Description', {
 			]},
 			{ cls: 'row', cn: [
 				{ cls: 'cell', cn: [
-					{ cls: 'label', html: 'Start Date'},
+					{ cls: 'label', html: '{{{NextThought.view.courseware.info.parts.Description.start}}}'},
 					{ cls: 'value', html: '{startDate:date("F j, Y")}' }
 				]},
 				{ cls: 'cell', cn: [
 					{ tag: 'tpl', 'if': 'duration', cn: { cls: 'cell cell1third', cn: [
-						{ cls: 'label', html: 'Duration'},
+						{ cls: 'label', html: '{{{NextThought.view.courseware.info.parts.Description.duration}}}'},
 						{ cls: 'value', html: '{duration} {durationUnits}' }
 					]}},
 					{ cls: 'cell cell2thirds', cn: [
-						{ cls: 'label', html: 'Day &amp; Time'},
+						{ cls: 'label', html: '{{{NextThought.view.courseware.info.parts.Description.days}}}'},
 						{ cls: 'value', cn: [
 							{ tag: 'tpl', 'if': 'days', cn: [
 								{ tag: 'span', html: '{days}'},
 								{ tag: 'span', html: '{times}'}
 							]
-							},{ tag: 'tpl', 'if': '!days', cn: 'Fully Online' }
+							},{ tag: 'tpl', 'if': '!days', cn: '{{{NextThought.view.courseware.info.parts.Description.online}}}' }
 						] }
 					]}
 				] }
@@ -81,7 +81,7 @@ Ext.define('NextThought.view.courseware.info.parts.Description', {
 		}
 
 		if (p.join() === '') {
-			p = ['There are no prerequisites for this course.'];
+			p = [getString('NextThought.view.courseware.info.parts.Description.noprereqs')];
 		}
 
 		this.callParent(arguments);
@@ -91,8 +91,8 @@ Ext.define('NextThought.view.courseware.info.parts.Description', {
 			courseId: i.getId(),
 			title: i.get('Title'),
 			school: i.get('ProviderDepartmentTitle'),
-			schoolLabel: 'School / Department', //Department
-			durationUnits: 'Weeks',
+			schoolLabel: getString('NextThought.view.courseware.info.parts.Description.schoollabel'), //Department
+			durationUnits: getString('NextThought.view.courseware.info.parts.Description.durationunits'),
 			duration: new Duration(i.get('Duration')).inWeeks(),
 			startDate: i.get('StartDate'),
 			days: (s.days || []).join('/'),//eww

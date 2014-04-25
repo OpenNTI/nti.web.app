@@ -5,7 +5,7 @@ Ext.define('NextThought.view.forums.topic.parts.NavHeader', {
 	cls: 'topic-nav-header',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'new-topic', html: 'New Discussion'}
+		{cls: 'new-topic', html: '{{{NextThought.view.forums.topic.parts.NavHeader.new}}}'}
 	]),
 
 

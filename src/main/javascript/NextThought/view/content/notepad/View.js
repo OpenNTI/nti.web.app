@@ -18,7 +18,7 @@ Ext.define('NextThought.view.content.notepad.View', {
 
 	renderTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{ cls: 'scroller', cn: [
-			{ cls: 'note-here', html: 'Add a note...' }
+			{ cls: 'note-here', html: '{{{NextThought.view.content.notepad.View.addnote}}}' }
 		] }
 	])),
 
@@ -162,7 +162,7 @@ Ext.define('NextThought.view.content.notepad.View', {
 			return false;
 		}
 
-		editor.mask('Saving...');
+		editor.mask(getString('NextThought.view.content.notepad.View.saving'));
 		try {
 			rangeInfo = reader.getNoteOverlay().rangeForLineInfo(editor.lineInfo, style);
 			reader.fireEvent('save-new-note', null, note, rangeInfo.range,
@@ -170,7 +170,7 @@ Ext.define('NextThought.view.content.notepad.View', {
 		}
 		catch (error) {
 			console.error('Error saving note - ' + Globals.getError(error));
-			alert('There was an error saving your note.');
+			alert(getString('NextThought.view.content.notepad.View.error'));
 			editor.unmask();
 		}
 		return false;
@@ -238,7 +238,7 @@ Ext.define('NextThought.view.content.notepad.View', {
 
 
 	syncScroll: function() {
-		if(!this.rendered){
+		if (!this.rendered) {
 			return;
 		}
 		this.getEl().setScrollTop(this.getReaderRef().getScroll().top());

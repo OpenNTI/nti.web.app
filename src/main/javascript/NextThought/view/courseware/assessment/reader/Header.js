@@ -9,12 +9,12 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 		{ cls: 'quiz-container ontime', cn: [
 			{ cls: 'title', html: '{title}' },
 			{ cls: 'turned-in', cn: [
-				{ tag: 'span', cls: 'date', html: 'completed {completed}' },
+				{ tag: 'span', cls: 'date', html: '{{{NextThought.view.courseware.assessment.reader.Header.completed}}}' },
 				{ tag: 'span', cls: 'late', html: '{late}'}
 			]}
 		]},
 		{ cls: 'grade-container', cn: [
-			{ cls: 'title', html: 'assignment grade' },
+			{ cls: 'title', html: '{{{NextThought.view.courseware.assessment.reader.Header.grade}}}' },
 			{ cls: 'grade'}
 		]}
 	]),

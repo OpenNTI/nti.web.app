@@ -21,11 +21,11 @@ Ext.define('NextThought.view.account.activity.note.Reply', {
 			{ cls: 'body' },
 			{ cls: 'foot', cn: [
 				{ tag: 'tpl', 'if': 'isModifiable', cn: [
-					{ tag: 'span', cls: 'edit link', html: 'Edit'},
-					{ tag: 'span', cls: 'delete link', html: 'Delete'}
+					{ tag: 'span', cls: 'edit link', html: '{{{NextThought.view.account.activity.note.Reply.edit}}}'},
+					{ tag: 'span', cls: 'delete link', html: '{{{NextThought.view.account.activity.note.Reply.delete}}}'}
 				]},
 				{ tag: 'tpl', 'if': '!isModifiable', cn: [
-					{ tag: 'span', cls: 'flag link', html: 'Report'}
+					{ tag: 'span', cls: 'flag link', html: '{{{NextThought.view.account.activity.note.Reply.report}}}'}
 				]}
 			]},
 			{ cls: 'editor-box reply' }
@@ -133,7 +133,7 @@ Ext.define('NextThought.view.account.activity.note.Reply', {
 			'activated-editor': hide,
 			'deactivated-editor': show,
 			'no-body-content': function(editor,el) {
-				editor.markError(el, 'You need to type something');
+				editor.markError(el, getString('NextThought.view.account.activity.note.Reply.no-body-content'));
 				return false;
 			},
 			'grew': function() {

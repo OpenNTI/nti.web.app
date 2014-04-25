@@ -85,7 +85,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.QuestionSet', {
 					lessonStartDate: courseNodeRecord.get('startDate'),
 					lastModified: courseNodeRecord.get('date'),
 					isAssignment: false
-				})]);				
+				})]);
 			}
 
 			req = {
@@ -176,7 +176,7 @@ Ext.define('NextThought.view.courseware.dashboard.widget.QuestionSetView', {
 		cls: 'header',
 		header: true,
 		renderTpl: Ext.DomHelper.markup([
-			{ cls: 'tile-title', html: 'Assessment'}
+			{ cls: 'tile-title', html: getString('NextThought.view.courseware.dashboard.widget.QuestionSetView.title')}
 		])
 	},
 
@@ -211,7 +211,7 @@ Ext.define('NextThought.view.courseware.dashboard.widget.QuestionSetView', {
 					{cls: 'value'}
 				]}
 			]},
-			{cls: 'next complete', html: 'Try Again'}
+			{cls: 'next complete', html: getString('NextThought.view.courseware.dashboard.widget.QuestionSetView.tryagain')}
 		])
 	},
 
@@ -244,7 +244,7 @@ Ext.define('NextThought.view.courseware.dashboard.widget.QuestionSetView', {
 				total = nextNode.getAttribute('question-count');
 				title.update(nextNode.getAttribute('label'));
 				chart.setValue(0);
-				count.update(total + ' question' + ((total > 1) ? 's' : ''));
+				count.update(total + Ext.util.Format.plural(total, 'question'));
 				date.destroy();
 
 				this.mon(go, 'click', function(e) {
@@ -261,7 +261,7 @@ Ext.define('NextThought.view.courseware.dashboard.widget.QuestionSetView', {
 
 		title.update(node.getAttribute('label'));
 		chart.setValue(Math.floor(100 * (correct / total)));
-		count.update(total + ' question' + ((total > 1) ? 's' : ''));
+		count.update(total + Ext.util.Format.plural(total, 'question'));
 		date.update(TimeUtils.timeDifference(new Date(), this.latestAttempt.get('Last Modified')));
 
 		this.mon(go, 'click', function(e) {
@@ -299,7 +299,7 @@ Ext.define('NextThought.view.courseware.dashboard.widget.QuestionSetView', {
 		}
 	}
 
-}, function(){
+}, function() {
 	Ext.define('NextThought.view.courseware.dashboard.widget.AssignmentView', {
 		extend: 'NextThought.view.courseware.dashboard.widget.QuestionSetView',
 		alias: 'widget.course-dashboard-tiles-assignment-view',
@@ -311,7 +311,7 @@ Ext.define('NextThought.view.courseware.dashboard.widget.QuestionSetView', {
 			cls: 'header',
 			header: true,
 			renderTpl: Ext.DomHelper.markup([
-				{ cls: 'tile-title', html: 'Assignment'}
+				{ cls: 'tile-title', html: getString('NextThought.view.courseware.dashboard.widget.AssignmentView.title')}
 			])
 		},
 
@@ -336,17 +336,17 @@ Ext.define('NextThought.view.courseware.dashboard.widget.QuestionSetView', {
 		},
 
 
-		afterRender: function(){
+		afterRender: function() {
 			this.callParent(arguments);
 
 			this.assignmentId = this.currentItemNode.getId();
 			this.setLatestAssignmentAttempt(false, null, this.currentItemNode, this.nextItemNode);
-			this.fireEvent('has-been-submitted', this);			
+			this.fireEvent('has-been-submitted', this);
 		},
 
 
-		setHistory: function(history){
-			if(!history){
+		setHistory: function(history) {
+			if (!history) {
 				console.warn('No history');
 			}
 
@@ -358,10 +358,10 @@ Ext.define('NextThought.view.courseware.dashboard.widget.QuestionSetView', {
 		},
 
 
-		setLatestAttempt: function(){},
+		setLatestAttempt: function() {},
 
-		
-		setLatestAssignmentAttempt: function(attempted, late, assignment, next){
+
+		setLatestAssignmentAttempt: function(attempted, late, assignment, next) {
 			var me = this,
 				lastAttempt = me.down('[attempt]'),
 				el = lastAttempt.el,
@@ -374,18 +374,18 @@ Ext.define('NextThought.view.courseware.dashboard.widget.QuestionSetView', {
 				questions = questionSet && questionSet.get('questions');
 
 			title.update(assignment.get('title'));
-			
-			if (questions) {  
+
+			if (questions) {
 				count.update(Ext.util.Format.plural(questions.length, 'question'));
 			}
 
-			if(attempted){
-				go.update('Review');
+			if (attempted) {
+				go.update(getString('NextThought.view.courseware.dashboard.widget.AssignmentView.review'));
 			} else {
-				go.update('Start');
+				go.update(getString('NextThought.view.courseware.dashboard.widget.AssignmentView.start'));
 			}
 
-			this.mon(go, 'click', function(){
+			this.mon(go, 'click', function() {
 				me.fireEvent('navigate-to-assignment', assignment.getId());
 			}, {single: true});
 

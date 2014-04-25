@@ -7,13 +7,19 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 
 	items: [
 		{xtype: 'container', layout: 'anchor', cls: 'input-wrapper', items: [
-			{xtype: 'simpletext', name: 'title', cls: 'input-box', inputType: 'text', placeholder: 'Title'},
+			{
+				xtype: 'simpletext',
+				name: 'title',
+				cls: 'input-box',
+				inputType: 'text',
+				placeholder: getString('NextThought.view.forums.forumcreation.Main.titleplaceholder')
+			},
 			{
 				xtype: 'box',
-				autoEl: {tag: 'textarea', name: 'description', placeholder: 'Description...'},
+				autoEl: {tag: 'textarea', name: 'description', placeholder: getString('NextThought.view.forums.forumcreation.Main.descriptionplaceholder')},
 				name: 'description',
 				cls: 'input-box textarea',
-				emptyText: 'Description...'
+				emptyText: getString('NextThought.view.forums.forumcreation.Main.descriptionplaceholder')
 			}
 		]},
 		{xtype: 'box', hidden: true, name: 'error', autoEl: {cls: 'error-box', tag: 'div',
@@ -23,11 +29,18 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 			]}
 		},
 		{xtype: 'container', cls: 'submit', layout: {type: 'hbox', pack: 'end'}, items: [
-			{xtype: 'checkbox', cls: 'sharing-checkbox', name: 'sharing', boxLabel: getString('forum_sharing_label', 'Everyone including the lame kids')},
-			{xtype: 'button', ui: 'secondary', scale: 'large', name: 'cancel', text: 'Cancel', handler: function(b) {
-				b.up('window').close();
-			}},
-			{xtype: 'button', cls: 'submitBtn', ui: 'primary', scale: 'large', name: 'submit', text: 'Save'}
+			{xtype: 'checkbox', cls: 'sharing-checkbox', name: 'sharing', boxLabel: getString('forum_sharing_label')},
+			{
+				xtype: 'button',
+				ui: 'secondary',
+				scale: 'large',
+				name: 'cancel',
+				text: getString('NextThought.view.forums.forumcreation.Main.cancel'),
+				handler: function(b) {
+					b.up('window').close();
+				}
+			},
+			{xtype: 'button', cls: 'submitBtn', ui: 'primary', scale: 'large', name: 'submit', text: getString('NextThought.view.forums.forumcreation.Main.save')}
 		]}
 	],
 
@@ -112,7 +125,7 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 		if (title.length > 140) {
 			this.setError({
 							  field: 'title',
-							  message: baseMsg + ' The title is too long. It can only be 140 characters or less.'
+							  message: getString('NextThought.view.forums.forumcreation.Main.toolong')
 						  });
 
 			return false;
@@ -121,7 +134,7 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 		if (title.length === 0) {
 			this.setError({
 							  field: 'title',
-							  message: baseMsg + ' The title cannot be empty.'
+							  message: getString('NextThought.view.forums.forumcreation.Main.titleempty')
 						  });
 
 			return false;
@@ -130,7 +143,7 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 		if (title.trim().length === 0) {
 			this.setError({
 							  field: 'title',
-							  message: baseMsg + ' The title cannot be all whitespace.'
+							  message: getString('NextThought.view.forums.forumcreation.Main.titlewhitespace')
 						  });
 
 			return false;
@@ -144,7 +157,7 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 		if (description.length === 0) {
 			this.setError({
 							  field: 'description',
-							  message: baseMsg + ' The description cannot be empty.'
+							  message: getString('NextThought.view.forums.forumcreation.Main.descriptionempty')
 						  });
 
 			return false;
@@ -153,7 +166,7 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 		if (description.trim().length === 0) {
 			this.setError({
 							  field: 'description',
-							  message: baseMsg + ' The description cannot be all whitespace.'
+							  message: getString('NextThought.view.forums.forumcreation.Main.descriptionwhitespace')
 						  });
 
 			return false;
@@ -220,7 +233,7 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 
 	onSaveFailure: function(proxy, response, operation) {
 		var msg = {
-			message: 'An unknown error occurred saving your Discussion.',
+			message: getString('NextThought.view.forums.forumcreation.Main.unknown'),
 			field: ''
 		}, error;
 
@@ -228,10 +241,10 @@ Ext.define('NextThought.view.forums.forumcreation.Main', {
 			error = Ext.decode(response.responseText, true) || {};
 
 			if (error.code === 'TooLong') {
-				msg.message = 'Could not save your Discussion. The title is too long. It can only be 140 characters or less.';
+				msg.message = getString('NextThought.view.forums.forumcreation.Main.toolong');
 				msg.field = 'title';
 			} else if (error.code === 'ImpossibleToMakeSpecificPartSafe') {
-				msg.message = 'Could not save your forum. The title cannot be all special characters.';
+				msg.message = getString('NextThought.view.forums.forumcreation.Main.special');
 				msg.field = 'title';
 			}
 

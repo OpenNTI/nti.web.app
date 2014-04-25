@@ -44,8 +44,8 @@ Ext.define('NextThought.view.forums.topic.parts.Topic', {
 					{ tag: 'span', cls: 'state link {publish-state:lowercase}', html: '{publish-state}'}
 				]},
 				{ tag: 'tpl', 'if': 'headline.isModifiable', cn: [
-					{ tag: 'span', cls: 'edit link', html: 'Edit'},
-					{ tag: 'span', cls: 'delete link', html: 'Delete'}
+					{ tag: 'span', cls: 'edit link', html: '{{{NextThought.view.forums.topic.parts.Topic.edit}}}'},
+					{ tag: 'span', cls: 'delete link', html: '{{{NextThought.view.forums.topic.parts.Topic.delete}}}'}
 				]}
 			]},
 			{ cls: 'body' },
@@ -59,9 +59,9 @@ Ext.define('NextThought.view.forums.topic.parts.Topic', {
 					{ cls: 'response', cn: [
 						{ tag: 'span', cls: 'reply-count', html: '{PostCount:plural("Comment")}'},
 						{ tag: 'tpl', 'if': 'canReply', cn: [
-							{ tag: 'span', cls: 'reply link', html: 'Add a Comment' }
+							{ tag: 'span', cls: 'reply link', html: '{{{NextThought.view.forums.topic.parts.Topic.add}}}' }
 						]},
-						{ tag: 'span', cls: 'report link', html: 'Report' }
+						{ tag: 'span', cls: 'report link', html: '{{{NextThought.view.forums.topic.parts.Topic.report}}}' }
 					]}
 				]}
 			]}
@@ -213,7 +213,8 @@ Ext.define('NextThought.view.forums.topic.parts.Topic', {
 
 	markAsPublished: function(key, value) {
 		var val = value ? 'public' : 'only me',
-			removeCls = value ? 'only me' : 'public';
+			removeCls = value ? 'only me' : 'public',
+			text = value ? getString('NextThought.view.forums.topic.parts.Topic.onlyme') : getString('NextThought.view.forums.topic.parts.Topic.public');
 		this.publishStateEl.addCls(val);
 		this.publishStateEl.update(Ext.Array.map(val.split(' '), Ext.String.capitalize).join(' '));
 		this.publishStateEl.removeCls(removeCls);
@@ -311,7 +312,7 @@ Ext.define('NextThought.view.forums.topic.parts.Topic', {
 
 
 	destroyWarningMessage: function() {
-		return 'Deleting your topic will permanently remove it and any comments.';
+		return getString('NextThought.view.forums.topic.parts.Topic.destrowarning');
 	},
 
 
@@ -324,8 +325,8 @@ Ext.define('NextThought.view.forums.topic.parts.Topic', {
 			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 			scope: me,
 			icon: 'warning-red',
-			buttonText: {'ok': 'Delete'},
-			title: 'Are you sure?',
+			buttonText: {'ok': getString('NextThought.view.forums.topic.parts.Topic.deletebutton')},
+			title: getString('NextThought.view.forums.topic.parts.Topic.deletetitle'),
 			fn: function(str) {
 				if (str === 'ok') {
 					me.fireDeleteEvent();

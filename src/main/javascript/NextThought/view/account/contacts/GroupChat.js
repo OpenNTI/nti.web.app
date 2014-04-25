@@ -4,7 +4,7 @@ Ext.define('NextThought.view.account.contacts.GroupChat', {
 
 	cls: 'group-chat-initiator',
 	ui: 'group-chat',
-	placeholder: 'Add people or groups to chat',
+	placeholder: getString('NextThought.view.account.contacts.GroupChat.placeholder'),
 
 	renderTpl: Ext.DomHelper.markup([
 		{ id: '{id}-list' },
@@ -20,8 +20,8 @@ Ext.define('NextThought.view.account.contacts.GroupChat', {
 			}
 		}},
 		{ id: '{id}-buttons', cn: [
-			{ cls: 'cancel', html: 'Cancel' },
-			{ cls: 'start disabled', html: 'Start Chat' }
+			{ cls: 'cancel', html: '{{{NextThought.view.account.contacts.GroupChat.cancel}}}' },
+			{ cls: 'start disabled', html: '{{{NextThought.view.account.contacts.GroupChat.start}}}' }
 		]}
 	]),
 
@@ -256,7 +256,7 @@ Ext.define('NextThought.view.account.contacts.GroupChat', {
 			itemSelector: this.searchItemSelector,
 			selectedItemCls: 'checked',
 			tpl: this.searchTpl,
-			emptyText: Ext.DomHelper.markup({cls: 'empty-list', html: 'No users found.'}),
+			emptyText: Ext.DomHelper.markup({cls: 'empty-list', html: '{{{NextThought.view.account.contacts.GroupChat.empty-search}}}'}),
 			renderTo: this.listEl,
 			cls: 'contact-search-group-chat',
 			listeners: {
@@ -433,7 +433,7 @@ Ext.define('NextThought.view.account.contacts.GroupChat', {
 	updateState: function() {
 		var has = this.hasTokens();
 
-		this.setPlaceholderText(has ? 'Add' : this.self.prototype.placeholder);
+		this.setPlaceholderText(has ? getString('NextThought.view.account.contacts.GroupChat.alt-placeholder') : this.self.prototype.placeholder);
 		this.startEl[has ? 'removeCls' : 'addCls']('disabled');
 	}
 });

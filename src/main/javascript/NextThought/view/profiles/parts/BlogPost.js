@@ -62,7 +62,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost', {
 			if (me.rendered) {
 				tpl = new Ext.XTemplate(me.pathTpl);
 				title = me.record.get('title');
-				tpl.insertFirst(me.headerEl, {path: 'Thoughts', title: title}, true);
+				tpl.insertFirst(me.headerEl, {path: getString('NextThought.view.profiles.parts.BlogPost.thoughts'), title: title}, true);
 			}
 		}, 1);
 	},
@@ -165,7 +165,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost', {
 
 
 	destroyWarningMessage: function() {
-		return 'Deleting your thought will permanently remove it and any comments.';
+		return getString('NextThought.view.profiles.parts.BlogPost.warning');
 	},
 
 

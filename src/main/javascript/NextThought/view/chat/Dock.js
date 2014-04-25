@@ -7,7 +7,7 @@ Ext.define('NextThought.view.chat.Dock', {
 		'NextThought.view.chat.History'
 	],
 
-	title: 'Chats',
+	title: getString('NextThought.view.chat.Dock.title'),
 
 	ui: 'chat-dock',
 	cls: 'chat-dock scrollable',
@@ -197,7 +197,7 @@ Ext.define('NextThought.view.chat.Dock', {
 		this[total === 0 ? 'addCls' : 'removeCls']('hide-arrow');
 		this.placeholder[total === 0 ? 'addCls' : 'removeCls']('hide-arrow');
 
-		this.setTitle((total === 0) ? 'Chats' : 'Chats (' + total + ')');
+		this.setTitle((total === 0) ? getString('NextThought.view.chat.Dock.title') : getString('NextThought.view.chat.Dock.title') + ' (' + total + ')');
 	},
 
 
@@ -267,7 +267,7 @@ Ext.define('NextThought.view.chat.DockItem', {
 	hidden: true, //start out as hidden
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'close', 'data-qtip': 'Exit Chat'},
+		{cls: 'close', 'data-qtip': '{{{NextThought.view.chat.DockItem.exit-chat}}}'},
 		{cls: 'avatars {avatarCls}', cn: [
 			{cls: 'img1 avatar', style: {backgroundImage: '{img1}'} },
 			{cls: 'img2 avatar', style: {backgroundImage: '{img2}'} },
@@ -456,8 +456,11 @@ Ext.define('NextThought.view.chat.DockItem', {
 		display = TimeUtils.getDurationText(status, cur);
 
 		if (occ.length === 1 && isMe(occ[0])) {
-			display = 'Ended';
+			display = getString('NextThought.view.chat.DockItem.chat-ended');
 		}
+		/*
+			TODO: figure out how to localize these strings
+		 */
 		else if (status > tenMinutesAgo) {
 			display = 'In Progress... ' + display;
 		} else {

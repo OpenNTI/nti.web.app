@@ -110,7 +110,7 @@ Ext.define('NextThought.view.courseware.dashboard.widget.InstructorForumView', {
    //				{ cls: 'favorite {favoriteState}' },
    //				{ cls: 'like {likeState}', html:'{[values.LikeCount==0?\"\":values.LikeCount]}' }
    //			]},
-			{cls: 'tile-title', html: 'Announcements'},
+			{cls: 'tile-title', html: '{{{NextThought.view.courseware.dashboard.widget.InstructorForumView.announcements}}}'},
 			{cls: 'title', html: '{title}'},
 			{cls: 'meta', cn: [
 				{tag: 'span', cls: 'by', html: 'By {Creator}'},

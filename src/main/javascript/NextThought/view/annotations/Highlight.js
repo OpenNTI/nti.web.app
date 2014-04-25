@@ -5,7 +5,10 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		'NextThought.util.Anchors',
 		'NextThought.util.Rects'
 	],
-	inheritableStatics: {bgcolor: {}, blockElementRe: /^(address|blockquote|body|center|dir|div|dl|fieldset|form|h[1-6]|hr|isindex|menu|noframes|noscript|ol|p|pre|table|ul|dd|dt|frameset|li|tbody|td|tfoot|th|thead|tr|html)$/i},
+	inheritableStatics: {
+		bgcolor: {},
+		blockElementRe: /^(address|blockquote|body|center|dir|div|dl|fieldset|form|h[1-6]|hr|isindex|menu|noframes|noscript|ol|p|pre|table|ul|dd|dt|frameset|li|tbody|td|tfoot|th|thead|tr|html)$/i
+	},
 
 	highlightCls: 'application-highlight',
 	mouseOverCls: 'highlight-mouse-over',

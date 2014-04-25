@@ -57,17 +57,17 @@ Ext.define('NextThought.view.account.contacts.management.Popout', {
 			{cls: 'controls', cn: [
 				{tag: 'tpl', 'if': 'isContact', cn: [
 					{cls: 'right chat', cn: [
-						{tag: 'a', cls: 'button', html: 'Chat'}
+						{tag: 'a', cls: 'button', html: '{{{NextThought.view.account.contacts.management.Popout.chat}}}'}
 					]}
 				]},
 				{tag: 'tpl', 'if': '!isContact', cn: [
 					{cls: 'right add-contact', cn: [
-						{tag: 'a', cls: 'button', html: 'Add Contact'}
+						{tag: 'a', cls: 'button', html: '{{{NextThought.view.account.contacts.management.Popout.add-contact}}}'}
 					]}
 				]},
 				{cls: 'left', cn: [
-					{cls: 'control lists', 'data-qtip': 'Distribution lists'},
-					{cls: 'control options', 'data-qtip': 'Options'}
+					{cls: 'control lists', 'data-qtip': '{{{NextThought.view.account.contacts.management.Popout.distribution-list}}}'},
+					{cls: 'control options', 'data-qtip': '{{{NextThought.view.account.contacts.management.Popout.options}}}'}
 				]}
 
 			]}
@@ -216,12 +216,12 @@ Ext.define('NextThought.view.account.contacts.management.Popout', {
 
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
-			msg: 'The following action will remove this contact.',
+			msg: getString('NextThought.view.account.contacts.management.Popout.remove-msg'),
 			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 			scope: me,
 			icon: 'warning-red',
-			buttonText: {'ok': 'Delete'},
-			title: 'Are you sure?',
+			buttonText: {'ok': getString('NextThought.view.account.contacts.management.Popout.remove-button')},
+			title: getString('NextThought.view.account.contacts.management.Popout.remove-title'),
 			fn: function(str) {
 				if (str === 'ok') {
 					me.fireEvent('delete-contact', me.user, data.groups, fin);
@@ -314,7 +314,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout', {
 
 	makeItContact: function() {
 		this.actionEl.removeCls('add-contact').addCls('chat');
-		this.actionButtonEl.update('Chat');
+		this.actionButtonEl.update(getString('NextThought.view.account.contacts.management.Popout.chat'));
 		this.isContact = true;
 		this.setPresenceButton();
 	},

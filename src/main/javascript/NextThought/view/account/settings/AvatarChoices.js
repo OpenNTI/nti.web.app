@@ -16,12 +16,12 @@ Ext.define('NextThought.view.account.settings.AvatarChoices', {
 				{
 					cls: 'wrapper',
 					cn: [
-						{tag: 'h3', cls: 'title', html: 'Custom Photo'},
+						{tag: 'h3', cls: 'title', html: '{{{NextThought.view.account.settings.AvatarChoices.custom}}}'},
 						{cn: [
 							{tag: 'span', cls: 'editCustom', cn: [
-								{tag: 'a', cls: 'editCustom', href: '#edit', html: 'Edit'},
+								{tag: 'a', cls: 'editCustom', href: '#edit', html: '{{{NextThought.view.account.settings.AvatarChoices.edit}}}'},
 								' | ']},
-							{tag: 'a', cls: 'uploadCustom', href: '#upload', html: 'Upload New Photo'}
+							{tag: 'a', cls: 'uploadCustom', href: '#upload', html: '{{{NextThought.view.account.settings.AvatarChoices.upload}}}'}
 						]}
 					]
 				}
@@ -31,9 +31,9 @@ Ext.define('NextThought.view.account.settings.AvatarChoices', {
 				{
 					cls: 'wrapper',
 					cn: [
-						{tag: 'h3', cls: 'title', html: 'Randomly Generated'},
+						{tag: 'h3', cls: 'title', html: '{{{NextThought.view.account.settings.AvatarChoices.random}}}'},
 						{cn: [
-							{tag: 'a', cls: 'more-random-choices', href: '#moreRandom', html: 'Show More'}
+							{tag: 'a', cls: 'more-random-choices', href: '#moreRandom', html: '{{{NextThought.view.account.settings.AvatarChoices.more}}}'}
 						]}
 					]
 				}
@@ -44,9 +44,9 @@ Ext.define('NextThought.view.account.settings.AvatarChoices', {
 				{
 					cls: 'wrapper',
 					cn: [
-						{tag: 'h3', cls: 'title', html: 'My Gravatar'},
+						{tag: 'h3', cls: 'title', html: '{{{NextThought.view.account.settings.AvatarChoices.gravatar}}}'},
 						{cn: [
-							{tag: 'a', cls: 'change gravatar', href: 'http://gravatar.com', html: 'Change', target: '_blank'}
+							{tag: 'a', cls: 'change gravatar', href: 'http://gravatar.com', html: '{{{NextThought.view.account.settings.AvatarChoices.change}}}', target: '_blank'}
 						]}
 					]
 				}
@@ -190,7 +190,13 @@ Ext.define('NextThought.view.account.settings.AvatarChoices', {
 			el.mask('Saving...');
 			u.saveField('avatarURL', url,
 				function good() { el.unmask(); },
-				function bad() { el.unmask(); alert({title: 'Oops!', msg: 'Something went wrong.'}); });
+				function bad() {
+					el.unmask();
+					alert({
+						title: getString('NextThought.view.account.settings.AvatarChoices.error-title'),
+						msg: getString('NextThought.view.account.settings.AvatarChoices.error-msg')
+					});
+				});
 		}
 	},
 

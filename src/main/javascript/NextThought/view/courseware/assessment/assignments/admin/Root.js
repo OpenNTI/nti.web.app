@@ -36,7 +36,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 
 		function mask(on) {
 			if (tab && tab.dom) {
-				tab[on ? 'mask' : 'unmask']('Loading...');
+				tab[on ? 'mask' : 'unmask'](getString('NextThought.view.courseware.assessment.assignments.admin.Root.loading'));
 			}
 		}
 

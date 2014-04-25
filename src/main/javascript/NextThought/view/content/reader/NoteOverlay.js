@@ -126,7 +126,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	onNavigation: function() {
 		if (this.editor && this.editor.isActive()) {
-			var msg = 'You are currently creating a note. Please save or cancel it first.';
+			var msg = getString('NextThought.view.content.reader.NoteOverlay.editing');
 			Ext.defer(function() {
 				alert({msg: msg});
 			}, 1);
@@ -282,11 +282,11 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		//Avoid saving empty notes or just returns.
 		if (DomUtils.isEmpty(note)) {
-			me.editor.markError(me.editor.el.down('.content'), 'Please enter text before you save');
+			me.editor.markError(me.editor.el.down('.content'), getString('NextThought.view.content.reader.NoteOverlay.empty'));
 			return false;
 		}
 
-		editor.mask('Saving...');
+		editor.mask(getString('NextThought.view.content.reader.NoteOverlay.saving'));
 		try {
 			rangeInfo = me.rangeForLineInfo(editor.lineInfo, style);
 			me.reader.fireEvent('save-new-note',
@@ -296,7 +296,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		}
 		catch (error) {
 			console.error('Error saving note - ' + Globals.getError(error));
-			alert('There was an error saving your note.');
+			alert(getString('NextThought.view.content.reader.NoteOverlay.error'));
 			editor.unmask();
 		}
 		return false;
@@ -306,7 +306,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	noteHere: function(range, rect, style) {
 		this.positionInputBox(Ext.apply(this.lineInfoForRangeAndRect(range, rect), {style: style}));
 		if (!this.openEditor()) {
-			alert('You already have a note in progress.');
+			alert(getString('NextThought.view.content.reader.NoteOverlay.inprogress'));
 			return false;
 		}
 		return true;
@@ -553,9 +553,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		//If we are a single non text node we will check to see if that node is the
 		//container rather than the common ancestor.
-		if (range.startContainer === range.endContainer
-				&& range.startContainer.nodeType !== Node.TEXT_NODE
-				&& range.startOffset + 1 === range.endOffset) {
+		if (range.startContainer === range.endContainer && range.startContainer.nodeType !== Node.TEXT_NODE && range.startOffset + 1 === range.endOffset) {
 			maybeContainer = range.startContainer.childNodes[range.startOffset];
 		}
 

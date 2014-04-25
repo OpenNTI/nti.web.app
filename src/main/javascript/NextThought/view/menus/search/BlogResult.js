@@ -8,7 +8,7 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 			{cls: 'title', cn: [
 				{tag: 'span', html: '{title}'},
 				{tag: 'tpl', 'if': 'name', cn: [
-					{cls: 'by', html: 'By {name}'}
+					{cls: 'by', html: '{{{NextThought.view.menus.search.BlogResult.by}}}'}
 				]},
 				{tag: 'tpl', 'if': 'tags', cn: [
 					{cls: 'tags', html: '{tags}'}
@@ -27,7 +27,7 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 		]},
 		{tag: 'tpl', 'if': 'isComment', cn: [
 			{cls: 'title', cn: [
-				{cls: 'commenter', html: '{name} commented on:'},
+				{cls: 'commenter', html: '{name} {{{NextThought.view.menus.search.BlogResult.commented}}}'},
 				{tag: 'span', html: '{title}'}
 			]},
 			{cls: 'wrap', cn: [
@@ -64,7 +64,7 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 
 		function fillInName() {
 			if (isMe(name)) {
-				me.renderData.name = (comment) ? 'I' : 'me';
+				me.renderData.name = (comment) ? getString('NextThought.view.menus.search.BlogResult.i') : getString('NextThought.view.menus.search.BlogResult.me');
 				me.user = $AppConfig.userObject;
 			}
 			if (!isMe(name) && name) {
@@ -92,7 +92,7 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 				tagMsg = false;
 			} else {
 				//comma seperate the tags
-				tagMsg = ((tags.length > 2) ? 'Tags' : 'Tag') + ': ' + tags.join(', ');
+				tagMsg = Ext.util.Format.plural(tags.length, 'Tag') + ': ' + tags.join(', ');
 			}
 
 			me.renderData.tags = tagMsg;
@@ -124,11 +124,15 @@ Ext.define('NextThought.view.menus.search.BlogResult', {
 
 	displayNavigationError: function() {
 		var objDisplayType = 'object',
-			msgCfg = { msg: 'An unexpected error occurred loading the ' + objDisplayType };
+			msgCfg = {msg: getFormattedString('NextThought.view.menus.search.BlogResult.unknown', {
+				object: objDisplayType
+			})};
 
 		if (this.deleted) {
-			msgCfg.title = 'Not Found!';
-			msgCfg.msg = 'The ' + objDisplayType + ' you are looking for no longer exists.';
+			msgCfg.title = getString('NextThought.view.menus.search.BlogResult.errortitle');
+			msgCfg.msg = getFormattedString('NextThought.view.menus.search.BlogResult.notfound', {
+				object: objDisplayType
+			});
 		}
 		alert(msgCfg);
 	}

@@ -15,14 +15,14 @@ Ext.define('NextThought.view.content.Navigation', {
 	MAX_PATH_LENGTH: 2,
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'goup', 'data-qtip': 'Go up a level'},
+		{cls: 'goup', 'data-qtip': '{{{NextThought.view.content.Navigation.goup}}}'},
 		{cls: 'breadcrumb'}
 	]),
 
 	levelLabels: {
 		'NaN': '&sect;',
-		'0': 'Select a chapter',
-		'1': 'Select a section'
+		'0': getString('NextThought.view.content.Navigation.select-chapter'),
+		'1': getString('NextThought.view.content.Navigation.select-section')
 	},
 
 	renderSelectors: {upEl: '.goup', breadcrumb: '.breadcrumb'},

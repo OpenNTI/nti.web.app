@@ -21,7 +21,7 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 			xtype: 'container',
 			layout: 'auto',
 			items: [
-				{ xtype: 'pie-chart', cls: 'roster', title: 'Enrollment Breakdown', series: [] }
+				{ xtype: 'pie-chart', cls: 'roster', title: getString('NextThought.view.courseware.info.Roster.breakdown'), series: [] }
 			]
 		}, {
 			xtype: 'grouping',
@@ -46,7 +46,7 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 					scroll: 'vertical',
 					columns: [
 						{
-							text: 'Student',
+							text: getString('NextThought.view.courseware.info.Roster.student'),
 							xtype: 'templatecolumn',
 							dataIndex: 'realname',
 							padding: '0 0 0 30',
@@ -59,8 +59,8 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 								]
 							})
 						},
-						{ text: 'Username', dataIndex: 'username' },
-						{ text: 'Status', sortable: false, dataIndex: 'LegacyEnrollmentStatus' },
+						{ text: getString('NextThought.view.courseware.info.Roster.username'), dataIndex: 'username' },
+						{ text: getString('NextThought.view.courseware.info.Roster.status'), sortable: false, dataIndex: 'LegacyEnrollmentStatus' },
 						{
 							//disclosure column
 							sortable: false,
@@ -78,11 +78,11 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 		}, {
 			xtype: 'filter-menupanel',
 			minWidth: 250,
-			searchPlaceHolderText: 'Search Students',
+			searchPlaceHolderText: getString('NextThought.view.courseware.info.Roster.search'),
 			filters: [
-				{ text: 'All Students', filter: '*'},
-				{ text: 'Enrolled Students', filter: 'ForCredit'},
-				{ text: 'Open Students', filter: 'Open'}
+				{ text: getString('NextThought.view.courseware.info.Roster.all'), filter: '*'},
+				{ text: getString('NextThought.view.courseware.info.Roster.enrolled'), filter: 'ForCredit'},
+				{ text: getString('NextThought.view.courseware.info.Roster.open'), filter: 'Open'}
 			]
 		}
 	],

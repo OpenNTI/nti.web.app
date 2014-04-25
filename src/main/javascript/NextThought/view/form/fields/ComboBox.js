@@ -22,7 +22,7 @@ Ext.define('NextThought.view.form.fields.ComboBox', {
 		cls: 'x-menu',
 		baseCls: 'x-menu',
 		itemCls: 'x-menu-item no-border',
-		emptyText: '<div class="x-menu-item">No results</div>',
+		emptyText: '<div class="x-menu-item">' + getString('NextThought.view.form.fields.ComboBox.empty') + '</div>',
 		xhooks: {
 			initComponent: function() {
 				this.callParent(arguments);

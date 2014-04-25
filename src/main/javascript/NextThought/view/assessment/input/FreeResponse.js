@@ -5,7 +5,7 @@ Ext.define('NextThought.view.assessment.input.FreeResponse', {
 	inputTpl: Ext.DomHelper.markup({
 		tag: 'input',
 		type: 'text',
-		placeholder: 'Answer',
+		placeholder: '{{{NextThought.view.assessment.input.FreeResponse.answer}}}',
 		tabIndex: '{tabIndex}',
 		cls: 'answer-field tabable'
 	}),
@@ -25,7 +25,7 @@ Ext.define('NextThought.view.assessment.input.FreeResponse', {
 
 
 	afterRender: function() {
-		this.solutionAnswerBox.insertFirst(['Answer: ', {tag: 'span'}]);
+		this.solutionAnswerBox.insertFirst([getString('NextThought.view.assessment.input.FreeResponse.answer') + ': ', {tag: 'span'}]);
 		this.solutionAnswerBox = this.solutionAnswerBox.down('span');
 
 		this.callParent(arguments);
@@ -34,7 +34,7 @@ Ext.define('NextThought.view.assessment.input.FreeResponse', {
 
 		this.mon(this.inputField, {
 			scope: this,
-			blur: function(e, dom) { dom.setAttribute('placeholder', 'Answer'); },
+			blur: function(e, dom) { dom.setAttribute('placeholder', getString('NextThought.view.assessment.input.FreeResponse.answer')); },
 			focus: function(e, dom) { dom.removeAttribute('placeholder'); },
 			keyup: function(e, dom) {
 				if (dom.value === '') { this.disableSubmission(); }

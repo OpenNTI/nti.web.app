@@ -30,8 +30,8 @@ Ext.define('NextThought.view.account.code.Window', {
 				anchor: '100% 100%',
 				xtype: 'account-header-view',
 				noIcon: true,
-				title: 'Enter a Group Code...',
-				detail: 'Please enter your code to join a specific group or class.'
+				title: getString('NextThought.view.account.code.Window.title'),
+				detail: getString('NextThought.view.account.code.Window.detail')
 			},
 			{xtype: 'box', cls: 'close', width: 10, height: 10}
 		]},

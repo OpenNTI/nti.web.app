@@ -8,7 +8,7 @@ Ext.define('NextThought.view.courseware.info.parts.Support', {
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'photo', style: {backgroundImage: 'url({photo})'}},
 		{ cls: 'wrap', cn: [
-			{ cls: 'label', html: 'Tech Support' },
+			{ cls: 'label', html: '{{{NextThought.view.courseware.info.parts.Support.support}}}' },
 			{ cls: 'phone', html: '{phone}'},
 			{ tag: 'tpl', 'for': 'links', cn: [
 				{ cn: { tag: 'a', cls: 'link', html: '{Label}', href: '{URL}', target: '_blank'}}

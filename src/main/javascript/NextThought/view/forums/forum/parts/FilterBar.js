@@ -6,13 +6,13 @@ Ext.define('NextThought.view.forums.forum.parts.FilterBar', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'third dropmenu disabled', cn: [
-			{ cls: 'label', html: 'All Discussions' }
+			{ cls: 'label', html: '{{{NextThought.view.forums.forum.parts.FilterBar.alldiscussion}}}' }
 		] },
 		{ cls: 'third dropmenu groupBy', cn: [
-			{ cls: 'label', html: 'By Most Recent Activity' }
+			{ cls: 'label', html: '{{{NextThought.view.forums.forum.parts.FilterBar.mostrecent}}}' }
 		] },
 		{ cls: 'third search', cn: [
-			{ tag: 'input', type: 'text', placeholder: 'Search Discussions', required: 'required' },
+			{ tag: 'input', type: 'text', placeholder: '{{{NextThought.view.forums.forum.parts.FilterBar.searchplaceholder}}}', required: 'required' },
 			{ cls: 'clear' }
 		] }
 	]),
@@ -70,10 +70,10 @@ Ext.define('NextThought.view.forums.forum.parts.FilterBar', {
 	createGroupByMenu: function() {
 		var type = this.currentSort,
 			items = [
-				{ text: 'By Most Recent Activity', groupBy: 'active', checked: type === 'active'},
-				{ text: 'By Creation', groupBy: 'created', checked: type === 'created'},
-				{ text: 'By Comment Count', groupBy: 'comment', checked: type === 'comment'},
-				{ text: 'By Likes', groupBy: 'likes', checked: type === 'likes'}
+				{ text: getString('NextThought.view.forums.forum.parts.FilterBar.mostrecent'), groupBy: 'active', checked: type === 'active'},
+				{ text: getString('NextThought.view.forums.forum.parts.FilterBar.creation'), groupBy: 'created', checked: type === 'created'},
+				{ text: getString('NextThought.view.forums.forum.parts.FilterBar.comment'), groupBy: 'comment', checked: type === 'comment'},
+				{ text: getString('NextThought.view.forums.forum.parts.FilterBar.likes'), groupBy: 'likes', checked: type === 'likes'}
 				//{ text: 'By Author', groupBy: 'creator', checked: type === 'creator'}
 			];
 

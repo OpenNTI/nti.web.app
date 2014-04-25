@@ -7,8 +7,8 @@ Ext.define('NextThought.view.assessment.ScoreboardTally', {
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'message' },
 		{ cls: 'tally', cn: [
-			{cls: 'stat correct', cn: [{tag: 'span', cls: 'count'},' correct'] },
-			{cls: 'stat incorrect', cn: [{tag: 'span', cls: 'count'},' incorrect'] },
+			{cls: 'stat correct', cn: [{tag: 'span', cls: 'count'},' {{{NextThought.view.assessment.ScoreboardTally.correct}}}'] },
+			{cls: 'stat incorrect', cn: [{tag: 'span', cls: 'count'},' {{{NextThought.view.assessment.ScoreboardTally.incorrect}}}'] },
 			{cls: 'stat questions' }
 		]}
 	]),

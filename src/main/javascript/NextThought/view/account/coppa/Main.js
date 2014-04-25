@@ -14,14 +14,14 @@ Ext.define('NextThought.view.account.coppa.Main', {
 					flex: 1
 				},
 				items: [
-					{cls: 'firstname input-box', name: 'firstname', placeholder: 'First Name'},
-					{cls: 'lastname input-box', name: 'lastname', placeholder: 'Last Name'}
+					{cls: 'firstname input-box', name: 'firstname', placeholder: getString('NextThought.view.account.coppa.Main.first-name')},
+					{cls: 'lastname input-box', name: 'lastname', placeholder: getString('NextThought.view.account.coppa.Main.last-name')}
 				]
 			},
-			{xtype: 'simpletext', name: 'email', cls: 'input-box', inputType: 'email', placeholder: 'Email'},
-			{xtype: 'box', autoEl: {tag: 'h3', html: 'Optional Information'}},
-			{xtype: 'checkbox', name: 'opt_in_email_communication', boxLabel: 'Send me updates about NextThought.'},
-			{xtype: 'box', name: 'affiliationBox', autoEl: {tag: 'div', cls: 'what-school', html: 'What school do you attend?'}},
+			{xtype: 'simpletext', name: 'email', cls: 'input-box', inputType: 'email', placeholder: getString('NextThought.view.account.coppa.Main.email')},
+			{xtype: 'box', autoEl: {tag: 'h3', html: getString('NextThought.view.account.coppa.Main.optional')}},
+			{xtype: 'checkbox', name: 'opt_in_email_communication', boxLabel: getString('NextThought.view.account.coppa.Main.updates')},
+			{xtype: 'box', name: 'affiliationBox', autoEl: {tag: 'div', cls: 'what-school', html: getString('NextThought.view.account.coppa.Main.school')}},
 			{
 				xtype: 'combobox',
 				name: 'affiliation',
@@ -45,7 +45,7 @@ Ext.define('NextThought.view.account.coppa.Main', {
 					cls: 'x-menu',
 					baseCls: 'x-menu',
 					itemCls: 'x-menu-item no-border',
-					emptyText: '<div class="x-menu-item">No results</div>',
+					emptyText: '<div class="x-menu-item">' + getString('NextThought.view.account.coppa.Main.no-school') + '</div>',
 					xhooks: {
 						initComponent: function() {
 							this.callParent(arguments);
@@ -82,11 +82,11 @@ Ext.define('NextThought.view.account.coppa.Main', {
 				width: 365,
 				autoEl: {
 					tag: 'a',
-					html: 'View Children\'s Privacy Policy',
+					html: getString('NextThought.view.account.coppa.Main.view-policy'),
 					href: '#'
 				}
 			},
-			{xtype: 'button', ui: 'primary', scale: 'medium', name: 'submit', text: 'Submit'}
+			{xtype: 'button', ui: 'primary', scale: 'medium', name: 'submit', text: getString('NextThought.view.account.coppa.Main.submit')}
 		]}
 	],
 
@@ -179,7 +179,7 @@ Ext.define('NextThought.view.account.coppa.Main', {
 		e.stopEvent();
 
 		var w = Ext.widget('nti-window', {
-			title: 'Children\'s Privacy Policy',
+			title: getString('NextThought.view.account.coppa.Main.policy-title'),
 			closeAction: 'hide',
 			width: '60%',
 			height: '75%',

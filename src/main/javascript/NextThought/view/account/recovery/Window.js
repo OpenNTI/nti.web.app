@@ -26,8 +26,8 @@ Ext.define('NextThought.view.account.recovery.Window', {
 	items: [
 		{
 			xtype: 'account-header-view',
-			title: 'Email Bounce Notification',
-			detail: 'The email you supplied is not valid, please reset your email now.',
+			title: getString('NextThought.view.account.recovery.Window.general-title'),
+			detail: getString('NextThought.view.account.recovery.Window.general-detail'),
 			icon: 'alert'
 		}
 	],
@@ -47,20 +47,20 @@ Ext.define('NextThought.view.account.recovery.Window', {
 
 		if (this.linkName === 'state-bounced-contact-email') {
 			//is contact email, not cancelable
-			Ext.fly(headerView.el.query('.title')[0]).setHTML('Resend Consent Form...');
-			Ext.fly(headerView.el.query('.detail')[0]).setHTML('We couldn\'t deliver the form to the email address you provided. ' +
-															   'Please enter your parent\'s email to get permission for social features.');
+			Ext.fly(headerView.el.query('.title')[0]).setHTML(getString('NextThought.view.account.recovery.Window.resend-title'));
+			Ext.fly(headerView.el.query('.detail')[0]).setHTML(getString('NextThought.view.account.recovery.Window.resend-detail') + ' ' +
+															   getString('NextThought.view.account.recovery.Window.need-parents'));
 			emailView.down('button[name=cancel]').destroy();
 		}
 		else if (this.linkName === 'contact-email-sends-consent-request') {
 			//is request to resent consent email and enter a new consent email
-			Ext.fly(headerView.el.query('.title')[0]).setHTML('Resend Consent Form...');
-			Ext.fly(headerView.el.query('.detail')[0]).setHTML('Please enter your parent\'s email to get permission for social features.');
+			Ext.fly(headerView.el.query('.title')[0]).setHTML(getString('NextThought.view.account.recovery.Window.resend-title'));
+			Ext.fly(headerView.el.query('.detail')[0]).setHTML(getString('NextThought.view.account.recovery.Window.need-parents'));
 		}
 		else {
 			//regular email, not cancelable
-			Ext.fly(headerView.el.query('.title')[0]).setHTML('Invalid Email...');
-			Ext.fly(headerView.el.query('.detail')[0]).setHTML('We couldn\'t deliver your email. Please enter a valid email address.');
+			Ext.fly(headerView.el.query('.title')[0]).setHTML(getString('NextThought.view.account.recovery.Window.invalid-title'));
+			Ext.fly(headerView.el.query('.detail')[0]).setHTML(getString('NextThought.view.account.recovery.Window.invalid-detail'));
 			emailView.down('button[name=cancel]').destroy();
 		}
 	}

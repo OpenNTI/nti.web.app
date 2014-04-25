@@ -103,7 +103,7 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.SupplementalMaterialIt
     //		]},
 		{ cls: 'meta', cn: [
 			{ cls: 'title', html: '{title}' },
-			{ cls: 'byline', html: 'By {creator}' },
+			{ cls: 'byline', html: '{{{NextThought.view.courseware.dashboard.widgets.SupplementalMaterialItem.by}}}' },
 			{ cls: 'description', html: '{description}' }
 		]}
 	]),

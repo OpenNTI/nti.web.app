@@ -245,7 +245,7 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 
 		if (this.record.placeholder) {
 			this.respondEl.remove();
-			this.name.update('Deleted');
+			this.name.update(getString('NextThought.view.account.activity.note.Preview.deleted'));
 			this.timeEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 			this.timeEl.hide();
 		}

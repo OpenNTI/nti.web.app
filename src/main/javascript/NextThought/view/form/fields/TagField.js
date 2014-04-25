@@ -11,7 +11,7 @@ Ext.define('NextThought.view.form.fields.TagField', {
 	delimiterRe: /[\t\r\n\s,]/i,
 	regex: /^[^\t\r\n\s,]+$/,
 
-	placeholder: 'Tags',
+	placeholder: getString('NextThought.view.form.fields.TagField.placeholder'),
 
 
 	renderTpl: Ext.DomHelper.markup([

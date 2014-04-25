@@ -11,7 +11,7 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 			{
 				cls: 'search-field',
 				cn: [
-					{tag: 'input', type: 'text', placeholder: 'Search'},
+					{tag: 'input', type: 'text', placeholder: getString('NextThought.view.form.fields.SearchField.placeholder')},
 					{tag: 'a', href: '#', cls: 'trigger'}
 				]
 			}

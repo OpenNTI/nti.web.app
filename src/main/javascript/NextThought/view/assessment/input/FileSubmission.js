@@ -8,10 +8,11 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 		cn: [
 			{ cls: 'label', html: '{label}' },
 			{ tag: 'tpl', 'if': 'due', cn: { tag: 'time', cls: 'due', datetime: '{due:date("c")}', html: 'Due {due:date("l, F j")}'}},
-			{ cls: 'submit button {enable:boolStr("","disabled")}', cn: ['Upload a File',
+			{ cls: 'submit button {enable:boolStr("","disabled")}', cn: [
+				'{{{NextThought.view.assessment.input.FileSubmission.upload}}}',
 				 { tag: 'tpl', 'if': 'enable', cn: { tag: 'input', type: 'file', cls: 'file' }}
 			]},
-			{ tag: 'a', cls: 'download button', html: 'Download', target: '_blank' }
+			{ tag: 'a', cls: 'download button', html: '{{{NextThought.view.assessment.input.FileSubmission.download}}}', target: '_blank' }
 		]
 	}),
 
@@ -142,7 +143,7 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 
 
 	unsupported: function() {
-		alert('This browser does not support HTML5 file submission.');
+		alert(getString('NextThought.view.assessment.input.FileSubmission.unsupported-feature'));
 	},
 
 
@@ -164,7 +165,7 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 		v = v || {};
 		this.value = v;
 
-		this.labelBoxEl.update(v.filename || 'Not Submitted');
+		this.labelBoxEl.update(v.filename || getString('NextThought.view.assessment.input.FileSubmission.not-submitted'));
 
 		if (v.CreatedTime || v.filename) {
 			this.markSubmitted(Ext.Date.parse(v.CreatedTime, 'timestamp') || new Date());
@@ -191,16 +192,16 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 
 		if (!assignment || assignment.getDueDate() > date) {
 			this.addCls('good');
-			this.dueEl.update('Submitted On-Time');
+			this.dueEl.update(getString('NextThought.view.assessment.input.FileSubmission.on-time'));
 		} else {
 			this.addCls('late');
-			this.dueEl.update('Submitted Late');
+			this.dueEl.update(getString('NextThought.view.assessment.input.FileSubmission.late'));
 		}
 	},
 
 
 	markBad: function() {
-		this.labelBoxEl.update('That file is not acceptable. Please pick another.');
+		this.labelBoxEl.update(getString('NextThought.view.assessment.input.FileSubmission.unsupported-type'));
 	},
 
 	reset: function() {

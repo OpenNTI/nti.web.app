@@ -44,7 +44,7 @@ Ext.define('NextThought.view.assessment.MultiPartSubmission', {
 
 
 	reset: function() {
-		this.checkItBtn.removeCls('wrong').update('Check It!');
+		this.checkItBtn.removeCls('wrong').update(getString('NextThought.view.assessment.MultiPartSubmission.check'));
 	},
 
 
@@ -68,7 +68,7 @@ Ext.define('NextThought.view.assessment.MultiPartSubmission', {
 
 	updateWithResults: function(assessmentQuestion) {
 		this.enableSubmission();
-		this.checkItBtn.removeCls('wrong').update('Try Again');
+		this.checkItBtn.removeCls('wrong').update(getString('NextThought.view.assessment.MultiPartSubmission.redo'));
 		if (!assessmentQuestion.isCorrect()) {
 			this.checkItBtn.addCls('wrong');
 		}

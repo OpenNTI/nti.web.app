@@ -13,17 +13,17 @@ Ext.define('NextThought.view.menus.Presence', {
 	sessionKey: 'presence-state',
 
 	renderTpl: Ext.DomHelper.markup([
-										{cls: 'header', html: 'MY STATUS'},
-										{cls: 'list', cn: [
-											{tag: 'tpl', 'for': 'states', cn: [
-												{cls: 'status {state}', cn: [
-													{tag: 'tpl', 'if': 'editable', cn: {cls: 'edit', 'data-placeholder': '{label}'}},
-													{cls: 'label', html: '{label}'},
-													{cls: 'presence {state}'}
-												]}
-											]}
-										]}
-									]),
+		{cls: 'header', html: '{{{NextThought.view.menus.Presence.header}}}'},
+		{cls: 'list', cn: [
+			{tag: 'tpl', 'for': 'states', cn: [
+				{cls: 'status {state}', cn: [
+					{tag: 'tpl', 'if': 'editable', cn: {cls: 'edit', 'data-placeholder': '{label}'}},
+					{cls: 'label', html: '{label}'},
+					{cls: 'presence {state}'}
+				]}
+			]}
+		]}
+	]),
 
 	renderSelectors: {
 		'availableEl': '.list .available',
@@ -33,10 +33,10 @@ Ext.define('NextThought.view.menus.Presence', {
 	},
 
 	defaultStates: {
-		'available': 'Available',
-		'away': 'Away',
-		'dnd': 'Do not disturb',
-		'offline': 'Offline'
+		'available': getString('NextThought.view.menus.Presence.available'),
+		'away': getString('NextThought.view.menus.Presence.away'),
+		'dnd': getString('NextThought.view.menus.Presence.dnd'),
+		'offline': getString('NextThought.view.menus.Presence.offline')
 	},
 
 	currentPreference: {},
@@ -51,11 +51,11 @@ Ext.define('NextThought.view.menus.Presence', {
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			states: [
-				{state: 'available', label: 'Available', editable: true},
-				{state: 'away', label: 'Away', editable: true},
-				{state: 'dnd', label: 'Do not disturb', editable: true},
+				{state: 'available', label: me.defaultStates.available, editable: true},
+				{state: 'away', label: me.defaultStates.away, editable: true},
+				{state: 'dnd', label: me.defaultStates.dnd, editable: true},
 				//{state: 'invisible', label: 'Invisible'},
-				{state: 'offline', label: 'Offline'}
+				{state: 'offline', label: me.defaultStates.offline}
 			]
 		});
 		$AppConfig.Preferences.getPreference('ChatPresence', function(value) {
@@ -301,7 +301,9 @@ Ext.define('NextThought.view.menus.Presence', {
 	isNewPresence: function(newPresence) {
 		var currentPresence = Ext.getStore('PresenceInfo').getPresenceOf($AppConfig.username);
 
-		return newPresence.get('type') !== currentPresence.get('type') || newPresence.get('show') !== currentPresence.get('show') || newPresence.get('status') !== currentPresence.get('status');
+		return newPresence.get('type') !== currentPresence.get('type') ||
+			newPresence.get('show') !== currentPresence.get('show') ||
+			newPresence.get('status') !== currentPresence.get('status');
 	},
 
 	isStatus: function(value) {

@@ -36,8 +36,8 @@ Ext.define('NextThought.view.contacts.oobe.Window', {
 		},
 		{
 			cls: 'footer', cn: [
-				{tag: 'a', cls: 'button cancel', role: 'button', html: 'Cancel'},
-				{tag: 'a', cls: 'button confirm disabled', role: 'button', html: 'Add Contact'}
+				{tag: 'a', cls: 'button cancel', role: 'button', html: '{{{NextThought.view.contacts.oobe.Window.cancel}}}'},
+				{tag: 'a', cls: 'button confirm disabled', role: 'button', html: '{{{NextThought.view.contacts.oobe.Window.add}}}'}
 			]
 		}
 	]),
@@ -85,7 +85,7 @@ Ext.define('NextThought.view.contacts.oobe.Window', {
 
 		this.add({
 			xtype: 'simpletext',
-			placeholder: 'Search for contacts...',
+			placeholder: getString('NextThought.view.contacts.oobe.Window.placeholder'),
 			listeners: {
 				scope: this,
 				buffer: 400,
@@ -123,16 +123,16 @@ Ext.define('NextThought.view.contacts.oobe.Window', {
 			noContactsEmptyText: Ext.DomHelper.markup({
 				cls: 'empty',
 				cn: [
-					{ tag: 'h3', html: 'No suggestions yet' },
-					{ html: 'Search above to add contacts.' }
+					{ tag: 'h3', html: getString('NextThought.view.contacts.oobe.Window.no-suggestions') },
+					{ html: getString('NextThought.view.contacts.oobe.Window.lookup') }
 				]
 			}),
 
 			normalEmptyText: Ext.DomHelper.markup({
 				cls: 'empty',
 				cn: [
-					{ tag: 'h3', html: 'No results' },
-					{ html: 'Try again?' }
+					{ tag: 'h3', html: getString('NextThought.view.contacts.oobe.Window.noresult') },
+					{ html: getString('NextThought.view.contacts.oobe.Window.tryagain') }
 				]
 			}),
 
@@ -198,7 +198,7 @@ Ext.define('NextThought.view.contacts.oobe.Window', {
 			el.setHeight(h);
 		}
 
-		this.errorLabelEl.update(label || 'Error:');
+		this.errorLabelEl.update(label || getString('NextThought.view.contacts.oobe.Window.error'));
 		this.errorMessageEl.update(message || '');
 
 		errorEl.show();
@@ -211,7 +211,7 @@ Ext.define('NextThought.view.contacts.oobe.Window', {
 			plural = (recs || []).length !== 1;
 		if (e) {
 			e[Ext.isEmpty(recs) ? 'addCls' : 'removeCls']('disabled');
-			e.update('Add Contact' + (plural ? 's' : ''));
+			e.update(getString('NextThought.view.contacts.oobe.Window.addcontacts'));
 		}
 	},
 
@@ -231,11 +231,11 @@ Ext.define('NextThought.view.contacts.oobe.Window', {
 			if (success !== false) {
 				me.close();
 			} else {
-				me.showError('Could not save contacts');
+				me.showError(getString('NextThought.view.contacts.oobe.Window.couldntsave'));
 			}
 		}
 		if (t && selMod) {
-			me.el.mask('Saving...');
+			me.el.mask(getString('NextThought.view.contacts.oobe.Window.saving'));
 			me.fireEvent('add-contacts', selMod.getSelection(), finish);
 		}
 	}

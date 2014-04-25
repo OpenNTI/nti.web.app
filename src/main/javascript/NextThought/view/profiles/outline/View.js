@@ -16,10 +16,10 @@ Ext.define('NextThought.view.profiles.outline.View', {
 			cn: [
 				{ cls: 'lists' },
 				{ cls: 'settings' },
-				{ tag: 'tpl', 'if': 'isMe', cn: { cls: 'button edit', html: 'Edit' }},
+				{ tag: 'tpl', 'if': 'isMe', cn: { cls: 'button edit', html: '{{{NextThought.view.profiles.outline.View.edit}}}' }},
 				{ tag: 'tpl', 'if': '!isMe', cn: [
-					{ tag: 'tpl', 'if': 'isContact', cn: { cls: 'button chat disabled', html: 'Chat' }},
-					{ tag: 'tpl', 'if': '!isContact', cn: { cls: 'button', html: 'Add Contact' }}
+					{ tag: 'tpl', 'if': 'isContact', cn: { cls: 'button chat disabled', html: '{{{NextThought.view.profiles.outline.View.chat}}}' }},
+					{ tag: 'tpl', 'if': '!isContact', cn: { cls: 'button', html: '{{{NextThought.view.profiles.outline.View.add}}}' }}
 				]}
 			]
 		},
@@ -95,9 +95,9 @@ Ext.define('NextThought.view.profiles.outline.View', {
 				{name: 'mapping', type: 'string'}
 			],
 			data: [
-				{id: 'about', label: 'About', mapping: 'profile-about' },
-				{id: 'activity', label: 'Recent Activity', mapping: 'profile-activity' },
-				{id: 'blog', label: 'Thoughts', mapping: 'profile-blog' }/*,
+				{id: 'about', label: getString('NextThought.view.profiles.outline.View.about'), mapping: 'profile-about' },
+				{id: 'activity', label: getString('NextThought.view.profiles.outline.View.activity'), mapping: 'profile-activity' },
+				{id: 'blog', label: getString('NextThought.view.profiles.outline.View.thoughts'), mapping: 'profile-blog' }/*,
 				{id:'discussions', label:'Discussions', type:'filter', mapping:'profile-activity' },
 				{id:'chats', label:'Chats', type:'filter', mapping:'profile-activity' },
 				{id:'comments', label:'Comments', type:'filter', mapping:'profile-activity' },
@@ -254,12 +254,12 @@ Ext.define('NextThought.view.profiles.outline.View', {
 
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		alert({
-			msg: 'The following action will remove this contact.',
+			msg: getString('NextThought.view.profiles.outline.View.warn'),
 			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 			scope: me,
 			icon: 'warning-red',
-			buttonText: {'ok': 'Delete'},
-			title: 'Are you sure?',
+			buttonText: {'ok': getString('NextThought.view.profiles.outline.View.delete')},
+			title: getString('NextThought.view.profiles.outline.View.confirm'),
 			fn: function(str) {
 				if (str === 'ok') {
 					me.fireEvent('delete-contact', me.user, data.groups, fin);
@@ -327,7 +327,7 @@ Ext.define('NextThought.view.profiles.outline.View', {
 
 
 	convertToStranger: function() {
-		this.controlsEl.down('.button').set({cls: 'button'}).update('Add Contact');
+		this.controlsEl.down('.button').set({cls: 'button'}).update(getString('NextThought.view.profiles.outline.View.add'));
 		this.isContact = false;
 		this.applyRenderData(this.user);
 		this.nameEl.addCls('no-presence');

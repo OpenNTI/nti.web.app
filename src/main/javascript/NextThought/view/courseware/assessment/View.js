@@ -76,7 +76,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 						cn: {
 							cls: 'empty-state',
 							cn: [
-								{cls: 'header', html: 'No assignments available at this time.'}//,
+								{cls: 'header', html: getString('NextThought.view.courseware.assessment.View.empty')}//,
 								//{cls: 'sub', html: 'Empty.'}
 							]
 						}
@@ -182,19 +182,19 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 	addAdminViews: function(getLink) {
 		this.body.add([
-			{ xtype: 'course-assessment-admin-activity', title: 'Activity & Notifications', label: 'notifications',
+			{ xtype: 'course-assessment-admin-activity', title: getString('NextThought.view.courseware.assessment.View.activity'), label: 'notifications',
 				activityFeedURL: getLink('CourseActivity') },
-			{ xtype: 'course-assessment-admin-assignments', title: 'Assignments', label: 'assignments' },
-			{ xtype: 'course-assessment-admin-performance', title: 'Grades & Performance', label: 'performance' }
+			{ xtype: 'course-assessment-admin-assignments', title: getString('NextThought.view.courseware.assessment.View.assignments'), label: 'assignments' },
+			{ xtype: 'course-assessment-admin-performance', title: getString('NextThought.view.courseware.assessment.View.grades'), label: 'performance' }
 		]);
 	},
 
 
 	addStudentViews: function() {
 		this.body.add([
-			{ xtype: 'course-assessment-activity', title: 'Activity & Notifications', label: 'notifications'},
-			{ xtype: 'course-assessment-assignments', title: 'Assignments', label: 'assignments'},
-			{ xtype: 'course-assessment-performance', title: 'Grades & Performance', label: 'performance'}
+			{ xtype: 'course-assessment-activity', title: getString('NextThought.view.courseware.assessment.View.activity'), label: 'notifications'},
+			{ xtype: 'course-assessment-assignments', title: getString('NextThought.view.courseware.assessment.View.assignments'), label: 'assignments'},
+			{ xtype: 'course-assessment-performance', title: getString('NextThought.view.courseware.assessment.View.grades'), label: 'performance'}
 		]);
 	},
 

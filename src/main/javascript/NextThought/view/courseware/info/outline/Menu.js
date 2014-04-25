@@ -10,7 +10,7 @@ Ext.define('NextThought.view.courseware.info.outline.Menu', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header', cn: [
-			'Course Info'
+			'{{{NextThought.view.courseware.info.outline.Menu.header}}}'
 		]},
 		{ cls: 'outline-menu'}
 	]),
@@ -63,10 +63,12 @@ Ext.define('NextThought.view.courseware.info.outline.Menu', {
 				],
 				data: [
 					{ hash: 'top', label: 'About' },
-					{ hash: 'course-info-instructors', label: 'Course Instructor' + plural },
+					{ hash: 'course-info-instructors', label: getFormattedString('NextThought.view.courseware.info.outline.Menu.courseinstructors', {
+						instructor: Ext.util.Format.plural(i.length, 'Instructor', true)
+					}) },
 					//{ hash: 'course-info-faq', label: 'Frequently Asked Questions' },
-					{ hash: 'course-info-support', label: 'Tech Support' },
-					{ hash: 'top', view: 'roster', label: 'Roster'}
+					{ hash: 'course-info-support', label: getString('NextThought.view.courseware.info.outline.Menu.support') },
+					{ hash: 'top', view: 'roster', label: getString('NextThought.view.courseware.info.outline.Menu.roster')}
 				]
 			});
 

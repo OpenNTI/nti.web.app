@@ -38,25 +38,25 @@ Ext.define('NextThought.view.menus.Settings', {
 		//items.push({ action: 'account', text: 'My Account'});
 
 		if (!Ext.isEmpty(welcomeLink)) {
-			items.push({ action: 'welcome', text: 'Welcome Guide', link: welcomeLink});
+			items.push({ action: 'welcome', text: getString('NextThought.view.menus.Settings.welcome'), link: welcomeLink});
 		}
 
-		items.push({ action: 'about', text: 'About', href: 'http://www.nextthought.com/', hrefTarget: '_blank'});
+		items.push({ action: 'about', text: getString('NextThought.view.menus.Settings.about'), href: 'http://www.nextthought.com/', hrefTarget: '_blank'});
 
 		//disable help because there are now 3 seperate help documents for different environments.  ugh!
 		//items.push({ action: 'help', text: 'Help'});
 
-		items.push({ action: 'privacy', text: 'Privacy'});
+		items.push({ action: 'privacy', text: getString('NextThought.view.menus.Settings.privacy')});
 		if (!Ext.isEmpty(childsLink)) {
-			items.push({ action: 'childrens-privacy', text: 'Children\'s Privacy'});
+			items.push({ action: 'childrens-privacy', text: getString('NextThought.view.menus.Settings.childerns')});
 		}
-		items.push({ action: 'terms', text: 'Terms of Service'});
+		items.push({ action: 'terms', text: getString('NextThought.view.menus.Settings.terms')});
 
 
-		items.push({ action: 'contact', text: 'Contact Us'});
+		items.push({ action: 'contact', text: getString('NextThought.view.menus.Settings.contact')});
 
 		items.push({ xtype: 'menuseparator' });
-		items.push({ action: 'logout', text: 'Sign Out'});
+		items.push({ action: 'logout', text: getString('NextThought.view.menus.Settings.logout')});
 
 		//add!
 		this.add(items);

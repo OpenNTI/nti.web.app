@@ -32,33 +32,33 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 			items: [
 				{
 					name: 'old_password',
-					placeholder: 'Old Password',
+					placeholder: getString('NextThought.view.form.PasswordResetForm.oldplaceholder'),
 					allowBlank: true,
 					validator: function(value) {
 						if (Ext.isEmpty(value)) {
-							throw 'Old password must not be empty';
+							throw getString('NextThought.view.form.PasswordResetForm.emptyold');
 						}
 						return true;
 					}
 				},{
 					name: 'password',
-					placeholder: 'New Password',
+					placeholder: getString('NextThought.view.form.PasswordResetForm.newplaceholder'),
 					//minLength: 6, // validator doesn't get called if this is set, and the value is less than
 					validator: function(value) {
 						if (Ext.isEmpty(value)) {
-							throw 'New password must not be empty';
+							throw getString('NextThought.view.form.PasswordResetForm.emptynew');
 						}
 						if (!Ext.String.trim(value)) {
-							throw 'New password must not be all whitespace.';
+							throw getString('NextThought.view.form.PasswordResetForm.whitespace');
 						}
 						if (value.length < 6) {
-							throw 'Password is too short.';
+							throw getString('NextThought.view.form.PasswordResetForm.short');
 						}
 						return true;
 					}
 				}, {
 					name: 'password-verify',
-					placeholder: 'Verify New Password',
+					placeholder: getString('NextThought.view.form.PasswordResetForm.verifyplaceholder'),
 					allowBlank: true,
 					listeners: {
 						focus: function(field) {
@@ -75,7 +75,7 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 						if (value === password) {
 							return true;
 						}
-						throw 'Passwords do not match.';
+						throw getString('NextThought.view.form.PasswordResetForm.nomatch');
 					}
 				}]
 		},{
@@ -97,7 +97,7 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 		},
 		defaultType: 'button',
 		items: [
-			{text: 'Save Password', save: 1, ui: 'flat-blue', scale: 'medium', disabled: true }
+			{text: getString('NextThought.view.form.PasswordResetForm.save'), save: 1, ui: 'flat-blue', scale: 'medium', disabled: true }
 		]
 	}],
 
@@ -111,10 +111,10 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 				renderTpl: Ext.DomHelper.markup({
 					cn: [{
 						cls: 'title',
-						html: getString('reset-password-not-allowed-title', 'Resetting your password is not allowed.')
+						html: getString('reset-password-not-allowed-title')
 					},{
 						cls: 'subtext',
-						html: getString('reset-password-not-allowed-subtext', 'You are not allowed to change your password at this time.  Please contact support to request a password change.')
+						html: getString('reset-password-not-allowed-subtext')
 					}]
 				})
 			}];
@@ -123,7 +123,7 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 	},
 
 
-	setMessage: function(msg,error) {
+	setMessage: function(msg, error) {
 		var el = this.down('box[message]').getEl().down('.text');
 		el[error ? 'addCls' : 'removeCls']('error');
 		el.update(msg || '');
@@ -138,7 +138,7 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 
 
 	setSuccess: function() {
-		this.setMessage('Your password has\nbeen changed.');
+		this.setMessage(getString('NextThought.view.form.PasswordResetForm.changed'));
 		Ext.each(this.query('simpletext'), function(t) {
 			t.suspendEvents();
 			t.clearValue(true);
@@ -169,7 +169,7 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 
 	checkValidity: function(value, input) {
 
-		function val(i,s) {
+		function val(i, s) {
 			try {
 				me.setError({message: ''});
 				return i.validate(!!s);
@@ -186,7 +186,7 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 
 		if (val(input)) {
 			me.setMessage();
-			v = me.inputs.reduce(function(accum,o) { return accum && val(o, true); }, true);
+			v = me.inputs.reduce(function(accum, o) { return accum && val(o, true); }, true);
       //			if(input.name === 'password'){
       //			}
 		}

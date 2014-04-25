@@ -387,13 +387,13 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 		if (win && $AppConfig.allowPrintingContent) {
 			menu.add({
-				text: 'Print',
+				text: getString('NextThought.view.content.reader.Annotations.print'),
 				handler: function() { win.print(); }
 			});
 		}
 
 		menu.add({
-					 text: 'Save Highlight',
+					 text: getString('NextThought.view.content.reader.Annotations.save-highlight'),
 					 handler: function(el, e) {
 						 me.fireEvent('save-phantom', record, false);
 						 me.clearSelection();
@@ -402,7 +402,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 		if (!this.reader.getNoteOverlay().disabled) {
 			menu.add({
-						 text: 'Add Note',
+						 text: getString('NextThought.view.content.reader.Annotations.add-note'),
 						 handler: function(el, e) {
 							 me.clearSelection();
 							 me.fireEvent('create-note', range, rect2, 'plain');
@@ -418,7 +418,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 					me.fireEvent('save-phantom', r, true);
 				}
 				catch (e) {
-					alert('Could not save redaction');
+					alert(getString('NextThought.view.content.reader.Annotations.error'));
 				}
 			};
 		}
@@ -430,12 +430,12 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		if (redactionRegex.test(this.reader.getLocation().NTIID)) {
 			//inject other menu items:
 			menu.add({
-						 text: 'Redact Inline',
+						 text: getString('NextThought.view.content.reader.Annotations.redact-inline'),
 						 handler: redaction(false)
 					 });
 
 			menu.add({
-						 text: 'Redact Block',
+						 text: getString('NextThought.view.content.reader.Annotations.redact-block'),
 						 handler: redaction(true)
 					 });
 		}
@@ -498,7 +498,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		});
 
 		menu.add({
-					 text: 'Save Highlight',
+					 text: getString('NextThought.view.content.reader.Annotations.save-highlight'),
 					 handler: function(el, e) {
 						 createHighlight();
 						 me.fireEvent('save-phantom', record, false);
@@ -506,7 +506,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				 });
 
 		menu.add({
-					 text: 'Add Note',
+					 text: getString('NextThought.view.content.reader.Annotations.add-note'),
 					 handler: function(el, e) {
 						 createHighlight();
 						 me.fireEvent('create-note', range, rect2, 'plain');
@@ -523,7 +523,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 					me.fireEvent('save-phantom', r, true);
 				}
 				catch (e) {
-					alert('Could not save redaction');
+					alert(getString('NextThought.view.content.reader.Annotations.error'));
 				}
 			};
 		}
@@ -535,12 +535,12 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		if (redactionRegex.test(this.reader.getLocation().NTIID)) {
 			//inject other menu items:
 			menu.add({
-						 text: 'Redact Inline',
-						 handler: redaction(false)
+						text: getString('NextThought.view.content.reader.Annotations.redact-inline'),
+						handler: redaction(false)
 					 });
 
 			menu.add({
-						 text: 'Redact Block',
+						 text: getString('NextThought.view.content.reader.Annotations.redact-block'),
 						 handler: redaction(true)
 					 });
 		}

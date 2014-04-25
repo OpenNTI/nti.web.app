@@ -28,7 +28,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Section', {
 	beforeRender: function() {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, {
-			title: this.title || 'Untitled',
+			title: this.title || getSting('NextThought.view.courseware.overview.parts.Section.untitled'),
 			type: this.type || ''
 		});
 
@@ -38,17 +38,17 @@ Ext.define('NextThought.view.courseware.overview.parts.Section', {
 	},
 
 
-	onAdd: function(item, index){
+	onAdd: function(item, index) {
 		var first = this.items.getCount() === 1;
 
-		this.mon(item,'show','show');
+		this.mon(item, 'show', 'show');
 
-		if(item.isHidden() && first){
+		if (item.isHidden() && first) {
 			this.hide();
 			return;
 		}
 
-		if(this.isHidden() && !item.isHidden()){
+		if (this.isHidden() && !item.isHidden()) {
 			this.show();
 		}
 

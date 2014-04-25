@@ -43,7 +43,7 @@ Ext.define('NextThought.view.content.View', {
 				}
 			}
 		},{
-			title: 'Dashboard',
+			title: 'Dashboard',//I don't think these title are used
 			id: 'course-dashboard',
 			xtype: 'course-dashboard'
 		},{
@@ -67,12 +67,12 @@ Ext.define('NextThought.view.content.View', {
 
 
 	tabSpecs: [
-		{label: 'Dashboard', viewId: 'course-dashboard'},
-		{label: 'Lessons', viewId: 'course-book?'},
-		{label: 'Assignments', viewId: 'course-assessment?', isAssignment: true},
-		{label: 'Discussions', viewId: 'course-forum'},
-		{label: 'Reports', viewId: 'course-reports'},
-		{label: 'Course Info', viewId: 'course-info'}
+		{label: getString('NextThought.view.content.View.dashboardtab'), viewId: 'course-dashboard'},
+		{label: getString('NextThought.view.content.View.lessontab'), viewId: 'course-book?'},
+		{label: getString('NextThought.view.content.View.assessmenttab'), viewId: 'course-assessment?', isAssignment: true},
+		{label: getString('NextThought.view.content.View.discussiontab'), viewId: 'course-forum'},
+		{label: getString('NextThought.view.content.View.reporttab'), viewId: 'course-reports'},
+		{label: getString('NextThought.view.content.View.infotab'), viewId: 'course-info'}
 	],
 
 

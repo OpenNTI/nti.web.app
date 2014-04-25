@@ -107,7 +107,7 @@ Ext.define('NextThought.view.account.activity.Preview', {
 				{
 					cls: 'reply-options',
 					cn: [
-						{ cls: 'link reply', html: 'Add a comment' }
+						{ cls: 'link reply', html: '{{{NextThought.view.account.activity.Preview.add-comment}}}' }
 					]
 				}
 			]}
@@ -323,7 +323,7 @@ Ext.define('NextThought.view.account.activity.Preview', {
 			'activated-editor': hide,
 			'deactivated-editor': show,
 			'no-body-content': function(editor, bodyEl) {
-				editor.markError(bodyEl, 'You need to type something');
+				editor.markError(bodyEl, getString('NextThought.view.account.activity.Preview.no-body-content'));
 				return false;
 			},
 			'grew': 'constrainPopout'

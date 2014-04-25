@@ -18,7 +18,7 @@ Ext.define('NextThought.view.cards.Card', {
     //		]},
 		{ cls: 'meta', cn: [
 			{ cls: 'title', html: '{title}' },
-			{ cls: 'byline', html: 'By {creator}' },
+			{ cls: 'byline', html: '{{{NextThought.view.cards.Card.by}}}' },
 			{ cls: 'description', html: '{description}' }
 		]}
 	]),

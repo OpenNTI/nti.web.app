@@ -24,13 +24,13 @@ Ext.define('NextThought.view.library.View', {
 			itemId: 'my-courses',
 			items: [
 				{
-					name: getString('My Administered Courses'),
+					name: getString('NextThought.view.library.View.administered'),
 					xtype: 'course-collection',
 					store: 'courseware.AdministeredCourses',
 					kind: 'admin'
 				},
 				{
-					name: getString('My Courses'),
+					name: getString('NextThought.view.library.View.enrolled'),
 					xtype: 'course-collection',
 					kind: 'enrolled'
 				}
@@ -48,9 +48,9 @@ Ext.define('NextThought.view.library.View', {
 	],
 
 	tabSpecs: [
-		{label: getString('Courses'), viewId: 'my-courses'},
-		{label: getString('Books'), viewId: 'my-books'},
-		{label: getString('Catalog'), viewId: 'content-catalog'}
+		{label: getString('NextThought.view.library.View.course'), viewId: 'my-courses'},
+		{label: getString('NextThought.view.library.View.books'), viewId: 'my-books'},
+		{label: getString('NextThought.view.library.View.catalog'), viewId: 'content-catalog'}
 	],
 
 

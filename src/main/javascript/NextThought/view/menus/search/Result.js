@@ -61,7 +61,7 @@ Ext.define('NextThought.view.menus.search.Result', {
 			name = hit.get('Creator');
 
 		if (isMe(name)) {
-			me.renderData.name = 'me';
+			me.renderData.name = getString('NextThought.view.menus.search.Result.me');
 		} else if (name === this.SYSTEM_CREATOR) {
 			me.renderData.name = '';
 		} else if (name) {

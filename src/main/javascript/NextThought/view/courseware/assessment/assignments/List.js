@@ -113,16 +113,21 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 			opens = values.opens || new Date(0),
 			day = (new Date(date.getTime())).setHours(0, 0, 0, 0),
 			today = (new Date()).setHours(0, 0, 0, 0),
-			html = 'Due ';
+			html = getFormattedString('NextThought.view.courseware.assessment.assignments.List.due', {
+				date: Ext.Date.format(date, format)
+			});
 
 		if (opens > today) {
-			html = 'Available on ' + Ext.Date.format(opens, format) + ' &middot; ' + html;
+			html = getFormattedString('NextThought.view.courseware.assessment.assignments.List.available', {
+				date: Ext.data.format(opens, format)
+			}) + '&middot;' + html;
 		}
 
 		if (day === today) {
-			html += 'Today ';
+			html += getFormattedString('NextThought.view.courseware.assessment.assignments.List.today', {
+				date: Ext.Date.format(date, format)
+			});
 		}
-		html += Ext.Date.format(date, format);
 
 		return html;
 	}

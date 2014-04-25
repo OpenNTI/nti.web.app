@@ -37,8 +37,8 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 				{ cls: 'ctr', cn: [
 					{ cls: 'play', cn: [
 						{cls: 'blur-clip', cn: {cls: 'blur'}},
-						{ cls: 'label', 'data-qtip': 'Play' },
-						{cls: 'launch-player', 'data-qtip': 'Play with transcript'}
+						{ cls: 'label', 'data-qtip': '{{{NextThought.view.courseware.overview.parts.Videos.play}}}' },
+						{cls: 'launch-player', 'data-qtip': '{{{NextThought.view.courseware.overview.parts.Videos.playtranscript}}}'}
 					] }
 				] }
 			]},
@@ -193,7 +193,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 				poster: getURL(n.getAttribute('poster'), i.root),
 				ntiid: n.getAttribute('ntiid'),
 				label: n.getAttribute('label'),
-				comments: 'Loading... ',
+				comments: getString('NextThought.view.courseware.overview.parts.Videos.loading') + ' ',
 				date: r && r.get('date')
 			});
 		});
@@ -205,7 +205,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 	beforeRender: function() {
 		this.callParent(arguments);
 
-		var t = this.title || 'Video';
+		var t = this.title || getString('NextThought.view.courseware.overview.parts.Videos.title');
 
 		if (this.store.getCount() !== 1) {
 			t = Ext.util.Inflector.pluralize(t);
@@ -340,7 +340,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 
 	onPlayerError: function() {
 		this.showCurtain();
-		alert('An error occurred playing the video.  Please try again later.');
+		alert(getString('NextThought.view.courseware.overview.parts.Videos.error'));
 	},
 
 

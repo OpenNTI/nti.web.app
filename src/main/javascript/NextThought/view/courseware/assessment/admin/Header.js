@@ -11,7 +11,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 
 	headerTpl: Ext.DomHelper.markup([
 		{ cls: 'grade', cn: [
-			{ cls: 'label', html: '{gradeTitle} Grade'},
+			{ cls: 'label', html: '{gradeTitle} {{{NextThought.view.courseware.assessment.admin.Header.grade}}}'},
 			{ cls: 'late', html: '{late}'},
 			{ cls: 'gradebox', cn: [
 				{ tag: 'input', size: 3, type: 'text', value: '{grade}'},
@@ -24,9 +24,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 				{ cls: 'title name {presence}', cn: {html: '{displayName}' }},
 				{ cls: 'username', cn: {html: '({Username})'}},
 				{ cls: 'subtitle actions', cn: [
-					{ tag: 'span', cls: 'profile link', html: 'Profile'},
-					{ tag: 'span', cls: 'email link', html: 'Email'},
-					{ tag: 'span', cls: 'chat link', html: 'Chat'}
+					{ tag: 'span', cls: 'profile link', html: '{{{NextThought.view.courseware.assessment.admin.Header.profile}}}'},
+					{ tag: 'span', cls: 'email link', html: '{{{NextThought.view.courseware.assessment.admin.Header.email}}}'},
+					{ tag: 'span', cls: 'chat link', html: '{{{NextThought.view.courseware.assessment.admin.Header.chat}}}'}
 				]}
 			]}
 		]}
@@ -61,7 +61,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 		this.renderData = Ext.apply(this.renderData || {}, {
 			displayName: this.student.toString(),
 			Username: this.showingUsername ? Username : '',
-			gradeTitle: this.gradeTitle || 'Assignment',
+			gradeTitle: this.gradeTitle || getString('NextThought.view.courseware.assessment.admin.Header.assignment'),
 			avatarURL: this.student.get('avatarURL'),
 			presence: this.student.getPresence().getName()
 		});
@@ -128,6 +128,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 
 
 	createGradeMenu: function() {
+		//Wasn't sure if this needs to be translated or not?
 		var items = [
 			{text: 'A', checked: this.currentLetter === 'A'},
 			{text: 'B', checked: this.currentLetter === 'B'},

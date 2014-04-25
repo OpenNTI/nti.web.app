@@ -7,7 +7,7 @@ Ext.define('NextThought.view.account.contacts.View', {
 
 	title: 'Chat',
 	tabConfig: {
-		tooltip: 'Chat'
+		tooltip: getString('NextThought.view.account.contacts.View.tooltip')
 	},
 
 	store: 'online-contacts-store',
@@ -20,11 +20,11 @@ Ext.define('NextThought.view.account.contacts.View', {
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'contact-list'},
 		{ cls: 'button-row', cn: [
-			{cls: 'search', html: 'Search', cn: [
+			{cls: 'search', html: '{{{NextThought.view.account.contacts.View.search}}}', cn: [
 				{tag: 'input', type: 'text'/*, placeholder:'Search'*/},
 				{cls: 'clear', style: {display: 'none'}}
 			] },
-			{cls: 'group-chat', html: 'Group Chat' }
+			{cls: 'group-chat', html: '{{{NextThought.view.account.contacts.View.group-chat}}}' }
 		]}
 	]),
 
@@ -86,14 +86,14 @@ Ext.define('NextThought.view.account.contacts.View', {
 		this.noContactsEmptyText = Ext.DomHelper.markup({
 			cls: 'rhp-no-contacts',
 			cn: [
-				{ html: 'You don&apos;t have any contacts yet...' },
-				{ tag: 'a', cls: 'button', role: 'button', href: '#', html: 'Add Contacts' }
+				{ html: '{{{NextThought.view.account.contacts.View.no-contacts}}}' },
+				{ tag: 'a', cls: 'button', role: 'button', href: '#', html: '{{{NextThought.view.account.contacts.View.add-contacts}}}' }
 			]
 		});
 
 		this.offlineEmptyText = Ext.DomHelper.markup({
 			cls: 'empty-list rhp-empty-list',
-			html: 'You are currently offline. Change your status to see contacts who are online'
+			html: '{{{NextThought.view.account.contacts.View.offline}}}'
 		});
 
 		this.friendsListStore = Ext.getStore('FriendsList');
@@ -331,7 +331,7 @@ Ext.define('NextThought.view.account.contacts.View', {
 			overItemCls: this.overItemCls,
 			itemSelector: this.itemSelector,
 			tpl: this.tpl,
-			emptyText: Ext.DomHelper.markup({cls: 'empty-list', html: 'No users found.'}),
+			emptyText: Ext.DomHelper.markup({cls: 'empty-list', html: '{{{NextThought.view.account.contacts.View.empty-list}}}'}),
 			renderTo: this.el,
 			cls: 'contact-search',
 			listeners: {

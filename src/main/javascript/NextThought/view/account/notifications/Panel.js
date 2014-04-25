@@ -21,7 +21,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 	iconCls: 'inbox',
 	title: 'Notifications',
 	tabConfig: {
-		tooltip: 'Notifications'
+		tooltip: getString('NextThought.view.account.notifications.Panel.tooltip')
 	},
 
 	ui: 'notifications',
@@ -31,7 +31,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 	emptyText: Ext.DomHelper.markup([
 		{
 			cls: 'history nothing rhp-empty-list',
-			html: 'All caught up'
+			html: '{{{NextThought.view.account.notifications.Panel.empty-state}}}'
 		}
 	]),
 

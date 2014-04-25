@@ -19,10 +19,10 @@ Ext.define('NextThought.view.MessageBox', {
 	iconWidth: 80,
 
 	buttonText: {
-		ok: 'OK',
-		yes: 'Yes',
-		no: 'No',
-		cancel: 'Cancel'
+		ok: getString('NextThought.view.MessageBox.ok'),
+		yes: getString('NextThought.view.MessageBox.yes'),
+		no: getString('NextThought.view.MessageBox.no'),
+		cancel: getString('NextThought.view.MessageBox.cancel')
 	},
 
 	buttonIds: [

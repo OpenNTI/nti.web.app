@@ -10,7 +10,13 @@ Ext.define('NextThought.view.assessment.ScoreboardHeader', {
 	cls: 'score-header',
 	ui: 'assessment',
 
-	renderTpl: Ext.DomHelper.markup([{cls: 'time', cn: [{tag: 'span'},{cls: 'arrow'}]},{cls: 'title', html: 'Scoreboard'}]),
+	renderTpl: Ext.DomHelper.markup([
+		{cls: 'time', cn: [
+			{tag: 'span'},
+			{cls: 'arrow'}
+		]},
+		{cls: 'title', html: '{{{NextThought.view.assessment.ScoreboardHeader.title}}}'}
+	]),
 
 	renderSelectors: {
 		time: '.time span',

@@ -30,7 +30,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		var me = this;
 
 		items.push({
-			text: 'Toggle Redaction',
+			text: getString('NextThought.view.annotations.Redaction.toggle'),
 			handler: function() {
 				me.toggleRedaction();
 			}
@@ -355,9 +355,9 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	tpl = {tag: 'span', 'data-non-anchorable': 'true', 'data-no-anchors-within': 'true', cls: 'redactionAction {style}', cn: [
 					{tag: 'span', 'data-non-anchorable': 'true', cls: 'editableSpan', html: '{replacementContent}'},
 					{tag: 'span', 'data-non-anchorable': 'true', cls: 'controls', cn: [
-						{tag: 'span', 'data-non-anchorable': 'true', cls: 'edit', 'data-qtip': 'edit'},
-						{tag: 'span', 'data-non-anchorable': 'true', cls: 'share', 'data-qtip': 'share'},
-						{tag: 'span', 'data-non-anchorable': 'true', cls: 'delete', 'data-qtip': 'delete'}
+						{tag: 'span', 'data-non-anchorable': 'true', cls: 'edit', 'data-qtip': '{{{NextThought.view.annotations.Redaction.edit}}}'},
+						{tag: 'span', 'data-non-anchorable': 'true', cls: 'share', 'data-qtip': '{{{NextThought.view.annotations.Redaction.share}}}'},
+						{tag: 'span', 'data-non-anchorable': 'true', cls: 'delete', 'data-qtip': '{{{NextThought.view.annotations.Redaction.delete}}}'}
 					]}
 				]};
 
@@ -372,7 +372,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	p.footnoteRedactedTpl = new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag: 'span',
 		 cls: 'redacted-text',
-		 html: 'This content has been redacted.',
+		 html: '{{{NextThought.view.annotations.Redaction.footnote-message}}}',
 		 'data-non-anchorable': 'true',
 		 'data-no-anchors-within': 'true'
 		}

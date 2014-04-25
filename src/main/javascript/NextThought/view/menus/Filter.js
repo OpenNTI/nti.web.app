@@ -37,19 +37,25 @@ Ext.define('NextThought.view.menus.Filter', {
 		var items = [], lists = [], groups = [];
 
 		this.removeAll(true);
-		items.push({ cls: 'type-filter nothing', text: 'Nothing', checked: false, allowUncheck: true, isNothing: true});
-		items.push({ cls: 'type-filter everything', text: 'Everything', checked: true, allowUncheck: false, isEverything: true});
+		items.push({ cls: 'type-filter nothing', text: getString('NextThought.view.menus.Filter.nothing'), checked: false, allowUncheck: true, isNothing: true});
+		items.push({
+			cls: 'type-filter everything',
+			text: getString('NextThought.view.menus.Filter.everything'),
+			checked: true,
+			allowUncheck: false,
+			isEverything: true
+		});
 		items.push({
 			cls: 'type-filter highlight',
-			text: 'Highlights',
+			text: getString('NextThought.view.menus.Filter.highlights'),
 			model: 'NextThought.model.Highlight',
 			hidden: /mathcounts/i.test(ReaderPanel.get().getLocation().NTIID) //FIXME eww, hack to prohibit highlighting in mathcounts
 		});
-		items.push({ cls: 'type-filter note', text: 'Notes', model: 'NextThought.model.Note' });
-		items.push({ xtype: 'labeledseparator', text: 'From' });
-		items.push({ cls: 'group-filter everyone', text: 'Everyone', checked: true,
+		items.push({ cls: 'type-filter note', text: getString('NextThought.view.menus.Filter.notes'), model: 'NextThought.model.Note' });
+		items.push({ xtype: 'labeledseparator', text: getString('NextThought.view.menus.Filter.from') });
+		items.push({ cls: 'group-filter everyone', text: getString('NextThought.view.menus.Filter.everyone'), checked: true,
 			allowUncheck: false, isEveryone: true });
-		items.push({ cls: 'group-filter', text: 'Me', isMe: true, record: $AppConfig.userObject, isActor: true });
+		items.push({ cls: 'group-filter', text: getString('NextThought.view.menus.Filter.me'), isMe: true, record: $AppConfig.userObject, isActor: true });
 
 
 		this.store.each(function(g) {
@@ -57,7 +63,7 @@ Ext.define('NextThought.view.menus.Filter', {
 		});
 
 		if (!Ext.isEmpty(lists)) {
-			items.push({ xtype: 'labeledseparator', text: 'Lists', cls: 'noline'});
+			items.push({ xtype: 'labeledseparator', text: getString('NextThought.view.menus.Filter.lists'), cls: 'noline'});
 			Ext.each(lists, function(v) {
 				items.push({
 					cls: 'group-filter',
@@ -70,7 +76,7 @@ Ext.define('NextThought.view.menus.Filter', {
 		}
 
 		if (!Ext.isEmpty(groups)) {
-			items.push({ xtype: 'labeledseparator', text: 'Groups', cls: 'noline'});
+			items.push({ xtype: 'labeledseparator', text: getString('NextThought.view.menus.Filter.groups'), cls: 'noline'});
 			Ext.each(groups, function(v) {
 				items.push({
 					cls: 'group-filter',
@@ -167,14 +173,16 @@ Ext.define('NextThought.view.menus.Filter', {
 			return nothing[0].text;
 		}
 
-		what = (things.length && Ext.String.format('{0} and {1}', things.join(', '), lastThing)) ||
-			   lastThing || 'Everything';
-		who = (from.length && Ext.String.format('{0} and {1}', from.join(', '), lastFrom)) ||
-			  lastFrom || 'Everyone';
+		what = things.length && getFormattedString('NextThought.view.menus.Filter.and', {first: things.join(','), second: lastThing}) ||
+			lastThing || getString('NextThought.view.menus.Filter.everything');
 
-		return Ext.String.format('{0} from {1}',
-				Ext.String.ellipsis(what, 30, false),
-				Ext.String.ellipsis(who, 30, true));
+		what = from.length && getFormattedString('NextThought.view.menus.Filter.and', {first: from.join(','), second: lastFrom}) ||
+			lastFrom || getString('NextThought.view.menus.Filter.everyone');
+
+		return getFromattedString('NextThought.view.menus.Filter.formto', {
+			from: Ext.String.ellipsis(what, 30, false),
+			to: Ext.String.ellipsis(who, 30, false)
+		});
 	},
 
 	nothingSelected: function(nothing) {

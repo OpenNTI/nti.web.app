@@ -2,7 +2,7 @@ Ext.define('NextThought.view.assessment.input.Unsupported', {
 	extend: 'NextThought.view.assessment.input.Base',
 	alias: 'widget.question-input-unsupported',
 
-	renderTpl: Ext.DomHelper.markup({html: 'This input type is not supported yet.'}),
+	renderTpl: Ext.DomHelper.markup({html: '{{{NextThought.view.assessment.input.Unsupported.msg}}}'}),
 
 	reset: Ext.emptyFn,
 

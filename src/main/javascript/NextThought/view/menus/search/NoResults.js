@@ -3,6 +3,6 @@ Ext.define('NextThought.view.menus.search.NoResults', {
 	alias: 'widget.search-noresults',
 	cls: 'search-noresults search-result',
 	renderTpl: [
-		'<div class="noresults">No results found.</div>'
+		'<div class="noresults">' + getString('NextThought.view.menus.search.NoResults.message') + '</div>'
 	]
 });

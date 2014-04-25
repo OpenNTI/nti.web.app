@@ -24,7 +24,7 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 		{ xtype: 'assessment-score' },
 		{ xtype: 'assessment-tally', flex: 1 },
 		{ xtype: 'button',
-			text: 'Review',
+			text: getString('NextThought.view.courseware.overview.parts.QuestionSet.review'),
 			ui: 'secondary',
 			scale: 'large',
 			handler: function(b) {b.up('course-overview-naquestionset').reviewClicked();}
@@ -98,10 +98,10 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 			date = assignment.get('availableEnding'),
 			day = (new Date(date.getTime())).setHours(0, 0, 0, 0),
 			today = (new Date()).setHours(0, 0, 0, 0),
-			html = 'Due ';
+			html = getString('NextThought.view.courseware.overview.parts.QuestionSet.due') + ' ';
 
 		if (day === today) {
-			html += 'Today';
+			html += getString('NextThought.view.courseware.overview.parts.QuestionSet.today');
 		} else {
 			html += Ext.Date.format(date, format);
 		}
@@ -115,7 +115,9 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 
 		if (opens && opens > new Date()) {
 			this.down('button').destroy();
-			tally.setGreyText('Available on ' + Ext.Date.format(opens, format));
+			tally.setGreyText(getFormattedString('NextThought.view.courseware.overview.parts.QuestionSet.available', {
+				date: Ext.Date.format(opens, format)
+			}));
 		}
 	},
 
@@ -123,7 +125,7 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 	setAsNotStarted: function() {
 		var b = this.down('button');
 		b.setUI('primary');
-		b.setText('Start');
+		b.setText(getString('NextThought.view.courseware.overview.parts.QuestionSet.start'));
 		this.addCls('not-started');
 	},
 
@@ -178,7 +180,9 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 		if (late) {
 			this.addCls('late');
 		}
-		tally[late ? 'setRedText' : 'setGreyText']('Completed ' + Ext.Date.format(completed, 'l, F j'));
+		tally[late ? 'setRedText' : 'setGreyText'](getFormattedString('NextThought.view.courseware.overview.parts.QuestionSet.completed', {
+			date: Ext.Date.format(completed, 'l, F j')
+		}));
 	},
 
 

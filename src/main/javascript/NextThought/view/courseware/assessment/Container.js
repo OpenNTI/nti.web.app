@@ -141,7 +141,10 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 					return reader;
 				})
 				.fail(function(reason) {
-					alert({title: 'Well, this is embarrassing!', msg: 'There was an unforeseen error loading this assignment. A report has been logged.'});
+					alert({
+						title: getString('NextThought.view.courseware.assessment.Container.errortitle'),
+						msg: getString('NextThought.view.courseware.assessment.Container.errormsg')
+					});
 					setTimeout(function() { throw reason; }, 1);
 				});
 		});

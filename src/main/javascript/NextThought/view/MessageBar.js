@@ -10,9 +10,9 @@ Ext.define('NextThought.view.MessageBar', {
 		dontShow: {}	},
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'remember', html: 'I get it. Don\'t show this again...'},
+		{cls: 'remember', html: '{{{NextThought.view.MessageBar.remember}}}'},
 		'{message}',
-		{tag: 'a', cls: 'dismiss', href: '#', html: 'Dismiss'}
+		{tag: 'a', cls: 'dismiss', href: '#', html: '{{{NextThought.view.MessageBar.dismiss}}}'}
 	]),
 
 	renderSelectors: {

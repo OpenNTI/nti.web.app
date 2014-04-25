@@ -52,7 +52,7 @@ Ext.define('NextThought.view.courseware.View', {
 
 		Ext.defer(function() {
 			if (me.el && me.el.dom) {
-				me.el.mask('Loading', 'loading');
+				me.el.mask(getString('NextThought.view.courseware.View.loading'), 'loading');
 			}
 		}, 1);
 		me.navigation.clear();

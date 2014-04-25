@@ -29,20 +29,20 @@ Ext.define('NextThought.view.contacts.Grouping', {
 		{
 			xtype: 'nti-tool-action',
 			iconCls: 'options',
-			label: 'Options',
+			label: getString('NextThought.view.contacts.Grouping.options'),
 			hideLabel: true
 		}
 	],
 
 	titleTpl: Ext.DomHelper.createTemplate(['{0} ', {tag: 'span', html: '{1}'}]),
 
-	showMoreTpl: Ext.DomHelper.createTemplate({
+	showMoreTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls: 'show-more',
 		cn: [
 			{cls: 'dots', cn: [{},{},{}]},
-			{html: '{count} More'}
+			{html: '{count} {{{NextThought.view.contacts.Grouping.more}}}'}
 		]
-	}),
+	})),
 
 	childEls: ['body'],
 	getTargetEl: function() {

@@ -64,13 +64,9 @@ Ext.define('NextThought.view.cards.CardTarget', {
 					target: '_blank',
 					cls: 'no-support',
 					cn: [
-						{ cls: 'message', html: 'Your browser does not support viewing this content with this application.' },
+						{ cls: 'message', html: getString('NextThought.view.cards.CardTarget.no-browser-support') },
 						{ cn: [
-							{
-								tag: 'span', cls: 'link',
-								html: 'Click Here'
-							},
-							' to open it in another window'
+							getString('NextThought.view.cards.CardTarget.click-here')
 						]}
 					]
 				}
@@ -84,7 +80,7 @@ Ext.define('NextThought.view.cards.CardTarget', {
 				xtype: 'box',
 				renderTpl: Ext.DomHelper.markup({
 					cls: 'no-support', 'data-link': data.href, cn: [
-						{ cls: 'message', html: 'Your mobile device does not support viewing this content with this application.'}
+						{ cls: 'message', html: '{{{NextThought.view.cards.CardTarget.no-mobile-support}}}'}
 					]
 				})
 			});
@@ -98,10 +94,8 @@ Ext.define('NextThought.view.cards.CardTarget', {
 				xtype: 'box',
 				renderTpl: Ext.DomHelper.markup({
 					cls: 'no-support', 'data-link': data.href, cn: [
-						{ cls: 'message', html: 'Your browser does not support viewing this content with this application.'},
-						{ cn: [
-							{ html: 'Please try again with the latest version of ' + chrome + ', ' + safari + ', ' + ff + ', or ' + ie + '.'}
-						]}
+						{ cls: 'message', html: '{{{NextThought.view.cards.CardTarget.no-browser-support}}}'},
+						{ cn: ['{{{NextThought.view.cards.CardTarget.update-browser}}}']}
 					]
 				})
 			});

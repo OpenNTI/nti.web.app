@@ -126,7 +126,7 @@ Ext.define('NextThought.view.definition.Window', {
 				})
 				.fail(function(e) {
 					me.hide();
-					alert('An error occured looking up definitions.\nPlease try again later.');
+					alert(getString('NextThought.view.definition.Window.error'));
 					Error.raiseForReport(e);
 				});
 	},

@@ -39,7 +39,7 @@ Ext.define('NextThought.view.profiles.View', {
 				var name = (panel && panel.displayName) || user;
 					name = (panel && panel.user && panel.user.get('displayName')) || name;
 				console.debug('fire finish');
-				me.setTitle('Profile: ' + name);
+				me.setTitle(getString('NextThought.view.profiles.View.profile') + ': ' + name);
 				fulfill();
 			});
 		});

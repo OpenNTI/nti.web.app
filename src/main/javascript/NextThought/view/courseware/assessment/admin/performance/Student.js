@@ -60,7 +60,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 		var el = this.el;
 		this._maskIn = setTimeout(function() {
 			if (el && el.dom) {
-				el.mask('Loading', 'loading', true);
+				el.mask(getString('NextThought.view.courseware.assessment.admin.performance.Student.loading'), 'loading', true);
 			}
 		}, 1);
 	},

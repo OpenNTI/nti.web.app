@@ -11,13 +11,13 @@ Ext.define('NextThought.view.courseware.overview.View', {
 	autoScroll: true,
 
 	SECTION_TITLE_MAP: {
-		'video': 'Video',
-		'discussions': 'Discussions',
-		'additional': 'Additional Resources',
-		'required': 'Required Resources',
-		'assessments': 'Practice Questions',
-		'session-overview': 'Session Overview',
-		'assignments': 'Assignments'
+		'video': getString('NextThought.view.courseware.overview.View.video'),
+		'discussions': getString('NextThought.view.courseware.overview.View.discussion'),
+		'additional': getString('NextThought.view.courseware.overview.View.additional'),
+		'required': getString('NextThought.view.courseware.overview.View.required'),
+		'assessments': getString('NextThought.view.courseware.overview.View.assessment'),
+		'session-overview': getString('NextThought.view.courseware.overview.View.session'),
+		'assignments': getString('NextThought.view.courseware.overview.View.assignments')
 	},
 
 
@@ -139,7 +139,7 @@ Ext.define('NextThought.view.courseware.overview.View', {
 			this.on({single: true, afterrender: 'maybeMask'});
 			return;
 		}
-		el.mask('Loading...', 'loading');
+		el.mask(getString('NextThought.view.courseware.overview.View.loading'), 'loading');
 	},
 
 

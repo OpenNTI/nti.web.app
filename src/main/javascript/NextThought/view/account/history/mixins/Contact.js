@@ -12,7 +12,7 @@ Ext.define('NextThought.view.account.history.mixins.Contact', {
 			cls: 'history notification contact',
 			cn: [
 				{tag: 'span', cls: 'creator link', html: '{displayName}'},
-				{tag: 'span', cls: 'verb', html: 'added you as a contact'}
+				{tag: 'span', cls: 'verb', html: '{{{NextThought.view.account.history.mixins.Contact.added-contact}}}'}
 			]
 		}
 	])),

@@ -37,7 +37,7 @@ Ext.define('NextThought.view.assessment.input.ModeledContent', {
 		this.mon(this.editor, {
 			'enable-save': 'updateState',
 			'no-body-content': function(editor, el) {
-				editor.markError(el, 'You need to type something');
+				editor.markError(el, getString('NextThought.view.assessment.input.ModeledContent.empty-editor'));
 				return false;
 			}
 		});

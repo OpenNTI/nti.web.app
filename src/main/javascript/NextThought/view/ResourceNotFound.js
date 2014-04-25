@@ -7,11 +7,11 @@ Ext.define('NextThought.view.ResourceNotFound', {
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'resource-not-found', cn: [
 			{ cls: 'body', cn: [
-				{ cls: 'heading', html: 'Sorry, this page doesn\'t exist...'},
-				{ cls: 'subtext', html: 'Your link may contain errors or the page may no longer exist.'},
+				{ cls: 'heading', html: '{{{NextThought.view.ResourceNotFound.heading}}}'},
+				{ cls: 'subtext', html: '{{{NextThought.view.ResourceNotFound.subtext}}}'},
 				{ cls: 'actions', cn: [
-					{tag: 'tpl', 'if': '!hideLibrary', cn: {cls: 'library', tag: 'a', html: 'Library'}},
-					{cls: 'back', tag: 'a', html: 'Previous Page'}
+					{tag: 'tpl', 'if': '!hideLibrary', cn: {cls: 'library', tag: 'a', html: '{{{NextThought.view.ResourceNotFound.action-library}}}'}},
+					{cls: 'back', tag: 'a', html: '{{{NextThought.view.ResourceNotFound.action-back}}}'}
 				]}
 			]}
 		]}

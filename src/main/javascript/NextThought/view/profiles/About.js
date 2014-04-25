@@ -25,31 +25,31 @@ Ext.define('NextThought.view.profiles.About', {
 						{
 							cls: 'about field',
 							cn: [
-								{ cls: 'label', html: 'About' },
-								{ cls: 'content', 'data-field': 'about', 'data-placeholder': 'Write something about yourself.', 'data-multiline': true }
+								{ cls: 'label', html: '{{{NextThought.view.profiles.About.about}}}' },
+								{ cls: 'content', 'data-field': 'about', 'data-placeholder': '{{{NextThought.view.profiles.About.write}}}', 'data-multiline': true }
 							]
 						},
 						{
 							cls: 'fold', cn: [
 
 								{ cls: 'field', cn: [
-									{ cls: 'label', cn: { tag: 'span', 'data-field': 'affiliation', 'data-placeholder': 'School or Company' } },
-									{ cn: { tag: 'span', 'data-field': 'role', 'data-placeholder': 'Role' } }
+									{ cls: 'label', cn: { tag: 'span', 'data-field': 'affiliation', 'data-placeholder': '{{{NextThought.view.profiles.About.affiliation}}}' } },
+									{ cn: { tag: 'span', 'data-field': 'role', 'data-placeholder': '{{{NextThought.view.profiles.About.role}}}' } }
 								]},
 
 								{ cls: 'field', cn: [
-									{ cls: 'label', html: 'Location' },
-									{ cn: { tag: 'span', 'data-field': 'location', 'data-placeholder': 'Location' } }
+									{ cls: 'label', html: '{{{NextThought.view.profiles.About.location}}}' },
+									{ cn: { tag: 'span', 'data-field': 'location', 'data-placeholder': '{{{NextThought.view.profiles.About.location}}}' } }
 								]},
 
 								{ cls: 'field', cn: [
-									{ cls: 'label', html: 'Homepage' },
-									{ cn: {tag: 'span', 'data-field': 'home_page', 'data-placeholder': 'Home Page' } }
+									{ cls: 'label', html: '{{{NextThought.view.profiles.About.home}}}' },
+									{ cn: {tag: 'span', 'data-field': 'home_page', 'data-placeholder': '{{{NextThought.view.profiles.About.home}}}' } }
 								]},
 
 								{ cls: 'field', cn: [
-									{ cls: 'label', html: 'Email' },
-									{ cn: { tag: 'span', 'data-field': 'email', 'data-placeholder': 'Email' } }
+									{ cls: 'label', html: '{{{NextThought.view.profiles.About.email}}}' },
+									{ cn: { tag: 'span', 'data-field': 'email', 'data-placeholder': '{{{NextThought.view.profiles.About.email}}}' } }
 								]}
 
 							]
@@ -132,7 +132,7 @@ Ext.define('NextThought.view.profiles.About', {
 			return;
 		}
 
-		me.getEl().mask('Loading...');
+		me.getEl().mask(getString('NextThought.view.profiles.About.loading'));
 
 		me.user = user;
 
@@ -211,12 +211,16 @@ Ext.define('NextThought.view.profiles.About', {
 			//for strings we expect a min and a max length and if they exist our string must fit in
 			//those bounds
 			if (value.length < (rules.min_length || 0)) {
-				this.showError('Must contain at least ' + (rules.min_length || 0) + ' characters.');
+				this.showError(getFormattedString('NextThought.view.profiles.About.short', {
+					number: rules.min_length || 0
+				}));
 				return false;
 			}
 
 			if (value.length > (rules.max_length || Infinity)) {
-				this.showError('May only use ' + (rules.max_length || Infinity) + ' characters.');
+				this.showError(getFormattedString('NextThought.view.profiles.About.long', {
+					number: rules.max_length || 0
+				}));
 				return false;
 			}
 
@@ -227,11 +231,11 @@ Ext.define('NextThought.view.profiles.About', {
 				//require it to start with http[s]
 				numColons = (value.match(/:/g) || []).length;
 				if (numColons > 1) {
-					this.showError('Must be a valid URL.');
+					this.showError(getString('NextThought.view.profiles.About.invalid'));
 					return false;
 				}
 				if (numColons === 1 && value.indexOf('http:') !== 0 && value.indexOf('https:') !== 0) {
-					this.showError('Must be a valid URL.');
+					this.showError(getString('NextThought.view.profiles.About.invalid'));
 					return false;
 				}
 				return true;
@@ -447,7 +451,7 @@ Ext.define('NextThought.view.profiles.About', {
 			cmp.startEdit(cmp.boundEl, oldValue);
 			cmp.setValue(newValue);
 			cmp.field.setError();
-			me.showError(resultJson.message || 'An unknown error occurred');
+			me.showError(resultJson.message || getString('NextThought.view.profiles.About.unknown'));
 			delete me.savingField;
 		}
 
@@ -465,8 +469,8 @@ Ext.define('NextThought.view.profiles.About', {
 		this.addCls('empty');
 		Ext.DomHelper.append(this.el, {
 					cls: 'empty-state', cn: [
-						{cls: 'header', html: 'Empty Profile :('},
-						{cls: 'sub', html: 'This user has not filled out their profile.'}
+						{cls: 'header', html: getString('NextThought.view.profiles.About.emptyheader')},
+						{cls: 'sub', html: getString('NextThought.view.profiles.About.emptysub')}
 					]
 				});
 	},

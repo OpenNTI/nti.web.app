@@ -27,12 +27,13 @@ Ext.define('NextThought.util.Localization', {
 		});
 	},
 
-	pluralizeString: function(count, key) {
-		var forms = window.NTIStrings.PluralForms[key], i;
+	pluralizeString: function(count, key, noNum) {
+		var forms = window.NTIStrings.PluralForms[key], i,
+			s;
 
 		if (!forms) {
 			console.error('Pluralizing a string we dont have forms for', key, count);
-			return key;
+			return this.oldPlural.apply(Ext.util.Format, arguments);
 		}
 
 		if (forms.rule) {
@@ -47,14 +48,25 @@ Ext.define('NextThought.util.Localization', {
 			return key;
 		}
 
-		return forms.forms[i] || key;
+		s = forms.forms[i] || key;
+
+		if (noNum) {
+			s = s.replace('{#}', '');
+			return s.trim();
+		}
+
+		if (s === key) {
+			return count + ' ' + s;
+		}
+
+		return s.replace('{#}', count);
 	}
 
 }, function() {
 	window.getString = this.getExternalizedString.bind(this);
 	window.getFormattedString = this.formatExternalString.bind(this);
 
-	//this.oldPlural = Ext.util.Forumat.plural;
+	this.oldPlural = Ext.util.Format.plural;
 
-	//Ext.util.Format.plural = ;
+	Ext.util.Format.plural = this.pluralizeString.bind(this);
 });

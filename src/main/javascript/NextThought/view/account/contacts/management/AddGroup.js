@@ -17,7 +17,7 @@ Ext.define('NextThought.view.account.contacts.management.AddGroup', {
 		this.mon(ourStore, {
 			beforeload: function() {
 				if (!owner.getEl()) {return;}
-				owner.getEl().mask('Loading...');
+				owner.getEl().mask(getString('NextThought.view.account.contacts.management.AddGroup.loading'));
 				ourStore.on('load', function() {
 					owner.getEl().unmask();
 				}, this, {single: true});

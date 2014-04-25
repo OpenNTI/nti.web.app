@@ -8,14 +8,14 @@ Ext.define('NextThought.view.courseware.info.parts.NotStarted', {
 
 	headerTpl: Ext.DomHelper.createTemplate({ cls: 'course-info-header-bar {status}', cn: [
 		{ cls: 'col-left', cn: [
-			{ cls: 'label', html: 'Course Starts' },
+			{ cls: 'label', html: '{{{NextThought.view.courseware.info.parts.NotStarted.starts}}}' },
 			{ cls: 'date', html: '{startDate:date("F j, Y")}'}
 		] },
 		{ cls: 'col-right', cn: [
 			{ tag: 'a', cls: 'enroll', html: '{enroll}', href: '{enrollUrl}', target: '_blank'},
 			{ cls: 'registered', cn: [
 				'{registered}',
-				{ tag: 'span', cls: 'edit', html: 'Edit' }
+				{ tag: 'span', cls: 'edit', html: '{{{NextThought.view.courseware.info.parts.NotStarted.edit}}}' }
 			] }
 		] }
 	] }),
@@ -38,7 +38,7 @@ Ext.define('NextThought.view.courseware.info.parts.NotStarted', {
 		Ext.apply(data || {}, {
 			startDate: i.get('StartDate'),
 			status: this.enrollmentStatus,
-			enroll: 'Enroll for Credit',
+			enroll: getString('NextThought.view.courseware.info.parts.NotStarted.notenrolled'),
 			enrollUrl: e.url,
 			registered: getString('course-info.description-widget.open-enrolled')
 		});

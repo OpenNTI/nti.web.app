@@ -14,7 +14,7 @@ Ext.define('NextThought.view.menus.PresenceEditor', {
 
 	controlTemplateObj: {
 		cls: 'controls',
-		cn: [{cls: 'cancel'}, {cls: 'save', html: 'Save'}]
+		cn: [{cls: 'cancel'}, {cls: 'save', html: getString('NextThought.view.menus.PresenceEditor.save')}]
 	},
 
 

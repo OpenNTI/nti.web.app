@@ -31,7 +31,7 @@ Ext.define('NextThought.view.account.history.mixins.Base', {
 		var me = this,
 			previewCls = 'preview',
 			prev = me.previewField ? '{' + me.previewField + '}' : '',
-			creator = me.showCreator ? '{Creator:displayName("You")}' : '';
+			creator = me.showCreator ? '{Creator:displayName("' + getString('NextThought.view.account.history.mixins.Base.you') + '")}' : '';
 
 		if (!me.showCreator) {
 			previewCls += ' link';

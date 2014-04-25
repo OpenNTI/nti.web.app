@@ -31,8 +31,8 @@ Ext.define('NextThought.view.account.codecreation.Window', {
 				anchor: '100% 100%',
 				xtype: 'account-header-view',
 				noIcon: true,
-				title: 'Create a New Group...',
-				detail: 'Once your group has been created, you\'ll receive a Group Code that you can share with others who want to join your group.'
+				title: getString('NextThought.view.account.codecreation.Window.title'),
+				detail: getString('NextThought.view.account.codecreation.Window.detail')
 			},
 			{xtype: 'box', cls: 'close', width: 10, height: 10}
 		]},
@@ -55,7 +55,10 @@ Ext.define('NextThought.view.account.codecreation.Window', {
 
 	showCreatedGroupCode: function(code) {
 		var headerView = this.query('account-header-view')[0];
-		headerView.updateHeaderText('Your Group Has Been Created...', 'Share the Group Code below to invite users to your group');
+		headerView.updateHeaderText(
+			getString('NextThought.view.account.codecreation.Window.created-title'),
+			getString('NextThought.view.account.codecreation.Window.created-detail')
+		);
 		this.query('codecreation-main-view')[0].setGroupCode(code);
 		this.doLayout();
 	},

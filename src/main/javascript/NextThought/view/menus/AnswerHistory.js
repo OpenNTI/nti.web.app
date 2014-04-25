@@ -9,9 +9,9 @@ Ext.define('NextThought.view.menus.AnswerHistory', {
 	constrain: true,
 	items: [
 		{
-			text: 'ANSWER HISTORY', cls: 'answer-title', allowUncheck: false, answerHistoryTitle: true},
+			text: getString('NextThought.view.menus.AnswerHistory.answer'), cls: 'answer-title', allowUncheck: false, answerHistoryTitle: true},
 		{
-			text: 'loading...', allowUncheck: false, noAnswerHistory: true
+			text: getString('NextThought.view.menus.AnswerHistory.loading'), allowUncheck: false, noAnswerHistory: true
 		}
 	],
 
@@ -35,7 +35,7 @@ Ext.define('NextThought.view.menus.AnswerHistory', {
 		var items = [], me = this;
 
 		this.removeAll();
-		items.push({text: 'ANSWER HISTORY', cls: 'answer-title', allowUncheck: false, answerHistoryTitle: true});
+		items.push({text: getString('NextThought.view.menus.AnswerHistory.answer'), cls: 'answer-title', allowUncheck: false, answerHistoryTitle: true});
 
 		this.store.each(function(r) {
 			var parts = r.get('parts'),
@@ -48,7 +48,7 @@ Ext.define('NextThought.view.menus.AnswerHistory', {
 		});
 
 		if (items.length === 1) {
-			items.push({text: 'Not Yet Attempted', cls: 'no-answer-history', allowUncheck: false, noAnswerHistory: true});
+			items.push({text: getString('NextThought.view.menus.AnswerHistory.noanswer'), cls: 'no-answer-history', allowUncheck: false, noAnswerHistory: true});
 		}
 		this.add(items);
 		if (this.el) {

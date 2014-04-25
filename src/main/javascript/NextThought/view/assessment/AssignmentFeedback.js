@@ -40,8 +40,8 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 							]},
 							{ cls: 'message', html: '{body}'},
 							{tag: 'tpl', 'if': 'isMe(Creator)', cn: { cls: 'footer', cn: [
-								{ tag: 'span', cls: 'link edit', html: 'Edit'},
-								{ tag: 'span', cls: 'link delete', html: 'Delete'}
+								{ tag: 'span', cls: 'link edit', html: '{{{NextThought.view.assessment.AssignmentFeedback.edit}}}'},
+								{ tag: 'span', cls: 'link delete', html: '{{{NextThought.view.assessment.AssignmentFeedback.delete}}}'}
 							]}}
 						]}
 					]
@@ -96,7 +96,7 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 			},
 			'save': 'addFeedback',
 			'no-body-content': function(editor, el) {
-				editor.markError(el, 'You need to type something');
+				editor.markError(el, getString('NextThought.view.assessment.AssignmentFeedback.empty-editor'));
 				return false;
 			}
 		});
@@ -133,7 +133,7 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 
 		this.history = history;
 
-		var s = 'The comments below will only be visible to you and your {0}.',
+		var s = getString('NextThought.view.assessment.AssignmentFeedback.visibility-message') + ' {0}.',
 			header = this.down('box[name=title]'),
 			feedback = history.get('Feedback').get('href');
 
@@ -163,7 +163,15 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 
 		this.mon(this.feedbackList, 'itemclick', 'onFeedbackClick');
 
-		header.messageEl.update(Ext.String.format(s, (isMe(history.get('Creator')) ? 'instructor' : 'student')));
+		header.messageEl.update(
+			Ext.String.format(
+				s,
+				(isMe(history.get('Creator')) ?
+					getString('NextThought.view.assessment.AssignmentFeedback.visibility-instr') :
+					getString('NextThought.view.assessment.AssignmentFeedback.visibility-student')
+				)
+			)
+		);
 
 		this.show();
 	},
@@ -224,7 +232,7 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 			enableObjectControls: false, //lets not open too much complexity yet.
 			listeners: {
 				save: function(editor, record, value) {
-					editor.mask('Saving...');
+					editor.mask(getString('NextThought.view.assessment.AssignmentFeedback.editor-mask'));
 					if (!record) {
 						console.error('No record!');
 						return;
@@ -236,7 +244,10 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 							record.resumeEvents();
 							editor.unmask();
 							if (!s) {
-								alert({title: 'Oops!', msg: 'Something went wrong.'});
+								alert({
+									title: getString('NextThought.view.assessment.AssignmentFeedback.error-title'),
+									msg: getString('NextThought.view.assessment.AssignmentFeedback.error-msg')
+								});
 								console.error('Failled to update feedback');
 								return;
 							}

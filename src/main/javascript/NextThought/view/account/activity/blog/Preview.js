@@ -8,7 +8,7 @@ Ext.define('NextThought.view.account.activity.blog.Preview', {
 
 	defaultType: 'activity-preview-blog-reply',
 
-	toolbarTpl: Ext.DomHelper.markup({ cls: 'thought-label', html: 'Thought'}),
+	toolbarTpl: Ext.DomHelper.markup({ cls: 'thought-label', html: '{{{NextThought.view.account.activity.blog.Preview.label}}}'}),
 
 
 	getCommentCount: function(record) {
@@ -121,7 +121,7 @@ Ext.define('NextThought.view.account.activity.blog.Reply', {
 		this.record.removeObserverForField(this, 'body', this.updateContent, this);
 
 		//Now update the body to the same text the server uses.
-		this.bodyEl.update('This item has been deleted.');
+		this.bodyEl.update(getString('NextThought.view.account.activity.blog.Reply.deleted'));
 		this.addCls('deleted');
 	}
 });

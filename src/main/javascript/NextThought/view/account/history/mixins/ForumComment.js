@@ -8,7 +8,7 @@ Ext.define('NextThought.view.account.history.mixins.ForumComment', {
 	showCreator: true,
 	previewField: 'bodyPreview',
 	quotePreview: false,
-	verb: 'commented',
+	verb: getString('NextThought.view.account.history.mixins.ForumComment.commented'),
 
 	fillInData: function(rec) {
 		this.callParent(arguments);

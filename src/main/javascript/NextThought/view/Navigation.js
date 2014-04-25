@@ -33,7 +33,7 @@ Ext.define('NextThought.view.Navigation', {
 				{ cls: 'branding' },
 				{
 					'data-view': 'content',
-					'data-qtip': 'Content',
+					'data-qtip': '{{{NextThought.view.Navigation.content}}}',
 					cls: 'content x-menu',
 					cn: [
 						{ cls: 'box' },
@@ -49,16 +49,16 @@ Ext.define('NextThought.view.Navigation', {
 				}
 			]
 		},
-		{ cls: 'library', 'data-qtip': 'Library', 'data-view': 'library', cn: [
+		{ cls: 'library', 'data-qtip': '{{{NextThought.view.Navigation.library}}}', 'data-view': 'library', cn: [
 			{cls: 'box'}
 		]},
-		{ cls: 'forums', 'data-qtip': 'Forums', 'data-view': 'forums', cn: [
+		{ cls: 'forums', 'data-qtip': '{{{NextThought.view.Navigation.forums}}}', 'data-view': 'forums', cn: [
 			{cls: 'box'}
 		] },
-		{ cls: 'contacts', 'data-qtip': 'Contacts', 'data-view': 'contacts', cn: [
+		{ cls: 'contacts', 'data-qtip': '{{{NextThought.view.Navigation.contacts}}}', 'data-view': 'contacts', cn: [
 			{cls: 'box'}
 		] },
-		{ cls: 'search x-menu', 'data-qtip': 'Search', 'data-view': 'search', cn: [
+		{ cls: 'search x-menu', 'data-qtip': '{{{NextThought.view.Navigation.search}}}', 'data-view': 'search', cn: [
 			{cls: 'box'}
 		] }
 	]),

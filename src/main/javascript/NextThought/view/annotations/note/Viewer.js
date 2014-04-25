@@ -213,7 +213,7 @@ Ext.define('NextThought.view.annotations.note.Viewer', {
 	warnBeforeDismissingEditor: function() {
 		Ext.defer(alert, 1, null, [
 			{
-				msg: 'You are currently creating a reply, please save or cancel it first.'
+				msg: getString('NextThought.view.annotations.note.Viewer.open-editor')
 			}
 		]);
 	}

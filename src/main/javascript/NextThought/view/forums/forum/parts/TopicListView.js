@@ -20,7 +20,7 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 					{ cls: 'controls', cn: [
 						{ cls: 'favorite {favoriteState}' },
 						{ cls: 'like {likeState} {[values.LikeCount==0?\"\":"keep"]}', html: '{[values.LikeCount==0?\"\":values.LikeCount]}' },
-						{ tag: 'tpl', 'if': 'this.showReport(values)', cn: { cls: 'reports off', 'data-qtip': 'Reports'} }
+						{ tag: 'tpl', 'if': 'this.showReport(values)', cn: { cls: 'reports off', 'data-qtip': '{{{NextThought.view.forums.forum.parts.TopicListView.reports}}}'} }
 					]},
 					{ cls: 'avatar', style: 'background: url({Creator:avatarURL})'},
 					{ cls: 'header', cn: [
@@ -29,14 +29,18 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 					]},
 					{ cls: 'meta', cn: [
 						{ tag: 'tpl', 'if': 'matches', cn: [
-							{ tag: 'span', cls: 'matches', html: '{matches:plural("Match", "Matches")} for &ldquo;{searchTerm}&rdquo;'}
+							{ tag: 'span', cls: 'matches', html: '{matches:plural("Match")} {{{NextThought.view.forums.forum.parts.TopicListView.for}}} &ldquo;{searchTerm}&rdquo;'}
 						]},
 						{ tag: 'span', cls: 'count', html: '{PostCount:plural(parent.kind)}'},
 						{ tag: 'tpl', 'if': 'values[\'NewestDescendant\'] && values[\'NewestDescendant\'].isComment', cn: [
-							{ tag: 'span', cls: 'active', html: '{NewestDescendant.data.Creator:displayName("You")} replied {NewestDescendant.data.CreatedTime:ago}'}
+							{
+								tag: 'span',
+								cls: 'active',
+								html: '{NewestDescendant.data.Creator:displayName("You")} {{{NextThought.view.forums.forum.parts.TopicListView.replied}}} {NewestDescendant.data.CreatedTime:ago}'
+							}
 						]},
 						{ tag: 'tpl', 'if': '!values[\'NewestDescendant\'] || !values[\'NewestDescendant\'].isComment', cn: [
-							{ tag: 'span', cls: 'active', html: '{Creator:displayName("You")} posted {CreatedTime:ago}'}
+							{ tag: 'span', cls: 'active', html: '{Creator:displayName("You")} {{{NextThought.view.forums.forum.parts.TopicListView.posted}}} {CreatedTime:ago}'}
 						]}
 					]}
 				]}
@@ -61,7 +65,7 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 
 	emptyText: Ext.DomHelper.markup({
 		cls: 'empty-forum',
-		html: 'There are no active discussions. Be the first to start one.'
+		html: '{{{NextThought.view.forums.forum.parts.TopicListView.empty}}}'
 	}),
 
 
@@ -83,7 +87,7 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 		if (!me.record.getLink('add')) {
 			me.emptyText = Ext.DomHelper.markup({
 				cls: 'empty-forum',
-				html: 'There are currently no active discussions in this forum.'
+				html: '{{{NextThought.view.forums.forum.parts.TopicListView.emptynoadd}}}'
 			});
 		}
 

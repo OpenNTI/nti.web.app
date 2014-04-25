@@ -126,7 +126,7 @@ Ext.define('NextThought.view.courseware.dashboard.widget.TopDiscusssionsView', {
 			{ cls: 'avatar'},
 			{cls: 'meta', cn: [
 				{cls: 'title', html: '{title}'},
-				{tag: 'span', cls: 'by', html: 'By {Creator}'},
+				{tag: 'span', cls: 'by', html: '{{{NextThought.view.courseware.dashboard.widget.TopDiscusssionsView.by}}}'},
 				{tag: 'span', cls: 'time', html: '{[TimeUtils.timeDifference(new Date(),values["CreatedTime"])]}'}
 			]},
 			{cls: 'snippet', html: '{compiledBody}'},

@@ -21,7 +21,7 @@ Ext.define('NextThought.view.contacts.Card', {
 				cls: 'meta',
 				cn: [
 					{ cls: 'name', html: '{name}', 'data-field': 'name'},
-					{ cls: 'add-to-contacts', html: 'ADD'},
+					{ cls: 'add-to-contacts', html: '{{{NextThought.view.contacts.Card.add}}}'},
 					{ tag: 'tpl', 'if': '!hideProfile && email', cn: [
 						{ cls: 'email', html: '{email}', 'data-field': 'email' }
 					]},
@@ -32,7 +32,7 @@ Ext.define('NextThought.view.contacts.Card', {
 								{ tag: 'span', html: '{role}', 'data-field': 'role'}
 							]},
 							{ tag: 'tpl', 'if': 'role && affiliation', cn: [
-								{tag: 'span', cls: 'separator', html: ' at '}
+								{tag: 'span', cls: 'separator', html: ' {{{NextThought.view.contacts.Card.at}}} '}
 							]},
 							{ tag: 'tpl', 'if': 'affiliation', cn: [
 								{ tag: 'span', html: '{affiliation}', 'data-field': 'affiliation' }
@@ -47,12 +47,12 @@ Ext.define('NextThought.view.contacts.Card', {
 					]},
 
 					{ cls: 'actions', cn: [
-						{ cls: 'chat', html: 'Chat'}
+						{ cls: 'chat', html: '{{{NextThought.view.contacts.Card.chat}}}'}
 					]}
 				]
 			},
 			{
-				cls: 'nib', 'data-qtip': 'Options'
+				cls: 'nib', 'data-qtip': '{{{NextThought.view.contacts.Card.options}}}'
 			}
 		]
 	}),
@@ -86,21 +86,21 @@ Ext.define('NextThought.view.contacts.Card', {
 
 		this.mon(this.el, 'click', this.clicked, this);
 
-        if(Ext.is.iOS){
-            this.mon(this.el, 'mouseup', this.mouseup, this);
-        }
+		if (Ext.is.iOS) {
+			this.mon(this.el, 'mouseup', this.mouseup, this);
+		}
 
 		this.updatePresenceState();
 	},
 
 
-    mouseup: function(e){
-        var nib = e.getTarget('.nib'),
-            input = Ext.get('my-contacts').down('input');
-        if(nib && window.innerHeight < 600){
-            input.blur();
-        }
-    },
+	mouseup: function(e) {
+		var nib = e.getTarget('.nib'),
+			input = Ext.get('my-contacts').down('input');
+		if (nib && window.innerHeight < 600) {
+			input.blur();
+		}
+	},
 
 	clicked: function(e) {
 		var nib = e.getTarget('.nib');

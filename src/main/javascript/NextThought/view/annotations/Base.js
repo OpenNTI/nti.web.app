@@ -277,7 +277,7 @@ Ext.define('NextThought.view.annotations.Base', {
 
 		if (this.allowShare) {
 			items.push({
-				text: m.isModifiable ? 'Share With...' : 'Get Info...',
+				text: m.isModifiable ? getString('NextThought.view.annotations.Base.share') : getString('NextThought.view.annotations.Base.get'),
 				handler: function() {
 					m.ownerCmp.fireEvent('share-with', m.record);
 				}

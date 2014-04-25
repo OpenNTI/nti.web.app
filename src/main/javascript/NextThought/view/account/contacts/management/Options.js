@@ -13,10 +13,10 @@ Ext.define('NextThought.view.account.contacts.management.Options', {
 		}
 	},
 	items: [
-		{ text: 'Settings', cls: 'label', allowUncheck: false, header: true},
+		{ text: getString('NextThought.view.account.contacts.management.Options.settings-label'), cls: 'label', allowUncheck: false, header: true},
     //		{ text: 'Mute', allowSelect:true},
     //		{ text: 'Block', allowSelect:true},
-		{ text: 'Remove from contacts', cls: 'no-checkbox', removeContact: true, allowSelect: true}
+		{ text: getString('NextThought.view.account.contacts.management.Options.remove'), cls: 'no-checkbox', removeContact: true, allowSelect: true}
 	],
 
 	handleClick: function(item) {

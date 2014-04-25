@@ -42,7 +42,7 @@ Ext.define('NextThought.view.menus.Reports', {
 		}
 
 		if (!Ext.isEmpty(items)) {
-			items.unshift({ xtype: 'labeledseparator', text: 'Reports', height: 1});
+			items.unshift({ xtype: 'labeledseparator', text: getString('NextThought.view.menus.Reports.reports'), height: 1});
 			me.add(items);
 		}
 
@@ -65,9 +65,9 @@ Ext.define('NextThought.view.menus.Reports', {
 
 		var win = Ext.widget('iframe-window', {
 				width: 'max',
-				saveText: 'Open in new window',
+				saveText: getString('NextThought.view.menus.Reports.savetext'),
 				link: href,
-				loadingText: 'Generating Report...'
+				loadingText: getString('NextThought.view.menus.Reports.loadingtext')
 			});
 
 		win.show();

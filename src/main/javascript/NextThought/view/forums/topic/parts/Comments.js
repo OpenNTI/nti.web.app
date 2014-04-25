@@ -31,7 +31,7 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 					'data-depth': '{depth}',
 					cn: [
 						{ cls: 'wrap', 'data-commentid': '{ID}', cn: [
-							{ cls: 'body', html: 'This item has been deleted.'},
+							{ cls: 'body', html: '{{{NextThought.view.forums.topic.parts.Comments.deleted}}}'},
 							{ cls: 'foot', cn: [
 								{ tag: 'tpl', 'if': 'depth == 0 &amp;&amp; ReferencedByCount &gt; 0', cn: [
 									{ tag: 'span', cls: 'comments link toggle', html: '{ReferencedByCount:plural("Comment")}'}
@@ -53,7 +53,7 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 							{ cls: 'meta', cn: [
 								{ tag: 'span', html: '{Creator:displayName()}', cls: 'name link'},
 								{ tag: 'tpl', 'if': 'depth &gt; 4', cn: [
-									{ tag: 'span', html: 'Replied to {repliedTo}'}
+									{ tag: 'span', html: '{{{NextThought.view.forums.topic.parts.Comments.repliedto}}}'}
 								]},
 								{ tag: 'tpl', 'if': 'depth &lt; 5', cn: [
 									{ tag: 'span', cls: 'datetime nodot', html: '{CreatedTime:ago}'}
@@ -64,13 +64,17 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 								{ tag: 'tpl', 'if': 'depth === 0', cn: [
 									{ tag: 'span', cls: 'comments link toggle', html: '{ReferencedByCount:plural("Comment")}'}
 								]},
-								{ tag: 'span', cls: 'reply thread-reply link', html: 'Reply'},
+								{ tag: 'span', cls: 'reply thread-reply link', html: '{{{NextThought.view.forums.topic.parts.Comments.reply}}}'},
 								{ tag: 'tpl', 'if': 'isModifiable', cn: [
-									{ tag: 'span', cls: 'edit link', html: 'Edit'},
-									{ tag: 'span', cls: 'delete link', html: 'Delete'}
+									{ tag: 'span', cls: 'edit link', html: '{{{NextThought.view.forums.topic.parts.Comments.edit}}}'},
+									{ tag: 'span', cls: 'delete link', html: '{{{NextThought.view.forums.topic.parts.Comments.delete}}}'}
 								]},
 								{ tag: 'tpl', 'if': '!isModifiable', cn: [
-									{ tag: 'span', cls: 'flag link {[values.flagged? "on" : "off"]}', html: '{[values.flagged? "Reported" : "Report"]}'}
+									{
+										tag: 'span',
+										cls: 'flag link {flagged:boolStr("on","off")}',
+										html: '{flagged:boolStr("NextThought.view.forums.topic.parts.Comments.reported","NextThought.view.forums.topic.parts.Comments.report")}'
+									}
 								]}
 							]},
 
@@ -338,13 +342,13 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 		width = el.down('.wrap').getWidth();
 
 		if (e.getTarget('.reply')) {
-			this.refocusVerb = 'creating';
+			this.refocusVerb = getString('NextThought.view.forums.topic.parts.Comments.creatingverb');
 			this.replyTo(record, el, width);
 			return;
 		}
 
 		if (e.getTarget('.edit')) {
-			this.refocusVerb = 'editing';
+			this.refocusVerb = getString('NextThought.view.forums.topic.parts.Comments.editingverb');
 			delete this.isNewRecord;
 			t = el.down('.body');
 			t.hide();
@@ -361,6 +365,7 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 
 		if (e.getTarget('.flag') && !record.isFlagged()) {
 			me.flagging = true;
+
 			TemplatesForNotes.reportInappropriate(function(btn) {
 				delete me.flagging;
 				if (btn === 'ok') { record.flag(me); }
@@ -429,12 +434,12 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 	deleteRecord: function(record) {
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
-			msg: 'This will permanently remove this comment.',
+			msg: getString('NextThought.view.forums.topic.parts.Comments.deletewarning'),
 			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 			scope: this,
 			icon: 'warning-red',
-			buttonText: {'ok': 'Delete'},
-			title: 'Are you sure?',
+			buttonText: {'ok': getString('NextThought.view.forums.topic.parts.Comments.deletebutton')},
+			title: getString('NextThought.view.forums.topic.parts.Comments.deletetitle'),
 			fn: function(str) {
 				if (str === 'ok') {
 					var href = record.get('href'),
@@ -567,7 +572,7 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 			this.refocusEditor();
 			return;
 		}
-		this.refocusVerb = 'creating';
+		this.refocusVerb = getString('NextThought.view.forums.topic.parts.Comments.creatingverb');
 		this.isNewRecord = true;
 		this.openEditor(null, this.el.down('.new-root'));
 	},
@@ -581,7 +586,7 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 
 
 	refocusEditor: function() {
-		var msg = 'You are currently ' + (this.refocusVerb || 'creating') + ' a reply, please save or cancel it first.';
+		var msg = getFormattedString('NextThought.view.forums.topic.parts.Comments.focuswarning', {verb: this.refocusVerb});
 
 		if (!this.editor.isActive()) { return; }
 		this.editor.el.scrollCompletelyIntoView(this.el.getScrollingEl());

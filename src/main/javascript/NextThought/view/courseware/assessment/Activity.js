@@ -10,7 +10,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header', html: '{title}'},
 		{ cls: 'list'},
-		{ cls: 'more hidden', html: 'More', tabIndex: 0}
+		{ cls: 'more hidden', html: '{{{NextThought.view.courseware.assessment.Activity.more}}}', tabIndex: 0}
 	]),
 
 	renderSelectors: {
@@ -234,27 +234,28 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 		}
 
 		if (grade && grade.get('value')) {
-			me.addEvent(me.getEventConfig('Grade Received', assignment, grade.get('Last Modified')));
+			me.addEvent(me.getEventConfig(getString('NextThought.view.courseware.assessment.Activity.gradereceived'), assignment, grade.get('Last Modified')));
 		}
 
 		if (dateOpens < now) {
-			me.addEvent(me.getEventConfig('New Assignment:', assignment, dateOpens));
+			me.addEvent(me.getEventConfig(getString('NextThought.view.courseware.assessment.Activity.newassignment'), assignment, dateOpens));
 		}
 
 		if (dateDue < now && (!dateCompleted || dateCompleted > dateDue) && hasParts) {
-			me.addEvent(me.getEventConfig('Assignment Past Due:', assignment, dateDue));
+			me.addEvent(me.getEventConfig(getString('NextThought.view.courseware.assessment.Activity.lateassignment'), assignment, dateDue));
 		}
 
 		if (dateCompleted && submission && (submission.get('parts') || []).length > 0) {
-			me.addEvent(me.getEventConfig('Assignment Submitted:', assignment, dateCompleted));
+			me.addEvent(me.getEventConfig(getString('NextThought.view.courseware.assessment.Activity.submittedassignment'), assignment, dateCompleted));
 		}
 	},
 
 
 	addFeedback: function(f) {
 		var c = f.get('Creator'),
-			str = isMe(c) ? ' commented on' : ' left feedback on',
-			label = ((isMe(c) && 'You') || '--') + str,
+			label = isMe(c) ?
+				getFormattedString('NextThought.view.courseware.assessment.Activity.youfeedback', {name: 'You'}) :
+				getFormattedString('NextThought.view.courseware.assessment.Activity.theyfeedback', {name: '--'}),
 			r = this.addEvent(this.getEventConfig(label, f.get('AssignmentId'), f.get('CreatedTime')));
 
 		if (r) {

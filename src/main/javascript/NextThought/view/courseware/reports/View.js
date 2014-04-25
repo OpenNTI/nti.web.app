@@ -18,9 +18,9 @@ Ext.define('NextThought.view.courseware.reports.View', {
 		'course-report': {
 			xtype: 'course-report-link',
 			id: 'course-report',
-			title: 'Course Report',
+			title: getString('NextThought.view.courseware.reports.View.coursetitle'),
 			about: Ext.DomHelper.markup({tag: 'span', cn: [
-				'The Course Summary Report includes information about student enrollment, self-assessments, assignments, student activity, and discussions.'
+				{html: '{{{NextThought.view.courseware.reports.View.coursereport}}}'}
 			]}),
 			courseNumber: '',
 			courseName: ''
@@ -28,44 +28,44 @@ Ext.define('NextThought.view.courseware.reports.View', {
 		'student-report': {
 			xtype: 'course-report-gif',
 			id: 'student-report',
-			title: 'Student Reports',
+			title: getString('NextThought.view.courseware.reports.View.studenttitle'),
 			about: Ext.DomHelper.markup({tag: 'span', cn: [
-				'The Student Participation Report includes information about a student\'s forum and discussion participation as ' +
-				'well as assignments. To view or download reports for individual students visit the ',
-				{tag: 'a', cls: 'target', html: 'course roster'}, '.'
+				getFormattedString('NextThought.view.courseware.reports.View.studentreport', {
+					roster: '<a class=\'target\'>' + getString('NextThought.view.courseware.reports.View.roster') + '.</a>'
+				})
 			]}),
 			src: 'resources/images/elements/report_student.gif'
 		},
 		'forum-report': {
 			xtype: 'course-report-gif',
 			id: 'forum-report',
-			title: 'Forum Reports',
+			title: getString('NextThought.view.courseware.reports.View.forumtitle'),
 			about: Ext.DomHelper.markup({tag: 'span', cn: [
-				'The Forum Participation Report includes information about weekly forum participation, top commenters, and comment activity per student. ' +
-				'You can view and download forum reports from the ',
-				{tag: 'a', cls: 'target', html: 'Discussions tab'}, '.'
+				getFormattedString('NextThought.view.courseware.reports.View.forumreport', {
+					tab: '<a class=\'target\'>' + getString('NextThought.view.courseware.reports.View.discussion') + '.</a>'
+				})
 			]}),
 			src: 'resources/images/elements/report_forum.gif'
 		},
 		'topic-report': {
 			xtype: 'course-report-gif',
 			id: 'topic-report',
-			title: 'Discussion Reports',
+			title: getString('NextThought.view.courseware.reports.View.discussiontitle'),
 			about: Ext.DomHelper.markup({tag: 'span', cn: [
-				'The Discussion Participation Report includes information about weekly participation, top commenters, and comment activity per student. ' +
-				'These reports can be found alongside each ',
-				{tag: 'a', cls: 'target', html: 'discussion'}, '.'
+				getFormattedString('NextThought.view.courseware.reports.View.discussionreport', {
+					discussion: '<a class=\'target\'>' + getString('NextThought.view.courseware.reports.View.discussion') + '.</a>'
+				})
 			]}),
 			src: 'resources/images/elements/report_discussion.gif'
 		},
 		'assignment-report': {
 			xtype: 'course-report-gif',
 			id: 'assignment-report',
-			title: 'Assignment Reports',
+			title: getString('NextThought.view.courseware.reports.View.assignmenttitle'),
 			about: Ext.DomHelper.markup({tag: 'span', cn: [
-				'The Assignment Report includes information about submissions, results, and answers on a particular assignment. ' +
-				'You can view and download these reports from the ',
-				{tag: 'a', cls: 'target', html: 'Assignments tab'}, '.'
+				getFormattedString('NextThought.view.courseware.reports.View.assignmentreport', {
+					assignment: '<a class=\'target\'>' + getString('NextThought.view.courseware.reports.View.assignment') + '.</a>'
+				})
 			]}),
 			src: 'resources/images/elements/assignment_report.gif'
 		}

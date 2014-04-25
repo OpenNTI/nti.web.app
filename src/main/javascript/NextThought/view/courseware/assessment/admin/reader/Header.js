@@ -28,13 +28,13 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 
 		if (submission && (submission.get('parts') || []).length > 0) {
 			if (this.assignmentHistory.get('due') < submission.get('CreatedTime')) {
-				this.lateEl.update('Late');
+				this.lateEl.update(getString('NextThought.view.courseware.assessment.admin.reader.Header.late'));
 			} else {
 				this.lateEl.addCls('good');
-				this.lateEl.update('On Time');
+				this.lateEl.update(getString('NextThought.view.courseware.assessment.admin.reader.Header.ontime'));
 			}
 		} else {
-			this.lateEl.update('Not Submitted');
+			this.lateEl.update(getString('NextThought.view.courseware.assessment.admin.reader.Header.notsubmitted'));
 		}
 
 		//TODO: if the submission was late, set the lateEl to X units late.

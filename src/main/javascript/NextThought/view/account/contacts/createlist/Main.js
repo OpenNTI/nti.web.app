@@ -10,7 +10,13 @@
 	items: [
 		{xtype: 'container', layout: 'anchor', cls: 'input-wrapper', items: [
 			{xtype: 'box', name: 'namelabel', cls: 'label', html: 'List name'},
-			{xtype: 'simpletext', name: 'name', cls: 'input-box name group-name', inputType: 'text', placeholder: 'Choose a name for your list...'}
+			{
+				xtype: 'simpletext',
+				name: 'name',
+				cls: 'input-box name group-name',
+				inputType: 'text',
+				placeholder: getString('NextThought.view.account.contacts.createlist.Main.name-placeholder')
+			}
 		]},
 		{xtype: 'box', hidden: true, name: 'error', autoEl: {cls: 'error-box', tag: 'div',
 			cn: [
@@ -18,37 +24,55 @@
 			]}
 		},
 		{xtype: 'container', cls: 'submit',	layout: {type: 'hbox', pack: 'end'}, items: [
-			{xtype: 'button', ui: 'secondary', scale: 'large', name: 'cancel', text: 'Cancel', handler: function(b) {
-				b.up('window').close();
-			}},
-			{xtype: 'button', ui: 'primary', scale: 'large', name: 'submit', text: 'Create', disabled: true, minWidth: 96}
+			{
+				xtype: 'button',
+				ui: 'secondary',
+				scale: 'large',
+				name: 'cancel',
+				text: getString('NextThought.view.account.contacts.createlist.Main.cancel'),
+				handler: function(b) {
+					b.up('window').close();
+				}
+			},
+			{
+				xtype: 'button',
+				ui: 'primary',
+				scale: 'large',
+				name: 'submit',
+				text: getString('NextThought.view.account.contacts.createlist.Main.create'),
+				disabled: true,
+				minWidth: 96
+			}
 		]}
 	],
 
 	afterRender: function() {
 		this.callParent(arguments);
 		this.mon(this.down('[name=name]'), {
-      scope: this,
-      changed: this.changed,
-      click: this.clearError,
-      specialkey: this.specialkey
-    });
-    this.mon(this.down('[name=submit]'), 'click', this.submitClicked, this);
+			scope: this,
+			changed: this.changed,
+			click: this.clearError,
+			specialkey: this.specialkey
+    	});
+		this.mon(this.down('[name=submit]'), 'click', this.submitClicked, this);
 	},
+
 
 	getListName: function() {
 		var name = this.down('[name=name]').getValue();
 		return name ? name.trim() : name;
 	},
 
-  specialkey: function(el, event) {
-    var val = el.lastValue,
-            empty = Ext.isEmpty(val);
 
-    if (event.getKey() === event.RETURN && !empty) {
-      this.submitClicked();
-    }
-  },
+	specialkey: function(el, event) {
+		var val = el.lastValue,
+			empty = Ext.isEmpty(val);
+
+		if (event.getKey() === event.RETURN && !empty) {
+			this.submitClicked();
+		}
+	},
+
 
 	changed: function(value, t) {
 		var val = value.trim(),
@@ -63,20 +87,23 @@
 		}
 	},
 
+
 	showError: function(errorText) {
 		var box = this.down('[name=error]');
 
-		errorText = errorText || 'An unknown error occurred. Please try again.';
+		errorText = errorText || getString('NextThought.view.account.contacts.createlist.Main.unknown-error');
 
 		//make main error field show up
 		box.el.down('.error-desc').update(errorText);
 		box.show();
 	},
 
-  submitClicked: function() {
-    this.clearError();
-    this.fireEvent('create-list', this.down('[name=submit]'));
-  },
+
+	submitClicked: function() {
+		this.clearError();
+		this.fireEvent('create-list', this.down('[name=submit]'));
+	},
+
 
 	clearError: function() {
 		var box = this.down('[name=error]');

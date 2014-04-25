@@ -5,7 +5,7 @@ Ext.define('NextThought.view.account.history.mixins.BlogEntryPost', {
 	keyVal: 'application/vnd.nextthought.forums.personalblogentrypost',
 
 	showCreator: true,
-	verb: 'shared a thought',
+	verb: getString('NextThought.view.account.history.mixins.BlogEntryPost.shared-thought'),
 	previewField: 'title',
 	quotePreview: false,
 	itemCls: 'post',

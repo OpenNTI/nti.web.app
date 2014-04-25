@@ -131,8 +131,8 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Videos', {
 				autoEl: {
 					cls: 'no-videos',
 					cn: [
-						{ cls: 'message', html: 'Videos are unavailable at this time.' },
-						{ cls: 'subtext', html: 'Please try again later.'}
+						{ cls: 'message', html: getString('NextThought.view.courseware.dashboard.tiles.Videos.notavailable') },
+						{ cls: 'subtext', html: getString('NextThought.view.courseware.dashboard.tiles.Videos.tryagain')}
 					]
 				}
 			});

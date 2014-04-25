@@ -22,7 +22,7 @@ Ext.define('NextThought.view.contacts.Search', {
 		{
 			xtype: 'container',
 			cls: 'search-field',
-			items: {xtype: 'simpletext', placeholder: 'Search for contacts...' }
+			items: {xtype: 'simpletext', placeholder: getString('NextThought.view.contacts.Search.placeholder') }
 		},
 		{
 			xtype: 'dataview',

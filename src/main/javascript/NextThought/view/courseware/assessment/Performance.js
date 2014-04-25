@@ -27,11 +27,11 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 				//	]
 				//} }
 
-				{ xtype: 'box', cls: 'grade-value', html: 'Not yet entered.', grade: true },
-				{ xtype: 'box', cls: 'label', html: 'Course Grade' },
+				{ xtype: 'box', cls: 'grade-value', html: getString('NextThought.view.courseware.assessment.Performance.notentered'), grade: true },
+				{ xtype: 'box', cls: 'label', html: getString('NextThought.view.courseware.assessment.Performance.coursegrade') },
 
-				{ xtype: 'box', cls: 'assignments-completed', html: '', msgTpl: '{0} of {1}' },
-				{ xtype: 'box', cls: 'label', html: 'Assignments Completed' }
+				{ xtype: 'box', cls: 'assignments-completed', html: '', msgTpl: getString('NextThought.view.courseware.assessment.Performance.outof') },
+				{ xtype: 'box', cls: 'label', html: getString('NextThought.view.courseware.assessment.Performance.completed') }
 			]
 		},
 		{xtype: 'grouping', title: 'All Grades',
@@ -154,7 +154,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 		var date = Ext.Date.format(record.get('assigned'), 'l F j \\a\\t g:i A');
 
 		if (!record || record.get('assigned') > new Date()) {
-			alert('This assignment will be availble on ' + date);
+			alert(getFormattedString('NextThought.view.courseware.assessment.Performance.notyet', {date: date}));
 			return;
 		}
 		this.fireEvent('goto-assignment', record.get('item'), $AppConfig.userObject);

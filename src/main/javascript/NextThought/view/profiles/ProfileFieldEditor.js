@@ -15,7 +15,10 @@ Ext.define('NextThought.view.profiles.ProfileFieldEditor', {
 
 	controlTemplateObj: {
 		cls: 'controls',
-		cn: [{cls: 'cancel', html: 'Cancel'}, {cls: 'save', html: 'Save'}]
+		cn: [
+			{cls: 'cancel', html: getString('NextThought.view.profiles.ProfileFieldEditor.cancel')},
+			{cls: 'save', html: getString('NextThought.view.profiles.ProfileFieldEditor.save')}
+		]
 	},
 
 

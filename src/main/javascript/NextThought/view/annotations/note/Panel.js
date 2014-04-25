@@ -65,9 +65,9 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 						{
 							cls: 'reply-options',
 							cn: [
-								{ cls: 'link reply', html: 'Reply' },
-								{ cls: 'link share', html: 'Share' },
-								{ cls: 'link more', 'data-qtip': 'Options', html: '&nbsp;'}
+								{ cls: 'link reply', html: '{{{NextThought.view.annotations.note.Panel.reply}}}' },
+								{ cls: 'link share', html: '{{{NextThought.view.annotations.note.Panel.share}}}' },
+								{ cls: 'link more', 'data-qtip': '{{{NextThought.view.annotations.note.Panel.options}}}', html: '&nbsp;'}
 							]
 						},
 						{ tag: 'span', cls: 'time' }
@@ -435,7 +435,7 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 		}
 
 		if (DomUtils.isEmpty(v.body)) {
-			me.editor.markError(me.editorEl.down('.content'), 'Please enter text before you save');
+			me.editor.markError(me.editorEl.down('.content'), getString('NextThought.view.annotations.note.Panel.empty-editor'));
 			return;
 		}
 		me.editorEl.mask('Saving...');

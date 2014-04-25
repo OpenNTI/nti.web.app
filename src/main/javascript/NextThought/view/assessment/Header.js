@@ -15,7 +15,7 @@ Ext.define('NextThought.view.assessment.Header', {
 			cn: [
         //				{ cls: 'favorite' },
         //				{ cls: 'like' },
-				{ cls: 'video', html: 'Related Videos' }
+				{ cls: 'video', html: '{{{NextThought.view.assessment.Header.related-videos}}}' }
 			]
 		},
 		{cls: 'title', html: '{title}'},

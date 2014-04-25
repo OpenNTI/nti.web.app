@@ -14,11 +14,11 @@ Ext.define('NextThought.view.menus.BlogTogglePublish', {
 	},
 
 	items: [{
-			text: 'Public',
+			text: getString('NextThought.view.menus.BlogTogglePublish.publish'),
 			published: true
 		},
 		{
-			text: 'Only Me',
+			text: getString('NextThought.view.menus.BlogTogglePublish.onlyme'),
 			published: false
 		}
 	],

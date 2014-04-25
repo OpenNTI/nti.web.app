@@ -20,11 +20,11 @@ Ext.define('NextThought.view.contacts.outline.View', {
 		{ cls: 'outline-list'},
 		{ tag: 'tpl', 'if': 'buttons', cn: { cls: 'buttons', cn: [
 			{ tag: 'tpl', 'if': 'canjoin', cn: {
-				cls: 'join join-{type} contact-button', html: 'Join {type:capitalize}' } },
+				cls: 'join join-{type} contact-button', html: '{{{NextThought.view.contacts.outline.View.join}}}' } },
 			{ tag: 'tpl', 'if': 'cancreate', cn: {
-				cls: 'create create-{type} contact-button', html: 'Create {type:capitalize}' } },
+				cls: 'create create-{type} contact-button', html: '{{{NextThought.view.contacts.outline.View.create}}}' } },
 			{ tag: 'tpl', 'if': 'hasSearch', cn: {
-				cls: 'contact-button search', html: 'Search', cn: [
+				cls: 'contact-button search', html: '{{{NextThought.view.contacts.outline.View.search}}}', cn: [
 					{tag: 'input', type: 'text'},
 					{cls: 'clear', style: {display: 'none'}}
 				]}

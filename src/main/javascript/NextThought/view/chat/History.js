@@ -11,7 +11,7 @@ Ext.define('NextThought.view.chat.History', {
 		'NextThought.model.converters.GroupByTime'
 	],
 
-	title: 'Chat History',
+	title: getString('NextThought.view.chat.History.title'),
 	ui: 'chat-history',
 	cls: 'chat-history',
 	defaultType: 'chat-history-item',
@@ -148,7 +148,7 @@ Ext.define('NextThought.view.chat.History', {
 				xtype: 'box',
 				autoEl: {
 					cls: 'more',
-					html: 'Load More'
+					html: getString('NextThought.view.chat.History.load-more')
 				},
 				listeners: {
 					click: {
@@ -164,7 +164,7 @@ Ext.define('NextThought.view.chat.History', {
 				xtype: 'box',
 				autoEl: {
 					cls: 'no-history',
-					html: 'No chat History'
+					html: getString('NextThought.view.chat.History.empty-state')
 				}
 			});
 		}

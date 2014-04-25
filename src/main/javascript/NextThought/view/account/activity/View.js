@@ -13,7 +13,7 @@ Ext.define('NextThought.view.account.activity.View', {
 	iconCls: 'activity',
 	title: 'Activity',
 	tabConfig: {
-		tooltip: 'Recent Activity'
+		tooltip: getString('NextThought.view.account.activity.View.tooltip')
 	},
 
 	ui: 'activity',
@@ -44,7 +44,7 @@ Ext.define('NextThought.view.account.activity.View', {
 		{ cls: 'filters-container', cn: [
 			{cls: 'activity-filters', cn: [
 				{cls: 'tabs', cn: [
-					{cls: 'tab from x-menu', html: 'Only Me'},
+					{cls: 'tab from x-menu', html: '{{{NextThought.view.account.activity.View.only-me}}'},
 					{cls: 'tab types x-menu'}
 				]}
 			]}
@@ -52,11 +52,40 @@ Ext.define('NextThought.view.account.activity.View', {
 	),
 
 	typesFilterArray: [
-		{contacts: true, community: true, text: 'Discussions & Thoughts', filter: 'discussions', type: 'discusssions'},
-		{me: true, text: 'Highlights & Notes', filter: 'notes', type: 'menotes'},
-		{contacts: true, community: true, text: 'Notes', filter: 'notes', type: 'communitynotes' },
-		{me: true, text: 'Bookmarks', filter: 'bookmarks', type: 'bookmarks'},
-		{contacts: true, community: true, text: 'Contact Requests', filter: 'contact', type: 'contactrequests', hideIfCoppa: true }
+		{
+			contacts: true,
+			community: true,
+			text: getString('NextThought.view.account.activity.View.discussions-thoughts'),
+			filter: 'discussions',
+			type: 'discusssions'
+		},
+		{
+			me: true,
+			text: getString('NextThought.view.account.activity.View.highlight-note'),
+			filter: 'notes',
+			type: 'menotes'
+		},
+		{
+			contacts: true,
+			community: true,
+			text: getString('NextThought.view.account.activity.View.note'),
+			filter: 'notes',
+			type: 'communitynotes'
+		},
+		{
+			me: true,
+			text: getString('NextThought.view.account.activity.View.bookmarks'),
+			filter: 'bookmarks',
+			type: 'bookmarks'
+		},
+		{
+			contacts: true,
+			community: true,
+			text: getString('NextThought.view.account.activity.View.contactrequest'),
+			filter: 'contact',
+			type: 'contactrequests',
+			hideIfCoppa: true
+		}
 	],
 
 	layout: {
@@ -91,7 +120,7 @@ Ext.define('NextThought.view.account.activity.View', {
 		});
 
 		this.fromMenu = Ext.widget('menu', {
-			title: 'Show Activity From',
+			title: getString('NextThought.view.account.activity.View.from-title'),
 			cls: 'menu from-menu',
 			width: 258,
 			defaults: {
@@ -105,9 +134,30 @@ Ext.define('NextThought.view.account.activity.View', {
 				}
 			},
 			items: [
-				{cls: 'option', text: 'Only Me', type: 'onlyme', checked: false, isMe: true, tabFilter: 'MeOnly'},
-				{cls: 'option', text: 'My Contacts', type: 'contacts', checked: false, isContacts: true, tabFilter: 'IFollow'},
-				{cls: 'option', text: 'Everyone', type: 'community', checked: false, isCommunity: true, tabFilter: 'inCommunity'}
+				{
+					cls: 'option',
+					text: getString('NextThought.view.account.activity.View.from-only-me'),
+					type: 'onlyme',
+					checked: false,
+					isMe: true,
+					tabFilter: 'MeOnly'
+				},
+				{
+					cls: 'option',
+					text: getString('NextThought.view.account.activity.View.from-contacts'),
+					type: 'contacts',
+					checked: false,
+					isContacts: true,
+					tabFilter: 'IFollow'
+				},
+				{
+					cls: 'option',
+					text: getString('NextThought.view.account.activity.View.from-everyone'),
+					type: 'community',
+					checked: false,
+					isCommunity: true,
+					tabFilter: 'inCommunity'
+				}
 			]
 		});
 

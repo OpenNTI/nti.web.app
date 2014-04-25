@@ -102,7 +102,7 @@ Ext.define('NextThought.view.annotations.note.Templates', {
 		//		});
 
 		flagItem = new Ext.Action({
-			text: 'Report',
+			text: getString('NextThought.view.annotations.note.Templates.flag-option'),
 			cls: 'reply-option flag',
 			itemId: 'Flag',
 			scope: this,
@@ -111,7 +111,7 @@ Ext.define('NextThought.view.annotations.note.Templates', {
 		});
 
 		deleteItem = new Ext.Action({
-			text: 'Delete',
+			text: getString('NextThought.view.annotations.note.Templates.delete-option'),
 			cls: 'reply-option delete',
 			itemId: 'Delete',
 			scope: this,
@@ -222,9 +222,9 @@ Ext.define('NextThought.view.annotations.note.Templates', {
 			msg: 'This action cannot be undone.',
 			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 			icon: 'warning-red',
-			buttonText: {'ok': 'Report'},
+			buttonText: {'ok': getString('NextThought.view.annotations.note.Templates.flag-option')},
 			ui: 'caution',
-			title: 'Report content as inappropriate?',
+			title: getString('NextThought.view.annotations.note.Templates.waringing-title'),
 			fn: callback
 		});
 	}

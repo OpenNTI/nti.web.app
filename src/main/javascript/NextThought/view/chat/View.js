@@ -47,7 +47,7 @@ Ext.define('NextThought.view.chat.View', {
 						{
 							xtype: 'button',
 							ui: 'flat',
-							text: 'Cancel',
+							text: getString('NextThought.view.chat.View.cancel'),
 							scale: 'large',
 							handler: function(btn) {
 								this.up('chat-window').onFlagToolClicked();
@@ -57,7 +57,7 @@ Ext.define('NextThought.view.chat.View', {
 							xtype: 'button',
 							flagButton: true,
 							ui: 'caution',
-							text: 'Report',
+							text: getString('NextThought.view.chat.View.report'),
 							scale: 'large',
 							disabled: true,
 							handler: function() {
@@ -205,7 +205,7 @@ Ext.define('NextThought.view.chat.View', {
 
 	showError: function(errorObject) {
 		var box = this.down('[name=error]'),
-			errorText = errorObject.message || 'An unknown error occurred. Please try again.';
+			errorText = errorObject.message || getString('NextThought.view.chat.View.error');
 		//make main error field show up
 		box.el.down('.error-desc').update(errorText);
 		box.show();

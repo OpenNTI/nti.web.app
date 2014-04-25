@@ -9,7 +9,7 @@ Ext.define('NextThought.view.account.code.Main', {
 
   items: [
     {xtype: 'container', layout: 'anchor', cls: 'input-wrapper', items: [
-            {xtype: 'simpletext', name: 'code', cls: 'input-box', inputType: 'text', placeholder: 'Enter Code'}
+            {xtype: 'simpletext', name: 'code', cls: 'input-box', inputType: 'text', placeholder: getString('NextThought.view.account.code.Main.enter-code')}
     ]},
     {xtype: 'box', hidden: true, name: 'error', autoEl: {cls: 'error-box', tag: 'div',
             cn: [
@@ -18,10 +18,17 @@ Ext.define('NextThought.view.account.code.Main', {
             ]}
     },
     {xtype: 'container', cls: 'submit', layout: {type: 'hbox', pack: 'end'}, items: [
-            {xtype: 'button', ui: 'secondary', scale: 'large', name: 'cancel', text: 'Cancel', handler: function(b) {
-        b.up('window').close();
-            }},
-            {xtype: 'button', ui: 'primary', scale: 'large', name: 'submit', text: 'Submit', disabled: true}
+            {
+              xtype: 'button',
+              ui: 'secondary',
+              scale: 'large',
+              name: 'cancel',
+              text: getString('NextThought.view.account.code.Main.cancel'),
+              handler: function(b) {
+                b.up('window').close();
+              }
+            },
+            {xtype: 'button', ui: 'primary', scale: 'large', name: 'submit', text: getString('NextThought.view.account.code.Main.submit'), disabled: true}
     ]}
   ],
 

@@ -25,7 +25,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 		'completion': {
 			'property': 'completed',
 			'getGroupString': function(val) {
-				return val.get('completed') ? 'Completed' : 'Incomplete';
+				return val.get('completed') ?
+					getString('NextThought.view.courseware.assessment.assignments.View.complete') :
+					getString('NextThought.view.courseware.assessment.assignments.View.incomplete');
 			}
 		},
 		'due': {
@@ -187,7 +189,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 		}
 
 		if (Ext.fly(dom).hasCls('closed')) {
-			alert('This assignment will be availble on ' + date);
+			alert(getFormattedString('NextThought.view.courseware.assessment.assignments.View.available', { date: date}));
 			return;
 		}
 		this._showAssignment(record);

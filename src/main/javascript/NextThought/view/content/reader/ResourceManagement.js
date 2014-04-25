@@ -17,7 +17,7 @@ Ext.define('NextThought.view.content.reader.ResourceManagement', {
 	YOU_TUBE_IFRAME_QUERY: 'iframe[src*="youtube.com"]',
 	YOU_TUBE_BLOCKED_TPL: Ext.DomHelper.createTemplate({
 		cls: 'youtube blocked video',
-		html: 'YouTube appears to be blocked by your connection.'
+		html: getString('NextThought.view.content.reader.ResourceManagement.youtubeblocked')
 	}),
 
 
@@ -26,7 +26,7 @@ Ext.define('NextThought.view.content.reader.ResourceManagement', {
 		cn: [{
 			tag: 'a',
 			href: '#zoom',
-			'data-qtip': 'Enlarge',
+			'data-qtip': '{{{NextThought.view.content.reader.ResourceManagement.enlarge}}}',
 			cls: 'zoom disabled',
 			html: ' ',
 			'data-non-anchorable': true
@@ -40,7 +40,7 @@ Ext.define('NextThought.view.content.reader.ResourceManagement', {
 		cn: [{
 			tag: 'a',
 			href: '#slide',
-			'data-qtip': 'Open Slides',
+			'data-qtip': '{{{NextThought.view.content.reader.ResourceManagement.open-slide}}}',
 			cls: 'bar-cell slide',
 			html: ' '
 		},{
@@ -64,9 +64,9 @@ Ext.define('NextThought.view.content.reader.ResourceManagement', {
 			},{
 				tag: 'a',
 				href: '#mark',
-				'data-qtip': 'Comment on this',
+				'data-qtip': '{{{NextThought.view.content.reader.ResourceManagement.commentonthis}}}',
 				cls: 'mark',
-				html: 'Comment'
+				html: '{{{NextThought.view.content.reader.ResourceManagement.comment}}}'
 			}]
 		}]
 	}])),

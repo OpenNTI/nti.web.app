@@ -18,20 +18,20 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			autoEl: { cls: 'header', cn: [
 				{ cls: 'assignment-filterbar', cn: [
 					{ cls: 'third dropmenu student', cn: [
-						{ cls: 'label', html: 'All Students' }
+						{ cls: 'label', html: getString('NextThought.view.courseware.assessment.admin.performance.Root.allstudents') }
 					] },
 					{ cls: 'third dropmenu item', cn: [
-						{ cls: 'label', html: 'All Items' }
+						{ cls: 'label', html: getString('NextThought.view.courseware.assessment.admin.performance.Root.allitems') }
 					] },
 					{ cls: 'third search', cn: [
-						{ tag: 'input', type: 'text', placeholder: 'Search Students', required: 'required' },
+						{ tag: 'input', type: 'text', placeholder: getString('NextThought.view.courseware.assessment.admin.performance.Root.search'), required: 'required' },
 						{ cls: 'clear' }
 					] }
 				]},
 				{
 					cls: 'tools',
 					cn: [
-						{ tag: 'a', href: '{exportLink}', cls: 'download button', html: 'Export'}
+						{ tag: 'a', href: '{exportLink}', cls: 'download button', html: getString('NextThought.view.courseware.assessment.admin.performance.Root.export')}
 					]
 				}
 			]},
@@ -122,7 +122,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				{name: 'id', type: 'string', mapping: 'Username'},
 				{name: 'user', type: 'auto'},
 				{name: 'avatar', type: 'string', defaultValue: 'resources/images/icons/unresolved-user.png'},
-				{name: 'displayName', type: 'string', defaultValue: 'Resolving...'},
+				{name: 'displayName', type: 'string', defaultValue: getString('NextThought.view.courseware.assessment.admin.performance.Root.resolving')},
 				{name: 'Username', type: 'string', defaultValue: ''},
 				{name: 'grade', type: 'string'},
 				{name: 'letter', type: 'string', defaultValue: '-'},
@@ -219,8 +219,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		var type = this.currentStudent || 'ForCredit',
 			items = [
 				//{ text: 'All Students', type: 'all', checked: type === 'all'},
-				{ text: 'Open Students', type: 'Open', checked: type === 'Open'},
-				{ text: 'Enrolled Students', type: 'ForCredit', checked: type === 'ForCredit'}
+				{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.open'), type: 'Open', checked: type === 'Open'},
+				{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.enrolled'), type: 'ForCredit', checked: type === 'ForCredit'}
 			];
 
 		this.studentMenu = Ext.widget('menu', {
@@ -295,12 +295,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			});
 		} else*/
 		if (type === 'ForCredit') {
-			this.header.exportButton.update('Export Enrolled Students');
+			this.header.exportButton.update(getString('NextThought.view.courseware.assessment.admin.performance.Root.exportenrolled'));
 			this.header.exportButton.set({
 				href: base + '?LegacyEnrollmentStatus=ForCredit'
 			});
 		} else if (type === 'Open') {
-			this.header.exportButton.update('Export Open Students');
+			this.header.exportButton.update(getString('NextThought.view.courseware.assessment.admin.performance.Root.exportopen'));
 			this.header.exportButton.set({
 				href: base + '?LegacyEnrollmentStatus=Open'
 			});
@@ -311,10 +311,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	createItemMenu: function() {
 		var type = this.currentItem,
 			items = [
-				{ text: 'All Items', type: 'all', checked: type === 'all'},
-				{ text: 'Actionable Items', type: 'action', checked: type === 'action'},
-				{ text: 'Overdue Items', type: 'overdue', checked: type === 'overdue'},
-				{ text: 'Ungraded Items', type: 'ungraded', checked: type === 'ungraded'}
+				{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.alloption'), type: 'all', checked: type === 'all'},
+				{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.actionoption'), type: 'action', checked: type === 'action'},
+				{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.overoption'), type: 'overdue', checked: type === 'overdue'},
+				{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.unoption'), type: 'ungraded', checked: type === 'ungraded'}
 			];
 
 		this.itemMenu = Ext.widget('menu', {
@@ -642,6 +642,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 					'checkchange': 'changeLetterGrade'
 				}
 			},
+			//Don't know if these need to be translated
 			items: [
 				{text: '-'},
 				{text: 'A'},

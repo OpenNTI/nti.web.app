@@ -125,7 +125,7 @@ Ext.define('NextThought.view.content.reader.Content', {
 			container = container.parentNode;
 
 			if (c > 10) {
-				Ext.DomHelper.append(container, {tag: 'span', cls: 'more', html: 'Show more'});
+				Ext.DomHelper.append(container, {tag: 'span', cls: 'more', html: getString('NextThought.view.content.reader.Content.showmore')});
 			}
 
 			Ext.fly(container).on('click', function() {

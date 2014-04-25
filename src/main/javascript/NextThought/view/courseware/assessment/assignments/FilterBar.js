@@ -6,13 +6,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.FilterBar', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'third dropmenu disabled', cn: [
-			{ cls: 'label', html: 'All Assignments' }
+			{ cls: 'label', html: '{{{NextThought.view.courseware.assessment.assignments.FilterBar.allassignments}}}' }
 		] },
 		{ cls: 'third dropmenu groupBy', cn: [
-			{ cls: 'label', html: 'By Lesson' }
+			{ cls: 'label', html: '{{{NextThought.view.courseware.assessment.assignments.FilterBar.alllessons}}}' }
 		] },
 		{ cls: 'third search', cn: [
-			{ tag: 'input', type: 'text', placeholder: 'Search Assignments', required: 'required' },
+			{ tag: 'input', type: 'text', placeholder: '{{{NextThought.view.courseware.assessment.assignments.FilterBar.searchplaceholder}}}', required: 'required' },
 			{ cls: 'clear' }
 		] }
 	]),
@@ -70,9 +70,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.FilterBar', {
 	createGroupByMenu: function() {
 		var type = this.currentGrouping,
 			items = [
-				{ text: 'By Lesson', groupBy: 'lesson', checked: type === 'lesson'},
-				{ text: 'By Due Date', groupBy: 'due', checked: type === 'due'},
-				{ text: 'By Completion', groupBy: 'completion', checked: type === 'completion'}
+				{ text: getString('NextThought.view.courseware.assessment.assignments.FilterBar.alllessons'), groupBy: 'lesson', checked: type === 'lesson'},
+				{ text: getString('NextThought.view.courseware.assessment.assignments.FilterBar.due'), groupBy: 'due', checked: type === 'due'},
+				{ text: getString('NextThought.view.courseware.assessment.assignments.FilterBar.completion'), groupBy: 'completion', checked: type === 'completion'}
 			];
 
 		this.groupByMenu = Ext.widget('menu', {

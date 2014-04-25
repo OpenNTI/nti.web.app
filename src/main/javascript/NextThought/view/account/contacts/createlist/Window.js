@@ -30,8 +30,8 @@ Ext.define('NextThought.view.account.contacts.createlist.Window', {
 				anchor: '100% 100%',
 				xtype: 'account-header-view',
 				noIcon: true,
-				title: 'Create a New List...',
-				detail: 'Enter a name for your new list.  Once created, lists can be used to organize your contacts.'
+				title: getString('NextThought.view.account.contacts.createlist.Window.title'),
+				detail: getString('NextThought.view.account.contacts.createlist.Window.detail')
 			},
 			{xtype: 'box', cls: 'close', width: 10, height: 10}
 		]},

@@ -9,7 +9,7 @@ Ext.define('NextThought.view.contacts.View', {
 	defaultTab: 'my-contacts',
 
 	items: [
-		{ xtype: 'contact-tab-view', id: 'my-contacts', bodyCls: 'make-white', outlineLabel: 'Contacts' },
+		{ xtype: 'contact-tab-view', id: 'my-contacts', bodyCls: 'make-white', outlineLabel: getString('NextThought.view.contacts.View.contact-tab') },
 		{ xtype: 'contact-tab-view', id: 'my-groups',
 			subType: 'group',
 			filterFn: function(group) { return group.hidden !== true && group.isDFL; }
@@ -30,9 +30,9 @@ Ext.define('NextThought.view.contacts.View', {
 
 
 	tabSpecs: [
-		{label: 'Contacts', viewId: 'my-contacts'},
-		{label: 'Groups', viewId: 'my-groups'},
-		{label: 'Distribution Lists', viewId: 'my-lists'}
+		{label: getString('NextThought.view.contacts.View.contact-tab'), viewId: 'my-contacts'},
+		{label: getString('NextThought.view.contacts.View.groups-tab'), viewId: 'my-groups'},
+		{label: getString('NextThought.view.contacts.View.list-tab'), viewId: 'my-lists'}
 	],
 
 

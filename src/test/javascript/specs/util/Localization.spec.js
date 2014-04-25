@@ -9,7 +9,7 @@ describe('Localization utility tests', function() {
 			formatterString: 'Formatter string {name} {foo} {bar}.',
 			PluralForms: {
 				'simple': {
-					forms: ['simples', 'simpless', 'simplesss'],
+					forms: ['{#} simples', 'simpless {#}', 'simplesss'],
 					ranges: {
 						0: -1,
 						1: 0,
@@ -128,11 +128,20 @@ describe('Localization utility tests', function() {
 
 		describe('range tests', function() {
 			it('n in range', function() {
-				var i, pl = localUtils.pluralizeString;
+				var i, pl = localUtils.pluralizeString, k = 'simple',
+					one = 'simples', two = 'simpless', three = 'simplesss';
 
-				for (i = 0; i <= 7; i++) {
-					expect(pl(i, 'simple')).toBe(addSs('simple', i % 4));
-				}
+				expect(pl(0, k)).toBe('0 simple');
+				expect(pl(4, k)).toBe('4 simple');
+
+				expect(pl(1, k)).toBe('1 simples');
+				expect(pl(5, k)).toBe('5 simples');
+
+				expect(pl(2, k)).toBe('simpless 2');
+				expect(pl(6, k)).toBe('simpless 6');
+
+				expect(pl(3, k)).toBe('simplesss');
+				expect(pl(7, k)).toBe('simplesss');
 			});
 
 			it('n out of range', function() {

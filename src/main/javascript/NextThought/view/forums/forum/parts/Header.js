@@ -9,12 +9,12 @@ Ext.define('NextThought.view.forums.forum.parts.Header', {
 	cls: 'topic-list-header',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'new-topic', html: 'New Discussion'},
+		{cls: 'new-topic', html: '{{{NextThought.view.forums.forum.parts.Header.new}}}'},
 		{cls: 'controls', cn: [
 			{cls: 'position', cn: [
-				{tag: 'span', cls: 'bold', html: 'Page'},
+				{tag: 'span', cls: 'bold', html: '{{{NextThought.view.forums.forum.parts.Header.page}}}'},
 				{tag: 'span', cls: 'current bold', html: '{currentPage}'},
-				'of',
+				'{{{NextThought.view.forums.forum.parts.Header.of}}}',
 				{tag: 'span', cls: 'total bold', html: '{totalPages}'}
 			]},
 			{cls: 'pager', cn: [

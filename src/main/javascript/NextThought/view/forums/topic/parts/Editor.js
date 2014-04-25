@@ -100,7 +100,7 @@ Ext.define('NextThought.view.forums.topic.parts.Editor', {
 
 
 	warnBeforeDismissingEditor: function() {
-		var msg = 'You are currently editing or creating a discussion topic. Please save or cancel it first.';
+		var msg = getString('NextThought.view.forums.topic.parts.Editor.dismisswarn');
 		Ext.defer(function() {
 			alert({msg: msg});
 		}, 1);
@@ -139,7 +139,7 @@ Ext.define('NextThought.view.forums.topic.parts.Editor', {
 
 		if (!Ext.isArray(v.body) || v.body.join('').replace(re, '') === '') {
 			console.error('bad forum post');
-			this.markError(this.contentEl, 'You need to type something');
+			this.markError(this.contentEl, getString('NextThought.view.forums.topic.parts.Editor.emptycontent'));
 			return;
 		}
 
@@ -150,21 +150,21 @@ Ext.define('NextThought.view.forums.topic.parts.Editor', {
 
 		if (Ext.isEmpty(v.title)) {
 			console.error('You need a title');
-			this.markError(this.titleWrapEl, 'You need a title');
+			this.markError(this.titleWrapEl, getString('NextThought.view.forums.topic.parts.Editor.emptytitle'));
 			this.titleWrapEl.addCls('error-on-bottom');
 			return;
 		}
 
 		if (/^[^a-z0-9]+$/i.test(v.title)) {
 			console.error('Title cant be all special chars');
-			this.markError(this.titleWrapEl, "Title can't be all special characters.");
+			this.markError(this.titleWrapEl, getString('NextThought.view.forums.topic.parts.Editor.specialtitle'));
 			this.titleWrapEl.addCls('error-on-bottom');
 			return;
 		}
 
 		if (/^@{1,}/.test(v.title)) {
 			console.error('Title cant start with @');
-			this.markError(this.titleWrapEl, "Title can't start with @");
+			this.markError(this.titleWrapEl, getString('NextThought.view.forums.topic.parts.Editor.attitle'));
 			this.titleWrapEl.addCls('error-on-bottom');
 			return;
 		}
@@ -188,10 +188,10 @@ Ext.define('NextThought.view.forums.topic.parts.Editor', {
 		if (response && response.responseText) {
 			error = JSON.parse(response.responseText) || {};
 			if (error.code === 'TooLong') {
-				msg = 'Could not save your Discussion. The title is too long. It can only be 140 characters or less.';
+				msg = getString('NextThought.view.forums.topic.parts.Editor.longtitle');
 			}
 		}
-		alert({title: 'Error', msg: msg, icon: 'warning-red'});
+		alert({title: getString('NextThought.view.forums.topic.parts.Editor.error'), msg: msg, icon: 'warning-red'});
 		console.debug(arguments);
 	},
 

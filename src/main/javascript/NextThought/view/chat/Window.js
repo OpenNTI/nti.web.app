@@ -43,11 +43,11 @@ Ext.define('NextThought.view.chat.Window', function() {
 
 		tools: {
 			'add-people': {
-				tip: 'View occupants',
+				tip: getString('NextThought.view.chat.Window.add-people-tooltip'),
 				handler: 'addPeople'
 			},
 			'flag-for-moderation': {
-				tip: 'Report',
+				tip: getString('NextThought.view.chat.Window.flag-tooltip'),
 				handler: 'onFlagToolClicked'
 			}
 		},
@@ -144,12 +144,12 @@ Ext.define('NextThought.view.chat.Window', function() {
 				if (newOccupants && newOccupants.length === 1 && isMe(newOccupants[0])) {
 					chatView.disable();
 					if (logView.addStatusNotification) {
-						logView.addStatusNotification('You are the ONLY one left in the chat. Your messages will not be sent.');
+						logView.addStatusNotification(getString('NextThought.view.chat.Window.one-occupant'));
 					}
 				} else if (me.onlineOccupants && me.onlineOccupants.length <= 1) {
 					chatView.disable();
 					if (logView.addSatusNotification) {
-						logView.addSatusNotification('You are the only one available in the chat. Your messages will not be sent.');
+						logView.addSatusNotification(getString('NextThought.view.chat.Window.one-occupantb'));
 					}
 				} else {
 					if (Ext.isEmpty(me.query('chat-log-entry'))) {
@@ -166,7 +166,7 @@ Ext.define('NextThought.view.chat.Window', function() {
 				} else {
 					console.log('Users who left the chat: ', whoLeft);
 					Ext.each(whoLeft, function(aUser) {
-						me.updateDisplayState(aUser, 'GONE', isGroupChat);
+						me.updateDisplayState(aUser, getString('NextThought.view.chat.Window.gone'), isGroupChat);
 					});
 				}
 			});
@@ -239,20 +239,20 @@ Ext.define('NextThought.view.chat.Window', function() {
 				if (!value.isOnline()) {
 					Ext.Array.remove(me.onlineOccupants, username);
 					logView.clearChatStatusNotifications();
-					logView.addStatusNotification(displayName + ' is unavailable.');
-					me.updateDisplayState(user.getName(), 'unavailable', isGroup);
+					logView.addStatusNotification(getFormattedString('NextThought.view.chat.Window.user-unavailable', {name: displayName}));
+					me.updateDisplayState(user.getName(), getString('NextThought.view.chat.Window.unavailable'), isGroup);
 
 					if (me.onlineOccupants.length <= 1) {
 						entryView.disable();
-						logView.addStatusNotification('You are the only one available in the chat. Your messages will not be sent.');
+						logView.addStatusNotification(getString('NextThought.view.chat.Window.one-occupantb'));
 					}
 				} else {
 					if (!Ext.Array.contains(me.onlineOccupants, username)) {
 						Ext.Array.push(me.onlineOccupants, username);
 						entryView.enable();
-						me.updateDisplayState(user.getName(), 'available', isGroup);
+						me.updateDisplayState(user.getName(), getString('NextThought.view.chat.Window.available'), isGroup);
 						logView.clearChatStatusNotifications();
-						logView.addStatusNotification(displayName + ' is available.');
+						logView.addStatusNotification(getFormattedString('NextThought.view.chat.Window.user-available', {name: displayName}));
 					}
 				}
 			});
@@ -265,12 +265,6 @@ Ext.define('NextThought.view.chat.Window', function() {
 			var me = this;
 
 			function getEl(c, sub) { return Ext.get(c.getId() + '-' + sub); }
-
-//			function iOSStuff() {
-//				//Keep the chat windows from disappearing due to positioning.
-//				var target = getEl(this, 'targetEl').setStyle('position', '');
-//				Ext.get(target.down('.x-box-layout-ct').id + '-targetEl').setStyle('position', '');
-//			}
 
 			this.dropZone = Ext.dd.DropZone.create(this.getEl(), {
 
@@ -295,10 +289,6 @@ Ext.define('NextThought.view.chat.Window', function() {
 					return true;
 				}
 			});
-
-//			if (Ext.is.iOS) {
-//				iOSStuff();
-//			}
 		},
 
 
@@ -345,7 +335,7 @@ Ext.define('NextThought.view.chat.Window', function() {
 				title = title[0];
 			}
 			else {
-				title = Ext.String.format('Chat ({0})', title.length);
+				title = getFormattedString('NextThought.view.chat.Window.occupantcount', {number: title.length});
 			}
 
 			this.setTitle(title);
@@ -360,7 +350,10 @@ Ext.define('NextThought.view.chat.Window', function() {
 					this.down('chat-gutter').setChatState(displayState, name);
 				}
 				else if (!isGroupChat && !isMe(targetUser)) {
-					txt = Ext.String.ellipsis(name, 16, false) + ' is ' + displayState;
+					txt = getFormattedString('NextThought.view.chat.Window.occupantstatus', {
+						name: Ext.String.ellipsis(name, 16, false),
+						status: displayState
+					});
 					this.setTitle(txt);
 				}
 			}, this);
@@ -376,7 +369,12 @@ Ext.define('NextThought.view.chat.Window', function() {
 
 
 		setChatStatesMap: function() {
-			this.chatUserStatesMap = { 'composing': 'typing', 'inactive': 'idle', 'gone': 'away', 'active': 'active' };
+			this.chatUserStatesMap = {
+				'composing': getString('NextThought.view.chat.Window.componsingstate'),
+				'inactive': getString('NextThought.view.chat.Window.inactivestate'),
+				'gone': getString('NextThought.view.chat.Window.gonestate'),
+				'active': getString('NextThought.view.chat.Window.activestate')
+			};
 		},
 
 

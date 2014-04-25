@@ -10,11 +10,11 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath', {
 	spanTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'tabable'}).compile(),
 
 	toolbarTpl: Ext.DomHelper.markup([
-		{ cls: 'mathsymbol sqrt', 'data-latex': '\\\\surd', 'data-qtip': 'Insert square root' },
-		{ cls: 'mathsymbol square', 'data-latex': 'x^2', 'data-qtip': 'Insert squared' },
-		{ cls: 'mathsymbol parens', 'data-latex': '(x)', 'data-qtip': 'Insert parentheses'},
-		{ cls: 'mathsymbol approx', 'data-latex': '\\\\approx', 'data-qtip': 'Insert approximately' },
-		{ cls: 'mathsymbol pi', 'data-latex': '\\\\pi', 'data-qtip': 'Insert pi' }
+		{ cls: 'mathsymbol sqrt', 'data-latex': '\\\\surd', 'data-qtip': '{{{NextThought.view.assessment.input.SymbolicMath.insert-sqrt}}}' },
+		{ cls: 'mathsymbol square', 'data-latex': 'x^2', 'data-qtip': '{{{NextThought.view.assessment.input.SymbolicMath.insert-sqr}}}' },
+		{ cls: 'mathsymbol parens', 'data-latex': '(x)', 'data-qtip': '{{{NextThought.view.assessment.input.SymbolicMath.insert-paren}}}'},
+		{ cls: 'mathsymbol approx', 'data-latex': '\\\\approx', 'data-qtip': '{{{NextThought.view.assessment.input.SymbolicMath.insert-approx}}}' },
+		{ cls: 'mathsymbol pi', 'data-latex': '\\\\pi', 'data-qtip': '{{{NextThought.view.assessment.input.SymbolicMath.insert-pi}}}' }
 	]),
 
 

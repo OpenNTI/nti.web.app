@@ -9,7 +9,7 @@ Ext.define('NextThought.view.courseware.info.parts.Instructors', {
 		{ cls: 'instructor {[(values.hasProfile && "has-profile")||""]}', cn: [
 			{ cls: 'photo', style: {backgroundImage: 'url({photo})'}},
 			{ cls: 'wrap', cn: [
-				{ cls: 'label', html: 'Course Instructor' },
+				{ cls: 'label', html: '{{{NextThought.view.courseware.info.parts.Instructors.instructors}}}' },
 				{ cls: 'name', html: '{Name}' },
 				{ cls: 'title', html: '{JobTitle}'}
 			] }

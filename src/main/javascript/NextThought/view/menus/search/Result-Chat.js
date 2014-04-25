@@ -16,12 +16,12 @@ Ext.define('NextThought.view.menus.search.Result-Chat', {
 				]}
 			]},
 			{cls: 'time', cn: [
-				{tag: 'span', cls: 'started', html: 'Sent: {sent}'}
+				{tag: 'span', cls: 'started', html: '{{{NextThought.view.menus.search.Result-Chat.sent}}}'}
 
 			]},
 			{tag: 'tpl', 'if': 'isRendered', cn: [
 				{cls: 'lasted', cn: [
-					{tag: 'span', cls: 'lasted', html: 'Lasted: {duration}'}
+					{tag: 'span', cls: 'lasted', html: '{{{NextThought.view.menus.search.Result-Chat.latest}}}'}
 				]}
 			]}
 		]},
@@ -29,7 +29,7 @@ Ext.define('NextThought.view.menus.search.Result-Chat', {
 		{ cls: 'wrap',
 			cn: [
 				{cls: 'name', cn: [
-					{tag: 'span', cls: 'created', html: '{creator} said:'}
+					{tag: 'span', cls: 'created', html: '{{{NextThought.view.menus.search.Result-Chat.created}}}'}
 				]},
 				{cls: 'fragments', cn: [
 						{tag: 'tpl', 'for': 'fragments', cn: [
@@ -83,7 +83,9 @@ Ext.define('NextThought.view.menus.search.Result-Chat', {
 
 				me.renderData = Ext.apply(me.renderData || {},{
 					isRendered: true,
-					occupants: 'Between me and ' + ((occupants.length - 1 > 1) ? (occupants.length - 1) + ' others' : '1 other'),
+					occupants: getFormattedString('NextThought.view.menus.search.Result-Chat.occupants', {
+						others: Ext.util.Format.plural(occupants.length, 'other')
+					}),
 					sent: Ext.Date.format(date, 'M-j g:i A'),
 					duration: TimeUtils.timeDifference(ended, started).replace(/ ago/i, ''),
 					creator: creator
@@ -97,7 +99,7 @@ Ext.define('NextThought.view.menus.search.Result-Chat', {
 			});
 		}
 
-		function failure(req,resp) {
+		function failure(req, resp) {
 			console.log('Error fetching chat transcript');
 		}
 		this.wrapFragmentHits();
@@ -110,15 +112,15 @@ Ext.define('NextThought.view.menus.search.Result-Chat', {
 	},
 
 	clicked: function(e) {
-		var errMsg = 'Unable to load chat transcript.';
+		var errMsg = getString('NextThought.view.menus.search.Result-Chat.errmsg');
 		if (!this.record) {
-			alert({ title: 'Error' , msg: errMsg, icon: 'warning-red'});
+			alert({ title: getString('NextThought.view.menus.search.Result-Chat.errtitle') , msg: errMsg, icon: 'warning-red'});
 			return;
 		}
 		this.callParent(arguments);
 	},
 
 	doClicked: function() {
-		this.fireEvent('open-chat-transcript', this.record, 'Opening chat transcript.');
+		this.fireEvent('open-chat-transcript', this.record, getString('NextThought.view.menus.search.Result-Chat.errorsup'));
 	}
 });

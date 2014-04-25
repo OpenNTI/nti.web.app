@@ -1,13 +1,13 @@
 Ext.define('NextThought.view.account.settings.PictureEditor', {
-  extend: 'Ext.container.Container',
-  alias: 'widget.picture-editor',
+	extend: 'Ext.container.Container',
+	alias: 'widget.picture-editor',
 
 	requires: [
 		'NextThought.view.account.settings.PictureCanvas'
 	],
 
 	cls: 'picture-editor',
-  ui: 'account',
+	ui: 'account',
 
 	layout: {
 		type: 'vbox',
@@ -34,11 +34,11 @@ Ext.define('NextThought.view.account.settings.PictureEditor', {
 			},
 			items: [
 				{xtype: 'tbspacer', flex: 4},
-				{text: 'Rotate', rotate: true, iconCls: 'rotate', disabled: true,
+				{text: getString('NextThought.view.account.settings.PictureEditor.rotate'), rotate: true, iconCls: 'rotate', disabled: true,
 					handler: function(b) {b.up('picture-editor').rotate();} },
 				{xtype: 'tbspacer', flex: 1},
-				{text: 'Cancel' },
-				{text: 'Save', save: true, ui: 'flat-blue', disabled: true }
+				{text: getString('NextThought.view.account.settings.PictureEditor.cancel') },
+				{text: getString('NextThought.view.account.settings.PictureEditor.save'), save: true, ui: 'flat-blue', disabled: true }
 			]
 		}
 	],
@@ -92,7 +92,10 @@ Ext.define('NextThought.view.account.settings.PictureEditor', {
 				},
 
 				function bad() {
-					alert({title: 'Oops!', msg: 'Something went wrong.'});
+					alert({
+						title: getString('NextThought.view.account.settings.PictureEditor.error-title'),
+						msg: getString('NextThought.view.account.settings.PictureEditor.error-msg')
+					});
 				}
 			);
 

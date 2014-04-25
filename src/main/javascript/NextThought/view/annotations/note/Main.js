@@ -50,9 +50,9 @@ Ext.define('NextThought.view.annotations.note.Main', {
 						{
 							cls: 'reply-options',
 							cn: [
-								{ cls: 'link reply', html: 'Reply' },
-								{ cls: 'link share', html: 'Share' },
-								{ cls: 'link more', 'data-qtip': 'Options', html: '&nbsp;'}
+								{ cls: 'link reply', html: '{{{NextThought.view.annotations.note.Main.reply}}}' },
+								{ cls: 'link share', html: '{{{NextThought.view.annotations.note.Main.share}}}' },
+								{ cls: 'link more', 'data-qtip': '{{{NextThought.view.annotations.note.Main.options}}}', html: '&nbsp;'}
 							]
 						}
 					]
@@ -310,12 +310,12 @@ Ext.define('NextThought.view.annotations.note.Main', {
 
 				/*jslint bitwise: false */ //Tell JSLint to ignore bitwise opperations
 				Ext.Msg.show({
-					msg: 'This will discard the contents of your current message',
+					msg: getString('NextThought.view.annotations.note.Main.editor-warning-msg'),
 					scope: me,
 					buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 					icon: 'warning-red',
-					title: 'Are you sure?',
-					buttonText: {ok: 'caution:OK'},
+					title: getString('NextThought.view.annotations.note.Main.editor-warning-title'),
+					buttonText: {ok: 'caution:' + getString('NextThought.view.annotations.note.Main.ok')},
 					fn: function(str) {
 						if (str === 'ok') {
 							openSlideDeck();

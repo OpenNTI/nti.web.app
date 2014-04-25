@@ -26,10 +26,17 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 		},
 
 		items: [
-					{ text: 'Assignment', dataIndex: 'name', name: 'name', tdCls: 'padded-cell', padding: '0 0 0 30', flex: 1 },
+					{
+						text: getString('NextThought.view.courseware.assessment.admin.Grid.assignment'),
+						dataIndex: 'name',
+						name: 'name',
+						tdCls: 'padded-cell',
+						padding: '0 0 0 30',
+						flex: 1
+					},
 
 
-					{ text: 'Completed', dataIndex: 'completed', name: 'completed', width: 150,
+					{ text: getString('NextThought.view.courseware.assessment.admin.Grid.completed'), dataIndex: 'completed', name: 'completed', width: 150,
 						renderer: function(v, col, rec) {
 							var d = this.dueDate || rec.get('due'),
 								s = (v && v.get && v.get('Last Modified')) || v,
@@ -43,21 +50,27 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 
 							//if no submission
 							if (!s) {
-								return Ext.DomHelper.markup({cls: 'incomplete', html: 'Due ' + Ext.Date.format(d, 'm/d')});
+								return Ext.DomHelper.markup({
+									cls: 'incomplete',
+									html: getFormattedString('NextThought.view.courseware.assessment.admin.Grid.incomplete', {date: Ext.Date.format(d, 'm/d')})
+								});
 							}
 							//if the submisson is before the due date
 							if (d > s) {
-								return Ext.DomHelper.markup({cls: 'ontime', html: 'On Time'});
+								return Ext.DomHelper.markup({cls: 'ontime', html: getString('NextThought.view.courseware.assessment.admin.Grid.ontime')});
 							}
 							//if we don't have a due data to tell how late it was
 							if (!d) {
-								return Ext.DomHelper.markup({cls: 'ontime', html: 'Submitted ' + Ext.Date.format(s, 'm/d')});
+								return Ext.DomHelper.markup({
+									cls: 'ontime',
+									html: getFormattedString('NextThought.view.courseware.assessment.admin.Grid.submitted', {date: Ext.Date.format(s, 'm/d')})
+								});
 							}
 
 							//if we get here the submission was late
 
 							d = new Duration(Math.abs(s - d) / 1000);
-							return Ext.DomHelper.createTemplate({cls: 'late', html: '{late} Late'}).apply({
+							return getFormattedString('NextThought.view.courseware.assessment.admin.Grid.late', {
 								late: d.ago().replace('ago', '').trim()
 							});
 						},
@@ -95,7 +108,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 
 
 
-					{ text: 'Score', xtype: 'templatecolumn',
+					{ text: getString('NextThought.view.courseware.assessment.admin.Grid.score'), xtype: 'templatecolumn',
 						componentCls: 'score',
 						dataIndex: 'Grade', allowTab: true, name: 'grade', width: 70,/*90*/
 						tdCls: 'text score',
@@ -128,7 +141,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 					},
 
 
-					{ text: 'Feedback', xtype: 'templatecolumn', dataIndex: 'feedback', name: 'feedback', width: 140,
+					{
+						text: getString('NextThought.view.courseware.assessment.admin.Grid.feedback'),
+						xtype: 'templatecolumn',
+						dataIndex: 'feedback',
+						name: 'feedback',
+						width: 140,
 						tpl: Ext.DomHelper.markup('{feedback:pluralIf("Comment")}'),
 						doSort: function(state) {
 							var store = this.up('grid').getStore(),
@@ -276,7 +294,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 			observer;
 
 		if (!MutationObserver) {
-			alert('Browser Missing Feature Support\nPlease use Chrome 18+, FF 14+, Safari 6+ or IE11');
+			alert(getString('NextThought.view.courseware.assessment.admin.Grid.oldbrowser'));
 			return;
 		}
 

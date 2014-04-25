@@ -37,22 +37,22 @@ Ext.define('NextThought.view.chat.Log', {
 		   this.tools = [
 						{
 							type: 'gear',
-							tooltip: 'select all',
+							tooltip: getString('NextThought.view.chat.Log.select-all-tooltip'),
 							action: 'selectall'
 						},
 						{
 							type: 'help',
-							tooltip: 'select none',
+							tooltip: getString('NextThought.view.chat.Log.select-none-tooltip'),
 							action: 'selectnone'
 						},
 						{
 							type: 'next',
-							tooltip: 'approve selected',
+							tooltip: getString('NextThought.view.chat.Log.approve-tooltip'),
 							action: 'approve'
 						},
 						{
 							type: 'prev',
-							tooltip: 'reject selected',
+							tooltip: getString('NextThought.view.chat.Log.reject-tooltip'),
 							action: 'reject'
 						}
 					];
@@ -61,17 +61,17 @@ Ext.define('NextThought.view.chat.Log', {
 			   dock: 'bottom',
 			   items: [
 				   {
-					   text: 'Select All',
+					   text: getString('NextThought.view.chat.Log.select-all'),
 					   action: 'selectall'
 				   },
 				   {
-					   text: 'Select None',
+					   text: getString('NextThought.view.chat.Log.select-none'),
 					   action: 'selectnone'},
 				   {
-					   text: 'Approve',
+					   text: getString('NextThought.view.chat.Log.approve'),
 					   action: 'approve'},
 				   {
-					   text: 'Reject',
+					   text: getString('NextThought.view.chat.Log.reject'),
 					   action: 'reject'}
 			   ]
 			};

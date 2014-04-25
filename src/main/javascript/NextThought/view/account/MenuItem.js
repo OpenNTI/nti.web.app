@@ -13,8 +13,8 @@ Ext.define('NextThought.view.account.MenuItem', {
 			{ cls: 'content', cn: [
 				{ cls: 'username', html: '{displayName:htmlEncode}' },
 				{ cls: 'links', cn: [
-					{ cls: 'profile', html: 'View Profile' },
-					{ cls: 'account', html: 'Manage Account'}
+					{ cls: 'profile', html: '{{{NextThought.view.account.MenuItem.profile}}}' },
+					{ cls: 'account', html: '{{{NextThought.view.account.MenuItem.account}}}'}
 				]}
 			]}
 		]),

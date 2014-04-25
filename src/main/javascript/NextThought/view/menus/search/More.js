@@ -3,7 +3,7 @@ Ext.define('NextThought.view.menus.search.More', {
   alias: 'widget.search-more',
   cls: 'search-more search-result',
   renderTpl: [
-    '<div class="see-all"><a href="#">Show more...</a></div>'
+    '<div class="see-all"><a href="#">' + getString('NextThought.view.menus.search.More.more') + '</a></div>'
   ],
 
   initComponent: function() {

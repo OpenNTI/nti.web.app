@@ -10,17 +10,17 @@ Ext.define('NextThought.view.profiles.parts.NoThought', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{tag: 'tpl', 'if': 'isMe', cn: [
-			{cls: 'title', html: 'Share your thoughts and ideas with others.'},
+			{cls: 'title', html: '{{{NextThought.view.profiles.parts.NoThought.share}}}'},
 			{ cls: 'meta', cn: [
         //				{cls:'link more', tag:'span', html:'Learn more'},
-				{cls: 'link start', tag: 'span', html: 'Get Started!'}
+				{cls: 'link start', tag: 'span', html: '{{{NextThought.view.profiles.parts.NoThought.start}}}'}
 			]}
 		]},
 		{tag: 'tpl', 'if': '!isMe', cn: [
-			{cls: 'title others', html: 'I\'m still collecting my thoughts...'},
+			{cls: 'title others', html: '{{{NextThought.view.profiles.parts.NoThought.empty}}}'},
 			{ cls: 'meta', cn: [
-				{cls: 'link back', tag: 'span', html: 'Go Back'},
-				{cls: 'link chat', tag: 'span', html: 'Chat'}
+				{cls: 'link back', tag: 'span', html: '{{{NextThought.view.profiles.parts.NoThought.back}}}'},
+				{cls: 'link chat', tag: 'span', html: '{{{NextThought.view.profiles.parts.NoThought.chat}}}'}
 			]}
 		]}
 	]),

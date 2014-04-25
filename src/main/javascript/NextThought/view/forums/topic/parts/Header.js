@@ -15,7 +15,7 @@ Ext.define('NextThought.view.forums.topic.parts.Header', {
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header-container', cn: { cls: '{headerCls} navigation-bar', cn: [
 			{cls: 'page', cn: [
-				{tag: 'span', cls: 'current', html: ''}, ' of ', {tag: 'span', cls: 'total', html: ''}
+				{tag: 'span', cls: 'current', html: ''}, ' {{{NextThought.view.forums.topic.parts.Header.of}}} ', {tag: 'span', cls: 'total', html: ''}
 			]},
 			{cls: 'pager', cn: [
 				{cls: 'prev disabled'},
@@ -39,7 +39,7 @@ Ext.define('NextThought.view.forums.topic.parts.Header', {
 
 		var me = this,
 			forumTitle = this.forum.get('title'),
-			topicTitle = (this.record && this.record.get) ? this.record.get('title') : 'New Discussion', tpl;
+			topicTitle = (this.record && this.record.get) ? this.record.get('title') : getString('NextThought.view.forums.topic.parts.Header.new'), tpl;
 
 		tpl = new Ext.XTemplate(me.pathTpl);
 		tpl.insertFirst(me.headerEl, {path: forumTitle, title: topicTitle}, true);

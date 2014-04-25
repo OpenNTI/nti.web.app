@@ -27,8 +27,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			cn: [
 				{ cls: 'right controls', cn: [
 					{ cls: 'page', cn: [
-						{tag: 'tpl', 'if': 'page', cn: [{ tag: 'span', html: '{page}'}, ' of ']},
-						{tag: 'tpl', 'if': '!page', cn: ['Total: ']},
+						{tag: 'tpl', 'if': 'page', cn: [{ tag: 'span', html: '{page}'}, ' {{{NextThought.view.courseware.assessment.assignments.admin.Assignment.of}}} ']},
+						{tag: 'tpl', 'if': '!page', cn: ['{{{NextThought.view.courseware.assessment.assignments.admin.Assignment.total}}} ']},
 						{tag: 'span', cls: 'total', html: '{total}'}
 					] },
 					{ cls: 'up {noPrev:boolStr("disabled")}' },
@@ -49,14 +49,19 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			cn: [
 				{ cls: 'controls', cn: [
 					//{ tag: 'a', href: '#', cls: 'reports', html: 'Reports'},
-					{ tag: 'a', href: '{exportFilesLink}', cls: 'download button hidden', html: 'Download Files'},
-					{ tag: 'a', href: '#request_change', cls: 'email button', html: 'Request a Change'}
+					{
+						tag: 'a',
+						href: '{exportFilesLink}',
+						cls: 'download button hidden',
+						html: '{{{NextThought.view.courseware.assessment.assignments.admin.Assignment.download}}}'
+					},
+					{ tag: 'a', href: '#request_change', cls: 'email button', html: '{{{NextThought.view.courseware.assessment.assignments.admin.Assignment.request}}}'}
 				]},
 				{ cls: 'title', html: '{assignmentTitle}' },
 				{
 					cls: 'subtitle',
 					cn: [
-						{ tag: 'span', cls: 'due', html: 'Due {due:date("l, g:i A, F j, Y")}'},
+						{ tag: 'span', cls: 'due', html: '{{{NextThought.view.courseware.assessment.assignments.admin.Assignment.due}}}'},
 						{ tag: 'span', cls: 'link arrow'}
 					]
 				}
@@ -92,7 +97,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			cls: 'student-assignment-overview',
 			nameOrder: ['creator', 'username', 'completed', 'grade', 'feedback', 'submission'],
 			columnOverrides: {
-				0: { text: 'Student', xtype: 'templatecolumn', dataIndex: 'Creator', name: 'creator', flex: 1, padding: '0 0 0 30',
+				0: {
+					text: getString('NextThought.view.courseware.assessment.assignments.admin.Assignment.student'),
+					xtype: 'templatecolumn',
+					dataIndex: 'Creator',
+					name: 'creator',
+					flex: 1,
+					padding: '0 0 0 30',
 					possibleSortStates: ['ASC', 'DESC'],//restore the default order of state(since the grid reverses it)
 					tpl: Ext.DomHelper.markup({cls: 'padded-cell user-cell student-cell', cn: [
 						{ cls: 'avatar', style: {backgroundImage: 'url({Creator:avatarURL})'} },
@@ -106,7 +117,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 					} }
 			},
 			extraColumns: [
-				{ text: 'Username', dataIndex: 'Creator', name: 'username',
+				{ text: getString('NextThought.view.courseware.assessment.assignments.admin.Assignment.username'), dataIndex: 'Creator', name: 'username',
 					possibleSortStates: ['ASC', 'DESC'],//restore the default order of state(since the grid reverses it)
 					renderer: function(v, g, record) {
 						var username = (v.get && v.get('Username')) || v,
@@ -131,10 +142,10 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		},
 		{
 			xtype: 'filter-menupanel',
-			searchPlaceHolderText: 'Search Students',
+			searchPlaceHolderText: getString('NextThought.view.courseware.assessment.assignments.admin.Assignment.search'),
 			filters: [
-				{ text: 'Enrolled Students', filter: 'ForCredit'},
-				{ text: 'Open Students', filter: 'Open'}
+				{ text: getString('NextThought.view.courseware.assessment.assignments.admin.Assignment.enrolled'), filter: 'ForCredit'},
+				{ text: getString('NextThought.view.courseware.assessment.assignments.admin.Assignment.open'), filter: 'Open'}
 			]
 		}
 	],
@@ -246,7 +257,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 				gridMask.addCls('masked-mask');
 			}
 			if (el && el.dom) {
-				el.mask('Loading', 'loading', true);
+				el.mask(getString('NextThought.view.courseware.assessment.assignments.admin.Assignment.loading'), 'loading', true);
 			}
 		}, 1);
 	},

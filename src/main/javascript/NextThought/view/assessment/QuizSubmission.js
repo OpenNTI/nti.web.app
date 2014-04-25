@@ -18,8 +18,8 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 	 */
 	html: Ext.DomHelper.markup([
 		{ cls: 'buttons', cn: [
-			{tag: 'a', href: '#', cls: 'reset', html: 'Cancel'},
-			{tag: 'a', href: '#', cls: 'submit tabable disabled', html: 'I\'m Finished!'}
+			{tag: 'a', href: '#', cls: 'reset', html: '{{{NextThought.view.assessment.QuizSubmission.cancel}}}'},
+			{tag: 'a', href: '#', cls: 'submit tabable disabled', html: '{{{NextThought.view.assessment.QuizSubmission.finished}}}'}
 		] },
 		{ cls: 'status' }
 	]),
@@ -109,7 +109,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		this.state = 'active';
 		this.resetBtn.show();
 		this.statusMessage.show();
-		this.submitBtn.update('I\'m Finished');
+		this.submitBtn.update(getString('NextThought.view.assessment.QuizSubmission.finished'));
 		this.submitBtn.removeCls('disabled');
 		if (this.shouldShow) {
 			this.show();
@@ -133,7 +133,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		this.submitted = true;
 		this.resetBtn.hide();
 		this.statusMessage.hide();
-		this.submitBtn.update('Try Again');
+		this.submitBtn.update(getString('NextThought.view.assessment.QuizSubmission.redo'));
 		this.submitBtn.removeCls('disabled');
 	},
 
@@ -185,9 +185,15 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		});
 
 		this.statusMessage.update(unansweredQuestions === 0 ?
-								  'All questions answered' :
-								  Ext.String.format('{0} unanswered',
-										  Ext.util.Format.plural(unansweredQuestions, 'question'))
+								getString('NextThought.view.assessment.QuizSubmission.all-answered') :
+								Ext.String.format(
+									'{0}' + getString('NextThought.view.assessment.QuizSubmission.unanswered'),
+									Ext.util.Format.plural(
+										unansweredQuestions,
+										getString('NextThought.view.assessment.QuizSubmission.question'),
+										getString('NextThought.view.assessment.QuizSubmission.question-plural')
+									)
+								)
 		);
 
 		this.statusMessage[((unansweredQuestions === 0) ? 'add' : 'remove') + 'Cls']('ready');
@@ -246,13 +252,13 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		}
 
 		Ext.MessageBox.alert({
-			title: 'Are you sure?',
-			msg: 'This will reset this assignment',
+			title: getString('NextThought.view.assessment.QuizSubmission.warning-title'),
+			msg: getString('NextThought.view.assessment.QuizSubmission.warning-msg'),
 			icon: 'warning-red',
 			buttonText: true,
 			buttons: {
-				cancel: 'Cancel',
-				yes: 'caution:Yes'
+				cancel: getString('NextThought.view.assessment.QuizSubmission.cancel'),
+				yes: 'caution:' + getString('NextThought.view.assessment.QuizSubmission.yes')
 			},
 			fn: function(button) {
 				if (button === 'yes') {

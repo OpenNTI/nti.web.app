@@ -94,10 +94,10 @@ Ext.define('NextThought.view.account.Window', {
 
 				items: [
 					canUploadAvatar ?
-						{text: 'Edit Profile Picture', associatedPanel: 'avatar-choices', pressed: true} :
-						{text: 'Change Avatar', associatedPanel: 'random-gravatar-picker', pressed: true},
-					{text: 'Change Password', associatedPanel: 'password-reset-form'},
-					{text: 'Preferences', associatedPanel: 'account-preferences'},
+						{text: getString('NextThought.view.account.Window.avatar-choices'), associatedPanel: 'avatar-choices', pressed: true} :
+						{text: getString('NextThought.view.account.Window.avatar-picks'), associatedPanel: 'random-gravatar-picker', pressed: true},
+					{text: getString('NextThought.view.account.Window.password'), associatedPanel: 'password-reset-form'},
+					{text: getString('NextThought.view.account.Window.preferences'), associatedPanel: 'account-preferences'},
 					{ disabled: true, flex: 1 }
 				]
 			},
@@ -147,4 +147,3 @@ Ext.define('NextThought.view.account.Window', {
 		}
 	}
 });
-

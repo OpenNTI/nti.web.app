@@ -36,12 +36,12 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 	TIP: {
 		'public': {
-			title: 'Public Discussion',
-			html: 'Use a public discussion when you want to reach the largest possible audience. Add contacts to notify them of your discussion and to encourage participation.'
+			title: getString('NextThought.view.form.fields.UserTokenField.publictitle'),
+			html: getString('NextThought.view.form.fields.UserTokenField.publicbody')
 		},
 		'private': {
-			title: 'Private Discussion',
-			html: 'Private discussions are limited to the contacts, lists, and groups you specify. Once a discussion has started the audience cannot be expanded.'
+			title: getString('NextThought.view.form.fields.UserTokenField.privatetitle'),
+			html: getString('NextThought.view.form.fields.UserTokenField.privatebody')
 		}
 	},
 
@@ -211,7 +211,7 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 
 	resetPlaceholderLabel: function() {
-		this.setPlaceholderText('Add people to the discussion');
+		this.setPlaceholderText(getString('NextThought.view.form.fields.UserTokenField.resetplaceholder'));
 	},
 
 

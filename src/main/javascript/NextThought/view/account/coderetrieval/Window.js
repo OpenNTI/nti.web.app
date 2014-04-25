@@ -33,7 +33,7 @@ Ext.define('NextThought.view.account.coderetrieval.Window', {
 				xtype: 'account-header-view',
 				noIcon: true,
 				title: '',
-				detail: 'Share the Group Code below to invite users to your group'
+				detail: getString('NextThought.view.account.coderetrieval.Window.detail')
 			},
 			{xtype: 'box', cls: 'close', width: 10, height: 10}
 		]},

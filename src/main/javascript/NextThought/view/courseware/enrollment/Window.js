@@ -25,13 +25,13 @@ Ext.define('NextThought.view.courseware.enrollment.Window', {
 		{
 			cls: 'header', cn: [
 			{ cls: 'titlebar', cn: [
-				{ cls: 'tab visited', html: 'Course Details', 'data-order': 'detail', 'data-no-decoration': true },
+				{ cls: 'tab visited', html: '{{{NextThought.view.courseware.enrollment.Window.details}}}', 'data-order': 'detail', 'data-no-decoration': true },
 				{ tag: 'tpl', 'if': 'enrollProcess', cn: {
-					 cls: 'tab', html: 'Confirmation', 'data-order': 2
+					 cls: 'tab', html: '{{{NextThought.view.courseware.enrollment.Window.confirmation}}}', 'data-order': 2
 				}},
 				{ tag: 'tpl', 'if': '!enrollProcess', cn: [
-					{ cls: 'tab', html: 'Confirmation', 'data-order': 1 },
-					{ cls: 'tab', html: 'Complete', 'data-order': 2 }
+					{ cls: 'tab', html: '{{{NextThought.view.courseware.enrollment.Window.confirmation}}}', 'data-order': 1 },
+					{ cls: 'tab', html: '{{{NextThought.view.courseware.enrollment.Window.completed}}}', 'data-order': 2 }
 				]},
 				{ cls: 'close' }
 			]},
@@ -40,7 +40,7 @@ Ext.define('NextThought.view.courseware.enrollment.Window', {
 				{ cls: 'meta', cn: [
 					{cls: 'course', html: '{Name}'},
 					{cls: 'title', html: '{Title}'},
-					{tag: 'tpl', 'if': 'by', cn: {cls: 'byline', html: 'By {by}'}}
+					{tag: 'tpl', 'if': 'by', cn: {cls: 'byline', html: '{{{NextThought.view.courseware.enrollment.Window.by}}}'}}
 				]}
 			] }
 		]
@@ -60,7 +60,7 @@ Ext.define('NextThought.view.courseware.enrollment.Window', {
 				{tag: 'input', type: 'checkbox'},
 				{}
 			]},
-			{tag: 'a', cls: 'button cancel', role: 'button', html: 'Cancel'},
+			{tag: 'a', cls: 'button cancel', role: 'button', html: '{{{NextThought.view.courseware.enrollment.Window.cancel}}}'},
 			{tag: 'a', cls: 'button confirm', role: 'button', html: ''}
 		]
 		}
@@ -170,7 +170,7 @@ Ext.define('NextThought.view.courseware.enrollment.Window', {
 			el.setHeight(h);
 		}
 
-		this.errorLabelEl.update(label || 'Error:');
+		this.errorLabelEl.update(label || getString('NextThought.view.courseware.enrollment.Window.error'));
 		this.errorMessageEl.update(message || '');
 
 		errorEl.show();
@@ -180,7 +180,7 @@ Ext.define('NextThought.view.courseware.enrollment.Window', {
 
 	onAdd: function(cmp) {
 		var ordinal = cmp.ordinal,
-			confirmLabel = cmp.confirmLabel || 'Enroll',
+			confirmLabel = cmp.confirmLabel || getString('NextThought.view.courseware.enrollment.Window.enroll'),
 			checkLabel = cmp.checkboxLabel;
 
 		this.activeView = cmp;

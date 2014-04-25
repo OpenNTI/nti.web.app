@@ -23,7 +23,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'list-view', cn: [
-			{ tag: 'tpl', 'if': 'canBlog', cn: { cls: 'new-entry-btn header', html: 'New Entry' }},
+			{ tag: 'tpl', 'if': 'canBlog', cn: { cls: 'new-entry-btn header', html: '{{{NextThought.view.profiles.parts.Blog.new}}}' }},
 			{ id: '{id}-body', cls: 'body', cn: ['{%this.renderContainer(out,values)%}'] }
 		]},
 		{ cls: 'post-view' }
@@ -259,7 +259,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 
 
 	warnBeforeDismissingEditor: function() {
-		var msg = 'You are currently editing a thought. Please save or cancel it first.';
+		var msg = getString('NextThought.view.profiles.parts.Blog.warn');
 		Ext.defer(function() { alert({msg: msg}); }, 1);
 	},
 
@@ -486,7 +486,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 			failure: function() {
 				Ext.callback(callback);
 				me.setParams();
-				alert('Could not load post');
+				alert(getString('NextThought.view.profiles.parts.Blog.failed'));
 			},
 			success: function(resp) {
 				args[0] = ParseUtils.parseItems(resp.responseText).first();

@@ -14,9 +14,9 @@ Ext.define('NextThought.view.account.contacts.DisabledView', {
 		cls: 'disabled-contacts-view',
 		cn: [
 			{ cls: 'disabled-message-div', cn: [
-				{ cls: 'disabled-title', html: 'Social Features Disabled...'},
-				'We need your parent\'s permission to give you more features.  ',
-        {tag: 'span', cls: 'resend-consent', html: 'Resend Consent Form'}
+				{ cls: 'disabled-title', html: '{{{NextThought.view.account.contacts.DisabledView.title}}}'},
+				'{{{NextThought.view.account.contacts.DisabledView.description}}}',
+				{tag: 'span', cls: 'resend-consent', html: '{{{NextThought.view.account.contacts.DisabledView.resend}}}'}
 			]}
 		]
 	}),

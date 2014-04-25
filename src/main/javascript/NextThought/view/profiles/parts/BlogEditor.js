@@ -176,7 +176,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 			trimEndRe = /((<p><br><\/?p>)|(<br\/?>))*$/g, l;
 
 		if (DomUtils.isEmpty(v.body)) {
-			this.markError(this.editorBodyEl, 'You need to type something');
+			this.markError(this.editorBodyEl, getString('NextThought.view.profiles.parts.BlogEditor.emptybody'));
 			return;
 		}
 
@@ -186,20 +186,20 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 		}
 
 		if (Ext.isEmpty(v.title)) {
-			this.markError(this.titleWrapEl, 'You need a title');
+			this.markError(this.titleWrapEl, getString('NextThought.view.profiles.parts.BlogEditor.emptytitle'));
 			this.titleWrapEl.addCls('error-on-bottom');
 			return;
 		}
 
 		if (/^[^a-z0-9]+$/i.test(v.title)) {
-			this.markError(this.titleWrapEl, "Title can't be all special characters.");
+			this.markError(this.titleWrapEl, getString('NextThought.view.profiles.parts.BlogEditor.specialtitle'));
 			this.titleWrapEl.addCls('error-on-bottom');
 			return;
 		}
 
 		if (/^@{1,}/.test(v.title)) {
 			console.error('Title cant start with @');
-			this.markError(this.titleWrapEl, "Title can't start with @");
+			this.markError(this.titleWrapEl, getString('NextThought.view.profiles.parts.BlogEditor.attitle'));
 			this.titleWrapEl.addCls('error-on-bottom');
 			return;
 		}
@@ -218,15 +218,15 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 
 
 	onSaveFailure: function(proxy, response, operation) {
-		var msg = 'An unknown error occurred saving your Thought.', error;
+		var msg = getString('NextThought.view.profiles.parts.BlogEditor.unknown'), error;
 
 		if (response && response.responseText) {
 			error = JSON.parse(response.responseText) || {};
 			if (error.code === 'TooLong') {
-				msg = 'Could not save your Thought. The title is too long. It can only be 140 characters or less.';
+				msg = getString('NextThought.view.profiles.parts.BlogEditor.longtitle');
 			}
 		}
-		alert({title: 'Error', msg: msg, icon: 'warning-red'});
+		alert({title: getString('NextThought.view.profiles.parts.BlogEditor.error'), msg: msg, icon: 'warning-red'});
 		console.debug(arguments);
 	},
 
