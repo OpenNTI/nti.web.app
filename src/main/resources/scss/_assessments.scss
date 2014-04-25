@@ -960,6 +960,7 @@ body.dragging * {
 				.text{
 					line-height: 26px;
 					min-width: 54px;
+					padding: 12px 0;
 				}
 
 				.label {
@@ -972,6 +973,7 @@ body.dragging * {
 					border: 0 solid $tertiary-grey-alt;
 					border-bottom-width: 1px;
 					border-right-width: 1px;
+					vertical-align: middle;
 				}
 
 				&.target-hover{
@@ -987,7 +989,7 @@ body.dragging * {
 					.controls{
 						.control {
 							position: absolute;
-							top: 7px; left: 0;
+							top: 6px; left: 0;
 							width: 20px;
 							height: 38px;
 							border: none;
@@ -995,7 +997,7 @@ body.dragging * {
 
 							&::after{
 								position: absolute;
-								left: 0px; top: 12px;
+								left: 0px; top: 10px;
 								content: ' ';
 								background: $icons no-repeat;
 								@include sprite($icons,'circle-check-green-18',$dimensions: true);
