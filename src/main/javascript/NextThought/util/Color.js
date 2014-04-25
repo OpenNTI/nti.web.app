@@ -29,15 +29,15 @@ Ext.define('NextThought.util.Color', {
 
 	/**
 	 *
-	 * @param string either a 8 or 16 bit hex color, or a CSS color function (rgb() or rgba()).
-	 * @param [alpha] If supplied, the float will override or add alpha to this color.
+	 * @param {String} string either a 8 or 16 bit hex color, or a CSS color function (rgb() or rgba()).
+	 * @param {number} [alpha] If supplied, the float will override or add alpha to this color.
 	 */
 	parse: function(string, alpha) {
 		var me = this,
 			color,
 			m;
 
-		function parseHex(cCmp,is8bit) {
+		function parseHex(cCmp, is8bit) {
 			var r, g, b;
 			r = parseInt(cCmp[1], 16) >> 0;
 			g = parseInt(cCmp[2], 16) >> 0;
@@ -78,14 +78,12 @@ Ext.define('NextThought.util.Color', {
 			Ext.Error.raise({message: 'Could not parse color', color: string});
 		}
 
-		m[3] = typeof alpha === 'number'
-			? alpha
-			: typeof m[3] === 'number' && !isNaN(m[3])
-				? m[3]
-				: 1;
+		m[3] = typeof alpha === 'number' ?
+			alpha :
+			typeof m[3] === 'number' && !isNaN(m[3]) ? m[3] : 1;
 
 		color = Ext.String.format('rgba({0},{1},{2},{3})', m[0], m[1], m[2], m[3]);
-		if (m[3].toFixed(0) === '0') {
+		if (m[3].toFixed(3) === '0.000') {
 			color = 'None';
 		}
 
@@ -120,7 +118,7 @@ Ext.define('NextThought.util.Color', {
 
 	/**
 	 * http://ridiculousfish.com/blog/posts/colors.html
-	 * @param idx
+	 * @param {number} idx
 	 */
 	hue: function(idx) {
 		/*
@@ -145,7 +143,7 @@ Ext.define('NextThought.util.Color', {
 
 	/**
 	 *
-	 * @param idx - either the known index (a number) or a username with which to look up the index for
+	 * @param {number} idx - either the known index (a number) or a username with which to look up the index for
 	 */
 	getColor: function(idx) {
 		if (typeof idx === 'string') {
