@@ -253,7 +253,7 @@ Ext.define('NextThought.controller.Session', {
 				alert({
 					icon: Ext.Msg.ERROR,
 					title: 'Request Timeout',
-					msg: 'There was some issue preventing us from starting.\nPlease try again in a few minutes.',
+					msg: 'There was some issue preventing us from starting. Please try again in a few minutes.',
 					closable: false,
 					buttons: null
 				});
