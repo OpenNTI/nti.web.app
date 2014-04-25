@@ -258,7 +258,35 @@ body.x-body {margin:0;}
 		padding: 1em;
 		background-image: none;
 		background-color: rgba(235, 235, 235, 0.3);
+
+		&.flat {
+			padding: 0;
+		}
+
+		&.border-top {
+			border-top: 1px solid $border-grey;
+		}
 	}
+
+
+	object[type$=ntisequence] {
+		display: block;
+		padding: 12px 15px;
+	}
+
+	button.playing + object[type$=ntisequenceitem] {
+		&::after {
+			display: block;
+		}
+	}
+
+	object[type$=ntisequenceitem] {
+		display: none;
+		&.active {
+			display: inline-block;
+		}
+	}
+
 
 	div {
 		&.mathjax{

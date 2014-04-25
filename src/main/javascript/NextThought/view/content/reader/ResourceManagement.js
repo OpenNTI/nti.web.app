@@ -143,6 +143,7 @@ Ext.define('NextThought.view.content.reader.ResourceManagement', {
 	manage: function(reader) {
 		this.activateOverlays.apply(this, arguments);
 		this.activateAnnotatableItems.apply(this, arguments);
+		this.activateSequences.apply(this, arguments);
 		this.activateAudioSnippets.apply(this, arguments);
 		this.manageYouTubeVideos();
 	},
@@ -225,6 +226,31 @@ Ext.define('NextThought.view.content.reader.ResourceManagement', {
 			tpl.insertBefore(snip, obj);
 			code.init(doc, id);
 			Ext.fly(snip).remove();
+		});
+	},
+
+
+	activateSequences: function(reader, doc) {
+		var me = this,
+			ob = new Ext.util.Observable(),
+			itemSelector = 'object[type$=ntisequenceitem]';
+
+		Ext.destroy(me.sequenceHandlers);
+		Array.prototype.forEach.call(doc.querySelectorAll('object[type$=ntisequence]'), function(seq) {
+			var items = Array.prototype.slice.call(seq.querySelectorAll(itemSelector));
+			Ext.fly(items[0]).addCls('active');
+
+			me.sequenceHandlers = ob.mon(new Ext.dom.CompositeElement(items), {
+				destroyable: true,
+				click: function(e) {
+					var dom = e.getTarget(itemSelector),
+						el = Ext.get(dom).removeCls('active');
+
+					el = el.next(itemSelector) || Ext.fly(dom.parentNode).first(itemSelector);
+
+					el.addCls('active');
+				}
+			});
 		});
 	},
 
