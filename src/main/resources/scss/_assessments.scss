@@ -1001,6 +1001,13 @@ body.dragging * {
 								@include sprite($icons,'circle-check-green-18',$dimensions: true);
 							}
 						}
+
+						&::before {
+							content: '';
+							height: 50px;
+							width: 0;
+							float: right;
+						}
 					}
 
 					&.correct, &.incorrect{
