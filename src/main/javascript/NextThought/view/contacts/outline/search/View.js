@@ -25,7 +25,7 @@ Ext.define('NextThought.view.contacts.outline.search.View', {
 		}
 	}),
 
-	emptyText: Ext.DomHelper.markup({cls: 'empty-list', html: '{{{NextThought.view.contacts.outline.search.View.empty}}}'}),
+	emptyText: Ext.DomHelper.markup({cls: 'empty-list', html: getString('NextThought.view.contacts.outline.search.View.empty')}),
 	cls: 'contact-search',
 	listeners: {
 		itemclick: 'rowClicked',
