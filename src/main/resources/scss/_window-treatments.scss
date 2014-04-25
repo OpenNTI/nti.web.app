@@ -150,28 +150,30 @@
 
 	.x-window-body {
 		.x-form-field, .x-form-display-field, & {
-			color: $primary-grey;
-			font: italic 400 1.3em/1.5 $font !important;
+			font: normal 300 1.1em/1.7 $font !important;
+			white-space: pre;
 
-			div.message {
-				font: normal 300 0.7em/1.7 $font !important;
-				white-space: pre;
-
-				a, a:link, a:visited, a:active {
-					color: $primary-blue;
-					text-decoration: none;
-					&:hover {
-						text-decoration: underline;
-					}
+			a, a:link, a:visited, a:active {
+				color: $primary-blue;
+				text-decoration: none;
+				&:hover {
+					text-decoration: underline;
 				}
+			}
 
-				.displayname {
-					max-width: 326px;
-					overflow: hidden;
-					@include ellipse;
-					display: inline-block;
-					vertical-align: text-bottom;
-				}
+			.displayname {
+				max-width: 326px;
+				overflow: hidden;
+				@include ellipse;
+				display: inline-block;
+				vertical-align: text-bottom;
+			}
+		}
+
+		.x-window-title.x-form-item {
+			.x-form-field, .x-form-display-field, & {
+				color: $primary-grey;
+				font: italic 400 1.25em/1.5 $font !important;
 			}
 		}
 

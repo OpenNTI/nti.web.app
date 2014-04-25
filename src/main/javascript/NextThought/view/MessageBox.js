@@ -74,8 +74,16 @@ Ext.define('NextThought.view.MessageBox', {
 
 
 	initComponent: function() {
-		this.callParent(arguments);
-		this.bottomTb.layout.pack = 'end';
+		var me = this;
+		me.callParent(arguments);
+		me.bottomTb.layout.pack = 'end';
+
+		me.myTitle = new Ext.form.field.Display({
+			id: me.id + '-titlefield',
+			cls: me.baseCls + '-title'
+		});
+
+		me.promptContainer.insert(0, me.myTitle);
 	},
 
 
@@ -100,13 +108,19 @@ Ext.define('NextThought.view.MessageBox', {
 			return str;
 		}
 
-		cfg.msg = wrap(cfg.msg, 60, '\n');
+		this.myTitle.setValue(cfg.title);
+		this.myTitle[Ext.isEmpty(cfg.title) ? 'hide' : 'show']();
 
-		cfg.msg = cfg.title + '<div class="message">' + cfg.msg + '</div>';
+		cfg.msg = wrap(cfg.msg, 55, '\n');
 		cfg.msg = cfg.msg.replace(/\n/, '<br/>');
-		Ext.defer(this.toFront, 10, this);
-		Ext.defer(this.updateLayout, 100, this);
-		return this.callParent([cfg]);
+
+		try {
+			return this.callParent([cfg]);
+		}
+		finally {
+			Ext.defer(this.toFront, 10, this);
+			Ext.defer(this.updateLayout, 100, this);
+		}
 	}
 
 }, function() {
