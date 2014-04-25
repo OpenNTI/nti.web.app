@@ -10,7 +10,7 @@ Ext.define('NextThought.view.assessment.components.AudioClip', {
 	childEls: ['audioEl'],
 
 	renderTpl: Ext.DomHelper.markup({tag: 'audio', id: '{id}-audioEl', cn: {tag: 'tpl', 'for': 'sources', cn: [
-			{tag: 'source', 'data-service': '{service}', src: '{source}', type: '{type}'}
+			{tag: 'source', src: '{source}', type: '{type}'}
 		]}
 	}),
 
@@ -21,8 +21,30 @@ Ext.define('NextThought.view.assessment.components.AudioClip', {
 
 
 	beforeRender: function() {
+		function trn(o) {
+			if (o.service !== 'html5' || o.source.length !== o.type.length) {
+				console.error('Bad audio source', o);
+				return [];
+			}
+
+			var a = [], i = 0;
+			for (i; i < o.source.length; i++) {
+				a.push({
+					source: o.source[i],
+					type: o.type[i]
+				});
+			}
+
+			return a;
+		}
+
+		function flatten(agg, v) { return agg.concat(v); }
+
 		Ext.apply(this.renderData, {
-			sources: this.domObject.querySelectorAll('object[type$=audiosource]').toArray().map(DomUtils.parseDomObject)
+			sources: this.domObject.querySelectorAll('object[type$=audiosource]').toArray()
+							 .map(DomUtils.parseDomObject)
+							 .map(trn)
+							 .reduce(flatten, [])
 		});
 
 		return this.callParent(arguments);

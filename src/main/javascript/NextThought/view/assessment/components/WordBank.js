@@ -22,7 +22,7 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 	audioTeplate: new Ext.XTemplate(Ext.DomHelper.markup({
 		tag: 'button', cls: 'x-component-assessment audio-clip', cn: {
 			tag: 'audio', cn: {tag: 'tpl', 'for': 'sources', cn: [
-				{tag: 'source', 'data-source': '{service}', src: '{source}', type: '{type}'}
+				{tag: 'source', src: '{source}', type: '{type}'}
 			]}
 		}
 	})),
@@ -44,10 +44,33 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 			elements = d.querySelectorAll('object[type$=ntiaudio]'),
 			x = elements.length - 1, c, o, p;
 
+		function trn(o) {
+			if (o.service !== 'html5' || o.source.length !== o.type.length) {
+				console.error('Bad audio source', o);
+				return [];
+			}
+
+			var a = [], i = 0;
+			for (i; i < o.source.length; i++) {
+				a.push({
+					source: o.source[i],
+					type: o.type[i]
+				});
+			}
+
+			return a;
+		}
+
+		function flatten(agg, v) { return agg.concat(v); }
+
+
 		for (x; x >= 0; x--) {
 			o = elements[x];
 			tpl.insertAfter(o, {
-				sources: o.querySelectorAll('object[type$=audiosource]').toArray().map(DomUtils.parseDomObject)});
+				sources: o.querySelectorAll('object[type$=audiosource]').toArray()
+								 .map(DomUtils.parseDomObject)
+								 .map(trn)
+								 .reduce(flatten, [])});
 			o.parentNode.removeChild(o);
 		}
 

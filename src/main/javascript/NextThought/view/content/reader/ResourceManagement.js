@@ -193,12 +193,35 @@ Ext.define('NextThought.view.content.reader.ResourceManagement', {
 		var tpl = this.AUDIO_SNIPPET_TEMPLATE,
 			code = this.AUDIO_SNIPPET_CODE_TEMPLATES;
 
+		function trn(o) {
+			if (o.service !== 'html5' || o.source.length !== o.type.length) {
+				console.error('Bad audio source', o);
+				return [];
+			}
+
+			var a = [], i = 0;
+			for (i; i < o.source.length; i++) {
+				a.push({
+					source: o.source[i],
+					type: o.type[i]
+				});
+			}
+
+			return a;
+		}
+
+		function flatten(agg, v) { return agg.concat(v); }
+
 		Array.prototype.forEach.call(doc.querySelectorAll('object[type$=ntiaudio]'), function(snip) {
 			var id = guidGenerator(),
 				obj = Ext.apply(DomUtils.parseDomObject(snip), {
-					sources: Array.prototype.map.call(snip.querySelectorAll('object[type$=audiosource]'), DomUtils.parseDomObject),
-					id: id
+					id: id,
+					sources: Array.prototype
+									 .map.call(snip.querySelectorAll('object[type$=audiosource]'), DomUtils.parseDomObject)
+									 .map(trn)
+									 .reduce(flatten, [])
 				});
+
 			tpl.insertBefore(snip, obj);
 			code.init(doc, id);
 			Ext.fly(snip).remove();
