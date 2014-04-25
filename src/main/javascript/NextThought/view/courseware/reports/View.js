@@ -64,7 +64,7 @@ Ext.define('NextThought.view.courseware.reports.View', {
 			title: 'Assignment Reports',
 			about: Ext.DomHelper.markup({tag: 'span', cn: [
 				'The Assignment Report includes information about submissions, results, and answers on a particular assignment. ' +
-				'You can view and download these reports from the ' +
+				'You can view and download these reports from the ',
 				{tag: 'a', cls: 'target', html: 'Assignments tab'}, '.'
 			]}),
 			src: 'resources/images/elements/assignment_report.gif'
