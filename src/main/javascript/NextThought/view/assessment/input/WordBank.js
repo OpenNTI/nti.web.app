@@ -133,7 +133,11 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 		}
 
 		el = Ext.get(dom);
-		el.select('*:not(.reset)').remove();
+		Array.prototype.forEach.call(dom.childNodes, function(d) {
+			if (!Ext.fly(d).is('.reset')) {
+				dom.removeChild(d);
+			}
+		});
 		Ext.DomHelper.append(el, dragSource.dataset.word);
 
 		dom.resetDD = function() {

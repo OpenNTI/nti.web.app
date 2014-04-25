@@ -1326,8 +1326,19 @@ body.dragging * {
 				border-radius: 3px;
 				clip: rect(20px auto auto auto);
 			}
+
+
+			&:not(.graded) .wordentry {
+				padding-right: 0;
+				.reset {
+					opacity: 1;
+					display: inline-block;
+					width: 1.5em;
+				}
+			}
 		}
 	}
+
 	.shortanswer-input {
 		.inputbox,
 		.response-container {
