@@ -4,6 +4,8 @@ Ext.define('NextThought.view.content.overlay.Panel', {
 
 	requires: ['NextThought.util.Anchors'],
 
+	OBJECT_QUERY: 'object[type*=naquestion]',
+
 	placementHolderTpl: Ext.DomHelper.createTemplate({type: 'application/vnd.nextthought.placeholder'}),
 
 	inheritableStatics: {
@@ -37,7 +39,7 @@ Ext.define('NextThought.view.content.overlay.Panel', {
 		if (!this.contentElement) {
 			try {
 			this.insertedElement = true;
-			d = this.reader.getDocumentElement().getElementsByTagName('object');
+			d = this.reader.getDocumentElement().querySelectorAll(this.OBJECT_QUERY);
 			d = Array.prototype.slice.call(d);
 
 			d = d.filter(function rootObjects(e) {
