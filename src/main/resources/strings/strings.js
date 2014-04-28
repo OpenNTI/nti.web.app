@@ -1,1 +1,1 @@
-../locales/en/strings/NextThoughtWebApp.js
+../locales/en/LC_MESSAGES/NextThoughtWebApp.js
