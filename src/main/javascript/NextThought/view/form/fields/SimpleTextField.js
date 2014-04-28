@@ -100,6 +100,7 @@ Ext.define('NextThought.view.form.fields.SimpleTextField', {
 			monitors = {
 				scope: this,
 				keyup: 'keyPressed',
+				paste: 'onPaste',
 				contextmenu: function(e) { e.stopPropagation(); } //allow context menu
 			};
 
@@ -113,12 +114,11 @@ Ext.define('NextThought.view.form.fields.SimpleTextField', {
 			this.clearEl.hide();
 		}
 
-		this.mon(e, monitors);
-		this.mon(this.clearEl, 'click', this.clearValue.bind(this, false));
-
-		if (this.inputEl) {
-			this.inputEl.on('paste', 'onPaste', this);
+		if (e) {
+			this.mon(e, monitors);
 		}
+
+		this.mon(this.clearEl, 'click', this.clearValue.bind(this, false));
 
 		this.lastValue = this.getValue();
 		delete this._value;
