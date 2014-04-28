@@ -26,8 +26,19 @@ Ext.define('NextThought.store.courseware.Navigation', {
 			tocNodes = this.tocNodes;
 
 		function itr(n) {
+			var id = n.getId();
+
 			if (n.isNode) {
-				t = tocNodes.getById(n.getId());
+				if (!id) {
+					console.warn('Node doesnt have an id', n);
+				}
+
+				t = tocNodes.getById(id);
+
+				if (!t) {
+					console.warn('Node isnt found in toc', id);
+				}
+
 				fill = t ? {
 					label: t.get('label'),
 					tocOutlineNode: t
