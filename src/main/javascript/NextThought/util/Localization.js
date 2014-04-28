@@ -28,7 +28,7 @@ Ext.define('NextThought.util.Localization', {
 	},
 
 	pluralizeString: function(count, key, noNum) {
-		var forms = window.NTIStrings.PluralForms[key], i,
+		var forms = (window.NTIStrings.PluralForms || {})[key], i,
 			s;
 
 		if (!forms) {
