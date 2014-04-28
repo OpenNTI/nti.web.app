@@ -135,6 +135,8 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 	insertOverlay: function() {
 		this.annotationOverlay = Ext.DomHelper.insertAfter(this.reader.getTargetEl().first(), {cls: 'note-gutter'}, true);
+
+		this.mon(this.annotationOverlay, 'click', 'showAnnotationsAtLine', this);
 	},
 
 
@@ -160,6 +162,21 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 			}
 		});
 
+		this.realignNotes();
+	},
+
+
+	realignNotes: function() {
+		this.annotationManager.removeAll();
+
+		//This is  not the right way to be plumbing this.  I'm not sure I have any better ideas though,
+		//the overlay needs component specific data to render a note.
+		cmps = Ext.isFunction(this.reader.getPartComponents) ? this.reader.getPartComponents() : [];
+		Ext.each(cmps || [], function(cmp) {
+			if (Ext.isFunction(cmp.registerAnnotations)) {
+				cmp.registerAnnotations();
+			}
+		});
 	},
 
 
@@ -234,17 +251,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 			return;
 		}
 
-
-		this.annotationManager.removeAll();
-
-		//This is  not the right way to be plumbing this.  I'm not sure I have any better ideas though,
-		//the overlay needs component specific data to render a note.
-		cmps = Ext.isFunction(this.reader.getPartComponents) ? this.reader.getPartComponents() : [];
-		Ext.each(cmps || [], function(cmp) {
-			if (Ext.isFunction(cmp.registerAnnotations)) {
-				cmp.registerAnnotations();
-			}
-		});
+		this.realignNotes();
 	},
 
 
@@ -415,7 +422,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		if (Ext.isEmpty(el)) {
 			el = tpl.append(this.annotationOverlay, {line: line, count: count}, true);
 			el.setStyle('top', line + 'px');
-			this.mon(el, 'click', 'showAnnotationsAtLine', this);
+			//this.mon(el, 'click', 'showAnnotationsAtLine', this);
 		} else {
 			Ext.fly(el).update(count);
 		}
