@@ -274,14 +274,9 @@ body.x-body {margin:0;}
 		padding: 12px 15px;
 	}
 
-	button.playing + object[type$=ntisequenceitem] {
-		&::after {
-			display: block;
-		}
-	}
-
 	object[type$=ntisequenceitem] {
 		display: none;
+		position: static;
 		&.active {
 			display: inline-block;
 		}
@@ -466,6 +461,17 @@ body.x-body {margin:0;}
 	}
 
 	.rightpic, .leftpic {margin: 1.5em;}
+
+	.putright {
+		position: absolute;
+		right: 0;
+		padding: 0;
+		margin: 0 1em;
+		* {
+			margin: 0;
+			padding: 0;
+		}
+	}
 
 	.align-center {text-align: center;}
 	.align-left {text-align: left;}
