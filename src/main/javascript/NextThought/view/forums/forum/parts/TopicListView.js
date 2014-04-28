@@ -65,7 +65,7 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 
 	emptyText: Ext.DomHelper.markup({
 		cls: 'empty-forum',
-		html: '{{{NextThought.view.forums.forum.parts.TopicListView.empty}}}'
+		html: getString('NextThought.view.forums.forum.parts.TopicListView.empty')
 	}),
 
 
