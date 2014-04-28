@@ -313,6 +313,12 @@ Ext.define('NextThought.view.menus.Presence', {
 	},
 
 	saveEditor: function(cmp, value, oldValue) {
+		value = value.trim();
+
+		if (value.length < 1) {
+			value = oldValue;
+		}
+
 		var row = cmp.boundEl.up('.status'),
 				target = this.getTarget(row),
 				newPresence,
@@ -325,6 +331,7 @@ Ext.define('NextThought.view.menus.Presence', {
 		row.removeCls('active');
 
 		if (value === oldValue) {
+			row.down('.label').update(value);
 			return;
 		}
 

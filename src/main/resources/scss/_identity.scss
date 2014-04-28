@@ -199,6 +199,9 @@
 		width: 165px;
 		float: right;
 		border: none;
+		height: 27px;
+		line-height: 27px;
+		background-color: #efefef
 	}
 
 	.controls{
@@ -206,6 +209,7 @@
 		height: 30px;
 		top: -3px;
 		overflow: visible;
+		background-color: #efefef;
 		.cancel{
 			@include icon('clear_line',$top:7px,$left:-7px);
 			overflow: visible;
