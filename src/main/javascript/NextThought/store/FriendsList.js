@@ -285,6 +285,28 @@ Ext.define('NextThought.store.FriendsList', {
 	},
 
 
+	findUnfiltered: function(property, value, start, anyMatch, caseSensitive, exactMatch) {
+		var fn = this.createFilterFn(property, value, anyMatch, caseSensitive, exactMatch),
+			data = this.snapshot || this.data;
+
+		return fn ? data.findIndexBy(fn, null, start) : -1;
+	},
+
+
+	getAtUnfiltered: function(index) {
+		var data = this.snapshot || this.data;
+
+		return data.getAt(index);
+	},
+
+
+	findRecordUnfiltered: function() {
+		var index = this.findUnfiltered.apply(this, arguments);
+
+		return index !== -1 ? this.getAtUnfiltered(index) : null;
+	},
+
+
 	/**
 	 *
 	 * @param {Boolean} [leaveDuplicates] @private

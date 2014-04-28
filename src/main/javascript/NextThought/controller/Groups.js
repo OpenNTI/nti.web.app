@@ -126,7 +126,8 @@ Ext.define('NextThought.controller.Groups', {
 			return;
 		}
 
-		rec = store.findRecord('Username', id, 0, false, true, true);
+		rec = store.findRecordUnfiltered('Username', id, 0, false, true, true);
+
 		if (!rec) {
 			me.createGroupUnguarded('My Contacts', id, store.getContacts(), function(success, rec) {
 				if (rec && rec.isModel) {
