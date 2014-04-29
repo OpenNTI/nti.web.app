@@ -40,6 +40,8 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 		Ext.apply(this.renderData, {
 			lineWithBlank: this.buildContent(this.filterHTML(this.part.get('input')))
 		});
+
+		this.maybeRelayout = Ext.Function.createBuffered(this.updateLayout, 10, this, []);
 	},
 
 
@@ -176,6 +178,7 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 		}
 
 		me.checkSubmissionState();
+		me.maybeRelayout();
 	},
 
 
@@ -183,7 +186,7 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 		var k, v = this.getValue(),
 			allFilledIn = true;
 
-		console.log('Test', v);
+		//console.log('Test', v);
 
 		for (k in v) {
 			if (v.hasOwnProperty(k)) {
