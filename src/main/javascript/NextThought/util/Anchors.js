@@ -1427,7 +1427,7 @@ Ext.define('NextThought.util.Anchors', {
 			//Most common is text
 			if (Ext.isTextNode(node)) {
 				//We don't want to try to anchor to empty text nodes
-				return node.nodeValue.trim().length < 1;
+				return node.nodeValue.trim().length > 0;
 			}
 
 			if (ntiid) {
