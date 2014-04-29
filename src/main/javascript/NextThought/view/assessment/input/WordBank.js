@@ -124,12 +124,19 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 
 
 	setFieldValue: function(dragSource, dropTarget) {
-		var el = dragSource.cloneNode(true),
+		var el = dragSource && dragSource.cloneNode(true),
 			dom = el, me = this,
-			input = dropTarget.previousSibling;
+			input = dropTarget && dropTarget.previousSibling;
 
-		if (input.getAttribute('name') !== dropTarget.dataset.input) {
+		if (!input || input.getAttribute('name') !== dropTarget.dataset.input) {
 			Ext.Error.raise('Bad DOM');
+		}
+
+		dropTarget.innerHTML = '';
+
+		if (!dragSource) {
+			input.value = '';
+			return;
 		}
 
 		el = Ext.get(dom);
@@ -148,6 +155,7 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 		};
 
 		dom.removeAttribute('id');
+		Ext.fly(dom).removeCls('used');
 		Ext.fly(dom).select('[id]').set({id: undefined});
 
 		dropTarget.appendChild(dom);
