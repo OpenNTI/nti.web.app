@@ -223,13 +223,16 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 				// Center drag and drop proxy on cursor pointer
 				this.setDelta(dx, dy);
 
-				data.sheild = Ext.DomHelper.insertFirst(co, {cls: 'sheild'}, true);
+				data.shield = Ext.DomHelper.insertFirst(co, {cls: 'shield'}, true);
 				Ext.getBody().addCls('dragging');
 				Ext.fly(so).addCls('dragging');
 			},
 
 			onEndDrag: function(data) {
-				Ext.destroy(data.sheild);
+				if (data.shield) {
+					data.shield.remove();
+					delete data.shield;
+				}
 				Ext.getBody().removeCls('dragging');
 				Ext.fly(data.sourceEl).removeCls('dragging');
 			}
