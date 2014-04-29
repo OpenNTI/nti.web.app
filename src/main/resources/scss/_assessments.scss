@@ -1300,7 +1300,7 @@ body.dragging * {
 
 		.blank {
 			display: inline-block;
-			margin-right: 1em;
+			margin-right: 0.5em;
 			border-radius: 3px;
 
 			position: relative;
@@ -1317,19 +1317,19 @@ body.dragging * {
 			}
 
 			&:empty {
-				min-width: 8em;
 				&::before {
 					content: '(drop)';
 					visibility: hidden;
 				}
 			}
 
-			&::after {
-				$o: -4px;
+
+			&:not(.drop-hover):empty::after {
+				$o: 0;
 				content: '';
 				position: absolute;
 				height: 24px;
-				left: $o; right: $o; bottom: 0;
+				left: $o; right: $o; bottom: 6px;
 
 				border: 2px solid $border-grey;
 				border-radius: 3px;
