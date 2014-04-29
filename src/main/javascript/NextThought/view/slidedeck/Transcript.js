@@ -587,6 +587,9 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		}
 		if ((!e || !e.getTarget('.annotation-view')) && this.annotationView.isVisible()) {
 			this.annotationView.hide();
+			this.noteOverlay.showAnnotationsAtLine(e);
+			e.stopPropagation();
+			return false;
 		}
 		return true;
 	},
