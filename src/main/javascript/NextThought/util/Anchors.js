@@ -1954,40 +1954,7 @@ Ext.define('NextThought.util.Anchors', {
 			}
 
 			return sel;
-		},
-
-
-		/*
-		 * Snap the selection to whole words as opposed to partial words.  This code is taken and only
-		 * minimally adjusted, from here:
-		 * http://stackoverflow.com/questions/10964016/how-do-i-extend-selection-to-word-boundary-using-javascript-once-only/10964743#10964743
-		 */
-		snapSelectionToWord: function(doc) {
-			try {
-				var sel = rangy.getSelection(doc),
-					r = sel.rangeCount ? sel.getRangeAt(0) : null;
-
-				//if selection is collapsed, don't expand.
-				if (!r || r.collapsed) {
-					return;
-				}
-				/*
-				 * \u2018 = fancy left single quote
-				 * \u2019 = fancy right single quote
-				 * \u201C = fancy left double quote
-				 * \u201D = fancy right double quote
-				 */
-
-				r.expand('word', {wordRegex: /[\u201C\u2018]*[a-z0-9]+('[a-z0-9]+)*[\u2019\u201D\.,;:]*/gi});
-
-				Anchors.expandRangeToIncludeMath(r);
-				sel.setSingleRange(r);
-			}
-			catch (e) {
-				console.error(e.stack || e.message || e);
-			}
 		}
-
 	},
 
 	function() {

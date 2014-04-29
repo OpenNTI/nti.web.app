@@ -686,11 +686,6 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		var doc = this.getDocumentElement(),
 				range, selection, txt;
 		try {
-			if (!Ext.is.iPad) { // iPad does this automatically
-				Anchors.snapSelectionToWord(doc);
-			}
-
-
 			selection = doc.parentWindow.getSelection();
 			txt = selection.toString();
 
