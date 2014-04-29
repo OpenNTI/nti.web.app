@@ -109,6 +109,8 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 				animRepair: true,
 				proxy: this.getDragProxy(),
 
+				afterRepair: function() { this.dragging = false; }, //override to stop the flash
+
 				getDragData: function(e) {
 					var sourceEl = e.getTarget('.drag', 10), d;
 					if (sourceEl) {
@@ -157,10 +159,8 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 				}
 			};
 
-			z = this.dragZones = [];
-			this.shelfEl.select('.target.drag').each(function(e) {
-				z.push(new Ext.dd.DragZone(e, cfg));
-			});
+			this.dd = new Ext.dd.DragZone(this.el, cfg);
+			this.on('destroy', 'destroy', this.dd);
 		},
 
 
