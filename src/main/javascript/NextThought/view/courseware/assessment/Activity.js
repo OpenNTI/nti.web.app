@@ -262,7 +262,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 			if (!isMe(c)) {
 				UserRepository.getUser(c).done(function(u) {
 					r.set({
-						label: u + str,
+						label: getFormattedString('NextThought.view.courseware.assessment.Activity.theyfeedback', {name: u}),
 						user: u
 					});
 				});
