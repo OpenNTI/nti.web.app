@@ -93,7 +93,7 @@ Ext.define('NextThought.view.account.contacts.View', {
 
 		this.offlineEmptyText = Ext.DomHelper.markup({
 			cls: 'empty-list rhp-empty-list',
-			html: '{{{NextThought.view.account.contacts.View.offline}}}'
+			html: getString('NextThought.view.account.contacts.View.offline')
 		});
 
 		this.friendsListStore = Ext.getStore('FriendsList');
