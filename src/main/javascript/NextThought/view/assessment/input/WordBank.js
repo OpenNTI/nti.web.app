@@ -18,6 +18,12 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 	]),
 
 
+	solTpl: Ext.DomHelper.createTemplate({
+		cls: 'multiple-choice-solution',
+		cn: ['{0}. ', {tag: 'span', cls: 'solution-choice-text', html: '{1}'}]
+	}),
+
+
 	inputTpl: Ext.DomHelper.markup({ cls: 'fill-in', html: '{lineWithBlank}' }),
 
 
@@ -255,5 +261,48 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 			pill = Ext.getDom(pill);
 			pill.resetDD();
 		});
+	},
+
+
+	getSolutionContent: function(part) {
+		function re(original, attrs) {
+			attrs = (attrs || '').trim().split(/\s/);
+
+			if (/type=(\"|\')?blankfield/i.test(attrs)) {
+				attrs = ((/name=\W?(\w+)\W?/).exec(attrs) || [])[1];
+				if (attrs) {
+					return '{' + attrs + '} ';//the inputs don't have a space between them and the following words. :/
+				}
+			}
+
+			return original;
+		}
+
+		var me = this,
+			out = [], tpl = me.solTpl,
+			line = Ext.DomHelper.createTemplate(
+					me.filterHTML(
+							me.part.get('input')
+									.replace(/<input([^>]+?)\/?>/igm, re)));
+
+		Ext.each(part.get('solutions'), function(s) {
+			var x = s.get('value');
+			// x may or may not be an Array.  Ext.each handles that for us.
+			Ext.each(x, function(s) {
+				var k, w, v = {};
+				for (k in s) {
+					if (s.hasOwnProperty(k)) {
+						w = me.getWordBankItem(s[k]);
+						v[k] = w && w.dataset.word;
+					}
+				}
+
+				out.push(tpl.apply([
+					line.apply(v)
+				]));
+			});
+		});
+
+		return out.join('');
 	}
 });
