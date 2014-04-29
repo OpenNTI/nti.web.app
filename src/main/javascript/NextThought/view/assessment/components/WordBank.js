@@ -182,11 +182,13 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 
 
 	setupDragging: function() {
-		var cfg, me = this, z;
+		var cfg, me = this;
 
 		cfg = {
 			animRepair: true,
 			proxy: this.getDragProxy(),
+
+			afterRepair: function() { this.dragging = false; }, //override to stop the flash
 
 			getDragData: function(e) {
 				var sourceEl = e.getTarget('.drag', 10), d;
@@ -238,9 +240,7 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 			}
 		};
 
-		z = this.dragZones = [];
-		this.el.select('.target.drag').each(function(e) {
-			z.push(new Ext.dd.DragZone(e, cfg));
-		});
+		this.dd = new Ext.dd.DragZone(this.el, cfg);
+		this.on('destroy', 'destroy', this.dd);
 	}
 });
