@@ -63,15 +63,20 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 							if (!d) {
 								return Ext.DomHelper.markup({
 									cls: 'ontime',
+									'data-qtip': getString('NextThought.view.courseware.assessment.admin.Grid.ontime'),
 									html: getFormattedString('NextThought.view.courseware.assessment.admin.Grid.submitted', {date: Ext.Date.format(s, 'm/d')})
 								});
 							}
 
 							//if we get here the submission was late
-
 							d = new Duration(Math.abs(s - d) / 1000);
-							return getFormattedString('NextThought.view.courseware.assessment.admin.Grid.late', {
-								late: d.ago().replace('ago', '').trim()
+
+							return Ext.DomHelper.markup({
+								cls: 'late',
+								'data-qtip': getFormattedString('NextThought.view.courseware.assessment.admin.Grid.late', {
+									late: d.ago().replace('ago', '').trim()
+								}),
+								html: getFormattedString('NextThought.view.courseware.assessment.admin.Grid.submitted', {date: Ext.Date.format(s, 'm/d')})
 							});
 						},
 						doSort: function(state) {
