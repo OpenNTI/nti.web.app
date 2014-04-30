@@ -112,7 +112,12 @@ Ext.define('NextThought.view.content.reader.ResourceManagement', {
 
 			btn.addEventListener('click', click, false);
 
-			lastsource.addEventListener('error', noplay, false);
+			if (lastsource) {
+				lastsource.addEventListener('error', noplay, false);
+			} else {
+				noplay();
+			}
+
 			audio.addEventListener('play', play, false);
 
 			['abort', 'ended', 'emptied', 'pause'].forEach(function(e) {
