@@ -182,6 +182,10 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 
 	setupScrollLock: function() {
 		var reader = this.reader;
+		if (!reader || this.up('question-parts')) {
+			return;
+		}
+
 		this.mon(reader, {
 			'scroll': 'onWordBankScroll'
 		});
