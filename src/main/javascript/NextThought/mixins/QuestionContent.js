@@ -53,7 +53,8 @@ Ext.define('NextThought.mixins.QuestionContent', {
 					domObject: object,
 					reader: me.reader,
 					record: me.part || me.question,
-					questionId: me.question.getId()
+					questionId: me.question.getId(),
+					ownerCt: me
 				}, me.rendered && !dontRender);
 
 			if (added) {

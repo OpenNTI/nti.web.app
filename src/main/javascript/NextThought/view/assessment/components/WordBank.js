@@ -130,7 +130,7 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 		body.setStyle({
 			position: 'fixed',
 			left: xy[0] + 'px',
-			top: xy[1] + 'px',
+			top: Ext.fly(refEl).getY() + 'px',
 			zIndex: 10
 		});
 
@@ -165,11 +165,12 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 	},
 
 
-	onWordBankScroll: function(e, scrollingEl) {
+	onWordBankScroll: function(ev, scrollingEl) {
 		var xy = this.el.getXY(),
 			refXY = Ext.fly(scrollingEl).getXY(),
 			diffY = xy[1] - refXY[1],
-			diffX = xy[0] - refXY[0];
+			diffX = xy[0] - refXY[0],
+			foot;
 
 		if (diffY <= 0) {
 			this.lockWordBank(xy, diffX, scrollingEl);
@@ -177,6 +178,17 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 			this.unlockWordBank();
 		}
 
+		try {
+			foot = this.up().down('question-parts').items.last().getY();
+
+			if ((this.bodyEl.getY() + this.bodyEl.getHeight()) < foot) {
+				this.bodyEl.show();
+			} else {
+				this.bodyEl.hide();
+			}
+		} catch (e) {
+			console.error(e.stack || e.message || e);
+		}
 	},
 
 
