@@ -67,6 +67,12 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 		if (blanks.length) {
 			this.setupDropZones(blanks);
 		}
+
+		//If there are more than one (drops), enable reordering.
+		// Create a DragZone and make it clone dropped pill, while removing
+		// the pill so the blank style restores while dragging. If the drag
+		// is canceled, we will restore the pill to the bank. On drop, we
+		// will "reset" any existing pills before dropping.
 	},
 
 
