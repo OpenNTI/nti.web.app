@@ -51,6 +51,7 @@ Ext.define('NextThought.mixins.QuestionContent', {
 				added = me.addObject(type, {
 					renderTo: id,
 					domObject: object,
+					reader: me.reader,
 					record: me.part || me.question,
 					questionId: me.question.getId()
 				}, me.rendered && !dontRender);

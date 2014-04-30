@@ -4,7 +4,11 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 
 	cls: 'wordbank',
 
-	renderTpl: new Ext.XTemplate(Ext.DomHelper.markup({ 'tag': 'tpl', 'for': 'entries', cn: [
+	childEls: ['bodyEl'],
+
+	renderTpl: new Ext.XTemplate(Ext.DomHelper.markup({
+		cls: 'wordbank-body', id: '{id}-bodyEl',
+		cn: { 'tag': 'tpl', 'for': 'entries', cn: [
 		{
 			cls: 'target wordentry drag {parent.unique:boolStr("unique")}',
 			'data-wid': '{wid:htmlEncode}',
@@ -14,7 +18,7 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 			'data-word': '{word:htmlEncode}',
 			cn: [{cls: 'reset'}, '{[this.parseWord(values, parent.ownerCmp)]}']
 		}
-	]}), {
+	]}}), {
 		parseWord: function(values, cmp) { return cmp.parseWordEntry(values.content || values.word); }
 	}),
 
@@ -111,6 +115,76 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 		this.callParent(arguments);
 		this.setupAudioClips();
 		this.setupDragging();
+		this.setupScrollLock();
+	},
+
+
+	lockWordBank: function(xy, left, refEl) {
+		if (this.wordbankLocked) {return;}
+		this.wordbankLocked = true;
+
+		this.el.setHeight(this.el.getHeight());//lock it in.
+
+		var body = this.bodyEl;
+
+		body.setStyle({
+			position: 'fixed',
+			left: xy[0] + 'px',
+			top: xy[1] + 'px',
+			zIndex: 10
+		});
+
+		function onResize() {
+			if (body.getStyle('position', true) !== 'fixed' || !body.dom) {return;}
+
+			var refXY = Ext.fly(refEl).getXY();
+			body.setStyle('left', (refXY[0] + left) + 'px');
+		}
+
+		Ext.EventManager.onWindowResize(onResize, window);
+
+		this.wordbankLocked = function() {
+			Ext.EventManager.removeResizeListener(onResize, window);
+		};
+	},
+
+
+	unlockWordBank: function() {
+		if (!this.wordbankLocked) {return;}
+		if (Ext.isFunction(this.wordbankLocked)) {
+			this.wordbankLocked();
+		}
+
+		this.wordbankLocked = false;
+
+		this.bodyEl.setStyle({
+			position: undefined,
+			left: undefined,
+			top: undefined
+		});
+	},
+
+
+	onWordBankScroll: function(e, scrollingEl) {
+		var xy = this.el.getXY(),
+			refXY = Ext.fly(scrollingEl).getXY(),
+			diffY = xy[1] - refXY[1],
+			diffX = xy[0] - refXY[0];
+
+		if (diffY <= 0) {
+			this.lockWordBank(xy, diffX, scrollingEl);
+		} else {
+			this.unlockWordBank();
+		}
+
+	},
+
+
+	setupScrollLock: function() {
+		var reader = this.reader;
+		this.mon(reader, {
+			'scroll': 'onWordBankScroll'
+		});
 	},
 
 
@@ -192,6 +266,7 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 
 			getDragData: function(e) {
 				var sourceEl = e.getTarget('.drag', 10), d;
+				//this.locationCache;
 				if (sourceEl) {
 					d = document.createElement('div');
 					d.className = sourceEl.className;
@@ -240,7 +315,7 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 			}
 		};
 
-		this.dd = new Ext.dd.DragZone(this.el, cfg);
+		this.dd = new Ext.dd.DragZone(this.bodyEl, cfg);
 		this.on('destroy', 'destroy', this.dd);
 	}
 });
