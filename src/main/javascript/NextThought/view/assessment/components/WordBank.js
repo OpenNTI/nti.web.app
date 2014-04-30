@@ -124,6 +124,7 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 		this.wordbankLocked = true;
 
 		this.el.setHeight(this.el.getHeight());//lock it in.
+		this.bodyEl.setWidth(this.el.getWidth());
 
 		var body = this.bodyEl;
 
@@ -181,7 +182,7 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 		try {
 			foot = this.up().down('question-parts').items.last().getY();
 
-			if ((this.bodyEl.getY() + this.bodyEl.getHeight()) < foot) {
+			if (this.bodyEl.getY() < foot) {
 				this.bodyEl.show();
 			} else {
 				this.bodyEl.hide();
