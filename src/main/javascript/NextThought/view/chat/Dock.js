@@ -371,14 +371,11 @@ Ext.define('NextThought.view.chat.DockItem', {
 							}
 						}
 
-						//don't show the images if the occupant isn't online, unless its not a group chat
-						if ((presence && presence.isOnline()) || !isGroup) {
-							data['img' + userCount] = 'url(' + u.get('avatarURL') + ')';
-							if (me.rendered) {
-								me['img' + userCount].setStyle({backgroundImage: data['img' + userCount]});
-							}
-							userCount++;
+						data['img' + userCount] = 'url(' + u.get('avatarURL') + ')';
+						if (me.rendered) {
+							me['img' + userCount].setStyle({backgroundImage: data['img' + userCount]});
 						}
+						userCount++;
 					}
 					//don't show the users name if the occupant isn't online, unliess its not a group chat
 					if ((presence && presence.isOnline()) || !isGroup) {
