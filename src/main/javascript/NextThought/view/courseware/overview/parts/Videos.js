@@ -37,8 +37,8 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 				{ cls: 'ctr', cn: [
 					{ cls: 'play', cn: [
 						{cls: 'blur-clip', cn: {cls: 'blur'}},
-						{ cls: 'label', 'data-qtip': '{{{NextThought.view.courseware.overview.parts.Videos.play}}}' },
-						{cls: 'launch-player', 'data-qtip': '{{{NextThought.view.courseware.overview.parts.Videos.playtranscript}}}'}
+						{ cls: 'label', 'data-qtip': '{{{NextThought.view.courseware.overview.parts.Videos.playtranscript}}}'},
+						{cls: 'launch-player', 'data-qtip': '{{{NextThought.view.courseware.overview.parts.Videos.play}}}'}
 					] }
 				] }
 			]},
@@ -435,7 +435,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 			slide;
 
 
-		if (e.getTarget('.launch-player')) {
+		if (!e.getTarget('.launch-player')) {
 			if (this.player) {
 				if (this.player.isPlaying()) {
 					console.debug('Pausing video for media');

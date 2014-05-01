@@ -65,7 +65,7 @@
 			padding: 0 15px 0 50px;
 			max-width: 400px;
 			@include ellipse();
-			@include icon('play',$top:3px,$left:3px);
+			@include icon('play-transcript',$top:3px,$right:3px, $left:auto);
 			&::before {content:'';}
 		}
 
@@ -74,11 +74,11 @@
 			.launch-player{
 				display: block;
 				top: 0;
-				right: 0;
+				left: 0;
 				bottom: 0;
 				width: 50px;
 				border-radius: 50px;
-				@include icon('play-transcript', $position:absolute, $top:2px, $left:5px);
+				@include icon('play', $position:absolute, $top:2px, $left:5px);
 			}
 
 			.label{
