@@ -286,7 +286,10 @@ Ext.define('NextThought.controller.Account', {
 		btn.addCls('disabled');
 		if (!data.message) {
 			console.log('no message to send.');
-			w.close();
+			view.setError({
+				field: 'message',
+				message: 'Message cannot be empty.'
+			});
 			return;
 		}
 
@@ -302,6 +305,14 @@ Ext.define('NextThought.controller.Account', {
 		else {
 			console.log('Unknown role for contact window');
 			w.close();
+			return;
+		}
+
+		if (!Globals.isEmail(data.email)) {
+			view.setError({
+				field: 'email',
+				message: 'You must enter a valid email address.'
+			});
 			return;
 		}
 
