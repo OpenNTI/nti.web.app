@@ -331,7 +331,7 @@ Ext.define('NextThought.view.account.contacts.View', {
 			overItemCls: this.overItemCls,
 			itemSelector: this.itemSelector,
 			tpl: this.tpl,
-			emptyText: Ext.DomHelper.markup({cls: 'empty-list', html: '{{{NextThought.view.account.contacts.View.empty-list}}}'}),
+			emptyText: Ext.DomHelper.markup({cls: 'empty-list', html: getString('NextThought.view.account.contacts.View.empty-list')}),
 			renderTo: this.el,
 			cls: 'contact-search',
 			listeners: {
