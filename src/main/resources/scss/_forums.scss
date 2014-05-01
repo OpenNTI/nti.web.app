@@ -640,7 +640,7 @@
 
 	&.no-reply {
 		.reply {
-			display: none;
+			display: none !important;
 		}
 	}
 
