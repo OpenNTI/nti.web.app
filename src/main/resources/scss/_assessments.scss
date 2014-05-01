@@ -1306,7 +1306,8 @@ body.dragging * {
 			position: relative;
 
 			&.drop-hover {
-				background: rgba(0, 0, 0, 0.3)
+				.drag {visibility: hidden;}
+				background: rgba(0, 0, 0, 0.3);
 			}
 
 			.target.drag {

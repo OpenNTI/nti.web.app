@@ -68,11 +68,9 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 			this.setupDropZones(blanks);
 		}
 
-		//If there are more than one (drops), enable reordering.
-		// Create a DragZone and make it clone dropped pill, while removing
-		// the pill so the blank style restores while dragging. If the drag
-		// is canceled, we will restore the pill to the bank. On drop, we
-		// will "reset" any existing pills before dropping.
+		if (blanks.length > 1) {
+			this.setupDragZone();
+		}
 	},
 
 
@@ -80,6 +78,100 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 		return this.blankTpl.insertAfter(input, Ext.apply({
 			inputName: input.getAttribute('name')
 		}, input.dataset));
+	},
+
+
+	getDragProxy: function() {
+		var proxy = this.dragProxy;
+
+		if (!proxy) {
+			proxy = this.dragProxy = new Ext.dd.StatusProxy({
+				cls: 'dd-assessment-proxy-ghost',
+				id: this.id + '-drag-status-proxy',
+				repairDuration: 500
+			});
+			this.on('destroy', 'destroy', proxy);
+		}
+		return proxy;
+	},
+
+
+	setupDragZone: function() {
+		var cfg, me = this;
+
+		cfg = {
+			animRepair: true,
+			proxy: this.getDragProxy(),
+
+
+			getRepairXY: function() { return this.dragData.repairXY; },
+
+
+			afterRepair: function(e) {
+				var d = this.dragData;
+				d.repairToEl.appendChild(d.repairEl);
+				this.dragging = false;
+			}, //override to stop the flash
+
+
+			getDragData: function(e) {
+				var sourceEl, redrag = e.getTarget('.drag', 10), d;
+				if (redrag) {
+					sourceEl = me.getWordBankItem(redrag.dataset.wid);
+
+					d = document.createElement('div');
+					d.className = sourceEl.className;
+					Ext.DomHelper.append(d, {cls: 'reset'});
+					Ext.DomHelper.append(d, sourceEl.dataset.word);
+
+					d = Ext.apply({
+						sourceEl: sourceEl,
+						repairXY: Ext.fly(sourceEl).getXY(),
+						ddel: d,
+						repairEl: redrag,
+						repairToEl: redrag.parentNode
+					}, sourceEl.dataset);
+
+					redrag.parentNode.removeChild(redrag);
+					return d;
+				}
+			},
+
+
+			onBeforeDrag: function() {
+				return !me.submitted;
+			},
+
+
+			onStartDrag: function() {
+				var data = this.dragData,
+						co = Ext.fly(data.sourceEl).up('.component-overlay'),
+						so = data.sourceEl,
+						el = this.getProxy().getDragEl(),
+						dx = Math.floor(el.getWidth() / 2),
+						dy = -Math.floor(el.getHeight() / 2);
+
+				// Center drag and drop proxy on cursor pointer
+				this.setDelta(dx, dy);
+
+				data.shield = Ext.DomHelper.insertFirst(co, {cls: 'shield'}, true);
+				Ext.getBody().addCls('dragging');
+				Ext.fly(so).addCls('dragging');
+			},
+
+
+			onEndDrag: function(data) {
+				if (data.shield) {
+					data.shield.remove();
+					delete data.shield;
+				}
+				Ext.getBody().removeCls('dragging');
+				Ext.fly(data.sourceEl).removeCls('dragging');
+			}
+		};
+
+		this.dd = new Ext.dd.DragZone(this.el, cfg);
+		this.on('destroy', 'destroy', this.dd);
 	},
 
 
@@ -96,8 +188,8 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 				// If the mouse is over a target node, return that node. This is provided as the "target" parameter in all "onNodeXXXX" node event
 				// handling functions
 				getTargetFromEvent: function(e) {
-					var n = e.getTarget('.blank.target');
-					return (n && n.childNodes.length > 0) ? null : n;
+					return e.getTarget('.blank.target');
+					//return (n && n.childNodes.length > 0) ? null : n;
 				},
 
 				// On entry into a target node, highlight that node.
@@ -122,7 +214,7 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 					if (!isValid(data)) {return false;}
 
 					try {
-						me.setFieldValue(data.sourceEl, target);
+						me.setFieldValue(me.getWordBankItem(data.wid), target);
 					} catch (er) {
 						return false;
 					}
@@ -140,10 +232,16 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 	setFieldValue: function(dragSource, dropTarget) {
 		var el = dragSource && dragSource.cloneNode(true),
 			dom = el, me = this,
-			input = dropTarget && dropTarget.previousSibling;
+			input = dropTarget && dropTarget.previousSibling,
+			replace;
 
 		if (!input || input.getAttribute('name') !== dropTarget.dataset.input) {
 			Ext.Error.raise('Bad DOM');
+		}
+
+		replace = dropTarget.querySelector('.drag');
+		if (replace && replace.resetDD) {
+			replace.resetDD();
 		}
 
 		dropTarget.innerHTML = '';
