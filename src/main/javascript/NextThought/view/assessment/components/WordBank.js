@@ -270,6 +270,7 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 				repairDuration: 1000
 				//repair : Ext.emptyFn <--to help debug
 			});
+			this.on('destroy', 'destroy', proxy);
 		}
 		return proxy;
 	},
