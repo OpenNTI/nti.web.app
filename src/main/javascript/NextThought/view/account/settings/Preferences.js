@@ -20,20 +20,21 @@ Ext.define('NextThought.view.account.settings.Preferences', {
 				}
 			]}
 		},
-
-		{ tag: 'fieldset', cn: [
-			{ tag: 'legend', html: 'Communications' },
-			{
-				tag: 'span',
-				cls: 'not-ready nti-checkbox email',
-				html: 'Send me email notifications about activity I may have missed.',
-				tabIndex: 0,
-				role: 'button',
-				'aria-role': 'button',
-				'data-preference-path': 'PushNotifications/Email',
-				'data-preference-key': 'email_a_summary_of_interesting_changes'
-			}
-		]}
+		{tag: 'tpl', 'if': 'isFeature(\'notifications\')', cn:
+			{ tag: 'fieldset', cn: [
+				{ tag: 'legend', html: 'Communications' },
+				{
+					tag: 'span',
+					cls: 'not-ready nti-checkbox email',
+					html: 'Send me email notifications about activity I may have missed.',
+					tabIndex: 0,
+					role: 'button',
+					'aria-role': 'button',
+					'data-preference-path': 'PushNotifications/Email',
+					'data-preference-key': 'email_a_summary_of_interesting_changes'
+				}
+			]}
+		}
 	]),
 
 
