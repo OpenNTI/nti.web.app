@@ -140,13 +140,6 @@
 		.x-component-forum-comment-thread {
 			font-size: 0.9em;
 
-			&.no-reply {
-				.flag::before {
-					content: '';
-					display: none !important;
-				}
-			}
-
 			.topic-comment-container{
 				padding: 0 0 0 10px;
 				background-color: #f9f9f9;
