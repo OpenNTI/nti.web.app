@@ -1325,7 +1325,7 @@ body.dragging * {
 			}
 
 
-			&:not(.drop-hover):empty::after {
+			&::after {
 				$o: 0;
 				content: '';
 				position: absolute;
@@ -1349,6 +1349,14 @@ body.dragging * {
 		}
 	}
 
+	.wordbank-input {
+		.blank {
+			&.drop-hover, &:not(:empty) {
+				display: none;
+			}
+		}
+	}
+
 	.shortanswer-input {
 		.inputbox,
 		.response-container {
@@ -1357,6 +1365,7 @@ body.dragging * {
 		.blank {
 			margin-right: auto;
 			&::after {
+				left: -4px; right: -4px; bottom: 0;
 				clip: rect(25px auto auto auto);
 			}
 		}
