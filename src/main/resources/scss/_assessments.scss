@@ -1352,7 +1352,7 @@ body.dragging * {
 	.wordbank-input {
 		.blank {
 			&.drop-hover, &:not(:empty) {
-				display: none;
+				&::after{display: none;}
 			}
 		}
 	}
