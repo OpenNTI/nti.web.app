@@ -49,7 +49,7 @@ Ext.define('NextThought.view.contacts.outline.search.View', {
 		var i = Ext.fly(item);
 		//NextThought.view.account.contacts.management.Popout.popup(record,el,item,[-1, 0]);
 		//if they aren't a contact show the card
-		if (i.hasCls('not-contact') && e.getTarget('.nib')) {
+		if (i.hasCls('not-contact')) {
 			e.stopPropagation();
 			this.startPopupTimeout(view, record, item, 0);
 			return;

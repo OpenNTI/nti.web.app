@@ -165,7 +165,7 @@ Ext.define('NextThought.view.account.contacts.View', {
 			el = i.down('.avatar');
 		//NextThought.view.account.contacts.management.Popout.popup(record,el,item,[-1, 0]);
 		//if they aren't a contact just show the card
-		if (i.hasCls('not-contact') && e.getTarget('.nib')) {
+		if (i.hasCls('not-contact')) {
 			e.stopPropagation();
 			this.startPopupTimeout(view, record, item, 0);
 			return;
