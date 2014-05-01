@@ -135,6 +135,8 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 			zIndex: 10
 		});
 
+		body.addCls('locked');
+
 		function onResize() {
 			if (body.getStyle('position', true) !== 'fixed' || !body.dom) {return;}
 
@@ -158,6 +160,7 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 
 		this.wordbankLocked = false;
 
+		this.bodyEl.removeCls('locked');
 		this.bodyEl.setStyle({
 			position: undefined,
 			left: undefined,
