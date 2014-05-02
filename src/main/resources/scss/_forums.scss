@@ -642,6 +642,19 @@
 		.reply {
 			display: none !important;
 		}
+
+		.topic-comment:not([data-depth='0']) {
+			.flag::before {
+				content: '';
+				display: none !important;
+			}
+
+			.edit::before {
+				content: '';
+				display: none !important;
+			}
+		}
+
 	}
 
 	.topic-comment{
