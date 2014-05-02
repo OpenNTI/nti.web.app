@@ -120,7 +120,7 @@
 						bottom: 0;
 						width: 50px;
 						border-radius: 50px;
-						@include icon('play-transcript', $position:absolute, $top:2px, $left:5px);
+						@include icon('play', $position:absolute, $top:2px, $left:5px);
 					}
 
 					.label{
