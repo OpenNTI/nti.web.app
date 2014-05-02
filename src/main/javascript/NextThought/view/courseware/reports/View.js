@@ -20,7 +20,7 @@ Ext.define('NextThought.view.courseware.reports.View', {
 			id: 'course-report',
 			title: getString('NextThought.view.courseware.reports.View.coursetitle'),
 			about: Ext.DomHelper.markup({tag: 'span', cn: [
-				{html: '{{{NextThought.view.courseware.reports.View.coursereport}}}'}
+				{html: getString('NextThought.view.courseware.reports.View.coursereport')}
 			]}),
 			courseNumber: '',
 			courseName: ''
