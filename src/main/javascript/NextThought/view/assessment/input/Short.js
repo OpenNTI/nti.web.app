@@ -67,7 +67,7 @@ Ext.define('NextThought.view.assessment.input.Short', {
 
 		(this.blankInputs || []).forEach(function(input) {
 			var name = input.getAttribute('name');
-			value[name] = input.value || false;
+			value[name] = input.value || null;
 		});
 		return value;
 	},
