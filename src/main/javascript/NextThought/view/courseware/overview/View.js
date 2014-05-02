@@ -89,7 +89,7 @@ Ext.define('NextThought.view.courseware.overview.View', {
 		}
 
 		Promise.all([
-			(overviewSrc && ContentProxy.get(overviewSrc)) || Promise.fulfill(null),
+			(overviewSrc && ContentProxy.get(overviewSrc)) || Promise.resolve(null),
 			course.getAssignments()
 		])
 			.then(function(data) {
