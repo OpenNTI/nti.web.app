@@ -8,14 +8,14 @@ Ext.define('NextThought.view.courseware.info.parts.NotStarted', {
 
 	headerTpl: Ext.DomHelper.createTemplate({ cls: 'course-info-header-bar {status}', cn: [
 		{ cls: 'col-left', cn: [
-			{ cls: 'label', html: '{{{NextThought.view.courseware.info.parts.NotStarted.starts}}}' },
+			{ cls: 'label', html: getString('NextThought.view.courseware.info.parts.NotStarted.starts') },
 			{ cls: 'date', html: '{startDate:date("F j, Y")}'}
 		] },
 		{ cls: 'col-right', cn: [
 			{ tag: 'a', cls: 'enroll', html: '{enroll}', href: '{enrollUrl}', target: '_blank'},
 			{ cls: 'registered', cn: [
 				'{registered}',
-				{ tag: 'span', cls: 'edit', html: '{{{NextThought.view.courseware.info.parts.NotStarted.edit}}}' }
+				{ tag: 'span', cls: 'edit', html: getString('NextThought.view.courseware.info.parts.NotStarted.edit') }
 			] }
 		] }
 	] }),
