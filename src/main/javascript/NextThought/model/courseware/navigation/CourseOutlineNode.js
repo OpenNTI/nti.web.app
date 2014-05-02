@@ -10,6 +10,7 @@ Ext.define('NextThought.model.courseware.navigation.CourseOutlineNode', {
 		{ name: 'Items', type: 'arrayItem', mapping: 'contents'},
 		{ name: 'description', type: 'string'},
 		{ name: 'title', type: 'string'},
+		{ name: 'src', type: 'string'},
 
 		{ name: 'AvailableBeginning', type: 'ISODate'},
 		{ name: 'AvailableEnding', type: 'ISODate'},

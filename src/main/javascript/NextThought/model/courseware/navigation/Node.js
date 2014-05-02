@@ -16,6 +16,8 @@ Ext.define('NextThought.model.courseware.navigation.Node', {
 	},
 
 	fields: [
+		{ name: 'src', type: 'string', mapping: '@src'},
+
 			//id
 		{ name: 'NTIID', type: 'string', mapping: '@topic-ntiid',
 			convert: function(v, m) {

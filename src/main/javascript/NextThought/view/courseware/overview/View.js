@@ -74,11 +74,13 @@ Ext.define('NextThought.view.courseware.overview.View', {
 			locInfo,
 			items = [],
 			sections = {},
-			course = me.up('course').currentCourse;
+			course = me.up('course').currentCourse,
+			overviewSrc = r && r.get('src');
 
 		//console.debug('Select???',arguments);
 
 		if (!r || r.getId() === me.currentPage || !course || !course.getAssignments) {
+			//show empty state??
 			return;
 		}
 
@@ -89,6 +91,9 @@ Ext.define('NextThought.view.courseware.overview.View', {
 		me.clear();
 		me.currentPage = r.getId();
 
+		if (overviewSrc) {
+			console.debug('Overview Source:', overviewSrc);
+		}
 
 		course.getAssignments()
 			.then(function(assignments) {
