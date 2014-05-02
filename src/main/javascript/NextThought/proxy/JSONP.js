@@ -2,6 +2,38 @@ Ext.define('NextThought.proxy.JSONP', {
 	bufferedContent: {},
 
 
+	get: function(urlOrConfig) {
+		var cfg = {},
+			me = this;
+
+		return new Promise(function(fulfill, reject) {
+			function resolve(q, s, r) {
+				var value = r.responseText;
+				if (!s) {
+					reject(r);
+					return;
+				}
+
+				if (q.method === 'HEAD') {
+					value = r;
+				}
+
+				fulfill(value);
+			}
+
+			if (Ext.isString(urlOrConfig)) {
+				Ext.apply(cfg, {url: urlOrConfig});
+			} else {
+				Ext.apply(cfg, urlOrConfig);
+			}
+
+			cfg.callback = Ext.Function.createSequence(resolve, cfg.callback, null);
+
+			me.request(cfg);
+		});
+	},
+
+
 	request: function(options) {
 		// an absolute url must be used. Luckily, thats all we use.
 		// and we care about the first 3 parts: [(protocoll:)//domain]/path/to/resource
@@ -45,13 +77,13 @@ Ext.define('NextThought.proxy.JSONP', {
 
 	/**
 	 *
-	 * @param options Object with keys:
-	 *	 jsonpUrl
-	 *	 url
-	 *	 expectedContentType
-	 *	 success
-	 *	 failure
-	 *   scope
+	 * @param {Object} options Object with keys:
+	 * @param {String} [options.jsonpUrl]
+	 * @param {String} options.url
+	 * @param {String} [options.expectedContentType]
+	 * @param {Function} [options.success]
+	 * @param {Function} [options.failure]
+	 * @param {Object} [options.scope]
 	 */
 	requestJSONP: function(options) {
 		var me = this,

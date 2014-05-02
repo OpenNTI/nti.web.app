@@ -68,16 +68,9 @@ Ext.define('NextThought.view.courseware.overview.View', {
 
 	onNodeSelected: function(s, r) {
 		var me = this,
-			SECTION_CONTAINER_MAP = me.SECTION_CONTAINER_MAP,
-			SECTION_TYPE_MAP = me.SECTION_TYPE_MAP,
-			SECTION_TITLE_MAP = me.SECTION_TITLE_MAP,
 			locInfo,
-			items = [],
-			sections = {},
 			course = me.up('course').currentCourse,
-			overviewSrc = r && r.get('src');
-
-		//console.debug('Select???',arguments);
+			overviewSrc = (r && r.get('src')) || null;
 
 		if (!r || r.getId() === me.currentPage || !course || !course.getAssignments) {
 			//show empty state??
@@ -92,49 +85,78 @@ Ext.define('NextThought.view.courseware.overview.View', {
 		me.currentPage = r.getId();
 
 		if (overviewSrc) {
-			console.debug('Overview Source:', overviewSrc);
+			overviewSrc = getURL(locInfo.root + overviewSrc);
 		}
 
-		course.getAssignments()
-			.then(function(assignments) {
+		Promise.all([
+			(overviewSrc && ContentProxy.get(overviewSrc)) || Promise.fulfill(null),
+			course.getAssignments()
+		])
+			.then(function(data) {
+				var assignments = data && data[1],
+					content = data && data[0];
+
 				if (me.currentPage !== r.getId()) {
 					return;
 				}
 
-				Ext.each(r.getChildren(), function(i) {
-					var c, t;
-					if (i.getAttribute('suppressed') === 'true') {
-						return;
-					}
-
-					i = me.getComponentForNode(i, locInfo, r, assignments);
-					t = i && (i.sectionOverride || SECTION_TYPE_MAP[i.xtype] || 'Unknown');
-					if (t) {
-						if (i.xtype !== 'course-overview-topic') {
-							c = sections[t];
-							if (!c) {
-								c = sections[t] = {
-									xtype: SECTION_CONTAINER_MAP[t] || 'course-overview-section',
-									type: t,
-									title: SECTION_TITLE_MAP[t] || 'Section ' + t,
-									items: []
-								};
-								items.push(c);
-							}
-							c.items.push(i);
-						}
-						else {
-							items.push(i);
-						}
-
-					}
-				});
-
 				me.removeAll(true);//make sure its a clean slate
-				me.add([{xtype: 'course-overview-header', record: r}].concat(items));
+
+				if (!content) {
+					me.buildFromToc(r, locInfo, assignments);
+				} else {
+					content = Ext.decode(content);
+					me.buildFromContent(content, r, locInfo, assignments);
+				}
 			})
 			.fail(function(reason) { console.error(reason); })
 			.done(me.maybeUnmask.bind(me));
+	},
+
+
+	buildFromContent: function(content, node, locInfo, assignments) {
+		console.debug(content);
+	},
+
+
+	buildFromToc: function(node, locInfo, assignments) {
+		var me = this,
+			SECTION_CONTAINER_MAP = me.SECTION_CONTAINER_MAP,
+			SECTION_TYPE_MAP = me.SECTION_TYPE_MAP,
+			SECTION_TITLE_MAP = me.SECTION_TITLE_MAP,
+			sections = {},
+			items = [];
+
+		Ext.each(node.getChildren(), function(i) {
+			var c, t;
+			if (i.getAttribute('suppressed') === 'true') {
+				return;
+			}
+
+			i = me.getComponentForNode(i, locInfo, node, assignments);
+			t = i && (i.sectionOverride || SECTION_TYPE_MAP[i.xtype] || 'Unknown');
+			if (t) {
+				if (i.xtype !== 'course-overview-topic') {
+					c = sections[t];
+					if (!c) {
+						c = sections[t] = {
+							xtype: SECTION_CONTAINER_MAP[t] || 'course-overview-section',
+							type: t,
+							title: SECTION_TITLE_MAP[t] || 'Section ' + t,
+							items: []
+						};
+						items.push(c);
+					}
+					c.items.push(i);
+				}
+				else {
+					items.push(i);
+				}
+
+			}
+		});
+
+		this.add([{xtype: 'course-overview-header', record: node}].concat(items));
 	},
 
 
