@@ -256,7 +256,7 @@ Ext.define('NextThought.view.account.contacts.GroupChat', {
 			itemSelector: this.searchItemSelector,
 			selectedItemCls: 'checked',
 			tpl: this.searchTpl,
-			emptyText: Ext.DomHelper.markup({cls: 'empty-list', html: '{{{NextThought.view.account.contacts.GroupChat.empty-search}}}'}),
+			emptyText: Ext.DomHelper.markup({cls: 'empty-list', html: getString('NextThought.view.account.contacts.GroupChat.empty-search')}),
 			renderTo: this.listEl,
 			cls: 'contact-search-group-chat',
 			listeners: {
