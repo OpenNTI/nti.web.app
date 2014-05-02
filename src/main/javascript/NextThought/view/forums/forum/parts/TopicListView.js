@@ -87,7 +87,7 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 		if (!me.record.getLink('add')) {
 			me.emptyText = Ext.DomHelper.markup({
 				cls: 'empty-forum',
-				html: '{{{NextThought.view.forums.forum.parts.TopicListView.emptynoadd}}}'
+				html: getString('NextThought.view.forums.forum.parts.TopicListView.emptynoadd')
 			});
 		}
 
