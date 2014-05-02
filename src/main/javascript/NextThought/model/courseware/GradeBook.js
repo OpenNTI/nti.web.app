@@ -6,9 +6,23 @@ Ext.define('NextThought.model.courseware.GradeBook', {
 	],
 
 
-	getItem: function(id, book) {
-		var b = this.getFieldItem('Items', book || 'default');
-		return b && b.getFieldItem('Items', id);
+	getItem: function(key, book, assignmentId) {
+		var b = this.getFieldItem('Items', book || 'default'),
+			i = b && b.getFieldItem('Items', key);
+
+		try {
+			if (!i || i.get('AssignmentId') !== assignmentId) {
+				i = this.findGradeBookEntryFor(assignmentId) || [];
+				i = i.reduce(function(a, key) { return a.getFieldItem('Items', key); }, this);
+				if (!NextThought.model.courseware.GradeBookEntry.isInstance(i)) {
+					i = null;
+				}
+			}
+		} catch (e) {
+			console.error(e.stack || e.message || e);
+		}
+
+		return i;
 	},
 
 

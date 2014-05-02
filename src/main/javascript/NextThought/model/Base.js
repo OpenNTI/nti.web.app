@@ -16,7 +16,11 @@ Ext.define('NextThought.model.Base', {
 	},
 
 	inheritableStatics: {
-		idsBeingGloballyUpdated: {}
+		idsBeingGloballyUpdated: {},
+
+		isInstance: function(instance) {
+			return instance instanceof this;
+		}
 	},
 
 	statics: {
