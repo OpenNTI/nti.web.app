@@ -194,7 +194,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			this.removeCls('show-final-grade');
 		}
 
-		if (this.gradeBook) {
+		//if we have a gradebook and haven't set the export link yet
+		if (this.gradeBook && this.header.exportButton.el.getAttribute('href') === '{exportLink}') {
 			this.header.exportButton.set({
 				href: this.gradeBook.getLink('ExportContents')
 			});
