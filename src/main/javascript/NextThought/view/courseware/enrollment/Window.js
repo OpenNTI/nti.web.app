@@ -40,7 +40,7 @@ Ext.define('NextThought.view.courseware.enrollment.Window', {
 				{ cls: 'meta', cn: [
 					{cls: 'course', html: '{Name}'},
 					{cls: 'title', html: '{Title}'},
-					{tag: 'tpl', 'if': 'by', cn: {cls: 'byline', html: '{{{NextThought.view.courseware.enrollment.Window.by}}}'}}
+					{cls: 'byline', html: '{courseId}'}
 				]}
 			] }
 		]
@@ -103,7 +103,7 @@ Ext.define('NextThought.view.courseware.enrollment.Window', {
 		var enrolling = !this.record.get('enrolled');
 		this.renderData = Ext.applyIf(this.renderData || {}, this.record.getData());
 		this.renderData = Ext.apply(this.renderData, {enrollProcess: enrolling});
-		this.renderData.by = this.renderData.Author || this.renderData.ProviderUniqueID;
+		this.renderData.courseId = this.renderData.Author || this.renderData.ProviderUniqueID;
 	},
 
 
