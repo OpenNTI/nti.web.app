@@ -65,7 +65,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 
 		Ext.EventManager.onWindowResize(this.syncHeight, this, null);
 
-		Ext.defer(Ext.Function.createSequence(this.syncHeight, this.focus, this), 500, this);//let the animation finish
+		Ext.defer(this.syncHeight, 500, this);//let the animation finish
 
 
 		if (Ext.is.iOS) {
@@ -97,13 +97,10 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 				}
 			});
 
+		} else {
+			this.titleEl.focus();
+			this.moveCursorToEnd(this.titleEl);
 		}
-	},
-
-
-	focus: function focus() {
-		this.titleEl.focus();
-		this.moveCursorToEnd(this.titleEl);
 	},
 
 
@@ -113,21 +110,6 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 		Ext.destroy(this.sizer);
 
 		return this.callParent(arguments);
-	},
-
-
-	moveCursorToEnd: function(el) {
-		//this is only for input/textarea elements
-		el = Ext.getDom(el);
-		if (typeof el.selectionStart === 'number') {
-			el.selectionStart = el.selectionEnd = el.value.length;
-		}
-		else if (el.createTextRange !== undefined) {
-			el.focus();
-			var range = el.createTextRange();
-			range.collapse(false);
-			range.select();
-		}
 	},
 
 
