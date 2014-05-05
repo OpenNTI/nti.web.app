@@ -82,42 +82,43 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 				//clear the active stores
 				me.activeStores = [];
 
-				if (groupBy === 'due' && !me.showOlder && !search) {
-					//filter out all of the ones due before today
-					count = store.getCount();
-					store.filter([{
-						id: 'dueFilter',
-						filterFn: function(rec) {
-							var now = new Date(),
-								due = rec.get('due');
+				//Getting rid of the past due filter until we can better define the behavior
+				//if (groupBy === 'due' && !me.showOlder && !search) {
+				//	//filter out all of the ones due before today
+				//	count = store.getCount();
+				//	store.filter([{
+				//		id: 'dueFilter',
+				//		filterFn: function(rec) {
+				//			var now = new Date(),
+				//				due = rec.get('due');
 
-							return due >= now;
-						}
-					}], true);
+				//			return due >= now;
+				//		}
+				//	}], true);
 
-					//if we filtered out any assignments, add a link to see older ones
-					if (count > store.getCount()) {
-						console.log('Some assignments were filtered');
-						//this item has to be the first thing added if its going to be
-						cmp.add({
-							xtype: 'box',
-							cls: 'show-older-container',
-							renderTpl: Ext.DomHelper.markup([
-								{cls: 'show-older', html: 'Show Previous Dates'}
-							]),
-							listeners: {
-								'click': {
-									element: 'el',
-									fn: function(e) {
-										if (!e.getTarget('.show-older')) { return; }
-										me.showOlder = true;
-										me.refresh();
-									}
-								}
-							}
-						});
-					}
-				}
+				//	//if we filtered out any assignments, add a link to see older ones
+				//	if (count > store.getCount()) {
+				//		console.log('Some assignments were filtered');
+				//		//this item has to be the first thing added if its going to be
+				//		cmp.add({
+				//			xtype: 'box',
+				//			cls: 'show-older-container',
+				//			renderTpl: Ext.DomHelper.markup([
+				//				{cls: 'show-older', html: getString('NextThought.view.courseware.assessment.assignments.View.older')}
+				//			]),
+				//			listeners: {
+				//				'click': {
+				//					element: 'el',
+				//					fn: function(e) {
+				//						if (!e.getTarget('.show-older')) { return; }
+				//						me.showOlder = true;
+				//						me.refresh();
+				//					}
+				//				}
+				//			}
+				//		});
+				//	}
+				//}
 
 				me.showOlder = false;
 
