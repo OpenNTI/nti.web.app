@@ -154,6 +154,19 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 	},
 
 
+	fillInAssessmentAttempt: function(questionSet) {
+		if (!questionSet || questionSet.get('questionSetId') !== this.ntiid) { return; }
+
+		var b = this.down('button');
+
+		b.setUI('secondary');
+		b.setText(getString('NextThought.view.courseware.overview.parts.QuestionSet.review'));
+		this.removeCls('not-started');
+
+		this.updateWithScore(questionSet.getCorrectCount());
+	},
+
+
 	setHistory: function(history) {
 		if (!history) {
 			console.warn('No history');

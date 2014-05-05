@@ -205,6 +205,14 @@ Ext.define('NextThought.view.courseware.overview.View', {
 			console.warn('Unknown overview type:', type, node);
 		}
 		return null;
-	}
+	},
 
+
+	updateAssessments: function(questionSet) {
+		var assessments = this.query('course-overview-naquestionset');
+
+		(assessments || []).forEach(function(a) {
+			a.fillInAssessmentAttempt(questionSet);
+		});
+	}
 });

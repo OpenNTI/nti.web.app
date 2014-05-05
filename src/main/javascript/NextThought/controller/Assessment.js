@@ -57,7 +57,8 @@ Ext.define('NextThought.controller.Assessment', {
 	],
 
 	refs: [
-		{ ref: 'assignmentView', selector: 'course-assessment' }
+		{ ref: 'assignmentView', selector: 'course-assessment' },
+		{ ref: 'courseOverView', selector: 'course-overview'}
 	],
 
 	init: function() {
@@ -170,14 +171,15 @@ Ext.define('NextThought.controller.Assessment', {
 
 	grade: function(submissionWidget, questionSet, submissionData) {
 
-		var s = this.getAssessmentQuestionSetSubmissionModel(),
+		var me = this,
+			s = me.getAssessmentQuestionSetSubmissionModel(),
 			data = {
 				ContainerId: submissionWidget.reader.getLocation().NTIID,
 				questionSetId: questionSet.getId(),
 				questions: []
 			};
 
-		Ext.Object.each(submissionData, this.__getQuestionSubmissions(data));
+		Ext.Object.each(submissionData, me.__getQuestionSubmissions(data));
 
 		s.create(data).save({
 			scope: this,
@@ -190,6 +192,8 @@ Ext.define('NextThought.controller.Assessment', {
 			success: function(self, op) {
 				var result = op.getResultSet().records.first();
 				submissionWidget.setGradingResult(result);
+
+				me.getCourseOverView().updateAssessments(result);
 			}
 		});
 	},
