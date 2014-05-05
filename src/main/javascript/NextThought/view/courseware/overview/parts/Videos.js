@@ -2,7 +2,11 @@
 /*globals $AppConfig, Library, getURL, NextThought  */
 Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 	extend: 'Ext.view.View',
-	alias: ['widget.course-overview-video-section', 'widget.course-overview-ntivideo'],
+	alias: ['widget.course-overview-video', 'widget.course-overview-ntivideo'],
+
+	statics: {
+		isVideo: true
+	},
 
 	requires: [
 		'NextThought.model.PlaylistItem',
@@ -25,10 +29,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 		deselectOnContainerClick: false
 	},
 
-	renderTpl: Ext.DomHelper.markup([
-		{ tag: 'h2', cls: '{type}', cn: [
-			{tag: 'span', html: '{title}'}
-		] },
+	renderTpl: Ext.DomHelper.markup(
 		{ cls: 'body', cn: [
 			{ cls: 'video-container', cn: [
 				{ cls: 'screen' }
@@ -44,7 +45,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 			]},
 			{ cls: 'video-list'}
 		]}
-	]),
+	),
 
 	renderSelectors: {
 		bodyEl: '.body',
@@ -213,19 +214,9 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 	beforeRender: function() {
 		this.callParent(arguments);
 
-		var t = this.title || getString('NextThought.view.courseware.overview.parts.Videos.title');
-
-		if (this.store.getCount() !== 1) {
-			t = Ext.util.Inflector.pluralize(t);
-		} else {
+		if (this.store.getCount() === 1) {
 			this.addCls('singular');
 		}
-
-
-		this.renderData = Ext.apply(this.renderData || {}, {
-			title: t,
-			type: this.type || ''
-		});
 
 		if (this.type) {
 			this.addCls(this.type);

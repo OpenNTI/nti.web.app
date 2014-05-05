@@ -24,7 +24,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Discussion', {
 
 
 	constructor: function(config) {
-		var n = config.node,
+		var n = config.node || {getAttribute: function(a) { return config[a];} },
 			i = config.locationInfo;
 
 		config.data = {

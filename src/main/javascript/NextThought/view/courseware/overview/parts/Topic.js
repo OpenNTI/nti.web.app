@@ -18,10 +18,19 @@ Ext.define('NextThought.view.courseware.overview.parts.Topic', {
 
 	beforeRender: function() {
 		this.callParent(arguments);
+		var data;
 
-		this.record = this.record || new NextThought.model.courseware.navigation.Node(null, null, this.node);
+		this.record = this.record || (this.node && new NextThought.model.courseware.navigation.Node(null, null, this.node));
 
-		this.renderData = Ext.apply(this.renderData || {},this.record.getData());
+		if (this.record) {
+			data = this.record.getData();
+			this.targetNTIID = me.record.get('NTIID');
+		} else {
+			this.targetNTIID = this.NTIID;
+			data = this.initialConfig;
+		}
+
+		this.renderData = Ext.apply(this.renderData || {}, data);
 	},
 
 
@@ -42,6 +51,6 @@ Ext.define('NextThought.view.courseware.overview.parts.Topic', {
 			}
 		}
 
-		me.fireEvent('set-location', me.record.get('NTIID'), cb);
+		me.fireEvent('set-location', me.targetNTIID, cb);
 	}
 });

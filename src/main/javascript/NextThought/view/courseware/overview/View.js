@@ -32,7 +32,7 @@ Ext.define('NextThought.view.courseware.overview.View', {
 
 
 	SECTION_CONTAINER_MAP: {
-		'video': 'course-overview-video-section',
+		'video': 'course-overview-section',
 		'discussions': 'course-overview-section',
 		'additional': 'course-overview-section',
 		'required': 'course-overview-section',
@@ -117,22 +117,49 @@ Ext.define('NextThought.view.courseware.overview.View', {
 	buildFromContent: function(content, node, locInfo, assignments) {
 		console.debug(content);
 
-		var items = (content.Items || content.items || []).map(function iter(item) {
-			var type = 'course-overview-' + item.MimeType.split('.').last(),
-				cls = type && Ext.ClassManager.getByAlias('widget.' + type);
+		function getItems(c) {return c.Items || c.items || [];}
+		function getType(i) {return 'course-overview-' + (i.MimeType || i.type || '').split('.').last();}
+		function getClass(t) {return t && Ext.ClassManager.getByAlias('widget.' + t);}
+
+		function process(items, item, i, a) {
+			var type = getType(item),
+				cls = getClass(type),
+				assignment, prev;
+
+			if (!cls) {
+				console.debug('No component found for:', item);
+				return items;
+			}
 
 			if (cls.isSection) {
-				return {
+				items.push({
 					xtype: type,
 					title: item.title,
 					type: 'content-driven',
-					color: item['title-background-color']
-				};
-			}
+					color: item['title-background-color'],
+					items: getItems(item).reduce(process, [])
+				});
+			} else {
+				if (type === 'course-overview-naquestionset') {
+					assignment = assignments.isAssignment(item['Target-NTIID']);
+					type = assignment ? 'course-overview-assignment' : type;
+					assignment = assignments.getItem(item['Target-NTIID']);
+				}
 
-			item.xtype = type;
-			return {};
-		});
+				prev = items.last();
+				if (prev && !getClass(getType(prev)).isVideo) { prev = null; }
+
+				(prev || items).push(Ext.applyIf({
+					xtype: type,
+					locationInfo: locInfo,
+					courseRecord: node,
+					assignment: assignment
+				}, item));
+			}
+			return items;
+		}
+
+		var items = getItems(content).reduce(process, []);
 
 		this.add([{xtype: 'course-overview-header', title: content.title, record: node}].concat(items));
 	},
@@ -147,7 +174,7 @@ Ext.define('NextThought.view.courseware.overview.View', {
 			items = [];
 
 		Ext.each(node.getChildren(), function(i) {
-			var c, t;
+			var c, t, p;
 			if (i.getAttribute('suppressed') === 'true') {
 				return;
 			}
@@ -166,6 +193,14 @@ Ext.define('NextThought.view.courseware.overview.View', {
 						};
 						items.push(c);
 					}
+
+					if (t === 'video') {
+						if (c.items.length === 0) {
+							c.items.push({xtype: 'course-overview-video', items: []});
+						}
+						c = c.items[0];
+					}
+
 					c.items.push(i);
 				}
 				else {

@@ -22,7 +22,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Section', {
 	renderTpl: Ext.DomHelper.markup([
 		{
 			tag: 'h2', cls: '{type}', cn: [
-			{tag: 'span', html: '{title}', style: '{[values.color && ("background-color: #" + values.color) ]}'}
+			{tag: 'span', html: '{title}', style: '{[(values.color && ("background-color: #" + values.color)) || "" ]}'}
 		]
 		},
 		{
@@ -34,8 +34,11 @@ Ext.define('NextThought.view.courseware.overview.parts.Section', {
 
 	beforeRender: function() {
 		this.callParent(arguments);
+
+		var title = this.title || getString('NextThought.view.courseware.overview.parts.Section.untitled');
+
 		this.renderData = Ext.apply(this.renderData || {}, {
-			title: this.title || getSting('NextThought.view.courseware.overview.parts.Section.untitled'),
+			title: title,
 			type: this.type || '',
 			color: this.color || false
 		});

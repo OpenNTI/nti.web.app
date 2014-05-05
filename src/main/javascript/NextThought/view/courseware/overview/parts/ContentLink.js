@@ -6,7 +6,7 @@ Ext.define('NextThought.view.courseware.overview.parts.ContentLink', {
 	],
 
 	constructor: function(config) {
-		var n = config.node,
+		var n = config.node || {getAttribute: function(a) { return config[a];} },
 			i = config.locationInfo,
 			href = n.getAttribute('href'),
 			ntiid = n.getAttribute('ntiid');

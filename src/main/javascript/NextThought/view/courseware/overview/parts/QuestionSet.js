@@ -41,7 +41,7 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 	},
 
 	constructor: function(config) {
-		var n = config.node,
+		var n = config.node || {getAttribute: function(a) { return config[a];} },
 			ntiid = n.getAttribute('target-ntiid') || 'no-value',
 			containerId = ContentUtils.getLineage(ntiid)[1],
 			req;
