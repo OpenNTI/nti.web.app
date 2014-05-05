@@ -116,6 +116,25 @@ Ext.define('NextThought.view.courseware.overview.View', {
 
 	buildFromContent: function(content, node, locInfo, assignments) {
 		console.debug(content);
+
+		var items = (content.Items || content.items || []).map(function iter(item) {
+			var type = 'course-overview-' + item.MimeType.split('.').last(),
+				cls = type && Ext.ClassManager.getByAlias('widget.' + type);
+
+			if (cls.isSection) {
+				return {
+					xtype: type,
+					title: item.title,
+					type: 'content-driven',
+					color: item['title-background-color']
+				};
+			}
+
+			item.xtype = type;
+			return {};
+		});
+
+		this.add([{xtype: 'course-overview-header', title: content.title, record: node}].concat(items));
 	},
 
 

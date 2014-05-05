@@ -1,6 +1,13 @@
 Ext.define('NextThought.view.courseware.overview.parts.Section', {
 	extend: 'Ext.container.Container',
-	alias: 'widget.course-overview-section',
+	alias: [
+		'widget.course-overview-section',
+		'widget.course-overview-nticourseoverviewgroup'
+	],
+
+	statics: {
+		isSection: true
+	},
 
 	ui: 'course',
 	cls: 'overview-section',
@@ -15,7 +22,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Section', {
 	renderTpl: Ext.DomHelper.markup([
 		{
 			tag: 'h2', cls: '{type}', cn: [
-			{tag: 'span', html: '{title}'}
+			{tag: 'span', html: '{title}', style: '{[values.color && ("background-color: #" + values.color) ]}'}
 		]
 		},
 		{
@@ -29,7 +36,8 @@ Ext.define('NextThought.view.courseware.overview.parts.Section', {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, {
 			title: this.title || getSting('NextThought.view.courseware.overview.parts.Section.untitled'),
-			type: this.type || ''
+			type: this.type || '',
+			color: this.color || false
 		});
 
 		if (this.type) {
