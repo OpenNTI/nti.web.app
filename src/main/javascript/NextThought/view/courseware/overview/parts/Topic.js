@@ -24,7 +24,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Topic', {
 
 		if (this.record) {
 			data = this.record.getData();
-			this.targetNTIID = me.record.get('NTIID');
+			this.targetNTIID = this.record.get('NTIID');
 		} else {
 			this.targetNTIID = this.NTIID;
 			data = this.initialConfig;
