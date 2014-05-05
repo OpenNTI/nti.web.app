@@ -32,6 +32,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 		},
 		'due': {
 			'property': 'due',
+			'direction': 'DESC',
 			'getGroupString': function(val) {
 				var today = (new Date()).setHours(0, 0, 0),
 					due = val.get('due'),
