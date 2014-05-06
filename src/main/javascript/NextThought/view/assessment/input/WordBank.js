@@ -116,7 +116,7 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 
 			getDragData: function(e) {
 				var sourceEl, redrag = e.getTarget('.drag', 10), d;
-				if (redrag) {
+				if (redrag && !e.getTarget('.reset')) {
 					sourceEl = me.getWordBankItem(redrag.dataset.wid);
 
 					d = document.createElement('div');
@@ -235,6 +235,13 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 			input = dropTarget && dropTarget.previousSibling,
 			replace;
 
+		function reset() {
+			input.value = '';
+			dropTarget.removeChild(dom);
+			Ext.fly(dragSource).removeCls('used');
+			me.checkSubmissionState();
+		}
+
 		if (!input || input.getAttribute('name') !== dropTarget.dataset.input) {
 			Ext.Error.raise('Bad DOM');
 		}
@@ -259,12 +266,7 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 		});
 		Ext.DomHelper.append(el, dragSource.dataset.word);
 
-		dom.resetDD = function() {
-			input.value = '';
-			dropTarget.removeChild(dom);
-			Ext.fly(dragSource).removeCls('used');
-			me.checkSubmissionState();
-		};
+		dom.resetDD = reset;
 
 		dom.removeAttribute('id');
 		Ext.fly(dom).removeCls('used');
@@ -275,7 +277,7 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 		input.value = dragSource.dataset.wid;
 
 		el.removeCls('dragging');
-		el.select('.reset').on('click', dom.resetDD);
+		el.select('.reset').on('click', reset, dom);
 
 		if (el.hasCls('unique')) {
 			Ext.fly(dragSource).addCls('used');
