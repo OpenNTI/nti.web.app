@@ -523,7 +523,7 @@ Ext.define('NextThought.controller.Forums', {
 	loadTopicList: function(cmp, record, activeTopic, callback) {
 		if (Ext.isArray(record)) { record = record[0]; }
 
-		if (!record.isModel) { return; }
+		if (!record || !record.isModel) { return; }
 
 		var me = this, view = this.getCardContainer(cmp);
 
