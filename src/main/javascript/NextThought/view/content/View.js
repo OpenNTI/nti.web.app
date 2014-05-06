@@ -649,8 +649,10 @@ Ext.define('NextThought.view.content.View', {
 		tab = (tab === 'null') ? null : tab;
 
 		function setupCourseUI(instance) {
+				instance = instance.get('CourseInstance');
 				return me._setCourse(instance, tab)
 						.then(function() {
+							me.fireEvent('track-from-restore', instance);
 							me.courseForum.restoreState(forum, topic);
 							me.courseNav.restoreState(st);
 							return instance;//restore the promise value
@@ -682,7 +684,18 @@ Ext.define('NextThought.view.content.View', {
 			throw reason;
 		}
 
-		return CourseWareUtils.resolveCourse(course)
+		course = CourseWareUtils.courseForNtiid(ntiid);
+
+		if (!course || !course.findByMyCourseInstance) {
+			return Promise.reject('No course for ntiid:' + ntiid)
+				.fail(noCourse)
+				.fail(setTab)
+				.fail(function(reason) {
+					console.error('Potentially, failed to restore the state', reason);
+				});
+		}
+
+		return CourseWareUtils.findCourseBy(course.findByMyCourseInstance())
 				.then(setupCourseUI,/*or*/ noCourse)
 				.then(setReader, /*or*/ setTab)
 				.fail(function(reason) {

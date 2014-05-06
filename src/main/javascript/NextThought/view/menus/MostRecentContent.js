@@ -110,7 +110,15 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 			store = this.getStore();
 
 			Promise.all(Ext.Array.map(s, getRecord)).then(function(records) {
+				var range = store.getRange() || [];
+
 				store.loadRecords(Ext.Array.clean(records));
+
+				//if we tried to track a record before we got here, track it again so it will be at the top
+				if (range[0]) {
+					me.track(range[0]);
+				}
+
 				if (store.getCount()) {
 					me.fireEvent('update-current', store.getAt(0));
 				}

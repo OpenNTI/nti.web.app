@@ -72,7 +72,8 @@ Ext.define('NextThought.controller.CourseWare', {
 				},
 
 				'content-view-container': {
-					'get-course-hooks': 'applyCourseHooks'
+					'get-course-hooks': 'applyCourseHooks',
+					'track-from-restore': 'trackFromRestore'
 				},
 
 				'enrollment-detailview': {
@@ -155,6 +156,11 @@ Ext.define('NextThought.controller.CourseWare', {
 
 		admin.on('load', refilter);
 		enrolled.on('load', refilter);
+	},
+
+
+	trackFromRestore: function(course) {
+		this.getMainNav().updateCurrent(false, course);
 	},
 
 
