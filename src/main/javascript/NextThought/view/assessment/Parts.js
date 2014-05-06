@@ -61,7 +61,7 @@ Ext.define('NextThought.view.assessment.Parts', {
 					 });
 		}
 		catch (e) {
-			console.warn('missing question type: ' + type);
+			console.warn('missing question type: ' + type, '\n\tUnderlying Error: ', (e.stack || e.message || e));
 		}
 	},
 
@@ -76,7 +76,7 @@ Ext.define('NextThought.view.assessment.Parts', {
 			part.set('answerLabel', answerLabel);
 			items = [];
 			type = 'question-input-' + part.get('Class').toLowerCase();
-			items.push({xtype: 'part-content', part: part, ordinal: i});
+			items.push({xtype: 'part-content', question: question, part: part, ordinal: i});
 			items.push({
 						   xtype: type,
 						   reader: this.up('[reader]').reader,
@@ -96,7 +96,7 @@ Ext.define('NextThought.view.assessment.Parts', {
 						 });
 			}
 			catch (e) {
-				console.warn('missing question type: ' + type);
+				console.warn('missing question type: ' + type, '\n\tUnderlying Error: ', (e.stack || e.message || e));
 			}
 		}
 	},
