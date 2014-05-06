@@ -281,6 +281,8 @@ Ext.define('NextThought.model.Service', {
 			headers.Accept = mime;
 		}
 
+		url = Ext.String.urlAppend(url, Ext.Object.toQueryString({type: mime}));
+
 		try {
 			req = {
 				url: url,
@@ -298,7 +300,7 @@ Ext.define('NextThought.model.Service', {
 						if (mime && forceMime) {
 							contentType = resp.getResponseHeader('Content-Type');
 							if (contentType && contentType.indexOf(mime) < 0) {
-								console.info('Requested with an explicit accept value of ', mime, ' but got ', contentType, '.  Calling failure ', arguments);
+								console.error('Requested with an explicit accept value of ', mime, ' but got ', contentType, '.  Calling failure ', arguments);
 								Ext.callback(failure, scope, [req, resp]);
 								return;
 							}
