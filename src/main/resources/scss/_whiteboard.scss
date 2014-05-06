@@ -486,6 +486,7 @@
 	input.x-form-text {
 		height: 32px;
 		text-indent: -1000px;
+		line-height: 1;
 		background: url(../images/old_sprites/spr_whiteboard.png) no-repeat;
 
 		&[value="fine"] { background-position: -16px -732px; }
