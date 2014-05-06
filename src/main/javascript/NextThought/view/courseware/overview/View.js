@@ -141,9 +141,13 @@ Ext.define('NextThought.view.courseware.overview.View', {
 				});
 			} else {
 				if (type === 'course-overview-naquestionset') {
-					assignment = assignments.isAssignment(item['Target-NTIID']);
+					Ext.applyIf(item, {
+						'target-ntiid': item['Target-NTIID']//too many references to this to make changes to accept both spellings.
+					});
+
+					assignment = assignments.isAssignment(item['target-ntiid']);
 					type = assignment ? 'course-overview-assignment' : type;
-					assignment = assignments.getItem(item['Target-NTIID']);
+					assignment = assignments.getItem(item['target-ntiid']);
 				}
 
 				prev = items.last();
