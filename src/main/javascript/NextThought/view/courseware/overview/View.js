@@ -136,7 +136,7 @@ Ext.define('NextThought.view.courseware.overview.View', {
 					xtype: type,
 					title: item.title,
 					type: 'content-driven',
-					color: item['title-background-color'],
+					color: item.accentColor,
 					items: getItems(item).reduce(process, [])
 				});
 			} else {
