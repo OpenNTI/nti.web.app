@@ -117,7 +117,6 @@ Ext.define('NextThought.view.assessment.Parts', {
 			input.reset();
 			if (keepAnswers && input.setValue) {
 				input.setValue(val);
-				input.focus();
 			}
 			if (input.enableSubmission) {
 				input.enableSubmission();
