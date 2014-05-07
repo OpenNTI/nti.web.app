@@ -1386,8 +1386,8 @@ body.dragging * {
 	position: relative;
 
 	.submitted & {
-		opacity: 0.4;
 		.drag {
+			opacity: 0.4;
 			cursor: default !important;
 			background-color: $primary-blue;
 			color: #fff;
