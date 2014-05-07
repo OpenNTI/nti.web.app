@@ -502,28 +502,7 @@ Ext.define('NextThought.controller.CourseWare', {
 			return false;
 		}
 
-		store = currentCourse.getNavigationStore();
-		lin = ContentUtils.getLineage(ntiid);
-
-		if (currentCourse.__getLocationInfo().NTIID !== lin.last()) {
-			return true;//not in the same content...
-		}
-
-
-		if (currentCourse.isExpired()) {
-			return true;
-		}
-
-		// the last item in the lineage is the root of the content.
-		// the next to last entry is the first branch from the root
-		// of the content (so its a unit or a lesson... if we can
-		// find it in the nav store, its available.)
-		//TODO: This needs to go away. Favor scoped reader navigation.
-		if (!store.getCount()) {
-			return true;
-		}
-
-		return !!store.getById(lin[Math.max(0, lin.length - 2)]);
+		return CourseWareUtils.canGetToContent(ntiid, currentCourse);
 	},
 
 
@@ -828,6 +807,36 @@ Ext.define('NextThought.controller.CourseWare', {
 			}
 
 			return statusMap[contentNtiid];
+		},
+
+
+		canGetToContent: function(ntiid, course) {
+			var lin = ContentUtils.getLineage(ntiid),
+				store = course && course.getNavigationStore();
+
+			if (!course) {
+				return true;
+			}
+
+			if (course.__getLocationInfo().NTIID !== lin.last()) {
+				return true;//not in the same content...
+			}
+
+
+			if (course.isExpired()) {
+				return true;
+			}
+
+			// the last item in the lineage is the root of the content.
+			// the next to last entry is the first branch from the root
+			// of the content (so its a unit or a lesson... if we can
+			// find it in the nav store, its available.)
+			//TODO: This needs to go away. Favor scoped reader navigation.
+			if (!store.getCount()) {
+				return true;
+			}
+
+			return !!store.getById(lin[Math.max(0, lin.length - 2)]);
 		}
 	};
 

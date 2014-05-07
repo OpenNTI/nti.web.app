@@ -749,7 +749,8 @@ Ext.define('NextThought.util.Content', {
 			if (!node) {return false;}
 			var result = false,
 				topicOrToc = topicOrTocRegex.test(node.tagName),
-				href = (node.getAttribute) ? node.getAttribute('href') : null;
+				href = (node.getAttribute) ? node.getAttribute('href') : null,
+				course;
 
 			//decide if this is a navigate-able thing, it most be a topic or toc, it must
 			//have an href, and that href must NOT have a anchor
@@ -819,7 +820,22 @@ Ext.define('NextThought.util.Content', {
 			next: maybeBlocker(nodes[1])
 		};
 
-		return info;
+		course = CourseWareUtils.courseForNtiid(ntiid);
+
+		if (!course) {
+			return Promise.resolve(info);
+		}
+
+		//if we can't get to previous or next in the course disable the navigation for them
+		return CourseWareUtils.findCourseBy(course.findByMyCourseInstance())
+			.then(function(instance) {
+				var currentCourse = instance.get('CourseInstance');
+
+				info.previous = CourseWareUtils.canGetToContent(info.previous, currentCourse) ? info.previous : null;
+				info.next = CourseWareUtils.canGetToContent(info.next, currentCourse) ? info.next : null;
+
+				return info;
+			});
 	}
 
 }, function() {

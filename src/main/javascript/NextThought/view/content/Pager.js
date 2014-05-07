@@ -28,21 +28,32 @@ Ext.define('NextThought.view.content.Pager', {
 
 
 	updateState: function(ntiid, rootId) {
-		var info = ntiid && ContentUtils.getNavigationInfo(ntiid, rootId),
+		var me = this,
 			next = this.nextEl,
-			prev = this.prevEl,
-			nextTitle = info && info.next && ContentUtils.findTitle(info.next, null),
-			prevTitle = info && info.previous && ContentUtils.findTitle(info.previous, null);
+			prev = this.prevEl;
 
-		next.set({title: nextTitle ? getFormattedString('NextThought.view.content.Pager.next', {title: nextTitle}) : undefined});
-		prev.set({title: prevTitle ? getFormattedString('NextThought.view.content.Pager.prev', {title: prevTitle}) : undefined});
+		if (!ntiid) {
+			this.disableButton(next);
+			next.set({'data-ntiid': undefined});
+			this.disableButton(prev);
+			prev.set({'data-ntiid': undefined});
+		}
 
-		this[info && info.next ? 'enableButton' : 'disableButton'](next);
-		next.set({'data-ntiid': (info && info.next) || undefined});
+		ContentUtils.getNavigationInfo(ntiid, rootId)
+			.then(function(info) {
+				var nextTitle = info && info.next && ContentUtils.findTitle(info.next, null),
+					prevTitle = info && info.previous && ContentUtils.findTitle(info.previous, null);
+
+				next.set({title: nextTitle ? getFormattedString('NextThought.view.content.Pager.next', {title: nextTitle}) : undefined});
+				prev.set({title: prevTitle ? getFormattedString('NextThought.view.content.Pager.prev', {title: prevTitle}) : undefined});
+
+				me[info && info.next ? 'enableButton' : 'disableButton'](next);
+				next.set({'data-ntiid': (info && info.next) || undefined});
 
 
-		this[info && info.previous ? 'enableButton' : 'disableButton'](prev);
-		prev.set({'data-ntiid': (info && info.previous) || undefined});
+				me[info && info.previous ? 'enableButton' : 'disableButton'](prev);
+				prev.set({'data-ntiid': (info && info.previous) || undefined});
+			});
 	},
 
 
