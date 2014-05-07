@@ -410,7 +410,10 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 				for (k in s) {
 					if (s.hasOwnProperty(k)) {
 						w = me.getWordBankItem(s[k]);
-						v[k] = w && w.dataset.word;
+						v[k] = (w && w.dataset.word) || '';
+						if (!w || !w.dataset.word) {
+							console.error('Solution for ' + k + 'references a bad word bank entry: ' + s[k]);
+						}
 					}
 				}
 
