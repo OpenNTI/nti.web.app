@@ -124,7 +124,7 @@ Ext.define('NextThought.view.assessment.input.Ordering', {
 			}
 		});
 
-		return out.join('');
+		return this.filterHTML(out.join(''));
 	},
 
 
