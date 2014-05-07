@@ -54,6 +54,7 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 			this.wordbank = Ext.widget({
 				xtype: 'assessment-components-wordbank',
 				record: this.part, renderTo: this.wordBankEl,
+				ownerCt: this,
 				partNumber: this.ordinal,
 				questionId: this.question.getId()
 			});
