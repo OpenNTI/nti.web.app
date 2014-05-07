@@ -974,6 +974,16 @@ body.dragging * {
 					border-bottom-width: 1px;
 					border-right-width: 1px;
 					vertical-align: middle;
+					overflow: hidden;
+
+					span[itemprop] {
+						display: inline-block;
+
+						img {
+							max-width: 275px !important;
+						}
+					}
+
 				}
 
 				&.target-hover{
@@ -1062,6 +1072,12 @@ body.dragging * {
 						padding-right: 20px;
 						vertical-align: middle;
 						color: $primary-grey;
+
+						img {
+							max-width: 300px !important;
+							height: auto !important;
+							width: auto !important;
+						}
 
 						&.solution-ordering-text{
 							color: $primary-green;
