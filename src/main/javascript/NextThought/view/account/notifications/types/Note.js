@@ -9,10 +9,10 @@ Ext.define('NextThought.view.account.notifications.types.Note', {
 
 	getVerb: function(values) {
 		if (values.inReplyTo) {
-			return 'commented';
+			return 'commented.';
 		}
 
-		return 'shared a note';
+		return 'shared a note.';
 	},
 
 	fillInData: function(rec) {

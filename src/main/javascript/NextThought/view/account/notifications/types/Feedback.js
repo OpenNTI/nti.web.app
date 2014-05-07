@@ -9,7 +9,7 @@ Ext.define('NextThought.view.account.notifications.types.Feedback', {
 	previewField: 'assignmentName',
 
 
-	assignmentNameTpl: Ext.DomHelper.createTemplate({ tag: 'span', cls: 'link', html: '{name}'}).compile(),
+	assignmentNameTpl: Ext.DomHelper.createTemplate({ tag: 'span', cls: 'link', html: '{name}.'}).compile(),
 
 
 	clicked: function(view, rec) {

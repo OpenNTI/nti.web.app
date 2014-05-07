@@ -8,7 +8,7 @@ Ext.define('NextThought.view.account.notifications.types.ForumComment', {
 	showCreator: true,
 	previewField: 'bodyPreview',
 	quotePreview: false,
-	verb: 'commented',
+	verb: 'commented.',
 
 	fillInData: function(rec) {
 		this.callParent(arguments);
