@@ -4,4 +4,6 @@ Ext.define('NextThought.model.assessment.MatchingPart', {
 		{ name: 'labels', type: 'auto' },
 		{ name: 'values', type: 'auto' }
 	]
+},function() {
+    NextThought.model.MAP['application/vnd.nextthought.assessment.randomizedmatchingpart'] = this.$className;
 });
