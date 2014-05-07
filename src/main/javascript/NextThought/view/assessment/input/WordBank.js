@@ -289,6 +289,8 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 
 
 	checkSubmissionState: function() {
+		if (this.submitted) {return;}
+
 		var k, v = this.getValue(),
 			allFilledIn = true;
 
@@ -302,7 +304,6 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 				}
 			}
 		}
-
 
 		this[allFilledIn ?
 			 'enableSubmission' :

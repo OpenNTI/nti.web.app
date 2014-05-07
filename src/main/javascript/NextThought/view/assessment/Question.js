@@ -245,6 +245,9 @@ Ext.define('NextThought.view.assessment.Question', {
 		if (sub) {
 			sub.disableSubmission();
 		}
+
+		this.submitted = true;
+		this.addCls('submitted');
 	},
 
 
@@ -252,6 +255,7 @@ Ext.define('NextThought.view.assessment.Question', {
 		this.down('question-header').reset();
 		this.down('question-parts').reset(keepAnswers);
 		delete this.submitted;
+		this.removeCls('submitted');
 		this.determineSubmissionState();
 		//	var sub = this.down('assessment-multipart-submission');
 		//	if (sub){sub.enableSubmission();}
@@ -267,10 +271,10 @@ Ext.define('NextThought.view.assessment.Question', {
 			this.reset(true);
 			return;
 		}
+
 		this.submitted = true;
 		var coll = {};
 		this.gatherQuestionResponse(null, coll);
 		this.fireEvent('check-answer', this, this.question, coll[this.question.getId()]);
-		return;
 	}
 });

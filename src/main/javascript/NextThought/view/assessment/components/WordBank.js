@@ -288,7 +288,7 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 			getDragData: function(e) {
 				var sourceEl = e.getTarget('.drag', 10), d;
 				//this.locationCache;
-				if (sourceEl) {
+				if (sourceEl && !me.up('assessment-question').submitted) {
 					d = document.createElement('div');
 					d.className = sourceEl.className;
 					Ext.DomHelper.append(d, {cls: 'reset'});

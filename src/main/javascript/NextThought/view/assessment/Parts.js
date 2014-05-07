@@ -103,7 +103,7 @@ Ext.define('NextThought.view.assessment.Parts', {
 
 
 	updateWithResults: function(assessedQuestion) {
-		var parts = this.query('abstract-question-input');
+		var parts = this.query('[updateWithResults]');
 		Ext.each(parts, function(part) {part.updateWithResults(assessedQuestion);});
 	},
 

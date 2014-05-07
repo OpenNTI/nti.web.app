@@ -1385,6 +1385,15 @@ body.dragging * {
 	overflow: hidden;
 	position: relative;
 
+	.submitted & {
+		opacity: 0.4;
+		.drag {
+			cursor: default !important;
+			background-color: $primary-blue;
+			color: #fff;
+		}
+	}
+	
 	.wordbank-body.locked {
 		background-color: white;
 		border-right: 1px #e2e2e2 solid;
