@@ -219,10 +219,12 @@ Ext.define('NextThought.view.annotations.note.Templates', {
 	reportInappropriate: function(callback) {
 		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
 		Ext.Msg.show({
-			msg: 'This action cannot be undone.',
+			msg: 'This action cannot be undone.', //Y No Externalize?? :P
 			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 			icon: 'warning-red',
-			buttonText: {'ok': getString('NextThought.view.annotations.note.Templates.flag-option')},
+			buttonText: {
+				ok: getString('NextThought.view.annotations.note.Templates.flag-option')
+			},
 			ui: 'caution',
 			title: getString('NextThought.view.annotations.note.Templates.waringing-title'),
 			fn: callback
