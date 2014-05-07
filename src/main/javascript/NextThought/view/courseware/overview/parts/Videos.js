@@ -5,7 +5,20 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 	alias: ['widget.course-overview-video', 'widget.course-overview-ntivideo'],
 
 	statics: {
-		isVideo: true
+		isVideo: true,
+
+		buildConfig: function(item, prev) {
+
+			if (prev && prev.xtype === this.xtype) {
+				prev.items.push(item);
+				return null;//don't add this new item
+			}
+
+			return {
+				xtype: this.xtype,
+				items: [item]
+			};
+		}
 	},
 
 	requires: [
@@ -194,7 +207,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 		var out = [];
 
 		Ext.each(items, function(item) {
-			var n = item.node,
+			var n = item.node || {getAttribute: function(a) { return item[a];} },
 				i = item.locationInfo || {},
 				r = item.courseRecord;
 

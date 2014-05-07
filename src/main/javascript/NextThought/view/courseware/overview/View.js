@@ -140,25 +140,32 @@ Ext.define('NextThought.view.courseware.overview.View', {
 					items: getItems(item).reduce(process, [])
 				});
 			} else {
+				Ext.applyIf(item, {
+					//too many references to these to make changes to accept all spellings.
+					'target-ntiid': item['Target-NTIID'],
+					ntiid: item.NTIID
+				});
 				if (type === 'course-overview-naquestionset') {
-					Ext.applyIf(item, {
-						'target-ntiid': item['Target-NTIID']//too many references to this to make changes to accept both spellings.
-					});
-
 					assignment = assignments.isAssignment(item['target-ntiid']);
 					type = assignment ? 'course-overview-assignment' : type;
 					assignment = assignments.getItem(item['target-ntiid']);
 				}
 
 				prev = items.last();
-				if (prev && !getClass(getType(prev)).isVideo) { prev = null; }
-
-				(prev || items).push(Ext.applyIf({
+				item = Ext.applyIf({
 					xtype: type,
 					locationInfo: locInfo,
 					courseRecord: node,
 					assignment: assignment
-				}, item));
+				}, item);
+
+				if (cls.buildConfig) {
+					item = cls.buildConfig(item, prev);
+				}
+
+				if (item) {
+					items.push(item);
+				}
 			}
 			return items;
 		}
