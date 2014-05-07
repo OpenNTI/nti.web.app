@@ -121,8 +121,12 @@
 		width: 230px;
 		height: 230px;
 		float: left;
-		margin: 5px 5px 0 0;
+		margin: 5px 5px 5px 0;
 		position: relative;
+
+		& + :not(.overview-discussion) {
+			clear: both;
+		}
 		
 		.image {
 			height: 50%;
@@ -286,7 +290,6 @@
 	}
 
 	.overview-naquestionset {
-		clear: both;
 		margin-top: 5px;
 
 		&.assignment{

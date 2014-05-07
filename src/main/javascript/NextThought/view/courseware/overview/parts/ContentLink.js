@@ -2,6 +2,7 @@ Ext.define('NextThought.view.courseware.overview.parts.ContentLink', {
 	extend: 'NextThought.view.cards.Card',
 	alias: [
 		'widget.course-overview-content',
+		'widget.course-overview-relatedworkref',
 		'widget.course-overview-externallink'
 	],
 
