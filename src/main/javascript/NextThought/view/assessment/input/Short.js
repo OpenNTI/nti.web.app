@@ -39,6 +39,11 @@ Ext.define('NextThought.view.assessment.input.Short', {
 			buffer: 300,
 			keyup: 'checkSubmissionState'
 		});
+
+		if (this._value) {
+			this.setValue(this._value);
+			delete this._value;
+		}
 	},
 
 
@@ -74,8 +79,12 @@ Ext.define('NextThought.view.assessment.input.Short', {
 
 
 	setValue: function(value) {
-		console.log(value);
+		if (!this.rendered) {
+			this._value = value;
+			return;
+		}
 
+		console.log(value);
 		var inputName;
 
 		for (inputName in value) {
@@ -87,17 +96,38 @@ Ext.define('NextThought.view.assessment.input.Short', {
 
 
 	setFieldValue: function(name, value) {
-		this.el.select('input[name="' + name + '"]').setValue(value);
+		var dom = Ext.getDom(this.el),
+			input = dom && dom.querySelector('input[name="' + name + '"]');
+
+		if (!input) {
+			console.warn('There was no input for name: ' + name);
+			return;
+		}
+
+		input.value = value;
 	},
 
 
-	//markCorrect: function() { this.callParent(arguments); },
+	markCorrect: function() {
+		this.markGraded();
+		this.callParent(arguments);
+	},
 
 
-	//markIncorrect: function() { this.callParent(arguments); },
+	markIncorrect: function() {
+		this.markGraded();
+		this.callParent(arguments);
+	},
 
+
+	markGraded: function(yes) {
+		var action = yes !== false ? 'addCls' : 'removeCls';
+		this.el[action]('graded');
+		this.el.select('span.blank')[action]('graded');
+	},
 
 	reset: function() {
+		this.markGraded(false);
 		this.callParent(arguments);
 	}
 });

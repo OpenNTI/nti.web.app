@@ -116,7 +116,7 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 
 			getDragData: function(e) {
 				var sourceEl, redrag = e.getTarget('.drag', 10), d;
-				if (redrag && !e.getTarget('.reset')) {
+				if (redrag && !e.getTarget('.reset') && !e.getTarget('.graded')) {
 					sourceEl = me.getWordBankItem(redrag.dataset.wid);
 
 					d = document.createElement('div');
@@ -357,15 +357,22 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 	},
 
 
-	//markCorrect: function() { this.callParent(arguments); },
+	markCorrect: function() { this.markGraded(); this.callParent(arguments); },
 
 
-	//markIncorrect: function() { this.callParent(arguments); },
+	markIncorrect: function() { this.markGraded(); this.callParent(arguments); },
+
+
+	markGraded: function(yes) {
+		var action = yes !== false ? 'addCls' : 'removeCls';
+		this.el[action]('graded');
+		this.el.select('span.blank')[action]('graded');
+	},
 
 
 	reset: function() {
 		this.callParent(arguments);
-
+		this.markGraded(false);
 		this.el.query('.dropzone .wordentry').forEach(function(pill) {
 			pill = Ext.getDom(pill);
 			pill.resetDD();
