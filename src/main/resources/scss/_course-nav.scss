@@ -285,7 +285,8 @@
 		@include scrollbar(#ffffff, $tertiary-grey);
 	}
 
-	.overview-naquestionset{
+	.overview-naquestionset {
+		clear: both;
 		margin-top: 5px;
 
 		&.assignment{
