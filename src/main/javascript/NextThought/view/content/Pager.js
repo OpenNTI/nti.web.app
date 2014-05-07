@@ -34,9 +34,8 @@ Ext.define('NextThought.view.content.Pager', {
 			nextTitle = info && info.next && ContentUtils.findTitle(info.next, null),
 			prevTitle = info && info.previous && ContentUtils.findTitle(info.previous, null);
 
-
-		next.set({title: nextTitle ? getString('NextThought.view.content.Pager.next', {title: nextTitle}) : undefined});
-		prev.set({title: prevTitle ? getString('NextThought.view.content.Pager.prev', {title: prevTitle}) : undefined});
+		next.set({title: nextTitle ? getFormattedString('NextThought.view.content.Pager.next', {title: nextTitle}) : undefined});
+		prev.set({title: prevTitle ? getFormattedString('NextThought.view.content.Pager.prev', {title: prevTitle}) : undefined});
 
 		this[info && info.next ? 'enableButton' : 'disableButton'](next);
 		next.set({'data-ntiid': (info && info.next) || undefined});
