@@ -323,6 +323,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		});
 
 		me.bindStore(s);
+		me.setMaskBind(parentStore);
 	},
 
 
@@ -410,6 +411,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 
 		this.lastScroll = 0;
 		this.mon(this.el, {
+			buffer: 500,
 			scroll: 'onScroll'
 		});
 	},
@@ -535,6 +537,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		this.currentCount = s.getCount();
 		max = s.getPageFromRecordIndex(s.getTotalCount());
 		if (s.currentPage < max && !s.isLoading()) {
+
 			s.clearOnPageLoad = false;
 			s.nextPage();
 		}
