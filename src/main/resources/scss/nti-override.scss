@@ -272,14 +272,22 @@ body.x-body {margin:0;}
 	object[type$=ntisequence] {
 		display: block;
 		padding: 12px 15px;
+
+		& > button.audio-clip:first-child {margin-top: 5px;float: left;}
 	}
 
 	object[type$=ntisequenceitem] {
 		display: none;
 		position: static;
+		padding-right: 25px;
 		&.active {
 			display: inline-block;
 		}
+	}
+
+	button.audio-clip ~ object[type$=ntisequenceitem].active {
+		display: block;
+		margin-left: 30px;
 	}
 
 
