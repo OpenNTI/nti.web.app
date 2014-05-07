@@ -1439,6 +1439,9 @@ body.dragging * {
 
 	&.playing {
 		opacity: 0.7;
+		&::after {
+			background-position: sprite-position($icons, 'audio-icon_hover');
+		}
 	}
 
 	&:hover{
