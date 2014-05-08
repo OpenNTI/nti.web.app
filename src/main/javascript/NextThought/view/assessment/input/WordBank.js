@@ -20,8 +20,12 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 
 	solTpl: Ext.DomHelper.createTemplate({
 		cls: 'multiple-choice-solution',
-		cn: ['{0}. ', {tag: 'span', cls: 'solution-choice-text', html: '{1}'}]
+		cn: ['{0} ', {tag: 'span', cls: 'solution-choice-text', html: '{1}'}]
 	}),
+
+	wordTpl: Ext.DomHelper.createTemplate(
+		{tag: 'span', cls: 'target wordentry drag graded', html: '{0}'}
+	),
 
 
 	inputTpl: Ext.DomHelper.markup({ cls: 'fill-in', html: '{lineWithBlank}' }),
@@ -398,6 +402,7 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 
 		var me = this,
 			out = [], tpl = me.solTpl,
+			pillTpl = me.wordTpl,
 			line = Ext.DomHelper.createTemplate(
 					me.filterHTML(
 							me.part.get('input')
@@ -415,6 +420,8 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 						if (!w || !w.dataset.word) {
 							console.error('Solution for ' + k + 'references a bad word bank entry: ' + s[k]);
 						}
+
+						v[k] = pillTpl.apply([v[k]]);
 					}
 				}
 
