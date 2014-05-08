@@ -35,9 +35,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 				},
 
 				getKind: function(values) {
-					var item = values.item,
-						parts = (item && item.get && item.get('parts')) || [];
-					return parts.length > 0 ? '' : ' no_submit ';
+					return '';
 				},
 
 				isOpen: function(v) {

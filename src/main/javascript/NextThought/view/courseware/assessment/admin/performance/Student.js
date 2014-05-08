@@ -125,30 +125,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 	},
 
 
-	applyPagerFilter: function() {
-		clearTimeout(this.__cleanupFilter);
-		if (!this.store.isFiltered() || !this.store.filters.containsKey('pager')) {
-			this.store.filter({
-				id: 'pager',
-				filterFn: function(rec) {
-					var item = rec && rec.get('item'),
-						parts = item && item.get('parts');
-
-					return parts && parts.length; //ensure there are submit parts (if no submit parts, its not to be subbmitted in the platform)
-				}
-			});
-		}
-	},
+	applyPagerFilter: function() {},
 
 
-	maybeRemoveFilter: function() {
-		var store = this.store;
-		clearTimeout(this.__cleanupFilter);
-		this.__cleanupFilter = Ext.defer(function() {
-			store.removeFilter('pager');
-		}, 250);
-
-	},
+	maybeRemoveFilter: function() {},
 
 	//<editor-fold desc="Navigation Events">
 	showAssignment: function(selModel, record) {

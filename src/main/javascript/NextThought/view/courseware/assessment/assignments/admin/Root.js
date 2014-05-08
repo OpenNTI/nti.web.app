@@ -52,11 +52,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 		me.onItemClicked(null, x);
 
 
-		if (parts.length === 0) {
-			console.warn('Cannot show an assignment that does not have submit parts.');
-			return;
-		}
-
 		view = me.up('course-assessment-admin-assignments');
 		assignmentView = view && view.down('course-assessment-admin-assignments-item');
 

@@ -44,13 +44,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.List', {
 						due = ((values && values.due) || new Date(now)).getTime(),//if no due date give, use now
 						opens = (values.opens || new Date(0)).getTime(),//if no open date given, use epoc
 
-						cls = opens > now ? 'closed ' : '',
+						cls = opens > now ? 'closed ' : '';
 
-						item = values.item,
-						parts = (item && item.get && item.get('parts')) || [],
-						kind = parts.length > 0 ? '' : 'no_submit ';
-
-					return kind + cls + (((values && values.due) && due < now) ? 'late' : '');
+					return cls + (((values && values.due) && due < now) ? 'late' : '');
 				},
 
 				getDueDate: function(values) {

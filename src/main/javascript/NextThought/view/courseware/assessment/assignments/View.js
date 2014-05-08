@@ -186,10 +186,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 			item = record && record.get('item'),
 			parts = item && item.get('parts');
 
-		if (!parts || !parts.length) {
-			return;
-		}
-
 		if (Ext.fly(dom).hasCls('closed')) {
 			alert(getFormattedString('NextThought.view.courseware.assessment.assignments.View.available', { date: date}));
 			return;
@@ -420,17 +416,10 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 	showAssignment: function(assignment) {
 		var id = assignment && ((assignment.getId && assignment.getId()) || assignment),
-			x = this.store.getById(id),
-			item = x && x.get('item'),
-			parts = (item && item.get('parts')) || [];
+			x = this.store.getById(id);
 
 		if (!x) {
 			console.warn('Assignment not found:', id);
-			return;
-		}
-
-		if (parts.length === 0) {
-			console.warn('Cannot show an assignment that does not have submit parts.');
 			return;
 		}
 
