@@ -190,6 +190,10 @@ Ext.define('NextThought.view.courseware.overview.View', {
 				return;
 			}
 
+			if (/^object$/i.test(i.tagName) && i.getAttribute('mimeType') === 'application/vnd.nextthought.relatedworkref') {
+				return;
+			}
+
 			i = me.getComponentForNode(i, locInfo, node, assignments);
 			t = i && (i.sectionOverride || SECTION_TYPE_MAP[i.xtype] || 'Unknown');
 			if (t) {
