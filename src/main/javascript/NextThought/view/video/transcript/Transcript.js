@@ -144,7 +144,7 @@ Ext.define('NextThought.view.video.transcript.Transcript', {
 		var start = this.transcript.get('desired-time-start'),
 			end = this.transcript.get('desired-time-end');
 
-		return (start >= 0 && end >= start) ? fn : null;
+		return (start >= 0 && end > start) ? fn : null;
 	},
 
 
