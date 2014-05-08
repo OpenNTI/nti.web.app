@@ -74,6 +74,7 @@ Ext.define('NextThought.view.courseware.overview.View', {
 
 		if (!r || r.getId() === me.currentPage || !course || !course.getAssignments) {
 			//show empty state??
+			console.warn('Nothing?', r, me.currentPage, course);
 			return;
 		}
 
