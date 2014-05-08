@@ -64,7 +64,11 @@ Ext.define('NextThought.view.assessment.Score', {
 
 		Ext.defer(function() {
 			store.loadRawData(data, false);
-			c.redraw();
+			try {
+				if (c.rendered) {c.redraw();}
+			} catch (e) {
+				Error.raiseForReport(e.stack || e.message || e);
+			}
 		},1);
 	}
 });
