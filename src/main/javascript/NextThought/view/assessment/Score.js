@@ -30,7 +30,14 @@ Ext.define('NextThought.view.assessment.Score', {
 			shadow: false,
 			legend: false,
 
-			series: [{ type: 'score', angleField: 'p', correctColor: this.correctColor, incorrectColor: this.incorrectColor, textColor: this.textColor, style: this.chartStyle }]
+			series: [{
+				 type: 'score',
+				 angleField: 'p',
+				 correctColor: this.correctColor,
+				 incorrectColor: this.incorrectColor,
+				 textColor: this.textColor,
+				 style: this.chartStyle
+			 }]
 		});
 
 		this.setValue(this.value || 0);
@@ -40,7 +47,8 @@ Ext.define('NextThought.view.assessment.Score', {
 	setValue: function(value) {
 		var v = value || 4,
 			data = [{p: v},{p: (100 - v)}],
-			s = this.down('chart').series.first(),
+			c = this.down('chart'),
+			s = c.series.first(),
 			store = this.store;
 
 		if (s.setValue) {
@@ -52,12 +60,11 @@ Ext.define('NextThought.view.assessment.Score', {
 
 		this.value = value;
 
-    //		if(value === 0){
-    //			data.shift();
-    //		}
+		//if (value === 0){ data.shift(); }
 
 		Ext.defer(function() {
 			store.loadRawData(data, false);
+			c.redraw();
 		},1);
 	}
 });
