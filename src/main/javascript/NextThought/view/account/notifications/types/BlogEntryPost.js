@@ -5,7 +5,7 @@ Ext.define('NextThought.view.account.notifications.types.BlogEntryPost', {
 	keyVal: 'application/vnd.nextthought.forums.personalblogentrypost',
 
 	showCreator: true,
-	verb: 'shared a thought',
+	wording: 'NextThought.view.account.notifications.types.BlogEntryPost.wording',
 	previewField: 'title',
 	quotePreview: false,
 	itemCls: 'post',

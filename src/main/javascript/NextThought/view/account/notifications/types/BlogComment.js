@@ -3,6 +3,7 @@ Ext.define('NextThought.view.account.notifications.types.BlogComment', {
 	alias: 'widget.notification-item-blog-comment',
 
 	keyVal: 'application/vnd.nextthought.forums.personalblogcomment',
+	wording: 'NextThought.view.account.notifications.types.BlogComment.wording',
 
 	clicked: function(view, rec) {
 		function success(r) {

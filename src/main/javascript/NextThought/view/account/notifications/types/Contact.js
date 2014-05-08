@@ -7,7 +7,7 @@ Ext.define('NextThought.view.account.notifications.types.Contact', {
 		'NextThought.view.account.contacts.management.Popout'
 	],
 
-	verb: 'added you as a contact.',
+	wording: 'NextThought.view.account.notifications.types.Contact.wording',
 
 	fillInData: function(rec) {
 	},
@@ -15,6 +15,7 @@ Ext.define('NextThought.view.account.notifications.types.Contact', {
 
 	getDisplayName: function(values) {
 		if (!values || !this.showCreator) { return ''; }
+
 		return NTIFormat.displayName(values, 'You');
 	},
 

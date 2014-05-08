@@ -4,7 +4,7 @@ Ext.define('NextThought.view.account.notifications.types.Base', {
 	keyVal: '',
 
 	showCreator: true,
-	verb: '',
+	wording: '',
 	itemCls: '',
 
 	constructor: function(config) {
@@ -38,8 +38,7 @@ Ext.define('NextThought.view.account.notifications.types.Base', {
 				cn: [
 					{ cls: 'icon', style: {backgroundImage: '{[this.getIcon(values)]}'}},
 					{ cls: 'wrap', cn: [
-						{ tag: 'span', cls: 'creator link', html: '{[this.getName(values)]}'}, ' ',
-						{ tag: 'span', cls: 'verb', html: '{[this.getVerb(values)]}'}, ' ',
+						'{[this.getWording(values)]}',
 						{ tag: 'time', cls: 'time',
 							datetime: '{[this.getTime(values)]}', html: '{Time:ago()}'}
 					]}
@@ -55,12 +54,8 @@ Ext.define('NextThought.view.account.notifications.types.Base', {
 				return Ext.util.Format.date(t, 'c');
 			},
 
-			getVerb: function(values) {
-				return me.getVerb(values);
-			},
-
-			getName: function(values) {
-				return me.getDisplayName(values);
+			getWording: function(values) {
+				return me.getWording(values);
 			},
 
 			getIcon: function(values) {
@@ -70,9 +65,25 @@ Ext.define('NextThought.view.account.notifications.types.Base', {
 	},
 
 
-	getVerb: function() {
-		return this.verb;
+	getWording: function(values) {
+		if (!this.wording) {
+			return '';
+		}
+
+		var creator = this.getDisplayNameTpl(values);
+
+		return getFormattedString(this.wording, {
+			creator: creator
+		});
 	},
+
+
+	getDisplayNameTpl: function(values) {
+		var name = this.getDisplayName(values);
+
+		return Ext.DomHelper.markup({tag: 'span', cls: 'creator link', html: name});
+	},
+
 
 	getDisplayName: function(values) {
 		if (!values || !this.showCreator) { return ''; }

@@ -4,7 +4,7 @@ Ext.define('NextThought.view.account.notifications.types.Note', {
 	keyVal: 'application/vnd.nextthought.note',
 
 	showCreator: true,
-	verb: getString('NextThought.view.account.history.mixins.NoteNotification.note-shared'),
+	wording: getString('NextThought.view.account.notifications.types.Note.wording'),
 	previewField: 'preview',
 
 	getVerb: function(values) {

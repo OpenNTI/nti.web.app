@@ -5,11 +5,11 @@ Ext.define('NextThought.view.account.notifications.types.Feedback', {
 
 	showCreator: true,
 	itemCls: 'feedback',
-	verb: 'posted feedback on ',
+	wording: 'NextThought.view.account.notifications.types.Feedback.wording',
 	previewField: 'assignmentName',
 
 
-	assignmentNameTpl: Ext.DomHelper.createTemplate({ tag: 'span', cls: 'link', html: '{name}.'}).compile(),
+	assignmentNameTpl: Ext.DomHelper.createTemplate({ tag: 'span', cls: 'link', html: '{name}'}).compile(),
 
 
 	clicked: function(view, rec) {
@@ -59,9 +59,15 @@ Ext.define('NextThought.view.account.notifications.types.Feedback', {
 	},
 
 
-	getVerb: function(values) {
-		if (!values || !this.course) { return ''; }
+	getWording: function(values) {
+		if (!values || !this.course || !this.wording) { return ''; }
 
-		return this.verb + this.assignmentNameTpl.apply({name: values.assignmentName});
+		var creator = this.getDisplayNameTpl(values),
+			assignment = this.assignmentNameTpl.apply({name: values.assignmentName});
+
+		return getFormattedString(this.wording, {
+			creator: creator,
+			assignment: assignment
+		});
 	}
 });
