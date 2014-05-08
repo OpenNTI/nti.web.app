@@ -481,9 +481,7 @@ body.dragging * {
 			@include experimental-value(cursor,grabbing);
 		}
 
-		&.used,
-		&.dropped,
-		&.dragging.unique {
+		&.dropped {
 			visibility: hidden;
 		}
 
@@ -1409,6 +1407,16 @@ body.dragging * {
 			color: #fff;
 		}
 	}
+
+	.wordentry.draggingk.unique,
+	.wordentry.drag.used {
+		opacity: 0.5;
+		background: #fff;
+		border: 1px solid $border-grey;
+		color: $tertiary-grey;
+		cursor: default;
+		pointer-events: none;
+	}
 	
 	.wordbank-body.locked {
 		background-color: white;
@@ -1417,10 +1425,6 @@ body.dragging * {
 		border-left: 1px #e2e2e2 solid;
 		box-shadow: 0px 1px 2px 1px #e6e6e6;
 		padding: 15px;
-
-		.used {
-			display: none;
-		}
 	}
 }
 
