@@ -286,9 +286,8 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 			afterRepair: function() { this.dragging = false; }, //override to stop the flash
 
 			getDragData: function(e) {
-				var sourceEl = e.getTarget('.drag', 10), d;
-				//this.locationCache;
-				if (sourceEl && !me.up('assessment-question').submitted) {
+				var sourceEl = e.getTarget('.drag'), d;
+				if (sourceEl && !e.getTarget('.used') && !me.up('assessment-question').submitted) {
 					d = document.createElement('div');
 					d.className = sourceEl.className;
 					Ext.DomHelper.append(d, {cls: 'reset'});
