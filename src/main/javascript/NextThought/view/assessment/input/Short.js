@@ -7,6 +7,9 @@ Ext.define('NextThought.view.assessment.input.Short', {
 
 	cls: 'shortanswer-input',
 
+	mixins: {
+		questionContent: 'NextThought.mixins.QuestionContent'
+	},
 
 	inputTpl: Ext.DomHelper.markup({ cls: 'fill-in', html: '{lineWithBlank}' }),
 
@@ -15,7 +18,7 @@ Ext.define('NextThought.view.assessment.input.Short', {
 	beforeRender: function() {
 		this.callParent(arguments);
 		Ext.apply(this.renderData, {
-			lineWithBlank: this.filterHTML(this.part.get('input'))
+			lineWithBlank: this.buildContent(this.filterHTML(this.part.get('input')))
 		});
 	},
 
