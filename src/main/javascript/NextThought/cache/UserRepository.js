@@ -31,8 +31,10 @@ Ext.define('NextThought.cache.UserRepository', {
 					t = queued.removeAt(0);
 					if (t) {
 						t = t();
-						active.add(t);
-						t.always(removeWhenDone(t));
+						if (t) {
+							active.add(t);
+							t.always(removeWhenDone(t));
+						}
 					} else {
 						task.stop();
 					}
@@ -468,7 +470,7 @@ Ext.define('NextThought.cache.UserRepository', {
 
 		function fire(fulfill) {
 
-			wait(1)
+			return wait(1)
 				.then(function() {
 					return me.__makeRequest({
 						url: Service.getBulkResolveUserURL(),
