@@ -101,14 +101,16 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 			format = 'l, F j',
 			opens = assignment.get('availableBeginning'),
 			date = assignment.get('availableEnding'),
-			day = (new Date(date.getTime())).setHours(0, 0, 0, 0),
+			day = date && (new Date(date.getTime())).setHours(0, 0, 0, 0),
 			today = (new Date()).setHours(0, 0, 0, 0),
-			html = getString('NextThought.view.courseware.overview.parts.QuestionSet.due') + ' ';
+			html = date && (getString('NextThought.view.courseware.overview.parts.QuestionSet.due') + ' ');
 
-		if (day === today) {
-			html += getString('NextThought.view.courseware.overview.parts.QuestionSet.today');
-		} else {
-			html += Ext.Date.format(date, format);
+		if (date) {
+			if (day === today) {
+				html += getString('NextThought.view.courseware.overview.parts.QuestionSet.today');
+			} else {
+				html += Ext.Date.format(date, format);
+			}
 		}
 
 		if (score) { score.destroy(); }
@@ -116,7 +118,7 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 		this.addCls('assignment');
 		this.setAsNotStarted();
 		this.updateWithScore();
-		tally.setGreyText(html);
+		tally.setGreyText(html || '');
 
 		if (opens && opens > new Date()) {
 			this.down('button').destroy();
