@@ -31,6 +31,7 @@ Ext.define('NextThought.view.courseware.assessment.reader.Panel', {
 			pageSource: this.pageSource,
 			path: this.path,
 			assignmentHistory: this.assignmentHistory,
+			assignment: this.assignment,
 			assignmentId: this.assignment.getId()
 		};
 	},

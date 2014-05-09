@@ -63,11 +63,11 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 		var grade = history && history.get('Grade'),
 			due = this.assignmentHistory && this.assignmentHistory.get('due'),
 			submission = history && history.get('Submission'),
-			hasParts = submission && (submission.get('parts') || []).length > 0,
+			hasParts = this.assignment.get('parts').length > 0,
 			completed = submission && submission.get('CreatedTime'),
 			overdue;
 
-		if (!history || !submission) {
+		if ((!history || !submission) && hasParts) {
 			this.removeCls('submitted');
 			this.updateLayout();
 			return;
@@ -78,6 +78,9 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 		if (!this.rendered) { return; }
 
 		if (!hasParts) {
+			if (!submission) {
+				this.completedEl.hide();
+			}
 			this.removeCls('ontime');
 			this.lateEl.hide();
 		} else if (completed > due) {
