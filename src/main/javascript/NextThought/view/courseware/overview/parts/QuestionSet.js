@@ -2,6 +2,7 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 	extend: 'Ext.Panel',
 	alias: [
 		'widget.course-overview-naquestionset',
+		'widget.course-overview-nanosubmitassignment',
 		'widget.course-overview-assignment'
 	],
 
@@ -10,6 +11,10 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 		'NextThought.view.assessment.ScoreboardHeader',
 		'NextThought.view.assessment.ScoreboardTally'
 	],
+
+	statics: {
+		isAssessmentWidget: true
+	},
 
 	cls: 'scoreboard overview-naquestionset',
 	ui: 'assessment',
@@ -51,7 +56,7 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 			ntiid: ntiid,
 			questionSetId: ntiid,
 			containerId: containerId,
-			total: n.getAttribute('question-count') || 10
+			total: n.getAttribute('question-count') || 0
 		});
 
 		this.callParent([config]);

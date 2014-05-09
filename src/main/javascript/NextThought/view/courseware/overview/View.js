@@ -252,7 +252,7 @@ Ext.define('NextThought.view.courseware.overview.View', {
 	getComponentForNode: function(node, info, rec, assignments) {
 		var type = node && node.nodeName,
 			section = (node && node.getAttribute('section')) || null,
-			assignment;
+			assignment, cls;
 
 		if (/^content:related$/i.test(type) || /^object$/i.test(type)) {
 			type = node.getAttribute('type') || node.getAttribute('mimeType');
@@ -260,14 +260,15 @@ Ext.define('NextThought.view.courseware.overview.View', {
 		}
 
 		type = type && ('course-overview-' + type.toLowerCase());
+		cls = Ext.ClassManager.getByAlias('widget.' + type);
 
-		if (type === 'course-overview-naquestionset') {
-			assignment = assignments.isAssignment(node.getAttribute('target-ntiid'));
-			type = assignment ? 'course-overview-assignment' : type;
-			assignment = assignments.getItem(node.getAttribute('target-ntiid'));
-		}
+		if (cls) {
+			if (cls && cls.isAssessmentWidget) {
+				assignment = assignments.isAssignment(node.getAttribute('target-ntiid'));
+				type = assignment ? 'course-overview-assignment' : type;
+				assignment = assignments.getItem(node.getAttribute('target-ntiid'));
+			}
 
-		if (type && Ext.ClassManager.getByAlias('widget.' + type)) {
 			return {xtype: type, node: node, locationInfo: info, courseRecord: rec, sectionOverride: section, assignment: assignment};
 		}
 
