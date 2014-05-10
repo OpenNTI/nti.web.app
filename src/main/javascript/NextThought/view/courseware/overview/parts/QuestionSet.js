@@ -125,6 +125,8 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 			tally.setGreyText(getFormattedString('NextThought.view.courseware.overview.parts.QuestionSet.available', {
 				date: Ext.Date.format(opens, format)
 			}));
+		} else if (assignment.get('parts').length === 0) {
+			this.down('button').setText(getString('NextThought.view.courseware.overview.parts.QuestionSet.review'));
 		}
 	},
 
