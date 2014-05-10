@@ -179,8 +179,8 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 				grade = h && h.get('Grade'),
 				pendingAssessment = h && h.get('pendingAssessment');
 
-			if (o.doNotShow()) {
-				me.maybeSetFinalGrade(o, h, grade);
+			//if (o.doNotShow()) {
+			if (me.maybeSetFinalGrade(o, h, grade)) {
 				return;
 			}
 
@@ -211,12 +211,13 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 
 	maybeSetFinalGrade: function(assignment, history, grade) {
 		if (!Ext.String.endsWith(assignment.get('NTIID'), ':Final_Grade')) {
-			return;
+			return false;
 		}
 
 		try {
 			this.finalGrade = grade && grade.get('value');
 			this.updateHeader();
+			return true;
 		} catch (e) {
 			console.error(e.stack || e.message || e);
 		}
