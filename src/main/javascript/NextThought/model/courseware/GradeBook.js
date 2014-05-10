@@ -11,7 +11,7 @@ Ext.define('NextThought.model.courseware.GradeBook', {
 			i = b && b.getFieldItem('Items', key);
 
 		try {
-			if (!i || i.get('AssignmentId') !== assignmentId) {
+			if (assignmentId && (!i || i.get('AssignmentId') !== assignmentId)) {
 				i = this.findGradeBookEntryFor(assignmentId) || [];
 				i = i.reduce(function(a, key) { return a.getFieldItem('Items', key); }, this);
 				if (!NextThought.model.courseware.GradeBookEntry.isInstance(i)) {
