@@ -44,7 +44,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 			me = this,
 			x = me.store.getById(id),
 			item = x && x.get('item'),
-			parts = (item && item.get('parts')) || [],
 			tab = me.up('[isTabView]').getEl(),
 			view, assignmentView, store, username;
 
