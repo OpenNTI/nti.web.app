@@ -111,13 +111,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 	maybeShowAssignment: function(view, record, node, index, e) {
 		var selModel = view.getSelectionModel(),
 			selection = selModel && selModel.selection,
-			dataIndex = selection && selection.columnHeader.dataIndex,
-			noSubmit = record.get('item').get('category_name') === 'no_submit';
+			dataIndex = selection && selection.columnHeader.dataIndex;
 
-		//if we didn't click on the grade cell or we don't have a grade yet
-		if (noSubmit) {
-			return;
-		}
 
 		if (dataIndex !== 'Grade') {
 			this.showAssignment(selModel, record);
