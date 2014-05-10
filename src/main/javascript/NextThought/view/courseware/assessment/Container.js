@@ -52,8 +52,8 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 
 
 	showRoot: function() {
-		Ext.destroy(this.items.getRange().slice(1));
 		this.getLayout().setActiveItem(0);
+		Ext.destroy(this.items.getRange().slice(1));
 	},
 
 
@@ -78,6 +78,8 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 			console.warn('No view found');
 			return;
 		}
+
+		this.showRoot();
 
 		v = r.activateView(v);
 
@@ -119,11 +121,11 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 
 			});
 
-			 return active.done(function(history) {
-			 		//both course-asessment-reader and the admin-reader extend the reader so this takes care of both
-			 		Ext.destroy(me.down('reader'));
+			return active.done(function(history) {
+					//both course-asessment-reader and the admin-reader extend the reader so this takes care of both
+					Ext.destroy(me.down('reader'));
 
-			 		var reader = me.add({
+					var reader = me.add({
 						xtype: isMe(student) ? 'course-assessment-reader' : 'course-assessment-admin-reader',
 						parentView: view,
 						assignmentHistory: history,
