@@ -32,7 +32,7 @@ Ext.define('NextThought.util.Localization', {
 			s;
 
 		if (!forms) {
-			console.error('Pluralizing a string we dont have forms for', key, count);
+			//console.error('Pluralizing a string we dont have forms for', key, count);
 			return this.oldPlural.apply(Ext.util.Format, arguments);
 		}
 
