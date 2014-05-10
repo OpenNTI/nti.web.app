@@ -750,8 +750,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			}
 		});
 
-		p.fulfill();
-		return p;
+		return Promise.resolve();
 	},
 
 
