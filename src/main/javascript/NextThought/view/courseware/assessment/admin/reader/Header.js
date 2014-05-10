@@ -33,7 +33,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 				this.lateEl.addCls('good');
 				this.lateEl.update(getString('NextThought.view.courseware.assessment.admin.reader.Header.ontime'));
 			}
-		} else if ((submission.get('parts') || []).length > 0) {
+		} else if ((this.assignment.get('parts') || []).length > 0) {
 			this.lateEl.update(getString('NextThought.view.courseware.assessment.admin.reader.Header.notsubmitted'));
 		}
 

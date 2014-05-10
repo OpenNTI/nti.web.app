@@ -25,6 +25,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Panel', {
 			student: this.student,
 			path: this.path,
 			pageSource: this.pageSource,
+			assignment: this.assignment,
 			assignmentHistory: this.assignmentHistory
 		};
 	},
