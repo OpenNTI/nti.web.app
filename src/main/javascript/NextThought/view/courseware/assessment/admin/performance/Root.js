@@ -723,7 +723,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				jsonData: { value: value }
 			})
 					.then(function(r) {
-						var json = ParseUtils.parseItems(Ext.decode(r.responseText))[0];
+						var json = ParseUtils.parseItems(Ext.decode(r, true))[0];
 						if (!json) {throw 'Bad Value';}//skip the next step, and jump to the fail()
 						return json;
 					})
