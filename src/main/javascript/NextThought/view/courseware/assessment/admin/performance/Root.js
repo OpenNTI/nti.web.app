@@ -698,6 +698,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			value = number + ' ' + letter,
 			url = this.gradeBook.get('href').split(/[\?#]/)[0];
 
+		if ((!grade && value === ' -') || (grade && value === grade.get('value'))) {
+			return;
+		}
 
 		function maybeFocus() {
 			var el = me.getNode(rec);
@@ -716,7 +719,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			});
 
 			url += '/no_submit/Final Grade/' + rec.getId();
-
+			console.log('new');
 			return Service.request({
 				url: url,
 				method: 'PUT',
@@ -739,6 +742,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 					});
 		}
 
+		console.log('update');
 		grade.set('value', value);
 		grade.save({
 			callback: function(q, s) {
