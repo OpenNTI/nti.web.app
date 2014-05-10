@@ -15,7 +15,7 @@ Ext.define('NextThought.view.account.notifications.types.Grade', {
 	},
 
 	getDisplayName: function(values) {
-		if (!values || !this.course) { return ''; }
-		return this.course.get('Title');
+		if (!values || !values.course) { return ''; }
+		return values.course.get('Title');
 	}
 });

@@ -35,17 +35,25 @@ Ext.define('NextThought.view.account.notifications.types.Feedback', {
 
 	fillInData: function(rec) {
 		this.callParent(arguments);
-		var me = this;
+
+		if (!rec.fields.getByKey('course')) {
+			rec.fields.add(Ext.data.Field.create({name: 'course', type: 'auto'}));
+		}
+		if (!rec.fields.getByKey('hidden')) {
+			rec.fields.add(Ext.data.Field.create({name: 'hidden', type: 'boolean'}));
+		}
 
 		if (rec.get('assignmentContainer') || rec.data.hidden) {return;}
 
 		Service.getObject(rec.get('AssignmentId'), function(assignment) {
 			var cid = assignment.get('ContainerId'),
-					course = CourseWareUtils.courseForNtiid(cid);
+				course = CourseWareUtils.courseForNtiid(cid);
+
 			if (!course) {
-				me.itemCls += ' x-hidden';
+				rec.data.hidden = true;
 			}
-			me.course = course;
+
+			rec.data.course = course;
 			rec.course = course;
 			rec.set({
 				assignmentContainer: cid,
