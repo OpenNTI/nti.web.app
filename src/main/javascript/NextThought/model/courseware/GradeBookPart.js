@@ -1,6 +1,6 @@
 Ext.define('NextThought.model.courseware.GradeBookPart', {
 	extend: 'NextThought.model.Base',
-
+	mimeType: 'application/vnd.nextthought.gradebookpart',
 	fields: [
 		{name: 'Items', type: 'collectionItem'},
 		{name: 'Name', type: 'string'},
