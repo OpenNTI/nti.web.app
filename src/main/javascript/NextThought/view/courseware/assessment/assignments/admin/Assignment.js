@@ -434,17 +434,11 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	},
 
 
-	onItemClick: function(v, record, dom, ix, e) {
+	onItemClick: function(v, record) {
 		var selModel = v.getSelectionModel(),
-				selection = selModel && selModel.selection,
-				dataIndex = selection && selection.columnHeader.dataIndex,
-				item = record.get('item'),
-				noSubmit = item && item.get && (item.get('category_name') === 'no_submit');
+			selection = selModel && selModel.selection,
+			dataIndex = selection && selection.columnHeader.dataIndex;
 
-		//if we didn't click on the grade cell or we don't have a grade yet
-		if (noSubmit) {
-			return;
-		}
 
 		if (dataIndex !== 'Grade') {
 			this.fireGoToAssignment(selModel, record);
