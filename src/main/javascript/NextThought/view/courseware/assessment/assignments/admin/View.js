@@ -15,7 +15,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.View', {
 
 	setAssignmentsData: function() {
 		this.clearAssignmentsData();
-		var root = this.add({ xtype: 'course-assessment-admin-assignments-root' });
+		var root = this.add({ xtype: 'course-assessment-admin-assignments-root' }),
 			p = root.setAssignmentsData.apply(root, arguments);
 		this.store = root.store;
 		this.mon(root, 'assignment-clicked', 'showAssignmentFromClick');
