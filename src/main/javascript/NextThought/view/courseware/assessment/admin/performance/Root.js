@@ -662,7 +662,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			el = Ext.get(node),
 			dropdown = el && el.down('.gradebox .letter'),
 			current;
-		console.log('show menu for record:', rec);
 
 		me.gradeMenu.items.each(function(item, index) {
 			var x = item.height * index;
@@ -685,7 +684,16 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 	changeLetterGrade: function(item, status) {
 		if (!this.activeGradeRecord || !status) { return; }
-		this.changeGrade(this.activeGradeRecord, this.activeGradeRecord.get('grade'), item.text);
+		var g = this.activeGradeRecord.get('grade'),
+			n = this.getNode(this.activeGradeRecord);
+
+		n = n && n.querySelector('.gradebox input');
+
+		if (n && n.value !== g) {
+			g = n.value;
+		}
+
+		this.changeGrade(this.activeGradeRecord, g, item.text);
 	},
 
 
@@ -711,7 +719,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		}
 
 		if (!grade) {
-			console.log('No final grade entry');
 
 			rec.set({
 				grade: number,
@@ -719,7 +726,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			});
 
 			url += '/no_submit/Final Grade/' + rec.getId();
-			console.log('new');
+
 			return Service.request({
 				url: url,
 				method: 'PUT',
@@ -742,7 +749,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 					});
 		}
 
-		console.log('update');
 		grade.set('value', value);
 		grade.save({
 			callback: function(q, s) {
@@ -773,8 +779,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	saveGradeFromInput: function(e, input, fromEnter) {
 		var node = e.getTarget(this.grid.view.itemSelector),
 			rec = node && this.getRecord(node);
+		if (!rec) {
+			console.warn('Event recieved from a detached node no longer in the dom');
+			return;
+		}
 
-		console.log('update record', rec, ' with input value:', input.value);
 		this.changeGrade(rec, input.value, rec.get('letter'), fromEnter);
 	}
 	//</editor-fold>
