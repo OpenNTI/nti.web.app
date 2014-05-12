@@ -35,6 +35,10 @@ Ext.define('NextThought.model.courseware.GradeBookPart', {
 			Ext.Error.raise('No name');
 		}
 
+		if (Ext.isEmpty(id)) {
+			Ext.Error.raise('No ID');
+		}
+
 		items.push(entry);
 		items.INDEX_KEYMAP[name] = key;
 

@@ -2,9 +2,15 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-assessment-admin-performance-root',
 
+	mixins: {
+		gridGrades: 'NextThought.mixins.grid-feature.GradeInputs'
+	},
+
 	requires: [
 		'NextThought.proxy.courseware.Roster'
 	],
+
+	__inputSelector: '.gradebox input',
 
 	ui: 'course-assessment',
 	cls: 'course-assessment-admin performance',
@@ -47,6 +53,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			xtype: 'grid',
 
 			scroll: 'vertical',
+
+			verticalScroller: {
+				synchronousRender: true
+			},
 
 			plugins: [{ptype: 'bufferedrenderer'}],
 			columns: [
@@ -189,21 +199,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	afterRender: function() {
-		var observer,
-			MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
-
 		this.callParent(arguments);
 
 		this.createStudentMenu();
 		this.createItemMenu();
 
-		if (MutationObserver) {
-			observer = new MutationObserver(this.bindInputs.bind(this));
-			observer.observe(
-					Ext.getDom(this.grid.getEl()),
-					{ childList: true, subtree: true });
-			this.on('destroy', 'disconnect', observer);
-		} else {
+		if (!this.monitorSubTree()) {
 			console.warn('Hidding Grade boxes because browser does not suppport MutationObserver. Chrome 18+, FF 14+, Safari 6+, IE11');
 			this.supported = false;
 			this.removeCls('show-final-grade');
@@ -423,9 +424,13 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 	//<editor-fold desc="Data Bindings">
 	onUpdate: function() {
-		var s = this.store;
+		var focused = this.getFocusedInput(),
+			s = this.store;
+
 		if (s.isFiltered()) {s.filter();}//refilter
 		s.sort();
+
+		this.setFocusedInput(focused);
 	},
 
 
@@ -607,19 +612,38 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		var v = this.grid.getView();
 		return v.getRecord.apply(v, arguments);
 	},
+
+
+	getFocusedInput: function() {
+		var input = document.querySelector(':focus');
+
+		function toSelector(tag) {
+			var s = tag.tagName,
+				cls = tag.className.replace(/\W+/g, '.');
+			return Ext.isEmpty(cls) ? s : (s + '.' + cls);
+		}
+
+		return input && {record: this.getRecord(Ext.fly(input).up(this.__getGridView().itemSelector)), tag: toSelector(input)};
+	},
+
+
+	setFocusedInput: function(info) {
+		var record = info && info.record,
+			tag = info && info.tag,
+			n = record && this.__getGridView().getNode(record);
+		return n && wait(1).then(function() {
+			n = n.querySelector(tag);
+			if (n) {
+				n.focus();
+			}
+		});
+	},
 	//</editor-fold>
 
 
 	//<editor-fold desc="Event Handlers">
-	bindInputs: function() {
-		var inputs = this.grid.view.getEl().select('.gradebox input');
-		Ext.destroy(this.gridInputListeners);
-
-		this.gridInputListeners = this.mon(inputs, {
-			destroyable: true,
-			blur: 'onInputBlur',
-			keypress: 'onInputChanged'
-		});
+	__getGridView: function() {
+		return this.grid.getView();
 	},
 
 
@@ -710,98 +734,60 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			g = n.value;
 		}
 
-		this.changeGrade(this.activeGradeRecord, g, item.text);
+		this.editGrade(this.activeGradeRecord, g, item.text);
 	},
 
 
-	changeGrade: function(rec, number, letter, fromEnter) {
+	editGrade: function(record, number, letter) {
 		if (!this.gradeBook) { return; }
 
 		var me = this,
+			view = me.__getGridView(),
 			gradebookentry = me.gradeBook.getItem('Final Grade', 'no_submit'),
-			grade = gradebookentry && gradebookentry.getFieldItem('Items', rec.getId()),
-			value = number + ' ' + letter,
-			url = this.gradeBook.get('href').split(/[\?#]/)[0];
+			grade = gradebookentry && gradebookentry.getFieldItem('Items', record.getId()),
+			oldValue = grade && grade.get('value'),
+			oldLetter = oldValue && oldValue.split(' ')[1],
+			value = number + ' ' + (letter || oldLetter || '-'),
+			url = me.gradeBook.get('href');
+
 
 		if ((!grade && value === ' -') || (grade && value === grade.get('value'))) {
 			return;
 		}
 
-		function maybeFocus() {
-			var el = me.getNode(rec);
-
-			if (fromEnter) {
-				Ext.fly(el).down('input').focus(10);
-			}
-		}
+		Ext.fly(view.getNode(record)).setStyle({opacity: '0.3'});
 
 		if (!grade) {
-
-			rec.set({
-				grade: number,
-				letter: letter
+			url += '/no_submit/Final Grade/' + record.getId();
+			grade = NextThought.model.courseware.Grade.create({
+				href: url,
+				Username: record.get('Username')
 			});
 
-			url += '/no_submit/Final Grade/' + rec.getId();
+			me.gradeBook.add(grade, null);
+		}
 
-			return Service.request({
-				url: url,
-				method: 'PUT',
-				jsonData: { value: value }
+		console.debug('saving: ' + value, 'to', grade.get('href'));
+		return wait(1).then(function() {
+			var input = me.getFocusedInput();
+
+			grade.phantom = false;
+			grade.set('value', value);
+
+			return new Promise(function(fulfill, reject) {
+				grade.save({
+					failure: function() { grade.reject(); reject(); },
+					success: function() { fulfill(); }});
 			})
-					.then(function(r) {
-						var json = ParseUtils.parseItems(Ext.decode(r, true))[0];
-						if (!json) {throw 'Bad Value';}//skip the next step, and jump to the fail()
-						return json;
-					})
-					.then(function(rec) {
-						gradebookentry.addItem(rec);
-						maybeFocus();
-					})
-					.fail(function(reason) {
-						rec.reject();
-						//probably should do something here
-						console.error('Failed to save final grade:', arguments);
-						throw reason;
-					});
-		}
+				.always(function() {
+					var n = view.getNode(record);
+					if (n) {
+						Ext.fly(n).setStyle({opacity: 1});
+					}
 
-		grade.set('value', value);
-		grade.save({
-			callback: function(q, s) {
-				if (s) {
-					maybeFocus();
-				} else {
-					grade.reject();
-				}
-			}
-		});
-
-		return Promise.resolve();
-	},
-
-
-	onInputChanged: function(e, input) {
-		if (e.getCharCode() === e.ENTER) {
-			this.saveGradeFromInput(e, input, true);
-		}
-	},
-
-
-	onInputBlur: function(e, input) {
-		this.saveGradeFromInput(e, input, false);
-	},
-
-
-	saveGradeFromInput: function(e, input, fromEnter) {
-		var node = e.getTarget(this.grid.view.itemSelector),
-			rec = node && this.getRecord(node);
-		if (!rec) {
-			console.warn('Event recieved from a detached node no longer in the dom');
-			return;
-		}
-
-		this.changeGrade(rec, input.value, rec.get('letter'), fromEnter);
+					return me.setFocusedInput(input);
+				});
+			});
 	}
 	//</editor-fold>
 });
