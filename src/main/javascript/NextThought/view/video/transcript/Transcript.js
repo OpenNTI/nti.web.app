@@ -144,7 +144,11 @@ Ext.define('NextThought.view.video.transcript.Transcript', {
 		var start = this.transcript.get('desired-time-start'),
 			end = this.transcript.get('desired-time-end');
 
-		return (start >= 0 && end > start) ? fn : null;
+		//if they are both zero don't filter out any of the transcript
+		if (start === 0 && end === 0) { return null; }
+
+		//if start and end are a valid range filter out all the lines not between start and end
+		return (start >= 0 && end >= start) ? fn : null;
 	},
 
 
