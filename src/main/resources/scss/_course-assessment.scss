@@ -361,6 +361,10 @@ canvas.x-component-course-assessment {
 
 			.name {
 				color: $secondary-grey !important;
+
+				.accent-name {
+					font-weight: normal;
+				}
 			}
 		}
 	}

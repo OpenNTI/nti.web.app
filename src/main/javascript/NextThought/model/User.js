@@ -7,8 +7,10 @@ Ext.define('NextThought.model.User', {
 		{ name: 'lastLoginTime', type: 'date', dateFormat: 'timestamp' },
 		{ name: 'NotificationCount', type: 'int' },
 		{ name: 'Username', type: 'string' },
-		{ name: 'FirstName', type: 'string', mapping: 'NonI18NFirstName', persist: false },
-		{ name: 'LastName', type: 'string', mapping: 'NonI18NLastName', persist: false},
+		{ name: 'FirstName', type: 'string', mapping: 'NonI18NFirstName'},
+		{ name: 'LastName', type: 'string', mapping: 'NonI18NLastName', convert: function(v, r) {
+			return v;
+		}},
 
 		{ name: 'Presence', type: 'PresenceInfo', persist: false },
 		{ name: 'alias', type: 'string' },

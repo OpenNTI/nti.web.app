@@ -50,18 +50,32 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 			plugins: [{ptype: 'bufferedrenderer'}],
 			columns: [
-				{ text: 'Student', dataIndex: 'displayName', flex: 1, xtype: 'templatecolumn', tpl: Ext.DomHelper.markup([
+				{ text: 'Student', dataIndex: 'LastName', flex: 1, xtype: 'templatecolumn', tpl: new Ext.XTemplate(Ext.DomHelper.markup([
 					{ cls: 'studentbox', cn: [
 						{ cls: 'avatar', style: {backgroundImage: 'url({avatar})'}},
 						{ cls: 'wrap', cn: [
-							{ cls: 'name', html: '{displayName}'},
+							{ cls: 'name', html: '{[this.displayName(values)]}'},
 							{ cls: 'action-items', cn: [
 								{ tag: 'tpl', 'if': 'overdue &gt; 0', cn: {cls: 'overdue', html: '{overdue:plural("Assignment")} Overdue'}},
 								{ tag: 'tpl', 'if': 'ungraded &gt; 0', cn: { html: '{ungraded:plural("Ungraded Assignment")}'}}
 							]}
 						]}
 					]}
-				])},
+				]), {
+					displayName: function(values) {
+						var d = values.displayName,
+							l = values.LastName;
+
+						if (l) {
+							d = d.replace(l, Ext.DomHelper.markup({tag: 'b', html: l}));
+							if (d !== values.displayName) {
+								d = Ext.DomHelper.markup({cls: 'accent-name', html: d});
+							}
+						}
+
+						return d;
+					}
+				})},
 
 
 
@@ -123,6 +137,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				{name: 'user', type: 'auto'},
 				{name: 'avatar', type: 'string', defaultValue: 'resources/images/icons/unresolved-user.png'},
 				{name: 'displayName', type: 'string', defaultValue: getString('NextThought.view.courseware.assessment.admin.performance.Root.resolving')},
+				{name: 'LastName', type: 'string' },
 				{name: 'Username', type: 'string', defaultValue: ''},
 				{name: 'grade', type: 'string'},
 				{name: 'letter', type: 'string', defaultValue: '-'},
@@ -137,7 +152,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			],
 
 			sorters: [
-				{property: 'displayName', direction: 'ascending'}
+				{property: 'LastName', direction: 'ascending'}
 			],
 
 			remoteSort: false,
@@ -418,7 +433,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		this.clearAssignmentsData();
 
 		var s = this.store,
-			gradeBook = this.gradeBook = assignments.gradeBook;
+			gradeBook = assignments.gradeBook;
+		this.gradeBook = gradeBook;
 		this.gradeBookDefaultPart = gradeBook && gradeBook.getFieldItem('Items', 'default');
 
 		this.updateExportEl(this.currentStudent);
@@ -543,7 +559,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		s.suspendEvents(true);
 
-		users.forEach(function(u, i) {
+		users.forEach(function(u) {
 			var grade = getGrade(gradebookentry, u),
 				r = recsMap[u.getId()], monitor;
 
@@ -570,6 +586,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				user: u,
 				avatar: u.get('avatarURL'),
 				displayName: u.toString(),
+				LastName: u.get('LastName'),
 				Username: r.get('Status') === 'Open' ? '' : u.get('Username')
 			});
 			r.commit(true);
