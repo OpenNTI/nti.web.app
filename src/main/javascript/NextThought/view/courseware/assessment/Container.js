@@ -85,7 +85,7 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 
 		return this.activeCourseSetup
 			.then(function() {
-				return v.showAssignment(assignment, user);
+				return v.showAssignment && v.showAssignment(assignment, user);
 			});
 	},
 

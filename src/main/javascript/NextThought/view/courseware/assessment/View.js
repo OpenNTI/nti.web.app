@@ -291,6 +291,11 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 	getViewFor: function(assignment, user) {
 		var view = null;
+
+		if (/Final_Grade$/i.test(assignment) || /finalgrade$/i.test(assignment)) {
+			return this.down('course-assessment-performance');
+		}
+
 		this.body.items.each(function(v) {
 			if (v.handlesAssignment) {
 				view = v;
