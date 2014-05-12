@@ -768,7 +768,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		}
 
 		console.debug('saving: ' + value, 'to', grade.get('href'));
-		return wait(1).then(function() {
+		return wait(300).then(function() {
 			var input = me.getFocusedInput();
 
 			grade.phantom = false;
