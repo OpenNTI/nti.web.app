@@ -171,6 +171,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			filter: 'doFilter',
 			search: {fn: 'doSearch', buffer: 450}
 		});
+
+		var grid = this.down('grid'),
+			completed = grid && grid.down('[dataIndex=completed]');
+
+		if (completed && Ext.isEmpty(this.assignment.get('parts'))) {
+			completed.hide();
+		}
 	},
 
 
