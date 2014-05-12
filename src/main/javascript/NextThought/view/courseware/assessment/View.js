@@ -293,7 +293,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 		var view = null;
 
 		if (/Final_Grade$/i.test(assignment) || /finalgrade$/i.test(assignment)) {
-			return this.down('course-assessment-performance');
+			return this.down('course-assessment-performance,course-assessment-admin-performance');
 		}
 
 		this.body.items.each(function(v) {
