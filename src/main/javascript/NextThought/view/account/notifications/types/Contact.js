@@ -9,7 +9,10 @@ Ext.define('NextThought.view.account.notifications.types.Contact', {
 
 	wording: 'NextThought.view.account.notifications.types.Contact.wording',
 
-	fillInData: function(rec) {
+	fillInData: function(rec, wrapped) {
+		this.lastmodified = wrapped.get('Last Modified');
+
+		this.callParent(arguments);
 	},
 
 

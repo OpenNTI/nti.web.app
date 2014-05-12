@@ -384,10 +384,12 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 
 
 	fillInData: function(rec) {
+		var wrapped = rec;
+
 		rec = this.unwrap(rec);
 
 		if (Ext.isFunction(this.fillData && this.fillData[rec.get('MimeType')])) {
-			this.fillData[rec.get('MimeType')](rec);
+			this.fillData[rec.get('MimeType')](rec, wrapped);
 		}
 	},
 

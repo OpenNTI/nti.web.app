@@ -46,7 +46,7 @@ Ext.define('NextThought.view.account.notifications.types.Base', {
 			}
 		]), {
 			getTime: function(values) {
-				var t = values['Last Modified'];
+				var t = me.lastmodified || values['Last Modified'];
 				if (!t || t.getTime() === 0) {
 					t = values.CreatedTime;
 				}
