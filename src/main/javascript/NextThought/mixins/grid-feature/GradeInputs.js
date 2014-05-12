@@ -33,6 +33,7 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 		this.gridInputListeners = this.mon(inputs, {
 			destroyable: true,
 			blur: 'onInputBlur',
+			focus: 'onInputFocus',
 			keypress: 'onInputKeyPress',
 			keydown: 'onInputKeyPress'
 		});
@@ -52,6 +53,16 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 
 		if (record) {
 			this.editGrade(record, value);
+		}
+	},
+
+
+	onInputFocus: function(e, el) {
+		var v = el.value,
+			len = (v && v.length) || 0;
+
+		if (len && el.setSelectionRange) {
+			el.setSelectionRange(0, len);
 		}
 	},
 
