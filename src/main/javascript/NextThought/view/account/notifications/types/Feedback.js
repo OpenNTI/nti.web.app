@@ -68,7 +68,7 @@ Ext.define('NextThought.view.account.notifications.types.Feedback', {
 
 
 	getWording: function(values) {
-		if (!values || !this.course || !this.wording) { return ''; }
+		if (!values || !values.course || !this.wording) { return ''; }
 
 		var creator = this.getDisplayNameTpl(values),
 			assignment = this.assignmentNameTpl.apply({name: values.assignmentName});
