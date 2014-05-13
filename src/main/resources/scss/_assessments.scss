@@ -1298,7 +1298,6 @@ body.dragging * {
 	}
 
 
-	.shortanswer-input,
 	.wordbank-input {
 		font-size: 14px;
 
@@ -1372,24 +1371,20 @@ body.dragging * {
 	}
 
 	.shortanswer-input {
+		font-size: 14px;
+		text-align: center;
+
 		.inputbox,
 		.response-container {
 			line-height: 2;
-		}
-		.blank {
-			margin-right: auto;
-			&::after {
-				left: -4px; right: -4px; bottom: 0;
-				clip: rect(25px auto auto auto);
-			}
 		}
 		input {
 			text-align: center;
 			font: normal normal 1em/1 $font;
 			color: $secondary-grey;
 			display: inline-block;
-			padding: 0; margin: 0;
-			border: 0;
+			padding: 0; margin: 0 0.2em;
+			border: 1px solid $border-grey;
 			background: none;
 		}
 	}
