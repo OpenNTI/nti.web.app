@@ -27,19 +27,27 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 
 
 	bindInputs: function() {
-		var inputs = this.__getGridView().getEl().select(this.__inputSelector);
+		var mons = {
+					destroyable: true,
+					blur: 'onInputBlur',
+					focus: 'onInputFocus',
+					keypress: 'onInputKeyPress',
+					keydown: 'onInputKeyPress'
+				},
+			inputs = this.__getGridView().getEl().select(this.__inputSelector);
+
 		Ext.destroy(this.gridInputListeners);
 
-		this.gridInputListeners = this.mon(inputs, {
-			destroyable: true,
-			blur: 'onInputBlur',
-			//focusout: 'onInputBlur',
-			focus: 'onInputFocus',
-			//focusin: 'onInputFocus',
-			keypress: 'onInputKeyPress',
-			keydown: 'onInputKeyPress',
-			mousedown: function(e) {e.stopPropagation();}
-		});
+
+		if (Ext.isIE11p || Ext.isIE) {//IE11p Ext.isIE will not be true for IE11p
+			Ext.apply(mons, {
+				//focusout: 'onInputBlur',
+				//focusin: 'onInputFocus',
+				mousedown: function(e) {e.stopPropagation();}
+			});
+		}
+
+		this.gridInputListeners = this.mon(inputs, mons);
 	},
 
 
