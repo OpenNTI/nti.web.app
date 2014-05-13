@@ -183,7 +183,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			limitParam: undefined
 		});
 
-		this.onUpdate = Ext.Function.createBuffered(this.onUpdate, 200, null, null);
+		this.resortAndFilter = Ext.Function.createBuffered(this.resortAndFilter, 200, null, null);
 		this.callParent(arguments);
 	},
 
@@ -423,7 +423,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	//<editor-fold desc="Data Bindings">
-	onUpdate: function() {
+	resortAndFilter: function() {
 		var focused = this.getFocusedInput(),
 			s = this.store;
 
@@ -476,7 +476,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		});
 
 		s.resumeEvents();
-		this.onUpdate();
+		this.resortAndFilter();
 
 		UserRepository.makeBulkRequest(users).done(applyUsers);
 	},
@@ -516,7 +516,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 	updateActionables: function(rec, username) {
 		rec.set(this.getCountsFor(username));
-		this.onUpdate();
+		//this.resortAndFilter();
 	},
 
 
@@ -598,7 +598,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		});
 
 		s.resumeEvents();
-		this.onUpdate();
+		this.resortAndFilter();
 	},
 
 

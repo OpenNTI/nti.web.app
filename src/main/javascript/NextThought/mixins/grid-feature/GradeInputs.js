@@ -27,6 +27,7 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 
 
 	bindInputs: function() {
+		function stop(e) { e.stopPropagation(); }
 		var mons = {
 					destroyable: true,
 					blur: 'onInputBlur',
@@ -39,11 +40,14 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 		Ext.destroy(this.gridInputListeners);
 
 
-		if (Ext.isIE11p || Ext.isIE) {//IE11p Ext.isIE will not be true for IE11p
+		//IE11p Ext.isIE will not be true for IE11p
+		if (Ext.isIE11p || Ext.isIE) {
 			Ext.apply(mons, {
-				//focusout: 'onInputBlur',
-				//focusin: 'onInputFocus',
-				mousedown: function(e) {e.stopPropagation();}
+				focusout: 'onInputBlur',
+				focusin: 'onInputFocusIE',
+				click: stop,
+				mousedown: stop,
+				mouseup: stop
 			});
 		}
 
@@ -65,6 +69,12 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 		if (record) {
 			this.editGrade(record, value);
 		}
+	},
+
+
+	onInputFocusIE: function(e) {
+		e.stopPropagation();
+		this.onInputFocus.apply(this, arguments);
 	},
 
 
