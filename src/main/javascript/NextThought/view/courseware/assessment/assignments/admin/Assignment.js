@@ -105,10 +105,32 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 					flex: 1,
 					padding: '0 0 0 30',
 					possibleSortStates: ['ASC', 'DESC'],//restore the default order of state(since the grid reverses it)
-					tpl: Ext.DomHelper.markup({cls: 'padded-cell user-cell student-cell', cn: [
-						{ cls: 'avatar', style: {backgroundImage: 'url({Creator:avatarURL})'} },
-						{ cls: 'name', html: '{Creator:displayName}'}
-					]}),
+					tpl: new Ext.XTemplate(Ext.DomHelper.markup([{
+								cls: 'padded-cell user-cell student-cell', cn: [
+									{ cls: 'avatar', style: {backgroundImage: 'url({Creator:avatarURL})'} },
+									{ cls: 'name', html: '{[this.displayName(values)]}'}
+								]
+						}]), {
+							displayName: function(values) {
+								if (Ext.isString(values.Creator)) {
+									return 'Resolving';
+								}
+
+								var creator = values.Creator,
+									d = creator && creator.get && creator.get('displayName'),
+									l = creator && creator.get && creator.get('LastName');
+
+								if (l) {
+									d = d.replace(l, Ext.DomHelper.markup({tag: 'b', html: l}));
+									if (d !== values.displayName) {
+										d = Ext.DomHelper.markup({cls: 'accent-name', html: d});
+									}
+								}
+
+								return d;
+							}
+						}
+					),
 					doSort: function(state) {
 						this.up('grid').getStore().sort(new Ext.util.Sorter({
 							direction: state,

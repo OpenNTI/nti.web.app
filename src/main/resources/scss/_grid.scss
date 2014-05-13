@@ -274,6 +274,10 @@
 				overflow: hidden;
 				@include ellipse;
 				color: $primary-grey;
+
+				.accent-name{
+					font-weight: normal;
+				}
 			}
 		}
 	}
