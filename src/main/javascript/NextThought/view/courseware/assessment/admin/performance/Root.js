@@ -761,7 +761,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			url += '/no_submit/Final Grade/' + record.getId();
 			grade = NextThought.model.courseware.Grade.create({
 				href: url,
-				Username: record.get('Username')
+				Username: record.getId()
 			});
 
 			me.gradeBook.add(grade, null);
