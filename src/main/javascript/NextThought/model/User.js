@@ -22,8 +22,11 @@ Ext.define('NextThought.model.User', {
 		{ name: 'ignoring', type: 'UserList' },
 		{ name: 'status', type: 'Synthetic', persist: false, fn: function(record) {
 			//The presence isn't always a PresenceInfo in testing
-			if (record.get('Presence') && record.get('Presence').getDisplayText) {
-				return record.get('Presence').getDisplayText();
+			try {
+				var p = record.get('Presence');
+				return (p && p.getDisplayText && p.getDisplayText()) || null;
+			} catch (e) {
+				console.warn(e.stack || e.message || e);
 			}
 			return null;
 		}},
