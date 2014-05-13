@@ -33,9 +33,12 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 		this.gridInputListeners = this.mon(inputs, {
 			destroyable: true,
 			blur: 'onInputBlur',
+			//focusout: 'onInputBlur',
 			focus: 'onInputFocus',
+			//focusin: 'onInputFocus',
 			keypress: 'onInputKeyPress',
-			keydown: 'onInputKeyPress'
+			keydown: 'onInputKeyPress',
+			mousedown: function(e) {e.stopPropagation();}
 		});
 	},
 
