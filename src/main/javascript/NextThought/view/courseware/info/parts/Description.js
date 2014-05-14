@@ -16,7 +16,7 @@ Ext.define('NextThought.view.courseware.info.parts.Description', {
 				] },
 				{ cls: 'cell', cn: [
 					{ cls: 'label', html: '{{{NextThought.view.courseware.info.parts.Description.hours}}}'},
-					{ cls: 'value {enrollmentStatus}', cn: [
+					{ cls: 'value {enrollmentStatus:lowercase}', cn: [
 						{ tag: 'tpl', 'if': 'creditHours', cn: {
 							cls: 'enroll-for-credit', cn: [
 								'{creditHours:plural("Credit")} {{{NextThought.view.courseware.info.parts.Description.available}}}. ',
