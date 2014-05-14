@@ -11,7 +11,8 @@ Ext.define('NextThought.view.courseware.info.parts.Support', {
 			{ cls: 'label', html: '{{{NextThought.view.courseware.info.parts.Support.support}}}' },
 			{ cls: 'phone', html: '{phone}'},
 			{ tag: 'tpl', 'for': 'links', cn: [
-				{ cn: { tag: 'a', cls: 'link', html: '{Label}', href: '{URL}', target: '_blank'}}
+				{ tag: 'tpl', 'if': 'URL', cn:
+					{ cn: { tag: 'a', cls: 'link', html: '{Label}', href: '{URL}', target: '_blank'}}}
 			]}
 
 		] }
@@ -19,21 +20,25 @@ Ext.define('NextThought.view.courseware.info.parts.Support', {
 
 	beforeRender: function() {
 
+		function clean(i) {
+			return i && (!Ext.isEmpty(i.Label) || !Ext.isEmpty(i.URL));
+		}
+
 		this.renderData = Ext.apply(this.renderData || {}, {
 			photo: getString('course-info.course-supoprt.photo'),
-			phone: getString('course-info.course-supoprt.phone'),
+			phone: getString('course-info.course-supoprt.phone', null, true),
 			links: [
 				{
-					Label: getString('course-info.course-supoprt.link1.Label'),
-					URL: getString('course-info.course-supoprt.link1.URL')
+					Label: getString('course-info.course-supoprt.link1.Label', null, true),
+					URL: getString('course-info.course-supoprt.link1.URL', null, true)
 				},{
-					Label: getString('course-info.course-supoprt.link2.Label'),
-					URL: getString('course-info.course-supoprt.link2.URL')
+					Label: getString('course-info.course-supoprt.link2.Label', null, true),
+					URL: getString('course-info.course-supoprt.link2.URL', null, true)
 				},{
-					Label: getString('course-info.course-supoprt.link3.Label'),
-					URL: getString('course-info.course-supoprt.link3.URL')
+					Label: getString('course-info.course-supoprt.link3.Label', null, true),
+					URL: getString('course-info.course-supoprt.link3.URL', null, true)
 				}
-			]
+				   ].filter(clean)
 		});
 
 		return this.callParent(arguments);
