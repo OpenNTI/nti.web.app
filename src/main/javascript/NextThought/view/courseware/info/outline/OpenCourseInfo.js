@@ -30,7 +30,7 @@ Ext.define('NextThought.view.courseware.info.outline.OpenCourseInfo', {
 	},
 
 	beforeRender: function() {
-		this.addCls(this.enrollmentStatus || 'open');
+		this.addCls((this.enrollmentStatus || 'open').toLowerCase());
 		this.renderData = Ext.apply(this.renderData || {}, {
 			'heading': getString('course-info.open-course-widget.heading'),
 			'message': getString('course-info.open-course-widget.message'),
