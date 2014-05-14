@@ -7,14 +7,14 @@ Ext.define('NextThought.view.courseware.info.outline.OpenCourseInfo', {
 	ui: 'course-info',
 	cls: 'open-course-info',
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'open-info', cn: [
-			{ cls: 'heading', html: '{heading}' },
-			{ cls: 'content', html: '{message}'},
-			{ tag: 'ul', cn: [
-				{ tag: 'li', html: '{pointfree}'},
-				{ tag: 'li', cls: 'red', html: '{nocredit}'}
-			] }
-		]},
+		{tag: 'tpl', 'if': 'heading || message || pointfree || nocredit', cn: { cls: 'open-info', cn: [
+			{tag: 'tpl', 'if': 'heading', cn: { cls: 'heading', html: '{heading}' }},
+			{tag: 'tpl', 'if': 'message', cn: { cls: 'content', html: '{message}'}},
+			{tag: 'tpl', 'if': 'pointfree || nocredit', cn: { tag: 'ul', cn: [
+				{tag: 'tpl', 'if': 'pointfree', cn: { tag: 'li', html: '{pointfree}'}},
+				{tag: 'tpl', 'if': 'nocredit', cn: { tag: 'li', cls: 'red', html: '{nocredit}'}}
+			] }}
+		]}},
 		{ cls: 'foot', cn: [
 			{ cls: 'edit', html: 'Edit'},
 			{ cls: 'registered', html: '{registered}' }
@@ -32,11 +32,11 @@ Ext.define('NextThought.view.courseware.info.outline.OpenCourseInfo', {
 	beforeRender: function() {
 		this.addCls((this.enrollmentStatus || 'open').toLowerCase());
 		this.renderData = Ext.apply(this.renderData || {}, {
-			'heading': getString('course-info.open-course-widget.heading'),
-			'message': getString('course-info.open-course-widget.message'),
-			'pointfree': getString('course-info.open-course-widget.free-to-anyone'),
-			'nocredit': getString('course-info.open-course-widget.not-for-credit'),
-			'registered': getString('course-info.open-course-widget.registered')
+			'heading': getString('course-info.open-course-widget.heading', '', true),
+			'message': getString('course-info.open-course-widget.message', '', true),
+			'pointfree': getString('course-info.open-course-widget.free-to-anyone', '', true),
+			'nocredit': getString('course-info.open-course-widget.not-for-credit', '', true),
+			'registered': getString('course-info.open-course-widget.registered', '', true)
 		});
 
 		this.on({
