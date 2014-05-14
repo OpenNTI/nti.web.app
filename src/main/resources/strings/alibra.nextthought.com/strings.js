@@ -10,4 +10,4 @@ NTIStrings['course-info.description-widget.for-no-credit'] = '';
 
 NTIStrings['course-info.course-supoprt.phone'] = '';
 NTIStrings['course-info.course-supoprt.link1.Label'] = 'Submit Request';
-NTIStrings['course-info.course-supoprt.link1.URL'] = 'support@nextthought.com';
+NTIStrings['course-info.course-supoprt.link1.URL'] = 'mailto:support@nextthought.com';

@@ -30,7 +30,7 @@ Ext.define('NextThought.view.courseware.info.parts.Support', {
 			links: [
 				{
 					Label: getString('course-info.course-supoprt.link1.Label', 'support@nextthought.com', true),
-					URL: getString('course-info.course-supoprt.link1.URL', 'support@nextthought.com', true)
+					URL: getString('course-info.course-supoprt.link1.URL', 'mailto:support@nextthought.com', true)
 				},{
 					Label: getString('course-info.course-supoprt.link2.Label', null, true),
 					URL: getString('course-info.course-supoprt.link2.URL', null, true)
