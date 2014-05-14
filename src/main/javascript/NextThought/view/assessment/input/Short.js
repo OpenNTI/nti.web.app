@@ -15,6 +15,17 @@ Ext.define('NextThought.view.assessment.input.Short', {
 
 	blankTpl: Ext.DomHelper.createTemplate({ tag: 'span', cls: 'blank'}),
 
+
+	solTpl: Ext.DomHelper.createTemplate({
+		cls: 'multiple-choice-solution',
+		cn: ['{0} ', {tag: 'span', cls: 'solution-choice-text', html: '{1}'}]
+	}),
+
+	wordTpl: Ext.DomHelper.createTemplate(
+			{tag: 'span', cls: 'target wordentry drag graded', html: '{0}'}
+	),
+
+
 	beforeRender: function() {
 		this.callParent(arguments);
 		Ext.apply(this.renderData, {
@@ -47,6 +58,51 @@ Ext.define('NextThought.view.assessment.input.Short', {
 			this.setValue(this._value);
 			delete this._value;
 		}
+	},
+
+
+	getSolutionContent: function(part) {
+		function re(original, attrs) {
+			attrs = (attrs || '').trim().split(/\s/);
+
+			if (/type=(\"|\')?blankfield/i.test(attrs)) {
+				attrs = ((/name=\W?(\w+)\W?/).exec(attrs) || [])[1];
+				if (attrs) {
+					return '{' + attrs + '} ';//the inputs don't have a space between them and the following words. :/
+				}
+			}
+
+			return original;
+		}
+
+		var me = this,
+			out = [], tpl = me.solTpl,
+			pillTpl = me.wordTpl,
+			line = Ext.DomHelper.createTemplate(
+					me.filterHTML(
+							me.part.get('input')
+									.replace(/<input([^>]+?)\/?>/igm, re)));
+
+		Ext.each(part.get('solutions'), function(s) {
+			var x = s.get('value');
+			// x may or may not be an Array.  Ext.each handles that for us.
+			Ext.each(x, function(s) {
+				var k, v = {};
+				for (k in s) {
+					if (s.hasOwnProperty(k)) {
+						v[k] = s[k] || '';
+
+						v[k] = pillTpl.apply([v[k]]);
+					}
+				}
+
+				out.push(tpl.apply([
+					line.apply(v)
+				]));
+			});
+		});
+
+		return out.join('');
 	},
 
 
