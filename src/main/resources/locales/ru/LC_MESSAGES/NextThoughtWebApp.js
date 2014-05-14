@@ -25,15 +25,6 @@ NTIStrings['no_group_sub'] = 'Click create or join to add some.';
 
 NTIStrings['course-enrollment-enroll'] = 'Get Started';
 
-
-NTIStrings['course-info.open-course-widget.heading'] = '';
-NTIStrings['course-info.open-course-widget.message'] = '';
-NTIStrings['course-info.open-course-widget.free-to-anyone'] = '';
-NTIStrings['course-info.open-course-widget.not-for-credit'] = '';
-NTIStrings['course-info.open-course-widget.registered'] = 'You are registered.';
-NTIStrings['course-info.description-widget.for-no-credit'] = '';
-NTIStrings['course-info.description-widget.open-enrolled'] = '';
-
 NTIStrings['course-info.course-supoprt.photo'] = 'resources/images/platform.ou.edu/tech_support.jpg';
 
 NTIStrings['enrollment.enroll.header'] = 'Congratulations!';
@@ -451,7 +442,7 @@ NTIStrings['NextThought.view.courseware.info.parts.Description.available'] = 'Av
 NTIStrings['NextThought.view.courseware.info.parts.Description.days'] = 'Day &amp; Time';
 NTIStrings['NextThought.view.courseware.info.parts.Description.duration'] = 'Duration';
 NTIStrings['NextThought.view.courseware.info.parts.Description.durationunits'] = 'Weeks';
-NTIStrings['NextThought.view.courseware.info.parts.Description.hours'] = ' ';
+NTIStrings['NextThought.view.courseware.info.parts.Description.hours'] = '\u200B';
 NTIStrings['NextThought.view.courseware.info.parts.Description.noprereqs'] = 'There are no prerequisites for this course.';
 NTIStrings['NextThought.view.courseware.info.parts.Description.online'] = 'Fully Online';
 NTIStrings['NextThought.view.courseware.info.parts.Description.prereqs'] = 'Prerequisites';
