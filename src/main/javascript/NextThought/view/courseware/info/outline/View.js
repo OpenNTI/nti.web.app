@@ -24,6 +24,7 @@ Ext.define('NextThought.view.courseware.info.outline.View', {
 			showRoster: showRoster
 		});
 
+
 		if (!showRoster) {
 			this.add({
 				xtype: 'course-info-outline-open-course',
