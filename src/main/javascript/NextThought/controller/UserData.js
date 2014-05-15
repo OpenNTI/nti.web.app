@@ -1135,23 +1135,26 @@ Ext.define('NextThought.controller.UserData', {
 	onDisplayPopover: function(sender, id, html, node) {
 		var offsets = sender.reader.getAnnotationOffsets(),
 			position = Ext.fly(node).getXY(),
+			midpoint = Ext.fly(node).getWidth() / 2,
 			me = this;
 
-		position[0] += offsets.left;
+		position[0] += offsets.left + midpoint;
+		position[1] += offsets.top;
 
+		//WTF: What are these fixed "magic" numbers?
 		function adjustPosition(position) {
 			var horizontalSpaceNeeded = me.popoverWidget.getWidth() / 2;
 
 			//adjust position depending on whether it should be shown on top or bottom
 			if ((position[1] - offsets.scrollTop) < me.popoverWidget.getHeight()) {
 				//bottom
-				position[1] = position[1] + offsets.top + 30;
+				position[1] += 30;//What is 30?
 				me.popoverWidget.addCls('top');
 			}
 			else {
 				//top
-				position[1] = position[1] + offsets.top;
-				position[1] = position[1] - me.popoverWidget.getHeight() - 20;
+				position[1] -= me.popoverWidget.getHeight();
+				position[1] -= 20;//What is 20?
 				me.popoverWidget.addCls('bottom');
 			}
 
@@ -1164,14 +1167,13 @@ Ext.define('NextThought.controller.UserData', {
 			}
 			else if (position[0] - horizontalSpaceNeeded < 0) {
 				//bubble needs to shift right, arrow on left
-				position[0] = position[0] - 66;
+				position[0] -= 66;
 				me.popoverWidget.addCls('left');
 			}
 			else {
 				//centered
-				position[0] = position[0] - (me.popoverWidget.width / 2);
+				position[0] -= (me.popoverWidget.width / 2);
 			}
-			position[0] += 80;
 
 			return position;
 		}
