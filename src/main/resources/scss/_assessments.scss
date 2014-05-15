@@ -340,6 +340,7 @@ body.dragging * {
 		& > .x-panel-body-assessment {
 			.question-content {
 				@extend .assessment-content;
+				vertical-align: initial;
 				margin: 17px 40px 15px 40px;
 
 				&:empty {display: none;}
