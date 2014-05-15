@@ -7,9 +7,9 @@ Ext.define('NextThought.view.account.notifications.types.Note', {
 	wording: getString('NextThought.view.account.notifications.types.Note.wording'),
 	previewField: 'preview',
 
-	getVerb: function(values) {
+	getWording: function(values) {
 		if (values.inReplyTo || (values.references || []).length > 0) {
-			return 'commented.';
+			return 'commented on a note.';
 		}
 
 		return 'shared a note.';
