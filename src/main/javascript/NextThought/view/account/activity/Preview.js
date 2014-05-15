@@ -37,6 +37,7 @@ Ext.define('NextThought.view.account.activity.Preview', {
 
 	mixins: {
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
+		questionContent: 'NextThought.mixins.QuestionContent',
 		profileLinks: 'NextThought.mixins.ProfileLinks'
 	},
 
@@ -139,7 +140,7 @@ Ext.define('NextThought.view.account.activity.Preview', {
 		}
 
 		var snip = ContentUtils.getHTMLSnippet(body, 300), me = this;
-		this.messageBodyEl.update(snip || body);
+		this.messageBodyEl.update(this.buildContent(snip || body));
 
 		DomUtils.adjustLinks(this.messageBodyEl, window.location.href);
 
