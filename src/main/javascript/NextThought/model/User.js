@@ -94,7 +94,7 @@ Ext.define('NextThought.model.User', {
 			if (f.hasOwnProperty(k)) {
 				v = f[k];
 				if (v && v.isModel) {
-					f[k] = v.getData.apply(v, arguments);
+					f[k] = v.isUser ? v.getId() : v.getData.apply(v, arguments);
 				}
 			}
 		}
