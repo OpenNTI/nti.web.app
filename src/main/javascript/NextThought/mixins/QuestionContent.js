@@ -22,9 +22,9 @@ Ext.define('NextThought.mixins.QuestionContent', {
 
 	/**
 	 * Takes the content of a question/part and returns the string to be inserted into the dom
-	 * @param  {String|Element} dom		the string or element of the question content
-	 * @param  {bool} dontRender	the element mixing in will hanldle it
-	 * @return {String}		the html string of the content
+	 * @param  {String|Element} dom the string or element of the question content
+	 * @param  {bool} dontRender the element mixing in will hanldle it
+	 * @return {String} the html string of the content
 	 */
 	buildContent: function(dom, dontRender) {
 		if (Ext.isString(dom)) {
@@ -37,6 +37,8 @@ Ext.define('NextThought.mixins.QuestionContent', {
 			return p ? topLevelOnly(p) : true;
 		}
 
+		dom = Ext.getDom(dom);
+
 		var me = this,
 			objects = dom.querySelectorAll('object').toArray().filter(topLevelOnly);
 
@@ -48,15 +50,20 @@ Ext.define('NextThought.mixins.QuestionContent', {
 				placeholder,
 				container = object.parentNode,
 				id = guidGenerator(),
+				added;
+			try {
 				added = me.addObject(type, {
 					renderTo: id,
 					domObject: object,
 					reader: me.reader,
 					record: me.part || me.question,
 					question: me.question,
-					questionId: me.question.getId(),
+					questionId: me.question && me.question.getId(),
 					ownerCt: me
 				}, me.rendered && !dontRender);
+			} catch (e) {
+				added = true;
+			}
 
 			if (added) {
 				placeholder = document.createElement('div');

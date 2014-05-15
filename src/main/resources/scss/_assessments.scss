@@ -1435,6 +1435,14 @@ body.dragging * {
 }
 
 
+input.preview[readonly] {
+	border: 0 solid $border-grey;
+	border-bottom-width: 2px;
+	width: 3em;
+	margin-right: 0.5em;
+}
+
+
 .x-component-assessment.audio-clip {
 	display: inline-block;
 	cursor: pointer;

@@ -140,7 +140,7 @@ Ext.define('NextThought.view.account.activity.Preview', {
 		}
 
 		var snip = ContentUtils.getHTMLSnippet(body, 300), me = this;
-		this.messageBodyEl.update(this.buildContent(snip || body));
+		this.messageBodyEl.update(snip || body);
 
 		DomUtils.adjustLinks(this.messageBodyEl, window.location.href);
 
@@ -198,8 +198,8 @@ Ext.define('NextThought.view.account.activity.Preview', {
 	/**
 	 * Maps the records 'reply/comment/post' counts to a single value.
 	 *
-	 * @param record
-	 * @return Number
+	 * @param {Ext.data.Model} record
+	 * @return {Number}
 	 */
 	getCommentCount: function(record) {
 		throw 'Do not use the base class directly. Subclass and implement this';
