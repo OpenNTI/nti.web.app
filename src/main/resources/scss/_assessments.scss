@@ -1556,11 +1556,12 @@ body.dragging * {
 
 .x-panel-body-assessment{
 	.alibraimage-caption {
+		display: block;
 		font-size: 2em;
 		font-weight: 700;
 	}
 	.alibraimage {
-		display: inline-block;
+		display: block;
 		text-align: center;
 	}
 }
