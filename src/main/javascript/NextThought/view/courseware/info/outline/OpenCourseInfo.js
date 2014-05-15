@@ -32,11 +32,11 @@ Ext.define('NextThought.view.courseware.info.outline.OpenCourseInfo', {
 	beforeRender: function() {
 		this.addCls((this.enrollmentStatus || 'open').toLowerCase());
 		this.renderData = Ext.apply(this.renderData || {}, {
-			'heading': getString('course-info.open-course-widget.heading', '', true),
-			'message': getString('course-info.open-course-widget.message', '', true),
-			'pointfree': getString('course-info.open-course-widget.free-to-anyone', '', true),
-			'nocredit': getString('course-info.open-course-widget.not-for-credit', '', true),
-			'registered': getString('course-info.open-course-widget.registered', '', true)
+			'heading': getString('course-info.open-course-widget.heading', '', true).replace(/\u200B/ig, ''),
+			'message': getString('course-info.open-course-widget.message', '', true).replace(/\u200B/ig, ''),
+			'pointfree': getString('course-info.open-course-widget.free-to-anyone', '', true).replace(/\u200B/ig, ''),
+			'nocredit': getString('course-info.open-course-widget.not-for-credit', '', true).replace(/\u200B/ig, ''),
+			'registered': getString('course-info.open-course-widget.registered', '', true).replace(/\u200B/ig, '')
 		});
 
 		this.on({
