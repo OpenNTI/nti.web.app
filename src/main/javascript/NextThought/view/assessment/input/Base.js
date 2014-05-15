@@ -233,6 +233,17 @@ Ext.define('NextThought.view.assessment.input.Base', {
 			answer = this.el.down('.answer'),
 			label = b.getHTML().replace(/(solution|hint)$/i, '{0}');
 
+		function removeObjects(dom) {
+			var el = document.createElement('div');
+
+			el.id = 'tempdom';
+			el.innerHTML = dom;
+
+			new Ext.dom.CompositeElementLite(el.querySelectorAll('object')).remove();
+
+			return el.innerHTML;
+		}
+
 		answer.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
 		b.update(
@@ -252,6 +263,8 @@ Ext.define('NextThought.view.assessment.input.Base', {
 			if (!Ext.isString(sol)) {
 				sol += '';
 			}
+
+			sol = removeObjects(sol);
 			a.update(sol);
 			e.update(this.filterHTML(p.get('explanation')));
 		}
