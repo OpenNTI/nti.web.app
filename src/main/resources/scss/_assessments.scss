@@ -1444,6 +1444,9 @@ input.preview[readonly] {
 
 
 .x-component-assessment.audio-clip {
+
+	.note-container .context & {display: none;}
+
 	display: inline-block;
 	cursor: pointer;
 	padding: 0;
