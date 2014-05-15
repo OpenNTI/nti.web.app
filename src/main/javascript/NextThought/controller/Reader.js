@@ -41,6 +41,9 @@ Ext.define('NextThought.controller.Reader', {
 	],
 
 
+	IGNORE_ROOTING: new RegExp(RegExp.escape('tag:nextthought.com,2011-10:Alibra-'), 'i'),
+
+
 	init: function() {
 		this.listen({
 			annotation: {
@@ -157,7 +160,7 @@ Ext.define('NextThought.controller.Reader', {
 	getRootForLocation: function(id) {
 		var info = ContentUtils.getLocation(id),
 			node, n;
-		if (!info) {
+		if (!info || this.IGNORE_ROOTING.test(id)) {
 			//not enough info... no root.
 			return null;
 		}
@@ -266,22 +269,27 @@ Ext.define('NextThought.controller.Reader', {
 
 	setLocationRooted: function(ntiid, callback, silent) {
 		var reader = this.getContentReader(),
-			oldRoot = reader.currentRoot;
+			oldRoot = reader.currentRoot,
+			root = ntiid;
 
-		reader.currentRoot = ntiid;
+		if (this.IGNORE_ROOTING.test(root)) {
+			root = null;
+		}
+
+		reader.currentRoot = root;
 
 		function call(a, er) {
 			if (er && er.status !== undefined && Ext.Ajax.isHTTPErrorCode(er.status)) {
 				reader.currentRoot = oldRoot;
 			} else {
-				reader.currentRoot = ntiid;//make sure it sicks
+				reader.currentRoot = root;//make sure it sicks
 			}
 
 			Ext.callback(callback, null, [ntiid, a, er]);
 		}
 
 		this.setLocation(ntiid, call, silent === true);
-		reader.currentRoot = ntiid; //setLocation is async, and in its init can set this to a less restrictive root.
+		reader.currentRoot = root; //setLocation is async, and in its init can set this to a less restrictive root.
 	},
 
 
