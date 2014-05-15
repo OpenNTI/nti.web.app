@@ -8,7 +8,7 @@ Ext.define('NextThought.view.account.notifications.types.Note', {
 	previewField: 'preview',
 
 	getVerb: function(values) {
-		if (values.inReplyTo) {
+		if (values.inReplyTo || (values.references || []).length > 0) {
 			return 'commented.';
 		}
 
