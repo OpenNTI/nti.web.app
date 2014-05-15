@@ -187,18 +187,20 @@ Ext.define('NextThought.view.assessment.Question', {
 		p = part ? part.get('content') : '';
 
 		//don't append a break unless there is actual content
-		if (c.replace(/<.*?>|\s+/g, '')) {
+		if (c.replace(/<[^>]*?>|\s+/g, '')) {
 			c += '<br/>';
 		}
 
 		this.update(
 			Ext.DomHelper.markup({
-				 style: {verticalAlign: 'initial'},
+				 cls: 'question-content',
 				 html: this.buildContent(ContentUtils.fixReferences(c + p, root))
 			 }));
 
 		function santatize() {
 			me.el.select('a[href]').set({target: '_blank'});
+			me.el.select('a:empty').remove();
+			me.updateLayout();
 		}
 
 		if (!this.rendered) {
@@ -206,8 +208,6 @@ Ext.define('NextThought.view.assessment.Question', {
 		} else {
 			santatize();
 		}
-
-		this.updateLayout();
 	},
 
 

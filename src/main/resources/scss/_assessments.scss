@@ -338,8 +338,12 @@ body.dragging * {
 		box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.08);
 
 		& > .x-panel-body-assessment {
-			@extend .assessment-content;
-			padding: 17px 40px 15px 40px;
+			.question-content {
+				@extend .assessment-content;
+				margin: 17px 40px 15px 40px;
+
+				&:empty {display: none;}
+			}
 			background: #ffffff;
 			color: $primary-grey;
 			overflow: hidden;

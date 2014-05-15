@@ -39,7 +39,7 @@ Ext.define('NextThought.view.assessment.Header', {
 
 	afterRender: function() {
 		this.callParent(arguments);
-		var r = this.question,
+		var //r = this.question,
         //			l = this.liked,
         //			f = this.favorites,
 			v = this.video;
@@ -84,7 +84,15 @@ Ext.define('NextThought.view.assessment.Header', {
 	},
 
 
+	maybeHide: function(title) {
+		var v = this.videos.length;
+		this[!v && Ext.isEmpty(title) ? 'hide' : 'show']();
+	},
+
+
+
 	setTitle: function(title) {
+		this.maybeHide(title);
 		if (!this.rendered) {
 			this.renderData.title = title;
 			return;
@@ -94,11 +102,13 @@ Ext.define('NextThought.view.assessment.Header', {
 
 
 	markCorrect: function() {
+		this.show();
 		this.el.removeCls('incorrect').addCls('correct');
 		this.status.update('Correct!');
 	},
 
 	markIncorrect: function() {
+		this.show();
 		this.el.removeCls('correct').addCls('incorrect');
 		this.status.update('Incorrect');
 	},
@@ -106,6 +116,8 @@ Ext.define('NextThought.view.assessment.Header', {
 	reset: function() {
 		this.el.removeCls(['incorrect', 'correct']);
 		this.status.update('');
+
+		this.maybeHide(this.myTitle.getHTML());
 	},
 
 
