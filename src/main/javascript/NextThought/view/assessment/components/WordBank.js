@@ -198,7 +198,7 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 
 	setupScrollLock: function() {
 		var reader = this.reader;
-		if (!reader || this.up('question-parts')) {
+		if (!reader || this.up('question-parts') || this.question.get('parts').length === 1) {
 			return;
 		}
 
