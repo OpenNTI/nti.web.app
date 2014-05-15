@@ -1090,7 +1090,9 @@ body.dragging * {
 	}
 
 	.x-panel-body-assessment {
-		.wordbank-input .footer, .field .footer {
+		.wordbank-input .footer,
+		.shortanswer-input .footer,
+		.field .footer {
 			position: relative;
 			overflow: hidden;
 
@@ -1297,7 +1299,7 @@ body.dragging * {
 
 	}
 
-
+	.shortanswer-input,
 	.wordbank-input {
 		font-size: 14px;
 
@@ -1371,19 +1373,23 @@ body.dragging * {
 	}
 
 	.shortanswer-input {
-		font-size: 14px;
-		text-align: center;
-
 		.inputbox,
+		.fill-in,
 		.response-container {
+			font-size: 14px;
 			line-height: 2;
+		}
+
+		.blank{
+			margin-right: 0;
+			&::after {display: none;}
 		}
 		input {
 			text-align: center;
 			font: normal normal 1em/1 $font;
 			color: $secondary-grey;
 			display: inline-block;
-			padding: 0; margin: 0 0.2em;
+			padding:x 0; margin: 0 0.2em;
 			border: 1px solid $border-grey;
 			background: none;
 		}
