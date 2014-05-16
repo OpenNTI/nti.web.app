@@ -4,35 +4,24 @@ Ext.define('NextThought.view.account.notifications.types.ForumTopic', {
 
 	keyVal: 'application/vnd.nextthought.forums.communityheadlinetopic',
 
+	wording: getString('NextThought.view.account.notifications.types.ForumTopic.wording', '{creator} created a discussion: {title}'),
 
-	tpl: new Ext.XTemplate(Ext.DomHelper.markup([
-		{
-			cls: 'item post',
-			cn: [
-				{cls: 'title', html: '{title} by:'},
-				{cls: 'author', html: '{creatorName}'},
-				{tag: 'tpl', 'if': 'tags.length &gt; 0', cn: [
-					{cls: 'tags', html: 'Tags: {tags}'}]}
-			]
+	getWording: function(values) {
+		if (!this.wording) {
+			return '';
 		}
-	])),
+
+		var creator = this.getDisplayNameTpl(values);
+
+		return getFormattedString(this.wording, {
+			creator: creator,
+			title: values.title
+		});
+	},
+
 
 	fillInData: function(rec) {
-		var u = rec.get('Creator');
-		if (!Ext.isString(u)) {
-			return;
-		}
-
-		if (isMe(u)) {
-			rec.set({'creatorName': 'Me'});
-			rec.user = $AppConfig.userObject;
-		}
-		else {
-			UserRepository.getUser(u).then(function(user) {
-				rec.set({'creatorName': user.getName()});
-				rec.user = user;
-			});
-		}
+		return NextThought.view.account.notifications.types.Base.prototype.fillInData.apply(this, arguments);
 	},
 
 	clicked: function(view, rec) {
