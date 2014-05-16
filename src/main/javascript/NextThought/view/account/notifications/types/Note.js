@@ -9,7 +9,7 @@ Ext.define('NextThought.view.account.notifications.types.Note', {
 	previewField: 'preview',
 
 	getWording: function(values) {
-		var w = this.wording;
+		var w = this.wording1;
 		if (values.inReplyTo || (values.references || []).length > 0) {
 			w = this.wording2;
 		}
