@@ -4,15 +4,18 @@ Ext.define('NextThought.view.account.notifications.types.Note', {
 	keyVal: 'application/vnd.nextthought.note',
 
 	showCreator: true,
-	wording: getString('NextThought.view.account.notifications.types.Note.wording'),
+	wording1: getString('NextThought.view.account.notifications.types.Note.wording'),
+	wording2: getString('NextThought.view.account.notifications.types.NoteReply.wording', '{creator} commented on a note.'),
 	previewField: 'preview',
 
 	getWording: function(values) {
+		var w = this.wording;
 		if (values.inReplyTo || (values.references || []).length > 0) {
-			return 'commented on a note.';
+			w = this.wording2;
 		}
 
-		return 'shared a note.';
+		this.wording = w;
+		return this.callParent(arguments);
 	},
 
 	fillInData: function(rec) {
