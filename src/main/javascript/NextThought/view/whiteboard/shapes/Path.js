@@ -45,27 +45,6 @@ Ext.define('NextThought.view.whiteboard.shapes.Path', {
 		renderCallback.call(this);
 	},
 
-	modify: function(nib,	x1,y1,	x2,y2,	dx,dy) {
-		var c = this.getCenter(true), newM, c1;
-
-		this.callParent(arguments);
-		newM = new NTMatrix(this.transform);
-		c1 = this.getCenter(true);
-		newM.translate(c[0] - c1[0], c[1] - c1[1]);
-		this.transform = newM.toTransform();
-	},
-
-	scaleWithConstraint: function(nib,dx,dy) {
-		var c = this.getCenter(true), newM, c1;
-
-		this.callParent(arguments);
-		newM = new NTMatrix(this.transform);
-		c1 = this.getCenter(true);
-
-		newM.translate(c[0] - c1[0], c[1] - c1[1]);
-		this.transform = newM.toTransform();
-	},
-
 	getCenter: function(transformed) {
 		if (!this.bbox) { return; }
 

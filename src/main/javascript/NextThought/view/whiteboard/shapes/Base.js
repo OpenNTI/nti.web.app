@@ -216,8 +216,17 @@ Ext.define('NextThought.view.whiteboard.shapes.Base', {
 		//console.log(sx, sy);
 
 		if (sx >= 0 && sy >= 0) {
+			var translate = [0, 0];
+			if(this.getCenter && this.points && this.bbox){
+				var center = this.getCenter(false);
+				var origin = [this.points[0], this.points[1]];
+				translate = [origin[0] - center[0],origin[1] - center[1]];
+			}
+
+			m.translate(-translate[0], -translate[1]);
 			m.scale(1 / s[0], 1 / s[1]);
 			m.scale(sx, sy);
+			m.translate(translate[0], translate[1]);
 		}
 		else {
 			throw this.STOP_NIB;
@@ -264,10 +273,19 @@ Ext.define('NextThought.view.whiteboard.shapes.Base', {
 		adjustedDx *= sign;
 		adjustedDy *= sign;
 
+		var translate = [0, 0];
+		if(this.getCenter && this.points && this.bbox){
+			var center = this.getCenter(false);
+			var origin = [this.points[0], this.points[1]];
+			translate = [origin[0] - center[0],origin[1] - center[1]];
+		}
+
+		m.translate(-translate[0], -translate[1]);
 		sx = s[0] + adjustedDx / w;
 		sy = s[1] + adjustedDy / h;
 		m.scale(1 / s[0], 1 / s[1]);
 		m.scale(sx, sy);
+		m.translate(translate[0], translate[1]);
 		this.transform = m.toTransform();
 	},
 
