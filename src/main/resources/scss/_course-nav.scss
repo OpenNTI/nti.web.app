@@ -177,7 +177,15 @@
 
 		&.singular{
 			.body {
+				height: 396px;
 				margin: 0;
+				.screen,
+				.curtain {
+					width: 704px;
+				}
+				.curtain {
+					background-size: 704px auto;
+				}
 
 				.video-list {
 					display: none;

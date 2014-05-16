@@ -90,8 +90,6 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 
 
 	constructor: function(config) {
-		var i = config.items[0];
-
 		this.store = config.store = new Ext.data.Store({
 			fields: [
 				{name: 'id', type: 'string', mapping: 'ntiid'},
@@ -106,11 +104,23 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 			data: this.convertItems(config.items || [])
 		});
 
+		var i = config.items[0],
+			single = this.store.getCount() === 1;
+
 		//store.each(this.loadPageInfo,this);
 		i = i && i.locationInfo;
 
 		delete config.items;
+
+		if (single) {
+			config.playerWidth = 704;
+		}
+
 		this.callParent([config]);
+
+		if (single) {
+			this.addCls('singular');
+		}
 
 		this.playlist = [];
 
@@ -227,10 +237,6 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 	beforeRender: function() {
 		this.callParent(arguments);
 
-		if (this.store.getCount() === 1) {
-			this.addCls('singular');
-		}
-
 		if (this.type) {
 			this.addCls(this.type);
 		}
@@ -240,9 +246,9 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		if (this.store.getCount() === 1) {
-			this.getTargetEl().hide();
-		}
+		//if (this.store.getCount() === 1) {
+		//	this.getTargetEl().hide();
+		//}
 
 		this.on({'click': {element: 'curtainEl', fn: 'onCurtainClicked'}, scope: this});
 
