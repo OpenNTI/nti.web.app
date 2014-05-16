@@ -51,6 +51,7 @@ Ext.define('NextThought.view.account.notifications.types.Feedback', {
 
 			if (!course) {
 				rec.data.hidden = true;
+				console.warn('Could not find course for ID: ', cid);
 			}
 
 			rec.data.course = course;
