@@ -264,7 +264,7 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 		}
 
 		el = Ext.get(dom);
-		Array.prototype.forEach.call(dom.childNodes, function(d) {
+		Array.prototype.slice.call(dom.childNodes).forEach(function(d) {
 			if (!Ext.fly(d).is('.reset')) {
 				dom.removeChild(d);
 			}
