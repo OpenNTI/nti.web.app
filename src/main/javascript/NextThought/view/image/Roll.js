@@ -137,11 +137,11 @@ Ext.define('NextThought.view.image.Roll', {
 	},
 
 
-	selection: function(v,s) {
+	selection: function(v, s) {
 		if (s && s[0]) {
 			this.image.el.setStyle({
 				backgroundImage: 'url(' + s[0].get('url') + ')',
-				backgroundSize: 'contain',
+				backgroundSize: 'cover',
 				backgroundPosition: 'center',
 				backgroundRepeat: 'no-repeat'
 			});
