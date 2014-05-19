@@ -178,14 +178,14 @@ Ext.define('NextThought.view.annotations.note.Main', {
 			Ext.fly(c).remove();
 		});
 
-		slideDeckTpl = Ext.DomHelper.createTemplate({cls: 'content-slidedeck', html: NextThought.view.slidedeck.SlideDeck.prototype.renderTpl.html});
+		slideDeckTpl = Ext.DomHelper.createTemplate({cls: 'content-launcher', html: NextThought.view.slidedeck.SlideDeck.prototype.renderTpl.html});
 		Ext.each(node.query('object[type*=ntislidedeck]'), function(c) {
 			var d = NextThought.view.slidedeck.OverlayedPanel.getData(c);
 			slideDeckTpl.insertAfter(c, d, false);
 			Ext.fly(c).remove();
 		});
 
-		slideVideoTpl = Ext.DomHelper.createTemplate({cls: 'content-slidevideo', html: NextThought.view.slidedeck.slidevideo.SlideVideo.prototype.renderTpl.html});
+		slideVideoTpl = Ext.DomHelper.createTemplate({cls: 'content-launcher', html: NextThought.view.slidedeck.slidevideo.SlideVideo.prototype.renderTpl.html});
 		Ext.each(node.query('object[type*=ntislidevideo][itemprop$=card]'), function(c) {
 			var d = NextThought.view.slidedeck.slidevideo.OverlayedPanel.getData(c);
 			slideVideoTpl.insertAfter(c, d, false);

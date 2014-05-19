@@ -12,7 +12,7 @@ Ext.define('NextThought.view.video.transcript.Transcript', {
 		transcriptItem: 'NextThought.view.slidedeck.TranscriptItem'
 	},
 
-	//	ui: 'content-slidevideo',
+	//	ui: 'content-launcher',
 	cls: 'content-video-transcript',
 
 	trackOver: true,

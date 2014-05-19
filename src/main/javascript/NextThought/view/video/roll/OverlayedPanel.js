@@ -1,35 +1,49 @@
+/*global DomUtils, NextThought */
 Ext.define('NextThought.view.video.roll.OverlayedPanel', {
 	extend: 'NextThought.view.content.overlay.Panel',
 	alias: 'widget.overlay-video-roll',
 
 	requires: [
 		'NextThought.util.Dom',
-		'NextThought.view.video.roll.Roll'
+		'NextThought.view.cards.Launcher'
 	],
 
-	ui: 'video-roll',
-	cls: 'video-roll',
+	ui: 'content-launcher',
+	cls: 'content-launcher-container',
+
+	statics: {
+		getData: function(dom, reader) {
+			var videos = DomUtils.getVideosFromDom(dom);
+			return NextThought.view.cards.Launcher.getData(dom, reader, videos, function() {
+				var thumb = videos[0];
+				thumb = thumb && thumb.sources && thumb.sources[0];
+				return thumb && thumb.thumbnail;
+			});
+		}
+	},
 
 	constructor: function(config) {
 		if (!config || !config.contentElement) {
 			throw 'you must supply a contentElement';
 		}
 
-		config = Ext.applyIf(config, {
-			layout: 'fit'
+		Ext.apply(config, {
+			layout: 'fit',
+			items: [{
+				xtype: 'content-launcher',
+				data: this.self.getData(config.contentElement, config.reader),
+				listeners: {
+					scope: this,
+					launch: 'showVideoRole'
+				}
+			}]
 		});
-
-		config.items = [{
-			xtype: 'video-roll',
-			data: DomUtils.getVideosFromDom(config.contentElement)
-		}];
 
 		this.callParent([config]);
 	},
 
 
-	afterRender: function() {
-		this.callParent(arguments);
-		this.down('video-roll').selectFirst();
+	showVideoRole: function(data) {
+		console.log('Video:', data);
 	}
 });

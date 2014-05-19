@@ -9,8 +9,8 @@ Ext.define('NextThought.view.slidedeck.OverlayedPanel', {
 		'NextThought.view.slidedeck.SlideDeck'
 	],
 
-	ui: 'content-slidedeck',
-	cls: 'content-slidedeck-container',
+	ui: 'content-launcher',
+	cls: 'content-launcher-container',
 
 	statics: {
 		getData: function(dom, reader) {

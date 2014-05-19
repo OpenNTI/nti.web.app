@@ -74,8 +74,7 @@ a{
 	}
 }
 
-.content-slidevideo,
-.content-slidedeck{
+.content-launcher {
 	&, .note-window .note.main-view &{
 		@include content-card-def;
 
@@ -88,7 +87,7 @@ a{
 
 		.meta {
 			margin-left: $thumbWidth+15px;
-			.presentation-button, .video-transcript-button{
+			.launcher-button {
 				margin: 5px 0px;
 				padding: 0px 10px 0px 40px;
 				background-color: $primary-blue;
@@ -173,13 +172,11 @@ a{
 		}
 	}
 
-	.content-slidevideo-container,
-	.content-slidedeck-container {
+	.content-launcher-container {
 		margin: 0;
 	}
 
-	.content-slidevideo,
-	.content-slidedeck,
+	.content-launcher,
 	.content-card {
 		cursor: pointer;
 	}

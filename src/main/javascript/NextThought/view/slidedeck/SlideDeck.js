@@ -2,8 +2,8 @@ Ext.define('NextThought.view.slidedeck.SlideDeck', {
 	extend: 'Ext.Component',
 	alias: 'widget.content-slidedeck',
 
-	ui: 'content-slidedeck',
-	cls: 'content-slidedeck',
+	ui: 'content-launcher',
+	cls: 'content-launcher',
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'thumbnail', style: { backgroundImage: 'url({thumbnail})'} },
@@ -11,7 +11,7 @@ Ext.define('NextThought.view.slidedeck.SlideDeck', {
 			{ cls: 'title', html: '{title}' },
 			{ cls: 'byline', html: 'By {creator}' },
 			{ cls: 'description', html: '{description}' },
-			{ cls: 'presentation-button', html: 'View Presentation' }
+			{ cls: 'launcher-button', html: 'View Presentation' }
 		]}
 	]),
 

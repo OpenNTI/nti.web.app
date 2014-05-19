@@ -9,8 +9,8 @@ Ext.define('NextThought.view.slidedeck.slidevideo.SlideVideo', {
 		'NextThought.webvtt.Cue'
 	],
 
-	ui: 'content-slidevideo',
-	cls: 'content-slidevideo',
+	ui: 'content-launcher',
+	cls: 'content-launcher',
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'thumbnail', style: { backgroundImage: 'url({thumbnail})'} },
@@ -18,7 +18,7 @@ Ext.define('NextThought.view.slidedeck.slidevideo.SlideVideo', {
 			{ cls: 'title', html: '{title}' },
 			{ cls: 'byline', html: 'By {creator}' },
 			{ cls: 'description', html: '{description}' },
-			{ cls: 'presentation-button', html: 'View Presentation' }
+			{ cls: 'launcher-button', html: 'View Presentation' }
 		]}
 	]),
 
