@@ -84,9 +84,11 @@ Ext.define('NextThought.view.video.roll.Roll', {
 			})
 		});
 		this.mon(this.others, 'selectionChange', this.selection, this);
+
+		this.on('afterrender', 'selectFirst', this);
 	},
 
-	selection: function(v,s) {
+	selection: function(v, s) {
 		if (s && s[0]) {
 			this.iframe.el.dom.setAttribute('src', this.filterVideoUrl(s[0].get('url')));
 		}
