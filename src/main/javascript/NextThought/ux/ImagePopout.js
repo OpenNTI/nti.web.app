@@ -1,4 +1,4 @@
-Ext.define('NextThought.ux.ImagePopout', {
+Ext.define('NextThought.ux.ImagePopout', {//TODO: this is 99% copied from the video version. Unify this in to a configurable popup.
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.image-lightbox',
 	requires: [
