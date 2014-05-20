@@ -2,6 +2,9 @@ window.NTIStrings = window.NTIStrings || {};
 
 
 //NTIStrings['course-info.course-supoprt.photo'] = 'resources/images/platform.ou.edu/tech_support.jpg';
+NTIStrings['enroll.detail'] = '';
+NTIStrings['drop.detail'] = 'Dropping the course will remove it from your library, and you will no longer have access to the course materials.';
+
 
 NTIStrings['NextThought.view.courseware.info.parts.Description.hours'] = '\u200B';
 
