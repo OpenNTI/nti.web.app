@@ -2,6 +2,24 @@ Ext.define('NextThought.util.Dom', {
 	singleton: true,
 
 
+	filterNodeList: function(nodeList, filter) {
+		var d = Array.prototype.slice.call(nodeList);
+
+		if (typeof filter === 'string') {
+			filter = this[filter];
+		}
+
+		return d.filter(filter);
+	},
+
+
+	isRootObject: function rootObjects(e) {
+		var p = e.parentNode;
+		if (p && p.nodeName === 'OBJECT') { return false; }
+		return p ? rootObjects(p) : true;
+	},
+
+
 	parseDomObject: function(objectDomEl) {
 		var obj = {},
 			id = Ext.get(objectDomEl).id;
@@ -88,9 +106,9 @@ Ext.define('NextThought.util.Dom', {
 				base,
 				src = i.getAttribute('src'),
 				current = i.getAttribute('data-nti-image-size'),
-				full = i.getAttribute('data-nti-image-full'),
-				half = i.getAttribute('data-nti-image-half'),
-				quarter = i.getAttribute('data-nti-image-quarter');
+				full = i.getAttribute('data-nti-image-full');
+				//half = i.getAttribute('data-nti-image-half'),
+				//quarter = i.getAttribute('data-nti-image-quarter');
 
 			current = src.indexOf(i.getAttribute('data-nti-image-' + current));
 			base = src.substr(0, current);
@@ -142,7 +160,9 @@ Ext.define('NextThought.util.Dom', {
 
 
 	isEmpty: function isEmpty(value) {
-		var re = isEmpty.re = (isEmpty.re || /((&nbsp;)|(\u2060)|(\u200B)|(<br\/?>)|(<\/?div>))*/ig);
+		var re = (isEmpty.re || /((&nbsp;)|(\u2060)|(\u200B)|(<br\/?>)|(<\/?div>))*/ig);
+
+		isEmpty.re = re;
 
 		value = (Ext.isArray(value) && value.join('')) || String(value);
 

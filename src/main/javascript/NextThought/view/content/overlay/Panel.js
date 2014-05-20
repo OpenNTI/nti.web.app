@@ -40,13 +40,8 @@ Ext.define('NextThought.view.content.overlay.Panel', {
 			try {
 			this.insertedElement = true;
 			d = this.reader.getDocumentElement().querySelectorAll(this.OBJECT_QUERY);
-			d = Array.prototype.slice.call(d);
 
-			d = d.filter(function rootObjects(e) {
-				var p = e.parentNode;
-				if (p && p.nodeName === 'OBJECT') { return false; }
-				return p ? rootObjects(p) : true;
-			});
+			d = DomUtils.filterNodeList(d, 'isRootObject');
 
 			//TODO: ensure its a 'type=application/vnd.nextthought.*'
 			if (this.appendPlaceholder) {
