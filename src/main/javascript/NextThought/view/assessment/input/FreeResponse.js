@@ -109,23 +109,26 @@ Ext.define('NextThought.view.assessment.input.FreeResponse', {
 	markCorrect: function() {
 		this.callParent(arguments);
 		this.inputBox.removeCls('incorrect').addCls('correct');
-		this.inputField.set({disabled: 'disabled', readOnly: true});
+		this.inputField.set({disabled: 'disabled', readOnly: true, placeholder: ''});
 	},
 
 
 	markIncorrect: function() {
 		this.callParent(arguments);
 		this.inputBox.removeCls('correct').addCls('incorrect');
-		this.inputField.set({disabled: 'disabled', readOnly: true});
+		this.inputField.set({disabled: 'disabled', readOnly: true, placeholder: ''});
 	},
 
 
 	reset: function() {
 		this.callParent(arguments);
 		this.inputBox.removeCls(['incorrect', 'correct']);
-		this.inputField.dom.removeAttribute('readOnly');
-		this.inputField.dom.removeAttribute('disabled');
+		this.inputField.set({
+			disabled: undefined,
+			readOnly: undefined,
+			placeholder: getString('NextThought.view.assessment.input.FreeResponse.answer')
+		});
 		this.inputField.dom.value = '';
-    //		this.inputField.focus();
+		//this.inputField.focus();
 	}
 });
