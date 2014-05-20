@@ -81,7 +81,7 @@ do
 	fi
 	
 	CHECK=( 
-		"jslint $(pwd)/$f $LINE_OPTS"
+		"jslint $(pwd)/$f $LINT_OPTS"
 		"gjslint --strict --disable=0005,0220 --max_line_length=160 $(pwd)/$f"
 		)
 	
