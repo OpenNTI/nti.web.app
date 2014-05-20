@@ -220,6 +220,7 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 
 					try {
 						me.setFieldValue(me.getWordBankItem(data.wid), target);
+						me.checkSubmissionState();
 					} catch (er) {
 						return false;
 					}
@@ -288,7 +289,6 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 			Ext.fly(dragSource).addCls('used');
 		}
 
-		me.checkSubmissionState();
 		me.maybeRelayout();
 	},
 
@@ -299,7 +299,7 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 		var k, v = this.getValue(),
 			allFilledIn = true;
 
-		//console.log('Test', v);
+		console.log('Test', v);
 
 		for (k in v) {
 			if (v.hasOwnProperty(k)) {
@@ -316,6 +316,19 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 	},
 
 
+	hasValue: function() {
+		var k, v = this.getValue();
+
+		for (k in v) {
+			if (v.hasOwnProperty(k)) { if (v[k]) {
+				return true;
+			}}
+		}
+
+		return false;
+	},
+
+
 	getValue: function() {
 		var value = {};
 
@@ -329,15 +342,13 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 
 
 	setValue: function(value) {
-		console.log(value);
-
 		var inputName, wordId, dropTarget, dragSource;
 
 		for (inputName in value) {
 			if (value.hasOwnProperty(inputName)) {
 				wordId = value[inputName];
 				dropTarget = Ext.getDom(this.el.select('.dropzone[data-input="' + inputName + '"]').first());
-				dragSource = this.getWordBankItem(wordId);
+				dragSource = wordId && this.getWordBankItem(wordId);
 
 				this.setFieldValue(dragSource, dropTarget);
 			}

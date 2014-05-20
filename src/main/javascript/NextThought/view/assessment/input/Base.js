@@ -214,6 +214,9 @@ Ext.define('NextThought.view.assessment.input.Base', {
 	},
 
 
+	hasValue: function() { return !Ext.isEmpty(this.getValue()); },
+
+
 	getValue: function() {
 		console.log(this.$className + ' does not implement the getValue function');
 	},
@@ -460,7 +463,7 @@ Ext.define('NextThought.view.assessment.input.Base', {
 		delete this.submissionDisabled;
 		this.checkItBtn.removeCls('disabled');
 		if (this.questionSet) {
-			this.questionSet.fireEvent('answered', this.question, this.part, !Ext.isEmpty(this.getValue()), true);
+			this.questionSet.fireEvent('answered', this.question, this.part, this.hasValue(), true);
 		}
 		this.fireEvent('enable-submission', this.ordinal);
 	},
@@ -470,7 +473,7 @@ Ext.define('NextThought.view.assessment.input.Base', {
 		this.submissionDisabled = true;
 		this.checkItBtn.addCls('disabled');
 		if (this.questionSet) {
-			this.questionSet.fireEvent('answered', this.question, this.part, !Ext.isEmpty(this.getValue()), false);
+			this.questionSet.fireEvent('answered', this.question, this.part, this.hasValue(), false);
 		}
 		this.fireEvent('disable-submission', this.ordinal);
 	},
