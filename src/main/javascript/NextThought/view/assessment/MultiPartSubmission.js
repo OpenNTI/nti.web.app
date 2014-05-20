@@ -4,7 +4,7 @@ Ext.define('NextThought.view.assessment.MultiPartSubmission', {
 	requires: [
 	],
 
-	cls: 'multipart-submission',
+	cls: 'field multipart-submission',
 
 	renderTpl: Ext.DomHelper.markup(
 		{
