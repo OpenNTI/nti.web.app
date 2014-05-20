@@ -9,8 +9,12 @@ Ext.define('NextThought.overrides.builtins.Number', {});
 			return s;
 		},
 		isFloatEqual: function(b, precision) {
-			precision = precision || 3;
-			return this.toFixed(precision) === b.toFixed(precision);
+			precision = precision || 2;
+
+			var zero = 0,
+				ep = parseFloat(zero.toFixed(precision) + '1'); //produces 0.001
+
+			return Math.abs(this - b) < ep;
 		},
 		isFloatGreaterThanOrEqual: function(b, precision) {
 			return this.isFloatEqual(b, precision) || this > b;
