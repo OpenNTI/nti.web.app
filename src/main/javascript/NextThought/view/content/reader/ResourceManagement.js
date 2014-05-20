@@ -21,55 +21,57 @@ Ext.define('NextThought.view.content.reader.ResourceManagement', {
 	}),
 
 
-	IMAGE_TEMPLATE: new Ext.XTemplate(Ext.DomHelper.markup([{
-		cls: 'wrapper',
-		cn: [{
-			tag: 'a',
-			href: '#zoom',
-			'data-qtip': '{{{NextThought.view.content.reader.ResourceManagement.enlarge}}}',
-			cls: 'zoom disabled',
-			html: ' ',
-			'data-non-anchorable': true
-		}]
-	},{
-		tag: 'span',
-		cls: 'bar',
-		'data-non-anchorable': true,
-		'data-no-anchors-within': true,
-		unselectable: true,
-		cn: [{
-			tag: 'a',
-			href: '#slide',
-			'data-qtip': '{{{NextThought.view.content.reader.ResourceManagement.open-slide}}}',
-			cls: 'bar-cell slide',
-			html: ' '
-		},{
-			cls: 'bar-cell {[values.title || values.caption ? \'\' : \'no-details\']}',
+	IMAGE_TEMPLATE: new Ext.XTemplate(Ext.DomHelper.markup([
+		{
+			cls: 'wrapper',
 			cn: [{
-				tag: 'tpl',
-				'if': 'title',
-				cn: {
-					tag: 'span',
-					cls: 'image-title',
-					html: '{title}'
-				}
-			},{
-				tag: 'tpl',
-				'if': 'caption',
-				cn: {
-					tag: 'span',
-					cls: 'image-caption',
-					html: '{caption}'
-				}
-			},{
 				tag: 'a',
-				href: '#mark',
-				'data-qtip': '{{{NextThought.view.content.reader.ResourceManagement.commentonthis}}}',
-				cls: 'mark',
-				html: '{{{NextThought.view.content.reader.ResourceManagement.comment}}}'
+				href: '#zoom',
+				'data-qtip': '{{{NextThought.view.content.reader.ResourceManagement.enlarge}}}',
+				cls: 'zoom disabled',
+				html: ' ',
+				'data-non-anchorable': true
 			}]
-		}]
-	}])),
+		},{
+			tag: 'span',
+			cls: 'bar',
+			'data-non-anchorable': true,
+			'data-no-anchors-within': true,
+			unselectable: true,
+			cn: [{
+				tag: 'a',
+				href: '#slide',
+				'data-qtip': '{{{NextThought.view.content.reader.ResourceManagement.open-slide}}}',
+				cls: 'bar-cell slide',
+				html: ' '
+			},{
+				cls: 'bar-cell {[values.title || values.caption ? \'\' : \'no-details\']}',
+				cn: [{
+					tag: 'tpl',
+					'if': 'title',
+					cn: {
+						tag: 'span',
+						cls: 'image-title',
+						html: '{title}'
+					}
+				},{
+					tag: 'tpl',
+					'if': 'caption',
+					cn: {
+						tag: 'span',
+						cls: 'image-caption',
+						html: '{caption}'
+					}
+				},{
+					tag: 'a',
+					href: '#mark',
+					'data-qtip': '{{{NextThought.view.content.reader.ResourceManagement.commentonthis}}}',
+					cls: 'mark',
+					html: '{{{NextThought.view.content.reader.ResourceManagement.comment}}}'
+				}]
+			}]
+		}
+	])),
 
 
 	AUDIO_SNIPPET_TEMPLATE: new Ext.XTemplate(Ext.DomHelper.markup([
@@ -184,6 +186,8 @@ Ext.define('NextThought.view.content.reader.ResourceManagement', {
 			o = me.getComponentOverlay(),
 			els = doc.querySelectorAll(query);
 
+		els = DomUtils.filterNodeList(els, 'isRootObject');
+
 		Ext.each(els, function(el) {
 			o.registerOverlayedPanel(el.getAttribute('data-ntiid'), Ext.widget(widgetXType, {
 				reader: me,
@@ -279,15 +283,15 @@ Ext.define('NextThought.view.content.reader.ResourceManagement', {
 				target = Ext.fly(el).down('img,iframe', true),
 				title = get(target, 'data-title'),
 				caption = get(target, 'data-caption'),
-				width,
+				width, button, comment,
 				bar = tpl.append(el, {
 					title: title,
 					caption: caption
 				},false);
 
 			if (Ext.is.iOS) {
-				var button = Ext.get(el).down('.bar-cell.slide'),
-					comment = Ext.get(el).down('.mark');
+				button = Ext.get(el).down('.bar-cell.slide');
+				comment = Ext.get(el).down('.mark');
 				button.on('mouseover', function() {
 					button.dom.click();
 				});
