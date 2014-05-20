@@ -20,15 +20,17 @@
     "plusplus": true,
 
     "predef": [
-        "angular",
-        "$",
 		"Ext",
-		"NextThought",
-		"getString",
-		"guidGenerator",
+		"$AppConfig",
+        "$",
 		"DomUtils",
+		"NextThought",
 		"Node",
-		"NodeFilter"
+		"NodeFilter",
+		"Library",
+		"getURL",
+		"getString",
+		"guidGenerator"
     ],
     "regexp": true,
     "rhino": false,
