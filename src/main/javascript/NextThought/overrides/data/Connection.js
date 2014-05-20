@@ -34,6 +34,18 @@ Ext.define('NextThought.overrides.data.Connection', {
 	//i.e. 400 <= statusCode <=599
 	isHTTPErrorCode: function(statusCode) {
 		return 400 <= statusCode && statusCode <= 599;
+	},
+
+
+	//Patch Ext's open request...if I explicitly say to not include credentials, don't.
+	openRequest: function(options) {
+		var xhr = this.callParent(arguments);
+
+		if (options && options.withCredentials === false) {
+			xhr.withCredentials = false;
+		}
+
+		return xhr;
 	}
 
 },function() {
@@ -44,7 +56,7 @@ Ext.define('NextThought.overrides.data.Connection', {
 	Ext.Ajax.useDefaultXhrHeader = false;
 	Ext.Ajax.defaultHeaders = Ext.Ajax.defaultHeaders || {};
 	Ext.Ajax.defaultHeaders.Accept = 'application/json';
-	Ext.Ajax.on('beforerequest', function(connection,options) {
+	Ext.Ajax.on('beforerequest', function(connection, options) {
 
 		if (Ext.Ajax.logRequests) {
 			console.debug('Will perform ajax request with ', arguments);
