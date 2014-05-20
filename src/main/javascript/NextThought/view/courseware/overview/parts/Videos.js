@@ -1,5 +1,3 @@
-/*jslint */
-/*globals $AppConfig, Library, getURL, NextThought  */
 Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 	extend: 'Ext.view.View',
 	alias: ['widget.course-overview-video', 'widget.course-overview-ntivideo'],
@@ -159,7 +157,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 			me.videoIndex = videoIndex || {};
 
 			store.each(function(r) {
-				var v = me.videoIndex[r.getId()], item;
+				var v = me.videoIndex[r.getId()], item, raw;
 				if (v) {
 					r.set('hasTranscripts', !Ext.isEmpty(v.transcripts) || !Ext.isEmpty(v.slidedeck));
 					if (me.curtainEl && selected.contains(r)) {
@@ -174,18 +172,32 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 						}
 					}
 
-					item = v.sources[0];
+					raw = v.sources[0];
+					item = reader.read({
+						'mediaId': v.title,
+						'sources': v.sources
+					}).records[0];
+
+					me.mon(item, {
+						single: true,
+						'resoloved-poster': function(item) {
+							r.set({
+								poster: item.get('poster'),
+								thumb: item.get('thumbnail')
+							});
+
+							me.onSelectChange(me.store, me.getSelectionModel().getSelection()[0]);
+						}
+					});
+
 					r.set({
-						poster: item.poster,
-						thumb: item.thumbnail,
+						poster: item.get('poster') || raw.poster,
+						thumb: item.get('thumbnail') || raw.thumbnail,
 						label: v.title,
 						slidedeck: v.slidedeck
 					});
 
-					me.playlist.push(reader.read({
-						'mediaId': v.title,
-						'sources': v.sources
-					}).records[0]);
+					me.playlist.push(item);
 				}
 				else {
 					toRemove.push(r);

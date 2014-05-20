@@ -1,8 +1,10 @@
 Ext.define('NextThought.model.converters.VideoSources', {
 	override: 'Ext.data.Types',
 	requires: [
-		'Ext.data.SortTypes'
+		'Ext.data.SortTypes',
+		'NextThought.model.resolvers.VideoPosters'
 	],
+
 	VIDEOSOURCES: {
 		type: 'VideoSource',
 		sortType: null,
@@ -52,8 +54,49 @@ Ext.define('NextThought.model.converters.VideoSources', {
 			//console.debug('Video Sources:',v);
 			return v;
 		}
+	},
+
+
+	VIDEOPOSTER: {
+		type: 'VideoPoster',
+		sortType: null,
+		convert: function(v, r, source) {
+			var name = this.mapping || this.name, len, x, s,
+				raw = r && r.raw,
+				resolver = NextThought.model.resolvers.VideoPosters;
+
+			if (v && Ext.isString(v)) {//if we already have a value, done.
+				return v;
+			}
+
+			if (raw && raw.sources && !source) {//no value, try to find it on the sources (not in recursive state)
+				len = raw.sources.length || 0;
+				for (x = 0; !v && x < len; x++) {
+					s = raw.sources[x] || {};
+					v = this.convert(s[name], r, s);
+				}
+			}
+
+			if (!v && source) { //still didn't find it, and we are recusing on a source
+				v = Ext.BLANK_IMAGE_URL;//stop iteration on caller and let the async resolver replace this value as soon as it resolves.
+
+				resolver.resolveForSource(source)
+						.then(function(data) {
+							r.set(name, data[name]);
+							if (name === 'poster') {
+								wait(1).then(function() {
+									r.fireEvent('resoloved-poster', r);
+								});
+							}
+						});
+			}
+
+			return v;
+		}
 	}
+
 },function() {
 	this.VIDEOSOURCES.sortType = Ext.data.SortTypes.none;
+	this.VIDEOPOSTER.sortType = Ext.data.SortTypes.none;
 });
 

@@ -26,7 +26,9 @@ Ext.define('NextThought.model.PlaylistItem', {
 				return '';
 			}
 		},
-		{name: 'comments', type: 'int', defaultValue: 0}
+		{name: 'comments', type: 'int', defaultValue: 0},
+		{name: 'poster', type: 'VideoPoster'},
+		{name: 'thumbnail', type: 'VideoPoster'}
 	],
 
 	statics: {
@@ -90,7 +92,7 @@ Ext.define('NextThought.model.PlaylistItem', {
 		},
 
 
-		fromURL: function(url){
+		fromURL: function(url) {
 
 			//http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url
 			function parseYoutubeIdOut(url) {
@@ -129,7 +131,7 @@ Ext.define('NextThought.model.PlaylistItem', {
 				};
 			}
 
-			return this.create({mediaId: guidGenerator(), sources:[source]});
+			return this.create({mediaId: guidGenerator(), sources: [source]});
 		}
 	},
 
