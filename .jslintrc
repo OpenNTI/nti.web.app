@@ -1,0 +1,42 @@
+{
+    "ass": false,
+    "bitwise": true,
+    "browser": true,
+    "closure": true,
+    "continue": true,
+
+    "debug": true,
+    "devel": true,
+    "eqeq": false,
+    "evil": false,
+    "forin": false,
+    "indent": 2,
+    "maxerr": 50,
+    "maxlen": 180,
+    "newcap": false,
+    "node": false,
+    "nomen": true,
+    "passfail": false,
+    "plusplus": true,
+
+    "predef": [
+        "angular",
+        "$",
+		"Ext",
+		"NextThought",
+		"getString",
+		"guidGenerator",
+		"DomUtils",
+		"Node",
+		"NodeFilter"
+    ],
+    "regexp": true,
+    "rhino": false,
+    "sloppy": true,
+    "stupid": false,
+    "sub": false,
+    "todo": true,
+    "unparam": true,
+    "vars": false,
+    "white": true
+}
