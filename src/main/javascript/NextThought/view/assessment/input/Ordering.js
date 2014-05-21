@@ -363,10 +363,15 @@ Ext.define('NextThought.view.assessment.input.Ordering', {
 				return e.getTarget('.draggable-area', null, true);
 			},
 			onNodeEnter: function(target, dd, e, data) {
-				var p = target.up('.ordinal');
+				var p = target.up('.ordinal'),
+					scroll = me.reader.getScroll();
 
 				if (p) {
 					Ext.fly(p).addCls('target-hover');
+
+					if (Ext.fly(p).needsScrollIntoView(me.reader.el)) {
+						Ext.fly(p).scrollCompletelyIntoView(scroll.scrollingEl, false, true);
+					}
 				}
 			},
 			onNodeOut: function(target, dd, e, data) {
