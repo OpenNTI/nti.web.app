@@ -80,6 +80,10 @@ Ext.define('NextThought.view.cards.Card', {
 		this.callParent(arguments);
 		this.mon(this.el, 'click', 'onCardClicked', this);
 
+		if (Ext.isEmpty((this.data || {}).creator)) {
+			this.el.down('.byline').remove();
+		}
+
 		try {
 			this.reader = this.reader || ReaderPanel.get();
 			var p = this.reader.getLocation().pageInfo;
