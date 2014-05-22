@@ -155,12 +155,12 @@ Ext.define('NextThought.view.forums.topic.parts.Editor', {
 			return;
 		}
 
-		if (/^[^a-z0-9]+$/i.test(v.title)) {
+		/*if (/^[^a-z0-9]+$/i.test(v.title)) {
 			console.error('Title cant be all special chars');
 			this.markError(this.titleWrapEl, getString('NextThought.view.forums.topic.parts.Editor.specialtitle'));
 			this.titleWrapEl.addCls('error-on-bottom');
 			return;
-		}
+		}*/
 
 		if (/^@{1,}/.test(v.title)) {
 			console.error('Title cant start with @');
