@@ -283,6 +283,12 @@ Ext.define('NextThought.view.annotations.note.Main', {
 		if (this.record.placeholder) {
 			this.hideImageCommentLink();
 		}
+
+		this.context.setStyle({display: 'block'});
+
+		if (!this.context.getHeight()) {
+			this.context.parent().setStyle({display: 'none'});
+		}
 	},
 
 
