@@ -120,6 +120,19 @@ Ext.define('NextThought.view.assessment.input.Base', {
 		},
 	  */
 
+	getContentElement: function() {
+		var ct = this.up('[contentElement]');
+		//if this returns null, it SHOULD blow up. Programmer error.
+
+		ct = ct.contentElement.querySelectorAll('.naquestionpart')[this.ordinal];
+		if (!ct) {
+			Ext.Error.raise('Part Content Missing');
+		}
+
+		return ct;
+	},
+
+
 	afterRender: function() {
 		this.callParent(arguments);
 

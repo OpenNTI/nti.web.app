@@ -35,17 +35,34 @@ Ext.define('NextThought.view.assessment.input.Short', {
 
 
 	afterRender: function() {
-		var me = this,
+		var me = this, ctEl,
 			tpl = me.blankTpl;
 		me.callParent(arguments);
+		ctEl = me.getContentElement();
 		me.blankInputs = me.inputBox.query('input[type="blankfield"]');
-		me.blankInputs.forEach(function(i) {
+
+		function setup(i, tag) {
+			if (!i) {return;}
+
 			var blank = tpl.insertBefore(i),
 				size = i.getAttribute('maxlength');
+
+			if (tag) {
+				blank.setAttribute('data-input', '1');
+				return;
+			}
 
 			blank.appendChild(i);
 			if (size) {
 				i.setAttribute('size', size);
+			}
+		}
+
+		me.blankInputs.forEach(function(i) {
+			var name = i.getAttribute('name');
+			setup(i);
+			if (ctEl) {
+				setup(ctEl.querySelector('input[name="' + name + '"]'), true);
 			}
 		});
 
@@ -58,6 +75,16 @@ Ext.define('NextThought.view.assessment.input.Short', {
 			this.setValue(this._value);
 			delete this._value;
 		}
+	},
+
+
+	getContentElement: function() {
+		var ct = this.callParent(arguments);
+		if (!ct.classList.contains('naqfillintheblankshortanswerpart')) {
+			Ext.Error.raise('Part Ordinal Mismatch');
+		}
+
+		return ct;
 	},
 
 

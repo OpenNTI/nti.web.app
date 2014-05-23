@@ -1435,6 +1435,34 @@ body.dragging * {
 }
 
 
+.blank[data-input] {
+	display: inline-block;
+	margin-right: 0.5em;
+	border-radius: 3px;
+
+	position: relative;
+
+	&:empty {
+		&::before {
+			content: '(blank)';
+			visibility: hidden;
+		}
+	}
+
+	&::after {
+		$o: 0;
+		content: '';
+		position: absolute;
+		height: 24px;
+		left: $o; right: $o; bottom: 6px;
+
+		border: 2px solid $border-grey;
+		border-radius: 3px;
+		clip: rect(20px auto auto auto);
+	}
+}
+
+
 input.preview[readonly] {
 	border: 0 solid $border-grey;
 	border-bottom-width: 2px;

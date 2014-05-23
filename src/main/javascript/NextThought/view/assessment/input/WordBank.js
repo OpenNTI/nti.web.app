@@ -49,6 +49,16 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 	},
 
 
+	getContentElement: function() {
+		var ct = this.callParent(arguments);
+		if (!ct.classList.contains('naqfillintheblankwithwordbankpart')) {
+			Ext.Error.raise('Part Ordinal Mismatch');
+		}
+
+		return ct;
+	},
+
+
 	afterRender: function() {
 		this.callParent(arguments);
 		var blanks,
@@ -67,6 +77,8 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 		blanks = this.inputBox.query('input[type="blankfield"]');
 		this.blankInputs = blanks;
 
+		this.contentElement = this.getContentElement();
+
 		blanks = blanks.map(this.setupBlank.bind(this));
 		this.blankDrops = blanks;
 		if (blanks.length) {
@@ -80,9 +92,17 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 
 
 	setupBlank: function(input) {
-		return this.blankTpl.insertAfter(input, Ext.apply({
-			inputName: input.getAttribute('name')
-		}, input.dataset));
+		var ctEl = this.contentElement,
+			tpl = this.blankTpl,
+			data = Ext.apply({ inputName: input.getAttribute('name') }, input.dataset);
+
+		if (ctEl) {
+			ctEl = ctEl.querySelector('input[name="' + data.inputName + '"]');
+			tpl.insertAfter(ctEl, data);
+		}
+
+
+		return tpl.insertAfter(input, data);
 	},
 
 
