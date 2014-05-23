@@ -23,14 +23,14 @@ Ext.define('NextThought.view.assessment.input.Base', {
 		},{
 			cls: 'footer',
 			cn: [{
-				cls: 'left', html: '{toolbar}'
-			},{
-				cls: 'right',
-				cn: [
-					{cls: 'action check'},
-					{cls: 'action solution', html: '{{{NextThought.view.assessment.input.Base.show-solution}}}'}
-				]
-			}]
+					 cls: 'left', html: '{toolbar}'
+				 },{
+					 cls: 'right',
+					 cn: [
+						 {cls: 'action check'},
+						 {cls: 'action solution', html: '{{{NextThought.view.assessment.input.Base.show-solution}}}'}
+					 ]
+				 }]
 		}
 	]),
 
@@ -98,6 +98,9 @@ Ext.define('NextThought.view.assessment.input.Base', {
 	initComponent: function() {
 		this.callParent(arguments);
 
+		this.hideSolutionLabel = getString('NextThought.view.assessment.input.Base.hide-solution');
+		this.showSolutionLabel = getString('NextThought.view.assessment.input.Base.show-solution');
+
 		this.isAssignment = Boolean(this.questionSet && this.questionSet.associatedAssignment);
 
 		if (this.isAssignment) {
@@ -111,11 +114,11 @@ Ext.define('NextThought.view.assessment.input.Base', {
 		this.enableBubble(['enable-submission', 'disable-submission']);
 	},
 
-  /*
-	getBubbleTarget: function(){
-		return this.up('assessment-question');
-	},
-  */
+	/*
+		getBubbleTarget: function(){
+			return this.up('assessment-question');
+		},
+	  */
 
 	afterRender: function() {
 		this.callParent(arguments);
@@ -147,11 +150,11 @@ Ext.define('NextThought.view.assessment.input.Base', {
 		this.solutionBox.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.footer.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.historyMenuEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
-    //if there are images, after they load, update layout.
-    this.solutionBox.select('img').on('load', function() {
-      this.updateLayout();
-      this.syncElementHeight();
-    },this, {single: true});
+		//if there are images, after they load, update layout.
+		this.solutionBox.select('img').on('load', function() {
+			this.updateLayout();
+			this.syncElementHeight();
+		},this, {single: true});
 
 		this.reset();
 
@@ -250,10 +253,12 @@ Ext.define('NextThought.view.assessment.input.Base', {
 		answer.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
 		b.update(
-			label.replace(
-				'{0}',
-				this.hintActive ? getString('NextThought.view.assessment.input.Base.hint') : getString('NextThought.view.assessment.input.Base.solution')
-			)
+				label.replace(
+						'{0}',
+						this.hintActive ?
+							getString('NextThought.view.assessment.input.Base.hint') :
+							getString('NextThought.view.assessment.input.Base.solution')
+				)
 		);
 
 		if (this.hintActive) {
@@ -282,7 +287,7 @@ Ext.define('NextThought.view.assessment.input.Base', {
 
 	submitOrTabNext: function(dom) {
 		var i, x, next, nextTabIndex = String(parseInt(dom.getAttribute('tabIndex'), 10) + 1),
-            partLen = this.question.get('parts').length;
+			partLen = this.question.get('parts').length;
 		if (this.questionSet || (partLen > 1 && (partLen - 1) !== this.ordinal)) {
 			i = this.el.up('.component-overlay').query('.tabable');
 			x = i.length - 1;
@@ -346,26 +351,26 @@ Ext.define('NextThought.view.assessment.input.Base', {
 	},
 
 	showHistoryMenu: function(e) {
-    var me = this,
-		    vH = Ext.dom.Element.getViewportHeight(),
-		    box = me.inputBox.getBox(),
-		    maxHeight = vH - box.bottom,
-		    anchor = 'tl-bl';
+		var me = this,
+			vH = Ext.dom.Element.getViewportHeight(),
+			box = me.inputBox.getBox(),
+			maxHeight = vH - box.bottom,
+			anchor = 'tl-bl';
 
 		if (maxHeight <= 150) {
 			maxHeight = box.y;
 			anchor = 'bl-tl?';
 		}
 
-    if (me.historyMenu && me.historyMenu.isVisible()) {
-      me.historyMenu.destroy();
-      return;
-    }
+		if (me.historyMenu && me.historyMenu.isVisible()) {
+			me.historyMenu.destroy();
+			return;
+		}
 		me.setupAnswerHistoryMenu();
 		me.historyMenu.maxHeight = maxHeight;
 
-    //		console.log('Viewport height: ', vH,', anchor: ', anchor, ' maxHeight: ', maxHeight, ' box top: ', box.y);
-    me.historyMenu.showBy(me.inputBox, anchor, [0, 0]);
+		//		console.log('Viewport height: ', vH,', anchor: ', anchor, ' maxHeight: ', maxHeight, ' box top: ', box.y);
+		me.historyMenu.showBy(me.inputBox, anchor, [0, 0]);
 		me.answerHistStore.reload();
 	},
 
@@ -490,8 +495,7 @@ Ext.define('NextThought.view.assessment.input.Base', {
 
 
 	hideSolution: function() {
-		var label = this.showSolutionBtn.getHTML();
-		this.showSolutionBtn.update(label.replace('Hide', 'Show'));
+		this.showSolutionBtn.update(this.showSolutionLabel);
 		this.solutionBox.hide();
 		this.inputBox.show();
 		this.updateLayout();
@@ -500,18 +504,16 @@ Ext.define('NextThought.view.assessment.input.Base', {
 
 
 	showSolution: function() {
-		var label = this.showSolutionBtn.getHTML();
-
 		this.updateSolutionButton();
 		this.currentHint = ((this.currentHint + 1) % (this.part.get('hints').length || 1));
 
-    //if there are images, after they load, update layout.
-    this.solutionBox.select('img').on('load', function() {
-      this.updateLayout();
-      this.syncElementHeight();
-    },this, {single: true});
+		//if there are images, after they load, update layout.
+		this.solutionBox.select('img').on('load', function() {
+			this.updateLayout();
+			this.syncElementHeight();
+		},this, {single: true});
 
-		this.showSolutionBtn.update(label.replace('Show', 'Hide'));
+		this.showSolutionBtn.update(this.hideSolutionLabel);
 		this.inputBox.hide();
 		this.solutionBox.show();
 		this.updateLayout();

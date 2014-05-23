@@ -291,7 +291,8 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		}
 
 
-		Ext.getBody().mask('Submitting...', 'navigation');
+		Ext.getBody().mask(
+				getString('Submitting...'), 'navigation');
 		this.fireEvent(isAssignment ? 'submit-assignment' : 'grade-it', this, q, submission);
 
 		if (e) {

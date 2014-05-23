@@ -5,7 +5,7 @@ Ext.define('NextThought.view.courseware.enrollment.Confirm', {
 	ui: 'purchase-form',
 
 	ordinal: 1,
-	confirmLabel: 'Drop',
+	confirmLabel: getString('course-enrollment-drop', 'Drop'),
 
 	renderTpl: Ext.DomHelper.markup([
 			{tag: 'tpl', 'if': 'enrolled', cn: [

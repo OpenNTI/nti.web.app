@@ -72,7 +72,7 @@ Ext.define('NextThought.view.contacts.SubView', {
 			cls: type,
 			subType: type,
 			store: store,
-			outlineLabel: config.outlineLabel || ('All ' + Ext.String.capitalize(Ext.util.Inflector.pluralize(type)))
+			outlineLabel: config.outlineLabel || getString('contacts_all_' + type.toLowerCase())
 		});
 
 

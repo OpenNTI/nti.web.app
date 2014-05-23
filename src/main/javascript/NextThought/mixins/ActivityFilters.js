@@ -29,7 +29,7 @@ Ext.define('NextThought.mixins.ActivityFilters', {
 	setUpMenu: function(key) {
 		this.key = key;
 		this.typesMenu = Ext.widget('menu', {
-			title: 'Activity Type',
+			title: getString('NextThought.mixins.ActivityFilters.activityType', 'Activity Type'),
 			cls: 'menu types-menu',
 			width: 258,
 			defaults: {
@@ -43,7 +43,14 @@ Ext.define('NextThought.mixins.ActivityFilters', {
 				}
 			},
 			items: [
-				{cls: 'option', text: 'Show All', type: 'showall', allowUncheck: false, isAll: true, filter: 'all'}
+				{
+					cls: 'option',
+					text: getString('NextThought.mixins.ActivityFilters.showAll', 'Show All'),
+					type: 'showall',
+					allowUncheck: false,
+					isAll: true,
+					filter: 'all'
+				}
 			]
 		});
 	},
