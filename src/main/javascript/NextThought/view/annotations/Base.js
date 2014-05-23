@@ -195,10 +195,10 @@ Ext.define('NextThought.view.annotations.Base', {
 		this.cleanup = Ext.emptyFn;
 		this.fireEvent('cleanup', this);
 		var me = this,
-			r = me.record,
-			id = r.getId(),
-			c = me.ownerCmp,
-			a = c && c.getAnnotations();
+				r = me.record,
+				id = r.getId(),
+				c = me.ownerCmp,
+				a = c && c.getAnnotations();
 
 		delete me.record;
 
@@ -237,8 +237,8 @@ Ext.define('NextThought.view.annotations.Base', {
 
 	render: function() {
 		console.warn(Ext.String.format(
-						'{0} does not implement render()',
-						this.$className));
+				'{0} does not implement render()',
+				this.$className));
 	},
 
 
@@ -299,11 +299,11 @@ Ext.define('NextThought.view.annotations.Base', {
 	getMenu: function(isLeaf, item) {
 		var m = this.buildMenu(item ? [item] : []);
 
-    if (m) {
-		    m.on('hide', function() {
-			if (!isLeaf) { m.destroy(); }
-		});
-    }
+		if (m) {
+			m.on('hide', function() {
+				if (!isLeaf) { m.destroy(); }
+			});
+		}
 
 		return m;
 	},
@@ -360,15 +360,15 @@ Ext.define('NextThought.view.annotations.Base', {
 
 		//single annotation
 		menu = this.getMenu(false, item);
-    if (menu) {
-      if (this.isSingleAction) {
-        menu.items.first().handler.call(menu);
-        return true;
-      }
+		if (menu) {
+			if (this.isSingleAction) {
+				menu.items.first().handler.call(menu);
+				return true;
+			}
 
-      menu.showAt.apply(menu, xy);
-      menu.setPosition(xy[0] - menu.getWidth() / 2, xy[1] + 10);
-    }
+			menu.showAt.apply(menu, xy);
+			menu.setPosition(xy[0] - menu.getWidth() / 2, xy[1] + 10);
+		}
 	}
 
 });
