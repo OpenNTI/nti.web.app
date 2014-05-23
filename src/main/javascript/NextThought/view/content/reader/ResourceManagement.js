@@ -252,12 +252,15 @@ Ext.define('NextThought.view.content.reader.ResourceManagement', {
 			me.sequenceHandlers = ob.mon(new Ext.dom.CompositeElement(items), {
 				destroyable: true,
 				click: function(e) {
-					var dom = e.getTarget(itemSelector),
-						el = Ext.get(dom).removeCls('active');
+					var sel = e.getTarget().ownerDocument.getSelection().isCollapsed,
+						dom = e.getTarget(itemSelector),
+						el = Ext.get(dom);
 
-					el = el.next(itemSelector) || Ext.fly(dom.parentNode).first(itemSelector);
-
-					el.addCls('active');
+					if (sel) {
+						el.removeCls('active');
+						el = el.next(itemSelector) || Ext.fly(dom.parentNode).first(itemSelector);
+						el.addCls('active');
+					}
 				}
 			});
 		});
