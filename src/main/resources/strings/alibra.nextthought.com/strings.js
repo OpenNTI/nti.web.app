@@ -15,8 +15,8 @@ NTIStrings['course-info.open-course-widget.heading'] = '\u200B';
 NTIStrings['course-info.open-course-widget.message'] = '\u200B';
 NTIStrings['course-info.open-course-widget.free-to-anyone'] = '\u200B';
 NTIStrings['course-info.open-course-widget.not-for-credit'] = '\u200B';
-NTIStrings['course-info.open-course-widget.registered'] = 'You are registered.';
+NTIStrings['course-info.open-course-widget.registered'] = 'Вы зарегистрированы';
 
 NTIStrings['course-info.course-supoprt.phone'] = '\u200B';
-NTIStrings['course-info.course-supoprt.link1.Label'] = 'Submit Request';
+NTIStrings['course-info.course-supoprt.link1.Label'] = 'Отправить запрос';
 NTIStrings['course-info.course-supoprt.link1.URL'] = 'mailto:support@nextthought.com';
