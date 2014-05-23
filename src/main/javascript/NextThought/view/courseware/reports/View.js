@@ -42,7 +42,7 @@ Ext.define('NextThought.view.courseware.reports.View', {
 			title: getString('NextThought.view.courseware.reports.View.forumtitle'),
 			about: Ext.DomHelper.markup({tag: 'span', cn: [
 				getFormattedString('NextThought.view.courseware.reports.View.forumreport', {
-					tab: '<a class=\'target\'>' + getString('NextThought.view.courseware.reports.View.discussion') + '.</a>'
+					tab: '<a class=\'target\'>' + getString('NextThought.view.courseware.reports.View.forum') + '.</a>'
 				})
 			]}),
 			src: 'resources/images/elements/report_forum.gif'
