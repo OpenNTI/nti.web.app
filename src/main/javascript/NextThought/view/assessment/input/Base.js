@@ -506,7 +506,7 @@ Ext.define('NextThought.view.assessment.input.Base', {
 
 
 	hideSolution: function() {
-		this.showSolutionBtn.update(this.showSolutionLabel);
+		this.showSolutionBtn.update(this.hintActive ? this.showHintLabel : this.showSolutionLabel);
 		this.solutionBox.hide();
 		this.inputBox.show();
 		this.updateLayout();
@@ -524,7 +524,7 @@ Ext.define('NextThought.view.assessment.input.Base', {
 			this.syncElementHeight();
 		},this, {single: true});
 
-		this.showSolutionBtn.update(this.hideSolutionLabel);
+		this.showSolutionBtn.update(this.hintActive ? this.hideHintLabel : this.hideSolutionLabel);
 		this.inputBox.hide();
 		this.solutionBox.show();
 		this.updateLayout();
