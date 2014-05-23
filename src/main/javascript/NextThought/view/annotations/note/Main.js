@@ -196,6 +196,11 @@ Ext.define('NextThought.view.annotations.note.Main', {
 			this.context.up('.context').addCls('slide');
 		}
 
+		node.query('object.overlayed').forEach(function(ob) {
+			ob.removeAttribute('data');
+			ob.removeAttribute('style');
+		});
+
 		return node.dom;
 	},
 
