@@ -100,6 +100,8 @@ Ext.define('NextThought.view.assessment.input.Base', {
 
 		this.hideSolutionLabel = getString('NextThought.view.assessment.input.Base.hide-solution');
 		this.showSolutionLabel = getString('NextThought.view.assessment.input.Base.show-solution');
+		this.hideHintLabel = getString('NextThought.view.assessment.input.Base.hide-hint');
+		this.showHintLabel = getString('NextThought.view.assessment.input.Base.show-hint');
 
 		this.isAssignment = Boolean(this.questionSet && this.questionSet.associatedAssignment);
 
@@ -248,9 +250,8 @@ Ext.define('NextThought.view.assessment.input.Base', {
 			a = this.solutionAnswerBox,
 			b = this.showSolutionBtn,
 			e = this.solutionExplanationBox,
-			sol,
-			answer = this.el.down('.answer'),
-			label = b.getHTML().replace(/(solution|hint)$/i, '{0}');
+			sol, shown = !this.inputBox.isVisible(),
+			answer = this.el.down('.answer');
 
 		function removeObjects(dom) {
 			var el = document.createElement('div');
@@ -266,12 +267,9 @@ Ext.define('NextThought.view.assessment.input.Base', {
 		answer.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
 		b.update(
-				label.replace(
-						'{0}',
-						this.hintActive ?
-							getString('NextThought.view.assessment.input.Base.hint') :
-							getString('NextThought.view.assessment.input.Base.solution')
-				)
+				this.hintActive ?
+					(shown ? this.hideHintLabel : this.showHintLabel) :
+					(shown ? this.hideSolutionLabel : this.showSolutionLabel)
 		);
 
 		if (this.hintActive) {
