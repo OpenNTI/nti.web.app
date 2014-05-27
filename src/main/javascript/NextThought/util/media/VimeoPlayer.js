@@ -1,7 +1,7 @@
 Ext.define('NextThought.util.media.VimeoPlayer', {
 
 	statics: {
-		PLAYER_ORIGIN: 'http://player.vimeo.com',
+		PLAYER_ORIGIN: window.location.protocol + '//player.vimeo.com',
 		kind: 'video',
 		type: 'vimeo',
 		valid: function() { return true; }
@@ -34,7 +34,7 @@ Ext.define('NextThought.util.media.VimeoPlayer', {
 		this.height = config.height;
 
 		this.playerTpl = Ext.DomHelper.createTemplate(Ext.apply({
-			src: window.location.protocol + '//player.vimeo.com/video/{videoId}?' +
+			src: this.self.PLAYER_ORIGIN + '/video/{videoId}?' +
 				 Ext.Object.toQueryString({
 					 api: 1,
 					 player_id: this.playerId,
