@@ -576,7 +576,9 @@ Ext.define('NextThought.view.content.View', {
 		clearTimeout(me.viewSwitch);
 		me.viewSwitch = setTimeout(function() {
 			me.courseBook.getLayout().setActiveItem('course-nav');
-			//this.setActiveTab('course-book');
+			me.pushState({
+				location: me.getCourseNavigationSelection()
+			});
 		}, 100);
 	},
 
@@ -724,12 +726,18 @@ Ext.define('NextThought.view.content.View', {
 			if (ai === this.reader) {
 				ntiid = this.reader.getLocation().NTIID;
 			} else if (ai === this.courseNav) {
-				ntiid = ai.navigation.getSelectionModel().getSelection()[0];
-				ntiid = ntiid && ntiid.getId();
+				ntiid = this.getCourseNavigationSelection();
 			}
 
 			o = ParseUtils.parseNTIID(ntiid);
 		}
 		return o ? o.toURLSuffix() : location.pathname;
+	},
+
+
+	getCourseNavigationSelection: function() {
+		var cn = this.courseNav.navigation;
+		cn = cn.getSelectionModel().getSelection()[0];
+		return cn && cn.getId();
 	}
 });
