@@ -250,8 +250,20 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 			};
 
 		this.dropZones = dropzones.map(function(zone) {
-			return new Ext.dd.DropZone(zone, Ext.apply(dropOnAnswer, common));
+			return new Ext.dd.DropZone(zone, Ext.apply({}, dropOnAnswer, common));
 		});
+
+		this.mon(this.reader, {
+			buffer: 300,
+			scroll: 'onScroll'
+		});
+	},
+
+
+	onScroll: function() {
+		var zones = this.dropZones || [];
+		this.el.select('.drop-hover').removeCls('drop-hover');
+		zones.forEach(function(z) {z.triggerCacheRefresh();});
 	},
 
 
