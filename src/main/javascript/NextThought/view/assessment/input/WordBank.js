@@ -157,7 +157,6 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 						repairToEl: redrag.parentNode
 					}, sourceEl.dataset);
 
-					redrag.parentNode.removeChild(redrag);
 					return d;
 				}
 			},
@@ -170,11 +169,14 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 
 			onStartDrag: function() {
 				var data = this.dragData,
-						co = Ext.fly(data.sourceEl).up('.component-overlay'),
-						so = data.sourceEl,
-						el = this.getProxy().getDragEl(),
-						dx = Math.floor(el.getWidth() / 2),
-						dy = -Math.floor(el.getHeight() / 2);
+					co = Ext.fly(data.sourceEl).up('.component-overlay'),
+					so = data.sourceEl,
+					el = this.getProxy().getDragEl(),
+					dx = Math.floor(el.getWidth() / 2),
+					dy = -Math.floor(el.getHeight() / 2),
+					redrag = data.repairEl;
+
+				redrag.parentNode.removeChild(redrag);
 
 				// Center drag and drop proxy on cursor pointer
 				this.setDelta(dx, dy);
