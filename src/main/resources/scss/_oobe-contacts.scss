@@ -55,15 +55,14 @@
 			cursor: pointer;
 			display: inline-block;
 			height: 45px;
-			width: 85px;
 			line-height: 45px;
 			font-size: 14px;
 			text-align: center;
 			color: $secondary-grey;
 			margin: -1px;
+			padding: 0 1.5em;
 
 			&.confirm {
-				width: 95px;
 				line-height: 44px;
 				font-weight: 500;
 				font-style: italic;
