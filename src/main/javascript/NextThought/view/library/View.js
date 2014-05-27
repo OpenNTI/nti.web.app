@@ -98,8 +98,31 @@ Ext.define('NextThought.view.library.View', {
 	},
 
 
+	pushState: function(s) {
+		history.pushState({library: s}, this.title, location.pathname);
+	},
+
+
+	onTabClicked: function(tabSpec) {
+		if (this.callParent(arguments) === true) {
+			this.pushState({
+				activeTab: this.parseTabSpec(tabSpec).viewId
+			});
+		}
+	},
+
+
 	restore: function(state) {
-		return Promise.resolve();
+		//console.debug('Library restore', state);
+		var tab = ((state || {}).library || {}).activeTab,
+			me = this;
+
+		return !tab ?
+			   Promise.resolve() :
+			   new Promise(function(fulfill) {
+				   me.setActiveTab(tab);
+				   fulfill();
+			   });
 	},
 
 
