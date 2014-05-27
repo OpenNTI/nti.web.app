@@ -170,13 +170,12 @@ Ext.define('NextThought.view.content.View', {
 
 
 	onTabClicked: function(tabSpec) {
-		tabSpec = tabSpec || {};
 		var active = this.layout.getActiveItem(),
-			targetView = /^([^\?]+)(\?)?$/.exec(tabSpec.viewId) || [tabSpec.viewId],
-			vId = targetView[1],
+			target = this.parseTabSpec(tabSpec),
+			vId = target.viewId,
 			needsChanging = vId !== active.id,
 			//only reset the view if we are already there and the spec flagged that it can be reset.
-			reset = !!targetView[2] && !needsChanging;
+			reset = target.flagged && !needsChanging;
 
 		if (Ext.isEmpty(vId)) {
 			return false;

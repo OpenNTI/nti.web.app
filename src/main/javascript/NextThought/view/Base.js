@@ -90,17 +90,36 @@ Ext.define('NextThought.view.Base', {
 	},
 
 
+	parseTabSpec: function(tabSpec) {
+		tabSpec = tabSpec || {};
+		var re = this._tabSpecParser,
+			r = {};
+		if (!re) {
+			re = this._tabSpecParser = /^([^\?]+)(\?)?$/;
+		}
+
+		re = re.exec(tabSpec.viewId) || ['', tabSpec.viewId];
+
+		Ext.apply(r, {
+			viewId: re[1],
+			flagged: !!re[2]
+		});
+
+
+		return r;
+	},
+
+
 	onTabClicked: function(tabSpec) {
 		if (!this.layout || !this.layout.getActiveItem) {
 			return false;
 		}
-		tabSpec = tabSpec || {};
 		var active = this.layout.getActiveItem(),
-				targetView = /^([^\?]+)(\?)?$/.exec(tabSpec.viewId) || [tabSpec.viewId],
-				vId = targetView[1],
-				needsChanging = vId !== active[this.viewIdProperty],
+			target = this.parseTabSpec(tabSpec),
+			vId = target.viewId,
+			needsChanging = vId !== active[this.viewIdProperty],
 		//only reset the view if we are already there and the spec flagged that it can be reset.
-				reset = !!targetView[2] && !needsChanging;
+			reset = target.flagged && !needsChanging;
 
 		if (Ext.isEmpty(vId)) {
 			return false;
@@ -108,9 +127,9 @@ Ext.define('NextThought.view.Base', {
 
 		if (needsChanging) {
 			this.setActiveTab(vId);
-			//			this.pushState({activeTab: vId});
 		} else if (reset) {
 			console.log('ignore reset');
+			return {};//truthy, but not "=== true"
 		}
 
 		return true;
