@@ -207,7 +207,7 @@ Ext.define('NextThought.view.content.View', {
 
 
 	pushState: function(s) {
-		history.pushState({active: 'content', content: s}, this.title, this.getFragment());
+		history.pushState({content: s}, this.title, this.getFragment());
 	},
 
 
@@ -639,12 +639,13 @@ Ext.define('NextThought.view.content.View', {
 
 	restore: function(state) {
 		var st = state.content,
-			course = st.course,
+			background = state.active !== this.id,
 			ntiid = st.location,
 			tab = st.activeTab,
 			disc = st.discussion || {},
 			topic = disc.topic,
 			forum = disc.forum,
+			course,
 			me = this;
 
 		tab = (tab === 'null') ? null : tab;
@@ -660,9 +661,10 @@ Ext.define('NextThought.view.content.View', {
 						});
 		}
 
+
 		function noCourse(reason) {
 			console.warn('Dropping state for course that is not accessible.');
-			if (state.active === me.id) {
+			if (state.active === me.id && !background) {
 				me.fireEvent('go-to-library');
 			}
 			throw reason;//make sure the promise chain is continuing to be directed to the fail branches
@@ -679,6 +681,7 @@ Ext.define('NextThought.view.content.View', {
 				me.reader[(ntiid ? 'set' : 'clear') + 'Location'](ntiid, fin, true);
 			});
 		}
+
 
 		function setTab(reason) {
 			me.setActiveTab(tab);
