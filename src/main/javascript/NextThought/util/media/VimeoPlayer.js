@@ -124,6 +124,8 @@ Ext.define('NextThought.util.media.VimeoPlayer', {
 
 		this.isReady = true;
 
+		this.fireEvent('player-ready', 'vimeo');
+
 		if (this.seekWhenReady) {
 			this.seek(this.seekWhenReady);
 			delete this.seekWhenReady;
