@@ -51,9 +51,9 @@ Ext.define('NextThought.view.content.reader.Location', {
 
 	/**
 	 *
-	 * @param ntiid
-	 * @param [callback]
-	 * @param [fromHistory]
+	 * @param {String} ntiid
+	 * @param {Function} [callback]
+	 * @param {Boolean} [fromHistory]
 	 */
 	setLocation: function(ntiidOrPageInfo, callback, fromHistory) {
 
@@ -76,7 +76,8 @@ Ext.define('NextThought.view.content.reader.Location', {
 				console.warn('finish navigation called twice');
 				return;
 			}
-			var args = Array.prototype.slice.call(arguments), error = (errorDetails || {}).error;
+			var args = Array.prototype.slice.call(arguments), error = (errorDetails || {}).error,
+				canceled;
 
 			finish.called = true;
 
@@ -96,6 +97,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 					}, ContentUtils.findTitle(ntiid, 'NextThought'), me.getFragment(ntiid));
 				}
 				else {
+					canceled = true;
 					history.cancelTransaction('navigation-transaction');
 				}
 				if (error) {
@@ -120,11 +122,11 @@ Ext.define('NextThought.view.content.reader.Location', {
 				if (ntiid && rootId) {
 					PersistentStorage.updateProperty('last-location-map', rootId, ntiid);
 				}
-
-				history.endTransaction('navigation-transaction');
 			}
-			catch (caughtError) {
-				history.beginTransaction('navigation-transaction');
+			finally {
+				if (!canceled) {
+					history.endTransaction('navigation-transaction');
+				}
 			}
 
 		}

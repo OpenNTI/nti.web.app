@@ -509,6 +509,10 @@ Ext.define('NextThought.controller.CourseWare', {
 	onCourseSelected: function(instance, callback) {
 		var c, view;
 
+		function end() {
+			history.endTransaction('navigation-transaction');
+		}
+
 		if (!instance.__getLocationInfo()) {
 			c = instance.getCourseCatalogEntry();
 			console.error('The Content Package for this course has not been loaded. Check that this user is "enrolled".\n' +
@@ -528,10 +532,11 @@ Ext.define('NextThought.controller.CourseWare', {
 			this.getMainNav().updateCurrent(false, instance);
 			view = this.getContentView();
 			view.onCourseSelected(instance)
-				.then(callback);
+				.then(callback)
+				.always(end);
 			return true;
-		} finally {
-			history.endTransaction('navigation-transaction');
+		} catch (er) {
+			end();
 		}
 	},
 

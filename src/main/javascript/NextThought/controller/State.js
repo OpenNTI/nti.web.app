@@ -3,6 +3,7 @@ PREVIOUS_STATE = 'previous-state';
 Ext.define('NextThought.controller.State', {
 	extend: 'Ext.app.Controller',
 
+	//<editor-fold desc="Config">
 	models: [
 		'User'
 	],
@@ -19,7 +20,10 @@ Ext.define('NextThought.controller.State', {
 	transactions: {},
 
 	enableTransactions: true,
+	//</editor-fold>
 
+
+	//<editor-fold desc="Init">
 	constructor: function() {
 		this.callParent(arguments);
 
@@ -60,10 +64,23 @@ Ext.define('NextThought.controller.State', {
 			}
 		});
 		//TODO: can we get rid of this?
-		ContentAPIRegistry.register('NTIPreviousPage', this.navigatePreviousPage, this);
+		ContentAPIRegistry.register('NTIPreviousPage', function() { history.back(); return true; }, this);
 	},
+	//</editor-fold>
 
 
+	//<editor-fold desc="Deprecations">
+	changeHash: function(hash) {
+		if (!hash || hash.indexOf('#') !== 0 || window.location.hash === hash) {
+			return;
+		}
+		console.error('Modifying window.location.hash', hash);
+		location.hash = hash;
+	},
+	//</editor-fold>
+
+
+	//<editor-fold desc="History API Hooks">
 	onSessionReady: function() {
 		var me = this,
 			history = window.history,
@@ -91,7 +108,7 @@ Ext.define('NextThought.controller.State', {
 		 *                      and leaving keys it does not have alone.
 		 * @return {Boolean} Returns true if the state was changed, false otherwise.
 		 */
-		history.updateState = function(s) {
+		function updateState(s) {
 			function isDiff(a, b) {
 				var ret = false;
 
@@ -127,11 +144,13 @@ Ext.define('NextThought.controller.State', {
 			}
 
 			return false;
-		};
+		}
 
 
 		history.pushState = function(s, title, url) {
 			var args;
+
+			if (me.restoringState) {return;}
 
 			if (!me.isPoppingHistory && me.transactions.active) {
 				console.log('Applying push state to transaction', me.transactions.active, arguments);
@@ -144,7 +163,7 @@ Ext.define('NextThought.controller.State', {
 				return;
 			}
 
-			if (this.updateState(s) && !me.isPoppingHistory) {
+			if (updateState(s) && !me.isPoppingHistory) {
 
 				console.debug('push state', s);
 
@@ -174,8 +193,12 @@ Ext.define('NextThought.controller.State', {
 			}
 		};
 
+
 		history.replaceState = function(s, title, url) {
 			var args;
+
+			if (me.restoringState) {return;}
+
 			console.debug('replace state', s);
 
 			if (me.transactions.active) {
@@ -189,7 +212,7 @@ Ext.define('NextThought.controller.State', {
 				return;
 			}
 
-			if (this.updateState(s)) {
+			if (updateState(s)) {
 
 				args = [
 					Ext.encode(me.currentState),
@@ -200,6 +223,7 @@ Ext.define('NextThought.controller.State', {
 			}
 		};
 
+
 		window.onpopstate = function(e) {
 			me.isPoppingHistory = true;
 			console.debug('Browser is popping state', e.state);
@@ -207,20 +231,24 @@ Ext.define('NextThought.controller.State', {
 			me.isPoppingHistory = false;
 		};
 
+
 		window.onhashchange = function(e) {
+			if (me.restoringState) {return;}
 			//Hash changes are their own entry in the history... so we do not need to push history, we just need to
 			// handle the change.
 			console.debug('Hash change');
 			var newState = me.interpretFragment(location.hash);
-			if (history.updateState(newState)) {
+			if (updateState(newState)) {
 				console.debug('restoring state from hash change', newState);
 				me.restoreState(newState);
 				history.replaceState(me.getState(), document.title, location.toString());
 			}
 		};
 	},
+	//</editor-fold>
 
 
+	//<editor-fold desc="Transaction Defs">
 	closeActiveTransaction: function() {
 		var active = this.transactions.active;
 		delete this.transactions.active;
@@ -329,8 +357,10 @@ Ext.define('NextThought.controller.State', {
 
 		history[replace ? 'replaceState' : 'pushState'](state, title, url);
 	},
+	//</editor-fold>
 
 
+	//<editor-fold desc="Fragment Functions">
 	interpretForumsFragment: function(fragment, query) {
 		var parts = (fragment || '').split('/').slice(0),
 			result = {}, forums = {};
@@ -458,13 +488,10 @@ Ext.define('NextThought.controller.State', {
 		console.debug('Fragment interpreted:', result);
 		return result;
 	},
+	//</editor-fold>
 
 
-	getState: function() {
-		return Ext.clone(this.currentState);
-	},
-
-
+	//<editor-fold desc="Handlers">
 	onPopState: function(e) {
 		if (!NextThought.isInitialized || this.isHangout) {
 			return;
@@ -485,6 +512,7 @@ Ext.define('NextThought.controller.State', {
 			history.pushState(state, document.title, './');
 		}
 	},
+	//</editor-fold>
 
 
 	restoreState: function(stateObject) {
@@ -495,6 +523,7 @@ Ext.define('NextThought.controller.State', {
 		this.restoringState = true;
 		var app = this.application,
 			history = window.history,
+			tasks = [],
 			replaceState = false, c, key, stateScoped, me = this, presentation;
 
 		function fin(key, stateFrag) {
@@ -540,7 +569,7 @@ Ext.define('NextThought.controller.State', {
 					try {
 						stateScoped = {active: stateObject.active};
 						this.currentState[key] = stateScoped[key] = stateObject[key];
-						c.restore(stateScoped).then(fin(key, stateScoped), fail(stateScoped));
+						tasks.push(c.restore(stateScoped).then(fin(key, stateScoped), fail(stateScoped)));
 					}
 					catch (e) {
 						console.error('Setting state: ', e, e.message, e.stack);
@@ -552,12 +581,23 @@ Ext.define('NextThought.controller.State', {
 			}
 		}
 
-		if (replaceState) {
-			history.replaceState(this.currentState, 'Title');
-		}
 
-		this.restoringState = false;
+		Promise.all(tasks).always(function() {
+			console.log('Finished');
+			if (replaceState) {
+				history.replaceState(me.currentState, 'Title');
+			}
+
+			me.restoringState = false;
+		});
 	},
+
+
+	//<editor-fold desc="Getters">
+	getState: function() {
+		return Ext.clone(this.currentState);
+	},
+
 
 	//Current default state is to load the content viewer on either the nti.landing_page or the first page in the
 	//library. And to put the profile on the app user.
@@ -569,6 +609,7 @@ Ext.define('NextThought.controller.State', {
 			profile: { username: $AppConfig.username }
 		};
 	},
+
 
 	loadState: function() {
 		if (this.isHangout) {
@@ -611,19 +652,6 @@ Ext.define('NextThought.controller.State', {
 			console.error('unknown username for state mgmt.');
 		}
 		return B64.encode('state-' + username);
-	},
-
-
-	navigatePreviousPage: function() {
-		history.back();
-		return true;
-	},
-
-	changeHash: function(hash) {
-		if (!hash || hash.indexOf('#') !== 0 || window.location.hash === hash) {
-			return;
-		}
-		console.error('Modifying window.location.hash', hash);
-		location.hash = hash;
 	}
+	//</editor-fold>
 });
