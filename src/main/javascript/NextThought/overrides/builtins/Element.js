@@ -19,19 +19,20 @@ if (!Function.prototype.bind) {
 		}
 
 		var aArgs = Array.prototype.slice.call(arguments, 1),
-				fToBind = this,
-				FNOP = function() {},
-				fBound = function() {
-					return fToBind.apply(
-									this instanceof FNOP && oThis ? this : oThis,
-							aArgs.concat(Array.prototype.slice.call(arguments))
-					);
-				};
+			fToBind = this;
+
+		function FNOP() {}
+		function Bound() {
+			return fToBind.apply(
+							this instanceof FNOP && oThis ? this : oThis,
+					aArgs.concat(Array.prototype.slice.call(arguments))
+			);
+		}
 
 		FNOP.prototype = this.prototype;
-		fBound.prototype = new FNOP();
+		Bound.prototype = new FNOP();
 
-		return fBound;
+		return Bound;
 	};
 }
 
@@ -152,7 +153,7 @@ if (!Function.prototype.bind) {
 			Object.defineProperties = function(obj, props) {
 				var prop;
 				for (prop in props) {
-					if (hasOwnProp.call(props, prop)) {
+					if (props.hasOwnProperty(prop)) {
 						Object.defineProperty(obj, prop, props[prop]);
 					}
 				}
@@ -172,31 +173,18 @@ if (!document.documentElement.dataset &&
 		get: function() {
 			'use strict';
 			var i,
-					that = this,
-					HTML5_DOMStringMap,
-					attrVal, attrName, propName,
-					attribute,
-					attributes = this.attributes,
-					attsLength = attributes.length,
-					toUpperCase = function(n0) {
-						return n0.charAt(1).toUpperCase();
-					},
-					getter = function() {
-						return this;
-					},
-					setter = function(attrName, value) {
-						return (typeof value !== 'undefined') ?
-							   this.setAttribute(attrName, value) :
-							   this.removeAttribute(attrName);
-					};
-			try { // Simulate DOMStringMap w/accessor support
-				// Test setting accessor on normal object
-				({}).__defineGetter__('test', function() {});
-				HTML5_DOMStringMap = {};
-			}
-			catch (e1) { // Use a DOM object for IE8
-				HTML5_DOMStringMap = document.createElement('div');
-			}
+				that = this,
+				HTML5_DOMStringMap = {},
+				attrVal, attrName, propName,
+				attribute,
+				attributes = this.attributes,
+				attsLength = attributes.length;
+			function toUpperCase(n0) { return n0.charAt(1).toUpperCase(); }
+			function getter() { return this; }
+			function setter(attrName, value) {
+				return (typeof value !== 'undefined') ?
+					   this.setAttribute(attrName, value) : this.removeAttribute(attrName); }
+
 			for (i = 0; i < attsLength; i++) {
 				attribute = attributes[i];
 				// Fix: This test really should allow any XML Name without
@@ -209,7 +197,7 @@ if (!document.documentElement.dataset &&
 					propName = attrName.substr(5).replace(/-./g, toUpperCase);
 					try {
 						Object.defineProperty(HTML5_DOMStringMap, propName, {
-							enumerable: this.enumerable,
+							enumerable: true,
 							get: getter.bind(attrVal || ''),
 							set: setter.bind(that, attrName)
 						});
@@ -222,15 +210,8 @@ if (!document.documentElement.dataset &&
 			return HTML5_DOMStringMap;
 		}
 	};
-	try {
-		// FF enumerates over element's dataset, but not
-		//   Element.prototype.dataset; IE9 iterates over both
-		Object.defineProperty(Element.prototype, 'dataset', propDescriptor);
-	} catch (e) {
-		// IE8 does not allow setting to true
-		propDescriptor.enumerable = false;
-		Object.defineProperty(Element.prototype, 'dataset', propDescriptor);
-	}
+
+	Object.defineProperty(Element.prototype, 'dataset', propDescriptor);
 }
 
 
