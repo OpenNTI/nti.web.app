@@ -311,14 +311,16 @@ Ext.define('NextThought.view.assessment.components.WordBank', {
 
 			onStartDrag: function() {
 				var data = this.dragData,
-						co = Ext.fly(data.sourceEl).up('.component-overlay'),
-						so = data.sourceEl,
-						el = this.getProxy().getDragEl(),
-						dx = Math.floor(el.getWidth() / 2),
-						dy = -Math.floor(el.getHeight() / 2);
+					co = Ext.fly(data.sourceEl).up('.component-overlay'),
+					so = data.sourceEl,
+					el = this.getProxy().getDragEl(),
+					dx = Math.floor(el.getWidth() / 2),
+					dy = -Math.floor(el.getHeight() / 2);
 
-				// Center drag and drop proxy on cursor pointer
-				this.setDelta(dx, dy);
+				if (!Ext.isIE10m) {
+					// Center drag and drop proxy on cursor pointer
+					this.setDelta(dx, dy);
+				}
 
 				data.shield = Ext.DomHelper.insertFirst(co, {cls: 'shield'}, true);
 				Ext.getBody().addCls('dragging');
