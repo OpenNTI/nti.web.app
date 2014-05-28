@@ -131,15 +131,19 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 
 		var tpl = this.tempCount.msgTpl,
 			t = this.store.getCount(),
-			c = this.store.getRange().filter(complete).length;
+			c = this.store.getRange().filter(complete).length,
+			value, number, letter, grades;
 		this.tempCount.update(Ext.String.format(tpl, c, t));
 
 		if (this.finalGrade && !Ext.isEmpty(this.finalGrade.trim())) {
-			t = this.finalGrade.split(/\W/);
+			//FIXME: This is duplicated with the instructor view.  Move to shared place
+			grades = this.finalGrade && this.finalGrade.split(' ');
+			number = grades && grades[0],
+			letter = (grades && grades[1]) || '-';
 			this.tempGrade.update(Ext.DomHelper.markup([
-				{tag: 'span', cls: 'score-grade', html: t[0]},
+				{tag: 'span', cls: 'score-grade', html: number},
 				'&nbsp;',
-				{tag: 'span', cls: 'letter-grade', html: t[1]}
+				{tag: 'span', cls: 'letter-grade', html: letter}
 			]));
 		}
 	},
