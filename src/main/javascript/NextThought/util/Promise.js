@@ -142,6 +142,7 @@ Ext.applyIf(Promise.prototype, {
 	//this is only here to be compliant to the api.
 	'catch': function(fn) { return this.fail.apply(this, arguments); },
 	always: function(fn) {this.validateHandler(fn); return this.then(fn, fn); },
+	chain: function(old) {this.then(function(o) {old.fulfill(o);},function(r) {old.reject(r);});},
 
 	validateHandler: function(fn) { if (typeof fn !== 'function') { throw new TypeError('Expected a function'); } }
 });

@@ -15,7 +15,6 @@ Ext.define('NextThought.Library', {
 	activeVideoLoad: {},
 
 	constructor: function(config) {
-		this.promiseToLoad = new Deferred();//XXX: Restructure this so we don't have to use a Deferred()
 		this.tocs = {};
 		this.addEvents({
 			loaded: true
@@ -28,14 +27,15 @@ Ext.define('NextThought.Library', {
 
 
 	onceLoaded: function() {
+		if (!this.promiseToLoad) {
+			this.promiseToLoad = new Deferred();//XXX: Restructure this so we don't have to use a Deferred()
+		}
 		return this.promiseToLoad;
 	},
 
 
 	getStore: function() {
-		var p, me = this;
-
-		p = this.promiseToLoad;
+		var me = this;
 
 		if (!this.store) {
 			this.store = new NextThought.store.Library({
@@ -49,9 +49,10 @@ Ext.define('NextThought.Library', {
 							return false;
 						}
 
-						var old = p;
-						p = me.promiseToLoad = new Deferred();
-						p.then(function() { old.fulfill(me); });
+						var old = me.onceLoaded(),
+							p = me.promiseToLoad = new Deferred();
+
+						p.chain(old);
 					}
 				},
 				filters: [
@@ -279,7 +280,12 @@ Ext.define('NextThought.Library', {
 		function go() {
 			me.loaded = true;
 			me.fireEvent('loaded', me);
-			me.promiseToLoad.fulfill();
+			if (me.promiseToLoad) {
+				me.promiseToLoad.fulfill();
+			} else {
+				me.promiseToLoad = Promise.resolve();
+			}
+
 			if (me.store.getCount()) {
 				me.fireEvent('show-books');
 			} else {
@@ -297,7 +303,12 @@ Ext.define('NextThought.Library', {
 					me.libraryLoaded(Ext.bind(go, me));
 				})
 				.fail(function(reason) {
-					me.promiseToLoad.reject(['CoureWare failed to load.', reason]);
+					reason = ['CoureWare failed to load.', reason];
+					if (me.promiseToLoad) {
+						me.promiseToLoad.reject(reason);
+					} else {
+						me.promiseToLoad = Promise.reject(reason);
+					}
 				});
 		}
 		else {
