@@ -193,7 +193,6 @@ if (!document.documentElement.dataset &&
 					(/^data-\w[\w\-]*$/).test(attribute.name)) {
 					attrVal = attribute.value;
 					attrName = attribute.name;
-					console.log(typeof attrVal);
 					// Change to CamelCase
 					propName = attrName.substr(5).replace(/-./g, toUpperCase);
 					try {
