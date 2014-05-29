@@ -180,7 +180,7 @@ if (!document.documentElement.dataset &&
 				attributes = this.attributes,
 				attsLength = attributes.length;
 			function toUpperCase(n0) { return n0.charAt(1).toUpperCase(); }
-			function getter() { return this; }
+			function getter() { return String(this); }
 			function setter(attrName, value) {
 				return (typeof value !== 'undefined') ?
 					   this.setAttribute(attrName, value) : this.removeAttribute(attrName); }
@@ -193,6 +193,7 @@ if (!document.documentElement.dataset &&
 					(/^data-\w[\w\-]*$/).test(attribute.name)) {
 					attrVal = attribute.value;
 					attrName = attribute.name;
+					console.log(typeof attrVal);
 					// Change to CamelCase
 					propName = attrName.substr(5).replace(/-./g, toUpperCase);
 					try {
