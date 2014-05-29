@@ -183,6 +183,7 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 
 			if (newContext) {
 				this.context.appendChild(newContext);
+				this.context.select('object').remove();
 				this.context.select('input').addCls('preview').set({readonly: true});
 				this.buildContent(this.context);
 			}

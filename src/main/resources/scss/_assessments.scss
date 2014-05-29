@@ -1464,8 +1464,8 @@ body.dragging * {
 
 
 input.preview[readonly] {
-	border: 0 solid $border-grey;
-	border-bottom-width: 2px;
+	border: 0;
+	box-shadow: inset 0 -2px 0 0 $border-grey;
 	width: 3em;
 	margin-right: 0.5em;
 }
