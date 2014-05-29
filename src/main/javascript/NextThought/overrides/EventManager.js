@@ -8,6 +8,7 @@ Ext.define('NextThought.overrides.EventManager', function() {
 			try {
 				return fn.apply(this, arguments);
 			} catch (e) {
+				console.warn(e.stack || e.message || e);
 				return null;
 			}
 		};
