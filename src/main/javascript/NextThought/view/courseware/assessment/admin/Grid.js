@@ -26,7 +26,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 	columns: {
 		defaults: {
 			//reverse the default state order (descending first)
-			possibleSortStates: ['DESC', 'ASC']
+			possibleSortStates: ['DESC', 'ASC'],
+			resizable: false
 		},
 
 		items: [

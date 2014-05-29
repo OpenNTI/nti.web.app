@@ -40,14 +40,14 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 			{
 				xtype: 'grid',
 				columns: [
-						{ text: 'Assignment Name', dataIndex: 'name', flex: 1 },
-						{ text: 'Assigned', dataIndex: 'assigned', xtype: 'datecolumn', width: 80, format: 'm/d' },
-						{ text: 'Due', dataIndex: 'due', xtype: 'datecolumn', width: 70, format: 'm/d' },
-						{ text: 'Completed', dataIndex: 'completed', width: 80, renderer: function(v) {
+						{ text: 'Assignment Name', dataIndex: 'name', flex: 1, resizable: false },
+						{ text: 'Assigned', dataIndex: 'assigned', xtype: 'datecolumn', width: 80, format: 'm/d', resizable: false },
+						{ text: 'Due', dataIndex: 'due', xtype: 'datecolumn', width: 70, format: 'm/d', resizable: false },
+						{ text: 'Completed', dataIndex: 'completed', width: 80, resizable: false, renderer: function(v) {
 							return (v && v.getTime() > 0) ? this.checkMarkTpl : '';
 						} },
-						{ text: 'Score', dataIndex: 'grade', width: 70 },
-						{ text: 'Feedback', dataIndex: 'feedback', width: 140, renderer: function(value) {
+						{ text: 'Score', dataIndex: 'grade', width: 70, resizable: false },
+						{ text: 'Feedback', dataIndex: 'feedback', width: 140, resizable: false, renderer: function(value) {
 							return value ? Ext.util.Format.plural(value, 'Comment') : '';
 						} }
 					],
@@ -138,7 +138,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 		if (this.finalGrade && !Ext.isEmpty(this.finalGrade.trim())) {
 			//FIXME: This is duplicated with the instructor view.  Move to shared place
 			grades = this.finalGrade && this.finalGrade.split(' ');
-			number = grades && grades[0],
+			number = grades && grades[0];
 			letter = (grades && grades[1]) || '-';
 			this.tempGrade.update(Ext.DomHelper.markup([
 				{tag: 'span', cls: 'score-grade', html: number},
