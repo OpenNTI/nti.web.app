@@ -85,7 +85,8 @@
 	display: none;
 	overflow: hidden;
 	height: 35px;
-	width: 165px;
+	//width: 165px;
+	white-space: nowrap;
 	font: normal 600 14px/35px "Open Sans", sans-serif;
 	padding: 0 15px 0 43px;
 
@@ -1225,8 +1226,8 @@
 					cursor: pointer;
 					color: $primary-blue;
 					height: 50px;
-					width: 150px;
 					padding-left: 40px;
+					white-space: nowrap;
 					font: normal 600 14px/50px "Open Sans", sans-serif;					
 					@include icon('comment-small-dark_hover', $top: 15px, $left: 15px);
 				}
@@ -1467,7 +1468,6 @@
 
 				.new-topic{
 					float: left;
-					width: 182px;
 					@include new-post;
 					display: block;
 				}
