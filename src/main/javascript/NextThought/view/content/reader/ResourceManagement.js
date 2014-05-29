@@ -80,6 +80,7 @@ Ext.define('NextThought.view.content.reader.ResourceManagement', {
 					{ tag: 'source', src: '{source}', type: '{type}'}]}}}
 	])),
 
+
 	AUDIO_SNIPPET_CODE_TEMPLATES: {
 		init: function(document, id) {
 			var btn = document.getElementById(id),
@@ -129,6 +130,7 @@ Ext.define('NextThought.view.content.reader.ResourceManagement', {
 
 	},
 
+
 	OVERLAY_DOM_QUERY_XTYPE_MAP: {
 		'object[type$=nticard]': 'overlay-card',
 		'object[type$=nticard-target]': 'overlay-card-target',
@@ -138,6 +140,7 @@ Ext.define('NextThought.view.content.reader.ResourceManagement', {
 		'object[type$=videoroll]': 'overlay-video-roll',
 		'object[type$=image-collection]': 'overlay-image-roll'
 	},
+
 
 	constructor: function(config) {
 		Ext.apply(this, config);
@@ -244,6 +247,18 @@ Ext.define('NextThought.view.content.reader.ResourceManagement', {
 			ob = new Ext.util.Observable(),
 			itemSelector = 'object[type$=ntisequenceitem]';
 
+		function updateAnnotations() {
+			try {
+				var reader = me.reader,
+					prefix = reader.prefix;
+
+				reader.getAnnotations().getManager().render(prefix);
+			}
+			catch (e) {
+				console.warn(e.stack || e.message || e);
+			}
+		}
+
 		Ext.destroy(me.sequenceHandlers);
 		Array.prototype.forEach.call(doc.querySelectorAll('object[type$=ntisequence]'), function(seq) {
 			var items = Array.prototype.slice.call(seq.querySelectorAll(itemSelector));
@@ -260,6 +275,7 @@ Ext.define('NextThought.view.content.reader.ResourceManagement', {
 						el.removeCls('active');
 						el = el.next(itemSelector) || Ext.fly(dom.parentNode).first(itemSelector);
 						el.addCls('active');
+						updateAnnotations();
 					}
 				}
 			});
