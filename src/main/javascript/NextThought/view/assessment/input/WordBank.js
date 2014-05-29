@@ -178,8 +178,10 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 
 				redrag.parentNode.removeChild(redrag);
 
-				// Center drag and drop proxy on cursor pointer
-				this.setDelta(dx, dy);
+				if (!Ext.isIE10m) {
+					// Center drag and drop proxy on cursor pointer
+					this.setDelta(dx, dy);
+				}
 
 				data.shield = Ext.DomHelper.insertFirst(co, {cls: 'shield'}, true);
 				Ext.getBody().addCls('dragging');
