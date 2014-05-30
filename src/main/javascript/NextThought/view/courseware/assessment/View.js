@@ -292,6 +292,9 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 	getViewFor: function(assignment, user) {
 		var view = null;
 
+		//if we are given a model, get its id to match
+		assignment = assignment.getId ? assignment.getId() : assignment;
+
 		if (/Final_Grade$/i.test(assignment) || /finalgrade$/i.test(assignment)) {
 			return this.down('course-assessment-performance,course-assessment-admin-performance');
 		}
