@@ -240,7 +240,7 @@ Ext.define('NextThought.util.TextRangeFinder', {
 		// loop until no more matches
 		for (;;) {
 			// find matching text, stop if none
-			matchingText = searchFor.exec(text);
+			matchingText = (!/alibra|local/i.test(location.host)) && searchFor.exec(text);
 			if (!matchingText || matchingText.length <= which[which.length - 1]) {
 				break;
 			}
