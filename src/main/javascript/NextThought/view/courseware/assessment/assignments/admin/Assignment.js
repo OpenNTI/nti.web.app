@@ -233,6 +233,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			this.on({afterrender: 'syncFilterToUI', single: true});
 			return;
 		}
+
 		var f = this.store.filters,
 			filter = f.getByKey('LegacyEnrollmentStatus'),
 			search = f.getByKey('search');

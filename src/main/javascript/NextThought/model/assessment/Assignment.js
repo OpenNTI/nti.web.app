@@ -85,7 +85,10 @@ Ext.define('NextThought.model.assessment.Assignment', {
 				s = this._submittedHistoryStore = new NextThought.store.courseware.AssignmentView({
 					url: url,
 					remoteFilter: true,
-					remoteSort: true
+					remoteSort: true,
+					filters: [
+						{id: 'LegacyEnrollmentStatus', property: 'LegacyEnrollmentStatus', value: isFeature('show-open-students-first') ? 'Open' : 'ForCredit'}
+					]
 				});
 
 			s.on({
