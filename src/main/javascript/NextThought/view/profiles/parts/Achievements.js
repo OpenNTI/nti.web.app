@@ -82,6 +82,11 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 	loadWorkSpace: function(workspace) {
 		var earnableUrl, earnedUrl;
 
+		if (!workspace) {
+			this.setEmptyState();
+			return;
+		}
+
 		(workspace.Items || []).forEach(function(item) {
 			if (item.Title === 'EarnableBadges') {
 				earnableUrl = item.href;
@@ -123,8 +128,8 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 			earnable = earnable && Ext.JSON.decode(earnable, true);
 			earned = earned && Ext.JSON.decode(earned, true);
 
-			earnable = earnable && earnable.Items || [];
-			earned = earned && earned.Items || [];
+			earnable = (earnable && earnable.Items) || [];
+			earned = (earned && earned.Items) || [];
 
 			function fillIn(item) {
 				if (!item.name) {
