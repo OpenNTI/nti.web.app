@@ -406,7 +406,12 @@ Ext.define('NextThought.view.assessment.input.Base', {
 
 	updateWithResults: function(assessedQuestion) {
 		var parts = assessedQuestion.get('parts'),
-			part = parts[this.ordinal], id;
+			part = parts[this.ordinal], id, correct,
+			fn = {
+				'null': 'markSubmitted',
+				'true': 'markCorrect',
+				'false': 'markIncorrect'
+			};
 
 		if (part.get) {
 			this.part.set({
@@ -419,9 +424,12 @@ Ext.define('NextThought.view.assessment.input.Base', {
 
 		this.setSubmitted();
 
-		if (!this.noMark && part.isModel) {
-			if (part.isCorrect()) { this.markCorrect(); }
-			else {this.markIncorrect(); }
+		if (!this.noMark) {
+			correct = part.isModel ? String(part.isCorrect()) : null;
+			if (!fn[correct]) {
+				correct = 'null';
+			}
+			this[fn[correct]]();
 		}
 
 		if (this.canHaveAnswerHistory()) {
@@ -437,28 +445,32 @@ Ext.define('NextThought.view.assessment.input.Base', {
 	},
 
 
-	markCorrect: function() {
-		this.hideSolution();
+	markSubmitted: function(cls) {
+		var o = this.up('question-parts').removeCls('incorrect correct').addCls('submitted');
+		if (!Ext.isEmpty(cls)) {o.addCls(cls);}
 		this.hintActive = false;
+		this.hideSolution();
 		this.updateSolutionButton();
+	},
+
+
+	markCorrect: function() {
+		this.markSubmitted('correct');
 		this.checkItBtn.hide();
-		this.up('question-parts').removeCls('incorrect').addCls('correct');
 		this.checkItBtn.removeCls('wrong');
 		this.updateLayout();
 	},
 
 
 	markIncorrect: function() {
-		this.hideSolution();
+		this.markSubmitted('incorrect');
 		this.checkItBtn.addCls('wrong');
-		this.hintActive = false;
-		this.updateSolutionButton();
 	},
 
 
 	reset: function() {
 		this.submitted = false;
-		this.up('question-parts').removeCls(['incorrect', 'correct']);
+		this.up('question-parts').removeCls('correct incorrect submitted');
 		this.hintActive = (this.part.get('hints').length > 0);
 		this.currentHint = 0;
 		this.updateSolutionButton();

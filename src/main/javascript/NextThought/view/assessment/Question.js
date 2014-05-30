@@ -241,10 +241,15 @@ Ext.define('NextThought.view.assessment.Question', {
 
 
 	markSubmitted: function() {
-		var sub = this.down('assessment-multipart-submission');
+		var head = this.down('question-header'),
+			sub = this.down('assessment-multipart-submission');
 		if (sub) {
 			sub.disableSubmission();
 		}
+
+		/*if (!head.isVisible()) {
+			head.markSubmitted();
+		}*/
 
 		this.submitted = true;
 		this.addCls('submitted');

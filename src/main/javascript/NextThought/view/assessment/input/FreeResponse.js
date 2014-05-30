@@ -106,16 +106,11 @@ Ext.define('NextThought.view.assessment.input.FreeResponse', {
 	},
 
 
-	markCorrect: function() {
+	markSubmitted: function(cls) {
 		this.callParent(arguments);
-		this.inputBox.removeCls('incorrect').addCls('correct');
-		this.inputField.set({disabled: 'disabled', readOnly: true, placeholder: ''});
-	},
 
-
-	markIncorrect: function() {
-		this.callParent(arguments);
-		this.inputBox.removeCls('correct').addCls('incorrect');
+		var b = this.inputBox.removeCls('incorrect correct');
+		if (!Ext.isEmpty(cls)) {b.addCls(cls);}
 		this.inputField.set({disabled: 'disabled', readOnly: true, placeholder: ''});
 	},
 

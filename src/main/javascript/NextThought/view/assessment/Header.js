@@ -113,6 +113,13 @@ Ext.define('NextThought.view.assessment.Header', {
 		this.status.update('Incorrect');
 	},
 
+
+	markSubmitted: function() {
+		this.show();
+		this.el.removeCls('correct').removeCls('incorrect');
+		this.status.update('Submitted');
+	},
+
 	reset: function() {
 		this.el.removeCls(['incorrect', 'correct']);
 		this.status.update('');

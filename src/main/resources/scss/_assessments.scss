@@ -784,9 +784,8 @@ body.dragging * {
 				top: 0;
 			}
 
-			&.correct, &.incorrect{
+			&.submitted {
 				&, input.answer-field {
-					color: #f35252;
 					font-weight: 600;
 				}
 				padding-left: 28px;
@@ -797,6 +796,12 @@ body.dragging * {
 					display: block;
 				}
 			}
+
+			&.incorrect {
+				&, input.answer-field { color: #f35252; }
+				&::after { @include sprite($icons, 'circle-x-red-18'); }
+			}
+
 			&.correct{
 				&, input.answer-field {
 					color: #8eb737;
@@ -818,6 +823,12 @@ body.dragging * {
 				left: 0; right: 0;
 				min-height: 28px; // mainly a fix for IE
 				min-width: 85%;	// mainly a fix for IE
+
+				&[readonly],
+				&[disabled] {
+					background: none;
+					opacity: 0.5;
+				}
 			}
 		}
 
