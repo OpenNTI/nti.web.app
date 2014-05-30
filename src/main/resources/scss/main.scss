@@ -112,6 +112,7 @@ input::-ms-clear { display: none; }
 ::-moz-placeholder { @include placeholder-style(); }
 input:-moz-placeholder { @include placeholder-style(); }
 :-ms-input-placeholder{ @include placeholder-style(); }
+input:-ms-input-placeholder{ @include placeholder-style(); }
 
 
 .ellipsis {
