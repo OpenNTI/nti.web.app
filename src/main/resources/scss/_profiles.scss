@@ -152,7 +152,7 @@
 				@include ellipse;
 
 				color: $secondary-grey;
-				font: normal 400 1em/1.2em $font;
+				font: normal 400 0.9em/1.6em $font;
 			}
 
 			.name {
@@ -175,7 +175,7 @@
 		.controls {
 			position: absolute;
 			top: 55px; right: 20px;
-			height: 30px;
+			height: 40px;
 
 			&.isMe {
 				span:not(.isMe) {
@@ -198,7 +198,7 @@
 			.button {
 				border-radius: 5px;
 				display: inline-block;
-				font: italic 500 0.8em/30px $font;
+				font: italic 600 0.9em/40px $font;
 				cursor: pointer;
 				float: left;
 				position: relative;
@@ -211,38 +211,38 @@
 				width: 140px;
 				padding-left: 55px;
 
-				@include icon('notepad_active', $top: 5px, $left: 30px)
+				@include icon('notepad_active', $top: 10px, $left: 30px)
 			}
 
 			.contact-menu {
 				margin-right: 10px;
-				width: 40px;
-				height: 30px;
-				@include icon('add-contact', $top: 8px, $left: 8px);
+				width: 50px;
+				height: 40px;
+				@include icon('ico_profile_contact', $top: 9px, $left: 10px);
 
 				&::before{
 					content: '';
 					position: absolute;
 					right: 2px;
-					top: 13px;
-					@include arrow($pointFrom: top, $color: $secondary-grey);
+					top: 18px;
+					@include arrow($pointFrom: top, $color: $tertiary-grey);
 				}
 			}
 
 			.mail {
-				width: 40px;
-				height: 30px;
+				width: 50px;
+				height: 40px;
 				border-radius: 5px 0 0 5px;
 				border-right-width: 0;
-				@include icon('mail', $top: 6px, $left: 8px)
+				@include icon('mail', $top: 11px, $left: 13px)
 			}
 
 			.chat {
-				width: 40px;
-				height: 30px;
+				width: 50px;
+				height: 40px;
 				border-radius: 0 5px 5px 0;
 				border-left-width: 0;
-				@include icon('chat-32', $top: 4px)
+				@include icon('chat-32', $top: 11px, $left: 5px)
 			}
 
 			.add-contact {
@@ -250,7 +250,7 @@
 				background-color: $primary-green;
 				color: white;
 				padding-left: 50px;
-				@include icon('add-contact', $top: 7px, $left: 25px)
+				@include icon('ico_profile_add_contact', $top: 12px, $left: 25px)
 			}
 		}
 
@@ -277,6 +277,7 @@
 					border-right: 1px solid #f0f0f0;
 					float: left;
 					padding: 0 1em;
+					font-weight: 600;
 					text-transform: uppercase;
 
 					&:not(.x-item-selected) {
@@ -285,7 +286,18 @@
 
 					&:not(.disabled).x-item-selected{
 						box-shadow: none;
-						font-weight: 500;
+						
+						.label {
+							visibility: hidden;
+						}
+
+						&::before {
+							position: absolute;
+							font-weight: 700;
+							left: 0; right: 0;
+							text-align: center;
+							content: attr(data-text);
+						}
 					}
 
 					&.over, &:hover{
@@ -1360,12 +1372,15 @@
 		.title {
 			color: $primary-grey;
 			padding: 0 3px;
+			height: 20px;
 			position: absolute;
 			bottom: 0px;
 			left: 0px; right: 0px;
 			font: normal 600 0.9em/20px $font;
 			text-align: center;
 			background-color: white;
+			overflow: hidden;
+			@include ellipsis;
 		}
 	}
 }

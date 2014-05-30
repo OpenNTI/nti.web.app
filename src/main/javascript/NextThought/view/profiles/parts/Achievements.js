@@ -53,7 +53,7 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 		this.currentCourses = this.down('[current]');
 		this.achievements = this.down('[achievements]');
 
-		var link = this.user.getLink('EarnedCourseBadges');
+		var link = this.user.getLink('Badges');
 
 		//if its me show the current courses
 		if (isMe(this.user)) {
@@ -64,7 +64,8 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 			this.currentCourses.destroy();
 
 			if (link) {
-				this.loadBadges(null, link);
+				Service.request(link)
+					.done(this.loadWorkSpace);
 			} else {
 				this.setEmptyState();
 			}
@@ -184,6 +185,15 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 		this.completedCourses.bindStore(this.buildStore(completed));
 		this.currentCourses.bindStore(this.buildStore(current));
 		this.achievements.bindStore(this.buildStore(achievements));
+
+		//if its empty they need the space of 3 columns
+		if (cCount === 0) {
+			cCount = 3;
+		}
+
+		if (iCount === 0) {
+			iCount = 3;
+		}
 
 		//if we have less than the number of columns
 		if ((cCount + iCount) >= this.columns) {

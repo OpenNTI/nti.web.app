@@ -975,7 +975,7 @@
 }
 
 #profile {
-
+	-webkit-font-smoothing: antialiased;
 	&.scroll-lock .blog .post-view{
 		overflow-y: hidden;
 	}

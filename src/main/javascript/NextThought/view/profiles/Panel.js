@@ -7,7 +7,8 @@ Ext.define('NextThought.view.profiles.Panel', {
 		'NextThought.view.profiles.About',
 		'NextThought.view.profiles.outline.View',
 		'NextThought.view.profiles.parts.Blog',
-		'NextThought.view.profiles.parts.Achievements'
+		'NextThought.view.profiles.parts.Achievements',
+		'NextThought.layout.container.AutoCard'
 	],
 
 	layout: 'auto',
@@ -16,7 +17,7 @@ Ext.define('NextThought.view.profiles.Panel', {
 
 	body: {
 		layout: {
-			type: 'card',
+			type: 'auto-card',
 			deferredRender: true//,
 			//calculate: Ext.emptyFn
 		}

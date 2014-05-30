@@ -139,10 +139,10 @@ Ext.define('NextThought.view.profiles.outline.View', {
 			},
 			tpl: Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
 				{
-					cls: 'outline-row',
+					cls: 'outline-row', 'data-text': '{label}',
 					cn: [
 						{ tag: 'tpl', 'if': 'count', cn: { cls: 'count', html: '{count}' } },
-						{ cls: 'label', html: '{label}' }
+						{ cls: 'label', html: '{label}'}
 					]
 				}
 			]}),
