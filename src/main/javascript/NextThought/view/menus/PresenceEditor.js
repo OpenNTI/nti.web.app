@@ -31,6 +31,20 @@ Ext.define('NextThought.view.menus.PresenceEditor', {
 		});
 	},
 
+
+	startEdit: function() {
+		this.callParent(arguments);
+
+		var total = this.el.getWidth() || 0,
+			controls = this.el.down('.controls'),
+			controlWidth = controls && controls.getWidth();
+
+		if (controlWidth) {
+			this.el.down('input').setWidth(total - controlWidth);
+		}
+	},
+
+
 	handleCancel: function() {
 		if (Ext.isEmpty(this.field.getValue())) {
 			this.cancelEdit();
