@@ -256,6 +256,7 @@ Ext.define('NextThought.view.profiles.parts.events.ActivityItem', {
 		this.callParent(arguments);
 		if (this.context) {
 			this.context.select('iframe').remove();
+			this.context.select('object').remove();
 		}
 	},
 
