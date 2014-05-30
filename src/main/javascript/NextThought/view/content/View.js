@@ -494,6 +494,7 @@ Ext.define('NextThought.view.content.View', {
 			return Promise.resolve();
 		}
 
+		instance = (instance && instance.isCourseInstance && instance) || undefined; //filter all non-instance values out (eg: Title models)
 
 		//Temporary stop gap
 		var info = instance && instance.__getLocationInfo(), me = this,
@@ -645,13 +646,16 @@ Ext.define('NextThought.view.content.View', {
 			disc = st.discussion || {},
 			topic = disc.topic,
 			forum = disc.forum,
+			location = ContentUtils.getLocation(ntiid),
+			isCourse = location && location.isCourse,
 			course,
 			me = this;
 
 		tab = (tab === 'null') ? null : tab;
 
 		function setupCourseUI(instance) {
-				instance = instance.get('CourseInstance');
+				//if its a course catalog entry, get the course instance, otherwise, just pass it along.
+				instance = instance && (instance.get('CourseInstance') || instance);
 				return me._setCourse(instance, tab)
 						.then(function() {
 							me.fireEvent('track-from-restore', instance);
@@ -688,9 +692,9 @@ Ext.define('NextThought.view.content.View', {
 			throw reason;
 		}
 
-		course = CourseWareUtils.courseForNtiid(ntiid);
-
-		if (!course || !course.findByMyCourseInstance) {
+		//We dont care if this is just content... if it doesn't have a course, we do not want to fail
+		course = isCourse && CourseWareUtils.courseForNtiid(ntiid);
+		if ((!course || !course.findByMyCourseInstance)) {
 			return Promise.reject('No course for ntiid:' + ntiid)
 				.fail(noCourse)
 				.fail(setTab)
@@ -699,7 +703,10 @@ Ext.define('NextThought.view.content.View', {
 				});
 		}
 
-		return CourseWareUtils.findCourseBy(course.findByMyCourseInstance())
+		return (course ?
+					CourseWareUtils.findCourseBy(course.findByMyCourseInstance()) :
+					Promise.resolve(location && location.title)
+			)
 				.then(setupCourseUI,/*or*/ noCourse)
 				.then(setReader, /*or*/ setTab)
 				.fail(function(reason) {

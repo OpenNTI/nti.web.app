@@ -1,6 +1,8 @@
 Ext.define('NextThought.model.courseware.CourseInstance', {
 	extend: 'NextThought.model.Base',
 
+	isCourseInstance: true,
+
 	requires: [
 		'NextThought.store.courseware.Navigation',
 		'NextThought.store.courseware.ToCBasedOutline'
