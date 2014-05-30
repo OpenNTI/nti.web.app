@@ -1,4 +1,5 @@
 loadExternalLibraries([
+	{'XRegExp': 'resources/lib/xregexp-all-min.js'},//https://github.com/slevithan/xregexp
 	{'Duration': 'resources/lib/duration.js'},//https://github.com/leadhead9/durationjs
 	{'Stripe': 'https://js.stripe.com/v1/'},
 	{'Flash API': 'resources/lib/swfobject.js'},

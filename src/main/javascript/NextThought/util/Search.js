@@ -49,9 +49,9 @@ Ext.define('NextThought.util.Search', {
 
 	contentRegexFromSearchTerm: function(term, isPhrase) {
 
-		term = term.replace(/[^a-zA-Z0-9]/g, '[^a-zA-Z0-9]+');
+		term = XRegExp.replace(term, new XRegExp('\\p{P}+', 'g'), '\\p{P}+');
 		if (isPhrase) {
-			term = term.replace(/\s([^\]]|$)/g, '[^a-zA-Z0-9]+$1');
+			term = XRegExp.replace(term, new XRegExp('\\p{^L}+([^\\]]|$)', 'g'), '\\p{^L}+$1');
 		}
 		return term;
 
@@ -126,7 +126,7 @@ Ext.define('NextThought.util.Search', {
 			escapedParts = Ext.Array.map(terms, function(item) {
 				return this.contentRegexFromSearchTerm(item, phraseSearch);
 			}, this);
-			combinedRegex = new RegExp(escapedParts.join('|'), 'ig');
+			combinedRegex = new XRegExp(escapedParts.join('|'), 'ig');
 		}
 
 		return combinedRegex;
@@ -160,7 +160,7 @@ Ext.define('NextThought.util.Search', {
 		}
 
 		if (!captureMatches) {
-			return new RegExp(this.contentRegexFromSearchTerm(fragment.text, true), 'ig');
+			return new XRegExp(this.contentRegexFromSearchTerm(fragment.text, true), 'ig');
 		}
 
 		if (Ext.isEmpty(fragment.matches)) {
@@ -198,7 +198,7 @@ Ext.define('NextThought.util.Search', {
 			terms.push(regexify(fragment.text.slice(currentIdx, fragment.text.length), true, true));
 		}
 
-		return {re: new RegExp(terms.join(''), 'ig'), matchingGroups: groups};
+		return {re: new XRegExp(terms.join(''), 'ig'), matchingGroups: groups};
 	}
 
 
