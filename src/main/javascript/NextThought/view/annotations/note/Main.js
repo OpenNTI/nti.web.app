@@ -289,10 +289,14 @@ Ext.define('NextThought.view.annotations.note.Main', {
 			this.hideImageCommentLink();
 		}
 
-		this.context.setStyle({display: 'block'});
+		try {
+			this.context.setStyle({display: 'block'});
 
-		if (!this.context.getHeight()) {
-			this.context.parent().setStyle({display: 'none'});
+			if (!this.context.getHeight()) {
+				this.context.parent().setStyle({display: 'none'});
+			}
+		} catch (e) {
+			console.error(e);
 		}
 	},
 
