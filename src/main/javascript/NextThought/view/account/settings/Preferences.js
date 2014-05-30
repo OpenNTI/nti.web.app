@@ -34,6 +34,21 @@ Ext.define('NextThought.view.account.settings.Preferences', {
 					'data-preference-key': 'email_a_summary_of_interesting_changes'
 				}
 			]}
+		},
+		{tag: 'tpl', 'if': 'isFeature(\'badges\')', cn:
+			{tag: 'fieldset', cn: [
+				{tag: 'legend', html: 'Badges'},
+				{
+					tag: 'span',
+					cls: 'not-ready nti-checkbox course-badges',
+					html: 'Make badges earned for completing a course public.',
+					tabIndex: 0,
+					role: 'button',
+					'aria-role': 'button',
+					'data-preference-path': 'Badges/Course',
+					'data-preference-key': 'show_course_badges'
+				}
+			]}
 		}
 	]),
 

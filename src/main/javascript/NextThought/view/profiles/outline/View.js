@@ -7,28 +7,31 @@ Ext.define('NextThought.view.profiles.outline.View', {
 	ui: 'profile',
 	cls: 'outline',
 
-	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'avatar', style: { backgroundImage: 'url({avatarURL})' }, cn: [
-			{ cls: 'name {presence}', html: '{displayName}' }
+	renderTpl: Ext.DomHelper.markup({cls: 'container', cn: [
+		{cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'}},
+		{cls: 'fixed-about', cn: [
+			{cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'}},
+			{cls: 'name {presence}', html: '{displayName}'}
 		]},
-		{
-			cls: 'controls',
-			cn: [
-				{ cls: 'lists' },
-				{ cls: 'settings' },
-				{ tag: 'tpl', 'if': 'isMe', cn: { cls: 'button edit', html: '{{{NextThought.view.profiles.outline.View.edit}}}' }},
-				{ tag: 'tpl', 'if': '!isMe', cn: [
-					{ tag: 'tpl', 'if': 'isContact', cn: { cls: 'button chat disabled', html: '{{{NextThought.view.profiles.outline.View.chat}}}' }},
-					{ tag: 'tpl', 'if': '!isContact', cn: { cls: 'button', html: '{{{NextThought.view.profiles.outline.View.add}}}' }}
-				]}
-			]
-		},
-		{
-			cls: 'nav'
-		}
-	]),
+		{cls: 'wrap', cn: [
+			{cls: 'about', cn: [
+				{cls: 'name {presence} field', html: '{displayName}'},
+				{cls: 'role field', html: '{role}'},
+				{cls: 'location field', html: '{location}'}
+			]},
+			{cls: 'controls {controlsCls}', cn: [
+				{tag: 'span', cls: 'button edit isMe', html: 'Edit Profile'},
+				{tag: 'span', cls: 'button add-contact notContact', html: 'Add Contact'},
+				{tag: 'span', cls: 'button contact-menu isContact'},
+				{tag: 'span', cls: 'button mail isContact'},
+				{tag: 'span', cls: 'button chat isContact'}
+			]},
+			{cls: 'nav'}
+		]}
+	]}),
 
 	renderSelectors: {
+		headerEl: '.container',
 		avatarEl: '.avatar',
 		nameEl: '.name',
 		controlsEl: '.controls'
@@ -45,7 +48,9 @@ Ext.define('NextThought.view.profiles.outline.View', {
 		this.groupsListMenu = Ext.widget({
 			xtype: 'menu',
 			width: 255,
-			items: [{xtype: 'management-group-list', allowSelect: true}]
+			items: [
+				{xtype: 'management-group-list', allowSelect: true}
+			]
 		});
 		this.on('destroy', 'destroy', this.groupsListMenu);
 
@@ -70,14 +75,16 @@ Ext.define('NextThought.view.profiles.outline.View', {
 	afterRender: function() {
 		this.callParent(arguments);
 
+		var store, data = [];
+
 		if (isMe(this.user) || !Service.canFriend()) {
-			this.controlsEl.select('.lists,.settings').addCls('disabled');
+			//this.controlsEl.select('.lists,.settings').addCls('disabled');
 			if ($AppConfig.disableProfiles === true) {
-				this.controlsEl.down('.button').hide();
+				//this.controlsEl.down('.button').hide();
 			}
 		}
 		if (!Service.canChat()) {
-			this.controlsEl.down('.button').destroy();
+			//this.controlsEl.down('.button').destroy();
 		}
 
 		if (this.nameUneditable) {
@@ -86,7 +93,25 @@ Ext.define('NextThought.view.profiles.outline.View', {
 
 		this.updateButton();
 
-		var store = new Ext.data.Store({
+		data.push({id: 'about', label: getString('NextThought.view.profiles.outline.View.about'), mapping: 'profile-about' });
+		data.push({id: 'activity', label: getString('NextThought.view.profiles.outline.View.activity'), mapping: 'profile-activity' });
+
+		if (isFeature('badges')) {
+			data.push({id: 'achievments', label: getString('NextThought.view.profiles.outline.View.achievements'), mapping: 'profile-achievements'});
+		}
+
+		data.push({id: 'blog', label: getString('NextThought.view.profiles.outline.View.thoughts'), mapping: 'profile-blog' });
+
+		/*
+			{id:'discussions', label:'Discussions', type:'filter', mapping:'profile-activity' },
+			{id:'chats', label:'Chats', type:'filter', mapping:'profile-activity' },
+			{id:'comments', label:'Comments', type:'filter', mapping:'profile-activity' },
+			{id:'highlights', label:'Highlights', type:'filter', mapping:'profile-activity' },
+			{id:'bookmarks', label:'Bookmarks', type:'filter', mapping:'profile-activity' },
+			{id:'like', label:'Likes', type:'filter', mapping:'profile-activity' }
+		*/
+
+		store = new Ext.data.Store({
 			fields: [
 				{name: 'id', type: 'string'},
 				{name: 'label', type: 'string'},
@@ -94,17 +119,7 @@ Ext.define('NextThought.view.profiles.outline.View', {
 				{name: 'type', type: 'string', defaultValue: 'view'},//or filter
 				{name: 'mapping', type: 'string'}
 			],
-			data: [
-				{id: 'about', label: getString('NextThought.view.profiles.outline.View.about'), mapping: 'profile-about' },
-				{id: 'activity', label: getString('NextThought.view.profiles.outline.View.activity'), mapping: 'profile-activity' },
-				{id: 'blog', label: getString('NextThought.view.profiles.outline.View.thoughts'), mapping: 'profile-blog' }/*,
-				{id:'discussions', label:'Discussions', type:'filter', mapping:'profile-activity' },
-				{id:'chats', label:'Chats', type:'filter', mapping:'profile-activity' },
-				{id:'comments', label:'Comments', type:'filter', mapping:'profile-activity' },
-				{id:'highlights', label:'Highlights', type:'filter', mapping:'profile-activity' },
-				{id:'bookmarks', label:'Bookmarks', type:'filter', mapping:'profile-activity' },
-				{id:'like', label:'Likes', type:'filter', mapping:'profile-activity' }*/
-			]
+			data: data
 		});
 
 		this.navStore = store;
@@ -115,7 +130,7 @@ Ext.define('NextThought.view.profiles.outline.View', {
 			overItemCls: 'over',
 			itemSelector: '.outline-row',
 			store: store,
-			cls: 'nav-outline static make-white',
+			cls: 'nav-outline static',
 			renderTo: this.el.down('.nav'),
 			selModel: {
 				allowDeselect: false,
@@ -136,6 +151,17 @@ Ext.define('NextThought.view.profiles.outline.View', {
 				select: 'selectionChanged'
 			}
 		});
+
+		this.setHeight(this.getHeight());
+
+		this.fixedPosition = {
+			left: this.getX() + 'px'
+		};
+
+		this.nonFixedPosition = {
+			left: '0px'
+		};
+
 		this.on('destroy', 'destroy', this.nav);
 	},
 
@@ -147,7 +173,14 @@ Ext.define('NextThought.view.profiles.outline.View', {
 		this.groupsList.setUser(user).isContact = this.isContact;
 
 		Ext.destroy(this.optionsMenu);
+
 		m = this.optionsMenu = Ext.widget({xtype: 'person-options-menu', width: 255, ownerCmp: this, user: this.user, isContact: this.isContact });
+
+		m.add({xtype: 'management-group-list', allowSelect: true});
+
+		this.groupsList = m.down('management-group-list');
+		this.mon(this.groupsList, 'added-contact', 'convertToContact');
+
 		m.mon(this, 'destroy', 'destroy');
 		m.on('hide-menu', 'hide');
 		this.mon(m, 'remove-contact-selected', 'onDeleteContact');
@@ -157,7 +190,8 @@ Ext.define('NextThought.view.profiles.outline.View', {
 		Ext.apply(this.renderData, {
 			isMe: this.isMe,
 			isContact: this.isContact,
-			presence: user.getPresence().getName() + (this.isContact || this.isMe ? '' : ' no-presence')
+			presence: user.getPresence().getName() + (this.isContact || this.isMe ? '' : ' no-presence'),
+			controlsCls: this.isMe ? 'isMe' : this.isContact ? 'isContact' : 'notContact'
 		});
 	},
 	//</editor-fold>
@@ -199,11 +233,8 @@ Ext.define('NextThought.view.profiles.outline.View', {
 			return;
 		}
 
-		if (e.getTarget('.settings')) {
-			this.optionsMenu.showBy(this.avatarEl, 'tl-bl');
-		}
-		else if (e.getTarget('.lists')) {
-			this.groupsListMenu.showBy(this.avatarEl, 'tl-bl');
+		if (e.getTarget('.contact-menu') && e.getTarget('.controls.isContact')) {
+			this.optionsMenu.showBy(e.getTarget('.contact-menu'), 'tl-bl');
 		}
 		else if (e.getTarget('.avatar')) {
 			if (this.hasCls('editing')) {
@@ -211,16 +242,16 @@ Ext.define('NextThought.view.profiles.outline.View', {
 			}
 		}
 		//the various states of the action button (default, edit, and chat)
-		else if (e.getTarget('.button.edit')) {
+		else if (e.getTarget('.button.edit') && !e.getTarget('.editing') && e.getTarget('.controls.isMe')) {
 			this.enableEditing();
 		}
 		else if (e.getTarget('.button.editing')) {
 			this.enableEditing(false);
 		}
-		else if (e.getTarget('.button.chat')) {
+		else if (e.getTarget('.button.chat') && e.getTarget('.controls.isContact')) {
 			this.fireEvent('chat', this.user);
 		}
-		else if (e.getTarget('.button')) {
+		else if (e.getTarget('.button.add-contact') && e.getTarget('.controls.notContact')) {
 			this.onAddContact();
 		}
 
@@ -318,20 +349,22 @@ Ext.define('NextThought.view.profiles.outline.View', {
 
 
 	convertToContact: function() {
-		this.controlsEl.down('.button').set({cls: 'button chat disabled'}).update('Chat');
+		//this.controlsEl.down('.button').set({cls: 'button chat disabled'}).update('Chat');
 		this.isContact = true;
 		this.applyRenderData(this.user);
 		this.nameEl.removeCls('no-presence');
 		this.updateButton();
+		this.controlsEl.removeCls('isMe notContact').addCls('isContact');
 	},
 
 
 	convertToStranger: function() {
-		this.controlsEl.down('.button').set({cls: 'button'}).update(getString('NextThought.view.profiles.outline.View.add'));
+		//this.controlsEl.down('.button').set({cls: 'button'}).update(getString('NextThought.view.profiles.outline.View.add'));
 		this.isContact = false;
 		this.applyRenderData(this.user);
 		this.nameEl.addCls('no-presence');
 		this.updateButton();
+		this.controlsEl.removeCls('isMe isContact').addCls('notContact');
 	},
 
 
@@ -342,8 +375,8 @@ Ext.define('NextThought.view.profiles.outline.View', {
 			mask = (enable ? '' : 'un') + 'mask',
 			cls = (enable ? 'add' : 'remove') + 'Cls',
 			ucls = (enable ? 'remove' : 'add') + 'Cls',
-			label = enable ? 'Done' : 'Edit',
-			button = this.controlsEl.down('.button');
+			label = enable ? 'Done Editing' : 'Edit Profile',
+			editEl = this.controlsEl.down('.edit');
 
 		if (enable) {
 			this.updateSelection('profile-about', true);//make sure you are on the about panel
@@ -352,7 +385,8 @@ Ext.define('NextThought.view.profiles.outline.View', {
 		this.nav[mask]();
 		this.fireEvent(event);
 		this[cls]('editing');
-		button.update(label)[ucls]('edit')[cls]('editing');
+		editEl.update(label);
+		editEl[cls]('editing');
 	},
 
 
@@ -365,15 +399,7 @@ Ext.define('NextThought.view.profiles.outline.View', {
 	},
 
 
-	updateButton: function() {
-		var b = this.controlsEl.down('.button'),
-			pi = this.user.getPresence(),
-			current = $AppConfig.userObject.getPresence(),
-			isOnline = current && current.isOnline() && ((pi && pi.isOnline()) || this.isUserOnline());
-		if (b) {
-			b[(this.isContact && !isOnline) ? 'addCls' : 'removeCls']('disabled');
-		}
-	},
+	updateButton: function() {},
 	//</editor-fold>
 
 
@@ -410,6 +436,30 @@ Ext.define('NextThought.view.profiles.outline.View', {
 		}
 
 		this.navStore.remove(toRemove);
+	},
+
+
+	maybeFixHeader: function(el) {
+		if (!el) { return false; }
+
+		el = Ext.get(el);
+
+		var navTop = this.nav && this.nav.getY(),
+			scrollTop = el.getScrollTop(),
+			delta = navTop - scrollTop,
+			threshold = -81;
+
+		if (navTop && delta <= threshold && !this.fixedHeader) {
+			this.addCls('fixed');
+			//this.el.setStyle(this.fixedPosition);
+			this.fixedHeader = true;
+		} else if (delta > threshold && this.fixedHeader) {
+			this.removeCls('fixed');
+			//this.el.setStyle(this.nonFixedPosition);
+			this.fixedHeader = false;
+		}
+
+		return this.fixedHeader;
 	}
 	//</editor-fold>
 });

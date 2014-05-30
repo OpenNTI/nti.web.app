@@ -6,15 +6,19 @@ Ext.define('NextThought.view.profiles.Panel', {
 	requires: [
 		'NextThought.view.profiles.About',
 		'NextThought.view.profiles.outline.View',
-		'NextThought.view.profiles.parts.Blog'
+		'NextThought.view.profiles.parts.Blog',
+		'NextThought.view.profiles.parts.Achievements'
 	],
 
-	navigation: {xtype: 'profile-outline'},
+	layout: 'auto',
+
+	navigation: {xtype: 'profile-outline', region: 'north', override: 'true'},
 
 	body: {
 		layout: {
 			type: 'card',
-			deferredRender: true
+			deferredRender: true//,
+			//calculate: Ext.emptyFn
 		}
 	},
 
@@ -55,7 +59,8 @@ Ext.define('NextThought.view.profiles.Panel', {
 					}
 				},
 				{ xtype: 'profile-about', user: u },
-				{ xtype: 'profile-blog', user: u, username: u.getId() }
+				{ xtype: 'profile-blog', user: u, username: u.getId() },
+				{ xtype: 'profile-achievements', user: u}
 			]
 		});
 
@@ -77,6 +82,16 @@ Ext.define('NextThought.view.profiles.Panel', {
 		});
 
 		me.on('beforedeactivate', 'onBeforeDeactivate');
+
+		me.on('afterrender', function() {
+			me.mon(me.el, 'scroll', function(e, el) {
+				if (me.navigation.maybeFixHeader(el)) {
+					me.addCls('fixed-header');
+				} else {
+					me.removeCls('fixed-header');
+				}
+			});
+		});
 	},
 
 

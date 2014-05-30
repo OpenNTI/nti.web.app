@@ -722,6 +722,7 @@ NTIStrings['NextThought.view.profiles.outline.View.warn'] = 'The following actio
 NTIStrings['NextThought.view.profiles.outline.View.delete'] = 'Delete';
 NTIStrings['NextThought.view.profiles.outline.View.confirm'] = 'Are you sure?';
 NTIStrings['NextThought.view.profiles.outline.View.loading'] = 'Loading...';
+NTIStrings['NextThought.view.profiles.outline.View.achievements'] = 'Achievements';
 NTIStrings['NextThought.view.profiles.parts.Blog.new'] = 'New Entry';
 NTIStrings['NextThought.view.profiles.parts.Blog.warn'] = 'You are currently editing a thought. Please save or cancel it first.';
 NTIStrings['NextThought.view.profiles.parts.Blog.failed'] = 'Could not load post';
