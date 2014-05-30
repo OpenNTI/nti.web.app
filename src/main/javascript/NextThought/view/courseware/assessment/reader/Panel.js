@@ -62,6 +62,7 @@ Ext.define('NextThought.view.courseware.assessment.reader.Panel', {
 			r.getNoteOverlay().disable();
 		//}
 
+		r.getContentMaskTarget().mask('Loading...', 'navigation');
 		r.setLocation(this.location, done, true);
 
 	}

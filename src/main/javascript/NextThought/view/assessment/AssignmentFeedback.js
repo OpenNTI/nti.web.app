@@ -158,8 +158,11 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 			this.mon(this.store, 'load', 'updateFeedback');
 		}
 
+		this.feedbackList.loadMask.disable();
 		this.feedbackList.bindStore(this.store);
 		this.store.load();
+
+		this.feedbackList.loadMask.enable();
 
 		this.mon(this.feedbackList, 'itemclick', 'onFeedbackClick');
 

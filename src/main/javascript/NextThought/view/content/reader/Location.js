@@ -58,7 +58,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 	setLocation: function(ntiidOrPageInfo, callback, fromHistory) {
 
 		var me = this,
-			e = Ext.get('content') || Ext.getBody(),
+			e = me.reader.getContentMaskTarget(),
 			ntiid = ntiidOrPageInfo && ntiidOrPageInfo.isPageInfo ? ntiidOrPageInfo.get('NTIID') : ntiidOrPageInfo,
 			rootId = ContentUtils.getLineage(ntiid),
 			finish;
@@ -71,6 +71,9 @@ Ext.define('NextThought.view.content.reader.Location', {
 			return;
 		}
 
+		var clearMask = Ext.Function.createDelayed(function() {if (e && e.isMasked()) {e.unmask();}}, 300);
+
+
 		function finishFn(a, errorDetails) {
 			if (finish.called) {
 				console.warn('finish navigation called twice');
@@ -81,9 +84,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 
 			finish.called = true;
 
-			if (e && e.isMasked()) {
-				e.unmask();
-			}
+			clearMask();
 
 			try {
 				//Give the content time to settle. TODO: find a way to make an event, or prevent this from being called until the content is settled.

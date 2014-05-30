@@ -49,6 +49,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Panel', {
 		}
 		r.getNoteOverlay().disable();
 		a.setAssignmentFromInstructorProspective(this.assignment, this.assignmentHistory);
+		r.getContentMaskTarget().mask('Loading...', 'navigation');
 		r.setLocation(this.location, done, true);
 
 	}

@@ -170,6 +170,10 @@ Ext.define('NextThought.view.content.Reader', {
 	needsWaitingOnReadyEvent: function() {
 		return Boolean(this.readyEventPrimed);
 	},
+
+	getContentMaskTarget: function() {
+		return this.el.parent('.main-view-container');
+	},
 	//</editor-fold>
 
 
