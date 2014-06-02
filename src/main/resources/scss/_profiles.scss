@@ -1136,6 +1136,7 @@
 	background: #fff;
 
 	.input-wrap, .textbox-base {
+		max-width: 854px;
 		input {
 			border-radius: 0;
 			border-width: 0;
@@ -1155,7 +1156,7 @@
 	.controls{
 		position: absolute;
 		overflow: hidden;
-		right:-104px;
+		right:-126px;
 		top:-1px;
 		bottom: -1px;
 

@@ -10,7 +10,7 @@ Ext.define('NextThought.view.profiles.ProfileFieldEditor', {
 	revertInvalid: false,
 	alignment: 'l-l',
 
-	maxWidth: 620,
+	maxWidth: 854,
 	autoSize: {width: 'field'},
 
 	controlTemplateObj: {
