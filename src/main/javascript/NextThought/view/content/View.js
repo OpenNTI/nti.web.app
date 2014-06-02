@@ -574,11 +574,10 @@ Ext.define('NextThought.view.content.View', {
 	showCourseNavigation: function() {
 		var me = this;
 		clearTimeout(me.viewSwitch);
+		me.pushState({ location: me.getCourseNavigationSelection() });
+
 		me.viewSwitch = setTimeout(function() {
 			me.courseBook.getLayout().setActiveItem('course-nav');
-			me.pushState({
-				location: me.getCourseNavigationSelection()
-			});
 		}, 100);
 	},
 

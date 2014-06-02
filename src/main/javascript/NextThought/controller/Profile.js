@@ -83,22 +83,23 @@ Ext.define('NextThought.controller.Profile', {
 
 
 	showProfile: function(user, args, callback) {
-		history.beginTransaction('showing-profile');
+		var txn = history.beginTransaction('showing-profile-' + guidGenerator()),
+			url, o, v;
 		if (!this.fireEvent('before-show-profile') || !this.fireEvent('show-view', 'profile')) {
-			history.endTransaction('showing-profile');
+			txn.commit();
 			return false;
 		}
 
 		//TODO: This function may need to move to a shared location. Feels dirty referencing sibling controller.
-		var url = user.getProfileUrl.apply(user, args),
-			o = this.getController('State').interpretFragment(url),
-			v = this.getProfileView();
+		url = user.getProfileUrl.apply(user, args);
+		o = this.getController('State').interpretFragment(url);
+		v = this.getProfileView();
 
 		v.restore(o)
 			.done(function() {
 				console.debug('Finished restore', o);
 				history.pushState(o, document.title, url);
-				history.endTransaction('showing-profile');
+				txn.commit();
 				Ext.callback(callback, null, [user]);
 			})
 			.fail(function(reason) {
@@ -465,7 +466,7 @@ Ext.define('NextThought.controller.Profile', {
 				UserRepository.getUser(obj.get('Creator'), function(user) {
 					finishNavigation(user, obj.get('ID'));
 				});
-			}
+			};
 		}
 
 		if (obj instanceof NextThought.model.forums.PersonalBlogComment) {
@@ -475,7 +476,7 @@ Ext.define('NextThought.controller.Profile', {
 						finishNavigation(user, post.get('ID'), obj.get('ID'));
 					});
 				});
-			}
+			};
 		}
 
 		return false;

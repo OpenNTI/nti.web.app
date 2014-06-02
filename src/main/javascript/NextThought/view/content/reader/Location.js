@@ -61,7 +61,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 			e = me.reader.getContentMaskTarget(),
 			ntiid = ntiidOrPageInfo && ntiidOrPageInfo.isPageInfo ? ntiidOrPageInfo.get('NTIID') : ntiidOrPageInfo,
 			rootId = ContentUtils.getLineage(ntiid),
-			finish;
+			finish, txn;
 
 		rootId = rootId && rootId.last();
 
@@ -99,7 +99,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 				}
 				else {
 					canceled = true;
-					history.cancelTransaction('navigation-transaction');
+					txn.abort();
 				}
 				if (error) {
 					delete me.currentNTIID;
@@ -126,7 +126,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 			}
 			finally {
 				if (!canceled) {
-					history.endTransaction('navigation-transaction');
+					txn.commit();
 				}
 			}
 
@@ -146,7 +146,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 			e.mask('Loading...', 'navigation');
 		}
 
-		history.beginTransaction('navigation-transaction');
+		txn = history.beginTransaction('navigation-transaction-' + guidGenerator());
 
 		//make this happen out of this function's flow, so that the mask shows immediately.
 		setTimeout(function() {
@@ -160,7 +160,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 				me.resolvePageInfo(ntiidOrPageInfo, rootId, finish, Boolean(callback));
 			}
 			catch (e) {
-				history.cancelTransaction('navigation-transaction');
+				txn.abort(e);
 			}
 		},1);
 	},

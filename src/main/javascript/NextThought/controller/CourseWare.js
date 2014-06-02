@@ -507,10 +507,10 @@ Ext.define('NextThought.controller.CourseWare', {
 
 
 	onCourseSelected: function(instance, callback) {
-		var c, view;
+		var c, view, txn;
 
 		function end() {
-			history.endTransaction('navigation-transaction');
+			txn.commit();
 		}
 
 		if (!instance.__getLocationInfo()) {
@@ -526,7 +526,7 @@ Ext.define('NextThought.controller.CourseWare', {
 			return false;
 		}
 
-		history.beginTransaction('navigation-transaction');
+		txn = history.beginTransaction('navigation-transaction-' + guidGenerator());
 
 		try {
 			this.getMainNav().updateCurrent(false, instance);
