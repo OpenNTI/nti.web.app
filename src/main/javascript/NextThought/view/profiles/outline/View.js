@@ -11,7 +11,7 @@ Ext.define('NextThought.view.profiles.outline.View', {
 		{cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'}},
 		{cls: 'fixed-about', cn: [
 			{cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'}},
-			{cls: 'name {presence}', html: '{displayName}'}
+			{cls: 'fixed-name {presence}', html: '{displayName}'}
 		]},
 		{cls: 'wrap', cn: [
 			{cls: 'about', cn: [
@@ -34,7 +34,9 @@ Ext.define('NextThought.view.profiles.outline.View', {
 		headerEl: '.container',
 		avatarEl: '.avatar',
 		nameEl: '.name',
-		controlsEl: '.controls'
+		controlsEl: '.controls',
+		roleEl: '.role',
+		locationEl: '.location'
 	},
 
 	//</editor-fold>
@@ -222,9 +224,19 @@ Ext.define('NextThought.view.profiles.outline.View', {
 			me.user = u;
 		}
 
-		if (me.nameEl && me.user) {
+		if (!me.user) { return; }
+
+		if (me.nameEl) {
 			me.nameEl.set({cls: 'name ' + me.user.getPresence().getName() + (this.isContact || this.isMe ? '' : ' no-presence')});
 			me.updateButton();
+		}
+
+		if (me.roleEl) {
+			me.roleEl.update(me.user.get('role'));
+		}
+
+		if (me.locationEl) {
+			me.locationEl.update(me.user.get('location'));
 		}
 	},
 
