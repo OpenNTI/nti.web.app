@@ -167,6 +167,14 @@ if (location.toString().indexOf('index.html') > 0) {
 //	location.replace(location.toString().split(/[#\?]/)[0]);
 //}
 else if (location.search && history.replaceState) {
-	//lets cleanup our search string too, shall we?
-	history.replaceState(document.title, history.state, location.pathname);
+	(function() {
+		var a = document.createElement('a');
+		a.href = location.toString();
+
+		a.search = '';
+
+		//lets cleanup our search string too, shall we? (but do NOT clobber the fragment!)
+		history.replaceState(document.title, history.state,
+				a.href.replace('?', ''));//the search blank out does not remove the delimiter... clean that up too
+	}());
 }
