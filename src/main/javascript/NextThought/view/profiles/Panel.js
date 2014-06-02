@@ -191,14 +191,20 @@ Ext.define('NextThought.view.profiles.Panel', {
 		var stateData = Ext.clone(this.getStateData()),
 			url,
 			u = this.user,
-			c = this.down(view);
+			c = this.down(view), success;
 
 		if (!c) {
 			console.error('No view selected from query: ' + view);
 			return;
 		}
 
-		this.body.getLayout().setActiveItem(c);
+		success = this.body.getLayout().setActiveItem(c);
+
+		if (!success) {
+			this.navigation.updateSelection(this.body.getLayout().getActiveItem());
+			return;
+		}
+
 		if (c.performAction) {
 			c.performAction(action, data);
 		} else if (action !== 'view') {
