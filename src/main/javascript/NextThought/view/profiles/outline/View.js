@@ -167,6 +167,10 @@ Ext.define('NextThought.view.profiles.outline.View', {
 		};
 
 		this.on('destroy', 'destroy', this.nav);
+
+		this.mon(Ext.getStore('PresenceInfo'), 'presence-changed', 'updatePresence');
+
+		this.updatePresence(this.user.getId());
 	},
 
 
@@ -227,7 +231,6 @@ Ext.define('NextThought.view.profiles.outline.View', {
 		if (!me.user) { return; }
 
 		if (me.nameEl) {
-			me.nameEl.set({cls: 'name ' + me.user.getPresence().getName() + (this.isContact || this.isMe ? '' : ' no-presence')});
 			me.updateButton();
 		}
 
@@ -238,6 +241,23 @@ Ext.define('NextThought.view.profiles.outline.View', {
 		if (me.locationEl) {
 			me.locationEl.update(me.user.get('location'));
 		}
+	},
+
+
+	updatePresence: function(username, presence) {
+		//if the update isn't for this user don't do a thing
+		if (username !== this.user.getId()) { return; }
+
+		if (!presence) {
+			presence = Ext.getStore('PresenceInfo').getPresenceOf(username);
+		}
+
+		//if we still don't have a presence they aren't loaded yet so just wait
+		if (!presence) { return; }
+
+		this.nameEl.removeCls(['available', 'Online', 'unavailable', 'away', 'dnd', 'dnd', 'offline']);
+
+		this.nameEl.addCls(presence.getName() + ((this.isContact || this.isMe) ? '' : ' no-presence'));
 	},
 
 
