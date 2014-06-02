@@ -5,6 +5,8 @@ Ext.define('NextThought.view.courseware.overview.parts.Discussion', {
 	ui: 'course',
 	cls: 'overview-discussion',
 
+	containerCls: 'discussions',
+
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'image', style: {backgroundImage: 'url({icon})'}},
 		{ cls: 'meta', cn: [

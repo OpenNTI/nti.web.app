@@ -54,6 +54,10 @@ Ext.define('NextThought.view.courseware.overview.parts.Section', {
 
 		this.mon(item, 'show', 'show');
 
+		if (item.containerCls) {
+			this.addCls(item.containerCls);
+		}
+
 		if (item.isHidden() && first) {
 			this.hide();
 			return;
