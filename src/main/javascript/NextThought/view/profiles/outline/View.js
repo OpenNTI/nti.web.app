@@ -23,7 +23,7 @@ Ext.define('NextThought.view.profiles.outline.View', {
 				{tag: 'span', cls: 'button edit isMe', html: 'Edit Profile'},
 				{tag: 'span', cls: 'button add-contact notContact', html: 'Add Contact'},
 				{tag: 'span', cls: 'button contact-menu isContact'},
-				{tag: 'span', cls: 'button mail isContact'},
+				//{tag: 'span', cls: 'button mail isContact'},
 				{tag: 'span', cls: 'button chat isContact'}
 			]},
 			{cls: 'nav'}
@@ -78,13 +78,15 @@ Ext.define('NextThought.view.profiles.outline.View', {
 		var store, data = [];
 
 		if (isMe(this.user) || !Service.canFriend()) {
-			//this.controlsEl.select('.lists,.settings').addCls('disabled');
+			this.controlsEl.select('.contact-menu,.add-contact').addCls('disabled');
+
 			if ($AppConfig.disableProfiles === true) {
-				//this.controlsEl.down('.button').hide();
+				this.controlsEl.down('.edit').addCls('disabled');
 			}
 		}
+
 		if (!Service.canChat()) {
-			//this.controlsEl.down('.button').destroy();
+			this.controlsEl.down('.chat').addCls('disabled');
 		}
 
 		if (this.nameUneditable) {

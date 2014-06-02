@@ -204,6 +204,10 @@
 				position: relative;
 				background-color: $quad-grey;
 				border: 1px solid #f0f0f0;
+
+				&.disabled {
+					display: none;
+				}
 			}
 
 			.edit {
@@ -234,15 +238,16 @@
 				height: 40px;
 				border-radius: 5px 0 0 5px;
 				border-right-width: 0;
+				display: none;
 				@include icon('mail', $top: 11px, $left: 13px)
 			}
 
 			.chat {
 				width: 50px;
 				height: 40px;
-				border-radius: 0 5px 5px 0;
-				border-left-width: 0;
-				@include icon('chat-32', $top: 11px, $left: 5px)
+				//border-radius: 0 5px 5px 0;
+				// border-left-width: 0;
+				@include icon('chat-32', $top: 9px, $left: 9px)
 			}
 
 			.add-contact {
