@@ -59,6 +59,9 @@ Ext.define('NextThought.view.account.notifications.types.Base', {
 			},
 
 			getIcon: function(values) {
+				if (values.hidden) {
+					console.warn('FYI: Item is hidden:', values);
+				}
 				return me.getIcon(values);
 			}
 		});

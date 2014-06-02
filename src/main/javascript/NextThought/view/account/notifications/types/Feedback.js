@@ -51,7 +51,7 @@ Ext.define('NextThought.view.account.notifications.types.Feedback', {
 
 			if (!course) {
 				rec.data.hidden = true;
-				console.warn('Could not find course for ID: ', cid);
+				console.warn('Hidding: ', rec.data, ' Could not find course for ID: ', cid);
 			}
 
 			rec.data.course = course;
@@ -64,6 +64,7 @@ Ext.define('NextThought.view.account.notifications.types.Feedback', {
 		}, function() {
 			rec.data.hidden = true;//secret..shhh
 			rec.set('assignmentName', 'Not Found');
+			console.warn('Hidding: ', rec.data, ' Could not find Assignment: ', rec.get('AssignmentId'));
 		});
 	},
 
