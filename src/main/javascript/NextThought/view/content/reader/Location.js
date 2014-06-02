@@ -93,8 +93,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 
 				if (fromHistory !== true) {
 					history.pushState({
-						content: {location: ntiid},
-						active: 'content'
+						content: {location: ntiid}
 					}, ContentUtils.findTitle(ntiid, 'NextThought'), me.getFragment(ntiid));
 				}
 				else {

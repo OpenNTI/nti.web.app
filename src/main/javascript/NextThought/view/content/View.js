@@ -212,7 +212,7 @@ Ext.define('NextThought.view.content.View', {
 
 
 	updateState: function(s) {
-		history.replaceState({active: 'content', content: s}, this.title, this.getFragment());
+		history.replaceState({content: s}, this.title, this.getFragment());
 	},
 
 

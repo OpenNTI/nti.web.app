@@ -522,11 +522,13 @@ Ext.define('NextThought.controller.CourseWare', {
 			return false;
 		}
 
-		if (this.fireEvent('show-view', 'content', true) === false) {
+		txn = history.beginTransaction('navigation-transaction-' + guidGenerator());
+
+		if (this.fireEvent('show-view', 'content', false) === false) {
+			txn.abort();
 			return false;
 		}
 
-		txn = history.beginTransaction('navigation-transaction-' + guidGenerator());
 
 		try {
 			this.getMainNav().updateCurrent(false, instance);
