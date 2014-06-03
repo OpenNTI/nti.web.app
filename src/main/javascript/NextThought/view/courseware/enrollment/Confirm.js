@@ -8,10 +8,10 @@ Ext.define('NextThought.view.courseware.enrollment.Confirm', {
 	confirmLabel: getString('course-enrollment-drop', 'Drop'),
 
 	renderTpl: Ext.DomHelper.markup([
-			{tag: 'tpl', 'if': 'enrolled', cn: [
+			{tag: 'tpl', 'if': '!enrolled', cn: [
 				{ tag: 'h3', cls: 'gap', html: '{{{NextThought.view.courseware.enrollment.Confirm.enroll}}}'}
 			]},
-			{tag: 'tpl', 'if': '!enrolled', cn: [
+			{tag: 'tpl', 'if': 'enrolled', cn: [
 				{ tag: 'h3', cls: 'gap', html: '{{{NextThought.view.courseware.enrollment.Confirm.drop}}}'}
 			]},
 			{ html: '{detail}'},
@@ -27,6 +27,7 @@ Ext.define('NextThought.view.courseware.enrollment.Confirm', {
 
 	beforeRender: function() {
 		this.callParent(arguments);
+
 		this.renderData = Ext.apply(this.renderData || {},{
 			enrolled: this.enrolled,
 			detail: getString(this.enrolled ? 'drop.detail' : 'enroll.detail')
