@@ -182,10 +182,6 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 			cDesired = this.completedCourses.desiredColumns,
 			iDesired = this.currentCourses.desiredColumns;
 
-		this.completedCourses.bindStore(this.buildStore(completed));
-		this.currentCourses.bindStore(this.buildStore(current));
-		this.achievements.bindStore(this.buildStore(achievements));
-
 		//if its empty they need the space of 3 columns
 		if (cCount === 0) {
 			cCount = 3;
@@ -210,9 +206,18 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 			}
 		}
 
+		if (achievements.length) {
+			this.achievements.bindStore(this.buildStore(achievements));
+			this.achievements.setColumns(this.columns);
+		} else {
+			this.achievements.destroy();
+		}
+
+		this.completedCourses.bindStore(this.buildStore(completed));
+		this.currentCourses.bindStore(this.buildStore(current));
+
 		this.completedCourses.setColumns(cCount);
 		this.currentCourses.setColumns(iCount);
-		this.achievements.setColumns(this.columns);
 	},
 
 
