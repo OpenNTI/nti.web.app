@@ -416,6 +416,11 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 			buffer: 500,
 			scroll: 'onScroll'
 		});
+
+		if (!this.store || !this.store.getCount()) {
+			this.deferEmptyText = false;
+			this.refresh();
+		}
 	},
 
 
