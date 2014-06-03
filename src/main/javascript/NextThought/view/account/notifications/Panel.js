@@ -484,7 +484,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 			if (!pop) {
 				return;
 			}
-			pop.on('destroy', 'cancelPopupTimeout', me);
+			pop.on('destroy', me.cancelPopupTimeout.bind(me, null));
 		}
 
 		me.cancelPopupTimeout();
@@ -499,12 +499,16 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 	},
 
 
-	cancelPopupTimeout: function() {
+	cancelPopupTimeout: function(dontReset) {
 		var me = this;
 		delete me.activeTargetDom;
 		delete me.activeTargetRecord;
+		delete me.activeTargetRecordId;
 		clearTimeout(me.hoverTimeout);
 		clearTimeout(me.resetDelayTimer);
+
+		if (dontReset) { return; }
+
 		me.resetDelayTimer = setTimeout(function() {
 			me.popupDelay = 1200;
 		},
@@ -556,7 +560,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		this.lastScroll = dom.scrollTop;
 
 		//popouts are annoying when scrolling
-		this.cancelPopupTimeout();
+		this.cancelPopupTimeout(true);
 
 		if (wantedDirection && top > triggerZone) {
 			this.prefetchNext();
