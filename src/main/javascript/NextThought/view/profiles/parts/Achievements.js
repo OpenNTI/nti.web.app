@@ -29,9 +29,11 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 				{
 					header: 'Completed',
 					completed: true,
-					 cls: 'completed',
-					 desiredColumns: 4,
-					 emptyText: 'You haven\'t completed a course that offers a completion badge.'
+					cls: 'completed',
+					desiredColumns: 4,
+					preferencePath: 'Badges/Course',
+					preferenceKey: 'show_course_badges',
+					emptyText: 'You haven\'t completed a course that offers a completion badge.'
 				}
 			]
 		},
@@ -40,7 +42,7 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 			header: 'Achievements',
 			achievements: true,
 			cls: 'achievements',
-			emptyText: 'You haven\'t earned any achievement badges yet. The more you use the app and actively participate the more of the you will earn.'
+			emptyText: 'You haven\'t earned any achievement badges yet. The more you use the app and actively participate the more you will earn.'
 		}
 	],
 
@@ -59,9 +61,13 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 		if (isMe(this.user)) {
 			this.isMe = true;
 			this.loadWorkSpace(Service.getWorkspace('Badges'));
+
+			this.completedCourses.hasPublicPreference = true;
 		} else {
 			this.isMe = false;
 			this.currentCourses.destroy();
+
+			this.completedCourses.emptyText = 'This user hasn\'t completed a course that offers a completion badge.';
 
 			if (link) {
 				Service.request(link)

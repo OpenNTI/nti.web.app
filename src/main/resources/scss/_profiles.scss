@@ -1276,10 +1276,11 @@
 }
 
 .profile-achievements {
+	min-height: 100%;
 	background: $panel-background;
 
 	.empty-achievements-text {
-		color: $primary-grey;
+		color: $tertiary-grey;
 		font: normal 500 0.9em/20px $font;
 		margin: 20px auto;
 		width: 500px;
@@ -1348,15 +1349,30 @@
 	}
 
 	.completed,.current,.achievements {
+
+		.header-container {
+			height: 14px;
+		}
+
 		.header {
 			color: $tertiary-grey;
-			font: normal 600 0.6em/1 $font;
+			font: normal 600 0.6em/14px $font;
 			text-transform: uppercase;
+			float: left;
+			clear: both;
+		}
+
+		.nti-checkbox {
+			color: $tertiary-grey;
+			font: normal 600 0.6em/14px $font;
+			text-transform: uppercase;
+			float: right;
+			margin: 0 10px;
 		}
 
 		.empty-badge-text {
-			color: $primary-grey;
-			font: normal 500 0.9em/20px $font;
+			color: $tertiary-grey;
+			font: italic 400 0.9em/20px $font;
 			margin-top: 20px;
 		}
 	}
@@ -1383,15 +1399,23 @@
 		.title {
 			color: $primary-grey;
 			padding: 0 3px;
-			height: 20px;
+			max-height: 20px;
 			position: absolute;
 			bottom: 0px;
 			left: 0px; right: 0px;
 			font: normal 600 0.9em/20px $font;
 			text-align: center;
-			background-color: white;
+			background-color: rgba(255,255,255,0.95);
 			overflow: hidden;
 			@include ellipsis;
+			transition: all 0.5s ease;
+		}
+
+		&:hover {
+			.title {
+				max-height: 100%;
+				white-space: normal;
+			}
 		}
 	}
 }

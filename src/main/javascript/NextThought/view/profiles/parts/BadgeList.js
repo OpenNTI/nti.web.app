@@ -6,7 +6,6 @@ Ext.define('NextThought.view.profiles.parts.BadgeList', {
 	itemSelector: '.badge',
 
 	deferEmptyText: false,
-	emptyText: Ext.DomHelper.markup({ cls: 'empty-badge-text', html: 'Badges! We don\'t need no stinkin badges.'}),
 
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag: 'tpl', 'for': '.', cn: [
@@ -17,11 +16,26 @@ Ext.define('NextThought.view.profiles.parts.BadgeList', {
 		]}
 	])),
 
-
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'header', html: '{header}'}
+		{cls: 'header-container', cn: [
+			{cls: 'header', html: '{header}'},
+			{tag: 'tpl', 'if': 'preference', cn: [
+				{
+					tag: 'span',
+					cls: 'not-ready nti-checkbox email',
+					'data-qtip': 'Make badges earned for completing a course public.',
+					html: 'Public',
+					tabIndex: 0,
+					role: 'button',
+					'aria-role': 'button'
+				}
+			]}
+		]}
 	]),
 
+	renderSelectors: {
+		preferenceEl: '.nti-checkbox'
+	},
 
 	beforeRender: function() {
 		this.callParent(arguments);
@@ -29,15 +43,37 @@ Ext.define('NextThought.view.profiles.parts.BadgeList', {
 		this.emptyText = Ext.DomHelper.markup({cls: 'empty-badge-text', html: this.emptyText});
 
 		Ext.apply(this.renderData, {
-			header: this.header || 'Achievements'
+			header: this.header || 'Achievements',
+			preference: this.hasPublicPreference
 		});
 	},
 
 	afterRender: function() {
 		this.callParent(arguments);
 
-		if (this.columnWidth) {
-			this.setColumns(this.columnWidth);
+		var me = this;
+
+		if (me.columnWidth) {
+			me.setColumns(me.columnWidth);
+		}
+
+		if (me.hasPublicPreference && me.preferenceEl) {
+			$AppConfig.Preferences.getPreference(me.preferencePath)
+				.done(function(preference) {
+					var checked;
+
+					me.preference = preference;
+					checked = me.preference.get(me.preferenceKey);
+
+					me.mon(me.preferenceEl, 'click', 'updatePreference');
+
+					me.mon(me.preference, 'changed', 'updateUIFromPreference');
+					me.updateUIFromPreference(me.preference);
+				})
+				.fail(function(reason) {
+					console.error('Failed to get preference: ', me.preferencePath, reason);
+					me.preferenceEl.destroy();
+				});
 		}
 	},
 
@@ -52,5 +88,25 @@ Ext.define('NextThought.view.profiles.parts.BadgeList', {
 		}
 
 		this.el.set({'data-columns': width});
+	},
+
+
+	updateUIFromPreference: function(preference) {
+		if (!preference) {
+			console.error('Cant update the ui with an empty preference.');
+			return;
+		}
+
+		var checked = preference.get(this.preferenceKey);
+
+		this.preferenceEl[checked ? 'addCls' : 'removeCls']('checked');
+	},
+
+
+	updatePreference: function() {
+		var state = !this.preferenceEl.hasCls('checked');
+
+		this.preference.set(this.preferenceKey, state);
+		this.preference.save();
 	}
 });

@@ -18,12 +18,18 @@ Ext.define('NextThought.model.preference.Base', {
 	},
 
 	save: function(ops) {
-		var request, url = this.getResourceUrl();
-		request = Ext.apply({
-			url: url,
-			method: 'PUT',
-			jsonData: this.asJSON()
-		}, ops);
+		var request, me = this,
+			url = me.getResourceUrl();
+			request = Ext.apply({
+				url: url,
+				method: 'PUT',
+				jsonData: me.asJSON(),
+				callback: function(req, success, resp) {
+					if (success) {
+						me.fireEvent('changed', me);
+					}
+				}
+			}, ops);
 
 		Ext.Ajax.request(request);
 	}
