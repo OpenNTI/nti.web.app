@@ -115,6 +115,11 @@ Ext.define('NextThought.view.account.contacts.View', {
 				a = !Ext.isEmpty(this.friendsListStore.getContacts()),
 				online = $AppConfig.userObject.getPresence().isOnline();//This should probably be optimized.
 
+		//if the friendslist store has loaded don't defer showing the empty text
+		if (this.store.parentLoaded) {
+			this.deferEmptyText = false;
+		}
+
 		if (a) {
 			this.emptyText = online ? this.normalEmptyText : this.offlineEmptyText;
 		}else {
