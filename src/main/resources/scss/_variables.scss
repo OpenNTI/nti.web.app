@@ -1,7 +1,6 @@
-$backdrops: sprite-map("backdrops/*.png",$layout:smart);
 $icons: sprite-map("icons/*.png",$layout:smart);
 $elements: sprite-map("elements/*.png",$layout:smart);
-$file-types: sprite-map("file-types/*.png",$layout:smart);
+
 
 $disable-magic-sprite-selectors: true;
 

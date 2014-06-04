@@ -58,12 +58,10 @@
 
 		.x-box-inner > div{
 			&::after {
-				content: ' ';
+				content: url(../images/backdrops/choose_file.png);
 				position: absolute;
 				top: 50px;
 				left: 66px;
-				background: #ffffff $backdrops no-repeat;
-				@include sprite($backdrops,'choose_file',$dimensions:true);
 				z-index: 0;
 			}
 
