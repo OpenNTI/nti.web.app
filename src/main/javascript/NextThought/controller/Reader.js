@@ -243,15 +243,17 @@ Ext.define('NextThought.controller.Reader', {
 
 		function fail(req, resp) {
 			var location = ContentUtils.getLocation(id),
-				data;
+				data, href;
 			if (resp && resp.status === 404 && location) {
 
 				data = DomUtils.parseDomObject(location.location);
+				href = data['attribute-href'];
 				data['attribute-data-href'] = getURL(data['attribute-href'], location.root);
 				data.title = data['attribute-label'];
 				data.ntiid = data['attribute-ntiid'];
-				data.thumbnail = data['attribute-icon'];
+				data.thumbnail = getURL(data['attribute-icon'], location.root);
 				data.description = data['attribute-desc'];
+				data.notTarget = !NextThought.view.cards.Card.prototype.shouldOpenInApp.call(this, id, href);
 
 
 				me.showCardTarget(r, data, false, callback);
