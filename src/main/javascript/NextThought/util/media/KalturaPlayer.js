@@ -58,13 +58,14 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 			width: '{width}px',
 			height: '{height}px'
 		},
-		cn: [{
+		cn: [
+			{
 				tag: 'iframe',
 				id: '{id}-iframe',
 				name: '{id}-iframe',
 				allowfullscreen: 'yes',
 				webkitallowfullscreen: 'yes',
-				src: Ext.SSL_SECURE_URL,
+				src: Globals.EMPTY_WRITABLE_IFRAME_SRC,
 				frameBorder: 0,
 				scrolling: 'no',
 				width: '{width}',
@@ -74,10 +75,10 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 					overflow: 'hidden',
 					width: '{width}px',
 					height: '{height}px'
-				 }
-			 }
-		 ]
-	 }),
+				}
+			}
+		]
+	}),
 
 
 	PLAYER_BODY_TPL: Ext.DomHelper.createTemplate([
@@ -164,18 +165,19 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 			return;
 		}
 
-		var data = {
-					id: this.id,
-					height: this.height,
-					width: this.width,
-					basePath: location.protocol + '//' + location.host + location.pathname,
-					code: this.buildWrapperCode(),
-					sheme: location.protocol,
-					partnerid: this.PARTNER_ID,
-					uiconfid: this.UICONF_ID
-				},
-				playerSetupTask = {interval: 50},
-				me = this;
+		var iframeId,
+			data = {
+				id: this.id,
+				height: this.height,
+				width: this.width,
+				basePath: location.protocol + '//' + location.host + location.pathname,
+				code: this.buildWrapperCode(),
+				sheme: location.protocol,
+				partnerid: this.PARTNER_ID,
+				uiconfid: this.UICONF_ID
+			},
+			playerSetupTask = {interval: 50},
+			me = this;
 
 		this.settingUp = true;
 
@@ -188,7 +190,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 		playerSetupTask.run = function() {
 			var doc;
 
-			if (me.playerDeactivated) {
+			if (me.playerDeactivated || !Ext.getDom(iframeId)) {
 				stopTask('Deactivated during setup task. Stopping');
 				me.cleanup();
 				return;
@@ -196,24 +198,18 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 			try {
 				doc = me.getPlayerContextDocument();
-			}
-			catch (e) {
-				stopTask(e.stack || e.message || e);
-				return;
-			}
-
-			if (!me.playerDeactivated && doc && doc.readyState === 'complete') {
-				stopTask();
-				try {
+				if (!me.playerDeactivated && doc) {
 					doc.open();
 					doc.write(me.PLAYER_BODY_TPL.apply(data));
 					doc.close();
 					console.log(me.id, ' Setup done for ', me.id);
+					stopTask();
 				}
-				catch (er) {
-					console.error(me.id, ' Setup died a terrible death', er.stack || er.message || er);
-					me.playerErrorHandler(er);
-				}
+			}
+			catch (e) {
+				console.error(me.id, ' Setup died a terrible death', e.stack || e.message || e);
+				stopTask(e.stack || e.message || e);
+				me.playerErrorHandler(e);
 			}
 		};
 
@@ -221,6 +217,8 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 		this.el = this.PLAYER_TPL.append(
 				this.parentEl, data, true);
 		this.iframe = this.el.down('iframe');
+
+		iframeId = this.iframe.id;
 
 		Ext.TaskManager.start(playerSetupTask);
 		window.addEventListener('message', this.handleMessage, false);

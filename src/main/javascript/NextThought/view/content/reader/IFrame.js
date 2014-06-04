@@ -99,21 +99,12 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 
 
 	resetFrame: function(cb) {
-		// must defer to wait for browser to be ready
-		var BLANK_DOC = '<!DOCTYPE html>' + Ext.DomHelper.markup(
-						{tag: 'html', lang: 'en', cn: [
-							{tag: 'head', cn: {tag: 'title', html: 'Content'}},
-							{tag: 'body'}
-						]
-						}),
-				me = this,
-				jsPrefix = 'javascript', //this in var to trick jslint
-				task = { interval: 50 },
-				doc = me.getDocumentElement();
+		var BLANK_DOC = '<!DOCTYPE html>' +
+				Ext.DomHelper.markup({tag: 'html', lang: 'en', cn: [
+					{tag: 'head', cn: {tag: 'title', html: 'Content'}},{tag: 'body'}]}),
+		me = this,
+		task = { interval: 50 };
 
-		doc.open();
-		doc.close();
-		doc.parentWindow.location.replace(jsPrefix + ':');
 		me.loadedResources = {};
 
 		delete this.contentDocumentElement;
@@ -123,7 +114,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 			if (!me.reader || me.reader.isDestroyed) {
 				Ext.TaskManager.stop(task);
 			}
-			if (doc && (doc.body || doc.readyState === 'complete') && me.get()) {
+			if (doc && me.get()) {
 				Ext.TaskManager.stop(task);
 				doc.open();
 				doc.write(BLANK_DOC);
