@@ -95,11 +95,27 @@ Ext.define('NextThought.view.menus.search.Result', {
 						} else if (!obj || !meta) {
 							p = CourseWareUtils.courseForNtiid(containerId) || ContentUtils.purchasableForContentNTIID(containerId);
 							if (p) {
-								me.handlePurchasable(p);
+								me[p.get('enrolled') ? 'handleEnrolled' : 'handlePurchasable'](p, containerId);
 							}
 						}
 					});
 				});
+	},
+
+
+	handleEnrolled: function(course, containerId) {
+		var location = ContentUtils.getLocation(containerId);
+
+		if (!location) {
+			this.handlePurchasable(course);
+			return;
+		}
+
+		this.fillInContentMeta(location);
+
+		if (this.rendered) {
+			this.renderTpl.overwrite(this.el, this.renderData);
+		}
 	},
 
 
