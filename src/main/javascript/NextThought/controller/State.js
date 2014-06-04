@@ -2,9 +2,13 @@ PREVIOUS_STATE = 'previous-state';
 
 (function() {
 
-	function Transaction(transactionId, stateCtlr) {
+	function Transaction(transactionId, stateCtlr, parentTransaction) {
 		this.id = transactionId;
 		this.ctlr = stateCtlr;
+		this.parent = parentTransaction;
+		if (this.parent) {
+			this.parent.hooked = true;
+		}
 
 		this.txn = [];
 	}
@@ -29,11 +33,26 @@ PREVIOUS_STATE = 'previous-state';
 		},
 
 
+		getInfo: function() {
+			return {
+				Open: this.isOpen(),
+				id: this.getId(),
+				length: this.txn ? this.txn.length : null,
+				parent: this.parent && this.parent.getInfo()
+			};
+		},
+
+
+		toString: function() {
+			return JSON.stringify(this.getInfo());
+		},
+
+
 		commit: function() {
 			var state, replace = false, title = '', url = '';
 
 			if (!this.isOpen()) {
-				console.error('Attempting to commit a closed transaction');
+				console.error('Attempting to commit a closed transaction.');
 				return;
 			}
 
@@ -300,13 +319,13 @@ PREVIOUS_STATE = 'previous-state';
 
 			window.onpopstate = function(e) {
 				me.isPoppingHistory = true;
-				console.debug('Browser is popping state', e.state);
+				console.debug('Browser is popping state, new state appling: ', Ext.decode(e.state, true));
 				me.onPopState(e);
 				me.isPoppingHistory = false;
 			};
 
 
-			window.onhashchange = function(e) {
+			window.onhashchange = function() {
 				if (me.restoringState) {return;}
 				//Hash changes are their own entry in the history... so we do not need to push history, we just need to
 				// handle the change.
@@ -345,6 +364,10 @@ PREVIOUS_STATE = 'previous-state';
 
 			if (!this.activeTransaction) {
 				this.activeTransaction = new Transaction(transactionId, this);
+			} else {
+				console.error('Transaction already open. (' + this.activeTransaction + ') ' +
+						'Attempted to create a new transaction with id: ' + transactionId + '. ' +
+						'Ignoring and returning the current transactoin.');
 			}
 
 			return this.activeTransaction;
@@ -536,6 +559,7 @@ PREVIOUS_STATE = 'previous-state';
 			if (stateObject === PREVIOUS_STATE) {
 				replaceState = true;
 				stateObject = this.loadState();
+				ObjectUtils.clean(stateObject);//drop keys with null & undefined values
 				if (history.updateState) {
 					history.updateState(stateObject);
 				}

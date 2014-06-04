@@ -50,12 +50,13 @@ Ext.define('NextThought.util.Object', {
 		for (key in o) {
 			if (o.hasOwnProperty(key)) {
 				v = o[key];
-				if (v === undefined || v === null) {
+				if (!v || clean(v)) {//remove falsy values and empty objects
 					delete o[key];
 				}
-				clean(v);
 			}
 		}
+
+		return Ext.Object.isEmpty(v);
 	}
 },function() {
 	window.ObjectUtils = this;
