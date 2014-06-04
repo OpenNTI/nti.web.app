@@ -14,28 +14,33 @@ Ext.define('NextThought.view.slidedeck.Overlay', {
 
 	initComponent: function() {
 		this.callParent(arguments);
-		var store = this.store, keyMap;
-		this.view = this.add({xtype: 'slidedeck-view', store: store, startOn: this.startOn});
+		var me = this,
+			store = me.store,
+			keyMap;
+		this.view = me.add({xtype: 'slidedeck-view', store: store, startOn: me.startOn});
 		//clean up references, we don't actually use the store here, so just pass it down.
-		delete this.store;
-		delete this.startOn;
+		delete me.store;
+		delete me.startOn;
 
-		this.mon(this.view, 'destroy', this.destroy, this);
-		Ext.EventManager.onWindowResize(this.setSize, this, false);
+		me.mon(me.view, 'destroy', me.destroy, me);
+		Ext.EventManager.onWindowResize(me.setSize, me);
 
 		keyMap = new Ext.util.KeyMap({
 			target: document,
 			binding: [{
 				key: Ext.EventObject.ESC,
-				fn: this.destroy,
-				scope: this
+				fn: me.destroy,
+				scope: me
 			},{
 				key: Ext.EventObject.TAB,
-				fn: this.tabNext,
-				scope: this
+				fn: me.tabNext,
+				scope: me
 			}]
 		});
-		this.on('destroy', function() {keyMap.destroy(false);});
+		me.on('destroy', function() {
+			keyMap.destroy(false);
+			Ext.EventManager.removeResizeListener(me.setSize, me);
+		});
 	},
 
 	afterRender: function() {
@@ -44,7 +49,7 @@ Ext.define('NextThought.view.slidedeck.Overlay', {
 	},
 
 
-	tabNext: function(k,e) {
+	tabNext: function(k, e) {
 		e.stopEvent();
 		var a = this.el.query('[tabindex]'), i;
 		i = Ext.Array.indexOf(a, (this.el.down('[tabindex]:focus') || {}).dom) + 1;
