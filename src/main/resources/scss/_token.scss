@@ -181,6 +181,7 @@
 			.inputArea{
 				white-space: nowrap;
 				display: inline-block;
+				position: relative;
 
 				.plus{
 					position: relative;
@@ -198,11 +199,27 @@
 					}
 				}
 
+				.placeholder {
+					position: absolute;
+					top: 7px;
+					font: italic normal 14px/20px $font !important;
+					padding-left: 5px;
+					display: inline-block;
+					max-width: 256px;
+					white-space: normal;
+
+					&.hidden {
+						display: none;
+					}
+
+				}
+
 				.token-input-wrap{
 					position: relative;
 					input {
 						font: italic normal 14px/20px $font !important;
 						text-transform: none;
+						background: transparent;
 						//padding: 5px 0;
 					}
 					.token-input-sizer{

@@ -12,9 +12,10 @@ Ext.define('NextThought.view.account.contacts.GroupChat', {
 			cls: 'tokens',
 			cn: { tag: 'span', cls: 'inputArea', cn: [
 					{tag: 'span', cls: 'plus'},
+					{tag: 'span', cls: 'placeholder', html: '{placeholder}'},
 					{tag: 'span', cls: 'token-input-wrap', cn: [
-						{tag: 'input', type: 'text', tabIndex: '{tabIndex}', placeholder: '{placeholder}'},
-						{tag: 'span', cls: 'token-input-sizer', html: '{placeholder}##'}
+						{tag: 'input', type: 'text', tabIndex: '{tabIndex}', placeholder: ''},
+						{tag: 'span', cls: 'token-input-sizer', html: '##'}
 					]}
 				]
 			}
@@ -37,7 +38,8 @@ Ext.define('NextThought.view.account.contacts.GroupChat', {
 		tokensEl: 'div[id$=tokens]',
 		buttonsEl: 'div[id$=buttons]',
 		tokenInsertPoint: 'div[id$=tokens] .tokens .inputArea',
-		startEl: 'div[id$=buttons] .start'
+		startEl: 'div[id$=buttons] .start',
+		placeholderEl: '.placeholder'
 	},
 
 
@@ -83,6 +85,7 @@ Ext.define('NextThought.view.account.contacts.GroupChat', {
 		if (this.isToken(value)) {
 			if (this.addTag(value, type, {username: record.get('Username')})) {
 				this.fireEvent('token-added', record.get('Username'));
+				this.placeholderEl.removeCls('hidden');
 			}
 		}
 	},
@@ -300,11 +303,13 @@ Ext.define('NextThought.view.account.contacts.GroupChat', {
 			this.mon(this.el, 'mouseover', this.mousedOver, this);
 		}
 
+
+		this.mon(this.inputEl, 'keyup', 'onKeyUp');
 	},
 
 	mousedOver: function(e) {
 		if (window.innerHeight < 600) {
-			if (!this.ipadOver && e.target.className.indexOf('nib') != -1) {
+			if (!this.ipadOver && e.target.className.indexOf('nib') !== -1) {
 				this.ipadOver = true;
 				e.preventDefault();
 				var touch = e.target;
@@ -364,12 +369,25 @@ Ext.define('NextThought.view.account.contacts.GroupChat', {
 			return false;
 		}
 
+		if (!e.isSpecialKey()) {
+			this.placeholderEl.addCls('hidden');
+		}
+
 		if (key === e.ESC) {
 			this.reset();
 		}
 
 		this.searchTimeout = Ext.defer(this.search, 250, this);
 		return true;
+	},
+
+
+	onKeyUp: function(e) {
+		var val = this.inputEl.getValue();
+
+		if (this.placeholderEl) {
+			this.placeholderEl[Ext.isEmpty(val) ? 'removeCls' : 'addCls']('hidden');
+		}
 	},
 
 
@@ -411,6 +429,7 @@ Ext.define('NextThought.view.account.contacts.GroupChat', {
 			this.listEl.setScrollTop(0);
 			this.searchStore.search();
 			this.contactSearch.getSelectionModel().deselectAll(true);
+			this.placeholderEl.removeCls('hidden');
 		}
 
 		this.updateState();
@@ -427,6 +446,13 @@ Ext.define('NextThought.view.account.contacts.GroupChat', {
 			this.lastSearchValue = value;
 			this.searchStore.search(value);
 		}
+	},
+
+
+	setPlaceholderText: function(text) {
+		this.placeholder = text;
+		this.placeholderEl.update(text);
+		this.updateSize();
 	},
 
 
