@@ -409,6 +409,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			annotation.destroy();
 		}
 
+		this.fireEvent('exited');
 
 		Ext.defer(this.destroy, 1100, this);
 		Ext.defer(this.fireEvent, 1100, this, ['exited', this]);
