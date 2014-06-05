@@ -126,9 +126,12 @@ Ext.define('NextThought.view.Navigation', {
 					],
 					listeners: {
 						hide: function() {
-							if (this.reactivate && this.ownerNode.hasCls('active')) {
+							if (this.ownerNode.hasCls('active')) {
 								this.ownerNode.removeCls('active');
-								this.reactivate.addCls('active');
+
+								if (this.reactivate) {
+									this.reactivate.addCls('active');
+								}
 							}
 						},
 						show: function(m) {
