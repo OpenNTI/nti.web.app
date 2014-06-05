@@ -174,8 +174,8 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 		// If you have an HTML5 player... this will not crash but will not hide the currtain either. TODO: figure out the player event api.
 		console.debug(this.id, 'Loading...', source, 'ready=False');
 
-		this.player.cueVideoById({ videoId: source, startSeconds: offset, suggestedQuality: 'medium' });
-		this.pause(); //-- pause has zero effect since "ready is false"
+		this.player.cueVideoById({ videoId: source, startSeconds: offset || 0, suggestedQuality: 'medium' });
+		//this.pause(); //-- pause has zero effect since "ready is false"
 	},
 
 
@@ -213,13 +213,32 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 
 	seek: function(offset, seekAhead) {
 		if (!this.isReady || !this.player) { return;}
+
+		var duration = this.player.getDuration();
+
 		this.currentStartAt = offset;
+
+		if (duration === 0) {
+			this.on({
+				single: true,
+				'player-event-play': this.seek.bind(this, offset, seekAhead)
+			});
+
+			this.player.playVideo();
+			return;
+		}
+
+		if (duration < offset) {
+			offset = duration;
+		}
+
 		this.player.seekTo(offset, seekAhead);
-		this.pause();
+		//this.pause();
 	},
 
 
 	stop: function() {
+		console.log('Youtube stop called:', arguments);
 		if (this.player && this.player.stopVideo) {
 			this.player.stopVideo();
 			//this.player.clearVideo();
