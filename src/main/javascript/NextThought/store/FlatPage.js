@@ -102,7 +102,7 @@ Ext.define('NextThought.store.FlatPage', {
 
 			function doesRecordPassFilters(rec) {
 				return Ext.Array.every(currentFilters, function(f) {
-					if (f.filterFn) { return f.filterFn.apply(f, [rec]); }
+					if (f.id !== 'lineFilter' && f.filterFn) { return f.filterFn.apply(f, [rec]); }
 					return true;
 				});
 			}
