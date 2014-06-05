@@ -101,7 +101,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 	resetFrame: function(cb) {
 		var BLANK_DOC = '<!DOCTYPE html>' +
 				Ext.DomHelper.markup({tag: 'html', lang: 'en', cn: [
-					{tag: 'head', cn: {tag: 'title', html: 'Content'}},{tag: 'body'}]}),
+					{tag: 'head'},{tag: 'body'}]}),
 		me = this,
 		task = { interval: 50 };
 

@@ -123,7 +123,7 @@ Ext.define('NextThought.util.Line', {
   },
 
 	/** @private */
-	//IE
+	//Gecko (FF)
 	rangeByRecursiveSearch: function(y, doc) {
     //		y -= 30; //Correction
 		var curNode = doc.documentElement, range, rect, sibling;
@@ -140,7 +140,7 @@ Ext.define('NextThought.util.Line', {
 				i = -1;
 			}
 			//If recursive search takes us to a bad node, depth-first search forward from there
-			while (curNode.nodeType !== curNode.TEXT_NODE && (i + 1) >= curNode.childNodes.length && curNode.parentNode) {
+			while (((curNode.nodeType !== curNode.TEXT_NODE && (i + 1) >= curNode.childNodes.length) || curNode.nodeName === 'OBJECT') && curNode.parentNode) {
 				i = 0;
 				sibling = curNode;
 				while ((sibling = sibling.previousSibling) !== null) { i += 1; }
