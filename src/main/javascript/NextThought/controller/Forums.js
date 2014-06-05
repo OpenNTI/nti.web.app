@@ -224,7 +224,7 @@ Ext.define('NextThought.controller.Forums', {
 
 		if (!url) {
 			//we can't restore the state but don't blow up
-			promise.fulfull();
+			promise.fulfill();
 		}
 
 		req = {
