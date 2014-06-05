@@ -102,12 +102,20 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 		var BLANK_DOC = '<!DOCTYPE html>' +
 				Ext.DomHelper.markup({tag: 'html', lang: 'en', cn: [
 					{tag: 'head'},{tag: 'body'}]}),
-		me = this,
-		task = { interval: 50 };
+			me = this,
+			task = { interval: 50 }, doc;
 
 		me.loadedResources = {};
 
 		delete this.contentDocumentElement;
+
+		if (Ext.isIE || Ext.isIE11p) {
+			doc = me.getDocumentElement();
+			doc.open();
+			doc.close();
+			doc.parentWindow.location.replace(Globals.EMPTY_WRITABLE_IFRAME_SRC);
+
+		}
 
 		task.run = function() {
 			var doc = me.getDocumentElement();
