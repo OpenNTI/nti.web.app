@@ -82,10 +82,10 @@ PREVIOUS_STATE = 'previous-state';
 				return;
 			}
 
+			this.close();
+			console.debug('State transaction ended: ', this.id);
 			history[replace ? 'replaceState' : 'pushState'](state, title, url);
 
-			console.debug('State transaction ended: ', this.id);
-			this.close();
 		},
 
 
@@ -256,7 +256,7 @@ PREVIOUS_STATE = 'previous-state';
 
 				if (updateState(s) && !me.isPoppingHistory) {
 
-					console.trace();
+					//console.trace();
 					console.debug('push state', s);
 
 					if (!url) {
@@ -291,7 +291,7 @@ PREVIOUS_STATE = 'previous-state';
 
 				if (me.restoringState) {return;}
 
-				console.trace();
+				//console.trace();
 				console.debug('replace state', s);
 
 				if (txn) {

@@ -211,11 +211,6 @@ Ext.define('NextThought.view.content.View', {
 	},
 
 
-	updateState: function(s) {
-		history.replaceState({content: s}, this.title, this.getFragment());
-	},
-
-
 	/**
 	 * @param {Boolean|String[]} enable
 	 */
@@ -541,7 +536,7 @@ Ext.define('NextThought.view.content.View', {
 				me.updateTabs();
 
 				//force this to blank out if it was unset
-				me.updateState({
+				me.pushState({
 					course: instance && instance.getId(),
 					activeTab: tab
 				});
