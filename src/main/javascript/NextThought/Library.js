@@ -145,7 +145,7 @@ Ext.define('NextThought.Library', {
 			title = me.getTitle(index),
 			toc = me.getToc(title),
 			ref = toc && toc.querySelector('reference[type="application/vnd.nextthought.videoindex"]'),
-			root = title.get('root'),
+			root = title && title.get('root'),
 			url, req;
 
 		function parse(json) {
