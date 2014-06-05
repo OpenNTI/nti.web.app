@@ -580,7 +580,7 @@ PREVIOUS_STATE = 'previous-state';
 
 			for (key in stateObject) {
 				if (stateObject.hasOwnProperty(key) && /object/i.test(typeof(stateObject[key]))) {
-					c = Ext.getCmp(key);
+					c = me.getStateRestorationHandlerFor(key);
 					if (c && c.restore) {
 						try {
 							stateScoped = {active: stateObject.active};
@@ -592,7 +592,7 @@ PREVIOUS_STATE = 'previous-state';
 						}
 					}
 					else {
-						console.warn('The key', key, 'did not point to a component with a restore method:', c);
+						console.warn('Could not find a handler to restore: ', key);
 					}
 				}
 			}
@@ -606,6 +606,13 @@ PREVIOUS_STATE = 'previous-state';
 
 				me.restoringState = false;
 			});
+		},
+
+
+
+		getStateRestorationHandlerFor: function(key) {
+			var hdlr = this.callOnAllControllersWith('getStateRestorationHandler', key);
+			return hdlr || Ext.getCmp(key);
 		},
 
 
