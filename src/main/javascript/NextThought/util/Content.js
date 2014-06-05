@@ -304,7 +304,7 @@ Ext.define('NextThought.util.Content', {
 		}
 
 		//One place we can check is the video index
-		Library.getVideoIndex(title, function(index) {
+		Library.getVideoIndex(title).then(function(index) {
 			var vid, container;
 			if (!index) {
 				Ext.callback(cb, scope);

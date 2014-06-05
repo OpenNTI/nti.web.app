@@ -124,7 +124,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 
 		if (i) {
 			this.locationInfo = i;
-			Library.getVideoIndex(i.title, this.applyVideoData, this);
+			Library.getVideoIndex(i.title).then(this.applyVideoData.bind(this));
 		}
 		else {
 			Ext.callback(this.getVideoDataLoadedCallback(), this, [undefined, 0]);

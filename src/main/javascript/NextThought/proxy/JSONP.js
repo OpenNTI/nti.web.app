@@ -53,7 +53,7 @@ Ext.define('NextThought.proxy.JSONP', {
 
 		//JSONP CORS workaround not needed. (or not enabled)
 		if (host === location.host || $AppConfig.server.jsonp !== true) {
-			return Ext.Ajax.request(options);
+			return Service.request(options);
 		}
 
 		if (!options.jsonpUrl) {
@@ -86,50 +86,57 @@ Ext.define('NextThought.proxy.JSONP', {
 	 * @param {Object} [options.scope]
 	 */
 	requestJSONP: function(options) {
-		var me = this,
-			opts = Ext.apply({},options),
-			script,
-			t;
+		var me = this;
+		return new Promise(function(fulfill, reject) {
+			var opts = Ext.apply({},options), script, t;
 
-		function jsonp(script) {
-			clearTimeout(t);
-			var resp = {
-				responseText: me.getContent(opts.ntiid, opts.expectedContentType),
-				request: { options: opts }
-			};
-			console.log('JSONP.request completed', resp.responseText.length);
-			opts.callback.call(opts.scope || window, opts, true, resp);
-			opts.success.call(opts.scope || window, resp, opts);
-			Ext.fly(script).remove();
-		}
+			function jsonp(script) {
+				clearTimeout(t);
+				var resp = {
+					responseText: me.getContent(opts.ntiid, opts.expectedContentType),
+					request: { options: opts }
+				};
+				console.log('JSONP.request completed', resp.responseText.length);
+				try {
+					opts.callback.call(opts.scope || window, opts, true, resp);
+					opts.success.call(opts.scope || window, resp, opts);
+				} finally {
+					Ext.fly(script).remove();
+					fulfill(resp.responseText);
+				}
+			}
 
-		function onError(script) {
-			delete script.onload;
-			clearTimeout(t);
-			Ext.fly(script).remove();
-			console.error('PROBLEMS!', opts);
+			function onError(script, reason) {
+				delete script.onload;
+				clearTimeout(t);
+				Ext.fly(script).remove();
 
-			var resp = {
-				status: 0,
-				responseText: 'Problem loading jsonp script',
-				requestedOptions: opts
-			};
+				var resp = {
+					status: 0,
+					reason: reason,
+					responseText: 'Problem loading jsonp script',
+					requestedOptions: opts
+				};
 
-			opts.callback.call(opts.scope || window, opts, false, resp);
-			opts.failure.call(opts.scope || window, resp);
-		}
+				console.error('PROBLEMS!', resp);
 
-		//ensure we have callbacks
-		opts.success = opts.success || function emptySuccess() {};
-		opts.failure = opts.failure || function emptyFailure() {};
-		opts.callback = opts.callback || function emptyCallback() {};
+				try {
+					opts.callback.call(opts.scope || window, opts, false, resp);
+					opts.failure.call(opts.scope || window, resp);
+				} finally {
+					reject(resp);
+				}
+			}
 
-		t = setTimeout(function() {
-			console.warn('Timed out: ' + opts.jsonpUrl);
-			onError(script);
-		},60000);
+			//ensure we have callbacks
+			opts.success = opts.success || function emptySuccess() {};
+			opts.failure = opts.failure || function emptyFailure() {};
+			opts.callback = opts.callback || function emptyCallback() {};
 
-		script = Globals.loadScript(opts.jsonpUrl, jsonp, onError, this);
+			t = setTimeout(function() { onError(script, 'Timeout'); },60000);
+
+			script = Globals.loadScript(opts.jsonpUrl, jsonp, onError, this);
+		});
 	},
 
 

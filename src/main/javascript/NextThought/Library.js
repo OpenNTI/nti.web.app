@@ -136,74 +136,51 @@ Ext.define('NextThought.Library', {
 	},
 
 
-	getVideoIndex: function(index, callback, scope) {
+	getVideoIndex: function(index) {
 		if (index instanceof Ext.data.Model) {
 			index = index.getId();
 		}
 
 		var me = this,
 			title = me.getTitle(index),
-			toc = me.getToc(title), t = toc,
+			toc = me.getToc(title),
+			ref = toc && toc.querySelector('reference[type="application/vnd.nextthought.videoindex"]'),
 			root = title.get('root'),
-			url;
+			url, req;
 
-		function makeAbsolute(o) {
-			o.src = getURL(o.src, root);
-			o.srcjsonp = getURL(o.srcjsonp, root);
-			return o;
-		}
+		function parse(json) {
+			var vi, n, keys, keyOrder = [],
+				containers;
 
-		function query(tag, id) {
-			return tag + '[ntiid="' + ParseUtils.escapeId(id) + '"]';
-		}
-
-		function parse(q, s, resp) {
-			var vi, n, cb, r, keys, keyOrder = [], containers;
-
-			if (!s) {
-				delete me.activeVideoLoad[index];
-				failure(resp);
-				return;
+			function makeAbsolute(o) {
+				o.src = getURL(o.src, root);
+				o.srcjsonp = getURL(o.srcjsonp, root);
+				return o;
 			}
 
-			cb = me.activeVideoLoad[index];
-			r = resp.responseText;
-
-			if (Ext.isString(r)) {
-				try {
-					r = Ext.JSON.decode(r);
-				}catch (e) {
-					delete me.activeVideoLoad[index];
-					failure(e);
-					return;
-				}
+			function query(tag, id) {
+				return tag + '[ntiid="' + ParseUtils.escapeId(id) + '"]';
 			}
 
-			containers = (r && r.Containers) || {};
+
+			if (Ext.isString(json)) {
+				json = Ext.JSON.decode(json);
+			}
+
+			containers = (json && json.Containers) || {};
 			keys = Ext.Object.getKeys(containers);
 			keys.sort(function(a, b) {
 				var c = toc.querySelector(query('topic', a)) || toc.querySelector(query('toc', a)),
 					d = toc.querySelector(query('topic', b)),
-					p;
-
-				try {
 					p = c.compareDocumentPosition(d);
-					return ((p & Node.DOCUMENT_POSITION_PRECEDING) === Node.DOCUMENT_POSITION_PRECEDING) ? 1 : -1;
-				} catch (e) {
-					console.error(e.stack || e.message || e);
-					return 0;
-				}
+				return ((p & Node.DOCUMENT_POSITION_PRECEDING) === Node.DOCUMENT_POSITION_PRECEDING) ? 1 : -1;
 			});
 
 			keys.forEach(function(k) {
-				//console.dir(containers[k]);
 				keyOrder.push.apply(keyOrder, containers[k]);
 			});
 
-
-			vi = me.videoIndex[index] = (r && r.Items) || r;
-			delete me.activeVideoLoad[index];
-
+			vi = (json && json.Items) || json;
 			for (n in vi) {
 				if (vi.hasOwnProperty(n)) {
 					n = vi[n];
@@ -214,54 +191,37 @@ Ext.define('NextThought.Library', {
 			}
 
 			vi._order = keyOrder;
-			//console.dir(keyOrder);
-			Ext.callback(cb, me, [me.videoIndex[index]]);
+
+			return vi;
 		}
 
 
-		function failure() {
-			console.error(arguments);
-			Ext.callback(callback, scope);
+		if (!toc || !ref) {
+			return Promise.reject('No video index defined, or no toc yet for ' + index);
 		}
 
-
-		if (!t) {
-			console.warn('No toc yet for', index);
-			failure();
-			return;
-		}
-
-		if (!me.videoIndex) {
-			me.videoIndex = {};
-		}
+		me.videoIndex = me.videoIndex || {};
 
 		if (!me.videoIndex[index]) {
-			t = t.querySelector('reference[type="application/vnd.nextthought.videoindex"]');
-			if (!t) {
-				console.warn('No video index defined', index);
-				failure();
-				return;
-			}
-			url = getURL(t.getAttribute('href'), title.get('root'));
-
-			if (me.activeVideoLoad[index]) {
-				me.activeVideoLoad[index] = Ext.Function.createSequence(me.activeVideoLoad[index], callback || Ext.emptyFn, scope);
-				return;
-			}
-
-			me.activeVideoLoad[index] = scope ? Ext.bind(callback, scope) : callback;
-			ContentProxy.request({
+			url = getURL(ref.getAttribute('href'), title.get('root'));
+			req = {
 				ntiid: title.get('NTIID'),
 				url: url,
 				jsonpUrl: url + 'p', //todo: make smarter
 				contentType: 'text/json',
-				expectedContentType: 'application/json',
-				callback: parse
+				expectedContentType: 'application/json'
+			};
+
+			me.videoIndex[index] = ContentProxy.request(req).then(parse); //the promise returned by 'then' is what is cached.
+
+			me.videoIndex[index].fail(function(reason) {
+				console.error(reason);
+				//it fails, remove the cached promise so it can retry.
+				delete me.videoIndex[index];
 			});
-			return;
 		}
 
-		Ext.callback(callback, scope, [me.videoIndex[index]]);
+		return me.videoIndex[index];
 	},
 
 

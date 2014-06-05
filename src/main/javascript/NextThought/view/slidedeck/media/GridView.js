@@ -143,7 +143,7 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 
 
 	getVideoData: function(title) {
-		Library.getVideoIndex(title, this.applyVideoData, this);
+		Library.getVideoIndex(title).then(this.applyVideoData.bind(this));
 	},
 
 
