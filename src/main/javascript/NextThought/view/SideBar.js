@@ -248,8 +248,12 @@ Ext.define('NextThought.view.SideBar', {
 
 		if (!this.host.isVisible()) {
 			if (Ext.is.iOS) {
-				searchInput = this.el.down('.search').down('input');
-				groupInput = this.el.down('.x-component-group-chat').down('input');
+				searchInput = this.el.down('.search');
+				searchInput = searchInput && searchInput.down('input');
+
+				groupInput = this.el.down('.x-component-group-chat');
+				groupInput = groupInput && groupInput.down('input');
+
 				if (searchInput) {
 					searchInput.blur();
 				}
