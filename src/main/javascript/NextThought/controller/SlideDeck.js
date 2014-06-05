@@ -34,6 +34,12 @@ Ext.define('NextThought.controller.SlideDeck', {
 				},
 				'#main-reader-view reader-content': {
 					'beforeNavigate': 'maybeCloseSlideDeck'
+				},
+				'slidedeck-view': {
+					'exited': 'slideDeckDidExit'
+				},
+				'media-viewer' : {
+					'exited': 'mediaViewerDidExit'
 				}
 			},
 			'controller': {
@@ -46,21 +52,109 @@ Ext.define('NextThought.controller.SlideDeck', {
 	},
 
 
+	restoreSlideDeckView: function(data) {
+		var me = this;
+
+		/*function getContentID(videoId) {
+			var contentPackage = Library.findTitleWithPrefix(ParseUtils.ntiidPrefix(videoId));
+			return contentPackage && contentPackage.getId();
+		}*/
+
+		return new Promise(function(fin) {
+
+			var video;
+			if (data.videoData) {
+				video = new NextThought.model.PlaylistItem(data.videoData, data.videoData.NTIID);
+			}
+			me.openSlideDeck(
+					data.contaienrId,// || getContentID(data.deckId),
+					data.deckId,
+					data.slideId,
+					video);
+			fin();
+		});
+	},
+
+
+	getStateRestorationHandler: function(key) {
+		var me = this;
+
+		if (key === 'slidedeck') {
+			return {
+				ctx: this,
+				restore: function(state) {
+					clearTimeout(this.ctx.__killOverlay);
+					this.ctx.__killOverlay = true;
+					var scope = state.slidedeck,
+						deck = scope.deck,
+						media = scope.media,
+						p;
+
+					if (deck) {
+						p = this.ctx.restoreSlideDeckView(deck);
+					} else if (media) {
+						p = this.ctx.restoreMediaViewer(media);
+					}
+
+					return p || Promise.resolve();
+				}
+			};
+			//if we've "restored" the timer id will be replaced with "true"
+		} else if (me.__killOverlay !== true) {
+			clearTimeout(me.__killOverlay);
+			me.__killOverlay = setTimeout(function() {
+				var a = me.getActiveMediaViewer(),
+					b = me.getActiveSlideDeck();
+				Ext.destroy(a, b);
+			}, 100);
+		}
+	},
+
+
+	restoreMediaViewer: function(data) {
+		var me = this;
+		return new Promise(function(fulfill, reject) {
+			var contentPackage = Library.findTitleWithPrefix(ParseUtils.ntiidPrefix(data.videoId));
+
+			Library.getVideoIndex(contentPackage)
+					.then(function(index) {
+						var video = index[data.videoId],
+							basePath = getURL(contentPackage.get('root'));
+
+						me.launchMediaPlayer(video, data.videoId, basePath);
+
+						fulfill();
+					})
+					.fail(reject);
+		});
+	},
+
+
 	openSlideDeck: function(contentNTIID, slideDeckId, startingVideo, startingSlide) {
 		if (!this.maybeCloseSlideDeck()) {
 			return false;
 		}
 
+		history.pushState({
+			slidedeck: {
+				media: null,
+				deck: {
+					contaienrId: contentNTIID,//string
+					deckId: slideDeckId,//string
+					slideId: startingSlide,//string
+					videoData: startingVideo && startingVideo.raw
+				}
+			}
+		});
 		SlideDeck.open(contentNTIID, slideDeckId, startingVideo, startingSlide);
 	},
 
 
 	maybeCloseSlideDeck: function() {
 		var active = this.getActiveMediaViewer() || this.getActiveSlideDeck();
-		if (!active) {return true;}
-
-		//TODO: make this query for open editors and return false to abort
-		active.destroy();
+		if (active && !this.getController('State').isRestoring()) {
+			active.destroy();
+		}
 		return true; //false will cancel the event, TODO: return false if there is an editor open
 	},
 
@@ -77,6 +171,7 @@ Ext.define('NextThought.controller.SlideDeck', {
 
 
 	launchMediaPlayer: function(v, videoId, basePath, rec, options) {
+
 		//Only allow one media player at a time
 		console.debug('Launching media viewer');
 		if (this.getActiveMediaViewer()) {
@@ -110,6 +205,15 @@ Ext.define('NextThought.controller.SlideDeck', {
 		// instead of just passing the transcript, we will pass all the associated items.
 
 		function createMediaPlayer(record, scrollToId) {
+			history.pushState({
+				slidedeck: {
+					deck: null,
+					media: {
+						videoId: videoId
+					}
+				}
+			});
+
 			me.activeMediaPlayer = Ext.widget('media-viewer', {
 				video: video,
 				transcript: transcript,
@@ -282,7 +386,7 @@ Ext.define('NextThought.controller.SlideDeck', {
 
 	maybeCloseMediaViewer: function(user, callback, scope) {
 		var active = this.getActiveMediaViewer() || this.getActiveSlideDeck();
-		if (active) {
+		if (active && !this.getController('State').isRestoring()) {
 			Ext.Msg.show({
 				msg: 'You are about to exit the media viewer.',
 				buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
@@ -327,5 +431,14 @@ Ext.define('NextThought.controller.SlideDeck', {
 				}
 			});
 		});
+	},
+
+
+	slideDeckDidExit: function() {
+		history.pushState({slidedeck: {deck: null}});
+	},
+
+	mediaViewerDidExit: function() {
+		history.pushState({slidedeck: {media: null}});
 	}
 });

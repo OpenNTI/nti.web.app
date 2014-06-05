@@ -609,6 +609,8 @@ PREVIOUS_STATE = 'previous-state';
 		},
 
 
+		isRestoring: function() {return !!this.restoringState;},
+
 
 		getStateRestorationHandlerFor: function(key) {
 			var hdlr = this.callOnAllControllersWith('getStateRestorationHandler', key);
