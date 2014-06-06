@@ -69,7 +69,7 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 
 			if (link) {
 				Service.request(link)
-					.done(this.loadWorkSpace);
+					.done(this.loadWorkSpace.bind(this));
 			} else {
 				this.setEmptyState();
 			}
