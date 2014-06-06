@@ -77,6 +77,15 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 	},
 
 
+	afterRender: function() {
+		this.callParent(arguments);
+
+		if (!this.badgesLoaded) {
+			this.el.mask('Loading...');
+		}
+	},
+
+
 	getStateData: function() { return this.uriFriendlyName; },
 
 	restore: function(data, callback) {
@@ -230,6 +239,11 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 
 		this.completedCourses.setColumns(cCount);
 		this.currentCourses.setColumns(iCount);
+
+		this.badgesLoaded = true;
+		if (this.rendered) {
+			this.el.unmask();
+		}
 	},
 
 
@@ -270,6 +284,11 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 
 		this.completedCourses.setColumns(this.columns);
 		this.achievements.setColumns(this.columns);
+
+		this.badgesLoaded = true;
+		if (this.rendered) {
+			this.el.unmask();
+		}
 	},
 
 
