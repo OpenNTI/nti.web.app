@@ -118,6 +118,16 @@
 			.avatar {
 				cursor: pointer;
 				@include icon('edit-15_hover', $left:auto, $top: 5px, $right: 5px);
+
+				&::before {
+					content: '';
+					width: 21px;
+					height: 21px;
+					background-color: $primary-grey;
+					top: 3px;
+					right: 3px;
+					position: absolute;
+				}
 			}
 
 			.name:not(.read-only){
@@ -217,10 +227,9 @@
 
 			.edit {
 				color: $secondary-grey;
-				width: 140px;
-				padding-left: 55px;
+				padding: 0 20px 0 45px;
 
-				@include icon('notepad_active', $top: 10px, $left: 30px)
+				@include icon('notepad_active', $top: 10px, $left: 20px);
 			}
 
 			.contact-menu {
@@ -748,7 +757,7 @@
 			}
 
 			& > * { margin-top: 20px; }
-			.controls {margin: 0 -20px 0 0;}
+			.controls {margin: 0 -10px 0 0;}
 
 			.avatar {
 				float: left;
