@@ -123,47 +123,86 @@ Ext.define('NextThought.view.profiles.About', {
 	//</editor-fold>
 
 
-	//<editor-fold desc="Profile Schema Logic">
 	setUser: function(user) {
-		var me = this, profileSchemaUrl, req;
+		var me = this, req,
+			profileSchemaUrl = user.getLink('account.profile');
 
-		if (!this.rendered) {
-			this.on('afterrender', Ext.bind(this.setUser, this, [user]), this, {single: true});
-			return;
+		function onAfterRender() {
+			if (!me.schemaLoaded) {
+				me.getEl().mask(getString('NextThought.view.profiles.About.loading'));
+			}
+
+			if (!profileSchemaUrl) {
+				me.profileInfoEl.removeCls('editable');
+			}
 		}
 
-		me.getEl().mask(getString('NextThought.view.profiles.About.loading'));
+		if (me.rendered) {
+			onAfterRender();
+		} else {
+			me.on('afterrender', onAfterRender);
+		}
 
 		me.user = user;
 
-		function onProfileLoaded(u, profile) {
-			me.updateProfile(u, profile);
-			me.getEl().unmask();
-		}
-
-		profileSchemaUrl = user.getLink('account.profile');
 		if (!profileSchemaUrl) {
-			me.profileInfoEl.removeCls('editable');
-			onProfileLoaded(user);
-			return;
+			me.onProfileLoaded(user);
 		}
 
 		req = {
 			url: profileSchemaUrl,
-			scope: this,
+			scope: me,
 			callback: function(q, success, r) {
 				var schema;
+
 				if (!success) {
 					console.log('Could not get profile schema');
-				}
-				else {
+				} else {
 					schema = Ext.decode(r.responseText, true);
 				}
-				onProfileLoaded(user, schema);
+
+				me.onProfileLoaded(user, schema);
+
+				if (me.rendered) {
+					me.getEl().unmask();
+				} else {
+					me.schemaLoaded = true;
+				}
 			}
 		};
 
 		Ext.Ajax.request(req);
+	},
+
+
+	onProfileLoaded: function(user, schema) {
+		var me = this, fn = 'editName',
+			profileSchema = (schema || {}).ProfileSchema,
+			nameInfo = me.getMetaInfoForField(user, 'alias', profileSchema);
+
+		me.userObject = user;
+		me.profileSchema = profileSchema;
+
+		//Make more of the UI schema driven
+
+		//If the name is editable it is guarenteed (right now) to be
+		//us.  Given that it is also guarenteed that we won't have the add to contacts
+		//button. so if its not editable we tag it with a class so we can snug the button
+		//up if it exists
+
+		if (!nameInfo.editable && isFeature('request-alias-change') && isMe(user)) {
+			fn = Ext.bind(me.fireEvent, me, ['request-alias-change', me]);
+		}
+
+		if (nameInfo.editable || Ext.isFunction(fn)) {
+			this.on('name-clicked', fn);
+		} else {
+			console.warn('Name isn`t editable and reguest-alias-change isn`t a feature');
+			this.fireEvent('uneditable-name');
+		}
+
+
+		me.updateProfile(user, profileSchema);
 	},
 
 
@@ -314,30 +353,12 @@ Ext.define('NextThought.view.profiles.About', {
 	},
 
 
-	updateProfile: function(user, schema) {
-		var me = this, fn = 'editName',
-			profileSchema = (schema || {}).ProfileSchema,
-			nameInfo = me.getMetaInfoForField(user, 'alias', profileSchema);
+	updateProfile: function(user, profileSchema) {
+		var me = this;
 
-		me.userObject = user;
-		me.profileSchema = profileSchema;
-
-		//Make more of the UI schema driven
-
-		//If the name is editable it is guarenteed (right now) to be
-		//us.  Given that it is also guarenteed that we won't have the add to contacts
-		//button. so if its not editable we tag it with a class so we can snug the button
-		//up if it exists
-
-		if (!nameInfo.editable && isFeature('request-alias-change') && isMe(user)) {
-			fn = Ext.bind(me.fireEvent, me, ['request-alias-change', me]);
-		}
-
-		if (nameInfo.editable || Ext.isFunction(fn)) {
-			this.on('name-clicked', fn);
-		} else {
-			console.warn('Name isn`t editable and reguest-alias-change isn`t a feature');
-			this.fireEvent('uneditable-name');
+		if (!me.rendered) {
+			me.on('afterrender', me.updateProfile.bind(me, user, profileSchema));
+			return;
 		}
 
 		function validateAgainstSchema(value) {

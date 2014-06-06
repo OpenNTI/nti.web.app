@@ -56,7 +56,7 @@ Ext.define('NextThought.util.Object', {
 			}
 		}
 
-		return Ext.Object.isEmpty(v);
+		return Ext.Object.isEmpty(o);
 	}
 },function() {
 	window.ObjectUtils = this;
