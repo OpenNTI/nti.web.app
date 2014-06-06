@@ -446,7 +446,7 @@ PREVIOUS_STATE = 'previous-state';
 
 
 		interpretObjectFragment: function(fragment, query) {
-			var domain,
+			var domain, me = this,
 				parts = (fragment || '').split('/').slice(0);
 
 			parts = Ext.Array.clean(parts);
@@ -457,7 +457,11 @@ PREVIOUS_STATE = 'previous-state';
 				parts = parts.slice(2);
 
 				if (domain === 'ntiid' && parts.length === 1 && ParseUtils.parseNTIID(parts[0])) {
-					Ext.defer(this.fireEvent, 1, this, ['show-ntiid', parts[0]]);
+					(this.restoringState || wait(1)).then(function() {
+						me.fireEvent('show-ntiid', parts[0], null, null, null, function() {
+							alert('There was a problem navigating to the destination. Check the address and try again.');
+						});
+					});
 				}
 			}
 			return {};
@@ -531,80 +535,86 @@ PREVIOUS_STATE = 'previous-state';
 
 
 		restoreState: function(stateObject) {
-			if (this.restoringState) {
+			var me = this,
+				app = me.application,
+				history = window.history;
+
+			if (me.restoringState) {
 				console.warn('Restoring state while one is already restoring...');
 				return;
 			}
-			this.restoringState = true;
-			var app = this.application,
-				history = window.history,
-				tasks = [],
-				replaceState = false, c, key, stateScoped, me = this, presentation;
 
-			function fin(key, stateFrag) {
+				function fin(key, stateFrag) {
 				var token = {};
 				token[key] = stateFrag;
 				app.registerInitializeTask(token);
-				return function(a) {
+				return function() {
 					app.finishInitializeTask(token);
 				};
 			}
 
-			function fail(stateFrag) {
-				return function(reason) {
-					console.error('Restore state Failed because', reason, ', fragment:', stateFrag);
-				};
-			}
+			me.restoringState = new Promise(function(fulfill, reject) {
+				//let the body of this function return so the promise is setup and ready for use
+				wait(1)
+						//then do our work
+						.then(function() {
+							var tasks = [],
+								replaceState = false,
+								c, key, stateScoped;
+							if (stateObject === PREVIOUS_STATE) {
+								replaceState = true;
+								stateObject = me.loadState();
+								ObjectUtils.clean(stateObject);//drop keys with null & undefined values
+								if (history.updateState) {
+									history.updateState(stateObject);
+								}
+							}
 
-			if (stateObject === PREVIOUS_STATE) {
-				replaceState = true;
-				stateObject = this.loadState();
-				ObjectUtils.clean(stateObject);//drop keys with null & undefined values
-				if (history.updateState) {
-					history.updateState(stateObject);
-				}
-			}
+							// we can get cancelled ?? The browser doesn't let us prevent the back event,...so this should force it and block the 'block'
+							if (me.fireEvent('show-view', stateObject.active, true) === false) {
+								//this should NEVER happen.
+								throw 'Blocked by a UI element with a Napoleon complex.';
+							}
 
-			c = this.fireEvent('show-view', stateObject.active, true);
-			// c equals false means that we got cancelled in beforedeactivate event.
-			// i.e we can get cancelled if the activeView has blog editor open.
-			if (c === false) {
-				if (NextThought.isInitialized) {
-					history.back();
-				}
-				this.restoringState = false;
-				return;
-			}
+							me.currentState.active = stateObject.active;
 
-			this.currentState.active = stateObject.active;
-
-			for (key in stateObject) {
-				if (stateObject.hasOwnProperty(key) && /object/i.test(typeof(stateObject[key]))) {
-					c = me.getStateRestorationHandlerFor(key);
-					if (c && c.restore) {
-						try {
-							stateScoped = {active: stateObject.active};
-							this.currentState[key] = stateScoped[key] = stateObject[key];
-							tasks.push(c.restore(stateScoped).then(fin(key, stateScoped), fail(stateScoped)));
-						}
-						catch (e) {
-							console.error('Setting state: ', e, e.message, e.stack);
-						}
-					}
-					else {
-						console.warn('Could not find a handler to restore: ', key);
-					}
-				}
-			}
+							for (key in stateObject) {
+								if (stateObject.hasOwnProperty(key)) {
+									c = me.getStateRestorationHandlerFor(key);
+									if (c && c.restore) {
+										try {
+											stateScoped = {active: stateObject.active};
+											me.currentState[key] = stateScoped[key] = stateObject[key];
+											tasks.push(c.restore(stateScoped).then(fin(key, stateScoped)));
+										}
+										catch (e) {
+											console.error('Setting state: ', e, e.message, e.stack);
+										}
+									}
+									else if (/object/i.test(typeof stateObject[key])) {
+										console.warn('Could not find a handler to restore: ', key);
+									}
+								}
+							}
 
 
-			Promise.all(tasks).always(function() {
-				console.log('Finished');
-				if (replaceState) {
-					history.replaceState(me.currentState, 'Title');
-				}
+							return Promise.all(tasks)
+								.always(function() {
+									if (replaceState) {
+										history.replaceState(me.currentState, 'Title');
+									}
+									me.restoringState = false;
+								});
+						})
 
-				me.restoringState = false;
+						//then finish or fail
+						.then(fulfill, reject);
+
+			});
+
+			me.restoringState.fail(function(reason) {
+				delete me.restoringState;
+				console.error('Failed to restore state', reason);
 			});
 		},
 
