@@ -24,6 +24,7 @@ Ext.define('NextThought.view.cards.CardTarget', {
 		var ctTop = this.el.up('.x-reader-pane').getY(),
 			top = (10 + ctTop);
 		this.el.setY(top);
+		this.viewportMonitor();
 	},
 
 	constructor: function(config) {
