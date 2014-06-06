@@ -296,8 +296,9 @@ Ext.define('NextThought.util.Content', {
 	 *  Looks in content for the content object with the given id
 	 */
 	findContentObject: function(id, cb, scope) {
-		var titleNtiidPrefix = ParseUtils.ntiidPrefix(id),
+		var titleNtiidPrefix = ParseUtils.ntiidPrefix(id), me = this,
 			title = titleNtiidPrefix ? Library.findTitleWithPrefix(titleNtiidPrefix) : null;
+
 		if (!title) {
 			Ext.callback(cb, scope);
 			return;
@@ -314,7 +315,7 @@ Ext.define('NextThought.util.Content', {
 			vid = index[id];
 
 			if (vid) {
-				container = this.getLineage(id);
+				container = me.getLineage(id);
 				if (!Ext.isEmpty(container) && container.length > 1) {
 					container = container[1];
 				}
@@ -336,7 +337,7 @@ Ext.define('NextThought.util.Content', {
 				Ext.callback(cb, scope, [vid]);
 			}
 
-		}, this);
+		});
 	},
 
 
