@@ -981,6 +981,7 @@
 	}
 
 	.blog {
+		height: 100%;
 
 		.post-view .blog-editor{
 			@include forum-post-editor;
