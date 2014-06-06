@@ -192,6 +192,9 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 			}
 		}).fail(function(reason) {
 			console.error(reason);
+
+			me.setEmptyState();
+			me.finishLoading();
 		});
 	},
 
