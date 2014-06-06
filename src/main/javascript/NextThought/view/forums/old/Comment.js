@@ -214,10 +214,10 @@ Ext.define('NextThought.view.forums.old.Comment', {
 	 * the server deletes them but then continues to return them as placeholder looking
 	 * objects.  With a little work we could employ the placeholder logic we give to notes,
 	 * where a delete turns certain records into placeholders.  However we drive many different views
-	 * history, activity off of destory events that don't get fired in that case.  Since the ds still
+	 * history, activity off of destroy events that don't get fired in that case.  Since the ds still
 	 * does all its other deletion logic as normal we opt to do the same.
 	 *
-	 * For now, for simplicity, we just have the record destory remove our record reference and update the UI components
+	 * For now, for simplicity, we just have the record destroy remove our record reference and update the UI components
 	 * appropriately.  We tear down any observers first so we don't get events and fall down code paths
 	 * requiring the record.
 	 *

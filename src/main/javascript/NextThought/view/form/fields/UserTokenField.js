@@ -563,6 +563,6 @@ Ext.define('NextThought.view.form.fields.UserTokenField', {
 
 	destroy: function() {
 		this.callParent(arguments);
-		console.warn('token field destoryed.');
+		//console.warn('token field destroyed.');
 	}
 });

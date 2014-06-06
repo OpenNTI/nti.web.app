@@ -83,7 +83,7 @@ Ext.define('NextThought.view.sharing.ShareSearchList', {
 
 	destroy: function() {
 		this.callParent(arguments);
-		console.warn('destorying list view...', arguments);
+		//console.warn('destroying list view...', arguments);
 	}
 
 });
