@@ -46,8 +46,6 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 		}
 	],
 
-	COMPLETION_BADGE_REGEX: /course_completion_badge.png$/,
-
 	initComponent: function() {
 		this.callParent(arguments);
 
@@ -146,12 +144,16 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 				return item;
 			}
 
+			function isCourse(item) {
+				return item.Type === 'Course';
+			}
+
 			earned.forEach(function(item) {
 				item.earnedCls = 'earned';
 
 				item = fillIn(item);
 
-				if (me.COMPLETION_BADGE_REGEX.test(item.image)) {
+				if (isCourse(item)) {
 					completed.push(item);
 				} else {
 					achievements.push(item);
@@ -163,7 +165,7 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 
 				item = fillIn(item);
 
-				if (me.COMPLETION_BADGE_REGEX.test(item.image)) {
+				if (isCourse(item)) {
 					current.push(item);
 				} else {
 					achievements.push(item);
