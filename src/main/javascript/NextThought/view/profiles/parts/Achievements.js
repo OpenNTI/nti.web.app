@@ -196,6 +196,15 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 	},
 
 
+	finishLoading: function() {
+		this.badgesLoaded = true;
+
+		if (this.rendered) {
+			this.el.unmask();
+		}
+	},
+
+
 	buildIsMe: function(completed, current, achievements) {
 		var cCount = completed.length,
 			iCount = current.length,
@@ -240,10 +249,7 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 		this.completedCourses.setColumns(cCount);
 		this.currentCourses.setColumns(iCount);
 
-		this.badgesLoaded = true;
-		if (this.rendered) {
-			this.el.unmask();
-		}
+		this.finishLoading();
 	},
 
 
@@ -253,6 +259,8 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 
 		if (!completed.length && !achievements.length) {
 			me.setEmptyState();
+
+			this.finishLoading();
 			return;
 		}
 
@@ -269,6 +277,8 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 			this.completedCourses.destroy();
 			this.achievements.bindStore(this.buildStore(achievements));
 			this.achievements.setColumns(this.columns);
+
+			this.finishLoading();
 			return;
 		}
 
@@ -276,6 +286,8 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 			this.achievements.destroy();
 			this.completedCourses.bindStore(this.buildStore(completed));
 			this.completedCourses.setColumns(this.columns);
+
+			this.finishLoading();
 			return;
 		}
 
@@ -285,10 +297,7 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 		this.completedCourses.setColumns(this.columns);
 		this.achievements.setColumns(this.columns);
 
-		this.badgesLoaded = true;
-		if (this.rendered) {
-			this.el.unmask();
-		}
+		this.finishLoading();
 	},
 
 
