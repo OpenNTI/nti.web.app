@@ -70,7 +70,7 @@ Ext.define('NextThought.chart.series.Score', {
 			abs,
 			sign,
 			//key = 'angles adjusted to start at -PI/2',
-			delta = this.correctionOffset;
+			delta = this.correctionOffset, seg;
 
 		if (delta === undefined) {
 			desiredAngle = Math.PI / 2;
@@ -91,6 +91,11 @@ Ext.define('NextThought.chart.series.Score', {
 			opt.startAngle -= delta;
     //		}
 
-		return this.callParent(arguments);
+		seg = this.callParent(arguments);
+		if (seg && seg.path && seg.path.join('').indexOf('NaN') >= 0) {
+			seg = {path: ''};
+		}
+
+		return seg;
 	}
 });
