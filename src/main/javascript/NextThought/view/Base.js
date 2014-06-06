@@ -14,8 +14,8 @@ Ext.define('NextThought.view.Base', {
 
 	monitorSizeAdjustments: function(me, ct) {
 		var sheet;
-		if (this.foceScrollZoneOut) {
-			this.cssRule = CSSUtils.getRule('main-view-container-sytles', '#' + this.id);
+		if (this.forceScrollZoneOut) {
+			this.cssRule = CSSUtils.getRule('main-view-container-styles', '#' + this.id);
 			this.cssRule.style.setProperty('width', 'auto', 'important');
 			this.cssRule.style.setProperty('left', '0', 'important');
 			this.mon(ct, 'sides-adjusted', 'invertParentsPaddingToMargins');

@@ -16,6 +16,7 @@ Ext.define('NextThought.view.profiles.Panel', {
 	navigation: {xtype: 'profile-outline', region: 'north', override: 'true'},
 
 	body: {
+		cls: 'profile-body',
 		layout: {
 			type: 'auto-card',
 			deferredRender: true//,
@@ -92,6 +93,18 @@ Ext.define('NextThought.view.profiles.Panel', {
 					me.removeCls('fixed-header');
 				}
 			});
+		});
+
+		me.cssRule = CSSUtils.getRule('main-view-container-styles', '#' + me.id);
+		CSSUtils.set(me.cssRule, {width: 'auto'}, true);
+	},
+
+	updateSidePadding: function(sides) {
+		function toPx(i) { return (i && i + 'px') || i; }
+
+		CSSUtils.set(this.cssRule, {
+			paddingLeft: toPx(sides.left),
+			paddingRight: toPx(sides.right)
 		});
 	},
 

@@ -9,18 +9,33 @@ Ext.define('NextThought.view.profiles.View', {
 	defaultType: 'profile-panel',
 	layout: 'fit',
 
-
 	initComponent: function() {
 		this.callParent(arguments);
+
+		var me = this;
+
 		this.mon(this, 'deactivate', this.onDeactivated, this);
 		this.mon(this, 'beforedeactivate', this.onBeforeDeactivate, this);
 		this.removeCls('make-white');
+
+		this.on('add', function() {
+			me.invertParentsPaddingToMargins(me.lastSides);
+		});
 	},
 
 
 	onBeforeDeactivate: function() {
 		var child = this.down(this.defaultType);
 		return child && child.fireEvent('beforedeactivate');
+	},
+
+	invertParentsPaddingToMargins: function(sides) {
+		this.lastSides = sides;
+
+		this.items.each(function(page) {
+			page.updateSidePadding(sides);
+		});
+		this.callParent(arguments);
 	},
 
 

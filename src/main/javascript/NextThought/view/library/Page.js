@@ -24,7 +24,7 @@ Ext.define('NextThought.view.library.Page', {
 		this.hideOrShow = Ext.Function.createBuffered(this.hideOrShow, 1, null, null);
 		this.callParent([config]);
 		this.enableBubble(['update-tab']);
-		this.cssRule = CSSUtils.getRule('main-view-container-sytles', '#' + this.id);
+		this.cssRule = CSSUtils.getRule('main-view-container-styles', '#' + this.id);
 		CSSUtils.set(this.cssRule, {width: 'auto'}, true);
 	},
 
