@@ -92,6 +92,10 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 			return;
 		}
 
+		if (Ext.isString(workspace)) {
+			workspace = Ext.JSON.decode(workspace, true);
+		}
+
 		(workspace.Items || []).forEach(function(item) {
 			if (item.Title === 'EarnableBadges') {
 				earnableUrl = item.href;
