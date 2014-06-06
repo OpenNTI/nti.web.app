@@ -36,7 +36,8 @@ Ext.define('NextThought.view.profiles.outline.View', {
 		nameEl: '.name',
 		controlsEl: '.controls',
 		roleEl: '.role',
-		locationEl: '.location'
+		locationEl: '.location',
+		chatEl: '.chat'
 	},
 
 	//</editor-fold>
@@ -253,7 +254,16 @@ Ext.define('NextThought.view.profiles.outline.View', {
 		}
 
 		//if we still don't have a presence they aren't loaded yet so just wait
-		if (!presence) { return; }
+		if (!presence) {
+			this.chatEl.addCls('x-hidden');
+			return;
+		}
+
+		if (presence.isOnline()) {
+			this.chatEl.removeCls('x-hidden');
+		} else {
+			this.chatEl.addCls('x-hidden');
+		}
 
 		this.nameEl.removeCls(['available', 'Online', 'unavailable', 'away', 'dnd', 'dnd', 'offline']);
 
