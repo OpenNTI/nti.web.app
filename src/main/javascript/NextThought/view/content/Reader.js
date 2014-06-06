@@ -172,7 +172,9 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 	getContentMaskTarget: function() {
-		return this.el.parent('.main-view-container');
+		this.maskTarget = this.maskTarget || (this.el ? this.el.parent('.main-view-container') : Ext.getBody());
+
+		return this.maskTarget;
 	},
 	//</editor-fold>
 
