@@ -147,6 +147,7 @@ Ext.define('NextThought.view.profiles.About', {
 
 		if (!profileSchemaUrl) {
 			me.onProfileLoaded(user);
+			return;
 		}
 
 		req = {
