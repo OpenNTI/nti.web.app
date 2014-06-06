@@ -169,12 +169,17 @@ Ext.define('NextThought.Library', {
 
 			containers = (json && json.Containers) || {};
 			keys = Ext.Object.getKeys(containers);
-			keys.sort(function(a, b) {
-				var c = toc.querySelector(query('topic', a)) || toc.querySelector(query('toc', a)),
-					d = toc.querySelector(query('topic', b)),
-					p = c.compareDocumentPosition(d);
-				return ((p & Node.DOCUMENT_POSITION_PRECEDING) === Node.DOCUMENT_POSITION_PRECEDING) ? 1 : -1;
-			});
+
+			try {
+				keys.sort(function(a, b) {
+					var c = toc.querySelector(query('topic', a)) || toc.querySelector(query('toc', a)),
+						d = toc.querySelector(query('topic', b)),
+						p = c.compareDocumentPosition(d);
+					return ((p & Node.DOCUMENT_POSITION_PRECEDING) === Node.DOCUMENT_POSITION_PRECEDING) ? 1 : -1;
+				});
+			} catch (e) {
+				console.warn('Potentially unsorted:', e.stack || e.message || e);
+			}
 
 			keys.forEach(function(k) {
 				keyOrder.push.apply(keyOrder, containers[k]);
