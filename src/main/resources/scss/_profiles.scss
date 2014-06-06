@@ -120,16 +120,19 @@
 		&.editing {
 			.avatar {
 				cursor: pointer;
-				@include icon('edit-15_hover', $left:auto, $top: 5px, $right: 5px);
+				@include icon('edit-15-white', $left:auto, $top: 10px, $right: 10px);
 
 				&::before {
 					content: '';
-					width: 21px;
-					height: 21px;
+					width: 30px;
+					height: 30px;
 					background-color: $primary-grey;
 					top: 3px;
 					right: 3px;
 					position: absolute;
+					opacity: 0.9;
+					border-radius: 5px;
+
 				}
 			}
 
