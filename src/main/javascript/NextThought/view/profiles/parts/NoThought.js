@@ -19,7 +19,7 @@ Ext.define('NextThought.view.profiles.parts.NoThought', {
 		{tag: 'tpl', 'if': '!isMe', cn: [
 			{cls: 'title others', html: '{{{NextThought.view.profiles.parts.NoThought.empty}}}'},
 			{ cls: 'meta', cn: [
-				{cls: 'link back', tag: 'span', html: '{{{NextThought.view.profiles.parts.NoThought.back}}}'},
+				//{cls: 'link back', tag: 'span', html: '{{{NextThought.view.profiles.parts.NoThought.back}}}'},
 				{cls: 'link chat', tag: 'span', html: '{{{NextThought.view.profiles.parts.NoThought.chat}}}'}
 			]}
 		]}
