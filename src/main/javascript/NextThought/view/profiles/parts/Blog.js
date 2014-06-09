@@ -177,6 +177,10 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 			this.el.down('.body').addCls('scrollable');
 			this.el.down('.post-view').addCls('scrollable');
 		}
+
+		if (this.shouldHideNewEntry) {
+			this.hideNewEntry();
+		}
 	},
 
 
@@ -340,9 +344,21 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 	addedContents: function(store, records, index) {
 		var me = this;
 		me.suspendLayouts();
+
 		if (me.noPostPlaceholder) {
 			me.noPostPlaceholder.destroy();
 		}
+
+		function showNewEntry() {
+
+		}
+
+		if (me.rendered) {
+			me.el.down('.new-entry-container').removeCls('x-hidden');
+		} else {
+			delete me.shouldHideNewEntry;
+		}
+
 		Ext.each(records, function(i) { me.insert(index, {record: i}); }, me, true);
 		me.resumeLayouts(true);
 	},
@@ -355,13 +371,36 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 	},
 
 
+	hideNewEntry: function() {
+		var cnt = this.el && this.el.down('.new-entry-container');
+
+		if (cnt) {
+			cnt.addCls('x-hidden');
+		}
+	},
+
+
 	handleNoVisiblePosts: function() {
 		var me = this;
 		me.addCls('make-white');
 
-		if (me.noPostPlaceholder) {
+		if (me.noPostPlaceholder && !me.noPostPlaceholder.isDestroyed) {
 			console.log('Already have an empty blog placeholder in place, dont add another one');
 			return;
+		}
+
+		function hideNewEdit() {
+			var cnt = me.el.down('.new-entry-container');
+
+			if (cnt) {
+				cnt.addCls('x-hidden');
+			}
+		}
+
+		if (me.rendered) {
+			this.hideNewEntry();
+		} else {
+			this.shouldHideNewEntry = true;
 		}
 
 		me.noPostPlaceholder = me.add({
