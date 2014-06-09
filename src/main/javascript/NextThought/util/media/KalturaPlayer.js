@@ -66,7 +66,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 				allowfullscreen: 'yes',
 				webkitallowfullscreen: 'yes',
 				src: (Ext.isIE || Ext.isIE11p) ?
-						'javascript:(function(){document.open();document.domain=\'' + document.domain + '\';document.close();})();' :
+						'javascript:document.open();document.domain=\'' + document.domain + '\';document.close();' :
 						Globals.EMPTY_WRITABLE_IFRAME_SRC,
 				frameBorder: 0,
 				scrolling: 'no',
@@ -200,12 +200,12 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 			try {
 				doc = me.getPlayerContextDocument();
-				if (!me.playerDeactivated && doc) {
+				if (!me.playerDeactivated && doc && doc.readyState === 'complete') {
+					stopTask();
 					doc.open();
 					doc.write(me.PLAYER_BODY_TPL.apply(data));
 					doc.close();
 					console.log(me.id, ' Setup done for ', me.id);
-					stopTask();
 				}
 			}
 			catch (e) {
