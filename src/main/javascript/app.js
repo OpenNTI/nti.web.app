@@ -80,7 +80,7 @@ Ext.application({
 			NextThought.isReady = true;
 		}
 
-		var me = this, ios, isIE11p,
+		var me = this, ios,
 			reasons = [],
 			unsupported = [], g,
 			geckoRev = /rv:(\d+\.\d+)/.exec(Ext.userAgent) || [];
@@ -89,8 +89,6 @@ Ext.application({
 				['Canvas', 'Range', 'CSS3BoxShadow', 'CSS3BorderRadius'],
 				function(f) {Boolean(!Ext.supports[f] && unsupported.push(f));});
 
-
-		Ext.isIE11p = isIE11p = !Ext.isIE && /Trident/i.test(navigator.userAgent);
 
 		// allow PhantomJS through the browser block - at least far enough for our headless login test
 		Ext.isPhantomJS = /PhantomJS/i.test(navigator.userAgent);
@@ -110,7 +108,7 @@ Ext.application({
 			reasons.push('Required html5 features are not present: ' + unsupported.join(','));
 		}
 
-		if (!Ext.isIE && !isIE11p && !(Ext.isGecko && parseFloat(geckoRev[1]) > 23.9) && !Ext.isWebKit) {
+		if (!Ext.isIE && !Ext.isIE11p && !(Ext.isGecko && parseFloat(geckoRev[1]) > 23.9) && !Ext.isWebKit) {
 			reasons.push('This version of FireFox is not supported.');
 		}
 

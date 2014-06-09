@@ -27,6 +27,9 @@ Ext.define('NextThought.overrides.Ext', {
 
 },function() {
 
+	Ext.isIE11p = !Ext.isIE && /Trident/i.test(navigator.userAgent);
+
+
 	var EC = Ext.cache,
 		removeAllEvents = Ext.EventManager.removeAll,
 		Element = Ext.dom.Element,

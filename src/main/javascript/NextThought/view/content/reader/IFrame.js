@@ -75,7 +75,9 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 			autoEl: {
 				tag: 'iframe',
 				name: 'iframe-' + guidGenerator() + '-content',
-				src: Globals.EMPTY_WRITABLE_IFRAME_SRC,
+				src: (Ext.isIE || Ext.isIE11p) ?
+					 Ext.SSL_SECURE_URL :
+					 Globals.EMPTY_WRITABLE_IFRAME_SRC,
 				frameBorder: 0,
 				scrolling: 'no',
 				seamless: true,
@@ -108,14 +110,6 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 		me.loadedResources = {};
 
 		delete this.contentDocumentElement;
-
-		if (Ext.isIE || Ext.isIE11p) {
-			doc = me.getDocumentElement();
-			doc.open();
-			doc.close();
-			doc.parentWindow.location.replace(Globals.EMPTY_WRITABLE_IFRAME_SRC);
-
-		}
 
 		task.run = function() {
 			var doc = me.getDocumentElement();

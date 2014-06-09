@@ -65,8 +65,9 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 				name: '{id}-iframe',
 				allowfullscreen: 'yes',
 				webkitallowfullscreen: 'yes',
+				'data-is-ie11-set': (Ext.isIE11p !== undefined),
 				src: (Ext.isIE || Ext.isIE11p) ?
-						'javascript:document.open();document.domain=\'' + document.domain + '\';document.close();' :
+						Ext.SSL_SECURE_URL :
 						Globals.EMPTY_WRITABLE_IFRAME_SRC,
 				frameBorder: 0,
 				scrolling: 'no',
@@ -314,7 +315,11 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 		var f = Ext.getDom(this.iframe),
 			w = this.getPlayerContext();
 
-		return ((f && f.contentDocument) || (w && w.document));
+		try {
+			return ((f && f.contentDocument) || (w && w.document));
+		} catch (e) {
+			return null;
+		}
 	},
 
 
