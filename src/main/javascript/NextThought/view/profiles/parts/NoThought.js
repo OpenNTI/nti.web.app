@@ -45,7 +45,7 @@ Ext.define('NextThought.view.profiles.parts.NoThought', {
 			this.mon(this.startEl, 'click', function(e) { this.up('profile-blog').onNewPost(e); }, this);
 		}
 		else {
-			this.mon(this.backEl, 'click', function(e) { history.back(); }, this);
+			//this.mon(this.backEl, 'click', function(e) { history.back(); }, this);
 			this.mon(this.chatEl, 'click', this.onChatWith, this);
 			this.maybeShowChat(this.chatEl);
 		}
