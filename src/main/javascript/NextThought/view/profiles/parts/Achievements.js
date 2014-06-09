@@ -98,10 +98,16 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 			}),
 			mouseOffset: [0, 15],
 			cls: 'badge-tip x-tip',
+			componentLayout: {
+				type: 'auto',
+				setHeightInDom: false,
+				setWidthInDom: false
+			},
 			layout: 'auto',
 			anchor: 'bottom',
 			tipAnchor: 'b',
 			dismissDelay: 0,
+			maxWidth: null,
 			renderSelectors: {
 				header: 'h2',
 				description: 'p'
