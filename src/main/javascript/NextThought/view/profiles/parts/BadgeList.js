@@ -39,10 +39,15 @@ Ext.define('NextThought.view.profiles.parts.BadgeList', {
 
 
 	constructor: function(config) {
-		var cls = config.cls;
-		delete config.cls;
-		this.callParent([config]);
-		this.addCls(cls);
+		var cls = config.cls,
+			newConfig = Ext.clone(config);
+
+		delete newConfig.cls;
+		this.callParent([newConfig]);
+
+		if (cls) {
+			this.addCls(cls);
+		}
 	},
 
 
