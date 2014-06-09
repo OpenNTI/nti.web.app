@@ -9,9 +9,9 @@ Ext.define('NextThought.view.profiles.parts.BadgeList', {
 
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag: 'tpl', 'for': '.', cn: [
-			{cls: 'badge {earnedCls}', 'data-qtip': '{description}', cn: [
-				{cls: 'img', style: {backgroundImage: 'url({image})'}},
-				{cls: 'title', html: '{name}'}
+			{cls: 'badge {earnedCls}', cn: [
+				{cls: 'img', style: {backgroundImage: 'url({image})'}}//,
+				//{cls: 'title', html: '{name}'}
 			]}
 		]}
 	])),
@@ -36,6 +36,15 @@ Ext.define('NextThought.view.profiles.parts.BadgeList', {
 	renderSelectors: {
 		preferenceEl: '.nti-checkbox'
 	},
+
+
+	constructor: function(config) {
+		var cls = config.cls;
+		delete config.cls;
+		this.callParent([config]);
+		this.addCls(cls);
+	},
+
 
 	beforeRender: function() {
 		this.callParent(arguments);

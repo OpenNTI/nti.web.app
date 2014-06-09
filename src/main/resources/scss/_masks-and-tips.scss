@@ -108,13 +108,40 @@
 	}
 }
 
+.badge-tip {
+	background-color: rgba(40,40,40,0.95) !important;
+	padding: 10px !important;
+	max-width: 240px;
+
+	.x-tip-body-default {
+		padding: 0;
+	}
+}
+
 .x-tip{
+	-webkit-font-smoothing: antialiased;
 	pointer-events: none;
-	background-color: #404040 !important;
 	border-width: 0 !important;
-	padding: 3px 5px !important;
 	border-radius: 0 !important;
 	box-shadow: 1px 2px 5px 0px rgba(0, 0, 0, 0.25);
+
+	&:not(.badge-tip) {
+		background-color: #404040 !important;
+		padding: 3px 5px !important;
+	}
+
+	h2 {
+		margin: 0;
+		font: normal 600 1.45em/1 'Open Sans Condensed', $font;
+		text-transform: uppercase;
+	}
+
+	p {
+		font: normal 500 1.3em/1.5 $font;
+		color: $tertiary-grey;
+		text-transform: none;
+		margin: 5px 0;
+	}
 
 
 	.x-tip-header-text {
@@ -141,6 +168,7 @@
 		border-width: 0;
 		border-color: transparent;
 		background: transparent $elements no-repeat;
+		visibility: visible !important;
 	}
 
 	.x-tip-anchor-top{

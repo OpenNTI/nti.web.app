@@ -1304,7 +1304,7 @@
 
 	.course-badges {
 		background-color: white;
-		padding: 25px 20px 0 20px;
+		padding: 25px 8px 0 8px;
 		width: 100%;
 		border-bottom: 1px solid #f0f0f0;
 		box-shadow: 0 1px 0 0 white;
@@ -1318,7 +1318,7 @@
 
 	.completed,.current{
 		float: left;
-		$columnWidth: 120px + 20px;
+		$columnWidth: 128px + 16px;
 
 		&[data-columns='1'] {
 			width: $columnWidth;
@@ -1367,6 +1367,7 @@
 
 		.header-container {
 			height: 14px;
+			padding-left: 5px;
 		}
 
 		.header {
@@ -1393,9 +1394,9 @@
 	}
 
 	.badge {
-		margin: 10px;
-		width: 120px;
-		height: 125px;
+		margin: 8px;
+		width: 128px;
+		height: 148px;
 		float: left;
 		position: relative;
 
@@ -1404,9 +1405,9 @@
 		}
 
 		.img {
-			width: 100px;
+			width: 128px;
 			margin: 0 auto;
-			height: 100px;
+			height: 128px;
 			background-size: contain;
 		}
 

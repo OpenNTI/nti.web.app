@@ -53,7 +53,8 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 		this.currentCourses = this.down('[current]');
 		this.achievements = this.down('[achievements]');
 
-		var link = this.user.getLink('Badges');
+		var link = this.user.getLink('Badges'),
+			me = this;
 
 		//if its me show the current courses
 		if (isMe(this.user)) {
@@ -80,9 +81,56 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 	afterRender: function() {
 		this.callParent(arguments);
 
+		var me = this;
+
 		if (!this.badgesLoaded) {
 			this.el.mask('Loading...');
 		}
+
+		me.tip = Ext.widget('nt-tooltip', {
+			target: me.el,
+			delegate: me.completedCourses.itemSelector,
+			html: Ext.DomHelper.markup({
+				cls: 'tool-tip',
+				cn: [
+					{tag: 'h2'},
+					{tag: 'p'}
+				]
+			}),
+			mouseOffset: [0, 15],
+			cls: 'badge-tip x-tip',
+			layout: 'auto',
+			anchor: 'bottom',
+			tipAnchor: 'b',
+			dismissDelay: 0,
+			renderSelectors: {
+				header: 'h2',
+				description: 'p'
+			},
+			renderTo: Ext.getBody(),
+			listeners: {
+				beforeshow: function(tip) {
+					var trigger = tip.triggerElement,
+						record = trigger && me.getRecord(trigger);
+
+					if (!record) {
+						console.error('No badge record to fill out the tool tip with', tip);
+						return false;
+					}
+
+					this.header.update(record.get('name'));
+					this.description.update(record.get('description'));
+				}
+			}
+		});
+	},
+
+
+	getRecord: function(el) {
+		var p = Ext.fly(el).parent('.badge-list'),
+			cmp = p && Ext.getCmp(p.id);
+
+		return cmp && cmp.getRecord(el);
 	},
 
 
