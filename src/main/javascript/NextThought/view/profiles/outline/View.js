@@ -20,8 +20,8 @@ Ext.define('NextThought.view.profiles.outline.View', {
 				{cls: 'location field', html: '{location}'}
 			]},
 			{cls: 'controls {controlsCls}', cn: [
-				{tag: 'span', cls: 'button edit isMe', html: 'Edit Profile'},
-				{tag: 'span', cls: 'button add-contact notContact', html: 'Add Contact'},
+				{tag: 'span', cls: 'button edit isMe', html: '{{{NextThought.view.profiles.outline.View.edit}}}'},
+				{tag: 'span', cls: 'button add-contact notContact', html: '{{{NextThought.view.profiles.outline.View.add}}}'},
 				{tag: 'span', cls: 'button contact-menu isContact'},
 				//{tag: 'span', cls: 'button mail isContact'},
 				{tag: 'span', cls: 'button chat isContact'}

@@ -23,7 +23,7 @@ Ext.define('NextThought.view.profiles.parts.BadgeList', {
 				{
 					tag: 'span',
 					cls: 'not-ready nti-checkbox email',
-					'data-qtip': 'Make badges earned for completing a course public.',
+					'data-qtip': '{preferenceTooltip}',
 					html: 'Public',
 					tabIndex: 0,
 					role: 'button',
@@ -58,7 +58,8 @@ Ext.define('NextThought.view.profiles.parts.BadgeList', {
 
 		Ext.apply(this.renderData, {
 			header: this.header || 'Achievements',
-			preference: this.hasPublicPreference
+			preference: this.hasPublicPreference,
+			preferenceTooltip: this.preferenceTooltip
 		});
 	},
 

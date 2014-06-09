@@ -20,29 +20,30 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 			defaultType: 'profile-badge-list',
 			items: [
 				{
-					header: 'Current Courses',
+					header: getString('NextThought.view.profiles.parts.Achievements.current_title'),
 					current: true,
 					cls: 'current',
 					desiredColumns: 3,
-					emptyText: 'You are currently not enrolled in any courses that offer a completion badge.'
+					emptyText: getString('NextThought.view.profiles.parts.Achievements.current_empty')
 				},
 				{
-					header: 'Completed',
+					header: getString('NextThought.view.profiles.parts.Achievements.completed_title'),
 					completed: true,
 					cls: 'completed',
 					desiredColumns: 4,
 					preferencePath: 'Badges/Course',
 					preferenceKey: 'show_course_badges',
-					emptyText: 'You haven\'t completed a course that offers a completion badge.'
+					preferenceTooltip: getString('NextThought.view.profiles.parts.Achievements.completed_preference'),
+					emptyText: getString('NextThought.view.profiles.parts.Achievements.completed_empty')
 				}
 			]
 		},
 		{
 			xtype: 'profile-badge-list',
-			header: 'Achievements',
+			header: getString('NextThought.view.profiles.parts.Achievements.achievements_title'),
 			achievements: true,
 			cls: 'achievements',
-			emptyText: 'You haven\'t earned any achievement badges yet. The more you use the app and actively participate the more you will earn.'
+			emptyText: getString('NextThought.view.profiles.parts.Achievements.achievements_empty')
 		}
 	],
 
@@ -66,8 +67,6 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 			this.isMe = false;
 			this.currentCourses.destroy();
 
-			this.completedCourses.emptyText = 'This user hasn\'t completed a course that offers a completion badge.';
-
 			if (link) {
 				Service.request(link)
 					.done(this.loadWorkSpace.bind(this));
@@ -84,7 +83,7 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 		var me = this;
 
 		if (!this.badgesLoaded) {
-			this.el.mask('Loading...');
+			this.el.mask(getString('NextThought.view.profiles.parts.Achievements.loading'));
 		}
 
 		me.tip = Ext.widget('nt-tooltip', {
@@ -374,7 +373,7 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 		this.removeAll(true);
 		this.add({
 			xtype: 'box',
-			autoEl: {cls: 'empty-achievements-text', html: 'This user doesn\'t have any visible badges.'}
+			autoEl: {cls: 'empty-achievements-text', html: getString('NextThought.view.profiles.parts.Achievements.empty')}
 		});
 	}
 });
