@@ -31,13 +31,17 @@ Ext.define('NextThought.view.courseware.enrollment.Complete', {
 			enroll = this.enrolled,
 			prefix = enroll ? 'enroll' : 'unenroll',
 			preview = this.record.get('Preview') ? 'preview' : 'active',
-			tplReplacement, win;
+			tplReplacement, win, description;
 
 		this.callParent(arguments);
 
+		description = getFormattedString('enrollment.' + prefix + '.' + preview + '.description', {
+			Name: rec.get('ProviderUniqueID')
+		}, true);
+
 		tplReplacement = {
 			headerHtml: getString('enrollment.' + prefix + '.' + preview + '.header', null, true) || getString('enrollment.' + prefix + '.header'),
-			descriptionHtml: getString('enrollment.' + prefix + '.' + preview + '.description', null, true) || getString('enrollment.' + prefix + '.description')
+			descriptionHtml: description || getString('enrollment.' + prefix + '.description')
 		};
 
 		Ext.Object.each(tplReplacement, function(key, val) {

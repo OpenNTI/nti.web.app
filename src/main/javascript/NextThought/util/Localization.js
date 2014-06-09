@@ -15,8 +15,8 @@ Ext.define('NextThought.util.Localization', {
 	},
 
 
-	formatExternalString: function(key, values) {
-		var string = this.getExternalizedString(key, key);
+	formatExternalString: function(key, values, dontUseKey) {
+		var string = this.getExternalizedString(key, dontUseKey ? null : key, true);
 
 		if (!values) {
 			return string;
