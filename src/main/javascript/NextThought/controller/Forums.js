@@ -1090,6 +1090,9 @@ Ext.define('NextThought.controller.Forums', {
 		var me = this;
 
 		if (me.fireEvent('show-view', 'forums', true)) {
+			if (me.stateRestoring) {
+				me.hasStateToRestore = true;
+			}
 			me.presentForumItem(obj);
 			return false;
 		}
