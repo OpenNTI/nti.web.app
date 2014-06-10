@@ -246,8 +246,13 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 		}).fail(function(reason) {
 			console.error(reason);
 
-			me.setEmptyState();
-			me.finishLoading();
+			//if the request fails and it is me, build the me state with no badges.
+			if (me.isMe) {
+				this.buildIsMe([], [], []);
+			} else {
+				me.setEmptyState();
+				me.finishLoading();
+			}
 		});
 	},
 
