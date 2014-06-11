@@ -48,6 +48,20 @@ Ext.define('NextThought.model.Title', {
 
 
 	fireNavigationEvent: function(eventSource) {
-		return Promise.resolve(eventSource.fireEvent('set-last-location-or-root', this.get('NTIID')));
+		var id = this.get('NTIID');
+		return new Promise(function(fulfill, reject) {
+			var txn = history.beginTransaction('book-navigation-transaction-' + guidGenerator());
+			eventSource.fireEvent('set-last-location-or-root', id, function(ntiid, reader, error) {
+				if (error) {
+					txn.abort();
+					reject(error);
+				}
+				else {
+
+					fulfill();
+					txn.commit();
+				}
+			});
+		});
 	}
 });
