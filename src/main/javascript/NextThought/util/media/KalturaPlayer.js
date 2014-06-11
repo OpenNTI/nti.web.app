@@ -201,12 +201,14 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 			try {
 				doc = me.getPlayerContextDocument();
-				if (!me.playerDeactivated && doc && doc.readyState === 'complete') {
-					stopTask();
-					doc.open();
-					doc.write(me.PLAYER_BODY_TPL.apply(data));
-					doc.close();
-					console.log(me.id, ' Setup done for ', me.id);
+				if (!me.playerDeactivated && doc) {
+					if (doc.readyState === 'complete' || doc.readyState === 'uninitialized') {
+						stopTask();
+						doc.open();
+						doc.write(me.PLAYER_BODY_TPL.apply(data));
+						doc.close();
+						console.log(me.id, ' Setup done for ', me.id);
+					}
 				}
 			}
 			catch (e) {
