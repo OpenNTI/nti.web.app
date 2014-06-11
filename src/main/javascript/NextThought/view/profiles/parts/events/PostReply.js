@@ -111,6 +111,17 @@ Ext.define('NextThought.view.profiles.parts.events.PostReply', {
 
 	redraw: function(data) {
 		if (!this.el) {return;}
+
+		var id = this.id, childs;
+
+		if (Ext.isIE) {
+			childs = (this.childEls || []).map(function(c) { return id + '-' + c;});
+
+			childs.forEach(function(c) {
+				delete Ext.cache[c];
+			});
+		}
+
 		this.renderTpl.overwrite(this.el, data);
 		this.applyRenderSelectors();
 		this.mixins.likeAndFavoriteActions.constructor.call(this);
