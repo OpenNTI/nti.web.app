@@ -118,7 +118,9 @@ Ext.define('NextThought.ux.SlideDeck', {
 			store.add(slides);
 		}
 
-		Library.getVideoIndex(title).then(function(data) {
+		Library.getVideoIndex(title)
+				.fail(function() {return null;})
+				.then(function(data) {
 			videoIndex = data;
 			ContentUtils.spider(ids, finish, parse);
 		});

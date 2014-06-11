@@ -305,39 +305,41 @@ Ext.define('NextThought.util.Content', {
 		}
 
 		//One place we can check is the video index
-		Library.getVideoIndex(title).then(function(index) {
-			var vid, container;
-			if (!index) {
-				Ext.callback(cb, scope);
-				return;
-			}
+		Library.getVideoIndex(title)
+				.then(function(index) {
+					var vid, container;
+					if (!index) {
+						Ext.callback(cb, scope);
+						return;
+					}
 
-			vid = index[id];
+					vid = index[id];
 
-			if (vid) {
-				container = me.getLineage(id);
-				if (!Ext.isEmpty(container) && container.length > 1) {
-					container = container[1];
-				}
-				else {
-					container = title.get('NTIID');
-				}
-				//We need the base path
-				LocationMeta.getMeta(container, function(meta) {
-					if (meta) {
-						vid.basePath = meta.absoluteContentRoot;
-						Ext.callback(cb, scope, [vid, meta]);
+					if (vid) {
+						container = me.getLineage(id);
+						if (!Ext.isEmpty(container) && container.length > 1) {
+							container = container[1];
+						}
+						else {
+							container = title.get('NTIID');
+						}
+						//We need the base path
+						LocationMeta.getMeta(container, function(meta) {
+							if (meta) {
+								vid.basePath = meta.absoluteContentRoot;
+								Ext.callback(cb, scope, [vid, meta]);
+							}
+							else {
+								Ext.callback(cb, scope);
+							}
+						});
 					}
 					else {
-						Ext.callback(cb, scope);
+						Ext.callback(cb, scope, [vid]);
 					}
-				});
-			}
-			else {
-				Ext.callback(cb, scope, [vid]);
-			}
 
-		});
+				})
+				.fail(function() { Ext.callback(cb, scope); });
 	},
 
 
