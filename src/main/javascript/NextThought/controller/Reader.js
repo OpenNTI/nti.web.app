@@ -218,7 +218,7 @@ Ext.define('NextThought.controller.Reader', {
 		}
 
 		function go(pi) {
-			if (me.fireEvent('show-view', 'content', true) === false) {
+			if (me.fireEvent('show-view', 'content') === false) {
 				return false;
 			}
 
