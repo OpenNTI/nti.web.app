@@ -662,7 +662,7 @@ Ext.define('NextThought.view.content.View', {
 
 		function noCourse(reason) {
 			console.warn('Dropping state for course that is not accessible.');
-			if (state.active === me.id && !background) {
+			if (!background) {
 				me.fireEvent('go-to-library');
 			}
 			throw reason;//make sure the promise chain is continuing to be directed to the fail branches
@@ -688,7 +688,7 @@ Ext.define('NextThought.view.content.View', {
 
 		//We dont care if this is just content... if it doesn't have a course, we do not want to fail
 		course = isCourse && CourseWareUtils.courseForNtiid(ntiid);
-		if ((!course || !course.findByMyCourseInstance)) {
+		if (isCourse && (!course || !course.findByMyCourseInstance)) {
 			return Promise.reject('No course for ntiid:' + ntiid)
 				.fail(noCourse)
 				.fail(setTab)
