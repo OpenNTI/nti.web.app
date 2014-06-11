@@ -662,11 +662,6 @@ PREVIOUS_STATE = 'previous-state';
 				console.log('local state found?', previousState);
 				lastLocation = previousState || null;
 
-				if (!lastLocation) {
-					return defaultState;
-				}
-
-
 				result = lastLocation && Ext.Object.getKeys(lastLocation).length > 0 ? lastLocation : defaultState;
 				if (location.hash) {
 					Ext.Object.merge(result, this.interpretFragment(location.hash));
