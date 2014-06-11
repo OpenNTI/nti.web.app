@@ -5,6 +5,7 @@ PREVIOUS_STATE = 'previous-state';
 	function Transaction(transactionId, stateCtlr, parentTransaction) {
 		this.id = transactionId;
 		this.ctlr = stateCtlr;
+		this.refs = 1;
 		this.parent = parentTransaction;
 		if (this.parent) {
 			this.parent.hooked = true;
@@ -37,6 +38,7 @@ PREVIOUS_STATE = 'previous-state';
 			return {
 				Open: this.isOpen(),
 				id: this.getId(),
+				refs: this.refs,
 				length: this.txn ? this.txn.length : null,
 				parent: this.parent && this.parent.getInfo()
 			};
@@ -49,10 +51,16 @@ PREVIOUS_STATE = 'previous-state';
 
 
 		commit: function() {
+			this.refs--;
 			var state, replace = false, title = '', url = '';
 
 			if (!this.isOpen()) {
 				console.error('Attempting to commit a closed transaction.');
+				return;
+			}
+
+			if (this.refs !== 0) {
+				console.debug('Waiting for the last reference to commit');
 				return;
 			}
 
@@ -87,6 +95,9 @@ PREVIOUS_STATE = 'previous-state';
 			history[replace ? 'replaceState' : 'pushState'](state, title, url);
 
 		},
+
+
+		_incRef: function() {this.refs++;},
 
 
 		_add: function(o) {
@@ -365,6 +376,7 @@ PREVIOUS_STATE = 'previous-state';
 			if (!this.activeTransaction) {
 				this.activeTransaction = new Transaction(transactionId, this);
 			} else {
+				this.activeTransaction._incRef();
 				console.error('Transaction already open. (' + this.activeTransaction + ') ' +
 						'Attempted to create a new transaction with id: ' + transactionId + '. ' +
 						'Ignoring and returning the current transactoin.');
