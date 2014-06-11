@@ -153,7 +153,8 @@ Ext.define('NextThought.view.profiles.outline.View', {
 			]}),
 			listeners: {
 				scope: this,
-				select: 'selectionChanged'
+				select: 'selectionChanged',
+				beforeselect: 'beforeSelect'
 			}
 		});
 
@@ -352,8 +353,13 @@ Ext.define('NextThought.view.profiles.outline.View', {
 	},
 
 
+	beforeSelect: function() {
+		return this.fireEvent('allow-view-change');
+	},
+
+
 	updateSelection: function(active, fromUser) {
-		var view = active.xtype || active,
+		var view = active.xtype || active, result, selModel,
 			i = this.navStore.findBy(function(r) {
 				return r.get('type') === 'view' && r.get('mapping') === view;
 			});
@@ -361,8 +367,14 @@ Ext.define('NextThought.view.profiles.outline.View', {
 		if (this.hasCls('editing')) {
 			this.enableEditing(false);
 		}
-		this.nav.getSelectionModel().select(i, false, fromUser !== true);
 
+		selModel = this.nav.getSelectionModel();
+
+		selModel.select(i, false, fromUser !== true);
+
+		//check if the selection changed or it was cancled
+		result = selModel.getSelection()[0];
+		return result.get('mapping') === view;
 	},
 	//</editor-fold>
 
@@ -422,8 +434,8 @@ Ext.define('NextThought.view.profiles.outline.View', {
 			label = enable ? 'Done Editing' : 'Edit Profile',
 			editEl = this.controlsEl.down('.edit');
 
-		if (enable) {
-			this.updateSelection('profile-about', true);//make sure you are on the about panel
+		if (enable && !this.updateSelection('profile-about', true)) {
+			return;
 		}
 
 		this.nav[mask]();

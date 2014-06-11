@@ -80,7 +80,8 @@ Ext.define('NextThought.view.profiles.Panel', {
 
 		me.forEachView(monitor, me);
 		me.mon(me.navigation, {
-			'show-profile-view': 'changeView'
+			'show-profile-view': 'changeView',
+			'allow-view-change': 'allowChangeView'
 		});
 
 		me.on('beforedeactivate', 'onBeforeDeactivate');
@@ -195,6 +196,13 @@ Ext.define('NextThought.view.profiles.Panel', {
 	},
 
 
+	allowChangeView: function() {
+		var activeItem = this.body.getLayout().getActiveItem();
+
+		return activeItem.fireEvent('beforedeactivate');
+	},
+
+
 	//This is fired based on USER interaction.
 	// Do not call this to restore the view programmatically. Just call setActiveItem, otherwise you will end up with
 	// bad history.
@@ -211,12 +219,7 @@ Ext.define('NextThought.view.profiles.Panel', {
 			return;
 		}
 
-		success = this.body.getLayout().setActiveItem(c);
-
-		if (!success) {
-			this.navigation.updateSelection(this.body.getLayout().getActiveItem());
-			return;
-		}
+		this.body.getLayout().setActiveItem(c);
 
 		if (c.performAction) {
 			c.performAction(action, data);
