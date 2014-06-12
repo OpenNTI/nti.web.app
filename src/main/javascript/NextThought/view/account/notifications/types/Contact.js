@@ -10,7 +10,11 @@ Ext.define('NextThought.view.account.notifications.types.Contact', {
 	wording: 'NextThought.view.account.notifications.types.Contact.wording',
 
 	fillInData: function(rec, wrapped) {
-		this.lastmodified = wrapped.get('Last Modified');
+		if (!rec.fields.getByKey('EventTime')) {
+			rec.fields.add(Ext.data.Field.create({name: 'EventTime', type: 'date'}));
+		}
+
+		rec.set({EventTime: wrapped.get('Last Modified')});
 
 		this.callParent(arguments);
 	},
