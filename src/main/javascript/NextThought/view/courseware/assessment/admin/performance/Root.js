@@ -74,13 +74,17 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				]), {
 					displayName: function(values) {
 						var d = values.displayName,
-							l = values.LastName;
+							f = values.FirstName,
+							l = values.LastName,
+							lm;
 
 						if (l) {
-							d = d.replace(l, Ext.DomHelper.markup({tag: 'b', html: l}));
-							if (d !== values.displayName) {
-								d = Ext.DomHelper.markup({cls: 'accent-name', html: d});
+							lm = Ext.DomHelper.markup({tag: 'b', html: l});
+							d = d.replace(l, lm);
+							if (d === values.displayName) {
+								d += (' (' + (f ? f + ' ' : '') + lm + ')');
 							}
+							d = Ext.DomHelper.markup({cls: 'accent-name', html: d});
 						}
 
 						return d;
@@ -147,6 +151,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				{name: 'user', type: 'auto'},
 				{name: 'avatar', type: 'string', defaultValue: 'resources/images/icons/unresolved-user.png'},
 				{name: 'displayName', type: 'string', defaultValue: getString('NextThought.view.courseware.assessment.admin.performance.Root.resolving')},
+				{name: 'FirstName', type: 'string' },
 				{name: 'LastName', type: 'string' },
 				{name: 'Username', type: 'string', defaultValue: ''},
 				{name: 'grade', type: 'string'},
@@ -591,6 +596,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				user: u,
 				avatar: u.get('avatarURL'),
 				displayName: u.toString(),
+				FirstName: u.get('FirstName'),
 				LastName: u.get('LastName'),
 				Username: r.get('Status') === 'Open' ? '' : u.get('Username')
 			});
