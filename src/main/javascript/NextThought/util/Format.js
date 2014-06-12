@@ -21,9 +21,7 @@ Ext.define('NextThought.util.Format', {
 	ago: function(value, max, format) {
 		var d = new Duration(Math.abs(value - new Date()) / 1000);
 		d = d.ago();
-		if (/^4 weeks/i.test(d)) {
-			d = '1 month ago';
-		}
+		//if (/^4 weeks/i.test(d)) { d = '1 month ago'; }
 		return d;
 	},
 
