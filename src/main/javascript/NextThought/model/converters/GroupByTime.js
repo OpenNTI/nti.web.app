@@ -24,7 +24,7 @@ Ext.define('NextThought.model.converters.GroupByTime', {
 
 			function between(date, start, end) {
 				var t = date.getTime();
-				return start.getTime() <= t && t <= end.getTime();
+				return start.getTime() < t && t <= end.getTime();
 			}
 
 
