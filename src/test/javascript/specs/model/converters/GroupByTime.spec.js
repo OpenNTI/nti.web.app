@@ -131,7 +131,7 @@ describe('GroupByTime Tests', function() {
 			   '2 weeks ago',
 			   '3 weeks ago',
 			   'Last month',
-			   'Last year',
+			   'This year',
 			   'Older'
 		   ]);
 
