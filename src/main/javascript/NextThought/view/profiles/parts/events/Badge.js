@@ -7,7 +7,7 @@ Ext.define('NextThought.view.profiles.parts.events.Badge', {
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'img', style: {backgroundImage: 'url({image})'}},
 		{cls: 'wrap', cn: [
-			{cls: 'name', html: '{username} earned the {badgename} badge.'},
+			{cls: 'name', html: '{{{NextThought.view.profiles.parts.events.Badge.name}}}'},
 			{cls: 'date', html: '{date}'},
 			{cls: 'description', html: '{description}'}
 		]}
