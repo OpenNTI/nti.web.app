@@ -214,6 +214,9 @@ Ext.define('NextThought.view.profiles.parts.Activity', {
 				i = i.getItem();
 			}
 
+			//if we don't have a record don't try to make a component for it
+			if (!i) { return; }
+
 			var c = (i.get('Class') || 'default').toLowerCase(),
 				reply = (i.isTopLevel && !i.isTopLevel() && '-reply') || '',
 				n = 'profile-activity-' + c + reply + '-item',
