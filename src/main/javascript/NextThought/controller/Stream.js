@@ -55,7 +55,7 @@ Ext.define('NextThought.controller.Stream', {
 			change = ParseUtils.parseItems([change])[0];
 		}
 
-		var item = change.get('Item'),
+		var item = change.getItem(),
 			store = this.getStreamStore();
 
 		//add it to the root stream store, why the heck not?

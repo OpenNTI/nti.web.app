@@ -1061,7 +1061,7 @@ Ext.define('NextThought.controller.Forums', {
 			change = ParseUtils.parseItems([change])[0];
 		}
 
-		item = change.get('Item');
+		item = change.getItem();
 		if (item && /generalforumcomment$/.test(item.get('MimeType'))) {
 			if (topic && topic.addIncomingComment) {
 				topic.addIncomingComment(item);

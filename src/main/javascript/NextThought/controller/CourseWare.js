@@ -666,9 +666,9 @@ Ext.define('NextThought.controller.CourseWare', {
 		}
 
 		if (obj instanceof NextThought.model.Change) {
-			if (obj.get('Item') instanceof NextThought.model.courseware.Grade) {
+			if (obj.getItem() instanceof NextThought.model.courseware.Grade) {
 				return function(obj, fragment) {
-					var item = obj.get('Item');
+					var item = obj.getItem ? obj.getItem() : obj.get('Item');
 
 					navigateToAssignment(item.get('AssignmentId'));
 				};

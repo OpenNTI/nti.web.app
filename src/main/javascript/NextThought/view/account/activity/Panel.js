@@ -373,7 +373,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 
 	changeToActivity: function(c) {
 		var me = this,
-			item = c.get('Item'),
+			item = c.getItem(),
 			cid = item ? item.get('ContainerId') : undefined,
 			guid = guidGenerator(),
 			activity, activityData;
@@ -423,7 +423,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 
 
 	getMessage: function(change, cid) {
-		var item = change.get('Item'),
+		var item = change.getItem(),
 			type = change.get('ChangeType');
 
 		if (!item) {
@@ -592,7 +592,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 				return true;
 			}
 			var type = c.get('ChangeType') || '',
-				item = c.get('Item'), mime;
+				item = c.getItem(), mime;
 
 			if (item && (/modified/i).test(type)) {
 				mime = item.get('MimeType');

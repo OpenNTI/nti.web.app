@@ -224,7 +224,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 
 	unwrap: function(record) {
 		if (this.ISCHANGE.test(record.get('MimeType'))) {
-			return record.get('Item');
+			return record.getItem();
 		}
 
 		return record;
@@ -282,8 +282,8 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 				],
 				filters: [
 					function(item) {
-						if (/change$/i.test(item.get('MimeType')) && item.get('Item')) {
-							item = item.get('Item');
+						if (/change$/i.test(item.get('MimeType')) && item.getItem()) {
+							item = item.getItem();
 						}
 						var m = item.get('MimeType'),
 							f = !m || registry.hasOwnProperty(m);

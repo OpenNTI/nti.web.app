@@ -6,6 +6,8 @@ Ext.define('NextThought.model.Change', {
 
 	NOTABLE_PROPERTY: 'RUGDByOthersThatIMightBeInterestedIn',
 
+	changeTypeToModel: {},
+
 	idProperty: 'ID',
 	fields: [
 		{ name: 'ID', type: 'string' },
@@ -17,13 +19,26 @@ Ext.define('NextThought.model.Change', {
 	],
 
 	getItemValue: function(field) {
-		var i = this.get('Item');
+		var i = this.getItem();
 
 		if (!i) {
 			return null;
 		}
 
 		return i.get(field);
+	},
+
+
+	getItem: function() {
+		var item = this.get('Item'),
+			changeModel = this.changeTypeToModel[this.get('ChangeType')];
+
+		if (!item && changeModel) {
+			item = changeModel.create();
+			this.set('Item', item);
+		}
+
+		return item;
 	},
 
 

@@ -288,7 +288,7 @@ Ext.define('NextThought.controller.UserData', {
 		}
 
 		var me = this,
-			item = change.get('Item'),
+			item = change.getItem(),
 			cid = change.getItemValue('ContainerId'),
 			type = (change.get('ChangeType') || '').toLowerCase(),//ensure lowercase
 			fn;
