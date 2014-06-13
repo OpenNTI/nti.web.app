@@ -310,15 +310,21 @@ Ext.define('NextThought.view.profiles.parts.events.ForumActivityItem', {
 	},
 
 
-	setBody: function(text) {
-		if (!this.rendered) {
-      //			this.renderData.body = text;
-			this.on('afterrender', Ext.bind(this.setBody, this, arguments));
+	setBody: function(text, insertComponents) {
+		var me = this;
+
+		if (!me.rendered) {
+			me.on('afterrender', Ext.bind(me.setBody, me, arguments));
 			return;
 		}
-		this.messageBodyEl.update(text);
-		this.messageBodyEl.select('.whiteboard-container .toolbar').remove();
-		this.messageBodyEl.select('.whiteboard-container .overlay').remove();
+
+		me.messageBodyEl.update(text);
+		me.messageBodyEl.select('.whiteboard-container .toolbar').remove();
+		me.messageBodyEl.select('.whiteboard-container .overlay').remove();
+
+		if (insertComponents) {
+			insertComponents(me.messageBodyEl, me).forEach(function(c) {me.on('destroy', 'destroy', c);});
+		}
 	},
 
 
