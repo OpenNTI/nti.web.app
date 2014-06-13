@@ -59,7 +59,7 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 
 
 		p.done(function() {
-			me.markSubmitted(new Date());
+			me.markUploaded(new Date());
 			me.markCorrect();
 		}).fail(function(reason) {
 			console.error(reason);
@@ -168,7 +168,7 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 		this.labelBoxEl.update(v.filename || getString('NextThought.view.assessment.input.FileSubmission.not-submitted'));
 
 		if (v.CreatedTime || v.filename) {
-			this.markSubmitted(Ext.Date.parse(v.CreatedTime, 'timestamp') || new Date());
+			this.markUploaded(Ext.Date.parse(v.CreatedTime, 'timestamp') || new Date());
 		} else {
 			this.addCls('hide-buttons');
 		}
@@ -186,7 +186,7 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 	markIncorrect: Ext.emptyFn,
 
 
-	markSubmitted: function(date) {
+	markUploaded: function(date) {
 		var q = this.questionSet,
 			assignment = q && q.associatedAssignment;
 
