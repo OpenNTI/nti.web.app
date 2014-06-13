@@ -75,11 +75,12 @@ Ext.define('NextThought.view.profiles.About', {
 
 	//<editor-fold desc="Init">
 	initComponent: function() {
-		this.callParent(arguments);
+		var me = this;
+		me.callParent(arguments);
 		//They want to disable profile fields for everyone in some environements.  If the config flag is set hide
 		// everything but the safeFields (avatar and name)
 		if ($AppConfig.disableProfiles === true) {
-			Ext.defer(this.destroy, 1, this);
+			Ext.defer(me.destroy, 1, this);
 		}
 
 		this.onSaveMap = {home_page: this.homePageChanged};
@@ -124,55 +125,32 @@ Ext.define('NextThought.view.profiles.About', {
 
 
 	setUser: function(user) {
-		var me = this, req,
+		var me = this,
+			render = this.onceRendered,
 			profileSchemaUrl = user.getLink('account.profile');
 
-		function onAfterRender() {
-			if (!me.schemaLoaded) {
-				me.getEl().mask(getString('NextThought.view.profiles.About.loading'));
-			}
-
+		function setupAndMask() {
+			me.getEl().mask(getString('NextThought.view.profiles.About.loading'));
 			if (!profileSchemaUrl) {
 				me.profileInfoEl.removeCls('editable');
 			}
 		}
 
-		if (me.rendered) {
-			onAfterRender();
-		} else {
-			me.on('afterrender', onAfterRender);
+		function unmask() {
+			me.getEl().unmask();
 		}
 
 		me.user = user;
 
-		if (!profileSchemaUrl) {
-			me.onProfileLoaded(user);
-			return;
-		}
 
-		req = {
-			url: profileSchemaUrl,
-			scope: me,
-			callback: function(q, success, r) {
-				var schema;
 
-				if (!success) {
-					console.log('Could not get profile schema');
-				} else {
-					schema = Ext.decode(r.responseText, true);
-				}
-
-				me.onProfileLoaded(user, schema);
-
-				if (me.rendered) {
-					me.getEl().unmask();
-				} else {
-					me.schemaLoaded = true;
-				}
-			}
-		};
-
-		Ext.Ajax.request(req);
+		Promise.all([
+			render.then(setupAndMask),
+			(profileSchemaUrl ?
+				   Service.request(profileSchemaUrl).then(JSON.decode) : Promise.resolve(null))
+					.then(me.onProfileLoaded.bind(me, user))
+					.fail(function(reason) { console.error('Could not get profile schema', reason); })
+		]).then(unmask);
 	},
 
 
