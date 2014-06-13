@@ -483,6 +483,8 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 				} else {
 					console.warn('Player did not report being in a state where the media viewer would interfere');
 				}
+
+				if (this.hasCls('playing')) { return; }
 			}
 
 			slide = m.get('slidedeck');
