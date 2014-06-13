@@ -513,6 +513,43 @@
 		}
 	}
 
+	.badge-event {
+		background-color: $panel-background;
+		min-height: 120px;
+
+		.img {
+			width: 100px;
+			height: 100px;
+			background-size: contain;
+			float: left;
+			margin: 10px 20px;
+		}
+
+		.wrap {
+			float: left;
+			color: $primary-grey;
+			padding-top: 32px;
+			width: 850px;
+			font: normal 500 1em/1 $font;
+
+			.name {
+				margin-bottom: 5px;
+			}
+
+			.date {
+				font-size: 0.63em;
+				font-weight: 600;
+				color: $tertiary-grey;
+				margin-bottom: 10px;
+			}
+
+			.description {
+				font-size: 0.9em;
+			}
+
+		}
+	}
+
 	.note-replies .note-container {
 		background: none;
 	}

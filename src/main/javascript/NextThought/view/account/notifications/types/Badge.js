@@ -11,14 +11,6 @@ Ext.define('NextThought.view.account.notifications.types.Badge', {
 
 	badgeTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'link', html: '{name}'}).compile(),
 
-	fillInData: function(rec, wrap) {
-		if (!rec.fields.getByKey('EventTime')) {
-			rec.fields.add(Ext.data.Field.create({name: 'EventTime', type: 'date'}));
-		}
-
-		rec.set({EventTime: wrap.get('Last Modified')});
-	},
-
 	getWording: function(values) {
 		var name;
 

@@ -190,7 +190,7 @@ Ext.define('NextThought.view.profiles.parts.Activity', {
 
 
 	cmpsFromRecords: function(records) {
-		var cmps = [], lastHighlightContainer;
+		var cmps = [], lastHighlightContainer, user = this.user;
 
 		function getDate(rec) {
 			var d = rec.get('CreatedTime') || new Date(0);
@@ -210,6 +210,10 @@ Ext.define('NextThought.view.profiles.parts.Activity', {
 		}
 
 		(records || []).forEach(function(i) {
+			if (/change$/.test(i.get('MimeType'))) {
+				i = i.getItem();
+			}
+
 			var c = (i.get('Class') || 'default').toLowerCase(),
 				reply = (i.isTopLevel && !i.isTopLevel() && '-reply') || '',
 				n = 'profile-activity-' + c + reply + '-item',
@@ -231,7 +235,7 @@ Ext.define('NextThought.view.profiles.parts.Activity', {
 				return;
 			}
 
-			cmps.push({record: i, root: true, xtype: n});
+			cmps.push({record: i, root: true, user: user, xtype: n});
 		});
 
 		return cmps;
