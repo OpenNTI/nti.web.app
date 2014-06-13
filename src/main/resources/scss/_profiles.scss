@@ -188,7 +188,7 @@
 				font: normal 600 1.6em/35px 'Open Sans Condensed', $font;
 
 				@include presence-style-sudo($x:0px, $y:15px, $xSide:'right', $side: 'before');
-				&.no-presence::after{
+				&.no-presence::before{
 					display: none !important;
 				}
 			}
