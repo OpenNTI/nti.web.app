@@ -104,7 +104,8 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 			componentLayout: {
 				type: 'auto',
 				setHeightInDom: false,
-				setWidthInDom: false
+				setWidthInDom: false,
+				getDockedItems: function() { return []; }
 			},
 			layout: 'auto',
 			anchor: 'bottom',
