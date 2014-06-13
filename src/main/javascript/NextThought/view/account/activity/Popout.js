@@ -178,8 +178,11 @@ Ext.define('NextThought.view.account.activity.Popout', {
 				return;
 			}
 
-			UserRepository.getUser(record.get('Creator'), function(user) {
-				var pop, sidebar, me = this;
+			var me = this,
+				creator = record.get('Creator');
+
+			function finish(user) {
+				var pop, sidebar;
 
 				function align() {
 					if (!pop) { return; }
@@ -197,7 +200,7 @@ Ext.define('NextThought.view.account.activity.Popout', {
 				}
 
 
-				pop = Ext.create(this.$className, {
+				pop = Ext.create(me.$className, {
 					renderTo: Ext.getBody(),
 					record: record,
 					user: user,
@@ -252,7 +255,13 @@ Ext.define('NextThought.view.account.activity.Popout', {
 				align();
 
 				Ext.callback(cb, null, [pop]);
-			}, this);
+			}
+
+			if (Ext.isEmpty(creator)) {
+				finish(creator);
+			} else {
+				UserRepository.getUser(record.get('Creator'), finish);
+			}
 		}
 
 	}

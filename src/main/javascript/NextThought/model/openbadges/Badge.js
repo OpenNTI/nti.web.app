@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.Badge', {
+Ext.define('NextThought.model.openbadges.Badge', {
 	extend: 'NextThought.model.Base',
 
 	fields: [
@@ -10,6 +10,7 @@ Ext.define('NextThought.model.Badge', {
 		{name: 'name', type: 'string'},
 		{name: 'tags', type: 'auto'},
 		//properties for the ui
-		{name: 'earnedCls', type: 'string', persist: false}
+		{name: 'earnedCls', type: 'string', persist: false},
+		{name: 'isEmpty', type: 'bool', persist: false}
 	]
 });

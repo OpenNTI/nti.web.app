@@ -4,7 +4,7 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 
 	requires: [
 		'NextThought.view.profiles.parts.BadgeList',
-		'NextThought.model.Badge'
+		'NextThought.model.openbadges.Badge'
 	],
 
 	uriFriendlyName: 'Achievements',
@@ -355,7 +355,7 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 
 	buildStore: function(items) {
 		return new Ext.data.Store({
-			model: 'NextThought.model.Badge',
+			model: 'NextThought.model.openbadges.Badge',
 			data: items
 		});
 	},

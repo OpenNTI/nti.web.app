@@ -13,7 +13,8 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		'NextThought.model.Redaction',
 		'NextThought.model.Note',
 		'NextThought.model.forums.Post',
-		'NextThought.model.forums.HeadlineTopic'
+		'NextThought.model.forums.HeadlineTopic',
+		'NextThought.model.openbadges.Badge'
 	],
 
 	mixins: {

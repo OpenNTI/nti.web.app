@@ -9,7 +9,8 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		'NextThought.util.Time',
 		'NextThought.view.account.contacts.management.Popout',
 		'NextThought.view.account.notifications.types.*',
-		'NextThought.view.account.activity.feedback.*'
+		'NextThought.view.account.activity.feedback.*',
+		'NextThought.view.account.activity.badge.*'
 	],
 
 
@@ -117,7 +118,8 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 			Types.ForumComment.create({panel: this}),
 			Types.BlogComment.create({panel: this}),
 			Types.BlogEntryPost.create({panel: this}),
-			Types.Contact.create({panel: this})
+			Types.Contact.create({panel: this}),
+			Types.Badge.create({panel: this})
 		];
 
 		this.highlightItem = this.types[1];
@@ -287,6 +289,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 						}
 						var m = item.get('MimeType'),
 							f = !m || registry.hasOwnProperty(m);
+
 						if (!f) {console.warn('Unregistered Type: ' + item.get('MimeType'), 'This component does not know how to render this item.');}
 						return f;
 					}

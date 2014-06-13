@@ -630,6 +630,33 @@
 	}
 }
 
+.badge-preview {
+	cursor: pointer;
+	width: 400px;
+	min-height: 120px;
+
+	.img {
+		width: 100px;
+		height: 100px;
+		background-size: contain;
+		float: left;
+		margin: 10px;
+	}
+
+	.wrap {
+		color: $primary-grey;
+		float: left;
+		width: 280px;
+		font: normal 500 1em/1 $font;
+		padding-top: 10px;
+
+		.description {
+			font-size: 0.9em;
+			margin-top: 5px;
+		}
+	}
+}
+
 .feedback-preview {
 	.path {
 		display: inline-block;

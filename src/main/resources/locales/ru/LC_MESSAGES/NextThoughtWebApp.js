@@ -775,5 +775,6 @@ NTIStrings['NextThought.view.profiles.parts.Achievements.achievements_empty'] = 
 NTIStrings['NextThought.view.profiles.parts.Achievements.empty'] = 'This user doesn\'t have any visible badges.';
 NTIStrings['NextThought.view.profiles.parts.Achievements.loading'] = 'Loading...';
 NTIStrings['NextThought.view.profiles.parts.Achievements.completed_preference'] = 'Allow users to view your earned course badges.';
+NTIStrings['NextThought.view.account.notifications.types.Badge.wording'] = '{badge} badge awarded.';
 NTIStrings['undefined'] = 'undefined';
 NTIStrings.PluralForms = {"question":{"forms":["{#} questions","{#} question"],"ranges":{"0":0,"1":1,undefined:0}},"Comment":{"forms":["{#} Comments","{#} Comment"],"ranges":{"0":0,"1":1,undefined:0}},"Instructor":{"forms":["{#} Instructors","{#} Instructor"],"ranges":{"0":0,"1":1,undefined:0}},"Credit":{"forms":["{#} Credits","{#} Credit"],"ranges":{"0":0,"1":1,undefined:0}},"Match":{"forms":["{#} Matches","{#} Match"],"ranges":{"0":0,"1":1,undefined:0}},"Like":{"forms":["{#} Likes","{#} Like"],"ranges":{"0":0,"1":1,undefined:0}},"Tag":{"forms":["{#} Tags","{#} Tag"],"ranges":{"0":0,"1":1,undefined:0}},"other":{"forms":["{#} others","{#} other"],"ranges":{"0":0,"1":1,undefined:0}}};

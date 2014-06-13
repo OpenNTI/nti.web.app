@@ -1,12 +1,19 @@
 Ext.define('NextThought.model.Change', {
 	extend: 'NextThought.model.Base',
 	requires: [
-		'NextThought.model.converters.GroupByTime'
+		'NextThought.model.converters.GroupByTime',
+		'NextThought.model.openbadges.Badge'
 	],
 
 	NOTABLE_PROPERTY: 'RUGDByOthersThatIMightBeInterestedIn',
 
-	changeTypeToModel: {},
+	constructor: function() {
+		this.callParent(arguments);
+
+		this.changeTypeToModel = {
+			BadgeEarned: NextThought.model.Badge
+		};
+	},
 
 	idProperty: 'ID',
 	fields: [
@@ -34,7 +41,11 @@ Ext.define('NextThought.model.Change', {
 			changeModel = this.changeTypeToModel[this.get('ChangeType')];
 
 		if (!item && changeModel) {
-			item = changeModel.create();
+			item = changeModel.create({
+				'Last Modified': this.get('Last Modified'),
+				isEmpty: true
+			});
+
 			this.set('Item', item);
 		}
 
