@@ -215,3 +215,38 @@
 		width: auto;
 	}
 }
+
+
+.badge-window {
+	.badge-preview {
+		.img{
+			width: 128px;
+			height: 128px;
+		}
+
+		.wrap{
+			width: 350px;
+			min-height: 148px;
+			font-size: 1.1em;
+		}
+
+		.issuer, .criteria {
+			margin-bottom: 4px;
+		}
+
+		.link {
+			display: block;
+			font-size: 0.9em;
+			text-decoration: none;
+			color: $primary-blue;
+			overflow: hidden;
+			@include ellipse;
+		}
+
+		.label {
+			font-size: 0.5em;
+			font-weight: 600;
+			color: $tertiary-grey;
+		}
+	}
+}

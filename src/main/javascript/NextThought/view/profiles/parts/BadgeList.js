@@ -2,6 +2,10 @@ Ext.define('NextThought.view.profiles.parts.BadgeList', {
 	extend: 'Ext.view.View',
 	alias: 'widget.profile-badge-list',
 
+	requires: [
+		'NextThought.view.badge.Window'
+	],
+
 	cls: 'badge-list',
 	itemSelector: '.badge',
 
@@ -123,5 +127,14 @@ Ext.define('NextThought.view.profiles.parts.BadgeList', {
 
 		this.preference.set(this.preferenceKey, state);
 		this.preference.save();
+	},
+
+
+	onItemClick: function(record) {
+		var win = Ext.widget('badge-window', {
+			badge: record
+		});
+
+		win.show();
 	}
 });
