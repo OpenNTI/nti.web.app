@@ -120,7 +120,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 									displayName = creator && creator.get && creator.get('displayName'),
 									f = creator && creator.get && creator.get('FirstName'),
 									l = creator && creator.get && creator.get('LastName'),
-									lm, d;
+									lm, d = displayName;
 
 								if (l) {
 									lm = Ext.DomHelper.markup({tag: 'b', html: l});
