@@ -461,12 +461,22 @@ Ext.define('NextThought.controller.Profile', {
 			me.showProfile(user, args);
 		}
 
+		function navigateToBlogEntry(obj) {
+			UserRepository.getUser(obj.get('Creator'), function(user) {
+				finishNavigation(user, obj.get('ID'));
+			});
+		}
+
 		if (obj instanceof NextThought.model.forums.PersonalBlogEntry) {
+			return navigateToBlogEntry;
+		}
+
+		if (obj instanceof NextThought.model.forums.PersonalBlogEntryPost) {
 			return function(obj) {
-				UserRepository.getUser(obj.get('Creator'), function(user) {
-					finishNavigation(user, obj.get('ID'));
+				Service.getObject(obj.get('ContainerId'), function(entry) {
+					navigateToBlogEntry(entry);
 				});
-			};
+			}
 		}
 
 		if (obj instanceof NextThought.model.forums.PersonalBlogComment) {
