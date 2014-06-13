@@ -33,10 +33,12 @@ Ext.define('NextThought.view.profiles.parts.events.Badge', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		var me = this;
+		var me = this, user = me.user;
 
-		me.mon(me.el.down('.link'), 'click', function() {
-			me.fireEvent('show-profile', $AppConfig.userObject, ['Achievements']);
-		});
+		if (user) {
+			me.mon(me.el.down('.link'), 'click', function() {
+				me.fireEvent('show-profile', user, ['Achievements']);
+			});
+		}
 	}
 });
