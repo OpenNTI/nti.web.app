@@ -5,11 +5,15 @@ Ext.define('NextThought.overrides.dom.Element', {
 	constructor: function() {
 		this.callParent(arguments);
 
-		this.on({
-			scope: this,
-			buffer: 200,
-			scroll: this._scrollStopped
-		});
+		if (this.dom && this.dom.addEventListener) {
+			this.on({
+				scope: this,
+				buffer: 200,
+				scroll: this._scrollStopped
+			});
+		} else {
+			console.warn('trying to register a listener for a element with out a dom node, it will not fire scrollstop');
+		}
 	},
 
 
