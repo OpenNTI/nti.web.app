@@ -5,6 +5,14 @@ Ext.define('NextThought.overrides.Component', {
 
 	constructor: function() {
 		this.shadow = false;
+
+		this.onceRendered = new Promise(function(fulfill) {
+			me.on({
+				single: true,
+				afterrender: fulfill
+			});
+		});
+
 		this.callParent(arguments);
 		this.initDelegation();
 		this.setNTTooltip();
