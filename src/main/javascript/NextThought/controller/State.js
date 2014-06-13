@@ -476,7 +476,8 @@ PREVIOUS_STATE = 'previous-state';
 					});
 				}
 			}
-			return {};
+			//if we are restoring an object from the url, we don't want to restore the slidedeck from the state
+			return {slidedeck: null};
 		},
 
 
