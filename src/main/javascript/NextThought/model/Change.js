@@ -49,7 +49,7 @@ Ext.define('NextThought.model.Change', {
 			this.set('Item', item);
 		}
 
-		if (!item.get('EventTime')) {
+		if (item && !item.get('EventTime')) {
 			if (!item.fields.getByKey('EventTime')) {
 				item.fields.add(Ext.data.Field.create({name: 'EventTime', type: 'date'}));
 			}
