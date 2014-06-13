@@ -2,7 +2,10 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.profile-achievements',
 
-	requires: ['NextThought.view.profiles.parts.BadgeList'],
+	requires: [
+		'NextThought.view.profiles.parts.BadgeList',
+		'NextThought.model.Badge'
+	],
 
 	uriFriendlyName: 'Achievements',
 
@@ -202,22 +205,12 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 			earnable = (earnable && earnable.Items) || [];
 			earned = (earned && earned.Items) || [];
 
-			function fillIn(item) {
-				if (!item.name) {
-					item.name = item.description;
-				}
-
-				return item;
-			}
-
 			function isCourse(item) {
 				return item.Type === 'Course';
 			}
 
 			earned.forEach(function(item) {
 				item.earnedCls = 'earned';
-
-				item = fillIn(item);
 
 				if (isCourse(item)) {
 					completed.push(item);
@@ -228,8 +221,6 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 
 			earnable.forEach(function(item) {
 				item.earnedCls = 'earnable';
-
-				item = fillIn(item);
 
 				if (isCourse(item)) {
 					current.push(item);
@@ -248,7 +239,7 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 
 			//if the request fails and it is me, build the me state with no badges.
 			if (me.isMe) {
-				this.buildIsMe([], [], []);
+				me.buildIsMe([], [], []);
 			} else {
 				me.setEmptyState();
 				me.finishLoading();
@@ -364,17 +355,7 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 
 	buildStore: function(items) {
 		return new Ext.data.Store({
-			fields: [
-				{name: 'NTIID', type: 'string'},
-				{name: 'criteria', type: 'string'},
-				{name: 'description', type: 'string'},
-				{name: 'href', type: 'string'},
-				{name: 'image', type: 'string'},
-				{name: 'issuer', type: 'auto'},
-				{name: 'tags', type: 'auto'},
-				{name: 'name', type: 'string'},
-				{name: 'earnedCls', type: 'string'}
-			],
+			model: 'NextThought.model.Badge',
 			data: items
 		});
 	},
