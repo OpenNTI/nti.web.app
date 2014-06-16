@@ -665,7 +665,7 @@ Ext.define('NextThought.view.content.View', {
 			if (!background) {
 				me.fireEvent('go-to-library');
 			}
-			throw reason;//make sure the promise chain is continuing to be directed to the fail branches
+			return Promise.reject(reason);//make sure the promise chain is continuing to be directed to the fail branches
 		}
 
 
@@ -683,7 +683,7 @@ Ext.define('NextThought.view.content.View', {
 
 		function setTab(reason) {
 			me.setActiveTab(tab);
-			throw reason;
+			return Promise.reject(reason);
 		}
 
 		//We dont care if this is just content... if it doesn't have a course, we do not want to fail
