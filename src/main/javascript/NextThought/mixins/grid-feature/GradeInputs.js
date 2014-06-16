@@ -44,6 +44,7 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 		if (Ext.isIE11p || Ext.isIE) {
 			Ext.apply(mons, {
 				focusout: 'onInputBlur',
+				blur: Ext.emptyFn,
 				focusin: 'onInputFocusIE',
 				click: stop,
 				mousedown: stop,
