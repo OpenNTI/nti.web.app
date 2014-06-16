@@ -16,22 +16,35 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Header', {
 	setUpGradebox: function() {
 		if (!this.gradebook) { return; }
 
-		var gradebookentry = this.gradebook.getItem('Final Grade', 'no_submit'),
-			grade = gradebookentry && gradebookentry.getFieldItem('Items', this.student.getId()),
-			value = grade && grade.get('value'),
-			grades = value && value.split(' '),
-			number = grades && grades[0],
-			letter = (grades && grades[1]) || '-';
+		var me = this,
+			gradebookentry = me.gradebook.getItem('Final Grade', 'no_submit'),
+			grade = gradebookentry && gradebookentry.getFieldItem('Items', me.student.getId()),
+			value = grade && grade.get('value');
 
-		if (number) {
-			this.currentGrade = number;
-			this.gradeEl.dom.value = number;
+		function fillInValue(key, value) {
+			var grades = value && value.split(' '),
+				number = grades && grades[0],
+				letter = (grades && grades[1]) || '-';
+
+			if (number) {
+				me.currentGrade = number;
+				me.gradeEl.dom.value = number;
+			}
+
+			if (letter) {
+				me.currentLetter = letter;
+				me.letterEl.update(letter);
+			}
 		}
 
-		if (letter) {
-			this.currentLetter = letter;
-			this.letterEl.update(letter);
+		if (grade) {
+			me.mon(grade, {
+				'value-changed': fillInValue,
+				single: true
+			});
 		}
+
+		fillInValue(null, value);
 
 		this.gradeboxEl[gradebookentry ? 'show' : 'hide']();
 	},
