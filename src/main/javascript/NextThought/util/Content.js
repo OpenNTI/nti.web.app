@@ -506,6 +506,12 @@ Ext.define('NextThought.util.Content', {
 			return [];
 		}
 
+		if (ntiid && ntiid.getAttribute) {
+			ntiid = ntiid.getAttribute('ntiid');
+		} else if (ntiid && ntiid.isModel) {
+			ntiid = ntiid.get('ContainerId') || ntiid.get('containerId') || ntiid.get('NTIID') || ntiid.getId();
+		}
+
 		var leaf = this.find(ntiid) || {},
 			node = leaf.location,
 			lineage = [],
@@ -675,7 +681,7 @@ Ext.define('NextThought.util.Content', {
 		if (id && id.getAttribute) {
 			id = id.getAttribute('ntiid');
 		} else if (id && id.isModel) {
-			id = id.get('containerId') || id.get('NTIID');
+			id = id.get('ContainerId') || id.get('containerId') || id.get('NTIID');
 		}
 
 		var me = this, r, l, d, i = id;

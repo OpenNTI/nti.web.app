@@ -565,6 +565,8 @@ Ext.define('NextThought.controller.CourseWare', {
 	 * @private
 	 */
 	__getCourseMapping: function(thing) {
+		thing = ContentUtils.getLineage(thing).last();//always get the root
+
 		var ifo = ContentUtils.getLocation(thing),
 			title = ifo && ifo.title,
 			ntiid = title && title.get && title.get('NTIID');
@@ -580,7 +582,7 @@ Ext.define('NextThought.controller.CourseWare', {
 					var i = c.get('CourseInstance'),
 							links = i && i.get('Links'),
 							href = links && links.getRelHref('CourseCatalogEntry');
-					return href === m;
+					return getURL(href) === m;
 				})
 				.then(function(o) {
 					return o.get('CourseInstance');
