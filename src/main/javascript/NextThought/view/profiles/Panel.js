@@ -122,7 +122,18 @@ Ext.define('NextThought.view.profiles.Panel', {
 
 	afterRender: function() {
 		this.callParent(arguments);
-		this.initState();
+
+		var me = this;
+
+		me.initState();
+
+		me.mon(me.el, 'scroll', function() {
+			var item = me.body.getLayout().getActiveItem();
+
+			if (item.onParentScroll) {
+				item.onParentScroll();
+			}
+		});
 	},
 
 

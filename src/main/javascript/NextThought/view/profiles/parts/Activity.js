@@ -364,6 +364,14 @@ Ext.define('NextThought.view.profiles.parts.Activity', {
 	},
 
 
+	onParentScroll: function() {
+		this.items.each(function(i) {
+			if (i.maybeFillIn) {
+				i.maybeFillIn();
+			}
+		});
+	},
+
 	prefetchNext: function() {
 		var s = this.store, max;
 
