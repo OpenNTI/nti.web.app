@@ -234,8 +234,14 @@ Ext.define('NextThought.controller.Forums', {
 				var json = Ext.JSON.decode(resp.responseText, true),
 					obj = ParseUtils.parseItems(json)[0];
 
-				me.presentForumItem(obj);
-				promise.fulfill();
+				me.presentForumItem(obj)
+					.then(function() {
+						promise.fulfill();
+					})
+					.fail(function(reason) {
+						console.error('Failed to restore forum state: ', reason);
+						promise.fulfill();
+					});
 			},
 			failure: function() {
 				console.error('Failded to get:', url, arguments);
@@ -322,22 +328,28 @@ Ext.define('NextThought.controller.Forums', {
 
 		if (!record) {
 			console.error('Cant present an empty record');
-			return;
+			return Promise.resolve();
 		}
 
 		if (record.isBoard) {
-			me.loadForumList(null, record);
-		} else if (record.isForum) {
-			//if we have a forum load its board and show it as the active one
-			Service.getObject(record.get('ContainerId'), function(obj) {
-				me.loadForumList(null, obj, record.getId());
-			});
-		} else if (record.isTopic) {
-			me.loadTopic(null, record);
-		} else if (record.isComment) {
-			me.loadComment(null, record);
+			return me.loadForumList(null, record);
 		}
 
+		if (record.isForum) {
+			//if we have a forum load its board and show it as the active one
+			return Service.getObject(record.get('ContainerId'))
+				.then(function(obj) {
+					me.loadForumList(null, obj, record.getId());
+				});
+		}
+
+		if (record.isTopic) {
+			return me.loadTopic(null, record);
+		}
+
+		if (record.isComment) {
+			return me.loadComment(null, record);
+		}
 	},
 
 
@@ -374,7 +386,7 @@ Ext.define('NextThought.controller.Forums', {
 		}
 
 		function loadCommunityBoard(community) {
-			var prom = PromiseFactory.make(),
+			var prom = new Deferred(),
 				url = community.getLink('DiscussionBoard');
 
 			if (!url) {
@@ -471,13 +483,11 @@ Ext.define('NextThought.controller.Forums', {
 			delete me.hasStateToRestore;
 			delete me.stateRestoring;
 
-			if (v.showForumList) {
-				if (wait) {
-					p.fulfill(v);
-				} else {
-					view.showForumList(record);
-				}
+			if (v.showForumList && !wait) {
+				v.showForumList(record);
 			}
+
+			return v;
 		}
 
 		function maybeFinish() {
@@ -489,12 +499,7 @@ Ext.define('NextThought.controller.Forums', {
 				record.findCourse()
 					.done(function(course) {
 						var s = (me.stateRestoring && !me.hasStateToRestore) || silent;
-						//if there is a state to restore that we aren't incharge of pass true as the last argument, to keep
-						//it from switching the tab.
-						view = me.callOnAllControllersWith('onNavigateToForum', record, course, s);
-						//set a flag to keep the view from updating the state
-						view.ignoreStateUpdate = s;
-						finish(view);
+
 					});
 			}
 		}
@@ -503,13 +508,23 @@ Ext.define('NextThought.controller.Forums', {
 			UserRepository.getUser(community)
 				.done(function(c) {
 					record.set('Creator', c);
-					maybeFinish();
 				});
-		} else {
-			maybeFinish();
 		}
 
-		return wait ? p : true;
+		if (view) {
+			return Promise.resolve(finish(view));
+		}
+
+		return	record.findCourse()
+			.then(function(course) {
+				var s = (me.stateRestoring && !me.hasStateToRestore) || silent;
+				//if there is a state to restore that we aren't incharge of pass true as the last argument, to keep
+				//it from switching the tab.
+				view = me.callOnAllControllersWith('onNavigateToForum', record, course, s);
+				//set a flag to keep the view from updating the state
+				view.ignoreStateUpdate = s;
+				return finish(view);
+			});
 	},
 
 
@@ -525,7 +540,7 @@ Ext.define('NextThought.controller.Forums', {
 
 		if (!record || !record.isModel) { return; }
 
-		var me = this, view = this.getCardContainer(cmp);
+		var me = this, view = this.getCardContainer(cmp), forumList;
 
 		record.activeRecord = activeTopic;
 
@@ -537,25 +552,29 @@ Ext.define('NextThought.controller.Forums', {
 			}
 		}
 
-		UserRepository.getUser(record.get('Creator'), function(c) {
-			record.set('Creator', c);
-		});
+		UserRepository.getUser(record.get('Creator'))
+			.then(function(c) {
+				record.set('Creator', c);
+			});
 
 		if (view) {
 			finish(view);
-		} else {
-			//get the forum list and add it first
-			Service.getObject(record.get('ContainerId'), function(forumList) {
-				if (forumList) {
-					me.loadForumList(null, forumList, record.getId(), true)
-						.done(function(v) {
-							finish(v, forumList);
-						});
-				}
-			}, function(req, resp) {
-				console.error('Faild to load forum-list for topic:', req, resp);
-			},me, true);
+
+			return Promise.resolve(view);
 		}
+
+		//get the forum list and add it first
+		return	Service.getObject(record.get('ContainerId'), Ext.emptyFn, Ext.emptyFn, null, true)
+			.then(function(f) {
+				forumList = f;
+				return me.loadForumList(null, forumList, record.getId(), true);
+			})
+			.then(function(v) {
+				finish(v, forumList);
+				return v;
+			}).fail(function(reason) {
+				return Promise.reject(reason);
+			});
 	},
 
 
@@ -569,38 +588,36 @@ Ext.define('NextThought.controller.Forums', {
 	 */
 	loadTopic: function(cmp, record, comment, cb, scope) {
 		if (!record) {
-			console.error('Cant present a topic with an empty record');
-			return;
+			return Promise.reject('Cant present a topic with an empty record');
 		}
 
 		var me = this;
 
-		Service.getObject(record.get('ContainerId'), function(topicList) {
-			if (topicList) {
+		return Service.getObject(record.get('ContainerId'))
+			.then(function(topicList) {
 				topicList.comment = comment;
-				me.loadTopicList(cmp, topicList, record, function(topicView, view) {
-					if (cb) {
-						cb.call(scope, view.down('forums-topic-view'));
-					}
-				});
-			}
-		});
+				return me.loadTopicList(cmp, topicList, record);
+			})
+			.then(function(view) {
+				if (cb) {
+					cb.call(scope, view.down('forums-topic-view'));
+				}
+			});
 	},
 
 
 	loadComment: function(cmp, record, cb, scope) {
 		if (!record) {
 			console.error('Cant present comment with no record');
-			return;
+			return Promise.resolve();
 		}
 
 		var me = this;
 
-		Service.getObject(record.get('ContainerId'), function(topic) {
-			if (topic) {
-				me.loadTopic(cmp, topic, record, cb, scope);
-			}
-		});
+		return Service.getObject(record.get('ContainerId'))
+			.then(function(topic) {
+				return me.loadTopic(cmp, topic, record, cb, scope);
+			});
 	},
 
 

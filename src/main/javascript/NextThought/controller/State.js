@@ -557,7 +557,7 @@ PREVIOUS_STATE = 'previous-state';
 				return;
 			}
 
-				function fin(key, stateFrag) {
+			function fin(key, stateFrag) {
 				var token = {};
 				token[key] = stateFrag;
 				app.registerInitializeTask(token);
