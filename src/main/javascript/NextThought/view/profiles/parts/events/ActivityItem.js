@@ -276,8 +276,8 @@ Ext.define('NextThought.view.profiles.parts.events.ActivityItem', {
 
 		function error(req, resp) {
 			req = resp.request;
-			var el = me.context.up('.content-callout'),
-				ntiid = req && req.ntiid, p;
+			var el = me.context.up('.content-callout'), p,
+				ntiid = (req && req.ntiid) || cid;
 
 			if (resp.status === 403) {
 				p = CourseWareUtils.courseForNtiid(ntiid) || ContentUtils.purchasableForContentNTIID(ntiid);
