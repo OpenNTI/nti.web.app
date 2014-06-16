@@ -297,27 +297,22 @@ Ext.define('NextThought.controller.Navigation', {
 
 	navigate: function(cid, rec, options) {
 		var me = this, perform = this.performAnd.bind(this, 'handleNavigation', cid, rec),
-			performAfter = this.performAnd.bind(this, 'afterHandleNavigation', cid, rec);
+			performAfter = this.performAnd.bind(this, 'afterHandleNavigation', cid, rec),
+			txn = history.beginTransaction('navigate-in-controller-' + guidGenerator()),
+			result;
 		//We don't want to do a content navigation until we are pretty sure
 		//thats what we want.  On failure it shows a page not found and
 		//if we handle this navigation in some other way we don't want that happening.
 
 		function recover(reason) {
 			if (reason && reason.status === 404) {
-				return new Promise(function(fulfill, reject) {
-
-					ContentUtils.findRelatedContentObject(cid, function(c) {
-						if (c) { LocationMeta.getMeta(c).then(fulfill, reject); }
-						else {reject();}
-					});
-
-
-				});
+				return ContentUtils.findRelatedContentObject(cid)
+						.then(LocationMeta.getMeta.bind(LocationMeta));
 			}
-			throw reason;
+			return Promise.reject(reason);
 		}
 
-		LocationMeta.getMeta(cid)
+		result = LocationMeta.getMeta(cid)
 			.fail(recover)
 			.then(perform)
 			.then(function() {
@@ -330,13 +325,18 @@ Ext.define('NextThought.controller.Navigation', {
 			.fail(function(reason) {
 				if (reason) {
 					console.error(reason);
-					return;
+					return Promise.reject(reason);
 				}
 
-				me.navigateToNtiid(cid, null, rec, options, function() {
-					me.doContentNavigation(cid, rec, options);
-				});
+				return me.navigateToNtiid(cid, null, rec, options)
+						.fail(function() {
+							return me.doContentNavigation(cid, rec, options);
+						});
 			});
+
+		result.then(txn.commit.bind(txn), txn.abort.bind(txn));
+
+		return result;
 	},
 
 
@@ -510,60 +510,29 @@ Ext.define('NextThought.controller.Navigation', {
 		var object = ntiid.isModel ? ntiid : undefined,
 				me = this;
 
-		function onSuccess(obj) {
-			//me.fireEvent('show-object', obj, fragment, rec, options);
-			me.navigateToContent(obj, fragment);
-		}
+		function onSuccess(obj) { return me.navigateToContent(obj, fragment); }
 
-		function onFailure() {
-			//TODO failure callback here
+		function onFailure(reason) {
 			console.error('An error occurred resolving ntiid as object for navigation', ntiid, arguments);
 			Ext.callback(failure);
+
+			return Promise.reject(reason);
 		}
 
-		if (!object) {
 			//We have a fair amount of data locally that we can get at now.  so look for it first
 			//if we can't find anything then fetch it from remote
-			ContentUtils.findContentObject(ntiid, function(object) {
-				if (object) {
-					onSuccess(object);
-				}
-				else {
-					Service.getObject(ntiid, onSuccess, onFailure, this);
-				}
-			}, this);
-		}
-		else {
-			onSuccess(object);
-		}
-
-	},
-
-
-	navigateToContentOld: function(obj, fragment) {
-		function scroll(content) {
-			if (content && fragment) {
-				content.getScroll().toTarget(fragment);
-			}
-		}
-
-		if (obj.isPageInfo) {
-			this.fireEvent('set-location', obj, scroll);
-			return false;
-		}
-		console.log('Dont know how to navigate to object', obj);
-		return true;
+		return object ? Promise.fulfill(object) : ContentUtils.findContentObject(ntiid)
+				.fail(Service.getObject.bind(Service, ntiid))
+				.then(onSuccess)
+				.fail(onFailure);
 	},
 
 
 	navigateToContent: function(obj, fragment) {
-		var getHandlers = this.performAnd('getHandlerForNavigationToObject', obj, fragment),
-			app = this.application;
+		var me = this, app = me.application;
 
 		NextThought.finishedLoading
-			.then(function() {
-				return getHandlers;
-			})
+			.then(function() { return me.performAnd('getHandlerForNavigationToObject', obj, fragment); })
 			.done(function(handlers) {
 				if (Ext.isEmpty(handlers)) {
 					console.error('No handlers for object navigation:', obj);
@@ -600,7 +569,7 @@ Ext.define('NextThought.controller.Navigation', {
 
 		if (obj instanceof NextThought.model.Note) {
 			return function(obj) {
-				me.navigate(obj.get('ContainerId'), obj);
+				return me.navigate(obj.get('ContainerId'), obj);
 			};
 		}
 
