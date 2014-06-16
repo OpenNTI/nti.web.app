@@ -264,64 +264,55 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
-	//appendTypeView: function(base, type) {
-	//	return base + '/@@' + type;
-	//},
+	getObjectRaw: function(url, mime, forceMime) {
+		var headers = {}, opts = {};
 
-
-	getObjectRaw: function(url, mime, forceMime, success, failure, scope) {
-		var q = {}, headers = {}, req;
-
-		if (!url) {
-			Ext.callback(failure, scope, ['']);
-			return null;
+		if (!url || (Ext.isObject(url) && !url.url)) {
+			return Promise.reject('No URL');
 		}
 
 		if (mime) {
 			headers.Accept = mime;
 		}
 
+		if (Ext.isObject(url)) {
+			opts = url;
+			url = opts.url;
+		}
+
 		url = Ext.String.urlAppend(url, Ext.Object.toQueryString({type: mime}));
 
-		try {
-			req = {
+		return new Promise(function(fulfill, reject) {
+			var req = {
 				url: url,
-				scope: scope,
 				headers: headers,
 				callback: function(req, s, resp) {
+					var reason, contentType;
 					//If sent an Accept header the server
 					//may return a 406 if the Accept value is not supported
 					//or it may just return whatever it wants.  If we send
 					//Accept we check the Content-Type to see if that is what
 					//we get back.  If it's not and forceMime is truthy
 					//we call the failure callback
-					var contentType;
 					if (s) {
 						if (mime && forceMime) {
 							contentType = resp.getResponseHeader('Content-Type');
 							if (contentType && contentType.indexOf(mime) < 0) {
-								console.error('Requested with an explicit accept value of ', mime, ' but got ', contentType, '.  Calling failure ', arguments);
-								Ext.callback(failure, scope, [req, resp]);
-								return;
+								reason = 'Requested with an explicit accept value of ' + mime + ' but got ' + contentType + '.  Rejecting.';
+								console.error(reason, arguments);
+								return reject(reason);
 							}
 						}
 
-						Ext.callback(success, scope, [resp]);
-					} else {
-						Ext.callback(failure, scope, [req, resp]);
+						return fulfill(resp);
 					}
+					reject([req, resp]);
 				}
 			};
 
-
-			//lookup step
-			q.request = Ext.Ajax.request(req);
-		}
-		catch (e) {
-			Ext.callback(failure, scope, [{},e]);
-		}
-
-		return q;
+			Ext.apply(req, opts);
+			Ext.Ajax.request(req);
+		});
 	},
 
 
@@ -340,16 +331,31 @@ Ext.define('NextThought.model.Service', {
 
 
 	getPageInfo: function(ntiid, success, failure, scope) {
-		var url, q,
-			cache = this.pageInfoCache = this.pageInfoCache || {},
+		var url, me = this,
+			cache = me.pageInfoCache = me.pageInfoCache || {},
 			mime = 'application/vnd.nextthought.pageinfo';
 
 		if (!ParseUtils.isNTIID(ntiid)) {
 			Ext.callback(failure, scope, ['']);
-			return null;
+			return Promise.reject('Bad NTIID');
 		}
 
-		url = this.getObjectURL(ntiid);
+		if (!cache.listeningForInvalidations) {
+			cache.listeningForInvalidations = Ext.Ajax.on({
+				destroyable: true,
+				beforerequest: function(connection, options) {
+					var method = options.method,
+						url = options.url && options.url.replace(/\/\+\+fields\+\+sharingPreference$/, '');
+
+					if (method !== 'GET' && cache[url]) {
+						console.debug('Invalidate cache at url' + url);
+						delete cache[url];
+					}
+				}
+			});
+		}
+
+		url = me.getObjectURL(ntiid);
 
 		//Chrome 25,26 and 27 (and safari 6) don't seem to listen to any of the caching
 		//headers that would prevent a request for an object using one Accept
@@ -358,141 +364,120 @@ Ext.define('NextThought.model.Service', {
 		//objects back so request them at a special view to influence cache logic
 		//url = this.appendTypeView(url, 'pageinfo+json');
 
-		try {
 
-			function onSuccess(resp) {
-				var pageInfos = ParseUtils.parseItems(resp.responseText),
-					//We claim success but the damn browsers like to give the wrong object
-					//type from cache.  They don't seem to listen to Vary: Accept or any
-					//of the other myriad of caching headers supplied by the server
-					pageInfo = pageInfos.first();
+		function onSuccess(resp) {
+			var pageInfos = ParseUtils.parseItems(resp.responseText),
+				//We claim success but the damn browsers like to give the wrong object
+				//type from cache.  They don't seem to listen to Vary: Accept or any
+				//of the other myriad of caching headers supplied by the server
+				pageInfo = pageInfos.first();
 
-				if (pageInfo && pageInfo.get('MimeType') !== mime) {
-					console.warn('Received an unknown object when requesting PageInfo.  Treating as failure', resp);
-					Ext.callback(failure, scope, [{}, resp]);
-					return;
-				}
-
-				Ext.each(pageInfos, function(p) {
-					(p || {}).originalNTIIDRequested = ntiid;
-				});
-				this.fireEvent('update-pageinfo-preferences', pageInfos);
-				Ext.callback(success, scope, pageInfos);
+			if (pageInfo && pageInfo.get('MimeType') !== mime) {
+				console.warn('Received an unknown object when requesting PageInfo.  Treating as failure', resp);
+				return Promise.reject([{}, resp]);
 			}
 
-			function onFailure(req, resp) {
-				Ext.callback(failure, scope, [req, resp]);
-			}
+			pageInfos.forEach(function(p) { (p || {}).originalNTIIDRequested = ntiid; });
 
-			function cacheWrapper(resp) {
-				if (resp.status === 200) {
-					try {
-						ObjectUtils.deleteFunctionProperties(cache[url] = Ext.clone(resp));
-					} catch (e) {
-						console.error('(IE9?) Error occured trying to cache the pageInfo response. ' + e.stack || e.message);
-					}
-				} else {
-					console.debug('Not caching response because it wasn\'t a 200', resp);
-				}
-				onSuccess.apply(this, arguments);
-			}
-
-			if (!cache.listeningForInvalidations) {
-				cache.listeningForInvalidations = Ext.Ajax.on({
-					destroyable: true,
-					beforerequest: function(connection, options) {
-						var method = options.method,
-							url = options.url && options.url.replace(/\/\+\+fields\+\+sharingPreference$/, '');
-
-						if (method !== 'GET' && cache[url]) {
-							console.debug('Invalidate cache at url' + url);
-							delete cache[url];
-						}
-					}
-				});
-			}
-
-			if (cache.hasOwnProperty(url)) {
-				Ext.defer(onSuccess, 1, this, [cache[url]]);//make this call from its own stack
-				return null;
-			}
-
-			q = this.getObjectRaw(url, mime + '+json', true, cacheWrapper, onFailure, this);
-			q.request.ntiid = ntiid;
-
-		}
-		catch (e) {
-			Ext.callback(failure, scope, [{},e]);
+			me.fireEvent('update-pageinfo-preferences', pageInfos);
+			Ext.callback(success, scope, pageInfos);//back-compat
+			return pageInfos;
 		}
 
-		return q;
+
+		function onFailure(reason) {
+			if (!Ext.isArray(reason)) {
+				reason = [reason];
+			}
+			reason[0].ntiid = ntiid;
+			Ext.callback(failure, scope, reason);//back-compat
+			//don't let this 'catch' the failure...let the promise continue to reject.
+			return Promise.reject(reason[0]);
+		}
+
+
+		function cacheWrapper(resp) {
+			if (resp.status === 200) {
+				try {
+					ObjectUtils.deleteFunctionProperties(cache[url] = Ext.clone(resp));
+				} catch (e) {
+					console.error('(IE9?) Error occured trying to cache the pageInfo response. ' + e.stack || e.message);
+				}
+			} else {
+				console.debug('Not caching response because it wasn\'t a 200', resp);
+			}
+			return resp;
+		}
+
+
+		if (cache.hasOwnProperty(url)) {
+			return wait(1).then(onSuccess.bind(this, cache[url]));//make this call from its own stack
+		}
+
+		return this.getObjectRaw({url: url, ntiid: ntiid}, mime + '+json', true)
+				.then(cacheWrapper)
+				.then(onSuccess)
+				.fail(onFailure);
 	},
 
 
 	getObject: function(ntiid, success, failure, scope, safe) {
-		var url;
+		var url, result;
 
 		if (!ParseUtils.isNTIID(ntiid)) {
 			Ext.callback(failure, scope, ['']);
-			return null;
+			return Promise.reject('Bad NTIID');
 		}
 
 		url = this.getObjectURL(ntiid);
 
-		return this.getObjectRaw(url, null, false,
-				function(resp) {
-					var arg;
-
+		result = this.getObjectRaw(url, null, false)
+				.then(function(resp) {
 					try {
-						arg = ParseUtils.parseItems(resp.responseText);
+						return ParseUtils.parseItems(resp.responseText)[0];
 					}catch (e) {
-						if (safe) {
-							Ext.callback(success, scope);
-						}else {
+						if (!safe) {
 							throw e;
 						}
 					}
-					Ext.callback(success, scope, arg);
-				},
-				function(req, resp) {
-					Ext.callback(failure, scope, [req, resp]);
-				},
-				this
-		);
+				});
+
+
+		//for backwards compat. Deprecate the callbacks.
+		result
+				.then(function(o) {
+					Ext.callback(success, scope, [o]);
+				})
+				.fail(function(reason) {
+					if (!Ext.isArray(reason)) {
+						reason = [reason];
+					}
+					Ext.callback(failure, scope, reason);
+				});
+
+		return result;
 	},
 
 	getObjects: function(ntiids, success, failure, scope, safe) {
+		var me = this;
 		if (!Ext.isArray(ntiids)) {
 			ntiids = [ntiids];
 		}
 
-		var results = {}, me = this, finishedCount = 0;
-
-		function finish() {
-			//get the results in the order they came in
-			var resultArray = Ext.Array.map(ntiids, function(n) {
-				return results[n];
-			});
-
-			Ext.callback(success, scope, [resultArray]);
+		function model(o) {
+			return o && o.isModel ? o : null;
 		}
 
-		function maybeFinish(name, rec) {
-			results[name] = rec;
-			finishedCount++;
+		return Promise.all(ntiids.map(function(n) {
+			return me.getObject(n, null, null, null, safe);
+		}))
+				.always(function(results) {
+					if (!Ext.isArray(results)) {results = [results];}
+					results = results.map(model);
+					Ext.callback(success, scope, [results]);
+					return results;
+				});
 
-			if (finishedCount === ntiids.length) {
-				finish();
-			}
-		}
-
-		Ext.each(ntiids, function(n) {
-			me.getObject(n, function(u) {
-				maybeFinish(n, u);
-			}, function() {
-				maybeFinish(n, null);
-			}, scope, safe);
-		});
 	},
 
 
