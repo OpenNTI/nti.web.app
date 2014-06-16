@@ -149,12 +149,20 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 			gradeBookRef = gradeBook && gradeBook.get('href'),
 			base = gradeBookRef && gradeBookRef.split(/[\?#]/)[0],
 			path = item && gradeBook && gradeBook.findGradeBookEntryFor(item.getId()),
-			grade = path && item && NextThought.model.courseware.Grade.create({
-				href: [base || '/???/']
+			href = [base || '/???/']
 							  .concat(path.map(encodeURIComponent))
 							  .concat([username])
 					  .join('/'),
-				Username: username
+			grade = path && item && NextThought.model.courseware.Grade.create({
+				href: href,
+				Username: username,
+				Links: [
+					{
+						Class: 'Link',
+						href: href,
+						rel: 'edit'
+					}
+				]
 			});
 
 		if (item && !path) {

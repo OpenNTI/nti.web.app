@@ -61,6 +61,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 			return;
 		}
 
+		//if it hasn't changed don't try to save it
+		if (value === grade.get('value')) { return; }
+
 		grade.set('value', value);
 		grade.save({
 			failure: function() {

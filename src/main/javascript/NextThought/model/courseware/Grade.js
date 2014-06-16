@@ -21,9 +21,24 @@ Ext.define('NextThought.model.courseware.Grade', {
 		{name: 'assignmentContainer', type: 'string', persist: false}
 	],
 
+	/**
+	 * Check if the value is empty, need to handle
+	 * "# L", "# -", " L", " " -", "#", and ""
+	 * @return {Boolean}
+	 */
+	isEmpty: function() {
+		var val = this.get('value');
+
+		return Ext.isEmpty(val.replace('-', '').trim());
+	},
+
+	//Doesn't make sense for this object
+	isMine: function() {
+		return true;
+	},
+
 
 	save: function(config) {
-
 		function failed() {
 			Ext.MessageBox.alert({
 				title: 'Error',
@@ -37,6 +52,11 @@ Ext.define('NextThought.model.courseware.Grade', {
 		}
 
 		config.failure = Ext.Function.createSequence(config.failure || Ext.emptyFn, failed, null);
+
+		if (this.isEmpty()) {
+			this.destroy(config);
+			return;
+		}
 
 		return this.callParent(arguments);
 	}
