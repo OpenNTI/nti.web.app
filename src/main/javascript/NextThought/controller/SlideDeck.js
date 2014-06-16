@@ -85,7 +85,7 @@ Ext.define('NextThought.controller.SlideDeck', {
 				restore: function(state) {
 					clearTimeout(this.ctx.__killOverlay);
 					this.ctx.__killOverlay = true;
-					var scope = state.slidedeck,
+					var scope = state.slidedeck || {},
 						deck = scope.deck,
 						media = scope.media,
 						p;
