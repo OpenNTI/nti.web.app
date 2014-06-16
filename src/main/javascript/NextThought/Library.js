@@ -123,7 +123,7 @@ Ext.define('NextThought.Library', {
 	},
 
 
-	getToc: function(index) {
+	getToc: function(index) {//todo: return a promise instead
 		if (index instanceof Ext.data.Model) {
 			index = index.getId();
 		}
@@ -436,7 +436,7 @@ Ext.define('NextThought.Library', {
 	},
 
 
-	resolve: function(toc, title, containerId, report) {
+	resolve: function(toc, title, containerId, report) {//todo: return a promise instead
 		var elts, ix, topic, EA = Ext.Array;
 
 		if (!toc) {
