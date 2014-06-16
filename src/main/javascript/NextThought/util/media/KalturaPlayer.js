@@ -466,7 +466,7 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 		if (!this.el && !this.settingUp) {
 			console.log(this.id, 'Performing activate');
 			this.playerSetup();
-			this.onReadyLoadSource = sourceId;
+			this.onReadyLoadSource = sourceId || (this.currentLoadAttempt || [])[0];
 		}
 		else {
 			console.log(this.id, 'Not doing player setup, but making player ready', this.el, this.settingUp);
