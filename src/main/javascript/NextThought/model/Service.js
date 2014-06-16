@@ -392,7 +392,7 @@ Ext.define('NextThought.model.Service', {
 			reason[0].ntiid = ntiid;
 			Ext.callback(failure, scope, reason);//back-compat
 			//don't let this 'catch' the failure...let the promise continue to reject.
-			return Promise.reject(reason[0]);
+			return Promise.reject(reason[1] || reason[0]);
 		}
 
 
