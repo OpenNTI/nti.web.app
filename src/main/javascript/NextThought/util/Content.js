@@ -297,78 +297,95 @@ Ext.define('NextThought.util.Content', {
 	 */
 	findContentObject: function(id, cb, scope) {
 		var titleNtiidPrefix = ParseUtils.ntiidPrefix(id), me = this,
-			title = titleNtiidPrefix ? Library.findTitleWithPrefix(titleNtiidPrefix) : null;
+			title = titleNtiidPrefix ? Library.findTitleWithPrefix(titleNtiidPrefix) : null,
+			result;
 
 		if (!title) {
 			Ext.callback(cb, scope);
-			return;
+			return Promise.reject('No Title');
 		}
 
 		//One place we can check is the video index
-		Library.getVideoIndex(title)
-				.then(function(index) {
-					var vid, container;
-					if (!index) {
-						Ext.callback(cb, scope);
-						return;
-					}
-
-					vid = index[id];
-
-					if (vid) {
+		result = Library.getVideoIndex(title)
+				.then(function(index) { return (index || {})[id]; })//don't really care if there is a video or not.
+				.then(function(video) {
+					var o = {object: video},
 						container = me.getLineage(id);
-						if (!Ext.isEmpty(container) && container.length > 1) {
-							container = container[1];
-						}
-						else {
-							container = title.get('NTIID');
-						}
-						//We need the base path
-						LocationMeta.getMeta(container, function(meta) {
-							if (meta) {
-								vid.basePath = meta.absoluteContentRoot;
-								Ext.callback(cb, scope, [vid, meta]);
-							}
-							else {
-								Ext.callback(cb, scope);
-							}
-						});
+
+					if (!Ext.isEmpty(container) && container.length > 1) {
+						container = container[1];
 					}
 					else {
-						Ext.callback(cb, scope, [vid]);
+						container = title.get('NTIID');
 					}
 
+					//We need the base path
+					return LocationMeta.getMeta(container)
+							.then(function(meta) {
+								if (o.object) {
+									o.object.basePath = meta.absoluteContentRoot;
+								}
+								o.meta = meta;
+							})
+							.always(function() { return o; });
+				});
+
+
+		//for backwards compat. Deprecate the
+		result
+				.then(function(o) {
+					//convert `o` to the arguments array.
+					return [o.object, o.meta];
 				})
-				.fail(function() { Ext.callback(cb, scope); });
+				//catch failures and resume...
+				.fail(function() {return null;})//ensure we always call the callback if its there, and if the promise is rejected,
+				// return null so the args are nulled out.
+				.then(function(args) { Ext.callback(cb, scope, args); });
+
+		return result;
 	},
 
 
 	findRelatedContentObject: function(id, cb, scope) {
 		var titleNTiidPrefix = ParseUtils.ntiidPrefix(id),
 			title = titleNTiidPrefix ? Library.findTitleWithPrefix(titleNTiidPrefix) : null,
-			toc, locationInfo, container;
+				o, action = 'resolve', result;
 
 		if (!title) {
 			Ext.callback(cb, scope);
-			return false;
+			return Promise.reject('No Title');
 		}
 
-		toc = Library.getToc(title);
-		locationInfo = Library.resolve(toc, title, id, true);
-		if (locationInfo) {
-			container = ContentUtils.getLineage(locationInfo.NTIID);
-			if (!Ext.isEmpty(container) && container.length > 1) {
-				container = container[1];
-			}
-			else {
-				container = title.get('NTIID');
-			}
-			Ext.callback(cb, scope, [container, locationInfo]);
-			return false;
+		o = Library.resolve(Library.getToc(title), title, id, true);
+		if (!o) {
+			action = 'reject';
+			o = 'No Info';
 		}
 
-		Ext.callback(cb, scope);
-		return true;
+		result = Promise[action](o)
+				.then(function(locationInfo) {
+					var container = ContentUtils.getLineage(locationInfo.NTIID);
+					if (!Ext.isEmpty(container) && container.length > 1) {
+						container = container[1];
+					}
+					else {
+						container = title.get('NTIID');
+					}
+					return {container: container, info: locationInfo};
+				});
+
+		//for backwards compat. Deprecate the callbacks
+		result
+				.then(function(o) {
+					//convert `o` to the arguments array.
+					return [o.container, o.info];
+				})
+				//catch failures and resume...
+				.fail(function() {return null;})//ensure we always call the callback if its there, and if the promise is rejected,
+												// return null so the args are nulled out.
+				.then(function(args) { Ext.callback(cb, scope, args); });
+
+		return result;//this is the actual promise. Not the promise returned in the back-compat chain.
 	},
 
 
