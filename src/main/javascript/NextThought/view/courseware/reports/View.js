@@ -64,7 +64,7 @@ Ext.define('NextThought.view.courseware.reports.View', {
 			title: getString('NextThought.view.courseware.reports.View.assignmenttitle'),
 			about: Ext.DomHelper.markup({tag: 'span', cn: [
 				getFormattedString('NextThought.view.courseware.reports.View.assignmentreport', {
-					assignment: '<a class=\'target\'>' + getString('NextThought.view.courseware.reports.View.assignment') + '.</a>'
+					assignments: '<a class=\'target\'>' + getString('NextThought.view.courseware.reports.View.assignment') + '.</a>'
 				})
 			]}),
 			src: 'resources/images/elements/assignment_report.gif'
