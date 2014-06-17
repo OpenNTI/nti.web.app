@@ -120,8 +120,8 @@ Ext.define('NextThought.view.courseware.info.outline.Menu', {
 		}
 
 		//switch!
-		this.scrollTo();//scroll the course info up
 		ci.body.getLayout().setActiveItem(viewId);
+		this.scrollTo(selModel, rec);//scroll the course info up
 	}
 
 });
