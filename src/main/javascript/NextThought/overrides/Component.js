@@ -7,11 +7,11 @@ Ext.define('NextThought.overrides.Component', {
 		this.shadow = false;
 
 		this.onceRendered = new Promise(function(fulfill) {
-			me.on({
+			this.on({
 				single: true,
 				afterrender: fulfill
 			});
-		});
+		}.bind(this));
 
 		this.callParent(arguments);
 		this.initDelegation();
