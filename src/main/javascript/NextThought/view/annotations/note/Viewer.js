@@ -74,6 +74,8 @@ Ext.define('NextThought.view.annotations.note.Viewer', {
 		m = this.down('note-main-view');
 		m.reader = this.reader || this.ownerCmp || this.floatParent;
 
+		m.purchasableId = this.purchasableId;
+
 		if (this.isEdit) {
 			m.editMode = this.isEdit;
 		}

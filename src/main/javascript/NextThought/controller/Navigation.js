@@ -304,11 +304,63 @@ Ext.define('NextThought.controller.Navigation', {
 		//thats what we want.  On failure it shows a page not found and
 		//if we handle this navigation in some other way we don't want that happening.
 
+		function handleUnauthorized() {
+			var win;
+			//if its a note go ahead and show the note window
+			if (rec instanceof NextThought.model.Note) {
+				UserRepository.getUser(rec.get('Creator'))
+					.then(function(u) {
+						if (!u) {
+							console.error('Failed to resolve creator of note: ', rec);
+							return;
+						}
+
+						return new Promise(function(fulfill, reject) {
+							me.fireEvent('show-profile', u, [], fulfill);
+						});
+					})
+					.then(function () { return wait(1); })
+					.then(function() {
+						win = Ext.widget({
+							xtype: 'note-window',
+							purchasableId: cid,
+							record: rec,
+							reader: {
+								fireEvent: Ext.emptyFn,
+								getDocumentElement: Ext.emptyFn,
+								getCleanContent: Ext.emptyFn,
+								up: Ext.emptyFn,
+								getPosition: function() {
+									var x = (Ext.Element.getViewportWidth() / 2) - (700 / 2);
+
+									return [x, 100];
+								},
+								getWidth: function() { return 700; }
+							}
+						});
+
+						win.show();
+					})
+					.fail(function(reason) {
+						me.fireEvent('unauthorized-navigation', me, cid);
+					});
+			} else {
+				me.fireEvent('unauthorized-navigation', me, cid);
+			}
+		}
+
 		function recover(reason) {
+			var course, content;
 			if (reason && reason.status === 404) {
 				return ContentUtils.findRelatedContentObject(cid)
 						.then(LocationMeta.getMeta.bind(LocationMeta));
 			}
+
+			if (reason && reason.status === 403) {
+				handleUnauthorized();
+				return Promise.reject('No Access');
+			}
+
 			return Promise.reject(reason);
 		}
 

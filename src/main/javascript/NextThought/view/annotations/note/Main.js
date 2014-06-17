@@ -13,6 +13,19 @@ Ext.define('NextThought.view.annotations.note.Main', {
 
 	highlightTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'highlight', html: '{0}'}),
 
+	purchasableTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+		{cls: 'bookcover', style: {backgroundImage: 'url({img})'}},
+		{cls: 'meta', cn: [
+			{cls: 'title', html: '{title}'},
+			{cls: 'byline', html: '{number}'},
+			{cls: 'button target', html: '{target}'}
+		]}
+	])),
+
+	noAccessTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+		{cls: 'no-access', html: 'You do not have access to this content.'}
+	])),
+
 	renderTpl: Ext.DomHelper.markup([
 		{
 			cls: 'note main-view',
@@ -68,7 +81,8 @@ Ext.define('NextThought.view.annotations.note.Main', {
 
 
 	renderSelectors: {
-		avatar: 'img.avatar'
+		avatar: 'img.avatar',
+		contextContainer: '.context'
 	},
 
 
@@ -283,8 +297,49 @@ Ext.define('NextThought.view.annotations.note.Main', {
 	},
 
 
+	setPurchasableContext: function(ntiid) {
+		var me = this, el,
+			course = CourseWareUtils.courseForNtiid(ntiid),
+			content = ContentUtils.purchasableForContentNTIID(ntiid);
+
+		//empty the current context;
+		me.contextContainer.update('');
+		me.contextContainer.addCls('purchasable');
+
+		if (course) {
+			el = me.purchasableTpl.append(this.contextContainer, {
+				img: course.get('thumbnail'),
+				title: course.get('Title'),
+				number: course.get('ProviderUniqueID'),
+				target: 'Enroll Now'
+			}, true);
+		} else if (content) {
+			el = me.purchasableTpl.append(me.contextContainer, {
+				img: content.get('Icon'),
+				title: content.get('Title'),
+				number: content.get('Name'),
+				target: 'Purchase'
+			}, true);
+		} else {
+			el = me.noAccessTpl.append(me.contextContainer, null, true);
+		}
+
+		me.mon(el, 'click', function(e) {
+			if (e.getTarget('.target')) {
+				me.fireEvent('unauthorized-navigation', me, ntiid);
+			}
+		});
+	},
+
+
 	setContext: function() {
+		if (this.purchasableId) {
+			this.setPurchasableContext(this.purchasableId);
+			return;
+		}
+
 		this.callParent(arguments);
+
 		if (this.record.placeholder) {
 			this.hideImageCommentLink();
 		}

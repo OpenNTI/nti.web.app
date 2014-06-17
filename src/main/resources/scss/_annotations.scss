@@ -482,6 +482,48 @@
 			}
 		}
 	}
+
+	&.purchasable {
+		.bookcover {
+			background: {
+				color: #f9f9f9;
+				size: cover;
+				position: center-center;
+				repeat: no-repeat;
+			}
+			box-shadow: -1px 1px 3px 0 rgba(0, 0, 0, 0.35);
+			border-radius: 1px;
+			float: left;
+			width: 55px;
+			height: 70px;
+		}
+
+		.meta {
+			float: left;
+			margin-left: 15px;
+
+			.title {
+				font-size: 2em;
+				height: auto;
+			}
+
+			.byline {
+				font-weight: 600;
+				color: $tertiary-grey;
+			}
+
+			.button {
+				color: $primary-blue;
+				cursor: pointer;
+				font-weight: 600;
+			}
+		}
+
+		.no-access {
+			font: normal 500 0.9em/1 $font;
+			color: #FD817F;
+		}
+	}
 }
 
 .note-window .main-view .context,
