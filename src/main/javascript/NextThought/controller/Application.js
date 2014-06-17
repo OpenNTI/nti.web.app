@@ -18,8 +18,14 @@ Ext.define('NextThought.controller.Application', {
 	},
 
 	restore: function() {
+		var token = {id: 'state-restore'},
+			app = this.application;
 		try {
-			this.getController('State').fireEvent('restore', PREVIOUS_STATE);
+			app.registerInitializeTask(token);
+			this.getController('State').restoreState(PREVIOUS_STATE)
+					.always(function() {
+						app.finishInitializeTask(token);
+					});
 		}
 		catch (e) {//restoring state
 			console.error('Restoring State: ', e, e.message, e.stack);

@@ -261,27 +261,5 @@ Promise.all = Promise.all || function(promises) {
 };
 
 
-Ext.define('NextThought.util.Promise', {
-	singleton: true,
-
-	make: function() {
-		console.error('[Bad Practice!] Promises should be not made without a guarantee. See this line.');
-		/**
-		 * Do NOT just replace .make() with "new Deferred()". Actually take the time to evaluate.
-		 *
-		 * Prferred pattern ex:
-		 * new Promise(function (fulfill, reject) {//the Guarantee
-		 *     //do something async here
-		 *     ajax(somerequest)
-		 *          .then(process)
-		 *          .done(function(procesResults) {
-		 *              fullfill(procesResults);
-		 *          })
-		 *          .fail(reject);
-		 * });
-		 */
-		return new Deferred();
-	}
-
-}, function() { window.PromiseFactory = this; });
+Ext.define('NextThought.util.Promise', {});
 

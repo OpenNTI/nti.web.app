@@ -22,11 +22,9 @@ Ext.define('NextThought.view.forums.Container', {
 
 
 	restore: function(state) {
-		var p = new Deferred();
-
-		this.fireEvent('restore-forum-state', state, p);
-
-		return p;
+		return new Promise(function(fulfill, reject) {
+			this.fireEvent('restore-forum-state', state, fulfill, reject);
+		}.bind(this));
 	},
 
 

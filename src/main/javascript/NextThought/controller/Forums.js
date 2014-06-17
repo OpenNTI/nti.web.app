@@ -22,20 +22,9 @@ Ext.define('NextThought.controller.Forums', {
 
 	stores: [
 		'NTI'
-		//'Board','Forums'...
 	],
 
-	views: [
-		// 'forums.Editor',
-		// 'forums.Root',
-		// 'forums.Board',
-		// 'forums.Comment',
-		// 'forums.Forum',
-		// 'forums.Topic',
-		// 'forums.View',
-		// 'forums.forumcreation.Window',
-		//'profiles.parts.ForumActivityItem'
-	],
+	views: [],
 
 	refs: [
 		{ ref: 'courseForum', selector: 'forums-container[isCourseForum]'},
@@ -218,55 +207,39 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	handleRestoreState: function(state, promise) {
-		var me = this,
-			url = me.buildUrlFromState(state), req;
+	handleRestoreState: function(state, finish) {
+		var url = this.buildUrlFromState(state);
 
+		//we can't restore the state but don't blow up
 		if (!url) {
-			//we can't restore the state but don't blow up
-			promise.fulfill();
+			finish();
 		}
 
-		req = {
-			url: url,
-			method: 'GET',
-			success: function(resp, req) {
-				var json = Ext.JSON.decode(resp.responseText, true),
-					obj = ParseUtils.parseItems(json)[0];
-
-				me.presentForumItem(obj)
-					.then(function() {
-						promise.fulfill();
-					})
-					.fail(function(reason) {
-						console.error('Failed to restore forum state: ', reason);
-						promise.fulfill();
-					});
-			},
-			failure: function() {
-				console.error('Failded to get:', url, arguments);
-				promise.fulfill();
-			}
-		};
-
-		Ext.Ajax.request(req);
+		Service.request(url)
+				.then(JSON.parse)
+				.then(ParseUtils.parseItems.bind(ParseUtils))
+				.then(function(objects) {return objects[0];})
+				.then(this.presentForumItem.bind(this))
+				.fail(function(reason) {
+					console.error('Failed to restore forum state: ', reason);
+				})
+				.then(finish);
 	},
 
 
-	restoreState: function(s, promise) {
+	restoreState: function(s, fulfill, reject) {
 		var state = s.forums || {},
 			me = this;
 
 		function handle() {
-			me.handleRestoreState(state, promise);
+			me.handleRestoreState(state, fulfill, reject);
 		}
 
 		//there is a state restoring
 		this.stateRestoring = true;
 
 		if (s.active !== 'forums') {
-			promise.fulfill();
-			return;
+			return fulfill();
 		}
 
 		//we are restoring a state
@@ -324,104 +297,73 @@ Ext.define('NextThought.controller.Forums', {
 	 * @param  {NextThought.model.forums.base} record either a board, forum, or topic
 	 */
 	presentForumItem: function(record) {
-		var me = this;
-
 		if (!record) {
 			console.error('Cant present an empty record');
 			return Promise.resolve();
 		}
 
 		if (record.isBoard) {
-			return me.loadForumList(null, record);
+			return this.loadForumList(null, record);
 		}
 
 		if (record.isForum) {
 			//if we have a forum load its board and show it as the active one
 			return Service.getObject(record.get('ContainerId'))
 				.then(function(obj) {
-					me.loadForumList(null, obj, record.getId());
-				});
+						return this.loadForumList(null, obj, record.getId());
+					}.bind(this));
 		}
 
 		if (record.isTopic) {
-			return me.loadTopic(null, record);
+			return this.loadTopic(null, record);
 		}
 
 		if (record.isComment) {
-			return me.loadComment(null, record);
+			return this.loadComment(null, record);
 		}
 	},
 
 
 	loadCommunityBoards: function() {
-		var p = PromiseFactory.make(), me = this,
-			communities = $AppConfig.userObject.getCommunities();
-
-		function onBoardLoad(resp, req) {
-			var objs = ParseUtils.parseItems(resp.responseText),
-				comm = req.community, boards = [];
-
-
-			objs.forEach(function(o) {
-				//We create forums on the backend, so if the board has 0, don't show it.
-				// except I don't think this applies anymore
-				if (o.get('ForumCount') > -1) {
-					if (comm) {
-						o.communityUsername = comm.getId();
-
-						if (o.get('Creator') === comm.getId()) {
-							o.set('Creator', comm);
-						}
-					}
-
-					boards.push(o);
-				}
-			});
-
-			if (req.promise) {
-				req.promise.fulfill(boards);
-			} else {
-				console.error('We didnt have a promise to fulfill, panic');
-			}
-		}
+		var communities = $AppConfig.userObject.getCommunities();
 
 		function loadCommunityBoard(community) {
-			var prom = new Deferred(),
-				url = community.getLink('DiscussionBoard');
+			var url = community.getLink('DiscussionBoard');
 
 			if (!url) {
-				prom.fulfill([]);
-				return prom;
+				return Promise.resolve([]);
 			}
 
-			Ext.Ajax.request({
-				url: url,
-				community: community,
-				promise: prom,
-				success: onBoardLoad,
-				failure: function() {
-					prom.fulfill([]);
-				}
-			});
+			return Service.request(url)
+					.then(ParseUtils.parseItems.bind(ParseUtils))
+					.then(function onBoardLoad(objs) {
+						return objs.map(function(o) {
+							//We create forums on the backend, so if the board has 0, don't show it.
+							// except I don't think this applies anymore
+							if (o.get('ForumCount') > -1) {
+								if (community) {
+									o.communityUsername = community.getId();
 
-			return prom;
+									if (o.get('Creator') === community.getId()) {
+										o.set('Creator', community);
+									}
+								}
+								return o;
+							}
+						});
+					});
+
 		}
 
-		Promise.all(communities.map(loadCommunityBoard))
-			.done(function(results) {
-				results = results.reduce(function(a, b) {
-					return a.concat(b);
-				}, []);
-
-				p.fulfill(results);
+		return Promise.all(communities.map(loadCommunityBoard))
+			.then(function(results) {
+				return results.reduce(function(a, b) { return a.concat(b); }, []);
 			})
 			.fail(function(reason) {
 				console.error('Faild to load boards because:', reason);
 				//if we fail for some reason don't break it, just show no boards
-				p.fulfill([]);
+				return [];
 			});
-
-		return p;
 	},
 
 
@@ -431,32 +373,32 @@ Ext.define('NextThought.controller.Forums', {
 		//don't need to load the boards more than once
 		if (this.boardStore && view.showBoardList) {
 			view.showBoardList(this.boardStore);
-			return;
+			return Promise.resolve();
 		}
 
-		var me = this,
-			store = NextThought.store.NTI.create({
-				model: 'NextThought.model.forums.Forum', id: 'flattened-boards-forums'
+		var store = NextThought.store.NTI.create({
+				model: 'NextThought.model.forums.Forum',
+				id: 'flattened-boards-forums'
 			});
 
-		me.loadingRoot = true;
+		this.loadingRoot = true;
 
-		me.loadCommunityBoards()
-			.done(function(boards) {
-				delete me.loadingRoot;
+		return this.loadCommunityBoards()
+				.then(function(boards) {
+					delete this.loadingRoot;
 
-				if (boards) {
-					store.add(boards);
+					if (boards) {
+						store.add(boards);
 
-					me.boardStore = store;
+						this.boardStore = store;
 
-					//TODO: if there is only one board go ahead and load it
-					if (view.showBoardList) {
-						view.showBoardList(store);
-						me.fireEvent('root-loaded');
+						//TODO: if there is only one board go ahead and load it
+						if (view.showBoardList) {
+							view.showBoardList(store);
+							this.fireEvent('root-loaded');
+						}
 					}
-				}
-			});
+				}.bind(this));
 
 	},
 
@@ -472,8 +414,7 @@ Ext.define('NextThought.controller.Forums', {
 	loadForumList: function(cmp, record, activeForumId, wait, silent) {
 		if (Ext.isArray(record)) { record = record[0]; }
 
-		var p = PromiseFactory.make(),
-			me = this, view = this.getCardContainer(cmp),
+		var p, me = this, view = this.getCardContainer(cmp),
 			community = record.get('Creator');
 
 		record.activeNTIID = activeForumId;
@@ -490,41 +431,27 @@ Ext.define('NextThought.controller.Forums', {
 			return v;
 		}
 
-		function maybeFinish() {
-			//If we have a view we can go ahead and set the forum list
-			if (view) {
-				finish(view);
-			} else {
-				//otherwise we need to go to the course of the forums tab first
-				record.findCourse()
-					.done(function(course) {
-						var s = (me.stateRestoring && !me.hasStateToRestore) || silent;
-
-					});
-			}
-		}
-
-		if (!community.isModel) {
-			UserRepository.getUser(community)
-				.done(function(c) {
+		p = community.isModel ?
+				Promise.resolve(community) :
+				UserRepository.getUser(community).then(function(c) {
 					record.set('Creator', c);
+					return c;
 				});
-		}
 
 		if (view) {
-			return Promise.resolve(finish(view));
+			return p.then(finish.bind(this, view));
 		}
 
-		return	record.findCourse()
-			.then(function(course) {
-				var s = (me.stateRestoring && !me.hasStateToRestore) || silent;
-				//if there is a state to restore that we aren't incharge of pass true as the last argument, to keep
-				//it from switching the tab.
-				view = me.callOnAllControllersWith('onNavigateToForum', record, course, s);
-				//set a flag to keep the view from updating the state
-				view.ignoreStateUpdate = s;
-				return finish(view);
-			});
+		return Promise.all([p, record.findCourse()])
+				.then(function(results) {return results.last();})//since we're waiting on both, only pass the last result to the next `then`.
+				.then(function(course) {
+					var s = (me.stateRestoring && !me.hasStateToRestore) || silent;
+					//if there is a state to restore that we aren't incharge of pass true as the last argument, to keep it from switching the tab.
+					view = me.callOnAllControllersWith('onNavigateToForum', record, course, s);
+					//set a flag to keep the view from updating the state
+					view.ignoreStateUpdate = s;
+					return finish(view);
+				});
 	},
 
 
@@ -537,44 +464,33 @@ Ext.define('NextThought.controller.Forums', {
 	 */
 	loadTopicList: function(cmp, record, activeTopic, callback) {
 		if (Ext.isArray(record)) { record = record[0]; }
-
 		if (!record || !record.isModel) { return; }
-
-		var me = this, view = this.getCardContainer(cmp), forumList;
-
 		record.activeRecord = activeTopic;
 
-		function finish(v, forumList) {
+		var me = this,
+			view = me.getCardContainer(cmp),
+			forumList;
+
+		function finish(v) {
 			var topicView = v.showTopicList(record, forumList);
-
-			if (callback && Ext.isFunction(callback)) {
-				callback.call(this, topicView, v);
+			if (Ext.isFunction(callback)) {
+				callback.call(me, topicView, v);
 			}
+			return v;
 		}
 
-		UserRepository.getUser(record.get('Creator'))
-			.then(function(c) {
-				record.set('Creator', c);
-			});
-
-		if (view) {
-			finish(view);
-
-			return Promise.resolve(view);
-		}
-
-		//get the forum list and add it first
-		return	Service.getObject(record.get('ContainerId'), Ext.emptyFn, Ext.emptyFn, null, true)
-			.then(function(f) {
-				forumList = f;
-				return me.loadForumList(null, forumList, record.getId(), true);
-			})
-			.then(function(v) {
-				finish(v, forumList);
-				return v;
-			}).fail(function(reason) {
-				return Promise.reject(reason);
-			});
+		return UserRepository.getUser(record.get('Creator'))
+				.then(function(c) { record.set('Creator', c); })
+				.then(function() {
+					return view ? Promise.resolve(view) :
+						//get the forum list and add it first
+						   Service.getObject(record.get('ContainerId'), null, null, null, true)
+								   .then(function(f) {
+									   forumList = f;
+									   return me.loadForumList(null, f, record.getId(), true);
+								   });
+				})
+				.then(finish);
 	},
 
 
@@ -591,18 +507,16 @@ Ext.define('NextThought.controller.Forums', {
 			return Promise.reject('Cant present a topic with an empty record');
 		}
 
-		var me = this;
-
 		return Service.getObject(record.get('ContainerId'))
-			.then(function(topicList) {
-				topicList.comment = comment;
-				return me.loadTopicList(cmp, topicList, record);
-			})
-			.then(function(view) {
-				if (cb) {
-					cb.call(scope, view.down('forums-topic-view'));
-				}
-			});
+				.then(function(topicList) {
+					topicList.comment = comment;
+					return this.loadTopicList(cmp, topicList, record);
+				}.bind(this))
+				.then(function(view) {
+					if (cb) {
+						cb.call(scope, view.down('forums-topic-view'));
+					}
+				});
 	},
 
 
@@ -744,9 +658,9 @@ Ext.define('NextThought.controller.Forums', {
 		} else {
 			Service.getObject(topicList.get('ContainerId'), function(forumList) {
 				if (forumList) {
-					me.loadForum(null, forum, topicList.getId(), null, true)
-						.done(function(v) {
-							finish(v, forumList);
+					return me.loadForum(null, forum, topicList.getId(), null, true)
+						.then(function(v) {
+							return finish(v, forumList);
 						});
 				}
 			});

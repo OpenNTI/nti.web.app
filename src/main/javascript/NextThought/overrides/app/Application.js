@@ -8,21 +8,6 @@ Ext.define('NextThought.overrides.app.Application', {
 	},
 
 
-	beginInitializeTask: function(name) {
-		var token = {name: name},
-			me = this,
-			method = me.beginInitializeTask.caller;
-
-		method = method.$previous || (method.$owner ? method : method.caller);
-		method = method.$owner ? (method.$owner.$className + '.' + method.$name) : method.name;
-		token.method = method;
-		me.registerInitializeTask(token);
-		return function() {
-			me.finishInitializeTask(token);
-		};
-	},
-
-
 	registerInitializeTask: function(task) {
 		var method = this.registerInitializeTask.caller;
 		method = method.$previous || (method.$owner ? method : method.caller);

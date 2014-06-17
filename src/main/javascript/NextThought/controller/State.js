@@ -132,9 +132,6 @@ PREVIOUS_STATE = 'previous-state';
 		constructor: function() {
 			this.callParent(arguments);
 
-			this.addEvents('restore');
-			this.on('restore', this.restoreState, this);
-
 			this.fragmentInterpreterMap = {
 				'#!profile': Ext.bind(this.interpretProfileFragment, this),
 				'#!forums': Ext.bind(this.interpretForumsFragment, this),
@@ -533,7 +530,7 @@ PREVIOUS_STATE = 'previous-state';
 				console.warn('there is no state to restore??', e);
 				return;
 			}
-			this.fireEvent('restore', Ext.decode(s, true) || {});
+			this.restoreState(Ext.decode(s, true) || {});
 		},
 
 
@@ -549,21 +546,11 @@ PREVIOUS_STATE = 'previous-state';
 
 		restoreState: function(stateObject) {
 			var me = this,
-				app = me.application,
 				history = window.history;
 
 			if (me.restoringState) {
 				console.warn('Restoring state while one is already restoring...');
 				return;
-			}
-
-			function fin(key, stateFrag) {
-				var token = {};
-				token[key] = stateFrag;
-				app.registerInitializeTask(token);
-				return function() {
-					app.finishInitializeTask(token);
-				};
 			}
 
 			me.restoringState = new Promise(function(fulfill, reject) {
@@ -598,7 +585,7 @@ PREVIOUS_STATE = 'previous-state';
 										try {
 											stateScoped = {active: stateObject.active};
 											me.currentState[key] = stateScoped[key] = stateObject[key];
-											tasks.push(c.restore(stateScoped).then(fin(key, stateScoped)));
+											tasks.push(c.restore(stateScoped));
 										}
 										catch (e) {
 											console.error('Setting state: ', e, e.message, e.stack);
@@ -625,10 +612,12 @@ PREVIOUS_STATE = 'previous-state';
 
 			});
 
-			me.restoringState.fail(function(reason) {
-				delete me.restoringState;
-				console.error('Failed to restore state', reason);
-			});
+			return me.restoringState
+					.fail(function(reason) {
+						delete me.restoringState;
+						console.error('Failed to restore state', reason);
+						return Promise.reject(reason);
+					});
 		},
 
 
