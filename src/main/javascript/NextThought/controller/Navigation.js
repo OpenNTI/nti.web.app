@@ -610,8 +610,20 @@ Ext.define('NextThought.controller.Navigation', {
 		if (obj.isPageInfo) {
 			return function(obj, fragment) {
 				function scroll(content) {
-					if (content && fragment) {
-						content.getScroll().toTarget(fragment);
+
+					var scroller,
+						id = obj.getId(),
+						requestedId = obj.originalNTIIDRequested;
+
+					if (content) {
+						scroller = content.getScroll();
+						if (fragment) {
+							scroller.toTarget(fragment);
+						}
+						//redirected PageInfo (requested id is a child of the `id`)
+						else if (requestedId && id !== requestedId) {
+							scroller.toContainer(requestedId);
+						}
 					}
 				}
 
