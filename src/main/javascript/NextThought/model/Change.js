@@ -37,7 +37,7 @@ Ext.define('NextThought.model.Change', {
 
 
 	getItem: function() {
-		var item = this.get('Item'),
+		var e, item = this.get('Item'),
 			changeModel = this.changeTypeToModel[this.get('ChangeType')];
 
 		if (!item && changeModel) {
@@ -54,7 +54,10 @@ Ext.define('NextThought.model.Change', {
 				item.fields.add(Ext.data.Field.create({name: 'EventTime', type: 'date'}));
 			}
 
+			e = item.editing;
+			item.editing = true;
 			item.set({EventTime: this.get('Last Modified')});
+			item.editing = e;
 		}
 
 		return item;
