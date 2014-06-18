@@ -206,6 +206,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	afterRender: function() {
 		this.callParent(arguments);
 
+		var grid = this.grid;
+
 		this.createStudentMenu();
 		this.createItemMenu();
 
@@ -231,6 +233,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		this.mon(this.grid, {
 			cellclick: 'onCellClick'
+		});
+
+		this.mon(this.store, 'refresh', function() {
+			grid.verticalScroller.scrollTo(0);
 		});
 	},
 	//</editor-fold>
