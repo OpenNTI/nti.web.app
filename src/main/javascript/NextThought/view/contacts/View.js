@@ -98,8 +98,25 @@ Ext.define('NextThought.view.contacts.View', {
 	},
 
 
+	pushState: function(s) {
+		history.pushState({contacts: s}, this.title, location.pathname);
+	},
+
+
+	onTabClicked: function(tabSpec) {
+		if (this.callParent(arguments) === true) {
+			this.pushState({
+				activeTab: this.parseTabSpec(tabSpec).viewId
+			});
+		}
+	},
+
+
 	restore: function(state) {
-		return Promise.resolve();
+		return new Promise(function(fulfill) {
+			this.setActiveTab(((state || {}).contacts || {}).activeTab);
+			fulfill();
+		}.bind(this));
 	}
 });
 
