@@ -319,7 +319,7 @@ Ext.define('NextThought.controller.Navigation', {
 							me.fireEvent('show-profile', u, [], fulfill);
 						});
 					})
-					.then(function () { return wait(1); })
+					.then(function() { return wait(1); })
 					.then(function() {
 						win = Ext.widget({
 							xtype: 'note-window',
@@ -573,7 +573,10 @@ Ext.define('NextThought.controller.Navigation', {
 
 			//We have a fair amount of data locally that we can get at now.  so look for it first
 			//if we can't find anything then fetch it from remote
-		return object ? Promise.fulfill(object) : ContentUtils.findContentObject(ntiid)
+		return (object ? Promise.fulfill(object) : ContentUtils.findContentObject(ntiid))
+				.then(function(o) {
+					return o.object || Promise.reject('No object');
+				})
 				.fail(Service.getObject.bind(Service, ntiid))
 				.then(onSuccess)
 				.fail(onFailure);
