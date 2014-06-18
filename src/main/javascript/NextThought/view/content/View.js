@@ -126,7 +126,6 @@ Ext.define('NextThought.view.content.View', {
 
 		this.mon(this.courseForum, {
 			scope: this,
-			'set-active-state': 'updateForumState',
 			'hide-forum-tab': function(view) {
 				this.updateTabs();
 				if (this.layout.getActiveItem() === view) {
@@ -159,13 +158,6 @@ Ext.define('NextThought.view.content.View', {
 		});
 
 		this.fireEvent('get-course-hooks', this);
-	},
-
-
-	updateForumState: function(type, ntiid) {
-		var state = {};
-		(state.discussion = {})[type] = ntiid;
-		this.pushState(state);
 	},
 
 
