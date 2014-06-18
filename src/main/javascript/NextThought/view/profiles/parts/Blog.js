@@ -273,7 +273,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 
 
 	onBeforeDeactivate: function() {
-		var b = Boolean(this.isVisible() && this.el.down('.blog-editor'));
+		var b = Boolean(this.isVisible() && this.down('profile-blog-editor'));
 		if (b) {
 			this.warnBeforeDismissingEditor();
 		}
