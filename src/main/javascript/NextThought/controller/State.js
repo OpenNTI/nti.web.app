@@ -530,7 +530,7 @@ PREVIOUS_STATE = 'previous-state';
 				console.warn('there is no state to restore??', e);
 				return;
 			}
-			this.restoreState(Ext.decode(s, true) || {});
+			this.restoreState(Ext.decode(s, true) || this.initialState || {});
 		},
 
 
@@ -578,6 +578,10 @@ PREVIOUS_STATE = 'previous-state';
 
 							me.currentState.active = stateObject.active;
 
+							if (stateObject.active && !stateObject[stateObject.active]) {
+								stateObject[stateObject.active] = {};
+							}
+
 							for (key in stateObject) {
 								if (stateObject.hasOwnProperty(key)) {
 									c = me.getStateRestorationHandlerFor(key);
@@ -613,6 +617,9 @@ PREVIOUS_STATE = 'previous-state';
 			});
 
 			return me.restoringState
+					.then(function() {
+						me.initialState = Ext.clone(me.currentState);
+					})
 					.fail(function(reason) {
 						delete me.restoringState;
 						console.error('Failed to restore state', reason);
