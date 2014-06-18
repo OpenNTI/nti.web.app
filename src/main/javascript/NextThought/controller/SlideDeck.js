@@ -80,23 +80,26 @@ Ext.define('NextThought.controller.SlideDeck', {
 		var me = this;
 
 		if (key === 'slidedeck') {
+			console.debug('media/slidedeck viwers in state!');
 			return {
-				ctx: this,
 				restore: function(state) {
-					clearTimeout(this.ctx.__killOverlay);
-					this.ctx.__killOverlay = true;
+					clearTimeout(me.__killOverlay);
+					me.__killOverlay = true;
 					var scope = state.slidedeck || {},
 						deck = scope.deck,
 						media = scope.media,
 						p;
 
 					if (deck) {
-						p = this.ctx.restoreSlideDeckView(deck);
+						p = me.restoreSlideDeckView(deck);
 					} else if (media) {
-						p = this.ctx.restoreMediaViewer(media);
+						p = me.restoreMediaViewer(media);
 					}
 
-					return p || Promise.resolve();
+					return (p || Promise.resolve()).then(function() {
+						console.debug('Now safe to queue viewer destruction');
+						delete me.__killOverlay;
+					});
 				}
 			};
 			//if we've "restored" the timer id will be replaced with "true"
@@ -106,7 +109,11 @@ Ext.define('NextThought.controller.SlideDeck', {
 				var a = me.getActiveMediaViewer(),
 					b = me.getActiveSlideDeck();
 				Ext.destroy(a, b);
+				delete me.__killOverlay;
 			}, 100);
+			console.debug('Queued destroying media/slidedeck viwers:' + key);
+		} else {
+			console.debug('Ignored, key:' + key);
 		}
 	},
 
