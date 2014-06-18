@@ -826,7 +826,8 @@ Ext.define('NextThought.controller.Chat', {
 
 		Ext.Object.each(msg, function(key, value) {
 			var presence = ParseUtils.parseItems([value])[0],
-					prevToast = Ext.getCmp('revertToast');
+				prevToast = Ext.getCmp('revertToast'),
+				oldPresence;
 
 			//if its the current user set the flag accordingly
 			if (isMe(key)) {
@@ -837,7 +838,8 @@ Ext.define('NextThought.controller.Chat', {
 					}
 
 				}else {
-					if (!me.setMyselfOffline && store.getPresenceOf(key).isOnline()) {
+					oldPresence = store.getPresenceOf(key);
+					if (!me.setMyselfOffline && oldPresence && oldPresence.isOnline()) {
 						console.log('Set offline in another session');
 						me.setMyselfOffline = false;
 
