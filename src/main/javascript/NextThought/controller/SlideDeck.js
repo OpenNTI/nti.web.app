@@ -121,7 +121,7 @@ Ext.define('NextThought.controller.SlideDeck', {
 						var video = index[data.videoId],
 							basePath = getURL(contentPackage.get('root'));
 
-						me.launchMediaPlayer(video, data.videoId, basePath);
+						me.changeMediaInPlayer(video, data.videoId, basePath);
 
 						fulfill();
 					})
