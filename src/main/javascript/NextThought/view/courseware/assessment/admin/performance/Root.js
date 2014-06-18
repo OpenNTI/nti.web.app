@@ -235,7 +235,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			cellclick: 'onCellClick'
 		});
 
-		this.mon(this.store, 'refresh', function() {
+		this.mon(this.store, 'refresh', function(store) {
+			//if there are no records in the scrollTo will case an exception
+			if (!store.getCount()) { return; }
+
 			grid.verticalScroller.scrollTo(0);
 		});
 	},
