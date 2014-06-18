@@ -177,7 +177,7 @@ Ext.define('NextThought.view.profiles.Panel', {
 		console.log(state);
 		var me = this,
 			p = state && state.activeTab && state.activeTab.split('/'),
-			activeView = p && p.shift(),
+			activeView = (p && p.shift()) || 'activity',
 			activeViewData = p && p.join('/');
 
 		function compareUriName(i) {
