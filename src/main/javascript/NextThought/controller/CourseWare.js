@@ -684,6 +684,9 @@ Ext.define('NextThought.controller.CourseWare', {
 
 		var contentView = this.getContentView();
 
+		//add logging to see why contentView.down('[isForumContainer]') is returning undefined... at least I think its returning undefined some times
+		console.log('Looking for the forum container under:' + contentView.getId() + ',' + contentView.xtype + ',' + contentView.down('[isForumContainer]'));
+
 		//if its silent, don't switch to the course or switch the tab
 		if (silent) {
 			return contentView.currentCourse === course && contentView.down('[isForumContainer]');
