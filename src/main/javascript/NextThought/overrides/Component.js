@@ -7,10 +7,7 @@ Ext.define('NextThought.overrides.Component', {
 		this.shadow = false;
 
 		this.onceRendered = new Promise(function(fulfill) {
-			this.on({
-				single: true,
-				afterrender: fulfill
-			});
+			this.afterRender = Ext.Function.createSequence(this.afterRender, fulfill);
 		}.bind(this));
 
 		this.callParent(arguments);
@@ -39,8 +36,8 @@ Ext.define('NextThought.overrides.Component', {
 
 	rtlSetLocalX: function(x) {
 		var style = this.el.dom.style;
-    style.left = 'auto';
-    style.right = (x === null) ? 'auto' : x + 'px';
+		style.left = 'auto';
+		style.right = (x === null) ? 'auto' : x + 'px';
 	},
 
 
