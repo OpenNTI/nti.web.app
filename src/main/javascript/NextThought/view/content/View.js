@@ -167,15 +167,25 @@ Ext.define('NextThought.view.content.View', {
 			vId = target.viewId,
 			needsChanging = vId !== active.id,
 			//only reset the view if we are already there and the spec flagged that it can be reset.
-			reset = target.flagged && !needsChanging;
+			reset = target.flagged && !needsChanging,
+			txn;
 
 		if (Ext.isEmpty(vId)) {
 			return false;
 		}
 
 		if (needsChanging) {
-			this.setActiveTab(vId);
-			this.pushState({activeTab: vId});
+			txn = history.beginTransaction('tab-change-' + guidGenerator());
+			this.setActiveTab(vId)
+				.then(
+					function() {
+						this.pushState({activeTab: vId});
+						txn.commit();
+					}.bind(this),
+					function() {
+						txn.abort();
+					}
+				);
 		} else if (reset) {
 
 			//should build in some smarts about allowing this to toggle through if the views are 'ready'
