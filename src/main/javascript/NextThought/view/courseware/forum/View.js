@@ -31,7 +31,7 @@ Ext.define('NextThought.view.courseware.forum.View', {
 
 
 	setForumList: function(forumList, topic, commnet) {
-		var id, store, me = this;
+		var me = this;
 
 		function finish() {
 			//we already have a board loaded, so don't overwrite it
@@ -62,14 +62,12 @@ Ext.define('NextThought.view.courseware.forum.View', {
 		this.currentForumList = forumList;
 
 		if ((forumList.get('Creator') || {}).isModel) {
-			finish();
-			return;
+			return finish();
 		}
 
-		UserRepository.getUser(forumList.get('Creator'), function(u) {
-			forumList.set('Creator', u);
-			finish();
-		});
+		UserRepository.getUser(forumList.get('Creator'))
+				.then(function(u) {	forumList.set('Creator', u); })
+				.then(finish);
 	},
 
 
@@ -84,8 +82,19 @@ Ext.define('NextThought.view.courseware.forum.View', {
 	showBoardList: function() {},
 
 
+	activeTopicListChanged: function() {
+		this.callParent(arguments);
+		if (this.onceLoaded) {
+			this.onceLoaded.fulfill();
+		}
+	},
+
+
 	courseChanged: function(courseInstance) {
 		this.hasBoard = true;
+
+		this.onceLoaded = new Deferred();
+
 		this.setForumList(courseInstance && courseInstance.get('Discussions'));
 	}
 });
