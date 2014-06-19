@@ -278,7 +278,7 @@ Ext.define('NextThought.controller.Forums', {
 
 
 	pushState: function(s, title) {
-		history.pushState({active: 'forums', forums: s}, title);
+		history.pushState({forums: s}, title);
 	},
 
 
