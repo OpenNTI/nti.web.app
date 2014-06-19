@@ -22,7 +22,10 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 			currentScroll = this.getScrollTop(),
 			//if we are already at the top, don't go higher
 			topChange = currentScroll < containerTop ? currentScroll : containerTop,
-			shouldScroll = (targetEl.el.dom.scrollHeight - targetEl.getHeight()) >= Math.abs(topChange),
+
+			targetDom = Ext.getDom(targetEl && targetEl.el),
+
+			shouldScroll = targetDom && (targetDom.scrollHeight - targetDom.offsetHeight) >= Math.abs(topChange),
 			shouldHaveAlt = (topChange / containerTop) > data.tolerance;
 
 		if (shouldScroll || !this.alreadySetMargin) {
