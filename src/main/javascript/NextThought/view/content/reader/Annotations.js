@@ -456,6 +456,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			menu.showAt(xy);
 		} else {
 			console.debug('hack alert; annotation context menu dilberately hidden in mathcounts content');
+			return;
 		}
 		me.selectRange(range);
 	},
