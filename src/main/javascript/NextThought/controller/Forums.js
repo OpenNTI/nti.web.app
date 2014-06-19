@@ -47,12 +47,7 @@ Ext.define('NextThought.controller.Forums', {
 					'active-state-changed': 'setActiveState'
 				},
 				'course-forum': {
-					'maybe-show-forum-list': function(cmp, forumsList, silent) {
-						//if we aren't restoring a state
-						if (!this.hasStateToRestore) {
-							this.loadForumList.call(this, cmp, forumsList, null, null, silent);
-						}
-					}
+					'maybe-show-forum-list': 'maybeShowForumList'
 				},
 				'forums-forum-nav': {
 					'new-forum': 'showForumEditor'
@@ -453,6 +448,17 @@ Ext.define('NextThought.controller.Forums', {
 					return finish(view);
 				});
 	},
+
+
+	maybeShowForumList: function(cmp, forumsList, silent) {
+		//if we aren't restoring a state
+		if (!this.hasStateToRestore) {
+			return this.loadForumList(cmp, forumsList, null, null, silent);
+		}
+
+		return Promise.resolve();
+	},
+
 
 
 	/**
