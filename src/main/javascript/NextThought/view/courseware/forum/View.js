@@ -3,6 +3,7 @@ Ext.define('NextThought.view.courseware.forum.View', {
 	alias: 'widget.course-forum',
 
 	isCourseForum: true,
+	typePrefix: 'course-forum',
 
 	mixins: {
 		customScroll: 'NextThought.mixins.CustomScroll'
@@ -21,22 +22,12 @@ Ext.define('NextThought.view.courseware.forum.View', {
 	},
 
 
-	initComponent: function() {
-		this.callParent(arguments);
-		// this.initCustomScrollOn('.forum-nav', '.scroll-content');
-	},
-
-
 	handleDeactivate: function() {
 		var p = this.el.up('.forum-in-view');
-
 		if (p) {
 			p.removeCls('forum-in-view');
 		}
 	},
-
-
-	typePrefix: 'course-forum',
 
 
 	setForumList: function(forumList, topic, commnet) {
