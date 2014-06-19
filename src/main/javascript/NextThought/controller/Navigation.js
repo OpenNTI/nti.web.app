@@ -79,15 +79,20 @@ Ext.define('NextThought.controller.Navigation', {
 		this.getNavigationBar().setActive(to);
 	},
 
-
-	setView: function(id, silent) {
+	/**
+	 * Set the active view
+	 * @param {string} id     the view to activate
+	 * @param {boolean} silent false to prevent pushing to the state while activating
+	 * @param {boolean} force  true to prevent anything from canceling the change (assuming the respect the flag)
+	 */
+	setView: function(id, silent, force) {
 		var cmp = id && (id.isComponent ? id : Ext.getCmp(id));
 		if (!cmp) {
 			console.error('no view', arguments);
 			return false;
 		}
 
-		return cmp.activate(silent);
+		return cmp.activate(silent, force);
 	},
 
 

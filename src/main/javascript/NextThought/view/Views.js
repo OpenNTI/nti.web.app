@@ -287,10 +287,10 @@ Ext.define('NextThought.view.Views', {
 	},
 
 
-	onBeforeActivateView: function(id) {
+	onBeforeActivateView: function(id, force) {
 		var layout = this.getLayout(),
 				activeItem = layout.getActiveItem();
 
-		return !activeItem || activeItem.fireEvent('beforedeactivate', activeItem, {});
+		return !activeItem || activeItem.fireEvent('beforedeactivate', activeItem, {}, force);
 	}
 });

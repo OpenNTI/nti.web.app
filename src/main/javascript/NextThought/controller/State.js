@@ -571,7 +571,7 @@ PREVIOUS_STATE = 'previous-state';
 							}
 
 							// we can get cancelled ?? The browser doesn't let us prevent the back event,...so this should force it and block the 'block'
-							if (me.fireEvent('show-view', stateObject.active, true) === false) {
+							if (me.fireEvent('show-view', stateObject.active, true, true) === false) {
 								//this should NEVER happen.
 								throw 'Blocked by a UI element with a Napoleon complex.';
 							}

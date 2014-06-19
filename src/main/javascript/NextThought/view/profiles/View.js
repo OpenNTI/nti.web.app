@@ -24,9 +24,9 @@ Ext.define('NextThought.view.profiles.View', {
 	},
 
 
-	onBeforeDeactivate: function() {
+	onBeforeDeactivate: function(cmp, n, force) {
 		var child = this.down(this.defaultType);
-		return child && child.fireEvent('beforedeactivate');
+		return child && child.fireEvent('beforedeactivate', force);
 	},
 
 	invertParentsPaddingToMargins: function(sides) {

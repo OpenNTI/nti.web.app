@@ -54,8 +54,8 @@ Ext.define('NextThought.view.Base', {
 	},
 
 
-	activate: function(silent) {
-		if (this.fireEvent('before-activate-view', this.getId()) && this.fireEvent('activate-view', this.getId(), Boolean(silent))) {
+	activate: function(silent, force) {
+		if (this.fireEvent('before-activate-view', this.getId(), force) && this.fireEvent('activate-view', this.getId(), Boolean(silent), force)) {
 			this.setTitle();
 			this.updateBackground();
 			return true;

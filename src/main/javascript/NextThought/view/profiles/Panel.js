@@ -146,10 +146,10 @@ Ext.define('NextThought.view.profiles.Panel', {
 
 	//<editor-fold desc="Simple Handlers">
 
-	onBeforeDeactivate: function() {
+	onBeforeDeactivate: function(force) {
 		console.log('about to deactivate the profile view');
 		return Ext.Array.every(this.body.items.items, function(item) {
-			return item.fireEvent('beforedeactivate');
+			return item.fireEvent('beforedeactivate', force);
 		});
 	},
 

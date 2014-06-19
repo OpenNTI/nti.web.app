@@ -271,9 +271,13 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 		Ext.defer(function() { alert({msg: msg}); }, 1);
 	},
 
-
-	onBeforeDeactivate: function() {
-		var b = Boolean(this.isVisible() && this.down('profile-blog-editor'));
+	/**
+	 * gives the user a change to cancel their action if there is an active editor
+	 * @param  {boolean} force navigate even if there is an active editor
+	 * @return {boolean}       whether or not to continue the navigation
+	 */
+	onBeforeDeactivate: function(force) {
+		var b = !force && Boolean(this.isVisible() && this.down('profile-blog-editor'));
 		if (b) {
 			this.warnBeforeDismissingEditor();
 		}
