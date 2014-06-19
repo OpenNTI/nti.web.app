@@ -4,8 +4,8 @@ Ext.define('NextThought.view.badge.Window', {
 
 	cls: 'badge-window',
 	width: 500,
-	height: 250,
-	layout: 'fit',
+	constrainTo: Ext.getBody(),
+	layout: 'anchor',
 	modal: true,
 	header: false,
 

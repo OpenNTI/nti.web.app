@@ -632,7 +632,6 @@
 
 .badge-preview {
 	cursor: pointer;
-	width: 400px;
 	min-height: 120px;
 
 	.img {
@@ -647,6 +646,8 @@
 		color: $primary-grey;
 		float: left;
 		width: 280px;
+		max-height: 400px;
+		overflow-y: auto;
 		padding: 20px 10px 10px 0;
 
 		.name {
