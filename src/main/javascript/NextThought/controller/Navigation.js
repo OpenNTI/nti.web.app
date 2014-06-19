@@ -358,7 +358,12 @@ Ext.define('NextThought.controller.Navigation', {
 			var course, content;
 			if (reason && reason.status === 404) {
 				return ContentUtils.findRelatedContentObject(cid)
-						.then(LocationMeta.getMeta.bind(LocationMeta));
+						.then(function(obj) {
+							//findRelatedContentObject fulfills promises with an object with the key container that is the ntiid
+							obj = obj.container;
+
+							return LocationMeta.getMeta(obj);
+						});
 			}
 
 			if (reason && reason.status === 403) {
