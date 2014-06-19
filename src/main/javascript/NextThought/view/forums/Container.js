@@ -23,6 +23,7 @@ Ext.define('NextThought.view.forums.Container', {
 
 	restore: function(state) {
 		return new Promise(function(fulfill, reject) {
+			this.showRoot();
 			this.fireEvent('restore-forum-state', state, fulfill, reject);
 		}.bind(this));
 	},
@@ -201,7 +202,6 @@ Ext.define('NextThought.view.forums.Container', {
 	 */
 	showTopicEditor: function(topic, topicList, forumList, closeCallback) {
 		var topicView = this.showTopicList(topicList, forumList);
-
 		topicView.showEditor(topic, topicList, closeCallback);
 	},
 
