@@ -145,17 +145,29 @@ Ext.define('NextThought.view.Base', {
 
 	setActiveTab: function(tab) {
 		var me = this;
-		if (this.rendered) {
-			me.layout.setActiveItem(tab || me.defaultTab || 0);
-			me.setTitle(me.getTitlePrefix());
-		} else {
-			me._setActiveTabAfterRender = me.mon(me, {
-				destroyable: true, single: true,
-				afterrender: function() {
-					me.setActiveTab(tab);
-					delete me._setActiveTabAfterRender;
+		return new Promise(function(fulfill) {
+			if (me.rendered) {
+				tab = me.getComponent(tab || me.defaultTab || 0);
+				if (tab) {
+					Promise.all([
+						tab.onceRendered || Promise.resolve(tab),
+						tab.onceLoaded || Promise.resolve([])
+					]).then(fulfill);
+				} else {
+					fulfill();
 				}
-			});
-		}
+
+				me.layout.setActiveItem(tab);
+				me.setTitle(me.getTitlePrefix());
+			} else {
+				me._setActiveTabAfterRender = me.mon(me, {
+					destroyable: true, single: true,
+					afterrender: function() {
+						delete me._setActiveTabAfterRender;
+						me.setActiveTab(tab).then(fulfill);
+					}
+				});
+			}
+		});
 	}
 });
