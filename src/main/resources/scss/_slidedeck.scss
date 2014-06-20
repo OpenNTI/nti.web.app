@@ -956,6 +956,25 @@ $experimental-support-for-svg: true;
 		}
 	}
 
+	.sync-button { 
+		position: absolute;
+		top: 80px;
+		z-index: 1;
+		text-align: center;
+
+		span {
+			font: normal 600 0.65em/1 $font;
+			background-color: #2a2a2a;
+			color: $tertiary-grey;
+			cursor: pointer;
+			z-index: 1;
+			text-transform: uppercase;
+			border-radius: 15px;
+			padding: 10px 15px;
+		}
+
+	}
+
 	.header{
 		position: relative;
 		top: 0; left: 0;

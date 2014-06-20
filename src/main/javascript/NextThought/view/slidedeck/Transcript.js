@@ -276,6 +276,8 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			'mousedown': 'mayBeHideAnnotationView'
 		});
 
+		this.mon(Ext.get(this.getScrollTarget()), 'scroll', 'onScroll');
+
 		this.on('beforedestroy', 'beforeDestroy');
 
 		this.on('will-hide-transcript', function() {
@@ -393,7 +395,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 	highlightAtTime: function(seconds, allowScroll) {
 		var cmps = this.query('video-transcript[transcript]') || [],
-			cmp, tEl, shouldScroll, offset, bottom,
+			cmp, tEl, shouldScroll, offset, bottom, me = this;
 			scrollingEl = Ext.get(this.getScrollTarget());
 
 		//if we are in the media view there is only one transcript
@@ -437,9 +439,26 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			shouldScroll = bottom && (bottom > document.body.getBoundingClientRect().bottom || bottom < 0);
 
 			if (allowScroll && shouldScroll && scrollingEl) {
-				scrollingEl.scrollTo('top', scrollingEl.getScrollTop() + (tEl.getY() - scrollingEl.getY()) - offset, true);
+				this.scrollingFromHighlight = true;
+				scrollingEl.scrollTo('top', scrollingEl.getScrollTop() + (tEl.getY() - scrollingEl.getY()) - offset, {
+					callback: function() {
+						//after the animation is done wait for the last scroll event to fire before removing the flag
+						wait(100)
+							.then(function() {
+								delete me.scrollingFromHighlight;
+							});
+					}
+				});
 			}
 		}
+	},
+
+
+	onScroll: function() {
+		if (this.scrollingFromHighlight) {
+			return;
+		}
+		this.fireEvent('unsync-video');
 	},
 
 

@@ -29,6 +29,9 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'header'},
+		{cls: 'sync-button', cn: [
+			{tag: 'span', html: 'sync with video', role: 'button'}
+		]},
 		{cls: 'grid-view-body'},
 		{cls: 'video-player'},
 		{id: '{id}-body', cls: 'body', cn: ['{%this.renderContainer(out, values)%}']}
@@ -38,7 +41,8 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 	renderSelectors: {
 		headerEl: '.header',
 		gridViewEl: '.grid-view-body',
-		videoPlayerEl: '.video-player'
+		videoPlayerEl: '.video-player',
+		syncEl: '.sync-button'
 	},
 
 	SMALLVIDEO: {
@@ -144,7 +148,8 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			transcript.mon(this, 'animation-end', 'onAnimationEnd');
 			this.mon(transcript, {
 				'will-show-annotation': 'willShowAnnotation',
-				'will-hide-annotation': 'willHideAnnotation'
+				'will-hide-annotation': 'willHideAnnotation',
+				'unsync-video': 'unsyncVideo'
 			});
 		} else {
 			this.noTranscript = true;
@@ -227,6 +232,10 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 		me.adjustOnResize();
 		Ext.EventManager.onWindowResize(me.adjustOnResize, me, {buffer: 250});
+
+		me.syncVideo();
+
+		me.mon(me.syncEl, 'click', 'syncVideo');
 	},
 
 
@@ -369,7 +378,28 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			//The heartbeat happens every second, so if the range for a line to be highlighted
 			//doesn't start on an exact second there is a delay with highlighting the next line.
 			//Adding half a second to the time, cuts down on the delay.
-			transcriptCmp.highlightAtTime(time + 0.5, true);
+			transcriptCmp.highlightAtTime(time + 0.5, this.syncWithTranscript);
+		}
+	},
+
+
+	unsyncVideo: function() {
+		var transcript = this.down('slidedeck-transcript');
+		this.syncWithTranscript = false;
+
+		if (this.syncEl) {
+			this.syncEl.setLeft(transcript.getX());
+			this.syncEl.setWidth(transcript.getWidth());
+			this.syncEl.show();
+		}
+	},
+
+
+	syncVideo: function() {
+		this.syncWithTranscript = true;
+
+		if (this.syncEl) {
+			this.syncEl.hide();
 		}
 	},
 
@@ -492,6 +522,12 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			me.adjustOnResize();
 			if (me.down('slidedeck-transcript')) {
 				me.down('slidedeck-transcript').fireEvent('sync-height');
+			}
+
+			if (isFullVideo) {
+				me.syncVideo();
+			} else if (me.syncWithTranscript === false) {
+				me.unsyncVideo();
 			}
 		}, 1, me);
 	},
