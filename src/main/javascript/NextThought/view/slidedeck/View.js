@@ -84,7 +84,9 @@ Ext.define('NextThought.view.slidedeck.View', {
 		//wire up
 		this.mon(q, 'select', this.maybeSelect, this);
 		this.mon(q, 'slide-selected', function(slide) {
-			if (this.down('slidedeck-transcript')) {
+			var link = (this.video && this.video.linkWithSlides) || true;
+
+			if (this.down('slidedeck-transcript') && link) {
 				this.down('slidedeck-transcript').selectSlide(slide);
 			}
 		}, this);

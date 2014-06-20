@@ -159,12 +159,19 @@ Ext.define('NextThought.view.slidedeck.Video', {
 
 			if (newIx === ix) {return;}
 
+			//without setting o to the playlist for the new index, when s.time is past the end time
+			//of the current playlist item which will cause the if to pass and not allow you to skip
+			//slides, but have to go through them in order.
+			o = pl[newIx] || o;
+
 			if (s.time >= o.get('end') || (newIx === -1 && Math.abs(s.time - o.get('end')) < 1)) {
 				newIx = ix + 1;
 				console.log(this.id, this.currentSource, '[End of Video]');
 			}
 
 			this.videoTriggeredTransition = true;
+
+			this.playListIndex = newIx;
 			this.queue.selectSlide(newIx);
 		}
 	},
