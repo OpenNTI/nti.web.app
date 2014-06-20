@@ -172,10 +172,11 @@ Ext.define('NextThought.view.slidedeck.View', {
 
 
 	actOnMediaHeartBeat: function() {
-		var s = this.video.getState();
+		var s = this.video.getState(),
+			link = this.video.linkWithSlides;
 
 		if (this.hasTranscript) {
-			this.down('slidedeck-transcript').syncWithVideo(s);
+			this.down('slidedeck-transcript').syncWithVideo(s, link);
 		}
 	},
 

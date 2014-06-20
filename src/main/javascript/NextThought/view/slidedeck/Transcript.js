@@ -391,19 +391,45 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	},
 
 
-	highlightAtTime: function(seconds) {
-		var cmp = this.down('video-transcript'),
-			cEl = cmp.el && cmp.el.down('.current'),
-			scrollingEl = this.el.getScrollingEl(),
-			tEl = cmp && cmp.getElementAtTime && cmp.getElementAtTime(seconds);
-		//if we have an element for that time and its not the time we just highlighted
+	highlightAtTime: function(seconds, allowScroll) {
+		var cmps = this.query('video-transcript[transcript]') || [],
+			cmp, tEl, shouldScroll,
+			scrollingEl = this.getTargetEl();
+
+		cmps.every(function(c) {
+			var t = c.transcript, current,
+				start = t.get('desired-time-start'),
+				end = t.get('desired-time-end');
+
+			if (start <= seconds && end > seconds) {
+				cmp = c;
+				return;
+			}
+
+			return true;
+		});
+
+		if (!cmp) {
+			console.error('NO transcript for time: ', seconds);
+			return;
+		}
+
+		tEl = cmp.getElementAtTime && cmp.getElementAtTime(seconds);
+
 		if (tEl && this.currentTime !== seconds) {
-			if (cEl) {
-				cEl.removeCls('current');
+			if (this.currentCue) {
+				this.currentCue.removeCls('current');
 			}
 
 			tEl.addCls('current');
+			this.currentCue = tEl;
 			this.currentTime = seconds;
+
+			shouldScroll = tEl.dom && tEl.dom.getBoundingClientRect().bottom > document.body.getBoundingClientRect().bottom;
+
+			if (allowScroll && shouldScroll && scrollingEl) {
+				scrollingEl.scrollBy(0, tEl.getY() - 10, true);
+			}
 		}
 	},
 
@@ -455,8 +481,11 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	},
 
 
-	syncWithVideo: function(videoState) {
-    //		this.transcriptView.syncTranscriptWithVideo(videoState);
+	syncWithVideo: function(videoState, allowScroll) {
+			if (videoState && videoState.time) {
+				this.highlightAtTime(videoState.time, allowScroll);
+			}
+			//this.transcriptView.syncTranscriptWithVideo(videoState);
 	},
 
 
