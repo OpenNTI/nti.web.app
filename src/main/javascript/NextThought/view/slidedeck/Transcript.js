@@ -396,18 +396,22 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			cmp, tEl, shouldScroll,
 			scrollingEl = this.getTargetEl();
 
-		cmps.every(function(c) {
-			var t = c.transcript, current,
-				start = t.get('desired-time-start'),
-				end = t.get('desired-time-end');
+		if (cmps.length === 1) {
+			cmp = cmps[0];
+		} else {
+			cmps.every(function(c) {
+				var t = c.transcript, current,
+					start = t.get('desired-time-start'),
+					end = t.get('desired-time-end');
 
-			if (start <= seconds && end > seconds) {
-				cmp = c;
-				return;
-			}
+				if (start <= seconds && end > seconds) {
+					cmp = c;
+					return;
+				}
 
-			return true;
-		});
+				return true;
+			});
+		}
 
 		if (!cmp) {
 			console.error('NO transcript for time: ', seconds);
