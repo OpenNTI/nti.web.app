@@ -38,8 +38,8 @@ Ext.define('NextThought.view.courseware.forum.View', {
 			if (me.forumList === forumList) { return; }
 			var silent = me.ownerCt.getLayout().getActiveItem() !== me;
 
-			if (!me.isActive()) {
-				me.on('activate', finish, me, {single: true});
+			if (me.isFromNavigatingToForum) {
+				delete me.isFromNavigatingToForum;
 				return;
 			}
 

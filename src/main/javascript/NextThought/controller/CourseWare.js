@@ -682,7 +682,8 @@ Ext.define('NextThought.controller.CourseWare', {
 	onNavigateToForum: function(board, course, silent) {
 		if (!course) { return; }
 
-		var contentView = this.getContentView();
+		var contentView = this.getContentView(),
+			forumContainer, isNavigatingToForum = false;
 
 		//add logging to see why contentView.down('[isForumContainer]') is returning undefined... at least I think its returning undefined some times
 		console.log('Looking for the forum container under:' + contentView.getId() + ',' + contentView.xtype + ',' + contentView.down('[isForumContainer]'));
@@ -699,13 +700,17 @@ Ext.define('NextThought.controller.CourseWare', {
 		//if we are already in the course just switch the tab
 		if (contentView.currentCourse === course) {
 			contentView.setActiveTab('course-forum');
-			return contentView.down('[isForumContainer]');
+		} else {
+			//finally if we aren't in the course switch to it
+			this.getMainNav().updateCurrent(false, course);
+			contentView.onCourseSelected(course, 'course-forum');
+			isNavigatingToForum = true;
 		}
 
-		//finally if we aren't in the course switch to it
-		this.getMainNav().updateCurrent(false, course);
-		contentView.onCourseSelected(course, 'course-forum');
-		return contentView.down('[isForumContainer]');
+		forumContainer = contentView.down('[isForumContainer]');
+		forumContainer.isFromNavigatingToForum = isNavigatingToForum;
+
+		return forumContainer;
 	}
 }, function() {
 
