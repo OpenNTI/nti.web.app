@@ -26,7 +26,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	},
 
 	initComponent: function() {
-		this.enableBubble(['presentation-parts-ready', 'no-presentation-parts']);
+		this.enableBubble(['presentation-parts-ready', 'no-presentation-parts', 'jump-video-to']);
 
 		//TODO: this needs to be more centralized.
 		if (this.slideStore) {
@@ -75,19 +75,19 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 
 	bindStoreToComponents: function(store, cmps) {
+		var r, sEl,
+			m = this.noteOverlay.annotationManager,
+			k = this.record, o, mc, me = this, win;
 
 		this.cmpMap[store.containerId] = cmps;
 
 		Ext.each(cmps, function(cmp) {
 			this.fireEvent('register-records', store, store.getRange(), cmp);
 			cmp.bindToStore(store);
+			me.relayEvents(cmp, 'jump-video-to');
 		});
 
 		if (this.record) {
-			var r, sEl,
-				m = this.noteOverlay.annotationManager,
-				k = this.record, o, mc, me = this, win;
-
 			// Since we've already added the record when its component registered its records,
 			// let's just get its annotation object.
 			o = m.findBy(function(item) {
@@ -199,7 +199,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 				vid = m && m.getAssociatedVideoId(),
 				t = transcriptStore.findRecord('associatedVideoId', vid, 0, false, true, true),
 				start = slide.get('video-start'),
-				end = slide.get('video-end'), videoObj;
+				end = slide.get('video-end'), videoObj, transcript;
 
 			console.log('slide starts: ', start, ' slide ends: ', end, ' and has transcript for videoid: ', t && t.get('associatedVideoId'));
 

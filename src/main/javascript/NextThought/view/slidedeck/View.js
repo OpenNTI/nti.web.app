@@ -116,7 +116,7 @@ Ext.define('NextThought.view.slidedeck.View', {
 		}, this);
 
 		if (this.hasTranscript) {
-			this.mon(this.down('slidedeck-transcript'), 'jump-video-to', Ext.bind(this.video.jumpVideoToLocation, this.video), this);
+			this.mon(this.down('slidedeck-transcript'), 'jump-video-to', Ext.bind(this.video.jumpToVideoLocation, this.video), this);
 			this.mon(this.video, 'media-heart-beat', this.actOnMediaHeartBeat, this);
 		}
 	},
