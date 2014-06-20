@@ -393,12 +393,15 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 	highlightAtTime: function(seconds, allowScroll) {
 		var cmps = this.query('video-transcript[transcript]') || [],
-			cmp, tEl, shouldScroll,
-			scrollingEl = this.getTargetEl();
+			cmp, tEl, shouldScroll, offset, bottom,
+			scrollingEl = Ext.get(this.getScrollTarget());
 
-		if (cmps.length === 1) {
+		//if we are in the media view there is only one transcript
+		if (this.up('media-viewer')) {
 			cmp = cmps[0];
+			offset = scrollingEl.getY();
 		} else {
+			offset = 10;
 			cmps.every(function(c) {
 				var t = c.transcript, current,
 					start = t.get('desired-time-start'),
@@ -429,10 +432,12 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			this.currentCue = tEl;
 			this.currentTime = seconds;
 
-			shouldScroll = tEl.dom && tEl.dom.getBoundingClientRect().bottom > document.body.getBoundingClientRect().bottom;
+			bottom = tEl.dom && tEl.dom.getBoundingClientRect().bottom;
+
+			shouldScroll = bottom && (bottom > document.body.getBoundingClientRect().bottom || bottom < 0);
 
 			if (allowScroll && shouldScroll && scrollingEl) {
-				scrollingEl.scrollBy(0, tEl.getY() - 10, true);
+				scrollingEl.scrollTo('top', scrollingEl.getScrollTop() + (tEl.getY() - scrollingEl.getY()) - offset, true);
 			}
 		}
 	},
