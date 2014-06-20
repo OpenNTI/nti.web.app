@@ -70,6 +70,8 @@ Ext.define('NextThought.ux.ImagePopout', {//TODO: this is 99% copied from the vi
 			scope: this,
 			click: this.close
 		});
+
+		this.mon(history.observable, 'pop', 'close');
 	}
 
 });
