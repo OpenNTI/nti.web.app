@@ -105,6 +105,8 @@ PREVIOUS_STATE = 'previous-state';
 		}
 	};
 
+	history.observable = new Ext.util.Observable();
+
 	Ext.define('NextThought.controller.State', {
 		extend: 'Ext.app.Controller',
 
@@ -328,6 +330,7 @@ PREVIOUS_STATE = 'previous-state';
 			window.onpopstate = function(e) {
 				me.isPoppingHistory = true;
 				console.debug('Browser is popping state, new state appling: ', Ext.decode(e.state, true));
+				history.observable.fireEvent('pop', e.state);
 				me.onPopState(e);
 				me.isPoppingHistory = false;
 			};
