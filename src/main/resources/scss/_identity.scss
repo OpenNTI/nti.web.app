@@ -211,7 +211,8 @@
 		overflow: visible;
 		background-color: #efefef;
 		.cancel{
-			@include icon('clear_line',$top:7px,$left:-7px);
+			@include icon('clear_line',$top:7px,$left:0);
+			width: 24px;
 			overflow: visible;
 			z-index: 2;
 			border: none;
