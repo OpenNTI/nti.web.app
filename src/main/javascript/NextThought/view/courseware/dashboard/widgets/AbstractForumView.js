@@ -42,8 +42,21 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.AbstractForumView', {
 		if (!this.record) {
 			return;
 		}
-		var h = this.record.get('headline');
-		this.renderData = Ext.apply(this.renderData || {},this.record.getData());
+		var h = this.record.get('headline'),
+			rd = this.record.getData();
+
+		if (this.record instanceof NextThought.model.forums.CommunityForum) {
+			rd.label = 'forum';
+			rd.CreatedTime = null;
+			rd.subCount = rd.TopicCount;
+			rd.subName = 'Topic';
+		} else {
+			rd.label = 'discussion';
+			rd.subCount = rd.PostCount;
+			rd.subName = 'Comment';
+		}
+
+		this.renderData = Ext.apply(this.renderData || {}, rd);
 
 		if (h) {
 			h.compileBodyContent(this.setBody, this, null, 100);

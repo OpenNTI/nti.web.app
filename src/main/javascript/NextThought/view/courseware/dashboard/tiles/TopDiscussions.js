@@ -122,15 +122,17 @@ Ext.define('NextThought.view.courseware.dashboard.widget.TopDiscusssionsView', {
 				{ cls: 'favorite {favoriteState}' },
 				{ cls: 'like {likeState}', html: '{[values.LikeCount==0?\"\":values.LikeCount]}' }
 			]},
-			{ cls: 'tile-title', html: 'discussion'},
+			{ cls: 'tile-title', html: '{label}'},
 			{ cls: 'avatar'},
 			{cls: 'meta', cn: [
 				{cls: 'title', html: '{title}'},
 				{tag: 'span', cls: 'by', html: '{{{NextThought.view.courseware.dashboard.widget.TopDiscusssionsView.by}}}'},
-				{tag: 'span', cls: 'time', html: '{[TimeUtils.timeDifference(new Date(),values["CreatedTime"])]}'}
+				{tag: 'tpl', 'if': 'CreatedTime', cn: [
+					{tag: 'span', cls: 'time', html: '{[TimeUtils.timeDifference(new Date(),values["CreatedTime"])]}'}
+				]}
 			]},
 			{cls: 'snippet', html: '{compiledBody}'},
-			{cls: 'count', html: '{PostCount:plural("Comment")}'}
+			{cls: 'count', html: '{subCount:plural(values.subName)}'}
 		]
 	),
 
