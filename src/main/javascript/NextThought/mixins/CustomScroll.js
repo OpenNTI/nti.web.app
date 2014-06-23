@@ -256,9 +256,9 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 				return;
 			}
 
-			this.upMenu = Ext.widget('jump-menu', { ownerButton: this, items: items, width: width });
+			this.tabMenu = Ext.widget('jump-menu', { ownerButton: this, items: items, width: width });
 
-			this.mon(this.upMenu, {
+			this.mon(this.tabMenu, {
 				scope: this,
 				click: function(menu, item) {
 					console.log('tab item clicked: ', arguments);
@@ -266,9 +266,9 @@ Ext.define('NextThought.mixins.CustomScroll', function() {
 				}
 			});
 
-			this.on('destroy', 'destroy', this.upMenu);
+			this.on('destroy', 'destroy', this.tabMenu);
 
-			return this.upMenu;
+			return this.tabMenu;
 		},
 
 		/**

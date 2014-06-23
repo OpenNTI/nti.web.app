@@ -5,7 +5,8 @@ Ext.define('NextThought.view.content.Navigation', {
 	extend: 'Ext.Component',
 	alias: 'widget.content-navigation',
 	requires: [
-		'NextThought.view.menus.JumpTo'
+		'NextThought.view.menus.JumpTo',
+		'NextThought.view.content.TableOfContents'
 	],
 	ui: 'content-navigation',
 	cls: 'jumpto',
@@ -15,7 +16,8 @@ Ext.define('NextThought.view.content.Navigation', {
 	MAX_PATH_LENGTH: 2,
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'goup', 'data-qtip': '{{{NextThought.view.content.Navigation.goup}}}'},
+		{cls: 'tabs'},
+		{cls: 'toc', html: '{{{Table of Contents}}}'},
 		{cls: 'breadcrumb'}
 	]),
 
@@ -25,7 +27,12 @@ Ext.define('NextThought.view.content.Navigation', {
 		'1': getString('NextThought.view.content.Navigation.select-section')
 	},
 
-	renderSelectors: {upEl: '.goup', breadcrumb: '.breadcrumb'},
+	renderSelectors: {
+		tabEl: '.tabs',
+		tocEl: '.toc',
+		breadcrumb: '.breadcrumb'
+	},
+
 
 	initComponent: function() {
 		this.callParent(arguments);
@@ -33,87 +40,62 @@ Ext.define('NextThought.view.content.Navigation', {
 		this.on({
 			afterrender: 'hide',
 			destroy: 'cleanupMenus',
-			click: {element: 'upEl', fn: 'onUp'},
-			mouseover: {element: 'upEl', fn: 'onUpHover'}
+			mouseover: {element: 'tabEl', fn: 'onShowTabsMenu'}
 		});
-	},
+		this.on({
+			mouseover: {element: 'tocEl', fn: 'showTableOfContents'}
+		});
 
-	onUp: function(e) {
-		e.stopEvent();
-
-		if (!this.upEl || !this.upEl.isVisible() || this.upEl.hasCls('disabled')) {
-			return;
-		}
-
-		if (this.upMenu) {
-			this.upMenu.stopHide();
-			this.upMenu.stopShow();
-		}
-		// pop up one level.
-		var up = ContentUtils.getLineage(this.currentNtiid, false, true)[1];
-		if (up) {
-			this.fireEvent('set-location', up);
-		}
+		this.tocFlyout = Ext.widget({ xtype: 'table-of-contents-flyout', floatParent: this });
+		this.on('destroy', 'destroy', this.tocFlyout);
 	},
 
 
-	onUpHover: function(e) {
+	showTableOfContents: function() {
+		this.tocFlyout.startShow(this.el, 'tl-tl', [0, 0]);
+	},
+
+
+	onShowTabsMenu: function(e) {
 		var scrollEl = this.up('[getMainTabbarMenu]');
 		e.stopEvent();
 		if (!e.getTarget('.has-alt-tabbar') || this.hasNoTabbar) { return; }
 
-		if (!this.upMenu && !this.hasNoTabbar) {
-			this.upMenu = scrollEl.getMainTabbarMenu();
-			if (!this.upMenu) {
+		if (!this.tabMenu && !this.hasNoTabbar) {
+			this.tabMenu = scrollEl.getMainTabbarMenu();
+			if (!this.tabMenu) {
 				this.hasNoTabbar = true;
 				return;
 			}
 
-			this.mon(this.upMenu, {
+			this.mon(this.tabMenu, {
 				scope: this,
 				click: function(menu, item) {
 					console.log('tab item clicked: ', arguments);
 					this.fireEvent('main-tab-clicked', item);
+				},
+				destroy: {
+					fn: 'destroy',
+					scope: this.on({destroyable: true, destroy: 'destroy', scope: this.tabMenu})
 				}
 			});
-
-			this.on('destroy', 'destroy', this.upMenu);
 		}
 
-		this.upMenu.startShow(this.upEl, 'tl-bl', [-10, -25]);
+		this.tabMenu.startShow(this.tabEl, 'tl-bl', [-10, -25]);
 	},
 
 
 	updateLocation: function(ntiid, rootId) {
-		this.currentNtiid = ntiid;
-		var me = this,
-			C = ContentUtils,
+		var C = ContentUtils,
 			loc = C.getLocation(ntiid),
 			lineage = C.getLineage(ntiid), leftOvers = [],
-			names = C.getLineage(ntiid, true),
-			parent = lineage.last(),
+			parentNode = lineage.last(),
 			page = lineage[0] ? C.getLocation(lineage[0]) : null,
-			path = me.getBreadcrumbPath(), i = 0, rootIdIdx,
-			pathLength = 0, allowMenus = true;
+			rootIdIdx,
+			allowMenus = true;
 
-		function buildPathPart(v, i, a) {
-			var e,
-				l = C.getLocation(v),
-				label = l.label;
-
-			e = me.breadcrumbTpl.insertFirst(me.breadcrumb, [label], true);
-			path.add(e);
-
-			if (a === lineage && allowMenus) {//only put menus on the rooted content
-				me.buildMenu(e, l, parent);
-			} else {
-				Ext.fly(e).addCls('locked');
-				me.mon(Ext.fly(e), 'click', 'onUp');
-			}
-
-		}
-
-		me.cleanupMenus(); //cleanup before proceeding.
+		this.tocFlyout.setContentPackage(loc.title, ntiid, rootId);
+		this.cleanupMenus(); //cleanup before proceeding.
 
 		// If passed, lets get the index of the rootId so we know where in the
 		// lineage to cut to Re-Root the tree.
@@ -132,61 +114,22 @@ Ext.define('NextThought.view.content.Navigation', {
 			leftOvers = lineage.slice(rootIdIdx);
 			rootIdIdx++; //slice is not inclusive, so push the index one up so that our slice gets the new root.
 			lineage = lineage.slice(0, rootIdIdx);
-			//No need to slice names... we're reversed so the 0th item is the leaf, the nth item is the root.
-			//names = names.slice(0, rootIdIdx);
-
 			//From this point on the logic should be unchanged... lineage manipulation is complete.
 		}
 
 		leftOvers.pop();
 		lineage.pop(); // don't let the root show
-		// first was the 2nd item in the array... which is where the 'back' arrow will take you
-		this.upEl[(!lineage.first() && !rootId) ? 'hide' : 'show']();
-		this.upEl.set({
-			'data-qtip': 'Go up to ' + (names[1] || '')
-		});
-
 
 		if (!loc || !loc.NTIID || !page) {
-			me.hide();
+			this.hide();
 			return;
 		}
 
-		if (me.isHidden()) {
-			me.show();
+		if (this.isHidden()) {
+			this.show();
 		}
 
-		if ((lineage.length + leftOvers.length) <= 1) {
-			if (me.hasChildren(loc.location)) {
-				path.add(me.breadcrumbTpl.insertFirst(me.breadcrumb, [me.levelLabels[lineage.length]], true));
-				me.buildMenu(path.last(), C.getLocation(me.getFirstTopic(loc.location)), parent);
-			}
-			else {
-				path.add = Ext.Function.createSequence(path.add, function(e) {
-					Ext.fly(e).addCls('no-children');
-				}, me);
-				path.add(me.breadcrumbTpl.insertFirst(me.breadcrumb, [me.levelLabels[NaN]], true));
-			}
-		}
-
-		for (i; i < this.MAX_PATH_LENGTH && i < lineage.length; i++) {
-			buildPathPart.call(this, lineage[i], i, lineage);
-			pathLength++;
-		}
-
-		for (i = 0; pathLength < this.MAX_PATH_LENGTH && i < leftOvers.length; i++) {
-			buildPathPart.call(this, leftOvers[i], i, leftOvers);
-			pathLength++;
-		}
-
-		if (path.last() && path.last().getHTML() === ' / ') {
-			path.removeElement(path.last(), true);
-		}
-	},
-
-
-	getContentNumericalAddress: function(lineage, loc) {
-		return '';
+		this.build(parentNode, loc.location, lineage, leftOvers, allowMenus);
 	},
 
 
@@ -214,16 +157,64 @@ Ext.define('NextThought.view.content.Navigation', {
 		});
 
 		delete this.hasNoTabbar;
-		if (this.upMenu) {
-			this.upMenu.destroy();
-			delete this.upMenu;
+		if (this.tabMenu) {
+			this.tabMenu.destroy();
+			delete this.tabMenu;
 		}
-		//TODO: clean them out
 	},
 
 
+	//region Builders
+	build: function(parentNode, topic, lineage, leftOvers, allowMenus) {
+		var me = this,
+				path = me.getBreadcrumbPath(),
+				i = 0,
+				pathLength = 0;
 
-	buildMenu: function(pathPartEl, locationInfo, parent) {
+		if ((lineage.length + leftOvers.length) <= 1) {
+			if (me.hasChildren(topic)) {
+				path.add(me.breadcrumbTpl.insertFirst(me.breadcrumb, [me.levelLabels[lineage.length]], true));
+				me.buildMenu(path.last(), ContentUtils.getLocation(me.getFirstTopic(topic)), parentNode);
+			}
+			else {
+				path.add = Ext.Function.createSequence(path.add, function(e) { Ext.fly(e).addCls('no-children'); }, me);
+				path.add(me.breadcrumbTpl.insertFirst(me.breadcrumb, [me.levelLabels[NaN]], true));
+			}
+		}
+
+		for (i; i < me.MAX_PATH_LENGTH && i < lineage.length; i++) {
+			path.add(me.buildPathPart(lineage[i], i, lineage, parentNode, allowMenus));
+			pathLength++;
+		}
+
+		for (i = 0; pathLength < me.MAX_PATH_LENGTH && i < leftOvers.length; i++) {
+			path.add(me.buildPathPart(leftOvers[i], i, leftOvers, parentNode));
+			pathLength++;
+		}
+
+		if (path.last() && path.last().getHTML() === ' / ') {
+			path.removeElement(path.last(), true);
+		}
+	},
+
+
+	buildPathPart: function(v, i, a, parentNode, allowMenus) {
+		var e, l = ContentUtils.getLocation(v),
+			label = l.label;
+
+		e = this.breadcrumbTpl.insertFirst(this.breadcrumb, [label], true);
+
+		if (allowMenus) {//only put menus on the rooted content
+			this.buildMenu(e, l, parentNode);
+		} else {
+			Ext.fly(e).addCls('locked');
+		}
+
+		return e;
+	},
+
+
+	buildMenu: function(pathPartEl, locationInfo, parentNode) {
 		var me = this, m,
 			menus = me.menuMap || {},
 			cfg = { ownerButton: me, items: [] },
@@ -242,7 +233,7 @@ Ext.define('NextThought.view.content.Navigation', {
 		if (currentNode.tagName === 'toc') {
 			return pathPartEl;
 		}
-		this.enumerateTopicSiblings(currentNode, cfg.items, parent);
+		this.enumerateTopicSiblings(currentNode, cfg.items, parentNode);
 
 		if (Ext.isEmpty(cfg.items)) {
 			return;
@@ -285,15 +276,17 @@ Ext.define('NextThought.view.content.Navigation', {
 
 		return pathPartEl;
 	},
+	//endregion
 
 
-	enumerateTopicSiblings: function(node, items, parent) {
+	//region Menu Building Code
+	enumerateTopicSiblings: function(node, items, parentNode) {
 		var me = this, current = node, num = 1, text,
 			type = '1', separate = '. ', suppress = false, nodes,
 			p, n = 'numbering', sep = 'separator', sup = 'suppressed';
 
-		if (parent) {
-			p = Library.getTitle(parent).get('PresentationProperties');
+		if (parentNode) {
+			p = Library.getTitle(parentNode).get('PresentationProperties');
 			if (p && p[n]) {
 				num = p[n] && p[n].start;
 				type = p[n] && p[n].type;
@@ -394,5 +387,6 @@ Ext.define('NextThought.view.content.Navigation', {
 	getFirstTopic: function(n) {
 		return Ext.fly(n).first('topic', true);
 	}
+	//endregion
 });
 

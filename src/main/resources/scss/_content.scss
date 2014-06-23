@@ -216,11 +216,7 @@
 		}
 		#view-tabs:not(:empty) ~ #content{
 			.content-toolbar{
-				.goup{
-					width: 124px;
-					position: absolute;
-					top: 0;
-					bottom: 0;
+				.tabs{
 					cursor: pointer;
 
 					&::before {
@@ -247,9 +243,6 @@
 							background:none;
 						}
 					}
-				}
-				.breadcrumb{
-					margin-left: 124px;
 				}
 			}
 		}

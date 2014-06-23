@@ -4,6 +4,10 @@ Ext.define('NextThought.view.menus.JumpTo', {
 	minWidth: 200,
 	maxWidth: 500,
 
+	mixins: {
+		menuBehavior: 'NextThought.mixins.MenuShowHideBehavior'
+	},
+
 	layout: {
 		type: 'vbox',
 		align: 'stretch',
@@ -19,6 +23,11 @@ Ext.define('NextThought.view.menus.JumpTo', {
 
 
 	initComponent: function() {
+		this.mixins.menuBehavior.constructor.call(this);
+		//if (!this.parentMenu && !this.ownerButton) {
+			//debugger;
+		//}
+
 		this.callParent(arguments);
 		this.on('click', 'handleClick', this);
 	},
@@ -42,41 +51,6 @@ Ext.define('NextThought.view.menus.JumpTo', {
 			this.mon(owner, 'destroy', 'destroy');
 		} else {
 			wait(1).then(this.destroy.bind(this));
-			return;
 		}
-
-		if (!Ext.is.iPad) { // iPad doesn't need/want these
-			this.mon(this, {
-				scope: this,
-				'mouseleave': this.startHide,
-				'mouseenter': this.stopHide
-			});
-		}
-	},
-
-
-	startShow: function(el, align, offset) {
-		this.stopHide();
-		this.showTimeout = Ext.defer(this.showBy, 750, this, [el, align, offset]);
-	},
-
-
-	stopShow: function() {
-		this.startHide();
-		clearTimeout(this.showTimeout);
-	},
-
-
-	startHide: function() {
-		var me = this;
-		me.stopHide();
-		me.leaveTimer = setTimeout(function() {
-			me.hide();
-		}, 500);
-	},
-
-
-	stopHide: function() {
-		clearTimeout(this.leaveTimer);
 	}
 });

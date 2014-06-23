@@ -40,9 +40,9 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 
 
 	onPathClick: function() {
-		if (this.upMenu) {
-			this.upMenu.stopHide();
-			this.upMenu.stopShow();
+		if (this.tabMenu) {
+			this.tabMenu.stopHide();
+			this.tabMenu.stopShow();
 		}
 
 		this.callParent(arguments);
@@ -52,10 +52,10 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 		if (!e.getTarget('.has-alt-tabbar')) { return; }
 		var scrollEl = this.up('[getMainTabbarMenu]');
 
-		this.upMenu = scrollEl.getMainTabbarMenu();
-		this.upMenu.startShow(part, 'tl-bl', [-10, 5]);
+		this.tabMenu = scrollEl.getMainTabbarMenu();
+		this.tabMenu.startShow(part, 'tl-bl', [-10, 5]);
 
-		this.on('destroy', 'destroy', this.upMenu);
+		this.on('destroy', 'destroy', this.tabMenu);
 	},
 
 
