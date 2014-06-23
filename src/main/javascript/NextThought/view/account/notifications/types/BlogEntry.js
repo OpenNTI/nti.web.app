@@ -7,7 +7,7 @@ Ext.define('NextThought.view.account.notifications.types.BlogEntry', {
 	wording: getString('NextThought.view.account.notifications.types.BlogEntry.wording', '{creator} created a thought: {title}'),
 
 	clicked: function(view, rec) {
-		var u = rec.user,
+		var u = rec.get('Creator'),
 			postId = rec.get('ID');
 		view.fireEvent('navigate-to-blog', u, postId);
 	}
