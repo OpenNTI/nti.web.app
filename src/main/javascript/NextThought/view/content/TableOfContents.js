@@ -96,8 +96,15 @@ Ext.define('NextThought.view.content.TableOfContents', {
 		this.activeNTIID = active;
 		this.bindStore(new Ext.data.Store({
 			model: NextThought.model.TopicNode,
-			data: Library.getToc(record)
+			data: Library.getToc(record),
+			filters: [
+				{fn: function(o) {
+					return o && o.get('levelnum') < 4;
+				}}
+			]
 		}));
+
+
 		if (root) {
 			rec = this.store.getById(root);
 			if (rec) {
