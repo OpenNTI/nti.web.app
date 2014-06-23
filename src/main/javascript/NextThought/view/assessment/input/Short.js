@@ -215,5 +215,11 @@ Ext.define('NextThought.view.assessment.input.Short', {
 	reset: function() {
 		this.markGraded(false);
 		this.callParent(arguments);
+
+		var inputs = this.el.select('.blank input');
+
+		inputs.each(function(i) {
+			i.dom.value = '';
+		});
 	}
 });
