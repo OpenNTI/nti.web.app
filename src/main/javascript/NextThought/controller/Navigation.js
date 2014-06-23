@@ -407,8 +407,8 @@ Ext.define('NextThought.controller.Navigation', {
 		 *  rec using a set of optional options
 		 */
 	doContentNavigation: function(ntiid, rec, options) {
-		var callback = Ext.emptyFn(),
-				reply, targets;
+		var callback = Ext.emptyFn,
+			reply, targets;
 
 		if (!this.fireEvent('show-view', 'content', true)) {
 			return Promise.reject();
@@ -476,7 +476,7 @@ Ext.define('NextThought.controller.Navigation', {
 					return reject(er);
 				}
 
-				cb.apply(window, arguments);
+				Ext.callback(cb, window, arguments);
 				fulfill(a);
 			});
 		});
