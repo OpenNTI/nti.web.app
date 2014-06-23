@@ -17,7 +17,7 @@ Ext.define('NextThought.view.content.Navigation', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'tabs'},
-		{cls: 'toc', html: '{{{Table of Contents}}}'},
+		{cls: 'toc', html: '{{{NextThought.view.content.Navigation.toc}}}'},
 		{cls: 'breadcrumb'}
 	]),
 

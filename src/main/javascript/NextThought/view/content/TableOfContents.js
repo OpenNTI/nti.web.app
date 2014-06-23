@@ -18,7 +18,7 @@ Ext.define('NextThought.view.content.TableOfContents', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header', cn: [
-			'{{{Table of Contents}}}'
+			'{{{NextThought.view.content.Navigation.toc}}}'
 		]},
 		{ cls: 'outline-list'}
 	]),
