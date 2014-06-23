@@ -20,9 +20,11 @@
 
 		@include icon('topic', $top:20px, $left: 18px, $side: 'before');
 
+		overflow: hidden;
 		cursor: pointer;
 		color: $primary-blue;
 		display: inline-block;
+		white-space: nowrap;
 
 		&::after {
 			content: '\00a0/\00a0';
