@@ -67,8 +67,11 @@ Ext.define('NextThought.view.content.TableOfContents', {
 
 	onShow: function() {
 		this.callParent(arguments);
-		this.getSelectionModel().select(this.store.getById(this.activeNTIID), false, true);
+		var rec = this.store.getById(this.activeNTIID);
+		if (rec) {
+			this.getSelectionModel().select(rec, false, true);
 		wait(100).then(this.scrollSelectionIntoView.bind(this));
+		}
 	},
 
 
