@@ -70,7 +70,7 @@ Ext.define('NextThought.view.content.TableOfContents', {
 		var rec = this.store.getById(this.activeNTIID);
 		if (rec) {
 			this.getSelectionModel().select(rec, false, true);
-		wait(100).then(this.scrollSelectionIntoView.bind(this));
+			wait(100).then(this.scrollSelectionIntoView.bind(this));
 		}
 	},
 
@@ -99,12 +99,7 @@ Ext.define('NextThought.view.content.TableOfContents', {
 		this.activeNTIID = active;
 		this.bindStore(new Ext.data.Store({
 			model: NextThought.model.TopicNode,
-			data: Library.getToc(record),
-			filters: [
-				{fn: function(o) {
-					return o && o.get('levelnum') < 4;
-				}}
-			]
+			data: Library.getToc(record)
 		}));
 
 

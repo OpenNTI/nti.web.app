@@ -318,8 +318,8 @@ Ext.define('NextThought.view.content.Reader', {
 			proxy.request({
 							  pageInfo: pageInfo,
 							  ntiid: pageInfo.getId(),
-							  jsonpUrl: pageInfo.getLink('jsonp_content'),
-							  url: pageInfo.getLink('content'),
+							  jsonpUrl: (pageInfo.getLink('jsonp_content') || '').split('#')[0],
+							  url: (pageInfo.getLink('content') || '').split('#')[0],
 							  expectedContentType: 'text/html',
 							  scope: this,
 							  success: success,
