@@ -52,7 +52,9 @@ Ext.define('NextThought.model.TopicNode', {
 
 		{ name: 'href', type: 'string', mapping: '@href' },
 		{ name: 'type', type: 'string', mapping: '@level' },
-		{ name: 'levelnum', type: 'int', mapping: '@levelnum' }
+		{ name: 'levelnum', type: 'int', mapping: '@levelnum' },
+
+		{ name: 'isRoot', type: 'bool', defaultVale: false }
 	],
 
 
