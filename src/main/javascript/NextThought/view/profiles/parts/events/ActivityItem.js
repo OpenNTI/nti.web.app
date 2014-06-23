@@ -225,6 +225,7 @@ Ext.define('NextThought.view.profiles.parts.events.ActivityItem', {
 			me.loadContext(function() {
 				if (me.contextEl) {
 					me.contextEl.unmask();
+					me.contextEl.select('input').addCls('preview').set({readonly: true});
 				}
 			});
 		}
