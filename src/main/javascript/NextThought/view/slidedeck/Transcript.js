@@ -17,6 +17,8 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	cls: 'transcript-view scrollable',
 	items: [],
 
+	desiredTop: 0,
+
 	lineFilterId: 'plinefilter',
 
 	bubbleEvents: ['add', 'remove', 'editor-open', 'editorActivated', 'editorDeactivated'],
@@ -419,7 +421,6 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		}
 
 		if (!cmp) {
-			console.error('NO transcript for time: ', seconds);
 			return;
 		}
 
@@ -434,31 +435,39 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			this.currentCue = tEl;
 			this.currentTime = seconds;
 
-			bottom = tEl.dom && tEl.dom.getBoundingClientRect().bottom;
-
-			shouldScroll = bottom && (bottom > document.body.getBoundingClientRect().bottom || bottom < 0);
-
-			if (allowScroll && shouldScroll && scrollingEl) {
-				this.scrollingFromHighlight = true;
-				scrollingEl.scrollTo('top', scrollingEl.getScrollTop() + (tEl.getY() - scrollingEl.getY()) - offset, {
-					callback: function() {
-						//after the animation is done wait for the last scroll event to fire before removing the flag
-						wait(100)
-							.then(function() {
-								delete me.scrollingFromHighlight;
-							});
-					}
-				});
+			if (allowScroll) {
+				this.scrollToEl(tEl, offset);
 			}
 		}
 	},
 
 
-	onScroll: function() {
-		if (this.scrollingFromHighlight) {
-			return;
+	scrollToEl: function(el, offset) {
+		var scrollingEl = Ext.get(this.getScrollTarget()),
+			top, bottom, shouldScroll;
+
+		offset = offset || 0;
+
+		bottom = el.dom && el.dom.getBoundingClientRect().bottom;
+
+		//if its offscreen
+		shouldScroll = bottom && (bottom > document.body.getBoundingClientRect().bottom || bottom < 0);
+
+		if (shouldScroll && scrollingEl) {
+			top = scrollingEl.getScrollTop() + (el.getY() - scrollingEl.getY()) - offset;
+			this.desiredTop = top;
+			scrollingEl.scrollTo('top', top);
 		}
-		this.fireEvent('unsync-video');
+	},
+
+
+	onScroll: function(e, dom) {
+		//if the current scroll top is too far off were is should be the user initiated it.
+		var delta = Math.abs(dom.scrollTop - this.desiredTop);
+
+		if (delta > 10) {
+			this.fireEvent('unsync-video');
+		}
 	},
 
 
@@ -503,7 +512,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 		if (!this.isMasked && targetImageEl) {
 			Ext.defer(function() {
-				targetImageEl.scrollIntoView(me.getTargetEl(), false, {listeners: {}});
+				me.scrollToEl(targetImageEl);
 			}, 10, me);
 		}
 	},

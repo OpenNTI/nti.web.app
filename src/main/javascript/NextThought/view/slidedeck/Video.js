@@ -226,6 +226,7 @@ Ext.define('NextThought.view.slidedeck.Video', {
 		this.linkWithSlides = !this.linkWithSlides;
 		this.updateCheckbox();
 		if (this.linkWithSlides) {
+			this.fireEvent('checkbox-checked');
 			this.videoTriggeredTransition = true;
 			this.queue.selectSlide(this.playlistIndex);
 		}

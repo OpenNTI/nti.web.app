@@ -74,6 +74,8 @@ Ext.define('NextThought.view.slidedeck.View', {
 		delete this.store;
 		delete this.startOn;
 
+		this.syncVideo();
+
 		v = this.video = ctrls.add({ xtype: 'slidedeck-video', playlist: vPlaylist});
 		//Ths queue is the primary control. Selection causes video and slide to change.
 		q = this.queue = ctrls.add({ xtype: 'slidedeck-queue', store: store, startOn: start, flex: 1 });
@@ -86,13 +88,15 @@ Ext.define('NextThought.view.slidedeck.View', {
 		this.mon(q, 'slide-selected', function(slide) {
 			var link = (this.video && this.video.linkWithSlides) || true;
 
-			if (this.down('slidedeck-transcript') && link) {
+			if (this.down('slidedeck-transcript') && link && this.syncWithTranscript) {
 				this.down('slidedeck-transcript').selectSlide(slide);
 			}
 		}, this);
 		this.mon(q, 'beforeselect', function(dvm) {
 			this.wasSelected = dvm.getSelection();
 		}, this);
+
+		this.mon(v, 'checkbox-checked', this.syncVideo, this);
 
 		this.on('editorActivated', function() {
 			this.pausedForEditing = v.pausePlayback();
@@ -118,10 +122,30 @@ Ext.define('NextThought.view.slidedeck.View', {
 		}, this);
 
 		if (this.hasTranscript) {
-			this.mon(this.down('slidedeck-transcript'), 'jump-video-to', Ext.bind(this.video.jumpToVideoLocation, this.video), this);
+			this.mon(this.down('slidedeck-transcript'), {
+				scope: this,
+				'jump-video-to': Ext.bind(this.video.jumpToVideoLocation, this.video),
+				'unsync-video': 'unsyncVideo'
+			});
 			this.mon(this.video, 'media-heart-beat', this.actOnMediaHeartBeat, this);
 		}
 	},
+
+
+	unsyncVideo: function() {
+		this.syncWithTranscript = false;
+
+		if (this.video) {
+			this.video.linkWithSlides = false;
+			this.video.updateCheckbox();
+		}
+	},
+
+
+	syncVideo: function() {
+		this.syncWithTranscript = true;
+	},
+
 
 	getVideoPlayList: function(store) {
 		var playList = [];
@@ -269,7 +293,7 @@ Ext.define('NextThought.view.slidedeck.View', {
 			if (me.fireEvent('beforeexit', me, slide) === false) {
 				return;
 			}
-			
+
 			me.destroy();
 			me.fireEvent('exited', me, slide);
 		}
