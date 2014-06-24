@@ -760,7 +760,7 @@ Ext.define('NextThought.util.Content', {
 			Ext.Error.raise('No NTIID');
 		}
 
-		var me = this,
+		var me = this, course,
 			loc = me.find(ntiid),
 			info, nodes = [],
 			topicOrTocRegex = /topic|toc/i,
@@ -778,8 +778,8 @@ Ext.define('NextThought.util.Content', {
 				href = (node.getAttribute) ? node.getAttribute('href') : null,
 				course;
 
-			//decide if this is a navigate-able thing, it most be a topic or toc, it must
-			//have an href, and that href must NOT have a anchor
+			//decide if this is a navigate-able thing, it must be a topic or toc, it must
+			//have an href, and that href must NOT have a fragment
 			if (topicOrToc && href && href.lastIndexOf('#') === -1 && !node.hasAttribute('suppressed')) {
 				result = true;
 			}
@@ -817,13 +817,16 @@ Ext.define('NextThought.util.Content', {
 		function sibling(node, previous) {
 			if (!node) {return null;}
 
-			var siblingProp = previous ? 'previousSibling' : 'nextSibling', //figure direction
+			var parent = node.parentNode,
+				siblingProp = previous ? 'previousSibling' : 'nextSibling', //figure direction
 				siblingNode = node[siblingProp]; //read directional sibling property (pointer ref)
 
 			//If the sibling is TOC or topic, we are done here...
-			return (isTopicOrToc(siblingNode)) ? siblingNode :
+			return (isTopicOrToc(siblingNode) ? siblingNode :
 					//If not, recurse in the same direction
-					sibling(node[siblingProp], previous);
+					sibling(node[siblingProp], previous)) ||
+				   //If we are at the end of the current branch, look up at the parent node and walk
+				   (parent && sibling(parent[siblingProp], previous));
 		}
 
 		loc = loc ? loc.location : null;
