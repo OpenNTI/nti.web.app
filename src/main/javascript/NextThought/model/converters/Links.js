@@ -23,7 +23,11 @@ Ext.define('NextThought.model.converters.Links', {
 							if (c[i].rel === rel) {
 								c = c[i].href;
 								if (c && c.split && !raw) {
-									c = c.split('#')[0];
+									c = c.split('#');
+									if (c.length > 1) {
+										console.warn('There was a fragment in a rel link! rel:' + rel + ' = ', c);
+									}
+									c = c[0];
 								} else if (raw) {
 									console.warn('Returning rel link raw: ', rel, c);
 								}
