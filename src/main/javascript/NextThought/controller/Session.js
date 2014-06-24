@@ -167,9 +167,7 @@ Ext.define('NextThought.controller.Session', {
 
 
 	linkElementForRel: function(linkRel) {
-		var user = $AppConfig.userObject,
-				links = user.get('Links') || {};
-		return links.getLinksForRel ? links.getLinksForRel(linkRel)[0] : null;
+		return $AppConfig.userObject.getLink(linkRel);
 	},
 
 

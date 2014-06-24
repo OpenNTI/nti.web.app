@@ -18,33 +18,23 @@ Ext.define('NextThought.model.converters.Links', {
 				asJSON: function() {return v;},
 				getRelHref: function(rel) {
 					var i, c = this.links, len = c.length;
-					if (typeof(c) === 'object') {
+					try {
 						for (i = len - 1; i >= 0; i--) {
 							if (c[i].rel === rel) {
 								return c[i].href;
 							}
 						}
 					}
-					else {
+					catch (e) {
 						console.warn('bad Links value: "', c, '" it is a', typeof(c), 'instead of an array');
 					}
 
 					return null;
 				},
-				getLinksForRel: function(rel) {
-					var i, c = this.links, len = c.length, results = [];
-					if (typeof(c) === 'object') {
 
-						for (i = len - 1; i >= 0; i--) {
-							if (c[i].rel === rel) {
-								results.push(c[i]);
-							}
-						}
-					}
-					else {
-						console.warn('bad Links value: "', c, '" it is a', typeof(c), 'instead of an array');
-					}
-					return results;
+
+				hasLink: function(rel) {
+					return !Ext.isEmpty(this.getRelHref(rel));
 				}
 			};
 		}
