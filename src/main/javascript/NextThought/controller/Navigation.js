@@ -304,7 +304,8 @@ Ext.define('NextThought.controller.Navigation', {
 		var me = this, perform = this.performAnd.bind(this, 'handleNavigation', cid, rec),
 			performAfter = this.performAnd.bind(this, 'afterHandleNavigation', cid, rec),
 			txn = history.beginTransaction('navigate-in-controller-' + guidGenerator()),
-			result;
+			result,
+			reader = ReaderPanel.get();
 		//We don't want to do a content navigation until we are pretty sure
 		//thats what we want.  On failure it shows a page not found and
 		//if we handle this navigation in some other way we don't want that happening.
@@ -377,12 +378,8 @@ Ext.define('NextThought.controller.Navigation', {
 		result = LocationMeta.getMeta(cid)
 			.fail(recover)
 			.then(perform)
-			.then(function() {
-				return me.doContentNavigation(cid, rec, options);
-			})
-			.fail(function(reason) {
-				console.log(reason);
-			})
+			.then(function() { return me.doContentNavigation(cid, rec, options); })
+			.fail(function(reason) { console.log(reason); })
 			.then(performAfter)
 			.fail(function(reason) {
 				if (reason) {
@@ -395,6 +392,15 @@ Ext.define('NextThought.controller.Navigation', {
 							return me.doContentNavigation(cid, rec, options);
 						});
 			});
+
+		result.then(function() {
+			var l = reader.getLocation(),
+				s = reader.getScroll();
+			l = l.pageInfo.getLinkFragment('content');
+			if (l) {
+				wait(500).then(s.toTarget.bind(s, l));
+			}
+		});
 
 		result.then(txn.commit.bind(txn), txn.abort.bind(txn));
 
