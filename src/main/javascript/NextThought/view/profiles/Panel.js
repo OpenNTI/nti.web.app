@@ -199,6 +199,17 @@ Ext.define('NextThought.view.profiles.Panel', {
 
 			win.show();
 
+			me.mon(win, {
+				single: true,
+				close: function() {
+					url = me.user.getProfileUrl();
+
+					history.pushState({profile: {
+						activeTab: 'activity'
+					}}, me.ownerCt.title, url);
+				}
+			});
+
 			activeView = 'activity';
 		}
 
