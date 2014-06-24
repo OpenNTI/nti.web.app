@@ -865,6 +865,23 @@ Ext.define('NextThought.util.Content', {
 
 				return info;
 			});
+	},
+
+
+	getPageID: function(ntiid) {
+		var l = this.getLineage(ntiid),
+			i, node, href;
+
+		for (; l.length > 0;) {
+			i = this.find(l.shift());
+			node = i && i.location;
+			href = node && node.getAttribute('href');
+			if (href && href.indexOf('#') < 0) {
+				return i.NTIID;
+			}
+		}
+
+		return null;
 	}
 
 }, function() {

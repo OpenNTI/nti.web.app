@@ -11,6 +11,7 @@ Ext.define('NextThought.view.content.Navigation', {
 	ui: 'content-navigation',
 	cls: 'jumpto',
 
+	//region Config
 	breadcrumbTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'part', html: '{0}'}).compile(),
 
 	MAX_PATH_LENGTH: 2,
@@ -32,6 +33,7 @@ Ext.define('NextThought.view.content.Navigation', {
 		tocEl: '.toc',
 		breadcrumb: '.breadcrumb'
 	},
+	//endregion
 
 
 	initComponent: function() {
@@ -87,10 +89,11 @@ Ext.define('NextThought.view.content.Navigation', {
 
 	updateLocation: function(ntiid, rootId) {
 		var C = ContentUtils,
-			loc = C.getLocation(ntiid),
-			lineage = C.getLineage(ntiid), leftOvers = [],
+			pageNtiid = C.getPageID(ntiid),
+			loc = C.getLocation(pageNtiid),
+			lineage = C.getLineage(pageNtiid),
+			leftOvers = [],
 			parentNode = lineage.last(),
-			page = lineage[0] ? C.getLocation(lineage[0]) : null,
 			rootIdIdx,
 			allowMenus = true;
 
@@ -120,7 +123,7 @@ Ext.define('NextThought.view.content.Navigation', {
 		leftOvers.pop();
 		lineage.pop(); // don't let the root show
 
-		if (!loc || !loc.NTIID || !page) {
+		if (!loc || !loc.NTIID) {
 			this.hide();
 			return;
 		}
