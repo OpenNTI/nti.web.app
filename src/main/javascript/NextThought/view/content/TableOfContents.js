@@ -86,12 +86,17 @@ Ext.define('NextThought.view.content.TableOfContents', {
 		if (this.filterValue === v) {return;}
 
 		this.filterValue = v;
-		this.store.filter({
-			id: 'search',
-			fn: function(r) {
-				return r.matches(v);
-			}
-		});
+		if (!v) {
+			this.store.clearFilter();
+		} else {
+			this.store.filter({
+				id: 'search',
+				fn: function(r) {
+					return r.matches(v);
+				}
+			});
+		}
+		this.showSelection();
 	},
 
 
@@ -108,6 +113,11 @@ Ext.define('NextThought.view.content.TableOfContents', {
 
 	onShow: function() {
 		this.callParent(arguments);
+		this.showSelection();
+	},
+
+
+	showSelection: function() {
 		var rec = this.store.getById(this.activeNTIID);
 		if (rec) {
 			this.getSelectionModel().select(rec, false, true);
