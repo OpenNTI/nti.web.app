@@ -16,17 +16,23 @@ Ext.define('NextThought.model.converters.Links', {
 			return {
 				links: v,
 				asJSON: function() {return v;},
-				getRelHref: function(rel) {
+				getRelHref: function(rel, raw) {
 					var i, c = this.links, len = c.length;
 					try {
 						for (i = len - 1; i >= 0; i--) {
 							if (c[i].rel === rel) {
-								return c[i].href;
+								c = c[i].href;
+								if (c && c.split && !raw) {
+									c = c.split('#')[0];
+								} else if (raw) {
+									console.warn('Returning rel link raw: ', rel, c);
+								}
+								return c;
 							}
 						}
 					}
 					catch (e) {
-						console.warn('bad Links value: "', c, '" it is a', typeof(c), 'instead of an array');
+						console.warn('bad Links value: "', c, '" it is a', typeof(c));
 					}
 
 					return null;
