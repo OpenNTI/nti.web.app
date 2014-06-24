@@ -250,3 +250,18 @@
 		}
 	}
 }
+
+.notifications-window {
+	.x-window-item {
+		overflow-y: auto;
+	}
+
+	div.nti-window-header{
+		background-color: #fffefe;
+		display: block;
+
+		.controls {
+			display: none;
+		}
+	}
+}

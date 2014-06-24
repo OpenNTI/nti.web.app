@@ -8,6 +8,7 @@ Ext.define('NextThought.view.profiles.Panel', {
 		'NextThought.view.profiles.outline.View',
 		'NextThought.view.profiles.parts.Blog',
 		'NextThought.view.profiles.parts.Achievements',
+		'NextThought.view.profiles.parts.Notifications',
 		'NextThought.layout.container.AutoCard'
 	],
 
@@ -175,7 +176,7 @@ Ext.define('NextThought.view.profiles.Panel', {
 	//<editor-fold desc="Read & Write State">
 	restoreState: function(state) {
 		console.log(state);
-		var me = this,
+		var me = this, win,
 			p = state && state.activeTab && state.activeTab.split('/'),
 			activeView = (p && p.shift()) || 'activity',
 			activeViewData = p && p.join('/');
@@ -191,6 +192,15 @@ Ext.define('NextThought.view.profiles.Panel', {
 		}
 
 		me.setStateData(Ext.clone(state));
+
+
+		if (activeView === 'Notifications' && isMe(this.user)) {
+			win = Ext.widget('profile-notifications');
+
+			win.show();
+
+			activeView = 'activity';
+		}
 
 		me.forEachView(compareUriName);
 		if (!activeView || Ext.isString(activeView)) {
