@@ -58,6 +58,11 @@ Ext.define('NextThought.model.TopicNode', {
 	],
 
 
+	matches: function(substring) {
+		return this.get('label').indexOf(substring) >= 0;
+	},
+
+
 	getChildren: function() {
 		var n = this.get('tocNode'),
 			c = n && n.getChildren();
@@ -71,40 +76,4 @@ Ext.define('NextThought.model.TopicNode', {
 		return Ext.Array.clone(n.getChildren());
 	}
 
-
-	/*
-	listenForFieldChange: function(field, fn, scope, single) {
-		var monitor;
-
-		function update(store, record, type, modifiedFieldNames) {
-			if (Ext.Array.contains(modifiedFieldNames, field)) {
-				if (Ext.isString(fn)) {
-
-					if ((scope || record)[fn]) {
-						fn = (scope || record)[fn];
-					}
-					else if (!fn && store[fn]) {
-						fn = store[fn];
-						scope = store;
-					} else {
-						console.error('Could not find function "' + fn + '" in scope, record nor store.', {
-							scope: scope, record: record, store: store});
-						Ext.destroy(monitor);
-						return;
-					}
-				}
-				if (single) {
-					Ext.destroy(monitor);
-				}
-				Ext.callback(fn, scope || record, [record, record.get(field)]);
-			}
-		}
-
-		monitor = this.mon(this.store, {
-			destroyable: true,
-			update: update
-		});
-		return monitor;
-	}
-	*/
 });

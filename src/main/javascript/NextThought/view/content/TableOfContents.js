@@ -20,10 +20,20 @@ Ext.define('NextThought.view.content.TableOfContents', {
 		{ cls: 'header', cn: [
 			'{{{NextThought.view.content.Navigation.toc}}}'
 		]},
+		{
+			tag: 'form', cls: 'search filter', onsubmit: 'return false',
+			cn: [
+				{ tag: 'input', placeholder: '{{{NextThought.view.Navigation.search}}}', required: true },
+				{ tag: 'button', type: 'reset', cls: 'clear' }
+			]
+		},
 		{ cls: 'outline-list'}
 	]),
 
 	renderSelectors: {
+		formEl: 'form.search',
+		clearEl: '.search button',
+		filterEl: '.search input',
 		frameBodyEl: '.outline-list'
 	},
 
@@ -51,6 +61,37 @@ Ext.define('NextThought.view.content.TableOfContents', {
 			height: 'auto',
 			bottom: '0'
 		}, true);
+
+
+		this.on({
+			clearEl: {click: 'onFilter', buffer: 1},
+			filterEl: {
+				keypress: 'onFilter',
+				keydown: 'onFilter'
+			}
+		});
+	},
+
+
+	onFilter: function(e) {
+		var v = this.filterEl.getValue();
+		if (e) {
+			e.stopPropagation();
+			if (e.getKey() === e.ESC) {
+				v = '';
+				Ext.getDom(this.formEl).reset();
+			}
+		}
+
+		if (this.filterValue === v) {return;}
+
+		this.filterValue = v;
+		this.store.filter({
+			id: 'search',
+			fn: function(r) {
+				return r.matches(v);
+			}
+		});
 	},
 
 
@@ -89,7 +130,7 @@ Ext.define('NextThought.view.content.TableOfContents', {
 			scroll.scrollTo('top', (scroll.getScrollTop() + offset) - (height / 2), true);
 		}
 
-		el.focus();
+		this.filterEl.focus();
 	},
 
 
@@ -110,6 +151,11 @@ Ext.define('NextThought.view.content.TableOfContents', {
 			} else {
 				console.warn('Strange, we set a root, but did not find it.');
 			}
+		}
+
+		if (this.filterEl) {
+			this.filterEl.set({value: ''});
+			this.onFilter();
 		}
 
 		this.refresh();

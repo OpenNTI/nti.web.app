@@ -118,12 +118,59 @@
 .nav-outline.toc-flyout {
 	box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
 	min-width: 300px;
-	.outline-list {top: 60px;}
+	.outline-list {top: 90px;}
 	.header {
 		text-transform: uppercase;
 		color: $primary-blue;
 		line-height: 60px;
 		&::after { top: 20px; }
+	}
+
+	.search {
+		@include icon('rhp-search',$top:6px,$left:9px);
+
+		height: 30px;
+		&::after{ cursor: text; }
+		&::before {
+			position: absolute;
+			content: '';
+			bottom: 0;
+			left: 30px; right: 30px;
+			height: 1px;
+			background: $border-grey;
+			opacity: 0.5;
+		}
+
+		input {
+			background: #fff;
+			border: 0;
+
+			font: normal normal 12px/24px $font;
+			color: $primary-grey;
+			margin: 0;
+			padding: 3px 32px;
+			width: 100%;
+
+			&:not(:valid) ~ .clear {
+				opacity: 0;
+				cursor: text;
+			}
+		}
+		.clear {
+			@include icon('clear_line', $position: absolute);
+			background: none;
+			transition: opacity 0.5s;
+			opacity: 1;
+			top: 9px;
+			right: 10px;
+			left: auto;
+			cursor: pointer;
+			margin: 0;
+			width: 16px;
+			height: 16px;
+			padding: 0;
+			border-width: 0;
+		}
 	}
 
 	.outline-row {
