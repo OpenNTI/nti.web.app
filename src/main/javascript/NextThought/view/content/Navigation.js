@@ -87,6 +87,28 @@ Ext.define('NextThought.view.content.Navigation', {
 	},
 
 
+	hideTableOfContentsLabel: function() {
+		if (!this.rendered) {
+			this.on({afterrender: 'hideTableOfContentsLabel', single: true});
+			return;
+		}
+
+		this.tocEl.setVisibilityMode(Ext.Element.DISPLAY).hide();
+		this.tabEl.update(new Array(6).join('&nbsp;'));//Hack...yes, I'm being lazy :P I don't want to formalize the hiding/padding of this state.
+	},
+
+
+	showTableOfContentsLabel: function() {
+		if (!this.rendered) {
+			this.on({afterrender: 'showTableOfContentsLabel', single: true});
+			return;
+		}
+
+		this.tabEl.update('');
+		this.tocEl.setVisibilityMode(Ext.Element.DISPLAY).show();
+	},
+
+
 	updateLocation: function(ntiid, rootId) {
 		var C = ContentUtils,
 			pageNtiid = C.getPageID(ntiid),
@@ -96,6 +118,8 @@ Ext.define('NextThought.view.content.Navigation', {
 			parentNode = lineage.last(),
 			rootIdIdx,
 			allowMenus = true;
+
+		this[(loc.isCourse ? 'hide' : 'show') + 'TableOfContentsLabel']();
 
 		this.tocFlyout.setContentPackage(loc.title, ntiid, rootId);
 		this.cleanupMenus(); //cleanup before proceeding.
