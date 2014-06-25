@@ -8,6 +8,13 @@ Ext.define('NextThought.mixins.MenuShowHideBehavior', {
 
 		if (!this.isMenu) {
 			//don't duplicate this logic
+			this.getRefOwner = (function(original) {
+				return function() {
+					return this.parentMenu ||
+						   this.ownerButton ||
+						   original.apply(this, arguments);
+				}; }(this.getRefOwner));
+
 			Ext.menu.Manager.register(this);//if this is menu, this is a no-op, but just to be nice...
 			this.on('destroy', function() {
 				Ext.menu.Manager.unregister(this);

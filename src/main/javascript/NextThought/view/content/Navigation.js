@@ -48,7 +48,7 @@ Ext.define('NextThought.view.content.Navigation', {
 			mouseover: {element: 'tocEl', fn: 'showTableOfContents'}
 		});
 
-		this.tocFlyout = Ext.widget({ xtype: 'table-of-contents-flyout', floatParent: this });
+		this.tocFlyout = Ext.widget({ xtype: 'table-of-contents-flyout', ownerButton: this });
 		this.on('destroy', 'destroy', this.tocFlyout);
 	},
 
