@@ -81,6 +81,6 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.AbstractForumView', {
 			return;
 		}
 
-		this.fireEvent('show-topic', this, this.record);
+		this.fireEvent('goto-forum-item', this.record);
 	}
 });
