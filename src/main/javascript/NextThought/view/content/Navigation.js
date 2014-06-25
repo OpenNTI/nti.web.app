@@ -42,7 +42,8 @@ Ext.define('NextThought.view.content.Navigation', {
 		this.on({
 			afterrender: 'hide',
 			destroy: 'cleanupMenus',
-			mouseover: {element: 'tabEl', fn: 'onShowTabsMenu'}
+			mouseover: {element: 'tabEl', fn: 'onShowTabsMenu'},
+			click: {element: 'tabEl', fn: 'onUp'}
 		});
 		this.on({
 			mouseover: {element: 'tocEl', fn: 'showTableOfContents'}
@@ -50,6 +51,26 @@ Ext.define('NextThought.view.content.Navigation', {
 
 		this.tocFlyout = Ext.widget({ xtype: 'table-of-contents-flyout', ownerButton: this });
 		this.on('destroy', 'destroy', this.tocFlyout);
+	},
+
+
+	onUp: function(e) {
+		e.stopEvent();
+
+		if (!this.tabEl.hasCls('go-up')) {
+			return;
+		}
+
+		if (this.tabMenu) {
+			this.tabMenu.stopHide();
+			this.tabMenu.stopShow();
+		}
+
+		// pop up one level.
+		var up = ContentUtils.getLineage(this.currentNtiid, false, true)[1];
+		if (up) {
+			this.fireEvent('set-location', up);
+		}
 	},
 
 
@@ -94,7 +115,7 @@ Ext.define('NextThought.view.content.Navigation', {
 		}
 
 		this.tocEl.setVisibilityMode(Ext.Element.DISPLAY).hide();
-		this.tabEl.update(new Array(6).join('&nbsp;'));//Hack...yes, I'm being lazy :P I don't want to formalize the hiding/padding of this state.
+		this.tabEl.addCls('go-up');
 	},
 
 
@@ -104,7 +125,7 @@ Ext.define('NextThought.view.content.Navigation', {
 			return;
 		}
 
-		this.tabEl.update('');
+		this.tabEl.removeCls('go-up');
 		this.tocEl.setVisibilityMode(Ext.Element.DISPLAY).show();
 	},
 
@@ -118,6 +139,8 @@ Ext.define('NextThought.view.content.Navigation', {
 			parentNode = lineage.last(),
 			rootIdIdx,
 			allowMenus = true;
+
+		this.currentNtiid = pageNtiid;
 
 		this[(loc.isCourse ? 'hide' : 'show') + 'TableOfContentsLabel']();
 

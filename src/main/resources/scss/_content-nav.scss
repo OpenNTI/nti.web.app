@@ -11,6 +11,18 @@
 	.tabs {
 		flex: none;
 		cursor: pointer;
+
+		&.go-up {
+			@include icon('profile_back_arrow', $top: 23px, $left: 35px);
+			width: 60px;
+			cursor: pointer;
+
+			&:hover {
+				&::after {
+					@include sprite($icons,'profile_back_arrow_active');
+				}
+			}
+		}
 	}
 
 	.toc {
