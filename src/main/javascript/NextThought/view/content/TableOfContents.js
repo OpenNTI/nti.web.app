@@ -146,17 +146,16 @@ Ext.define('NextThought.view.content.TableOfContents', {
 
 
 	setContentPackage: function(record, active, root) {
-		var rec;
-
 		this.activeNTIID = active;
-		this.bindStore(new Ext.data.Store({
+		var rec, store = new Ext.data.Store({
 			model: NextThought.model.TopicNode,
 			data: Library.getToc(record)
-		}));
+		});
 
-		this.store.remove(
-			this.store.getRange().filter(function(_) { return _.get('suppressed'); }));
+		store.remove(
+			store.getRange().filter(function(_) { return _.get('suppressed'); }));
 
+		this.bindStore(store);
 		if (root) {
 			rec = this.store.getById(root);
 			if (rec) {
