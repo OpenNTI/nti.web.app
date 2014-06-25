@@ -1,3 +1,4 @@
+
 Ext.define('NextThought.view.content.TableOfContents', {
 	extend: 'Ext.view.View',
 	alias: 'widget.table-of-contents-flyout',
@@ -153,6 +154,8 @@ Ext.define('NextThought.view.content.TableOfContents', {
 			data: Library.getToc(record)
 		}));
 
+		this.store.remove(
+			this.store.getRange().filter(function(_) { return _.get('suppressed'); }));
 
 		if (root) {
 			rec = this.store.getById(root);

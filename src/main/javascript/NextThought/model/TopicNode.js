@@ -50,6 +50,8 @@ Ext.define('NextThought.model.TopicNode', {
 		//string displayed in the UI
 		{ name: 'label', type: 'string', mapping: '@label' },
 
+		{ name: 'suppressed', type: 'bool', mapping: '@suppressed' },
+
 		{ name: 'href', type: 'string', mapping: '@href' },
 		{ name: 'type', type: 'string', mapping: '@level' },
 		{ name: 'levelnum', type: 'int', mapping: '@levelnum' },
