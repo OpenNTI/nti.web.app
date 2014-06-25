@@ -61,7 +61,8 @@ Ext.define('NextThought.model.TopicNode', {
 
 
 	matches: function(substring) {
-		return this.get('label').indexOf(substring) >= 0;
+		var re = substring && new RegExp(substring, 'i');
+		return !re || re.test(this.get('label'));
 	},
 
 
