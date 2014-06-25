@@ -217,6 +217,7 @@
 		#view-tabs:not(:empty) ~ #content{
 			.content-toolbar{
 				.tabs{
+					width: auto;
 					cursor: pointer;
 
 					&::before {
@@ -227,6 +228,7 @@
 						font: normal normal 14px/60px "Open Sans", sans-serif;
 					}
 					&::after {
+						position: static;
 						background: none;
 						content: '\00a0/\00a0';
 						color: #b8b8b8;
