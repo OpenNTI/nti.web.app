@@ -82,7 +82,7 @@ Ext.define('NextThought.ux.SlideDeck', {
 		function finish() {
 			var earliestSlide, p;
 			store.sort('ordinal', 'ASC');
-			store.filter('slidedeck-id', slidedeckId);
+			store.filter(function(_) {return _.get('slidedeck-id') === slidedeckId; });
 
 			//If now startingSlide but we have a starting video, find the earliest starting slide for that video
 			if (!startingSlide && startingVideo) {
