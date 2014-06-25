@@ -111,7 +111,7 @@
 
 .nav-outline.toc-flyout {
 	box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
-	min-width: 1024px;
+	min-width: 767px;
 	.outline-list {top: 90px;}
 	.header {
 		@include icon('topic', $top:5px, $side: 'before', $position: none);
