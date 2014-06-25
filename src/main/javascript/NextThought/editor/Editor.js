@@ -264,6 +264,10 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			enableVideo: Boolean(this.enableVideo),
 			placeholderText: this.placeholderText
 		});
+
+		if (this.enableShareControls || this.enablePublishControls) {
+			this.addCls('with-controls');
+		}
 	},
 
 
