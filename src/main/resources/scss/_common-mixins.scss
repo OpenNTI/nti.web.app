@@ -76,7 +76,9 @@
 
 
 @mixin icon($name,$top:0,$left:0,$right:auto,$side:'after',$sprite:$icons,$position:relative,$hover:false,$active:false){
-	position: $position;
+	@if $position != none {
+		position: $position;
+	}
 
 	@if $hover {
 		&:target,
@@ -98,7 +100,13 @@
 	&::#{$side} {
 		content: '';
 		overflow: hidden;
-		position: absolute;
+		@if $position != none {
+			position: absolute;
+		} @else {
+			display: inline-block;
+			position: relative;
+			margin-right: 0.5em;
+		}
 		top: $top;
 		left: $left;
 		right: $right;

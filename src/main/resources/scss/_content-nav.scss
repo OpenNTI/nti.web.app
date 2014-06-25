@@ -9,21 +9,19 @@
 	.detected-scrollbars & {width: 635px;}
 
 	.tabs {
-		position: relative;
+		flex: none;
 		cursor: pointer;
-		display: inline-block;
 	}
 
 	.toc {
-		padding: 0 0 0 3em;
+		flex: none;
+		padding: 0 0 0 1.2em;
 		font: normal 500 1.2em/60px $font;
 
-		@include icon('topic', $top:20px, $left: 18px, $side: 'before');
+		@include icon('topic', $top:5px, $side: 'before', $position: none);
 
-		overflow: hidden;
 		cursor: pointer;
 		color: $primary-blue;
-		display: inline-block;
 		white-space: nowrap;
 
 		&::after {
@@ -34,7 +32,8 @@
 
 	.breadcrumb {
 		flex-grow: 1;
-		position: relative;
+		display: inline-flex;
+		flex-wrap: nowrap;
 		font: normal 500 1.2em/60px $font;
 
 		&, * {
@@ -50,17 +49,17 @@
 		}
 
 		.part {
+			flex-grow: 0;
+			flex-shrink: 1;
 			cursor: pointer;
+
+			&:last-of-type { flex: none; }
 
 			&:hover,
 			&:last-of-type:not(.no-children) {
 				color: $primary-grey;
 			}
 
-			&:not(:last-of-type) {
-				display: inline-block;
-				max-width: 35%;
-			}
 
 			&.locked {
 				cursor: default;
@@ -70,16 +69,11 @@
 			}
 
 			&.no-children:last-of-type{
-				position: relative;
 				overflow: visible;
 				cursor: default;
 				margin-left: 0.4em;
-				//.x-ie &,
-				//.x-ie10 &,
-				//.x-gecko & {
-				//	top: -25px;
-				//}
 				&:hover {
+					position: relative;
 					color: inherit;
 
 					&::after{
@@ -120,10 +114,14 @@
 	min-width: 300px;
 	.outline-list {top: 90px;}
 	.header {
+		@include icon('topic', $top:5px, $side: 'before', $position: none);
 		text-transform: uppercase;
 		color: $primary-blue;
 		line-height: 60px;
-		&::after { top: 20px; }
+		padding: 0 0 0 1.2em;
+		&::after {
+			display: none;
+		}
 	}
 
 	.search {
