@@ -88,7 +88,7 @@ Ext.define('NextThought.view.content.TableOfContents', {
 
 		this.filterValue = v;
 		if (!v) {
-			this.store.clearFilter();
+			this.store.removeFilter('search');
 		} else {
 			this.store.filter({
 				id: 'search',
@@ -155,15 +155,23 @@ Ext.define('NextThought.view.content.TableOfContents', {
 		store.remove(
 			store.getRange().filter(function(_) { return _.get('suppressed'); }));
 
-		this.bindStore(store);
 		if (root) {
-			rec = this.store.getById(root);
+			rec = store.getById(root);
 			if (rec) {
 				rec.set('isRoot', true);
 			} else {
 				console.warn('Strange, we set a root, but did not find it.');
 			}
+
+			/*store.filter({
+				id: 'root',
+				filterFn: function(o) {
+					return o.isUnder(root);
+				}
+			});*/
 		}
+
+		this.bindStore(store);
 
 		if (this.filterEl) {
 			this.filterEl.set({value: ''});

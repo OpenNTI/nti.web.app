@@ -66,6 +66,12 @@ Ext.define('NextThought.model.TopicNode', {
 	},
 
 
+	isUnder: function(ntiid) {
+		var lineage = ContentUtils.getLineage(this.getId());
+		return lineage.indexOf(ntiid) >= 0;
+	},
+
+
 	getChildren: function() {
 		var n = this.get('tocNode'),
 			c = n && n.getChildren();
