@@ -310,10 +310,12 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		s.loadRecords(parentStore.getRange(), {addRecords: true});
 
 		me.mon(parentStore, {
-			add: function(store, recs) { s.add(recs); s.sort(); },
+			add: function(store, recs) { if (recs) {s.add(recs); s.sort(); }},
 			load: function(store, recs) {
-				s.loadRecords(recs, {addRecords: true});
-				s.sort();
+				if (recs) {
+					s.loadRecords(recs, {addRecords: true});
+					s.sort();
+				}
 				me.maybeLoadMoreIfNothingNew();
 			}
 		});
