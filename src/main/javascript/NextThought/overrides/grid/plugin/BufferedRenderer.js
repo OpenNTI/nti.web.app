@@ -3,7 +3,7 @@ Ext.define('NextThought.overrides.grid.plugin.BufferedRenderer', {
 
 	/*onViewRefresh: function() {
 		console.debug('BufferedRenderer: View Refresh?', arguments);
-		if (this.grid.isVisible(true)) {
+		if (this.grid && this.grid.isVisible(true)) {
 			this.callParent(arguments);
 		} else {
 			console.debug('droped refresh, not visible');
@@ -13,7 +13,7 @@ Ext.define('NextThought.overrides.grid.plugin.BufferedRenderer', {
 
 	/*onViewResize: function() {
 		console.debug('BufferedRenderer: View Resize?', arguments);
-		if (this.grid.isVisible(true)) {
+		if (this.grid && this.grid.isVisible(true)) {
 			this.callParent(arguments);
 		} else {
 			console.debug('droped view resize, not visible');
@@ -23,7 +23,7 @@ Ext.define('NextThought.overrides.grid.plugin.BufferedRenderer', {
 
 	renderRange: function() {
 		console.debug('BufferedRenderer: renderRange?', arguments);
-		if (this.grid.isVisible(true)) {
+		if (this.grid && this.grid.isVisible(true)) {
 			this.callParent(arguments);
 		} else {
 			console.debug('BufferedRenderer: droped renderRange, not visible');
@@ -50,7 +50,7 @@ Ext.define('NextThought.overrides.grid.plugin.BufferedRenderer', {
 				me.mon(c, {
 					buffer: 1,
 					show: function() {
-						if (grid.isVisible(true)) {
+						if (grid && grid.isVisible(true)) {
 							grid.updateLayout({defer: false});
 						}
 					}

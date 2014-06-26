@@ -250,7 +250,7 @@ Ext.define('NextThought.view.assessment.input.Base', {
 			a = this.solutionAnswerBox,
 			b = this.showSolutionBtn,
 			e = this.solutionExplanationBox,
-			sol, shown = !this.inputBox.isVisible(),
+			sol, shown = this.inputBox && !this.inputBox.isVisible(),
 			answer = this.el.down('.answer');
 
 		function removeObjects(dom) {
@@ -433,7 +433,7 @@ Ext.define('NextThought.view.assessment.input.Base', {
 		}
 
 		if (this.canHaveAnswerHistory()) {
-			if (!this.historyMenuEl.isVisible()) {
+			if (this.historyMenuEl && !this.historyMenuEl.isVisible()) {
 				this.shouldShowAnswerHistory();
 			}
 			if (!this.answerHistStore) {
@@ -508,7 +508,7 @@ Ext.define('NextThought.view.assessment.input.Base', {
 
 
 	toggleSolution: function() {
-		if (this.solutionBox.isVisible()) {
+		if (this.solutionBox && this.solutionBox.isVisible()) {
 			this.hideSolution();
 		}
 		else {

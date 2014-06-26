@@ -107,7 +107,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 
 	maybeClearBadge: function(deactivatedCmp) {
 		var c = this;
-		while (c.isVisible()) {
+		while (c && c.isVisible()) {
 			c = c.up();
 		}
 
