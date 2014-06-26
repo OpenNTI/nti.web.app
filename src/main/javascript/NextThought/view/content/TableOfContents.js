@@ -133,14 +133,15 @@ Ext.define('NextThought.view.content.TableOfContents', {
 		if (!sel) {return;}
 
 		el = Ext.get(this.getNode(sel));
-		scroll = el.getScrollingEl();
-		height = scroll.getHeight();
-		offset = el.getOffsetsTo(scroll)[1];
+		if (el) {
+			scroll = el.getScrollingEl();
+			height = scroll.getHeight();
+			offset = el.getOffsetsTo(scroll)[1];
 
-		if (offset < 0 || offset > height) {
-			scroll.scrollTo('top', (scroll.getScrollTop() + offset) - (height / 2), true);
+			if (offset < 0 || offset > height) {
+				scroll.scrollTo('top', (scroll.getScrollTop() + offset) - (height / 2), true);
+			}
 		}
-
 		this.filterEl.focus();
 	},
 
