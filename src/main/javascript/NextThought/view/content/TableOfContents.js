@@ -74,30 +74,38 @@ Ext.define('NextThought.view.content.TableOfContents', {
 	},
 
 
+	doFilter: Ext.Function.createBuffered(
+			function() {
+				if (this.isDestroyed) {return;}
+
+				var v = this.filterEl.getValue();
+				if (this.filterValue === v) {return;}
+
+				this.filterValue = v;
+				if (!v) {
+					this.store.removeFilter('search');
+				} else {
+					this.store.filter({
+						id: 'search',
+						fn: function(r) {
+							return r.matches(v);
+						}
+					});
+				}
+				this.showSelection();
+			},
+			100),
+
+
 	onFilter: function(e) {
-		var v = this.filterEl.getValue();
 		if (e) {
 			e.stopPropagation();
 			if (e.getKey() === e.ESC) {
-				v = '';
 				Ext.getDom(this.formEl).reset();
 			}
 		}
 
-		if (this.filterValue === v) {return;}
-
-		this.filterValue = v;
-		if (!v) {
-			this.store.removeFilter('search');
-		} else {
-			this.store.filter({
-				id: 'search',
-				fn: function(r) {
-					return r.matches(v);
-				}
-			});
-		}
-		this.showSelection();
+		this.doFilter();
 	},
 
 
