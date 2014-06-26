@@ -2,14 +2,19 @@
 
 .x-component-content-navigation.jumpto {
 	width: 620px;
-	display: flex;
-	flex-wrap: nowrap;
+
+	display: -ms-flexbox;
+	-ms-box-orient: horizontal;
+
+	@include experimental-value(display, flex);
+	@include experimental(flex-wrap, nowrap);
+
 	text-transform: uppercase;
 
 	.detected-scrollbars & {width: 635px;}
 
 	.tabs {
-		flex: none;
+		@include experimental(flex, none);
 		cursor: pointer;
 
 		&.go-up {
@@ -26,7 +31,7 @@
 	}
 
 	.toc {
-		flex: none;
+		@include experimental(flex, none);
 		padding: 0 0 0 1.2em;
 		font: normal 500 1.2em/60px $font;
 
@@ -43,9 +48,11 @@
 	}
 
 	.breadcrumb {
-		flex-grow: 1;
-		display: inline-flex;
-		flex-wrap: nowrap;
+		@include experimental(flex, 1 1 auto);
+		display: -ms-flexbox;
+		-ms-box-orient: horizontal;
+		@include experimental-value(display, inline-flex);
+		@include experimental(flex-wrap, nowrap);
 		font: normal 500 1.2em/60px $font;
 
 		&, * {
@@ -61,11 +68,10 @@
 		}
 
 		.part {
-			flex-grow: 0;
-			flex-shrink: 1;
+			@include experimental(flex, 0 1 auto);
 			cursor: pointer;
 
-			&:last-of-type { flex: none; }
+			&:last-of-type { @include experimental(flex, 1 1 auto); }
 
 			&:hover,
 			&:last-of-type:not(.no-children) {
