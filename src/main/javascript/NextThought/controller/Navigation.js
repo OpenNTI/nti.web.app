@@ -630,21 +630,23 @@ Ext.define('NextThought.controller.Navigation', {
 		if (obj.isPageInfo) {
 			return function(obj, fragment) {
 				function scroll(content) {
-
-					var scroller,
-						id = obj.getId(),
-						requestedId = obj.originalNTIIDRequested;
-
-					if (content) {
-						scroller = content.getScroll();
-						if (fragment) {
-							scroller.toTarget(fragment);
-						}
-						//redirected PageInfo (requested id is a child of the `id`)
-						else if (requestedId && id !== requestedId) {
-							scroller.toContainer(requestedId);
+					function scrollNow() {
+						var scroller,
+							id = obj.getId(),
+							requestedId = obj.originalNTIIDRequested;
+						if (content) {
+							scroller = content.getScroll();
+							if (fragment) {
+								scroller.toTarget(fragment);
+							}
+							//redirected PageInfo (requested id is a child of the `id`)
+							else if (requestedId && id !== requestedId) {
+								scroller.toContainer(requestedId);
+							}
 						}
 					}
+
+					content.onceSettled().then(scrollNow);
 				}
 
 				me.fireEvent('set-location', obj, scroll);

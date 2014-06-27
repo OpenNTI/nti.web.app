@@ -37,7 +37,8 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 
 		Ext.apply(reader, {
 			getDocumentElement: me.getDocumentElement.bind(me),
-			getCleanContent: me.getCleanContent.bind(me)
+			getCleanContent: me.getCleanContent.bind(me),
+			onceSettled: me.onceSettled.bind(me)
 		});
 
 		me.checkFrame = me.checkFrame.bind(me);
@@ -464,6 +465,28 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 	},
 
 
+	onceSettled: function() {
+		var me = this,
+			p = me.settledPromise || new Promise(function(fulfill, reject) {
+				var fn = Ext.Function.createBuffered(function() {
+					fn = Ext.emptyFn;
+					Ext.destroy(fire);
+					fire = null;
+					fulfill(me);
+				}, 500);
+				var fire = me.on({
+					destroyable: true,
+					'sync-height': fn
+				});
+
+				wait(1000).then(fn);
+			});
+
+		me.settledPromise = p;
+		return p;
+	},
+
+
 	checkFrame: function() {
 		if (this.reader.isDestroyed) {clearInterval(this.syncInterval); return;}
 		var doc = this.getDocumentElement(), html;
@@ -608,6 +631,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 			this.fireEvent('content-updated-with', body, doc);
 			this.cleanContent = body.dom.cloneNode(true);
 		}
+		delete this.settledPromise;
 		this.fireEvent('content-updated');
 
 		clearInterval(this.syncInterval);
