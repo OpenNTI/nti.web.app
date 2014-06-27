@@ -98,7 +98,7 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 
 		var score = this.down('assessment-score'),
 			tally = this.down('assessment-tally'),
-			format = 'l, F j g:i a',
+			format = 'l, F j, g:i a',
 			opens = assignment.get('availableBeginning'),
 			date = assignment.get('availableEnding'),
 			day = date && (new Date(date.getTime())).setHours(0, 0, 0, 0),
