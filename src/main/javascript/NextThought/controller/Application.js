@@ -46,6 +46,7 @@ Ext.define('NextThought.controller.Application', {
 		}
 
 		Promise.all([
+			//todo: add ContentManagement.onceLoaded()
 			Library.onceLoaded(),
 			CourseWareUtils.onceLoaded()])
 				.then(

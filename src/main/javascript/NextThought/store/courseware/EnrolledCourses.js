@@ -77,6 +77,13 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 	},
 
 
+	destroy: function() {
+		this.destroyed = true;
+		this.removeAll(true);
+		this.promiseToLoaded.fulfill(this);
+	},
+
+
 	onceLoaded: function() {
 		return this.promiseToLoaded;
 	},

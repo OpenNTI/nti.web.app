@@ -168,9 +168,7 @@ Ext.define('NextThought.controller.CourseWare', {
 		var store = Ext.getStore(storeId);
 		if (Ext.isEmpty(source)) {
 			console.warn('CourseWare: Not setting up store: ' + storeId + ', no source given');
-			if (store.onceLoaded) {
-				store.onceLoaded().fulfill(store);
-			}
+			store.destroy();
 			return null;
 		}
 		store.proxy.url = getURL(source);

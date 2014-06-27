@@ -1,7 +1,7 @@
-Ext.define('NextThought.store.courseware.AvailableCourses', {
+Ext.define('NextThought.store.ContentBundles', {
 	extend: 'Ext.data.Store',
-
-	model: 'NextThought.model.courseware.CourseCatalogEntry',
+	requires: ['NextThought.util.Promise'],
+	model: 'NextThought.model.ContentBundle',
 	proxy: {
 		type: 'ajax',
 		timeout: 3600000,//hour
@@ -29,24 +29,19 @@ Ext.define('NextThought.store.courseware.AvailableCourses', {
 		startParam: undefined,
 		limitParam: undefined
 	},
-	sorters: [
-		{
-			property: 'Title',
-			direction: 'asc'
-		}
-	],
 
 	constructor: function() {
 		var p = this.promiseToLoaded = new Deferred(),
-			me = this;
+				me = this;
 		this.callParent(arguments);
 		this.on({
 			scope: this,
 			beforeload: function() {
 				var old = p;
 				p = me.promiseToLoaded = new Deferred();
-				p.then(function() { old.fulfill(me); });
+				p.chain(old);
 			},
+
 			load: function(me, records, success) {
 				if (!success) {
 					p.reject('Store Failed to load');
@@ -68,4 +63,6 @@ Ext.define('NextThought.store.courseware.AvailableCourses', {
 	onceLoaded: function() {
 		return this.promiseToLoaded;
 	}
+
+
 });

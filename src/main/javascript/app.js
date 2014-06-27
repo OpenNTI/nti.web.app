@@ -48,6 +48,7 @@ Ext.application({
 		'Application',
 		'Assessment',
 		'Chat',
+		'ContentManagement',
 		'CourseWare',
 		'FilterControl',
 		'Forums',
