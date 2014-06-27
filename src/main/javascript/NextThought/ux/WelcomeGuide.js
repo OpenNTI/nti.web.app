@@ -58,13 +58,13 @@ Ext.define('NextThought.ux.WelcomeGuide', {
 			this.on('destroy', this.deleteLink, this);
 		}
 
-        if(Ext.is.iOS){
-            this.on('afterrender', function(){
-                var iframe = this.el.down('iframe');
-                iframe.parent().el.setStyle('-webkit-overflow-scrolling', 'touch');
-                iframe.parent().el.setStyle('overflow', 'auto');
-            },this);
-        }
+		if (Ext.is.iOS) {
+			this.on('afterrender', function() {
+				var iframe = this.el.down('iframe');
+				iframe.parent().el.setStyle('-webkit-overflow-scrolling', 'touch');
+				iframe.parent().el.setStyle('overflow', 'auto');
+			},this);
+		}
 	},
 
 	addCustomMask: function() {
@@ -89,7 +89,7 @@ Ext.define('NextThought.ux.WelcomeGuide', {
 
 	deleteLink: function() {
 		Ext.Ajax.request({
-			url: this.link.href,
+			url: this.link.href || this.link,
 			method: 'DELETE',
 			success: function(r, opts) {
 				console.log('Success: ', arguments);
