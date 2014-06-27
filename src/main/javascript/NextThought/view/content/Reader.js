@@ -316,19 +316,20 @@ Ext.define('NextThought.view.content.Reader', {
 			}
 
 			proxy.request({
-							  pageInfo: pageInfo,
-							  ntiid: pageInfo.getId(),
-							  jsonpUrl: pageInfo.getLink('jsonp_content'),
-							  url: pageInfo.getLink('content'),
-							  expectedContentType: 'text/html',
-							  scope: this,
-							  success: success,
-							  failure: function(r) {
-								  console.log('server-side failure with status code ' + r.status + '. Message: ' + r.responseText);
-								  me.splash.hide();
-								  me.onNavigationAborted();
-							  }
-						  });
+				pageInfo: pageInfo,
+				ntiid: pageInfo.getId(),
+				jsonpUrl: pageInfo.getLink('jsonp_content'),
+				url: pageInfo.getLink('content'),
+				expectedContentType: 'text/html',
+				scope: this,
+				success: success,
+				failure: function(r) {
+					console.log('server-side failure with status code ' + r.status + '. Message: ' + r.responseText);
+					me.splash.show();
+					me.onNavigationAborted();
+					Ext.callback(finish, null, [me, r]);
+				}
+			});
 		}
 	},
 	//</editor-fold>
