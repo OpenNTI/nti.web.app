@@ -1,9 +1,9 @@
 Ext.define('NextThought.store.Library', {
 	extend: 'Ext.data.Store',
 	requires: [
-		'NextThought.model.Title'
+		'NextThought.model.ContentPackage'
 	],
-	model: 'NextThought.model.Title',
+	model: 'NextThought.model.ContentPackage',
 
 	buffered: false,
 	clearOnPageLoad: true,

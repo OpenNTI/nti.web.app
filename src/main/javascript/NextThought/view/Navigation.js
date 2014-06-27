@@ -215,7 +215,7 @@ Ext.define('NextThought.view.Navigation', {
 
 	updateCurrent: function(pop, rec) {
 
-		if (rec instanceof NextThought.model.Title && rec.get('isCourse')) {
+		if (rec instanceof NextThought.model.ContentPackage && rec.get('isCourse')) {
 			//figure out the course record?
 			return this;
 		}

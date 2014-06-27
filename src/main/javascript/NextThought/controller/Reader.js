@@ -297,7 +297,7 @@ Ext.define('NextThought.controller.Reader', {
 
 	/**
 	 * This is (and should) only be called by navigating to a BOOK.
-	 * {@see NextThought.model.Title#fireNavigationEvent()}
+	 * {@see NextThought.model.ContentPackage#fireNavigationEvent()}
 	 *
 	 * @param {String} ntiid
 	 * @param {Function} [callback]
