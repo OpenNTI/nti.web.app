@@ -666,6 +666,7 @@ function() {
 	function worker() {
 		var keep = {
 			Class: 1,
+			CreatedTime: 1,
 			Links: 1,
 			MimeType: 1,
 			NTIID: 1,
