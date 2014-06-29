@@ -8,11 +8,11 @@ Ext.define('NextThought.view.library.Collection', {
 	rowSpan: 1,
 
 	tpl: Ext.DomHelper.markup([
-		{ cls: 'stratum collection-name', 'aria-label': '{name} {count} items', 'role': 'heading', cn: {
-			'aria-hidden': 'true', cn: [
-				'{name}', {cls: 'count', 'aria-hidden': 'true', html: '{count}'}
-			]
-		}},
+		// { cls: 'stratum collection-name', 'aria-label': '{name} {count} items', 'role': 'heading', cn: {
+		// 	'aria-hidden': 'true', cn: [
+		// 		'{name}', {cls: 'count', 'aria-hidden': 'true', html: '{count}'}
+		// 	]
+		// }},
 		{ cls: 'grid', 'role': 'group', 'aria-label': '{name}', cn: {
 			tag: 'tpl', 'for': 'items', cn: ['{entry}']}
 		}
