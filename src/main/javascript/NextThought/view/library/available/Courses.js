@@ -1,10 +1,12 @@
-Ext.define('NextThought.view.library.available.Window', {
+Ext.define('NextThought.view.library.available.Courses', {
 	extend: 'NextThought.view.window.Window',
-	alias: 'widget.library-available',
+	alias: 'widget.library-available-courses',
 
 	requires: ['NextThought.view.courseware.coursecatalog.Collection'],
 
 	floating: true,
+
+	label: 'Add Courses',
 
 	constrainTo: Ext.getBody(),
 	width: 1024,
@@ -26,7 +28,7 @@ Ext.define('NextThought.view.library.available.Window', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'header', cn: [
-			{cls: 'name', html: 'Add Courses'},
+			{cls: 'name', html: '{label}'},
 			{cls: 'close'}
 		]},
 		{ id: '{id}-body', cls: 'body-container',
@@ -83,6 +85,15 @@ Ext.define('NextThought.view.library.available.Window', {
 		if (this.archived) {
 			this.updateArchived(this.archived);
 		}
+	},
+
+
+	beforeRender: function() {
+		this.callParent(arguments);
+
+		this.renderData = Ext.apply(this.renderData || {}, {
+			label: this.label
+		});
 	},
 
 

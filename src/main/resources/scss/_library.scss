@@ -287,7 +287,7 @@
 	}
 }
 
-.available-catalog {
+.available-catalog, .purchasables {
 	padding: 20px 34px;
 	.collection-name {
 		display: none;
@@ -414,7 +414,7 @@
 	}
 }
 
-.course-settings-window, .available-courses {
+.course-settings-window, .available-courses, .available-books {
 	box-shadow: 0 0 5px 0 rgba(0,0,0,0.35);
 	background-color: white;
 
@@ -479,7 +479,7 @@
 	}
 }
 
-.available-courses {
+.available-courses, .available-books {
 	.header {
 		height: 60px;
 		padding-top: 15px;
@@ -523,6 +523,12 @@
 
 	.drop {
 		color: $primary-red;
+	}
+}
+
+.available-books {
+	.available-courses-tabbar {
+		display: none;
 	}
 }
 

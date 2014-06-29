@@ -6,7 +6,7 @@ Ext.define('NextThought.view.library.Panel', {
 		'NextThought.view.library.CoursePage',
 		'NextThought.view.library.BookPage',
 		'NextThought.view.library.Navigation',
-		'NextThought.view.library.available.Window'
+		'NextThought.view.library.available.*'
 	],
 
 	cls: 'library-panel',
@@ -131,12 +131,26 @@ Ext.define('NextThought.view.library.Panel', {
 	},
 
 
-	showAvailable: function() {
-		var win = Ext.widget('library-available', {
-			current: this.currentAvailable,
-			upcoming: this.upcomingAvailable,
-			archived: this.archivedAvailable
-		});
+	showAvailable: function(isBook) {
+		var win, cfg, xtype;
+
+		if (isBook) {
+			xtype = 'library-available-books';
+
+			cfg = {
+				store: this.purchasables
+			};
+		} else {
+			xtype = 'library-available-courses';
+
+			cfg = {
+				current: this.currentAvailable,
+				upcoming: this.upcomingAvailable,
+				archived: this.archivedAvailable
+			};
+		}
+
+		win = Ext.widget(xtype, cfg);
 
 		win.showBy(this, 'tl-tl', [this.leftSide, 40]);
 	},
@@ -181,7 +195,7 @@ Ext.define('NextThought.view.library.Panel', {
 
 
 	setPurchasables: function(store) {
-
+		this.purchasables = store;
 	},
 
 

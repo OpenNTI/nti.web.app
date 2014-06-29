@@ -96,7 +96,7 @@ Ext.define('NextThought.view.library.Navigation', {
 		this.buildViewMenu();
 		this.mon(this.dropdownEl, 'click', 'showViewMenu', this);
 
-		this.mon(this.addEl, 'click', this.fireEvent.bind(this, 'show-available'));
+		this.mon(this.addEl, 'click', 'showAvailable', this);
 	},
 
 
@@ -161,11 +161,30 @@ Ext.define('NextThought.view.library.Navigation', {
 
 		if (item.type === 'courses') {
 			this.fireEvent('show-my-courses');
+			this.updateAvailable();
 		} else if (item.type === 'admins') {
 			this.fireEvent('show-my-admins');
+			this.updateAvailable();
 		} else if (item.type === 'books') {
 			this.fireEvent('show-my-books');
+			this.updateAvailable(true);
 		}
+	},
+
+
+	updateAvailable: function(isBook) {
+		this.isBook = isBook;
+
+		if (isBook) {
+			this.addEl.update('Add Books');
+		} else {
+			this.addEl.update('Add Courses');
+		}
+	},
+
+
+	showAvailable: function() {
+		this.fireEvent('show-available', this.isBook);
 	},
 
 
