@@ -51,6 +51,21 @@ Ext.define('NextThought.view.library.Panel', {
 	},
 
 
+	afterRender: function() {
+		this.callParent(arguments);
+
+		var me = this;
+
+		me.mon(me.el, 'scroll', function(e, el) {
+			if (me.navigation.maybeFixHeader(el)) {
+				me.addCls('fixed');
+			} else {
+				me.removeCls('fixed');
+			}
+		});
+	},
+
+
 	changeView: function(view) {
 		var cmp = this.down('[id="' + view + '"]');
 

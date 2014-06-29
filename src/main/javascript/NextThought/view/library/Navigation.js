@@ -207,5 +207,26 @@ Ext.define('NextThought.view.library.Navigation', {
 
 		selModel = this.nav.getSelectionModel();
 		selModel.select(i, false);
+	},
+
+
+	maybeFixHeader: function(el) {
+		if (!el) { return; }
+
+		el = Ext.get(el);
+
+		var navTop = this.navEl.dom.getBoundingClientRect().top,
+			elTop = el.getScrollTop(),
+			delta = (navTop - elTop) || 0;
+
+		if (delta < 0 && !this.fixedHeader) {
+			this.addCls('fixed');
+			this.fixedHeader = true;
+		} else if (delta >= 0 && this.fixedHeader) {
+			this.removeCls('fixed');
+			this.fixedHeader = false;
+		}
+
+		return this.fixedHeader;
 	}
 });

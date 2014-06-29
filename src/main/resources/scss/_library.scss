@@ -20,6 +20,13 @@
 		.library-navigation {
 			width: 1024px !important;
 
+			&.fixed .nav-bar {
+				position: fixed;
+				top: 57px;
+				width: 1024px;
+				z-index: 1;
+			}
+
 			.x-component-branding {
 				min-height: 50px;
 				display: block;
@@ -168,6 +175,11 @@
 			}
 		}
 
+		.grid {
+			width: 100%;
+			padding-left: 10px;
+		}
+
 		.grid .grid-item {background: none;}
 
 		.grid-item.item {
@@ -175,7 +187,7 @@
 			width: 243px !important;
 			height: 290px !important;
 			cursor: pointer;
-			margin: 0 15px 15px 0;
+			margin: 0 10px 10px 0;
 
 			.cover {
 				width: 233px;
