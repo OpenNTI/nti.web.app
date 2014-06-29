@@ -4,6 +4,7 @@ Ext.define('NextThought.model.courseware.CourseCatalogEntry', {
 	mimeType: 'application/vnd.nextthought.courseware.coursecataloglegacyentry',
 	requires: ['NextThought.model.converters.Date'],
 	idProperty: 'ProviderUniqueID',
+
 	fields: [
 		{ name: 'Communities', type: 'auto', persist: false },
 		{ name: 'ContentPackageNTIID', type: 'string', persist: false },
@@ -25,7 +26,8 @@ Ext.define('NextThought.model.courseware.CourseCatalogEntry', {
 		{ name: 'poster', type: 'string' }, //medium (promo)
 		{ name: 'background', type: 'string' }, //large
 
-		{ name: 'enrolled', type: 'bool' }
+		{ name: 'enrolled', type: 'bool' },
+		{ name: 'isOpen', type: 'bool'}
 	],
 
 
@@ -58,6 +60,15 @@ Ext.define('NextThought.model.courseware.CourseCatalogEntry', {
 
 	fireAcquisitionEvent: function(eventSource, callback) {
 		return eventSource.fireEvent('show-enrollment', this, callback);
+	},
+
+
+	getSemester: function() {
+		var start = this.get('StartDate'),
+			month = start.getMonth(),
+			s = getString('months')[month + 1];
+
+		return s;
 	}
 });
 

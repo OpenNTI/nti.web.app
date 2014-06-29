@@ -54,6 +54,7 @@ Ext.application({
 		'Forums',
 		'Google',
 		'Groups',
+		'Library',
 		'Navigation',
 		'Notifications',
 		'Profile',

@@ -17,5 +17,10 @@ Ext.define('NextThought.model.courseware.CourseInstanceAdministrativeRole', {
 
 	getCourseCatalogEntry: function() {
 		return this.get('CourseInstance').getCourseCatalogEntry();
+	},
+
+	//return false since admins are enrolled for credit
+	isOpen: function() {
+		return false;
 	}
 });

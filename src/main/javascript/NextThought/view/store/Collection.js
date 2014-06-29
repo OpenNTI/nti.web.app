@@ -63,10 +63,10 @@ Ext.define('NextThought.view.store.Collection', {
 
 			i.inGrid = 'grid-item';
 
-			if (rows > 1 && !updating && (x === 0 || i.Featured)) {
-				i.featured = true;
-				cols = 4;
-			}
+			// if (rows > 1 && !updating && (x === 0 || i.Featured)) {
+			// 	i.featured = true;
+			// 	cols = 4;
+			// }
 
 			i.rows = rows;
 			i.cols = cols;

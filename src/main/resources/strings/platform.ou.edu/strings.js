@@ -1,5 +1,20 @@
 window.NTIStrings = window.NTIStrings || {};
 
+NTIStrings['months'] = {
+	1: 'Spring',
+	2: 'Spring',
+	3: 'Spring',
+	4: 'Spring',
+	5: 'Summer',
+	6: 'Summer',
+	7: 'Summer',
+	8: 'Fall',
+	9: 'Fall',
+	10: 'Fall',
+	11: 'Fall',
+	12: 'Fall'
+};
+
 
 NTIStrings['UnresolvedUsernamePattern'] = 'Anonymous ####';
 NTIStrings['course.catalog'] = 'Available Courses';

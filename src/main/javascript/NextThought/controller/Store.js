@@ -278,7 +278,7 @@ Ext.define('NextThought.controller.Store', function() {
 		//items that have not yet been purchased?
 		maybeAddPurchasables: function() {
 
-			var view = this.getLibraryView().getCatalogView(),
+			var view = this.getLibraryView().getPanel(),
 				store = this.getPurchasableStore(),
 				archive = this.archiveStore || new NextThought.store.Purchasable();
 
@@ -296,22 +296,12 @@ Ext.define('NextThought.controller.Store', function() {
 			store.filter([courses, notFilter]);
 			archive.filter([courses, filter]);
 
-			if (store.getCount() && view && !Ext.getCmp('store-collection')) {
-				view.add({
-					store: store,
-					xtype: 'purchasable-collection',
-					id: 'store-collection',
-					name: getString('store.catalog', 'Available for Purchase')
-				});
+			if (store.getCount() && view) {
+				view.setPurchasables(store);
 			}
 
-			if (archive.getCount() && view && !Ext.getCmp('store-archive-collection')) {
-				view.add({
-					store: archive,
-					xtype: 'purchasable-collection',
-					id: 'store-archive-collection',
-					name: getString('store.catalog.archive', 'Archive')
-				});
+			if (archive.getCount() && view) {
+				view.setArchivedPurchasables(archive);
 			}
 
 

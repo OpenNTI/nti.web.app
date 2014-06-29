@@ -181,7 +181,7 @@ Ext.define('NextThought.controller.CourseWare', {
 		if (!store) {
 			return;
 		}
-		this.mon(store, 'load', 'onAdministeredCoursesLoaded');
+		//this.mon(store, 'load', 'onAdministeredCoursesLoaded');
 		store.load();
 	},
 
@@ -196,8 +196,8 @@ Ext.define('NextThought.controller.CourseWare', {
 		this.mon(store, 'load', 'markEnrolledCourses');
 
 		this.mon(store, {
-			beforeload: 'onAvailableCoursesLoading',
-			load: 'onAvailableCoursesLoaded'
+			beforeload: 'onAvailableCoursesLoading'
+			//load: 'onAvailableCoursesLoaded'
 		});
 		store.load();
 	},
@@ -209,7 +209,7 @@ Ext.define('NextThought.controller.CourseWare', {
 			return;
 		}
 		this.mon(store, 'load', 'markEnrolledCourses');
-		this.mon(store, 'load', 'onEnrolledCoursesLoaded');
+		//this.mon(store, 'load', 'onEnrolledCoursesLoaded');
 		store.load();
 	},
 
@@ -238,12 +238,14 @@ Ext.define('NextThought.controller.CourseWare', {
 
 
 	onEnrolledCoursesLoaded: function(store) {
-		this.onCoursesLoaded(this.getEnrolledCoursesView(), store);
+		this.getLibraryView().setEnrolledCourses(store);
+		//this.onCoursesLoaded(this.getEnrolledCoursesView(), store);
 	},
 
 
 	onAdministeredCoursesLoaded: function(store) {
-		this.onCoursesLoaded(this.getAdministeredCoursesView(), store);
+		this.getLibraryView().setAdministeredCourses(store);
+		//this.onCoursesLoaded(this.getAdministeredCoursesView(), store);
 	},
 
 
@@ -253,55 +255,59 @@ Ext.define('NextThought.controller.CourseWare', {
 
 
 	onAvailableCoursesLoaded: function(store) {
-		var me = this, view = this.getLibraryView().getCatalogView(),
+		var me = this, view = this.getLibraryView(),
 			archiveStore, archived, now = new Date(),
 			contentMap = me.TEMP_WORKAROUND_COURSE_TO_CONTENT_MAP;
 
-		store.each(function(o) {
-			var k = o.get('ContentPackageNTIID');
-			if (!contentMap.hasOwnProperty(k)) {
-				contentMap[k] = o.get('href');
-			} else {
-				console.error('Assertion Failed! There is another mapping to content package: ' + k);
-			}
-		});
+		this.getLibraryView().setAvailableCourses(store);
 
-		if (!store.getCount()) {
-			return;
-		}
+		return;
 
-		function archivedFilter(r) {
-			var e = r.raw.EndDate;
-			return e && (new Date(e) < now);
-		}
+		//store.each(function(o) {
+		//	var k = o.get('ContentPackageNTIID');
+		//	if (!contentMap.hasOwnProperty(k)) {
+		//		contentMap[k] = o.get('href');
+		//	} else {
+		//		console.error('Assertion Failed! There is another mapping to content package: ' + k);
+		//	}
+		//});
 
-		function activeFilter(r) { return !archivedFilter(r); }
+		//if (!store.getCount()) {
+		//	return;
+		//}
 
-		archived = store.getRange().filter(archivedFilter);
+		//function archivedFilter(r) {
+		//	var e = r.raw.EndDate;
+		//	return e && (new Date(e) < now);
+		//}
 
-		view.add({
-			store: store,
-			hidden: false,
-			xtype: 'course-catalog-collection',
-			id: 'course-catalog-collection',
-			name: getString('course.catalog', 'Available Courses')
-		});
+		//function activeFilter(r) { return !archivedFilter(r); }
 
-		//Do archived courses here.
-		if (!archived || archived.length === 0) {
-			return;
-		}
+		//archived = store.getRange().filter(archivedFilter);
 
-		store.filter(activeFilter);//don't remove, so we can still find them.
-		archiveStore = NextThought.store.courseware.AvailableCourses.create({proxy: 'memory', data: archived});
+		//view.add({
+		//	store: store,
+		//	hidden: false,
+		//	xtype: 'course-catalog-collection',
+		//	id: 'course-catalog-collection',
+		//	name: getString('course.catalog', 'Available Courses')
+		//});
 
-		view.add({
-			store: archiveStore,
-			hidden: false,
-			xtype: 'course-catalog-collection',
-			id: 'course-catalog-archive-collection',
-			name: getString('course.catalog.archived', 'Archived Courses')
-		});
+		////Do archived courses here.
+		//if (!archived || archived.length === 0) {
+		//	return;
+		//}
+
+		//store.filter(activeFilter);//don't remove, so we can still find them.
+		//archiveStore = NextThought.store.courseware.AvailableCourses.create({proxy: 'memory', data: archived});
+
+		//view.add({
+		//	store: archiveStore,
+		//	hidden: false,
+		//	xtype: 'course-catalog-collection',
+		//	id: 'course-catalog-archive-collection',
+		//	name: getString('course.catalog.archived', 'Archived Courses')
+		//});
 	},
 
 

@@ -2,23 +2,25 @@ Ext.define('NextThought.view.courseware.coursecatalog.Collection', {
 	extend: 'NextThought.view.store.Collection',
 	alias: 'widget.course-catalog-collection',
 
-	hidden: true,//start hidden
+	//hidden: true,//start hidden
 	courseList: true,
 	store: 'courseware.AvailableCourses',
-	cls: 'courses',
+	cls: 'courses available-catalog',
 
 
 	entryTpl: Ext.DomHelper.markup({
-		cls: '{inGrid} item {Class:lowercase} {featured:boolStr("featured")} {enrolled:boolStr("activated")} row-{rows} col-{cols}',
+		cls: '{inGrid} item {Class:lowercase} {enrolled:boolStr("activated")} row-{rows} col-{cols}',
 		'data-qtip': '{Title:htmlEncode}', cn: [
-			{ tag: 'tpl', 'if': 'featured', cn:
-				{ cls: 'cover', style: { backgroundImage: 'url({icon})' }}},
-			{ tag: 'tpl', 'else': '', cn:
-				{ cls: 'cover', style: { backgroundImage: 'url({thumbnail})' }}},
+			{ cls: 'cover', style: { backgroundImage: 'url({thumbnail})' }},
+			{ tag: 'tpl', 'if': 'enrolled', cn: [
+				{cls: 'enrollment', cn: [
+					{cls: 'enrollment-text', html: '{enrolledText}'}
+				]}
+			]},
 			{ cls: 'meta', cn: [
-				{ cls: 'courseName', html: '{Name}' },
+				{ cls: 'courseName', html: '{ProviderUniqueID}' },
 				{ cls: 'title', html: '{Title}' },
-				{ cls: 'author provider-id', html: '{ProviderUniqueID}' },
+				{ cls: 'author', html: '{author}' },
 				{ cls: 'description', html: '{Description}'}
 			]}
 		]
@@ -26,9 +28,14 @@ Ext.define('NextThought.view.courseware.coursecatalog.Collection', {
 
 
 	prepareData: function(data, index, record) {
-		var i = Ext.Object.chain(this.callParent(arguments));
+		var i = Ext.Object.chain(this.callParent(arguments)),
+			instructors = record.get('Instructors'),
+			name = instructors && instructors[0].get('Name'),
+			isOpen = record.get('isOpen');
 
+		i.author = name;
 		i.isCourse = true;
+		i.enrolledText = isOpen ? 'Open Course' : 'Enrolled for Credit';
 
 		return i;
 	},

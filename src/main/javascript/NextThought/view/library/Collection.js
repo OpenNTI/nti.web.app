@@ -20,7 +20,10 @@ Ext.define('NextThought.view.library.Collection', {
 
 	entryTpl: Ext.DomHelper.markup({
 		cls: '{inGrid} item {featured} row-{rows} col-{cols}', 'role': 'link', 'aria-label': '{title}', cn: [
-			{ cls: 'cover', style: {backgroundImage: 'url({icon})'}},
+			{ cls: 'cover', cn: [
+				{tag: 'img', src: '{icon}'}
+			]},
+			{ tag: 'tpl', 'if': 'enableSettings', cn: { cls: 'settings'}},
 			{ tag: 'tpl', 'if': 'sample', cn: { cls: 'sample', 'data-qtip': 'Sample' }}, //store - sample flag
 			{ cls: 'meta', 'aria-hidden': 'true', cn: [
 				{ cls: 'courseName', html: '{courseName}' },  //course name/id

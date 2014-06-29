@@ -3,58 +3,35 @@ Ext.define('NextThought.view.library.View', {
 	alias: 'widget.library-view-container',
 
 	requires: [
-		'NextThought.view.library.Page',
-		'NextThought.view.courseware.Collection',
-		'NextThought.view.courseware.coursecatalog.Collection'
+		'NextThought.view.library.Panel'
 	],
 
-	viewIdProperty: 'itemId',
-	extraTabBarCls: 'library',
-	cls: 'library-view',
-	defaultType: 'library-view-page',
-	defaultTab: 'my-courses',
-	activeItem: 0,
-	layout: {
-		type: 'card',
-		deferredRender: true
-	},
+	cls: 'library-container',
 
+	layout: 'fit',
 	items: [
-		{
-			itemId: 'my-courses',
-			items: [
-				{
-					name: getString('NextThought.view.library.View.administered'),
-					xtype: 'course-collection',
-					store: 'courseware.AdministeredCourses',
-					kind: 'admin'
-				},
-				{
-					name: getString('NextThought.view.library.View.enrolled'),
-					xtype: 'course-collection',
-					kind: 'enrolled'
-				}
-			]
-		},
-		{
-			itemId: 'my-books',
-			items: [
-				{ name: getString('My Books') }
-			]
-		},
-		{
-			itemId: 'content-catalog'
-		}
+		{xtype: 'library-view-panel'}
 	],
 
-	tabSpecs: [
-		{label: getString('NextThought.view.library.View.course'), viewId: 'my-courses'},
-		{label: getString('NextThought.view.library.View.books'), viewId: 'my-books'},
-		{label: getString('NextThought.view.library.View.catalog'), viewId: 'content-catalog'}
-	],
+	initComponent: function() {
+		this.callParent(arguments);
+
+		var me = this;
+
+		//me.mon(me, 'deactivate', 'onDeactivated', me);
+		//me.mon(me, 'beforedeactivate', 'onBeforeDeactivate', me);
+
+		me.removeCls('make-white');
+
+		//me.on('add', function() {
+		//me.invertParentsPaddingToMargins(me.lastSides);
+		//});
+	},
 
 
 	invertParentsPaddingToMargins: function(sides) {
+		this.lastSides = sides;
+
 		this.items.each(function(page) {
 			page.updateSidePadding(sides);
 		});
@@ -62,74 +39,8 @@ Ext.define('NextThought.view.library.View', {
 	},
 
 
-	initComponent: function() {
-		this.callParent(arguments);
-		this.removeCls('make-white');
-		this.on({
-			'update-tab': 'updateTabs'
-		});
-	},
-
-
-	getTabs: function() {
-		var me = this,
-			tabs = me.tabSpecs,
-			active = me.layout.getActiveItem(),
-			activeId = active && active.itemId;
-
-		function canShow(o) {
-			return me.getComponent(o.viewId).showPage;
-		}
-
-		function markSelected(t) {
-			t.selected = (t.viewId === activeId);
-		}
-
-		tabs = tabs.filter(canShow);
-
-		tabs.forEach(markSelected);
-
-		if (active && !active.showPage) {
-			//if the active tab isn't showing set it to the first one, which for now is the course catalog
-			this.setActiveTab((tabs[0] || {}).viewId);
-		}
-
-		return tabs.length === 1 ? [] : tabs;
-	},
-
-
-	pushState: function(s) {
-		history.pushState({library: s}, this.title, location.pathname);
-	},
-
-
-	onTabClicked: function(tabSpec) {
-		if (this.callParent(arguments) === true) {
-			this.pushState({
-				activeTab: this.parseTabSpec(tabSpec).viewId
-			});
-		}
-	},
-
-
-	restore: function(state) {
-		//console.debug('Library restore', state);
-		var tab = ((state || {}).library || {}).activeTab,
-			me = this;
-
-		return !tab ?
-			   Promise.resolve() :
-			   new Promise(function(fulfill) {
-				   me.setActiveTab(tab);
-				   fulfill();
-			   });
-	},
-
-
-	getCatalogView: function() {
-		if (!this.catalog) {
-			this.catalog = this.getComponent('content-catalog');
-		}
-		return this.catalog;
+	getPanel: function() {
+		return this.down('library-view-panel');
 	}
+
 });

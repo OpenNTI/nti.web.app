@@ -1,7 +1,7 @@
 
 #library {
 
-	margin-top: -50px;
+	margin-top: -105px;
 
 	.page {
 		@include scrollbar($track:transparent,$nib:rgba(0,0,0,0.3));
@@ -13,9 +13,147 @@
 //		padding-left: 5px;
 	}
 
+	.library-panel {
+		overflow-y: auto;
+
+
+		.library-navigation {
+			width: 1024px !important;
+
+			.x-component-branding {
+				min-height: 50px;
+				display: block;
+
+				.box {
+					display: none;
+				}
+			}
+
+			.nav-bar {
+				//-webkit-font-smoothing: antialiased;
+				height: 50px;
+				border-radius: 3px;
+				background-color: #505050;
+				@include background-image(linear-gradient(top, #505050 0%,#474747 100%));
+				box-shadow: 0 1px 3px 0 rgba(0,0,0,0.35), inset 0 1px 0 0 rgba(255,255,255,0.1);
+
+				.dropdown {
+					cursor: pointer;
+					float: left;
+					background-color: rgba(255,255,255, 0.15);
+					color: rgba(255,255,255,0.8);
+					font: normal 300 1.3em/50px $font;
+					padding: 0 20px 0 15px;
+					letter-spacing: 1px;
+
+					&::after {
+						content: '\2039';
+						line-height: 0.4;
+						display: inline-block;
+						font-size: 1em;
+						position: relative;
+						top: -3px;
+						left: 2px;
+						font-weight: 300;
+						width: 0.5em;
+						height: 0.5em;
+						@include experimental(transform, rotate(-90deg));
+					}
+				}
+
+				.nav {
+					float: left;
+					padding-left: 20px;
+
+					.outline-row {
+						cursor: pointer;
+						float: left;
+						color: $secondary-grey;
+						margin: 11px 5px;
+						height: 28px;
+						font: normal 500 0.9em/28px $font;
+						padding: 0 20px;
+						border-radius: 15px;
+
+						&.over, &.selected {
+							background-color: rgba(255,255,255, 0.15);
+							color: rgba(255,255,255,0.8);
+						}
+					}
+				}
+
+				.add-courses {
+					position: relative;
+					margin: 6px 5px 0;
+					border-radius: 5px;
+					color: white;
+					float: right;
+					z-index: 3;
+					overflow: hidden;
+					padding: 0 20px;
+					cursor: pointer;
+					font: normal 300 0.85em/36px $font;
+					border: 1px solid rgba(0,0,0, 0.7);
+					box-shadow: 0 1px 0 0 rgba(255,255,255, 0.1);
+
+					&::before, &::after {
+						content: '';
+						position: absolute;
+						top: 0; left: 0;
+						right: 0; bottom: 0;
+					}
+
+					&::before {
+						background-color: #3fb34f;
+						box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.35);
+						z-index: -2;
+					}
+					&::after {
+						z-index: -1;
+						opacity: 0.3;
+						@include background-image(linear-gradient(top, rgba(255,255,255,0.25) 0%,rgba(255,255,255,0) 75%,rgba(255,255,255,0) 100%));
+					}
+
+					&:active {
+						&::before, &::after {
+							@include experimental(transform, rotate(180deg));
+						}
+					}
+				}
+			}
+		}
+
+		.library-body {
+			width: 1024px !important;
+
+			.empty-text {
+				color: $tertiary-grey;
+				font: normal 300 2em $font;
+				margin: 2em auto;
+				width: 500px;
+				text-align: center;
+			}
+		}
+
+		.library-group-header{
+			height: 20px;
+			margin-bottom: 10px;
+
+			div {
+				float: left;
+				color: rgba(255,255,255,0.8);
+				text-transform: uppercase;
+				font: normal 500 0.9em/1 $font;
+			}
+
+			.group {
+				margin-left: 0.5em;
+				color: rgba(255,255,255, 0.30);
+			}
+		}
+	}
 
 	@include grid-def($gridSpacing: 6px);
-	.grid .grid-item.row-1{ height: 160px; }
 
 
 	.x-component-library-collection{
@@ -32,17 +170,25 @@
 
 		.grid .grid-item {background: none;}
 
-		.item {
+		.grid-item.item {
+			background: white !important;
+			width: 243px !important;
+			height: 290px !important;
 			cursor: pointer;
+			margin: 0 15px 15px 0;
 
 			.cover {
-				position: absolute;
-				top: 0; left: 0;
-				right: 0; bottom: 0;
-				background: {
-					size: cover;
-					position: center center;
-					repeat: no-repeat;
+				width: 233px;
+				height: 170px;
+				margin: 5px;
+				overflow: hidden;
+
+
+				img {
+					display: block;
+					height: 100%;
+					@include experimental(transform, scale(1,1));
+					@include experimental(transition, all 0.5s);
 				}
 			}
 
@@ -51,62 +197,55 @@
 			}
 
 			.meta {
-				position: absolute;
 				overflow: hidden;
-				bottom: 0; left: 0; right: 0;
-				background: rgba(0,0,0,0.9);
-				color: #fff;
-				padding: 10px;
+				color: $primary-grey;
+				padding: 0 10px;
 
 				.author,.courseName {
-					font: normal 700 0.6em/1.6em $font;
-					text-transform: uppercase;
-					color: $primary-blue;
 					overflow: hidden;
 					@include ellipse();
 				}
-				.courseName { color: $secondary-grey; }
-				.author:not(:empty):not(.provider-id)::before{content: 'By ';}
-				.title {
+				.courseName {
 					text-transform: uppercase;
-					font: normal 700 1.1em/1.15em "Open Sans Condensed";
+					color: $tertiary-grey;
+					font: normal 600 0.6em/1.6em $font;
 				}
 
-				.description,.author {
+				.author {
+					color: $primary-blue;
+					font: normal 300 0.85em/1.6em $font;
+				}
+
+				.author:not(:empty):not(.provider-id)::before{content: 'By ';}
+				.title {
+					font: normal 300 1.6em/1.1em "Open Sans Condensed";
+				}
+
+				.description{
 					overflow: hidden;
 					display: none;
 				}
 			}
 
-			&.featured {
-				.meta{
-					.description {
-						display: block;
-
-					}
-				}
+			.settings {
+				top: 10px;
+				right: 10px;
+				width: 30px;
+				height: 30px;
+				background: rgba(0,0,0,0.6);
+				border-radius: 5px;
+				display: none;
+				@include icon('rhp-contact-flyout-settings', $top: 7px, $left: 7px, $position: absolute);
 			}
 
-			&:not(.row-1){
-				.meta {
-					min-height: 95px;
-					background: #fff;
-					color: $secondary-grey;
-					.courseName {
-						color: $tertiary-grey;
-					}
-					.author{display:block;}
+			&:hover {
+				.cover img{
+					@include experimental(transform, scale(1.05,1.05));
+					opacity: 0.7;
 				}
 
-				&.featured {
-					.cover {
-						right: auto;
-						width: 200px;
-					}
-					.meta{
-						top: 0;
-						left: 200px;
-					}
+				.settings {
+					display: block;
 				}
 			}
 		}
@@ -114,18 +253,10 @@
 		&.books {
 			.grid {
 				.item {
-					&.grid-item.row-1{ height: 80px; }
 					.cover {
-						width: 60px;
-						right: auto;
-					}
-					.meta {
-						top: 0;
-						left: 60px;
-						.author { display: block; }
-						.title{
-							font-size: 0.9em;
-							line-height: normal;
+						img {
+							width: 100%;
+							height: auto;
 						}
 					}
 				}
@@ -154,4 +285,281 @@
 			}
 		}
 	}
+}
+
+.available-catalog {
+	padding: 20px 34px;
+	.collection-name {
+		display: none;
+	}
+
+	.grid-item.item {
+		background: white !important;
+		width: 230px !important;
+		height: 250px !important;
+		cursor: pointer;
+		margin: 0 9px 9px 0;
+
+		.cover {
+			width: 220px;
+			height: 160px;
+			margin: 5px;
+			overflow: hidden;
+
+
+			img {
+				display: block;
+				height: 100%;
+				@include experimental(transform, scale(1,1));
+				@include experimental(transition, all 0.5s);
+			}
+		}
+
+		.sample {
+			@include element('sample-banner', $position: absolute);
+		}
+
+		.enrollment {
+			position: absolute;
+			float: left;
+			top: 70px;
+			left: 50%;
+			font: normal 500 0.9em/1 $font;
+			color: #40ac4f;
+
+			.enrollment-text {
+				float: left;
+				left: -50%;
+				background-color: white;
+				border-radius: 20px;
+				display: inline-block;
+				line-height: 24px;
+				white-space: nowrap;
+				padding: 0 5px 0 26px;
+
+				@include icon('circle-check-green', $top: 2px, $left: 4px);
+			}
+		}
+
+		.meta {
+			overflow: hidden;
+			color: $primary-grey;
+			padding: 0 10px;
+
+			.author,.courseName {
+				overflow: hidden;
+				@include ellipse();
+			}
+			.courseName {
+				text-transform: uppercase;
+				color: $tertiary-grey;
+				font: normal 600 0.6em/1.6em $font;
+			}
+
+			.author {
+				color: $primary-blue;
+				font: normal 300 0.85em/1.6em $font;
+			}
+
+			.author:not(:empty):not(.provider-id)::before{content: 'By ';}
+			.title {
+				font: normal 600 1.2em/1.1em "Open Sans Condensed";
+			}
+
+			.title {
+				max-height: 2em;
+			}
+
+			.description{
+				overflow: hidden;
+				display: none;
+			}
+		}
+	}
+}
+
+.library-view-menu {
+
+	.x-menu-body {
+		border: none;
+		padding: 0;
+	}
+
+	div.group-by-option {
+		background-color: #646464;
+		color: rgba(255,255,255,0.8) !important;
+		font: normal 300 1.3em/50px $font;
+		padding: 0 20px 0 15px;
+		letter-spacing: 1px;
+
+		&.x-menu-item-active {
+			background-color: rgba(255,255,255,0.8) !important;
+			color: #646464 !important; 
+		}
+
+		&.x-menu-item-checked::after {
+			content: '\2039';
+			line-height: 0.4;
+			display: inline-block;
+			font-size: 1em;
+			position: relative;
+			top: -3px;
+			left: 2px;
+			font-weight: 300;
+			width: 0.5em;
+			height: 0.5em;
+			background: none;
+			@include experimental(transform, rotate(-90deg));
+		}
+	}
+}
+
+.course-settings-window, .available-courses {
+	box-shadow: 0 0 5px 0 rgba(0,0,0,0.35);
+	background-color: white;
+
+	.header{
+		position: relative;
+		background-color: $quad-grey;
+		font: normal 600 1em/1.2em $font;
+		padding: 10px 50px 10px 10px;
+		border-bottom: 1px solid #e5e5e5;
+		text-transform: uppercase;
+
+		.close {
+			cursor: pointer;
+			position: absolute;
+			top: 15px; right: 15px;
+			left: auto;
+			width: 24px;
+			height: 24px;
+			@include icon('note-window-x', $top: 0, $right: 0, $position: absolute);
+
+			&:hover {
+				@include icon('note-window-x_hover', $top: 0, $right: 0, $position: absolute);
+			}
+		}
+
+		.label {
+			font-size: 0.7em;
+			color: $tertiary-grey;
+		}
+
+		.name {
+			color: $secondary-grey;
+		}
+	}
+
+	.footer {
+		height: 40px;
+		background-color: $quad-grey;
+		position: relative;
+
+		.done {
+			cursor: pointer;
+			float: right;
+			background-color: $primary-blue;
+			color: white;
+			padding: 0 30px;
+			font: normal 500 0.9em/40px $font;
+		}
+
+		&::after {
+			content: '';
+			position: absolute;
+			top: -10px;
+			height: 10px;
+			left: 0;
+			right: 0;
+			background-color: rgba(0,0,0,0.35);
+			box-shadow: 0 0 5px 0 rgba(0,0,0,0.35);
+			clip: rect(10px, auto, 20px, auto);
+			border-radius: 335em / 2em;
+		}
+	}
+}
+
+.available-courses {
+	.header {
+		height: 60px;
+		padding-top: 15px;
+		.name {
+			line-height: 1.5em;
+			font-weight: 300;
+			font-size: 1.5em;
+			text-transform: none;
+		}
+	}
+
+	&::after {
+		content: '';
+		position: fixed;
+		top: 0; bottom: 0;
+		right: 0; left: 0;
+		background-color: black;
+		opacity: 0.5;
+		z-index: -1;
+	}
+}
+
+.course-setting-options {
+	padding: 20px 40px;
+	color: $primary-blue;
+	font: normal 500 1em/1.5em $font;
+	
+	.enrollment {
+		font-size: 0.9em;
+		color: $secondary-grey;
+
+		@include icon('courseinfo-circle-check-gray', $side: before, $left: -25px, $top: 2px);
+	}
+
+	.contact, .support, .report, .drop {
+		display: block;
+		cursor: pointer;
+		color: $primary-blue;
+		font-size: 0.8em;
+	}
+
+	.drop {
+		color: $primary-red;
+	}
+}
+
+
+.available-courses-tabpanel {
+	background-color: $panel-background;
+
+	.available-courses-tabbar {
+		height: 40px;
+		background-color: #efefef;
+		// border-right: 1px solid #e3e3e3;
+		box-shadow: inset 0 0 0 1px #e3e3e3;
+
+		.x-tab {
+			color: $secondary-grey;
+			cursor: pointer;
+			padding: 0 20px;
+			border-radius: 0;
+			height: 40px;
+			box-shadow: 1px 0 0 0 #e3e3e3;
+
+			.x-tab-inner {
+				font: normal 500 0.9em/40px $font;
+				text-transform: uppercase;
+			}
+
+			&.x-tab-active, &:hover {
+				color: white;
+				background-color: $primary-blue;
+				box-shadow: -1px 0 0 0 #e3e3e3,
+					1px 0 0 0 #e3e3e3;
+			}
+		}
+	}
+
+	.x-panel-body {
+		overflow-y: auto;
+	}
+
 }

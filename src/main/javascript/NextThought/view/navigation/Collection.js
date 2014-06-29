@@ -1,7 +1,7 @@
 Ext.define('NextThought.view.navigation.Collection', {
 	extend: 'Ext.view.View',
 	//disabling invoking this directly. Only use this through subclasses
-	//alias: 'widget.navigation-collection',
+	alias: 'widget.navigation-collection',
 
 	ui: 'navigation-collection',
 

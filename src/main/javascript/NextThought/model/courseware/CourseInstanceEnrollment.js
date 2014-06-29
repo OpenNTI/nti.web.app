@@ -16,5 +16,9 @@ Ext.define('NextThought.model.courseware.CourseInstanceEnrollment', {
 
 	getCourseCatalogEntry: function() {
 		return this.get('CourseInstance').getCourseCatalogEntry();
+	},
+
+	isOpen: function() {
+		return this.get('Status') === 'Open';
 	}
 });

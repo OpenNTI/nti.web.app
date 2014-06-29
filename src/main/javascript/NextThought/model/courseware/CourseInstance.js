@@ -13,12 +13,16 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 		{ name: 'Discussions', type: 'singleItem', persist: false },
 		{ name: 'Outline', type: 'singleItem', persist: false },
 		{ name: 'TotalEnrolledCount', type: 'int'},
-		{ name: 'Scopes', type: 'auto' }
+		{ name: 'Scopes', type: 'auto' },
+		//UI propertied
+		{ name: 'cover', type: 'string', persist: false, defaultValue: 'missing-notset.png'}
 	],
 
 
 	asUIData: function() {
-		var e = this.getCourseCatalogEntry();
+		var e = this.getCourseCatalogEntry(),
+			instructors = e && e.get('Instructors'),
+			author = instructors && instructors[0];
 
 		//if (!e) {
 			//console.warn('CourseCatalogEntry for', this, 'has not been preloaded yet.');
@@ -29,8 +33,34 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 			isCourse: true,
 			title: (e && e.get('Title')) || 'Missing Catalog Entry',
 			label: (e && e.get('ProviderUniqueID')) || '---',
-			icon: (e && e.get('thumbnail')) || 'missing-icon.png'
+			icon: this.get('cover'),
+			author: author && author.get('Name')
 		};
+	},
+
+
+	setLibraryImage: function() {
+		var me = this,
+			location = me.__getLocationInfo(),
+			root = location && location.root,
+			img = new Image();
+
+		if (!root) {
+			console.error('No location root for course');
+			return;
+		}
+
+		me.set('cover', getURL(root) + '/presentation-assets/webapp/v1/contentpackage-landing-232x170.png');
+
+		img.onerror = function() {
+			var e = me.getCourseCatalogEntry();
+
+			console.error('No well known path for this course: ', e);
+
+			me.set('cover', e ? e.get('thumbnail') : 'missing-entry.png');
+		};
+
+		img.src = me.get('cover');
 	},
 
 
@@ -46,6 +76,10 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 					url: me.getLink('CourseCatalogEntry'),
 					callback: function(rec) {
 						me.__courseCatalogEntry = rec;
+
+						Library.onceLoaded()
+							.then(me.setLibraryImage.bind(me));
+
 						me.afterEdit(['NTIID']);//let views know the record "changed".
 
 						if (rec) {
