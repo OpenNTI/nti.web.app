@@ -14,6 +14,8 @@
 			// relative to their url, "../.." would make "images" have to be
 			// unnecessarily symlinked at the root.
 			content: url(../images/platform.ou.edu/ou_janux_logo.png);
+			height: 108px;
+			width: 200px;
 		}
 	}
 
