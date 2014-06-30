@@ -212,7 +212,7 @@ Ext.define('NextThought.view.library.Navigation', {
 			this.updateAvailable();
 		} else if (item.type === 'admins') {
 			this.fireEvent('show-my-admins');
-			this.updateAvailable();
+			this.updateAvailable(false, true);
 		} else if (item.type === 'books') {
 			this.fireEvent('show-my-books');
 			this.updateAvailable(true);
@@ -220,13 +220,19 @@ Ext.define('NextThought.view.library.Navigation', {
 	},
 
 
-	updateAvailable: function(isBook) {
+	updateAvailable: function(isBook, hide) {
 		this.isBook = isBook;
 
 		if (isBook) {
 			this.addEl.update('Add Books');
 		} else {
 			this.addEl.update('Add Courses');
+		}
+
+		if (hide) {
+			this.addEl.hide();
+		} else {
+			this.addEl.show();
 		}
 	},
 
