@@ -42,7 +42,8 @@ Ext.define('NextThought.controller.Library', {
 
 			store.each(function(course) {
 				var catalog = course.getCourseCatalogEntry(),
-					instance = course.get('CourseInstance');
+					instance = course.get('CourseInstance'),
+					isOpen = course.isOpen();
 
 				if (catalog.isExpired()) {
 					completed.push(course);
@@ -50,7 +51,9 @@ Ext.define('NextThought.controller.Library', {
 					current.push(course);
 				}
 
-				openMap[instance.get('href')] = course.isOpen();
+				//set isOpen on the catalog entry so the available window can know if its open or enrolled
+				catalog.set('isOpen', isOpen);
+				openMap[instance.get('href')] = isOpen;
 			});
 
 			if (panel[fnName]) {
@@ -75,14 +78,6 @@ Ext.define('NextThought.controller.Library', {
 					archived.push(course);
 				}
 
-				if (open !== undefined) {
-					course.set({
-						enrolled: true,
-						isOpen: open
-					});
-				}
-
-
 				if (panel[fnName]) {
 					panel[fnName](current, upcoming, archived);
 				}
@@ -105,7 +100,7 @@ Ext.define('NextThought.controller.Library', {
 		});
 
 		this.mon(available, 'load', function() {
-			available.promiseToLoaded.then(split.bind(null, available, 'setAvailableCourses'));
+			available.promiseToLoaded.then(splitAvailable.bind(null, available, 'setAvailableCourses'));
 		});
 	},
 

@@ -34,6 +34,7 @@ Ext.define('NextThought.view.library.CoursePage', {
 			return;
 		}
 
+		delete this.emptyCmp;
 		this.removeAll(true);
 		this.binCourses(items);
 	},
