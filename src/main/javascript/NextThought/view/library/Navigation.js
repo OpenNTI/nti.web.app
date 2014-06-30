@@ -15,7 +15,7 @@ Ext.define('NextThought.view.library.Navigation', {
 			]}
 		]},
 		{cls: 'nav-bar', cn: [
-			{cls: 'dropdown', html: 'Your Courses'},
+			{cls: 'dropdown disabled', html: 'Your Courses'},
 			{cls: 'nav'},
 			{cls: 'add-courses', html: 'Add Courses'}
 		]}
@@ -104,13 +104,23 @@ Ext.define('NextThought.view.library.Navigation', {
 		var active = this.currentView,
 			items = [];
 
-		items.push({text: 'Your Courses', type: 'courses', checked: active === 'courses'});
+		if (this.shouldEnableCourses) {
+			items.push({text: 'Your Courses', type: 'courses', checked: active === 'courses'});
+			this.dropdownEl.update('Your Courses');
+		}
 
 		if (this.shouldEnableAdmin) {
 			items.push({text: 'Your Administered Courses', type: 'admins', checked: active === 'admins'});
 		}
 
-		items.push({text: 'Your Books', type: 'books', checked: active === 'books'});
+		if (this.shouldEnableBooks) {
+			items.push({text: 'Your Books', type: 'books', checked: active === 'books'});
+
+			if (!this.shouldEnableCourses) {
+				this.dropdownEl.update('Your Books');
+				//this.fireEvent('show-my-books');
+			}
+		}
 
 		this.viewMenu = Ext.widget('menu', {
 			cls: 'library-view-menu',
@@ -129,21 +139,59 @@ Ext.define('NextThought.view.library.Navigation', {
 					'checkchange': 'switchView'
 				}
 			},
-			items: items
+			items: items,
+			listeners: {
+				scope: this,
+				'add': 'maybeEnableDropDown'
+			}
 		});
+
+		this.maybeEnableDropDown(this.viewMenu);
+	},
+
+
+	maybeEnableDropDown: function(menu) {
+		if (menu.items.length > 1 && !this.enableDropDown) {
+			this.dropdownEl.removeCls('disabled');
+		} else if (menu.items.length <= 1 && this.enableDropDown) {
+			this.dropdownEl.addCls('disabled');
+		}
+	},
+
+	enableCourses: function() {
+		if (this.viewMenu && !this.shouldEnableCourses) {
+			this.viewMenu.insert(0, {text: 'Your Courses', type: 'courses', checked: this.currentView === 'courses'});
+		}
+
+		this.shouldEnableCourses = true;
 	},
 
 
 	enableAdmin: function() {
-		this.shouldEnableAdmin = true;
-
-		if (this.viewMenu) {
+		if (this.viewMenu && !this.shouldEnableAdmin) {
 			this.viewMenu.insert(1, {text: 'Your Administered Courses', type: 'admins', checked: this.currentView === 'admins'});
 		}
+
+		this.shouldEnableAdmin = true;
 	},
 
 
-	showViewMenu: function() {
+	enableBooks: function() {
+		if (this.viewMenu && !this.shouldEnableBooks) {
+			this.viewMenu.insert(2, {text: 'Your Books', type: 'books', checked: this.currentView === 'books'});
+
+			if (!this.shouldEnableCourses) {
+				this.dropdownEl.update('Your Books');
+			}
+		}
+
+		this.shouldEnableBooks = true;
+	},
+
+
+	showViewMenu: function(e) {
+		if (e.getTarget('.disabled')) { return; }
+
 		this.viewMenu.showBy(this.dropdownEl, 'tl-tl', this.viewMenu.offsets);
 	},
 
@@ -204,6 +252,8 @@ Ext.define('NextThought.view.library.Navigation', {
 			i = this.navStore.findBy(function(rec) {
 				return rec.get('viewId') === viewId;
 			});
+
+		this.updateAvailable(active === 'books');
 
 		selModel = this.nav.getSelectionModel();
 		selModel.select(i, false);

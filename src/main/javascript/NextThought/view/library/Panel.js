@@ -46,8 +46,6 @@ Ext.define('NextThought.view.library.Panel', {
 			'show-my-books': 'showMyBooks',
 			'show-available': 'showAvailable'
 		});
-
-		this.showMyCourses();
 	},
 
 
@@ -79,6 +77,8 @@ Ext.define('NextThought.view.library.Panel', {
 
 
 	showMyCourses: function() {
+		if (this.noCourses) { return; }
+
 		this.navigation.setItems([
 			{label: 'Current and Upcoming', viewId: 'current-courses-page'},
 			{label: 'Completed', viewId: 'completed-courses-page'}
@@ -143,6 +143,7 @@ Ext.define('NextThought.view.library.Panel', {
 			emptyText: 'You dont have any books'
 		});
 
+		this.changeView('books');
 	},
 
 
@@ -183,6 +184,7 @@ Ext.define('NextThought.view.library.Panel', {
 			this.el.mask('Loading...');
 		}
 	},
+
 
 	setEnrolledCourses: function(current, completed) {
 		this.currentCourses = current;
@@ -230,8 +232,23 @@ Ext.define('NextThought.view.library.Panel', {
 	},
 
 
+	setBookStore: function(store) {
+		this.bookStore = store;
+
+		this.maybeEnableBooks();
+
+		var bookCmp = this.body.down('[id=books]');
+
+		if (bookCmp) {
+			bookCmp.setBookStore(store);
+		}
+	},
+
+
 	setPurchasables: function(store) {
 		this.purchasables = store;
+
+		this.maybeEnableBooks();
 	},
 
 
@@ -246,13 +263,66 @@ Ext.define('NextThought.view.library.Panel', {
 	},
 
 
-	setBookStore: function(store) {
-		this.bookStore = store;
+	/**
+	 * If courses is true enable the my courses tab, if not don't enable it and maybe enable the books tab
+	 * @param  {boolean} courses whether or not there are courses
+	 * @return {undefined}
+	 */
+	maybeEnableCourses: function(courses) {
+		//if there are no courses
+		if (!courses) {
+			this.noCourses = true;
 
-		var bookCmp = this.body.down('[id=books]');
+			if (this.noBooks) {
+				console.error('!!!User has no courses or books!!!');
+			} else if (this.hasBooks) {
+				//if we are empty and we have books show the books view
+				this.showMyBooks();
+			}
 
-		if (bookCmp) {
-			bookCmp.setBookStore(store);
+			return;
+		}
+
+		//if we haven't already enable courses and make it the active view
+		if (!this.hasCourses) {
+			this.hasCourses = true;
+			this.navigation.enableCourses();
+			this.showMyCourses();
+		}
+	},
+
+
+	maybeEnableBooks: function() {
+		//if we already know we have books don't check again
+		if (this.hasBooks) { return; }
+
+		var isEmpty = false;
+
+		//if we haven't loaded books yet don't do anything
+		if (!this.bookStore || !this.purchasables) { return; }
+
+		//if both the bookStore and the purchasables are empty
+		if (!this.bookStore.getCount() && !this.purchasables.getCount()) {
+			isEmpty = true;
+		}
+
+		if (isEmpty) {
+			this.noBooks = true;
+
+			if (this.noCoureses) {
+				console.error('!!!User has no courses or books');
+			}
+
+			return;
+		}
+
+		//since we haven't already enable books and if we don't have courses make it the active view
+		this.hasBooks = true;
+		this.navigation.enableBooks();
+
+		//if we don't have courses yet show the books view
+		if (!this.hasCourses) {
+			this.showMyBooks();
 		}
 	}
 });

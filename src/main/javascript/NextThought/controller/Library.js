@@ -77,15 +77,18 @@ Ext.define('NextThought.controller.Library', {
 				} else {
 					archived.push(course);
 				}
-
-				if (panel[fnName]) {
-					panel[fnName](current, upcoming, archived);
-				}
 			});
+
+			if (panel[fnName]) {
+				panel[fnName](current, upcoming, archived);
+			}
 		}
 
 		Library.onceLoaded()
 			.then(function() {
+				//pass if there are any enrolled or available
+				panel.maybeEnableCourses(enrolled.getCount() || available.getCount());
+
 				split(enrolled, 'setEnrolledCourses');
 				split(administered, 'setAdministeredCourses');
 				splitAvailable(available, 'setAvailableCourses');
