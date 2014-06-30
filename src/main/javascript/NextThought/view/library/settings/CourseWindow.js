@@ -28,7 +28,7 @@ Ext.define('NextThought.view.library.settings.CourseWindow', {
 		{ id: '{id}-body', cls: 'body-container',
 			cn: ['{%this.renderContainer(out,values)%}'] },
 		{cls: 'footer', cn: [
-			{cls: 'done button', html: 'Done'}
+			{cls: 'done button close', html: 'Done'}
 		]}
 	]),
 

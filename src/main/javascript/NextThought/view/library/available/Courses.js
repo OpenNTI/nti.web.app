@@ -32,9 +32,9 @@ Ext.define('NextThought.view.library.available.Courses', {
 			{cls: 'close'}
 		]},
 		{ id: '{id}-body', cls: 'body-container',
-			cn: ['{%this.renderContainer(out,values)%}'] },,
+			cn: ['{%this.renderContainer(out,values)%}'] },
 		{cls: 'footer', cn: [
-			{cls: 'done button', html: 'Finished'}
+			{cls: 'done button close', html: 'Finished'}
 		]}
 	]),
 
