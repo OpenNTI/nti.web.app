@@ -7,8 +7,8 @@ Ext.define('NextThought.view.library.settings.CourseOptions', {
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'enrollment {enrollCls}', html: '{enrollText}'},
 		//{cls: 'contact', html: 'Contact the Instructor'},
-		{ tag: 'a', cls: 'support', html: 'Request Support'},
-		{ tag: 'a', cls: 'report', html: 'Report an Issue'},
+		{ tag: 'a', cls: 'support', href: '{supportLink}', target: '_blank', html: 'Request Support'},
+		//{ tag: 'a', cls: 'report', html: 'Report an Issue'},
 		{cls: 'drop', html: 'Drop Course'}
 	]),
 
@@ -20,7 +20,7 @@ Ext.define('NextThought.view.library.settings.CourseOptions', {
 		this.renderData = Ext.apply(this.renderData || {}, {
 			enrollCls: isOpen ? 'open' : 'enrolled',
 			enrollText: isOpen ? 'You are taking the Open Course.' : 'You are taking the Credit Course.',
-			supporLink: getString('course-info.course-supoprt.link1.URL', 'mailto:support@nextthought.com', true),
+			supportLink: getString('course-info.course-supoprt.link1.URL', 'mailto:support@nextthought.com', true),
 			reportLink: ''
 		});
 	},
@@ -37,23 +37,11 @@ Ext.define('NextThought.view.library.settings.CourseOptions', {
 		var instance = this.course.get('CourseInstance'),
 			catalog = instance.getCourseCatalogEntry();
 
-		if (e.getTarget('.contact')) {
-			//whats is this suppose to do
-		}
-
-		if (e.getTarget('.support')) {
-
-		}
-
-		if (e.getTarget('.report')) {
-
-		}
-
 		if (e.getTarget('.drop')) {
 			catalog.fireAcquisitionEvent(this, function(enrolled) {
-				// if (!enrolled) {
-				// 	me.fireEvent('go-to-library', me);
-				// }
+				//if (!enrolled) {
+				//	me.fireEvent('go-to-library', me);
+				//}
 			});
 		}
 
