@@ -85,7 +85,7 @@ Ext.define('NextThought.view.library.CoursePage', {
 		});
 
 		years.sort().reverse();
-		semesters = (semesters && Ext.Array.unique(semesters)) || [];
+		semesters = ((semesters && Ext.Array.unique(semesters)) || []).reverse();
 
 
 		years.forEach(function(year) {
