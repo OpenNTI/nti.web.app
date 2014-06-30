@@ -248,6 +248,10 @@ Ext.define('NextThought.view.library.Panel', {
 
 
 	setPurchasables: function(store) {
+		if (store.getCount()) {
+			this.navigation.allowBookAdd = true;
+		}
+
 		this.purchasables = store;
 
 		this.maybeEnableBooks();
@@ -255,6 +259,11 @@ Ext.define('NextThought.view.library.Panel', {
 
 
 	setAvailableCourses: function(current, upcoming, archived) {
+		if (!Ext.isEmpty(current) || !Ext.isEmpty(upcoming) || !Ext.isEmpty(acrhived)) {
+			this.navigation.allowCourseAdd = true;
+		}
+
+
 		this.currentAvailable = current;
 		this.upcomingAvailable = upcoming;
 		this.archivedAvailable = archived;

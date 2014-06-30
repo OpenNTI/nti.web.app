@@ -209,30 +209,30 @@ Ext.define('NextThought.view.library.Navigation', {
 
 		if (item.type === 'courses') {
 			this.fireEvent('show-my-courses');
-			this.updateAvailable();
 		} else if (item.type === 'admins') {
 			this.fireEvent('show-my-admins');
-			this.updateAvailable(false, true);
 		} else if (item.type === 'books') {
 			this.fireEvent('show-my-books');
-			this.updateAvailable(true);
 		}
+
+		this.updateAvailable();
 	},
 
 
-	updateAvailable: function(isBook, hide) {
-		this.isBook = isBook;
+	updateAvailable: function() {
+		this.isBook = this.currentView === 'books';
 
-		if (isBook) {
+		//if the current view is books and we can allow books add show it
+		if (this.isBook && this.allowBookAdd) {
 			this.addEl.update('Add Books');
-		} else {
-			this.addEl.update('Add Courses');
-		}
-
-		if (hide) {
-			this.addEl.hide();
-		} else {
 			this.addEl.show();
+		} else if (this.currentView === 'courses' && this.allowCourseAdd) {
+			//if the current view is courses and we can allow courses add show it
+			this.addEl.update('Add Courses');
+			this.addEl.show();
+		} else {
+			//otherwise we can't show it so hide it
+			this.addEl.hide();
 		}
 	},
 
