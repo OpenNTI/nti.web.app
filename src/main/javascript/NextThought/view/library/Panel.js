@@ -147,7 +147,8 @@ Ext.define('NextThought.view.library.Panel', {
 
 
 	showAvailable: function(isBook) {
-		var win, cfg, xtype;
+		var me = this,
+			win, cfg, xtype;
 
 		if (isBook) {
 			xtype = 'library-available-books';
@@ -168,8 +169,20 @@ Ext.define('NextThought.view.library.Panel', {
 		win = Ext.widget(xtype, cfg);
 
 		win.showBy(this, 'tl-tl', [this.leftSide, 40]);
+
+		this.hasAvailableWindow = true;
+		this.mon(win, 'close', function() {
+			delete me.hasAvailableWindow;
+		});
 	},
 
+
+	courseDropped: function() {
+		if (this.el && !this.hasAvailableWindow) {
+			this.hasDroppedMask = true;
+			this.el.mask('Loading...');
+		}
+	},
 
 	setEnrolledCourses: function(current, completed) {
 		this.currentCourses = current;
@@ -184,6 +197,10 @@ Ext.define('NextThought.view.library.Panel', {
 
 		if (completedCmp) {
 			completedCmp.setItems(completed);
+		}
+
+		if (this.hasDroppedMask) {
+			this.el.unmask();
 		}
 	},
 
@@ -205,6 +222,10 @@ Ext.define('NextThought.view.library.Panel', {
 
 		if (completedCmp) {
 			completedCmp.setItems(completed);
+		}
+
+		if (this.hasDropMask) {
+			this.el.unmask();
 		}
 	},
 

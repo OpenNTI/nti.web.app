@@ -388,11 +388,14 @@ Ext.define('NextThought.controller.CourseWare', {
 
 	//<editor-fold desc="Enrollment Window">
 	showEnrollmentWindow: function(course, callback) {
-		var win = this.getEnrollmentWindow();
+		var win = this.getEnrollmentWindow(),
+			panel = this.getLibraryView().getPanel();
 		if (win) {
 			console.error('Enrollment already in progress.  How did you manage this', win);
 			return null;
 		}
+
+		callback = Ext.Function.createSequence(function() { panel.courseDropped(); }, callback || Ext.emptyFn);
 
 		return this.getView('courseware.enrollment.Window').create({record: course, callback: callback});
 	},
