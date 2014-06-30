@@ -307,15 +307,17 @@ Ext.define('NextThought.view.library.Panel', {
 		//if we already know we have books don't check again
 		if (this.hasBooks) { return; }
 
-		var isEmpty = false;
+		var isEmpty = true;
 
-		//if we haven't loaded books yet don't do anything
-		if (!this.bookStore || !this.purchasables) { return; }
+		//if the bookstore is set and it has items its not empty
+		if (this.bookStore && this.bookStore.getCount()) { isEmpty = false; }
 
-		//if both the bookStore and the purchasables are empty
-		if (!this.bookStore.getCount() && !this.purchasables.getCount()) {
-			isEmpty = true;
-		}
+		//if the purchasables is set and it has items its not empty
+		if (this.purchasables && this.purchasables.getCount()) { isEmpty = false; }
+
+		//if its still empty but either the bookstore or the purchasables hasn't been set yet
+		//don't do anything
+		if (isEmpty && (!this.bookStore || !this.purchasables)) { return; }
 
 		if (isEmpty) {
 			this.noBooks = true;
