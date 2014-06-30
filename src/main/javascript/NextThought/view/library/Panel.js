@@ -129,6 +129,8 @@ Ext.define('NextThought.view.library.Panel', {
 				emptyText: 'You have never been an administratorated a courses'
 			}
 		]);
+
+		this.changeView('current-admins-page');
 	},
 
 
