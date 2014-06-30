@@ -196,8 +196,8 @@ Ext.define('NextThought.controller.CourseWare', {
 		this.mon(store, 'load', 'markEnrolledCourses');
 
 		this.mon(store, {
-			beforeload: 'onAvailableCoursesLoading'
-			//load: 'onAvailableCoursesLoaded'
+			beforeload: 'onAvailableCoursesLoading',
+			load: 'onAvailableCoursesLoaded'
 		});
 		store.load();
 	},
@@ -255,59 +255,17 @@ Ext.define('NextThought.controller.CourseWare', {
 
 
 	onAvailableCoursesLoaded: function(store) {
-		var me = this, view = this.getLibraryView(),
-			archiveStore, archived, now = new Date(),
+		var me = this,
 			contentMap = me.TEMP_WORKAROUND_COURSE_TO_CONTENT_MAP;
 
-		this.getLibraryView().setAvailableCourses(store);
-
-		return;
-
-		//store.each(function(o) {
-		//	var k = o.get('ContentPackageNTIID');
-		//	if (!contentMap.hasOwnProperty(k)) {
-		//		contentMap[k] = o.get('href');
-		//	} else {
-		//		console.error('Assertion Failed! There is another mapping to content package: ' + k);
-		//	}
-		//});
-
-		//if (!store.getCount()) {
-		//	return;
-		//}
-
-		//function archivedFilter(r) {
-		//	var e = r.raw.EndDate;
-		//	return e && (new Date(e) < now);
-		//}
-
-		//function activeFilter(r) { return !archivedFilter(r); }
-
-		//archived = store.getRange().filter(archivedFilter);
-
-		//view.add({
-		//	store: store,
-		//	hidden: false,
-		//	xtype: 'course-catalog-collection',
-		//	id: 'course-catalog-collection',
-		//	name: getString('course.catalog', 'Available Courses')
-		//});
-
-		////Do archived courses here.
-		//if (!archived || archived.length === 0) {
-		//	return;
-		//}
-
-		//store.filter(activeFilter);//don't remove, so we can still find them.
-		//archiveStore = NextThought.store.courseware.AvailableCourses.create({proxy: 'memory', data: archived});
-
-		//view.add({
-		//	store: archiveStore,
-		//	hidden: false,
-		//	xtype: 'course-catalog-collection',
-		//	id: 'course-catalog-archive-collection',
-		//	name: getString('course.catalog.archived', 'Archived Courses')
-		//});
+		store.each(function(o) {
+			var k = o.get('ContentPackageNTIID');
+			if (!contentMap.hasOwnProperty(k)) {
+				contentMap[k] = o.get('href');
+			} else {
+				console.error('Assertion Failed! There is another mapping to content package: ' + k);
+			}
+		});
 	},
 
 
