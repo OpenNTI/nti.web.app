@@ -381,7 +381,9 @@ Ext.define('NextThought.controller.CourseWare', {
 
 
 	onCourseCatalogItemSelect: function(sel, record) {
-		this.showEnrollmentWindow(record);
+		this.showEnrollmentWindow(record, function() {
+			record.set('isChanging', true);
+		});
 		return false;//prevent the Store from handling this as the base class is a store view.
 	},
 

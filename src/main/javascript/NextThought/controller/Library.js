@@ -33,8 +33,7 @@ Ext.define('NextThought.controller.Library', {
 
 
 	coursesLoaded: function(enrolled, administered, available) {
-		var panel = this.getLibraryView().getPanel(),
-			openMap = {};
+		var panel = this.getLibraryView().getPanel();
 
 		function split(store, fnName) {
 			var current = [],
@@ -52,8 +51,10 @@ Ext.define('NextThought.controller.Library', {
 				}
 
 				//set isOpen on the catalog entry so the available window can know if its open or enrolled
-				catalog.set('isOpen', isOpen);
-				openMap[instance.get('href')] = isOpen;
+				catalog.set({
+					'isOpen': isOpen,
+					'isChanging': false
+				});
 			});
 
 			if (panel[fnName]) {
@@ -67,8 +68,7 @@ Ext.define('NextThought.controller.Library', {
 			store.each(function(course) {
 				var start = course.get('StartDate'),
 					end = course.get('EndDate'),
-					now = new Date(),
-					open = openMap[course.getLink('CourseInstance')];
+					now = new Date();
 
 				if (start > now) {
 					upcoming.push(course);

@@ -25,9 +25,12 @@ Ext.define('NextThought.model.courseware.CourseCatalogEntry', {
 		{ name: 'thumbnail', type: 'string', mapping: 'LegacyPurchasableThumbnail' }, //small/medium
 		{ name: 'poster', type: 'string' }, //medium (promo)
 		{ name: 'background', type: 'string' }, //large
-
 		{ name: 'enrolled', type: 'bool' },
-		{ name: 'isOpen', type: 'bool'}
+		//ui data
+		{ name: 'isOpen', type: 'bool'},
+		{ name: 'isChanging', type: 'bool', convert: function(v, rec) {
+			return rec.get('enrolled') && v;
+		}}
 	],
 
 

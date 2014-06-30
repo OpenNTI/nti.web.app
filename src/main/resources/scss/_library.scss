@@ -315,6 +315,26 @@
 		cursor: pointer;
 		margin: 0 9px 9px 0;
 
+		&.changing {
+			position: relative;
+			.enrollment { display: none; }
+
+			&::before {
+				position: absolute;
+				top: 0; left: 0;
+				bottom: 0; right: 0;
+				background-color: black;
+				opacity: 0.5;
+				z-index: 1;
+				content: '';
+			}
+
+			&::after {
+				z-index: 2;
+				@include loadingSpinner($top: 113px, $left: 103px);
+			}
+		}
+
 		.cover {
 			width: 220px;
 			height: 160px;

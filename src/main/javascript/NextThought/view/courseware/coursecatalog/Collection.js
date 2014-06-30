@@ -9,7 +9,7 @@ Ext.define('NextThought.view.courseware.coursecatalog.Collection', {
 
 
 	entryTpl: Ext.DomHelper.markup({
-		cls: '{inGrid} item {Class:lowercase} {enrolled:boolStr("activated")} row-{rows} col-{cols}',
+		cls: '{inGrid} item {Class:lowercase} {enrolled:boolStr("activated")} {isChanging:boolStr("changing")} row-{rows} col-{cols}',
 		'data-qtip': '{Title:htmlEncode}', cn: [
 			{ cls: 'cover', style: { backgroundImage: 'url({thumbnail})' }},
 			{ tag: 'tpl', 'if': 'enrolled', cn: [
@@ -43,5 +43,13 @@ Ext.define('NextThought.view.courseware.coursecatalog.Collection', {
 
 	handleSelect: function(selModel, record) {
 		selModel.deselect(record);
+	},
+
+
+	onItemClick: function(rec, node, index, e) {
+		if (e.getTarget('.changing')) {
+			e.stopPropagation();
+			return false;
+		}
 	}
 });
