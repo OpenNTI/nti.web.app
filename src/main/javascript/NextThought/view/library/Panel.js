@@ -259,7 +259,7 @@ Ext.define('NextThought.view.library.Panel', {
 
 
 	setAvailableCourses: function(current, upcoming, archived) {
-		if (!Ext.isEmpty(current) || !Ext.isEmpty(upcoming) || !Ext.isEmpty(acrhived)) {
+		if (!Ext.isEmpty(current) || !Ext.isEmpty(upcoming) || !Ext.isEmpty(archived)) {
 			this.navigation.allowCourseAdd = true;
 		}
 
