@@ -150,14 +150,14 @@ Ext.define('NextThought.view.library.Panel', {
 				id: 'current-admins-page',
 				groupLabel: 'current',
 				courses: this.currentAdministered || [],
-				emptyText: 'You are not an administraighter of any courses'
+				emptyText: 'You are not administering any courses.'
 			},
 			{
 				xtype: 'library-view-course-page',
 				id: 'archived-admins-page',
 				groupLabel: 'archived',
 				courses: this.archivedAdministered || [],
-				emptyText: 'You have never been an administratorated a courses'
+				emptyText: 'You have no administered courses.'
 			}
 		]);
 
@@ -175,7 +175,7 @@ Ext.define('NextThought.view.library.Panel', {
 			xtype: 'library-view-book-page',
 			id: 'books',
 			books: this.bookStore,
-			emptyText: 'You dont have any books'
+			emptyText: 'You don\'t have any books'
 		});
 
 		this.stateObj.activeView = 'books';
