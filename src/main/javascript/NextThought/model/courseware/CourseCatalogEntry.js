@@ -3,7 +3,6 @@ Ext.define('NextThought.model.courseware.CourseCatalogEntry', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.courseware.coursecataloglegacyentry',
 	requires: ['NextThought.model.converters.Date'],
-	idProperty: 'ProviderUniqueID',
 
 	fields: [
 		{ name: 'Communities', type: 'auto', persist: false },
