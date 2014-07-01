@@ -98,7 +98,7 @@ Ext.define('NextThought.view.library.Panel', {
 				id: 'archived-courses-page',
 				groupLabel: 'archived',
 				courses: this.archivedCourses || [],
-				emptyText: 'You have not archived any courses'
+				emptyText: 'You don\'t have any archived courses.'
 			}
 		]);
 
