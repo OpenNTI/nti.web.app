@@ -7,8 +7,7 @@ Ext.define('NextThought.controller.ContentManagement', {
 
 
 	stores: [
-		'ContentBundles',
-		'ContentPackages'
+		'ContentBundles'
 	],
 
 
@@ -121,4 +120,21 @@ Ext.define('NextThought.controller.ContentManagement', {
 			end();
 		}
 	}
+}, function() {
+
+	window.ContentManagementUtils = {
+		findBundle: function(ntiid) {
+			var p = ParseUtils.ntiidPrefix.bind(ParseUtils);
+			function prefix(bundle) {
+				return (bundle.get('ContentPackages') || [])
+							   .filter(function(b) {return p(ntiid) === p(b.get('NTIID'));}).length > 0;
+			}
+
+			return Ext.getStore('ContentBundles').onceLoaded()
+					.then(function(s) {
+						var i = s.findBy(prefix);
+						return i >= 0 ? s.getAt(i) : Promise.reject('Not Found');
+					});
+		}
+	};
 });
