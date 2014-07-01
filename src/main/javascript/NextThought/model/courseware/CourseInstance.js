@@ -83,11 +83,11 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 						Library.onceLoaded()
 							.then(me.setLibraryImage.bind(me));
 
-						me.set('Preview', rec.get('Preview'));
 
 						me.afterEdit(['NTIID']);//let views know the record "changed".
 
 						if (rec) {
+							me.set('Preview', rec.get('Preview'));
 							rec.set('enrolled', true);//if we come from here, we are enrolled.
 							fulfill(rec);
 						} else {
