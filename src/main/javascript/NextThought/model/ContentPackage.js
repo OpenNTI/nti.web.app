@@ -53,6 +53,10 @@ Ext.define('NextThought.model.ContentPackage', {
 			entities = (toc && toc.querySelectorAll('scope[type="' + scope + '"] entry')) || [],
 			values = [];
 
+		if (!toc) {
+			Ext.Error.raise('No Scope yet.');
+		}
+
 		entities.forEach(function(entity) {
 			values.push(entity.textContent.trim());
 		});
