@@ -49,6 +49,15 @@ Ext.define('NextThought.view.library.Collection', {
 	},
 
 
+	afterRender: function() {
+		this.callParent(arguments);
+
+		if (!Ext.is.iOS) {
+			this.addCls('allow-zoom');
+		}
+	},
+
+
 	prepareData: function(data, index, record) {
 		var i = this.callParent(arguments),
 			rows = this.rowSpan,
