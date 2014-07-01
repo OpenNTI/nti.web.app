@@ -37,7 +37,7 @@ Ext.define('NextThought.controller.Library', {
 
 		function split(store, fnName) {
 			var current = [],
-				completed = [];
+				archived = [];
 
 			store.each(function(course) {
 				var catalog = course.getCourseCatalogEntry(),
@@ -45,7 +45,7 @@ Ext.define('NextThought.controller.Library', {
 					isOpen = course.isOpen();
 
 				if (catalog.isExpired()) {
-					completed.push(course);
+					archived.push(course);
 				} else {
 					current.push(course);
 				}
@@ -58,7 +58,7 @@ Ext.define('NextThought.controller.Library', {
 			});
 
 			if (panel[fnName]) {
-				panel[fnName](current, completed);
+				panel[fnName](current, archived);
 			}
 		}
 

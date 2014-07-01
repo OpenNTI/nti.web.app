@@ -81,7 +81,7 @@ Ext.define('NextThought.view.library.Panel', {
 
 		this.navigation.setItems([
 			{label: 'Current and Upcoming', viewId: 'current-courses-page'},
-			{label: 'Completed', viewId: 'completed-courses-page'}
+			{label: 'Archived', viewId: 'archived-courses-page'}
 		]);
 
 		this.body.removeAll(true);
@@ -95,10 +95,10 @@ Ext.define('NextThought.view.library.Panel', {
 			},
 			{
 				xtype: 'library-view-course-page',
-				id: 'completed-courses-page',
-				groupLabel: 'completed',
-				courses: this.completedCourses || [],
-				emptyText: 'You have not completed any courses'
+				id: 'archived-courses-page',
+				groupLabel: 'archived',
+				courses: this.archivedCourses || [],
+				emptyText: 'You have not archived any courses'
 			}
 		]);
 
@@ -109,7 +109,7 @@ Ext.define('NextThought.view.library.Panel', {
 	showMyAdminCourses: function() {
 		this.navigation.setItems([
 			{label: 'Current and Upcoming', viewId: 'current-admins-page'},
-			{label: 'Completed', viewId: 'completed-admins-page'}
+			{label: 'Archived', viewId: 'archived-admins-page'}
 		]);
 
 		this.body.removeAll(true);
@@ -123,9 +123,9 @@ Ext.define('NextThought.view.library.Panel', {
 			},
 			{
 				xtype: 'library-view-course-page',
-				id: 'completed-admins-page',
-				groupLabel: 'completed',
-				courses: this.completedAdministered || [],
+				id: 'archived-admins-page',
+				groupLabel: 'archived',
+				courses: this.archivedAdministered || [],
 				emptyText: 'You have never been an administratorated a courses'
 			}
 		]);
@@ -188,19 +188,19 @@ Ext.define('NextThought.view.library.Panel', {
 	},
 
 
-	setEnrolledCourses: function(current, completed) {
+	setEnrolledCourses: function(current, archived) {
 		this.currentCourses = current;
-		this.completedCourses = completed;
+		this.archivedCourses = archived;
 
 		var currentCmp = this.body.down('[id=current-courses-page]'),
-			completedCmp = this.body.down('[id=completed-courses-page]');
+			archivedCmp = this.body.down('[id=archived-courses-page]');
 
 		if (currentCmp) {
 			currentCmp.setItems(current);
 		}
 
-		if (completedCmp) {
-			completedCmp.setItems(completed);
+		if (archivedCmp) {
+			archivedCmp.setItems(archived);
 		}
 
 		if (this.hasDroppedMask) {
@@ -209,23 +209,23 @@ Ext.define('NextThought.view.library.Panel', {
 	},
 
 
-	setAdministeredCourses: function(current, completed) {
-		if (!Ext.isEmpty(current) || !Ext.isEmpty(completed)) {
+	setAdministeredCourses: function(current, archived) {
+		if (!Ext.isEmpty(current) || !Ext.isEmpty(archived)) {
 			this.navigation.enableAdmin();
 		}
 
 		this.currentAdministered = current;
-		this.completedAdministered = completed;
+		this.archivedAdministered = archived;
 
 		var currentCmp = this.body.down('[id=current-admins-page]'),
-			completedCmp = this.body.down('[id=comleted-admins-page]');
+			archivedCmp = this.body.down('[id=archived-admins-page]');
 
 		if (currentCmp) {
 			currentCmp.setItems(current);
 		}
 
-		if (completedCmp) {
-			completedCmp.setItems(completed);
+		if (archivedCmp) {
+			archivedCmp.setItems(archived);
 		}
 
 		if (this.hasDropMask) {
