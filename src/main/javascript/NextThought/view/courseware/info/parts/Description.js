@@ -88,7 +88,7 @@ Ext.define('NextThought.view.courseware.info.parts.Description', {
 		this.renderData = Ext.apply(this.renderData || {}, {
 			description: i.get('Description'),
 			prerequisites: p,
-			courseId: i.getId(),
+			courseId: i.get('ProviderUniqueID'),
 			title: i.get('Title'),
 			school: i.get('ProviderDepartmentTitle'),
 			schoolLabel: getString('NextThought.view.courseware.info.parts.Description.schoollabel'), //Department
