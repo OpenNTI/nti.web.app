@@ -41,8 +41,20 @@ Ext.define('NextThought.view.library.Navigation', {
 				{name: 'viewId', type: 'string'}
 			]
 		});
+	},
 
-		this.currentView = 'courses';
+
+	setDefault: function(type) {
+		if (type === 'courses') {
+			this.currentView = 'courses';
+			this.dropText = 'Your Courses';
+		} else if (type === 'admin') {
+			this.currentView = 'admins';
+			this.dropText = 'Your Administered Courses';
+		} else if (type === 'books') {
+			this.currentView = 'books';
+			this.dropText = 'Your Books';
+		}
 	},
 
 
@@ -103,11 +115,17 @@ Ext.define('NextThought.view.library.Navigation', {
 		this.mon(this.addEl, 'click', 'showAvailable', this);
 
 		this.navContainerEl.setHeight(this.navBarEl.getHeight());
+
+		if (this.dropText) {
+			this.dropdownEl.update(this.dropText);
+		}
+
+		this.updateAvailable();
 	},
 
 
 	buildViewMenu: function() {
-		var active = this.currentView,
+		var active = this.currentView || 'courses',
 			items = [];
 
 		if (this.shouldEnableCourses) {
@@ -228,6 +246,8 @@ Ext.define('NextThought.view.library.Navigation', {
 	updateAvailable: function() {
 		this.isBook = this.currentView === 'books';
 
+		if (!this.rendered) { return; }
+
 		//if the current view is books and we can allow books add show it
 		if (this.isBook && this.allowBookAdd) {
 			this.addEl.update('Add Books');
@@ -265,7 +285,7 @@ Ext.define('NextThought.view.library.Navigation', {
 				return rec.get('viewId') === viewId;
 			});
 
-		this.updateAvailable(active === 'books');
+		this.updateAvailable();
 
 		selModel = this.nav.getSelectionModel();
 		selModel.select(i, false);

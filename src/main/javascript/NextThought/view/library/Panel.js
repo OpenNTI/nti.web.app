@@ -9,6 +9,10 @@ Ext.define('NextThought.view.library.Panel', {
 		'NextThought.view.library.available.*'
 	],
 
+	stateObj: {activeView: ''},
+	stateful: true,
+	stateId: 'library',
+
 	cls: 'library-panel',
 
 	navigation: {xtype: 'library-navigation', region: 'north', override: 'true'},
@@ -61,6 +65,29 @@ Ext.define('NextThought.view.library.Panel', {
 				me.removeCls('fixed');
 			}
 		});
+
+		this.maybeRestoreState();
+	},
+
+
+	getState: function() {
+		return this.stateObj;
+	},
+
+
+	applyState: function(state) {
+		this.stateObj = state;
+
+		if (state.activeView === 'mycourses') {
+			this.showMyCourses();
+			this.navigation.setDefault('courses');
+		} else if (state.activeView === 'admincourses') {
+			this.showMyAdminCourses();
+			this.navigation.setDefault('admin');
+		} else if (state.activeView === 'books') {
+			this.showMyBooks();
+			this.navigation.setDefault('books');
+		}
 	},
 
 
@@ -72,6 +99,8 @@ Ext.define('NextThought.view.library.Panel', {
 		//if it was successful
 		if (this.body.getLayout().getActiveItem() === cmp) {
 			this.navigation.updateSelection(view);
+			this.stateObj[this.stateObj.activeView] = view;
+			this.saveState();
 		}
 	},
 
@@ -102,7 +131,9 @@ Ext.define('NextThought.view.library.Panel', {
 			}
 		]);
 
-		this.changeView('current-courses-page');
+		this.stateObj.activeView = 'mycourses';
+		this.changeView(this.stateObj.mycourses || 'current-courses-page');
+		this.saveState();
 	},
 
 
@@ -130,7 +161,9 @@ Ext.define('NextThought.view.library.Panel', {
 			}
 		]);
 
-		this.changeView('current-admins-page');
+		this.stateObj.activeView = 'admincourses';
+		this.changeView(this.stateObj.admincourses || 'current-admins-page');
+		this.saveState();
 	},
 
 
@@ -145,7 +178,8 @@ Ext.define('NextThought.view.library.Panel', {
 			emptyText: 'You dont have any books'
 		});
 
-		this.changeView('books');
+		this.stateObj.activeView = 'books';
+		this.saveState();
 	},
 
 
@@ -250,6 +284,7 @@ Ext.define('NextThought.view.library.Panel', {
 	setPurchasables: function(store) {
 		if (store.getCount()) {
 			this.navigation.allowBookAdd = true;
+			this.navigation.updateAvailable();
 		}
 
 		this.purchasables = store;
@@ -261,6 +296,7 @@ Ext.define('NextThought.view.library.Panel', {
 	setAvailableCourses: function(current, upcoming, archived) {
 		if (!Ext.isEmpty(current) || !Ext.isEmpty(upcoming) || !Ext.isEmpty(archived)) {
 			this.navigation.allowCourseAdd = true;
+			this.navigation.updateAvailable();
 		}
 
 
@@ -271,30 +307,22 @@ Ext.define('NextThought.view.library.Panel', {
 
 
 	/**
-	 * If courses is true enable the my courses tab, if not don't enable it and maybe enable the books tab
+	 * Mark if we have any courses or not
 	 * @param  {boolean} courses whether or not there are courses
-	 * @return {undefined}
 	 */
 	maybeEnableCourses: function(courses) {
-		//if there are no courses
+		//is there isn't an active view or courses is the active view
+		var isActive = !this.stateObj.activeView || this.stateObj.activeView === 'mycourses';
+
 		if (!courses) {
 			this.noCourses = true;
 
 			if (this.noBooks) {
 				console.error('!!!User has no courses or books!!!');
-			} else if (this.hasBooks) {
-				//if we are empty and we have books show the books view
-				this.showMyBooks();
 			}
-
-			return;
-		}
-
-		//if we haven't already enable courses and make it the active view
-		if (!this.hasCourses) {
+		} else if (!this.hasCourses) {//if we haven't already enable courses and make it the active view if it is the active tab
 			this.hasCourses = true;
 			this.navigation.enableCourses();
-			this.showMyCourses();
 		}
 	},
 
@@ -303,7 +331,9 @@ Ext.define('NextThought.view.library.Panel', {
 		//if we already know we have books don't check again
 		if (this.hasBooks) { return; }
 
-		var isEmpty = true;
+		var isEmpty = true,
+			//if there isn't an activeView yet or books is the active view
+			isActive = !this.stateObj.activeView || this.stateObj.activeView === 'books';
 
 		//if the bookstore is set and it has items its not empty
 		if (this.bookStore && this.bookStore.getCount()) { isEmpty = false; }
@@ -321,17 +351,49 @@ Ext.define('NextThought.view.library.Panel', {
 			if (this.noCoureses) {
 				console.error('!!!User has no courses or books');
 			}
+		} else {
+			//since we haven't already enable books and if we don't have courses make it the active view
+			this.hasBooks = true;
+			this.navigation.enableBooks();
+		}
+	},
+
+
+	maybeRestoreState: function() {
+		var active = this.stateObj.activeView;
+
+		//if we tried to restore to my courses but we don't have any show my books if we have any
+		if (this.noCourses && active === 'mycourses') {
+			if (this.hasBooks) {
+				this.showMyBooks();
+			} else {
+				console.error('No Courses or Books in the library');
+			}
 
 			return;
 		}
 
-		//since we haven't already enable books and if we don't have courses make it the active view
-		this.hasBooks = true;
-		this.navigation.enableBooks();
+		//if we tried to restore to my books but we don't have any show my courses if we have any
+		if (this.noBooks && active === 'books') {
+			if (this.hasCourses) {
+				this.showMyCourses();
+			} else {
+				console.error('No Books or Courses in the library');
+			}
 
-		//if we don't have courses yet show the books view
-		if (!this.hasCourses) {
+			return;
+		}
+
+		//if we didn't try to restore a state and we have courses show my courses
+		if (this.hasCourses && !active) {
+			this.showMyCourses();
+			return;
+		}
+
+		//if we didn't try to restore a state and we have books but not courses show my books
+		if (this.hasBooks && !active) {
 			this.showMyBooks();
+			return;
 		}
 	}
 });
