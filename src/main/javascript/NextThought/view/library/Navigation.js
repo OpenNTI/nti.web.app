@@ -14,16 +14,20 @@ Ext.define('NextThought.view.library.Navigation', {
 				{ cls: 'message', html: '{message}', cn: { cls: 'ellipsis', cn: [{},{},{}] }}
 			]}
 		]},
-		{cls: 'nav-bar', cn: [
-			{cls: 'dropdown disabled', html: 'Your Courses'},
-			{cls: 'nav'},
-			{cls: 'add-courses', html: 'Add Courses'}
+		{cls: 'nav-container', cn: [
+			{cls: 'nav-bar', cn: [
+				{cls: 'dropdown disabled', html: 'Your Courses'},
+				{cls: 'nav'},
+				{cls: 'add-courses', html: 'Add Courses'}
+			]}
 		]}
 	]}),
 
 	renderSelectors: {
 		dropdownEl: '.dropdown',
 		navEl: '.nav',
+		navBarEl: '.nav-bar',
+		navContainerEl: '.nav-container',
 		addEl: '.add-courses'
 	},
 
@@ -97,6 +101,8 @@ Ext.define('NextThought.view.library.Navigation', {
 		this.mon(this.dropdownEl, 'click', 'showViewMenu', this);
 
 		this.mon(this.addEl, 'click', 'showAvailable', this);
+
+		this.navContainerEl.setHeight(this.navBarEl.getHeight());
 	},
 
 
