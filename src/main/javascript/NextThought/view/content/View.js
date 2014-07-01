@@ -556,7 +556,7 @@ Ext.define('NextThought.view.content.View', {
 		this.reader.clearLocation();
 		return this._setBundle(bundle, tab)
 				.then(function() {
-					var e, ntiid, title;
+					var e, ntiid, title, result = me;
 
 					if (bundle.isCourse) {
 						me.showCourseNavigation();
@@ -565,8 +565,14 @@ Ext.define('NextThought.view.content.View', {
 						title = e.get('Title');
 					} else {
 						me.showContentReader();
-						ntiid = bundle.get('ContentBundles')[0].get('NTIID');
+						ntiid = bundle.getFirstPage();
 						title = bundle.get('Title');
+						result = new Promise(function(fulfill, reject) {
+							me.fireEvent('set-last-location-or-root', ntiid, function(ntiid, reader, error) {
+								if (error) { return reject(error); }
+								fulfill(me);
+							});
+						});
 					}
 
 
@@ -577,7 +583,7 @@ Ext.define('NextThought.view.content.View', {
 						bundle: bundle.getId()
 					});
 
-					return me;
+					return result;
 				});
 	},
 
@@ -658,20 +664,20 @@ Ext.define('NextThought.view.content.View', {
 			forum = disc.forum,
 			location = ContentUtils.getLocation(ntiid),
 			isCourse = location && location.isCourse,
-			bundle,
+			course,
 			me = this;
 
 		tab = (tab === 'null') ? null : tab;
 
-		function setupCourseUI(instance) {
+		function setupUI(bundle) {
 				//if its a course catalog entry, get the course instance, otherwise, just pass it along.
-				instance = instance && (instance.get('CourseInstance') || instance);
-				return me._setBundle(instance, tab)
+				bundle = bundle && (bundle.get('CourseInstance') || bundle);
+				return me._setBundle(bundle, tab)
 						.then(function() {
-							me.fireEvent('track-from-restore', instance);
+							me.fireEvent('track-from-restore', bundle);
 							me.courseForum.restoreState(forum, topic);
 							me.courseNav.restoreState(st);
-							return instance;//restore the promise value
+							return bundle;//restore the promise value
 						});
 		}
 
@@ -702,9 +708,13 @@ Ext.define('NextThought.view.content.View', {
 			return Promise.reject(reason);
 		}
 
+		function fallback() {
+			return location && location.title;
+		}
+
 		//We dont care if this is just content... if it doesn't have a course, we do not want to fail
-		bundle = isCourse && CourseWareUtils.courseForNtiid(ntiid);
-		if (isCourse && (!bundle || !bundle.findByMyCourseInstance)) {
+		course = isCourse && CourseWareUtils.courseForNtiid(ntiid);
+		if (isCourse && (!course || !course.findByMyCourseInstance)) {
 			return Promise.reject('No course for ntiid:' + ntiid)
 				.fail(noCourse)
 				.fail(setTab)
@@ -713,11 +723,11 @@ Ext.define('NextThought.view.content.View', {
 				});
 		}
 
-		return (bundle ?
-					CourseWareUtils.findCourseBy(bundle.findByMyCourseInstance()) :
-					Promise.resolve(location && location.title)//find bundle or fall back to content package
+		return (course ?
+					CourseWareUtils.findCourseBy(course.findByMyCourseInstance()) :
+					ContentManagementUtils.findBundle(ntiid).fail(fallback)
 			)
-				.then(setupCourseUI,/*or*/ noCourse)
+				.then(setupUI,/*or*/ noCourse)
 				.then(setReader, /*or*/ setTab)
 				.fail(function(reason) {
 					//catch the reason... (and let the restore)
