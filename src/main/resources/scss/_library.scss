@@ -382,27 +382,28 @@
 			padding: 0 10px;
 
 			.author,.courseName {
+				text-transform: uppercase;
+				font: normal bold 0.6em/1.6em $font;
 				overflow: hidden;
 				@include ellipse();
 			}
 			.courseName {
 				text-transform: uppercase;
 				color: $tertiary-grey;
-				font: normal 600 0.6em/1.6em $font;
 			}
 
 			.author {
 				color: $primary-blue;
-				font: normal 300 0.85em/1.6em $font;
 			}
 
 			.author:not(:empty):not(.provider-id)::before{content: 'By ';}
+			
 			.title {
-				font: normal 600 1.2em/1.1em "Open Sans Condensed";
-			}
-
-			.title {
+				font: normal 700 1em/1.1em "Open Sans Condensed";
+				color: $secondary-grey;
 				max-height: 2em;
+				margin-bottom: 10px;
+				text-transform: uppercase;
 			}
 
 			.description{
@@ -567,7 +568,6 @@
 		display: none;
 	}
 }
-
 
 .available-courses-tabpanel {
 	background-color: $panel-background;
