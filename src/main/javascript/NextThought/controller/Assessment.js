@@ -235,7 +235,7 @@ Ext.define('NextThought.controller.Assessment', {
 				safelyCall('setGradingResult', widget, result);
 
 				if (progress.instance) {
-					progress.courseChanged(progress.instance);
+					progress.bundleChanged(progress.instance);
 				}
 			},
 			failure: function() {

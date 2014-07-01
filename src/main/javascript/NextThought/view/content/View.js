@@ -529,9 +529,9 @@ Ext.define('NextThought.view.content.View', {
 
 		return Promise.all(subs.map(
 			function(e) {
-				if (e.courseChanged) {
+				if (e.bundleChanged) {
 					try {
-						return e.courseChanged(bundle);
+						return e.bundleChanged(bundle);
 					} catch (er) {
 						console.error(er.stack || er.message || er);
 						return null;

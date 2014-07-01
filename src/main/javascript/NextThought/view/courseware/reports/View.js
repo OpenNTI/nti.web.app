@@ -100,11 +100,11 @@ Ext.define('NextThought.view.courseware.reports.View', {
 	},
 
 
-	courseChanged: function(course) {
+	bundleChanged: function(bundle) {
 		var me = this,
-			entry = course && course.getCourseCatalogEntry();
+			entry = bundle && bundle.getCourseCatalogEntry && bundle.getCourseCatalogEntry();
 
-		me.reportLinks = course && course.getReportLinks();
+		me.reportLinks = bundle && bundle.getReportLinks && bundle.getReportLinks();
 
 		if (Ext.isEmpty(me.reportLinks) || !isFeature('analytic-reports')) {
 			me.hasLinks = false;

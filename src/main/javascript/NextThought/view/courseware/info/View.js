@@ -35,9 +35,9 @@ Ext.define('NextThought.view.courseware.info.View', {
 	},
 
 
-	courseChanged: function(courseInstance) {
+	bundleChanged: function(bundle) {
 		var me = this,
-			catalogEntry = courseInstance && courseInstance.getCourseCatalogEntry();
+			catalogEntry = bundle && bundle.getCourseCatalogEntry && bundle.getCourseCatalogEntry();
 
 		function update(info, status, showRoster) {
 			me.hasInfo = !!info;
@@ -47,7 +47,7 @@ Ext.define('NextThought.view.courseware.info.View', {
 
 			me.body.getLayout().setActiveItem('info');//always reset
 			me.body.getComponent('info').setContent(info, status);
-			me.body.getComponent('roster').setContent(showRoster && courseInstance);
+			me.body.getComponent('roster').setContent(showRoster && bundle);
 			me.navigation.setContent(info, status, showRoster);
 		}
 
@@ -58,8 +58,8 @@ Ext.define('NextThought.view.courseware.info.View', {
 		this.hasInfo = !!catalogEntry;
 		this.infoOnly = catalogEntry && catalogEntry.get('Preview') === true;
 
-		if (courseInstance) {
-			return courseInstance.getWrapper()
+		if (bundle && bundle.getWrapper) {
+			return bundle.getWrapper()
 				.done(function(e) {
 					update(catalogEntry, e.get('Status'), !!e.isAdministrative);
 				})

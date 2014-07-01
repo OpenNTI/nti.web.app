@@ -90,11 +90,11 @@ Ext.define('NextThought.view.courseware.forum.View', {
 	},
 
 
-	courseChanged: function(courseInstance) {
+	bundleChanged: function(bundle) {
 		this.hasBoard = true;
 
 		this.onceLoaded = new Deferred();
 
-		this.setForumList(courseInstance && courseInstance.get('Discussions'));
+		this.setForumList(bundle && bundle.get('Discussions'));
 	}
 });

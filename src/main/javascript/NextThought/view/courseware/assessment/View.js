@@ -51,7 +51,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 	},
 
 
-	courseChanged: function(instance) {
+	bundleChanged: function(instance) {
 		var me = this;
 		me.showTab = true;
 		delete me.finished;

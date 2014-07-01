@@ -67,7 +67,7 @@ Ext.define('NextThought.view.courseware.View', {
 	},
 
 
-	courseChanged: function(courseInstance) {
+	bundleChanged: function(courseInstance) {
 		if (this.currentCourse === courseInstance) {
 			return;
 		}

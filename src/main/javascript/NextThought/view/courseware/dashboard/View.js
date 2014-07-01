@@ -21,8 +21,8 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 	},
 
 
-	courseChanged: function(courseInstance) {
-		var courseId = courseInstance && courseInstance.getId(),
+	bundleChanged: function(bundle) {
+		var courseId = bundle && bundle.getId(),
 			l, toc, course, courseNavStore,
 			date = this.self.dateOverride || new Date();//now
 
@@ -31,18 +31,18 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 			this.tileContainer.removeAll(true);
 		}
 
-		if (!courseInstance || $AppConfig.disableDashboard) {
+		if (!bundle || $AppConfig.disableDashboard) {
 			return;
 		}
 
 		this.course = courseId;
 
-		l = courseInstance.__getLocationInfo();
+		l = bundle.__getLocationInfo();
 
 		if (l && l !== ContentUtils.NO_LOCATION) {
 			toc = l.toc.querySelector('toc');
 			course = toc && toc.querySelector('course');
-			courseNavStore = courseInstance.getNavigationStore();
+			courseNavStore = bundle.getNavigationStore && bundle.getNavigationStore();
 			if (!courseNavStore) {
 				return;
 			}

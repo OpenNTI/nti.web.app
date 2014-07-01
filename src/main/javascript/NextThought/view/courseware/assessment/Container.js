@@ -153,12 +153,12 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 	},
 
 
-	courseChanged: function() {
+	bundleChanged: function() {
 		var args = arguments;
 		this.showRoot();
 		this.activeCourseSetup = Promise.all(this.items.items.map(function(o) {
 			try {
-				return o.courseChanged.apply(o, args);
+				return o.bundleChanged.apply(o, args);
 			} catch (e) {
 				console.error(e.stack || e.message || e);
 				return Promise.reject(e);
