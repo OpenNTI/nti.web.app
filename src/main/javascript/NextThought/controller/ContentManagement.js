@@ -130,11 +130,13 @@ Ext.define('NextThought.controller.ContentManagement', {
 							   .filter(function(b) {return p(ntiid) === p(b.get('NTIID'));}).length > 0;
 			}
 
-			return Ext.getStore('ContentBundles').onceLoaded()
+			return Promise.reject('Disabled');
+
+			/*return Ext.getStore('ContentBundles').onceLoaded()
 					.then(function(s) {
 						var i = s.findBy(prefix);
 						return i >= 0 ? s.getAt(i) : Promise.reject('Not Found');
-					});
+					});*/
 		}
 	};
 });
