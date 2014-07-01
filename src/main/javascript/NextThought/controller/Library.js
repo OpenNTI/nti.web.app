@@ -109,6 +109,8 @@ Ext.define('NextThought.controller.Library', {
 
 
 	libraryLoaded: function() {
-		this.getLibraryView().getPanel().setBookStore(Ext.getStore('ContentBundles'));
+		this.getLibraryView().getPanel().setBookStore(
+				Ext.getStore('library'));
+				//Ext.getStore('ContentBundles'));
 	}
 });
