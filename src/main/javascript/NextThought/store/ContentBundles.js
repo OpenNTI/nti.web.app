@@ -12,7 +12,7 @@ Ext.define('NextThought.store.ContentBundles', {
 		url: 'tbd',
 		reader: {
 			type: 'json',
-			root: 'Items'
+			root: 'titles'
 		},
 
 		noCache: false,

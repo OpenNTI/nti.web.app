@@ -1,7 +1,8 @@
 Ext.define('NextThought.model.courseware.CourseInstance', {
 	extend: 'NextThought.model.Base',
 
-	isCourseInstance: true,
+	isBundle: true,
+	isCourse: true,
 
 	requires: [
 		'NextThought.store.courseware.Navigation',
@@ -14,6 +15,8 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 		{ name: 'Outline', type: 'singleItem', persist: false },
 		{ name: 'TotalEnrolledCount', type: 'int'},
 		{ name: 'Scopes', type: 'auto' },
+
+		{ name: 'Preview', type: 'bool', persist: false},
 		//UI propertied
 		{ name: 'cover', type: 'string', persist: false, defaultValue: 'missing-notset.png'}
 	],
@@ -79,6 +82,8 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 
 						Library.onceLoaded()
 							.then(me.setLibraryImage.bind(me));
+
+						me.set('Preview', rec.get('Preview'));
 
 						me.afterEdit(['NTIID']);//let views know the record "changed".
 

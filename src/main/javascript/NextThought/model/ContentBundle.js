@@ -2,6 +2,8 @@ Ext.define('NextThought.model.ContentBundle', {
 	alternateClassName: 'NextThought.model.ContentPackageBundle',
 	extend: 'NextThought.model.Base',
 
+	isBundle: true,
+
 	fields: [
 		{ name: 'ContentPackages', type: 'arrayItem' },
 		{ name: 'DCCreator', type: 'auto' },
@@ -36,27 +38,30 @@ Ext.define('NextThought.model.ContentBundle', {
 	asUIData: function() {
 		return {
 			id: this.getId(),
-			isCourse: false,
-			title: '',
-			label: '',
-			icon: ''
+			isBundle: true,
+			title: this.get('title'),
+			label: this.get('author'),
+			icon: getURL(this.get('root')) + '/presentation-assets/webapp/v1/contentpackage-landing-232x170.png'
 		};
 	},
 
 
+	__getLocationInfo: function() {
+		var locationInfo = ContentUtils.getLocation(this.get('ContentPackages')[0]);
+		//add a reference to myself so the course tiles can get the course instance form the locationInfo for now
+		if (locationInfo) {
+			locationInfo.bundle = this;
+		}
+
+		return locationInfo;
+	},
+
+
 	fireNavigationEvent: function(eventSource) {
-		var id = this.get('NTIID');
-		return new Promise(function(fulfill, reject) {
-			var txn = history.beginTransaction('book-navigation-transaction-' + guidGenerator());
-			eventSource.fireEvent('set-last-location-or-root', id, function(ntiid, reader, error) {
-				if (error) {
-					txn.abort();
-					reject(error);
-				}
-				else {
-					fulfill();
-					txn.commit();
-				}
+		var me = this;
+		return new Promise(function(fulfill) {
+			eventSource.fireEvent('bundle-selected', me, function() {
+				fulfill();
 			});
 		});
 	}

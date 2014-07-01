@@ -3,7 +3,7 @@ Ext.define('NextThought.view.library.Collection', {
 	alias: 'widget.library-collection',
 
 	ui: 'library-collection',
-	store: 'library',
+	store: 'ContentBundles',
 	cls: 'books',
 	rowSpan: 1,
 
