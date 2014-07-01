@@ -302,6 +302,14 @@
 	}
 }
 
+.x-ios {
+	.grid-item.item:hover{
+		.settings {
+			display: none !important;
+		}
+	}
+}
+
 .available-catalog, .purchasables {
 	padding: 20px 34px;
 	.collection-name {
