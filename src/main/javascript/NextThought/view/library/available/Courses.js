@@ -46,6 +46,7 @@ Ext.define('NextThought.view.library.available.Courses', {
 			ui: 'available',
 			plain: true,
 			cls: 'available-courses-tabpanel',
+			bodyCls: 'scrollable',
 			tabBar: {
 				baseCls: 'available-courses-tabbar',
 				plain: true,
