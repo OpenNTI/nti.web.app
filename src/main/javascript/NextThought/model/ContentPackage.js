@@ -18,8 +18,22 @@ Ext.define('NextThought.model.ContentPackage', {
 		{ name: 'path', type: 'string', defaultValue: ''},
 		{ name: 'sample', type: 'bool', defaultValue: false, persist: false},
 			//for filtering
-		{ name: 'isCourse', type: 'bool', defaultValue: false, persist: false}
+		{ name: 'isCourse', type: 'bool', defaultValue: false, persist: false},
+
+		{ name: 'toc', type: 'auto', persist: false}
 	],
+
+
+	constructor: function() {
+		this.callParent(arguments);
+
+		this.tocPromise = Service.request(this.get('index'))
+				.then(ContentUtils.parseXML)
+			//BEGIN: ToC Cleanup
+			//TODO: move toc code here.
+			//END: ToC Cleanup
+				.then(function(x) { this.set('toc', x); return x; }.bind(this));
+	},
 
 
 	asUIData: function() {
@@ -35,11 +49,9 @@ Ext.define('NextThought.model.ContentPackage', {
 
 	/** @deprecated Use {@link NextThought.model.courseware.CourseInstance#getScope()} instead */
 	getScope: function(scope) {
-		var toc = this.toc,
-			entities = toc && toc.querySelectorAll('scope[type="' + scope + '"] entry'),
+		var toc = this.get('toc'),
+			entities = (toc && toc.querySelectorAll('scope[type="' + scope + '"] entry')) || [],
 			values = [];
-
-		console.warn('Legacy path');
 
 		entities.forEach(function(entity) {
 			values.push(entity.textContent.trim());
