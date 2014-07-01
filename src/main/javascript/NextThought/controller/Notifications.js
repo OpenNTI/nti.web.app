@@ -84,7 +84,23 @@ Ext.define('NextThought.controller.Notifications', {
 		}
 
 		if (change.isNotable()) {
+			if (/^DELETE/i.test(change.get('ChangeType'))) {
+				this.__remove(change, store);
+				return;
+			}
+
 			store.add(change);
 		}
+	},
+
+
+	__remove: function(event, store) {
+		var i = event.get('Item');
+		if (!i) { return; }
+		i = i.getId();
+		store.remove(store.getRange().filter(function(c) {
+				var o = c && c.get('item');
+				return i === (o && o.getId());
+			}));
 	}
 });
