@@ -670,7 +670,7 @@ Ext.define('NextThought.controller.CourseWare', {
 		} else {
 			//finally if we aren't in the course switch to it
 			this.getMainNav().updateCurrent(false, course);
-			contentView.onCourseSelected(course, 'course-forum');
+			contentView.onBundleSelected(course, 'course-forum');
 			isNavigatingToForum = true;
 		}
 
