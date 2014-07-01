@@ -55,6 +55,11 @@ Ext.define('NextThought.view.library.Navigation', {
 			this.currentView = 'books';
 			this.dropText = 'Your Books';
 		}
+
+		if (this.rendered) {
+			this.dropdownEl.update(this.dropText);
+			this.updateAvailable();
+		}
 	},
 
 

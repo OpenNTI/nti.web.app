@@ -387,12 +387,14 @@ Ext.define('NextThought.view.library.Panel', {
 		//if we didn't try to restore a state and we have courses show my courses
 		if (this.hasCourses && !active) {
 			this.showMyCourses();
+			this.navigation.setDefault('courses');
 			return;
 		}
 
 		//if we didn't try to restore a state and we have books but not courses show my books
 		if (this.hasBooks && !active) {
 			this.showMyBooks();
+			this.navigation.setDefault('books');
 			return;
 		}
 	}
