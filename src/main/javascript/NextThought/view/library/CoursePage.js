@@ -51,8 +51,8 @@ Ext.define('NextThought.view.library.CoursePage', {
 				}
 		 */
 		var	me = this,
-			bins = {upcoming: []},
-			years = [],
+			bins = {upcoming: {}},
+			years = [], upcoming = [],
 			semesters = Ext.Object.getValues(getString('months'));
 
 		function getSemester(date) {
@@ -64,27 +64,36 @@ Ext.define('NextThought.view.library.CoursePage', {
 				start = catalog.get('StartDate'),
 				year = start.getFullYear(),
 				semester = catalog.getSemester(),
-				yearBin = bins[year],
+				yearBin = bins[year], list = years, bin = bins,
 				semesterBin = yearBin && yearBin[semester];
 
+			//if it hasn't started yet put it in an upcoming bin
+			if (start > new Date()) {
+				yearBin = bins.upcoming[year];
+				semesterBin = yearBin && yearBin[semester];
+				list = upcoming;
+				bin = bins.upcoming;
+			}
+
+			//if we already have a bin for the year
 			if (yearBin) {
+				//if we already have a bin in that year for the semester
 				if (semesterBin) {
 					semesterBin.push(course);
 				} else {
+					//create a bin for that semester
 					semesterBin = yearBin[semester] = [course];
 				}
 			} else {
-				years.push(year);
-				yearBin = bins[year] = {};
+				//create a bin for that year
+				list.push(year);
+				yearBin = bin[year] = {};
 				semesterBin = yearBin[semester] = [course];
-			}
-
-			if (start > new Date()) {
-				yearBin.label = 'upcoming';
 			}
 		});
 
 		years.sort().reverse();
+		upcoming.sort().reverse();
 		semesters = ((semesters && Ext.Array.unique(semesters)) || []).reverse();
 
 
@@ -95,6 +104,21 @@ Ext.define('NextThought.view.library.CoursePage', {
 				if (bin[semester] && bin[semester].length) {
 					me.add({
 						label: bin.label || me.groupLabel,
+						group: semester + ' ' + year,
+						store: me.getCourseStore(bin[semester])
+					});
+				}
+			});
+		});
+
+
+		upcoming.forEach(function(year) {
+			var bin = bins.upcoming[year];
+
+			semesters.forEach(function(semester) {
+				if (bin[semester] && bin[semester].length) {
+					me.add({
+						label: 'upcoming',
 						group: semester + ' ' + year,
 						store: me.getCourseStore(bin[semester])
 					});
