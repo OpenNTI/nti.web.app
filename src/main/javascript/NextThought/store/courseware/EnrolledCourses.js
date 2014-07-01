@@ -56,22 +56,31 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 					return;
 				}
 
-				Promise.all(Ext.Array.map(
-						me.getRange(),
-						function(r) {
-							return r.__precacheEntry();
-						})).then(
-					function() {
-						sort(me);
-						p.fulfill(me);
-					},
-					function(reason) {
-						//don't send fulfilled promise values with the error.
-						reason = reason.map(function(o) {
-							return o && o.isModel ? true : o;
+				var dead = [],
+					bad = dead.push.bind(dead);
+
+				function prune() {
+					if (!dead.length) {return;}
+
+					console.warn('Ignoring Courses that cannot resolve...', dead);
+					me.remove(dead);
+				}
+
+				Promise.all(Ext.Array.map(me.getRange(), function(r) {
+							return r.__precacheEntry().fail(function() { bad(r); });
+						}))
+						.then(prune)
+						.then(function() {
+							sort(me);
+							p.fulfill(me);
+						},
+						function(reason) {
+							//don't send fulfilled promise values with the error.
+							reason = reason.map(function(o) {
+								return o && o.isModel ? true : o;
+							});
+							p.reject(reason);
 						});
-						p.reject(reason);
-					});
 			}
 		});
 	},
