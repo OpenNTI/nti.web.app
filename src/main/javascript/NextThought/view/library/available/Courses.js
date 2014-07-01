@@ -75,7 +75,7 @@ Ext.define('NextThought.view.library.available.Courses', {
 		this.tabpanel = this.down('tabpanel');
 
 		if (this.upcoming) {
-			this.updateUpcoming(this.upcoming);
+			this.tabpanel.setActiveTab(this.updateUpcoming(this.upcoming));
 		}
 
 		if (this.current) {
@@ -128,12 +128,14 @@ Ext.define('NextThought.view.library.available.Courses', {
 				cmp.store.loadRecords(courses);
 			}
 		} else {
-			this.tabpanel.add({
+			cmp = this.tabpanel.add({
 				xtype: 'course-catalog-collection',
 				store: this.buildStore(courses),
 				title: 'current'
 			});
 		}
+
+		return cmp;
 	},
 
 
@@ -147,12 +149,14 @@ Ext.define('NextThought.view.library.available.Courses', {
 				cmp.store.loadRecords(courses);
 			}
 		} else {
-			this.tabpanel.add({
+			cmp = this.tabpanel.add({
 				xtype: 'course-catalog-collection',
 				store: this.buildStore(courses),
 				title: 'upcoming'
 			});
 		}
+
+		return cmp;
 	},
 
 
@@ -166,11 +170,13 @@ Ext.define('NextThought.view.library.available.Courses', {
 				cmp.store.loadRecords(courses);
 			}
 		} else {
-			this.tabpanel.add({
+			cmp = this.tabpanel.add({
 				xtype: 'course-catalog-collection',
 				store: this.buildStore(courses),
 				title: 'archived'
 			});
 		}
+
+		return cmp;
 	}
 });
