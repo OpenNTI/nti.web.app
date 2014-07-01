@@ -46,7 +46,7 @@ Ext.define('NextThought.view.content.Navigation', {
 			click: {element: 'tabEl', fn: 'onUp'}
 		});
 		this.on({
-			mouseover: {element: 'tocEl', fn: 'showTableOfContents'}
+			click: {element: 'tocEl', fn: 'showTableOfContents'}
 		});
 
 		this.tocFlyout = Ext.widget({ xtype: 'table-of-contents-flyout', ownerButton: this });
@@ -75,7 +75,7 @@ Ext.define('NextThought.view.content.Navigation', {
 
 
 	showTableOfContents: function() {
-		this.tocFlyout.startShow(this.el, 'tl-tl', [0, 0]);
+		this.tocFlyout.showBy(this.el, 'tl-tl', [0, 0]);
 	},
 
 
