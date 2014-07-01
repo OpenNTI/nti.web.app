@@ -23,7 +23,9 @@ Ext.define('NextThought.model.ContentBundle', {
 		{ name: 'root', type: 'string' },
 		{ name: 'subjects', type: 'auto' },
 		{ name: 'title', type: 'string' },
-		{ name: 'Title', type: 'string', mapping: 'title' }
+		{ name: 'Title', type: 'string', mapping: 'title' },
+
+		{ name: 'icon', type: 'string' }
 	],
 
 
@@ -36,14 +38,40 @@ Ext.define('NextThought.model.ContentBundle', {
 	},
 
 
+	constructor: function() {
+		this.callParent(arguments);
+		this.__setImage();
+	},
+
+
 	asUIData: function() {
 		return {
 			id: this.getId(),
 			isBundle: true,
 			title: this.get('title'),
 			label: this.get('author'),
-			icon: getURL(this.get('root')) + '/presentation-assets/webapp/v1/contentpackage-landing-232x170.png'
+			icon: this.get('icon')
 		};
+	},
+
+
+	__setImage: function() {
+		var me = this,
+			root = this.get('root'),
+			img = new Image();
+
+		if (!Ext.isEmpty(me.get('cover'))) {
+			return;
+		}
+
+		me.set('icon', getURL(root) + '/presentation-assets/webapp/v1/contentpackage-landing-232x170.png');
+
+		img.onerror = function() {
+			var e = me.get('ContentPackages')[0];
+			me.set('icon', getURL(e.get('icon')));
+		};
+
+		img.src = me.get('icon');
 	},
 
 
