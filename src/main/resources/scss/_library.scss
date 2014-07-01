@@ -591,11 +591,15 @@
 				text-transform: uppercase;
 			}
 
-			&.x-tab-active, &:hover {
+			&.x-tab-active, &.x-tab-active:hover{
 				color: white;
 				background-color: $primary-blue;
 				box-shadow: -1px 0 0 0 #e3e3e3,
 					1px 0 0 0 #e3e3e3;
+			}
+
+			&:hover {
+				background-color: #ccc;
 			}
 		}
 	}
