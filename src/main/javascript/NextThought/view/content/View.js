@@ -459,14 +459,14 @@ Ext.define('NextThought.view.content.View', {
 
 
 		//TEMP:
-		var sc = Ext.bind(this._setCourse, this, ['passive'], true);
+		var sc = Ext.bind(this._setBundle, this, ['passive'], true);
 		if (this.isPartOfCourse(pageInfo)) {
 			this.getCourseInstance(pageInfo).then(sc, function(reason) {
 				console.error('Could not set course from pageInfo: ', reason);
 			});
 		} else {
 			console.debug('Removing Course, map did not contain ID?');
-			this._setCourse(null);
+			this._setBundle(null);
 		}
 
 		//TEMP:
@@ -482,8 +482,8 @@ Ext.define('NextThought.view.content.View', {
 	},
 
 
-	_setCourse: function(instance, tab) {
-		if (this.currentCourse === instance) {
+	_setBundle: function(bundle, tab) {
+		if (this.currentCourse === bundle) {
 			if (tab !== 'passive') {
 				tab = tab || (this.isPreview ? 'course-info' : null);
 				this.setActiveTab(tab);
@@ -491,12 +491,11 @@ Ext.define('NextThought.view.content.View', {
 			return Promise.resolve();
 		}
 
-		instance = (instance && instance.isCourseInstance && instance) || undefined; //filter all non-instance values out (eg: Title models)
+		bundle = (bundle && bundle.isBundle && bundle) || undefined; //filter all non-bundle values out (eg: Title models)
 
 		//Temporary stop gap
-		var info = instance && instance.__getLocationInfo(), me = this,
-			catalogEntry = instance && instance.getCourseCatalogEntry(),
-			preview = catalogEntry && catalogEntry.get('Preview'),
+		var info = bundle && bundle.__getLocationInfo(), me = this,
+			preview = bundle && bundle.get('Preview'),
 			background = info && info.toc && getURL(info.toc.querySelector('toc').getAttribute('background'), info.root),
 			subs = [
 				this.courseNav,
@@ -507,14 +506,14 @@ Ext.define('NextThought.view.content.View', {
 				this.courseReports
 			];
 
-		this.currentCourse = instance;
+		this.currentCourse = bundle;
 		//this.reader.clearLocation();
 
 		this.setBackground(background);
-		this.enableTabs(preview ? [] : !!instance);
+		this.enableTabs(preview ? [] : !!bundle);
 
 		if (tab !== 'passive') {
-			if (instance) {
+			if (bundle && bundle.getOutline) {
 				this.showCourseNavigation();
 			} else {
 				this.showContentReader();
@@ -531,7 +530,12 @@ Ext.define('NextThought.view.content.View', {
 		return Promise.all(subs.map(
 			function(e) {
 				if (e.courseChanged) {
-					return e.courseChanged(instance);
+					try {
+						return e.courseChanged(bundle);
+					} catch (er) {
+						console.error(er.stack || er.message || er);
+						return null;
+					}
 				}
 			}))
 			.done(function() {
@@ -539,32 +543,42 @@ Ext.define('NextThought.view.content.View', {
 
 				//force this to blank out if it was unset
 				me.pushState({
-					course: instance && instance.getId(),
+					bundle: bundle && bundle.getId(),
 					activeTab: tab
 				});
 			});
 	},
 
 
-	onCourseSelected: function(instance, tab) {
+	onBundleSelected: function(bundle, tab) {
 		var me = this;
 		//Because courses still use location, it needs to be cleared before setting the new one
 		this.reader.clearLocation();
-		return this._setCourse(instance, tab)
-			.then(function() {
-				me.showCourseNavigation();
+		return this._setBundle(bundle, tab)
+				.then(function() {
+					var e, ntiid, title;
 
-				var e = instance.getCourseCatalogEntry(),
-					ntiid = e.get('ContentPackageNTIID');
-				me.setTitle(e.get('Title'));
-				me.pushState({
-					//dirty, i know... TODO: track last content course was at, and restore that.
-					location: PersistentStorage.getProperty('last-location-map', ntiid, ntiid),
-					course: instance.getId()
+					if (bundle.isCourse) {
+						me.showCourseNavigation();
+						e = bundle.getCourseCatalogEntry();
+						ntiid = e.get('ContentPackageNTIID');
+						title = e.get('Title');
+					} else {
+						me.showContentReader();
+						ntiid = bundle.get('ContentBundles')[0].get('NTIID');
+						title = bundle.get('Title');
+					}
+
+
+					me.setTitle(title);
+					me.pushState({
+						//dirty, i know... TODO: track last content course was at, and restore that.
+						location: PersistentStorage.getProperty('last-location-map', ntiid, ntiid),
+						bundle: bundle.getId()
+					});
+
+					return me;
 				});
-
-				return me;
-			});
 	},
 
 
@@ -644,7 +658,7 @@ Ext.define('NextThought.view.content.View', {
 			forum = disc.forum,
 			location = ContentUtils.getLocation(ntiid),
 			isCourse = location && location.isCourse,
-			course,
+			bundle,
 			me = this;
 
 		tab = (tab === 'null') ? null : tab;
@@ -652,7 +666,7 @@ Ext.define('NextThought.view.content.View', {
 		function setupCourseUI(instance) {
 				//if its a course catalog entry, get the course instance, otherwise, just pass it along.
 				instance = instance && (instance.get('CourseInstance') || instance);
-				return me._setCourse(instance, tab)
+				return me._setBundle(instance, tab)
 						.then(function() {
 							me.fireEvent('track-from-restore', instance);
 							me.courseForum.restoreState(forum, topic);
@@ -689,8 +703,8 @@ Ext.define('NextThought.view.content.View', {
 		}
 
 		//We dont care if this is just content... if it doesn't have a course, we do not want to fail
-		course = isCourse && CourseWareUtils.courseForNtiid(ntiid);
-		if (isCourse && (!course || !course.findByMyCourseInstance)) {
+		bundle = isCourse && CourseWareUtils.courseForNtiid(ntiid);
+		if (isCourse && (!bundle || !bundle.findByMyCourseInstance)) {
 			return Promise.reject('No course for ntiid:' + ntiid)
 				.fail(noCourse)
 				.fail(setTab)
@@ -699,9 +713,9 @@ Ext.define('NextThought.view.content.View', {
 				});
 		}
 
-		return (course ?
-					CourseWareUtils.findCourseBy(course.findByMyCourseInstance()) :
-					Promise.resolve(location && location.title)
+		return (bundle ?
+					CourseWareUtils.findCourseBy(bundle.findByMyCourseInstance()) :
+					Promise.resolve(location && location.title)//find bundle or fall back to content package
 			)
 				.then(setupCourseUI,/*or*/ noCourse)
 				.then(setReader, /*or*/ setTab)

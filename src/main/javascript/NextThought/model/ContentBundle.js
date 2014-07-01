@@ -22,7 +22,8 @@ Ext.define('NextThought.model.ContentBundle', {
 		{ name: 'publisher', type: 'string' },
 		{ name: 'root', type: 'string' },
 		{ name: 'subjects', type: 'auto' },
-		{ name: 'title', type: 'string' }
+		{ name: 'title', type: 'string' },
+		{ name: 'Title', type: 'string', mapping: 'title' }
 	],
 
 

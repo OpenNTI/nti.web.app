@@ -95,7 +95,8 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 		me.instanceId = instance && instance.getId();
 		me.instance = instance;
 
-		if (!instance) {
+		if (!instance || !instance.getWrapper) {
+			resetView(true);
 			return Promise.resolve();
 		}
 

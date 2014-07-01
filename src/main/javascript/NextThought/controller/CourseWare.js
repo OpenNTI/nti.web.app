@@ -500,7 +500,7 @@ Ext.define('NextThought.controller.CourseWare', {
 		try {
 			this.getMainNav().updateCurrent(false, instance);
 			view = this.getContentView();
-			view.onCourseSelected(instance)
+			view.onBundleSelected(instance)
 				.then(callback)
 				.always(end);
 			return true;
