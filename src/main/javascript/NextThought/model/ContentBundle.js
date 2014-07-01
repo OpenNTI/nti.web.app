@@ -10,6 +10,7 @@ Ext.define('NextThought.model.ContentBundle', {
 		{ name: 'DCDescription', type: 'string' },
 		{ name: 'DCTitle', type: 'string' },
 
+		{ name: 'Discussions', type: 'singleItem', persist: false },
 		{ name: 'author', type: 'DCCreatorToAuthor', mapping: 'DCCreator'},
 
 		{ name: 'PlatformPresentationResources', type: 'auto' },
@@ -83,6 +84,12 @@ Ext.define('NextThought.model.ContentBundle', {
 		}
 
 		return locationInfo;
+	},
+
+
+	getFirstPage: function() {
+		var e = this.get('ContentPackages')[0];
+		return e && e.get('NTIID');
 	},
 
 
