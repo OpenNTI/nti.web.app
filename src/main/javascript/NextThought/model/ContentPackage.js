@@ -57,7 +57,8 @@ Ext.define('NextThought.model.ContentPackage', {
 			Ext.Error.raise('No Scope yet.');
 		}
 
-		entities.forEach(function(entity) {
+		//entities is a node list so it doesn't have a forEach
+		Ext.each(entities, function(entity) {
 			values.push(entity.textContent.trim());
 		});
 
