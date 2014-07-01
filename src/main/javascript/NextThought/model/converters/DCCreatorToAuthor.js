@@ -5,7 +5,7 @@ Ext.define('NextThought.model.converters.DCCreatorToAuthor', {
 	DCCREATORTOAUTHOR: {
 		type: 'DCCreatorToAuthor',
 		convert: function(v) {
-			return v.join(', ');
+			return v && v.join(', ');
 		},
 		sortType: 'none'
 	}

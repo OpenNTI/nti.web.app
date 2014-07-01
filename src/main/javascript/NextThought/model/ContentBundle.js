@@ -8,6 +8,8 @@ Ext.define('NextThought.model.ContentBundle', {
 		{ name: 'DCDescription', type: 'string' },
 		{ name: 'DCTitle', type: 'string' },
 
+		{ name: 'author', type: 'DCCreatorToAuthor', mapping: 'DCCreator'},
+
 		{ name: 'PlatformPresentationResources', type: 'auto' },
 		{ name: 'contributors', type: 'auto' },
 		{ name: 'created', type: 'ISODate' },
@@ -20,6 +22,15 @@ Ext.define('NextThought.model.ContentBundle', {
 		{ name: 'subjects', type: 'auto' },
 		{ name: 'title', type: 'string' }
 	],
+
+
+	statics: {
+		fromPackage: function(contentPackage) {
+			var id = contentPackage.get('NTIID') + '-auto-bundle';
+			return this.create(
+					Ext.applyIf({ ContentPackages: [contentPackage], href: '/' }, contentPackage.raw), id);
+		}
+	},
 
 
 	asUIData: function() {
