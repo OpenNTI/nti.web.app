@@ -1,4 +1,3 @@
-
 Ext.define('NextThought.view.content.TableOfContents', {
 	extend: 'Ext.view.View',
 	alias: 'widget.table-of-contents-flyout',
@@ -32,6 +31,7 @@ Ext.define('NextThought.view.content.TableOfContents', {
 	]),
 
 	renderSelectors: {
+		headerEl: '.header',
 		formEl: 'form.search',
 		clearEl: '.search button',
 		filterEl: '.search input',
@@ -65,6 +65,7 @@ Ext.define('NextThought.view.content.TableOfContents', {
 
 
 		this.on({
+			headerEl: {click: 'hide'},
 			clearEl: {click: 'onFilter', buffer: 1},
 			filterEl: {
 				keypress: 'onFilter',
