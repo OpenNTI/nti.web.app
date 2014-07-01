@@ -75,7 +75,7 @@ Ext.define('NextThought.view.courseware.View', {
 		this.clear();
 		this.currentCourse = courseInstance;
 
-		if (!courseInstance) {
+		if (!courseInstance || !courseInstance.getNavigationStore) {
 			delete this.currentCourse;
 			return;
 		}

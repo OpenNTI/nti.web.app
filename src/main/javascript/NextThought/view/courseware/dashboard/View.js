@@ -44,6 +44,8 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 			course = toc && toc.querySelector('course');
 			courseNavStore = bundle.getNavigationStore && bundle.getNavigationStore();
 			if (!courseNavStore) {
+				this.hasItems = false;
+				this.fireEvent('hide-dashboard-tab', this);
 				return;
 			}
 
