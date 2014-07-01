@@ -35,11 +35,13 @@ Ext.define('NextThought.model.ContentPackage', {
 
 	/** @deprecated Use {@link NextThought.model.courseware.CourseInstance#getScope()} instead */
 	getScope: function(scope) {
-		var toc = (this.toc = this.toc || Library.getToc(this)),
+		var toc = this.toc,
 			entities = toc && toc.querySelectorAll('scope[type="' + scope + '"] entry'),
 			values = [];
 
-		Ext.each(entities, function(entity) {
+		console.warn('Legacy path');
+
+		entities.forEach(function(entity) {
 			values.push(entity.textContent.trim());
 		});
 

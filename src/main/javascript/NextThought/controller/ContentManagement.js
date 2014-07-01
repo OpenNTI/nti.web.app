@@ -7,7 +7,8 @@ Ext.define('NextThought.controller.ContentManagement', {
 
 
 	stores: [
-		'ContentBundles'
+		'ContentBundles',
+		'ContentPackages'
 	],
 
 
@@ -17,7 +18,6 @@ Ext.define('NextThought.controller.ContentManagement', {
 
 	onSessionReady: function() {
 		var store = this.__setupStore('ContentBundles', (Service.getCollection('VisibleContentBundles', 'ContentBundles') || {}).href);
-
 		if (store) {
 			store.load();
 		}
@@ -26,12 +26,10 @@ Ext.define('NextThought.controller.ContentManagement', {
 
 	__setupStore: function(storeId, source) {
 		var store = Ext.getStore(storeId);
-		if (Ext.isEmpty(source)) {
-			console.warn('ContentManagement: Not setting up store: ' + storeId + ', no source given');
-			store.destroy();
-			return null;
-		}
 		store.proxy.url = getURL(source);
+		if (Ext.isEmpty(source)) {
+			store.load = function() { this.fireEvent('load', this, []); };
+		}
 		return store;
 	}
 });
