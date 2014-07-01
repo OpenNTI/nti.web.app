@@ -91,7 +91,7 @@ Ext.define('NextThought.view.library.Panel', {
 				id: 'current-courses-page',
 				groupLabel: 'current',
 				courses: this.currentCourses || [],
-				emptyText: 'You are not currently enrolled an any courses'
+				emptyText: 'You are not currently enrolled in any courses'
 			},
 			{
 				xtype: 'library-view-course-page',
@@ -267,10 +267,6 @@ Ext.define('NextThought.view.library.Panel', {
 		this.currentAvailable = current;
 		this.upcomingAvailable = upcoming;
 		this.archivedAvailable = archived;
-
-		if (this.availableWin) {
-			thia.availableWin.setCourses(current, upcoming, acrhived);
-		}
 	},
 
 
