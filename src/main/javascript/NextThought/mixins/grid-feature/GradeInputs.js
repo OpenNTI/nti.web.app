@@ -120,6 +120,11 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 		v = v && v.split(' ')[0];
 
 		if (v !== value) {
+			//if there's no grade and no value don't bother creating one
+			if (!grade && !value) {
+				return;
+			}
+
 			Ext.fly(view.getNode(record)).setStyle({opacity: '0.3'});
 
 			if (!grade) {
