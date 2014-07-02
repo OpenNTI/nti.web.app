@@ -37,6 +37,7 @@ Ext.define('NextThought.model.courseware.Grade', {
 		return true;
 	},
 
+	isModifiable: function() { return true; },
 
 	save: function(config) {
 		function failed() {
