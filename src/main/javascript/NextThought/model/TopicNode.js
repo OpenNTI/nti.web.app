@@ -61,17 +61,53 @@ Ext.define('NextThought.model.TopicNode', {
 
 
 	matches: function(substring) {
-		var re;
+		var re, rootId = this.get('NTIID'),
+			matchingMap = {}, keys,
+			children = this.get('tocNode').querySelectorAll('topic');
+
 		try {
 			try {
 				re = substring && new RegExp(substring, 'i');
 			} catch (badexp) {
-				re = new RegExp(RegExp.escape(substring), 'i');//if it doesn't compile as an expresion, treat it literally.
+				re = new RegExp(RegExp.escape(substiring), 'i');
 			}
-			return !re || re.test(this.get('label'));
 		} catch (e) {
-			return false;
+			console.error('Failed to build matching regexp for toc search:', e);
+			return [];
 		}
+
+		if (!re) {
+			return [];
+		}
+
+		function addParents(node) {
+			var id = node.getAttribute('ntiid');
+
+			if (id === rootId || matchingMap[id]) { return; }
+
+			matchingMap[id] = true;
+			addParents(node.parentNode);
+		}
+
+		children = children ? Array.prototype.slice.call(children) : [];
+
+		children.forEach(function(node) {
+			var id = node.getAttribute('ntiid');
+
+			//if we have been matched already don't check again
+			if (matchingMap[id]) { return; }
+
+			if (re.test(node.getAttribute('label'))) {
+				matchingMap[id] = true;
+				addParents(node.parentNode);
+			}
+		});
+
+		if (Object.keys(matchingMap).length || re.test(this.get('label'))) {
+			matchingMap[rootId] = true;
+		}
+
+		return matchingMap;
 	},
 
 

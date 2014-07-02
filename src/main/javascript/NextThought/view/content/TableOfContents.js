@@ -88,8 +88,16 @@ Ext.define('NextThought.view.content.TableOfContents', {
 				} else {
 					this.store.filter({
 						id: 'search',
+						matchingIds: {},
 						fn: function(r) {
-							return r.matches(v);
+							//if we alread know its matching don't check again
+							if (this.matchingIds[r.get('NTIID')]) { return true; }
+
+							var matches = r.matches(v);
+
+							this.matchingIds = Ext.apply(this.matchingIds || {}, matches);
+
+							return Object.keys(matches).length;
 						}
 					});
 				}
