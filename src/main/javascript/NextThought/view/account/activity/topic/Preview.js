@@ -123,9 +123,15 @@ Ext.define('NextThought.view.account.activity.topic.Preview', {
 		me.mon(comments, {
 			'activated-editor': function() {
 				me.openEditor = true;
+
+				wait(1)
+					.then(me.fireEvent.bind(me, 'realign'));
 			},
 			'deactivated-editor': function() {
 				delete me.openEditor;
+
+				wait(1)
+					.then(me.fireEvent.bind(me, 'realign'));
 			}
 		});
 	},
