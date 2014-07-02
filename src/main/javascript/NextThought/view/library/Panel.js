@@ -175,7 +175,7 @@ Ext.define('NextThought.view.library.Panel', {
 			xtype: 'library-view-book-page',
 			id: 'books',
 			books: this.bookStore,
-			emptyText: 'You don\'t have any books'
+			emptyText: 'You do not have any books.'
 		});
 
 		this.stateObj.activeView = 'books';
