@@ -662,7 +662,7 @@ Ext.define('NextThought.view.content.View', {
 			disc = st.discussion || {},
 			topic = disc.topic,
 			forum = disc.forum,
-			location = ContentUtils.getLocation(ntiid),
+			location = ntiid && ContentUtils.getLocation(ntiid),
 			isCourse = location && location.isCourse,
 			course,
 			me = this;
@@ -710,6 +710,14 @@ Ext.define('NextThought.view.content.View', {
 
 		function fallback() {
 			return location && location.title;
+		}
+
+		if (!location) {
+			return noCourse('No thing to do!')
+					.fail(function() {
+						//the noCourse() function returns a rejected promise... we aren't really failing, so catch the rejection and just log it.
+						console.error('State did not contain a location to restore.');
+					});
 		}
 
 		//We dont care if this is just content... if it doesn't have a course, we do not want to fail
