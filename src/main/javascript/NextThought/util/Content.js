@@ -500,17 +500,25 @@ Ext.define('NextThought.util.Content', {
 	},
 
 
+	getNTIIDFromThing: function(thing) {
+		var ntiid;
+		if (thing && thing.getAttribute) {
+			ntiid = thing.getAttribute('ntiid');
+		} else if (thing && thing.isModel) {
+			ntiid = thing.get('ContainerId') || thing.get('containerId') || thing.get('NTIID') || thing.getId();
+		}
+
+		return ntiid || thing;
+	},
+
+
 	getLineage: function(ntiid, justLabels) {
 		if (!ntiid) {
       //			Ext.Error.raise('No ntiid given');
 			return [];
 		}
 
-		if (ntiid && ntiid.getAttribute) {
-			ntiid = ntiid.getAttribute('ntiid');
-		} else if (ntiid && ntiid.isModel) {
-			ntiid = ntiid.get('ContainerId') || ntiid.get('containerId') || ntiid.get('NTIID') || ntiid.getId();
-		}
+		ntiid = this.getNTIIDFromThing(ntiid);
 
 		var leaf = this.find(ntiid) || {},
 			node = leaf.location,
