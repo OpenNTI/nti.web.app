@@ -6,7 +6,7 @@
 	//margin: 30px 0 140px 0;
 
 	.logo{
-		//top: 10%;
+		display: inline-block;
 		&::after{
 			//This file isn't publically referenced by its path on the system.
 			// The browsers will see it as "domain/resources/css/site.css" not
