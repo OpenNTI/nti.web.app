@@ -450,7 +450,7 @@ Ext.define('NextThought.controller.CourseWare', {
 
 	onBeforeContentReaderNavigation: function(ntiid) {
 		var view = this.getCourseAssignmentsView(),
-			collection = view.assignmentsCollection,
+			collection = view.assignmentsCollection, assignments,
 			currentCourse = view.instance, potentials, store, lin;
 
 		//not in a course, ignore.
@@ -465,7 +465,16 @@ Ext.define('NextThought.controller.CourseWare', {
 		potentials = collection.pageContainsAssignment(ntiid);
 		if (potentials) {
 			console.log('Go to the assignment:', potentials);
-			//call onNavigateToAssignment()?
+			assignments = collection.getAssignmentsForContainer(ntiid);
+
+			if (!Ext.isEmpty(assignments)) {
+				if (assignments.length > 1) {
+					console.error('More than one assignment for a page: ', ntiid);
+				} else {
+					this.onNavigateToAssignment(assignments[0].getId());
+				}
+			}
+
 			return false;
 		}
 

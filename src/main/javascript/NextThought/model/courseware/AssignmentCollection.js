@@ -201,5 +201,19 @@ Ext.define('NextThought.model.courseware.AssignmentCollection', {
 		}
 
 		return me._studentViews[student];
+	},
+
+
+	getAssignmentsForContainer: function(containerId) {
+		var items = this.get('Items') || [],
+			assignments = [];
+
+		items.forEach(function(item) {
+			if (item.get('ContainerId') === containerId) {
+				assignments.push(item);
+			}
+		});
+
+		return assignments;
 	}
 });
