@@ -602,10 +602,9 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 
 	update: function(html, metaData) {
 		var doc = this.getDocumentElement(),
-				body = Ext.get(doc.body),
-				head = doc.getElementsByTagName('head')[0],
-				metaNames = ['NTIID', 'last-modified'],
-				me = this;
+			body = Ext.get(doc.body || doc.getElementsByName('body')[0]),
+			head = doc.getElementsByTagName('head')[0],
+			metaNames = ['NTIID', 'last-modified'];
 
 		Ext.select('meta[nti-injected="true"]', false, head).remove();
 
@@ -623,13 +622,17 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 			});
 		}
 
-		body.update(html || '');
-		body.setStyle('background', 'transparent');
-		doc.normalize();
+		if (body) {
+			body.update(html || '');
+			body.setStyle('background', 'transparent');
+			doc.normalize();
+		} else if (html) {
+			console.error('We attempted to set the content of the IFrame and there was no BODY element to write to!');
+		}
 
 		if (html !== false) {
 			this.fireEvent('content-updated-with', body, doc);
-			this.cleanContent = body.dom.cloneNode(true);
+			this.cleanContent = body && body.dom.cloneNode(true);
 		}
 		delete this.settledPromise;
 		this.fireEvent('content-updated');
