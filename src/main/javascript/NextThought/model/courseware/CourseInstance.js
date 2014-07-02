@@ -53,7 +53,7 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 			return;
 		}
 
-		me.set('cover', getURL(root) + '/presentation-assets/webapp/v1/contentpackage-landing-232x170.png');
+		me.set('cover', getURL(root).concatPath('/presentation-assets/webapp/v1/contentpackage-landing-232x170.png'));
 
 		img.onerror = function() {
 			var e = me.getCourseCatalogEntry();

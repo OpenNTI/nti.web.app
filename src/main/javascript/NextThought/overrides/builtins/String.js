@@ -22,6 +22,22 @@ Ext.define('NextThought.overrides.builtins.String', function() {
 
 	function hashMe() { return hash(this); }
 
+	String.prototype.concatPath = function(str) {
+		var result = this;
+		//ensure the base path ends in a separator...
+		if (result.charAt(result.length - 1) !== '/') {
+			result += '/';
+		}
+
+		//ensure the postfix does not start with a separator...
+		if (str && str.charAt(0) === '/') {
+			str = str.substr(1);
+		}
+
+		//join...
+		return result + str;
+	};
+
 	String.prototype.hash = hashMe;
 	String.hash = hash;
 
