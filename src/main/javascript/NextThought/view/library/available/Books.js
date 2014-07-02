@@ -18,5 +18,14 @@ Ext.define('NextThought.view.library.available.Books', {
 		this.collection = this.down('purchasable-collection');
 
 		this.collection.bindStore(this.store);
+	},
+
+
+	setItems: function(store) {
+		if (this.collection.store) {
+			this.collection.store.loadRecords(store.getRange());
+		} else {
+			this.collection.bindStore(store);
+		}
 	}
 });

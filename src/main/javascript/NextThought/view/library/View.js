@@ -26,6 +26,24 @@ Ext.define('NextThought.view.library.View', {
 		//me.on('add', function() {
 		//me.invertParentsPaddingToMargins(me.lastSides);
 		//});
+
+
+		me.on('beforedeactivate', function() {
+			me.getPanel().fireEvent('beforedeactivate');
+		});
+	},
+
+
+	restore: function(state) {
+		var panel = this.getPanel();
+
+		return new Promise(function(fulfill, reject) {
+			if (state.active === 'library') {
+				panel.restore(state.library);
+			}
+
+			fulfill();
+		});
 	},
 
 

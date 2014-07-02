@@ -39,6 +39,22 @@ Ext.define('NextThought.view.library.Panel', {
 	},
 
 
+	restore: function(state) {
+		if (!state.activeWindow) { return; }
+
+		var isBook = state.activeWindow === 'books';
+
+		if (this.rendered) {
+			if (this.activeWindow) {
+				this.activeWindow.close();
+			}
+
+			this.showAvailable(isBook);
+		} else {
+			this.restoreWindow = isBook ? 'books' : 'courses';
+		}
+	},
+
 	initComponent: function() {
 		this.callParent(arguments);
 
@@ -66,7 +82,21 @@ Ext.define('NextThought.view.library.Panel', {
 			}
 		});
 
-		this.maybeRestoreState();
+		me.maybeRestoreState();
+
+		if (me.activeWindow) {
+			me.activeWindow.close();
+		}
+
+		if (this.restoreWindow) {
+			me.setAvailable(this.restoreWindow === 'books');
+		}
+
+		me.on('beforedeactivate', function() {
+			if (me.activeWindow) {
+				me.activeWindow.close();
+			}
+		});
 	},
 
 
@@ -184,7 +214,7 @@ Ext.define('NextThought.view.library.Panel', {
 
 
 	showAvailable: function(isBook) {
-		var me = this,
+		var me = this, state,
 			win, cfg, xtype;
 
 		if (isBook) {
@@ -193,6 +223,8 @@ Ext.define('NextThought.view.library.Panel', {
 			cfg = {
 				store: this.purchasables
 			};
+
+			state = 'books';
 		} else {
 			xtype = 'library-available-courses';
 
@@ -201,6 +233,8 @@ Ext.define('NextThought.view.library.Panel', {
 				upcoming: this.upcomingAvailable,
 				archived: this.archivedAvailable
 			};
+
+			state = 'courses';
 		}
 
 		win = Ext.widget(xtype, cfg);
@@ -208,9 +242,16 @@ Ext.define('NextThought.view.library.Panel', {
 		win.showBy(this, 'tl-tl', [this.leftSide, 40]);
 
 		this.hasAvailableWindow = true;
+		this.activeWindow = win;
+
 		this.mon(win, 'close', function() {
 			delete me.hasAvailableWindow;
+			delete me.activeWindow;
+
+			history.pushState({library: {activeWindow: null}});
 		});
+
+		history.pushState({active: 'library', library: {activeWindow: state}});
 	},
 
 
@@ -288,6 +329,10 @@ Ext.define('NextThought.view.library.Panel', {
 		}
 
 		this.purchasables = store;
+
+		if (this.activeWindow && this.activeWindow.is('library-available-books')) {
+			this.activeWindow.setItems(store);
+		}
 
 		this.maybeEnableBooks();
 	},
