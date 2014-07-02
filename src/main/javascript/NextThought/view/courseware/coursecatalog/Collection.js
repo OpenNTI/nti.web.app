@@ -11,7 +11,9 @@ Ext.define('NextThought.view.courseware.coursecatalog.Collection', {
 	entryTpl: Ext.DomHelper.markup({
 		cls: '{inGrid} item {Class:lowercase} {enrolled:boolStr("activated")} {isChanging:boolStr("changing")} row-{rows} col-{cols}',
 		'data-qtip': '{Title:htmlEncode}', cn: [
-			{ cls: 'cover', style: { backgroundImage: 'url({thumbnail})' }},
+			{ cls: 'cover', cn: [
+				{tag: 'img', src: '{thumbnail}'}
+			]},
 			{ tag: 'tpl', 'if': 'enrolled', cn: [
 				{cls: 'enrollment', cn: [
 					{cls: 'enrollment-text', html: '{enrolledText}'}

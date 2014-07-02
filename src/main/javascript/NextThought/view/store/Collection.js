@@ -19,7 +19,9 @@ Ext.define('NextThought.view.store.Collection', {
 	entryTpl: Ext.DomHelper.markup({
 		cls: '{inGrid} purchasable item {Class:lowercase} {featured:boolStr("featured")} {Activated:boolStr("activated")} row-{rows} col-{cols}',
 		'data-qtip': '{Title:htmlEncode}', cn: [
-			{ cls: 'cover', style: { backgroundImage: 'url({Icon})' }},
+			{ cls: 'cover', cn: [
+				{tag: 'img', src: '{Icon}'}
+			]},
 			{ cls: 'meta', cn: [
 				{ cls: 'title', html: '{Title}' },
 				{ cls: 'author', html: '{Provider}' },
