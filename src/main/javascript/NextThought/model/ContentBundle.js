@@ -41,7 +41,7 @@ Ext.define('NextThought.model.ContentBundle', {
 
 	constructor: function() {
 		this.callParent(arguments);
-		this.__setImage();
+		wait().then(this.__setImage.bind(this));
 	},
 
 
@@ -61,7 +61,7 @@ Ext.define('NextThought.model.ContentBundle', {
 			root = this.get('root'),
 			img = new Image();
 
-		if (!Ext.isEmpty(me.get('cover'))) {
+		if (!Ext.isEmpty(me.get('icon'))) {
 			return;
 		}
 

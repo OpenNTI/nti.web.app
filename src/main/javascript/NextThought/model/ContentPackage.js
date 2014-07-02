@@ -26,13 +26,14 @@ Ext.define('NextThought.model.ContentPackage', {
 
 	constructor: function() {
 		this.callParent(arguments);
-
 		this.tocPromise = Service.request(this.get('index'))
 				.then(ContentUtils.parseXML)
 			//BEGIN: ToC Cleanup
 			//TODO: move toc code here.
 			//END: ToC Cleanup
 				.then(function(x) { this.set('toc', x); return x; }.bind(this));
+
+		wait().then(this.__setImage.bind(this));
 	},
 
 
@@ -82,5 +83,23 @@ Ext.define('NextThought.model.ContentPackage', {
 				}
 			});
 		});
+	},
+
+
+
+	__setImage: function() {
+		var me = this,
+			fallback = this.get('icon'),
+			root = this.get('root'),
+			img = new Image();
+
+		me.set('icon', getURL(root) + '/presentation-assets/webapp/v1/contentpackage-landing-232x170.png');
+
+		img.onerror = function() {
+			me.set('icon', fallback);
+		};
+
+		img.src = me.get('icon');
 	}
+
 });
