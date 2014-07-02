@@ -49,7 +49,7 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.AbstractForumView', {
 			rd.label = 'forum';
 			rd.CreatedTime = null;
 			rd.subCount = rd.TopicCount;
-			rd.subName = 'Topic';
+			rd.subName = 'Discussion';
 		} else {
 			rd.label = 'discussion';
 			rd.subCount = rd.PostCount;
