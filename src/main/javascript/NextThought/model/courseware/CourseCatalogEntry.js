@@ -27,6 +27,7 @@ Ext.define('NextThought.model.courseware.CourseCatalogEntry', {
 		{ name: 'enrolled', type: 'bool' },
 		//ui data
 		{ name: 'isOpen', type: 'bool'},
+		{ name: 'isAdmin', type: 'bool'},
 		{ name: 'isChanging', type: 'bool', convert: function(v, rec) {
 			return rec.get('enrolled') && v;
 		}}

@@ -53,6 +53,7 @@ Ext.define('NextThought.controller.Library', {
 				//set isOpen on the catalog entry so the available window can know if its open or enrolled
 				catalog.set({
 					'isOpen': isOpen,
+					'isAdmin': course instanceof NextThought.model.courseware.CourseInstanceAdministrativeRole,
 					'isChanging': false
 				});
 			});

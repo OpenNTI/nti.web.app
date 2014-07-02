@@ -31,11 +31,12 @@ Ext.define('NextThought.view.courseware.coursecatalog.Collection', {
 		var i = Ext.Object.chain(this.callParent(arguments)),
 			instructors = record.get('Instructors'),
 			name = instructors && instructors[0].get('Name'),
-			isOpen = record.get('isOpen');
+			isOpen = record.get('isOpen'),
+			isAdmin = record.get('isAdmin');
 
 		i.author = name;
 		i.isCourse = true;
-		i.enrolledText = isOpen ? 'Not For Credit' : 'For Credit';
+		i.enrolledText = isAdmin ? 'Administering' : isOpen ? 'Not For Credit' : 'For Credit';
 
 		return i;
 	},
