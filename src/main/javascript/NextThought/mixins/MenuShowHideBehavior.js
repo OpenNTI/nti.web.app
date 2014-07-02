@@ -78,5 +78,11 @@ Ext.define('NextThought.mixins.MenuShowHideBehavior', {
 
 	stopHide: function() {
 		clearTimeout(this.__leaveTimer);
+	},
+
+
+	stopShowHideTimers: function() {
+		clearTimeout(this.__leaveTimer);
+		clearTimeout(this.__showTimeout);
 	}
 });

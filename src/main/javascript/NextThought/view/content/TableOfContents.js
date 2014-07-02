@@ -124,6 +124,7 @@ Ext.define('NextThought.view.content.TableOfContents', {
 	onShow: function() {
 		this.callParent(arguments);
 		this.showSelection();
+		this.stopShowHideTimers();
 	},
 
 
