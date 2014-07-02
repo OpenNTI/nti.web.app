@@ -102,7 +102,10 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 			me.mon(me.header, 'page-change', function() {
 				me.mon(this.store, {
 					single: true,
-					load: 'addGrouper'
+					load: function(store, records) {
+						me.addGrouper();
+						me.fillInData(records, me.filterBar.getSearch());
+					}
 				});
 			});
 		}
