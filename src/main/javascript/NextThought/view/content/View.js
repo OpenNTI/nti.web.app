@@ -234,7 +234,7 @@ Ext.define('NextThought.view.content.View', {
 			}
 
 			if (!this.courseAssignments.showTab) {
-				tabs = tabs.filter(function(i) {return i.viewId !== 'course-assessment';});
+				tabs = tabs.filter(function(i) {return !i.isAssignment;});
 			}
 
 			if (!this.courseForum.hasBoard) {
@@ -257,6 +257,10 @@ Ext.define('NextThought.view.content.View', {
 		Ext.each(tabs, function(t) {
 			t.selected = (t.viewId.replace(/\?$/, '') === active);
 		});
+
+		if (tabs.length === 1) {
+			tabs = [];
+		}
 
 		return this.tabs ? tabs : [];
 	},
