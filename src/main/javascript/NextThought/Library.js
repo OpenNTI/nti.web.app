@@ -309,6 +309,9 @@ Ext.define('NextThought.Library', {
 				d.setAttribute('base', o.get('root'));
 				d.setAttribute('icon', o.get('icon'));
 				d.setAttribute('title', o.get('title'));
+				o.on('icon-changed', function() {
+					d.setAttribute('icon', o.get('icon'));
+				});
 
 				if (d.getAttribute('isCourse') === 'true') {
 					o.set('isCourse', true);
