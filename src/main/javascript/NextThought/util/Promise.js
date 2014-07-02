@@ -151,7 +151,7 @@ Ext.applyIf(Promise.prototype, {
 Ext.applyIf(Promise, {
 	resolve: function(v) { return new Promise(function(f) {f.call(this, v);}); },
 	reject: function(v) { return new Promise(function(f, r) {r.call(this, v);}); },
-	wait: function(t) { return new Promise(function(f) {setTimeout(f, t);});}
+	wait: function(t) { return new Promise(function(f) {setTimeout(f, t || 1);});}
 });
 
 wait = Promise.wait;
