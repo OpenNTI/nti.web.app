@@ -412,14 +412,17 @@ Ext.define('NextThought.controller.Reader', {
 		pw.clearBookmark();
 		pg.updateState(t, reader.currentRoot);
 
-		//Do not track content packages if they are marked as courseware...track the course instead.
-		if (cw.__isPartOfCourse(pageInfo)) {
-			cw.__getCourseInstance(pageInfo).then(trackFn, function(reason) {
-				console.error('No course for pageInfo', pageInfo);
-			});
-		} else {
-			trackFn(l && l.title);
-		}
+
+		//Do not track content packages if they are marked as bundles/courses...track the bundle instead.
+		ContentManagementUtils.findBundle(pageInfo)
+			//if we don't find it in bundles... look up the course instance...
+				.fail(function() { return cw.__getCourseInstance(pageInfo); }.bind(this))
+			//Found a bundle or course instance...
+				.then(trackFn)
+			//Did not find a bundle or course...
+				.fail(function() {
+					trackFn(l && l.title);
+				});
 
 		//If there is no origin, we treat this as normal. (Read the location from the location provder) The origin is
 		// to direct the navbar to use the origins' id instead of the current one (because we know th current one will

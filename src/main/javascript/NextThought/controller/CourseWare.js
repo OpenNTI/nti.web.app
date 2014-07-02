@@ -117,8 +117,7 @@ Ext.define('NextThought.controller.CourseWare', {
 	//<editor-fold desc="Store Setup">
 	applyCourseHooks: function(observable) {
 		Ext.apply(observable, {
-			getCourseInstance: Ext.bind(this.__getCourseInstance, this),
-			isPartOfCourse: Ext.bind(this.__isPartOfCourse, this)
+			getCourseInstance: Ext.bind(this.__getCourseInstance, this)
 		});
 	},
 
@@ -527,11 +526,6 @@ Ext.define('NextThought.controller.CourseWare', {
 
 		content.onTabClicked(tab);
 		return content.down('course-assessment-container').gotoAssignment(id, user);
-	},
-
-
-	__isPartOfCourse: function(thing) {
-		return Boolean(this.__getCourseMapping(thing));
 	},
 
 

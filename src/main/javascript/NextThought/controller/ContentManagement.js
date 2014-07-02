@@ -122,21 +122,23 @@ Ext.define('NextThought.controller.ContentManagement', {
 	}
 }, function() {
 
+	var getPrefix = ParseUtils.ntiidPrefix.bind(ParseUtils);
+
+	function prefix(ntiid) {
+		var p = getPrefix(ntiid);
+		return function(bundle) {
+			return (bundle.get('ContentPackages') || []).filter(function(b) {return p === getPrefix(b.get('NTIID'));}).length > 0;
+		};
+	}
+
 	window.ContentManagementUtils = {
-		findBundle: function(ntiid) {
-			var p = ParseUtils.ntiidPrefix.bind(ParseUtils);
-			function prefix(bundle) {
-				return (bundle.get('ContentPackages') || [])
-							   .filter(function(b) {return p(ntiid) === p(b.get('NTIID'));}).length > 0;
-			}
-
-			return Promise.reject('Disabled');
-
-			/*return Ext.getStore('ContentBundles').onceLoaded()
+		findBundle: function(thing) {
+			var ntiid = ContentUtils.getNTIIDFromThing(thing);
+			return Ext.getStore('ContentBundles').onceLoaded()
 					.then(function(s) {
-						var i = s.findBy(prefix);
+						var i = s.findBy(prefix(ntiid));
 						return i >= 0 ? s.getAt(i) : Promise.reject('Not Found');
-					});*/
+					});
 		}
 	};
 });

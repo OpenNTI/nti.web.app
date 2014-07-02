@@ -457,20 +457,16 @@ Ext.define('NextThought.view.content.View', {
 
 		this.down('content-toolbar').show();
 
+		ContentManagementUtils.findBundle(pageInfo)
+			//if we don't find it in bundles... look up the course instance...
+			.fail(function() { return this.getCourseInstance(pageInfo); }.bind(this))
+			//Found a bundle or course instance...
+			.then(Ext.bind(this._setBundle, this, ['passive'], true))
+			//Did not find a bundle or course...
+			.fail(this._setBundle.bind(this, null));
 
 		//TEMP:
-		var sc = Ext.bind(this._setBundle, this, ['passive'], true);
-		if (this.isPartOfCourse(pageInfo)) {
-			this.getCourseInstance(pageInfo).then(sc, function(reason) {
-				console.error('Could not set course from pageInfo: ', reason);
-			});
-		} else {
-			console.debug('Removing Course, map did not contain ID?');
-			this._setBundle(null);
-		}
-
-		//TEMP:
-		if (pageInfo.isPartOfCourseNav() && this.currentCourse) {
+		if (pageInfo.isPartOfCourseNav() && this.currentBundle) {
 			this.showCourseNavigation();
 		}
 		else {
@@ -483,7 +479,7 @@ Ext.define('NextThought.view.content.View', {
 
 
 	_setBundle: function(bundle, tab) {
-		if (this.currentCourse === bundle) {
+		if (this.currentBundle === bundle) {
 			if (tab !== 'passive') {
 				tab = tab || (this.isPreview ? 'course-info' : null);
 				this.setActiveTab(tab);
@@ -506,7 +502,7 @@ Ext.define('NextThought.view.content.View', {
 				this.courseReports
 			];
 
-		this.currentCourse = bundle;
+		this.currentBundle = bundle;
 		//this.reader.clearLocation();
 
 		this.setBackground(background);
@@ -631,7 +627,7 @@ Ext.define('NextThought.view.content.View', {
 
 	getTitlePrefix: function() {
 		var prefix = this.getLayout().getActiveItem().title || '',
-			inst = this.currentCourse,
+			inst = this.currentBundle,
 			courseTitle = (inst && inst.asUIData().title);
 
 		if (!Ext.isEmpty(prefix)) {
@@ -645,7 +641,7 @@ Ext.define('NextThought.view.content.View', {
 
 	updateTitle: function() {
 		var tab = this.layout.getActiveItem(),
-			inst = this.currentCourse,
+			inst = this.currentBundle,
 			courseTitle = (inst && inst.asUIData().title),
 			pageTitle = this.locationTitle,
 			subTitle = tab && (Ext.isEmpty(tab.title) ? pageTitle : courseTitle);
