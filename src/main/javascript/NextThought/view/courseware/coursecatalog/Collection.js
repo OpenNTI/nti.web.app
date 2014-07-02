@@ -35,7 +35,7 @@ Ext.define('NextThought.view.courseware.coursecatalog.Collection', {
 
 		i.author = name;
 		i.isCourse = true;
-		i.enrolledText = isOpen ? 'Enrolled (No Credit)' : 'Enrolled (For Credit)';
+		i.enrolledText = isOpen ? 'Enrolled (Non-Credit)' : 'Enrolled (For Credit)';
 
 		return i;
 	},
