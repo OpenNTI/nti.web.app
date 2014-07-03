@@ -10,7 +10,6 @@ Ext.define('NextThought.model.ContentBundle', {
 		{ name: 'DCDescription', type: 'string' },
 		{ name: 'DCTitle', type: 'string' },
 
-		{ name: 'Discussions', type: 'singleItem', persist: false },
 		{ name: 'author', type: 'DCCreatorToAuthor', mapping: 'DCCreator'},
 
 		{ name: 'PlatformPresentationResources', type: 'auto' },
