@@ -24,7 +24,8 @@
 				position: fixed;
 				top: 57px;
 				width: 1024px;
-				z-index: 1;
+				//make sure it stays on top
+				z-index: 900000;
 			}
 
 			.x-component-branding {
