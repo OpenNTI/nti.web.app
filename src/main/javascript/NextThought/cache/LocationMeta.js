@@ -116,11 +116,12 @@ Ext.define('NextThought.cache.LocationMeta', {
 		me.listenToLibrary();
 
 		return Service.getPageInfo(ntiid)
-				.then(function(infos) {
-					return Promise.all(infos.map(function(pi) {
+				.then(function(info) {
+					return Promise.resolve(info)
+							.then(function(pi) {
 								var meta = me.createAndCacheMeta(ntiid, pi, ignoreCache);
 								return meta || Promise.reject(['createAndCacheMeta failed: ', ntiid, pi, ignoreCache]);
-							}))
+							})
 							.then(function(infos) {
 								return (infos || [])[0];
 							});
