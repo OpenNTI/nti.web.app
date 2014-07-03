@@ -381,7 +381,7 @@ Ext.define('NextThought.model.Service', {
 
 			me.fireEvent('update-pageinfo-preferences', pageInfos);
 			Ext.callback(success, scope, pageInfos);//back-compat
-			return pageInfos;
+			return pageInfo;
 		}
 
 
