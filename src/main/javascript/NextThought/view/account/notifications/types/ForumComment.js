@@ -26,7 +26,17 @@ Ext.define('NextThought.view.account.notifications.types.ForumComment', {
 		}
 	},
 
+
 	clicked: function(view, rec) {
 		view.fireEvent('show-topic-comment', view, rec);
+	},
+
+
+	getBody: function(values) {
+		if (this.panel.isActivityWindow) {
+			return this.getBodyTpl(values.bodyPreview);
+		}
+
+		return '';
 	}
 });

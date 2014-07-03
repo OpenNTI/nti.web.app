@@ -4,18 +4,46 @@ Ext.define('NextThought.view.account.notifications.types.Note', {
 	keyVal: 'application/vnd.nextthought.note',
 
 	showCreator: true,
-	wording1: getString('NextThought.view.account.notifications.types.Note.wording'),
+	wording1: getString('NextThought.view.account.notifications.types.Note.wording', '{creator} shared a note.'),
 	wording2: getString('NextThought.view.account.notifications.types.NoteReply.wording', '{creator} commented on a note.'),
+	wording3: getString('NextThought.view.account.notifications.types.Note.titlewording', '{creator} shared a note: {title}.'),
 	previewField: 'preview',
 
-	getWording: function(values) {
-		var w = this.wording1;
-		if (values.inReplyTo || (values.references || []).length > 0) {
-			w = this.wording2;
+	/*
+		If the note is a reply it will return this preview of the comment
+		If the note is not a reply and it has a title it will return ''
+		If the note is not a reply and it doesn't have a title it will return the preview.
+	 */
+	getBody: function(values) {
+		var isComment = values.inReplyTo || (values.references || []).length > 0;
+
+		if (this.panel.isActivityWindow && (isComment || !values.title)) {
+			return this.getBodyTpl(values.$preview);
 		}
 
-		this.wording = w;
-		return this.callParent(arguments);
+		return '';
+	},
+
+
+	/*
+		If the note is a reply it will return '{creator} commented on a note.'
+		If the note is not a reply and it has a title it will return '{creator} shared a note: {title}.'
+		If the note is not a reply and it doesn't have a title it will return '{creator} shared a note.'
+	 */
+	getWording: function(values) {
+		var w = this.wording1,
+			creator = this.getDisplayNameTpl(values);
+
+		if (values.inReplyTo || (values.references || []).length > 0) {
+			w = this.wording2;
+		} else if (values.title) {
+			w = this.wording3;
+		}
+
+		return getFormattedString(w, {
+			creator: creator,
+			title: values.$preview
+		});
 	},
 
 	fillInData: function(rec) {

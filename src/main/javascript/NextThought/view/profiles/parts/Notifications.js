@@ -15,6 +15,7 @@ Ext.define('NextThought.view.profiles.parts.Notifications', {
 	items: [
 		{
 			xtype: 'notifications-panel',
+			isActivityWindow: true,
 			rowHover: Ext.emptyFn
 		}
 	],

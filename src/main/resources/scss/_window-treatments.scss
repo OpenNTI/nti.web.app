@@ -264,4 +264,8 @@
 			display: none;
 		}
 	}
+
+	.x-component-notifications.user-data-panel .notification {
+		.body { display: block; }
+	}
 }

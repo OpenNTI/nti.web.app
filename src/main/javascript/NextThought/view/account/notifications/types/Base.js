@@ -39,6 +39,7 @@ Ext.define('NextThought.view.account.notifications.types.Base', {
 					{ cls: 'icon', style: {backgroundImage: '{[this.getIcon(values)]}'}},
 					{ cls: 'wrap', cn: [
 						'{[this.getWording(values)]}',
+						'{[this.getBody(values)]}',
 						{ tag: 'time', cls: 'time',
 							datetime: '{[this.getTime(values)]}', html: '{Time:ago()}'}
 					]}
@@ -63,8 +64,24 @@ Ext.define('NextThought.view.account.notifications.types.Base', {
 					console.warn('FYI: Item is hidden:', values);
 				}
 				return me.getIcon(values);
+			},
+
+			getBody: function(values) {
+				return me.getBody(values);
 			}
 		});
+	},
+
+
+	getBody: function() {
+		return '';
+	},
+
+
+	getBodyTpl: function(body) {
+		if (!body) { return ''; }
+
+		return Ext.DomHelper.markup({tag: 'span', cls: 'body', html: body});
 	},
 
 
