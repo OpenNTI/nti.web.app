@@ -283,5 +283,11 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 					console.error(reason);
 					throw reason;//don't let the fact that we log the error "unfail" the chain.
 				});
+	},
+
+
+	getDiscussionBoard: function() {
+		var b = this.get('Discussions');
+		return b ? Promise.resolve(b) : Promise.reject('No board');
 	}
 });

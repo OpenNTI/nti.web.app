@@ -93,8 +93,10 @@ Ext.define('NextThought.view.courseware.forum.View', {
 	bundleChanged: function(bundle) {
 		this.hasBoard = true;
 
-		this.onceLoaded = new Deferred();
+		this.onceLoaded = new Deferred();//IDK... is this used?
 
-		this.setForumList(bundle && bundle.get('Discussions'));
+		return ((bundle && bundle.getDiscussionBoard()) || Promise.reject('No Board'))
+			.then(this.setForumList.bind(this))
+			.fail(this.setForumList.bind(this, false));
 	}
 });

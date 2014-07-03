@@ -99,5 +99,30 @@ Ext.define('NextThought.model.ContentBundle', {
 				fulfill();
 			});
 		});
+	},
+
+
+	getDiscussionBoard: function() {
+		var me = this,
+			link = me.getLink('DiscussionBoard'),
+			//get the cached request, or make a new one.
+			p = me.__BoardResolver || (((link && Service.request(link)) || Promise.reject('No Discussion Board Link'))
+					//parse
+				.then(ParseUtils.parseItems.bind(ParseUtils))
+					//unwrap from the array
+				.then(function(items) {
+					if (items.length > 1) {console.warn('Too many items found.');}
+					return items[0];
+				})
+					//if we fail, delete the cached promise, and resume failure. :P
+				.fail(function(reason) {
+					delete me.__BoardResolver;
+					return Promise.reject(reason);
+				}));
+
+		//cache the current request
+		this.__BoardResolver = p;
+
+		return p;
 	}
 });
