@@ -150,7 +150,11 @@ Ext.define('NextThought.view.courseware.outline.View', {
 				console.warn('Danger! Selection returned a value from different content (should not be possible)');
 			}
 			console.debug('No record selected, defaulting to first lesson in: ', root);
-			r = store.findRecord('type', 'lesson', 0, false, false, true);
+			//r = store.findRecord('type', 'lesson', 0, false, false, true);
+			//find the first record that is a lesson and has an ntiid (meaning is active)
+			r = store.findBy(function(rec) {
+				return rec.get('type') === 'lesson' && rec.get('NTIID');
+			});
 		}
 
 		if (r) {
