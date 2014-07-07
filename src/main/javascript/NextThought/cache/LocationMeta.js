@@ -123,7 +123,7 @@ Ext.define('NextThought.cache.LocationMeta', {
 								return meta || Promise.reject(['createAndCacheMeta failed: ', ntiid, pi, ignoreCache]);
 							})
 							.then(function(infos) {
-								return (infos || [])[0];
+								return Ext.isArray(infos) ? infos[0] : infos;
 							});
 				})
 				.fail(function(reason) {
