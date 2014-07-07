@@ -109,18 +109,21 @@ Ext.define('NextThought.view.courseware.outline.View', {
 
 
 	maybeChangeSelection: function(ntiid, fromEvent) {
-		Ext.destroy(this._waitForBuild);
-		delete this._waitForBuild;
-
-		if (this.store.building) {
-			this._waitForBuild = this.mon(this.store, {
-				destroyable: true,
-				single: true,
-				built: this.maybeChangeSelection.bind(this, ntiid)
-			});
+		var me = this, store = me.store;
+		//prevent asynchronous calls that finish late from messing with us.
+		if (fromEvent && fromEvent !== store) {
 			return;
 		}
 
+		if (store.onceBuilt) {
+			store.onceBuilt().then(function() {
+				me.doChangeSelection(ntiid, store);
+			});
+		}
+	},
+
+
+	doChangeSelection: function(ntiid, fromEvent) {
 		//prevent asynchronous calls that finish late from messing with us.
 		if (fromEvent && fromEvent !== this.store) {
 			return;

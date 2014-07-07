@@ -23,7 +23,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 
 	bundleChanged: function(bundle) {
 		var courseId = bundle && bundle.getId(),
-			l, toc, course, courseNavStore,
+			l, toc, course, courseNavStore, me = this,
 			date = this.self.dateOverride || new Date();//now
 
 		if (this.course !== courseId) {
@@ -49,22 +49,19 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 				return;
 			}
 
-			this.applyStore(courseNavStore, date, course, l);
+			if (courseNavStore.onceBuilt) {
+				courseNavStore.onceBuilt().then(function() {
+					if (me.course === courseId) {
+						me.applyStore(courseNavStore, date, course, l);
+					}
+				});
+			}
 		}
 	},
 
 
 	applyStore: function(store, date, course, locationInfo) {
 		var me = this, nodes, que = [];
-		Ext.destroy(this._buildCallback);
-		if (store.building) {
-			this._buildCallback = this.mon(store, {
-				destroyable: true,
-				single: true,
-				built: Ext.bind(this.applyStore, this, arguments)
-			});
-			return;
-		}
 
 		if (this.el) {
 			this.el.mask(getString('NextThought.view.courseware.dashboard.View.loading'));
@@ -86,7 +83,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 			}));
 		});
 
-		Promise.all(que)
+		return Promise.all(que)
 			.done(this.applyTiles.bind(this))
 			.fail(function() { if (me.el) {me.el.unmask();} });
 	},

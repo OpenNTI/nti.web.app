@@ -15,9 +15,20 @@ Ext.define('NextThought.store.courseware.Navigation', {
 
 
 	constructor: function() {
-		this.building = true;
+		this.building = this.outlinePromise
+				.then(this.fillFromOutline.bind(this), this.failedToBuild.bind(this));
 		this.callParent(arguments);
-		this.outlinePromise.done(this.fillFromOutline.bind(this));
+	},
+
+
+	onceBuilt: function() {
+		return this.building;
+	},
+
+
+	failedToBuild: function(reason) {
+		console.error('Could not build outline store:', reason);
+		return this;
 	},
 
 
@@ -70,9 +81,9 @@ Ext.define('NextThought.store.courseware.Navigation', {
 			this.add(r);
 		}
 		finally {
-			this.building = false;
 			this.fireEvent('built', this);
 		}
+		return this;
 	},
 
 
