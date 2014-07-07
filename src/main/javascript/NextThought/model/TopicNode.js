@@ -69,7 +69,7 @@ Ext.define('NextThought.model.TopicNode', {
 			try {
 				re = substring && new RegExp(substring, 'i');
 			} catch (badexp) {
-				re = new RegExp(RegExp.escape(substiring), 'i');
+				re = new RegExp(RegExp.escape(substring), 'i');
 			}
 		} catch (e) {
 			console.error('Failed to build matching regexp for toc search:', e);
