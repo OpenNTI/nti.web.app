@@ -5,10 +5,10 @@
 
 	.page {
 		@include scrollbar($track:transparent,$nib:rgba(0,0,0,0.3));
-		overflow: {
-			x: hidden;
-			y: auto; //scroll;
-		}
+		// overflow: {
+		// 	x: hidden;
+		// 	y: auto; //scroll;
+		// }
 //		margin-left: -5px;
 //		padding-left: 5px;
 	}
@@ -24,8 +24,7 @@
 				position: fixed;
 				top: 57px;
 				width: 1024px;
-				//make sure it stays on top
-				z-index: 900000;
+				z-index: 9;
 			}
 
 			.x-component-branding {
@@ -467,6 +466,12 @@
 			@include experimental(transform, rotate(-90deg));
 		}
 	}
+}
+
+.course-settings-window {
+	position: absolute;
+	top: -55px;
+	left: -53px;
 }
 
 .course-settings-window, .available-courses, .available-books {

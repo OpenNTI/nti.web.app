@@ -59,7 +59,7 @@ Ext.define('NextThought.view.courseware.Collection', {
 		if (e.getTarget('.settings')) {
 			win = Ext.widget('library-course-settings', {
 				course: record,
-				renderTo: this.el
+				renderTo: node
 			});
 
 			win.showBy(Ext.get(node), 'tl-tl', win.offsets);

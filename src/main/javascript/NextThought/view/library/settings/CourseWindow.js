@@ -11,7 +11,7 @@ Ext.define('NextThought.view.library.settings.CourseWindow', {
 	constrainTo: Ext.getBody(),
 	offsets: [-55, -53],
 	width: 350,
-	floating: true,
+	//floating: true,
 
 	getTargetEl: function() {
 		return this.body;
