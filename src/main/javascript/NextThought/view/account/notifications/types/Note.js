@@ -17,8 +17,8 @@ Ext.define('NextThought.view.account.notifications.types.Note', {
 	getBody: function(values) {
 		var isComment = values.inReplyTo || (values.references || []).length > 0;
 
-		if (this.panel.isActivityWindow && (isComment || !values.title)) {
-			return this.getBodyTpl(values.$preview);
+		if (this.panel.isActivityWindow) {
+			return this.getBodyTpl(values.textBodyContent);
 		}
 
 		return '';
@@ -42,7 +42,7 @@ Ext.define('NextThought.view.account.notifications.types.Note', {
 
 		return getFormattedString(w, {
 			creator: creator,
-			title: values.$preview
+			title: values.title
 		});
 	},
 
@@ -65,8 +65,8 @@ Ext.define('NextThought.view.account.notifications.types.Note', {
 
 			rec.set({
 				'location': Ext.String.ellipsis(location, 150, false),
-				'path': lineage.join(' / ')//,
-				//'textBodyContent': rec.getBodyText && rec.getBodyText()
+				'path': lineage.join(' / '),
+				'textBodyContent': rec.getBodyText && rec.getBodyText()
 			});
 		});
 
