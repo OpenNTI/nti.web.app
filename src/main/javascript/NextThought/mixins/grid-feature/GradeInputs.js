@@ -119,7 +119,8 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 
 		v = v && v.split(' ')[0];
 
-		if (v !== value) {
+		//'' !== null so double check that at least on of the values is truthy before trying to save it
+		if (v !== value && (v || value)) {
 			//if there's no grade and no value don't bother creating one
 			if (!grade && !value) {
 				return;
