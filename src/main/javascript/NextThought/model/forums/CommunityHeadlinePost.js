@@ -1,6 +1,4 @@
 Ext.define('NextThought.model.forums.CommunityHeadlinePost', {
-	extend: 'NextThought.model.forums.GeneralHeadlinePost',
-	isAlwaysPublic: true,
-
+	extend: 'NextThought.model.forums.HeadlinePost',
 	searchProps: ['body', 'title', 'tag']
 });

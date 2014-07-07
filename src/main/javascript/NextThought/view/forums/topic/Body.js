@@ -91,7 +91,7 @@ Ext.define('NextThought.view.forums.topic.Body', {
 		var topic = this.down('forums-topic-topic'),
 			comments = this.down('forums-topic-comment-thread');
 
-		if (comments && hit.get('Type') === 'GeneralForumComment') {
+		if (comments && hit.get('Type') === 'CommentPost') {
 			comments.showSearchHit(hit, frag);
 		}
 

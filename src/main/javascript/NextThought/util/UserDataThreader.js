@@ -8,7 +8,7 @@ Ext.define('NextThought.util.UserDataThreader', {
 		'Note': function(r) {return r;},
 		'TranscriptSummary': function(r) {return r.get('RoomInfo');},
 		'QuizResult': function(r) {return r;},
-		'GeneralForumComment': function(r) { return r;},
+		'CommentPost': function(r) { return r;},
 		'PersonalBlogComment': function(r) { return r;}
 	},
 

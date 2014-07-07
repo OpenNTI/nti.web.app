@@ -1,6 +1,10 @@
 Ext.define('NextThought.model.forums.HeadlineTopic', {
 	extend: 'NextThought.model.forums.Topic',
 
+	mixins: {
+		publishActions: 'NextThought.mixins.ModelWithPublish'
+	},
+
 	searchProps: ['title'],
 
 	fields: [

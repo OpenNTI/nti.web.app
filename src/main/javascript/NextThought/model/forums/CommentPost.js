@@ -1,5 +1,5 @@
-Ext.define('NextThought.model.forums.GeneralForumComment', {
-	extend: 'NextThought.model.forums.GeneralPost',
+Ext.define('NextThought.model.forums.CommentPost', {
+	extend: 'NextThought.model.forums.Post',
 
 	isComment: true,
 
@@ -37,7 +37,7 @@ Ext.define('NextThought.model.forums.GeneralForumComment', {
 
 	/**
 	 *	Make a reply to this comment
-	 *	@return {NextThought.model.forums.GeneralForumComment}
+	 *	@return {NextThought.model.forums.CommentPost}
 	 */
 	makeReply: function() {
 		var comment = this,

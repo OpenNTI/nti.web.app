@@ -5,7 +5,7 @@ Ext.define('NextThought.store.forums.Comments', {
 		'NextThought.util.UserDataThreader'
 	],
 
-	model: 'NextThought.model.forums.GeneralForumComment',
+	model: 'NextThought.model.forums.CommentPost',
 
 	constructor: function() {
 		this.callParent(arguments);

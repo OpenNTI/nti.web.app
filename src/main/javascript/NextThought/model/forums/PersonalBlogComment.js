@@ -1,5 +1,5 @@
 Ext.define('NextThought.model.forums.PersonalBlogComment', {
-	extend: 'NextThought.model.forums.GeneralForumComment',
+	extend: 'NextThought.model.forums.CommentPost',
 
 	isBlogComment: true,
 

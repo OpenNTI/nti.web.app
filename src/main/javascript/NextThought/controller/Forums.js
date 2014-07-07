@@ -9,12 +9,7 @@ Ext.define('NextThought.controller.Forums', {
 		'forums.CommunityHeadlineTopic',
 		'forums.ContentBoard',
 		'forums.Forum',
-		'forums.GeneralForum',
-		'forums.GeneralForumComment',
-		'forums.GeneralHeadlinePost',
-		'forums.GeneralHeadlineTopic',
-		'forums.GeneralPost',
-		'forums.GeneralTopic',
+		'forums.CommentPost',
 		'forums.HeadlinePost',
 		'forums.HeadlineTopic',
 		'forums.Post',
@@ -546,7 +541,7 @@ Ext.define('NextThought.controller.Forums', {
 		var postCmp = editor.up('forums-topic-view') || editor.up('[record]'),
 			postRecord = (postCmp && postCmp.getTopic && postCmp.getTopic()) || (postCmp && postCmp.record),
 			isEdit = Boolean(record) && !record.phantom, postLink,
-			commentForum = record || NextThought.model.forums.GeneralForumComment.create();
+			commentForum = record || NextThought.model.forums.CommentPost.create();
 
 		commentForum.set({ body: valueObject.body });
 
