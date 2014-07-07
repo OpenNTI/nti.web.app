@@ -2,6 +2,10 @@ Ext.define('NextThought.model.ContentBundle', {
 	alternateClassName: 'NextThought.model.ContentPackageBundle',
 	extend: 'NextThought.model.Base',
 
+	requires: [
+		'NextThought.model.forums.ContentBoard'
+	],
+
 	isBundle: true,
 
 	fields: [

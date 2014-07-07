@@ -7,6 +7,7 @@ Ext.define('NextThought.controller.Forums', {
 		'forums.CommunityForum',
 		'forums.CommunityHeadlinePost',
 		'forums.CommunityHeadlineTopic',
+		'forums.ContentBoard',
 		'forums.Forum',
 		'forums.GeneralForum',
 		'forums.GeneralForumComment',
