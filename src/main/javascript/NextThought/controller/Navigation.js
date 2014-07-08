@@ -466,8 +466,10 @@ Ext.define('NextThought.controller.Navigation', {
 
 
 	navigateAndScrollToSearchHit: function(ntiid, result, fragment) {
-		function callback(reader) {
-			(reader || ReaderPanel.get()).getScroll().toSearchHit(result, fragment);
+		function callback(reader, error) {
+			if (!error) {
+				(reader || ReaderPanel.get()).getScroll().toSearchHit(result, fragment);
+			}
 		}
 
 		this.fireEvent('set-location', ntiid, callback, this);
@@ -478,13 +480,13 @@ Ext.define('NextThought.controller.Navigation', {
 		var me = this;
 
 		return new Promise(function(fulfill, reject) {
-			me.fireEvent('set-location', id, function(a, er) {
-				if (er && er.status !== undefined) {
+			me.fireEvent('set-location', id, function(_, er) {
+				if (er) {
 					return reject(er);
 				}
 
 				Ext.callback(cb, window, arguments);
-				fulfill(a);
+				fulfill(_);
 			});
 		});
 	},
@@ -629,7 +631,7 @@ Ext.define('NextThought.controller.Navigation', {
 
 		if (obj.isPageInfo) {
 			return function(obj, fragment) {
-				function scroll(content) {
+				function scroll(content, error) {
 					function scrollNow() {
 						var scroller,
 							id = obj.getId(),
@@ -646,7 +648,9 @@ Ext.define('NextThought.controller.Navigation', {
 						}
 					}
 
-					content.onceSettled().then(scrollNow);
+					if (!error) {
+						content.onceSettled().then(scrollNow);
+					}
 				}
 
 				me.fireEvent('set-location', obj, scroll);

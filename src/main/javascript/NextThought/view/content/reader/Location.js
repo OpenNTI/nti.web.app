@@ -74,12 +74,12 @@ Ext.define('NextThought.view.content.reader.Location', {
 		var clearMask = Ext.Function.createDelayed(function() {if (e && e.isMasked()) {e.unmask();}}, 300);
 
 
-		function finishFn(a, errorDetails) {
+		function finishFn(_, error) {
 			if (finish.called) {
 				console.warn('finish navigation called twice');
 				return;
 			}
-			var args = Array.prototype.slice.call(arguments), error = (errorDetails || {}).error,
+			var args = Array.prototype.slice.call(arguments),
 				canceled;
 
 			finish.called = true;
@@ -87,9 +87,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 			clearMask();
 
 			try {
-				//Give the content time to settle. TODO: find a way to make an event, or prevent this from being called until the content is settled.
-				//Ext.defer(Ext.callback,500,Ext,[callback,null,args]);
-				Ext.callback(callback, null, args);
+				_.onceSettled().then(function() { Ext.callback(callback, null, args); });
 
 				if (fromHistory !== true) {
 					history.pushState({
@@ -100,12 +98,14 @@ Ext.define('NextThought.view.content.reader.Location', {
 					canceled = true;
 					txn.abort();
 				}
+
 				if (error) {
+					PersistentStorage.updateProperty('last-location-map', rootId, rootId);
 					delete me.currentNTIID;
 					//Ok no bueno.  The page info request failed.  Ideally whoever
 					//initiated this request handles the error  but we aren't really setup for
 					//that everywhere. Need to work on error handling.
-					console.error('An error occurred from setLocation', errorDetails);
+					console.error('An error occurred from setLocation', error);
 					if (error.status !== undefined && Ext.Ajax.isHTTPErrorCode(error.status)) {
 						//We were displaying an alert box here on 403s, but since we don't know why we
 						//are being called we shouldn't do that.  I.E. unless the user triggered this action
