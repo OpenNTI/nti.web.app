@@ -68,7 +68,8 @@ Ext.define('NextThought.view.content.View', {
 
 	tabSpecs: [
 		{label: getString('NextThought.view.content.View.dashboardtab'), viewId: 'course-dashboard'},
-		{label: getString('NextThought.view.content.View.lessontab'), viewId: 'course-book?'},
+		{label: getString('NextThought.view.content.View.lessontab'), viewId: 'course-book?', isCourse: true},
+		{label: getString('NextThought.view.content.View.booktab', 'Book'), viewId: 'course-book'},
 		{label: getString('NextThought.view.content.View.assessmenttab'), viewId: 'course-assessment?', isAssignment: true},
 		{label: getString('NextThought.view.content.View.discussiontab'), viewId: 'course-forum'},
 		{label: getString('NextThought.view.content.View.reporttab'), viewId: 'course-reports'},
@@ -225,9 +226,15 @@ Ext.define('NextThought.view.content.View', {
 	getTabs: function() {
 		var tabs = this.tabSpecs,
 			tabSet = Ext.isArray(this.tabs) ? this.tabs : [],
-			active = this.layout.getActiveItem().id;
+			active = this.layout.getActiveItem().id,
+			bundle = this.currentBundle || {};
 
 		if (this.tabs) {
+
+			//filter the coursebook tabs down to just one (letting all other tabs pass)
+			tabs = tabs.filter(function(i) {
+				return !(/course-book/i).test(i.viewId) || Boolean(i.isCourse) === Boolean(bundle.isCourse);
+			});
 
 			if (!this.courseDash.hasItems) {
 				tabs = tabs.filter(function(i) {return i.viewId !== 'course-dashboard';});
