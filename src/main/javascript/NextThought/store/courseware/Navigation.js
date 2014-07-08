@@ -14,8 +14,11 @@ Ext.define('NextThought.store.courseware.Navigation', {
 	],
 
 
-	constructor: function() {
-		this.building = this.outlinePromise
+	constructor: function(config) {
+		if (!config.outlinePromise) {
+			config.outlinePromise = Promise.reject('Not Given');
+		}
+		this.building = config.outlinePromise
 				.then(this.fillFromOutline.bind(this), this.failedToBuild.bind(this));
 		this.callParent(arguments);
 	},
