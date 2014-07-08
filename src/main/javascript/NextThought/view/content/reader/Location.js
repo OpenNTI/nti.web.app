@@ -189,7 +189,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 			// Give the navigateAbort handler a chance to see if it can resolve and navigate to the correct location.
 			// it will explicitly return false, if it thinks it can handle it, otherwise, we callback.
 			if (me.fireEvent('navigateAbort', r, ntiidOrPageInfo, finish) !== false) {
-				Ext.callback(finish, null, [me, {failure: true, req: q, error: r}]);
+				Ext.callback(finish, null, [me.reader, {failure: true, req: q, error: r}]);
 			}
 
 		}
