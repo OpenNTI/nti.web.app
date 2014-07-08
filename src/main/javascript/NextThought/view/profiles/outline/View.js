@@ -22,6 +22,8 @@ Ext.define('NextThought.view.profiles.outline.View', {
 			{cls: 'controls {controlsCls}', cn: [
 				{tag: 'span', cls: 'button edit isMe', html: '{{{NextThought.view.profiles.outline.View.edit}}}'},
 				{tag: 'span', cls: 'button add-contact notContact', html: '{{{NextThought.view.profiles.outline.View.add}}}'},
+				{tag: 'span', cls: 'button cancel isMe editing', html: 'Cancel'},
+				{tag: 'span', cls: 'button save isMe editing', html: 'Save'},
 				{tag: 'span', cls: 'button contact-menu isContact'},
 				//{tag: 'span', cls: 'button mail isContact'},
 				{tag: 'span', cls: 'button chat isContact'}
@@ -291,7 +293,7 @@ Ext.define('NextThought.view.profiles.outline.View', {
 			this.enableEditing();
 		}
 		else if (e.getTarget('.button.editing')) {
-			this.enableEditing(false);
+			this.doneEditing(e.getTarget('.save'));
 		}
 		else if (e.getTarget('.button.chat') && e.getTarget('.controls.isContact')) {
 			this.fireEvent('chat', this.user);
@@ -364,8 +366,9 @@ Ext.define('NextThought.view.profiles.outline.View', {
 				return r.get('type') === 'view' && r.get('mapping') === view;
 			});
 
+		//if we are editing and don't allow a new selection
 		if (this.hasCls('editing')) {
-			this.enableEditing(false);
+			return;
 		}
 
 		selModel = this.nav.getSelectionModel();
@@ -427,22 +430,38 @@ Ext.define('NextThought.view.profiles.outline.View', {
 	enableEditing: function(enable) {
 		enable = enable !== false;
 
-		var event = (enable ? 'en' : 'dis') + 'able-edit',
-			mask = (enable ? '' : 'un') + 'mask',
-			cls = (enable ? 'add' : 'remove') + 'Cls',
-			ucls = (enable ? 'remove' : 'add') + 'Cls',
-			label = enable ? 'Done Editing' : 'Edit Profile',
-			editEl = this.controlsEl.down('.edit');
+		var editEl = this.controlsEl.down('.edit');
 
 		if (enable && !this.updateSelection('profile-about', true)) {
 			return;
 		}
 
-		this.nav[mask]();
-		this.fireEvent(event);
-		this[cls]('editing');
-		editEl.update(label);
-		editEl[cls]('editing');
+		this.fireEvent('enable-edit');
+		this.nav.mask();
+		this.addCls('editing');
+		editEl.addCls('editing');
+	},
+
+
+	/**
+	 * Fires the event to let the about page set it editing state
+	 * @param  {boolean} save truthy to save the changes, falsy to cancel the changes
+	 * @return {boolean}      true if the about page quit editing, false if it didn't
+	 */
+	doneEditing: function(save) {
+		var me = this;
+
+		function finish(success) {
+			var editEl = me.controlsEl.down('.edit');
+
+			if (success) {
+				me.nav.unmask();
+				me.removeCls('editing');
+				editEl.removeCls('editing');
+			}
+		}
+
+		me.fireEvent(save ? 'save-edits' : 'cancel-edits', finish);
 	},
 
 

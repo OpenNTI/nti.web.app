@@ -150,9 +150,7 @@
 
 				@include icon('edit-15_hover', $left:auto, $top: 12px, $right: 2px, $position: absolute);
 			}
-		}
 
-		&.editing {
 			.about {
 				.field {
 					display: none;
@@ -162,7 +160,31 @@
 					display: inline;
 				}
 			}
+
+			.controls {
+				.save {
+					padding: 0 15px;
+					background-color: $primary-blue;
+					color: white;
+					display: inline-block;
+				}
+
+				.cancel {
+					padding: 0 15px;
+					display: inline-block;
+					background: none;
+					border: none;
+					font-weight: 500;
+					color: $primary-grey;
+					font-style: normal;
+				}
+
+				.edit {
+					display: none;
+				}
+			}
 		}
+
 
 		.about{
 			padding-top: 15px;
@@ -237,6 +259,14 @@
 				padding: 0 20px 0 45px;
 
 				@include icon('notepad_active', $top: 10px, $left: 20px);
+			}
+
+			.save {
+				display: none;
+			}
+
+			.cancel {
+				display: none;
 			}
 
 			.contact-menu {
@@ -1289,6 +1319,26 @@
 			white-space: nowrap;
 		}
 
+		.editable[contenteditable=true] {
+			display: block;
+			padding: 3px;
+			border: 1px solid #efefef;
+			background-color: white;
+
+			&:focus {
+				border-color: $primary-blue;
+			}
+
+			&[data-field=affiliation] {
+				margin-bottom: 5px;
+			}
+
+			&[data-field=about] {
+				width: 100%;
+				min-height: 146px;
+			}
+		}
+
 		.error-msg{
 			margin-top: 4px;
 			color: red;
@@ -1296,32 +1346,6 @@
 			font-weight: 300;
 			&::before{
 				content: '*'
-			}
-		}
-	}
-
-	.editing & {
-
-		[data-field].editable {
-			color: $primary-grey;
-			z-index: 1000;
-			cursor: pointer;
-
-			@include icon('edit-15_hover', $left:auto, $top: 3px, $right: -24px);
-
-			&::before {
-				content: ' ';
-				overflow: hidden;
-				position: absolute;
-				top: -2px; left: -5px; bottom:-2px; right: -28px;
-				background: #f4f4f4;
-				border: 0 solid #dcdcdc;
-				border-bottom-width: 1px;
-				z-index: -1;
-			}
-
-			&.name::after{
-				right: 5px;
 			}
 		}
 	}

@@ -26,7 +26,8 @@ Ext.define('NextThought.view.profiles.About', {
 							cls: 'about field',
 							cn: [
 								{ cls: 'label', html: '{{{NextThought.view.profiles.About.about}}}' },
-								{ cls: 'content', 'data-field': 'about', 'data-placeholder': '{{{NextThought.view.profiles.About.write}}}', 'data-multiline': true }
+								{ cls: 'content', 'data-field': 'about', 'data-placeholder': '{{{NextThought.view.profiles.About.write}}}', 'data-multiline': true },
+								{ cls: 'error-msg', 'data-prop': 'about'}
 							]
 						},
 						{
@@ -34,22 +35,27 @@ Ext.define('NextThought.view.profiles.About', {
 
 								{ cls: 'field', cn: [
 									{ cls: 'label', cn: { tag: 'span', 'data-field': 'affiliation', 'data-placeholder': '{{{NextThought.view.profiles.About.affiliation}}}' } },
-									{ cn: { tag: 'span', 'data-field': 'role', 'data-placeholder': '{{{NextThought.view.profiles.About.role}}}' } }
+									{ cls: 'error-msg', 'data-prop': 'affiliation' },
+									{ cn: { tag: 'span', 'data-field': 'role', 'data-placeholder': '{{{NextThought.view.profiles.About.role}}}' } },
+									{ cls: 'error-msg', 'data-prop': 'role'}
 								]},
 
 								{ cls: 'field', cn: [
 									{ cls: 'label', html: '{{{NextThought.view.profiles.About.location}}}' },
-									{ cn: { tag: 'span', 'data-field': 'location', 'data-placeholder': '{{{NextThought.view.profiles.About.location}}}' } }
+									{ cn: { tag: 'span', 'data-field': 'location', 'data-placeholder': '{{{NextThought.view.profiles.About.location}}}' } },
+									{ cls: 'error-msg', 'data-prop': 'location'}
 								]},
 
 								{ cls: 'field', cn: [
 									{ cls: 'label', html: '{{{NextThought.view.profiles.About.home}}}' },
-									{ cn: {tag: 'span', 'data-field': 'home_page', 'data-placeholder': '{{{NextThought.view.profiles.About.home}}}' } }
+									{ cn: {tag: 'span', 'data-field': 'home_page', 'data-placeholder': '{{{NextThought.view.profiles.About.home}}}' } },
+									{ cls: 'error-msg', 'data-prop': 'home_page'}
 								]},
 
 								{ cls: 'field', cn: [
 									{ cls: 'label', html: '{{{NextThought.view.profiles.About.email}}}' },
-									{ cn: { tag: 'span', 'data-field': 'email', 'data-placeholder': '{{{NextThought.view.profiles.About.email}}}' } }
+									{ cn: { tag: 'span', 'data-field': 'email', 'data-placeholder': '{{{NextThought.view.profiles.About.email}}}' } },
+									{ cls: 'error-msg', 'data-prop': 'email'}
 								]}
 
 							]
@@ -66,8 +72,7 @@ Ext.define('NextThought.view.profiles.About', {
 	renderSelectors: {
 		profileInfoEl: '.profile-about',
 		metaEl: '.profile-about .meta',
-		homePageEl: '.profile-about .meta [data-field=home_page]',
-		errorMsgEl: '.error-msg'
+		homePageEl: '.profile-about .meta [data-field=home_page]'
 	},
 
 	//</editor-fold>
@@ -87,9 +92,13 @@ Ext.define('NextThought.view.profiles.About', {
 
 		this.on({
 			'enable-edit': 'onShowEditing',
-			'disable-edit': 'onHideEditing',
+			'save-edits': 'onSaveEdits',
+			'cancel-edits': 'onCancelEdits',
 			beforedeactivate: 'onBeforeDeactivate',
-			metaEl: { click: 'editMeta' }
+			metaEl: {
+				click: 'editMeta',
+				keydown: 'onKeyDown'
+			}
 		});
 
 		this.setUser(this.user);
@@ -109,7 +118,11 @@ Ext.define('NextThought.view.profiles.About', {
 
 	afterRender: function() {
 		this.callParent(arguments);
-		this.errorMsgEl.setVisibilityMode(Ext.Element.DISPLAY).hide();
+
+		var errorEls = this.el.select('.error-msg');
+
+		errorEls.setVisibilityMode(Ext.Element.DISPLAY).hide();
+		this.el.selectable();
 	},
 	//</editor-fold>
 
@@ -147,7 +160,7 @@ Ext.define('NextThought.view.profiles.About', {
 		Promise.all([
 			render.then(setupAndMask),
 			(profileSchemaUrl ?
-				   Service.request(profileSchemaUrl).then(JSON.decode) : Promise.resolve(null))
+				   Service.request(profileSchemaUrl).then(JSON.parse) : Promise.resolve(null))
 					.then(me.onProfileLoaded.bind(me, user))
 					.fail(function(reason) { console.error('Could not get profile schema', reason); })
 		]).then(unmask);
@@ -168,6 +181,8 @@ Ext.define('NextThought.view.profiles.About', {
 		//us.  Given that it is also guarenteed that we won't have the add to contacts
 		//button. so if its not editable we tag it with a class so we can snug the button
 		//up if it exists
+
+		nameInfo.editable = true;
 
 		if (!nameInfo.editable && isFeature('request-alias-change') && isMe(user)) {
 			fn = Ext.bind(me.fireEvent, me, ['request-alias-change', me]);
@@ -217,7 +232,7 @@ Ext.define('NextThought.view.profiles.About', {
 		//this will let us share it and test it...
 
 		if (rules.required === true && (value === null || value === undefined)) {
-			this.showError('Required.');
+			this.showError('Required.', field);
 			return false;
 		}
 
@@ -231,14 +246,14 @@ Ext.define('NextThought.view.profiles.About', {
 			if (value.length < (rules.min_length || 0)) {
 				this.showError(getFormattedString('NextThought.view.profiles.About.short', {
 					number: rules.min_length || 0
-				}));
+				}), field);
 				return false;
 			}
 
 			if (value.length > (rules.max_length || Infinity)) {
 				this.showError(getFormattedString('NextThought.view.profiles.About.long', {
 					number: rules.max_length || 0
-				}));
+				}), field);
 				return false;
 			}
 
@@ -249,11 +264,11 @@ Ext.define('NextThought.view.profiles.About', {
 				//require it to start with http[s]
 				numColons = (value.match(/:/g) || []).length;
 				if (numColons > 1) {
-					this.showError(getString('NextThought.view.profiles.About.invalid'));
+					this.showError(getString('NextThought.view.profiles.About.invalid'), field);
 					return false;
 				}
 				if (numColons === 1 && value.indexOf('http:') !== 0 && value.indexOf('https:') !== 0) {
-					this.showError(getString('NextThought.view.profiles.About.invalid'));
+					this.showError(getString('NextThought.view.profiles.About.invalid'), field);
 					return false;
 				}
 				return true;
@@ -391,26 +406,23 @@ Ext.define('NextThought.view.profiles.About', {
 
 
 	editMeta: function(e) {
-		var t = e.getTarget('[data-field]', null, true),
-			field = t && Ext.fly(t).getAttribute('data-field'),
-			value = (field && this.userObject.get(field)) || '',
-			ed = this.metaEditor;
+		var target = e.getTarget('[data-field]'),
+			placeholder = target && target.querySelector('.placeholder'),
+			range, sel = window.getSelection();
 
-		if (!t || this.savingField || !this.hasCls('editing')) {//e.getTarget('a[href]') (the link will work as normal while we are not in edit mode)
-			return;
+		if (target) {
+			e.stopPropagation();
+
+			this.clearError(target.getAttribute('data-field'));
+
+			if (placeholder) {
+				range = document.createRange();
+				range.selectNodeContents(target);
+				range.collapse(true);//collapse to the start
+				sel.removeAllRanges();
+				sel.addRange(range);
+			}
 		}
-
-		e.stopEvent();//prevent link from working in edit mode
-
-		if (this.nameEditor.editing) {
-			this.nameEditor.cancelEdit();
-		}
-
-		if (ed.editing) {
-			ed.cancelEdit();
-		}
-
-		ed.startEdit(t, value);
 	},
 
 
@@ -464,6 +476,16 @@ Ext.define('NextThought.view.profiles.About', {
 
 
 	//<editor-fold desc="UI Updaters & Handlers">
+	onKeyDown: function(e) {
+		var target = e.getTarget('[data-field][contenteditable=true]'),
+			placeholder = target && target.querySelector('.placeholder');
+
+		if (placeholder && document.activeElement === target) {
+			Ext.fly(placeholder).remove();
+		}
+	},
+
+
 	showEmptyState: function() {
 		this.profileInfoEl.remove();
 		this.addCls('empty');
@@ -477,32 +499,143 @@ Ext.define('NextThought.view.profiles.About', {
 
 
 	onShowEditing: function() {
+		var fields = this.el.select('.editable[data-field]');
+
+		fields.set({contenteditable: true});
 		this.addCls('editing');
-		console.debug('show edit', arguments);
 	},
 
 
 	onHideEditing: function() {
+		var fields = this.el.select('.editable[data-field]');
+
+		fields.set({contenteditable: false});
+		this.clearError();
 		this.removeCls('editing');
-		if (this.metaEditor && this.metaEditor.editing) {
-			this.metaEditor.cancelEdit();
-		}
-
-		if (this.nameEditor && this.nameEditor.editing) {
-			this.nameEditor.cancelEdit();
-		}
-		console.debug('hide edit', arguments);
 	},
 
 
-	showError: function(text) {
-		this.errorMsgEl.update(text);
-		this.errorMsgEl.show();
+	resetFields: function(fields) {
+		var me = this;
+			user = me.user;
+
+		(fields || []).forEach(function(field) {
+			var prop = field.getAttribute('data-field');
+
+			me.updateField(Ext.get(field), prop, user.get(prop));
+		});
 	},
 
 
-	clearError: function() {
-		this.errorMsgEl.hide();
+	onSaveEdits: function(finish) {
+		var me = this, fields = me.el.query('.editable[data-field]'),
+			user = me.user, newValues = {}, oldValues = {}, hasChanged = false;
+
+		(fields || []).forEach(function(field) {
+			var prop = field.getAttribute('data-field'),
+				text = field.textContent, valid,
+				old = user.get(prop);
+
+			//if it has the placeholder don't set the value
+			if (field.querySelector('.placeholder')) {
+				newValues[prop] = null;
+				return;
+			}
+
+			//use null instead of the empty string
+			text = text === '' ? null : text;
+
+			valid = me.validate(prop, text);
+
+			if (valid === true && text !== old) {
+				//if its valid and changed set the value
+				newValues[prop] = text;
+				oldValues[prop] = old;
+				hasChanged = true;
+			}
+		});
+
+		if (hasChanged) {
+			user.set(newValues);
+			user.save({
+				success: function() {
+					finish(true);
+					me.onHideEditing();
+				},
+				failure: function(resp) {
+					var msg = Ext.JSON.decode(resp.responseText, true);
+
+					//if we fail reset the old values
+					user.set(oldValues);
+
+					me.showError(msg.message, msg.field);
+
+					me.resetFields(fields);
+				}
+			});
+		}
+
+		return true;
+	},
+
+
+	onCancelEdits: function(finish) {
+		var me = this,
+			fields = me.el.query('.editable[data-field]'),
+			user = me.user, hasChanged;
+
+		(fields || []).forEach(function(field) {
+			var prop = field.getAttribute('data-field'),
+				text = field.textContent;
+
+			//if its not the placeholder and the text has changed
+			if (!field.querySelector('.placeholder') && text !== user.get(prop)) {
+				hasChanged = true;
+			}
+		});
+
+		//if we have changes alert the user before canceling
+		if (hasChanged) {
+			/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
+			Ext.Msg.show({
+				msg: 'Canceling will lose any changes you have made.',
+				buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+				scope: me,
+				icon: 'warning-red',
+				buttonText: {'ok': 'Yes'},
+				title: 'Are you sure?',
+				fn: function(str) {
+					if (str === 'ok') {
+						me.onHideEditing();
+						me.resetFields(fields);
+						finish.call(null, true);
+					} else {
+						finish.call(null, false);
+					}
+				}
+			});
+		} else {
+			me.onHideEditing();
+			finish.call(null, true);
+		}
+	},
+
+
+	showError: function(text, field) {
+		var errorEl = this.el.down('.error-msg[data-prop=' + field + ']');
+
+		if (errorEl) {
+			errorEl.update(text);
+			errorEl.show();
+		}
+	},
+
+
+	clearError: function(field) {
+		var query = field ? '.error-msg[data-prop=' + field + ']' : '.error-msg',
+			errorEls = this.el.select(query);
+
+		errorEls.hide();
 	},
 
 
