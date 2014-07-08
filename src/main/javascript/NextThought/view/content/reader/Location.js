@@ -80,6 +80,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 				return;
 			}
 			var args = Array.prototype.slice.call(arguments),
+				onceReady = _ && _.onceSettled ? _.onceSettled() : wait(),
 				canceled;
 
 			finish.called = true;
@@ -87,7 +88,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 			clearMask();
 
 			try {
-				_.onceSettled().then(function() { Ext.callback(callback, null, args); });
+				onceReady.then(function() { Ext.callback(callback, null, args); });
 
 				if (fromHistory !== true) {
 					history.pushState({
