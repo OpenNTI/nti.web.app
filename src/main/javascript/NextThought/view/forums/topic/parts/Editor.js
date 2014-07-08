@@ -186,7 +186,7 @@ Ext.define('NextThought.view.forums.topic.parts.Editor', {
 		var msg = 'An unknown error occurred saving your Discussion.', error;
 
 		if (response && response.responseText) {
-			error = JSON.parse(response.responseText) || {};
+			error = Ext.JSON.decode(response.responseText, true) || {};
 			if (error.code === 'TooLong') {
 				msg = getString('NextThought.view.forums.topic.parts.Editor.longtitle');
 			}
