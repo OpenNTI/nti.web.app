@@ -122,6 +122,18 @@ Ext.define('NextThought.view.library.available.Courses', {
 	updateCurrent: function(courses) {
 		var cmp = this.tabpanel.down('[title=current]');
 
+		if (Ext.isEmpty(courses)) {
+			if (cmp) { cmp.destroy(); }
+
+			cmp = this.tabpanel.add({
+				xtype: 'box',
+				autoEl: {tag: 'div', cls: 'empty-text', html: 'There are no current courses.'},
+				title: 'current'
+			});
+
+			return cmp;
+		}
+
 		if (cmp) {
 			if (!cmp.store) {
 				cmp.bindStore(this.buildStore(courses));
@@ -143,6 +155,18 @@ Ext.define('NextThought.view.library.available.Courses', {
 	updateUpcoming: function(courses) {
 		var cmp = this.tabpanel.down('[title=upcoming]');
 
+		if (Ext.isEmpty(courses)) {
+			if (cmp) { cmp.destroy(); }
+
+			cmp = this.tabpanel.add({
+				xtype: 'box',
+				autoEl: {tag: 'div', cls: 'empty-text', html: 'There are no upcoming courses.'},
+				title: 'upcoming'
+			});
+
+			return cmp;
+		}
+
 		if (cmp) {
 			if (!cmp.store) {
 				cmp.bindStore(this.buildStore(courses));
@@ -163,6 +187,18 @@ Ext.define('NextThought.view.library.available.Courses', {
 
 	updateArchived: function(courses) {
 		var cmp = this.tabpanel.down('[title=archived]');
+
+		if (Ext.isEmpty(courses)) {
+			if (cmp) { cmp.destroy(); }
+
+			cmp = this.tabpanel.add({
+				xtype: 'box',
+				autoEl: {tag: 'div', cls: 'empty-text', html: 'There are no archived courses.'},
+				title: 'archived'
+			});
+
+			return cmp;
+		}
 
 		if (cmp) {
 			if (!cmp.store) {
