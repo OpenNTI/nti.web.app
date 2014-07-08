@@ -232,7 +232,7 @@ Ext.define('NextThought.util.Sharing', {
 					onlyMe = prefix === 'Only Me';
 
 				if (dn.toLowerCase() !== 'unknown' && !Ext.isEmpty(dn) && (!onlyMe || dn !== 'me')) {
-					names.push(dn);
+					names.push(' ' + dn);
 					return !maxLength || names.length <= maxLength;
 				}
 			});
@@ -246,11 +246,11 @@ Ext.define('NextThought.util.Sharing', {
 			if (others) {
 				names.push(Ext.String.format('and {0}', Ext.util.Format.plural(others, 'other')));
 			} else if (names.length > 1) {
-				names.push(' and ' + names.pop());
+				names.push(' and' + names.pop());
 			}
 
-			if(names.length === 0){ comma = ''; }
-			if(names.length === 1){ comma = ' and'; }
+			if (names.length === 0) { comma = ''; }
+			if (names.length === 1) { comma = ' and'; }
 
 			str = Ext.String.format('{0}{1} {2}', prefix, comma, names.join(','));
 			Ext.callback(callback, scope, [str]);
