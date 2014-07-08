@@ -9,9 +9,9 @@ Ext.define('NextThought.controller.Forums', {
 		'forums.CommunityHeadlineTopic',
 		'forums.ContentBoard',
 		'forums.ContentForum',
-		'forums.ContentTopic',
 		'forums.ContentCommentPost',
 		'forums.ContentHeadlinePost',
+		'forums.ContentHeadlineTopic',
 		'forums.Forum',
 		'forums.CommentPost',
 		'forums.HeadlinePost',
@@ -721,7 +721,7 @@ Ext.define('NextThought.controller.Forums', {
 	saveTopicPost: function(editorCmp, record, forum, title, tags, body, autoPublish) {
 		var isEdit = Boolean(record),
 			cmp = editorCmp.up('forums-topic-view'),
-			post = isEdit ? record.get('headline') : NextThought.model.forums.CommunityHeadlinePost.create(),
+			post = isEdit ? record.get('headline') : NextThought.model.forums.Post.create(),
 			me = this;
 
 		// NOTE: Forums entries are PUBLIC only.
