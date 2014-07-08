@@ -312,8 +312,10 @@ Ext.define('NextThought.view.content.Navigation', {
 				}
 			},
 			'mouseenter': function() {
+				var offset = Ext.isIE10m ? [0, 0] : [-10, -20];
+
 				m.maxHeight = Ext.Element.getViewportHeight() - (pathPartEl.getX() + pathPartEl.getHeight() + 40);
-				m.startShow(pathPartEl, 'tl-bl', [-10, -25]);
+				m.startShow(pathPartEl, 'tl-bl', offset);
 			},
 			'click': function() {
 				m.stopHide();
