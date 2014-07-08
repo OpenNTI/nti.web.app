@@ -34,8 +34,6 @@ Ext.define('NextThought.view.courseware.forum.View', {
 		var me = this;
 
 		function finish() {
-			//we already have a board loaded, so don't overwrite it
-			if (me.forumList === forumList) { return; }
 			var silent = me.ownerCt.getLayout().getActiveItem() !== me;
 
 			if (me.isFromNavigatingToForum) {
@@ -49,17 +47,15 @@ Ext.define('NextThought.view.courseware.forum.View', {
 
 		if (!forumList) {
 			delete this.hasBoard;
-			delete this.currentForumList;
+			delete this.forumList;
 			this.removeAll(true);
 			this.fireEvent('hide-forum-tab');
 			return;
 		}
 
-		if (this.currentForumList === forumList) {
+		if (this.forumList === forumList) {
 			return;
 		}
-
-		this.currentForumList = forumList;
 
 		if ((forumList.get('Creator') || {}).isModel) {
 			return finish();
