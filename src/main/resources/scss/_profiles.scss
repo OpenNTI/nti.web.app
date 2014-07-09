@@ -1335,6 +1335,10 @@
 				min-height: 23px;
 			}
 
+			&[data-field=role] {
+				min-height: 32px;
+			}
+
 			&[data-field=about] {
 				width: 100%;
 				min-height: 146px;
