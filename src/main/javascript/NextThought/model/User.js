@@ -146,10 +146,15 @@ Ext.define('NextThought.model.User', {
 
 
 	save: function(ops) {
+		var data = this.asJSON();
+
+		//The avatar is saved in another place don't try to do it here. Also custom avatar urls will cause a 422
+		delete data.avatarURL;
+
 		Ext.Ajax.request(Ext.apply({
 		   url: this.getLink('edit'),
 		   method: 'PUT',
-		   jsonData: this.asJSON()
+		   jsonData: data
 	   }, ops));
 	},
 
