@@ -515,14 +515,15 @@ Ext.define('NextThought.view.profiles.About', {
 	},
 
 
-	resetFields: function(fields) {
+	resetFields: function(fields, values) {
 		var me = this;
 			user = me.user;
 
 		(fields || []).forEach(function(field) {
-			var prop = field.getAttribute('data-field');
+			var prop = field.getAttribute('data-field'),
+				val = (values && values[prop]) || user.get(prop);
 
-			me.updateField(Ext.get(field), prop, user.get(prop));
+			me.updateField(Ext.get(field), prop, val);
 		});
 	},
 
@@ -570,7 +571,7 @@ Ext.define('NextThought.view.profiles.About', {
 
 					me.showError(msg.message, msg.field);
 
-					me.resetFields(fields);
+					me.resetFields(fields, newValues);
 				}
 			});
 		}
