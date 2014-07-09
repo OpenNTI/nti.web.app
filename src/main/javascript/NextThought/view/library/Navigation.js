@@ -304,12 +304,13 @@ Ext.define('NextThought.view.library.Navigation', {
 
 		var navTop = this.navEl.dom.getBoundingClientRect().top,
 			elTop = el.getScrollTop(),
-			delta = (navTop - elTop) || 0;
+			delta = (navTop - elTop) || 0,
+			offset = -(el.getTop() + 30);
 
-		if (delta < 0 && !this.fixedHeader) {
+		if (delta < offset && !this.fixedHeader) {
 			this.addCls('fixed');
 			this.fixedHeader = true;
-		} else if (delta >= 0 && this.fixedHeader) {
+		} else if (delta >= offset && this.fixedHeader) {
 			this.removeCls('fixed');
 			this.fixedHeader = false;
 		}
