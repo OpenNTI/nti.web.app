@@ -615,7 +615,7 @@ Ext.define('NextThought.util.Content', {
 			Ext.Error.raise('No ntiid given');
 		}
 
-    function findByFunction(r) {return r.get('NTIID') === id;}
+		function findByFunction(r) {return r.get('NTIID') === id;}
 
 		var noLeaf = {},
 			leaf = this.find(ntiid) || noLeaf,
@@ -770,9 +770,9 @@ Ext.define('NextThought.util.Content', {
 
 		var me = this, course,
 			loc = me.find(ntiid),
-			info, nodes = [],
-			topicOrTocRegex = /topic|toc/i,
-			slice = Array.prototype.slice;
+			doc = loc && loc.toc,
+			walker, info, nodes = [],
+			topicOrTocRegex = /topic|toc/i;
 
 		function maybeBlocker(id) {
 			return (!id || /\.blocker\./ig.test(id)) ? undefined : id;
@@ -783,8 +783,7 @@ Ext.define('NextThought.util.Content', {
 			if (!node) {return false;}
 			var result = false,
 				topicOrToc = topicOrTocRegex.test(node.tagName),
-				href = (node.getAttribute) ? node.getAttribute('href') : null,
-				course;
+				href = (node.getAttribute) ? node.getAttribute('href') : null;
 
 			//decide if this is a navigate-able thing, it must be a topic or toc, it must
 			//have an href, and that href must NOT have a fragment
@@ -804,44 +803,22 @@ Ext.define('NextThought.util.Content', {
 			return node.getAttribute('ntiid') || null;
 		}
 
-		function child(n, first) {
-			var v,
-				topics = n && n.childNodes ? slice.call(n.childNodes) : [];
 
-			if (first) {
-				topics.reverse();
-			}
-
-			while (topics.length && !isTopicOrToc(topics.peek())) {topics.pop();}
-			if (n && topics.length) {
-				v = topics.peek();
-				return first ? v : child(v, first);
-			}
-			return first ? null : n;
-		}
-
-		//returns either the previous or next actionable node (topic or toc), or null if
-		//we never find anything, meaning we are at one end or the other...
-		function sibling(node, previous) {
-			if (!node) {return null;}
-
-			var parent = node.parentNode,
-				siblingProp = previous ? 'previousSibling' : 'nextSibling', //figure direction
-				siblingNode = node[siblingProp]; //read directional sibling property (pointer ref)
-
-			//If the sibling is TOC or topic, we are done here...
-			return (isTopicOrToc(siblingNode) ? siblingNode :
-					//If not, recurse in the same direction
-					sibling(node[siblingProp], previous)) ||
-				   //If we are at the end of the current branch, look up at the parent node and walk
-				   (parent && sibling(parent[siblingProp], previous));
-		}
-
-		loc = loc ? loc.location : null;
 		if (loc) {
-			nodes.push(getRef(child(sibling(loc, true)) || loc.parentNode));
-			nodes.push(getRef(child(loc, true) || sibling(loc, false) || sibling(loc.parentNode, false)));
+			walker = doc.createTreeWalker(
+					doc.firstChild,
+					NodeFilter.SHOW_ELEMENT,
+					{ acceptNode: function(node) {
+						return isTopicOrToc(node) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+					} },
+					false);
+			walker.currentNode = loc.location;
+			nodes = [
+				getRef(walker.previousNode()),
+				getRef(walker.nextNode())
+			];
 		}
+
 
 		//If we have a rootId, lets make that what we consider the root.
 		if (rootId) {
