@@ -181,9 +181,6 @@ Ext.define('NextThought.view.profiles.About', {
 		//us.  Given that it is also guarenteed that we won't have the add to contacts
 		//button. so if its not editable we tag it with a class so we can snug the button
 		//up if it exists
-
-		nameInfo.editable = true;
-
 		if (!nameInfo.editable && isFeature('request-alias-change') && isMe(user)) {
 			fn = Ext.bind(me.fireEvent, me, ['request-alias-change', me]);
 		}
