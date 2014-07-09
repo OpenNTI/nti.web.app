@@ -1,5 +1,6 @@
 Ext.define('NextThought.model.forums.CommentPost', {
 	extend: 'NextThought.model.forums.Post',
+	mimeType: 'application/vnd.nextthought.forums.generalforumcomment',
 
 	isComment: true,
 

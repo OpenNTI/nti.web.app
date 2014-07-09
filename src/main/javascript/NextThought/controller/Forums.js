@@ -545,7 +545,7 @@ Ext.define('NextThought.controller.Forums', {
 		var postCmp = editor.up('forums-topic-view') || editor.up('[record]'),
 			postRecord = (postCmp && postCmp.getTopic && postCmp.getTopic()) || (postCmp && postCmp.record),
 			isEdit = Boolean(record) && !record.phantom, postLink,
-			commentForum = record || NextThought.model.forums.CommentPost.create();
+			commentForum = record || NextThought.model.forums.Post.create();
 
 		commentForum.set({ body: valueObject.body });
 
@@ -580,8 +580,10 @@ Ext.define('NextThought.controller.Forums', {
 			commentForum.save({
 				url: postLink,//only use postRecord if its a new post.
 				scope: this,
-				success: function(rec) {
-					var topicCmp = Ext.ComponentQuery.query('forums-topic')[0];
+				success: function(_, operation) {
+					var rec = isEdit ? commentForum : ParseUtils.parseItems(operation.response.responseText)[0],
+						topicCmp = Ext.ComponentQuery.query('forums-topic')[0];
+
 					console.log('Success: ', rec);
 					unmask();
 
