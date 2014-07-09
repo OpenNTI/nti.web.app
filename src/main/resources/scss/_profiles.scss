@@ -1324,6 +1324,7 @@
 			padding: 3px;
 			border: 1px solid #efefef;
 			background-color: white;
+			min-height: 38px;
 
 			&:focus {
 				border-color: $primary-blue;
@@ -1331,6 +1332,7 @@
 
 			&[data-field=affiliation] {
 				margin-bottom: 5px;
+				min-height: 23px;
 			}
 
 			&[data-field=about] {
