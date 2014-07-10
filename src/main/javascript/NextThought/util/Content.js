@@ -781,14 +781,14 @@ Ext.define('NextThought.util.Content', {
 		//This function returns true if the node submitted matches a regex looking for topic or toc
 		function isTopicOrToc(node) {
 			if (!node) {return false;}
-			var result = false,
+			var result = NodeFilter.FILTER_SKIP,
 				topicOrToc = topicOrTocRegex.test(node.tagName),
 				href = (node.getAttribute) ? node.getAttribute('href') : null;
 
 			//decide if this is a navigate-able thing, it must be a topic or toc, it must
 			//have an href, and that href must NOT have a fragment
 			if (topicOrToc && href && href.lastIndexOf('#') === -1 && !node.hasAttribute('suppressed')) {
-				result = true;
+				result = NodeFilter.FILTER_ACCEPT;
 			}
 
 			return result;
@@ -808,9 +808,7 @@ Ext.define('NextThought.util.Content', {
 			walker = doc.createTreeWalker(
 					doc.firstChild,
 					NodeFilter.SHOW_ELEMENT,
-					{ acceptNode: function(node) {
-						return isTopicOrToc(node) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
-					} },
+					isTopicOrToc,
 					false);
 
 			walker.currentNode = loc.location;
