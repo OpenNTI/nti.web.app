@@ -10,7 +10,8 @@ Ext.define('NextThought.util.UserDataThreader', {
 		'QuizResult': function(r) {return r;},
 		'CommentPost': function(r) { return r;},
 		'GeneralForumComment': function(r) { return r;},
-		'PersonalBlogComment': function(r) { return r;}
+		'PersonalBlogComment': function(r) { return r;},
+		'ContentCommentPost': function(r) { return r;}
 	},
 
 	//TODO unify this function with buildThreads
