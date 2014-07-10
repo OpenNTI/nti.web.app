@@ -812,11 +812,12 @@ Ext.define('NextThought.util.Content', {
 						return isTopicOrToc(node) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
 					} },
 					false);
+
 			walker.currentNode = loc.location;
-			nodes = [
-				getRef(walker.previousNode()),
-				getRef(walker.nextNode())
-			];
+			nodes[0] = getRef(walker.previousNode());
+
+			walker.currentNode = loc.location;
+			nodes[1] = getRef(walker.nextNode());
 		}
 
 
