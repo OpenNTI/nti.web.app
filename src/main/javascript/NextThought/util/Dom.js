@@ -221,7 +221,8 @@ Ext.define('NextThought.util.Dom', {
 				//remove nodes we deem bad
 				(BAD_NODES[el.tagName]) ||
 				//remove empty nodes (maybe dangerous, images?, is there a way to know if an element is meant to be unary?)
-				(el.childNodes.length === 0 && el.tagName !== 'IMG') ||
+				//allow img and br tags
+				(el.childNodes.length === 0 && !/^(IMG|BR)$/i.test(el.tagName)) ||
 				//remove elements that are effectively empty (whitespace only text node as their only child)
 				(el.childNodes.length === 1 && el.childNodes[0].nodeType === Node.TEXT_NODE && el.childNodes[0].nodeValue.trim() === '') ||
 				//remove Office (xml namespaced) elements (that are empty)... need an would be nice to just

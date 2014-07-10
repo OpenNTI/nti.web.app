@@ -26,7 +26,13 @@ Ext.define('NextThought.view.profiles.About', {
 							cls: 'about field',
 							cn: [
 								{ cls: 'label', html: '{{{NextThought.view.profiles.About.about}}}' },
-								{ cls: 'content', 'data-field': 'about', 'data-placeholder': '{{{NextThought.view.profiles.About.write}}}', 'data-multiline': true },
+								{
+									cls: 'content',
+									'data-field': 'about',
+									'data-rich-text': 'true',
+									'data-placeholder': '{{{NextThought.view.profiles.About.write}}}',
+									'data-multiline': true
+								},
 								{ cls: 'error-msg', 'data-prop': 'about'}
 							]
 						},
@@ -531,6 +537,7 @@ Ext.define('NextThought.view.profiles.About', {
 
 		(fields || []).forEach(function(field) {
 			var prop = field.getAttribute('data-field'),
+				isRich = field.getAttribute('data-rich-text'),
 				text = field.textContent, valid,
 				old = user.get(prop);
 
@@ -538,6 +545,10 @@ Ext.define('NextThought.view.profiles.About', {
 			if (field.querySelector('.placeholder')) {
 				newValues[prop] = null;
 				return;
+			}
+
+			if (isRich) {
+				text = DomUtils.sanitizeExternalContentForInput(field.innerHTML);
 			}
 
 			//use null instead of the empty string
