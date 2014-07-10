@@ -51,7 +51,8 @@ Ext.define('NextThought.model.forums.CommentPost', {
 		reply.set({
 			'ContainerId': comment.get('ContainerId'),
 			'inReplyTo': parent,
-			'references': refs
+			'references': refs,
+			'MimeType': 'application/vnd.nextthought.forums.post'
 		});
 
 		return reply;
