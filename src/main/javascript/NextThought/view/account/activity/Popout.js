@@ -10,6 +10,8 @@ Ext.define('NextThought.view.account.activity.Popout', {
 	width: 400,
 	floating: true,
 	constrain: true,
+	constrainTo: Ext.getBody(),
+	maxHeight: Ext.Element.getViewportHeight(),
 	shadow: false,
 
 	layout: 'auto',
