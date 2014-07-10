@@ -306,9 +306,6 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 			}
 		});
 
-
-		s.loadRecords(parentStore.getRange(), {addRecords: true});
-
 		me.mon(parentStore, {
 			add: function(store, recs) { if (recs) {s.add(recs); s.sort(); }},
 			load: function(store, recs) {
@@ -332,6 +329,8 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 
 		me.bindStore(s);
 		me.setMaskBind(parentStore);
+
+		s.loadRecords(parentStore.getRange(), {addRecords: true});
 	},
 
 
