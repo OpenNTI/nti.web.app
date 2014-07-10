@@ -285,7 +285,13 @@ Ext.define('NextThought.view.account.history.Panel', {
 		//wait until the library is loaded so Location.getMeta will return something
 		Library.onceLoaded()
 			.then(function() {
-				Ext.each(store.getRange(), me.fillInData, me);
+				store.getRange().forEach(function(o) {
+					try {
+						me.fillInData(o);
+					} catch (e) {
+						console.warn('There was an error...\n', e.stack || e.message || e);
+					}
+				});
 				me.insertDividers();
 
 				me.maybeShowMoreItems();

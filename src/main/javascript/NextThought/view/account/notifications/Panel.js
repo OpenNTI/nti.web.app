@@ -368,7 +368,14 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 
 
 	storeLoaded: function(store) {
-		Ext.each(store.getRange(), this.fillInData, this);
+		var fill = this.fillInData.bind(this);
+		store.getRange().forEach(function(r) {
+			try {
+				fill(r);
+			} catch (e) {
+				console.warn('There was an error...\n', e.stack || e.message || e);
+			}
+		});
 		this.insertDividers();
 		this.maybeShowMoreItems();
 	},
