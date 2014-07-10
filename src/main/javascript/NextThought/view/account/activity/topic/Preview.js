@@ -73,6 +73,12 @@ Ext.define('NextThought.view.account.activity.topic.Preview', {
 	},
 
 
+	initComponent: function() {
+		this.callParent(arguments);
+		this.loadComments();
+	},
+
+
 	beforeRender: function() {
 		this.callParent(arguments);
 		this.record.get('headline').compileBodyContent(this.setBody, this, null, this.self.WhiteboardSize);
@@ -84,14 +90,12 @@ Ext.define('NextThought.view.account.activity.topic.Preview', {
 		}
 	},
 
-	afterRender: function() {
-		this.callParent(arguments);
-		this.mon(this.pathEl, 'click', this.navigateToItem, this);
 
-		if (!this.threadedReplies) { return; }
-
+	loadComments: function() {
 		var me = this,
 			comments = me.add({xtype: 'forums-topic-comment-thread', topic: me.record, activeComment: me.record.focusRecord});
+
+		if (!this.threadedReplies) { return; }
 
 		if (me.record.focusRecord) {
 			comments.store.addFilter({
@@ -134,6 +138,13 @@ Ext.define('NextThought.view.account.activity.topic.Preview', {
 					.then(me.fireEvent.bind(me, 'realign'));
 			}
 		});
+
+		me.mon(comments.store, 'load', me.fireEvent.bind(me, 'realign'));
+	},
+
+	afterRender: function() {
+		this.callParent(arguments);
+		this.mon(this.pathEl, 'click', this.navigateToItem, this);
 	},
 
 	destroy: function() {
