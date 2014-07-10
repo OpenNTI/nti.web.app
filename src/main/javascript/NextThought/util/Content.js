@@ -775,7 +775,7 @@ Ext.define('NextThought.util.Content', {
 			topicOrTocRegex = /topic|toc/i;
 
 		function maybeBlocker(id) {
-			return (!id || /\.blocker\./ig.test(id)) ? undefined : id;
+			return (!id || /\.blocker(\.)?/ig.test(id)) ? undefined : id;
 		}
 
 		//This function returns true if the node submitted matches a regex looking for topic or toc
