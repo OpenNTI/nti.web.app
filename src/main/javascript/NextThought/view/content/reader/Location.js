@@ -173,13 +173,16 @@ Ext.define('NextThought.view.content.reader.Location', {
 
 
 	resolvePageInfo: function(ntiidOrPageInfo, rootId, finish, hasCallback) {
-		var me = this;
+		var me = this,
+			requestedPageInfo = null,
+			ntiid;
 
 		function success(pageInfo) {
-			if (ntiidOrPageInfo === rootId && !LocationMeta.getValue(rootId)) {
+			if (ntiid === rootId && !LocationMeta.getValue(rootId)) {
 				// let's cache this on the LocationMeta, if it's not there already.
 				LocationMeta.createAndCacheMeta(rootId, pageInfo);
 			}
+			me.requestedPageInfo = requestedPageInfo || pageInfo;
 			me.currentPageInfo = pageInfo;
 			me.currentNTIID = pageInfo.getId();
 			me.fireEvent('navigateComplete', pageInfo, finish, hasCallback);
@@ -192,21 +195,28 @@ Ext.define('NextThought.view.content.reader.Location', {
 			if (me.fireEvent('navigateAbort', r, ntiidOrPageInfo, finish) !== false) {
 				Ext.callback(finish, null, [me.reader, {failure: true, req: q, error: r}]);
 			}
-
 		}
 
 		if (ntiidOrPageInfo.isPageInfo) {
-			success(ntiidOrPageInfo);
-			return;
+			if (ntiidOrPageInfo.isPageRoot()) {
+				success(ntiidOrPageInfo);
+				return;
+			}
+
+			ntiid = ntiidOrPageInfo.getPageRootID();
+			requestedPageInfo = ntiidOrPageInfo;
+		} else {
+			ntiid = ntiidOrPageInfo;
 		}
 
 		//page info's are cached at the service layer.
-		Service.getPageInfo(ntiidOrPageInfo, success, failure, me);
+		Service.getPageInfo(ntiid, success, failure, me);
 	},
 
 
 	getLocation: function() {
 		return Ext.apply({
+			requestedPageInfo: this.requestedPageInfo,
 			pageInfo: this.currentPageInfo
 		},ContentUtils.getLocation(this.currentNTIID));
 	},

@@ -396,7 +396,7 @@ Ext.define('NextThought.controller.Navigation', {
 		result.then(function() {
 			var l = reader.getLocation(),
 				s = reader.getScroll(),
-				p = l && l.pageInfo;
+				p = l && l.requestedPageInfo;
 			l = p && p.getLinkFragment('content');
 			if (l) {
 				wait(500).then(s.toTarget.bind(s, l));

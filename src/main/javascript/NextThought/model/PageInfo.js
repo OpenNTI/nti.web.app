@@ -36,6 +36,34 @@ Ext.define('NextThought.model.PageInfo', {
 	},
 
 
+	isPageRoot: function() {
+		return !this.getLinkFragment('content');
+	},
+
+
+	getPageRootID: function() {
+		if (this.isPageRoot()) {
+			return this.getId();
+		}
+
+		var l = ContentUtils.getLineage(this);
+
+		function isRoot(i) {
+			var l = ContentUtils.getLocation(i);
+			l = l && l.location;
+			l = l && l.getAttribute('href');
+			l = l && l.split('#')[1];
+			return !l;
+		}
+
+		while (!isRoot(l[0]) && l.length) {
+			l.shift();
+		}
+
+		return l[0];
+	},
+
+
 	isPartOfCourse: function() {
 		var maybe = this.isCourse;
 
