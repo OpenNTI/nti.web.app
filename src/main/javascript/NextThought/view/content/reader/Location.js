@@ -197,14 +197,11 @@ Ext.define('NextThought.view.content.reader.Location', {
 
 		if (ntiidOrPageInfo.isPageInfo) {
 			success(ntiidOrPageInfo);
+			return;
 		}
-		//If we have the pageInfo cached, used it.
-		else if (ntiidOrPageInfo === rootId && LocationMeta.getValue(rootId)) {
-			success(LocationMeta.getValue(ntiidOrPageInfo).pageInfo);
-		}
-		else {
-			Service.getPageInfo(ntiidOrPageInfo, success, failure, me);
-		}
+
+		//page info's are cached at the service layer.
+		Service.getPageInfo(ntiidOrPageInfo, success, failure, me);
 	},
 
 
