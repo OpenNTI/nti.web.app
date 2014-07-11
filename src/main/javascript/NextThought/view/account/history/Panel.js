@@ -36,7 +36,9 @@ Ext.define('NextThought.view.account.history.Panel', {
 		'forums.personalblogcomment',
 		'forums.personalblogentrypost',
 		'forums.communityheadlinepost',
-		'forums.generalforumcomment'
+		'forums.contentheadlinepost',
+		'forums.generalforumcomment',
+		'forums.contentforumcomment'
 	],
 
 	grouping: 'GroupingField',

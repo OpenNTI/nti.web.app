@@ -12,6 +12,8 @@ Ext.define('NextThought.mixins.ActivityFilters', {
 			'forums.personalblogentrypost',
 			'forums.communityheadlinepost',
 			'forums.generalforumcomment',
+			'forums.contentforumcomment',
+			'forums.contentheadlinepost',
 			'forums.communityheadlinetopic'
 		],
 		'notes': ['highlight', 'note'],

@@ -2,7 +2,10 @@ Ext.define('NextThought.view.account.notifications.types.ForumTopic', {
 	extend: 'NextThought.view.account.notifications.types.Note',
 	alias: 'widget.notification-item-forum-topic',
 
-	keyVal: 'application/vnd.nextthought.forums.communityheadlinetopic',
+	keyVal: [
+		'application/vnd.nextthought.forums.communityheadlinetopic',
+		'application/vnd.nextthought.forums.contentheadlinetopic'
+	],
 
 	wording: getString('NextThought.view.account.notifications.types.ForumTopic.wording', '{creator} created a discussion: {title}'),
 

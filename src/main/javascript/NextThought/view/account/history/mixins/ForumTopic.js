@@ -2,7 +2,10 @@ Ext.define('NextThought.view.account.history.mixins.ForumTopic', {
 	extend: 'NextThought.view.account.history.mixins.Note',
 	alias: 'widget.history-item-forum-topic',
 
-	keyVal: 'application/vnd.nextthought.forums.communityheadlinetopic',
+	keyVal: [
+		'application/vnd.nextthought.forums.communityheadlinetopic',
+		'application/vnd.nextthought.forums.contentheadlinetopic'
+	],
 
 
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup([

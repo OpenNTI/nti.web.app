@@ -28,7 +28,9 @@ Ext.define('NextThought.view.account.activity.View', {
 			'forums.personalblogentrypost',
 			'forums.communityheadlinepost',
 			'forums.generalforumcomment',
-			'forums.communityheadlinetopic'
+			'forums.contentforumcomment',
+			'forums.communityheadlinetopic',
+			'forums.contentheadlinetopic'
 		],
 		'notes': ['highlight', 'note'],
 		'contact': ['user']
