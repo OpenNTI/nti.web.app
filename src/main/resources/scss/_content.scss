@@ -227,6 +227,11 @@
 						color: #b8b8b8;
 						font: normal normal 14px/60px "Open Sans", sans-serif;
 					}
+
+					&.books::before {
+						content: 'BOOK';
+					}
+
 					&::after {
 						position: static;
 						background: none;
@@ -241,7 +246,11 @@
 					}
 				}
 				.toc {
-					padding-left: 0.5em;
+					padding-left: 0.2em;
+
+					&::before {
+						display: none;
+					}
 				}
 			}
 		}

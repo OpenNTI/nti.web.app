@@ -142,7 +142,13 @@ Ext.define('NextThought.view.content.Navigation', {
 
 		this.currentNtiid = pageNtiid;
 
-		this[(loc.isCourse ? 'hide' : 'show') + 'TableOfContentsLabel']();
+		if (loc.isCourse) {
+			this.hideTableOfContentsLabel();
+			this.tabEl.removeCls('books');
+		} else {
+			this.showTableOfContentsLabel();
+			this.tabEl.addCls('books');
+		}
 
 		this.tocFlyout.setContentPackage(loc.title, ntiid, rootId);
 		this.cleanupMenus(); //cleanup before proceeding.
