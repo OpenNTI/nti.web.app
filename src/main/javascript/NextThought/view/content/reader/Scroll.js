@@ -118,9 +118,12 @@ Ext.define('NextThought.view.content.reader.Scroll', {
 
 
 	toTarget: function(target) {
+		function getNode(t) {
+			return document.getElementById(t) || de.getElementById(t) || de.getElementsByName(t)[0];
+		}
 		var de = this.reader.getDocumentElement(),
 				c = Ext.getCmp(target),
-				e = document.getElementById(target) || de.getElementById(target) || de.getElementsByName(target)[0],
+				e = getNode(target) || getNode(decodeURIComponent(target)),
 				topMargin = 75;
 
 		if (!e && c) {
@@ -134,7 +137,7 @@ Ext.define('NextThought.view.content.reader.Scroll', {
 		}
 
 		if (!e) {
-			console.warn('toTarget: no target found: ', target);
+			console.warn('toTarget: no target found for: ', target);
 		}
 		else {
 			this.toNode(e, null, null);
