@@ -140,7 +140,7 @@ Ext.define('NextThought.controller.ContentManagement', {
 		}
 
 		//if we are already in the course just switch the tab
-		if (contentView.currentCourse === bundle) {
+		if (contentView.currentBundle === bundle) {
 			contentView.setActiveTab('course-forum');
 		} else {
 			//finally if we aren't in the course switch to it
