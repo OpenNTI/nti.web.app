@@ -667,8 +667,8 @@ Ext.define('NextThought.controller.Navigation', {
 	},
 
 
-	onNavigateToForum: function(board, course, silent) {
-		if (course) { return; }
+	onNavigateToForum: function(board, bundle, silent) {
+		if (bundle) { return; }
 
 		this.setView('forums');
 		return Ext.getCmp('forums');

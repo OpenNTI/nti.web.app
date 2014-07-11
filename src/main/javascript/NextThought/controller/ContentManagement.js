@@ -119,7 +119,42 @@ Ext.define('NextThought.controller.ContentManagement', {
 		} catch (er) {
 			end();
 		}
+	},
+
+	onNavigateToForum: function(board, bundle, silent) {
+		if (!bundle) { return; }
+
+		var contentView = this.getContentView(),
+			forumContainer, isNavigatingToForum = false;
+
+		//add logging to see why contentView.down('[isForumContainer]') is returning undefined... at least I think its returning undefined some times
+		console.log('Looking for the forum container under:' + contentView.getId() + ',' + contentView.xtype + ',' + contentView.down('[isForumContainer]'));
+
+		//if its silent, don't switch to the course or switch the tab
+		if (silent) {
+			return contentView.currentBundle === bundle && contentView.down('[isForumContainer]');
+		}
+
+		if (this.fireEvent('show-view', 'content', true) === false) {
+			return false;
+		}
+
+		//if we are already in the course just switch the tab
+		if (contentView.currentCourse === bundle) {
+			contentView.setActiveTab('course-forum');
+		} else {
+			//finally if we aren't in the course switch to it
+			this.getMainNav().updateCurrent(false, bundle);
+			contentView.onBundleSelected(bundle, 'course-forum');
+			isNavigatingToForum = true;
+		}
+
+		forumContainer = contentView.down('[isForumContainer]');
+		forumContainer.isFromNavigatingToForum = isNavigatingToForum;
+
+		return forumContainer;
 	}
+
 }, function() {
 
 	var getPrefix = ParseUtils.ntiidPrefix.bind(ParseUtils);
@@ -139,6 +174,14 @@ Ext.define('NextThought.controller.ContentManagement', {
 						var i = s.findBy(prefix(ntiid));
 						return i >= 0 ? s.getAt(i) : Promise.reject('Not Found');
 					});
+		},
+		findBundleBy: function(fn) {
+			return Ext.getStore('ContentBundles').onceLoaded()
+				.then(function(s) {
+					var i = s.findBy(fn);
+
+					return i >= 0 ? s.getAt(i) : Promise.reject('Not Found');
+				});
 		}
 	};
 });

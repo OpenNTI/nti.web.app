@@ -2,7 +2,10 @@ Ext.define('NextThought.view.account.notifications.types.ForumComment', {
 	extend: 'NextThought.view.account.notifications.types.Base',
 	alias: 'widget.notification-item-forum-comment',
 
-	keyVal: 'application/vnd.nextthought.forums.generalforumcomment',
+	keyVal: [
+		'application/vnd.nextthought.forums.generalforumcomment',
+		'application/vnd.nextthought.forums.contentforumcomment'
+	],
 
 	itemCls: 'comment',
 	showCreator: true,

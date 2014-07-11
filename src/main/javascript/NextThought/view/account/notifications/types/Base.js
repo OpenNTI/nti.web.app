@@ -9,13 +9,27 @@ Ext.define('NextThought.view.account.notifications.types.Base', {
 
 	constructor: function(config) {
 		Ext.apply(this, config);
+
 		if (!this.panel) {
 			return;
 		}
 
-		this.panel.registerSubType(this.keyVal, this.getTpl());
-		this.panel.registerFillData(this.keyVal, this.fillInData.bind(this));
-		this.panel.registerClickHandler(this.keyVal, this.clicked);
+		var panel = this.panel,
+			tpl = this.getTpl(),
+			fill = this.fillInData.bind(this);
+			clicked = this.clicked;
+
+		this.keyVal = Ext.isArray(this.keyVal) ? this.keyVal : [this.keyVal];
+
+		(this.keyVal || []).forEach(function(val) {
+			panel.registerSubType(val, tpl);
+			panel.registerFillData(val, fill);
+			panel.registerClickHandler(val, clicked);
+		});
+
+		// this.panel.registerSubType(this.keyVal, this.getTpl());
+		// this.panel.registerFillData(this.keyVal, this.fillInData.bind(this));
+		// this.panel.registerClickHandler(this.keyVal, this.clicked);
 	},
 
 	getTpl: function() {

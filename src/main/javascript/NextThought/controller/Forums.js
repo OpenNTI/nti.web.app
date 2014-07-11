@@ -437,12 +437,12 @@ Ext.define('NextThought.controller.Forums', {
 			return p.then(finish.bind(this, view));
 		}
 
-		return Promise.all([p, record.findCourse()])
+		return Promise.all([p, record.findBundle()])
 				.then(function(results) {return results.last();})//since we're waiting on both, only pass the last result to the next `then`.
-				.then(function(course) {
+				.then(function(bundle) {
 					var s = (me.stateRestoring && !me.hasStateToRestore) || silent;
 					//if there is a state to restore that we aren't incharge of pass true as the last argument, to keep it from switching the tab.
-					view = me.callOnAllControllersWith('onNavigateToForum', record, course, s);
+					view = me.callOnAllControllersWith('onNavigateToForum', record, bundle, s);
 					//set a flag to keep the view from updating the state
 					view.ignoreStateUpdate = s;
 					return finish(view);

@@ -9,7 +9,19 @@ Ext.define('NextThought.model.forums.Board', {
 	],
 
 
-	findBundle: function() { return Promise.reject('Not Found'); },//TODO: fill this in
+	findBundle: function() {
+		var me = this;
+
+		return ContentManagementUtils.findBundleBy(function(bundle) {
+			var links = bundle.get('Links'),
+				link = links && links.getRelLink('DiscussionBoard');
+
+			return link && link.ntiid === me.getId();
+		})
+		.fail(function(reason) {
+			return me.findCourse();
+		});
+	},
 
 
 	findCourse: function() {
