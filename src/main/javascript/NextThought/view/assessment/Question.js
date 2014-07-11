@@ -127,17 +127,16 @@ Ext.define('NextThought.view.assessment.Question', {
 			q = assessedQuestionSet;
 		}
 
-		if (!q) {
-			Ext.Error.raise('Couldn\'t find my question? :(');
-		}
 
-		correct = String(q.isCorrect());
+		correct = q && String(q.isCorrect());
 		if (!fn[correct]) {
 			correct = 'null';
 		}
 		this[fn[correct]](assessedQuestionSet.noMark);
 
-		this.down('question-parts').updateWithResults(q);
+		if (q) {
+			this.down('question-parts').updateWithResults(q);
+		}
 	},
 
 
