@@ -369,7 +369,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		}
 
 		//Default container, this should be replaced with the local container.
-		record.set('ContainerId', this.reader.getLocation().NTIID);
+		if (!record.get('ContainerId')) { record.set('ContainerId', this.reader.getLocation().NTIID); }
 
 		//set a flag to prevent NoteOverlay from resolving the line
 		this.reader.creatingAnnotation = true;
