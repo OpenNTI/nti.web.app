@@ -40,6 +40,11 @@ Ext.define('NextThought.util.Globals', {
 		html: ':('
 	}),
 
+	WELL_KNOWNS: {
+		thumb: '/presentation-assets/webapp/v1/contentpackage-thumb-60x60.png',
+		landing: '/presentation-assets/webapp/v1/contentpackage-landing-232x170.png'
+	},
+
 	//Holy mother of perl! JSLint really hates the javascript protocol. :( We have to really obfuscate that string for it not to complain.
 	EMPTY_WRITABLE_IFRAME_SRC: ('javascript' + (function() {return ':';}())),
 

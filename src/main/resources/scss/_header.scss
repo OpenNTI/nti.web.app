@@ -14,7 +14,7 @@
 		background-position: center;
 
 		&.is-book{
-			background-size: contain;
+			//background-size: contain;
 			background-repeat: no-repeat;
 		}
 	}
@@ -238,7 +238,7 @@
 .x-panel-content-switcher{
 	box-shadow: 0 0 8px rgba(0,0,0,0.5);
 
-	.x-menu-body{ padding: 0; background: #eae9e9; }
+	.x-menu-body{ padding: 0; background: #eae9e9; border: none; }
 
 	.item {
 		@include content-item-row;

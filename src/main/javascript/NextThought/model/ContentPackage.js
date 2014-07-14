@@ -93,7 +93,7 @@ Ext.define('NextThought.model.ContentPackage', {
 			root = this.get('root'),
 			img = new Image();
 
-		me.set('icon', getURL(root).concatPath('/presentation-assets/webapp/v1/contentpackage-landing-232x170.png'));
+		me.set('icon', getURL(root).concatPath(Globals.WELL_KNOWNS.landing));
 
 		img.onerror = function() {
 			me.set('icon', fallback);

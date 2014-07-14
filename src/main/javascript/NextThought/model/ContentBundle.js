@@ -68,7 +68,7 @@ Ext.define('NextThought.model.ContentBundle', {
 			return;
 		}
 
-		me.set('icon', getURL(root).concatPath('/presentation-assets/webapp/v1/contentpackage-landing-232x170.png'));
+		me.set('icon', getURL(root).concatPath(Globals.WELL_KNOWNS.landing));
 
 		img.onerror = function() {
 			var e = me.get('ContentPackages')[0];

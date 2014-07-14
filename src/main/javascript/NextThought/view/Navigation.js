@@ -245,7 +245,8 @@ Ext.define('NextThought.view.Navigation', {
 	updateUI: function(rec) {
 		var cls = 'is-book',
 			img = this.imgEl,
-			data = rec.asUIData();
+			data = rec.asUIData(),
+			icon = rec.get('root').concatPath(Globals.WELL_KNOWNS.thumb);
 
 		img.removeCls(cls);
 		img[data.isCourse ? 'removeCls' : 'addCls'](cls);
