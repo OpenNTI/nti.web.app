@@ -6,6 +6,10 @@ Ext.define('NextThought.model.ContentBundle', {
 		'NextThought.model.forums.ContentBoard'
 	],
 
+	mixins: {
+		'PresentationResources': 'NextThought.mixins.PresentationResources'
+	},
+
 	isBundle: true,
 
 	fields: [
@@ -59,23 +63,29 @@ Ext.define('NextThought.model.ContentBundle', {
 	},
 
 
-	__setImage: function() {
-		var me = this,
-			root = this.get('root'),
-			img = new Image();
+	getDefaultAssetRoot: function() {
+		var root = this.get('root');
 
-		if (!Ext.isEmpty(me.get('icon'))) {
-			return;
+		if (!root) {
+			console.error('No root for content bundle: ', this);
+			return '';
 		}
 
-		me.set('icon', getURL(root).concatPath(Globals.WELL_KNOWNS.landing));
+		return getURL(root).concatPath('/presentation-assets/webapp/v1/');
+	},
 
-		img.onerror = function() {
-			var e = me.get('ContentPackages')[0];
-			me.set('icon', getURL(e.get('icon')));
-		};
 
-		img.src = me.get('icon');
+	__setImage: function() {
+		var me = this;
+
+		me.getImgAsset('thumb')
+			.then(function(url) {
+				me.set('icon', url);
+			})
+			.fail(function() {
+				var e = me.get('ContentPackages')[0];
+				me.set('icon', getURL(e.get('icon')));
+			});
 	},
 
 

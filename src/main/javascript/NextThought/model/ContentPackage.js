@@ -2,6 +2,10 @@ Ext.define('NextThought.model.ContentPackage', {
 	extend: 'NextThought.model.Base',
 	requires: ['NextThought.model.converters.DCCreatorToAuthor'],
 
+	mixins: {
+		'PresentationResources': 'NextThought.mixins.PresentationResources'
+	},
+
 	idProperty: 'index',
 	fields: [
 		{ name: 'Archive Last Modified', type: 'date', dateFormat: 'timestamp' },
@@ -14,6 +18,7 @@ Ext.define('NextThought.model.ContentPackage', {
 		{ name: 'title', type: 'string' },
 		{ name: 'author', type: 'DCCreatorToAuthor', mapping: 'DCCreator', defaultValue: ['Author Name Here']},
 		{ name: 'version', type: 'string'},
+		{ name: 'PlatformPresentationResources', type: 'auto'},
 		{ name: 'PresentationProperties', type: 'auto'},
 		{ name: 'path', type: 'string', defaultValue: ''},
 		{ name: 'sample', type: 'bool', defaultValue: false, persist: false},
@@ -86,20 +91,25 @@ Ext.define('NextThought.model.ContentPackage', {
 	},
 
 
+	getDefaultAssetRoot: function() {
+		var root = this.get('root');
+
+		if (!root) {
+			console.error('No root for content package: ', this);
+			return '';
+		}
+
+		return getURL(root).concatPath('/presentation-assets/webapp/v1/');
+	},
+
 
 	__setImage: function() {
-		var me = this,
-			fallback = this.get('icon'),
-			root = this.get('root'),
-			img = new Image();
+		var me = this;
 
-		me.set('icon', getURL(root).concatPath(Globals.WELL_KNOWNS.landing));
-
-		img.onerror = function() {
-			me.set('icon', fallback);
-		};
-
-		img.src = me.get('icon');
+		me.getImgAsset('landing')
+			.then(function(url) {
+				me.set('icon', url);
+			});
 	}
 
 });

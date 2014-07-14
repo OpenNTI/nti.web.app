@@ -9,6 +9,10 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 		'NextThought.store.courseware.ToCBasedOutline'
 	],
 
+	mixins: {
+		'PresentationResources': 'NextThought.mixins.PresentationResources'
+	},
+
 	fields: [
 		{ name: 'isCourse', type: 'bool', defaultValue: true, persist: false },
 		{ name: 'Discussions', type: 'singleItem', persist: false },
@@ -42,28 +46,33 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 	},
 
 
-	setLibraryImage: function() {
-		var me = this,
-			location = me.__getLocationInfo(),
-			root = location && location.root,
-			img = new Image();
+	getDefaultAssetRoot: function() {
+		var location = this.__getLocationInfo(),
+			root = location && location.root;
 
 		if (!root) {
 			console.error('No location root for course');
-			return;
+			return '';
 		}
 
-		me.set('cover', getURL(root).concatPath('/presentation-assets/webapp/v1/contentpackage-landing-232x170.png'));
+		return getURL(root).concatPath('/presentation-assets/webapp/v1/');
+	},
 
-		img.onerror = function() {
-			var e = me.getCourseCatalogEntry();
 
-			console.error('No well known path for this course: ', e);
+	setLibraryImage: function() {
+		var me = this;
 
-			me.set('cover', e ? e.get('thumbnail') : 'missing-entry.png');
-		};
+		me.getImgAsset('landing')
+			.then(function(url) {
+				me.set('cover', url);
+			})
+			.fail(function() {
+				var e = me.getCourseCatalogEntry();
 
-		img.src = me.get('cover');
+				console.error('No well known path for this course: ', e);
+
+				me.set('cover', e ? e.get('thumbnail') : 'missing-entry.png');
+			});
 	},
 
 
