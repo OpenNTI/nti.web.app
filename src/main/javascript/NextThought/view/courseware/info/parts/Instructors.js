@@ -65,7 +65,7 @@ Ext.define('NextThought.view.courseware.info.parts.Instructors', {
 			}
 		}
 
-		UserRepository.getUser(Ext.Array.clean(Ext.Array.pluck(i, 'username')), function(u) {
+		UserRepository.getUser(Ext.Array.clean(Ext.Array.pluck(i, 'Username')), function(u) {
 			Ext.each(u, update);
 		});
 
