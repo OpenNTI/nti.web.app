@@ -763,7 +763,7 @@ Ext.define('NextThought.controller.Forums', {
 					}
 				}
 			} catch (e) {
-				console.error('Could not insert post into widget', Global.getError(e));
+				console.error('Could not insert post into widget', Globals.getError(e));
 			} finally {
 				me.applyTopicToStores(entry);
 				Ext.callback(editorCmp.onSaveSuccess, editorCmp, [entry, isEdit]);
