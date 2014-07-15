@@ -7,7 +7,7 @@ Ext.define('NextThought.view.forums.topic.parts.NavGrid', {
 	],
 
 	viewConfig: {
-		cls: 'nav-outline forum-outline'
+		cls: 'nav-outline forum-outline scrollable'
 	},
 
 	selModel: {
