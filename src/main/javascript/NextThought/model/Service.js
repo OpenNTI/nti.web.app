@@ -458,6 +458,7 @@ Ext.define('NextThought.model.Service', {
 		return result;
 	},
 
+
 	getObjects: function(ntiids, success, failure, scope, safe) {
 		var me = this;
 		if (!Ext.isArray(ntiids)) {
@@ -481,10 +482,24 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
+	getSupportLinks: function() {
+		this.supportLinks = this.supportLinks || {};
+		return Ext.applyIf(this.supportLinks, {
+			about: 'http://nextthought.com',
+			termsOfService: 'about:blank'
+		});
+	},
 
+	overrideServiceLink: function(link, value) {
+		var o = {}; o[link] = value;
+		this.supportLinks = Ext.apply(this.supportLinks || {}, o);
+	},
+
+
+	//region capability shortcuts
 	/*
-	 *	The following methods are for deciding when things can or cannot happen
-	 */
+		 *	The following methods are for deciding when things can or cannot happen
+		 */
 
 	canUploadAvatar: function() {
 		return this.hasCapability('nti.platform.customization.avatar_upload');
@@ -556,5 +571,6 @@ Ext.define('NextThought.model.Service', {
 	canWorkspaceBlog: function() {
 		return Boolean(Service.getCollection('Blog'));
 	}
+	//endregion
 
 });

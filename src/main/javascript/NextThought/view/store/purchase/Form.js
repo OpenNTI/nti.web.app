@@ -448,7 +448,7 @@ Ext.define('NextThought.view.store.purchase.Form', {
 
 	onCheckboxLinkClicked: function() {
 		//TODO hardcoded link needs to go away preferably for a link like what we use for the welcome guide
-		window.open($AppConfig.links.terms_of_service, '_blank');
+		window.open(Service.getSupportLinks().termsOfService, '_blank');
 	},
 
 

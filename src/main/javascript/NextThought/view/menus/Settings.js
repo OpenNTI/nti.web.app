@@ -41,7 +41,7 @@ Ext.define('NextThought.view.menus.Settings', {
 			items.push({ action: 'welcome', text: getString('NextThought.view.menus.Settings.welcome'), link: welcomeLink});
 		}
 
-		items.push({ action: 'about', text: getString('NextThought.view.menus.Settings.about'), href: 'http://www.nextthought.com/', hrefTarget: '_blank'});
+		items.push({ action: 'about', text: getString('NextThought.view.menus.Settings.about'), href: Service.getSupportLinks().about, hrefTarget: '_blank'});
 
 		//disable help because there are now 3 seperate help documents for different environments.  ugh!
 		//items.push({ action: 'help', text: 'Help'});

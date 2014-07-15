@@ -329,14 +329,15 @@ Ext.define('NextThought.controller.Session', {
 					m.maybeTakeImmediateAction(r);
 					m.logoutURL = m.getLink(r, 'logon.logout');
 
-					Ext.Object.each({
-						'content.permanent_general_privacy_page': 'privacy_policy',
-						'content.permanent_tos_page': 'terms_of_service'
-					}, function(server, local) {
-						$AppConfig.links[local] = m.getLink(r, server);
-					});
-
-					return m.resolveService();
+					return m.resolveService()
+							.then(function() {
+								Ext.Object.each({
+									'content.permanent_general_privacy_page': 'privacyPolicy',
+									'content.permanent_tos_page': 'termsOfService'
+								}, function(server, local) {
+									Service.overrideServiceLink(local, m.getLink(r, server));
+								});
+							});
 				});
 	},
 
