@@ -15,15 +15,13 @@ Ext.define('NextThought.view.sharing.Window', {
 		this.items = [
 			{
 				xtype: 'component',
-				renderTpl: [
-					'<div class="{model:lowercase}">',
-						'<div class="share-with-data">',
-							'<div class="title"><img id="{id}-avatar" src="{avatarURL}"> {title}</div>',
-							'<div class="description">{model:capitalize} by <span id="{id}-name" class="username">{name}</span></div>',
-							'<div class="snippet">{content:ellipsis(150)}</div>',
-						'</div>',
-					'</div>'
-				],
+				renderTpl: Ext.DomHelper.markup({ cls: '{model:lowercase}', cn: [
+					{ cls: 'share-with-data', cn: [
+						{ cls: 'title', cn: [{tag: 'img', id: '{id}-avatar', src: '{avatarURL}'}, '{title}']},
+						{ cls: 'description', cn: ['{model:capitalize} by ', {tag: 'span', id: '{id}-name', cls: 'username', html: '{name}'}]},
+						{ cls: 'snippet', html: '{content:ellipsis(150)}' }
+					] }
+				]}),
 				childEls: ['name', 'avatar']
 			},
 			{
