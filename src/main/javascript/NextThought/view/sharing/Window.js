@@ -67,6 +67,8 @@ Ext.define('NextThought.view.sharing.Window', {
 			info = this.items.first(),
 			buttons;
 
+		this.mon(history.observable, 'pop', 'destroy', this);
+
 		if (this.record && this.record.getBodyText) {
 			content = this.record.getBodyText();
 		}
