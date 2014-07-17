@@ -39,9 +39,13 @@ Ext.define('NextThought.model.ContentBundle', {
 
 	statics: {
 		fromPackage: function(contentPackage) {
-			var id = contentPackage.get('NTIID') + '-auto-bundle';
-			return this.create(
-					Ext.applyIf({ ContentPackages: [contentPackage], href: '/' }, contentPackage.raw), id);
+			var id = contentPackage.get('NTIID') + '-auto-bundle',
+				reader = ParseUtils.getReaderFor({MimeType: 'application/vnd.nextthought.contentbundle'}),
+				data = Ext.applyIf({ ContentPackages: [contentPackage], href: '/' }, contentPackage.raw),
+				convertedValues,
+				record = this.create(undefined, id, data, convertedValues = {});
+			reader.convertRecordData(convertedValues, data, record);
+			return record;
 		}
 	},
 
