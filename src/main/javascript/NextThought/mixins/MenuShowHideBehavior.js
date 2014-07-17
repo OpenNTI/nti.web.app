@@ -54,7 +54,7 @@ Ext.define('NextThought.mixins.MenuShowHideBehavior', {
 	startShow: function(el, align, offset) {
 		this.stopHide();
 		this.__showTimeout = Ext.defer(function() {
-			if (el && el.isVisible(true)) {
+			if (el && Ext.fly(el).isVisible(true)) {
 				this.showBy(el, align, offset);
 			}
 		}, 750, this);
