@@ -57,7 +57,7 @@ Ext.define('NextThought.mixins.MenuShowHideBehavior', {
 			if (el && Ext.fly(el).isVisible(true)) {
 				this.showBy(el, align, offset);
 			}
-		}, 500, this);
+		}, 400, this);
 	},
 
 
