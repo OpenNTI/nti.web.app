@@ -648,7 +648,7 @@ Ext.define('NextThought.controller.Navigation', {
 						}
 					}
 
-					if (!error) {
+					if (!error && content) {
 						content.onceSettled().then(scrollNow);
 					}
 				}
