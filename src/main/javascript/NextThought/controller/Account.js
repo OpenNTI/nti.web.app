@@ -153,7 +153,14 @@ Ext.define('NextThought.controller.Account', {
 
 
 	showContactUs: function() {
-		var me = this;
+		var me = this,
+			help = Service.getSupportLinks().supportEmail;
+
+		if (help) {
+			Globals.sendEmailTo(help);
+			return;
+		}
+
 		if (me.contactUsWin && !me.contactUsWin.isDestroyed) {
 			me.contactUsWin.show();
 			return;
