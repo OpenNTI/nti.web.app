@@ -7,7 +7,7 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 	inputTpl: Ext.DomHelper.markup({
 		cn: [
 			{ cls: 'label', html: '{label}' },
-			{ tag: 'tpl', 'if': 'due', cn: { tag: 'time', cls: 'due', datetime: '{due:date("c")}', html: 'Due {due:date("l, F j")}'}},
+			{ tag: 'time', cls: 'due', datetime: '{due:date("c")}', cn: { tag: 'tpl', 'if': 'due', html: 'Due {due:date("l, F j")}'}},
 			{ cls: 'submit button {enable:boolStr("","disabled")}', cn: [
 				'{{{NextThought.view.assessment.input.FileSubmission.upload}}}',
 				 { tag: 'tpl', 'if': 'enable', cn: { tag: 'input', type: 'file', cls: 'file' }}
@@ -98,7 +98,7 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		this.dueString = this.dueEl && this.dueEl.getHTML();
+		this.dueString = this.dueEl.getHTML();
 
 		if (this.inputField) {
 			this.monitor();
