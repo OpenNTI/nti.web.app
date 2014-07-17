@@ -296,19 +296,24 @@ Ext.define('NextThought.controller.Session', {
 
 
 		return m.ServiceInterface.request({ timeout: 60000, url: getURL(d + ping)})
-				.then(function(r) { var l = m.getLink(r, 'logon.handshake'); if (!l) {throw '';} return l;})
-				.fail(function(r) {
-						if (r && r.timedout) {
-							console.log('Request timed out: ', r.request.options.url);
+				.then(function(response) {
+					m.getLink(response, 'logon.handshake');
+
+					return (m.getLink(response, 'logon.handshake') && response) || Promise.reject('No handshake link!');
+				})
+				.fail(function(reason) {
+						if (reason && reason.timedout) {
+							console.log('Request timed out: ', reason.request.options.url);
 						}
-						throw 'timedout';
+						return Promise.reject('Timeout');
 					})
 				.then(m.performHandshake.bind(m));
 	},
 
 
-	performHandshake: function(link) {
+	performHandshake: function(pongFromPing) {
 		var m = this,
+			link = m.getLink(pongFromPing, 'logon.handshake'),
 			u = decodeURIComponent(Ext.util.Cookies.get('username')),
 			handshakeTimer = setTimeout(m.handshakeRecovery, 30000);
 
@@ -324,19 +329,22 @@ Ext.define('NextThought.controller.Session', {
 				username: u
 			}
 		})
-				.then(function(r) { if (!m.getLink(r, 'logon.continue')) { throw 'no link'; } return r; })
-				.then(function(r) {
-					m.maybeTakeImmediateAction(r);
-					m.logoutURL = m.getLink(r, 'logon.logout');
+				.then(function(response) {
+					return (m.getLink(response, 'logon.continue') && response) || Promise.reject('No Continue Link');
+				})
+				.then(function(response) {
+					m.maybeTakeImmediateAction(response);
+					m.logoutURL = m.getLink(response, 'logon.logout');
 
 					return m.resolveService()
 							.then(function() {
-								Ext.Object.each({
-									'content.permanent_general_privacy_page': 'privacyPolicy',
-									'content.permanent_tos_page': 'termsOfService'
-								}, function(server, local) {
-									Service.overrideServiceLink(local, m.getLink(r, server));
-								});
+								var setLink = Service.overrideServiceLink.bind(Service);
+
+								setLink('privacyPolicy', m.getLink(response, 'content.permanent_general_privacy_page'));
+								setLink('termsOfService', m.getLink(response, 'content.permanent_tos_page'));
+
+								setLink('about', m.getLink(pongFromPing, 'about-page'));
+								setLink('supportEmail', m.getLink(pongFromPing, 'support-email'));
 							});
 				});
 	},
