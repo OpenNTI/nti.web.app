@@ -98,7 +98,7 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		this.dueString = this.dueEl.getHTML();
+		this.dueString = this.dueEl && this.dueEl.getHTML();
 
 		if (this.inputField) {
 			this.monitor();
