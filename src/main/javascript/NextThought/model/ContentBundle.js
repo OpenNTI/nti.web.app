@@ -82,7 +82,7 @@ Ext.define('NextThought.model.ContentBundle', {
 	__setImage: function() {
 		var me = this;
 
-		me.getImgAsset('thumb')
+		me.getImgAsset('landing')
 			.then(function(url) {
 				me.set('icon', url);
 			})
