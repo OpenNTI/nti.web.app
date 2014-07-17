@@ -223,13 +223,13 @@
 					&::before {
 						padding-left: 1em;
 						background: none;
-						content: 'LESSONS';
+						content: 'Lessons';
 						color: #b8b8b8;
-						font: normal normal 14px/60px "Open Sans", sans-serif;
+						font: normal normal 1em/60px "Open Sans", sans-serif;
 					}
 
 					&.books::before {
-						content: 'BOOK';
+						content: 'Book';
 					}
 
 					&::after {
@@ -237,6 +237,7 @@
 						background: none;
 						content: '\00a0/\00a0';
 						color: #b8b8b8;
+						margin-right: 0.4em;
 					}
 
 					&:hover{

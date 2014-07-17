@@ -9,8 +9,6 @@
 	@include experimental-value(display, flex);
 	@include experimental(flex-wrap, nowrap);
 
-	text-transform: uppercase;
-
 	.detected-scrollbars & {width: 635px;}
 
 	.tabs {
@@ -35,15 +33,27 @@
 		padding: 0 0 0 1.2em;
 		font: normal 500 1.2em/60px $font;
 
-		@include icon('topic', $top:5px, $side: 'before', $position: none);
+		.icon {
+			border-radius: 5px;
+			box-shadow: 0 0 0 1px #e5e5e5;
+			@include background-image(linear-gradient(top, #ffffff 0%,#f8f8f8 100%));
+
+			padding: 8px 18px;
+			display: inline-block;
+			@include icon('topic-blue', $position: none);
+			line-height: 0;
+			vertical-align: sub;
+			&::after {margin-right: 0;}
+		}
+
+		.label {display: none;}
 
 		cursor: pointer;
-		color: $primary-blue;
-		white-space: nowrap;
 
 		&::after {
 			content: '\00a0/\00a0';
 			color: $tertiary-grey;
+			margin-left: 0.4em;
 		}
 	}
 
@@ -53,10 +63,10 @@
 		-ms-box-orient: horizontal;
 		@include experimental-value(display, inline-flex);
 		@include experimental(flex-wrap, nowrap);
-		font: normal 500 1.2em/60px $font;
+		font: normal 500 1em/60px $font;
 
 		&, * {
-			color: $tertiary-grey;
+			color: $primary-blue;
 			vertical-align: top;
 			overflow: hidden;
 			@include ellipse;
@@ -130,41 +140,55 @@
 .nav-outline.toc-flyout {
 	box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
 	min-width: 360px;
-	.outline-list {top: 90px;}
+	.outline-list {top: 61px;}
 	.header {
-		@include icon('topic', $top:5px, $side: 'before', $position: none);
-		text-transform: uppercase;
+		background: #fff;
+		height: 60px;
+		box-shadow: inset 0 -1px 0 0 #f3f3f3;
+		padding: 0 18px 0 20px;
+		&::after { display: none; }
+
+		display: -ms-flexbox;
+		-ms-box-orient: horizontal;
+
+		@include experimental-value(display, flex);
+		@include experimental(flex-wrap, nowrap);
+		@include experimental(align-items, center);
+		@include experimental(align-content, center);
+	}
+
+	.button {
+		@include experimental(flex, none);
+		display: inline-block;
+		line-height: 38px;
+		padding: 0 0.9em;
+		border-radius: 5px;
+		cursor: pointer;
+		box-shadow: 0 0 0 1px #e5e5e5;
+		@include background-image(linear-gradient(top, #ffffff 0%,#f8f8f8 100%));
 		color: $primary-blue;
-		line-height: 60px;
-		padding: 0 0 0 1.2em;
-		&::after {
-			display: none;
-		}
 	}
 
 	.search {
-		@include icon('rhp-search',$top:6px,$left:9px);
+		margin-left: 10px;
+		overflow: hidden;
+		@include experimental(flex, 1 1 auto);
+		background: #fafafa;
+		border-radius: 5px;
+		box-shadow: 0 0 0 1px #eaeaea;
+		@include icon('rhp-search',$top:10px,$left:9px);
 
-		height: 30px;
+		line-height: 38px;
 		&::after{ cursor: text; }
-		&::before {
-			position: absolute;
-			content: '';
-			bottom: 0;
-			left: 30px; right: 30px;
-			height: 1px;
-			background: $border-grey;
-			opacity: 0.5;
-		}
 
 		input {
-			background: #fff;
+			background: #fafafa;
 			border: 0;
-
+			line-height: 0;
 			font: normal normal 12px/24px $font;
 			color: $primary-grey;
 			margin: 0;
-			padding: 3px 32px;
+			padding: 0 32px;
 			width: 100%;
 
 			&:not(:valid) ~ .clear {
@@ -177,7 +201,7 @@
 			background: none;
 			transition: opacity 0.5s;
 			opacity: 1;
-			top: 9px;
+			top: 10px;
 			right: 10px;
 			left: auto;
 			cursor: pointer;

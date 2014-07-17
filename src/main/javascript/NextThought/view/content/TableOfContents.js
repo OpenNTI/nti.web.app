@@ -18,15 +18,15 @@ Ext.define('NextThought.view.content.TableOfContents', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header', cn: [
-			'{{{NextThought.view.content.Navigation.toc}}}'
+			{ cls: 'button', html: 'Close' },//'{{{NextThought.view.content.Navigation.toc.close|Close}}}' },
+			{
+				tag: 'form', cls: 'search filter', onsubmit: 'return false',
+				cn: [
+					{ tag: 'input', placeholder: '{{{NextThought.view.Navigation.search}}}', required: true },
+					{ tag: 'button', type: 'reset', cls: 'clear' }
+				]
+			}
 		]},
-		{
-			tag: 'form', cls: 'search filter', onsubmit: 'return false',
-			cn: [
-				{ tag: 'input', placeholder: '{{{NextThought.view.Navigation.search}}}', required: true },
-				{ tag: 'button', type: 'reset', cls: 'clear' }
-			]
-		},
 		{ cls: 'outline-list'}
 	]),
 
