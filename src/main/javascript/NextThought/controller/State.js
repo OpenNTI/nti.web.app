@@ -530,8 +530,7 @@ PREVIOUS_STATE = 'previous-state';
 			}
 			var s = e ? e.state : null;
 			if (!s) {
-				console.warn('there is no state to restore??', e);
-				return;
+				console.warn('there is no state to restore?? Will use initial.', e);
 			}
 			this.restoreState(Ext.decode(s, true) || this.initialState || {});
 		},
