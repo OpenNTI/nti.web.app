@@ -491,7 +491,7 @@ Ext.define('NextThought.model.Service', {
 	},
 
 	overrideServiceLink: function(link, value) {
-		var o = {}; o[link] = value;
+		var o = {}; o[link] = value || undefined;
 		this.supportLinks = Ext.apply(this.supportLinks || {}, o);
 	},
 
