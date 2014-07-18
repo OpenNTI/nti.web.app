@@ -9,6 +9,8 @@
 	@include experimental-value(display, flex);
 	@include experimental(flex-wrap, nowrap);
 
+	text-transform: uppercase;
+
 	.detected-scrollbars & {width: 635px;}
 
 	.tabs {
