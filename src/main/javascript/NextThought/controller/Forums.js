@@ -442,10 +442,12 @@ Ext.define('NextThought.controller.Forums', {
 				.then(function(bundle) {
 					var s = (me.stateRestoring && !me.hasStateToRestore) || silent;
 					//if there is a state to restore that we aren't incharge of pass true as the last argument, to keep it from switching the tab.
-					view = me.callOnAllControllersWith('onNavigateToForum', record, bundle, s);
-					//set a flag to keep the view from updating the state
-					view.ignoreStateUpdate = s;
-					return finish(view);
+					return (me.callOnAllControllersWith('onNavigateToForum', record, bundle, s) || Promise.resolve(view))
+							.then(function(view) {
+								//set a flag to keep the view from updating the state
+								view.ignoreStateUpdate = s;
+								return finish(view);
+							});
 				});
 	},
 
