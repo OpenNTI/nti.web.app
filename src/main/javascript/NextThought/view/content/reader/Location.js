@@ -67,7 +67,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 
 		if (!me.fireEvent('beforeNavigate', ntiid, fromHistory) || me.currentNTIID === ntiid) {
 			me.fireEvent('navigateCanceled', ntiid, me.currentNTIID === ntiid, fromHistory);
-			Ext.callback(callback);
+			Ext.callback(callback, null, [me.reader]);
 			return;
 		}
 
