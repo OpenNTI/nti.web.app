@@ -1,11 +1,7 @@
 Ext.define('NextThought.overrides.builtins.FileReaderAPI', function() {
 
 	function free() {
-		this.onload = this.onloaded = this.onloadstart = this.onloadend = function() {};
-		this.readAsDataURL(new Blob());//replace with small object...
-		if (this.result !== '') {
-			console.error('Could not free FileReader, or empty result looks different in this browser:', this.result);
-		}
+		//I don't think we need to do this... :/ and its blowing up in IE10 now. sooo....
 	}
 
 	if (window.FileReader) {
