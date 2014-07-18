@@ -8,6 +8,13 @@ Ext.define('NextThought.overrides.builtins.Node', {});
 		matches: EP.matches || EP.webkitMatchesSelector || EP.mozMatchesSelector || EP.msMatchesSelector || EP.oMatchesSelector
 	});
 
+	//FireFox & Safari & IE (WTH!@#??) give a different instance of Element.protoyp in their
+	// event targets so our above patch is not present for those instances! LAME!!
+	Element.matches = function(el, selector) {
+		var m = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector || el.oMatchesSelector;
+		return m.call(el, selector);
+	};
+
 	window.Node = window.Node || function() {};
 	window.NodeFilter = window.NodeFilter || {};
 

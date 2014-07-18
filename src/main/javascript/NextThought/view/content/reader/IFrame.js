@@ -258,7 +258,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 				target = evt.getTarget(),
 				anchor = evt.getTarget('A');
 
-			if (anchor && !target.matches('.application-highlight,.application-highlight ' + target.tagName)) {
+			if (anchor && !Element.matches(target, '.application-highlight,.application-highlight ' + target.tagName)) {
 				me.reader.getContent().onClick(evt, anchor);
 				return;
 			}
