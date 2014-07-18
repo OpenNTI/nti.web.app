@@ -33,7 +33,8 @@ Ext.define('NextThought.model.ContentBundle', {
 		{ name: 'title', type: 'string' },
 		{ name: 'Title', type: 'string', mapping: 'title' },
 
-		{ name: 'icon', type: 'string' }
+		{ name: 'icon', type: 'string' },
+		{ name: 'thumb', type: 'string' }
 	],
 
 
@@ -62,7 +63,8 @@ Ext.define('NextThought.model.ContentBundle', {
 			isBundle: true,
 			title: this.get('title'),
 			label: this.get('author'),
-			icon: this.get('icon')
+			icon: this.get('icon'),
+			thumb: this.get('thumb')
 		};
 	},
 
@@ -82,14 +84,15 @@ Ext.define('NextThought.model.ContentBundle', {
 	__setImage: function() {
 		var me = this;
 
+		function fallback() {
+			var e = me.get('ContentPackages')[0];
+			me.set('icon', getURL(e.get('icon')));
+		}
+
 		me.getImgAsset('landing')
-			.then(function(url) {
-				me.set('icon', url);
-			})
-			.fail(function() {
-				var e = me.get('ContentPackages')[0];
-				me.set('icon', getURL(e.get('icon')));
-			});
+			.then(function(url) { me.set('icon', url); }, fallback);
+		me.getImgAsset('thumb')
+			.then(function(url) { me.set('thumb', url); }, fallback);
 	},
 
 

@@ -10,7 +10,6 @@ Ext.define('NextThought.model.ContentPackage', {
 	fields: [
 		{ name: 'Archive Last Modified', type: 'date', dateFormat: 'timestamp' },
 		{ name: 'archive', type: 'string' },
-		{ name: 'icon', type: 'string' },
 		{ name: 'index', type: 'string' },
 		{ name: 'index_jsonp', type: 'string' },
 		{ name: 'installable', type: 'bool' },
@@ -25,7 +24,9 @@ Ext.define('NextThought.model.ContentPackage', {
 			//for filtering
 		{ name: 'isCourse', type: 'bool', defaultValue: false, persist: false},
 
-		{ name: 'toc', type: 'auto', persist: false}
+		{ name: 'toc', type: 'auto', persist: false},
+		{ name: 'icon', type: 'string' },
+		{ name: 'thumb', type: 'string' }
 	],
 
 
@@ -48,7 +49,8 @@ Ext.define('NextThought.model.ContentPackage', {
 			isCourse: this.get('isCourse'),
 			title: this.get('title'),
 			label: this.get('author'),
-			icon: this.get('icon')
+			icon: this.get('icon'),
+			thumb: this.get('thumb')
 		};
 	},
 
@@ -105,11 +107,8 @@ Ext.define('NextThought.model.ContentPackage', {
 
 	__setImage: function() {
 		var me = this;
-
-		me.getImgAsset('landing')
-			.then(function(url) {
-				me.set('icon', url);
-			});
+		me.getImgAsset('landing').then(function(url) { me.set('icon', url); });
+		me.getImgAsset('thunb').then(function(url) { me.set('thumb', url); });
 	}
 
 });

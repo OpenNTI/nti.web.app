@@ -22,7 +22,8 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 
 		{ name: 'Preview', type: 'bool', persist: false},
 		//UI propertied
-		{ name: 'cover', type: 'string', persist: false, defaultValue: 'missing-notset.png'}
+		{ name: 'cover', type: 'string', persist: false, defaultValue: 'missing-notset.png'},
+		{ name: 'thumb', type: 'string', persist: false, defaultValue: 'missing.png'}
 	],
 
 
@@ -41,6 +42,7 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 			title: (e && e.get('Title')) || 'Missing Catalog Entry',
 			label: (e && e.get('ProviderUniqueID')) || '---',
 			icon: this.get('cover'),
+			thumb: this.get('cover'),
 			author: author && author.get('Name')
 		};
 	},
@@ -61,6 +63,8 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 
 	setLibraryImage: function() {
 		var me = this;
+
+		me.getImgAsset('thumb').then(function(url) { me.set('thumb', url); });
 
 		me.getImgAsset('landing')
 			.then(function(url) {

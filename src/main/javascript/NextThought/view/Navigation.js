@@ -214,7 +214,6 @@ Ext.define('NextThought.view.Navigation', {
 
 
 	updateCurrent: function(pop, rec) {
-
 		if (rec instanceof NextThought.model.ContentPackage && rec.get('isCourse')) {
 			//figure out the course record?
 			return this;
@@ -249,7 +248,7 @@ Ext.define('NextThought.view.Navigation', {
 
 		img.removeCls(cls);
 		img[data.isCourse ? 'removeCls' : 'addCls'](cls);
-		img.setStyle('background-image', 'url(' + data.icon + ')');
+		img.setStyle('background-image', 'url(' + (data.thumb || data.icon) + ')');
 
 		this.providerEl.update(data.label);
 		this.titleEl.update(data.title);

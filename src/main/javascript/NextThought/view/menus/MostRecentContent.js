@@ -32,7 +32,8 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 				{ tag: 'tpl', 'for': '.', cn: {
 					cls: 'item',
 					cn: [
-						{ cls: 'image', style: {backgroundImage: 'url({icon})'} },
+						{ tag: 'tpl', 'if': '!thumb', cn: { cls: 'image', style: {backgroundImage: 'url({icon})'} }},
+						{ tag: 'tpl', 'if': 'thumb', cn: { cls: 'image', style: {backgroundImage: 'url({thumb})'} }},
 						{
 							cls: 'wrap',
 							cn: [
@@ -148,7 +149,8 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 					{ name: 'isCourse', type: 'bool' },
 					{ name: 'title', type: 'string' },
 					{ name: 'label', type: 'string' },
-					{ name: 'icon', type: 'string' }
+					{ name: 'icon', type: 'string' },
+					{ name: 'thumb', type: 'string' }
 				],
 				proxy: 'memory',
 				sorters: [
@@ -191,7 +193,6 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 			}
 		}
 		catch (e) {
-			console.warn('Dropping content tracking... an error occured:', e.stack || e.message);
 			return;
 		}
 
