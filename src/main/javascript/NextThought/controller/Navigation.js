@@ -48,8 +48,7 @@ Ext.define('NextThought.controller.Navigation', {
 					'show-ntiid': 'navigateToNtiid',
 					'show-object': 'navigateToContent',
 					'show-view': 'setView',
-					'content-dropped': 'dropCachedEntries',
-					'navigate-to-forum': 'onNavigateToForum'
+					'content-dropped': 'dropCachedEntries'
 				}
 			}
 		});
@@ -671,6 +670,6 @@ Ext.define('NextThought.controller.Navigation', {
 		if (bundle) { return; }
 
 		this.setView('forums');
-		return Ext.getCmp('forums');
+		return Promise.resolve(Ext.getCmp('forums'));
 	}
 });

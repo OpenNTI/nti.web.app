@@ -104,7 +104,6 @@ Ext.define('NextThought.controller.CourseWare', {
 			controller: {
 				'*': {
 					'course-selected': 'onCourseSelected',
-					'navigate-to-forum': 'onNavigateToForum',
 					'unauthorized-navigation': 'maybeShowEnroll'
 				}
 			}
