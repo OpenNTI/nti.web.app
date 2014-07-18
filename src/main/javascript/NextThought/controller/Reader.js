@@ -222,7 +222,9 @@ Ext.define('NextThought.controller.Reader', {
 				return false;
 			}
 
-			v.setActiveTab('course-book');
+			//this is stomping on forum navigation, as far as I can tell its working fine without it
+			//but there might be some edge cases we need to look out for
+			//v.setActiveTab('course-book');
 
 			if (pi && pi.isPartOfCourseNav()) {
 				r.clearLocation();
