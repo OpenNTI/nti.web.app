@@ -322,7 +322,7 @@ Ext.define('NextThought.controller.Reader', {
 		}
 
 		reader.currentRoot = null;
-		this.getContentView()._setBundle(null);
+		//this.getContentView()._setBundle(null);
 		this.setLocation(lastNtiid, call, silent === true);
 	},
 
