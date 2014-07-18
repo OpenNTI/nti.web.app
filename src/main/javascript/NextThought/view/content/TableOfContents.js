@@ -31,7 +31,7 @@ Ext.define('NextThought.view.content.TableOfContents', {
 	]),
 
 	renderSelectors: {
-		headerEl: '.header',
+		closeEl: '.header .button',
 		formEl: 'form.search',
 		clearEl: '.search button',
 		filterEl: '.search input',
@@ -65,7 +65,7 @@ Ext.define('NextThought.view.content.TableOfContents', {
 
 
 		this.on({
-			headerEl: {click: 'hide'},
+			closeEl: {click: 'hide'},
 			clearEl: {click: 'onFilter', buffer: 1},
 			filterEl: {
 				keypress: 'onFilter',
