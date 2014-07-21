@@ -108,7 +108,12 @@ Ext.define('NextThought.view.content.TableOfContents', {
 
 	onFilter: function(e) {
 		if (e) {
-			e.stopPropagation();
+			try {
+				e.stopPropagation();
+			} catch (er) {
+				console.warn('Filter event was not probably not stopped.');
+				console.dir(er);
+			}
 			if (e.getKey() === e.ESC) {
 				Ext.getDom(this.formEl).reset();
 			}
