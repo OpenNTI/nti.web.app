@@ -153,6 +153,7 @@
 
 		display: -ms-flexbox;
 		-ms-box-orient: horizontal;
+		-ms-flex-align: center;
 
 		@include experimental-value(display, flex);
 		@include experimental(flex-wrap, nowrap);
