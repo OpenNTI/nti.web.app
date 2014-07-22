@@ -164,6 +164,9 @@ Ext.define('NextThought.controller.Forums', {
 					}
 
 					UserRepository.getUser(o.get('Creator'), function(u) {
+						if (u.Unresolved) {
+							console.error('Broken Creator: ', o.get('Creator'));
+						}
 						o.set('Creator', u);
 						maybeFinish();
 					});
@@ -185,7 +188,7 @@ Ext.define('NextThought.controller.Forums', {
 	buildUrlFromState: function(state) {
 		var path = ['users'];
 
-		if (!state.board) { return; }
+		if (!state.board || !state.board.community) { return; }
 
 		path.push(state.board.community);
 		path.push('DiscussionBoard');
@@ -259,6 +262,12 @@ Ext.define('NextThought.controller.Forums', {
 		var s,
 			comm = board.get('Creator');
 
+		if (!comm || comm.Unresolved) {
+			alert('Cannot use an Unresolved Community: ' +
+				  Ext.String.htmlEncode(board.raw.Creator));
+			return;
+		}
+
 		forum = forum && forum.get('ID');
 		topic = topic && topic.get('ID');
 
@@ -279,11 +288,6 @@ Ext.define('NextThought.controller.Forums', {
 
 	pushState: function(s, title) {
 		history.pushState({forums: s}, title);
-	},
-
-
-	replaceState: function(s) {
-		history.replaceState({forums: s});
 	},
 
 
@@ -429,6 +433,9 @@ Ext.define('NextThought.controller.Forums', {
 		p = community.isModel ?
 				Promise.resolve(community) :
 				UserRepository.getUser(community).then(function(c) {
+					if (c.Unresolved) {
+						console.error('Broken Community: ' + community);
+					}
 					record.set('Creator', c);
 					return c;
 				});
@@ -488,7 +495,13 @@ Ext.define('NextThought.controller.Forums', {
 		}
 
 		return UserRepository.getUser(record.get('Creator'))
-				.then(function(c) { record.set('Creator', c); })
+				.then(function(c) {
+					if (c.Unresolved) {
+						console.error('Broken Community: ' + record.get('Creator'));
+					}
+
+					record.set('Creator', c);
+				})
 				.then(function() {
 					return view ? Promise.resolve(view) :
 						//get the forum list and add it first
@@ -659,6 +672,7 @@ Ext.define('NextThought.controller.Forums', {
 
 		if (topicRecord) {
 			UserRepository.getUser(topicRecord.get('Creator'), function(c) {
+				if (c.Unresolved) { console.error('Broken Creator:' + topicRecord.get('Creator')); }
 				topicRecord.set('Creator', c);
 			});
 		}
