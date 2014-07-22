@@ -138,7 +138,6 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions', {
 			reader = new FileReader();
 			reader.onload = function(event) {
 				me.insertImage(event.target.result);
-				reader.free();
 			};
 			reader.readAsDataURL(file);
 		}
@@ -157,7 +156,6 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions', {
 				reader = new FileReader();
 				reader.onload = function(evt) {
 					me.insertImage(evt.target.result);
-					reader.free();
 				};
 				reader.readAsDataURL(file);
 				return false;
