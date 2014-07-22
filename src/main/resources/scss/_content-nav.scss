@@ -32,19 +32,27 @@
 
 	.toc {
 		@include experimental(flex, none);
-		padding: 0 0 0 1.2em;
+		padding: 0 0 0 20px;
 		font: normal 500 1.2em/60px $font;
+
+		display: -ms-flexbox;
+		-ms-box-orient: horizontal;
+		-ms-flex-align: center;
+
+		@include experimental-value(display, flex);
+		@include experimental(flex-wrap, nowrap);
+		@include experimental(align-items, center);
+		@include experimental(align-content, center);
 
 		.icon {
 			border-radius: 5px;
 			box-shadow: 0 0 0 1px #e5e5e5;
 			@include background-image(linear-gradient(top, #ffffff 0%,#f8f8f8 100%));
 
-			padding: 8px 18px;
+			padding: 8px 18px 8px 18px;
 			display: inline-block;
 			@include icon('topic-blue', $position: none);
 			line-height: 0;
-			vertical-align: sub;
 			&::after {margin-right: 0;}
 		}
 
@@ -164,7 +172,7 @@
 	.button {
 		@include experimental(flex, none);
 		display: inline-block;
-		line-height: 38px;
+		line-height: 36px;
 		padding: 0 0.9em;
 		border-radius: 5px;
 		cursor: pointer;
