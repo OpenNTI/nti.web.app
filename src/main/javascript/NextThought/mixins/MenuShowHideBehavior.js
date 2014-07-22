@@ -26,6 +26,7 @@ Ext.define('NextThought.mixins.MenuShowHideBehavior', {
 
 		this.on({
 			scope: this,
+			destroy: 'stopShowHideTimers',
 			mouseleave: 'startHide',
 			mouseenter: 'stopHide',
 			afterrender: function() {
@@ -54,8 +55,12 @@ Ext.define('NextThought.mixins.MenuShowHideBehavior', {
 	startShow: function(el, align, offset) {
 		this.stopHide();
 		this.__showTimeout = Ext.defer(function() {
-			if (el && Ext.fly(el).isVisible(true)) {
-				this.showBy(el, align, offset);
+			try {
+				if (el && Ext.fly(el).isVisible(true)) {
+					this.showBy(el, align, offset);
+				}
+			} catch (e) {
+				console.warn('Forgot to stop timout before destroying');
 			}
 		}, 400, this);
 	},
