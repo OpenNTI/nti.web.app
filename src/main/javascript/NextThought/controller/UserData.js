@@ -1185,7 +1185,7 @@ Ext.define('NextThought.controller.UserData', {
 
 		Ext.fly(html).select('a[href]', true).set({target: '_blank'});
 
-		me.popoverWidget = Ext.widget('simple-popover-widget', {text: html.innerHTML});
+		me.popoverWidget = Ext.widget('simple-popover-widget', {reader: sender.reader, text: html.innerHTML});
 		me.popoverWidget.showAt(adjustPosition(position));
 	},
 
