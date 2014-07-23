@@ -244,6 +244,8 @@ Ext.define('NextThought.controller.Forums', {
 
 	restoreState: function(s, fulfill, reject) {
 		var state = s.forums || {},
+			contentTab = s.content && s.content.activeTab,
+			active = s.active,
 			me = this;
 
 		function handle() {
@@ -252,6 +254,10 @@ Ext.define('NextThought.controller.Forums', {
 
 		//there is a state restoring
 		this.stateRestoring = true;
+
+		if (active !== 'forums' && (active !== 'content' || contentTab !== 'course-forum')) {
+			return fulfill();
+		}
 
 		//we are restoring a state
 		this.hasStateToRestore = true;
