@@ -35,6 +35,7 @@ Ext.define('NextThought.view.profiles.outline.View', {
 	renderSelectors: {
 		headerEl: '.container',
 		avatarEl: '.avatar',
+		avatarEl2: '.fixed-about .avatar',
 		nameEl: '.name',
 		controlsEl: '.controls',
 		roleEl: '.role',
@@ -403,6 +404,7 @@ Ext.define('NextThought.view.profiles.outline.View', {
 
 		if (!currentURL || a !== b) {
 			this.avatarEl.setStyle({backgroundImage: 'url(' + avatarURL + ')'});
+			this.avatarEl2.setStyle({backgroundImage: 'url(' + avatarURL + ')'});
 		}
 	},
 
