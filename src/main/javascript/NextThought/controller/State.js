@@ -565,8 +565,8 @@ PREVIOUS_STATE = 'previous-state';
 									c = me.getStateRestorationHandlerFor(key);
 									if (c && c.restore) {
 										try {
-											stateScoped = {active: stateObject.active};
-											me.currentState[key] = stateScoped[key] = stateObject[key];
+											stateScoped = Ext.clone(stateObject);
+											me.currentState[key] = stateObject[key];
 											tasks.push(c.restore(stateScoped));
 										}
 										catch (e) {
