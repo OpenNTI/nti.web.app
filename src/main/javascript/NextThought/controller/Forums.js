@@ -42,7 +42,6 @@ Ext.define('NextThought.controller.Forums', {
 		me.listen({
 			component: {
 				'forums-container': {
-					'restore-forum-state': 'restoreState',
 					'render': 'loadBoardList',
 					'active-state-changed': 'setActiveState'
 				},
@@ -224,6 +223,20 @@ Ext.define('NextThought.controller.Forums', {
 				.then(finish);
 	},
 
+
+	getStateRestorationHandler: function(key) {
+		var me = this;
+
+		if (key === 'forums') {
+			return {
+				restore: function(state) {
+					return new Promise(function(fulfill, reject) {
+						me.restoreState(state, fulfill, reject);
+					});
+				}
+			};
+		}
+	},
 
 	restoreState: function(s, fulfill, reject) {
 		var state = s.forums || {},

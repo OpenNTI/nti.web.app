@@ -21,14 +21,6 @@ Ext.define('NextThought.view.forums.Container', {
 	}],
 
 
-	restore: function(state) {
-		return new Promise(function(fulfill, reject) {
-			this.showRoot();
-			this.fireEvent('restore-forum-state', state, fulfill, reject);
-		}.bind(this));
-	},
-
-
 	afterRender: function() {
 		this.callParent(arguments);
 		this.removeCls('make-white');

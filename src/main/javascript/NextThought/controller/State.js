@@ -140,9 +140,7 @@ PREVIOUS_STATE = 'previous-state';
 				'#!object': Ext.bind(this.interpretObjectFragment, this)
 			};
 
-			this.generateFragmentMap = {
-				'forums': Ext.bind(this.generateForumsFragment, this)
-			};
+			this.generateFragmentMap = {};
 		},
 
 		init: function() {
@@ -388,6 +386,7 @@ PREVIOUS_STATE = 'previous-state';
 
 
 		//<editor-fold desc="Fragment Functions">
+		//Legacy forums fragment
 		interpretForumsFragment: function(fragment, query) {
 			var parts = (fragment || '').split('/').slice(0),
 				result = {}, forums = {};
@@ -414,29 +413,6 @@ PREVIOUS_STATE = 'previous-state';
 					result.forums = forums;
 				}
 			}
-			return result;
-		},
-
-
-		generateForumsFragment: function(state) {
-			var resultParts = [], result,
-				board = state && state.board;
-
-			if (board && board.isUser && board.community) {
-				resultParts.push('u');
-				resultParts.push(board.community);
-
-				Ext.each(['forum', 'topic', 'comment'], function(prop) {
-					if (state.hasOwnProperty(prop) && state[prop]) {
-						resultParts.push(state[prop]);
-					}
-				});
-			}
-
-			if (!Ext.isEmpty(resultParts)) {
-				result = resultParts.join('/');
-			}
-
 			return result;
 		},
 
@@ -557,7 +533,7 @@ PREVIOUS_STATE = 'previous-state';
 
 			me.restoringState = new Promise(function(fulfill, reject) {
 				//let the body of this function return so the promise is setup and ready for use
-				wait(1)
+				wait()
 						//then do our work
 						.then(function() {
 							var tasks = [],
