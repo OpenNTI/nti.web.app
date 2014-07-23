@@ -490,7 +490,7 @@ PREVIOUS_STATE = 'previous-state';
 				result = this.fragmentInterpreterMap[root](fragment, query);
 			}
 			else if (ntiid) {
-				result = {active: 'content', content: {location: ntiid}};
+				result = {active: 'content', content: {activeTab: null, location: ntiid}};
 			}
 
 			console.debug('Fragment interpreted:', result);
