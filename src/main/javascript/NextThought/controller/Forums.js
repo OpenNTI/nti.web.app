@@ -187,6 +187,10 @@ Ext.define('NextThought.controller.Forums', {
 	buildUrlFromState: function(state) {
 		var path = ['users'];
 
+		if (state.href) {
+			return state.href;
+		}
+
 		if (!state.board || !state.board.community) { return; }
 
 		path.push(state.board.community);
@@ -249,10 +253,6 @@ Ext.define('NextThought.controller.Forums', {
 		//there is a state restoring
 		this.stateRestoring = true;
 
-		if (s.active !== 'forums') {
-			return fulfill();
-		}
-
 		//we are restoring a state
 		this.hasStateToRestore = true;
 
@@ -272,35 +272,11 @@ Ext.define('NextThought.controller.Forums', {
 			return;
 		}
 
-		var s,
-			comm = board.get('Creator');
+		board = board.get('href');
+		forum = forum && forum.get('href');
+		topic = topic && topic.get('href');
 
-		if (!comm || comm.Unresolved) {
-			alert('Cannot use an Unresolved Community: ' +
-				  Ext.String.htmlEncode(board.raw.Creator));
-			return;
-		}
-
-		forum = forum && forum.get('ID');
-		topic = topic && topic.get('ID');
-
-		comm = comm.isModel ? comm.get('ID') : comm;
-
-		s = {
-			board: {
-				community: comm,
-				isUser: true
-			},
-			forum: forum,
-			topic: topic
-		};
-
-		this.pushState(s, title);
-	},
-
-
-	pushState: function(s, title) {
-		history.pushState({forums: s}, title);
+		history.pushState({forums: { href: topic || forum || board }}, title);
 	},
 
 
