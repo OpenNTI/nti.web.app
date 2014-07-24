@@ -57,17 +57,15 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 		this.currentCourses = this.down('[current]');
 		this.achievements = this.down('[achievements]');
 
-		var link = this.user.getLink('Badges'),
-			me = this;
+		var link = this.user.getLink('Badges');
+		this.isMe = isMe(this.user);
 
 		//if its me show the current courses
-		if (isMe(this.user)) {
-			this.isMe = true;
+		if (this.isMe) {
 			this.loadWorkSpace(Service.getWorkspace('Badges'));
 
 			this.completedCourses.hasPublicPreference = true;
 		} else {
-			this.isMe = false;
 			this.currentCourses.destroy();
 
 			if (link) {
