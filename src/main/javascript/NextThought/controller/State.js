@@ -442,10 +442,10 @@ PREVIOUS_STATE = 'previous-state';
 
 			if ((parts[0] || '').toLowerCase() === '#!object') {
 				domain = parts[1];
-				parts = parts.slice(2);
+				parts = parts.slice(2).map(decodeURIComponent);
 
 				if (domain === 'ntiid' && parts.length === 1 && ParseUtils.parseNTIID(parts[0])) {
-					(this.restoringState || wait(1)).then(function() {
+					(this.restoringState || wait()).then(function() {
 						me.fireEvent('show-ntiid', parts[0], null, null, null, function() {
 							alert('There was a problem navigating to the destination. Check the address and try again.');
 						});

@@ -278,11 +278,25 @@ Ext.define('NextThought.controller.Forums', {
 			return;
 		}
 
+		function getNTIID(o) {
+			var i = o && o.get && o.get('NTIID');
+			if (arguments.length > 1) {
+				Array.prototype.forEach.call(arguments, function(o) {
+					i = getNTIID(o) || i;
+				});
+			}
+
+			return i;
+		}
+
+		var ntiid = getNTIID(board, forum, topic),
+			url = ntiid && ('#!object/ntiid/' + encodeURIComponent(ntiid));
+
 		board = board.get('href');
 		forum = forum && forum.get('href');
 		topic = topic && topic.get('href');
 
-		history.pushState({forums: { href: topic || forum || board }}, title);
+		history.pushState({forums: { href: topic || forum || board }}, title, url);
 	},
 
 
