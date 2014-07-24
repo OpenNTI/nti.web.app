@@ -4,6 +4,10 @@ Ext.define('NextThought.view.content.reader.Content', {
 		observable: 'Ext.util.Observable'
 	},
 
+	requires: [
+		'NextThought.ux.IFramePopout'
+	],
+
 	BODY_TEMPLATE: Ext.DomHelper.createTemplate({ id: 'NTIContent', html: '{0}'}).compile(),
 
 	getBubbleTarget: function() {return this.reader; },
@@ -319,11 +323,17 @@ Ext.define('NextThought.view.content.reader.Content', {
 		e.stopEvent();
 		var m = this,
 			r = el.href,
+			p = el.getAttribute('data-presentation'),
 			hash = r.split('#'),
 			target = hash[1],
 			whref = window.location.href.split('#')[0],
 			doc = this.reader.getDocumentElement(),
 			element = doc.getElementById(target) || doc.getElementsByName(target)[0] || null;
+
+		if (p && p === 'popup') {
+			Ext.widget('iframe-lightbox', { src: m.basePath.concatPath(el.getAttribute('data-source-wrapped')) }).show();
+			return false;
+		}
 
 		//Is this a special internal link that we need to handle
 		if (el.getAttribute('onclick') || !r || whref + '#' === r) {
