@@ -158,7 +158,7 @@ Ext.define('NextThought.view.account.activity.Preview', {
 
 	maybeShowMoreLink: function() {
 		var el = this.messageBodyEl;
-		if (el.dom.scrollHeight <= el.getHeight()) {
+		if (!el || el.dom.scrollHeight <= el.getHeight()) {
 			return;
 		}
 

@@ -156,7 +156,7 @@ Ext.define('NextThought.view.account.activity.note.Reply', {
 
 	maybeShowMoreLink: function() {
 		var el = this.bodyEl;
-		if (el.dom.scrollHeight <= el.getHeight() || this.hasMoreLink) {
+		if (!el || el.dom.scrollHeight <= el.getHeight() || this.hasMoreLink) {
 			return;
 		}
 
