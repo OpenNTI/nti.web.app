@@ -1,6 +1,6 @@
-Ext.define('NextThought.model.courseware.CourseCatalogInstructorInfo', {
-	alternateClassName: 'NextThought.model.courseware.CourseCatalogInstructorLegacyInfo',
-	mimeType: 'application/vnd.nextthought.courseware.coursecataloginstructorlegacyinfo',
+Ext.define('NextThought.model.courses.CourseCatalogInstructorInfo', {
+	alternateClassName: 'NextThought.model.courses.CourseCatalogInstructorLegacyInfo',
+	mimeType: 'application/vnd.nextthought.courses.coursecataloginstructorlegacyinfo',
 	extend: 'NextThought.model.Base',
 
 	idProperty: 'Username',

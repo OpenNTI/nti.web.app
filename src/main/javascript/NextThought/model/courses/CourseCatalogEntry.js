@@ -1,7 +1,7 @@
-Ext.define('NextThought.model.courseware.CourseCatalogEntry', {
-	alternateClassName: 'NextThought.model.courseware.CourseCatalogLegacyEntry',
+Ext.define('NextThought.model.courses.CourseCatalogEntry', {
+	alternateClassName: 'NextThought.model.courses.CourseCatalogLegacyEntry',
 	extend: 'NextThought.model.Base',
-	mimeType: 'application/vnd.nextthought.courseware.coursecataloglegacyentry',
+	mimeType: 'application/vnd.nextthought.courses.coursecataloglegacyentry',
 	requires: ['NextThought.model.converters.Date'],
 	mixins: {
 		PresentationResources: 'NextThought.mixins.PresentationResources'

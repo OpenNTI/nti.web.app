@@ -1,7 +1,7 @@
 Ext.define('NextThought.store.courseware.AvailableCourses', {
 	extend: 'Ext.data.Store',
 
-	model: 'NextThought.model.courseware.CourseCatalogEntry',
+	model: 'NextThought.model.courses.CourseCatalogEntry',
 	proxy: {
 		type: 'ajax',
 		timeout: 3600000,//hour

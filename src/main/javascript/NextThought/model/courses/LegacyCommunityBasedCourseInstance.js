@@ -1,5 +1,5 @@
-Ext.define('NextThought.model.courseware.LegacyCommunityBasedCourseInstance', {
-	extend: 'NextThought.model.courseware.CourseInstance',
+Ext.define('NextThought.model.courses.LegacyCommunityBasedCourseInstance', {
+	extend: 'NextThought.model.courses.CourseInstance',
 	mimeType: 'application/vnd.nextthought.courses.legacycommunitybasedcourseinstance',
 
 	fields: [

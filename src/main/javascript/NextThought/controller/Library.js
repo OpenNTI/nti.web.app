@@ -2,11 +2,11 @@ Ext.define('NextThought.controller.Library', {
 	extend: 'Ext.app.Controller',
 
 	models: [
-		'courseware.CourseCatalogEntry',
-		'courseware.CourseCatalogInstructorInfo',
-		'courseware.CourseCreditLegacyInfo',
-		'courseware.CourseInstance',
-		'courseware.CourseInstanceAdministrativeRole',
+		'courses.CourseCatalogEntry',
+		'courses.CourseCatalogInstructorInfo',
+		'courses.CourseCreditLegacyInfo',
+		'courses.CourseInstance',
+		'courses.CourseInstanceAdministrativeRole',
 		'courseware.CourseInstanceEnrollment'
 	],
 
@@ -53,7 +53,7 @@ Ext.define('NextThought.controller.Library', {
 				//set isOpen on the catalog entry so the available window can know if its open or enrolled
 				catalog.set({
 					'isOpen': isOpen,
-					'isAdmin': course instanceof NextThought.model.courseware.CourseInstanceAdministrativeRole,
+					'isAdmin': course.isAdministrative || false, //force boolean
 					'isChanging': false
 				});
 			});

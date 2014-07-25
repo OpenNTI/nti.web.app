@@ -1,10 +1,11 @@
-Ext.define('NextThought.model.courseware.CourseInstance', {
+Ext.define('NextThought.model.courses.CourseInstance', {
 	extend: 'NextThought.model.Base',
 
 	isBundle: true,
 	isCourse: true,
 
 	requires: [
+		'NextThought.model.courses.CourseInstanceBoard',
 		'NextThought.store.courseware.Navigation',
 		'NextThought.store.courseware.ToCBasedOutline'
 	],
@@ -14,16 +15,25 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 	},
 
 	fields: [
-		{ name: 'isCourse', type: 'bool', defaultValue: true, persist: false },
 		{ name: 'Discussions', type: 'singleItem', persist: false },
 		{ name: 'Outline', type: 'singleItem', persist: false },
+
+		{ name: 'Scopes', type: 'auto', mapping: 'LegacyScopes' },
+
+
+		{ name: 'ContentPackageBundle', type: 'auto'},
+		{ name: 'SharingScopes', type: 'auto'},
+
+
 		{ name: 'TotalEnrolledCount', type: 'int'},
-		{ name: 'Scopes', type: 'auto' },
+		{ name: 'TotalEnrolledCountOpen', type: 'int', mapping: 'TotalLegacyOpenEnrolledCount'},
+		{ name: 'TotalEnrolledCountForCredit', type: 'int', mapping: 'TotalLegacyForCreditEnrolledCount'},
 
 		{ name: 'PlatformPresentationResources', type: 'auto' },
 
 		{ name: 'Preview', type: 'bool', persist: false},
 		//UI propertied
+		{ name: 'isCourse', type: 'bool', defaultValue: true, persist: false },
 		{ name: 'cover', type: 'string', persist: false, defaultValue: 'missing-notset.png'},
 		{ name: 'thumb', type: 'string', persist: false, defaultValue: 'missing.png'}
 	],
@@ -81,7 +91,7 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 	__precacheEntry: function() {
 		var p = this.precachePromise,
 			me = this,
-			Cls = NextThought.model.courseware.CourseCatalogEntry;
+			Cls = NextThought.model.courses.CourseCatalogEntry;
 
 		if (!p) {
 			this.precachePromise = new Promise(function(fulfill, reject) {

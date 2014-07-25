@@ -1,7 +1,7 @@
 Ext.define('NextThought.store.courseware.AdministeredCourses', {
 	extend: 'NextThought.store.courseware.EnrolledCourses',
 
-	model: 'NextThought.model.courseware.CourseInstanceAdministrativeRole',
+	model: 'NextThought.model.courses.CourseInstanceAdministrativeRole',
 	proxy: {
 		type: 'ajax',
 		timeout: 3600000,//hour

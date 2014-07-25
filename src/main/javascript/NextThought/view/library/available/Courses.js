@@ -113,7 +113,7 @@ Ext.define('NextThought.view.library.available.Courses', {
 
 	buildStore: function(data) {
 		return new Ext.data.Store({
-			model: 'NextThought.model.courseware.CourseCatalogEntry',
+			model: 'NextThought.model.courses.CourseCatalogEntry',
 			data: data
 		});
 	},
