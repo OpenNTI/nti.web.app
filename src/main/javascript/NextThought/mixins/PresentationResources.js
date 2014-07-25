@@ -37,7 +37,7 @@ Ext.define('NextThought.mixins.PresentationResources', {
 	 * @return {Promise} whether or not the asset exists
 	 */
 	getImgAsset: function(name) {
-		var assetPath = this.ASSET_MAP[name] || 'missing-' + name + '-asset.png',
+		var assetPath = this.ASSET_MAP[name] || ('missing-' + name + '-asset.png'),
 			root = this.getAssetRoot(),
 			url = root && root.concatPath(assetPath);
 
