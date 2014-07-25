@@ -1,9 +1,9 @@
 Ext.define('NextThought.store.courseware.Navigation', {
 	extend: 'Ext.data.Store',
 	requires: [
-		'NextThought.model.courseware.navigation.CourseOutlineNode'
+		'NextThought.model.courses.navigation.CourseOutlineNode'
 	],
-	model: 'NextThought.model.courseware.navigation.Node',
+	model: 'NextThought.model.courses.navigation.Node',
 	sorters: [
 		{
 			fn: function(a, b) {

@@ -10,11 +10,13 @@ Ext.define('NextThought.controller.CourseWare', {
 		'courses.CourseInstanceAdministrativeRole',
 		'courses.CourseInstanceSharingScope',
 		'courses.CourseInstanceSharingScopes',
+		'courses.CourseOutline',
 		'courses.LegacyCommunityBasedCourseInstance',
-		'courseware.AssignmentCollection',
+		'courses.navigation.CourseOutlineNode',
+		'courses.navigation.CourseOutlineCalendarNode',
+		'courses.navigation.CourseOutlineContentNode',
 		'courseware.CourseActivity',
 		'courseware.CourseInstanceEnrollment',
-		'courseware.CourseOutline',
 		'courseware.Grade',
 		'courseware.GradeBook',
 		'courseware.GradeBookPart',
@@ -22,10 +24,7 @@ Ext.define('NextThought.controller.CourseWare', {
 		'courseware.UsersCourseAssignmentHistory',
 		'courseware.UsersCourseAssignmentHistoryItem',
 		'courseware.UsersCourseAssignmentHistoryItemFeedback',
-		'courseware.UsersCourseAssignmentHistoryItemFeedbackContainer',
-		'courseware.navigation.CourseOutlineNode',
-		'courseware.navigation.CourseOutlineCalendarNode',
-		'courseware.navigation.CourseOutlineContentNode'
+		'courseware.UsersCourseAssignmentHistoryItemFeedbackContainer'
 	],
 
 

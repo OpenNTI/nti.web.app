@@ -135,7 +135,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 	 * @param {Date} date
 	 * @param {Node} course
 	 * @param {Object} location
-	 * @param {NextThought.model.courseware.navigation.Node} courseNode
+	 * @param {NextThought.model.courses.navigation.Node} courseNode
 	 * @param {Function} callback
 	 * @param {Array} callback.tiles
 	 */

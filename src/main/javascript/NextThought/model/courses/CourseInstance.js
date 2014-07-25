@@ -5,6 +5,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	isCourse: true,
 
 	requires: [
+		'NextThought.model.courses.AssignmentCollection',
 		'NextThought.model.courses.CourseInstanceBoard',
 		'NextThought.store.courseware.Navigation',
 		'NextThought.store.courseware.ToCBasedOutline'
@@ -21,8 +22,8 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		{ name: 'Scopes', type: 'auto', mapping: 'LegacyScopes' },
 
 
-		{ name: 'ContentPackageBundle', type: 'auto'},
-		{ name: 'SharingScopes', type: 'auto'},
+		{ name: 'ContentPackageBundle', type: 'singleItem'},
+		{ name: 'SharingScopes', type: 'singleItem'},
 
 
 		{ name: 'TotalEnrolledCount', type: 'int'},
@@ -264,7 +265,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 					nonAssignments = Ext.decode(json[1], true),
 					gradeBook = json[2];
 
-				return NextThought.model.courseware.AssignmentCollection.fromJson(
+				return NextThought.model.courses.AssignmentCollection.fromJson(
 						assignments, nonAssignments, roster, gradeBook, me.getLink('AssignmentHistory'));
 			});
 

@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.courseware.AssignmentCollection', {
+Ext.define('NextThought.model.courses.AssignmentCollection', {
 	extend: 'NextThought.model.Base',
 
 	statics: {

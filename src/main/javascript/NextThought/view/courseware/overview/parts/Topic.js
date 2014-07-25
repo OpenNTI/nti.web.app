@@ -20,7 +20,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Topic', {
 		this.callParent(arguments);
 		var data;
 
-		this.record = this.record || (this.node && new NextThought.model.courseware.navigation.Node(null, null, this.node));
+		this.record = this.record || (this.node && new NextThought.model.courses.navigation.Node(null, null, this.node));
 
 		if (this.record) {
 			data = this.record.getData();

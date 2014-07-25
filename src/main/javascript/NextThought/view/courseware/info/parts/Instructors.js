@@ -43,7 +43,7 @@ Ext.define('NextThought.view.courseware.info.parts.Instructors', {
 		});
 
 		store = new Ext.data.Store({
-				model: 'NextThought.model.courseware.CourseCatalogInstructorInfo',
+				model: 'NextThought.model.courses.CourseCatalogInstructorInfo',
 				data: i
 			});
 

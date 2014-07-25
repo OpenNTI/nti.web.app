@@ -8,7 +8,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Tile', {
 	inheritableStatics: {
 
 		/**
-		 * @param {NextThought.model.courseware.navigation.Node} r
+		 * @param {NextThought.model.courses.navigation.Node} r
 		 * @return {Node[]}
 		 */
 		getChildrenNodes: function(r) {
@@ -16,7 +16,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Tile', {
 		},
 
 		/**
-		 * @param {NextThought.model.courseware.navigation.Node} r
+		 * @param {NextThought.model.courses.navigation.Node} r
 		 * @return {NextThought.store.courseware.Navigation}
 		 */
 		getCourseNavStore: function(r) {
@@ -33,7 +33,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Tile', {
 		 * @param {Node} course The node from the ToC document describing this course. aka the <course> tag.
 		 * @param {Object} locationInfo the results of {@link NextThought.util.Content#getLocation()} The location
 		 * information of the navigation that triggered a onCourseChanged.
-		 * @param {NextThought.model.courseware.navigation.Node} courseNodeRecord The record in the course nav store
+		 * @param {NextThought.model.courses.navigation.Node} courseNodeRecord The record in the course nav store
 		 * that represents the current point in the course - on or after the effectiveDate.
 		 * @param {Function} finish The callback function that hands you the resolved tile(s)
 		 * @param {NextThought.view.courseware.dashboard.tiles.Tile|NextThought.view.courseware.dashboard.tiles.Tile[]} finish.tiles
