@@ -12,7 +12,7 @@ Ext.define('NextThought.view.courseware.coursecatalog.Collection', {
 		cls: '{inGrid} item {Class:lowercase} {enrolled:boolStr("activated")} {isChanging:boolStr("changing")} row-{rows} col-{cols}',
 		'data-qtip': '{Title:htmlEncode}', cn: [
 			{ cls: 'cover', cn: [
-				{tag: 'img', src: '{thumbnail}'}
+				{tag: 'img', src: '{icon}'}
 			]},
 			{ tag: 'tpl', 'if': 'enrolled', cn: [
 				{cls: 'enrollment', cn: [

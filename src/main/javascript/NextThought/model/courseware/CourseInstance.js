@@ -20,6 +20,8 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 		{ name: 'TotalEnrolledCount', type: 'int'},
 		{ name: 'Scopes', type: 'auto' },
 
+		{ name: 'PlatformPresentationResources', type: 'auto' },
+
 		{ name: 'Preview', type: 'bool', persist: false},
 		//UI propertied
 		{ name: 'cover', type: 'string', persist: false, defaultValue: 'missing-notset.png'},
@@ -31,10 +33,6 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 		var e = this.getCourseCatalogEntry(),
 			instructors = e && e.get('Instructors'),
 			author = instructors && instructors[0];
-
-		//if (!e) {
-			//console.warn('CourseCatalogEntry for', this, 'has not been preloaded yet.');
-		//}
 
 		return {
 			id: this.getId(),
@@ -75,7 +73,7 @@ Ext.define('NextThought.model.courseware.CourseInstance', {
 
 				console.error('No well known path for this course: ', e);
 
-				me.set('cover', e ? e.get('thumbnail') : 'missing-entry.png');
+				me.set('cover', e ? e.get('icon') : 'missing-entry.png');
 			});
 	},
 
