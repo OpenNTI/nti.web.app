@@ -216,6 +216,8 @@ Ext.define('NextThought.controller.Forums', {
 			finish();
 		}
 
+		var txn = history.beginTransaction('restore-forum-transaction');
+
 		Service.request(url)
 				.then(JSON.parse)
 				.then(ParseUtils.parseItems.bind(ParseUtils))
@@ -223,6 +225,12 @@ Ext.define('NextThought.controller.Forums', {
 				.then(this.presentForumItem.bind(this))
 				.fail(function(reason) {
 					console.error('Failed to restore forum state: ', reason);
+				})
+				.then(function() {
+					//We are restoring state... so any calls to "pushState" need to be ignored. This should have been good
+					// enough, but there are still calls to "pushState" getting made after this point.
+					//FIXME: The promise returned by `presentForumItem` should not fulfill untill all things are presented.
+					txn.abort();
 				})
 				.then(finish);
 	},
