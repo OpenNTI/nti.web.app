@@ -54,7 +54,7 @@
 	}
 }
 
-a{
+a[href] {
     &.internal-link {
 		@include content-link-def;
 		&:active, &:hover, &:visited { @include content-link-def; }
