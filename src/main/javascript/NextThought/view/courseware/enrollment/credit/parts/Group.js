@@ -13,11 +13,20 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Group', {
 	]),
 
 
+	initComponent: function() {
+		this.on('changed', 'changed');
+		this.enableBubble(['reveal-item', 'hide-item']);
+
+		this.callParent(arguments);
+	},
+
 	beforeRender: function() {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			label: this.label
 		});
+
+		this.changed();
 	}
 });

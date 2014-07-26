@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.courseware.enrollment.credit.parts.Checkbox', {
-	extend: 'Ext.Component',
+	extend: 'NextThought.view.courseware.enrollment.credit.parts.BaseInput',
 	alias: 'widget.credit-checkbox',
 
 
@@ -17,5 +17,19 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Checkbox', {
 			name: this.name,
 			text: this.text
 		});
+	},
+
+	getValue: function() {
+		if (!this.el) { return; }
+
+		var check = this.el.down('input[type=checkbox]');
+
+		return check.is(':checked');
+	},
+
+	isEmpty: function() {
+		if (!this.el) { return true; }
+
+		return false;
 	}
 });

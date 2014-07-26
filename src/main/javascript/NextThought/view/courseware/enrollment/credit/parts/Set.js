@@ -7,15 +7,19 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Set', {
 	requires: [
 		'NextThought.view.courseware.enrollment.credit.parts.Description',
 		'NextThought.view.courseware.enrollment.credit.parts.RadioGroup',
-		'NextThought.view.courseware.enrollment.credit.parts.Checkbox'
+		'NextThought.view.courseware.enrollment.credit.parts.Checkbox',
+		'NextThought.view.courseware.enrollment.credit.parts.TextInput',
+		'NextThought.view.courseware.enrollment.credit.parts.CheckboxGroup',
+		'NextThought.view.courseware.enrollment.credit.parts.DropDown'
 	],
 
 	typesMap: {
-		'text': '',
+		'text': 'credit-textinput',
 		'checkbox': 'credit-checkbox',
 		'radio-group': 'credit-radiogroup',
-		'description': 'credit-description'
-
+		'description': 'credit-description',
+		'checkbox-group': 'credit-checkbox-group',
+		'dropdown': 'credit-dropdown'
 	},
 
 	//name of the group so it can be idenitified
@@ -76,8 +80,9 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Set', {
 
 			me.add(input);
 		});
-	},
 
+		this.enableBubble(['reveal-item', 'hide-item']);
+	},
 
 	beforeRender: function() {
 		this.callParent(arguments);
@@ -104,5 +109,54 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Set', {
 				});
 			}
 		});
+
+		if (this.hides) {
+			this.fireEvent('hide-item', this.hides);
+		}
+	},
+
+	changed: function() {
+		var parent = this.up('[changed]');
+
+		if (this.reveals) {
+			if (this.isCorrect()) {
+				this.fireEvent('reveal-item', this.reveals);
+				this.fireEvent('hide-item', this.hides);
+			} else {
+				this.fireEvent('hide-item', this.reveals);
+			}
+		}
+
+		if (parent) {
+			parent.changed();
+		}
+	},
+
+
+	maybeToggleHides: function(correct) {
+		var parent = this.up('[maybeToggleHides]'),
+			notEmpty = true;
+
+		this.items.each(function(item) {
+			if (item.isEmpty && item.isEmpty()) {
+				notEmpty = false;
+			}
+		});
+
+		if (!this.hides) {
+			if (parent) { parent.maybeToggleHides(); }
+			return;
+		}
+
+		if (!correct) {
+			this.fireEvent('reveal-item', this.hides);
+			return;
+		}
+
+		if (this.isCorrect() || !notEmpty) {
+			this.fireEvent('hide-item', this.hides);
+		} else {
+			this.fireEvent('reveal-item', this.hides);
+		}
 	}
 });

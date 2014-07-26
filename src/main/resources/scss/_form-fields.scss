@@ -216,3 +216,73 @@ span.nti-radiobutton {
 		@include sprite($icons, 'radio-button-16_active');
 	}
 }
+
+
+.searchcombobox {
+	position: relative;
+
+
+	input {
+		font-size: 14px;
+		font-weight: 500;
+		border-radius: 0;
+		line-height: 25px;
+		padding: 6px 10px;
+		width: 100%;
+		height: 100%;
+		box-shadow: none;
+		border: 1px solid $border-grey;
+		background: #ffffff;
+	}
+
+	.options {
+		position: fixed;
+		top: 100%;
+		background-color: white;
+		border: 1px solid $border-grey;
+		border-top-width: 0;
+		z-index: 1;
+		overflow: auto;
+		color: $primary-grey;
+		
+		ul {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+
+			li {
+				padding: 0 10px;
+				cursor: pointer;
+
+				&.active, &:hover {
+					background-color: #efefef
+				}
+			}
+		}
+
+		&.hidden {
+			display: none;
+		}
+	}
+
+	.arrow {
+		right: 0;
+		top: 0;
+		bottom: 0;
+		width: 21px;
+
+		@include icon('arrow-course-dropdown-light', $side: 'after', $position: absolute, $left: 4px, $top: 50%);
+
+		&::after {
+			margin-top: -3px;
+		}
+
+		&:hover {
+			@include icon('arrow-course-dropdown', $side: 'after', $position: absolute, $left: 4px, $top: 50%);
+		}
+
+		&.up::after {
+			@include experimental(transform, rotate(-180deg));
+		}
+	}
+}

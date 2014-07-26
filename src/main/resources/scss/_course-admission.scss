@@ -99,11 +99,45 @@
 			}
 		}
 
+		.credit-input-container {
+			position: relative;
+
+			.help {
+				position: absolute;
+				color: $primary-blue;
+				border: 2px solid $primary-blue;
+				border-radius: 15px;
+				padding: 0 8px;
+				top: 8px;
+				left: 180px;
+
+			}
+		}
+
+		.credit-checkbox-group {
+			.options {
+				padding-left: 20px;
+				overflow: hidden;
+				font-size: 1.1em;
+				position: relative;
+
+				&.disabled::after {
+					content: '';
+					position: absolute;
+					top: 0; bottom: 0;
+					left: 0; right: 0;
+					background-color: #efefef;
+					opacity: 0.5;
+				}
+
+			}
+		}
+
 		.credit-input {
-			font: normal 500 1em/40px $font;
+			font: normal 600 0.9em/40px $font;
 			display: inline-block;
 			color: $primary-grey;
-			margin: 4px 0;
+			margin: 2px 0;
 
 			&.full {
 				width: 675px;
@@ -115,6 +149,30 @@
 
 			&.radio {
 				cursor: pointer;
+
+				.input-container {
+					display: inline-block;
+					position: relative;
+
+					&.disabled::after {
+						content: '';
+						position: absolute;
+						top: 0; bottom: 0;
+						left: 0; right: 0;
+						background-color: #efefef;
+						opacity: 0.5;
+					}
+				}
+
+				input[type=text] {
+					box-shadow: none;
+					font-size: 14px;
+					font-weight: 500;
+					line-height: 25px;
+					border: 1px solid $border-grey;
+					background: #ffffff;
+					padding: 6px 10px;
+				}
 
 				input[type=radio] {
 					opacity: 0;
@@ -154,6 +212,74 @@
 
 				&:hover input[type=checkbox]:not(:checked) + * {
 					@include icon('checkbox-14_hover', $top: 13px)
+				}
+			}
+
+			&.text, &.select {
+				input {
+					box-shadow: none;
+					border-radius: 0;
+					font-size: 14px;
+					font-weight: 500;
+					line-height: 25px;
+					border: 1px solid $border-grey;//#dcdcdc;
+					background: #ffffff;
+					padding: 6px 10px;
+					margin: 0;
+					min-height: 39px;
+					width: 100%;
+
+					&:focus {
+						border-color: $primary-blue;
+					}
+				}
+
+				.clear {
+					top: 11px;
+					right: 8px;
+				}
+
+				&.required {
+					input {
+						box-shadow: inset 4px 0 0 0 $border-grey;
+						border-left-width: 0;
+
+						&:focus {
+							box-shadow: inset 4px 0 0 0 $primary-blue;
+						}
+					}
+				}
+
+				&.error {
+					input {
+						border-color: $primary-red;
+						box-shadow: inset 4px 0 0 0 $primary-red;
+
+						&:focus {
+							border-color: $primary-red;
+							box-shadow: inset 4px 0 0 0 $primary-red;
+						}
+					}
+				}
+
+				&.left {
+					float: left;
+					margin-right: 8px;
+					&.last {
+						margin-right: 0;
+					}
+				}
+
+				&.third {
+					width: 219px;
+				}
+
+				&.large {
+					width: 255px;
+				}
+
+				&.small {
+					width: 140px;
 				}
 			}
 		}
