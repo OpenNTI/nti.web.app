@@ -233,6 +233,10 @@ span.nti-radiobutton {
 		box-shadow: none;
 		border: 1px solid $border-grey;
 		background: #ffffff;
+
+		&.error {
+			border-color: $primary-red;
+		}
 	}
 
 	.options {
@@ -270,19 +274,22 @@ span.nti-radiobutton {
 		top: 0;
 		bottom: 0;
 		width: 21px;
+		cursor: pointer;
+		position: absolute;
 
-		@include icon('arrow-course-dropdown-light', $side: 'after', $position: absolute, $left: 4px, $top: 50%);
+		//@include icon('arrow-course-dropdown-light', $side: 'after', $position: absolute, $left: 4px, $top: 50%);
 
 		&::after {
-			margin-top: -3px;
+			content: '';
+			@include arrow($pointFrom: top, $color: $tertiary-grey);
+			position: absolute;
+			top: 50%;
+			margin-top: -2px;
+			right: 6px;
 		}
 
-		&:hover {
-			@include icon('arrow-course-dropdown', $side: 'after', $position: absolute, $left: 4px, $top: 50%);
-		}
-
-		&.up::after {
-			@include experimental(transform, rotate(-180deg));
+		&:hover::after {
+			border-top-color: $secondary-grey;
 		}
 	}
 }

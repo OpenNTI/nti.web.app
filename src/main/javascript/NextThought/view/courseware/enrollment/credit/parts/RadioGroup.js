@@ -2,12 +2,17 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 	extend: 'NextThought.view.courseware.enrollment.credit.parts.BaseInput',
 	alias: 'widget.credit-radiogroup',
 
-	renderTpl: Ext.DomHelper.markup({tag: 'tpl', 'for': 'options', cn: [
-		{tag: 'label', cls: 'credit-input dark full radio', cn: [
-			{tag: 'input', type: 'radio', name: '{name}', value: '{value}'},
-			{html: '{text}'}
-		]}
-	]}),
+	renderTpl: Ext.DomHelper.markup({tag: 'tpl', 'for': 'options', cn: {
+		cls: 'credit-input dark full radio', cn: [
+			{tag: 'input', id: '{parent.id}-{value}', type: 'radio', name: '{name}', value: '{value}'},
+			{tag: 'label', cls: '{cls}', 'for': '{parent.id}-{value}', cn: [
+				{html: '{text}'},
+				{tag: 'tpl', 'if': 'content', cn: [
+					{cls: 'content hidden', html: '{content}'}
+				]}
+			]}
+		]
+	}}),
 
 
 	beforeRender: function() {
@@ -19,6 +24,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 			var width = (option.inputWidth && option.inputWidth) + 'px' || 'auto';
 			option.name = name;
 			if (option.value === 'input') {
+				option.cls = 'input';
 				option.text = option.text.replace('{input}', Ext.DomHelper.markup({
 					cls: 'input-container disabled',
 					cn: {tag: 'input', type: 'text', style: {width: width}}
@@ -40,16 +46,38 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 	changed: function(e) {
 		this.callParent(arguments);
 
-		var inputFields = this.el.dom.querySelectorAll('label.credit-input .input-container');
+		var me = this,
+			inputFields = this.el.dom.querySelectorAll('.credit-input .input-container'),
+			contents = this.el.select('.content');
+
+		if (!Ext.isEmpty(contents)) {
+			contents.addCls('hidden');
+		}
 
 		if (!inputFields || Ext.isEmpty(inputFields)) { return; }
 
 		wait()
 			.then(function() {
+				var checked = me.el.down('input[type=radio]:checked'),
+					container = checked && checked.up('.radio'),
+					content = container && container.down('.content'),
+					error = me.el.down('label.error');
+
+				if (content) {
+					content.removeCls('hidden');
+				}
+
+				if (error) {
+					error.removeCls('error');
+				}
+
+				if (!me.isCorrect() && container) {
+					container.addCls('error');
+				}
+
 				Ext.each(inputFields, function(input) {
-					var span = input.parentNode,
-						label = span && span.parentNode,
-						checkedRadio = label && label.querySelector('input[type=radio]:checked');
+					var credit = Ext.fly(input).up('.credit-input'),
+						checkedRadio = credit && credit.el.dom.querySelector('input[type=radio]:checked');
 
 					Ext.fly(input)[checkedRadio ? 'removeCls' : 'addCls']('disabled');
 				});
@@ -60,25 +88,27 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 		if (!this.el) { return; }
 
 		var active = this.el.down('input[type=radio]:checked'),
-			label, input;
+			label, input, value = {};
 
 		if (!active) { return; }
 
-		label = active.up('label');
+		label = active.up('.radio');
 
 		if (label) {
 			input = label.down('input[type=text]');
 		}
 
 		if (input) {
-			return input.dom.value;
+			value[this.name] = input.dom.value;
+		} else {
+			value[this.name] = active.dom.value;
 		}
 
-		return active.dom.value;
+		return value;
 	},
 
 	isEmpty: function() {
-		if (!this.el) { return true; }
+		if (!this.rendered) { return true; }
 
 		var active = this.el.down('input[type=radio]:checked');
 

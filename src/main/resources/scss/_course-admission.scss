@@ -103,14 +103,37 @@
 			position: relative;
 
 			.help {
-				position: absolute;
-				color: $primary-blue;
-				border: 2px solid $primary-blue;
-				border-radius: 15px;
-				padding: 0 8px;
-				top: 8px;
-				left: 180px;
+				float: left;
+				width: 500px;
+				padding-left: 40px;
+				position: relative;
 
+				.information {
+					padding-top: 10px;
+					font-size: 0.9em;
+					font-weight: 300;
+					color: $tertiary-grey;
+				}
+
+				.information.hidden {
+					display: none;
+				}
+
+				.information:not(.hidden) + .icon {
+					@include icon('info_active', $position: absolute);
+				}
+
+				.icon {
+					cursor: pointer;
+					top: 13px;
+					left: 12px;
+
+					@include icon('info', $position: absolute);
+
+					&:hover {
+						@include icon('info_active', $position: absolute);
+					}
+				} 
 			}
 		}
 
@@ -121,23 +144,41 @@
 				font-size: 1.1em;
 				position: relative;
 
-				&.disabled::after {
-					content: '';
-					position: absolute;
-					top: 0; bottom: 0;
-					left: 0; right: 0;
-					background-color: #efefef;
-					opacity: 0.5;
+				.credit-input {
+					margin: 0;
+				}
+
+				&.disabled {
+					cursor: default;
+					.credit-input {
+						cursor: default;
+						color: $tertiary-grey;
+
+						&.checkbox {
+							input[type=checkbox]:checked + * {
+								@include icon('checkbox-14', $top: 13px, $left: 18px);
+
+								&::before{
+									display: none;
+								}
+							}
+
+							&:hover input[type=checkbox]:not(:checked) + * {
+								@include icon('checkbox-14', $top: 13px, $left: 18px);
+						}
+						}
+					}
 				}
 
 			}
 		}
 
 		.credit-input {
-			font: normal 600 0.9em/40px $font;
+			font: normal 600 0.9em/20px $font;
 			display: inline-block;
 			color: $primary-grey;
 			margin: 2px 0;
+			float: left;
 
 			&.full {
 				width: 675px;
@@ -145,6 +186,19 @@
 
 			&.dark {
 				background-color: #f9f9f9;
+			}
+
+			&.error {
+				background-color: rgba(243, 82, 82, 0.05);
+				border-color: $primary-red;
+
+				label {
+					border-color: $primary-red;
+
+					&::before {
+						background-color: $primary-red !important;
+					}
+				}
 			}
 
 			&.radio {
@@ -174,18 +228,39 @@
 					padding: 6px 10px;
 				}
 
-				input[type=radio] {
-					opacity: 0;
-				}
-				
-				input[type=radio] + * {
-					padding-left: 36px;
-					display: inline-block;
-					@include icon('radio-button-16', $top: 12px);
+				.content {
+					padding: 5px 0 15px 0;
+					font-weight: 400;
+					font-style: italic;
+
+					a {
+						text-decoration: none;
+						color: $primary-blue;
+					}
+
+					&.hidden {
+						display: none;
+					}
 				}
 
-				input[type=radio]:checked + * {
-					@include icon('radio-button-16_active', $top: 12px);
+				input[type=radio] {
+					opacity: 0;
+					position: absolute;
+				}
+				
+				input[type=radio] + label {
+					min-height: 40px;
+					padding: 10px 15px 10px 45px;
+					display: block;
+					@include icon('radio-button-16', $top: 12px, $left: 18px);
+
+					&.input {
+						padding: 0 15px 0 45px;
+					}
+				}
+
+				input[type=radio]:checked + label {
+					@include icon('radio-button-16_active', $top: 12px, $left: 18px);
 
 					&::before {
 						content: '';
@@ -193,13 +268,25 @@
 						width: 4px;
 						background-color: $primary-blue;
 						top: 0;
-						left: -18px;
+						left: 0px;
 						bottom: 0;
 					}
 				}
 
-				&:hover input[type=radio]:not(:checked) + * {
-					@include icon('radio-button-16_hover', $top: 12px);
+				&:hover input[type=radio]:not(:checked) + label {
+					@include icon('radio-button-16_hover', $top: 12px, $left: 18px);
+				}
+
+				&:not(.error) {
+					input[type=radio]:focus + label {
+						box-shadow: inset 0 0 0 1px $primary-blue;
+					}
+				}
+
+				&.error {
+					input[type=radio]:focus + label {
+						box-shadow: inset 0 0 0 1px $primary-red;
+					}
 				}
 			}
 
@@ -208,16 +295,18 @@
 
 				input[type=checkbox] {
 					opacity: 0;
+					position: absolute;
 				}
 
-				input[type=checkbox] + * {
-					padding-left: 36px;
-					display: inline-block;
-					@include icon('checkbox-14', $top: 13px);
+				input[type=checkbox] + label {
+					min-height: 40px;
+					padding: 10px 15px 10px 46px;
+					display: block;
+					@include icon('checkbox-14', $top: 13px, $left: 18px);
 				}
 
-				input[type=checkbox]:checked + * {
-					@include icon('checkbox-14_active', $top: 13px);
+				input[type=checkbox]:checked + label {
+					@include icon('checkbox-14_active', $top: 13px, $left: 18px);
 
 					&::before {
 						content: '';
@@ -225,17 +314,27 @@
 						width: 4px;
 						background-color: $primary-blue;
 						top: 0;
-						left: -18px;
+						left: 0px;
 						bottom: 0;
 					}
 				}
 
-				&:hover input[type=checkbox]:not(:checked) + * {
-					@include icon('checkbox-14_hover', $top: 13px)
+				&:hover input[type=checkbox]:not(:checked) + label {
+					@include icon('checkbox-14_hover', $top: 13px, $left: 18px);
+				}
+
+				input[type=checkbox]:focus + label {
+					box-shadow: inset 0 0 0 1px $primary-blue;
 				}
 			}
 
-			&.text, &.select {
+			&.date-input {
+				input:focus {
+					border-color: $primary-blue;
+				}
+			}
+
+			&.text, &.select{
 				input {
 					box-shadow: none;
 					border-radius: 0;
@@ -252,6 +351,16 @@
 					&:focus {
 						border-color: $primary-blue;
 					}
+
+					&.error {
+						border-color: $primary-red;
+						box-shadow: inset 4px 0 0 0 $primary-red;
+
+						&:focus {
+							border-color: $primary-red;
+							box-shadow: inset 4px 0 0 0 $primary-red;
+						}
+					}
 				}
 
 				.clear {
@@ -266,18 +375,6 @@
 
 						&:focus {
 							box-shadow: inset 4px 0 0 0 $primary-blue;
-						}
-					}
-				}
-
-				&.error {
-					input {
-						border-color: $primary-red;
-						box-shadow: inset 4px 0 0 0 $primary-red;
-
-						&:focus {
-							border-color: $primary-red;
-							box-shadow: inset 4px 0 0 0 $primary-red;
 						}
 					}
 				}

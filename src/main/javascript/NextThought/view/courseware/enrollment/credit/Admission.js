@@ -22,7 +22,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					],
 					help: [
 						{text: 'Take the free course instead.', type: 'event', event: 'goto-free'},
-						{text: 'View the FAQ\'s', type: 'link', href: '#'}
+						{text: 'View the FAQ\'s', type: 'link', href: '#', target: '_blank'}
 					]
 				}
 			]
@@ -30,15 +30,14 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 		{
 			name: 'preliminary',
 			label: 'Preliminary Questions',
-			reveals: 'general',
-			hides: 'not-eligible',
+			reveals: ['general', 'signature'],
 			items: [
 				{
 					xtype: 'enrollment-credit-set',
 					label: 'Are you currently attending the University of Oklahoma?',
 					inputs: [
 						{type: 'radio-group', name: 'attending', correct: 'false', options: [
-							{text: 'Yes', value: true},
+							{text: 'Yes', value: true, content: 'Please sign up for the course using your <a href=\'http://www.ozone.ou.edu\'>Ozone account</a>.'},
 							{text: 'No', value: false}
 						]}
 					]
@@ -46,41 +45,20 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 				{
 					xtype: 'enrollment-credit-set',
 					label: 'Are you attending High School?',
+					name: 'attending-highschool',
 					inputs: [
 						{type: 'radio-group', name: 'highschool', correct: 'false', options: [
-							{text: 'Yes', value: true},
+							{
+								text: 'Yes',
+								value: true,
+								content: 'Please apply using our <a href=\'http://www.ou.edu/content/go2/admissions/concurrent.html\'>Concurrent Enrollment Appliation</a>'
+							},
 							{text: 'No', value: false}
 						]}
-					]
-				},
-				{
-					xtype: 'enrollment-credit-set',
-					label: 'Are you prohibited from enrolling in any University of Oklahoma progam?',
-					inputs: [
-						{type: 'checkbox', text: 'I am not prohibited.', name: 'prohibited', correct: true}
-					],
-					help: [
-						{text: 'Why would I be prohibited?', type: 'link', href: '#'}
 					]
 				}
 			]
 		},
-		//{
-		//	name: 'not-eligible',
-		//	label: 'You are not eligible for admission',
-		//	items: [
-		//		{
-		//			xtype: 'enrollment-credit-set',
-		//			inputs: [
-		//				{type: 'description', text: ['Based on your answers above you are unable to be admitted']}
-		//			],
-		//			help: [
-		//				{text: 'Why am I unelgible?', type: 'link', href: '#'},
-		//				{text: 'Take the free course instead.', type: 'event', event: 'goto-free'}
-		//			]
-		//		}
-		//	]
-		//},
 		{
 			name: 'general',
 			label: 'General Information',
@@ -96,7 +74,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 				},
 				{
 					xtype: 'enrollment-credit-set',
-					label: 'What is your full name?',
+					label: 'What is your former name?',
 					inputs: [
 						{type: 'text', name: 'former-first-name', placeholder: 'First Name', size: 'third left'},
 						{type: 'text', name: 'former-middle-name', placeholder: 'Middle Name', size: 'third left'},
@@ -202,7 +180,12 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					xtype: 'enrollment-credit-set',
 					label: 'Social Security Number',
 					inputs: [
-						{type: 'text', name: 'social_security_number', placeholder: 'XXX - XX - XXXX', help: 'What should we say here?'}
+						{
+							type: 'text',
+							name: 'social_security_number',
+							placeholder: 'XXX - XX - XXXX',
+							help: 'Your Social Security Number is not requred for admission, but it is used for submission of a 1098T to the IRS.'
+						}
 					]
 				},
 				{
@@ -257,6 +240,31 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					]
 				}
 			]
+		},
+		{
+			name: 'signature',
+			label: 'Signature',
+			reveals: 'enable-submit',
+			items: [
+				{
+					xtype: 'enrollment-credit-set',
+					inputs: [
+						{type: 'checkbox', text: [
+							'I affirm that I am not prohibited from enrolling in any University of Oklahoma program.',
+							'I understand that submitting any false information to the University,',
+							'including but not limited to, any information contained on this form,',
+							'or withholding information about my previous academic history will make my application for admission to the University,',
+							'as well as any future applications, subject to denial, or will result in expulsion from the University.',
+							'I pledge to conduct myself with academic integrity and abide by the tenets of',
+							'The University of Oklahoma\'s Integrity Pledge'
+						].join(' '), correct: true}
+					],
+					help: [
+						{text: 'Why would I be prohibited?', type: 'event', event: 'show-criteria'},
+						{text: 'Integrity Pledge', type: 'link', href: 'http://integrity.ou.edu/', target: '_blank'}
+					]
+				}
+			]
 		}
 	],
 
@@ -272,10 +280,32 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 
 
 	hideItem: function(name) {
-		var item = this.down('[name=' + name + ']');
+		var me = this, item, parent;
+
+		if (Ext.isArray(name)) {
+			name.forEach(function(n) {
+				me.hideItem(n);
+			});
+
+			return;
+		}
+
+		if (name === 'enable-submit') {
+			return;
+		}
+
+		item = me.down('[name=' + name + ']');
 
 		if (item) {
 			item.hide();
+
+			if (item.reveals) {
+				this.hideItem(item.reveals);
+			}
+
+			if (item.hides) {
+				this.hideItem(item.hides);
+			}
 		} else {
 			console.error('No item to hide: ', name);
 		}
@@ -283,12 +313,42 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 
 
 	revealItem: function(name) {
-		var item = this.down('[name="' + name + '"]');
+		var me = this, item, parent;
+
+		if (Ext.isArray(name)) {
+			name.forEach(function(n) {
+				me.revealItem(n);
+			});
+
+			return;
+		}
+
+		if (name === 'enable-submit') {
+			this.maybeEnableSubmission();
+			return;
+		}
+
+		item = me.down('[name="' + name + '"]');
 
 		if (item) {
 			item.show();
+
+			if (item.changed) {
+				item.changed();
+			}
 		} else {
 			console.error('No item to reveal: ', name);
 		}
+	},
+
+
+	getValue: function() {
+		var value = {};
+
+		this.items.each(function(item) {
+			value = Ext.apply(value, item.getValue && item.getValue());
+		});
+
+		return value;
 	}
 });

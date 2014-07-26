@@ -7,7 +7,10 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.TextInput', {
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'input-container credit-input text {required} {size}'},
 		{tag: 'tpl', 'if': 'help', cn: [
-			{cls: 'help', 'data-qtip': '{help}', html: '?'}
+			{cls: 'help', cn: [
+				{cls: 'information hidden', html: '{help}'},
+				{cls: 'icon'}
+			]}
 		]}
 	]),
 
@@ -30,6 +33,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.TextInput', {
 	afterRender: function() {
 		this.callParent(arguments);
 
+		var helpIcon = this.el.down('.help .icon'), helpText;
+
 		this.input = Ext.widget('simpletext', {
 			inputType: 'text',
 			placeholder: this.placeholder,
@@ -39,11 +44,26 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.TextInput', {
 		this.on('destroy', 'destroy', this.input);
 
 		this.setUpChangeMonitors();
+
+		if (helpIcon) {
+			helpText = this.el.down('.help .information');
+
+			this.mon(helpIcon, 'click', helpText.toggleCls.bind(helpText, 'hidden'));
+		}
 	},
 
 	setUpChangeMonitors: function() {
 		if (!this.input) { return; }
 
 		this.mon(this.input, 'changed', 'changed');
+	},
+
+
+	getValue: function() {
+		var value = {};
+
+		value[this.name] = this.input.getValue();
+
+		return value;
 	}
 });

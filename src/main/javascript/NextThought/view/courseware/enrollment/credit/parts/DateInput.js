@@ -16,10 +16,30 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.DateInput', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		this.dateInput = Ext.widget('datefield', {
-			renderTo: this.dateEl
+		var me = this,
+			scrollParent = me.el.parent('.credit-container');
+
+		me.dateInput = Ext.widget('datefield', {
+			renderTo: me.dateEl
 		});
 
-		this.on('destroy', 'destroy', this.dateInput);
+		me.on('destroy', 'destroy', me.dateInput);
+
+		me.mon(scrollParent, 'scroll', function() {
+			me.dateInput.monthInput.hideOptions();
+		});
+	},
+
+
+	isEmpty: function() {
+		return this.getValue();
+	},
+
+
+	getValue: function() {
+		var value = {};
+
+		value[this.name] = this.dateInput.getValue();
+		return value;
 	}
 });

@@ -16,6 +16,10 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.BaseInput', {
 		if (this.reveals) {
 			this.fireEvent('hide-item', this.reveals);
 		}
+
+		if (this.hides) {
+			this.fireEvent('hide-item', this.hides);
+		}
 	},
 
 
@@ -62,6 +66,11 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.BaseInput', {
 		//if we don't have an el we can't have any answers so we can't be correct
 		if (!this.el) { return false; }
 
-		return this.getValue() === this.correct;
+		var value = this.getValue();
+
+		//if we don't have a value, we can't be correct
+		if (!value) { return false; }
+
+		return this.getValue()[this.name] === this.correct;
 	}
 });

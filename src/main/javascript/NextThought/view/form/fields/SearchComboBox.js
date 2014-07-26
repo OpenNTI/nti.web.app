@@ -232,7 +232,7 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 	inputBlur: function() {
 		var me = this;
 
-		wait(100)
+		wait()
 			.then(function() {
 				var value = me.inputEl.getValue() || '',
 					currentText = me.currentText || '',
@@ -241,14 +241,14 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 
 				//if its not empty and the value is not a valid option
 				if (!isEmpty && !isValid) {
-					me.fireEvent('invalid-selection');
+					me.inputEl.addCls('error');
 				}
 			});
 	},
 
 
 	inputFocus: function() {
-		this.fireEvent('input-focused');
+		this.inputEl.removeCls('error');
 
 		var value = this.inputEl.getValue();
 

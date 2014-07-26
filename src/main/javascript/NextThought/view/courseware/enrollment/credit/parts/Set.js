@@ -43,6 +43,31 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Set', {
 		return correct;
 	},
 
+	isEmpty: function() {
+		var empty = true;
+
+		this.items.each(function(item) {
+			if (Ext.isFunction(item.isEmpty) && !item.isEmpty()) {
+				empty = false;
+			}
+
+			return empty;
+		});
+
+		return empty;
+	},
+
+
+	getValue: function() {
+		var value = {};
+
+		this.items.each(function(item) {
+			value = Ext.apply(value, item.getValue && item.getValue());
+		});
+
+		return value;
+	},
+
 	defaultType: null,
 
 	getTargetEl: function() {
@@ -51,7 +76,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Set', {
 
 	childEls: ['body'],
 
-	helpTpl: new Ext.XTemplate(Ext.DomHelper.markup({tag: 'a', cls: 'help', href: '{href}', html: '{text}'})),
+	helpTpl: new Ext.XTemplate(Ext.DomHelper.markup({tag: 'a', cls: 'help', href: '{href}', target: '{target}', html: '{text}'})),
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'label', html: '{label}'},
@@ -117,14 +142,22 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Set', {
 	},
 
 	changed: function() {
-		var parent = this.up('[changed]');
+		var parent = this.up('[changed]'),
+			correct = this.isCorrect();
 
 		if (this.reveals) {
-			if (this.isCorrect()) {
+			if (correct) {
 				this.fireEvent('reveal-item', this.reveals);
-				this.fireEvent('hide-item', this.hides);
 			} else {
 				this.fireEvent('hide-item', this.reveals);
+			}
+		}
+
+		if (this.hides && !this.isEmpty()) {
+			if (correct) {
+				this.fireEvent('hide-item', this.hides);
+			} else {
+				this.fireEvent('reveal-item', this.hides);
 			}
 		}
 

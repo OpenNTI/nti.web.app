@@ -4,22 +4,22 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.CheckboxGroup', 
 
 	renderTpl: Ext.DomHelper.markup({
 		 cls: 'credit-checkbox-group', cn: [
-			{tag: 'label', cls: 'credit-input dark full radio yes', cn: [
-				{tag: 'input', type: 'radio', name: '{name}'},
-				{tag: 'span', html: 'Yes.'},
+			{cls: 'credit-input dark full radio yes', cn: [
+				{tag: 'input', id: '{id}-{name}-yes', type: 'radio', name: '{name}'},
+				{tag: 'label', 'for': '{id}-{name}-yes', html: 'Yes.'},
 
 				{cls: 'options disabled', cn: [
 					{tag: 'tpl', 'for': 'options', cn: [
-						{tag: 'label', cls: 'credit-input dark full checkbox', cn: [
-							{tag: 'input', type: 'checkbox', name: '{name}'},
-							{tag: 'span', html: '{text}'}
+						{cls: 'credit-input dark full checkbox', cn: [
+							{tag: 'input', id: '{parent.id}-{name}', type: 'checkbox', name: '{name}'},
+							{tag: 'label', 'for': '{parent.id}-{name}', html: '{text}'}
 						]}
 					]}
 				]}
 			]},
-			{tag: 'label', cls: 'credit-input dark full radio no', cn: [
-				{tag: 'input', type: 'radio', name: '{name}'},
-				{tag: 'span', html: 'No.'}
+			{cls: 'credit-input dark full radio no', cn: [
+				{tag: 'input', id: '{id}-{name}-no', type: 'radio', name: '{name}'},
+				{tag: 'label', 'for': '{id}-{name}-no', html: 'No.'}
 			]}
 	]}),
 
