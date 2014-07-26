@@ -8,6 +8,9 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	},
 
 	fields: [
+		{ name: 'ContentPackages', mapping: 'ContentPackageNTIID',
+			convert: function(v) { return [v]; } },
+
 		{ name: 'Credit', type: 'arrayItem', persist: false },
 		{ name: 'Description', type: 'string', persist: false },
 		{ name: 'Duration', type: 'string', persist: false },

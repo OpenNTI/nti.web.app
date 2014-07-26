@@ -63,7 +63,6 @@ Ext.define('NextThought.controller.CourseWare', {
 
 
 	init: function() {
-		this.TEMP_WORKAROUND_COURSE_TO_CONTENT_MAP = {};
 		this.mon(this.application, 'session-ready', 'onSessionReady');
 
 
@@ -179,10 +178,6 @@ Ext.define('NextThought.controller.CourseWare', {
 
 		this.mon(store, 'load', 'markEnrolledCourses');
 
-		this.mon(store, {
-			beforeload: 'onAvailableCoursesLoading',
-			load: 'onAvailableCoursesLoaded'
-		});
 		store.load();
 	},
 
@@ -216,26 +211,6 @@ Ext.define('NextThought.controller.CourseWare', {
 			});
 
 			entry.set('enrolled', found);
-		});
-	},
-
-
-	onAvailableCoursesLoading: function() {
-		this.TEMP_WORKAROUND_COURSE_TO_CONTENT_MAP = {};
-	},
-
-
-	onAvailableCoursesLoaded: function(store) {
-		var me = this,
-			contentMap = me.TEMP_WORKAROUND_COURSE_TO_CONTENT_MAP;
-
-		store.each(function(o) {
-			var k = o.get('ContentPackageNTIID');
-			if (!contentMap.hasOwnProperty(k)) {
-				contentMap[k] = o.get('href');
-			} else {
-				console.error('Assertion Failed! There is another mapping to content package: ' + k);
-			}
 		});
 	},
 	//</editor-fold>
@@ -452,29 +427,20 @@ Ext.define('NextThought.controller.CourseWare', {
 	 * @param {String|NextThought.model.PageInfo} thing A Content NTIID or pageInfo
 	 * @private
 	 */
-	__getCourseMapping: function(thing) {
-		thing = ContentUtils.getLineage(thing).last();//always get the root
-
-		var ifo = ContentUtils.getLocation(thing),
-			title = ifo && ifo.title,
-			ntiid = title && title.get && title.get('NTIID');
-		return this.TEMP_WORKAROUND_COURSE_TO_CONTENT_MAP[ntiid];
-	},
-
-
 	__getCourseInstance: function(thing) {
-		var m = this.__getCourseMapping(thing);
-
-		return CourseWareUtils.findCourseBy(
-				function(c) {
-					var i = c.get('CourseInstance'),
-							links = i && i.get('Links'),
-							href = links && links.getRelHref('CourseCatalogEntry');
-					return getURL(href) === m;
-				})
-				.then(function(o) {
-					return o.get('CourseInstance');
-				});
+		return CourseWareUtils.courseForNtiid(ContentUtils.getNTIIDFromThing(thing))
+				.then(function(cce) { return cce.get('href');})
+				.then(function(href) {
+					function comparator(c) {
+						var i = c.get('CourseInstance'),
+							ref = i && i.get('Links').getRelHref('CourseCatalogEntry');
+						return getURL(ref) === href;
+					}
+					return CourseWareUtils.findCourseBy(comparator)
+						.then(function(o) {
+							return o.get('CourseInstance');
+						});
+		});
 	},
 
 
@@ -574,7 +540,11 @@ Ext.define('NextThought.controller.CourseWare', {
 		 */
 		courseForNtiid: function(ntiid) {
 			function fn(rec) {
-				return prefix && prefix === ParseUtils.ntiidPrefix(rec.get('ContentPackageNTIID'));
+				var match = false;
+				rec.get('ContentPackages').every(function(id) {
+					match = (prefix && prefix === ParseUtils.ntiidPrefix(id));
+				});
+				return match;
 			}
 
 			var prefix = ParseUtils.ntiidPrefix(ntiid),
