@@ -37,9 +37,21 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.DateInput', {
 
 
 	getValue: function() {
-		var value = {};
+		var value = {},
+			date = this.dateInput.getValue(),
+			year = date.getFullYear(),
+			day = date.getDay(),
+			month = date.getMonth() + 1;
 
-		value[this.name] = this.dateInput.getValue();
+		if (day < 10) {
+			day = '0' + day;
+		}
+
+		if (month < 10) {
+			month = '0' + month;
+		}
+
+		value[this.name] = year.toString() + month.toString() + day.toString();
 		return value;
 	}
 });
