@@ -52,12 +52,12 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		//ui data
 		{ name: 'isOpen', type: 'bool', persist: false},
 		{ name: 'isAdmin', type: 'bool', persist: false},
+		{ name: 'isChanging', type: 'bool', convert: function(v, rec) { return rec.get('enrolled') && v; }},
+		{ name: 'icon', type: 'string', mapping: 'LegacyPurchasableThumbnail' },//These look backwards, they are not... and are ONLY for fallback
+		{ name: 'thumb', type: 'string', mapping: 'LegacyPurchasableIcon' },
 
 		//Legacy
-		{ name: 'Communities', type: 'auto', persist: false },
-		{ name: 'ContentPackageNTIID', type: 'string', persist: false },
-		{ name: 'icon', type: 'string', mapping: 'LegacyPurchasableThumbnail' },//These look backwards, they are not... and are ONLY for fallback
-		{ name: 'thumb', type: 'string', mapping: 'LegacyPurchasableIcon' }
+		{ name: 'Communities', type: 'auto', persist: false }
 	],
 
 

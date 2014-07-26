@@ -166,7 +166,6 @@ Ext.define('NextThought.controller.CourseWare', {
 		if (!store) {
 			return;
 		}
-		//this.mon(store, 'load', 'onAdministeredCoursesLoaded');
 		store.load();
 	},
 
@@ -194,7 +193,6 @@ Ext.define('NextThought.controller.CourseWare', {
 			return;
 		}
 		this.mon(store, 'load', 'markEnrolledCourses');
-		//this.mon(store, 'load', 'onEnrolledCoursesLoaded');
 		store.load();
 	},
 
@@ -222,18 +220,6 @@ Ext.define('NextThought.controller.CourseWare', {
 	},
 
 
-	onEnrolledCoursesLoaded: function(store) {
-		this.getLibraryView().setEnrolledCourses(store);
-		//this.onCoursesLoaded(this.getEnrolledCoursesView(), store);
-	},
-
-
-	onAdministeredCoursesLoaded: function(store) {
-		this.getLibraryView().setAdministeredCourses(store);
-		//this.onCoursesLoaded(this.getAdministeredCoursesView(), store);
-	},
-
-
 	onAvailableCoursesLoading: function() {
 		this.TEMP_WORKAROUND_COURSE_TO_CONTENT_MAP = {};
 	},
@@ -249,17 +235,6 @@ Ext.define('NextThought.controller.CourseWare', {
 				contentMap[k] = o.get('href');
 			} else {
 				console.error('Assertion Failed! There is another mapping to content package: ' + k);
-			}
-		});
-	},
-
-
-	onCoursesLoaded: function(cmp, store) {
-		Library.onceLoaded().then(function() {
-			var content = Library.getCount() && store.getCount();
-			cmp[content ? 'show' : 'hide']();
-			if (!content) {
-				console.debug('Hiding ' + cmp.id + ' because the library or the store (' + store.storeId + ') was empty');
 			}
 		});
 	},
@@ -434,19 +409,10 @@ Ext.define('NextThought.controller.CourseWare', {
 
 
 	onCourseSelected: function(instance, callback) {
-		var c, view, txn;
+		var view, txn;
 
 		function end() {
 			txn.commit();
-		}
-
-		if (!instance.__getLocationInfo()) {
-			c = instance.getCourseCatalogEntry();
-			console.error('The Content Package for this course has not been loaded. Check that this user is "enrolled".\n' +
-						  '\tInstance ID: ' + instance.getId() + '\n' +
-						  '\tCourseCatalogEntry ID: ' + (c && c.getId()) + '\n' +
-						  '\tContent Package ID:' + (c && c.get('ContentPackageNTIID')));
-			return false;
 		}
 
 		txn = history.beginTransaction('navigation-transaction-' + guidGenerator());
@@ -602,6 +568,10 @@ Ext.define('NextThought.controller.CourseWare', {
 }, function() {
 
 	window.CourseWareUtils = {
+		/**
+		 * @param {String} ntiid
+		 * @return {CourseCatalogEntry}
+		 */
 		courseForNtiid: function(ntiid) {
 			function fn(rec) {
 				return prefix && prefix === ParseUtils.ntiidPrefix(rec.get('ContentPackageNTIID'));
@@ -697,7 +667,9 @@ Ext.define('NextThought.controller.CourseWare', {
 			if (!statusMap) {
 				statusMap = me.statusMap = {};
 				this.forEachCourse(function(enrollment) {
-					statusMap[enrollment.getCourseCatalogEntry().get('ContentPackageNTIID')] = enrollment.get('Status');
+					enrollment.get('CourseInstance').get('Bundle').get('ContentPackages').forEach(function(pkg) {
+						statusMap[pkg.get('NTIID')] = enrollment.get('Status');
+					});
 				});
 
 				stores.push(Ext.getStore('courseware.EnrolledCourses'), Ext.getStore('courseware.AdministeredCourses'));

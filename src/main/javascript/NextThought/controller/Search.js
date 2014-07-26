@@ -193,8 +193,8 @@ Ext.define('NextThought.controller.Search', {
 			filter = this.modelFilter,
 			partial = this.doPartialSearch,
 			rootUrl = Service.getUserUnifiedSearchURL(),
-			currentCourse = Ext.getCmp('content').currentCourse,
-			loc = (currentCourse && currentCourse.getContentPackageNTIID()) ||
+			currentBundle = Ext.getCmp('content').currentBundle,
+			loc = (currentBundle && currentBundle.getId()) ||
 				  ReaderPanel.get().getLocation().NTIID ||
 				  'noNTIID',
 			url = [

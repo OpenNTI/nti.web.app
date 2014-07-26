@@ -16,24 +16,19 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 	fields: [
+		{ name: 'Bundle', type: 'singleItem', mapping: 'ContentPackageBundle'},
 		{ name: 'Discussions', type: 'singleItem', persist: false },
 		{ name: 'Outline', type: 'singleItem', persist: false },
 
 		{ name: 'Scopes', type: 'auto', mapping: 'LegacyScopes' },
-
-
-		{ name: 'ContentPackageBundle', type: 'singleItem'},
 		{ name: 'SharingScopes', type: 'singleItem'},
-
 
 		{ name: 'TotalEnrolledCount', type: 'int'},
 		{ name: 'TotalEnrolledCountOpen', type: 'int', mapping: 'TotalLegacyOpenEnrolledCount'},
 		{ name: 'TotalEnrolledCountForCredit', type: 'int', mapping: 'TotalLegacyForCreditEnrolledCount'},
 
-		{ name: 'PlatformPresentationResources', type: 'auto' },
-
-		{ name: 'Preview', type: 'bool', persist: false},
 		//UI propertied
+		{ name: 'Preview', type: 'bool', persist: false},
 		{ name: 'isCourse', type: 'bool', defaultValue: true, persist: false },
 		{ name: 'cover', type: 'string', persist: false, defaultValue: 'missing-notset.png'},
 		{ name: 'thumb', type: 'string', persist: false, defaultValue: 'missing.png'}
@@ -43,17 +38,19 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	asUIData: function() {
 		var e = this.getCourseCatalogEntry(),
 			instructors = e && e.get('Instructors'),
-			author = instructors && instructors[0];
+			title = e && e.get('Title'),
+			label = e && e.get('ProviderUniqueID'),
+			author = instructors && instructors[0],
+			data = {
+				id: this.getId(),
+				isCourse: true,
+				author: author && author.get('Name')
+			};
 
-		return {
-			id: this.getId(),
-			isCourse: true,
-			title: (e && e.get('Title')) || 'Missing Catalog Entry',
-			label: (e && e.get('ProviderUniqueID')) || '---',
-			icon: this.get('cover'),
-			thumb: this.get('cover'),
-			author: author && author.get('Name')
-		};
+		if (title) { data.title = title; }
+		if (label) { data.label = label; }
+
+		return Ext.apply(this.get('Bundle').asUIData(), data);
 	},
 
 
@@ -70,25 +67,6 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
-	setLibraryImage: function() {
-		var me = this;
-
-		me.getImgAsset('thumb').then(function(url) { me.set('thumb', url); });
-
-		me.getImgAsset('landing')
-			.then(function(url) {
-				me.set('cover', url);
-			})
-			.fail(function() {
-				var e = me.getCourseCatalogEntry();
-
-				console.error('No well known path for this course: ', e);
-
-				me.set('cover', e ? e.get('icon') : 'missing-entry.png');
-			});
-	},
-
-
 	__precacheEntry: function() {
 		var p = this.precachePromise,
 			me = this,
@@ -101,10 +79,6 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 					url: me.getLink('CourseCatalogEntry'),
 					callback: function(rec) {
 						me.__courseCatalogEntry = rec;
-
-						Library.onceLoaded()
-							.then(me.setLibraryImage.bind(me));
-
 
 						me.afterEdit(['NTIID']);//let views know the record "changed".
 
@@ -149,12 +123,6 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
-	getContentPackageNTIID: function() {
-		var c = this.getCourseCatalogEntry();
-		return c && c.get('ContentPackageNTIID');
-	},
-
-
 	isExpired: function() {
 		var c = this.getCourseCatalogEntry();
 		return c && c.isExpired();
@@ -162,7 +130,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 
 	__getLocationInfo: function() {
-		var locationInfo = ContentUtils.getLocation(this.getContentPackageNTIID());
+		var locationInfo = this.get('Bundle').getLocationInfo();
 		//add a reference to myself so the course tiles can get the course instance form the locationInfo for now
 		if (locationInfo) {
 			locationInfo.courseInstance = this;
@@ -293,18 +261,11 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	fireNavigationEvent: function(eventSource) {
 		var me = this;
 
-		return this.__precacheEntry()
-				.done(function() {
-					return new Promise(function(fulfill) {
-						eventSource.fireEvent('course-selected', me, function() {
-							fulfill();
-						});
-					});
-				})
-				.fail(function(reason) {
-					console.error(reason);
-					throw reason;//don't let the fact that we log the error "unfail" the chain.
-				});
+		return new Promise(function(fulfill) {
+			eventSource.fireEvent('course-selected', me, function() {
+				fulfill();
+			});
+		});
 	},
 
 

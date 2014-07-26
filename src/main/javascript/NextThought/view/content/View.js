@@ -563,34 +563,35 @@ Ext.define('NextThought.view.content.View', {
 		this.reader.clearLocation();
 		return this._setBundle(bundle, tab)
 				.then(function() {
-					var e, ntiid, title, result = me;
+					var ntiid, title,
+						id = bundle.getId(),
+						result;
 
 					if (bundle.isCourse) {
 						me.showCourseNavigation();
-						e = bundle.getCourseCatalogEntry();
-						ntiid = e.get('ContentPackageNTIID');
-						title = e.get('Title');
+						bundle = bundle.get('Bundle');
 					} else {
 						me.showContentReader();
-						ntiid = bundle.getFirstPage();
-						title = bundle.get('Title');
-						result = new Promise(function(fulfill, reject) {
-							if (!ntiid) {
-								return reject('No NTIID');
-							}
-							me.fireEvent('set-last-location-or-root', ntiid, function(ntiid, reader, error) {
-								if (error) { return reject(error); }
-								fulfill(me);
-							});
-						});
 					}
+
+					ntiid = bundle.getFirstPage();
+					title = bundle.get('Title');
+					result = new Promise(function(fulfill, reject) {
+						if (!ntiid) {
+							return reject('No NTIID');
+						}
+						me.fireEvent('set-last-location-or-root', ntiid, function(ntiid, reader, error) {
+							if (error) { return reject(error); }
+							fulfill(me);
+						});
+					});
 
 
 					me.setTitle(title);
 					me.pushState({
 						//dirty, i know... TODO: track last content course was at, and restore that.
 						location: ntiid && PersistentStorage.getProperty('last-location-map', ntiid, ntiid),
-						bundle: bundle.getId()
+						bundle: id
 					});
 
 					return result;
