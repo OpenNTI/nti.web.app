@@ -78,7 +78,7 @@
 					.outline-row {
 						cursor: pointer;
 						float: left;
-						color: $secondary-grey;
+						color: $tertiary-grey;
 						margin: 11px 5px;
 						height: 28px;
 						font: normal 500 0.9em/28px $font;
@@ -485,6 +485,7 @@
 		padding: 10px 50px 10px 10px;
 		border-bottom: 1px solid #e5e5e5;
 		text-transform: uppercase;
+		z-index: 2;
 
 		.close {
 			cursor: pointer;
@@ -549,6 +550,14 @@
 			font-weight: 300;
 			font-size: 1.5em;
 			text-transform: none;
+
+			&.back {
+				color: $primary-blue;
+				padding-left: 22px;
+				cursor: pointer;
+
+				@include icon('arrow-left', $top: 8px);
+			}
 		}
 	}
 
@@ -562,11 +571,58 @@
 		z-index: -1;
 	}
 
+	.msg-container {
+		position: absolute;
+		top: 28px;
+		left: 0; right: 0px;
+		font: normal 500 1em/2em $font;
+		padding: 0 25px;
+		background-color: $primary-green;
+		color: white;
+		z-index: 1;
+		@include experimental(transition, all 0.5s);
+
+
+		&.show {
+			top: 60px;
+		}
+
+		&.error {
+			background-color: $primary-red;
+		}
+
+		.msg {
+			text-align: center;
+		}
+
+
+		.close-msg {
+			right: 15px;
+			top: 11px;
+			height: 10px;
+			width: 10px;
+			cursor: pointer;
+
+			@include icon('light-x', $position: absolute, $hover: true, $top: 2px, $left: 1px);
+		}
+	}
+
 	.empty-text {
 		text-align: center;
 		font: normal 500 1.1em/1 $font;
 		color: $primary-grey;
 		padding-top: 20px;
+	}
+
+	.footer {
+		position: absolute;
+		bottom: 0;
+		left: 0; right: 0;
+	}
+
+	.body-container {
+		height: calc(100% - 100px);
+		background-color: $panel-background;
 	}
 }
 
@@ -603,6 +659,7 @@
 
 .available-courses-tabpanel {
 	background-color: $panel-background;
+	max-height: 100%;
 
 	.available-courses-tabbar {
 		height: 40px;
@@ -639,6 +696,7 @@
 
 	.x-panel-body {
 		overflow-y: auto;
+		max-height: calc(100% - 40px);
 	}
 
 }

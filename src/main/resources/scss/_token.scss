@@ -99,7 +99,7 @@
 				display: block;
 				position: absolute;
 				background: $icons no-repeat;
-				@include sprite($icons,'light-x-hover',$dimensions: true);
+				@include sprite($icons,'light-x_hover',$dimensions: true);
 				top: 6px; left: 6px;
 				cursor: pointer;
 			}

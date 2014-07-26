@@ -148,7 +148,7 @@ Ext.define('NextThought.controller.Reader', {
 
 		if (!rec || !ntiid || (c && c.getId() === rec.getId())) {
 		//TODO: this should start a session transaction that ends with a "state replacement" so there is no "back"
-			this.fireEvent('show-view', 'library', true);
+			//this.fireEvent('show-view', 'library', true);
 			r.clearLocation();
 			r.currentRoot = null;
 			this.getMainNav().updateCurrent(true);

@@ -218,7 +218,7 @@ Ext.define('NextThought.view.library.Panel', {
 			win, cfg, xtype;
 
 		if (isBook) {
-			xtype = 'library-available-books';
+			xtype = 'library-available-books-window';
 
 			cfg = {
 				store: this.purchasables
@@ -226,12 +226,13 @@ Ext.define('NextThought.view.library.Panel', {
 
 			state = 'books';
 		} else {
-			xtype = 'library-available-courses';
+			xtype = 'library-available-courses-window';
 
 			cfg = {
 				current: this.currentAvailable,
 				upcoming: this.upcomingAvailable,
-				archived: this.archivedAvailable
+				archived: this.archivedAvailable,
+				showAvailable: true
 			};
 
 			state = 'courses';

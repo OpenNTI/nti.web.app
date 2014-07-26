@@ -50,9 +50,8 @@ Ext.define('NextThought.view.courseware.coursecatalog.Collection', {
 
 
 	onItemClick: function(rec, node, index, e) {
-		if (e.getTarget('.changing')) {
-			e.stopPropagation();
-			return false;
-		}
+		this.fireEvent('show-course-detail', rec);
+		e.stopPropagation();
+		return false;
 	}
 });

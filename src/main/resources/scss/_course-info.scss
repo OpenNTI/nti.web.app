@@ -417,3 +417,97 @@
 
 	.x-grid-body .x-grid-row .x-grid-cell.x-grid-cell-first { cursor: default; }
 }
+
+
+.course-details {
+	overflow: auto;
+	padding: 7px 15px 0 15px;
+	background-color: #efefef;
+	color: $primary-grey;
+	max-height: 100%;
+
+	.header {
+		background-color: #efefef;
+		border: none;
+		height: auto;
+		padding: 25px 0 0 0;
+		margin-bottom: 10px;
+		z-index: 0;
+
+		.title {
+			font-size: 2em;
+			line-height: 1em;
+			font-weight: 300;
+			text-transform: none;
+		}
+
+		.sub {
+			color: $tertiary-grey;
+			font-size: 0.75em;
+		}
+	}
+
+	.left {
+		float: left;
+		width: 642px;
+	}
+
+	.description {
+		font: normal 400 0.9em/1.7em $font;
+	}
+
+	.right {
+		float: left;
+	}
+
+	.enroll-card {
+		width: 300px;
+		margin: 0 15px 15px 15px;
+		background-color: white;
+		box-shadow: 0 1px 2px 0 rgba(0,0,0,0.35);
+		padding: 0 10px 10px 10px;
+		color: $primary-grey;
+
+		.title{
+			font: normal 500 0.8em/1 $font;
+			padding-top:15px;
+			color: $tertiary-grey;
+			text-transform: uppercase;
+		}
+
+		.main {
+			margin: 0;
+			font-weight: 300;
+		}
+
+		.sub, .warning {
+			font-weight: 300;
+			font-size: 0.9em;
+			line-height: 1.7em;
+			margin: 0.85em 0 0 0;
+		}
+
+		.warning {
+			color: $primary-red;
+			margin-top: 0;
+			font-style: italic;
+			font-weight: 500;
+		}
+
+		.button {
+			text-align: center;
+			color: white;
+			line-height: 35px;
+			background-color: $primary-blue;
+			margin-top: 20px;
+			border-radius: 3px;
+			font-weight: 300px;
+			cursor: pointer;
+		}
+
+
+		&.open-enrolled .button {
+			background-color: $primary-red;
+		}
+	}
+}

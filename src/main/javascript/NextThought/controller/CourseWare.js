@@ -45,7 +45,8 @@ Ext.define('NextThought.controller.CourseWare', {
 		'courseware.coursecatalog.Collection',
 		'courseware.enrollment.Window',
 		'courseware.enrollment.Confirm',
-		'courseware.enrollment.Complete'
+		'courseware.enrollment.Complete',
+		'library.available.CourseWindow'
 	],
 
 
@@ -77,29 +78,14 @@ Ext.define('NextThought.controller.CourseWare', {
 					'track-from-restore': 'trackFromRestore'
 				},
 
-				'enrollment-detailview': {
-					'show-enrollment-confirmation': 'showEnrollmentConfirmation'
-				},
-
-				'enrollment-confirm': {
-					'show-enrollment-complete': 'showEnrollmentComplete'
-				},
-
-				'enrollment-complete': {
-					'close': 'forceCloseWindow'
-				},
-
-				'course-catalog-collection': {
-					'select': 'onCourseCatalogItemSelect'
-				},
-
 				'*': {
 					'course-selected': 'onCourseSelected',
 					'navigate-to-assignment': 'onNavigateToAssignment',
 					'unauthorized-navigation': 'maybeShowEnroll',
 					'enrollment-enrolled-complete': 'courseEnrolled',
 					'enrollment-dropped-complete': 'courseDropped',
-					'show-enrollment': 'showEnrollmentWindow'
+					'show-enrollment': 'showEnrollmentWindow',
+					'change-enrollment': 'changeEnrollmentStatus'
 				}
 			},
 			controller: {
@@ -319,130 +305,85 @@ Ext.define('NextThought.controller.CourseWare', {
 	},
 
 
-	courseDropped: function(win, rec) {
+	courseDropped: function(rec) {
 		this.enrollmentChanged();
 		this.fireEvent('content-dropped', rec);
 	},
 	//</editor-fold>
-
-
-	maybeShowEnroll: function(sender, ntiid) {
+	maybeShowEnrollment: function(sender, ntiid) {
 		var course = ntiid && CourseWareUtils.courseForNtiid(ntiid);
+
 		if (course) {
-			Ext.getStore('courseware.EnrolledCourses').findCourseBy(course.findByMyCourseInstance())
-					//if this promise fulfills, you are enrolled, so put a handler on the failure.
-					.fail(this.showEnrollmentWindow.bind(this, course));
+			this.showEnrollmentWindow(course);
 		}
-		return !course;
+
+		return course;
 	},
 
 
-	onCourseCatalogItemSelect: function(sel, record) {
-		this.showEnrollmentWindow(record, function() {
-			record.set('isChanging', true);
-		});
-		return false;//prevent the Store from handling this as the base class is a store view.
-	},
-
-
-	//<editor-fold desc="Enrollment Window">
 	showEnrollmentWindow: function(course, callback) {
-		var win = this.getEnrollmentWindow(),
-			panel = this.getLibraryView().getPanel();
-		if (win) {
-			console.error('Enrollment already in progress.  How did you manage this', win);
-			return null;
+		var win = Ext.widget('library-available-courses-window', {
+			course: course
+		});
+
+		if (Ext.isFunction(callback)) {
+			this.mon(win, {
+				single: true,
+				'enrolled-action': callback
+			});
 		}
 
-		callback = Ext.Function.createSequence(function() { panel.courseDropped(); }, callback || Ext.emptyFn);
+		win.show();
 
-		return this.getView('courseware.enrollment.Window').create({record: course, callback: callback});
+		return win;
 	},
 
-
-	showEnrollmentConfirmation: function(view, course) {
+	/**
+	 * Either enrolls or drops a course
+	 * @param  {CourseCatalogEntry}   course   the course to enroll or drop
+	 * @param  {boolean}   enrolled   true to enroll false to drop
+	 * @param  {Function} callback    what to do when its done, takes two arguments success,changed
+	 */
+	changeEnrollmentStatus: function(course, enrolled, callback) {
 		var me = this,
-			enrolledStore = Ext.getStore('courseware.EnrolledCourses'),
-			win = me.getEnrollmentWindow();
-
-		if (!win) {
-			console.error('Expected a course window', arguments);
-			return;
-		}
+			enrolledStore = Ext.getStore('courseware.EnrolledCourses');
 
 		enrolledStore.findCourseBy(course.findByMyCourseInstance())
-				.then(
-				function() { //found, enrolled
-					me.transitionToComponent(win, {xtype: 'enrollment-confirm', record: course, enrolled: true});
-				},
-				function() {//not enrolled
-					me.toggleEnrollmentStatus(course)
-							.then(
-							function() {
-								course.set('enrolled', true);
-								me.transitionToComponent(win, {xtype: 'enrollment-complete', record: course, enrolled: true});
-							},
-							function(reason) {
-								console.log(reason);
-								win.showError('An unknown error occurred.  Please try again later.');
-								win.setConfirmState(false);
-							});
-				});
-	},
-
-
-	showEnrollmentComplete: function(view, course) {
-		var me = this,
-			enrolledStore = Ext.getStore('courseware.EnrolledCourses'),
-			win = this.getEnrollmentWindow();
-
-		if (!win) {
-			console.error('Expected a purchase window', arguments);
-			return;
-		}
-
-		enrolledStore.findCourseBy(course.findByMyCourseInstance())
-				.then(function(enrollment) {//found to be enrolled, lets drop...
-					me.toggleEnrollmentStatus(course, enrollment)
-							.then(
-							function() {
-								course.set('enrolled', false);
-								me.transitionToComponent(win, {xtype: 'enrollment-complete', record: course, enrolled: false});
-							},
-							function(reason) {
-								console.log(reason);
-								win.showError('An unknown error occurred. Please try again later.');
-								win.setConfirmState(false);
-							});
-				},
-				function() {//no found, not enrolled
-					this.transitionToComponent(win, {xtype: 'enrollment-complete', record: course, enrolled: false});
-				});
-	},
-
-
-	transitionToComponent: function(win, cfg) {
-		if (!win) {
-			console.error('No window!', arguments);
-			return;
-		}
-		win.hideError();
-		win.removeAll(true);
-		return win.add(cfg);
-	},
-
-
-	forceCloseWindow: function(cmp, w) {
-		var win = this.getEnrollmentWindow();
-
-		if (!win) {
-			console.error('Expected a enrollment window', arguments);
-			return;
-		}
-
-		win.forceClosing = true;
-		win.close();
-		delete win.forceClosing;
+			.then(function(enrollment) {//enrolled
+				//if we trying to enroll, and we are already enrolled no need to enroll again
+				if (enrolled) {
+					callback.call(null, true, false);
+					return;
+				}
+				//if we aren't trying to enroll, and we already are drop the course
+				me.toggleEnrollmentStatus(course, enrollment)
+					.then(function() {
+						course.set('enrolled', false);
+						wait(1).then(me.courseDropped.bind(me, course));
+						callback.call(null, true, true);
+					})
+					.fail(function(reason) {
+						console.error(reason);
+						callback.call(null, false);
+					});
+			}, function() {
+				//if we are trying to drop, and we aren't enrolled no need to drop
+				if (!enrolled) {
+					callback.call(null, true, false);
+					return;
+				}
+				//if we are trying to enroll and we aren't
+				me.toggleEnrollmentStatus(course)
+					.then(function() {
+						course.set('enrolled', true);
+						wait(1).then(me.courseEnrolled.bind(me));
+						callback.call(null, true, true);
+					})
+					.fail(function(reason) {
+						console.error(reason);
+						callback.call(null, false);
+					});
+			});
 	},
 	//</editor-fold>
 

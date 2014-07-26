@@ -1,6 +1,6 @@
-Ext.define('NextThought.view.library.available.Books', {
-	extend: 'NextThought.view.library.available.Courses',
-	alias: 'widget.library-available-books',
+Ext.define('NextThought.view.library.available.BookWindow', {
+	extend: 'NextThought.view.library.available.CourseWindow',
+	alias: 'widget.library-available-books-window',
 
 	label: 'Add Books',
 
@@ -16,6 +16,7 @@ Ext.define('NextThought.view.library.available.Books', {
 		this.callParent(arguments);
 
 		this.collection = this.down('purchasable-collection');
+		this.getLayout().setActiveItem(this.collection);
 
 		this.collection.bindStore(this.store);
 	},
