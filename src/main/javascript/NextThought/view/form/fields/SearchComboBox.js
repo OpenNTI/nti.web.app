@@ -5,7 +5,7 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 	listTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		tag: 'ul', cn: [
 			{tag: 'tpl', 'for': 'options', cn: [
-				{tag: 'li', 'data-value': '{value}', html: '{text}'}
+				{tag: 'li', 'data-value': '{[values.value || values]}', html: '{[values.text || values]}'}
 			]}
 		]
 	})),
@@ -72,6 +72,13 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 	},
 
 
+	addOptions: function(options) {
+		this.options = options;
+
+		this.filterOptions();
+	},
+
+
 	showOptions: function() {
 		if (!this.optionsEl.hasCls('hidden')) { return; }
 
@@ -107,7 +114,7 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 
 		if (value) {
 			options = options.filter(function(option) {
-				var text = option.text.toLowerCase();
+				var text = (option.text || option).toLowerCase();
 
 				return text.indexOf(value.toLowerCase()) === 0;
 			});
@@ -121,12 +128,12 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 
 		//if we only have one item make it the active one
 		if (options.length === 1) {
-			this.activeValue = options[0].value;
+			this.activeValue = options[0].value || options[0];
 
 			//if the value is the whole text of the option make it the current one
-			if (value.toLowerCase() === options[0].text.toLowerCase()) {
-				this.currentValue = options[0].value;
-				this.currentText = options[0].text;
+			if (value.toLowerCase() === (options[0].text || options[0]).toLowerCase()) {
+				this.currentValue = options[0].value || options[0];
+				this.currentText = options[0].text || options[0];
 			}
 		}
 

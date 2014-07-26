@@ -37,6 +37,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.DropDown', {
 
 		var scrollParent = me.el.parent('.credit-container');
 
+		me.addOptions = me.combobox.addOptions.bind(me.combobox);
+
 		me.mon(scrollParent, 'scroll', function() {
 			me.combobox.hideOptions();
 		});
@@ -54,12 +56,26 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.DropDown', {
 	},
 
 
+	addError: function() {
+		this.selectEl.addCls('error');
+	},
+
+
+	removeError: function() {
+		this.selectEl.removeCls('error');
+	},
+
+
 	isEmpty: function() {
 		return !this.getValue();
 	},
 
 
 	getValue: function() {
-		return this.combobox.getValue();
+		var value = {};
+
+		value[this.name] = this.combobox.getValue();
+
+		return value;
 	}
 });

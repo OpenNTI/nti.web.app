@@ -2,6 +2,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 	extend: 'NextThought.view.courseware.enrollment.credit.parts.BaseInput',
 	alias: 'widget.credit-radiogroup',
 
+	cls: 'credit-input-container',
+
 	renderTpl: Ext.DomHelper.markup({tag: 'tpl', 'for': 'options', cn: {
 		cls: 'credit-input dark full radio', cn: [
 			{tag: 'input', id: '{parent.id}-{value}', type: 'radio', name: '{name}', value: '{value}'},
@@ -84,8 +86,19 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 			});
 	},
 
-	getValue: function() {
-		if (!this.el) { return; }
+
+	addError: function() {
+		this.addCls('error');
+	},
+
+
+	removeError: function() {
+		this.removeCls('error');
+	},
+
+
+	getValue: function(force) {
+		if (!this.el || (!force && this.doNotSend)) { return; }
 
 		var active = this.el.down('input[type=radio]:checked'),
 			label, input, value = {};

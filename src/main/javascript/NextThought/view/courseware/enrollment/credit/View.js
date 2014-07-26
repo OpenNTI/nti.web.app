@@ -30,7 +30,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 		this.callParent(arguments);
 
 		this.admissions = this.add({
-			xtype: 'enrollment-credit-admission'
+			xtype: 'enrollment-credit-admission',
+			course: this.course
 		});
 
 		this.getLayout().setActiveItem(this.admissions);

@@ -2,6 +2,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.CheckboxGroup', 
 	extend: 'NextThought.view.courseware.enrollment.credit.parts.BaseInput',
 	alias: 'widget.credit-checkbox-group',
 
+	cls: 'credit-input-container',
+
 	renderTpl: Ext.DomHelper.markup({
 		 cls: 'credit-checkbox-group', cn: [
 			{cls: 'credit-input dark full radio yes', cn: [
@@ -53,6 +55,16 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.CheckboxGroup', 
 			no = this.el.down('.no input');
 
 		return !yes.is(':checked') && !no.is(':checked');
+	},
+
+
+	addError: function() {
+		this.addCls('error');
+	},
+
+
+	removeError: function() {
+		this.removeCls('error');
 	},
 
 

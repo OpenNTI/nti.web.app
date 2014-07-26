@@ -10,7 +10,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Set', {
 		'NextThought.view.courseware.enrollment.credit.parts.Checkbox',
 		'NextThought.view.courseware.enrollment.credit.parts.TextInput',
 		'NextThought.view.courseware.enrollment.credit.parts.CheckboxGroup',
-		'NextThought.view.courseware.enrollment.credit.parts.DropDown'
+		'NextThought.view.courseware.enrollment.credit.parts.DropDown',
+		'NextThought.view.courseware.enrollment.credit.parts.SubmitButton'
 	],
 
 	typesMap: {
@@ -20,7 +21,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Set', {
 		'description': 'credit-description',
 		'checkbox-group': 'credit-checkbox-group',
 		'dropdown': 'credit-dropdown',
-		'date': 'credit-dateinput'
+		'date': 'credit-dateinput',
+		'submit-button': 'credit-submit-button'
 	},
 
 	//name of the group so it can be idenitified
@@ -58,6 +60,21 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Set', {
 	},
 
 
+	isValid: function() {
+		var valid = true;
+
+		this.items.each(function(item) {
+			if (Ext.isFunction(item.isValid) && !item.isValid()) {
+				valid = false;
+			}
+			//don't short circuit so all the invalid inputs have a chance to show their error.
+			return true;
+		});
+
+		return valid;
+	},
+
+
 	getValue: function() {
 		var value = {};
 
@@ -76,7 +93,14 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Set', {
 
 	childEls: ['body'],
 
-	helpTpl: new Ext.XTemplate(Ext.DomHelper.markup({tag: 'a', cls: 'help', href: '{href}', target: '{target}', html: '{text}'})),
+	helpTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+		{tag: 'tpl', 'if': 'hasTip', cn: [
+			{tag: 'a', cls: 'help', 'data-qtip': '{info}', html: '{text}'}
+		]},
+		{tag: 'tpl', 'if': '!hasTip', cn: [
+			{tag: 'a', cls: 'help', href: '{href}', target: '{target}', html: '{text}'}
+		]}
+	])),
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'label', html: '{label}'},
@@ -125,12 +149,34 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Set', {
 		var me = this;
 
 		(me.help || []).forEach(function(help) {
-			var el = me.helpTpl.append(me.helpContainerEl, help, true);
+			var el;
+
+			help.hasTip = false;
+
+			if (help.type === 'text') {
+				if (Ext.isObject(help.info)) {
+					help.showInWindow = true;
+				} else if (help.info.length > 50) {
+					help.showInWindow = true;
+				} else {
+					help.hasTip = true;
+				}
+			}
+
+			el = me.helpTpl.append(me.helpContainerEl, help, true);
 
 			if (help.type === 'event') {
 				me.mon(el, 'click', function(e) {
 					me.fireEvent(help.event);
 					e.stopEvent();
+					return false;
+				});
+			}
+
+			if (help.type === 'text') {
+				me.mon(el, 'click', function(e) {
+					e.stopEvent();
+					console.log(me, help);
 					return false;
 				});
 			}

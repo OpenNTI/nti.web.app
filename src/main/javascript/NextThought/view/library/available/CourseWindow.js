@@ -118,7 +118,7 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 	 * @param  {Boolean} hasClickHandler if there is a function to handle the click
 	 * @return {Promise}                  fulfill if there is a click handler on click, and reject on close
 	 */
-	showMsg: function(msg, isError, hasClickHandler) {
+	showMsg: function(msg, isError, timeout, hasClickHandler) {
 		var me = this;
 
 		me.msgContainerEl[isError ? 'addCls' : 'removeCls']('error');
@@ -126,6 +126,13 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 
 		me.bodyEl.addCls('has-msg');
 		me.msgContainerEl.addCls('show');
+
+		if (timeout) {
+			wait(timeout)
+				.then(function() {
+					me.closeMsg();
+				});
+		}
 
 		return new Promise(function(fulfill, reject) {
 			me.msgMonitors = me.mon(me.msgContainerEl, {

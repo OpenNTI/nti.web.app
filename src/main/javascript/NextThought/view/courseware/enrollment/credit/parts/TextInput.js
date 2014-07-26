@@ -8,7 +8,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.TextInput', {
 		{cls: 'input-container credit-input text {required} {size}'},
 		{tag: 'tpl', 'if': 'help', cn: [
 			{cls: 'help', cn: [
-				{cls: 'information hidden', html: '{help}'},
+				{cls: 'information', html: '{help}'},
 				{cls: 'icon'}
 			]}
 		]}
@@ -45,17 +45,35 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.TextInput', {
 
 		this.setUpChangeMonitors();
 
-		if (helpIcon) {
-			helpText = this.el.down('.help .information');
+		//if (helpIcon) {
+		//	helpText = this.el.down('.help .information');
 
-			this.mon(helpIcon, 'click', helpText.toggleCls.bind(helpText, 'hidden'));
-		}
+		//	this.mon(helpIcon, 'click', helpText.toggleCls.bind(helpText, 'hidden'));
+		//}
 	},
+
 
 	setUpChangeMonitors: function() {
 		if (!this.input) { return; }
 
 		this.mon(this.input, 'changed', 'changed');
+	},
+
+
+	isEmpty: function() {
+		var value = this.input.getValue();
+
+		return Ext.isEmpty(value);
+	},
+
+
+	addError: function() {
+		this.inputEl.addCls('error');
+	},
+
+
+	removeError: function() {
+		this.inputEl.removeCls('error');
 	},
 
 

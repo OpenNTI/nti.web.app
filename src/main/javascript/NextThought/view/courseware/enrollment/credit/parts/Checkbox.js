@@ -6,7 +6,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Checkbox', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{tag: 'input', id: '{id}-{name}', type: 'checkbox', name: '{name}'},
-		{tag: 'label', 'for': '{id}-{name}', html: '{text}'}
+		{tag: 'label', cls: '{cls}', 'for': '{id}-{name}', html: '{text}'}
 	]),
 
 	beforeRender: function() {
@@ -14,15 +14,18 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Checkbox', {
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			name: this.name || 'credit-checkbox',
-			text: this.text
+			text: this.text,
+			cls: (this.text || '').length > 40 ? 'long' : ''
 		});
 	},
 
-	getValue: function() {
-		if (!this.el) { return; }
+	getValue: function(force) {
+		if (!this.el || (!force && this.doNotSend)) { return; }
 
 		var check = this.el.down('input[type=checkbox]'),
 			value = {};
+
+		if (!this.name) { return; }
 
 		value[this.name] = check.is(':checked');
 
@@ -33,5 +36,19 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Checkbox', {
 		if (!this.rendered) { return true; }
 
 		return false;
+	},
+
+
+	addError: function() {
+		var label = this.el.down('label');
+
+		label.addCls('error');
+	},
+
+
+	removeError: function() {
+		var label = this.el.down('label');
+
+		label.removeCls('error');
 	}
 });

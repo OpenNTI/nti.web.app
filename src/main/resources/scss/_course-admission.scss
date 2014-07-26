@@ -8,6 +8,7 @@
 		color: $tertiary-grey;
 		height: 36px;
 		padding: 0;
+		z-index: 0;
 
 		div {
 			float: left;
@@ -73,12 +74,17 @@
 		height: auto;
 		overflow: hidden;
 		margin-bottom: 40px;
+
 		.label {
 			color: $primary-grey;
 			font-size: 0.9em;
 			line-height: 1em;
 			font-weight: 500;
 			margin-bottom: 20px;
+
+			&:empty {
+				margin-bottom: 0;
+			}
 		}
 
 		.body-container {
@@ -89,7 +95,7 @@
 		.help-container {
 			float: left;
 			margin-left: 10px;
-			width: 239px; //1024 - 50 - 50 - 675 - 10
+			width: 220px;
 
 			.help {
 				font: normal 400 0.9em/45px $font;
@@ -124,7 +130,7 @@
 				}
 
 				.icon {
-					cursor: pointer;
+					//cursor: pointer;
 					top: 13px;
 					left: 12px;
 
@@ -142,6 +148,7 @@
 				padding-left: 20px;
 				overflow: hidden;
 				font-size: 1.1em;
+				width: calc(100% - 20px);
 				position: relative;
 
 				.credit-input {
@@ -170,6 +177,20 @@
 					}
 				}
 
+			}
+		}
+
+		.credit-input-container.error {
+			position: relative;
+			overflow: hidden;
+			height: auto;
+
+			&::before {
+				content: '';
+				position: absolute;
+				top: 0; bottom: 0;
+				left: 0; right: 0;
+				border: 1px solid $primary-red;
 			}
 		}
 
@@ -252,6 +273,7 @@
 					min-height: 40px;
 					padding: 10px 15px 10px 45px;
 					display: block;
+					cursor: pointer;
 					@include icon('radio-button-16', $top: 12px, $left: 18px);
 
 					&.input {
@@ -302,11 +324,27 @@
 					min-height: 40px;
 					padding: 10px 15px 10px 46px;
 					display: block;
+					cursor: pointer;
+
+					&.long {
+						line-height: 28px;
+						padding: 15px 25px 15px 46px;
+						font-weight: 400;
+
+						&::after {
+							top: 22px;
+						}
+					}
+
 					@include icon('checkbox-14', $top: 13px, $left: 18px);
 				}
 
 				input[type=checkbox]:checked + label {
 					@include icon('checkbox-14_active', $top: 13px, $left: 18px);
+
+					&.long::after {
+						top: 22px;
+					}
 
 					&::before {
 						content: '';
@@ -321,6 +359,10 @@
 
 				&:hover input[type=checkbox]:not(:checked) + label {
 					@include icon('checkbox-14_hover', $top: 13px, $left: 18px);
+
+					&.long::after {
+						top: 22px;
+					}
 				}
 
 				input[type=checkbox]:focus + label {
@@ -379,6 +421,24 @@
 					}
 				}
 
+				&.error {
+					input {
+						border-color: $primary-red;
+
+						&:focus {
+							border-color: $primary-red;
+						} 
+					}
+
+					&.required input {
+						box-shadow: inset 4px 0 0 0 $primary-red;
+
+						&:focus {
+							box-shadow: inset 4px 0 0 0 $primary-red;
+						}
+					}
+				}
+
 				&.left {
 					float: left;
 					margin-right: 8px;
@@ -398,6 +458,17 @@
 				&.small {
 					width: 140px;
 				}
+			}
+
+			&.button .button-text {
+				display: inline-block;
+				line-height: 20px;
+				padding: 10px 20px;
+				background-color: $primary-blue;
+				float: right;
+				border-radius: 5px;
+				color: white;
+				cursor: pointer;
 			}
 		}
 	}

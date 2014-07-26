@@ -36,7 +36,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					xtype: 'enrollment-credit-set',
 					label: 'Are you currently attending the University of Oklahoma?',
 					inputs: [
-						{type: 'radio-group', name: 'attending', correct: 'false', options: [
+						{type: 'radio-group', name: 'attending', doNotSend: true, correct: 'false', options: [
 							{text: 'Yes', value: true, content: 'Please sign up for the course using your <a href=\'http://www.ozone.ou.edu\'>Ozone account</a>.'},
 							{text: 'No', value: false}
 						]}
@@ -47,7 +47,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					label: 'Are you attending High School?',
 					name: 'attending-highschool',
 					inputs: [
-						{type: 'radio-group', name: 'highschool', correct: 'false', options: [
+						{type: 'radio-group', name: 'highschool', doNotSend: true, correct: 'false', options: [
 							{
 								text: 'Yes',
 								value: true,
@@ -92,9 +92,9 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					xtype: 'enrollment-credit-set',
 					label: 'What is your gender?',
 					inputs: [
-						{type: 'radio-group', name: 'gender', options: [
-							{text: 'Male', value: 'male'},
-							{text: 'Female', value: 'female'},
+						{type: 'radio-group', name: 'gender', required: true, options: [
+							{text: 'Male', value: 'M'},
+							{text: 'Female', value: 'F'},
 							{text: 'I\'d rather not say...', value: null}
 						]}
 					]
@@ -103,27 +103,11 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					xtype: 'enrollment-credit-set',
 					label: 'Permanent Address',
 					inputs: [
-						{type: 'text', name: 'street_line_1', placeholder: 'Address', required: true, size: 'full'},
-						{type: 'text', name: 'street_line_2', placeholder: 'Address', size: 'full'},
+						{type: 'text', name: 'street_line1', placeholder: 'Address', required: true, size: 'full'},
+						{type: 'text', name: 'street_line2', placeholder: 'Address', size: 'full'},
 						{type: 'text', name: 'city', placeholder: 'City / Town', size: 'large'},
 						{type: 'text', name: 'state', placeholder: 'State / Province / Territory / Region', size: 'full'},
-						{type: 'dropdown', name: 'nation_code', placeholder: 'Country', required: true, size: 'large left', options: [
-							{value: 'AF', text: 'Afghanistan'},
-							{value: 'AX', text: 'Aland Islands'},
-							{value: 'AL', text: 'Albania'},
-							{value: 'BS', text: 'Bahamas'},
-							{value: 'KH', text: 'Cambodia'},
-							{value: 'CA', text: 'Canada'},
-							{value: 'CC', text: 'Cocos (Keeling) Islands'},
-							{value: 'FR', text: 'France'},
-							{value: 'GR', text: 'Greece'},
-							{value: 'IS', text: 'Iceland'},
-							{value: 'KW', text: 'Kuwait'},
-							{value: 'MC', text: 'Monaco'},
-							{value: 'PR', text: 'Puerto Rico'},
-							{value: 'GS', text: 'South Georgia and the South Sandwich Islands'},
-							{value: 'US', text: 'United States'}
-						]},
+						{type: 'dropdown', name: 'nation_code', placeholder: 'Country', required: true, size: 'large left', options: []},
 						{type: 'text', name: 'postal_code', placeholder: 'ZIP / Postal Code', size: 'small left'}
 					]
 				},
@@ -138,27 +122,11 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					name: 'mailing-address',
 					label: 'Mailing Address',
 					inputs: [
-						{type: 'text', name: 'mailing_street_line_1', placeholder: 'Address', size: 'full'},
-						{type: 'text', name: 'mailing_street_line_2', placeholder: 'Address', size: 'full'},
+						{type: 'text', name: 'mailing_street_line1', placeholder: 'Address', size: 'full'},
+						{type: 'text', name: 'mailing_street_line2', placeholder: 'Address', size: 'full'},
 						{type: 'text', name: 'mailing_city', placeholder: 'City / Town', size: 'large'},
 						{type: 'text', name: 'mailing_state', placeholder: 'State / Province / Territory / Region', size: 'full'},
-						{type: 'dropdown', name: 'mailing_nation_code', placeholder: 'Country', size: 'large left', options: [
-							{value: 'AF', text: 'Afghanistan'},
-							{value: 'AX', text: 'Aland Islands'},
-							{value: 'AL', text: 'Albania'},
-							{value: 'BS', text: 'Bahamas'},
-							{value: 'KH', text: 'Cambodia'},
-							{value: 'CA', text: 'Canada'},
-							{value: 'CC', text: 'Cocos (Keeling) Islands'},
-							{value: 'FR', text: 'France'},
-							{value: 'GR', text: 'Greece'},
-							{value: 'IS', text: 'Iceland'},
-							{value: 'KW', text: 'Kuwait'},
-							{value: 'MC', text: 'Monaco'},
-							{value: 'PR', text: 'Puerto Rico'},
-							{value: 'GS', text: 'South Georgia and the South Sandwich Islands'},
-							{value: 'US', text: 'United States'}
-						]},
+						{type: 'dropdown', name: 'mailing_nation_code', placeholder: 'Country', size: 'large left', options: []},
 						{type: 'text', name: 'mailing_postal_code', placeholder: 'ZIP / Postal Code', size: 'small left'}
 					]
 				},
@@ -192,7 +160,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					xtype: 'enrollment-credit-set',
 					label: 'Are you a U.S. Citizen?',
 					inputs: [
-						{type: 'radio-group', name: 'country_of_citizenship', options: [
+						{type: 'radio-group', name: 'country_of_citizenship', required: true, options: [
 							{text: 'Yes', value: 'united states'},
 							{text: 'No. I am a citizen of {input}.', value: 'input'}
 						]}
@@ -202,7 +170,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					xtype: 'enrollment-credit-set',
 					label: 'Are you a resident of Oklahoma?',
 					inputs: [
-						{type: 'radio-group', name: 'resident', options: [
+						{type: 'radio-group', name: 'years_of_oklahoma_residency', required: true, options: [
 							{text: 'Yes. I\'ve been a resident for {input} years', value: 'input', inputWidth: 48},
 							{text: 'No.', value: 0}
 						]}
@@ -212,9 +180,9 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					xtype: 'enrollment-credit-set',
 					label: 'Are you a highschool graduate?',
 					inputs: [
-						{type: 'radio-group', name: 'completed-highschool', options: [
-							{text: 'Yes.'},
-							{text: 'No.'}
+						{type: 'radio-group', name: 'completed-highschool', required: true, options: [
+							{text: 'Yes.', value: 'Y'},
+							{text: 'No.', value: 'N'}
 						]}
 					]
 				},
@@ -222,7 +190,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					xtype: 'enrollment-credit-set',
 					label: 'Have you ever attended the University of Oklahoma?',
 					inputs: [
-						{type: 'radio-group', name: 'sooner_id', options: [
+						{type: 'radio-group', name: 'sooner_id', required: true, options: [
 							{text: 'Yes, and my Sooner ID was {input}.', value: 'input'},
 							{text: 'No.', value: ''}
 						]}
@@ -232,7 +200,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					xtype: 'enrollment-credit-set',
 					label: 'Have you ever attended another college or university?',
 					inputs: [
-						{type: 'checkbox-group', name: 'attended_other_institution', options: [
+						{type: 'checkbox-group', name: 'attended_other_institution', required: true, options: [
 							{type: 'checkbox', text: 'I am still attending.', name: 'still_attending'},
 							{type: 'checkbox', text: 'I am in good academic standing.', name: 'good_academic_standing'},
 							{type: 'checkbox', text: 'I have obtained a Bachelor\'s degree or highter.', name: 'bachelors_or_higher'}
@@ -249,7 +217,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 				{
 					xtype: 'enrollment-credit-set',
 					inputs: [
-						{type: 'checkbox', text: [
+						{type: 'checkbox', name: 'affirm', doNotSend: true, text: [
 							'I affirm that I am not prohibited from enrolling in any University of Oklahoma program.',
 							'I understand that submitting any false information to the University,',
 							'including but not limited to, any information contained on this form,',
@@ -260,8 +228,37 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 						].join(' '), correct: true}
 					],
 					help: [
-						{text: 'Why would I be prohibited?', type: 'event', event: 'show-criteria'},
+						{text: 'Why would I be prohibited?', type: 'text', info: {
+							title: 'Policy on Non-Academic Criteria in the Admission of Students',
+							body: [
+								'In addition to the academic criteria used as the basis for the admission of students,',
+								'the University shall consider the following non-academic criteria in deciding whether a student shall be granted admission:',
+								'whether an applicant has been expelled, suspended, or denied admission or readmission by any other educational institution;',
+								'whether an applicant has been convicted of a felony or lesser crime involving moral turpitude;',
+								'whether an applicant\'s conduct would be grounds for expulsion, suspension, dismissal or denial of readmission,',
+								'had the student been enrolled at the University of Oklahoma.',
+								'An applicant may be denied admission to the University if the University determines that there is substantial evidence,',
+								'based on any of the instances described above, to indicate the applicant\'s unfitness to be a student at the University of Oklahoma.'
+							].join(' ')
+						}},
 						{text: 'Integrity Pledge', type: 'link', href: 'http://integrity.ou.edu/', target: '_blank'}
+					]
+				}
+			]
+		},
+		{
+			name: 'enable-submit',
+			items: [
+				{
+					xtype: 'enrollment-credit-set',
+					inputs: [
+						{
+							type: 'description',
+							text: 'After your admission application is sent to OU and processed, we will proceed to enrolling in this course'
+						},
+						{
+							type: 'submit-button'
+						}
 					]
 				}
 			]
@@ -272,10 +269,42 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.on({
+		var me = this,
+			nationsLink = $AppConfig.userObject.getLink('fmaep.country.names');
+
+		me.enableBubble('show-msg');
+
+		me.on({
 			'reveal-item': 'revealItem',
-			'hide-item': 'hideItem'
+			'hide-item': 'hideItem',
+			'send-application': 'maybeSubmitApplication'
 		});
+
+		Service.request(nationsLink)
+			.then(function(response) {
+				var nations = Ext.JSON.decode(response, true),
+					nationInput = me.down('[name=nation_code]'),
+					mailingNationInput = me.down('[name=mailing_nation_code]');
+
+				function updateInputs() {
+					if (nationInput) {
+						nationInput.addOptions(nations);
+					}
+
+					if (mailingNationInput) {
+						mailingNationInput.addOptions(nations);
+					}
+				}
+
+				if (!me.rendered) {
+					me.on('afterrender', updateInputs);
+				} else {
+					updateInputs();
+				}
+			})
+			.fail(function(reason) {
+				console.error('Failed to load nation list ', reason);
+			});
 	},
 
 
@@ -287,10 +316,6 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 				me.hideItem(n);
 			});
 
-			return;
-		}
-
-		if (name === 'enable-submit') {
 			return;
 		}
 
@@ -323,11 +348,6 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 			return;
 		}
 
-		if (name === 'enable-submit') {
-			this.maybeEnableSubmission();
-			return;
-		}
-
 		item = me.down('[name="' + name + '"]');
 
 		if (item) {
@@ -350,5 +370,88 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 		});
 
 		return value;
+	},
+
+
+	isValid: function() {
+		var valid = true;
+
+		this.items.each(function(item) {
+			if (Ext.isFunction(item.isValid) && !item.isValid()) {
+				valid = false;
+			}
+
+			return true;
+		});
+
+		return valid;
+	},
+
+
+	maybeSubmitApplication: function() {
+		var preflightlink = $AppConfig.userObject.getLink('fmaep.admission.preflight'),
+			submitlink = $AppConfig.userObject.getLink('fmaep.admission'),
+			me = this,
+			value = me.getValue();
+
+		if (!me.isValid()) {
+			me.fireEvent('show-msg', 'Please fill out all required information.', true, 5000);
+			return;
+		}
+
+		if (!submitlink || !preflightlink) {
+			me.fireEvent('show-msg', 'An error occured, please try again later', true);
+			console.error('no admission links');
+			return;
+		}
+
+		function showError(json) {
+			var input;
+
+			if (json.field) {
+				input = me.down('[name="' + json.field + '"]');
+
+				if (input && input.addError) {
+					input.addError();
+					input.el.scrollIntoView(me.el.up('.credit-container'));
+				}
+			}
+
+			if (json.message) {
+				me.fireEvent('show-msg', json.message.replace('${field}', json.field), true, 5000);
+			} else {
+				me.fireEvent('show-msg', 'An unkown error occured. Please try again later.', true, 5000);
+			}
+		}
+
+		Service.post(preflightlink, value)
+			.then(function() {
+				Service.post(submitlink, value)
+					.then(function(response) {
+						var json = Ext.JSON.decode(response, true);
+
+						if (json.status === 500) {
+							showError(json);
+						}
+
+						//if (json.status === 202) {
+						//	//do pending logic here
+						//}
+
+						//if (json.status === 201) {
+						//	//do success logic here
+						//}
+					})
+					.fail(function(response) {
+						var json = Ext.JSON.decode(response && response.responseText, true);
+
+						showError(json);
+					});
+			})
+			.fail(function(response) {
+				var json = Ext.JSON.decode(response && response.responseText, true);
+
+				showError(json);
+			});
 	}
 });

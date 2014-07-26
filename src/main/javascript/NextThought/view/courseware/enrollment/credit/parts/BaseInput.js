@@ -32,6 +32,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.BaseInput', {
 		var me = this;
 			parent = me.up('[changed]');
 
+		this.removeError();
+
 		wait()
 			.then(function() {
 				if (me.reveals) {
@@ -60,17 +62,33 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.BaseInput', {
 			});
 	},
 
+	//override this
+	isEmpty: function() { return false; },
+	addError: function() {},
+	removeError: function() {},
+
+	isValid: function() {
+		//if we are required and empty we aren't
+		var isValid = this.required ? !this.isEmpty() : true;
+
+		if (!isValid) {
+			this.addError();
+		}
+
+		return isValid;
+	},
+
 	isCorrect: function() {
 		//if we don't have a correct value, we can't be incorrect
 		if (this.correct === undefined) { return true; }
 		//if we don't have an el we can't have any answers so we can't be correct
 		if (!this.el) { return false; }
 
-		var value = this.getValue();
+		var value = this.getValue(true);
 
 		//if we don't have a value, we can't be correct
 		if (!value) { return false; }
 
-		return this.getValue()[this.name] === this.correct;
+		return value[this.name] === this.correct;
 	}
 });
