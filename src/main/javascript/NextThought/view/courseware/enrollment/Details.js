@@ -491,6 +491,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			if (href === 'profile') {
 				e.stopEvent();
 				this.fireEvent('show-profile', $AppConfig.userObject, ['about']);
+				this.up('library-available-courses-window').close();
 				return;
 			}
 		}
