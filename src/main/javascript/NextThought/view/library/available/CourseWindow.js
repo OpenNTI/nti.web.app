@@ -4,7 +4,8 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 
 	requires: [
 		'NextThought.view.courseware.coursecatalog.Collection',
-		'NextThought.view.courseware.coursecatalog.TabPanel'
+		'NextThought.view.courseware.coursecatalog.TabPanel',
+		'NextThought.view.courseware.enrollment.credit.View'
 	],
 
 	floating: true,
@@ -104,6 +105,10 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 		if (current.is('course-enrollment-details')) {
 			this.showTabpanel();
 		}
+
+		if (current.is('enrollment-credit')) {
+			this.showCourse(current.course);
+		}
 	},
 
 	/**
@@ -127,8 +132,7 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 				'single': true,
 				'click': function(e) {
 					if (e.getTarget('.close-msg')) {
-						me.bodyEl.removeCls('has-msg');
-						me.msgContainerEl.removeCls('show');
+						me.closeMsg();
 						reject();
 						return;
 					}
@@ -142,20 +146,27 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 	},
 
 
+	closeMsg: function() {
+		if (!this.rendered) { return; }
+		this.bodyEl.removeCls('has-msg');
+		this.msgContainerEl.removeCls('show');
+	},
+
+
 	showTabpanel: function() {
 		if (!this.showAvailable) { return; }
 
 		var me = this;
 
-		if (!this.tabpanel) {
-			this.tabpanel = this.add({
+		if (!me.tabpanel) {
+			me.tabpanel = me.add({
 				xtype: 'course-catalog-tabpanel',
-				upcoming: this.upcoming,
-				current: this.current,
-				archived: this.archived
+				upcoming: me.upcoming,
+				current: me.current,
+				archived: me.archived
 			});
 
-			this.mon(this.tabpanel, 'show-course-detail', 'showCourse');
+			me.mon(me.tabpanel, 'show-course-detail', 'showCourse');
 		}
 
 		function updateLabel() {
@@ -164,13 +175,14 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 		}
 
 
-		if (!this.rendered) {
-			this.on('afterrender', updateLabel);
+		if (!me.rendered) {
+			me.on('afterrender', updateLabel);
 		} else {
 			updateLabel();
 		}
 
-		this.getLayout().setActiveItem(this.tabpanel);
+		me.getLayout().setActiveItem(me.tabpanel);
+		me.closeMsg();
 	},
 
 
@@ -200,6 +212,33 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 			updateLabel();
 		}
 
+		me.mon(me.courseDetail, 'enroll-for-credit', 'showAdmission');
+
 		me.getLayout().setActiveItem(me.courseDetail);
+		me.closeMsg();
+	},
+
+
+	showAdmission: function(course) {
+		var me = this;
+
+		me.courseAdmission = me.add({
+			xtype: 'enrollment-credit',
+			course: course
+		});
+
+		function updateLabel() {
+			me.labelEl.addCls('back');
+			me.labelEl.update(course.get('Title'));
+		}
+
+		if (!me.rendered) {
+			me.on('afterrender', updateLabel);
+		} else {
+			updateLabel();
+		}
+
+		me.getLayout().setActiveItem(me.courseAdmission);
+		me.closeMsg();
 	}
 });

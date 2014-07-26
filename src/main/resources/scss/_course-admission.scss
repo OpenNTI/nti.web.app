@@ -1,0 +1,169 @@
+.enrollment-credit {
+	height: 100% !important;
+
+	.header {
+		background-color: #efefef;
+		font: normal 600 0.6em/35px $font;
+		text-transform: uppercase;
+		color: $tertiary-grey;
+		height: 36px;
+		padding: 0;
+
+		div {
+			float: left;
+			padding: 0 15px;
+
+			&.enabled {
+				color: $secondary-grey;
+
+				&.number::before {
+					border-color: $secondary-grey;
+				}
+			}
+
+			&.active {
+				color: $primary-green;
+				background-color: white;
+				border: 0px solid #e5e5e5;
+				border-left-width: 1px;
+				border-right-width: 1px;
+
+				&.number::before {
+					border-color: $primary-green;
+				}
+			}
+
+			&.number {
+				position: relative;
+				padding-left: 29px;
+				&::before {
+					content: attr(data-number);
+					position: absolute;
+					top: 9px;
+					left: 8px;
+					padding: 2px 3px;
+					border: 2px solid $tertiary-grey;
+					border-radius: 13px;
+					font-weight:700;
+					line-height: 1em;
+				}
+			}
+		}
+	}
+
+	.credit-container {
+		padding: 70px 50px 30px 50px;
+		overflow: auto;
+		background-color: white;
+		height: calc(100% - 36px);
+	}
+
+	.body-container {
+		background-color: white;
+	}
+
+	.admission-group {
+		.label {
+			font: normal 300 1.7em/2em $font;
+			color: $tertiary-grey;
+		}
+	}
+
+	.admission-set {
+		height: auto;
+		overflow: hidden;
+		margin-bottom: 40px;
+		.label {
+			color: $primary-grey;
+			font-size: 0.9em;
+			line-height: 1em;
+			font-weight: 500;
+			margin-bottom: 20px;
+		}
+
+		.body-container {
+			width: 675px;
+			float: left;
+		}
+
+		.help-container {
+			float: left;
+			margin-left: 10px;
+			width: 239px; //1024 - 50 - 50 - 675 - 10
+
+			.help {
+				font: normal 400 0.9em/45px $font;
+				display: block;
+				text-decoration: none;
+				color: $primary-blue;
+			}
+		}
+
+		.credit-input {
+			font: normal 500 1em/40px $font;
+			display: inline-block;
+			color: $primary-grey;
+			margin: 4px 0;
+
+			&.full {
+				width: 675px;
+			}
+
+			&.dark {
+				background-color: #f9f9f9;
+			}
+
+			&.radio {
+				cursor: pointer;
+
+				input[type=radio] {
+					opacity: 0;
+				}
+				
+				input[type=radio] + * {
+					padding-left: 36px;
+					display: inline-block;
+					@include icon('radio-button-16', $top: 12px);
+				}
+
+				input[type=radio]:checked + * {
+					@include icon('radio-button-16_active', $top: 12px);
+				}
+
+				&:hover input[type=radio]:not(:checked) + * {
+					@include icon('radio-button-16_hover', $top: 12px);
+				}
+			}
+
+			&.checkbox {
+				cursor: pointer;
+
+				input[type=checkbox] {
+					opacity: 0;
+				}
+
+				input[type=checkbox] + * {
+					padding-left: 36px;
+					display: inline-block;
+					@include icon('checkbox-14', $top: 13px);
+				}
+
+				input[type=checkbox]:checked + * {
+					@include icon('checkbox-14_active', $top: 13px);
+				}
+
+				&:hover input[type=checkbox]:not(:checked) + * {
+					@include icon('checkbox-14_hover', $top: 13px)
+				}
+			}
+		}
+	}
+
+	.credit-description {
+		p {
+			margin: 0;
+			font: normal 300 1em/1.5em $font;
+			color: $secondary-grey;
+		}
+	}
+}
