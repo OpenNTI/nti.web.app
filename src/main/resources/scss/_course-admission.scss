@@ -186,6 +186,16 @@
 
 				input[type=radio]:checked + * {
 					@include icon('radio-button-16_active', $top: 12px);
+
+					&::before {
+						content: '';
+						position: absolute;
+						width: 4px;
+						background-color: $primary-blue;
+						top: 0;
+						left: -18px;
+						bottom: 0;
+					}
 				}
 
 				&:hover input[type=radio]:not(:checked) + * {
@@ -208,6 +218,16 @@
 
 				input[type=checkbox]:checked + * {
 					@include icon('checkbox-14_active', $top: 13px);
+
+					&::before {
+						content: '';
+						position: absolute;
+						width: 4px;
+						background-color: $primary-blue;
+						top: 0;
+						left: -18px;
+						bottom: 0;
+					}
 				}
 
 				&:hover input[type=checkbox]:not(:checked) + * {
