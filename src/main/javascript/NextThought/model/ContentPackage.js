@@ -108,7 +108,7 @@ Ext.define('NextThought.model.ContentPackage', {
 	__setImage: function() {
 		var me = this;
 		me.getImgAsset('landing').then(function(url) { me.set('icon', url); });
-		me.getImgAsset('thunb').then(function(url) { me.set('thumb', url); });
+		me.getImgAsset('thumb').then(function(url) { me.set('thumb', url); });
 	}
 
 });
