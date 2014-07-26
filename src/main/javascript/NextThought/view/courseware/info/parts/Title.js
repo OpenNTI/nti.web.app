@@ -31,10 +31,13 @@ Ext.define('NextThought.view.courseware.info.parts.Title', {
 
 
 	afterRender: function() {
-		var me = this;
 		this.callParent(arguments);
-
 		this.buildVideo();
+		if (!Ext.isEmpty(this.videoUrl)) {
+			this.videoEl.setStyle({
+				minHeight: '430px'
+			});
+		}
 	},
 
 
@@ -72,17 +75,28 @@ Ext.define('NextThought.view.courseware.info.parts.Title', {
 
 	showCurtain: function() {
 		this.removeCls('playing');
-		this.buildVideo();
+		Ext.destroy(this.video, this.videoMonitor);
+		delete this.video;
+		delete this.videoMonitor;
 	},
 
 
 	curtainClicked: function(e) {
-		if (e && e.shiftKey && this.player.canOpenExternally()) {
-			this.video.openExternally();
+		var p = Promise.resolve();
+
+		if (!this.video) {
+			this.buildVideo();
+			p = wait();
 		}
-		else {
-			this.addCls('playing');
-			this.video.resumePlayback();
-		}
+
+		p.then(function() {
+			if (e && e.shiftKey && this.player.canOpenExternally()) {
+				this.video.openExternally();
+			}
+			else {
+				this.addCls('playing');
+				this.video.resumePlayback();
+			}
+		}.bind(this));
 	}
 });
