@@ -428,8 +428,11 @@ Ext.define('NextThought.controller.CourseWare', {
 	 * @private
 	 */
 	__getCourseInstance: function(thing) {
-		return CourseWareUtils.courseForNtiid(ContentUtils.getNTIIDFromThing(thing))
-				.then(function(cce) { return cce.get('href');})
+		return Promise.resolve(CourseWareUtils.courseForNtiid(ContentUtils.getNTIIDFromThing(thing)))
+				.then(function(cce) {
+					if (!cce) { return Promise.reject('Not Found'); }
+					return cce.get('href');
+				})
 				.then(function(href) {
 					function comparator(c) {
 						var i = c.get('CourseInstance'),
