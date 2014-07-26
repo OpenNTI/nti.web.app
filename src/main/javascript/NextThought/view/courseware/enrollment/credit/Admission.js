@@ -6,27 +6,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 
 	defaultType: 'enrollment-credit-group',
 
-	items: [
-		{
-			name: 'intro',
-			label: 'Admission to OU Janux',
-			items: [
-				{
-					xtype: 'enrollment-credit-set',
-					inputs: [
-						{type: 'description', text: [
-							'Before you can start to earn college credit from the University of Oklahoma,',
-							'we need you to answer some questions.',
-							'Don\'t worry, the admission process is totally free and should only take a few minutes.'
-						].join(' ')}
-					],
-					help: [
-						{text: 'Take the free course instead.', type: 'event', event: 'goto-free'},
-						{text: 'View the FAQ\'s', type: 'link', href: '#', target: '_blank'}
-					]
-				}
-			]
-		},
+	form: [
 		{
 			name: 'preliminary',
 			label: 'Preliminary Questions',
@@ -170,7 +150,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					xtype: 'enrollment-credit-set',
 					label: 'Are you a resident of Oklahoma?',
 					inputs: [
-						{type: 'radio-group', name: 'years_of_oklahoma_residency', required: true, options: [
+						{type: 'radio-group', name: 'years_of_oklahoma_residency', valType: 'number', required: true, options: [
 							{text: 'Yes. I\'ve been a resident for {input} years', value: 'input', inputWidth: 48},
 							{text: 'No.', value: 0}
 						]}
@@ -190,7 +170,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					xtype: 'enrollment-credit-set',
 					label: 'Have you ever attended the University of Oklahoma?',
 					inputs: [
-						{type: 'radio-group', name: 'sooner_id', required: true, options: [
+						{type: 'radio-group', name: 'sooner_id', required: true, valType: 'number', options: [
 							{text: 'Yes, and my Sooner ID was {input}.', value: 'input'},
 							{text: 'No.', value: ''}
 						]}
@@ -203,7 +183,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 						{type: 'checkbox-group', name: 'attended_other_institution', required: true, options: [
 							{type: 'checkbox', text: 'I am still attending.', name: 'still_attending'},
 							{type: 'checkbox', text: 'I am in good academic standing.', name: 'good_academic_standing'},
-							{type: 'checkbox', text: 'I have obtained a Bachelor\'s degree or highter.', name: 'bachelors_or_higher'}
+							{type: 'checkbox', text: 'I have obtained a Bachelor\'s degree or higher.', name: 'bachelors_or_higher'}
 						]}
 					]
 				}
@@ -269,8 +249,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		var me = this,
-			nationsLink = $AppConfig.userObject.getLink('fmaep.country.names');
+		var me = this;
 
 		me.enableBubble('show-msg');
 
@@ -279,6 +258,89 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 			'hide-item': 'hideItem',
 			'send-application': 'maybeSubmitApplication'
 		});
+
+		if (me.status === 'pending') {
+			me.add([
+				{
+					name: 'pending',
+					label: 'Admission Pending',
+					items: [
+						{
+							xtype: 'enrollment-credit-set',
+							inputs: [
+								{
+									type: 'description',
+									text: [
+										'Your application for admission is being processed by OU.',
+										'To check on the process you can contact the OU Admissions Office.',
+										'Once you are admitted comeback here to enroll in ' + this.course.get('Title')
+									].join(' ')
+								}
+							],
+							help: [
+								{text: 'OU Admissions Office', type: 'link', href: '#', target: '_blank'}
+							]
+						}
+					]
+				}
+			]);
+
+			return;
+		}
+
+		if (me.status === 'rejected') {
+			me.form.unshift({
+				name: 'rejected',
+				label: 'Application Rejected',
+				items: [
+					{
+						xtype: 'enrollment-credit-set',
+						inputs: [
+							{
+								type: 'description',
+								text: [
+									'Your last application for admission was rejected by OU.',
+									'For more information you can contact OU Enrollment services.',
+									'Feel free to apply again below.'
+								].join(' ')
+							}
+						],
+						help: [
+							{text: 'OU Enrollment Services', type: 'link', href: '#', target: '_blank'}
+						]
+					}
+				]
+			});
+		} else {
+			me.form.unshift({
+				name: 'intro',
+				label: 'Admission to OU Janux',
+				items: [
+					{
+						xtype: 'enrollment-credit-set',
+						inputs: [
+							{type: 'description', text: [
+								'Before you can start to earn college credit from the University of Oklahoma,',
+								'we need you to answer some questions.',
+								'Don\'t worry, the admission process is totally free and should only take a few minutes.'
+							].join(' ')}
+						],
+						help: [
+							{text: 'Take the free course instead.', type: 'event', event: 'goto-free'},
+							{text: 'View the FAQ\'s', type: 'link', href: '#', target: '_blank'}
+						]
+					}
+				]
+			});
+		}
+		me.fillInNations();
+		me.add(me.form);
+	},
+
+
+	fillInNations: function() {
+		var me = this,
+			nationsLink = $AppConfig.userObject.getLink('fmaep.country.names');
 
 		Service.request(nationsLink)
 			.then(function(response) {
@@ -430,7 +492,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					.then(function(response) {
 						var json = Ext.JSON.decode(response, true);
 
-						if (json.status === 500) {
+						if (json.Status === 500) {
 							showError(json);
 						}
 

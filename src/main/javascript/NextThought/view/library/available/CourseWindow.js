@@ -5,7 +5,8 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 	requires: [
 		'NextThought.view.courseware.coursecatalog.Collection',
 		'NextThought.view.courseware.coursecatalog.TabPanel',
-		'NextThought.view.courseware.enrollment.credit.View'
+		'NextThought.view.courseware.enrollment.credit.View',
+		'NextThought.view.courseware.enrollment.Details'
 	],
 
 	floating: true,

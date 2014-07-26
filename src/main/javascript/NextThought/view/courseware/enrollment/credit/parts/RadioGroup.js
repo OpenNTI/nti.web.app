@@ -117,6 +117,10 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 			value[this.name] = active.dom.value;
 		}
 
+		if (this.valType === 'number') {
+			value[this.name] = parseInt(value[this.name]);
+		}
+
 		return value;
 	},
 

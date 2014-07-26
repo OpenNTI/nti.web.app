@@ -93,14 +93,20 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Set', {
 
 	childEls: ['body'],
 
-	helpTpl: new Ext.XTemplate(Ext.DomHelper.markup([
-		{tag: 'tpl', 'if': 'hasTip', cn: [
-			{tag: 'a', cls: 'help', 'data-qtip': '{info}', html: '{text}'}
-		]},
-		{tag: 'tpl', 'if': '!hasTip', cn: [
+	helpTpl: new Ext.XTemplate(Ext.DomHelper.markup({cls: 'help-item', cn: [
+		{tag: 'tpl', 'if': 'link', cn: [
 			{tag: 'a', cls: 'help', href: '{href}', target: '{target}', html: '{text}'}
+		]},
+		{tag: 'tpl', 'if': '!link', cn: [
+			{tag: 'a', cls: 'help', html: '{text}'}
+		]},
+		{tag: 'tpl', 'if': 'hasText', cn: [
+			{tag: 'div', cls: 'help-popover hidden', cn: [
+				{cls: 'title', html: '{[values.info.title ? values.info.title : \'\']}'},
+				{cls: 'body', html: '{[values.info.body ? values.info.body : values.info]}'}
+			]}
 		]}
-	])),
+	]})),
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'label', html: '{label}'},
@@ -149,18 +155,17 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Set', {
 		var me = this;
 
 		(me.help || []).forEach(function(help) {
-			var el;
+			var el, popover, height;
 
-			help.hasTip = false;
+			help.link = false;
+			help.hasText = false;
+
+			if (help.type === 'link') {
+				help.link = true;
+			}
 
 			if (help.type === 'text') {
-				if (Ext.isObject(help.info)) {
-					help.showInWindow = true;
-				} else if (help.info.length > 50) {
-					help.showInWindow = true;
-				} else {
-					help.hasTip = true;
-				}
+				help.hasText = true;
 			}
 
 			el = me.helpTpl.append(me.helpContainerEl, help, true);
@@ -174,9 +179,28 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Set', {
 			}
 
 			if (help.type === 'text') {
+				height = me.el.getHeight();
+
+				me.el.setHeight(height);
+				me.el.setStyle({overflow: 'visible'});
+
+				if (help.info.body) {
+					el.down('.help-popover').setWidth(550);
+				}
+
 				me.mon(el, 'click', function(e) {
 					e.stopEvent();
-					console.log(me, help);
+
+					var item = e.getTarget('.help-item'),
+						popover = item && item.querySelector('.help-popover');
+
+					if (e.getTarget('.help') && popover) {
+						popover = Ext.get(popover);
+						popover.setTop(-(popover.getHeight() / 2 - 20));
+
+						popover.toggleCls('hidden');
+					}
+
 					return false;
 				});
 			}

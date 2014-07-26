@@ -97,11 +97,28 @@
 			margin-left: 10px;
 			width: 220px;
 
+			.help-item {
+				position: relative;
+			}
+
 			.help {
 				font: normal 400 0.9em/45px $font;
 				display: block;
 				text-decoration: none;
 				color: $primary-blue;
+				cursor: pointer;
+			}
+
+			.help-popover {
+				position: absolute;
+				right: 220px;
+				background-color: white;
+				min-width: 230px;
+				box-shadow: 0 0 1px black;
+
+				&.hidden {
+					visibility: hidden;
+				}
 			}
 		}
 
