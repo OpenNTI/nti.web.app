@@ -4,19 +4,24 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 	cls: 'course-details',
 
-	enrollmentCardTpl: new Ext.XTemplate(Ext.DomHelper.markup([
-		{cls: 'enroll-card {cardCls}', cn: [
-			{cls: 'title', cn: '{title}'},
-			{tag: 'h2', cls: 'main', html: '{main}'},
-			{tag: 'p', cls: 'sub', html: '{description}'},
-			{tag: 'tpl', 'if': 'warning', cn: [
-				{cls: 'warning', html: '{warning}'}
+	enrollmentCardTpl: new Ext.XTemplate(Ext.DomHelper.markup(
+		{cls: 'enroll-card', cn: [
+			{cls: 'top {top.cls}', cn: [
+				{cls: 'title', html: '{top.title}'},
+				{cls: 'info', html: '{top.information}'},
+				{tag: 'tpl', 'for': 'top.links', cn: [
+					{tag: 'a', cls: 'link', href: '{href}', target: '_blank', html: '{text}'}
+				]}
 			]},
-			{tag: 'tpl', 'if': 'button', cn: [
-				{cls: 'button', html: '{button}'}
-			]}
+			{cls: 'bottom {bottom.cls}', cn: [
+				{cls: 'title', html: '{bottom.title}'},
+				{cls: 'price', html: '{price}'},
+				{cls: 'info', html: '{bottom.information}'},
+				{cls: 'warning', html: '{bottom.warning}'}
+			]},
+			{cls: 'button {buttonCls}', html: '{buttonText}'}
 		]}
-	])),
+	)),
 
 
 	renderTpl: Ext.DomHelper.markup([
@@ -29,14 +34,17 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			{cls: 'curtain'},
 			{tag: 'p', cls: 'description', cn: '{description}'}
 		]},
-		{cls: 'right enrollment-container'}
+		{cls: 'right enrollment', cn: [
+			{cls: 'enrollment-container'}
+		]}
 	]),
 
 
 	renderSelectors: {
 		videoEl: '.video',
 		curtainEl: '.curtain',
-		cardsEl: '.enrollment-container'
+		cardsEl: '.enrollment',
+		cardsContainerEl: '.enrollment-container'
 	},
 
 	listeners: {
@@ -73,7 +81,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 		me.buildVideo();
 
-		me.addEnrollmentCards();
+		me.updateEnrollmentCard();
 
 		me.mon(me.cardsEl, 'click', 'handleEnrollmentClick', me);
 	},
@@ -81,6 +89,23 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 	onBeforeDeactivate: function() {
 		return !this.changingEnrollment;
+	},
+
+
+	addMask: function() {
+		this.el.mask('Loading...');
+	},
+
+
+	removeMask: function() {
+		var el = this.el,
+			mask = el.down('.x-mask'),
+			maskMsg = el.down('.x-mask-msg');
+
+		mask.addCls('removing');
+		maskMsg.addCls('removing');
+
+		wait(1000).then(el.unmask.bind(el));
 	},
 
 
@@ -137,65 +162,281 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 	},
 
 
-	addEnrollmentCards: function() {
-		this.cardsEl.dom.innerHTML = '';
+	getEnrollmentData: function() {
+		var me = this, catalogData;
 
-		var openEnrolled, openEnroll, creditEnrolled, creditEnroll;
+		me.admissionstate = $AppConfig.userObject.get('admissin_status');
 
-		openEnrolled = {
-			cardCls: 'open-enrolled',
-			title: 'register for the open course',
-			main: 'Open courses are free to anyone, anywhere',
-			description: 'Get complete access to interact with all course content, including lectures, course materials, quizes, and discussions once class is in session.',
-			button: 'Drop Open Course'
+		catalogData = {
+			StartDate: me.course.get('StartDate'),
+			EndDate: me.course.get('EndDate'),
+			EnrollCutOff: me.course.get('EnrollForCreditCutOff'),
+			DropCutOff: me.course.get('DropCutOff') || me.course.get('EnrollForCreditCutoff'),
+			AvailableForCredit: me.course.isAvailableForCredit,
+			Enrolled: me.course.isActive(),
+			OpenEnrolled: me.course.isActive() && !me.course.isEnrolledForCredit(),
+			EnrolledForCredit: me.course.isEnrolledForCredit(),
+			SeatCount: me.course.seatcount,
+			AdmissionState: me.admissionstate
 		};
 
-		openEnroll = {
-			cardCls: 'open-enroll',
-			title: 'register for the open course',
-			main: 'Open courses are free to anyone, anywhere',
-			description: 'Get complete access to interact with all course content, including lectures, course materials, quizes, and discussions once class is in session.',
-			button: 'Register for the Open Course'
-		};
+		if (catalogData.Enrolled) {
+			return CourseWareUtils.findCourseBy(me.course.findByMyCourseInstance())
+				.then(function(instance) {
+					catalogData.EnrollStartDate = instance.get('CreatedTime');
 
-		creditEnrolled = {
-			cardCls: 'credit-enrolled',
-			title: 'enrolled for credit',
-			main: 'Open courses are free to anyone, anywhere',
-			description: 'Contact OU to drop this course'
-		};
-
-		creditEnroll = {
-			cardCls: 'credit-enroll',
-			title: 'enroll for credit',
-			main: 'Get college credit for taking this course.',
-			description: 'Our 5 minute enrollment process is the fastest way to start earning college credit.',
-			button: 'Enroll for Credit'
-		};
-
-		//TODO: Show a enrollment card for admin users?
-		if (this.course.get('isAdmin')) {
-			return;
+					return catalogData;
+				})
+				.fail(function() {
+					return catalogData;
+				});
 		}
 
+		return Promise.resolve(catalogData);
+	},
 
-		//if we are enrolled for credit only show the credit enrolled option
-		if (!this.course.enrolledForCredit) {
-			//if we are open enrolled show the open enrolled option
-			if (this.course.isActive()) {
-				this.enrollmentCardTpl.append(this.cardsEl, openEnrolled);
-			} else {
-				//if we are not open enrolled show the option to open enroll
-				this.enrollmentCardTpl.append(this.cardsEl, openEnroll);
-			}
+	/*
+		Possible States
+			top
+				Not Enrolled
+				Open Enrolled
+				Enrolled for Credit
+				Course Archived/ not enrolled
+				Course Archived/ open enrolled before
+				Course Archived/ open enrolled after
+				Course Archived/ enrolled for credit pass
+				Course Archived/ enrolled for credit fail
 
-			//if the course is available for credit show the option to enroll for credit
-			if (this.course.isAvailableForCredit) {
-				this.enrollmentCardTpl.append(this.cardsEl, creditEnroll);
+			bottom
+				Nothing
+				Available for Credit
+				Admission Pending
+				Admissin Denied
+				Enrolled for Credit (How do I drop?)
+				Open Course Archived Still available for credit
+				Course Archived Earned Credit
+				Course Archived Faild to Earn Credit
+	 */
+	ENROLLMENT_STATES: {
+		top: {
+			not_enrolled: {
+				title: 'Enroll for Free',
+				information: [
+					'Get complete access to interact with all course content including lectures,',
+					'course materials, quizzes, and discussions once class is in session.'
+				].join(' '),
+				cls: ''
+			},
+			open_enrolled: {
+				title: 'You are in the Open Course!',
+				information: 'Class begins {date} and will be conducted fully online.',
+				cls: 'enrolled',
+				links: [
+					{href: 'welcome', text: 'Get Aquanited with Janux'},
+					{href: 'profile', text: 'Complete your Profile'}
+				]
+			},
+			credit_enrolled: {
+				title: 'Enrolled for College Credit',
+				information: 'Class begins {date} and will be conducted fully online.',
+				cls: 'enrolled',
+				links: [
+					{href: 'welcome', text: 'Get Aquanited with Janux'},
+					{href: 'profile', text: 'Complete your Profile'}
+				]
+			},
+			archived_not_enrolled: {
+				title: 'This Course is Archived.',
+				information: [
+					'Archived courses are out of session but all course content will remain available',
+					'including the lectures, course materials, quizzes, and discussions'
+				].join(' '),
+				cls: ''
+			},
+			archived_enrolled_before: {
+				title: 'You Took the Open Course!',
+				information: [
+					'Thanks for your participation in OU Janux!',
+					'The content of this course will remain available for you to review at any time.'
+				].join(' '),
+				cls: ''
+			},
+			archived_enrolled_for_credit: {
+				title: 'Enrolled for College Credit!',
+				information: [
+					'Thanks for your participation in OU Janux!',
+					'The content of the course will remain available for you to review at any time.'
+				].join(' '),
+				cls: ''
 			}
-		} else {
-			this.enrollmentCardTpl.append(this.cardsEl, creditEnrolled);
+		},
+		bottom: {
+			not_enrolled: {
+				title: 'Earn {#} College Credits',
+				information: 'Earn transcripted college credit from the University of Oklahoma.',
+				warning: 'Not available until after {date}.',
+				cls: 'checkbox'
+			},
+			admission_pending: {
+				title: 'Admission Pending...',
+				information: [
+					'We\'re processing your request to earn college credit.',
+					'This process should take no more than two business days.',
+					'If you believe there has been an error, please contact the',
+					'<a class=\'link\' href=\'www.ou.edu\'>OU Admissions Office.</a>'
+				].join(' '),
+				cls: 'pending'
+			},
+			admission_reject: {
+				title: 'Admission Denied',
+				information: [
+					'Your request to earn college credit has been denied',
+					'If you believe there has been an error, please contact the',
+					'<a class=\'link\' href=\'www.ou.edu\'>OU Admissions Office</a>',
+					'or <a class=\'link\' href=\'resubmit\'>resubmit your application</a>'
+				].join(' '),
+				cls: 'rejected'
+			},
+			credit_enrolled: {
+				title: 'How do I drop the course?',
+				information: 'Contact the <a class=\'link\' href=\'www.ou.edu\'>OU Admissions Office</a> by {date} for a full refund.',
+				cls: 'enrolled'
+			}
 		}
+	},
+
+
+	getState: function(side, name, data) {
+		var state = this.ENROLLMENT_STATES[side][name],
+			prop, key;
+
+		if (!state || !data) { return state; }
+
+		for (prop in data) {
+			if (data.hasOwnProperty(prop)) {
+				key = '{' + prop + '}';
+				state.information = state.information.replace(key, data[prop]);
+				state.title = state.title.replace(key, data[prop]);
+				if (state.warning) {
+					state.warning = state.warning.replace(key, data[prop]);
+				}
+			}
+		}
+
+		return state;
+	},
+
+
+	updateEnrollmentCard: function() {
+		this.cardsContainerEl.dom.innerHTML = '';
+
+		var me = this;
+
+		function finish(state) {
+			me.state = state;
+			me.enrollmentCardTpl.append(me.cardsContainerEl, state);
+		}
+
+		me.getEnrollmentData()
+			.then(function(courseData) {
+				var enrollcutoff = Ext.Date.format(courseData.EnrollCutOff, 'F j'),
+					dropcutoff = Ext.Date.format(courseData.DropCutOff, 'F j'),
+					start = Ext.Date.format(courseData.StartDate, 'F j'),
+					now = new Date(),
+					state = {
+						top: {},
+						bottom: {}
+					};
+
+				//if the course is archived
+				if (courseData.EndDate < now) {
+					//just hide the bottom part for now
+					state.bottom.cls = 'openonly';
+					//if not enrolled
+					if (!courseData.Enrolled) {
+						state.top = me.getState('top', 'archived_not_enrolled');
+						state.buttonCls = 'open';
+						state.buttonText = 'Add Archived Course';
+					}
+
+					if (courseData.EnrolledForCredit) {
+						state.top = me.getState('top', 'archived_enrolled_for_credit');
+						state.buttonCls = '';
+						state.buttonText = '';
+					}
+
+					//if open enrolled before it was archived
+					if (courseData.OpenEnrolled && courseData.EndDate > courseData.EnrollStartDate) {
+						state.top = me.getState('top', 'archived_enrolled_before');
+						state.buttonCls = 'drop';
+						state.buttonText = 'Drop the Open Course';
+					}
+
+					//if open enrolled after it was archived
+					if (courseData.OpenEnrolled && courseData.EndDate <= courseData.EnrollStartDate) {
+						state.top = me.getState('top', 'archived_not_enrolled');
+						state.buttonCls = 'drop';
+						state.buttonText = 'Drop Archived Course';
+					}
+
+					//ignore these for now
+					////if enrolled for credit pass
+					//if (data.EnrolledFoCredit && data.passed) {
+
+					//}
+
+					////if enrolled for credit fail
+					//if (data.EnrolledForCredit && !data.passed) {
+
+					//}
+
+					finish(state);
+					return;
+				}
+
+				if (courseData.OpenEnrolled) {
+					state.top = me.getState('top', 'open_enrolled', {
+						date: start
+					});
+					state.buttonCls = 'drop';
+					state.buttonText = 'Drop the Open Course';
+				} else if (courseData.EnrolledForCredit) {
+					state.top = me.getState('top', 'credit_enrolled', {
+						date: start
+					});
+
+					state.buttonCls = '';
+					state.buttontext = '';
+				} else {
+					state.top = me.getState('top' , 'not_enrolled');
+
+					state.buttonCls = 'open';
+					state.buttonText = 'Enroll in the Open Course';
+				}
+
+				if (courseData.AvailableForCredit) {
+					if (courseData.EnrolledForCredit) {
+						state.bottom = me.getState('bottom', 'credit_enrolled', {
+							date: enrollcutoff
+						});
+					} else if (courseData.AdmissionState === 'pending') {
+						state.bottom = me.getState('bottom', 'admission_pending');
+					} else if (courseData.AdmissionState === 'rejected') {
+						state.bottom = me.getState('bottom', 'admission_reject');
+					} else {
+						//TODO fill this out from the course
+						state.bottom = me.getState('bottom', 'not_enrolled', {
+							'#': 3,
+							'date': start
+						});
+						state.price = '$599';
+					}
+				} else {
+					state.bottom.cls = 'openonly';
+				}
+
+				finish(state);
+			});
 	},
 
 
@@ -203,7 +444,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 		var me = this,
 			win = me.up('[showMsg]');
 
-		win.showMsg(msg, isError, me.msgClickHandler)
+		win.showMsg(msg, isError, false, me.msgClickHandler)
 			.then((me.msgClickHandler || Ext.emptyFn).bind(me))
 			.fail(function() {
 				delete me.msgClickHandler;
@@ -212,22 +453,63 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 
 	handleEnrollmentClick: function(e) {
-		if (!e.getTarget('.button')) { return; }
+		var me = this,
+			checkbox = e.getTarget('.bottom.checkbox'),
+			button = this.cardsContainerEl.down('.button'),
+			anchor = e.getTarget('a'), href;
 
-		var me = this;
+		checkbox = Ext.get(checkbox);
 
-		me.el.mask('Loading...');
-
-		function done(success, change) {
-			delete this.changingEnrollment;
-			if (success && change) {
-				me.addEnrollmentCards();
+		if (checkbox) {
+			if (checkbox.hasCls('checked')) {
+				button.update(this.state.buttonText);
+				button.removeCls(['drop', 'credit', 'open']);
+				button.addCls(this.state.buttonCls);
+				checkbox.removeCls('checked');
+			} else {
+				button.update('Enroll For College Credit!');
+				button.removeCls(['drop', 'open']);
+				button.addCls('credit');
+				checkbox.addCls('checked');
 			}
-
-			me.el.unmask();
 		}
 
-		if (e.getTarget('.open-enrolled')) {
+		if (anchor) {
+			href = anchor.getAttribute('href');
+
+			if (href === 'welcome') {
+				e.stopEvent();
+				this.fireEvent('show-permanent-welcome-guide', {
+					link: $AppConfig.userObject.getLink('content.permanent_welcome_page')
+				});
+
+				return false;
+			}
+
+			if (href === 'profile') {
+				e.stopEvent();
+				this.fireEvent('show-profile', $AppConfig.userObject, ['about']);
+				return;
+			}
+		}
+
+		function done(success, change) {
+			delete me.changingEnrollment;
+			if (success && change) {
+				me.updateEnrollmentCard();
+			}
+
+			me.removeMask();
+		}
+
+		if (!e.getTarget('.button')) {
+			return;
+		}
+
+		me.addMask();
+
+		//if we are dropping
+		if (button.hasCls('drop')) {
 			var title = me.course.get('Title');//Ext.DomHelper.markup({tag: 'span', cls: 'course-title', html: me.course.get('Title')});
 			this.changingEnrollment = true;
 
@@ -245,7 +527,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 								me.fireEvent('enrolled-action', false);
 								me.showMessage('You are no longer enrolled in ' + me.course.get('Title'));
 							} else {
-								ms.showMessage('There was an error dropping the course, please try again later.', true);
+								me.showMessage('There was an error dropping the course, please try again later.', true);
 							}
 
 							done(success, change);
@@ -260,29 +542,38 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			return;
 		}
 
-		if (e.getTarget('.open-enroll')) {
+		if (button.hasCls('open')) {
 			this.changingEnrollment = true;
-			me.fireEvent('change-enrollment', me.course, true, function(success, change) {
-				if (success) {
-					me.fireEvent('enrolled-action', true);
+				me.fireEvent('change-enrollment', me.course, true, function(success, change) {
+					if (success) {
+						me.fireEvent('enrolled-action', true);
 
-					me.msgClickHandler = function() {
-						CourseWareUtils.findCourseBy(me.course.findByMyCourseInstance())
-							.then(function(course) {
-								var instance = course.get('CourseInstance');
+						me.msgClickHandler = function() {
+							CourseWareUtils.findCourseBy(me.course.findByMyCourseInstance())
+								.then(function(course) {
+									var instance = course.get('CourseInstance');
 
-								instance.fireNavigationEvent(me);
-							});
-					};
+									instance.fireNavigationEvent(me);
+								});
+						};
 
-					me.showMessage('You have successfully enrolled in ' + me.course.get('Title') + ' click here to go to the content.');
-				} else {
-					me.showMessage('There was an error enrolling, please try again later.', true);
-				}
+						me.showMessage('You have successfully enrolled in ' + me.course.get('Title') + ' click here to go to the content.');
+					} else {
+						me.showMessage('There was an error enrolling, please try again later.', true);
+					}
 
-				done(success, change);
-			});
-			return;
+					done(success, change);
+				});
+				return;
 		}
+
+
+		if (button.hasCls('credit')) {
+			me.fireEvent('enroll-for-credit', me.course);
+		}
+
+		//if we get here something wen't seriously wrong unmask so the ui isn't hosed
+		console.error('Umm wut, the button was clicked with not enrollment options....');
+		done();
 	}
 });

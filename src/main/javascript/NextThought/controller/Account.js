@@ -67,7 +67,7 @@ Ext.define('NextThought.controller.Account', {
 				},
 
 				'settings-menu [action=welcome]': {
-					'click': 'showPermanantWelcome'
+					'click': 'showPermanentWelcome'
 				},
 
 				'settings-menu [action=contact]': {
@@ -114,7 +114,8 @@ Ext.define('NextThought.controller.Account', {
 				'*': {
 					'resend-consent': 'resendConsent',
 					'set-preference': 'setPreference',
-					'delete-preference': 'delPreference'
+					'delete-preference': 'delPreference',
+					'show-permanent-welcome-guide': 'showPermanentWelcome'
 				},
 
 				'group-buttons': { 'click': 'groupButtonClicked' },
@@ -177,7 +178,7 @@ Ext.define('NextThought.controller.Account', {
 	},
 
 
-	showPermanantWelcome: function(cmp) {
+	showPermanentWelcome: function(cmp) {
 		this.guideWin = Ext.widget('welcome-guide', {link: cmp.link});
 		this.guideWin.show();
 	},

@@ -375,9 +375,20 @@ Ext.define('NextThought.controller.CourseWare', {
 				//if we are trying to enroll and we aren't
 				me.toggleEnrollmentStatus(course)
 					.then(function() {
+						var enrolledStore = Ext.getStore('courseware.EnrolledCourses');
+
 						course.set('enrolled', true);
 						wait(1).then(me.courseEnrolled.bind(me));
-						callback.call(null, true, true);
+
+						me.mon(enrolledStore, {
+							single: true,
+							load: function() {
+								enrolledStore.promiseToLoaded.then(function() {
+										return wait();
+									})
+									.then(callback.bind(null, true, true));
+							}
+						});
 					})
 					.fail(function(reason) {
 						console.error(reason);

@@ -426,6 +426,14 @@
 	color: $primary-grey;
 	max-height: 100%;
 
+	.x-mask, .x-mask-msg {
+		@include animate($name: fadeIn, $duration: 1s);
+
+		&.removing {
+			@include animate($name: fadeOut, $duration: 1s);
+		}
+	}
+
 	.header {
 		background-color: #efefef;
 		border: none;
@@ -460,54 +468,167 @@
 		float: left;
 	}
 
-	.enroll-card {
-		width: 300px;
-		margin: 0 15px 15px 15px;
-		background-color: white;
+	.enrollment {
+		background-color: $panel-background;
+		width: 310px;
+		margin-left: 15px;
 		box-shadow: 0 1px 2px 0 rgba(0,0,0,0.35);
-		padding: 0 10px 10px 10px;
-		color: $primary-grey;
 
-		.title{
-			font: normal 500 0.8em/1 $font;
-			padding-top:15px;
+		.header {
+			font: normal 500 0.8em/35px $font;
 			color: $tertiary-grey;
-			text-transform: uppercase;
-		}
-
-		.main {
 			margin: 0;
-			font-weight: 300;
+			background-color: white;
+			padding: 0 10px;
+			border-bottom: 1px solid #efefef;	
 		}
 
-		.sub, .warning {
-			font-weight: 300;
+		.enrollment-confirm {
+			font: normal 300 1.2em/50px $font;
+			text-align: center;
+			background-color: $secondary-grey;
+			color: white;
+
+			&.active {
+				cursor: pointer;
+				background-color: #3fb34f;
+			}
+		}
+	}
+
+	.enroll-card {
+		.top, .bottom {
+			padding: 15px;
+			font: normal 300 1em/1 $font;
+			color: $primary-grey;
+		}
+
+		.info, .warning {
 			font-size: 0.9em;
-			line-height: 1.7em;
-			margin: 0.85em 0 0 0;
+			line-height: 1.8em;
+			font-weight: 300;
 		}
 
 		.warning {
 			color: $primary-red;
-			margin-top: 0;
-			font-style: italic;
-			font-weight: 500;
+		}
+
+		.link {
+			display: block;
+			color: $primary-blue;
+			text-decoration: none;
+			margin: 10px 0;
+			font-size: 0.9em;
+		}
+
+		.top {
+			padding-top: 20px;
+			min-height: 200px;
+
+			.title {
+				font-size: 1.2em;
+				margin-bottom: 10px;
+			}
+
+			&.enrolled {
+				padding-left: 35px;
+				@include icon('green_check', $top: 20px, $left: 10px);
+			}
+		}
+
+		.top.enrolled + .bottom {
+			padding-left: 35px;
+		}
+
+		.bottom {
+			padding-right: 35px;
+			background-color: #f5fbff;
+			border-top: 1px solid #efefef;
+
+			.link {
+				display: inline;
+				margin: 0;
+				font-size: 1em;
+			}
+
+			.title {
+				font-size: 0.85em;
+				font-weight: 600;
+				width: 185px;
+				float: left;
+				margin-bottom: 10px;
+			}
+
+			.price {
+				float: left;
+				width: 55px;
+				text-align: right;
+				font-weight: 600;
+				font-size: 0.85em;
+				color: #40b34f;
+				margin-bottom: 10px;
+			}
+
+			&.openonly {
+				display: none;
+			}
+
+			&.pending, &.rejected, &.enrolled {
+				.title {
+					color: $primary-red;
+					width: 100%;
+				}
+
+				.price {
+					display: none;
+				}
+			}
+
+			&.enrolled .title {
+				color: $primary-grey;
+			}
+
+			&.rejected, &.pending {
+				background-color: rgba(243, 82, 82, 0.05);
+			}
+		
+
+			&.checkbox {
+				cursor: pointer;
+				padding-left: 35px;
+
+				@include icon('checkbox-14_hover', $top: 15px, $left: 13px);
+
+				&.checked {
+					@include icon('checkbox-14_active', $top: 15px, $left: 13px);
+				}
+			}
 		}
 
 		.button {
+			line-height: 50px;
 			text-align: center;
+			font-weight: 300;
+			font-size: 1.2em;
+			letter-spacing: 1px;
 			color: white;
-			line-height: 35px;
-			background-color: $primary-blue;
-			margin-top: 20px;
-			border-radius: 3px;
-			font-weight: 300px;
 			cursor: pointer;
-		}
 
+			&.hidden {
+				display: none;
+			}
 
-		&.open-enrolled .button {
-			background-color: $primary-red;
+			&.open {
+				background-color: $primary-blue;
+			}
+
+			&.credit {
+				background-color: #40b34f;
+			}
+
+			&.drop {
+				background-color: $primary-red;
+			}
 		}
 	}
 }

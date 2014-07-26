@@ -23,6 +23,16 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		{ name: 'Preview', type: 'bool' },
 		{ name: 'enrolled', type: 'bool' },
 
+		{ name: 'EnrollForCreditCutOff', type: 'Synthetic', persist: false, fn: function() {
+			var start = this.get('StartDate'),
+				clone = new Date(start.getTime());
+
+			//add 14 days (2 weeks) to the start
+			clone.setDate(clone.getDate() + 14);
+
+			return clone;
+		}},
+
 
 		{ name: 'DCCreator', type: 'auto' },
 		{ name: 'DCDescription', type: 'string' },
@@ -40,11 +50,8 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		{ name: 'title', type: 'string' },
 
 		//ui data
-		{ name: 'isOpen', type: 'bool'},
-		{ name: 'isAdmin', type: 'bool'},
-		{ name: 'isChanging', type: 'bool', convert: function(v, rec) {
-			return rec.get('enrolled') && v;
-		}},
+		{ name: 'isOpen', type: 'bool', persist: false},
+		{ name: 'isAdmin', type: 'bool', persist: false},
 
 		//Legacy
 		{ name: 'Communities', type: 'auto', persist: false },
@@ -72,6 +79,12 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	isActive: function() {
 		return Boolean(this.get('enrolled'));
 	},
+
+
+	isEnrolledForCredit: function() {
+		return this.isActive() && !this.get('isOpen');
+	},
+
 
 	isExpired: function() {
 		var d, s;
