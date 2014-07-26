@@ -222,10 +222,19 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 	showAdmission: function(course) {
 		var me = this;
 
-		me.courseAdmission = me.add({
-			xtype: 'enrollment-credit',
-			course: course
-		});
+		function addView() {
+			me.courseAdmission = me.add({
+				xtype: 'enrollment-credit',
+				course: course
+			});
+		}
+
+		if (!me.courseAdmission) {
+			addView();
+		} else if (me.courseAdmission.course !== course) {
+			addView();
+		}
+
 
 		function updateLabel() {
 			me.labelEl.addCls('back');
