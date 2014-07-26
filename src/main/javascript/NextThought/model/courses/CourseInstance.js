@@ -37,20 +37,20 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 	asUIData: function() {
 		var e = this.getCourseCatalogEntry(),
-			instructors = e && e.get('Instructors'),
-			title = e && e.get('Title'),
-			label = e && e.get('ProviderUniqueID'),
-			author = instructors && instructors[0],
+			author = ((e && e.get('Instructors')) || [])[0],
+			bundle = this.get('Bundle').asUIData(),
 			data = {
 				id: this.getId(),
 				isCourse: true,
-				author: author && author.get('Name')
+				author: author && author.get('Name'),
+				title: e && e.get('Title'),
+				label: e && e.get('ProviderUniqueID'),
+				icon: e && e.get('icon'),
+				thumb: e && e.get('thumb')
 			};
 
-		if (title) { data.title = title; }
-		if (label) { data.label = label; }
-
-		return Ext.apply(this.get('Bundle').asUIData(), data);
+		ObjectUtils.clean(bundle);//make sure falsy values are "undefined" before the applyIf()
+		return Ext.applyIf(bundle, data);
 	},
 
 

@@ -84,15 +84,10 @@ Ext.define('NextThought.model.ContentBundle', {
 	__setImage: function() {
 		var me = this;
 
-		function fallback() {
-			var e = me.get('ContentPackages')[0];
-			me.set('icon', getURL(e.get('icon')));
-		}
-
 		me.getImgAsset('landing')
-			.then(function(url) { me.set('icon', url); }, fallback);
+			.then(function(url) { me.set('icon', url); }, me.set.bind(me, ['icon', null]));
 		me.getImgAsset('thumb')
-			.then(function(url) { me.set('thumb', url); }, fallback);
+			.then(function(url) { me.set('thumb', url); }, me.set.bind(me, ['thumb', null]));
 	},
 
 
