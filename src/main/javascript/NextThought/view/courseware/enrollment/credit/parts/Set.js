@@ -19,7 +19,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Set', {
 		'radio-group': 'credit-radiogroup',
 		'description': 'credit-description',
 		'checkbox-group': 'credit-checkbox-group',
-		'dropdown': 'credit-dropdown'
+		'dropdown': 'credit-dropdown',
+		'date': 'credit-dateinput'
 	},
 
 	//name of the group so it can be idenitified

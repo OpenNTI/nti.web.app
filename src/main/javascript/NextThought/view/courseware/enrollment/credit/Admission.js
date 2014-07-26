@@ -107,7 +107,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					xtype: 'enrollment-credit-set',
 					label: 'What is your Date of Birth?',
 					inputs: [
-						{type: 'text', name: 'date_of_birth', placeholder: 'MM / DD / YYYY', size: 'third'}
+						{type: 'date', name: 'date_of_birth', size: 'third'}
 					]
 				},
 				{

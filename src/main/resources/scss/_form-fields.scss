@@ -286,3 +286,39 @@ span.nti-radiobutton {
 		}
 	}
 }
+
+.datefield {
+	height: auto;
+	overflow: hidden;
+
+	.month {
+		width: 110px;
+		float: left;
+	}
+
+	.date-field-input {
+		float: left;
+		font-size: 14px;
+		font-weight: 500;
+		border-radius: 0;
+		line-height: 25px;
+		padding: 6px 10px;
+		height: 100%;
+		box-shadow: none;
+		border: 1px solid $border-grey;
+		background: #ffffff;
+	}
+
+	.day {
+		width: 60px;
+	}
+
+	.year {
+		width: 75px;
+	}
+}
+
+
+
+
+
