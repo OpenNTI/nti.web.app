@@ -249,7 +249,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 				title: 'This Course is Archived.',
 				information: [
 					'Archived courses are out of session but all course content will remain available',
-					'including the lectures, course materials, quizzes, and discussions'
+					'including the lectures, course materials, quizzes, and discussions.'
 				].join(' '),
 				cls: ''
 			},
@@ -293,7 +293,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 					'Your request to earn college credit has been denied',
 					'If you believe there has been an error, please contact the',
 					'<a class=\'link\' href=\'www.ou.edu\'>OU Admissions Office</a>',
-					'or <a class=\'link\' href=\'resubmit\'>resubmit your application</a>'
+					'or <a class=\'link\' href=\'resubmit\'>resubmit your application</a>.'
 				].join(' '),
 				cls: 'rejected'
 			},
@@ -525,7 +525,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 						me.fireEvent('change-enrollment', me.course, false, function(success, change) {
 							if (success) {
 								me.fireEvent('enrolled-action', false);
-								me.showMessage('You are no longer enrolled in ' + me.course.get('Title'));
+								me.showMessage('You are no longer enrolled in ' + me.course.get('Title') + '.');
 							} else {
 								me.showMessage('There was an error dropping the course, please try again later.', true);
 							}
@@ -557,7 +557,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 								});
 						};
 
-						me.showMessage('You have successfully enrolled in ' + me.course.get('Title') + ' click here to go to the content.');
+						me.showMessage('You have successfully enrolled in ' + me.course.get('Title') + '. Click here to go to the content.');
 					} else {
 						me.showMessage('There was an error enrolling, please try again later.', true);
 					}
