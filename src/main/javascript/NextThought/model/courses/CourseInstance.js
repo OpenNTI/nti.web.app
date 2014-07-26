@@ -131,8 +131,10 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 	__getLocationInfo: function() {
 		var locationInfo = this.get('Bundle').getLocationInfo();
-		//add a reference to myself so the course tiles can get the course instance form the locationInfo for now
+
 		if (locationInfo) {
+			locationInfo.isCourse = true;
+			//add a reference to myself so the course tiles can get the course instance form the locationInfo for now
 			locationInfo.courseInstance = this;
 		}
 

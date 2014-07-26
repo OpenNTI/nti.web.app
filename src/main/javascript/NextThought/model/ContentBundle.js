@@ -96,14 +96,22 @@ Ext.define('NextThought.model.ContentBundle', {
 	},
 
 
-	__getLocationInfo: function() {
-		var locationInfo = ContentUtils.getLocation(this.get('ContentPackages')[0]);
-		//add a reference to myself so the course tiles can get the course instance form the locationInfo for now
-		if (locationInfo) {
-			locationInfo.bundle = this;
-		}
+	getLocationInfo: function() {
+		var data = this.asUIData(),
+			firstPackage = this.get('ContentPackages')[0],
+			firstPage = this.getFirstPage(),
+			toc = firstPackage.get('toc');
 
-		return locationInfo;
+		return !toc ? null : Ext.applyIf({
+				toc: toc,
+				location: toc.documentElement,
+				NTIID: firstPage,
+				ContentNTIID: firstPackage,
+				title: firstPackage,
+				root: firstPackage.get('root'),
+				getIcon: function() { return data.icon; },
+				getPathLabel: function() { return data.title; }
+			}, data);
 	},
 
 
