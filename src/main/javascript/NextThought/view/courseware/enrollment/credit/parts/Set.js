@@ -137,7 +137,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Set', {
 			me.add(input);
 		});
 
-		this.enableBubble(['reveal-item', 'hide-item']);
+		this.enableBubble(['reveal-item', 'hide-item', 'add-address-line']);
 	},
 
 	beforeRender: function() {

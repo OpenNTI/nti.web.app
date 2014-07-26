@@ -82,19 +82,26 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 				{
 					xtype: 'enrollment-credit-set',
 					label: 'Permanent Address',
+					name: 'permanent-address',
 					inputs: [
 						{type: 'text', name: 'street_line1', placeholder: 'Address', required: true, size: 'full'},
 						{type: 'text', name: 'street_line2', placeholder: 'Address', size: 'full'},
+						{type: 'text', name: 'street_line3', hidden: true, placeholder: 'Address', size: 'full'},
+						{type: 'text', name: 'street_line4', hidden: true, placeholder: 'Address', size: 'full'},
+						{type: 'text', name: 'street_line5', hidden: true, placeholder: 'Address', size: 'full'},
 						{type: 'text', name: 'city', placeholder: 'City / Town', size: 'large'},
 						{type: 'text', name: 'state', placeholder: 'State / Province / Territory / Region', size: 'full'},
 						{type: 'dropdown', name: 'nation_code', placeholder: 'Country', required: true, size: 'large left', options: []},
 						{type: 'text', name: 'postal_code', placeholder: 'ZIP / Postal Code', size: 'small left'}
+					],
+					help: [
+						{text: 'Add Address Line', type: 'event', event: 'add-address-line'}
 					]
 				},
 				{
 					xtype: 'enrollment-credit-set',
 					inputs: [
-						{type: 'checkbox', text: 'My mailing address is different', reveals: 'mailing-address', correct: true}
+						{type: 'checkbox', text: 'My mailing address is different', name: 'show-mailing', doNotSend: true, reveals: 'mailing-address', correct: true}
 					]
 				},
 				{
@@ -104,6 +111,9 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					inputs: [
 						{type: 'text', name: 'mailing_street_line1', placeholder: 'Address', size: 'full'},
 						{type: 'text', name: 'mailing_street_line2', placeholder: 'Address', size: 'full'},
+						{type: 'text', name: 'mailing_street_line3', hidden: true, placeholder: 'Address', size: 'full'},
+						{type: 'text', name: 'mailing_street_line4', hidden: true, placeholder: 'Address', size: 'full'},
+						{type: 'text', name: 'mailing_street_line5', hidden: true, placeholder: 'Address', size: 'full'},
 						{type: 'text', name: 'mailing_city', placeholder: 'City / Town', size: 'large'},
 						{type: 'text', name: 'mailing_state', placeholder: 'State / Province / Territory / Region', size: 'full'},
 						{type: 'dropdown', name: 'mailing_nation_code', placeholder: 'Country', size: 'large left', options: []},
@@ -256,7 +266,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 		me.on({
 			'reveal-item': 'revealItem',
 			'hide-item': 'hideItem',
-			'send-application': 'maybeSubmitApplication'
+			'send-application': 'maybeSubmitApplication',
+			'add-address-line': 'addAddressLine'
 		});
 
 		if (me.status === 'pending') {
@@ -367,6 +378,28 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 			.fail(function(reason) {
 				console.error('Failed to load nation list ', reason);
 			});
+	},
+
+
+	addAddressLine: function() {
+		var line = this.numberofaddressline || 2,
+			streetAddress = this.down('[name=permanent-address]'),
+			help;
+
+		line = this.numberofaddressline = line + 1;
+
+		if (line >= 5) {
+			help = streetAddress.el.query('a.help');
+
+			(help || []).forEach(function(h) {
+				if (h.innerText === 'Add Address Line') {
+					Ext.fly(h).destroy();
+				}
+			});
+		}
+
+		this.revealItem('street_line' + line);
+		this.revealItem('mailing_street_line' + line);
 	},
 
 
