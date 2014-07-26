@@ -426,14 +426,6 @@
 	color: $primary-grey;
 	max-height: 100%;
 
-	.x-mask, .x-mask-msg {
-		@include animate($name: fadeIn, $duration: 1s);
-
-		&.removing {
-			@include animate($name: fadeOut, $duration: 1s);
-		}
-	}
-
 	.header {
 		background-color: #efefef;
 		border: none;

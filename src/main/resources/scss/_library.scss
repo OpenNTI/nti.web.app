@@ -474,6 +474,16 @@
 	left: -53px;
 }
 
+.available-courses {
+	.x-mask, .x-mask-msg {
+		@include animate($name: fadeIn, $duration: 1s);
+
+		&.removing {
+			@include animate($name: fadeOut, $duration: 1s);
+		}
+	}
+}
+
 .course-settings-window, .available-courses, .available-books {
 	box-shadow: 0 0 5px 0 rgba(0,0,0,0.35);
 	background-color: white;
