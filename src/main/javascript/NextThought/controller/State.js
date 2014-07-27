@@ -10,7 +10,7 @@ PREVIOUS_STATE = 'previous-state';
 		if (this.parent) {
 			this.parent.hooked = true;
 		}
-
+		console.error(transactionId + ' Opened');
 		this.txn = [];
 	}
 	Transaction.prototype = {
@@ -28,8 +28,8 @@ PREVIOUS_STATE = 'previous-state';
 			if (this.isOpen()) {
 				delete this.txn;
 				delete this.ctlr;
-
 				ctlr.closeActiveTransaction(this);
+				console.error(this.id + ' Closed');
 			}
 		},
 
