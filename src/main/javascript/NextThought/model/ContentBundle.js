@@ -70,7 +70,10 @@ Ext.define('NextThought.model.ContentBundle', {
 
 
 	getDefaultAssetRoot: function() {
-		var root = this.get('root');
+		var root = ([this].concat(this.get('ContentPackages')))
+				.reduce(function(agg, o) {
+					return agg || o.get('root');
+				}, null);
 
 		if (!root) {
 			console.error('No root for content bundle: ', this);
