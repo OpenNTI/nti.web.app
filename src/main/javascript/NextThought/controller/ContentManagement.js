@@ -80,9 +80,19 @@ Ext.define('NextThought.controller.ContentManagement', {
 
 
 	__fillIn: function(store) {
+		function badBundle(o) {
+			return Ext.isEmpty(o.get('ContentPackages'));
+		}
+
 		var Model = this.getContentBundleModel(),
 			refed = this.__isPackageReferenced.bind(this),
-			wrapped = [];
+			wrapped = [],
+			remove = store.getRange().filter(badBundle);
+
+		if (remove.length > 0) {
+			console.error('Removing bundles that appear bad:', remove);
+			store.remove(remove);
+		}
 
 		Library.each(function(pkg) {
 			if (!refed(pkg) && !pkg.get('isCourse')) {
