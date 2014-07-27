@@ -31,11 +31,11 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 	},
 
 	constructor: function() {
+		function c(o) {return (o && o.get('CourseInstance').asUIData().title) || '';}
 		function sort(s) {
 			s.sort([{
 				sorterFn: function(a, b) {
-					return	a.get('CourseInstance').asUIData().title.strcmp(
-							b.get('CourseInstance').asUIData().title); }
+					return	c(a).strcmp(c(b)); }
 			}]);
 		}
 
@@ -70,8 +70,9 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 							return r.__precacheEntry().fail(function() { bad(r); });
 						}))
 						.then(prune)
+						.then(sort.bind(me, [me]))
+						.fail(function(e) { console.warn('Problems sorting...', e);})//catch
 						.then(function() {
-							sort(me);
 							p.fulfill(me);
 						},
 						function(reason) {
