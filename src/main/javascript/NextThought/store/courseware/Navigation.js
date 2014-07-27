@@ -43,15 +43,7 @@ Ext.define('NextThought.store.courseware.Navigation', {
 			var id = n.getId();
 
 			if (n.isNode) {
-				if (!id) {
-					console.warn('Node doesnt have an id', n);
-				}
-
-				t = tocNodes.getById(id);
-
-				if (!t) {
-					console.warn('Node isnt found in toc', id);
-				}
+				t = id && tocNodes.getById(id);
 
 				fill = t ? {
 					label: t.get('label'),
