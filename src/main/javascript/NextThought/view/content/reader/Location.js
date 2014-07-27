@@ -115,7 +115,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 						//just log the issue and leave the splash showing.
 						throw 'error occurred during navigation';
 					}
-					throw 'error occurred during navigation';
+					return;
 				}
 
 
