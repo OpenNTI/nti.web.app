@@ -3,12 +3,14 @@ Ext.define('NextThought.model.assessment.Question', {
 	mimeType: 'application/vnd.nextthought.naquestion',
 	requires: [
 		'NextThought.model.converters.Items',
-		'NextThought.util.Parsing'
+		'NextThought.util.Parsing',
+		'NextThought.model.assessment.WordBank'
 	],
 
 	fields: [
 		{ name: 'content', type: 'auto' },
-		{ name: 'parts', type: 'arrayItem' }
+		{ name: 'parts', type: 'arrayItem' },
+		{ name: 'wordbank', type: 'singleItem' }
 	],
 
 	getVideos: function() {
