@@ -33,7 +33,7 @@ Ext.define('NextThought.model.ContentPackage', {
 	constructor: function() {
 		this.callParent(arguments);
 		this.tocPromise = Service.request(this.get('index'))
-				.then(ContentUtils.parseXML)
+				.then(Library.parseXML)
 			//BEGIN: ToC Cleanup
 			//TODO: move toc code here.
 			//END: ToC Cleanup
