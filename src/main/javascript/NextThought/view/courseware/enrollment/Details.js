@@ -234,7 +234,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 				information: 'Class begins {date} and will be conducted fully online.',
 				cls: 'enrolled',
 				links: [
-					{href: 'welcome', text: 'Get Aquanited with Janux'},
+					{href: 'welcome', text: 'Get Acquainted with Janux'},
 					{href: 'profile', text: 'Complete your Profile'}
 				]
 			},
@@ -243,7 +243,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 				information: 'Class begins {date} and will be conducted fully online.',
 				cls: 'enrolled',
 				links: [
-					{href: 'welcome', text: 'Get Aquanited with Janux'},
+					{href: 'welcome', text: 'Get Acquainted with Janux'},
 					{href: 'profile', text: 'Complete your Profile'}
 				]
 			},
