@@ -165,7 +165,8 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 
 	getEnrollmentData: function() {
-		var me = this, catalogData;
+		var me = this, catalogData,
+			credit = me.course.get('Credit');
 
 		me.admissionstate = $AppConfig.userObject.get('admissin_status');
 
@@ -174,12 +175,13 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			EndDate: me.course.get('EndDate'),
 			EnrollCutOff: me.course.get('EnrollForCreditCutOff'),
 			DropCutOff: me.course.get('DropCutOff') || me.course.get('EnrollForCreditCutoff'),
-			AvailableForCredit: me.course.isAvailableForCredit,
+			AvailableForCredit: me.course.get('NTI_FiveminuteEnrollmentCapable'),
 			Enrolled: me.course.isActive(),
 			OpenEnrolled: me.course.isActive() && !me.course.isEnrolledForCredit(),
 			EnrolledForCredit: me.course.isEnrolledForCredit(),
 			SeatCount: me.course.seatcount,
-			AdmissionState: me.admissionstate
+			AdmissionState: me.admissionstate,
+			Hours: credit && credit[0] && credit[0].get('Hours')
 		};
 
 		if (catalogData.Enrolled) {
@@ -428,7 +430,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 					} else {
 						//TODO fill this out from the course
 						state.bottom = me.getState('bottom', 'not_enrolled', {
-							'#': 3,
+							'#': courseData.Hours,
 							'date': start
 						});
 						state.price = '$599';

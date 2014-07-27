@@ -26,6 +26,10 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		{ name: 'Preview', type: 'bool' },
 		{ name: 'enrolled', type: 'bool' },
 
+		{ name: 'NTI_FiveminuteEnrollmentCapable', type: 'bool', persist: false },
+		{ name: 'OU_CRN', type: 'bool', persist: false },
+		{ name: 'OU_Term', type: 'bool', persist: false },
+
 		{ name: 'EnrollForCreditCutOff', type: 'Synthetic', persist: false, fn: function() {
 			var start = this.get('StartDate'),
 				clone = new Date(start.getTime());
@@ -125,4 +129,3 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		return s;
 	}
 });
-
