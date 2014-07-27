@@ -112,12 +112,36 @@
 			.help-popover {
 				position: absolute;
 				right: 220px;
-				background-color: white;
+				background-color: #f7fcff;
 				min-width: 230px;
-				box-shadow: 0 0 1px black;
+				padding: 10px;
+				border: 2px solid $primary-blue;
+				border-radius: 5px;
+				box-shadow: 0 0 15px 0 rgba(0,0,0,0.3);
+				font: normal 300 1em/1 $font;
 
 				&.hidden {
 					visibility: hidden;
+				}
+
+				.title {
+					font-size: 1.3em;
+					line-height: 1.5em;
+					margin-top: 10px;
+					padding-right: 20px;
+				}
+
+				.body {
+					line-height: 28px;
+					font-size: 0.9em;
+					font-weight: 400;
+				}
+
+				.close {
+					cursor: pointer;
+					top: 10px;
+					right: 20px;
+					@include icon('message_box_close', $position: absolute);
 				}
 			}
 		}

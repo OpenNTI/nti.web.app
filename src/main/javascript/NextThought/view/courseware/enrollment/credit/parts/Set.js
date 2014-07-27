@@ -102,6 +102,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Set', {
 		]},
 		{tag: 'tpl', 'if': 'hasText', cn: [
 			{tag: 'div', cls: 'help-popover hidden', cn: [
+				{cls: 'close'},
 				{cls: 'title', html: '{[values.info.title ? values.info.title : \'\']}'},
 				{cls: 'body', html: '{[values.info.body ? values.info.body : values.info]}'}
 			]}
@@ -185,7 +186,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Set', {
 				me.el.setStyle({overflow: 'visible'});
 
 				if (help.info.body) {
-					el.down('.help-popover').setWidth(550);
+					el.down('.help-popover').setWidth(450);
 				}
 
 				me.mon(el, 'click', function(e) {
@@ -199,6 +200,10 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Set', {
 						popover.setTop(-(popover.getHeight() / 2 - 20));
 
 						popover.toggleCls('hidden');
+					}
+
+					if (e.getTarget('.close') && popover) {
+						Ext.fly(popover).addCls('hidden');
 					}
 
 					return false;
