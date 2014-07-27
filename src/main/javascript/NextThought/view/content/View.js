@@ -501,7 +501,7 @@ Ext.define('NextThought.view.content.View', {
 		bundle = (bundle && bundle.isBundle && bundle) || undefined; //filter all non-bundle values out (eg: Title models)
 
 		//Temporary stop gap
-		var info = bundle && bundle.__getLocationInfo(), me = this,
+		var info = bundle && bundle.getLocationInfo(), me = this,
 			preview = bundle && bundle.get('Preview'),
 			background = info && info.toc && getURL(info.toc.querySelector('toc').getAttribute('background'), info.root),
 			subs = [

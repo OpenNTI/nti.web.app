@@ -667,7 +667,7 @@ Ext.define('NextThought.controller.CourseWare', {
 				return true;
 			}
 
-			if (course.__getLocationInfo().NTIID !== lin.last()) {
+			if (course.getLocationInfo().NTIID !== lin.last()) {
 				return true;//not in the same content...
 			}
 

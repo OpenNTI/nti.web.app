@@ -55,7 +55,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 
 	getDefaultAssetRoot: function() {
-		var location = this.__getLocationInfo(),
+		var location = this.getLocationInfo(),
 			root = location && location.root;
 
 		if (!root) {
@@ -110,7 +110,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		var temp;
 		if (!this.navStore) {
 			//This function is wrapping the temporary stop-gap...
-			temp = this.__getLocationInfo();
+			temp = this.getLocationInfo();
 			if (temp && temp.toc) {
 				this.navStore = new NextThought.store.courseware.Navigation({
 					tocNodes: new NextThought.store.courseware.ToCBasedOutline({data: temp.toc}),
@@ -130,7 +130,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
-	__getLocationInfo: function() {
+	getLocationInfo: function() {
 		var locationInfo = this.get('Bundle').getLocationInfo();
 
 		if (locationInfo) {

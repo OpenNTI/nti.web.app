@@ -37,7 +37,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 
 		this.course = courseId;
 
-		l = bundle.__getLocationInfo();
+		l = bundle.getLocationInfo();
 
 		if (l && l !== ContentUtils.NO_LOCATION) {
 			toc = l.toc.querySelector('toc');
