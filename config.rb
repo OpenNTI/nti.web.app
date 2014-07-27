@@ -7,9 +7,7 @@ end
 #blessc_executable = 'blessc';
 
 environment = :production
-
-sass_options = {:sourcemap => true,}
-enable_sourcemaps = true
+sourcemap = true
 
 # Set this to the root of your project when deployed:
 http_path = "./"
@@ -21,7 +19,6 @@ relative_assets = true
 
 output_style = :compressed
 line_comments = false
-enable_sourcemaps
 
 # execute blessc when the stylesheet is generated
 #on_stylesheet_saved do |path|
