@@ -83,7 +83,7 @@ Ext.define('NextThought.ux.IFramePopout', {
 		c.onceRendered.then(function() {
 			var e = c.el.down('pre');
 			e.selectable();
-			c.mon(e, {
+			/*c.mon(e, {
 				click: function() {
 					var s = document.getSelection(),
 						r = document.createRange();
@@ -91,7 +91,7 @@ Ext.define('NextThought.ux.IFramePopout', {
 					r.selectNodeContents(e.dom);
 					s.addRange(r);
 				}
-			});
+			});*/
 		});
 	},
 
