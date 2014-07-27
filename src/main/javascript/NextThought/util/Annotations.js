@@ -164,6 +164,12 @@ Ext.define('NextThought.util.Annotations', {
 				   return textNodes;
 			   },
 
+			   colorsForName: function(highlightColorName) {
+			   		var colors = Service.getHighlightColors();
+			   		return Ext.Array.findBy(colors,function(item,idx) {
+			   			return item.name == highlightColorName;
+			   		});
+			   },
 
 			   drawCanvas: function(canvas, content, range, backgroundColor, offset) {
 

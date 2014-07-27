@@ -22,6 +22,13 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		if (!this.isModifiable) {
 			this.highlightCls += ' shared-with-me';
 		}
+
+		var pp = this.getRecordField('presentationProperties');
+		if(pp && pp.highlightColorName) {
+			this.highlightColorName = pp.highlightColorName;
+			this.highlightCls += ' ' + pp.highlightColorName;
+		}
+
 		this.allowShare = false;
 	},
 
@@ -211,7 +218,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			//highlights that are not ours do not get a marked over treatment...so don't create the canvas
 
 			//FIXME Dirty Work around an issue with redactions also being highlighted.  At this point the redaction class
-			//hasn't been aplied to what becomes sampleEl.  It gets applied in the subclass when this returns
+			//hasn't been applied to what becomes sampleEl.  It gets applied in the subclass when this returns
 			//therefore here it looks just like a highlight.
 			if (me.record.get('Class') === 'Highlight') {
 
@@ -290,8 +297,10 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			window.scrollTo(0, 0);
 		}
 
+		var colorSpec = AnnotationUtils.colorsForName(this.highlightColorName);
+
 		boundingTop = AnnotationUtils.drawCanvas(me.canvas,
-												 me.content, fakeRectRange, me.self.bgcolor[me.record.get('Class')][state],
+												 me.content, fakeRectRange, colorSpec || me.self.bgcolor[me.record.get('Class')][state],
 												 [leftOffset, topOffset]);
 
 

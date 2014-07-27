@@ -21,6 +21,7 @@ relative_assets = true
 
 output_style = :compressed
 line_comments = false
+enable_sourcemaps
 
 # execute blessc when the stylesheet is generated
 #on_stylesheet_saved do |path|

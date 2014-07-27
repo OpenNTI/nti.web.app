@@ -1,7 +1,6 @@
 $icons: sprite-map("icons/*.png",$layout:smart);
 $elements: sprite-map("elements/*.png",$layout:smart);
 
-
 $disable-magic-sprite-selectors: true;
 
 $font: 'Open Sans', sans-serif;
@@ -33,5 +32,13 @@ $panel-background: #fbfbfb;
 
 $toast-border-top: #78caf9;
 
+$annotations-menu-bg-color:rgba(#333,.95);
+$annotations-menu-bg:$annotations-menu-bg-color;
+
+$highlight-colors: (
+	'yellow':#EDE619,
+	'green':#4CE67F,
+	'blue':#3FB3F6
+);
 
 @import "common-mixins";

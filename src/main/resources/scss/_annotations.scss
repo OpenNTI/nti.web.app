@@ -18,7 +18,7 @@
 			z-index: 2;
 		}
 	}
-
+	
 	.bar {
 		cursor: default;
 		display: block;
@@ -753,7 +753,6 @@
 		}
 	}
 
-
 	.math .application-highlight.plain {
 		display: inline-block;
 	}
@@ -772,8 +771,7 @@
 				&::before, &::after { color: #ffffff; }
 			}
 		}
-
-
+		
 		&.plain {
 
 			&, * {
@@ -781,9 +779,11 @@
 				z-index: 1;
 			}
 
-			color: #076da7;
+			// color: #076da7;
 			background-color: #e1f4fe;
 			overflow: hidden;
+
+			@include highlight-colors();
 
 			&.shared-with-me {
 				&,.math {
@@ -904,3 +904,129 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7 }
 	}
 }
 
+.nt-annotation-menu {
+	$transition-duration:.1s;
+	background: $annotations-menu-bg;
+	border-radius:6px;
+	opacity: 0.01; // so we can show the menu, compute its width, and center it. (can't get the width until it's rendered in the dom.)
+	&.visible {
+		opacity: 1;
+		@include single-transition(all,$transition-duration,ease-in,0);
+	}
+
+	overflow: visible;
+
+	// the pointer/arrow
+	&::after {
+		$arrow-size:.5em;
+		content: '';
+		position: absolute;
+		width: 0;
+		height: 0;
+		background: none;
+		border: $arrow-size solid transparent;
+		border-top-color: $annotations-menu-bg;
+		left: 50%;
+		margin-left: -$arrow-size;
+		bottom: -($arrow-size * 2);
+		z-index: 9999;
+		margin-bottom: 1px;
+	}
+
+	.x-panel-body-nt-annotation {
+		background: none;
+		border:none;
+		padding:0;
+	}
+	.x-menu-item {
+	  	&.icon {
+		}
+		&.add-note {
+			@include icon('comment_white', $left: 2px, $top: 3px);
+			text-indent:-100em;
+		}
+		&.define {
+			@include icon('search-white',$top:8px,$left:5px);
+			text-indent:-100em;
+		}
+
+		&:after {
+			opacity:.75;
+			@include single-transition(opacity,$transition-duration,ease-in,0);
+		}
+
+		&:hover:after {
+			opacity:1.0;
+			@include single-transition(opacity,$transition-duration,ease-in,0);
+		}
+	}
+
+	.x-menu-item-active {
+		background:none !important;
+	}
+
+	.x-component {
+		&:before { // divider line between items
+			content: "";
+			border-right: 2px solid rgba(128,128,128,0.2);
+			position: absolute;
+			height: 75%;
+			top: 5px;
+			right: 0;
+		}
+		&:last-child {
+			padding-right:1.5em;
+			&:before {
+				content:none; // no divider following the last item.
+			}
+		}
+	}
+
+	.nt-highlight-picker {
+		background:none;
+		height:auto;
+		width:auto;
+		padding-left:.5em;
+		padding-right:.5em;
+
+		a {
+			span { // the color swatches
+				$swatchSize:1.25em;
+				display:inline-block;
+				width:$swatchSize;
+				height:$swatchSize;
+				border:2px solid transparent;
+				border-radius:$swatchSize/2;
+				margin:.5em .2em;
+				position:relative;
+				@include transform(scale(1,1)); // so the transform will animate on mouseout.
+				@include single-transition(all,$transition-duration,ease-in,0);
+				&::after {
+					content:'';
+					position:absolute;
+					top:0;
+					left:0;
+					background:url('../images/icons/rhp-status-checkmark.png') center no-repeat transparent;
+					width:100%;
+					height:100%;
+					opacity:0;
+					@include single-transition(opacity,$transition-duration,ease-in,0); // fade out the checkmark
+				}
+			}
+		}
+
+		a:hover, a.x-color-picker-selected {
+			background:none;
+			border:none;
+			span {
+				border-color:white;
+				@include single-transition(all,$transition-duration,ease-in,0);
+				@include transform(scale(1.2,1.2));
+				&::after {
+					opacity: 1.0;
+					@include single-transition(opacity,$transition-duration,ease-in,0); // fade up the checkmark
+				}
+			}
+		}
+	}
+}

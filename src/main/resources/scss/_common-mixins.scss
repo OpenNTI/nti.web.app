@@ -231,6 +231,25 @@
 
 }
 
+@mixin highlight-colors($onParentSelector: true, $selector:'', $nibselector:null) {
+	@each $name, $color in $highlight-colors {
+		$highlightcolor: scale-color($color,$lightness:75%);
+		$prefix: if($onParentSelector,'&','');
+		#{$prefix}.#{$name} #{$selector} {
+			// color: $color;
+			background-color: $highlightcolor;
+			&.highlight-mouse-over {
+				background-color: $color;
+				color: white;
+			}
+			@if($nibselector) {
+				#{$nibselector} {
+					border-top-color: $highlightcolor;
+				}
+			}
+		}
+	}	
+}
 
 @mixin hardware-accelerate() {
 	//@include experimental(transform, translate3d(0, 0, 0));

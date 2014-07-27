@@ -93,6 +93,13 @@ Ext.define('NextThought.model.Service', {
 		return getURL(this.forceTrailingSlash(l));
 	},
 
+	getHighlightColors: function() {
+		return	[
+			{name:'yellow',color:'EDE619'},
+			{name:'green',color:'4CE67F'},
+			{name:'blue',color:'3FB3F6'}
+		];
+	},
 
 	getUserUnifiedSearchURL: function() {
 		var w = this.getWorkspace($AppConfig.username) || {},

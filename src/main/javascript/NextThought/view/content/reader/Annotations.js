@@ -7,6 +7,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		'NextThought.model.TranscriptSummary',
 		'NextThought.model.QuizResult',
 		'NextThought.util.Annotations',
+		'NextThought.util.Color',
 		'NextThought.ux.SearchHits',
 		'NextThought.view.annotations.renderer.Manager',
 		'NextThought.view.annotations.Redaction',
@@ -325,6 +326,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			if (/^\w+$|^\w+[^\w]+\w+$/i.test(text)) {//it is one or two words
 				result = {
 					text: 'Define...',
+					cls:'define',
 					handler: function() {
 						me.fireEvent('define', text, boundingBox, me.reader);
 						me.clearSelection();
@@ -376,14 +378,12 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 		menu = Ext.widget('menu', {
 			closeAction: 'destroy',
-			minWidth: 150,
-			defaults: {ui: 'nt-annotaion', plain: true }
+			minWidth: 4,
+            ui: 'nt-annotation',
+            cls:'nt-annotation-menu',
+            layout:'hbox',
+			defaults: {ui: 'nt-annotation', plain: true }
 		});
-
-		define = me.getDefinitionMenuItem(range);
-		if (define) {
-			menu.add(define);
-		}
 
 		if (win && $AppConfig.allowPrintingContent) {
 			menu.add({
@@ -392,17 +392,34 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			});
 		}
 
-		menu.add({
-					 text: getString('NextThought.view.content.reader.Annotations.save-highlight'),
-					 handler: function(el, e) {
-						 me.fireEvent('save-phantom', record, false);
-						 me.clearSelection();
-					 }
-				 });
+		var highlightColors = Service.getHighlightColors(); // array of objects: {name:'blue',color:'0000ff'}
+
+		var colorPicker = Ext.widget('colorpicker', {
+			colors: Ext.Array.pluck(highlightColors,'color'), // hex codes are case sensitive. won't work if 'FF' is 'ff'.
+			cls:'nt-highlight-picker',
+			plain:false,
+			listeners: {
+				select: function(picker, selColor) {
+					var hColor = Ext.Array.findBy(highlightColors,function(item,index){ return item.color == selColor; });
+					record.set('fillColor',Color.toRGBA(selColor));
+					record.set('presentationProperties',{highlightColorName:hColor.name});
+					me.fireEvent('save-phantom', record, false);
+					me.clearSelection();
+				}
+			}
+		});
+
+		menu.add(colorPicker);
+
+		define = me.getDefinitionMenuItem(range);
+		if (define) {
+			menu.add(define);
+		}
 
 		if (!this.reader.getNoteOverlay().disabled) {
 			menu.add({
 						 text: getString('NextThought.view.content.reader.Annotations.add-note'),
+                         cls:'add-note',
 						 handler: function(el, e) {
 							 me.clearSelection();
 							 me.fireEvent('create-note', range, rect2, 'plain');
@@ -446,16 +463,54 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			delete this.reader.creatingAnnotation;
 		}, this);
 
+		// identify the top coordinate of the nearest client rect (nearest line of text)
+		// so we can position the menu consistently instead of relying solely on the y coordinate
+		// of the mouse event.
+		function nearestTextTopOffset(range,xy) {
+			var rects = range.getClientRects();
+			var scrollOffset = me.reader.getScroll().get().top;
+			var targetY = xy[1];
+			var miny;
+			for(var i = 0; i < rects.length; i++ ) {
+				var r = rects[i];
+				var dy = Math.abs(targetY - r.top + scrollOffset);
+				miny = Math.min(miny,dy) || dy;
+//				showRect(r);
+			}
+			return miny;
+		}
 
-		offset = me.reader.getEl().getXY();
-		innerDocOffset = document.getElementsByTagName('iframe')[0].offsetLeft;
-		xy[0] += offset[0] + innerDocOffset;
-		xy[1] += offset[1];
+		// debug utility for visualizing where the given rect is on the page.
+//		function showRect(rect) {
+//			var offset = me.reader.getEl().getXY();
+//			var scroll = me.reader.getScroll().get().top;
+//			var d = document.createElement('div');
+//			d.style.position = 'absolute';
+//			d.style.top = (rect.top + offset[1] - scroll) + 'px';
+//			d.style.left = (rect.left + offset[0]) + 'px';
+//			d.style.border = '1px solid red';
+//			d.style.width = rect.width + 'px';
+//			d.style.height = rect.height + 'px';
+//			d.style.zIndex = 9999;
+//			document.body.appendChild(d);
+//		}
+
+		function menuPosition(range,xy) {
+			var yoffset = (nearestTextTopOffset(range,xy)||0);
+			var x = xy[0] - (menu.getWidth()/2);
+			var y =	xy[1] - menu.getHeight() - yoffset - 10;
+			var offset = me.reader.getEl().getXY();
+			x += offset[0];
+			y += offset[1];
+			return [x,y];
+		}
 
 		if (this.reader.getLocation().NTIID.indexOf('mathcounts') < 0) {
-			menu.showAt(xy);
+			menu.showAt(xy); // opacity still at 0 via css so we can center it. (we can't get the dimensions until it renders)
+			menu.setXY(menuPosition(range,xy),false); // center it
+			menu.addClass('visible'); // show it.
 		} else {
-			console.debug('hack alert; annotation context menu dilberately hidden in mathcounts content');
+			console.debug('hack alert; annotation context menu deliberately hidden in mathcounts content');
 			return;
 		}
 		me.selectRange(range);

@@ -1182,9 +1182,9 @@
 						position: relative;
 						margin: 0 0 20px 0;
 						left: -3px;
-						span{
-							color: #076da7;
-							background-color: #e1f4fe;
+						span {
+							// color: #076da7;
+							// background-color: #e1f4fe;
 							font: normal 400 14px/16px $font;
 							& > span {
 								position: relative;
@@ -1192,7 +1192,7 @@
 								padding: 3px;
 								margin: 2px 0;
 
-								&:last-child::after{
+								&:last-child::after {
 									content: ' ';
 									display: block;
 									position: absolute;
@@ -1204,18 +1204,18 @@
 										color: transparent;
 										width: 21px 7px 0 0;
 									}
-									border-top-color: #e1f4fe;
+									//border-top-color: #e1f4fe;
 									top: 0;
 								}
 							}
 						}
+						@include highlight-colors($selector:span,$nibselector: '& > span:last-child::after' );
 					}
 				}
 			}
 		}
 	}
 }
-
 
 .meta-editor,
 .name-editor{

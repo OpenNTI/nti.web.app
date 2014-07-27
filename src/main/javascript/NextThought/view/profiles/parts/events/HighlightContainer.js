@@ -43,7 +43,7 @@ Ext.define('NextThought.view.profiles.parts.events.HighlightContainer', {
 						{ cls: 'page', cn: [
 							{ cls: 'label', html: '{label}', 'data-ntiid': '{ntiid}' },
 							{ tag: 'tpl', 'for': 'items', cn: [
-								{ cls: 'selected-text', 'data-ntiid': '{ntiid}', cn: [
+								{ cls: 'selected-text {highlightColorName}', 'data-ntiid': '{ntiid}', cn: [
 									{tag: 'span', html: '{text}'},{cls: 'tip'}
 								]}
 							]}
@@ -121,7 +121,8 @@ Ext.define('NextThought.view.profiles.parts.events.HighlightContainer', {
 				Ext.each(items, function(i) {
 					if (!book.hasOwnProperty('icon')) { book.icon = i.meta.getIcon(true); }
 					if (!page.hasOwnProperty('label')) { page.label = i.meta.getPathLabel(); }
-					page.items.push({text: i.get('selectedText'), ntiid: i.getId()});
+					var pp = i.get('presentationProperties');
+					page.items.push({text: i.get('selectedText'), ntiid: i.getId(), highlightColorName: pp.highlightColorName});
 				});
 			});
 		});
