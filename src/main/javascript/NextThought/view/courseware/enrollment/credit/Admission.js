@@ -72,7 +72,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					xtype: 'enrollment-credit-set',
 					label: 'What is your gender?',
 					inputs: [
-						{type: 'radio-group', name: 'gender', required: true, options: [
+						{type: 'radio-group', name: 'gender', required: true, omitIfBlank: true, options: [
 							{text: 'Male', value: 'M'},
 							{text: 'Female', value: 'F'},
 							{text: 'I\'d rather not say...', value: null}
@@ -180,7 +180,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					xtype: 'enrollment-credit-set',
 					label: 'Have you ever attended the University of Oklahoma?',
 					inputs: [
-						{type: 'radio-group', name: 'sooner_id', required: true, valType: 'number', options: [
+						{type: 'radio-group', name: 'sooner_id', required: true, omitIfBlank: true, valType: 'number', options: [
 							{text: 'Yes, and my Sooner ID was {input}.', value: 'input'},
 							{text: 'No.', value: ''}
 						]}

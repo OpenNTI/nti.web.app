@@ -161,15 +161,31 @@
 		}
 
 		.credit-checkbox-group {
+
+			.yes {
+				position: relative;
+			}
+
 			.options {
 				padding-left: 20px;
 				overflow: hidden;
 				font-size: 1.1em;
 				width: calc(100% - 20px);
-				position: relative;
+				position: absolute;
+				bottom: 1px;
 
 				.credit-input {
 					margin: 0;
+				}
+
+				.credit-input.checkbox {
+					input[type=checkbox]:focus + label {
+						box-shadow: none;
+					}
+
+					input[type=checkbox]:checked + label::before {
+						display: none;
+					}
 				}
 
 				&.disabled {
@@ -179,7 +195,11 @@
 						color: $tertiary-grey;
 
 						&.checkbox {
-							input[type=checkbox]:checked + * {
+							input[type=checkbox]:focus + label {
+								box-shadow: none;
+							}
+
+							input[type=checkbox]:checked + label {
 								@include icon('checkbox-14', $top: 13px, $left: 18px);
 
 								&::before{
@@ -187,9 +207,9 @@
 								}
 							}
 
-							&:hover input[type=checkbox]:not(:checked) + * {
+							&:hover input[type=checkbox]:not(:checked) + label {
 								@include icon('checkbox-14', $top: 13px, $left: 18px);
-						}
+							}
 						}
 					}
 				}

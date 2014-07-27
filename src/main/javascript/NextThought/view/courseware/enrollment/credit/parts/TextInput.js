@@ -8,8 +8,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.TextInput', {
 		{cls: 'input-container credit-input text {required} {size}'},
 		{tag: 'tpl', 'if': 'help', cn: [
 			{cls: 'help', cn: [
-				{cls: 'information', html: '{help}'},
-				{cls: 'icon'}
+				{cls: 'information', html: '{help}'}
 			]}
 		]}
 	]),
@@ -77,8 +76,13 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.TextInput', {
 	},
 
 
-	getValue: function() {
-		var value = {};
+	getValue: function(force) {
+		var value = {},
+			val = this.input.getValue();
+
+		if ((Ext.isEmpty(val) || !val) && !force) {
+			return value;
+		}
 
 		value[this.name] = this.input.getValue();
 

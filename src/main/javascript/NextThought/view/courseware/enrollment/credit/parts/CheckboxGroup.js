@@ -36,6 +36,16 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.CheckboxGroup', 
 	},
 
 
+	afterRender: function() {
+		this.callParent(arguments);
+
+		var options = this.el.down('.options'),
+			label = this.el.down('.credit-input label');
+
+		label.setHeight(options.getHeight() + 40);
+	},
+
+
 	changed: function() {
 		this.callParent(arguments);
 
@@ -74,12 +84,12 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.CheckboxGroup', 
 			selected = yes && yes.is(':checked'),
 			value = {};
 
-		value[this.name] = selected;
+		value[this.name] = selected ? 'Y' : 'N';
 
 		function getOptionValue(name) {
 			var input = el.down('input[name="' + name + '"]');
 
-			return input.is(':checked');
+			return input.is(':checked') ? 'Y' : 'N';
 		}
 
 		(this.options || []).forEach(function(option) {
