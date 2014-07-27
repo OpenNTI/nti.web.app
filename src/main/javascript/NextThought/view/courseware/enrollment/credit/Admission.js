@@ -259,7 +259,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		var me = this;
+		var me = this,
+			form = me.form.slice();
 
 		me.enableBubble('show-msg');
 
@@ -300,7 +301,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 		}
 
 		if (me.status === 'rejected') {
-			me.form.unshift({
+			form.unshift({
 				name: 'rejected',
 				label: 'Application Rejected',
 				items: [
@@ -323,7 +324,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 				]
 			});
 		} else {
-			me.form.unshift({
+			form.unshift({
 				name: 'intro',
 				label: 'Admission to OU Janux',
 				items: [
@@ -344,8 +345,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 				]
 			});
 		}
+		me.add(form);
 		me.fillInNations();
-		me.add(me.form);
 	},
 
 
