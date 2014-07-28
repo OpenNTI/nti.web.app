@@ -466,8 +466,13 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 	onClick: function(e) {
+		if (this.ownerCmp.getAnnotations().getSelection()) {
+			return;
+		}
+
 		e.stopEvent();
 		var p = this.callParent(arguments);
+
 		this.ownerCmp.getAnnotations().clearSelection();
 		//the note overlay is listening on iframe-mouseup to enable showing the add note icons
 		//since we stop the mouse event manually fire it so we can still add notes
