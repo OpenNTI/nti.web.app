@@ -43,7 +43,9 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 		{ id: '{id}-body', cls: 'body-container',
 			cn: ['{%this.renderContainer(out,values)%}'] },
 		{cls: 'footer', cn: [
-			{cls: 'done button close', html: 'Finished'}
+			{cls: 'done button close detail', html: 'Finished'},
+			{cls: 'button enroll submit disabled', html: 'Submit Application'},
+			{cls: 'button enroll cancel', html: 'Cancel'}
 		]}
 	]),
 
@@ -52,7 +54,8 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 		labelEl: '.header .name',
 		msgContainerEl: '.msg-container',
 		msgEl: '.msg-container .msg',
-		bodyEl: '.body-container'
+		bodyEl: '.body-container',
+		footerEl: '.footer'
 	},
 
 
@@ -91,9 +94,16 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 			if (e.getTarget('.back')) {
 				me.showPrevItem();
 			}
+
+			if (e.getTarget('.enroll')) {
+				me.enrollOptionClicked(e);
+			}
 		});
 
-		me.on('show-msg', 'showMsg');
+		me.on({
+			'show-msg': 'showMsg',
+			'enable-submission': 'enableSubmit'
+		});
 	},
 
 	showPrevItem: function() {
@@ -161,6 +171,30 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 	},
 
 
+	enableSubmit: function(enable) {
+		this.footerEl.down('.submit')[enable ? 'removeCls' : 'addCls']('disabled');
+	},
+
+
+	enrollOptionClicked: function(e) {
+		var admission = this.courseEnrollment && this.courseEnrollment.down('enrollment-credit-admission');
+
+		if (e.getTarget('.cancel')) {
+			this.showPrevItem();
+			return;
+		}
+
+		if (e.getTarget('.submit')) {
+			if (!admission) {
+				console.error('no admission form');
+				return;
+			}
+
+			admission.maybeSubmitApplication();
+		}
+	},
+
+
 	showTabpanel: function() {
 		if (!this.showAvailable) { return; }
 
@@ -180,6 +214,8 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 		function updateLabel() {
 			me.labelEl.removeCls('back');
 			me.labelEl.update(me.label);
+
+			me.footerEl.removeCls('enroll');
 		}
 
 
@@ -212,6 +248,8 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 			} else {
 				me.labelEl.update(course.get('Title'));
 			}
+
+			me.footerEl.removeCls('enroll');
 		}
 
 		if (!me.rendered) {
@@ -231,15 +269,15 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 		var me = this;
 
 		function addView() {
-			me.courseAdmission = me.add({
+			me.courseEnrollment = me.add({
 				xtype: 'enrollment-credit',
 				course: course
 			});
 		}
 
-		if (!me.courseAdmission) {
+		if (!me.courseEnrollment) {
 			addView();
-		} else if (me.courseAdmission.course !== course) {
+		} else if (me.courseEnrollment.course !== course) {
 			addView();
 		}
 
@@ -247,6 +285,8 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 		function updateLabel() {
 			me.labelEl.addCls('back');
 			me.labelEl.update(course.get('Title'));
+
+			me.footerEl.addCls('enroll');
 		}
 
 		if (!me.rendered) {
@@ -255,7 +295,7 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 			updateLabel();
 		}
 
-		me.getLayout().setActiveItem(me.courseAdmission);
+		me.getLayout().setActiveItem(me.courseEnrollment);
 		me.closeMsg();
 	}
 });

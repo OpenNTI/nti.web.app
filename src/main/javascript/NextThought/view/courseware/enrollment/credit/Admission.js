@@ -170,7 +170,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					xtype: 'enrollment-credit-set',
 					label: 'Are you a highschool graduate?',
 					inputs: [
-						{type: 'radio-group', name: 'completed-highschool', required: true, options: [
+						{type: 'radio-group', name: 'high_school_graduate', required: true, options: [
 							{text: 'Yes.', value: 'Y'},
 							{text: 'No.', value: 'N'}
 						]}
@@ -245,9 +245,6 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 						{
 							type: 'description',
 							text: 'After your admission application is sent to OU and processed, we will proceed to enrolling in this course'
-						},
-						{
-							type: 'submit-button'
 						}
 					]
 				}
@@ -262,7 +259,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 		var me = this,
 			form = me.form.slice();
 
-		me.enableBubble('show-msg');
+		me.enableBubble(['show-msg', 'enable-submission']);
 
 		me.on({
 			'reveal-item': 'revealItem',
@@ -415,6 +412,11 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 			return;
 		}
 
+		if (name === 'enable-submit') {
+			me.fireEvent('enable-submission', false);
+		}
+
+
 		item = me.down('[name=' + name + ']');
 
 		if (item) {
@@ -442,6 +444,12 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 			});
 
 			return;
+		}
+
+		if (name === 'enable-submit') {
+			me.shouldAllowSubmission()
+				.then(me.fireEvent.bind(me, 'enable-submission', true))
+				.fail(me.fireEvent.bind(me, 'enable-submission', true));
 		}
 
 		item = me.down('[name="' + name + '"]');
@@ -484,70 +492,95 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 	},
 
 
+	showError: function(json) {
+		var input;
+
+		if (json.field) {
+			input = this.down('[name="' + json.field + '"]');
+
+			if (input && input.addError) {
+				input.addError();
+				input.el.scrollIntoView(this.el.up('.credit-container'));
+			}
+		}
+
+		if (json.message) {
+			this.fireEvent('show-msg', json.message.replace('${field}', json.field), true, 5000);
+		} else {
+			this.fireEvent('show-msg', 'An unkown error occured. Please try again later.', true, 5000);
+		}
+	},
+
+
+	shouldAllowSubmission: function(value) {
+		var me = this,
+			preflightlink = $AppConfig.userObject.getLink('fmaep.admission.preflight');
+
+		value = value || me.getValue();
+
+		return new Promise(function(fulfill, reject) {
+			if (!me.isValid()) {
+				me.fireEvent('show-msg', 'Please fill out all required information.', true, 5000);
+				reject();
+				return;
+			}
+
+			if (!preflightlink) {
+				console.error('No Preflight to validate the admission form, allowing submitt anyway');
+				fulfill();
+				return;
+			}
+
+			Service.post(preflightlink, value)
+				.then(function() {
+					fulfill();
+				})
+				.fail(function(response) {
+					var json = Ext.JSON.decode(response && response.responseText, true);
+
+					me.showError(json);
+					reject();
+				});
+		});
+	},
+
+
 	maybeSubmitApplication: function() {
-		var preflightlink = $AppConfig.userObject.getLink('fmaep.admission.preflight'),
-			submitlink = $AppConfig.userObject.getLink('fmaep.admission'),
+		var submitlink = $AppConfig.userObject.getLink('fmaep.admission'),
 			me = this,
 			value = me.getValue();
 
-		if (!me.isValid()) {
-			me.fireEvent('show-msg', 'Please fill out all required information.', true, 5000);
-			return;
-		}
-
-		if (!submitlink || !preflightlink) {
+		if (!submitlink) {
 			me.fireEvent('show-msg', 'An error occured, please try again later', true);
 			console.error('no admission links');
 			return;
 		}
 
-		function showError(json) {
-			var input;
-
-			if (json.field) {
-				input = me.down('[name="' + json.field + '"]');
-
-				if (input && input.addError) {
-					input.addError();
-					input.el.scrollIntoView(me.el.up('.credit-container'));
-				}
-			}
-
-			if (json.message) {
-				me.fireEvent('show-msg', json.message.replace('${field}', json.field), true, 5000);
-			} else {
-				me.fireEvent('show-msg', 'An unkown error occured. Please try again later.', true, 5000);
-			}
-		}
-
-		Service.post(preflightlink, value)
+		me.shouldAllowSubmission(value)
 			.then(function() {
-				Service.post(submitlink, value)
-					.then(function(response) {
-						var json = Ext.JSON.decode(response, true);
+				return Service.post(submitlink, value);
+			})
+			.then(function(response) {
+				var json = Ext.JSON.decode(response, true);
 
-						if (json.Status === 500) {
-							showError(json);
-						}
+				if (json.Status === 500) {
+					showError(json);
+				}
 
-						//if (json.status === 202) {
-						//	//do pending logic here
-						//}
+				//if (json.status === 202) {
+				//	//do pending logic here
+				//}
 
-						//if (json.status === 201) {
-						//	//do success logic here
-						//}
-					})
-					.fail(function(response) {
-						var json = Ext.JSON.decode(response && response.responseText, true);
-
-						showError(json);
-					});
+				//if (json.status === 201) {
+				//	//do success logic here
+				//}
 			})
 			.fail(function(response) {
-				var json = Ext.JSON.decode(response && response.responseText, true);
+				if (!response) { return; }
 
-				showError(json);
+				var json = Ext.JSon.decode(resposne.responseText, true);
+
+				me.showError(json);
 			});
 	}
 });

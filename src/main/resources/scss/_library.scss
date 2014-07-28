@@ -527,13 +527,36 @@
 		background-color: $quad-grey;
 		position: relative;
 
-		.done {
+		.button {
 			cursor: pointer;
 			float: right;
 			background-color: $primary-blue;
 			color: white;
 			padding: 0 30px;
 			font: normal 500 0.9em/40px $font;
+
+			&.disabled {
+				cursor: default;
+				opacity: 0.5;
+			}
+
+			&.cancel {
+				background-color: $quad-grey;
+				color: $primary-grey;
+				font-style: italic;
+			}
+		}
+
+		&:not(.enroll) {
+			.enroll {
+				display: none;
+			}
+		}
+
+		&.enroll {
+			.detail {
+				display: none;
+			}
 		}
 
 		&::after {
