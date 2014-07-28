@@ -15,45 +15,45 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 			{cls: 'line', cn: [
 				{cls: 'course-number', html: '{number}'},
 				{cls: 'title', html: '{title}'},
-				{cls: 'intsructor', html: 'instructed by {instructor}'},
+				{cls: 'instructor', html: 'instructed by {instructor}'},
 				{cls: 'enroll-now', html: '{price}'}
 			]},
 			{cls: 'line course-info', cn: [
-				{cls: 'field', cn: [
+				{cls: 'field long', cn: [
 					{cls: 'name', html: 'prerequisites'},
 					{tag: 'tpl', 'for': 'prereqs', cn: [
 						{cls: 'value', html: '{title}'}
 					]}
 				]},
-				{cls: 'field', cn: [
+				{cls: 'field medium green', cn: [
 					{cls: 'name', html: 'credit hours'},
 					{cls: 'value green', html: '{credit}'}
 				]}
 			]},
 			{cls: 'line course-info', cn: [
-				{cls: 'field', cn: [
+				{cls: 'field long', cn: [
 					{cls: 'name', html: '{number}'},
 					{cls: 'value', html: '{title}'}
 				]},
-				{cls: 'field', cn: [
+				{cls: 'field medium', cn: [
 					{cls: 'name', html: 'school'},
 					{cls: 'value', html: '{school}'}
 				]}
 			]},
 			{cls: 'line course-info', cn: [
-				{cls: 'field', cn: [
+				{cls: 'field fourth', cn: [
 					{cls: 'name', html: 'start date'},
 					{cls: 'value', html: '{start}'}
 				]},
-				{cls: 'field', cn: [
+				{cls: 'field fourth', cn: [
 					{cls: 'name', html: 'end date'},
 					{cls: 'value', html: '{end}'}
 				]},
-				{cls: 'field', cn: [
+				{cls: 'field fourth', cn: [
 					{cls: 'name', html: 'duration'},
 					{cls: 'value', html: '{duration}'}
 				]},
-				{cls: 'field', cn: [
+				{cls: 'field fourth', cn: [
 					{cls: 'name', html: 'course type'},
 					{cls: 'value', html: '{type}'}
 				]}
@@ -80,7 +80,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 		this.renderData = Ext.apply(this.renderData || {}, {
 			header: 'Your application has been accepted!',
 			text: 'Thank you for applying to earn credit online from the University of Oklahoma.',
-			available: 'Your admission credit is available for ',
+			available: 'Your admission credit is available for ' + c.getSemester() + '.',
 			confirm: 'Please take a moment to confirm your course selection before checking out.',
 			price: '$599',
 			number: c.get('ProviderUniqueID'),
@@ -88,9 +88,9 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 			instructor: instructor.get('Name'),
 			prereqs: c.get('Prerequisites'),
 			credit: credit.get('Hours') + ' credit hours available',
-			start: c.get('StartDate'),
-			end: c.get('EndDate'),
-			school: c.get('ProviderDepartmenTitle'),
+			start: Ext.Date.format(c.get('StartDate'), 'F j, Y'),
+			end: Ext.Date.format(c.get('EndDate'), 'F j, Y'),
+			school: c.get('ProviderDepartmentTitle'),
 			duration: duration.inWeeks() + ' Weeks',
 			type: 'Fully Online'
 		});
@@ -108,12 +108,13 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 			if (json.Message) {
 				me.fireEvent('show-msg', json.Message, true);
 			} else {
-				me.fireEvent('show-msg', 'An unkown error occured. Please try again later.');
+				me.fireEvent('show-msg', 'An unkown error occured. Please try again later.', true);
 			}
 		}
 
 		me.mon(me.enrollEl, 'click', function() {
 			var enrollLink = me.course.getLink('fmaep.enroll'),
+				payLink = me.course.getLink('fmaep.pay'),
 				crn = me.course.get('OU_CRN'),
 				term = me.course.get('OU_Term');
 
@@ -129,13 +130,17 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 				.then(function(response) {
 					var json = Ext.JSON.decode(response, true);
 
-					if (json.Status) {
-
+					if (json.Status === 201 || true) {
+						Service.post(payLink, {
+							CRN: crn,
+							term_code: term,
+							return_url: getURL('/app/#!library/availablecourses/' + me.course.getId() + '/paymentcomplete')
+						});
 					}
+
 					console.log(me);
 				})
-				.fail(function() {
-
+				.fail(function(response) {
 					console.log(me);
 				});
 		});

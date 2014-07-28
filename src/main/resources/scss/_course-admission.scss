@@ -546,3 +546,119 @@
 		}
 	}
 }
+
+.enroll-for-credit {
+	color: $primary-grey;
+	padding-right: 230px;
+	font: normal 400 1em/1 $font;
+
+	.main {
+		color: $secondary-green;
+		font-size: 1.5em;
+		line-height: 1.7em;
+		font-weight: 300;
+	}
+
+	.text {
+		margin: 8px 0;
+	}
+
+	.confirm {
+		margin: 40px 0 20px 0;
+	}
+
+	.info {
+		background-color: $panel-background;
+		border: 1px solid #efefef;
+
+		.line {
+			padding: 15px;
+
+			&:not(.course-info) {
+				position: relative;
+				background-color: white;
+			}
+
+			.course-number {
+				font-size: 0.75em;
+				font-weight: 600;
+				text-transform: uppercase;
+				color: $tertiary-grey;
+				margin-bottom: 5px;
+			}
+
+			.title {
+				font-size: 1.5em;
+				font-weight: 300;
+			}
+
+			.instructor {
+				font-size: 0.6em;
+				text-transform: uppercase;
+				font-weight: 600;
+				margin-top: 5px;
+				color: $primary-blue;
+			}
+
+			.enroll-now {
+				cursor: pointer;
+				position: absolute;
+				line-height: 40px;
+				color: white;
+				background-color: $secondary-green;
+				font-size: 1.2em;
+				right: 20px;
+				top: 24px;
+				padding: 0 10px;
+				border-radius: 5px;
+			}
+
+			&.course-info {
+				margin: 0 40px 0 20px;
+				border-bottom: 1px solid #efefef;
+				height: auto;
+				overflow: hidden;
+				padding-right: 0;
+			}
+
+			.name {
+				font-size: 0.6em;
+				font-weight: 600;
+				text-transform: uppercase;
+				color: $tertiary-grey;
+			}
+
+			.field {
+				float: left;
+
+				&.long {
+					width: 350px;
+					margin-right: 10px;
+				}
+
+				&.medium {
+					width: 240px;
+				}
+
+				&.fourth {
+					margin-right: 66px;
+
+					&:last-of-type {
+						margin-right: 0;
+					}
+				}
+
+				.value {
+					margin-top: 10px;
+					font-size: 0.9em;
+
+					&.green {
+						color: $secondary-green;
+						font-weight: 600;
+					}
+				}
+			}
+		}
+	}
+
+}
