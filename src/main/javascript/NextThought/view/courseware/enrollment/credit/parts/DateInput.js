@@ -31,6 +31,9 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.DateInput', {
 	},
 
 
+	setUpChangeMonitors: function() {},//ignore base class's event listener
+
+
 	isEmpty: function() {
 		return this.getValue();
 	},
@@ -62,6 +65,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.DateInput', {
 		}
 
 		value[this.name] = year.toString() + month.toString() + day.toString();
+		this.changed();//There is no good way to validate on input the date ...so lets just do it when we request the value.
 		return value;
 	}
 });
