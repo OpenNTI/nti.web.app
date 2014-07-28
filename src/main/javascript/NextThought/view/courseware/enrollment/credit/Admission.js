@@ -17,7 +17,9 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					label: 'Are you currently attending the University of Oklahoma?',
 					inputs: [
 						{type: 'radio-group', name: 'is_currently_attending_ou', correct: 'N', options: [
-							{text: 'Yes', value: 'Y', content: 'Please sign up for the course using your <a href=\'http://www.ozone.ou.edu\'>Ozone account</a>.'},
+							{text: 'Yes', value: 'Y', content: 'Please sign up for the course using your ' +
+															   Ext.DomHelper.markup({tag: 'a', href: 'http://www.ozone.ou.edu', target: '_blank', html: 'Ozone account'}) +
+															   '.'},
 							{text: 'No', value: 'N'}
 						]}
 					]
@@ -31,7 +33,11 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 							{
 								text: 'Yes',
 								value: 'Y',
-								content: 'Please apply using our <a href=\'http://www.ou.edu/content/go2/admissions/concurrent.html\'>Concurrent Enrollment Appliation</a>'
+								content: 'Please apply using our ' +
+										 Ext.DomHelper.markup({
+											 tag: 'a', href: 'http://www.ou.edu/content/go2/admissions/concurrent.html',
+											 target: '_blank', html: 'Concurrent Enrollment Appliation'}) +
+										 '.'
 							},
 							{text: 'No', value: 'N'}
 						]}
@@ -142,7 +148,9 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 							type: 'text',
 							name: 'social_security_number',
 							placeholder: 'XXX - XX - XXXX',
-							help: 'Your Social Security Number is not requred for admission, but it is used for submission of a 1098T to the IRS.'
+							help: 'Your Social Security Number is not requred for admission, but it is used for submission of a ' +
+								  Ext.DomHelper.markup({tag: 'a', target: '_blank', html: '1098T', href: 'http://www.irs.gov/uac/Form-1098-T,-Tuition-Statement'}) +
+								  ' to the IRS.'
 						}
 					]
 				},
