@@ -1209,7 +1209,7 @@
 								}
 							}
 						}
-						@include highlight-colors($selector:span,$nibselector: '& > span:last-child::after' );
+						@include highlight-colors($selector:'span > span',$nibselector: '& > span:last-child::after' );
 					}
 				}
 			}
