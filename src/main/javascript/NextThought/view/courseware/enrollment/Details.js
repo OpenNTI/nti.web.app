@@ -583,8 +583,6 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			me.fireEvent('enroll-for-credit', me.course);
 		}
 
-		//if we get here something wen't seriously wrong unmask so the ui isn't hosed
-		console.error('Umm wut, the button was clicked with not enrollment options....');
 		done();
 	}
 });

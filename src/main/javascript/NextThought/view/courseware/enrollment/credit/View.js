@@ -44,7 +44,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 		if (this.admissionState === 'Admitted') {
 			if (this.paymentcomplete) {
 				this.showPurchase();
-			} else if (this.course.getLink('enrolllink') || true) {
+			} else if (this.course.getLink('fmaep.enroll')) {
 				this.showEnroll();
 			}
 
