@@ -127,6 +127,15 @@ Ext.define('NextThought.view.content.reader.Location', {
 			finally {
 				if (!canceled) {
 					txn.commit();
+					onceReady.then(function() {
+						var l = me.reader.getLocation(),
+							s = me.reader.getScroll(),
+							p = l && l.requestedPageInfo;
+						l = p && p.getLinkFragment('content');
+						if (l) {
+							wait(500).then(s.toTarget.bind(s, l));
+						}
+					});
 				}
 			}
 
