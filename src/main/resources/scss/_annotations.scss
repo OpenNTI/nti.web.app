@@ -766,11 +766,11 @@
 		& + li.exercise {
 			&::before, &::after { z-index: 1; color: #076da7 }
 		}
-		&.highlight-mouse-over {
-			& + li.part, & + li.exercise {
-				&::before, &::after { color: #ffffff; }
-			}
-		}
+		// &.highlight-mouse-over {
+		// 	& + li.part, & + li.exercise {
+		// 		&::before, &::after { color: #ffffff; }
+		// 	}
+		// }
 		
 		&.plain {
 
@@ -793,12 +793,12 @@
 				}
 
 
-				&.highlight-mouse-over {
-					&,.math {
-						color: #ffffff;
-						background-color: $primary-blue;
-					}
-				}
+				// &.highlight-mouse-over {
+				// 	&,.math {
+				// 		color: #ffffff;
+				// 		background-color: $primary-blue;
+				// 	}
+				// }
 
 				.application-highlight.shared-with-me {
 					&,.math {
@@ -809,8 +809,8 @@
 
 			&.highlight-mouse-over{
 				&,a {
-					color: #ffffff;
-					background-color: $primary-blue;
+					// color: #ffffff;
+					// background-color: $primary-blue;
 					.application-highlight {
 						background-color: transparent;
 					}

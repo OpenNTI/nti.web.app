@@ -234,23 +234,27 @@
 @mixin highlight-colors($onParentSelector: true, $selector:'', $nibselector:null) {
 	@each $item in $highlight-colors {
 		$name: nth($item,1);
-		$color: nth($item,2);
-		$highlightcolor: scale-color($color,$lightness:75%);
+		$menu_color: nth($item,2);
+		$hover_color: nth($item,3);
+		$highlight_color: rgba($hover_color,.65);
+		
 		$prefix: if($onParentSelector,'&','');
 		#{$prefix}.#{$name} #{$selector} {
-			// color: $color;
-			background-color: $highlightcolor;
+			// color: $menu_color;
+			background-color: $highlight_color;
+			@include transition(all 0.2s);
 			&.highlight-mouse-over {
-				background-color: $color;
-				color: white;
+				background-color:$hover_color;
+				@include transition(all 0.2s);
+				@include box-shadow(0 0 4px rgba(0,0,0,.4));
 			}
 			@if($nibselector) {
 				#{$nibselector} {
-					border-top-color: $highlightcolor;
+					border-top-color: $highlight_color;
 				}
 			}
 		}
-	}	
+	}
 }
 
 @mixin hardware-accelerate() {

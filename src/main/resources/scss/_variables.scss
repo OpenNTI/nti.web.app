@@ -37,9 +37,10 @@ $annotations-menu-bg-color:rgba(#333,.95);
 $annotations-menu-bg:$annotations-menu-bg-color;
 
 $highlight-colors: (
-	('yellow',#EDE619),
-	('green',#4CE67F),
-	('blue',#3FB3F6)
+	// (name, menu color, hover) actual highlight will be computed from hover color.
+	('yellow',#EDE619,#F9F6AF),
+	('green',#4CE67F,#B7F5CC),
+	('blue',#3FB3F6,#CFECFD)
 );
 
 @import "common-mixins";
