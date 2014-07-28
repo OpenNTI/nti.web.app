@@ -37,6 +37,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 	initComponent: function() {
 		this.callParent(arguments);
 
+		this.enableBubble('show-detail');
+
 		this.admissionState = $AppConfig.userObject.get('admission_status');
 
 		if (this.admissionState === 'Admitted') {
@@ -78,6 +80,14 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 		} else {
 			updateHeader();
 		}
+
+		me.mon(me.admissions, 'admission-complete', function(success) {
+			if (success) {
+				me.showEnrollment();
+			} else {
+				me.fireEvent('show-detail', me.course);
+			}
+		});
 
 		me.getLayout().setActiveItem(me.admissions);
 	},

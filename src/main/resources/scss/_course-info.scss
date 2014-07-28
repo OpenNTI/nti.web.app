@@ -557,7 +557,7 @@
 				text-align: right;
 				font-weight: 600;
 				font-size: 0.85em;
-				color: #40b34f;
+				color: $secondary-green;
 				margin-bottom: 10px;
 			}
 
@@ -615,7 +615,7 @@
 			}
 
 			&.credit {
-				background-color: #40b34f;
+				background-color: $secondary-green;
 			}
 
 			&.drop {

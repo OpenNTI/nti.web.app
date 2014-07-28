@@ -102,7 +102,15 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 
 		me.on({
 			'show-msg': 'showMsg',
-			'enable-submission': 'enableSubmit'
+			'enable-submission': 'enableSubmit',
+			'show-detail': function(course) {
+				if (me.courseDetail && me.courseDetail.course === course) {
+					me.courseDetail.updateEnrollmentCard();
+					me.showPrevItem();
+				} else {
+					me.showCourse(course);
+				}
+			}
 		});
 	},
 
@@ -192,6 +200,17 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 
 			admission.maybeSubmitApplication();
 		}
+	},
+
+
+	admissionComplete: function() {
+		if (!this.courseDetail) {
+			console.error('No course detail to go back to');
+			return;
+		}
+
+		this.courseDetail.updateEnrollmentCard();
+		this.getLayout().setActiveItem(this.courseDetail);
 	},
 
 

@@ -611,7 +611,7 @@
 		left: 0; right: 0px;
 		font: normal 500 1em/2em $font;
 		padding: 0 25px;
-		background-color: $primary-green;
+		background-color: $secondary-green;
 		color: white;
 		z-index: 1;
 		@include experimental(transition, all 0.5s);

@@ -16,9 +16,9 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					xtype: 'enrollment-credit-set',
 					label: 'Are you currently attending the University of Oklahoma?',
 					inputs: [
-						{type: 'radio-group', name: 'attending', doNotSend: true, correct: 'false', options: [
-							{text: 'Yes', value: true, content: 'Please sign up for the course using your <a href=\'http://www.ozone.ou.edu\'>Ozone account</a>.'},
-							{text: 'No', value: false}
+						{type: 'radio-group', name: 'is_currently_attending_ou', correct: 'N', options: [
+							{text: 'Yes', value: 'Y', content: 'Please sign up for the course using your <a href=\'http://www.ozone.ou.edu\'>Ozone account</a>.'},
+							{text: 'No', value: 'N'}
 						]}
 					]
 				},
@@ -27,13 +27,13 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					label: 'Are you attending High School?',
 					name: 'attending-highschool',
 					inputs: [
-						{type: 'radio-group', name: 'highschool', doNotSend: true, correct: 'false', options: [
+						{type: 'radio-group', name: 'is_currently_attending_highschool', correct: 'N', options: [
 							{
 								text: 'Yes',
-								value: true,
+								value: 'Y',
 								content: 'Please apply using our <a href=\'http://www.ou.edu/content/go2/admissions/concurrent.html\'>Concurrent Enrollment Appliation</a>'
 							},
-							{text: 'No', value: false}
+							{text: 'No', value: 'N'}
 						]}
 					]
 				}
@@ -151,7 +151,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					label: 'Are you a U.S. Citizen?',
 					inputs: [
 						{type: 'radio-group', name: 'country_of_citizenship', required: true, options: [
-							{text: 'Yes', value: 'united states'},
+							{text: 'Yes', value: 'United States'},
 							{text: 'No. I am a citizen of {input}.', value: 'input'}
 						]}
 					]
@@ -315,7 +315,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 							}
 						],
 						help: [
-							{text: 'OU Enrollment Services', type: 'link', href: '#', target: '_blank'}
+							{text: 'OU Admissions Office', type: 'link', href: '#', target: '_blank'}
 						]
 					}
 				]
@@ -492,6 +492,47 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 	},
 
 
+	showRejection: function(json) {
+		this.removeAll(true);
+
+		var fields = this.form.slice();
+
+		fields.unshift({
+			name: 'rejected',
+			label: 'Application Rejected',
+			items: [
+				{
+					xtype: 'enrollment-credit-set',
+					inputs: [
+						{
+							type: 'description',
+							text: json.Message
+						}
+					]
+				},
+				{
+					xtype: 'enrollment-credit-set',
+					inputs: [
+						{
+							type: 'description',
+							text: [
+								'Your request to earn college credit has been denied',
+								'If you believe there has been an error,',
+								'please contact the OU Admissions Office or resubmit your application.'
+							].join(' ')
+						}
+					],
+					help: [
+						{text: 'OU Admissions Office', type: 'link', href: '#', target: '_blank'}
+					]
+				}
+			]
+		});
+
+		this.add(fields);
+	},
+
+
 	showError: function(json) {
 		var input;
 
@@ -564,16 +605,28 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 				var json = Ext.JSON.decode(response, true);
 
 				if (json.Status === 500) {
-					showError(json);
+					me.showError(json);
 				}
 
-				//if (json.status === 202) {
-				//	//do pending logic here
-				//}
+				if (json.Status === 403) {
+					$AppConfig.userObject.set('admission_status', 'Rejected');
+					me.showRejection(json);
+					return;
+				}
 
-				//if (json.status === 201) {
-				//	//do success logic here
-				//}
+				if (json.Status === 202) {
+					$AppConfig.userObject.set('admission_status', 'Pending');
+					me.showError(json);
+					me.fireEvent('admission-complete', false);
+					return;
+				}
+
+				if (json.Status === 201) {
+					$AppConfig.userObject.set('admission_status', 'Admitted');
+					me.fireEvent('show-msg', json.Message || 'Your application was successful', false, 5000);
+					me.fireEvent('admission-complete', true);
+					return;
+				}
 			})
 			.fail(function(response) {
 				if (!response) { return; }

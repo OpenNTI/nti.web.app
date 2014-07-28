@@ -93,7 +93,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.CheckboxGroup', 
 		}
 
 		(this.options || []).forEach(function(option) {
-			value[option.name] = selected && getOptionValue(option.name);
+			value[option.name] = selected ? getOptionValue(option.name) : 'N';
 		});
 
 		return value;
