@@ -2,7 +2,12 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Set', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.enrollment-credit-set',
 
+	require: [
+		 'NextThought.layout.container.None'
+	],
+
 	cls: 'admission-set',
+	layout: 'none',
 
 	requires: [
 		'NextThought.view.courseware.enrollment.credit.parts.Description',
