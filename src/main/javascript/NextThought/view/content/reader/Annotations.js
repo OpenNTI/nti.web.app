@@ -405,6 +405,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 					record.set('presentationProperties',{highlightColorName:hColor.name});
 					me.fireEvent('save-phantom', record, false);
 					me.clearSelection();
+					menu.close();
 				}
 			}
 		});
