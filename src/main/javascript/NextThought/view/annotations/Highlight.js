@@ -466,7 +466,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 	onClick: function(e) {
-		if (this.ownerCmp.getAnnotations().getSelection()) {
+		if (this.ownerCmp.getAnnotations().getSelection() || !this.isModifiable) {
 			return;
 		}
 
