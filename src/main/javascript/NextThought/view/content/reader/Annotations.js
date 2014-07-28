@@ -311,7 +311,6 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		try {
 			range = range || this.getSelection();
 			if (!range) {
-				console.error('No range!');
 				return null;
 			}
 			var me = this,
