@@ -3,8 +3,8 @@ PREVIOUS_STATE = 'previous-state';
 (function() {
 
 	var history = window.history,
-	push = (history.pushState || Ext.emptyFn),
-	replace = (history.replaceState || Ext.emptyFn);
+		push = (history.pushState || Ext.emptyFn),
+		replace = (history.replaceState || Ext.emptyFn);
 
 	function Transaction(transactionId, stateCtlr, parentTransaction) {
 		this.id = transactionId;
@@ -552,6 +552,22 @@ PREVIOUS_STATE = 'previous-state';
 				return;
 			}
 
+			function applyChanges(key, modState) {
+				return function() {
+					var o = me.currentState[key],
+						m = modState[key],
+						keys = Object.keys(o);
+
+					Ext.apply(o, m);
+
+					keys.forEach(function(key) {
+						if (!m.hasOwnProperty(key)) {
+							delete o[key];
+						}
+					});
+				};
+			}
+
 			me.restoringState = new Promise(function(fulfill, reject) {
 				//let the body of this function return so the promise is setup and ready for use
 				wait()
@@ -588,7 +604,8 @@ PREVIOUS_STATE = 'previous-state';
 										try {
 											stateScoped = Ext.clone(stateObject);
 											me.currentState[key] = stateObject[key];
-											tasks.push(c.restore(stateScoped));
+											tasks.push(c.restore(stateScoped)
+													.then(applyChanges(key, stateScoped)));
 										}
 										catch (e) {
 											console.error('Setting state: ', e, e.message, e.stack);
@@ -604,7 +621,7 @@ PREVIOUS_STATE = 'previous-state';
 							return Promise.all(tasks)
 								.always(function() {
 									if (replaceState) {
-										history.replaceState(me.currentState, 'Title');
+										replace.call(history, me.currentState);
 									}
 									me.restoringState = false;
 								});
