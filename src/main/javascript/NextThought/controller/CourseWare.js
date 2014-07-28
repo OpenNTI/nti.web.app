@@ -271,6 +271,17 @@ Ext.define('NextThought.controller.CourseWare', {
 	},
 
 
+	maybeShowEnroll: function(sender, ntiid) {
+		var course = CourseWareUtils.courseForNtiid(ntiid);
+
+		if (course) {
+			this.showEnrollmentWindow(course);
+		}
+
+		return !course;
+	},
+
+
 	showEnrollmentWindow: function(course, callback) {
 		var win = Ext.widget('library-available-courses-window', {
 			course: course
