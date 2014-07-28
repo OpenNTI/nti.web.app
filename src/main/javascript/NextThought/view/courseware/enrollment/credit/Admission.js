@@ -408,8 +408,7 @@
 								].join(' ')}
 							],
 							help: [
-								{text: 'Take the free course instead.', type: 'event', event: 'goto-free'},
-								{text: 'View the FAQ\'s', type: 'link', href: '#', target: '_blank'}
+								{text: 'Take the free course instead.', type: 'event', event: 'goto-free'}
 							]
 						}
 					]
