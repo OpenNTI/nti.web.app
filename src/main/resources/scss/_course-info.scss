@@ -523,13 +523,13 @@
 			}
 
 			&.enrolled {
-				padding-left: 35px;
-				@include icon('green_check', $top: 20px, $left: 10px);
+				padding-left: 40px;
+				@include icon('ico_enrollment_circhlecheck', $top: 20px, $left: 10px);
 			}
 		}
 
 		.top.enrolled + .bottom {
-			padding-left: 35px;
+			padding-left: 40px;
 		}
 
 		.bottom {
