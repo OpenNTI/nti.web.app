@@ -44,42 +44,13 @@ Ext.define('NextThought.view.form.fields.DateField', {
 
 		this.on('destroy', 'destroy', this.monthInput);
 
-		this.mon(this.dayEl, 'keydown', 'enforceNumber');
-		this.mon(this.yearEl, 'keydown', 'enforceNumber');
+		this.mon(this.dayEl, 'keydown', 'enforceNumber', DomUtils);
+		this.mon(this.yearEl, 'keydown', 'enforceNumber', DomUtils);
 
 		this.maybeChanged = Ext.Function.createBuffered(this.maybeChanged, 1, this);
 		this.mon(this.monthInput, 'select', 'maybeChanged');
 		this.mon(this.dayEl, 'keyup', 'maybeChanged');
 		this.mon(this.yearEl, 'keyup', 'maybeChanged');
-	},
-
-
-	enforceNumber: function(e) {
-		function between(key, lower, upper) {
-			return lower <= key && key <= upper;
-		}
-
-		var input = e.getTarget('input'),
-			maxLength = parseInt(input.getAttribute('size'), 10) || -1,
-			tooLong = (input.value || '').length + 1 > maxLength,
-			letter = e.getCharCode() || 13,
-			isArrow = between(letter, 37, 40),//left arrow, and down arrow
-			isNumber = between(letter, 48, 57) || between(letter, 95, 105),//numbers across the top and num pad
-			isAllowedCtrl = between(letter, 8, 9) || letter === 13, //backspace, tab, or enter
-			hasSelection = Math.abs(input.selectionStart - input.selectionEnd) !== 0,
-			ctrlPressed = e.ctrlKey; //ext maps the metaKey to ctrlKey
-
-		/*
-			if the character entered is
-				1.) pushing the size of the input value over the limit, there is a size limit, and the character is a number, and there is no selection
-			or	2.) not an arrow, number, or allowed control key
-			and 3.) the ctrl or meta key is not pressed
-			then stop the event and do not put the character in the input
-		 */
-		if (!ctrlPressed && ((maxLength >= 0 && tooLong && isNumber && !hasSelection) || !(isArrow || isNumber || isAllowedCtrl))) {
-			e.stopEvent();
-			return false;
-		}
 	},
 
 

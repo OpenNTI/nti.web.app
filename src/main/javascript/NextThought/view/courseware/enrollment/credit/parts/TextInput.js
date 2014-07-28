@@ -40,6 +40,10 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.TextInput', {
 			renderTo: this.inputEl
 		});
 
+		if (this.valuetype === 'numeric') {
+			this.mon(this.input.inputEl, 'keydown', 'enforceNumber', DomUtils);
+		}
+
 		this.on('destroy', 'destroy', this.input);
 
 		this.setUpChangeMonitors();
@@ -80,11 +84,15 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.TextInput', {
 		var value = {},
 			val = this.input.getValue();
 
+		if (this.valuetype === 'numeric') {
+			val = (val && val.replace(/[^0-9]/g, '')) || val;
+		}
+
 		if ((Ext.isEmpty(val) || !val) && !force) {
 			return value;
 		}
 
-		value[this.name] = this.input.getValue();
+		value[this.name] = val;
 
 		return value;
 	}

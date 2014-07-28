@@ -212,6 +212,7 @@
 							{
 								type: 'text',
 								name: 'social_security_number',
+								valuetype: 'numeric',
 								placeholder: 'XXX - XX - XXXX',
 								help: 'Your Social Security Number is not requred for admission, but it is used for submission of a ' +
 									  Ext.DomHelper.markup({tag: 'a', target: '_blank', html: '1098T', href: 'http://www.irs.gov/uac/Form-1098-T,-Tuition-Statement'}) +
