@@ -41,7 +41,7 @@ Ext.define('NextThought.model.User', {
 		{ name: 'role', type: 'string'},
 		{ name: 'location', type: 'string'},
 		{ name: 'home_page', type: 'string'},
-		{ name: 'admission_status', type: 'string', mapping: 'fmaep.admission.state', defaultValue: null, persist: false}
+		{ name: 'admission_status', type: 'string', mapping: 'fmaep_admission_state', defaultValue: null, persist: false}
 	],
 
 	isUser: true,

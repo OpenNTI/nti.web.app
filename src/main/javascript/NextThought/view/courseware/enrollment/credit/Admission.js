@@ -268,7 +268,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 			'add-address-line': 'addAddressLine'
 		});
 
-		if (me.status === 'pending') {
+		if (me.status === 'Pending') {
 			me.add([
 				{
 					name: 'pending',
@@ -297,7 +297,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 			return;
 		}
 
-		if (me.status === 'rejected') {
+		if (me.status === 'Rejected') {
 			form.unshift({
 				name: 'rejected',
 				label: 'Application Rejected',

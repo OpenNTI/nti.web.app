@@ -168,7 +168,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 		var me = this, catalogData,
 			credit = me.course.get('Credit');
 
-		me.admissionstate = $AppConfig.userObject.get('admissin_status');
+		me.admissionstate = $AppConfig.userObject.get('admission_status');
 
 		catalogData = {
 			StartDate: me.course.get('StartDate'),
@@ -423,9 +423,9 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 						state.bottom = me.getState('bottom', 'credit_enrolled', {
 							date: enrollcutoff
 						});
-					} else if (courseData.AdmissionState === 'pending') {
+					} else if (courseData.AdmissionState === 'Pending') {
 						state.bottom = me.getState('bottom', 'admission_pending');
-					} else if (courseData.AdmissionState === 'rejected') {
+					} else if (courseData.AdmissionState === 'Rejected') {
 						state.bottom = me.getState('bottom', 'admission_reject');
 					} else {
 						//TODO fill this out from the course
@@ -483,7 +483,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 			if (href === 'welcome') {
 				e.stopEvent();
-				this.fireEvent('show-permanent-welcome-guide', {
+				me.fireEvent('show-permanent-welcome-guide', {
 					link: $AppConfig.userObject.getLink('content.permanent_welcome_page')
 				});
 
@@ -492,9 +492,15 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 			if (href === 'profile') {
 				e.stopEvent();
-				this.fireEvent('show-profile', $AppConfig.userObject, ['about']);
-				this.up('library-available-courses-window').close();
-				return;
+				me.fireEvent('show-profile', $AppConfig.userObject, ['about']);
+				me.up('library-available-courses-window').close();
+				return false;
+			}
+
+			if (href === 'resubmit') {
+				e.stopEvent();
+				me.fireEvent('enroll-for-credit', me.course);
+				return false;
 			}
 		}
 
