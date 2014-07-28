@@ -178,7 +178,7 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 	 * @param  {Node} option the li to select
 	 */
 	selectOption: function(option) {
-		this.currentText = option.innerText;
+		this.currentText = option.textContent;
 		this.currentValue = option.getAttribute('data-value');
 
 		this.inputEl.dom.value = this.currentText;
