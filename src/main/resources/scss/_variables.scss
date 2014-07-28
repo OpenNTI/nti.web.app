@@ -36,9 +36,9 @@ $annotations-menu-bg-color:rgba(#333,.95);
 $annotations-menu-bg:$annotations-menu-bg-color;
 
 $highlight-colors: (
-	'yellow':#EDE619,
-	'green':#4CE67F,
-	'blue':#3FB3F6
+	('yellow',#EDE619),
+	('green',#4CE67F),
+	('blue',#3FB3F6)
 );
 
 @import "common-mixins";

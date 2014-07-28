@@ -232,7 +232,9 @@
 }
 
 @mixin highlight-colors($onParentSelector: true, $selector:'', $nibselector:null) {
-	@each $name, $color in $highlight-colors {
+	@each $item in $highlight-colors {
+		$name: nth($item,1);
+		$color: nth($item,2);
 		$highlightcolor: scale-color($color,$lightness:75%);
 		$prefix: if($onParentSelector,'&','');
 		#{$prefix}.#{$name} #{$selector} {
