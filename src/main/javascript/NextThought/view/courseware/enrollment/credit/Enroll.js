@@ -120,6 +120,16 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 				crn: crn,
 				term_code: term,
 				return_url: returnURL
+			}).then(function(response) {
+				var json = Ext.JSON.decode(response, true);
+
+				if (json.href) {
+					window.location.href = json.href;
+				} else {
+					console.error('No href to redirect to', response);
+				}
+			}).fail(function(response) {
+				console.error('payment post failed', response);
 			});
 		}
 
