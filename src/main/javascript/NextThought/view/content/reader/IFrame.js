@@ -248,11 +248,6 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 			Ext.menu.Manager.hideAll();
 		});
 
-		on(doc, 'contextmenu', function(e) {
-			Ext.EventObject.setEvent(e || event).stopEvent();
-			return false;
-		});
-
 		on(doc, 'click', function(e) {
 			var evt = Ext.EventObject.setEvent(e || event),
 				target = evt.getTarget(),
