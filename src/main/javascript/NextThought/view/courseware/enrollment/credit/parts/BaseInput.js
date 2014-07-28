@@ -29,7 +29,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.BaseInput', {
 
 
 	changed: function() {
-		var me = this;
+		var me = this,
 			parent = me.up('[changed]');
 
 		this.removeError();
