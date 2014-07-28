@@ -603,6 +603,7 @@
 			});
 
 			this.add(fields);
+			this.fillInNations();
 		},
 
 
@@ -659,9 +660,10 @@
 		},
 
 
-		maybeSubmitApplication: function() {
+		maybeSubmit: function() {
 			var submitlink = $AppConfig.userObject.getLink('fmaep.admission'),
 				me = this,
+				maskCmp = this.up('enrollment-credit'),
 				value = me.getValue();
 
 			if (!submitlink) {
@@ -672,11 +674,15 @@
 
 			me.shouldAllowSubmission(value)
 				.then(function() {
+					me.fireEvent('enable-submission', false);
+					maskCmp.el.mask('Loading...');
+
 					return Service.post(submitlink, value);
 				})
 				.then(function(response) {
 					var json = Ext.JSON.decode(response, true);
 
+					maskCmp.el.unmask();
 					if (json.Status === 500) {
 						me.showError(json);
 					}
@@ -684,6 +690,7 @@
 					if (json.Status === 403) {
 						$AppConfig.userObject.set('admission_status', 'Rejected');
 						me.showRejection(json);
+						me.fireEvent('enable-submission', true);
 						return;
 					}
 

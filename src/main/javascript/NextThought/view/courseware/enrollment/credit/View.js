@@ -37,14 +37,14 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.enableBubble('show-detail');
+		this.enableBubble('show-detail', 'set-window-btns');
 
 		this.admissionState = $AppConfig.userObject.get('admission_status');
 
 		if (this.admissionState === 'Admitted') {
 			if (this.paymentcomplete) {
 				this.showPurchase();
-			} else if (this.course.getLink('fmaep.enroll')) {
+			} else {
 				this.showEnroll();
 			}
 
@@ -90,6 +90,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 			}
 		});
 
+		me.fireEvent('set-window-btns', 'admission');
 		me.getLayout().setActiveItem(me.admissions);
 	},
 
@@ -121,6 +122,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 			updateHeader();
 		}
 
+		me.fireEvent('set-window-btns', 'enroll');
 		me.getLayout().setActiveItem(me.enrollment);
 	},
 
@@ -151,6 +153,17 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 			updateHeader();
 		}
 
+		me.fireEvent('set-window-btns', 'payconfirm');
 		me.getLayout().setActiveItem(me.purchase);
+	},
+
+
+	maybeSubmitApplication: function() {
+		this.admissions.maybeSubmit();
+	},
+
+
+	maybeSubmitEnrollment: function() {
+		this.enrollment.maybeSubmit();
 	}
 });

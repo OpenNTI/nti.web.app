@@ -75,6 +75,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 			credit = c.get('Credit')[0],
 			instructor = c.get('Instructors')[0];
 
+		this.enableBubble('show-msg');
+
 		duration = new Duration(duration);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
@@ -97,52 +99,48 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 	},
 
 
-	afterRender: function() {
-		this.callParent(arguments);
+	showError: function(json) {
+		if (json.Message) {
+			this.fireEvent('show-msg', json.Message, true);
+		} else {
+			this.fireEvent('show-msg', 'An unkown error occured. Please try again later.', true);
+		}
+	},
 
-		var me = this;
+	maybeSubmit: function() {
+		var me = this,
+			enrollLink = me.course.getLink('fmaep.enroll'),
+			payLink = me.course.getLink('fmaep.pay'),
+			crn = me.course.get('OU_CRN'),
+			term = me.course.get('OU_Term'),
+			returnURL = me.course.buildPaymentReturnURL();
 
-		me.enableBubble('show-msg');
-
-		function showError(json) {
-			if (json.Message) {
-				me.fireEvent('show-msg', json.Message, true);
-			} else {
-				me.fireEvent('show-msg', 'An unkown error occured. Please try again later.', true);
-			}
+		function pay() {
+			Service.post(payLink, {
+				crn: crn,
+				term_code: term,
+				return_url: returnURL
+			});
 		}
 
-		me.mon(me.enrollEl, 'click', function() {
-			var enrollLink = me.course.getLink('fmaep.enroll'),
-				payLink = me.course.getLink('fmaep.pay'),
-				crn = me.course.get('OU_CRN'),
-				term = me.course.get('OU_Term');
+		if (!payLink) {
+			console.error('No pay link');
+			return;
+		}
 
-			if (!enrollLink) {
-				console.error('No Enrollment link');
-				return;
-			}
+		if (!enrollLink) {
+			pay();
+		}
 
-			Service.post(enrollLink, {
-				crn: crn,
-				term_code: term
-			})
-				.then(function(response) {
-					var json = Ext.JSON.decode(response, true);
+		Service.post(enrollLink, {
+			crn: crn,
+			term_code: term
+		}).then(function(response) {
+			var json = Ext.JSON.decode(response, true);
 
-					if (json.Status === 201 || true) {
-						Service.post(payLink, {
-							crn: crn,
-							term_code: term,
-							return_url: me.course.buildPaymentReturnURL()
-						});
-					}
+			if (json.Status === 201) { pay(); }
 
-					console.log(me);
-				})
-				.fail(function(response) {
-					console.log(me);
-				});
+			//TODO: Handle Error cases
 		});
 	}
 });

@@ -547,13 +547,25 @@
 			}
 		}
 
+		&:not(.admission) {
+			.admission {
+				display: none;
+			}
+		}
+
 		&:not(.enroll) {
 			.enroll {
 				display: none;
 			}
 		}
 
-		&.enroll {
+		&:not(.payconfirm) {
+			.payconfirm {
+				display: none;
+			}
+		}
+
+		&.enroll, &.admission, &.payment {
 			.detail {
 				display: none;
 			}
