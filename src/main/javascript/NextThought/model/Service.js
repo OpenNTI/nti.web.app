@@ -53,6 +53,16 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
+	postAndExit: function(url, data) {
+		var id = guidGenerator(),
+			tpl = new Ext.XTemplate(
+				Ext.DomHelper.markup({tag: 'form', id: id, action: url, method: 'POST', cn: {
+					tag: 'tpl', foreach: '.', cn: {tag: 'input', type: 'hidden', name: '{$}', value: '{.}'}}}));
+
+		tpl.append(Ext.getBody(), data).submit();
+	},
+
+
 	put: function(url, data) {
 		return this.request({
 			url: url,
@@ -94,10 +104,10 @@ Ext.define('NextThought.model.Service', {
 	},
 
 	getHighlightColors: function() {
-		return	[
-			{name:'yellow',color:'EDE619'},
-			{name:'green',color:'4CE67F'},
-			{name:'blue',color:'3FB3F6'}
+		return [
+			{name: 'yellow', color: 'EDE619'},
+			{name: 'green', color: '4CE67F'},
+			{name: 'blue', color: '3FB3F6'}
 		];
 	},
 
