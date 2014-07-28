@@ -134,7 +134,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 						Service.post(payLink, {
 							crn: crn,
 							term_code: term,
-							return_url: me.course.buildPaymentURL()
+							return_url: me.course.buildPaymentReturnURL()
 						});
 					}
 
