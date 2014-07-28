@@ -570,7 +570,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 						me.showMessage('You have successfully enrolled in ' + me.course.get('Title') + '. Click here to go to the content.');
 					} else {
-						me.showMessage('There was an error enrolling, please try again later.', true);
+						me.showMessage('There was an error enrolling. Please try again later.', true);
 					}
 
 					done(success, change);
