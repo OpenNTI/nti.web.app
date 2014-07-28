@@ -83,7 +83,7 @@
 						inputs: [
 							{type: 'radio-group', name: 'is_currently_attending_ou', correct: 'N', options: [
 								{text: 'Yes', value: 'Y', content: 'Please sign up for the course using your ' +
-																   Ext.DomHelper.markup({tag: 'a', href: 'http://www.ozone.ou.edu', target: '_blank', html: 'Ozone account'}) +
+																   Ext.DomHelper.markup({tag: 'a', href: 'http://ozone.ou.edu', target: '_blank', html: 'Ozone account'}) +
 																   '.'},
 								{text: 'No', value: 'N'}
 							]}
