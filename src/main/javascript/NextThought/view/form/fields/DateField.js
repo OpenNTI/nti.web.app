@@ -55,7 +55,7 @@ Ext.define('NextThought.view.form.fields.DateField', {
 		}
 
 		var input = e.getTarget('input'),
-			maxLength = parseInt(input.getAttribute('size')) || -1,
+			maxLength = parseInt(input.getAttribute('size'), 10) || -1,
 			tooLong = (input.value || '').length + 1 > maxLength,
 			letter = e.getCharCode() || 13,
 			isArrow = between(letter, 37, 40),//left arrow, and down arrow
@@ -78,11 +78,22 @@ Ext.define('NextThought.view.form.fields.DateField', {
 	},
 
 
+	isEmpty: function() {
+		return Ext.isEmpty(this.yearEl.getValue() +
+						   this.dayEl.getValue() +
+						   this.monthInput.getValue());
+	},
+
+
 	getValue: function() {
 		var year = parseInt(this.yearEl.getValue(), 10),
 			day = parseInt(this.dayEl.getValue(), 10),
 			month = parseInt(this.monthInput.getValue(), 10) - 1,
 			value = new Date(year, month, day);
+
+		if (day !== value.getDate() || month !== value.getMonth() || year !== value.getFullYear()) {
+			value = null;
+		}
 
 		return value;
 	}
