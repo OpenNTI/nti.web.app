@@ -46,6 +46,11 @@ Ext.define('NextThought.view.form.fields.DateField', {
 
 		this.mon(this.dayEl, 'keydown', 'enforceNumber');
 		this.mon(this.yearEl, 'keydown', 'enforceNumber');
+
+		this.maybeChanged = Ext.Function.createBuffered(this.maybeChanged, 1, this);
+		this.mon(this.monthInput, 'select', 'maybeChanged');
+		this.mon(this.dayEl, 'keyup', 'maybeChanged');
+		this.mon(this.yearEl, 'keyup', 'maybeChanged');
 	},
 
 
@@ -82,6 +87,25 @@ Ext.define('NextThought.view.form.fields.DateField', {
 		return Ext.isEmpty(this.yearEl.getValue() +
 						   this.dayEl.getValue() +
 						   this.monthInput.getValue());
+	},
+
+
+	isFullyAnswered: function() {
+		var q = this.hasBeenAnswered || (!Ext.isEmpty(this.yearEl.getValue()) &&
+										 !Ext.isEmpty(this.dayEl.getValue()) &&
+										 !Ext.isEmpty(this.monthInput.getValue()));
+
+		this.hasBeenAnswered = q;
+		return q;
+	},
+
+
+	maybeChanged: function onChange() {
+		var last = onChange.lastValue,
+			current = this.getValue();
+		if (last !== current && this.isFullyAnswered()) {
+			this.fireEvent('changed', current, last);
+		}
 	},
 
 

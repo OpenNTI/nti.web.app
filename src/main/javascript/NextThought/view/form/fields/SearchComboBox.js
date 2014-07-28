@@ -182,6 +182,7 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 		this.currentValue = option.getAttribute('data-value');
 
 		this.inputEl.dom.value = this.currentText;
+		this.fireEvent('select', this.currentValue);
 	},
 
 

@@ -28,14 +28,16 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.DateInput', {
 		me.mon(scrollParent, 'scroll', function() {
 			me.dateInput.monthInput.hideOptions();
 		});
+
+		me.mon(me.dateInput, 'changed', 'changed');
 	},
 
 
-	setUpChangeMonitors: function() {},//ignore base class's event listener
+	setUpChangeMonitors: function() {},//Uh...not rendered yet.
 
 
 	isEmpty: function() {
-		return this.getValue();
+		return this.dateInput.isEmpty();
 	},
 
 
@@ -49,23 +51,40 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.DateInput', {
 	},
 
 
+	isValid: function() {
+		var c = this.isCorrect();
+
+		if (!c) {
+			this.addError();
+		}
+
+		return c;
+	},
+
+
+	isCorrect: function() {
+		return !this.rendered || (this.isEmpty() || !!this.getValue()[this.name]);
+	},
+
 	getValue: function() {
 		var value = {},
 			date = this.dateInput.getValue(),
-			year = date.getFullYear(),
-			day = date.getDate(),
-			month = date.getMonth() + 1;
+			year = date && date.getFullYear(),
+			day = date && date.getDate(),
+			month = date && date.getMonth() + 1;
 
-		if (day < 10) {
-			day = '0' + day;
+		if (date) {
+			if (day < 10) {
+				day = '0' + day;
+			}
+
+			if (month < 10) {
+				month = '0' + month;
+			}
+
+			value[this.name] = year.toString() + month.toString() + day.toString();
 		}
 
-		if (month < 10) {
-			month = '0' + month;
-		}
-
-		value[this.name] = year.toString() + month.toString() + day.toString();
-		this.changed();//There is no good way to validate on input the date ...so lets just do it when we request the value.
 		return value;
 	}
 });
