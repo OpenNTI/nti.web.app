@@ -226,7 +226,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			not_enrolled: {
 				title: 'Enroll for Free',
 				information: [
-					'Get complete access to interact with all course content including lectures,',
+					'Get complete access to interact with all course content, including lectures,',
 					'course materials, quizzes, and discussions once class is in session.'
 				].join(' '),
 				cls: ''
