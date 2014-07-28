@@ -2,6 +2,10 @@ PREVIOUS_STATE = 'previous-state';
 
 (function() {
 
+	var history = window.history,
+	push = (history.pushState || Ext.emptyFn),
+	replace = (history.replaceState || Ext.emptyFn);
+
 	function Transaction(transactionId, stateCtlr, parentTransaction) {
 		this.id = transactionId;
 		this.ctlr = stateCtlr;
@@ -185,9 +189,6 @@ PREVIOUS_STATE = 'previous-state';
 		//<editor-fold desc="History API Hooks">
 		onSessionReady: function() {
 			var me = this,
-				history = window.history,
-				push = (history.pushState || Ext.emptyFn),
-				replace = (history.replaceState || Ext.emptyFn),
 				SEVEN_DAYS = 604800000,
 				p = me.getStateKey() + 'non-history-state-',
 				provider = Ext.supports.LocalStorage ?
@@ -496,6 +497,26 @@ PREVIOUS_STATE = 'previous-state';
 			console.debug('Fragment interpreted:', result);
 			return result;
 		},
+
+
+		interpretQueryParams: function(search) {
+			var state = Ext.Object.fromQueryString(search, true),
+				a = document.createElement('a');
+
+			if (!state || !state.hasOwnProperty('active')) {
+				state = {};
+			}
+
+			a.href = location.toString();
+
+			a.search = '';
+
+			//lets cleanup our search string too, shall we? (but do NOT clobber the fragment!)
+			replace.call(history, document.title, history.state,
+					a.href.replace('?', ''));//the search blank out does not remove the delimiter... clean that up too
+
+			return state;
+		},
 		//</editor-fold>
 
 
@@ -653,6 +674,11 @@ PREVIOUS_STATE = 'previous-state';
 				if (location.hash) {
 					Ext.Object.merge(result, this.interpretFragment(location.hash));
 				}
+
+				if (location.search) {
+					Ext.Object.merge(result, this.interpretQueryParams(location.search));
+				}
+
 				return result;
 			}
 			catch (e) {
