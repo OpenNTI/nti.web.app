@@ -46,21 +46,19 @@ Ext.define('NextThought.model.PageInfo', {
 			return this.getId();
 		}
 
-		var l = ContentUtils.getLineage(this);
+		var l = (ContentUtils.getLocation(this) || {}).location;
 
-		function isRoot(i) {
-			var l = ContentUtils.getLocation(i);
-			l = l && l.location;
+		function isRoot(l) {
 			l = l && l.getAttribute('href');
 			l = l && l.split('#')[1];
 			return !l;
 		}
 
-		while (!isRoot(l[0]) && l.length) {
-			l.shift();
+		while (l && !isRoot(l)) {
+			l = l.parentNode;
 		}
 
-		return l[0];
+		return l && l.getAttribute('ntiid');
 	},
 
 
