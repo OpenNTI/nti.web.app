@@ -74,6 +74,8 @@
 		height: auto;
 		overflow: hidden;
 		margin-bottom: 40px;
+		margin-left: -5px;
+		padding-left: 5px;
 
 		.label {
 			color: $primary-grey;
@@ -90,6 +92,7 @@
 		.body-container {
 			width: 675px;
 			float: left;
+			padding-bottom: 2px;
 		}
 
 		.help-container {
@@ -246,13 +249,7 @@
 			overflow: hidden;
 			height: auto;
 
-			&::before {
-				content: '';
-				position: absolute;
-				top: 0; bottom: 0;
-				left: 0; right: 0;
-				border: 1px solid $primary-red;
-			}
+			box-shadow: 0 0 0px 1px $primary-red;
 		}
 
 		.credit-input {
