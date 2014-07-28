@@ -40,20 +40,29 @@ Ext.define('NextThought.view.library.Panel', {
 
 
 	restore: function(state) {
-		if (!state.activeWindow) { return; }
+		var me = this;
 
-		var isBook = state.activeWindow === 'books';
-
-		if (this.rendered) {
-			if (this.activeWindow) {
-				this.activeWindow.close();
-			}
-
-			this.showAvailable(isBook);
-		} else {
-			this.restoreWindow = isBook ? 'books' : 'courses';
+		if (!state.activeWindow && !(state.paymentcomplete === 'true')) {
+			return Promise.resolve();
 		}
+
+		return me.onceRendered
+			.then(function() {
+				var isBook = state.activeWindow === 'books';
+
+				if (me.activeWindow) {
+					me.activeWindow.close();
+				}
+
+				if (state.paymentcomplete === 'true') {
+					me.showAvailable();
+					return me.activeWindow.restore(state);
+				}
+
+				me.showAvailable(isBook);
+			});
 	},
+
 
 	initComponent: function() {
 		this.callParent(arguments);
@@ -88,8 +97,8 @@ Ext.define('NextThought.view.library.Panel', {
 			me.activeWindow.close();
 		}
 
-		if (this.restoreWindow) {
-			me.setAvailable(this.restoreWindow === 'books');
+		if (me.restoreState) {
+			me.restore(me.restoreState);
 		}
 
 		me.on('beforedeactivate', function() {

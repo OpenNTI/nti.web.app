@@ -162,19 +162,3 @@ Ext.application({
 if (location.toString().indexOf('index.html') > 0) {
 	location.replace(location.toString().replace('index.html', ''));
 }
-//BAD: we need the fragments on init...
-//else if (location.toString().indexOf('#') > 0 && location.hash === '') {
-//	location.replace(location.toString().split(/[#\?]/)[0]);
-//}
-else if (location.search && history.replaceState) {
-	(function() {
-		var a = document.createElement('a');
-		a.href = location.toString();
-
-		a.search = '';
-
-		//lets cleanup our search string too, shall we? (but do NOT clobber the fragment!)
-		history.replaceState(document.title, history.state,
-				a.href.replace('?', ''));//the search blank out does not remove the delimiter... clean that up too
-	}());
-}

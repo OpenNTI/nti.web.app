@@ -132,9 +132,9 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 
 					if (json.Status === 201 || true) {
 						Service.post(payLink, {
-							CRN: crn,
+							crn: crn,
 							term_code: term,
-							return_url: getURL('/app/#!library/availablecourses/' + me.course.getId() + '/paymentcomplete')
+							return_url: me.course.buildPaymentURL()
 						});
 					}
 

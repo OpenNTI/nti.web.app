@@ -543,10 +543,14 @@ Ext.define('NextThought.controller.CourseWare', {
 		 */
 		courseForNtiid: function(ntiid) {
 			function fn(rec) {
-				var match = false;
-				rec.get('ContentPackages').every(function(id) {
-					match = (prefix && prefix === ParseUtils.ntiidPrefix(id));
-				});
+				var match = rec.getId() === ntiid;
+
+				if (!match) {
+					rec.get('ContentPackages').every(function(id) {
+						match = (prefix && prefix === ParseUtils.ntiidPrefix(id));
+					});
+				}
+
 				return match;
 			}
 

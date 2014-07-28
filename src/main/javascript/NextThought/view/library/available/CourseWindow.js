@@ -59,6 +59,25 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 	},
 
 
+	restore: function(state) {
+		var me = this;
+
+		return new Promise(function(fulfill) {
+			var course = CourseWareUtils.courseForNtiid(state.cce);
+
+			if (!course) {
+				console.error('No course to restore state to');
+			} else {
+				delete state.paymentcomplete;
+				delete state.cce;
+				me.showAdmission(course, true);
+			}
+
+			fulfill();
+		});
+	},
+
+
 	initComponent: function() {
 		this.callParent(arguments);
 
@@ -284,13 +303,14 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 	},
 
 
-	showAdmission: function(course) {
+	showAdmission: function(course, paymentcomplete) {
 		var me = this;
 
 		function addView() {
 			me.courseEnrollment = me.add({
 				xtype: 'enrollment-credit',
-				course: course
+				course: course,
+				paymentcomplete: paymentcomplete
 			});
 		}
 

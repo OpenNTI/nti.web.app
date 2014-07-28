@@ -127,5 +127,24 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 			s = getString('months')[month + 1];
 
 		return s;
+	},
+
+
+	buildPaymentReturnURL: function() {
+		var id = this.get('NTIID'),
+			params = {
+				active: 'library',
+				library: {
+					paymentcomplete: true,
+					cce: id
+				}
+			},
+			query = Ext.Object.toQueryString(params, true),
+			a = document.createElement('a');
+
+		a.setAttribute('href', './');
+		a.search = query;
+
+		return a.href;
 	}
 });

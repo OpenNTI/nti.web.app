@@ -41,12 +41,13 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 
 		this.admissionState = $AppConfig.userObject.get('admission_status');
 
-		if (this.admissionState === 'Admitted' || true) {
-			if (this.course.getLink('enrolllink') || true) {
-				this.showEnroll();
-			} else {
+		if (this.admissionState === 'Admitted') {
+			if (this.paymentcomplete) {
 				this.showPurchase();
+			} else if (this.course.getLink('enrolllink') || true) {
+				this.showEnroll();
 			}
+
 			return;
 		}
 

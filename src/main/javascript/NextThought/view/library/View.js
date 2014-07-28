@@ -37,13 +37,9 @@ Ext.define('NextThought.view.library.View', {
 	restore: function(state) {
 		var panel = this.getPanel();
 
-		return new Promise(function(fulfill, reject) {
-			if (state.active === 'library') {
-				panel.restore(state.library);
-			}
-
-			fulfill();
-		});
+		return state.active === 'library' ?
+				panel.restore(state.library) :
+				Promise.resolve();
 	},
 
 
