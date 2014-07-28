@@ -45,7 +45,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.DateInput', {
 
 
 	removeError: function() {
-		this.addCls('error');
+		this.removeCls('error');
 	},
 
 
