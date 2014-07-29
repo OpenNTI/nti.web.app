@@ -315,6 +315,9 @@ span.nti-radiobutton {
 		border: 1px solid $border-grey;
 		background: #ffffff;
 	}
+	input.date-field-input {
+		border-left-width: 0;
+	}
 
 	.day {
 		width: 60px;
