@@ -318,7 +318,7 @@
 						inputs: [
 							{
 								type: 'description',
-								text: 'After your admission application is sent to OU and processed, we will proceed to enrolling in this course'
+								text: 'After your admission application is sent to OU and processed, we will proceed to enrolling in this course.'
 							}
 						]
 					}
@@ -709,7 +709,7 @@
 					if (json.Status === 201) {
 						me.course.setEnrollmentLinks(json.Links);
 						$AppConfig.userObject.set('admission_status', 'Admitted');
-						me.fireEvent('show-msg', json.Message || 'Your application was successful', false, 5000);
+						me.fireEvent('show-msg', json.Message || 'Your application was successful.', false, 5000);
 						me.fireEvent('admission-complete', true);
 						return;
 					}
