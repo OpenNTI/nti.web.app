@@ -692,6 +692,7 @@
 
 					if (json.Status === 403) {
 						$AppConfig.userObject.set('admission_status', 'Rejected');
+						me.showError(json);
 						me.showRejection(json);
 						me.fireEvent('enable-submission', true);
 						return;
@@ -718,9 +719,17 @@
 				.fail(function(response) {
 					if (!response) { return; }
 
-					var json = Ext.JSon.decode(resposne.responseText, true);
+					var json = Ext.JSON.decode(response.responseText, true);
 
 					maskCmp.el.unmask();
+
+					if (json.Status === 403) {
+						$AppConfig.userObject.set('admission_status', 'Rejected');
+						me.showError(json);
+						me.showRejection(json);
+						me.fireEvent('enable-submission', true);
+						return;
+					}
 
 					me.showError(json);
 
