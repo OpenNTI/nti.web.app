@@ -580,10 +580,13 @@ Ext.define('NextThought.view.content.View', {
 						if (!ntiid) {
 							return reject('No NTIID');
 						}
-						me.fireEvent('set-last-location-or-root', ntiid, function(ntiid, reader, error) {
-							if (error) { return reject(error); }
-							fulfill(me);
-						});
+
+						if (!bundle.isCourse) {
+							me.fireEvent('set-last-location-or-root', ntiid, function(ntiid, reader, error) {
+								if (error) { return reject(error); }
+								fulfill(me);
+							});
+						}
 					});
 
 
