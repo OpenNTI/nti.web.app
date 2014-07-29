@@ -104,10 +104,10 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 
 
 	showError: function(json) {
-		if (json.Message) {
-			this.fireEvent('show-msg', json.Message, true);
+		if (json && json.Message) {
+			this.fireEvent('show-msg', json.Message, true, 500);
 		} else {
-			this.fireEvent('show-msg', 'An unkown error occured. Please try again later.', true);
+			this.fireEvent('show-msg', 'An unkown error occured. Please try again later.', true, 5000);
 		}
 	},
 
@@ -139,6 +139,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 
 		if (!payLink) {
 			console.error('No pay link');
+			me.showError();
 			return;
 		}
 
@@ -152,9 +153,17 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 		}).then(function(response) {
 			var json = Ext.JSON.decode(response, true);
 
-			if (json.Status === 201) { pay(); }
+			if (json.Status === 201) {
+				pay();
+			} else {
+				me.showError(json);
+			}
+		}).fail(function(response) {
+			var json = Ext.JSON.decode(response, true);
 
-			//TODO: Handle Error cases
+			console.error('Enroll request failed: ' + response);
+
+			me.showError(json);
 		});
 	}
 });

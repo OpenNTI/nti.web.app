@@ -624,8 +624,8 @@
 				}
 			}
 
-			if (json.message) {
-				this.fireEvent('show-msg', json.message.replace('${field}', json.field), true, 5000);
+			if (json.Message || json.message) {
+				this.fireEvent('show-msg', (json.Message || json.message).replace('${field}', json.field), true, 5000);
 			} else {
 				this.fireEvent('show-msg', 'An unkown error occured. Please try again later.', true, 5000);
 			}
@@ -688,9 +688,7 @@
 					var json = Ext.JSON.decode(response, true);
 
 					maskCmp.el.unmask();
-					if (json.Status === 500) {
-						me.showError(json);
-					}
+
 
 					if (json.Status === 403) {
 						$AppConfig.userObject.set('admission_status', 'Rejected');
@@ -713,6 +711,9 @@
 						me.fireEvent('admission-complete', true);
 						return;
 					}
+
+					me.showError(json);
+					me.fireEvent('enable-submission', true);
 				})
 				.fail(function(response) {
 					if (!response) { return; }
