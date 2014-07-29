@@ -403,9 +403,9 @@
 							xtype: 'enrollment-credit-set',
 							inputs: [
 								{type: 'description', text: [
-									'Before you can start to earn college credit from the University of Oklahoma,',
+									'Before you can earn college credit from the University of Oklahoma,',
 									'we need you to answer some questions.',
-									'Don\'t worry, the admission process is totally free and should only take a few minutes.'
+									'Don\'t worry, the admission process is free and should only take a few minutes.'
 								].join(' ')}
 							],
 							help: [
