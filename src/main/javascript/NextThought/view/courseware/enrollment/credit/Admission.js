@@ -750,11 +750,11 @@
 					me.fireEvent('enable-submission', true);
 				})
 				.fail(function(response) {
+					maskCmp.el.unmask();
+
 					if (!response) { return; }
 
 					var json = Ext.JSON.decode(response.responseText, true);
-
-					maskCmp.el.unmask();
 
 					if (json.Status === 403) {
 						$AppConfig.userObject.set('admission_status', 'Rejected');
