@@ -146,7 +146,7 @@
 							{type: 'radio-group', name: 'gender', required: true, omitIfBlank: true, options: [
 								{text: 'Male', value: 'M'},
 								{text: 'Female', value: 'F'},
-								{text: 'I\'d rather not say...', value: null}
+								{text: 'Prefer not to disclose', value: null}
 							]}
 						]
 					},
