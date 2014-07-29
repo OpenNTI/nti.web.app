@@ -598,7 +598,6 @@
 			}
 
 			.enroll-now {
-				cursor: pointer;
 				position: absolute;
 				line-height: 40px;
 				color: white;
@@ -658,4 +657,43 @@
 		}
 	}
 
+}
+
+.enrollment-credit-purchase {
+	padding-right: 235px;
+	color: $primary-grey;
+	font: normal 300 1em/1 $font;
+
+	.title {
+		font-size: 1.5em;
+		color: $secondary-green;
+		margin-bottom: 10px;
+
+		@include icon('assignment_ontime_small', $left: -35px);
+	}
+
+	.things-to-do {
+		margin-bottom: 30px;
+		.prompt {
+			margin-bottom: 30px;
+		}
+	}
+
+	a {
+		display: block;
+		text-decoration: none;
+		color: $primary-blue;
+		margin: 10px 0;
+		font-size: 0.9em;
+	}
+
+	.support-text {
+		font-size: 0.9em;
+		font-weight: 400;
+		line-height: 40px;
+	}
+
+	.phone {
+		font-size: 0.9em;
+	}
 }

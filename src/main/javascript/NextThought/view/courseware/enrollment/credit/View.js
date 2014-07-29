@@ -5,7 +5,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 	requires: [
 		'NextThought.view.courseware.enrollment.credit.Admission',
 		'NextThought.view.courseware.enrollment.credit.Enroll',
-		'NextThought.view.courseware.enrollment.credit.Purchase'
+		'NextThought.view.courseware.enrollment.credit.PurchaseComplete'
 	],
 
 	layout: 'card',
@@ -22,7 +22,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 			{cls: 'enabled', html: 'Course Details'},
 			{cls: 'number enabled active admission', 'data-number': '1', html: 'Admissions'},
 			{cls: 'number enrollment', 'data-number': '2', html: 'Enrollment'},
-			{cls: 'number purchase', 'data-number': '3', html: 'Purchase'}
+			{cls: 'number purchase', 'data-number': '3', html: 'Purchase'},
+			{cls: 'number confirmation', 'data-number': '4', html: 'Confirmation'}
 		]},
 		{ id: '{id}-body', cls: 'body-container credit-container', cn: ['{%this.renderContainer(out,values)%}'] }
 	]),
@@ -30,7 +31,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 	renderSelectors: {
 		admissionEl: '.header .admission',
 		enrollEl: '.header .enrollment',
-		purchaseEl: '.header .purchase'
+		purchaseEl: '.header .purchase',
+		confirmationEl: '.header .confirmation'
 	},
 
 
@@ -43,7 +45,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 
 		if (this.admissionState === 'Admitted') {
 			if (this.paymentcomplete) {
-				this.showPurchase();
+				this.showPurchaseComplete();
 			} else {
 				this.showEnroll();
 			}
@@ -127,11 +129,11 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 	},
 
 
-	showPurchase: function() {
+	showPurchaseComplete: function() {
 		var me = this;
 
 		me.purchase = me.add({
-			xtype: 'enrollment-credit-purchase',
+			xtype: 'enrollment-credit-purchase-complete',
 			course: me.course
 		});
 
@@ -144,7 +146,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 
 			me.admissionEl.addCls('enabled');
 			me.enrollEl.addCls('enabled');
-			me.purchaseEl.addCls('active');
+			me.purchaseEl.addCls('enabled');
+			me.confirmationEl.addCls('active');
 		}
 
 		if (!me.rendered) {
