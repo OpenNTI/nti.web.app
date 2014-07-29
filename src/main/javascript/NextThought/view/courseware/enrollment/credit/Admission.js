@@ -389,7 +389,7 @@
 								}
 							],
 							help: [
-								{text: 'OU Admissions Office', type: 'link', href: '#', target: '_blank'}
+								{text: 'OU Admissions Office', type: 'link', href: 'http://www.ou.edu/admissions.html', target: '_blank'}
 							]
 						}
 					]
