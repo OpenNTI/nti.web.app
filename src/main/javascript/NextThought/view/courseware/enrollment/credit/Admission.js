@@ -125,7 +125,7 @@
 					},
 					{
 						xtype: 'enrollment-credit-set',
-						label: 'What is your former name?',
+						label: 'What is your former name? (optional)',
 						inputs: [
 							{type: 'text', name: 'former-first-name', placeholder: 'First Name', size: 'third left'},
 							{type: 'text', name: 'former-middle-name', placeholder: 'Middle Name', size: 'third left'},
@@ -207,7 +207,7 @@
 					},
 					{
 						xtype: 'enrollment-credit-set',
-						label: 'Social Security Number',
+						label: 'Social Security Number (optional)',
 						inputs: [
 							{
 								type: 'text',
