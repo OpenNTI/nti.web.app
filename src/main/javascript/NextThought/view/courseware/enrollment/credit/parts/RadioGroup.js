@@ -164,7 +164,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 		}
 
 		if (inputContainer && inputContainer.is('.dropdown')) {
-			val = this.dropdown.getValue();
+			val = this.dropdown.getValue() || '';
 		} else if (input) {
 			val = input.dom.value;
 		} else {
