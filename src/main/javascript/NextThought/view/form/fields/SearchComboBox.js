@@ -48,7 +48,8 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 			'keydown': 'inputKeyDown',
 			'keyup': 'inputKeyPress',
 			'blur': 'inputBlur',
-			'focus': 'inputFocus'
+			'focus': 'inputFocus',
+			'click': 'showOptions'
 		});
 
 		this.mon(Ext.getBody(), 'click', 'bodyClick');
@@ -206,14 +207,26 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 			return;
 		}
 
+		if (!this.optionsEl.hasCls('hidden')) {
+			if (charCode === e.ESC) {
+				e.stopEvent();
+				this.hideOptions();
+				return;
+			}
+		}
+
 		//down select the next sibling if there is one
 		if (charCode === e.DOWN) {
-			next = current.dom.nextSibling;
+			if (!this.optionsEl.hasCls('hidden')) {
+				next = current.dom.nextSibling || current.dom.parentNode.firstChild;
+			} else {
+				this.showOptions();
+			}
 		}
 
 		//up select the previous sibling if there is one
 		if (charCode === e.UP) {
-			next = current.dom.previousSibling;
+			next = current.dom.previousSibling || current.dom.parentNode.lastChild;
 		}
 
 		if (charCode === e.TAB || charCode === e.RIGHT) {
@@ -222,7 +235,7 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 
 		//if enter select the current active li
 		if (charCode === e.ENTER) {
-			if (!e.shiftKey) {
+			if (!e.shiftKey && !this.optionsEl.hasCls('hidden')) {
 				this.selectOption(current.dom);
 			}
 			this.hideOptions();
@@ -242,6 +255,7 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 	IGNORE_KEY_CODES: {
 		'9': true, //TAB
 		'13': true, //ENTER/RETURN
+		'27': true, //ESC
 		'38': true, //UP
 		'40': true //TRUE
 	},
@@ -251,36 +265,30 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 
 		if (!this.IGNORE_KEY_CODES[e.getCharCode()]) {
 			//filter the options and show the options menu unless we are from an enter
-			this.filterOptions(value, e.getCharCode() !== e.ENTER);
+			this.filterOptions(value, true);
 		}
 	},
 
 
 	inputBlur: function() {
-		var me = this;
+		var value = this.inputEl.getValue() || '',
+			currentText = this.currentText || '',
+			isEmpty = Ext.isEmpty(value),
+			isValid = value.toLowerCase() === currentText.toLowerCase();
 
-		wait()
-			.then(function() {
-				var value = me.inputEl.getValue() || '',
-					currentText = me.currentText || '',
-					isEmpty = Ext.isEmpty(value),
-					isValid = value.toLowerCase() === currentText.toLowerCase();
+		//if its not empty and the value is not a valid option
+		if (!isEmpty && !isValid) {
+			this.inputEl.addCls('error');
+		}
 
-				//if its not empty and the value is not a valid option
-				if (!isEmpty && !isValid) {
-					me.inputEl.addCls('error');
-				}
-				me.hideOptions();
-			});
+		this.__hideOptionsTimer = setTimeout(this.hideOptions.bind(this), 300);
 	},
 
 
 	inputFocus: function() {
 		this.inputEl.removeCls('error');
-
-		//var value = this.inputEl.getValue();
-
-		this.filterOptions('', true);
+		this.filterOptions('');
+		clearTimeout(this.__hideOptionsTimer);
 	},
 
 
