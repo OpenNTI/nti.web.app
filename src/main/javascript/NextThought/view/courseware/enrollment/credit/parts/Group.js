@@ -7,7 +7,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Group', {
 	cls: 'admission-group',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'label', html: '{label}'},
+		{cls: 'label {labelCls}', html: '{label}'},
 		{ id: '{id}-body', cls: 'body-container',
 			cn: ['{%this.renderContainer(out,values)%}'] }
 	]),
@@ -24,7 +24,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Group', {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
-			label: this.label
+			label: this.label,
+			labelCls: this.labelCls
 		});
 
 		this.changed();

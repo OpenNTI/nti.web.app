@@ -67,6 +67,10 @@
 		.label {
 			font: normal 300 1.7em/2em $font;
 			color: $tertiary-grey;
+
+			&.error {
+				color: $primary-red;
+			}
 		}
 	}
 

@@ -375,6 +375,7 @@
 				form.unshift({
 					name: 'rejected',
 					label: 'Application Rejected',
+					labelCls: 'error',
 					items: [
 						{
 							xtype: 'enrollment-credit-set',
@@ -577,7 +578,8 @@
 
 			fields.unshift({
 				name: 'rejected',
-				label: 'Application Rejected',
+				label: 'Your Application to Earn College Credit has been Rejected',
+				labelCls: 'error',
 				items: [
 					{
 						xtype: 'enrollment-credit-set',
@@ -609,6 +611,35 @@
 
 			this.add(fields);
 			this.fillInNations();
+		},
+
+
+		showPending: function(json) {
+			this.removeAll(true);
+
+			this.add({
+				name: 'rejected',
+				label: 'Your Application to Earn College Credit is Pending',
+				labelCls: 'error',
+				items: [
+					{
+						xtype: 'enrollment-credit-set',
+						inputs: [
+							{
+								type: 'description',
+								text: json.Message || [
+									'Your application for admission is being processed by OU.',
+									'To check on the process you can contact the OU Admissions Office.',
+									'Once you are admitted comeback here to enroll in ' + this.course.get('Title')
+								].join(' ')
+							}
+						],
+						help: [
+							{text: 'OU Admissions Office', type: 'link', href: '#', target: '_blank'}
+						]
+					}
+				]
+			});
 		},
 
 
@@ -700,8 +731,10 @@
 
 					if (json.Status === 202) {
 						$AppConfig.userObject.set('admission_status', 'Pending');
-						me.showError(json);
-						me.fireEvent('admission-complete', false);
+						me.showError({
+							Message: 'Your application is pending.'
+						});
+						me.showPending(json);
 						return;
 					}
 
