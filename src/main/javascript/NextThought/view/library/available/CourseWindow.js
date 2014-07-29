@@ -303,7 +303,7 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 				me.labelEl.update(course.get('Title'));
 			}
 
-			me.footerEl.removeCls('enroll');
+			me.footerEl.removeCls(['enroll', 'admission']);
 		}
 
 		if (!me.rendered) {

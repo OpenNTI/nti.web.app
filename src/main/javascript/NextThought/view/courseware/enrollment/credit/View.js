@@ -39,21 +39,35 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.enableBubble('show-detail', 'set-window-btns');
+		var me = this;
 
-		this.admissionState = $AppConfig.userObject.get('admission_status');
+		me.enableBubble('show-detail', 'set-window-btns');
 
-		if (this.admissionState === 'Admitted') {
-			if (this.paymentcomplete) {
-				this.maybeShowPurchaseComplete();
+		me.admissionState = $AppConfig.userObject.get('admission_status');
+
+		me.on('activate', function() {
+			var buttonCls;
+
+			if (me.enrollment) {
+				buttonCls = 'enroll';
+			} else if (me.admissions) {
+				buttonCls = 'admission';
+			}
+
+			me.fireEvent('set-window-btns', buttonCls);
+		});
+
+		if (me.admissionState === 'Admitted') {
+			if (me.paymentcomplete) {
+				me.maybeShowPurchaseComplete();
 			} else {
-				this.showEnroll();
+				me.showEnroll();
 			}
 
 			return;
 		}
 
-		this.showAdmission();
+		me.showAdmission();
 	},
 
 
