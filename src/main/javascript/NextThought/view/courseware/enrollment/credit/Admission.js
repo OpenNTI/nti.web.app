@@ -288,7 +288,7 @@
 								'or withholding information about my previous academic history will make my application for admission to the University,',
 								'as well as any future applications, subject to denial, or will result in expulsion from the University.',
 								'I pledge to conduct myself with academic integrity and abide by the tenets of',
-								'The University of Oklahoma\'s Integrity Pledge'
+								'The University of Oklahoma\'s Integrity Pledge.'
 							].join(' '), correct: true}
 						],
 						help: [
