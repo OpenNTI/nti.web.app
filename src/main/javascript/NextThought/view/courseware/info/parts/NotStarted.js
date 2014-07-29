@@ -42,7 +42,7 @@ Ext.define('NextThought.view.courseware.info.parts.NotStarted', {
 			enrollUrl: e.url,
 			registered: /open/i.test(this.enrollmentStatus) ?
 					getString('course-info.description-widget.open-enrolled') :
-					getString('course-info.description-widget.for-no-credit')
+					getString('course-info.description-widget.enrolled')
 		});
 
 		el = this.headerTpl.insertFirst('course-info', data, true);
