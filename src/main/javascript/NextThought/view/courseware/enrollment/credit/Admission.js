@@ -226,7 +226,7 @@
 						inputs: [
 							{type: 'radio-group', name: 'country_of_citizenship', required: true, options: [
 								{text: 'Yes', value: 'United States'},
-								{text: 'No. I am a citizen of {input}.', value: 'input'}
+								{text: 'No. I am a citizen of {input}.', value: 'dropdown', options: []}
 							]}
 						]
 					},
@@ -428,7 +428,8 @@
 				.then(function(response) {
 					var nations = Ext.JSON.decode(response, true),
 						nationInput = me.down('[name=nation_code]'),
-						mailingNationInput = me.down('[name=mailing_nation_code]');
+						mailingNationInput = me.down('[name=mailing_nation_code]'),
+						citizenshipInput = me.down('[name=country_of_citizenship]');
 
 					function updateInputs() {
 						if (nationInput) {
@@ -437,6 +438,10 @@
 
 						if (mailingNationInput) {
 							mailingNationInput.addOptions(nations);
+						}
+
+						if (citizenshipInput) {
+							citizenshipInput.addOptions(nations);
 						}
 					}
 

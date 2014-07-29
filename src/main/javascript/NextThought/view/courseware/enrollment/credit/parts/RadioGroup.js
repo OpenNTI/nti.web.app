@@ -20,10 +20,12 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 	beforeRender: function() {
 		this.callParent(arguments);
 
-		var name = this.name;
+		var me = this,
+			name = me.name;
 
-		(this.options || []).forEach(function(option) {
-			var width = (option.inputWidth && (option.inputWidth + 'px')) || 'auto';
+		(me.options || []).forEach(function(option) {
+			var width = (option.inputWidth && option.inputWidth) + 'px' || 'auto';
+
 			option.name = name;
 			if (option.value === 'input') {
 				option.cls = 'input';
@@ -32,17 +34,28 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 					cn: {tag: 'input', type: 'text', style: {width: width}}
 				}));
 			}
+
+			if (option.value === 'dropdown') {
+				option.cls = 'input';
+				me.dropdownOption = option;
+				option.text = option.text.replace('{input}', Ext.DomHelper.markup({
+					cls: 'input-container dropdown'
+				}));
+			}
 		});
 
-		this.renderData = Ext.apply(this.renderData || {}, {
-			options: this.options
+		me.renderData = Ext.apply(me.renderData || {}, {
+			options: me.options
 		});
 	},
 
 
 	afterRender: function() {
 		this.callParent(arguments);
-		var me = this;
+
+		var me = this,
+			dropdownContainer,
+			option = this.dropdownOption;
 
 		function stop(e) {
 			e.stopEvent();
@@ -55,6 +68,26 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 		this.el.query('label input').forEach(function(n) {
 			me.mon(Ext.get(n), 'click', stop);
 		});
+
+
+		if (option) {
+			dropdownContainer = this.el.down('.input-container.dropdown');
+
+			this.dropdown = Ext.widget('searchcombobox', {
+				options: this.dropdownoptions || option.options,
+				emptyText: option.placeholder,
+				renderTo: dropdownContainer
+			});
+		}
+	},
+
+
+	addOptions: function(options) {
+		if (this.dropdown) {
+			this.dropdown.addOptions(options);
+		}
+
+		this.dropdownoptions = options;
 	},
 
 
@@ -119,7 +152,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 		if (!this.el || (!force && this.doNotSend)) { return; }
 
 		var active = this.el.down('input[type=radio]:checked'),
-			label, input, value = {},
+			label, input, inputContainer, value = {},
 			val;
 
 		if (!active) { return; }
@@ -128,9 +161,12 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 
 		if (label) {
 			input = label.down('input[type=text]');
+			inputContainer = label.down('.input-container');
 		}
 
-		if (input) {
+		if (inputContainer && inputContainer.is('.dropdown')) {
+			val = this.dropdown.getValue();
+		} else if (input) {
 			val = input.dom.value;
 		} else {
 			val = active.dom.value;

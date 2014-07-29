@@ -258,6 +258,7 @@
 			color: $primary-grey;
 			margin: 2px 0;
 			float: left;
+			min-height: 40px;
 
 			&.full {
 				width: 675px;
@@ -286,6 +287,10 @@
 				.input-container {
 					display: inline-block;
 					position: relative;
+
+					&.dropdown {
+						width: 300px;
+					}
 
 					&.disabled::after {
 						content: '';
