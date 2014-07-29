@@ -255,7 +255,7 @@
 						label: 'Have you ever attended the University of Oklahoma?',
 						inputs: [
 							{type: 'radio-group', name: 'sooner_id', required: true, omitIfBlank: true, valType: 'number', options: [
-								{text: 'Yes, and my Sooner ID was {input}.', value: 'input'},
+								{text: 'Yes, and my Sooner ID was {input}', value: 'input'},
 								{text: 'No.', value: ''}
 							]}
 						]
