@@ -168,7 +168,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 				me.showError(json);
 			}
 		}).fail(function(response) {
-			var json = Ext.JSON.decode(response, true);
+			var json = Ext.JSON.decode((response && response.responseText) || response, true);
 
 			console.error('Enroll request failed: ' + response);
 			maskCmp.el.unmask();
