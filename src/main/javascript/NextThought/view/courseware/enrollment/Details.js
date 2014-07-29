@@ -278,7 +278,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			not_enrolled: {
 				title: 'Earn College Credit',
 				information: 'Earn transcripted college credit from the University of Oklahoma.',
-				warning: 'Not available until {date}.',
+				warning: 'Not available after {date}.',
 				cls: 'checkbox'
 			},
 			admission_pending: {

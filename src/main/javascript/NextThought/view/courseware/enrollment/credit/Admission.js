@@ -101,7 +101,7 @@
 									content: 'Please apply using our ' +
 											 Ext.DomHelper.markup({
 												 tag: 'a', href: 'http://www.ou.edu/content/go2/admissions/concurrent.html',
-												 target: '_blank', html: 'Concurrent Enrollment Appliation'}) +
+												 target: '_blank', html: 'Concurrent Enrollment Application'}) +
 											 '.'
 								},
 								{text: 'No', value: 'N'}
@@ -226,7 +226,7 @@
 						inputs: [
 							{type: 'radio-group', name: 'country_of_citizenship', required: true, options: [
 								{text: 'Yes', value: 'United States'},
-								{text: 'No. I am a citizen of {input}.', value: 'dropdown', options: []}
+								{text: 'No. I am a citizen of {input}', value: 'dropdown', options: []}
 							]}
 						]
 					},
@@ -235,7 +235,7 @@
 						label: 'Are you a resident of Oklahoma?',
 						inputs: [
 							{type: 'radio-group', name: 'years_of_oklahoma_residency', valType: 'number', required: true, options: [
-								{text: 'Yes. I\'ve been a resident for {input} years', value: 'input', inputWidth: 48},
+								{text: 'Yes. I\'ve been a resident for {input} years.', value: 'input', inputWidth: 48},
 								{text: 'No.', value: 0}
 							]}
 						]
