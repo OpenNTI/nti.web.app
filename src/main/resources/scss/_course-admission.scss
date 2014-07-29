@@ -435,6 +435,9 @@
 			&.date-input {
 				input:focus {
 					border-color: $primary-blue;
+					box-shadow: -1px 0 0 0 $primary-blue;
+					position: relative;
+					z-index: 1;
 				}
 			}
 
