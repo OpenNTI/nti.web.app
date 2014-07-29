@@ -702,6 +702,7 @@
 					}
 
 					if (json.Status === 201) {
+						me.course.setEnrollmentLinks(json.Links);
 						$AppConfig.userObject.set('admission_status', 'Admitted');
 						me.fireEvent('show-msg', json.Message || 'Your application was successful', false, 5000);
 						me.fireEvent('admission-complete', true);

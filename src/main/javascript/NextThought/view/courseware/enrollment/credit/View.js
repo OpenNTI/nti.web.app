@@ -45,7 +45,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 
 		if (this.admissionState === 'Admitted') {
 			if (this.paymentcomplete) {
-				this.showPurchaseComplete();
+				this.maybeShowPurchaseComplete();
 			} else {
 				this.showEnroll();
 			}
@@ -97,12 +97,13 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 	},
 
 
-	showEnroll: function() {
+	showEnroll: function(paymentfail) {
 		var me = this;
 
 		me.enrollment = me.add({
 			xtype: 'enrollment-credit-enroll',
-			course: me.course
+			course: me.course,
+			paymentfail: paymentfail
 		});
 
 
@@ -159,6 +160,41 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 		me.fireEvent('set-window-btns', 'payconfirm');
 		me.getLayout().setActiveItem(me.purchase);
 	},
+
+
+	maybeShowPurchaseComplete: function() {
+		var me = this,
+			link = me.course.getLink('fmaep.is.pay.done'),
+			crn = me.course.get('OU_CRN'),
+			term = me.course.get('OU_Term');
+
+		if (!link) {
+			console.error('No is pay done link');
+			this.showEnroll();
+		}
+
+		Service.post(link, {
+			crn: crn,
+			term_code: term
+		}).then(function(response) {
+			var json = Ext.JSON.decode(response, true);
+
+			if (json.Status !== 200) {
+				console.error('Error resolving is pay done', json);
+			} else {
+				if (json.State) {
+					me.showPurchaseComplete();
+				} else {
+					me.showEnroll(true);
+				}
+
+			}
+		}).fail(function(reason) {
+			console.error('Error with is pay done', reason);
+		});
+
+	},
+
 
 
 	maybeSubmitApplication: function() {

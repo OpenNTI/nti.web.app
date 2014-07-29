@@ -80,8 +80,12 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 		duration = new Duration(duration);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
-			header: 'Your application has been accepted!',
-			text: 'Thank you for applying to earn credit online from the University of Oklahoma.',
+			header: this.paymentfail ?
+				'There were some troubles with your payment.' :
+				'Your application has been accepted!',
+			text: this.paymentfail ?
+				'Thank you for applying to earn credit online from the University of Oklahoma.' :
+				'Please try again, you will gain access to the content once the payment is successful',
 			available: 'Your admission credit is available for ' + c.getSemester() + '.',
 			confirm: 'Please take a moment to confirm your course selection before checking out.',
 			price: '$599',
@@ -109,8 +113,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 
 	maybeSubmit: function() {
 		var me = this,
-			enrollLink = me.course.getLink('fmaep.enroll'),
-			payLink = me.course.getLink('fmaep.pay'),
+			enrollLink = me.course.getEnrollForCreditLink(),
+			payLink = me.course.getPaymentLink(),
 			crn = me.course.get('OU_CRN'),
 			term = me.course.get('OU_Term'),
 			returnURL = me.course.buildPaymentReturnURL();

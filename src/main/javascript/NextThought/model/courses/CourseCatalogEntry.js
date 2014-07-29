@@ -130,6 +130,29 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	},
 
 
+	setEnrollmentLinks: function(links) {
+		var me = this;
+
+		(links || []).forEach(function(link) {
+			if (link.rel === 'fmaep.pay') {
+				me.creditpaylink = link.href;
+			} else if (link.rel === 'fmaep.enroll') {
+				me.creditenrolllink = link.href;
+			}
+		});
+	},
+
+
+	getEnrollForCreditLink: function() {
+		return this.creditenrolllink || this.getLink('fmaep.enroll');
+	},
+
+
+	getPaymentLink: function() {
+		return this.creditpaylink || this.getLink('fmaep.pay');
+	},
+
+
 	buildPaymentReturnURL: function() {
 		var id = this.get('NTIID'),
 			params = {
