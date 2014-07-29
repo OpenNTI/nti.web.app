@@ -172,7 +172,7 @@
 					{
 						xtype: 'enrollment-credit-set',
 						inputs: [
-							{type: 'checkbox', text: 'My mailing address is different', name: 'has_mailing_address', reveals: 'mailing-address', correct: true}
+							{type: 'checkbox', text: 'My mailing address is different.', name: 'has_mailing_address', reveals: 'mailing-address', correct: true}
 						]
 					},
 					{
