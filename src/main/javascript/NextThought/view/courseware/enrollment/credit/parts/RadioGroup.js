@@ -24,7 +24,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 			name = me.name;
 
 		(me.options || []).forEach(function(option) {
-			var width = (option.inputWidth && option.inputWidth) + 'px' || 'auto';
+			var width = (option.inputWidth && (option.inputWidth + 'px')) || 'auto';
 
 			option.name = name;
 			if (option.value === 'input') {
@@ -39,7 +39,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 				option.cls = 'input';
 				me.dropdownOption = option;
 				option.text = option.text.replace('{input}', Ext.DomHelper.markup({
-					cls: 'input-container dropdown'
+					cls: 'input-container dropdown disabled'
 				}));
 			}
 		});
@@ -55,7 +55,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 
 		var me = this,
 			dropdownContainer,
-			option = this.dropdownOption;
+			option = me.dropdownOption;
 
 		function stop(e) {
 			e.stopEvent();
@@ -65,20 +65,19 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 			}
 		}
 
-		this.el.query('label input').forEach(function(n) {
-			me.mon(Ext.get(n), 'click', stop);
-		});
-
-
 		if (option) {
-			dropdownContainer = this.el.down('.input-container.dropdown');
+			dropdownContainer = me.el.down('.input-container.dropdown');
 
-			this.dropdown = Ext.widget('searchcombobox', {
-				options: this.dropdownoptions || option.options,
+			me.dropdown = Ext.widget('searchcombobox', {
+				options: me.dropdownoptions || option.options,
 				emptyText: option.placeholder,
 				renderTo: dropdownContainer
 			});
 		}
+
+		me.el.query('label input').forEach(function(n) {
+			me.mon(Ext.get(n), 'click', stop);
+		});
 	},
 
 
