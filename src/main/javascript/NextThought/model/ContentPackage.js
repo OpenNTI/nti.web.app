@@ -109,6 +109,8 @@ Ext.define('NextThought.model.ContentPackage', {
 		var me = this;
 		me.getImgAsset('landing').then(function(url) { me.set('icon', url); });
 		me.getImgAsset('thumb').then(function(url) { me.set('thumb', url); });
-	}
+	},
 
+
+	represents: function(catalogEntry) {return false;}
 });

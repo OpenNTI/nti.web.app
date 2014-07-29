@@ -146,6 +146,8 @@ Ext.define('NextThought.controller.Reader', {
 			ntiid = loc && loc.ContentNTIID,
 			c = ntiid && CourseWareUtils.courseForNtiid(ntiid);
 
+		this.getSwitcher().drop(rec);
+
 		if (!rec || !ntiid || (c && c.getId() === rec.getId())) {
 		//TODO: this should start a session transaction that ends with a "state replacement" so there is no "back"
 			//this.fireEvent('show-view', 'library', true);

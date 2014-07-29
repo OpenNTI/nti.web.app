@@ -183,6 +183,18 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 	},
 
 
+	drop: function(catalogEntry) {
+		var store = this.getStore(),
+			rec = store.findBy(function(rec) {
+				return rec.represents(catalogEntry);
+			});
+
+		if (rec >= 0) {
+			store.removeAt(rec);
+		}
+	},
+
+
 	track: function(rec, remove) {
 		var s = this.getStore();
 		try {

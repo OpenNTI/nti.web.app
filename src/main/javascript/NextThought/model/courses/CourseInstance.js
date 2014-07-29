@@ -275,5 +275,16 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	getDiscussionBoard: function() {
 		var b = this.get('Discussions');
 		return b ? Promise.resolve(b) : Promise.reject('No board');
+	},
+
+
+	represents: function(catalogEntry) {
+		var cceId = catalogEntry.getId(),
+			cceHref = catalogEntry.get('href'),
+			cce = this.getCourseCatalogEntry();
+
+		return cce ?
+			   cce.getId() === cceId :
+			   this.getLink('CourseCatalogEntry') === cceHref;
 	}
 });

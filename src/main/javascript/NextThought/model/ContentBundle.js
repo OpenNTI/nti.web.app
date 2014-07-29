@@ -151,5 +151,7 @@ Ext.define('NextThought.model.ContentBundle', {
 		this.__BoardResolver = p;
 
 		return p;
-	}
+	},
+
+	represents: function(catalogEntry) {return false;}
 });
