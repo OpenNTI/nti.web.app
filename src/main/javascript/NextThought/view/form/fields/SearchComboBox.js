@@ -64,6 +64,7 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 
 	toggleOptions: function(e) {
 		if (e.getTarget('.down')) {
+			e.stopEvent();
 			this.inputEl.focus();
 			this.filterOptions();
 			this.showOptions();
