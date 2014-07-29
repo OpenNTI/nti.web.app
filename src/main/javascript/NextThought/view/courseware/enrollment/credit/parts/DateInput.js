@@ -5,11 +5,19 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.DateInput', {
 	requires: ['NextThought.view.form.fields.DateField'],
 
 	renderTpl: Ext.DomHelper.markup({
-		cls: 'credit-input date-input full'
+		cls: 'credit-input date-input full {required}'
 	}),
 
 	renderSelectors: {
 		dateEl: '.date-input'
+	},
+
+
+	beforeRender: function() {
+		this.callParent(arguments);
+		Ext.apply(this.renderData, {
+			required: this.required ? 'required' : ''
+		});
 	},
 
 

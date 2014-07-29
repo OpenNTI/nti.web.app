@@ -445,6 +445,17 @@
 					position: relative;
 					z-index: 1;
 				}
+
+				&.required {
+					.month input {
+						box-shadow: inset 4px 0 0 0 $border-grey;
+						border-left-width: 0;
+
+						&:focus {
+							box-shadow: inset 4px 0 0 0 $primary-blue;
+						}
+					}
+				}
 			}
 
 			&.text, &.select{

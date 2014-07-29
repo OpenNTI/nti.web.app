@@ -136,7 +136,7 @@
 						xtype: 'enrollment-credit-set',
 						label: 'What is your Date of Birth?',
 						inputs: [
-							{type: 'date', name: 'date_of_birth', size: 'third'}
+							{type: 'date', name: 'date_of_birth', size: 'third', required: true}
 						]
 					},
 					{
