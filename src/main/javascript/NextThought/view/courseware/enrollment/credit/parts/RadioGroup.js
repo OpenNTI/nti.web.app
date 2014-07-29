@@ -188,7 +188,18 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 	isEmpty: function() {
 		if (!this.rendered) { return true; }
 
-		var active = this.el.down('input[type=radio]:checked');
+		var active = this.el.down('input[type=radio]:checked'),	input;
+
+		if (active) {
+			input = active.up('.radio');
+			if (input) {
+				input = input.down('input[type=text]');
+			}
+
+			if (input) {
+				active = input.dom.value;
+			}
+		}
 
 		return !active;
 	}
