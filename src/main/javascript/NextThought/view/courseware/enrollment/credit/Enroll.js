@@ -105,7 +105,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 
 	showError: function(json) {
 		if (json && json.Message) {
-			this.fireEvent('show-msg', json.Message, true, 500);
+			this.fireEvent('show-msg', json.Message, true, 5000);
 		} else {
 			this.fireEvent('show-msg', 'An unkown error occured. Please try again later.', true, 5000);
 		}
@@ -117,7 +117,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 			payLink = me.course.getPaymentLink(),
 			crn = me.course.get('OU_CRN'),
 			term = me.course.get('OU_Term'),
-			returnURL = me.course.buildPaymentReturnURL();
+			returnURL = me.course.buildPaymentReturnURL(),
+			maskCmp = me.up('enrollment-credit');
 
 		function pay() {
 			Service.post(payLink, {
@@ -134,6 +135,11 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 				}
 			}).fail(function(response) {
 				console.error('payment post failed', response);
+				me.showError({
+					Message: 'An error occurred with your payment. You are enrolled in the course, but will need to pay before you have access to the content.'
+				});
+
+				maskCmp.el.unmask();
 			});
 		}
 
@@ -142,6 +148,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 			me.showError();
 			return;
 		}
+
+		maskCmp.el.mask('Loading...');
 
 		if (!enrollLink) {
 			pay();
@@ -156,13 +164,14 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 			if (json.Status === 201) {
 				pay();
 			} else {
+				maskCmp.el.unmask();
 				me.showError(json);
 			}
 		}).fail(function(response) {
 			var json = Ext.JSON.decode(response, true);
 
 			console.error('Enroll request failed: ' + response);
-
+			maskCmp.el.unmask();
 			me.showError(json);
 		});
 	}
