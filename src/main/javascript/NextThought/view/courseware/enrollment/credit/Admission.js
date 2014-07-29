@@ -720,7 +720,11 @@
 
 					var json = Ext.JSon.decode(resposne.responseText, true);
 
+					maskCmp.el.unmask();
+
 					me.showError(json);
+
+					me.fireEvent('enable-submission', true);
 				});
 		}
 	});
