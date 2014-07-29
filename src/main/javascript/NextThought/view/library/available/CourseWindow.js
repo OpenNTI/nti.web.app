@@ -107,6 +107,21 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 
 		var me = this;
 
+		me.msgMonitors = me.mon(me.msgContainerEl, {
+			'click': function(e) {
+				if (e.getTarget('.close-msg')) {
+					me.closeMsg();
+					return;
+				}
+
+				var msg = me.msgEl.getAttribute('data-message');
+				var isError = (/true/i).test(me.msgEl.getAttribute('data-message-is-error'));
+				var msgid = me.msgEl.getAttribute('data-message-id');
+
+				me.fireEvent('message-clicked', msgid, isError, msg);
+			}
+		});
+
 		me.mon(me.el, 'click', function(e) {
 			if (e.getTarget('.close')) {
 				me.close();
@@ -156,14 +171,19 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 	 * show the message bar across the top of the window
 	 * @param  {string}  msg             the message to display
 	 * @param  {Boolean} isError         whether or not we are showing an error
-	 * @param  {Boolean} hasClickHandler if there is a function to handle the click
-	 * @return {Promise}                  fulfill if there is a click handler on click, and reject on close
+	 * @param  {String} msgid 	 		 id of the message element
+	 * @return {Promise}                 fulfill if there is a click handler on click, and reject on close
 	 */
-	showMsg: function(msg, isError, timeout, hasClickHandler) {
+	showMsg: function(msg, isError, timeout, msgid) {
 		var me = this;
 
 		me.msgContainerEl[isError ? 'addCls' : 'removeCls']('error');
 		me.msgEl.update(msg);
+		me.msgEl.set({
+			'data-message': msg,
+			'data-message-is-error': isError,
+			'data-message-id': msgid
+		});
 
 		me.bodyEl.addCls('has-msg');
 		me.msgContainerEl.addCls('show');
@@ -174,25 +194,7 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 					me.closeMsg();
 				});
 		}
-
-		return new Promise(function(fulfill, reject) {
-			me.msgMonitors = me.mon(me.msgContainerEl, {
-				'single': true,
-				'click': function(e) {
-					if (e.getTarget('.close-msg')) {
-						me.closeMsg();
-						reject();
-						return;
-					}
-
-					if (hasClickHandler) {
-						fulfill();
-					}
-				}
-			});
-		});
 	},
-
 
 	closeMsg: function() {
 		if (!this.rendered) { return; }

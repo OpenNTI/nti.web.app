@@ -446,13 +446,20 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 	showMessage: function(msg, isError) {
 		var me = this,
-			win = me.up('[showMsg]');
+			win = me.up('[showMsg]'),
+			guid = guidGenerator();
 
-		win.showMsg(msg, isError, false, me.msgClickHandler)
-			.then((me.msgClickHandler || Ext.emptyFn).bind(me))
-			.fail(function() {
-				delete me.msgClickHandler;
-			});
+		win.showMsg(msg, isError, false, guid);
+
+		Ext.destroy(me.__showMessageClickMonitor);
+		me.__showMessageClickMonitor = me.mon(win, {
+			destroyable: true,
+			single: true,
+			'message-clicked': function(msgId) {
+				if (msgId === guid) {
+					Ext.callback(me.msgClickHandler);
+				}
+			}});
 	},
 
 
@@ -563,11 +570,14 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 							CourseWareUtils.findCourseBy(me.course.findByMyCourseInstance())
 								.then(function(course) {
 									var instance = course.get('CourseInstance');
-
 									instance.fireNavigationEvent(me);
+									me.up('window').close();
+								})
+								.fail(function(reason) {
+									alert('Unable to find course.');
+									console.error('Unable to find course. %o', reason);
 								});
 						};
-
 						me.showMessage('You have successfully enrolled in ' + me.course.get('Title') + '. Click here to go to the content.');
 					} else {
 						me.showMessage('There was an error enrolling. Please try again later.', true);
