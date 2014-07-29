@@ -571,7 +571,10 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 								.then(function(course) {
 									var instance = course.get('CourseInstance');
 									instance.fireNavigationEvent(me);
-									me.up('window').close();
+									var win = me.up('window');
+									if (win) {
+										win.close();
+									}
 								})
 								.fail(function(reason) {
 									alert('Unable to find course.');
