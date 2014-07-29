@@ -680,7 +680,7 @@
 			me.shouldAllowSubmission(value)
 				.then(function() {
 					me.fireEvent('enable-submission', false);
-					maskCmp.el.mask('Loading...');
+					maskCmp.el.mask('Your application is being processed. This may take a few moments.');
 
 					return Service.post(submitlink, value);
 				})
