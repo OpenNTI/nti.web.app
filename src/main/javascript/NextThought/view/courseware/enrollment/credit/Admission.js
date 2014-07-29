@@ -684,9 +684,7 @@
 
 				Service.post(preflightlink, value)
 					.then(function(response) {
-						var json = Ext.JSON.decode(response, true);
-
-						fulfill(json.Input);
+						fulfill();
 					})
 					.fail(function(response) {
 						var json = Ext.JSON.decode(response && response.responseText, true);
@@ -711,11 +709,11 @@
 			}
 
 			me.shouldAllowSubmission(value)
-				.then(function(input) {
+				.then(function() {
 					me.fireEvent('enable-submission', false);
 					maskCmp.el.mask('Your application is being processed. This may take a few moments.');
 
-					return Service.post(submitlink, input);
+					return Service.post(submitlink, value);
 				})
 				.then(function(response) {
 					var json = Ext.JSON.decode(response, true);
