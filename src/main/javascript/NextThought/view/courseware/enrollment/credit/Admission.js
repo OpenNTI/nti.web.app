@@ -172,7 +172,7 @@
 					{
 						xtype: 'enrollment-credit-set',
 						inputs: [
-							{type: 'checkbox', text: 'My mailing address is different', name: 'show-mailing', doNotSend: true, reveals: 'mailing-address', correct: true}
+							{type: 'checkbox', text: 'My mailing address is different', name: 'has_mailing_address', reveals: 'mailing-address', correct: true}
 						]
 					},
 					{
@@ -683,8 +683,10 @@
 				}
 
 				Service.post(preflightlink, value)
-					.then(function() {
-						fulfill();
+					.then(function(response) {
+						var json = Ext.JSON.decode(response, true);
+
+						fulfill(json.Input);
 					})
 					.fail(function(response) {
 						var json = Ext.JSON.decode(response && response.responseText, true);
@@ -709,11 +711,11 @@
 			}
 
 			me.shouldAllowSubmission(value)
-				.then(function() {
+				.then(function(input) {
 					me.fireEvent('enable-submission', false);
 					maskCmp.el.mask('Your application is being processed. This may take a few moments.');
 
-					return Service.post(submitlink, value);
+					return Service.post(submitlink, input);
 				})
 				.then(function(response) {
 					var json = Ext.JSON.decode(response, true);
