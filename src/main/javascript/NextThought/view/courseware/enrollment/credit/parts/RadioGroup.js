@@ -23,7 +23,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 		var name = this.name;
 
 		(this.options || []).forEach(function(option) {
-			var width = (option.inputWidth && option.inputWidth) + 'px' || 'auto';
+			var width = (option.inputWidth && (option.inputWidth + 'px')) || 'auto';
 			option.name = name;
 			if (option.value === 'input') {
 				option.cls = 'input';
@@ -36,6 +36,24 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			options: this.options
+		});
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+		var me = this;
+
+		function stop(e) {
+			e.stopEvent();
+			var t = e.getTarget('input');
+			if (t) {
+				t.focus();
+			}
+		}
+
+		this.el.query('label input').forEach(function(n) {
+			me.mon(Ext.get(n), 'click', stop);
 		});
 	},
 
@@ -119,7 +137,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 		}
 
 		if (this.valType === 'number') {
-			val = parseInt(val);
+			val = parseInt(val, 10);
 		}
 
 		if ((Ext.isEmpty(val) || val === 'N' || !val) && !force && this.omitIfBlank) {
