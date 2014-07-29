@@ -52,14 +52,7 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 			'click': 'showOptions'
 		});
 
-		this.mon(Ext.getBody(), 'click', 'bodyClick');
-	},
-
-
-	bodyClick: function(e) {
-		if (!e.getTarget('.searchcombobox')) {
-			this.hideOptions();
-		}
+		//this.mon(Ext.getBody(), 'click', function(e) {if (!e.getTarget('.searchcombobox')) { this.hideOptions(); }}, this);
 	},
 
 

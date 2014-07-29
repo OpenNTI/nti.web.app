@@ -443,10 +443,10 @@
 			}
 
 			&.date-input {
+				input { position: relative; }
 				input:focus {
 					border-color: $primary-blue;
 					box-shadow: -1px 0 0 0 $primary-blue;
-					position: relative;
 					z-index: 1;
 				}
 
