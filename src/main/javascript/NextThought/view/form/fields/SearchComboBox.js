@@ -216,13 +216,15 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 			next = current.dom.previousSibling;
 		}
 
-		if (charCode === e.TAB) {
+		if (charCode === e.TAB || charCode === e.RIGHT) {
 			charCode = e.ENTER;
 		}
 
 		//if enter select the current active li
 		if (charCode === e.ENTER) {
-			this.selectOption(current.dom);
+			if (!e.shiftKey) {
+				this.selectOption(current.dom);
+			}
 			this.hideOptions();
 			return;
 		}
@@ -237,12 +239,20 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 		}
 	},
 
+	IGNORE_KEY_CODES: {
+		'9': true, //TAB
+		'13': true, //ENTER/RETURN
+		'38': true, //UP
+		'40': true //TRUE
+	},
 
 	inputKeyPress: function(e) {
 		var value = this.inputEl.getValue();
 
-		//filter the options and show the options menu unless we are from an enter
-		this.filterOptions(value, e.getCharCode() !== e.ENTER);
+		if (!this.IGNORE_KEY_CODES[e.getCharCode()]) {
+			//filter the options and show the options menu unless we are from an enter
+			this.filterOptions(value, e.getCharCode() !== e.ENTER);
+		}
 	},
 
 
@@ -260,6 +270,7 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 				if (!isEmpty && !isValid) {
 					me.inputEl.addCls('error');
 				}
+				me.hideOptions();
 			});
 	},
 
