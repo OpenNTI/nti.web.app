@@ -308,7 +308,7 @@
 					font-size: 14px;
 					font-weight: 500;
 					line-height: 25px;
-					border: 1px solid $border-grey;
+					border: 1px solid $tertiary-grey;
 					background: #ffffff;
 					padding: 6px 10px;
 				}
@@ -448,7 +448,7 @@
 
 				&.required {
 					.month input {
-						box-shadow: inset 4px 0 0 0 $border-grey;
+						box-shadow: inset 4px 0 0 0 $tertiary-grey;
 						border-left-width: 0;
 
 						&:focus {
@@ -465,7 +465,7 @@
 					font-size: 14px;
 					font-weight: 500;
 					line-height: 25px;
-					border: 1px solid $border-grey;//#dcdcdc;
+					border: 1px solid $tertiary-grey;
 					background: #ffffff;
 					padding: 6px 10px;
 					margin: 0;
@@ -494,7 +494,7 @@
 
 				&.required {
 					input {
-						box-shadow: inset 4px 0 0 0 $border-grey;
+						box-shadow: inset 4px 0 0 0 $tertiary-grey;
 						border-left-width: 0;
 
 						&:focus {
