@@ -65,6 +65,7 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 	toggleOptions: function(e) {
 		if (e.getTarget('.down')) {
 			this.inputEl.focus();
+			this.filterOptions();
 			this.showOptions();
 			return;
 		}
@@ -209,6 +210,10 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 		//up select the previous sibling if there is one
 		if (charCode === e.UP) {
 			next = current.dom.previousSibling;
+		}
+
+		if (charCode === e.TAB && this.optionsEl.query('li').length === 1) {
+			charCode = e.ENTER;
 		}
 
 		//if enter select the current active li
