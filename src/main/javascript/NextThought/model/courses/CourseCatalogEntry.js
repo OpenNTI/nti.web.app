@@ -44,7 +44,7 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 				clone = new Date(start.getTime());
 
 			//add 14 days (2 weeks) to the start
-			clone.setDate(clone.getDate() + 14);
+			clone.setDate(clone.getDate() + 4);
 
 			return clone;
 		}},

@@ -431,7 +431,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 						//TODO fill this out from the course
 						state.bottom = me.getState('bottom', 'not_enrolled', {
 							'#': courseData.Hours,
-							'date': start
+							'date': enrollcutoff
 						});
 						state.price = '$599';
 					}
