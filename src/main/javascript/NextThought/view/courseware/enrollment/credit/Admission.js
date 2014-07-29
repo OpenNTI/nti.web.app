@@ -161,7 +161,7 @@
 							{type: 'text', name: 'street_line4', hidden: true, placeholder: 'Address', size: 'full'},
 							{type: 'text', name: 'street_line5', hidden: true, placeholder: 'Address', size: 'full'},
 							{type: 'text', name: 'city', placeholder: 'City / Town', size: 'large', required: true},
-							{type: 'dropdown', name: 'state', placeholder: 'State / Province / Territory / Region', required: true, size: 'full', options: states},
+							{type: 'dropdown', name: 'state', placeholder: 'State / Province / Territory / Region', size: 'full', options: states},
 							{type: 'dropdown', name: 'nation_code', placeholder: 'Country', required: true, size: 'large left', options: []},
 							{type: 'text', name: 'postal_code', placeholder: 'ZIP / Postal Code', size: 'small left'}
 						],
