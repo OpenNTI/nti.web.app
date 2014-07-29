@@ -45,16 +45,21 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 
 		me.admissionState = $AppConfig.userObject.get('admission_status');
 
-		me.on('activate', function() {
-			var buttonCls;
+		me.on({
+			'activate': function() {
+				var buttonCls;
 
-			if (me.enrollment) {
-				buttonCls = 'enroll';
-			} else if (me.admissions) {
-				buttonCls = 'admission';
+				if (me.enrollment) {
+					buttonCls = 'enroll';
+				} else if (me.admissions) {
+					buttonCls = 'admission';
+				}
+
+				me.fireEvent('set-window-btns', buttonCls);
+			},
+			'goto-free': function() {
+				me.fireEvent('show-detail', me.course);
 			}
-
-			me.fireEvent('set-window-btns', buttonCls);
 		});
 
 		if (me.admissionState === 'Admitted') {
