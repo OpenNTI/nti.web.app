@@ -84,8 +84,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 				'There were some troubles with your payment.' :
 				'Your application has been accepted!',
 			text: this.paymentfail ?
-				'Thank you for applying to earn credit online from the University of Oklahoma.' :
-				'Please try again, you will gain access to the content once the payment is successful',
+				'Please try again, you will gain access to the content once the payment is successful' :
+				'Thank you for applying to earn credit online from the University of Oklahoma.',
 			available: 'Your admission credit is available for ' + c.getSemester() + '.',
 			confirm: 'Please take a moment to confirm your course selection before checking out.',
 			price: '$599',
