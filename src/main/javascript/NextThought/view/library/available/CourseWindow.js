@@ -116,7 +116,7 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 				me.showPrevItem();
 			}
 
-			if (e.getTarget('.enrollment')) {
+			if (e.getTarget('.enrollment') && !e.getTarget('.disabled')) {
 				me.enrollmentOptionClicked(e);
 			}
 		});
