@@ -421,7 +421,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 				if (courseData.AvailableForCredit) {
 					if (courseData.EnrolledForCredit) {
 						state.bottom = me.getState('bottom', 'credit_enrolled', {
-							date: enrollcutoff
+							date: dropcutoff
 						});
 					} else if (courseData.AdmissionState === 'Pending') {
 						state.bottom = me.getState('bottom', 'admission_pending');
