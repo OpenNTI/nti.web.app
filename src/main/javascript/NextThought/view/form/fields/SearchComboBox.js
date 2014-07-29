@@ -120,6 +120,9 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 
 				return text.indexOf(value.toLowerCase()) === 0;
 			});
+
+			//No matches? unfilter?
+			//if (options.length === 0) { options = this.options.slice(); }
 		}
 
 		this.optionsEl.el.dom.innerHTML = '';
@@ -213,7 +216,7 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 			next = current.dom.previousSibling;
 		}
 
-		if (charCode === e.TAB && this.optionsEl.query('li').length === 1) {
+		if (charCode === e.TAB) {
 			charCode = e.ENTER;
 		}
 
@@ -264,9 +267,9 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 	inputFocus: function() {
 		this.inputEl.removeCls('error');
 
-		var value = this.inputEl.getValue();
+		//var value = this.inputEl.getValue();
 
-		this.filterOptions(value, true);
+		this.filterOptions('', true);
 	},
 
 
