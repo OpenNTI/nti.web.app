@@ -614,7 +614,7 @@
 
 			fields.unshift({
 				name: 'rejected',
-				label: 'Your Application to Earn College Credit has been Rejected',
+				label: 'Your Application to Earn College Credit Has Been Denied',
 				labelCls: 'error',
 				items: [
 					{
