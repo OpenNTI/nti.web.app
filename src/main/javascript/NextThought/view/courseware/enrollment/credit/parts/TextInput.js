@@ -18,6 +18,21 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.TextInput', {
 	},
 
 
+	initComponent: function() {
+		this.callParent(arguments);
+
+		function asPatterns(v) {
+			return v ? (Array.isArray(v) ? v : [{'*': v}]) : undefined;
+		}
+
+		if (this.valueType === 'numeric') {
+			this.valuePattern = this.valuePattern || '\\d*';
+		}
+
+		this.valuePattern = asPatterns(this.valuePattern);
+	},
+
+
 	beforeRender: function() {
 		this.callParent(arguments);
 
@@ -40,8 +55,11 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.TextInput', {
 			renderTo: this.inputEl
 		});
 
-		if (this.valuetype === 'numeric') {
-			this.mon(this.input.inputEl, 'keydown', 'enforceNumber', DomUtils);
+		if (this.valuePattern) {
+			this.formatter = new Formatter(Ext.getDom(this.input.inputEl), {
+				patterns: this.valuePattern,
+				persistent: false
+			});
 		}
 
 		this.on('destroy', 'destroy', this.input);
@@ -63,10 +81,25 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.TextInput', {
 	},
 
 
-	isEmpty: function() {
-		var value = this.input.getValue();
+	isValid: function() {
+		//if we are required and empty we aren't
+		var value = this.getValue()[this.name],
+			isValid = this.required ? !this.isEmpty() : true;
 
-		return Ext.isEmpty(value);
+		if (this.valueValidation && !this.isEmpty()) {
+			isValid = this.valueValidation.test(value);
+		}
+
+		if (!isValid) {
+			this.addError();
+		}
+
+		return isValid;
+	},
+
+
+	isEmpty: function() {
+		return Ext.isEmpty(this.input.getValue());
 	},
 
 
@@ -105,7 +138,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.TextInput', {
 		var value = {},
 			val = this.input.getValue();
 
-		if (this.valuetype === 'numeric') {
+		if (this.valueType === 'numeric') {
 			val = (val && val.replace(/[^0-9]/g, '')) || val;
 		}
 

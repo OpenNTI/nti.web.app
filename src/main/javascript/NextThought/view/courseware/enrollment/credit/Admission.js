@@ -199,7 +199,14 @@
 						xtype: 'enrollment-credit-set',
 						label: 'Phone Number',
 						inputs: [
-							{type: 'text', name: 'telephone_number', placeholder: 'Primary Phone', required: true, size: 'large'}
+							{type: 'text', name: 'telephone_number',
+								valueType: 'numeric',
+								valuePattern: [
+									{ '^\\d{0,10}$': '({{999}}) {{999}}-{{9999}}' },
+									{ '^\\d.*$': '{{999999999999999999}}' }
+								],
+								valueValidation: /\d{10,}/,
+								placeholder: 'Primary Phone', required: true, size: 'large'}
 						]
 					},
 					{
@@ -216,7 +223,9 @@
 							{
 								type: 'text',
 								name: 'social_security_number',
-								valuetype: 'numeric',
+								valueType: 'numeric',
+								valuePattern: '{{999}}-{{99}}-{{9999}}',
+								valueValidation: /\d{9}/,
 								placeholder: 'XXX - XX - XXXX',
 								doNotStore: true,
 								help: 'Your Social Security Number is not requred for admission, but it is used for submission of a ' +
