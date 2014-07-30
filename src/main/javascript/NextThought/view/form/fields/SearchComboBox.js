@@ -47,7 +47,7 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 		this.mon(this.inputEl, {
 			'keydown': 'inputKeyDown',
 			'keyup': 'inputKeyPress',
-			'blur': 'inputBlur',
+			'blur': {fn: 'inputBlur', scope: this, buffer: 10},
 			'focus': 'inputFocus',
 			'click': 'showOptions'
 		});
@@ -69,7 +69,11 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 
 
 	addOptions: function(options) {
-		this.options = options;
+		function convert(o) {
+			return o.hasOwnProperty('value') ? o : {value: o, text: o};
+		}
+
+		this.options = options.map(convert);
 
 		this.filterOptions();
 
@@ -114,8 +118,7 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 
 		if (value) {
 			options = options.filter(function(option) {
-				var text = (option.text || option).toLowerCase();
-
+				var text = option.text.toLowerCase();
 				return text.indexOf(value.toLowerCase()) === 0;
 			});
 
@@ -179,13 +182,24 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 	/**
 	 * Set the current option and update the input
 	 * @param  {Node} option the li to select
+	 * @param  {Boolean} silent don't fire an event
 	 */
-	selectOption: function(option) {
+	selectOption: function(option, silent) {
 		this.currentText = option.textContent;
 		this.currentValue = option.getAttribute('data-value');
 
 		this.inputEl.dom.value = this.currentText;
-		this.fireEvent('select', this.currentValue);
+		this.inputEl.removeCls('error');
+
+		if (!silent) {
+			this.fireEvent('select', this.currentValue);
+		}
+	},
+
+
+	deselect: function() {
+		delete this.currentText;
+		delete this.currentValue;
 	},
 
 
@@ -246,16 +260,21 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 			next.scrollIntoView(this.optionsEl);
 			this.activeValue = next.getAttribute('data-value');
 			current.removeCls('active');
+			this.selectOption(next.dom, true);
 		}
 	},
+
 
 	IGNORE_KEY_CODES: {
 		'9': true, //TAB
 		'13': true, //ENTER/RETURN
 		'27': true, //ESC
+		'37': true, //LEFT
 		'38': true, //UP
-		'40': true //TRUE
+		'39': true, //RIGHT
+		'40': true  //DOWN
 	},
+
 
 	inputKeyPress: function(e) {
 		var value = this.inputEl.getValue();
@@ -266,19 +285,29 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 		}
 	},
 
+
 	inputBlur: function() {
-		var value = this.inputEl.getValue() || '',
-			currentText = this.currentText || '',
+		function search(o) {
+			return o.text.toLowerCase() === value;
+		}
+
+		var value = (this.inputEl.getValue() || '').toLowerCase(),
 			isEmpty = Ext.isEmpty(value),
-			isValid = value.toLowerCase() === currentText.toLowerCase();
+			isValid = this.options.filter(search).length === 1;
 
 		//if its not empty and the value is not a valid option
+		this.inputEl.removeCls('error');
 		if (!isEmpty && !isValid) {
-			this.inputEl.addCls('error');
+			if (this.currentValue) {
+				this.inputEl.dom.value = this.currentText;
+			} else {
+				this.inputEl.addCls('error');
+			}
 		}
 
 		this.__hideOptionsTimer = setTimeout(this.hideOptions.bind(this), 300);
 	},
+
 
 	inputFocus: function() {
 		this.inputEl.removeCls('error');
@@ -297,8 +326,6 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 
 			if (li) {
 				this.selectOption(li.dom);
-			} else {
-				console.error('No Option for value: ', value);
 			}
 		}
 	},
