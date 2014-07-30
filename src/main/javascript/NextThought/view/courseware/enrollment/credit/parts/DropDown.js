@@ -46,7 +46,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.DropDown', {
 			'input-focused': function() {
 				me.selectEl.removeCls('error');
 			},
-			'changed': {fn: 'changed', scope: me, buffer: 1}
+			'select': {fn: 'changed', scope: me, buffer: 1}
 		});
 
 		me.on('destroy', 'destroy', me.combobox);
@@ -73,9 +73,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.DropDown', {
 
 
 	isEmpty: function() {
-		return !this.getValue();
+		return !this.getValue()[this.name];
 	},
-
 
 	setValue: function(value) {
 		var me = this;

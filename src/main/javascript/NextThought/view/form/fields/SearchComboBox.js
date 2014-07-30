@@ -49,7 +49,8 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 			'keyup': 'inputKeyPress',
 			'blur': 'inputBlur',
 			'focus': 'inputFocus',
-			'click': 'showOptions'
+			'click': 'showOptions',
+			'change': 'inputChange'
 		});
 
 		//this.mon(Ext.getBody(), 'click', function(e) {if (!e.getTarget('.searchcombobox')) { this.hideOptions(); }}, this);
@@ -266,7 +267,6 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 		}
 	},
 
-
 	inputBlur: function() {
 		var value = this.inputEl.getValue() || '',
 			currentText = this.currentText || '',
@@ -280,7 +280,6 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 
 		this.__hideOptionsTimer = setTimeout(this.hideOptions.bind(this), 300);
 	},
-
 
 	inputFocus: function() {
 		this.inputEl.removeCls('error');
