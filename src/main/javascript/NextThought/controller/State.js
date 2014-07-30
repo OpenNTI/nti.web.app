@@ -625,7 +625,7 @@ PREVIOUS_STATE = 'previous-state';
 									if (replaceState) {
 										ObjectUtils.clean(me.currentState);//drop keys with null & undefined values
 										PersistentStorage.set(me.getStateKey(), me.currentState);
-										replace.call(history, me.currentState);
+										replace.call(history, me.currentState, document.title, location.href);
 									}
 								});
 						})

@@ -33,10 +33,7 @@ Ext.define('NextThought.store.courseware.EnrolledCourses', {
 	constructor: function() {
 		function c(o) {return (o && o.get('CourseInstance').asUIData().title) || '';}
 		function sort(s) {
-			s.sort([{
-				sorterFn: function(a, b) {
-					return	c(a).strcmp(c(b)); }
-			}]);
+			s.sort(function(a, b) { return c(a).strcmp(c(b)); });
 		}
 
 		var p = this.promiseToLoaded = new Deferred(),
