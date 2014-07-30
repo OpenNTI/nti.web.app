@@ -205,7 +205,7 @@
 									{ '^\\d{0,10}$': '({{999}}) {{999}}-{{9999}}' },
 									{ '*': '{{' + ((new Array(128)).join('*')) + '}}' }
 								],
-								valueValidation: /\d{10,}/,
+								valueValidation: /.{10,128}/,
 								placeholder: 'Primary Phone', required: true, size: 'large'}
 						]
 					},
