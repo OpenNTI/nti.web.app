@@ -449,7 +449,10 @@
 			}
 
 			&.date-input {
-				input { position: relative; }
+				input {
+					position: relative;
+					height: 40px;//because IE sucks.
+				}
 				input:focus {
 					border-color: $primary-blue;
 					box-shadow: -1px 0 0 0 $primary-blue;
