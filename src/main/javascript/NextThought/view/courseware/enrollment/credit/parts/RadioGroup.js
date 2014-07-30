@@ -11,6 +11,11 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 				{html: '{text}'},
 				{tag: 'tpl', 'if': 'content', cn: [
 					{cls: 'content hidden', html: '{content}'}
+				]},
+				{tag: 'tpl', 'if': 'help', cn: [
+					{cls: 'help', cn: [
+						{cls: 'information', html: '{help}'}
+					]}
 				]}
 			]}
 		]

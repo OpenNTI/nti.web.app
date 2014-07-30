@@ -382,6 +382,12 @@
 						background-color: #f9f9f9;
 					}
 				}
+				label {
+					.help {
+						margin-bottom:1em;
+						padding-left:0;
+					}
+				}
 			}
 
 			&.checkbox {
