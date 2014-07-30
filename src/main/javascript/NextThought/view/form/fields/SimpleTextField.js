@@ -167,7 +167,7 @@ Ext.define('NextThought.view.form.fields.SimpleTextField', {
 
 
 	keyPressed: function(event) {
-		var e = this.inputEl, v = this.getValue(), c = this.clearEl,
+		var	e = this.inputEl, v = this.getValue(), c = this.clearEl,
 			k = event.getKey && event.getKey();
 
 		if (!this.readOnly) {
@@ -183,7 +183,10 @@ Ext.define('NextThought.view.form.fields.SimpleTextField', {
 		if (this.lastValue !== v) {
 			this.lastValue = v;
 			this.__maybeTagEmpty(v);
-			this.fireEvent('changed', v, this);
+
+			clearTimeout(this.__changeTimeout);
+
+			this.__changeTimeout = setTimeout(this.fireEvent.bind(this, 'changed', v, this), 500);
 		}
 	},
 

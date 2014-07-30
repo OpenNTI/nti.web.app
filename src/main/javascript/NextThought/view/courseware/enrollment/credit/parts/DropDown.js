@@ -35,8 +35,6 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.DropDown', {
 			renderTo: me.selectEl
 		});
 
-		me.addOptions = me.combobox.addOptions.bind(me.combobox);
-
 		me.mon(scrollParent, 'scroll', function() {
 			me.combobox.hideOptions();
 		});
@@ -55,7 +53,13 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.DropDown', {
 	},
 
 
-	setUpChangeMonitors: function() {},
+	addOptions: function(options) {
+		this.options = options;
+
+		if (this.combobox) {
+			this.combobox.addOptions(options);
+		}
+	},
 
 
 	addError: function() {
@@ -70,6 +74,23 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.DropDown', {
 
 	isEmpty: function() {
 		return !this.getValue();
+	},
+
+
+	setValue: function(value) {
+		var me = this;
+
+		if (!me.rendered) {
+			me.startingvalue = value;
+			return;
+		}
+
+		//me.comobox is set in me.afterRender but we are called in parent.afterRender
+		//so wait until the next event pump
+		wait()
+			.then(function() {
+				me.combobox.setValue(value);
+			});
 	},
 
 

@@ -25,18 +25,18 @@ Ext.define('NextThought.view.form.fields.DateField', {
 
 		this.monthInput = Ext.widget('searchcombobox', {
 			options: [
-				{value: '01', text: 'January'},
-				{value: '02', text: 'February'},
-				{value: '03', text: 'March'},
-				{value: '04', text: 'April'},
-				{value: '05', text: 'May'},
-				{value: '06', text: 'June'},
-				{value: '07', text: 'July'},
-				{value: '08', text: 'August'},
-				{value: '09', text: 'September'},
-				{value: '10', text: 'October'},
-				{value: '11', text: 'November'},
-				{value: '12', text: 'December'}
+				{value: '0', text: 'January'},
+				{value: '1', text: 'February'},
+				{value: '2', text: 'March'},
+				{value: '3', text: 'April'},
+				{value: '4', text: 'May'},
+				{value: '5', text: 'June'},
+				{value: '6', text: 'July'},
+				{value: '7', text: 'August'},
+				{value: '8', text: 'September'},
+				{value: '9', text: 'October'},
+				{value: '10', text: 'November'},
+				{value: '11', text: 'December'}
 			],
 			emptyText: 'Month',
 			renderTo: this.monthEl
@@ -51,6 +51,10 @@ Ext.define('NextThought.view.form.fields.DateField', {
 		this.mon(this.monthInput, 'select', 'maybeChanged');
 		this.mon(this.dayEl, 'keyup', 'maybeChanged');
 		this.mon(this.yearEl, 'keyup', 'maybeChanged');
+
+		if (this.date) {
+			this.setValue(this.date);
+		}
 	},
 
 
@@ -80,10 +84,27 @@ Ext.define('NextThought.view.form.fields.DateField', {
 	},
 
 
+	setValue: function(date) {
+		if (!this.rendered) {
+			this.date = date;
+			return;
+		}
+
+		var year = date && date.getFullYear(),
+			month = date && date.getMonth(),
+			day = date && date.getDate();
+
+		this.yearEl.dom.value = year;
+		this.dayEl.dom.value = day;
+
+		this.monthInput.setValue(month);
+	},
+
+
 	getValue: function() {
 		var year = parseInt(this.yearEl.getValue(), 10),
 			day = parseInt(this.dayEl.getValue(), 10),
-			month = parseInt(this.monthInput.getValue(), 10) - 1,
+			month = parseInt(this.monthInput.getValue(), 10),
 			value = new Date(year, month, day);
 
 		if (day !== value.getDate() || month !== value.getMonth() || year !== value.getFullYear()) {

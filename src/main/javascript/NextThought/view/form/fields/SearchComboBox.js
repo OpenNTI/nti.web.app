@@ -72,6 +72,10 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 		this.options = options;
 
 		this.filterOptions();
+
+		if (this.currentValue) {
+			this.setValue(this.currentValue);
+		}
 	},
 
 
@@ -282,6 +286,23 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 		this.inputEl.removeCls('error');
 		this.filterOptions('');
 		clearTimeout(this.__hideOptionsTimer);
+	},
+
+
+	setValue: function(value) {
+		var li;
+
+		this.currentValue = value;
+
+		if (!Ext.isEmpty(this.options)) {
+			li = this.el.down('li[data-value="' + value + '"]');
+
+			if (li) {
+				this.selectOption(li.dom);
+			} else {
+				console.error('No Option for value: ', value);
+			}
+		}
 	},
 
 

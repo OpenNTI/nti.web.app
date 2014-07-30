@@ -19,6 +19,26 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Checkbox', {
 		});
 	},
 
+
+	setValue: function(value) {
+		var input;
+
+		if (!this.rendered) {
+			this.startingvalue = value;
+			return;
+		}
+
+		value = value || value === 'Y';
+
+		input = this.el.down('input[type=checkbox]');
+
+		if (input) {
+			input.dom.checked = value;
+			this.changed();
+		}
+	},
+
+
 	getValue: function(force) {
 		if (!this.el || (!force && this.doNotSend)) { return; }
 

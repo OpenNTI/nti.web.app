@@ -80,6 +80,27 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.TextInput', {
 	},
 
 
+	setValue: function(value) {
+		var me = this;
+
+		if (!me.rendered) {
+			me.startingvalue = value;
+			return;
+		}
+
+		if (me.input) {
+			me.input.setValue(value);
+		} else {
+			//me.input is set in this.afterRender but we are called in this.parent.afterRender
+			//so wait until the next event pump when we have me.input
+			wait()
+				.then(function() {
+					me.input.setValue(value);
+				});
+		}
+	},
+
+
 	getValue: function(force) {
 		var value = {},
 			val = this.input.getValue();

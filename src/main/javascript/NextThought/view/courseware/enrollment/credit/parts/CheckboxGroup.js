@@ -7,7 +7,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.CheckboxGroup', 
 	renderTpl: Ext.DomHelper.markup({
 		 cls: 'credit-checkbox-group', cn: [
 			{cls: 'credit-input dark full radio yes', cn: [
-				{tag: 'input', id: '{id}-{name}-yes', type: 'radio', name: '{name}'},
+				{tag: 'input', id: '{id}-{name}-yes', type: 'radio', name: '{name}', value: 'Y'},
 				{tag: 'label', 'for': '{id}-{name}-yes', html: 'Yes.'},
 
 				{cls: 'options disabled', cn: [
@@ -20,7 +20,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.CheckboxGroup', 
 				]}
 			]},
 			{cls: 'credit-input dark full radio no', cn: [
-				{tag: 'input', id: '{id}-{name}-no', type: 'radio', name: '{name}'},
+				{tag: 'input', id: '{id}-{name}-no', type: 'radio', name: '{name}', value: 'N'},
 				{tag: 'label', 'for': '{id}-{name}-no', html: 'No.'}
 			]}
 	]}),
@@ -46,16 +46,35 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.CheckboxGroup', 
 	},
 
 
-	changed: function() {
-		this.callParent(arguments);
-
+	changed: function(e) {
 		var yes = this.el.down('.yes input'),
-			options = this.el.down('.yes .options');
+			options = this.el.down('.yes .options'),
+			parent = this.up('[changed]'),
+			inOption = e && e.getTarget('.options'),
+			label, input;
 
 		if (yes.is(':checked')) {
 			options.removeCls('disabled');
 		} else {
 			options.addCls('disabled');
+		}
+
+		if (!inOption) {
+			this.callParent(arguments);
+			return;
+		}
+
+		//if the click was in the options we need to call changed on the parent to
+		//push the values to the session storage
+		label = e.getTarget('label');
+		label = Ext.get(label);
+		input = label && label.up('.credit-input').down('input[type=checkbox]');
+
+		if (input && parent) {
+			wait()
+				.then(function() {
+					parent.changed(input.dom.name, input.dom.checked);
+				});
 		}
 	},
 
@@ -75,6 +94,22 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.CheckboxGroup', 
 
 	removeError: function() {
 		this.removeCls('error');
+	},
+
+
+	setValue: function(value) {
+		var input;
+
+		if (!this.rendered) {
+			this.startingvaluename = name;
+			this.startingvalue = value;
+			return;
+		}
+
+
+		input = this.el.down('input[type=radio][value="' + value + '"]');
+		input.dom.checked = true;
+		this.changed();
 	},
 
 

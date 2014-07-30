@@ -71,6 +71,10 @@
 
 		defaultType: 'enrollment-credit-group',
 
+		STATE_VALUES: {},
+
+		STATE_NAME: 'admission-form',
+
 		form: [
 			{
 				name: 'preliminary',
@@ -214,6 +218,7 @@
 								name: 'social_security_number',
 								valuetype: 'numeric',
 								placeholder: 'XXX - XX - XXXX',
+								doNotStore: true,
 								help: 'Your Social Security Number is not requred for admission, but it is used for submission of a ' +
 									  Ext.DomHelper.markup({tag: 'a', target: '_blank', html: '1098T', href: 'http://www.irs.gov/uac/Form-1098-T,-Tuition-Statement'}) +
 									  ' to the IRS.'
@@ -281,7 +286,7 @@
 					{
 						xtype: 'enrollment-credit-set',
 						inputs: [
-							{type: 'checkbox', name: 'affirm', doNotSend: true, text: [
+							{type: 'checkbox', name: 'affirm', doNotSend: true, doNotStore: true, text: [
 								'I affirm that I am not prohibited from enrolling in any University of Oklahoma program.',
 								'I understand that submitting any false information to the University,',
 								'including but not limited to, any information contained on this form,',
@@ -343,58 +348,9 @@
 			});
 
 			if (me.status === 'Pending') {
-				me.add([
-					{
-						name: 'pending',
-						label: 'Admission Pending',
-						items: [
-							{
-								xtype: 'enrollment-credit-set',
-								inputs: [
-									{
-										type: 'description',
-										text: [
-											'Your application for admission is being processed by OU.',
-											'To check on the process you can contact the OU Admissions Office.',
-											'Once you are admitted comeback here to enroll in ' + this.course.get('Title')
-										].join(' ')
-									}
-								],
-								help: [
-									{text: 'OU Admissions Office', type: 'link', href: '#', target: '_blank'}
-								]
-							}
-						]
-					}
-				]);
-
-				return;
-			}
-
-			if (me.status === 'Rejected') {
-				form.unshift({
-					name: 'rejected',
-					label: 'Application Rejected',
-					labelCls: 'error',
-					items: [
-						{
-							xtype: 'enrollment-credit-set',
-							inputs: [
-								{
-									type: 'description',
-									text: [
-										'Your last application for admission was rejected by OU.',
-										'For more information you can contact OU Enrollment services.',
-										'Feel free to apply again below.'
-									].join(' ')
-								}
-							],
-							help: [
-								{text: 'OU Admissions Office', type: 'link', href: 'http://www.ou.edu/admissions.html', target: '_blank'}
-							]
-						}
-					]
-				});
+				me.showPending();
+			}else if (me.status === 'Rejected') {
+				me.showRejected();
 			} else {
 				form.unshift({
 					name: 'intro',
@@ -415,9 +371,80 @@
 						}
 					]
 				});
+
+				me.add(form);
+				me.updateFromStorage();
+				me.fillInNations();
 			}
-			me.add(form);
-			me.fillInNations();
+		},
+
+
+		updateFromStorage: function() {
+			var me = this,
+				values = TemporaryStorage.get(me.STATE_NAME) || {},
+				keys = Object.keys(values),
+				waitOnRender = [];
+
+			(keys || []).forEach(function(key) {
+				var input = me.down('[name="' + key + '"]'),
+					parent;
+
+				if (input) {
+
+					if (input.setValue) {
+						input.setValue(values[key]);
+					} else {
+						parent = input.up('[setValue]');
+
+						if (parent) {
+							parent.setValue(value, key);
+						}
+					}
+				} else {
+					//We don't have an item with that name
+					waitOnRender.push(key);
+				}
+			});
+
+			if (!Ext.isEmpty(waitOnRender)) {
+				//If we don't have an item with for the key, its probably a sub input of another item
+				//so wait until we are rendered, get the input element with that name and set its value
+				me.onceRendered
+					.then(function() {
+						return wait();
+					})
+					.then(function() {
+						waitOnRender.forEach(function(key) {
+							var input = me.el.down('input[name="' + key + '"]'),
+								type = input && input.getAttribute('type'),
+								value = values[key];
+
+							if (!type) {
+								console.error('No input for key: ', key);
+							} else if (type === 'text') {
+								input.dom.value = value;
+							} else if (type === 'radio' || type === 'checkbox') {
+								input.dom.checked = value || value === 'Y';
+							}
+						});
+					});
+			}
+
+			me.STATE_VALUES = values;
+		},
+
+
+		changed: function(name, value, doNotStore) {
+			if (!name || doNotStore) { return; }
+
+			this.STATE_VALUES[name] = value;
+
+			TemporaryStorage.set(this.STATE_NAME, this.STATE_VALUES);
+		},
+
+
+		clearStorage: function() {
+			TemporaryStorage.set(this.STATE_NAME, {});
 		},
 
 
@@ -611,6 +638,7 @@
 
 			this.add(fields);
 			this.fillInNations();
+			this.fillInFromStorage();
 		},
 
 
@@ -735,7 +763,6 @@
 							Message: 'Your application is pending.'
 						});
 						me.showPending(json);
-						return;
 					}
 
 					if (json.Status === 201) {
@@ -743,9 +770,9 @@
 						$AppConfig.userObject.set('admission_status', 'Admitted');
 						me.fireEvent('show-msg', json.Message || 'Your application was successful.', false, 5000);
 						me.fireEvent('admission-complete', true);
-						return;
 					}
 
+					ne.clearStorage();
 					me.showError(json);
 					me.fireEvent('enable-submission', true);
 				})

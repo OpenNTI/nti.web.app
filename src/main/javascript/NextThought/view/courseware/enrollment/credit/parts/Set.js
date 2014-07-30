@@ -221,7 +221,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Set', {
 		}
 	},
 
-	changed: function() {
+	changed: function(name, value, doNotStore) {
 		var parent = this.up('[changed]'),
 			correct = this.isCorrect();
 
@@ -242,7 +242,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Set', {
 		}
 
 		if (parent) {
-			parent.changed();
+			parent.changed(name, value, doNotStore);
 		}
 	},
 

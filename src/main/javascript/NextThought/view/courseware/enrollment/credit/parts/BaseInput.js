@@ -20,6 +20,10 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.BaseInput', {
 		if (this.hides) {
 			this.fireEvent('hide-item', this.hides);
 		}
+
+		if (this.startingvalue) {
+			this.setValue(this.startingvalue, this.startingvaluename);
+		}
 	},
 
 
@@ -57,15 +61,16 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.BaseInput', {
 				}
 
 				if (parent) {
-					parent.changed();
+					parent.changed(me.name, me.getValue(true)[me.name], me.doNotStore);
 				}
 			});
 	},
 
-	//override this
+	//override these
 	isEmpty: function() { return false; },
 	addError: function() {},
 	removeError: function() {},
+	setValue: function() {},
 
 	isValid: function() {
 		//if we are required and empty we aren't

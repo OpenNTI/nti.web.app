@@ -28,7 +28,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.DateInput', {
 			scrollParent = me.el.parent('.credit-container');
 
 		me.dateInput = Ext.widget('datefield', {
-			renderTo: me.dateEl
+			renderTo: me.dateEl,
+			date: me.startingDate
 		});
 
 		me.on('destroy', 'destroy', me.dateInput);
@@ -45,7 +46,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.DateInput', {
 
 
 	isEmpty: function() {
-		return this.dateInput.isEmpty();
+		return this.dateInput ? this.dateInput.isEmpty() : true;
 	},
 
 
@@ -73,6 +74,34 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.DateInput', {
 	isCorrect: function() {
 		return !this.rendered || (this.isEmpty() || !!this.getValue()[this.name]);
 	},
+
+
+	//value looks like YYYYMMDD
+	setValue: function(value) {
+		var year, month, day, date;
+
+		if (!this.rendered) {
+			this.startingvalue = value;
+			return;
+		}
+
+		year = value.substring(0, 4);
+		month = value.substring(4, 6);
+		day = value.substring(6, 8);
+
+		year = parseInt(year, 10);
+		month = parseInt(month, 10) - 1;
+		day = parseInt(day, 10);
+
+		date = new Date(year, month, day);
+
+		if (this.dateInput) {
+			this.dateInput.setValue(date);
+		} else {
+			this.startingDate = date;
+		}
+	},
+
 
 	getValue: function() {
 		var value = {},

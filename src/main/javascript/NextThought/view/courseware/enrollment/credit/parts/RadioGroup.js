@@ -96,7 +96,23 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 
 
 	setUpChangeMonitors: function() {
-		this.mon(this.el, 'click', 'changed');
+		var input, me = this;
+
+		me.mon(me.el, 'click', 'changed');
+
+		if (me.dropdown) {
+			me.mon(me.dropdown, 'changed', 'changed');
+		}
+
+		input = me.el.down('input[type=text]');
+
+		if (input) {
+			me.mon(input, 'keydown', function() {
+				clearTimeout(me.inputChangeTimeout);
+
+				me.inputChangeTimeout = setTimeout(me.changed.bind(me), 500);
+			});
+		}
 	},
 
 
@@ -149,6 +165,62 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 
 	removeError: function() {
 		this.removeCls('error');
+	},
+
+
+	setValue: function(value) {
+		var me = this,
+			input, parent;
+
+		if (!me.rendered) {
+			me.startingvalue = value;
+			return;
+		}
+
+		input = me.el.down('input[value="' + value + '"]');
+
+		//if we have an input with the correct value, check it
+		if (input) {
+			input.dom.checked = true;
+			me.changed();
+			return;
+		}
+
+		//drop down is set in this.afterRender but this is called from the parent.afterRender
+		//so wait until the next event pump
+		wait()
+			.then(function() {
+				//if we have a drop down set that as the value
+				if (me.dropdown) {
+					me.dropdown.setValue(value);
+
+					input = me.el.down('.input-container.dropdown');
+					parent = input && input.up('.credit-input').down('input[type=radio]');
+
+					//check the radio input associated with the drop down
+					if (parent) {
+						parent.dom.checked = true;
+					}
+
+					me.changed();
+				} else {
+					//check if we have an text input
+					input = me.el.down('input[type=text]');
+					parent = input && input.up('.credit-input').down('input[type=radio]');
+
+					//if we have an input and the value isn't falsy
+					if (input) {
+						input.dom.value = value === 'NaN' ? 0 : value;
+					}
+
+					//check the radio input associated with the text input
+					if (parent) {
+						parent.dom.checked = true;
+					}
+
+					me.changed();
+				}
+			});
 	},
 
 
