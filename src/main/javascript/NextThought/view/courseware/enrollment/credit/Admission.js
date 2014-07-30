@@ -203,7 +203,7 @@
 								valueType: 'numeric',
 								valuePattern: [
 									{ '^\\d{0,10}$': '({{999}}) {{999}}-{{9999}}' },
-									{ '^\\d.*$': '{{999999999999999999}}' }
+									{ '*': '{{' + ((new Array(128)).join('*')) + '}}' }
 								],
 								valueValidation: /\d{10,}/,
 								placeholder: 'Primary Phone', required: true, size: 'large'}
