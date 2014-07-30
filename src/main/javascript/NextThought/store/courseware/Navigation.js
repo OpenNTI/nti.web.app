@@ -73,7 +73,10 @@ Ext.define('NextThought.store.courseware.Navigation', {
 			maxDepth = this.depth = getDepth(outline);
 
 			itr(outline);
+			this.suspendEvents();
 			this.add(r);
+			this.resumeEvents();
+			this.fireEvent('clear', this);
 		}
 		finally {
 			this.fireEvent('built', this);

@@ -726,6 +726,19 @@ Ext.define('NextThought.view.content.View', {
 			return location && location.title;
 		}
 
+		//This works around the fact that there are multiple CCE's (multiple instances) that contain references to the same ContentPackages...
+		// instead of looking through the catalog, loop through the enrolled courses and pull the CCE off them. This is still a bandaid. We will
+		// eventually require the context of an ID so there is no ambiguity.
+		function search(enrollment) {
+			var cce = enrollment.getCourseCatalogEntry();
+			if (!cce) {
+				console.error('Not precached yet', enrollment);
+				return false;
+			}
+
+			return CourseWareUtils.containsNTIID(cce, ParseUtils.ntiidPrefix(ntiid));
+		}
+
 		if (!location) {
 			return noCourse('No thing to do!')
 					.fail(function() {
@@ -735,25 +748,27 @@ Ext.define('NextThought.view.content.View', {
 		}
 
 		//We dont care if this is just content... if it doesn't have a course, we do not want to fail
-		course = isCourse && CourseWareUtils.courseForNtiid(ntiid);
-		if (isCourse && (!course || !course.findByMyCourseInstance)) {
+		course = isCourse && CourseWareUtils.courseForNtiid(ntiid);//NOTE: DO NOT USE the CourseCatalogEntry returned by this...
+																	// this is just determining if there is ANY course for this ntiid.
+																	// It may not be the **correct** CCE!
+		if (isCourse && !course) {
 			return Promise.reject('No course for ntiid:' + ntiid)
 				.fail(noCourse)
 				.fail(setTab)
 				.fail(function(reason) {
-					console.error('Potentially, failed to restore the state', reason);
+					console.error('Potentially, failed to restore the state %s', reason);
 				});
 		}
 
 		return (course ?
-					CourseWareUtils.findCourseBy(course.findByMyCourseInstance()) :
+					CourseWareUtils.findCourseBy(search) :
 					ContentManagementUtils.findBundle(ntiid).fail(fallback)
 			)
 				.then(setupUI,/*or*/ noCourse)
 				.then(setReader, /*or*/ setTab)
 				.fail(function(reason) {
 					//catch the reason... (and let the restore)
-					console.error('Potentially, failed to restore the state', reason);
+					console.error('Potentially, failed to restore the state %o', reason);
 				});
 	},
 

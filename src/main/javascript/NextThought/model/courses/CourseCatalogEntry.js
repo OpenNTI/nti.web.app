@@ -115,12 +115,16 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 
 
 	findByMyCourseInstance: function() {
+		//returns a string that can be compared. NOTE: not for use as a URL!
+		function nomnom(href) {
+			return (getURL(href) || '').split('/').map(decodeURIComponent).join('/');
+		}
 
-		var myCoursInstance = this.getLink('CourseInstance');
+		var myCoursInstance = nomnom(this.getLink('CourseInstance'));
 
 		return function(instance) {
 			var i = instance.get('CourseInstance') || instance;
-			return myCoursInstance === getURL(i.get('href'));
+			return myCoursInstance === nomnom(getURL(i.get('href')));
 		};
 	},
 

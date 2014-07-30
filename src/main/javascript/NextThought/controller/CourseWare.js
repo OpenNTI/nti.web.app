@@ -89,6 +89,7 @@ Ext.define('NextThought.controller.CourseWare', {
 			},
 			controller: {
 				'*': {
+					'content-dropped': 'purgeCourse',
 					'course-selected': 'onCourseSelected',
 					'unauthorized-navigation': 'maybeShowEnroll'
 				}
@@ -255,9 +256,36 @@ Ext.define('NextThought.controller.CourseWare', {
 	},
 
 
-	courseDropped: function(rec) {
+	courseDropped: function(catalogEntry) {
 		this.enrollmentChanged();
-		this.fireEvent('content-dropped', rec);
+		this.fireEvent('content-dropped', catalogEntry);
+	},
+
+	purgeCourse: function(catalogEntry) {
+		//returns a string that can be compared. NOTE: not for use as a URL!
+		function nomnom(href) {
+			return (getURL(href) || '').split('/').map(decodeURIComponent).join('/');
+		}
+
+		var toRemove = [];
+
+		CourseWareUtils.forEachCourse(function(enrollment) {
+			var cce = catalogEntry && nomnom(catalogEntry.get('href')),
+				lnk = enrollment && nomnom(enrollment.get('CourseInstance').getLink('CourseCatalogEntry'));
+			if (cce === lnk) {
+				toRemove.push(enrollment);
+			}
+		});
+
+		toRemove.forEach(function(rec) {
+			rec.stores.slice().forEach(function(store) {
+				if (store.isModel) {
+					rec.unjoin(store);
+				} else {
+					store.remove(rec);
+				}
+			});
+		});
 	},
 	//</editor-fold>
 	maybeShowEnrollment: function(sender, ntiid) {
@@ -417,6 +445,7 @@ Ext.define('NextThought.controller.CourseWare', {
 				.always(end);
 			return true;
 		} catch (er) {
+			console.error(er.stack || er.message || er);
 			end();
 		}
 	},
@@ -548,6 +577,15 @@ Ext.define('NextThought.controller.CourseWare', {
 }, function() {
 
 	window.CourseWareUtils = {
+		containsNTIID: function(rec, prefix) {
+			var match = false;
+			rec.get('ContentPackages').every(function(id) {
+				match = match || (prefix && prefix === ParseUtils.ntiidPrefix(id));
+			});
+			return match;
+		},
+
+
 		/**
 		 * @param {String} ntiid
 		 * @return {CourseCatalogEntry}
@@ -555,19 +593,12 @@ Ext.define('NextThought.controller.CourseWare', {
 		courseForNtiid: function(ntiid) {
 			function fn(rec) {
 				var match = rec.getId() === ntiid;
-
-				if (!match) {
-					rec.get('ContentPackages').every(function(id) {
-						match = (prefix && prefix === ParseUtils.ntiidPrefix(id));
-					});
-				}
-
-				return match;
+				return match || CourseWareUtils.containsNTIID(rec, prefix);
 			}
 
 			var prefix = ParseUtils.ntiidPrefix(ntiid),
-					store = Ext.getStore('courseware.AvailableCourses'),
-					course, index;
+				store = Ext.getStore('courseware.AvailableCourses'),
+				course, index;
 
 			store = store.snapshot || store;
 

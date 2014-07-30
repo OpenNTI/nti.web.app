@@ -149,8 +149,7 @@ Ext.define('NextThought.controller.Reader', {
 		this.getSwitcher().drop(rec);
 
 		if (!rec || !ntiid || (c && c.getId() === rec.getId())) {
-		//TODO: this should start a session transaction that ends with a "state replacement" so there is no "back"
-			//this.fireEvent('show-view', 'library', true);
+			//TODO: this should start a session transaction that ends with a "state replacement" so there is no "back"
 			r.clearLocation();
 			r.currentRoot = null;
 			this.getMainNav().updateCurrent(true);

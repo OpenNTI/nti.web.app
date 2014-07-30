@@ -96,11 +96,15 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 					fulfill(o);
 				}
 
-				if (v.c && ParseUtils.isNTIID(v.i)) {
-					CourseWareUtils.resolveCourse(v.i).then(f, reject);
+				if (ParseUtils.isNTIID(v.i)) {
+					if (v.c) {
+						CourseWareUtils.resolveCourse(v.i).then(f, reject);
+					} else {
+						ContentManagementUtils.findBundle(v.i).then(f, reject);
+					}
 				} else {
 					title = Library.getTitle(v.i);
-					if (title && !title.get('isCourse')) { f(title); }
+					if (title) { f(title); }
 					else { reject(); }
 				}
 
@@ -110,7 +114,7 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 		try {
 			store = this.getStore();
 
-			Promise.all(Ext.Array.map(s, getRecord)).then(function(records) {
+			Promise.all(s.map(getRecord)).then(function(records) {
 				var range = store.getRange() || [];
 
 				store.loadRecords(Ext.Array.clean(records));
@@ -191,6 +195,7 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 
 		if (rec >= 0) {
 			store.removeAt(rec);
+			this.saveStore();
 		}
 	},
 
@@ -198,39 +203,46 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 	track: function(rec, remove) {
 		var s = this.getStore();
 		try {
-			s.remove(rec);
-			rec.lastTracked = new Date();
-			if (!remove) {
-				s.add(rec);
+			if (rec) {
+				s.remove(rec);
+				rec.lastTracked = new Date();
+				if (!remove) {
+					s.add(rec);
+				}
 			}
 		}
 		catch (e) {
-			return;
+			console.warn(e.stack || e.message || e);
 		}
 
 		if (s.getCount() > 5) {
 			try {
 				s.remove(s.getRange(5));
 			} catch (er) {
-				console.warn('An error occured removing the last record from this store, purging just to be safe.', er.stack || er.message);
 				s.removeAll();
 			}
 		}
 
 
 		if (this.allowTracking) {
-			s = s.getRange();
-			Ext.each(s, function(t, i) {
-
-				s[i] = {
-					c: t.get('isCourse'),
-					i: t.getId(),
-					l: t.lastTracked
-				};
-			});
-			//Cant save records to local storage...so must save just the id's or the index of the content
-			PersistentStorage.updateProperty(this.persistenceKey, this.persistenceProperty, s);
+			this.saveStore();
 		}
+	},
+
+
+	saveStore: function() {
+		var s = this.getStore().getRange();
+		s.forEach(function(t, i) {
+
+			s[i] = {
+				c: t.isCourse,
+				b: t.isBundle,
+				i: t.getId(),
+				l: t.lastTracked
+			};
+		});
+		//Cant save records to local storage...so must save just the id's or the index of the content
+		PersistentStorage.updateProperty(this.persistenceKey, this.persistenceProperty, s);
 	},
 
 

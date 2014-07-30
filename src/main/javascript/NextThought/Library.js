@@ -112,14 +112,36 @@ Ext.define('NextThought.Library', {
 	},
 
 
-	purgeTocs: function() {
-		var me = this;
+	removeForPrefix: function(prefix) {
+		var t = this.findTitleWithPrefix(prefix);
+		if (t) {
+			this.purgeToc(t);
+			this.store.remove(t);
+		}
+	},
 
-		Ext.Object.each(this.tocs, function(index, toc, o) {
-			if (!me.getTitle(index)) {
-				delete o[index];
+
+	purgeTocs: function() {
+		var map = this.tocs,
+			indices = Object.keys(map),
+			i = indices.length, key;
+
+		while (--i >= 0) {
+			key = indices[i];
+			if (!this.getTitle(key)) {
+				delete map[key];
 			}
-		});
+		}
+	},
+
+
+	purgeToc: function(thing) {
+		var t = this.getTitle(thing);
+		if (t) {
+			delete this.tocs[t.getId()];
+		} else {
+			console.error('Could not purge ToC for ', thing);
+		}
 	},
 
 
@@ -290,7 +312,6 @@ Ext.define('NextThought.Library', {
 
 
 		if (count === 0) {
-			console.error('Oh no\'s!\n\n\n\n\n!! No content in Library !!\n\n\n\n\n');
 			callback.call(this);
 			return;
 		}

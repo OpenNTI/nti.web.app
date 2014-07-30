@@ -63,13 +63,23 @@ Ext.define('NextThought.controller.Navigation', {
 			});
 		}
 
-		var EA = Ext.Array,
-			ids = [rec.getId()].concat(rec.get('Items'));
 
-		ids = EA.unique(EA.map(ids, ParseUtils.ntiidPrefix, ParseUtils));
-		Ext.each(ids, function(id) {
+		function toPrefix(o) {
+			if (o && o.isModel) {
+				o = o.get('NTIID');
+			}
+
+			return ParseUtils.ntiidPrefix(o);
+		}
+
+		var ids = [rec.getId()]
+				.concat(rec.get('Items') || [])
+				.concat(rec.get('ContentPackages') || []);
+
+		Ext.Array.unique(ids.map(toPrefix)).forEach(function(id) {
 			console.warn('Dropping PageInfos for prefix:', id);
 			Service.dropPageInfosForPrefix(id);
+			Library.removeForPrefix(id);
 		});
 	},
 
