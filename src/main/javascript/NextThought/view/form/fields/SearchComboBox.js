@@ -49,8 +49,7 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 			'keyup': 'inputKeyPress',
 			'blur': 'inputBlur',
 			'focus': 'inputFocus',
-			'click': 'showOptions',
-			'change': 'inputChange'
+			'click': 'showOptions'
 		});
 
 		//this.mon(Ext.getBody(), 'click', function(e) {if (!e.getTarget('.searchcombobox')) { this.hideOptions(); }}, this);
