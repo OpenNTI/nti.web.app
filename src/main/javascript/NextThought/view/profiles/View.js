@@ -33,7 +33,11 @@ Ext.define('NextThought.view.profiles.View', {
 		this.lastSides = sides;
 
 		this.items.each(function(page) {
-			page.updateSidePadding(sides);
+			try {
+				page.updateSidePadding(sides);
+			} catch (e) {
+				console.warn('Profile page does not implement interfaces. %o', page);
+			}
 		});
 		this.callParent(arguments);
 	},
