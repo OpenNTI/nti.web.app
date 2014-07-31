@@ -99,7 +99,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.TextInput', {
 
 
 	isEmpty: function() {
-		return Ext.isEmpty(this.input.getValue());
+		return Ext.isEmpty(this.input.getValue().replace(/\W/ig, ''));
 	},
 
 

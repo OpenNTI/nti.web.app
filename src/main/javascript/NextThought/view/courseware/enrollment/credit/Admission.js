@@ -200,12 +200,12 @@
 						label: 'Phone Number',
 						inputs: [
 							{type: 'text', name: 'telephone_number',
-								valueType: 'numeric',
+								/*valueType: 'numeric',
 								valuePattern: [
 									{ '^\\d{0,10}$': '({{999}}) {{999}}-{{9999}}' },
 									{ '*': '{{' + ((new Array(128)).join('*')) + '}}' }
-								],
-								valueValidation: /.{10,128}/,
+								],*/
+								valueValidation: /^.{1,128}$/,
 								placeholder: 'Primary Phone', required: true, size: 'large'}
 						]
 					},
