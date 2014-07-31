@@ -248,7 +248,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 			val = active.dom.value;
 		}
 
-		if (this.valType === 'number') {
+		if (this.valType === 'number' && !Ext.isEmpty(val)) {
 			val = parseInt(val, 10);
 		}
 
@@ -266,7 +266,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 
 		var active = this.el.down('input[type=radio]:checked'),	input;
 
-		if (active) {
+		if (active && !this.allowEmptyInput) {
 			input = active.up('.radio');
 			if (input) {
 				input = input.down('input[type=text]');

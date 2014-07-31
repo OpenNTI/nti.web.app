@@ -266,7 +266,7 @@
 						xtype: 'enrollment-credit-set',
 						label: 'Have you ever attended the University of Oklahoma?',
 						inputs: [
-							{type: 'radio-group', name: 'sooner_id', required: true, omitIfBlank: true, valType: 'number', options: [
+							{type: 'radio-group', name: 'sooner_id', required: true, omitIfBlank: true, allowEmptyInput: true, valType: 'number', options: [
 								{text: 'Yes, and my Sooner ID was {input}', value: 'input', help: 'If you do not remember your Sooner ID number, please leave this field blank.'},
 								{text: 'No.', value: ''}
 							]}
@@ -647,7 +647,8 @@
 						inputs: [
 							{
 								type: 'description',
-								text: json.Message
+								text: json.Message,
+								cls: 'error-detail'
 							}
 						]
 					},
@@ -657,7 +658,7 @@
 							{
 								type: 'description',
 								text: [
-									'Your request to earn college credit has been denied',
+									'Your request to earn college credit has been denied. ',
 									'If you believe there has been an error,',
 									'please contact the OU Admissions Office or resubmit your application.'
 								].join(' ')
