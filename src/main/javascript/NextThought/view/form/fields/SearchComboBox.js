@@ -280,6 +280,7 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 		var value = this.inputEl.getValue();
 
 		if (!this.IGNORE_KEY_CODES[e.getCharCode()]) {
+			this.deselect();
 			//filter the options and show the options menu unless we are from an enter
 			this.filterOptions(value, true);
 		}
