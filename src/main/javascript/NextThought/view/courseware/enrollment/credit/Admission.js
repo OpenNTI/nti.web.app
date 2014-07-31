@@ -163,7 +163,7 @@
 							{type: 'text', name: 'street_line4', hidden: true, placeholder: 'Address', size: 'full'},
 							{type: 'text', name: 'street_line5', hidden: true, placeholder: 'Address', size: 'full'},
 							{type: 'text', name: 'city', placeholder: 'City / Town', size: 'large', required: true},
-							{type: 'dropdown', name: 'state', placeholder: 'State / Province / Territory / Region', size: 'full', options: states, required: true},
+							{type: 'dropdown', name: 'state', placeholder: 'State / Province / Territory / Region', size: 'full', options: states, required: true, editable: false},
 							{type: 'dropdown', name: 'nation_code', placeholder: 'Country', required: true, size: 'large left', options: []},
 							{type: 'text', name: 'postal_code', placeholder: 'ZIP / Postal Code', size: 'small left', required: true}
 						],
@@ -188,7 +188,7 @@
 							{type: 'text', name: 'mailing_street_line4', hidden: true, placeholder: 'Address', size: 'full'},
 							{type: 'text', name: 'mailing_street_line5', hidden: true, placeholder: 'Address', size: 'full'},
 							{type: 'text', name: 'mailing_city', placeholder: 'City / Town', size: 'large'},
-							{type: 'dropdown', name: 'mailing_state', placeholder: 'State / Province / Territory / Region', size: 'full', options: states},
+							{type: 'dropdown', name: 'mailing_state', placeholder: 'State / Province / Territory / Region', size: 'full', options: states, editable: false},
 							{type: 'dropdown', name: 'mailing_nation_code', placeholder: 'Country', size: 'large left', options: []},
 							{type: 'text', name: 'mailing_postal_code', placeholder: 'ZIP / Postal Code', size: 'small left'}
 						]

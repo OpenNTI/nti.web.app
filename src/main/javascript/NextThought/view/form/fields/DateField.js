@@ -39,6 +39,7 @@ Ext.define('NextThought.view.form.fields.DateField', {
 				{value: '11', text: 'December'}
 			],
 			emptyText: 'Month',
+			editable: false,
 			renderTo: this.monthEl
 		});
 
