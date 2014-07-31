@@ -224,10 +224,11 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 
 	/**
 	 * show the message bar across the top of the window
-	 * @param  {string}  msg             the message to display
-	 * @param  {Boolean} isError         whether or not we are showing an error
-	 * @param  {String} msgid 	 		 id of the message element
-	 * @return {Promise}                 fulfill if there is a click handler on click, and reject on close
+	 * @param  {string}  msg  the message to display
+	 * @param  {Boolean} isError  whether or not we are showing an error
+	 * @param  {Number} timeout  timeout...
+	 * @param  {String} msgid  id of the message element
+	 * @return {Promise} fulfill if there is a click handler on click, and reject on close
 	 */
 	showMsg: function(msg, isError, timeout, msgid) {
 		var me = this;
@@ -351,6 +352,7 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 
 
 		function updateLabel() {
+			var activeTab;
 			if (me.showAvailable) {
 				me.labelEl.addCls('back');
 				activeTab = me.tabpanel.getTabForCourse(course);
