@@ -2,17 +2,19 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 	extend: 'Ext.Component',
 	alias: 'widget.searchcombobox',
 
+	editable: true,
+
 	listTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		tag: 'ul', cn: [
 			{tag: 'tpl', 'for': 'options', cn: [
-				{tag: 'li', 'data-value': '{[values.value || values]}', html: '{[values.text || values]}'}
+				{tag: 'li', 'data-value': '{value}', html: '{text}'}
 			]}
 		]
 	})),
 
 	renderTpl: Ext.DomHelper.markup({
 		cls: 'searchcombobox', cn: [
-			{tag: 'input', type: 'text', placeholder: '{placeholder}'},
+			'<input type="text" placeholder="{placeholder}" {readonly:boolStr("readonly")} tabindex="0">',
 			{cls: 'arrow down'},
 			{cls: 'options hidden'}
 		]
@@ -26,10 +28,21 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 	},
 
 
+	constructor: function() {
+		this.callParent(arguments);
+		if (this.options) {
+			this.addOptions(this.options);
+		}
+
+		this.__inputBuffer = '^';
+	},
+
+
 	beforeRender: function() {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
+			readonly: !this.editable,
 			placeholder: this.emptyText
 		});
 	},
@@ -70,7 +83,9 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 
 	addOptions: function(options) {
 		function convert(o) {
-			return o.hasOwnProperty('value') ? o : {value: o, text: o};
+			o = o.hasOwnProperty('value') ? Ext.clone(o) : {value: o, text: o};
+			o.toString = function() {return this.text;};
+			return o;
 		}
 
 		this.options = options.map(convert);
@@ -114,13 +129,11 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 
 	filterOptions: function(value, show) {
 		var options = this.options,
-			active, current;
+			active, current, regex;
 
-		if (value) {
-			options = options.filter(function(option) {
-				var text = option.text.toLowerCase();
-				return text.indexOf(value.toLowerCase()) === 0;
-			});
+		if (value && this.editable) {
+			regex = new RegExp('^' + RegExp.escape(value), 'i');
+			options = options.filter(regex.test.bind(regex));
 
 			//No matches? unfilter?
 			//if (options.length === 0) { options = this.options.slice(); }
@@ -134,12 +147,12 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 
 		//if we only have one item make it the active one
 		if (options.length === 1) {
-			this.activeValue = options[0].value || options[0];
+			this.activeValue = options[0].value;
 
 			//if the value is the whole text of the option make it the current one
-			if (value.toLowerCase() === (options[0].text || options[0]).toLowerCase()) {
-				this.currentValue = options[0].value || options[0];
-				this.currentText = options[0].text || options[0];
+			if (value.toLowerCase() === options[0].text.toLowerCase()) {
+				this.currentValue = options[0].value;
+				this.currentText = options[0].text;
 			}
 		}
 
@@ -164,6 +177,16 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 
 			active.addCls('active');
 		}
+	},
+
+
+	activateOption: function(el, silent) {
+		this.optionsEl.select('.active').removeCls('active');
+		el = Ext.get(el.dom || el);
+		el.addCls('active');
+		el.scrollIntoView(this.optionsEl);
+		el.activeValue = el.getAttribute('data-value');
+		this.selectOption(el.dom, silent);
 	},
 
 
@@ -197,6 +220,50 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 	},
 
 
+	selectNextMatch: function(e) {
+		function str(o) {return (o || '').toString();}
+		var me = this,
+			ch = String.fromCharCode(e.getCharCode()),
+			options = this.options,
+			selected = options.map(str).indexOf(this.currentText),
+			matcher, o, len = options.length, start;
+
+		function clear() { me.__inputBuffer = '^'; }
+
+		if (/[A-Z]/i.test(ch)) {
+			if (me.__inputBuffer.charAt(me.__inputBuffer.length - 1) !== ch) {
+				me.__inputBuffer += ch;
+			}
+			clearTimeout(me.__inputBufferClear);
+			me.__inputBufferClear = setTimeout(clear, 250);
+		} else {
+			me.__inputBuffer = '^';
+			return;
+		}
+
+		matcher = new RegExp(me.__inputBuffer, 'i');
+		selected = ((matcher.test(this.currentText) && selected) || -1) + 1;
+
+		start = selected;
+		for (selected; selected <= len; selected++) {
+			o = options[selected];
+			if (o && matcher.test(o)) {
+				o = me.optionsEl.query('li[data-value="' + o.value + '"]')[0];
+				if (o) {
+					me.activateOption(o);
+				}
+				break;
+			}
+
+			if (selected + 1 >= options.length && start !== false) {
+				selected = -1;//
+				len = start;
+				start = false;
+			}
+		}
+	},
+
+
 	deselect: function() {
 		delete this.currentText;
 		delete this.currentValue;
@@ -205,7 +272,12 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 
 	inputKeyDown: function(e) {
 		var charCode = e.getCharCode(),
+			open = !this.optionsEl.hasCls('hidden'),
 			current = this.optionsEl.down('li.active'), next;
+
+		if (!this.editable && charCode !== e.TAB) {
+			e.stopEvent();
+		}
 
 		if (!current) {
 			current = this.optionsEl.down('li');
@@ -218,7 +290,8 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 			return;
 		}
 
-		if (!this.optionsEl.hasCls('hidden')) {
+		if (open) {
+
 			if (charCode === e.ESC) {
 				e.stopEvent();
 				this.hideOptions();
@@ -228,7 +301,7 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 
 		//down select the next sibling if there is one
 		if (charCode === e.DOWN) {
-			if (!this.optionsEl.hasCls('hidden')) {
+			if (open) {
 				next = current.dom.nextSibling || current.dom.parentNode.firstChild;
 			} else {
 				this.showOptions();
@@ -246,7 +319,7 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 
 		//if enter select the current active li
 		if (charCode === e.ENTER) {
-			if (!e.shiftKey && !this.optionsEl.hasCls('hidden')) {
+			if (!e.shiftKey && open) {
 				this.selectOption(current.dom);
 			}
 			this.hideOptions();
@@ -255,12 +328,7 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 
 		//set the next element active
 		if (next) {
-			next = Ext.get(next);
-			next.addCls('active');
-			next.scrollIntoView(this.optionsEl);
-			this.activeValue = next.getAttribute('data-value');
-			current.removeCls('active');
-			this.selectOption(next.dom, true);
+			this.activateOption(next, true);
 		}
 	},
 
@@ -279,10 +347,14 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 	inputKeyPress: function(e) {
 		var value = this.inputEl.getValue();
 
-		if (!this.IGNORE_KEY_CODES[e.getCharCode()]) {
-			this.deselect();
-			//filter the options and show the options menu unless we are from an enter
-			this.filterOptions(value, true);
+		if (this.editable) {
+			if (!this.IGNORE_KEY_CODES[e.getCharCode()]) {
+				this.deselect();
+				//filter the options and show the options menu unless we are from an enter
+				this.filterOptions(value, true);
+			}
+		} else {
+			this.selectNextMatch(e);
 		}
 	},
 
