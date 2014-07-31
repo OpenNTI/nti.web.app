@@ -72,6 +72,13 @@
 				color: $primary-red;
 			}
 		}
+		.error-detail {
+			background-color:transparentize($primary-red,.85);
+			border-radius:3px;
+			p {
+				padding:.5em 1em;
+			}
+		}
 	}
 
 	.admission-set {
