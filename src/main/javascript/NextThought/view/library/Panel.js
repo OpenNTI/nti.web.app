@@ -59,7 +59,8 @@ Ext.define('NextThought.view.library.Panel', {
 					return me.activeWindow.restore(state);
 				}
 
-				me.showAvailable(isBook);
+				me.showAvailable(isBook, state.activeId);
+				return me.activeWindow.restore(state);
 			});
 	},
 
@@ -222,11 +223,11 @@ Ext.define('NextThought.view.library.Panel', {
 	},
 
 
-	showAvailable: function(isBook) {
+	showAvailable: function(showBooks, activeId) {
 		var me = this, state,
 			win, cfg, xtype;
 
-		if (isBook) {
+		if (showBooks) {
 			xtype = 'library-available-books-window';
 
 			cfg = {
@@ -241,7 +242,8 @@ Ext.define('NextThought.view.library.Panel', {
 				current: this.currentAvailable,
 				upcoming: this.upcomingAvailable,
 				archived: this.archivedAvailable,
-				showAvailable: true
+				showAvailable: true,
+				activeId: activeId
 			};
 
 			state = 'courses';

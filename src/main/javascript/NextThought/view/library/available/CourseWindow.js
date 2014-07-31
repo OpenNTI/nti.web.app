@@ -65,14 +65,18 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 		var me = this;
 
 		return new Promise(function(fulfill) {
-			var course = CourseWareUtils.courseForNtiid(state.cce);
+			var course;
 
-			if (!course) {
-				console.error('No course to restore state to');
-			} else {
-				delete state.paymentcomplete;
-				delete state.cce;
-				me.showAdmission(course, true);
+			if (state.paymentcomplete) {
+				course = CourseWareUtils.courseForNtiid(state.cce);
+
+				if (!course) {
+					console.error('No Course to restore state to');
+				} else {
+					delete state.paymentcomplete;
+					delete state.cce;
+					me.showAdmission(course, true);
+				}
 			}
 
 			fulfill();
@@ -83,12 +87,22 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 	initComponent: function() {
 		this.callParent(arguments);
 
+		var course;
+
 		if (this.showAvailable) {
 			this.showTabpanel();
 		}
 
 		if (this.course) {
 			this.showCourse(this.course);
+		} else if (this.activeId) {
+			course = CourseWareUtils.courseForNtiid(this.activeId);
+
+			if (course) {
+				this.showCourse(course);
+			} else {
+				console.error('Faild to load active id, ', this.activeId);
+			}
 		}
 
 		this.on('beforeclose', this.onBeforeClose, this);
@@ -339,7 +353,7 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 		function updateLabel() {
 			if (me.showAvailable) {
 				me.labelEl.addCls('back');
-				activeTab = me.tabpanel.getActiveTab();
+				activeTab = me.tabpanel.getTabForCourse(course);
 
 				me.labelEl.update(activeTab.title + ' Courses');
 			} else {

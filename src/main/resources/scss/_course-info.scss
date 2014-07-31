@@ -495,7 +495,7 @@
 			color: $primary-grey;
 		}
 
-		.info, .warning {
+		.info, .warning, .seats {
 			font-size: 0.9em;
 			line-height: 1.8em;
 			font-weight: 300;
@@ -503,6 +503,10 @@
 
 		.warning {
 			color: $primary-red;
+		}
+
+		.seats {
+			color: $secondary-green;
 		}
 
 		.link {

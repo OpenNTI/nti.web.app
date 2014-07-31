@@ -53,6 +53,24 @@ Ext.define('NextThought.view.courseware.coursecatalog.TabPanel', {
 	},
 
 
+	getTabForCourse: function(course) {
+		var id = course.get('NTIID'),
+			upcoming = this.down('[title=Upcoming]'),
+			current = this.down('[title=Current]'),
+			archived = this.down('[title=Archived]');
+
+		if (upcoming && upcoming.store && upcoming.store.find('NTIID', id) >= 0) { return upcoming; }
+
+		if (current && current.store && current.store.find('NTIID', id) >= 0) { return current; }
+
+		if (archived && archived.store && archived.store.find('NTIID', id) > 0) { return archived; }
+
+		return {
+			title: 'Courses'
+		};
+	},
+
+
 	updateCurrent: function(courses) {
 		var cmp = this.down('[title=current]');
 

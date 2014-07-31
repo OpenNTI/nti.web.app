@@ -141,7 +141,8 @@ PREVIOUS_STATE = 'previous-state';
 			this.fragmentInterpreterMap = {
 				'#!profile': Ext.bind(this.interpretProfileFragment, this),
 				'#!forums': Ext.bind(this.interpretForumsFragment, this),
-				'#!object': Ext.bind(this.interpretObjectFragment, this)
+				'#!object': Ext.bind(this.interpretObjectFragment, this),
+				'#!library': Ext.bind(this.interpretLibraryFragment, this)
 			};
 
 			this.generateFragmentMap = {};
@@ -455,6 +456,28 @@ PREVIOUS_STATE = 'previous-state';
 			}
 			//if we are restoring an object from the url, we don't want to restore the slidedeck from the state
 			return {slidedeck: null};
+		},
+
+
+		interpretLibraryFragment: function(fragment, query) {
+			var parts = (fragment || '').split('/').slice(1), //split on / and slice the #!library off the front
+				result = {
+					active: 'library',
+					library: {}
+				};
+
+			if (parts.length > 0) {
+
+				if (parts[0].toLowerCase() === 'availablecourses') {
+					result.library.activeWindow = 'courses';
+				}
+
+				if (parts[1]) {
+					result.library.activeId = B64.decodeURLFriendly(parts[1]);
+				}
+			}
+
+			return result;
 		},
 
 
