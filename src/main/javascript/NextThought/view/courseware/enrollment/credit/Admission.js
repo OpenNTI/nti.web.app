@@ -129,11 +129,9 @@
 					},
 					{
 						xtype: 'enrollment-credit-set',
-						label: 'What is your former name? (optional)',
+						label: 'Do you have a former last name? (optional)',
 						inputs: [
-							{type: 'text', name: 'former-first-name', placeholder: 'First Name', size: 'third left'},
-							{type: 'text', name: 'former-middle-name', placeholder: 'Middle Name', size: 'third left'},
-							{type: 'text', name: 'former-last-name', placeholder: 'Last Name', size: 'third left last'}
+							{type: 'text', name: 'former_name', placeholder: 'Former Last Name', size: 'third'}
 						]
 					},
 					{
