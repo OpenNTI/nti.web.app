@@ -798,6 +798,7 @@
 						me.showError({
 							Message: 'Your application is pending.'
 						});
+						me.showError(json);
 						me.showPending(json);
 					}
 
@@ -808,8 +809,7 @@
 						me.fireEvent('admission-complete', true);
 					}
 
-					ne.clearStorage();
-					me.showError(json);
+					me.clearStorage();
 					me.fireEvent('enable-submission', true);
 				})
 				.fail(function(response) {
