@@ -127,8 +127,12 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.CheckboxGroup', 
 			return input.is(':checked') ? 'Y' : 'N';
 		}
 
+		//if N is checked don't add the options to the value
+		//if y is checked add Y or N depending on if they are checked
 		(this.options || []).forEach(function(option) {
-			value[option.name] = selected ? getOptionValue(option.name) : 'N';
+			if (selected) {
+				value[option.name] = getOptionValue(option.name);
+			}
 		});
 
 		return value;
