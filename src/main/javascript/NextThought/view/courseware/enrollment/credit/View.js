@@ -76,6 +76,15 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 	},
 
 
+	stopClose: function() {
+		var admissionsShouldStop = this.admissions && this.admissions.stopClose(),
+			enrollmentShouldStop = this.enrollment && this.enrollment.stopClose && this.enrollment.stopClose(),
+			purchaseShouldStop = this.purchase && this.purchase.stopClose && this.purchase.stopClose();
+
+		return admissionsShouldStop || enrollmentShouldStop || purchaseShouldStop;
+	},
+
+
 	showAdmission: function() {
 		var me = this;
 

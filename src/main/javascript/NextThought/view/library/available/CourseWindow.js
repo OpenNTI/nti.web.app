@@ -90,6 +90,8 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 		if (this.course) {
 			this.showCourse(this.course);
 		}
+
+		this.on('beforeclose', this.onBeforeClose, this);
 	},
 
 
@@ -151,20 +153,59 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 		});
 	},
 
+
+	onBeforeClose: function() {
+		var me = this,
+			warning;
+
+		//Iterate through all the items and see if they care if the window is closed
+		me.items.each(function(item) {
+			if (item.stopClose) {
+				//stopWindowClose should return a promise
+				//that on success will allow the window to close
+				// and on fail will prevent the window to close
+				warning = item.stopClose();
+
+				return false;
+			}
+		});
+
+		if (warning) {
+			warning
+				.then(function() {
+					//close the window;
+					me.destroy();
+				});
+
+			return false;
+		}
+	},
+
+
+
 	showPrevItem: function() {
-		var current = this.getLayout().getActiveItem();
+		var me = this, p,
+			current = this.getLayout().getActiveItem();
 
-		if (!current.fireEvent('beforedeactivate')) {
-			return;
+		if (current.stopClose) {
+			p = current.stopClose();
+		} else {
+			p = new Promise.resolve();
 		}
 
-		if (current.is('course-enrollment-details')) {
-			this.showTabpanel();
-		}
+		p.then(function() {
+			if (current.is('course-enrollment-details')) {
+				me.showTabpanel();
+				delete me.courseDetail;
+			}
 
-		if (current.is('enrollment-credit')) {
-			this.showCourse(current.course);
-		}
+			if (current.is('enrollment-credit')) {
+				me.showCourse(current.course);
+				delete me.courseEnrollment;
+			}
+
+			current.destroy();
+		});
 	},
 
 	/**

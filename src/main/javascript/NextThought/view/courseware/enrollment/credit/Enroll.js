@@ -103,6 +103,32 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 	},
 
 
+	stopClose: function() {
+		var me = this;
+
+		return new Promise(function(fulfill, reject) {
+			Ext.Msg.show({
+				msg: 'You have not finished enrolling in this course yet.',
+				buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+				scope: this,
+				icon: 'warning-red',
+				buttonText: {
+					'ok': 'caution:Leave',
+					'cancel': 'Stay'
+				},
+				title: 'Are you sure?',
+				fn: function(str) {
+					if (str === 'ok') {
+						fulfill();
+					} else {
+						reject();
+					}
+				}
+			});
+		});
+	},
+
+
 	showError: function(json) {
 		if (json && json.Message) {
 			this.fireEvent('show-msg', json.Message, true, 5000);

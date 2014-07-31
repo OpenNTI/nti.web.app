@@ -457,6 +457,33 @@
 		},
 
 
+		stopClose: function() {
+			var me = this;
+
+			return new Promise(function(fulfill, reject) {
+				Ext.Msg.show({
+					msg: 'Navigating away from this page will clear all progress on your Application to Earn College Credit.',
+					buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+					scope: this,
+					icon: 'warning-red',
+					buttonText: {
+						'ok': 'caution:Discard Application',
+						'cancel': 'Stay and Complete Application'
+					},
+					title: 'Are you sure?',
+					fn: function(str) {
+						if (str === 'ok') {
+							me.clearStorage();
+							fulfill();
+						} else {
+							reject();
+						}
+					}
+				});
+			});
+		},
+
+
 		fillInNations: function() {
 			var me = this,
 				nationsLink = $AppConfig.userObject.getLink('fmaep.country.names');
