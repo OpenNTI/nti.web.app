@@ -5,7 +5,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.PurchaseComplete', {
 	cls: 'enrollment-credit-purchase',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'title', html: 'You\'re Enrolled to Earn College Credit'},
+		{cls: 'title', html: 'You\'re Enrolled to Earn College Credit.'},
 		{cls: 'things-to-do', cn: [
 			{cls: 'prompt', html: '{prompt}'},
 			{tag: 'tpl', 'for': 'todo', cn: [
