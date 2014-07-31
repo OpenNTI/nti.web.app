@@ -559,13 +559,19 @@
 			}
 		}
 
+		&:not(.error) {
+			.error {
+				display: none;
+			}
+		}
+
 		&:not(.payconfirm) {
 			.payconfirm {
 				display: none;
 			}
 		}
 
-		&.enroll, &.admission, &.payment {
+		&.enroll, &.admission, &.payment, &.error {
 			.detail {
 				display: none;
 			}

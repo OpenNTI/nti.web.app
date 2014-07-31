@@ -22,16 +22,27 @@
 				}
 			}
 
-			&.active {
+			&.failed {
+				color: $primary-red;
+
+				&.number::before {
+					border-color: $primary-red;
+				}
+			}
+
+			&.active:not(.failed) {
 				color: $primary-green;
+				
+				&.number::before {
+					border-color: $primary-green;
+				}
+			}
+
+			&.active {
 				background-color: white;
 				border: 0px solid #e5e5e5;
 				border-left-width: 1px;
 				border-right-width: 1px;
-
-				&.number::before {
-					border-color: $primary-green;
-				}
 			}
 
 			&.number {
@@ -581,6 +592,11 @@
 			font: normal 300 1em/1.5em $font;
 			color: $secondary-grey;
 		}
+
+		a {
+			text-decoration: none;
+			color: $primary-blue;
+		}
 	}
 }
 
@@ -594,6 +610,10 @@
 		font-size: 1.5em;
 		line-height: 1.7em;
 		font-weight: 300;
+
+		&.error {
+			color: $primary-red;
+		}
 	}
 
 	.text {
@@ -607,6 +627,10 @@
 	.info {
 		background-color: $panel-background;
 		border: 1px solid #efefef;
+
+		&.hidden {
+			display: none;
+		}
 
 		.line {
 			padding: 15px;

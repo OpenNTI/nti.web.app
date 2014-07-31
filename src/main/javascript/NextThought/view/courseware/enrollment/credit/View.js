@@ -116,11 +116,17 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 			updateHeader();
 		}
 
-		me.mon(me.admissions, 'admission-complete', function(success) {
-			if (success) {
-				me.showEnroll();
-			} else {
-				me.fireEvent('show-detail', me.course);
+		me.mon(me.admissions, {
+			'admission-complete': function(success) {
+				if (success) {
+					me.showEnroll();
+				} else {
+					me.fireEvent('show-detail', me.course);
+				}
+			},
+			'admission-error': function() {
+				me.fireEvent('set-window-btns', null);
+				me.admissionEl.addCls('failed');
 			}
 		});
 

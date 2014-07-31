@@ -47,7 +47,8 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 			{cls: 'button admission enrollment submit disabled', html: 'Submit Application'},
 			{cls: 'button enroll enrollment submit', html: 'Continue to Payment'},
 			{cls: 'button enroll enrollment cancel', html: 'Cancel'},
-			{cls: 'button admission enrollment cancel', html: 'Cancel'}
+			{cls: 'button admission enrollment cancel', html: 'Cancel'},
+			{cls: 'button error enrollment cancel', html: 'Cancel'}
 		]}
 	]),
 

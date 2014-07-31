@@ -292,10 +292,9 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 				cls: 'pending'
 			},
 			admission_reject: {
-				title: 'Admission Denied',
+				title: 'We are unable to confirm your eligibility to enroll through this process.',
 				information: [
-					'Your request to earn college credit has been denied',
-					'If you believe there has been an error, please contact the',
+					'Please contact',
 					'<a class=\'link\' href=\'http://www.ou.edu/admissions.html\' target=\'_blank\'>OU Admissions Office</a>',
 					'or <a class=\'link\' href=\'resubmit\'>resubmit your application</a>.'
 				].join(' '),
