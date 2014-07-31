@@ -317,6 +317,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 			me.add(form);
 			me.updateFromStorage();
 			me.fillInNations();
+			me.fillInStates();
 		}
 	},
 
@@ -454,6 +455,38 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 			})
 			.fail(function(reason) {
 				console.error('Failed to load nation list ', reason);
+			});
+	},
+
+
+	fillInStates: function() {
+		var me = this,
+			stateLink = $AppConfig.userObject.getLink('fmaep.state.names');
+
+		Service.request(stateLink)
+			.then(function(response) {
+				var states = Ext.JSON.decode(response, true),
+					stateInput = me.down('[name=state]'),
+					mailingStateInput = me.down('[name=mailing_state]');
+
+				function updateInputs() {
+					if (stateInput) {
+						stateInput.addOptions(states);
+					}
+
+					if (mailingStateInput) {
+						mailingStateInput.addOptions(states);
+					}
+				}
+
+				if (!me.rendered) {
+					me.on('afterrender', updateInputs);
+				} else {
+					updateInputs();
+				}
+			})
+			.fail(function(reason) {
+				console.error('Failed to load state list: ', reaseon);
 			});
 	},
 
@@ -612,6 +645,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 
 		this.add(fields);
 		this.fillInNations();
+		this.fillInStates();
 		this.updateFromStorage();
 	},
 
