@@ -114,12 +114,17 @@ Ext.define('NextThought.view.assessment.input.Short', {
 			var x = s.get('value');
 			// x may or may not be an Array.  Ext.each handles that for us.
 			Ext.each(x, function(s) {
-				var k, v = {};
+				var k, v = {}, o;
 				for (k in s) {
 					if (s.hasOwnProperty(k)) {
-						v[k] = s[k] || '';
+						o = s[k] || '';
 
-						v[k] = pillTpl.apply([v[k]]);
+						if (typeof o !== 'string') {
+							console.warn('Probably dropping question solution... its not a simple value. %o', o);
+							o = o.solution;
+						}
+
+						v[k] = o ? pillTpl.apply([o]) : '';
 					}
 				}
 
