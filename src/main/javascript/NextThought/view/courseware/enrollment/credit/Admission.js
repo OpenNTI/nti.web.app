@@ -674,7 +674,7 @@
 
 			this.add(fields);
 			this.fillInNations();
-			this.fillInFromStorage();
+			this.updateFromStorage();
 		},
 
 
