@@ -303,7 +303,13 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			},
 			credit_enrolled: {
 				title: 'How do I drop the course?',
-				information: 'Contact the <a class=\'link\' href=\'http://www.ou.edu/admissions.html\' target=\'_blank\'>OU Admissions Office</a> by {date} for a full refund.',
+				information: [
+					'If you are currently enrolled as an OU student, visit',
+					'<a class=\'link\' href=\'http://ozone.ou.edu\'>oZone</a>.',
+					'If not, please contact the',
+					'<a class=\'link\' href=\'http://www.ou.edu/admissions.html\'>Admission office</a>',
+					'by {date} for a full refund.'
+				].join(' '),
 				cls: 'enrolled'
 			}
 		}
@@ -397,7 +403,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 					finish(state);
 					return;
 				}
-
+				//Set the state in the top part and the button
 				if (courseData.OpenEnrolled) {
 					state.top = me.getState('top', 'open_enrolled', {
 						date: start
@@ -418,6 +424,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 					state.buttonText = 'Enroll in the Open Course';
 				}
 
+				//Set up the state in the bottom
 				if (courseData.AvailableForCredit) {
 					if (courseData.EnrolledForCredit) {
 						state.bottom = me.getState('bottom', 'credit_enrolled', {
@@ -435,6 +442,11 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 						});
 						state.price = '$599';
 					}
+				} else if (courseData.EnrolledForCredit) {
+					state.bottom = me.getState('bottom', 'credit_enrolled', {
+						'date': enrollcutoff
+					});
+					state.price = '$599';
 				} else {
 					state.bottom.cls = 'openonly';
 				}
