@@ -203,9 +203,9 @@
 								/*valueType: 'numeric',
 								valuePattern: [
 									{ '^\\d{0,10}$': '({{999}}) {{999}}-{{9999}}' },
-									{ '*': '{{' + ((new Array(18)).join('*')) + '}}' }
+									{ '*': '{{' + ((new Array(128)).join('*')) + '}}' }
 								],*/
-								valueValidation: /^.{1,18}$/,
+								valueValidation: /^.{1,128}$/,
 								placeholder: 'Primary Phone', required: true, size: 'large'}
 						]
 					},
