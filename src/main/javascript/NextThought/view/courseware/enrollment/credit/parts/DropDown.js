@@ -9,6 +9,9 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.DropDown', {
 	}),
 
 
+	editable: true,
+
+
 	beforeRender: function() {
 		this.callParent(arguments);
 
@@ -32,7 +35,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.DropDown', {
 		me.combobox = Ext.widget('searchcombobox', {
 			options: me.options,
 			emptyText: me.placeholder,
-			renderTo: me.selectEl
+			renderTo: me.selectEl,
+			editable: !!me.editable
 		});
 
 		me.mon(scrollParent, 'scroll', function() {
