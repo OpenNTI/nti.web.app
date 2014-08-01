@@ -33,7 +33,7 @@ Ext.define('NextThought.view.forums.Container', {
 
 
 	getTabs: function() {
-		if (!this.forumList) {
+		if (!this.forumList || this.noTab) {
 			return;
 		}
 

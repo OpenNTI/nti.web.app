@@ -513,6 +513,63 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
+	__resolveBoards: function(link, community) {
+		return Service.request(link)
+				.then(ParseUtils.parseItems.bind(ParseUtils))
+				.then(function(objs) {
+					//if we have a community go ahead and set it as the creator of the board it created
+					//otherwise just return the boards as is
+					if (!community) {
+						return objs;
+					}
+
+					return objs.map(function(o) {
+						o.communityUsername = community.getId();
+
+						if (o.get('Creator') === community.getId()) {
+							o.set('Creator', community);
+						}
+
+						return o;
+					});
+				});
+	},
+
+
+	getRootBoardLink: function() {
+		var collection = this.getCollection('Boards', $AppConfig.username),
+			links = collection && collection.Links,
+			link = links && this.getLinkFrom(links, 'global.site.board');
+
+		return link;
+	},
+
+
+	resolveRootBoards: function() {
+		var me = this,
+			rootLink = me.getRootBoardLink(),
+			communities;
+
+		if (rootLink) {
+			return me.__resolveBoards(rootLink);
+		}
+
+		communities = $AppConfig.userObject.getCommunities();
+
+		return Promise.all(communities.map(function(community) {
+			var url = community.getLink('DiscussionBoard');
+
+			if (!url) {
+				return Promise.resolve([]);
+			}
+
+			return me.__resolveBoards(url, community);
+		})).then(function(results) {
+			return results.reduce(function(a, b) { return a.concat(b); }, []);
+		});
+	},
+
+
 	//region capability shortcuts
 	/*
 		 *	The following methods are for deciding when things can or cannot happen

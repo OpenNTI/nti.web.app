@@ -340,82 +340,33 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	loadCommunityBoards: function() {
-		var communities = $AppConfig.userObject.getCommunities();
+	loadBoardList: function(view) {
+		var me = this;
 
-		function loadCommunityBoard(community) {
-			var url = community.getLink('DiscussionBoard');
+		Service.resolveRootBoards()
+			.then(function(boards) {
+				var store;
 
-			if (!url) {
-				return Promise.resolve([]);
-			}
-
-			return Service.request(url)
-					.then(ParseUtils.parseItems.bind(ParseUtils))
-					.then(function onBoardLoad(objs) {
-						return objs.map(function(o) {
-							//We create forums on the backend, so if the board has 0, don't show it.
-							// except I don't think this applies anymore
-							if (o.get('ForumCount') > -1) {
-								if (community) {
-									o.communityUsername = community.getId();
-
-									if (o.get('Creator') === community.getId()) {
-										o.set('Creator', community);
-									}
-								}
-								return o;
-							}
-						});
+				if (boards.length === 1) {
+					if (view.showForumList) {
+						view.showForumList(boards[0]);
+						view.noTab = true;
+					}
+				} else {
+					store = NextThought.store.NTI.create({
+						model: 'NextThought.model.forums.Forum',
+						id: 'flattened-boards-forums',
+						data: boards
 					});
 
-		}
+					me.boardsStore = store;
 
-		return Promise.all(communities.map(loadCommunityBoard))
-			.then(function(results) {
-				return results.reduce(function(a, b) { return a.concat(b); }, []);
-			})
-			.fail(function(reason) {
-				console.error('Faild to load boards because:', reason);
-				//if we fail for some reason don't break it, just show no boards
-				return [];
-			});
-	},
-
-
-	loadBoardList: function(view) {
-		console.log('Loadroot called', view);
-
-		//don't need to load the boards more than once
-		if (this.boardStore && view.showBoardList) {
-			view.showBoardList(this.boardStore);
-			return Promise.resolve();
-		}
-
-		var store = NextThought.store.NTI.create({
-				model: 'NextThought.model.forums.Forum',
-				id: 'flattened-boards-forums'
-			});
-
-		this.loadingRoot = true;
-
-		return this.loadCommunityBoards()
-				.then(function(boards) {
-					delete this.loadingRoot;
-
-					if (boards) {
-						store.add(boards);
-
-						this.boardStore = store;
-
-						//TODO: if there is only one board go ahead and load it
-						if (view.showBoardList) {
-							view.showBoardList(store);
-							this.fireEvent('root-loaded');
-						}
+					if (view.showBoardList) {
+						view.showBoardList(store);
+						me.fireEvent('root-loaded');
 					}
-				}.bind(this));
-
+				}
+			});
 	},
 
 
