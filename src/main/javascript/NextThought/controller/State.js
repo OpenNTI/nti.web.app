@@ -329,9 +329,11 @@ PREVIOUS_STATE = 'previous-state';
 
 			window.onpopstate = function(e) {
 				me.isPoppingHistory = true;
-				console.debug('Browser is popping state, new state appling: ', Ext.decode(e.state, true));
 				history.observable.fireEvent('pop', e.state);
-				me.onPopState(e);
+				if (e.state !== null) {
+					console.debug('Browser is popping state, new state appling: ', Ext.decode(e.state, true) || e.state);
+					me.onPopState(e);
+				}
 				me.isPoppingHistory = false;
 			};
 
@@ -552,7 +554,7 @@ PREVIOUS_STATE = 'previous-state';
 			if (!s) {
 				console.warn('there is no state to restore?? Will use initial.', e);
 			}
-			this.restoreState(Ext.decode(s, true) || this.initialState || {});
+			this.restoreState(Ext.decode(s, true) || s || this.initialState || {});
 		},
 
 
