@@ -255,7 +255,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 		}
 
 		if (this.valType === 'number' && !Ext.isEmpty(inputvalue)) {
-			inputvalue = parseInt(inputvalue, 10) || null;
+			var tmp = parseInt(inputvalue,10);
+			inputvalue = isNaN(tmp) ? (this.allowEmptyInput ? '' : null) : tmp;
 		}
 		return {
 			checked: active.dom.value,
@@ -267,12 +268,12 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 		if (!this.required) { return true; }
 
 		var val = this.getValue();
-		if (val && val[this.name] != null) {
+		if (val && !Ext.isEmpty(val[this.name], true)) {
 		 	return true;
 		}
 
 		var selection = this.__selectionValues();
-		if (selection && (this.allowEmptyInput && selection.input == '')) {
+		if (selection && (this.omitIfBlank || (this.allowEmptyInput && selection.input === ''))) {
 			return true;
 		}
 
@@ -307,10 +308,10 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 
 		if (this.valType === 'number' && !Ext.isEmpty(val)) {
 			var tmp = parseInt(val,10);
-			val = isNaN(tmp) ? '' : tmp;
+			val = isNaN(tmp) ? (this.allowEmptyInput ? '' : null) : tmp;
 		}
 		
-		var isBlank = (Ext.isEmpty(val) || val === 'N' || !val);
+		var isBlank = (Ext.isEmpty(val) || val === 'N');
 		if (isBlank) {
 			var selection = this.__selectionValues();
 			if (selection && selection.input != null && this.allowEmptyInput) {
