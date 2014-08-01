@@ -223,6 +223,63 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 			});
 	},
 
+	// itemChecked: function() {
+	// 	var selection = this.el.down('input[type=radio]:checked');
+	// 	return !!selection;
+	// },
+
+	/*
+		return an object with values for the selected radio
+		button and (if applicable) its corresponding text input,
+		or null if no button is selected.
+	*/
+	__selectionValues: function() {
+		var active = this.el.down('input[type=radio]:checked'),
+			label, input, inputContainer, inputvalue;
+
+		if (!active) {
+			return;
+		}
+
+		label = active.up('.radio');
+
+		if (label) {
+			input = label.down('input[type=text]');
+			inputContainer = label.down('.input-container');
+		}
+
+		if (inputContainer && inputContainer.is('.dropdown')) {
+			inputvalue = this.dropdown.getValue() || '';
+		} else if (input) {
+			inputvalue = input.dom.value;
+		}
+
+		if (this.valType === 'number' && !Ext.isEmpty(inputvalue)) {
+			inputvalue = parseInt(inputvalue, 10) || null;
+		}
+		return {
+			checked: active.dom.value,
+			input: inputvalue
+		};
+	},
+
+	isValid: function() {
+		if (!this.required) { return true; }
+
+		var val = this.getValue();
+		if (val && val[this.name]) {
+		 	return true;
+		}
+
+		var selection = this.__selectionValues();
+		if (selection && (this.allowEmptyInput && selection.input == '')) {
+			return true;
+		}
+
+		this.addError();
+
+		return false;
+	},
 
 	getValue: function(force) {
 		if (!this.el || (!force && this.doNotSend)) { return; }
@@ -249,10 +306,10 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 		}
 
 		if (this.valType === 'number' && !Ext.isEmpty(val)) {
-			val = parseInt(val, 10);
+			val = parseInt(val, 10) || '';
 		}
 
-		if ((Ext.isEmpty(val) || val === 'N' || !val) && !force && this.omitIfBlank) {
+		if ((Ext.isEmpty(val) || val === 'N' || !val) && !force && (this.omitIfBlank && (!input || this.allowEmptyInput))) {
 			return value;
 		}
 
@@ -266,7 +323,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 
 		var active = this.el.down('input[type=radio]:checked'),	input;
 
-		if (active && !this.allowEmptyInput) {
+		if (active) {
 			input = active.up('.radio');
 			if (input) {
 				input = input.down('input[type=text]');
