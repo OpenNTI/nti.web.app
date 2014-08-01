@@ -211,10 +211,18 @@ Ext.define('NextThought.view.assessment.input.Short', {
 	},
 
 
+	markSubmitted: function() {
+		this.markGraded();
+		this.callParent(arguments);
+	},
+
+
 	markGraded: function(yes) {
 		var action = yes !== false ? 'addCls' : 'removeCls';
 		this.el[action]('graded');
 		this.el.select('span.blank')[action]('graded');
+
+		this.el.select('span.blank input').set({disabled: yes !== false ? true : undefined});
 	},
 
 	reset: function() {
