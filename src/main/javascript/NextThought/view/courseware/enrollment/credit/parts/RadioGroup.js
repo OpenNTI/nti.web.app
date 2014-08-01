@@ -309,8 +309,16 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 			var tmp = parseInt(val,10);
 			val = isNaN(tmp) ? '' : tmp;
 		}
-
-		if ((Ext.isEmpty(val) || val === 'N' || !val) && !force && (this.omitIfBlank && (!input || this.allowEmptyInput))) {
+		
+		var isBlank = (Ext.isEmpty(val) || val === 'N' || !val);
+		if (isBlank) {
+			var selection = this.__selectionValues();
+			if (selection && selection.input != null && this.allowEmptyInput) {
+				isBlank = false;
+			}
+		}
+		
+		if (isBlank && !force && this.omitIfBlank) {
 			return value;
 		}
 
