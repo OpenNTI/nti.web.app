@@ -28,7 +28,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.PurchaseComplete', {
 		var c = this.course,
 			start = c.get('StartDate'),
 			helplinks = [], i, labelprefix,
-			prompt = '{course} starts on {date} and will be conducted fully online. Here are some things to do before class starts:';
+			prompt = '<span class=\'bold\' >{course} starts on {date}</span> and will be conducted fully online. Here are some things to do before class starts:';
 
 		prompt = prompt.replace('{course}', c.get('Title'));
 		prompt = prompt.replace('{date}', Ext.Date.format(start, 'F j, Y'));

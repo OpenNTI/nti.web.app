@@ -12,12 +12,30 @@
 
 		div {
 			float: left;
-			padding: 0 15px;
+			position: relative;
+			padding: 0 15px 0 29px;
+
+			&.number::before {
+				content: '';
+				position: absolute;
+				top: 8px;
+				left: 7px;
+				padding: 7px;
+				border: 2px solid $tertiary-grey;
+				border-radius: 13px;
+				font-weight:700;
+				line-height: 1em;
+			}
 
 			&.enabled {
 				color: $secondary-grey;
+			}
 
-				&.number::before {
+			&.enabled.number {
+				color: $secondary-grey;
+				@include icon('check_progress', $side: after, $top: 13px, $left: 11px);
+
+				&::before {
 					border-color: $secondary-grey;
 				}
 			}
@@ -31,10 +49,11 @@
 			}
 
 			&.active:not(.failed) {
-				color: $primary-green;
-				
-				&.number::before {
-					border-color: $primary-green;
+				color: $secondary-green;
+				@include icon('check_progress_grn', $side: after, $top: 13px, $left: 11px);
+
+				&::before {
+					border-color: $secondary-green;
 				}
 			}
 
@@ -45,20 +64,11 @@
 				border-right-width: 1px;
 			}
 
-			&.number {
-				position: relative;
-				padding-left: 29px;
-				&::before {
-					content: attr(data-number);
-					position: absolute;
-					top: 9px;
-					left: 8px;
-					padding: 2px 3px;
-					border: 2px solid $tertiary-grey;
-					border-radius: 13px;
-					font-weight:700;
-					line-height: 1em;
-				}
+			&.number:not(.enabled):not(.active)::after {
+				content: attr(data-number);
+				position: absolute;
+				top: 0;
+				left: 13px;
 			}
 		}
 	}
@@ -603,7 +613,7 @@
 .enroll-for-credit-confirmation {
 	color: $primary-grey;
 	padding-right: 230px;
-	font: normal 400 1em/1 $font;
+	font: normal 300 1em/1 $font;
 
 	.main {
 		color: $secondary-green;
@@ -674,11 +684,12 @@
 			}
 
 			&.course-info {
-				margin: 0 40px 0 20px;
+				margin: 0 40px 0 10px;
 				border-bottom: 1px solid #efefef;
 				height: auto;
 				overflow: hidden;
 				padding-right: 0;
+				padding-left: 0;
 			}
 
 			.name {
@@ -711,6 +722,7 @@
 				.value {
 					margin-top: 10px;
 					font-size: 0.9em;
+					line-height: 1.5em;
 
 					&.green {
 						color: $secondary-green;
@@ -740,6 +752,11 @@
 		margin-bottom: 30px;
 		.prompt {
 			margin-bottom: 30px;
+			line-height: 1.5em;
+
+			.bold {
+				font-weight: 600;
+			}
 		}
 	}
 
