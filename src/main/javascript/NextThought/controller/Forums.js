@@ -345,13 +345,14 @@ Ext.define('NextThought.controller.Forums', {
 
 		Service.resolveRootBoards()
 			.then(function(boards) {
-				var store;
+				var store, forumList;
 
 				if (boards.length === 1) {
 					if (view.showForumList) {
-						view.showForumList(boards[0]);
+						forumList = view.showForumList(boards[0]);
 						view.setForumListToRoot();
 						view.noTab = true;
+						forumList.convertToRoot();
 					}
 				} else {
 					store = NextThought.store.NTI.create({

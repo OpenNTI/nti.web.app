@@ -18,7 +18,7 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls: 'nav-outline forum-outline scrollable', cn: [
-			{cls: 'header toggle-opposite-tabs', html: '{{{NextThought.view.forums.forum.Navigation.header}}}'},
+			{cls: 'header toggle-opposite-tabs {[this.getHeaderCls()]}', html: '{{{NextThought.view.forums.forum.Navigation.header}}}'},
 			{cls: 'outline-list', cn: [
 				{tag: 'tpl', 'for': '.', cn: [
 					{cls: 'outline-row', 'data-qtip': '{title}', cn: [
@@ -36,6 +36,9 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 	}), {
 		showButton: function(value, out) {
 			return this.canCreateForums;
+		},
+		getHeaderCls: function() {
+			return this.noPop ? 'no-pop' : '';
 		},
 		showReport: function(value, out) {
 			var show = false;
@@ -68,6 +71,13 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 		me.on('select', function(cmp, record) {
 			me.fireEvent('update-body', record);
 		});
+	},
+
+
+	convertToRoot: function() {
+		var me = this;
+
+		me.tpl.noPop = true;
 	},
 
 
@@ -133,7 +143,7 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 			this.fireEvent('new-forum', this);
 		}
 
-		if (e.getTarget('.header')) {
+		if (e.getTarget('.header:not(.no-pop)')) {
 			this.fireEvent('pop-view');
 		}
 	},

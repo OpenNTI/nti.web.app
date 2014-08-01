@@ -29,5 +29,10 @@ Ext.define('NextThought.view.forums.forum.View', {
 		if (this.body.store) {
 			this.body.store.load();
 		}
+	},
+
+
+	convertToRoot: function() {
+		this.navigation.convertToRoot();
 	}
 });
