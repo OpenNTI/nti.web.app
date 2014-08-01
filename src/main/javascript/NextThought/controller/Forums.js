@@ -350,6 +350,7 @@ Ext.define('NextThought.controller.Forums', {
 				if (boards.length === 1) {
 					if (view.showForumList) {
 						view.showForumList(boards[0]);
+						view.setForumListToRoot();
 						view.noTab = true;
 					}
 				} else {

@@ -77,6 +77,15 @@ Ext.define('NextThought.view.forums.Container', {
 		Ext.destroy(this.items.getRange().slice(1));
 	},
 
+
+	setForumListToRoot: function() {
+		var root = this.getRoot();
+
+		if (root) {
+			root.destroy();
+		}
+	},
+
 	/**
 	* Check if view has already been added, if not add it with the record. If it has
 	* and the records are different set the new record
