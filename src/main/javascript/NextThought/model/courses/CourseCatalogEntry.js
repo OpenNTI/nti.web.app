@@ -30,25 +30,9 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		{ name: 'OU_CRN', type: 'string', persist: false },
 		{ name: 'OU_Term', type: 'string', persist: false },
 
-		{ name: 'DropCutOff', type: 'Synthetic', persist: false, fn: function() {
-			var start = this.get('StartDate'),
-				clone = new Date(start.getTime());
-
-			//add 14 days (2 weeks) to the start
-			clone.setDate(clone.getDate() + 11);
-
-			return clone;
-		}},
-		{ name: 'EnrollForCreditCutOff', type: 'Synthetic', persist: false, fn: function() {
-			var start = this.get('StartDate'),
-				clone = new Date(start.getTime());
-
-			//add 14 days (2 weeks) to the start
-			clone.setDate(clone.getDate() + 4);
-
-			return clone;
-		}},
-
+		{ name: 'DropCutOff', type: 'ISODate', mapping: 'OU_DropCutOffDate', persist: false },
+		{ name: 'EnrollForCreditCutOff', type: 'ISODate', mapping: 'OU_EnrollCutOffDate', persist: false },
+		{ name: 'OU_Price', type: 'number', persist: false},
 
 		{ name: 'DCCreator', type: 'auto' },
 		{ name: 'DCDescription', type: 'string' },

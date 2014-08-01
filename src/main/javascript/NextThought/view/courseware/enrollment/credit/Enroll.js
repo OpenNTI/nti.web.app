@@ -88,7 +88,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 				'Thank you for applying to earn credit online from the University of Oklahoma.',
 			available: 'Your admission credit is available for ' + c.getSemester() + '.',
 			confirm: 'Please take a moment to confirm your course selection before checking out.',
-			price: '$599',
+			price: '$' + c.get('OU_Price'),
 			number: c.get('ProviderUniqueID'),
 			title: c.get('Title'),
 			instructor: instructor.get('Name'),

@@ -17,6 +17,9 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 				{cls: 'title', html: '{bottom.title}'},
 				{cls: 'price', html: '{price}'},
 				{cls: 'info', html: '{bottom.information}'},
+				{tag: 'tpl', 'if': 'hasSeats', cn: [
+					{cls: 'seats', html: '{seats:plural("seat")} available for college credit.'}
+				]},
 				{cls: 'warning', html: '{bottom.warning}'}
 			]},
 			{cls: 'button {buttonCls}', html: '{buttonText}'}
@@ -166,7 +169,10 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 	getEnrollmentData: function() {
 		var me = this, catalogData,
-			credit = me.course.get('Credit');
+			credit = me.course.get('Credit'),
+			detailsLink = me.course.getLink('fmaep.course.details'),
+			getDetails,
+			getCourse;
 
 		me.admissionstate = $AppConfig.userObject.get('admission_status');
 
@@ -181,22 +187,33 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			EnrolledForCredit: me.course.isEnrolledForCredit(),
 			SeatCount: me.course.seatcount,
 			AdmissionState: me.admissionstate,
-			Hours: credit && credit[0] && credit[0].get('Hours')
+			Hours: credit && credit[0] && credit[0].get('Hours'),
+			Price: '$' + me.course.get('OU_Price')
 		};
 
-		if (catalogData.Enrolled) {
-			return CourseWareUtils.findCourseBy(me.course.findByMyCourseInstance())
-				.then(function(instance) {
-					catalogData.EnrollStartDate = instance.get('CreatedTime');
-
-					return catalogData;
-				})
-				.fail(function() {
-					return catalogData;
-				});
+		if (detailsLink) {
+			getDetails = Service.request(detailsLink);
 		}
 
-		return Promise.resolve(catalogData);
+		if (catalogData.Enrolled) {
+			getCourse = CourseWareUtils.findCourseBy(me.course.findByMyCourseInstance());
+		}
+
+		return Promise.all([getDetails, getCourse])
+			.then(function(results) {
+				var details = Ext.JSON.decode(results[0], true),
+					course = results[1];
+
+				if (details) {
+					catalogData.AvailableSeats = details.Course.SeatAvailable;
+				}
+
+				if (course) {
+					catalogData.EnrollStartDate = instance.get('CreatedTime');
+				}
+
+				return catalogData;
+			});
 	},
 
 	/*
@@ -436,16 +453,25 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 					} else {
 						//TODO fill this out from the course
 						state.bottom = me.getState('bottom', 'not_enrolled', {
-							'#': courseData.Hours,
 							'date': enrollcutoff
 						});
-						state.price = '$599';
+						state.price = courseData.Price;
+
+						if (courseData.AvailableSeats !== undefined) {
+							state.hasSeats = true;
+							state.seats = courseData.AvailableSeats;
+
+							if (courseData.AvailableSeats === 0) {
+								state.bottom.cls = state.bottom.cls + ' full';
+								state.bottom.warning = '';
+							}
+						}
 					}
 				} else if (courseData.EnrolledForCredit) {
 					state.bottom = me.getState('bottom', 'credit_enrolled', {
 						'date': enrollcutoff
 					});
-					state.price = '$599';
+					state.price = courseData.Price;
 				} else {
 					state.bottom.cls = 'openonly';
 				}
@@ -482,7 +508,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 		checkbox = Ext.get(checkbox);
 
-		if (checkbox) {
+		if (checkbox && !checkbox.hasCls('full')) {
 			if (checkbox.hasCls('checked')) {
 				button.update(this.state.buttonText);
 				button.removeCls(['drop', 'credit', 'open']);

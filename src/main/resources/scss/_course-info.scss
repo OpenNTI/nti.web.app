@@ -501,11 +501,11 @@
 			font-weight: 300;
 		}
 
-		.warning {
+		.warning, .seats.full {
 			color: $primary-red;
 		}
 
-		.seats {
+		.seats:not(.full) {
 			color: $secondary-green;
 		}
 
@@ -587,9 +587,20 @@
 			&.rejected, &.pending {
 				background-color: rgba(243, 82, 82, 0.05);
 			}
+
+			&.checkbox.full {
+				cursor: default;
+				padding-left: 35px;
+
+				@include icon('checkbox-14', $top: 15px, $left: 13px);
+
+				&::after {
+					opacity: 0.75;
+				}
+			}
 		
 
-			&.checkbox {
+			&.checkbox:not(.full) {
 				cursor: pointer;
 				padding-left: 35px;
 
