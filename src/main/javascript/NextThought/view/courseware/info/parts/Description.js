@@ -20,7 +20,7 @@ Ext.define('NextThought.view.courseware.info.parts.Description', {
 						{ tag: 'tpl', 'if': 'creditHours', cn: {
 							cls: 'enroll-for-credit', cn: [
 								'{creditHours:plural("Credit")} {{{NextThought.view.courseware.info.parts.Description.available}}}. ',
-								{ tag: 'a', target: '_blank', href: '{enrollUrl}', html: '{enrollLabel}'}
+								{ tag: 'a', href: '{enrollUrl}', html: '{enrollLabel}'}
 							] } },
 						{ cls: 'open', cn: [
 							'{inopen} ', { cls: 'red', tag: 'span', html: '{nocredit}' }
