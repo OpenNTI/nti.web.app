@@ -466,6 +466,11 @@
 		margin-left: 15px;
 		box-shadow: 0 1px 2px 0 rgba(0,0,0,0.35);
 
+
+		.loading {
+			height: 200px;
+		}
+
 		.header {
 			font: normal 500 0.8em/35px $font;
 			color: $tertiary-grey;

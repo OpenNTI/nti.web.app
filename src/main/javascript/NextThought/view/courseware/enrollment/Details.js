@@ -192,26 +192,40 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 		};
 
 		if (detailsLink) {
-			getDetails = Service.request(detailsLink);
+			getDetails = Service.request(detailsLink)
+				.then(function(details) {
+					details = Ext.decode(details, true);
+
+					if (details) {
+
+						if (details.Status === 422) {
+							catalogData.AvailableForCredit = false;
+						} else {
+							catalogData.AvailableSeats = details.Course.SeatAvailable;
+						}
+					}
+				})
+				.fail(function(reason) {
+					console.error('Course Details request failed: ', reason);
+
+					catalogData.API_DOWN = true;
+				});
 		}
 
 		if (catalogData.Enrolled) {
-			getCourse = CourseWareUtils.findCourseBy(me.course.findByMyCourseInstance());
+			getCourse = CourseWareUtils.findCourseBy(me.course.findByMyCourseInstance())
+				.then(function(instance) {
+					if (instance) {
+						catalogData.EnrollStartDate = instance.get('CreatedTime');
+					}
+				})
+				.fail(function(reason) {
+					console.error('Failed to find course instance: ', reason);
+				});
 		}
 
 		return Promise.all([getDetails, getCourse])
-			.then(function(results) {
-				var details = Ext.JSON.decode(results[0], true),
-					instance = results[1];
-
-				if (details) {
-					catalogData.AvailableSeats = details.Course.SeatAvailable;
-				}
-
-				if (instance) {
-					catalogData.EnrollStartDate = instance.get('CreatedTime');
-				}
-
+			.then(function() {
 				return catalogData;
 			});
 	},
@@ -298,6 +312,14 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 				warning: 'Not available after {date}.',
 				cls: 'checkbox'
 			},
+			api_down: {
+				title: 'Earn College Credit',
+				information: [
+					'Transcripted credit is available from the University of Oklahoma but unfortunately we cannot process an applications at this time.',
+					'Please contact the <a class=\'link\'href=\'mailto:support@nextthought.com\'>help desk.</a>'
+				].join(' '),
+				cls: 'rejected'
+			},
 			admission_pending: {
 				title: 'Admission Pending...',
 				information: [
@@ -360,8 +382,13 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 		function finish(state) {
 			me.state = state;
+			me.cardsContainerEl.removeCls('loading');
 			me.enrollmentCardTpl.append(me.cardsContainerEl, state);
+			me.cardsContainerEl.el.unmask();
 		}
+
+		me.cardsContainerEl.addCls('loading');
+		me.cardsContainerEl.el.mask('Loading');
 
 		me.getEnrollmentData()
 			.then(function(courseData) {
@@ -442,7 +469,13 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 				//Set up the state in the bottom
 				if (courseData.AvailableForCredit) {
-					if (courseData.EnrolledForCredit) {
+					if (courseData.API_DOWN) {
+						state.bottom = me.getState('bottom', 'api_down', {
+							date: enrollcutoff
+						});
+
+						state.price = courseData.Price;
+					} else if (courseData.EnrolledForCredit) {
 						state.bottom = me.getState('bottom', 'credit_enrolled', {
 							date: dropcutoff
 						});
