@@ -400,7 +400,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 
 		return new Promise(function(fulfill, reject) {
 			Ext.Msg.show({
-				msg: 'Navigating away from this page will clear all progress on your Application to Earn College Credit.',
+				msg: 'Navigating away from this page will clear all progress on your application.',
 				buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 				scope: this,
 				icon: 'warning-red',
