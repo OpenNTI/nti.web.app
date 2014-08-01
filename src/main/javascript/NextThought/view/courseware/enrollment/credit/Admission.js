@@ -182,7 +182,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					label: 'Are you a resident of Oklahoma?',
 					inputs: [
 						{type: 'radio-group', name: 'years_of_oklahoma_residency', valType: 'number', required: true, options: [
-							{text: 'Yes. I\'ve been a resident for {input} years.', value: 'input', inputWidth: 48},
+							{text: 'Yes. I\'ve been a resident for {input} years.', value: 'input', inputWidth: 48, allowEmptyInput: false},
 							{text: 'No.', value: 0}
 						]}
 					]

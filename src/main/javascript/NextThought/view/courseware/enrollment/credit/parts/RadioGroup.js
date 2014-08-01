@@ -267,7 +267,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 		if (!this.required) { return true; }
 
 		var val = this.getValue();
-		if (val && val[this.name]) {
+		if (val && val[this.name] != null) {
 		 	return true;
 		}
 
@@ -306,7 +306,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 		}
 
 		if (this.valType === 'number' && !Ext.isEmpty(val)) {
-			val = parseInt(val, 10) || '';
+			var tmp = parseInt(val,10);
+			val = isNaN(tmp) ? '' : tmp;
 		}
 
 		if ((Ext.isEmpty(val) || val === 'N' || !val) && !force && (this.omitIfBlank && (!input || this.allowEmptyInput))) {
