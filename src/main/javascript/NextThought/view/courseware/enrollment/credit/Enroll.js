@@ -179,26 +179,26 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 
 		if (!enrollLink) {
 			pay();
-		}
+		} else {
+			Service.post(enrollLink, {
+				crn: crn,
+				term_code: term
+			}).then(function(response) {
+				var json = Ext.JSON.decode(response, true);
 
-		Service.post(enrollLink, {
-			crn: crn,
-			term_code: term
-		}).then(function(response) {
-			var json = Ext.JSON.decode(response, true);
+				if (json.Status === 201) {
+					pay();
+				} else {
+					maskCmp.el.unmask();
+					me.showError(json);
+				}
+			}).fail(function(response) {
+				var json = Ext.JSON.decode((response && response.responseText) || response, true);
 
-			if (json.Status === 201) {
-				pay();
-			} else {
+				console.error('Enroll request failed: ' + response);
 				maskCmp.el.unmask();
 				me.showError(json);
-			}
-		}).fail(function(response) {
-			var json = Ext.JSON.decode((response && response.responseText) || response, true);
-
-			console.error('Enroll request failed: ' + response);
-			maskCmp.el.unmask();
-			me.showError(json);
-		});
+			});
+		}
 	}
 });
