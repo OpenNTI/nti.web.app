@@ -2,7 +2,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 	extend: 'Ext.Component',
 	alias: 'widget.enrollment-credit-enroll',
 
-	cls: 'enroll-for-credit',
+	cls: 'enroll-for-credit-confirmation',
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'message', cn: [
