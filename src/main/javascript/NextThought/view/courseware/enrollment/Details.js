@@ -202,13 +202,13 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 		return Promise.all([getDetails, getCourse])
 			.then(function(results) {
 				var details = Ext.JSON.decode(results[0], true),
-					course = results[1];
+					instance = results[1];
 
 				if (details) {
 					catalogData.AvailableSeats = details.Course.SeatAvailable;
 				}
 
-				if (course) {
+				if (instance) {
 					catalogData.EnrollStartDate = instance.get('CreatedTime');
 				}
 
