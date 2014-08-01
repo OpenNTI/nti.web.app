@@ -41,8 +41,10 @@ Ext.define('NextThought.controller.Forums', {
 
 		me.listen({
 			component: {
+				'main-views > forums-container': {
+					'render': 'loadBoardList'
+				},
 				'forums-container': {
-					'render': 'loadBoardList',
 					'active-state-changed': 'setActiveState'
 				},
 				'course-forum': {
