@@ -17,14 +17,25 @@ Ext.define('NextThought.view.courseware.info.parts.Description', {
 				{ cls: 'cell', cn: [
 					{ cls: 'label', html: '{{{NextThought.view.courseware.info.parts.Description.hours}}}'},
 					{ cls: 'value {enrollmentStatus:lowercase}', cn: [
+
 						{ tag: 'tpl', 'if': 'creditHours', cn: {
 							cls: 'enroll-for-credit', cn: [
 								'{creditHours:plural("Credit")} {{{NextThought.view.courseware.info.parts.Description.available}}}. ',
-								{ tag: 'a', href: '{enrollUrl}', html: '{enrollLabel}'}
-							] } },
+								{ tag: 'tpl', 'for': 'credit', cn: [
+									'{%' +
+										'var e = values.get("Enrollment"); ' +
+										'values["enrollUrl"] = e && e.url; ' +
+										'values["enrollLabel"] = e && e.label;\n' +
+									'%}',
+									{ tag: 'a', href: '{enrollUrl}', html: '{enrollLabel}'}, {tag: 'br'}
+								] }
+							] }
+						},
+
 						{ cls: 'open', cn: [
 							'{inopen} ', { cls: 'red', tag: 'span', html: '{nocredit}' }
 						] }
+
 					] }
 				] }
 			]},
@@ -71,7 +82,6 @@ Ext.define('NextThought.view.courseware.info.parts.Description', {
 		var i = this.getInfo() || {get: Ext.emptyFn},
 			s = i.get('Schedule') || {},
 			c = (i.get('Credit') || [])[0],
-			e = (c && c.get('Enrollment')) || {},
 			p = Ext.Array.pluck(i.get('Prerequisites') || [], 'title'),
 			start = Ext.Date.format(i.get('StartDate'), 'Y-m-d');
 
@@ -97,9 +107,11 @@ Ext.define('NextThought.view.courseware.info.parts.Description', {
 			startDate: i.get('StartDate'),
 			days: (s.days || []).join('/'),//eww
 			times: Ext.Array.map(s.times || [], fo).join(' - '), //eww
+
+			credit: i.get('Credit'),
 			creditHours: c && c.get('Hours'),
-			enrollLabel: e.label,
-			enrollUrl: e.url,
+			//enrollLabel: e.label,
+			//enrollUrl: e.url,
 
 			enrollmentStatus: this.enrollmentStatus,
 
