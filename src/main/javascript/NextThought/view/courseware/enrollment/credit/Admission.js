@@ -790,6 +790,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 			//this.clearStorage();
 		} else if (json.Status === 201) {
 			$AppConfig.userObject.set('admission_status', 'Admitted');
+			this.course.setEnrollmentLinks(json.Links);
 			this.fireEvent('show-msg', json.Message || 'Your application was successful.', false, 5000);
 			//this.clearStorage();
 			this.fireEvent('admission-complete', true);
