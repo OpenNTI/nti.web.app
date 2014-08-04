@@ -313,31 +313,19 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 			on(doc, 'selectionchange', function(e) {
 				function selectionChange(e) {
 					var fakeEvent = Ext.EventObject.setEvent(e || event),
-						//t = me.reader.getScroll().get().top,
-						s = me.get().win.getSelection();
+						r = me.get().win.getSelection().getRangeAt(0);
 
-					if (s.rangeCount > 0) {
-						var df = s.getRangeAt(0).cloneContents(),
+					function showMenu() {
+						me.reader.onContextMenuHandler({
+								getTarget: function() { return fakeEvent.getTarget.apply(fakeEvent, arguments); },
+								preventDefault: function() { fakeEvent.preventDefault(); },
+								stopPropagation: function() { fakeEvent.stopPropagation(); }
+						});
+					}
+
+					if (r) {
+						var df = r.cloneContents(),
 							n = df.firstChild;
-
-
-						function showMenu() {
-							me.reader.onContextMenuHandler(
-								{
-									getTarget: function() {
-										return fakeEvent.getTarget.apply(fakeEvent, arguments);
-									},
-
-									preventDefault: function() {
-										fakeEvent.preventDefault();
-									},
-
-									stopPropagation: function() {
-										fakeEvent.stopPropagation();
-									}
-								}
-							);
-						}
 
 						if (!n) {
 							clearInterval(this.showMenuTimer);
@@ -402,7 +390,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 				Ext.each(Ext.fly(clonedFn).query('a'),
 						 function(d) {
 							 var href = d.getAttribute ? d.getAttribute('href') : '';
-							 if (href.indexOf('#m') >= 0) {
+							 if (href && href.indexOf('#m') >= 0) {
 								 clonedFn.removeChild(d);
 							 }
 						 }
@@ -458,9 +446,9 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 
 
 	onceSettled: function() {
-		var me = this,
+		var me = this, fn,
 			p = me.settledPromise || new Promise(function(fulfill, reject) {
-				var fn = Ext.Function.createBuffered(function() {
+				fn = Ext.Function.createBuffered(function() {
 					fn = Ext.emptyFn;
 					Ext.destroy(fire);
 					fire = null;
@@ -642,7 +630,7 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 	/**
 	 * Makes pointer events go through the iframe so that all the
 	 * interactions can be handled manually.
-	 * @param should
+	 * @param {Boolean} should
 	 */
 	setClickthrough: function(should) {
 		var el = this.get();
@@ -663,8 +651,8 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 	},
 
 	/**
-	 * @param x relative to the window's top left corner
-	 * @param y relative to the window's top left corner
+	 * @param {Number} x relative to the window's top left corner
+	 * @param {Number} y relative to the window's top left corner
 	 */
 	elementAt: function(x, y) {
 		var reader = this.reader,
@@ -730,10 +718,10 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 
 	/**
 	 * Positions relative to the window
-	 * @param x1
-	 * @param y1
-	 * @param x2
-	 * @param y2
+	 * @param {Number} x1
+	 * @param {Number} y1
+	 * @param {Number} x2
+	 * @param {Number} y2
 	 */
 	makeRangeFrom: function(x1, y1, x2, y2) {
 
