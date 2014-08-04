@@ -45,7 +45,9 @@ Ext.define('NextThought.controller.Assessment', {
 		'assessment.SymbolicMathPart',
 		'assessment.SymbolicMathSolution',
 		'assessment.TextHint',
-		'assessment.TextResponse'
+		'assessment.TextResponse',
+		'assessment.RandomizedQuestionSet',
+		'assessment.QuestionBank'
 	],
 
 	views: [
