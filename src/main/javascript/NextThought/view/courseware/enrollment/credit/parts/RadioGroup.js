@@ -267,7 +267,15 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 	isValid: function() {
 		if (!this.required) { return true; }
 
-		var val = this.getValue();
+		var val = this.getValue(),
+			active = this.el.down('input[type=radio]:checked'),
+			radio = active && active.up('.radio'),
+			input = radio && radio.down('input[type=text]');
+
+		//if there is a checked option and it doesn't have an input its valid
+		//so don't check the other stuff
+		if (!input && active) { return true; }
+
 		if (val && !Ext.isEmpty(val[this.name], true)) {
 		 	return true;
 		}
