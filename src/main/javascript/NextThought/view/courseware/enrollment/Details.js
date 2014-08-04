@@ -17,9 +17,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 				{cls: 'title', html: '{bottom.title}'},
 				{cls: 'price', html: '{price}'},
 				{cls: 'info', html: '{bottom.information}'},
-				{tag: 'tpl', 'if': 'hasSeats', cn: [
-					{cls: 'seats', html: '{seats:plural("seat")} available for college credit.'}
-				]},
+				{cls: 'seats', html: ''},
 				{cls: 'warning', html: '{bottom.warning}'}
 			]},
 			{cls: 'button {buttonCls}', html: '{buttonText}'}
@@ -424,6 +422,15 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			if (state.price) {
 				bottom.down('.price').update(state.price);
 			}
+
+			if (state.hasSeats) {
+				if (state.seats === 0) {
+					bottom.addCls('full');
+					bottom.down('.warning').update('');
+				}
+
+				bottom.down('.seats').update(Ext.util.Format.plural(state.seats, 'seat') + ' available for college credit.');
+			}
 		}
 
 		bottom.removeCls('loading');
@@ -561,11 +568,11 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 				});
 				state.price = courseData.Price;
 
-				if (courseData.AvailableSeats !== undefined) {
+				if (details.AvailableSeats !== undefined) {
 					state.hasSeats = true;
-					state.seats = courseData.AvailableSeats;
+					state.seats = details.AvailableSeats;
 
-					if (courseData.AvailableSeats === 0) {
+					if (details.AvailableSeats === 0) {
 						state.bottom.cls = state.bottom.cls + ' full';
 						state.bottom.warning = '';
 					}
