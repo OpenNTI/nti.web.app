@@ -12,6 +12,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	],
 
 	mixins: {
+		'BundleLike': 'NextThought.mixins.BundleLike',
 		'PresentationResources': 'NextThought.mixins.PresentationResources'
 	},
 
@@ -286,5 +287,10 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		return cce ?
 			   cce.getId() === cceId :
 			   this.getLink('CourseCatalogEntry') === cceHref;
+	},
+
+
+	containsNTIID: function(id) {
+		return this.get('Bundle').containsNTIID(id);
 	}
 });

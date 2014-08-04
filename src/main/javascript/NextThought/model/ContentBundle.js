@@ -7,6 +7,7 @@ Ext.define('NextThought.model.ContentBundle', {
 	],
 
 	mixins: {
+		'BundleLike': 'NextThought.mixins.BundleLike',
 		'PresentationResources': 'NextThought.mixins.PresentationResources'
 	},
 

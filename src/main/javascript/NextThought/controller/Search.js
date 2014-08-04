@@ -194,35 +194,31 @@ Ext.define('NextThought.controller.Search', {
 			partial = this.doPartialSearch,
 			rootUrl = Service.getUserUnifiedSearchURL(),
 			currentBundle = Ext.getCmp('content').currentBundle,
-			loc = (currentBundle && currentBundle.getId()) ||
-				  ReaderPanel.get().getLocation().NTIID ||
-				  'noNTIID',
-			url = [
-				rootUrl,
-				loc,
-				'/',
-				value,
-				partial ? '*' : ''
-			],
-			selectedMimeTypes = [], me = this;
+			bundleId = currentBundle && currentBundle.getId(),
+			readerLocation = (ReaderPanel.get().getLocation() || {}).NTIID,
+			selectedMimeTypes = [], loc, url;
 
 		this.clearSearchResults();
 		s.removeAll();
 
+		if (currentBundle && readerLocation && !currentBundle.containsNTIID(readerLocation)) {
+			readerLocation = null;
+		}
+
+
+		loc = readerLocation || bundleId || 'noNTIID';
+
+
 		s.clearFilter();
 		if (filter) {
 			Ext.each(filter.value, function(item) {
-				var mt = item.value;
-				if (mt) {
-					selectedMimeTypes.push(mt);
-				}
-			});
-			s.filter([
-						 {filterFn: function(item) {
-							 return filter.test(item);
-						 }}
-					 ]);
+				if (item.value) { selectedMimeTypes.push(item.value); } });
+			s.filter(function(item) { return filter.test(item);});
 		}
+
+
+		url = [rootUrl, loc, '/', value, partial ? '*' : ''];
+
 		s.proxy.url = url.join('');
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
 			sortOn: 'relevance',
