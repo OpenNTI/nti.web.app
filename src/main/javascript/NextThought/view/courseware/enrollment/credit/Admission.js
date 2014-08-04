@@ -613,7 +613,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 
 		fields.unshift({
 			name: 'rejected',
-			label: 'Your Application to Earn College Credit Has Been Denied',
+			label: 'A Problem Occured. Please Correct the Following:',
 			labelCls: 'error',
 			items: [
 				{
@@ -781,7 +781,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 		if (json.Status === 422) {
 			$AppConfig.userObject.set('admission_status', 'Rejected');
 			this.showError(json);
-			//this.showRejection(json);
+			this.showRejection(json);
 			this.fireEvent('enable-submission', true);
 		} else if (json.Status === 202) {
 			$AppConfig.userObject.set('admission_status', 'Pending');
