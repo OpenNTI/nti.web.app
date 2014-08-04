@@ -181,9 +181,9 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			Price: '$' + c.get('OU_Price')
 		};
 
-		catalogData.enrollcutoff = Ext.Date.format(catalogData.EnrollCutOff, 'F j');
-		catalogData.dropcutoff = Ext.Date.format(catalogData.DropCutOff, 'F j');
-		catalogData.start = Ext.Date.format(catalogData.StartDate, 'F j');
+		catalogData.enrollcutoff = Ext.Date.format(catalogData.EnrollCutOff, 'F j, g:i A T');
+		catalogData.dropcutoff = Ext.Date.format(catalogData.DropCutOff, 'F j, g:i A T');
+		catalogData.start = Ext.Date.format(catalogData.StartDate, 'F j, g:i A T');
 
 		if (catalogData.Enrolled) {
 			p = CourseWareUtils.findCourseBy(c.findByMyCourseInstance())
