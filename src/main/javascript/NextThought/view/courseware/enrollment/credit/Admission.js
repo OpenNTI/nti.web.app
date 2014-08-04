@@ -469,6 +469,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					stateInput = me.down('[name=state]'),
 					mailingStateInput = me.down('[name=mailing_state]');
 
+				states.unshift(''); // insert empty value as first option.
+
 				function updateInputs() {
 					if (stateInput) {
 						stateInput.addOptions(states);

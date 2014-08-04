@@ -343,6 +343,10 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 		'40': true  //DOWN
 	},
 
+	KEY_CODES: {
+		BACKSPACE: 8
+	},
+
 
 	inputKeyPress: function(e) {
 		var value = this.inputEl.getValue();
@@ -354,6 +358,9 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 				this.filterOptions(value, true);
 			}
 		} else {
+			if (this.KEY_CODES.BACKSPACE == e.getCharCode()) {
+				this.setValue('');
+			}
 			this.selectNextMatch(e);
 		}
 	},
