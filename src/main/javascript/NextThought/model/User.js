@@ -7,6 +7,7 @@ Ext.define('NextThought.model.User', {
 		{ name: 'lastLoginTime', type: 'date', dateFormat: 'timestamp' },
 		{ name: 'NotificationCount', type: 'int' },
 		{ name: 'Username', type: 'string' },
+		{ name: 'OU4x4', type: 'string' },
 		{ name: 'FirstName', type: 'string', mapping: 'NonI18NFirstName'},
 		{ name: 'LastName', type: 'string', mapping: 'NonI18NLastName', convert: function(v, r) {
 			return v;

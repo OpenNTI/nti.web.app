@@ -63,7 +63,7 @@ Ext.define('NextThought.view.account.Window', {
 							{
 								cls: 'identities',
 								cn: [
-									{tag: 'span', cls: 'username', html: me.get('Username')},
+									{tag: 'span', cls: 'username', html: (me.get('OU4x4') || me.get('Username'))},
 									{tag: 'span', cls: 'email', html: me.get('email')}
 								]
 							}
