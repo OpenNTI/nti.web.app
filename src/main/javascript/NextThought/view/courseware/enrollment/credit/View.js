@@ -213,6 +213,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 		if (!link) {
 			console.error('No is pay done link');
 			this.showEnroll();
+			return;
 		}
 
 		Service.post(link, {
