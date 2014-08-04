@@ -86,6 +86,10 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 		if (this.enrollment && activeItem === this.enrollment) {
 			return this.enrollment.stopClose();
 		}
+
+		if (this.purchase && activeItem === this.purchase) {
+			return this.purchase.stopClose();
+		}
 	},
 
 

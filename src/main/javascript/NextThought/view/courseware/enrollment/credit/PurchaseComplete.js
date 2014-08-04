@@ -81,5 +81,9 @@ Ext.define('NextThought.view.courseware.enrollment.credit.PurchaseComplete', {
 				return false;
 			}
 		});
+	},
+
+	stopClose: function() {
+		return Promise.resolve();
 	}
 });
