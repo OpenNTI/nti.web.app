@@ -168,66 +168,80 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 
 	getEnrollmentData: function() {
-		var me = this, catalogData,
-			credit = me.course.get('Credit'),
-			detailsLink = me.course.getLink('fmaep.course.details'),
-			getDetails,
-			getCourse;
-
-		me.admissionstate = $AppConfig.userObject.get('admission_status');
+		var c = this.course, catalogData, p;
 
 		catalogData = {
-			StartDate: me.course.get('StartDate'),
-			EndDate: me.course.get('EndDate'),
-			EnrollCutOff: me.course.get('EnrollForCreditCutOff'),
-			DropCutOff: me.course.get('DropCutOff') || me.course.get('EnrollForCreditCutoff'),
-			AvailableForCredit: me.course.get('NTI_FiveminuteEnrollmentCapable'),
-			Enrolled: me.course.isActive(),
-			OpenEnrolled: me.course.isActive() && !me.course.isEnrolledForCredit(),
-			EnrolledForCredit: me.course.isEnrolledForCredit(),
-			SeatCount: me.course.seatcount,
-			AdmissionState: me.admissionstate,
-			Hours: credit && credit[0] && credit[0].get('Hours'),
-			Price: '$' + me.course.get('OU_Price')
+			StartDate: c.get('StartDate'),
+			EndDate: c.get('EndDate'),
+			EnrollCutOff: c.get('EnrollForCreditCutOff'),
+			DropCutOff: c.get('EnrollForCreditCutoff'),
+			AvailableForCredit: c.get('NTI_FiveminuteEnrollmentCapable'),
+			Enrolled: c.isActive(),
+			OpenEnrolled: c.isActive() && !c.isEnrolledForCredit(),
+			EnrolledForCredit: c.isEnrolledForCredit(),
+			AdmissionState: $AppConfig.userObject.get('admission_status'),
+			Price: '$' + c.get('OU_Price')
 		};
 
-		if (detailsLink) {
-			getDetails = Service.request(detailsLink)
-				.then(function(details) {
-					details = Ext.decode(details, true);
-
-					if (details) {
-
-						if (details.Status === 422) {
-							catalogData.AvailableForCredit = false;
-						} else {
-							catalogData.AvailableSeats = details.Course.SeatAvailable;
-						}
-					}
-				})
-				.fail(function(reason) {
-					console.error('Course Details request failed: ', reason);
-
-					catalogData.API_DOWN = true;
-				});
-		}
+		catalogData.enrollcutoff = Ext.Date.format(catalogData.EnrollCutOff, 'F j');
+		catalogData.dropcutoff = Ext.Date.format(catalogData.DropCutOff, 'F j');
+		catalogData.start = Ext.Date.format(catalogData.StartDate, 'F j');
 
 		if (catalogData.Enrolled) {
-			getCourse = CourseWareUtils.findCourseBy(me.course.findByMyCourseInstance())
+			p = CourseWareUtils.findCourseBy(c.findByMyCourseInstance())
 				.then(function(instance) {
 					if (instance) {
 						catalogData.EnrollStartDate = instance.get('CreatedTime');
 					}
 				})
-				.fail(function(reason) {
+				.fail(function(reaseon) {
 					console.error('Failed to find course instance: ', reason);
 				});
+		} else {
+			p = Promise.resolve();
 		}
 
-		return Promise.all([getDetails, getCourse])
-			.then(function() {
-				return catalogData;
-			});
+		return p.then(function() {
+			return catalogData;
+		});
+	},
+
+
+	getCourseDetailsData: function() {
+		var detailsLink = this.course.getLink('fmaep.course.details'),
+			details, p;
+
+		details = {
+			AvailableForCredit: true,
+			AvailableSeats: 0,
+			API_DOWN: false
+		};
+
+		if (detailsLink) {
+			p = Service.request(detailsLink)
+				.then(function(json) {
+					json = Ext.decode(json, true);
+
+					if (json) {
+						if (json.Status === 422) {
+							details.AvailableForCredit = false;
+						} else {
+							details.AvailableSeats = json.Course.SeatAvailable;
+						}
+					}
+				})
+				.fail(function(reason) {
+					console.error('Course detail request failed: ', reason);
+
+					details.API_DOWN = true;
+				});
+		} else {
+			p = Promise.resolve();
+		}
+
+		return p.then(function() {
+			return details;
+		});
 	},
 
 	/*
@@ -375,142 +389,243 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 	},
 
 
+	buildEnrollmentCard: function(state) {
+		if (Ext.isArray(state)) {
+			state = state[0];
+		}
+
+		this.state = state;
+		this.cardsContainerEl.removeCls('loading');
+		this.enrollmentCardTpl.append(this.cardsContainerEl, state);
+		this.cardsContainerEl.el.unmask();
+	},
+
+
+	applyToEnrollmentCard: function(state) {
+		var bottom = this.cardsContainerEl.el.down('.bottom');
+
+		if (state.bottom) {
+			if (state.bottom.cls) {
+				bottom.addCls(state.bottom.cls);
+			}
+
+			if (state.bottom.title) {
+				bottom.down('.title').update(state.bottom.title);
+			}
+
+			if (state.bottom.information) {
+				bottom.down('.info').update(state.bottom.information);
+			}
+
+			if (state.bottom.warning) {
+				bottom.down('.warning').update(state.bottom.warning);
+			}
+
+			if (state.price) {
+				bottom.down('.price').update(state.price);
+			}
+		}
+
+		bottom.removeCls('loading');
+		bottom.el.unmask();
+	},
+
+
+	__setArchivedState: function(state, courseData) {
+		var now = new Date();
+
+		if (courseData.EndDate < now) {
+			//just hide the bottom part for now
+			state.bottom.cls = 'openonly';
+			//if not enrolled
+			if (!courseData.Enrolled) {
+				state.top = this.getState('top', 'archived_not_enrolled');
+				state.buttonCls = 'open';
+				state.buttonText = 'Add Archived Course';
+			}
+
+			if (courseData.EnrolledForCredit) {
+				state.top = this.getState('top', 'archived_enrolled_for_credit');
+				state.buttonCls = '';
+				state.buttonText = '';
+			}
+
+			//if open enrolled before it was archived
+			if (courseData.OpenEnrolled && courseData.EndDate > courseData.EnrollStartDate) {
+				state.top = this.getState('top', 'archived_enrolled_before');
+				state.buttonCls = 'drop';
+				state.buttonText = 'Drop the Open Course';
+			}
+
+			//if open enrolled after it was archived
+			if (courseData.OpenEnrolled && courseData.EndDate <= courseData.EnrollStartDate) {
+				state.top = this.getState('top', 'archived_not_enrolled');
+				state.buttonCls = 'drop';
+				state.buttonText = 'Drop Archived Course';
+			}
+
+			//ignore these for now
+			////if enrolled for credit pass
+			//if (data.EnrolledFoCredit && data.passed) {
+
+			//}
+
+			////if enrolled for credit fail
+			//if (data.EnrolledForCredit && !data.passed) {
+
+			//}
+
+			return Promise.reject(state);
+		}
+
+		return Promise.resolve([state, courseData]);
+	},
+
+
+	__setEnrolledState: function(result) {
+		var state = result[0],
+			courseData = result[1];
+
+		if (courseData.OpenEnrolled) {
+			state.top = this.getState('top', 'open_enrolled', {
+				date: courseData.start
+			});
+
+			state.buttonCls = 'drop';
+			state.buttonText = 'Drop the Open Course';
+		} else if (courseData.EnrolledForCredit) {
+			state.top = this.getState('top' , 'credit_enrolled', {
+				date: courseData.start
+			});
+
+			state.buttonCls = '';
+			state.buttonText = '';
+		} else {
+			state.top = this.getState('top', 'not_enrolled');
+
+			state.buttonCls = 'open';
+			state.buttonText = 'Enroll in the Open Course';
+		}
+
+		return Promise.resolve([state, courseData]);
+	},
+
+
+	__setAdmissionState: function(result) {
+		var waitOnDetails = false,
+			state = result[0],
+			courseData = result[1];
+
+		if (courseData.AvailableForCredit) {
+			if (courseData.EnrolledForCredit) {
+				state.bottom = this.getState('bottom', 'credit_enrolled', {
+					date: courseData.dropcutoff
+				});
+			} else if (courseData.AdmissionState === 'Pending') {
+				state.bottom = this.getState('bottom', 'admission_pending');
+			} else if (courseData.AdmissionState === 'Rejected') {
+				waitOnDetails = true;
+			} else {
+				//not enrolled and available for credit
+				waitOnDetails = true;
+			}
+		} else if (courseData.EnrolledForCredit) {
+			state.bottom = this.getState('bottom', 'credit_enrolled', {
+				date: courseData.enrollcutoff
+			});
+			state.price = courseData.Price;
+		} else {
+			state.bottom.cls = 'openonly';
+		}
+
+		return waitOnDetails ? Promise.resolve([state, courseData]) : Promise.reject(state);
+	},
+
+
+	__setDetailsState: function(result, details) {
+		var state = result[0],
+			courseData = result[1];
+
+		if (details.AvailableForCredit) {
+			if (details.API_DOWN) {
+				state.bottom = this.getState('bottom', 'api_down', {
+					date: courseData.enrollcutoff
+				});
+
+				state.price = courseData.Price;
+			} else if (courseData.AdmissionState === 'Rejected') {
+				state = this.getState('bottom', 'admission_reject');
+			} else {
+				state.bottom = this.getState('bottom', 'not_enrolled', {
+					date: courseData.enrollcutoff
+				});
+				state.price = courseData.Price;
+
+				if (courseData.AvailableSeats !== undefined) {
+					state.hasSeats = true;
+					state.seats = courseData.AvailableSeats;
+
+					if (courseData.AvailableSeats === 0) {
+						state.bottom.cls = state.bottom.cls + ' full';
+						state.bottom.warning = '';
+					}
+				}
+			}
+		}
+
+		return Promise.reject(state);
+	},
+
+
 	updateEnrollmentCard: function() {
 		this.cardsContainerEl.dom.innerHTML = '';
 
-		var me = this;
-
-		function finish(state) {
-			me.state = state;
-			me.cardsContainerEl.removeCls('loading');
-			me.enrollmentCardTpl.append(me.cardsContainerEl, state);
-			me.cardsContainerEl.el.unmask();
-		}
+		var me = this,
+			state = {
+				top: {},
+				bottom: {}
+			};
 
 		me.cardsContainerEl.addCls('loading');
 		me.cardsContainerEl.el.mask('Loading');
 
+		//if the __set*State retunrs a rejected promise it means to go ahead and build the
+		//component without going through the rest of the __set*State
 		me.getEnrollmentData()
-			.then(function(courseData) {
-				var enrollcutoff = Ext.Date.format(courseData.EnrollCutOff, 'F j'),
-					dropcutoff = Ext.Date.format(courseData.DropCutOff, 'F j'),
-					start = Ext.Date.format(courseData.StartDate, 'F j'),
-					now = new Date(),
-					state = {
-						top: {},
-						bottom: {}
-					};
+			.then(me.__setArchivedState.bind(me, state))
+			.then(me.__setEnrolledState.bind(me))
+			.then(me.__setAdmissionState.bind(me))
+			.then(function(result) {
+				var bottom,
+					state = result[0];
 
-				//if the course is archived
-				if (courseData.EndDate < now) {
-					//just hide the bottom part for now
-					state.bottom.cls = 'openonly';
-					//if not enrolled
-					if (!courseData.Enrolled) {
-						state.top = me.getState('top', 'archived_not_enrolled');
-						state.buttonCls = 'open';
-						state.buttonText = 'Add Archived Course';
-					}
+				me.buildEnrollmentCard(state);
 
-					if (courseData.EnrolledForCredit) {
-						state.top = me.getState('top', 'archived_enrolled_for_credit');
-						state.buttonCls = '';
-						state.buttonText = '';
-					}
+				bottom = me.cardsContainerEl.el.down('.bottom');
 
-					//if open enrolled before it was archived
-					if (courseData.OpenEnrolled && courseData.EndDate > courseData.EnrollStartDate) {
-						state.top = me.getState('top', 'archived_enrolled_before');
-						state.buttonCls = 'drop';
-						state.buttonText = 'Drop the Open Course';
-					}
-
-					//if open enrolled after it was archived
-					if (courseData.OpenEnrolled && courseData.EndDate <= courseData.EnrollStartDate) {
-						state.top = me.getState('top', 'archived_not_enrolled');
-						state.buttonCls = 'drop';
-						state.buttonText = 'Drop Archived Course';
-					}
-
-					//ignore these for now
-					////if enrolled for credit pass
-					//if (data.EnrolledFoCredit && data.passed) {
-
-					//}
-
-					////if enrolled for credit fail
-					//if (data.EnrolledForCredit && !data.passed) {
-
-					//}
-
-					finish(state);
+				if (!bottom) {
+					console.error('No admission state part of the enrollment card');
 					return;
 				}
-				//Set the state in the top part and the button
-				if (courseData.OpenEnrolled) {
-					state.top = me.getState('top', 'open_enrolled', {
-						date: start
-					});
-					state.buttonCls = 'drop';
-					state.buttonText = 'Drop the Open Course';
-				} else if (courseData.EnrolledForCredit) {
-					state.top = me.getState('top', 'credit_enrolled', {
-						date: start
-					});
 
-					state.buttonCls = '';
-					state.buttontext = '';
-				} else {
-					state.top = me.getState('top' , 'not_enrolled');
+				bottom.addCls('loading');
+				bottom.el.mask('Loading...');
 
-					state.buttonCls = 'open';
-					state.buttonText = 'Enroll in the Open Course';
+				me.getCourseDetailsData()
+					.then(me.__setDetailsState.bind(me, result))
+					.fail(me.applyToEnrollmentCard.bind(me));
+
+				//reject with no reason to break the chain
+				return Promise.reject();
+			})
+			.fail(function(reason) {
+				if (Ext.isObject(reason)) {
+					return reason;
 				}
 
-				//Set up the state in the bottom
-				if (courseData.AvailableForCredit) {
-					if (courseData.API_DOWN) {
-						state.bottom = me.getState('bottom', 'api_down', {
-							date: enrollcutoff
-						});
-
-						state.price = courseData.Price;
-					} else if (courseData.EnrolledForCredit) {
-						state.bottom = me.getState('bottom', 'credit_enrolled', {
-							date: dropcutoff
-						});
-					} else if (courseData.AdmissionState === 'Pending') {
-						state.bottom = me.getState('bottom', 'admission_pending');
-					} else if (courseData.AdmissionState === 'Rejected') {
-						state.bottom = me.getState('bottom', 'admission_reject');
-					} else {
-						//TODO fill this out from the course
-						state.bottom = me.getState('bottom', 'not_enrolled', {
-							'date': enrollcutoff
-						});
-						state.price = courseData.Price;
-
-						if (courseData.AvailableSeats !== undefined) {
-							state.hasSeats = true;
-							state.seats = courseData.AvailableSeats;
-
-							if (courseData.AvailableSeats === 0) {
-								state.bottom.cls = state.bottom.cls + ' full';
-								state.bottom.warning = '';
-							}
-						}
-					}
-				} else if (courseData.EnrolledForCredit) {
-					state.bottom = me.getState('bottom', 'credit_enrolled', {
-						'date': enrollcutoff
-					});
-					state.price = courseData.Price;
-				} else {
-					state.bottom.cls = 'openonly';
-				}
-
-				finish(state);
-			});
+				return Promise.reject(reason);
+			})
+			.then(me.buildEnrollmentCard.bind(me));
 	},
 
 
