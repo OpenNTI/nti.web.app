@@ -613,7 +613,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 
 		fields.unshift({
 			name: 'rejected',
-			label: 'A Problem Occured. Please Correct the Following:',
+			label: 'A Problem Occurred. Please Correct the Following:',
 			labelCls: 'error',
 			items: [
 				{
