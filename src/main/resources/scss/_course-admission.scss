@@ -190,6 +190,11 @@
 				padding-left: 40px;
 				position: relative;
 
+				a {
+					text-decoration: none;
+					color: $primary-blue;
+				}
+
 				.information {
 					padding-top: 10px;
 					font-size: 0.9em;
