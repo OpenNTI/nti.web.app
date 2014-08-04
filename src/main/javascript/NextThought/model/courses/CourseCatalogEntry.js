@@ -11,6 +11,7 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		{ name: 'ContentPackages', mapping: 'ContentPackageNTIID',
 			convert: function(v) { return [v]; } },
 
+		{ name: 'CourseEntryNTIID', type: 'string', persist: false},
 		{ name: 'Credit', type: 'arrayItem', persist: false },
 		{ name: 'Description', type: 'string', persist: false },
 		{ name: 'Duration', type: 'string', persist: false },

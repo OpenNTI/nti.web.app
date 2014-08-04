@@ -592,7 +592,11 @@ Ext.define('NextThought.controller.CourseWare', {
 		 */
 		courseForNtiid: function(ntiid) {
 			function fn(rec) {
+				//if ntiid is my id or my oid
 				var match = rec.getId() === ntiid || rec.get('OID') === ntiid;
+				//
+				match = match || rec.get('CourseEntryNTIID') === ntiid;
+
 				return match || CourseWareUtils.containsNTIID(rec, prefix);
 			}
 
