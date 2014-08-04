@@ -67,7 +67,7 @@ Ext.define('NextThought.model.User', {
 				return;
 			}
 
-			//DFLs come back in communities but there usernames are ntiids.
+			//DFLs come back in communities but their usernames are ntiids.
 			if (ParseUtils.isNTIID(c)) {
 				field = 'NTIID';
 			}
@@ -114,7 +114,7 @@ Ext.define('NextThought.model.User', {
 		return this.get('alias') ||
 			   this.get('realname') ||
 			   //because this implementation is 'borrowed', we cannot assume 'this'
-			   // is anything more than A model. Not necisarily, "this" model.
+			   // is anything more than A model. Not necessarily "this" model.
 			   NextThought.model.User.getUsername(this.get('Username'));
 	},
 
@@ -150,7 +150,7 @@ Ext.define('NextThought.model.User', {
 	save: function(ops) {
 		var data = this.asJSON();
 
-		//The avatar is saved in another place don't try to do it here. Also custom avatar urls will cause a 422
+		//The avatar is saved in another place; don't try to do it here. Also custom avatar urls will cause a 422
 		delete data.avatarURL;
 
 		Ext.Ajax.request(Ext.apply({
