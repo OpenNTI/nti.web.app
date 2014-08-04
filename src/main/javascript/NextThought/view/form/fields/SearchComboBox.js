@@ -208,9 +208,12 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 	 * @param  {Boolean} silent don't fire an event
 	 */
 	selectOption: function(option, silent) {
-		this.currentText = option.textContent;
-		this.currentValue = option.getAttribute('data-value');
+		this.__setValue(option.textContent, option.getAttribute('data-value'), silent);
+	},
 
+	__setValue: function(text, value, silent) {
+		this.currentText = text;
+		this.currentValue = value;
 		this.inputEl.dom.value = this.currentText;
 		this.inputEl.removeCls('error');
 
@@ -218,7 +221,6 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 			this.fireEvent('select', this.currentValue);
 		}
 	},
-
 
 	selectNextMatch: function(e) {
 		function str(o) {return (o || '').toString();}
@@ -359,7 +361,7 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 			}
 		} else {
 			if (this.KEY_CODES.BACKSPACE == e.getCharCode()) {
-				this.setValue('');
+				this.clear();
 			}
 			this.selectNextMatch(e);
 		}
@@ -395,6 +397,9 @@ Ext.define('NextThought.view.form.fields.SearchComboBox', {
 		clearTimeout(this.__hideOptionsTimer);
 	},
 
+	clear: function() {
+		this.__setValue('', null);
+	},
 
 	setValue: function(value) {
 		var li;
