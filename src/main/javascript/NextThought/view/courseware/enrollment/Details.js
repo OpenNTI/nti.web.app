@@ -192,7 +192,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 						catalogData.EnrollStartDate = instance.get('CreatedTime');
 					}
 				})
-				.fail(function(reaseon) {
+				.fail(function(reason) {
 					console.error('Failed to find course instance: ', reason);
 				});
 		} else {
