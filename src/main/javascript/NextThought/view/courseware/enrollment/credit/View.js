@@ -62,8 +62,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 			}
 		});
 
-		if (me.admissionState === 'Admitted' || true) {
-			if (me.paymentcomplete || true) {
+		if (me.admissionState === 'Admitted') {
+			if (me.paymentcomplete) {
 				me.maybeShowPurchaseComplete();
 			} else {
 				me.showEnroll();
