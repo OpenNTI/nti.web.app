@@ -6,7 +6,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'message', cn: [
-			{cls: 'main', html: '{header}'},
+			{cls: 'main {headerCls}', html: '{header}'},
 			{cls: 'text', html: '{text}'},
 			{cls: 'text', html: '{available}'},
 			{cls: 'confirm', html: '{confirm}'}
@@ -80,6 +80,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 		duration = new Duration(duration);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
+			headerCls: this.paymentfail ? 'error' : '',
 			header: this.paymentfail ?
 				'There were some troubles with your payment.' :
 				'Your application has been accepted!',
