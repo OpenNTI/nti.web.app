@@ -335,7 +335,10 @@ Ext.define('NextThought.controller.CourseWare', {
 	 */
 	changeEnrollmentStatus: function(course, enrolled, callback) {
 		var me = this,
-			enrolledStore = Ext.getStore('courseware.EnrolledCourses');
+			enrolledStore = Ext.getStore('courseware.EnrolledCourses'),
+			panel = this.getLibraryView().getPanel();
+
+		panel.addMask();
 
 		enrolledStore.findCourseBy(course.findByMyCourseInstance())
 			.then(function(enrollment) {//enrolled
@@ -350,9 +353,11 @@ Ext.define('NextThought.controller.CourseWare', {
 						course.set('enrolled', false);
 						wait(1).then(me.courseDropped.bind(me, course));
 						callback.call(null, true, true);
+						panel.removeMask();
 					})
 					.fail(function(reason) {
 						console.error(reason);
+						panel.removeMask();
 						callback.call(null, false);
 					});
 			}, function() {
@@ -375,12 +380,14 @@ Ext.define('NextThought.controller.CourseWare', {
 								enrolledStore.promiseToLoaded.then(function() {
 										return wait();
 									})
+									.then(panel.removeMask.bind(panel))
 									.then(callback.bind(null, true, true));
 							}
 						});
 					})
 					.fail(function(reason) {
 						console.error(reason);
+						panel.removeMask();
 						callback.call(null, false);
 					});
 			});

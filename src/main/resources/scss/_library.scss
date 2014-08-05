@@ -476,6 +476,7 @@
 }
 
 .available-courses {
+	overflow: visible;
 	.x-mask, .x-mask-msg {
 		@include animate($name: fadeIn, $duration: 1s);
 
