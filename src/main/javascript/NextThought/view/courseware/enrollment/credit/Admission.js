@@ -782,20 +782,22 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 
 	handleResponse: function(json) {
 		this.completed = true;
+
+		if (json.State) {
+			$AppConfig.userObject.set('admission_status', json.State);
+		}
+
 		if (json.Status === 422) {
-			$AppConfig.userObject.set('admission_status', 'Rejected');
 			this.showError(json);
 			this.showRejection(json);
 			this.fireEvent('enable-submission', true);
 		} else if (json.Status === 202) {
-			$AppConfig.userObject.set('admission_status', 'Pending');
 			this.showError({
 				Message: 'Your application is pending.'
 			});
 			this.showPending(json);
 			this.clearStorage();
 		} else if (json.Status === 201) {
-			$AppConfig.userObject.set('admission_status', 'Admitted');
 			this.course.setEnrollmentLinks(json.Links);
 			this.fireEvent('show-msg', json.Message || 'Your application was successful.', false, 5000);
 			this.clearStorage();
