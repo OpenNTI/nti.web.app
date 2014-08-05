@@ -10,11 +10,6 @@ Ext.define('NextThought.model.courses.CourseCatalogInstructorInfo', {
 		{ name: 'MimeType', type: 'string' },
 		{ name: 'Name', type: 'string' },
 		{ name: 'Sufix', type: 'string' },
-		{ name: 'Title', type: 'string' },
-
-		{ name: 'Username', type: 'string', persist: false },
-		{ name: 'hasProfile', type: 'bool', persist: false, defaultValue: false },
-		{ name: 'photo', type: 'string', mapping: 'defaultphoto' },
-		{ name: 'associatedUser', type: 'auto', persist: false }
+		{ name: 'Title', type: 'string' }
 	]
 });

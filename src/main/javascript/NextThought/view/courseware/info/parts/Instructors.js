@@ -5,20 +5,32 @@ Ext.define('NextThought.view.courseware.info.parts.Instructors', {
 	cls: 'course-info-instructors',
 
 	itemSelector: '.instructor',
-	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
-		{ cls: 'instructor {[(values.hasProfile && "has-profile")||""]}', cn: [
-			{ cls: 'photo', style: {backgroundImage: 'url({photo})'}},
-			{ cls: 'wrap', cn: [
-				{ cls: 'label', html: '{{{NextThought.view.courseware.info.parts.Instructors.instructors}}}' },
-				{ cls: 'name', html: '{Name}' },
-				{ cls: 'title', html: '{JobTitle}'}
-			] }
-		]}
-	]})),
 
 	config: {
 		info: null
 	},
+
+	constructor: function(config) {
+		var me = this;
+		config.tpl = new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
+			{ cls: 'instructor', cn: [
+				'{%  values.index = Ext.String.leftPad(xindex, 2, "0"); %}',
+				{ cls: 'photo', style: {backgroundImage: 'url({[this.getRoot()]}instructor-photos/{index}.png)'}},
+				{ cls: 'wrap', cn: [
+					{ cls: 'label', html: '{{{NextThought.view.courseware.info.parts.Instructors.instructors}}}' },
+					{ cls: 'name', html: '{Name}' },
+					{ cls: 'title', html: '{JobTitle}'}
+				] }
+			]}
+		]}), {
+			getRoot: function() {
+				return me.root || '/no-root/';
+			}
+		});
+
+		me.callParent([config]);
+	},
+
 
 	initComponent: function() {
 		this.callParent(arguments);
@@ -27,48 +39,13 @@ Ext.define('NextThought.view.courseware.info.parts.Instructors', {
 
 
 	buildStore: function() {
-		var ifo = this.getInfo(),
-			i = ((ifo && ifo.get('Instructors')) || []).slice(),
-			store;
+		var ifo = this.getInfo();
 
-		Ext.each(i, function(o, i, a) {
-			try {
-				o = a[i] = o.data || o;
-				if (!/^data:image/i.test(o.defaultphoto)) {
-					o.defaultphoto = getURL(o.defaultphoto);
-				}
-			} catch (e) {
-				console.error(e.stack || e.message || e);
-			}
+		this.root = ifo.getAssetRoot();
+
+		return new Ext.data.Store({
+			model: 'NextThought.model.courses.CourseCatalogInstructorInfo',
+			data: ((ifo && ifo.get('Instructors')) || []).slice()
 		});
-
-		store = new Ext.data.Store({
-				model: 'NextThought.model.courses.CourseCatalogInstructorInfo',
-				data: i
-			});
-
-		function update(u) {
-
-			var instructor;
-			if (!u.Unresolved) {
-				instructor = store.findRecord('Username', u.getId(), 0, false, false, true);
-				if (!instructor) {
-					console.warn('This SHOULD NOT happen! Could not find instructor that I just queried for...', u, store);
-					return;
-				}
-
-				instructor.set({
-					hasProfile: true,
-					photo: u.get('avatarURL'),
-					associatedUser: u
-				});
-			}
-		}
-
-		UserRepository.getUser(Ext.Array.clean(Ext.Array.pluck(i, 'Username')), function(u) {
-			Ext.each(u, update);
-		});
-
-		return store;
 	}
 });
