@@ -742,7 +742,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 		if (json.Message || json.message) {
 			this.fireEvent('show-msg', (json.Message || json.message).replace('${field}', json.field), true, 5000);
 		} else {
-			this.fireEvent('show-msg', 'An unkown error occured. Please try again later.', true, 5000);
+			this.fireEvent('show-msg', 'An unknown error occurred. Please try again later.', true, 5000);
 		}
 	},
 
