@@ -75,9 +75,14 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 		if (!p) {
 			this.precachePromise = new Promise(function(fulfill, reject) {
+				var url = me.getLink('CourseCatalogEntry');
+
+				if (!url) {
+					return reject('Course Instance (' + me.getId() + ') has a null link for "CourseCatalogEntry".');
+				}
 
 				Cls.load(null, {
-					url: me.getLink('CourseCatalogEntry'),
+					url: url,
 					callback: function(rec) {
 						me.__courseCatalogEntry = rec;
 						if (rec) {
