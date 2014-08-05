@@ -158,12 +158,17 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 			'enable-submission': 'enableSubmit',
 			'set-window-btns': 'setWindowBtns',
 			'show-detail': function(course) {
-				if (me.courseDetail && me.courseDetail.course === course) {
-					me.courseDetail.updateEnrollmentCard();
-					me.showPrevItem();
-				} else {
-					me.showCourse(course);
-				}
+				wait()
+					.then(function() {
+						if (me.courseDetail && me.courseDetail.course === course) {
+							me.showPrevItem('course-enrollment-details');
+							me.courseDetail.updateEnrollmentCard();
+
+							me.getLayout().setActiveItem(me.courseDetail);
+						} else {
+							me.showCourse(course);
+						}
+					});
 			}
 		});
 	},
@@ -198,9 +203,11 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 
 
 
-	showPrevItem: function() {
+	showPrevItem: function(xtype) {
 		var me = this, p,
 			current = this.getLayout().getActiveItem();
+
+		if (current.xtype === xtype) { return; }
 
 		if (current.stopClose) {
 			p = current.stopClose();
@@ -345,12 +352,19 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 	showCourse: function(course) {
 		var me = this;
 
-		me.courseDetail = me.add({
-			xtype: 'course-enrollment-details',
-			course: course,
-			ownerCt: me
-		});
+		function addView() {
+			me.courseDetail = me.add({
+				xtype: 'course-enrollment-details',
+				course: course,
+				ownerCt: me
+			});
+		}
 
+		if (!me.courseDetail) {
+			addView();
+		} else if (me.courseDetail.course !== course) {
+			addView();
+		}
 
 		function updateLabel() {
 			var activeTab;

@@ -62,8 +62,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 			}
 		});
 
-		if (me.admissionState === 'Admitted') {
-			if (me.paymentcomplete) {
+		if (me.admissionState === 'Admitted' || true) {
+			if (me.paymentcomplete || true) {
 				me.maybeShowPurchaseComplete();
 			} else {
 				me.showEnroll();
@@ -90,6 +90,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 		if (this.purchase && activeItem === this.purchase) {
 			return this.purchase.stopClose();
 		}
+
+		return Promise.resolve();
 	},
 
 
@@ -212,7 +214,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 
 		if (!link) {
 			console.error('No is pay done link');
-			this.showEnroll();
+			me.fireEvent('show-detail', me.course);
 			return;
 		}
 
@@ -234,6 +236,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 			}
 		}).fail(function(reason) {
 			console.error('Error with is pay done', reason);
+			me.fireEvent('show-detail', me.course);
 		});
 
 	},
