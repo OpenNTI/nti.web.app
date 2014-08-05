@@ -292,7 +292,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 		if (me.status === 'Pending') {
 			me.showPending();
 		}else if (me.status === 'Rejected') {
-			me.showRejected();
+			me.showRejection();
 		} else {
 			form.unshift({
 				name: 'intro',
@@ -609,40 +609,44 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 	showRejection: function(json) {
 		this.removeAll(true);
 
-		var fields = this.form.slice();
+		var fields = this.form.slice(),
+			items = [];
+
+		if (json) {
+			items.push({
+				xtype: 'enrollment-credit-set',
+				inputs: [
+					{
+						type: 'description',
+						text: json.Message,
+						cls: 'error-detail'
+					}
+				]
+			});
+		}
+
+		items.push({
+			xtype: 'enrollment-credit-set',
+			inputs: [
+				{
+					type: 'description',
+					text: [
+						'Your request to earn college credit has been denied. ',
+						'If you believe there has been an error,',
+						'please contact the OU Admissions Office or resubmit your application.'
+					].join(' ')
+				}
+			],
+			help: [
+				{text: 'OU Admissions Office', type: 'link', href: 'http://www.ou.edu/admissions.html', target: '_blank'}
+			]
+		});
 
 		fields.unshift({
 			name: 'rejected',
 			label: 'A Problem Occurred. Please Correct the Following:',
 			labelCls: 'error',
-			items: [
-				{
-					xtype: 'enrollment-credit-set',
-					inputs: [
-						{
-							type: 'description',
-							text: json.Message,
-							cls: 'error-detail'
-						}
-					]
-				},
-				{
-					xtype: 'enrollment-credit-set',
-					inputs: [
-						{
-							type: 'description',
-							text: [
-								'Your request to earn college credit has been denied. ',
-								'If you believe there has been an error,',
-								'please contact the OU Admissions Office or resubmit your application.'
-							].join(' ')
-						}
-					],
-					help: [
-						{text: 'OU Admissions Office', type: 'link', href: 'http://www.ou.edu/admissions.html', target: '_blank'}
-					]
-				}
-			]
+			items: items
 		});
 
 		this.add(fields);
