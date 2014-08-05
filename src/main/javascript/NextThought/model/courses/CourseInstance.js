@@ -215,10 +215,11 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 						return ParseUtils.parseItems(txt)[0];
 					})
 					.fail(function(reason) {
-						if ((reason || '').substr(0, 3) === '404') {
+						if (reason && reason.status === 404) {
 							return NextThought.model.courseware.UsersCourseAssignmentHistory.getEmpty();
 						}
-						throw reason;
+
+						return Promise.reject(reason);
 					});
 			});
 	},
