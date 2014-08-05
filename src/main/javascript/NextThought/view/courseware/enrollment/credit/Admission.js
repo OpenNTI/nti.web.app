@@ -181,7 +181,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					xtype: 'enrollment-credit-set',
 					label: 'Are you a resident of Oklahoma?',
 					inputs: [
-						{type: 'radio-group', name: 'years_of_oklahoma_residency', valType: 'number', required: true, omitIfBlank: true, allowEmptyInput: false, options: [
+						{type: 'radio-group', name: 'years_of_oklahoma_residency', /*valType: 'number',*/ required: true, omitIfBlank: true, allowEmptyInput: false, options: [
 							{text: 'Yes. I\'ve been a resident for {input} years.', value: 'input', inputWidth: 48},
 							{text: 'No.', value: 0}
 						]}
@@ -201,7 +201,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					xtype: 'enrollment-credit-set',
 					label: 'Have you ever attended the University of Oklahoma?',
 					inputs: [
-						{type: 'radio-group', name: 'sooner_id', required: true, omitIfBlank: true, allowEmptyInput: true, valType: 'number', options: [
+						{type: 'radio-group', name: 'sooner_id', required: true, omitIfBlank: true, allowEmptyInput: true, /*valType: 'number',*/ options: [
 							{text: 'Yes, and my Sooner ID was {input}', value: 'input', help: 'If you do not remember your Sooner ID number, please leave this field blank.'},
 							{text: 'No.', value: ''}
 						]}
