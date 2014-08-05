@@ -427,9 +427,9 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 				if (state.seats === 0) {
 					bottom.addCls('full');
 					bottom.down('.warning').update('');
+				} else if (state.seats <= 10) {
+					bottom.down('.seats').update('Only ' + Ext.util.Format.plural(state.seats, 'seat') + ' left.');
 				}
-
-				bottom.down('.seats').update(Ext.util.Format.plural(state.seats, 'seat') + ' available for college credit.');
 			}
 		}
 
