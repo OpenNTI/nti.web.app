@@ -14,8 +14,7 @@ Ext.define('NextThought.view.courseware.info.parts.Instructors', {
 		var me = this;
 		config.tpl = new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
 			{ cls: 'instructor', cn: [
-				'{%  values.index = Ext.String.leftPad(xindex, 2, "0"); %}',
-				{ cls: 'photo', style: {backgroundImage: 'url({[this.getRoot()]}instructor-photos/{index}.png)'}},
+				{ cls: 'photo', style: {backgroundImage: 'url({photo})'}},
 				{ cls: 'wrap', cn: [
 					{ cls: 'label', html: '{{{NextThought.view.courseware.info.parts.Instructors.instructors}}}' },
 					{ cls: 'name', html: '{Name}' },
@@ -23,9 +22,7 @@ Ext.define('NextThought.view.courseware.info.parts.Instructors', {
 				] }
 			]}
 		]}), {
-			getRoot: function() {
-				return me.root || '/no-root/';
-			}
+		//template functions
 		});
 
 		me.callParent([config]);
@@ -39,13 +36,21 @@ Ext.define('NextThought.view.courseware.info.parts.Instructors', {
 
 
 	buildStore: function() {
-		var ifo = this.getInfo();
+		var ifo = this.getInfo(),
+			data = ((ifo && ifo.get('Instructors')) || []).slice(),
+			photo = '{0}instructor-photos/{1}.png',
+			root = ifo.getAssetRoot() || '/no-root/';
 
-		this.root = ifo.getAssetRoot();
+		data.forEach(function(o, i) {
+			var url = Ext.String.format(photo, root, Ext.String.leftPad(i, 2, '0'));
+
+			o.set('photo', url);
+			Service.request({method: 'HEAD', url: url}).fail(o.set.bind(o, 'photo', User.BLANK_AVATAR));
+		});
 
 		return new Ext.data.Store({
 			model: 'NextThought.model.courses.CourseCatalogInstructorInfo',
-			data: ((ifo && ifo.get('Instructors')) || []).slice()
+			data: data
 		});
 	}
 });
