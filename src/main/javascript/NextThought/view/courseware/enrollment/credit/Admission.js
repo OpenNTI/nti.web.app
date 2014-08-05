@@ -788,6 +788,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 		}
 
 		if (json.Status === 422) {
+			delete this.completed;
 			this.showError(json);
 			this.showRejection(json);
 			this.fireEvent('enable-submission', true);
