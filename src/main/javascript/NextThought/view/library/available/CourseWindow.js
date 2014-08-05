@@ -364,6 +364,8 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 			addView();
 		} else if (me.courseDetail.course !== course) {
 			addView();
+		} else {
+			me.courseDetail.updateEnrollmentCard();
 		}
 
 		function updateLabel() {
