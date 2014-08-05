@@ -561,7 +561,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 				state.price = courseData.Price;
 			} else if (courseData.AdmissionState === 'Rejected') {
-				state = this.getState('bottom', 'admission_reject');
+				state.bottom = this.getState('bottom', 'admission_reject');
 			} else {
 				state.bottom = this.getState('bottom', 'not_enrolled', {
 					date: courseData.enrollcutoff
