@@ -35,12 +35,66 @@ Ext.define('NextThought.model.ContentPackage', {
 		this.tocPromise = Service.request(this.get('index'))
 				.then(Library.parseXML)
 			//BEGIN: ToC Cleanup
-			//TODO: move toc code here.
+				.then(this.__cleanToCNodes)
 			//END: ToC Cleanup
-				.then(function(x) { this.set('toc', x); return x; }.bind(this));
+				.then(function(x) {
+					var d = x.documentElement;
+					this.set('toc', x);
+
+					this.set('NTIID', d.getAttribute('ntiid'));
+					d.setAttribute('base', this.get('root'));
+					d.setAttribute('icon', this.get('icon'));
+					d.setAttribute('title', this.get('title'));
+					this.on('icon-changed', function() {
+						d.setAttribute('icon', this.get('icon'));
+					});
+
+					if (d.getAttribute('isCourse') === 'true') {
+						this.set('isCourse', true);
+					}
+					return x;
+				}.bind(this));
 
 		wait().then(this.__setImage.bind(this));
 	},
+
+
+
+	__cleanToCNodes: function(x) {
+		function strip(e) { Ext.fly(e).remove(); }
+
+		function getAllNodesReferencingContentID(ntiid, xml) {
+			if (!xml || !ntiid) {
+				console.warn('Error: toc/xml or ntiid is empty. Should provide valid toc');
+				return [];
+			}
+
+			function getNodesForKey(keys) {
+				var nodes = [];
+				ntiid = ParseUtils.escapeId(ntiid);
+				Ext.each(keys, function(k) {
+							nodes = Ext.Array.merge(nodes, Ext.DomQuery.select(
+											'[' + k + '="' + ntiid + '"]', xml));
+						}
+				);
+
+				return nodes;
+			}
+
+			return getNodesForKey(['ntiid', 'target-ntiid']);
+		}
+
+		function permitOrRemove(e) {
+			if (!ContentUtils.hasVisibilityForContent(e, status)) {
+				getAllNodesReferencingContentID(e.getAttribute('target-ntiid'), x).forEach(strip);
+			}
+		}
+
+		Ext.each(Ext.DomQuery.select('[visibility]:not([visibility=everyone])', x), permitOrRemove);
+		return x;
+	},
+
+
 
 
 	asUIData: function() {
