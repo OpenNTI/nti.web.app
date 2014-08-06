@@ -35,7 +35,7 @@ Ext.define('NextThought.model.ContentPackage', {
 		this.tocPromise = Service.request(this.get('index'))
 				.then(Library.parseXML)
 			//BEGIN: ToC Cleanup
-				.then(this.__cleanToCNodes)
+				.then(this.__cleanToCNodes.bind(this))
 			//END: ToC Cleanup
 				.then(function(x) {
 					var d = x.documentElement;
@@ -85,10 +85,13 @@ Ext.define('NextThought.model.ContentPackage', {
 		}
 
 		function permitOrRemove(e) {
+			var status = CourseWareUtils.getEnrollmentStatus(ntiid);
 			if (!ContentUtils.hasVisibilityForContent(e, status)) {
 				getAllNodesReferencingContentID(e.getAttribute('target-ntiid'), x).forEach(strip);
 			}
 		}
+
+		var ntiid = this.get('NTIID');
 
 		Ext.each(Ext.DomQuery.select('[visibility]:not([visibility=everyone])', x), permitOrRemove);
 		return x;
