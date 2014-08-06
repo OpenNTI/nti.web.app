@@ -422,6 +422,9 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 			this.fireEvent('player-error', 'kaltura');
 			return;
 		}
+		if (Ext.is.iOS) {
+			return;
+		}
 		console.log(this.id, ' Firing play event');
 		this.sendCommand('doPlay');
 	},
