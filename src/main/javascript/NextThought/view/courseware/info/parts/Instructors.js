@@ -42,7 +42,7 @@ Ext.define('NextThought.view.courseware.info.parts.Instructors', {
 			root = ifo.getAssetRoot() || '/no-root/';
 
 		data.forEach(function(o, i) {
-			var url = Ext.String.format(photo, root, Ext.String.leftPad(i, 2, '0'));
+			var url = Ext.String.format(photo, root, Ext.String.leftPad(i + 1, 2, '0'));
 
 			o.set('photo', url);
 			Service.request({method: 'HEAD', url: url}).fail(o.set.bind(o, 'photo', User.BLANK_AVATAR));
