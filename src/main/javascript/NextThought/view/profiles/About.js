@@ -10,7 +10,7 @@ Ext.define('NextThought.view.profiles.About', {
 	uriFriendlyName: 'about',
 	html: 'about',
 	ui: 'profile',
-	cls: 'about',
+	cls: 'about scrollable',
 
 
 	placeholderTextTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'placeholder', html: '{0}'}),
