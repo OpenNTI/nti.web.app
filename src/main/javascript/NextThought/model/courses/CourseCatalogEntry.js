@@ -28,8 +28,8 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		{ name: 'enrolled', type: 'bool' },
 
 		{ name: 'NTI_FiveminuteEnrollmentCapable', type: 'bool', persist: false },
-		{ name: 'OU_CRN', type: 'string', persist: false },
-		{ name: 'OU_Term', type: 'string', persist: false },
+		{ name: 'NTI_CRN', type: 'string', persist: false },
+		{ name: 'NTI_Term', type: 'string', persist: false },
 
 		{ name: 'DropCutOff', type: 'ISODate', mapping: 'OU_DropCutOffDate', persist: false },
 		{ name: 'EnrollForCreditCutOff', type: 'ISODate', mapping: 'OU_EnrollCutOffDate', persist: false },

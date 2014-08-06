@@ -142,8 +142,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 		var me = this,
 			enrollLink = me.course.getEnrollForCreditLink(),
 			payLink = me.course.getPaymentLink(),
-			crn = me.course.get('OU_CRN'),
-			term = me.course.get('OU_Term'),
+			crn = me.course.get('NTI_CRN'),
+			term = me.course.get('NTI_Term'),
 			returnURL = me.course.buildPaymentReturnURL(),
 			maskCmp = me.up('enrollment-credit');
 

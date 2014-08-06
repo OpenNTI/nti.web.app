@@ -209,8 +209,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 	maybeShowPurchaseComplete: function() {
 		var me = this,
 			link = me.course.getLink('fmaep.is.pay.done'),
-			crn = me.course.get('OU_CRN'),
-			term = me.course.get('OU_Term');
+			crn = me.course.get('NTI_CRN'),
+			term = me.course.get('NTI_Term');
 
 		if (!link) {
 			console.error('No is pay done link');
