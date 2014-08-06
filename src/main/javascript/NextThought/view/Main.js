@@ -39,6 +39,10 @@ Ext.define('NextThought.view.Main', {
 		this.hidden = Boolean(NextThought.phantomRender);
 		this.callParent(arguments);
 
+		if (Ext.isWindows) {
+			Ext.getBody().addCls('is-windows');
+		}
+
 		if (Ext.is.iOS) {
 			Ext.getBody().on({
 				touchstart: this.onTouchStart,
