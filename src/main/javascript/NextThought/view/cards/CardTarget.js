@@ -139,7 +139,9 @@ Ext.define('NextThought.view.cards.CardTarget', {
 				y = this.getY(),
 				h = (Ext.dom.Element.getViewportHeight() - y) - margin;
 
-			this.setHeight(h);
+			if (this.getHeight() !== h) {
+				this.setHeight(h);
+			}
 		}
 		catch (e) {
 			console.warn(e.message);
