@@ -743,6 +743,33 @@ Ext.define('NextThought.controller.CourseWare', {
 			}
 
 			return !!store.getById(lin[Math.max(0, lin.length - 2)]);
+		},
+
+
+		getMostRecentEnrollment: function() {
+			var store = Ext.getStore('courseware.EnrolledCourses');
+
+			return store.onceLoaded()
+				.then(function() {
+					var maxDate = new Date(0),
+						maxInstance;
+
+					store.each(function(course) {
+						var instance = course.get('CourseInstance'),
+							date = instance.get('CreatedTime');
+
+						if (date > maxDate) {
+							maxDate = date;
+							maxInstance = instance;
+						}
+					});
+
+					if (!maxInstance) {
+						return Promise.reject('No most recent enrollment');
+					}
+
+					return maxInstance;
+				});
 		}
 	};
 

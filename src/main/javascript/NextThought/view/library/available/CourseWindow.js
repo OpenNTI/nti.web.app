@@ -65,22 +65,47 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 	restore: function(state) {
 		var me = this;
 
-		return new Promise(function(fulfill) {
-			var course;
+		function finish(catalogEntry, fulfill) {
+			delete state.paymentcomplete;
 
-			if (state.paymentcomplete) {
-				course = CourseWareUtils.courseForNtiid(state.cce);
-
-				if (!course) {
-					console.error('No Course to restore state to');
-				} else {
-					delete state.paymentcomplete;
-					delete state.cce;
-					me.showAdmission(course, true);
-				}
+			if (catalogEntry) {
+				me.showAdmission(catalogEntry, true);
 			}
 
 			fulfill();
+		}
+
+		return new Promise(function(fulfill) {
+			if (state.paymentcomplete) {
+				CourseWareUtils.getMostRecentEnrollment()
+					.then(function(course) {
+						if (!course) {
+							console.error('No Course to restore state to');
+						} else {
+							finish(course.getCourseCatalogEntry(), fulfill);
+						}
+					})
+					.fail(function(reason) {
+						if (!state.cce) {
+							return Promise.reject('No most recent enrollment, or cce to return to');
+						} else {
+							return CourseWareUtils.courseForNtiid(state.cce);
+						}
+					})
+					.then(function(entry) {
+						if (!entry) {
+							return Promise.reject('No cce for ' + state.cce);
+						} else {
+							finish(entry, fulfill);
+						}
+					}).
+					fail(function(reason) {
+						console.error('unable to return from payment: ', reason);
+						finish(false, fulfill);
+					});
+			} else {
+				fulfill();
+			}
 		});
 	},
 
