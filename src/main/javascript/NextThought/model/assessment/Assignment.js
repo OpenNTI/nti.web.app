@@ -81,19 +81,21 @@ Ext.define('NextThought.model.assessment.Assignment', {
 
 	getSubmittedHistoryStore: function() {
 		if (!this._submittedHistoryStore) {
-			var url = this.getLink('GradeSubmittedAssignmentHistorySummaries'),
-				s = this._submittedHistoryStore = new NextThought.store.courseware.AssignmentView({
-					url: url,
-					remoteFilter: true,
-					remoteSort: true,
-					filters: [
-						{id: 'LegacyEnrollmentStatus', property: 'LegacyEnrollmentStatus', value: isFeature('show-open-students-first') ? 'Open' : 'ForCredit'}
-					]
-				});
+			var url = this.getLink('GradeSubmittedAssignmentHistorySummaries'), s;
 
 			if (!url) {
 				console.error('The assignment record %o did not have a "Link" for GradeSubmittedAssignmentHistorySummaries', this);
+				return Ext.getStore('ext-empty-store');
 			}
+
+			s = this._submittedHistoryStore = new NextThought.store.courseware.AssignmentView({
+				url: url,
+				remoteFilter: true,
+				remoteSort: true,
+				filters: [
+					{id: 'LegacyEnrollmentStatus', property: 'LegacyEnrollmentStatus', value: isFeature('show-open-students-first') ? 'Open' : 'ForCredit'}
+				]
+			});
 
 			s.on({
 				scope: this,
