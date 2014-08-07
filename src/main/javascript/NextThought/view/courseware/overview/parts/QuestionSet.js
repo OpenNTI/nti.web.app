@@ -111,6 +111,10 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 			} else {
 				html += Ext.Date.format(date, format);
 			}
+
+			if (date < today) {
+				this.addCls('late');
+			}
 		}
 
 		if (score) { score.destroy(); }
@@ -202,9 +206,8 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 		if (button) { button.setText('Review'); }
 
 		this.addCls('turned-in-assignment');
-		if (late) {
-			this.addCls('late');
-		}
+		this[late ? 'addCls' : 'removeCls']('late');
+
 		tally[late ? 'setRedText' : 'setGreyText'](getFormattedString('NextThought.view.courseware.overview.parts.QuestionSet.completed', {
 			date: Ext.Date.format(completed, 'l, F j g:i a')
 		}));
