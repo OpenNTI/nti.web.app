@@ -55,7 +55,9 @@ Ext.define('NextThought.model.ContentPackage', {
 					return x;
 				}.bind(this));
 
-		wait().then(this.__setImage.bind(this));
+		wait()
+				.then(this.__cacheContentPreferences.bind(this))
+				.then(this.__setImage.bind(this));
 	},
 
 
@@ -159,6 +161,14 @@ Ext.define('NextThought.model.ContentPackage', {
 		}
 
 		return getURL(root).concatPath('/presentation-assets/webapp/v1/');
+	},
+
+
+
+	__cacheContentPreferences: function() {
+		var c = console;
+		Service.getPageInfo(this.get('NTIID'))
+				.then(undefined, c.error.bind(c));
 	},
 
 
