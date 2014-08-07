@@ -261,5 +261,55 @@ Promise.all = Promise.all || function(promises) {
 };
 
 
+/**
+ * Given an array of values, step through one at a time and fulfill with
+ *	1.) The value its self if its not a function
+ *	2.) The return value of the function
+ *	3.) The success of the promise the function returns
+ * if it returns a promise that fails, repeat with the next item
+ *
+ * @param  {Array} values An Array of values or functions that return value or a Promise.
+ * @return {Promise}      fulfills with the first successful value in the array or rejects if none are.
+ */
+Promise.first = Promise.first || function(values) {
+	if (!Ext.isArray(values) || !values.length) {
+		return Promsie.reject('No promise');
+	}
+
+	return new Promise(function(fulfill, reject) {
+		var total = values.length;
+
+		function add(index) {
+			if (index >= total) {
+				reject('No promise in chain was successful');
+				return;
+			}
+
+			var val = values[index];
+
+			if (!Ext.isFunction(val)) {
+				fulfill(val);
+				return;
+			}
+
+			val = val.call();
+
+			if (val instanceof Promise) {
+				val
+					.then(fulfill)
+					.fail(function(reason) {
+						console.error('Promise in chain failed: ', reason);
+						add(index + 1);
+					});
+			} else {
+				fulfill(val);
+			}
+		}
+
+		add(0);
+	});
+};
+
+
 Ext.define('NextThought.util.Promise', {});
 
