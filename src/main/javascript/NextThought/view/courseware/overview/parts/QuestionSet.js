@@ -182,7 +182,10 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 			return;
 		}
 
-		this.on('afterrender', Ext.bind(this.setHistory, this, arguments), this, {single: true});
+		if (!this.rendered) {
+			this.on('afterrender', Ext.bind(this.setHistory, this, arguments), this, {single: true});
+			return;
+		}
 
 		var submission = history.get('Submission'),
 			completed = (submission && submission.get('CreatedTime')) || new Date(),
