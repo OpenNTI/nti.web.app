@@ -402,7 +402,6 @@ Ext.define('NextThought.controller.Reader', {
 			l = pageInfo && pageInfo.getLocationInfo(),
 			t = pageInfo && pageInfo.get('NTIID'),
 		//TEMP:
-			cw = this.getController('CourseWare'),
 			trackFn = Ext.bind(mn.updateCurrent, mn, [false], 0);
 
 		pg[fn]();
@@ -415,7 +414,7 @@ Ext.define('NextThought.controller.Reader', {
 		//Do not track content packages if they are marked as bundles/courses...track the bundle instead.
 		ContentManagementUtils.findBundle(pageInfo)
 			//if we don't find it in bundles... look up the course instance...
-				.fail(function() { return cw.__getCourseInstance(pageInfo); }.bind(this))
+				.fail(function() { return CourseWareUtils.getCourseInstance(pageInfo); }.bind(this))
 			//Found a bundle or course instance...
 				.then(trackFn)
 			//Did not find a bundle or course...
