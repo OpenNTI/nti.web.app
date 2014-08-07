@@ -172,7 +172,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			StartDate: c.get('StartDate'),
 			EndDate: c.get('EndDate'),
 			EnrollCutOff: c.get('EnrollForCreditCutOff'),
-			DropCutOff: c.get('EnrollForCreditCutoff'),
+			DropCutOff: c.get('DropCutOff'),
 			AvailableForCredit: c.get('NTI_FiveminuteEnrollmentCapable'),
 			Enrolled: c.isActive(),
 			OpenEnrolled: c.isActive() && !c.isEnrolledForCredit(),
@@ -538,9 +538,8 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			}
 		} else if (courseData.EnrolledForCredit) {
 			state.bottom = this.getState('bottom', 'credit_enrolled', {
-				date: courseData.enrollcutoff
+				date: courseData.dropcutoff
 			});
-			state.price = courseData.Price;
 		} else {
 			state.bottom.cls = 'openonly';
 		}
