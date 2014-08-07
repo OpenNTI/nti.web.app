@@ -114,25 +114,6 @@ Ext.define('NextThought.model.ContentPackage', {
 	},
 
 
-	/** @deprecated Use {@link NextThought.model.courseware.CourseInstance#getScope()} instead */
-	getScope: function(scope) {
-		var toc = this.get('toc'),
-			entities = (toc && toc.querySelectorAll('scope[type="' + scope + '"] entry')) || [],
-			values = [];
-
-		if (!toc) {
-			Ext.Error.raise('No Scope yet.');
-		}
-
-		//entities is a node list so it doesn't have a forEach
-		Ext.each(entities, function(entity) {
-			values.push(entity.textContent.trim());
-		});
-
-		return values;
-	},
-
-
 	fireNavigationEvent: function(eventSource) {
 		var id = this.get('NTIID');
 		return new Promise(function(fulfill, reject) {
