@@ -945,6 +945,37 @@ Ext.define('NextThought.controller.UserData', {
 		}
 	},
 
+	/**
+	 * Takes an ntiid or an array of ntiids [lineage], it will go from the leaf to the root
+	 * and return a promise that fulfills with the sharing prefs of the first ntiid that has them
+	 * @param  {String} ntiid A single ntiid or the lineage of an ntiid
+	 * @return {Promise}      Fulfills with the first sharing prefs in the lineage
+	 */
+	__getPreferenceFromLineage: function(ntiid) {
+		if (!ntiid) { return Promise.reject('No id to get preference for.'); }
+
+		var preferenceMap = this.preferenceMap,
+			lineage = Ext.isArray(ntiid) ? ntiid : ContentUtils.getLineage(ntiid),
+			preferenceOrPageInfo = lineage.map(function(id) {
+				//if we have it cached return that, else call Service.getPageInfo which will get the
+				//page info and cache the sharing prefs on this.preferenceMap
+				return preferenceMap[id] || Service.getPageInfo.bind(Service, id);
+			});
+
+		return Promise.first(preferenceOrPageInfo)
+			.then(function(p) {
+				if (p.isPageInfo) {
+					return preferenceMap[p.getId()];
+				}
+
+				return p;
+			})
+			.fail(function(reason) {
+				console.error('Failed to get preference from lineage: ', reason);
+				return null;
+			});
+	},
+
 
 	setupPagePreferences: function(cmp) {
 		cmp.getPagePreferences = Ext.bind(this.getPreferences, this);
@@ -991,65 +1022,60 @@ Ext.define('NextThought.controller.UserData', {
 			return Promise.reject('No preferences or no id.');
 		}
 
-		var preferenceMap = this.preferenceMap,
-			lineage = ContentUtils.getLineage(ntiid),
-			result = null,
-			sharingIsValid = true,
-			rootId = lineage.last(),
-			flStore = Ext.getStore('FriendsList');
+		var lineage = ContentUtils.getLineage(ntiid),
+			rootId = lineage.last();
 
-		lineage.every(function(l) {
-			result = preferenceMap[l];
-			return !result;
-		});
+		return this.__getPreferenceFromLineage(lineage)
+			.then(function(result) {
+				var sharingIsValid = true,
+					flStore = Ext.getStore('FriendsList');
 
-		if (!Ext.isEmpty(result)) {
-			(result.sharing.sharedWith || []).every(function(id) {
-				var entity = UserRepository.resolveFromStore(id),
-					found;
+				if (!Ext.isEmpty(result)) {
+					(result.sharing.sharedWith || []).every(function(id) {
+						var entity = UserRepository.resolveFromStore(id),
+							found;
 
-				if (!entity) {
-					sharingIsValid = false;
-				}
-				else {
-					//If its not a user its a fl, or dfl we have to have it in
-					//the fl store.  If its a community it would need to be in  our
-					//community list
-					if (entity.isFriendsList) {
-						if (!flStore.getById(entity.getId())) {
+						if (!entity) {
 							sharingIsValid = false;
 						}
-					}
-					else if (entity.isCommunity) {
-						found = false;
-						$AppConfig.userObject.getCommunities().every(function(com) {
-							if (com.getId() === entity.getId()) {
-								found = true;
+						else {
+							//If its not a user its a fl, or dfl we have to have it in
+							//the fl store.  If its a community it would need to be in  our
+							//community list
+							if (entity.isFriendsList) {
+								if (!flStore.getById(entity.getId())) {
+									sharingIsValid = false;
+								}
 							}
-							return !found;
-						});
-						sharingIsValid = found;
-					}
+							else if (entity.isCommunity) {
+								found = false;
+								$AppConfig.userObject.getCommunities().every(function(com) {
+									if (com.getId() === entity.getId()) {
+										found = true;
+									}
+									return !found;
+								});
+								sharingIsValid = found;
+							}
+						}
+
+						return sharingIsValid;
+					});
 				}
 
-				return sharingIsValid;
+				if (!result || !sharingIsValid) {
+					// if we have no sharing prefs, default to the public scope
+					// or we can't resolve the sharing, the use public scope.
+
+					return CourseWareUtils.getCourseInstance(rootId)
+							.then(function(ci) {
+								var scope = ci.getScope('public');
+								return {sharing: {sharedWith: scope}};
+							});
+				}
+
+				return result;
 			});
-		}
-
-
-		if (!result || !sharingIsValid) {
-			// if we have no sharing prefs, default to the public scope
-			// or we can't resolve the sharing, the use public scope.
-
-			return CourseWareUtils.getCourseInstance(rootId)
-					.then(function(ci) {
-						var scope = ci.getScope('public');
-						return {sharing: {sharedWith: scope}};
-					});
-		}
-
-
-		return Promise.resolve(result);
 	},
 
 
