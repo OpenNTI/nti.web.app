@@ -24,9 +24,9 @@ Ext.define('NextThought.view.menus.Settings', {
 
 		//setup fields:
 		var items = [],
-			u = $AppConfig.userObject,
-			welcomeLink = u.getLink('content.permanent_welcome_page'),
-			childsLink = u.getLink('childrens-privacy');
+				u = $AppConfig.userObject, contactItem,
+				welcomeLink = u.getLink('content.permanent_welcome_page'),
+				childsLink = u.getLink('childrens-privacy');
 
 		items.push({ xtype: 'account-menuitem' });
 
@@ -53,7 +53,21 @@ Ext.define('NextThought.view.menus.Settings', {
 		items.push({ action: 'terms', text: getString('NextThought.view.menus.Settings.terms')});
 
 
-		items.push({ action: 'contact', text: getString('NextThought.view.menus.Settings.contact')});
+		contactItem = { action: 'contact', text: getString('NextThought.view.menus.Settings.contact')};
+		items.push(contactItem);
+		if (!Ext.isEmpty(Service.getSupportLinks().supportEmail) || true) {
+			Ext.apply(contactItem, {
+				onClick: Ext.emptyFn,
+				action: 'contact-someone-else',
+				autoEl: {
+					tag: 'a',
+					target: '_blank',
+					href: 'mailto:' + Service.getSupportLinks().supportEmail,
+					style: {textDecoration: 'none'}
+				}
+			});
+		}
+
 
 		items.push({ xtype: 'menuseparator' });
 		items.push({ action: 'logout', text: getString('NextThought.view.menus.Settings.logout')});
