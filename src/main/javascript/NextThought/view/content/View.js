@@ -157,8 +157,6 @@ Ext.define('NextThought.view.content.View', {
 			'deactivate': 'onDeactivated',
 			'activate': 'onActivated'
 		});
-
-		this.fireEvent('get-course-hooks', this);
 	},
 
 
@@ -470,7 +468,7 @@ Ext.define('NextThought.view.content.View', {
 
 		ContentManagementUtils.findBundle(pageInfo)
 			//if we don't find it in bundles... look up the course instance...
-			.fail(function() { return this.getCourseInstance(pageInfo); }.bind(this))
+			.fail(function() { return CourseWareUtils.getCourseInstance(pageInfo); })
 			//Found a bundle or course instance...
 			.then(Ext.bind(this._setBundle, this, ['passive'], true))
 			//Did not find a bundle or course...

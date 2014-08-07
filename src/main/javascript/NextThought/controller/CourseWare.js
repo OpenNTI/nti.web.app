@@ -73,7 +73,6 @@ Ext.define('NextThought.controller.CourseWare', {
 				},
 
 				'content-view-container': {
-					'get-course-hooks': 'applyCourseHooks',
 					'track-from-restore': 'trackFromRestore'
 				},
 
@@ -101,13 +100,6 @@ Ext.define('NextThought.controller.CourseWare', {
 
 
 	//<editor-fold desc="Store Setup">
-	applyCourseHooks: function(observable) {
-		Ext.apply(observable, {
-			getCourseInstance: Ext.bind(this.__getCourseInstance, this)
-		});
-	},
-
-
 	onSessionReady: function() {
 		var s = Service;
 		this.setupAdministeredCourses((s.getCollection('AdministeredCourses', 'Courses') || {}).href);
@@ -469,31 +461,6 @@ Ext.define('NextThought.controller.CourseWare', {
 	},
 
 
-	/**
-	 *
-	 * @param {String|NextThought.model.PageInfo} thing A Content NTIID or pageInfo
-	 * @private
-	 */
-	__getCourseInstance: function(thing) {
-		return Promise.resolve(CourseWareUtils.courseForNtiid(ContentUtils.getNTIIDFromThing(thing)))
-				.then(function(cce) {
-					if (!cce) { return Promise.reject('Not Found'); }
-					return cce.get('href');
-				})
-				.then(function(href) {
-					function comparator(c) {
-						var i = c.get('CourseInstance'),
-							ref = i && i.get('Links').getRelHref('CourseCatalogEntry');
-						return getURL(ref) === href;
-					}
-					return CourseWareUtils.findCourseBy(comparator)
-						.then(function(o) {
-							return o.get('CourseInstance');
-						});
-		});
-	},
-
-
 	handleNavigation: function(cid, rec, meta) {
 		if (!meta || !meta.isCourse) {
 			return Promise.resolve();
@@ -584,6 +551,29 @@ Ext.define('NextThought.controller.CourseWare', {
 }, function() {
 
 	window.CourseWareUtils = {
+		/**
+		 *
+		 * @param {String|NextThought.model.PageInfo} thing A Content NTIID or pageInfo
+		 */
+		getCourseInstance: function(thing) {
+			return Promise.resolve(this.courseForNtiid(ContentUtils.getNTIIDFromThing(thing)))
+					.then(function(cce) {
+						if (!cce) { return Promise.reject('Not Found'); }
+						return cce.get('href');
+					})
+					.then(function(href) {
+						function comparator(c) {
+							var i = c.get('CourseInstance'),
+									ref = i && i.get('Links').getRelHref('CourseCatalogEntry');
+							return getURL(ref) === href;
+						}
+						return this.findCourseBy(comparator)
+								.then(function(o) {
+									return o.get('CourseInstance');
+								});
+					}.bind(this));
+		},
+
 		containsNTIID: function(rec, prefix) {
 			var match = false;
 			rec.get('ContentPackages').every(function(id) {
