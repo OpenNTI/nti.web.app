@@ -91,6 +91,10 @@ Ext.define('NextThought.model.assessment.Assignment', {
 					]
 				});
 
+			if (!url) {
+				console.error('The assignment record %o did not have a "Link" for GradeSubmittedAssignmentHistorySummaries', this);
+			}
+
 			s.on({
 				scope: this,
 				load: '_resolveParts',
