@@ -51,10 +51,11 @@ body.x-body {margin:0;}
 
 		word-wrap: break-word;
 
-		-webkit-hyphens: auto;
-		-moz-hyphens: auto;
-		-ms-hyphens: auto;
-		hyphens: auto;
+		//Add the html-entity "&shy;" for break points you want to allow to hypnen-wrap.
+		-webkit-hyphens: manual;
+		-moz-hyphens: manual;
+		-ms-hyphens: manual;
+		hyphens: manual;
 
 		box-sizing: border-box;
 		-moz-box-sizing: border-box;
