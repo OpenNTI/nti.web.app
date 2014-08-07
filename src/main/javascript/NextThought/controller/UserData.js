@@ -988,23 +988,26 @@ Ext.define('NextThought.controller.UserData', {
 	 */
 	getPreferences: function(ntiid) {
 		if (!this.preferenceMap || !ntiid) {
-			return null;
+			return Promise.reject('No preferences or no id.');
 		}
 
-		var lineage = ContentUtils.getLineage(ntiid), result = null, sharingIsValid = true,
+		var preferenceMap = this.preferenceMap,
+			lineage = ContentUtils.getLineage(ntiid),
+			result = null,
+			sharingIsValid = true,
 			rootId = lineage.last(),
-			i = ContentUtils.getLocation(rootId),
 			flStore = Ext.getStore('FriendsList');
 
-		Ext.each(lineage, function(l) {
-			result = this.preferenceMap[l];
+		lineage.every(function(l) {
+			result = preferenceMap[l];
 			return !result;
-		}, this);
+		});
 
 		if (!Ext.isEmpty(result)) {
-			Ext.each(result.sharing.sharedWith || [], function(id) {
+			(result.sharing.sharedWith || []).every(function(id) {
 				var entity = UserRepository.resolveFromStore(id),
-						communities, found;
+					found;
+
 				if (!entity) {
 					sharingIsValid = false;
 				}
@@ -1018,15 +1021,13 @@ Ext.define('NextThought.controller.UserData', {
 						}
 					}
 					else if (entity.isCommunity) {
-						communities = $AppConfig.userObject.getCommunities();
 						found = false;
-						Ext.Array.each(communities, function(com) {
+						$AppConfig.userObject.getCommunities().every(function(com) {
 							if (com.getId() === entity.getId()) {
 								found = true;
 							}
 							return !found;
 						});
-
 						sharingIsValid = found;
 					}
 				}
@@ -1039,15 +1040,16 @@ Ext.define('NextThought.controller.UserData', {
 		if (!result || !sharingIsValid) {
 			// if we have no sharing prefs, default to the public scope
 			// or we can't resolve the sharing, the use public scope.
-			result = i.title && i.title.getScope('public');
-			if (Ext.isEmpty(result)) {
-				return;
-			}
-			result = {sharing: {sharedWith: result}};
+
+			return CourseWareUtils.getCourseInstance(rootId)
+					.then(function(ci) {
+						var scope = ci.getScope('public');
+						return {sharing: {sharedWith: scope}};
+					});
 		}
 
 
-		return result;
+		return Promise.resolve(result);
 	},
 
 
@@ -1284,11 +1286,6 @@ Ext.define('NextThought.controller.UserData', {
 		if (!Service.canShare()) {
 			shareWith = [];
 		}
-		//apply default sharing
-		//handled in the UI
-		/*else if(Ext.isEmpty(shareWith)){
-		 shareWith = ((this.getPreferences(container)||{}).sharing||{}).sharedWith || [];
-		 }*/
 
 		selectedText = range ? range.toString() : '';
 		this.saveNote(rangeDescription.description, body, title, container, shareWith, selectedText, style, callback);
@@ -1452,14 +1449,21 @@ Ext.define('NextThought.controller.UserData', {
 			Ext.callback(success ? successFn : failureFn, null, [record, rec]);
 		}
 
-		var p = null;
+		var p = Promise.resolve(null);
 
 		if (applySharing) {
-			p = ((this.getPreferences(record.get('ContainerId')) || {}).sharing || {}).sharedWith || null;
+			p = this.getPreferences(record.get('ContainerId'))
+					.then(function(sharing) {
+						return ((sharing || {}).sharing || {}).sharedWith || null;
+					}, function() {
+						return null;
+					});
 		}
-		record.set('SharedWidth', p);
 
-		record.save({ scope: this, callback: this.getSaveCallback(callback) });
+		p.then(function(share) {
+			record.set('SharedWidth', share);
+			record.save({ scope: this, callback: this.getSaveCallback(callback) });
+		}.bind(this));
 	},
 
 

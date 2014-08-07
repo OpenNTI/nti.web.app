@@ -297,26 +297,29 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 
 	setDefaultSharingFor: function(ntiid) {
-		function getMeta(meta) {
+		var me = this;
+		//me.editor.disable();//curious...
+		this.resolveRootPageInfoFor(ntiid).then(function(meta) {
 			var pageInfo = meta && meta.pageInfo,
-					prefs, sharing, shareInfo, sharedWith;
+				p = Promise.resolve();
+
+			function recover() {return null;}
 
 			if (pageInfo) {
-				prefs = me.getPagePreferences(pageInfo.getId());
-				sharing = prefs && prefs.sharing;
-				sharedWith = sharing && sharing.sharedWith;
-				shareInfo = SharingUtils.sharedWithToSharedInfo(
-						SharingUtils.resolveValue(sharedWith),
-						pageInfo
-				);
+				p = me.getPagePreferences(pageInfo.getId()).fail(recover).then(function(prefs) {
+					var sharing = prefs && prefs.sharing,
+						sharedWith = sharing && sharing.sharedWith;
+
+					return SharingUtils.sharedWithToSharedInfo(SharingUtils.resolveValue(sharedWith));
+				});
 			}
 
-			me.editor.setSharedWith(shareInfo);
-			me.reader.pageInfo = pageInfo;
-		}
-
-		var me = this;
-		this.resolveRootPageInfoFor(ntiid, getMeta);
+			return p.then(function(shareInfo) {
+				me.editor.setSharedWith(shareInfo);
+				me.reader.pageInfo = pageInfo;
+				//me.editor.enable();
+			});
+		});
 	},
 
 
@@ -485,13 +488,13 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 	},
 
 
-	resolveRootPageInfoFor: function(ntiid, callback) {
+	resolveRootPageInfoFor: function(ntiid) {
 		var rootId = ContentUtils.getLineage(ntiid);
 
 		rootId = rootId && rootId.last();
 		if (!rootId) {
-			Ext.callback(callback, this);
+			return Promise.reject('No ID');
 		}
-		LocationMeta.getMeta(rootId, callback, this);
+		return LocationMeta.getMeta(rootId);
 	}
 });

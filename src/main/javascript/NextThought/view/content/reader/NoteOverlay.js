@@ -156,20 +156,13 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		if (this.disabled) {return;}
 
 		var me = this,
-			tabPanel, lineInfo = this.data.box.activeLineInfo,
-			prefs = this.getPagePreferences(this.reader.getLocation().NTIID),
-			sharing = prefs && prefs.sharing,
-			sharedWith = sharing && sharing.sharedWith,
 			targetEl = this.reader.getEl().up('.x-container-reader.reader-container'),
-			shareInfo = SharingUtils.sharedWithToSharedInfo(
-					SharingUtils.resolveValue(sharedWith));
+			tabPanel, lineInfo = this.data.box.activeLineInfo;
+
 
 		if (this.editor && !this.editor.isDestroyed) {
 			return false;
 		}
-
-		this.mouseOut();
-		this.suspendMoveEvents = true;
 
 		tabPanel = targetEl.down('.x-panel-notes-and-discussion');
 		tabPanel = tabPanel && Ext.getCmp(tabPanel.id);
@@ -178,66 +171,78 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			return false;
 		}
 
-		tabPanel.mask();
-
-		this.editor = Ext.widget('nti-editor', {
-			lineInfo: lineInfo || {},
-			ownerCmp: this.reader,
-			sharingValue: shareInfo,
-			floating: true,
-			renderTo: targetEl,
-			enableShareControls: true,
-			enableTitle: true,
-			preventBringToFront: true,
-			listeners: {
-				'deactivated-editor': 'destroy',
-				'no-title-content': function() {return !isFeature('notepad');},//require title if notepad is a feature
-				grew: function() {
-					if (Ext.is.iPad) {
-						return;
-					}
-					var h = this.getHeight(),
-							b = h + this.getY(),
-							v = Ext.Element.getViewportHeight();
-					if (b > v) {
-						this.setY(v - h);
-					}
-				}
-			}
-		}).addCls('active in-gutter');
-		this.editor.toFront();
-		this.editor.focus();
-
-		this.editor.alignTo(this.data.box, 't-t?');
-		this.editor.rtlSetLocalX(0);
-		if (this.editor.getLocalY() < 59) {
-			this.editor.setLocalY(59);
+		function recover() {
+			return null;
 		}
 
+		this.getPagePreferences(this.reader.getLocation().NTIID).fail(recover).then(function(prefs) {
+			var sharing = prefs && prefs.sharing,
+					sharedWith = sharing && sharing.sharedWith,
+					shareInfo = SharingUtils.sharedWithToSharedInfo(SharingUtils.resolveValue(sharedWith));
 
 
-		this.editor.on({
-			save: 'saveNewNote',
-			destroy: 'editorCleanup',
-			scope: this
+			me.mouseOut();
+			me.suspendMoveEvents = true;
+
+
+			tabPanel.mask();
+
+			me.editor = Ext.widget('nti-editor', {
+				lineInfo: lineInfo || {},
+				ownerCmp: me.reader,
+				sharingValue: shareInfo,
+				floating: true,
+				renderTo: targetEl,
+				enableShareControls: true,
+				enableTitle: true,
+				preventBringToFront: true,
+				listeners: {
+					'deactivated-editor': 'destroy',
+					'no-title-content': function() {return !isFeature('notepad');},//require title if notepad is a feature
+					grew: function() {
+						if (Ext.is.iPad) {
+							return;
+						}
+						var h = this.getHeight(), b = h + this.getY(), v = Ext.Element.getViewportHeight();
+						if (b > v) {
+							this.setY(v - h);
+						}
+					}
+				}
+			}).addCls('active in-gutter');
+			me.editor.toFront();
+			me.editor.focus();
+
+			me.editor.alignTo(me.data.box, 't-t?');
+			me.editor.rtlSetLocalX(0);
+			if (me.editor.getLocalY() < 59) {
+				me.editor.setLocalY(59);
+			}
+
+
+			me.editor.on({
+				save: 'saveNewNote',
+				destroy: 'editorCleanup',
+				scope: me
+			});
+
+			me.editor.on('destroy', 'unmask', tabPanel);
+			me.editor.mon(tabPanel, 'resize', 'syncEditorWidth', me);
+
+
+			if (Ext.is.iPad) {
+				Ext.defer(function() {
+					var contentEl = me.editor.el.down('.content'),
+						footerHeight = me.editor.el.down('.footer').getHeight(),
+						hiddenAmount = window.innerHeight - 276,
+						contentHeight = contentEl.getY() - (window.outerHeight - window.innerHeight),
+						toSetHeight = window.innerHeight - contentHeight - footerHeight - hiddenAmount;
+					contentEl.setStyle('max-height', toSetHeight + 'px');
+				}, 1000);
+			}
+
+			me.syncEditorWidth(tabPanel, tabPanel.getWidth());
 		});
-
-		this.editor.on('destroy', 'unmask', tabPanel);
-		this.editor.mon(tabPanel, 'resize', 'syncEditorWidth', this);
-
-
-    if (Ext.is.iPad) {
-      Ext.defer(function() {
-        var contentEl = me.editor.el.down('.content'),
-            footerHeight = me.editor.el.down('.footer').getHeight(),
-                    hiddenAmount = window.innerHeight - 276,
-                    contentHeight = contentEl.getY() - (window.outerHeight - window.innerHeight),
-                    toSetHeight = window.innerHeight - contentHeight - footerHeight - hiddenAmount;
-        contentEl.setStyle('max-height', toSetHeight + 'px');
-      },1000);
-    }
-
-		this.syncEditorWidth(tabPanel, tabPanel.getWidth());
 		return true;
 	},
 
