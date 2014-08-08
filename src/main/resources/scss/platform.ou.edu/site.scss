@@ -42,19 +42,19 @@
 		// 	width: 10px;
 		// 	background: url(../images/platform.ou.edu/ou_cover.png) 0 0 no-repeat;
 		// }
-		.wrap {
-			.provider {
-				text-indent: -1000px;
-				&::before {content:':';}//force there to be some text (the text indent hides it)
-				&::after {
-					content: 'The University of Oklahoma';
-					position: absolute;
-					left: 0;
-					top: 0;
-					text-indent: 0;
-				}
-			}
-		}
+		// .wrap {
+		// 	.provider {
+		// 		text-indent: -1000px;
+		// 		&::before {content:':';}//force there to be some text (the text indent hides it)
+		// 		&::after {
+		// 			content: 'The University of Oklahoma';
+		// 			position: absolute;
+		// 			left: 0;
+		// 			top: 0;
+		// 			text-indent: 0;
+		// 		}
+		// 	}
+		// }
 	}
 }
 

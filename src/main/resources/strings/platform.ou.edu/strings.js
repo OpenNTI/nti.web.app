@@ -20,6 +20,7 @@ NTIStrings['UnresolvedUsernamePattern'] = 'Anonymous ####';
 NTIStrings['course.catalog'] = 'Available Courses';
 NTIStrings['course.catalog.archive'] = 'Archived Courses';
 NTIStrings['Coming Soon'] = 'Upcoming Courses';
+NTIStrings['library:branding navigation-label'] = 'The University of Oklahoma';
 NTIStrings['library:branding logo-alt-text'] = 'The University of Oklahoma';
 NTIStrings['library:branding message-title'] = 'Online Learning Initiative';
 NTIStrings['library:branding message'] = 'The University of Oklahoma is proud to announce an exciting new partnership with NextThought!';

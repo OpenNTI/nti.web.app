@@ -42,7 +42,8 @@ Ext.define('NextThought.view.Navigation', {
 							cls: 'wrap',
 							cn: [
 								{ cls: 'provider' },
-								{ cls: 'title' }
+								{ cls: 'title' },
+								{ cls: 'provider-bottom'}
 							]
 						}
 					]
@@ -66,6 +67,7 @@ Ext.define('NextThought.view.Navigation', {
 	renderSelectors: {
 		imgEl: '.content .image',
 		providerEl: '.content .wrap .provider',
+		providerBottomEl: '.content .wrap .provider-bottom',
 		titleEl: '.content .wrap .title',
 		jumpEl: '.jump-menu'
 	},
@@ -244,13 +246,20 @@ Ext.define('NextThought.view.Navigation', {
 	updateUI: function(rec) {
 		var cls = 'is-book',
 			img = this.imgEl,
-			data = rec.asUIData();
+			data = rec.asUIData(),
+			label = getString('library:branding navigation-label', data.label);
 
 		img.removeCls(cls);
 		img[data.isCourse ? 'removeCls' : 'addCls'](cls);
 		img.setStyle('background-image', 'url(' + (data.thumb || data.icon) + ')');
 
-		this.providerEl.update(data.label);
+		if (label !== data.label) {
+			this.providerEl.update(label);
+			this.providerBottomEl.update(data.label);
+		} else {
+			this.providerEl.update(label);
+		}
+
 		this.titleEl.update(data.title);
 	},
 
