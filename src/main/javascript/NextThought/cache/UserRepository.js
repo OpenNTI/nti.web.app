@@ -201,11 +201,11 @@ Ext.define('NextThought.cache.UserRepository', {
 
 				if (l <= 0) {
 					result = names.map(function(n) {
-						return result[n];
+						return result[n] || User.getUnresolved(n);
 					});
 
 					if (username.returnSingle) {
-						result = result.first() || User.getUnresolved();
+						result = result.first();
 					}
 					fulfill(result);
 					Ext.callback(callback, scope, [result]);
@@ -290,7 +290,7 @@ Ext.define('NextThought.cache.UserRepository', {
 					})
 					.fail(function(reason) {
 						console.error('Failed to bulk resolve: %o %o', toResolve, reason);
-						reject(e);
+						reject(reason);
 						fulfill = Ext.emptyFn;
 						Ext.callback(callback, scope, [[]]);
 					});
