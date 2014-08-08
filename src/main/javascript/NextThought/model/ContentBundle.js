@@ -130,6 +130,19 @@ Ext.define('NextThought.model.ContentBundle', {
 	},
 
 
+	getPublicScope: function() { return this.getScope('public'); },
+	getRestrictedScope: function() { return this.getScope('restricted'); },//i don't think this is used
+
+
+	getScope: function(scope) {
+		var s = (this.get('Scopes') || {})[scope] || '';
+		if (typeof s === 'string') {
+			s = s.split(' ');
+		}
+		return s;
+	},
+
+
 	getDiscussionBoard: function() {
 		var me = this,
 			link = me.getLink('DiscussionBoard'),
