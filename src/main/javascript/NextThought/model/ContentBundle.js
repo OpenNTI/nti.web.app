@@ -139,7 +139,7 @@ Ext.define('NextThought.model.ContentBundle', {
 		if (typeof s === 'string') {
 			s = s.split(' ');
 		}
-		return s;
+		return s.filter(function(v) {return !Ext.isEmpty(v);});
 	},
 
 

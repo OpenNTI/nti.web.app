@@ -156,7 +156,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		if (typeof s === 'string') {
 			s = s.split(' ');
 		}
-		return s;
+		return s.filter(function(v) {return !Ext.isEmpty(v);});
 	},
 
 
