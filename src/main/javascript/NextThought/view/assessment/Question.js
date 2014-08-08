@@ -50,6 +50,7 @@ Ext.define('NextThought.view.assessment.Question', {
 		});
 
 		this.setQuestionContent(multiPart ? null : parts.first());
+		this.startTimestamp = new Date().getTime();
 	},
 
 

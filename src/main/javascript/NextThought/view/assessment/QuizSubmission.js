@@ -57,6 +57,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		});
 
 		this.answeredMap = answeredMap;
+		this.startTimestamp = new Date().getTime();
 	},
 
 

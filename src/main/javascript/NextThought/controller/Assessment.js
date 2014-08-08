@@ -133,11 +133,18 @@ Ext.define('NextThought.controller.Assessment', {
 
 	checkAnswer: function(questionWidget, question, answerValues) {
 
+		var endTimestamp = new Date().getTime();
+		// in seconds
+		// TODO We may have to reset startTimestamp, depending on flow.
+		// SelfAssessments (and maybe assignments) could be re-submitted.
+		var duration = (endTimestamp - questionWidget.startTimestamp) / 1000;
+
 		var containerId = questionWidget.canSubmitIndividually() ? question.getId() : questionWidget.reader.getLocation().NTIID,
 			submission = this.getAssessmentQuestionSubmissionModel().create({
 			ContainerId: containerId,
 			questionId: question.getId(),
-			parts: answerValues
+			parts: answerValues,
+			CreatorRecordedEffortDuration: duration
 		});
 
 		questionWidget.mask('Grading...');
@@ -173,12 +180,19 @@ Ext.define('NextThought.controller.Assessment', {
 
 	grade: function(submissionWidget, questionSet, submissionData) {
 
+		var endTimestamp = new Date().getTime();
+		// in seconds
+		// TODO We may have to reset startTimestamp, depending on flow.
+		// SelfAssessments (and maybe assignments) could be re-submitted.
+		var duration = (endTimestamp - submissionWidget.startTimestamp) / 1000;
+
 		var me = this,
 			s = me.getAssessmentQuestionSetSubmissionModel(),
 			data = {
 				ContainerId: submissionWidget.reader.getLocation().NTIID,
 				questionSetId: questionSet.getId(),
-				questions: []
+				questions: [],
+				CreatorRecordedEffortDuration: duration
 			};
 
 		Ext.Object.each(submissionData, me.__getQuestionSubmissions(data));
@@ -205,6 +219,9 @@ Ext.define('NextThought.controller.Assessment', {
 
 		var s = this.getAssessmentQuestionSetSubmissionModel(),
 			a = this.getAssessmentAssignmentSubmissionModel(),
+			endTimestamp = new Date().getTime(),
+			// in seconds
+			duration = (endTimestamp - widget.startTimestamp) / 1000,
 			progress = this.getAssignmentView(),
 			//containerId = widget.reader.getLocation().NTIID,
 			assignmentId = questionSet.associatedAssignment.getId(),
@@ -227,7 +244,8 @@ Ext.define('NextThought.controller.Assessment', {
 		a = a.create({
 			assignmentId: assignmentId,
 			//containerId: containerId,
-			parts: [s.create(qset)]
+			parts: [s.create(qset)],
+			CreatorRecordedEffortDuration: duration
 		});
 		safelyCall('mask', widget);
 		a.save({url: Service.getObjectURL(assignmentId),
