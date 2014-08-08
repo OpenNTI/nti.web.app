@@ -156,6 +156,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		if (this.disabled) {return;}
 
 		var me = this,
+			pageId = this.reader.getLocation().NTIID,
 			targetEl = this.reader.getEl().up('.x-container-reader.reader-container'),
 			tabPanel, lineInfo = this.data.box.activeLineInfo;
 
@@ -175,10 +176,11 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			return null;
 		}
 
-		this.getPagePreferences(this.reader.getLocation().NTIID).fail(recover).then(function(prefs) {
+
+		function work(prefs, bundle) {
 			var sharing = prefs && prefs.sharing,
-					sharedWith = sharing && sharing.sharedWith,
-					shareInfo = SharingUtils.sharedWithToSharedInfo(SharingUtils.resolveValue(sharedWith));
+				sharedWith = sharing && sharing.sharedWith,
+				shareInfo = SharingUtils.sharedWithToSharedInfo(SharingUtils.resolveValue(sharedWith), bundle);
 
 
 			me.mouseOut();
@@ -242,6 +244,15 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			}
 
 			me.syncEditorWidth(tabPanel, tabPanel.getWidth());
+		}
+
+		Promise.all([
+			this.getPagePreferences(pageId).fail(recover),
+			ContentManagementUtils.findBundle(pageId)
+					.fail(function() {
+						return CourseWareUtils.getCourseInstance(pageId); })
+		]).then(function(data) {
+			work.apply(this, data);
 		});
 		return true;
 	},
@@ -274,7 +285,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 				note = v.body,
 				title = v.title,
 				pageInfo = this.reader.getLocation().pageInfo,
-				sharing = SharingUtils.sharedWithForSharingInfo(v.sharingInfo, pageInfo),
+				pageId = pageInfo.getId(),
 				style = editor.lineInfo.style || 'suppressed',
 				rangeInfo;
 
@@ -292,18 +303,21 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		}
 
 		editor.mask(getString('NextThought.view.content.reader.NoteOverlay.saving'));
-		try {
-			rangeInfo = me.rangeForLineInfo(editor.lineInfo, style);
-			me.reader.fireEvent('save-new-note',
-								title, note, rangeInfo.range,
-								rangeInfo.container || me.reader.getLocation().NTIID,
-								sharing, style, afterSave);
-		}
-		catch (error) {
-			console.error('Error saving note - ' + Globals.getError(error));
-			alert(getString('NextThought.view.content.reader.NoteOverlay.error'));
-			editor.unmask();
-		}
+
+		ContentManagementUtils.findBundle(pageId)
+				.fail(function() { return CourseWareUtils.getCourseInstance(pageId); })
+				.then(function(bundle) {
+					rangeInfo = me.rangeForLineInfo(editor.lineInfo, style);
+					me.reader.fireEvent('save-new-note',
+							title, note, rangeInfo.range, rangeInfo.container || pageId,
+							SharingUtils.sharedWithForSharingInfo(v.sharingInfo, bundle),
+							style, afterSave);
+				})
+				.fail(function(reason) {
+					console.error('Error saving note %o', reason);
+					alert(getString('NextThought.view.content.reader.NoteOverlay.error'));
+					editor.unmask();
+				});
 		return false;
 	},
 

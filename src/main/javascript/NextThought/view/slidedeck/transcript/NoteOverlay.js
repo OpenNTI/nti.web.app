@@ -300,17 +300,24 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		var me = this;
 		//me.editor.disable();//curious...
 		this.resolveRootPageInfoFor(ntiid).then(function(meta) {
-			var pageInfo = meta && meta.pageInfo,
+			var pageInfo = meta && meta.pageInfo, pageId,
 				p = Promise.resolve();
 
 			function recover() {return null;}
 
 			if (pageInfo) {
-				p = me.getPagePreferences(pageInfo.getId()).fail(recover).then(function(prefs) {
-					var sharing = prefs && prefs.sharing,
-						sharedWith = sharing && sharing.sharedWith;
+				pageId = pageInfo.getId();
+				p = Promise.all([
+					this.getPagePreferences(pageId).fail(recover),
+					ContentManagementUtils.findBundle(pageId)
+							.fail(function() { return CourseWareUtils.getCourseInstance(pageId); })
+				])
+					.then(function(data) {
+						var prefs = data[0],
+							sharing = prefs && prefs.sharing,
+							sharedWith = sharing && sharing.sharedWith;
 
-					return SharingUtils.sharedWithToSharedInfo(SharingUtils.resolveValue(sharedWith));
+						return SharingUtils.sharedWithToSharedInfo(SharingUtils.resolveValue(sharedWith), data[1]);
 				});
 			}
 
