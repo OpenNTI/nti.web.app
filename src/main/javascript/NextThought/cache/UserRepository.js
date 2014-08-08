@@ -475,7 +475,13 @@ Ext.define('NextThought.cache.UserRepository', {
 				n = names[i];
 				o = json[n];
 				if (o) {
-					o = User.create(json[n], n);
+					o = json[n];
+					if (o.MimeType === User.mimeType) {
+						o = User.create(o, n);
+					} else {
+						console.warn('Parsing a non-user: "%s" %o', n, o);
+						o = ParseUtils.parseItems(o)[0];
+					}
 					o.summaryObject = false;
 					me.cacheUser(o, true);
 					me.updatePresenceFromResolve([o]);
