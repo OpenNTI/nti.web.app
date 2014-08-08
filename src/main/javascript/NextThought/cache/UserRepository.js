@@ -199,7 +199,7 @@ Ext.define('NextThought.cache.UserRepository', {
 				result[k] = v;
 				l -= 1;
 
-				if (l === 0) {
+				if (l <= 0) {
 					result = names.map(function(n) {
 						return result[n];
 					});
@@ -279,9 +279,14 @@ Ext.define('NextThought.cache.UserRepository', {
 					.done(function(users) {
 						//Note we recache the user here no matter what
 						//if we requestsd it we cache the new values
-						users.forEach(function(u) {
-							maybeFinish(u.getId(), me.cacheUser(u, true));
-						});
+						if (users.length === 0) {
+							l = 0;
+							maybeFinish();
+						} else {
+							users.forEach(function(u) {
+								maybeFinish(u.getId(), me.cacheUser(u, true));
+							});
+						}
 					})
 					.fail(function(reason) {
 						console.error('Failed to bulk resolve: %o %o', toResolve, reason);
