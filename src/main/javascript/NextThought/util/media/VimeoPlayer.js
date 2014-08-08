@@ -135,6 +135,7 @@ Ext.define('NextThought.util.media.VimeoPlayer', {
 
 	load: function(source, offset) {
 		this.cleanPlayer();
+		this.el.select('iframe.vimeo').remove();
 		var o = this.playerTpl.append(this.el, {id: this.id, videoId: source, height: this.height, width: this.width});
 		this.player = Ext.getDom(this.playerId) || o;
 		this.playerSourceURL = this.player.getAttribute('src').split('?')[0];
