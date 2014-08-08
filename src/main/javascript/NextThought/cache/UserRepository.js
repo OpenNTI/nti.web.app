@@ -279,13 +279,10 @@ Ext.define('NextThought.cache.UserRepository', {
 					.done(function(users) {
 						//Note we recache the user here no matter what
 						//if we requestsd it we cache the new values
-						if (users.length === 0) {
+						users.forEach(function(u) { maybeFinish(u.getId(), me.cacheUser(u, true)); });
+						if (l > 0) {
 							l = 0;
 							maybeFinish();
-						} else {
-							users.forEach(function(u) {
-								maybeFinish(u.getId(), me.cacheUser(u, true));
-							});
 						}
 					})
 					.fail(function(reason) {
