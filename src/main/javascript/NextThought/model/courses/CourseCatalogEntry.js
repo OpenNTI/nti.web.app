@@ -78,8 +78,9 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 			return !taRe.test(instructor.get('JobTitle'));
 		}
 
-		var taRe = (/Teaching Assistant/ig),
+		var taRe = (/Teaching Assistant/i),
 			instructors = this.get('Instructors');
+
 		return (instructors && instructors.filter(notTA).map(makeName).join(', ')) || '';
 	},
 
