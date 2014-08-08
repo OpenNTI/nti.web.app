@@ -193,7 +193,7 @@ Ext.define('NextThought.cache.UserRepository', {
 			names = [],
 			toResolve = [];
 
-		return new Promise(function(fulfill) {
+		return new Promise(function(fulfill, reject) {
 
 			function maybeFinish(k, v) {
 				result[k] = v;
@@ -282,6 +282,12 @@ Ext.define('NextThought.cache.UserRepository', {
 						users.forEach(function(u) {
 							maybeFinish(u.getId(), me.cacheUser(u, true));
 						});
+					})
+					.fail(function(reason) {
+						console.error('Failed to bulk resolve: %o %o', toResolve, reason);
+						reject(e);
+						fulfill = Ext.emptyFn;
+						Ext.callback(callback, scope, [[]]);
 					});
 			}
 
@@ -302,19 +308,35 @@ Ext.define('NextThought.cache.UserRepository', {
 			work = Ext.Function.createBuffered(function() {
 				var job = pending,
 					load = toResolve;
-				toResolve = []; pending = [];
+
+				toResolve = [];
+				pending = [];
+
 				console.debug('Resolving in bulk...', load.length);
+
 				this.makeBulkRequest(load)
 						.done(function(v) {
-							job.forEach(function(p) {p.fulfill(v);});
+							job.forEach(function(p) {
+								try {
+									p.fulfill(v);
+								} catch (e) {
+									console.error('%s: %o', e.message, e);
+								}
+							});
 						})
 						.fail(function(v) {
-							job.forEach(function(p) {p.reject(v);});
+							job.forEach(function(p) {
+								try {
+									p.reject(v);
+								} catch (e) {
+									console.error('%s: %o', e.message, e);
+								}
+							});
 						});
 			}, 10);
 
 		function toWork(names, fulfill, reject) {
-			toResolve = toResolve.concat(names);
+			toResolve = Ext.Array.unique(toResolve.concat(names));
 			pending.push({
 				fulfill: fulfill,
 				reject: reject
@@ -324,26 +346,31 @@ Ext.define('NextThought.cache.UserRepository', {
 
 		return function(names) {
 			var me = this;
+
+			names = Ext.Array.unique(names);
+
 			return new Promise(function(fulfill, reject) {
+
 				function success(v) {
 					var fulfillment = [], x, i;
+
 					for (i = v.length - 1; i >= 0; i--) {
+
 						for (x = names.length - 1; x >= 0; x--) {
+
 							if (v[i] && names[x] === v[i].getId()) {
 								fulfillment.push(v[i]);
 							}
 						}
 					}
 
-					if (fulfillment.length === names.length) {
-						fulfill(fulfillment);
-					} else {
-						console.error('Length missmatch!', names, fulfillment, v);
-						reject('Length Missmatch.');
+					if (fulfillment.length !== names.length) {
+						console.warn('Length missmatch! Assuming this is due to communities in the list.', names, fulfillment, v);
 					}
+					fulfill(fulfillment);
 				}
 
-				toWork.call(me, names, success, reject);
+				toWork.call(me, names.slice(), success, reject);
 			});
 		};
 	}()),
@@ -360,8 +387,8 @@ Ext.define('NextThought.cache.UserRepository', {
 		return Promise.all(usernames.chunk(chunkSize).map(me.__chunkBulkRequest.bind(me)))
 				.done(rebuild)
 				.fail(function failed(reason) {
-					console.error('Failed:', reason);
-					throw reason;
+					console.error('Failed: %o', reason);
+					return Promise.reject(reason);
 				});
 	},
 
@@ -419,8 +446,8 @@ Ext.define('NextThought.cache.UserRepository', {
 				return me.__recompose(names, lists);
 			})
 			.fail(function(reason) {
-				console.error('Failed:', reason);
-				throw reason;
+				console.error('Failed: %o', reason);
+				return Promise.reject(reason);
 			});
 	},
 
@@ -470,7 +497,7 @@ Ext.define('NextThought.cache.UserRepository', {
 
 		function fire(fulfill) {
 
-			return wait(1)
+			return wait()
 				.then(function() {
 					return me.__makeRequest({
 						url: Service.getBulkResolveUserURL(),
