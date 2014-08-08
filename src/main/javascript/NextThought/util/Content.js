@@ -612,7 +612,8 @@ Ext.define('NextThought.util.Content', {
 
 	getSortIndexes: function(ntiid) {
 		if (!ntiid) {
-			Ext.Error.raise('No ntiid given');
+			console.error('No ntiid given');
+			return [0, Infinity];
 		}
 
 		function findByFunction(r) {return r.get('NTIID') === id;}
