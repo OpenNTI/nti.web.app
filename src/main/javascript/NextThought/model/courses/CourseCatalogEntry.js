@@ -68,6 +68,22 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	},
 
 
+	getAuthorLine: function() {
+		function makeName(instructor) {
+			return instructor.get('Name');
+		}
+
+
+		function notTA(instructor) {
+			return !taRe.test(instructor.get('JobTitle'));
+		}
+
+		var taRe = (/Teaching Assistant/ig),
+			instructors = this.get('Instructors');
+		return (instructors && instructors.filter(notTA).map(makeName).join(', ')) || '';
+	},
+
+
 	__setImage: function() {
 		var me = this;
 		me.getImgAsset('landing')

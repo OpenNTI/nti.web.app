@@ -38,12 +38,11 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 	asUIData: function() {
 		var e = this.getCourseCatalogEntry(),
-			author = ((e && e.get('Instructors')) || [])[0],
 			bundle = this.get('Bundle').asUIData(),
 			data = {
 				id: this.getId(),
 				isCourse: true,
-				author: author && author.get('Name'),
+				author: e && e.getAuthorLine(),
 				title: e && e.get('Title'),
 				label: e && e.get('ProviderUniqueID'),
 				icon: e && e.get('icon'),

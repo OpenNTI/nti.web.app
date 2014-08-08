@@ -31,23 +31,11 @@ Ext.define('NextThought.view.courseware.coursecatalog.Collection', {
 
 	prepareData: function(data, index, record) {
 
-		function makeName(instructor) {
-			return instructor.get('Name');
-		}
-
-
-		function notTA(instructor) {
-			return !taRe.test(instructor.get('JobTitle'));
-		}
-
-
 		var i = Ext.Object.chain(this.callParent(arguments)),
-			taRe = (/Teaching Assistant/ig),
-			instructors = record.get('Instructors'),
 			isOpen = record.get('isOpen'),
 			isAdmin = record.get('isAdmin');
 
-		i.author = (instructors && instructors.filter(notTA).map(makeName).join(', ')) || '';
+		i.author = record.getAuthorLine();
 		i.isCourse = true;
 		i.enrolledText = isAdmin ? 'Administering' : isOpen ? 'Not For Credit' : 'For Credit';
 
