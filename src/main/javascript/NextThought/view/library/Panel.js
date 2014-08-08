@@ -111,12 +111,16 @@ Ext.define('NextThought.view.library.Panel', {
 
 
 	addMask: function() {
-		this.body.el.mask('Loading...');
+		if (this.rendered) {
+			this.body.el.mask('Loading...');
+		}
 	},
 
 
 	removeMask: function() {
-		this.body.el.unmask();
+		if (this.rendered) {
+			this.body.el.mask('Loading...');
+		}
 	},
 
 
