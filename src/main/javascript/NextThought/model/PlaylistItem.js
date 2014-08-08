@@ -21,7 +21,7 @@ Ext.define('NextThought.model.PlaylistItem', {
 		{name: 'title', type: 'string'},
 		{name: 'description', type: 'string'},
 		{name: 'section', type: 'string'},
-		{name: 'diration', type: 'Synthetic', persist: false,
+		{name: 'duration', type: 'Synthetic', persist: false,
 			fn: function(r) {
 				return '';
 			}

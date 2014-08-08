@@ -35,7 +35,7 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 					{ cls: 'meta', cn: [
 						{ cls: 'title', html: '{title}' },
 						{ cls: 'info', cn: [
-            //							{ tag: 'span', html: '{diration}'},
+            //							{ tag: 'span', html: '{duration}'},
             //							{ tag: 'span', html: '{comments:plural("Comment")}'}
 						] }
 					] }
