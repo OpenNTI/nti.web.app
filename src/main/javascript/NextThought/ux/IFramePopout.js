@@ -15,7 +15,7 @@ Ext.define('NextThought.ux.IFramePopout', {
 	closeAction: 'destroy',
 	cls: 'lightbox',
 	ui: 'lightbox',
-	width: 640,
+	widthRatio: 0.8,
 	heightRatio: 0.75,
 	layout: 'fit',
 
@@ -97,7 +97,9 @@ Ext.define('NextThought.ux.IFramePopout', {
 
 
 	syncSize: function() {
-		this.setHeight(Math.floor(Ext.Element.getViewportHeight() * (this.heightRatio || 0.5)));
+		this.setSize(
+				Math.floor(Ext.Element.getViewportWidth() * (this.widthRatio || 0.5)),
+				Math.floor(Ext.Element.getViewportHeight() * (this.heightRatio || 0.5)));
 		this.center();
 	},
 
