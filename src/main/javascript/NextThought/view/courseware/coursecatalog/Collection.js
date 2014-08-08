@@ -30,13 +30,17 @@ Ext.define('NextThought.view.courseware.coursecatalog.Collection', {
 
 
 	prepareData: function(data, index, record) {
+
+		function makeName(instructor) {
+			return instructor.get('Name');
+		}
+
 		var i = Ext.Object.chain(this.callParent(arguments)),
 			instructors = record.get('Instructors'),
-			name = instructors && instructors[0].get('Name'),
 			isOpen = record.get('isOpen'),
 			isAdmin = record.get('isAdmin');
 
-		i.author = name;
+		i.author = (instructors && instructors.map(makeName).join(', ')) || '';
 		i.isCourse = true;
 		i.enrolledText = isAdmin ? 'Administering' : isOpen ? 'Not For Credit' : 'For Credit';
 
