@@ -119,7 +119,7 @@ Ext.define('NextThought.view.library.Panel', {
 
 	removeMask: function() {
 		if (this.rendered) {
-			this.body.el.mask('Loading...');
+			this.body.el.unmask();
 		}
 	},
 
