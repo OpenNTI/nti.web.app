@@ -586,9 +586,9 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	rangeForLineInfo: function(line, style) {
 		var range = line.range,
-				maybeContainer = range.commonAncestorContainer || null,
-				containerSelector = 'object[data-nti-container]',
-				container, c;
+			maybeContainer = (range && range.commonAncestorContainer) || null,
+			containerSelector = 'object[data-nti-container]',
+			container, c;
 
 		if (style !== 'suppressed') {
 			return {range: line.range, container: null};
@@ -596,13 +596,13 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		//If we are a single non text node we will check to see if that node is the
 		//container rather than the common ancestor.
-		if (range.startContainer === range.endContainer && range.startContainer.nodeType !== Node.TEXT_NODE && range.startOffset + 1 === range.endOffset) {
+		if (range && (range.startContainer === range.endContainer && range.startContainer.nodeType !== Node.TEXT_NODE && range.startOffset + 1 === range.endOffset)) {
 			maybeContainer = range.startContainer.childNodes[range.startOffset];
 		}
 
 		//OK we are style suppressed
-		maybeContainer = Ext.fly(maybeContainer);
-		container = maybeContainer.is(containerSelector) ? maybeContainer : maybeContainer.up(containerSelector);
+		maybeContainer = maybeContainer && Ext.fly(maybeContainer);
+		container = maybeContainer && maybeContainer.is(containerSelector) ? maybeContainer : maybeContainer.up(containerSelector);
 		c = container ? container.getAttribute('data-ntiid') : null;
 		if (container && c) {
 			return {range: null, container: c};
