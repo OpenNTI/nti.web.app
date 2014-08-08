@@ -29,7 +29,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			'content-updated': 'onContentUpdate',
 			'markupenabled-action': 'contentDefinedAnnotationAction',
 			'sync-height': 'syncHeight',
-			'create-note': 'noteHere',
+			'create-note': 'noteHereEvent',
 			'beforenavigate': 'onNavigation',
 			'beforedeactivate': 'onNavigation'
 		});
@@ -66,13 +66,13 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		if (Ext.is.iPad) {
 			me.mon(box, {
-				click: 'openEditor',
+				click: 'openEditorClick',
 				mouseover: 'overNib'
 			});
 		}
 		else {
 			me.mon(box, {
-				click: 'openEditor',
+				click: 'openEditorClick',
 				mouseover: 'overNib',
 				mousemove: 'overNib',
 				mouseout: 'offNib',
@@ -152,30 +152,45 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	openEditor: function() {
-		if (this.disabled) {return;}
+	getTabPanel: function() {
+		var targetEl = this.reader.getEl().up('.x-container-reader.reader-container'),
+			tabPanel;
 
-		var me = this,
-			pageId = this.reader.getLocation().NTIID,
-			targetEl = this.reader.getEl().up('.x-container-reader.reader-container'),
-			tabPanel, lineInfo = this.data.box.activeLineInfo;
+		tabPanel = targetEl.down('.x-panel-notes-and-discussion');
+		return tabPanel && Ext.getCmp(tabPanel.id);
+	},
 
 
+	allowOpenEditor: function() {
 		if (this.editor && !this.editor.isDestroyed) {
 			return false;
 		}
 
-		tabPanel = targetEl.down('.x-panel-notes-and-discussion');
-		tabPanel = tabPanel && Ext.getCmp(tabPanel.id);
-		if (!tabPanel) {
-			console.error('No tab panel!');
-			return false;
+		return true;
+	},
+
+
+	openEditorClick: function() {
+		if (this.allowOpenEditor() && this.getTabPanel()) {
+			this.openEditor();
+			return true;
 		}
 
-		function recover() {
-			return null;
-		}
+		return false;
+	},
 
+	openEditor: function() {
+		if (this.disabled) { return Promise.reject(); }
+
+		var me = this,
+			pageId = me.reader.getLocation().NTIID,
+			targetEl = this.reader.getEl().up('.x-container-reader.reader-container'),
+			tabPanel = me.getTabPanel(),
+			lineInfo = me.data.box.activeLineInfo;
+
+		if (!me.allowOpenEditor() || !tabPanel) {
+			return Promise.reject();
+		}
 
 		function work(prefs, bundle) {
 			var sharing = prefs && prefs.sharing,
@@ -246,15 +261,17 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			me.syncEditorWidth(tabPanel, tabPanel.getWidth());
 		}
 
-		Promise.all([
-			this.getPagePreferences(pageId).fail(recover),
+		return Promise.all([
+			this.getPagePreferences(pageId)
+					.fail(function() {
+						return null;
+					}),
 			ContentManagementUtils.findBundle(pageId)
 					.fail(function() {
 						return CourseWareUtils.getCourseInstance(pageId); })
 		]).then(function(data) {
 			work.apply(this, data);
 		});
-		return true;
 	},
 
 
@@ -322,13 +339,19 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
+	noteHereEvent: function(range, rect, style) {
+		return this.openEditorClick();
+	},
+
+
 	noteHere: function(range, rect, style) {
 		this.positionInputBox(Ext.apply(this.lineInfoForRangeAndRect(range, rect), {style: style}));
-		if (!this.openEditor()) {
-			alert(getString('NextThought.view.content.reader.NoteOverlay.inprogress'));
-			return false;
-		}
-		return true;
+
+		return this.openEditor()
+			.fail(function() {
+				alert(getString('NextThought.view.content.reader.NoteOverlay.inprogress'));
+				return Promise.reject();
+			});
 	},
 
 
@@ -344,14 +367,15 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			range.selectNode(img);
 			rect = img.getBoundingClientRect();
 
-			if (this.noteHere(range, rect)) {
-				WBUtils.createFromImage(img, function(data) {
-					me.editor.reset();
-					me.editor.setValue('');
-					me.editor.addWhiteboard(data);
-					me.editor.focus(true);
+			this.noteHere(range, rect)
+				.then(function() {
+					WBUtils.createFromImage(img, function(data) {
+						me.editor.reset();
+						me.editor.setValue('');
+						me.editor.addWhiteboard(data);
+						me.editor.focus(true);
+					});
 				});
-			}
 		}
 	},
 
