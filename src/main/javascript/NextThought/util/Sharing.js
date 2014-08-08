@@ -213,65 +213,70 @@ Ext.define('NextThought.util.Sharing', {
 		};
 	},
 
-	getLongTextFromShareInfo: function(shareInfo, callback, scope, tpl, maxLength) {
+	getLongTextFromShareInfo: function(shareInfo, tpl, maxLength) {
 		var explicitEntities = shareInfo.entities,
 			isPublic = shareInfo.publicToggleOn,
 			prefix = isPublic && 'Public',
 			str, others, names = [], comma = ',';
 
 		if (Ext.isEmpty(explicitEntities)) {
-			Ext.callback(callback, scope, [prefix || 'Only Me']);
-			return;
+			return Promise.resolve(prefix || 'Only Me');
 		}
 
 		prefix = prefix || 'Private';
 
-		UserRepository.getUser(explicitEntities, function(resolvedUsers) {
-			Ext.each(resolvedUsers || [], function(u) {
-				var dn = isMe(u) ? 'me' : u.getName(),
-					onlyMe = prefix === 'Only Me';
+		return UserRepository.getUser(explicitEntities)
+			.then(function(resolvedUsers) {
+				Ext.each(resolvedUsers || [], function(u) {
+					var dn = isMe(u) ? 'me' : u.getName(),
+						onlyMe = prefix === 'Only Me';
 
-				if (dn.toLowerCase() !== 'unknown' && !Ext.isEmpty(dn) && (!onlyMe || dn !== 'me')) {
-					names.push(' ' + dn);
-					return !maxLength || names.length <= maxLength;
+					if (dn.toLowerCase() !== 'unknown' && !Ext.isEmpty(dn) && (!onlyMe || dn !== 'me')) {
+						names.push(' ' + dn);
+						return !maxLength || names.length <= maxLength;
+					}
+				});
+
+				if (tpl) {
+					names = Ext.Array.map(names, function() { return tpl.apply(arguments); });
 				}
+
+				others = resolvedUsers.length - names.length;
+
+				if (others) {
+					names.push(Ext.String.format('and {0}', Ext.util.Format.plural(others, 'other')));
+				} else if (names.length > 1) {
+					names.push(' and' + names.pop());
+				}
+
+				if (names.length === 0) { comma = ''; }
+				if (names.length === 1) { comma = ' and'; }
+
+				str = Ext.String.format('{0}{1} {2}', prefix, comma, names.join(','));
+
+				return str;
 			});
-
-			if (tpl) {
-				names = Ext.Array.map(names, function() { return tpl.apply(arguments); });
-			}
-
-			others = resolvedUsers.length - names.length;
-
-			if (others) {
-				names.push(Ext.String.format('and {0}', Ext.util.Format.plural(others, 'other')));
-			} else if (names.length > 1) {
-				names.push(' and' + names.pop());
-			}
-
-			if (names.length === 0) { comma = ''; }
-			if (names.length === 1) { comma = ' and'; }
-
-			str = Ext.String.format('{0}{1} {2}', prefix, comma, names.join(','));
-			Ext.callback(callback, scope, [str]);
-		});
-
 	},
 
-	getShortTextFromShareInfo: function(shareInfo, callback, scope) {
+	getShortTextFromShareInfo: function(shareInfo) {
 		var explicitEntities = shareInfo.entities,
 			isPublic = shareInfo.publicToggleOn,
 			prefix = isPublic ? 'Public and' : 'Shared with',
 			str;
 
 		if (Ext.isEmpty(explicitEntities)) {
-			Ext.callback(callback, scope, [isPublic ? 'Public' : 'Only Me']);
-		} else if (explicitEntities.length > 1) {
+			return Promise.resolve(isPublic ? 'Public' : 'Only Me');
+		}
+
+		if (explicitEntities.length > 1) {
 			str = Ext.String.format('{0} {1}', prefix, Ext.util.Format.plural(explicitEntities.length, 'other'));
-			Ext.callback(callback, scope, [str]);
-		} else {
-			//Exactly one, resolve the user then callback
-			UserRepository.getUser(explicitEntities.first(), function(resolved) {
+
+			return Promise.resolve(str);
+		}
+
+		//Exactly one, resolve the user then callback
+		UserRepository.getUser(explicitEntities.first())
+			.then(function(resolved) {
 				var dn = resolved.getName();
 
 				if (dn.toLowerCase() === 'unknown' || Ext.isEmpty(dn)) {
@@ -280,21 +285,34 @@ Ext.define('NextThought.util.Sharing', {
 					str = Ext.String.format('{0} {1}', prefix, resolved.getName());
 				}
 
-				Ext.callback(callback, scope, [str]);
+				return str;
 			});
-		}
 	},
 
 	getLongSharingDisplayText: function(shareWith, callback, scope, tpl, maxLength) {
 		var shareInfo = this.sharedWithToSharedInfo(shareWith);
 
-		this.getLongTextFromShareInfo(shareInfo, callback, scope, tpl, maxLength);
+		return this.getLongTextFromShareInfo(shareInfo, tpl, maxLength)
+			.then(function(str) {
+				if (callback) {
+					callback.call(scope, str);
+				}
+
+				return str;
+			});
 	},
 
 	getShortSharingDisplayText: function(shareWith, callback, scope) {
 		var shareInfo = this.sharedWithToSharedInfo(shareWith);
 
-		this.getShortTextFromShareInfo(shareInfo, callback, scope);
+		return this.getShortTextFromShareInfo(shareInfo)
+			.then(function(str) {
+				if (callback) {
+					callback.call(scope, str);
+				}
+
+				return str;
+			});
 	},
 
 
@@ -302,14 +320,28 @@ Ext.define('NextThought.util.Sharing', {
 	getTagSharingLongText: function(sharedWith, tags, published, callback, scope, tpl, maxLength) {
 		var shareInfo = this.tagShareToSharedInfo(sharedWith, tags, published);
 
-		this.getLongTextFromShareInfo(shareInfo, callback, scope, tpl, maxLength);
+		return this.getLongTextFromShareInfo(shareInfo, tpl, maxLength)
+			.then(function(str) {
+				if (callback) {
+					callback.call(scope, str);
+				}
+
+				return str;
+			});
 	},
 
 	//Takes the shared with and the tags of a post and returns the short sharing text
 	getTagSharingShortText: function(sharedWith, tags, published, callback, scope) {
 		var shareInfo = this.tagShareToSharedInfo(sharedWith, tags, published);
 
-		this.getShortTextFromShareInfo(shareInfo, callback, scope);
+		return this.getShortTextFromShareInfo(shareInfo)
+			.then(function(str) {
+				if (callback) {
+					callback.call(scope, str);
+				}
+
+				return str;
+			});
 	}
 
 
