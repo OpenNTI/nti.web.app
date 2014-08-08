@@ -3,7 +3,7 @@ Ext.define('NextThought.model.courses.CourseCatalogInstructorInfo', {
 	mimeType: 'application/vnd.nextthought.courses.coursecataloginstructorlegacyinfo',
 	extend: 'NextThought.model.Base',
 
-	idProperty: 'Username',
+	idProperty: 'Name',
 	fields: [
 		{ name: 'Class', type: 'string' },
 		{ name: 'JobTitle', type: 'string' },
@@ -12,6 +12,6 @@ Ext.define('NextThought.model.courses.CourseCatalogInstructorInfo', {
 		{ name: 'Sufix', type: 'string' },
 		{ name: 'Title', type: 'string' },
 
-		{ name: 'photo', type: 'string', persist: false }
+		{ name: 'photo', type: 'string', mapping: 'defaultphoto', persist: false }
 	]
 });
