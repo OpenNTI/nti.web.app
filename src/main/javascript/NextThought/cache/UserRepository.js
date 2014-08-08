@@ -205,7 +205,7 @@ Ext.define('NextThought.cache.UserRepository', {
 					});
 
 					if (username.returnSingle) {
-						result = result.first();
+						result = result.first() || User.getUnresolved();
 					}
 					fulfill(result);
 					Ext.callback(callback, scope, [result]);
