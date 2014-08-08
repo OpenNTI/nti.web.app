@@ -602,7 +602,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		//OK we are style suppressed
 		maybeContainer = maybeContainer && Ext.fly(maybeContainer);
-		container = maybeContainer && maybeContainer.is(containerSelector) ? maybeContainer : maybeContainer.up(containerSelector);
+		container = !maybeContainer || maybeContainer.is(containerSelector) ? maybeContainer : maybeContainer.up(containerSelector);
 		c = container ? container.getAttribute('data-ntiid') : null;
 		if (container && c) {
 			return {range: null, container: c};
