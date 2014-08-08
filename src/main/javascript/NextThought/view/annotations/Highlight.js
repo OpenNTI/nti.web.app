@@ -24,7 +24,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		}
 
 		var pp = this.getRecordField('presentationProperties');
-		if(pp && pp.highlightColorName) {
+		if (pp && pp.highlightColorName) {
 			this.highlightColorName = pp.highlightColorName;
 			this.highlightCls += ' ' + pp.highlightColorName;
 		}
@@ -341,13 +341,18 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 	isInlineElement: function(node) {
+		return {
+			none: true,
+			inline: true,
+			'': true
+			//Do not include "inline-(block|table)"
+		}[getComputedStyle(node).display];
 		//getComputedStyle === $$$$
-		//return ['inline','inline-block','none'].indexOf(Ext.fly(node).getStyle('display')) >= 0;
-		return !this.self.blockElementRe.test(node.nodeName);
+		//return !this.self.blockElementRe.test(node.nodeName);
 	},
 
 
-	validToWrapEntireNodeFaster: function(node) {
+	validToWrapEntireNode: function(node) {
 		var ntiInline;
 		if (node.nodeType === node.TEXT_NODE) {
 			return true;
@@ -364,7 +369,11 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			if (ntiInline) {
 				return true;
 			}
-			if (node.className.indexOf && (node.className.indexOf('mathjax') >= 0 || node.className.indexOf('mathquill') >= 0)) {
+
+			if (node.className.indexOf && (
+					node.className.indexOf('mathjax') >= 0 ||
+					node.className.indexOf('mathquill') >= 0) &&
+					node.className.indexOf('link-button') < 0) {
 				return true;
 			}
 		}
@@ -372,33 +381,21 @@ Ext.define('NextThought.view.annotations.Highlight', {
 	},
 
 
-	validToWrapEntireNode: function(node) {
-		var valid = false, display;
-
-		if (node.nodeType === node.TEXT_NODE) {
-			valid = true;
-		}
-		else if (node.nodeType === node.ELEMENT_NODE) {
-			display = node.ownerDocument.parentWindow.getComputedStyle(node).display;
-			if (['inline', 'inline-block', 'none'].indexOf(display) >= 0) {
-				valid = true;
-			}
-			else if (node.className.indexOf && node.className.indexOf('mathjax') >= 0) {
-				valid = true;
-			}
-			else if (node.className.indexOf && node.className.indexOf('mathquill') >= 0) {
-				valid = true;
-			}
-			if (node.tagName === 'P') {
-				valid = false;
-			}
-			if (node.childNodes.length === 0) {
-				valid = true;
-			}
+	onClick: function(e) {
+		if (this.ownerCmp.getAnnotations().getSelection() || !this.isModifiable) {
+			return;
 		}
 
-		return valid;
+		e.stopEvent();
+		var p = this.callParent(arguments);
+
+		this.ownerCmp.getAnnotations().clearSelection();
+		//the note overlay is listening on iframe-mouseup to enable showing the add note icons
+		//since we stop the mouse event manually fire it so we can still add notes
+		this.ownerCmp.fireEvent('iframe-mouseup');
+		return p;
 	},
+
 
 
 	wrapRange: function(node, range) {
@@ -424,7 +421,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		endToStart = nodeRange.compareBoundaryPoints(Range.END_TO_START, range);
 		endToEnd = nodeRange.compareBoundaryPoints(Range.END_TO_END, range);
 
-		valid = this.validToWrapEntireNodeFaster(node);
+		valid = this.validToWrapEntireNode(node);
 
 		//Easy case, the node is completely surronded and valid, wrap the node
 		if ((startToStart === AFTER || startToStart === SAME) &&
@@ -462,22 +459,6 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			}
 		}
 		return Ext.Array.clean(nodeList);
-	},
-
-
-	onClick: function(e) {
-		if (this.ownerCmp.getAnnotations().getSelection() || !this.isModifiable) {
-			return;
-		}
-
-		e.stopEvent();
-		var p = this.callParent(arguments);
-
-		this.ownerCmp.getAnnotations().clearSelection();
-		//the note overlay is listening on iframe-mouseup to enable showing the add note icons
-		//since we stop the mouse event manually fire it so we can still add notes
-		this.ownerCmp.fireEvent('iframe-mouseup');
-		return p;
 	},
 
 
