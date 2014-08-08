@@ -336,34 +336,34 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	fillInShare: function(sharedWith) {
-		var tpl = Ext.DomHelper.createTemplate({tag: 'name', 'data-profile-idx': '{1}', html: '{0}'});
-		if (!this.responseBox || this.isDestroyed) {
+	fillInShare: function(sharedWith, bundle) {
+		var me = this,
+			tpl = Ext.DomHelper.createTemplate({tag: 'name', 'data-profile-idx': '{1}', html: '{0}'}),
+			sharingInfo = SharingUtils.sharedWithToSharedInfo(SharingUtils.resolveValue(sharedWith), bundle);
+
+		if (!me.responseBox || me.isDestroyed) {
 			return;
 		}
 
-		this.responseBox[(sharedWith || []).length === 0 ? 'removeCls' : 'addCls']('shared');
-		if (Ext.isEmpty(sharedWith)) {
-			this.sharedTo.update('Private');
-			this.sharedTo.set({'data-qtip': undefined});
-			return;
-		}
+		me.responseBox[(sharedWith || []).length === 0 ? 'removeCls' : 'addCls']('shared');
 
-		SharingUtils.getLongSharingDisplayText(sharedWith, function(str) {
-			this.sharedTo.update(str);
-			this.sharedTo.set({'data-qtip': str});
+		SharingUtils.getLongTextFromShareInfo(sharingInfo, tpl, 150)
+			.then(function(str) {
+				me.sharedTo.update(str);
+				me.sharedTo.set({'data-qtip': str});
 
-			this.sharedTo.select('name[data-profile-idx]').on('click', function(e) {
-				var a = e.getTarget('name'),
-					i = a && a.getAttribute('data-profile-idx'),
-					u = a && sharedWith[i];
+				me.sharedTo.select('name[data-profile-idx]').on('click', function(e) {
+					var a = e.getTarget('name'),
+						i = a && a.getAttribute('data-profile-idx'),
+						u = a && sharedWith[i];
 
-				e.stopEvent();
-				if (a && !Ext.isEmpty(i) && u && u.getProfileUrl) {
-					this.fireEvent('show-profile', u);
-				}
-			}, this);
-		}, this, tpl, 150);
+						e.stopEvent();
+
+						if (a && !Ext.isEmpty(i) && u && u.getProfileUrl) {
+							me.fireEvent('show-profile', u);
+						}
+				});
+			});
 	},
 
 
@@ -466,50 +466,78 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
+	getContentBundle: function(record) {
+		var pageId;
+
+		if (record) {
+			pageId = record.get('ContainerId');
+		} else {
+			pageId = this.record.get('ContainerId');
+		}
+
+		if (record || !this.__getContentBundlePromise) {
+			this.__getContentBundlePromise = ContentManagementUtils.findBundle(pageId)
+						.fail(function() {
+							return CourseWareUtils.getCourseInstance(pageId);
+						});
+		}
+
+
+		return this.__getContentBundlePromise;
+	},
+
+
 	//NOTE right now we are assuming the anchorable data won't change.
 	//That is true in practice and it would be expensive to pull it everytime
 	//some other part of this record is updated
 	updateFromRecord: function(newRecord, modifiedFieldName) {
-		var r = newRecord || this.record;
+		var me = this,
+			r = newRecord || this.record;
 
 		try {
 			// Update only fields that changed. no point in redrawing everything.
 			if (!Ext.isEmpty(modifiedFieldName)) {
 				if (modifiedFieldName === 'LikeCount') {
-					this.updateLikeCount(r);
+					me.updateLikeCount(r);
 				}
 				if (modifiedFieldName === 'favorite') {
-					this.markAsFavorited(modifiedFieldName, r.isFavorited());
+					me.markAsFavorited(modifiedFieldName, r.isFavorited());
 				}
 				return;
 			}
-			UserRepository.getUser(r.get('Creator'), this.fillInUser, this);
+			UserRepository.getUser(r.get('Creator'), me.fillInUser, me);
 
-			if (this.sharedTo) {
-				UserRepository.getUser(r.get('sharedWith').slice(), this.fillInShare, this);
+			if (me.sharedTo) {
+				Promise.all([
+					UserRepository.getUser(r.get('sharedWith').slice()),
+					me.getContentBundle(newRecord)
+				])
+					.then(function(results) {
+						me.fillInShare.apply(me, results);
+					});
 			}
 
 
-			this.time.update(r.getRelativeTimeString());
-			this.noteBody.removeCls('deleted-reply');
+			me.time.update(r.getRelativeTimeString());
+			me.noteBody.removeCls('deleted-reply');
 
 			if (r.placeholder) {
-				this.setPlaceholderContent();
+				me.setPlaceholderContent();
 			}
 
-			this.reflectLikeAndFavorite(r);
+			me.reflectLikeAndFavorite(r);
 		}
 		catch (e1) {
 			console.error(Globals.getError(e1));
 		}
 		//In case compiling the body content fails silently and doesn't call the callback,
 		//blank us out so we don't ghost note bodies onto the wrong note.
-		this.setContent('');
+		me.setContent('');
 		if (r.compileBodyContent) {
-			r.compileBodyContent(this.setContent, this, this.generateClickHandler, 226);
+			r.compileBodyContent(me.setContent, me, me.generateClickHandler, 226);
 		}
 
-		this.updateToolState();
+		me.updateToolState();
 	},
 
 
