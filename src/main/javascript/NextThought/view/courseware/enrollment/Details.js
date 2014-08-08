@@ -655,7 +655,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 
 	handleEnrollmentClick: function(e) {
-		var me = this,
+		var me = this, win = me.up('window'),
 			checkbox = e.getTarget('.bottom.checkbox'),
 			button = this.cardsContainerEl.down('.button'),
 			anchor = e.getTarget('a'), href;
@@ -691,7 +691,11 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			if (href === 'profile') {
 				e.stopEvent();
 				me.fireEvent('show-profile', $AppConfig.userObject, ['about']);
-				me.up('library-available-courses-window').close();
+
+				if (win) {
+					win.close();
+				}
+
 				return false;
 			}
 
@@ -762,7 +766,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 								.then(function(course) {
 									var instance = course.get('CourseInstance');
 									instance.fireNavigationEvent(me);
-									var win = me.up('window');
+
 									if (win) {
 										win.close();
 									}
