@@ -111,10 +111,6 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 			} else {
 				html += Ext.Date.format(date, format);
 			}
-
-			if (date < today) {
-				this.addCls('late');
-			}
 		}
 
 		if (score) { score.destroy(); }
@@ -124,7 +120,10 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 		this.updateWithScore();
 		tally.setGreyText(html || '');
 
-		if (opens && opens > new Date()) {
+		if (date && date < today) {
+			this.addCls('late');
+			tally.setRedText(html);
+		} else if (opens && opens > new Date()) {
 			this.down('button').destroy();
 			tally.setGreyText(getFormattedString('NextThought.view.courseware.overview.parts.QuestionSet.available', {
 				date: Ext.Date.format(opens, format)
