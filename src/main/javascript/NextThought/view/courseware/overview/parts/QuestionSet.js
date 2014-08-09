@@ -98,7 +98,7 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 
 		var score = this.down('assessment-score'),
 			tally = this.down('assessment-tally'),
-			format = 'l, F j, g:i a',
+			format = 'l, F j, g:i a T',
 			opens = assignment.get('availableBeginning'),
 			date = assignment.get('availableEnding'),
 			day = date && (new Date(date.getTime())).setHours(0, 0, 0, 0),
@@ -208,7 +208,7 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 		this[late ? 'addCls' : 'removeCls']('late');
 
 		tally[late ? 'setRedText' : 'setGreyText'](getFormattedString('NextThought.view.courseware.overview.parts.QuestionSet.completed', {
-			date: Ext.Date.format(completed, 'l, F j g:i a')
+			date: Ext.Date.format(completed, 'l, F j g:i a T')
 		}));
 	},
 
