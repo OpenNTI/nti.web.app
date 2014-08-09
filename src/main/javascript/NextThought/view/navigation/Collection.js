@@ -56,13 +56,37 @@ Ext.define('NextThought.view.navigation.Collection', {
 	initComponent: function() {
 		this.enableBubble('select');
 		this.callParent(arguments);
-		this.on({
+
+		var me = this;
+
+		me.on({
 			select: 'handleSelect',
 			itemadd: 'updateCount',
 			itemremove: 'updateCount'
 		});
 
-		this.mon(this.getStore(), 'datachanged', 'updateCount');
+		me.mon(me.getStore(), 'datachanged', 'updateCount');
+
+		me.on('itemadd', function(record, e, node) {
+			if (!Ext.isArray(node)) {
+				node = [node];
+			}
+
+			node.forEach(me.clamptitle.bind(me));
+		});
+
+		me.on('refresh', function() {
+			var titles = me.el.select('.item .title');
+
+			titles.each(function(title) {
+				me.clampTitle(title.dom);
+			});
+		});
+	},
+
+
+	clampTitle: function(node) {
+		$clamp(node, {lines: 2});
 	},
 
 
