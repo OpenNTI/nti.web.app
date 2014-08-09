@@ -648,6 +648,10 @@
 			background-color: $primary-red;
 		}
 
+		&.link {
+			cursor: pointer;
+		}
+
 		.msg {
 			text-align: center;
 		}

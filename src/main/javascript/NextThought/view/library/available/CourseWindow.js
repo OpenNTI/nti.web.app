@@ -263,7 +263,7 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 	 * @param  {String} msgid  id of the message element
 	 * @return {Promise} fulfill if there is a click handler on click, and reject on close
 	 */
-	showMsg: function(msg, isError, timeout, msgid) {
+	showMsg: function(msg, isError, timeout, msgid, cursor) {
 		var me = this;
 
 		me.msgContainerEl[isError ? 'addCls' : 'removeCls']('error');
@@ -277,6 +277,12 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 		me.bodyEl.addCls('has-msg');
 		me.msgContainerEl.addCls('show');
 
+		if (cursor) {
+			me.msgContainerEl.addCls('link');
+		} else {
+			me.msgContainerEl.removeCls('link');
+		}
+
 		if (timeout) {
 			wait(timeout)
 				.then(function() {
@@ -288,7 +294,8 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 	closeMsg: function() {
 		if (!this.rendered) { return; }
 		this.bodyEl.removeCls('has-msg');
-		this.msgContainerEl.removeCls('show');
+		this.msgContainerEl.removeCls(['show', 'link']);
+		this.msgEl.update('');
 	},
 
 

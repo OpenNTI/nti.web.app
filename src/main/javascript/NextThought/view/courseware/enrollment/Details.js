@@ -635,12 +635,12 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 	},
 
 
-	showMessage: function(msg, isError) {
+	showMessage: function(msg, isError, cursor) {
 		var me = this,
 			win = me.up('[showMsg]'),
 			guid = guidGenerator();
 
-		win.showMsg(msg, isError, false, guid);
+		win.showMsg(msg, isError, false, guid, cursor);
 
 		Ext.destroy(me.__showMessageClickMonitor);
 		me.__showMessageClickMonitor = me.mon(win, {
@@ -658,7 +658,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 		var me = this, win = me.up('window'),
 			checkbox = e.getTarget('.bottom.checkbox'),
 			button = this.cardsContainerEl.down('.button'),
-			anchor = e.getTarget('a'), href;
+			anchor = e.getTarget('a'), href, title;
 
 		checkbox = Ext.get(checkbox);
 
@@ -721,9 +721,16 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 		me.addMask();
 
+		title = me.course.get('Title');
+
+		if (title.length >= 50) {
+			title = title.substr(0, 47) + '...';
+		} else {
+			title = title + '.';
+		}
+
 		//if we are dropping
 		if (button.hasCls('drop')) {
-			var title = me.course.get('Title');//Ext.DomHelper.markup({tag: 'span', cls: 'course-title', html: me.course.get('Title')});
 			this.changingEnrollment = true;
 
 			Ext.Msg.show({
@@ -738,7 +745,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 						me.fireEvent('change-enrollment', me.course, false, function(success, change) {
 							if (success) {
 								me.fireEvent('enrolled-action', false);
-								me.showMessage('You are no longer enrolled in ' + me.course.get('Title') + '.');
+								me.showMessage('You are no longer enrolled in ' + title);
 							} else {
 								me.showMessage('There was an error dropping the course, please try again later.', true);
 							}
@@ -776,7 +783,8 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 									console.error('Unable to find course. %o', reason);
 								});
 						};
-						me.showMessage('You have successfully enrolled in ' + me.course.get('Title') + '. Click here to go to the content.');
+
+						me.showMessage('You have successfully enrolled in ' + title + ' Click here to go to the content.', null, true);
 					} else {
 						me.showMessage('There was an error enrolling. Please try again later.', true);
 					}
