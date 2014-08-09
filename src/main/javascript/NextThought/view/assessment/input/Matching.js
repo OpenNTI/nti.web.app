@@ -32,7 +32,7 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 
 			{'tag': 'tpl', 'for': 'targets', cn: [
 				{ cls: 'target choice', 'data-target': '{[xindex-1]}', cn: [
-					{ cls: 'match dropzone', 'data-term': '{parent.term:htmlEncode}', html: '{parent.term}' },
+					{ cls: 'match blank dropzone', 'data-term': '{parent.term:htmlEncode}', html: '{parent.term}' },
 					{ cls: 'text', html: '{.}' }
 				]}
 			]}
@@ -59,7 +59,7 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 			}
 
 			this.renderData = Ext.apply(this.renderData || {}, {
-				term: 'Term',//shold the question part define this string?
+				term: '',//shold the question part define this string?
 				terms: n.reverse(),
 				targets: m.reverse()
 			});
