@@ -249,6 +249,7 @@ Ext.define('NextThought.controller.Assessment', {
 		});
 		safelyCall('mask', widget);
 		a.save({
+			url: Service.getObjectURL(assignmentId),
 			success: function(self, op) {
 				var result = op.getResultSet().records.first().get('parts').first();//hack
 				safelyCall('unmask', widget);
