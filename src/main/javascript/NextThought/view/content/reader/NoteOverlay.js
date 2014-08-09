@@ -340,6 +340,9 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	noteHereEvent: function(range, rect, style) {
+		this.data.box.activeLineInfo = Ext.apply(
+				{style: style},
+				this.lineInfoForRangeAndRect(range, rect));
 		return this.openEditorClick();
 	},
 
