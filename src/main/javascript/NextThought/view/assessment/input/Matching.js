@@ -71,9 +71,8 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 		injectMatchTerms: function() {
 			var s = this.shelfEl,
 				el, ownerMain;
-			if (this.questionSet) {
-				return;
-			}
+
+
 			ownerMain = this.up('assessment-question');
 			el = ownerMain.getInsertionEl();
 			this.shelfEl.appendTo(el);
@@ -159,7 +158,7 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 				}
 			};
 
-			this.dd = new Ext.dd.DragZone(this.el, cfg);
+			this.dd = new Ext.dd.DragZone(this.shelfEl, cfg);
 			this.on('destroy', 'destroy', this.dd);
 		},
 
@@ -181,6 +180,7 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 				to.appendChild(el);
 
 				me.maybeChangeSubmitButtonState();
+				me.updateLayout();
 			}
 
 
