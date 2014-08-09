@@ -121,11 +121,14 @@
 			margin: 0 auto;
 		}
 
-		.title {
+		.video + .title {
 			position: absolute;
 			bottom: 0;
 			left: 0;
 			right: 0;
+		}
+
+		.title {
 			padding: 0 0.625em;
 			text-transform: uppercase;
 			color: #fff;

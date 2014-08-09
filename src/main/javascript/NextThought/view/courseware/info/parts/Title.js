@@ -37,6 +37,9 @@ Ext.define('NextThought.view.courseware.info.parts.Title', {
 			this.videoEl.setStyle({
 				minHeight: '430px'
 			});
+		} else {
+			this.curtainEl.remove();
+			this.videoEl.remove();
 		}
 	},
 
