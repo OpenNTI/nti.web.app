@@ -248,7 +248,7 @@ Ext.define('NextThought.controller.Assessment', {
 			CreatorRecordedEffortDuration: duration
 		});
 		safelyCall('mask', widget);
-		a.save({url: Service.getObjectURL(assignmentId),
+		a.save({
 			success: function(self, op) {
 				var result = op.getResultSet().records.first().get('parts').first();//hack
 				safelyCall('unmask', widget);
