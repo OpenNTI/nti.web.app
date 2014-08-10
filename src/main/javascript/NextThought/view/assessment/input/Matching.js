@@ -273,7 +273,7 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 				terms = this.shelfEl.query(q).concat(this.inputBox.query(q));
 
 			function s(bucket) {
-				var key = asInt(bucket, 'data-target'),
+				var key = asInt(bucket.down('.term'), 'data-match'),
 					t = terms[value[key]];
 
 				bucket = Ext.getDom(bucket.down('.dropzone'));
@@ -306,8 +306,8 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 			}
 
 			function m(e) {
-				var key = asInt(e, 'data-target'),
-					value = asInt(Ext.fly(e).down('.term'), 'data-match'),
+				var key = asInt(Ext.fly(e).down('.term'), 'data-match'),
+					value = asInt(e, 'data-target'),
 					cls = (value === c[key]) ? 'correct' : 'incorrect';
 
 				e.down('.dropzone').addCls('graded');
