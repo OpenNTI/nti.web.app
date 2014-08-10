@@ -51,20 +51,10 @@ Ext.define('NextThought.view.courseware.overview.parts.Discussion', {
 
 	afterRender: function() {
 		this.callParent(arguments);
-		this.shrinkText();
-	},
 
-	//if the title is overflowing take characters off until it will fit with the ellipsis
-	shrinkText: function() {
-		var title = this.el && this.el.down('.title'),
-			text = title && title.dom.innerText;
+		var title = this.el.down('.title');
 
-		if (!text) { return; }
-
-		while (title.getHeight() < title.dom.scrollHeight) {
-			text = text.substr(0, text.length - 1);
-			title.update(text + '<div class=\'ellipsis\'><div></div><div></div><div></div></div>');
-		}
+		$clamp(title.dom, {lines: 2});
 	},
 
 
