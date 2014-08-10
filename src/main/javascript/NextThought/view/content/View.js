@@ -675,7 +675,6 @@ Ext.define('NextThought.view.content.View', {
 			topic = disc.topic,
 			forum = disc.forum,
 			location = ntiid && ContentUtils.getLocation(ntiid),
-			isCourse = location && location.isCourse,
 			course,
 			me = this;
 
@@ -746,17 +745,9 @@ Ext.define('NextThought.view.content.View', {
 		}
 
 		//We dont care if this is just content... if it doesn't have a course, we do not want to fail
-		course = isCourse && CourseWareUtils.courseForNtiid(ntiid);//NOTE: DO NOT USE the CourseCatalogEntry returned by this...
-																	// this is just determining if there is ANY course for this ntiid.
-																	// It may not be the **correct** CCE!
-		if (isCourse && !course) {
-			return Promise.reject('No course for ntiid:' + ntiid)
-				.fail(noCourse)
-				.fail(setTab)
-				.fail(function(reason) {
-					console.error('Potentially, failed to restore the state %s', reason);
-				});
-		}
+		course = CourseWareUtils.courseForNtiid(ntiid);//NOTE: DO NOT USE the CourseCatalogEntry returned by this...
+														// this is just determining if there is ANY course for this ntiid.
+														// It may not be the **correct** CCE!
 
 		return (course ?
 					CourseWareUtils.findCourseBy(search) :
