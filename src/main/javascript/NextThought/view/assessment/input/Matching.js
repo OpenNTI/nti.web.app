@@ -261,7 +261,7 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 			var val = {};
 
 			this.el.select('.choice').each(function(e) {
-				val[asInt(e, 'data-target')] = asInt(e.down('.term'), 'data-match');
+				val[asInt(e.down('.term'), 'data-match')] = asInt(e, 'data-target');
 			});
 
 			return val;
