@@ -146,6 +146,11 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
+	getBackgroundImage: function() {
+		return this.get('Bundle').getBackgroundImage();
+	},
+
+
 	getPublicScope: function() { return this.getScope('public'); },
 	getRestrictedScope: function() { return this.getScope('restricted'); },//i don't think this is used
 

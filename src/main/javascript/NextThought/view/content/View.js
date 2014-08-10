@@ -501,7 +501,7 @@ Ext.define('NextThought.view.content.View', {
 		//Temporary stop gap
 		var info = bundle && bundle.getLocationInfo(), me = this,
 			preview = bundle && bundle.get('Preview'),
-			background = info && info.toc && getURL(info.toc.querySelector('toc').getAttribute('background'), info.root),
+			background = bundle && bundle.getBackgroundImage(),
 			subs = [
 				this.courseNav,
 				this.courseDash,
@@ -510,6 +510,8 @@ Ext.define('NextThought.view.content.View', {
 				this.courseInfo,
 				this.courseReports
 			];
+
+		background = background || info && info.toc && getURL(info.toc.querySelector('toc').getAttribute('background'), info.root);
 
 		this.currentBundle = bundle;
 		//this.reader.clearLocation();

@@ -1,7 +1,8 @@
 Ext.define('NextThought.mixins.PresentationResources', {
 	ASSET_MAP: {
 		thumb: 'contentpackage-thumb-60x60.png',
-		landing: 'contentpackage-landing-232x170.png'
+		landing: 'contentpackage-landing-232x170.png',
+		background: 'background.png'
 	},
 
 

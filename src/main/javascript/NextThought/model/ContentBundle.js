@@ -35,7 +35,8 @@ Ext.define('NextThought.model.ContentBundle', {
 		{ name: 'Title', type: 'string', mapping: 'title' },
 
 		{ name: 'icon', type: 'string' },
-		{ name: 'thumb', type: 'string' }
+		{ name: 'thumb', type: 'string' },
+		{ name: 'background', type: 'string'}
 	],
 
 
@@ -92,6 +93,13 @@ Ext.define('NextThought.model.ContentBundle', {
 			.then(function(url) { me.set('icon', url); }, me.set.bind(me, ['icon', null]));
 		me.getImgAsset('thumb')
 			.then(function(url) { me.set('thumb', url); }, me.set.bind(me, ['thumb', null]));
+		me.getImgAsset('background')
+			.then(function(url) { me.set('background', url); }, me.set.bind(me, 'background', null));
+	},
+
+
+	getBackgroundImage: function() {
+		return this.get('background');
 	},
 
 
