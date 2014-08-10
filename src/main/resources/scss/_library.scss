@@ -669,10 +669,10 @@
 	}
 
 	.empty-text {
+		color: $tertiary-grey;
+		font: normal 300 2em $font;
 		text-align: center;
-		font: normal 500 1.1em/1 $font;
-		color: $primary-grey;
-		padding-top: 20px;
+		padding-top: 2em;
 	}
 
 	.footer {
