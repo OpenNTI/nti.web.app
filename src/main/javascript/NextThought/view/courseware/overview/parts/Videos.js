@@ -176,7 +176,8 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 					raw = v.sources[0];
 					item = reader.read({
 						'mediaId': v.title,
-						'sources': v.sources
+						'sources': v.sources,
+						'NTIID': r.getId()
 					}).records[0];
 
 					me.mon(item, {

@@ -301,12 +301,18 @@ Ext.define('NextThought.view.video.Video', {
 
 	playerReady: function(player) {
 		var q = this.commandQueue[player],
-			p = this.players[player];
+			p = this.players[player],
+			state = this.queryPlayer();
+
 		while (q && q.length > 0) {
 			Ext.callback(this.issueCommand, this, q.shift());
 			if (!p.isReady) {
 				return;
 			}
+		}
+
+		if (state) {
+			this.fireEvent('player-state-ready', state);
 		}
 	},
 
@@ -402,6 +408,20 @@ Ext.define('NextThought.view.video.Video', {
 
 
 	stopPlayback: function() {
+		var container, cuurent, state = this.queryPlayer();
+
+		if (this.currentVideoId) {
+			container = this.up('content-view-container');
+			current = this.playlist[this.playlistIndex];
+
+			AnalyticsUtil.stopResourceTimer(current.getId(), {
+				course: container && container.currentBundle && container.currentBundle.getId(),
+				with_transcript: !!this.up('media-viewer'),
+				video_end_time: state.time,
+				context_path: 'a test'
+			});
+		}
+
 		this.currentVideoId = null;
 
 		if (this.activeVideoService) {
@@ -422,6 +442,19 @@ Ext.define('NextThought.view.video.Video', {
 
 	resumePlayback: function(force) {
 		this.maybeActivatePlayer();
+
+		var me = this,
+			current = this.playlist[this.playlistIndex];
+
+		if (current) {
+			me.on('player-state-ready', function(state) {
+				AnalyticsUtil.getResourceTimer(current.getId(), {
+					type: 'video-watch',
+					video_start_time: state.time
+				});
+			}, null, {single: true});
+		}
+
 		if (this.activeVideoService && (force || !this.isPlaying())) {
 			this.issueCommand(this.activeVideoService, 'play');
 			return true;
