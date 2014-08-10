@@ -16,11 +16,6 @@ Ext.define('NextThought.view.courseware.info.parts.Title', {
 		curtainEl: '.curtain'
 	},
 
-	listeners: {
-		curtainEl: {
-			click: 'curtainClicked'
-		}
-	},
 
 	beforeRender: function() {
 		this.callParent(arguments);
@@ -37,6 +32,8 @@ Ext.define('NextThought.view.courseware.info.parts.Title', {
 			this.videoEl.setStyle({
 				minHeight: '430px'
 			});
+
+			this.mon(this.curtainEl, 'click', 'curtainClicked', this);
 		} else {
 			this.curtainEl.remove();
 			this.videoEl.remove();
