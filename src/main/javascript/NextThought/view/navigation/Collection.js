@@ -86,7 +86,7 @@ Ext.define('NextThought.view.navigation.Collection', {
 
 
 	clampTitle: function(node) {
-		$clamp(node, {lines: 2});
+		$clamp(node, {clamp: 3});
 	},
 
 

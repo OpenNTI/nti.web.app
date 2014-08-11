@@ -54,7 +54,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Discussion', {
 
 		var title = this.el.down('.title');
 
-		$clamp(title.dom, {lines: 2});
+		$clamp(title.dom, {clamp: 3});
 	},
 
 
@@ -92,9 +92,9 @@ Ext.define('NextThought.view.courseware.overview.parts.Discussion', {
 	onTopicResolveFailure: function() {
 		console.warn('Could not load the topic object: ', arguments);
 
-    if (!Ext.isEmpty(this.idsToLookup)) {
-      this.loadTopic(this.idsToLookup.shift());
-    }
+		if (!Ext.isEmpty(this.idsToLookup)) {
+			this.loadTopic(this.idsToLookup.shift());
+		}
 	},
 
 

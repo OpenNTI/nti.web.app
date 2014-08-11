@@ -239,9 +239,10 @@
 				.title {
 					font: normal 700 1em/1.1em "Open Sans Condensed";
 					color: $secondary-grey;
-					max-height: 2em;
+					max-height: 2.2em;
 					margin-bottom: 10px;
 					text-transform: uppercase;
+					overflow: hidden;
 				}
 
 				.description{
@@ -419,9 +420,10 @@
 			.title {
 				font: normal 700 1em/1.1em "Open Sans Condensed";
 				color: $secondary-grey;
-				max-height: 2em;
+				max-height: 2.2em;
 				margin-bottom: 10px;
 				text-transform: uppercase;
+				overflow: hidden;
 			}
 
 			.description{
