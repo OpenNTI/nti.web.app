@@ -344,8 +344,8 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 				information: [
 					'We\'re processing your request to earn college credit.',
 					'This process should take no more than two business days.',
-					'If you believe there has been an error, please contact the',
-					'<a class=\'link\' href=\'http://www.ou.edu/admissions.html\' target=\'_blank\'>OU Admissions Office.</a>'
+					'If you believe there has been an error, please contact',
+					'<a class=\'link\' href=\'mailto:pending@ou.edu\'>pending@ou.edu</a>.'
 				].join(' '),
 				cls: 'pending'
 			},
@@ -530,12 +530,12 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			state = result[0],
 			courseData = result[1];
 
-		if (courseData.AvailableForCredit) {
-			if (courseData.EnrolledForCredit) {
+		if (courseData.AvailableForCredit || true) {
+			if (courseData.EnrolledForCredit && false) {
 				state.bottom = this.getState('bottom', 'credit_enrolled', {
 					date: courseData.dropcutoff
 				});
-			} else if (courseData.AdmissionState === 'Pending') {
+			} else if (courseData.AdmissionState === 'Pending' || true) {
 				state.bottom = this.getState('bottom', 'admission_pending');
 			} else if (courseData.AdmissionState === 'Rejected') {
 				waitOnDetails = true;

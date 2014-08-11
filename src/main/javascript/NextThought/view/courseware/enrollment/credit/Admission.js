@@ -680,7 +680,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 						}
 					],
 					help: [
-						{text: 'OU Admissions Office', type: 'link', href: 'http://www.ou.edu/admissions.html', target: '_blank'}
+						{text: 'pending@ou.edu', type: 'link', href: 'mailto:pending@ou.edu', target: '_blank'}
 					]
 				}
 			]
