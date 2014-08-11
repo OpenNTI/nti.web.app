@@ -243,6 +243,8 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 		p.then(function() {
 			if (current.is('course-enrollment-details')) {
 				me.showTabpanel();
+
+				me.courseDetail.destroy();
 				delete me.courseDetail;
 			}
 

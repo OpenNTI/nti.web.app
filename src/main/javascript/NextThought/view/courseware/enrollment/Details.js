@@ -88,6 +88,13 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 	},
 
 
+	onDestroy: function() {
+		this.callParent(arguments);
+
+		Ext.destroy(this.video);
+	},
+
+
 	onBeforeDeactivate: function() {
 		return !this.changingEnrollment;
 	},
