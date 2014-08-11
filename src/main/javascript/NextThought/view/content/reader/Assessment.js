@@ -34,6 +34,10 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			tabIndexTracker: o.tabIndexer,
 			contentElement: contentElement
 		}));
+
+		Ext.fly(contentElement).set({
+			'data-used': true
+		});
 	},
 
 
@@ -108,7 +112,7 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 		new Ext.dom.CompositeElement(
 			doc.querySelectorAll('.x-btn-submit,[onclick^=NTISubmitAnswers]')).remove();
 
-		questionObjs = slice.call(doc.querySelectorAll('object[type$=naquestion][data-ntiid]'));
+		questionObjs = slice.call(doc.querySelectorAll('object[type*=naquestion][data-ntiid]'));
 
 		Ext.Array.sort(items, function(ar, br) {
 			var a = questionObjs.indexOf(me.getRelatedElement(ar.get('NTIID'), questionObjs)),
@@ -119,6 +123,10 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 		Ext.each(this.cleanQuestionsThatAreInQuestionSets(items, questionObjs), function(q) {
 			if (q.isSet) { me.makeAssessmentQuiz(q); }
 			else { me.makeAssessmentQuestion(q); }
+		});
+
+		slice.call(doc.querySelectorAll('object[type*=naquestion][data-ntiid]:not([data-used])')).forEach(function(e) {
+			e.parentNode.removeChild(e);
 		});
 	},
 
