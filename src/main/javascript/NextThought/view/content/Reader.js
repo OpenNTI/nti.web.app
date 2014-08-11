@@ -61,16 +61,12 @@ Ext.define('NextThought.view.content.Reader', {
 		this.getRangePositionAdjustments = this.forwardToModule('annotations', 'getRangePositionAdjustments');
 		this.rangesForSearchHits = this.forwardToModule('annotations', 'rangesForSearchHits');
 
-		this.mon(this.getAnnotations(), 'rendered', 'fireReady', this);
 		this.getIframe().on('iframe-ready', 'bootstrap', this, {single: true});
 
 		this.on({
 					scope: this,
-					//beforeNavigate: 'onBeforeNavigate',
-					beginNavigate: 'onBeginNavigate',
 					navigateAbort: 'onNavigationAborted',
 					navigateComplete: 'onNavigateComplete',
-					'load-annotations-skipped': 'skipAnnotationsFireReadyOnFinish'
 				});
 	},
 
@@ -126,25 +122,6 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
-	primeReadyEvent: function() {
-		this.readyEventPrimed = true;
-	},
-
-
-	fireReady: function() {
-		if (this.navigating) {
-			console.warn('fired ready while navigating');
-			return;
-		}
-
-		if (!this.readyEventPrimed) {
-			return;
-		}
-
-		delete this.readyEventPrimed;
-		//console.warn('should-be-ready fired');
-		this.fireEvent('should-be-ready', this);
-	},
 	//</editor-fold>
 
 
@@ -167,10 +144,6 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
-	needsWaitingOnReadyEvent: function() {
-		return Boolean(this.readyEventPrimed);
-	},
-
 	getContentMaskTarget: function() {
 		this.maskTarget = this.maskTarget || (this.el ? this.el.parent('.main-view-container') : Ext.getBody());
 
@@ -180,11 +153,6 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	//<editor-fold desc="Actions">
-	skipAnnotationsFireReadyOnFinish: function() {
-		this.skippedAnnotations = true;
-	},
-
-
 	activating: function() {
 		delete this.annotationOffsetsCache;
 	},
@@ -257,14 +225,8 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	//<editor-fold desc="Navigation Handlers">
-	onBeginNavigate: function(ntiid) {
-		this.navigating = true;
-	},
-
-
 	onNavigationAborted: function(resp, ntiid) {
 		this.splash.removeCls('initial');
-		delete this.navigating;
 	},
 
 
@@ -273,15 +235,9 @@ Ext.define('NextThought.view.content.Reader', {
 			proxy = ContentProxy;
 
 		function success(resp) {
-			delete me.navigating;
-			me.primeReadyEvent();
 			me.splash.hide();
 			me.splash.removeCls('initial');
 			me.getContent().setContent(resp, pageInfo.get('AssessmentItems'), finish, hasCallback);
-			if (me.skippedAnnotations) {
-				delete me.skippedAnnotations;
-				me.fireReady();
-			}
 		}
 
 
