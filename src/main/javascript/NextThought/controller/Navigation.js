@@ -273,12 +273,7 @@ Ext.define('NextThought.controller.Navigation', {
 				return;
 			}
 
-			if (reader.needsWaitingOnReadyEvent && reader.needsWaitingOnReadyEvent()) {
-				reader.on('should-be-ready', continueLoad, me, {single: true});
-			}
-			else {
-				continueLoad();
-			}
+			reader.onceSettled().then(continueLoad);
 		};
 	},
 
