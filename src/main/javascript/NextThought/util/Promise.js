@@ -34,13 +34,13 @@ Promise = window.Promise || (function(global) {
 	function changeState(state, value) {
 		// catch changing to same state (perhaps trying to change the value)
 		if (this.state === state) {
-			console.warn('Cannot transition to same state: ' + state);
+			console.error('Cannot transition to same state: ' + state);
 			return;
 		}
 
 		// trying to change out of fulfilled or rejected
 		if (this.state === State.FULFILLED || this.state === State.REJECTED) {
-			console.warn('cannot transition from current state: ' + state);
+			console.error('cannot transition from current state: ' + state);
 			return;
 		}
 
