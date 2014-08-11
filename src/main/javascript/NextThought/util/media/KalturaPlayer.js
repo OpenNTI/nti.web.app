@@ -548,6 +548,12 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 
 
 	playerUpdatePlayheadHandler: function(event) {
+		var position = event.data[0];
+
+		if (Math.abs(this.currentPosition - position) > 1) {
+		 	this.fireEvent('player-seek', {start: this.currentPosition, end: position});
+		}
+
 		this.currentPosition = event.data[0];
 	},
 
@@ -803,7 +809,9 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 							'skinLoaded',
 							'skinLoadFailed',
 							'sourceReady',
-							'startup'
+							'startup',
+							'playerSeekStart',
+							'playerSeekEnd'
 						],
 						i = events.length - 1;
 

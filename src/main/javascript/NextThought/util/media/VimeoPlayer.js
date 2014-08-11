@@ -205,7 +205,10 @@ Ext.define('NextThought.util.media.VimeoPlayer', {
 
 
 	onSeek: function(event) {
-		this.currentPosition = event.data.seconds;
+		var end = event.data.seconds;
+
+		this.fireEvent('player-seek', {start: this.currentPosition, end: end});
+		this.currentPosition = end;
 		this.notify('seek');
 	},
 

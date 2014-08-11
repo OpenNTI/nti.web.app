@@ -128,13 +128,31 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 	playerStatusChange: function(event) {
 		var type = '';
 		switch (event.data) {
-			case -1: type = 'unstarted'; break;
-			case YT.PlayerState.ENDED: type = 'ended'; break;
-			case YT.PlayerState.PLAYING: type = 'play'; this.userActivatedPlayer = true; break;
-			case YT.PlayerState.PAUSED: type = 'pause'; break;
-			case YT.PlayerState.BUFFERING: type = 'buffering'; break;
-			case YT.PlayerState.CUED: type = 'cued'; this.playerReady(); break;
-			default: console.log(event.data); return;
+			case -1:
+				type = 'unstarted';
+				break;
+			case YT.PlayerState.ENDED:
+				type = 'ended';
+				break;
+			case YT.PlayerState.PLAYING:
+				type = 'play';
+				this.userActivatedPlayer = true;
+				this.onPlay();
+				break;
+			case YT.PlayerState.PAUSED:
+				type = 'pause';
+				this.onPause();
+				break;
+			case YT.PlayerState.BUFFERING:
+				type = 'buffering';
+				break;
+			case YT.PlayerState.CUED:
+				type = 'cued';
+				this.playerReady();
+				break;
+			default:
+				console.log(event.data);
+				return;
 		}
 
 		//This came from an event! stop our poll
@@ -179,6 +197,37 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 	},
 
 
+	onPlay: function() {
+		var me = this,
+			current = me.getCurrentTime;
+
+		function maybeFireSeek(current, last) {
+			if (Math.abs(current - last) > 1) {
+				me.fireEvent('player-seek', {start: last, end: current});
+			}
+		}
+
+		maybeFireSeek(current, me.lastTime);
+
+		me.lastTime = current;
+
+		if (!me.seekInterval) {
+			me.seekInterval = setInterval(function() {
+				var time = me.getCurrentTime();
+
+				maybeFireSeek(time, me.lastTime);
+
+				me.lastTime = time;
+			}, 500);
+		}
+	},
+
+
+	onPause: function() {
+		clearInterval(this.seekInterval);
+	},
+
+
 	play: function() {
 		if (this.player && this.player.playVideo) {
 			if (Ext.is.iOS && !this.userActivatedPlayer) {//we have to wait for the player to have been touched, but after that, we can interact with it just as normal.
@@ -206,7 +255,11 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 	pause: function() {
 		if (!this.isReady || !this.player) { return; }
 		if (this.player.pauseVideo) {
-			this.player.pauseVideo();
+				try {
+					this.player.pauseVideo();
+				} catch (e) {
+					console.error('Error pausing youtube video: ', e);
+				}
 		}
 	},
 
@@ -240,7 +293,11 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 	stop: function() {
 		console.log('Youtube stop called:', arguments);
 		if (this.player && this.player.stopVideo) {
-			this.player.stopVideo();
+			try {
+				this.player.stopVideo();
+			} catch (e) {
+				console.error('Error stopping youtube video: ', e);
+			}
 			//this.player.clearVideo();
 			//this.player.pauseVideo();
 		}
@@ -254,6 +311,7 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 
 		this.isReady = false;
 		clearInterval(this.stateChangeChecker);
+		clearInterval(this.seekInterval);
 		if (el) {
 			el.clearListeners();
 			Ext.destroy(el);

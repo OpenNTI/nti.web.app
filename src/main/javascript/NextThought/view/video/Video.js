@@ -22,6 +22,7 @@ Ext.define('NextThought.view.video.Video', {
 		destroy: 'cleanup',
 		'player-ready': 'playerReady',
 		'player-error': 'playerError',
+		'player-seek': 'playerSeek',
 		'unrecoverable-player-error': 'unrecoverablePlayerError'
 	},
 
@@ -277,7 +278,8 @@ Ext.define('NextThought.view.video.Video', {
 						'player-error',
 						'player-event-play',
 						'player-event-pause',
-						'player-event-ended'
+						'player-event-ended',
+						'player-seek'
 					]));
 
 			me.playerIds[cls.type] = p.id;
@@ -460,6 +462,27 @@ Ext.define('NextThought.view.video.Video', {
 			return true;
 		}
 		return false;
+	},
+
+
+	playerSeek: function(data) {
+		var current = this.playlist[this.playlistIndex],
+			id = current && current.getId(), container;
+
+		if (id) {
+			container = this.up('content-view-container');
+
+			AnalyticsUtil.getResourceTimer(id, {
+				type: 'video-skip',
+				course: container && container.currentBundle && container.currentBundle.getId(),
+				context_path: 'a test',
+				with_transcript: !!this.up('media-viewer'),
+				video_start_time: data.start,
+				video_end_time: data.end
+			});
+
+			AnalyticsUtil.stopResourceTimer(id, {});
+		}
 	},
 
 

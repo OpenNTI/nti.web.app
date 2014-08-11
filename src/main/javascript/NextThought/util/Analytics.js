@@ -44,6 +44,8 @@ Ext.define('NextThought.util.Analytics', {
 		var resource = this.TIMER_MAP[resourceId],
 			now = new Date();
 
+		data = data || {};
+
 		if (!resource) {
 			console.error('No resource for ID: ', id);
 			return;
