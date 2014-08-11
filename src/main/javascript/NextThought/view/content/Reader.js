@@ -2,7 +2,7 @@ Ext.define('NextThought.view.content.Reader', {
 	extend: 'NextThought.view.content.Base',
 	alias: 'widget.reader-content',
 
-	//<editor-fold desc="Config">
+	//region Config
 	requires: [
 		'NextThought.proxy.JSONP',
 		'NextThought.view.ResourceNotFound',
@@ -30,16 +30,16 @@ Ext.define('NextThought.view.content.Reader', {
 	ui: 'reader',
 	layout: 'auto',
 	prefix: 'default',
-	//</editor-fold>
+	//endregion
 
 
-	//<editor-fold desc="Setup & Init">
+	//region Setup & Init
 	initComponent: function() {
 		this.callParent(arguments);
 		this.trackThis();
 
 		this.enableBubble(
-				'finished-restore'
+			'finished-restore'
 		);
 
 		var rRef = {reader: this};
@@ -64,10 +64,49 @@ Ext.define('NextThought.view.content.Reader', {
 		this.getIframe().on('iframe-ready', 'bootstrap', this, {single: true});
 
 		this.on({
-					scope: this,
-					navigateAbort: 'onNavigationAborted',
-					navigateComplete: 'onNavigateComplete',
-				});
+			scope: this,
+			navigateAbort: 'onNavigationAborted',
+			navigateComplete: 'onNavigateComplete',
+			'afterrender': function() {
+				var maybeFireVisibilityChange = Ext.Function.createBuffered(this.maybeFireVisibilityChange, 100, this);
+
+				function monitorCardChange(cmp, me) {
+					var c = cmp.up('{isOwnerLayout("card")}');
+					me = me || cmp;
+					if (c) {
+						me.mon(c, {
+							//beforeactivate: '',
+							//beforedeactivate: '',
+							activate: maybeFireVisibilityChange,
+							deactivate: maybeFireVisibilityChange,
+							scope: me
+						});
+						monitorCardChange(c, me);
+					}
+				}
+
+				monitorCardChange(this);
+			}.bind(this)
+		});
+
+
+		this.on({
+			scope: this,
+			destroy: 'endViewAnalytics',
+			beginNavigate: 'endViewAnalytics',
+			'visibility-changed-hidden': 'endViewAnalytics',
+			'visibility-changed-visible': 'beginViewAnalytics'
+		});
+	},
+
+
+	maybeFireVisibilityChange: function() {
+		var v = this.isVisible(true);
+		if (this.___visibility !== undefined && v !== this.___visibility) {
+			this.fireEvent('visibility-changed-' + (v ? 'visible' : 'hidden'), this);
+			this.fireEvent('visibility-changed', v, this);
+		}
+		this.___visibility = v;
 	},
 
 
@@ -122,10 +161,51 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
-	//</editor-fold>
+	//endregion
 
 
-	//<editor-fold desc="Getters/Queries">
+
+	//region Analytics
+	___getActiveBundle: function() {
+		var c = (this.up('#content') || {}).currentBundle;
+		return c && c.getId();
+	},
+
+
+	beginViewAnalytics: function() {
+		var begin = {
+			type: 'resource-viewed',
+			resource_id: this.getLocation().NTIID,
+			course: this.___getActiveBundle()
+		};
+
+		if (Ext.isEmpty(begin.resource_id)) {
+			return;
+		}
+
+		if (this.___lastAnalyticEvent) {
+			console.warn('Overwriting event %o with %o', this.___lastAnalyticEvent, begin);
+		}
+
+		this.___lastAnalyticEvent = begin;
+
+		AnalyticsUtil.getResourceTimer(begin.resource_id, begin);
+	},
+
+
+	endViewAnalytics: function() {
+		var end = this.___lastAnalyticEvent;
+
+		if (!end) {return;}
+
+		delete this.___lastAnalyticEvent;
+		AnalyticsUtil.stopResourceTimer(end.resource_id, end);
+	},
+	//endregion
+
+
+
+	//region Getters/Queries
 	getAnnotationOffsets: function() {
 		return this.calculateNecessaryAnnotationOffsets();
 	},
@@ -149,10 +229,10 @@ Ext.define('NextThought.view.content.Reader', {
 
 		return this.maskTarget;
 	},
-	//</editor-fold>
+	//endregion
 
 
-	//<editor-fold desc="Actions">
+	//region Actions
 	activating: function() {
 		delete this.annotationOffsetsCache;
 	},
@@ -214,17 +294,16 @@ Ext.define('NextThought.view.content.Reader', {
 			scrollTop: scrollPosition //dynamic
 		};
 	},
-	//</editor-fold>
+	//endregion
 
 
-	//<editor-fold desc="Event Handlers">
+	//region Event Handlers
 	onContextMenuHandler: function() {
 		var o = this.getAnnotations();
 		return o.onContextMenuHandler.apply(o, arguments);
 	},
 
 
-	//<editor-fold desc="Navigation Handlers">
 	onNavigationAborted: function(resp, ntiid) {
 		this.splash.removeCls('initial');
 	},
@@ -235,6 +314,7 @@ Ext.define('NextThought.view.content.Reader', {
 			proxy = ContentProxy;
 
 		function success(resp) {
+			me.beginViewAnalytics();
 			me.splash.hide();
 			me.splash.removeCls('initial');
 			me.getContent().setContent(resp, pageInfo.get('AssessmentItems'), finish, hasCallback);
@@ -288,11 +368,10 @@ Ext.define('NextThought.view.content.Reader', {
 			});
 		}
 	},
-	//</editor-fold>
-	//</editor-fold>
+	//endregion
 
 
-	//<editor-fold desc="Statics">
+	//region Statics
 	statics: {
 		get: function(prefix) {
 			prefix = prefix || 'default';
@@ -320,7 +399,7 @@ Ext.define('NextThought.view.content.Reader', {
 			}
 		}
 	}
-	//</editor-fold>
+	//endregion
 
 
 }, function() {
