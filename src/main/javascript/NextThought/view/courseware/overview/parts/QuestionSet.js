@@ -3,6 +3,7 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 	alias: [
 		'widget.course-overview-naquestionset',
 		'widget.course-overview-nanosubmitassignment',
+		'widget.course-overview-naassignment',
 		'widget.course-overview-assignment'
 	],
 
@@ -78,12 +79,15 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 			};
 
 			Ext.Ajax.request(req);
-		} else if (this.assignment) {
-			this.assignmentId = this.assignment.getId();
-			this.setAsAssignment(this.assignment);
-			this.fireEvent('has-been-submitted', this);
 		} else {
-			this.hide();
+			if (this.assignment) {
+				this.setAsAssignment(this.assignment);
+				this.assignmentId = this.assignment.getId();
+				this.fireEvent('has-been-submitted', this);
+			} else {
+				console.warn('Hidding Assignment widget. Assignmet was null. %o', config);
+				this.hide();
+			}
 		}
 	},
 

@@ -146,7 +146,8 @@ Ext.define('NextThought.view.courseware.overview.View', {
 					'target-ntiid': item['Target-NTIID'],
 					ntiid: item.NTIID
 				});
-				if (type === 'course-overview-naquestionset') {
+
+				if (cls.isAssessmentWidget) {
 					assignment = assignments.isAssignment(item['target-ntiid']);
 					type = assignment ? 'course-overview-assignment' : type;
 					assignment = assignments.getItem(item['target-ntiid']);
