@@ -468,7 +468,7 @@ Ext.define('NextThought.view.video.Video', {
 	playerSeek: function(data) {
 		var current = this.playlist[this.playlistIndex],
 			id = current && current.getId(), container;
-
+		console.log('Player Seek: ', data.start, data.end);
 		if (id) {
 			container = this.up('content-view-container');
 

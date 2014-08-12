@@ -550,8 +550,11 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 	playerUpdatePlayheadHandler: function(event) {
 		var position = event.data[0];
 
-		if (Math.abs(this.currentPosition - position) > 1) {
-		 	this.fireEvent('player-seek', {start: this.currentPosition, end: position});
+		if (this.seekingStart && this.seekingStop) {
+			this.fireEvent('player-seek', {start: this.seekingStart, end: this.seekingStop});
+
+			delete this.seekingStart;
+			delete this.seekingStop;
 		}
 
 		this.currentPosition = event.data[0];
@@ -671,6 +674,16 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 			return true;
 		}
 		return false;
+	},
+
+
+	playerSeekStartHandler: function() {
+		this.seekingStart = this.currentPosition;
+	},
+
+
+	doSeekHandler: function(event) {
+		this.seekingStop = event.data[0];
 	},
 
 
@@ -811,7 +824,8 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 							'sourceReady',
 							'startup',
 							'playerSeekStart',
-							'playerSeekEnd'
+							'playerSeekEnd',
+							'doSeek'
 						],
 						i = events.length - 1;
 
