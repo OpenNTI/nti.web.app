@@ -54,10 +54,10 @@ Ext.define('NextThought.util.Analytics', {
 		data = Ext.applyIf(data, resource.data);
 
 		data.resource_id = resourceId;
-		data.time_length = (now - resource.start) * 1000;
+		data.time_length = (now - resource.start) / 1000;//send seconds back
 		data.MimeType = this.TYPE_TO_MIMETYPE[data.type];
 		data.user = $AppConfig.username;
-		data.Timestamp = now;
+		data.timestamp = now.getTime() / 1000;//send seconds back
 
 		this.batch.push(data);
 
