@@ -530,12 +530,12 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			state = result[0],
 			courseData = result[1];
 
-		if (courseData.AvailableForCredit || true) {
-			if (courseData.EnrolledForCredit && false) {
+		if (courseData.AvailableForCredit) {
+			if (courseData.EnrolledForCredit) {
 				state.bottom = this.getState('bottom', 'credit_enrolled', {
 					date: courseData.dropcutoff
 				});
-			} else if (courseData.AdmissionState === 'Pending' || true) {
+			} else if (courseData.AdmissionState === 'Pending') {
 				state.bottom = this.getState('bottom', 'admission_pending');
 			} else if (courseData.AdmissionState === 'Rejected') {
 				waitOnDetails = true;
