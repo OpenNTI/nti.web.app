@@ -741,7 +741,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			this.changingEnrollment = true;
 
 			Ext.Msg.show({
-				msg: 'Dropping ' + title + ' will remove it from your library, and you will no longer have access to the course materials.',
+				msg: 'Dropping ' + me.course.get('Title') + ' will remove it from your library, and you will no longer have access to the course materials.',
 				buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 				scope: this,
 				icon: 'warning-red',
