@@ -207,9 +207,28 @@ Ext.define('NextThought.util.media.VimeoPlayer', {
 	onSeek: function(event) {
 		var end = event.data.seconds;
 
-		this.fireEvent('player-seek', {start: this.currentPosition, end: end});
-		this.currentPosition = end;
+		if (!this.seeking) {
+			this.seeking = true;
+			this.seekingStart = this.currentPosition;
+		}
+
+		this.detectSeekingStop(end);
+
 		this.notify('seek');
+	},
+
+	detectSeekingStop: function(val) {
+		clearTimeout(this.seekEndTimer);
+		this.seekEndTimer = setTimeout(this.onSeekEnd.bind(this, val), 750);
+	},
+
+	onSeekEnd: function(end) {
+		if (this.seeking) {
+			this.fireEvent('player-seek', {start: this.seekingStart, end: end});
+			this.notify('seekEnd');
+			delete this.seeking;
+			delete this.seekingStart;
+		}
 	},
 
 

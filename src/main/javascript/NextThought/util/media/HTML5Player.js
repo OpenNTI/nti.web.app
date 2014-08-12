@@ -43,25 +43,21 @@ Ext.define('NextThought.util.media.HTML5Player', {
 		this.mon(this.el, {
 			'click': 'togglePlayback',
 			'error': 'playerError',
-
-      //			'stalled':'',
-      //			'waiting':'',
-      //			'canplaythrough':'',
-      //			'loadedmetadata':'',
-      //			'loadeddata':'',
-      //
-      //			'timeupdate':'',
-      //
 			'ended': 'notify',
 			'pause': 'notify',
-      //			'playing':'',
-			'play': 'notify'
+			'play': 'notify',
+			'seeking': 'onSeeking',
+			'seeked': {fn: 'onSeeked', scope: this, buffer: 10000}
 		});
 	},
 
 
 	togglePlayback: function(e) {
-		var p = this.player, y = e.getY(), rect = p.getBoundingClientRect();
+		var p = this.player,
+			y = e.getY(),
+			rect = p.getBoundingClientRect();
+
+		e.stopPropagation();
 		if ((rect.bottom - y) > 40) {
 			p[p.paused ? 'play' : 'pause']();
 		}
@@ -74,6 +70,26 @@ Ext.define('NextThought.util.media.HTML5Player', {
 	},
 
 
+	onSeeking: function(e) {
+		this.notify(e);
+		if (!this.seeking) {
+			this.seeking = true;
+			this.seekingStart = this.getCurrentTime();
+		}
+	},
+
+
+	onSeeked: function(e) {
+		this.notify(e);
+
+		if (this.seeking) {
+			this.fireEvent('player-seek', {start: this.seekingStart, end: this.getCurrentTime()});
+			delete this.seeking;
+			delete this.seekingStart;
+		}
+	},
+
+
 	playerError: function() {
 		this.fireEvent('player-error', 'html5');
 	},
@@ -82,6 +98,7 @@ Ext.define('NextThought.util.media.HTML5Player', {
 	getCurrentTime: function() {
 		return this.player.currentTime;
 	},
+
 
 	getPlayerState: function() {
 		var playerState = -1;
@@ -101,6 +118,7 @@ Ext.define('NextThought.util.media.HTML5Player', {
 
 		return playerState;
 	},
+
 
 	load: function(source, offset) {
 		var sourceTpl = Ext.DomHelper.createTemplate({tag: 'source', src: '{src}', type: '{type}'}),
@@ -127,6 +145,7 @@ Ext.define('NextThought.util.media.HTML5Player', {
 		}
 	},
 
+
 	play: function() {
 		this.player.play();
 	},
@@ -144,6 +163,7 @@ Ext.define('NextThought.util.media.HTML5Player', {
 		this.player.pause();
 	},
 
+
 	seek: function(offset) {
 		var player = this.player;
 		if (player.readyState === 0) {
@@ -154,11 +174,13 @@ Ext.define('NextThought.util.media.HTML5Player', {
 		}
 	},
 
+
 	stop: function() {
 		// Remove the current sources and trigger a load to free the used memory
 		this.player.innerHTML = '';
 		this.player.load();
 	},
+
 
 	cleanup: function() {
 		if (this.player) {
