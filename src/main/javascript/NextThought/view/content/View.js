@@ -649,11 +649,11 @@ Ext.define('NextThought.view.content.View', {
 			inst = this.currentBundle,
 			courseTitle = (inst && inst.asUIData().title);
 
-		if (!Ext.isEmpty(prefix)) {
-			prefix += ' - ';
-		}
 		if (!Ext.isEmpty(courseTitle)) {
-			prefix += courseTitle + ' - ';
+			if (!Ext.isEmpty(prefix)) {
+				prefix += ' - ';
+			}
+			prefix += courseTitle;
 		}
 		return prefix;
 	},
@@ -662,7 +662,7 @@ Ext.define('NextThought.view.content.View', {
 	updateTitle: function() {
 		var tab = this.layout.getActiveItem(),
 			pageTitle = this.locationTitle,
-			subTitle = tab && (Ext.isEmpty(tab.title) ? pageTitle : '');
+			subTitle = tab && (Ext.isEmpty(tab.title) ? (' - ' + pageTitle) : '');
 
 		this.setTitle(this.getActiveTitle() + subTitle);
 	},
