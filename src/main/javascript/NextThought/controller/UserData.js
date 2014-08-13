@@ -965,7 +965,7 @@ Ext.define('NextThought.controller.UserData', {
 		return Promise.first(preferenceOrPageInfo)
 			.then(function(p) {
 				if (p.isPageInfo) {
-					return preferenceMap[p.getId()];
+					return preferenceMap[p.getId()] || {sharing: p.get('sharingPreference')};
 				}
 
 				return p;
