@@ -13,7 +13,7 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 	return {
 
 		extend: 'NextThought.view.assessment.input.Base',
-		alias: 'widget.question-input-matchingpart-v3',
+		alias: 'widget.question-input-matchingpart',
 
 		requires: [
 			'Ext.dd.DragZone',
@@ -64,7 +64,17 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 				targets: m.reverse()
 			});
 
-			this.on({'afterRender': {fn: 'injectMatchTerms', buffer: 1}});
+			this.on({
+				afterRender: {scope: this, fn: 'injectMatchTerms', buffer: 1},
+				el: {
+					scope: this,
+					click: function(e) {
+						if (e.getTarget('.reset')) {
+							this.resetTerm(e);
+						}
+					}
+				}
+			});
 		},
 
 
@@ -100,9 +110,37 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 		},
 
 
+		moveTerm: function moveTerm(el, to) {
+			var p = el.parentNode,
+				doc = (p && (p.ownerDocument || p.documentElement)) || document,
+				term = p && p.getAttribute('data-term');
+
+			if (p === Ext.getDom(to)) {
+				return;
+			}
+
+			if (p.childNodes.length === 1 && !Ext.isEmpty(term)) {
+				p.appendChild(doc.createTextNode(term));
+			}
+
+			to.appendChild(el);
+
+			this.maybeChangeSubmitButtonState();
+			this.updateLayout();
+		},
+
+
+		resetTerm: function resetTerm(e) {
+			var toReset = e.getTarget('.target.drag');
+			if (toReset) {
+				this.moveTerm(toReset, this.shelfEl);
+			}
+		},
+
+
 		setupDragging: function() {
 			var cfg, me = this,
-					el = this.up().getEl(), z;
+				el = this.up().getEl(), z;
 
 			cfg = {
 				animRepair: true,
@@ -158,94 +196,65 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 				}
 			};
 
-			this.dd = new Ext.dd.DragZone(this.shelfEl, cfg);
+			this.dd = new Ext.dd.DragZone(this.el, cfg);
 			this.on('destroy', 'destroy', this.dd);
 		},
 
 
 		setupDropZone: function() {
 
-			function moveTerm(el, to) {
-				var p = el.parentNode,
-						doc = (p && (p.ownerDocument || p.documentElement)) || document,
-						term = p && p.getAttribute('data-term');
-				if (p === Ext.getDom(to)) {
-					return;
-				}
-
-				if (p.childNodes.length === 1 && !Ext.isEmpty(term)) {
-					p.appendChild(doc.createTextNode(term));
-				}
-
-				to.appendChild(el);
-
-				me.maybeChangeSubmitButtonState();
-				me.updateLayout();
-			}
-
-
-			function resetTerm(e) {
-				var toReset = e.getTarget('.target.drag');
-				if (toReset) {
-					moveTerm(toReset, me.shelfEl);
-				}
-			}
-
 			var id = this.id,
-					me = this,
-					common = {
-						//<editor-fold desc="Boilerplate">
-						// If the mouse is over a target node, return that node. This is provided as the "target" parameter in all "onNodeXXXX" node event
-						// handling functions
-						getTargetFromEvent: function(e) { return e.getTarget('.target.choice') || e.getTarget('.terms'); },
+				me = this,
+				common = {
+					//<editor-fold desc="Boilerplate">
+					// If the mouse is over a target node, return that node. This is provided as the "target" parameter in all "onNodeXXXX" node event
+					// handling functions
+					getTargetFromEvent: function(e) { return e.getTarget('.target.choice') || e.getTarget('.terms'); },
 
-						// On entry into a target node, highlight that node.
-						onNodeEnter: function(target, dd, e, data) { Ext.fly(target).addCls('drop-hover'); },
+					// On entry into a target node, highlight that node.
+					onNodeEnter: function(target, dd, e, data) { Ext.fly(target).addCls('drop-hover'); },
 
-						// On exit from a target node, unhighlight that node.
-						onNodeOut: function(target, dd, e, data) { Ext.fly(target).removeCls('drop-hover'); },
+					// On exit from a target node, unhighlight that node.
+					onNodeOut: function(target, dd, e, data) { Ext.fly(target).removeCls('drop-hover'); },
 
-						// While over a target node, return the default drop allowed
-						onNodeOver: function(target, dd, e, data) { return Ext.dd.DropZone.prototype.dropAllowed; }
-						//</editor-fzold>
-					},
-					dropOnAnswer = {
-						onNodeDrop: function(target, dd, e, data) {
+					// While over a target node, return the default drop allowed
+					onNodeOver: function(target, dd, e, data) { return Ext.dd.DropZone.prototype.dropAllowed; }
+					//</editor-fzold>
+				},
+				dropOnAnswer = {
+					onNodeDrop: function(target, dd, e, data) {
 
-							var t = Ext.fly(target).down('.dropzone', true),
-								c = t && t.childNodes,
-								n = c && c[0];
+						var t = Ext.fly(target).down('.dropzone', true),
+							c = t && t.childNodes,
+							n = c && c[0];
 
-							if (!c || c.length > 1) { //problems
-								return false;
-							}
+						if (!c || c.length > 1) { //problems
+							return false;
+						}
 
-							if (Ext.isTextNode(n)) {
-								t.removeChild(n);
-							}
+						if (Ext.isTextNode(n)) {
+							t.removeChild(n);
+						}
 
-							if (n === data.sourceEl) {
-								return true;
-							}
-
-							if (n && !Ext.isTextNode(n)) {
-								me.shelfEl.appendChild(n);
-							}
-
-							moveTerm(data.sourceEl, t);
-
+						if (n === data.sourceEl) {
 							return true;
 						}
-					},
-					dropOnShelf = {
-						onNodeDrop: function(target, dd, e, data) {
-							moveTerm(data.sourceEl, Ext.get(target));
-							return true;
+
+						if (n && !Ext.isTextNode(n)) {
+							me.shelfEl.appendChild(n);
 						}
-					};
 
+						me.moveTerm(data.sourceEl, t);
 
-			this.mon(this.shelfEl.select('.target.drag .reset'), 'click', resetTerm);
+						return true;
+					}
+				},
+				dropOnShelf = {
+					onNodeDrop: function(target, dd, e, data) {
+						me.moveTerm(data.sourceEl, Ext.get(target));
+						return true;
+					}
+				};
 
 
 			this.dropZones = [
@@ -270,10 +279,12 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 
 		setValue: function(value) {
 			var q = '.term',
-				terms = this.shelfEl.query(q).concat(this.inputBox.query(q));
+				terms = Ext.Array.unique(
+						this.shelfEl.query(q)
+							.concat(this.inputBox.query(q)));
 
 			function s(bucket) {
-				var key = asInt(bucket.down('.term'), 'data-match'),
+				var key = asInt(bucket, 'data-target'),
 					t = terms[value[key]];
 
 				bucket = Ext.getDom(bucket.down('.dropzone'));
@@ -334,6 +345,12 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 			this.callParent();
 			this.mark();
 		},
+
+
+		markSubmitted: function() {
+			this.callParent(arguments);
+			this.mark();
+		},
 		//</editor-fold>
 
 
@@ -372,8 +389,4 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 
 
 	};
-}, function() {
-	if (isFeature('v3matching')) {
-		this.addXtype('question-input-matchingpart');
-	}
 });

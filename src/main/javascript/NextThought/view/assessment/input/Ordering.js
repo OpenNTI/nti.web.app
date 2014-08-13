@@ -391,8 +391,4 @@ Ext.define('NextThought.view.assessment.input.Ordering', {
 			onNodeDrop: function(target, dd, e, data) { me.swapNodes(target, dd); }
 		});
 	}
-}, function() {
-	if (!isFeature('v3matching')) {
-		this.addXtype('question-input-matchingpart');
-	}
 });
