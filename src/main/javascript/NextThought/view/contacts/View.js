@@ -5,7 +5,7 @@ Ext.define('NextThought.view.contacts.View', {
 		'NextThought.view.contacts.SubView'
 	],
 
-	title: 'NextThought: Contacts',
+	title: 'Contacts',
 	defaultTab: 'my-contacts',
 
 	items: [
@@ -34,12 +34,6 @@ Ext.define('NextThought.view.contacts.View', {
 		{label: getString('NextThought.view.contacts.View.groups-tab'), viewId: 'my-groups'},
 		{label: getString('NextThought.view.contacts.View.list-tab'), viewId: 'my-lists'}
 	],
-
-
-	getTitlePrefix: function() {
-		return 'NextThought: Contacts';
-	},
-
 
 	initComponent: function() {
 		var me = this;

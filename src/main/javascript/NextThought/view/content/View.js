@@ -178,6 +178,7 @@ Ext.define('NextThought.view.content.View', {
 			this.setActiveTab(vId)
 				.then(
 					function() {
+						this.updateTitle();
 						this.pushState({activeTab: vId});
 						txn.commit();
 					}.bind(this),
@@ -208,7 +209,7 @@ Ext.define('NextThought.view.content.View', {
 
 
 	pushState: function(s) {
-		history.pushState({content: s}, this.title, this.getFragment());
+		history.pushState({content: s}, this.getTitle(), this.getFragment());
 	},
 
 
@@ -482,7 +483,7 @@ Ext.define('NextThought.view.content.View', {
 			this.showContentReader();
 		}
 
-		this.locationTitle = pageInfo.getTitle('NextThought');
+		this.locationTitle = pageInfo.getTitle('');
 		this.updateTitle();
 	},
 
@@ -511,7 +512,7 @@ Ext.define('NextThought.view.content.View', {
 				this.courseReports
 			];
 
-		background = background || info && info.toc && getURL(info.toc.querySelector('toc').getAttribute('background'), info.root);
+		background = background || (info && info.toc && getURL(info.toc.querySelector('toc').getAttribute('background'), info.root));
 
 		this.currentBundle = bundle;
 		//this.reader.clearLocation();
@@ -643,15 +644,16 @@ Ext.define('NextThought.view.content.View', {
 	},
 
 
-	getTitlePrefix: function() {
+	getActiveTitle: function() {
 		var prefix = this.getLayout().getActiveItem().title || '',
 			inst = this.currentBundle,
 			courseTitle = (inst && inst.asUIData().title);
 
 		if (!Ext.isEmpty(prefix)) {
 			prefix += ' - ';
-		} else if (!Ext.isEmpty(courseTitle)) {
-			prefix = courseTitle + ' - ';
+		}
+		if (!Ext.isEmpty(courseTitle)) {
+			prefix += courseTitle + ' - ';
 		}
 		return prefix;
 	},
@@ -659,12 +661,10 @@ Ext.define('NextThought.view.content.View', {
 
 	updateTitle: function() {
 		var tab = this.layout.getActiveItem(),
-			inst = this.currentBundle,
-			courseTitle = (inst && inst.asUIData().title),
 			pageTitle = this.locationTitle,
-			subTitle = tab && (Ext.isEmpty(tab.title) ? pageTitle : courseTitle);
+			subTitle = tab && (Ext.isEmpty(tab.title) ? pageTitle : '');
 
-		this.setTitle((this.getTitlePrefix() + subTitle) || 'NextThought');
+		this.setTitle(this.getActiveTitle() + subTitle);
 	},
 
 

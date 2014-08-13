@@ -6,6 +6,7 @@ Ext.define('NextThought.view.profiles.View', {
 		'NextThought.view.ResourceNotFound'
 	],
 
+	title: 'Profile: ',
 	defaultType: 'profile-panel',
 	layout: 'fit',
 

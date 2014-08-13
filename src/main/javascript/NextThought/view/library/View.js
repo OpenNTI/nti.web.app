@@ -8,6 +8,7 @@ Ext.define('NextThought.view.library.View', {
 
 	cls: 'library-container',
 
+	title: 'Library',
 	layout: 'fit',
 	items: [
 		{xtype: 'library-view-panel'}

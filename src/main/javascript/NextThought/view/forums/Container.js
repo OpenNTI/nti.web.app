@@ -9,7 +9,7 @@ Ext.define('NextThought.view.forums.Container', {
 	],
 
 	cls: 'forums-view',
-	title: 'NextThought: Discussions',
+	title: 'Discussions',
 	layout: 'card',
 	isForumContainer: true,
 	extraTabBarCls: 'forums',

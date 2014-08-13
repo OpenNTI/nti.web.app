@@ -32,10 +32,18 @@ Ext.define('NextThought.view.Base', {
 
 
 	setTitle: function(newTitle) {
-		this.title = newTitle || this.title;
-		if (this.isActive()) {
-			document.title = this.title || 'NextThought';
+		if (arguments.length > 0) {
+			this.title = newTitle;
 		}
+		if (this.isActive()) {
+			document.title = this.getTitle();
+		}
+	},
+
+
+	getTitle: function() {
+		var t = this.title;
+		return this.getTitlePrefix() + (t ? (': ' + t) : '');
 	},
 
 
@@ -74,7 +82,9 @@ Ext.define('NextThought.view.Base', {
 	},
 
 
-	getTitlePrefix: function() {return '';},
+	getTitlePrefix: function() {
+		return getString('application.title-bar-prefix', 'NextThought');
+	},
 
 
 	getTabs: function() {
@@ -158,7 +168,7 @@ Ext.define('NextThought.view.Base', {
 				}
 
 				me.layout.setActiveItem(tab);
-				me.setTitle(me.getTitlePrefix());
+				me.setTitle();
 			} else {
 				me._setActiveTabAfterRender = me.mon(me, {
 					destroyable: true, single: true,
