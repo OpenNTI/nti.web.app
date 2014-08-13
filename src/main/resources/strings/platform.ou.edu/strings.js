@@ -15,6 +15,8 @@ NTIStrings['months'] = {
 	12: 'Fall'
 };
 
+NTIStrings['application.title-bar-prefix'] = 'Janux';
+
 
 NTIStrings['UnresolvedUsernamePattern'] = 'Anonymous ####';
 NTIStrings['course.catalog'] = 'Available Courses';
