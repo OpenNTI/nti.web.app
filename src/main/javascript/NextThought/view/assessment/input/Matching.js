@@ -16,7 +16,7 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 		alias: 'widget.question-input-matchingpart',
 
 		requires: [
-			'Ext.dd.DragZone',
+			'NextThought.dd.ScrollingDragZone',
 			'Ext.dd.DropZone',
 			'Ext.dd.StatusProxy'
 		],
@@ -143,6 +143,7 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 				el = this.up().getEl(), z;
 
 			cfg = {
+				scrollEl: me.reader.getScroll().scrollingEl,
 				animRepair: true,
 				proxy: this.getDragProxy(),
 
@@ -196,8 +197,10 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 				}
 			};
 
-			this.dd = new Ext.dd.DragZone(this.el, cfg);
+			this.dd = new NextThought.dd.ScrollingDragZone(this.shelfEl, cfg);
+			this.reDD = new NextThought.dd.ScrollingDragZone(this.inputBox, cfg);
 			this.on('destroy', 'destroy', this.dd);
+			this.on('destroy', 'destroy', this.reDD);
 		},
 
 
@@ -269,8 +272,16 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 		getValue: function() {
 			var val = {};
 
-			this.el.select('.choice').each(function(e) {
-				val[asInt(e.down('.term'), 'data-match')] = asInt(e, 'data-target');
+			this.el.select('.choice').each(function(blank) {
+				//this iterates the drop zones (blanks) and looks for the drag element (the "answer")
+				var answer = blank.down('.term'),
+				//Get the index off the answer...
+					answerKey = asInt(answer, 'data-match');
+
+				if (answer) {
+					//sigh... this is backasswards. The drop zones are the constants, but...whatever...
+					val[answerKey] = asInt(blank, 'data-target');
+				}
 			});
 
 			return val;
@@ -278,30 +289,27 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 
 
 		setValue: function(value) {
-			var q = '.term',
+			var q = '.term', termId, binId, bin,
+				bins = toMap(this.inputBox.query('.choice'), 'data-target'),
 				terms = Ext.Array.unique(
 						this.shelfEl.query(q)
 							.concat(this.inputBox.query(q)));
 
-			function s(bucket) {
-				var key = asInt(bucket, 'data-target'),
-					t = terms[value[key]];
-
-				bucket = Ext.getDom(bucket.down('.dropzone'));
-				if (Ext.isTextNode(bucket.firstChild)) {
-					bucket.removeChild(bucket.firstChild);
-				}
-
-				if (t) {
-					bucket.appendChild(t);
-				} else {
-					console.warn('Unexpected scenario... no term for bucket found: key:', key, 'map', terms);
-				}
-			}
 
 			console.log('set:', value);
+			this.shelfEl.appendChild(terms);
+
 			terms = toMap(terms, 'data-match');
-			this.inputBox.select('.choice').each(s);
+
+			for (termId in value) {
+				if (value.hasOwnProperty(termId)) {
+					binId = value[termId];
+					bin = bins[binId];
+					if (bin) {
+						bin.appendChild(terms[termId]);
+					}
+				}
+			}
 		},
 
 
@@ -319,11 +327,11 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 			function m(e) {
 				var key = asInt(Ext.fly(e).down('.term'), 'data-match'),
 					value = asInt(e, 'data-target'),
-					cls = (value === c[key]) ? 'correct' : 'incorrect';
+					cls = (!Ext.isEmpty(key) && value === c[key]) ? 'correct' : 'incorrect';
 
 				e.down('.dropzone').addCls('graded');
 				e.addCls(cls);
-				console.log('marking key:', key, 'val:', value, '=?=', c[key], cls);
+				console.log('marking key:', key, 'val:', value, '=?=', c[key] || 'blank', cls);
 			}
 
 			this.getEl().select('.choice').removeCls('correct incorrect').each(m);
@@ -335,19 +343,7 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 		},
 
 
-		markCorrect: function() {
-			this.callParent();
-			this.mark();
-		},
-
-
-		markIncorrect: function() {
-			this.callParent();
-			this.mark();
-		},
-
-
-		markSubmitted: function() {
+		markSubmitted: function(state) {
 			this.callParent(arguments);
 			this.mark();
 		},
