@@ -65,6 +65,8 @@ Ext.define('NextThought.view.definition.Window', {
 			destroy: me.unfixMask,
 			afterrender: Ext.bind(me.loadDefinition, me, [me.term])
 		});
+
+		me.mon(history.observable, 'pop', 'close', me);
 	},
 
 	syncHeight: Ext.emptyFn,//not needed here.
