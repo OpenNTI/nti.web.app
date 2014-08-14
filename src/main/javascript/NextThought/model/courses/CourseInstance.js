@@ -437,6 +437,13 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 
 	getDiscussionBoard: function() {
+		var b = this.get('Discussions');
+
+		return b ? Promise.resolve(b) : Promise.reject('No Board');
+	},
+
+
+	xgetDiscussionBoard: function() {
 		var me = this;
 
 		return this.getDiscussionContents()
