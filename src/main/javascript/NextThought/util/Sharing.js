@@ -275,7 +275,7 @@ Ext.define('NextThought.util.Sharing', {
 		}
 
 		//Exactly one, resolve the user then callback
-		UserRepository.getUser(explicitEntities.first())
+		return UserRepository.getUser(explicitEntities.first())
 			.then(function(resolved) {
 				var dn = resolved.getName();
 
