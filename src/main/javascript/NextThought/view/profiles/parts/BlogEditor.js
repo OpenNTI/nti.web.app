@@ -203,7 +203,7 @@ Ext.define('NextThought.view.profiles.parts.BlogEditor', {
 		var msg = getString('NextThought.view.profiles.parts.BlogEditor.unknown'), error;
 
 		if (response && response.responseText) {
-			error = JSON.parse(response.responseText) || {};
+			error = Ext.decode(response.responseText, true) || {};
 			if (error.code === 'TooLong') {
 				msg = getString('NextThought.view.profiles.parts.BlogEditor.longtitle');
 			}
