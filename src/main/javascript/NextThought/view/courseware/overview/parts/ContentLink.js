@@ -78,7 +78,10 @@ Ext.define('NextThought.view.courseware.overview.parts.ContentLink', {
 			this.on('afterrender', Ext.bind(this.appendTotal, this, arguments), this, {single: true});
 			return;
 		}
-		this.commentTpl.append(this.meta, {count: total});
+
+		if (Ext.getDom(this.meta)) {
+			this.commentTpl.append(this.meta, {count: total});
+		}
 	},
 
 
