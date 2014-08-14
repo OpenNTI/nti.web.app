@@ -18,13 +18,6 @@ Ext.define('NextThought.view.MessageBox', {
 	iconHeight: 75,
 	iconWidth: 80,
 
-	buttonText: {
-		ok: getString('NextThought.view.MessageBox.ok'),
-		yes: getString('NextThought.view.MessageBox.yes'),
-		no: getString('NextThought.view.MessageBox.no'),
-		cancel: getString('NextThought.view.MessageBox.cancel')
-	},
-
 	buttonIds: [
 		'cancel', 'no', 'yes', 'ok'
 	],
@@ -75,6 +68,14 @@ Ext.define('NextThought.view.MessageBox', {
 
 	initComponent: function() {
 		var me = this;
+
+		Ext.apply(me.buttonText, {
+			ok: getString('NextThought.view.MessageBox.ok'),
+			yes: getString('NextThought.view.MessageBox.yes'),
+			no: getString('NextThought.view.MessageBox.no'),
+			cancel: getString('NextThought.view.MessageBox.cancel')
+		});
+
 		me.callParent(arguments);
 		me.bottomTb.layout.pack = 'end';
 
