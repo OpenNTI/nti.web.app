@@ -101,21 +101,33 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 
 	addMask: function() {
-		var maskEl = this.el.up('.body-container');
-
-		maskEl.mask('Loading...');
+		try {
+			var maskEl = this.el && this.el.up('.body-container');
+			if (maskEl) {
+				maskEl.mask('Loading...');
+			}
+		} catch (e) {
+			console.warn('Error masking. %o', e);
+		}
 	},
 
 
 	removeMask: function() {
 		var maskEl = this.el.up('.body-container'),
-			mask = maskEl.down('.x-mask'),
-			maskMsg = maskEl.down('.x-mask-msg');
+			mask = maskEl && maskEl.down('.x-mask'),
+			maskMsg = maskEl && maskEl.down('.x-mask-msg');
 
-		mask.addCls('removing');
-		maskMsg.addCls('removing');
+		if (mask) {
+			mask.addCls('removing');
+		}
 
-		wait(1000).then(maskEl.unmask.bind(maskEl));
+		if (maskMsg) {
+			maskMsg.addCls('removing');
+		}
+
+		if (maskEl) {
+			wait(1000).then(maskEl.unmask.bind(maskEl));
+		}
 	},
 
 
