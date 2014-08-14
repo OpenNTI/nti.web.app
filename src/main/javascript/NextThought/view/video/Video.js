@@ -410,7 +410,7 @@ Ext.define('NextThought.view.video.Video', {
 
 
 	stopPlayback: function() {
-		var container, cuurent, state = this.queryPlayer();
+		var container, current, state = this.queryPlayer();
 
 		if (this.currentVideoId) {
 			container = this.up('content-view-container');
@@ -419,7 +419,7 @@ Ext.define('NextThought.view.video.Video', {
 			AnalyticsUtil.stopResourceTimer(current.getId(), {
 				course: container && container.currentBundle && container.currentBundle.getId(),
 				with_transcript: !!this.up('media-viewer'),
-				video_end_time: state.time,
+				video_end_time: state && state.time,
 				context_path: 'a test'
 			});
 		}
