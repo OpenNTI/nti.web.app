@@ -47,7 +47,7 @@ Ext.define('NextThought.view.video.roll.OverlayedPanel', {
 
 		var videos = [];
 
-		Ext.each(data.items || [], function(v) {
+		Ext.each((data && data.items) || [], function(v) {
 			var s = v.sources[0];
 			videos.push({
 				thumbnail: s.thumbnail,
