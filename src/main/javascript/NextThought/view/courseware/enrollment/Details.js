@@ -334,7 +334,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			api_down: {
 				title: 'Earn College Credit',
 				information: [
-					'Transcripted credit is available from the University of Oklahoma but unfortunately we cannot process an applications at this time.',
+					'Transcripted credit is available from the University of Oklahoma but unfortunately we cannot process an application at this time.',
 					'Please contact the <a class=\'link\'href=\'mailto:support@nextthought.com\'>help desk.</a>'
 				].join(' '),
 				cls: 'rejected'
