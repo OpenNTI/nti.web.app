@@ -31,7 +31,8 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 			this.tileContainer.removeAll(true);
 		}
 
-		if (!bundle || $AppConfig.disableDashboard) {
+		if (!bundle || $AppConfig.disableDashboard || /UCOL/i.test(courseId)) {
+			this.hasItems = false;
 			return;
 		}
 
