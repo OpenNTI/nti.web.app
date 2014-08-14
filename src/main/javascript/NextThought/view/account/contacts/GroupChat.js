@@ -284,13 +284,17 @@ Ext.define('NextThought.view.account.contacts.GroupChat', {
 
 			this.el.down('.inputArea').down('input').on('focus', function() {
 				Ext.defer(function() {
+					var input = me.el.down('inputArea');
 					if (window.innerHeight < 600) {
 						me.contactSearch.el.setHeight(114);
 						me.contactSearch.el.setY(385);
 						me.contactSearch.el.setRight(0);
 					}
-					else {
-						me.el.down('inputArea').down('input').blur();
+					else if (input) {
+						input = input.down('input');
+						if (input) {
+							input.blur();
+						}
 					}
 				},250);
 			});

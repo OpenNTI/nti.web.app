@@ -507,7 +507,11 @@ Ext.define('NextThought.controller.Chat', {
 			if (w) {
 				w.show();
 				setTimeout(function() {
-					w.down('chat-entry').focus();
+					try {
+						w.down('chat-entry').focus();
+					} catch (e) {
+						console.warn('Couldn\'t focus entry');
+					}
 				}, 500);
 			}
 		} else {
