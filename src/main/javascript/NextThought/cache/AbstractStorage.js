@@ -27,8 +27,19 @@ Ext.define('NextThought.cache.AbstractStorage', function() {
 
 
 		set: function(key, value) {
-			var old = this.get(key);
-			this.backingStore.setItem(prefix(key), Ext.encode(value));
+			var old = this.get(key),
+				encKey = prefix(key),
+				encVal = Ext.encode(value);
+			try {
+				this.backingStore.setItem(encKey, encVal);
+			} catch (e) {
+				this.removeAll();
+				try {
+					this.backingStore.setItem(encKey, encVal);
+				} catch (er) {
+					console.error('Trouble setting a value in storage: %o', er, key, value);
+				}
+			}
 			return old;
 		},
 
