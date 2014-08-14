@@ -35,9 +35,11 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			contentElement: contentElement
 		}));
 
-		Ext.fly(contentElement).set({
-			'data-used': true
-		});
+		if (contentElement) {
+			Ext.fly(contentElement).set({
+				'data-used': true
+			});
+		}
 	},
 
 
