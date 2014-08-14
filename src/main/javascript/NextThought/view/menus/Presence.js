@@ -162,23 +162,26 @@ Ext.define('NextThought.view.menus.Presence', {
 			dndStatus;
 
 		function update() {
+			try {
+				availableStatus = (available && !available.isFuture) ? available.get('status') : me.defaultStates.available;
+				me.availableEl.down('.label').update(availableStatus);
 
-			availableStatus = (available && !available.isFuture) ? available.get('status') : me.defaultStates.available;
-			me.availableEl.down('.label').update(availableStatus);
+				awayStatus = (away && !away.isFuture) ? away.get('status') : me.defaultStates.away;
+				me.awayEl.down('.label').update(awayStatus);
 
-			awayStatus = (away && !away.isFuture) ? away.get('status') : me.defaultStates.away;
-			me.awayEl.down('.label').update(awayStatus);
+				dndStatus = (dnd && !dnd.isFuture) ? dnd.get('status') : me.defaultStates.dnd;
+				me.dndEl.down('.label').update(dndStatus);
 
-			dndStatus = (dnd && !dnd.isFuture) ? dnd.get('status') : me.defaultStates.dnd;
-			me.dndEl.down('.label').update(dndStatus);
-
-			if (type === 'available') {
-				me.availableEl[(show === 'chat') ? 'addCls' : 'removeCls']('selected');
-				me.awayEl[(show === 'away') ? 'addCls' : 'removeCls']('selected');
-				me.dndEl[(show === 'dnd') ? 'addCls' : 'removeCls']('selected');
-				me.offlineEl.removeCls('selected');
-			}else {
-				me.offlineEl.addCls('selected');
+				if (type === 'available') {
+					me.availableEl[(show === 'chat') ? 'addCls' : 'removeCls']('selected');
+					me.awayEl[(show === 'away') ? 'addCls' : 'removeCls']('selected');
+					me.dndEl[(show === 'dnd') ? 'addCls' : 'removeCls']('selected');
+					me.offlineEl.removeCls('selected');
+				} else {
+					me.offlineEl.addCls('selected');
+				}
+			} catch (e) {
+				console.warn('Trouble in paradise. %o', e);
 			}
 		}
 
