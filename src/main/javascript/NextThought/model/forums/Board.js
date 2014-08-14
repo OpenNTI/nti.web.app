@@ -3,6 +3,25 @@ Ext.define('NextThought.model.forums.Board', {
 
 	isBoard: true,
 
+	statics: {
+		buildContentsStoreFromData: function(id, data) {
+			var store;
+
+			store = Ext.getStore(id) || NextThought.store.NTI.create({
+				storeId: id,
+				data: data,
+				sorters: [{
+					property: 'CreatedTime',
+					direction: 'DESC'
+				}]
+			});
+
+			StoreUtils.fillInUsers(store);
+
+			return store;
+		}
+	},
+
 	fields: [
 		{ name: 'ForumCount', type: 'int', persist: false },
 		{ name: 'title', type: 'auto', persist: false}

@@ -19,6 +19,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	fields: [
 		{ name: 'Bundle', type: 'singleItem', mapping: 'ContentPackageBundle'},
 		{ name: 'Discussions', type: 'singleItem', persist: false },
+		{ name: 'ParentDiscussions', type: 'singleItem', persist: false},
 		{ name: 'Outline', type: 'singleItem', persist: false },
 
 		{ name: 'Scopes', type: 'auto', mapping: 'LegacyScopes' },
@@ -281,9 +282,196 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
+	getDiscussionContents: function() {
+		var section = this.get('Discussions'),
+			sectionRequest,
+			parent = this.get('ParentDiscussions'),
+			parentRequest;
+
+		if (section) {
+			section = section.getLink('contents');
+
+			sectionRequest = section ? Service.request(section) : [];
+		}
+
+
+		if (parent) {
+			parent = parent.getLink('contents');
+
+			parentRequest = parent ? Service.request(parent) : [];
+		}
+
+		return Promise.all([
+			sectionRequest,
+			parentRequest
+		]);
+	},
+
+
+	__binDiscussions: function(section, parent) {
+		var bin = {
+			ForCredit: {
+				Section: [],
+				Parent: []
+			},
+			Open: {
+				Section: [],
+				Parent: []
+			},
+			Other: []
+		};
+
+		function isOpen(item) {
+			return item.isOpen;
+		}
+
+		function isForCredit(item) {
+			return item.isForCredit;
+		}
+
+		(section || []).forEach(function(item) {
+			if (isOpen(item)) {
+				bin.Open.Section.push(item);
+			} else if (isForCredit(item)) {
+				bin.ForCredit.Section.push(item);
+			} else {
+				bin.Other.push(item);
+			}
+		});
+
+		(parent || []).forEach(function(item) {
+			if (isOpen(item)) {
+				bin.Open.Parent.push(item);
+			} else if (isForCredit(item)) {
+				bin.ForCredit.Parent.push(item);
+			} else {
+				bin.Other.push(item);
+			}
+		});
+
+		return bin;
+	},
+
+
+	__binToForumList: function(bin) {
+		var section = this.get('Discussions'),
+			parent = this.get('ParentDiscussions'),
+			sectionId, parentId,
+			forumList = [],
+			forCredit, open, other;
+
+		sectionId = section && section.getContentsStoreId();
+		parentId = parent && parent.getContentsStoreId();
+
+		function isEmpty(b) {
+			return Ext.isEmpty(b.Section) && Ext.isEmpty(b.Parent);
+		}
+
+		function buildStore(id, data) {
+			return NextThought.model.forums.Board.buildContentsStoreFromData(id, data);
+		}
+
+		if (!isEmpty(bin.ForCredit)) {
+			forCredit = {
+				title: 'Enrolled For-Credit',
+				children: []
+			};
+
+			if (!Ext.isEmpty(bin.ForCredit.Section)) {
+				forCredit.children.push({
+					title: 'Section',
+					store: buildStore(sectionId + 'ForCredit', bin.ForCredit.Section),
+					board: section
+				});
+			}
+
+			if (!Ext.isEmpty(bin.ForCredit.Parent)) {
+				forCredit.children.push({
+					title: 'All',
+					store: buildStore(parentId + 'ForCredit', bin.ForCredit.Parent),
+					board: parent
+				});
+			}
+
+			forumList.push(forCredit);
+		}
+
+		if (!isEmpty(bin.Open)) {
+			open = {
+				title: 'Open Discussions',
+				children: []
+			};
+
+			if (!Ext.isEmpty(bin.Open.Section)) {
+				open.children.push({
+					title: 'Section',
+					store: buildStore(sectionId + 'Open', bin.Open.Section),
+					board: section
+				});
+			}
+
+			if (!Ext.isEmpty(bin.Open.Parent)) {
+				open.children.push({
+					title: 'All',
+					store: buildStore(parent + 'Open', bin.Open.Parent),
+					board: parent
+				});
+			}
+
+			forumList.push(open);
+		}
+
+		if (!Ext.isEmpty(bin.Other)) {
+			other = {
+				title: 'Other Discussions',
+				store: buildStore(section + 'Other', bin.Other),
+				board: section
+			};
+
+			forumList.push(other);
+		}
+
+
+		return forumList;
+	},
+
+
 	getDiscussionBoard: function() {
-		var b = this.get('Discussions');
-		return b ? Promise.resolve(b) : Promise.reject('No board');
+		var me = this;
+
+		return this.getDiscussionContents()
+			.then(function(results) {
+				var section = results[0],
+					parent = results[1];
+
+				if (!Ext.isEmpty(section)) {
+					section = JSON.parse(section);
+					section.Items = ParseUtils.parseItems(section.Items);
+				} else {
+					section = {
+						Items: []
+					};
+				}
+
+				if (!Ext.isEmpty(parent)) {
+					parent = JSON.parse(parent);
+					parent.Items = ParseUtils.parseItems(parent.Items);
+				} else {
+					parnet = {
+						Items: []
+					};
+				}
+
+
+				return [section.Items, parent.Items];
+			})
+			.then(function(results) {
+				return me.__binDiscussions.apply(me, results);
+			})
+			.then(me.__binToForumList.bind(me))
+			.fail(function(reason) {
+				console.error('Failed to get discussion contents: ', reason);
+			});
 	},
 
 
