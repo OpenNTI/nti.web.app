@@ -255,7 +255,15 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 								return;
 							}
 							Ext.destroy(editor);
-							me.refresh();
+
+							try {
+								var view = me.down('dataview');
+								if (view) {
+									view.refresh();
+								}
+							} catch (e) {
+								console.error(e.message);
+							}
 						}
 					});
 				},
