@@ -19,9 +19,7 @@ window.Blob = window.Blob || window.webkitBlob;
 Ext.USE_NATIVE_JSON = true;
 
 //disable script cache-busting _dc=... get string args
-Ext.Loader.setConfig('disableCaching',
-		window.disableCaching !== undefined ?
-		window.disableCaching : false);
+Ext.Loader.setConfig('disableCaching', false); //for when unminified
 
 Ext.application({
 	name: 'NextThought',
@@ -30,6 +28,7 @@ Ext.application({
 	autoCreateViewport: false,
 
 	requires: [
+		'NextThought.util.Localization',//require this SUPER early.
 		'NextThought.overrides.*',
 		'NextThought.util.*',
 
