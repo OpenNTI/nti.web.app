@@ -37,6 +37,11 @@
 	function hook() {
 		var onerror = window.onerror || function() {};
 		window.onerror = function(msg, url, line, column, errObj) {
+
+			if (/^(SecurityError)/i.test(msg)) {
+				return;
+			}
+
 			var me = this, args = arguments, collectedLog = '[]', message = '', data = {}, count;
 			function escape(s) {
 				return (s || '').toString().replace(/"/g, '\\"');
@@ -67,8 +72,8 @@
 								'","line":"' + escape(line) +
 								'","char":"' + escape(column) +
 								'","count":' + count +
-							  	',"JSON": "Not defined"' +
-							  '}';
+								',"JSON": "Not defined"' +
+							'}';
 				}
 
 				sendRequest(
