@@ -22,21 +22,22 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 
 
 	bundleChanged: function(bundle) {
-		var courseId = bundle && bundle.getId(),
+		var bundleId = bundle && bundle.getId(),
 			l, toc, course, courseNavStore, me = this,
+			testId = bundle && (bundle.isCourse ? bundle.get('Bundle').getId() : bundleId),
 			date = this.self.dateOverride || new Date();//now
 
-		if (this.course !== courseId) {
+		if (this.course !== bundleId) {
 			this.hasItems = true;
 			this.tileContainer.removeAll(true);
 		}
 
-		if (!bundle || $AppConfig.disableDashboard || /UCOL/i.test(courseId)) {
+		if (!bundle || $AppConfig.disableDashboard || /UCOL/i.test(testId)) {
 			this.hasItems = false;
 			return;
 		}
 
-		this.course = courseId;
+		this.course = bundleId;
 
 		l = bundle.getLocationInfo();
 
@@ -52,7 +53,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 
 			if (courseNavStore.onceBuilt) {
 				courseNavStore.onceBuilt().then(function() {
-					if (me.course === courseId) {
+					if (me.course === bundleId) {
 						me.applyStore(courseNavStore, date, course, l);
 					}
 				});
