@@ -278,9 +278,20 @@ Ext.define('NextThought.controller.Store', function() {
 		//items that have not yet been purchased?
 		maybeAddPurchasables: function() {
 
-			var view = this.getLibraryView().getPanel(),
+			var lib = this.getLibraryView(),
+				view = lib && lib.getPanel(),
 				store = this.getPurchasableStore(),
 				archive = this.archiveStore || new NextThought.store.Purchasable();
+
+
+			if (!lib) {
+				this.maybeAddPurchasables.attempts = (this.maybeAddPurchasables.attempts || 0) + 1;
+				if (this.maybeAddPurchasables.attempts < 60) {//make attempts for 1 minute.
+					setTimeout(this.maybeAddPurchasables.bind(this), 1000);
+					console.debug('Library view was not available yet, will try again in 1 second');
+				}
+				return;
+			}
 
 			archive.loadRecords((store.snapshot || store.data).getRange());
 			this.archiveStore = archive;
