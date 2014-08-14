@@ -49,10 +49,13 @@ Ext.define('NextThought.view.video.roll.OverlayedPanel', {
 
 		Ext.each((data && data.items) || [], function(v) {
 			var s = v.sources[0];
-			videos.push({
-				thumbnail: s.thumbnail,
-				url: Ext.String.format('https://www.youtube.com/embed/{0}?rel=0&wmode=opaque', s.source)
-			});
+			if (s) {
+				videos.push({
+					thumbnail: s.thumbnail, url: Ext.String.format('https://www.youtube.com/embed/{0}?rel=0&wmode=opaque', s.source)
+				});
+			} else {
+				console.warn('Video has no sourse? %o', v);
+			}
 		});
 
 		Ext.widget('video-lightbox', { data: videos }).show();
