@@ -311,33 +311,53 @@
 	width: 120px;
 	position: relative;
 
-	.next,.prev {
+
+	.page {
+		vertical-align: top;
+		line-height: 59px;
+		display: inline-block;
+		font-style: italic;
+		color: $primary-grey;
+		margin-right: 25px;
+		span {
+			font-weight: 600;
+		}
+	}
+
+	.prev, .next {
 		cursor: pointer;
-		width: 60px;
+		display: inline-block;
+		width: 40px;
 		height: 60px;
-		position: absolute !important;
-		top: 0;
-		opacity: 0.2;
+		line-height: 0;
+		opacity: 0.65;
 
 		&.disabled {
-			opacity: 0.1;
 			cursor: default;
 		}
-
 		&:not(.disabled):hover {
 			opacity: 1;
 		}
 	}
 
-	.next {
-		right: 0;
-		@include icon('next', $top: 20px, $left: 12px);
+	.prev {
+		@include icon('arrow-up', $top: 24px, $left: 10px);
+
+		&.disabled::after {
+			@include sprite($icons, 'arrow-up_inactive');
+		}
 	}
 
-	.prev {
-		left: 0;
-		@include icon('prev', $top: 20px, $left: 35px);
+	.next {
+		@include icon('arrow-down', $top: 24px, $left: 10px);
+
+		&.disabled::after {
+			@include sprite($icons, 'arrow-down_inactive');
+		}
 	}
+
+
+
 }
 
 
