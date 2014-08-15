@@ -773,6 +773,7 @@ Ext.define('NextThought.util.Content', {
 			loc = me.find(ntiid),
 			doc = loc && loc.toc,
 			root = doc.firstChild,
+			onSuppressed = false,
 			walker, info, nodes = [], visibleNodes, currentIndex,
 			topicOrTocRegex = /topic|toc/i;
 
@@ -810,10 +811,18 @@ Ext.define('NextThought.util.Content', {
 			root = doc.querySelector('[ntiid="' + ParseUtils.escapeId(rootId) + '"]') || root;
 		}
 
-		visibleNodes = Array.prototype.slice.call(root.querySelectorAll('topic[ntiid]:not([suppressed]):not([href*="#"])'));
-		if (root !== doc.firstChild) {
-			visibleNodes.unshift(root);
+		if (loc.location.hasAttribute('suppressed')) {
+			loc.location.removeAttribute('suppressed');
+			onSuppressed = true;
 		}
+
+		visibleNodes = Array.prototype.slice.call(root.querySelectorAll('topic[ntiid]:not([suppressed]):not([href*="#"])'));
+		visibleNodes.unshift(root);
+
+		if (onSuppressed) {
+			loc.location.setAttribute('suppressed', 'true');
+		}
+
 		currentIndex = visibleNodes.indexOf(loc.location);
 
 		if (loc) {
@@ -831,6 +840,7 @@ Ext.define('NextThought.util.Content', {
 		}
 
 		info = {
+			isSuppresed: onSuppressed,
 			currentIndex: currentIndex,
 			totalNodes: visibleNodes.length,
 			previous: maybeBlocker(nodes[0]),
