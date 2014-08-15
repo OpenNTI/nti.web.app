@@ -144,7 +144,8 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 				width: 642,
 				playerWidth: 642,
 				renderTo: me.videoEl,
-				floatParent: me
+				floatParent: me,
+				doNotCaptureAnalytics: true
 			});
 
 			me.video.mon(me, 'destroy', 'destroy', me.video);

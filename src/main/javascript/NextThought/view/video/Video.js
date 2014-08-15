@@ -418,7 +418,7 @@ Ext.define('NextThought.view.video.Video', {
 	stopPlayback: function() {
 		var container, current, state = this.queryPlayer();
 
-		if (this.currentVideoId) {
+		if (this.currentVideoId && !this.doNotCaptureAnalytics) {
 			container = this.up('[currentBundle]');
 			current = this.playlist[this.playlistIndex];
 
@@ -454,7 +454,7 @@ Ext.define('NextThought.view.video.Video', {
 		var me = this,
 			current = this.playlist[this.playlistIndex];
 
-		if (current) {
+		if (current && !me.doNotCaptureAnalytics) {
 			me.on('player-state-ready', function(state) {
 				AnalyticsUtil.getResourceTimer(current.getId(), {
 					type: 'video-watch',
@@ -475,8 +475,8 @@ Ext.define('NextThought.view.video.Video', {
 		var current = this.playlist[this.playlistIndex],
 			id = current && current.getId(), container;
 		console.log('Player Seek: ', data.start, data.end);
-		if (id) {
-			container = this.up('content-view-container');
+		if (id && !this.doNotCaptureAnalytics) {
+			container = this.up('[currentBundle]');
 
 			AnalyticsUtil.getResourceTimer(id, {
 				type: 'video-skip',

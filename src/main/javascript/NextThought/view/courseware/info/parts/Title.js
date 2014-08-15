@@ -51,7 +51,8 @@ Ext.define('NextThought.view.courseware.info.parts.Title', {
 				width: 764,
 				playerWidth: 764,//video initializes early enough it can't read the dom just yet...so lets JUST GET IT DONE...
 				renderTo: this.videoEl,
-				floatParent: this
+				floatParent: this,
+				doNotCaptureAnalytics: true
 			});
 			this.video.mon(this, 'destroy', 'destroy', this.video);
 
