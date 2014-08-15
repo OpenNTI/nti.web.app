@@ -170,7 +170,10 @@ Ext.define('NextThought.view.video.Video', {
 		};
 
 		Ext.TaskManager.start(this.taskMediaHeartBeat);
-		this.on('destroy', function cleanUpTask() {Ext.TaskManager.stop(this.taskMediaHeartBeat);});
+		this.on('destroy', function cleanUpTask() {
+			this.stopPlayback();
+			Ext.TaskManager.stop(this.taskMediaHeartBeat);
+		}, this);
 
 		//this.checkForFlash();
 	},
