@@ -31,7 +31,7 @@ Ext.define('NextThought.util.Analytics', {
 			};
 		}
 
-		this.TIMER_MAP[resourceId] = {
+		this.TIMER_MAP[resourceId + data.type] = {
 			start: now,
 			data: data
 		};
@@ -40,8 +40,8 @@ Ext.define('NextThought.util.Analytics', {
 	},
 
 
-	stopResourceTimer: function(resourceId, data) {
-		var resource = this.TIMER_MAP[resourceId],
+	stopResourceTimer: function(resourceId, type, data) {
+		var resource = this.TIMER_MAP[resourceId + type],
 			now = new Date();
 
 		data = data || {};

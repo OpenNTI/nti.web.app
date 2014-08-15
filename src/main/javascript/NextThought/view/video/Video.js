@@ -422,7 +422,7 @@ Ext.define('NextThought.view.video.Video', {
 			container = this.up('content-view-container');
 			current = this.playlist[this.playlistIndex];
 
-			AnalyticsUtil.stopResourceTimer(current.getId(), {
+			AnalyticsUtil.stopResourceTimer(current.getId(), 'video-watch', {
 				course: container && container.currentBundle && container.currentBundle.getId(),
 				with_transcript: !!this.up('media-viewer'),
 				video_end_time: state && state.time,
@@ -487,7 +487,7 @@ Ext.define('NextThought.view.video.Video', {
 				video_end_time: data.end
 			});
 
-			AnalyticsUtil.stopResourceTimer(id, {});
+			AnalyticsUtil.stopResourceTimer(id, 'video-skip', {});
 		}
 	},
 

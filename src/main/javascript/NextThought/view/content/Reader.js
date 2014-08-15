@@ -199,7 +199,7 @@ Ext.define('NextThought.view.content.Reader', {
 		if (!end) {return;}
 
 		delete this.___lastAnalyticEvent;
-		AnalyticsUtil.stopResourceTimer(end.resource_id, end);
+		AnalyticsUtil.stopResourceTimer(end.resource_id, 'resource-viewed', end);
 	},
 	//endregion
 
