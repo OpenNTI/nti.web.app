@@ -419,7 +419,7 @@ Ext.define('NextThought.view.video.Video', {
 		var container, current, state = this.queryPlayer();
 
 		if (this.currentVideoId) {
-			container = this.up('content-view-container');
+			container = this.up('[currentBundle]');
 			current = this.playlist[this.playlistIndex];
 
 			AnalyticsUtil.stopResourceTimer(current.getId(), 'video-watch', {

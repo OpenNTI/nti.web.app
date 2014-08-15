@@ -264,6 +264,12 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 		//	this.getTargetEl().hide();
 		//}
 
+		var container = this.up('content-view-container');
+
+		if (container) {
+			this.currentBundle = container.currentBundle;
+		}
+
 		this.on({'click': {element: 'curtainEl', fn: 'onCurtainClicked'}, scope: this});
 
 		if (this.screenEl) {
@@ -320,6 +326,9 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 
 		this.on({
 			scope: p,
+			beforedestroy: function() {
+				return p.fireEvent('beforedestroy');
+			},
 			destroy: 'destroy'
 		});
 
