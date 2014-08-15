@@ -180,7 +180,11 @@ Ext.define('NextThought.view.content.Reader', {
 			course: this.___getActiveBundle()
 		};
 
-		if (Ext.isEmpty(begin.resource_id)) {
+		if (Ext.isEmpty(begin.resource_id) || !this.isVisible(true)) {
+			return;
+		}
+
+		if (this.___lastAnalyticEvent && this.___lastAnalyticEvent.resource_id === begin.resource_id) {
 			return;
 		}
 
