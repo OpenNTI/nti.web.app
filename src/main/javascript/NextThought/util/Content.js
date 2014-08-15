@@ -811,7 +811,9 @@ Ext.define('NextThought.util.Content', {
 		}
 
 		visibleNodes = Array.prototype.slice.call(root.querySelectorAll('topic[ntiid]:not([suppressed]):not([href*="#"])'));
-		visibleNodes.unshift(root);
+		if (root !== doc.firstChild) {
+			visibleNodes.unshift(root);
+		}
 		currentIndex = visibleNodes.indexOf(loc.location);
 
 		if (loc) {
