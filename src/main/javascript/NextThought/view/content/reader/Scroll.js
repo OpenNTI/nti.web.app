@@ -30,7 +30,7 @@ Ext.define('NextThought.view.content.reader.Scroll', {
 
 
 	lock: function() {
-		if (!this.scrollingEl) {
+		if (!Ext.getDom(this.scrollingEl)) {
 			return;
 		}
 		this.scrollingEl.scrollTo('top', 0, false);
@@ -39,7 +39,7 @@ Ext.define('NextThought.view.content.reader.Scroll', {
 
 
 	unlock: function() {
-		if (!this.scrollingEl) {
+		if (!Ext.getDom(this.scrollingEl)) {
 			return;
 		}
 		this.scrollingEl.setStyle({overflowY: 'auto'});
