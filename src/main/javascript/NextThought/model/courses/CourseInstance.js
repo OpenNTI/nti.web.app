@@ -327,7 +327,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		function isForCredit(item) {
 			var title = item.get('title');
 
-			return title.indexOf('For Credit') === 0;
+			return title.indexOf('In-Class') === 0;
 		}
 
 		(section || []).forEach(function(item) {
@@ -394,7 +394,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 			if (!Ext.isEmpty(bin.ForCredit.Section)) {
 				forCredit.children.push({
-					title: 'Section',
+					title: 'My Section',
 					store: buildStore(sectionId + 'ForCredit', bin.ForCredit.Section),
 					board: section
 				});
@@ -402,7 +402,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 			if (!Ext.isEmpty(bin.ForCredit.Parent)) {
 				forCredit.children.push({
-					title: 'All',
+					title: 'All Sections',
 					store: buildStore(parentId + 'ForCredit', bin.ForCredit.Parent),
 					board: parent
 				});
@@ -419,7 +419,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 			if (!Ext.isEmpty(bin.Open.Section)) {
 				open.children.push({
-					title: 'Section',
+					title: 'My Section',
 					store: buildStore(sectionId + 'Open', bin.Open.Section),
 					board: section
 				});
@@ -427,7 +427,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 			if (!Ext.isEmpty(bin.Open.Parent)) {
 				open.children.push({
-					title: 'All',
+					title: 'All Sections',
 					store: buildStore(parent + 'Open', bin.Open.Parent),
 					board: parent
 				});

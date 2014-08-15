@@ -30,11 +30,11 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 					//	cls: 'group-header outline-row add-forum', html: 'Add Forum'
 					//}},
 					{tag: 'tpl', 'if': '!values.divider', cn: [
-						{cls: 'outline-row', 'data-qtip': '{title}', cn: [
+						{cls: 'outline-row', 'data-qtip': '{displayTitle}', cn: [
 							{tag: 'tpl', 'if': 'this.showReport(values)', cn: [
 								{cls: 'report-icon', 'data-qtip': '{{{NextThought.view.forums.forum.Navigation.reports}}}'}
 							]},
-							{cls: 'label', html: '{title}'}
+							{cls: 'label', html: '{displayTitle}'}
 						]}
 					]}
 				]}
