@@ -240,6 +240,7 @@ Ext.define('NextThought.controller.CourseWare', {
 	reloadEnrolledStores: function() {
 		//reload enrolled/administered
 		Ext.getStore('courseware.EnrolledCourses').load();
+		Ext.getStore('courseware.AvailableCourses').load();
 	},
 
 

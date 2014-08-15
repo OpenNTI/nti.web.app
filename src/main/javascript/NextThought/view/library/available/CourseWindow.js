@@ -199,6 +199,23 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 	},
 
 
+	updateAvailableCourses: function(current, upcoming, archived) {
+		if (!this.tabpanel) { return; }
+
+		if (current) {
+			this.tabpanel.updateCurrent(current);
+		}
+
+		if (upcoming) {
+			this.tabpanel.updateUpcoming(upcoming);
+		}
+
+		if (archived) {
+			this.tabpanel.updateArchived(archived);
+		}
+	},
+
+
 	onBeforeClose: function() {
 		var me = this,
 			warning;

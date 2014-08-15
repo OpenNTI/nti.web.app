@@ -374,6 +374,10 @@ Ext.define('NextThought.view.library.Panel', {
 		this.currentAvailable = current;
 		this.upcomingAvailable = upcoming;
 		this.archivedAvailable = archived;
+
+		if (this.activeWindow && this.activeWindow.is('library-available-courses-window')) {
+			this.activeWindow.updateAvailableCourses(current, upcoming, archived);
+		}
 	},
 
 

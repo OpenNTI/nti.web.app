@@ -72,7 +72,7 @@ Ext.define('NextThought.view.courseware.coursecatalog.TabPanel', {
 
 
 	updateCurrent: function(courses) {
-		var cmp = this.down('[title=current]');
+		var cmp = this.down('[title=Current]');
 
 		if (Ext.isEmpty(courses)) {
 			if (cmp) { cmp.destroy(); }
@@ -106,7 +106,7 @@ Ext.define('NextThought.view.courseware.coursecatalog.TabPanel', {
 
 
 	updateUpcoming: function(courses) {
-		var cmp = this.down('[title=upcoming]');
+		var cmp = this.down('[title=Upcoming]');
 
 		if (Ext.isEmpty(courses)) {
 			if (cmp) { cmp.destroy(); }
@@ -140,7 +140,7 @@ Ext.define('NextThought.view.courseware.coursecatalog.TabPanel', {
 
 
 	updateArchived: function(courses) {
-		var cmp = this.down('[title=archived]');
+		var cmp = this.down('[title=Archived]');
 
 		if (Ext.isEmpty(courses)) {
 			if (cmp) { cmp.destroy(); }
