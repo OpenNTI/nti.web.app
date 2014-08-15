@@ -237,6 +237,7 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 			this.fireEvent('navigate-to-assignment', this.assignmentId);
 			return;
 		}
-		this.fireEvent('navigate-to-href', this, this.getContainerId());
+		this.fireEvent('set-location-rooted', this.getContainerId());
+		//this.fireEvent('navigate-to-href', this, this.getContainerId());
 	}
 });
