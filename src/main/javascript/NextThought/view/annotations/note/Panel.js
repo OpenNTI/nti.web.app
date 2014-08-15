@@ -182,6 +182,8 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 
 		me.setRecord(me.record);
 
+		me.startResourceTimer();
+
 		this.on('scroll', function(e) {
 			Ext.emptyFn();
 		});
@@ -1073,11 +1075,31 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 		this.record.destroy();
 	},
 
+
+	startResourceTimer: function() {
+		if (!this.record) { return; }
+
+		var content = Ext.getCmp('content'),
+			bundle = content && content.currentBundle;
+
+		if (bundle) {
+			AnalyticsUtil.getResourceTimer(this.record.getId(), {
+				type: 'note-viewed',
+				context_path: 'a test',
+				course: bundle.getId(),
+				note_id: this.record.getId()
+			});
+		}
+	},
+
 	onDestroy: function() {
 		if (this.editor) {
 			delete this.editor.ownerCt;
 			this.editor.destroy();
 		}
+
+		AnalyticsUtil.stopResourceTimer(this.record.getId(), 'note-viewed');
+
 		this.callParent(arguments);
 	},
 

@@ -175,7 +175,7 @@ Ext.define('NextThought.view.content.Reader', {
 	beginViewAnalytics: function() {
 		var begin = {
 			type: 'resource-viewed',
-			context: 'a test',
+			context_path: 'a test',
 			resource_id: this.getLocation().NTIID,
 			course: this.___getActiveBundle()
 		};
