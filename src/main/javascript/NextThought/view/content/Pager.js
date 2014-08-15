@@ -4,11 +4,17 @@ Ext.define('NextThought.view.content.Pager', {
 	ui: 'content-pager',
 
 	renderTpl: Ext.DomHelper.markup([
+		{ cls: 'page', cn: [
+			{ tag: 'span', cls: 'current', html: '?'}, ' of ', {tag: 'span', cls: 'total', html: '?'}
+		] },
 		{ cls: 'prev' },
 		{ cls: 'next' }
 	]),
 
 	renderSelectors: {
+		page: '.page',
+		currentPage: '.page .current',
+		totalPages: '.page .total',
 		nextEl: '.next',
 		prevEl: '.prev'
 	},
@@ -43,6 +49,15 @@ Ext.define('NextThought.view.content.Pager', {
 			.then(function(info) {
 				var nextTitle = info && info.next && ContentUtils.findTitle(info.next, null),
 					prevTitle = info && info.previous && ContentUtils.findTitle(info.previous, null);
+
+				if (info.totalNodes) {
+					me.currentPage.update((info.currentIndex + 1) || '0');
+					me.totalPages.update(info.totalNodes || '0');
+					me.page.show();
+				} else {
+					me.page.hide();
+				}
+				me.updateLayout();
 
 				next.set({title: nextTitle ? getFormattedString('NextThought.view.content.Pager.next', {title: nextTitle}) : undefined});
 				prev.set({title: prevTitle ? getFormattedString('NextThought.view.content.Pager.prev', {title: prevTitle}) : undefined});

@@ -307,9 +307,10 @@
 }
 
 .x-component-content-pager {
-	height: 60px;
-	width: 120px;
 	position: relative;
+	padding-right: 10px;
+	white-space: nowrap;
+	height: 60px;
 
 
 	.page {

@@ -772,7 +772,8 @@ Ext.define('NextThought.util.Content', {
 		var me = this, course,
 			loc = me.find(ntiid),
 			doc = loc && loc.toc,
-			walker, info, nodes = [],
+			root = doc.firstChild,
+			walker, info, nodes = [], visibleNodes, currentIndex,
 			topicOrTocRegex = /topic|toc/i;
 
 		function maybeBlocker(id) {
@@ -804,10 +805,18 @@ Ext.define('NextThought.util.Content', {
 			return node.getAttribute('ntiid') || null;
 		}
 
+		//If we have a rootId, lets make that what we consider the root.
+		if (rootId) {
+			root = doc.querySelector('[ntiid="' + ParseUtils.escapeId(rootId) + '"]') || root;
+		}
+
+		visibleNodes = Array.prototype.slice.call(root.querySelectorAll('topic[ntiid]:not([suppressed]):not([href*="#"])'));
+		visibleNodes.unshift(root);
+		currentIndex = visibleNodes.indexOf(loc.location);
 
 		if (loc) {
 			walker = doc.createTreeWalker(
-					doc.firstChild,
+					root,
 					NodeFilter.SHOW_ELEMENT,
 					isTopicOrToc,
 					false);
@@ -819,17 +828,9 @@ Ext.define('NextThought.util.Content', {
 			nodes[1] = getRef(walker.nextNode());
 		}
 
-
-		//If we have a rootId, lets make that what we consider the root.
-		if (rootId) {
-			//replace siblings that fall outside of our given root.
-			nodes = nodes.map(function(n) {
-				var l = (n && me.getLineage(n)) || [];
-				return (l.indexOf(rootId) < 0) ? null : n;
-			});
-		}
-
 		info = {
+			currentIndex: currentIndex,
+			totalNodes: visibleNodes.length,
 			previous: maybeBlocker(nodes[0]),
 			next: maybeBlocker(nodes[1])
 		};
