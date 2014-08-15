@@ -15,7 +15,7 @@ Ext.define('NextThought.util.Analytics', {
 		'thought-viewed': '',
 		'note-viewed': '',
 		'discussion-viewed': '',
-		'course-catalog-viewed': ''
+		'course-catalog-viewed': 'application/vnd.nextthought.analytics.coursecatalogviewevent'
 	},
 
 	TIMER_MAP: {},

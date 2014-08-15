@@ -60,6 +60,11 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 		this.enableBubble(['enrolled-action', 'show-msg']);
 
+		AnalyticsUtil.getResourceTimer(this.course.getId(), {
+			type: 'course-catalog-viewed',
+			course: this.course.getId()
+		});
+
 		this.on('beforedeactivate', 'onBeforeDeactivate');
 	},
 
@@ -90,6 +95,8 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 	onDestroy: function() {
 		this.callParent(arguments);
+
+		AnalyticsUtil.stopResourceTimer(this.course.getId(), 'course-catalog-viewed');
 
 		Ext.destroy(this.video);
 	},
