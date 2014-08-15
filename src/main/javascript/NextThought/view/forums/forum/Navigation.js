@@ -9,6 +9,8 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 	cls: 'topic-list-nav forum-nav',
 	itemSelector: '.outline-row',
 
+	ID_TO_BOARD: {},
+
 	selModel: {
 		preventFocus: true,
 		allowDeselect: false,
@@ -21,22 +23,24 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 			{cls: 'header toggle-opposite-tabs {[this.getHeaderCls()]}', html: '{{{NextThought.view.forums.forum.Navigation.header}}}'},
 			{cls: 'outline-list', cn: [
 				{tag: 'tpl', 'for': '.', cn: [
-					{cls: 'outline-row', 'data-qtip': '{title}', cn: [
-						{tag: 'tpl', 'if': 'this.showReport(values)', cn: [
-							{cls: 'report-icon', 'data-qtip': '{{{NextThought.view.forums.forum.Navigation.reports}}}'}
-						]},
-						{cls: 'label', html: '{title}'}
+					{tag: 'tpl', 'if': 'values.divider', cn: {
+						cls: 'group-header outline-row', 'data-depth': '{depth}', 'data-board': '{attr}', html: '{label}'
+					}},
+					//{tag: 'tpl', 'if': 'values.divider && values.depth < 0', cn: {
+					//	cls: 'group-header outline-row add-forum', html: 'Add Forum'
+					//}},
+					{tag: 'tpl', 'if': '!values.divider', cn: [
+						{cls: 'outline-row', 'data-qtip': '{title}', cn: [
+							{tag: 'tpl', 'if': 'this.showReport(values)', cn: [
+								{cls: 'report-icon', 'data-qtip': '{{{NextThought.view.forums.forum.Navigation.reports}}}'}
+							]},
+							{cls: 'label', html: '{title}'}
+						]}
 					]}
-				]},
-				{tag: 'tpl', 'if': 'this.showButton(values,out)', cn: [
-					{cls: 'new-forum', html: '{{{NextThought.view.forums.forum.Navigation.addforum}}}'}
 				]}
 			]}
 		]
 	}), {
-		showButton: function(value, out) {
-			return this.canCreateForums;
-		},
 		getHeaderCls: function() {
 			return this.noPop ? 'no-pop' : '';
 		},
@@ -71,6 +75,11 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 		me.on('select', function(cmp, record) {
 			me.fireEvent('update-body', record);
 		});
+
+		me.on('beforeselect', function(cmp, record) {
+			//don't allow headers to be selected
+			return !(record instanceof NextThought.model.UIViewHeader);
+		});
 	},
 
 
@@ -81,11 +90,99 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 	},
 
 
-	setCurrent: function(record, store) {
-		this.record = record;
-		this.bindStore(store);
+	canCreateForums: function(record) {
+		return record;// && isFeature('mutable-forums') && record.getLink('add');
+	},
 
-		this.tpl.canCreateForums = this.canCreateForums();
+
+	buildStore: function(forumList) {
+		var me = this,
+			items = [];
+
+		function addList(list, level) {
+			var title;
+
+			if (!Ext.isEmpty(list.title)) {
+				items.push(NextThought.model.UIViewHeader.create({
+					label: list.title,
+					depth: level,
+					attr: list.board && list.board.getId()
+				}));
+			}
+
+			//if we have a store add the store's items
+			if (list.store) {
+				items = items.concat(list.store.getRange());
+
+				//if (me.canCreateForums(list.board)) {
+				//	items.push(NextThought.model.UIViewHeader.create({
+				//		label: 'Add Forum',
+				//		cls: 'add-forum',
+				//		depth: -1
+				//	}));
+				//}
+			}
+
+			if (list.children) {
+				list.children.forEach(function(child) {
+					addList(child, level + 1);
+				});
+			}
+		}
+
+		(forumList || []).forEach(function(list) {
+			addList(list, 0);
+
+			if (list.board) {
+				me.ID_TO_BOARD[list.board.getId()] = list.board;
+			}
+		});
+
+		return Ext.data.Store.create({
+			model: 'NextThought.model.forums.CommunityForum',
+			data: items
+		});
+	},
+
+
+	getFirstForum: function() {
+		var first;
+
+		this.store.each(function(record) {
+			if (!(record instanceof NextThought.model.UIViewHeader)) {
+				first = record;
+			}
+
+			return !first;
+		});
+
+		return first;
+	},
+
+
+	setCurrent: function(forumList) {
+		var me = this,
+			store = me.buildStore(forumList),
+			selModel = me.getSelectionModel();
+
+		me.bindStore(store);
+
+		wait()
+			.then(function() {
+				return me.onceRendered;
+			})
+			.then(function() {
+				return wait(); //wait for the listeners to have a change to be set up
+			})
+			.then(function() {
+				if (forumList.activeNTIID) {
+					selModel.select(store.getById(forumList.activeNTIID));
+				} else {
+					selModel.select(me.getFirstForum());
+				}
+			});
+
+		return store;
 	},
 
 
@@ -130,11 +227,6 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 		}
 
 		this.tabMenu.startShow(header, 'tl-tl');
-	},
-
-
-	canCreateForums: function() {
-		return isFeature('mutable-forums') && this.record.getLink('add');
 	},
 
 

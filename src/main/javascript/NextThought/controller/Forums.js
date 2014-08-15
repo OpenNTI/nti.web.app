@@ -106,7 +106,7 @@ Ext.define('NextThought.controller.Forums', {
 				'*': {
 					'show-topic': 'loadTopic',
 					'forums:fill-in-path': 'fillInPath',
-					'show-forum-list': 'loadForumList',
+					'show-forum-list': 'loadBoard',
 					'show-topic-list': 'loadTopicList',
 					'show-topic-comment': 'loadComment',
 					'new-topic': 'showNewTopicEditor',
@@ -282,7 +282,10 @@ Ext.define('NextThought.controller.Forums', {
 	},
 
 
-	setActiveState: function(board, forum, topic, title) {
+	setActiveState: function(forumList, forum, topic, title) {
+		var board = NextThought.model.forums.Board.getBoardFromForumList(forumList),
+			ntiid, url;
+
 		if (!board) {
 			console.error('No forum state to set', arguments);
 			return;
@@ -299,14 +302,15 @@ Ext.define('NextThought.controller.Forums', {
 			return i;
 		}
 
-		var ntiid = getNTIID(board, forum, topic),
-			url = ntiid && ('#!object/ntiid/' + encodeURIComponent(ntiid));
+		ntiid = getNTIID(board, forum, topic);
 
-		board = board.get('href');
+		url = ntiid && ('#!object/ntiid/' + encodeURIComponent(ntiid));
+
+		board = board && board.get('href');
 		forum = forum && forum.get('href');
 		topic = topic && topic.get('href');
 
-		history.pushState({forums: { href: topic || forum || board }}, title, url);
+		history.pushState({forums: { href: topic || forum || forumList }}, title, url);
 	},
 
 
@@ -328,7 +332,7 @@ Ext.define('NextThought.controller.Forums', {
 			//if we have a forum load its board and show it as the active one
 			return Service.getObject(record.get('ContainerId'))
 				.then(function(obj) {
-						return this.loadForumList(null, obj, record.getId());
+						return this.loadBoard(null, obj, record.getId());
 					}.bind(this));
 		}
 
@@ -347,14 +351,32 @@ Ext.define('NextThought.controller.Forums', {
 
 		Service.resolveRootBoards()
 			.then(function(boards) {
-				var store, forumList;
+				var store;
 
 				if (boards.length === 1) {
 					if (view.showForumList) {
-						forumList = view.showForumList(boards[0]);
-						view.setForumListToRoot();
-						view.noTab = true;
-						forumList.convertToRoot();
+						boards[0].findBundle()
+							.then(function(bundle) {
+								var p;
+
+								if (!bundle.getForumList) {
+									p = Promise.reject();
+								} else {
+									p = bundle.getForumList();
+								}
+
+								return p;
+							})
+							.fail(function() {
+								return boards[0].getForumList();
+							})
+							.then(function(forumList) {
+								var forum = view.showForumList(forumList);
+
+								view.setForumListToRoot();
+								view.noTab = true;
+								forum.convertToRoot();
+							});
 					}
 				} else {
 					store = NextThought.store.NTI.create({
@@ -377,18 +399,17 @@ Ext.define('NextThought.controller.Forums', {
 	/**
 	 * Navigates to the parent of the record and sets the forum list
 	 * @param  {Ext.Component} cmp   who fired the event, looks for its forum container parent
-	 * @param  {NextThoguht.model.forums.Board} record    the forum list to navigate to
+	 * @param  {NextThoguht.model.forums.Board} forum    the forum list to navigate to
+	 * @param  {ContentBundle} bundle The content bundle or course instance the board is in
 	 * @param  {NTIID} activeForumId   the forum to select
 	 * @param  {Boolean} wait   the calle will set the topic and forum
 	 * @param  {Boolean} silent if true don't switch to the discussion tab
 	 */
-	loadForumList: function(cmp, record, activeForumId, wait, silent) {
-		if (Ext.isArray(record)) { record = record[0]; }
-
+	loadForumList: function(cmp, forumList, bundle, activeForumId, wait, silent) {
 		var p, me = this, view = this.getCardContainer(cmp),
-			community = record.get('Creator');
+			s = (me.stateRestoring && !me.hasStateToRestore) || silent;
 
-		record.activeNTIID = activeForumId;
+		forumList.activeNTIID = activeForumId;
 
 		function finish(v) {
 			//once we get here the state restoring is done
@@ -396,48 +417,59 @@ Ext.define('NextThought.controller.Forums', {
 			delete me.stateRestoring;
 
 			if (v.showForumList && !wait) {
-				v.showForumList(record);
+				v.showForumList(forumList);
 			}
 
 			return v;
 		}
 
-		p = community.isModel ?
-				Promise.resolve(community) :
-				UserRepository.getUser(community).then(function(c) {
-					if (c.Unresolved) {
-						console.error('Broken Community: ' + community);
-					}
-					record.set('Creator', c);
-					return c;
-				});
 
 		if (view) {
-			return p.then(finish.bind(this, view));
+			return Promise.resolve(finish(view));
 		}
 
-		return Promise.all([p, record.findBundle()])
-				.then(function(results) {return results.last();})//since we're waiting on both, only pass the last result to the next `then`.
-				.then(function(bundle) {
-					var s = (me.stateRestoring && !me.hasStateToRestore) || silent;
-					//if there is a state to restore that we aren't incharge of pass true as the last argument, to keep it from switching the tab.
-					return (me.callOnAllControllersWith('onNavigateToForum', record, bundle, s) || Promise.resolve(view))
-							.then(function(view) {
-								//set a flag to keep the view from updating the state
-								view.ignoreStateUpdate = s;
-								return finish(view);
-							});
-				});
+		return (me.callOnAllControllersWith('onNavigateToForum', forumList, bundle, s) || Promise.resolve(view))
+			.then(function(view) {
+				view.ignoreStateUpdate = s;
+				return finish(view);
+			});
+	},
+
+	/**
+	 * Gets the bundle and forum list for a board an navigate to it
+	 * @param  {Ext.Component} cmp    The cmp the event is coming from
+	 * @param  {NextThought.model.forums.Board} record        the board to navigate to
+	 * @param  {NTIID} activeForumId	ntiid of the forum to start out of active
+	 * @param  {Boolean} wait         if we should go ahead and set the forum list or not
+	 * @param  {Boolean} silent       make the view active or not
+	 * @return {Promise}              Fulfills with the forum view the board belongs in
+	 */
+	loadBoard: function(cmp, record, activeForumId, wait, silent) {
+		var me = this,
+			b;
+
+		return record.findBundle()
+			.then(function(bundle) {
+				var p;
+
+				b = bundle;
+
+				if (bundle.getForumList) {
+					p = bundle.getForumList();
+				} else {
+					p = record.getForumList();
+				}
+
+				return p;
+			})
+			.then(function(forumList) {
+				return me.loadForumList(cmp, forumList, b, activeForumId, wait, silent);
+			});
 	},
 
 
 	maybeShowForumList: function(cmp, forumsList, silent) {
-		//if we aren't restoring a state
-		if (!this.hasStateToRestore) {
-			return this.loadForumList(cmp, forumsList, null, null, silent);
-		}
-
-		return Promise.resolve();
+		return this.loadForumList(cmp, forumsList, null, null, null, silent);
 	},
 
 
@@ -477,11 +509,20 @@ Ext.define('NextThought.controller.Forums', {
 				.then(function() {
 					return view ? Promise.resolve(view) :
 						//get the forum list and add it first
-						   Service.getObject(record.get('ContainerId'), null, null, null, true)
-								   .then(function(f) {
-									   forumList = f;
-									   return me.loadForumList(null, f, record.getId(), true);
-								   });
+							Service.getObject(record.get('ContainerId'), null, null, null, true)
+									.then(function(board) {
+										return Promise.all([
+											board.getForumList(),
+											board.findBundle()
+										]);
+									})
+									.then(function(results) {
+										var bundle = results[1];
+
+										forumList = results[0];
+
+										return me.loadForumList(null, forumList, bundle, record.getId(), true);
+									});
 				})
 				.then(finish);
 	},
@@ -873,15 +914,15 @@ Ext.define('NextThought.controller.Forums', {
 						if (course) {
 							//set the forums ACL to restricted
 							forum.set('ACL', [{
-					            'Action': 'Allow',
-					            'Class': 'ForumACE',
-					            'Entities': course.getScope('restricted'),
-					            'MimeType': 'application/vnd.nextthought.forums.ace',
-					            'Permissions': [
-					                'Read',
-					                'Create'
-					            ]
-					        }]);
+								'Action': 'Allow',
+								'Class': 'ForumACE',
+								'Entities': course.getScope('restricted'),
+								'MimeType': 'application/vnd.nextthought.forums.ace',
+								'Permissions': [
+									'Read',
+									'Create'
+								]
+							}]);
 						}
 
 						updateForum();

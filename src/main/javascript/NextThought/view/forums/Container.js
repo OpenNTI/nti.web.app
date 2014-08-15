@@ -37,8 +37,8 @@ Ext.define('NextThought.view.forums.Container', {
 			return;
 		}
 
-		var board = this.forumList.get('title'),
-			community = this.forumList.get('Creator');
+		var board = NextThought.model.forums.Board.getBoardFromForumList(this.forumList),
+			community = board && board.get('Creator');
 
 		if (Ext.isString(community)) {
 			console.error('Boards community isnt resolved yet');
@@ -48,7 +48,7 @@ Ext.define('NextThought.view.forums.Container', {
 		community = community.toString();
 
 		return [{
-			label: community + '-' + board
+			label: community + '-' + board.get('title')
 		}];
 	},
 

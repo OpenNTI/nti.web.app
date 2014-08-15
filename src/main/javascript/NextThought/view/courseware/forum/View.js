@@ -31,39 +31,22 @@ Ext.define('NextThought.view.courseware.forum.View', {
 
 
 	setForumList: function(forumList, topic, commnet) {
-		var me = this;
-
-		function finish() {
-			var silent = me.ownerCt.getLayout().getActiveItem() !== me;
-
-			if (me.isFromNavigatingToForum) {
-				delete me.isFromNavigatingToForum;
-				return;
-			}
-
-			me.fireEvent('maybe-show-forum-list', me, forumList, silent);
-		}
+		var silent = this.ownerCt.getLayout().getActiveItem() !== this;
 
 
 		if (!forumList) {
 			delete this.hasBoard;
 			delete this.forumList;
+
 			this.removeAll(true);
 			this.fireEvent('hide-forum-tab');
+		} else if (this.forumList === forumList) {
 			return;
+		} else if (this.isFromNavigatingToForum) {
+			delete this.isFromNavigatingToForum;
+		} else {
+			this.fireEvent('maybe-show-forum-list', this, forumList, silent);
 		}
-
-		if (this.forumList === forumList) {
-			return;
-		}
-
-		if ((forumList.get('Creator') || {}).isModel) {
-			return finish();
-		}
-
-		UserRepository.getUser(forumList.get('Creator'))
-				.then(function(u) {	forumList.set('Creator', u); })
-				.then(finish);
 	},
 
 
@@ -91,7 +74,7 @@ Ext.define('NextThought.view.courseware.forum.View', {
 
 		this.onceLoaded = new Deferred();//IDK... is this used?
 
-		return ((bundle && bundle.getDiscussionBoard()) || Promise.reject('No Board'))
+		return ((bundle && bundle.getForumList()) || Promise.reject('No Board'))
 			.then(this.setForumList.bind(this))
 			.fail(this.setForumList.bind(this, false));
 	}

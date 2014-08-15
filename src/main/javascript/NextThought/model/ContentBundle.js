@@ -150,8 +150,38 @@ Ext.define('NextThought.model.ContentBundle', {
 		return s.filter(function(v) {return !Ext.isEmpty(v);});
 	},
 
+	/**
+	 * See getForumList in CourseInstance for more details
+	 * @return {Object} a forum list of the contents of this board
+	 */
+	getForumList: function() {
+		var me = this,
+			b;
 
-	getDiscussionBoard: function() {
+		me.resolveBoard
+			.then(function(board) {
+				var contents = board.getLink('contents');
+
+				b = board;
+
+				return Service.request(contents);
+			})
+			.then(function(json) {
+				json = JSON.parse(json);
+				json.Items = ParseUtils.parseItems(json.Items);
+
+				var store = NextThought.model.forums.Board.buildContentsStoreFromDate(me.getId() + '-board', json.Items);
+
+				return [{
+					title: '',
+					store: store,
+					board: b
+				}];
+			});
+	},
+
+
+	resolveBoard: function() {
 		var me = this,
 			link = me.getLink('DiscussionBoard'),
 			//get the cached request, or make a new one.

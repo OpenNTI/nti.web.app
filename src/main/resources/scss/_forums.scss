@@ -1339,10 +1339,63 @@
 		}
 
 		&.topic-list-nav{
-			background: #f0f0f0;
+			-webkit-font-smoothing: initial;
+			background: #fafafa;
 
 			.header.no-pop {
 				cursor: default;
+			}
+
+			.group-header.outline-row {
+				cursor: default;
+				position: relative;
+
+				&.add-forum::after {
+					content: '+';
+				}	
+
+				&[data-depth='0'] {
+					font: normal 400 1.5em/2.1 "Open Sans Condensed", $font;
+					padding-top: 5px;
+
+					&:hover, &:not(.x-item-selected):hover {
+						background-color: #ffffff;
+					}
+
+					&:not(:first-of-type){
+						padding-top: 30px;
+						&::before {
+							content: '';
+							position: absolute;
+							left: 0;
+							right: 0;
+							top: 1.1em;
+							height: 0.167em;
+							background: #e7e8ed;
+							box-shadow: inset 0 -1px 0 0 #dddddd;
+						}
+					}
+				}
+
+				&:not([data-depth='0']) {
+					padding: 0 10px 0 20px;
+					line-height: 2.3;
+					font-size: 0.6em;
+					background: #fafafa !important;
+					font-weight: 600;
+					box-shadow: inset 0 1px 0 0 #efefef, inset 0 -1px 0 0 #efefef;
+					color: $secondary-grey;
+					text-transform: uppercase;
+
+					&:hover, &:not(.x-item-selected):hover {
+						box-shadow: inset 0 1px 0 0 #efefef, inset 0 -1px 0 0 #efefef;
+					}
+				}
+
+				&:hover, &:not(.x-item-selected):hover {
+					box-shadow: none;
+					background-color: $quad-grey;
+				}
 			}
 
 			// .outline-list{
@@ -1352,8 +1405,8 @@
 			.outline-row {
 				background: #ffffff;
 				color: #757474;
-				font: normal 600 0.9em/2.8em "Open Sans", sans-serif;
-				padding: 0 0.35em 0 1.39em;
+				font: normal 400 0.9em/2.8em "Open Sans", sans-serif;
+				padding: 0 10px 0 20px;
 				cursor: pointer;
 
 				&:not(.x-item-selected):hover{
@@ -1363,6 +1416,7 @@
 
 				&.x-item-selected{
 					color: #ffffff;
+					font-weight: 600;
 					background-color: $primary-blue;
 				}
 			}

@@ -19,6 +19,23 @@ Ext.define('NextThought.model.forums.Board', {
 			StoreUtils.fillInUsers(store);
 
 			return store;
+		},
+		getBoardFromForumList: function(forumList) {
+			var board;
+
+			(forumList || []).every(function(item) {
+				if (item.board) {
+					board = item.board;
+				}
+
+				if (item.children) {
+					board = NextThought.model.forums.Board.getBoardFromForumList(item.children);
+				}
+
+				return !board;
+			});
+
+			return board;
 		}
 	},
 
@@ -62,6 +79,34 @@ Ext.define('NextThought.model.forums.Board', {
 			me.course = false;
 			return false;
 		});
+	},
+
+	/**
+	 * See CourseInstance getForumList for more details the structure this is returning
+	 * @return {Object} A forum list of the contents of this board
+	 */
+	getForumList: function() {
+		var me = this,
+			content = me.getLink('contents');
+
+		return Service.request(content)
+			.then(function(json) {
+				json = (json && JSON.parse(json)) || {};
+				json.Items = json.Items && ParseUtils.parseItems(json.Items);
+
+				var store = NextThought.model.forums.Board.buildContentsStoreFromData(me.getContentsStoreId(), json.Items);
+
+				return [{
+					title: '',
+					board: me,
+					store: store
+				}];
+			})
+			.fail(function(response) {
+				console.error('failed to load board contents: ', response);
+
+				return {};
+			});
 	}
 
 });

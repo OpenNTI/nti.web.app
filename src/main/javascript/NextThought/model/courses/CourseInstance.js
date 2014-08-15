@@ -282,32 +282,29 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
-	getDiscussionContents: function() {
-		var section = this.get('Discussions'),
-			sectionRequest,
-			parent = this.get('ParentDiscussions'),
-			parentRequest;
-
-		if (section) {
-			section = section.getLink('contents');
-
-			sectionRequest = section ? Service.request(section) : [];
-		}
-
-
-		if (parent) {
-			parent = parent.getLink('contents');
-
-			parentRequest = parent ? Service.request(parent) : [];
-		}
-
-		return Promise.all([
-			sectionRequest,
-			parentRequest
-		]);
-	},
-
-
+	/**
+	*Takes two arrays of forums and bins then
+	*
+	*	1.) by for credit or open
+	*	2.) by if they are for this section or the parent
+	*
+	*returns an object that looks like
+	*{
+	*	ForCredit: {
+	*		Section: [],
+	*		Parent: []
+	*	},
+	*	Open: {
+	*		Section: [],
+	*		Parent: []
+	*	},
+	*	Other: []
+	*}
+	*
+	* @param  {Array} section Array of forums in this section
+	* @param  {Array} parent  Array of forums in the parent if there are any
+	* @return {Object}        The binned forums
+	*/
 	__binDiscussions: function(section, parent) {
 		var bin = {
 			ForCredit: {
@@ -322,11 +319,15 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		};
 
 		function isOpen(item) {
-			return item.isOpen;
+			var title = item.get('title');
+
+			return title.indexOf('Open') === 0;
 		}
 
 		function isForCredit(item) {
-			return item.isForCredit;
+			var title = item.get('title');
+
+			return title.indexOf('For Credit') === 0;
 		}
 
 		(section || []).forEach(function(item) {
@@ -353,6 +354,20 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
+	/**
+	 * Takes the binned forums and creates a forum list from it
+	 *
+	 * Forum lists are an object that look like
+	 *	{
+	 *		title: 'Title',
+	 *		store: contents store of the board,
+	 *		children: [forum lists nested beneath this one],
+	 *		board: the board associated with this list
+	 *	}
+	 *
+	 * @param  {Object} bin binned forums
+	 * @return {Object}     a forum list of the above type
+	 */
 	__binToForumList: function(bin) {
 		var section = this.get('Discussions'),
 			parent = this.get('ParentDiscussions'),
@@ -435,19 +450,41 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		return forumList;
 	},
 
+	/**
+	 * Sends requests for the contents link of the discussions and parent discussions if they are there
+	 * @return {Promise} Fulfills or rejects with the response of the request
+	 */
+	getDiscussionContents: function() {
+		var section = this.get('Discussions'),
+			sectionRequest,
+			parent = this.get('ParentDiscussions'),
+			parentRequest;
 
-	getDiscussionBoard: function() {
-		var b = this.get('Discussions');
+		if (section) {
+			section = section.getLink('contents');
 
-		return b ? Promise.resolve(b) : Promise.reject('No Board');
+			sectionRequest = section ? Service.request(section) : [];
+		}
+
+
+		if (parent) {
+			parent = parent.getLink('contents');
+
+			parentRequest = parent ? Service.request(parent) : [];
+		}
+
+		return Promise.all([
+			sectionRequest,
+			parentRequest
+		]);
 	},
 
 
-	xgetDiscussionBoard: function() {
+	getForumList: function() {
 		var me = this;
 
 		return this.getDiscussionContents()
-			.then(function(results) {
+			.then(function(results) { // parse the results
 				var section = results[0],
 					parent = results[1];
 
@@ -464,7 +501,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 					parent = JSON.parse(parent);
 					parent.Items = ParseUtils.parseItems(parent.Items);
 				} else {
-					parnet = {
+					parent = {
 						Items: []
 					};
 				}
@@ -472,10 +509,10 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 				return [section.Items, parent.Items];
 			})
-			.then(function(results) {
+			.then(function(results) {//bin the forums
 				return me.__binDiscussions.apply(me, results);
 			})
-			.then(me.__binToForumList.bind(me))
+			.then(me.__binToForumList.bind(me))//create a forum list for the ui to build from
 			.fail(function(reason) {
 				console.error('Failed to get discussion contents: ', reason);
 			});
