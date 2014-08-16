@@ -12,7 +12,7 @@ Ext.define('NextThought.util.Analytics', {
 		'video-skip': 'application/vnd.nextthought.analytics.skipvideoevent',
 		'assessment': '',
 		'resource-viewed': 'application/vnd.nextthought.analytics.resourceevent',
-		'thought-viewed': '',
+		'thought-viewed': 'application/vnd.nextthought.analytics.blogviewevent',
 		'note-viewed': 'application/vnd.nextthought.analytics.noteviewevent',
 		'discussion-viewed': 'application/vnd.nextthought.analytics.topicviewevent',
 		'course-catalog-viewed': 'application/vnd.nextthought.analytics.coursecatalogviewevent'
