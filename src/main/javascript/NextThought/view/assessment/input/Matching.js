@@ -138,6 +138,33 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 		},
 
 
+		dropTerm: function(dropOn, term) {
+			var t = Ext.fly(dropOn).down('.dropzone', true),
+				c = t && t.childNodes,
+				n = c && c[0];
+
+			if (!c || c.length > 1) { //problems
+				return false;
+			}
+
+			if (Ext.isTextNode(n)) {
+				t.removeChild(n);
+			}
+
+			if (n === term) {
+				return true;
+			}
+
+			if (n && !Ext.isTextNode(n)) {
+				this.shelfEl.appendChild(n);
+			}
+
+			this.moveTerm(term, t);
+
+			return true;
+		},
+
+
 		setupDragging: function() {
 			var cfg, me = this,
 				el = this.up().getEl(), z;
@@ -225,32 +252,7 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 					//</editor-fzold>
 				},
 				dropOnAnswer = {
-					onNodeDrop: function(target, dd, e, data) {
-
-						var t = Ext.fly(target).down('.dropzone', true),
-							c = t && t.childNodes,
-							n = c && c[0];
-
-						if (!c || c.length > 1) { //problems
-							return false;
-						}
-
-						if (Ext.isTextNode(n)) {
-							t.removeChild(n);
-						}
-
-						if (n === data.sourceEl) {
-							return true;
-						}
-
-						if (n && !Ext.isTextNode(n)) {
-							me.shelfEl.appendChild(n);
-						}
-
-						me.moveTerm(data.sourceEl, t);
-
-						return true;
-					}
+					onNodeDrop: function(target, dd, e, data) { return me.dropTerm(target, data.sourceEl); }
 				},
 				dropOnShelf = {
 					onNodeDrop: function(target, dd, e, data) {
@@ -306,7 +308,7 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 					binId = value[termId];
 					bin = bins[binId];
 					if (bin) {
-						bin.appendChild(terms[termId]);
+						this.dropTerm(bin, terms[termId]);
 					}
 				}
 			}
@@ -371,7 +373,7 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 
 			el.select('.choice').removeCls('correct incorrect');
 			el.select('.choice .dropzone').removeCls('graded').each(r);
-			el.select('.choice .dropzone .term').appendTo(this.shelfEl);
+			el.select('.drag.term').appendTo(this.shelfEl);
 			this.callParent();
 		},
 
