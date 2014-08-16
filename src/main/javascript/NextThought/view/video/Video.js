@@ -22,7 +22,6 @@ Ext.define('NextThought.view.video.Video', {
 		destroy: 'cleanup',
 		'player-ready': 'playerReady',
 		'player-error': 'playerError',
-		'player-seek': 'playerSeek',
 		'unrecoverable-player-error': 'unrecoverablePlayerError'
 	},
 
@@ -424,7 +423,10 @@ Ext.define('NextThought.view.video.Video', {
 			diff = this.lasttime ? time - this.lasttime : 0,
 			threshold = 5,
 			current = this.playlist[this.playlistIndex],
-			container = this.up('[currentBundle]');
+			id = current && current.getId(),
+			hasTranscript = !!this.up('media-viewer'),
+			container = this.up('[currentBundle]'),
+			bundle = container && container.currentBundle && container.currentBundle.getId();
 
 		if (!state || this.doNotCaptureAnalytics) { return; }
 
@@ -432,18 +434,33 @@ Ext.define('NextThought.view.video.Video', {
 		//stop the watch event
 		if (this.hasWatchEvent && (diff > threshold || diff < 0)) {
 			delete this.hasWatchEvent;
-			AnalyticsUtil.stopResourceTimer(current.getId(), 'video-watch', {
+			AnalyticsUtil.stopResourceTimer(id, 'video-watch', {
 				video_end_time: this.lasttime
 			});
+
+			//send a seek event saying the skipped over this part of the video
+			//if the player is still ready and not reset
+			if (state.state !== this.states.UNSTARTED) {
+				AnalyticsUtil.getResourceTimer(id, {
+					type: 'video-skip',
+					course: bundle,
+					context_path: 'a test',
+					with_transcript: hasTranscript,
+					video_start_time: this.lasttime,
+					video_end_time: time
+				});
+
+				AnalyticsUtil.stopResourceTimer(id, 'video-skip');
+			}
 		}
 
 		//Not an else if so a new timer will start when the other one ends
 		if (!this.hasWatchEvent && state.state !== this.states.UNSTARTED) {
-			AnalyticsUtil.getResourceTimer(current.getId(), {
+			AnalyticsUtil.getResourceTimer(id, {
 				type: 'video-watch',
 				context_path: 'a test',
-				with_transcript: !!this.up('media-viewer'),
-				course: container && container.currentBundle && container.currentBundle.getId(),
+				with_transcript: hasTranscript,
+				course: bundle,
 				video_start_time: time
 			});
 			this.hasWatchEvent = true;
@@ -490,27 +507,6 @@ Ext.define('NextThought.view.video.Video', {
 			return true;
 		}
 		return false;
-	},
-
-
-	playerSeek: function(data) {
-		var current = this.playlist[this.playlistIndex],
-			id = current && current.getId(), container;
-		console.log('Player Seek: ', data.start, data.end);
-		if (id && !this.doNotCaptureAnalytics) {
-			container = this.up('[currentBundle]');
-
-			AnalyticsUtil.getResourceTimer(id, {
-				type: 'video-skip',
-				course: container && container.currentBundle && container.currentBundle.getId(),
-				context_path: 'a test',
-				with_transcript: !!this.up('media-viewer'),
-				video_start_time: data.start,
-				video_end_time: data.end
-			});
-
-			AnalyticsUtil.stopResourceTimer(id, 'video-skip', {});
-		}
 	},
 
 
