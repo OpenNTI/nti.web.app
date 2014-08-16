@@ -430,7 +430,7 @@ Ext.define('NextThought.view.video.Video', {
 
 		//if the time has changed more than the threshold or we have come backwards
 		//stop the watch event
-		if (diff > threshold || diff < 0) {
+		if (this.hasWatchEvent && (diff > threshold || diff < 0)) {
 			delete this.hasWatchEvent;
 			AnalyticsUtil.stopResourceTimer(current.getId(), 'video-watch', {
 				video_end_time: this.lasttime
@@ -438,7 +438,7 @@ Ext.define('NextThought.view.video.Video', {
 		}
 
 		//Not an else if so a new timer will start when the other one ends
-		if (!this.hasWatchEvent) {
+		if (!this.hasWatchEvent && state.state !== this.states.UNSTARTED) {
 			AnalyticsUtil.getResourceTimer(current.getId(), {
 				type: 'video-watch',
 				context_path: 'a test',
