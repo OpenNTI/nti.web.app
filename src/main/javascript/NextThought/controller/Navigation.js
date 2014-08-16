@@ -360,7 +360,6 @@ Ext.define('NextThought.controller.Navigation', {
 		}
 
 		function recover(reason) {
-			var course, content;
 			if (reason && reason.status === 404) {
 				return ContentUtils.findRelatedContentObject(cid)
 						.then(function(obj) {
@@ -368,6 +367,11 @@ Ext.define('NextThought.controller.Navigation', {
 							obj = obj.container;
 
 							return LocationMeta.getMeta(obj);
+						})
+						.fail(function(reason) {
+							console.error('Could not find releated info... treating as 403', reason);
+							handleUnauthorized();
+							return Promise.reject('No Access');
 						});
 			}
 
