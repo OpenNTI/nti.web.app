@@ -511,17 +511,7 @@ Ext.define('NextThought.controller.Forums', {
 						//get the forum list and add it first
 							Service.getObject(record.get('ContainerId'), null, null, null, true)
 									.then(function(board) {
-										return Promise.all([
-											board.getForumList(),
-											board.findBundle()
-										]);
-									})
-									.then(function(results) {
-										var bundle = results[1];
-
-										forumList = results[0];
-
-										return me.loadForumList(null, forumList, bundle, record.getId(), true);
+										return me.loadBoard(cmp, board, record.getId(), true);
 									});
 				})
 				.then(finish);
