@@ -31,7 +31,49 @@ Ext.define('NextThought.view.forums.topic.View', {
 	setCurrent: function(record) {
 		this.setExtraParams(record);
 
-		this.callParent(arguments);
+		var me = this,
+			container = me.up('[currentBundle]'),
+			id = record.getId();
+
+		function startTimer() {
+			if (container) {
+				AnalyticsUtil.getResourceTimer(id, {
+					type: 'discussion-viewed',
+					course: container.currentBundle.getId(),
+					topic_id: id
+				});
+			}
+		}
+
+		function stopTimer() {
+			AnalyticsUtil.stopResourceTimer(id, 'discussion-viewed');
+		}
+
+		Ext.destroy(me.visibilityMonitors);
+
+		me.visibilityMonitors = this.on({
+			'destroy': function() {
+				stopTimer();
+			},
+			'visibility-changed': function(visible) {
+				//start the time when we become visible, stop it when we hide
+				if (visible) {
+					startTimer();
+				} else {
+					stopTimer();
+				}
+			}
+		}, me, {destroyable: true});
+
+		startTimer();
+
+		//wait until the next event loop so the visibility will be correct
+		wait()
+			.then(function() {
+				me.maybeFireVisibilityChange();
+			});
+
+		me.callParent(arguments);
 	},
 
 

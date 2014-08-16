@@ -14,7 +14,7 @@ Ext.define('NextThought.util.Analytics', {
 		'resource-viewed': 'application/vnd.nextthought.analytics.resourceevent',
 		'thought-viewed': '',
 		'note-viewed': 'application/vnd.nextthought.analytics.noteviewevent',
-		'discussion-viewed': '',
+		'discussion-viewed': 'application/vnd.nextthought.analytics.topicviewevent',
 		'course-catalog-viewed': 'application/vnd.nextthought.analytics.coursecatalogviewevent'
 	},
 
