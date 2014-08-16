@@ -165,7 +165,10 @@ Ext.define('NextThought.view.video.Video', {
 		this.taskMediaHeartBeat = {
 			interval: 1000,
 			scope: this,
-			run: function() {this.fireEvent('media-heart-beat');},
+			run: function() {
+				this.onHeartBeat();
+				this.fireEvent('media-heart-beat');
+			},
 			onError: function() {console.error(arguments);}
 		};
 
@@ -415,18 +418,49 @@ Ext.define('NextThought.view.video.Video', {
 	},
 
 
-	stopPlayback: function() {
-		var container, current, state = this.queryPlayer();
-
-		if (this.currentVideoId && !this.doNotCaptureAnalytics) {
+	onHeartBeat: function() {
+		var state = this.queryPlayer(),
+			time = state.time,
+			diff = this.lasttime ? time - this.lasttime : 0,
+			threshold = 5,
+			current = this.playlist[this.playlistIndex],
 			container = this.up('[currentBundle]');
-			current = this.playlist[this.playlistIndex];
 
+		if (!state || this.doNotCaptureAnalytics) { return; }
+
+		//if the time has changed more than the threshold or we have come backwards
+		//stop the watch event
+		if (diff > threshold || diff < 0) {
+			delete this.hasWatchEvent;
 			AnalyticsUtil.stopResourceTimer(current.getId(), 'video-watch', {
-				course: container && container.currentBundle && container.currentBundle.getId(),
+				video_end_time: this.lasttime
+			});
+		}
+
+		//Not an else if so a new timer will start when the other one ends
+		if (!this.hasWatchEvent) {
+			AnalyticsUtil.getResourceTimer(current.getId(), {
+				type: 'video-watch',
+				context_path: 'a test',
 				with_transcript: !!this.up('media-viewer'),
-				video_end_time: state && state.time,
-				context_path: 'a test'
+				course: container && container.currentBundle && container.currentBundle.getId(),
+				video_start_time: time
+			});
+			this.hasWatchEvent = true;
+		}
+
+		this.lasttime = time;
+	},
+
+
+	stopPlayback: function() {
+		var current, state = this.queryPlayer();
+
+		if (this.hasWatchEvent && !this.doNotCaptureAnalytics) {
+			current = this.playlist[this.playlistIndex];
+			delete this.hasWatchEvent;
+			AnalyticsUtil.stopResourceTimer(current.getId(), 'video-watch', {
+				video_end_time: state && state.time
 			});
 		}
 
@@ -450,18 +484,6 @@ Ext.define('NextThought.view.video.Video', {
 
 	resumePlayback: function(force) {
 		this.maybeActivatePlayer();
-
-		var me = this,
-			current = this.playlist[this.playlistIndex];
-
-		if (current && !me.doNotCaptureAnalytics) {
-			me.on('player-state-ready', function(state) {
-				AnalyticsUtil.getResourceTimer(current.getId(), {
-					type: 'video-watch',
-					video_start_time: state.time
-				});
-			}, null, {single: true});
-		}
 
 		if (this.activeVideoService && (force || !this.isPlaying())) {
 			this.issueCommand(this.activeVideoService, 'play');
