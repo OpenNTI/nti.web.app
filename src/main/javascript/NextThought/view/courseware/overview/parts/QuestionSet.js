@@ -17,6 +17,8 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 		isAssessmentWidget: true
 	},
 
+	header: false,
+
 	cls: 'scoreboard overview-naquestionset',
 	ui: 'assessment',
 
@@ -59,6 +61,8 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 			containerId: containerId,
 			total: n.getAttribute('question-count') || 0
 		});
+
+		delete config.title;
 
 		this.callParent([config]);
 
