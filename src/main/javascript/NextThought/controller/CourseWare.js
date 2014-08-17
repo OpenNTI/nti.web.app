@@ -746,12 +746,11 @@ Ext.define('NextThought.controller.CourseWare', {
 						maxInstance;
 
 					store.each(function(course) {
-						var instance = course.get('CourseInstance'),
-							date = instance.get('Last Modified');
+						var date = course.get('Last Modified');
 
 						if (date > maxDate) {
 							maxDate = date;
-							maxInstance = instance;
+							maxInstance = course;
 						}
 					});
 
