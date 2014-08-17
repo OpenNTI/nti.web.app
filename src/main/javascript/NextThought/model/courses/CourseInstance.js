@@ -152,16 +152,37 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
-	getPublicScope: function() { return this.getScope('public'); },
-	getRestrictedScope: function() { return this.getScope('restricted'); },//i don't think this is used
+	getPublicScope: function() { return this.getScope('Public'); },
+	getRestrictedScope: function() { return this.getScope('Restricted'); },//i don't think this is used
 
 
 	getScope: function(scope) {
-		var s = (this.get('Scopes') || {})[scope] || '';
+		var s = (this.get('Scopes') || {})[scope.toLowerCase()] || '';//Old...
+
+		if (this.raw.SharingScopes) {
+			s = this.get('SharingScopes');
+			s = s.getScope(scope);
+			if (s && typeof s !== 'string') {
+				s = s.get('NTIID');
+			}
+		}
+
 		if (typeof s === 'string') {
 			s = s.split(' ');
 		}
 		return s.filter(function(v) {return !Ext.isEmpty(v);});
+	},
+
+
+	getDefaultSharing: function() {
+		var defaultSharing = this.getPublicScope();
+
+		if (this.raw.SharingScopes) {
+			defaultSharing = this.get('SharingScopes').getDefaultSharing();
+			defaultSharing = defaultSharing ? [defaultSharing] : [];
+		}
+
+		return defaultSharing;
 	},
 
 
