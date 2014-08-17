@@ -61,6 +61,7 @@ Ext.define('NextThought.util.Sharing', {
 		return $AppConfig.userObject.getCommunities(true);
 	},
 
+
 	//TODO need to check published status for the case of blogs NO?
 	isPublic: function(sharedWith, scopeProvider) {
 		if (Ext.isEmpty(sharedWith)) {
@@ -123,6 +124,7 @@ Ext.define('NextThought.util.Sharing', {
 	getCurrentSharingInfo: function() {
 		return Ext.getCmp('content').currentBundle;
 	},
+
 
 	sharedWithForSharingInfo: function(sharingInfo, scopeProvider) {
 		if (Ext.isEmpty(sharingInfo)) {
@@ -217,6 +219,7 @@ Ext.define('NextThought.util.Sharing', {
 		};
 	},
 
+
 	getLongTextFromShareInfo: function(shareInfo, tpl, maxLength) {
 		var explicitEntities = shareInfo.entities,
 			isPublic = shareInfo.publicToggleOn,
@@ -262,6 +265,7 @@ Ext.define('NextThought.util.Sharing', {
 			});
 	},
 
+
 	getShortTextFromShareInfo: function(shareInfo) {
 		var explicitEntities = shareInfo.entities,
 			isPublic = shareInfo.publicToggleOn,
@@ -293,6 +297,7 @@ Ext.define('NextThought.util.Sharing', {
 			});
 	},
 
+
 	getLongSharingDisplayText: function(shareWith, callback, scope, tpl, maxLength) {
 		var shareInfo = this.sharedWithToSharedInfo(shareWith);
 
@@ -305,6 +310,7 @@ Ext.define('NextThought.util.Sharing', {
 				return str;
 			});
 	},
+
 
 	getShortSharingDisplayText: function(shareWith, callback, scope) {
 		var shareInfo = this.sharedWithToSharedInfo(shareWith);
@@ -333,6 +339,7 @@ Ext.define('NextThought.util.Sharing', {
 				return str;
 			});
 	},
+
 
 	//Takes the shared with and the tags of a post and returns the short sharing text
 	getTagSharingShortText: function(sharedWith, tags, published, callback, scope) {
