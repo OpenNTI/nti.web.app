@@ -66,27 +66,7 @@ Ext.define('NextThought.view.content.Reader', {
 		this.on({
 			scope: this,
 			navigateAbort: 'onNavigationAborted',
-			navigateComplete: 'onNavigateComplete',
-			'afterrender': function() {
-				var maybeFireVisibilityChange = Ext.Function.createBuffered(this.maybeFireVisibilityChange, 100, this);
-
-				function monitorCardChange(cmp, me) {
-					var c = cmp.up('{isOwnerLayout("card")}');
-					me = me || cmp;
-					if (c) {
-						me.mon(c, {
-							//beforeactivate: '',
-							//beforedeactivate: '',
-							activate: maybeFireVisibilityChange,
-							deactivate: maybeFireVisibilityChange,
-							scope: me
-						});
-						monitorCardChange(c, me);
-					}
-				}
-
-				monitorCardChange(this);
-			}.bind(this)
+			navigateComplete: 'onNavigateComplete'
 		});
 
 
@@ -97,16 +77,6 @@ Ext.define('NextThought.view.content.Reader', {
 			'visibility-changed-hidden': 'endViewAnalytics',
 			'visibility-changed-visible': 'beginViewAnalytics'
 		});
-	},
-
-
-	maybeFireVisibilityChange: function() {
-		var v = this.isVisible(true);
-		if (this.___visibility !== undefined && v !== this.___visibility) {
-			this.fireEvent('visibility-changed-' + (v ? 'visible' : 'hidden'), this);
-			this.fireEvent('visibility-changed', v, this);
-		}
-		this.___visibility = v;
 	},
 
 

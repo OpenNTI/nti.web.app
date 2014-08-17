@@ -67,12 +67,6 @@ Ext.define('NextThought.view.forums.topic.View', {
 
 		startTimer();
 
-		//wait until the next event loop so the visibility will be correct
-		wait()
-			.then(function() {
-				me.maybeFireVisibilityChange();
-			});
-
 		me.callParent(arguments);
 	},
 

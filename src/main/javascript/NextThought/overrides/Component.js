@@ -4,15 +4,54 @@ Ext.define('NextThought.overrides.Component', {
 
 
 	constructor: function() {
-		this.shadow = false;
+		var me = this;
 
-		this.onceRendered = new Promise(function(fulfill) {
-			this.afterRender = Ext.Function.createSequence(this.afterRender, fulfill);
-		}.bind(this));
+		me.shadow = false;
 
-		this.callParent(arguments);
-		this.initDelegation();
-		this.setNTTooltip();
+		me.onceRendered = new Promise(function(fulfill) {
+			me.afterRender = Ext.Function.createSequence(me.afterRender, fulfill);
+		}.bind(me));
+
+		me.callParent(arguments);
+		me.initDelegation();
+		me.setNTTooltip();
+
+
+		me.on('afterrender', function() {
+			var maybeFireVisibilityChange = Ext.Function.createBuffered(this.maybeFireVisibilityChange, 100, this);
+
+			function monitorCardChange(cmp, me) {
+				var next = cmp.up('{isOwnerLayout("card")}'),
+					c = cmp.isOwnerLayout('card') ? cmp : next;
+
+				me = me || cmp;
+
+				if (c) {
+					me.mon(c, {
+						//beforeactivate: '',
+						//beforedeactivate: '',
+						activate: maybeFireVisibilityChange,
+						deactivate: maybeFireVisibilityChange,
+						scope: me
+					});
+
+					if (next) {
+						monitorCardChange(next, me);
+					}
+				}
+			}
+
+			monitorCardChange(me);
+		});
+	},
+
+	maybeFireVisibilityChange: function() {
+		var v = this.isVisible(true);
+		if (v !== this.___visibility) {
+			this.fireEvent('visibility-changed-' + (v ? 'visible' : 'hidden'), this);
+			this.fireEvent('visibility-changed', v, this);
+		}
+		this.___visibility = v;
 	},
 
 

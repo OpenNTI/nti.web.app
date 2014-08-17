@@ -45,38 +45,6 @@ Ext.define('NextThought.view.forums.hierarchy.View', {
 
 			this.relayEvents(this.body, ['pop-view', 'new-record', 'pop-to-root', 'highlight-ready']);
 		}
-
-		var maybeFireVisibilityChange = Ext.Function.createBuffered(this.maybeFireVisibilityChange, 100, this);
-
-		function monitorCardChange(cmp, me) {
-			var c = cmp.up('{isOwnerLayout("card")}');
-
-			me = me || cmp;
-
-			if (c) {
-				me.mon(c, {
-					//beforeactivate: '',
-					//beforedeactivate: '',
-					activate: maybeFireVisibilityChange,
-					deactivate: maybeFireVisibilityChange,
-					scope: me
-				});
-
-				monitorCardChange(c, me);
-			}
-		}
-
-		monitorCardChange(this);
-	},
-
-
-	maybeFireVisibilityChange: function() {
-		var v = this.isVisible(true);
-		if (this.___visibility !== undefined && v !== this.___visibility) {
-			this.fireEvent('visibility-changed-' + (v ? 'visible' : 'hidden'), this);
-			this.fireEvent('visibility-changed', v, this);
-		}
-		this.___visibility = v;
 	},
 
 	//if the body is in a state where it shouldn't allow a selection change
