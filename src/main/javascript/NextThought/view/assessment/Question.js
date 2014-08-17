@@ -1,4 +1,4 @@
-RExt.define('NextThought.view.assessment.Question', {
+Ext.define('NextThought.view.assessment.Question', {
 	extend: 'NextThought.view.content.overlay.Panel',
 	alias: 'widget.assessment-question',
 
