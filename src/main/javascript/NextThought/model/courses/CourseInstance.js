@@ -159,13 +159,13 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	getScope: function(scope) {
 		var s = (this.get('Scopes') || {})[scope.toLowerCase()] || '';//Old...
 
-		if (this.raw.SharingScopes) {
+		/*if (this.raw.SharingScopes) {
 			s = this.get('SharingScopes');
 			s = s.getScope(scope);
 			if (s && typeof s !== 'string') {
 				s = s.get('NTIID');
 			}
-		}
+		}*/
 
 		if (typeof s === 'string') {
 			s = s.split(' ');
