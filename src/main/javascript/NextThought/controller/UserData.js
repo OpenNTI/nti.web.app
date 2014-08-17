@@ -1027,10 +1027,11 @@ Ext.define('NextThought.controller.UserData', {
 
 		return this.__getPreferenceFromLineage(lineage)
 			.then(function(result) {
-				var sharingIsValid = true,
+				var sharingIsValid = result && !Ext.isEmpty(result.sharing),
 					flStore = Ext.getStore('FriendsList');
 
-				if (!Ext.isEmpty(result)) {
+				if (result && !Ext.isEmpty(result.sharing)) {
+
 					(result.sharing.sharedWith || []).every(function(id) {
 						var entity = UserRepository.resolveFromStore(id),
 							found;
@@ -1069,8 +1070,10 @@ Ext.define('NextThought.controller.UserData', {
 
 					return CourseWareUtils.getCourseInstance(rootId)
 							.then(function(ci) {
-								var scope = ci.getScope('public');
-								return {sharing: {sharedWith: scope}};
+								return {sharing: {sharedWith: ci.getDefaultSharing()}};
+							})
+							.fail(function() {
+								return {sharing: {}};
 							});
 				}
 
