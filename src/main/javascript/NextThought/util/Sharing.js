@@ -136,6 +136,10 @@ Ext.define('NextThought.util.Sharing', {
 			scopeProvider = this.getCurrentSharingInfo();
 		}
 
+		if (!scopeProvider) {
+			Error.raiseForReport('No scope provider');//won't inerupt. :/
+		}
+
 		if (isPublic) {
 			targets = (scopeProvider && scopeProvider.getPublicScope()) || [];
 

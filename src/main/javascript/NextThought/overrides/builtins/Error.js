@@ -8,9 +8,12 @@ Ext.define('NextThought.overrides.builtins.Error', {});
  * @param {String|Object} msg - message {@see Ext.Error#raise}
  */
 Error.raiseForReport = function(msg) {
+
+	var stack = new Error(msg).stack;
+
 	setTimeout(function() {
-		if (msg instanceof Error) {throw msg;}
-		Ext.Error.raise(msg);
+		if (msg instanceof Error) {throw msg.stack || msg.message;}
+		Ext.Error.raise(stack);
 	},1);
 };
 
