@@ -46,6 +46,8 @@ Ext.define('NextThought.util.Analytics', {
 
 
 	fillInData: function(resource, data) {
+		var now = new Date();
+
 		data.time_length = (now - resource.start) / 1000;
 
 		return data;
