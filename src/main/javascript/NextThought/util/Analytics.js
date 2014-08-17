@@ -18,6 +18,11 @@ Ext.define('NextThought.util.Analytics', {
 		'course-catalog-viewed': 'application/vnd.nextthought.analytics.coursecatalogviewevent'
 	},
 
+	FILL_IN_MAP: {
+		'video-watch': 'fillInVideo',
+		'video-skip': 'fillInVideo'
+	},
+
 	TIMER_MAP: {},
 
 	batch: [],
@@ -40,6 +45,20 @@ Ext.define('NextThought.util.Analytics', {
 	},
 
 
+	fillInData: function(resource, data) {
+		data.time_length = (now - resource.start) / 1000;
+
+		return data;
+	},
+
+
+	fillInVideo: function(resource, data) {
+		data.time_length = Math.abs(data.video_end_time - data.video_start_time);
+
+		return data;
+	},
+
+
 	stopResourceTimer: function(resourceId, type, data) {
 		var resource = this.TIMER_MAP[resourceId + type],
 			now = new Date();
@@ -54,7 +73,13 @@ Ext.define('NextThought.util.Analytics', {
 		data = Ext.applyIf(data, resource.data);
 
 		data.resource_id = resourceId;
-		data.time_length = (now - resource.start) / 1000;//send seconds back
+
+		if (this.FILL_IN_MAP[data.type]) {
+			data = this[this.FILL_IN_MAP[data.type]].call(this, resource, data);
+		} else {
+			data = this.fillInData(resource, data);
+		}
+
 		data.MimeType = this.TYPE_TO_MIMETYPE[data.type];
 		data.user = $AppConfig.username;
 		data.timestamp = now.getTime() / 1000;//send seconds back
