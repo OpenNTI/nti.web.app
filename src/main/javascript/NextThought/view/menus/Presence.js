@@ -301,12 +301,14 @@ Ext.define('NextThought.view.menus.Presence', {
 		this.deferHideParentMenusTimer = Ext.defer(this.deferHideParentMenus, 250, this);
 	},
 
-	isNewPresence: function(newPresence) {
-		var currentPresence = Ext.getStore('PresenceInfo').getPresenceOf($AppConfig.username);
+	isNewPresence: function(updated) {
+		var current = Ext.getStore('PresenceInfo').getPresenceOf($AppConfig.username);
 
-		return newPresence.get('type') !== currentPresence.get('type') ||
-			newPresence.get('show') !== currentPresence.get('show') ||
-			newPresence.get('status') !== currentPresence.get('status');
+		function cmp(k) {
+			return (updated && updated.get(k)) !== (current && current.get(k));
+		}
+
+		return cmp('type') || cmp('show') || cmp('status');
 	},
 
 	isStatus: function(value) {
