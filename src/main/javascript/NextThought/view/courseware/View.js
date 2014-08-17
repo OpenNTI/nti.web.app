@@ -67,22 +67,22 @@ Ext.define('NextThought.view.courseware.View', {
 	},
 
 
-	bundleChanged: function(courseInstance) {
-		if (this.currentCourse === courseInstance) {
+	bundleChanged: function(bundle) {
+		if (this.currentBundle === bundle) {
 			return;
 		}
 
 		this.clear();
-		this.currentCourse = courseInstance;
+		this.currentBundle = bundle;
 
-		if (!courseInstance || !courseInstance.getNavigationStore) {
-			delete this.currentCourse;
+		if (!bundle || !bundle.getNavigationStore) {
+			delete this.currentBundle;
 			return;
 		}
 
-		this.store = courseInstance.getNavigationStore();
+		this.store = bundle.getNavigationStore();
 
-		this.navigation.maybeChangeStoreOrSelection(courseInstance.getId(), this.store);
+		this.navigation.maybeChangeStoreOrSelection(bundle.getId(), this.store);
 	},
 
 	restoreState: function(state) {

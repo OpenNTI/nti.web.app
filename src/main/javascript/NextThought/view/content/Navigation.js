@@ -280,8 +280,8 @@ Ext.define('NextThought.view.content.Navigation', {
 			key = locationInfo ? locationInfo.NTIID : null,
 			currentNode = locationInfo ? locationInfo.location : null,
 			content = Ext.getCmp('content'),
-			currentCourse = content && content.currentCourse,
-			outline = currentCourse && currentCourse.getOutline();
+			currentBundle = content && content.currentBundle,
+			outline = currentBundle && currentBundle.getOutline();
 
 		outline = outline && outline.value;
 

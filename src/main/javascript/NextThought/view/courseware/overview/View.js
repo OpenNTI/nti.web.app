@@ -69,7 +69,7 @@ Ext.define('NextThought.view.courseware.overview.View', {
 	onNodeSelected: function(s, r) {
 		var me = this,
 			locInfo,
-			course = me.up('course').currentCourse,
+			course = me.up('course').currentBundle,
 			overviewSrc = (r && r.get('src')) || null;
 
 		if (!r || r.getId() === me.currentPage || !course || !course.getAssignments) {

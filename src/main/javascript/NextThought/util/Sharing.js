@@ -121,7 +121,7 @@ Ext.define('NextThought.util.Sharing', {
 
 
 	getCurrentSharingInfo: function() {
-		return Ext.getCmp('content').currentCourse;
+		return Ext.getCmp('content').currentBundle;
 	},
 
 	sharedWithForSharingInfo: function(sharingInfo, scopeProvider) {
@@ -137,7 +137,7 @@ Ext.define('NextThought.util.Sharing', {
 		}
 
 		if (!scopeProvider) {
-			Error.raiseForReport('No scope provider');//won't inerupt. :/
+			Error.raiseForReport('No scope provider');//won't interupt. :/
 		}
 
 		if (isPublic) {
