@@ -308,7 +308,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 			if (pageInfo) {
 				pageId = pageInfo.getId();
 				p = Promise.all([
-					this.getPagePreferences(pageId).fail(recover),
+					me.getPagePreferences(pageId).fail(recover),
 					ContentManagementUtils.findBundle(pageId)
 							.fail(function() { return CourseWareUtils.getCourseInstance(pageId); })
 				])
