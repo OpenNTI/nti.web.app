@@ -441,7 +441,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 			if (r && i.get('ID') === r.get('ID')) {
 				console.debug('Loaded active record into store...');
 				if (a.updateRecord) {
-					a.updateRecord(i);
+					a.updateRecord(i, store);
 				}
 			}
 
@@ -647,6 +647,7 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 
 		this.postViewEl.scrollTo('top', 0);
 		this.activePost = Ext.widget(xtype, cfg);
+		this.activePost.updateRecord(record, this.store);
 		this.updateLayout();
 	},
 

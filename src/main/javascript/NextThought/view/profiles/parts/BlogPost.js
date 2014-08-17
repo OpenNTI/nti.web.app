@@ -67,6 +67,27 @@ Ext.define('NextThought.view.profiles.parts.BlogPost', {
 		}, 1);
 	},
 
+	updateRecord: function(record, store) {
+		if (!record || !store) { return; }
+
+		try {
+			var count = store.getCount(),
+				index = store.indexOf(record);
+
+			if (index > 0) {
+				this.prevRecord = store.getAt(index - 1);
+				this.prevPostEl.removeCls('disabled');
+			}
+
+			if (index < (count - 1)) {
+				this.nextRecord = store.getAt(index + 1);
+				this.nextPostEl.removeCls('disabled');
+			}
+		} catch (e) {
+			console.error(e.stack || e.message || e);
+		}
+	},
+
 
 	updateField: function(key, value) {
 		var el = this.el.down('.' + key), len;
@@ -147,7 +168,7 @@ Ext.define('NextThought.view.profiles.parts.BlogPost', {
 			disabled = Boolean(e.getTarget('.disabled'));
 
 		if (!disabled) {
-			this.fireEvent('navigate-post', this, this.record, direction ? 'next' : 'prev');
+			this.fireEvent('navigate-post', this, this.record, direction ? 'prev' : 'next');
 		}
 
 		return false;
