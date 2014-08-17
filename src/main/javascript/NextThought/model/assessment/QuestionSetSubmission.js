@@ -8,6 +8,6 @@ Ext.define('NextThought.model.assessment.QuestionSetSubmission', {
 	fields: [
 		{ name: 'questionSetId', type: 'string' },
 		{ name: 'questions', type: 'arrayItem' },
-		{ name: 'CreatorRecordedEffortDuration', type: 'int', defaultValue: 120 }
+		{ name: 'CreatorRecordedEffortDuration', type: 'int' }
 	]
 });

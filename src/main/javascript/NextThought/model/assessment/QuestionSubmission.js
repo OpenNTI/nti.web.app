@@ -7,7 +7,7 @@ Ext.define('NextThought.model.assessment.QuestionSubmission', {
 	fields: [
 		{ name: 'questionId', type: 'string' },
 		{ name: 'parts', type: 'auto' },
-		{ name: 'CreatorRecordedEffortDuration', type: 'int', defaultValue: 240 }
+		{ name: 'CreatorRecordedEffortDuration', type: 'int' }
 	],
 
 	isCorrect: function() { return null; }

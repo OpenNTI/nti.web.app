@@ -3,6 +3,6 @@ Ext.define('NextThought.model.assessment.AssignmentSubmission', {
 	fields: [
 		{name: 'assignmentId', type: 'string'},
 		{name: 'parts', type: 'arrayItem'},
-		{name: 'CreatorRecordedEffortDuration', type: 'int', defaultValue: 180}
+		{name: 'CreatorRecordedEffortDuration', type: 'int'}
 	]
 });
