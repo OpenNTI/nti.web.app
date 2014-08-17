@@ -419,7 +419,7 @@ Ext.define('NextThought.view.video.Video', {
 
 	onHeartBeat: function() {
 		var state = this.queryPlayer(),
-			time = state.time,
+			time = state && state.time,
 			diff = this.lasttime ? time - this.lasttime : 0,
 			threshold = 5,
 			current = this.playlist[this.playlistIndex],
