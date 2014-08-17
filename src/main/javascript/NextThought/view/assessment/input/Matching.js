@@ -303,12 +303,14 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 
 			terms = toMap(terms, 'data-match');
 
-			for (termId in value) {
-				if (value.hasOwnProperty(termId)) {
-					binId = value[termId];
-					bin = bins[binId];
-					if (bin) {
-						this.dropTerm(bin, terms[termId]);
+			if (value) {
+				for (termId in value) {
+					if (value.hasOwnProperty(termId)) {
+						binId = value[termId];
+						bin = bins[binId];
+						if (bin) {
+							this.dropTerm(bin, terms[termId]);
+						}
 					}
 				}
 			}

@@ -96,7 +96,7 @@ Ext.define('NextThought.view.assessment.input.FreeResponse', {
 
 	setValue: function(str) {
 		if (!Ext.isString(str)) {
-			str = (str.value || [])[0] || '';
+			str = (str && str.value || [])[0] || '';
 		}
 
 		var d = document.createElement('div');

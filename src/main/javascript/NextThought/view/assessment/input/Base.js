@@ -405,7 +405,7 @@ Ext.define('NextThought.view.assessment.input.Base', {
 	},
 
 	updateWithResults: function(assessedQuestion) {
-		var parts = assessedQuestion.get('parts'),
+		var parts = (assessedQuestion && assessedQuestion.get('parts')) || {},
 			part = parts[this.ordinal], id, correct,
 			fn = {
 				'null': 'markSubmitted',
@@ -413,19 +413,19 @@ Ext.define('NextThought.view.assessment.input.Base', {
 				'false': 'markIncorrect'
 			};
 
-		if (part.get) {
+		if (part && part.get) {
 			this.part.set({
 				explanation: part.get('explanation'),
 				solutions: part.get('solutions')
 			});
 		}
 
-		this.setValue(part.get ? part.get('submittedResponse') : part);
+		this.setValue(part && part.get ? part.get('submittedResponse') : part);
 
 		this.setSubmitted();
 
 		if (!this.noMark) {
-			correct = part.isModel ? String(part.isCorrect()) : null;
+			correct = part && part.isModel ? String(part.isCorrect()) : null;
 			if (!fn[correct]) {
 				correct = 'null';
 			}

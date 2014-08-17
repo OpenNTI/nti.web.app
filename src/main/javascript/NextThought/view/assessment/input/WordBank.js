@@ -380,13 +380,15 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 	setValue: function(value) {
 		var inputName, wordId, dropTarget, dragSource;
 
-		for (inputName in value) {
-			if (value.hasOwnProperty(inputName)) {
-				wordId = value[inputName];
-				dropTarget = Ext.getDom(this.el.select('.dropzone[data-input="' + inputName + '"]').first());
-				dragSource = wordId && this.getWordBankItem(wordId);
+		if (value) {
+			for (inputName in value) {
+				if (value.hasOwnProperty(inputName)) {
+					wordId = value[inputName];
+					dropTarget = Ext.getDom(this.el.select('.dropzone[data-input="' + inputName + '"]').first());
+					dragSource = wordId && this.getWordBankItem(wordId);
 
-				this.setFieldValue(dragSource, dropTarget);
+					this.setFieldValue(dragSource, dropTarget);
+				}
 			}
 		}
 	},

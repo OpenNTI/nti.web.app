@@ -215,6 +215,8 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath', {
 		//safest and fastest
 		//console.log('Sanitizing raw value', latex);
 
+		latex = latex || '';
+
 		latex = latex.trim();
 		latex = latex.replace(/\s/g, '\\space ');
 		latex = latex.replace(/\\[;:,]/g, '\\space ');

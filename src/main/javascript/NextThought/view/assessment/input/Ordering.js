@@ -77,6 +77,7 @@ Ext.define('NextThought.view.assessment.input.Ordering', {
 			return;
 		}
 		var ordinal, text, label;
+		if (!val) {return;}
 		for (ordinal in val) {
 			if (val.hasOwnProperty(ordinal)) {
 				text = this.el.down('.draggable-area[data-ordinal="' + val[ordinal] + '"]');

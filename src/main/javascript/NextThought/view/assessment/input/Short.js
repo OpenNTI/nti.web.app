@@ -178,9 +178,11 @@ Ext.define('NextThought.view.assessment.input.Short', {
 		console.log(value);
 		var inputName;
 
-		for (inputName in value) {
-			if (value.hasOwnProperty(inputName)) {
-				this.setFieldValue(inputName, value[inputName]);
+		if (value) {
+			for (inputName in value) {
+				if (value.hasOwnProperty(inputName)) {
+					this.setFieldValue(inputName, value[inputName]);
+				}
 			}
 		}
 	},
