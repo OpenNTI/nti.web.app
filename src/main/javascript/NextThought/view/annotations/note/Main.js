@@ -316,7 +316,7 @@ Ext.define('NextThought.view.annotations.note.Main', {
 
 		if (course) {
 			el = me.purchasableTpl.append(this.contextContainer, {
-				img: course.get('thumbnail'),
+				img: course.get('thumb'),
 				title: course.get('Title'),
 				number: course.get('ProviderUniqueID'),
 				target: 'Enroll Now'
