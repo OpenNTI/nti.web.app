@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.assessment.Question', {
+RExt.define('NextThought.view.assessment.Question', {
 	extend: 'NextThought.view.content.overlay.Panel',
 	alias: 'widget.assessment-question',
 
@@ -135,9 +135,7 @@ Ext.define('NextThought.view.assessment.Question', {
 		}
 		this[fn[correct]](assessedQuestionSet.noMark);
 
-		if (q) {
-			this.down('question-parts').updateWithResults(q);
-		}
+		this.down('question-parts').updateWithResults(q);
 	},
 
 
