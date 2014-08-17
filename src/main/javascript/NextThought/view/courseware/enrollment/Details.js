@@ -735,7 +735,15 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 		function done(success, change) {
 			delete me.changingEnrollment;
+
+			var store = Ext.getStore('courseware.AvailableCourses'),
+				c = store.getById(me.course.getId());
+
 			if (success && change) {
+				if (c) {
+					me.course = c;
+				}
+
 				me.updateEnrollmentCard();
 			}
 
