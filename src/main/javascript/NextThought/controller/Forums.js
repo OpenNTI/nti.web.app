@@ -310,7 +310,7 @@ Ext.define('NextThought.controller.Forums', {
 		forum = forum && forum.get('href');
 		topic = topic && topic.get('href');
 
-		history.pushState({forums: { href: topic || forum || forumList }}, title, url);
+		history.pushState({forums: { href: topic || forum || board }}, title, url);
 	},
 
 
