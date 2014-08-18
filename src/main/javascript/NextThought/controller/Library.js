@@ -99,10 +99,12 @@ Ext.define('NextThought.controller.Library', {
 		});
 
 		this.mon(administered, 'load', function() {
-			administered.promisetToLoaded.then(split.bind(null, administered, 'setAdministeredCourses'));
+			administered.promiseToLoaded.then(split.bind(null, administered, 'setAdministeredCourses'));
 		});
 
 		this.mon(available, 'load', function() {
+			enrolled.promiseToLoaded.then(split.bind(null, enrolled, undefined));
+			administered.promiseToLoaded.then(split.bind(null, administered, undefined));
 			available.promiseToLoaded.then(splitAvailable.bind(null, available, 'setAvailableCourses'));
 		});
 	},
