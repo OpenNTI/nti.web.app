@@ -101,7 +101,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 				}
 
 				if (error) {
-					PersistentStorage.updateProperty('last-location-map', rootId, rootId);
+					//PersistentStorage.updateProperty('last-location-map', rootId, rootId);
 					delete me.currentNTIID;
 					//Ok no bueno.  The page info request failed.  Ideally whoever
 					//initiated this request handles the error  but we aren't really setup for
@@ -118,11 +118,10 @@ Ext.define('NextThought.view.content.reader.Location', {
 					return;
 				}
 
-
 				//remember last ntiid for this book if it is truthy
-				if (ntiid && rootId) {
-					PersistentStorage.updateProperty('last-location-map', rootId, ntiid);
-				}
+				//if (ntiid && rootId) {
+					//PersistentStorage.updateProperty('last-location-map', rootId, ntiid);
+				//}
 			}
 			finally {
 				if (!canceled) {

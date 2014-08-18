@@ -303,6 +303,7 @@ Ext.define('NextThought.controller.Reader', {
 	 * @param {Boolean} [silent]
 	 */
 	setLastLocation: function(ntiid, callback, silent) {
+		PersistentStorage.remove('last-location-map');//neuter last-location-map
 		var reader = this.getContentReader(),
 			lastNtiid = PersistentStorage.getProperty('last-location-map', ntiid, ntiid);
 
