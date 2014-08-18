@@ -72,7 +72,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Discussion', {
 		if (parsedId && (/^Topic:EnrolledCourse(Section|Root)$/).test(parsedId.specific.type)) {
 			if (bundle && bundle.getCourseCatalogEntry) {
 				e = bundle.getCourseCatalogEntry(); //this may not be filled in yet.
-				parsedId.specific.$$provider = ((e && e.get('ProviderUniqueID')) || '').replace(/[\W\-]/, '_');
+				parsedId.specific.$$provider = ((e && e.get('ProviderUniqueID')) || '').replace(/[\W\-]/g, '_');
 				ntiid = parsedId.toString();
 			} else {
 				console.warn('Did not get the thing we were expecting...', bundle);
