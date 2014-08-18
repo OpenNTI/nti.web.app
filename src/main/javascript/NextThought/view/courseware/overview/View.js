@@ -91,11 +91,13 @@ Ext.define('NextThought.view.courseware.overview.View', {
 
 		Promise.all([
 			(overviewSrc && ContentProxy.get(overviewSrc)) || Promise.resolve(null),
-			course.getAssignments()
+			course.getAssignments(),
+			course.getWrapper && course.getWrapper()
 		])
 			.then(function(data) {
 				var assignments = data && data[1],
-					content = data && data[0];
+					content = data && data[0],
+					enrollment = data[2];
 
 				if (me.currentPage !== r.getId()) {
 					return;
@@ -107,7 +109,7 @@ Ext.define('NextThought.view.courseware.overview.View', {
 					me.buildFromToc(r, locInfo, assignments);
 				} else {
 					content = Ext.decode(content);
-					me.buildFromContent(content, r, locInfo, assignments);
+					me.buildFromContent(content, r, enrollment, locInfo, assignments);
 				}
 			})
 			.fail(function(reason) { console.error(reason); })
@@ -115,20 +117,26 @@ Ext.define('NextThought.view.courseware.overview.View', {
 	},
 
 
-	buildFromContent: function(content, node, locInfo, assignments) {
+	buildFromContent: function(content, node, enrollment, locInfo, assignments) {
 		console.debug(content);
 
 		function getItems(c) {return c.Items || c.items || [];}
 		function getType(i) {return 'course-overview-' + (i.MimeType || i.type || '').split('.').last();}
 		function getClass(t) {return t && Ext.ClassManager.getByAlias('widget.' + t);}
 
-		function process(items, item, i, a) {
+		function process(items, item) {
 			var type = getType(item),
 				cls = getClass(type),
 				assignment, prev;
 
 			if (!cls) {
 				console.debug('No component found for:', item);
+				return items;
+			}
+
+			if (!ContentUtils.hasVisibilityForContent(
+							{getAttribute: function(i) {return item[i];}},
+							enrollment.get('Status'))) {
 				return items;
 			}
 
