@@ -218,6 +218,11 @@ Ext.define('NextThought.view.Navigation', {
 
 	updateCurrent: function(pop, rec) {
 		console.debug('(ROOT) Update Menu: %o, pop: %s', rec, Boolean(pop));
+		if (rec instanceof NextThought.model.ContentPackage && rec.get('isCourse')) {
+			//figure out the course record?
+			return this;
+		}
+
 		rec = this.track(rec, pop === true);
 
 		if (rec) {
