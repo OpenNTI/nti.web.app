@@ -452,10 +452,15 @@ Ext.define('NextThought.view.content.View', {
 	},
 
 
+	getActiveTabForNavigation: function() {
+		return Ext.isArray(this.tabs) ? 'course-info' : 'course-book';
+	},
+
+
 	onNavigationCanceled: function(ntiid, alreadyThere, fromHistory) {
 		if (!alreadyThere || fromHistory) { return; }
 
-		var tab = Ext.isArray(this.tabs) ? 'course-info' : 'course-book';
+		var tab = this.getActiveTabForNavigation();
 
 		this.setActiveTab(tab);
 		this.pushState({activeTab: tab});
@@ -482,6 +487,8 @@ Ext.define('NextThought.view.content.View', {
 		else {
 			this.showContentReader();
 		}
+
+		this.setActiveTab(this.getActiveTabForNavigation());
 
 		this.locationTitle = pageInfo.getTitle('');
 		this.updateTitle();
