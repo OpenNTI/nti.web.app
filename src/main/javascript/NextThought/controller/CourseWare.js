@@ -418,7 +418,8 @@ Ext.define('NextThought.controller.CourseWare', {
 			return false;
 		}
 
-		return CourseWareUtils.canGetToContent(ntiid, currentCourse);
+		return (/CHEM1315.+chemistry/).test(ntiid) ||
+			CourseWareUtils.canGetToContent(ntiid, currentCourse);
 	},
 
 
