@@ -18,8 +18,9 @@ Ext.define('NextThought.cache.AbstractStorage', function() {
 				Ext.Error.raise('Given storage object does not implement Storage api');
 			}
 
+			this.prefix = prefix;
 			if (noPrefix === true) {
-				prefix = function(v) {return v;};
+				this.prefix = function(v) {return v;};
 			}
 
 			this.backingStore = storage;
@@ -28,7 +29,7 @@ Ext.define('NextThought.cache.AbstractStorage', function() {
 
 		set: function(key, value) {
 			var old = this.get(key),
-				encKey = prefix(key),
+				encKey = this.prefix(key),
 				encVal = Ext.encode(value);
 			try {
 				this.backingStore.setItem(encKey, encVal);
@@ -47,12 +48,12 @@ Ext.define('NextThought.cache.AbstractStorage', function() {
 		get: function(key) {
 			//Migrate:
 			var old = this.backingStore.getItem(key);
-			if (old && prefix(key) !== key) {
-				this.backingStore.setItem(prefix(key), old);
+			if (old && this.prefix(key) !== key) {
+				this.backingStore.setItem(this.prefix(key), old);
 				this.backingStore.removeItem(key);
 			}
 			//End Migrate
-			return Ext.decode(this.backingStore.getItem(prefix(key)), true);
+			return Ext.decode(this.backingStore.getItem(this.prefix(key)), true);
 		},
 
 
