@@ -65,7 +65,7 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 
 	onInputBlur: function(e, dom) {
 		var record = this.getRecordFromEvent(e),
-				value = Ext.fly(dom).getValue();
+			value = Ext.fly(dom).getValue();
 
 		if (record) {
 			this.editGrade(record, value);
@@ -113,7 +113,7 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 
 
 	editGrade: function(record, value) {
-		var view = this.__getGridView(),
+		var view = this.__getGridView(), store = this.store,
 			grade = record.get('Grade'),
 			v = grade && grade.get('value');
 
@@ -126,6 +126,7 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 				return;
 			}
 
+			store.suspendEvents();
 			Ext.fly(view.getNode(record)).setStyle({opacity: '0.3'});
 
 			if (!grade) {
@@ -142,6 +143,7 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 					grade.reject();
 				},
 				callback: function() {
+					store.resumeEvents();
 					var n = view.getNode(record);
 					if (n) {
 						Ext.fly(n).setStyle({opacity: 1});
