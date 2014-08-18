@@ -281,9 +281,9 @@ Ext.define('NextThought.view.content.Navigation', {
 			currentNode = locationInfo ? locationInfo.location : null,
 			content = Ext.getCmp('content'),
 			currentBundle = content && content.currentBundle,
-			outline = currentBundle && currentBundle.getOutline();
+			p = currentBundle && currentBundle.getOutline && currentBundle.getOutline();
 
-		outline = outline && outline.value;
+		p = p || Promise.resolve(null);
 
 		if (!currentNode) {
 			return pathPartEl;
@@ -298,42 +298,46 @@ Ext.define('NextThought.view.content.Navigation', {
 			return;
 		}
 
-		//if we don't have an outline we aren't in a course so don't filter out items
-		if (outline) {
-			cfg.items = (cfg.items || []).reduce(function(prev, cur) {
-				if (outline.isVisible(cur.ntiid)) {
-					prev.push(cur);
-				}
+		p.then(function(outline) {
 
-				return prev;
-			}, []);
-		}
+			//if we don't have an outline we aren't in a course so don't filter out items
+			if (outline) {
+				cfg.items = (cfg.items || []).reduce(function(prev, cur) {
+					if (outline.isVisible(cur.ntiid)) {
+						prev.push(cur);
+					}
 
-		m = menus[key] = Ext.widget('jump-menu', Ext.apply({}, cfg));
-		m.hostEl = pathPartEl;
-
-		// evt handlers to hide menu on mouseout (w/o click) so they don't stick around forever...
-		m.mon(pathPartEl, {
-			scope: m,
-			'mouseleave': function maybeStopShow() {
-				if (!Ext.is.iPad || !m.isVisible()) {
-					m.stopShow();
-				}
-			},
-			'mouseenter': function() {
-				var offset = Ext.isIE10m ? [0, 0] : [-10, -20];
-
-				m.maxHeight = Ext.Element.getViewportHeight() - (pathPartEl.getY() + pathPartEl.getHeight() + 40);
-				m.startShow(pathPartEl, 'tl-bl', offset);
-			},
-			'click': function() {
-				m.stopHide();
-				m.stopShow();
-				me.fireEvent('set-location', key);
+					return prev;
+				}, []);
 			}
-		});
 
-		this.menuMap = menus;
+			m = menus[key] = Ext.widget('jump-menu', Ext.apply({}, cfg));
+			m.hostEl = pathPartEl;
+
+			// evt handlers to hide menu on mouseout (w/o click) so they don't stick around forever...
+			m.mon(pathPartEl, {
+				scope: m,
+				'mouseleave': function maybeStopShow() {
+					if (!Ext.is.iPad || !m.isVisible()) {
+						m.stopShow();
+					}
+				},
+				'mouseenter': function() {
+					var offset = Ext.isIE10m ? [0, 0] : [-10, -20];
+
+					m.maxHeight = Ext.Element.getViewportHeight() - (pathPartEl.getY() + pathPartEl.getHeight() + 40);
+					m.startShow(pathPartEl, 'tl-bl', offset);
+				},
+				'click': function() {
+					m.stopHide();
+					m.stopShow();
+					me.fireEvent('set-location', key);
+				}
+			});
+
+			me.menuMap = menus;
+
+		});
 
 		return pathPartEl;
 	},
