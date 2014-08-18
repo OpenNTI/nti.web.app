@@ -739,7 +739,7 @@ PREVIOUS_STATE = 'previous-state';
 			if (!username) {
 				console.error('unknown username for state mgmt.');
 			}
-			return B64.encode('state-' + username);
+			return B64.encode('state2-' + username);
 		}
 		//</editor-fold>
 	});
