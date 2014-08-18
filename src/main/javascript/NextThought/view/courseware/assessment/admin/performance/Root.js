@@ -247,7 +247,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 	//<editor-fold desc="Header Managements">
 	createStudentMenu: function() {
-		var type = this.currentStudent || isFeature('show-open-students-first') ? 'Open' : 'ForCredit',
+		var type = this.currentStudent || (isFeature('show-open-students-first') ? 'Open' : 'ForCredit'),
 			items = [
 				//{ text: 'All Students', type: 'all', checked: type === 'all'},
 				{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.open'), type: 'Open', checked: type === 'Open'},
