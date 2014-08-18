@@ -318,11 +318,13 @@ Ext.define('NextThought.controller.Forums', {
 	 * Takes any of the forum models, and navigates to it
 	 * @param  {NextThought.model.forums.base} record either a board, forum, or topic
 	 */
-	presentForumItem: function(record) {
+	presentForumItem: function(record, bundle) {
 		if (!record) {
 			console.error('Cant present an empty record');
 			return Promise.resolve();
 		}
+
+		record.targetBundle = bundle;
 
 		if (record.isBoard) {
 			return this.loadForumList(null, record);
@@ -332,6 +334,7 @@ Ext.define('NextThought.controller.Forums', {
 			//if we have a forum load its board and show it as the active one
 			return Service.getObject(record.get('ContainerId'))
 				.then(function(obj) {
+						obj.targetBundle = bundle;
 						return this.loadBoard(null, obj, record.getId());
 					}.bind(this));
 		}
@@ -446,9 +449,15 @@ Ext.define('NextThought.controller.Forums', {
 	 */
 	loadBoard: function(cmp, record, activeForumId, wait, silent) {
 		var me = this,
-			b;
+			b, getBundle;
 
-		return record.findBundle()
+		if (record.targetBundle) {
+			getBundle = Promise.resolve(record.targetBundle);
+		} else {
+			getBundle = record.findBundle();
+		}
+
+		return getBundle
 			.then(function(bundle) {
 				var p;
 
@@ -511,6 +520,7 @@ Ext.define('NextThought.controller.Forums', {
 						//get the forum list and add it first
 							Service.getObject(record.get('ContainerId'), null, null, null, true)
 									.then(function(board) {
+										board.targetBundle = record.targetBundle;
 										return me.loadBoard(cmp, board, record.getId(), true);
 									});
 				})

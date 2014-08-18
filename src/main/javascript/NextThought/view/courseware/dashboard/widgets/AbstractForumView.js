@@ -81,6 +81,9 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.AbstractForumView', {
 			return;
 		}
 
-		this.fireEvent('goto-forum-item', this.record);
+		var container = this.up('course-view-container'),
+			bundle = container && container.currentBundle;
+
+		this.fireEvent('goto-forum-item', this.record, bundle);
 	}
 });

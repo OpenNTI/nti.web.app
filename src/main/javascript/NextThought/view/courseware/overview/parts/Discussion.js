@@ -99,11 +99,14 @@ Ext.define('NextThought.view.courseware.overview.parts.Discussion', {
 
 
 	onClick: function() {
+		var container = this.up('content-view-container'),
+			bundle = container && container.currentBundle;
+
 		if (!this.topic) {
 			alert('An error occurred showing this discussion.');
 		}
 		else {
-			this.fireEvent('goto-forum-item', this.topic);
+			this.fireEvent('goto-forum-item', this.topic, bundle);
 		}
 	}
 });
