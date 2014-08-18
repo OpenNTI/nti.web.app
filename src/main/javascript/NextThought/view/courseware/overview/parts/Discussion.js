@@ -42,6 +42,12 @@ Ext.define('NextThought.view.courseware.overview.parts.Discussion', {
 	},
 
 
+	getBundle: function() {
+		var container = this.up('content-view-container');
+		return container && container.currentBundle;
+	},
+
+
 	beforeRender: function() {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {},this.data);
@@ -59,12 +65,21 @@ Ext.define('NextThought.view.courseware.overview.parts.Discussion', {
 
 
 	loadTopic: function(ntiid) {
-		Service.getObject(ntiid,
-			this.onTopicResolved,
-			this.onTopicResolveFailure,
-			this,
-			true
-		);
+		var parsedId = ParseUtils.parseNTIID(ntiid),
+			bundle = this.getBundle(),
+			e;
+
+		if (parsedId && (/^Topic:EnrolledCourse(Section|Root)$/).test(parsedId.specific.type)) {
+			if (bundle && bundle.getCourseCatalogEntry) {
+				e = bundle.getCourseCatalogEntry(); //this may not be filled in yet.
+				parsedId.specific.$$provider = ((e && e.get('ProviderUniqueID')) || '').replace(/[\W\-]/, '_');
+				ntiid = parsedId.toString();
+			} else {
+				console.warn('Did not get the thing we were expecting...', bundle);
+			}
+		}
+
+		Service.getObject(ntiid, this.onTopicResolved, this.onTopicResolveFailure, this, true);
 	},
 
 
@@ -99,14 +114,11 @@ Ext.define('NextThought.view.courseware.overview.parts.Discussion', {
 
 
 	onClick: function() {
-		var container = this.up('content-view-container'),
-			bundle = container && container.currentBundle;
-
 		if (!this.topic) {
 			alert('An error occurred showing this discussion.');
 		}
 		else {
-			this.fireEvent('goto-forum-item', this.topic, bundle);
+			this.fireEvent('goto-forum-item', this.topic, this.getBundle());
 		}
 	}
 });
