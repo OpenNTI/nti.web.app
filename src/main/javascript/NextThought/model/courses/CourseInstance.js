@@ -50,8 +50,8 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 				thumb: e && e.get('thumb')
 			};
 
-		ObjectUtils.clean(bundle);//make sure falsy values are "undefined" before the applyIf()
-		return Ext.applyIf(bundle, data);
+		ObjectUtils.clean(bundle);
+		return Ext.apply(bundle, data);
 	},
 
 
