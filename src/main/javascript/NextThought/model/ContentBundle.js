@@ -158,7 +158,7 @@ Ext.define('NextThought.model.ContentBundle', {
 		var me = this,
 			b;
 
-		me.resolveBoard
+		me.resolveBoard()
 			.then(function(board) {
 				var contents = board.getLink('contents');
 
