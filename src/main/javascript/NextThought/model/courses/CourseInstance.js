@@ -336,7 +336,10 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 				Section: [],
 				Parent: []
 			},
-			Other: []
+			Other: {
+				Section: [],
+				Parent: []
+			}
 		};
 
 		function isOpen(item) {
@@ -357,7 +360,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 			} else if (isForCredit(item)) {
 				bin.ForCredit.Section.push(item);
 			} else {
-				bin.Other.push(item);
+				bin.Other.Section.push(item);
 			}
 		});
 
@@ -367,7 +370,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 			} else if (isForCredit(item)) {
 				bin.ForCredit.Parent.push(item);
 			} else {
-				bin.Other.push(item);
+				bin.Other.Parent.push(item);
 			}
 		});
 
@@ -457,12 +460,25 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 			forumList.push(open);
 		}
 
-		if (!Ext.isEmpty(bin.Other)) {
+		if (!isEmpty(bin.Other)) {
 			other = {
 				title: 'Other Discussions',
-				store: buildStore(sectionId + 'Other', bin.Other),
-				board: section
+				children: []
 			};
+
+			if (!Ext.isEmpty(bin.Other.Section)) {
+				other.children.push({
+					title: 'My Section',
+					store: buildStore(sectionId + 'Other', bin.Other.Section)
+				});
+			}
+
+			if (!Ext.isEmpty(bin.Other.Parent)) {
+				other.children.push({
+					title: 'All Sections',
+					store: buildStore(parentId + 'Other', bin.Other.Parent)
+				});
+			}
 
 			forumList.push(other);
 		}
