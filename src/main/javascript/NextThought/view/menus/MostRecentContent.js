@@ -201,6 +201,7 @@ Ext.define('NextThought.view.menus.MostRecentContent', {
 
 
 	track: function(rec, remove) {
+		console.debug('(MENU) Tracking navigation: %o, pop: %s', rec, Boolean(remove));
 		var s = this.getStore();
 		try {
 			if (rec) {

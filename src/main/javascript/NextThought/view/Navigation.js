@@ -171,6 +171,7 @@ Ext.define('NextThought.view.Navigation', {
 
 
 	track: function(rec, pop) {
+		console.debug('(ROOT) Tracking navigation: %o, pop: %s', rec, Boolean(pop));
 		if (pop) {
 			rec = this.currentRecord = this.recordHistory.pop();
 			return rec;
@@ -216,11 +217,7 @@ Ext.define('NextThought.view.Navigation', {
 
 
 	updateCurrent: function(pop, rec) {
-		if (rec instanceof NextThought.model.ContentPackage && rec.get('isCourse')) {
-			//figure out the course record?
-			return this;
-		}
-
+		console.debug('(ROOT) Update Menu: %o, pop: %s', rec, Boolean(pop));
 		rec = this.track(rec, pop === true);
 
 		if (rec) {
