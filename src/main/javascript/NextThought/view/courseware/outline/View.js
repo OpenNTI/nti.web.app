@@ -57,8 +57,11 @@ Ext.define('NextThought.view.courseware.outline.View', {
 
 		},
 		select: function(s, r) {
+			var container = this.up('content-view-container'),
+				bundle = container && container.currentBundle;
+
 			if (this.fromClick || this.fromKey) {
-				this.fireEvent('set-location', r.getId());
+				this.fireEvent('set-location', r.getId(), null, null, bundle);
 			}
 			delete this.fromClick;
 			delete this.fromKey;

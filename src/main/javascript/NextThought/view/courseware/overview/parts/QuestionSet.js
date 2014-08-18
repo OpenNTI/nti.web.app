@@ -236,12 +236,15 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 
 
 	reviewClicked: function() {
+		var container = this.up('content-view-container'),
+			bundle = container && container.currentBundle;
+
 		//console.log('navigate to', this.getContainerId());
 		if (this.assignment) {
 			this.fireEvent('navigate-to-assignment', this.assignmentId);
 			return;
 		}
-		this.fireEvent('set-location-rooted', this.getContainerId());
+		this.fireEvent('set-location-rooted', this.getContainerId(), null, null, bundle);
 		//this.fireEvent('navigate-to-href', this, this.getContainerId());
 	}
 });

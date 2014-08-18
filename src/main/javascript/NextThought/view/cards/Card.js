@@ -98,12 +98,15 @@ Ext.define('NextThought.view.cards.Card', {
 
 
 	navigateToTarget: function(e) {
-		var status;
+		var status,
+			container = this.up('content-view-container'),
+			bundle = container && container.currentBundle;
+
 		if (ParseUtils.isNTIID(this.target)) {
 			status = this.fireEvent('navigate-to-href', this, this.target);
 		}
 		else {
-			status = this.fireEvent('show-target', this, this.data, !e, Ext.emptyFn/*needs a callback, we just don't care*/);
+			status = this.fireEvent('show-target', this, this.data, !e, Ext.emptyFn/*needs a callback, we just don't care*/, bundle);
 		}
 		return status;
 	},

@@ -33,10 +33,12 @@ Ext.define('NextThought.view.content.Pager', {
 	showControls: function() { this.el.show(); },
 
 
-	updateState: function(ntiid, rootId) {
+	updateState: function(ntiid, rootId, bundle) {
 		var me = this,
 			next = this.nextEl,
 			prev = this.prevEl;
+
+		this.currentBundle = bundle;
 
 		if (!ntiid) {
 			this.disableButton(next);
@@ -94,7 +96,7 @@ Ext.define('NextThought.view.content.Pager', {
 			ntiid = btn && btn.getAttribute('data-ntiid');
 
 		if (ntiid) {
-			this.fireEvent('set-location', ntiid);
+			this.fireEvent('set-location', ntiid, null, null, this.currentBundle);
 		}
 		else {
 			console.debug('no ntiid');

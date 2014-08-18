@@ -97,8 +97,11 @@ Ext.define('NextThought.view.courseware.overview.parts.ContentLink', {
 
 
 	navigateToTarget: function() {
+		var container = this.up('content-view-container'),
+			currentBundle = container && container.currentBundle;
+
 		if (ParseUtils.isNTIID(this.target)) {
-			return this.fireEvent('set-location-rooted', this.target);
+			return this.fireEvent('set-location-rooted', this.target, null, null, currentBundle);
 		}
 
 		return this.callParent(arguments);

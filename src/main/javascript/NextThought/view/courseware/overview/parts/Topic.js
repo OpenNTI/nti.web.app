@@ -41,7 +41,10 @@ Ext.define('NextThought.view.courseware.overview.parts.Topic', {
 
 
 	onClick: function(e) {
-		var me = this;
+		var me = this,
+			container = this.up('content-view-container'),
+			bundle = container && container.currentBundle;
+
 		e.stopEvent();
 
 		function cb() {
@@ -51,6 +54,6 @@ Ext.define('NextThought.view.courseware.overview.parts.Topic', {
 			}
 		}
 
-		me.fireEvent('set-location', me.targetNTIID, cb);
+		me.fireEvent('set-location', me.targetNTIID, cb, null, bundle);
 	}
 });

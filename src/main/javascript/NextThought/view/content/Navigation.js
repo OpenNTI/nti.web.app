@@ -72,7 +72,7 @@ Ext.define('NextThought.view.content.Navigation', {
 		// pop up one level.
 		var up = ContentUtils.getLineage(this.currentNtiid, false, true)[1];
 		if (up) {
-			this.fireEvent('set-location', up);
+			this.fireEvent('set-location', up, null, null, this.currentBundle);
 		}
 	},
 
@@ -133,7 +133,7 @@ Ext.define('NextThought.view.content.Navigation', {
 	},
 
 
-	updateLocation: function(ntiid, rootId) {
+	updateLocation: function(ntiid, rootId, bundle) {
 		var C = ContentUtils,
 			pageNtiid = C.getPageID(ntiid),
 			loc = C.getLocation(pageNtiid),
@@ -144,6 +144,7 @@ Ext.define('NextThought.view.content.Navigation', {
 			allowMenus = true;
 
 		this.currentNtiid = pageNtiid;
+		this.currentBundle = bundle;
 
 		if (loc.isCourse) {
 			this.hideTableOfContentsLabel();
@@ -276,7 +277,7 @@ Ext.define('NextThought.view.content.Navigation', {
 	buildMenu: function(pathPartEl, locationInfo, parentNode) {
 		var me = this, m,
 			menus = me.menuMap || {},
-			cfg = { ownerButton: me, items: [] },
+			cfg = { ownerButton: me, items: [], bundle: me.currentBundle },
 			key = locationInfo ? locationInfo.NTIID : null,
 			currentNode = locationInfo ? locationInfo.location : null,
 			content = Ext.getCmp('content'),
@@ -331,7 +332,7 @@ Ext.define('NextThought.view.content.Navigation', {
 				'click': function() {
 					m.stopHide();
 					m.stopShow();
-					me.fireEvent('set-location', key);
+					me.fireEvent('set-location', key, null, null, me.currentBundle);
 				}
 			});
 

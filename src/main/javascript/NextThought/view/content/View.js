@@ -195,7 +195,7 @@ Ext.define('NextThought.view.content.View', {
 				try {
 					active = active.down('course-outline').getSelectionModel().getSelection()[0];
 					if (active) {
-						this.fireEvent('set-location', active.getId());
+						this.fireEvent('set-location', active.getId(), null, null, this.currentBundle);
 					}
 				}
 				catch (e) {
@@ -470,11 +470,19 @@ Ext.define('NextThought.view.content.View', {
 	onNavigateComplete: function(pageInfo) {
 		if (!pageInfo || !pageInfo.isModel) {return;}
 
+		var getBundle;
+
 		this.down('content-toolbar').show();
 
-		ContentManagementUtils.findBundle(pageInfo)
-			//if we don't find it in bundles... look up the course instance...
-			.fail(function() { return CourseWareUtils.getCourseInstance(pageInfo); })
+		if (pageInfo.targetBundle) {
+			getBundle = Promise.resolve(pageInfo.targetBundle);
+		} else {
+			getBundle = ContentManagementUtils.findBundle(pageInfo)
+				//if we don't find it in bundles... look up the course instance...
+				.fail(function() { return CourseWareUtils.getCourseInstance(pageInfo); });
+		}
+
+		getBundle
 			//Found a bundle or course instance...
 			.then(Ext.bind(this._setBundle, this, ['passive'], true))
 			//Did not find a bundle or course...
@@ -593,7 +601,7 @@ Ext.define('NextThought.view.content.View', {
 							me.fireEvent('set-last-location-or-root', ntiid, function(ntiid, reader, error) {
 								if (error) { return reject(error); }
 								fulfill(me);
-							});
+							}, bundle);
 						}
 					});
 

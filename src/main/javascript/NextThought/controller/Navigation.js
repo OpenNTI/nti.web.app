@@ -470,7 +470,12 @@ Ext.define('NextThought.controller.Navigation', {
 			}
 		}
 
-		this.fireEvent('set-location', ntiid, callback, this);
+		this.fireEvent('set-location', ntiid, callback, this, this.getCurrentBundle());
+	},
+
+
+	getCurrentBundle: function() {
+		return this.getContentView().currentBundle;
 	},
 
 
@@ -485,7 +490,7 @@ Ext.define('NextThought.controller.Navigation', {
 
 				Ext.callback(cb, window, arguments);
 				fulfill(_);
-			});
+			}, null, me.getCurrentBundle());
 		});
 	},
 
@@ -651,7 +656,7 @@ Ext.define('NextThought.controller.Navigation', {
 					}
 				}
 
-				me.fireEvent('set-location', obj, scroll);
+				me.fireEvent('set-location', obj, scroll, null, this.getCurrentBundle());
 			};
 		}
 

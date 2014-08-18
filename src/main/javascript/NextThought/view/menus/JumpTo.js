@@ -38,7 +38,7 @@ Ext.define('NextThought.view.menus.JumpTo', {
 			return;
 		}
 
-		this.fireEvent('set-location', item.ntiid);
+		this.fireEvent('set-location', item.ntiid, null, null, this.bundle);
 	},
 
 

@@ -202,7 +202,7 @@ Ext.define('NextThought.controller.Reader', {
 	 * @param {Boolean} [silent] Presently not used.
 	 * @return {Boolean} Always returns true. :/
 	 */
-	setLocation: function(ntiid, callback, silent) {
+	setLocation: function(ntiid, callback, silent, bundle) {
 		var me = this,
 			r = me.getContentReader(),
 			v = me.getContentView(),
@@ -219,6 +219,7 @@ Ext.define('NextThought.controller.Reader', {
 		}
 
 		function go(pi) {
+			pi.targetBundle = bundle;
 			if (me.fireEvent('show-view', 'content') === false) {
 				return false;
 			}
@@ -268,7 +269,7 @@ Ext.define('NextThought.controller.Reader', {
 	},
 
 
-	setLocationRooted: function(ntiid, callback, silent) {
+	setLocationRooted: function(ntiid, callback, silent, bundle) {
 		var reader = this.getContentReader(),
 			oldRoot = reader.currentRoot,
 			root = ntiid;
@@ -289,7 +290,7 @@ Ext.define('NextThought.controller.Reader', {
 			Ext.callback(callback, null, [ntiid, a, er]);
 		}
 
-		this.setLocation(ntiid, call, silent === true);
+		this.setLocation(ntiid, call, silent === true, bundle);
 		reader.currentRoot = root; //setLocation is async, and in its init can set this to a less restrictive root.
 	},
 
@@ -302,7 +303,7 @@ Ext.define('NextThought.controller.Reader', {
 	 * @param {Function} [callback]
 	 * @param {Boolean} [silent]
 	 */
-	setLastLocation: function(ntiid, callback, silent) {
+	setLastLocation: function(ntiid, callback, silent, bundle) {
 		PersistentStorage.remove('last-location-map');//neuter last-location-map
 		var reader = this.getContentReader(),
 			lastNtiid = PersistentStorage.getProperty('last-location-map', ntiid, ntiid);
@@ -323,7 +324,7 @@ Ext.define('NextThought.controller.Reader', {
 
 		reader.currentRoot = null;
 		//this.getContentView()._setBundle(null);
-		this.setLocation(lastNtiid, call, silent === true);
+		this.setLocation(lastNtiid, call, silent === true, bundle);
 	},
 
 
@@ -337,7 +338,7 @@ Ext.define('NextThought.controller.Reader', {
 	},
 
 
-	showCardTarget: function(card, data, silent, callback) {
+	showCardTarget: function(card, data, silent, callback, bundle) {
 		var reader = card.up('reader-content') || ReaderPanel.get(),//for now, lets just get the default reader.
 			ntiid = data.ntiid,
 			postfix = data.notTarget ? '' : '-target',
@@ -378,8 +379,9 @@ Ext.define('NextThought.controller.Reader', {
 
 		pi.contentOrig = reader.getLocation().NTIID;
 		pi.hideControls = true;
+		pi.targetBundle = bundle;
 
-		reader.setLocation(pi, callback, !!silent);
+		reader.setLocation(pi, callback, !!silent, bundle);
 	},
 
 
@@ -409,24 +411,30 @@ Ext.define('NextThought.controller.Reader', {
 		pw[fn]();
 
 		pw.clearBookmark();
-		pg.updateState(t, reader.currentRoot);
+		pg.updateState(t, reader.currentRoot, pageInfo.targetBundle);
 
-
-		//Do not track content packages if they are marked as bundles/courses...track the bundle instead.
-		ContentManagementUtils.findBundle(pageInfo)
+		if (pageInfo.targetBundle) {
+			Promise.resolve(pageInfo.targetBundle)
+				.then(trackFn);
+		} else {
+			//Do not track content packages if they are marked as bundles/courses...track the bundle instead.
+			ContentManagementUtils.findBundle(pageInfo)
 			//if we don't find it in bundles... look up the course instance...
-				.fail(function() { return CourseWareUtils.getCourseInstance(pageInfo); }.bind(this))
+				.fail(function() {
+					return CourseWareUtils.getCourseInstance(pageInfo);
+				}.bind(this))
 			//Found a bundle or course instance...
 				.then(trackFn)
 			//Did not find a bundle or course...
 				.fail(function() {
 					trackFn(l && l.title);
 				});
+		}
 
 		//If there is no origin, we treat this as normal. (Read the location from the location provder) The origin is
 		// to direct the navbar to use the origins' id instead of the current one (because we know th current one will
 		// not resolve from our library... its a card)
-		nav.updateLocation(t || origin, reader.currentRoot);
+		nav.updateLocation(t || origin, reader.currentRoot, pageInfo.targetBundle);
 	},
 
 
