@@ -162,7 +162,9 @@ Ext.define('NextThought.view.forums.Container', {
 			single: true,
 			//go back to the forum-list we were at
 			'pop-view': function() {
-				delete me.topicList.activeRecord;
+				if (me.topicList) {
+					delete me.topicList.activeRecord;
+				}
 				me.updateState();
 				me.showForumList(me.forumList);
 			},
