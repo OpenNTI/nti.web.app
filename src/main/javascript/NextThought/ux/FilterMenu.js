@@ -64,7 +64,11 @@ Ext.define('NextThought.ux.FilterMenu', {
 		var item = this.down('[filter="' + filter + '"]') || this.down('[filter]');
 
 		if (item) {
-			item.setChecked(true, true);
+			if (!item.setChecked) {
+				console.error('Got item with no setChecked:', item);
+			} else {
+				item.setChecked(true, true);
+			}
 		}
 
 		this.search.setValue(search || '');
