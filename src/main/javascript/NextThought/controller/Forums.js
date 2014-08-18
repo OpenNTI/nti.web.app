@@ -544,6 +544,7 @@ Ext.define('NextThought.controller.Forums', {
 		return Service.getObject(record.get('ContainerId'))
 				.then(function(topicList) {
 					topicList.comment = comment;
+					topicList.targetBundle = record.targetBundle;
 					return this.loadTopicList(cmp, topicList, record);
 				}.bind(this))
 				.then(function(view) {
