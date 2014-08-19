@@ -61,15 +61,19 @@ Ext.define('NextThought.model.forums.Board', {
 
 
 	findCourse: function() {
-		var me = this;
+		var me = this,
+			id = me.getId();
 
 		if (me.course || me.course === false) {
 			return Promise.resolve(me.course);
 		}
 
 		return CourseWareUtils.findCourseBy(function(course) {
-			var instance = course.get('CourseInstance');
-			return me.getId() === instance.get('Discussions').getId();
+			var instance = course.get('CourseInstance'),
+				section = instance.get('Discussions'),
+				parent = instance.get('ParentDiscussions');
+
+			return (section && section.getId() === id) || (parent && parent.getId() === id);
 		}).done(function(course) {
 			course = course.get('CourseInstance');
 			me.course = course;
