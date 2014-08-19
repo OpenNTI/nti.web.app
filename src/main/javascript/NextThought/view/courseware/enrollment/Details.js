@@ -667,6 +667,8 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			win = me.up('[showMsg]'),
 			guid = guidGenerator();
 
+		if (!win) {return;}//user closed window before we got here.
+
 		win.showMsg(msg, isError, false, guid, cursor);
 
 		Ext.destroy(me.__showMessageClickMonitor);
