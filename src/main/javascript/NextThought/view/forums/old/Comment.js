@@ -244,7 +244,9 @@ Ext.define('NextThought.view.forums.old.Comment', {
 		this.record.removeObserverForField(this, 'body', this.updateContent, this);
 
 		//Now update the body to the same text the server uses.
-		this.bodyEl.update('This item has been deleted.');
+		if (this.bodyEl && this.bodyEl.dom) {
+			this.bodyEl.update('This item has been deleted.');
+		}
 		this.addCls('deleted');
 	},
 

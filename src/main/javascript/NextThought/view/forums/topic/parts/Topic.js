@@ -374,6 +374,7 @@ Ext.define('NextThought.view.forums.topic.parts.Topic', {
 
 
 	setContent: function(html, cb) {
+		if (!this.bodyEl || !this.bodyEl.dom) { return; }
 		var me = this, cmps;
 		this.bodyEl.update(html);
 		DomUtils.adjustLinks(this.bodyEl, window.location.href);

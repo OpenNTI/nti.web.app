@@ -56,7 +56,7 @@ Ext.define('NextThought.view.account.activity.note.Reply', {
 
 	initComponent: function() {
 		this.callParent(arguments);
-		this.enableBubble(['realign','editor-opened','editor-closed']);
+		this.enableBubble(['realign', 'editor-opened', 'editor-closed']);
 		this.mon(this.record, 'destroy', this.handleDestroy, this);
 	},
 
@@ -132,7 +132,7 @@ Ext.define('NextThought.view.account.activity.note.Reply', {
 			scope: this,
 			'activated-editor': hide,
 			'deactivated-editor': show,
-			'no-body-content': function(editor,el) {
+			'no-body-content': function(editor, el) {
 				editor.markError(el, getString('NextThought.view.account.activity.note.Reply.no-body-content'));
 				return false;
 			},
@@ -192,6 +192,8 @@ Ext.define('NextThought.view.account.activity.note.Reply', {
 			return;
 		}
 
+		if (this.destroying || this.isDestroyed) {return;}
+
 		var snip = ContentUtils.getHTMLSnippet(html, 180), me = this;
 		this.bodyEl.update(snip || html);
 		DomUtils.adjustLinks(this.bodyEl, window.location.href);
@@ -220,7 +222,7 @@ Ext.define('NextThought.view.account.activity.note.Reply', {
 
 	editComment: function(e) {
 		e.stopEvent();
-		if(this.fireEvent('editor-opened')){
+		if (this.fireEvent('editor-opened')) {
 			this.editor.editBody(this.record.get('body')).activate();
 		}
 	},

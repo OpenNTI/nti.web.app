@@ -121,7 +121,9 @@ Ext.define('NextThought.view.account.activity.blog.Reply', {
 		this.record.removeObserverForField(this, 'body', this.updateContent, this);
 
 		//Now update the body to the same text the server uses.
-		this.bodyEl.update(getString('NextThought.view.account.activity.blog.Reply.deleted'));
+		if (this.bodyEl || this.bodyEl.dom) {
+			this.bodyEl.update(getString('NextThought.view.account.activity.blog.Reply.deleted'));
+		}
 		this.addCls('deleted');
 	}
 });
