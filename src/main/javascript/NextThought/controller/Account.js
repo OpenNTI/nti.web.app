@@ -245,10 +245,13 @@ Ext.define('NextThought.controller.Account', {
 							 },
 							 callback: function(q, success, r) {
 								 var store;
-								 btn.removeCls('disabled');
+								 if (!btn.isDestroyed) {
+									 btn.removeCls('disabled');
+								 }
 								 if (!success) {
-									 view.setError({field: 'Group Code', message: 'The code you entered is not valid.'});
-									 return;
+									 if (!view.isDestroyed) {
+										 view.setError({field: 'Group Code', message: 'The code you entered is not valid.'});
+									 }
 								 }
 								 else {
 									 store = this.getFriendsListStore();
