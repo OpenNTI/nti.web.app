@@ -17,7 +17,8 @@ Ext.define('NextThought.model.Highlight', {
 		{ name: 'presentationProperties', type: 'auto'},
 		{ name: 'applicableRange', type: 'ContentRangeDescription'},
 
-		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false, affectedBy: 'Last Modified'}
+		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false, affectedBy: 'Last Modified'},
+		{ name: 'NotificationGroupingField', mapping: 'CreatedTime', type: 'groupByTime', persist: false, affectedBy: 'CreatedTime'}
 	],
 
 	getActivityItemConfig: function(type, cid) {

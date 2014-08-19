@@ -45,6 +45,7 @@ Ext.define('NextThought.model.Note', {
 		{ name: 'RecursiveLikeCount', type: 'int'},
 
 		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false, affectedBy: 'Last Modified'},
+		{ name: 'NotificationGroupingField', mapping: 'CreatedTime', type: 'groupByTime', persist: false, affectedBy: 'CreatedTime'},
 		{ name: 'FavoriteGroupingField', defaultValue: 'Note', persist: false},
 
 		{ name: 'line', type: 'int', defaultValue: 0, persist: false},

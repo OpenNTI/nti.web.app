@@ -9,6 +9,16 @@ Ext.define('NextThought.view.account.notifications.types.Contact', {
 
 	wording: 'NextThought.view.account.notifications.types.Contact.wording',
 
+	getDisplayTime: function(values) {
+		var t = values.EventTime || values['Last Modified'];
+
+		if (!t || t.getTime() === 0) {
+			t = values.CreatedTime;
+		}
+		values.Time = t;
+		return Ext.util.Format.date(t, 'c');
+	},
+
 	getDisplayName: function(values) {
 		if (!values || !this.showCreator) { return ''; }
 

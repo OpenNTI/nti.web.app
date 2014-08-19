@@ -17,7 +17,8 @@ Ext.define('NextThought.model.Bookmark', {
     { name: 'applicableRange', type: 'ContentRangeDescription'},
 
     { name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false, affectedBy: 'Last Modified'},
-	    { name: 'FavoriteGroupingField', defaultValue: 'Bookmarks', persist: false}
+    { name: 'NotificationGroupingField', mapping: 'CreatedTime', type: 'groupByTime', persist: false, affectedBy: 'CreatedTime'},
+	  { name: 'FavoriteGroupingField', defaultValue: 'Bookmarks', persist: false}
 
   ]
 });

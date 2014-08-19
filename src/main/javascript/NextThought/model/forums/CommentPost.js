@@ -6,6 +6,7 @@ Ext.define('NextThought.model.forums.CommentPost', {
 
 	fields: [
 		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false, affectedBy: 'Last Modified'},
+		{ name: 'NotificationGroupingField', mapping: 'CreatedTime', type: 'groupByTime', persist: false, affectedBy: 'CreatedTime'},
 
 		{ name: 'Deleted', type: 'boolean', persist: false },
 		{ name: 'inReplyTo', type: 'string' },

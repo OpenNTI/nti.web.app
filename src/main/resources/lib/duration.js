@@ -315,29 +315,29 @@ Duration.prototype.value = function() {
 }
 
 Duration.prototype.ago = function() {
-	if (Math.floor(this.seconds) == 0) {
+	if (Math.round(this.seconds) == 0) {
 		return 'just now';
 	}
 	else if (this.seconds < this.Calendar.Seconds.per.Minute) {
-		return Math.floor(this.seconds) + ' second' + ((Math.floor(this.seconds) > 1) ? 's' : '') + ' ago';
+		return Math.round(this.seconds) + ' second' + ((Math.round(this.seconds) > 1) ? 's' : '') + ' ago';
 	}
 	else if (this.seconds < this.Calendar.Seconds.per.Hour) {
-		return Math.floor(this.inMinutes()) + ' minute' + ((Math.floor(this.inMinutes()) > 1) ? 's' : '') + ' ago';
+		return Math.round(this.inMinutes()) + ' minute' + ((Math.round(this.inMinutes()) > 1) ? 's' : '') + ' ago';
 	}
 	else if (this.seconds < this.Calendar.Seconds.per.Day) {
-		return Math.floor(this.inHours()) + ' hour' + ((Math.floor(this.inHours()) > 1) ? 's' : '') + ' ago';
+		return Math.round(this.inHours()) + ' hour' + ((Math.round(this.inHours()) > 1) ? 's' : '') + ' ago';
 	}
 	else if (this.seconds < this.Calendar.Seconds.per.Week) {
-		return Math.floor(this.inDays()) + ' day' + ((Math.floor(this.inDays()) > 1) ? 's' : '') + ' ago';
+		return Math.round(this.inDays()) + ' day' + ((Math.round(this.inDays()) > 1) ? 's' : '') + ' ago';
 	}
 	else if (this.seconds < this.Calendar.Seconds.per.Month) {
-		return Math.floor(this.inWeeks()) + ' week' + ((Math.floor(this.inWeeks()) > 1) ? 's' : '') + ' ago';
+		return Math.round(this.inWeeks()) + ' week' + ((Math.round(this.inWeeks()) > 1) ? 's' : '') + ' ago';
 	}
 	else if (this.seconds < this.Calendar.Seconds.per.Year) {
-		return Math.floor(this.inMonths()) + ' month' + ((Math.floor(this.inMonths()) > 1) ? 's' : '') + ' ago';
+		return Math.round(this.inMonths()) + ' month' + ((Math.round(this.inMonths()) > 1) ? 's' : '') + ' ago';
 	}
 	else {
-		return Math.floor(this.inYears()) + ' year' + ((Math.floor(this.inYears()) > 1) ? 's' : '') + ' ago';
+		return Math.round(this.inYears()) + ' year' + ((Math.round(this.inYears()) > 1) ? 's' : '') + ' ago';
 	}
 }
 

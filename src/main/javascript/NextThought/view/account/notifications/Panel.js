@@ -178,7 +178,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		this._lastViewedURL = links.lastViewed;
 
 		this.store.each(function(c) {
-			if (c.get('Last Modified') > lastViewed) {
+			if (c.get('CreatedTime') > lastViewed) {
 				count++;
 			}
 		});
@@ -272,14 +272,14 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 				groupers: [
 					{
 						direction: 'DESC',
-						property: 'GroupingField'
+						property: 'NotificationGroupingField'
 					}
 				],
 				sorters: [
 					function(a, b) { return a.isHeader === b.isHeader ? 0 : a.isHeader ? -1 : 1; },
 					{
 						direction: 'DESC',
-						property: 'Last Modified'
+						property: 'CreatedTime'
 					}
 				],
 				filters: [
@@ -345,7 +345,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 				label = Ext.data.Types.GROUPBYTIME.groupTitle(d);
 				if (label) {
 					headers.push(NextThought.model.UIViewHeader.create({
-						GroupingField: d,
+						NotificationGroupingField: d,
 						label: label
 					}, d.toString()));
 				}

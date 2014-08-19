@@ -61,10 +61,10 @@ Ext.define('NextThought.view.account.notifications.types.Base', {
 			}
 		]), {
 			getTime: function(values) {
-				var t = values.EventTime || values['Last Modified'];
-				if (!t || t.getTime() === 0) {
-					t = values.CreatedTime;
-				}
+				if (me.getDiplayTime) { return me.getDisplayTime(); }
+
+				var t = values.CreatedTime;
+
 				values.Time = t;
 				return Ext.util.Format.date(t, 'c');
 			},
