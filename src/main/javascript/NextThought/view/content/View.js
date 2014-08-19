@@ -577,6 +577,7 @@ Ext.define('NextThought.view.content.View', {
 		var me = this;
 		//Because courses still use location, it needs to be cleared before setting the new one
 		this.reader.clearLocation();
+		me.el.mask('Loading...');
 		return this._setBundle(bundle, tab)
 				.then(function() {
 					var ntiid, title,
@@ -612,6 +613,8 @@ Ext.define('NextThought.view.content.View', {
 						location: ntiid && PersistentStorage.getProperty('last-location-map', ntiid, ntiid),
 						bundle: id
 					});
+
+					result.always(me.el.unmask.bind(me.el));
 
 					return result;
 				});
