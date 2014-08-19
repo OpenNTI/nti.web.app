@@ -12,6 +12,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Section', {
 	ui: 'course',
 	cls: 'overview-section',
 
+	hidden: true,
 	layout: 'auto',
 	componentLayout: 'natural',
 	childEls: ['body'],
