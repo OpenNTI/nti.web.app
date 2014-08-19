@@ -410,12 +410,15 @@ Ext.define('NextThought.view.profiles.outline.View', {
 
 
 	convertToContact: function() {
-		//this.controlsEl.down('.button').set({cls: 'button chat disabled'}).update('Chat');
 		this.isContact = true;
 		this.applyRenderData(this.user);
-		this.nameEl.removeCls('no-presence');
-		this.updateButton();
-		this.controlsEl.removeCls('isMe notContact').addCls('isContact');
+
+		if (this.rendered && !this.isDestroyed && !this.destroying) {
+			//this.controlsEl.down('.button').set({cls: 'button chat disabled'}).update('Chat');
+			this.nameEl.removeCls('no-presence');
+			this.controlsEl.removeCls('isMe notContact').addCls('isContact');
+			this.updateButton();
+		}
 	},
 
 
