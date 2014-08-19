@@ -499,6 +499,7 @@ Ext.define('NextThought.controller.Forums', {
 			view = me.getCardContainer(cmp);
 
 		function finish(results) {
+			if (!Ext.isArray(results)) { results = [results]; }
 			var v = results[0],
 				forumList = results[1],
 				topicView = v.showTopicList(record, forumList);
