@@ -674,9 +674,12 @@ Ext.define('NextThought.model.Base', {
 			},
 			success: function(resp) {
 				var newMe = ParseUtils.parseItems(Ext.decode(resp.responseText))[0],
-					sanitizedValue = newMe.get(fieldName);
-
-				me.set(fieldName, sanitizedValue);
+					sanitizedValue = newMe && newMe.get(fieldName);
+				if (!newMe) {
+					console.warn('Could not parse response... %o', resp.responseText);
+				} else {
+					me.set(fieldName, sanitizedValue);
+				}
 
 				//it worked, reset the dirty flag, and reset the field
 				//because the server may have sanitized it.
