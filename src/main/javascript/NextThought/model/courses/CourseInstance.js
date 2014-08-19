@@ -45,13 +45,17 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 				isCourse: true,
 				author: e && e.getAuthorLine(),
 				title: e && e.get('Title'),
-				label: e && e.get('ProviderUniqueID'),
-				icon: e && e.get('icon'),
-				thumb: e && e.get('thumb')
+				label: e && e.get('ProviderUniqueID')
 			};
 
 		ObjectUtils.clean(bundle);
-		return Ext.apply(bundle, data);
+
+		bundle = Ext.apply(bundle, data);
+
+		return Ext.applyIf(bundle, {
+			icon: e && e.get('icon'),
+			thumb: e && e.get('thumb')
+		});
 	},
 
 
