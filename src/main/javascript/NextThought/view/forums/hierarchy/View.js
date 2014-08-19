@@ -125,6 +125,8 @@ Ext.define('NextThought.view.forums.hierarchy.View', {
 			this.navigation.setActiveRecord(record);
 			this.fireEvent('active-record-changed', record);
 		}
+
+		return record;
 	},
 
 

@@ -31,48 +31,56 @@ Ext.define('NextThought.view.forums.topic.View', {
 	setCurrent: function(record) {
 		this.setExtraParams(record);
 
-		var me = this,
-			container = me.up('[currentBundle]'),
-			id = record.getId();
-
-		function startTimer() {
-			if (container) {
-				AnalyticsUtil.getResourceTimer(id, {
-					type: 'discussion-viewed',
-					course: container.currentBundle.getId(),
-					topic_id: id
-				});
-			}
-		}
-
-		function stopTimer() {
-			AnalyticsUtil.stopResourceTimer(id, 'discussion-viewed');
-		}
-
-		Ext.destroy(me.visibilityMonitors);
-
-		me.visibilityMonitors = this.on({
-			'destroy': function() {
-				stopTimer();
-			},
-			'visibility-changed': function(visible) {
-				//start the time when we become visible, stop it when we hide
-				if (visible) {
-					startTimer();
-				} else {
-					stopTimer();
-				}
-			}
-		}, me, {destroyable: true});
-
-		startTimer();
-
-		me.callParent(arguments);
+		this.callParent(arguments);
 	},
 
 
 	setCurrentBody: function() {
-		this.callParent(arguments);
+		var record = this.callParent(arguments),
+			me = this,
+			container = me.up('[currentBundle]');
+
+		function stopTimer() {
+			if (me.currentAnalyticId && me.hasCurrentTimer) {
+				delete me.hasCurrentTimer;
+				AnalyticsUtil.stopResourceTimer(me.currentAnalyticId, 'discussion-viewed');
+			}
+		}
+
+		function startTimer() {
+			if (!me.hasCurrentTimer) {
+				me.hasCurrentTimer = true;
+
+				AnalyticsUtil.getResourceTimer(me.currentAnalyticId, {
+					type: 'discussion-viewed',
+					course: container && container.currentBundle && container.currentBundle.getId(),
+					topic_id: me.currentAnalyticId
+				});
+			}
+		}
+
+		if (record.getId() !== me.currentAnalyticId) {
+			stopTimer();
+			me.currentAnalyticId = record.getId();
+			startTimer();
+		}
+
+		if (!me.visibilityMonitors) {
+			me.visibilityMonitors = this.on({
+				'destroy': function() {
+					Ext.destroy(me.visibilityMonitors);
+					stopTimer();
+				},
+				'visibility-changed': function(visible) {
+					//start the time when we become visible, stop it when we hide
+					if (visible) {
+						startTimer();
+					} else {
+						stopTimer();
+					}
+				}
+			}, me, {destroyable: true});
+		}
 
 		this.realignSidebar();
 
