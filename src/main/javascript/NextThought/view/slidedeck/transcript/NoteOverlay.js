@@ -471,7 +471,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 
 	showAnnotationsAtLine: function(e) {
-		var t = e.getTarget('.count', null, true),
+		var t = e && e.getTarget('.count', null, true),
 			line = t && t.getAttribute('data-line'), annotations;
 
 		if (!line) { return;}
