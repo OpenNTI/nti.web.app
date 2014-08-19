@@ -8,6 +8,7 @@ Ext.define('NextThought.cache.AbstractStorage', function() {
 	};
 
 	return {
+		currentVersion: 2,
 
 		constructor: function(storage, noPrefix) {
 			if (!storage ||
@@ -18,13 +19,21 @@ Ext.define('NextThought.cache.AbstractStorage', function() {
 				Ext.Error.raise('Given storage object does not implement Storage api');
 			}
 
-			this.prefix = prefix;
-			if (noPrefix === true) {
-				this.prefix = function(v) {return v;};
+			this.backingStore = storage;
+
+			if (this.get('version') !== this.currentVersion) {
+				this.removeAll();
 			}
 
-			this.backingStore = storage;
+			this.set('version', this.currentVersion);
+
+			if (noPrefix !== true) {
+				this.prefix = prefix;
+			}
 		},
+
+
+		prefix: function(v) {return v;},
 
 
 		set: function(key, value) {
@@ -113,8 +122,8 @@ Ext.define('NextThought.cache.AbstractStorage', function() {
 },function() {
 	var w = window,
 		Cls = this,
-		ss = w.sessionStorage,
-		ls = w.localStorage,
+		ss,
+		ls,
 		fallback = {
 			data: {},
 			removeItem: function(k) {delete this.data[k];},
@@ -134,8 +143,14 @@ Ext.define('NextThought.cache.AbstractStorage', function() {
 		}
 	}
 
-	if (!isStorageSupported(ss)) { ss = null; }
-	if (!isStorageSupported(ls)) { ls = ss; }
+	try {
+		ss = w.sessionStorage;
+		ls = w.localStorage;
+		if (!isStorageSupported(ss)) { ss = null; }
+		if (!isStorageSupported(ls)) { ls = ss; }
+	} catch (e) {
+		console.error('Could not acces browser storage %o', e.stack || e.message || e);
+	}
 
 	window.TemporaryStorage = new Cls(ss || fallback, true);
 	window.PersistentStorage = new Cls(ls || fallback);

@@ -131,6 +131,8 @@ PREVIOUS_STATE = 'previous-state';
 		transactions: {},
 
 		enableTransactions: true,
+
+		currentStateVersion: 4,
 		//</editor-fold>
 
 
@@ -232,7 +234,7 @@ PREVIOUS_STATE = 'previous-state';
 				var current = me.currentState,
 					diff = isDiff(current, s);
 				console.debug('update state', arguments);
-				Ext.applyIf(s, {active: current.active, version: 3});
+				Ext.applyIf(s, {active: current.active, version: me.currentStateVersion});
 
 				console.debug('Will state change?', diff);
 
@@ -715,6 +717,11 @@ PREVIOUS_STATE = 'previous-state';
 				console.log('local state found?', previousState);
 				lastLocation = previousState || null;
 
+				if (previousState && previousState.version !== this.currentStateVersion) {
+					PersistentStorage.remove(this.getStateKey());
+					lastLocation = defaultState;
+				}
+
 				result = lastLocation && Ext.Object.getKeys(lastLocation).length > 0 ? lastLocation : defaultState;
 				if (location.hash) {
 					Ext.Object.merge(result, this.interpretFragment(location.hash));
@@ -739,7 +746,7 @@ PREVIOUS_STATE = 'previous-state';
 			if (!username) {
 				console.error('unknown username for state mgmt.');
 			}
-			return B64.encode('state2-' + username);
+			return B64.encode('state-' + username);
 		}
 		//</editor-fold>
 	});
