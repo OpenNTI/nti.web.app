@@ -68,18 +68,32 @@ Ext.define('NextThought.model.forums.Board', {
 			return Promise.resolve(me.course);
 		}
 
-		return CourseWareUtils.findCourseBy(function(course) {
+		return CourseWareUtils.getCoursesByPriority(function(course) {
 			var instance = course.get('CourseInstance'),
 				section = instance.get('Discussions'),
 				parent = instance.get('ParentDiscussions');
 
-			return (section && section.getId() === id) || (parent && parent.getId() === id);
-		}).done(function(course) {
+			if (section && section.getId() === id) {
+				return 2;
+			}
+
+			if (parent && parent.getId() === id) {
+				return 1;
+			}
+
+			return 0;
+		}).then(function(courses) {
+			var course = courses.last();
+
+			if (!course) {
+				return Promise.reject('No Course found');
+			}
+
 			course = course.get('CourseInstance');
 			me.course = course;
 			return course;
-		}).fail(function(reason) {
-			console.log(reason);
+		}).fail(function() {
+			console.error(reason);
 			me.course = false;
 			return false;
 		});

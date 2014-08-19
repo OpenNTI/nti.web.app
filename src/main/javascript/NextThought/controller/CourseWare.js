@@ -761,6 +761,37 @@ Ext.define('NextThought.controller.CourseWare', {
 
 					return maxInstance;
 				});
+		},
+
+
+		getCoursesByPriority: function(fn) {
+			return new Promise(function(fulfill) {
+				var priorities = {},
+					keys = [],
+					result = [];
+
+				function find(course) {
+					var priority = fn.call(null, course);
+
+					if (priorities[priority]) {
+						priorities[priority].push(course);
+					} else {
+						keys.push(priority);
+						priorities[priority] = [course];
+					}
+				}
+
+				Ext.getStore('courseware.EnrolledCourses').each(find);
+				Ext.getStore('courseware.AdministeredCourses').each(find);
+
+				keys.sort();
+
+				keys.forEach(function(key) {
+					result = result.concat(priorities[key]);
+				});
+
+				fulfill(result);
+			});
 		}
 	};
 
