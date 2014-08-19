@@ -88,7 +88,5 @@
 		};
 	}
 
-	hook();
-
 	window.reportErrorEvent = hook;
 }());
