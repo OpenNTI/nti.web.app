@@ -611,6 +611,10 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 
 	updateEnrollmentCard: function() {
+		if (this.isDestroyed) {
+			return;
+		}
+
 		this.cardsContainerEl.dom.innerHTML = '';
 
 		var me = this,
