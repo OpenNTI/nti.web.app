@@ -423,7 +423,7 @@ Ext.define('NextThought.controller.Forums', {
 				v.showForumList(forumList);
 			}
 
-			return v;
+			return [v, forumList];
 		}
 
 
@@ -496,11 +496,12 @@ Ext.define('NextThought.controller.Forums', {
 		record.activeRecord = activeTopic;
 
 		var me = this,
-			view = me.getCardContainer(cmp),
-			forumList;
+			view = me.getCardContainer(cmp);
 
-		function finish(v) {
-			var topicView = v.showTopicList(record, forumList);
+		function finish(results) {
+			var v = results[0],
+				forumList = results[1],
+				topicView = v.showTopicList(record, forumList);
 			if (Ext.isFunction(callback)) {
 				callback.call(me, topicView, v);
 			}
