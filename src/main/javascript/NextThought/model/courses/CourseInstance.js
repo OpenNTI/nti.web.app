@@ -495,68 +495,78 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	 * Sends requests for the contents link of the discussions and parent discussions if they are there
 	 * @return {Promise} Fulfills or rejects with the response of the request
 	 */
-	getDiscussionContents: function() {
-		var section = this.get('Discussions'),
-			sectionRequest,
-			parent = this.get('ParentDiscussions'),
-			parentRequest;
+	getDiscussionContents: function(prop) {
+		var board = this.get(prop),
+			request;
 
-		if (section) {
-			section = section.getLink('contents');
+		if (board) {
+			board = board.getLink('contents');
 
-			sectionRequest = section ? Service.request(section) : [];
+			request = board ? Service.request(board) : Promise.reject('No Contents Link');
+		} else {
+			request = Promise.reject('No board');
 		}
 
-
-		if (parent) {
-			parent = parent.getLink('contents');
-
-			parentRequest = parent ? Service.request(parent) : [];
-		}
-
-		return Promise.all([
-			sectionRequest,
-			parentRequest
-		]);
+		return request;
 	},
 
 
 	getForumList: function() {
-		var me = this;
+		var me = this,
+			sectionContents,
+			parentContents;
 
-		return this.getDiscussionContents()
-			.then(function(results) { // parse the results
-				var section = results[0],
-					parent = results[1];
+		//fail if both section and parent fail to load, succeed otherwise
+		return me.getDiscussionContents('Discussions')
+			.then(function(response) {
+				var section;
 
-				if (!Ext.isEmpty(section)) {
-					section = JSON.parse(section);
-					section.Items = ParseUtils.parseItems(section.Items);
-				} else {
-					section = {
-						Items: []
-					};
+				if (!response) {
+					return Promise.reject('No response');
 				}
 
-				if (!Ext.isEmpty(parent)) {
-					parent = JSON.parse(parent);
-					parent.Items = ParseUtils.parseItems(parent.Items);
-				} else {
-					parent = {
-						Items: []
-					};
+				try {
+					section = JSON.parse(response);
+
+					sectionContents = ParseUtils.parseItems(section.Items);
+				} catch (e) {
+					console.error('Failed to pares section, ', e);
+
+					sectionContents = null;
+				}
+			})
+			.fail(function(reason) {
+				console.error('Section contents fail: ', reason);
+			})
+			.then(me.getDiscussionContents.bind(me, 'ParentDiscussions'))
+			.then(function(response) {
+				var parent;
+
+				if (!response) {
+					return Proimse.reject('No response');
 				}
 
+				try {
+					parent = JSON.parse(response);
 
-				return [section.Items, parent.Items];
+					parentContents = ParseUtils.parseItems(parent.Items);
+				} catch (e) {
+					console.error('Failed to parse parent, ', e);
+
+					parentContent = null;
+				}
+			})
+			.fail(function(reason) {
+				console.error('Parent contents fail: ', reason);
 			})
 			.then(function(results) {//bin the forums
-				return me.__binDiscussions.apply(me, results);
+
+				if (!sectionContents && !parentContents) {
+					return Promsie.reject('Failed to load any board contents');
+				}
+				return me.__binDiscussions(sectionContents, parentContents);
 			})
-			.then(me.__binToForumList.bind(me))//create a forum list for the ui to build from
-			.fail(function(reason) {
-				console.error('Failed to get discussion contents: ', reason);
-			});
+			.then(me.__binToForumList.bind(me));//create a forum list for the ui to build from
 	},
 
 
