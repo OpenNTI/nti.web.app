@@ -281,14 +281,6 @@ Ext.define('NextThought.view.library.Panel', {
 	},
 
 
-	courseDropped: function() {
-		if (this.el && !this.hasAvailableWindow) {
-			this.hasDroppedMask = true;
-			this.el.mask('Loading...');
-		}
-	},
-
-
 	setEnrolledCourses: function(current, archived) {
 		this.currentCourses = current;
 		this.archivedCourses = archived;
@@ -304,16 +296,27 @@ Ext.define('NextThought.view.library.Panel', {
 			archivedCmp.setItems(archived);
 		}
 
-		if (this.hasDroppedMask) {
-			this.el.unmask();
+		if (!Ext.isEmpty(current) || !Ext.isEmpty(archived)) {
+			this.loadCourses = Promise.resolve(true);
+			this.navigation.enableCourses();
+		} else {
+			this.loadCourses = Promise.reject('No Courses');
 		}
+
+		this.maybeFinishLoad();
 	},
 
 
 	setAdministeredCourses: function(current, archived) {
 		if (!Ext.isEmpty(current) || !Ext.isEmpty(archived)) {
 			this.navigation.enableAdmin();
+
+			this.loadAdmin = Promise.resolve(true);
+		} else {
+			this.loadAdmin = Promise.reject();
 		}
+
+		this.maybeFinishLoad();
 
 		this.currentAdministered = current;
 		this.archivedAdministered = archived;
@@ -328,17 +331,20 @@ Ext.define('NextThought.view.library.Panel', {
 		if (archivedCmp) {
 			archivedCmp.setItems(archived);
 		}
-
-		if (this.hasDropMask) {
-			this.el.unmask();
-		}
 	},
 
 
 	setBookStore: function(store) {
 		this.bookStore = store;
 
-		this.maybeEnableBooks();
+		if (store.getCount() > 0) {
+			this.navigation.enableBooks();
+			this.loadBooks = Promise.resolve(true);
+		} else {
+			this.loadBooks = Promise.reject(false);
+		}
+
+		this.maybeFinishLoad();
 
 		var bookCmp = this.body.down('[id=books]');
 
@@ -352,7 +358,14 @@ Ext.define('NextThought.view.library.Panel', {
 		if (store.getCount()) {
 			this.navigation.allowBookAdd = true;
 			this.navigation.updateAvailable();
+
+			this.navigation.enableBooks();
+			this.loadPurchasables = Promise.resolve(true);
+		} else {
+			this.loadPurchasables = Promise.reject(false);
 		}
+
+		this.maybeFinishLoad();
 
 		this.purchasables = store;
 
@@ -360,12 +373,13 @@ Ext.define('NextThought.view.library.Panel', {
 			this.activeWindow.setItems(store);
 		}
 
-		this.maybeEnableBooks();
+
 	},
 
 
 	setAvailableCourses: function(current, upcoming, archived) {
 		if (!Ext.isEmpty(current) || !Ext.isEmpty(upcoming) || !Ext.isEmpty(archived)) {
+			this.navigation.enableCourses();
 			this.navigation.allowCourseAdd = true;
 			this.navigation.updateAvailable();
 		}
@@ -381,96 +395,52 @@ Ext.define('NextThought.view.library.Panel', {
 	},
 
 
-	/**
-	 * Mark if we have any courses or not
-	 * @param  {boolean} courses whether or not there are courses
-	 */
-	maybeEnableCourses: function(courses) {
-		//is there isn't an active view or courses is the active view
-		var isActive = !this.stateObj.activeView || this.stateObj.activeView === 'mycourses';
-
-		if (!courses) {
-			this.noCourses = true;
-
-			if (this.noBooks) {
-				console.error('!!!User has no courses or books!!!');
-			}
-		} else if (!this.hasCourses) {//if we haven't already enable courses and make it the active view if it is the active tab
-			this.hasCourses = true;
-			this.navigation.enableCourses();
+	maybeFinishLoad: function() {
+		if (!this.loadCourses || !this.loadAdmin || !this.loadBooks || !this.loadPurchasables) {
+			return;
 		}
-	},
 
+		var me = this,
+			active = me.stateObj.activeView;
 
-	maybeEnableBooks: function() {
-		//if we already know we have books don't check again
-		if (this.hasBooks) { return; }
-
-		var isEmpty = true,
-			//if there isn't an activeView yet or books is the active view
-			isActive = !this.stateObj.activeView || this.stateObj.activeView === 'books';
-
-		//if the bookstore is set and it has items its not empty
-		if (this.bookStore && this.bookStore.getCount()) { isEmpty = false; }
-
-		//if the purchasables is set and it has items its not empty
-		if (this.purchasables && this.purchasables.getCount()) { isEmpty = false; }
-
-		//if its still empty but either the bookstore or the purchasables hasn't been set yet
-		//don't do anything
-		if (isEmpty && (!this.bookStore || !this.purchasables)) { return; }
-
-		if (isEmpty) {
-			this.noBooks = true;
-
-			if (this.noCoureses) {
-				console.error('!!!User has no courses or books');
-			}
-		} else {
-			//since we haven't already enable books and if we don't have courses make it the active view
-			this.hasBooks = true;
-			this.navigation.enableBooks();
-		}
+		this.loadAdmin
+			.then(function() {
+				if (!active || active === 'admincourses') {
+					active = 'admincourses';
+					me.showMyAdminCourses();
+				}
+			})
+			.fail(function() {
+				return this.loadCourses;
+			})
+			.then(function() {
+				if (!active || active === 'mycourses') {
+					active = 'mycourses';
+					me.showMyCourses();
+				}
+			})
+			.fail(function() {
+				return this.loadBooks;
+			})
+			.then(function() {
+				if (!active || active === 'books') {
+					active = 'books';
+					me.showMyBooks();
+				}
+			})
+			.fail(function() {
+				return this.loadPurchasables;
+			})
+			.then(function() {
+				if (!active || active === 'books') {
+					active = 'books';
+					me.showMyBooks();
+				}
+			});
 	},
 
 
 	maybeRestoreState: function() {
-		var active = this.stateObj.activeView;
-
-		//if we tried to restore to my courses but we don't have any show my books if we have any
-		if (this.noCourses && active === 'mycourses') {
-			if (this.hasBooks) {
-				this.showMyBooks();
-			} else {
-				console.error('No Courses or Books in the library');
-			}
-
-			return;
-		}
-
-		//if we tried to restore to my books but we don't have any show my courses if we have any
-		if (this.noBooks && active === 'books') {
-			if (this.hasCourses) {
-				this.showMyCourses();
-			} else {
-				console.error('No Books or Courses in the library');
-			}
-
-			return;
-		}
-
-		//if we didn't try to restore a state and we have courses show my courses
-		if (this.hasCourses && !active) {
-			this.showMyCourses();
-			this.navigation.setDefault('courses');
-			return;
-		}
-
-		//if we didn't try to restore a state and we have books but not courses show my books
-		if (this.hasBooks && !active) {
-			this.showMyBooks();
-			this.navigation.setDefault('books');
-			return;
-		}
+		this.maybeFinishLoad();
 	}
 });

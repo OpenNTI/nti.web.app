@@ -86,9 +86,6 @@ Ext.define('NextThought.controller.Library', {
 
 		Library.onceLoaded()
 			.then(function() {
-				//pass if there are any enrolled or available
-				panel.maybeEnableCourses(enrolled.getCount() || available.getCount());
-
 				split(enrolled, 'setEnrolledCourses');
 				split(administered, 'setAdministeredCourses');
 				splitAvailable(available, 'setAvailableCourses');

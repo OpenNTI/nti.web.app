@@ -140,6 +140,7 @@ Ext.define('NextThought.view.library.Navigation', {
 
 		if (this.shouldEnableAdmin) {
 			items.push({text: 'Your Administered Courses', type: 'admins', checked: active === 'admins'});
+			this.dropdownEl.update('Your Administerd Courses');
 		}
 
 		if (this.shouldEnableBooks) {
