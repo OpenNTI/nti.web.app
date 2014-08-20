@@ -122,6 +122,8 @@ Ext.define('NextThought.view.courseware.reports.View', {
 		me.configMap['course-report'].courseNumber = entry.get('ProviderUniqueID');
 		me.configMap['course-report'].courseName = entry.get('Title');
 
+		me.navigation.clear();
+
 		me.ids.forEach(function(id) {
 			me.navigation.addItem(me.configMap[id]);
 		});
