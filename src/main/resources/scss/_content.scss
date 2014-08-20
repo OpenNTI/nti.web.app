@@ -365,7 +365,8 @@ div.no-content-splash {
 	& > .x-panel {
 		z-index: 3;
 		position: absolute;
-		width: calc(100% - 5px);
+		width: 98%;
+		@include experimental-value(width, calc(100% - 5px));
 	}
 }
 

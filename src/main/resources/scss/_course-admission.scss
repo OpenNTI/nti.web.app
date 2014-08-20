@@ -77,7 +77,8 @@
 		padding: 70px 0px 30px 50px;
 		overflow: auto;
 		background-color: white;
-		height: calc(100% - 36px);
+		height: 90%;
+		@include experimental-value(height, calc(100% - 36px));
 	}
 
 	.body-container {
@@ -234,7 +235,8 @@
 				padding-left: 20px;
 				overflow: hidden;
 				font-size: 1.1em;
-				width: calc(100% - 20px);
+				width: 98%;
+				@include experimental-value(width, calc(100% - 20px));
 				position: absolute;
 				bottom: 1px;
 
