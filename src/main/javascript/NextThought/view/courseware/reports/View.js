@@ -119,7 +119,7 @@ Ext.define('NextThought.view.courseware.reports.View', {
 
 		me.hasLinks = true;
 
-		me.configMap['course-report'].courseNumber = entry.getId();
+		me.configMap['course-report'].courseNumber = entry.get('ProviderUniqueID');
 		me.configMap['course-report'].courseName = entry.get('Title');
 
 		me.ids.forEach(function(id) {
