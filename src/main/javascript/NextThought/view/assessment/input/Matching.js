@@ -39,6 +39,16 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 		]),
 
 
+		solTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+			{'tag': 'tpl', 'for': '.', cn: [
+				{ cn: [
+					{ cls: 'target term drag', html: '{term}' },
+					{ cls: 'text', html: '{label}' }
+				]}
+			]}
+		])),
+
+
 		renderSelectors: {
 			shelfEl: '.terms'
 		},
@@ -298,7 +308,7 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 							.concat(this.inputBox.query(q)));
 
 
-			console.log('set:', value);
+			//console.log('set:', value);
 			this.shelfEl.appendChild(terms);
 
 			terms = toMap(terms, 'data-match');
@@ -381,7 +391,29 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 
 
 		getSolutionContent: function(part) {
-			return '';
+			var f = this.filterHTML.bind(this),
+				values = this.part.get('values').map(f),
+				labels = this.part.get('labels').map(f),
+				solution = (this.part.get('solutions') || [])[0],
+				data = [], termId, labelId;
+
+			solution = solution && solution.get('value');
+
+			if (!solution) {return '';}
+
+			for (termId in solution) {
+				if (solution.hasOwnProperty(termId)) {
+					labelId = solution[termId];
+					data.push({
+						term: values[termId],
+						label: labels[labelId]
+					});
+				}
+			}
+
+			console.debug(data);
+
+			return this.solTpl.apply(data);
 		}
 
 
