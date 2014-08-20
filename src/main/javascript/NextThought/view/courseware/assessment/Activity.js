@@ -7,6 +7,8 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 	cls: 'course-assessment-activity scrollable',
 	preserveScrollOnRefresh: true,
 
+	emptyText: Ext.DomHelper.markup({ cls: 'empty-text', html: 'There is no activity.'}),
+
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header', html: '{title}'},
 		{ cls: 'list'},

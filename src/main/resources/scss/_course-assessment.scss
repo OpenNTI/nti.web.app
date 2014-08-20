@@ -97,6 +97,14 @@ canvas.x-component-course-assessment {
 			font: normal 300 1.5em/2 $font;
 		}
 
+		.empty-text {
+			color: $tertiary-grey;
+			font: normal 300 2em $font;
+			margin: 2em auto;
+			width: 500px;
+			text-align: center;
+		}
+
 		.list {
 			position: relative;
 
