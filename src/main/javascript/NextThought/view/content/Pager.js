@@ -4,8 +4,8 @@ Ext.define('NextThought.view.content.Pager', {
 	ui: 'content-pager',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'page', cn: [
-			{ tag: 'span', cls: 'current', html: '?'}, ' of ', {tag: 'span', cls: 'total', html: '?'}
+		{ cls: 'page', style: 'display: none', cn: [
+			{ tag: 'span', cls: 'current'}, ' of ', {tag: 'span', cls: 'total'}
 		] },
 		{ cls: 'prev' },
 		{ cls: 'next' }
@@ -37,6 +37,8 @@ Ext.define('NextThought.view.content.Pager', {
 		var me = this,
 			next = this.nextEl,
 			prev = this.prevEl;
+
+		this.page.setVisibilityMode(Ext.Element.DISPLAY);
 
 		this.currentBundle = bundle;
 
