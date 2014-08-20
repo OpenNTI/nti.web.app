@@ -95,7 +95,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 				{ text: 'Username', dataIndex: 'Username', renderer: function(v, cellStuff, r) {
 					try {
-						return r.get('Status') === 'ForCredit' ? v : '';
+						return r.get('Status') === 'ForCredit' ? (r.get('OU4x4') || v) : '';
 					} catch (e) {
 						console.error(e.stack || e.message || e);
 						return '';

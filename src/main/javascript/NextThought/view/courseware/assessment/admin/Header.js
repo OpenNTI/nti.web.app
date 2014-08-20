@@ -50,7 +50,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 		this.callParent();
 
 		var status = this.status || 'Open',
-			Username = this.student.get('Username');
+			Username = this.student.get('OU4x4') || this.student.get('Username');
 
 		this.currentGrade = '';
 		this.currentLetter = '-';
