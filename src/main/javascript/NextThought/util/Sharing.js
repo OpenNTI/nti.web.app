@@ -230,7 +230,7 @@ Ext.define('NextThought.util.Sharing', {
 			return Promise.resolve(prefix || 'Only Me');
 		}
 
-		prefix = prefix || 'Private';
+		prefix = prefix || 'Only Me';
 
 		return UserRepository.getUser(explicitEntities)
 			.then(function(resolvedUsers) {
