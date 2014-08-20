@@ -763,7 +763,13 @@ Ext.define('NextThought.controller.CourseWare', {
 				});
 		},
 
-
+		/**
+		 * Takes a function that takes a course and returns a number priority
+		 * and returns an array of the courses ordered by their priority, excluding
+		 * courses that have zero or lower priority
+		 * @param  {Function} fn takes an enrollment instance and returns a number
+		 * @return {Promise}     fulfills with an array of enrollment instances in order
+		 */
 		getCoursesByPriority: function(fn) {
 			return new Promise(function(fulfill) {
 				var priorities = {},
@@ -773,11 +779,13 @@ Ext.define('NextThought.controller.CourseWare', {
 				function find(course) {
 					var priority = fn.call(null, course);
 
-					if (priorities[priority]) {
-						priorities[priority].push(course);
-					} else {
-						keys.push(priority);
-						priorities[priority] = [course];
+					if (priority && priority > 0) {
+						if (priorities[priority]) {
+							priorities[priority].push(course);
+						} else {
+							keys.push(priority);
+							priorities[priority] = [course];
+						}
 					}
 				}
 

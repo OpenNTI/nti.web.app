@@ -92,7 +92,7 @@ Ext.define('NextThought.model.forums.Board', {
 			course = course.get('CourseInstance');
 			me.course = course;
 			return course;
-		}).fail(function() {
+		}).fail(function(reason) {
 			console.error(reason);
 			me.course = false;
 			return false;
