@@ -38,7 +38,7 @@ Ext.define('NextThought.view.Views', {
 
 	tabTpl: new Ext.XTemplate(Ext.DomHelper.markup(
 			{ tag: 'tpl', 'for': '.', cn: [
-				{ cls: 'main-view-tab {[values.selected?\'selected\':\'\']}', html: '{label}', 'data-view-id': '{viewId}'}
+				{ cls: 'main-view-tab {cls} {[values.selected?\'selected\':\'\']}', html: '{label}', 'data-view-id': '{viewId}'}
 			]}
 	)),
 

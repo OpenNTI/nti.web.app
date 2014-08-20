@@ -443,3 +443,31 @@
 		}
 	}
 }
+
+.section-menu {
+	.section-option {
+		line-height: 30px;
+		padding: 0 30px 0 10px;
+
+		&.x-menu-item-checked {
+			background-color: $primary-blue;
+			color: white !important;
+
+			&::after {
+				display: none;
+			}
+
+			&.x-menu-item-active {
+				background-color: $primary-blue !important;
+			}
+		}
+	}
+
+	.x-panel-body {
+		padding-bottom: 0px;
+	}
+
+	.x-box-scroller-bottom {
+		display: none;
+	}
+}

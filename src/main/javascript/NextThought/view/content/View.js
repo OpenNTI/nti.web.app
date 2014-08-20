@@ -23,6 +23,8 @@ Ext.define('NextThought.view.content.View', {
 		isTabView: true
 	},
 
+	ID_TO_COURSE: {},
+
 	items: [
 		{
 			id: 'course-book',
@@ -67,6 +69,7 @@ Ext.define('NextThought.view.content.View', {
 
 
 	tabSpecs: [
+		{label: '', viewId: 'section-switcher', cls: 'hide'},
 		{label: getString('NextThought.view.content.View.dashboardtab'), viewId: 'course-dashboard'},
 		{label: getString('NextThought.view.content.View.lessontab'), viewId: 'course-book?', isCourse: true},
 		{label: getString('NextThought.view.content.View.booktab', 'Book'), viewId: 'course-book'},
@@ -157,6 +160,13 @@ Ext.define('NextThought.view.content.View', {
 			'deactivate': 'onDeactivated',
 			'activate': 'onActivated'
 		});
+
+
+		if (isFeature('section-switcher')) {
+			this.buildSectionMenu();
+		} else {
+			this.updateSection = function() {};
+		}
 	},
 
 
@@ -171,6 +181,11 @@ Ext.define('NextThought.view.content.View', {
 
 		if (Ext.isEmpty(vId)) {
 			return false;
+		}
+
+		if (vId === 'section-switcher') {
+			this.showSectionMenu(tabSpec);
+			return;
 		}
 
 		if (needsChanging) {
@@ -222,11 +237,116 @@ Ext.define('NextThought.view.content.View', {
 	},
 
 
+	updateSection: function() {
+		var id = this.getProviderId(),
+			option;
+
+		if (!id) { return; }
+
+		option = this.sectionMenu.down('[data-id="' + id + "']");
+
+		if (option) {
+			option.setChecked(true, true);
+			this.sectionMenu.offsets = [0 , -30 * this.sectionMenu.items.indexOf(option)];
+		}
+	},
+
+
+	buildSectionMenu: function() {
+		var me = this,
+			items = [],
+			activeId = me.getProviderId(),
+			store = Ext.getStore('courseware.AdministeredCourses');
+
+		store.each(function(course) {
+			var instance = course.get('CourseInstance'),
+				catalog = instance && instance.getCourseCatalogEntry(),
+				providerId = catalog && catalog.get('ProviderUniqueID');
+
+			me.ID_TO_COURSE[providerId] = instance;
+
+			items.push({'data-id': providerId, 'data-ntiid': course.get('NTIID'), text: providerId, checked: activeId === providerId});
+		});
+
+		if (items.length > 1) {
+			me.addCls('has-switcher');
+			me.hasNoSections = false;
+		} else if (items.length === 0) {
+			me.hasNoSections = true;
+
+			me.mon(store, 'load', function() {
+				wait()
+					.then(me.buildSectionMenu.bind(me));
+			});
+			return;
+		}
+
+		me.sectionMenu = Ext.widget('menu', {
+			cls: 'section-menu',
+			ownerCmp: me,
+			offset: [0, 0],
+			floating: true,
+			constrain: true,
+			constrainTo: Ext.getBody(),
+			defaults: {
+				xtype: 'menucheckitem',
+				group: 'sectionOptions',
+				cls: 'section-option',
+				height: 30,
+				plain: true,
+				listeners: {
+					scope: me,
+					'checkchange': 'switchSection'
+				}
+			},
+			items: items
+		});
+
+		me.sectionMenu.show();
+		me.sectionMenu.hide();
+	},
+
+	switchSection: function(option, selected) {
+		var id = option['data-id'],
+			course = id && this.ID_TO_COURSE[id];
+
+		if (course && selected) {
+			course.fireNavigationEvent(this);
+		}
+	},
+
+
+	showSectionMenu: function() {
+		var tabs = Ext.get('view-tabs'),
+			tabEl = tabs && tabs.down('[data-view-id=section-switcher]'),
+			id = this.getProviderId(),
+			offsets = this.sectionMenu.offsets;
+
+		if (!offsets || offsets[1] > 0) { offsets = [0, 0]; }
+
+		this.sectionMenu.showBy(tabEl, 'tl-tl', offsets);
+		this.sectionMenu.doConstrain(Ext.getBody());
+	},
+
+
+	getProviderId: function() {
+		if (!this.currentBundle || !this.currentBundle.isCourse) { return false; }
+
+		var catalog = this.currentBundle.getCourseCatalogEntry(),
+			isAdmin = catalog && catalog.get('isAdmin'),
+			id = isAdmin && catalog.get('ProviderUniqueID');
+
+		return id;
+	},
+
+
 	getTabs: function() {
 		var tabs = this.tabSpecs,
 			tabSet = Ext.isArray(this.tabs) ? this.tabs : [],
 			active = this.layout.getActiveItem().id,
-			bundle = this.currentBundle || {};
+			bundle = this.currentBundle || {},
+			hasSections = !this.hasNoSections,
+			providerId = this.getProviderId();
 
 		if (this.tabs) {
 
@@ -261,6 +381,20 @@ Ext.define('NextThought.view.content.View', {
 		}
 
 		Ext.each(tabs, function(t) {
+			if (t.viewId === 'section-switcher') {
+				t.cls = 'section-switcher';
+
+				if (providerId && isFeature('section-switcher')) {
+					t.label = providerId;
+
+					if (hasSections) {
+						t.cls += ' has-switcher';
+					}
+				} else {
+					t.cls += ' hide';
+				}
+			}
+
 			t.selected = (t.viewId.replace(/\?$/, '') === active);
 		});
 
@@ -530,6 +664,7 @@ Ext.define('NextThought.view.content.View', {
 		background = background || (info && info.toc && getURL(info.toc.querySelector('toc').getAttribute('background'), info.root));
 
 		this.currentBundle = bundle;
+		this.updateSection();
 		//this.reader.clearLocation();
 
 		this.setBackground(background);
@@ -586,6 +721,7 @@ Ext.define('NextThought.view.content.View', {
 
 					if (bundle.isCourse) {
 						me.showCourseNavigation();
+
 						bundle = bundle.get('Bundle');
 					} else {
 						me.showContentReader();

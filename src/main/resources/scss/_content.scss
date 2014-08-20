@@ -164,6 +164,37 @@
 				padding: 0.3em 0.6em 0.3em 0.5em;
 
 			}
+
+			&.section-switcher {
+				color: rgba(255,255,255,0.6);
+				background-color: rgba(255,255,255, 0.1);
+				float: right;
+				margin-right: 0;
+				padding: 0 30px 0 10px;
+				border-radius: 3px;
+
+				&.hide {
+					display: none;
+				}
+
+				&.has-switcher {
+					cursor: pointer;
+
+					@include icon('ico_section_arrow_white', $top: 13px, $right: 7px, $left: auto, $side: after);
+
+					&::after {
+						opacity: 0.6;
+					}
+
+					&:hover{
+						color: white;
+						&::after {
+							opacity: 1;
+						}
+					}
+					
+				}
+			}
 		}
 	}
 
