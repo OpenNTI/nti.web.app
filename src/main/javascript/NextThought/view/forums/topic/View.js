@@ -59,7 +59,7 @@ Ext.define('NextThought.view.forums.topic.View', {
 			}
 		}
 
-		if (record.getId() !== me.currentAnalyticId) {
+		if (record && record.getId() !== me.currentAnalyticId) {
 			stopTimer();
 			me.currentAnalyticId = record.getId();
 			startTimer();

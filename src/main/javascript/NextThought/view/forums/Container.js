@@ -40,6 +40,10 @@ Ext.define('NextThought.view.forums.Container', {
 		var board = NextThought.model.forums.Board.getBoardFromForumList(this.forumList),
 			community = board && board.get('Creator');
 
+		if (!board || !community) {
+			return;
+		}
+
 		if (Ext.isString(community)) {
 			console.error('Boards community isnt resolved yet');
 			return;
