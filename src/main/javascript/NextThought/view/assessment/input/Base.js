@@ -424,13 +424,12 @@ Ext.define('NextThought.view.assessment.input.Base', {
 
 		this.setSubmitted();
 
-		if (!this.noMark) {
-			correct = part && part.isModel ? String(part.isCorrect()) : null;
-			if (!fn[correct]) {
-				correct = 'null';
-			}
-			this[fn[correct]]();
+		correct = part && part.isModel ? String(part.isCorrect()) : null;
+		if (!fn[correct] || this.noMark) {
+			correct = 'null';
 		}
+
+		this[fn[correct]]();
 
 		if (this.canHaveAnswerHistory()) {
 			if (this.historyMenuEl && !this.historyMenuEl.isVisible()) {
