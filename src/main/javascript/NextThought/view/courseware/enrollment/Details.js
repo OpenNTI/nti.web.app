@@ -80,6 +80,11 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 	},
 
 
+	stopClose: function() {
+		return this.changingEnrollment ? Promise.reject() : Promise.resolve();
+	},
+
+
 	afterRender: function() {
 		this.callParent(arguments);
 
