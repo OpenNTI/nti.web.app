@@ -241,7 +241,7 @@ Ext.define('NextThought.view.content.View', {
 		var id = this.getProviderId(),
 			option;
 
-		if (!id) { return; }
+		if (!id || !this.sectionMenu) { return; }
 
 		option = this.sectionMenu.down('[data-id="' + id + "']");
 
@@ -263,9 +263,12 @@ Ext.define('NextThought.view.content.View', {
 				catalog = instance && instance.getCourseCatalogEntry(),
 				providerId = catalog && catalog.get('ProviderUniqueID');
 
-			me.ID_TO_COURSE[providerId] = instance;
+			if (providerId) {
+				me.ID_TO_COURSE[providerId] = instance;
 
-			items.push({'data-id': providerId, 'data-ntiid': course.get('NTIID'), text: providerId, checked: activeId === providerId});
+				items.push({'data-id': providerId, 'data-ntiid': course.get('NTIID'), text: providerId, checked: activeId === providerId});
+			}
+
 		});
 
 		if (items.length > 1) {
@@ -275,9 +278,10 @@ Ext.define('NextThought.view.content.View', {
 			me.hasNoSections = true;
 
 			me.mon(store, 'load', function() {
-				wait()
+				store.onceLoaded()
 					.then(me.buildSectionMenu.bind(me));
 			});
+
 			return;
 		}
 
