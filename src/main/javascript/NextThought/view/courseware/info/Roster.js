@@ -59,7 +59,11 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 								]
 							})
 						},
-						{ text: getString('NextThought.view.courseware.info.Roster.username'), dataIndex: 'username' },
+						{ text: getString('NextThought.view.courseware.info.Roster.username'),
+							dataIndex: 'username', renderer: function(v, col, rec) {
+								return rec.get('OU4x4') || v;
+							}
+						},
 						{ text: getString('NextThought.view.courseware.info.Roster.status'), sortable: false, dataIndex: 'LegacyEnrollmentStatus' },
 						{
 							//disclosure column
