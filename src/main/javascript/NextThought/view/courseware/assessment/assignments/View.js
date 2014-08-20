@@ -221,7 +221,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 		this.on('filters-changed', 'refresh');
 		this.on('search-changed', 'filterSearchValue');
 
-		this.store = new Ext.data.Store({ fields: this.getFields() });
+		this.store = new Ext.data.Store({
+			fields: this.getFields(),
+			sorters: [
+				{ property: 'due', direction: 'ASC' },
+				{ property: 'title', direction: 'DESC' }
+			]
+		});
 	},
 
 
