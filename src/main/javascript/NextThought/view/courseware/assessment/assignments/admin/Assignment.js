@@ -146,7 +146,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 				{ text: getString('NextThought.view.courseware.assessment.assignments.admin.Assignment.username'), dataIndex: 'Creator', name: 'username',
 					possibleSortStates: ['ASC', 'DESC'],//restore the default order of state(since the grid reverses it)
 					renderer: function(v, g, record) {
-						var username = (v.get && v.get('Username')) || v,
+						var username = (v.get && (v.get('OU4x4') || v.get('Username'))) || v,
 								f = record.store && record.store.filters;
 
 						f = f && f.getByKey('LegacyEnrollmentStatus');
@@ -207,6 +207,31 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	},
 
 
+	maybeSwitch: function() {
+		var menu = this.filterMenu,
+			s = this.store,
+			item = menu.down('[checked]'),
+			initial = menu.initialState;
+
+		function loaded(s) {
+			if (!s.getCount()) {
+				item = menu.down('filter-menu-item:not([checked])');
+				if (item) {
+					item.setChecked(true);
+				}
+			}
+		}
+
+		if (item && item.filter === initial) {
+			if (!s.loading && s.loaded) {
+				loaded(s);
+			} else {
+				s.on({ single: true, load: loaded });
+			}
+		}
+	},
+
+
 	_setupButtons: function(el) {
 		var tip = el.textContent;
 		Ext.fly(el).set({
@@ -228,11 +253,11 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		if (this._masked) {
 			this._showMask();
 		}
-		this.syncFilterToUI();
+		this.syncFilterToUI(true);
 	},
 
 
-	syncFilterToUI: function() {
+	syncFilterToUI: function(firstPass) {
 		if (!this.rendered) {
 			this.on({afterrender: 'syncFilterToUI', single: true});
 			return;
@@ -249,6 +274,11 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 		this.filterMenu.setState(filter, (search && search.value) || '');
 		this.updateFilterCount();
+
+		if (firstPass) {
+			this.filterMenu.initialState = filter;
+			this.maybeSwitch();
+		}
 	},
 
 

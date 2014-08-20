@@ -111,6 +111,7 @@ Ext.define('NextThought.model.assessment.Assignment', {
 
 
 	_resolveParts: function(store, records, success) {
+		store.loaded = true;
 		if (!success) {return;}
 		records = records || [];
 
