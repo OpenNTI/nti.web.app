@@ -192,6 +192,7 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 						d = sourceEl.cloneNode(true);
 						d.id = Ext.id();
 						return {
+							instanceId: me.id,
 							sourceEl: sourceEl,
 							repairXY: Ext.fly(sourceEl).getXY(),
 							ddel: d,
@@ -249,23 +250,36 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 					//<editor-fold desc="Boilerplate">
 					// If the mouse is over a target node, return that node. This is provided as the "target" parameter in all "onNodeXXXX" node event
 					// handling functions
-					getTargetFromEvent: function(e) { return e.getTarget('.target.choice') || e.getTarget('.terms'); },
+					getTargetFromEvent: function(e) {
+						return e.getTarget('.target.choice') || e.getTarget('.terms'); },
 
 					// On entry into a target node, highlight that node.
-					onNodeEnter: function(target, dd, e, data) { Ext.fly(target).addCls('drop-hover'); },
+					onNodeEnter: function(target, dd, e, data) {
+						if (data.instanceId !== id) {return false;}
+						Ext.fly(target).addCls('drop-hover'); },
 
 					// On exit from a target node, unhighlight that node.
-					onNodeOut: function(target, dd, e, data) { Ext.fly(target).removeCls('drop-hover'); },
+					onNodeOut: function(target, dd, e, data) {
+						if (data.instanceId !== id) {return false;}
+						Ext.fly(target).removeCls('drop-hover'); },
 
 					// While over a target node, return the default drop allowed
-					onNodeOver: function(target, dd, e, data) { return Ext.dd.DropZone.prototype.dropAllowed; }
+					onNodeOver: function(target, dd, e, data) {
+						var p = Ext.dd.DropZone.prototype;
+						return (data.instanceId === id) ?
+							   p.dropAllowed :
+							   p.dropNotAllowed;
+					}
 					//</editor-fzold>
 				},
 				dropOnAnswer = {
-					onNodeDrop: function(target, dd, e, data) { return me.dropTerm(target, data.sourceEl); }
+					onNodeDrop: function(target, dd, e, data) {
+						if (data.instanceId !== id) {return false;}
+						return me.dropTerm(target, data.sourceEl); }
 				},
 				dropOnShelf = {
 					onNodeDrop: function(target, dd, e, data) {
+						if (data.instanceId !== id) {return false;}
 						me.moveTerm(data.sourceEl, Ext.get(target));
 						return true;
 					}
