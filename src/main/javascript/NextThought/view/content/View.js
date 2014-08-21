@@ -9,7 +9,8 @@ Ext.define('NextThought.view.content.View', {
 		'NextThought.view.courseware.dashboard.View',
 		'NextThought.view.courseware.forum.View',
 		'NextThought.view.courseware.info.View',
-		'NextThought.view.courseware.overview.parts.ContentLink'
+		'NextThought.view.courseware.overview.parts.ContentLink',
+		'NextThought.view.menus.LabeledSeparator'
 	],
 
 	layout: {
@@ -254,7 +255,9 @@ Ext.define('NextThought.view.content.View', {
 
 	buildSectionMenu: function() {
 		var me = this,
+			now = new Date(),
 			items = [],
+			archived = [],
 			activeId = me.getProviderId(),
 			store = Ext.getStore('courseware.AdministeredCourses');
 
@@ -266,10 +269,20 @@ Ext.define('NextThought.view.content.View', {
 			if (providerId) {
 				me.ID_TO_COURSE[providerId] = instance;
 
-				items.push({'data-id': providerId, 'data-ntiid': course.get('NTIID'), text: providerId, checked: activeId === providerId});
+				if (catalog.get('EndDate') < now) {
+					archived.push({'data-id': providerId, 'data-ntiid': course.get('NTIID'), text: providerId, checked: activeId === providerId});
+				} else {
+					items.push({'data-id': providerId, 'data-ntiid': course.get('NTIID'), text: providerId, checked: activeId === providerId});
+				}
 			}
 
 		});
+
+		if (archived.length > 0) {
+			items.push({xtype: 'labeledseparator', cls: 'seperator', text: 'Archived', height: 1});
+
+			items = items.concat(archived);
+		}
 
 		if (items.length > 1) {
 			me.addCls('has-switcher');
