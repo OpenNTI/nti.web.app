@@ -291,6 +291,14 @@ Ext.define('NextThought.view.library.Navigation', {
 				return rec.get('viewId') === viewId;
 			});
 
+		if (viewId === 'current-courses-page') {
+			this.currentView = 'courses';
+		} else if (viewId === 'current-admins-page') {
+			this.currentView = 'admins';
+		} else if (viewId === 'books') {
+			this.currentView = 'books';
+		}
+
 		this.updateAvailable();
 
 		selModel = this.nav.getSelectionModel();
