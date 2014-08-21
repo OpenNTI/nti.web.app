@@ -829,6 +829,7 @@ Ext.define('NextThought.view.content.View', {
 	restore: function(state) {
 		var st = state.content,
 			background = state.active !== this.id,
+			bundleId = st.bundle, bundle,
 			ntiid = st.location,
 			tab = st.activeTab,
 			disc = st.discussion || {},
@@ -840,9 +841,10 @@ Ext.define('NextThought.view.content.View', {
 
 		tab = (tab === 'null') ? null : tab;
 
-		function setupUI(bundle) {
+		function setupUI(b) {
 				//if its a course catalog entry, get the course instance, otherwise, just pass it along.
-				bundle = bundle && (bundle.get('CourseInstance') || bundle);
+				bundle = b && (b.get('CourseInstance') || b);
+
 				return me._setBundle(bundle, tab)
 						.then(function() {
 							me.fireEvent('track-from-restore', bundle);
@@ -869,7 +871,7 @@ Ext.define('NextThought.view.content.View', {
 					if (!reader) {reject('setLocation aborted'); return;}
 					fulfill(input);//don't mutate the value...
 				}
-				me.reader[(ntiid ? 'set' : 'clear') + 'Location'](ntiid, fin, true);
+				me.reader[(ntiid ? 'set' : 'clear') + 'Location'](ntiid, fin, true, bundle);
 			});
 		}
 
@@ -887,7 +889,13 @@ Ext.define('NextThought.view.content.View', {
 		// instead of looking through the catalog, loop through the enrolled courses and pull the CCE off them. This is still a bandaid. We will
 		// eventually require the context of an ID so there is no ambiguity.
 		function search(enrollment) {
-			var cce = enrollment.getCourseCatalogEntry();
+			var instance = enrollment.get('CourseInstance'),
+				cce = enrollment.getCourseCatalogEntry();
+
+			if (bundleId) {
+				return instance.getId() === bundleId;
+			}
+
 			if (!cce) {
 				console.error('Not precached yet', enrollment);
 				return false;

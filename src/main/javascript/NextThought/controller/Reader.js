@@ -234,7 +234,7 @@ Ext.define('NextThought.controller.Reader', {
 			v.showContentReader();
 
 			if (!r.ntiidOnFrameReady) {
-				r.setLocation(pi, callback);
+				r.setLocation(pi, callback, null, bundle);
 			}
 			else {
 				r.ntiidOnFrameReady = [pi, callback];

@@ -55,7 +55,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 	 * @param {Function} [callback]
 	 * @param {Boolean} [fromHistory]
 	 */
-	setLocation: function(ntiidOrPageInfo, callback, fromHistory) {
+	setLocation: function(ntiidOrPageInfo, callback, fromHistory, targetBundle) {
 
 		var me = this,
 			e = me.reader.getContentMaskTarget(),
@@ -165,7 +165,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 
 			try {
 				me.clearPageStore();
-				me.resolvePageInfo(ntiidOrPageInfo, rootId, finish, Boolean(callback));
+				me.resolvePageInfo(ntiidOrPageInfo, rootId, finish, Boolean(callback), targetBundle);
 			}
 			catch (e) {
 				txn.abort(e);
@@ -180,12 +180,13 @@ Ext.define('NextThought.view.content.reader.Location', {
 	},
 
 
-	resolvePageInfo: function(ntiidOrPageInfo, rootId, finish, hasCallback) {
+	resolvePageInfo: function(ntiidOrPageInfo, rootId, finish, hasCallback, targetBundle) {
 		var me = this,
 			requestedPageInfo = null,
 			ntiid;
 
 		function success(pageInfo) {
+			pageInfo.targetBundle = targetBundle || pageInfo.targetBundle;
 			if (ntiid === rootId && !LocationMeta.getValue(rootId)) {
 				// let's cache this on the LocationMeta, if it's not there already.
 				LocationMeta.createAndCacheMeta(rootId, pageInfo);
