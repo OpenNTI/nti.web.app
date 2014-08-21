@@ -619,6 +619,7 @@ PREVIOUS_STATE = 'previous-state';
 							}
 
 							me.currentState.active = stateObject.active;
+							me.currentState.version = me.currentStateVersion;
 
 							if (stateObject.active && !stateObject[stateObject.active]) {
 								stateObject[stateObject.active] = {};
