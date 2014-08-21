@@ -315,7 +315,7 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 
 
 		setValue: function(value) {
-			var q = '.term', termId, binId, bin,
+			var q = '.drag.term', termId, binId, bin,
 				bins = toMap(this.inputBox.query('.choice'), 'data-target'),
 				terms = Ext.Array.unique(
 						this.shelfEl.query(q)
@@ -386,7 +386,8 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 
 
 		reset: function() {
-			var el = this.getEl();
+			var el = this.getEl(),
+				q = '.drag.term';
 
 			function r(e) {
 				var p = Ext.getDom(e).parentNode,
@@ -399,15 +400,16 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 
 			el.select('.choice').removeCls('correct incorrect');
 			el.select('.choice .dropzone').removeCls('graded').each(r);
-			el.select('.drag.term').appendTo(this.shelfEl);
+
+			this.shelfEl.appendChild(this.shelfEl.query(q).concat(this.inputBox.query(q)));
 			this.callParent();
 		},
 
 
 		getSolutionContent: function(part) {
 			var f = this.filterHTML.bind(this),
-				values = this.part.get('values').map(f),
-				labels = this.part.get('labels').map(f),
+				labels = this.part.get('values').slice().map(f),
+				terms = this.part.get('labels').slice().map(f),
 				solution = (this.part.get('solutions') || [])[0],
 				data = [], termId, labelId;
 
@@ -419,8 +421,8 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 				if (solution.hasOwnProperty(termId)) {
 					labelId = solution[termId];
 					data.push({
-						term: values[termId],
-						label: labels[labelId]
+						term: terms[labelId],
+						label: labels[termId]
 					});
 				}
 			}
