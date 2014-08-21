@@ -135,7 +135,6 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 
 			to.appendChild(el);
 
-			this.maybeChangeSubmitButtonState();
 			this.updateLayout();
 		},
 
@@ -275,12 +274,16 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 				dropOnAnswer = {
 					onNodeDrop: function(target, dd, e, data) {
 						if (data.instanceId !== id) {return false;}
-						return me.dropTerm(target, data.sourceEl); }
+						var r = me.dropTerm(target, data.sourceEl);
+						me.maybeChangeSubmitButtonState();
+						return r;
+					}
 				},
 				dropOnShelf = {
 					onNodeDrop: function(target, dd, e, data) {
 						if (data.instanceId !== id) {return false;}
 						me.moveTerm(data.sourceEl, Ext.get(target));
+						me.maybeChangeSubmitButtonState();
 						return true;
 					}
 				};
