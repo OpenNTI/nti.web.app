@@ -42,7 +42,7 @@ Ext.define('NextThought.view.library.Panel', {
 	restore: function(state) {
 		var me = this;
 
-		if (!state.activeWindow && !(state.paymentcomplete === 'true')) {
+		if (!state.activeWindow && state.paymentcomplete !== 'true') {
 			return Promise.resolve();
 		}
 
@@ -411,7 +411,7 @@ Ext.define('NextThought.view.library.Panel', {
 				}
 			})
 			.fail(function() {
-				return this.loadCourses;
+				return me.loadCourses;
 			})
 			.then(function() {
 				if (!active || active === 'mycourses') {
@@ -420,7 +420,7 @@ Ext.define('NextThought.view.library.Panel', {
 				}
 			})
 			.fail(function() {
-				return this.loadBooks;
+				return me.loadBooks;
 			})
 			.then(function() {
 				if (!active || active === 'books') {
@@ -429,7 +429,7 @@ Ext.define('NextThought.view.library.Panel', {
 				}
 			})
 			.fail(function() {
-				return this.loadPurchasables;
+				return me.loadPurchasables;
 			})
 			.then(function() {
 				if (!active || active === 'books') {
