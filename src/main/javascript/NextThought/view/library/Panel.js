@@ -23,6 +23,9 @@ Ext.define('NextThought.view.library.Panel', {
 		this.callParent(arguments);
 
 		this.cssRule = CSSUtils.getRule('main-view-container-styles', '#' + this.id);
+
+		this.courseSettingsRule = CSSUtils.getRule('main-view-container-styles', '.grid-item:nth-child(4n+1) .course-settings-window');
+
 		CSSUtils.set(this.cssRule, {width: 'auto'}, true);
 	},
 
@@ -31,6 +34,10 @@ Ext.define('NextThought.view.library.Panel', {
 		function toPx(i) { return (i && i + 'px') || i; }
 
 		this.leftSide = sides.left;
+
+		CSSUtils.set(this.courseSettingsRule, {
+			left: sides.left > 53 ? '' : toPx(-sides.left)
+		});
 
 		CSSUtils.set(this.cssRule, {
 			paddingLeft: toPx(sides.left),
