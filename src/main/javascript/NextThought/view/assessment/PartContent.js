@@ -16,22 +16,37 @@ Ext.define('NextThought.view.assessment.PartContent', {
 	),
 
 	initComponent: function() {
-		var c = this.part.get('content');
-
-		if (c) {
-			c = this.buildContent(c);
-		}
-
 		this.renderData = Ext.apply(this.renderData || {}, {
-			content: c,
+			content: this.setupContent(),
 			ordinal: String.fromCharCode(65 + this.ordinal)
 		});
-		return this.callParent(arguments);
+
+		this.callParent(arguments);
+
+		this.setupContent();
 	},
 
-	afterRender: function() {
-		this.callParent(this);
 
-		this.el.select('a[href]').set({target: '_blank'});
+	setupContent: function() {
+		var me = this,
+			root = ContentUtils.getRoot(this.reader.getLocation().NTIID),
+			c = this.part.get('content') || '';
+
+		c = this.buildContent(
+					ContentUtils.fixReferences(c, root));
+
+		function santatize() {
+			me.el.select('a[href]').set({target: '_blank'});
+			me.el.select('a:empty').remove();
+			me.updateLayout();
+		}
+
+		if (!this.rendered) {
+			me.on('afterrender', santatize);
+		} else {
+			santatize();
+		}
+
+		return c;
 	}
 });

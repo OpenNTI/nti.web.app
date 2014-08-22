@@ -76,7 +76,7 @@ Ext.define('NextThought.view.assessment.Parts', {
 			part.set('answerLabel', answerLabel);
 			items = [];
 			type = 'question-input-' + part.get('Class').toLowerCase();
-			items.push({xtype: 'part-content', question: question, part: part, ordinal: i});
+			items.push({xtype: 'part-content', question: question, part: part, ordinal: i, reader: this.up('[reader]').reader});
 			items.push({
 						   xtype: type,
 						   reader: this.up('[reader]').reader,
