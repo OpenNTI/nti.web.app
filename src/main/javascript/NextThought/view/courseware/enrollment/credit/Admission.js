@@ -837,7 +837,10 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 				me.fireEvent('enable-submission', false);
 				maskCmp.el.mask('Your application is being processed. This may take a few moments.');
 
-				return Service.post(submitlink, value);
+				return Service.post({
+					url: submitlink,
+					timeout: 120000 //2 minutes
+				}, value);
 			})
 			.then(function(response) {
 				var json = Ext.JSON.decode(response, true);

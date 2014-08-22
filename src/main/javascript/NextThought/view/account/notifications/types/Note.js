@@ -53,22 +53,24 @@ Ext.define('NextThought.view.account.notifications.types.Note', {
 			return;
 		}
 
-		LocationMeta.getMeta(rec.get('ContainerId'), function(meta) {
-			var lineage = [],
-				location = '';
+		LocationMeta.getMeta(rec.get('ContainerId'))
+			.then(function(meta) {
+				return ContentUtils.getLineage((meta && meta.NTIID) || rec.get('ContainerId'), true);
+			})
+			.then(function(labels) {
+				var location = '';
 
-			lineage = ContentUtils.getLineage((meta && meta.NTIID) || rec.get('ContainerId'), true);
-			if (!Ext.isEmpty(lineage)) {
-				location = lineage.shift();
-				lineage.reverse();
-			}
+				if (!Ext.isEmtpy(lineage)) {
+					location = labels.shift();
+					lineage.reverse();
+				}
 
-			rec.set({
-				'location': Ext.String.ellipsis(location, 150, false),
-				'path': lineage.join(' / '),
-				'textBodyContent': rec.getBodyText && rec.getBodyText()
+				rec.set({
+					location: Ext.String.ellipsis(location, 150, false),
+					path: lineage.join(' / '),
+					textBodyContent: rec.getBodyText && rec.getBodyText()
+				});
 			});
-		});
 
 		// rec.on("convertedToPlaceholder", function(){
 		//	console.log("Item removed");

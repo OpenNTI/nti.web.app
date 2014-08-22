@@ -74,9 +74,14 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 			C.spider(meta.NTIID,
 					function spiderComplete() {
 						if (me.locationEl) {
-							me.locationEl.update(meta.getPathLabel());
+							meta.getPathLabel()
+								.then(function(label) {
+									me.locationEl.update(label);
+									fulfill();
+								});
+						} else {
+							fulfill();
 						}
-						fulfill();
 					},
 					function parse(content) {
 						me.setContext(C.parseXML(C.fixReferences(content, meta.absoluteContentRoot)));
@@ -104,7 +109,12 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 						if (meta) {
 							//handle a card
 							context = (meta.location && meta.location.getAttribute('desc')) || 'No description or excerpt for this content.';
-							me.locationEl.update(meta.getPathLabel());
+
+							meta.getPathLabel()
+								.then(function(label) {
+									me.locationEl.update(label);
+								});
+
 							me.context.update(context);
 						} else {
 							return reject();
@@ -122,7 +132,11 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 		console.log('Need to set context being video', obj);
 		if (meta) {
 			try {
-				me.locationEl.update(meta.getPathLabel());
+				meta.getPathLabel()
+					.then(function(label) {
+						me.locationEl.update(label);
+					});
+
 				if (me.context) {
 					contextEl = me.context.up('.context');
 					if (contextEl) {

@@ -28,24 +28,25 @@ Ext.define('NextThought.view.account.history.mixins.Bookmark', {
 	},
 
 	fillInData: function(rec) {
-		LocationMeta.getMeta(rec.get('ContainerId'), function(meta) {
-			var lineage = [],
-				location = '';
+		LocationMeta.getMeta(rec.get('ContainerId'))
+			.then(function(meta) {
+				if (!meta) {
+					console.warn('No meta for' + rec.get('ContainerId'));
+					return [];
+				}
 
-			if (!meta) {
-				console.warn('No meta for ' + rec.get('ContainerId'));
-			}
-			else {
-				lineage = ContentUtils.getLineage(meta.NTIID, true);
-				location = lineage.shift();
+				return ContentUtils.getLineageLabels(meta.NTIID, true);
+			})
+			.then(function(lineage) {
+				var location = lineage.shift();
+
 				lineage.reverse();
-			}
 
-			rec.set({
-				'location': Ext.String.ellipsis(location, 150, false),
-				'path': lineage.join(' / ')
+				rec.set({
+					'location': Ext.String.ellipsis(location, 150, false),
+					'path': lineage.join(' / ')
+				});
 			});
-		});
 	}
 
 });

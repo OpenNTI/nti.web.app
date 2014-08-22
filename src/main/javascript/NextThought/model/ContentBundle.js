@@ -117,7 +117,7 @@ Ext.define('NextThought.model.ContentBundle', {
 				title: firstPackage,
 				root: firstPackage.get('root'),
 				getIcon: function() { return data.icon; },
-				getPathLabel: function() { return data.title; }
+				getPathLabel: function() { return Promise.resolve(data.title); }
 			}, data);
 	},
 

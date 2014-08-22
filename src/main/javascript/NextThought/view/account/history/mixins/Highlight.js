@@ -17,23 +17,25 @@ Ext.define('NextThought.view.account.history.mixins.Highlight', {
 	])),
 
 	fillInData: function(rec) {
-		LocationMeta.getMeta(rec.get('ContainerId'), function(meta) {
-			var lineage = [],
-				location = '';
+		LocationMeta.getMeta(rec.get('ContainerId'))
+			.then(function(meta) {
+				if (!meta) {
+					return [];
+				}
 
-			if (!meta) {
-				console.warn('No meta for ' + rec.get('ContainerId'));
-			}
-			else {
-				lineage = ContentUtils.getLineage(meta.NTIID, true);
-				location = lineage.shift();
-				lineage.reverse();
-			}
+				return ContentUtils.getLineageLabels(meta.NTIID, true);
+			})
+			.then(function(labels) {
+				var location = labels.shift();
 
-			rec.set({'location': Ext.String.ellipsis(location, 150, false)});
-			rec.set({'path': lineage.join(' / ')});
-			rec.set({'textBodyContent': rec.get && rec.get('selectedText')});
-		});
+				labels.reverse();
+
+				rec.set({
+					location: Ext.String.ellipsis(location, 150, false),
+					path: labels.join(' / '),
+					textBodyContent: rec.get && rec.get('selectedText')
+				});
+			});
 	}
 
 });

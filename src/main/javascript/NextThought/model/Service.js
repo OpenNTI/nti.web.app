@@ -44,12 +44,20 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
-	post: function(url, data) {
-		return this.request({
-			url: url,
-			method: 'POST',
-			jsonData: data
-		});
+	post: function(urlOrConfig, data) {
+		var config;
+		if (Ext.isString(urlOrConfig)) {
+			config = {
+				url: urlOrConfig
+			};
+		} else {
+			config = urlOrConfig;
+		}
+
+		config.method = 'POST';
+		config.jsonData = config.jsonData || data;
+
+		return this.request(config);
 	},
 
 

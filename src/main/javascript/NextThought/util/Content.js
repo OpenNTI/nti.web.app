@@ -512,7 +512,7 @@ Ext.define('NextThought.util.Content', {
 	},
 
 
-	getLineage: function(ntiid, justLabels) {
+	getLineage: function(ntiid) {
 		if (!ntiid) {
       //			Ext.Error.raise('No ntiid given');
 			return [];
@@ -527,19 +527,13 @@ Ext.define('NextThought.util.Content', {
 
 		while (node) {
 
-			id = node.getAttribute ? node.getAttribute(justLabels ? 'label' : 'ntiid') : null;
+			id = node.getAttribute ? node.getAttribute('ntiid') : null;
 			if (id) {
 				lineage.push(id);
 			}
 			else if (node.nodeType !== Node.DOCUMENT_NODE) {
-				if (!justLabels) {
-					console.error(node, 'no id');
-					break;
-				}
-				else {
-					console.error('Missing Label:', node);
-					lineage.push('Missing Label');
-				}
+				console.error(node, 'no id');
+				break;
 			}
 
 			link = this.isSymLinked(node, leaf.toc);
@@ -553,6 +547,61 @@ Ext.define('NextThought.util.Content', {
 		}
 
 		return lineage;
+	},
+
+
+	getLineageLabels: function(ntiid, showBundleAsRoot) {
+		if (!ntiid) {
+			return Promise.resolve([]);
+		}
+
+		var me = this,
+			labels = [],
+			getLineage;
+
+		getLineage = new Promise(function(fulfill) {
+			ntiid = me.getNTIIDFromThing(ntiid);
+
+			var leaf = me.find(ntiid) || {},
+				node = leaf.location,
+				label, id, link;
+
+			while (node) {
+				label = node.getAttribute ? node.getAttribute('label') : null;
+				if (label) {
+					labels.push(label);
+				} else if (node.nodeType !== Node.DOCUMENT_NODE) {
+					console.error('Missing Label:', node);
+					labels.push('Missing Label');
+				}
+
+				link = me.isSymLinked(node, leaf.toc);
+				if (link) {
+					console.warn('Using SymLinked Parent Node as Lineage instead of ACTUAL parentNode for ', node.getAttribute('ntiid'));
+					node = link;
+				}
+				else {
+					node = node.parentNode;
+				}
+			}
+
+			fulfill(labels);
+		});
+
+		if (showBundleAsRoot) {
+			return getLineage
+				.then(function() {
+					return CourseWareUtils.courseForNtiid(ntiid);
+				})
+				.then(function(course) {
+					labels[labels.length - 1] = course.get('Title');
+
+					return labels;
+				});
+		}
+
+
+		return getLineage;
 	},
 
 
@@ -728,11 +777,14 @@ Ext.define('NextThought.util.Content', {
 						return iconPath;
 					},
 					getPathLabel: function() {
-						var lineage = me.getLineage(this.NTIID, true),
-							sep = lineage.length <= 2 ? ' / ' : ' /.../ ',
-							base = lineage.last() || '',
-							leaf = lineage.first();
-						return lineage.length <= 1 ? base : base + sep + leaf;
+						return me.getLineageLabels(this.NTIID, true)
+							.then(function(lineage) {
+								var sep = lineage.length <= 2 ? ' / ' : ' /.../ ',
+									base = lineage.last() || '',
+									leaf = lineage.first();
+
+								return lineage.length <= 1 ? base : base + sep + leaf;
+							});
 					}
 				},r);
 		}

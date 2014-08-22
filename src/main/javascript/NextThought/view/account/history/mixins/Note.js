@@ -35,22 +35,24 @@ Ext.define('NextThought.view.account.history.mixins.Note', {
 
 
 	fillInData: function(rec) {
-		LocationMeta.getMeta(rec.get('ContainerId'), function(meta) {
-			var lineage = [],
-				location = '';
+		LocationMeta.getMeta(rec.get('ContainerId'))
+			.then(function(meta) {
+				return ContentUtils.getLineageLabels((meta && meta.NTIID) || rec.get('ContainerId'), true);
+			})
+			.fail(function(reason) {
+				console.error('Failed to get meta for record: ', reason);
+				return ContentUtils.getLineageLabels(rec.get('ContainerId'), true);
+			})
+			.then(function(lineage) {
+				var location = lineage.shift();
 
-			lineage = ContentUtils.getLineage((meta && meta.NTIID) || rec.get('ContainerId'), true);
-			if (!Ext.isEmpty(lineage)) {
-				location = lineage.shift();
 				lineage.reverse();
-			}
 
-			rec.set({
-				'location': Ext.String.ellipsis(location, 150, false),
-				'path': lineage.join(' / ')//,
-				//'textBodyContent': rec.getBodyText && rec.getBodyText()
+				rec.set({
+					location: Ext.String.ellipsis(location, 150, false),
+					path: lineage.join(' / ')
+				});
 			});
-		});
 
 		// rec.on("convertedToPlaceholder", function(){
 		//	console.log("Item removed");

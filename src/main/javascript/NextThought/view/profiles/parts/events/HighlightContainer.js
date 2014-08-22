@@ -74,7 +74,7 @@ Ext.define('NextThought.view.profiles.parts.events.HighlightContainer', {
 			date: Ext.Date.format(me.date, 'F j, Y')
 		});
 
-		function byTime(a,b) {
+		function byTime(a, b) {
 			function g(x) { return x.get ? x.get('CreatedTime').getTime() : 0; }
 			a = g(a);
 			b = g(b);
@@ -96,8 +96,8 @@ Ext.define('NextThought.view.profiles.parts.events.HighlightContainer', {
 				page.push(i);
 
 				if (!count) {
-					me.setupBookRenderData(d, books);
-					me.maybeFillIn(d);
+					me.setupBookRenderData(d, books)
+						.then(me.maybeFillIn.bind(me));
 				}
 			});
 		});
@@ -107,25 +107,56 @@ Ext.define('NextThought.view.profiles.parts.events.HighlightContainer', {
 
 	/**
 	 * This is intended to be a callback. No return value. We modify {data}
-	 * @param data {Object} the output
-	 * @param groupings {Object} the input
+	 * @param {Object} data the output
+	 * @param {Object} groupings the input
 	 */
-	setupBookRenderData: function(data,groupings) {
+	setupBookRenderData: function(data, groupings) {
+		var toFillIn = [];
+
 		data.books = [];
-		Ext.Object.each(groupings, function(k,root) {
-			var book = {pages: [], ntiid: k};
-			data.books.push(book);
-			Ext.Object.each(root, function(k,items) {
-				var page = {items: [], ntiid: k};
-				book.pages.push(page);
-				Ext.each(items, function(i) {
-					if (!book.hasOwnProperty('icon')) { book.icon = i.meta.getIcon(true); }
-					if (!page.hasOwnProperty('label')) { page.label = i.meta.getPathLabel(); }
-					var pp = i.get('presentationProperties');
-					page.items.push({text: i.get('selectedText'), ntiid: i.getId(), highlightColorName: pp.highlightColorName});
+
+		Ext.Object.each(groupings, function(k, root) {
+			toFillIn.push(new Promise(function(fulfill, reject) {
+				var book = {pages: [], ntiid: k};
+
+				data.books.push(book);
+
+				Ext.Object.each(root, function(k, items) {
+					var page = {items: [], ntiid: k};
+
+					book.pages.push(page);
+
+					Ext.each(items, function(i) {
+						var pp = i.get('presentationProperties');
+
+						page.items.push({
+							text: i.get('selectedText'),
+							ntiid: i.getId(),
+							highlightColorName: pp.highlightColorName
+						});
+
+						if (!book.hasOwnProperty('icon')) {
+							book.icon = i.meta.getIcon(true);
+						}
+
+						if (!page.hasOwnProperty('label')) {
+							i.meta.getPathLabel()
+								.then(function(label) {
+									page.label = label;
+									fulfill();
+								});
+						} else {
+							fulfill();
+						}
+					});
 				});
-			});
+			}));
 		});
+
+		return Promise.all(toFillIn)
+			.then(function() {
+				return data;
+			});
 	},
 
 
