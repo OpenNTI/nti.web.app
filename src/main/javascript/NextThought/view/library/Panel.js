@@ -280,6 +280,9 @@ Ext.define('NextThought.view.library.Panel', {
 
 
 	setEnrolledCourses: function(current, archived) {
+		this.currentCourses = current;
+		this.archivedCourses = archived;
+
 		var currentCmp = this.body.down('[id=current-courses-page]'),
 			archivedCmp = this.body.down('[id=archived-courses-page]');
 
