@@ -705,6 +705,7 @@ function() {
 			Links: 1,
 			MimeType: 1,
 			NTIID: 1,
+			OU4x4: 1,
 			Username: 1,
 			alias: 1,
 			realname: 1,
