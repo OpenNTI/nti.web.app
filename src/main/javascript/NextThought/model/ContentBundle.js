@@ -170,7 +170,7 @@ Ext.define('NextThought.model.ContentBundle', {
 				json = JSON.parse(json);
 				json.Items = ParseUtils.parseItems(json.Items);
 
-				var store = NextThought.model.forums.Board.buildContentsStoreFromDate(me.getId() + '-board', json.Items);
+				var store = NextThought.model.forums.Board.buildContentsStoreFromData(me.getId() + '-board', json.Items);
 
 				return [{
 					title: '',
