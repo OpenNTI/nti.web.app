@@ -57,7 +57,9 @@ Ext.define('NextThought.view.account.activity.Popout', {
 		}
 
 		if (Ext.isEmpty(wName)) {
-			Ext.Error.raise('Developer Error: a view is not defined for: ' + this.record.$className);
+			console.error('Developer Error: a view is not defined for: ' + this.record.$className);
+			wait().then(this.destroy.bind(this));
+			return;
 		}
 		this.preview = this.add({ xtype: wName, record: this.record, user: this.user });
 	},
