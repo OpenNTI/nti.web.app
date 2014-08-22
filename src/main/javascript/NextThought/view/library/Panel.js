@@ -139,16 +139,7 @@ Ext.define('NextThought.view.library.Panel', {
 	applyState: function(state) {
 		this.stateObj = state;
 
-		if (state.activeView === 'mycourses') {
-			this.showMyCourses();
-			this.navigation.setDefault('courses');
-		} else if (state.activeView === 'admincourses') {
-			this.showMyAdminCourses();
-			this.navigation.setDefault('admin');
-		} else if (state.activeView === 'books') {
-			this.showMyBooks();
-			this.navigation.setDefault('books');
-		}
+		this.maybeFinishLoad();
 	},
 
 
@@ -289,9 +280,6 @@ Ext.define('NextThought.view.library.Panel', {
 
 
 	setEnrolledCourses: function(current, archived) {
-		this.currentCourses = current;
-		this.archivedCourses = archived;
-
 		var currentCmp = this.body.down('[id=current-courses-page]'),
 			archivedCmp = this.body.down('[id=archived-courses-page]');
 
@@ -422,6 +410,10 @@ Ext.define('NextThought.view.library.Panel', {
 				}
 			})
 			.fail(function() {
+				if (active === 'admincourses') {
+					active = '';
+				}
+
 				return me.loadCourses;
 			})
 			.then(function() {
@@ -432,7 +424,11 @@ Ext.define('NextThought.view.library.Panel', {
 				}
 			})
 			.fail(function() {
-				return this.loadAvailable;
+				if (active === 'mycourses') {
+					active = '';
+				}
+
+				return me.loadAvailable;
 			})
 			.then(function() {
 				if (!active || active === 'mycourses') {
@@ -442,6 +438,10 @@ Ext.define('NextThought.view.library.Panel', {
 				}
 			})
 			.fail(function() {
+				if (active === 'mycourses') {
+					active = '';
+				}
+
 				return me.loadBooks;
 			})
 			.then(function() {
@@ -452,6 +452,10 @@ Ext.define('NextThought.view.library.Panel', {
 				}
 			})
 			.fail(function() {
+				if (active === 'books') {
+					active = '';
+				}
+
 				return me.loadPurchasables;
 			})
 			.then(function() {
