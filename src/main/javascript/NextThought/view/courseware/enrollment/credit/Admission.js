@@ -722,7 +722,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					xtype: 'enrollment-credit-set',
 					inputs: [
 						{type: 'description', text: json.Message, cls: 'error-detail'},
-						{type: 'description', text: 'Please contact <a href=\'http://www.ou.edu/admissions.html\'>OU Admissions</a> for further information.'}
+						{type: 'description', text: 'Please contact the <a href=\'mailto:support@nextthought.com\'>help desk</a> for further information.'}
 					]
 				}
 			]
@@ -853,7 +853,12 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 			.fail(function(response) {
 				maskCmp.el.unmask();
 
-				if (!response) { return; }
+				if (!response) {
+					me.handleResponse({
+						message: 'An unknown error occurred. Please try again later.'
+					});
+					return;
+				}
 
 				var json = Ext.JSON.decode(response.responseText || response, true);
 
