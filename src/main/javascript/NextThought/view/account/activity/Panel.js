@@ -132,7 +132,8 @@ Ext.define('NextThought.view.account.activity.Panel', {
 			'personalblogentry': this.blogEntryClicked,
 			'personalblogcomment': this.blogCommentItemClicked,
 			'communityheadlinetopic': this.forumTopicClicked,
-			'generalforumcomment': this.forumCommentClicked
+			'generalforumcomment': this.forumCommentClicked,
+			'contentcommentpost': this.forumCommentClicked
 		};
 
 		this.addMask();
