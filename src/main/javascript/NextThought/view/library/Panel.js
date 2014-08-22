@@ -382,6 +382,9 @@ Ext.define('NextThought.view.library.Panel', {
 			this.navigation.enableCourses();
 			this.navigation.allowCourseAdd = true;
 			this.navigation.updateAvailable();
+			this.loadAvailable = Promise.resolve();
+		} else {
+			this.loadAvailable = Promise.reject('No Available');
 		}
 
 
@@ -396,7 +399,7 @@ Ext.define('NextThought.view.library.Panel', {
 
 
 	maybeFinishLoad: function() {
-		if (!this.loadCourses || !this.loadAdmin || !this.loadBooks || !this.loadPurchasables) {
+		if (!this.loadCourses || !this.loadAdmin || !this.loadBooks || !this.loadPurchasables || !this.loadAvailable) {
 			return;
 		}
 
@@ -408,6 +411,7 @@ Ext.define('NextThought.view.library.Panel', {
 				if (!active || active === 'admincourses') {
 					active = 'admincourses';
 					me.showMyAdminCourses();
+					me.navigation.setView('admins');
 				}
 			})
 			.fail(function() {
@@ -417,6 +421,17 @@ Ext.define('NextThought.view.library.Panel', {
 				if (!active || active === 'mycourses') {
 					active = 'mycourses';
 					me.showMyCourses();
+					me.navigation.setView('courses');
+				}
+			})
+			.fail(function() {
+				return this.loadAvailable;
+			})
+			.then(function() {
+				if (!active || active === 'mycourses') {
+					active = 'mycourses';
+					me.showMyCourses();
+					me.navigation.setView('courses');
 				}
 			})
 			.fail(function() {
@@ -426,6 +441,7 @@ Ext.define('NextThought.view.library.Panel', {
 				if (!active || active === 'books') {
 					active = 'books';
 					me.showMyBooks();
+					me.navigation.setView('books');
 				}
 			})
 			.fail(function() {
@@ -435,6 +451,7 @@ Ext.define('NextThought.view.library.Panel', {
 				if (!active || active === 'books') {
 					active = 'books';
 					me.showMyBooks();
+					me.navigation.setView('books');
 				}
 			});
 	},

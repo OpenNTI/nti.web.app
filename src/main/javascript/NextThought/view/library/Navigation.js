@@ -226,6 +226,23 @@ Ext.define('NextThought.view.library.Navigation', {
 	},
 
 
+	setView: function(type) {
+		if (!this.rendered) {
+			this.on('afterrender', this.setView.bind(this, type));
+			return;
+		}
+
+		var item = this.viewMenu.down('[type="' + type + '"]');
+
+		if (item) {
+			item.setChecked(true, true);
+			this.dropdownEl.update(item.text);
+			this.currentView = type;
+			this.updateAvailable();
+		}
+	},
+
+
 	switchView: function(item, status) {
 		if (!status) { return; }
 
@@ -290,14 +307,6 @@ Ext.define('NextThought.view.library.Navigation', {
 			i = this.navStore.findBy(function(rec) {
 				return rec.get('viewId') === viewId;
 			});
-
-		if (viewId === 'current-courses-page') {
-			this.currentView = 'courses';
-		} else if (viewId === 'current-admins-page') {
-			this.currentView = 'admins';
-		} else if (viewId === 'books') {
-			this.currentView = 'books';
-		}
 
 		this.updateAvailable();
 

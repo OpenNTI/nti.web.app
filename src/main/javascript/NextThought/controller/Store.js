@@ -307,7 +307,7 @@ Ext.define('NextThought.controller.Store', function() {
 			store.filter([courses, notFilter]);
 			archive.filter([courses, filter]);
 
-			if (store.getCount() && view) {
+			if (view) {
 				view.setPurchasables(store);
 			}
 
@@ -415,15 +415,15 @@ Ext.define('NextThought.controller.Store', function() {
 		},
 
 
-		// navigateToPurchasable: function(obj) {
-		// 	var me = this;
+		//navigateToPurchasable: function(obj) {
+		//	var me = this;
 
-		// 	if (obj instanceof NextThought.model.store.Purchasable) {
-		// 		me.showPurchasable(obj);
-		// 		return false;
-		// 	}
-		// 	return true;
-		// },
+		//	if (obj instanceof NextThought.model.store.Purchasable) {
+		//		me.showPurchasable(obj);
+		//		return false;
+		//	}
+		//	return true;
+		//},
 
 
 		getHandlerForNavigationToObject: function(obj, fragment) {
