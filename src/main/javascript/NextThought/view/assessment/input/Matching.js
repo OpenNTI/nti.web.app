@@ -313,7 +313,7 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 				}
 			});
 
-			return val;
+			return Object.keys(val).length ? val : null;
 		},
 
 
@@ -350,8 +350,7 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 				values = Ext.clone(this.part.get('values')),
 				labels = Ext.clone(this.part.get('labels'));
 
-			if (!s) {
-				//no solution... get it from the assessed question.
+			if (!s || !this.getValue()) {
 				return;
 			}
 
