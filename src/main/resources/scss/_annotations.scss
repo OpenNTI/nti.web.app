@@ -988,6 +988,11 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7 }
 		width:auto;
 		padding-left:.5em;
 		padding-right:.5em;
+		white-space: nowrap;
+
+		&.x-component:last-child{
+			padding-right:.5em;
+		}
 
 		a {
 			span { // the color swatches
