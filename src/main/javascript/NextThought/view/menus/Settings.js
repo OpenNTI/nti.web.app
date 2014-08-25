@@ -55,7 +55,7 @@ Ext.define('NextThought.view.menus.Settings', {
 
 		contactItem = { action: 'contact', text: getString('NextThought.view.menus.Settings.contact')};
 		items.push(contactItem);
-		if (!Ext.isEmpty(Service.getSupportLinks().supportEmail) || true) {
+		if (!Ext.isEmpty(Service.getSupportLinks().supportEmail)) {
 			Ext.apply(contactItem, {
 				onClick: Ext.emptyFn,
 				action: 'contact-someone-else',
