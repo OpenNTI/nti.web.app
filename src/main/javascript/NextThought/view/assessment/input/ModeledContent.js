@@ -58,9 +58,15 @@ Ext.define('NextThought.view.assessment.input.ModeledContent', {
 
 
 	getValue: function() {
+		var v = this.editor.getValue().body;
+
+		if (DomUtils.isEmpty(v)) {
+			return null;
+		}
+
 		return {
 	        MimeType: 'application/vnd.nextthought.assessment.modeledcontentresponse',
-	        value: this.editor.getValue().body
+	        value: v
 		};
 	},
 
