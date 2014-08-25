@@ -23,7 +23,8 @@ Ext.define('NextThought.view.assessment.input.ModeledContent', {
 		this.editor = Ext.widget('nti-editor', {
 			ownerCt: this,
 			renderTo: this.inputField,
-			onCancel: Ext.emptyFn
+			onCancel: Ext.emptyFn,
+			enableObjectControls: false //lets not open too much complexity yet.
 		});
 
 		this.callParent(arguments);
