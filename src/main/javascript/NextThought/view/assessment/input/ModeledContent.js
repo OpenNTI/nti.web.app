@@ -45,6 +45,7 @@ Ext.define('NextThought.view.assessment.input.ModeledContent', {
 
 
 	updateState: function(enable) {
+		//Prevent setting enabled/disabled repeatedly.
 		if (this.submissionDisabled !== enable) {
 			return;
 		}
@@ -72,15 +73,12 @@ Ext.define('NextThought.view.assessment.input.ModeledContent', {
 
 
 	setValue: function(o) {
-		if (!o || !o.value) {
-			console.warn('We did not understand this:', arguments);
-		} else {
-			this.editor.editBody(o.value);
-		}
-
-		if (this.isAssignment) {
-			this.editor.contentEl.set({contentEditable: false});
-			this.editor.el.down('.footer').hide();
+		if (o) {
+			if (!o.value) {
+				console.warn('We did not understand this:', arguments);
+			} else {
+				this.editor.editBody(o.value);
+			}
 		}
 	},
 
@@ -88,9 +86,21 @@ Ext.define('NextThought.view.assessment.input.ModeledContent', {
 	markCorrect: Ext.emptyFn,
 	markIncorrect: Ext.emptyFn,
 
+	markSubmitted: function() {
+		this.editor.lock();
+		if (this.isAssignment) {
+			this.editor.el.down('.footer').hide();
+		}
+		this.callParent(arguments);
+	},
+
 
 	reset: function() {
 		this.editor.reset();
+		this.editor.unlock();
+		if (this.isAssignment) {
+			this.editor.el.down('.footer').show();
+		}
 		this.callParent(arguments);
 	}
 });
