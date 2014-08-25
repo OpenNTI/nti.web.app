@@ -460,6 +460,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		me.typingAttributes = [];
 	},
 
+
 	moveCursorToEnd: function(el) {
 		//this is only for input/textarea elements
 		var range, selection;
@@ -1792,6 +1793,20 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		}
 		catch (e) {
 			console.log('Removing all ranges from selection failed: ', e.message);
+		}
+	},
+
+
+	lock: function() {
+		if (Ext.getDom(this.contentEl)) {
+			this.contentEl.set({contentEditable: false});
+		}
+	},
+
+
+	unlock: function() {
+		if (Ext.getDom(this.contentEl)) {
+			this.contentEl.set({contentEditable: true});
 		}
 	}
 
