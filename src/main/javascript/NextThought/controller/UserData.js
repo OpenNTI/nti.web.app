@@ -1027,7 +1027,7 @@ Ext.define('NextThought.controller.UserData', {
 
 		return this.__getPreferenceFromLineage(lineage)
 			.then(function(result) {
-				var sharingIsValid = result && !Ext.isEmpty(result.sharing),
+				var sharingIsValid = result && !Ext.isEmpty(result.sharing), c,
 					flStore = Ext.getStore('FriendsList');
 
 				if (result && !Ext.isEmpty(result.sharing)) {
@@ -1068,7 +1068,9 @@ Ext.define('NextThought.controller.UserData', {
 					// if we have no sharing prefs, default to the public scope
 					// or we can't resolve the sharing, the use public scope.
 
-					return CourseWareUtils.getCourseInstance(rootId)
+					c = Ext.getCmp('content').currentBundle;
+
+					return Promise[c ? 'resolve' : 'reject'](c)
 							.then(function(ci) {
 								return {sharing: {sharedWith: ci.getDefaultSharing()}};
 							})
