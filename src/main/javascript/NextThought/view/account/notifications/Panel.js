@@ -494,7 +494,12 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		record = this.unwrap(record);
 
 		if (record && record.getClassForModel) {
-			popout = record.getClassForModel('widget.activity-popout-', NextThought.view.account.activity.Popout);
+			popout = record.getClassForModel('widget.activity-popout-');
+		}
+
+		if (!popout) {
+			console.warn('No Popout for record: ', record);
+			return;
 		}
 
 		function fin(pop) {

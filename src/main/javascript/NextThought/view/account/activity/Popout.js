@@ -112,11 +112,13 @@ Ext.define('NextThought.view.account.activity.Popout', {
 		me.on('blur', me.maybeHidePopout, me);
 
 		Ext.defer(function() {
-			me.mon(me.el.up('body'), {
-				scope: me,
-				'click': 'detectBlurClick',
-				'mouseover': 'detectBlur'
-			});
+			if (me.el) {
+				me.mon(me.el.up('body'), {
+					scope: me,
+					'click': 'detectBlurClick',
+					'mouseover': 'detectBlur'
+				});
+			}
 		}, 1);
 	},
 
