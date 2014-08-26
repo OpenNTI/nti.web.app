@@ -423,11 +423,17 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 				if (solution.hasOwnProperty(termId)) {
 					labelId = solution[termId];
 					data.push({
-						term: terms[labelId],
-						label: labels[termId]
+						sort: labelId,
+						term: terms[termId],
+						label: labels[labelId]
 					});
 				}
 			}
+
+			data.sort(function(a, b) {
+				var x = a.sort, y = b.sort;
+				return x === y ? 0 : x < y ? -1 : 1;
+			});
 
 			console.debug(data);
 
