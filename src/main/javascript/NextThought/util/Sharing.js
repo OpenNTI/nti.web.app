@@ -234,9 +234,15 @@ Ext.define('NextThought.util.Sharing', {
 
 		return UserRepository.getUser(explicitEntities)
 			.then(function(resolvedUsers) {
+				var toResolve = resolvedUsers.length;
+
 				Ext.each(resolvedUsers || [], function(u) {
 					var dn = isMe(u) ? 'me' : u.getName(),
 						onlyMe = prefix === 'Only Me';
+
+					if (onlyMe && dn === 'me') {
+						toResolve -= 1;
+					}
 
 					if (dn.toLowerCase() !== 'unknown' && !Ext.isEmpty(dn) && (!onlyMe || dn !== 'me')) {
 						names.push(' ' + dn);
@@ -248,10 +254,10 @@ Ext.define('NextThought.util.Sharing', {
 					names = Ext.Array.map(names, function() { return tpl.apply(arguments); });
 				}
 
-				others = resolvedUsers.length - names.length;
+				others = toResolve - names.length;
 
 				if (others) {
-					names.push(Ext.String.format('and {0}', Ext.util.Format.plural(others, 'other')));
+					names.push(Ext.String.format(' and {0}', Ext.util.Format.plural(others, 'other')));
 				} else if (names.length > 1) {
 					names.push(' and' + names.pop());
 				}
