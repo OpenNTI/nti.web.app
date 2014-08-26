@@ -50,7 +50,7 @@ Ext.define('NextThought.ux.IframeWindow', {
 			defaults: { xtype: 'button', ui: 'blue', scale: 'large'},
 			items: [
 				//{text: 'Save', cls: 'x-btn-flat-large save', action: 'save', href: '{url}', style: { float: 'left'}},
-				{ xtype: 'box', cls: 'iframe-save', save: true, autoEl: { tag: 'a', href: '{url}', html: 'Save', target: '_blank'}},
+				{ xtype: 'box', cls: 'iframe-save', save: true, autoEl: { tag: 'a', href: '{url}', html: '', target: '_blank'}},
 				{
 					text: 'Close',
 					cls: 'x-btn-blue-large dismiss',
@@ -74,8 +74,13 @@ Ext.define('NextThought.ux.IframeWindow', {
 			extraParams = '#view=FitH&toolbar=0&navpanes=0&statusbar=0&page=1';
 
 		iframe.autoEl.src = url.substr(-3, 3) === 'pdf' ? url + extraParams : url;
-		save.autoEl.href = url;
-		save.autoEl.html = this.saveText || 'Save';
+
+		if (this.noSaveLink) {
+			save.destroy();
+		} else {
+			save.autoEl.href = this.saveUrl || url;
+			save.autoEl.html = this.saveText || 'Save';
+		}
 
 		iframe.on({
 			afterRender: function(cmp) {

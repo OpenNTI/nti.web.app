@@ -22,7 +22,8 @@ Ext.define('NextThought.controller.Session', {
 		'account.recovery.Window',
 		'menus.Settings',
 		'NextThought.ux.WelcomeGuide',
-		'NextThought.ux.UpdatedTos'
+		'NextThought.ux.UpdatedTos',
+		'NextThought.ux.IframeConfirmWindow'
 	],
 
 	sessionTrackerKey: 'sidt',
@@ -161,6 +162,38 @@ Ext.define('NextThought.controller.Session', {
 	},
 
 
+	showResearchAgreement: function() {
+		var html = this.linkElementForRel('irb_html'),
+			pdf = this.linkElementForRel('irb_pdf'),
+			post = this.linkElementForRel('SetUserResearch');
+
+		function sendRequest(agreed) {
+			if (!post) {
+				return Promise.reject('No link to post to');
+			}
+
+			return Service.post(post, {
+				allow_research: agreed
+			});
+		}
+
+		this.researchWin = Ext.widget('iframe-confirm-window', {
+			link: html,
+			title: 'Research Agreement',
+			confirmText: 'Consent',
+			denyText: 'Do Not Consent',
+			confirmAction: function() {
+				return sendRequest(true);
+			},
+			denyAction: function() {
+				return sendRequest(false);
+			}
+		});
+
+		this.researchWin.show();
+	},
+
+
 	shouldShowContentFor: function(linkRel) {
 		return !Ext.isEmpty(this.linkElementForRel(linkRel));
 	},
@@ -212,6 +245,10 @@ Ext.define('NextThought.controller.Session', {
 		// currently above and below are piling on top of one another
 		if (this.shouldShowContentFor('content.initial_welcome_page')) {
 			this.showWelcomePage();
+		}
+
+		if (this.shouldShowContentFor('irb_html')) {
+			this.showResearchAgreement();
 		}
 
 		//Note we show TOS last so it stacks on top.  Need a better solution for this
