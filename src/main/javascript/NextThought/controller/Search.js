@@ -223,7 +223,8 @@ Ext.define('NextThought.controller.Search', {
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
 			sortOn: 'relevance',
 			sortOrder: 'descending',
-			accept: selectedMimeTypes.join(',')
+			accept: selectedMimeTypes.join(','),
+			course: bundleId
 		});
 
 		s.on('load', Ext.bind(this.storeLoad, this, [value], true), this, {single: true});
