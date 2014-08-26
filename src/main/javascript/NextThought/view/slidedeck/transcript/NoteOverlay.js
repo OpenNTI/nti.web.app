@@ -171,7 +171,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 		//This is  not the right way to be plumbing this.  I'm not sure I have any better ideas though,
 		//the overlay needs component specific data to render a note.
-		cmps = Ext.isFunction(this.reader.getPartComponents) ? this.reader.getPartComponents() : [];
+		var cmps = Ext.isFunction(this.reader.getPartComponents) ? this.reader.getPartComponents() : [];
 		Ext.each(cmps || [], function(cmp) {
 			if (Ext.isFunction(cmp.registerAnnotations)) {
 				cmp.registerAnnotations();
@@ -309,8 +309,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 				pageId = pageInfo.getId();
 				p = Promise.all([
 					me.getPagePreferences(pageId).fail(recover),
-					ContentManagementUtils.findBundle(pageId)
-							.fail(function() { return CourseWareUtils.getCourseInstance(pageId); })
+					Ext.getCmp('content').currentBundle
 				])
 					.then(function(data) {
 						var prefs = data[0],

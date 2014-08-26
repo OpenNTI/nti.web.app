@@ -266,9 +266,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 					.fail(function() {
 						return null;
 					}),
-			ContentManagementUtils.findBundle(pageId)
-					.fail(function() {
-						return CourseWareUtils.getCourseInstance(pageId); })
+			this.reader.getLocation().pageInfo.targetBundle
 		]).then(function(data) {
 			work.apply(this, data);
 		});
