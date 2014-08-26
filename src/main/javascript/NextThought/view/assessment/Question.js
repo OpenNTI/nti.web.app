@@ -128,6 +128,9 @@ Ext.define('NextThought.view.assessment.Question', {
 			q = assessedQuestionSet;
 		}
 
+		if (!q) {
+			this.addCls('no-data');
+		}
 
 		correct = q && String(q.isCorrect());
 		if (!fn[correct]) {
@@ -239,15 +242,10 @@ Ext.define('NextThought.view.assessment.Question', {
 
 
 	markSubmitted: function() {
-		var head = this.down('question-header'),
-			sub = this.down('assessment-multipart-submission');
+		var sub = this.down('assessment-multipart-submission');
 		if (sub) {
 			sub.disableSubmission();
 		}
-
-		/*if (!head.isVisible()) {
-			head.markSubmitted();
-		}*/
 
 		this.submitted = true;
 		this.addCls('submitted');
@@ -258,10 +256,8 @@ Ext.define('NextThought.view.assessment.Question', {
 		this.down('question-header').reset();
 		this.down('question-parts').reset(keepAnswers);
 		delete this.submitted;
-		this.removeCls('submitted');
+		this.removeCls('submitted no-data');
 		this.determineSubmissionState();
-		//	var sub = this.down('assessment-multipart-submission');
-		//	if (sub){sub.enableSubmission();}
 	},
 
 
