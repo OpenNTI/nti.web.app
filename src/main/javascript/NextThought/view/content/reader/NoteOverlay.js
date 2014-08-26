@@ -319,20 +319,13 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		editor.el.mask(getString('NextThought.view.content.reader.NoteOverlay.saving'));
 
-		ContentManagementUtils.findBundle(pageId)
-				.fail(function() { return CourseWareUtils.getCourseInstance(pageId); })
-				.then(function(bundle) {
-					rangeInfo = me.rangeForLineInfo(editor.lineInfo, style);
-					me.reader.fireEvent('save-new-note',
-							title, note, rangeInfo.range, rangeInfo.container || pageId,
-							SharingUtils.sharedWithForSharingInfo(v.sharingInfo, bundle),
-							style, afterSave);
-				})
-				.fail(function(reason) {
-					console.error('Error saving note %o', reason);
-					alert(getString('NextThought.view.content.reader.NoteOverlay.error'));
-					editor.unmask();
-				});
+		rangeInfo = me.rangeForLineInfo(editor.lineInfo, style);
+		me.reader.fireEvent('save-new-note',
+			title, note, rangeInfo.range, rangeInfo.container || pageId,
+			SharingUtils.sharedWithForSharingInfo(v.sharingInfo),
+			style, afterSave
+		);
+
 		return false;
 	},
 
