@@ -224,8 +224,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 		this.store = new Ext.data.Store({
 			fields: this.getFields(),
 			sorters: [
-				{ property: 'due', direction: 'ASC' },
-				{ property: 'title', direction: 'DESC' }
+				{ property: 'due', direction: 'DESC' },
+				{ property: 'name', direction: 'ASC' }
 			]
 		});
 	},
