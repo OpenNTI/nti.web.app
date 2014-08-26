@@ -180,6 +180,7 @@ Ext.define('NextThought.controller.ContentManagement', {
 
 	window.ContentManagementUtils = {
 		findBundle: function(thing) {
+			console.error('[deprecated] This function is dangerious! Replace with prejudice!');
 			var ntiid = ContentUtils.getNTIIDFromThing(thing);
 			return Ext.getStore('ContentBundles').onceLoaded()
 					.then(function(s) {
