@@ -154,6 +154,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				{name: 'FirstName', type: 'string' },
 				{name: 'LastName', type: 'string' },
 				{name: 'Username', type: 'string', defaultValue: ''},
+				{name: 'OU4x4', type: 'string', defaultValue: ''},
 				{name: 'grade', type: 'string'},
 				{name: 'letter', type: 'string', defaultValue: '-'},
 				{name: 'action', type: 'int'},

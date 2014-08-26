@@ -24,7 +24,7 @@ Ext.define('NextThought.proxy.courseware.Roster', {
 				u = o && o.UserProfile;
 				if (u) {
 					delete o.UserProfile;
-					UserRepository.cacheUser(ParseUtils.parseItems(u)[0]);
+					UserRepository.cacheUser(User.create(u, u.Username), true);
 				}
 			}
 
