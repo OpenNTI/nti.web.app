@@ -279,7 +279,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		this.switchStudent(
 			this.studentMenu.down('[checked]'),
-			true);
+			true,
+			null,
+			true
+		);
 	},
 
 
@@ -288,7 +291,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	switchStudent: function(item, status) {
+	switchStudent: function(item, status, opts, noEmpty) {
 		if (!status) { return; }
 
 		var me = this, offset, x;
@@ -309,12 +312,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		this.updateExportEl(item.type);
 
 		this.store.setSource(item.type);
-		this.maybeSwitch();
+		this.maybeSwitch(noEmpty);
 		this.updateFilter();
 	},
 
 
-	maybeSwitch: function() {
+	maybeSwitch: function(noEmpty) {
 		var menu = this.studentMenu,
 			item = menu.down('[checked]'),
 			initial = menu.initialType;
@@ -323,7 +326,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			this.store.on({
 				single: true,
 				load: function(s) {
-					if (!s.getCount()) {
+					if (!s.getCount() && noEmpty) {
 						item = menu.down('menuitem:not([checked])');
 						if (item) {
 							item.setChecked(true);
