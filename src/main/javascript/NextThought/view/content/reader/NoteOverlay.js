@@ -319,7 +319,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			return false;
 		}
 
-		editor.mask(getString('NextThought.view.content.reader.NoteOverlay.saving'));
+		editor.el.mask(getString('NextThought.view.content.reader.NoteOverlay.saving'));
 
 		ContentManagementUtils.findBundle(pageId)
 				.fail(function() { return CourseWareUtils.getCourseInstance(pageId); })
