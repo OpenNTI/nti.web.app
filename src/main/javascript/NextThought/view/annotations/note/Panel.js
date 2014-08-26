@@ -338,10 +338,10 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	fillInShare: function(sharedWith, bundle) {
+	fillInShare: function(sharedWith) {
 		var me = this,
 			tpl = Ext.DomHelper.createTemplate({tag: 'name', 'data-profile-idx': '{1}', html: '{0}'}),
-			sharingInfo = SharingUtils.sharedWithToSharedInfo(SharingUtils.resolveValue(sharedWith), bundle);
+			sharingInfo = SharingUtils.sharedWithToSharedInfo(SharingUtils.resolveValue(sharedWith));
 
 		if (!me.responseBox || me.isDestroyed) {
 			return;
@@ -468,27 +468,6 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 	},
 
 
-	getContentBundle: function(record) {
-		var pageId;
-
-		if (record) {
-			pageId = record.get('ContainerId');
-		} else {
-			pageId = this.record.get('ContainerId');
-		}
-
-		if (record || !this.__getContentBundlePromise) {
-			this.__getContentBundlePromise = ContentManagementUtils.findBundle(pageId)
-						.fail(function() {
-							return CourseWareUtils.getCourseInstance(pageId);
-						});
-		}
-
-
-		return this.__getContentBundlePromise;
-	},
-
-
 	//NOTE right now we are assuming the anchorable data won't change.
 	//That is true in practice and it would be expensive to pull it everytime
 	//some other part of this record is updated
@@ -510,12 +489,9 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 			UserRepository.getUser(r.get('Creator'), me.fillInUser, me);
 
 			if (me.sharedTo) {
-				Promise.all([
-					UserRepository.getUser(r.get('sharedWith').slice()),
-					me.getContentBundle(newRecord)
-				])
-					.then(function(results) {
-						me.fillInShare.apply(me, results);
+				UserRepository.getUser(r.get('sharedWith').slice())
+					.then(function(users) {
+						me.fillInShare(users);
 					});
 			}
 
