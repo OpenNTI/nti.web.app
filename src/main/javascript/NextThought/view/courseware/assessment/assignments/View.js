@@ -75,7 +75,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 		//return function that will perform the grouping
 		return function(cmp, store) {
 			var count, groups;
-
+			store.clearGrouping();
 			store.removeFilter('dueFilter');
 			//TODO: handle the show type
 
@@ -123,7 +123,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 				me.showOlder = false;
 
-				store.clearGrouping();
 				store.group(me.grouperMap[groupBy]);
 
 				groups = [];
@@ -171,8 +170,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 					});
 				}, wait(10));
 			}
-
-			store.clearGrouping();
 
 			if (search) {
 				this.filterSearchValue(search);
