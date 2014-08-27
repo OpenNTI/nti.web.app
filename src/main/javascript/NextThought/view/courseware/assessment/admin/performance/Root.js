@@ -634,6 +634,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				displayName: u.toString(),
 				FirstName: u.get('FirstName'),
 				LastName: u.get('LastName'),
+				OU4x4: r.get('Status') === 'Open' ? '' : u.get('OU4x4'),
 				Username: r.get('Status') === 'Open' ? '' : u.get('Username')
 			});
 			r.commit(true);
