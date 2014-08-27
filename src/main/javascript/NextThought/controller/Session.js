@@ -34,11 +34,17 @@ Ext.define('NextThought.controller.Session', {
 		this.listen({
 			component: {
 				'settings-menu [action=logout]': {
-					'click': this.handleLogout
+					'click': 'handleLogout'
 				},
 
+
+				'settings-menu [action=impersonate]': {
+					'click': 'handleImpersonate'
+				},
+
+
 				'coppa-birthday-form': {
-					'refresh-service-doc': this.resolveService
+					'refresh-service-doc': 'resolveService'
 				}
 			}
 		});
@@ -77,6 +83,19 @@ Ext.define('NextThought.controller.Session', {
 
 	onWindowDeactivated: function() {
 		//console.debug('Tab/Window Deactivated');
+	},
+
+
+	handleImpersonate: function() {
+		var url = Service.getSupportLinks().impersonate,
+			username = url && prompt('What username do you want to impersonate?');
+		if (username) {
+			location.replace(Ext.String.urlAppend(url,
+					Ext.Object.toQueryString({
+						username: username,
+						success: location.pathname
+					})));
+		}
 	},
 
 
@@ -376,6 +395,8 @@ Ext.define('NextThought.controller.Session', {
 					return m.resolveService()
 							.then(function() {
 								var setLink = Service.overrideServiceLink.bind(Service);
+
+								setLink('impersonate', m.getLink(response, 'logon.nti.impersonate'));
 
 								setLink('privacyPolicy', m.getLink(response, 'content.permanent_general_privacy_page'));
 								setLink('termsOfService', m.getLink(response, 'content.permanent_tos_page'));

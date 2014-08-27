@@ -70,6 +70,12 @@ Ext.define('NextThought.view.menus.Settings', {
 
 
 		items.push({ xtype: 'menuseparator' });
+
+		//Currently the impersonation link comes back even if we cannot impersonate... so lets add a gate above and beyond the presence of the link...
+		if (Service.getSupportLinks().impersonate && (/@nextthought\.com$/).test($AppConfig.username)) {
+			items.push({ action: 'impersonate', text: 'Impersonate User...' });
+		}
+
 		items.push({ action: 'logout', text: getString('NextThought.view.menus.Settings.logout')});
 
 		//add!
