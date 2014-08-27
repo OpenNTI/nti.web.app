@@ -428,10 +428,11 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 				r = a && a.record, m;
 
 		//Note This probably changes or gets moved when paging is involved
-		if (success && Ext.isEmpty(records)) {
+		if (Ext.isEmpty(records)) {
 			this.handleNoVisiblePosts();
 			return;
 		}
+
 		if (this.noPostPlaceholder) {
 			this.noPostPlaceholder.destroy();
 		}
