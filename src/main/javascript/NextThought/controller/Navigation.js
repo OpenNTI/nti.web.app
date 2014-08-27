@@ -656,7 +656,7 @@ Ext.define('NextThought.controller.Navigation', {
 					}
 				}
 
-				me.fireEvent('set-location', obj, scroll, null, this.getCurrentBundle());
+				me.fireEvent('set-location', obj, scroll, null, me.getCurrentBundle());
 			};
 		}
 
