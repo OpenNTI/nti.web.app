@@ -216,6 +216,7 @@ Ext.define('NextThought.view.account.activity.note.Preview', {
 			return;
 		}
 
+		AnalyticsUtil.addContext('RHP', true);
 		this.fireEvent('navigation-selected', this.record.get('ContainerId'), this.record);
 	},
 

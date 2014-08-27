@@ -18,6 +18,7 @@ Ext.define('NextThought.view.account.activity.blog.Preview', {
 	navigateToItem: function() {
 		var me = this, rec = this.record;
 		UserRepository.getUser(rec.get('Creator'), function(user) {
+			AnalyticsUtil.addContext('RHP', true);
 			me.fireEvent('navigate-to-blog', user, rec.get('ID'));
 		});
 	},

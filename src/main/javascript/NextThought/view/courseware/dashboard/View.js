@@ -12,7 +12,18 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 
 	initComponent: function() {
 		this.callParent(arguments);
-		this.initCustomScrollOn('content');
+
+		var me = this;
+
+		me.initCustomScrollOn('content');
+
+		me.on({
+			'visibility-changed': function(visible) {
+				if (visible) {
+					AnalyticsUtil.addContext('dashboard', true);
+				}
+			}
+		});
 	},
 
 

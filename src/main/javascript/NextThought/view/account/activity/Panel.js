@@ -461,6 +461,7 @@ Ext.define('NextThought.view.account.activity.Panel', {
 		className = rec.get('Class').toLowerCase();
 
 		try {
+			AnalyticsUtil.addContext('RHP', true);
 			if (this.itemClickMap[className]) {
 				this.itemClickMap[className].call(this, rec);
 			}

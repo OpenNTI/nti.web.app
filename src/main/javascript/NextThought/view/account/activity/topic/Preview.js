@@ -65,6 +65,8 @@ Ext.define('NextThought.view.account.activity.topic.Preview', {
 	navigateToItem: function() {
 		var pop = this.up('activity-popout');
 
+		AnalyticsUtil.addContext('RHP', true);
+
 		this.fireEvent('show-topic', this, this.record, this.record.focusRecord);
 
 		if (pop) {

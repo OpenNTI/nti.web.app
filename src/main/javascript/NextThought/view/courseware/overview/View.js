@@ -44,18 +44,46 @@ Ext.define('NextThought.view.courseware.overview.View', {
 
 	getSelectionModel: DelegateFactory.getDelegated(),
 
+	initComponent: function() {
+		this.callParent(arguments);
+
+		var me = this;
+
+		me.on('visibility-changed', function(visible) {
+			var container = this.up('content-view-container'),
+				reader = container && container.down('reader-content');
+
+			if (!visible && reader.isVisible(true)) {
+				AnalyticsUtil.addContext(me.currentPage, true);
+			}
+
+			if (visible) {
+				AnalyticsUtil.addContext('overview', true);
+
+				if (me.currentPage) {
+					AnalyticsUtil.addContext(me.currentPage);
+				}
+				console.log(me);
+			}
+		});
+	},
+
 
 	beforeRender: function() {
 		this.callParent(arguments);
 
-		var s = this.getSelectionModel();
+		var me = this,
+			s = me.getSelectionModel();
+
 		if (!s) {
 			Ext.log.error('No selection model!');
 			return;
 		}
-		this.mon(s, 'select', 'onNodeSelected', this);
+
+		me.mon(s, 'select', 'onNodeSelected', me);
+
 		if (s.hasSelection()) {
-			this.onNodeSelected(s, s.getSelection()[0]);
+			me.onNodeSelected(s, s.getSelection()[0]);
 		}
 	},
 
@@ -84,6 +112,10 @@ Ext.define('NextThought.view.courseware.overview.View', {
 		locInfo = ContentUtils.getLocation(r.getId());
 		me.clear();
 		me.currentPage = r.getId();
+
+		if (AnalyticsUtil.getContextRoot() === 'overview') {
+			AnalyticsUtil.addContext('me.currentPage');
+		}
 
 		if (overviewSrc) {
 			overviewSrc = getURL(locInfo.root + overviewSrc);

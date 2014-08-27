@@ -26,6 +26,32 @@ Ext.define('NextThought.util.Analytics', {
 	TIMER_MAP: {},
 
 	batch: [],
+	context: [],
+
+
+	addContext: function(context, isRoot) {
+		if (!context) {
+			this.context = [];
+			return;
+		}
+
+		if (isRoot) {
+			this.context = [];
+		}
+
+		this.context.push(context);
+	},
+
+
+	getContextRoot: function() {
+		return this.context[0];
+	},
+
+
+	getContext: function() {
+		return this.context.join('/');
+	},
+
 
 	getResourceTimer: function(resourceId, data) {
 		var now = new Date();
@@ -35,6 +61,8 @@ Ext.define('NextThought.util.Analytics', {
 				type: data
 			};
 		}
+
+		data.context = this.getContext();
 
 		this.TIMER_MAP[resourceId + data.type] = {
 			start: now,
@@ -80,6 +108,10 @@ Ext.define('NextThought.util.Analytics', {
 			data = this[this.FILL_IN_MAP[data.type]].call(this, resource, data);
 		} else {
 			data = this.fillInData(resource, data);
+		}
+
+		if (data.course) {
+			data.context_path = data.course + '/' + data.context_path;
 		}
 
 		data.MimeType = this.TYPE_TO_MIMETYPE[data.type];
@@ -138,6 +170,7 @@ Ext.define('NextThought.util.Analytics', {
 }, function() {
 
 	if (!isFeature('capture-analytics')) {
+		this.addContext = function() {};
 		this.getResourceTimer = function() {};
 		this.stopResourceTimer = function() {};
 		this.sendBatch = function() {};

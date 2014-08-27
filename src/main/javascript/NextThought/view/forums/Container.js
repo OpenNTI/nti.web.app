@@ -20,6 +20,14 @@ Ext.define('NextThought.view.forums.Container', {
 		xtype: 'forums-board-view'
 	}],
 
+	initComponent: function() {
+		this.callParent(arguments);
+
+		this.on('activate', function() {
+			AnalyticsUtil.addContext('Global Forums', true);
+		});
+	},
+
 
 	afterRender: function() {
 		this.callParent(arguments);

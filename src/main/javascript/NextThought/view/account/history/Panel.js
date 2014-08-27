@@ -348,6 +348,7 @@ Ext.define('NextThought.view.account.history.Panel', {
 
 	rowClicked: function(view, rec, item) {
 		if (Ext.isFunction(this.clickHandlers && this.clickHandlers[rec.get('MimeType')])) {
+			AnalyticsUtil.addContext('RHP', true);
 			this.clickHandlers[rec.get('MimeType')](view, rec);
 		}
 	},
