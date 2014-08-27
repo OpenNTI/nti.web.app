@@ -1154,6 +1154,39 @@ body.dragging * {
 				&.parens { background-position: -82px -2px; }
 				&.approx { background-position: -122px -2px; }
 				&.pi { background-position: -162px -2px; }
+				&.leq {
+					text-align: center; 
+					background: none;
+					&::before{
+						content: '\2264 ';
+						line-height: 33px;
+						font-size: 1.5em;
+						font-weight: 300;
+						color: $secondary-grey;
+					}
+				}
+				&.geq {
+					text-align: center;
+					background: none;
+					&::before{
+						content: '\2265';
+						line-height: 33px;
+						font-size: 1.5em;
+						font-weight: 300;
+						color: $secondary-grey;
+					}
+				}
+				&.neq {
+					text-align: center;
+					background: none;
+					&::before {
+						content: '\2260';
+						line-height: 33px;
+						font-size: 1.5em;
+						font-weight: 300;
+						color: $secondary-grey;
+					}
+				}
 			}
 
 			.action {

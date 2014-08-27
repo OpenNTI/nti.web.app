@@ -14,7 +14,10 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath', {
 		{ cls: 'mathsymbol square', 'data-latex': 'x^2', 'data-qtip': '{{{NextThought.view.assessment.input.SymbolicMath.insert-sqr}}}' },
 		{ cls: 'mathsymbol parens', 'data-latex': '(x)', 'data-qtip': '{{{NextThought.view.assessment.input.SymbolicMath.insert-paren}}}'},
 		{ cls: 'mathsymbol approx', 'data-latex': '\\\\approx', 'data-qtip': '{{{NextThought.view.assessment.input.SymbolicMath.insert-approx}}}' },
-		{ cls: 'mathsymbol pi', 'data-latex': '\\\\pi', 'data-qtip': '{{{NextThought.view.assessment.input.SymbolicMath.insert-pi}}}' }
+		{ cls: 'mathsymbol pi', 'data-latex': '\\\\pi', 'data-qtip': '{{{NextThought.view.assessment.input.SymbolicMath.insert-pi}}}' },
+		{ cls: 'mathsymbol leq', 'data-latex': '\\\\leq', 'data-qtip': 'Insert less than or equal to'},
+		{ cls: 'mathsymbol geq', 'data-latex': '\\\\geq', 'data-qtip': 'Insert greater than or equal to'},
+		{ cls: 'mathsymbol neq', 'data-latex': '\\\\neq', 'data-qtip': 'Insert not Equal'}
 	]),
 
 
