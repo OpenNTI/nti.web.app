@@ -444,7 +444,6 @@ Ext.define('NextThought.view.video.Video', {
 				AnalyticsUtil.getResourceTimer(id, {
 					type: 'video-skip',
 					course: bundle,
-					context_path: 'a test',
 					with_transcript: hasTranscript,
 					video_start_time: this.lasttime,
 					video_end_time: time
@@ -458,7 +457,6 @@ Ext.define('NextThought.view.video.Video', {
 		if (!this.hasWatchEvent && state.state !== this.states.UNSTARTED) {
 			AnalyticsUtil.getResourceTimer(id, {
 				type: 'video-watch',
-				context_path: 'a test',
 				with_transcript: hasTranscript,
 				course: bundle,
 				video_start_time: time

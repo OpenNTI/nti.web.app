@@ -49,7 +49,7 @@ Ext.define('NextThought.util.Analytics', {
 
 
 	getContext: function() {
-		return this.context.join('/');
+		return this.context;
 	},
 
 
@@ -62,7 +62,7 @@ Ext.define('NextThought.util.Analytics', {
 			};
 		}
 
-		data.context = this.getContext();
+		data.context_path = this.getContext();
 
 		this.TIMER_MAP[resourceId + data.type] = {
 			start: now,
@@ -111,7 +111,7 @@ Ext.define('NextThought.util.Analytics', {
 		}
 
 		if (data.course) {
-			data.context_path = data.course + '/' + data.context_path;
+			data.context_path.unshift(data.course);
 		}
 
 		data.MimeType = this.TYPE_TO_MIMETYPE[data.type];

@@ -1061,7 +1061,6 @@ Ext.define('NextThought.view.annotations.note.Panel', {
 		if (bundle) {
 			AnalyticsUtil.getResourceTimer(this.record.getId(), {
 				type: 'note-viewed',
-				context_path: 'a test',
 				course: bundle.getId(),
 				note_id: this.record.getId()
 			});

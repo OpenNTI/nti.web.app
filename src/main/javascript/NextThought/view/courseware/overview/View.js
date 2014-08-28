@@ -114,7 +114,7 @@ Ext.define('NextThought.view.courseware.overview.View', {
 		me.currentPage = r.getId();
 
 		if (AnalyticsUtil.getContextRoot() === 'overview') {
-			AnalyticsUtil.addContext('me.currentPage');
+			AnalyticsUtil.addContext(me.currentPage);
 		}
 
 		if (overviewSrc) {
