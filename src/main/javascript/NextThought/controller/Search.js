@@ -201,12 +201,7 @@ Ext.define('NextThought.controller.Search', {
 		this.clearSearchResults();
 		s.removeAll();
 
-		if (currentBundle && readerLocation && !currentBundle.containsNTIID(readerLocation)) {
-			readerLocation = null;
-		}
-
-
-		loc = readerLocation || bundleId || 'noNTIID';
+		loc = readerLocation || bundleId || Globals.CONTENT_ROOT;
 
 
 		s.clearFilter();
