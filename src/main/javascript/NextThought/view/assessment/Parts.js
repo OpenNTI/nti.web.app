@@ -73,7 +73,11 @@ Ext.define('NextThought.view.assessment.Parts', {
 
 		for (i = 0; i < parts.length; i++) {
 			part = parts[i];
-			part.set('answerLabel', answerLabel);
+
+			if (answerLabel) {
+				part.set('answerLabel', answerLabel);
+			}
+
 			items = [];
 			type = 'question-input-' + part.get('Class').toLowerCase();
 			items.push({xtype: 'part-content', question: question, part: part, ordinal: i, reader: this.up('[reader]').reader});
