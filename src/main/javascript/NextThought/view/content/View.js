@@ -334,6 +334,7 @@ Ext.define('NextThought.view.content.View', {
 
 
 	showSectionMenu: function() {
+		if (this.hasNoSections || !this.sectionMenu) { return; }
 		var tabs = Ext.get('view-tabs'),
 			tabEl = tabs && tabs.down('[data-view-id=section-switcher]'),
 			id = this.getProviderId(),
