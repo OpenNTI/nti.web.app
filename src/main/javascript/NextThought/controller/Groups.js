@@ -572,6 +572,11 @@ Ext.define('NextThought.controller.Groups', {
 			w = btn.up('window'),
 			displayName = w.getListName(),
 			username = this.generateUsername(displayName);
+
+		if (Ext.isEmpty(displayName)) {
+			return;
+		}
+
 		btn.setDisabled(true);
 		this.createGroupUnguarded(displayName, username, null, onCreated, this, onError);
 	},
