@@ -60,6 +60,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 
 		var me = this,
 			dropdownContainer,
+			scrollParent = this.el.parent('.credit-container'),
 			option = me.dropdownOption;
 
 		function stop(e) {
@@ -77,6 +78,10 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 				options: me.dropdownoptions || option.options,
 				emptyText: option.placeholder,
 				renderTo: dropdownContainer
+			});
+
+			me.mon(scrollParent, 'scroll', function() {
+				me.dropdown.hideOptions();
 			});
 		}
 
@@ -223,10 +228,10 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 			});
 	},
 
-	// itemChecked: function() {
-	// 	var selection = this.el.down('input[type=radio]:checked');
-	// 	return !!selection;
-	// },
+	//itemChecked: function() {
+	//	var selection = this.el.down('input[type=radio]:checked');
+	//	return !!selection;
+	//},
 
 	/*
 		return an object with values for the selected radio
