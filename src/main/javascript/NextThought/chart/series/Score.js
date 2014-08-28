@@ -31,24 +31,25 @@ Ext.define('NextThought.chart.series.Score', {
 		}
 
 		delete this.correctionOffset;
-		this.callParent(arguments);
-
-		var val = this.scoreValue,
-			label = this.scoreLabel;
-
-		if (!label) {
-			label = this.scoreLabel = this.chart.surface.add({
-		        type: 'text',
-		        text: '',
-		        fill: this.textColor,
-		        font: 'normal 400 14px "Open Sans", Verdana',
-				'text-anchor': 'middle',
-				x: (this.centerX + 2) || -10000,
-				y: (this.centerY + 1) || -10000
-		    });
-		}
-
 		try {
+			this.callParent(arguments);
+
+
+			var val = this.scoreValue,
+				label = this.scoreLabel;
+
+			if (!label) {
+				label = this.scoreLabel = this.chart.surface.add({
+					type: 'text',
+					text: '',
+					fill: this.textColor,
+					font: 'normal 400 14px "Open Sans", Verdana',
+					'text-anchor': 'middle',
+					x: (this.centerX + 2) || -10000,
+					y: (this.centerY + 1) || -10000
+				});
+			}
+
 			label.setAttributes({
 				text: val + (val >= 100 ? '' : '\u008C%'),
 				fill: val === 0 ? this.incorrectColor : this.textColor,
@@ -59,7 +60,7 @@ Ext.define('NextThought.chart.series.Score', {
 			label.show(true);
 		}
 		catch (er) {
-			console.error(er.message);
+			console.warn(er.message);
 		}
 	},
 
