@@ -232,12 +232,9 @@ Ext.define('NextThought.view.annotations.note.Main', {
 	fillInShareFromFieldChange: function(field, value) {
 		var me = this;
 
-		Promise.all([
-			UserRepository.getUser(value),
-			me.getContentBundle()
-		])
-			.then(function(results) {
-				me.fillInShare.apply(me, results);
+		UserRepository.getUser(value)
+			.then(function(users) {
+				me.fillInShare(users);
 			});
 	},
 
