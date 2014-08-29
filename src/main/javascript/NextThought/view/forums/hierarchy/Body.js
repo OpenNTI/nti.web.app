@@ -4,6 +4,8 @@ Ext.define('NextThought.view.forums.hierarchy.Body', {
 
 	cls: 'forums-body',
 
+	layout: 'none',
+
 	setCurrent: function() {},
 
 	allowSelectionChange: function() {

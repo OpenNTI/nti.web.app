@@ -6,6 +6,10 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 		'NextThought.view.menus.Reports'
 	],
 
+	loadMask: {
+		hideMode: 'display'
+	},
+
 	cls: 'topic-list list scrollable scroll-content',
 	itemSelector: '.topic-list-item',
 	preserveScrollOnRefresh: true,
@@ -109,7 +113,26 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 				});
 			});
 		}
+
+		me.on('render', function() {
+			var mask = me.loadMask,
+				height = me.getHeight(),
+				paddingBottom = me.el.getPadding('b') || 0;
+
+			if (mask && height) {
+				console.log('SETTING HEIGHT ON MASK: ', height);
+				mask.setHeight(height - paddingBottom);
+			}
+		});
 	},
+
+
+	beforeRender: function() {
+		this.callParent(arguments);
+
+		this.loadMask.renderTo = this.ownerCt.el;
+	},
+
 
 
 	fillInData: function(records, search) {
