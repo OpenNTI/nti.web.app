@@ -264,15 +264,16 @@ Ext.define('NextThought.view.content.View', {
 		store.each(function(course) {
 			var instance = course.get('CourseInstance'),
 				catalog = instance && instance.getCourseCatalogEntry(),
+				id = instance && instance.get('NTIID'),
 				providerId = catalog && catalog.get('ProviderUniqueID');
 
 			if (providerId) {
-				me.ID_TO_COURSE[providerId] = instance;
+				me.ID_TO_COURSE[id] = instance;
 
 				if (catalog.get('EndDate') < now) {
-					archived.push({'data-id': providerId, 'data-ntiid': course.get('NTIID'), text: providerId, checked: activeId === providerId});
+					archived.push({'data-id': id, text: providerId, checked: activeId === providerId});
 				} else {
-					items.push({'data-id': providerId, 'data-ntiid': course.get('NTIID'), text: providerId, checked: activeId === providerId});
+					items.push({'data-id': id, text: providerId, checked: activeId === providerId});
 				}
 			}
 
