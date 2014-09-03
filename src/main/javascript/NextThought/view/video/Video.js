@@ -425,7 +425,7 @@ Ext.define('NextThought.view.video.Video', {
 			current = this.playlist[this.playlistIndex],
 			id = current && current.getId(),
 			hasTranscript = !!this.up('media-viewer'),
-			container = this.up('[currentBundle]'),
+			container = this.up('[currentBundle]') || Ext.getCmp('content'),
 			bundle = container && container.currentBundle && container.currentBundle.getId();
 
 		if (!state || this.doNotCaptureAnalytics) { return; }
