@@ -473,14 +473,16 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 			if (!Ext.isEmpty(bin.Other.Section)) {
 				other.children.push({
 					title: 'My Section',
-					store: buildStore(sectionId + 'Other', bin.Other.Section)
+					store: buildStore(sectionId + 'Other', bin.Other.Section),
+					board: section
 				});
 			}
 
 			if (!Ext.isEmpty(bin.Other.Parent)) {
 				other.children.push({
 					title: 'All Sections',
-					store: buildStore(parentId + 'Other', bin.Other.Parent)
+					store: buildStore(parentId + 'Other', bin.Other.Parent),
+					board: parent
 				});
 			}
 

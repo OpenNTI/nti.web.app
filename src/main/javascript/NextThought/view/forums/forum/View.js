@@ -17,6 +17,7 @@ Ext.define('NextThought.view.forums.forum.View', {
 	model: 'NextThought.model.forums.CommunityForum',
 
 	setCurrent: function(forumList) {
+		this.currentRecord = forumList;
 		this.store = this.navigation.setCurrent(forumList);
 	},
 
