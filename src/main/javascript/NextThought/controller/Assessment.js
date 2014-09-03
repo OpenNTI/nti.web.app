@@ -70,7 +70,8 @@ Ext.define('NextThought.controller.Assessment', {
 			component: {
 				'*': {
 					'has-been-submitted': 'maybeMarkSubmissionAsSubmitted',
-					'set-assignment-history': 'applyAssessmentHistory'
+					'set-assignment-history': 'applyAssessmentHistory',
+					'assignment-reset': 'assignmentReset'
 				},
 				'assessment-question': {
 					'check-answer': 'checkAnswer'
@@ -111,7 +112,7 @@ Ext.define('NextThought.controller.Assessment', {
 		if (o) {
 			if (cmp.setGradingResult) {
 				s = o.get('pendingAssessment').get('parts')[0];
-				cmp.setGradingResult(s);
+				cmp.setGradingResult(s, o);
 			} else if (cmp.setHistory) {
 				cmp.setHistory(o);
 			}
@@ -120,9 +121,20 @@ Ext.define('NextThought.controller.Assessment', {
 
 
 	applyAssessmentHistory: function(history) {
+		var reader;
+
 		this.history = history;
 		this.submissionsWidgets.each(function(c) {
 			try {
+				//no need to do this more than once
+				if (!reader) {
+					reader = c.reader;
+
+					if (reader) {
+						reader.getAssessment().updateAssessmentHistory(history);
+					}
+				}
+
 				this.maybeMarkSubmissionAsSubmitted(c);
 			} catch (e) {
 				Error.raiseForReport(e);
@@ -252,6 +264,7 @@ Ext.define('NextThought.controller.Assessment', {
 			url: Service.getObjectURL(assignmentId),
 			success: function(self, op) {
 				var result = op.getResultSet().records.first().get('parts').first();//hack
+
 				safelyCall('unmask', widget);
 				safelyCall('setGradingResult', widget, result);
 
@@ -267,5 +280,14 @@ Ext.define('NextThought.controller.Assessment', {
 				safelyCall('unmask', widget);
 			}
 		});
+	},
+
+
+	assignmentReset: function() {
+		var assignment = this.getAssignmentView();
+
+		if (assignment.instance) {
+			assignment.bundleChanged(assignment.instance);
+		}
 	}
 });

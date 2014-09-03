@@ -84,11 +84,12 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 
 		submission = o.registerOverlayedPanel(guid + 'submission', Ext.widget('assessment-quiz-submission', {
 			reader: r, renderTo: c, questionSet: set,
-			tabIndexTracker: o.tabIndexer
+			tabIndexTracker: o.tabIndexer,
+			history: h
 		}));
 
 		if (set.associatedAssignment) {
-			o.registerOverlayedPanel(guid + 'feedback', Ext.widget('assignment-feedback', {
+			this.feedback = o.registerOverlayedPanel(guid + 'feedback', Ext.widget('assignment-feedback', {
 				reader: r, renderTo: c, questionSet: set,
 				tabIndexTracker: o.tabIndexer,
 				history: h
@@ -98,6 +99,45 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 		if (pendingAssessment) {
 			submission.setGradingResult(pendingAssessment);
 		}
+	},
+
+
+	updateAssessmentHistory: function(history) {
+		var setId = this.injectedAssignment.getId(),
+			historyItem = setId && history.getItem(setId);
+
+		if (historyItem) {
+			this.injectedAssignmentHistory.set('history', historyItem);
+		}
+	},
+
+
+	shouldAllowReset: function() {
+		var history;
+
+		if (!this.injectedAssignmentHistory) {
+			return true;
+		}
+
+		history = this.injectedAssignmentHistory.get('history');
+
+		return history && !!history.allowReset();
+	},
+
+
+	resetAssignment: function() {
+		var me = this,
+			history = me.injectedAssignmentHistory.get('history'),
+			reset = history && history.resetAssignment ? history.resetAssignment(isMe(history.get('Creator'))) : Promise.reject();
+
+		return reset
+			.then(function(deleted) {
+				if (deleted && me.feedback) {
+					me.feedback.hide();
+				}
+
+				return deleted;
+			});
 	},
 
 

@@ -121,14 +121,22 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 
 
 	moveToSubmitted: function() {
-		if (this.isSubmitted()) {
+		var isAssignment = !!this.questionSet.associatedAssignment,
+			assessmentReader = this.reader.getAssessment(),
+			allowReset = assessmentReader.shouldAllowReset();
+
+		//if we aren't an assignment and we are already marked submitted don't do it again
+		if (!isAssignment && this.isSubmitted()) {
 			return;
 		}
 
-		var isAssignment = !!this.questionSet.associatedAssignment;
-		if (isAssignment) {
+		//if we are an assignment that doesn't allow resetting hide
+		if (isAssignment && !allowReset) {
 			this.shouldShow = false;
 			this.hide();
+		} else {
+			this.shouldShow = true;
+			this.show();
 		}
 
 		console.log('New status is submitted');
@@ -209,31 +217,63 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 
 
 	maybeDoReset: function(keepAnswers) {
-		var q = this.questionSet;
-		if (this.resetting) {return;} //some how we're getting called repeatedly...lets not fire an infinte loop of events.
-		try {
-			this.resetting = true;
+		var me = this,
+			q = me.questionSet,
+			isAssignment = q.associatedAssignment,
+			assessmentReader = me.reader.getAssessment();
 
-			if (q.fireEvent('beforereset')) {
-				q.fireEvent('reset', keepAnswers);
-				console.log('fired reset');
-				return true;
+		if (me.resetting) {return Promise.reject();} //some how we're getting called repeatedly...lets not fire an infinte loop of events.
+
+		function finish() {
+			try {
+				if (q.fireEvent('beforereset')) {
+					q.fireEvent('reset', keepAnswers);
+					console.log('fired reset');
+					return Promise.resolve;
+				}
+
+				console.log('reset aborted');
+				return Promise.resolve;
+			} finally {
+				delete me.resetting;
 			}
 
-			console.log('reset aborted');
-			return false;
 		}
-		finally {
-			delete this.resetting;
+
+		me.resetting = true;
+
+		//if we are in an assignment that allows itself to be reset and
+		//keep answers is true, which means we are resetting from a submitted state
+		//as opposed to clearing out the current answers
+		if (isAssignment && assessmentReader && assessmentReader.shouldAllowReset() && keepAnswers) {
+			return assessmentReader.resetAssignment()
+				.then(function(deleted) {
+					if (deleted) {
+						me.fireEvent('assignment-reset');
+						return finish();
+					}
+
+					return Promise.reject();
+				})
+				.fail(function(reason) {
+					delete me.resetting;
+
+					return Promise.reject(reason);
+				});
+		} else {
+			return finish();
 		}
 	},
 
 
 	resetBasedOnButtonClick: function(e) {
 		//If we are in a submitted state we want to reset things
-		if (this.maybeDoReset(true)) {
-			this.reader.getScroll().to(0);
-		}
+		var me = this;
+
+		me.maybeDoReset(true)
+			.then(function() {
+				me.reader.getScroll().to(0);
+			});
 
 		if (e) {
 			e.stopEvent();
@@ -305,7 +345,8 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 	},
 
 
-	setGradingResult: function(assessedQuestionSet) {
+	setGradingResult: function(assessedQuestionSet, assessmentHistory) {
+		this.assessmentHistory = assessmentHistory;
 		try {
 			assessedQuestionSet = assessedQuestionSet || NextThought.model.assessment.AssessedQuestionSet.from(this.questionSet);
 			this.questionSet.fireEvent('graded', assessedQuestionSet);

@@ -94,6 +94,79 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 	},
 
 
+	allowReset: function() {
+		return !!this.getLink('edit');
+	},
+
+	/**
+	 * Deletes the assignment history item if it can, returns a promise that either
+	 * 1.)	Fufill with false if they cancel the dialog
+	 * 2.)	Rejects if the request was unsuccessful
+	 * 3.)	Fulfills with true if the request was successful
+	 * @param  {Boolean} isMine Which message to show in the confirmation
+	 * @return {Promise}         fulfills is it was successful
+	 */
+	resetAssignment: function(isMine) {
+		var record = this,
+			msg, url = record.getLink('edit');
+
+		if (!isMine) {
+			msg = 'This will reset this assignment for this student. It is not recoverable.' +
+					'\nFeedback and work will be deleted.';
+		} else {
+			msg = 'This will reset the assignment. All work will be deleted and is not recoverable';
+		}
+
+		return new Promise(function(fulfill, reject) {
+			Ext.MessageBox.alert({
+				title: 'Are you sure?',
+				msg: msg,
+				icon: 'warning-red',
+				buttonText: true,
+				buttons: {
+					cancel: 'Cancel',
+					yes: 'caution:Yes'
+				},
+				fn: function(button) {
+					if (button === 'yes') {
+						if (!url) {
+							reject('No edit link');
+						} else {
+							Service.request({
+								url: url,
+								method: 'DELETE'
+							})
+								.fail(function() {
+									console.error('Failed to reset assignment: ', arguments);
+									reject('Request Failed');
+								})
+								.done(function() {
+									delete record.isSummary;
+									delete record.raw.SubmissionCreatedTime;
+									delete record.raw.Submission;
+									delete record.raw.FeedbackCount;
+
+									record.set({
+										Submission: null,
+										Grade: null,
+										Feedback: null,
+										completed: null,
+										submission: null
+									});
+
+									fulfill(true);
+								});
+						}
+					} else {
+						fulfill(false);
+					}
+				}
+			});
+		});
+
+	},
+
+
 	beginReset: function() {
 		var record = this;
 		Ext.MessageBox.alert({

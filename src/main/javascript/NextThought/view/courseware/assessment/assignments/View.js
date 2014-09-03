@@ -201,6 +201,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 			{name: 'opens', type: 'date'},
 			{name: 'completed', type: 'date'},
 			{name: 'correct', type: 'int'},
+			{name: 'history', type: 'auto'},
 			{name: 'total', type: 'int'},
 			{name: 'item', type: 'auto'},
 			{name: 'submittedCount', type: 'int'},
@@ -370,6 +371,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 				completed: h && h.get('completed'),
 				correct: h && h.get('correct'),
+
+				history: h,
 
 				total: o.tallyParts(),
 				submittedCount: o.get('SubmittedCount') || 0,
