@@ -138,7 +138,8 @@ Ext.define('NextThought.view.content.reader.ResourceManagement', {
 		'object[type$=ntislidevideo][itemprop=presentation-card]': 'overlay-slidevideo',
 		'object[type$=ntivideo][itemprop=presentation-video]': 'overlay-video',
 		'object[type$=videoroll]': 'overlay-video-roll',
-		'object[type$=image-collection]': 'overlay-image-roll'
+		'object[type$=image-collection]': 'overlay-image-roll',
+		'object[class=ntirelatedworkref]': 'overlay-card'
 	},
 
 
