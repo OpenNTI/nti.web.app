@@ -134,8 +134,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 									transform: function(o) {
 										var f;
 
-										o = o && o.get('value');
-										o = o && o.split(' ')[0];
+										o = o && o.getValues();
+										o = o && o.value;
 
 										//convert it to a number so the sort makes sense
 										f = parseFloat(o, 10);

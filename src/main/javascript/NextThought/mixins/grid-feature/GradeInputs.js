@@ -115,12 +115,10 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 	editGrade: function(record, value) {
 		var view = this.__getGridView(), store = this.store,
 			grade = record.get('Grade'),
-			v = grade && grade.get('value');
-
-		v = v && v.split(' ')[0];
+			v = grade && grade.getValues();
 
 		//'' !== null so double check that at least on of the values is truthy before trying to save it
-		if (v !== value && (v || value)) {
+		if (v.value !== value && (v || value)) {
 			//if there's no grade and no value don't bother creating one
 			if (!grade && !value) {
 				return;
@@ -137,19 +135,19 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 
 			console.debug('saving: ' + value, 'to', grade.get('href'));
 
-			grade.set('value', value + ' -');
-			grade.save({
-				failure: function() {
+			grade.saveValue(value, '-')
+				.fail(function() {
 					grade.reject();
-				},
-				callback: function() {
+				})
+				.always(function() {
 					store.resumeEvents();
+
 					var n = view.getNode(record);
+
 					if (n) {
 						Ext.fly(n).setStyle({opacity: 1});
 					}
-				}
-			});
+				});
 		}
 	}
 });

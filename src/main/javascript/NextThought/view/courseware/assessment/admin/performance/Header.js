@@ -22,9 +22,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Header', {
 			value = grade && grade.get('value');
 
 		function fillInValue(key, value) {
-			var grades = value && value.split(' '),
-				number = grades && grades[0],
-				letter = (grades && grades[1]) || '-';
+			var values = grade && grade.getValues(),
+				number = values && values.value,
+				letter = values && values.letter;
 
 			if (number) {
 				me.currentGrade = number;
@@ -85,12 +85,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Header', {
 			return;
 		}
 
-		grade.set('value', value);
-		grade.save({
-			failure: function() {
+		grade.saveValue(number, letter)
+			.fail(function() {
 				grade.reject();
-			}
-		});
+			});
 
 		// url += '/no_submit/Final Grade/' + this.student.getId();
 

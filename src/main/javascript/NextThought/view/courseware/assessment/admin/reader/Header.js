@@ -9,10 +9,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 		if (!this.assignmentHistory) { return; }
 
 		var grade = this.assignmentHistory.get('Grade'),
-			value = grade && grade.get('value'),
-			grades = value && value.split(' '),
-			number = grades && grades[0],
-			letter = (grades && grades[1]) || '-',
+			values = grade && grade.getValues(),
+			number = values && values.value,
+			letter = values && values.letter,
 			submission = this.assignmentHistory.get('Submission');
 
 		this.letterEl.setStyle({display: 'none'});

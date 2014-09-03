@@ -94,13 +94,10 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 
 		this.completedEl.update('completed ' + Ext.Date.format(completed, 'm/d'));
 
-		grade = grade && grade.get('value');
-		if (grade && grade.split(' ')[1] === '-') {
-			grade = grade && grade.split(' ')[0];
-		}
+		grade = grade && grade.getValues();
 
 		if (grade) {
-			this.gradeEl.update(grade);
+			this.gradeEl.update(grade.value);
 			this.gradeContainerEl.show();
 		} else {
 			this.gradeContainerEl.hide();

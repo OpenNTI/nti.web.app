@@ -197,7 +197,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 				due: o.get('availableEnding'),
 				completed: submission && submission.get('CreatedTime'),
 				Grade: grade,
-				grade: grade && (grade.get('value') || '').split(' ')[0],
+				grade: grade && grade.getValues().value,
 				average: grade && grade.get('average'),
 				Feedback: feedback,
 				feedback: feedback && feedback.get('Items').length,

@@ -570,22 +570,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			return entry && entry.getFieldItem('Items', user.getId());
 		}
 
-		function parseGradeValue(grade) {
-			var value = grade && grade.get('value'),
-				grades = value && value.split(' '),
-				number = grades && grades[0],
-				letter = (grades && grades[1]) || '-';
-
-			return {
-				number: number,
-				letter: letter
-			};
-		}
-
 		function setGrade(r, value) {
-			var v = parseGradeValue(value);
+			var v = value.getValues();
 			r.set({
-				grade: v.number,
+				grade: v.value,
 				letter: v.letter
 			});
 			r.commit(true);
@@ -788,13 +776,16 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			view = me.__getGridView(),
 			gradebookentry = me.gradeBook.getItem('Final Grade', 'no_submit'),
 			grade = gradebookentry && gradebookentry.getFieldItem('Items', record.getId()),
-			oldValue = grade && grade.get('value'),
-			oldLetter = oldValue && oldValue.split(' ')[1],
-			value = number + ' ' + (letter || oldLetter || '-'),
+			oldValues = grade && grade.getValues(),
 			url = me.gradeBook.get('href');
 
+		//if there isn't a grade and the values we are trying to save are empty don't bother
+		if (!grade && NextThought.model.courseware.Grade.isEmpty(number, letter)) {
+			return;
+		}
 
-		if ((!grade && value === ' -') || (grade && value === grade.get('value'))) {
+		//if we are trying to save the same values that are already set don't bother
+		if (grade && grade.valuesEqual(number, letter)) {
 			return;
 		}
 
@@ -811,19 +802,16 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		}
 
 		console.debug('saving: ' + value, 'to', grade.get('href'));
+
 		return wait(300).then(function() {
 			var input = me.getFocusedInput();
 
 			grade.phantom = false;
-			grade.set('value', value);
 
-			return new Promise(function(fulfill, reject) {
-				grade.save({
-					failure: function() { grade.reject(); reject(); },
-					success: function() { fulfill(); }});
-			})
+			return grade.saveValues(number, letter)
 				.always(function() {
 					var n = view.getNode(record);
+
 					if (n) {
 						Ext.fly(n).setStyle({opacity: 1});
 					}

@@ -67,9 +67,10 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 
 
 		{name: 'grade', type: 'Synthetic', persist: false, fn: function(r) {
-			var s = r.get('Grade');
-			s = s && (s.get('value') || '').split(' ')[0];
-			return s || '';
+			var s = r.get('Grade'),
+				values = s && s.getValues();
+
+			return (values && values.value) || '';
 		}}
 		//</editor-fold>
 	],
