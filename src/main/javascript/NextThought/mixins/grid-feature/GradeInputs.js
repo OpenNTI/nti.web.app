@@ -117,8 +117,13 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 			grade = record.get('Grade'),
 			v = grade && grade.getValues();
 
-		//'' !== null so double check that at least on of the values is truthy before trying to save it
-		if ((v && v.value !== value) && (v || value)) {
+		/**
+		 * only set the grade if:
+		 * 1.) there is no grade set and we are given a value
+		 * 2.) there is a grade set and it is different from the value given
+		 * 3.) there is a grade but no value given (deleting)
+		 */
+		if ((!v && value) || (v && v.value !== value) || (!value && v)) {
 			//if there's no grade and no value don't bother creating one
 			if (!grade && !value) {
 				return;
