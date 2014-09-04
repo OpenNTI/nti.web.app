@@ -144,7 +144,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	isBlockRedaction: function() {
-		return Boolean(this.record.get('redactionExplanation'));
+		return this.record && Boolean(this.record.get('redactionExplanation'));
 		//kind of hacky... as soon as you blank out this field, the redaction will become "inline" and there is no way
 		// to go back, nor is this obvious. TODO: expose a "style" much like highlights/notes. (I'm actually surprised
 		// style wasn't accepted already)
