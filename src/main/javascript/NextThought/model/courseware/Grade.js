@@ -89,7 +89,7 @@ Ext.define('NextThought.model.courseware.Grade', {
 
 		return new Promise(function(fulfill, reject) {
 			me.save({
-				success: fufill,
+				success: fulfill,
 				failure: reject
 			});
 		});
