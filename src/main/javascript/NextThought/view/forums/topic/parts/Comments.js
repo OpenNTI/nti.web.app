@@ -244,6 +244,8 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 		record.compileBodyContent(function(body) {
 			var index;
 
+			if (!me.store) {return;}
+
 			me.store.suspendEvents();
 
 			record.set({
