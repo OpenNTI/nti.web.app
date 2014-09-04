@@ -59,8 +59,6 @@ Ext.define('NextThought.model.courseware.Grade', {
 	getValues: function() {
 		var val = this.get('value') || '', parts, letter, grade;
 
-		val = val.trim();
-
 		//check if it ends in a character we recognize as a letter grade
 		//if it does use the last part of the value as the letter grade
 		if (this.ENDS_IN_LETTER_REGEX.test(val)) {
@@ -80,10 +78,11 @@ Ext.define('NextThought.model.courseware.Grade', {
 
 
 	saveValue: function(value, letter) {
+		value = value && value.trim();
+		letter = letter && letter.trim();
+
 		var me = this,
 			val = value + ' ' + letter;
-
-		val = val.trim();
 
 		me.set('value', val);
 

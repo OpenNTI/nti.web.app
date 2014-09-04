@@ -123,7 +123,7 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 		 * 2.) there is a grade set and it is different from the value given
 		 * 3.) there is a grade but no value given (deleting)
 		 */
-		if ((!v && value) || (v && v.value !== value) || (!value && v)) {
+		if ((!v && value) || (v && v.value !== value) || (!value && v && v.value)) {
 			//if there's no grade and no value don't bother creating one
 			if (!grade && !value) {
 				return;
@@ -141,6 +141,9 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 			console.debug('saving: ' + value, 'to', grade.get('href'));
 
 			grade.saveValue(value, '-')
+				.then(function(grade) {
+					record.set('Grade', grade);
+				})
 				.fail(function() {
 					grade.reject();
 				})

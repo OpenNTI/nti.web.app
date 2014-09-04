@@ -111,7 +111,8 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 							r.set({
 								Feedback: o.get('Feedback'),
 								Submission: o.get('Submission'),
-								pendingAssessment: o.get('pendingAssessment')
+								pendingAssessment: o.get('pendingAssessment'),
+								Grade: o.get('Grade')
 							});
 							delete r.isSummary;
 
