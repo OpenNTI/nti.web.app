@@ -287,6 +287,8 @@ Ext.define('NextThought.controller.Session', {
 			app.on('finished-loading', me.immediateAction, me);
 
 			app.getController('Application').openViewport();
+
+			AnalyticsUtil.beginSession();
 		}
 
 		function showLogin(reason) {

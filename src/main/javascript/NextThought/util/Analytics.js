@@ -53,6 +53,23 @@ Ext.define('NextThought.util.Analytics', {
 	},
 
 
+	beginSession: function() {
+		var collection = Service.getWorkspace('Analytics'),
+			links = collection && collection.Links,
+			url = links && Service.getLinkFrom(links, 'analytics_session');
+
+		if (url) {
+			Service.post(url)
+				.then(function() {
+					console.log('Analytics session started.');
+				})
+				.fail(function() {
+					console.error('Failed to start analytic session: ', arguments);
+				});
+		}
+	},
+
+
 	getResourceTimer: function(resourceId, data) {
 		var now = new Date();
 
@@ -171,6 +188,7 @@ Ext.define('NextThought.util.Analytics', {
 
 	if (!isFeature('capture-analytics')) {
 		this.addContext = function() {};
+		this.beginSession = function() {};
 		this.getResourceTimer = function() {};
 		this.stopResourceTimer = function() {};
 		this.sendBatch = function() {};
