@@ -380,6 +380,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			ui: 'nt-annotation',
 			cls: 'nt-annotation-menu',
 			layout: 'hbox',
+			focusOnToFront: false,
 			defaults: {ui: 'nt-annotation', plain: true }
 		});
 
