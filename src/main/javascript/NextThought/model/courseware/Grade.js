@@ -100,7 +100,7 @@ Ext.define('NextThought.model.courseware.Grade', {
 	 * @return {Boolean}
 	 */
 	isEmpty: function() {
-		var val = this.get('value');
+		var val = this.get('value') || '';
 
 		return Ext.isEmpty(val.replace('-', '').trim());
 	},
