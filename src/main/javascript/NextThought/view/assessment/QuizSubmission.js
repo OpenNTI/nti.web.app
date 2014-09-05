@@ -263,6 +263,8 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 				.fail(function(reason) {
 					delete me.resetting;
 
+					 alert('We are unable to reset your assignment at this time.');
+
 					return Promise.reject(reason);
 				});
 		} else {

@@ -116,7 +116,7 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 			msg = 'This will reset this assignment for this student. It is not recoverable.' +
 					'\nFeedback and work will be deleted.';
 		} else {
-			msg = 'This will reset the assignment. All work will be deleted and is not recoverable';
+			msg = 'This will reset the assignment. All work will be deleted and is not recoverable.';
 		}
 
 		return new Promise(function(fulfill, reject) {
