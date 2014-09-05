@@ -795,6 +795,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			oldValues = grade && grade.getValues(),
 			url = me.gradeBook.get('href');
 
+		//if we were not given a value for letter use the old letter value
+		if (!letter) {
+			letter = oldValues && oldValues.letter;
+		}
+
 		//if there isn't a grade and the values we are trying to save are empty don't bother
 		if (!grade && NextThought.model.courseware.Grade.isEmpty(number, letter)) {
 			return;
@@ -815,11 +820,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			});
 
 			me.gradeBook.add(grade, null);
-		}
-
-		//if we were not given a value for letter use the old letter value
-		if (!letter) {
-			letter = oldValues && oldValues.letter;
 		}
 
 		console.debug('saving: %s %s to %s', number, letter, grade.get('href'));
