@@ -817,6 +817,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			me.gradeBook.add(grade, null);
 		}
 
+		//if we were not given a value for letter use the old letter value
+		if (!letter) {
+			letter = oldValues && oldValues.letter;
+		}
+
 		console.debug('saving: %s %s to %s', number, letter, grade.get('href'));
 
 		return wait(300).then(function() {
