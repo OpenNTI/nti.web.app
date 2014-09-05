@@ -801,7 +801,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		}
 
 		//if we are trying to save the same values that are already set don't bother
-		if (grade && grade.valuesEqual(number, letter)) {
+		if (grade && grade.valueEquals(number, letter)) {
 			return;
 		}
 
@@ -817,14 +817,14 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			me.gradeBook.add(grade, null);
 		}
 
-		console.debug('saving: ' + value, 'to', grade.get('href'));
+		console.debug('saving: %s %s to %s', number, letter, grade.get('href'));
 
 		return wait(300).then(function() {
 			var input = me.getFocusedInput();
 
 			grade.phantom = false;
 
-			return grade.saveValues(number, letter)
+			return grade.saveValue(number, letter)
 				.always(function() {
 					var n = view.getNode(record);
 
