@@ -205,11 +205,25 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 	},
 
 	reset: function() {
+		var dontSetBack,
+			q = this.questionSet;
+
 		if (this.hasCls('good') || this.hasCls('late')) {
 			this.removeCls('good late');
 			this.labelBoxEl.update(this.renderData.label);
 			this.dueEl.update(this.dueString);
+
+			this.downloadBtn.removeCls('active');
+
+			if (q && q.tallyParts() === 1) {
+				Ext.defer(q.fireEvent, 1, q, ['hide-quiz-submission']);
+			}
+
+			dontSetBack = true;
 		}
+
 		this.callParent(arguments);
+
+		return dontSetBack;
 	}
 });

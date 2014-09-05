@@ -114,12 +114,14 @@ Ext.define('NextThought.view.assessment.Parts', {
 	reset: function(keepAnswers) {
 		var inputs = this.query('abstract-question-input,assessment-multipart-submission');
 		Ext.each(inputs, function(input) {
-			var val;
+			var val, dontUseTheOldAnswer;
 			if (keepAnswers && input.getValue) {
 				val = input.getValue();
 			}
-			input.reset();
-			if (keepAnswers && input.setValue) {
+
+			dontUseTheOldAnswer = input.reset();
+
+			if (!dontUseTheOldAnswer && keepAnswers && input.setValue) {
 				input.setValue(val);
 			}
 			if (input.enableSubmission) {

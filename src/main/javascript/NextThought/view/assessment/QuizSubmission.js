@@ -110,6 +110,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		if (this.isActive()) {
 			return;
 		}
+		delete this.allowResettingAssignment;
 		console.log('New status is active');
 		this.state = 'active';
 		this.resetBtn.show();
