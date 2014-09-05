@@ -49,7 +49,7 @@ Ext.define('NextThought.view.image.Roll', {
 			}];
 		}
 
-		this.preload(data);
+		//this.preload(data);
 
 		this.store = store || new Ext.data.Store({
 			fields: [
@@ -140,8 +140,10 @@ Ext.define('NextThought.view.image.Roll', {
 	selection: function(v, s) {
 		if (s && s[0]) {
 			this.image.el.setStyle({
+				width: '640px',
+				height: (this.getHeight() - this.others.getHeight()) + 'px',
 				backgroundImage: 'url(' + s[0].get('url') + ')',
-				backgroundSize: 'cover',
+				backgroundSize: 'contain',
 				backgroundPosition: 'center',
 				backgroundRepeat: 'no-repeat'
 			});
