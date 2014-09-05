@@ -28,6 +28,7 @@ Ext.define('NextThought.overrides.Ext', {
 },function() {
 
 	Ext.isIE11p = !Ext.isIE && /Trident/i.test(navigator.userAgent);
+	Ext.isGecko = Ext.isGecko && !Ext.isIE11p;
 
 
 	var EC = Ext.cache,

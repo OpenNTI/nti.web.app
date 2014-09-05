@@ -14,7 +14,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 	},
 
 	verticalScroller: {
-		synchronousRender: true,
+		synchronousRender: !Ext.isGecko,
 		scrollToLoadBuffer: 100,
 		trailingBufferZone: 100,
 		numFromEdge: 50,
