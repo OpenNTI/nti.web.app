@@ -93,14 +93,30 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 
-				{ text: 'Username', dataIndex: 'Username', renderer: function(v, cellStuff, r) {
-					try {
-						return r.get('Status') === 'ForCredit' ? (r.get('OU4x4') || v) : '';
-					} catch (e) {
-						console.error(e.stack || e.message || e);
-						return '';
+				{ text: 'Username', dataIndex: 'Username',
+					renderer: function(v, cellStuff, r) {
+						try {
+							return r.get('Status') === 'ForCredit' ? (r.get('OU4x4') || v) : '';
+						} catch (e) {
+							console.error(e.stack || e.message || e);
+							return '';
+						}
+					},
+					doSort: function(state) {
+						this.up('grid').getStore().sort(new Ext.util.Sorter({
+							direction: state,
+							property: 'username',
+							transform: function(r) {
+								return r && (r.get('Status') === 'ForCredit' ? (r.get('OU4x4') || v) : '');
+							},
+							defaultSorterFn: function(o1, o2) {
+								var v1 = this.transform(o1);
+								var v2 = this.transform(o2);
+								return v1 > v2 ? 1 : (v1 < v2 ? -1 : 0);
+							}
+						}));
 					}
-				} },
+				},
 
 
 

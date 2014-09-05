@@ -147,7 +147,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 					possibleSortStates: ['ASC', 'DESC'],//restore the default order of state(since the grid reverses it)
 					renderer: function(v, g, record) {
 						var username = (v.get && (v.get('OU4x4') || v.get('Username'))) || v,
-								f = record.store && record.store.filters;
+							f = record.store && record.store.filters;
 
 						f = f && f.getByKey('LegacyEnrollmentStatus');
 
@@ -160,7 +160,15 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 					doSort: function(state) {
 						this.up('grid').getStore().sort(new Ext.util.Sorter({
 							direction: state,
-							property: 'username'
+							property: 'username',
+							transform: function(o) {
+								return (o.get && (o.get('OU4x4') || o.get('Username'))) || o;
+							},
+							defaultSorterFn: function(o1, o2) {
+								var v1 = this.transform(o1);
+								var v2 = this.transform(o2);
+								return v1 > v2 ? 1 : (v1 < v2 ? -1 : 0);
+							}
 						}));
 					}
 				}
