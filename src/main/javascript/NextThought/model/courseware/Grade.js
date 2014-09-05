@@ -8,7 +8,7 @@ Ext.define('NextThought.model.courseware.Grade', {
 		isEmpty: function(value, letter) {
 			var v = value + ' ' + letter;
 
-			return Ext.isEmpty(val.replace('-', '').trim());
+			return Ext.isEmpty(v.replace('-', '').trim());
 		}
 	},
 
