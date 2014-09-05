@@ -103,15 +103,28 @@ Ext.define('NextThought.util.Dom', {
 		var imageObjects = [];
 		Ext.each(contentElement.querySelectorAll('span > img'), function(i) {
 			var imageObj = {},
+				sizes = ['full', 'half', 'quarter'],
 				base,
 				src = i.getAttribute('src'),
+				resourceIndex,
 				current = i.getAttribute('data-nti-image-size'),
+				currentSrc = i.getAttribute('data-nti-image-' + current),
 				full = i.getAttribute('data-nti-image-full');
 				//half = i.getAttribute('data-nti-image-half'),
 				//quarter = i.getAttribute('data-nti-image-quarter');
 
-			current = src.indexOf(i.getAttribute('data-nti-image-' + current));
-			base = src.substr(0, current);
+			//if for some reason there is no current src search all the sizes to get the base substring
+			if (currentSrc) {
+				resourceIndex = src.indexOf(currentSrc);
+			} else {
+				sizes.every(function(s) {
+					resourceIndex = src.indexOf(i.getAttribute('data-nti-image-' + s));
+
+					return resourceIndex < 0;
+				});
+			}
+
+			base = src.substr(0, resourceIndex);
 
 			Ext.removeNode(i.parentNode);
 
