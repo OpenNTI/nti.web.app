@@ -78,8 +78,8 @@ Ext.define('NextThought.model.courseware.Grade', {
 
 
 	saveValue: function(value, letter) {
-		value = value && value.trim();
-		letter = letter && letter.trim();
+		value = (value && value.trim()) || '';
+		letter = (letter && letter.trim()) || '-';
 
 		var me = this,
 			val = value + ' ' + letter;
