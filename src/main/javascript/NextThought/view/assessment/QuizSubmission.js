@@ -100,8 +100,10 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 
 
 	disableView: function() {
-		this.shouldShow = false;
-		this.hide();
+		if (!this.allowResettingAssignment) {
+			this.shouldShow = false;
+			this.hide();
+		}
 	},
 
 	moveToActive: function() {
@@ -133,9 +135,11 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		//if we are an assignment that doesn't allow resetting hide
 		if (isAssignment && !allowReset) {
 			this.shouldShow = false;
+			delete this.allowResettingAssignment;
 			this.hide();
 		} else {
 			this.shouldShow = true;
+			this.allowResettingAssignment = true;
 			this.show();
 		}
 
