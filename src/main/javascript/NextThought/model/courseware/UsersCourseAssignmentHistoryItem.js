@@ -3,6 +3,7 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 	extend: 'NextThought.model.Base',
 
 	mimeType: 'application/vnd.nextthought.assessment.userscourseassignmenthistoryitem',
+	//application/vnd.nextthought.assessment.userscourseassignmenthistoryitemsummary
 
 	fields: [
 		{name: 'Feedback', type: 'singleItem', persist: false},
@@ -287,4 +288,6 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 
 		return {cls: 'late', html: due + ' Late'};
 	}
+}, function() {
+	NextThought.model.MAP['application/vnd.nextthought.assessment.userscourseassignmenthistoryitemsummary'] = this.$className;
 });
