@@ -564,7 +564,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 			.then(function(results) {//bin the forums
 
 				if (!sectionContents && !parentContents) {
-					return Promsie.reject('Failed to load any board contents');
+					return Promise.reject('Failed to load any board contents');
 				}
 				return me.__binDiscussions(sectionContents, parentContents);
 			})
