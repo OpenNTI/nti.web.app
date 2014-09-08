@@ -482,12 +482,17 @@ Ext.define('NextThought.view.assessment.input.Base', {
 	},
 
 
-	enableSubmission: function() {
+	enableSubmission: function(fromReset) {
 		if (this.isAssignment && this.submitted) {
 			return;
 		}
 
-		delete this.submissionDisabled;
+		if (!fromReset) {
+			delete this.submissionDisabled;
+		} else {
+			console.log('enabling submission from a reset');
+		}
+
 		this.checkItBtn.removeCls('disabled');
 		if (this.questionSet) {
 			this.questionSet.fireEvent('answered', this.question, this.part, this.hasValue(), true);

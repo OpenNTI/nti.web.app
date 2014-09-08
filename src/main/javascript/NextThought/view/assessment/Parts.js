@@ -125,7 +125,7 @@ Ext.define('NextThought.view.assessment.Parts', {
 				input.setValue(val);
 			}
 			if (input.enableSubmission) {
-				input.enableSubmission();
+				input.enableSubmission(true);
 			}
 		});
 	},
