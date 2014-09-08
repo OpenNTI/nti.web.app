@@ -10,7 +10,7 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 
 	monitorSubTree: function() {
 		var MutationObserver = window.MutationObserver || window.WebKitMutationObserver,
-			observer;
+			observer, view = this.__getGridView();
 
 		if (!MutationObserver) {
 			alert(getString('NextThought.view.courseware.assessment.admin.Grid.oldbrowser'));
@@ -21,6 +21,8 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 
 		observer.observe(Ext.getDom(this.__getGridView().getEl()), { childList: true, subtree: true });
 		this.on('destroy', 'disconnect', observer);
+
+		this.mon(view.el, 'scroll', 'onViewScroll');
 
 		return true;
 	},
@@ -63,6 +65,20 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 	},
 
 
+	onViewScroll: function() {
+		if (!this.currentFocused) { return; }
+
+		var input = this.currentFocused,
+			v = this.__getGridView(),
+			row = input.up(v.itemSelector),
+			rec = v && v.getRecord(row);
+
+		if (rec) {
+			this.editGrade(rec, input.dom.value);
+		}
+	},
+
+
 	onInputBlur: function(e, dom) {
 		var record = this.getRecordFromEvent(e),
 			value = Ext.fly(dom).getValue();
@@ -86,6 +102,8 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 		if (len && el.setSelectionRange) {
 			el.setSelectionRange(0, len);
 		}
+
+		this.currentFocused = Ext.get(el);
 	},
 
 
