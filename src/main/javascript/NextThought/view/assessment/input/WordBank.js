@@ -162,8 +162,10 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 			},
 
 
-			onBeforeDrag: function() {
-				return !me.submitted;
+			onBeforeDrag: function(dragConfig, e) {
+				var inputBox = !!e.getTarget('.inputbox');
+
+				return inputBox && !me.submitted;
 			},
 
 
@@ -199,7 +201,7 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 			}
 		};
 
-		this.dd = new Ext.dd.DragZone(this.el, cfg);
+		this.dd = new Ext.dd.DragZone(this.inputBox, cfg);
 		this.on('destroy', 'destroy', this.dd);
 	},
 
