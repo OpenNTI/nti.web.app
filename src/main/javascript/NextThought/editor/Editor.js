@@ -1553,8 +1553,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				parts = d && d.querySelectorAll('.object-part');
 
 			return {
-				clearPlaceholder: !Ext.isEmpty(parts) || !DomUtils.isEmpty(html),
-				enableSave: !Ext.isEmpty(Ext.Object.getKeys(parts)) || !DomUtils.isEmpty(html)
+				clearPlaceholder: parts.length > 0 || !DomUtils.isEmpty(html),
+				enableSave: parts.length > 0 || !DomUtils.isEmpty(html)
 			};
 		}
 
