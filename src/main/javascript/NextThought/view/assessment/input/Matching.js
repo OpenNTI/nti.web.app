@@ -144,6 +144,7 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 			if (toReset) {
 				this.moveTerm(toReset, this.shelfEl);
 			}
+			this.maybeChangeSubmitButtonState();
 		},
 
 

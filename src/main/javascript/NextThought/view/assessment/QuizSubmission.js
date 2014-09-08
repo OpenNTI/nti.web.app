@@ -89,6 +89,11 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 	},
 
 
+	isInActive: function() {
+		return !this.state || this.state === 'inactive';
+	},
+
+
 	isSubmitted: function() {
 		return this.state === 'submitted';
 	},
@@ -117,6 +122,23 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		this.statusMessage.show();
 		this.submitBtn.update(getString('NextThought.view.assessment.QuizSubmission.finished'));
 		this.submitBtn.removeCls('disabled');
+		if (this.shouldShow) {
+			this.show();
+		}
+	},
+
+
+	moveToInActive: function() {
+		if (this.isInActive()) {
+			return;
+		}
+
+		this.state = 'inactive';
+		this.resetBtn.hide();
+		this.statusMessage.show();
+		this.submitBtn.update(getString('NextThought.view.assessment.QuizSubmission.finished'));
+		this.submitBtn.addCls('disabled');
+
 		if (this.shouldShow) {
 			this.show();
 		}
@@ -183,7 +205,8 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 
 
 	reflectStateChange: function() {
-		var unansweredQuestions = 0;
+		var unansweredQuestions = 0,
+			totalQuestionCount = 0;
 		if (!this.rendered) { return; }
 
 		Ext.Object.each(this.answeredMap, function(key, val) {
@@ -198,7 +221,13 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 			if (answered < total) {
 				unansweredQuestions++;
 			}
+
+			totalQuestionCount += 1;
 		});
+
+		if (totalQuestionCount === unansweredQuestions) {
+			this.moveToInActive();
+		}
 
 		this.statusMessage.update(unansweredQuestions === 0 ?
 								getString('NextThought.view.assessment.QuizSubmission.all-answered') :

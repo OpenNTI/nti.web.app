@@ -158,6 +158,17 @@ Ext.define('NextThought.view.assessment.input.Short', {
 	},
 
 
+	hasValue: function() {
+		var isEmpty;
+
+		isEmpty = (this.blankInputs || []).every(function(input) {
+			return !!input.value;
+		});
+
+		return isEmpty;
+	},
+
+
 	getValue: function() {
 		var value = {};
 
