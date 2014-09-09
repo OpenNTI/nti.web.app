@@ -348,11 +348,22 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 			lesson = ContentUtils.getLineage(o.get('containerId'));//this function is in need to go asynchronous...but i need it here. :(
 			lesson.pop();//discard the root
-			if (lesson.length > 1) {
-				lesson.shift();//discard leaf page
+
+			//search through the entire lineage to find an outline node for the assignment
+			while (!node) {
+				//doing this the first time through is alright because
+				//it is discarding the leaf page
+				lesson.shift();
+
+				//if there are no lessons in the lineage left we can't find a node
+				//so don't keep looping 'ZZZ' will be placed at the bottom
+				if (lesson.length === 0) {
+					node = 'ZZZ';
+				} else {
+					node = d.outline.getNode(lesson[0]);
+				}
 			}
-			//make the sorter keep the order
-			node = d.outline.getNode(lesson[0]) || 'ZZZ'; //no node? ZZZ is at the bottom.
+
 			if (node.get) {
 				node = node.index;
 				node = (node && node.pad && node.pad(3)) || 'ZZZ';
