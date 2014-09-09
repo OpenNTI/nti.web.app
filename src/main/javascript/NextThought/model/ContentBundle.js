@@ -137,6 +137,11 @@ Ext.define('NextThought.model.ContentBundle', {
 		});
 	},
 
+	//for now content bundles shouldn't show the assignment tab
+	shouldShowAssignments: function() {
+		return false;
+	},
+
 
 	getPublicScope: function() { return this.getScope('public'); },
 	getRestrictedScope: function() { return this.getScope('restricted'); },//i don't think this is used

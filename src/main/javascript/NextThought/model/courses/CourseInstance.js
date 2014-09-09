@@ -255,6 +255,12 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
+	shouldShowAssignments: function() {
+		//we should only show assignments if there is an assignments by outline node link
+		return !!this.getLink('AssignmentsByOutlineNode');
+	},
+
+
 	getAssignments: function() {
 		if (this.getAssignmentsPromise) { return this.getAssignmentsPromise; }
 

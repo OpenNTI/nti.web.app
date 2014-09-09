@@ -103,6 +103,16 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 			});
 		}
 
+		//if the instance shouldn't show assignments hide the tab
+		if (!instance.shouldShowAssignments()) {
+			return Promise.resolve()
+				.then(function() {
+					resetView(true);
+					delete me.instanceId;
+					delete me.instance;
+				});
+		}
+
 		me.maybeMask();
 
 		return instance.getWrapper()
