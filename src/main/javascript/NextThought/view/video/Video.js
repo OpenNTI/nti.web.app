@@ -428,7 +428,9 @@ Ext.define('NextThought.view.video.Video', {
 			container = this.up('[currentBundle]') || Ext.getCmp('content'),
 			bundle = container && container.currentBundle && container.currentBundle.getId();
 
-		if (!state || this.doNotCaptureAnalytics) { return; }
+		//if we don't have a player state, we aren't suppose to capture analytics,
+		//or we don't have a resource id don't send any events
+		if (!state || this.doNotCaptureAnalytics || !id) { return; }
 
 		//if the time has changed more than the threshold or we have come backwards
 		//stop the watch event
