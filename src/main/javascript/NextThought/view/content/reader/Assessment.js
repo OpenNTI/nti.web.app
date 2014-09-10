@@ -52,7 +52,7 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			r = me.reader,
 			guid = guidGenerator(),
 			questions = set.get('questions'),
-			submission, pendingAssessment;
+			pendingAssessment;
 
 		function getPendingAssessment(h) {
 			var temp;
@@ -82,7 +82,7 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 
 		Ext.each(questions, function(q) {me.makeAssessmentQuestion(q, set);});
 
-		submission = o.registerOverlayedPanel(guid + 'submission', Ext.widget('assessment-quiz-submission', {
+		this.submission = o.registerOverlayedPanel(guid + 'submission', Ext.widget('assessment-quiz-submission', {
 			reader: r, renderTo: c, questionSet: set,
 			tabIndexTracker: o.tabIndexer,
 			history: h
@@ -97,7 +97,7 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 		}
 
 		if (pendingAssessment) {
-			submission.setGradingResult(pendingAssessment);
+			this.submission.setGradingResult(pendingAssessment);
 		}
 	},
 
@@ -109,6 +109,36 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 		if (historyItem) {
 			this.injectedAssignmentHistory.set('history', historyItem);
 		}
+	},
+
+	//do not allow close if we have a submission and it has answers
+	stopClose: function() {
+		var shouldPrompt = this.submission && this.submission.hasAnyAnswers();
+
+		if (!shouldPrompt) {
+			return Promise.resolve();
+		}
+
+		return new Promise(function(fulfill, reject) {
+			Ext.Msg.show({
+				msg: 'Navigating away from this page will clear all progress on this assignment.',
+				buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+				scope: this,
+				icon: 'warning-red',
+				buttonText: {
+					'ok': 'caution:Discard Progress',
+					'cancel': 'Stay and Complete Assignment'
+				},
+				title: 'Are you sure?',
+				fn: function(str) {
+					if (str === 'ok') {
+						fulfill();
+					} else {
+						reject();
+					}
+				}
+			});
+		});
 	},
 
 

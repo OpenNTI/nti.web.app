@@ -194,6 +194,13 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 	},
 
 
+	//just use us being in the active state to determine if
+	//we have any answers
+	hasAnyAnswers: function() {
+		return this.isActive();
+	},
+
+
 	updateStatus: function(question, part, status, enabling) {
 		if (enabling) {
 			this.transitionToActive();
