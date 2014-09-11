@@ -97,5 +97,24 @@ Ext.define('NextThought.store.courseware.AssignmentView', {
 			this.proxy.limitParam = undefined;
 			this.proxy.idParam = undefined;
 		}
+	},
+
+
+	getFromPageSourceRecord: function(record) {
+		var match, id = record.getId(),
+			creator = record.get('Creator'),
+			creatorId = Ext.isString(creator) ? creator : creator.getId();
+
+		this.data.forEach(function(item) {
+			if (item.getId() === id) {
+				match = item;
+			} else if (item.get('Creator').getId() === creatorId) {
+				match = item;
+			}
+
+			return !match;
+		});
+
+		return match;
 	}
 });

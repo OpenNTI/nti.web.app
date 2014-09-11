@@ -52,7 +52,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 
 	changeGrade: function(number, letter) {
 		var me = this,
-			grade = this.assignmentHistory.get('Grade');
+			store = this.pageSource,
+			historyItem = this.assignmentHistory,
+			grade = historyItem.get('Grade');
 
 		if (!grade) {
 			console.error('No assignmentHistroy set, cannot change the grade');
@@ -63,6 +65,21 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 		if (grade.valueEquals(number, letter)) { return; }
 
 		grade.saveValue(number, letter)
+			.then(function(g) {
+				var link = g.getLink('AssignmentHistoryItem');
+				//if the grade that comes back from saving has an assignment history item link
+				//and we have a store get the history item from the server and update the backing store
+				if (link && store) {
+					Service.request(link)
+						.then(function(item) {
+							historyItem = ParseUtils.parseItems(item)[0];
+							store.syncBackingStore(historyItem);
+						})
+						.fail(function(reason) {
+							console.error('Failed to update assignmenthistoryitem from new grade:', reason);
+						});
+				}
+			})
 			.fail(function() {
 				grade.reject();
 				me.setUpGradebox();

@@ -88,7 +88,23 @@ Ext.define('NextThought.model.courseware.Grade', {
 
 		return new Promise(function(fulfill, reject) {
 			me.save({
-				success: fulfill,
+				success: function(grade, req) {
+					var response = req && req.response,
+						text = response && response.responseText,
+						json;
+
+					try {
+						json = JSON.parse(text);
+
+						//update the links so we can get the link for the assignment history item
+						//if there is one
+						grade.set('Links', json.Links);
+					} catch (e) {
+						console.error('failed to parse response text for a saved grade:', e, text);
+					} finally {
+						fulfill(grade);
+					}
+				},
 				failure: reject
 			});
 		});
