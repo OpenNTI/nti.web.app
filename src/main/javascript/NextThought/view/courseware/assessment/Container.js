@@ -100,7 +100,7 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 
 		me.showRoot()
 			.then(function() {
-				v = r.activeView(v);
+				v = r.activateView(v);
 
 				return me.activeCourseSetup
 					.then(function() {
