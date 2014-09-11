@@ -34,7 +34,8 @@ Ext.define('NextThought.proxy.PageSource', {
 		current: null,
 		url: '',
 		model: null,
-		batchAroundParam: 'batchAround'
+		batchAroundParam: 'batchAround',
+		backingStore: null
 	},
 
 

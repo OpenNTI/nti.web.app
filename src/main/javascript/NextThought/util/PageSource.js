@@ -21,6 +21,44 @@ Ext.define('NextThought.util.PageSource', {
 		}
 	},
 
+	/**
+	 * If we have a backing store and it has an instance of the record update the backing store
+	 * to be up to date with the record
+	 * @param  {Model} record the record in the page source that was updated
+	 * @param  {String} field  the field to update, if falsy update every field
+	 */
+	syncBackingStore: function(record, field) {
+		if (!this.backingStore) { return; }
+
+		var storeRec, data;
+
+		//getById will throw an error if its not there, we are okay with it not being there
+		//so catch it and don't blow up
+		try {
+			//if the backing store has a function to find the record use it
+			if (this.backingStore.getFromPageSourceRecord) {
+				storeRec = this.backingStore.getFromPageSourceRecord(record);
+			} else {
+				//else just look for the same id
+				storeRec = this.backingStore.getById(record.getId());
+			}
+		} catch (e) {
+			console.error('No record in backingstore for ', record);
+		} finally {
+			if (storeRec) {
+				//if we are passed a field only update that field
+				if (field) {
+					storeRec.set(field, record.get(field));
+				} else {
+					data = record.getData();
+					//don't trigger an id change
+					delete data[record.idProperty];
+					storeRec.set(data);
+				}
+			}
+		}
+	},
+
 
 	getTotal: function() {
 		var s = this.store,

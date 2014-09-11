@@ -26,7 +26,8 @@ Ext.define('NextThought.proxy.courseware.PageSource', {
 		current: null,
 		url: '',
 		model: null,
-		batchAroundParam: 'batchAround'
+		batchAroundParam: 'batchAround',
+		backingStore: null
 	},
 
 
