@@ -149,10 +149,12 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 
 	applyVideoData: function(data) {
 		//data is a NTIID->source map
-		var reader = Ext.data.reader.Json.create({model: NextThought.model.PlaylistItem}),
-			selected = this.getSource().get('NTIID'),
+		var me = this,
+			reader = Ext.data.reader.Json.create({model: NextThought.model.PlaylistItem}),
+			selected = me.getSource().get('NTIID'),
 			sections = {},
-			videos = [];
+			videos = [],
+			fillingIn = [];
 
 		function iter(key) {
 			var v = data[key], section;
@@ -160,43 +162,52 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 				console.error(key, '!=', v);
 			}
 
-			section = ContentUtils.getLineage(key, true)[1];
+			//get the ntiid of the section to key the groups by
+			section = ContentUtils.getLineage(key)[1];
 
-			if (!sections.hasOwnProperty(section)) {
-				sections[section] = NextThought.model.PlaylistItem({section: section, sources: []});
-				videos.push(sections[section]);
-			}
+			//get the label to show to the user
+			return ContentUtils.getLineageLabels(key)
+				.then(function(labels) {
+					var label = labels[1];
 
-			videos.push(reader.read(Ext.apply(v, {
-				NTIID: v.ntiid,
-				section: section
-			})).records[0]);
+					if (!sections.hasOwnProperty(section)) {
+						sections[section] = NextThought.model.PlaylistItem({section: label, sources: []});
+						videos.push(sections[section]);
+					}
 
-			if (key === selected) {
-				selected = videos.last();
-			}
+					videos.push(reader.read(Ext.apply(v, {
+						NTIID: v.ntiid,
+						section: section
+					})).records[0]);
+
+					if (key === selected) {
+						selected = videos.last();
+					}
+
+				});
 		}
 
-		//Ext.Object.each(data, iter);
-		data._order.forEach(iter);
+		fillingIn = data._order.map(iter);
 
+		Promise.all(fillingIn)
+			.then(function(results) {
+				me.store = new Ext.data.Store({
+					model: NextThought.model.PlaylistItem,
+					proxy: 'memory',
+					data: videos,
+					sorters: [
+						//Globals.getNaturalSorter('section'),
+						//Globals.getNaturalSorter('title')
+					]
+				});
 
-		this.store = new Ext.data.Store({
-			model: NextThought.model.PlaylistItem,
-			proxy: 'memory',
-			data: videos,
-			sorters: [
-				//Globals.getNaturalSorter('section'),
-				//Globals.getNaturalSorter('title')
-			]
-		});
+				me.bindStore(me.store);
 
-		this.bindStore(this.store);
-
-		this.fireEvent('store-set', this.store);
-		if (!Ext.isString(selected)) {
-			this.getSelectionModel().select(selected, false, true);
-		}
+				me.fireEvent('store-set', me.store);
+				if (!Ext.isString(selected)) {
+					me.getSelectionModel().select(selected, false, true);
+				}
+			});
 	},
 	//</editor-fold>
 
