@@ -265,15 +265,16 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		if (this.getAssignmentsPromise) { return this.getAssignmentsPromise; }
 
 		var me = this,
+			assignmentsLink = me.getLink('AssignmentsByOutlineNode'),
 			roster = me.getLink('CourseEnrollmentRoster');
 
-		if (!roster) {
+		if (!assignmentsLink) {
 			return Promise.resolve(NextThought.model.courses.AssignmentCollection.fromJson(
 				{},{},null, null, me.getLink('AssignmentHistory')));
 		}
 
 		me.getAssignmentsPromise = Promise.all([
-			Service.request(me.getLink('AssignmentsByOutlineNode')),
+			Service.request(assignmentsLink),
 			Service.request(me.getLink('NonAssignmentAssessmentItemsByOutlineNode')),
 			me.getLink('GradeBook') ? me._getGradeBook() : Promise.resolve()
 		])
