@@ -182,7 +182,7 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 		this.showRoot();
 		this.activeCourseSetup = Promise.all(this.items.items.map(function(o) {
 			try {
-				return o.bundleChanged.apply(o, args);
+				return o.bundleChanged && o.bundleChanged.apply(o, args);
 			} catch (e) {
 				console.error(e.stack || e.message || e);
 				return Promise.reject(e);
