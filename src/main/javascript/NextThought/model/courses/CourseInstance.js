@@ -267,6 +267,11 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		var me = this,
 			roster = me.getLink('CourseEnrollmentRoster');
 
+		if (!roster) {
+			return Promise.resolve(NextThought.model.courses.AssignmentCollection.fromJson(
+				{},{},null, null, me.getLink('AssignmentHistory')));
+		}
+
 		me.getAssignmentsPromise = Promise.all([
 			Service.request(me.getLink('AssignmentsByOutlineNode')),
 			Service.request(me.getLink('NonAssignmentAssessmentItemsByOutlineNode')),
