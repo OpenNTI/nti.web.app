@@ -68,6 +68,8 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 				m.push(this.filterHTML(values[i]));
 			}
 
+			this.bufferedUpdateLayout = Ext.Function.createBuffered(this.updateLayout, 500);
+
 			this.renderData = Ext.apply(this.renderData || {}, {
 				term: '',//shold the question part define this string?
 				terms: n.reverse(),
@@ -122,8 +124,10 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 
 		moveTerm: function moveTerm(el, to) {
 			var p = el.parentNode,
+				tP = to.parentNode,
+				tS = to.nextSibling,
 				doc = (p && (p.ownerDocument || p.documentElement)) || document,
-				term = p && p.getAttribute('data-term');
+				term = p && p.dataset.term;
 
 			if (p === Ext.getDom(to)) {
 				return;
@@ -133,9 +137,17 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 				p.appendChild(doc.createTextNode(term));
 			}
 
-			to.appendChild(el);
+			if (Ext.isIE11p) {
+				tP.removeChild(to);
+				p.removeChild(el);
+				el = el.cloneNode(true);
+				to.appendChild(el);
+				tP.insertBefore(to, tS);
+			} else {
+				to.appendChild(el);
+			}
 
-			this.updateLayout();
+			this.bufferedUpdateLayout();
 		},
 
 
