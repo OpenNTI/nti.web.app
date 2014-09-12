@@ -8,7 +8,7 @@ Ext.define('NextThought.overrides.picker.Color', {
 			'<a href="#" class="color-',
 				'<tpl if="values==\'None\'">NONE</tpl>',
 				'<tpl if="values!=\'None\'">{.}</tpl>',
-				'" hidefocus="on" title="{.}">',
+				'" hidefocus="on">',
 				'<em><span style="background:#{.}" unselectable="on">&#160;</span></em>',
 			'</a>',
 		'</tpl>'
