@@ -106,6 +106,13 @@ Ext.define('NextThought.view.assessment.Parts', {
 	},
 
 
+	updateWithProgress: function(questionSubmission) {
+		var parts = this.query('[updateWithProgress]');
+		Ext.each(parts, function(part) {
+			part.updateWithProgress(questionSubmission);
+		});
+	},
+
 	updateWithResults: function(assessedQuestion) {
 		var parts = this.query('[updateWithResults]');
 		Ext.each(parts, function(part) {part.updateWithResults(assessedQuestion);});

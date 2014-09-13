@@ -141,7 +141,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 	},
 
 
-	setAssignmentsData: function(assignments, history) {
+	setAssignmentsData: function(assignments, history, instance, savepoints) {
 		var me = this;
 
 		this.clearAssignmentsData();
@@ -152,6 +152,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 		}
 
 		this.assignments = {};
+		this.savepoints = savepoints;
 
 		function collect(o) { me.collectEvents(o, history); }
 

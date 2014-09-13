@@ -40,7 +40,9 @@ Ext.define('NextThought.view.assessment.Question', {
 			this.mon(this.questionSet, {
 				scope: this,
 				'beforesubmit': this.gatherQuestionResponse,
+				'beforesaveprogress': this.gatherQuestionProgress,
 				'graded': this.updateWithResults,
+				'set-progress': this.updateWithProgress,
 				'reset': this.reset
 			});
 		}
@@ -106,6 +108,32 @@ Ext.define('NextThought.view.assessment.Question', {
 		}
 	},
 
+	/**
+	 * Takes a question set submission and updates the inputs with those values, without triggering
+	 * it to be marked correct or incorrect
+	 * @param  {QuestionSetSubmission} questionSetSubmission the users last values they had
+	 */
+	updateWithProgress: function(questionSetSubmission) {
+		if (!questionSetSubmission) { return; }
+
+		var q, id = this.question.getId(),
+			questions = questionSetSubmission.get('questions') || [];
+
+		if (questionSetSubmission.isSet) {
+			questions.every(function(question) {
+				if (question.getId() === id || question.get('questionId') === id) {
+					q = question;
+				}
+
+				return !q;
+			});
+		} else {
+			q = questionSetSubmission;
+		}
+
+		this.down('question-parts').updateWithProgress(q);
+	},
+
 
 	updateWithResults: function(assessedQuestionSet) {
 		var q, id = this.question.getId(),
@@ -139,6 +167,26 @@ Ext.define('NextThought.view.assessment.Question', {
 		this[fn[correct]](assessedQuestionSet.noMark);
 
 		this.down('question-parts').updateWithResults(q);
+	},
+
+
+	gatherQuestionProgress: function(questionSet, collection) {
+		var id = this.question.getId(), values = [];
+
+		Ext.each(this.query('abstract-question-input'), function(p) {
+			var v = p.getValue();
+
+			v = v || null;
+
+			values[p.getOrdinal()] = v;
+		});
+
+		if (collection.hasOwnProperty(id)) {
+			console.error('duplicate id in submission!', id);
+			return false;
+		}
+
+		collection[id] = values;
 	},
 
 

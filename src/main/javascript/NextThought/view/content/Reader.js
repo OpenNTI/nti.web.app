@@ -111,6 +111,27 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
+	showToast: function(msg, cls) {
+		var toast,
+			left = this.getX() + this.getWidth(),
+			viewWidth = Ext.Element.getViewportWidth(),
+			right = (viewWidth - left) + 20;
+
+		cls = cls ? 'reader-toast ' + cls : 'reader-toast';
+
+		toast = this.add({
+			xtype: 'box',
+			cls: cls,
+			autoEl: {html: msg},
+			openLongEnough: wait(3000)
+		});
+
+		toast.el.setStyle('right', right + 'px');
+
+		return toast;
+	},
+
+
 	bootstrap: function(loc) {
 		//differed reader startup. State restore will not do anything on an un-rendered reader...so start it after the
 		// reader is rendered.

@@ -48,6 +48,7 @@ Ext.define('NextThought.view.assessment.input.ModeledContent', {
 		//Prevent setting enabled/disabled repeatedly.
 		enable = enable || undefined;
 		if (this.submissionDisabled !== enable) {
+			this.saveProgress();
 			return;
 		}
 

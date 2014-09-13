@@ -130,6 +130,11 @@
 	100% { opacity: 0; @include experimental(transform, translateX(20px)); }
 }
 
+@include keyframes(fadeOutDown) {
+	0% { opacity: 1; @include experimental(transform, translateY(0)); }
+	100% { opacity: 0; @include experimental(transform, translateY(20px)); }
+}
+
 @include keyframes(shake) {
 	0%, 100% {@include experimental(transform, translateX(0));}
 	10%, 30%, 50%, 70%, 90% {@include experimental(transform, translateX(-10px));}

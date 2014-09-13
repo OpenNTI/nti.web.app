@@ -27,6 +27,11 @@ Ext.define('NextThought.model.assessment.Assignment', {
 	},
 
 
+	canSaveProgress: function() {
+		return !!this.getLink('Savepoint');
+	},
+
+
 	getDueDate: function() {
 		return this.get('availableEnding') || this.get('availableBeginning');
 	},

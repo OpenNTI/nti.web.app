@@ -307,6 +307,50 @@
             pointer-events: none;
         }
     }
+
+    .reader-toast {
+    	position: fixed;
+    	bottom: 4px;
+    	z-index: 10;
+    	background-color: white;
+    	color: $primary-grey;
+    	max-width: 300px;
+    	font: normal 600 1em/1.2 $font;
+    	padding: 3px;
+    	box-shadow: 0 0 2px 0 rgba(0,0,0,0.35);
+    	@include experimental(transition, all 0.5s);
+
+    	@include animate('fadeInUp');
+
+    	&.saving {
+    		padding-left: 30px;
+    		line-height: 24px;
+
+    		&::before {
+    			@include loadingSpinner($top: 3px, $left: 3px);
+    		}
+    	}
+
+    	&.saved, &.error {
+    		padding-left: 3px;
+    		line-height: 24px;
+    		@include animate('fadeOutDown', $delay: 2s);
+
+    		&::before {
+    			display: none;
+    		}
+    	}
+
+    	&.saved {
+    		background-color: $primary-green;
+    		color: white;
+    	}
+
+    	&.error {
+    		background-color: $primary-red;
+    		color: white;
+    	}
+    }
 }
 
 .component-overlay {

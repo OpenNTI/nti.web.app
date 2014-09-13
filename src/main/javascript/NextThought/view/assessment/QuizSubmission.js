@@ -43,7 +43,8 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 			'reset': 'reset',
 			'graded': 'graded',
 			'hide-quiz-submission': 'disableView',
-			'do-submission': 'submitClicked'
+			'do-submission': 'submitClicked',
+			'save-progress': 'saveProgress'
 		});
 
 		Ext.each(this.questionSet.get('questions'), function(q) {
@@ -201,6 +202,11 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 	},
 
 
+	hasProgressedSaved: function() {
+		return this.progressSaved;
+	},
+
+
 	updateStatus: function(question, part, status, enabling) {
 		if (enabling) {
 			this.transitionToActive();
@@ -355,6 +361,46 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 	},
 
 
+	onProgressSaved: function() {
+		var assessmentReader = this.reader.getAssessment();
+
+		this.progressSaved = true;
+
+		assessmentReader.showProgressSaved();
+	},
+
+
+	onProgressFail: function() {
+		var assessmentReader = this.reader.getAssessment();
+
+		this.progressSaved = false;
+
+		assessmentReader.showProgressFailed();
+	},
+
+	/**
+	 * Gets all the answers the user has entered so far
+	 * TODO: Don't iterate through all the questions every time, only look at the question that fired the event
+	 */
+	saveProgress: function() {
+		var q = this.questionSet,
+			assignment = q.associatedAssignment,
+			assessmentReader = this.reader.getAssessment();
+			submission = {};
+
+		//only save progress for assignments for now
+		if (!assignment || !assignment.canSaveProgress()) { return; }
+
+		assessmentReader.showSavingProgress();
+
+		if (!q.fireEvent('beforesaveprogress', q, submission)) {
+			console.log('save progress aborted');
+		}
+
+		this.fireEvent('save-progress', this, q, submission);
+	},
+
+
 	submitClicked: function(e) {
 		var q = this.questionSet,
 			isAssignment = !!q.associatedAssignment,
@@ -376,7 +422,6 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 			return;
 		}
 
-
 		Ext.getBody().mask(
 				getString('Submitting...'), 'navigation');
 		this.fireEvent(isAssignment ? 'submit-assignment' : 'grade-it', this, q, submission);
@@ -384,6 +429,14 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		if (e) {
 			e.stopEvent();
 			return false;
+		}
+	},
+
+
+	setFromSavePoint: function(savepoint) {
+		if (savepoint) {
+			this.progressSaved = true;
+			this.questionSet.fireEvent('set-progress', savepoint.getQuestionSetSubmission());
 		}
 	},
 

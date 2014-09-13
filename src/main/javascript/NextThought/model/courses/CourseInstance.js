@@ -7,6 +7,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	requires: [
 		'NextThought.model.courses.AssignmentCollection',
 		'NextThought.model.courses.CourseInstanceBoard',
+		'NextThought.model.assessment.UsersCourseAssignmentSavepoint',
 		'NextThought.store.courseware.Navigation',
 		'NextThought.store.courseware.ToCBasedOutline'
 	],
@@ -288,6 +289,36 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 			});
 
 		return me.getAssignmentsPromise;
+	},
+
+
+	getAssignmentSavePoints: function() {
+		var p = this.getAssignmentSavePointsPromise,
+			link;
+
+		if (!p) {
+
+			p = this.getWrapper()
+				.then(function(cce) {
+					link = cce.getLink('AssignmentSavepoints');
+
+					if (link) {
+						return Service.request(link)
+							.then(function(response) {
+								return ParseUtils.parseItems(response)[0];
+							})
+							.fail(function() {
+								return NextThought.model.assessment.UsersCourseAssignmentSavepoint.create();
+							});
+					}
+
+					return Promise.resolve(NextThought.model.assessment.UsersCourseAssignmentSavepoint.create());
+				});
+
+			this.getAssignmentSavePointsPromise = p;
+		}
+
+		return p;
 	},
 
 

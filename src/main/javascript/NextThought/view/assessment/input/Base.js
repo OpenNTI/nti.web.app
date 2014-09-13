@@ -105,6 +105,8 @@ Ext.define('NextThought.view.assessment.input.Base', {
 
 		this.isAssignment = Boolean(this.questionSet && this.questionSet.associatedAssignment);
 
+		this.saveProgress = Ext.Function.createBuffered(this.saveProgress, 500);
+
 		if (this.isAssignment) {
 			this.noMark = Boolean(this.questionSet.noMark);
 		}
@@ -173,7 +175,7 @@ Ext.define('NextThought.view.assessment.input.Base', {
 
 		this.reset();
 
-		this.disableSubmission();
+		this.disableSubmission(true);
 
 		if (this.canHaveAnswerHistory()) {
 			this.mon(this.historyMenuEl, {
@@ -404,6 +406,19 @@ Ext.define('NextThought.view.assessment.input.Base', {
 		return s;
 	},
 
+	//set the inputs values with out marking it correct or incorrect
+	updateWithProgress: function(questionSubmission) {
+		var parts = (questionSubmission && questionSubmission.get('parts')) || {},
+			part = parts[this.ordinal];
+
+		this.setValue(part);
+
+		if (part) {
+			this.enableSubmission(true);
+		}
+	},
+
+
 	updateWithResults: function(assessedQuestion) {
 		var parts = (assessedQuestion && assessedQuestion.get('parts')) || {},
 			part = parts[this.ordinal], id, correct,
@@ -477,8 +492,15 @@ Ext.define('NextThought.view.assessment.input.Base', {
 		this.footer.show();
 		this.checkItBtn.removeCls('wrong').update(getString('NextThought.view.assessment.input.Base.check'));
 		this.hideSolution();
-		this.disableSubmission();
+		this.disableSubmission(true);
 		this.updateLayout();
+	},
+
+
+	saveProgress: function() {
+		if (this.questionSet) {
+			this.questionSet.fireEvent('save-progress');
+		}
 	},
 
 
@@ -498,16 +520,26 @@ Ext.define('NextThought.view.assessment.input.Base', {
 			this.questionSet.fireEvent('answered', this.question, this.part, this.hasValue(), true);
 		}
 		this.fireEvent('enable-submission', this.ordinal);
+
+		if (!fromReset) {
+			this.saveProgress();
+		}
 	},
 
 
-	disableSubmission: function() {
+	disableSubmission: function(doNotSave) {
 		this.submissionDisabled = true;
 		this.checkItBtn.addCls('disabled');
 		if (this.questionSet) {
 			this.questionSet.fireEvent('answered', this.question, this.part, this.hasValue(), false);
 		}
 		this.fireEvent('disable-submission', this.ordinal);
+
+		//Some question fill call this when they are emptied so we want to save progress
+		//but this is also called on reset and afterrender, and we don't want to save progress then
+		if (!doNotSave) {
+			this.saveProgress();
+		}
 	},
 
 

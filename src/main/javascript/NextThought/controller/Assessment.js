@@ -79,7 +79,8 @@ Ext.define('NextThought.controller.Assessment', {
 
 				'assessment-quiz-submission': {
 					'grade-it': 'grade',
-					'submit-assignment': 'submit'
+					'submit-assignment': 'submit',
+					'save-progress': 'saveProgress'
 				}
 			}
 		});
@@ -280,6 +281,60 @@ Ext.define('NextThought.controller.Assessment', {
 				safelyCall('unmask', widget);
 			}
 		});
+	},
+
+	/**
+	 * Posts the question set to the save point of the assignment to be restored
+	 * next time they come back to the assignment
+	 * @param  {Component} widget      the component firing the event
+	 * @param  {QuestionSet} questionSet the question set the answers are for
+	 * @param  {Object} data        the answers
+	 * @return {Boolean}             True is an attempt was made to save, false otherwise
+	 */
+	saveProgress: function(widget, questionSet, data) {
+		var s = this.getAssessmentQuestionSetSubmissionModel(),
+			a = this.getAssessmentAssignmentSubmissionModel(),
+			endTimestamp = new Date().getTime(),
+			//in seconds
+			duration = (endTimestamp - widget.startTimestamp) / 1000,
+			progress = this.getAssignmentView(),
+			assignment = questionSet.associatedAssignment,
+			url = assignment.getLink('Savepoint'),
+			qset = {
+				questionSetId: questionSet.getId(),
+				questions: []
+			};
+
+		if (!url) {
+			console.error('no url to save assignment progress to');
+			return false;
+		}
+
+		Ext.Object.each(data, this.__getQuestionSubmissions(qset));
+
+		a = a.create({
+			assignmentId: assignment.getId(),
+			parts: [s.create(qset)],
+			CreatorRecordedEffortDuration: duration
+		});
+
+		a.save({
+			url: url,
+			success: function(self, op) {
+				if (widget.onProgressSaved) {
+					widget.onProgressSaved();
+				}
+			},
+			failure: function() {
+				console.error('Failed to save assignment progress');
+
+				if (widget.onProgressFail) {
+					widget.onProgressFail();
+				}
+			}
+		});
+
+		return true;
 	},
 
 

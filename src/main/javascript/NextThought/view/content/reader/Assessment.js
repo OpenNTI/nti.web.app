@@ -98,6 +98,8 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 
 		if (pendingAssessment) {
 			this.submission.setGradingResult(pendingAssessment);
+		} else if (this.injectedSavePoint) {
+			this.submission.setFromSavePoint(this.injectedSavePoint);
 		}
 	},
 
@@ -113,9 +115,10 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 
 	//do not allow close if we have a submission and it has answers
 	stopClose: function() {
-		var shouldPrompt = this.submission && this.submission.hasAnyAnswers();
+		var shouldPrompt = this.submission && this.submission.hasAnyAnswers(),
+			savedProgress = this.submission && this.submission.hasProgressedSaved();
 
-		if (!shouldPrompt) {
+		if (!shouldPrompt || savedProgress) {
 			return Promise.resolve();
 		}
 
@@ -139,6 +142,49 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 				}
 			});
 		});
+	},
+
+	showSavingProgress: function() {
+		if (this.progressToast && !this.progressToast.isDestroyed) { return; }
+		this.progressToast = this.reader.showToast('Saving Progress', 'saving');
+	},
+
+
+	showProgressSaved: function() {
+		var toast = this.progressToast;
+
+		if (!toast) { return; }
+
+		toast.openLongEnough
+			.then(function() {
+				toast.addCls('saved');
+				toast.removeCls('saving');
+				toast.update('Saved Progress');
+
+				return wait(3000);
+			})
+			.then(function() {
+				toast.destroy();
+			});
+	},
+
+
+	showProgressFailed: function() {
+		var toast = this.progressToast;
+
+		if (!toast) { return; }
+
+		toast.openLongEnough
+			.then(function() {
+				toast.addCls('error');
+				toast.removeCls('saving');
+				toast.update('Failed to Save Progress');
+
+				return wait(5000);
+			})
+			.then(function() {
+				toast.destroy();
+			});
 	},
 
 
@@ -168,6 +214,15 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 
 				return deleted;
 			});
+	},
+
+
+	injectAssignmentSavePoint: function(point) {
+		this.injectedSavePoint = point;
+
+		if (this.submission) {
+			submission.setFromSavePoint(point);
+		}
 	},
 
 

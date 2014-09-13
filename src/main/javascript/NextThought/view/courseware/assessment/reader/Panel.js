@@ -40,6 +40,8 @@ Ext.define('NextThought.view.courseware.assessment.reader.Panel', {
 	afterRender: function() {
 		this.callParent(arguments);
 		var r = this.down('reader-content'),
+			container = this.up('[currentBundle]'),
+			savepoints,
 			a = r.getAssessment(),
 			assignment = this.assignment,
 			history = this.assignmentHistory,
@@ -56,6 +58,19 @@ Ext.define('NextThought.view.courseware.assessment.reader.Panel', {
 		if (!this.location) {
 			console.error('No location configured');
 		}
+
+		if (container && container.currentBundle.getAssignmentSavePoints) {
+			savepoints = container.currentBundle.getAssignmentSavePoints();
+		} else {
+			savepoints = Promise.resolve();
+		}
+
+		savepoints.then(function(points) {
+			var point = points && points.getSavePoint(assignment.getId());
+
+			a.injectAssignmentSavePoint(point);
+		});
+
 		a.setAssignmentFromStudentProspective(assignment, history);
 
 		//if (assignment.get('availableEnding') >= now || !completed) {
@@ -64,6 +79,5 @@ Ext.define('NextThought.view.courseware.assessment.reader.Panel', {
 
 		r.getContentMaskTarget().mask('Loading...', 'navigation');
 		r.setLocation(this.location, done, true);
-
 	}
 });

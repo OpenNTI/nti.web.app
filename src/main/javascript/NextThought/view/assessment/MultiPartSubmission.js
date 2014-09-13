@@ -66,6 +66,12 @@ Ext.define('NextThought.view.assessment.MultiPartSubmission', {
 	},
 
 
+	updateWithProgress: function(questionSubmission) {
+		this.enableSubmission();
+		this.checkitBtn.removeCls('wrong').update(getString('NextThought.view.assessment.MultiPartSubmission.redo'));
+	},
+
+
 	updateWithResults: function(assessmentQuestion) {
 		this.enableSubmission();
 		this.checkItBtn.removeCls('wrong').update(getString('NextThought.view.assessment.MultiPartSubmission.redo'));
