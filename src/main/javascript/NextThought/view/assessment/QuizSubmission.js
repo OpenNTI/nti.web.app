@@ -275,6 +275,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 			try {
 				if (q.fireEvent('beforereset')) {
 					q.fireEvent('reset', keepAnswers);
+					me.saveProgress();
 					console.log('fired reset');
 					return Promise.resolve();
 				}
