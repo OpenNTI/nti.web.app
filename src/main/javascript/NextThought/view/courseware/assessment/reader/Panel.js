@@ -41,9 +41,9 @@ Ext.define('NextThought.view.courseware.assessment.reader.Panel', {
 		this.callParent(arguments);
 		var r = this.down('reader-content'),
 			container = this.up('[currentBundle]'),
-			savepoints,
 			a = r.getAssessment(),
 			assignment = this.assignment,
+			savepoint = assignment && assignment.getSavePoint(),
 			history = this.assignmentHistory,
 			completed = history && history.get('completed');
 
@@ -59,17 +59,11 @@ Ext.define('NextThought.view.courseware.assessment.reader.Panel', {
 			console.error('No location configured');
 		}
 
-		if (container && container.currentBundle.getAssignmentSavePoints) {
-			savepoints = container.currentBundle.getAssignmentSavePoints();
-		} else {
-			savepoints = Promise.resolve();
+		if (savepoint) {
+			savepoint.then(function(point) {
+				a.injectAssignmentSavePoint(point);
+			});
 		}
-
-		savepoints.then(function(points) {
-			var point = points && points.getSavePoint(assignment.getId());
-
-			a.injectAssignmentSavePoint(point);
-		});
 
 		a.setAssignmentFromStudentProspective(assignment, history);
 

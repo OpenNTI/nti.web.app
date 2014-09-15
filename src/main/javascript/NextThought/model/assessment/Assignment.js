@@ -32,6 +32,23 @@ Ext.define('NextThought.model.assessment.Assignment', {
 	},
 
 
+	getSavePoint: function() {
+		var url = this.getLink('Savepoint');
+
+		if (!url) {
+			return Promise.resolve();
+		}
+
+		return Service.request(url)
+			.then(function(response) {
+				return ParseUtils.parseItems(response)[0];
+			})
+			.fail(function(reason) {
+				console.error('Failed to get the assignment save point: ', reason);
+			});
+	},
+
+
 	getDueDate: function() {
 		return this.get('availableEnding') || this.get('availableBeginning');
 	},
