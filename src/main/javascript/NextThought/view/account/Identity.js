@@ -6,13 +6,13 @@ Ext.define('NextThought.view.account.Identity', {
 	requires: [
 		'NextThought.view.menus.Settings'
 	],
-	mixins: {
-		enableProfiles: 'NextThought.mixins.ProfileLinks'
-	},
+	// mixins: {
+	//	enableProfiles: 'NextThought.mixins.ProfileLinks'
+	// },
 
 	profileLinkCard: false,
 
-	cls: 'identity',
+	cls: 'identity x-menu',
 	autoShow: true,
 	floating: true,
 
@@ -31,7 +31,7 @@ Ext.define('NextThought.view.account.Identity', {
 	initComponent: function() {
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData || {}, $AppConfig.userObject.data);
-		this.menu = Ext.widget({xtype: 'settings-menu'});
+		this.menu = Ext.widget({xtype: 'settings-menu', ownerCt: this});
 		this.on('destroy', 'destroy', this.menu);
 		this.monitorUser($AppConfig.userObject);
 	},
@@ -64,8 +64,10 @@ Ext.define('NextThought.view.account.Identity', {
 		this.callParent(arguments);
 		this.monitorUser(this.user);
 		this.mon(this.el, {
-			'mouseover': 'startToShowMenu',
-			'mouseout': 'startToHideMenu'
+			'click': 'toggleMenu'
+			// 'mouseover': 'startToShowMenu',
+			// 'mouseout': 'startToHideMenu'
+
 		});
 
 		this.mon(this.menu, {
@@ -74,10 +76,9 @@ Ext.define('NextThought.view.account.Identity', {
 			'hide': function() { me.removeCls('menu-showing');}
 		});
 
-		this.enableProfileClicks(this.avatar);
+		//this.enableProfileClicks(this.avatar);
 
 		if (Ext.is.iOS) {
-			var me = this;
 			// Prevent the save/copy image menu from appearing
 			this.el.down('img').setStyle('-webkit-touch-callout', 'none');
 			// Prevent the status menu from appearing after a click
@@ -92,8 +93,19 @@ Ext.define('NextThought.view.account.Identity', {
 
 
 	cancelHideShowEvents: function() {
-		clearTimeout(this.showTimout);
-		clearTimeout(this.hideTimout);
+		clearTimeout(this.showTimeout);
+		clearTimeout(this.hideTimeout);
+	},
+
+
+	toggleMenu: function() {
+		if (this.menu.isVisible()) {
+			this.menu.hide();
+		} else {
+			clearTimeout(this.showTimeout);
+			clearTimeout(this.hideTimeout);
+			this.menu.showBy(this.el, 'tr-br', [0, 0]);
+		}
 	},
 
 
@@ -103,13 +115,13 @@ Ext.define('NextThought.view.account.Identity', {
 		this.cancelHideShowEvents();
 
 		if (!Ext.is.iOS) {
-			this.showTimout = setTimeout(function() {
+			this.showTimeout = setTimeout(function() {
 				me.menu.showBy(me.el, 'tr-br', [0, 0]);
 			}, 0);//instant!
 		}
 		else {
 			//Delay so that we can avoid showing when clicking
-			this.showTimout = setTimeout(function() {
+			this.showTimeout = setTimeout(function() {
 				me.menu.showBy(me.el, 'tr-br', [0, 0]);
 			}, 400);
 		}
@@ -122,7 +134,7 @@ Ext.define('NextThought.view.account.Identity', {
 		this.cancelHideShowEvents();
 
 		if (!Ext.is.iPad || this.menu.isHidden()) { // On iPad, don't hide menu if it's already shown
-			this.hideTimout = setTimeout(function() {
+			this.hideTimeout = setTimeout(function() {
 				me.menu.hide();
 			}, 500);
 		}
