@@ -6,6 +6,11 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 
 	defaultType: 'enrollment-credit-group',
 
+	defaultMessages: {
+		Message: '',
+		ContactInformation: 'Please contact the <a href=\'mailto:support@nextthought.com\'>help desk</a> for further information.'
+	},
+
 	STATE_VALUES: {},
 
 	STATE_NAME: 'admission-form',
@@ -610,9 +615,12 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 		this.removeAll(true);
 
 		var fields = this.form.slice(),
-			items = [];
+			defaults = {
+				Message: 'An unknown error occurred. Please try again later.',
+				ContactInformation: 'Please contact the <a href=\'mailto:support@nextthought.com\'>help desk</a> for further information or resubmit your application.'
+			};
 
-		if (json) {
+		if (json && json.Message) {
 			fields.unshift({
 				name: 'rejected',
 				label: 'A Problem Occurred. Please Correct the Following:',
@@ -625,6 +633,10 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 								type: 'description',
 								text: json.Message,
 								cls: 'error-detail'
+							},
+							{
+								type: 'description',
+								text: json.ContactInformation || defaults.ContactInformation
 							}
 						]
 					}
@@ -641,11 +653,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 						inputs: [
 							{
 								type: 'description',
-								text: 'Please contact the OU Admissions Office or resubmit your application.'
+								text: defaults.ContactInformation
 							}
-						],
-						help: [
-							{text: 'OU Admissions Office', type: 'link', href: 'http://www.ou.edu/admissions.html', target: '_blank'}
 						]
 					}
 				]
@@ -660,6 +669,13 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 
 
 	showPending: function(json) {
+		var defaults = {
+			Message: 'Your application for admission is being process by OU.' +
+				' Once you are admitted comeback here to enroll in ' + this.course.get('Title') + '.',
+			ContactInformation: this.defaultMessages.ContactInformation
+		};
+
+		json = json || {};
 		this.removeAll(true);
 
 		this.add({
@@ -672,15 +688,12 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					inputs: [
 						{
 							type: 'description',
-							text: json.Message || [
-								'Your application for admission is being processed by OU.',
-								'To check on the process you can contact the OU Admissions Office.',
-								'Once you are admitted comeback here to enroll in ' + this.course.get('Title')
-							].join(' ')
+							text: json.Message || defaults.Message
+						},
+						{
+							type: 'description',
+							text: json.ContactInformation || defaults.ContactInformation
 						}
-					],
-					help: [
-						{text: 'pending@ou.edu', type: 'link', href: 'mailto:pending@ou.edu', target: '_blank'}
 					]
 				}
 			]
@@ -689,11 +702,18 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 
 
 	showAlreadyExisted: function(json) {
+		var defaults = {
+			Message: 'Your application could not be processed at this time.',
+			ContactInformation: this.defaultMessages.ContactInformation
+		};
+
+		json = json || {};
+
 		this.removeAll(true);
 
 		this.add({
 			name: 'rejected',
-			label: 'Your application could not be processed at this time.',
+			label: json.Message || defaults.Message,
 			labelCls: 'error',
 			items: [
 				{
@@ -701,7 +721,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					inputs: [
 						{
 							type: 'description',
-							text: 'For help please contact <a href=\'mailto:support@nextthought.com\'>NextThought Support.</a>'
+							text: json.ContactInformation || defaults.ContactInformation
 						}
 					]
 				}
@@ -711,6 +731,13 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 
 
 	showErrorState: function(json) {
+		var defaults = {
+			Message: 'An unknown error occurred. Please try again later.',
+			ContactInformation: this.defaultMessages.ContactInformation
+		};
+
+		json = json || {};
+
 		this.removeAll(true);
 
 		this.add({
@@ -721,8 +748,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 				{
 					xtype: 'enrollment-credit-set',
 					inputs: [
-						{type: 'description', text: json.Message, cls: 'error-detail'},
-						{type: 'description', text: 'Please contact the <a href=\'mailto:support@nextthought.com\'>help desk</a> for further information.'}
+						{type: 'description', text: json.Message || defaults.Message, cls: 'error-detail'},
+						{type: 'description', text: json.ContactInformation || defaults.ContactInformation}
 					]
 				}
 			]
