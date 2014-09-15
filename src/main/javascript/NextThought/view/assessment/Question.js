@@ -176,7 +176,9 @@ Ext.define('NextThought.view.assessment.Question', {
 		Ext.each(this.query('abstract-question-input'), function(p) {
 			var v = p.getValue();
 
-			v = v || null;
+			if (v === undefined || v === null) {
+				v = null;
+			}
 
 			values[p.getOrdinal()] = v;
 		});
