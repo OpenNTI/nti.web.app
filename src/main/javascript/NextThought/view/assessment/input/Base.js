@@ -413,7 +413,7 @@ Ext.define('NextThought.view.assessment.input.Base', {
 
 		this.setValue(part);
 
-		if (part) {
+		if (part !== null) {
 			this.enableSubmission(true);
 		}
 	},
