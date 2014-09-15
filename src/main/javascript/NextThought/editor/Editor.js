@@ -615,6 +615,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		this.processPaste(offScreenBuffer, savedRange, elem);
 
+		this.maybeEnableSave();
+
 		return false;
 	},
 
