@@ -1,7 +1,7 @@
-$accessibility_mode: false;
+$accessibility_mode: true;
 
 @import "compass";
-@import "variables";
+@import "variables-accessible";
 @import "animate";
 
 @import "nti-override.css";

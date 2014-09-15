@@ -5,6 +5,19 @@ Ext.define('NextThought.view.account.settings.Preferences', {
 	cls: 'account-preferences',
 
 	renderTpl: Ext.DomHelper.markup([
+		{ tag: 'fieldset', cn: [
+			{tag: 'legend', html: 'High Contrast Mode'},
+			{
+				tag: 'span',
+				cls: 'not-ready nti-checkbox high-contrast',
+				html: 'View the site in high contrast mode.',
+				tabIndex: 0,
+				role: 'button',
+				'aria-role': 'button',
+				'data-preference-path': 'WebApp',
+				'data-preference-key': 'useHighContrast'
+			}
+		]},
 		{ tag: 'tpl', 'if': 'isFeature(\'video-settings\')', cn:
 			{ tag: 'fieldset', cn: [
 				{ tag: 'legend', html: 'Videos' },
@@ -102,7 +115,14 @@ Ext.define('NextThought.view.account.settings.Preferences', {
 
 		prefs.then(function(pref) {
 			pref.set(key, state);
-			pref.save();
+			pref.save({
+				callback: function() {
+					if (key === 'useHighContrast') {
+						Ext.util.Cookies.clear('use-accessibility-mode');
+						window.location.reload();
+					}
+				}
+			});
 			Ext.fly(dom)[state ? 'addCls' : 'removeCls']('checked');
 		});
 	}

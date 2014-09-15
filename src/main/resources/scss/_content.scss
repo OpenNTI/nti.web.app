@@ -137,7 +137,9 @@
 			position: relative;
 			display: inline-block;
 			font: normal 300 16px/30px $font;
-			color: $tertiary-grey;
+
+			@include accessibility-option(color, $tertiary-grey, #fff);
+
 			padding: 0 20px;
 			margin: 42px 15px 0;
 			border-radius: 90px;

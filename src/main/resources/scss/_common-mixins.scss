@@ -74,6 +74,14 @@
 	}
 }
 
+@mixin accessibility-option($style, $non-accessible, $accessible){
+	@if $accessibility_mode {
+		#{$style}: $accessible;
+	} @else {
+		#{$style}: $non-accessible;
+	}
+}
+
 
 @mixin icon($name,$top:0,$left:0,$right:auto,$side:'after',$sprite:$icons,$position:relative,$hover:false,$active:false){
 	@if $position != none {
@@ -487,7 +495,9 @@
 
 @mixin content-link-def{
 	color: $secondary-grey;
-	text-decoration: none;
+
+	@include accessibility-option(text-decoration, none, underline);
+
 	cursor: pointer;
 	line-height: 1.5em;
 }

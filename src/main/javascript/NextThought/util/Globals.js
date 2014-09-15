@@ -201,6 +201,63 @@ Ext.define('NextThought.util.Globals', {
 	},
 
 
+	loadStyleSheetPromise: function(url, id) {
+		var old, head;
+		//TODO: maybe try to restore the old one if it fails
+		return new Promise(function(fulfill, reject) {
+			var doc = document, i = 0,
+				link, checkInterval, sibling;
+
+			if (typeof url === 'object') {
+				doc = url.document;
+				url = url.url;
+			}
+
+			if (typeof doc !== 'undefined') {
+				head = doc.head || doc.getElementsByTagName('head')[0];
+			} else {
+				console.error('Document not defined');
+				reject();
+				return;
+			}
+
+			//if we are given an id, remove the old one
+			if (id) {
+				old = doc.getElementById(id);
+				head.removeChild(old);
+			}
+
+			link = doc.createElement('link');
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.id = id;
+			link.href = url;
+
+			head.appendChild(link);
+
+			/**
+			 * Check all the style sheets of the link to see if the it has rules
+			 * @return {Boolean} true if one matches false otherwise
+			 */
+			function checkIfLoaded() {
+				return link.style && link.sheet && link.sheet.rules.length;
+			}
+
+			checkInterval = setInterval(function() {
+				i++;
+
+				if (i > 300) {
+					clearInterval(checkInterval);
+					reject();
+				} else if (checkIfLoaded()) {
+					clearInterval(checkInterval);
+					fulfill();
+				}
+			}, 100);
+		});
+	},
+
+
 	/**
 	 * Load a stylesheet file (.css) into the DOM.
 	 *

@@ -279,16 +279,69 @@ Ext.define('NextThought.controller.Session', {
 
 	login: function(app) {
 		function success() {
+			var setFromCookie,
+				preference,
+				field = 'useHighContrast',
+				cookieName = 'use-accessibility-mode';
+
 			me.sessionId = B64.encodeURLFriendly($AppConfig.username);//weak obfuscation
 			TemporaryStorage.set(me.sessionTrackerKey, me.sessionId);
 			me.sessionStarted = true;
-			console.log('fireing session-ready');//card 1768
-			app.fireEvent('session-ready');
+			console.log('firing session-ready');//card 1768
 			app.on('finished-loading', me.immediateAction, me);
 
-			app.getController('Application').openViewport();
+			$AppConfig.Preferences.getPreference('WebApp')
+				.then(function(value) {
+					var	pref = value.get(field);
+					var	c = Ext.util.Cookies.get(cookieName);
 
-			AnalyticsUtil.beginSession();
+					c = c === 'true' ? true : false;
+
+					if (c && !pref) {
+						setFromCookie = true;
+					}
+
+					preference = value;
+
+					if (pref || c) {
+						return Globals.loadStyleSheetPromise('resources/css/accessibility.css', 'main-stylesheet')
+							.fail(function() {
+								throw 'Failed to load the accessibility style sheet';
+							});
+					}
+				})
+				.always(function() {
+					app.getController('Application').openViewport();
+
+					app.fireEvent('session-ready');
+
+					AnalyticsUtil.beginSession();
+
+					return wait();
+				})
+				.then(function() {
+					if (!setFromCookie) { return; }
+					Ext.Msg.show({
+						title: 'High Contrast Mode',
+						msg: 'You are using the site in high contrast mode. Do you want to continue and make this your preferred version of the app?',
+						buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+						buttonText: {
+							ok: 'Yes',
+							cancel: 'caution:No'
+						},
+						fn: function(str) {
+							if (str === 'ok') {
+								if (preference) {
+									preference.set(field, true);
+									preference.save();
+								}
+							} else {
+								Ext.util.Cookies.set(cookieName, 'false');
+								window.location.reload();
+							}
+						}
+					});
+				});
 		}
 
 		function showLogin(reason) {
