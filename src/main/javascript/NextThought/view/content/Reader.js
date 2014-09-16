@@ -220,9 +220,21 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	getContentMaskTarget: function() {
-		this.maskTarget = this.maskTarget || (this.el ? this.el.parent('.main-view-container') : Ext.getBody());
+		var target;
 
-		return this.maskTarget;
+		//if we have a mask target already return that
+		if (this.maskTarget) {
+			target = this.maskTarget;
+		} else if (this.el) {
+			//if we have an el cache the mask target
+			target = this.maskTarget = this.el.parent('.main-view-container');
+		} else {
+			//if we don't have an el return the body but don't cache it
+			//since we may not be rendered
+			target = Ext.getBody();
+		}
+
+		return target;
 	},
 	//endregion
 
