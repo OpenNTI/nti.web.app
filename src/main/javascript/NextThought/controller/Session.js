@@ -337,7 +337,6 @@ Ext.define('NextThought.controller.Session', {
 								}
 							} else {
 								Ext.util.Cookies.set(cookieName, 'false');
-								window.location.reload();
 							}
 						}
 					});
