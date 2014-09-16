@@ -6,11 +6,11 @@ Ext.define('NextThought.view.account.settings.Preferences', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{ tag: 'fieldset', cn: [
-			{tag: 'legend', html: 'High Contrast Mode'},
+			{tag: 'legend', html: 'Accessibility'},
 			{
 				tag: 'span',
 				cls: 'not-ready nti-checkbox high-contrast',
-				html: 'View the site in high contrast mode.',
+				html: 'Enable High Contrast Mode.',
 				tabIndex: 0,
 				role: 'button',
 				'aria-role': 'button',
