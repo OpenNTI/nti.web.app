@@ -29,17 +29,17 @@
 	width: 7px;
 	height: 7px;
 	border-radius: 90px;
-	background: $tertiary-grey;
+	background: #747474;
 
 	&.Online,&.online,&.available {
-		background: $primary-green;
+		background: #8eb737;
 	}
 	&.idle {}
 	&.away{
 		background: #ebcd25;
 	}
 	&.DnD,&.dnd {
-		background: $primary-red;
+		background: #ebcd25;
 	}
 }
 
@@ -48,7 +48,7 @@
 		width: 7px;
 		height: 7px;
 		border-radius: 90px;
-		background: $tertiary-grey;
+		background: #747474;
 		content: '';
 		position: absolute;
 		display: block;
@@ -58,7 +58,7 @@
 
 	&.Online,&.available {
 		&::#{$side}{
-			background: $primary-green;
+			background: #8eb737;
 		}
 	}
 	&.idle {}
@@ -69,7 +69,7 @@
 	}
 	&.DnD,&.dnd {
 		&::#{$side}{
-			background: $primary-red;
+			background: #F35252;
 		}
 	}
 }
