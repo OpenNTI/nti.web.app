@@ -140,66 +140,41 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 
 	maybeSubmit: function() {
 		var me = this,
-			enrollLink = me.course.getEnrollForCreditLink(),
-			payLink = me.course.getPaymentLink(),
+			link = me.course.getEnrollAndPayLink(),
 			crn = me.course.get('NTI_CRN'),
 			term = me.course.get('NTI_Term'),
 			returnURL = me.course.buildPaymentReturnURL(),
 			maskCmp = me.up('enrollment-credit');
 
-		function pay() {
-			Service.post(payLink, {
-				crn: crn,
-				term_code: term,
-				return_url: returnURL
-			}).then(function(response) {
-				var json = Ext.JSON.decode(response, true);
-
-				if (json.href) {
-					window.location.href = json.href;
-				} else {
-					console.error('No href to redirect to', response);
-				}
-			}).fail(function(response) {
-				console.error('payment post failed', response);
-				me.showError({
-					Message: 'An error occurred with your payment. You are enrolled in the course, but will need to pay before you have access to the content.'
-				});
-
-				maskCmp.el.unmask();
-			});
-		}
-
-		if (!payLink) {
-			console.error('No pay link');
+		if (!link) {
+			console.error('No enroll and pay link');
 			me.showError();
 			return;
 		}
 
 		maskCmp.el.mask('Loading...');
 
-		if (!enrollLink) {
-			pay();
-		} else {
-			Service.post(enrollLink, {
-				crn: crn,
-				term_code: term
-			}).then(function(response) {
-				var json = Ext.JSON.decode(response, true);
+		Service.post(link, {
+			crn: crn,
+			term_code: term,
+			return_url: returnURL
+		}).then(function(response) {
+			var json = Ext.JSON.decode(response, true);
 
-				if (json.Status === 201) {
-					pay();
-				} else {
-					maskCmp.el.unmask();
-					me.showError(json);
-				}
-			}).fail(function(response) {
-				var json = Ext.JSON.decode((response && response.responseText) || response, true);
+			if (json.href) {
+				window.location.href = json.href;
+			} else {
+				console.error('No href to redirect to... ', response);
+				me.showError();
+			}
+		}).fail(function(response) {
+			var json = Ext.JSON.decode(response, true);
 
-				console.error('Enroll request failed: ' + response);
-				maskCmp.el.unmask();
-				me.showError(json);
-			});
-		}
+			console.error('Enroll and pay failed', response);
+
+			me.showError(json);
+
+			maskCmp.el.unmask();
+		});
 	}
 });
