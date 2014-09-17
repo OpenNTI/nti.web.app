@@ -25,6 +25,16 @@
 	@include animate($name: rotate, $duration: 2s, $delay: 0s, $function: linear, $iteration:infinite);
 }
 
+@mixin loadingEllipse($side: after, $animation-delay: 0) {
+	&::#{$side} {
+		content: '.\a0.\a0.';
+		display: inline-block;
+		overflow: hidden;
+		vertical-align: bottom;
+		@include animate($name: loadingellipse, $duration: 2s, $delay: $animation-delay, $function: linear, $iteration:infinite);
+	}
+}
+
 @mixin presence-style{
 	width: 7px;
 	height: 7px;

@@ -95,6 +95,46 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 	},
 
 
+	showToast: function(msgOrConfig) {
+		if (!this.rendered) {
+			this.on('afterrender', this.showToast.bind(this, arguments));
+			return;
+		}
+
+		var me = this, toast,
+			config = Ext.isString(msgOrConfig) ? { text: msgOrConfig} : msgOrConfig,
+			content = config.content || {html: config.text};
+
+		config.cls = config.cls ? 'header-toast ' + config.cls : 'header-toast';
+
+		toast = Ext.widget('box', {
+			cls: config.cls,
+			autoEl: content,
+			renderTo: this.pathEl
+		});
+
+		if (config.minTime) {
+			toast.waitToClose = wait(config.minTime);
+		}
+
+		me.pathEl.addCls('show-toast');
+
+		return {
+			el: toast,
+			//fulfills after the minimum time the toast has to be open passes
+			openLongEnough: toast.waitToClose,
+			close: function(time) {
+				this.closing = true;
+				wait(time || 0)
+					.then(function() {
+						me.pathEl.removeCls('show-toast');
+						wait(500).then(toast.destroy.bind(toast));
+					});
+			}
+		};
+	},
+
+
 	onPagerUpdate: function() {
 		if (!this.rendered) {
 			this.on({afterrender: 'onPagerUpdate', single: true});

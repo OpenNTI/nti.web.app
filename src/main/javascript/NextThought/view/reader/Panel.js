@@ -27,8 +27,14 @@ Ext.define('NextThought.view.reader.Panel', {
 	initComponent: function() {
 		this.callParent(arguments);
 
+		var toolbarConfig = this.getToolbarConfig();
+
 		this.flatPageStore = NextThought.store.FlatPage.create({ storeId: 'FlatPage-' + this.id });
 		this.fireEvent('add-flatpage-store-context', this);
+
+		//since the toolbar can be a bunch of different xtypes
+		//add a flag to it so we can find it easily
+		toolbarConfig.isReaderToolBar = true;
 
 		this.add([{
 				region: 'center',
@@ -37,7 +43,7 @@ Ext.define('NextThought.view.reader.Panel', {
 					align: 'stretch'
 				},
 				items: [
-					this.getToolbarConfig(),
+					toolbarConfig,
 					{ xtype: 'reader-content', prefix: this.prefix, flex: 1 }
 				]
 			},{
@@ -90,6 +96,20 @@ Ext.define('NextThought.view.reader.Panel', {
 
 	getToolbarConfig: function() {
 		return { xtype: 'content-toolbar', hidden: true };
+	},
+
+
+	showHeaderToast: function() {
+		var header = this.getToolbar();
+
+		if (header && header.showToast) {
+			return header.showToast.apply(header, arguments);
+		}
+	},
+
+
+	getToolbar: function() {
+		return this.down('[isReaderToolBar]');
 	},
 
 

@@ -111,6 +111,15 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
+	showHeaderToast: function() {
+		var panel = this.up('reader');
+
+		if (panel) {
+			return panel.showHeaderToast.apply(panel, arguments);
+		}
+	},
+
+
 	showToast: function(msg, cls) {
 		var toast,
 			left = this.getX() + this.getWidth(),

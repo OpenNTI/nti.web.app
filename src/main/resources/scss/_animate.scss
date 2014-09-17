@@ -45,6 +45,13 @@
 	}
 }
 
+@include keyframes(loadingellipse) {
+	25% {width: 0; }
+	50% { width: 0.466667em; }
+	75% { width: 0.933333em; }
+	100% { width: 1.4em; }
+}
+
 @include keyframes(rotate) {
 	from { @include experimental(transform, rotate(0deg)); }
 	to { @include experimental(transform, rotate(360deg)); }

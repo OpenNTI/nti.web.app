@@ -145,8 +145,15 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 	},
 
 	showSavingProgress: function() {
-		if (this.progressToast && !this.progressToast.isDestroyed) { return; }
-		this.progressToast = this.reader.showToast('Saving Progress', 'saving');
+		if (this.progressToast && !this.progressToast.el.isDestroyed) {
+			console.warn('Toast already open');
+		} else {
+			this.progressToast = this.reader.showHeaderToast({
+				text: 'Saving Progress',
+				cls: 'saving',
+				minTime: 3000
+			});
+		}
 	},
 
 
@@ -157,14 +164,12 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 
 		toast.openLongEnough
 			.then(function() {
-				toast.addCls('saved');
-				toast.removeCls('saving');
-				toast.update('Saved Progress');
+				toast.el.addCls('saved');
+				toast.el.removeCls('saving');
+				toast.el.update('Saved Progress');
 
-				return wait(3000);
-			})
-			.then(function() {
-				toast.destroy();
+				toast.close(3000);
+
 			});
 	},
 
@@ -176,14 +181,12 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 
 		toast.openLongEnough
 			.then(function() {
-				toast.addCls('error');
-				toast.removeCls('saving');
-				toast.update('Failed to Save Progress');
+				toast.el.addCls('error');
+				toast.el.removeCls('saving');
+				toast.el.update('Failed to Save Progress');
 
+				toast.close(3000);
 				return wait(5000);
-			})
-			.then(function() {
-				toast.destroy();
 			});
 	},
 
