@@ -1548,7 +1548,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 
-	maybeEnableSave: function() {
+	maybeEnableSave: function(silent) {
 		function isNoteBodyEmpty() {
 			var d = Ext.getDom(me.el.down('.content')),
 				html = d && d.innerHTML,
@@ -1578,13 +1578,13 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		}
 
-		this.fireEvent('enable-save', r.enableSave);
+		this.fireEvent('enable-save', r.enableSave, silent);
 
 		this.contentEl[r.clearPlaceholder ? 'removeCls' : 'addCls']('show-placeholder');
 	},
 
 
-	editBody: function(body) {
+	editBody: function(body, silent) {
 		var me = this,
 			c = Ext.getDom(this.el.down('.content'));
 
@@ -1620,7 +1620,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		});
 
 		Ext.fly(c).select('a[href]').set({target: '_blank'});
-		this.maybeEnableSave();
+		this.maybeEnableSave(silent);
 		return me;
 	},
 

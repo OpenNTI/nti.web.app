@@ -43,17 +43,21 @@ Ext.define('NextThought.view.assessment.input.ModeledContent', {
 		});
 	},
 
-
-	updateState: function(enable) {
+	/**
+	 * Enable or disable submission accordingly, if we aren't silent save the progress
+	 * @param  {Boolean} enable is the editor has something in it
+	 * @param  {Boolean} silent if we are setting the value, don't save the progress
+	 */
+	updateState: function(enable, silent) {
 		//Prevent setting enabled/disabled repeatedly.
 		enable = enable || undefined;
-		if (this.submissionDisabled !== enable) {
+		if (this.submissionDisabled !== enable && !silent) {
 			this.saveProgress();
 			return;
 		}
 
-		if (enable) { this.enableSubmission(); }
-		else { this.disableSubmission(); }
+		if (enable) { this.enableSubmission(silent); }
+		else { this.disableSubmission(silent); }
 	},
 
 
@@ -79,7 +83,7 @@ Ext.define('NextThought.view.assessment.input.ModeledContent', {
 			if (!o.value) {
 				console.warn('We did not understand this:', arguments);
 			} else {
-				this.editor.editBody(o.value);
+				this.editor.editBody(o.value, true);
 			}
 		}
 	},
