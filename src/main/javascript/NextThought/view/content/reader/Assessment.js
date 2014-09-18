@@ -224,7 +224,7 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 		this.injectedSavePoint = point;
 
 		if (this.submission) {
-			submission.setFromSavePoint(point);
+			this.submission.setFromSavePoint(point);
 		}
 	},
 

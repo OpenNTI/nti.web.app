@@ -10,7 +10,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 	hidden: true,
 	shouldShow: true,
 	//layout: 'none',
-	componentLayout: 'auto',
+	componentLayout: Ext.isIE10m ? undefined : 'auto',
 
 	/* Because we're inheriting from a "Panel" to get the special handling provided by the super class, we can't use
 	 * our typical renderTpl. Instead we're going to take advantage of the Ext.panal.Panel's html config property...
