@@ -230,7 +230,10 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 						dy = -Math.floor(el.getHeight() / 2);
 
 					// Center drag and drop proxy on cursor pointer
-					this.setDelta(dx, dy);
+					if (!Ext.isIE10m) {
+						this.setDelta(dx, dy);
+					}
+
 
 					data.shield = Ext.DomHelper.insertFirst(co, {cls: 'shield'}, true);
 					Ext.getBody().addCls('dragging');
