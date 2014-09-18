@@ -24,7 +24,7 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		{ name: 'EndDate', type: 'ISODate', persist: false },
 		{ name: 'Title', type: 'string', persist: false },
 		{ name: 'Video', type: 'string', persist: false },
-		{ name: 'Preview', type: 'bool', mapping: 'f' },
+		{ name: 'Preview', type: 'bool' },
 		{ name: 'enrolled', type: 'bool' },
 
 		{ name: 'NTI_FiveminuteEnrollmentCapable', type: 'bool', persist: false },
