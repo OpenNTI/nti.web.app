@@ -33,6 +33,8 @@ Ext.define('NextThought.controller.Assessment', {
 		'assessment.MultipleChoiceSolution',
 		'assessment.NumericMathPart',
 		'assessment.NumericMathSolution',
+		'assessment.OrderingPart',
+		'assessment.OrderingSolution',
 		'assessment.Part',
 		'assessment.Question',
 		'assessment.QuestionMap',
