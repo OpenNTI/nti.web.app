@@ -35,7 +35,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 				},
 				{
 					xtype: 'enrollment-credit-set',
-					label: 'Are you attending High School?',
+					label: 'Are you an Oklahoma resident currently attending High School?',
 					name: 'attending-highschool',
 					inputs: [
 						{type: 'radio-group', name: 'is_currently_attending_highschool', correct: 'N', options: [
