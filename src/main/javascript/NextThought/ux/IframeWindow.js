@@ -9,6 +9,9 @@ Ext.define('NextThought.ux.IframeWindow', {
 	modal: true,
 	header: false,
 
+	desiredWidth: 842,
+	desiredHeight: 595,
+
 	config: {
 		loadingText: 'Loading...'
 	},
@@ -121,7 +124,7 @@ Ext.define('NextThought.ux.IframeWindow', {
 
 
 	fillScreen: function() {
-		var aspect = 842 / 595, //width / height
+		var aspect = this.desiredWidth / this.desiredHeight, //width / height
 			height, width,
 			MAX_WIDTH = (Ext.Element.getViewWidth() - 50), //window width - padding
 			MAX_HEIGHT = (Ext.Element.getViewHeight() - 20 - 55); //window height - padding - bottom bar
