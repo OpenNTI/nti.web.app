@@ -187,9 +187,6 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 					.then(function() {
 						if (me.courseDetail && me.courseDetail.course === course) {
 							me.showPrevItem('course-enrollment-details');
-							me.courseDetail.updateEnrollmentCard();
-
-							me.getLayout().setActiveItem(me.courseDetail);
 						} else {
 							me.showCourse(course);
 						}
@@ -257,7 +254,7 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 			p = new Promise.resolve();
 		}
 
-		p.then(function() {
+		return p.then(function() {
 			if (current.is('course-enrollment-details')) {
 				me.showTabpanel();
 
