@@ -72,6 +72,6 @@ Ext.define('NextThought.view.courseware.assessment.reader.Panel', {
 		//}
 
 		r.getContentMaskTarget().mask('Loading...', 'navigation');
-		r.setLocation(this.location, done, true);
+		r.setLocation(this.location, done, true, container.currentBundle);
 	}
 });

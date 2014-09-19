@@ -355,9 +355,10 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
-	getPageInfo: function(ntiid, success, failure, scope) {
+	getPageInfo: function(ntiid, success, failure, scope, targetBundle) {
 		var url, me = this,
 			cache = me.pageInfoCache = me.pageInfoCache || {},
+			params = targetBundle ? { course: targetBundle.getId() } : {},
 			mime = 'application/vnd.nextthought.pageinfo';
 
 		if (!ParseUtils.isNTIID(ntiid)) {
@@ -381,6 +382,12 @@ Ext.define('NextThought.model.Service', {
 		}
 
 		url = me.getObjectURL(ntiid);
+
+		params = Ext.Object.toQueryString(params);
+
+		if (params) {
+			url = Ext.String.urlAppend(url, params);
+		}
 
 		//Chrome 25,26 and 27 (and safari 6) don't seem to listen to any of the caching
 		//headers that would prevent a request for an object using one Accept

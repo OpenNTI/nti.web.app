@@ -56,7 +56,6 @@ Ext.define('NextThought.view.content.reader.Location', {
 	 * @param {Boolean} [fromHistory]
 	 */
 	setLocation: function(ntiidOrPageInfo, callback, fromHistory, targetBundle) {
-
 		var me = this,
 			e = me.reader.getContentMaskTarget(),
 			ntiid = ntiidOrPageInfo && ntiidOrPageInfo.isPageInfo ? ntiidOrPageInfo.get('NTIID') : ntiidOrPageInfo,
@@ -187,14 +186,21 @@ Ext.define('NextThought.view.content.reader.Location', {
 
 		function success(pageInfo) {
 			pageInfo.targetBundle = targetBundle || pageInfo.targetBundle;
-			if (ntiid === rootId && !LocationMeta.getValue(rootId)) {
-				// let's cache this on the LocationMeta, if it's not there already.
-				LocationMeta.createAndCacheMeta(rootId, pageInfo);
-			}
-			me.requestedPageInfo = requestedPageInfo || pageInfo;
-			me.currentPageInfo = pageInfo;
-			me.currentNTIID = pageInfo.getId();
-			me.fireEvent('navigateComplete', pageInfo, finish, hasCallback);
+
+			//the server is suppose to be taking care of getting the correct page info
+			//for the course so this shouldn't be necessary.
+			/*pageInfo.syncWithBundle(targetBundle)*/
+			Promise.resolve()
+				.then(function() {
+					if (ntiid === rootId && !LocationMeta.getValue(rootId)) {
+						// let's cache this on the LocationMeta, if it's not there already.
+						LocationMeta.createAndCacheMeta(rootId, pageInfo);
+					}
+					me.requestedPageInfo = requestedPageInfo || pageInfo;
+					me.currentPageInfo = pageInfo;
+					me.currentNTIID = pageInfo.getId();
+					me.fireEvent('navigateComplete', pageInfo, finish, hasCallback);
+				});
 		}
 
 		function failure(q, r) {
@@ -219,7 +225,7 @@ Ext.define('NextThought.view.content.reader.Location', {
 		}
 
 		//page info's are cached at the service layer.
-		Service.getPageInfo(ntiid, success, failure, me);
+		Service.getPageInfo(ntiid, success, failure, me, targetBundle);
 	},
 
 

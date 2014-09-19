@@ -107,5 +107,47 @@ Ext.define('NextThought.model.PageInfo', {
 			title = l && l.title;
 		console.error('[DEPRECATED] User CourseInstance');
 		return (title && title.getScope('restricted')) || [];
+	},
+
+
+	hasAssessmentItems: function() {
+		var items = this.get('AssessmentItems');
+
+		return !Ext.isEmpty(items);
+	},
+
+	/**
+	 * If the user has more than one section of the course the assessmentItems might
+	 * not be the correct one, so pull them off of the bundle and update our assessmentItems
+	 * @param  {Object} bundle the bundle to sync to
+	 * @return {Promise}        fulfills when its done
+	 */
+	syncWithBundle: function(bundle) {
+		var me = this;
+
+		if (!bundle || !bundle.getAssignments || !me.hasAssessmentItems()) {
+			return Promise.resolve();
+		}
+		//get the assignments from the assignments by outline node request on the course
+		return bundle.getAssignments()
+			.then(function(assignments) {
+				var oldAssessment = me.get('AssessmentItems') || [],
+					newAssessment = [];
+
+				//go through our assessment items and get the matching one
+				//from the course assignments
+				oldAssessment.forEach(function(item) {
+					var a = assignments.getItem(item.getId());
+
+					if (a) {
+						newAssessment.push(a);
+					}
+				});
+
+				//if we found any items to replace replace all of them
+				if (!Ext.isEmpty(newAssessment)) {
+					me.set('AssessmentItems', newAssessment);
+				}
+			});
 	}
 });

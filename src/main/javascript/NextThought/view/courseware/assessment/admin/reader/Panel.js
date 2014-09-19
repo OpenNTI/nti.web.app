@@ -34,6 +34,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Panel', {
 	afterRender: function() {
 		this.callParent(arguments);
 		var r = this.down('reader-content'),
+			container = this.up('[currentBundle]'),
 			a = r.getAssessment();
 
 		r.getScroll().lock();
@@ -50,7 +51,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Panel', {
 		r.getNoteOverlay().disable();
 		a.setAssignmentFromInstructorProspective(this.assignment, this.assignmentHistory);
 		r.getContentMaskTarget().mask('Loading...', 'navigation');
-		r.setLocation(this.location, done, true);
+		r.setLocation(this.location, done, true, container.currentBundle);
 
 	}
 });
