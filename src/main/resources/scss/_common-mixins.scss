@@ -31,7 +31,7 @@
 		display: inline-block;
 		overflow: hidden;
 		vertical-align: bottom;
-		@include animate($name: loadingellipse, $duration: 2s, $delay: $animation-delay, $function: linear, $iteration:infinite);
+		@include animate($name: loadingellipse, $duration: 0.75s, $delay: $animation-delay, $function: linear, $iteration:infinite);
 	}
 }
 

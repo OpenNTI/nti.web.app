@@ -166,9 +166,9 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			.then(function() {
 				toast.el.addCls('saved');
 				toast.el.removeCls('saving');
-				toast.el.update('Saved Progress');
+				toast.el.update('Progress Saved');
 
-				toast.close(3000);
+				toast.close(1500);
 
 			});
 	},

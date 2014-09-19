@@ -609,34 +609,47 @@ canvas.x-component-course-assessment {
 			white-space: nowrap;
 
 			.path-items {
+				position: relative;
 				overflow: hidden;
 				text-overflow: ellipsis;
 				max-width: 520px;
 				display: inline-block;
-				position: relative;
-				top: 0;
-				@include experimental(transition, all 1s);
+
+				.path.current {
+					position: relative;
+					top: 0;
+					@include experimental(transition, top 0.25s);
+				}
 
 				&.show-toast {
-					top: -10px;
+					.path.current {
+						top: -8px;
+					}
 
 					.header-toast {
 						opacity: 1;
+
+						&.changing {
+							opacity: 0;
+						}
 					}
 				}
 
 				.header-toast {
-					position: relative;
-					top: -35px;
+					position: absolute;
+					bottom: 13px;
+					font-weight: 600;
+					color: #fa8700;
+					line-height: 1.2em;
 					opacity: 0;
-					@include experimental(transition, opacity 1s);
+					@include experimental(transition, opacity 0.25s);
 
 					&.saving {
-						@include loadingEllipse($animation-delay: 1s);
+						@include loadingEllipse($animation-delay: 0.2s);
 					}
 
 					&.saved {
-						color: $primary-green;
+						color: $secondary-green;
 					}
 
 					&.error {

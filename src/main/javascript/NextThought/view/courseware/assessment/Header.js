@@ -103,14 +103,21 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 
 		var me = this, toast,
 			config = Ext.isString(msgOrConfig) ? { text: msgOrConfig} : msgOrConfig,
-			content = config.content || {html: config.text};
+			content = config.content || {html: config.text},
+			currentPath = this.pathEl.down('.path.current'),//the last item in the bread crumb
+			currentPathLeft = currentPath && currentPath.getX(),
+			pathLeft = this.pathEl.getX(),
+			left = currentPathLeft && pathLeft ? currentPathLeft - pathLeft : 0;
 
 		config.cls = config.cls ? 'header-toast ' + config.cls : 'header-toast';
 
 		toast = Ext.widget('box', {
 			cls: config.cls,
 			autoEl: content,
-			renderTo: this.pathEl
+			renderTo: this.pathEl,
+			style: {
+				left: left + 'px;'
+			}
 		});
 
 		if (config.minTime) {
