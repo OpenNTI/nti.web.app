@@ -1359,6 +1359,7 @@ body.dragging * {
 
 		.button {
 			cursor: pointer;
+			overflow: hidden;
 			background: $primary-blue;
 			border-radius: 3px;
 			font: italic 600 1.2em/1 $font;
@@ -1376,10 +1377,9 @@ body.dragging * {
 			input {
 				cursor: pointer;
 				position: absolute;
-				top: 0; bottom: 0;
-				right: 0; left: 0;
+				top: 0;	right: 0;
 				opacity: 0;
-				font-size: 0.45em;
+				font-size: 3em;
 			}
 			position: relative;
 		}
