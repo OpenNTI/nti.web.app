@@ -387,9 +387,9 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 				title: 'How do I drop the course?',
 				information: [
 					'If you are currently enrolled as an OU student, visit',
-					'<a class=\'link\' href=\'http://ozone.ou.edu\'>oZone</a>.',
+					'<a class=\'link\' target=\'_blank\' href=\'http://ozone.ou.edu\'>oZone</a>.',
 					'If not, please contact the',
-					'<a class=\'link\' href=\'http://www.ou.edu/admissions.html\'>Admission office</a>',
+					'<a class=\'link\' target=\'_blank\' href=\'http://www.ou.edu/admissions.html\'>Admission office</a>',
 					'by {date} for a full refund.'
 				].join(' '),
 				cls: 'enrolled'
