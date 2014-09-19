@@ -214,6 +214,8 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 
 		this.answeredMap[question.getId()][part.id] = Boolean(status);
 		this.reflectStateChange();
+
+		return status;
 	},
 
 

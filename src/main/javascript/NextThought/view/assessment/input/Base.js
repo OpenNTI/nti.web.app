@@ -524,7 +524,9 @@ Ext.define('NextThought.view.assessment.input.Base', {
 
 		this.checkItBtn.removeCls('disabled');
 		if (this.questionSet) {
-			this.questionSet.fireEvent('answered', this.question, this.part, this.hasValue(), true);
+			if (!this.questionSet.fireEvent('answered', this.question, this.part, this.hasValue(), true)) {
+				this.submissionDisabled = true;
+			}
 		}
 		this.fireEvent('enable-submission', this.ordinal);
 
