@@ -7,8 +7,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'message', cn: [
 			{cls: 'main {headerCls}', html: '{header}'},
-			{cls: 'text', html: '{text}'},
-			{cls: 'text', html: '{available}'},
+			{cls: 'text description', html: '{text}'},
+			{cls: 'text available', html: '{available}'},
 			{cls: 'confirm', html: '{confirm}'}
 		]},
 		{cls: 'info', cn: [
@@ -63,7 +63,11 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 
 
 	renderSelectors: {
-		enrollEl: '.enroll-now'
+		enrollEl: '.enroll-now',
+		titleEl: '.main',
+		descriptionEl: '.description',
+		confirmEl: '.confirm',
+		availableEl: '.available'
 	},
 
 
@@ -85,7 +89,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 				'There were some troubles with your payment.' :
 				'Your application has been accepted!',
 			text: this.paymentfail ?
-				'Please try again, you will gain access to the content once the payment is successful' :
+				'Please try again, you will gain access to the content once the payment is successful.' :
 				'Thank you for applying to earn credit online from the University of Oklahoma.',
 			available: 'Your admission credit is available for ' + c.getSemester() + '.',
 			confirm: 'Please take a moment to confirm your course selection before checking out.',
@@ -130,7 +134,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 	},
 
 
-	showError: function(json) {
+	showErrorMsg: function(json) {
 		if (json && json.Message) {
 			this.fireEvent('show-msg', json.Message, true, 5000);
 		} else {
@@ -138,39 +142,57 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 		}
 	},
 
+
+	showError: function(json) {
+		json = json || {};
+		json.title = 'There were some troubles with your payment.';
+		json.Message = json.Message || 'Please try again, you will gain access to the content once the payment is successful.';
+		json.ContactInformation = json.ContactInformation || 'Please contact the <a href=\'mailto:support@nextthought.com\'>help desk</a> for further information.';
+
+		this.titleEl.update(json.title);
+		this.titleEl.addCls('error');
+		this.availableEl.update('');
+		this.descriptionEl.update(json.Message);
+		this.confirmEl.update(json.ContactInformation);
+	},
+
+
 	maybeSubmit: function() {
 		var me = this,
 			link = me.course.getEnrollAndPayLink(),
 			crn = me.course.get('NTI_CRN'),
 			term = me.course.get('NTI_Term'),
 			returnURL = me.course.buildPaymentReturnURL(),
-			maskCmp = me.up('enrollment-credit');
+			maskCmp = me.up('enrollment-credit'),
+			request;
 
-		if (!link) {
-			console.error('No enroll and pay link');
-			me.showError();
-			return;
+		if (link && false) {
+			request = Service.post(link, {
+				crn: crn,
+				term_code: term,
+				return_url: returnURL
+			});
+		} else {
+			request = Promise.reject('no link provided');
 		}
 
 		maskCmp.el.mask('Loading...');
 
-		Service.post(link, {
-			crn: crn,
-			term_code: term,
-			return_url: returnURL
-		}).then(function(response) {
+		request.then(function(response) {
 			var json = Ext.JSON.decode(response, true);
 
 			if (json.href) {
 				window.location.href = json.href;
 			} else {
 				console.error('No href to redirect to... ', response);
-				me.showError();
+				me.showErrorMsg();
 			}
 		}).fail(function(response) {
 			var json = Ext.JSON.decode(response, true);
 
 			console.error('Enroll and pay failed', response);
+
+			me.showErrorMsg(json);
 
 			me.showError(json);
 
