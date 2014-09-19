@@ -56,7 +56,9 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 	onFileLoaded: function(event) {
 		this.value.value = event.target.result;
 
-		this.saveProgress();
+		this.unmask();
+
+		this.enableSubmission(true);
 
 		this.setUploadedNotSubmitted(this.value);
 		this.markCorrect();
@@ -166,6 +168,11 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 
 	getValue: function() {
 		return this.value;
+	},
+
+
+	getProgress: function() {
+		return null;
 	},
 
 
