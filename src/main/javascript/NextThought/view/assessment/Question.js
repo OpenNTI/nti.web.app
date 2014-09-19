@@ -111,7 +111,7 @@ Ext.define('NextThought.view.assessment.Question', {
 
 
 	reapplyProgress: function(questionSetSubmission) {
-		this.updateWithProgress(questionSetSubmission, true);
+		this.updateWithProgress(questionSetSubmission, null, true);
 	},
 
 	/**
@@ -119,7 +119,7 @@ Ext.define('NextThought.view.assessment.Question', {
 	 * it to be marked correct or incorrect
 	 * @param  {QuestionSetSubmission} questionSetSubmission the users last values they had
 	 */
-	updateWithProgress: function(questionSetSubmission, reapplying) {
+	updateWithProgress: function(questionSetSubmission, eopts, reapplying) {
 		if (!questionSetSubmission) { return; }
 
 		var q, id = this.question.getId(),
