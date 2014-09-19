@@ -18,7 +18,7 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 				]}
 			]},
 			{cls: 'button-container', cn: [
-				{cls: 'submit button no-file', cn: [
+				{cls: 'submit button no-file not-submitted', cn: [
 					'{{{NextThought.view.assessment.input.FileSubmission.upload}}}',
 					{tag: 'tpl', 'if': 'enable', cn: {tag: 'input', type: 'file', cls: 'file'}}
 				]},
@@ -313,15 +313,13 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 		var dontSetBack,
 			q = this.questionSet;
 
-		if (this.hasCls('has-file') || this.hasCls('not-submitted')) {
-			this.removeCls('has-file not-submitted');
-			this.setLabel(this.renderData.label);
-			this.dueEl.update(this.dueString);
+		this.removeCls('has-file');
+		this.addCls('not-submitted');
+		this.setLabel(this.renderData.label);
+		this.dueEl.update(this.dueString);
 
-			this.downloadBtn.removeCls('active');
-
-			dontSetBack = true;
-		}
+		this.downloadBtn.removeCls('active');
+		dontSetBack = true;
 
 		this.callParent(arguments);
 
