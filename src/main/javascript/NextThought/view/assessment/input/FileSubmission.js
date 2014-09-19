@@ -4,15 +4,26 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 
 	cls: 'file-submission-part',
 
+	reapplyProgress: true,
+
 	inputTpl: Ext.DomHelper.markup({
 		cn: [
-			{ cls: 'label', html: '{label}' },
-			{ tag: 'time', cls: 'due', datetime: '{due:date("c")}', cn: { tag: 'tpl', 'if': 'due', html: 'Due {due:date("l, F j")}'}},
-			{ cls: 'submit button {enable:boolStr("","disabled")}', cn: [
-				'{{{NextThought.view.assessment.input.FileSubmission.upload}}}',
-				 { tag: 'tpl', 'if': 'enable', cn: { tag: 'input', type: 'file', cls: 'file' }}
+			{cls: 'label-container', cn: [
+				{cls: 'label', html: '{label}'},
+				{cls: 'meta', cn: [
+					{tag: 'time', cls: 'due', datatime: '{due:date("c")}', cn: {
+						tag: 'tpl', 'if': 'due', html: 'Due {due:date("l, F j")}'
+					}},
+					{tag: 'span', cls: 'has-file not-submitted delete', html: 'Delete'}
+				]}
 			]},
-			{ tag: 'a', cls: 'download button', html: '{{{NextThought.view.assessment.input.FileSubmission.download}}}', target: '_blank' }
+			{cls: 'button-container', cn: [
+				{cls: 'submit button no-file', cn: [
+					'{{{NextThought.view.assessment.input.FileSubmission.upload}}}',
+					{tag: 'tpl', 'if': 'enable', cn: {tag: 'input', type: 'file', cls: 'file'}}
+				]},
+				{tag: 'a', cls: 'download button has-file', html: '{{{NextThought.view.assessment.input.FileSubmission.download}}}', target: '_blank'}
+			]}
 		]
 	}),
 
@@ -21,7 +32,8 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 		submitBtn: '.submit.button',
 		inputField: 'input[type=file]',
 		dueEl: 'time.due',
-		labelBoxEl: '.label'
+		labelBoxEl: '.label',
+		deleteEl: '.delete'
 	},
 
 
@@ -42,38 +54,16 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 
 
 	onFileLoaded: function(event) {
-		this.unmask();
 		this.value.value = event.target.result;
 
-		var me = this,
-			q = this.questionSet,
-			p;
+		this.saveProgress();
 
-		if (q && q.tallyParts() === 1) {
-			console.debug('Auto submitting...');
-			q.fireEvent('do-submission', {stopEvent: Ext.emptyFn});
-			//eventually pass promise down and let it be fulfilled when submission finishes
-		}// else {
-			p = Promise.resolve();//nothing to do.
-		//}
-
-
-		p.done(function() {
-			me.markUploaded(new Date());
-			me.markCorrect();
-		}).fail(function(reason) {
-			console.error(reason);
-			me.markIncorrect();
-		});
+		this.setUploadedNotSubmitted(this.value);
+		this.markCorrect();
 	},
 
 
 	beforeRender: function() {
-		this.renderData = Ext.apply(this.renderData || {}, {
-			label: this.part.get('content'),
-			enable: !!this.filereader
-		});
-
 		var q = this.questionSet,
 			assignment = q && q.associatedAssignment;
 
@@ -83,13 +73,11 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 					.addCls('file-submission');
 		}
 
-		if (q && q.tallyParts() === 1) {
-			Ext.defer(q.fireEvent, 1, q, ['hide-quiz-submission']);
-			if (assignment) {
-				this.renderData.due = assignment.getDueDate();
-				this.renderData.label = assignment.get('title');
-			}
-		}
+		this.renderData = Ext.apply(this.renderData || {}, {
+			label: this.part.get('content'),
+			enable: !!this.filereader,
+			due: assignment.getDueDate()
+		});
 
 		this.callParent(arguments);
 	},
@@ -105,6 +93,10 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 		} else {
 			this.mon(this.submitBtn, 'click', 'unsupported');
 		}
+
+		this.setNotUploaded();
+
+		this.mon(this.deleteEl, 'click', 'deleteFile');
 	},
 
 
@@ -128,8 +120,8 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 				this[allowed ? 'reset' : 'markBad']();
 
 				if (allowed) {
-					me.mask();
-					me.labelBoxEl.update(file.name);
+					me.el.mask('Uploading...');
+					me.setLabel(file.name);
 					reader.readAsDataURL(file);
 				}
 				//reset it to be clickable again
@@ -147,10 +139,45 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 	},
 
 
+	deleteFile: function() {
+		var me = this,
+			name = me.value.filename;
+
+		Ext.Msg.show({
+			msg: 'You are about to delete ' + name + '.',
+			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+			scope: this,
+			icon: 'warning-red',
+			buttonText: {
+				'ok': 'caution:Delete',
+				'cancel': 'Cancel'
+			},
+			title: 'Are you sure?',
+			fn: function(str) {
+				if (str === 'ok') {
+					delete me.value;
+					me.el.mask('Deleting...');
+					me.saveProgress();
+				}
+			}
+		});
+	},
+
+
 	getValue: function() {
 		return this.value;
 	},
 
+
+	setProgress: function(v) {
+		this.unmask();
+
+		if (v) {
+			this.setUploadedNotSubmitted(v);
+		} else {
+			this.setNotUploaded();
+		}
+	},
 
 	setValue: function(v) {
 		/*
@@ -161,23 +188,97 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 			url
 			value
 		*/
+		this.setFileSubmitted(v);
+	},
 
+
+	setNotUploaded: function() {
+		this.value = null;
+
+		this.setLabel(this.renderData.label);
+		this.setDownloadButton();
+		this.dueEl.update(this.dueString);
+		this.addCls('not-submitted');
+		this.removeCls(['late', 'good']);
+	},
+
+
+	setUploadedNotSubmitted: function(v) {
 		v = v || {};
+
+		var q = this.questionSet,
+			date = Ext.Date.parse(v.CreatedTime, 'timestamp') || new Date(),
+			assignment = q && q.associatedAssignment;
+
 		this.value = v;
 
-		this.labelBoxEl.update(v.filename || getString('NextThought.view.assessment.input.FileSubmission.not-submitted'));
-
-		if (v.CreatedTime || v.filename) {
-			this.markUploaded(Ext.Date.parse(v.CreatedTime, 'timestamp') || new Date());
-		} else {
-			this.addCls('hide-buttons');
+		if (v.filename) {
+			this.setLabel(v.filename);
 		}
 
-		if (v.url) {
+		this.addCls('not-submitted');
+
+		this.setDue(!assignment || assignment.getDueDate() > date);
+
+		this.setDownloadButton(v.download_url || v.url);
+	},
+
+
+	setFileSubmitted: function(v) {
+		v = v || {};
+
+		var q = this.questionSet,
+			date = Ext.Date.parse(v.CreatedTime, 'timestamp') || new Date(),
+			assignment = q && q.associatedAssignment;
+
+		this.value = v;
+
+		if (v.filename) {
+			this.setLabel(v.filename);
+		}
+
+		this.removeCls('not-submitted');
+
+		this.setDue(!assignment || assignment.getDueDate() > date);
+
+		this.setDownloadButton(v.download_url || v.url);
+	},
+
+
+	setLabel: function(label) {
+		this.labelBoxEl.update(label);
+
+		if (label && label !== this.renderData.label) {
+			this.labelBoxEl.set({
+				'data-qtip': label
+			});
+		}
+	},
+
+
+	setDue: function(onTime) {
+		if (onTime) {
+			this.addCls('good');
+			this.dueEl.update(getString('NextThought.view.assessment.input.FileSubmission.on-time'));
+		} else {
+			this.addCls('late');
+			this.dueEl.update(getString('NextThought.view.assessment.input.FileSubmission.late'));
+		}
+	},
+
+
+	setDownloadButton: function(url) {
+		if (url) {
+			this.addCls('has-file');
+			this.removeCls('no-file');
 			this.downloadBtn.addCls('active');
 			this.downloadBtn.set({
-				href: v.download_url || v.url
+				href: url
 			});
+		} else {
+			this.removeCls('has-file');
+			this.addCls('no-file');
+			this.downloadBtn.removeCls('active');
 		}
 	},
 
@@ -186,9 +287,13 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 	markIncorrect: Ext.emptyFn,
 
 
-	markUploaded: function(date) {
+	markUploaded: function(date, doNotDisable) {
 		var q = this.questionSet,
 			assignment = q && q.associatedAssignment;
+
+		if (!doNotDisable) {
+			this.addCls('disabled');
+		}
 
 		if (!assignment || assignment.getDueDate() > date) {
 			this.addCls('good');
@@ -208,16 +313,12 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 		var dontSetBack,
 			q = this.questionSet;
 
-		if (this.hasCls('good') || this.hasCls('late')) {
-			this.removeCls('good late');
-			this.labelBoxEl.update(this.renderData.label);
+		if (this.hasCls('has-file') || this.hasCls('not-submitted')) {
+			this.removeCls('has-file not-submitted');
+			this.setLabel(this.renderData.label);
 			this.dueEl.update(this.dueString);
 
 			this.downloadBtn.removeCls('active');
-
-			if (q && q.tallyParts() === 1) {
-				Ext.defer(q.fireEvent, 1, q, ['hide-quiz-submission']);
-			}
 
 			dontSetBack = true;
 		}

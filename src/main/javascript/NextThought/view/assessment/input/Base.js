@@ -407,11 +407,18 @@ Ext.define('NextThought.view.assessment.input.Base', {
 	},
 
 	//set the inputs values with out marking it correct or incorrect
-	updateWithProgress: function(questionSubmission) {
+	updateWithProgress: function(questionSubmission, reapplying) {
 		var parts = (questionSubmission && questionSubmission.get('parts')) || {},
 			part = parts[this.ordinal];
 
-		this.setValue(part);
+		//if we are reapplying and the part doesn't want to don't
+		if (reapplying && !this.reapplyProgress) { return; }
+
+		if (this.setProgress) {
+			this.setProgress(part);
+		} else {
+			this.setValue(part);
+		}
 
 		if (part !== null) {
 			this.enableSubmission(true);

@@ -323,8 +323,10 @@ Ext.define('NextThought.controller.Assessment', {
 		a.save({
 			url: url,
 			success: function(self, op) {
+				var result = op.getResultSet().records.first();
+
 				if (widget.onProgressSaved) {
-					widget.onProgressSaved();
+					widget.onProgressSaved(result);
 				}
 			},
 			failure: function() {

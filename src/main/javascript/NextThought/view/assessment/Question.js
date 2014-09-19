@@ -43,7 +43,8 @@ Ext.define('NextThought.view.assessment.Question', {
 				'beforesaveprogress': this.gatherQuestionProgress,
 				'graded': this.updateWithResults,
 				'set-progress': this.updateWithProgress,
-				'reset': this.reset
+				'reset': this.reset,
+				'reapply-progress': this.reapplyProgress
 			});
 		}
 		this.mon(this, {
@@ -108,12 +109,17 @@ Ext.define('NextThought.view.assessment.Question', {
 		}
 	},
 
+
+	reapplyProgress: function(questionSetSubmission) {
+		this.updateWithProgress(questionSetSubmission, true);
+	},
+
 	/**
 	 * Takes a question set submission and updates the inputs with those values, without triggering
 	 * it to be marked correct or incorrect
 	 * @param  {QuestionSetSubmission} questionSetSubmission the users last values they had
 	 */
-	updateWithProgress: function(questionSetSubmission) {
+	updateWithProgress: function(questionSetSubmission, reapplying) {
 		if (!questionSetSubmission) { return; }
 
 		var q, id = this.question.getId(),
@@ -131,7 +137,7 @@ Ext.define('NextThought.view.assessment.Question', {
 			q = questionSetSubmission;
 		}
 
-		this.down('question-parts').updateWithProgress(q);
+		this.down('question-parts').updateWithProgress(q, reapplying);
 	},
 
 
@@ -174,7 +180,7 @@ Ext.define('NextThought.view.assessment.Question', {
 		var id = this.question.getId(), values = [];
 
 		Ext.each(this.query('abstract-question-input'), function(p) {
-			var v = p.getValue();
+			var v = p.getProgress ? p.getProgress() : p.getValue();
 
 			if (v === undefined || v === null) {
 				v = null;

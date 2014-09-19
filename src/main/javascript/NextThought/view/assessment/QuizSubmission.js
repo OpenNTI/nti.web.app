@@ -362,10 +362,15 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 	},
 
 
-	onProgressSaved: function() {
-		var assessmentReader = this.reader.getAssessment();
+	onProgressSaved: function(point) {
+		var q = this.questionSet;
+			assessmentReader = this.reader.getAssessment();
 
 		this.progressSaved = true;
+
+		if (point && q) {
+			q.fireEvent('reapply-progress', point.getQuestionSetSubmission());
+		}
 
 		assessmentReader.showProgressSaved();
 	},
@@ -386,7 +391,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 	saveProgress: function() {
 		var q = this.questionSet,
 			assignment = q.associatedAssignment,
-			assessmentReader = this.reader.getAssessment();
+			assessmentReader = this.reader.getAssessment(),
 			submission = {};
 
 		//only save progress for assignments for now
@@ -435,7 +440,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 
 
 	setFromSavePoint: function(savepoint) {
-		if (savepoint) {
+		if (savepoint && !this.assessmentHistory) {
 			this.progressSaved = true;
 			this.questionSet.fireEvent('set-progress', savepoint.getQuestionSetSubmission());
 		}

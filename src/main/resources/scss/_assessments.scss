@@ -1255,22 +1255,48 @@ body.dragging * {
 		position: relative;
 		background: #fbfbfb;
 		border-bottom: 1px solid #f2f2f2;
-		padding: 20px 10em 20px 90px;
+		padding: 20px 5px 20px 90px;
 		min-height: 85px;
 
 		@include icon('assignment_due', $top: 20px, $left: 30px);
 
-		&.late {
+		.label-container {
+			float: left;
+			width: 405px;
+		}
+
+		.button-container {
+			float: left;
+			width: 155px;
+		}
+
+		&.has-file {
+			.no-file {
+				display: none;
+			}
+		}
+
+		&.no-file {
+			.has-file {
+				display: none;
+			}
+		}
+
+		&:not(.not-submitted) .not-submitted {
+			display: none;
+		}
+
+		&.disabled.good, &.disabled.late {
 			.button { display: none; }
+		}
+
+		&.late {
 			.due {color: $primary-red;}
 			&::after {
 				@include sprite($icons,'assignment_late');
 			}
 		}
 		&.good {
-			.button {
-				display: none;
-			}
 			.due {
 				color: $primary-green;
 			}
@@ -1312,6 +1338,25 @@ body.dragging * {
 			color: $tertiary-grey;
 		}
 
+		.delete {
+			font: normal 700 0.8em/3 $font;
+			text-transform: uppercase;
+			color: $primary-blue;
+			cursor: pointer;
+
+			&::before {
+				color: #b8b8b8;
+				font-weight: 600;
+				position: static;
+				content: '\00B7';
+				text-decoration: none !important;
+				vertical-align: baseline;
+				display: inline-block;
+				padding: 0 0.6em;
+				background: none;
+			}
+		}
+
 		.button {
 			cursor: pointer;
 			background: $primary-blue;
@@ -1319,9 +1364,8 @@ body.dragging * {
 			font: italic 600 1.2em/1 $font;
 			color: #fff;
 			padding: 1em 2em;
-			right: 15px;
-			top: 25px;
-			overflow: hidden;
+			margin-right: 5px;
+			float: right;
 
 			&.disabled {
 				background: $tertiary-grey;
@@ -1330,12 +1374,14 @@ body.dragging * {
 			}
 
 			input {
+				cursor: pointer;
 				position: absolute;
-				top: 0; right: 0;
+				top: 0; bottom: 0;
+				right: 0; left: 0;
 				opacity: 0;
-				font-size: 3em;
+				font-size: 0.45em;
 			}
-			position: absolute;
+			position: relative;
 		}
 
 		a.download.button:not(.active) {
