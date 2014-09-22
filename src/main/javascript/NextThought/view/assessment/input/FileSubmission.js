@@ -112,15 +112,16 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 					file = t.files[0],
 					allowed = p.isFileAcceptable(file);
 
-				me.value = {
-					MimeType: 'application/vnd.nextthought.assessment.uploadedfile',
-					filename: file.name
-				};
-
 				this[allowed ? 'reset' : 'markBad']();
 
 				if (allowed) {
 					me.el.mask('Uploading...');
+
+					me.value = {
+						MimeType: 'application/vnd.nextthought.assessment.uploadedfile',
+						filename: file.name
+					};
+
 					me.setLabel(file.name);
 					reader.readAsDataURL(file);
 				}
