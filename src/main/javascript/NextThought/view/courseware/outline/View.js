@@ -28,12 +28,16 @@ Ext.define('NextThought.view.courseware.outline.View', {
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
 		{ cls: 'outline-row {type} {NTIID:boolStr("","disabled")}', 'data-qtip': '{label:htmlEncode}', cn: [
 			{cls: 'label', html: '{label}'},
-			{tag: 'tpl', 'if': 'startDate', cn: {cls: 'date', cn: [
+			{tag: 'tpl', 'if': 'this.shouldShowDate(values)', cn: {cls: 'date', cn: [
 				{html: '{startDate:date("M")}'},
 				{html: '{startDate:date("j")}'}
 			]}}
 		]}
-	]})),
+	]}), {
+		shouldShowDate: function(values) {
+			return this.allowDates;
+		}
+	}),
 
 
 	listeners: {
@@ -175,9 +179,14 @@ Ext.define('NextThought.view.courseware.outline.View', {
 	},
 
 
-	maybeChangeStoreOrSelection: function(ntiid, store) {
+	maybeChangeStoreOrSelection: function(bundle, store) {
+		var ntiid = bundle.getId(),
+			catalog = bundle.getCourseCatalogEntry(),
+			shouldShowDates = catalog && !catalog.get('DisableOverviewCalendar');
+
 
 		if (this.store !== store) {
+			this.tpl.allowDates = shouldShowDates;
 			this.clear();
 			if (store) {
 				this.bindStore(store);

@@ -82,7 +82,7 @@ Ext.define('NextThought.view.courseware.View', {
 
 		this.store = bundle.getNavigationStore();
 
-		this.navigation.maybeChangeStoreOrSelection(bundle.getId(), this.store);
+		this.navigation.maybeChangeStoreOrSelection(bundle, this.store);
 	},
 
 	restoreState: function(state) {
