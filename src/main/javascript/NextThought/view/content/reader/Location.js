@@ -185,11 +185,19 @@ Ext.define('NextThought.view.content.reader.Location', {
 			ntiid;
 
 		function success(pageInfo) {
+			var sync;
+
 			pageInfo.targetBundle = targetBundle || pageInfo.targetBundle;
 
 			//the server is suppose to be taking care of getting the correct page info
 			//for the course so this shouldn't be necessary.
-			pageInfo.syncWithBundle(targetBundle)
+			if (isFeature('sync-pageinfo-and-outlinenode')) {
+				sync = pageInfo.syncWithBundle(targetBundle);
+			} else {
+				sync = Promise.resolve();
+			}
+
+			sync
 				.then(function() {
 					if (ntiid === rootId && !LocationMeta.getValue(rootId)) {
 						// let's cache this on the LocationMeta, if it's not there already.

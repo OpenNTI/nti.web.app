@@ -135,12 +135,15 @@ Ext.define('NextThought.model.PageInfo', {
 					newAssessment = [];
 
 				//go through our assessment items and get the matching one
-				//from the course assignments
+				//from the course assignments and update the dates
 				oldAssessment.forEach(function(item) {
 					var a = assignments.getItem(item.getId());
 
 					if (a) {
-						newAssessment.push(a);
+						item.set({
+							'availableBeginning': a.get('availableBeginning'),
+							'availableEnding': a.get('availableEnding')
+						});
 					}
 				});
 
