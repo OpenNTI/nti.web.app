@@ -59,6 +59,10 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 
 		this.answeredMap = answeredMap;
 		this.startTimestamp = new Date().getTime();
+
+		this.questionSet.addSaveProgressHandler(this, this.beforeSaveProgress.bind(this), this.afterSaveProgress.bind(this));
+		this.questionSet.setStartTime(this.startTimestamp);
+		this.questionSet.clearProgress();
 	},
 
 
@@ -277,7 +281,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 			try {
 				if (q.fireEvent('beforereset')) {
 					q.fireEvent('reset', keepAnswers);
-					me.saveProgress();
+					q.clearProgress(true);
 					console.log('fired reset');
 					return Promise.resolve();
 				}
@@ -364,48 +368,19 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 	},
 
 
-	onProgressSaved: function(point) {
-		var q = this.questionSet;
-			assessmentReader = this.reader.getAssessment();
-
-		this.progressSaved = true;
-
-		if (point && q) {
-			q.fireEvent('reapply-progress', point.getQuestionSetSubmission());
-		}
-
-		assessmentReader.showProgressSaved();
-	},
-
-
-	onProgressFail: function() {
+	beforeSaveProgress: function() {
 		var assessmentReader = this.reader.getAssessment();
 
-		this.progressSaved = false;
-
-		assessmentReader.showProgressFailed();
+		assessmentReader.showSavingProgress();
 	},
 
-	/**
-	 * Gets all the answers the user has entered so far
-	 * TODO: Don't iterate through all the questions every time, only look at the question that fired the event
-	 */
-	saveProgress: function() {
-		var q = this.questionSet,
-			assignment = q.associatedAssignment,
-			assessmentReader = this.reader.getAssessment(),
-			submission = {};
 
-		//only save progress for assignments for now
-		if (!assignment || !assignment.canSaveProgress()) { return; }
+	afterSaveProgress: function(success) {
+		var assessmentReader = this.reader.getAssessment();
 
-		assessmentReader.showSavingProgress();
+		this.progressSaved = success;
 
-		if (!q.fireEvent('beforesaveprogress', q, submission)) {
-			console.log('save progress aborted');
-		}
-
-		this.fireEvent('save-progress', this, q, submission);
+		assessmentReader[success ? 'showProgressSaved' : 'showProgressFailed']();
 	},
 
 
@@ -442,9 +417,12 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 
 
 	setFromSavePoint: function(savepoint) {
+		var submission = savepoint.getQuestionSetSubmission();
+
 		if (savepoint && !this.assessmentHistory) {
 			this.progressSaved = true;
-			this.questionSet.fireEvent('set-progress', savepoint.getQuestionSetSubmission());
+			this.questionSet.fireEvent('set-progress', submission);
+			this.questionSet.setPreviousEffortDuration(submission.get('CreatorRecordedEffortDuration'));
 		}
 	},
 

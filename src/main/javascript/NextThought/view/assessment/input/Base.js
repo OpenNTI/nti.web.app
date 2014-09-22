@@ -188,6 +188,8 @@ Ext.define('NextThought.view.assessment.input.Base', {
 			this.historyMenuEl.remove();
 		}
 
+		this.questionSet.setProgress(this.question, this);
+
 	},
 
 
@@ -407,12 +409,9 @@ Ext.define('NextThought.view.assessment.input.Base', {
 	},
 
 	//set the inputs values with out marking it correct or incorrect
-	updateWithProgress: function(questionSubmission, reapplying) {
+	updateWithProgress: function(questionSubmission) {
 		var parts = (questionSubmission && questionSubmission.get('parts')) || {},
 			part = parts[this.ordinal];
-
-		//if we are reapplying and the part doesn't want to don't
-		if (reapplying && !this.reapplyProgress) { return; }
 
 		if (this.setProgress) {
 			this.setProgress(part);
@@ -423,6 +422,8 @@ Ext.define('NextThought.view.assessment.input.Base', {
 		if (part !== null) {
 			this.enableSubmission(true);
 		}
+
+		this.questionSet.setProgress(this.question, this);
 	},
 
 
@@ -506,7 +507,7 @@ Ext.define('NextThought.view.assessment.input.Base', {
 
 	saveProgress: function() {
 		if (this.questionSet) {
-			this.questionSet.fireEvent('save-progress');
+			this.questionSet.saveProgress(this.question, this);
 		}
 	},
 

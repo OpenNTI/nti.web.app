@@ -164,6 +164,11 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 
 		toast.openLongEnough
 			.then(function() {
+				//the toast got destroyed by something else
+				if (!toast.el || toast.isDestroyed) {
+					return;
+				}
+
 				toast.el.addCls('saved');
 				toast.el.removeCls('saving');
 				toast.el.update('Progress Saved');
@@ -181,6 +186,11 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 
 		toast.openLongEnough
 			.then(function() {
+				//the toast got destroyed by something else
+				if (!toast.el || toast.isDestroyed) {
+					return;
+				}
+
 				toast.el.addCls('error');
 				toast.el.removeCls('saving');
 				toast.el.update('Failed to Save Progress');

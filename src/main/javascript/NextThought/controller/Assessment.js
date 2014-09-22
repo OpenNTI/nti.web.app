@@ -73,7 +73,8 @@ Ext.define('NextThought.controller.Assessment', {
 				'*': {
 					'has-been-submitted': 'maybeMarkSubmissionAsSubmitted',
 					'set-assignment-history': 'applyAssessmentHistory',
-					'assignment-reset': 'assignmentReset'
+					'assignment-reset': 'assignmentReset',
+					'save-progress': 'saveProgress'
 				},
 				'assessment-question': {
 					'check-answer': 'checkAnswer'
@@ -81,8 +82,7 @@ Ext.define('NextThought.controller.Assessment', {
 
 				'assessment-quiz-submission': {
 					'grade-it': 'grade',
-					'submit-assignment': 'submit',
-					'save-progress': 'saveProgress'
+					'submit-assignment': 'submit'
 				}
 			}
 		});
@@ -245,6 +245,8 @@ Ext.define('NextThought.controller.Assessment', {
 				questions: []
 			};
 
+		duration += questionSet.getPreviousEffortDuration();
+
 		Ext.Object.each(data, this.__getQuestionSubmissions(qset));
 
 		function safelyCall(fnName, scope) {
@@ -288,17 +290,17 @@ Ext.define('NextThought.controller.Assessment', {
 	/**
 	 * Posts the question set to the save point of the assignment to be restored
 	 * next time they come back to the assignment
-	 * @param  {Component} widget      the component firing the event
 	 * @param  {QuestionSet} questionSet the question set the answers are for
 	 * @param  {Object} data        the answers
+	 * @param  {Function} callback what to do when its done (yuck callbacks, couldn't think of an alternative for the time being)
 	 * @return {Boolean}             True is an attempt was made to save, false otherwise
 	 */
-	saveProgress: function(widget, questionSet, data) {
+	saveProgress: function(questionSet, data, callback) {
 		var s = this.getAssessmentQuestionSetSubmissionModel(),
 			a = this.getAssessmentAssignmentSubmissionModel(),
 			endTimestamp = new Date().getTime(),
 			//in seconds
-			duration = (endTimestamp - widget.startTimestamp) / 1000,
+			duration = (endTimestamp - questionSet.getStartTime()) / 1000,
 			progress = this.getAssignmentView(),
 			assignment = questionSet.associatedAssignment,
 			url = assignment.getLink('Savepoint'),
@@ -306,6 +308,9 @@ Ext.define('NextThought.controller.Assessment', {
 				questionSetId: questionSet.getId(),
 				questions: []
 			};
+
+		//keep a cumulative total running from the save points
+		duration += questionSet.getPreviousEffortDuration();
 
 		if (!url) {
 			console.error('no url to save assignment progress to');
@@ -325,15 +330,15 @@ Ext.define('NextThought.controller.Assessment', {
 			success: function(self, op) {
 				var result = op.getResultSet().records.first();
 
-				if (widget.onProgressSaved) {
-					widget.onProgressSaved(result);
+				if (callback) {
+					callback.call(null, result);
 				}
 			},
 			failure: function() {
 				console.error('Failed to save assignment progress');
 
-				if (widget.onProgressFail) {
-					widget.onProgressFail();
+				if (callback) {
+					callback.call(null, result);
 				}
 			}
 		});

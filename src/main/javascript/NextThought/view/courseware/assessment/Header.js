@@ -134,7 +134,13 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 				this.closing = true;
 				wait(time || 0)
 					.then(function() {
-						me.pathEl.removeCls('show-toast');
+						//if the path el is still around
+						if (me.pathEl) {
+							me.pathEl.removeCls('show-toast');
+						}
+
+						//wait to give the animations a chance to finish before we
+						//remove the toast from the dom
 						wait(500).then(toast.destroy.bind(toast));
 					});
 			}
