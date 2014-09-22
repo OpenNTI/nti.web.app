@@ -166,7 +166,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 			maskCmp = me.up('enrollment-credit'),
 			request;
 
-		if (link && false) {
+		if (link) {
 			request = Service.post(link, {
 				crn: crn,
 				term_code: term,
