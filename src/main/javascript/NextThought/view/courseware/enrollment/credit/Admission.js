@@ -837,7 +837,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 			this.showError(json);
 			this.clearStorage();
 			this.fireEvent('admission-error');
-			this.showAlreadyExisted();
+			this.showAlreadyExisted(json);
 		} else {
 			this.showError(json);
 			this.clearStorage();
