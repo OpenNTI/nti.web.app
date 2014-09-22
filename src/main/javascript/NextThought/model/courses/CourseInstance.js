@@ -327,7 +327,10 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 			var p, link = this.getLink('GradeBook');
 
 			if (link) {
-				p = Service.request(link)
+				p = Service.request({
+						url: link,
+						timeout: 120000 //2 minutes
+					})
 						.done(function(json) { return ParseUtils.parseItems(json)[0]; });
 			} else {
 				p = Promise.reject('Not present');
