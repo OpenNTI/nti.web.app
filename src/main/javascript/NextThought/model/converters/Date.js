@@ -4,6 +4,11 @@ Ext.define('NextThought.model.converters.Date', {
 }, function() {
 	Ext.data.Types.ISODATE = {
 		convert: function(v) {
+			//if we already have a date don't try to parse it
+			if (v instanceof Date) {
+				return v;
+			}
+
 			if (v && v[v.length - 1] === 'Z') {
 				v = v.substr(0, v.length - 1);
 			}
