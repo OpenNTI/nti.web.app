@@ -849,7 +849,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 
 	maybeSubmit: function() {
 		var submitlink = $AppConfig.userObject.getLink('fmaep.admission'),
-			me = this,
+			me = this, isValid,
 			maskCmp = this.up('enrollment-credit'),
 			value = me.getValue();
 
@@ -861,6 +861,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 
 		me.shouldAllowSubmission(value)
 			.then(function() {
+				isVaild = true;
 				me.fireEvent('enable-submission', false);
 				maskCmp.el.mask('Your application is being processed. This may take a few moments.');
 
@@ -868,6 +869,10 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					url: submitlink,
 					timeout: 120000 //2 minutes
 				}, value);
+			}, function() {
+				isValid = false;
+
+				return Promise.reject();
 			})
 			.then(function(response) {
 				var json = Ext.JSON.decode(response, true);
@@ -879,6 +884,10 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 			})
 			.fail(function(response) {
 				maskCmp.el.unmask();
+
+				if (!isValid) {
+					return;
+				}
 
 				if (!response) {
 					me.handleResponse({
