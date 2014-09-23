@@ -82,11 +82,13 @@ Ext.define('NextThought.model.assessment.QuestionSet', {
 			return;
 		}
 
-		if (this.beforeSaveProgress) {
-			this.beforeSaveProgress.call();
-		}
+		if (isFeature('save-progress')) {
+			if (this.beforeSaveProgress) {
+				this.beforeSaveProgress.call();
+			}
 
-		this.saveProgressEventSrc.fireEvent('save-progress', this, this.progress, this.onSaveProgress.bind(this, question, input));
+			this.saveProgressEventSrc.fireEvent('save-progress', this, this.progress, this.onSaveProgress.bind(this, question, input));
+		}
 	},
 
 
