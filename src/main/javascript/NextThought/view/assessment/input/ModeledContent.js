@@ -8,7 +8,7 @@ Ext.define('NextThought.view.assessment.input.ModeledContent', {
 		cls: 'answer-field'
 	}),
 
-	SaveProgressBuffer: 15000,
+	SaveProgressBuffer: 5000,
 
 	renderSelectors: {
 		inputField: '.answer-field'
