@@ -8,6 +8,8 @@ Ext.define('NextThought.view.assessment.input.Base', {
 
 	cls: 'field',
 
+	SaveProgresBuffer: 1000,
+
 	renderTpl: Ext.DomHelper.markup([
 		{
 			cls: 'response-container',
@@ -105,7 +107,7 @@ Ext.define('NextThought.view.assessment.input.Base', {
 
 		this.isAssignment = Boolean(this.questionSet && this.questionSet.associatedAssignment);
 
-		this.saveProgress = Ext.Function.createBuffered(this.saveProgress, 500);
+		this.saveProgress = Ext.Function.createBuffered(this.saveProgress, this.SaveProgressBuffer);
 
 		if (this.isAssignment) {
 			this.noMark = Boolean(this.questionSet.noMark);

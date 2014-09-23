@@ -2,6 +2,8 @@ Ext.define('NextThought.view.assessment.input.FreeResponse', {
 	extend: 'NextThought.view.assessment.input.Base',
 	alias: 'widget.question-input-freeresponsepart',
 
+	SaveProgressBuffer: 15000,
+
 	inputTpl: Ext.DomHelper.markup({
 		tag: 'input',
 		type: 'text',
