@@ -136,7 +136,7 @@ Ext.define('NextThought.model.courseware.Grade', {
 				icon: 'warning-red',
 				buttonText: true,
 				buttons: {
-					ok: 'Ok'
+					primary: 'Ok'
 				}
 			});
 		}

@@ -1,140 +1,295 @@
 Ext.define('NextThought.view.MessageBox', {
-	extend: 'Ext.window.MessageBox',
+	extend: 'NextThought.view.window.Window',
 
-	plain: true,
-	border: false,
-	frame: false,
-	shadow: false,
 	ui: 'nti-alert',
 	cls: 'nti-alert',
-	minWidth: 390,
-	maxWidth: 500,
 
-	CANCEL: 1,
-	NO: 2,
-	YES: 4,
-	OK: 8,
+	constrainTo: Ext.getBody(),
+	floating: true,
+	dialog: true,
+	resizable: false,
+	closeAction: 'hide',
 
-	iconHeight: 75,
-	iconWidth: 80,
+	aspectRatio: 1.78,
 
-	buttonIds: [
-		'cancel', 'no', 'yes', 'ok'
-	],
+	height: 'auto',
+	width: 400,
 
-	makeButton: function(btnIdx) {
-		var btnId = this.buttonIds[btnIdx];
+	layout: 'auto',
+	componentLayout: 'natural',
 
-		return new Ext.button.Button({
-			handler: this.btnCallback,
-			itemId: btnId,
-			ui: 'secondary',
-			scale: 'large',
-			scope: this,
-			text: this.buttonText[btnId],
+	//Legacy Constants taken from Ext.window.MessageBox
+	OK: 1,
+	YES: 2,
+	NO: 4,
+	CANCEL: 8,
+	OKCANCEL: 9,
+	YESNO: 6,
+	YESNOCANCEL: 14,
+	INFO: 'info',
+	WARNING: 'warning-red',
+	QUESTION: 'question',
+	ERROR: 'error',
 
-			xhooks: {
-				//We support setting ui off a formatter in the text.
-				//we split by ':' and if there are two parts the first
-				//will be used to set the UI and the second will be the
-				//text
-				setText: function(text) {
-					var parts = text.split(':') || [],
-						newArgs = Array.prototype.slice.call(arguments);
-					if (parts.length > 1) {
-						this.setUI(parts[0]);
-						newArgs[0] = parts[1];
-						return this.callParent(newArgs);
-					}
+	items: [],
 
-					//If there is no formatter do the same
-					//magical stuff we used to do
-					if (/delete/i.test(text) || /report/i.test(text)) {
-						this.setUI('caution');
-					}
-					else if (/accept/i.test(text)) {
-						this.setUI('primary');
-					}
-					else {
-						this.setUI('secondary');
-					}
-
-					return this.callParent(arguments);
-				}
-			}
-		});
+	childEls: ['body'],
+	getTargetEl: function() {
+		return this.body;
 	},
 
 
-	initComponent: function() {
-		var me = this;
+	getDockedItems: function() {
+		return [];
+	},
 
-		Ext.apply(me.buttonText, {
-			ok: getString('NextThought.view.MessageBox.ok'),
-			yes: getString('NextThought.view.MessageBox.yes'),
-			no: getString('NextThought.view.MessageBox.no'),
-			cancel: getString('NextThought.view.MessageBox.cancel')
+	buttonOrder: ['primary', 'secondary'],
+
+	buttonText: {
+		primary: getString('NextThought.view.MessageBox.ok'),
+		secondary: getString('NextThought.view.MessageBox.cancel')
+	},
+
+	defaultButtons: {
+		primary: true
+	},
+
+	renderTpl: Ext.DomHelper.markup([
+		{cls: 'alert-container', cn: [
+			{cls: 'close'},
+			{cls: 'message-container', cn: [
+				{cls: 'title', html: 'Attention...'},
+				{cls: 'message', html: ''}
+			]},
+			{
+				id: '{id}-body', cls: 'button-body', html: '{%this.renderContainer(out,values)%}'
+			}
+		]}
+	]),
+
+	renderSelectors: {
+		closeEl: '.close',
+		messageContainerEl: '.message-container',
+		titleEl: '.message-container .title',
+		messageEl: '.message-container .message',
+		buttonEl: '.button-body'
+	},
+
+	initComponent: function() {
+		this.callParent(arguments);
+
+		//make the execution of show take place in the next event loop
+		this.show = Ext.Function.createBuffered(this.show, 1);
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		this.mon(this.el, 'click', 'handleClick', this);
+	},
+
+
+	startClose: function() {
+		this.addCls('closing');
+		this.removeCls('showing');
+
+		wait(500).then(this.close.bind(this));
+	},
+
+
+	handleClick: function(e) {
+		//if we aren't closable then there is no need to check the others
+		if (!this.isClosable) {
+			return;
+		}
+		//if they clicked the x
+		if (e.getTarget('.close')) {
+			this.startClose();
+		//if they clicked the mask
+		} else if (!e.getTarget('.alert-container')) {
+			this.startClose();
+		}
+	},
+
+
+	parseButtons: function(cfg) {
+		var btns = cfg.buttons,
+			btnCfg = {}, i, text, order,
+			lookUp = ['ok', 'yes', 'no', 'cancel'],
+			buttonText = cfg.buttonText || {};
+
+		for (i = 0; i < 4; i++) {
+			if (btns & Math.pow(2, i)) {
+				text = buttonText[lookUp[i]];
+				order = i < 2 ? 'primary' : 'secondary';
+
+				text = text ? text.split(':') : [];
+
+				btnCfg[order] = {
+					text: text.length === 1 ? text[0] : text[1],
+					cls: text.length > 1 ? text[0] : '',
+					name: lookUp[i]
+				};
+			}
+		}
+
+		return btnCfg;
+	},
+
+
+	getButtons: function(cfg) {
+		var btns = cfg.buttons;
+
+		if (!btns) {
+			return this.defaultButtons;
+		}
+
+		if (Ext.isString(btns)) {
+			return {
+				primary: btns
+			};
+		}
+
+		if (!Ext.isNumber(btns)) {
+			return btns;
+		}
+
+
+		return this.parseButtons(cfg);
+	},
+
+
+	alert: function(cfg) {
+		this.show(cfg);
+	},
+
+
+	show: function(cfg) {
+		if (!this.rendered) {
+			this.render(Ext.getBody());
+		}
+
+		var me = this,
+			buttons = this.getButtons(cfg);
+
+		me.__clearPreviousConfig();
+
+		me.currentConfig = cfg;
+
+		me.titleEl.update(cfg.title || 'Attention...');
+		me.messageEl.update(cfg.msg);
+
+		if (cfg.icon) {
+			me.messageContainerEl.addCls(cfg.icon);
+		}
+
+		//if we are closable show the x at the top
+		if (cfg.closable !== false) {
+			me.addCls('closable');
+			me.isClosable = true;
+		} else {
+			me.removeCls('closable');
+			me.isClosable = false;
+		}
+
+		me.buttonOrder.forEach(function(btn) {
+			var btnCfg = buttons[btn];
+
+			if (btnCfg) {
+				me.addButton(btn, buttons[btn], cfg.fn);
+			}
+		});
+
+		wait().then(function() {
+			me.adjustSize();
 		});
 
 		me.callParent(arguments);
-		me.bottomTb.layout.pack = 'end';
-
-		me.myTitle = new Ext.form.field.Display({
-			id: me.id + '-titlefield',
-			cls: me.baseCls + '-title'
-		});
-
-		me.promptContainer.insert(0, me.myTitle);
+		me.addCls('showing');
 	},
 
 
-	setTitle: function() { this.callParent(['&#160;']); },
+	adjustSize: function() {
+		var height = this.getHeight(),
+			aspect = this.aspectRatio,
+			width = height * aspect;
 
-	show: function(cfg) {
-		Ext.applyIf(cfg, {
-			title: 'Attention...'
-		});
+		this.setWidth(400);
+
+		while (this.buttonEl.dom.scrollHeight > 40) {
+			width += 20;
+			this.setWidth(width);
+		}
+	},
 
 
-		function wrap(str, width, brk) {
-			if (str.length > width) {
-				var left, right, p = width;
-				p = str.lastIndexOf(' ', p);
-				if (p > 0) {
-					left = str.substring(0, p);
-					right = str.substring(p + 1);
-					return left + brk + wrap(right, width, brk);
+	__clearPreviousConfig: function() {
+		var current = this.currentConfig;
+
+		if (current) {
+			//remove the last icon class
+			this.messageContainerEl.removeCls(current.icon || '');
+			//remove the buttons
+			this.removeAll(true);
+		}
+	},
+
+
+	addButton: function(name, cfg, closeHandler) {
+		var me = this,
+			cls = 'button ' + name;
+
+		if (cfg === true) {
+			cfg = {};
+		} else if (Ext.isString(cfg)) {
+			cfg = {
+				text: cfg
+			};
+		}
+
+		cfg.text = cfg.text || this.buttonText[name];
+
+		if (cfg.cls) {
+			cls += ' ' + cfg.cls;
+		}
+
+		this.add({
+			xtype: 'box',
+			ui: 'nti-button',
+			cls: 'button',
+			autoEl: {cls: cls, html: cfg.text},
+			listeners: {
+				click: {
+					element: 'el',
+					fn: function() {
+						if (!cfg.doNotClose) {
+							me.startClose();
+
+							if (closeHandler) {
+								closeHandler.call(null, cfg.name || cfg.text);
+							}
+						}
+
+						if (cfg.handler) {
+							cfg.handler.call();
+						}
+					}
 				}
 			}
-			return str;
-		}
-
-		this.myTitle.setValue(cfg.title);
-		this.myTitle[Ext.isEmpty(cfg.title) ? 'hide' : 'show']();
-
-		cfg.msg = wrap(cfg.msg, 55, '\n');
-		cfg.msg = cfg.msg.replace(/\n/, '<br/>');
-
-		try {
-			return this.callParent([cfg]);
-		}
-		finally {
-			Ext.defer(this.toFront, 10, this);
-			Ext.defer(this.updateLayout, 100, this);
-		}
+		});
 	}
-
 }, function() {
 	Ext.MessageBox = Ext.Msg = new NextThought.view.MessageBox();
+
 	window.alert = function(cfg, fn) {
 		Globals.removeLoaderSplash();
+
 		if (!cfg || Ext.isString(cfg)) {
-      cfg = { msg: cfg || 'No Message' };
-    }
+			cfg = { msg: cfg || 'No Message' };
+		}
 
 		Ext.applyIf(cfg, {
-			icon: Ext.Msg.WARNING,
-			buttons: Ext.Msg.OK,
 			fn: Ext.isFunction(fn) ? fn : undefined
 		});
 		Ext.MessageBox.alert(cfg);

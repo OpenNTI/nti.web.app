@@ -126,8 +126,12 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 				icon: 'warning-red',
 				buttonText: true,
 				buttons: {
-					cancel: 'Cancel',
-					yes: 'caution:Yes'
+					primary: {
+						name: 'yes',
+						text: 'Yes',
+						cls: 'caution'
+					},
+					secondary: 'Cancel'
 				},
 				fn: function(button) {
 					if (button === 'yes') {
@@ -178,8 +182,12 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 			icon: 'warning-red',
 			buttonText: true,
 			buttons: {
-				cancel: 'Cancel',
-				yes: 'caution:Yes'
+				primary: {
+					name: 'yes',
+					text: 'Yes',
+					cls: 'caution'
+				},
+				secondary: 'Cancel'
 			},
 			fn: function(button) {
 				if (button === 'yes') {

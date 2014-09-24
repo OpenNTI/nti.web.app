@@ -124,93 +124,156 @@
 	}
 }
 
-
 .nti-alert {
-	@include reset-window-border-radius(3px);
+	overflow: visible;
 
-	$experimental-support-for-svg: true;
-	background-color: rgb(248,248,248);
-	@include filter-gradient(#f8f8f8, #f3f3f3, vertical);
-	@include background-image(linear-gradient(top,  rgba(248,248,248,1) 26%,rgba(243,243,243,1) 100%));
-
-	box-shadow: 0 10px 40px 10px rgba(0, 0, 0, 0.2);
-
-
-	.x-window-header-icon {display: none !important;}
-
-	.x-tool{
-		margin: 10px;
-
-		img.x-tool-close {
-			margin: 2px;
-			background: transparent $icons no-repeat;
-			@include sprite($icons,'message_box_close',$dimensions: true);
+	&:not(.showing) {
+		.alert-container {
+			@include animate(fadeOutDown, $duration: 0.35s, $delay: 0);
 		}
 	}
 
-	.x-window-body {
-		.x-form-field, .x-form-display-field, & {
-			font: normal 300 1.1em/1.7 $font !important;
-			white-space: pre;
+	&.showing {
+		.alert-container {
+			@include animate(fadeInUp, $duration: 0.35s);
+		}
 
-			a, a:link, a:visited, a:active {
-				color: $primary-blue;
-				text-decoration: none;
+		&::after {
+			background-color: rgba(0, 0, 0, 0.5);
+		}
+	}
+
+	.alert-container {
+		background-color: white;
+		position: relative;
+		padding-top: 30px;
+	}
+
+	&.closable .close{
+		display: block;
+	}
+
+	.close {
+		display: none;
+		width: 10px;
+		height: 10px;
+		right: 10px;
+		top: 10px;
+		cursor: pointer;
+		opacity: 0.6;
+
+		&:hover {
+			opacity: 1;
+		}
+
+		@include icon('message_box_close', $position: absolute);
+	}
+
+	.message-container {
+		color: $primary-grey;
+		padding-left: 80px;
+		font: normal 300 1em/1.3 $font;
+		min-height: 47px;
+		margin: 0 10px 30px 10px;
+
+		.title {
+			font-size: 1.5em;
+			margin-bottom: 5px;
+		}
+
+		.message {
+			font-size: 0.9em;
+		}
+
+		@include icon('modal-yellow-sign', $left: 10px, $top: -5px);
+
+		&.error, &.warning-red {
+			@include icon('modal-red-sign', $left: 10px, $top: -5px);
+		}
+	}
+
+	.button-body {
+		background-color: #f8f8f8;
+		overflow: hidden;
+		position: relative;
+
+		&::before {
+			content: '';
+			position: absolute;
+			bottom: 40px;
+			height: 300px;
+			left: 0;
+			right: 0;
+			background-color: #f0f0f0;
+			box-shadow: 0 0 5px 0 rgba(0,0,0,0.35);
+			clip: rect(300px, auto, 310px, auto);
+			border-radius: 350em / 4em;
+		}
+	
+		.button {
+			float: right;
+			padding: 0 20px;
+			cursor: pointer;
+			font: normal 400 0.9em/40px $font;
+			text-align: center;
+			min-width: 90px;
+
+			&:hover {
+				opacity: 1;
+			}
+
+			&.primary {
+				background-color: $primary-blue;
+				color: white;
+				box-shadow: inset 1px 0 0 0 $border-blue;
+
 				&:hover {
-					text-decoration: underline;
+					opacity: 0.9;
+				}
+
+				&.decline, &.caution {
+					box-shadow: inset 1px 0 0 0 #dd4845; 
 				}
 			}
 
-			.displayname {
-				max-width: 326px;
-				overflow: hidden;
-				@include ellipse;
-				display: inline-block;
-				vertical-align: text-bottom;
-			}
-
-			.course-title {
-				font-weight: 500;
-			}
-		}
-
-		.x-window-title.x-form-item {
-			.x-form-field, .x-form-display-field, & {
+			&.secondary {
+				font-weight: 300;
 				color: $primary-grey;
-				font: italic 400 1.25em/1.5 $font !important;
-			}
-		}
 
-		.x-container.x-window-item {
-			padding-right: 30px !important;
-			min-height: 130px;
-		}
+				&:hover {
+					background-color: white;
+					box-shadow: inset 0 0 1px 0 rgba(0,0,0,0.5);
+				}
 
-		.x-dlg-icon,
-		.x-message-box-icon {
-			background: none;
-			position: relative;
-			width: 80px; height: 75px;
-			margin-right: 10px;
+				&.declinde, &.caution {
+					color: $primary-red;
+				}
 
-			&.x-message-box-warning {
-				@include icon('modal-yellow-sign',$top: 9px,$left: 14px);
 			}
 
-			&.x-message-box-error,
-			&.warning-red {
-				@include icon('modal-red-sign',$top: 9px,$left: 14px);
+			&.accept {
+				background-color: $secondary-green;
 			}
+
+			&.decline, &.caution {
+				background-color: $primary-red;
+			}
+			
 		}
 	}
 
-	.x-toolbar-footer.x-docked-bottom {
-		border-radius: 0 0 3px 3px;
-		margin: 10px;
+	&.error .message-container {
+	 	@include icon('modal-red-sign', $left: 10px);
+	}
 
-		.x-btn {
-			min-width: 105px;
-		}
+	&::after {
+		content: '';
+		position: fixed;
+		top: 0; bottom: 0;
+		left: 0; right: 0;
+		background-color: rgba(0, 0, 0, 0);
+		z-index: -1;
+		@include experimental(transition, all 0.35s 0 ease-out);
 	}
 }
 

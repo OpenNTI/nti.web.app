@@ -405,21 +405,17 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 
 		return new Promise(function(fulfill, reject) {
 			Ext.Msg.show({
-				msg: 'Navigating away from this page will clear all progress on your application.',
-				buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
-				scope: this,
+				title: 'Your application has not been submitted.',
+				msg: 'If you leave now all progress will be lost.',
 				icon: 'warning-red',
-				buttonText: {
-					'ok': 'caution:Discard Application',
-					'cancel': 'Stay and Complete Application'
-				},
-				title: 'Are you sure?',
-				fn: function(str) {
-					if (str === 'ok') {
-						me.clearStorage();
-						fulfill();
-					} else {
-						reject();
+				buttons: {
+					primary: {
+						text: 'Stay and Finish',
+						handler: reject
+					},
+					secondary: {
+						text: 'Leave this Page',
+						handler: fulfill
 					}
 				}
 			});

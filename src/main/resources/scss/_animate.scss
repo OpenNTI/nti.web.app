@@ -45,6 +45,11 @@
 	}
 }
 
+@include keyframes(fadeInMask) {
+	0% { opacity: 0; }
+	100% { opacity: 0.5; }
+}
+
 @include keyframes(loadingellipse) {
 	25% {width: 0; }
 	50% { width: 0.466667em; }

@@ -65,11 +65,10 @@ Ext.define('NextThought.controller.Session', {
 			Socket.tearDownSocket();
 
 			alert({
-				icon: Ext.Msg.WARNING,
 				title: 'Alert',
 				msg: 'You\'re using the application in another tab. This session has been invalidated.',
 				closable: false,
-				buttons: null
+				buttons: {}
 			});
 		}
 	},
@@ -323,20 +322,22 @@ Ext.define('NextThought.controller.Session', {
 					if (!setFromCookie) { return; }
 					Ext.Msg.show({
 						title: 'High Contrast Mode',
-						msg: 'You are using the site in high contrast mode. Do you want to continue and make this your preferred version of the app?',
-						buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
-						buttonText: {
-							ok: 'Yes',
-							cancel: 'caution:No'
-						},
-						fn: function(str) {
-							if (str === 'ok') {
-								if (preference) {
-									preference.set(field, true);
-									preference.save();
+						msg: 'You are using the site in high contrast mode. Do you want to make this your preferred version of the app?',
+						buttons: {
+							primary: {
+								text: 'Yes',
+								handler: function() {
+									if (preference) {
+										preference.set(field, true);
+										preference.save();
+									}
 								}
-							} else {
-								Ext.util.Cookies.set(cookieName, 'false');
+							},
+							secondary: {
+								text: 'No',
+								handler: function() {
+									Ext.util.Cookies.set(cookieName, 'false');
+								}
 							}
 						}
 					});
@@ -359,11 +360,11 @@ Ext.define('NextThought.controller.Session', {
 
 			if (reason === 'timedout') {
 				alert({
-					icon: Ext.Msg.ERROR,
+					icon: 'error',
 					title: 'Request Timeout',
 					msg: 'There was some issue preventing us from starting. Please try again in a few minutes.',
 					closable: false,
-					buttons: null
+					buttons: {}
 				});
 				return;
 			}

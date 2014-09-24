@@ -351,8 +351,15 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 			icon: 'warning-red',
 			buttonText: true,
 			buttons: {
-				cancel: getString('NextThought.view.assessment.QuizSubmission.cancel'),
-				yes: 'caution:' + getString('NextThought.view.assessment.QuizSubmission.yes')
+				primary: {
+					name: 'yes',
+					cls: 'caution',
+					text: getString('NextThought.view.assessment.QuizSubmission.yes')
+				},
+				secondary: {
+					name: 'cancel',
+					text: getString('NextThought.view.assessment.QuizSubmission.cancel')
+				}
 			},
 			fn: function(button) {
 				if (button === 'yes') {
