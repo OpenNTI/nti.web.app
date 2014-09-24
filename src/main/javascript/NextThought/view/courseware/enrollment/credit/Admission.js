@@ -861,7 +861,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 
 		me.shouldAllowSubmission(value)
 			.then(function() {
-				isVaild = true;
+				isValid = true;
 				me.fireEvent('enable-submission', false);
 				maskCmp.el.mask('Your application is being processed. This may take a few moments.');
 
