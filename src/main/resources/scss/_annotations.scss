@@ -868,8 +868,7 @@
 	[itemprop~="nti-data-markupenabled"],
 	[itemprop~="nti-slide-video"]{
 		&[itemprop~="nti-data-resizeable"]{
-			.bar .image-title,
-			.bar .image-caption {
+			.bar .image-title {
 				overflow: hidden;
 				@include ellipse;
 			}
