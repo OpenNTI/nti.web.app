@@ -256,7 +256,10 @@ Ext.define('NextThought.view.assessment.Question', {
 
 		function santatize() {
 			me.el.select('a[href]').set({target: '_blank'});
-			me.el.select('a:empty').remove();
+			me.el.select('a:empty').set({
+				id: null,
+				name: null
+			});
 			me.updateLayout();
 		}
 
