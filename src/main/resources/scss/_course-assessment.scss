@@ -509,20 +509,20 @@ canvas.x-component-course-assessment {
 			background: #fbfbfb;
 
 			&.x-menu-item-checked{
-				color: $primary-grey;
-				background: #f0f0f0;
-				@include icon('arrow-course-dropdown', $top:1.5em, $left:auto, $right:1em);
+				color: white !important;
+				background: $primary-blue !important;
+				box-shadow: inset 0px 0 1px 1px $border-blue,
+					inset 3px 0 0 0 $border-blue;
+				@include icon('arrow-course-dropdown-light', $top:1.5em, $left:auto, $right:1em);
 
-				&:hover {
-					&::after {
-						@include sprite($icons, 'arrow-course-dropdown-light');
-					}
+				&.x-menu-item-active {
+					background: $primary-blue !important;
 				}
 			}
 
 			&.x-menu-item-active{
-				color: #fff !important;
-				background: $primary-blue;
+				color: $primary-grey;
+				background: #f0f0f0 !important;
 			}
 		}
 	}
