@@ -72,8 +72,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 				if (link && store) {
 					Service.request(link)
 						.then(function(item) {
-							historyItem = ParseUtils.parseItems(item)[0];
-							store.syncBackingStore(historyItem);
+							var newHistoryItem = ParseUtils.parseItems(item)[0];
+							//the item field is set with the assignment and does not come back from the server
+							//so fill it in with the previous history item's item
+							newHistoryItem.set('item', historyItem.get('item'));
+							store.syncBackingStore(newHistoryItem);
 						})
 						.fail(function(reason) {
 							console.error('Failed to update assignmenthistoryitem from new grade:', reason);
