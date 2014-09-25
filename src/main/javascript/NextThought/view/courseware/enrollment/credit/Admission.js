@@ -676,7 +676,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 
 		this.add({
 			name: 'rejected',
-			label: 'Your Application to Earn College Credit is Pending.',
+			label: 'We are unable to confirm your eligibility to enroll through this process.',
 			labelCls: 'error',
 			items: [
 				{
