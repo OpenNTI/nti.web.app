@@ -63,7 +63,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					label: 'What is your full name?',
 					inputs: [
 						{type: 'text', name: 'first_name', placeholder: 'First Name', required: true, size: 'third left'},
-						{type: 'text', name: 'middle_name', placeholder: 'Middle Name', size: 'third left'},
+						{type: 'text', name: 'middle_name', placeholder: 'Middle Name (optional)', size: 'third left'},
 						{type: 'text', name: 'last_name', placeholder: 'Last Name', required: true, size: 'third left last'}
 					]
 				},
@@ -98,14 +98,14 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					name: 'permanent-address',
 					inputs: [
 						{type: 'text', name: 'street_line1', placeholder: 'Address', required: true, size: 'full'},
-						{type: 'text', name: 'street_line2', placeholder: 'Address', size: 'full'},
-						{type: 'text', name: 'street_line3', hidden: true, placeholder: 'Address', size: 'full'},
-						{type: 'text', name: 'street_line4', hidden: true, placeholder: 'Address', size: 'full'},
-						{type: 'text', name: 'street_line5', hidden: true, placeholder: 'Address', size: 'full'},
+						{type: 'text', name: 'street_line2', placeholder: 'Address (optional)', size: 'full'},
+						{type: 'text', name: 'street_line3', hidden: true, placeholder: 'Address (optional)', size: 'full'},
+						{type: 'text', name: 'street_line4', hidden: true, placeholder: 'Address (optional)', size: 'full'},
+						{type: 'text', name: 'street_line5', hidden: true, placeholder: 'Address (optional)', size: 'full'},
 						{type: 'text', name: 'city', placeholder: 'City / Town', size: 'large', required: true},
 						{type: 'dropdown', name: 'state', placeholder: 'State / Province / Territory / Region', size: 'full', options: [], editable: false},
 						{type: 'dropdown', name: 'nation_code', placeholder: 'Country', required: true, size: 'large left', options: []},
-						{type: 'text', name: 'postal_code', placeholder: 'ZIP / Postal Code', size: 'small left', required: false}
+						{type: 'text', name: 'postal_code', placeholder: 'ZIP / Postal Codet', size: 'small left', required: false}
 					],
 					help: [
 						{text: 'Add Address Line', type: 'event', event: 'add-address-line'}
