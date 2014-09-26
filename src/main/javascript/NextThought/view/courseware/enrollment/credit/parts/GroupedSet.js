@@ -50,6 +50,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.GroupedSet', {
 		} else {
 			body.removeCls('error');
 		}
+
+		return isAnswered;
 	},
 
 
