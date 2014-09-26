@@ -820,7 +820,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 			this.fireEvent('enable-submission', true);
 		} else if (json.Status === 202) {
 			this.showError({
-				Message: 'Your application is pending.'
+				Message: 'We are unable to confirm your eligibility to enroll through this process.'
 			});
 			this.showPending(json);
 			this.clearStorage();
