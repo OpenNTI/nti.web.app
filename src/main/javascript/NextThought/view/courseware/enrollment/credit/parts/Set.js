@@ -16,7 +16,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Set', {
 		'NextThought.view.courseware.enrollment.credit.parts.TextInput',
 		'NextThought.view.courseware.enrollment.credit.parts.CheckboxGroup',
 		'NextThought.view.courseware.enrollment.credit.parts.DropDown',
-		'NextThought.view.courseware.enrollment.credit.parts.SubmitButton'
+		'NextThought.view.courseware.enrollment.credit.parts.SubmitButton',
+		'NextThought.view.courseware.enrollment.credit.parts.SplitRadio'
 	],
 
 	typesMap: {
@@ -27,7 +28,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Set', {
 		'checkbox-group': 'credit-checkbox-group',
 		'dropdown': 'credit-dropdown',
 		'date': 'credit-dateinput',
-		'submit-button': 'credit-submit-button'
+		'submit-button': 'credit-submit-button',
+		'split-radio': 'credit-split-radio'
 	},
 
 	//name of the group so it can be idenitified

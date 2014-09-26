@@ -83,6 +83,10 @@
 
 	.body-container {
 		background-color: white;
+
+		&.error {
+			box-shadow: 0 0 0 1px $primary-red;
+		}
 	}
 
 	.admission-group {
@@ -109,6 +113,7 @@
 		margin-bottom: 40px;
 		margin-left: -5px;
 		padding-left: 5px;
+		padding-bottom: 2px;
 
 		.label {
 			color: $primary-grey;
@@ -184,6 +189,29 @@
 
 		.credit-input-container {
 			position: relative;
+
+			&.nested {
+				margin: 0;
+				display: inline-block;
+			
+				.credit-input {
+					padding-left: 50px;
+					margin: 0;
+				}
+
+				.label {
+					background-color: #f9f9f9;
+					margin: 0;
+					line-height: 40px;
+					padding-left: 40px;
+				}
+
+				.credit-input.radio label {
+					width: 615px;
+					background-color: #f2f2f2;
+					margin-bottom: 4px;
+				}
+			}
 
 			.help {
 				float: left;
@@ -299,7 +327,12 @@
 			float: left;
 			min-height: 40px;
 
-			&.full {
+			&.nested {
+				margin: 0;
+				padding-left: 20px;
+			}
+
+			&.full{
 				width: 675px;
 			}
 

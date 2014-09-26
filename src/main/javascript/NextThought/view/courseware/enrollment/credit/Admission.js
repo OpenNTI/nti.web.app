@@ -213,14 +213,20 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					]
 				},
 				{
-					xtype: 'enrollment-credit-set',
+					xtype: 'enrollment-credit-grouped-set',
 					label: 'Have you ever attended another college or university?',
-					inputs: [
-						{type: 'checkbox-group', name: 'attended_other_institution', required: true, options: [
-							{type: 'checkbox', text: 'I am still attending.', name: 'still_attending'},
-							{type: 'checkbox', text: 'I am in good academic standing.', name: 'good_academic_standing'},
-							{type: 'checkbox', text: 'I have obtained a Bachelor\'s degree or higher.', name: 'bachelors_or_higher'}
-						]}
+					name: 'attended_other_institution',
+					required: true,
+					options: [
+						{text: 'Yes.', value: 'Y', inputs: [
+							{type: 'checkbox', text: 'I am still attending.', name: 'still_attending', useChar: true, defaultAnswer: 'N'},
+							{type: 'checkbox', text: 'I have obtained a Bachelor\'s degree or higher.', name: 'bachelors_or_higher', useChar: true, defaultAnswer: 'N'},
+							{type: 'radio-group', label: 'I am in good academic standing.', name: 'good_academic_standing', defaultAnswer: 'N', required: true, options: [
+								{text: 'Yes.', value: 'Y'},
+								{text: 'No.', value: 'N'}
+							]}
+						]},
+						{text: 'No.', value: 'N'}
 					]
 				}
 			]
@@ -415,7 +421,10 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					},
 					secondary: {
 						text: 'Leave this Page',
-						handler: fulfill
+						handler: function() {
+							me.clearStorage();
+							fulfill();
+						}
 					}
 				}
 			});

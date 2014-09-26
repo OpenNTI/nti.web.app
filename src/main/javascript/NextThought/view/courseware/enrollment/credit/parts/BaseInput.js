@@ -24,6 +24,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.BaseInput', {
 		if (this.startingvalue) {
 			this.setValue(this.startingvalue, this.startingvaluename);
 		}
+
+		this.addCls(this.otherCls);
 	},
 
 

@@ -15,7 +15,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Checkbox', {
 		this.renderData = Ext.apply(this.renderData || {}, {
 			name: this.name || 'credit-checkbox',
 			text: this.text,
-			cls: (this.text || '').length > 40 ? 'long' : ''
+			cls: (this.text || '').length > 60 ? 'long' : ''
 		});
 	},
 
@@ -43,11 +43,16 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Checkbox', {
 		if (!this.el || (!force && this.doNotSend)) { return; }
 
 		var check = this.el.down('input[type=checkbox]'),
+			isChecked = check.is(':checked'),
 			value = {};
 
 		if (!this.name) { return; }
 
-		value[this.name] = check.is(':checked');
+		if (isChecked) {
+			value[this.name] = this.useChar ? 'Y' : true;
+		} else {
+			value[this.name] = this.useChar ? 'N' : false;
+		}
 
 		return value;
 	},

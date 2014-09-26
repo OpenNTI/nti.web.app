@@ -4,22 +4,25 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 
 	cls: 'credit-input-container',
 
-	renderTpl: Ext.DomHelper.markup({tag: 'tpl', 'for': 'options', cn: {
-		cls: 'credit-input dark full radio', cn: [
-			{tag: 'input', id: '{parent.id}-{value}', type: 'radio', name: '{name}', value: '{value}'},
-			{tag: 'label', cls: '{cls}', 'for': '{parent.id}-{value}', cn: [
-				{html: '{text}'},
-				{tag: 'tpl', 'if': 'content', cn: [
-					{cls: 'content hidden', html: '{content}'}
-				]},
-				{tag: 'tpl', 'if': 'help', cn: [
-					{cls: 'help', cn: [
-						{cls: 'information', html: '{help}'}
+	renderTpl: Ext.DomHelper.markup({cn: [
+		{cls: 'label', html: '{label}'},
+		{tag: 'tpl', 'for': 'options', cn: {
+			cls: 'credit-input dark full radio', cn: [
+				{tag: 'input', id: '{parent.id}-{value}', type: 'radio', name: '{name}', value: '{value}'},
+				{tag: 'label', cls: '{cls}', 'for': '{parent.id}-{value}', cn: [
+					{html: '{text}'},
+					{tag: 'tpl', 'if': 'content', cn: [
+						{cls: 'content hidden', html: '{content}'}
+					]},
+					{tag: 'tpl', 'if': 'help', cn: [
+						{cls: 'help', cn: [
+							{cls: 'information', html: '{help}'}
+						]}
 					]}
 				]}
 			]}
-		]
-	}}),
+		}
+	]}),
 
 
 	beforeRender: function() {
@@ -50,7 +53,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 		});
 
 		me.renderData = Ext.apply(me.renderData || {}, {
-			options: me.options
+			options: me.options,
+			label: me.label
 		});
 	},
 
