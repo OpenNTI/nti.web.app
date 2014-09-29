@@ -51,7 +51,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.GroupedSet', {
 			body.removeCls('error');
 		}
 
-		return isAnswered;
+		return isAnswered && r;
 	},
 
 
