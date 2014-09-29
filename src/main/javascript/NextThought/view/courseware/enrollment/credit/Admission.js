@@ -105,7 +105,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 						{type: 'text', name: 'city', placeholder: 'City / Town', size: 'large', required: true},
 						{type: 'dropdown', name: 'state', placeholder: 'State / Province / Territory / Region', size: 'full', options: [], editable: false},
 						{type: 'dropdown', name: 'nation_code', placeholder: 'Country', required: true, size: 'large left', options: []},
-						{type: 'text', name: 'postal_code', placeholder: 'ZIP / Postal Codet', size: 'small left', required: false}
+						{type: 'text', name: 'postal_code', placeholder: 'ZIP / Postal Code', size: 'small left', required: false}
 					],
 					help: [
 						{text: 'Add Address Line', type: 'event', event: 'add-address-line'}
