@@ -74,7 +74,7 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 		}
 
 		this.renderData = Ext.apply(this.renderData || {}, {
-			label: this.part.get('content'),
+			label: this.part.get('content') || assignment.get('title'),
 			enable: !!this.filereader,
 			due: assignment.getDueDate()
 		});
