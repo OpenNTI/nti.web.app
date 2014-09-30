@@ -206,7 +206,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 	},
 
 
-	hasProgressedSaved: function() {
+	hasProgressSaved: function() {
 		return this.progressSaved;
 	},
 

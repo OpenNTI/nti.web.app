@@ -113,31 +113,34 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 		}
 	},
 
-	//do not allow close if we have a submission and it has answers
+	//do not allow close if we don't have a submission and it has answers
 	stopClose: function() {
 		var shouldPrompt = this.submission && this.submission.hasAnyAnswers(),
-			savedProgress = this.submission && this.submission.hasProgressedSaved();
+			progressSaved = this.submission && this.submission.hasProgressSaved(),
+			assignment = this.injectedAssignment,
+			title = (assignment && assignment.get('title')) || 'This assignment',
+			progress = progressSaved ?
+				' Your progress has been saved and can be resumed at a later date.' :
+				' Your progress will be lost.',
+			due = assignment ? ' It is due on ' + Ext.Date.format(assignment.getDueDate(), 'l, F j') + '.' : '';
 
-		if (!shouldPrompt || savedProgress) {
+		if (!shouldPrompt) {
 			return Promise.resolve();
 		}
 
 		return new Promise(function(fulfill, reject) {
 			Ext.Msg.show({
-				msg: 'Navigating away from this page will clear all progress on this assignment.',
-				buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
-				scope: this,
-				icon: 'warning-red',
-				buttonText: {
-					'ok': 'caution:Discard Progress',
-					'cancel': 'Stay and Complete Assignment'
-				},
 				title: 'Are you sure?',
-				fn: function(str) {
-					if (str === 'ok') {
-						fulfill();
-					} else {
-						reject();
+				msg: title + ' has not been submitted for grading. ' + due + progress,
+				buttons: {
+					primary: {
+						cls: 'caution',
+						text: 'Leave',
+						handler: fulfill
+					},
+					secondary: {
+						text: 'Stay',
+						handler: reject
 					}
 				}
 			});
