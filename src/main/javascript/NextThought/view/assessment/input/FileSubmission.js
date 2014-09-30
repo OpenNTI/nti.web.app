@@ -11,9 +11,7 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 			{cls: 'label-container', cn: [
 				{cls: 'label', html: '{label}'},
 				{cls: 'meta', cn: [
-					{tag: 'time', cls: 'due', datatime: '{due:date("c")}', cn: {
-						tag: 'tpl', 'if': 'due', html: 'Due {due:date("l, F j")}'
-					}},
+					{tag: 'time', cls: 'due', datetime: '{due:date("c")}', html: 'Due {due:date("l, F j")}'},
 					{tag: 'span', cls: 'has-file not-submitted delete', html: 'Delete'}
 				]}
 			]},
@@ -84,9 +82,9 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 
 
 	afterRender: function() {
-		this.callParent(arguments);
-
 		this.dueString = this.dueEl.getHTML();
+
+		this.callParent(arguments);
 
 		if (this.inputField) {
 			this.monitor();
@@ -236,11 +234,13 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 
 		if (v.filename) {
 			this.setLabel(v.filename);
+			this.setDue(!assignment || assignment.getDueDate() > date);
+		} else if (assignment && assignment.getDueDate() < date) {
+			this.addCls('late');
 		}
 
 		this.removeCls('not-submitted');
 
-		this.setDue(!assignment || assignment.getDueDate() > date);
 
 		this.setDownloadButton(v.download_url || v.url);
 	},
