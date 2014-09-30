@@ -190,7 +190,9 @@ Ext.define('NextThought.view.assessment.input.Base', {
 			this.historyMenuEl.remove();
 		}
 
-		this.questionSet.setProgress(this.question, this);
+		if (this.questionSet) {
+			this.questionSet.setProgress(this.question, this);
+		}
 
 	},
 
