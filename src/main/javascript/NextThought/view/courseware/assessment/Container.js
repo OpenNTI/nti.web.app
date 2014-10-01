@@ -52,7 +52,7 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 
 	//if we have a reader with an assessment
 	//and it is allowing close don't allow navigation
-	maybePreventNavigation: function() {
+	maybePreventNavigation: function(assignment) {
 		var reader = this.down('reader-content'),
 			assessment = reader && reader.getAssessment();
 
@@ -60,14 +60,14 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 			return Promise.resolve();
 		}
 
-		return assessment.stopClose();
+		return assessment.stopClose(assignment);
 	},
 
 
-	showRoot: function() {
+	showRoot: function(assignment) {
 		var me = this;
 
-		return me.maybePreventNavigation()
+		return me.maybePreventNavigation(assignment)
 			.then(function() {
 				me.getLayout().setActiveItem(0);
 				Ext.destroy(me.items.getRange().slice(1));
@@ -98,7 +98,7 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 			return;
 		}
 
-		me.showRoot()
+		me.showRoot(assignment)
 			.then(function() {
 				v = r.activateView(v);
 

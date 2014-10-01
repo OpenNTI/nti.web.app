@@ -114,7 +114,14 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 	},
 
 	//do not allow close if we don't have a submission and it has answers
-	stopClose: function() {
+	stopClose: function(id) {
+		//if the reader isn't visible or we are passed an id and it is not the assignment we are currently looking at
+		//don't alert
+		//TODO: figure out a better way to do this
+		if (!this.reader.isVisible(true) || (Ext.isString(id) && id !== this.injectedAssignment.getId())) {
+			return Promise.resolve();
+		}
+
 		var shouldPrompt = this.submission && this.submission.hasAnyAnswers(),
 			progressSaved = this.submission && this.submission.hasProgressSaved(),
 			assignment = this.injectedAssignment,
