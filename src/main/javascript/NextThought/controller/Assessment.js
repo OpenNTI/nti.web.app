@@ -303,7 +303,7 @@ Ext.define('NextThought.controller.Assessment', {
 			duration = (endTimestamp - questionSet.getStartTime()) / 1000,
 			progress = this.getAssignmentView(),
 			assignment = questionSet.associatedAssignment,
-			url = assignment.getLink('Savepoint'),
+			url = assignment && assignment.getLink('Savepoint'),
 			qset = {
 				questionSetId: questionSet.getId(),
 				questions: []
