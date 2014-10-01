@@ -11,7 +11,7 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 			{cls: 'label-container', cn: [
 				{cls: 'label', html: '{label}'},
 				{cls: 'meta', cn: [
-					{tag: 'time', cls: 'due', datetime: '{due:date("c")}', html: 'Due {due:date("l, F j")}'},
+					{tag: 'span', cls: 'due', html: ''},
 					{tag: 'span', cls: 'has-file not-submitted delete', html: 'Delete'}
 				]}
 			]},
@@ -29,7 +29,7 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 		downloadBtn: 'a.button',
 		submitBtn: '.submit.button',
 		inputField: 'input[type=file]',
-		dueEl: 'time.due',
+		dueEl: '.due',
 		labelBoxEl: '.label',
 		deleteEl: '.delete'
 	},
@@ -73,8 +73,7 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			label: this.part.get('content') || assignment.get('title'),
-			enable: !!this.filereader,
-			due: assignment.getDueDate()
+			enable: !!this.filereader
 		});
 
 		this.callParent(arguments);
@@ -206,18 +205,17 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 		v = v || {};
 
 		var q = this.questionSet,
-			date = Ext.Date.parse(v.CreatedTime, 'timestamp') || new Date(),
 			assignment = q && q.associatedAssignment;
 
 		this.value = v;
 
 		if (v.filename) {
 			this.setLabel(v.filename);
+			this.setSubText(true);
 		}
 
 		this.addCls('not-submitted');
 
-		this.setDue(!assignment || assignment.getDueDate() > date);
 
 		this.setDownloadButton(v.download_url || v.url);
 	},
@@ -227,16 +225,13 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 		v = v || {};
 
 		var q = this.questionSet,
-			date = Ext.Date.parse(v.CreatedTime, 'timestamp') || new Date(),
 			assignment = q && q.associatedAssignment;
 
 		this.value = v;
 
 		if (v.filename) {
 			this.setLabel(v.filename);
-			this.setDue(!assignment || assignment.getDueDate() > date);
-		} else if (assignment && assignment.getDueDate() < date) {
-			this.addCls('late');
+			this.setSubText();
 		}
 
 		this.removeCls('not-submitted');
@@ -257,13 +252,11 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 	},
 
 
-	setDue: function(onTime) {
-		if (onTime) {
-			this.addCls('good');
-			this.dueEl.update(getString('NextThought.view.assessment.input.FileSubmission.on-time'));
+	setSubText: function(uploadedNotSubmitted) {
+		if (uploadedNotSubmitted) {
+			this.dueEl.update('Ready for Submission');
 		} else {
-			this.addCls('late');
-			this.dueEl.update(getString('NextThought.view.assessment.input.FileSubmission.late'));
+			this.dueEl.update('');
 		}
 	},
 
