@@ -369,16 +369,15 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 				information: [
 					'We\'re processing your request to earn college credit.',
 					'This process should take no more than two business days.',
-					'If you believe there has been an error, please contact',
-					'<a class=\'link\' href=\'mailto:pending@ou.edu\'>pending@ou.edu</a>.'
+					'If you believe there has been an error, please contact the ',
+					'<a class=\'link\'href=\'mailto:support@nextthought.com\'>help desk.</a>'
 				].join(' '),
 				cls: 'pending'
 			},
 			admission_reject: {
 				title: 'We are unable to confirm your eligibility to enroll through this process.',
 				information: [
-					'Please contact',
-					'<a class=\'link\' href=\'http://www.ou.edu/admissions.html\' target=\'_blank\'>OU Admissions Office</a>',
+					'Please contact the <a class=\'link\'href=\'mailto:support@nextthought.com\'>help desk.</a>',
 					'or <a class=\'link\' href=\'resubmit\'>resubmit your application</a>.'
 				].join(' '),
 				cls: 'rejected'
