@@ -17,6 +17,13 @@
 	background: transparent;
 	color: $primary-grey;
 
+	&.enrollment-mask {
+		.x-mask-msg-text {
+			font-size: 16px;
+			line-height: 20px;
+		}
+	}
+
 	&.body-mask,
 	&.drag-mask {
 		div{
@@ -58,10 +65,13 @@
 			border: none;
 			padding: 1em 1em 1.5em 1em;
 			font-size: 18px;
+			max-width: 35rem;
+			text-align: center;
 			&::after {
 				top: auto;
 				bottom: 0;
-				left: 36%;
+				left: 50%;
+				margin-left: -12px;
 			}
 		}
 	}

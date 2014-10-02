@@ -177,7 +177,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 			request = Promise.reject('no link provided');
 		}
 
-		maskCmp.el.mask('Finalizing your enrollment. You will be redirected to a secure external payment site to complete this transaction.');
+		maskCmp.el.mask('Finalizing your enrollment. You will be redirected to a secure external payment site to complete this transaction.', 'navigation');
 
 		request.then(function(response) {
 			var json = Ext.JSON.decode(response, true);
