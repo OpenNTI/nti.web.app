@@ -164,6 +164,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 			term = me.course.get('NTI_Term'),
 			returnURL = me.course.buildPaymentReturnURL(),
 			maskCmp = me.up('enrollment-credit'),
+			minTime = wait(5000),
 			request;
 
 		if (link) {
@@ -176,16 +177,22 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 			request = Promise.reject('no link provided');
 		}
 
-		maskCmp.el.mask('Loading...');
+		maskCmp.el.mask('Finalizing your enrollment. You will be redirected to a secure external payment site to complete this transaction.');
 
 		request.then(function(response) {
 			var json = Ext.JSON.decode(response, true);
 
 			if (json.href) {
-				window.location.href = json.href;
+				minTime.then(function() {
+					window.location.href = json.href;
+				});
 			} else {
 				console.error('No href to redirect to... ', response);
 				me.showErrorMsg();
+
+				minTime.then(function() {
+					maskCmp.el.unmask();
+				});
 			}
 		}).fail(function(response) {
 			var json = Ext.JSON.decode(response, true);
@@ -196,7 +203,9 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Enroll', {
 
 			me.showError(json);
 
-			maskCmp.el.unmask();
+			minTime.then(function() {
+				maskCmp.el.unmask();
+			});
 		});
 	}
 });
