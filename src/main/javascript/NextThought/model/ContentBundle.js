@@ -64,7 +64,8 @@ Ext.define('NextThought.model.ContentBundle', {
 			id: this.getId(),
 			isBundle: true,
 			title: this.get('title'),
-			label: this.get('author'),
+			label: this.get('author'),//TODO: delete this line when we know uiData.label is not referenced. (I'm 90% sure its not already.)
+			author: this.get('author'),
 			icon: this.get('icon'),
 			thumb: this.get('thumb')
 		};
