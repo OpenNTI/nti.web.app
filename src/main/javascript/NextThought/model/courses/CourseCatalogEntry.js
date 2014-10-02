@@ -80,9 +80,10 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		}
 
 		var taRe = (/Teaching Assistant/i),
-			instructors = this.get('Instructors');
+			instructors = this.get('Instructors'),
+			creator = this.get('author');
 
-		return (instructors && instructors.filter(notTA).map(makeName).join(', ')) || '';
+		return creator || (instructors && instructors.filter(notTA).map(makeName).join(', ')) || '';
 	},
 
 
