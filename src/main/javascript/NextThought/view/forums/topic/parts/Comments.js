@@ -337,7 +337,6 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 		}
 
 		if (e.getTarget('.body') && record.get('threadShowing')) {
-			e.preventDefault();
 			return;
 		}
 
