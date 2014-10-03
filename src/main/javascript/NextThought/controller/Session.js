@@ -310,9 +310,12 @@ Ext.define('NextThought.controller.Session', {
 					}
 				})
 				.always(function() {
-					app.getController('Application').openViewport();
-
 					app.fireEvent('session-ready');
+
+					return wait();
+				})
+				.then(function() {
+					app.getController('Application').openViewport();
 
 					AnalyticsUtil.beginSession();
 
