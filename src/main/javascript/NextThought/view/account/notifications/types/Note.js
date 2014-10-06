@@ -60,7 +60,7 @@ Ext.define('NextThought.view.account.notifications.types.Note', {
 			.then(function(labels) {
 				var location = '';
 
-				if (!Ext.isEmtpy(labels)) {
+				if (!Ext.isEmpty(labels)) {
 					location = labels.shift();
 					lineage.reverse();
 				}
