@@ -31,16 +31,29 @@ Ext.define('NextThought.view.courseware.coursecatalog.TabPanel', {
 	initComponent: function() {
 		this.callParent(arguments);
 
+		var upcoming, current, archived;
+
 		if (this.upcoming) {
-			this.setActiveTab(this.updateUpcoming(this.upcoming));
+			upcoming = this.updateUpcoming(this.upcoming);
 		}
 
 		if (this.current) {
-			this.updateCurrent(this.current);
+			current = this.updateCurrent(this.current);
 		}
 
 		if (this.archived) {
-			this.updateArchived(this.archived);
+			archived = this.updateArchived(this.archived);
+		}
+
+		if (!Ext.isEmpty(this.upcoming) && upcoming) {
+			this.setActiveTab(upcoming);
+		} else if (!Ext.isEmpty(this.current) && current) {
+			this.setActiveTab(current);
+		} else if (!Ext.isEmpty(this.archived) && archived) {
+			this.setActiveTab(archived);
+		} else {
+			console.error('No Courses to set the active tab to');
+			this.setActiveTab(upcoming || current || archived);
 		}
 	},
 
