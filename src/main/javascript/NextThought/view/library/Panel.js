@@ -174,7 +174,7 @@ Ext.define('NextThought.view.library.Panel', {
 				id: 'current-courses-page',
 				groupLabel: 'current',
 				courses: this.currentCourses || [],
-				emptyText: 'You do not have any courses.<br> <a data-event = "show-available">Add Courses</a>'
+				emptyText: 'You don\'t have any courses yet...<br><a data-event = "show-available">+ Add Courses</a>'
 			},
 			{
 				xtype: 'library-view-course-page',
