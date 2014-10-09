@@ -333,11 +333,36 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 	},
 
 
+	fillInDefaults: function(values) {
+		var user = $AppConfig.userObject,
+			firstName = user.get('FirstName'),
+			lastName = user.get('LastName'),
+			email = user.get('email');
+
+		if (!values.first_name && firstName) {
+			values.first_name = firstName;
+		}
+
+		if (!values.last_name && lastName) {
+			values.last_name = lastName;
+		}
+
+		if (!values.email && email) {
+			values.email = email;
+		}
+
+		return values;
+	},
+
+
 	updateFromStorage: function() {
 		var me = this,
 			values = TemporaryStorage.get(me.STATE_NAME) || {},
-			keys = Object.keys(values),
+			keys,
 			waitOnRender = [];
+
+		values = this.fillInDefaults(values);
+		keys = Object.keys(values),
 
 		(keys || []).forEach(function(key) {
 			var input = me.down('[name="' + key + '"]'),
