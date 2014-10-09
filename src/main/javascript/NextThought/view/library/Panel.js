@@ -83,6 +83,8 @@ Ext.define('NextThought.view.library.Panel', {
 			'show-my-books': 'showMyBooks',
 			'show-available': 'showAvailable'
 		});
+
+		this.on('show-available', 'showAvailable');
 	},
 
 
@@ -172,7 +174,7 @@ Ext.define('NextThought.view.library.Panel', {
 				id: 'current-courses-page',
 				groupLabel: 'current',
 				courses: this.currentCourses || [],
-				emptyText: 'You are not currently enrolled in any courses.'
+				emptyText: 'You do not have any courses.<br> <a data-event = "show-available">Add Courses</a>'
 			},
 			{
 				xtype: 'library-view-course-page',

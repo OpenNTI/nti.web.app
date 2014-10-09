@@ -13,6 +13,8 @@ Ext.define('NextThought.view.library.CoursePage', {
 	initComponent: function() {
 		this.callParent(arguments);
 
+		this.enableBubble(['show-available']);
+
 		this.emptyCfg = {
 			xtype: 'box',
 			autoEl: {cls: 'empty-text', html: this.emptyText}
@@ -27,6 +29,25 @@ Ext.define('NextThought.view.library.CoursePage', {
 			this.emptyCmp = this.add(this.emptyCfg);
 		}
 	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		var me = this;
+
+		if (me.emptyCmp) {
+			me.mon(me.emptyCmp.el, 'click', function(e) {
+				var a = e.getTarget('a[data-event]'),
+					eventName = a && a.getAttribute('data-event');
+
+				if (eventName) {
+					me.fireEvent(eventName);
+				}
+			});
+		}
+	},
+
 
 	setItems: function(items) {
 		if (Ext.isEmpty(items)) {
