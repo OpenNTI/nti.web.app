@@ -36,7 +36,7 @@ Ext.define('NextThought.view.library.CoursePage', {
 
 		var me = this;
 
-		if (me.emptyCmp) {
+		if (me.emptyCmp && me.emptyCmp.el) {
 			me.mon(me.emptyCmp.el, 'click', function(e) {
 				var a = e.getTarget('a[data-event]'),
 					eventName = a && a.getAttribute('data-event');
