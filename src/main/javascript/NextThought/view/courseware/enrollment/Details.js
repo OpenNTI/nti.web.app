@@ -414,7 +414,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			}
 		}
 
-		return state;
+		return Ext.clone(state);
 	},
 
 
