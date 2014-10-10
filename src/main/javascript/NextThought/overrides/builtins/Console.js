@@ -103,7 +103,7 @@ Ext.define('NextThought.overrides.builtins.Console', function() {
 		var l = fns.length - 1;
 		for (l; l >= 0; l--) {
 			if (fns[l]) {
-				console[fns[l]] = getReporter(fns[l]);
+				console[fns[l]] = Ext.emptyFn;//getReporter(fns[l]);
 			}
 		}
 	}
