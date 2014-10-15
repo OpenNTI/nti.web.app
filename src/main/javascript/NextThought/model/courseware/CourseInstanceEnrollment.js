@@ -21,6 +21,6 @@ Ext.define('NextThought.model.courseware.CourseInstanceEnrollment', {
 	isOpen: function() {
 		var status = this.get('Status');
 
-		return status === 'Open' || status === 'ForCreditNonDegree';
+		return status === 'Open';
 	}
 });

@@ -59,7 +59,6 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		//ui data
 		{ name: 'isOpen', type: 'bool', persist: false},
 		{ name: 'isAdmin', type: 'bool', persist: false},
-		{ name: 'enrollmentType', type: 'string', persist: false},
 		{ name: 'isChanging', type: 'bool', convert: function(v, rec) { return rec.get('enrolled') && v; }},
 		{ name: 'icon', type: 'string', mapping: 'LegacyPurchasableThumbnail' },//These look backwards, they are not... and are ONLY for fallback
 		{ name: 'thumb', type: 'string', mapping: 'LegacyPurchasableIcon' },
@@ -99,6 +98,31 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 				.then(function(url) { me.set('icon', url); });
 		me.getImgAsset('thumb')
 				.then(function(url) { me.set('thumb', url); });
+	},
+
+
+	updateEnrollmentState: function(status, open, admin) {
+		var options = this.get('EnrollmentOptions'),
+			openOption = options && options.OpenEnrollment,
+			fmaepOption = options && options.FiveminuteEnrollment,
+			storeOption = options && options.StoreEnrollment,
+			isOpen = open;
+
+		if (status === 'Open' && open && openOption) {
+			openOption.IsEnrolled = true;
+		} else if (status === 'ForCreditNonDegree') {
+			if (storeOption && storeOption.IsEnrolled) {
+				isOpen = true;
+			} else if (fmaepOption && fmaep.IsEnrolled) {
+				isOpen = false;
+			}
+		}
+
+		this.set({
+			'isOpen': isOpen,
+			'isAdmin': admin,
+			'EnrollmentOptions': options
+		});
 	},
 
 

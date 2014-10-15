@@ -263,8 +263,9 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 					Price: Number, //how much this option costs, null if its free
 					AvailableSeats: Number, //how many seats are left,
 					API_DOWN: Boolean, //if there is an external API that we detect is down
-					DoEnrollment: Function, //a function to fire the navigation/enrollment events to get the process started
-					UndoEnrollment: Function, //drops the course, null if they cannot drop the course in the app
+					getWording: Function, //returns the wording for the state the option is in
+					doEnrollment: Function, //a function to fire the navigation/enrollment events to get the process started
+					undoEnrollment: Function, //drops the course, null if they cannot drop the course in the app
 				}
 			}
 		}
@@ -513,7 +514,7 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 				DropCutOff: null,
 				AvailableForCredit: false,
 				BaseOption: true, //TODO: this should come from the server
-				Enrolled: course.getEnrollmentType() === 'Open',
+				Enrolled: enrollmentOption.IsEnrolled,
 				RequiresAdmission: false,
 				AdmissionState: null,
 				Price: null,
@@ -603,8 +604,8 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 
 	__buildFmaepDetails: function(course) {
 		var name = this.FMAEP, p, details, catalogData,
-			isEnrolled = course.getEnrollmentType() === 'ForCredit',
-			enrollmentOption = course.getEnrollmentOption(name);
+			enrollmentOption = course.getEnrollmentOption(name),
+			isEnrolled = enrollmentOption && enrollmentOption.IsEnrolled;
 
 		if (!enrollmentOption || !enrollmentOption.NTI_FiveminuteEnrollmentCapable) {
 			return Promise.reject();
@@ -716,7 +717,7 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 					AvailableForCredit: false,
 					BaseOption: true,//TODO: this should come from the server
 					Giftable: true,//TODO: this should come from the server
-					Enrolled: course.getEnrollmentType() === 'Open', //Since this takes the place of the open course for now, might not be true in the future
+					Enrolled: enrollmentOption.IsEnrolled, //Since this takes the place of the open course for now, might not be true in the future
 					RequiresAdmission: false,
 					AdmissionState: null,
 					AvailableSeats: Infinity, //May not be true

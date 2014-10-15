@@ -42,7 +42,8 @@ Ext.define('NextThought.controller.Library', {
 			store.each(function(course) {
 				var catalog = course.getCourseCatalogEntry(),
 					instance = course.get('CourseInstance'),
-					isOpen = course.isOpen();
+					isOpen = course.isOpen(),
+					isAdmin = course instanceof NextThought.model.courses.CourseInstanceAdministrativeRole;
 
 				if (catalog.isExpired()) {
 					archived.push(course);
@@ -50,12 +51,7 @@ Ext.define('NextThought.controller.Library', {
 					current.push(course);
 				}
 
-				//set isOpen on the catalog entry so the available window can know if its open or enrolled
-				catalog.set({
-					'isOpen': isOpen,
-					'isAdmin': course instanceof NextThought.model.courses.CourseInstanceAdministrativeRole,
-					'enrollmentType': course.get('Status')
-				});
+				catalog.updateEnrollmentState(course.get('Status'), isOpen, isAdmin);
 			});
 
 			if (panel[fnName]) {
