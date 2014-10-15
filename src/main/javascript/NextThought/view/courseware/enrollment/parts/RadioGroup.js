@@ -1,13 +1,13 @@
-Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
-	extend: 'NextThought.view.courseware.enrollment.credit.parts.BaseInput',
-	alias: 'widget.credit-radiogroup',
+Ext.define('NextThought.view.courseware.enrollment.parts.RadioGroup', {
+	extend: 'NextThought.view.courseware.enrollment.parts.BaseInput',
+	alias: 'widget.enrollment-radiogroup',
 
-	cls: 'credit-input-container',
+	cls: 'enrollment-input-container',
 
 	renderTpl: Ext.DomHelper.markup({cn: [
 		{cls: 'label', html: '{label}'},
 		{tag: 'tpl', 'for': 'options', cn: {
-			cls: 'credit-input dark full radio', cn: [
+			cls: 'enrollment-input dark full radio', cn: [
 				{tag: 'input', id: '{parent.id}-{value}', type: 'radio', name: '{name}', value: '{value}'},
 				{tag: 'label', cls: '{cls}', 'for': '{parent.id}-{value}', cn: [
 					{html: '{text}'},
@@ -64,7 +64,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 
 		var me = this,
 			dropdownContainer,
-			scrollParent = this.el.parent('.credit-container'),
+			scrollParent = this.el.parent('.enrollment-container'),
 			option = me.dropdownOption;
 
 		function stop(e) {
@@ -129,7 +129,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 		this.callParent(arguments);
 
 		var me = this,
-			inputFields = this.el.dom.querySelectorAll('.credit-input .input-container'),
+			inputFields = this.el.dom.querySelectorAll('.enrollment-input .input-container'),
 			contents = this.el.select('.content');
 
 		if (!Ext.isEmpty(contents)) {
@@ -158,7 +158,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 				}
 
 				Ext.each(inputFields, function(input) {
-					var credit = Ext.fly(input).up('.credit-input'),
+					var credit = Ext.fly(input).up('.enrollment-input'),
 						checkedRadio = credit && credit.el.dom.querySelector('input[type=radio]:checked');
 
 					Ext.fly(input)[checkedRadio ? 'removeCls' : 'addCls']('disabled');
@@ -204,7 +204,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 					me.dropdown.setValue(value);
 
 					input = me.el.down('.input-container.dropdown');
-					parent = input && input.up('.credit-input').down('input[type=radio]');
+					parent = input && input.up('.enrollment-input').down('input[type=radio]');
 
 					//check the radio input associated with the drop down
 					if (parent) {
@@ -215,7 +215,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.RadioGroup', {
 				} else {
 					//check if we have an text input
 					input = me.el.down('input[type=text]');
-					parent = input && input.up('.credit-input').down('input[type=radio]');
+					parent = input && input.up('.enrollment-input').down('input[type=radio]');
 
 					//if we have an input and the value isn't falsy
 					if (input) {

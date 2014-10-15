@@ -1,11 +1,11 @@
-Ext.define('NextThought.view.courseware.enrollment.credit.parts.TextInput', {
-	extend: 'NextThought.view.courseware.enrollment.credit.parts.BaseInput',
-	alias: 'widget.credit-textinput',
+Ext.define('NextThought.view.courseware.enrollment.parts.TextInput', {
+	extend: 'NextThought.view.courseware.enrollment.parts.BaseInput',
+	alias: 'widget.enrollment-textinput',
 
 	requires: ['NextThought.view.form.fields.SimpleTextField'],
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'input-container credit-input text {required} {size}'},
+		{cls: 'input-container enrollment-input text {required} {size}'},
 		{tag: 'tpl', 'if': 'help', cn: [
 			{cls: 'help', cn: [
 				{cls: 'information', html: '{help}'}

@@ -1,8 +1,8 @@
-Ext.define('NextThought.view.courseware.enrollment.credit.parts.BaseInput', {
+Ext.define('NextThought.view.courseware.enrollment.parts.BaseInput', {
 	extend: 'Ext.Component',
-	alias: 'widget.credit-baseinput',
+	alias: 'widget.enrollment-baseinput',
 
-	cls: 'credit-input-container',
+	cls: 'enrollment-input-container',
 
 	initComponent: function() {
 		this.enableBubble(['changed', 'reveal-item', 'hide-item', 'maybe-hide-item']);

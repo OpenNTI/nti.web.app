@@ -1,9 +1,9 @@
-Ext.define('NextThought.view.courseware.enrollment.credit.parts.SubmitButton', {
-	extend: 'NextThought.view.courseware.enrollment.credit.parts.BaseInput',
-	alias: 'widget.credit-submit-button',
+Ext.define('NextThought.view.courseware.enrollment.parts.SubmitButton', {
+	extend: 'NextThought.view.courseware.enrollment.parts.BaseInput',
+	alias: 'widget.enrollment-submit-button',
 
 	renderTpl: Ext.DomHelper.markup({
-		cls: 'credit-input full button', cn: [
+		cls: 'enrollment-input full button', cn: [
 			{cls: 'button-text', html: 'Send Application'}
 		]
 	}),

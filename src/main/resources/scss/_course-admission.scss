@@ -73,7 +73,7 @@
 		}
 	}
 
-	.credit-container {
+	.enrollment-container {
 		padding: 70px 0px 30px 50px;
 		overflow: auto;
 		background-color: white;
@@ -187,14 +187,14 @@
 			}
 		}
 
-		.credit-input-container {
+		.enrollment-input-container {
 			position: relative;
 
 			&.nested {
 				margin: 0;
 				display: inline-block;
 			
-				.credit-input {
+				.enrollment-input {
 					padding-left: 50px;
 					margin: 0;
 				}
@@ -206,7 +206,7 @@
 					padding-left: 40px;
 				}
 
-				.credit-input.radio label {
+				.enrollment-input.radio label {
 					width: 615px;
 					background-color: #f2f2f2;
 					margin-bottom: 4px;
@@ -253,7 +253,7 @@
 			}
 		}
 
-		.credit-checkbox-group {
+		.enrollment-checkbox-group {
 
 			.yes {
 				position: relative;
@@ -268,11 +268,11 @@
 				position: absolute;
 				bottom: 1px;
 
-				.credit-input {
+				.enrollment-input {
 					margin: 0;
 				}
 
-				.credit-input.checkbox {
+				.enrollment-input.checkbox {
 					input[type=checkbox]:focus + label {
 						box-shadow: none;
 					}
@@ -284,7 +284,7 @@
 
 				&.disabled {
 					cursor: default;
-					.credit-input {
+					.enrollment-input {
 						cursor: default;
 						color: $tertiary-grey;
 
@@ -311,7 +311,7 @@
 			}
 		}
 
-		.credit-input-container.error {
+		.enrollment-input-container.error {
 			position: relative;
 			overflow: hidden;
 			height: auto;
@@ -319,7 +319,7 @@
 			box-shadow: 0 0 0px 1px $primary-red;
 		}
 
-		.credit-input {
+		.enrollment-input {
 			font: normal 600 0.9em/20px $font;
 			display: inline-block;
 			color: $primary-grey;
@@ -636,7 +636,7 @@
 		}
 	}
 
-	.credit-description {
+	.enrollment-description {
 		p {
 			margin: 10px 0 0 0;
 			font: normal 300 1em/1.5em $font;

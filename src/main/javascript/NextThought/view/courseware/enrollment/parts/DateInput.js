@@ -1,11 +1,11 @@
-Ext.define('NextThought.view.courseware.enrollment.credit.parts.DateInput', {
-	extend: 'NextThought.view.courseware.enrollment.credit.parts.BaseInput',
-	alias: 'widget.credit-dateinput',
+Ext.define('NextThought.view.courseware.enrollment.parts.DateInput', {
+	extend: 'NextThought.view.courseware.enrollment.parts.BaseInput',
+	alias: 'widget.enrollment-dateinput',
 
 	requires: ['NextThought.view.form.fields.DateField'],
 
 	renderTpl: Ext.DomHelper.markup({
-		cls: 'credit-input date-input full {required}'
+		cls: 'enrollment-input date-input full {required}'
 	}),
 
 	renderSelectors: {
@@ -25,7 +25,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.DateInput', {
 		this.callParent(arguments);
 
 		var me = this,
-			scrollParent = me.el.parent('.credit-container');
+			scrollParent = me.el.parent('.enrollment-container');
 
 		me.dateInput = Ext.widget('datefield', {
 			renderTo: me.dateEl,

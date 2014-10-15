@@ -1,8 +1,8 @@
-Ext.define('NextThought.view.courseware.enrollment.credit.parts.Checkbox', {
-	extend: 'NextThought.view.courseware.enrollment.credit.parts.BaseInput',
-	alias: 'widget.credit-checkbox',
+Ext.define('NextThought.view.courseware.enrollment.parts.Checkbox', {
+	extend: 'NextThought.view.courseware.enrollment.parts.BaseInput',
+	alias: 'widget.enrollment-checkbox',
 
-	cls: 'credit-input dark full checkbox',
+	cls: 'enrollment-input dark full checkbox',
 
 	renderTpl: Ext.DomHelper.markup([
 		{tag: 'input', id: '{id}-{name}', type: 'checkbox', name: '{name}'},
@@ -13,7 +13,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Checkbox', {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
-			name: this.name || 'credit-checkbox',
+			name: this.name || 'enrollment-checkbox',
 			text: this.text,
 			cls: (this.text || '').length > 60 ? 'long' : ''
 		});

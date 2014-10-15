@@ -2,9 +2,9 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.enrollment-credit-admission',
 
-	requires: ['NextThought.view.courseware.enrollment.credit.parts.*'],
+	requires: ['NextThought.view.courseware.enrollment.parts.*'],
 
-	defaultType: 'enrollment-credit-group',
+	defaultType: 'enrollment-group',
 
 	defaultMessages: {
 		Message: '',
@@ -22,7 +22,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 			reveals: ['general', 'signature'],
 			items: [
 				{
-					xtype: 'enrollment-credit-set',
+					xtype: 'enrollment-set',
 					label: 'Are you currently attending the University of Oklahoma?',
 					inputs: [
 						{type: 'radio-group', name: 'is_currently_attending_ou', correct: 'N', options: [
@@ -34,7 +34,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					]
 				},
 				{
-					xtype: 'enrollment-credit-set',
+					xtype: 'enrollment-set',
 					label: 'Are you an Oklahoma resident currently attending High School?',
 					name: 'attending-highschool',
 					inputs: [
@@ -59,7 +59,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 			label: 'General Information',
 			items: [
 				{
-					xtype: 'enrollment-credit-set',
+					xtype: 'enrollment-set',
 					label: 'What is your full name?',
 					inputs: [
 						{type: 'text', name: 'first_name', placeholder: 'First Name', required: true, size: 'third left'},
@@ -68,21 +68,21 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					]
 				},
 				{
-					xtype: 'enrollment-credit-set',
+					xtype: 'enrollment-set',
 					label: 'Do you have a former last name? (optional)',
 					inputs: [
 						{type: 'text', name: 'former_name', placeholder: 'Former Last Name', size: 'third'}
 					]
 				},
 				{
-					xtype: 'enrollment-credit-set',
+					xtype: 'enrollment-set',
 					label: 'What is your Date of Birth?',
 					inputs: [
 						{type: 'date', name: 'date_of_birth', size: 'third', required: true}
 					]
 				},
 				{
-					xtype: 'enrollment-credit-set',
+					xtype: 'enrollment-set',
 					label: 'What is your gender?',
 					inputs: [
 						{type: 'radio-group', name: 'gender', required: true, omitIfBlank: true, options: [
@@ -93,7 +93,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					]
 				},
 				{
-					xtype: 'enrollment-credit-set',
+					xtype: 'enrollment-set',
 					label: 'Permanent Address',
 					name: 'permanent-address',
 					inputs: [
@@ -112,13 +112,13 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					]
 				},
 				{
-					xtype: 'enrollment-credit-set',
+					xtype: 'enrollment-set',
 					inputs: [
 						{type: 'checkbox', text: 'My mailing address is different.', name: 'has_mailing_address', reveals: 'mailing-address', correct: true}
 					]
 				},
 				{
-					xtype: 'enrollment-credit-set',
+					xtype: 'enrollment-set',
 					name: 'mailing-address',
 					label: 'Mailing Address',
 					inputs: [
@@ -134,7 +134,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					]
 				},
 				{
-					xtype: 'enrollment-credit-set',
+					xtype: 'enrollment-set',
 					label: 'Phone Number',
 					inputs: [
 						{type: 'text', name: 'telephone_number',
@@ -148,14 +148,14 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					]
 				},
 				{
-					xtype: 'enrollment-credit-set',
+					xtype: 'enrollment-set',
 					label: 'Email Address',
 					inputs: [
 						{type: 'text', name: 'email', placeholder: 'Primary Email', required: true, size: 'large'}
 					]
 				},
 				{
-					xtype: 'enrollment-credit-set',
+					xtype: 'enrollment-set',
 					label: 'Social Security Number (optional)',
 					inputs: [
 						{
@@ -173,7 +173,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					]
 				},
 				{
-					xtype: 'enrollment-credit-set',
+					xtype: 'enrollment-set',
 					label: 'Are you a U.S. Citizen?',
 					inputs: [
 						{type: 'radio-group', name: 'country_of_citizenship', required: true, options: [
@@ -183,7 +183,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					]
 				},
 				{
-					xtype: 'enrollment-credit-set',
+					xtype: 'enrollment-set',
 					label: 'Are you a resident of Oklahoma?',
 					inputs: [
 						{type: 'radio-group', name: 'years_of_oklahoma_residency', /*valType: 'number',*/ required: true, omitIfBlank: true, allowEmptyInput: false, options: [
@@ -193,7 +193,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					]
 				},
 				{
-					xtype: 'enrollment-credit-set',
+					xtype: 'enrollment-set',
 					label: 'Are you a highschool graduate?',
 					inputs: [
 						{type: 'radio-group', name: 'high_school_graduate', required: true, options: [
@@ -203,7 +203,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					]
 				},
 				{
-					xtype: 'enrollment-credit-set',
+					xtype: 'enrollment-set',
 					label: 'Have you ever attended the University of Oklahoma?',
 					inputs: [
 						{type: 'radio-group', name: 'sooner_id', required: true, omitIfBlank: true, allowEmptyInput: true, /*valType: 'number',*/ options: [
@@ -213,7 +213,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 					]
 				},
 				{
-					xtype: 'enrollment-credit-grouped-set',
+					xtype: 'enrollment-grouped-set',
 					label: 'Have you ever attended another college or university?',
 					name: 'attended_other_institution',
 					required: true,
@@ -237,7 +237,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 			reveals: 'enable-submit',
 			items: [
 				{
-					xtype: 'enrollment-credit-set',
+					xtype: 'enrollment-set',
 					inputs: [
 						{type: 'checkbox', name: 'affirm', doNotSend: true, doNotStore: true, text: [
 							'I affirm that I am not prohibited from enrolling in any University of Oklahoma program.',
@@ -272,7 +272,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 			name: 'enable-submit',
 			items: [
 				{
-					xtype: 'enrollment-credit-set',
+					xtype: 'enrollment-set',
 					inputs: [
 						{
 							type: 'description',
@@ -310,7 +310,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 				label: 'Admission to OU Janux',
 				items: [
 					{
-						xtype: 'enrollment-credit-set',
+						xtype: 'enrollment-set',
 						inputs: [
 							{type: 'description', text: [
 								'Before you can earn college credit from the University of Oklahoma,',
@@ -657,7 +657,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 				labelCls: 'error',
 				items: [
 					{
-						xtype: 'enrollment-credit-set',
+						xtype: 'enrollment-set',
 						inputs: [
 							{
 								type: 'description',
@@ -679,7 +679,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 				labelCls: 'error',
 				items: [
 					{
-						xtype: 'enrollment-credit-set',
+						xtype: 'enrollment-set',
 						inputs: [
 							{
 								type: 'description',
@@ -714,7 +714,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 			labelCls: 'error',
 			items: [
 				{
-					xtype: 'enrollment-credit-set',
+					xtype: 'enrollment-set',
 					inputs: [
 						{
 							type: 'description',
@@ -747,7 +747,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 			labelCls: 'error',
 			items: [
 				{
-					xtype: 'enrollment-credit-set',
+					xtype: 'enrollment-set',
 					inputs: [
 						{
 							type: 'description',
@@ -776,7 +776,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 			labelCls: 'error',
 			items: [
 				{
-					xtype: 'enrollment-credit-set',
+					xtype: 'enrollment-set',
 					inputs: [
 						{type: 'description', text: json.Message || defaults.Message, cls: 'error-detail'},
 						{type: 'description', text: json.ContactInformation || defaults.ContactInformation}

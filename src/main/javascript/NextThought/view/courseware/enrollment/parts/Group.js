@@ -1,8 +1,8 @@
-Ext.define('NextThought.view.courseware.enrollment.credit.parts.Group', {
-	extend: 'NextThought.view.courseware.enrollment.credit.parts.Set',
-	alias: 'widget.enrollment-credit-group',
+Ext.define('NextThought.view.courseware.enrollment.parts.Group', {
+	extend: 'NextThought.view.courseware.enrollment.parts.Set',
+	alias: 'widget.enrollment-group',
 
-	requires: ['NextThought.view.courseware.enrollment.credit.parts.Set'],
+	requires: ['NextThought.view.courseware.enrollment.parts.Set'],
 
 	cls: 'admission-group',
 

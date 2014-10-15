@@ -25,7 +25,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.View', {
 			{cls: 'number purchase', 'data-number': '3', html: 'Purchase'},
 			{cls: 'number confirmation', 'data-number': '4', html: 'Confirmation'}
 		]},
-		{ id: '{id}-body', cls: 'body-container credit-container', cn: ['{%this.renderContainer(out,values)%}'] }
+		{ id: '{id}-body', cls: 'body-container enrollment-container', cn: ['{%this.renderContainer(out,values)%}'] }
 	]),
 
 	renderSelectors: {

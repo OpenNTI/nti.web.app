@@ -1,9 +1,9 @@
-Ext.define('NextThought.view.courseware.enrollment.credit.parts.Description', {
+Ext.define('NextThought.view.courseware.enrollment.parts.Description', {
 	extend: 'Ext.Component',
-	alias: 'widget.credit-description',
+	alias: 'widget.enrollment-description',
 
 
-	cls: 'credit-description',
+	cls: 'enrollment-description',
 
 	renderTpl: Ext.DomHelper.markup([
 		{tag: 'p', html: '{text}'}

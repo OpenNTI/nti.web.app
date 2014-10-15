@@ -1,25 +1,25 @@
-Ext.define('NextThought.view.courseware.enrollment.credit.parts.CheckboxGroup', {
-	extend: 'NextThought.view.courseware.enrollment.credit.parts.BaseInput',
-	alias: 'widget.credit-checkbox-group',
+Ext.define('NextThought.view.courseware.enrollment.parts.CheckboxGroup', {
+	extend: 'NextThought.view.courseware.enrollment.parts.BaseInput',
+	alias: 'widget.enrollment-checkbox-group',
 
-	cls: 'credit-input-container',
+	cls: 'enrollment-input-container',
 
 	renderTpl: Ext.DomHelper.markup({
-		 cls: 'credit-checkbox-group', cn: [
-			{cls: 'credit-input dark full radio yes', cn: [
+		 cls: 'enrollment-checkbox-group', cn: [
+			{cls: 'enrollment-input dark full radio yes', cn: [
 				{tag: 'input', id: '{id}-{name}-yes', type: 'radio', name: '{name}', value: 'Y'},
 				{tag: 'label', 'for': '{id}-{name}-yes', html: 'Yes.'},
 
 				{cls: 'options disabled', cn: [
 					{tag: 'tpl', 'for': 'options', cn: [
-						{cls: 'credit-input dark full checkbox', cn: [
+						{cls: 'enrollment-input dark full checkbox', cn: [
 							{tag: 'input', id: '{parent.id}-{name}', type: 'checkbox', name: '{name}'},
 							{tag: 'label', 'for': '{parent.id}-{name}', html: '{text}'}
 						]}
 					]}
 				]}
 			]},
-			{cls: 'credit-input dark full radio no', cn: [
+			{cls: 'enrollment-input dark full radio no', cn: [
 				{tag: 'input', id: '{id}-{name}-no', type: 'radio', name: '{name}', value: 'N'},
 				{tag: 'label', 'for': '{id}-{name}-no', html: 'No.'}
 			]}
@@ -40,7 +40,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.CheckboxGroup', 
 		this.callParent(arguments);
 
 		var options = this.el.down('.options'),
-			label = this.el.down('.credit-input label');
+			label = this.el.down('.enrollment-input label');
 
 		label.setHeight(options.getHeight() + 40);
 	},
@@ -68,7 +68,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.CheckboxGroup', 
 		//push the values to the session storage
 		label = e.getTarget('label');
 		label = Ext.get(label);
-		input = label && label.up('.credit-input').down('input[type=checkbox]');
+		input = label && label.up('.enrollment-input').down('input[type=checkbox]');
 
 		if (input && parent) {
 			wait()

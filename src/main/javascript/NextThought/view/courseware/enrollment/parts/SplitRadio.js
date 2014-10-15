@@ -1,6 +1,6 @@
-Ext.define('NextThought.view.courseware.enrollment.credit.parts.SplitRadio', {
-	extend: 'NextThought.view.courseware.enrollment.credit.parts.RadioGroup',
-	alias: 'widget.credit-split-radio',
+Ext.define('NextThought.view.courseware.enrollment.parts.SplitRadio', {
+	extend: 'NextThought.view.courseware.enrollment.parts.RadioGroup',
+	alias: 'widget.enrollment-split-radio',
 
 	initComponent: function() {
 		this.options = [{

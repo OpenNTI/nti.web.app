@@ -1,6 +1,6 @@
-Ext.define('NextThought.view.courseware.enrollment.credit.parts.GroupedSet', {
-	extend: 'NextThought.view.courseware.enrollment.credit.parts.Set',
-	alias: 'widget.enrollment-credit-grouped-set',
+Ext.define('NextThought.view.courseware.enrollment.parts.GroupedSet', {
+	extend: 'NextThought.view.courseware.enrollment.parts.Set',
+	alias: 'widget.enrollment-grouped-set',
 
 	initComponent: function() {
 		var me = this,

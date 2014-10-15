@@ -1,11 +1,11 @@
-Ext.define('NextThought.view.courseware.enrollment.credit.parts.DropDown', {
-	extend: 'NextThought.view.courseware.enrollment.credit.parts.BaseInput',
-	alias: 'widget.credit-dropdown',
+Ext.define('NextThought.view.courseware.enrollment.parts.DropDown', {
+	extend: 'NextThought.view.courseware.enrollment.parts.BaseInput',
+	alias: 'widget.enrollment-dropdown',
 
 	requires: ['NextThought.view.form.fields.SearchComboBox'],
 
 	renderTpl: Ext.DomHelper.markup({
-		cls: 'credit-input select {required} {size}'
+		cls: 'enrollment-input select {required} {size}'
 	}),
 
 
@@ -30,7 +30,7 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.DropDown', {
 		this.callParent(arguments);
 
 		var me = this,
-			scrollParent = this.el.parent('.credit-container');
+			scrollParent = this.el.parent('.enrollment-container');
 
 		me.combobox = Ext.widget('searchcombobox', {
 			options: me.options,

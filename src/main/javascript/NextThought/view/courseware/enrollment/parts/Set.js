@@ -1,6 +1,6 @@
-Ext.define('NextThought.view.courseware.enrollment.credit.parts.Set', {
+Ext.define('NextThought.view.courseware.enrollment.parts.Set', {
 	extend: 'Ext.container.Container',
-	alias: 'widget.enrollment-credit-set',
+	alias: 'widget.enrollment-set',
 
 	require: [
 		 'NextThought.layout.container.None'
@@ -10,26 +10,26 @@ Ext.define('NextThought.view.courseware.enrollment.credit.parts.Set', {
 	layout: 'none',
 
 	requires: [
-		'NextThought.view.courseware.enrollment.credit.parts.Description',
-		'NextThought.view.courseware.enrollment.credit.parts.RadioGroup',
-		'NextThought.view.courseware.enrollment.credit.parts.Checkbox',
-		'NextThought.view.courseware.enrollment.credit.parts.TextInput',
-		'NextThought.view.courseware.enrollment.credit.parts.CheckboxGroup',
-		'NextThought.view.courseware.enrollment.credit.parts.DropDown',
-		'NextThought.view.courseware.enrollment.credit.parts.SubmitButton',
-		'NextThought.view.courseware.enrollment.credit.parts.SplitRadio'
+		'NextThought.view.courseware.enrollment.parts.Description',
+		'NextThought.view.courseware.enrollment.parts.RadioGroup',
+		'NextThought.view.courseware.enrollment.parts.Checkbox',
+		'NextThought.view.courseware.enrollment.parts.TextInput',
+		'NextThought.view.courseware.enrollment.parts.CheckboxGroup',
+		'NextThought.view.courseware.enrollment.parts.DropDown',
+		'NextThought.view.courseware.enrollment.parts.SubmitButton',
+		'NextThought.view.courseware.enrollment.parts.SplitRadio'
 	],
 
 	typesMap: {
-		'text': 'credit-textinput',
-		'checkbox': 'credit-checkbox',
-		'radio-group': 'credit-radiogroup',
-		'description': 'credit-description',
-		'checkbox-group': 'credit-checkbox-group',
-		'dropdown': 'credit-dropdown',
-		'date': 'credit-dateinput',
-		'submit-button': 'credit-submit-button',
-		'split-radio': 'credit-split-radio'
+		'text': 'enrollment-textinput',
+		'checkbox': 'enrollment-checkbox',
+		'radio-group': 'enrollment-radiogroup',
+		'description': 'enrollment-description',
+		'checkbox-group': 'enrollment-checkbox-group',
+		'dropdown': 'enrollment-dropdown',
+		'date': 'enrollment-dateinput',
+		'submit-button': 'enrollment-submit-button',
+		'split-radio': 'enrollment-split-radio'
 	},
 
 	//name of the group so it can be idenitified
