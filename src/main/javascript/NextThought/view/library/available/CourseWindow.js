@@ -76,7 +76,7 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 			delete state.paymentcomplete;
 
 			if (catalogEntry) {
-				me.showAdmission(catalogEntry, true);
+				me.showEnrollmentOption(catalogEntry, 'FiveminuteEnrollment');
 			}
 
 			fulfill();

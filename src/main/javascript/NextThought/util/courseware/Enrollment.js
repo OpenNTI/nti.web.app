@@ -185,7 +185,7 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 			steps = [];
 
 		if (!enrollmentOption.Purchasable.isModel) {
-			enrollmentOption.Purchasable = NextThought.model.store.Purchasable.create(enrollmentOption.Purchasable);
+			enrollmentOption.Purchasable = NextThought.model.store.PurchasableCourse.create(enrollmentOption.Purchasable);
 		}
 
 		this.__addStep({
@@ -412,6 +412,10 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 			return Promise.reject();
 		}
 
+		if (!enrollmentOption.Purchasable.isModel) {
+			enrollmentOption.Purchasable = NextThought.model.store.PurchasableCourse.create(enrollmentOption.Purchasable);
+		}
+
 		return new Promise(function(fulfill, reject) {
 			var catalogData = {
 					EnrollCutOff: null,
@@ -427,6 +431,14 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 					},
 					UndoEnrollment: null
 				};
+
+			if (enrollmentOption.Purchasable) {
+				catalogData.RedeemToken = function(cmp, code) {
+					return new Promise(function(fulfill, reject) {
+						cmp.fireEvent('redeem-enrollment-token', cmp, enrollmentOption.Purchasable, code, fulfill, reject);
+					});
+				};
+			}
 
 			fulfill(catalogData);
 		});

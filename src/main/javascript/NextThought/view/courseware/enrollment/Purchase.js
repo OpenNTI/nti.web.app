@@ -187,6 +187,7 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 
 		function onFailure(reason) {
 			console.error('failed to price purchase');
+			me.showStripeError(reason);
 		}
 
 		this.fireEvent('price-enroll-purchase', this, pricingInfo, onSuccess, onFailure);
@@ -252,9 +253,14 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 	showStripeError: function(json) {
 		var error = {};
 
-		if (json && json.type && json.type === 'card_error') {
-			error.field = json.param;
-			error.Message = json.message;
+		if (json) {
+			if (json.type && json.type === 'card_error') {
+				error.field = json.param;
+				error.Message = json.message;
+			} else if (json.Type && json.Type === 'PricingError') {
+				error.field = 'coupon';
+				error.Message = json.Message;
+			}
 		} else {
 			error.Message = 'An unknown error occurred. Please try again later.';
 		}
@@ -272,6 +278,8 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 				cardInfo: value
 			};
 
+		me.addMask('Processing card information. You will not be charged yet.');
+
 		me.shouldAllowSubmission()
 			.then(me.complete.bind(me, me, data))
 			.then(function(result) {
@@ -287,6 +295,7 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 			})
 			.fail(function(error) {
 				console.error('failed to create token', arguments);
+				me.removeMask();
 				me.showStripeError(error);
 			});
 	}

@@ -194,6 +194,7 @@ Ext.define('NextThought.controller.Store', function() {
 			'store.PurchaseAttempt',
 			'store.StripePricedPurchasable',
 			'store.StripePurchaseError',
+			'store.PurchasableCourse',
 			'Course'//keep this around to filter them out
 		],
 
@@ -255,7 +256,8 @@ Ext.define('NextThought.controller.Store', function() {
 						'unauthorized-navigation': 'maybeShowPurchasableForContent',
 						'price-enroll-purchase': 'priceEnrollmentPurchase',
 						'create-enroll-purchase': 'createEnrollmentPurchase',
-						'submit-enroll-purchase': 'submitEnrollmentPurchase'
+						'submit-enroll-purchase': 'submitEnrollmentPurchase',
+						'redeem-enrollment-token': 'enrollWithCode'
 					}
 				},
 				'controller': {
@@ -602,6 +604,11 @@ Ext.define('NextThought.controller.Store', function() {
 					})
 					.fail(function(reason) {
 						console.error('Error processing price,', reason);
+
+						if (reason && reason.responseText) {
+							reason = Ext.JSON.decode(reason.responseText, true);
+						}
+
 						failure.call(null, reason);
 						delete sender.lockPurchaseAction;
 					});
@@ -737,6 +744,44 @@ Ext.define('NextThought.controller.Store', function() {
 					tokenObject: tokenObject
 				});
 				done();
+			}
+		},
+
+
+		enrollWithCode: function(sender, purchasable, code, success, failure) {
+			var url = Service.getStoreActivationURL(),
+				me = this;
+
+			if (sender.lockPurchaseAction) {
+				console.error('already locked aborting activation code', arguments);
+				failure.call();
+				return;
+			}
+
+			sender.lockPurchaseAction = true;
+
+			if (!url) {
+				console.error('No url to redeem activation key with');
+				failure.call(null, {Message: 'Unable to redeem your activation key. Please try again later.'});
+				return;
+			}
+
+			try {
+				me.doEnrollmentPricingRequest(url, {purchasableID: purchasable.getId(), invitation_code: code})
+					.then(function() {
+						delete sender.lockPurchaseAction;
+						me.refreshPurchasable(purchasable);
+						success.call();
+					})
+					.fail(function(reason) {
+						console.error('An unexpected error occurred trying to redeem activation code', reason);
+						delete sender.lockPurchaseAction;
+						failure.call(null, {Message: 'A problem occurred redeeming your activation key'});
+					});
+			} catch (e) {
+				console.error('An unexpected error occurred trying to redeem activation code', e);
+				delete sender.lockPurchaseAction;
+				failure.call(null, {Message: 'A problem occurred redeeming your activation key'});
 			}
 		},
 
