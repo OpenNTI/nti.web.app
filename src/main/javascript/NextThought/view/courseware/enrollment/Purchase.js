@@ -55,7 +55,7 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 					xtype: 'enrollment-set',
 					label: 'Credit Card Information',
 					inputs: [
-						{type: 'text', name: 'name', required: true, placeholder: 'Name on Card', size: 'full'},
+						{type: 'text', name: 'name', required: true, placeholder: 'Name on Card', size: 'card-name'},
 						{
 							type: 'text',
 							name: 'number',
@@ -63,7 +63,7 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 							doNotStore: true,
 							//valueType: 'numeric',
 							placeholder: '1234 1234 1234 1234',
-							size: 'left',
+							size: 'left card-number',
 							validateOnChange: true,
 							paymentFormatter: 'formatCardNumber',
 							//validator: 'validateCardNumber',
@@ -77,7 +77,7 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 							required: true,
 							doNotStore: true,
 							placeholder: 'MM / YY',
-							size: 'small left',
+							size: 'left card-code',
 							validateOnChange: true,
 							paymentFormatter: 'formatCardExpiry',
 							validator: 'validateCardExpiry',
@@ -88,8 +88,8 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 							name: 'cvc',
 							required: true,
 							doNotStore: true,
-							placeholder: 'Security Code',
-							size: 'small left',
+							placeholder: 'Code',
+							size: 'left card-code',
 							validateOnChange: true,
 							paymentFormatter: 'formatCardCVC',
 							validator: 'validateCardCVC'
@@ -264,6 +264,8 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 			} else if (json.Type && json.Type === 'PricingError') {
 				error.field = 'coupon';
 				error.Message = json.Message;
+			} else {
+				error.Message = 'An unknown error occurred. Please try again later.';
 			}
 		} else {
 			error.Message = 'An unknown error occurred. Please try again later.';

@@ -336,6 +336,19 @@
 				padding-left: 20px;
 			}
 
+			&.card-name {
+				width: 386px;
+				margin-right: 200px; //wrap to the next line
+			}
+
+			&.card-number {
+				width: 200px;
+			}
+
+			&.card-code {
+				width: 85px;
+			}
+
 			&.full{
 				width: 675px;
 			}
