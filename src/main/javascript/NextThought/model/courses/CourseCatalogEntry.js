@@ -28,7 +28,10 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		{ name: 'enrolled', type: 'bool' },
 		{ name: 'DisableOverviewCalendar', type: 'bool', persist: false},
 
-		{name: 'EnrollmentOptions', type: 'auto', persist: false},
+		{name: 'EnrollmentOptions', type: 'auto', persist: false, convert: function(v) {
+			//clone the option so changes here won't be applied to the raw
+			return Ext.clone(v);
+		}},
 
 		{ name: 'NTI_FiveminuteEnrollmentCapable', type: 'bool', persist: false },
 		{ name: 'NTI_CRN', type: 'string', persist: false },

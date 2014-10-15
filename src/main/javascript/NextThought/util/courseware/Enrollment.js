@@ -251,6 +251,8 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 			Options: {
 				name: A Promise that fulfills with this data or rejects if that option is not available
 				{
+					Name: String, // the name of the option
+					BaseOption: Boolean, //if the option is a base or add on
 					EnrollCutOff: Date, // the last day to enroll in this option, null if there isn't one
 					DropCutOff: Date, //the last day to drop from this option, null if there isn't one
 					AvailableForCredit: Boolean, //if this option has college credit
@@ -267,8 +269,6 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 		}
 	 */
 
-	 //the order the options should be presented to the user
-	 OptionsOrder: ['OpenEnrollment', 'FiveminuteEnrollment', 'StoreEnrollment'],
 	 /**
 	  * Returns the details about the different enrollment options
 	  *
@@ -277,9 +277,10 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 	  */
 	getEnrollmentDetails: function(course) {
 		var p, catalogData = {
+				DateFormat: 'F j, g:i A T',
 				StartDate: course.get('StartDate'),
 				EndDate: course.get('EndDate'),
-				Enrolled: course.getEnrollmentType(),
+				Enrolled: course.isActive(),
 				Options: {
 					OpenEnrollment: this.__buildOpenEnrollmentDetails(course),
 					FiveminuteEnrollment: this.__buildFmaepDetails(course),
@@ -306,9 +307,189 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 		});
 	},
 
+	//return all the possible options, wait is true if it should block the enrollment card
+	//should wait on it to load (wait === false means its an add on)
+	Options: [
+		{name: 'OpenEnrollment', wait: true},
+		{name: 'FiveminuteEnrollment', wait: false},
+		{name: 'StoreEnrollment', wait: true}
+	],
+
+	//a shortcut for CourseWareUtils.Enrollment.Options.forEach
+	forEachOption: function(fn) {
+		this.Options.forEach(fn);
+	},
+
+	//Put all the wordings together in one spot so they are easy to find
+	ENROLLMENT_STATES: {
+		OpenEnrollment: {
+			notEnrolled: {
+				title: 'Enroll for Free',
+				price: 0,
+				information: 'Gain complete access to interact with all course content, including lectures ' +
+								'course materials, quizzes, and discussions once the class is in session'
+			},
+			enrolled: {
+				title: 'You are in the Open Course',
+				information: 'Class begins {date} and will be conducted fully online.',
+				links: [
+					{href: 'welcome', text: 'Get Acquainted with Janux'},
+					{href: 'profile', text: 'Complete your Profile'}
+				],
+				cls: 'enrolled'
+			},
+			archivedEnrolled: {
+				title: 'You Took the Open Course!',
+				information: 'Thanks for your participation in OU Janux!' +
+								'The content of this course will remain available for you to review at any time.'
+			},
+			archivedNotEnrolled: {
+				title: 'This Course is Archived.',
+				price: 0,
+				information: 'Archived courses are out of session but all course content will remain available' +
+								'including the lectures, course materials, quizzes, and discussions.'
+			}
+		},
+		FiveminuteEnrollment: {
+			notEnrolled: {
+				title: 'Earn College Credit',
+				information: 'Earn transcripted college credit from the University of Oklahoma',
+				warning: 'Not available after {date}.',
+				cls: 'checkbox'
+			},
+			enrolled: {
+				title: 'Enrolled for College Credit!',
+				information: 'Class begins {date} and will be conducted fully online.',
+				links: [
+					{href: 'welcome', text: 'Get Acquainted with Janux'},
+					{href: 'profile', text: 'Complete your Profile'}
+				],
+				cls: 'enrolled'
+			},
+			archivedEnrolled: {
+				title: 'Enrolled for College Credit!',
+				information: 'Thanks for your participation in OU Janux!' +
+								'The content of this course will remain available for you to review at any time.'
+			},
+			admissionPending: {
+				title: 'Admission Pending...',
+				information: 'We\'re processing your request to earn college credit.' +
+								'This process should take no more than two business days.' +
+								'If you believe there has been an error, please contact the ' +
+								'<a class=\'link\' href=\'mailto:support@nextthought.com\'>help desk.</a>',
+				cls: 'pending'
+			},
+			admissionRejected: {
+				title: 'We are unable to confirm your eligibility to enroll through this process.',
+				information: 'Please contact the <a class=\'link\' href=\'mailto:support@nextthought.com\'>help desk.</a>' +
+								'or <a class=\'link\' href=\'resubmit\'>resubmit your application.</a>',
+				cls: 'rejected'
+			},
+			apiDown: {
+				title: 'Earn College Credit',
+				information: 'Transcripted credit is available from the University of Oklahoma but unfortunately' +
+								'we cannot process an application at this time. Please contact the ' +
+								'<a class=\'link\' href=\'mailto:support@nextthought.com\'>help desk.</a>',
+				cls: 'down'
+			}
+		},
+		StoreEnrollment: {
+			notEnrolled: {
+				title: 'Lifelong Learner',
+				information: 'Gain complete access to interact with all course content, including lectures' +
+								'course materials, quizzes, and discussions once the class is in session'
+			},
+			enrolled: {
+				title: 'You are in the Lifelong Learner',
+				information: 'Class begins {date} and will be conducted fully online.',
+				links: [
+					{href: 'welcome', text: 'Get Acquainted with Janux'},
+					{href: 'profile', text: 'Complete your Profile'}
+				],
+				cls: 'enrolled'
+			},
+			archivedEnrolled: {
+				title: 'You took the Lifelong Learner',
+				information: 'Thanks for your participation in OU Janux!' +
+								'The content of this course will remain available for you to review at any time.'
+			},
+			archivedNotEnrolled: {
+				title: 'This Course is Archived',
+				information: 'Archived courses are out of session but all course content will remain available' +
+								'including the lectures, course materials, quizzes, and discussions.'
+			}
+		}
+	},
+
+	//get the wording for the option in a given state
+	getWording: function(name, state, data) {
+		var text = this.ENROLLMENT_STATES[name][state],
+			prop, key;
+
+		if (!text) { return {}; }
+
+		for (prop in data) {
+			if (data.hasOwnProperty(prop)) {
+				key = '{' + prop + '}';
+				text.information = text.information.replace(key, data[prop]);
+				text.title = text.title.replace(key, data[prop]);
+
+				if (text.warning) {
+					text.warning = text.warning.replace(key, data[prop]);
+				}
+			}
+		}
+
+		return Ext.clone(text);
+	},
+
+	/**
+	 * Takes the details of the option, and returns the wording for the state
+	 * @param  {Object} course the details of course
+	 * @param  {Object} option the details specific to this option
+	 * @return {Object}        the wording for the state it is in
+	 */
+	getOpenEnrollmentText: function(course, option) {
+		var name = this.OPEN,
+			state,	now = new Date();
+
+		//if the course is archived
+		if (course.EndDate < now) {
+			//if we aren't enrolled
+			if (!option.Enrolled) {
+				state = this.getWording(name, 'archivedNotEnrolled');
+				state.buttonText = 'Add Archived Course';
+
+			//if we enrolled before the course was archived
+			} else if (course.EndDate > course.EnrollStartDate) {
+				state = this.getWording(name, 'archivedEnrolled');
+				state.butonText = 'Drop the Open Course';
+			} else { //if we enrolled after the course was archived
+				state = this.getWording(name, 'arhivedNotEnrolled');
+				state.buttonText = 'Drop the Archived Course';
+			}
+		} else {//if the course is current or upcoming
+			//if we are enrolled
+			if (option.Enrolled) {
+				state = this.getWording(name, 'enrolled', {
+					date: Ext.Date.format(course.StartDate, course.DateFormat)
+				});
+				state.buttonText = 'Drop the Open Course';
+			} else { //if we aren't enrolled
+				state = this.getWording(name, 'notEnrolled');
+				state.buttonText = 'Enroll in the Open Course';
+			}
+		}
+
+		state.name = option.Name;
+
+		return state;
+	},
+
 
 	__buildOpenEnrollmentDetails: function(course) {
-		var enrollmentOption = course.getEnrollmentOption(this.OPEN);
+		var me = this,
+			enrollmentOption = course.getEnrollmentOption(me.OPEN);
 
 		if (!enrollmentOption || !enrollmentOption.Enabled) {
 			return Promise.reject();
@@ -316,15 +497,18 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 
 		return new Promise(function(fulfill, reject) {
 			var catalogData = {
+				Name: me.OPEN,
 				EnrollCutOff: null,
 				DropCutOff: null,
 				AvailableForCredit: false,
+				BaseOption: true, //TODO: this should come from the server
 				Enrolled: course.getEnrollmentType() === 'Open',
 				RequiresAdmission: false,
 				AdmissionState: null,
 				Price: null,
 				AvailableSeats: Infinity,
-				DoEnrollment: function(cmp) {
+				getCardText: me.getOpenEnrollmentText.bind(me),
+				doEnrollment: function(cmp) {
 					return new Promise(function(fulfill, reject) {
 						cmp.fireEvent('change-enrollment', course, true, function(success, changed) {
 							if (success) {
@@ -335,7 +519,7 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 						});
 					});
 				},
-				UndoEnrollment: function(cmp) {
+				undoEnrollment: function(cmp) {
 					return new Promise(function(fulfill, reject) {
 						cmp.fireEvent('change-enrollment', course, false, function(success, changed) {
 							if (success) {
@@ -353,8 +537,63 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 	},
 
 
+	getFmaepText: function(course, option) {
+		var name = this.FMAEP,
+			state = {}, now = new Date();
+
+		//REMOVE BEFORE PROD
+		option.AvailableSeats = 99;
+
+		//if the course is archived
+		if (course.EndDate < now) {
+			//if we are enrolled
+			if (option.Enrolled) {
+				state = thie.getWording(name, 'archivedEnrolled');
+			}
+		} else if (option.Enrolled) {//if the course is active and we are enrolled in this option
+			state = this.getWording(name, 'enrolled', {
+				date: Ext.Date.format(course.StartDate, course.DateFormat)
+			});
+		} else if (option.AdmissionState === 'Pending') {//if we are pending admission
+			state = this.getWording(name, 'admissionPending');
+		} else if (option.API_DOWN) {//if we detect the admission api is down
+			state = this.getWording(name, 'apiDown');
+		} else if (option.AdmissionState === 'Rejected') {//if our application was rejected
+			state = this.getWording(name, 'admissionRejected');
+		} else {//we aren't enrolled
+			state = this.getWording(name, 'notEnrolled', {
+				date: Ext.Date.format(option.EnrollCutOff, course.DateFormat)
+			});
+
+			state.buttonText = 'Enroll for College Credit';
+
+			state.price = option.Price;
+
+			//if the available seats has been set
+			if (option.AvailableSeats !== undefined) {
+				state.hasSeats = true;
+				state.seatcount = option.AvailableSeats;
+
+				//if there are no seats left mark it as full
+				if (option.AvailableSeats === 0) {
+					state.cls = (state.cls || '') + ' full';
+					state.warning = '';
+					state.buttonText = '';
+				} else if (option.AvailableSeats <= 10) {//if there are less than 10 seats left tell the user
+					state.seats = 'Only' + Ext.util.Format.plural(option.AvailableSeats, 'seat') + ' left.';
+				}
+			}
+		}
+
+		state.name = option.Name;
+
+		return state;
+	},
+
+
 	__buildFmaepDetails: function(course) {
 		var name = this.FMAEP, p, details, catalogData,
+			isEnrolled = course.getEnrollmentType() === 'ForCredit',
 			enrollmentOption = course.getEnrollmentOption(name);
 
 		if (!enrollmentOption || !enrollmentOption.NTI_FiveminuteEnrollmentCapable) {
@@ -365,23 +604,26 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 		details = Service.getLinkFrom(enrollmentOption.Links, 'fmaep.course.details');
 
 		catalogData = {
-			EnrollCutOff: enrollmentOption.OU_EnrollCutOffDate,
-			DropCutOff: enrollmentOption.OU_DropCutOffDate,
+			Name: name,
+			EnrollCutOff: new Date(enrollmentOption.OU_EnrollCutOffDate),
+			DropCutOff: new Date(enrollmentOption.OU_DropCutOffDate),
 			AvailableForCredit: true,
-			Enrolled: course.getEnrollmentType() === 'ForCredit',
+			Enrolled: isEnrolled,
 			RequiresAdmission: false,
 			AdmissionState: $AppConfig.userObject.get('admission_status'),
 			AvailableSeats: 0,
 			API_DOWN: false,
 			Price: enrollmentOption.OU_Price,
-			DoEnrollment: function(cmp) {
+			getCardText: this.getFmaepText.bind(this),
+			doEnrollment: function(cmp) {
 				cmp.fireEvent('enroll-in-course', course, name);
 			},
-			UndoEnrollment: null
+			undoEnrollment: null
 		};
 
 		//if there is a link to get external info get it and add it to the catalogData
-		if (details) {
+		//only request the details if we aren't enrolled
+		if (details && !isEnrolled) {
 			p = Service.request(details)
 				.then(function(json) {
 					json = Ext.decode(json, true);
@@ -409,8 +651,43 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 	},
 
 
-	__buildStoreEnrollmentDetails: function(course) {
+	getStoreEnrollmentText: function(course, option) {
 		var name = this.STRIPE,
+			state, now = new Date();
+
+		//if the course is archived
+		if (course.EndDate < now) {
+			//if we aren't enrolled
+			if (!option.Enrolled) {
+				state = this.getWording(name, 'archivedNotEnrolled');
+				state.buttonText = 'Add Archived Course';
+			//if we enrolled before it was archived
+			} else if (course.EndDate > course.EnrollStartDate) {
+				state = this.getWording(name, 'arhcivedEnrolled');
+			} else { //if we didn't enroll before it was archived
+				state = this.getWording(name, 'archivedNotEnrolled');
+			}
+		} else {
+			if (option.Enrolled) {
+				state = this.getWording(name, 'enrolled', {
+					date: Ext.Date.format(course.StartDate, course.DateFormat)
+				});
+			} else {
+				state = this.getWording(name, 'notEnrolled');
+				state.buttonText = 'Enroll as a Lifelong Learner';
+				state.price = option.Price;
+			}
+		}
+
+		state.name = option.Name;
+
+		return state;
+	},
+
+
+	__buildStoreEnrollmentDetails: function(course) {
+		var me = this,
+			name = this.STRIPE,
 			enrollmentOption = course.getEnrollmentOption('StoreEnrollment');
 
 		if (!enrollmentOption) {
@@ -423,18 +700,22 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 
 		return new Promise(function(fulfill, reject) {
 			var catalogData = {
+					Name: name,
 					EnrollCutOff: null,
 					DropCutOff: null,
 					AvailableForCredit: false,
+					BaseOption: true,//TODO: this should come from the server
+					Giftable: true,//TODO: this should come from the server
 					Enrolled: course.getEnrollmentType() === 'Open', //Since this takes the place of the open course for now, might not be true in the future
 					RequiresAdmission: false,
 					AdmissionState: null,
 					AvailableSeats: Infinity, //May not be true
 					Price: enrollmentOption.Price,
-					DoEnrollment: function(cmp) {
+					getCardText: me.getStoreEnrollmentText.bind(me),
+					doEnrollment: function(cmp) {
 						cmp.fireEvent('enroll-in-course', course, name);
 					},
-					UndoEnrollment: null
+					undoEnrollment: null
 				};
 
 			if (enrollmentOption.Purchasable) {

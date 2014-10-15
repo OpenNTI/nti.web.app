@@ -179,10 +179,6 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 			if (e.getTarget('.back')) {
 				me.showPrevItem();
 			}
-
-			if (e.getTarget('.enrollment') && !e.getTarget('.disabled')) {
-				me.enrollmentOptionClicked(e);
-			}
 		});
 
 		me.mon(me.footerEl, 'click', 'handleButtonClick');

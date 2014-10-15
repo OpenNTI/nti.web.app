@@ -498,7 +498,7 @@
 	}
 
 	.enroll-card {
-		.top, .bottom {
+		.enroll-option {
 			padding: 15px;
 			font: normal 300 1em/1 $font;
 			color: $primary-grey;
@@ -526,18 +526,53 @@
 			font-size: 0.9em;
 		}
 
-		.top {
+		.enroll-option.base {
 			padding-top: 20px;
 			min-height: 200px;
 
 			.title {
 				font-size: 1.2em;
 				margin-bottom: 10px;
+				float: left;
+				width: 200px;
+			}
+
+			.price {
+				float: right;
+				max-width: 75px;
+				font-size: 1.2em;
+				margin-bottom: 10px;
+				color: $secondary-green;
+			}
+
+			.info {
+				margin-top: 2em;
+			}
+
+			.enrolled {
+				color: $secondary-green;
+				text-transform: uppercase;
+				font-size: 0.8em;
+				line-height: 1.5em;
+				font-weight: 400;
+				display: none;
 			}
 
 			&.enrolled {
-				padding-left: 40px;
-				@include icon('ico_enrollment_circhlecheck', $top: 20px, $left: 10px);
+				padding-right: 40px;
+				@include icon('ico_enrollment_circhlecheck', $top: 20px, $right: 10px, $left: auto);
+
+				.title {
+					width: 100%;
+				}
+
+				.price {
+					display: none;
+				}
+
+				.enrolled {
+					display: block;
+				}
 			}
 		}
 
@@ -545,7 +580,7 @@
 			padding-left: 40px;
 		}
 
-		.bottom {
+		.enroll-option.addon {
 			padding-right: 35px;
 			background-color: #f5fbff;
 			border-top: 1px solid #efefef;
@@ -563,19 +598,11 @@
 			.title {
 				font-size: 0.85em;
 				font-weight: 600;
-				width: 185px;
-				float: left;
 				margin-bottom: 10px;
-			}
 
-			.price {
-				float: left;
-				width: 50px;
-				text-align: right;
-				font-weight: 600;
-				font-size: 0.85em;
-				color: $secondary-green;
-				margin-bottom: 10px;
+				span {
+					margin-left: 1.2em;
+				}
 			}
 
 			&.openonly {
@@ -638,11 +665,11 @@
 				display: none;
 			}
 
-			&.open {
+			&.free {
 				background-color: $primary-blue;
 			}
 
-			&.credit {
+			&.paid {
 				background-color: $secondary-green;
 			}
 

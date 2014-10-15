@@ -4,25 +4,42 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 	cls: 'course-details',
 
-	enrollmentCardTpl: new Ext.XTemplate(Ext.DomHelper.markup(
+	enrollmentCardTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{cls: 'enroll-card', cn: [
-			{cls: 'top {top.cls}', cn: [
-				{cls: 'title', html: '{top.title}'},
-				{cls: 'info', html: '{top.information}'},
-				{tag: 'tpl', 'for': 'top.links', cn: [
+			{cls: 'enroll-option base {base.cls}', 'data-name': '{base.name}', cn: [
+				{cls: 'enrolled', html: 'Enrolled'},
+				{cls: 'title', html: '{base.title}'},
+				{cls: 'price', html: '{base.priceString}'},
+				{cls: 'info', html: '{base.information}'},
+				{cls: 'seats', html: '{base.seats}'},
+				{cls: 'warning', html: '{base.warning}'},
+				{tag: 'tpl', 'for': 'base.links', cn: [
 					{tag: 'a', cls: 'link', href: '{href}', target: '_blank', html: '{text}'}
 				]}
 			]},
-			{cls: 'bottom {bottom.cls}', cn: [
-				{cls: 'title', html: '{bottom.title}'},
-				{cls: 'price', html: '{price}'},
-				{cls: 'info', html: '{bottom.information}'},
-				{cls: 'seats', html: ''},
-				{cls: 'warning', html: '{bottom.warning}'}
+			{tag: 'tpl', 'for': 'addOns', cn: [
+				{cls: 'enroll-option addon {cls}', 'data-name': '{name}', cn: [
+					{cls: 'title', cn: [
+						'{title}',
+						{tag: 'span', html: '({difference})'}
+					]},
+					{cls: 'info', html: '{information}'},
+					{cls: 'seats', html: '{seats}'},
+					{cls: 'warning', html: '{warning}'},
+					{tag: 'tpl', 'for': 'links', cn: [
+						{tag: 'a', cls: 'link', href: '{href}', target: '_blank', html: '{text}'}
+					]}
+				]}
 			]},
-			{cls: 'button {buttonCls}', html: '{buttonText}'}
+			{cls: 'button {buttonCls}', 'data-name': '{buttonName}', html: '{buttonText}'},
+			{tag: 'tpl', 'if': 'drop', cn: [
+				{cls: 'drop', cn: [
+					{cls: 'title', html: 'How do I drop?'},
+					{cls: 'infor'}
+				]}
+			]}
 		]}
-	)),
+	])),
 
 
 	renderTpl: Ext.DomHelper.markup([
@@ -199,493 +216,263 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 	},
 
 
-	getEnrollmentData: function() {
-		var c = this.course, catalogData, p;
-
-		catalogData = {
-			StartDate: c.get('StartDate'),
-			EndDate: c.get('EndDate'),
-			EnrollCutOff: c.get('EnrollForCreditCutOff'),
-			DropCutOff: c.get('DropCutOff'),
-			AvailableForCredit: c.get('NTI_FiveminuteEnrollmentCapable'),
-			Enrolled: c.isActive(),
-			OpenEnrolled: c.isActive() && !c.isEnrolledForCredit(),
-			EnrolledForCredit: c.isEnrolledForCredit(),
-			AdmissionState: $AppConfig.userObject.get('admission_status'),
-			Price: '$' + c.get('OU_Price')
-		};
-
-		catalogData.enrollcutoff = Ext.Date.format(catalogData.EnrollCutOff, 'F j, g:i A T');
-		catalogData.dropcutoff = Ext.Date.format(catalogData.DropCutOff, 'F j, g:i A T');
-		catalogData.start = Ext.Date.format(catalogData.StartDate, 'F j, g:i A T');
-
-		if (catalogData.Enrolled) {
-			p = CourseWareUtils.findCourseBy(c.findByMyCourseInstance())
-				.then(function(instance) {
-					if (instance) {
-						catalogData.EnrollStartDate = instance.get('CreatedTime');
-					}
-				})
-				.fail(function(reason) {
-					console.error('Failed to find course instance: ', reason);
-				});
-		} else {
-			p = Promise.resolve();
-		}
-
-		return p.then(function() {
-			return catalogData;
-		});
+	__getOptionText: function(details, option) {
+		return option.getCardText(details, option);
 	},
 
 
-	getCourseDetailsData: function() {
-		var detailsLink = this.course.getLink('fmaep.course.details'),
-			details, p;
-
-		details = {
-			AvailableForCredit: true,
-			AvailableSeats: 0,
-			API_DOWN: false
-		};
-
-		if (detailsLink) {
-			p = Service.request(detailsLink)
-				.then(function(json) {
-					json = Ext.decode(json, true);
-
-					if (json) {
-						if (json.Status === 422) {
-							details.AvailableForCredit = false;
-						} else {
-							details.AvailableSeats = json.Course.SeatAvailable;
-						}
-					}
-				})
-				.fail(function(reason) {
-					console.error('Course detail request failed: ', reason);
-
-					details.API_DOWN = true;
-				});
-		} else {
-			p = Promise.resolve();
+	__addBaseOption: function(details, option) {
+		if (this.state.base) {
+			console.error('More than one base', details, option);
 		}
 
-		return p.then(function() {
-			return details;
-		});
+		this.state.base = this.__getOptionText(details, option);
 	},
 
-	/*
-		Possible States
-			top
-				Not Enrolled
-				Open Enrolled
-				Enrolled for Credit
-				Course Archived/ not enrolled
-				Course Archived/ open enrolled before
-				Course Archived/ open enrolled after
-				Course Archived/ enrolled for credit pass
-				Course Archived/ enrolled for credit fail
 
-			bottom
-				Nothing
-				Available for Credit
-				Admission Pending
-				Admissin Denied
-				Enrolled for Credit (How do I drop?)
-				Open Course Archived Still available for credit
-				Course Archived Earned Credit
-				Course Archived Faild to Earn Credit
+	__addAddOnOption: function(details, option) {
+		var data = this.__getOptionText(details, option);
+
+		if (option.Enrolled) {
+			this.state.base = data;
+		} else {
+			this.state.addOns[data.name] = data;
+		}
+
+		//since add ons do not block showing the card
+		//we may need to update what is there
+		this.__maybeUpdateCard(this.state);
+	},
+
+	/**
+	 * Given enrollment details, fetch all the data for the option given
+	 * @param  {String} name    the name of the option
+	 * @param  {Object} details the enrollment details
+	 * @return {Promise}         resolved if the option is available, reject if not;
 	 */
-	ENROLLMENT_STATES: {
-		top: {
-			not_enrolled: {
-				title: 'Enroll for Free',
-				information: [
-					'Get complete access to interact with all course content, including lectures,',
-					'course materials, quizzes, and discussions once class is in session.'
-				].join(' '),
-				cls: ''
-			},
-			open_enrolled: {
-				title: 'You are in the Open Course!',
-				information: 'Class begins {date} and will be conducted fully online.',
-				cls: 'enrolled',
-				links: [
-					{href: 'welcome', text: 'Get Acquainted with Janux'},
-					{href: 'profile', text: 'Complete your Profile'}
-				]
-			},
-			credit_enrolled: {
-				title: 'Enrolled for College Credit',
-				information: 'Class begins {date} and will be conducted fully online.',
-				cls: 'enrolled',
-				links: [
-					{href: 'welcome', text: 'Get Acquainted with Janux'},
-					{href: 'profile', text: 'Complete your Profile'}
-				]
-			},
-			archived_not_enrolled: {
-				title: 'This Course is Archived.',
-				information: [
-					'Archived courses are out of session but all course content will remain available',
-					'including the lectures, course materials, quizzes, and discussions.'
-				].join(' '),
-				cls: ''
-			},
-			archived_enrolled_before: {
-				title: 'You Took the Open Course!',
-				information: [
-					'Thanks for your participation in OU Janux!',
-					'The content of this course will remain available for you to review at any time.'
-				].join(' '),
-				cls: ''
-			},
-			archived_enrolled_for_credit: {
-				title: 'Enrolled for College Credit!',
-				information: [
-					'Thanks for your participation in OU Janux!',
-					'The content of the course will remain available for you to review at any time.'
-				].join(' '),
-				cls: ''
-			}
-		},
-		bottom: {
-			not_enrolled: {
-				title: 'Earn College Credit',
-				information: 'Earn transcripted college credit from the University of Oklahoma.',
-				warning: 'Not available after {date}.',
-				cls: 'checkbox'
-			},
-			api_down: {
-				title: 'Earn College Credit',
-				information: [
-					'Transcripted credit is available from the University of Oklahoma but unfortunately we cannot process an application at this time.',
-					'Please contact the <a class=\'link\'href=\'mailto:support@nextthought.com\'>help desk.</a>'
-				].join(' '),
-				cls: 'rejected'
-			},
-			admission_pending: {
-				title: 'Admission Pending...',
-				information: [
-					'We\'re processing your request to earn college credit.',
-					'This process should take no more than two business days.',
-					'If you believe there has been an error, please contact the ',
-					'<a class=\'link\'href=\'mailto:support@nextthought.com\'>help desk.</a>'
-				].join(' '),
-				cls: 'pending'
-			},
-			admission_reject: {
-				title: 'We are unable to confirm your eligibility to enroll through this process.',
-				information: [
-					'Please contact the <a class=\'link\'href=\'mailto:support@nextthought.com\'>help desk.</a>',
-					'or <a class=\'link\' href=\'resubmit\'>resubmit your application</a>.'
-				].join(' '),
-				cls: 'rejected'
-			},
-			credit_enrolled: {
-				title: 'How do I drop the course?',
-				information: [
-					'If you are currently enrolled as an OU student, visit',
-					'<a class=\'link\' target=\'_blank\' href=\'http://ozone.ou.edu\'>oZone</a>.',
-					'If not, please contact the',
-					'<a class=\'link\' target=\'_blank\' href=\'http://www.ou.edu/admissions.html\'>Admission office</a>',
-					'by {date} for a full refund.'
-				].join(' '),
-				cls: 'enrolled'
-			}
-		}
-	},
+	__addEnrollmentOption: function(name, details) {
+		var me = this, loading,
+			option = details.Options[name];
 
-
-	getState: function(side, name, data) {
-		var state = this.ENROLLMENT_STATES[side][name],
-			prop, key;
-
-		if (!state || !data) { return state; }
-
-		for (prop in data) {
-			if (data.hasOwnProperty(prop)) {
-				key = '{' + prop + '}';
-				state.information = state.information.replace(key, data[prop]);
-				state.title = state.title.replace(key, data[prop]);
-				if (state.warning) {
-					state.warning = state.warning.replace(key, data[prop]);
+		if (option) {
+			loading = option.then(function(data) {
+				me.enrollmentOptions[data.Name] = data;
+				if (data.BaseOption) {
+					me.__addBaseOption(details, data);
+				} else {
+					me.__addAddOnOption(details, data);
 				}
-			}
-		}
-
-		return Ext.clone(state);
-	},
-
-
-	buildEnrollmentCard: function(state) {
-		if (Ext.isArray(state)) {
-			state = state[0];
-		}
-
-		this.state = state;
-		this.cardsContainerEl.removeCls('loading');
-		this.enrollmentCardTpl.append(this.cardsContainerEl, state);
-		this.cardsContainerEl.el.unmask();
-	},
-
-
-	applyToEnrollmentCard: function(state) {
-		var bottom = this.cardsContainerEl.el.down('.bottom');
-
-		if (state.bottom) {
-			if (state.bottom.cls) {
-				bottom.addCls(state.bottom.cls);
-			}
-
-			if (state.bottom.title) {
-				bottom.down('.title').update(state.bottom.title);
-			}
-
-			if (state.bottom.information) {
-				bottom.down('.info').update(state.bottom.information);
-			}
-
-			if (state.bottom.warning) {
-				bottom.down('.warning').update(state.bottom.warning);
-			}
-
-			if (state.price) {
-				bottom.down('.price').update(state.price);
-			}
-
-			if (state.hasSeats) {
-				if (state.seats === 0) {
-					bottom.addCls('full');
-					bottom.down('.warning').update('');
-				} else if (state.seats <= 10) {
-					bottom.down('.seats').update('Only ' + Ext.util.Format.plural(state.seats, 'seat') + ' left.');
-				}
-			}
-		}
-
-		bottom.removeCls('loading');
-		bottom.el.unmask();
-	},
-
-
-	__setArchivedState: function(state, courseData) {
-		var now = new Date();
-
-		if (courseData.EndDate < now) {
-			//just hide the bottom part for now
-			state.bottom.cls = 'openonly';
-			//if not enrolled
-			if (!courseData.Enrolled) {
-				state.top = this.getState('top', 'archived_not_enrolled');
-				state.buttonCls = 'open';
-				state.buttonText = 'Add Archived Course';
-			}
-
-			if (courseData.EnrolledForCredit) {
-				state.top = this.getState('top', 'archived_enrolled_for_credit');
-				state.buttonCls = '';
-				state.buttonText = '';
-			}
-
-			//if open enrolled before it was archived
-			if (courseData.OpenEnrolled && courseData.EndDate > courseData.EnrollStartDate) {
-				state.top = this.getState('top', 'archived_enrolled_before');
-				state.buttonCls = 'drop';
-				state.buttonText = 'Drop the Open Course';
-			}
-
-			//if open enrolled after it was archived
-			if (courseData.OpenEnrolled && courseData.EndDate <= courseData.EnrollStartDate) {
-				state.top = this.getState('top', 'archived_not_enrolled');
-				state.buttonCls = 'drop';
-				state.buttonText = 'Drop Archived Course';
-			}
-
-			//ignore these for now
-			////if enrolled for credit pass
-			//if (data.EnrolledFoCredit && data.passed) {
-
-			//}
-
-			////if enrolled for credit fail
-			//if (data.EnrolledForCredit && !data.passed) {
-
-			//}
-
-			return Promise.reject(state);
-		}
-
-		return Promise.resolve([state, courseData]);
-	},
-
-
-	__setEnrolledState: function(result) {
-		var state = result[0],
-			courseData = result[1];
-
-		if (courseData.OpenEnrolled) {
-			state.top = this.getState('top', 'open_enrolled', {
-				date: courseData.start
-			});
-
-			state.buttonCls = 'drop';
-			state.buttonText = 'Drop the Open Course';
-		} else if (courseData.EnrolledForCredit) {
-			state.top = this.getState('top' , 'credit_enrolled', {
-				date: courseData.start
-			});
-
-			state.buttonCls = '';
-			state.buttonText = '';
-		} else {
-			state.top = this.getState('top', 'not_enrolled');
-
-			state.buttonCls = 'open';
-			state.buttonText = 'Enroll in the Open Course';
-		}
-
-		return Promise.resolve([state, courseData]);
-	},
-
-
-	__setAdmissionState: function(result) {
-		var waitOnDetails = false,
-			state = result[0],
-			courseData = result[1];
-
-		if (courseData.AvailableForCredit) {
-			if (courseData.EnrolledForCredit) {
-				state.bottom = this.getState('bottom', 'credit_enrolled', {
-					date: courseData.dropcutoff
-				});
-			} else if (courseData.AdmissionState === 'Pending') {
-				state.bottom = this.getState('bottom', 'admission_pending');
-			} else if (courseData.AdmissionState === 'Rejected') {
-				waitOnDetails = true;
-			} else {
-				//not enrolled and available for credit
-				waitOnDetails = true;
-			}
-		} else if (courseData.EnrolledForCredit) {
-			state.bottom = this.getState('bottom', 'credit_enrolled', {
-				date: courseData.dropcutoff
 			});
 		} else {
-			state.bottom.cls = 'openonly';
+			loading = Promise.reject();
 		}
 
-		return waitOnDetails ? Promise.resolve([state, courseData]) : Promise.reject(state);
+		return loading;
 	},
 
 
-	__setDetailsState: function(result, details) {
-		var state = result[0],
-			courseData = result[1];
+	/**
+	 * Takes the enrollment details for the course and build the
+	 * data necessary to make the enrollment card
+	 * @param  {Object} details enrollment details
+	 * @return {Promise}         fulfills when its done, a rejection is not expected
+	 */
+	__onDetailsLoaded: function(details) {
+		var loading = Promise.reject(),
+			me = this;
 
-		if (details.AvailableForCredit) {
-			if (details.API_DOWN) {
-				state.bottom = this.getState('bottom', 'api_down', {
-					date: courseData.enrollcutoff
-				});
-
-				state.price = courseData.Price;
-			} else if (courseData.AdmissionState === 'Rejected') {
-				state.bottom = this.getState('bottom', 'admission_reject');
+		//iterate through the all the possible options and load their data
+		//if the option is configured to wait, do not unmask the card before its is loaded
+		//if the option isn't ocnfigured to wait, do not block showing the card
+		CourseWareUtils.Enrollment.forEachOption(function(option) {
+			if (option.wait) {
+				loading = loading
+						.fail(me.__addEnrollmentOption.bind(me, option.name, details));
 			} else {
-				state.bottom = this.getState('bottom', 'not_enrolled', {
-					date: courseData.enrollcutoff
-				});
-				state.price = courseData.Price;
+				//add a placeholder for the add on to show that there is another option coming
+				me.state.addOns[option.name] = {
+					name: option.name,
+					loading: true
+				};
+				//if the option is not available it will be a rejected promise immediately
+				//so on fail remove it from the addons
+				me.__addEnrollmentOption(option.name, details)
+					.fail(function() {
+						delete me.state.addOns[option.name];
+					});
+			}
+		});
 
-				if (details.AvailableSeats !== undefined) {
-					state.hasSeats = true;
-					state.seats = details.AvailableSeats;
+		return loading;
+	},
 
-					if (details.AvailableSeats === 0) {
-						state.bottom.cls = state.bottom.cls + ' full';
-						state.bottom.warning = '';
-					}
+
+	__maybeUpdateCard: function(state) {
+		var me = this,
+			card = me.cardsContainerEl,
+			addOns = Object.keys(state.addOns || {});
+
+
+		//if the card is still loading there's no need to update
+		if (card.hasCls('loading')) { return; }
+
+		addOns.forEach(function(key) {
+			var el = card.down('.loading[data-name="' + key + '"]'),
+				obj = state.addOns[key] || {},
+				title = obj.title,
+				titleEl = el && el.down('.title'),
+				price = obj.price,
+				info = obj.information,
+				infoEl = el && el.down('.info'),
+				seats = obj.seats,
+				seatsEl = el && el.down('.seats'),
+				warning = obj.warning,
+				warningEl = el && el.down('.warning');
+
+			if (!el) { return; }
+
+			el.removeCls('loading');
+
+			if (obj.cls) {
+				el.addCls(obj.cls);
+			}
+
+			price = me.getPriceString(state.base.price, price);
+
+			if (title && titleEl) {
+				if (price) {
+					titleEl.update(title + '<span>(' + price + ')</span>');
+				} else {
+					titleEl.update(title);
 				}
 			}
-		}
 
-		return Promise.reject(state);
+			if (info && infoEl) {
+				infoEl.update(info);
+			}
+
+			if (seats && seatsEl) {
+				seatsEl.update(seats);
+			}
+
+			if (warning && warningEl) {
+				warningEl.update(warning);
+			}
+		});
 	},
 
 
+	__buildCard: function(state) {
+		var data = {
+				base: state.base,
+				addOns: [],
+				buttonName: state.base.name,
+				buttonCls: state.base.price ? 'paid' : 'free',
+				buttonText: state.base.buttonText || '',
+				drop: state.base.dropText
+			},
+			me = this,
+			addOns = Ext.Object.getValues(state.addOns);
+
+		addOns.forEach(function(addOn) {
+			addOn.difference = me.getPriceString(state.base.price, addOn.price);
+
+			if (addOn.loading) {
+				addOn.cls = addOn.cls ? addOn.cls + ' loading' : 'loading';
+			}
+			data.addOns.push(addOn);
+		});
+
+		data.base.priceString = this.getPriceString(data.base.price);
+
+		me.enrollmentCardTpl.append(me.cardsContainerEl, data);
+		me.cardsContainerEl.removeCls('loading');
+
+	},
+
+
+	__showError: function() {
+
+	},
+
+	/**
+	 * Updates the enrollment card to match the options available
+	 * to the user for this course
+	 */
 	updateEnrollmentCard: function() {
-		if (this.isDestroyed) {
+		if (this.isDestoryed) {
 			return;
 		}
 
-		this.cardsContainerEl.dom.innerHTML = '';
-
 		var me = this,
-			state = {
-				top: {},
-				bottom: {}
-			};
+			loading;
 
-		CourseWareUtils.Enrollment.getEnrollmentDetails(this.course)
-			.then(function(details) {
-				details.Options.FiveminuteEnrollment.then(function(option) {
-					me.FiveminuteEnrollment = option;
-				});
-
-				details.Options.OpenEnrollment.then(function(option) {
-					me.OpenEnrollment = option;
-				});
-
-				details.Options.StoreEnrollment.then(function(option) {
-					me.StoreEnrollment = option;
-				});
-			});
 
 		me.cardsContainerEl.addCls('loading');
-		me.cardsContainerEl.el.mask('Loading');
+		me.cardsContainerEl.dom.innerHTML = '';
 
-		//if the __set*State retunrs a rejected promise it means to go ahead and build the
-		//component without going through the rest of the __set*State
-		me.getEnrollmentData()
-			.then(me.__setArchivedState.bind(me, state))
-			.then(me.__setEnrolledState.bind(me))
-			.then(me.__setAdmissionState.bind(me))
-			.then(function(result) {
-				var bottom,
-					state = result[0];
+		//empty out the previous options
+		me.enrollmentOptions = {};
 
-				me.buildEnrollmentCard(state);
+		//start with an empty state
+		me.state = {
+			base: null,
+			addOns: {},
+			gifts: null
+		};
 
-				bottom = me.cardsContainerEl.el.down('.bottom');
-
-				if (!bottom) {
-					console.error('No admission state part of the enrollment card');
-					return;
-				}
-
-				bottom.addCls('loading');
-				bottom.el.mask('Loading...');
-
-				me.getCourseDetailsData()
-					.then(me.__setDetailsState.bind(me, result))
-					.fail(me.applyToEnrollmentCard.bind(me));
-
-				//reject with no reason to break the chain
-				return Promise.reject();
+		CourseWareUtils.Enrollment.getEnrollmentDetails(me.course)
+			.then(me.__onDetailsLoaded.bind(me))
+			.then(function() {
+				return me.state;
 			})
 			.fail(function(reason) {
-				if (Ext.isObject(reason)) {
-					return reason;
-				}
-
-				return Promise.reject(reason);
+				console.error('Failed to load enrollment details,', reason);
+				me.__showError();
+				return Promise.reject();//keep the failure going
 			})
-			.then(me.buildEnrollmentCard.bind(me));
+			.then(me.__buildCard.bind(me));
+
 	},
 
+	/**
+	 * takes the prices and returns the string we should show to the user
+	 *
+	 * @param  {Number} base  the price of the base option
+	 * @param  {Number} addOn the price of the addon
+	 * @return {String}       what we should show the user
+	 */
+	getPriceString: function(base, addOn) {
+		var price;
+
+		base = base === 'Free' ? 0 : base;
+		addOn = addOn === 'Free' ? 0 : addOn;
+
+		//if no add on was passed
+		//get the string for the base
+		if (addOn === undefined) {
+			if (!base) {
+				price = 'Free';
+			} else {
+				price = '$' + base;
+			}
+		//if is no base or its free (0)
+		} else if (!base) {
+			if (!addOn) {
+				price = 'Free';
+			} else {
+				price = '$' + addOn;
+			}
+		} else {
+			if (!addOn) {
+				price = 'Free';
+			} else {
+				price = 'Add $' + (base - addOn);
+			}
+		}
+
+		return price;
+	},
 
 	showMessage: function(msg, isError, cursor) {
 		var me = this,
@@ -707,66 +494,141 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			}});
 	},
 
-
+	/**
+	 * Handles a click on the enrollment card and calls the appropriate handler
+	 * @param  {Event} e the click event
+	 * @return {Boolean}   if the event was stopped
+	 */
 	handleEnrollmentClick: function(e) {
-		var me = this, win = me.up('window'),
-			checkbox = e.getTarget('.bottom.checkbox'),
-			button = this.cardsContainerEl.down('.button'),
-			anchor = e.getTarget('a'), href, title;
+		var checkbox = e.getTarget('.addon.checkbox'),
+			button = e.getTarget('.button'),
+			anchor = e.getTarget('a'), r;
 
-		checkbox = Ext.get(checkbox);
+		if (checkbox) {
+			r = this.updateSelectedEnrollment(Ext.get(checkbox), e);
+		} else if (button) {
+			r = this.enrollmentClicked(Ext.get(button), e);
+		} else if (anchor) {
+			r = this.linkClicked(Ext.get(anchor), e);
+		}
 
-		if (checkbox && !checkbox.hasCls('full')) {
-			if (checkbox.hasCls('checked')) {
-				button.update(this.state.buttonText);
-				button.removeCls(['drop', 'credit', 'open']);
-				button.addCls(this.state.buttonCls);
-				checkbox.removeCls('checked');
-			} else {
-				button.update('Enroll For College Credit!');
-				button.removeCls(['drop', 'open']);
-				button.addCls('credit');
-				checkbox.addCls('checked');
+		return r;
+	},
+
+	/**
+	 * Updates the cards and button toggling a addon
+	 * @param  {Ext.element} checkbox the addon element
+	 * @param  {Event} e        the click event
+	 */
+	updateSelectedEnrollment: function(checkbox, e) {
+		//if the checkbox is full don't do anything
+		if (checkbox.hasCls('full')) { return; }
+
+		var me = this,
+			name = checkbox.getAttribute('data-name'),
+			baseEl = me.cardsContainerEl.down('.enroll-option.base:not(.enrolled)'),
+			button = me.cardsContainerEl.down('.button'),
+			titleEl = baseEl && baseEl.down('.title'),
+			priceEl = baseEl && baseEl.down('.price'),
+			title, price;
+
+		function fillInOption(option) {
+			title = option.title;
+			price = me.getPriceString(option.price);
+
+			button.removeCls(['paid', 'free']);
+			button.addCls(option.price ? 'paid' : 'free');
+			button.dom.setAttribute('data-name', option.name);
+			button.update(option.buttonText);
+
+			if (titleEl) {
+				titleEl.update(title);
+			}
+
+			if (priceEl) {
+				priceEl.update(price);
 			}
 		}
 
-		if (anchor) {
-			href = anchor.getAttribute('href');
+		//if the checkbox already has a class of checked
+		//set it back to the base
+		if (checkbox.hasCls('checked')) {
+			fillInOption(me.state.base);
 
-			if (href === 'welcome') {
-				e.stopEvent();
-				me.fireEvent('show-permanent-welcome-guide', {
-					link: $AppConfig.userObject.getLink('content.permanent_welcome_page')
-				});
+			checkbox.removeCls('checked');
+		} else {
+			fillInOption(me.state.addOns[name]);
 
-				return false;
+			checkbox.addCls('checked');
+		}
+	},
+
+	/**
+	 * Handles anchors with hrefs that we are looking for
+	 * @param  {Ext.element} link the anchor that was clicked
+	 * @param  {Event} e    the click event
+	 * @return {Boolean}      whether or not the event should be stopped
+	 */
+	linkClicked: function(link, e) {
+		var href = link.getAttribute('href'), r = true,
+			win = this.up('window');
+
+		if (href === 'welcome') {
+			e.stopEvent();
+			this.fireEvent('show-permanent-welcome-guide', {
+				link: $AppConfig.userObject.getLink('content.permanent_welcome_page')
+			});
+
+			r = false;
+		} else if (href === 'profile') {
+			e.stopEvent();
+			this.fireEvent('show-profile', $AppConfig.userObject, ['about']);
+
+			if (win) {
+				win.close();
 			}
 
-			if (href === 'profile') {
-				e.stopEvent();
-				me.fireEvent('show-profile', $AppConfig.userObject, ['about']);
+			r = false;
+		} else if (href === 'resubmit') {
+			e.stopEvent();
+			me.enrollInOption('FiveminuteEnrollment');
 
-				if (win) {
-					win.close();
-				}
-
-				return false;
-			}
-
-			if (href === 'resubmit') {
-				e.stopEvent();
-				me.fireEvent('enroll-for-credit', me.course);
-				return false;
-			}
+			r = false;
 		}
 
-		function done(success, change) {
+		return r;
+	},
+
+	/**
+	 * Handles the button being clicked for enrolling/dropping
+	 * @param  {Ext.element} button the button element
+	 * @param  {Event} e      the click event
+	 */
+	enrollmentClicked: function(button, e) {
+		var me = this, title,
+			name = button.getAttribute('data-name'),
+			option = me.enrollmentOptions[name], action;
+
+		if (!option) {
+			console.error('No enrollment option with that name', button);
+			return;
+		}
+
+		title = me.course.get('Title');
+
+		if (title.length >= 50) {
+			title = title.substr(0, 47) + '...';
+		} else {
+			title = title + '.';
+		}
+
+		function done(success, changed) {
 			delete me.changingEnrollment;
 
 			var store = Ext.getStore('courseware.AvailableCourses'),
 				c = store.getById(me.course.getId());
 
-			if (success && change) {
+			if (success && changed) {
 				if (c) {
 					me.course = c;
 				}
@@ -777,57 +639,41 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			me.removeMask();
 		}
 
-		if (!e.getTarget('.button')) {
-			return;
-		}
-
-		me.addMask();
-
-		title = me.course.get('Title');
-
-		if (title.length >= 50) {
-			title = title.substr(0, 47) + '...';
-		} else {
-			title = title + '.';
-		}
-
-		//if we are dropping
-		if (button.hasCls('drop')) {
-			this.changingEnrollment = true;
-
+		if (option.Enrolled && option.undoEnrollment) {
+			me.changingEnrollment = true;
 			Ext.Msg.show({
-				msg: 'Dropping ' + me.course.get('Title') + ' will remove it from your library, and you will no longer have access to the course materials.',
-				buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
-				scope: this,
-				icon: 'warning-red',
-				buttonText: {'ok': 'caution:Drop Course'},
+				msg: 'Dropping ' + me.course.get('Title') + ' will remove it from your library, and you will no longer have access to the course materials',
 				title: 'Are you sure?',
-				fn: function(str) {
-					if (str === 'ok') {
-						me.fireEvent('change-enrollment', me.course, false, function(success, change) {
-							if (success) {
-								me.fireEvent('enrolled-action', false);
-								me.showMessage('You are no longer enrolled in ' + title);
-							} else {
-								me.showMessage('There was an error dropping the course, please try again later.', true);
-							}
-
-							done(success, change);
-						});
-						return;
-					}
-
-					done(false);
+				icon: 'warning-red',
+				buttons: {
+					primary: {
+						text: 'Drop Course',
+						cls: 'caution',
+						handler: function() {
+							me.addMask();
+							option.undoEnrollment(me)
+								.then(function(changed) {
+									me.fireEvent('enrolled-action', false);
+									me.showMessage('You are no long enrolled in ' + title);
+									done(true, changed);
+								})
+								.fail(function(reason) {
+									console.error('failed to drop course', reason);
+									me.showMessage('There was an error dropping the course. Please try again later.', true);
+									done(false);
+								});
+						}
+					},
+					secondary: 'Cancel'
 				}
 			});
+		} else if (option.doEnrollment) {
+			action = option.doEnrollment(me);
 
-			return;
-		}
-
-		if (button.hasCls('open')) {
-			this.changingEnrollment = true;
-				me.fireEvent('change-enrollment', me.course, true, function(success, change) {
-					if (success) {
+			if (action) {
+				me.addMask();
+				action
+					.then(function(changed) {
 						me.fireEvent('enrolled-action', true);
 
 						me.msgClickHandler = function() {
@@ -842,31 +688,27 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 								})
 								.fail(function(reason) {
 									alert('Unable to find course.');
-									console.error('Unable to find course. %o', reason);
+									console.error('Unable to fined course.', reason);
 								});
 						};
 
-						me.showMessage('You have successfully enrolled in ' + title + ' Click here to go to the content.', null, true);
-					} else {
+						done(true, changed);
+					})
+					.fail(function(reason) {
+						console.error('failed to enroll in course', reason);
+
 						me.showMessage('There was an error enrolling. Please try again later.', true);
-					}
 
-					done(success, change);
-				});
-				return;
+						done(false);
+					});
+			}
 		}
 
-
-		if (button.hasCls('credit')) {
-			me.fireEvent('enroll-for-credit', me.course);
-		}
-
-		done();
 	},
 
 
 	enrollInOption: function(name) {
-		var option = this[name];
+		var option = this.enrollmentOptions[name];
 
 		if (option) {
 			option.DoEnrollment(this);
