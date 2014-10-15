@@ -281,6 +281,7 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 				StartDate: course.get('StartDate'),
 				EndDate: course.get('EndDate'),
 				Enrolled: course.isActive(),
+				EnrolledType: course.get('enrollmentType'),
 				Options: {
 					OpenEnrollment: this.__buildOpenEnrollmentDetails(course),
 					FiveminuteEnrollment: this.__buildFmaepDetails(course),
