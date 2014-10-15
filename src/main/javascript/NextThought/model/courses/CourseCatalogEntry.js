@@ -113,7 +113,7 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		} else if (status === 'ForCreditNonDegree') {
 			if (storeOption && storeOption.IsEnrolled) {
 				isOpen = true;
-			} else if (fmaepOption && fmaep.IsEnrolled) {
+			} else if (fmaepOption && fmaepOption.IsEnrolled) {
 				isOpen = false;
 			}
 		}
