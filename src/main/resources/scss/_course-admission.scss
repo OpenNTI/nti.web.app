@@ -48,23 +48,22 @@
 				}
 			}
 
-			&.active:not(.failed) {
-				color: $secondary-green;
-				@include icon('check_progress_grn', $side: after, $top: 13px, $left: 11px);
-
-				&::before {
-					border-color: $secondary-green;
-				}
-			}
-
 			&.active {
 				background-color: white;
 				border: 0px solid #e5e5e5;
 				border-left-width: 1px;
 				border-right-width: 1px;
+
+				&:not(.failed) {
+					color: $secondary-green;
+
+					&::before {
+						border-color: $secondary-green;
+					}
+				}
 			}
 
-			&.number:not(.enabled):not(.active)::after {
+			&.number:not(.enabled)::after {
 				content: attr(data-number);
 				position: absolute;
 				top: 0;

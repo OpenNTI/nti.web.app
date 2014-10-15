@@ -6,7 +6,8 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 		'NextThought.view.courseware.coursecatalog.Collection',
 		'NextThought.view.courseware.coursecatalog.TabPanel',
 		'NextThought.view.courseware.enrollment.credit.View',
-		'NextThought.view.courseware.enrollment.Details'
+		'NextThought.view.courseware.enrollment.Details',
+		'NextThought.view.courseware.enrollment.Process'
 	],
 
 	floating: true,
@@ -31,6 +32,10 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 	getDockedItems: function() { return []; },
 	center: Ext.emptyFn,
 
+	buttonCfg: [
+		{name: 'Finish', action: 'close'}
+	],
+
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'header', cn: [
 			{cls: 'name', html: '{label}'},
@@ -51,6 +56,8 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 			{cls: 'button error enrollment cancel', html: 'Cancel'}
 		]}
 	]),
+
+	btnTpl: new Ext.XTemplate(Ext.DomHelper.markup({cls: 'button {disabled} {secondary}', 'data-action': '{action}', html: '{name}'})),
 
 
 	renderSelectors: {
@@ -178,10 +185,11 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 			}
 		});
 
+		me.mon(me.footerEl, 'click', 'handleButtonClick');
+
 		me.on({
 			'show-msg': 'showMsg',
-			'enable-submission': 'enableSubmit',
-			'set-window-btns': 'setWindowBtns',
+			'update-buttons': 'updateButtons',
 			'show-detail': function(course) {
 				wait()
 					.then(function() {
@@ -262,7 +270,7 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 				delete me.courseDetail;
 			}
 
-			if (current.is('enrollment-credit')) {
+			if (current.is('enrollment-process')) {
 				me.showCourse(current.course);
 				delete me.courseEnrollment;
 			}
@@ -315,49 +323,52 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 	},
 
 
-	setWindowBtns: function(cls) {
-		this.footerEl.removeCls(this.windowbtncls);
-		this.windowbtncls = cls;
-		this.footerEl.addCls(cls);
+	updateButtons: function() {
+		var active = this.getLayout().getActiveItem(),
+			btnCfg = active && active.getButtonCfg && active.getButtonCfg();
+
+		this.applyButtonCfg(btnCfg || this.buttonCfg);
 	},
 
 
-	enableSubmit: function(enable) {
-		this.footerEl.down('.submit')[enable ? 'removeCls' : 'addCls']('disabled');
+	applyButtonCfg: function(cfgs) {
+		var me = this;
+
+		//make sure its an array
+		cfgs = Ext.isArray(cfgs) ? cfgs : [cfgs];
+
+		//clear out the old buttons
+		me.footerEl.update('');
+
+		cfgs.forEach(function(cfg) {
+			cfg.disabled = cfg.disabled ? 'disabled' : '';
+			cfg.secondary = cfg.secondary ? 'secondary' : '';
+
+			me.btnTpl.append(me.footerEl, cfg);
+		});
 	},
 
 
-	enrollmentOptionClicked: function(e) {
-		var admission, enroll;
+	handleButtonClick: function(e) {
+		var btn = e.getTarget('.button'),
+			active, action;
 
-		if (e.getTarget('.cancel')) {
+		btn = btn && Ext.get(btn);
+
+		if (!btn || btn.hasCls('disabled')) { return; }
+
+		action = btn.getAttribute('data-action');
+
+		if (action === 'close') {
+			this.close();
+		} else if (action === 'go-back') {
 			this.showPrevItem();
-			return;
+		} else {
+			active = this.getLayout().getActiveItem();
+			active.buttonClick(action);
 		}
 
-		if (!this.courseEnrollment) {
-			console.error('not in the enrollment process, why can you click an enroll');
-			return;
-		}
 
-		if (e.getTarget('.admission.submit')) {
-			this.courseEnrollment.maybeSubmitApplication();
-		}
-
-		if (e.getTarget('.enroll.submit')) {
-			this.courseEnrollment.maybeSubmitEnrollment();
-		}
-	},
-
-
-	admissionComplete: function() {
-		if (!this.courseDetail) {
-			console.error('No course detail to go back to');
-			return;
-		}
-
-		this.courseDetail.updateEnrollmentCard();
-		this.getLayout().setActiveItem(this.courseDetail);
 	},
 
 
@@ -437,8 +448,36 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 		}
 
 		me.mon(me.courseDetail, 'enroll-for-credit', 'showAdmission');
+		me.mon(me.courseDetail, 'enroll-in-course', 'showEnrollmentOption');
 
 		me.getLayout().setActiveItem(me.courseDetail);
+		me.closeMsg();
+	},
+
+
+	showEnrollmentOption: function(course, name) {
+		var me = this;
+
+		function addView() {
+			me.courseEnrollment = me.add({
+				xtype: 'enrollment-process',
+				steps: CourseWareUtils.Enrollment.getEnrollmentSteps(course, name),
+				course: course
+			});
+		}
+
+		if (!me.courseEnrollment) {
+			addView();
+		} else if (me.courseEnrollment.course !== course) {
+			addView();
+		}
+
+		function updateLabel() {
+			me.labelEl.addCls('back');
+			me.labelEl.update(course.get('Title'));
+		}
+
+		me.getLayout().setActiveItem(me.courseEnrollment);
 		me.closeMsg();
 	},
 

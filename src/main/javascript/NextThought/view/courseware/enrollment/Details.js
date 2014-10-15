@@ -66,6 +66,8 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 		});
 
 		this.on('beforedeactivate', 'onBeforeDeactivate');
+
+		window.EnrollInOption = this.enrollInOption.bind(this);
 	},
 
 
@@ -627,6 +629,21 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 				bottom: {}
 			};
 
+		CourseWareUtils.Enrollment.getEnrollmentDetails(this.course)
+			.then(function(details) {
+				details.Options.FiveminuteEnrollment.then(function(option) {
+					me.FiveminuteEnrollment = option;
+				});
+
+				details.Options.OpenEnrollment.then(function(option) {
+					me.OpenEnrollment = option;
+				});
+
+				details.Options.StoreEnrollment.then(function(option) {
+					me.storeEnrollment = option;
+				});
+			});
+
 		me.cardsContainerEl.addCls('loading');
 		me.cardsContainerEl.el.mask('Loading');
 
@@ -845,5 +862,14 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 		}
 
 		done();
+	},
+
+
+	enrollInOption: function(name) {
+		var option = this[name];
+
+		if (option) {
+			option.DoEnrollment(this);
+		}
 	}
 });

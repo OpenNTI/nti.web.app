@@ -1,6 +1,6 @@
-Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
+Ext.define('NextThought.view.courseware.enrollment.Admission', {
 	extend: 'Ext.container.Container',
-	alias: 'widget.enrollment-credit-admission',
+	alias: 'widget.enrollment-admission',
 
 	requires: ['NextThought.view.courseware.enrollment.parts.*'],
 
@@ -10,6 +10,11 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 		Message: '',
 		ContactInformation: 'Please contact the <a href=\'mailto:support@nextthought.com\'>help desk</a> for further information.'
 	},
+
+	buttonCfg: [
+		{name: 'Submit Application', disabled: true, action: 'submit-application'},
+		{name: 'Cancel', disabled: false, action: 'go-back', secondary: true}
+	],
 
 	STATE_VALUES: {},
 
@@ -291,12 +296,14 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 		var me = this,
 			form = me.form.slice();
 
-		me.enableBubble(['show-msg', 'enable-submission']);
+		me.submitBtnCfg = me.buttonCfg[0];
+
+		me.enableBubble(['show-msg', 'enable-submission', 'update-buttons']);
 
 		me.on({
 			'reveal-item': 'revealItem',
 			'hide-item': 'hideItem',
-			'send-application': 'maybeSubmitApplication',
+			'send-application': 'maybeSubmit',
 			'add-address-line': 'addAddressLine'
 		});
 
@@ -333,36 +340,23 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 	},
 
 
-	fillInDefaults: function(values) {
-		var user = $AppConfig.userObject,
-			firstName = user.get('FirstName'),
-			lastName = user.get('LastName'),
-			email = user.get('email');
+	getButtonCfg: function() {
+		return this.buttonCfg;
+	},
 
-		if (!values.first_name && firstName) {
-			values.first_name = firstName;
+
+	buttonClick: function(action) {
+		if (action === 'submit-application') {
+			this.maybeSubmit();
 		}
-
-		if (!values.last_name && lastName) {
-			values.last_name = lastName;
-		}
-
-		if (!values.email && email) {
-			values.email = email;
-		}
-
-		return values;
 	},
 
 
 	updateFromStorage: function() {
 		var me = this,
 			values = TemporaryStorage.get(me.STATE_NAME) || {},
-			keys,
+			keys = Object.keys(values),
 			waitOnRender = [];
-
-		values = this.fillInDefaults(values);
-		keys = Object.keys(values),
 
 		(keys || []).forEach(function(key) {
 			var input = me.down('[name="' + key + '"]'),
@@ -562,7 +556,8 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 		}
 
 		if (name === 'enable-submit') {
-			me.fireEvent('enable-submission', false);
+			me.submitBtnCfg.disabled = true;
+			me.fireEvent('update-buttons');
 		}
 
 
@@ -596,9 +591,10 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 		}
 
 		if (name === 'enable-submit') {
+			me.submitBtnCfg.disabled = false;
+
 			me.shouldAllowSubmission()
-				.then(me.fireEvent.bind(me, 'enable-submission', true))
-				.fail(me.fireEvent.bind(me, 'enable-submission', true));
+				.always(me.fireEvent.bind(me, 'update-buttons'));
 		}
 
 		item = me.down('[name="' + name + '"]');
@@ -862,43 +858,34 @@ Ext.define('NextThought.view.courseware.enrollment.credit.Admission', {
 			this.course.setEnrollmentLinks(json.Links);
 			this.fireEvent('show-msg', json.Message || 'Your application was successful.', false, 5000);
 			this.clearStorage();
-			this.fireEvent('admission-complete', true);
+			this.done(this);
 		} else if (json.Status === 409) {
 			this.showError(json);
 			this.clearStorage();
-			this.fireEvent('admission-error');
+			this.error(this);
 			this.showAlreadyExisted(json);
 		} else {
 			this.showError(json);
 			this.clearStorage();
-			this.fireEvent('admission-error');
+			this.error(this);
 			this.showErrorState(json);
 		}
 	},
 
 
 	maybeSubmit: function() {
-		var submitlink = $AppConfig.userObject.getLink('fmaep.admission'),
-			me = this, isValid,
+		var me = this, isValid,
 			maskCmp = this.getMaskCmp(),
 			value = me.getValue();
-
-		if (!submitlink) {
-			me.fireEvent('show-msg', 'An error occured, please try again later', true);
-			console.error('no admission links');
-			return;
-		}
 
 		me.shouldAllowSubmission(value)
 			.then(function() {
 				isValid = true;
-				me.fireEvent('enable-submission', false);
+				me.submitBtnCfg.disabled = true;
+				me.fireEvent('update-buttons');
 				maskCmp.el.mask('Your application is being processed. This may take a few moments.');
 
-				return Service.post({
-					url: submitlink,
-					timeout: 120000 //2 minutes
-				}, value);
+				return me.complete(me, value);
 			}, function() {
 				isValid = false;
 

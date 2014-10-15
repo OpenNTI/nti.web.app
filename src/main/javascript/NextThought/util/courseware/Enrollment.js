@@ -13,12 +13,13 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 
 		{
 			isComplete: function //returns a promise that fulfills if this step is completed, rejects if they need to complete it
-			autoComplete: boolean //true if the step should be completed as soon as its active
-			xtype: String //the view to show for this step
+			enrollmentOption: Object //the object from the CCE's EnrollmentOptions
+			xtype: String //the view to show for this step if empty this step is just a placeholder in the breadcrumb thingy
 			name: String //the name that displays in the progress bread crumb thingy
-			isActive: boolean //true if this is the step they should start on, if more than on step is active the last one is where it starts
 			buttonCfg: Object //the buttons to show in the window, see the documentation in NextThought.view.library.available.CourseWindow
-			complete: function //completes that step and moves the ui forward takes the cmp to fire events from and data from the ui, returns a promise
+								these should be defined on the components themselves
+			complete: function //completes that step takes the cmp to fire events from and data from the ui, returns a promise
+			done: function //moves the ui forward after complete is successful
 			Purchasable: Model //only if payment takes place in the app
 			//other data necessary for the step to complete
 		}
@@ -34,17 +35,150 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 	 * @return {Array}        an array of steps
 	 */
 	getEnrollmentSteps: function(course, enrollmentType) {
+		var steps = [];
 
+		if (enrollmentType === this.OPEN) {
+			steps = this.__buildOpenEnrollmentSteps(course);
+		} else if (enrollmentType === this.FMAEP) {
+			steps = this.__buildFmaepSteps(course);
+		} else if (enrollmentType === this.STRIPE) {
+			steps = this.__buildStoreEnrollmentSteps(course);
+		} else {
+			console.error('Not a recognized enrollment type: ', enrollmentType);
+		}
+
+		return steps;
+	},
+
+
+	__stepTpl: {
+		xtype: '',
+		name: '',
+		enrollmentOption: {},
+		isActive: false,
+		isComplete: function() {},
+		comlete: function() {},
+		done: function(cmp) {
+			cmp.fireEvent('step-completed');
+		},
+		error: function(cmp) {
+			cmp.fireEvent('step-error');
+		}
+	},
+
+
+	__addStep: function(cfg, steps) {
+		steps.push(Ext.applyIf(cfg, this.__stepTpl));
 	},
 
 
 	__buildOpenEnrollmentSteps: function(course) {
-
+		return [];
 	},
 
 
 	__buildFmaepSteps: function(course) {
+		var enrollmentOption = course.getEnrollmentOption(this.FMAEP),
+			steps = [];
 
+		//the admission form
+		this.__addStep({
+			xtype: 'enrollment-admission',
+			name: 'Admissions',
+			enrollmentOption: enrollmentOption,
+			isActive: true,
+			isComplete: function() {
+				return new Promise(function(fulfill, reject) {
+					if ($AppConfig.userObject.get('admission_status') === 'Admitted') {
+						fulfill();
+					} else {
+						reject();
+					}
+				});
+			},
+			complete: function(cmp, data) {
+				var link = $AppConfig.userObject.getLink('fmaep.admission');
+
+				if (!link) {
+					console.error('No admit link');
+					return Promise.reject();
+				}
+
+				return Service.post({
+					url: link,
+					timeout: 120000 //2 minutes
+				}, data);
+			}
+		}, steps);
+
+		//the payment confirmation
+		this.__addStep({
+			xtype: 'enrollment-enroll',
+			name: 'Enrollment',
+			enrollmentOption: enrollmentOption,
+			isActive: false,
+			isComplete: function() {
+				var link = course.getLink('fmaep.is.pay.done'),
+					crn = enrollmentOption.NTI_CRN,
+					term = enrollmentOption.NTI_Term;
+
+				if (!link) {
+					return Promise.reject('No is pay done link');
+				}
+
+				return Service.post(link, {
+					crn: crn,
+					term: term
+				}).then(function(response) {
+					var json = Ext.JSON.decode(response, true);
+
+					if (json.Status !== 200) {
+						return Promise.reject(response);
+					}
+
+					if (json.State) {
+						return true;
+					} else {
+						return Promise.reject(response);
+					}
+				});
+			},
+			complete: function(cmp, data) {
+				var link = course.getEnrollAndPayLink(),
+					crn = enrollmentOption.NTI_CRN,
+					term = enrollmentOption.NTI_Term,
+					returnUrl = course.buildPaymentReturnURL();
+
+				if (!link) {
+					return Promise.reject('No enroll and pay link');
+				}
+
+				return Service.post(link, {
+					crn: crn,
+					term: term,
+					return_url: returnUrl
+				});
+			}
+		}, steps);
+
+		//payment
+		this.__addStep({
+			xtype: '',
+			name: 'Payment',
+			isComplete: function() {
+				return Promise.resolve();
+			}
+		}, steps);
+
+
+		//confirmation
+		this.__addStep({
+			xtype: 'enrollment-confirmation',
+			name: 'Confirmation',
+			enrollmentOption: enrollmentOption
+		}, steps);
+
+		return steps;
 	},
 
 
@@ -100,7 +234,7 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 					StoreEnrollment: this.__buildStoreEnrollmentDetails(course)
 				}
 			};
-
+		//if we are enrolled in the course get the enrollment instance to see when they enrolled
 		if (catalogData.Enrolled) {
 			p = CourseWareUtils.findCourseBy(course.findByMyCourseInstance())
 				.then(function(instance) {
@@ -176,7 +310,8 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 		}
 
 
-		details = Service.getLink(enrollmentOption.Links, 'fmaep.course.details');
+		details = Service.getLinkFrom(enrollmentOption.Links, 'fmaep.course.details');
+
 		catalogData = {
 			EnrollCutOff: enrollmentOption.OU_EnrollCutOffDate,
 			DropCutOff: enrollmentOption.OU_DropCutOffDate,
@@ -193,6 +328,7 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 			UndoEnrollment: null
 		};
 
+		//if there is a link to get external info get it and add it to the catalogData
 		if (details) {
 			p = Service.request(details)
 				.then(function(json) {

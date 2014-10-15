@@ -28,6 +28,8 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		{ name: 'enrolled', type: 'bool' },
 		{ name: 'DisableOverviewCalendar', type: 'bool', persist: false},
 
+		{name: 'EnrollmentOptions', type: 'auto', persist: false},
+
 		{ name: 'NTI_FiveminuteEnrollmentCapable', type: 'bool', persist: false },
 		{ name: 'NTI_CRN', type: 'string', persist: false },
 		{ name: 'NTI_Term', type: 'string', persist: false },
@@ -93,6 +95,13 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 				.then(function(url) { me.set('icon', url); });
 		me.getImgAsset('thumb')
 				.then(function(url) { me.set('thumb', url); });
+	},
+
+
+	getEnrollmentOption: function(name) {
+		var options = this.get('EnrollmentOptions');
+
+		return options[name];
 	},
 
 
