@@ -35,7 +35,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			{tag: 'tpl', 'if': 'drop', cn: [
 				{cls: 'drop', cn: [
 					{cls: 'title', html: 'How do I drop?'},
-					{cls: 'infor'}
+					{cls: 'info', html: '{drop}'}
 				]}
 			]}
 		]}
@@ -224,6 +224,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 	__addBaseOption: function(details, option) {
 		if (this.state.base) {
 			console.error('More than one base', details, option);
+			return;
 		}
 
 		this.state.base = this.__getOptionText(details, option);
@@ -235,6 +236,8 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 		if (option.Enrolled) {
 			this.state.base = data;
+
+			delete this.state.addOns[data.name];
 		} else {
 			this.state.addOns[data.name] = data;
 		}
@@ -257,6 +260,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 		if (option) {
 			loading = option.then(function(data) {
 				me.enrollmentOptions[data.Name] = data;
+
 				if (data.BaseOption) {
 					me.__addBaseOption(details, data);
 				} else {
@@ -294,6 +298,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 					name: option.name,
 					loading: true
 				};
+
 				//if the option is not available it will be a rejected promise immediately
 				//so on fail remove it from the addons
 				me.__addEnrollmentOption(option.name, details)
@@ -369,7 +374,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 				buttonName: state.base.name,
 				buttonCls: state.base.price ? 'paid' : 'free',
 				buttonText: state.base.buttonText || '',
-				drop: state.base.dropText
+				drop: state.base.drop
 			},
 			me = this,
 			addOns = Ext.Object.getValues(state.addOns);
@@ -591,7 +596,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			r = false;
 		} else if (href === 'resubmit') {
 			e.stopEvent();
-			me.enrollInOption('FiveminuteEnrollment');
+			this.enrollInOption('FiveminuteEnrollment');
 
 			r = false;
 		}
@@ -711,7 +716,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 		var option = this.enrollmentOptions[name];
 
 		if (option) {
-			option.DoEnrollment(this);
+			option.doEnrollment(this);
 		}
 	}
 });

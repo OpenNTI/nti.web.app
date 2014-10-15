@@ -364,7 +364,12 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 					{href: 'welcome', text: 'Get Acquainted with Janux'},
 					{href: 'profile', text: 'Complete your Profile'}
 				],
-				cls: 'enrolled'
+				cls: 'enrolled',
+				drop: 'If you are currently enrolled as an OU student, visit ' +
+					'<a class=\'link\' target=\'_blank\' href=\'http://ozone.ou.edu\'>oZone</a>. ' +
+					'If not, please contact the ' +
+					'<a class=\'link\' target=\'_blank\' href=\'http://www.ou.edu/admissions.html\'>Admission office</a> ' +
+					'by {drop} for a full refund.'
 			},
 			archivedEnrolled: {
 				title: 'Enrolled for College Credit!',
@@ -436,6 +441,10 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 
 				if (text.warning) {
 					text.warning = text.warning.replace(key, data[prop]);
+				}
+
+				if (text.drop) {
+					text.drop = text.drop.replace(key, data[prop]);
 				}
 			}
 		}
@@ -541,9 +550,6 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 		var name = this.FMAEP,
 			state = {}, now = new Date();
 
-		//REMOVE BEFORE PROD
-		option.AvailableSeats = 99;
-
 		//if the course is archived
 		if (course.EndDate < now) {
 			//if we are enrolled
@@ -552,12 +558,14 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 			}
 		} else if (option.Enrolled) {//if the course is active and we are enrolled in this option
 			state = this.getWording(name, 'enrolled', {
-				date: Ext.Date.format(course.StartDate, course.DateFormat)
+				date: Ext.Date.format(course.StartDate, course.DateFormat),
+				drop: Ext.Date.format(option.DropCutOff, course.DateFormat)
 			});
 		} else if (option.AdmissionState === 'Pending') {//if we are pending admission
 			state = this.getWording(name, 'admissionPending');
 		} else if (option.API_DOWN) {//if we detect the admission api is down
 			state = this.getWording(name, 'apiDown');
+			state.price = option.Price;
 		} else if (option.AdmissionState === 'Rejected') {//if our application was rejected
 			state = this.getWording(name, 'admissionRejected');
 		} else {//we aren't enrolled

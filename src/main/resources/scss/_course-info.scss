@@ -498,7 +498,7 @@
 	}
 
 	.enroll-card {
-		.enroll-option {
+		.enroll-option, .drop {
 			padding: 15px;
 			font: normal 300 1em/1 $font;
 			color: $primary-grey;
@@ -586,7 +586,26 @@
 			border-top: 1px solid #efefef;
 
 			&.loading {
+				position: relative;
 				height: 100px;
+
+				div {
+					display: none;
+				}
+
+				&::before {
+					@include loadingSpinner($top: 38px, $left: 107px);
+				}
+
+				&::after {
+					content: 'Loading...';
+					position: absolute;
+					top: 38px;
+					left: 135px;
+					font-size: 0.8em;
+					font-weight: 400;
+					line-height: 24px;
+				}
 			}
 
 			.link {
@@ -613,6 +632,8 @@
 				.title {
 					color: $primary-red;
 					width: 100%;
+
+					span { display: none; }
 				}
 
 				.price {
@@ -640,7 +661,7 @@
 			}
 		
 
-			&.checkbox:not(.full) {
+			&.checkbox:not(.full):not(.loading) {
 				cursor: pointer;
 				padding-left: 35px;
 
@@ -649,6 +670,22 @@
 				&.checked {
 					@include icon('checkbox-14_active', $top: 15px, $left: 13px);
 				}
+			}
+		}
+
+		.drop {
+			padding-right: 35px;
+			background-color: #f5fbff;
+			border-top: 1px solid #efefef;
+
+			.title {
+				width: 100%;
+			}
+
+			.link {
+				display: inline;
+				margin: 0;
+				font-size: 1em;
 			}
 		}
 
