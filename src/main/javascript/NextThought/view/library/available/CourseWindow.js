@@ -275,6 +275,7 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 				delete me.courseEnrollment;
 			}
 
+			me.updateButtons();
 			current.destroy();
 		});
 	},

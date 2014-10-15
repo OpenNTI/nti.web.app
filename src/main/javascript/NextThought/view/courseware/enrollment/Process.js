@@ -40,6 +40,7 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 
 	initComponent: function() {
 		this.callParent(arguments);
+		this.tabsToAdd = [];
 		this.enableBubble('update-buttons');
 
 		(this.steps || []).forEach(this.addStep.bind(this));
@@ -146,11 +147,13 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 	 * Starting at index step through the steps and activate the first one that is not completed
 	 * or stop on the last one
 	 * @param  {Number} index the step to start looking from
+	 * @param {Boolean} recursive if we are called again to activate the next step
 	 */
-	activateStep: function(index) {
+	activateStep: function(index, recursive) {
 		var me = this,
 			item = me.down('[index="' + index + '"]') || me.down('[name="' + index + '"]'),
 			total = me.numberOfSteps,
+			maskCmp = me.el;
 			step = me.steps[index];
 
 		if (index < 0) {
@@ -166,17 +169,22 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 			return;
 		}
 
+		if (!recursive) {
+			maskCmp.mask('Loading...');
+		}
+
 		function setItem() {
 			me.getLayout().setActiveItem(item);
 			me.setActiveTab(index);
 			me.fireEvent('update-buttons');
+			maskCmp.unmask();
 		}
 
 		step.isComplete()
 			.then(function() {//if we are completed
 				//if we aren't the last one check the next one
 				if (index < total - 1) {
-					me.activateStep(index + 1);
+					me.activateStep(index + 1, true);
 				} else if (item) {
 					//if we are the last item make us active
 					setItem();

@@ -4,6 +4,10 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 
 	requires: ['NextThought.view.courseware.enrollment.parts.*'],
 
+	mixins: {
+		form: 'NextThought.mixins.enrollment-feature.Form'
+	},
+
 	defaultType: 'enrollment-group',
 
 	defaultMessages: {
@@ -15,8 +19,6 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 		{name: 'Submit Application', disabled: true, action: 'submit-application'},
 		{name: 'Cancel', disabled: false, action: 'go-back', secondary: true}
 	],
-
-	STATE_VALUES: {},
 
 	STATE_NAME: 'admission-form',
 
@@ -300,12 +302,12 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 
 		me.enableBubble(['show-msg', 'enable-submission', 'update-buttons']);
 
-		me.on({
-			'reveal-item': 'revealItem',
-			'hide-item': 'hideItem',
-			'send-application': 'maybeSubmit',
-			'add-address-line': 'addAddressLine'
-		});
+		me.addressLines = ['street_line', 'mailing_street_line'];
+
+		me.nationsLink = $AppConfig.userObject.getLink('fmaep.country.names');
+		me.statesLink = $AppConfig.userObject.getLink('fmaep.state.names');
+
+		me.addListners();
 
 		if (me.status === 'Pending') {
 			me.showPending();
@@ -352,75 +354,6 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 	},
 
 
-	updateFromStorage: function() {
-		var me = this,
-			values = TemporaryStorage.get(me.STATE_NAME) || {},
-			keys = Object.keys(values),
-			waitOnRender = [];
-
-		(keys || []).forEach(function(key) {
-			var input = me.down('[name="' + key + '"]'),
-				parent;
-
-			if (input) {
-
-				if (input.setValue) {
-					input.setValue(values[key]);
-				} else {
-					parent = input.up('[setValue]');
-
-					if (parent) {
-						parent.setValue(value, key);
-					}
-				}
-			} else {
-				//We don't have an item with that name
-				waitOnRender.push(key);
-			}
-		});
-
-		if (!Ext.isEmpty(waitOnRender)) {
-			//If we don't have an item with for the key, its probably a sub input of another item
-			//so wait until we are rendered, get the input element with that name and set its value
-			me.onceRendered
-				.then(function() {
-					return wait();
-				})
-				.then(function() {
-					waitOnRender.forEach(function(key) {
-						var input = me.el.down('input[name="' + key + '"]'),
-							type = input && input.getAttribute('type'),
-							value = values[key];
-
-						if (!type) {
-							console.error('No input for key: ', key);
-						} else if (type === 'text') {
-							input.dom.value = value;
-						} else if (type === 'radio' || type === 'checkbox') {
-							input.dom.checked = value || value === 'Y';
-						}
-					});
-				});
-		}
-
-		me.STATE_VALUES = values;
-	},
-
-
-	changed: function(name, value, doNotStore) {
-		if (!name || doNotStore) { return; }
-
-		this.STATE_VALUES[name] = value;
-
-		TemporaryStorage.set(this.STATE_NAME, this.STATE_VALUES);
-	},
-
-
-	clearStorage: function() {
-		TemporaryStorage.set(this.STATE_NAME, {});
-	},
-
-
 	stopClose: function() {
 		var me = this;
 
@@ -448,192 +381,6 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 				}
 			});
 		});
-	},
-
-
-	fillInNations: function() {
-		var me = this,
-			nationsLink = $AppConfig.userObject.getLink('fmaep.country.names');
-
-		Service.request(nationsLink)
-			.then(function(response) {
-				var nations = Ext.JSON.decode(response, true),
-					nationInput = me.down('[name=nation_code]'),
-					mailingNationInput = me.down('[name=mailing_nation_code]'),
-					citizenshipInput = me.down('[name=country_of_citizenship]');
-
-				function updateInputs() {
-					if (nationInput) {
-						nationInput.addOptions(nations);
-					}
-
-					if (mailingNationInput) {
-						mailingNationInput.addOptions(nations);
-					}
-
-					if (citizenshipInput) {
-						citizenshipInput.addOptions(nations);
-					}
-				}
-
-				if (!me.rendered) {
-					me.on('afterrender', updateInputs);
-				} else {
-					updateInputs();
-				}
-			})
-			.fail(function(reason) {
-				console.error('Failed to load nation list ', reason);
-			});
-	},
-
-
-	fillInStates: function() {
-		var me = this,
-			stateLink = $AppConfig.userObject.getLink('fmaep.state.names');
-
-		Service.request(stateLink)
-			.then(function(response) {
-				var states = Ext.JSON.decode(response, true),
-					stateInput = me.down('[name=state]'),
-					mailingStateInput = me.down('[name=mailing_state]');
-
-				states.unshift(''); // insert empty value as first option.
-
-				function updateInputs() {
-					if (stateInput) {
-						stateInput.addOptions(states);
-					}
-
-					if (mailingStateInput) {
-						mailingStateInput.addOptions(states);
-					}
-				}
-
-				if (!me.rendered) {
-					me.on('afterrender', updateInputs);
-				} else {
-					updateInputs();
-				}
-			})
-			.fail(function(reason) {
-				console.error('Failed to load state list: ', reaseon);
-			});
-	},
-
-
-	addAddressLine: function() {
-		var line = this.numberofaddressline || 2,
-			streetAddress = this.down('[name=permanent-address]'),
-			help;
-
-		line = this.numberofaddressline = line + 1;
-
-		if (line >= 5) {
-			help = streetAddress.el.query('a.help');
-
-			(help || []).forEach(function(h) {
-				if (h.innerText === 'Add Address Line') {
-					Ext.fly(h).destroy();
-				}
-			});
-		}
-
-		this.revealItem('street_line' + line);
-		this.revealItem('mailing_street_line' + line);
-	},
-
-
-	hideItem: function(name) {
-		var me = this, item, parent;
-
-		if (Ext.isArray(name)) {
-			name.forEach(function(n) {
-				me.hideItem(n);
-			});
-
-			return;
-		}
-
-		if (name === 'enable-submit') {
-			me.submitBtnCfg.disabled = true;
-			me.fireEvent('update-buttons');
-		}
-
-
-		item = me.down('[name=' + name + ']');
-
-		if (item) {
-			item.hide();
-
-			if (item.reveals) {
-				this.hideItem(item.reveals);
-			}
-
-			if (item.hides) {
-				this.hideItem(item.hides);
-			}
-		} else {
-			console.error('No item to hide: ', name);
-		}
-	},
-
-
-	revealItem: function(name) {
-		var me = this, item, parent;
-
-		if (Ext.isArray(name)) {
-			name.forEach(function(n) {
-				me.revealItem(n);
-			});
-
-			return;
-		}
-
-		if (name === 'enable-submit') {
-			me.submitBtnCfg.disabled = false;
-
-			me.shouldAllowSubmission()
-				.always(me.fireEvent.bind(me, 'update-buttons'));
-		}
-
-		item = me.down('[name="' + name + '"]');
-
-		if (item) {
-			item.show();
-
-			if (item.changed) {
-				item.changed();
-			}
-		} else {
-			console.error('No item to reveal: ', name);
-		}
-	},
-
-
-	getValue: function() {
-		var value = {};
-
-		this.items.each(function(item) {
-			value = Ext.apply(value, item.getValue && item.getValue());
-		});
-
-		return value;
-	},
-
-
-	isValid: function() {
-		var valid = true;
-
-		this.items.each(function(item) {
-			if (Ext.isFunction(item.isValid) && !item.isValid()) {
-				valid = false;
-			}
-
-			return true;
-		});
-
-		return valid;
 	},
 
 
@@ -780,26 +527,6 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 				}
 			]
 		});
-	},
-
-
-	showError: function(json) {
-		var input;
-
-		if (json.field) {
-			input = this.down('[name="' + json.field + '"]');
-
-			if (input && input.addError) {
-				input.addError();
-				input.el.scrollIntoView(this.el.up('.credit-container'));
-			}
-		}
-
-		if (json.Message || json.message) {
-			this.fireEvent('show-msg', (json.Message || json.message).replace('${field}', json.field), true, 5000);
-		} else {
-			this.fireEvent('show-msg', 'An unknown error occurred. Please try again later.', true, 5000);
-		}
 	},
 
 
