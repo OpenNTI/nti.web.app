@@ -801,7 +801,9 @@ Ext.define('NextThought.controller.CourseWare', {
 
 				fulfill(result);
 			});
-		}
+		},
+
+		Enrollment: NextThought.util.courseware.Enrollment
 	};
 
 });

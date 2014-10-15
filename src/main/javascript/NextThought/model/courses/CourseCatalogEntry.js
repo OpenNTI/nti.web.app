@@ -96,6 +96,26 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	},
 
 
+	getEnrollmentType: function() {
+		var isEnrolled = this.get('enrolled'),
+			isAdmin = this.get('isAdmin'),
+			isOpen = this.get('isOpen'),
+			enrollment;
+
+		if (!isEnrolled) {
+			enrollment = null;
+		} else if (isAdmin) {
+			enrollment = 'Admin';
+		} else if (!isOpen) {
+			enrollment = 'ForCredit';
+		} else {
+			enrollment = 'Open';
+		}
+
+		return enrollment;
+	},
+
+
 	isActive: function() {
 		return Boolean(this.get('enrolled'));
 	},
