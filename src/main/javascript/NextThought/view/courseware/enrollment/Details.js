@@ -372,7 +372,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 				base: state.base,
 				addOns: [],
 				buttonName: state.base.name,
-				buttonCls: state.base.price ? 'paid' : 'free',
+				buttonCls: this.getButtonCls(state.base),
 				buttonText: state.base.buttonText || '',
 				drop: state.base.drop
 			},
@@ -479,6 +479,21 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 		return price;
 	},
 
+
+	getButtonCls: function(option) {
+		var cls = 'free';
+
+		if (option.cls === 'enrolled') {
+			cls = 'drop';
+		} else if (option.price) {
+			cls = 'paid';
+		} else {
+			cls = 'free';
+		}
+
+		return cls;
+	},
+
 	showMessage: function(msg, isError, cursor) {
 		var me = this,
 			win = me.up('[showMsg]'),
@@ -542,7 +557,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			price = me.getPriceString(option.price);
 
 			button.removeCls(['paid', 'free']);
-			button.addCls(option.price ? 'paid' : 'free');
+			button.addCls(me.getButtonCls(option));
 			button.dom.setAttribute('data-name', option.name);
 			button.update(option.buttonText);
 

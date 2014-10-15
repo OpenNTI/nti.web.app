@@ -440,7 +440,7 @@
 
 		.title {
 			font-size: 2em;
-			line-height: 1em;
+			line-height: 1.3em;
 			font-weight: 300;
 			text-transform: none;
 		}
@@ -498,7 +498,7 @@
 	}
 
 	.enroll-card {
-		.enroll-option, .drop {
+		.enroll-option, .drop:not(.button) {
 			padding: 15px;
 			font: normal 300 1em/1 $font;
 			color: $primary-grey;
@@ -673,7 +673,7 @@
 			}
 		}
 
-		.drop {
+		.drop:not(.button) {
 			padding-right: 35px;
 			background-color: #f5fbff;
 			border-top: 1px solid #efefef;
