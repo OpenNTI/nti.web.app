@@ -5,7 +5,7 @@ Ext.define('NextThought.view.courseware.enrollment.parts.BaseInput', {
 	cls: 'enrollment-input-container',
 
 	initComponent: function() {
-		this.enableBubble(['changed', 'reveal-item', 'hide-item', 'maybe-hide-item']);
+		this.enableBubble(['changed', 'reveal-item', 'hide-item', 'maybe-hide-item', 'viewLicense']);
 	},
 
 
@@ -34,9 +34,16 @@ Ext.define('NextThought.view.courseware.enrollment.parts.BaseInput', {
 	},
 
 
-	changed: function() {
+	changed: function(e) {
 		var me = this,
+			anchor = e && e.getTarget && e.getTarget('a[data-event]'),
 			parent = me.up('[changed]');
+
+		if (anchor) {
+			me.fireEvent(anchor.getAttribute('data-event'));
+			e.stopEvent();
+			return false;
+		}
 
 		this.removeError();
 

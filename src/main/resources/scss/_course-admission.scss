@@ -326,6 +326,11 @@
 			float: left;
 			min-height: 40px;
 
+
+			a {
+				color: $primary-blue;
+			}
+
 			&.nested {
 				margin: 0;
 				padding-left: 20px;

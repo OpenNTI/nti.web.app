@@ -111,17 +111,21 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 						{type: 'text', name: 'address_zip', placeholder: 'ZIP / Postal Code', size: 'small left', required: false}
 					]//,
 					// help: [
-					// 	{text: 'Add Address Line', type: 'event', event: 'add-address-line'}
+					//	{text: 'Add Address Line', type: 'event', event: 'add-address-line'}
 					// ]
 				},
 				{
 					xtype: 'enrollment-set',
 					reveals: 'enable-submit',
 					inputs: [
-						{type: 'checkbox', name: 'affirm', doNotSend: true, doNotTrack: true, text: 'I have read an agree to the licensing terms.', correct: true}
-					],
-					help: [
-						{text: 'Licensing Terms', type: 'event', event: 'viewLicense'}
+						{
+							type: 'checkbox',
+							name: 'affirm',
+							doNotSend: true,
+							doNotTrack: true,
+							text: 'I have read an agree to the <a data-event="viewLicense">licensing terms.</a>',
+							correct: true
+						}
 					]
 				}
 			]
