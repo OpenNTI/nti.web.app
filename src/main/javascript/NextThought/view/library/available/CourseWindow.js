@@ -33,7 +33,7 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 	center: Ext.emptyFn,
 
 	buttonCfg: [
-		{name: 'Finish', action: 'close'}
+		{name: 'Finished', action: 'close'}
 	],
 
 	renderTpl: Ext.DomHelper.markup([
@@ -47,14 +47,7 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 		]},
 		{ id: '{id}-body', cls: 'body-container',
 			cn: ['{%this.renderContainer(out,values)%}'] },
-		{cls: 'footer', cn: [
-			{cls: 'done button close detail', html: 'Finished'},
-			{cls: 'button admission enrollment submit disabled', html: 'Submit Application'},
-			{cls: 'button enroll enrollment submit', html: 'Continue to Payment'},
-			{cls: 'button enroll enrollment cancel', html: 'Cancel'},
-			{cls: 'button admission enrollment cancel', html: 'Cancel'},
-			{cls: 'button error enrollment cancel', html: 'Cancel'}
-		]}
+		{cls: 'footer'}
 	]),
 
 	btnTpl: new Ext.XTemplate(Ext.DomHelper.markup({cls: 'button {disabled} {secondary}', 'data-action': '{action}', html: '{name}'})),
@@ -197,6 +190,8 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 					});
 			}
 		});
+
+		me.updateButtons();
 	},
 
 
@@ -444,7 +439,6 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 			updateLabel();
 		}
 
-		me.mon(me.courseDetail, 'enroll-for-credit', 'showAdmission');
 		me.mon(me.courseDetail, 'enroll-in-course', 'showEnrollmentOption');
 
 		me.getLayout().setActiveItem(me.courseDetail);
@@ -468,41 +462,6 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 		} else if (me.courseEnrollment.course !== course) {
 			addView();
 		}
-
-		function updateLabel() {
-			me.labelEl.addCls('back');
-			me.labelEl.update(course.get('Title'));
-		}
-
-		if (!me.rendered) {
-			me.on('afterrender', updateLabel);
-		} else {
-			updateLabel();
-		}
-
-		me.getLayout().setActiveItem(me.courseEnrollment);
-		me.closeMsg();
-	},
-
-
-	showAdmission: function(course, paymentcomplete) {
-		var me = this;
-
-		function addView() {
-			me.courseEnrollment = me.add({
-				xtype: 'enrollment-credit',
-				course: course,
-				paymentcomplete: paymentcomplete,
-				ownerCt: me
-			});
-		}
-
-		if (!me.courseEnrollment) {
-			addView();
-		} else if (me.courseEnrollment.course !== course) {
-			addView();
-		}
-
 
 		function updateLabel() {
 			me.labelEl.addCls('back');
