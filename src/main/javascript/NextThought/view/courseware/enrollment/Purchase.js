@@ -25,27 +25,6 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 			items: [
 				{
 					xtype: 'enrollment-set',
-					label: 'Who are you purchasing for?',
-					inputs: [
-						{type: 'radio-group', name: 'quantity', required: true, options: [
-							{text: 'Me. I want to buy a license for my account', value: -1},
-							{
-								text: 'I want to purchase {input} activation keys to share with to share with others',
-								value: 'input',
-								inputWidth: 48,
-								inputCfg: {
-									type: 'number',
-									pattern: '[0-9]*'
-								}
-							}
-						]}
-					],
-					help: [
-						{text: 'What is an activation key?', type: 'text', info: 'An activation key is a code that gives you access to the content.'}
-					]
-				},
-				{
-					xtype: 'enrollment-set',
 					label: 'Coupon',
 					inputs: [
 						{type: 'text', name: 'coupon', placeholder: 'Coupon Code'}
@@ -200,14 +179,7 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 
 	getPricingInfo: function(formValue) {
 		var desc = {Purchasable: this.enrollmentOption.Purchasable},
-			wantsCode = formValue.quantity === 'other',
-			coupon = (formValue.coupon || '').trim(),
-			count = (formValue.count || '').trim();
-
-		if (wantsCode) {
-			count = count ? parseInt(count, 10) : 1;
-			desc.Quantity = count || 1;
-		}
+			coupon = (formValue.coupon || '').trim();
 
 		if (coupon) {
 			desc.Coupon = coupon;
