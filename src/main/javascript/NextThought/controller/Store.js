@@ -613,6 +613,13 @@ Ext.define('NextThought.controller.Store', function() {
 		},
 
 
+		/**
+		 * Called to generate a stripe payment token from purchase information
+		 *
+		 * @param {NextThought.view.store.purchase.Form} cmp the owner cmp
+		 * @param {Object} desc
+		 * @param {Object} cardinfo to provide to stripe in exchange for a token
+		 */
 		createEnrollmentPurchase: function(sender, desc, cardinfo, success, failure) {
 			var purchasable = desc.Purchasable || {},
 				connectInfo = purchasable.get('StripeConnectKey'),
@@ -642,8 +649,8 @@ Ext.define('NextThought.controller.Store', function() {
 
 			function tokenResponseHandler(status, response) {
 				if (status !== 200 || response.error) {
-					console.error('An error occured during the token generation for purchasable', purchasable, response);
-					failure.call(null, response.error);
+					console.error('An error occurred during the token generation for purchasable', purchasable, response);
+					onFail(response.error);
 				} else {
 					console.log('Stripe token response handler', arguments);
 					tokenObject = response;
@@ -664,6 +671,14 @@ Ext.define('NextThought.controller.Store', function() {
 		},
 
 
+		/**
+		 * Make the purchase for purchasable using tokenObject
+		 *
+		 * @param {Component} cmp the owner cmp
+		 * @param {Object} purchaseDescription an object containing the Purchasable, Quantity, and Coupon.  Omitted quantity is assumed 1, Coupon is optional.
+		 * @param {Object} tokenObject the stripe token object
+		 * @param {NextThought.model.store.StripePricedPurchasable} pricingInfo
+		 */
 		submitEnrollmentPurchase: function(sender, purchaseDescription, tokenObject, pricingInfo, success, failure) {
 			var purchasable = purchaseDescription.Purchasable,
 				delegate, me = this;

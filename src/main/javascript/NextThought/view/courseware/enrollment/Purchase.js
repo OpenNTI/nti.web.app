@@ -66,7 +66,7 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 							size: 'left',
 							validateOnChange: true,
 							paymentFormatter: 'formatCardNumber',
-							validator: 'validateCardNumber',
+							//validator: 'validateCardNumber',
 							getter: function(val) {
 								return val.replace(/[^0-9]/g, '');
 							}
@@ -249,6 +249,20 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 	},
 
 
+	showStripeError: function(json) {
+		var error = {};
+
+		if (json && json.type && json.type === 'card_error') {
+			error.field = json.param;
+			error.Message = json.message;
+		} else {
+			error.Message = 'An unknown error occurred. Please try again later.';
+		}
+
+		this.showError(error);
+	},
+
+
 	maybeSubmit: function() {
 		var me = this,
 			value = me.getParsedValues(),
@@ -271,8 +285,9 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 				me.enrollmentOption.tokenObject = result.tokenObject;
 				me.done(me);
 			})
-			.fail(function() {
+			.fail(function(error) {
 				console.error('failed to create token', arguments);
+				me.showStripeError(error);
 			});
 	}
 });
