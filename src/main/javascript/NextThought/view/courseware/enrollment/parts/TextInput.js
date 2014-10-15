@@ -66,11 +66,24 @@ Ext.define('NextThought.view.courseware.enrollment.parts.TextInput', {
 
 		this.setUpChangeMonitors();
 
+		if (this.paymentFormatter) {
+			this.addFormatter(this.paymentFormatter);
+		}
+
 		//if (helpIcon) {
 		//	helpText = this.el.down('.help .information');
 
 		//	this.mon(helpIcon, 'click', helpText.toggleCls.bind(helpText, 'hidden'));
 		//}
+	},
+
+
+	addFormatter: function(formatter) {
+		var input = this.input && this.input.inputEl && this.input.inputEl.dom;
+
+		if (input) {
+			jQuery(input).payment(formatter);
+		}
 	},
 
 
@@ -84,14 +97,21 @@ Ext.define('NextThought.view.courseware.enrollment.parts.TextInput', {
 	isValid: function() {
 		//if we are required and empty we aren't
 		var value = this.getValue()[this.name],
-			isValid = this.required ? !this.isEmpty() : true;
+			isValid = this.required ? !this.isEmpty() : true,
+			paymentValidator = this.validator && jQuery.payment[this.validator];
 
 		if (this.valueValidation && !this.isEmpty()) {
 			isValid = this.valueValidation.test(value);
 		}
 
+		if (paymentValidator && !paymentValidator(value)) {
+			isValid = false;
+		}
+
 		if (!isValid) {
 			this.addError();
+		} else {
+			this.removeError();
 		}
 
 		return isValid;
@@ -135,8 +155,13 @@ Ext.define('NextThought.view.courseware.enrollment.parts.TextInput', {
 
 
 	getValue: function(force) {
-		var value = {},
-			val = this.input.getValue();
+		var value = {}, val = this.input.getValue();
+
+		if (this.getter && Ext.isFunction(this.getter)) {
+			val = this.getter.call(null, val);
+		} else if (this.paymentGetter) {
+			val = jQuery(this.input.inputEl.dom).payment(this.paymentGetter);
+		}
 
 		if (this.valueType === 'numeric') {
 			val = (val && val.replace(/[^0-9]/g, '')) || val;

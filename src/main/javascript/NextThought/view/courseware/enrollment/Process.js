@@ -5,7 +5,8 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 	requires: [
 		'NextThought.view.courseware.enrollment.Confirmation',
 		'NextThought.view.courseware.enrollment.Enroll',
-		'NextThought.view.courseware.enrollment.Admission'
+		'NextThought.view.courseware.enrollment.Admission',
+		'NextThought.view.courseware.enrollment.PaymentConfirmation'
 	],
 
 	layout: 'card',
@@ -174,6 +175,10 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 		}
 
 		function setItem() {
+			if (item.beforeShow) {
+				item.beforeShow();
+			}
+
 			me.getLayout().setActiveItem(item);
 			me.setActiveTab(index);
 			me.fireEvent('update-buttons');

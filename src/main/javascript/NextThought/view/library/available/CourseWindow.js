@@ -478,6 +478,12 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 			me.labelEl.update(course.get('Title'));
 		}
 
+		if (!me.rendered) {
+			me.on('afterrender', updateLabel);
+		} else {
+			updateLabel();
+		}
+
 		me.getLayout().setActiveItem(me.courseEnrollment);
 		me.closeMsg();
 	},

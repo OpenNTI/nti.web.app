@@ -50,6 +50,10 @@ Ext.define('NextThought.view.courseware.enrollment.parts.BaseInput', {
 					}
 				}
 
+				if (me.validateOnChange) {
+					me.isValid();
+				}
+
 				if (!me.isEmpty() && !me.hides && parent) {
 					parent.maybeToggleHides(me.isCorrect());
 				}

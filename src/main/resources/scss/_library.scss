@@ -613,6 +613,8 @@
 			font-weight: 300;
 			font-size: 1.5em;
 			text-transform: none;
+			overflow: hidden;
+			@include ellipsis();
 
 			&.back {
 				color: $primary-blue;

@@ -20,7 +20,7 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 								these should be defined on the components themselves
 			complete: function //completes that step takes the cmp to fire events from and data from the ui, returns a promise
 			done: function //moves the ui forward after complete is successful
-			Purchasable: Model //only if payment takes place in the app
+			goBackOnError: Boolean //if there is an error show the previous step
 			//other data necessary for the step to complete
 		}
 
@@ -86,7 +86,6 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 			xtype: 'enrollment-admission',
 			name: 'Admissions',
 			enrollmentOption: enrollmentOption,
-			isActive: true,
 			isComplete: function() {
 				return new Promise(function(fulfill, reject) {
 					if ($AppConfig.userObject.get('admission_status') === 'Admitted') {
@@ -116,7 +115,6 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 			xtype: 'enrollment-enroll',
 			name: 'Enrollment',
 			enrollmentOption: enrollmentOption,
-			isActive: false,
 			isComplete: function() {
 				var link = course.getLink('fmaep.is.pay.done'),
 					crn = enrollmentOption.NTI_CRN,
@@ -183,7 +181,56 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 
 
 	__buildStoreEnrollmentSteps: function(course) {
+		var enrollmentOption = course.getEnrollmentOption(this.STRIPE),
+			steps = [];
 
+		if (!enrollmentOption.Purchasable.isModel) {
+			enrollmentOption.Purchasable = NextThought.model.store.Purchasable.create(enrollmentOption.Purchasable);
+		}
+
+		this.__addStep({
+			xtype: 'enrollment-purchase',
+			name: 'Payment',
+			enrollmentOption: enrollmentOption,
+			isComplete: function() {return Promise.reject()},
+			complete: function(cmp, data) {
+				if (!data.purchaseDescription || !data.cardInfo) {
+					console.error('Incorrect data passed to complete', agruments);
+					return Promise.reject();
+				}
+
+				return new Promise(function(fulfill, reject) {
+					cmp.fireEvent('create-enroll-purchase', cmp, data.purchaseDescription, data.cardInfo, fulfill, reject);
+				});
+			}
+		}, steps);
+
+
+		this.__addStep({
+			xtype: 'enrollment-paymentconfirmation',
+			name: 'Enrollment',
+			enrollmentOption: enrollmentOption,
+			isComplete: function() {return Promise.reject()},
+			complete: function(cmp, data) {
+				if (!data.purchaseDescription || !data.tokenObject || !data.pricingInfo) {
+					console.error('Incorrect data passed to complete', arguments);
+					return Promise.reject();
+				}
+
+				return new Promise(function(fulfill, reject) {
+					cmp.fireEvent('submit-enroll-purchase', cmp, data.purchaseDescription, data.tokenObject, data.pricingInfo, fulfill, reject);
+				});
+			}
+		}, steps);
+
+
+		this.__addStep({
+			xtype: 'enrollment-confirmation',
+			name: 'Confirmation',
+			enrollmentOption: enrollmentOption
+		}, steps);
+
+		return steps;
 	},
 
 	/*
@@ -358,7 +405,7 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 
 
 	__buildStoreEnrollmentDetails: function(course) {
-		var name = this.STORE,
+		var name = this.STRIPE,
 			enrollmentOption = course.getEnrollmentOption('StoreEnrollment');
 
 		if (!enrollmentOption) {
@@ -380,6 +427,8 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 					},
 					UndoEnrollment: null
 				};
+
+			fulfill(catalogData);
 		});
 	}
 });

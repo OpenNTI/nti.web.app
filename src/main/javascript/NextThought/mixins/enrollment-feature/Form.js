@@ -1,8 +1,9 @@
 Ext.define('NextThought.mixins.enrollment-feature.Form', {
 	STATE_VALUES: {},
 
+	changeMonitors: {},
 
-	addListners: function() {
+	addListeners: function() {
 		this.on({
 			'reveal-item': 'revealItem',
 			'hide-item': 'hideItem',
@@ -68,6 +69,10 @@ Ext.define('NextThought.mixins.enrollment-feature.Form', {
 
 
 	changed: function(name, value, doNotStore) {
+		if (this.changeMonitors[name]) {
+			this[this.changeMonitors[name]].call(this);
+		}
+
 		if (!name || doNotStore) { return; }
 
 		this.STATE_VALUES[name] = value;

@@ -252,7 +252,10 @@ Ext.define('NextThought.controller.Store', function() {
 
 					'*': {
 						'show-purchasable': 'showPurchaseWindow',
-						'unauthorized-navigation': 'maybeShowPurchasableForContent'
+						'unauthorized-navigation': 'maybeShowPurchasableForContent',
+						'price-enroll-purchase': 'priceEnrollmentPurchase',
+						'create-enroll-purchase': 'createEnrollmentPurchase',
+						'submit-enroll-purchase': 'submitEnrollmentPurchase'
 					}
 				},
 				'controller': {
@@ -535,6 +538,191 @@ Ext.define('NextThought.controller.Store', function() {
 				scope: this,
 				callback: callback
 			});
+		},
+
+
+		doEnrollmentPricingRequest: function(url, data) {
+			return Service.post(url, data);
+		},
+
+		/**
+		 * validates a coupon code or figures the cost for activation keys
+		 * @param {Component} sender  the form that is sending the request
+		 * @param {Object} desc an object containing the Purchasable, Quantity, and Coupon.  Ommitted quantity is assumed 1, Coupon is optional.
+		 * @param {Function} success The success callback called if the provided coupone is valid
+		 * @param {Function} failure The failure callback called if we are unable to validate the coupon for any reason
+		 */
+		priceEnrollmentPurchase: function(sender, desc, success, failure) {
+			desc = desc || {};
+			success = success || function() {};
+			failure = failure || function() {};
+
+			var purchasable = desc.Purchasable,
+				data = {},
+				pricingLink = purchasable && purchasable.getLink('pricing');
+
+			if (!pricingLink) {
+				console.error('Must supply a purchasable with a pricing link', arguments);
+				Ext.Error.rais('Must supply a purchasable');
+			}
+
+			if (sender !== this && sender.lockPurchaseAction) {
+				console.error('Already locked aborting pricePurchase', arguments);
+				return false;
+			}
+
+			if (sender !== this) {
+				sender.lockPurchaseAction = true;
+			}
+
+			data.purchasableID = purchasable.getId();
+
+			if (desc.Coupon) {
+				data.Coupon = desc.Coupon.ID || desc.Coupon;
+			}
+
+			if (desc.Quantity > 0) {
+				data.Quantity = desc.Quantity;
+			}
+
+			try {
+				this.doEnrollmentPricingRequest(pricingLink, data)
+					.then(function(result) {
+						delete sender.lockPurchaseAction;
+
+						if (result) {
+							result = ParseUtils.parseItems(result)[0];
+						}
+
+						if (!result || !result.isPricedPurchase) {
+							throw 'Unknown response from pricing call';
+						} else {
+							success.call(null, result);
+						}
+					})
+					.fail(function(reason) {
+						console.error('Error processing price,', reason);
+						failure.call(null, reason);
+						delete sender.lockPurchaseAction;
+					});
+			} catch (e) {
+				console.error('Error process price', e);
+				failure.call();
+				delete sender.lockPurchaseAction;
+			}
+		},
+
+
+		createEnrollmentPurchase: function(sender, desc, cardinfo, success, failure) {
+			var purchasable = desc.Purchasable || {},
+				connectInfo = purchasable.get('StripeConnectKey'),
+				pKey = connectInfo && connectInfo.get('PublicKey'),
+				tokenObject, me = this;
+
+			if (!pKey) {
+				console.error('No Stripe connection infor for the purchasable', purchasable);
+				failure.call();
+				return;
+			}
+
+			if (sender.lockPurchaseAction) {
+				failure.call();
+				return;
+			}
+
+			function onPriced(result) {
+				delete sender.lockPurchaseAction;
+				success.call(null, {pricing: result, tokenObject: tokenObject});
+			}
+
+			function onFail(reason) {
+				delete sender.lockPurchaseAction;
+				failure.call(null, reason);
+			}
+
+			function tokenResponseHandler(status, response) {
+				if (status !== 200 || response.error) {
+					console.error('An error occured during the token generation for purchasable', purchasable, response);
+					failure.call(null, response.error);
+				} else {
+					console.log('Stripe token response handler', arguments);
+					tokenObject = response;
+					me.priceEnrollmentPurchase(me, desc, onPriced, onFail);
+				}
+			}
+
+			sender.lockPurchaseAction = true;
+
+			try {
+				Stripe.setPublishableKey(pKey);
+				Stripe.createToken(cardinfo, tokenResponseHandler);
+			} catch (e) {
+				console.error('Error generating a stripe token', e);
+				delete sender.lockPurchaseAction;
+				failure.call();
+			}
+		},
+
+
+		submitEnrollmentPurchase: function(sender, purchaseDescription, tokenObject, pricingInfo, success, failure) {
+			var purchasable = purchaseDescription.Purchasable,
+				delegate, me = this;
+
+			if (sender.lockPurchaseAction) {
+				console.error('window already locked aborting submitEnrollmentPurchase', arguments);
+				return;
+			}
+
+			sender.lockPurchaseAction = true;
+
+			function done() {
+				delete me.paymentProcessor;
+				delete sender.lockPurchaseAction;
+			}
+
+			delegate = {
+				purchaseAttemptCompleted: function(helper, purchaseAttempt) {
+					done();
+
+					success.call(null, {
+						Message: 'Purchase attempt success',
+						purchaseAttempt: purchaseAttempt
+					});
+				},
+				purchaseAttemptFailed: function(helper, purchaseAttempt) {
+					done();
+
+					failure.call(null, {
+						purchaseAttempt: purchaseAttempt,
+						Message: 'Purchase attempt failed'
+					});
+				},
+				purchaseAttemptTimedOut: function() {
+					done();
+
+					failure.call(null, {
+						Message: ''
+					});
+				},
+				purchaseAttemptCompletedWithUnknownStatus: function() {
+					done();
+
+					failure.call(null, {
+						Message: ''
+					});
+				}
+			};
+
+			try {
+				me.paymentProcessor = new PurchaseHelper(purchaseDescription, tokenObject, pricingInfo.get('PurchasePrice'), delegate, me);
+			} catch (e) {
+				console.error('An error occurred initiating payment.', e, arguments);
+				failure.call(null, {
+					Message: 'An error occurred initiating payment. Please try again later.',
+					tokenObject: tokenObject
+				});
+				done();
+			}
 		},
 
 

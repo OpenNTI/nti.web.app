@@ -640,7 +640,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 				});
 
 				details.Options.StoreEnrollment.then(function(option) {
-					me.storeEnrollment = option;
+					me.StoreEnrollment = option;
 				});
 			});
 

@@ -2,7 +2,10 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.enrollment-admission',
 
-	requires: ['NextThought.view.courseware.enrollment.parts.*'],
+	requires: [
+		'NextThought.view.courseware.enrollment.parts.*',
+		'NextThought.mixins.enrollment-feature.Form'
+	],
 
 	mixins: {
 		form: 'NextThought.mixins.enrollment-feature.Form'
@@ -307,7 +310,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 		me.nationsLink = $AppConfig.userObject.getLink('fmaep.country.names');
 		me.statesLink = $AppConfig.userObject.getLink('fmaep.state.names');
 
-		me.addListners();
+		me.addListeners();
 
 		if (me.status === 'Pending') {
 			me.showPending();

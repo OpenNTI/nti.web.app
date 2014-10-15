@@ -4,6 +4,10 @@ Ext.define('NextThought.view.courseware.enrollment.Enroll', {
 
 	cls: 'enroll-for-credit-confirmation',
 
+	requires: [
+		'NextThought.view.courseware.enrollment.parts.DetailsTable'
+	],
+
 	buttonCfg: [
 		{name: 'Continue to Payment', action: 'goto-payment'}
 	],
@@ -15,54 +19,7 @@ Ext.define('NextThought.view.courseware.enrollment.Enroll', {
 			{cls: 'text available', html: '{available}'},
 			{cls: 'confirm', html: '{confirm}'}
 		]},
-		{cls: 'info', cn: [
-			{cls: 'line', cn: [
-				{cls: 'course-number', html: '{number}'},
-				{cls: 'title', html: '{title}'},
-				{cls: 'instructor', html: 'instructed by {instructor}'},
-				{cls: 'enroll-now', html: '{price}'}
-			]},
-			{cls: 'line course-info', cn: [
-				{cls: 'field long', cn: [
-					{cls: 'name', html: 'prerequisites'},
-					{tag: 'tpl', 'for': 'prereqs', cn: [
-						{cls: 'value', html: '{title}'}
-					]}
-				]},
-				{cls: 'field medium green', cn: [
-					{cls: 'name', html: 'credit hours'},
-					{cls: 'value green', html: '{credit}'}
-				]}
-			]},
-			{cls: 'line course-info', cn: [
-				{cls: 'field long', cn: [
-					{cls: 'name', html: '{number}'},
-					{cls: 'value', html: '{title}'}
-				]},
-				{cls: 'field medium', cn: [
-					{cls: 'name', html: 'school'},
-					{cls: 'value', html: '{school}'}
-				]}
-			]},
-			{cls: 'line course-info', cn: [
-				{cls: 'field fourth', cn: [
-					{cls: 'name', html: 'start date'},
-					{cls: 'value', html: '{start}'}
-				]},
-				{cls: 'field fourth', cn: [
-					{cls: 'name', html: 'end date'},
-					{cls: 'value', html: '{end}'}
-				]},
-				{cls: 'field fourth', cn: [
-					{cls: 'name', html: 'duration'},
-					{cls: 'value', html: '{duration}'}
-				]},
-				{cls: 'field fourth', cn: [
-					{cls: 'name', html: 'course type'},
-					{cls: 'value', html: '{type}'}
-				]}
-			]}
-		]}
+		{cls: 'details'}
 	]),
 
 
@@ -71,21 +28,22 @@ Ext.define('NextThought.view.courseware.enrollment.Enroll', {
 		titleEl: '.main',
 		descriptionEl: '.description',
 		confirmEl: '.confirm',
-		availableEl: '.available'
+		availableEl: '.available',
+		detailsEl: '.details'
+	},
+
+
+	initComponent: function() {
+		this.callParent(arguments);
+
+		this.enableBubble('show-msg');
 	},
 
 
 	beforeRender: function() {
 		this.callParent(arguments);
 
-		var c = this.course,
-			duration = c.get('Duration'),
-			credit = c.get('Credit')[0],
-			instructor = c.get('Instructors')[0];
-
-		this.enableBubble('show-msg');
-
-		duration = new Duration(duration);
+		var c = this.course;
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			headerCls: this.paymentfail ? 'error' : '',
@@ -96,19 +54,21 @@ Ext.define('NextThought.view.courseware.enrollment.Enroll', {
 				'Please try again, you will gain access to the content once the payment is successful.' :
 				'Thank you for applying to earn credit online from the University of Oklahoma.',
 			available: 'Your admission credit is available for ' + c.getSemester() + '.',
-			confirm: 'Please take a moment to confirm your course selection before checking out.',
-			price: '$' + c.get('OU_Price'),
-			number: c.get('ProviderUniqueID'),
-			title: c.get('Title'),
-			instructor: instructor.get('Name'),
-			prereqs: c.get('Prerequisites'),
-			credit: credit.get('Hours') + ' credit hours available',
-			start: Ext.Date.format(c.get('StartDate'), 'F j, Y'),
-			end: Ext.Date.format(c.get('EndDate'), 'F j, Y'),
-			school: c.get('ProviderDepartmentTitle'),
-			duration: duration.inWeeks() + ' Weeks',
-			type: 'Fully Online'
+			confirm: 'Please take a moment to confirm your course selection before checking out.'
 		});
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		this.detailsTable = Ext.widget('enrollment-details-table', {
+			course: this.course,
+			enrollmentOption: this.enrollmentOption,
+			renderTo: this.detailsEl
+		});
+
+		this.on('destroy', 'destroy', this.detailsTable);
 	},
 
 
