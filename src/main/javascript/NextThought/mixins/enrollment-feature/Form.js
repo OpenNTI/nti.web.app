@@ -13,11 +13,19 @@ Ext.define('NextThought.mixins.enrollment-feature.Form', {
 	},
 
 
+	fillInDefaults: function(values) {
+		return values;
+	},
+
+
 	updateFromStorage: function() {
 		var me = this,
 			values = TemporaryStorage.get(me.STATE_NAME) || {},
-			keys = Object.keys(values),
+			keys,
 			waitOnRender = [];
+
+		values = me.fillInDefaults(values);
+		keys = Object.keys(values),
 
 		(keys || []).forEach(function(key) {
 			var input = me.down('[name="' + key + '"]'),
