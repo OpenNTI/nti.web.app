@@ -246,6 +246,11 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 		var index = cmp.index + 1,
 			btn = this.headerEl.down('[data-number="' + index + '"]');
 
+		if (cmp.goBackOnError) {
+			this.activateStep(cmp.index - 1);
+			return;
+		}
+
 		if (btn) { btn.addCls('failed'); }
 	}
 });

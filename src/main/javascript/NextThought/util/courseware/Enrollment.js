@@ -192,7 +192,7 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 			xtype: 'enrollment-purchase',
 			name: 'Payment',
 			enrollmentOption: enrollmentOption,
-			isComplete: function() {return Promise.reject()},
+			isComplete: function() {return Promise.reject(); },
 			complete: function(cmp, data) {
 				if (!data.purchaseDescription || !data.cardInfo) {
 					console.error('Incorrect data passed to complete', agruments);
@@ -210,7 +210,8 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 			xtype: 'enrollment-paymentconfirmation',
 			name: 'Verification',
 			enrollmentOption: enrollmentOption,
-			isComplete: function() {return Promise.reject()},
+			goBackOnError: true,
+			isComplete: function() {return Promise.reject(); },
 			complete: function(cmp, data) {
 				if (!data.purchaseDescription || !data.tokenObject || !data.pricingInfo) {
 					console.error('Incorrect data passed to complete', arguments);
@@ -219,6 +220,9 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 
 				return new Promise(function(fulfill, reject) {
 					cmp.fireEvent('submit-enroll-purchase', cmp, data.purchaseDescription, data.tokenObject, data.pricingInfo, fulfill, reject);
+				}).then(function(result) {
+					//trigger the library to reload
+					cmp.fireEvent('enrollment-enrolled-complete');
 				});
 			}
 		}, steps);
@@ -227,7 +231,8 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 		this.__addStep({
 			xtype: 'enrollment-confirmation',
 			name: 'Confirmation',
-			enrollmentOption: enrollmentOption
+			enrollmentOption: enrollmentOption,
+			isComplete: function() { return Promise.resolve(); }
 		}, steps);
 
 		return steps;
