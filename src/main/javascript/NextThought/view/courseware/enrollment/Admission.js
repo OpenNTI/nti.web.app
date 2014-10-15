@@ -627,7 +627,6 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 
 	maybeSubmit: function() {
 		var me = this, isValid,
-			maskCmp = this.getMaskCmp(),
 			value = me.getValue();
 
 		me.shouldAllowSubmission(value)
@@ -635,7 +634,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 				isValid = true;
 				me.submitBtnCfg.disabled = true;
 				me.fireEvent('update-buttons');
-				maskCmp.el.mask('Your application is being processed. This may take a few moments.');
+				me.addMask('Your application is being processed. This may take a few moment.');
 
 				return me.complete(me, value);
 			}, function() {
@@ -646,13 +645,13 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 			.then(function(response) {
 				var json = Ext.JSON.decode(response, true);
 
-				maskCmp.el.unmask();
+				me.removeMask();
 
 
 				me.handleResponse(json);
 			})
 			.fail(function(response) {
-				maskCmp.el.unmask();
+				me.removeMask();
 
 				if (!isValid) {
 					return;

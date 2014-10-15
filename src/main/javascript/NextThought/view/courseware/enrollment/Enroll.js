@@ -135,10 +135,9 @@ Ext.define('NextThought.view.courseware.enrollment.Enroll', {
 
 	maybeSubmit: function() {
 		var me = this,
-			maskCmp = this.getMaskCmp(),
 			minTime = wait(5000);
 
-		maskCmp.el.mask('Finalizing your enrollment. You will be redirected to a secure external payment site to complete this transaction.', 'navigation');
+		me.addMask('Finalizing your enrollment. You will be redirected to a secure external payment site to complete this transaction', 'navigation');
 
 		this.complete()
 			.then(function(response) {
@@ -154,7 +153,7 @@ Ext.define('NextThought.view.courseware.enrollment.Enroll', {
 
 					minTime.then(function() {
 						me.error(me);
-						maskCmp.el.unmask();
+						me.removeMask();
 					});
 				}
 			})
@@ -169,7 +168,7 @@ Ext.define('NextThought.view.courseware.enrollment.Enroll', {
 
 				minTime.then(function() {
 					me.error(me);
-					maskCmp.el.unmask();
+					me.removeMask();
 				});
 			});
 	}

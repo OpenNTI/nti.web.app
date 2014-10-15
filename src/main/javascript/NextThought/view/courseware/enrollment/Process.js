@@ -72,6 +72,33 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 	},
 
 
+	addMask: function(msg, cls) {
+		if (!this.el) { return; }
+
+		var isMasked = this.el.isMasked(),
+			maskMsg = this.el.down('.x-mask-msg');
+
+		if (isMasked && msg && maskMsg) {
+			maskMsg.update(msg);
+		} else if (!isMasked) {
+			this.el.mask(msg || 'Loading...', cls);
+		}
+	},
+
+
+	removeMask: function() {
+		if (!this.el) { return; }
+		var mask = this.el.down('.x-mask'),
+			maskMsg = this.el.down('.x-mask-msg');
+
+		if (mask) { mask.addCls('removing'); }
+
+		if (maskMsg) { maskMsg.addCls('removing'); }
+
+		wait(1000).then(this.el.unmask.bind(this.el));
+	},
+
+
 	addTabs: function(cfgs) {
 		if (!this.rendered) {
 			this.tabsToAdd.push(cfgs);
@@ -102,9 +129,8 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 		this.addTabs(tabCfg);
 
 		step.course = this.course;
-		step.getMaskCmp = function() {
-			return me.el;
-		};
+		step.addMask = this.addMask.bind(this);
+		step.removeMask = this.removeMask.bind(this);
 		step.index = i;
 
 		if (step.xtype) {
