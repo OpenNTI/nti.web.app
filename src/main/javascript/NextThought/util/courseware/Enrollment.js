@@ -173,6 +173,7 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 		this.__addStep({
 			xtype: 'enrollment-confirmation',
 			name: 'Confirmation',
+			isComplete: function() { return Promise.resolve(); },
 			enrollmentOption: enrollmentOption
 		}, steps);
 
