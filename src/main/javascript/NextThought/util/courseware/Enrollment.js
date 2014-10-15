@@ -208,7 +208,7 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 
 		this.__addStep({
 			xtype: 'enrollment-paymentconfirmation',
-			name: 'Enrollment',
+			name: 'Verification',
 			enrollmentOption: enrollmentOption,
 			isComplete: function() {return Promise.reject()},
 			complete: function(cmp, data) {
