@@ -649,6 +649,10 @@
 				background-color: rgba(243, 82, 82, 0.05);
 			}
 
+			&.full {
+				.title span{display: none;}
+			}
+
 			&.checkbox.full {
 				cursor: default;
 				padding-left: 35px;

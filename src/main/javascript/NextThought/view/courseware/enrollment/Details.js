@@ -217,7 +217,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 
 	__getOptionText: function(details, option) {
-		return option.getCardText(details, option);
+		return option.Wording;
 	},
 
 
