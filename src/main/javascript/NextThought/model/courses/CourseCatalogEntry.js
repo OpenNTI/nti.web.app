@@ -100,7 +100,41 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 				.then(function(url) { me.set('thumb', url); });
 	},
 
+	//update the enrollment scopes enrollment
+	setEnrolled: function(enrolled) {
+		var options = this.get('EnrollmentOptions'),
+			open = options && options.OpenEnrollment,
+			fmaep = options && options.FiveminutEnrollment,
+			store = options && options.StoreEnrollment;
 
+		//if we are dropping the course, we won't update our scopes
+		//when the library reloads so set all the options as not enrolled
+		if (!enrolled) {
+			if (open) {
+				open.IsEnrolled = false;
+			}
+
+			if (fmaep) {
+				fmaep.IsEnrolled = false;
+			}
+
+			if (store) {
+				store.IsEnrolled = false;
+			}
+		}
+
+		this.set({
+			'enrolled': enrolled,
+			'EnrollmentOptions': options
+		});
+	},
+
+	/**
+	 * Mark the appropriate enrollment option as enrolled
+	 * @param  {String} status the scope they are enrolled in
+	 * @param  {Boolean} open   if they are open enrolled
+	 * @param  {Boolean} admin  if they are an admin
+	 */
 	updateEnrollmentState: function(status, open, admin) {
 		var options = this.get('EnrollmentOptions'),
 			openOption = options && options.OpenEnrollment,
@@ -108,12 +142,17 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 			storeOption = options && options.StoreEnrollment,
 			isOpen = open;
 
+		//assume the option option isn't enrolled in
+		openOption.IsEnrolled = false;
 		if (status === 'Open' && open && openOption) {
 			openOption.IsEnrolled = true;
+		//stripe and fmaep enrollment will both be in the forcreditnondegree scope
 		} else if (status === 'ForCreditNonDegree') {
 			if (storeOption && storeOption.IsEnrolled) {
+				//treat the stripe enrollment as open
 				isOpen = true;
 			} else if (fmaepOption && fmaepOption.IsEnrolled) {
+				//treat the fmaep enrollment as for credit
 				isOpen = false;
 			}
 		}
