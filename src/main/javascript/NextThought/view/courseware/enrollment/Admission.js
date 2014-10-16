@@ -331,7 +331,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 							].join(' ')}
 						],
 						help: [
-							{text: 'Take the free course instead.', type: 'event', event: 'goto-free'}
+							{text: 'Take the free course instead.', type: 'event', event: 'go-back'}
 						]
 					}
 				]

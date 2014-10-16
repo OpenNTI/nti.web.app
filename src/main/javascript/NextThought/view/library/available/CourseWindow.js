@@ -179,6 +179,7 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 		me.on({
 			'show-msg': 'showMsg',
 			'update-buttons': 'updateButtons',
+			'go-back': 'showPrevItem',
 			'show-detail': function(course) {
 				wait()
 					.then(function() {
