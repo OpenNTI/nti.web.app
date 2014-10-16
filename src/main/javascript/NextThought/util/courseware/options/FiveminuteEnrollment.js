@@ -236,7 +236,7 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 			name = me.NAME,
 			option = course.getEnrollmentOption(name);
 
-		if (!option || !option.NTI_FiveminuteEnrollmentCapable) {
+		if (!option) {
 			return Promise.reject();
 		}
 
