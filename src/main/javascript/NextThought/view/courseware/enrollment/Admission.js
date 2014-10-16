@@ -380,32 +380,37 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 
 
 	stopClose: function() {
-		var me = this;
+		var me = this,
+			r;
 
 		if (me.completed) {
-			return Promise.resolve();
-		}
-
-		return new Promise(function(fulfill, reject) {
-			Ext.Msg.show({
-				title: 'Your application has not been submitted.',
-				msg: 'If you leave now all progress will be lost.',
-				icon: 'warning-red',
-				buttons: {
-					primary: {
-						text: 'Stay and Finish',
-						handler: reject
-					},
-					secondary: {
-						text: 'Leave this Page',
-						handler: function() {
-							me.clearStorage();
-							fulfill();
+			r = Promise.resolve();
+		}else if (me.hasMask()) {
+			r = Promise.reject();
+		} else {
+			r = new Promise(function(fulfill, reject) {
+				Ext.Msg.show({
+					title: 'Your application has not been submitted.',
+					msg: 'If you leave now all progress will be lost.',
+					icon: 'warning-red',
+					buttons: {
+						primary: {
+							text: 'Stay and Finish',
+							handler: reject
+						},
+						secondary: {
+							text: 'Leave this Page',
+							handler: function() {
+								me.clearStorage();
+								fulfill();
+							}
 						}
 					}
-				}
+				});
 			});
-		});
+		}
+
+		return r;
 	},
 
 

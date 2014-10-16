@@ -147,6 +147,37 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 	},
 
 
+	stopClose: function() {
+		var r, me = this;
+
+		if (this.hasMask()) {
+			r = Promise.reject();
+		} else {
+			r = new Promise(function(fulfill, reject) {
+				Ext.Msg.show({
+					title: 'Your payment has not been submitted.',
+					msg: 'If you leave now all progress will be lost.',
+					icon: 'warning-red',
+					buttons: {
+						primary: {
+							text: 'Stay and Finish',
+							handler: reject
+						},
+						secondary: {
+							text: 'Leave this Page',
+							handler: function() {
+								me.clearStorage();
+								fulfill();
+							}
+						}
+					}
+				});
+			});
+		}
+		return r;
+	},
+
+
 	showPrice: function() {
 
 	},

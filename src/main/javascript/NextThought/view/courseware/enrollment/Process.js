@@ -72,6 +72,17 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 	},
 
 
+	stopClose: function() {
+		var active = this.getLayout().getActiveItem();
+
+		if (active && active.stopClose) {
+			return active.stopClose();
+		}
+
+		return Promise.resolve();
+	},
+
+
 	addMask: function(msg, cls) {
 		if (!this.el) { return; }
 
@@ -96,6 +107,11 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 		if (maskMsg) { maskMsg.addCls('removing'); }
 
 		wait(1000).then(this.el.unmask.bind(this.el));
+	},
+
+
+	hasMask: function() {
+		return this.el.isMasked();
 	},
 
 
@@ -131,6 +147,7 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 		step.course = this.course;
 		step.addMask = this.addMask.bind(this);
 		step.removeMask = this.removeMask.bind(this);
+		step.hasMask = this.hasMask.bind(this);
 		step.index = i;
 
 		if (step.xtype) {
