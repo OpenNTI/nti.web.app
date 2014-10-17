@@ -565,7 +565,7 @@ Ext.define('NextThought.controller.Store', function() {
 
 			if (!pricingLink) {
 				console.error('Must supply a purchasable with a pricing link', arguments);
-				Ext.Error.rais('Must supply a purchasable');
+				Ext.Error.raise('Must supply a purchasable');
 			}
 
 			if (sender !== this && sender.lockPurchaseAction) {

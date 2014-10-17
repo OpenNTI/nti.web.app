@@ -4,11 +4,14 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 	singleton: true,
 
 	NAME: 'FiveminuteEnrollment',
+	display: 'For Credit',
 	isBase: false,
 
 	buildEnrollmentSteps: function(course) {
-		var enrollmentOption = course.getEnrollmentOption(this.FMAEP),
+		var enrollmentOption = course.getEnrollmentOption(this.NAME),
 			steps = [];
+
+		enrollmentOption.display = this.display;
 
 		//the admission form
 		this.__addStep({

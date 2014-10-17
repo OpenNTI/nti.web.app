@@ -283,13 +283,13 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 			{cls: 'title', html: 'Policy on Non-Academic Criteria in the Admission of Students'},
 			{
 				cls: 'body',
-				html: 'In addition to the academic criteria used as the basis for the admission of students,' +
-					'the University shall consider the following non-academic criteria in deciding whether a student shall be granted admission:' +
-					'whether an applicant has been expelled, suspended, or denied admission or readmission by any other educational institution;' +
-					'whether an applicant has been convicted of a felony or lesser crime involving moral turpitude;' +
-					'whether an applicant\'s conduct would be grounds for expulsion, suspension, dismissal or denial of readmission,' +
-					'had the student been enrolled at the University of Oklahoma.' +
-					'An applicant may be denied admission to the University if the University determines that there is substantial evidence,' +
+				html: 'In addition to the academic criteria used as the basis for the admission of students, ' +
+					'the University shall consider the following non-academic criteria in deciding whether a student shall be granted admission: ' +
+					'whether an applicant has been expelled, suspended, or denied admission or readmission by any other educational institution; ' +
+					'whether an applicant has been convicted of a felony or lesser crime involving moral turpitude; ' +
+					'whether an applicant\'s conduct would be grounds for expulsion, suspension, dismissal or denial of readmission, ' +
+					'had the student been enrolled at the University of Oklahoma. ' +
+					'An applicant may be denied admission to the University if the University determines that there is substantial evidence, ' +
 					'based on any of the instances described above, to indicate the applicant\'s unfitness to be a student at the University of Oklahoma.'
 			}
 		]}
@@ -360,6 +360,31 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 				}
 			});
 		});
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+	},
+
+
+	beforeShow: function() {
+		if (!this.rendered) {
+			return;
+		}
+
+		var container = this.el.up('.enrollment-container');
+
+		if (this.pricingInfo) {
+			this.pricingInfo.show();
+		} else {
+			this.pricingInfo = Ext.widget('enrollment-pricing', {
+				course: this.course,
+				renderTo: container,
+				scrollTarget: container,
+				enrollmentOption: this.enrollmentOption
+			});
+		}
 	},
 
 
@@ -633,6 +658,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 			this.course.setEnrollmentLinks(json.Links);
 			this.fireEvent('show-msg', json.Message || 'Your application was successful.', false, 5000);
 			this.clearStorage();
+			this.pricingInfo.hide();
 			this.done(this);
 		} else if (json.Status === 409) {
 			this.showError(json);

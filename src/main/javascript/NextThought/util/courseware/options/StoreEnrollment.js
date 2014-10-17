@@ -4,6 +4,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 	singleton: true,
 
 	NAME: 'StoreEnrollment',
+	display: 'Lifelong Learner',
 	isBase: true,
 
 	buildEnrollmentSteps: function(course) {
@@ -13,6 +14,8 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 		if (!option.Purchasable.isModel) {
 			option.Purchasable = NextThought.model.store.PurchasableCourse.create(option.Purchasable);
 		}
+
+		option.display = this.display;
 
 		this.__addStep({
 			xtype: 'enrollment-purchase',
