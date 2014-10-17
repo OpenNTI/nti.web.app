@@ -17,7 +17,8 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Set', {
 		'NextThought.view.courseware.enrollment.parts.CheckboxGroup',
 		'NextThought.view.courseware.enrollment.parts.DropDown',
 		'NextThought.view.courseware.enrollment.parts.SubmitButton',
-		'NextThought.view.courseware.enrollment.parts.SplitRadio'
+		'NextThought.view.courseware.enrollment.parts.SplitRadio',
+		'NextThought.view.courseware.enrollment.parts.Links'
 	],
 
 	typesMap: {
@@ -29,7 +30,8 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Set', {
 		'dropdown': 'enrollment-dropdown',
 		'date': 'enrollment-dateinput',
 		'submit-button': 'enrollment-submit-button',
-		'split-radio': 'enrollment-split-radio'
+		'split-radio': 'enrollment-split-radio',
+		'link': 'enrollment-link'
 	},
 
 	//name of the group so it can be idenitified
@@ -100,32 +102,12 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Set', {
 
 	childEls: ['body'],
 
-	helpTpl: new Ext.XTemplate(Ext.DomHelper.markup({cls: 'help-item', cn: [
-		{tag: 'tpl', 'if': 'link', cn: [
-			{tag: 'a', cls: 'help', href: '{href}', target: '{target}', html: '{text}'}
-		]},
-		{tag: 'tpl', 'if': '!link', cn: [
-			{tag: 'a', cls: 'help', html: '{text}'}
-		]},
-		{tag: 'tpl', 'if': 'hasText', cn: [
-			{tag: 'div', cls: 'help-popover hidden', cn: [
-				{cls: 'close'},
-				{cls: 'title', html: '{[values.info.title ? values.info.title : \'\']}'},
-				{cls: 'body', html: '{[values.info.body ? values.info.body : values.info]}'}
-			]}
-		]}
-	]})),
-
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'label', html: '{label}'},
 		{ id: '{id}-body', cls: 'body-container',
-			cn: ['{%this.renderContainer(out,values)%}'] },
-		{cls: 'help-container'}
+			cn: ['{%this.renderContainer(out,values)%}'] }
 	]),
 
-	renderSelectors: {
-		helpContainerEl: '.help-container'
-	},
 
 	initComponent: function() {
 		this.callParent(arguments);
@@ -161,62 +143,6 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Set', {
 		this.callParent(arguments);
 
 		var me = this;
-
-		(me.help || []).forEach(function(help) {
-			var el, popover, height;
-
-			help.link = false;
-			help.hasText = false;
-
-			if (help.type === 'link') {
-				help.link = true;
-			}
-
-			if (help.type === 'text') {
-				help.hasText = true;
-			}
-
-			el = me.helpTpl.append(me.helpContainerEl, help, true);
-
-			if (help.type === 'event') {
-				me.mon(el, 'click', function(e) {
-					me.fireEvent(help.event);
-					e.stopEvent();
-					return false;
-				});
-			}
-
-			if (help.type === 'text') {
-				height = me.el.getHeight();
-
-				me.el.setHeight(height);
-				me.el.setStyle({overflow: 'visible'});
-
-				if (help.info.body) {
-					el.down('.help-popover').setWidth(450);
-				}
-
-				me.mon(el, 'click', function(e) {
-					e.stopEvent();
-
-					var item = e.getTarget('.help-item'),
-						popover = item && item.querySelector('.help-popover');
-
-					if (e.getTarget('.help') && popover) {
-						popover = Ext.get(popover);
-						popover.setTop(-(popover.getHeight() / 2 - 20));
-
-						popover.toggleCls('hidden');
-					}
-
-					if (e.getTarget('.close') && popover) {
-						Ext.fly(popover).addCls('hidden');
-					}
-
-					return false;
-				});
-			}
-		});
 
 		if (this.hides) {
 			this.fireEvent('hide-item', this.hides);

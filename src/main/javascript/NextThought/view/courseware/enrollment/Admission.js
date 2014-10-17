@@ -112,13 +112,11 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 						{type: 'text', name: 'street_line3', hidden: true, placeholder: 'Address (optional)', size: 'full'},
 						{type: 'text', name: 'street_line4', hidden: true, placeholder: 'Address (optional)', size: 'full'},
 						{type: 'text', name: 'street_line5', hidden: true, placeholder: 'Address (optional)', size: 'full'},
+						{type: 'link', name: 'add_address_line', text: 'Add Address Line', eventName: 'add-address-line'},
 						{type: 'text', name: 'city', placeholder: 'City / Town', size: 'large', required: true},
 						{type: 'dropdown', name: 'state', placeholder: 'State / Province / Territory / Region', size: 'full', options: [], editable: false},
 						{type: 'dropdown', name: 'nation_code', placeholder: 'Country', required: true, size: 'large left', options: []},
 						{type: 'text', name: 'postal_code', placeholder: 'ZIP / Postal Code', size: 'small left', required: false}
-					],
-					help: [
-						{text: 'Add Address Line', type: 'event', event: 'add-address-line'}
 					]
 				},
 				{
@@ -249,31 +247,15 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 				{
 					xtype: 'enrollment-set',
 					inputs: [
-						{type: 'checkbox', name: 'affirm', doNotSend: true, doNotStore: true, text: [
-							'I affirm that I am not prohibited from enrolling in any University of Oklahoma program.',
-							'I understand that submitting any false information to the University,',
-							'including but not limited to, any information contained on this form,',
-							'or withholding information about my previous academic history will make my application for admission to the University,',
-							'as well as any future applications, subject to denial, or will result in expulsion from the University.',
-							'I pledge to conduct myself with academic integrity and abide by the tenets of',
-							'The University of Oklahoma\'s Integrity Pledge.'
-						].join(' '), correct: true}
-					],
-					help: [
-						{text: 'Why would I be prohibited?', type: 'text', info: {
-							title: 'Policy on Non-Academic Criteria in the Admission of Students',
-							body: [
-								'In addition to the academic criteria used as the basis for the admission of students,',
-								'the University shall consider the following non-academic criteria in deciding whether a student shall be granted admission:',
-								'whether an applicant has been expelled, suspended, or denied admission or readmission by any other educational institution;',
-								'whether an applicant has been convicted of a felony or lesser crime involving moral turpitude;',
-								'whether an applicant\'s conduct would be grounds for expulsion, suspension, dismissal or denial of readmission,',
-								'had the student been enrolled at the University of Oklahoma.',
-								'An applicant may be denied admission to the University if the University determines that there is substantial evidence,',
-								'based on any of the instances described above, to indicate the applicant\'s unfitness to be a student at the University of Oklahoma.'
-							].join(' ')
-						}},
-						{text: 'Integrity Pledge', type: 'link', href: 'http://integrity.ou.edu/', target: '_blank'}
+						{type: 'checkbox', name: 'affirm', doNotSend: true, doNotStore: true, correct: true, text:
+							'I affirm that I am not <a data-event=\'prohibited\'>prohibited</a> from enrolling in any University of Oklahoma program. ' +
+							'I understand that submitting any false information to the University, ' +
+							'including but not limited to, any information contained on this form, ' +
+							'or withholding information about my previous academic history will make my application for admission to the University, ' +
+							'as well as any future applications, subject to denial, or will result in expulsion from the University. ' +
+							'I pledge to conduct myself with academic integrity and abide by the tenets of ' +
+							'The University of Oklahoma\'s <a href=\'http://integrity.ou.edu/\' target=\'_blank\'>Integrity Pledge.</a>'
+						}
 					]
 				}
 			]
@@ -293,6 +275,25 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 			]
 		}
 	],
+
+
+	prohibitedPopover: new Ext.XTemplate(Ext.DomHelper.markup([
+		{cls: 'help-popover hidden', cn: [
+			{cls: 'close'},
+			{cls: 'title', html: 'Policy on Non-Academic Criteria in the Admission of Students'},
+			{
+				cls: 'body',
+				html: 'In addition to the academic criteria used as the basis for the admission of students,' +
+					'the University shall consider the following non-academic criteria in deciding whether a student shall be granted admission:' +
+					'whether an applicant has been expelled, suspended, or denied admission or readmission by any other educational institution;' +
+					'whether an applicant has been convicted of a felony or lesser crime involving moral turpitude;' +
+					'whether an applicant\'s conduct would be grounds for expulsion, suspension, dismissal or denial of readmission,' +
+					'had the student been enrolled at the University of Oklahoma.' +
+					'An applicant may be denied admission to the University if the University determines that there is substantial evidence,' +
+					'based on any of the instances described above, to indicate the applicant\'s unfitness to be a student at the University of Oklahoma.'
+			}
+		]}
+	])),
 
 
 	initComponent: function() {
@@ -324,14 +325,14 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 					{
 						xtype: 'enrollment-set',
 						inputs: [
-							{type: 'description', text: [
-								'Before you can earn college credit from the University of Oklahoma,',
-								'we need you to answer some questions.',
-								'Don\'t worry, the admission process is free and should only take a few minutes.'
-							].join(' ')}
-						],
-						help: [
-							{text: 'Take the free course instead.', type: 'event', event: 'go-back'}
+							{
+								type: 'description',
+								text:
+									'Before you can earn college credit from the University of Oklahoma, ' +
+									'we need you to answer some questions. ' +
+									'Don\'t worry, the admission process is free and should only take a few minutes.'
+							},
+							{type: 'link', text: 'Take the free course instead.', eventName: 'go-back'}
 						]
 					}
 				]
@@ -342,6 +343,23 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 			me.fillInNations();
 			me.fillInStates();
 		}
+
+		me.on('prohibited', function(anchor) {
+			var popover, parent;
+
+			anchor = Ext.get(anchor);
+
+			parent = anchor.up('.body-container');
+
+			popover = me.prohibitedPopover.append(parent, {}, true);
+
+			popover.on('click', function(e) {
+				if (e.getTarget('.close')) {
+					e.stopEvent();
+					popover.destroy();
+				}
+			});
+		});
 	},
 
 

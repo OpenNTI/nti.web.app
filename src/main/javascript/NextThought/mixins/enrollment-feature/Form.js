@@ -25,7 +25,7 @@ Ext.define('NextThought.mixins.enrollment-feature.Form', {
 			waitOnRender = [];
 
 		values = me.fillInDefaults(values);
-		keys = Object.keys(values),
+		keys = Object.keys(values);
 
 		(keys || []).forEach(function(key) {
 			var input = me.down('[name="' + key + '"]'),
@@ -305,13 +305,7 @@ Ext.define('NextThought.mixins.enrollment-feature.Form', {
 		line = me.numberofaddressline = line + 1;
 
 		if (line >= 5) {
-			help = streetAddress.el.query('a.help');
-
-			(help || []).forEach(function(h) {
-				if (h.innerText === 'Add Address Line') {
-					Ext.fly(h).destroy();
-				}
-			});
+			me.hideItem('add_address_line');
 		}
 
 

@@ -132,37 +132,18 @@
 			padding-bottom: 2px;
 		}
 
-		.help-container {
-			float: left;
-			margin-left: 10px;
-			width: 220px;
-
-			.help-item {
+		.help-popover {
 				position: relative;
-			}
-
-			.help {
-				font: normal 400 0.9em/45px $font;
-				display: block;
-				text-decoration: none;
-				color: $primary-blue;
-				cursor: pointer;
-			}
-
-			.help-popover {
-				position: absolute;
-				right: 220px;
+				clear: both;
 				background-color: #f7fcff;
-				min-width: 230px;
+				width: 650px;
+				top: -220px;
+				left: 15px;
 				padding: 10px;
 				border: 2px solid $primary-blue;
 				border-radius: 5px;
 				box-shadow: 0 0 15px 0 rgba(0,0,0,0.3);
 				font: normal 300 1em/1 $font;
-
-				&.hidden {
-					visibility: hidden;
-				}
 
 				.title {
 					font-size: 1.3em;
@@ -183,6 +164,23 @@
 					right: 20px;
 					@include icon('message_box_close', $position: absolute);
 				}
+			}
+
+		.help-container {
+			float: left;
+			margin-left: 10px;
+			width: 220px;
+
+			.help-item {
+				position: relative;
+			}
+
+			.help {
+				font: normal 400 0.9em/45px $font;
+				display: block;
+				text-decoration: none;
+				color: $primary-blue;
+				cursor: pointer;
 			}
 		}
 
@@ -326,9 +324,10 @@
 			float: left;
 			min-height: 40px;
 
-
 			a {
 				color: $primary-blue;
+				text-decoration: none;
+				position: relative;
 			}
 
 			&.nested {
@@ -664,6 +663,13 @@
 			text-decoration: none;
 			color: $primary-blue;
 		}
+	}
+
+	.enrollment-link {
+		font: normal 400 0.9em/40px $font;
+		color: $primary-blue;
+		cursor: pointer;
+		display: inline;
 	}
 }
 
