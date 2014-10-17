@@ -62,6 +62,7 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		{ name: 'isChanging', type: 'bool', convert: function(v, rec) { return rec.get('enrolled') && v; }},
 		{ name: 'icon', type: 'string', mapping: 'LegacyPurchasableThumbnail' },//These look backwards, they are not... and are ONLY for fallback
 		{ name: 'thumb', type: 'string', mapping: 'LegacyPurchasableIcon' },
+		{ name: 'background', type: 'string', persis: false},
 
 		//Legacy
 		{ name: 'Communities', type: 'auto', persist: false }
@@ -98,6 +99,8 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 				.then(function(url) { me.set('icon', url); });
 		me.getImgAsset('thumb')
 				.then(function(url) { me.set('thumb', url); });
+		me.getImgAsset('background')
+			.then(function(url) {me.set('background', url); });
 	},
 
 	//update the enrollment scopes enrollment

@@ -30,7 +30,7 @@ Ext.define('NextThought.view.courseware.info.parts.Title', {
 		this.buildVideo();
 		if (!Ext.isEmpty(this.videoUrl)) {
 			this.videoEl.setStyle({
-				minHeight: '430px'
+				minHeight: this.videoHeight + 'px' || '430px'
 			});
 
 			this.mon(this.curtainEl, 'click', 'curtainClicked', this);
@@ -48,8 +48,8 @@ Ext.define('NextThought.view.courseware.info.parts.Title', {
 			this.video = Ext.widget({
 				xtype: 'content-video',
 				url: this.videoUrl,
-				width: 764,
-				playerWidth: 764,//video initializes early enough it can't read the dom just yet...so lets JUST GET IT DONE...
+				width: this.videoWidth,
+				playerWidth: this.videoWidth,//video initializes early enough it can't read the dom just yet...so lets JUST GET IT DONE...
 				renderTo: this.videoEl,
 				floatParent: this,
 				doNotCaptureAnalytics: true

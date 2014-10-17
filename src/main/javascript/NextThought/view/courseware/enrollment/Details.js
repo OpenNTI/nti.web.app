@@ -2,6 +2,10 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-enrollment-details',
 
+	requires: [
+		'NextThought.view.courseware.info.Panel'
+	],
+
 	cls: 'course-details',
 
 	enrollmentCardTpl: new Ext.XTemplate(Ext.DomHelper.markup([
@@ -47,11 +51,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			{cls: 'sub', html: '{number}'},
 			{cls: 'title', html: '{title}'}
 		]},
-		{cls: 'left', cn: [
-			{cls: 'video'},
-			{cls: 'curtain'},
-			{tag: 'p', cls: 'description', cn: '{description}'}
-		]},
+		{cls: 'left'},
 		{cls: 'right enrollment', cn: [
 			{cls: 'enrollment-container'}
 		]}
@@ -59,16 +59,9 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 
 	renderSelectors: {
-		videoEl: '.video',
-		curtainEl: '.curtain',
+		detailsEl: '.left',
 		cardsEl: '.enrollment',
 		cardsContainerEl: '.enrollment-container'
-	},
-
-	listeners: {
-		curtainEl: {
-			click: 'curtainClicked'
-		}
 	},
 
 
@@ -93,8 +86,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			number: this.course.get('ProviderUniqueID'),
-			title: this.course.get('Title'),
-			description: this.course.get('Description')
+			title: this.course.get('Title')
 		});
 	},
 
@@ -109,11 +101,23 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 		var me = this;
 
-		me.buildVideo();
+		me.details = Ext.widget('course-info-panel', {
+			videoWidth: 642,
+			videoHeight: 360,
+			renderTo: this.detailsEl
+		});
+
+		me.details.setContent(me.course);
+
+		me.on('destroy', 'destroy', me.details);
 
 		me.updateEnrollmentCard();
 
 		me.mon(me.cardsEl, 'click', 'handleEnrollmentClick', me);
+
+		me.el.setStyle({
+			backgroundImage: 'url(' + me.course.get('background') + ')'
+		});
 	},
 
 
@@ -121,8 +125,6 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 		this.callParent(arguments);
 
 		AnalyticsUtil.stopResourceTimer(this.course.getId(), 'course-catalog-viewed');
-
-		Ext.destroy(this.video);
 	},
 
 
@@ -158,60 +160,6 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 		if (maskEl) {
 			wait(1000).then(maskEl.unmask.bind(maskEl));
-		}
-	},
-
-
-	buildVideo: function() {
-		var me = this,
-			videoURL = me.course.get('Video');
-
-		Ext.destroy(me.video, me.videoMonitor);
-
-		if (!Ext.isEmpty(videoURL)) {
-			me.video = Ext.widget({
-				xtype: 'content-video',
-				url: videoURL,
-				width: 642,
-				playerWidth: 642,
-				renderTo: me.videoEl,
-				floatParent: me,
-				doNotCaptureAnalytics: true
-			});
-
-			me.video.mon(me, 'destroy', 'destroy', me.video);
-
-			this.videoMonitor = this.mon(this.video, {
-				destroyable: true,
-				'beforerender': {
-					fn: function() {
-						me.addCls('has-video');
-					},
-					single: true
-				},
-				'player-event-ended': {
-					fn: 'showCurtain',
-					scope: me,
-					buffer: 1000
-				}
-			});
-		}
-	},
-
-
-	showCurtain: function() {
-		this.removeCls('playing');
-		this.buildVideo();
-	},
-
-
-	curtainClicked: function(e) {
-		if (e && e.shiftKey && this.player.canOpenExternally()) {
-			this.video.openExternally();
-		}
-		else {
-			this.addCls('playing');
-			this.video.resumePlayback();
 		}
 	},
 

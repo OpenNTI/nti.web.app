@@ -425,13 +425,13 @@
 
 .course-details {
 	overflow: auto;
-	padding: 7px 15px 0 15px;
+	padding: 7px 15px 15px 15px;
 	background-color: #efefef;
 	color: $primary-grey;
 	max-height: 100%;
 
 	.header {
-		background-color: #efefef;
+		background: none;
 		border: none;
 		height: auto;
 		padding: 25px 0 0 0;
@@ -443,6 +443,7 @@
 			line-height: 1.3em;
 			font-weight: 300;
 			text-transform: none;
+			color: white;
 		}
 
 		.sub {
@@ -454,6 +455,27 @@
 	.left {
 		float: left;
 		width: 642px;
+
+		.course-info-panel {
+			overflow: visible;
+		}
+
+		.title-box {
+			.title {
+				display: none;
+			}
+		}
+
+		.description-fields {
+			.row .value {
+				margin-left: 10px;
+			}
+		}
+
+		.x-component-course-info {
+			box-shadow: 0 1px 2px 0 rgba(0,0,0,0.35);
+			&.gutter { display: none; }
+		}
 	}
 
 	.description {
