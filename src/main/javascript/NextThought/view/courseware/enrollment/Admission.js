@@ -384,6 +384,8 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 				scrollTarget: container,
 				enrollmentOption: this.enrollmentOption
 			});
+
+			this.on('destroy', 'destroy', this.pricingInfo);
 		}
 	},
 
