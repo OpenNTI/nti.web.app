@@ -142,6 +142,14 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 	},
 
 
+	fillInDefaults: function(values) {
+		values.number = '';
+		values.cvc = '';
+
+		return values;
+	},
+
+
 
 	beforeShow: function() {
 		if (!this.rendered) {
@@ -162,6 +170,9 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 
 			this.on('destroy', 'destroy', this.pricingInfo);
 		}
+
+
+		this.updateFromStorage();
 	},
 
 
