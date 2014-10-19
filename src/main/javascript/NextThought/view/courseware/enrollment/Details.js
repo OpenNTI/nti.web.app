@@ -504,7 +504,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			title = option.title;
 			price = me.getPriceString(option.price);
 
-			button.removeCls(['paid', 'free']);
+			button.removeCls(['paid', 'free', 'drop']);
 			button.addCls(me.getButtonCls(option));
 			button.dom.setAttribute('data-name', option.name);
 			button.update(option.buttonText);
