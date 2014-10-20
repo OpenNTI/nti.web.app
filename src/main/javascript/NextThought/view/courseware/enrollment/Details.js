@@ -420,7 +420,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			if (!addOn) {
 				price = 'Free';
 			} else {
-				price = 'Add $' + (base - addOn);
+				price = 'Add $' + Math.abs(addOn - base);
 			}
 		}
 
