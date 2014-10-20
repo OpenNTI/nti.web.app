@@ -101,7 +101,7 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 							type: 'checkbox',
 							name: 'affirm',
 							doNotSend: true,
-							doNotTrack: true,
+							doNotStore: true,
 							text: 'I have read an agree to the <a data-event="viewLicense">licensing terms.</a>',
 							correct: true
 						}

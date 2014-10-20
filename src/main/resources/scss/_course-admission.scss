@@ -954,3 +954,66 @@
 		font-size: 0.9em;
 	}
 }
+
+.payment-verification {
+	font: normal 400 1em/1 $font;
+	color: $primary-grey;
+	.info {
+		.title {
+			font-size: 1.7em;
+			line-height: 2em;
+			font-weight: 300;
+			color: $tertiary-grey;
+		}
+	}
+
+	.payment-info, .billing-info {
+		position: relative;
+		float: left;
+		margin: 20px 400px 0 0;
+		padding-right: 30px;
+
+		.edit {
+			position: absolute;
+			right: 0;
+			color: $primary-blue;
+			cursor: pointer;
+			text-transform: uppercase;
+			font-size: 0.7em;
+			color: $primary-blue;
+		}
+
+		.title {
+			font-size: 1.3em;
+			line-height: 1.5em;
+			font-weight: 300;
+			color: $tertiary-grey;
+		}
+
+		.info {
+			font-size: 0.9em;
+			line-height: 1.4em;
+
+			.label {
+				font-weight: 600;
+				margin-right: 0.5em;
+
+				&::after {
+					content: ':'
+				}
+			}
+
+			&.card .last-four::before {
+				content: '**** **** **** '
+			}
+
+			.city {
+				margin-right: 0.5em;
+			}
+
+			.state {
+				margin-right: 0.5em;
+			}
+		}
+	}
+}

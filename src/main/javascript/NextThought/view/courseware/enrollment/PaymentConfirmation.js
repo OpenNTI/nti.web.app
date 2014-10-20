@@ -2,46 +2,56 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 	extend: 'Ext.Component',
 	alias: 'widget.enrollment-paymentconfirmation',
 
-	cls: 'enroll-for-credit-confirmation',
+	cls: 'payment-verification',
 
 	buttonCfg: [
 		{name: 'Submit Payment', action: 'submit-payment'}
 	],
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'details'},
-		{cls: 'payment-details', cn: [
-			{cls: 'edit', html: 'Edit'},
-			{cls: 'header', html: 'Payment Details'},
-			{cls: 'card-information', cn: [
-				{cls: 'card'},
-				{cls: 'name'},
-				{cls: 'expiry'}
+		{cls: 'info', cn: [
+			{cls: 'title', html: 'Review and Pay'},
+			{cls: 'description', html: 'Please take a moment to review your order and then submit payment.'}
+		]},
+		{cls: 'payment-info', cn: [
+			{cls: 'edit', html: 'edit'},
+			{cls: 'title', html: 'Payment Information'},
+			{cls: 'name info'},
+			{cls: 'card info', cn: [
+				{tag: 'span', cls: 'type label'},
+				{tag: 'span', cls: 'last-four'}
 			]},
-			{cls: 'billing-information', cn: [
-				{cls: 'address-line1 address-line'},
-				{cls: 'address-line2 address-line'},
-				{cls: 'city'},
-				{cls: 'state'},
-				{cls: 'country'},
-				{cls: 'zip'}
+			{cls: 'expiration info', cn: [
+				{tag: 'span', cls: 'label', html: 'Expires'},
+				{tag: 'span', cls: 'date', html: ''}
 			]}
+		]},
+		{cls: 'billing-info', cn: [
+			{cls: 'edit', html: 'edit'},
+			{cls: 'title', html: 'Billing Address'},
+			{cls: 'street line1 info'},
+			{cls: 'street line2 info'},
+			{cls: 'city-info info', cn: [
+				{tag: 'span', cls: 'city'},
+				{tag: 'span', cls: 'state'},
+				{tag: 'span', cls: 'zip'}
+			]},
+			{cls: 'country info'}
 		]}
 	]),
 
+
 	renderSelectors: {
-		detailsEl: '.details',
-		editEl: '.edit',
-		cardNumEl: '.card-information .card',
-		cardNameEl: '.card-information .name',
-		cardExpEl: '.card-information .expiry',
-		cardCodeEl: '.card-information .cvc',
-		lineOneEl: '.billing-information .address-line1',
-		lineTwoEl: '.billing-information .address-line2',
-		cityEl: '.billing-information .city',
-		stateEl: '.billing-information .state',
-		countryEl: '.billing-information .country',
-		zipEl: '.billing-information .zip'
+		nameEl: '.payment-info .name',
+		cardTypeEl: '.payment-info .card .type',
+		cardNumberEl: '.payment-info .card .last-four',
+		expirationEl: '.payment-info .expiration .date',
+		streetOneEl: '.billing-info .street.line1',
+		streetTwoEl: '.billing-info .street.line2',
+		cityEl: '.billing-info .city',
+		stateEl: '.billing-info .state',
+		zipEl: '.billing-info .zip',
+		countryEl: '.billing-info .country'
 	},
 
 
@@ -69,28 +79,32 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 
 		if (!card || !this.rendered) { return; }
 
+		if (card.brand) {
+			this.cardTypeEl.update(card.brand);
+		}
+
 		if (card.last4) {
-			this.cardNumEl.update(card.last4);
+			this.cardNumberEl.update(card.last4);
 		}
 
 		if (card.name) {
-			this.cardNameEl.update(card.name);
+			this.nameEl.update(card.name);
 		}
 
 		if (card.exp_month) {
-			this.cardExpEl.update(card.exp_month + ' / ' + card.exp_year);
+			this.expirationEl.update(card.exp_month + '/' + card.exp_year);
 		}
 
 		if (card.address_line1) {
-			this.lineOneEl.update(card.address_line1);
+			this.streetOneEl.update(card.address_line1);
 		}
 
 		if (card.address_line2) {
-			this.lineTwoEl.update(card.address_line2);
+			this.streetTwoEl.update(card.address_line2);
 		}
 
 		if (card.address_city) {
-			this.cityEl.update(card.address_city);
+			this.cityEl.update(card.address_city + ',');
 		}
 
 		if (card.address_state) {
@@ -110,21 +124,27 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		var me = this;
-
-		me.detailsTable = Ext.widget('enrollment-details-table', {
-			course: me.course,
-			enrollmentOption: me.enrollmentOption,
-			renderTo: me.detailsEl
-		});
-
-		me.on('destroy', 'destroy', me.detailsTable);
+		var me = this,
+			container = this.el.up('.enrollment-container');
 
 		me.mon(me.el, 'click', function(e) {
 			if (e.getTarget('.edit')) {
 				me.error(me);
 			}
 		});
+
+		if (me.pricingInfo) {
+			me.pricingInfo.show();
+		} else {
+			me.pricingInfo = Ext.widget('enrollment-pricing', {
+				course: this.course,
+				renderTo: container,
+				scrollTarget: container,
+				enrollmentOption: this.enrollmentOption
+			});
+
+			me.on('destroy', 'destroy', me.pricingInfo);
+		}
 	},
 
 
