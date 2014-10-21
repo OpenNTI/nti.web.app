@@ -315,7 +315,7 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 				function() {
 					invalid = false;
 					me.addMask('Processing card information. You will not be charged yet.');
-					me.complete(me, data);
+					return me.complete(me, data);
 				},
 				function() {
 					invalid = true;
