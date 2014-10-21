@@ -467,8 +467,12 @@
 		}
 
 		.description-fields {
-			.row .value {
-				margin-left: 10px;
+			.cell {
+				width: 45%;
+			}
+
+			.cell:not(.cell1third):first-of-type {
+				margin-right: 5%;
 			}
 		}
 
