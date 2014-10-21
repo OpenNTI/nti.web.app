@@ -172,7 +172,6 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 						secondary: {
 							text: 'Leave this Page',
 							handler: function() {
-								me.clearStorage();
 								fulfill();
 							}
 						}
