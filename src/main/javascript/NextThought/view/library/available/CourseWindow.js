@@ -221,8 +221,6 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 
 		if (active && active.stopClose) {
 			warning = active.stopClose();
-		} else {
-			warning = Promise.reject();
 		}
 
 		if (warning) {
