@@ -145,6 +145,7 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 	fillInDefaults: function(values) {
 		values.number = '';
 		values.cvc = '';
+		values.affirm = false;
 
 		return values;
 	},
