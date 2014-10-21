@@ -153,26 +153,6 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 
 
 	beforeShow: function() {
-		if (!this.rendered) {
-			return;
-		}
-
-		var container = this.el.up('.enrollment-container');
-
-		if (this.pricingInfo) {
-			this.pricingInfo.show();
-		} else {
-			this.pricingInfo = Ext.widget('enrollment-pricing', {
-				course: this.course,
-				renderTo: container,
-				scrollTarget: container,
-				enrollmentOption: this.enrollmentOption
-			});
-
-			this.on('destroy', 'destroy', this.pricingInfo);
-		}
-
-
 		this.updateFromStorage();
 	},
 
@@ -342,7 +322,6 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 				me.enrollmentOption.purchaseDescription = pricingInfo;
 				me.enrollmentOption.pricing = result.pricing;
 				me.enrollmentOption.tokenObject = result.tokenObject;
-				me.pricingInfo.hide();
 				me.done(me);
 			})
 			.fail(function(error) {

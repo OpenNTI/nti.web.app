@@ -57,6 +57,33 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 	},
 
 
+	showPricingInfo: function(course, enrollmentOption) {
+		if (!this.rendered) { return; }
+
+		var container = this.el.down('.enrollment-container');
+
+		if (this.pricingInfo) {
+			this.pricingInfo.destroy();
+		}
+
+		this.pricingInfo = Ext.widget('enrollment-pricing', {
+			course: course,
+			enrollmentOption: enrollmentOption,
+			renderTo: container,
+			scrollTarget: container
+		});
+
+		this.on('destroy', 'destroy', this.pricingInfo);
+	},
+
+
+	hidePricingInfo: function(course, enrollmentOption) {
+		if (this.pricingInfo) {
+			this.pricingInfo.hide();
+		}
+	},
+
+
 	getButtonCfg: function() {
 		var active = this.getLayout().getActiveItem(),
 			btnCfg = active && active.getButtonCfg && active.getButtonCfg();
@@ -148,6 +175,7 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 		step.addMask = this.addMask.bind(this);
 		step.removeMask = this.removeMask.bind(this);
 		step.hasMask = this.hasMask.bind(this);
+		step.hidePricingInfo = this.hidePricingInfo.bind(this);
 		step.index = i;
 
 		if (step.xtype) {
@@ -220,6 +248,10 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 		function setItem() {
 			if (item.beforeShow) {
 				item.beforeShow();
+			}
+
+			if (item.hasPricingCard) {
+				me.showPricingInfo(item.course, item.enrollmentOption);
 			}
 
 			me.getLayout().setActiveItem(item);

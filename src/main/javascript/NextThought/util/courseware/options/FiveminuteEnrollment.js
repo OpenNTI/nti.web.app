@@ -17,6 +17,7 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 		this.__addStep({
 			xtype: 'enrollment-admission',
 			name: 'Admissions',
+			hasPricingCard: true,
 			enrollmentOption: enrollmentOption,
 			isComplete: function() {
 				return new Promise(function(fulfill, reject) {
@@ -154,7 +155,7 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 		},
 		apiDown: {
 			title: 'Earn College Credit',
-			information: 'Transcripted credit is available from the University of Oklahoma but unfortunately' +
+			information: 'Transcripted credit is available from the University of Oklahoma but unfortunately ' +
 							'we cannot process an application at this time. Please contact the ' +
 							'<a class=\'link\' href=\'mailto:support@nextthought.com\'>help desk.</a>',
 			cls: 'down'

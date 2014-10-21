@@ -368,28 +368,6 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 	},
 
 
-	beforeShow: function() {
-		if (!this.rendered) {
-			return;
-		}
-
-		var container = this.el.up('.enrollment-container');
-
-		if (this.pricingInfo) {
-			this.pricingInfo.show();
-		} else {
-			this.pricingInfo = Ext.widget('enrollment-pricing', {
-				course: this.course,
-				renderTo: container,
-				scrollTarget: container,
-				enrollmentOption: this.enrollmentOption
-			});
-
-			this.on('destroy', 'destroy', this.pricingInfo);
-		}
-	},
-
-
 	getButtonCfg: function() {
 		return this.buttonCfg;
 	},
@@ -587,6 +565,8 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 		json = json || {};
 
 		this.removeAll(true);
+
+		this.hidePricingInfo();
 
 		this.add({
 			name: 'rejected',

@@ -128,8 +128,7 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		var me = this,
-			container = this.el.up('.enrollment-container');
+		var me = this;
 
 		me.mon(me.el, 'click', function(e) {
 			if (e.getTarget('.edit')) {
@@ -138,18 +137,6 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 			}
 		});
 
-		if (me.pricingInfo) {
-			me.pricingInfo.show();
-		} else {
-			me.pricingInfo = Ext.widget('enrollment-pricing', {
-				course: this.course,
-				renderTo: container,
-				scrollTarget: container,
-				enrollmentOption: this.enrollmentOption
-			});
-
-			me.on('destroy', 'destroy', me.pricingInfo);
-		}
 	},
 
 

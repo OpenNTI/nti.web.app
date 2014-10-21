@@ -20,6 +20,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 		this.__addStep({
 			xtype: 'enrollment-purchase',
 			name: 'Payment',
+			hasPricingCard: true,
 			enrollmentOption: option,
 			isComplete: function() {return Promise.reject(); },
 			complete: function(cmp, data) {
@@ -39,6 +40,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 			xtype: 'enrollment-paymentconfirmation',
 			name: 'Verification',
 			enrollmentOption: option,
+			hasPricingCard: true,
 			goBackOnError: true,
 			isComplete: function() {return Promise.reject(); },
 			complete: function(cmp, data) {
@@ -60,6 +62,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 		this.__addStep({
 			xtype: 'enrollment-confirmation',
 			name: 'Confirmation',
+			hasPricingCard: true,
 			enrollmentOption: option,
 			isComplete: function() { return Promise.resolve(); }
 		}, steps);
