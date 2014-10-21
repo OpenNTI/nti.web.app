@@ -216,27 +216,20 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 
 	onBeforeClose: function() {
 		var me = this,
+			active = me.getLayout().getActiveItem(),
 			warning;
 
-		//Iterate through all the items and see if they care if the window is closed
-		me.items.each(function(item) {
-			if (item.stopClose) {
-				//stopWindowClose should return a promise
-				//that on success will allow the window to close
-				// and on fail will prevent the window to close
-				warning = item.stopClose();
-
-				return false;
-			}
-		});
+		if (active && active.stopClose) {
+			warning = active.stopClose();
+		} else {
+			warning = Promise.reject();
+		}
 
 		if (warning) {
 			warning
 				.then(function() {
-					//close the window;
 					me.destroy();
 				});
-
 			return false;
 		}
 	},
