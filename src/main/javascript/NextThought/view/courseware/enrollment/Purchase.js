@@ -102,7 +102,7 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 							name: 'affirm',
 							doNotSend: true,
 							doNotStore: true,
-							text: 'I have read an agree to the <a data-event="viewLicense">licensing terms.</a>',
+							text: 'I have read and agree to the <a data-event="viewLicense">licensing terms.</a>',
 							correct: true
 						}
 					]
