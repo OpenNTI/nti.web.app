@@ -5,7 +5,8 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 	cls: 'payment-verification',
 
 	buttonCfg: [
-		{name: 'Submit Payment', action: 'submit-payment'}
+		{name: 'Submit Payment', action: 'submit-payment'},
+		{name: 'Cancel', action: 'go-back', secondary: true}
 	],
 
 	renderTpl: Ext.DomHelper.markup([
@@ -58,7 +59,9 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 
 	initComponent: function() {
 		this.callParent(arguments);
-		this.enableBubble(['show-msg', 'update-buttons']);
+		this.enableBubble(['show-msg', 'update-buttons', 'close-msg']);
+
+		this.submitButton = this.buttonCfg[0];
 	},
 
 
@@ -130,6 +133,7 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 
 		me.mon(me.el, 'click', function(e) {
 			if (e.getTarget('.edit')) {
+				me.fireEvent('close-msg');
 				me.error(me);
 			}
 		});
@@ -146,6 +150,38 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 
 			me.on('destroy', 'destroy', me.pricingInfo);
 		}
+	},
+
+
+	stopClose: function() {
+		var r, me = this;
+
+		if (me.hasMask()) {
+			r = Promise.reject();
+		} else {
+			r = new Promise(function(fulfill, reject) {
+				Ext.Msg.show({
+					title: 'Your payment has not been submitted.',
+					msg: 'If you leave now all progress will be lost.',
+					icon: 'warning-red',
+					buttons: {
+						primary: {
+							text: 'Stay and Finish',
+							handler: reject
+						},
+						secondary: {
+							text: 'Leave this Page',
+							handler: function() {
+								me.clearStorage();
+								fulfill();
+							}
+						}
+					}
+				});
+			});
+		}
+
+		return r;
 	},
 
 
@@ -199,14 +235,19 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 				pricingInfo: me.enrollmentOption.pricing
 			};
 
+		me.submitButton.disabled = true;
+		me.fireEvent('update-buttons');
 		me.addMask('Submitting payment. This may take a few moments.');
 
 		me.complete(me, data)
 			.then(function() {
 				console.log('Payment successful', arguments);
+				me.removeMask();
 				me.done(me);
 			})
 			.fail(function(reason) {
+				me.submitButton.disabled = false;
+				me.fireEvent('update-buttons');
 				me.showStripeError(reason);
 				me.removeMask();
 				console.error('Payment failed', arguments);
