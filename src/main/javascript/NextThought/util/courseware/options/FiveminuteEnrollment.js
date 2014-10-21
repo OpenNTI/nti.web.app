@@ -217,14 +217,17 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 
 
 	__getOptionDetails: function(course, option) {
-		var drop = option.OU_DropCutOffDate;
+		var drop = option.OU_DropCutOffDate,
+			enroll = option.EnrollCutOffDate;
 
 		drop = drop ? new Date(drop) : new Date();
+		enroll = enroll ? new Date(enroll) : new Date();
 
 		return {
 			StartDate: course.StartDate,
 			EndDate: course.EndDate,
 			DropCutOff: drop,
+			EnrollCutOff: enroll,
 			Enrolled: option.IsEnrolled,
 			AdmissionState: $AppConfig.userObject.get('admission_status'),
 			Price: option.OU_Price,

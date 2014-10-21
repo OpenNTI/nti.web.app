@@ -77,6 +77,8 @@ Ext.define('NextThought.util.courseware.options.Base', {
 			return {};
 		}
 
+		text = Ext.clone(text);
+
 		for (prop in data) {
 			if (data.hasOwnProperty(prop)) {
 				key = '{' + prop + '}';
