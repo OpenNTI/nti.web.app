@@ -18,7 +18,7 @@ Ext.define('NextThought.model.store.PurchaseAttempt', {
     { name: 'State', type: 'string', persist: false },
     { name: 'Processor', type: 'string', persist: false },
     { name: 'StartTime', type: 'date', persist: false, dateFormat: 'timestamp', defaultValue: new Date() },
-    { name: 'Error', type: 'singleitem', persist: false},
+    { name: 'Error', type: 'singleItem', persist: false},
     { name: 'Description', type: 'string', persist: false },
     { name: 'Quantity', type: 'int', persist: false },
     { name: 'TokenID', type: 'string', persist: false },

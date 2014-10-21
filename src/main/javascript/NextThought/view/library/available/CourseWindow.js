@@ -300,7 +300,7 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 			me.msgContainerEl.removeCls('link');
 		}
 
-		if (timeout) {
+		if (timeout && Ext.isNumber(timeout)) {
 			wait(timeout)
 				.then(function() {
 					me.closeMsg();

@@ -42,6 +42,7 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 
 
 	renderSelectors: {
+		descriptionEl: '.description',
 		nameEl: '.payment-info .name',
 		cardTypeEl: '.payment-info .card .type',
 		cardNumberEl: '.payment-info .card .last-four',
@@ -150,17 +151,29 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 
 	showError: function(json) {
 		if (json && (json.Message || json.message)) {
-			this.fireEvent('show-error', json.Message || json.message, true, 5000);
+			this.fireEvent('show-msg', json.Message || json.message, true);
 		} else {
-			this.fireEvent('show-error', 'An unknown error occurred. Please try again later.', true, 5000);
+			this.fireEvent('show-msg', 'An unknown error occurred. Please try again later.', true);
 		}
 	},
 
 
-	showStripeError: function(json) {
-		var error = {};
+	parsePurchaseAttempt: function(attempt) {
+		var error = attempt.get('Error');
 
-		if (json) {
+		return {
+			Message: (error && error.get('Message')) || 'An unknown error occurred. Please try again later.'
+		};
+	},
+
+
+	showStripeError: function(json) {
+		var error = {},
+			purchaseAttempt = json && json.purchaseAttempt;
+
+		if (purchaseAttempt && purchaseAttempt.isModel) {
+			error = this.parsePurchaseAttempt(purchaseAttempt);
+		} else if (json) {
 			if (json.type && json.type === 'card_error') {
 				error.field = json.param;
 				error.Message = json.message;
@@ -195,6 +208,7 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 			})
 			.fail(function(reason) {
 				me.showStripeError(reason);
+				me.removeMask();
 				console.error('Payment failed', arguments);
 			});
 	}

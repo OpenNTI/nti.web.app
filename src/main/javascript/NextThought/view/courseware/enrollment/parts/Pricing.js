@@ -82,6 +82,10 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 
 
 	onContainerScroll: function() {
+		if (!this.scrollTarget || !this.scrollTarget.dom) {
+			return;
+		}
+
 		var containerTop = this.scrollTarget.getScrollTop(),
 			containerHeight = this.scrollTarget.getHeight(),
 			myHeight = this.getHeight(),
