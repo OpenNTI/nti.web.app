@@ -302,6 +302,7 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 
 	maybeSubmit: function() {
 		var me = this,
+			invalid,
 			value = me.getParsedValues(),
 			pricingInfo = me.getPricingInfo(value),
 			data = {
@@ -309,10 +310,18 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 				cardInfo: value
 			};
 
-		me.addMask('Processing card information. You will not be charged yet.');
-
 		me.shouldAllowSubmission()
-			.then(me.complete.bind(me, me, data))
+			.then(
+				function() {
+					invalid = false;
+					me.addMask('Processing card information. You will not be charged yet.');
+					me.complete(me, data);
+				},
+				function() {
+					invalid = true;
+					return Promise.reject();
+				}
+			)
 			.then(function(result) {
 				if (!result.pricing || !result.tokenObject) {
 					console.error('Unexpected result', result);
@@ -325,9 +334,11 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 				me.done(me);
 			})
 			.fail(function(error) {
-				console.error('failed to create token', arguments);
-				me.removeMask();
-				me.showStripeError(error);
+				if (!invalid) {
+					console.error('failed to create token', arguments);
+					me.removeMask();
+					me.showStripeError(error);
+				}
 			});
 	}
 });
