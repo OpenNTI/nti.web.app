@@ -154,6 +154,7 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 
 	beforeShow: function() {
 		this.updateFromStorage();
+		this.updatePrice();
 	},
 
 
@@ -200,11 +201,6 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 	},
 
 
-	showPrice: function() {
-
-	},
-
-
 	showTerms: function() {
 		//TODO hardcoded link needs to go away preferably for a link like what we use for the welcome guide
 		window.open(Service.getSupportLinks().termsOfService, '_blank');
@@ -218,10 +214,12 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 
 		function onSuccess(result) {
 			me.enrollmentOption.pricing = result;
-			me.showPrice();
+			me.showPrice(result);
 		}
 
 		function onFailure(reason) {
+			me.enrollmentOption.pricing = null;
+			me.showPrice();
 			console.error('failed to price purchase');
 			me.showStripeError(reason);
 		}

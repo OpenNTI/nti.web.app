@@ -33,10 +33,15 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 			]},
 			{cls: 'detail price', cn: [
 				{tag: 'span', cls: 'label', html: 'Total'},
-				{tag: 'span', html: '{price}'}
+				{tag: 'span', cls: 'amount', html: '{price}'}
 			]}
 		]}
 	]),
+
+
+	renderSelectors: {
+		priceEl: '.amount'
+	},
 
 
 	beforeRender: function() {
@@ -61,7 +66,7 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 			credit: hours ? Ext.util.Format.plural(hours, 'Credit Hour') : 'No College Credit',
 			begins: Ext.Date.format(begins, format),
 			ends: Ext.Date.format(ends, format),
-			price: '$' + this.enrollmentOption.Price.toFixed(2)
+			price: '$' + this.getPrice()
 		});
 	},
 
@@ -104,5 +109,27 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 			this.el.setTop(this.base_top - containerTop);
 		}
 
+	},
+
+
+	getPrice: function(pricing) {
+		pricing = pricing || this.enrollmentOption.pricing;
+
+		var price;
+
+		if (!pricing) {
+			price = this.enrollmentOption.Price;
+		} else {
+			price = pricing.get('PurchasePrice') || pricing.get('Amount');
+		}
+
+		return (price || 0).toFixed(2);
+	},
+
+
+	update: function(pricing) {
+		var price = this.getPrice(pricing);
+
+		this.priceEl.update('$' + price);
 	}
 });

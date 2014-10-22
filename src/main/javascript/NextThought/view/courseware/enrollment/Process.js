@@ -84,6 +84,13 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 	},
 
 
+	updatePricingInfo: function(pricing) {
+		if (this.pricingInfo) {
+			this.pricingInfo.update(pricing);
+		}
+	},
+
+
 	getButtonCfg: function() {
 		var active = this.getLayout().getActiveItem(),
 			btnCfg = active && active.getButtonCfg && active.getButtonCfg();
@@ -176,6 +183,7 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 		step.removeMask = this.removeMask.bind(this);
 		step.hasMask = this.hasMask.bind(this);
 		step.hidePricingInfo = this.hidePricingInfo.bind(this);
+		step.showPrice = this.updatePricingInfo.bind(this);
 		step.index = i;
 
 		if (step.xtype) {
