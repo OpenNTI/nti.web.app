@@ -754,8 +754,13 @@
 
 .enroll-for-credit-confirmation {
 	color: $primary-grey;
-	padding-right: 230px;
+	padding: 0 230px 75px 0;
+	position: relative;
 	font: normal 300 1em/1 $font;
+
+	.subscribe {
+		right: 230px;
+	}
 
 	.main {
 		color: $secondary-green;
@@ -955,9 +960,80 @@
 	}
 }
 
+.payment-verification, .enroll-for-credit-confirmation {
+	.subscribe {
+		font: normal 600 0.9em/20px $font;
+		margin-top: 20px;
+		background-color: #f9f9f9;
+		clear: both;
+		cursor: pointer;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+
+		input[type=checkbox] {
+			opacity: 0;
+			position: absolute;
+		}
+
+		input[type=checkbox] + label {
+			min-height: 40px;
+			padding: 10px 15px 10px 46px;
+			display: block;
+			cursor: pointer;
+
+			&.long {
+				line-height: 28px;
+				padding: 15px 25px 15px 46px;
+				font-weight: 400;
+
+				&::after {
+					top: 22px;
+				}
+			}
+
+			@include icon('checkbox-14', $top: 13px, $left: 18px);
+		}
+
+		input[type=checkbox]:checked + label {
+			@include icon('checkbox-14_active', $top: 13px, $left: 18px);
+
+			&.long::after {
+				top: 22px;
+			}
+
+			&::before {
+				content: '';
+				position: absolute;
+				width: 4px;
+				background-color: $primary-blue;
+				top: 0;
+				left: 0px;
+				bottom: 0;
+			}
+		}
+
+		&:hover input[type=checkbox]:not(:checked) + label {
+			@include icon('checkbox-14_hover', $top: 13px, $left: 18px);
+
+			&.long::after {
+				top: 22px;
+			}
+		}
+
+		input[type=checkbox]:focus + label {
+			box-shadow: inset 0 0 0 1px $primary-blue;
+		}
+	}
+}
+
 .payment-verification {
 	font: normal 400 1em/1 $font;
 	color: $primary-grey;
+	overflow: hidden;
+	padding: 0 300px 75px 0;
+	position: relative;
+
 	.info {
 		.title {
 			font-size: 1.7em;
@@ -965,6 +1041,10 @@
 			font-weight: 300;
 			color: $tertiary-grey;
 		}
+	}
+
+	.subscribe {
+		right: 300px;
 	}
 
 	.payment-info, .billing-info {

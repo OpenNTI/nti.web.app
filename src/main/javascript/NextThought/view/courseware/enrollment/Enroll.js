@@ -19,7 +19,11 @@ Ext.define('NextThought.view.courseware.enrollment.Enroll', {
 			{cls: 'text available', html: '{available}'},
 			{cls: 'confirm', html: '{confirm}'}
 		]},
-		{cls: 'details'}
+		{cls: 'details'},
+		{cls: 'subscribe', cn: [
+			{tag: 'input', id: '{id}-subscribe-check', type: 'checkbox', name: 'subscribe'},
+			{tag: 'label', cls: '{cls}', 'for': '{id}-subscribe-check', html: 'Send Me Spam'}
+		]}
 	]),
 
 
@@ -29,7 +33,10 @@ Ext.define('NextThought.view.courseware.enrollment.Enroll', {
 		descriptionEl: '.description',
 		confirmEl: '.confirm',
 		availableEl: '.available',
-		detailsEl: '.details'
+		detailsEl: '.details',
+		subscribeContainerEl: '.subscribe',
+		subscribeEl: '.subscribe input[name=subscribe]',
+		subscribeLabelEl: '.subscribe label'
 	},
 
 
@@ -69,6 +76,20 @@ Ext.define('NextThought.view.courseware.enrollment.Enroll', {
 		});
 
 		this.on('destroy', 'destroy', this.detailsTable);
+
+		this.beforeShow();
+	},
+
+
+	beforeShow: function() {
+		if (!this.rendered) { return; }
+
+		if (this.enrollmentOption.AllowVendorUpdates) {
+			this.subscribeLabelEl.update('Subscribe to updates from ' + this.enrollmentOption.VendorName);
+			this.subscribeContainerEl.show();
+		} else {
+			this.subscribeContainerEl.hide();
+		}
 	},
 
 
@@ -135,11 +156,17 @@ Ext.define('NextThought.view.courseware.enrollment.Enroll', {
 
 	maybeSubmit: function() {
 		var me = this,
-			minTime = wait(5000);
+			minTime = wait(5000),
+			subscribe;
+
+		//if its there, visible, and checked
+		subscribe = this.subscribeEl && this.subscribeEl.isVisible() && this.subscribeEl.dom.checked;
 
 		me.addMask('Finalizing your enrollment. You will be redirected to a secure external payment site to complete this transaction', 'navigation');
 
-		this.complete()
+		this.complete(this, {
+			subscribe: subscribe
+		})
 			.then(function(response) {
 				var json = Ext.JSON.decode(response, true);
 

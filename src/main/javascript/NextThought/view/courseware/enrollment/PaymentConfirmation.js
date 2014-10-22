@@ -38,6 +38,10 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 				{tag: 'span', cls: 'zip'}
 			]},
 			{cls: 'country info'}
+		]},
+		{cls: 'subscribe', cn: [
+			{tag: 'input', id: '{id}-subscribe-check', type: 'checkbox', name: 'subscribe'},
+			{tag: 'label', cls: '{cls}', 'for': '{id}-subscribe-check', html: 'Send Me Spam'}
 		]}
 	]),
 
@@ -53,7 +57,10 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 		cityEl: '.billing-info .city',
 		stateEl: '.billing-info .state',
 		zipEl: '.billing-info .zip',
-		countryEl: '.billing-info .country'
+		countryEl: '.billing-info .country',
+		subscribeContainerEl: '.subscribe',
+		subscribeEl: '.subscribe input[name=subscribe]',
+		subscribeLabelEl: '.subscribe label'
 	},
 
 
@@ -82,6 +89,13 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 			card = token && token.card;
 
 		if (!card || !this.rendered) { return; }
+
+		if (this.enrollmentOption.AllowVendorUpdates) {
+			this.subscribeLabelEl.update('Subscribe to updates from ' + this.enrollmentOption.VendorName);
+			this.subscribeContainerEl.show();
+		} else {
+			this.subsdcribeContainerEl.hide();
+		}
 
 		if (card.brand) {
 			this.cardTypeEl.update(card.brand);
@@ -220,6 +234,8 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 				tokenObject: me.enrollmentOption.tokenObject,
 				pricingInfo: me.enrollmentOption.pricing
 			};
+
+		data.purchaseDescription.subscribe = this.subscribeEl && this.subscribeEl.isVisible() && this.subscribeEl.dom.checked;
 
 		me.submitButton.disabled = true;
 		me.fireEvent('update-buttons');

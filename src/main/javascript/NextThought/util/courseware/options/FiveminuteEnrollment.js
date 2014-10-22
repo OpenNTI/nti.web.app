@@ -87,7 +87,8 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 				return Service.post(link, {
 					crn: crn,
 					term: term,
-					return_url: returnUrl
+					return_url: returnUrl,
+					AllowVendorUpdates: data.subscribe
 				});
 			}
 		}, steps);
@@ -165,8 +166,6 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 	__getEnrollmentText: function(course, option) {
 		var state = {}, now = new Date(),
 			details = this.__getOptionDetails(course, option);
-
-		details.AvailableSeats = 99;
 
 		//if the course is archived
 		if (details.EndDate < now) {

@@ -28,6 +28,7 @@ Ext.define('NextThought.controller.Store', function() {
 		this.expectedPrice = expectedPrice;
 		this.tokenId = tokenId;
 		this.delegate = delegate;
+		this.subscribe = purchaseDesc.subscribe;
 		this.scope = scope;
 		this.initiatePurchase();
 	};
@@ -58,14 +59,20 @@ Ext.define('NextThought.controller.Store', function() {
 
 			data = {
 				token: this.tokenId,
-				purchasableID: this.purchasable.getId()
+				purchasableID: this.purchasable.getId(),
+				context: {
+					AllowVendorUpdates: this.subscribe
+				}
 			};
+
 			if (this.coupon !== undefined) {
 				data.coupon = this.coupon;
 			}
+
 			if (this.quantity > 0) {
 				data.quantity = this.quantity;
 			}
+
 			if (this.expectedPrice !== undefined) {
 				data.expectedAmount = this.expectedPrice;
 			}
