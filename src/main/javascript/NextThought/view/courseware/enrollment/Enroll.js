@@ -93,7 +93,7 @@ Ext.define('NextThought.view.courseware.enrollment.Enroll', {
 			this.subscribeLegalEl.update(getString('SubscribeToVendorLegal'));
 			this.subscribeContainerEl.show();
 		} else {
-			this.subsdcribeContainerEl.hide();
+			this.subscribeContainerEl.hide();
 		}
 	},
 

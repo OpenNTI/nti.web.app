@@ -27,44 +27,6 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 
 	form: [
 		{
-			name: 'preliminary',
-			label: 'Preliminary Questions',
-			reveals: ['general', 'signature'],
-			items: [
-				{
-					xtype: 'enrollment-set',
-					label: 'Are you currently attending the University of Oklahoma?',
-					inputs: [
-						{type: 'radio-group', name: 'is_currently_attending_ou', correct: 'N', options: [
-							{text: 'Yes', value: 'Y', content: 'Please sign up for the course using your ' +
-															   Ext.DomHelper.markup({tag: 'a', href: 'http://ozone.ou.edu', target: '_blank', html: 'Ozone account'}) +
-															   '.'},
-							{text: 'No', value: 'N'}
-						]}
-					]
-				},
-				{
-					xtype: 'enrollment-set',
-					label: 'Are you an Oklahoma resident currently attending High School?',
-					name: 'attending-highschool',
-					inputs: [
-						{type: 'radio-group', name: 'is_currently_attending_highschool', correct: 'N', options: [
-							{
-								text: 'Yes',
-								value: 'Y',
-								content: 'Please apply using our ' +
-										 Ext.DomHelper.markup({
-											 tag: 'a', href: 'http://www.ou.edu/content/go2/admissions/concurrent.html',
-											 target: '_blank', html: 'Concurrent Enrollment Application'}) +
-										 '.'
-							},
-							{text: 'No', value: 'N'}
-						]}
-					]
-				}
-			]
-		},
-		{
 			name: 'general',
 			label: 'General Information',
 			items: [
@@ -300,7 +262,56 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 		this.callParent(arguments);
 
 		var me = this,
-			form = me.form.slice();
+			form = me.form.slice(),
+			courseSpecific = this.course ? getString('CourseSpecific')[this.course.getId()] : null,
+			currentStudent;
+
+		if (courseSpecific && courseSpecific.AlreadyEnrolled) {
+			currentStudent = courseSpecific.AlreadyEnrolled;
+		} else {
+			currentStudent = Ext.DomHelper.markup([
+				'Please sign up for the course using your ',
+				{tag: 'a', href: 'http://ozone.ou.edu', target: '_blank', html: 'Ozone account.'}
+			]);
+		}
+
+
+		form.unshift({
+				name: 'preliminary',
+				label: 'Preliminary Questions',
+				reveals: ['general', 'signature'],
+				items: [
+					{
+						xtype: 'enrollment-set',
+						label: 'Are you currently attending the University of Oklahoma?',
+						inputs: [
+							{type: 'radio-group', name: 'is_currently_attending_ou', correct: 'N', options: [
+								{text: 'Yes', value: 'Y',	content: currentStudent},
+								{text: 'No', value: 'N'}
+							]}
+						]
+					},
+					{
+						xtype: 'enrollment-set',
+						label: 'Are you an Oklahoma resident currently attending High School?',
+						name: 'attending-highschool',
+						inputs: [
+							{type: 'radio-group', name: 'is_currently_attending_highschool', correct: 'N', options: [
+								{
+									text: 'Yes',
+									value: 'Y',
+									content: 'Please apply using our ' +
+											 Ext.DomHelper.markup({
+												 tag: 'a', href: 'http://www.ou.edu/content/go2/admissions/concurrent.html',
+												 target: '_blank', html: 'Concurrent Enrollment Application'}) +
+											 '.'
+								},
+								{text: 'No', value: 'N'}
+							]}
+						]
+					}
+				]
+		});
 
 		me.submitBtnCfg = me.buttonCfg[0];
 

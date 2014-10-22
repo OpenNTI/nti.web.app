@@ -99,7 +99,7 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 			this.subscribeLegalEl.update(getString('SubscribeToVendorLegal'));
 			this.subscribeContainerEl.show();
 		} else {
-			this.subsdcribeContainerEl.hide();
+			this.subscribeContainerEl.hide();
 		}
 
 		if (card.brand) {

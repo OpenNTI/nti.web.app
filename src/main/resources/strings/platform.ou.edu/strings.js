@@ -52,3 +52,10 @@ NTIStrings['SubscribeToVendorLegal'] = 'By opting in for email updates you agree
 									'You can withdraw your consent at any time. More Details: <a href="http://www.aenetworks.com/privacy" target="_blank">Privacy Policy</a> | ' +
 									'<a href="http://www.aenetworks.com/terms" target="_blank">Terms of Use</a> | ' +
 									'<a href="http://www.aenetworks.com/contact" target="_blank">Contact Us</a>';
+
+NTIStrings.CourseSpecific = {
+	'tag:nextthought.com,2011-10:NTI-CourseInfo-Spring2015_HIST_1493': {
+		AlreadyEnrolled: 'LSTD 1153.500 fulfills US History Gen Ed requirement. ' +
+							'To enroll, visit <a href="htttp://ozone.ou.edu" target="_blank">ozone.ou.edu</a> and enroll in LSTD 1153, Section 500.'
+	}
+};
