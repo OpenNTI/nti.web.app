@@ -9,7 +9,7 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 		{name: 'Cancel', action: 'go-back', secondary: true}
 	],
 
-	renderTpl: Ext.DomHelper.markup([
+	renderTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{cls: 'info', cn: [
 			{cls: 'title', html: 'Review and Pay'},
 			{cls: 'description', html: 'Please take a moment to review your order and then submit payment.'}
@@ -39,11 +39,14 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 			]},
 			{cls: 'country info'}
 		]},
-		{cls: 'subscribe', cn: [
-			{tag: 'input', id: '{id}-subscribe-check', type: 'checkbox', name: 'subscribe'},
-			{tag: 'label', cls: '{cls}', 'for': '{id}-subscribe-check', html: 'Send Me Spam'}
+		{cls: 'subscribe-container', cn: [
+			{cls: 'subscribe', cn: [
+				{tag: 'input', id: '{id}-subscribe-check', type: 'checkbox', name: 'subscribe'},
+				{tag: 'label', cls: '{cls}', 'for': '{id}-subscribe-check', html: ''}
+			]},
+			{cls: 'legal'}
 		]}
-	]),
+	])),
 
 
 	renderSelectors: {
@@ -60,7 +63,8 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 		countryEl: '.billing-info .country',
 		subscribeContainerEl: '.subscribe',
 		subscribeEl: '.subscribe input[name=subscribe]',
-		subscribeLabelEl: '.subscribe label'
+		subscribeLabelEl: '.subscribe label',
+		subscribeLegalEl: '.subscribe-container .legal'
 	},
 
 
@@ -91,7 +95,8 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 		if (!card || !this.rendered) { return; }
 
 		if (this.enrollmentOption.AllowVendorUpdates) {
-			this.subscribeLabelEl.update('Subscribe to updates from ' + this.enrollmentOption.VendorName);
+			this.subscribeLabelEl.update(getString('SubscribeToVendor') || 'Subscribe to updates.');
+			this.subscribeLegalEl.update(getString('SubscribeToVendorLegal'));
 			this.subscribeContainerEl.show();
 		} else {
 			this.subsdcribeContainerEl.hide();

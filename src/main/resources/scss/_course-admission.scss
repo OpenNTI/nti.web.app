@@ -754,11 +754,11 @@
 
 .enroll-for-credit-confirmation {
 	color: $primary-grey;
-	padding: 0 230px 75px 0;
+	padding: 0 230px 110px 0;
 	position: relative;
 	font: normal 300 1em/1 $font;
 
-	.subscribe {
+	.subscribe-container {
 		right: 230px;
 	}
 
@@ -961,15 +961,30 @@
 }
 
 .payment-verification, .enroll-for-credit-confirmation {
+	.subscribe-container {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+	}
+
+	.legal {
+		font-size: 0.9em;
+		line-height: 1.2em;
+		color: $secondary-grey;
+		padding: 10px 0;
+
+		a {
+			color: $primary-blue;
+			text-decoration: none;
+		}
+	}
+
 	.subscribe {
 		font: normal 600 0.9em/20px $font;
 		margin-top: 20px;
 		background-color: #f9f9f9;
 		clear: both;
 		cursor: pointer;
-		position: absolute;
-		bottom: 0;
-		left: 0;
 
 		input[type=checkbox] {
 			opacity: 0;
@@ -1031,7 +1046,7 @@
 	font: normal 400 1em/1 $font;
 	color: $primary-grey;
 	overflow: hidden;
-	padding: 0 300px 75px 0;
+	padding: 0 300px 110px 0;
 	position: relative;
 
 	.info {
@@ -1043,7 +1058,7 @@
 		}
 	}
 
-	.subscribe {
+	.subscribe-container {
 		right: 300px;
 	}
 

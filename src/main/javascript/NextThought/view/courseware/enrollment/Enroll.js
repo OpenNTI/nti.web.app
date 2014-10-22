@@ -20,9 +20,12 @@ Ext.define('NextThought.view.courseware.enrollment.Enroll', {
 			{cls: 'confirm', html: '{confirm}'}
 		]},
 		{cls: 'details'},
-		{cls: 'subscribe', cn: [
-			{tag: 'input', id: '{id}-subscribe-check', type: 'checkbox', name: 'subscribe'},
-			{tag: 'label', cls: '{cls}', 'for': '{id}-subscribe-check', html: 'Send Me Spam'}
+		{cls: 'subscribe-container', cn: [
+			{cls: 'subscribe', cn: [
+				{tag: 'input', id: '{id}-subscribe-check', type: 'checkbox', name: 'subscribe'},
+				{tag: 'label', cls: '{cls}', 'for': '{id}-subscribe-check', html: ''}
+			]},
+			{cls: 'legal'}
 		]}
 	]),
 
@@ -36,7 +39,8 @@ Ext.define('NextThought.view.courseware.enrollment.Enroll', {
 		detailsEl: '.details',
 		subscribeContainerEl: '.subscribe',
 		subscribeEl: '.subscribe input[name=subscribe]',
-		subscribeLabelEl: '.subscribe label'
+		subscribeLabelEl: '.subscribe label',
+		subscribeLegalEl: '.subscribe-container .legal'
 	},
 
 
@@ -85,10 +89,11 @@ Ext.define('NextThought.view.courseware.enrollment.Enroll', {
 		if (!this.rendered) { return; }
 
 		if (this.enrollmentOption.AllowVendorUpdates) {
-			this.subscribeLabelEl.update('Subscribe to updates from ' + this.enrollmentOption.VendorName);
+			this.subscribeLabelEl.update(getString('SubscribeToVendor') || 'Subscribe to updates.');
+			this.subscribeLegalEl.update(getString('SubscribeToVendorLegal'));
 			this.subscribeContainerEl.show();
 		} else {
-			this.subscribeContainerEl.hide();
+			this.subsdcribeContainerEl.hide();
 		}
 	},
 
