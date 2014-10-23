@@ -651,7 +651,6 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 			this.course.setEnrollmentLinks(json.Links);
 			this.fireEvent('show-msg', json.Message || 'Your application was successful.', false, 5000);
 			this.clearStorage();
-			this.pricingInfo.hide();
 			this.done(this);
 		} else if (json.Status === 409) {
 			this.showError(json);
