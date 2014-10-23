@@ -260,6 +260,8 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 
 			if (item.hasPricingCard) {
 				me.showPricingInfo(item.course, item.enrollmentOption);
+			} else {
+				me.hidePricingInfo();
 			}
 
 			me.getLayout().setActiveItem(item);
