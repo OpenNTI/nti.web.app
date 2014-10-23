@@ -36,7 +36,8 @@ Ext.define('NextThought.model.ContentBundle', {
 
 		{ name: 'icon', type: 'string' },
 		{ name: 'thumb', type: 'string' },
-		{ name: 'background', type: 'string'}
+		{ name: 'background', type: 'string'},
+		{ name: 'vendorIcon', type: 'string'}
 	],
 
 
@@ -67,7 +68,8 @@ Ext.define('NextThought.model.ContentBundle', {
 			label: this.get('author'),//TODO: delete this line when we know uiData.label is not referenced. (I'm 90% sure its not already.)
 			author: this.get('author'),
 			icon: this.get('icon'),
-			thumb: this.get('thumb')
+			thumb: this.get('thumb'),
+			vendorIcon: this.get('vendorIcon')
 		};
 	},
 
@@ -95,7 +97,9 @@ Ext.define('NextThought.model.ContentBundle', {
 		me.getImgAsset('thumb')
 			.then(function(url) { me.set('thumb', url); }, me.set.bind(me, ['thumb', null]));
 		me.getImgAsset('background')
-			.then(function(url) { me.set('background', url); }, me.set.bind(me, 'background', null));
+			.then(function(url) { me.set('background', url); }, me.set.bind(me, ['background', null]));
+		me.getImgAsset('vendorIcon')
+			.then(function(url) { me.set('vendorIcon', url);}, me.set.bind(me, ['vendorIcon', null]));
 	},
 
 

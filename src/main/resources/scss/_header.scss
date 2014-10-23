@@ -160,6 +160,8 @@
 
 
 	.branding {
+		background-position: center center;
+		background-repeat: no-repeat;
 		position: absolute;
 		top: 0;
 		bottom: 0;
@@ -167,6 +169,12 @@
 		width: 60px;
 		//background: red;
 		z-index: 10;
+
+		&.custom-vendor {
+			background-color: #ebebec;
+			width: 120px;
+			left: -60px;
+		}
 	}
 
 	.content {

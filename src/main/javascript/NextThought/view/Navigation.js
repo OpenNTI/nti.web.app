@@ -69,7 +69,8 @@ Ext.define('NextThought.view.Navigation', {
 		providerEl: '.content .wrap .provider',
 		providerBottomEl: '.content .wrap .provider-bottom',
 		titleEl: '.content .wrap .title',
-		jumpEl: '.jump-menu'
+		jumpEl: '.jump-menu',
+		brandingEl: '.jump-menu .branding'
 	},
 
 
@@ -260,6 +261,14 @@ Ext.define('NextThought.view.Navigation', {
 			this.providerBottomEl.update(data.label);
 		} else {
 			this.providerEl.update(label);
+		}
+
+		if (data.vendorIcon) {
+			this.brandingEl.addCls('custom-vendor');
+			this.brandingEl.setStyle({backgroundImage: 'url(' + data.vendorIcon + ')'});
+		} else {
+			this.brandingEl.removeCls('custom-vendor');
+			this.brandingEl.setStyle({backgroundImage: undefined});
 		}
 
 		this.titleEl.update(data.title);
