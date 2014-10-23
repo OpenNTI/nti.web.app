@@ -74,7 +74,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 	ENROLLMENT_STATES: {
 		notEnrolled: {
 			title: 'Lifelong Learner',
-			information: 'Gain complete access to interact with all course content, including lectures' +
+			information: 'Gain complete access to interact with all course content, including lectures, ' +
 							'course materials, quizzes, and discussions once the class is in session'
 		},
 		enrolled: {
