@@ -167,7 +167,7 @@ Ext.define('NextThought.view.courseware.enrollment.Enroll', {
 		//if its there, visible, and checked
 		subscribe = this.subscribeEl && this.subscribeEl.isVisible() && this.subscribeEl.dom.checked;
 
-		me.addMask('Finalizing your enrollment. You will be redirected to a secure external payment site to complete this transaction', 'navigation');
+		me.addMask('Finalizing your enrollment. You will be redirected to a secure external payment site to complete this transaction.', 'navigation');
 
 		this.complete(this, {
 			subscribe: subscribe
