@@ -622,7 +622,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 							option.undoEnrollment(me)
 								.then(function(changed) {
 									me.fireEvent('enrolled-action', false);
-									me.showMessage('You are no long enrolled in ' + title);
+									me.showMessage('You are no longer enrolled in ' + title);
 									done(true, changed);
 								})
 								.fail(function(reason) {
