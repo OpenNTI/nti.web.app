@@ -675,7 +675,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 				isValid = true;
 				me.submitBtnCfg.disabled = true;
 				me.fireEvent('update-buttons');
-				me.addMask('Your application is being processed. This may take a few moment.');
+				me.addMask('Your application is being processed. This may take a few moments.');
 
 				return me.complete(me, value);
 			}, function() {
