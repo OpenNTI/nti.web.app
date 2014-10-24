@@ -343,7 +343,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 									'we need you to answer some questions. ' +
 									'Don\'t worry, the admission process is free and should only take a few minutes.'
 							},
-							{type: 'link', text: 'Take the free course instead.', eventName: 'go-back'}
+							{type: 'link', text: (me.baseIsOpen ? 'Take the free course instead.' : 'Take the Lifelong Learner course instead.'), eventName: 'go-back'}
 						]
 					}
 				]
