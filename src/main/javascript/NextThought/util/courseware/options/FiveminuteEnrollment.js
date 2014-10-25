@@ -14,6 +14,16 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 
 		enrollmentOption.display = this.display;
 
+		function getEnrollAndPayLink() {
+			var link = course.getEnrollAndPayLink();
+
+			if (!link) {
+				link = Service.getLinkFrom(enrollmentOption.Links, 'fmaep.pay.and.enroll');
+			}
+
+			return link;
+		}
+
 		//the admission form
 		this.__addStep({
 			xtype: 'enrollment-admission',
@@ -51,7 +61,8 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 			name: 'Enrollment',
 			enrollmentOption: enrollmentOption,
 			isComplete: function() {
-				var link = course.getLink('fmaep.is.pay.done'),
+				var links = enrollmentOption.Links,
+					link = Service.getLinkFrom(links, 'fmaep.is.pay.done'),
 					crn = enrollmentOption.NTI_CRN,
 					term = enrollmentOption.NTI_Term;
 
@@ -77,7 +88,7 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 				});
 			},
 			complete: function(cmp, data) {
-				var link = course.getEnrollAndPayLink(),
+				var link = getEnrollAndPayLink(),
 					crn = enrollmentOption.NTI_CRN,
 					term = enrollmentOption.NTI_Term,
 					returnUrl = course.buildPaymentReturnURL();
