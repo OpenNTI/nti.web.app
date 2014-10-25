@@ -75,7 +75,7 @@ Ext.define('NextThought.view.courseware.enrollment.parts.DetailsTable', {
 			price: this.getPrice(),
 			number: c.get('ProviderUniqueID'),
 			title: c.get('Title'),
-			instructors: instructors.get('Name'),
+			instructor: instructors.get('Name'),
 			showCredit: showCredit,
 			prereqs: prereqs,
 			credit: credit ? credit.get('Hours') + ' credit hours available' : 'No credit hours available',
