@@ -145,8 +145,8 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 			drop: 'If you are currently enrolled as an OU student, visit ' +
 				'<a class=\'link\' target=\'_blank\' href=\'http://ozone.ou.edu\'>oZone</a>. ' +
 				'If not, please contact the ' +
-				'<a class=\'link\' target=\'_blank\' href=\'http://www.ou.edu/admissions.html\'>Admission office</a> ' +
-				'by {drop} for a full refund.'
+				'<a class=\'link\' target=\'_blank\' href=\'http://www.ou.edu/admissions.html\'>Admission office</a>' +
+				'{drop}.'
 		},
 		archivedEnrolled: {
 			title: 'Enrolled for College Credit!',
@@ -178,7 +178,9 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 
 	__getEnrollmentText: function(course, option) {
 		var state = {}, now = new Date(),
-			details = this.__getOptionDetails(course, option);
+			details = this.__getOptionDetails(course, option),
+			dropDate = details.DropCutOff && Ext.Date.format(details.DropCutOff, this.DateFormat),
+			dropText = dropDate && ' by ' + dropDate + ' for a full refund.';
 
 		//if the course is archived
 		if (details.EndDate < now) {
@@ -189,7 +191,7 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 		} else if (details.Enrolled) {//if the course is active and we are enrolled in this option
 			state = this.getWording('enrolled', {
 				date: Ext.Date.format(details.StartDate, this.DateFormat),
-				drop: Ext.Date.format(details.DropCutOff, this.DateFormat)
+				drop: dropText || ''
 			});
 		} else if (details.AdmissionState === 'Pending') {//if we are pending admission
 			state = this.getWording('admissionPending');
@@ -233,7 +235,7 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 		var drop = option.OU_DropCutOffDate,
 			enroll = option.EnrollCutOffDate;
 
-		drop = drop ? new Date(drop) : new Date();
+		drop = drop && new Date(drop);
 		enroll = enroll ? new Date(enroll) : new Date();
 
 		return {
