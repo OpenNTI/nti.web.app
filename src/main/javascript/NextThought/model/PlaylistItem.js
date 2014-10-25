@@ -1,4 +1,3 @@
-/*jslint */
 /*global DomUtils, ParseUtils */
 Ext.define('NextThought.model.PlaylistItem', {
 	extend: 'Ext.data.Model',
@@ -104,6 +103,16 @@ Ext.define('NextThought.model.PlaylistItem', {
 				return null;
 			}
 
+			function parseVimeoId(url) {
+				var regExp = /^.*vimeo(\:\/\/|\.com\/)(.+)/i,
+					match = url.match(regExp);
+				if (match && match[2]) {
+					return match[2];
+				}
+				return null;
+			}
+
+
 			function parseKalturaInformation(url) {
 				var kalturaRegex = /^kaltura:\/\/([^\/]+)\/([^\/]+)\/{0,1}/i,
 						match = url.match(kalturaRegex);
@@ -112,7 +121,8 @@ Ext.define('NextThought.model.PlaylistItem', {
 			}
 
 			var source,
-				youtubeId = parseYoutubeIdOut(url);
+				youtubeId = parseYoutubeIdOut(url),
+				vimeoId = parseVimeoId(url);
 
 			if (/^kaltura:/i.test(url)) {
 				kalturaSource = parseKalturaInformation(url);
@@ -126,8 +136,10 @@ Ext.define('NextThought.model.PlaylistItem', {
 			}
 			else {
 				source = {
-					service: youtubeId ? 'youtube' : 'html5',
-					source: [youtubeId || url]
+					source: [youtubeId || vimeoId || url],
+					service: youtubeId ? 'youtube' :
+							 vimeoId ? 'vimeo' :
+							'html5'
 				};
 			}
 
