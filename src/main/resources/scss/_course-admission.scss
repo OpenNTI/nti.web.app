@@ -179,13 +179,13 @@
 
 	.body-container {
 		background-color: white;
-
 		&.error {
 			box-shadow: 0 0 0 1px $primary-red;
 		}
 	}
 
 	.admission-group {
+		padding-right: 280px;
 		.label {
 			font: normal 300 1.7em/2em $font;
 			color: $tertiary-grey;
