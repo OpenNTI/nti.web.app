@@ -43,7 +43,7 @@ Ext.define('NextThought.view.courseware.info.parts.NotStarted', {
 			status: this.enrollmentStatus,
 			enroll: getString('NextThought.view.courseware.info.parts.NotStarted.notenrolled'),
 			enrollUrl: e.url,
-			registered: registerdText || ''
+			registered: registeredText || ''
 		});
 
 		el = this.headerTpl.insertFirst('course-info', data, true);
