@@ -81,7 +81,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 							'course materials, quizzes, and discussions once the class is in session'
 		},
 		enrolled: {
-			title: 'You Enrolled as a Lifelong Learner',
+			title: 'You\'re Enrolled as a Lifelong Learner',
 			information: 'Class begins {date} and will be conducted fully online.',
 			links: [
 				{href: 'welcome', text: 'Get Acquainted with Janux'},
