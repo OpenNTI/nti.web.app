@@ -6,6 +6,8 @@ Ext.define('NextThought.util.courseware.options.OpenEnrollment', {
 	NAME: 'OpenEnrollment',
 	isBase: true,
 
+	EnrolledWording: getString('course-info.description-widget.open-enrolled'),
+
 
 	buildEnrollmentSteps: function() {
 		return [];

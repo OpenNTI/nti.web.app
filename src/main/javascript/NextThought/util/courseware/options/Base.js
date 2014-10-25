@@ -1,6 +1,8 @@
 Ext.define('NextThought.util.courseware.options.Base', {
 	NAME: '', //the name of the option
 
+	EnrolledWording: '',
+
 	/*
 	Enrollment steps are object that contain info about which views/forms users need to fill out before
 		they are enrolled in a course.

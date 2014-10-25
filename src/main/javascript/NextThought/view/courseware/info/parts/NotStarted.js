@@ -31,18 +31,19 @@ Ext.define('NextThought.view.courseware.info.parts.NotStarted', {
 			c = (i.get('Credit') || [])[0],
 			e = (c && c.get('Enrollment')) || {},
 			data = {},
+			registeredText,
 			el;
 
 		this.callParent(arguments);
+
+		registeredText = CourseWareUtils.Enrollment.getEnrolledText(i);
 
 		Ext.apply(data || {}, {
 			startDate: i.get('StartDate'),
 			status: this.enrollmentStatus,
 			enroll: getString('NextThought.view.courseware.info.parts.NotStarted.notenrolled'),
 			enrollUrl: e.url,
-			registered: i && i.get('isOpen') ?
-					getString('course-info.description-widget.open-enrolled') :
-					getString('course-info.description-widget.enrolled')
+			registered: registerdText || ''
 		});
 
 		el = this.headerTpl.insertFirst('course-info', data, true);

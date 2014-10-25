@@ -7,6 +7,8 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 	display: 'For Credit',
 	isBase: false,
 
+	EnrolledWording: getString('course-info.description-widget.enrolled'),
+
 	buildEnrollmentSteps: function(course) {
 		var enrollmentOption = course.getEnrollmentOption(this.NAME),
 			openOption = course.getEnrollmentOption(NextThought.util.courseware.options.OpenEnrollment.NAME),

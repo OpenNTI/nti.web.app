@@ -37,6 +37,24 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 	},
 
 
+	getEnrolledText: function(course) {
+		var me = this,
+			text = '';
+
+		if (course) {
+			me.forEachOption(function(option) {
+				var courseOption = course.getEnrollmentOption(option.name);
+
+				if (courseOption && courseOption.IsEnrolled) {
+					text = me.getOption(option.name).EnrolledWording;
+				}
+			});
+		}
+
+		return text;
+	},
+
+
 	/**
 	 * Takes a course and a type of enrollment and returns a list of steps
 	 * that have to be completed to enroll in that course.

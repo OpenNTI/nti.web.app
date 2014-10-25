@@ -7,6 +7,8 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 	display: 'Lifelong Learner',
 	isBase: true,
 
+	EnrolledWording: 'You are enrolled as a Lifelong Learner',
+
 	buildEnrollmentSteps: function(course) {
 		var option = course.getEnrollmentOption(this.NAME),
 			steps = [];
