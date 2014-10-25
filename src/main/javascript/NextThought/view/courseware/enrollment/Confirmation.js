@@ -5,7 +5,7 @@ Ext.define('NextThought.view.courseware.enrollment.Confirmation', {
 	cls: 'enrollment-credit-purchase',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'title', html: 'You\'re Enrolled to Earn College Credit.'},
+		{cls: 'title', html: '{heading}'},
 		{cls: 'things-to-do', cn: [
 			{cls: 'prompt', html: '{prompt}'},
 			{tag: 'tpl', 'for': 'todo', cn: [
@@ -44,6 +44,7 @@ Ext.define('NextThought.view.courseware.enrollment.Confirmation', {
 		}
 
 		this.renderData = Ext.apply(this.renderData || {}, {
+			heading: this.heading,
 			prompt: prompt,
 			todo: [
 				{href: 'welcome', text: 'Get Acquainted with Janux'},

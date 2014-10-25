@@ -122,6 +122,7 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 		this.__addStep({
 			xtype: 'enrollment-confirmation',
 			name: 'Confirmation',
+			heading: 'You\'re Enrolled to Earn College Credit.',
 			isComplete: function() { return Promise.resolve(); },
 			enrollmentOption: enrollmentOption
 		}, steps);

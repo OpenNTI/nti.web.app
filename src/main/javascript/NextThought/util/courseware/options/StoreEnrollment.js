@@ -64,6 +64,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 		this.__addStep({
 			xtype: 'enrollment-confirmation',
 			name: 'Confirmation',
+			heading: 'You\'re Enrolled as a Lifelong Learner',
 			hasPricingCard: true,
 			enrollmentOption: option,
 			isComplete: function() { return Promise.resolve(); }
