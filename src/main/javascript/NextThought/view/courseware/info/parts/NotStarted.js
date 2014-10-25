@@ -40,7 +40,7 @@ Ext.define('NextThought.view.courseware.info.parts.NotStarted', {
 			status: this.enrollmentStatus,
 			enroll: getString('NextThought.view.courseware.info.parts.NotStarted.notenrolled'),
 			enrollUrl: e.url,
-			registered: /open/i.test(this.enrollmentStatus) ?
+			registered: i && i.get('isOpen') ?
 					getString('course-info.description-widget.open-enrolled') :
 					getString('course-info.description-widget.enrolled')
 		});
