@@ -30,7 +30,7 @@ Ext.define('NextThought.view.courseware.info.parts.Title', {
 		this.buildVideo();
 		if (!Ext.isEmpty(this.videoUrl)) {
 			this.videoEl.setStyle({
-				minHeight: this.videoHeight + 'px' || '430px'
+				minHeight: this.videoHeight ? this.videoHeight + 'px' : '430px'
 			});
 
 			this.mon(this.curtainEl, 'click', 'curtainClicked', this);
