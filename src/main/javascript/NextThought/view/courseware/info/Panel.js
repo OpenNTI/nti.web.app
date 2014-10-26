@@ -40,7 +40,7 @@ Ext.define('NextThought.view.courseware.info.Panel', {
 			xtype: 'course-info-title',
 			title: content.get('Title'),
 			videoUrl: content.get('Video'),
-			videoWidth: this.videoWidth || 764
+			videoWidth: this.videoWidth || 764,
 			videoHeight: this.videoHeight
 		},{
 			xtype: 'course-info-description',
