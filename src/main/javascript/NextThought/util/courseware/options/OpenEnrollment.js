@@ -18,7 +18,7 @@ Ext.define('NextThought.util.courseware.options.OpenEnrollment', {
 			title: 'Enroll for Free',
 			price: 0,
 			information: 'Gain complete access to interact with all course content, including lectures, ' +
-							'course materials, quizzes, and discussions once the class is in session'
+							'course materials, quizzes, and discussions once the class is in session.'
 		},
 		enrolled: {
 			title: 'You are in the Open Course',
