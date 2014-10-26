@@ -17,6 +17,7 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 		enrollmentOption.display = this.display;
 		enrollmentOption.hasCredit = true;
 		enrollmentOption.refunds = true;
+		enrollmentOption.refundDate = enrollmentOption.OU_RefundCutOffDate && Ext.Date.format(enrollmentOption.OU_RefundCutOffDate, this.DateFormat);
 
 		function getEnrollAndPayLink() {
 			var link = course.getEnrollAndPayLink();

@@ -31,6 +31,10 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 				{tag: 'span', cls: 'label', html: 'Ends:'},
 				{tag: 'span', html: '{ends}'}
 			]},
+			{cls: 'detail', cn: [
+				{tag: 'span', cls: 'label', html: 'Refunds:'},
+				{tag: 'span', cls: 'refund', html: '{refunds}'}
+			]},
 			{cls: 'detail price', cn: [
 				{tag: 'span', cls: 'label', html: 'Total'},
 				{tag: 'span', cls: 'amount', html: '{price}'}
@@ -51,11 +55,22 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 			credit = this.course.get('Credit'),
 			begins = this.course.get('StartDate'),
 			ends = this.course.get('EndDate'),
-			format = 'F j, Y';
+			format = 'F j, Y',
+			refunds;
 
 		credit = credit && credit[0];
 
 		hours = credit && credit.get('Hours');
+
+		if (this.enrollmentOption.refunds) {
+			if (this.enrollmentOption.refundDate) {
+				refunds = 'Refundable Before ' + this.enrollmentOption.refundDate;
+			} else {
+				refunds = 'Refundable';
+			}
+		} else {
+			refunds = 'Not Refundable';
+		}
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			icon: course.get('icon'),
@@ -66,7 +81,8 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 			credit: hours && this.enrollmentOption.hasCredit ? Ext.util.Format.plural(hours, 'Credit Hour') : 'No College Credit',
 			begins: Ext.Date.format(begins, format),
 			ends: Ext.Date.format(ends, format),
-			price: '$' + this.getPrice()
+			price: '$' + this.getPrice(),
+			refunds: refunds
 		});
 	},
 

@@ -424,7 +424,7 @@
 
 .course-details {
 	overflow: auto;
-	padding: 7px 15px 15px 15px;
+	padding: 7px 15px 15px 20px;
 	background-color: #efefef;
 	color: $primary-grey;
 	max-height: 100%;
@@ -527,6 +527,13 @@
 			padding: 15px;
 			font: normal 300 1em/1 $font;
 			color: $primary-grey;
+		}
+
+		.refund {
+			font-size: 0.7em;
+			font-weight: 400;
+			color: $tertiary-grey;
+			line-height: 1.8em;
 		}
 
 		.info, .warning, .seats {

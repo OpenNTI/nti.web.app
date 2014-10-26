@@ -17,6 +17,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 				{cls: 'info', html: '{base.information}'},
 				{cls: 'seats', html: '{base.seats}'},
 				{cls: 'warning', html: '{base.warning}'},
+				{cls: 'refund', html: '{base.refund}'},
 				{tag: 'tpl', 'for': 'base.links', cn: [
 					{tag: 'a', cls: 'link', href: '{href}', target: '_blank', html: '{text}'}
 				]}
