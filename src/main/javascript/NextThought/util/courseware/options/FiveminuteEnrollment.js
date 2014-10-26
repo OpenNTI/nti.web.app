@@ -15,6 +15,7 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 			steps = [];
 
 		enrollmentOption.display = this.display;
+		enrollmentOption.hasCredit = true;
 
 		function getEnrollAndPayLink() {
 			var link = course.getEnrollAndPayLink();

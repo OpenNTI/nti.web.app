@@ -63,7 +63,7 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 			title: course.get('title'),
 			author: course.getAuthorLine(),
 			enrollmentType: this.enrollmentOption.display,
-			credit: hours ? Ext.util.Format.plural(hours, 'Credit Hour') : 'No College Credit',
+			credit: hours && this.enrollmentOption.hasCredit ? Ext.util.Format.plural(hours, 'Credit Hour') : 'No College Credit',
 			begins: Ext.Date.format(begins, format),
 			ends: Ext.Date.format(ends, format),
 			price: '$' + this.getPrice()

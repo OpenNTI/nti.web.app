@@ -18,6 +18,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 		}
 
 		option.display = this.display;
+		option.hasCredit = false;
 
 		this.__addStep({
 			xtype: 'enrollment-purchase',
