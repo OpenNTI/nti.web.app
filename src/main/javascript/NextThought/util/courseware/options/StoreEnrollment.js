@@ -54,10 +54,13 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 				}
 
 				return new Promise(function(fulfill, reject) {
+					cmp.fireEvent('enrollment-enroll-started');
 					cmp.fireEvent('submit-enroll-purchase', cmp, data.purchaseDescription, data.tokenObject, data.pricingInfo, fulfill, reject);
 				}).then(function(result) {
 					//trigger the library to reload
-					cmp.fireEvent('enrollment-enrolled-complete');
+					return new Promise(function(fulfill, reject) {
+						cmp.fireEvent('enrollment-enrolled-complete', fulfill, reject);
+					});
 				});
 			}
 		}, steps);

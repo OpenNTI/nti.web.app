@@ -409,7 +409,7 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 		} else if (me.courseDetail.course !== course) {
 			addView();
 		} else {
-			me.courseDetail.updateEnrollmentCard();
+			me.courseDetail.updateEnrollmentCard(true);
 		}
 
 		function updateLabel() {

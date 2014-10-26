@@ -80,6 +80,7 @@ Ext.define('NextThought.controller.CourseWare', {
 					'course-selected': 'onCourseSelected',
 					'navigate-to-assignment': 'onNavigateToAssignment',
 					'unauthorized-navigation': 'maybeShowEnroll',
+					'enrollment-enroll-started': 'courseEnrollmentStarted',
 					'enrollment-enrolled-complete': 'courseEnrolled',
 					'enrollment-dropped-complete': 'courseDropped',
 					'show-enrollment': 'showEnrollmentWindow',
@@ -220,7 +221,7 @@ Ext.define('NextThought.controller.CourseWare', {
 	},
 
 
-	enrollmentChanged: function() {
+	enrollmentChanged: function(fulfill, reject) {
 		var library = Library.getStore();
 
 		library.on({
@@ -244,7 +245,40 @@ Ext.define('NextThought.controller.CourseWare', {
 	},
 
 
-	courseEnrolled: function() {
+	courseEnrollmentStarted: function() {
+		var panel = this.getLibraryView().getPanel();
+
+		panel.addMask();
+	},
+
+
+	courseEnrolled: function(fulfill, reject) {
+		var enrolledStore,
+			panel = this.getLibraryView().getPanel();
+
+		if (fulfill || reject) {
+			enrolledStore = Ext.getStore('courseware.EnrolledCourses');
+			this.mon(enrolledStore, {
+				single: true,
+				load: function() {
+					enrolledStore.promiseToLoaded
+						.then(function() {
+							return wait();
+						})
+						.then(function() {
+							fulfill();
+							panel.removeMask();
+						})
+						.fail(function() {
+							reject();
+							panel.removeMask();
+						});
+				}
+			});
+		} else {
+			panel.removeMask();
+		}
+
 		this.enrollmentChanged();
 	},
 

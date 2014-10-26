@@ -358,14 +358,25 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 	/**
 	 * Updates the enrollment card to match the options available
 	 * to the user for this course
+	 *
+	 * @param {Boolean} updateFromStore update the course from the available courses store
 	 */
-	updateEnrollmentCard: function() {
+	updateEnrollmentCard: function(updateFromStore) {
 		if (this.isDestoryed) {
 			return;
 		}
 
-		var me = this,
+		var me = this, c,
+			store = Ext.getStore('courseware.AvailableCourses'),
 			loading;
+
+		if (updateFromStore) {
+			c = store.getById(me.course.getId());
+
+			if (c) {
+				me.course = c;
+			}
+		}
 
 
 		me.cardsContainerEl.addCls('loading');
