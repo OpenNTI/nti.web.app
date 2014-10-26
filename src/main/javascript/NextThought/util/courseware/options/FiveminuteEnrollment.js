@@ -158,8 +158,8 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 		},
 		admissionPending: {
 			title: 'Admission Pending...',
-			information: 'We\'re processing your request to earn college credit.' +
-							'This process should take no more than two business days.' +
+			information: 'We\'re processing your request to earn college credit. ' +
+							'This process should take no more than two business days. ' +
 							'If you believe there has been an error, please contact the ' +
 							'<a class=\'link\' href=\'mailto:support@nextthought.com\'>help desk.</a>',
 			cls: 'pending'
