@@ -240,7 +240,7 @@ Ext.define('NextThought.util.Globals', {
 			 * @return {Boolean} true if one matches false otherwise
 			 */
 			function checkIfLoaded() {
-				return link.style && link.sheet && link.sheet.rules.length;
+				return link.style && link.sheet && link.sheet.cssRules.length;
 			}
 
 			checkInterval = setInterval(function() {
