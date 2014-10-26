@@ -2,6 +2,10 @@ Ext.define('NextThought.model.ContentPackage', {
 	extend: 'NextThought.model.Base',
 	requires: ['NextThought.model.converters.DCCreatorToAuthor'],
 
+	statics: {
+		TOC_REQUESTS: {}
+	},
+
 	mixins: {
 		'PresentationResources': 'NextThought.mixins.PresentationResources'
 	},
@@ -32,34 +36,52 @@ Ext.define('NextThought.model.ContentPackage', {
 
 	constructor: function() {
 		this.callParent(arguments);
-		this.tocPromise = Service.request(this.get('index'))
-				.then(Library.parseXML)
-			//BEGIN: ToC Cleanup
-				.then(this.__cleanToCNodes.bind(this))
-			//END: ToC Cleanup
-				.then(function(x) {
-					var d = x.documentElement;
-					this.set('toc', x);
 
-					this.set('NTIID', d.getAttribute('ntiid'));
-					d.setAttribute('base', this.get('root'));
-					d.setAttribute('icon', this.get('icon'));
-					d.setAttribute('title', this.get('title'));
-					this.on('icon-changed', function() {
-						d.setAttribute('icon', this.get('icon'));
-					});
+		var me = this,
+			index = me.get('index');
 
-					if (d.getAttribute('isCourse') === 'true') {
-						this.set('isCourse', true);
-					}
-					return x;
-				}.bind(this));
+		if (me.self.TOC_REQUESTS[index]) {
+			me.tocPromise = me.self.TOC_REQUESTS[index];
+		} else {
+			me.tocPromise = Service.request(me.get('index'))
+								.then(Library.parseXML)
+							//BEGIN: ToC Cleanup
+								.then(me.__cleanToCNodes.bind(me))
+							//END: ToC Cleanup
+								.then(function(x) {
+									var d = x.documentElement;
+
+									d.setAttribute('base', me.get('root'));
+									d.setAttribute('icon', me.get('icon'));
+									d.setAttribute('title', me.get('title'));
+
+									return x;
+								});
+
+			me.self.TOC_REQUESTS[index] = me.tocPromise;
+		}
+
+		me.tocPromise
+			.then(function(x) {
+				var d = x.documentElement;
+
+				me.set({
+					toc: x,
+					NTIID: d.getAttribute('ntiid'),
+					isCourse: d.getAttribute('isCourse') === 'true'
+				});
+
+			});
 
 		wait()
-				.then(this.__cacheContentPreferences.bind(this))
-				.then(this.__setImage.bind(this));
+				.then(me.__cacheContentPreferences.bind(me))
+				.then(me.__setImage.bind(me));
 	},
 
+
+	getToc: function() {
+		return this.tocPromise;
+	},
 
 
 	__cleanToCNodes: function(x) {

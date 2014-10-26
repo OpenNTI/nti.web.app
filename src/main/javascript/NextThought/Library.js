@@ -307,121 +307,30 @@ Ext.define('NextThought.Library', {
 
 	libraryLoaded: function(callback) {
 		var me = this,
-			store = this.getStore(),
-			count = this.getStore().getCount();
+			loadTocs = [],
+			store = this.getStore();
 
-
-		if (count === 0) {
-			callback.call(this);
-			return;
-		}
-
-		function setupToc(o, toc) {
-			var d;
-			count--;
-
-			if (!toc) {
-				console.log('Could not load "' + o.get('index') + '"... removing form library view');
-				store.remove(o);
-			}
-			else {
-				d = toc.documentElement;
-				o.set('NTIID', d.getAttribute('ntiid'));
-				d.setAttribute('base', o.get('root'));
-				d.setAttribute('icon', o.get('icon'));
-				d.setAttribute('title', o.get('title'));
-				o.on('icon-changed', function() {
-					d.setAttribute('icon', o.get('icon'));
-				});
-
-				if (d.getAttribute('isCourse') === 'true') {
-					o.set('isCourse', true);
-				}
-			}
-
-			if (count <= 0 && callback) {
-				store.filter();
-				callback.call(me);
-			}
-		}
-
-		//Loads TOC async, so once the last one loads, callback if available
 		this.each(function(o) {
-			if (!o.get || !o.get('index')) {
-				setupToc(o);
-				return;
-			}
+			var load = o.getToc(),
+				index = o.get('index');
 
-			me.loadToc(o, o.get('index'), o.get('NTIID'), setupToc);
+			loadTocs.push(
+				load
+					.then(function(xml) {
+						me.tocs[index] = xml;
+					})
+					.fail(function() {
+						console.log('Could not load "' + o.get('index') + '"... removing form library view');
+						store.remove(o);
+					})
+			)
 		});
-	},
 
-
-	loadToc: function(index, url, ntiid, callback) {
-		var me = this,
-			record = index && index.isModel ? index : null,
-			status = CourseWareUtils.getEnrollmentStatus(ntiid);
-
-		if (!this.loaded && !callback) {
-			Ext.log.warn('The library has not loaded yet');
-		}
-
-		index = (record && record.get('index')) || index;
-
-		function tocLoaded(q, s, r) {
-			var xml,
-				cb = me.activeLoad[index], n;
-
-			function strip(e) { Ext.fly(e).remove(); }
-			function permitOrRemove(e) {
-				if (!ContentUtils.hasVisibilityForContent(e, status)) {
-					Ext.each(me.getAllNodesReferencingContentID(e.getAttribute('target-ntiid'), xml), strip);
-				}
-			}
-
-			delete me.tocs[index];
-
-			if (s) {
-				xml = me.tocs[index] = me.parseXML(r.responseText);
-				if (xml) {
-					//Ext.each(Ext.DomQuery.select('topic:not([ntiid])[href*=#]', xml), strip);
-					n = Ext.DomQuery.select('[visibility]:not([visibility=everyone])', xml);
-					Ext.each(n, permitOrRemove);
-				}
-				else {
-					console.warn('no data for index: ' + url);
-				}
-			}
-			else {
-				console.error('There was an error loading part of the library: ' + url, arguments);
-			}
-
-			delete me.activeLoad[index];
-			Ext.callback(cb, me, [record, xml]);
-		}
-
-		try {
-			url = getURL(url);
-
-			if (me.activeLoad[index]) {
-				me.activeLoad[index] = Ext.Function.createSequence(me.activeLoad[index], callback || Ext.emptyFn, null);
-				return;
-			}
-
-
-			me.activeLoad[index] = callback;
-			ContentProxy.request({
-				ntiid: ntiid,
-				jsonpUrl: record.get('index_jsonp'),
-				url: url,
-				expectedContentType: 'text/xml',
-				scope: me,
-				callback: tocLoaded
-			});
-		}
-		catch (e) {
-			console.error('Error loading the TOC:', e, e.message, e.stack);
-		}
+		Promise.all(loadTocs)
+			.then(callback.bind(this))
+			.fail(function(reason) {
+				console.error('Failed to load library: ', reason);
+			})
 	},
 
 
