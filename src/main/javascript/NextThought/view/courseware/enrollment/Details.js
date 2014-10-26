@@ -574,6 +574,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 	 */
 	enrollmentClicked: function(button, e) {
 		var me = this, title,
+			video = me.details.getVideo(),
 			name = button.getAttribute('data-name'),
 			option = me.enrollmentOptions[name], action;
 
@@ -605,6 +606,10 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			}
 
 			me.removeMask();
+		}
+
+		if (video) {
+			video.stopPlayback();
 		}
 
 		if (option.Enrolled && option.undoEnrollment) {

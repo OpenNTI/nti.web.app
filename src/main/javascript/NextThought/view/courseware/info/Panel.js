@@ -61,6 +61,13 @@ Ext.define('NextThought.view.courseware.info.Panel', {
 	},
 
 
+	getVideo: function() {
+		var title = this.down('course-info-title');
+
+		return title && title.video;
+	},
+
+
 	//<editor-fold desc="Fallback Code">
 	fillInPage: function(html) {
 		var bodyTag = html.match(/<body.*?>(.*)<\/body>/i),
