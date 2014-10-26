@@ -1,9 +1,21 @@
 Ext.define('NextThought.mixins.PresentationResources', {
 	ASSET_MAP: {
-		thumb: 'contentpackage-thumb-60x60.png',
-		landing: 'contentpackage-landing-232x170.png',
-		background: 'background.png',
-		vendorIcon: 'vendoroverrideicon.png'
+		thumb: {
+			check: false,
+			name: 'contentpackage-thumb-60x60.png'
+		},
+		landing: {
+			check: false,
+			name: 'contentpackage-landing-232x170.png'
+		},
+		background: {
+			check: false,
+			name: 'background.png'
+		},
+		vendorIcon: {
+			check: true,
+			name: 'vendoroverrideicon.png'
+		}
 	},
 
 
@@ -39,24 +51,29 @@ Ext.define('NextThought.mixins.PresentationResources', {
 	 * @return {Promise} whether or not the asset exists
 	 */
 	getImgAsset: function(name) {
-		var assetPath = this.ASSET_MAP[name] || ('missing-' + name + '-asset.png'),
+		var assetPath = this.ASSET_MAP[name] || {name: ('missing-' + name + '-asset.png')},
 			root = this.getAssetRoot(),
-			url = root && root.concatPath(assetPath);
+			url = root && root.concatPath(assetPath.name),
+			p;
 
 		if (Ext.isEmpty(root)) {
-			return Promise.reject('No root');
+			p = Promise.reject('No root');
+		} else if (assetPath.check) {
+			p = Service.request({
+					method: 'HEAD',
+					url: url
+				})
+				.then(function() {
+					return url;
+				})
+				.fail(function() {
+					return Promise.reject(name + ' asset not found');
+				});
+		} else {
+			p = Promise.resolve(url);
 		}
 
-		return Service.request({
-			method: 'HEAD',
-			url: url
-		})
-			.then(function() {
-				return url;
-			})
-			.fail(function() {
-				return Promise.reject(name + ' asset not found');
-			});
+		return p;
 	}
 
 });
