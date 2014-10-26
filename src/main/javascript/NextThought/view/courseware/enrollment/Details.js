@@ -197,13 +197,12 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 	/**
 	 * Given enrollment details, fetch all the data for the option given
-	 * @param  {String} name    the name of the option
+	 * @param  {Promise} option    promise to load the option details
 	 * @param  {Object} details the enrollment details
 	 * @return {Promise}         resolved if the option is available, reject if not;
 	 */
-	__addEnrollmentOption: function(name, details) {
-		var me = this, loading,
-			option = details.Options[name];
+	__addEnrollmentOption: function(option, details) {
+		var me = this, loading;
 
 		if (option) {
 			loading = option.then(function(data) {
@@ -237,9 +236,16 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 		//if the option is configured to wait, do not unmask the card before its is loaded
 		//if the option isn't ocnfigured to wait, do not block showing the card
 		CourseWareUtils.Enrollment.forEachOption(function(option) {
-			if (option.wait) {
+			var optionDetails = details.Options[option.name];
+
+			//if we are enrolled in the option always wait for it to finish
+			if (optionDetails.IsEnrolled) {
 				loading = loading
-						.fail(me.__addEnrollmentOption.bind(me, option.name, details));
+							.always(me.__addEnrollmentOption.bind(me, optionDetails.loaded, details));
+			} else if (option.wait) {
+				//if we aren't enrolled only wait if we should for this option
+				loading = loading
+							.fail(me.__addEnrollmentOption.bind(me, optionDetails.loaded, details));
 			} else {
 				//add a placeholder for the add on to show that there is another option coming
 				me.state.addOns[option.name] = {
@@ -249,7 +255,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 				//if the option is not available it will be a rejected promise immediately
 				//so on fail remove it from the addons
-				me.__addEnrollmentOption(option.name, details)
+				me.__addEnrollmentOption(optionDetails.loaded, details)
 					.fail(function() {
 						delete me.state.addOns[option.name];
 					});

@@ -131,10 +131,16 @@ Ext.define('NextThought.util.courseware.options.Base', {
 	__getOptionDetails: function(course, option) {},
 
 	/**
-	 * Returns a promise that fulfills with the enrollment details
+	 * Returns an object
+	 *
+	 *	{
+	 *		loaded: Promise that fulfills with all the course data
+	 *		IsEnrlled: Boolean if they are enrolled in that option
+	 *	}
+	 *
 	 * @param {CourseCatalogEnrty} course the course we are looking at
 	 * @param {Object} details parsed enrollment details for the course
-	 * @return {Promise}
+	 * @return {Object}
 	 */
 	buildEnrollmentDetails: function(course, details) {}
 });

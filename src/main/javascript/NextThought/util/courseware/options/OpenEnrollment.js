@@ -93,13 +93,18 @@ Ext.define('NextThought.util.courseware.options.OpenEnrollment', {
 
 	buildEnrollmentDetails: function(course, details) {
 		var me = this,
+			loadDetails,
 			option = course.getEnrollmentOption(me.NAME);
 
-		if (!option || !option.Enabled) {
-			return Promise.reject();
+
+		if (!option || (!option.Enabled && !option.IsEnrolled)) {
+			return {
+				loaded: Promise.reject(),
+				IsEnrolled: false
+			};
 		}
 
-		return new Promise(function(fulfill, reject) {
+		loadDetails = new Promise(function(fulfill, reject) {
 			var catalogData = {
 					Name: me.NAME,
 					BaseOption: me.isBase,
@@ -132,5 +137,10 @@ Ext.define('NextThought.util.courseware.options.OpenEnrollment', {
 
 			fulfill(catalogData);
 		});
+
+		return {
+			loaded: loadDetails,
+			IsEnrolled: option.IsEnrolled
+		};
 	}
 });

@@ -16,6 +16,7 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 
 		enrollmentOption.display = this.display;
 		enrollmentOption.hasCredit = true;
+		enrollmentOption.refunds = true;
 
 		function getEnrollAndPayLink() {
 			var link = course.getEnrollAndPayLink();
@@ -259,10 +260,15 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 	buildEnrollmentDetails: function(course, details) {
 		var me = this,	catalogData, link, p,
 			name = me.NAME,
+			loadDetails,
 			option = course.getEnrollmentOption(name);
 
-		if (!option) {
-			return Promise.reject();
+
+		if (!option || (!option.IsEnrolled && !option.IsAvailable)) {
+			return {
+				loaded: Promise.reject(),
+				IsEnrolled: false
+			};
 		}
 
 		link = Service.getLinkFrom(option.Links, 'fmaep.course.details');
@@ -301,11 +307,17 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 		}
 
 
-		return p.then(function() {
+		loadDetails = p.then(function() {
 			catalogData.Wording = me.__getEnrollmentText(details, option);
 
 			return catalogData;
 		});
+
+
+		return {
+			loaded: loadDetails,
+			IsEnrolled: option.IsEnrolled
+		};
 	}
 
 });

@@ -19,6 +19,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 
 		option.display = this.display;
 		option.hasCredit = false;
+		option.refunds = false;
 
 		this.__addStep({
 			xtype: 'enrollment-purchase',
@@ -150,17 +151,23 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 
 	buildEnrollmentDetails: function(course, details) {
 		var me = this,
-			option = course.getEnrollmentOption(this.NAME);
+			option = course.getEnrollmentOption(this.NAME),
+			loadDetails;
 
-		if (!option) {
-			return Promise.reject();
+
+		//if there is an option, and its either enrolled or available
+		if (!option || (!option.IsEnrolled && !option.IsAvailable)) {
+			return {
+				loaded: Promise.reject(),
+				IsEnrolled: false
+			};
 		}
 
 		if (!option.Purchasable.isModel) {
 			option.Purchasable = NextThought.model.store.PurchasableCourse.create(option.Purchasable);
 		}
 
-		return new Promise(function(fulfill, reject) {
+		loadDetails = new Promise(function(fulfill, reject) {
 			var catalogData = {
 					Name: me.NAME,
 					BaseOption: me.isBase,
@@ -175,5 +182,10 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 
 			fulfill(catalogData);
 		});
+
+		return {
+			loaded: loadDetails,
+			IsEnrolled: option.isEnroll
+		};
 	}
 });
