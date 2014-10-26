@@ -969,13 +969,14 @@
 		position: absolute;
 		bottom: 0;
 		left: 0;
+		background-color: #f9f9f9;
 	}
 
 	.legal {
-		font-size: 0.9em;
-		line-height: 1.2em;
-		color: $secondary-grey;
-		padding: 10px 0;
+		font-size: 0.74em;
+		line-height: 1.4em;
+		color: #757474;
+		padding: 4px 10px 10px 46px;
 
 		a {
 			color: $primary-blue;
@@ -985,7 +986,6 @@
 
 	.subscribe {
 		font: normal 600 0.9em/20px $font;
-		margin-top: 20px;
 		background-color: #f9f9f9;
 		clear: both;
 		cursor: pointer;
@@ -1047,11 +1047,15 @@
 }
 
 .payment-verification {
-	font: normal 400 1em/1 $font;
+	font: normal 300 1em/1 $font;
 	color: $primary-grey;
 	overflow: hidden;
-	padding: 0 300px 110px 0;
+	padding: 0 300px 140px 0;
 	position: relative;
+
+	.warning {
+		margin-top: 10px;
+	}
 
 	.info {
 		.title {

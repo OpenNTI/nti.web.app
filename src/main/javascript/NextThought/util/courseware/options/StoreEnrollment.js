@@ -81,7 +81,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 			title: 'Lifelong Learner',
 			information: 'Gain complete access to interact with all course content, including lectures, ' +
 							'course materials, quizzes, and discussions once the class is in session.',
-			refund: 'Enrollment in Lifelong Learner is not refundable.'
+			refund: 'Enrollment is not refundable.'
 		},
 		enrolled: {
 			title: 'You\'re Enrolled as a Lifelong Learner',

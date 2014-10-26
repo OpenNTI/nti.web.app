@@ -12,7 +12,8 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 	renderTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{cls: 'info', cn: [
 			{cls: 'title', html: 'Review and Pay'},
-			{cls: 'description', html: 'Please take a moment to review your order and then submit payment.'}
+			{cls: 'description', html: 'Please take a moment to review your order and then submit payment.'},
+			{cls: 'warning', html: 'All sales are final.'}
 		]},
 		{cls: 'payment-info', cn: [
 			{cls: 'edit', html: 'edit'},
