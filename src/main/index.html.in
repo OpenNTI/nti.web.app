@@ -6,7 +6,7 @@
 		<meta http-equiv="refresh" content="0;url=/login/">
 	</noscript>
 	<script>
-		if (/android|blackberry|ipad|iphone|ipod|mobile|webos/i.test(navigator.userAgent) ){
+		if (/android|blackberry|iphone|ipod|mobile|webos/i.test(navigator.userAgent) ){
 			location.replace('/mobile/' + (location.hash ? ('?q='+location.hash.replace(/^#!/,'')) : ''));
 		}
 	</script>
