@@ -147,7 +147,7 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 
 		//assume the option option isn't enrolled in
 		openOption.IsEnrolled = false;
-		if (status === 'Open' && open && openOption) {
+		if ((status === 'Open' || status === 'Public') && open && openOption) {
 			openOption.IsEnrolled = true;
 		//stripe and fmaep enrollment will both be in the forcreditnondegree scope
 		} else if (status === 'ForCredtiNonDegree' || status === 'Purchased') {
