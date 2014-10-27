@@ -356,7 +356,7 @@ Ext.define('NextThought.view.library.Panel', {
 
 	setPurchasables: function(store) {
 		if (store.getCount()) {
-			this.navigation.allowBookAdd = true;
+			this.navigation.allowBookAdd = !isFeature('hide-add-books');
 			this.navigation.updateAvailable();
 
 			this.navigation.enableBooks();
