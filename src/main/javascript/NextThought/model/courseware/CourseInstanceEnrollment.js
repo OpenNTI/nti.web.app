@@ -5,7 +5,8 @@ Ext.define('NextThought.model.courseware.CourseInstanceEnrollment', {
 	fields: [
 		{ name: 'CourseInstance', type: 'singleItem', persist: false },
 		{ name: 'Username', type: 'string' },
-		{ name: 'Status', type: 'string', mapping: 'LegacyEnrollmentStatus'}
+		{ name: 'Status', type: 'string', mapping: 'LegacyEnrollmentStatus'},
+		{ name: 'RealEnrollmentStatus', type: 'string'}
 	],
 
 

@@ -51,7 +51,7 @@ Ext.define('NextThought.controller.Library', {
 					current.push(course);
 				}
 
-				catalog.updateEnrollmentState(course.get('Status'), isOpen, isAdmin);
+				catalog.updateEnrollmentState(course.get('RealEnrollmentStatus') || course.get('Status'), isOpen, isAdmin);
 			});
 
 			if (panel[fnName]) {
