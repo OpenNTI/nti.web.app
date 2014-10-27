@@ -35,7 +35,7 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 				{cls: 'detail', cn: [
 					{tag: 'span', cls: 'label', html: 'Refunds:'},
 					{tag: 'span', cls: 'refund', html: '{refunds}'}
-				]},
+				]}
 			]},
 			{cls: 'detail price', cn: [
 				{tag: 'span', cls: 'label', html: 'Total'},
