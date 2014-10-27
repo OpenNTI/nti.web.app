@@ -61,7 +61,7 @@ Ext.define('NextThought.view.account.notifications.types.Base', {
 			}
 		]), {
 			getTime: function(values) {
-				if (me.getDiplayTime) { return me.getDisplayTime(); }
+				if (me.getDisplayTime) { return me.getDisplayTime(values); }
 
 				var t = values.CreatedTime;
 

@@ -31,5 +31,13 @@ Ext.define('NextThought.view.account.notifications.types.Badge', {
 
 	clicked: function(view, rec) {
 		view.fireEvent('show-profile', $AppConfig.userObject, ['Achievements']);
+	},
+
+
+	getDisplayTime: function(values) {
+		var t = values.EventTime || values.CreatedTime;
+
+		values.Time = t;
+		return Ext.util.Format.date(t, 'c');
 	}
 });
