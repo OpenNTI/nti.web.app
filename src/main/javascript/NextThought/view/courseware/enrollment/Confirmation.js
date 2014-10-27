@@ -38,7 +38,7 @@ Ext.define('NextThought.view.courseware.enrollment.Confirmation', {
 
 			if (getString(labelprefix + '.Label') !== labelprefix + '.label') {
 				helplinks.push(
-					{href: getString(labelprefix + '.URL'), text: getString(labelprefix + '.Label')}
+					{href: getString(labelprefix + '.URL'), text: getString(labelprefix + '.Label', '', true)}
 				);
 			}
 		}
