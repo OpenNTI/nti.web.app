@@ -103,7 +103,7 @@ Ext.define('NextThought.view.courseware.info.parts.Description', {
 			school: i.get('ProviderDepartmentTitle'),
 			schoolLabel: getString('NextThought.view.courseware.info.parts.Description.schoollabel'), //Department
 			durationUnits: getString('NextThought.view.courseware.info.parts.Description.durationunits'),
-			duration: new Duration(i.get('Duration')).inWeeks(),
+			duration: Math.floor(new Duration(i.get('Duration')).inWeeks()),
 			startDate: i.get('StartDate'),
 			days: (s.days || []).join('/'),//eww
 			times: Ext.Array.map(s.times || [], fo).join(' - '), //eww
