@@ -82,7 +82,7 @@ Ext.define('NextThought.view.courseware.enrollment.parts.DetailsTable', {
 			start: Ext.Date.format(c.get('StartDate'), 'F j, Y'),
 			end: Ext.Date.format(c.get('EndDate'), 'F j, Y'),
 			school: c.get('ProviderDepartmentTitle'),
-			duration: duration.inWeeks() + ' Weeks',
+			duration: Math.floor(duration.inWeeks()) + ' Weeks',
 			type: 'Fully Online'
 		});
 	},
