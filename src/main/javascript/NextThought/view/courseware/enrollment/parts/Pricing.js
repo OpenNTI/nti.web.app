@@ -31,9 +31,11 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 				{tag: 'span', cls: 'label', html: 'Ends:'},
 				{tag: 'span', html: '{ends}'}
 			]},
-			{cls: 'detail', cn: [
-				{tag: 'span', cls: 'label', html: 'Refunds:'},
-				{tag: 'span', cls: 'refund', html: '{refunds}'}
+			{tag: 'tpl', 'if': 'refunds', cn: [
+				{cls: 'detail', cn: [
+					{tag: 'span', cls: 'label', html: 'Refunds:'},
+					{tag: 'span', cls: 'refund', html: '{refunds}'}
+				]},
 			]},
 			{cls: 'detail price', cn: [
 				{tag: 'span', cls: 'label', html: 'Total'},
@@ -62,13 +64,7 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 
 		hours = credit && credit.get('Hours');
 
-		if (this.enrollmentOption.refunds) {
-			if (this.enrollmentOption.refundDate) {
-				refunds = 'Refundable Before ' + this.enrollmentOption.refundDate;
-			} else {
-				refunds = 'Refundable';
-			}
-		} else {
+		if (this.enrollmentOption.noRefunds) {
 			refunds = 'Not Refundable';
 		}
 

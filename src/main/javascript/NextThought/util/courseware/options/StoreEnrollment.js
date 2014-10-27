@@ -19,7 +19,8 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 
 		option.display = this.display;
 		option.hasCredit = false;
-		option.refunds = false;
+		//option.Refunds = false;
+		option.noRefunds = true;
 
 		this.__addStep({
 			xtype: 'enrollment-purchase',
