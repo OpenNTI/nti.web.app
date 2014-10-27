@@ -51,6 +51,14 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 			});
 		}
 
+		if (!text && course.get('enrolled')) {
+			if (course.get('isOpen')) {
+				text = getString('course-info.description-widget.open-enrolled');
+			} else {
+				text = getString('course-info.description-widget.enrolled');
+			}
+		}
+
 		return text;
 	},
 
