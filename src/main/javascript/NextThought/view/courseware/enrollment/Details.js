@@ -362,7 +362,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 	 * @param {Boolean} updateFromStore update the course from the available courses store
 	 */
 	updateEnrollmentCard: function(updateFromStore) {
-		if (this.isDestoryed) {
+		if (this.isDestroyed) {
 			return;
 		}
 
