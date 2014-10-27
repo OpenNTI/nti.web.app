@@ -23,7 +23,7 @@ Ext.define('NextThought.view.library.settings.CourseOptions', {
 		this.renderData = Ext.apply(this.renderData || {}, {
 			enrollCls: isOpen ? 'open' : 'enrolled',
 			enrollText: registered,// || isOpen ? 'You are taking the Open Course.' : 'You are taking the Credit Course.',
-			supportLink: getString('course-info.course-supoprt.link2.URL', 'mailto:support@nextthought.com', true),
+			supportLink: 'mailto:support@nextthought.com?subject=Support%20Request',
 			reportLink: ''
 		});
 	},
