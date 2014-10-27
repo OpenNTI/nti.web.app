@@ -258,18 +258,46 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 	},
 
 
+	__getForCreditEnrolled: function(details) {
+		var me = this;
+
+		return {
+			loaded: new Promise(function(fulfill, reject) {
+				var state = me.getWording('enrolled', {
+					date: Ext.Date.format(details.StartDate, me.DateFormat),
+					drop: ''
+				});
+
+				state.name = me.NAME;
+
+				fulfill({
+					Name: me.NAME,
+					BaseOption: me.isBase,
+					Enrolled: true,
+					Wording: state
+				});
+			}),
+			IsEnrolled: true
+		};
+	},
+
+
 	buildEnrollmentDetails: function(course, details) {
 		var me = this,	catalogData, link, p,
 			name = me.NAME,
 			loadDetails,
 			option = course.getEnrollmentOption(name);
 
-
 		if (!option || (!option.IsEnrolled && !option.IsAvailable)) {
-			return {
-				loaded: Promise.reject(),
-				IsEnrolled: false
-			};
+			//if we aren't enrolled in the fiveminute option but we are enrolled for credit
+			if (course.get('enrolled') && !course.get('isOpen')) {
+				return this.__getForCreditEnrolled(details);
+			} else {
+				return {
+					loaded: Promise.reject(),
+					IsEnrolled: false
+				};
+			}
 		}
 
 		link = Service.getLinkFrom(option.Links, 'fmaep.course.details');
