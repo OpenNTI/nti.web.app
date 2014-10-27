@@ -26,9 +26,8 @@ Ext.define('NextThought.util.courseware.options.OpenEnrollment', {
 			information: 'Class begins {date} and will be conducted fully online.',
 			links: [
 				{href: 'welcome', text: 'Get Acquainted with Janux'},
-				{href: 'profile', text: 'Complete your Profile'}
-			],
-			cls: 'enrolled'
+				{href: 'profile', text: 'Complete Your Profile'}
+			]
 		},
 		archivedEnrolled: {
 			title: 'You Took the Open Course!',

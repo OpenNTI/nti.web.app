@@ -145,7 +145,7 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 			information: 'Class begins {date} and will be conducted fully online.',
 			links: [
 				{href: 'welcome', text: 'Get Acquainted with Janux'},
-				{href: 'profile', text: 'Complete your Profile'}
+				{href: 'profile', text: 'Complete Your Profile'}
 			],
 			cls: 'enrolled',
 			drop: 'If you are currently enrolled as an OU student, visit ' +
