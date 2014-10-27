@@ -22,6 +22,7 @@ Ext.define('NextThought.util.courseware.options.OpenEnrollment', {
 		},
 		enrolled: {
 			title: 'You are in the Open Course',
+			cls: 'enrolled',
 			information: 'Class begins {date} and will be conducted fully online.',
 			links: [
 				{href: 'welcome', text: 'Get Acquainted with Janux'},
@@ -31,7 +32,8 @@ Ext.define('NextThought.util.courseware.options.OpenEnrollment', {
 		},
 		archivedEnrolled: {
 			title: 'You Took the Open Course!',
-			information: 'Thanks for your participation in OU Janux!' +
+			cls: 'enrolled',
+			information: 'Thanks for your participation in OU Janux! ' +
 							'The content of this course will remain available for you to review at any time.'
 		},
 		archivedNotEnrolled: {
@@ -59,7 +61,7 @@ Ext.define('NextThought.util.courseware.options.OpenEnrollment', {
 				state = this.getWording('archivedEnrolled');
 				state.butonText = 'Drop the Open Course';
 			} else { //if we enrolled after the course was archived
-				state = this.getWording(name, 'arhivedNotEnrolled');
+				state = this.getWording('archivedEnrolled');
 				state.buttonText = 'Drop the Archived Course';
 			}
 		} else {//if the course is current or upcoming
