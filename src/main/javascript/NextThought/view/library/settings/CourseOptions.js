@@ -15,11 +15,14 @@ Ext.define('NextThought.view.library.settings.CourseOptions', {
 	beforeRender: function() {
 		this.callParent(arguments);
 
-		var isOpen = this.course.isOpen();
+		var isOpen = this.course.isOpen(),
+			registered;
+
+		registered = CourseWareUtils.Enrollment.getEnrolledText(this.course.getCourseCatalogEntry());
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			enrollCls: isOpen ? 'open' : 'enrolled',
-			enrollText: isOpen ? 'You are taking the Open Course.' : 'You are taking the Credit Course.',
+			enrollText: registered,// || isOpen ? 'You are taking the Open Course.' : 'You are taking the Credit Course.',
 			supportLink: getString('course-info.course-supoprt.link2.URL', 'mailto:support@nextthought.com', true),
 			reportLink: ''
 		});
