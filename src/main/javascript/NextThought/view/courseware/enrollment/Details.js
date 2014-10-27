@@ -516,10 +516,12 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			button = me.cardsContainerEl.down('.button'),
 			titleEl = baseEl && baseEl.down('.title'),
 			priceEl = baseEl && baseEl.down('.price'),
-			title, price;
+			refundEl = baseEl && baseEl.down('.refund'),
+			title, price, refund;
 
 		function fillInOption(option) {
 			title = option.title;
+			refund = option.refund;
 			price = me.getPriceString(option.price);
 
 			button.removeCls(['paid', 'free', 'drop']);
@@ -533,6 +535,10 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 			if (priceEl) {
 				priceEl.update(price);
+			}
+
+			if (refundEl) {
+				refundEl.update(refund);
 			}
 		}
 
