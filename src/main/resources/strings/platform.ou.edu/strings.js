@@ -37,6 +37,8 @@ NTIStrings['course-info.course-supoprt.link1.Label'] = 'janux@ou.edu';
 NTIStrings['course-info.course-supoprt.link1.URL'] = 'mailto:janux@ou.edu';
 NTIStrings['course-info.course-supoprt.link2.Label'] = 'Service Centers';
 NTIStrings['course-info.course-supoprt.link2.URL'] = 'http://www.ou.edu/content/ouit/help/personal.html';
+NTIStrings['course-info.course-supoprt.link3.Label'] = '';
+NTIStrings['course-info.course-supoprt.link3.URL'] = '';
 
 NTIStrings['enroll.detail'] = '';
 NTIStrings['drop.detail'] = 'Dropping the course will remove it from your library, and you will no longer have access to the course materials.';
