@@ -33,12 +33,10 @@ NTIStrings['course-info.description-widget.enrolled'] = 'You are enrolled for cr
 NTIStrings['course-info.course-supoprt.photo'] = 'resources/images/platform.ou.edu/tech_support.jpg';
 
 NTIStrings['course-info.course-supoprt.phone'] = '(405) 325-HELP';
-NTIStrings['course-info.course-supoprt.link1.Label'] = 'Submit Request';
-NTIStrings['course-info.course-supoprt.link1.URL'] = 'http://www.ou.edu/content/ouit/help/ticket.html';
-NTIStrings['course-info.course-supoprt.link2.Label'] = 'janux@ou.edu';
-NTIStrings['course-info.course-supoprt.link2.URL'] = 'mailto:janux@ou.edu';
-NTIStrings['course-info.course-supoprt.link3.Label'] = 'Service Centers';
-NTIStrings['course-info.course-supoprt.link3.URL'] = 'http://www.ou.edu/content/ouit/help/personal.html';
+NTIStrings['course-info.course-supoprt.link1.Label'] = 'janux@ou.edu';
+NTIStrings['course-info.course-supoprt.link1.URL'] = 'mailto:janux@ou.edu';
+NTIStrings['course-info.course-supoprt.link2.Label'] = 'Service Centers';
+NTIStrings['course-info.course-supoprt.link2.URL'] = 'http://www.ou.edu/content/ouit/help/personal.html';
 
 NTIStrings['enroll.detail'] = '';
 NTIStrings['drop.detail'] = 'Dropping the course will remove it from your library, and you will no longer have access to the course materials.';
