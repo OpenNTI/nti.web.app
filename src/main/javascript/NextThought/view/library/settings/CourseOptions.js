@@ -7,7 +7,7 @@ Ext.define('NextThought.view.library.settings.CourseOptions', {
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'enrollment {enrollCls}', html: '{enrollText}'},
 		//{cls: 'contact', html: 'Contact the Instructor'},
-		{ tag: 'a', cls: 'support', href: '{supportLink}', target: '_blank', html: 'Request Support'},
+		{ tag: 'a', cls: 'support', href: '{supportLink}', html: 'Request Support'},
 		//{ tag: 'a', cls: 'report', html: 'Report an Issue'},
 		{cls: 'drop', html: 'Drop Course'}
 	]),
