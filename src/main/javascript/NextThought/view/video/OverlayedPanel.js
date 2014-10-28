@@ -45,7 +45,8 @@ Ext.define('NextThought.view.video.OverlayedPanel', {
 			data = DomUtils.parseDomObject(dom),
 			description = el.down('span.description'),
 			loc = ContentUtils.getLocation(reader.getLocation().NTIID),
-			playlist = [];
+			playlist = [],
+			size = this.getSize(dom, 640);
 
 		playlist.push(NextThought.model.PlaylistItem.fromDom(dom));
 
@@ -54,10 +55,12 @@ Ext.define('NextThought.view.video.OverlayedPanel', {
 			description: (description && description.getHTML()) || ''
 		});
 
+		this.size = size;
+
 		Ext.apply(config, {
 			layout: 'fit',
 			items: [{
-				width: 640,
+				width: size.width,
 				xtype: 'box',
 				autoEl: { cls: 'curtain content-video-curtain', cn: [
 					{ cls: 'ctr', cn: [
@@ -69,7 +72,7 @@ Ext.define('NextThought.view.video.OverlayedPanel', {
 					] }
 				]}
 			},{
-				width: 640,
+				width: size.width,
 				xtype: 'content-video',
 				data: data,
 				playlist: playlist,
@@ -100,6 +103,51 @@ Ext.define('NextThought.view.video.OverlayedPanel', {
 		this.callParent([config]);
 
 		Library.getVideoIndex(loc.title).then(this.fillVideo.bind(this));
+	},
+
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		this.el.setStyle({
+			left: this.size.left + 'px',
+			width: this.size.parentWidth + 'px'
+		});
+	},
+
+
+
+	getSize: function(dom, desiredWidth) {
+		var parent = dom.parentElement, left, width,
+			parentRect = parent && parent.getBoundingClientRect();
+
+		if (!parentRect) {
+			return {
+				left: 0,
+				width: destiredWidth
+			};
+		}
+
+		if (parentRect.width >= desiredWidth) {
+			if (Ext.fly(parent).is('.figure')) {
+				//there is some padding being applied somewhere that I don't know how to find programmatically
+				//so hard code the 4 for now...
+				left = Math.ceil((parentRect.width - desiredWidth) / 2) + 4;
+			} else {
+				left = 0;
+			}
+			return {
+				left: left,
+				parentWidth: parentRect.width,
+				width: desiredWidth
+			};
+		}
+
+		return {
+			left: parentRect.left,
+			width: desiredWidth
+		};
 	},
 
 
