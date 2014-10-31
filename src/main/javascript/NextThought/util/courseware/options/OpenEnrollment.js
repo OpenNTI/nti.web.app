@@ -13,35 +13,7 @@ Ext.define('NextThought.util.courseware.options.OpenEnrollment', {
 		return [];
 	},
 
-	ENROLLMENT_STATES: {
-		notEnrolled: {
-			title: 'Enroll for Free',
-			price: 0,
-			information: 'Gain complete access to interact with all course content, including lectures, ' +
-							'course materials, quizzes, and discussions once the class is in session.'
-		},
-		enrolled: {
-			title: 'You are in the Open Course',
-			cls: 'enrolled',
-			information: 'Class begins {date} and will be conducted fully online.',
-			links: [
-				{href: 'welcome', text: getString('enrollment.previewplatform', '', true)},
-				{href: 'profile', text: 'Complete Your Profile'}
-			]
-		},
-		archivedEnrolled: {
-			title: 'You Took the Open Course!',
-			cls: 'enrolled',
-			information: 'Thanks for your participation in OU Janux! ' +
-							'The content of this course will remain available for you to review at any time.'
-		},
-		archivedNotEnrolled: {
-			title: 'This Course is Archived.',
-			price: 0,
-			information: 'Archived courses are out of session but all course content will remain available' +
-							'including the lectures, course materials, quizzes, and discussions.'
-		}
-	},
+	ENROLLMENT_STATES: getString('EnrollmentText').OpenEnrollment || {},
 
 
 	__getEnrollmentText: function(course, option) {

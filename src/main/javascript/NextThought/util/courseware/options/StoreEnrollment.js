@@ -80,33 +80,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 	},
 
 
-	ENROLLMENT_STATES: {
-		notEnrolled: {
-			title: 'Lifelong Learner',
-			information: 'Gain complete access to interact with all course content, including lectures, ' +
-							'course materials, quizzes, and discussions once the class is in session.',
-			refund: 'Enrollment is not refundable.'
-		},
-		enrolled: {
-			title: 'You\'re Enrolled as a Lifelong Learner',
-			information: 'Class begins {date} and will be conducted fully online.',
-			links: [
-				{href: 'welcome', text: getString('enrollment.previewplatform', '', true)},
-				{href: 'profile', text: 'Complete Your Profile'}
-			],
-			cls: 'enrolled'
-		},
-		archivedEnrolled: {
-			title: 'You took the Lifelong Learner',
-			information: 'Thanks for your participation in OU Janux!' +
-							'The content of this course will remain available for you to review at any time.'
-		},
-		archivedNotEnrolled: {
-			title: 'This Course is Archived',
-			information: 'Archived courses are out of session but all course content will remain available' +
-							'including the lectures, course materials, quizzes, and discussions.'
-		}
-	},
+	ENROLLMENT_STATES: getString('EnrollmentText').StoreEnrollment || {},
 
 
 	__getEnrollmentText: function(course, option) {
