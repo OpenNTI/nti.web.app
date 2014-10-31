@@ -91,7 +91,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 			title: 'You\'re Enrolled as a Lifelong Learner',
 			information: 'Class begins {date} and will be conducted fully online.',
 			links: [
-				{href: 'welcome', text: 'Get Acquainted with Janux'},
+				{href: 'welcome', text: getString('enrollment.previewplatform', '', true)},
 				{href: 'profile', text: 'Complete Your Profile'}
 			],
 			cls: 'enrolled'

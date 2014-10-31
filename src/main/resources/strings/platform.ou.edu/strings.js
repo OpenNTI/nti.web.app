@@ -46,6 +46,8 @@ NTIStrings['drop.detail'] = 'Dropping the course will remove it from your librar
 NTIStrings['enrollment.enroll.active.description'] = '{Title} has been added to your library. This open course is already in progress so you can start participating right away. Visit the Courses tab to access your materials and get started now.';
 NTIStrings['enrollment.enroll.preview.description'] = 'This course has been added to your library and will begin on {StartDate:date("F j, Y")}. This course is open, so you will have complete access to all of the course content, discussions, and social features.<br/><br/><b>OU Students:</b> If you are a current OU student, you can enroll in JANUX courses on <a class="enrollLink" href="http://ozone.ou.edu/" target="_blank">oZone</a> to earn credit. The corresponding OU course number is {Name}.<br/><br/>If you are not an OU student but want to enroll for credit, see about becoming a <a class="enrollLink" href="http://www.ou.edu/admissions/nondegree/" target="_blank">Special Student</a>.';
 
+NTIStrings['enrollment.previewplatform'] = 'Get Acquainted with Janux';
+
 NTIStrings['SubscribeToVendor'] = 'Yes, I\'d like to sign up for HISTORY email updates.';
 
 NTIStrings['SubscribeToVendorLegal'] = 'By opting in for email updates you agree to receive emails from HISTORY Channel and A+E Networks. ' +

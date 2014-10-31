@@ -47,7 +47,7 @@ Ext.define('NextThought.view.courseware.enrollment.Confirmation', {
 			heading: this.heading,
 			prompt: prompt,
 			todo: [
-				{href: 'welcome', text: 'Get Acquainted with Janux'},
+				{href: 'welcome', text: getString('enrollment.previewplatform', '', true)},
 				{href: 'profile', text: 'Complete Your Profile'}
 			],
 			phone: getString('course-info.course-supoprt.phone'),
