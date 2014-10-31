@@ -36,8 +36,8 @@ Ext.define('NextThought.model.resolvers.videoservices.Vimeo', {
 				.then(Ext.decode)
 				.then(function(jsonArray) {return jsonArray[0];})
 				.then(function(json) {
-					json.poster = json.thumbnail_large;
-					json.thumbnail = json.thumbnail_medium;
+					json.poster = json.thumbnail_large || json.thumbnail_url;
+					json.thumbnail = json.thumbnail_medium || json.thumbnail_url;
 					return json;
 				})
 				.fail(function(reason) {
