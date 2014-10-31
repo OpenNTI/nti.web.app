@@ -6,7 +6,8 @@ Ext.define('NextThought.model.resolvers.videoservices.Vimeo', {
 	},
 
 
-	URL: '//vimeo.com/api/v2/video/{0}.json',
+	//URL: '//vimeo.com/api/v2/video/{0}.json',
+	URL: '//vimeo.com/api/oembed.json?url=http%3A//vimeo.com/{0}',
 
 
 	constructor: function(data) {
