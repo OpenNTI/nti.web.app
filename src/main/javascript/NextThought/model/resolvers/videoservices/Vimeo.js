@@ -34,7 +34,7 @@ Ext.define('NextThought.model.resolvers.videoservices.Vimeo', {
 
 		promise = Service.request({url: this.source, withCredentials: false})
 				.then(Ext.decode)
-				.then(function(jsonArray) {return jsonArray[0];})
+				.then(function(o) {return o[0] || o;})
 				.then(function(json) {
 					json.poster = json.thumbnail_large || json.thumbnail_url;
 					json.thumbnail = json.thumbnail_medium || json.thumbnail_url;
