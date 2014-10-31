@@ -3,17 +3,17 @@ window.NTIStrings = window.NTIStrings || {};
 NTIStrings.EnrollmentText = {
 	OpenEnrollment: {
 		notEnrolled: {
-			title: 'Enroll for Free',
+			title: 'Take the Course for Free',
 			price: 0,
-			information: 'Gain complete access to interact with all course content, including lectures, ' +
-							'course materials, quizzes, and discussions once the class is in session.'
+			information: 'See all of the course content with limited access to discussions and assessments. ' +
+							'Participation in the open course will not be certified on an official transcript.'
 		},
 		enrolled: {
 			title: 'You are in the Open Course',
 			cls: 'enrolled',
 			information: 'Class begins {date} and will be conducted fully online.',
 			links: [
-				{href: 'welcome', text: getString('enrollment.previewplatform', '', true)},
+				{href: 'welcome', text: ''},
 				{href: 'profile', text: 'Complete Your Profile'}
 			]
 		},
@@ -33,7 +33,7 @@ NTIStrings.EnrollmentText = {
 	FiveminuteEnrollment: {
 		notEnrolled: {
 			title: 'Earn College Credit',
-			information: 'Earn transcripted college credit from the University of Oklahoma',
+			information: 'Earn transcripted college credit from Oklahoma State University',
 			warning: 'Not available after {date}.',
 			cls: 'checkbox'
 		},
@@ -41,19 +41,19 @@ NTIStrings.EnrollmentText = {
 			title: 'Enrolled for College Credit!',
 			information: 'Class begins {date} and will be conducted fully online.',
 			links: [
-				{href: 'welcome', text: getString('enrollment.previewplatform', '', true)},
+				{href: 'welcome', text: ''},
 				{href: 'profile', text: 'Complete Your Profile'}
 			],
 			cls: 'enrolled',
-			drop: 'If you are currently enrolled as an OU student, visit ' +
-				'<a class=\'link\' target=\'_blank\' href=\'http://ozone.ou.edu\'>oZone</a>. ' +
+			drop: 'If you are currently enrolled as an OSU student, visit ' +
+				'<a class=\'link\' target=\'_blank\' href=\'http://prodosu.okstate.edu/\'>student self services</a>. ' +
 				'If not, please contact the ' +
-				'<a class=\'link\' target=\'_blank\' href=\'http://www.ou.edu/admissions.html\'>Admission office</a>' +
+				'<a class=\'link\' target=\'_blank\' href=\'\'>Admission office</a>' +
 				'{drop}.'
 		},
 		archivedEnrolled: {
 			title: 'Enrolled for College Credit!',
-			information: 'Thanks for your participation in OU Janux!' +
+			information: 'Thanks for your participation!' +
 							'The content of this course will remain available for you to review at any time.'
 		},
 		admissionPending: {
@@ -72,7 +72,7 @@ NTIStrings.EnrollmentText = {
 		},
 		apiDown: {
 			title: 'Earn College Credit',
-			information: 'Transcripted credit is available from the University of Oklahoma but unfortunately ' +
+			information: 'Transcripted credit is available from Oklahoma State University but unfortunately ' +
 							'we cannot process an application at this time. Please contact the ' +
 							'<a class=\'link\' href=\'mailto:support@nextthought.com\'>help desk.</a>',
 			cls: 'down'
@@ -89,7 +89,7 @@ NTIStrings.EnrollmentText = {
 			title: 'You\'re Enrolled as a Lifelong Learner',
 			information: 'Class begins {date} and will be conducted fully online.',
 			links: [
-				{href: 'welcome', text: getString('enrollment.previewplatform', '', true)},
+				{href: 'welcome', text: ''},
 				{href: 'profile', text: 'Complete Your Profile'}
 			],
 			cls: 'enrolled'
