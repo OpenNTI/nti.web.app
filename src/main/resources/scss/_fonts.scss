@@ -210,8 +210,7 @@
   src: url(../lib/mathquill/font/Symbola.eot);
   src: local("Symbola Regular"), local("Symbola"),
     url(../lib/mathquill/font/Symbola.ttf) format("truetype"),
-    url(../lib/mathquill/font/Symbola.otf) format("opentype"),
-    url(../lib/mathquill/font/Symbola.svg#Symbola) format("svg");
+    url(../lib/mathquill/font/Symbola.otf) format("opentype");
 }
 
 
@@ -223,8 +222,7 @@
     src: url('../lib/fonts/stix/stixgeneral-bold-webfont.eot');
     src: url('../lib/fonts/stix/stixgeneral-bold-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/stix/stixgeneral-bold-webfont.woff') format('woff'),
-         url('../lib/fonts/stix/stixgeneral-bold-webfont.ttf') format('truetype'),
-         url('../lib/fonts/stix/stixgeneral-bold-webfont.svg#STIXGeneralBold') format('svg');
+         url('../lib/fonts/stix/stixgeneral-bold-webfont.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
 }
@@ -233,8 +231,7 @@
     src: url('../lib/fonts/stix/stixgeneral-bolditalic-webfont.eot');
     src: url('../lib/fonts/stix/stixgeneral-bolditalic-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/stix/stixgeneral-bolditalic-webfont.woff') format('woff'),
-         url('../lib/fonts/stix/stixgeneral-bolditalic-webfont.ttf') format('truetype'),
-         url('../lib/fonts/stix/stixgeneral-bolditalic-webfont.svg#STIXGeneralBoldItalic') format('svg');
+         url('../lib/fonts/stix/stixgeneral-bolditalic-webfont.ttf') format('truetype');
     font-weight: bold;
     font-style: italic;
 }
@@ -243,8 +240,7 @@
     src: url('../lib/fonts/stix/stixgeneral-italic-webfont.eot');
     src: url('../lib/fonts/stix/stixgeneral-italic-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/stix/stixgeneral-italic-webfont.woff') format('woff'),
-         url('../lib/fonts/stix/stixgeneral-italic-webfont.ttf') format('truetype'),
-         url('../lib/fonts/stix/stixgeneral-italic-webfont.svg#STIXGeneralItalic') format('svg');
+         url('../lib/fonts/stix/stixgeneral-italic-webfont.ttf') format('truetype');
     font-weight: normal;
     font-style: italic;
 }
@@ -253,8 +249,7 @@
     src: url('../lib/fonts/stix/stixgeneral-regular-webfont.eot');
     src: url('../lib/fonts/stix/stixgeneral-regular-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/stix/stixgeneral-regular-webfont.woff') format('woff'),
-         url('../lib/fonts/stix/stixgeneral-regular-webfont.ttf') format('truetype'),
-         url('../lib/fonts/stix/stixgeneral-regular-webfont.svg#STIXGeneralRegular') format('svg');
+         url('../lib/fonts/stix/stixgeneral-regular-webfont.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -263,8 +258,7 @@
     src: url('../lib/fonts/stix/stixintegralsd-bold-webfont.eot');
     src: url('../lib/fonts/stix/stixintegralsd-bold-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/stix/stixintegralsd-bold-webfont.woff') format('woff'),
-         url('../lib/fonts/stix/stixintegralsd-bold-webfont.ttf') format('truetype'),
-         url('../lib/fonts/stix/stixintegralsd-bold-webfont.svg#STIXIntegralsDBold') format('svg');
+         url('../lib/fonts/stix/stixintegralsd-bold-webfont.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
 }
@@ -273,8 +267,7 @@
     src: url('../lib/fonts/stix/stixintegralsd-regular-webfont.eot');
     src: url('../lib/fonts/stix/stixintegralsd-regular-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/stix/stixintegralsd-regular-webfont.woff') format('woff'),
-         url('../lib/fonts/stix/stixintegralsd-regular-webfont.ttf') format('truetype'),
-         url('../lib/fonts/stix/stixintegralsd-regular-webfont.svg#STIXIntegralsDRegular') format('svg');
+         url('../lib/fonts/stix/stixintegralsd-regular-webfont.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -283,8 +276,7 @@
     src: url('../lib/fonts/stix/stixintegralssm-bold-webfont.eot');
     src: url('../lib/fonts/stix/stixintegralssm-bold-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/stix/stixintegralssm-bold-webfont.woff') format('woff'),
-         url('../lib/fonts/stix/stixintegralssm-bold-webfont.ttf') format('truetype'),
-         url('../lib/fonts/stix/stixintegralssm-bold-webfont.svg#STIXIntegralsSmBold') format('svg');
+         url('../lib/fonts/stix/stixintegralssm-bold-webfont.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
 }
@@ -293,8 +285,7 @@
     src: url('../lib/fonts/stix/stixintegralssm-regular-webfont.eot');
     src: url('../lib/fonts/stix/stixintegralssm-regular-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/stix/stixintegralssm-regular-webfont.woff') format('woff'),
-         url('../lib/fonts/stix/stixintegralssm-regular-webfont.ttf') format('truetype'),
-         url('../lib/fonts/stix/stixintegralssm-regular-webfont.svg#STIXIntegralsSmRegular') format('svg');
+         url('../lib/fonts/stix/stixintegralssm-regular-webfont.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -303,8 +294,7 @@
     src: url('../lib/fonts/stix/stixintegralsup-bold-webfont.eot');
     src: url('../lib/fonts/stix/stixintegralsup-bold-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/stix/stixintegralsup-bold-webfont.woff') format('woff'),
-         url('../lib/fonts/stix/stixintegralsup-bold-webfont.ttf') format('truetype'),
-         url('../lib/fonts/stix/stixintegralsup-bold-webfont.svg#STIXIntegralsUpBold') format('svg');
+         url('../lib/fonts/stix/stixintegralsup-bold-webfont.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
 }
@@ -313,8 +303,7 @@
     src: url('../lib/fonts/stix/stixintegralsup-regular-webfont.eot');
     src: url('../lib/fonts/stix/stixintegralsup-regular-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/stix/stixintegralsup-regular-webfont.woff') format('woff'),
-         url('../lib/fonts/stix/stixintegralsup-regular-webfont.ttf') format('truetype'),
-         url('../lib/fonts/stix/stixintegralsup-regular-webfont.svg#STIXIntegralsUpRegular') format('svg');
+         url('../lib/fonts/stix/stixintegralsup-regular-webfont.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -323,8 +312,7 @@
     src: url('../lib/fonts/stix/stixintegralsupd-bold-webfont.eot');
     src: url('../lib/fonts/stix/stixintegralsupd-bold-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/stix/stixintegralsupd-bold-webfont.woff') format('woff'),
-         url('../lib/fonts/stix/stixintegralsupd-bold-webfont.ttf') format('truetype'),
-         url('../lib/fonts/stix/stixintegralsupd-bold-webfont.svg#STIXIntegralsUpDBold') format('svg');
+         url('../lib/fonts/stix/stixintegralsupd-bold-webfont.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
 }
@@ -333,8 +321,7 @@
     src: url('../lib/fonts/stix/stixintegralsupd-regular-webfont.eot');
     src: url('../lib/fonts/stix/stixintegralsupd-regular-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/stix/stixintegralsupd-regular-webfont.woff') format('woff'),
-         url('../lib/fonts/stix/stixintegralsupd-regular-webfont.ttf') format('truetype'),
-         url('../lib/fonts/stix/stixintegralsupd-regular-webfont.svg#STIXIntegralsUpDRegular') format('svg');
+         url('../lib/fonts/stix/stixintegralsupd-regular-webfont.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -343,8 +330,7 @@
     src: url('../lib/fonts/stix/stixintegralsupsm-bold-webfont.eot');
     src: url('../lib/fonts/stix/stixintegralsupsm-bold-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/stix/stixintegralsupsm-bold-webfont.woff') format('woff'),
-         url('../lib/fonts/stix/stixintegralsupsm-bold-webfont.ttf') format('truetype'),
-         url('../lib/fonts/stix/stixintegralsupsm-bold-webfont.svg#STIXIntegralsUpSmBold') format('svg');
+         url('../lib/fonts/stix/stixintegralsupsm-bold-webfont.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
 }
@@ -353,8 +339,7 @@
     src: url('../lib/fonts/stix/stixintegralsupsm-regular-webfont.eot');
     src: url('../lib/fonts/stix/stixintegralsupsm-regular-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/stix/stixintegralsupsm-regular-webfont.woff') format('woff'),
-         url('../lib/fonts/stix/stixintegralsupsm-regular-webfont.ttf') format('truetype'),
-         url('../lib/fonts/stix/stixintegralsupsm-regular-webfont.svg#STIXIntegralsUpSmRegular') format('svg');
+         url('../lib/fonts/stix/stixintegralsupsm-regular-webfont.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -363,8 +348,7 @@
     src: url('../lib/fonts/stix/stixnonunicode-bold-webfont.eot');
     src: url('../lib/fonts/stix/stixnonunicode-bold-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/stix/stixnonunicode-bold-webfont.woff') format('woff'),
-         url('../lib/fonts/stix/stixnonunicode-bold-webfont.ttf') format('truetype'),
-         url('../lib/fonts/stix/stixnonunicode-bold-webfont.svg#STIXNonUnicodeBold') format('svg');
+         url('../lib/fonts/stix/stixnonunicode-bold-webfont.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
 }
@@ -373,8 +357,7 @@
     src: url('../lib/fonts/stix/stixnonunicode-bolditalic-webfont.eot');
     src: url('../lib/fonts/stix/stixnonunicode-bolditalic-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/stix/stixnonunicode-bolditalic-webfont.woff') format('woff'),
-         url('../lib/fonts/stix/stixnonunicode-bolditalic-webfont.ttf') format('truetype'),
-         url('../lib/fonts/stix/stixnonunicode-bolditalic-webfont.svg#STIXNonUnicodeBoldItalic') format('svg');
+         url('../lib/fonts/stix/stixnonunicode-bolditalic-webfont.ttf') format('truetype');
     font-weight: bold;
     font-style: italic;
 }
@@ -383,8 +366,7 @@
     src: url('../lib/fonts/stix/stixnonunicode-italic-webfont.eot');
     src: url('../lib/fonts/stix/stixnonunicode-italic-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/stix/stixnonunicode-italic-webfont.woff') format('woff'),
-         url('../lib/fonts/stix/stixnonunicode-italic-webfont.ttf') format('truetype'),
-         url('../lib/fonts/stix/stixnonunicode-italic-webfont.svg#STIXNonUnicodeItalic') format('svg');
+         url('../lib/fonts/stix/stixnonunicode-italic-webfont.ttf') format('truetype');
     font-weight: normal;
     font-style: italic;
 }
@@ -393,8 +375,7 @@
     src: url('../lib/fonts/stix/stixnonunicode-regular-webfont.eot');
     src: url('../lib/fonts/stix/stixnonunicode-regular-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/stix/stixnonunicode-regular-webfont.woff') format('woff'),
-         url('../lib/fonts/stix/stixnonunicode-regular-webfont.ttf') format('truetype'),
-         url('../lib/fonts/stix/stixnonunicode-regular-webfont.svg#STIXNonUnicodeRegular') format('svg');
+         url('../lib/fonts/stix/stixnonunicode-regular-webfont.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -403,8 +384,7 @@
     src: url('../lib/fonts/stix/stixsizefivesym-regular-webfont.eot');
     src: url('../lib/fonts/stix/stixsizefivesym-regular-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/stix/stixsizefivesym-regular-webfont.woff') format('woff'),
-         url('../lib/fonts/stix/stixsizefivesym-regular-webfont.ttf') format('truetype'),
-         url('../lib/fonts/stix/stixsizefivesym-regular-webfont.svg#STIXSizeFiveSymRegular') format('svg');
+         url('../lib/fonts/stix/stixsizefivesym-regular-webfont.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -413,8 +393,7 @@
     src: url('../lib/fonts/stix/stixsizefoursym-bold-webfont.eot');
     src: url('../lib/fonts/stix/stixsizefoursym-bold-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/stix/stixsizefoursym-bold-webfont.woff') format('woff'),
-         url('../lib/fonts/stix/stixsizefoursym-bold-webfont.ttf') format('truetype'),
-         url('../lib/fonts/stix/stixsizefoursym-bold-webfont.svg#STIXSizeFourSymBold') format('svg');
+         url('../lib/fonts/stix/stixsizefoursym-bold-webfont.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
 }
@@ -423,8 +402,7 @@
     src: url('../lib/fonts/stix/stixsizefoursym-regular-webfont.eot');
     src: url('../lib/fonts/stix/stixsizefoursym-regular-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/stix/stixsizefoursym-regular-webfont.woff') format('woff'),
-         url('../lib/fonts/stix/stixsizefoursym-regular-webfont.ttf') format('truetype'),
-         url('../lib/fonts/stix/stixsizefoursym-regular-webfont.svg#STIXSizeFourSymRegular') format('svg');
+         url('../lib/fonts/stix/stixsizefoursym-regular-webfont.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -433,8 +411,7 @@
     src: url('../lib/fonts/stix/stixsizeonesym-bold-webfont.eot');
     src: url('../lib/fonts/stix/stixsizeonesym-bold-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/stix/stixsizeonesym-bold-webfont.woff') format('woff'),
-         url('../lib/fonts/stix/stixsizeonesym-bold-webfont.ttf') format('truetype'),
-         url('../lib/fonts/stix/stixsizeonesym-bold-webfont.svg#STIXSizeOneSymBold') format('svg');
+         url('../lib/fonts/stix/stixsizeonesym-bold-webfont.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
 }
@@ -443,8 +420,7 @@
     src: url('../lib/fonts/stix/stixsizeonesym-regular-webfont.eot');
     src: url('../lib/fonts/stix/stixsizeonesym-regular-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/stix/stixsizeonesym-regular-webfont.woff') format('woff'),
-         url('../lib/fonts/stix/stixsizeonesym-regular-webfont.ttf') format('truetype'),
-         url('../lib/fonts/stix/stixsizeonesym-regular-webfont.svg#STIXSizeOneSymRegular') format('svg');
+         url('../lib/fonts/stix/stixsizeonesym-regular-webfont.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -453,8 +429,7 @@
     src: url('../lib/fonts/stix/stixsizethreesym-bold-webfont.eot');
     src: url('../lib/fonts/stix/stixsizethreesym-bold-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/stix/stixsizethreesym-bold-webfont.woff') format('woff'),
-         url('../lib/fonts/stix/stixsizethreesym-bold-webfont.ttf') format('truetype'),
-         url('../lib/fonts/stix/stixsizethreesym-bold-webfont.svg#STIXSizeThreeSymBold') format('svg');
+         url('../lib/fonts/stix/stixsizethreesym-bold-webfont.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
 }
@@ -463,8 +438,7 @@
     src: url('../lib/fonts/stix/stixsizethreesym-regular-webfont.eot');
     src: url('../lib/fonts/stix/stixsizethreesym-regular-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/stix/stixsizethreesym-regular-webfont.woff') format('woff'),
-         url('../lib/fonts/stix/stixsizethreesym-regular-webfont.ttf') format('truetype'),
-         url('../lib/fonts/stix/stixsizethreesym-regular-webfont.svg#STIXSizeThreeSymRegular') format('svg');
+         url('../lib/fonts/stix/stixsizethreesym-regular-webfont.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -473,8 +447,7 @@
     src: url('../lib/fonts/stix/stixsizetwosym-bold-webfont.eot');
     src: url('../lib/fonts/stix/stixsizetwosym-bold-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/stix/stixsizetwosym-bold-webfont.woff') format('woff'),
-         url('../lib/fonts/stix/stixsizetwosym-bold-webfont.ttf') format('truetype'),
-         url('../lib/fonts/stix/stixsizetwosym-bold-webfont.svg#STIXSizeTwoSymBold') format('svg');
+         url('../lib/fonts/stix/stixsizetwosym-bold-webfont.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
 }
@@ -483,8 +456,7 @@
     src: url('../lib/fonts/stix/stixsizetwosym-regular-webfont.eot');
     src: url('../lib/fonts/stix/stixsizetwosym-regular-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/stix/stixsizetwosym-regular-webfont.woff') format('woff'),
-         url('../lib/fonts/stix/stixsizetwosym-regular-webfont.ttf') format('truetype'),
-         url('../lib/fonts/stix/stixsizetwosym-regular-webfont.svg#STIXSizeTwoSymRegular') format('svg');
+         url('../lib/fonts/stix/stixsizetwosym-regular-webfont.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -493,8 +465,7 @@
     src: url('../lib/fonts/stix/stixvariants-bold-webfont.eot');
     src: url('../lib/fonts/stix/stixvariants-bold-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/stix/stixvariants-bold-webfont.woff') format('woff'),
-         url('../lib/fonts/stix/stixvariants-bold-webfont.ttf') format('truetype'),
-         url('../lib/fonts/stix/stixvariants-bold-webfont.svg#STIXVariantsBold') format('svg');
+         url('../lib/fonts/stix/stixvariants-bold-webfont.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
 }
@@ -503,8 +474,7 @@
     src: url('../lib/fonts/stix/stixvariants-regular-webfont.eot');
     src: url('../lib/fonts/stix/stixvariants-regular-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/stix/stixvariants-regular-webfont.woff') format('woff'),
-         url('../lib/fonts/stix/stixvariants-regular-webfont.ttf') format('truetype'),
-         url('../lib/fonts/stix/stixvariants-regular-webfont.svg#STIXVariantsRegular') format('svg');
+         url('../lib/fonts/stix/stixvariants-regular-webfont.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -733,8 +703,7 @@
     src: url('../lib/fonts/lmroman/lmroman10-bold-webfont.eot');
     src: url('../lib/fonts/lmroman/lmroman10-bold-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/lmroman/lmroman10-bold-webfont.woff') format('woff'),
-         url('../lib/fonts/lmroman/lmroman10-bold-webfont.ttf') format('truetype'),
-         url('../lib/fonts/lmroman/lmroman10-bold-webfont.svg#latin_modern_roman10_bold') format('svg');
+         url('../lib/fonts/lmroman/lmroman10-bold-webfont.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
 }
@@ -744,8 +713,7 @@
     src: url('../lib/fonts/lmroman/lmroman10-bolditalic-webfont.eot');
     src: url('../lib/fonts/lmroman/lmroman10-bolditalic-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/lmroman/lmroman10-bolditalic-webfont.woff') format('woff'),
-         url('../lib/fonts/lmroman/lmroman10-bolditalic-webfont.ttf') format('truetype'),
-         url('../lib/fonts/lmroman/lmroman10-bolditalic-webfont.svg#latin_modern_roman10BdIt') format('svg');
+         url('../lib/fonts/lmroman/lmroman10-bolditalic-webfont.ttf') format('truetype');
     font-weight: bold;
     font-style: italic;
 }
@@ -755,8 +723,7 @@
     src: url('../lib/fonts/lmroman/lmroman10-italic-webfont.eot');
     src: url('../lib/fonts/lmroman/lmroman10-italic-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/lmroman/lmroman10-italic-webfont.woff') format('woff'),
-         url('../lib/fonts/lmroman/lmroman10-italic-webfont.ttf') format('truetype'),
-         url('../lib/fonts/lmroman/lmroman10-italic-webfont.svg#latin_modern_roman10_italic') format('svg');
+         url('../lib/fonts/lmroman/lmroman10-italic-webfont.ttf') format('truetype');
     font-weight: normal;
     font-style: italic;
 }
@@ -766,8 +733,7 @@
     src: url('../lib/fonts/lmroman/lmroman10-regular-webfont.eot');
     src: url('../lib/fonts/lmroman/lmroman10-regular-webfont.eot?#iefix') format('embedded-opentype'),
          url('../lib/fonts/lmroman/lmroman10-regular-webfont.woff') format('woff'),
-         url('../lib/fonts/lmroman/lmroman10-regular-webfont.ttf') format('truetype'),
-         url('../lib/fonts/lmroman/lmroman10-regular-webfont.svg#latin_modern_roman10_regular') format('svg');
+         url('../lib/fonts/lmroman/lmroman10-regular-webfont.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
