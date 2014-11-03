@@ -839,6 +839,9 @@
 
 				@include highlight-tip;
 
+				//this is adding a space between letters when the highlight ends in a word
+				padding-left: 0;
+
 				&.with-count {
 					overflow: hidden;
 					width: 30px;
