@@ -233,7 +233,8 @@ Ext.define('NextThought.view.annotations.Highlight', {
 						sampleEl.removeCls(me.mouseOverCls);
 					}
 					//me.compElements.setStyle('background-color','transparent');
-					me.canvas = me.createCanvas();
+					//The fill is no longer working on the canvas, so don't create one needlessly since you can't see it anyway
+					//me.canvas = me.createCanvas();
 				}
 			}
 		}
