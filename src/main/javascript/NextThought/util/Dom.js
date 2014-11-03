@@ -273,7 +273,7 @@ Ext.define('NextThought.util.Dom', {
 			toRemove, i;
 
 		if (typeof html === 'string') {
-			offScreenBuffer.innerHTML = html.replace(/[\n\r]+/ig, ' ');
+			offScreenBuffer.innerHTML = html.replace(/[\n\r]+/ig, ' ').replace(/[\x00-\x08\x0B\x0E-\x1F]/g, '');
 		} else {
 			offScreenBuffer.appendChild(html.cloneNode(true));
 		}
