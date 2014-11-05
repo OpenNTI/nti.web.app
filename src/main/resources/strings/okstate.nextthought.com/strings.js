@@ -1,5 +1,10 @@
 window.NTIStrings = window.NTIStrings || {};
 
+
+NTIStrings['course-info.open-course-widget.message'] = 'See all of the course content with limited access to discussions and assessments. ' +
+															'Participation in the open course will not be certified on an official transcript.';
+
+
 NTIStrings.EnrollmentText = {
 	OpenEnrollment: {
 		notEnrolled: {
