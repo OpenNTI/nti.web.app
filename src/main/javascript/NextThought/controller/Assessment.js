@@ -338,7 +338,7 @@ Ext.define('NextThought.controller.Assessment', {
 				console.error('Failed to save assignment progress');
 
 				if (callback) {
-					callback.call(null, result);
+					callback.call(null);
 				}
 			}
 		});
