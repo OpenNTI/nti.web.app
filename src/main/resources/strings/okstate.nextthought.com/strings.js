@@ -1,5 +1,8 @@
 window.NTIStrings = window.NTIStrings || {};
 
+NTIStrings['library:branding navigation-label'] = 'Oklahoma State University';
+NTIStrings['library:branding logo-alt-text'] = 'Oklahoma State University';
+
 
 NTIStrings['course-info.open-course-widget.message'] = 'See all of the course content with limited access to discussions and assessments. ' +
 															'Participation in the open course will not be certified on an official transcript.';
