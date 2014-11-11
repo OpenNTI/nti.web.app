@@ -29,5 +29,9 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Description', {
 				anchor.setAttribute('target', '_blank');
 			}
 		});
+
+		if (this.otherCls) {
+			this.addCls(this.otherCls);
+		}
 	}
 });

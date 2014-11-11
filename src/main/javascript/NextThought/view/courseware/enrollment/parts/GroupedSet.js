@@ -104,7 +104,9 @@ Ext.define('NextThought.view.courseware.enrollment.parts.GroupedSet', {
 		});
 
 		toShow.forEach(function(input) {
-			input.show();
+			if (!input.shouldHide) {
+				input.show();
+			}
 		});
 	},
 
@@ -117,5 +119,14 @@ Ext.define('NextThought.view.courseware.enrollment.parts.GroupedSet', {
 
 		this.showSubInputs(value);
 		body.removeCls('error');
+	},
+
+	isCorrect: function() {
+		if (!this.correct) { return true; }
+
+		var values = this.getValue(),
+			value = values && values[this.name];
+
+		return value && value === this.correct;
 	}
 });

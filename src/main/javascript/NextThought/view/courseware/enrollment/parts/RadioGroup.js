@@ -153,7 +153,7 @@ Ext.define('NextThought.view.courseware.enrollment.parts.RadioGroup', {
 					error.removeCls('error');
 				}
 
-				if (!me.isCorrect() && container) {
+				if (!me.isCorrect() && container && !me.noIncorrect) {
 					container.addCls('error');
 				}
 
@@ -168,7 +168,9 @@ Ext.define('NextThought.view.courseware.enrollment.parts.RadioGroup', {
 
 
 	addError: function() {
-		this.addCls('error');
+		if (!this.noIncorrect) {
+			this.addCls('error');
+		}
 	},
 
 

@@ -388,7 +388,6 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 		}
 
 		me.getLayout().setActiveItem(me.tabpanel);
-		me.closeMsg();
 	},
 
 
@@ -434,7 +433,6 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 		me.mon(me.courseDetail, 'enroll-in-course', 'showEnrollmentOption');
 
 		me.getLayout().setActiveItem(me.courseDetail);
-		me.closeMsg();
 	},
 
 

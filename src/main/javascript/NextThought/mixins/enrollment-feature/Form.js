@@ -3,6 +3,8 @@ Ext.define('NextThought.mixins.enrollment-feature.Form', {
 
 	changeMonitors: {},
 
+	eventToGroup: {},
+
 	addListeners: function() {
 		this.on({
 			'reveal-item': 'revealItem',
@@ -78,7 +80,7 @@ Ext.define('NextThought.mixins.enrollment-feature.Form', {
 
 	changed: function(name, value, doNotStore) {
 		if (this.changeMonitors[name]) {
-			this[this.changeMonitors[name]].call(this);
+			this[this.changeMonitors[name]].call(this, value);
 		}
 
 		if (!name || doNotStore) { return; }
@@ -105,7 +107,7 @@ Ext.define('NextThought.mixins.enrollment-feature.Form', {
 			return;
 		}
 
-		if (name === 'enable-submit') {
+		if (name === 'enable-submit' || name === 'enable-contact-submit') {
 			me.submitBtnCfg.disabled = true;
 			me.fireEvent('update-buttons');
 		}
@@ -140,11 +142,12 @@ Ext.define('NextThought.mixins.enrollment-feature.Form', {
 			return;
 		}
 
-		//special name to enable the submit button
-		if (name === 'enable-submit') {
+		//special name to enable the submit button enable-submit*
+		//where the star indicates a group to use
+		if (name.indexOf('enable-submit') === 0) {
 			me.submitBtnCfg.disabled = false;
 
-			me.shouldAllowSubmission()
+			me.shouldAllowSubmission({group: me.eventToGroup[name]})
 				.always(me.fireEvent.bind(me, 'update-buttons'));
 		}
 
@@ -162,11 +165,11 @@ Ext.define('NextThought.mixins.enrollment-feature.Form', {
 	},
 
 
-	isValid: function() {
+	isValid: function(group) {
 		var valid = true;
 
 		this.items.each(function(item) {
-			if (Ext.isFunction(item.isValid) && !item.isValid()) {
+			if (Ext.isFunction(item.isValid) && !item.isValid(group)) {
 				valid = false;
 			}
 
@@ -296,21 +299,23 @@ Ext.define('NextThought.mixins.enrollment-feature.Form', {
 	 * the inputs name should follow a scheme of line, line2, line3 ...
 	 * this.addressLines is an array of all the prefixes for the street line inputs in all the address forms
 	 */
-	addAddressLine: function() {
+	numberofaddressline: {},
+	addAddressLine: function(prefix, cmp) {
 		var me = this,
-			line = me.numberofaddressline || 2,
-			streetAddress = me.down('[name=permanent-address]'),
-			help;
+			line = me.numberofaddressline[prefix] || 2;
 
-		line = me.numberofaddressline = line + 1;
+		line = me.numberofaddressline[prefix] = line + 1;
 
 		if (line >= 5) {
-			me.hideItem('add_address_line');
+			cmp.hide();
 		}
 
-
-		me.addressLines.forEach(function(prefix) {
+		if (prefix) {
 			me.revealItem(prefix + line);
-		});
+		} else {
+			me.addressLines.forEach(function(pref) {
+				me.revealItem(pref + line);
+			});
+		}
 	}
 });

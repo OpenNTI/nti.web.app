@@ -271,10 +271,17 @@
 			position: relative;
 
 			&.nested {
-				margin: 0;
+				margin: -5px 0 0;
 				display: inline-block;
-			
+				padding-right: 20px;
+				background-color: #f9f9f9;
+
 				.enrollment-input {
+					width: 675px;
+					padding-left: 30px;
+				}
+			
+				.enrollment-input:not(.text) {
 					padding-left: 50px;
 					margin: 0;
 				}
@@ -290,6 +297,10 @@
 					width: 615px;
 					background-color: #f2f2f2;
 					margin-bottom: 4px;
+				}
+
+				.full {
+					width: 655px;
 				}
 			}
 
@@ -720,6 +731,10 @@
 				&.small {
 					width: 140px;
 				}
+
+				&.one-line {
+					margin-right: 400px;
+				}
 			}
 
 			&.button .button-text {
@@ -736,6 +751,12 @@
 	}
 
 	.enrollment-description {
+
+		&.nested {
+			padding: 20px;
+			background-color: #f9f9f9;
+		}
+
 		p {
 			margin: 10px 0 0 0;
 			font: normal 300 1em/1.5em $font;
@@ -753,6 +774,14 @@
 		color: $primary-blue;
 		cursor: pointer;
 		display: inline;
+
+		&.nested {
+			display: inline-block;
+			background-color: #f9f9f9;
+			margin-top: -5px;
+			width: 675px;
+			padding: 0 30px;
+		}
 	}
 }
 

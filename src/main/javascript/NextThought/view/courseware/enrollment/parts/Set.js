@@ -69,8 +69,12 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Set', {
 	},
 
 
-	isValid: function() {
+	isValid: function(group) {
 		var valid = true;
+
+		if (group && group !== this.group) {
+			return true;
+		}
 
 		this.items.each(function(item) {
 			if (Ext.isFunction(item.isValid) && !item.isValid()) {

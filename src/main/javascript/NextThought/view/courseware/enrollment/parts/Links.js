@@ -25,8 +25,18 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Links', {
 
 		var me = this;
 
+		if (me.otherCls) {
+			me.addCls(me.otherCls);
+		}
+
 		me.mon(me.el, 'click', function() {
-			me.fireEvent(me.eventName);
+			var args = [me.eventName];
+
+			args = args.concat(me.args);
+
+			args.push(me);
+
+			me.fireEvent.apply(me, args);
 		});
 	}
 });

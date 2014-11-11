@@ -23,11 +23,90 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 		{name: 'Cancel', disabled: false, action: 'go-back', secondary: true}
 	],
 
+
+	groups: {
+		'concurrent': {
+			'preflight': null,
+			'submit': 'submitConcurrentForm',
+			'handler': 'handleConcurrentResponse'
+		},
+		'admission': {
+			'preflight': 'shouldAllowSubmission',
+			'submit': 'submitAdmission',
+			'handler': 'handleResponse'
+		}
+	},
+
+
+	//which group to use for validation when the enable events are fired
+	eventToGroup: {
+		'enable-submit-concurrent': 'concurrent',
+		'enable-submit': 'admission'
+	},
+
+
 	STATE_NAME: 'admission-form',
 
 	form: [
 		{
+			name: 'concurrent-contact',
+			group: 'concurrent',
+			label: 'Contact Information',
+			items: [
+				{
+					xtype: 'enrollment-set',
+					inputs: [
+						{
+							type: 'description',
+							text: 'Enter your contact information below and my boy from ' +
+									'The University of Oklahoma will holla back at you.'
+						}
+					]
+				},
+				{
+					xtype: 'enrollment-set',
+					label: 'Contact Information',
+					inputs: [
+						{type: 'text', name: 'contact_name', placeholder: 'Full Name', required: true, size: 'large one-line'},
+						{type: 'text', name: 'contact_email', placeholder: 'Email', required: true, size: 'large one-line'},
+						{type: 'text', name: 'contact_phone', placeholder: 'Primary Phone (optional)', valueValidation: /^.{1,128}$/, size: 'large one-line'}
+					]
+				},
+				{
+					xtype: 'enrollment-set',
+					label: 'What is your Date of Birth?',
+					inputs: [
+						{type: 'date', name: 'contact_date_of_birth', required: true, size: 'third'}
+					]
+				},
+				{
+					xtype: 'enrollment-set',
+					label: 'Address (optional)',
+					inputs: [
+						{type: 'text', name: 'contact_street_line1', placeholder: 'Address', size: 'full'},
+						{type: 'text', name: 'contact_street_line2', placeholder: 'Address', size: 'full'},
+						{type: 'text', name: 'contact_street_line3', hidden: true, placeholder: 'Address', size: 'full'},
+						{type: 'text', name: 'contact_street_line4', hidden: true, placeholder: 'Address', size: 'full'},
+						{type: 'text', name: 'contact_street_line4', hidden: true, placeholder: 'Address', size: 'full'},
+						{type: 'link', name: 'add_address_line', text: 'Add Address', eventName: 'add-address-line', args: ['contact_street_line']},
+						{type: 'text', name: 'contact_city', placeholder: 'City / Town', size: 'large'},
+						{type: 'text', name: 'contact_state', placeholder: 'State / Province / Territory / Region', size: 'full'},
+						{type: 'text', name: 'contact_country', placeholder: 'Country', size: 'large left'},
+						{type: 'text', name: 'contact_zip', placeholder: 'ZIP / Postal Code', size: 'small left'}
+					]
+				},
+				{
+					xtype: 'enrollment-set',
+					reveals: 'enable-submit-concurrent',
+					inputs: [
+						{type: 'checkbox', name: 'affirm', doNotSend: true, doNotStore: true, correct: true, text: 'I want someone from the University of Oklahoma to contact me'}
+					]
+				}
+			]
+		},
+		{
 			name: 'general',
+			group: 'admission',
 			label: 'General Information',
 			items: [
 				{
@@ -74,7 +153,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 						{type: 'text', name: 'street_line3', hidden: true, placeholder: 'Address (optional)', size: 'full'},
 						{type: 'text', name: 'street_line4', hidden: true, placeholder: 'Address (optional)', size: 'full'},
 						{type: 'text', name: 'street_line5', hidden: true, placeholder: 'Address (optional)', size: 'full'},
-						{type: 'link', name: 'add_address_line', text: 'Add Address Line', eventName: 'add-address-line'},
+						{type: 'link', name: 'add_address_line', text: 'Add Address Line', eventName: 'add-address-line', args: ['street_line']},
 						{type: 'text', name: 'city', placeholder: 'City / Town', size: 'large', required: true},
 						{type: 'dropdown', name: 'state', placeholder: 'State / Province / Territory / Region', size: 'full', options: [], editable: false},
 						{type: 'dropdown', name: 'nation_code', placeholder: 'Country', required: true, size: 'large left', options: []},
@@ -97,6 +176,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 						{type: 'text', name: 'mailing_street_line3', hidden: true, placeholder: 'Address', size: 'full'},
 						{type: 'text', name: 'mailing_street_line4', hidden: true, placeholder: 'Address', size: 'full'},
 						{type: 'text', name: 'mailing_street_line5', hidden: true, placeholder: 'Address', size: 'full'},
+						{type: 'link', name: 'add_address_line', text: 'Add Address Line', eventName: 'add-address-line', args: ['mailing_street_line']},
 						{type: 'text', name: 'mailing_city', placeholder: 'City / Town', size: 'large'},
 						{type: 'dropdown', name: 'mailing_state', placeholder: 'State / Province / Territory / Region', size: 'full', options: [], editable: false},
 						{type: 'dropdown', name: 'mailing_nation_code', placeholder: 'Country', size: 'large left', options: []},
@@ -203,6 +283,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 		},
 		{
 			name: 'signature',
+			group: 'admission',
 			label: 'Signature',
 			reveals: 'enable-submit',
 			items: [
@@ -224,6 +305,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 		},
 		{
 			name: 'enable-submit',
+			group: 'admission',
 			items: [
 				{
 					xtype: 'enrollment-set',
@@ -296,16 +378,8 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 						label: 'Are you an Oklahoma resident currently attending High School?',
 						name: 'attending-highschool',
 						inputs: [
-							{type: 'radio-group', name: 'is_currently_attending_highschool', correct: 'N', options: [
-								{
-									text: 'Yes',
-									value: 'Y',
-									content: 'Please apply using our ' +
-											 Ext.DomHelper.markup({
-												 tag: 'a', href: 'http://www.ou.edu/content/go2/admissions/concurrent.html',
-												 target: '_blank', html: 'Concurrent Enrollment Application'}) +
-											 '.'
-								},
+							{type: 'radio-group', name: 'is_currently_attending_highschool', correct: 'N', noIncorrect: true, hides: 'concurrent-contact', options: [
+								{text: 'Yes', value: 'Y'},
 								{text: 'No', value: 'N'}
 							]}
 						]
@@ -315,9 +389,9 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 
 		me.submitBtnCfg = me.buttonCfg[0];
 
-		me.enableBubble(['show-msg', 'enable-submission', 'update-buttons']);
+		me.enableBubble(['show-msg', 'enable-submission', 'update-buttons', 'go-back']);
 
-		me.addressLines = ['street_line', 'mailing_street_line'];
+		me.addressLines = ['street_line', 'mailing_street_line', 'contact_street_line'];
 
 		me.nationsLink = $AppConfig.userObject.getLink('fmaep.country.names');
 		me.statesLink = $AppConfig.userObject.getLink('fmaep.state.names');
@@ -405,8 +479,16 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 			values.last_name = lastName;
 		}
 
+		if (!values.contact_name && firstName && lastName) {
+			values.contact_name = firstName + ' ' + lastName;
+		}
+
 		if (!values.email && email) {
 			values.email = email;
+		}
+
+		if (!values.contact_email && email) {
+			values.contact_email = email;
 		}
 
 		return values;
@@ -598,33 +680,35 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 
 	shouldAllowSubmission: function(value) {
 		var me = this,
-			preflightlink = $AppConfig.userObject.getLink('fmaep.admission.preflight');
+			preflightlink = $AppConfig.userObject.getLink('fmaep.admission.preflight'),
+			groupConfig = me.groups[value.group];
 
 		value = value || me.getValue();
 
 		return new Promise(function(fulfill, reject) {
-			if (!me.isValid()) {
+			if (!me.isValid(value.group)) {
 				me.fireEvent('show-msg', 'Please fill out all required information.', true, 5000);
 				reject();
 				return;
 			}
 
-			if (!preflightlink) {
-				console.error('No Preflight to validate the admission form, allowing submitt anyway');
+			if (!groupConfig.preflight) {
 				fulfill();
-				return;
+			} else if (!preflightlink) {
+				console.error('No Preflight to validate the admission form, allowing submit anyway');
+				fulfill();
+			} else {
+				Service.post(preflightlink, value.postData)
+					.then(function(response) {
+						fulfill();
+					})
+					.fail(function(response) {
+						var json = Ext.JSON.decode(response && response.responseText, true);
+
+						me.showError(json);
+						reject();
+					});
 			}
-
-			Service.post(preflightlink, value)
-				.then(function(response) {
-					fulfill();
-				})
-				.fail(function(response) {
-					var json = Ext.JSON.decode(response && response.responseText, true);
-
-					me.showError(json);
-					reject();
-				});
 		});
 	},
 
@@ -666,18 +750,83 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 	},
 
 
+	handleConcurrentResponse: function(json, success) {
+		if (success) {
+			this.completed = true;
+			this.clearStorage();
+			this.fireEvent('show-msg', (json && json.Message) || 'Your contact information has been sent.', false, 5000);
+			wait(1000)
+				.then(this.fireEvent.bind(this, 'go-back'));
+		} else {
+			this.showError(json);
+		}
+	},
+
+
+	getValue: function() {
+		var value = this.mixins.form.getValue.call(this),
+			group = 'admission', data;
+
+		if (value.is_currently_attending_highschool === 'Y') {
+			group = 'concurrent';
+			data = {
+				name: value.contact_name,
+				email: value.contact_email,
+				street_line: value.contact_street_line,
+				street_line2: value.contact_street_line2,
+				street_line3: value.contact_street_line3,
+				street_line4: value.contact_street_line4,
+				city: value.contact_city,
+				state: value.contact_state,
+				zip: value.contact_zip,
+				country: value.contact_country,
+				date_of_birth: value.contact_date_of_birth
+			};
+		}
+
+		return {
+			group: group,
+			postData: data || value
+		};
+	},
+
+
+	submitConcurrentForm: function(value) {
+		var url = $AppConfig.userObject.getLink('concurrent.enrollment.notify');
+
+
+		this.submitBtnCfg.disabled = true;
+		this.fireEvent('update-buttons');
+		this.addMask('Your contact information is being sent.');
+
+		return Service.post(url, value.postData);
+	},
+
+	submitAdmission: function(value) {
+		this.submitBtnCfg.disabled = true;
+		this.fireEvent('update-buttons');
+		this.addMask('Your application is being processed. This may take a few moments.');
+
+		return this.complete(this, value.postData);
+	},
+
+
 	maybeSubmit: function() {
 		var me = this, isValid,
-			value = me.getValue();
+			value = me.getValue(),
+			preflight,
+			groupConfig = this.groups[value.group];
 
-		me.shouldAllowSubmission(value)
+		if (groupConfig.preflight) {
+			preflight = me[groupConfig.preflight].call(me, value);
+		} else {
+			preflight = Promise.resolve();
+		}
+
+		preflight
 			.then(function() {
 				isValid = true;
-				me.submitBtnCfg.disabled = true;
-				me.fireEvent('update-buttons');
-				me.addMask('Your application is being processed. This may take a few moments.');
-
-				return me.complete(me, value);
+				me[groupConfig.submit].call(me, value);
 			}, function() {
 				isValid = false;
 
@@ -688,8 +837,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 
 				me.removeMask();
 
-
-				me.handleResponse(json);
+				me[groupConfig.handler].call(me, json, true);
 			})
 			.fail(function(response) {
 				me.removeMask();
@@ -698,16 +846,17 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 					return;
 				}
 
+				var json;
+
 				if (!response) {
-					me.handleResponse({
+					json = {
 						message: 'An unknown error occurred. Please try again later.'
-					});
-					return;
+					};
+				} else {
+					json = Ext.JSON.decode(response.responseText || response, true);
 				}
 
-				var json = Ext.JSON.decode(response.responseText || response, true);
-
-				me.handleResponse(json);
+				me[groupConfig.handler].call(me, json, false);
 			});
 	}
 });
