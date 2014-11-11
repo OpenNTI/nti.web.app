@@ -2,7 +2,10 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	alternateClassName: 'NextThought.model.courses.CourseCatalogLegacyEntry',
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.courses.coursecataloglegacyentry',
-	requires: ['NextThought.model.converters.Date'],
+	requires: [
+		'NextThought.model.converters.Date',
+		'NextThought.model.courses.EnrollmentOptions'
+	],
 	mixins: {
 		PresentationResources: 'NextThought.mixins.PresentationResources'
 	},
@@ -28,10 +31,7 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		{ name: 'enrolled', type: 'bool' },
 		{ name: 'DisableOverviewCalendar', type: 'bool', persist: false},
 
-		{name: 'EnrollmentOptions', type: 'auto', persist: false, convert: function(v) {
-			//clone the option so changes here won't be applied to the raw
-			return Ext.clone(v);
-		}},
+		{name: 'EnrollmentOptions', type: 'singleItem', persist: false},
 
 		{ name: 'NTI_FiveminuteEnrollmentCapable', type: 'bool', persist: false },
 		{ name: 'NTI_CRN', type: 'string', persist: false },
@@ -140,9 +140,9 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	 */
 	updateEnrollmentState: function(status, open, admin) {
 		var options = this.get('EnrollmentOptions'),
-			openOption = options && options.OpenEnrollment,
-			fmaepOption = options && options.FiveminuteEnrollment,
-			storeOption = options && options.StoreEnrollment,
+			openOption = options && options.getType('OpenEnrollment'),
+			fmaepOption = options && options.getType('FiveminuteEnrollment'),
+			storeOption = options && options.getType('StoreEnrollment'),
 			isOpen = open;
 
 		//assume the option option isn't enrolled in
@@ -160,6 +160,10 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 			}
 		}
 
+		options.setType('OpenEnrollment', openOption);
+		options.setType('FiveminuteEnrollment', fmaepOption);
+		options.setType('StoreEnrollment', storeOption);
+
 		this.set({
 			'isOpen': isOpen,
 			'isAdmin': admin,
@@ -171,7 +175,7 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	getEnrollmentOption: function(name) {
 		var options = this.get('EnrollmentOptions');
 
-		return options[name];
+		return options.getType(name);
 	},
 
 
