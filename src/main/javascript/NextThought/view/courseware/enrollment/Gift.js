@@ -16,7 +16,7 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 			items: [
 				{
 					xtype: 'enrollment-set',
-					label: 'Who is it from?',
+					label: 'From:',
 					inputs: [
 						{type: 'text', name: 'sender', required: true, size: 'large left', placeholder: 'Full Name'},
 						{type: 'text', name: 'from', required: true, size: 'large left', placeholder: 'Email'}
@@ -24,14 +24,15 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 				},
 				{
 					xtype: 'enrollment-set',
-					label: 'Who is it to?',
+					label: 'To:',
 					inputs: [
-						{type: 'text', name: 'receiver', required: true, size: 'large', placeholder: 'Email'}
+						{type: 'text', name: 'to', required: true, size: 'large left', placeholder: 'Full Name'},
+						{type: 'text', name: 'receiver', required: true, size: 'large left', placeholder: 'Email'}
 					]
 				},
 				{
 					xtype: 'enrollment-set',
-					label: 'Additional Information',
+					label: '',
 					inputs: [
 						{type: 'text', name: 'message', size: 'full', placeholder: 'Message'}
 					]
@@ -138,6 +139,7 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 		desc.from = formValue.from;
 		desc.receiver = formValue.receiver;
 		desc.message = formValue.message;
+		desc.to = formValue.to;
 
 		return desc;
 	}

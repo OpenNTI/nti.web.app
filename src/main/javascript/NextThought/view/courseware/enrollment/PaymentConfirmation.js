@@ -16,8 +16,10 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 			{cls: 'warning', html: 'All sales are final.'}
 		]},
 		{cls: 'gift-info', cn: [
-			{cls: 'edit', html: 'edit'},
-			{cls: 'title', html: 'Gift Information'},
+			{cls: 'title', cn: [
+				{tag: 'span', html: 'Gift Information'},
+				{cls: 'edit', html: 'edit'}
+			]},
 			{cls: 'from info', cn: [
 				{tag: 'span', cls: 'label', html: 'From'},
 				{tag: 'span', cls: 'name'}
@@ -32,8 +34,10 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 			]}
 		]},
 		{cls: 'payment-info', cn: [
-			{cls: 'edit', html: 'edit'},
-			{cls: 'title', html: 'Payment Information'},
+			{cls: 'title', cn: [
+				{tag: 'span', html: 'Payment Information'},
+				{cls: 'edit', html: 'edit'}
+			]},
 			{cls: 'name info'},
 			{cls: 'card info', cn: [
 				{tag: 'span', cls: 'type label'},
@@ -45,8 +49,10 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 			]}
 		]},
 		{cls: 'billing-info', cn: [
-			{cls: 'edit', html: 'edit'},
-			{cls: 'title', html: 'Billing Address'},
+			{cls: 'title', cn: [
+				{tag: 'span', html: 'Billing Address'},
+				{cls: 'edit', html: 'edit'}
+			]},
 			{cls: 'street line1 info'},
 			{cls: 'street line2 info'},
 			{cls: 'city-info info', cn: [
@@ -139,7 +145,7 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 		}
 
 		if (purchaseDesc.receiver) {
-			this.giftToEl.down('.to-email').update(purchaseDesc.receiver);
+			this.giftToEl.down('.to-email').update(purchaseDesc.to + ' (' + purchaseDesc.receiver + ')');
 		}
 
 		if (purchaseDesc.message) {
@@ -291,8 +297,9 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 		me.addMask('Submitting payment. This may take a few moments.');
 
 		me.complete(me, data)
-			.then(function() {
+			.then(function(result) {
 				console.log('Payment successful', arguments);
+				me.enrollmentOption.purchaseAttempt = result.purchaseAttempt;
 				me.removeMask();
 				me.done(me);
 			})

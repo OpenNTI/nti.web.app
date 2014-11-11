@@ -133,7 +133,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 		}, steps);
 
 		this.__addStep({
-			xtype: 'enrollment-confirmation',
+			xtype: 'enrollment-gift-confirmation',
 			name: 'Confirmation',
 			enrollmentOption: option,
 			hasPricingCard: true,

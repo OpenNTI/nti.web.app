@@ -920,7 +920,18 @@
 
 }
 
-.enrollment-credit-purchase {
+.enrollment-gift-confirmation {
+	.token {
+		margin-top: 1em;
+		.label {
+			font-weight: 600;
+			margin-right: 0.5em;
+		}
+	}
+}
+
+.enrollment-credit-purchase,
+.enrollment-gift-confirmation {
 	padding-right: 280px;
 	color: $primary-grey;
 	font: normal 300 1em/1 $font;
@@ -1076,21 +1087,27 @@
 		margin: 20px 400px 0 0;
 		padding-right: 30px;
 
-		.edit {
-			position: absolute;
-			right: 0;
-			color: $primary-blue;
-			cursor: pointer;
-			text-transform: uppercase;
-			font-size: 0.7em;
-			color: $primary-blue;
-		}
-
 		.title {
+			float: left;
 			font-size: 1.3em;
 			line-height: 1.5em;
 			font-weight: 300;
 			color: $tertiary-grey;
+
+			span {
+				float: left;
+			}
+
+			.edit {
+				position: relative;
+				float: left;
+				padding-left: 10px;
+				top: -6px;
+				color: $primary-blue;
+				cursor: pointer;
+				text-transform: uppercase;
+				font-size: 0.55em;
+			}
 		}
 
 		.info {
