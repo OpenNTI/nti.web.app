@@ -194,7 +194,7 @@ Ext.define('NextThought.mixins.enrollment-feature.Form', {
 	showError: function(json) {
 		var input;
 
-		json = Ext.isString(json) ? {Message: json} : json;
+		json = Ext.isString(json) ? {Message: json} : (json || {});
 
 		if (json.field) {
 			input = this.down('[name="' + json.field + '"]');

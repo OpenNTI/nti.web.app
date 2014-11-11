@@ -153,6 +153,8 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 
 
 	beforeShow: function() {
+		this.submitBtnCfg.disabled = false;
+		this.fireEvent('update-buttons');
 		this.updateFromStorage();
 		this.updatePrice();
 	},
@@ -312,6 +314,8 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 			.then(
 				function() {
 					invalid = false;
+					me.submitBtnCfg.disabled = true;
+					me.fireEvent('update-buttons');
 					me.addMask('Processing card information. You will not be charged yet.');
 					return me.complete(me, data);
 				},

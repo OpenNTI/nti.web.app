@@ -48,12 +48,16 @@ Ext.define('NextThought.view.courseware.enrollment.Redeem', {
 
 		me.shouldAllowSubmission()
 			.then(function() {
+				me.submitBtnCfg.disabled = true;
+				me.fireEvent('update-buttons');
+				me.addMask('Processing card information. You will not be charged yet.');
 				return me.complete(me, value);
 			})
 			.then(function(result) {
 				me.done(me);
 			})
 			.fail(function(error) {
+				me.removeMask();
 				me.showError(error);
 			});
 	}

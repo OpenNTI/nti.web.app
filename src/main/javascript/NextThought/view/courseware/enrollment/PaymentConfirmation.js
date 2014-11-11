@@ -128,6 +128,7 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 			this.subscribeContainerEl.hide();
 		}
 
+		this.giftEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
 		if (purchaseDesc.from) {
 			this.giftEl.show();
