@@ -197,6 +197,7 @@ Ext.define('NextThought.controller.Store', function() {
 		],
 
 		models: [
+			'store.GiftPurchaseAttempt',
 			'store.Purchasable',
 			'store.PurchaseAttempt',
 			'store.StripePricedPurchasable',
