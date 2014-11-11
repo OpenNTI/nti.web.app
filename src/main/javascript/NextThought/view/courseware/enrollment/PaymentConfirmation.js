@@ -15,6 +15,22 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 			{cls: 'description', html: 'Please take a moment to review your order and then submit payment.'},
 			{cls: 'warning', html: 'All sales are final.'}
 		]},
+		{cls: 'gift-info', cn: [
+			{cls: 'edit', html: 'edit'},
+			{cls: 'title', html: 'Gift Information'},
+			{cls: 'from info', cn: [
+				{tag: 'span', cls: 'label', html: 'From'},
+				{tag: 'span', cls: 'name'}
+			]},
+			{cls: 'to info', cn: [
+				{tag: 'span', cls: 'label', html: 'To'},
+				{tag: 'span', cls: 'to-email'}
+			]},
+			{cls: 'message info', cn: [
+				{tag: 'span', cls: 'label', html: 'Message'},
+				{tag: 'span', cls: 'message-text'}
+			]}
+		]},
 		{cls: 'payment-info', cn: [
 			{cls: 'edit', html: 'edit'},
 			{cls: 'title', html: 'Payment Information'},
@@ -65,7 +81,11 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 		subscribeContainerEl: '.subscribe',
 		subscribeEl: '.subscribe input[name=subscribe]',
 		subscribeLabelEl: '.subscribe label',
-		subscribeLegalEl: '.subscribe-container .legal'
+		subscribeLegalEl: '.subscribe-container .legal',
+		giftEl: '.gift-info',
+		giftFromEl: '.gift-info .from',
+		giftToEl: '.gift-info .to',
+		giftMessageEl: '.gift-info .message'
 	},
 
 
@@ -91,6 +111,7 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 
 	beforeShow: function() {
 		var token = this.enrollmentOption.tokenObject,
+			purchaseDesc = this.enrollmentOption.purchaseDescription,
 			card = token && token.card;
 
 		if (!card || !this.rendered) { return; }
@@ -101,6 +122,23 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 			this.subscribeContainerEl.show();
 		} else {
 			this.subscribeContainerEl.hide();
+		}
+
+
+		if (purchaseDesc.from) {
+			this.giftEl.show();
+
+			this.giftFromEl.down('.name').update(purchaseDesc.sender + ' (' + purchaseDesc.from + ')');
+		} else {
+			this.giftEl.hide();
+		}
+
+		if (purchaseDesc.receiver) {
+			this.giftToEl.down('.to-email').update(purchaseDesc.receiver);
+		}
+
+		if (purchaseDesc.message) {
+			this.giftMessageEl.down('.message-text').update(purchaseDesc.message);
 		}
 
 		if (card.brand) {

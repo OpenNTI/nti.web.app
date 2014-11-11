@@ -69,10 +69,11 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 	 *
 	 * @param  {CourseCatalogEntry} course the course we are building the steps for
 	 * @param {String} enrollmentType the type of enrollment
+	 * @param {String} type a subtype of the enrollment gift, or redeem
 	 * @return {Array}        an array of steps
 	 */
-	getEnrollmentSteps: function(course, enrollmentType) {
-		return this.getOption(enrollmentType).buildEnrollmentSteps(course);
+	getEnrollmentSteps: function(course, enrollmentType, type) {
+		return this.getOption(enrollmentType).buildEnrollmentSteps(course, type);
 	},
 
 

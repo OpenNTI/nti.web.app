@@ -490,11 +490,8 @@
 	}
 
 	.enrollment {
-		background-color: $panel-background;
 		width: 310px;
 		margin-left: 15px;
-		box-shadow: 0 1px 2px 0 rgba(0,0,0,0.35);
-
 
 		.loading {
 			height: 200px;
@@ -519,6 +516,57 @@
 				cursor: pointer;
 				background-color: #3fb34f;
 			}
+		}
+	}
+
+	.enroll-card, .gift-card {
+		background-color: $panel-background;
+		box-shadow: 0 1px 2px 0 rgba(0,0,0,0.35);
+	}
+
+	.gift-card {
+		margin-top: 20px;
+		padding: 10px 5px 10px 10px;
+		display: none;
+
+		&.show {
+			display: block;
+		}
+
+		.redeem, .give {
+			padding: 0 15px 0 10px;
+			height: 40px;
+			display: none;
+			font: normal 300 1em/1 $font;
+			cursor: pointer;
+
+			&.show {
+				display: block;
+			}
+
+			.title {
+				color: $primary-blue;
+				line-height: 1.5em;
+			}
+
+			.sub {
+				font-size: 0.6em;
+				font-weight: 400;
+				color: $tertiary-grey;
+				text-transform: uppercase;
+			}
+
+			@include icon('arrow-next_hover', $side: after, $left: auto, $right: 5px, $top: 10px);
+
+		}
+
+		.give {
+			padding-bottom: 10px;
+		}
+
+		.redeem {
+			padding-top: 10px;
+			border-top: 1px solid #efefef;
 		}
 	}
 

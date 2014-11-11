@@ -14,6 +14,7 @@ Ext.define('NextThought.model.store.Purchasable', {
 		{ name: 'BulkPurchase', type: 'bool', persist: false },
 		{ name: 'Discountable', type: 'bool', persist: false },
 		{ name: 'Provider', type: 'string', persist: false },
+		{ name: 'Giftable', type: 'bool', persist: false },
 		{ name: 'Title', type: 'string', persist: false },
 		{ name: 'Icon', type: 'string', persist: false },
 		{ name: 'Description', type: 'string', persist: false },
@@ -55,5 +56,13 @@ Ext.define('NextThought.model.store.Purchasable', {
 		} finally {
 			Ext.callback(callback);
 		}
+	},
+
+	isGiftable: function() {
+		return !!this.getLink('gift_stripe_payment');
+	},
+
+	isRedeemable: function() {
+		return !!this.getLink('redeem_gift');
 	}
 });

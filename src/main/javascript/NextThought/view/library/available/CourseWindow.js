@@ -438,13 +438,13 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 	},
 
 
-	showEnrollmentOption: function(course, name) {
+	showEnrollmentOption: function(course, name, type) {
 		var me = this;
 
 		function addView() {
 			me.courseEnrollment = me.add({
 				xtype: 'enrollment-process',
-				steps: CourseWareUtils.Enrollment.getEnrollmentSteps(course, name),
+				steps: CourseWareUtils.Enrollment.getEnrollmentSteps(course, name, type),
 				course: course
 			});
 		}

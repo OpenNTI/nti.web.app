@@ -43,6 +43,15 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 					{cls: 'info', html: '{drop}'}
 				]}
 			]}
+		]},
+		{cls: 'gift-card {base.giftClass}', cn: [
+			{cls: 'give {base.giveClass}', cn: [
+				{cls: 'title', html: 'Give This Course as a Gift'},
+				{cls: 'sub', html: '{base.giveTitle}'}
+			]},
+			{cls: 'redeem {base.redeemClass}', cn: [
+				{cls: 'title', html: 'Redeem a Gift'}
+			]}
 		]}
 	])),
 
@@ -488,6 +497,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 	handleEnrollmentClick: function(e) {
 		var checkbox = e.getTarget('.addon.checkbox'),
 			button = e.getTarget('.button'),
+			gift = e.getTarget('.gift-card'),
 			anchor = e.getTarget('a'), r;
 
 		if (checkbox) {
@@ -496,6 +506,8 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			r = this.enrollmentClicked(Ext.get(button), e);
 		} else if (anchor) {
 			r = this.linkClicked(Ext.get(anchor), e);
+		} else if (gift) {
+			r = this.giftClicked(Ext.get(gift), e);
 		}
 
 		return r;
@@ -701,6 +713,19 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			}
 		}
 
+	},
+
+
+	giftClicked: function(el, e) {
+		var give = e.getTarget('.give'),
+			redeem = e.getTarget('.redeem'),
+			option = this.enrollmentOptions.StoreEnrollment;
+
+		if (give) {
+			option.doEnrollment(this, 'gift');
+		} else if (redeem) {
+			option.doEnrollment(this, 'redeem');
+		}
 	},
 
 

@@ -264,7 +264,9 @@ Ext.define('NextThought.controller.Store', function() {
 						'price-enroll-purchase': 'priceEnrollmentPurchase',
 						'create-enroll-purchase': 'createEnrollmentPurchase',
 						'submit-enroll-purchase': 'submitEnrollmentPurchase',
-						'redeem-enrollment-token': 'enrollWithCode'
+						'redeem-enrollment-token': 'enrollWithCode',
+						'create-gift-purchase': 'createEnrollmentPurchase',
+						'submit-gift-purchase': 'submitGiftPurchase'
 					}
 				},
 				'controller': {
@@ -709,6 +711,22 @@ Ext.define('NextThought.controller.Store', function() {
 				}
 			};
 
+			if (purchaseDescription.sender !== undefined) {
+				data.sender = purchaseDescription.sender;
+			}
+
+			if (purchaseDescription.from !== undefined) {
+				data.from = purchaseDescription.from;
+			}
+
+			if (purchaseDescription.receiver !== undefined) {
+				data.receiver = purchaseDescription.receiver;
+			}
+
+			if (purchaseDescription.message !== undefined) {
+				data.message = purchaseDescription.message;
+			}
+
 			if (purchaseDescription.Coupon !== undefined) {
 				data.coupon = purchaseDescription.Coupon;
 			}
@@ -793,6 +811,8 @@ Ext.define('NextThought.controller.Store', function() {
 		 * @param {Object} purchaseDescription an object containing the Purchasable, Quantity, and Coupon.  Omitted quantity is assumed 1, Coupon is optional.
 		 * @param {Object} tokenObject the stripe token object
 		 * @param {NextThought.model.store.StripePricedPurchasable} pricingInfo
+		 * @param {Function} success success callback
+		 * @param {Function} failure failure callback
 		 */
 		submitEnrollmentPurchase: function(sender, purchaseDescription, tokenObject, pricingInfo, success, failure) {
 			var me = this;
@@ -833,6 +853,61 @@ Ext.define('NextThought.controller.Store', function() {
 						failure.call(null, {
 							Message: '',
 							tokenObject: tokenObject
+						});
+					}
+				});
+		},
+
+
+		/**
+		 * Make the purchase for purchasable using tokenObject
+		 *
+		 * @param {Component} cmp the owner cmp
+		 * @param {Object} purchaseDescription an object containing the Purchasable, Quantity, and Coupon.  Omitted quantity is assumed 1, Coupon is optional.
+		 * @param {Object} tokenObject the stripe token object
+		 * @param {NextThought.model.store.StripePricedPurchasable} pricingInfo
+		 * @param {Function} success success callback
+		 * @param {Function} failure failure callback
+		 */
+		submitGiftPurchase: function(sender, purchaseDescription, tokenObject, pricingInfo, success, failure) {
+			var me = this;
+
+			if (sender.lockPurchaseAction) {
+				console.error('window already locked aborting submitGirfPurchase', arguments);
+				failure.call(null, {
+					Message: 'Purchase already in progress'
+				});
+				return;
+			}
+
+			sender.lockPurchaseAction = true;
+
+			function done() {
+				delete sender.lockPurchaseAction;
+			}
+
+			me.__attemptPurchase(purchaseDescription, tokenObject, pricingInfo.get('PurchasePrice'), 'gift_stripe_payment')
+				.then(me.__pollPurchaseAttempt.bind(me))
+				.then(function(attempt) {
+					done();
+
+					success.call(null, {
+						Message: 'Purchase attempt success',
+						purchaseAttempt: attempt
+					});
+				})
+				.fail(function(attempt) {
+					done();
+
+					if (attempt && attempt.isPurchaseAttempt) {
+						failure.call(null, {
+							Message: 'Purchase attempt failed',
+							purchaseAttempt: attempt
+						});
+					} else {
+						failure.call(null, {
+							Message: '',
+							tokenObject: tokebObject
 						});
 					}
 				});

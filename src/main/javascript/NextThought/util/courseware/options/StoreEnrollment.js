@@ -9,7 +9,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 
 	EnrolledWording: 'You are enrolled as a Lifelong Learner',
 
-	buildEnrollmentSteps: function(course) {
+	buildEnrollmentSteps: function(course, type) {
 		var option = course.getEnrollmentOption(this.NAME),
 			steps = [];
 
@@ -22,6 +22,19 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 		//option.Refunds = false;
 		option.noRefunds = true;
 
+		if (!type || type === 'self') {
+			steps = this.__addBaseSteps(course, option, steps);
+		} else if (type === 'gift') {
+			steps = this.__addGiftSteps(course, option, steps);
+		} else if (type === 'redeem') {
+			steps = this.__addRedeemSteps(course, option, steps);
+		}
+
+		return steps;
+	},
+
+
+	__addBaseSteps: function(course, option, steps) {
 		this.__addStep({
 			xtype: 'enrollment-purchase',
 			name: 'Payment',
@@ -80,6 +93,82 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 	},
 
 
+	__addGiftSteps: function(course, option, steps) {
+		this.__addStep({
+			xtype: 'enrollment-gift-purchase',
+			name: 'Payment',
+			hasPricingCard: true,
+			enrollmentOption: option,
+			isComplete: function() { return Promise.reject(); },
+			complete: function(cmp, data) {
+				if (!data.purchaseDescription || !data.cardInfo) {
+					console.error('Incorrect data passed to complete', arguments);
+					return Promise.reject();
+				}
+
+				return new Promise(function(fulfill, reject) {
+					cmp.fireEvent('create-gift-purchase', cmp, data.purchaseDescription, data.cardInfo, fulfill, reject);
+				});
+			}
+		}, steps);
+
+
+		this.__addStep({
+			xtype: 'enrollment-paymentconfirmation',
+			name: 'Verification',
+			enrollmentOption: option,
+			hasPricingCard: true,
+			goBackOnError: true,
+			isComplete: function() { return Promise.reject(); },
+			complete: function(cmp, data) {
+				if (!data.purchaseDescription || !data.tokenObject || !data.pricingInfo) {
+					console.error('Incorrect data passed to complete', arguments);
+					return Promise.reject();
+				}
+
+				return new Promise(function(fulfill, reject) {
+					cmp.fireEvent('submit-gift-purchase', cmp, data.purchaseDescription, data.tokenObject, data.pricingInfo, fulfill, reject);
+				});
+			}
+		}, steps);
+
+		this.__addStep({
+			xtype: 'enrollment-confirmation',
+			name: 'Confirmation',
+			enrollmentOption: option,
+			hasPricingCard: true,
+			isComplete: function() { return Promise.resolve(); }
+		}, steps);
+
+		return steps;
+	},
+
+
+	__addRedeemSteps: function(course, option, steps) {
+		this.__addStep({
+			xtype: 'enrollment-gift-redeem',
+			name: 'Redeem',
+			enrollmentOption: option,
+			hasPricingCard: false,
+			isComplete: function() { return Promise.reject(); },
+			complete: function(cmp, data) {
+
+				return new Promise(function(fulfill, reject) {
+					cmp.fire('redeem-gift', cmp);
+				});
+			}
+		});
+
+		this.__addStep({
+			xtype: 'enrollment-confirmation',
+			name: 'Confirmation',
+			enrollmentOption: option,
+			hasPricingCard: false,
+			isComplete: function() { return Promise.resolve(); }
+		});
+	},
+
+
 	ENROLLMENT_STATES: getString('EnrollmentText').StoreEnrollment || {},
 
 
@@ -109,6 +198,17 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 				state.buttonText = 'Enroll as a Lifelong Learner';
 				state.price = details.Price;
 			}
+		}
+
+		if (option.Purchasable.isGiftable()) {
+			state.giftClass = 'show';
+			state.giveClass = 'show';
+			state.giveTitle = 'Lifelong Learner Only';
+		}
+
+		if (option.Purchasable.isRedeemable()) {
+			state.giftClass = 'show';
+			state.redeemClass = 'show';
 		}
 
 		state.name = this.NAME;
@@ -151,10 +251,12 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 					Name: me.NAME,
 					BaseOption: me.isBase,
 					Enrolled: option.IsEnrolled,
+					Giftable: option.Purchasable && option.Purchasable.isGiftable(),
+					Redeemable: option.Purchasable && option.Purchasable.isRedeemable(),
 					Price: null,
 					Wording: me.__getEnrollmentText(details, option),
-					doEnrollment: function(cmp) {
-						cmp.fireEvent('enroll-in-course', course, me.NAME);
+					doEnrollment: function(cmp, type) {
+						cmp.fireEvent('enroll-in-course', course, me.NAME, type);
 					},
 					undoEnrollment: null
 				};
