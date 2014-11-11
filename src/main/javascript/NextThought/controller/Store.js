@@ -685,6 +685,107 @@ Ext.define('NextThought.controller.Store', function() {
 		},
 
 
+		__attemptPurchase: function(purchaseDescription, tokenObject, expectedPrice, linkName) {
+			var purchasable = purchaseDescription.Purchasable,
+				tokenId = tokenObject.id,
+				url = purchasable && purchasable.getLink(linkName),
+				data;
+
+			if (!purchasable || !tokenId) {
+				console.error('Invalid arugments supplied to submit purchase', arguments);
+				return Promise.reject();
+			}
+
+			if (!url) {
+				console.error('No link with that name', linkName, purchasable);
+				return Promise.reject();
+			}
+
+			data = {
+				token: tokenId,
+				purchasableID: purchasable.getId(),
+				context: {
+					AllowVendorUpdates: purchaseDescription.subscribe
+				}
+			};
+
+			if (purchaseDescription.Coupon !== undefined) {
+				data.coupon = purchaseDescription.Coupon;
+			}
+
+			if (purchaseDescription.Quantity) {
+				data.quantity = purchaseDescription.Quantity;
+			}
+
+			if (expectedPrice !== undefined) {
+				data.expectedAmount = expectedPrice;
+			}
+
+			return Service.post(url, data)
+					.then(this.__parsePurchaseAttempt.bind(this));
+		},
+
+		__parsePurchaseAttempt: function(response) {
+			var result = Ext.JSON.decode(response, true);
+
+			if (result) {
+				result = ParseUtils.parseItems(result.Items || result)[0];
+			}
+
+			if (!result || !result.isPurchaseAttempt) {
+				console.error('Unexpected response type');
+
+				return Promise.reject();
+			}
+
+			return result;
+		},
+
+
+		__pollPurchaseAttempt: function(purchaseAttempt) {
+			var me = this,
+				startedPollingAt = (new Date()).getTime(),
+				maxWaitInMillis = 2 * 60 * 1000, //2 minutes
+				pollingIntervalInMillis = 5 * 1000; //5 seconds
+
+			function poll(attempt) {
+				var url = attempt.getLink('get_purchase_attempt');
+
+				return Service.request(url)
+						.then(me.__parsePurchaseAttempt.bind(me));
+			}
+
+			return new Promise(function(fulfill, reject) {
+				function process(delay, attempt) {
+					var now = (new Date()).getTime();
+
+					if (attempt && attempt.isComplete()) {
+						if (attempt.isSuccess()) {
+							fulfill(attempt);
+						} else if (attempt.isFailure()) {
+							reject(attempt);
+						} else {
+							reject();
+						}
+					} else if (startedPollingAt + maxWaitInMillis < now) {
+						reject(attempt);
+					} else if (delay) {
+						wait(delay)
+							.then(poll.bind(me, attempt))
+							.then(process.bind(me, pollingIntervalInMillis))
+							.fail(reject);
+					} else {
+						poll(attempt)
+							.then(process.bind(me, pollingIntervalInMillis))
+							.fail(reject);
+					}
+				}
+
+				process(0, purchaseAttempt);
+			});
+
+		},
+
 		/**
 		 * Make the purchase for purchasable using tokenObject
 		 *
@@ -694,64 +795,47 @@ Ext.define('NextThought.controller.Store', function() {
 		 * @param {NextThought.model.store.StripePricedPurchasable} pricingInfo
 		 */
 		submitEnrollmentPurchase: function(sender, purchaseDescription, tokenObject, pricingInfo, success, failure) {
-			var purchasable = purchaseDescription.Purchasable,
-				delegate, me = this;
+			var me = this;
 
 			if (sender.lockPurchaseAction) {
 				console.error('window already locked aborting submitEnrollmentPurchase', arguments);
+				failure.call(null, {
+					Message: 'Purchase already in progress'
+				});
 				return;
 			}
 
 			sender.lockPurchaseAction = true;
 
 			function done() {
-				delete me.paymentProcessor;
 				delete sender.lockPurchaseAction;
 			}
 
-			delegate = {
-				purchaseAttemptCompleted: function(helper, purchaseAttempt) {
+			me.__attemptPurchase(purchaseDescription, tokenObject, pricingInfo.get('PurchasePrice'), 'purchase')
+				.then(me.__pollPurchaseAttempt.bind(me))
+				.then(function(attempt) {
 					done();
 
 					success.call(null, {
 						Message: 'Purchase attempt success',
-						purchaseAttempt: purchaseAttempt
+						purchaseAttempt: attempt
 					});
-				},
-				purchaseAttemptFailed: function(helper, purchaseAttempt) {
+				})
+				.fail(function(attempt) {
 					done();
 
-					failure.call(null, {
-						purchaseAttempt: purchaseAttempt,
-						Message: 'Purchase attempt failed'
-					});
-				},
-				purchaseAttemptTimedOut: function() {
-					done();
-
-					failure.call(null, {
-						Message: ''
-					});
-				},
-				purchaseAttemptCompletedWithUnknownStatus: function() {
-					done();
-
-					failure.call(null, {
-						Message: ''
-					});
-				}
-			};
-
-			try {
-				me.paymentProcessor = new PurchaseHelper(purchaseDescription, tokenObject, pricingInfo.get('PurchasePrice'), delegate, me);
-			} catch (e) {
-				console.error('An error occurred initiating payment.', e, arguments);
-				failure.call(null, {
-					Message: 'An error occurred initiating payment. Please try again later.',
-					tokenObject: tokenObject
+					if (attempt && attempt.isPurchaseAttempt) {
+						failure.call(null, {
+							Message: 'Purchase attempt failed',
+							purchaseAttempt: attempt
+						});
+					} else {
+						failure.call(null, {
+							Message: '',
+							tokenObject: tokenObject
+						});
+					}
 				});
-				done();
-			}
 		},
 
 
