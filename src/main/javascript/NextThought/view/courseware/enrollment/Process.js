@@ -7,7 +7,8 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 		'NextThought.view.courseware.enrollment.Enroll',
 		'NextThought.view.courseware.enrollment.Admission',
 		'NextThought.view.courseware.enrollment.PaymentConfirmation',
-		'NextThought.view.courseware.enrollment.Gift'
+		'NextThought.view.courseware.enrollment.Gift',
+		'NextThought.view.courseware.enrollment.Redeem'
 	],
 
 	layout: 'card',

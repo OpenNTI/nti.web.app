@@ -2,17 +2,6 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 	extend: 'NextThought.view.courseware.enrollment.Purchase',
 	alias: 'widget.enrollment-gift-purchase',
 
-	requires: [
-		'NextThought.view.courseware.enrollment.parts.*',
-		'NextThought.mixins.enrollment-feature.Form'
-	],
-
-	mixins: {
-		form: 'NextThought.mixins.enrollment-feature.Form'
-	},
-
-	defaultType: 'enrollment-group',
-
 	buttonCfg: [
 		{name: 'Submit', disabled: true, action: 'submit-payment'},
 		{name: 'Cancel', disabled: false, action: 'go-back', secondary: true}
@@ -20,7 +9,7 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 
 	STATE_NAME: 'gift-form',
 
-		form: [
+	form: [
 		{
 			name: 'gift',
 			label: 'Gift Information',

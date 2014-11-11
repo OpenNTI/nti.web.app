@@ -116,6 +116,10 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 
 		if (!card || !this.rendered) { return; }
 
+
+		this.submitButton.disabled = false;
+		this.fireEvent('update-buttons');
+
 		if (this.enrollmentOption.AllowVendorUpdates) {
 			this.subscribeLabelEl.update(getString('SubscribeToVendor') || 'Subscribe to updates.');
 			this.subscribeLegalEl.update(getString('SubscribeToVendorLegal'));

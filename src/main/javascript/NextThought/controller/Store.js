@@ -265,9 +265,9 @@ Ext.define('NextThought.controller.Store', function() {
 						'price-enroll-purchase': 'priceEnrollmentPurchase',
 						'create-enroll-purchase': 'createEnrollmentPurchase',
 						'submit-enroll-purchase': 'submitEnrollmentPurchase',
-						'redeem-enrollment-token': 'enrollWithCode',
 						'create-gift-purchase': 'createEnrollmentPurchase',
-						'submit-gift-purchase': 'submitGiftPurchase'
+						'submit-gift-purchase': 'submitGiftPurchase',
+						'redeem-gift': 'redeemGift'
 					}
 				},
 				'controller': {
@@ -914,42 +914,48 @@ Ext.define('NextThought.controller.Store', function() {
 				});
 		},
 
-
-		enrollWithCode: function(sender, purchasable, code, success, failure) {
-			var url = Service.getStoreActivationURL(),
-				me = this;
+		/**
+		 * Submit a redeem token for a purchasable
+		 * @param  {Ext.Component} sender      the component sending the request
+		 * @param  {NextThought.model.store.Purchasable} purchasable the purchasable the token is for
+		 * @param  {String} token       the redeem token
+		 * @param  {Function} success   success callback
+		 * @param  {Function} failure   failure callback
+		 */
+		redeemGift: function(sender, purchasable, token, success, failure) {
+			var me = this,
+				url = purchasable && purchasable.getLink('redeem_gift');
 
 			if (sender.lockPurchaseAction) {
-				console.error('already locked aborting activation code', arguments);
+				console.error('Window already locked aborting redeem gift', arguments);
+				failure.call();
+				return;
+			}
+
+			if (!url) {
+				console.error('No redeem gift link');
 				failure.call();
 				return;
 			}
 
 			sender.lockPurchaseAction = true;
 
-			if (!url) {
-				console.error('No url to redeem activation key with');
-				failure.call(null, {Message: 'Unable to redeem your activation key. Please try again later.'});
-				return;
+			function done() {
+				delete sender.lockPurchaseAction;
 			}
 
-			try {
-				me.doEnrollmentPricingRequest(url, {purchasableID: purchasable.getId(), invitation_code: code})
-					.then(function() {
-						delete sender.lockPurchaseAction;
-						me.refreshPurchasable(purchasable);
-						success.call();
-					})
-					.fail(function(reason) {
-						console.error('An unexpected error occurred trying to redeem activation code', reason);
-						delete sender.lockPurchaseAction;
-						failure.call(null, {Message: 'A problem occurred redeeming your activation key'});
-					});
-			} catch (e) {
-				console.error('An unexpected error occurred trying to redeem activation code', e);
-				delete sender.lockPurchaseAction;
-				failure.call(null, {Message: 'A problem occurred redeeming your activation key'});
-			}
+			Service.post(url, {
+				code: token
+			})
+				.then(function() {
+					done();
+					success.call();
+				})
+				.fail(function(reason) {
+					done();
+
+					failure.call();
+				});
 		},
 
 

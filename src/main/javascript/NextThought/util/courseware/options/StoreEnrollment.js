@@ -152,12 +152,20 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 			hasPricingCard: false,
 			isComplete: function() { return Promise.reject(); },
 			complete: function(cmp, data) {
-
+				if (!data.token || !data.purchasable) {
+					console.error('Incorrect data passed to redeem', arguments);
+					return Promise.reject();
+				}
 				return new Promise(function(fulfill, reject) {
-					cmp.fire('redeem-gift', cmp);
+					cmp.fireEvent('redeem-gift', cmp, data.purchasable, data.token, fulfill, reject);
+				}).then(function(result) {
+					//trigger the library to reload
+					return new Promise(function(fulfill, reject) {
+						cmp.fireEvent('enrollment-enrolled-complete', fulfill, reject);
+					});
 				});
 			}
-		});
+		}, steps);
 
 		this.__addStep({
 			xtype: 'enrollment-confirmation',
@@ -165,7 +173,9 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 			enrollmentOption: option,
 			hasPricingCard: false,
 			isComplete: function() { return Promise.resolve(); }
-		});
+		}, steps);
+
+		return steps;
 	},
 
 
@@ -206,7 +216,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 			state.giveTitle = 'Lifelong Learner Only';
 		}
 
-		if (option.Purchasable.isRedeemable()) {
+		if (option.Purchasable.isRedeemable() && !details.Enrolled) {
 			state.giftClass = 'show';
 			state.redeemClass = 'show';
 		}
@@ -251,8 +261,6 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 					Name: me.NAME,
 					BaseOption: me.isBase,
 					Enrolled: option.IsEnrolled,
-					Giftable: option.Purchasable && option.Purchasable.isGiftable(),
-					Redeemable: option.Purchasable && option.Purchasable.isRedeemable(),
 					Price: null,
 					Wording: me.__getEnrollmentText(details, option),
 					doEnrollment: function(cmp, type) {
