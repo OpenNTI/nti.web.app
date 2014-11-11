@@ -951,10 +951,12 @@ Ext.define('NextThought.controller.Store', function() {
 					done();
 					success.call();
 				})
-				.fail(function(reason) {
+				.fail(function(response) {
 					done();
 
-					failure.call();
+					var json = Ext.decode(response && response.responseText, true);
+
+					failure.call(null, json);
 				});
 		},
 
