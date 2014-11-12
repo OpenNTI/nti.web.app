@@ -26,6 +26,10 @@ Ext.define('NextThought.view.courseware.enrollment.parts.BaseInput', {
 		}
 
 		this.addCls(this.otherCls);
+
+		this.el.set({
+			'data-fieldname': this.name
+		});
 	},
 
 
