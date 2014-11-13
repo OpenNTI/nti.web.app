@@ -107,7 +107,7 @@ Ext.define('NextThought.mixins.enrollment-feature.Form', {
 			return;
 		}
 
-		if (name === 'enable-submit' || name === 'enable-contact-submit') {
+		if (name.indexOf('enable-submit') === 0) {
 			me.submitBtnCfg.disabled = true;
 			me.fireEvent('update-buttons');
 		}
