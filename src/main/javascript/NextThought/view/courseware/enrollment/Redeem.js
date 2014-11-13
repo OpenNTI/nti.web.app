@@ -18,7 +18,7 @@ Ext.define('NextThought.view.courseware.enrollment.Redeem', {
 					xtype: 'enrollment-set',
 					label: '',
 					inputs: [
-						{type: 'text', name: 'token', size: 'full', placeholder: 'Token'}
+						{type: 'text', name: 'token', size: 'full', placeholder: 'Token', required: true}
 					]
 				},
 				{
@@ -41,24 +41,30 @@ Ext.define('NextThought.view.courseware.enrollment.Redeem', {
 
 
 	maybeSubmit: function() {
-		var me = this,
+		var me = this, invalid,
 			value = me.getValue();
 
 		value.purchasable = me.enrollmentOption.Purchasable;
 
 		me.shouldAllowSubmission()
 			.then(function() {
+				invalid = false;
 				me.submitBtnCfg.disabled = true;
 				me.fireEvent('update-buttons');
 				me.addMask('Processing token.');
 				return me.complete(me, value);
+			}, function() {
+				invalid = true;
+				return Promise.reject();
 			})
 			.then(function(result) {
 				me.done(me);
 			})
 			.fail(function(error) {
-				me.removeMask();
-				me.showError(error);
+				if (!invalid) {
+					me.removeMask();
+					me.showError(error);
+				}
 			});
 	}
 
