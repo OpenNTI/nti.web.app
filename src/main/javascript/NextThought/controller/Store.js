@@ -970,6 +970,12 @@ Ext.define('NextThought.controller.Store', function() {
 
 					var json = Ext.decode(response && response.responseText, true);
 
+					if (!json) {
+						json = {
+							Message: 'An unknown error occurred. Please try again later.'
+						};
+					}
+
 					failure.call(null, json);
 				});
 		},
