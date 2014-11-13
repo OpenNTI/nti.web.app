@@ -681,9 +681,11 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 	shouldAllowSubmission: function(value) {
 		var me = this,
 			preflightlink = $AppConfig.userObject.getLink('fmaep.admission.preflight'),
-			groupConfig = me.groups[value.group];
+			groupConfig;
 
 		value = value || me.getValue();
+
+		groupConfig = me.groups[value.group];
 
 		return new Promise(function(fulfill, reject) {
 			if (!me.isValid(value.group)) {

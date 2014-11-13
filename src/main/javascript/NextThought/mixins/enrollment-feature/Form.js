@@ -147,7 +147,7 @@ Ext.define('NextThought.mixins.enrollment-feature.Form', {
 		if (name.indexOf('enable-submit') === 0) {
 			me.submitBtnCfg.disabled = false;
 
-			me.shouldAllowSubmission({group: me.eventToGroup[name]})
+			me.shouldAllowSubmission()
 				.always(me.fireEvent.bind(me, 'update-buttons'));
 		}
 
