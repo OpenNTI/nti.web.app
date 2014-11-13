@@ -34,6 +34,13 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 					xtype: 'enrollment-set',
 					label: '',
 					inputs: [
+						{type: 'checkbox', name: 'immediate', text: 'Send an email to the recipient right away.'}
+					]
+				},
+				{
+					xtype: 'enrollment-set',
+					label: '',
+					inputs: [
 						{type: 'text', name: 'message', size: 'full', placeholder: 'Message'}
 					]
 				}
@@ -140,6 +147,7 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 		desc.receiver = formValue.receiver;
 		desc.message = formValue.message;
 		desc.to = formValue.to;
+		desc.immediate = formValue.immediate;
 
 		return desc;
 	}

@@ -738,6 +738,14 @@ Ext.define('NextThought.controller.Store', function() {
 				data.receiver = purchaseDescription.receiver;
 			}
 
+			if (purchaseDescription.to !== undefined) {
+				data.to = purchaseDescription.to;
+			}
+
+			if (purchaseDescription.immediate !== undefined) {
+				data.immediate = purchaseDescription.immediate;
+			}
+
 			if (purchaseDescription.message !== undefined) {
 				data.message = purchaseDescription.message;
 			}
