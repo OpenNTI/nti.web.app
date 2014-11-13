@@ -922,7 +922,7 @@ Ext.define('NextThought.controller.Store', function() {
 					} else {
 						failure.call(null, {
 							Message: '',
-							tokenObject: tokebObject
+							tokenObject: tokenObject
 						});
 					}
 				});
