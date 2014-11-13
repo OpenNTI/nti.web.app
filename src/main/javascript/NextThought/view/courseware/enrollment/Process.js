@@ -47,6 +47,8 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 		this.enableBubble('update-buttons');
 
 		(this.steps || []).forEach(this.addStep.bind(this));
+
+		this.on('beforedeactivate', 'clearStorage', this);
 	},
 
 
@@ -56,6 +58,15 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 		this.addTabs(this.tabsToAdd);
 
 		this.activateStep(0);
+	},
+
+
+	clearStorage: function(all) {
+		this.items.each(function(item) {
+			if (item.clearStorage) {
+				item.clearStorage();
+			}
+		});
 	},
 
 
@@ -186,6 +197,7 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 		step.hasMask = this.hasMask.bind(this);
 		step.hidePricingInfo = this.hidePricingInfo.bind(this);
 		step.showPrice = this.updatePricingInfo.bind(this);
+		step.clearProcessStorage = this.clearStorage.bind(this);
 		step.index = i;
 
 		if (step.xtype) {

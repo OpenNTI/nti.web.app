@@ -301,6 +301,7 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 				console.log('Payment successful', arguments);
 				me.enrollmentOption.purchaseAttempt = result.purchaseAttempt;
 				me.removeMask();
+				me.clearProcessStorage();
 				me.done(me);
 			})
 			.fail(function(reason) {
