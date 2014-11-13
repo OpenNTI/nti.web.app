@@ -99,7 +99,14 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 					xtype: 'enrollment-set',
 					reveals: 'enable-submit-concurrent',
 					inputs: [
-						{type: 'checkbox', name: 'affirm', doNotSend: true, doNotStore: true, correct: true, text: 'I want someone from the University of Oklahoma to contact me'}
+						{
+							type: 'checkbox',
+							name: 'affirm-contact',
+							doNotSend: true,
+							doNotStore: true,
+							correct: true,
+							text: 'I want someone from the University of Oklahoma to contact me'
+						}
 					]
 				}
 			]
