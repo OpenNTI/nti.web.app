@@ -289,6 +289,8 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 			} else if (json.Type && json.Type === 'PricingError') {
 				error.field = 'coupon';
 				error.Message = json.Message;
+			} else if (json.Type && json.Type === 'FormError') {
+				error = json;
 			} else {
 				error.Message = 'An unknown error occurred. Please try again later.';
 			}
@@ -339,6 +341,8 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 				if (!invalid) {
 					console.error('failed to create token', arguments);
 					me.removeMask();
+					me.submitBtnCfg.disabled = false;
+					me.fireEvent('update-buttons');
 					me.showStripeError(error);
 				}
 			});

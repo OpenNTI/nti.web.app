@@ -678,8 +678,22 @@ Ext.define('NextThought.controller.Store', function() {
 			sender.lockPurchaseAction = true;
 
 			try {
-				Stripe.setPublishableKey(pKey);
-				Stripe.createToken(cardinfo, tokenResponseHandler);
+				if (desc.from && !Globals.isEmail(desc.from)) {
+					onFail({
+						Type: 'FormError',
+						Message: 'Invalid Email',
+						field: 'from'
+					});
+				} else if (desc.receiver && !Globals.isEmail(desc.receiver)) {
+					onFail({
+						Type: 'FormError',
+						Message: 'Invalid Email',
+						field: 'receiver'
+					});
+				} else {
+					Stripe.setPublishableKey(pKey);
+					Stripe.createToken(cardinfo, tokenResponseHandler);
+				}
 			} catch (e) {
 				console.error('Error generating a stripe token', e);
 				delete sender.lockPurchaseAction;
