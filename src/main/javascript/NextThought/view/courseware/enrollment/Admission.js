@@ -835,7 +835,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 		preflight
 			.then(function() {
 				isValid = true;
-				me[groupConfig.submit].call(me, value);
+				return me[groupConfig.submit].call(me, value);
 			}, function() {
 				isValid = false;
 
