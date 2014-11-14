@@ -701,7 +701,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 						{
 							type: 'description',
 							text: 'We\'ve received your contact info and a Concurrent Enrollment Counselor will be contacting you shortly. ' +
-									'In the meantime feel free to explore the' +
+									'In the meantime feel free to explore the ' +
 									'<a href="http://www.ou.edu/content/go2/admissions/concurrent.html" target="_blank">Concurrent Enrollment website</a> ' +
 									'to learn more about the process.'
 						}
