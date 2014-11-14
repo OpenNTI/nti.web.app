@@ -16,32 +16,30 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 			items: [
 				{
 					xtype: 'enrollment-set',
-					label: 'From:',
 					inputs: [
-						{type: 'text', name: 'sender', required: true, size: 'large left', placeholder: 'Full Name'},
-						{type: 'text', name: 'from', required: true, size: 'large left', placeholder: 'Email'}
+						{
+							type: 'description',
+							text: 'If you would like for us to send a gift notification to the person for whom you are purchasing this course, ' +
+									'please enter their name and email below. Pricing information is not included in this notification'
+						}
 					]
 				},
 				{
 					xtype: 'enrollment-set',
-					label: 'To:',
+					labelCls: 'gift-recipient',
+					label: 'Gift Recipient (Optional)',
 					inputs: [
-						{type: 'text', name: 'to', size: 'large left', placeholder: 'Full Name'},
-						{type: 'text', name: 'receiver', size: 'large left', placeholder: 'Email'}
+						{type: 'text', name: 'to_first_name', size: 'large left', placeholder: 'First Name'},
+						{type: 'text', name: 'to_last_name', size: 'large left', placeholder: 'Last Name'},
+						{type: 'text', name: 'receiver', size: 'large left last', placeholder: 'Email Address'}
 					]
 				},
 				{
 					xtype: 'enrollment-set',
-					label: '',
+					labelCls: 'gift-message',
 					inputs: [
-						{type: 'checkbox', name: 'immediate', text: 'Send an email to the recipient right away.'}
-					]
-				},
-				{
-					xtype: 'enrollment-set',
-					label: '',
-					inputs: [
-						{type: 'text', name: 'message', size: 'full', placeholder: 'Message'}
+						{type: 'text', name: 'sender', size: 'full', placeholder: 'From'},
+						{type: 'textarea', name: 'message', placeholder: 'Enter your message here...'}
 					]
 				}
 			]
@@ -50,6 +48,19 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 			name: 'payment',
 			label: 'Payment Information',
 			items: [
+				{
+					xtype: 'enrollment-set',
+					inputs: [
+						{
+							type: 'text',
+							name: 'from',
+							required: true,
+							placeholder: 'Email Address',
+							size: 'large',
+							help: 'This is where we will send your purchase confirmation.'
+						}
+					]
+				},
 				{
 					xtype: 'enrollment-set',
 					label: 'Coupon',
@@ -163,8 +174,8 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 		desc.from = formValue.from;
 		desc.receiver = formValue.receiver;
 		desc.message = formValue.message;
-		desc.to = formValue.to;
-		desc.immediate = formValue.immediate;
+		desc.to = formValue.to_first_name + ' ' + formValue.to_last_name;
+		desc.immediate = !!formValue.reviever;
 
 		return desc;
 	}

@@ -14,6 +14,7 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Set', {
 		'NextThought.view.courseware.enrollment.parts.RadioGroup',
 		'NextThought.view.courseware.enrollment.parts.Checkbox',
 		'NextThought.view.courseware.enrollment.parts.TextInput',
+		'NextThought.view.courseware.enrollment.parts.Textarea',
 		'NextThought.view.courseware.enrollment.parts.CheckboxGroup',
 		'NextThought.view.courseware.enrollment.parts.DropDown',
 		'NextThought.view.courseware.enrollment.parts.SubmitButton',
@@ -23,6 +24,7 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Set', {
 
 	typesMap: {
 		'text': 'enrollment-textinput',
+		'textarea': 'enrollment-textarea',
 		'checkbox': 'enrollment-checkbox',
 		'radio-group': 'enrollment-radiogroup',
 		'description': 'enrollment-description',
@@ -150,6 +152,10 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Set', {
 
 		if (this.hides) {
 			this.fireEvent('hide-item', this.hides);
+		}
+
+		if (this.labelCls) {
+			this.addCls(this.labelCls);
 		}
 	},
 
