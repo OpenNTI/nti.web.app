@@ -26,8 +26,8 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 					xtype: 'enrollment-set',
 					label: 'To:',
 					inputs: [
-						{type: 'text', name: 'to', required: true, size: 'large left', placeholder: 'Full Name'},
-						{type: 'text', name: 'receiver', required: true, size: 'large left', placeholder: 'Email'}
+						{type: 'text', name: 'to', size: 'large left', placeholder: 'Full Name'},
+						{type: 'text', name: 'receiver', size: 'large left', placeholder: 'Email'}
 					]
 				},
 				{
@@ -137,6 +137,23 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 			]
 		}
 	],
+
+	fillInDefaults: function(values) {
+		var user = $AppConfig.userObject,
+			firstName = user.get('FirstName'),
+			lastName = user.get('LastName'),
+			email = user.get('email');
+
+		if (!values.from && email) {
+			values.from = email;
+		}
+
+		if (!values.sender && firstName) {
+			values.sender = firstName + (lastName ? ' ' + lastName : '');
+		}
+
+		return values;
+	},
 
 
 	getPricingInfo: function(formValue) {
