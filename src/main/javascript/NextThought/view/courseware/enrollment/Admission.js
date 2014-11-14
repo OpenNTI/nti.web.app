@@ -58,8 +58,10 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 					inputs: [
 						{
 							type: 'description',
-							text: 'Enter your contact information below and my boy from ' +
-									'The University of Oklahoma will holla back at you.'
+							text: 'You may be eligible to take this course through Concurrent Enrollment at the University of Oklahoma. ' +
+									'Please enter your contact information below and a representative from the University of Oklahoma will reach out to you. ' +
+									'Additionally, you can visit <a href="http://www.ou.edu/content/go2/admissions/concurrent.html" target="_blank">Concurrent Enrollment</a>' +
+									' for more information.'
 						}
 					]
 				},
