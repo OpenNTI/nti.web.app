@@ -211,15 +211,18 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 			}
 		}
 
-		if (option.Purchasable.isGiftable()) {
-			state.giftClass = 'show';
-			state.giveClass = 'show';
-			state.giveTitle = 'Lifelong Learner Only';
-		}
 
-		if (option.Purchasable.isRedeemable() && !details.Enrolled) {
-			state.giftClass = 'show';
-			state.redeemClass = 'show';
+		if (isFeature('course-gifts')) {
+			if (option.Purchasable.isGiftable()) {
+				state.giftClass = 'show';
+				state.giveClass = 'show';
+				state.giveTitle = 'Lifelong Learner Only';
+			}
+
+			if (option.Purchasable.isRedeemable() && !details.Enrolled) {
+				state.giftClass = 'show';
+				state.redeemClass = 'show';
+			}
 		}
 
 		state.name = this.NAME;
