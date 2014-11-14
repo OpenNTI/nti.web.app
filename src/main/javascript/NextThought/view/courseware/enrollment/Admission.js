@@ -51,17 +51,17 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 		{
 			name: 'concurrent-contact',
 			group: 'concurrent',
-			label: 'Contact Information',
+			label: 'You May Qualify for Concurrent Enrollment',
 			items: [
 				{
 					xtype: 'enrollment-set',
 					inputs: [
 						{
 							type: 'description',
-							text: 'You may be eligible to take this course through Concurrent Enrollment at the University of Oklahoma. ' +
-									'Please enter your contact information below and a representative from the University of Oklahoma will reach out to you. ' +
-									'Additionally, you can visit <a href="http://www.ou.edu/content/go2/admissions/concurrent.html" target="_blank">Concurrent Enrollment</a>' +
-									' for more information.'
+							text: 'Through Concurrent Enrollment (CE), high school juniors and senior can enroll in college classes and earn ' +
+									'college credit while still in high school. Submit your contact info and date of birth below and a ' +
+									'Concurrent Enrollment Counselor will be in touch to guide you through the ' +
+									'<a href="http://www.ou.edu/content/go2/admissions/concurrent.html" target="_blank">Concurrent Enrollment Process.</a>'
 						}
 					]
 				},
@@ -687,6 +687,31 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 	},
 
 
+	showConcurrentSubmitted: function() {
+		this.removeAll(true);
+
+		this.add({
+			name: 'submitted',
+			labelCls: 'success',
+			label: 'Thank you for your interest in concurrent enrollment.',
+			items: [
+				{
+					xtype: 'enrollment-set',
+					inputs: [
+						{
+							type: 'description',
+							text: 'We\'ve received your contact info and a Concurrent Enrollment Counselor will be contacting you shortly. ' +
+									'In the meantime feel free to explore the' +
+									'<a href="http://www.ou.edu/content/go2/admissions/concurrent.html" target="_blank">Concurrent Enrollment website</a> ' +
+									'to learn more about the process.'
+						}
+					]
+				}
+			]
+		});
+	},
+
+
 	shouldAllowSubmission: function(value) {
 		var me = this,
 			preflightlink = $AppConfig.userObject.getLink('fmaep.admission.preflight'),
@@ -766,8 +791,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 			this.completed = true;
 			this.clearStorage();
 			this.fireEvent('show-msg', (json && json.Message) || 'Your contact information has been sent.', false, 5000);
-			wait(1000)
-				.then(this.fireEvent.bind(this, 'go-back'));
+			this.showConcurrentSubmitted();
 		} else {
 			this.showError(json);
 		}
