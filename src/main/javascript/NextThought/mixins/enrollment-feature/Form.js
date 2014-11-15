@@ -108,8 +108,12 @@ Ext.define('NextThought.mixins.enrollment-feature.Form', {
 		}
 
 		if (name.indexOf('enable-submit') === 0) {
-			me.submitBtnCfg.disabled = true;
-			me.fireEvent('update-buttons');
+			if (!me.locked) {
+				me.submitBtnCfg.disabled = true;
+				me.fireEvent('update-buttons');
+			} else {
+				me.previousDisabled = true;
+			}
 		}
 
 
@@ -145,7 +149,13 @@ Ext.define('NextThought.mixins.enrollment-feature.Form', {
 		//special name to enable the submit button enable-submit*
 		//where the star indicates a group to use
 		if (name.indexOf('enable-submit') === 0) {
-			me.submitBtnCfg.disabled = false;
+			if (!me.locked) {
+				me.submitBtnCfg.disabled = false;
+				me.fireEvent('update-buttons');
+			} else {
+				me.previousDisabled = false;
+			}
+
 
 			me.shouldAllowSubmission()
 				.always(me.fireEvent.bind(me, 'update-buttons'));

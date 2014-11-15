@@ -60,6 +60,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 			enrollmentOption: option,
 			hasPricingCard: true,
 			goBackOnError: true,
+			lockCoupon: true,
 			isComplete: function() {return Promise.reject(); },
 			complete: function(cmp, data) {
 				if (!data.purchaseDescription || !data.tokenObject || !data.pricingInfo) {
@@ -85,6 +86,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 			name: 'Confirmation',
 			heading: 'You\'re Enrolled as a Lifelong Learner',
 			hasPricingCard: true,
+			lockCoupon: true,
 			enrollmentOption: option,
 			isComplete: function() { return Promise.resolve(); }
 		}, steps);
@@ -119,6 +121,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 			enrollmentOption: option,
 			hasPricingCard: true,
 			goBackOnError: true,
+			lockCoupon: true,
 			isComplete: function() { return Promise.reject(); },
 			complete: function(cmp, data) {
 				if (!data.purchaseDescription || !data.tokenObject || !data.pricingInfo) {
@@ -135,6 +138,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 		this.__addStep({
 			xtype: 'enrollment-gift-confirmation',
 			name: 'Confirmation',
+			lockCoupon: true,
 			enrollmentOption: option,
 			hasPricingCard: true,
 			isComplete: function() { return Promise.resolve(); }

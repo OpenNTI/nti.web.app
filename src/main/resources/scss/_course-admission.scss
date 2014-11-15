@@ -76,6 +76,26 @@
 				}
 			}
 
+			.coupon {
+				margin-top: 10px;
+				.label {
+					font-size: 0.8em;
+					text-transform: uppercase;
+					color: $tertiary-grey;
+				}
+
+				.coupon-container {
+					pointer-events: all;
+
+					input {
+						box-shadow: none;
+						border-radius: 0;
+						border: 1px solid #b8b8b8;
+						font-size: 1.1em;
+					}
+				}
+			}
+
 			.refund {
 				color: $primary-red;
 			}

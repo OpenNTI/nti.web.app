@@ -2,6 +2,8 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 	extend: 'Ext.Component',
 	alias: 'widget.enrollment-pricing',
 
+	requires: ['NextThought.view.form.fields.SimpleTextField'],
+
 	base_top: 50,
 
 	cls: 'enrollment-pricing',
@@ -37,6 +39,13 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 					{tag: 'span', cls: 'refund', html: '{refunds}'}
 				]}
 			]},
+			{tag: 'tpl', 'if': 'coupons', cn: [
+				{cls: 'detail coupon', cn: [
+					{tag: 'span', cls: 'label', html: 'I have a coupon'},
+					{cls: 'coupon-value'},
+					{cls: 'coupon-container'}
+				]}
+			]},
 			{cls: 'detail price', cn: [
 				{tag: 'span', cls: 'label', html: 'Total'},
 				{tag: 'span', cls: 'amount', html: '{price}'}
@@ -46,7 +55,17 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 
 
 	renderSelectors: {
-		priceEl: '.amount'
+		priceEl: '.amount',
+		couponLabelEl: '.coupon .label',
+		couponContainerEl: '.coupon-container',
+		couponValueEl: '.coupon-value'
+	},
+
+
+	initComponent: function() {
+		this.callParent(arguments);
+
+		this.enableBubble(['show-msg']);
 	},
 
 
@@ -77,6 +96,7 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 			credit: hours && this.enrollmentOption.hasCredit ? Ext.util.Format.plural(hours, 'Credit Hour') : 'No College Credit',
 			begins: Ext.Date.format(begins, format),
 			ends: Ext.Date.format(ends, format),
+			coupons: !!this.enrollmentOption.Purchasable,
 			price: '$' + this.getPrice(),
 			refunds: refunds
 		});
@@ -93,6 +113,21 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 		} else {
 			this.mon(this.scrollTarget, 'scroll', 'onContainerScroll');
 		}
+
+		if (this.couponContainerEl) {
+			this.couponContainerEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
+			this.couponInput = Ext.widget('simpletext', {
+				inputType: 'text',
+				placeholder: 'Coupon Code',
+				renderTo: this.couponContainerEl
+			});
+
+			this.on('destroy', 'destroy', this.couponInput);
+
+			this.mon(this.couponInput, 'changed', 'update');
+		}
+
+		this.update = Ext.Function.createBuffered(this.update.bind(this), 5000);
 
 		Ext.EventManager.onWindowResize(this.onContainerScroll.bind(this));
 	},
@@ -139,9 +174,70 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 	},
 
 
-	update: function(pricing) {
-		var price = this.getPrice(pricing);
+	update: function(coupon) {
+		if (!coupon) { this.priceEl.update('$' + this.getPrice()); }
 
-		this.priceEl.update('$' + price);
+		var me = this,
+			desc = { Purchasable: me.enrollmentOption.Purchasable };
+
+		if (coupon) {
+			desc.Coupon = coupon.trim();
+		}
+
+		this.lockProcess();
+
+		function onSuccess(result) {
+			me.enrollmentOption.pricing = result;
+			me.priceEl.update('$' + me.getPrice(result));
+			me.unlockProcess();
+		}
+
+		function onFailure(reason) {
+			var msg = reason.Message || 'An unknown error occurred. Please try again later';
+
+			me.priceEl.update('$' + me.getPrice());
+
+			me.fireEvent('show-msg', msg, true, 5000);
+			me.unlockProcess();
+		}
+
+		this.fireEvent('price-enroll-purchase', this, desc, onSuccess, onFailure);
+	},
+
+
+	getCoupon: function() {
+		return this.couponInput.getValue();
+	},
+
+
+	lockCoupon: function() {
+		var pricing = this.enrollmentOption.pricing,
+			coupon = pricing && pricing.get('Coupon'),
+			id = coupon && coupon.ID;
+
+		this.couponLabelEl.update('coupon');
+
+		this.couponContainerEl.hide();
+		this.couponLabelEl.show();
+
+		if (id) {
+			this.couponValueEl.update(id);
+		} else {
+			this.couponValueEl.update('No Coupon');
+		}
+
+	},
+
+	unlockCoupon: function() {
+		var pricing = this.enrollmentOption.pricing,
+			coupon = pricing && pricing.get('Coupon'),
+			id = coupon && coupon.ID;
+
+		this.couponValueEl.hide();
+		this.couponContainerEl.show();
+
+		if (id) {
+			this.couponInput.setValue(id);
+		}
 	}
 });

@@ -83,7 +83,10 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 			course: course,
 			enrollmentOption: enrollmentOption,
 			renderTo: container,
-			scrollTarget: container
+			ownerCt: this,
+			scrollTarget: container,
+			lockProcess: this.lockProcess.bind(this),
+			unlockProcess: this.unlockProcess.bind(this)
 		});
 
 		this.on('destroy', 'destroy', this.pricingInfo);
@@ -97,9 +100,27 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 	},
 
 
-	updatePricingInfo: function(pricing) {
-		if (this.pricingInfo) {
-			this.pricingInfo.update(pricing);
+	getCoupon: function() {
+		return this.pricingInfo && this.pricingInfo.getCoupon();
+	},
+
+
+	lockProcess: function() {
+		var item = this.getLayout().getActiveItem();
+
+		if (item.lock) {
+			item.locked = true;
+			item.lock();
+		}
+	},
+
+
+	unlockProcess: function() {
+		var item = this.getLayout().getActiveItem();
+
+		if (item && item.unlock) {
+			delete item.locked;
+			item.unlock();
 		}
 	},
 
@@ -196,7 +217,7 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 		step.removeMask = this.removeMask.bind(this);
 		step.hasMask = this.hasMask.bind(this);
 		step.hidePricingInfo = this.hidePricingInfo.bind(this);
-		step.showPrice = this.updatePricingInfo.bind(this);
+		step.getCoupon = this.getCoupon.bind(this);
 		step.clearProcessStorage = this.clearStorage.bind(this);
 		step.index = i;
 
@@ -276,6 +297,12 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 				me.showPricingInfo(item.course, item.enrollmentOption);
 			} else {
 				me.hidePricingInfo();
+			}
+
+			if (item.lockCoupon) {
+				me.pricingInfo.lockCoupon();
+			} else {
+				me.pricingInfo.unlockCoupon();
 			}
 
 			me.getLayout().setActiveItem(item);

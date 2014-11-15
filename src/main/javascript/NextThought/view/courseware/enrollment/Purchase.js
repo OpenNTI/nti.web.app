@@ -25,13 +25,6 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 			items: [
 				{
 					xtype: 'enrollment-set',
-					label: 'Coupon',
-					inputs: [
-						{type: 'text', name: 'coupon', placeholder: 'Coupon Code'}
-					]
-				},
-				{
-					xtype: 'enrollment-set',
 					label: 'Credit Card Information',
 					inputs: [
 						{type: 'text', name: 'name', required: true, placeholder: 'Name on Card', size: 'card-name'},
@@ -125,8 +118,6 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 
 		this.submitBtnCfg = this.buttonCfg[0];
 
-		this.updatePrice = Ext.Function.createBuffered(this.updatePrice, 1000);
-
 		this.addListeners();
 
 		this.on('viewLicense', 'showTerms');
@@ -151,12 +142,25 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 	},
 
 
+	lock: function() {
+		this.locked = true;
+		this.previousDisabled = this.submitBtnCfg.disabled;
+		this.submitBtnCfg.disabled = true;
+		this.fireEvent('update-buttons');
+	},
+
+
+	unlock: function() {
+		this.locked = false;
+		this.submitBtnCfg.disabled = !!this.previousDisabled;
+		this.fireEvent('update-buttons');
+	},
+
 
 	beforeShow: function() {
-		this.submitBtnCfg.disabled = false;
-		this.fireEvent('update-buttons');
+		// this.submitBtnCfg.disabled = false;
+		// this.fireEvent('update-buttons');
 		this.updateFromStorage();
-		this.updatePrice();
 	},
 
 
@@ -209,30 +213,9 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 	},
 
 
-	updatePrice: function() {
-		var me = this,
-			value = this.getParsedValues(),
-			pricingInfo = this.getPricingInfo(value);
-
-		function onSuccess(result) {
-			me.enrollmentOption.pricing = result;
-			me.showPrice(result);
-		}
-
-		function onFailure(reason) {
-			me.enrollmentOption.pricing = null;
-			me.showPrice();
-			console.error('failed to price purchase');
-			me.showStripeError(reason);
-		}
-
-		this.fireEvent('price-enroll-purchase', this, pricingInfo, onSuccess, onFailure);
-	},
-
-
 	getPricingInfo: function(formValue) {
 		var desc = {Purchasable: this.enrollmentOption.Purchasable},
-			coupon = (formValue.coupon || '').trim();
+			coupon = this.getCoupon();
 
 		if (coupon) {
 			desc.Coupon = coupon;
