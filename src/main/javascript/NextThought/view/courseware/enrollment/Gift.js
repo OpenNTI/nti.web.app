@@ -171,7 +171,7 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 		desc.to = formValue.to_first_name;
 
 		if (formValue.to_last_name) {
-			des.to += ' ' + formValue.to_last_name;
+			desc.to += ' ' + formValue.to_last_name;
 		}
 
 		desc.immediate = !!formValue.reviever;
