@@ -167,7 +167,13 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 		desc.from = formValue.from;
 		desc.receiver = formValue.receiver;
 		desc.message = formValue.message;
-		desc.to = formValue.to_first_name + ' ' + formValue.to_last_name;
+		//first name + ' ' + last name if last name is not falsy
+		desc.to = formValue.to_first_name;
+
+		if (formValue.to_last_name) {
+			des.to += ' ' + formValue.to_last_name;
+		}
+
 		desc.immediate = !!formValue.reviever;
 
 		return desc;
