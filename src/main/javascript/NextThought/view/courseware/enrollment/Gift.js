@@ -38,8 +38,8 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 					xtype: 'enrollment-set',
 					labelCls: 'gift-message',
 					inputs: [
-						{type: 'text', name: 'sender', size: 'full', placeholder: 'From'},
-						{type: 'textarea', name: 'message', placeholder: 'Enter your message here...'}
+						{type: 'textarea', name: 'message', placeholder: 'Enter your message here...'},
+						{type: 'text', name: 'sender', size: 'full', placeholder: 'From'}
 					]
 				}
 			]
