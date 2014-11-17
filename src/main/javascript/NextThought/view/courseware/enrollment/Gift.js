@@ -63,13 +63,6 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 				},
 				{
 					xtype: 'enrollment-set',
-					label: 'Coupon',
-					inputs: [
-						{type: 'text', name: 'coupon', placeholder: 'Coupon Code'}
-					]
-				},
-				{
-					xtype: 'enrollment-set',
 					label: 'Credit Card Information',
 					inputs: [
 						{type: 'text', name: 'name', required: true, placeholder: 'Name on Card', size: 'card-name'},
