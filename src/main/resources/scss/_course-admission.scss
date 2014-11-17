@@ -1054,6 +1054,19 @@
 }
 
 .enrollment-gift-confirmation {
+	.bold {
+		font-weight: 500;
+	}
+
+	.prompt {
+		line-height: 1.3em;
+	}
+
+	.gift-info {
+		margin-top: 1em;
+		line-height: 1.3em;
+	}
+
 	.token {
 		margin-top: 1em;
 		.label {

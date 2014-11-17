@@ -4,9 +4,38 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 
 	cls: 'enrollment-gift-confirmation',
 
+	giftInfoTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+		{tag: 'tpl', 'if': 'receiverEmail', cn: [
+			{tag: 'tpl', 'if': 'receiverName', cn:
+				{tag: 'span', cn: [
+					'An email as been sent to ',
+					{tag: 'span', cls: 'bold', html: '{receiverName} '},
+					'at ',
+					{tag: 'span', cls: 'bold', html: '{receiverEmail} '},
+					'with instructions about how to redeem this gift.'
+				]}
+			},
+			{tag: 'tpl', 'if': '!receiverName', cn:
+				{tag: 'span', cn: [
+					'An email has been sent to ',
+					{tag: 'span', cls: 'bold', html: '{receiverEmail} '},
+					'with instructions about how to redeem this gift.'
+				]}
+			}
+		]},
+		{tag: 'tpl', 'if': '!receiverEmail', cn:
+			{tag: 'span', cn: [
+				'An email has been sent to ',
+				{tag: 'span', cls: 'bold', html: '{senderEmail} '},
+				'with instructions about how to redeem this gift.'
+			]}
+		}
+	])),
+
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'title', html: '{heading}'},
 		{cls: 'prompt', html: '{prompt}'},
+		{cls: 'gift-info', html: '{gift-info}'},
 		{cls: 'token', cn: [
 			{tag: 'span', cls: 'label', html: 'Token:'},
 			{tag: 'span', cls: 'token-text', html: '{token}'}
@@ -22,7 +51,8 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 
 
 	renderSelectors: {
-		tokenEl: '.token .token-text'
+		tokenEl: '.token .token-text',
+		giftEl: '.gift-info'
 	},
 
 
@@ -69,5 +99,13 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 		if (token) {
 			this.tokenEl.update(token);
 		}
+
+		this.giftEl.dom.innerHTML = '';
+
+		this.giftInfoTpl.append(this.giftEl, {
+			receiverEmail: purchaseAttempt && purchaseAttempt.get('Receiver'),
+			receiverName: purchaseAttempt && purchaseAttempt.get('ReceiverName'),
+			senderEmail: purchaseAttempt && purchaseAttempt.get('Creator')
+		});
 	}
 });
