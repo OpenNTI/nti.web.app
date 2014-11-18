@@ -3,7 +3,7 @@ Ext.define('NextThought.view.courseware.enrollment.Redeem', {
 	alias: 'widget.enrollment-gift-redeem',
 
 	buttonCfg: [
-		{name: 'Submit', disabled: true, action: 'submit-payment'},
+		{name: 'Redeem', disabled: false, action: 'submit-payment'},
 		{name: 'Cancel', disabled: false, action: 'go-back', secondary: true}
 	],
 

@@ -2,6 +2,8 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 	extend: 'Ext.Component',
 	alias: 'widget.enrollment-gift-confirmation',
 
+	requires: ['NextThought.view.form.fields.SimpleTextField'],
+
 	cls: 'enrollment-gift-confirmation',
 
 	giftInfoTpl: new Ext.XTemplate(Ext.DomHelper.markup([
@@ -38,7 +40,7 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 		{cls: 'gift-info', html: '{gift-info}'},
 		{cls: 'token', cn: [
 			{tag: 'span', cls: 'label', html: 'Token:'},
-			{tag: 'span', cls: 'token-text', html: '{token}'}
+			{cls: 'token-text'}
 		]},
 		{cls: 'support', cn: [
 			{cls: 'support-text', html: 'Please contact tech support if you have any issues.'},
@@ -80,12 +82,20 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 		this.renderData = Ext.apply(this.renderData || {}, {
 			heading: 'Gift Purchase Successful',
 			prompt: prompt,
-			todo: [
-				{href: 'welcome', text: getString('enrollment.previewplatform', '', true)},
-				{href: 'profile', text: 'Complete Your Profile'}
-			],
 			phone: getString('course-info.course-supoprt.phone'),
 			helplinks: helplinks
+		});
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		this.tokenInput = Ext.widget('simpletext', {
+			inputType: 'text',
+			readOnly: true,
+			placeholder: 'Token',
+			renderTo: this.tokenEl
 		});
 	},
 
@@ -97,7 +107,7 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 		if (!this.rendered) { return; }
 
 		if (token) {
-			this.tokenEl.update(token);
+			this.tokenInput.update(token);
 		}
 
 		this.giftEl.dom.innerHTML = '';
