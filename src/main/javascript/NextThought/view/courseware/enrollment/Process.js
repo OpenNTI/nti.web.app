@@ -299,10 +299,12 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 				me.hidePricingInfo();
 			}
 
-			if (item.lockCoupon) {
-				me.pricingInfo.lockCoupon();
-			} else {
-				me.pricingInfo.unlockCoupon();
+			if (me.pricingInfo) {
+				if (item.lockCoupon) {
+					me.pricingInfo.lockCoupon();
+				} else {
+					me.pricingInfo.unlockCoupon();
+				}
 			}
 
 			me.getLayout().setActiveItem(item);
