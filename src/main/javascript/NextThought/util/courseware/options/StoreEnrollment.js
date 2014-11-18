@@ -37,7 +37,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 	__addBaseSteps: function(course, option, steps) {
 		this.__addStep({
 			xtype: 'enrollment-purchase',
-			name: 'Payment',
+			name: 'Payment Info',
 			hasPricingCard: true,
 			enrollmentOption: option,
 			isComplete: function() {return Promise.reject(); },
@@ -56,7 +56,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 
 		this.__addStep({
 			xtype: 'enrollment-paymentconfirmation',
-			name: 'Verification',
+			name: 'Review and Purchase',
 			enrollmentOption: option,
 			hasPricingCard: true,
 			goBackOnError: true,
@@ -98,7 +98,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 	__addGiftSteps: function(course, option, steps) {
 		this.__addStep({
 			xtype: 'enrollment-gift-purchase',
-			name: 'Payment',
+			name: 'Payment Info',
 			hasPricingCard: true,
 			enrollmentOption: option,
 			isComplete: function() { return Promise.reject(); },
@@ -117,7 +117,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 
 		this.__addStep({
 			xtype: 'enrollment-paymentconfirmation',
-			name: 'Verification',
+			name: 'Review and Purchase',
 			enrollmentOption: option,
 			hasPricingCard: true,
 			goBackOnError: true,
