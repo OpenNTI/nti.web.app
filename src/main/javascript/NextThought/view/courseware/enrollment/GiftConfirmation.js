@@ -102,6 +102,8 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 
 	beforeShow: function() {
 		var purchaseAttempt = this.enrollmentOption.purchaseAttempt,
+			receiverEmail = purchaseAttempt && purchaseAttempt.get('Receiver'),
+			receiverName = purchaseAttempt && purchaseAttempt.get('ReceiverName'),
 			token = purchaseAttempt && purchaseAttempt.get('RedemptionCode');
 
 		if (!this.rendered) { return; }
@@ -110,11 +112,15 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 			this.tokenInput.update(token);
 		}
 
+		if (receiverEmail === receiverName) {
+			receiverName = '';
+		}
+
 		this.giftEl.dom.innerHTML = '';
 
 		this.giftInfoTpl.append(this.giftEl, {
-			receiverEmail: purchaseAttempt && purchaseAttempt.get('Receiver'),
-			receiverName: purchaseAttempt && purchaseAttempt.get('ReceiverName'),
+			receiverEmail: receiverEmail,
+			receiverName: receiverName,
 			senderEmail: purchaseAttempt && purchaseAttempt.get('Creator')
 		});
 	}
