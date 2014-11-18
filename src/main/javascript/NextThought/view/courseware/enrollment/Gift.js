@@ -20,7 +20,7 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 						{
 							type: 'description',
 							text: 'If you would like for us to send a gift notification to the person for whom you are purchasing this course, ' +
-									'please enter their name and email below. Pricing information is not included in this notification'
+									'please enter their name and email below. Pricing information is not included in this notification.'
 						}
 					]
 				},
