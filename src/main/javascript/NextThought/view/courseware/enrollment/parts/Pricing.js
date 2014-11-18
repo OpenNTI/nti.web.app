@@ -211,6 +211,9 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 
 
 	lockCoupon: function() {
+		//if we don't have a coupon container we aren't allowing copupons
+		if (!this.couponContainerEl) { return; }
+
 		var pricing = this.enrollmentOption.pricing,
 			coupon = pricing && pricing.get('Coupon'),
 			id = coupon && coupon.ID;
@@ -229,6 +232,9 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 	},
 
 	unlockCoupon: function() {
+		//if we don't have a coupon container we aren't allowing coupons
+		if (!this.couponContainerEl) { return; }
+
 		var pricing = this.enrollmentOption.pricing,
 			coupon = pricing && pricing.get('Coupon'),
 			id = coupon && coupon.ID;
