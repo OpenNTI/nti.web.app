@@ -108,7 +108,7 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 	lockProcess: function() {
 		var item = this.getLayout().getActiveItem();
 
-		if (item.lock) {
+		if (item.lock && !item.locked) {
 			item.locked = true;
 			item.lock();
 		}

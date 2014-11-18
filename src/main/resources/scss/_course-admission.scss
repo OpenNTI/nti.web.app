@@ -80,9 +80,22 @@
 			.coupon {
 				margin-top: 10px;
 				.label {
+					display: block;
 					font-size: 0.8em;
 					text-transform: uppercase;
 					color: $tertiary-grey;
+
+					&.error {
+						color: $primary-red;
+					}
+
+					&.success {
+						color: $secondary-green;
+					}
+
+					&.loading {
+						@include loadingEllipse($animation-delay: 0.2s);
+					}
 				}
 
 				.coupon-container {
@@ -114,7 +127,19 @@
 					line-height: 1.5em;
 				}
 
-				span:not(.label) {
+				.old-amount {
+					margin-right: 5px;
+					font-size: 1.5em;
+					color: $tertiary-grey;
+					font-weight: 300;
+					text-decoration: line-through;
+
+					&:empty {
+						display: none;
+					}
+				}
+
+				.amount {
 					font-size: 1.5em;
 					font-weight: 400;
 					color: $secondary-green;

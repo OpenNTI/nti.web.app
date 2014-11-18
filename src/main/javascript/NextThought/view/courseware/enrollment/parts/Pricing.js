@@ -48,6 +48,7 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 			]},
 			{cls: 'detail price', cn: [
 				{tag: 'span', cls: 'label', html: 'Total'},
+				{tag: 'span', cls: 'old-amount', html: ''},
 				{tag: 'span', cls: 'amount', html: '{price}'}
 			]}
 		]}
@@ -58,7 +59,9 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 		priceEl: '.amount',
 		couponLabelEl: '.coupon .label',
 		couponContainerEl: '.coupon-container',
-		couponValueEl: '.coupon-value'
+		couponValueEl: '.coupon-value',
+		oldAmountEl: '.price .old-amount',
+		amountEl: '.price .amount'
 	},
 
 
@@ -66,6 +69,8 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 		this.callParent(arguments);
 
 		this.enableBubble(['show-msg']);
+
+		this.update = Ext.Function.createBuffered(this.update.bind(this), 2000);
 	},
 
 
@@ -124,10 +129,8 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 
 			this.on('destroy', 'destroy', this.couponInput);
 
-			this.mon(this.couponInput, 'changed', 'update');
+			this.mon(this.couponInput, 'changed', 'couponChanged');
 		}
-
-		this.update = Ext.Function.createBuffered(this.update.bind(this), 5000);
 
 		Ext.EventManager.onWindowResize(this.onContainerScroll.bind(this));
 	},
@@ -174,6 +177,35 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 	},
 
 
+	couponChanged: function(coupon) {
+		this.lockProcess();
+
+		this.couponLabelEl.update('Checking Coupon');
+		this.couponLabelEl.removeCls(['error', 'success']);
+		this.couponLabelEl.addCls('loading');
+
+		this.update(coupon);
+	},
+
+
+	updatePricing: function(pricing) {
+		pricing = pricing || this.enrollmentOption.pricing;
+
+		var oldPrice = this.enrollmentOption.Price || 0,
+			newPrice = this.getPrice(pricing);
+
+		oldPrice = oldPrice.toFixed(2);
+
+		if (pricing) {
+			this.oldAmountEl.update('$' + oldPrice);
+		} else {
+			this.oldAmountEl.update('');
+		}
+
+		this.amountEl.update('$' + newPrice);
+	},
+
+
 	update: function(coupon) {
 		if (!coupon) { this.priceEl.update('$' + this.getPrice()); }
 
@@ -188,17 +220,34 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 
 		function onSuccess(result) {
 			me.enrollmentOption.pricing = result;
-			me.priceEl.update('$' + me.getPrice(result));
+
+			var coupon = result && result.get('Coupon');
+
+			me.couponLabelEl.update('Coupon Accepted: ' + coupon.PercentOff + '% off');
+			me.couponLabelEl.removeCls(['loading', 'error']);
+			me.couponLabelEl.addCls('success');
 			me.unlockProcess();
+
+			me.updatePricing(result);
 		}
 
 		function onFailure(reason) {
-			var msg = reason.Message || 'An unknown error occurred. Please try again later';
+			//unset any other pricing
+			me.enrollmentOption.pricing = null;
 
-			me.priceEl.update('$' + me.getPrice());
+			me.couponLabelEl.removeCls('loading');
 
-			me.fireEvent('show-msg', msg, true, 5000);
+			if (!coupon) {
+				me.couponLabelEl.update('I have a coupon');
+				me.couponLabelEl.removeCls(['error', 'success']);
+			} else {
+				me.couponLabelEl.update('Invalid Coupon');
+				me.couponLabelEl.removeCls('success');
+				me.couponLabelEl.addCls('error');
+			}
+
 			me.unlockProcess();
+			me.updatePricing();
 		}
 
 		this.fireEvent('price-enroll-purchase', this, desc, onSuccess, onFailure);
@@ -206,7 +255,11 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 
 
 	getCoupon: function() {
-		return this.couponInput.getValue();
+		var pricing = this.enrollmentOption.pricing,
+			coupon = pricing && pricing.get('Coupon'),
+			id = coupon && coupon.ID;
+
+		return id || '';
 	},
 
 
