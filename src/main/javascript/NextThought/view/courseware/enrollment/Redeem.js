@@ -7,7 +7,7 @@ Ext.define('NextThought.view.courseware.enrollment.Redeem', {
 		{name: 'Cancel', disabled: false, action: 'go-back', secondary: true}
 	],
 
-	STATE_NAME: 'gift-form',
+	STATE_NAME: 'gift-redeem',
 
 	form: [
 		{
