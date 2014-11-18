@@ -134,22 +134,32 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 			this.subscribeContainerEl.hide();
 		}
 
-		this.giftEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
-
 		if (purchaseDesc.from) {
 			this.giftEl.show();
 
-			this.giftFromEl.down('.name').update(purchaseDesc.sender + ' (' + purchaseDesc.from + ')');
+			if (purchaseDesc.sender) {
+				this.giftFromEl.down('.name').update(purchaseDesc.sender + ' (' + purchaseDesc.from + ')');
+			} else {
+				this.giftFromEl.down('.name').update(purchaseDesc.from);
+			}
 		} else {
 			this.giftEl.hide();
 		}
 
 		if (purchaseDesc.receiver) {
-			this.giftToEl.down('.to-email').update(purchaseDesc.to + ' (' + purchaseDesc.receiver + ')');
+			if (purchaseDesc.to) {
+				this.giftToEl.down('.to-email').update(purchaseDesc.to + ' (' + purchaseDesc.receiver + ')');
+			} else {
+				this.giftToEl.down('.to-email').update(purchaseDesc.receiver);
+			}
+		} else {
+			this.giftToEl.hide();
 		}
 
 		if (purchaseDesc.message) {
 			this.giftMessageEl.down('.message-text').update(purchaseDesc.message);
+		} else {
+			this.giftMessageEl.hide();
 		}
 
 		if (card.brand) {
@@ -206,6 +216,9 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 			}
 		});
 
+		me.giftEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		me.giftToEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		me.giftMessageEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 	},
 
 
