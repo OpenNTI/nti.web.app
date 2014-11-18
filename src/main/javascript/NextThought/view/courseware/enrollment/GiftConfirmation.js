@@ -10,7 +10,7 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 		{tag: 'tpl', 'if': 'receiverEmail', cn: [
 			{tag: 'tpl', 'if': 'receiverName', cn:
 				{tag: 'span', cn: [
-					'An email as been sent to ',
+					'An email has been sent to ',
 					{tag: 'span', cls: 'bold', html: '{receiverName} '},
 					'at ',
 					{tag: 'span', cls: 'bold', html: '{receiverEmail} '},
