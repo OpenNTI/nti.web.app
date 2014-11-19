@@ -232,8 +232,9 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 	getPricingInfo: function(formValue) {
 		var desc = this.callParent(arguments);
 
+		desc.sender = formValue.sender;
+
 		if (formValue.enable_recipient) {
-			desc.sender = formValue.sender;
 			desc.from = formValue.from;
 			desc.receiver = formValue.receiver;
 			desc.message = formValue.message;
