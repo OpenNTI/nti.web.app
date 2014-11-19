@@ -90,7 +90,7 @@ Ext.define('NextThought.overrides.tip.QuickTip', {
 
 		if (Ext.isEmpty(this.anchorTarget)) {
 			console.warn('Tooltip anchorTarget is null. It shouldn\'t be');
-			return [-1000, -1000];//don't return null... its dangerious.
+			return [-1000, -1000];//don't return null... its dangerous.
 		}
 		try {
 			r = this.callParent(arguments);

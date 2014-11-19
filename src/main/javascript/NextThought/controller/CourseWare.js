@@ -592,7 +592,7 @@ Ext.define('NextThought.controller.CourseWare', {
 		 * @param {String|NextThought.model.PageInfo} thing A Content NTIID or pageInfo
 		 */
 		getCourseInstance: function(thing) {
-			console.error('[deprecated] This function is dangerious in environments where there are multiple instances of the same course! Replace with prejudice!');
+			console.error('[deprecated] This function is dangerous in environments where there are multiple instances of the same course! Replace with prejudice!');
 			return Promise.resolve(this.courseForNtiid(ContentUtils.getNTIIDFromThing(thing)))
 					.then(function(cce) {
 						if (!cce) { return Promise.reject('Not Found'); }
