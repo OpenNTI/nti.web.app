@@ -14,14 +14,14 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 					{tag: 'span', cls: 'bold', html: '{receiverName} '},
 					'at ',
 					{tag: 'span', cls: 'bold', html: '{receiverEmail} '},
-					'with instructions about how to redeem this gift.'
+					'with instructions on how to redeem this gift.'
 				]}
 			},
 			{tag: 'tpl', 'if': '!receiverName', cn:
 				{tag: 'span', cn: [
 					'An email has been sent to ',
 					{tag: 'span', cls: 'bold', html: '{receiverEmail} '},
-					'with instructions about how to redeem this gift.'
+					'with instructions on how to redeem this gift.'
 				]}
 			}
 		]},
@@ -29,7 +29,7 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 			{tag: 'span', cn: [
 				'An email has been sent to ',
 				{tag: 'span', cls: 'bold', html: '{senderEmail} '},
-				'with instructions about how to redeem this gift.'
+				'with instructions on how to redeem this gift.'
 			]}
 		}
 	])),
@@ -64,7 +64,7 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 		var c = this.course,
 			start = c.get('StartDate'),
 			helplinks = [], i, labelprefix,
-			prompt = '<span class=\'bold\' >{course} starts on {date}</span> and will be conducted fully online.</span>';
+			prompt = '<span class=\'bold\' >{course}</span> starts on {date} and will be conducted fully online.</span>';
 
 		prompt = prompt.replace('{course}', c.get('Title'));
 		prompt = prompt.replace('{date}', Ext.Date.format(start, 'F j, Y'));
