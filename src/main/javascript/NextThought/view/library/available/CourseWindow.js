@@ -102,6 +102,14 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 						console.error('unable to return from payment: ', reason);
 						finish(false, fulfill);
 					});
+			} else if (state.enrollmentOption) {
+				if (!me.courseDetail) {
+					console.error('Trying to restore an enrollment option without an active course set:', state);
+					fulfill();
+				} else {
+					me.courseDetail.restoreEnrollmentOption(state.enrollmentOption, state.enrollmentConfig);
+					fulfill();
+				}
 			} else {
 				fulfill();
 			}
@@ -436,13 +444,13 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 	},
 
 
-	showEnrollmentOption: function(course, name, type) {
+	showEnrollmentOption: function(course, name, type, config) {
 		var me = this;
 
 		function addView() {
 			me.courseEnrollment = me.add({
 				xtype: 'enrollment-process',
-				steps: CourseWareUtils.Enrollment.getEnrollmentSteps(course, name, type),
+				steps: CourseWareUtils.Enrollment.getEnrollmentSteps(course, name, type, config),
 				course: course
 			});
 		}

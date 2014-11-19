@@ -9,7 +9,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 
 	EnrolledWording: 'You are enrolled as a Lifelong Learner',
 
-	buildEnrollmentSteps: function(course, type) {
+	buildEnrollmentSteps: function(course, type, config) {
 		var option = course.getEnrollmentOption(this.NAME),
 			steps = [];
 
@@ -23,11 +23,11 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 		option.noRefunds = true;
 
 		if (!type || type === 'self') {
-			steps = this.__addBaseSteps(course, option, steps);
+			steps = this.__addBaseSteps(course, option, steps, config);
 		} else if (type === 'gift') {
-			steps = this.__addGiftSteps(course, option, steps);
+			steps = this.__addGiftSteps(course, option, steps, config);
 		} else if (type === 'redeem') {
-			steps = this.__addRedeemSteps(course, option, steps);
+			steps = this.__addRedeemSteps(course, option, steps, config);
 		}
 
 		return steps;
@@ -148,7 +148,11 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 	},
 
 
-	__addRedeemSteps: function(course, option, steps) {
+	__addRedeemSteps: function(course, option, steps, config) {
+		if (config && config[0]) {
+			option.redeemToken = config[0];
+		}
+
 		this.__addStep({
 			xtype: 'enrollment-gift-redeem',
 			name: 'Redeem',
@@ -249,7 +253,6 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 			option = course.getEnrollmentOption(this.NAME),
 			loadDetails;
 
-
 		//if there is an option, and its either enrolled or available
 		if (!option || (!option.IsEnrolled && !option.IsAvailable)) {
 			return {
@@ -269,8 +272,8 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 					Enrolled: option.IsEnrolled,
 					Price: null,
 					Wording: me.__getEnrollmentText(details, option),
-					doEnrollment: function(cmp, type) {
-						cmp.fireEvent('enroll-in-course', course, me.NAME, type);
+					doEnrollment: function(cmp, type, config) {
+						cmp.fireEvent('enroll-in-course', course, me.NAME, type, config);
 					},
 					undoEnrollment: null
 				};

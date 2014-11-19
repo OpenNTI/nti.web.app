@@ -130,6 +130,32 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 		});
 	},
 
+	/**
+	 * Restore to an enrollment option
+	 * @param  {String} type   name of the enrollment option
+	 * @param  {Array} config  array of configs for the option to parse
+	 */
+	restoreEnrollmentOption: function(type, config) {
+		if (!this.rendered) {
+			this.on('afterrender', this.restoreEnrollmentOption.bind(this, type, config));
+			return;
+		}
+
+		if (!this.enrollmentOptions || Ext.Object.isEmpty(this.enrollmentOptions)) {
+			this.__stateToRestore = this.restoreEnrollmentOption.bind(this, type, config);
+			return;
+		}
+
+		var option;
+
+		if (type === 'redeem') {
+			option = this.enrollmentOptions.StoreEnrollment;
+
+			option.doEnrollment(this, 'redeem', config);
+		}
+
+	},
+
 
 	onDestroy: function() {
 		this.callParent(arguments);
@@ -411,7 +437,12 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 				me.__showError();
 				return Promise.reject();//keep the failure going
 			})
-			.then(me.__buildCard.bind(me));
+			.then(me.__buildCard.bind(me))
+			.then(function() {
+				if (me.__stateToRestore) {
+					me.__stateToRestore.call();
+				}
+			});
 
 	},
 

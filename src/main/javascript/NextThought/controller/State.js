@@ -463,6 +463,22 @@ PREVIOUS_STATE = 'previous-state';
 		},
 
 
+		/**
+		 * Parse the state from a library url that looks like
+		 *
+		 * /#!library/{window}/{activeItem}/{enrollmentOption}/{optionConfig}
+		 *
+		 * where
+		 * window = 'availableCourses' to open the course library
+		 * activeItem = B64 url friendly ntiid of the item to show
+		 *  if the activeItem is a course
+		 *      enrollmentOption = String the name of an enrollment option to start down the path of
+		 *      optionConfig = list of configs to pass to the option (ex /token for redeeming gifts)
+		 *
+		 * @param  {String} fragment the url fragment
+		 * @param  {Object} query    the query params
+		 * @return {Object}          the state to restore to
+		 */
 		interpretLibraryFragment: function(fragment, query) {
 			var parts = (fragment || '').split('/').slice(1), //split on / and slice the #!library off the front
 				result = {
@@ -478,6 +494,11 @@ PREVIOUS_STATE = 'previous-state';
 
 				if (parts[1]) {
 					result.library.activeId = B64.decodeURLFriendly(parts[1]);
+				}
+
+				if (parts[2]) {
+					result.library.enrollmentOption = parts[2];
+					result.library.enrollmentConfig = parts.slice(3);
 				}
 			}
 

@@ -3,7 +3,7 @@ Ext.define('NextThought.view.courseware.enrollment.Redeem', {
 	alias: 'widget.enrollment-gift-redeem',
 
 	buttonCfg: [
-		{name: 'Redeem', disabled: false, action: 'submit-payment'},
+		{name: 'Redeem', disabled: true, action: 'submit-payment'},
 		{name: 'Cancel', disabled: false, action: 'go-back', secondary: true}
 	],
 
@@ -38,6 +38,15 @@ Ext.define('NextThought.view.courseware.enrollment.Redeem', {
 			]
 		}
 	],
+
+
+	fillInDefaults: function(values) {
+		if (this.enrollmentOption.redeemToken) {
+			values.token = this.enrollmentOption.redeemToken;
+		}
+
+		return values;
+	},
 
 
 	maybeSubmit: function() {
