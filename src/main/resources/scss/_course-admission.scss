@@ -1397,10 +1397,18 @@
 
 			.city {
 				margin-right: 0.5em;
+
+				&:empty {
+					display: none;
+				}
 			}
 
 			.state {
 				margin-right: 0.5em;
+
+				&:empty {
+					display: none;
+				}
 			}
 		}
 	}
