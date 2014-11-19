@@ -180,6 +180,8 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 			lastName = user.get('LastName'),
 			email = user.get('email');
 
+		values = this.callParent(arguments);
+
 		if (!values.enable_recipient) {
 			values.enable_recipient = false;
 		}
