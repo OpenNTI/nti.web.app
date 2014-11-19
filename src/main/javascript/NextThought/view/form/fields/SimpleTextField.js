@@ -99,6 +99,7 @@ Ext.define('NextThought.view.form.fields.SimpleTextField', {
 		var e = this.inputEl,
 			monitors = {
 				scope: this,
+				focus: 'onInputFocus',
 				keyup: 'keyPressed',
 				paste: 'onPaste',
 				contextmenu: function(e) { e.stopPropagation(); } //allow context menu
@@ -153,6 +154,11 @@ Ext.define('NextThought.view.form.fields.SimpleTextField', {
 			event.stopPropagation();
 			this.keyPressed(event);
 		}
+	},
+
+
+	onInputFocus: function() {
+		this.fireEvent('input-focus');
 	},
 
 

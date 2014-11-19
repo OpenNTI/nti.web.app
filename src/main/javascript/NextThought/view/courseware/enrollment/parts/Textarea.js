@@ -29,6 +29,15 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Textarea', {
 	},
 
 
+	afterRender: function() {
+		this.callParent(arguments);
+
+		if (this.focusEvent) {
+			this.mon(this.textareaEl, 'focus', this.fireEvent.bind(this, this.focusEvent));
+		}
+	},
+
+
 	setUpChangeMonitors: function() {
 		if (this.textareaEl) {
 			this.mon(this.textareaEl, 'keyup', 'changed');

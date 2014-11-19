@@ -5,7 +5,12 @@ Ext.define('NextThought.view.courseware.enrollment.parts.BaseInput', {
 	cls: 'enrollment-input-container',
 
 	initComponent: function() {
-		this.enableBubble(['changed', 'reveal-item', 'hide-item', 'maybe-hide-item', 'viewLicense', 'prohibited']);
+		var events = ['changed', 'reveal-item', 'hide-item', 'maybe-hide-item', 'viewLicense', 'prohibited'];
+
+		if (this.focusEvent) {
+			events.push(this.focusEvent);
+		}
+		this.enableBubble(events);
 	},
 
 

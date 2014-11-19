@@ -253,12 +253,50 @@
 		}
 	}
 
+	.admission-set {
+		&.gift-from,
+		&.gift-message,
+		&.gift-recipient {
+			.enrollment-input-container.disabled {
+				.enrollment-input input,
+				.enrollment-input textarea {
+					border-color: $tertiary-grey-alt;
+					opacity: 0.7
+				}
+
+				.enrollment-input.required input {
+					box-shadow: none;
+					border-left-width: 1px;
+				}
+			}
+		}
+	}
+
+	.admission-set.gift-from {
+		border: 1px solid #d6f1d9;
+		border-top-width: 0;
+		padding: 15px;
+
+		.label {
+			color: #52b85f;
+			margin-bottom: 10px;
+		}
+
+		.body-container .large {
+			width: 212px;
+		}
+	}
+
 
 	.admission-set.gift-recipient {
-		padding: 15px;
+		padding: 0px 15px 5px 15px;
 		background-color: #f7fdf8;
 		border: 1px solid #d6f1d9;
+		border-bottom-width: 0;
 		margin-bottom: 0;
+		position: relative;
+
+		@include icon('gift', $position: relative, $right: 13px, $top: 5px, $left: auto);
 
 		.label {
 			color: #52b85f;
@@ -276,24 +314,64 @@
 				}
 			}
 		}
+
+		.enrollment-input.checkbox {
+			background-color: #f7fdf8;
+
+			&:hover {
+				input[type=checkbox]:not(:checked) + label::after {
+					left: 0;
+				}
+			}
+
+			input[type=checkbox] + label {
+				padding-left: 25px;
+				color: #52b85f;
+				
+				&::after {
+					left: 0;
+				}
+
+				&::before {
+					display: none;
+				}
+
+			}
+
+			input[type=checkbox]:checked + label::after {
+				left: 0;
+			} 
+
+			input[type=checkbox]:focus + label {
+				box-shadow: none;
+			}
+		}
 	}
 
 	.admission-set.gift-message {
-		padding: 15px;
-		padding-bottom: 10px;
+		padding: 0 15px 10px 15px;
+		background-color: #f7fdf8;
 		border: 1px solid #d6f1d9;
 		border-top-width: 0;
+		margin-bottom: 0;
 
 		.body-container {
 			width: 652px;
+			padding-bottom: 0;
 		}
 
 		.enrollment-input {
 			width: 100%;
-			
+			background-color: #f7fdf8;
+			margin: 0;
+
 			&.full {
 				width: 652px;
 			}
+		}
+
+		textarea {
+			background-color: white;
 		}
 
 		textarea::-webkit-input-placeholder {
@@ -437,7 +515,7 @@
 			.help {
 				float: left;
 				width: 485px;
-				padding-left: 40px;
+				padding-left: 20px;
 				position: relative;
 
 				a {

@@ -27,19 +27,33 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 				{
 					xtype: 'enrollment-set',
 					labelCls: 'gift-recipient',
-					label: 'Gift Recipient (Optional)',
 					inputs: [
-						{type: 'text', name: 'to_first_name', size: 'large left', placeholder: 'First Name'},
-						{type: 'text', name: 'to_last_name', size: 'large left', placeholder: 'Last Name'},
-						{type: 'text', name: 'receiver', size: 'large left last', placeholder: 'Email Address'}
+						{type: 'checkbox', name: 'enable_recipient', text: 'Send a gift notification to:'},
+						{type: 'text', name: 'to_first_name', size: 'large left', placeholder: 'First Name', focusEvent: 'enable-recipient'},
+						{type: 'text', name: 'to_last_name', size: 'large left', placeholder: 'Last Name', focusEvent: 'enable-recipient'},
+						{type: 'text', name: 'receiver', size: 'large left last', required: true, placeholder: 'Email Address', focusEvent: 'enable-recipient'}
 					]
 				},
 				{
 					xtype: 'enrollment-set',
 					labelCls: 'gift-message',
 					inputs: [
-						{type: 'textarea', name: 'message', placeholder: 'Enter your message here...'},
-						{type: 'text', name: 'sender', size: 'full', placeholder: 'From'}
+						{type: 'textarea', name: 'message', placeholder: 'Enter your message here...', focusEvent: 'enable-recipient'}
+					]
+				},
+				{
+					xtype: 'enrollment-set',
+					labelCls: 'gift-from',
+					label: 'From:',
+					inputs: [
+						{
+							type: 'text',
+							name: 'sender',
+							size: 'large',
+							placeholder: 'Your Name',
+							focusEvent: 'enable-recipient',
+							help: 'This notification will be sent upon completion of purchase.'
+						}
 					]
 				}
 			]
@@ -142,6 +156,24 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 		}
 	],
 
+
+	initComponent: function() {
+		this.callParent(arguments);
+
+		var me = this;
+
+		me.on('enable-recipient', function() {
+			var checkbox = me.recipientCheckbox || me.down('[name=enable_recipient]');
+
+			me.recipientCheckbox = checkbox;
+
+			if (checkbox && !checkbox.getValue()[checkbox.name]) {
+				checkbox.setValue(true);
+			}
+		});
+	},
+
+
 	fillInDefaults: function(values) {
 		var user = $AppConfig.userObject,
 			firstName = user.get('FirstName'),
@@ -160,21 +192,56 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 	},
 
 
+	changed: function(name, value) {
+		this.mixins.form.changed.apply(this, arguments);
+
+		if (name === 'enable_recipient') {
+			if (value) {
+				this.setRecipient(true);
+			} else {
+				this.setRecipient(false);
+			}
+		}
+	},
+
+
+	setRecipient: function(enabled) {
+		var items = this.recipientItems || [
+				this.down('[name=to_first_name]'),
+				this.down('[name=to_last_name]'),
+				this.down('[name=receiver]'),
+				this.down('[name=message]'),
+				this.down('[name=sender]')
+			];
+
+
+		this.recipientItems = items;
+
+		items.forEach(function(item) {
+			item[enabled ? 'removeCls' : 'addCls']('disabled');
+		});
+	},
+
+
 	getPricingInfo: function(formValue) {
 		var desc = this.callParent(arguments);
 
-		desc.sender = formValue.sender;
-		desc.from = formValue.from;
-		desc.receiver = formValue.receiver;
-		desc.message = formValue.message;
-		//first name + ' ' + last name if last name is not falsy
-		desc.to = formValue.to_first_name;
+		if (formValue.enable_recipient) {
+			desc.sender = formValue.sender;
+			desc.from = formValue.from;
+			desc.receiver = formValue.receiver;
+			desc.message = formValue.message;
 
-		if (formValue.to_last_name) {
-			desc.to += ' ' + formValue.to_last_name;
+			if (formValue.to_first_name) {
+				if (formValue.to_last_name) {
+					desc.to = formValue.to_first_name + ' ' + formValue.to_last_name;
+				} else {
+					desc.to = formValue.to_first_name;
+				}
+			} else if (formValue.to_last_name) {
+				desc.to = formValue.to_first_name;
+			}
 		}
-
-		desc.immediate = !!formValue.reviever;
 
 		return desc;
 	}

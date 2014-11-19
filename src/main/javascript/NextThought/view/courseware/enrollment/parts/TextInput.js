@@ -62,6 +62,10 @@ Ext.define('NextThought.view.courseware.enrollment.parts.TextInput', {
 			});
 		}
 
+		if (this.focusEvent) {
+			this.mon(this.input, 'input-focus', this.fireEvent.bind(this, this.focusEvent));
+		}
+
 		this.on('destroy', 'destroy', this.input);
 
 		this.setUpChangeMonitors();
