@@ -154,6 +154,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			option.doEnrollment(this, 'redeem', config);
 		}
 
+		delete this.__stateToRestore;
 	},
 
 
