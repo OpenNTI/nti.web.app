@@ -146,13 +146,23 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			return;
 		}
 
-		var option;
+		var option, checkbox;
 
 		if (type === 'redeem') {
 			option = this.enrollmentOptions.StoreEnrollment;
 
 			if (option && option.Redeemable) {
 				option.doEnrollment(this, 'redeem', config);
+			}
+		} else if (type === 'forcredit') {
+			option = this.enrollmentOptions.FiveminuteEnrollment;
+
+			if (option) {
+				checkbox = this.el.down('.addon.checkbox[data-name=FiveminuteEnrollment');
+
+				if (checkbox) {
+					this.updateSelectedEnrollment(checkbox);
+				}
 			}
 		}
 
