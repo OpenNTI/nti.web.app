@@ -220,6 +220,8 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 		items.forEach(function(item) {
 			item[enabled ? 'removeCls' : 'addCls']('disabled');
 		});
+
+		items[2].required = enabled;
 	},
 
 

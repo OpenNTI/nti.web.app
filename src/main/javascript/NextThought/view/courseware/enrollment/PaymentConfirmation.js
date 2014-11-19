@@ -322,6 +322,7 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 				me.fireEvent('update-buttons');
 				me.showStripeError(reason);
 				me.removeMask();
+				me.error(me);
 				console.error('Payment failed', arguments);
 			});
 	}
