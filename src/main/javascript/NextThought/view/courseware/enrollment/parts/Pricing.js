@@ -221,9 +221,16 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 		function onSuccess(result) {
 			me.enrollmentOption.pricing = result;
 
-			var coupon = result && result.get('Coupon');
+			var coupon = result && result.get('Coupon'),
+				discount = '';
 
-			me.couponLabelEl.update('Coupon Accepted: ' + coupon.PercentOff + '% off');
+			if (coupon.PercentOff) {
+				discount = coupon.PercentOff + '% off';
+			} else if (coupon.AmountOff) {
+				discount = '$' + (coupon.AmountOff / 100).toFixed(2) + ' off';
+			}
+
+			me.couponLabelEl.update('Coupon Accepted: ' + discount);
 			me.couponLabelEl.removeCls(['loading', 'error']);
 			me.couponLabelEl.addCls('success');
 			me.unlockProcess();
