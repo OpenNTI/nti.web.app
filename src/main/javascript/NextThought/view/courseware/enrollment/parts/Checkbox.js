@@ -6,7 +6,8 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Checkbox', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{tag: 'input', id: '{id}-{name}', type: 'checkbox', name: '{name}'},
-		{tag: 'label', cls: '{cls}', 'for': '{id}-{name}', html: '{text}'}
+		{tag: 'label', cls: '{cls}', 'for': '{id}-{name}', html: '{text}'},
+		{cls: 'help', html: '{help}'}
 	]),
 
 	beforeRender: function() {
@@ -15,7 +16,8 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Checkbox', {
 		this.renderData = Ext.apply(this.renderData || {}, {
 			name: this.name || 'enrollment-checkbox',
 			text: this.text,
-			cls: (this.text || '').length > 60 ? 'long' : ''
+			cls: (this.text || '').length > 60 ? 'long' : '',
+			help: this.help
 		});
 	},
 

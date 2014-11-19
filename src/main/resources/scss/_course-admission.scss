@@ -380,7 +380,7 @@
 
 		textarea:-moz-placeholder {
 		    /* FF 4-18 */
-		    font: normal 300 1.3em/1 $font;
+	    font: normal 300 1.3em/1 $font;
 		}
 
 		textarea::-moz-placeholder {
@@ -778,6 +778,23 @@
 
 			&.checkbox {
 				cursor: pointer;
+
+				.help {
+					font-size: 0.84em;
+					line-height: 1.4em;
+					font-weight: 300;
+					color: #757474;
+					padding: 4px 10px 10px 46px;
+
+					a {
+						color: $primary-blue;
+						text-decoration: none;
+					}
+
+					&:empty {
+						display: none;
+					}
+				}
 
 				input[type=checkbox] {
 					opacity: 0;
@@ -1369,7 +1386,7 @@
 			.edit {
 				position: relative;
 				float: left;
-				padding-left: 10px;
+				padding-left: 9px;
 				top: -6px;
 				color: $primary-blue;
 				cursor: pointer;

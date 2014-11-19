@@ -941,10 +941,11 @@ Ext.define('NextThought.controller.Store', function() {
 		 * @param  {Ext.Component} sender      the component sending the request
 		 * @param  {NextThought.model.store.Purchasable} purchasable the purchasable the token is for
 		 * @param  {String} token       the redeem token
+		 * @param  {Boolean} allowVendorUpdates subscribe the user to updates from the vendor
 		 * @param  {Function} success   success callback
 		 * @param  {Function} failure   failure callback
 		 */
-		redeemGift: function(sender, purchasable, token, success, failure) {
+		redeemGift: function(sender, purchasable, token, allowVendorUpdates, success, failure) {
 			var me = this,
 				url = purchasable && purchasable.getLink('redeem_gift');
 
@@ -967,7 +968,8 @@ Ext.define('NextThought.controller.Store', function() {
 			}
 
 			Service.post(url, {
-				code: token
+				code: token,
+				AllowVendorUpdates: allowVendorUpdates
 			})
 				.then(function() {
 					done();

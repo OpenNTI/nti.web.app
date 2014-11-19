@@ -23,6 +23,19 @@ Ext.define('NextThought.view.courseware.enrollment.Redeem', {
 				},
 				{
 					xtype: 'enrollment-set',
+					hidden: true,
+					name: 'allowupdates_container',
+					inputs: [
+						{
+							type: 'checkbox',
+							name: 'AllowVendorUpdates',
+							text: getString('SubscribeToVendor'),
+							help: getString('SubscribeToVendorLegal')
+						}
+					]
+				},
+				{
+					xtype: 'enrollment-set',
 					reveals: 'enable-submit',
 					inputs: [
 						{
@@ -38,6 +51,15 @@ Ext.define('NextThought.view.courseware.enrollment.Redeem', {
 			]
 		}
 	],
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		if (this.enrollmentOption.AllowVendorUpdates) {
+			this.revealItem('allowupdates_container');
+		}
+	},
 
 
 	fillInDefaults: function(values) {
@@ -71,6 +93,8 @@ Ext.define('NextThought.view.courseware.enrollment.Redeem', {
 			})
 			.fail(function(error) {
 				if (!invalid) {
+					me.submitBtnCfg.disabled = false;
+					me.fireEvent('update-buttons');
 					me.removeMask();
 					me.showError(error);
 				}
