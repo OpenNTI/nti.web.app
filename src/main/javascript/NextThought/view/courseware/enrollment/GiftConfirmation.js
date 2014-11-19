@@ -39,8 +39,12 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 		{cls: 'prompt', html: '{prompt}'},
 		{cls: 'gift-info', html: '{gift-info}'},
 		{cls: 'token', cn: [
-			{tag: 'span', cls: 'label', html: 'Token:'},
+			{tag: 'span', cls: 'label', html: 'Access Key:'},
 			{cls: 'token-text'}
+		]},
+		{cls: 'transaction', cn: [
+			{tag: 'span', cls: 'label', html: 'Transaction ID:'},
+			{cls: 'transaction-id'}
 		]},
 		{cls: 'support', cn: [
 			{cls: 'support-text', html: 'Please contact tech support if you have any issues.'},
@@ -54,6 +58,7 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 
 	renderSelectors: {
 		tokenEl: '.token .token-text',
+		transactionEl: '.transaction .transaction-id',
 		giftEl: '.gift-info'
 	},
 
@@ -91,11 +96,25 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		this.tokenInput = Ext.widget('simpletext', {
+		var me = this;
+
+		me.tokenInput = Ext.widget('simpletext', {
 			inputType: 'text',
 			readOnly: true,
 			placeholder: 'Token',
-			renderTo: this.tokenEl
+			renderTo: me.tokenEl
+		});
+
+		me.transactionInput = Ext.widget('simpletext', {
+			inputType: 'text',
+			readOnly: true,
+			placeholder: 'Transaction ID',
+			renderTo: me.transactionEl
+		});
+
+		me.on('destroy', function() {
+			me.tokenInput.destroy();
+			me.transactionInput.destroy();
 		});
 	},
 
@@ -104,9 +123,14 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 		var purchaseAttempt = this.enrollmentOption.purchaseAttempt,
 			receiverEmail = purchaseAttempt && purchaseAttempt.get('Receiver'),
 			receiverName = purchaseAttempt && purchaseAttempt.get('ReceiverName'),
+			transactionId = purchaseAttempt && purchaseAttempt.get('TransactionID'),
 			token = purchaseAttempt && purchaseAttempt.get('RedemptionCode');
 
 		if (!this.rendered) { return; }
+
+		if (transactionId) {
+			this.transactionInput.update(transactionId);
+		}
 
 		if (token) {
 			this.tokenInput.update(token);

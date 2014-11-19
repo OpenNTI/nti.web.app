@@ -12,13 +12,13 @@ Ext.define('NextThought.view.courseware.enrollment.Redeem', {
 	form: [
 		{
 			name: 'gift',
-			label: 'Redeem a Token',
+			label: 'Redeem an Access Key',
 			items: [
 				{
 					xtype: 'enrollment-set',
 					label: '',
 					inputs: [
-						{type: 'text', name: 'token', size: 'full', placeholder: 'Token', required: true}
+						{type: 'text', name: 'token', size: 'full', placeholder: 'Access Key', required: true}
 					]
 				},
 				{

@@ -12,6 +12,10 @@ Ext.define('NextThought.view.courseware.enrollment.Confirmation', {
 				{tag: 'a', href: '{href}', html: '{text}'}
 			]}
 		]},
+		{cls: 'transaction', cn: [
+			{tag: 'span', cls: 'label', html: 'Transaction ID:'},
+			{cls: 'transaction-id'}
+		]},
 		{cls: 'support', cn: [
 			{cls: 'support-text', html: 'Please contact tech support if you have any issues.'},
 			{cls: 'help-link phone', html: '{phone}'},
@@ -20,6 +24,12 @@ Ext.define('NextThought.view.courseware.enrollment.Confirmation', {
 			]}
 		]}
 	]),
+
+
+	renderSelectors: {
+		transactionContainerEl: '.transaction',
+		transactionEl: '.transaction .transaction-id'
+	},
 
 
 	beforeRender: function() {
@@ -82,9 +92,32 @@ Ext.define('NextThought.view.courseware.enrollment.Confirmation', {
 				return false;
 			}
 		});
+
+		me.transactionContainerEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
+
+		me.transactionInput = Ext.widget('simpletext', {
+			inputType: 'text',
+			readOnly: true,
+			placeholder: 'Transaction ID',
+			renderTo: me.transactionEl
+		});
+
+		me.on('destroy', 'destroy', me.transactionInput);
 	},
 
 	stopClose: function() {
 		return Promise.resolve();
+	},
+
+
+	beforeShow: function() {
+		var purchaseAttempt = this.enrollmentOption.purchaseAttempt,
+			transactionId = purchaseAttempt && purchaseAttempt.get('TransactionID');
+
+		if (transactionId) {
+			this.transactionInput.update(transactionId);
+		} else {
+			this.transactionContainerEl.hide();
+		}
 	}
 });

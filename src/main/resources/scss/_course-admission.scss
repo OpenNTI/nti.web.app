@@ -1188,7 +1188,7 @@
 		line-height: 1.3em;
 	}
 
-	.token {
+	.token, .transaction {
 		margin-top: 1em;
 		overflow: hidden;
 
@@ -1238,6 +1238,32 @@
 			.bold {
 				font-weight: 600;
 			}
+		}
+	}
+
+	.transaction {
+		margin-bottom: 1em;
+		overflow: hidden;
+
+		.label {
+			float: left;
+			font-weight: 600;
+			line-height: 30px;
+			margin-right: 0.5em;
+		}
+
+		.textbox-base {
+			float: left;
+		}
+
+		input {
+			box-shadow: none;
+			font-size: 1em;
+			font-weight: 300;
+			color: #494949;
+			margin-left: 10px;
+			width: 140px;
+			border-radius: 0;
 		}
 	}
 
