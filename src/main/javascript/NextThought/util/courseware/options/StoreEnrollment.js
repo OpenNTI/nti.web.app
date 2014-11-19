@@ -270,6 +270,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 					Name: me.NAME,
 					BaseOption: me.isBase,
 					Enrolled: option.IsEnrolled,
+					Redeemable: option.Purchasable.isRedeemable(),
 					Price: null,
 					Wording: me.__getEnrollmentText(details, option),
 					doEnrollment: function(cmp, type, config) {

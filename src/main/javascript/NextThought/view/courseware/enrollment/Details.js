@@ -151,7 +151,9 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 		if (type === 'redeem') {
 			option = this.enrollmentOptions.StoreEnrollment;
 
-			option.doEnrollment(this, 'redeem', config);
+			if (option && option.Redeemable) {
+				option.doEnrollment(this, 'redeem', config);
+			}
 		}
 
 		delete this.__stateToRestore;
