@@ -45,36 +45,19 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 	renderSelectors: {
 		tokenEl: '.token .token-text',
 		transactionEl: '.transaction .transaction-id',
-		giftEl: '.gift-info'
+		giftEl: '.gift-info',
+		promptEl: '.prompt'
 	},
 
 
 	beforeRender: function() {
 		this.callParent(arguments);
 
-		var c = this.course,
-			start = c.get('StartDate'),
-			helplinks = [], i, labelprefix,
-			prompt = '<span class=\'bold\' >{course}</span> starts on {date} and will be conducted fully online.</span>';
-
-		prompt = prompt.replace('{course}', c.get('Title'));
-		prompt = prompt.replace('{date}', Ext.Date.format(start, 'F j, Y'));
-
-		for (i = 1; i <= 3; i++) {
-			labelprefix = 'course-info.course-supoprt.link' + i;
-
-			if (getString(labelprefix + '.Label') !== labelprefix + '.label') {
-				helplinks.push(
-					{href: getString(labelprefix + '.URL'), text: getString(labelprefix + '.Label', '', true)}
-				);
-			}
-		}
+		var prompt = this.getPrompt();
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			heading: 'Thank you for your purchase!',
-			prompt: prompt,
-			phone: getString('course-info.course-supoprt.phone'),
-			helplinks: helplinks
+			prompt: prompt
 		});
 	},
 
@@ -105,6 +88,26 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 	},
 
 
+	getPrompt: function(hasReceiver) {
+		var c = this.course,
+			start = c.get('StartDate'),
+			prompt;
+
+		prompt = 'The start date for <span class=\'bold\'>{course}</span> is {date}.';
+
+		prompt = prompt.replace('{course}', c.get('Title'));
+		prompt = prompt.replace('{date}', Ext.Date.format(start, 'F j, Y'));
+
+		if (hasReceiver) {
+			prompt += ' Please ensure the gift is activated before classes start!';
+		} else {
+			prompt += ' Please ensure the gift is redeemed before classes start!';
+		}
+
+		return prompt;
+	},
+
+
 	beforeShow: function() {
 		var purchaseAttempt = this.enrollmentOption.purchaseAttempt,
 			receiverEmail = purchaseAttempt && purchaseAttempt.get('Receiver'),
@@ -120,6 +123,8 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 		if (token) {
 			this.tokenInput.update(token);
 		}
+
+		this.promptEl.update(this.getPrompt(receiverEmail));
 
 		this.giftEl.dom.innerHTML = '';
 
