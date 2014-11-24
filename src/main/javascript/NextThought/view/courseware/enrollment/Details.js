@@ -717,7 +717,10 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 								});
 						}
 					},
-					secondary: 'Cancel'
+					secondary: {
+						text: 'Cancel',
+						handler: done.bind(me, false)
+					}
 				}
 			});
 		} else if (option.doEnrollment) {
