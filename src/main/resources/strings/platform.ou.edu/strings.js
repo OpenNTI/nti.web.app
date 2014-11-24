@@ -40,6 +40,9 @@ NTIStrings['course-info.course-supoprt.link2.URL'] = 'http://www.ou.edu/content/
 NTIStrings['course-info.course-supoprt.link3.Label'] = '';
 NTIStrings['course-info.course-supoprt.link3.URL'] = '';
 
+NTIStrings['gift-support.link'] = 'mailto:historychannel@ou.edu';
+NTIStrings['gift-support.label'] = 'HistoryChannel@ou.edu';
+
 NTIStrings['enroll.detail'] = '';
 NTIStrings['drop.detail'] = 'Dropping the course will remove it from your library, and you will no longer have access to the course materials.';
 

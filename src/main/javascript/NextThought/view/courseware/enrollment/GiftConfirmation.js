@@ -7,37 +7,30 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 	cls: 'enrollment-gift-confirmation',
 
 	giftInfoTpl: new Ext.XTemplate(Ext.DomHelper.markup([
-		{tag: 'tpl', 'if': 'receiverEmail', cn: [
-			{tag: 'tpl', 'if': 'receiverName', cn:
-				{tag: 'span', cn: [
-					'An email has been sent to ',
-					{tag: 'span', cls: 'bold', html: '{receiverName} '},
-					'at ',
-					{tag: 'span', cls: 'bold', html: '{receiverEmail} '},
-					'with instructions on how to redeem this gift.'
-				]}
-			},
-			{tag: 'tpl', 'if': '!receiverName', cn:
-				{tag: 'span', cn: [
-					'An email has been sent to ',
-					{tag: 'span', cls: 'bold', html: '{receiverEmail} '},
-					'with instructions on how to redeem this gift.'
-				]}
-			}
-		]},
-		{tag: 'tpl', 'if': '!receiverEmail', cn:
-			{tag: 'span', cn: [
-				'An email has been sent to ',
-				{tag: 'span', cls: 'bold', html: '{senderEmail} '},
+		{cn: [
+			'We\'ve sent an email receipt of this transaction to you at ',
+			{tag: 'a', html: '{senderEmail}. '},
+			{tag: 'tpl', 'if': 'receiverEmail', cn: [
+				'We\'ve also sent you a copy of the gift notification that was sent to ',
+				{tag: 'a', html: '{receiverEmail} '},
 				'with instructions on how to redeem this gift.'
+			]},
+			{tag: 'tpl', 'if': '!receiverEmail', cn: [
+				'We\'ve also sent you a separate email that contains instructions on how to redeem this gift.',
+				{tag: 'p', cls: 'bold', html: 'Please be sure to pass this information along to the gift recipient in time to take advantage of the course.'}
 			]}
-		}
+		]}
 	])),
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'title', html: '{heading}'},
-		{cls: 'prompt', html: '{prompt}'},
 		{cls: 'gift-info', html: '{gift-info}'},
+		{cls: 'prompt', html: '{prompt}'},
+		{cls: 'support', cn: [
+			'Please contact ',
+			{tag: 'a', href: '{{{gift-support.link}}}', html: '{{{gift-support.label}}} '},
+			'if you have any issues.'
+		]},
 		{cls: 'token', cn: [
 			{tag: 'span', cls: 'label', html: 'Access Key:'},
 			{cls: 'token-text'}
@@ -45,13 +38,6 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 		{cls: 'transaction', cn: [
 			{tag: 'span', cls: 'label', html: 'Transaction ID:'},
 			{cls: 'transaction-id'}
-		]},
-		{cls: 'support', cn: [
-			{cls: 'support-text', html: 'Please contact tech support if you have any issues.'},
-			{cls: 'help-link phone', html: '{phone}'},
-			{tag: 'tpl', 'for': 'helplinks', cn: [
-				{tag: 'a', href: '{href}', html: '{text}', target: '_blank'}
-			]}
 		]}
 	]),
 
@@ -85,7 +71,7 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 		}
 
 		this.renderData = Ext.apply(this.renderData || {}, {
-			heading: 'Gift Purchase Successful',
+			heading: 'Thank you for your purchase!',
 			prompt: prompt,
 			phone: getString('course-info.course-supoprt.phone'),
 			helplinks: helplinks
@@ -122,7 +108,6 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 	beforeShow: function() {
 		var purchaseAttempt = this.enrollmentOption.purchaseAttempt,
 			receiverEmail = purchaseAttempt && purchaseAttempt.get('Receiver'),
-			receiverName = purchaseAttempt && purchaseAttempt.get('ReceiverName'),
 			transactionId = purchaseAttempt && purchaseAttempt.get('TransactionID'),
 			token = purchaseAttempt && purchaseAttempt.get('RedemptionCode');
 
@@ -136,15 +121,10 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 			this.tokenInput.update(token);
 		}
 
-		if (receiverEmail === receiverName) {
-			receiverName = '';
-		}
-
 		this.giftEl.dom.innerHTML = '';
 
 		this.giftInfoTpl.append(this.giftEl, {
 			receiverEmail: receiverEmail,
-			receiverName: receiverName,
 			senderEmail: purchaseAttempt && purchaseAttempt.get('Creator')
 		});
 	}

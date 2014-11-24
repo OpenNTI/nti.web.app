@@ -85,7 +85,7 @@
 					text-transform: uppercase;
 					color: $tertiary-grey;
 
-					&.error {
+					&.invalid {
 						color: $primary-red;
 					}
 
@@ -1184,8 +1184,17 @@
 	}
 
 	.gift-info {
-		margin-top: 1em;
+		margin: 1em 0;
 		line-height: 1.3em;
+
+		a {
+			display: inline;
+			font-size: 1em;
+		}
+
+		p {
+			margin-top: 0;
+		}
 	}
 
 	.token, .transaction {
@@ -1275,10 +1284,13 @@
 		font-size: 0.9em;
 	}
 
-	.support-text {
-		font-size: 0.9em;
-		font-weight: 400;
+	.support{
 		line-height: 40px;
+		margin-top: 1em;
+
+		a {
+			display: inline;
+		}
 	}
 
 	.phone {

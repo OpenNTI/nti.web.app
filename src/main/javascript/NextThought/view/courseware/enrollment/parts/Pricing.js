@@ -181,7 +181,7 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 		this.lockProcess();
 
 		this.couponLabelEl.update('Checking Coupon');
-		this.couponLabelEl.removeCls(['error', 'success']);
+		this.couponLabelEl.removeCls(['invalid', 'success']);
 		this.couponLabelEl.addCls('loading');
 
 		this.update(coupon);
@@ -231,7 +231,7 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 			}
 
 			me.couponLabelEl.update('Coupon Accepted: ' + discount);
-			me.couponLabelEl.removeCls(['loading', 'error']);
+			me.couponLabelEl.removeCls(['loading', 'invalid']);
 			me.couponLabelEl.addCls('success');
 			me.unlockProcess();
 
@@ -246,11 +246,11 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 
 			if (!coupon) {
 				me.couponLabelEl.update('I have a coupon');
-				me.couponLabelEl.removeCls(['error', 'success']);
+				me.couponLabelEl.removeCls(['invalid', 'success']);
 			} else {
 				me.couponLabelEl.update('Invalid Coupon');
 				me.couponLabelEl.removeCls('success');
-				me.couponLabelEl.addCls('error');
+				me.couponLabelEl.addCls('invalid');
 			}
 
 			me.unlockProcess();
