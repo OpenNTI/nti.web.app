@@ -695,7 +695,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 		if (option.Enrolled && option.undoEnrollment) {
 			me.changingEnrollment = true;
 			Ext.Msg.show({
-				msg: 'Dropping ' + me.course.get('Title') + ' will remove it from your library, and you will no longer have access to the course materials',
+				msg: 'Dropping ' + me.course.get('Title') + ' will remove it from your library and you will no longer have access to the course materials.',
 				title: 'Are you sure?',
 				icon: 'warning-red',
 				buttons: {
