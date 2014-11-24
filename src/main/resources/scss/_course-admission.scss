@@ -523,6 +523,17 @@
 					color: $primary-blue;
 				}
 
+				.token-help {
+					width: 690px;
+					margin-left: -10px;
+					color: $secondary-grey;
+					font-style: italic;
+
+					.bold {
+						font-weight: 500;
+					}
+				}
+
 				.information {
 					padding-top: 10px;
 					font-size: 0.9em;

@@ -157,7 +157,8 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 			xtype: 'enrollment-gift-redeem',
 			name: 'Redeem',
 			enrollmentOption: option,
-			hasPricingCard: false,
+			hasPricingCard: true,
+			hidePrice: true,
 			isComplete: function() { return Promise.reject(); },
 			complete: function(cmp, data) {
 				if (!data.token || !data.purchasable) {

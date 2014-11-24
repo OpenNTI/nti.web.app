@@ -12,13 +12,29 @@ Ext.define('NextThought.view.courseware.enrollment.Redeem', {
 	form: [
 		{
 			name: 'gift',
-			label: 'Redeem an Access Key',
+			label: 'Redeem this course with an Access Key.',
 			items: [
 				{
 					xtype: 'enrollment-set',
 					label: '',
 					inputs: [
-						{type: 'text', name: 'token', size: 'full', placeholder: 'Access Key', required: true}
+						{
+							type: 'text',
+							name: 'token',
+							size: 'full',
+							placeholder: 'Access Key',
+							required: true,
+							help: Ext.DomHelper.markup({
+								cls: 'token-help',
+								cn: [
+									{tag: 'span', cls: 'bold', html: 'Not sure where to find your Access Key? '},
+									'Please check your purchase confirmation or gift notification emails. ',
+									'Contact ',
+									{tag: 'a', href: getString('gift-support.link'), html: getString('gift-support.label') + ' '},
+									'if additional support is required.'
+								]
+							})
+						}
 					]
 				},
 				{

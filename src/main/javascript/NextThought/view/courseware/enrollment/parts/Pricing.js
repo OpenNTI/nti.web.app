@@ -60,6 +60,7 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 		couponLabelEl: '.coupon .label',
 		couponContainerEl: '.coupon-container',
 		couponValueEl: '.coupon-value',
+		priceEl: '.price',
 		oldAmountEl: '.price .old-amount',
 		amountEl: '.price .amount'
 	},
@@ -101,7 +102,7 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 			credit: hours && this.enrollmentOption.hasCredit ? Ext.util.Format.plural(hours, 'Credit Hour') : 'No College Credit',
 			begins: Ext.Date.format(begins, format),
 			ends: Ext.Date.format(ends, format),
-			coupons: !!this.enrollmentOption.Purchasable,
+			coupons: !!this.enrollmentOption.Purchasable && !this.hidePrice,
 			price: '$' + this.getPrice(),
 			refunds: refunds
 		});
@@ -113,6 +114,11 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 
 		this.el.setTop(this.base_top);
 
+		if (this.hidePrice) {
+			this.priceEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
+			this.priceEl.hide();
+		}
+ 
 		if (!this.scrollTarget) {
 			console.error('No scroll target for pricing info');
 		} else {
