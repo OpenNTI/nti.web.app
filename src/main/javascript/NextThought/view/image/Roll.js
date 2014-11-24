@@ -6,17 +6,19 @@ Ext.define('NextThought.view.image.Roll', {
 	defaults: {anchor: '100%'},
 	cls: 'image',
 	ui: 'image',
-	items: [{
-		name: 'image',
-		xtype: 'box',
-		cls: 'image',
-		width: 640,
-		height: 480,
-		autoEl: {
-			tag: 'img',
-			src: Ext.BLANK_IMAGE_URL
+	items: [
+		{
+			name: 'image',
+			xtype: 'box',
+			cls: 'image',
+			width: 640,
+			height: 480,
+			autoEl: {
+				tag: 'img',
+				src: Ext.BLANK_IMAGE_URL
+			}
 		}
-	}],
+	],
 
 	constructor: function(config) {
 		var store = config ? (config.store || undefined) : undefined,
@@ -134,15 +136,34 @@ Ext.define('NextThought.view.image.Roll', {
 	afterRender: function() {
 		this.callParent(arguments);
 		Ext.DomHelper.append(this.el, {cls: 'fade-outs', cn: [{cls: 'left'},{cls: 'right'}]});
+
+		this.mon(this.el, 'click', 'onClick');
 	},
 
 
 	selection: function(v, s) {
-		if (s && s[0]) {
+		var item = s && s[0],
+			store = this.others.store,
+			index = store && store.indexOf(item),
+			total = store && store.getCount();
+
+		if (item) {
+			if (index - 1 >= 0) {
+				this.el.down('.left').removeCls('disabled');
+			} else {
+				this.el.down('.left').addCls('disabled');
+			}
+
+			if (index + 1 < total) {
+				this.el.down('.right').removeCls('disabled');
+			} else {
+				this.el.down('.right').addCls('disabled');
+			}
+
 			this.image.el.setStyle({
 				width: '640px',
 				height: (this.getHeight() - this.others.getHeight()) + 'px',
-				backgroundImage: 'url(' + s[0].get('url') + ')',
+				backgroundImage: 'url(' + item.get('url') + ')',
 				backgroundSize: 'contain',
 				backgroundPosition: 'center',
 				backgroundRepeat: 'no-repeat'
@@ -153,5 +174,66 @@ Ext.define('NextThought.view.image.Roll', {
 
 	selectFirst: function() {
 		this.others.getSelectionModel().select(0);
+	},
+
+
+	onClick: function(e) {
+		if (e.getTarget('.disabled')) {
+			console.warn('disabled');
+		} else if (e.getTarget('.right')) {
+			this.selectNext();
+		} else if (e.getTarget('.left')) {
+			this.selectPrev();
+		}
+	},
+
+
+	getActiveSelection: function() {
+		var selection = this.others.getSelectionModel(),
+			activeSelection = selection && selection.getSelection();
+
+		return activeSelection && activeSelection[0];
+	},
+
+
+	selectItem: function(item) {
+		var selection = this.others.getSelectionModel();
+
+		selection.select(item);
+	},
+
+
+	selectNext: function() {
+		var active = this.getActiveSelection(),
+			store = this.others.store,
+			total = store && store.getCount(),
+			currentIndex = store && store.indexOf(active),
+			newIndex;
+
+
+		if (currentIndex + 1 < total) {
+			newIndex = currentIndex + 1;
+		} else {
+			newIndex = 0;
+		}
+
+		this.selectItem(store.getAt(newIndex));
+	},
+
+
+	selectPrev: function() {
+		var active = this.getActiveSelection(),
+			store = this.others.store,
+			total = store && store.getCount(),
+			currentIndex = store && store.indexOf(active),
+			newIndex;
+
+		if (currentIndex - 1 >= 0) {
+			newIndex = currentIndex - 1;
+		} else {
+			newIndex = total - 1;
+		}
+
+		this.selectItem(store.getAt(newIndex));
 	}
 });
