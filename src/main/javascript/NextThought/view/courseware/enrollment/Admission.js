@@ -476,6 +476,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 
 	fillInDefaults: function(values) {
 		var user = $AppConfig.userObject,
+			realname = user.get('realname'),
 			firstName = user.get('FirstName'),
 			lastName = user.get('LastName'),
 			email = user.get('email');
@@ -488,8 +489,8 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 			values.last_name = lastName;
 		}
 
-		if (!values.contact_name && firstName && lastName) {
-			values.contact_name = firstName + ' ' + lastName;
+		if (!values.contact_name && realname) {
+			values.contact_name = realname;
 		}
 
 		if (!values.email && email) {

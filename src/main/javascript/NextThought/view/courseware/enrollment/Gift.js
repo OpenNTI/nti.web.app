@@ -176,8 +176,7 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 
 	fillInDefaults: function(values) {
 		var user = $AppConfig.userObject,
-			firstName = user.get('FirstName'),
-			lastName = user.get('LastName'),
+			realname = user.get('realname'),
 			email = user.get('email');
 
 		values = this.callParent(arguments);
@@ -190,8 +189,8 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 			values.from = email;
 		}
 
-		if (!values.sender && firstName) {
-			values.sender = firstName + (lastName ? ' ' + lastName : '');
+		if (!values.sender && realname) {
+			values.sender = realname;
 		}
 
 		return values;
