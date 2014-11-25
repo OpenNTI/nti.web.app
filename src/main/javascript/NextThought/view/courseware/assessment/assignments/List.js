@@ -119,10 +119,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 			html = getFormattedString('NextThought.view.courseware.assessment.assignments.List.available', {
 				date: Ext.data.format(opens, format)
 			}) + '&middot;' + html;
-		}
-
-		if (day === today) {
-			html += getFormattedString('NextThought.view.courseware.assessment.assignments.List.today', {
+		} else if (day === today) {
+			html = getFormattedString('NextThought.view.courseware.assessment.assignments.List.today', {
 				date: Ext.Date.format(date, format)
 			});
 		}
