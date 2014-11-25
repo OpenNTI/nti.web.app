@@ -84,6 +84,7 @@ Ext.define('NextThought.util.courseware.options.OpenEnrollment', {
 					Enrolled: option.IsEnrolled,
 					Price: null,
 					Wording: me.__getEnrollmentText(details, option),
+					lock: true,
 					doEnrollment: function(cmp) {
 						return new Promise(function(fulfill, reject) {
 							cmp.fireEvent('change-enrollment', course, true, function(success, changed) {

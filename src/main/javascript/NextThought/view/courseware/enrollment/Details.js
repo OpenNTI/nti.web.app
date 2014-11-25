@@ -724,6 +724,10 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 				}
 			});
 		} else if (option.doEnrollment) {
+			if (option.lock) {
+				me.changingEnrollment = true;
+			}
+
 			action = option.doEnrollment(me);
 
 			if (action) {
