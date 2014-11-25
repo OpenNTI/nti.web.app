@@ -16,7 +16,7 @@
  * Generate the bootstrap.js with this command:
 
 
-			sencha -sdk src/main/ext-4.2 compile \
+			sencha -sdk ext-4.2 compile \
 				-classpath=src/main/javascript/NextThought \
 				meta -alias -out src/main/bootstrap.js and \
 				meta -alt -append -out src/main/bootstrap.js

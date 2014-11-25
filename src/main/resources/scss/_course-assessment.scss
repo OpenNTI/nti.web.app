@@ -513,7 +513,7 @@ canvas.x-component-course-assessment {
 				background: $primary-blue !important;
 				box-shadow: inset 0px 0 1px 1px $border-blue,
 					inset 3px 0 0 0 $border-blue;
-				@include icon('arrow-course-dropdown-light', $top:1.5em, $left:auto, $right:1em);
+				@include icon('arrow-course-dropdown-white', $top:1.5em, $left:auto, $right:1em);
 
 				&.x-menu-item-active {
 					background: $primary-blue !important;
