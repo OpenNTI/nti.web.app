@@ -377,10 +377,21 @@ Ext.define('NextThought.controller.CourseWare', {
 				//if we aren't trying to enroll, and we already are drop the course
 				me.toggleEnrollmentStatus(course, enrollment)
 					.then(function() {
+						var enrolledStore = Ext.getStore('courseware.EnrolledCourses');
+
 						course.setEnrolled(false);
 						wait(1).then(me.courseDropped.bind(me, course));
-						callback.call(null, true, true);
-						panel.removeMask();
+
+						me.mon(enrolledStore, {
+							single: true,
+							load: function() {
+								enrolledStore.promiseToLoaded.then(function() {
+									return wait();
+								})
+									.then(panel.removeMask())
+									.then(callback.bind(null, true, true));
+							}
+						});
 					})
 					.fail(function(reason) {
 						console.error(reason);
