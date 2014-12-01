@@ -106,23 +106,26 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	//update the enrollment scopes enrollment
 	setEnrolled: function(enrolled) {
 		var options = this.get('EnrollmentOptions'),
-			open = options && options.OpenEnrollment,
-			fmaep = options && options.FiveminutEnrollment,
-			store = options && options.StoreEnrollment;
+			open = options && options.getType('OpenEnrollment'),
+			fmaep = options && options.getType('FiveminutEnrollment'),
+			store = options && options.getType('StoreEnrollment');
 
 		//if we are dropping the course, we won't update our scopes
 		//when the library reloads so set all the options as not enrolled
 		if (!enrolled) {
 			if (open) {
 				open.IsEnrolled = false;
+				options.setType('OpenEnrollment', open);
 			}
 
 			if (fmaep) {
 				fmaep.IsEnrolled = false;
+				options.setType('FiveminuteEnrollment', fmaep);
 			}
 
 			if (store) {
 				store.IsEnrolled = false;
+				options.setType('StoreEnrollment', store);
 			}
 		}
 
