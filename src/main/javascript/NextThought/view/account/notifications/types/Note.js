@@ -62,12 +62,12 @@ Ext.define('NextThought.view.account.notifications.types.Note', {
 
 				if (!Ext.isEmpty(labels)) {
 					location = labels.shift();
-					lineage.reverse();
+					labels.reverse();
 				}
 
 				rec.set({
 					location: Ext.String.ellipsis(location, 150, false),
-					path: lineage.join(' / '),
+					path: labels.join(' / '),
 					textBodyContent: rec.getBodyText && rec.getBodyText()
 				});
 			});
