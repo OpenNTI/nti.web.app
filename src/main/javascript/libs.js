@@ -15,5 +15,9 @@ loadExternalLibraries([
 		url: 'resources/lib/rangy-1.3alpha.681/rangy-textrange.js',
 		waitFor: 'rangy',
 		cb: function() {rangy.init();}
+	}},
+	{'Timeline': {
+		url: 'resources/lib/timeline/js/storyjs-embed.js',
+		waitFor: 'jQuery'
 	}}
 ]);
