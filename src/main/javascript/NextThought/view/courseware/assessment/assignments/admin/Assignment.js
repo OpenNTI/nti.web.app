@@ -62,7 +62,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 					cls: 'subtitle',
 					cn: [
 						{ tag: 'span', cls: 'due', html: '{{{NextThought.view.courseware.assessment.assignments.admin.Assignment.due}}}'},
-						{ tag: 'span', cls: 'link arrow'}
+						{ tag: 'span', cls: 'toggle-avatar link enabled', html: 'Hide Avatars'},
+						{ tag: 'span', cls: 'link filters arrow'}
 					]
 				}
 			]
@@ -77,7 +78,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		nextEl: '.toolbar .controls .down',
 		totalEl: '.toolbar .controls .page .total',
 		changeDateEl: '.header .controls .email',
-		filtersEl: '.header span.link',
+		filtersEl: '.header span.filters',
+		avatarEl: '.header span.toggle-avatar',
 		reportsEl: '.header .controls .reports'
 	},
 
@@ -198,12 +200,18 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			search: {fn: 'doSearch', buffer: 450}
 		});
 
-		var grid = this.down('grid'),
+		var me = this,
+			grid = me.down('grid'),
 			completed = grid && grid.down('[dataIndex=completed]');
 
-		if (completed && Ext.isEmpty(this.assignment.get('parts'))) {
+		if (completed && Ext.isEmpty(me.assignment.get('parts'))) {
 			completed.hide();
 		}
+
+		$AppConfig.Preferences.getPreference('Gradebook')
+			.then(function(value) {
+				me.toggleAvatars(!value.get('hide_avatars'));
+			});
 	},
 
 
@@ -254,6 +262,39 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			this._showMask();
 		}
 		this.syncFilterToUI(true);
+
+		this.mon(this.avatarEl, 'click', 'toggleAvatarsClicked');
+	},
+
+
+	toggleAvatarsClicked: function(e) {
+		this.toggleAvatars(!e.getTarget('.enabled'));
+	},
+
+
+	toggleAvatars: function(show) {
+		if (!this.rendered) {
+			this.on('afterrender', this.toggleAvatars.bind(this, show));
+			return;
+		}
+
+		if (show) {
+			this.avatarEl.update('Hide Avatars');
+			this.avatarEl.removeCls('disabled');
+			this.avatarEl.addCls('enabled');
+			this.removeCls('hide-avatars');
+		} else {
+			this.avatarEl.update('Show Avatars');
+			this.avatarEl.removeCls('enabled');
+			this.avatarEl.addCls('disabled');
+			this.addCls('hide-avatars');
+		}
+
+		$AppConfig.Preferences.getPreference('Gradebook')
+			.then(function(value) {
+				value.set('hide_avatars', !show);
+				value.save();
+			});
 	},
 
 

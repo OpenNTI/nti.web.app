@@ -620,6 +620,16 @@ canvas.x-component-course-assessment {
 	}
 }
 
+.course-assessment-header.assignment-item.hide-avatars {
+	.x-grid-body .x-grid-row .x-grid-cell .user-cell .avatar {
+		display: none;
+	}
+
+	.x-grid-body .x-grid-row .x-grid-cell .user-cell .name {
+		margin-left: 5px;
+	}
+}
+
 .course-assessment-header {
 	font-size: 16px;//force a base em size
 
