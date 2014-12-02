@@ -37,7 +37,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				{
 					cls: 'tools',
 					cn: [
-						{ tag: 'a', href: '{exportLink}', cls: 'download button', html: getString('NextThought.view.courseware.assessment.admin.performance.Root.export')}
+						{ tag: 'a', href: '{exportLink}', cls: 'download button', html: getString('NextThought.view.courseware.assessment.admin.performance.Root.export')},
+						{ cls: 'toggle-avatar enabled', html: 'Hide Avatars'}
 					]
 				}
 			]},
@@ -46,7 +47,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				itemEl: '.item',
 				inputEl: '.search input',
 				clearEl: '.search .clear',
-				exportButton: 'a.download.button'
+				exportButton: 'a.download.button',
+				avatarEl: '.toggle-avatar'
 			}
 		},{
 			anchor: '0 -115',
@@ -211,12 +213,19 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	initComponent: function() {
-		this.callParent(arguments);
-		this.supported = true;
-		this.grid = this.down('grid');
-		this.grid.bindStore(this.store);
-		this.header = this.down('box');
-		this.createGradeMenu();
+		var me = this;
+
+		me.callParent(arguments);
+		me.supported = true;
+		me.grid = me.down('grid');
+		me.grid.bindStore(me.store);
+		me.header = me.down('box');
+		me.createGradeMenu();
+
+		$AppConfig.Preferences.getPreference('Gradebook')
+			.then(function(value) {
+				me.toggleAvatars(!value.get('hide_avatars'));
+			});
 	},
 
 
@@ -245,7 +254,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			studentEl: {click: 'showStudentMenu', scope: this},
 			itemEl: {click: 'showItemMenu', scope: this},
 			inputEl: {keyup: 'changeNameFilter', scope: this, buffer: 350},
-			clearEl: {click: 'clearSearch', scope: this}
+			clearEl: {click: 'clearSearch', scope: this},
+			avatarEl: {click: 'toggleAvatarsClicked', scope: this}
 		});
 
 		this.mon(this.grid, {
@@ -260,6 +270,38 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		});
 	},
 	//</editor-fold>
+
+	toggleAvatarsClicked: function(e) {
+		this.toggleAvatars(!e.getTarget('.enabled'));
+	},
+
+
+	toggleAvatars: function(show) {
+		if (!this.rendered) {
+			this.on('afterrender', this.toggleAvatars.bind(this, show));
+			return;
+		}
+
+		var avatarEl = this.header.avatarEl;
+
+		if (show) {
+			avatarEl.update('Hide Avatars');
+			avatarEl.removeCls('disabled');
+			avatarEl.addCls('enabled');
+			this.removeCls('hide-avatars');
+		} else {
+			avatarEl.update('Show Avatars');
+			avatarEl.removeCls('enabled');
+			avatarEl.addCls('disabled');
+			this.addCls('hide-avatars');
+		}
+
+		$AppConfig.Preferences.getPreference('Gradebook')
+			.then(function(value) {
+				value.set('hide_avatars', !show);
+				value.save();
+			});
+	},
 
 
 	//<editor-fold desc="Header Managements">

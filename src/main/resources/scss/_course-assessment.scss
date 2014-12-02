@@ -359,10 +359,36 @@ canvas.x-component-course-assessment {
 		}
 	}
 
+	.tools {
+		position: relative;
+
+		.toggle-avatar {
+			position: absolute;
+
+			top: 1em;
+			right: 1em;
+			padding: 0.8em 0;
+			font: normal 300 0.9em/1 $font;
+			color: $primary-blue;
+			cursor: pointer;
+		}
+	}
+
+	&.hide-avatars {
+		.avatar {
+			display: none;
+		}
+
+		.studentbox .wrap {
+			margin-left: 5px;
+		}
+	}
+
 	.studentbox {
 		cursor: pointer;
 		position: relative;
 		overflow: hidden;
+		min-height: 60px;
 
 		.wrap {
 			margin: 15px 0 0 75px;
