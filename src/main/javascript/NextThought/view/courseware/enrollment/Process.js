@@ -87,7 +87,7 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 			ownerCt: this,
 			scrollTarget: container,
 			lockProcess: this.lockProcess.bind(this),
-			unlockProcess: this.unlockProcess.bind(this),
+			unlockProcess: this.unlockProcess.bind(this)
 		});
 
 		this.on('destroy', 'destroy', this.pricingInfo);
