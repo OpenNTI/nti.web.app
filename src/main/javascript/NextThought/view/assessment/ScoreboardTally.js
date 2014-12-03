@@ -38,7 +38,7 @@ Ext.define('NextThought.view.assessment.ScoreboardTally', {
 			this.incorrectBox.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
 		}
 
-		if (this.questionBox) {
+		if (this.questionsBox) {
 			this.questionsBox.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
 		}
 	},
@@ -49,8 +49,14 @@ Ext.define('NextThought.view.assessment.ScoreboardTally', {
 			return;
 		}
 		this.correctBox.hide();
-		this.incorrectBox.hide();
-		this.questionsBox.show().update(text);
+
+		if (this.incorrectBox) {
+			this.incorrectBox.hide();
+		}
+
+		if (this.questionsBox) {
+			this.questionsBox.show().update(text);
+		}
 	},
 
 	setGreenText: function(text) {
@@ -58,8 +64,15 @@ Ext.define('NextThought.view.assessment.ScoreboardTally', {
 			this.on({single: true, afterrender: this.setGreenText.bind(this, [text])});
 			return;
 		}
-		this.incorrectBox.hide();
-		this.questionsBox.hide();
+
+		if (this.incorrectBox) {
+			this.incorrectBox.hide();
+		}
+
+		if (this.questionsBox) {
+			this.questionsBox.hide();
+		}
+
 		this.correctBox.show().update(text);
 	},
 
@@ -68,9 +81,16 @@ Ext.define('NextThought.view.assessment.ScoreboardTally', {
 			this.on({single: true, afterrender: this.setRedText.bind(this, [text])});
 			return;
 		}
+
 		this.correctBox.hide();
-		this.questionsBox.hide();
-		this.incorrectBox.show().update(text);
+
+		if (this.questionsBox) {
+			this.questionsBox.hide();
+		}
+
+		if (this.incorrectBox) {
+			this.incorrectBox.show().update(text);
+		}
 	},
 
 	setTally: function(correct, total, noScore) {
@@ -100,12 +120,24 @@ Ext.define('NextThought.view.assessment.ScoreboardTally', {
 
 		function updateTpl() {
 			me.correctCount.update(correct || 0);
-			me.incorrectCount.update(incorrect);
-			me.questionsBox.update(Ext.util.Format.plural(total, 'question'));
+
+			if (me.incorrectCount) {
+				me.incorrectCount.update(incorrect);
+			}
+
+			if (me.questionsBox) {
+				me.questionsBox.update(Ext.util.Format.plural(total, 'question'));
+			}
 
 			me.correctBox[correct === 0 ? 'hide' : 'show']();
-			me.incorrectBox[noScore || incorrect === 0 ? 'hide' : 'show']();
-			me.questionsBox[noScore ? 'show' : 'hide']();
+
+			if (me.incorrectBox) {
+				me.incorrectBox[noScore || incorrect === 0 ? 'hide' : 'show']();
+			}
+
+			if (me.questionsBox) {
+				me.questionsBox[noScore ? 'show' : 'hide']();
+			}
 
 			me.message.update(msg);
 		}
