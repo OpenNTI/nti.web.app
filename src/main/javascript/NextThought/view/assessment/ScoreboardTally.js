@@ -33,7 +33,11 @@ Ext.define('NextThought.view.assessment.ScoreboardTally', {
 		}
 
 		this.correctBox.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
-		this.incorrectBox.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
+
+		if (this.incorrectBox) {
+			this.incorrectBox.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
+		}
+
 		this.questionsBox.setVisibilityMode(Ext.dom.Element.DISPLAY).hide();
 	},
 
