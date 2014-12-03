@@ -20,6 +20,8 @@ Ext.define('NextThought.view.library.Panel', {
 	body: {cls: 'library-body', layout: 'auto-card'},
 
 	constructor: function() {
+		var a = 21;
+		console.error('hello world', a);
 		this.callParent(arguments);
 
 		this.cssRule = CSSUtils.getRule('main-view-container-styles', '#' + this.id);

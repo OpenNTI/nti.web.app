@@ -3,8 +3,8 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 	alias: 'widget.enrollment-gift-purchase',
 
 	buttonCfg: [
-		{name: 'Submit', disabled: true, action: 'submit-payment'},
-		{name: 'Cancel', disabled: false, action: 'go-back', secondary: true}
+		{name: getString('NextThought.view.courseware.enrollment.Gift.Submit'), disabled: true, action: 'submit-payment'},
+		{name: getString('NextThought.view.courseware.enrollment.Gift.Cancel'), disabled: false, action: 'go-back', secondary: true}
 	],
 
 	STATE_NAME: 'gift-form',
@@ -12,15 +12,14 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 	form: [
 		{
 			name: 'gift',
-			label: 'Gift Information',
+			label: getString('NextThought.view.courseware.enrollment.Gift.GiftInfo'),
 			items: [
 				{
 					xtype: 'enrollment-set',
 					inputs: [
 						{
 							type: 'description',
-							text: 'If you would like for us to send a gift notification to the person for whom you are purchasing this course, ' +
-									'please enter their name and email below. Pricing information is not included in this notification.'
+							text: getString('NextThought.view.courseware.enrollment.Gift.GiftMessageOption')
 						}
 					]
 				},
@@ -28,31 +27,31 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 					xtype: 'enrollment-set',
 					labelCls: 'gift-recipient',
 					inputs: [
-						{type: 'checkbox', name: 'enable_recipient', text: 'Send a gift notification to:'},
-						{type: 'text', name: 'to_first_name', size: 'large left', placeholder: 'First Name', focusEvent: 'enable-recipient'},
-						{type: 'text', name: 'to_last_name', size: 'large left', placeholder: 'Last Name', focusEvent: 'enable-recipient'},
-						{type: 'text', name: 'receiver', size: 'large left last', required: true, placeholder: 'Email Address', focusEvent: 'enable-recipient'}
+						{type: 'checkbox', name: 'enable_recipient', text: getString('NextThought.view.courseware.enrollment.Gift.GiftNotificationTitle')},
+						{type: 'text', name: 'to_first_name', size: 'large left', placeholder: getString('NextThought.view.courseware.enrollment.Gift.FirstName'), focusEvent: 'enable-recipient'},
+						{type: 'text', name: 'to_last_name', size: 'large left', placeholder: getString('NextThought.view.courseware.enrollment.Gift.LastName'), focusEvent: 'enable-recipient'},
+						{type: 'text', name: 'receiver', size: 'large left last', required: true, placeholder: getString('NextThought.view.courseware.enrollment.Gift.GifteeEmail'), focusEvent: 'enable-recipient'}
 					]
 				},
 				{
 					xtype: 'enrollment-set',
 					labelCls: 'gift-message',
 					inputs: [
-						{type: 'textarea', name: 'message', placeholder: 'Enter your message here...', focusEvent: 'enable-recipient'}
+						{type: 'textarea', name: 'message', placeholder: getString('NextThought.view.courseware.enrollment.Gift.GiftMessagePlaceholder'), focusEvent: 'enable-recipient'}
 					]
 				},
 				{
 					xtype: 'enrollment-set',
 					labelCls: 'gift-from',
-					label: 'From:',
+					label: getString('NextThought.view.courseware.enrollment.Gift.From'),
 					inputs: [
 						{
 							type: 'text',
 							name: 'sender',
 							size: 'large',
-							placeholder: 'Your Name',
+							placeholder: getString('NextThought.view.courseware.enrollment.Gift.GifterName'),
 							focusEvent: 'enable-recipient',
-							help: 'This notification will be sent upon completion of purchase.'
+							help: getString('NextThought.view.courseware.enrollment.Gift.Notice')
 						}
 					]
 				}
@@ -60,7 +59,7 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 		},
 		{
 			name: 'payment',
-			label: 'Payment Information',
+			label: getString('NextThought.view.courseware.enrollment.Gift.PayInfo'),
 			items: [
 				{
 					xtype: 'enrollment-set',
@@ -69,24 +68,24 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 							type: 'text',
 							name: 'from',
 							required: true,
-							placeholder: 'Email Address',
+							placeholder: getString('NextThought.view.courseware.enrollment.Gift.GifterEmail'),
 							size: 'large',
-							help: 'This is where we will send your purchase confirmation.'
+							help: getString('NextThought.view.courseware.enrollment.Gift.GifterPurchaseNotice')
 						}
 					]
 				},
 				{
 					xtype: 'enrollment-set',
-					label: 'Credit Card Information',
+					label: getString('NextThought.view.courseware.enrollment.Gift.CCInfo'),
 					inputs: [
-						{type: 'text', name: 'name', required: true, placeholder: 'Name on Card', size: 'card-name'},
+						{type: 'text', name: 'name', required: true, placeholder: getString('NextThought.view.courseware.enrollment.Gift.CardName'), size: 'card-name'},
 						{
 							type: 'text',
 							name: 'number',
 							required: true,
 							doNotStore: true,
 							//valueType: 'numeric',
-							placeholder: '1234 1234 1234 1234',
+							placeholder: getString('NextThought.view.courseware.enrollment.Gift.CC1234'),
 							size: 'left card-number',
 							validateOnChange: true,
 							paymentFormatter: 'formatCardNumber',
@@ -100,7 +99,7 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 							name: 'exp_',
 							required: true,
 							doNotStore: true,
-							placeholder: 'MM / YY',
+							placeholder: getString('NextThought.view.courseware.enrollment.Gift.CCExp'),
 							size: 'left card-code',
 							validateOnChange: true,
 							paymentFormatter: 'formatCardExpiry',
@@ -112,7 +111,7 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 							name: 'cvc',
 							required: true,
 							doNotStore: true,
-							placeholder: 'Code',
+							placeholder: getString('NextThought.view.courseware.enrollment.Gift.CVCCode'),
 							size: 'left card-code',
 							validateOnChange: true,
 							paymentFormatter: 'formatCardCVC',
@@ -122,17 +121,17 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 				},
 				{
 					xtype: 'enrollment-set',
-					label: 'Billing Address',
+					label: getString('NextThought.view.courseware.enrollment.Gift.BillingInfo'),
 					inputs: [
-						{type: 'text', name: 'address_line1', placeholder: 'Address', required: true, size: 'full'},
-						{type: 'text', name: 'address_line2', placeholder: 'Address (optional)', size: 'full'},
+						{type: 'text', name: 'address_line1', placeholder: getString('NextThought.view.courseware.enrollment.Gift.BillingAddress'), required: true, size: 'full'},
+						{type: 'text', name: 'address_line2', placeholder: getString('NextThought.view.courseware.enrollment.Gift.BillingAddressOpt'), size: 'full'},
 						// {type: 'text', name: 'address_line3', hidden: true, placeholder: 'Address (optional)', size: 'full'},
 						// {type: 'text', name: 'address_line4', hidden: true, placeholder: 'Address (optional)', size: 'full'},
 						// {type: 'text', name: 'address_line5', hidden: true, placeholder: 'Address (optional)', size: 'full'},
-						{type: 'text', name: 'address_city', placeholder: 'City / Town', size: 'large'},
-						{type: 'text', name: 'address_state', placeholder: 'State / Province / Territory / Region', size: 'full'},
-						{type: 'text', name: 'address_country', placeholder: 'Country', required: true, size: 'large left'},
-						{type: 'text', name: 'address_zip', placeholder: 'ZIP / Postal Code', size: 'small left', required: false}
+						{type: 'text', name: 'address_city', placeholder: getString('NextThought.view.courseware.enrollment.Gift.CityTown'), size: 'large'},
+						{type: 'text', name: 'address_state', placeholder: getString('NextThought.view.courseware.enrollment.Gift.StateProvTerrReg'), size: 'full'},
+						{type: 'text', name: 'address_country', placeholder: getString('NextThought.view.courseware.enrollment.Gift.Country'), required: true, size: 'large left'},
+						{type: 'text', name: 'address_zip', placeholder: getString('NextThought.view.courseware.enrollment.Gift.ZIPPostal'), size: 'small left', required: false}
 					]//,
 					// help: [
 					//	{text: 'Add Address Line', type: 'event', event: 'add-address-line'}
@@ -147,7 +146,7 @@ Ext.define('NextThought.view.courseware.enrollment.Gift', {
 							name: 'affirm',
 							doNotSend: true,
 							doNotStore: true,
-							text: 'I have read and agree to the <a data-event="viewLicense">licensing terms.</a>',
+							text: getString('NextThought.view.courseware.enrollment.Gift.LicenseAgree'),
 							correct: true
 						}
 					]

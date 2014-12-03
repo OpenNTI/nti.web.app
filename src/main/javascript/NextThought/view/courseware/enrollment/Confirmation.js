@@ -13,11 +13,11 @@ Ext.define('NextThought.view.courseware.enrollment.Confirmation', {
 			]}
 		]},
 		{cls: 'transaction', cn: [
-			{tag: 'span', cls: 'label', html: 'Transaction ID:'},
+			{tag: 'span', cls: 'label', html: '{{{NextThought.view.courseware.enrollment.Confirmation.TransID}}}'},
 			{cls: 'transaction-id'}
 		]},
 		{cls: 'support', cn: [
-			{cls: 'support-text', html: 'Please contact tech support if you have any issues.'},
+				{cls: 'support-text', html: '{{{NextThought.view.courseware.enrollment.Confirmation.ContactTechSupport}}}'},
 			{cls: 'help-link phone', html: '{phone}'},
 			{tag: 'tpl', 'for': 'helplinks', cn: [
 				{tag: 'a', href: '{href}', html: '{text}', target: '_blank'}
@@ -38,10 +38,10 @@ Ext.define('NextThought.view.courseware.enrollment.Confirmation', {
 		var c = this.course,
 			start = c.get('StartDate'),
 			helplinks = [], i, labelprefix,
-			prompt = '<span class=\'bold\' >{course}</span> starts on {date} and will be conducted fully online. Here are some things to do before class starts:';
-
-		prompt = prompt.replace('{course}', c.get('Title'));
-		prompt = prompt.replace('{date}', Ext.Date.format(start, 'F j, Y'));
+			prompt = getFormattedString('NextThought.view.courseware.enrollment.Confirmation.ClassStartInfo', {
+                date: Ext.Date.format(start, 'F j, Y'),
+                course: c.get('Title')
+            });
 
 		for (i = 1; i <= 3; i++) {
 			labelprefix = 'course-info.course-supoprt.link' + i;
@@ -58,7 +58,7 @@ Ext.define('NextThought.view.courseware.enrollment.Confirmation', {
 			prompt: prompt,
 			todo: [
 				{href: 'welcome', text: getString('enrollment.previewplatform', '', true)},
-				{href: 'profile', text: 'Complete Your Profile'}
+				{href: 'profile', text: getString('NextThought.view.courseware.enrollment.Confirmation.CompleteProfile')}
 			],
 			phone: getString('course-info.course-supoprt.phone'),
 			helplinks: helplinks
@@ -98,7 +98,7 @@ Ext.define('NextThought.view.courseware.enrollment.Confirmation', {
 		me.transactionInput = Ext.widget('simpletext', {
 			inputType: 'text',
 			readOnly: true,
-			placeholder: 'Transaction ID',
+			placeholder: getString('NextThought.view.courseware.enrollment.Confirmation.TransID'),
 			renderTo: me.transactionEl
 		});
 

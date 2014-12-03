@@ -5,38 +5,38 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 	cls: 'payment-verification',
 
 	buttonCfg: [
-		{name: 'Submit Payment', action: 'submit-payment'},
-		{name: 'Cancel', action: 'go-back', secondary: true}
+		{name: getString('NextThought.view.courseware.enrollment.PaymentConfirmation.SubmitPayment'), action: 'submit-payment'},
+		{name: getString('NextThought.view.courseware.enrollment.PaymentConfirmation.Cancel'), action: 'go-back', secondary: true}
 	],
 
 	renderTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{cls: 'info', cn: [
-			{cls: 'title', html: 'Review and Pay'},
-			{cls: 'description', html: 'Please take a moment to review your order and then submit payment.'},
-			{cls: 'warning', html: 'All sales are final.'}
+			{cls: 'title', html: '{{{NextThought.view.courseware.enrollment.PaymentConfirmation.ReviewPay}}}'},
+			{cls: 'description', html: '{{{NextThought.view.courseware.enrollment.PaymentConfirmation.PleaseReview}}}'},
+			{cls: 'warning', html: '{{{NextThought.view.courseware.enrollment.PaymentConfirmation.SaleFinal}}}'}
 		]},
 		{cls: 'gift-info', cn: [
 			{cls: 'title', cn: [
-				{tag: 'span', html: 'Gift Information'},
-				{cls: 'edit', html: 'edit'}
+				{tag: 'span', html: '{{{NextThought.view.courseware.enrollment.PaymentConfirmation.GiftInfo}}}'},
+				{cls: 'edit', html: '{{{NextThought.view.courseware.enrollment.PaymentConfirmation.Edit}}}'}
 			]},
 			{cls: 'from info', cn: [
-				{tag: 'span', cls: 'label', html: 'From'},
+				{tag: 'span', cls: 'label', html: '{{{NextThought.view.courseware.enrollment.PaymentConfirmation.GiftFrom}}}'},
 				{tag: 'span', cls: 'name'}
 			]},
 			{cls: 'to info', cn: [
-				{tag: 'span', cls: 'label', html: 'To'},
+				{tag: 'span', cls: 'label', html: '{{{NextThought.view.courseware.enrollment.PaymentConfirmation.GiftTo}}}'},
 				{tag: 'span', cls: 'to-email'}
 			]},
 			{cls: 'message info', cn: [
-				{tag: 'span', cls: 'label', html: 'Message'},
+				{tag: 'span', cls: 'label', html: '{{{NextThought.view.courseware.enrollment.PaymentConfirmation.GiftMessage}}}'},
 				{tag: 'span', cls: 'message-text'}
 			]}
 		]},
 		{cls: 'payment-info', cn: [
 			{cls: 'title', cn: [
-				{tag: 'span', html: 'Payment Information'},
-				{cls: 'edit', html: 'edit'}
+				{tag: 'span', html: '{{{NextThought.view.courseware.enrollment.PaymentConfirmation.PayInfo}}}'},
+				{cls: 'edit', html: '{{{NextThought.view.courseware.enrollment.PaymentConfirmation.Edit}}}'}
 			]},
 			{cls: 'name info'},
 			{cls: 'card info', cn: [
@@ -50,8 +50,8 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 		]},
 		{cls: 'billing-info', cn: [
 			{cls: 'title', cn: [
-				{tag: 'span', html: 'Billing Address'},
-				{cls: 'edit', html: 'edit'}
+				{tag: 'span', html: '{{{NextThought.view.courseware.enrollment.PaymentConfirmation.BillAddress}}}'},
+				{cls: 'edit', html: '{{{NextThought.view.courseware.enrollment.PaymentConfirmation.Edit}}}'}
 			]},
 			{cls: 'street line1 info'},
 			{cls: 'street line2 info'},
@@ -230,16 +230,16 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 		} else {
 			r = new Promise(function(fulfill, reject) {
 				Ext.Msg.show({
-					title: 'Your payment has not been submitted.',
-					msg: 'If you leave now all progress will be lost.',
+					title: getString('NextThought.view.courseware.enrollment.PaymentConfirmation.PayNotSubmitted'),
+					msg: getString('NextThought.view.courseware.enrollment.PaymentConfirmation.ProgressLost'),
 					icon: 'warning-red',
 					buttons: {
 						primary: {
-							text: 'Stay and Finish',
+							text: getString('NextThought.view.courseware.enrollment.PaymentConfirmation.StayFinish'),
 							handler: reject
 						},
 						secondary: {
-							text: 'Leave this Page',
+							text: getString('NextThought.view.courseware.enrollment.PaymentConfirmation.LeavePage'),
 							handler: function() {
 								fulfill();
 							}
@@ -257,7 +257,7 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 		if (json && (json.Message || json.message)) {
 			this.fireEvent('show-msg', json.Message || json.message, true);
 		} else {
-			this.fireEvent('show-msg', 'An unknown error occurred. Please try again later.', true);
+			this.fireEvent('show-msg', getString('NextThought.view.courseware.enrollment.PaymentConfirmation.UnknownError'), true);
 		}
 	},
 
@@ -266,7 +266,7 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 		var error = attempt.get('Error');
 
 		return {
-			Message: (error && error.get('Message')) || 'An unknown error occurred. Please try again later.'
+			Message: (error && error.get('Message')) || getString('NextThought.view.courseware.enrollment.PaymentConfirmation.UnknownError')
 		};
 	},
 
@@ -285,10 +285,10 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 				error.field = 'coupon';
 				error.Message = json.Message;
 			} else {
-				error.Message = 'An unknown error occurred. Please try again later.';
+				error.Message = getString('NextThought.view.courseware.enrollment.PaymentConfirmation.UnknownError');
 			}
 		} else {
-			error.Message = 'An unknown error occurred. Please try again later.';
+			error.Message = getString('NextThought.view.courseware.enrollment.PaymentConfirmation.UnknownError');
 		}
 
 		this.showError(error);
@@ -307,7 +307,7 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 
 		me.submitButton.disabled = true;
 		me.fireEvent('update-buttons');
-		me.addMask('Submitting payment. This may take a few moments.');
+		me.addMask(getString('NextThought.view.courseware.enrollment.PaymentConfirmation.SubPaymentTime'));
 
 		me.complete(me, data)
 			.then(function(result) {

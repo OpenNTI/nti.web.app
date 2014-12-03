@@ -15,12 +15,12 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 
 	defaultMessages: {
 		Message: '',
-		ContactInformation: 'Please contact the <a href=\'mailto:support@nextthought.com\'>help desk</a> for further information.'
+		ContactInformation: getString('NextThought.view.courseware.enrollment.Admission.ContactHelpDesk'),
 	},
 
 	buttonCfg: [
-		{name: 'Submit Application', disabled: true, action: 'submit-application'},
-		{name: 'Cancel', disabled: false, action: 'go-back', secondary: true}
+		{name: getString('NextThought.view.courseware.enrollment.Admission.SubmitApp'), disabled: true, action: 'submit-application'},
+		{name: getString('NextThought.view.courseware.enrollment.Admission.CancelApp'), disabled: false, action: 'go-back', secondary: true}
 	],
 
 
@@ -51,17 +51,14 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 		{
 			name: 'concurrent-contact',
 			group: 'concurrent',
-			label: 'You May Qualify for Concurrent Enrollment',
+			label: getString('NextThought.view.courseware.enrollment.Admission.ConcurrentEnroll'),
 			items: [
 				{
 					xtype: 'enrollment-set',
 					inputs: [
 						{
 							type: 'description',
-							text: 'Through Concurrent Enrollment (CE), high school juniors and senior can enroll in college classes and earn ' +
-									'college credit while still in high school. Submit your contact info and date of birth below and a ' +
-									'Concurrent Enrollment Counselor will be in touch to guide you through the ' +
-									'<a href="http://www.ou.edu/content/go2/admissions/concurrent.html" target="_blank">Concurrent Enrollment Process.</a>'
+							text: getString('NextThought.view.courseware.enrollment.Admission.CEDescription')
 						}
 					]
 				},
@@ -69,32 +66,32 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 					xtype: 'enrollment-set',
 					label: 'Contact Information',
 					inputs: [
-						{type: 'text', name: 'contact_name', placeholder: 'Full Name', required: true, size: 'large one-line'},
-						{type: 'text', name: 'contact_email', placeholder: 'Email', required: true, size: 'large one-line'},
-						{type: 'text', name: 'contact_phone', placeholder: 'Primary Phone (optional)', valueValidation: /^.{1,128}$/, size: 'large one-line'}
+						{type: 'text', name: 'contact_name', placeholder: getString('NextThought.view.courseware.enrollment.Admission.FullName'), required: true, size: 'large one-line'},
+						{type: 'text', name: 'contact_email', placeholder: getString('NextThought.view.courseware.enrollment.Admission.Email'), required: true, size: 'large one-line'},
+						{type: 'text', name: 'contact_phone', placeholder: getString('NextThought.view.courseware.enrollment.Admission.ContactPhone'), valueValidation: /^.{1,128}$/, size: 'large one-line'}
 					]
 				},
 				{
 					xtype: 'enrollment-set',
-					label: 'What is your Date of Birth?',
+					label: getString('NextThought.view.courseware.enrollment.Admission.DoB'),
 					inputs: [
 						{type: 'date', name: 'contact_date_of_birth', required: true, size: 'third'}
 					]
 				},
 				{
 					xtype: 'enrollment-set',
-					label: 'Address (optional)',
+					label: getString('NextThought.view.courseware.enrollment.Admission.OptAddress'),
 					inputs: [
-						{type: 'text', name: 'contact_street_line1', placeholder: 'Address', size: 'full'},
-						{type: 'text', name: 'contact_street_line2', placeholder: 'Address', size: 'full'},
-						{type: 'text', name: 'contact_street_line3', hidden: true, placeholder: 'Address', size: 'full'},
-						{type: 'text', name: 'contact_street_line4', hidden: true, placeholder: 'Address', size: 'full'},
-						{type: 'text', name: 'contact_street_line4', hidden: true, placeholder: 'Address', size: 'full'},
-						{type: 'link', name: 'add_address_line', text: 'Add Address', eventName: 'add-address-line', args: ['contact_street_line']},
-						{type: 'text', name: 'contact_city', placeholder: 'City / Town', size: 'large'},
-						{type: 'text', name: 'contact_state', placeholder: 'State / Province / Territory / Region', size: 'full'},
-						{type: 'text', name: 'contact_country', placeholder: 'Country', size: 'large left'},
-						{type: 'text', name: 'contact_zip', placeholder: 'ZIP / Postal Code', size: 'small left'}
+						{type: 'text', name: 'contact_street_line1', placeholder: getString('NextThought.view.courseware.enrollment.Admission.AddressLine'), size: 'full'},
+						{type: 'text', name: 'contact_street_line2', placeholder: getString('NextThought.view.courseware.enrollment.Admission.AddressLine'), size: 'full'},
+						{type: 'text', name: 'contact_street_line3', hidden: true, placeholder: getString('NextThought.view.courseware.enrollment.Admission.AddressLine'), size: 'full'},
+						{type: 'text', name: 'contact_street_line4', hidden: true, placeholder: getString('NextThought.view.courseware.enrollment.Admission.AddressLine'), size: 'full'},
+						{type: 'text', name: 'contact_street_line4', hidden: true, placeholder: getString('NextThought.view.courseware.enrollment.Admission.AddressLine'), size: 'full'},
+						{type: 'link', name: 'add_address_line', text: getString('NextThought.view.courseware.enrollment.Admission.AddAddress'), eventName: 'add-address-line', args: ['contact_street_line']},
+						{type: 'text', name: 'contact_city', placeholder: getString('NextThought.view.courseware.enrollment.Admission.CityTown'), size: 'large'},
+						{type: 'text', name: 'contact_state', placeholder: getString('NextThought.view.courseware.enrollment.Admission.StateProvTerrReg'), size: 'full'},
+						{type: 'text', name: 'contact_country', placeholder: getString('NextThought.view.courseware.enrollment.Admission.Country'), size: 'large left'},
+						{type: 'text', name: 'contact_zip', placeholder: getString('NextThought.view.courseware.enrollment.Admission.ZIPPostal'), size: 'small left'}
 					]
 				},
 				{
@@ -107,7 +104,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 							doNotSend: true,
 							doNotStore: true,
 							correct: true,
-							text: 'I want someone from the University of Oklahoma to contact me.'
+							text: getString('NextThought.view.courseware.enrollment.Admission.OUContact')
 						}
 					]
 				}
@@ -116,85 +113,85 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 		{
 			name: 'general',
 			group: 'admission',
-			label: 'General Information',
+			label: getString('NextThought.view.courseware.enrollment.Admission.GeneralInfo'),
 			items: [
 				{
 					xtype: 'enrollment-set',
-					label: 'What is your full name?',
+					label: getString('NextThought.view.courseware.enrollment.Admission.AskName'),
 					inputs: [
-						{type: 'text', name: 'first_name', placeholder: 'First Name', required: true, size: 'third left'},
-						{type: 'text', name: 'middle_name', placeholder: 'Middle Name (optional)', size: 'third left'},
-						{type: 'text', name: 'last_name', placeholder: 'Last Name', required: true, size: 'third left last'}
+						{type: 'text', name: 'first_name', placeholder: getString('NextThought.view.courseware.enrollment.Admission.FirstName'), required: true, size: 'third left'},
+						{type: 'text', name: 'middle_name', placeholder: getString('NextThought.view.courseware.enrollment.Admission.MiddleNameOpt'), size: 'third left'},
+						{type: 'text', name: 'last_name', placeholder: getString('NextThought.view.courseware.enrollment.Admission.LastName'), required: true, size: 'third left last'}
 					]
 				},
 				{
 					xtype: 'enrollment-set',
-					label: 'Do you have a former last name? (optional)',
+					label: getString('NextThought.view.courseware.enrollment.Admission.FormerLastNameOpt'),
 					inputs: [
-						{type: 'text', name: 'former_name', placeholder: 'Former Last Name', size: 'third'}
+						{type: 'text', name: 'former_name', placeholder: getString('NextThought.view.courseware.enrollment.Admission.FormerLastName'), size: 'third'}
 					]
 				},
 				{
 					xtype: 'enrollment-set',
-					label: 'What is your Date of Birth?',
+					label: getString('NextThought.view.courseware.enrollment.Admission.DoB'),
 					inputs: [
 						{type: 'date', name: 'date_of_birth', size: 'third', required: true}
 					]
 				},
 				{
 					xtype: 'enrollment-set',
-					label: 'What is your gender?',
+					label: getString('NextThought.view.courseware.enrollment.Admission.Gender'),
 					inputs: [
 						{type: 'radio-group', name: 'gender', required: true, omitIfBlank: true, options: [
-							{text: 'Male', value: 'M'},
-							{text: 'Female', value: 'F'},
-							{text: 'Prefer not to disclose', value: null}
+							{text: getString('NextThought.view.courseware.enrollment.Admission.Male'), value: 'M'},
+							{text: getString('NextThought.view.courseware.enrollment.Admission.Female'), value: 'F'},
+							{text: getString('NextThought.view.courseware.enrollment.Admission.NotDiscloseGender'), value: null}
 						]}
 					]
 				},
 				{
 					xtype: 'enrollment-set',
-					label: 'Permanent Address',
+					label: getString('NextThought.view.courseware.enrollment.Admission.PermanentAddress'),
 					name: 'permanent-address',
 					inputs: [
-						{type: 'text', name: 'street_line1', placeholder: 'Address', required: true, size: 'full'},
-						{type: 'text', name: 'street_line2', placeholder: 'Address (optional)', size: 'full'},
-						{type: 'text', name: 'street_line3', hidden: true, placeholder: 'Address (optional)', size: 'full'},
-						{type: 'text', name: 'street_line4', hidden: true, placeholder: 'Address (optional)', size: 'full'},
-						{type: 'text', name: 'street_line5', hidden: true, placeholder: 'Address (optional)', size: 'full'},
-						{type: 'link', name: 'add_address_line', text: 'Add Address Line', eventName: 'add-address-line', args: ['street_line']},
-						{type: 'text', name: 'city', placeholder: 'City / Town', size: 'large', required: true},
-						{type: 'dropdown', name: 'state', placeholder: 'State / Province / Territory / Region', size: 'full', options: [], editable: false},
-						{type: 'dropdown', name: 'nation_code', placeholder: 'Country', required: true, size: 'large left', options: []},
-						{type: 'text', name: 'postal_code', placeholder: 'ZIP / Postal Code', size: 'small left', required: false}
+						{type: 'text', name: 'street_line1', placeholder: getString('NextThought.view.courseware.enrollment.Admission.AddressLine'), required: true, size: 'full'},
+						{type: 'text', name: 'street_line2', placeholder: getString('NextThought.view.courseware.enrollment.Admission.AddressOpt'), size: 'full'},
+						{type: 'text', name: 'street_line3', hidden: true, placeholder: getString('NextThought.view.courseware.enrollment.Admission.AddressOpt'), size: 'full'},
+						{type: 'text', name: 'street_line4', hidden: true, placeholder: getString('NextThought.view.courseware.enrollment.Admission.AddressOpt'), size: 'full'},
+						{type: 'text', name: 'street_line5', hidden: true, placeholder: getString('NextThought.view.courseware.enrollment.Admission.AddressOpt'), size: 'full'},
+						{type: 'link', name: 'add_address_line', text: getString('NextThought.view.courseware.enrollment.Admission.AddAddress'), eventName: 'add-address-line', args: ['street_line']},
+						{type: 'text', name: 'city', placeholder: getString('NextThought.view.courseware.enrollment.Admission.CityTown'), size: 'large', required: true},
+						{type: 'dropdown', name: 'state', placeholder: getString('NextThought.view.courseware.enrollment.Admission.StateProvTerrReg'), size: 'full', options: [], editable: false},
+						{type: 'dropdown', name: 'nation_code', placeholder: getString('NextThought.view.courseware.enrollment.Admission.Country'), required: true, size: 'large left', options: []},
+						{type: 'text', name: 'postal_code', placeholder: getString('NextThought.view.courseware.enrollment.Admission.ZIPPostal'), size: 'small left', required: false}
 					]
 				},
 				{
 					xtype: 'enrollment-set',
 					inputs: [
-						{type: 'checkbox', text: 'My mailing address is different.', name: 'has_mailing_address', reveals: 'mailing-address', correct: true}
+						{type: 'checkbox', text: getString('NextThought.view.courseware.enrollment.Admission.MailDifferent'), name: 'has_mailing_address', reveals: 'mailing-address', correct: true}
 					]
 				},
 				{
 					xtype: 'enrollment-set',
 					name: 'mailing-address',
-					label: 'Mailing Address',
+					label: getString('NextThought.view.courseware.enrollment.Admission.MailingAddress'),
 					inputs: [
-						{type: 'text', name: 'mailing_street_line1', placeholder: 'Address', size: 'full'},
-						{type: 'text', name: 'mailing_street_line2', placeholder: 'Address', size: 'full'},
-						{type: 'text', name: 'mailing_street_line3', hidden: true, placeholder: 'Address', size: 'full'},
-						{type: 'text', name: 'mailing_street_line4', hidden: true, placeholder: 'Address', size: 'full'},
-						{type: 'text', name: 'mailing_street_line5', hidden: true, placeholder: 'Address', size: 'full'},
-						{type: 'link', name: 'add_address_line', text: 'Add Address Line', eventName: 'add-address-line', args: ['mailing_street_line']},
-						{type: 'text', name: 'mailing_city', placeholder: 'City / Town', size: 'large'},
-						{type: 'dropdown', name: 'mailing_state', placeholder: 'State / Province / Territory / Region', size: 'full', options: [], editable: false},
-						{type: 'dropdown', name: 'mailing_nation_code', placeholder: 'Country', size: 'large left', options: []},
-						{type: 'text', name: 'mailing_postal_code', placeholder: 'ZIP / Postal Code', size: 'small left'}
+						{type: 'text', name: 'mailing_street_line1', placeholder: getString('NextThought.view.courseware.enrollment.Admission.AddressLine'), size: 'full'},
+						{type: 'text', name: 'mailing_street_line2', placeholder: getString('NextThought.view.courseware.enrollment.Admission.AddressLine'), size: 'full'},
+						{type: 'text', name: 'mailing_street_line3', hidden: true, placeholder: getString('NextThought.view.courseware.enrollment.Admission.AddressLine'), size: 'full'},
+						{type: 'text', name: 'mailing_street_line4', hidden: true, placeholder: getString('NextThought.view.courseware.enrollment.Admission.AddressLine'), size: 'full'},
+						{type: 'text', name: 'mailing_street_line5', hidden: true, placeholder: getString('NextThought.view.courseware.enrollment.Admission.AddressLine'), size: 'full'},
+						{type: 'link', name: 'add_address_line', text: getString('NextThought.view.courseware.enrollment.Admission.AddAddress'), eventName: 'add-address-line', args: ['mailing_street_line']},
+						{type: 'text', name: 'mailing_city', placeholder: getString('NextThought.view.courseware.enrollment.Admission.CityTown'), size: 'large'},
+						{type: 'dropdown', name: 'mailing_state', placeholder: getString('NextThought.view.courseware.enrollment.Admission.StateProvTerrReg'), size: 'full', options: [], editable: false},
+						{type: 'dropdown', name: 'mailing_nation_code', placeholder: getString('NextThought.view.courseware.enrollment.Admission.Country'), size: 'large left', options: []},
+						{type: 'text', name: 'mailing_postal_code', placeholder: getString('NextThought.view.courseware.enrollment.Admission.ZIPPostal'), size: 'small left'}
 					]
 				},
 				{
 					xtype: 'enrollment-set',
-					label: 'Phone Number',
+					label: getString('NextThought.view.courseware.enrollment.Admission.PhoneNumber'),
 					inputs: [
 						{type: 'text', name: 'telephone_number',
 							/*valueType: 'numeric',
@@ -203,19 +200,19 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 								{ '*': '{{' + ((new Array(128)).join('*')) + '}}' }
 							],*/
 							valueValidation: /^.{1,128}$/,
-							placeholder: 'Primary Phone', required: true, size: 'large'}
+							placeholder: getString('NextThought.view.courseware.enrollment.Admission.PrimPhone'), required: true, size: 'large'}
 					]
 				},
 				{
 					xtype: 'enrollment-set',
-					label: 'Email Address',
+					label: getString('NextThought.view.courseware.enrollment.Admission.EmailAddress'),
 					inputs: [
-						{type: 'text', name: 'email', placeholder: 'Primary Email', required: true, size: 'large'}
+						{type: 'text', name: 'email', placeholder: getString('NextThought.view.courseware.enrollment.Admission.PrimEmail'), required: true, size: 'large'}
 					]
 				},
 				{
 					xtype: 'enrollment-set',
-					label: 'Social Security Number (optional)',
+					label: getString('NextThought.view.courseware.enrollment.Admission.SSNOpt'),
 					inputs: [
 						{
 							type: 'text',
@@ -223,69 +220,65 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 							valueType: 'numeric',
 							valuePattern: '{{999}}-{{99}}-{{9999}}',
 							valueValidation: /\d{9}/,
-							placeholder: 'XXX - XX - XXXX',
+							placeholder: getString('NextThought.view.courseware.enrollment.Admission.SSNPlace'),
 							doNotStore: true,
-							help: 'Your Social Security Number is not requred for admission, but it is used for submission of a ' +
-								  Ext.DomHelper.markup({tag: 'a', target: '_blank', html: '1098T', href: 'http://www.irs.gov/uac/Form-1098-T,-Tuition-Statement'}) +
-								  ' to the IRS.'
+							help: getString('NextThought.view.courseware.enrollment.Admission.SSNNotRequired')
 						}
 					]
 				},
 				{
 					xtype: 'enrollment-set',
-					label: 'Are you a U.S. Citizen?',
+					label: getString('NextThought.view.courseware.enrollment.Admission.AskCitizen'),
 					inputs: [
 						{type: 'radio-group', name: 'country_of_citizenship', required: true, options: [
-							{text: 'Yes', value: 'United States'},
-							{text: 'No. I am a citizen of {input}', value: 'dropdown', options: []}
-						]}
-					]
-				},
-				{
+							{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'United States'},
+                            {text: getFormattedString('NextThought.view.courseware.enrollment.Admission.NoCitizenOf', {dropdown: '{input}'}), value: 'dropdown', options: []}
+                    ]}]},
+                {
 					xtype: 'enrollment-set',
-					label: 'Are you a resident of Oklahoma?',
+					label: getString('NextThought.view.courseware.enrollment.Admission.AskOklahoman'),
 					inputs: [
 						{type: 'radio-group', name: 'years_of_oklahoma_residency', /*valType: 'number',*/ required: true, omitIfBlank: true, allowEmptyInput: false, options: [
-							{text: 'Yes. I\'ve been a resident for {input} years.', value: 'input', inputWidth: 48},
-							{text: 'No.', value: 0}
+							{text: getFormattedString('NextThought.view.courseware.enrollment.Admission.OKYears', {input: '{input}'}), value: 'input', inputWidth: 48},
+							{text: getString('NextThought.view.courseware.enrollment.Admission.No'), value: 0}
 						]}
 					]
 				},
 				{
 					xtype: 'enrollment-set',
-					label: 'Are you a highschool graduate?',
+					label: getString('NextThought.view.courseware.enrollment.Admission.HSGrad'),
 					inputs: [
 						{type: 'radio-group', name: 'high_school_graduate', required: true, options: [
-							{text: 'Yes.', value: 'Y'},
-							{text: 'No.', value: 'N'}
+							{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'Y'},
+							{text: getString('NextThought.view.courseware.enrollment.Admission.No'), value: 'N'}
 						]}
 					]
 				},
 				{
 					xtype: 'enrollment-set',
-					label: 'Have you ever attended the University of Oklahoma?',
+					label: getString('NextThought.view.courseware.enrollment.Admission.AskOUAlum'),
 					inputs: [
 						{type: 'radio-group', name: 'sooner_id', required: true, omitIfBlank: true, allowEmptyInput: true, /*valType: 'number',*/ options: [
-							{text: 'Yes, and my Sooner ID was {input}', value: 'input', help: 'If you do not remember your Sooner ID number, please leave this field blank.'},
-							{text: 'No.', value: ''}
+							{text: getFormattedString('NextThought.view.courseware.enrollment.Admission.YesSoonerID', {input: '{input}'}), value: 'input', help: getString('NextThought.view.courseware.enrollment.Admission.ForgotID')},
+							{text: getString('NextThought.view.courseware.enrollment.Admission.No', {value: ''})}
 						]}
 					]
 				},
 				{
 					xtype: 'enrollment-grouped-set',
-					label: 'Have you ever attended another college or university?',
+					label: getString('NextThought.view.courseware.enrollment.Admission.AskCollege'),
 					name: 'attended_other_institution',
 					required: true,
 					options: [
-						{text: 'Yes.', value: 'Y', inputs: [
-							{type: 'checkbox', text: 'I am still attending.', name: 'still_attending', useChar: true, defaultAnswer: 'N'},
-							{type: 'checkbox', text: 'I have obtained a Bachelor\'s degree or higher.', name: 'bachelors_or_higher', useChar: true, defaultAnswer: 'N'},
-							{type: 'radio-group', label: 'I am in good academic standing.', name: 'good_academic_standing', defaultAnswer: 'N', required: true, options: [
-								{text: 'Yes.', value: 'Y'},
-								{text: 'No.', value: 'N'}
+						{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'Y', inputs: [
+							{type: 'checkbox', text: getString('NextThought.view.courseware.enrollment.Admission.CurrentStudent'), name: 'still_attending', useChar: true, defaultAnswer: 'N'},
+							{type: 'checkbox', text: getString('NextThought.view.courseware.enrollment.Admission.BachPlus'), name: 'bachelors_or_higher', useChar: true, defaultAnswer: 'N'},
+							{type: 'radio-group', label: getString('NextThought.view.courseware.enrollment.Admission.GoodAcademic'), name: 'good_academic_standing', defaultAnswer: 'N', required: true, options: [
+								{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'Y'},
+								{text: getString('NextThought.view.courseware.enrollment.Admission.No'), value: 'N'}
 							]}
 						]},
-						{text: 'No.', value: 'N'}
+						{text: getString('NextThought.view.courseware.enrollment.Admission.No'), value: 'N'}
 					]
 				}
 			]
@@ -293,20 +286,14 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 		{
 			name: 'signature',
 			group: 'admission',
-			label: 'Signature',
+			label: getString('NextThought.view.courseware.enrollment.Admission.Signature'),
 			reveals: 'enable-submit',
 			items: [
 				{
 					xtype: 'enrollment-set',
 					inputs: [
-						{type: 'checkbox', name: 'affirm', doNotSend: true, doNotStore: true, correct: true, text:
-							'I affirm that I am not <a data-event=\'prohibited\'>prohibited</a> from enrolling in any University of Oklahoma program. ' +
-							'I understand that submitting any false information to the University, ' +
-							'including but not limited to, any information contained on this form, ' +
-							'or withholding information about my previous academic history will make my application for admission to the University, ' +
-							'as well as any future applications, subject to denial, or will result in expulsion from the University. ' +
-							'I pledge to conduct myself with academic integrity and abide by the tenets of ' +
-							'The University of Oklahoma\'s <a href=\'http://integrity.ou.edu/\' target=\'_blank\'>Integrity Pledge.</a>'
+						{type: 'checkbox', name: 'affirm', doNotSend: true, doNotStore: true, correct: true, text:          
+						getString('NextThought.view.courseware.enrollment.Admission.IntegrityPledge')
 						}
 					]
 				}
@@ -321,7 +308,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 					inputs: [
 						{
 							type: 'description',
-							text: 'After your admission application is sent to OU and processed, we will proceed to enrolling in this course.'
+							text: getString('NextThought.view.courseware.enrollment.Admission.ProceedtoEnroll')
 						}
 					]
 				}
@@ -333,17 +320,10 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 	prohibitedPopover: new Ext.XTemplate(Ext.DomHelper.markup([
 		{cls: 'help-popover hidden', cn: [
 			{cls: 'close'},
-			{cls: 'title', html: 'Policy on Non-Academic Criteria in the Admission of Students'},
+			{cls: 'title', html: getString('NextThought.view.courseware.enrollment.Admission.NonAcademicPolicy')},
 			{
 				cls: 'body',
-				html: 'In addition to the academic criteria used as the basis for the admission of students, ' +
-					'the University shall consider the following non-academic criteria in deciding whether a student shall be granted admission: ' +
-					'whether an applicant has been expelled, suspended, or denied admission or readmission by any other educational institution; ' +
-					'whether an applicant has been convicted of a felony or lesser crime involving moral turpitude; ' +
-					'whether an applicant\'s conduct would be grounds for expulsion, suspension, dismissal or denial of readmission, ' +
-					'had the student been enrolled at the University of Oklahoma. ' +
-					'An applicant may be denied admission to the University if the University determines that there is substantial evidence, ' +
-					'based on any of the instances described above, to indicate the applicant\'s unfitness to be a student at the University of Oklahoma.'
+				html: '{{{NextThought.view.courseware.enrollment.Admission.NonAcademicCriteria}}}'
 			}
 		]}
 	])),
@@ -360,21 +340,19 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 		if (courseSpecific && courseSpecific.AlreadyEnrolled) {
 			currentStudent = courseSpecific.AlreadyEnrolled;
 		} else {
-			currentStudent = Ext.DomHelper.markup([
-				'Please sign up for the course using your ',
-				{tag: 'a', href: 'http://ozone.ou.edu', target: '_blank', html: 'Ozone account.'}
+			currentStudent = Ext.DomHelper.markup([getString('NextThought.view.courseware.enrollment.Admission.SignUpOzone')
 			]);
 		}
 
 
 		form.unshift({
 				name: 'preliminary',
-				label: 'Preliminary Questions',
+				label: getString('NextThought.view.courseware.enrollment.Admission.PrelimQuest'),
 				reveals: ['general', 'signature'],
 				items: [
 					{
 						xtype: 'enrollment-set',
-						label: 'Are you an Oklahoma resident currently attending High School?',
+						label: getString('NextThought.view.courseware.enrollment.Admission.OKHSStudent'),
 						name: 'attending-highschool',
 						inputs: [
 							{
@@ -388,20 +366,21 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 								},
 								hides: 'concurrent-contact',
 								options: [
-									{text: 'Yes', value: 'Y'},
-									{text: 'No', value: 'N'}
+									{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'Y'},
+									{text: getString('NextThought.view.courseware.enrollment.Admission.No'), value: 'N'}
 								]
 							}
 						]
 					},
 					{
 						xtype: 'enrollment-set',
-						label: 'Are you currently attending the University of Oklahoma?',
+
+						label: getString('NextThought.view.courseware.enrollment.Admission.OUStudent'),
 						name: 'attending',
 						inputs: [
 							{type: 'radio-group', name: 'is_currently_attending_ou', correct: 'N', options: [
-								{text: 'Yes', value: 'Y',	content: currentStudent},
-								{text: 'No', value: 'N'}
+								{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'Y',	content: currentStudent},
+								{text: getString('NextThought.view.courseware.enrollment.Admission.No'), value: 'N'}
 							]}
 						]
 					}
@@ -426,19 +405,16 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 		} else {
 			form.unshift({
 				name: 'intro',
-				label: 'Admission to OU Janux',
+				label: getString('NextThought.view.courseware.enrollment.Admission.OUJanux'),
 				items: [
 					{
 						xtype: 'enrollment-set',
 						inputs: [
 							{
 								type: 'description',
-								text:
-									'Before you can earn college credit from the University of Oklahoma, ' +
-									'we need you to answer some questions. ' +
-									'Don\'t worry, the admission process is free and should only take a few minutes.'
+								text: getString('NextThought.view.courseware.enrollment.Admission.OUQuest')
 							},
-							{type: 'link', text: (me.baseIsOpen ? 'Take the free course instead.' : 'Take the Lifelong Learner course instead.'), eventName: 'go-back'}
+							{type: 'link', text: (me.baseIsOpen ? getString('NextThought.view.courseware.enrollment.Admission.FreeCourse') : getString('NextThought.view.courseware.enrollment.Admission.LifelongLearner')), eventName: 'go-back'}
 						]
 					}
 				]
@@ -528,16 +504,16 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 		} else {
 			r = new Promise(function(fulfill, reject) {
 				Ext.Msg.show({
-					title: 'Your application has not been submitted.',
-					msg: 'If you leave now all progress will be lost.',
+					title: getString('NextThought.view.courseware.enrollment.Admission.AppNotSubmitted'),
+					msg: getString('NextThought.view.courseware.enrollment.Admission.ProgressLost'),
 					icon: 'warning-red',
 					buttons: {
 						primary: {
-							text: 'Stay and Finish',
+							text: getString('NextThought.view.courseware.enrollment.Admission.StayFinish'),
 							handler: reject
 						},
 						secondary: {
-							text: 'Leave this Page',
+							text: getString('NextThought.view.courseware.enrollment.Admission.LeavePage'),
 							handler: function() {
 								me.clearStorage();
 								fulfill();
@@ -557,14 +533,14 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 
 		var fields = this.form.slice(),
 			defaults = {
-				Message: 'An unknown error occurred. Please try again later.',
-				ContactInformation: 'Please contact the <a href=\'mailto:support@nextthought.com\'>help desk</a> for further information or resubmit your application.'
+				Message: getString('NextThought.view.courseware.enrollment.Admission.TryLater'),
+				ContactInformation: getString('NextThought.view.courseware.enrollment.Admission.HelpOrResubmit')
 			};
 
 		if (json && json.Message) {
 			fields.unshift({
 				name: 'rejected',
-				label: 'A Problem Occurred. Please Correct the Following:',
+				label: getString('NextThought.view.courseware.enrollment.Admission.Corrections'),
 				labelCls: 'error',
 				items: [
 					{
@@ -586,7 +562,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 		} else {
 			fields.unshift({
 				name: 'rejected',
-				label: 'We are unable to confirm your eligibility to enroll through this process.',
+				label: getString('NextThought.view.courseware.enrollment.Admission.UnabletoConfirm'),
 				labelCls: 'error',
 				items: [
 					{
@@ -611,8 +587,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 
 	showPending: function(json) {
 		var defaults = {
-			Message: 'Your application for admission is being process by OU.' +
-				' Once you are admitted comeback here to enroll in ' + this.course.get('Title') + '.',
+			Message: getFormattedString('NextThought.view.courseware.enrollment.Admission.ComeBackEnroll', {title: this.course.get('Title')}),
 			ContactInformation: this.defaultMessages.ContactInformation
 		};
 
@@ -621,7 +596,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 
 		this.add({
 			name: 'rejected',
-			label: 'We are unable to confirm your eligibility to enroll through this process.',
+			label: getString('NextThought.view.courseware.enrollment.Admission.UnabletoConfirm'),
 			labelCls: 'error',
 			items: [
 				{
@@ -644,7 +619,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 
 	showAlreadyExisted: function(json) {
 		var defaults = {
-			Message: 'Your application could not be processed at this time.',
+			Message: getString('NextThought.view.courseware.enrollment.Admission.CantProcessNow'),
 			ContactInformation: this.defaultMessages.ContactInformation
 		};
 
@@ -673,7 +648,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 
 	showErrorState: function(json) {
 		var defaults = {
-			Message: 'An unknown error occurred. Please try again later.',
+			Message: getString('NextThought.view.courseware.enrollment.Admission.TryLater'),
 			ContactInformation: this.defaultMessages.ContactInformation
 		};
 
@@ -685,7 +660,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 
 		this.add({
 			name: 'rejected',
-			label: 'We are unable to confirm your eligibility to enroll through this process.',
+			label: getString('NextThought.view.courseware.enrollment.Admission.UnabletoConfirm'),
 			labelCls: 'error',
 			items: [
 				{
@@ -706,17 +681,14 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 		this.add({
 			name: 'submitted',
 			labelCls: 'success',
-			label: 'Thank you for your interest in concurrent enrollment.',
+			label: getString('NextThought.view.courseware.enrollment.Admission.InterestCE'),
 			items: [
 				{
 					xtype: 'enrollment-set',
 					inputs: [
 						{
 							type: 'description',
-							text: 'We\'ve received your contact info and a Concurrent Enrollment Counselor will be contacting you shortly. ' +
-									'In the meantime feel free to explore the ' +
-									'<a href="http://www.ou.edu/content/go2/admissions/concurrent.html" target="_blank">Concurrent Enrollment website</a> ' +
-									'to learn more about the process.'
+							text: getString('NextThought.view.courseware.enrollment.Admission.CECounselorContact')
 						}
 					]
 				}
@@ -736,7 +708,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 
 		return new Promise(function(fulfill, reject) {
 			if (!me.isValid(value.group)) {
-				me.fireEvent('show-msg', 'Please fill out all required information.', true, 5000);
+				me.fireEvent('show-msg', getString('NextThought.view.courseware.enrollment.Admission.FillOutAllInfo'), true, 5000);
 				reject();
 				return;
 			}
@@ -776,7 +748,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 			this.fireEvent('enable-submission', true);
 		} else if (json.Status === 202) {
 			this.showError({
-				Message: 'We are unable to confirm your eligibility to enroll through this process.'
+				Message: getString('NextThought.view.courseware.enrollment.Admission.UnabletoConfirm')
 			});
 			this.showPending(json);
 			this.clearStorage();
@@ -803,7 +775,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 		if (success) {
 			this.completed = true;
 			this.clearStorage();
-			this.fireEvent('show-msg', (json && json.Message) || 'Your contact information has been sent.', false, 5000);
+			this.fireEvent('show-msg', (json && json.Message) || getString('NextThought.view.courseware.enrollment.Admission.ContactInfoSent'), false, 5000);
 			this.showConcurrentSubmitted();
 		} else {
 			this.showError(json);
@@ -845,7 +817,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 
 		this.submitBtnCfg.disabled = true;
 		this.fireEvent('update-buttons');
-		this.addMask('Your contact information is being sent.');
+		this.addMask(getString('NextThought.view.courseware.enrollment.Admission.SendingContactInfo'));
 
 		return Service.post(url, value.postData);
 	},
@@ -853,7 +825,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 	submitAdmission: function(value) {
 		this.submitBtnCfg.disabled = true;
 		this.fireEvent('update-buttons');
-		this.addMask('Your application is being processed. This may take a few moments.');
+		this.addMask(getString('NextThought.view.courseware.enrollment.Admission.ProcessApp'));
 
 		return this.complete(this, value.postData);
 	},
@@ -898,7 +870,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 
 				if (!response) {
 					json = {
-						message: 'An unknown error occurred. Please try again later.'
+						message: getString('NextThought.view.courseware.enrollment.Admission.TryLater')
 					};
 				} else {
 					json = Ext.JSON.decode(response.responseText || response, true);

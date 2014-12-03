@@ -11,8 +11,8 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 	defaultType: 'enrollment-group',
 
 	buttonCfg: [
-		{name: 'Continue to Enrollment', disabled: true, action: 'submit-payment'},
-		{name: 'Cancel', disabled: false, action: 'go-back', secondary: true}
+		{name: getString('NextThought.view.courseware.enrollment.Purchase.ContEnroll'), disabled: true, action: 'submit-payment'},
+		{name: getString('NextThought.view.courseware.enrollment.Purchase.CancelEnroll'), disabled: false, action: 'go-back', secondary: true}
 	],
 
 	STATE_NAME: 'enrollment-purchase',
@@ -21,20 +21,20 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 	form: [
 		{
 			name: 'payment',
-			label: 'Payment Information',
+			label: getString('NextThought.view.courseware.enrollment.Purchase.PayInfo'),
 			items: [
 				{
 					xtype: 'enrollment-set',
-					label: 'Credit Card Information',
+					label: getString('NextThought.view.courseware.enrollment.Purchase.CCInfo'),
 					inputs: [
-						{type: 'text', name: 'name', required: true, placeholder: 'Name on Card', size: 'card-name'},
+						{type: 'text', name: 'name', required: true, placeholder: getString('NextThought.view.courseware.enrollment.Purchase.CardName'), size: 'card-name'},
 						{
 							type: 'text',
 							name: 'number',
 							required: true,
 							doNotStore: true,
 							//valueType: 'numeric',
-							placeholder: '1234 1234 1234 1234',
+							placeholder: getString('NextThought.view.courseware.enrollment.Purchase.Card1234'),
 							size: 'left card-number',
 							validateOnChange: true,
 							paymentFormatter: 'formatCardNumber',
@@ -48,7 +48,7 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 							name: 'exp_',
 							required: true,
 							doNotStore: true,
-							placeholder: 'MM / YY',
+							placeholder: getString('NextThought.view.courseware.enrollment.Purchase.CardExpDate'),
 							size: 'left card-code',
 							validateOnChange: true,
 							paymentFormatter: 'formatCardExpiry',
@@ -60,7 +60,7 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 							name: 'cvc',
 							required: true,
 							doNotStore: true,
-							placeholder: 'Code',
+							placeholder: getString('NextThought.view.courseware.enrollment.Purchase.CardCVC'),
 							size: 'left card-code',
 							validateOnChange: true,
 							paymentFormatter: 'formatCardCVC',
@@ -70,17 +70,17 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 				},
 				{
 					xtype: 'enrollment-set',
-					label: 'Billing Address',
+					label: getString('NextThought.view.courseware.enrollment.Purchase.BillInfo'),
 					inputs: [
-						{type: 'text', name: 'address_line1', placeholder: 'Address', required: true, size: 'full'},
-						{type: 'text', name: 'address_line2', placeholder: 'Address (optional)', size: 'full'},
+						{type: 'text', name: 'address_line1', placeholder: getString('NextThought.view.courseware.enrollment.Purchase.BillAddress'), required: true, size: 'full'},
+						{type: 'text', name: 'address_line2', placeholder: getString('NextThought.view.courseware.enrollment.Purchase.BillAddressOpt'), size: 'full'},
 						// {type: 'text', name: 'address_line3', hidden: true, placeholder: 'Address (optional)', size: 'full'},
 						// {type: 'text', name: 'address_line4', hidden: true, placeholder: 'Address (optional)', size: 'full'},
 						// {type: 'text', name: 'address_line5', hidden: true, placeholder: 'Address (optional)', size: 'full'},
-						{type: 'text', name: 'address_city', placeholder: 'City / Town', size: 'large'},
-						{type: 'text', name: 'address_state', placeholder: 'State / Province / Territory / Region', size: 'full'},
-						{type: 'text', name: 'address_country', placeholder: 'Country', required: true, size: 'large left'},
-						{type: 'text', name: 'address_zip', placeholder: 'ZIP / Postal Code', size: 'small left', required: false}
+						{type: 'text', name: 'address_city', placeholder: getString('NextThought.view.courseware.enrollment.Purchase.CityTown'), size: 'large'},
+						{type: 'text', name: 'address_state', placeholder: getString('NextThought.view.courseware.enrollment.Purchase.StateProvTerrReg'), size: 'full'},
+						{type: 'text', name: 'address_country', placeholder: getString('NextThought.view.courseware.enrollment.Purchase.Country'), required: true, size: 'large left'},
+						{type: 'text', name: 'address_zip', placeholder: getString('NextThought.view.courseware.enrollment.Purchase.ZIPPostalCode'), size: 'small left', required: false}
 					]//,
 					// help: [
 					//	{text: 'Add Address Line', type: 'event', event: 'add-address-line'}
@@ -95,7 +95,7 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 							name: 'affirm',
 							doNotSend: true,
 							doNotStore: true,
-							text: 'I have read and agree to the <a data-event="viewLicense">licensing terms.</a>',
+							text: getString('NextThought.view.courseware.enrollment.Purchase.LicenseAgree'),
 							correct: true
 						}
 					]
@@ -184,16 +184,16 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 		} else {
 			r = new Promise(function(fulfill, reject) {
 				Ext.Msg.show({
-					title: 'Your payment has not been submitted.',
-					msg: 'If you leave now all progress will be lost.',
+					title: getString('NextThought.view.courseware.enrollment.Purchase.PayNotSubmitted'),
+					msg: getString('NextThought.view.courseware.enrollment.Purchase.ProgressLost'),
 					icon: 'warning-red',
 					buttons: {
 						primary: {
-							text: 'Stay and Finish',
+							text: getString('NextThought.view.courseware.enrollment.Purchase.StayFinish'),
 							handler: reject
 						},
 						secondary: {
-							text: 'Leave this Page',
+							text: getString('NextThought.view.courseware.enrollment.Purchase.LeavePage'),
 							handler: function() {
 								me.clearStorage();
 								fulfill();
@@ -237,7 +237,7 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 			raw.quantity = 'self';
 			raw.count = '1';
 		} else if (raw.quantity === 0) {
-			this.showError({Messge: 'Invalid number of licenses'});
+			this.showError({Messge: getString('NextThought.view.courseware.enrollment.Purchase.InvalidNumbofLicenses')});
 			raw = false;
 		} else {
 			raw.count = raw.quantity;
@@ -255,7 +255,7 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 			if (me.isValid()) {
 				fulfill();
 			} else {
-				me.fireEvent('show-msg', 'Please fill out all required information.', true, 5000);
+				me.fireEvent('show-msg', getString('NextThought.view.courseware.enrollment.Purchase.FillInfo'), true, 5000);
 				reject();
 			}
 		});
@@ -275,10 +275,10 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 			} else if (json.Type && json.Type === 'FormError') {
 				error = json;
 			} else {
-				error.Message = 'An unknown error occurred. Please try again later.';
+				error.Message = getString('NextThought.view.courseware.enrollment.Purchase.UnknownError');
 			}
 		} else {
-			error.Message = 'An unknown error occurred. Please try again later.';
+			error.Message = getString('NextThought.view.courseware.enrollment.Purchase.UnknownError');
 		}
 
 		this.showError(error);
@@ -301,7 +301,7 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 					invalid = false;
 					me.submitBtnCfg.disabled = true;
 					me.fireEvent('update-buttons');
-					me.addMask('Processing card information. You will not be charged yet.');
+					me.addMask(getString('NextThought.view.courseware.enrollment.Purchase.CardProcessNotCharge'));
 					return me.complete(me, data);
 				},
 				function() {

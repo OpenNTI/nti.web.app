@@ -3,8 +3,8 @@ Ext.define('NextThought.view.courseware.enrollment.Redeem', {
 	alias: 'widget.enrollment-gift-redeem',
 
 	buttonCfg: [
-		{name: 'Redeem', disabled: true, action: 'submit-payment'},
-		{name: 'Cancel', disabled: false, action: 'go-back', secondary: true}
+		{name: getString('NextThought.view.courseware.enrollment.Redeem.Redeem'), disabled: true, action: 'submit-payment'},
+		{name: getString('NextThought.view.courseware.enrollment.Redeem.Cancel'), disabled: false, action: 'go-back', secondary: true}
 	],
 
 	STATE_NAME: 'gift-redeem',
@@ -12,7 +12,8 @@ Ext.define('NextThought.view.courseware.enrollment.Redeem', {
 	form: [
 		{
 			name: 'gift',
-			label: 'Redeem this course with an Access Key.',
+			label: getString('NextThought.view.courseware.enrollment.Redeem.AccessKeyRedeem'),
+
 			items: [
 				{
 					xtype: 'enrollment-set',
@@ -22,16 +23,19 @@ Ext.define('NextThought.view.courseware.enrollment.Redeem', {
 							type: 'text',
 							name: 'token',
 							size: 'full',
-							placeholder: 'Access Key',
+							placeholder: getString('NextThought.view.courseware.enrollment.Redeem.AccessKeyInput'),
 							required: true,
 							help: Ext.DomHelper.markup({
 								cls: 'token-help',
 								cn: [
-									{tag: 'span', cls: 'bold', html: 'Not sure where to find your Access Key? '},
-									'Please check your purchase confirmation or gift notification emails. ',
-									'Contact ',
+									{tag: 'span', cls: 'bold', html: '{{{NextThought.view.courseware.enrollment.Redeem.HelpFindAccessKey}}}'},
+									getString('NextThought.view.courseware.enrollment.Redeem.CheckEmail'),
+									getFormattedString('NextThought.view.courseware.enrollment.Redeem.ContactSupport', {support: getString('gift-support.link')}),
+									
+									//commenting out current line so that the world doesn't explode if the above solution doesn't work quite right 
+									/*'Contact ',
 									{tag: 'a', href: getString('gift-support.link'), html: getString('gift-support.label') + ' '},
-									'if additional support is required.'
+									'if additional support is required.'*/
 								]
 							})
 						}
@@ -59,7 +63,7 @@ Ext.define('NextThought.view.courseware.enrollment.Redeem', {
 							name: 'affirm',
 							doNotSend: true,
 							doNotStore: true,
-							text: 'I have read and agree to the <a data-event="viewLicense">licensing terms.</a>',
+							text: getString('NextThought.view.courseware.enrollment.Redeem.LicensingAgree'),
 							correct: true
 						}
 					]

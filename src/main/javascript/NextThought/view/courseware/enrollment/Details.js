@@ -11,7 +11,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 	enrollmentCardTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{cls: 'enroll-card', cn: [
 			{cls: 'enroll-option base {base.cls}', 'data-name': '{base.name}', cn: [
-				{cls: 'enrolled', html: 'Enrolled'},
+				{cls: 'enrolled', html: '{{{NextThought.view.courseware.enrollment.Details.Enrolled}}}'},
 				{cls: 'title', html: '{base.title}'},
 				{cls: 'price', html: '{base.priceString}'},
 				{cls: 'info', html: '{base.information}'},
@@ -39,18 +39,18 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			{cls: 'button {buttonCls}', 'data-name': '{buttonName}', html: '{buttonText}'},
 			{tag: 'tpl', 'if': 'drop', cn: [
 				{cls: 'drop', cn: [
-					{cls: 'title', html: 'How do I drop?'},
+					{cls: 'title', html: '{{{NextThought.view.courseware.enrollment.Details.HowtoDrop}}}'},
 					{cls: 'info', html: '{drop}'}
 				]}
 			]}
 		]},
 		{cls: 'gift-card {base.giftClass}', cn: [
 			{cls: 'give {base.giveClass}', cn: [
-				{cls: 'title', html: 'Give This Course as a Gift'},
+				{cls: 'title', html: '{{{NextThought.view.courseware.enrollment.Details.CourseGift}}}'},
 				{cls: 'sub', html: '{base.giveTitle}'}
 			]},
 			{cls: 'redeem {base.redeemClass}', cn: [
-				{cls: 'title', html: 'Redeem a Gift'}
+				{cls: 'title', html: '{{{NextThought.view.courseware.enrollment.Details.RedeemGift}}}'}
 			]}
 		]}
 	])),
@@ -476,22 +476,22 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 		//get the string for the base
 		if (addOn === undefined) {
 			if (!base) {
-				price = 'Free';
+				price = getString('NextThought.view.courseware.enrollment.Details.PriceFree');
 			} else {
-				price = '$' + base;
+				price = getString('NextThought.view.courseware.enrollment.Details.DollarSign') + base;
 			}
 		//if is no base or its free (0)
 		} else if (!base) {
 			if (!addOn) {
-				price = 'Free';
+				price = getString('NextThought.view.courseware.enrollment.Details.PriceFree');
 			} else {
-				price = '$' + addOn;
+				price = getString('NextThought.view.courseware.enrollment.Details.DollarSign') + addOn;
 			}
 		} else {
 			if (!addOn) {
-				price = 'Free';
+				price = getString('NextThought.view.courseware.enrollment.Details.PriceFree');
 			} else {
-				price = 'Add $' + Math.abs(addOn - base);
+				price = getString('NextThought.view.courseware.enrollment.Details.AddDollarSign') + Math.abs(addOn - base);
 			}
 		}
 
@@ -507,7 +507,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 		} else if (option.price) {
 			cls = 'paid';
 		} else {
-			cls = 'free';
+			cls = 'free'; 
 		}
 
 		return cls;
@@ -695,30 +695,32 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 		if (option.Enrolled && option.undoEnrollment) {
 			me.changingEnrollment = true;
 			Ext.Msg.show({
-				msg: 'Dropping ' + me.course.get('Title') + ' will remove it from your library and you will no longer have access to the course materials.',
-				title: 'Are you sure?',
+				msg: getFormattedString('NextThought.view.courseware.enrollment.Details.DropDetails', {title: title}),
+				title: getString('NextThought.view.courseware.enrollment.Details.AreSure'),
 				icon: 'warning-red',
 				buttons: {
 					primary: {
-						text: 'Drop Course',
+						text: getString('NextThought.view.courseware.enrollment.Details.DropCourse'),
 						cls: 'caution',
 						handler: function() {
 							me.addMask();
 							option.undoEnrollment(me)
 								.then(function(changed) {
 									me.fireEvent('enrolled-action', false);
-									me.showMessage('You are no longer enrolled in ' + title);
+									me.showMessage(getFormattedString('NextThought.view.courseware.enrollment.Details.dropped', {
+										title: title
+									}));
 									done(true, changed);
 								})
 								.fail(function(reason) {
 									console.error('failed to drop course', reason);
-									me.showMessage('There was an error dropping the course. Please try again later.', true);
+									me.showMessage(getString('NextThought.view.courseware.enrollment.Details.ProblemDropping'), true);
 									done(false);
 								});
 						}
 					},
 					secondary: {
-						text: 'Cancel',
+						text: getString('NextThought.view.courseware.enrollment.Details.DropCancel'),
 						handler: done.bind(me, false)
 					}
 				}
@@ -757,7 +759,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 					.fail(function(reason) {
 						console.error('failed to enroll in course', reason);
 
-						me.showMessage('There was an error enrolling. Please try again later.', true);
+						me.showMessage(getString('NextThought.view.courseware.enrollment.Details.ProblemDropping'), true);
 
 						done(false);
 					});

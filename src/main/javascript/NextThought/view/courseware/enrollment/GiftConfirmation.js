@@ -8,16 +8,14 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 
 	giftInfoTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{cn: [
-			'We\'ve sent an email receipt of this transaction to you at ',
-			{tag: 'a', html: '{senderEmail}. '},
+			getFormattedString('NextThought.view.courseware.enrollment.GiftConfirmation.EmailReceipt', {email: senderEmail}),
 			{tag: 'tpl', 'if': 'receiverEmail', cn: [
-				'We\'ve also sent you a copy of the gift notification that was sent to ',
-				{tag: 'a', html: '{receiverEmail} '},
-				'with instructions on how to redeem this gift.'
+				getFormattedString('NextThought.view.courseware.enrollment.GiftConfirmation.GiftCopy', {receiverEmail: receiverEmail}),
+				getString('NextThought.view.courseware.enrollment.GiftConfirmation.InstructionstoRedeem')
 			]},
 			{tag: 'tpl', 'if': '!receiverEmail', cn: [
-				'We\'ve also sent you a separate email that contains instructions on how to redeem this gift.',
-				{tag: 'p', cls: 'bold', html: 'Please be sure to pass this information along to the gift recipient in time to take advantage of the course.'}
+				getString('NextThought.view.courseware.enrollment.GiftConfirmation.RedeemCopy'),
+				{tag: 'p', cls: 'bold', html: '{{{NextThought.view.courseware.enrollment.GiftConfirmation.PassGift}}}'}
 			]}
 		]}
 	])),
@@ -32,15 +30,14 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 			'if you have any issues.'
 		]},
 		{cls: 'token', cn: [
-			{tag: 'span', cls: 'label', html: 'Access Key:'},
+			{tag: 'span', cls: 'label', html: '{{{NextThought.view.courseware.enrollment.GiftConfirmation.AccessKey}}}'},
 			{cls: 'token-text'}
 		]},
 		{cls: 'transaction', cn: [
-			{tag: 'span', cls: 'label', html: 'Transaction ID:'},
+			{tag: 'span', cls: 'label', html: '{{{NextThought.view.courseware.enrollment.GiftConfirmation.TransID}}}'},
 			{cls: 'transaction-id'}
-		]}
+		]},
 	]),
-
 
 	renderSelectors: {
 		tokenEl: '.token .token-text',
@@ -56,10 +53,11 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 		var prompt = this.getPrompt();
 
 		this.renderData = Ext.apply(this.renderData || {}, {
-			heading: 'Thank you for your purchase!',
+
+			heading: getString('NextThought.view.courseware.enrollment.GiftConfirmation.GiftSuccessful'),
 			prompt: prompt
 		});
-	},
+	}
 
 
 	afterRender: function() {
@@ -77,7 +75,7 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 		me.transactionInput = Ext.widget('simpletext', {
 			inputType: 'text',
 			readOnly: true,
-			placeholder: 'Transaction ID',
+			placeholder: getString('NextThought.view.courseware.enrollment.GiftConfirmation.TransID'),
 			renderTo: me.transactionEl
 		});
 
@@ -93,15 +91,15 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 			start = c.get('StartDate'),
 			prompt;
 
-		prompt = 'The start date for <span class=\'bold\'>{course}</span> is {date}.';
+		prompt = getFormattedString('NextThought.view.courseware.enrollment.GiftConfirmation.CourseOnline', {course: c.get('Title')}, {date: Ext.Date.format(start, 'F j, Y'));
 
-		prompt = prompt.replace('{course}', c.get('Title'));
-		prompt = prompt.replace('{date}', Ext.Date.format(start, 'F j, Y'));
+		//prompt = prompt.replace('{course}', c.get('Title'));
+		//prompt = prompt.replace('{date}', Ext.Date.format(start, 'F j, Y'));
 
 		if (hasReceiver) {
-			prompt += ' Please ensure the gift is activated before classes start!';
+			prompt +=  getString('NextThought.view.courseware.enrollment.GiftConfirmation.GiftActivated');
 		} else {
-			prompt += ' Please ensure the gift is redeemed before classes start!';
+			prompt += getString('NextThought.view.courseware.enrollment.GiftConfirmation.GiftRedeemed');
 		}
 
 		return prompt;

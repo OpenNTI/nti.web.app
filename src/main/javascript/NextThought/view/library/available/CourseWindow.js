@@ -32,7 +32,7 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 	center: Ext.emptyFn,
 
 	buttonCfg: [
-		{name: 'Finished', action: 'close'}
+		{name: getString('NextThought.view.library.available.CourseWindow.Finished'), action: 'close'}
 	],
 
 	renderTpl: Ext.DomHelper.markup([

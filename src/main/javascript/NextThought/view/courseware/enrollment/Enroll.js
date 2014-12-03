@@ -9,7 +9,7 @@ Ext.define('NextThought.view.courseware.enrollment.Enroll', {
 	],
 
 	buttonCfg: [
-		{name: 'Continue to Payment', action: 'goto-payment'}
+		{name: getString('NextThought.view.courseware.enrollment.Enroll.ConttoPay'), action: 'goto-payment'}
 	],
 
 	renderTpl: Ext.DomHelper.markup([
@@ -59,13 +59,13 @@ Ext.define('NextThought.view.courseware.enrollment.Enroll', {
 		this.renderData = Ext.apply(this.renderData || {}, {
 			headerCls: this.paymentfail ? 'error' : '',
 			header: this.paymentfail ?
-				'There were some troubles with your payment.' :
-				'Your application has been accepted!',
+				getString('NextThought.view.courseware.enrollment.Enroll.PaymentProblems') :
+				getString('NextThought.view.courseware.enrollment.Enroll.AppAccepted'),
 			text: this.paymentfail ?
-				'Please try again, you will gain access to the content once the payment is successful.' :
-				'Thank you for applying to earn credit online from the University of Oklahoma.',
-			available: 'Your admission credit is available for ' + c.getSemester() + '.',
-			confirm: 'Please take a moment to confirm your course selection before checking out.'
+				getString('NextThought.view.courseware.enrollment.Enroll.TryPayAgain') :
+				getString('NextThought.view.courseware.enrollment.Enroll.ThanksCreditOU'),
+			available: getFormattedString('NextThought.view.courseware.enrollment.Enroll.CreditAvailable', {title: c.getSemester()}),
+			confirm: getString('NextThought.view.courseware.enrollment.Enroll.ConfirmCourse')
 		});
 	},
 
@@ -115,15 +115,15 @@ Ext.define('NextThought.view.courseware.enrollment.Enroll', {
 
 		return new Promise(function(fulfill, reject) {
 			Ext.Msg.show({
-				msg: 'You have not finished enrolling in this course yet.',
+				msg: getString('NextThought.view.courseware.enrollment.Enroll.NotFinished'),
 				buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 				scope: this,
 				icon: 'warning-red',
 				buttonText: {
-					'ok': 'caution:Leave',
-					'cancel': 'Stay'
+					'ok': 'caution: ' +getString('NextThought.view.courseware.enrollment.Enroll.Leave'),
+					'cancel': getString('NextThought.view.courseware.enrollment.Enroll.Stay')
 				},
-				title: 'Are you sure?',
+				title: getString('NextThought.view.courseware.enrollment.Enroll.AreYouSure'),
 				fn: function(str) {
 					if (str === 'ok') {
 						fulfill();
@@ -140,16 +140,16 @@ Ext.define('NextThought.view.courseware.enrollment.Enroll', {
 		if (json && json.Message) {
 			this.fireEvent('show-msg', json.Message, true, 5000);
 		} else {
-			this.fireEvent('show-msg', 'An unknown error occurred. Please try again later.', true, 5000);
+			this.fireEvent('show-msg', getString('NextThought.view.courseware.enrollment.Enroll.TryLater'), true, 5000);
 		}
 	},
 
 
 	showError: function(json) {
 		json = json || {};
-		json.title = 'There were some troubles with your payment.';
-		json.Message = json.Message || 'Please try again, you will gain access to the content once the payment is successful.';
-		json.ContactInformation = json.ContactInformation || 'Please contact the <a href=\'mailto:support@nextthought.com\'>help desk</a> for further information.';
+		json.title = getString('NextThought.view.courseware.enrollment.Enroll.PaymentProblems');
+		json.Message = json.Message || getString('NextThought.view.courseware.enrollment.Enroll.TryPayAgain');
+		json.ContactInformation = json.ContactInformation || getString('NextThought.view.courseware.enrollment.Enroll.HelpDesk');
 
 		this.titleEl.update(json.title);
 		this.titleEl.addCls('error');
@@ -167,7 +167,7 @@ Ext.define('NextThought.view.courseware.enrollment.Enroll', {
 		//if its there, visible, and checked
 		subscribe = this.subscribeEl && this.subscribeEl.isVisible() && this.subscribeEl.dom.checked;
 
-		me.addMask('Finalizing your enrollment. You will be redirected to a secure external payment site to complete this transaction.', 'navigation');
+		me.addMask(getString('NextThought.view.courseware.enrollment.Enroll.ExternalPay'), 'navigation');
 
 		this.complete(this, {
 			subscribe: subscribe
