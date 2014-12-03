@@ -374,21 +374,33 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 				items: [
 					{
 						xtype: 'enrollment-set',
-						label: 'Are you currently attending the University of Oklahoma?',
+						label: 'Are you an Oklahoma resident currently attending High School?',
+						name: 'attending-highschool',
 						inputs: [
-							{type: 'radio-group', name: 'is_currently_attending_ou', correct: 'N', options: [
-								{text: 'Yes', value: 'Y',	content: currentStudent},
-								{text: 'No', value: 'N'}
-							]}
+							{
+								type: 'radio-group',
+								name: 'is_currently_attending_highschool',
+								correct: 'N',
+								noIncorrect: true,
+								reveals: {
+									name: 'attending',
+									ifNotEmpty: true
+								},
+								hides: 'concurrent-contact',
+								options: [
+									{text: 'Yes', value: 'Y'},
+									{text: 'No', value: 'N'}
+								]
+							}
 						]
 					},
 					{
 						xtype: 'enrollment-set',
-						label: 'Are you an Oklahoma resident currently attending High School?',
-						name: 'attending-highschool',
+						label: 'Are you currently attending the University of Oklahoma?',
+						name: 'attending',
 						inputs: [
-							{type: 'radio-group', name: 'is_currently_attending_highschool', correct: 'N', noIncorrect: true, hides: 'concurrent-contact', options: [
-								{text: 'Yes', value: 'Y'},
+							{type: 'radio-group', name: 'is_currently_attending_ou', correct: 'N', options: [
+								{text: 'Yes', value: 'Y',	content: currentStudent},
 								{text: 'No', value: 'N'}
 							]}
 						]

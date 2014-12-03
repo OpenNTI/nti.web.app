@@ -10,7 +10,14 @@ Ext.define('NextThought.view.courseware.enrollment.parts.BaseInput', {
 		if (this.focusEvent) {
 			events.push(this.focusEvent);
 		}
+
 		this.enableBubble(events);
+
+		if (Ext.isString(this.reveals)) {
+			this.reveals = {
+				name: this.reveals
+			};
+		}
 	},
 
 
@@ -18,8 +25,8 @@ Ext.define('NextThought.view.courseware.enrollment.parts.BaseInput', {
 		this.callParent(arguments);
 		this.setUpChangeMonitors();
 
-		if (this.reveals) {
-			this.fireEvent('hide-item', this.reveals);
+		if (this.reveals && !this.reveals.ifNotEmpty) {
+			this.fireEvent('hide-item', this.reveals.name);
 		}
 
 		if (this.hides) {
@@ -58,13 +65,19 @@ Ext.define('NextThought.view.courseware.enrollment.parts.BaseInput', {
 
 		wait()
 			.then(function() {
+
 				if (me.reveals) {
-					if (me.isCorrect()) {
-						me.fireEvent('reveal-item', me.reveals);
-					} else {
-						me.fireEvent('hide-item', me.reveals);
+					if (me.reveals.ifNotEmpty && !me.isEmpty() && me.isCorrect()) {
+						me.fireEvent('reveal-item', me.reveals.name);
+					} else if (me.reveals.ifNotEmpty && !me.isEmpty()) {
+						me.fireEvent('hide-item', me.reveals.name);
+					} else if (!me.reveals.ifNotEmpty && me.isCorrect()) {
+						me.fireEvent('reveal-item', me.reveals.name);
+					} else if (!me.reveals.ifNotEmpty) {
+						me.fireEvent('hide-item', me.reveals.name);
 					}
 				}
+
 
 				if (me.validateOnChange) {
 					me.isValid();
