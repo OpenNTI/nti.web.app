@@ -142,7 +142,7 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 		Ext.each(this.query('simpletext'), function(t) {
 			t.suspendEvents();
 			t.clearValue(true);
-			t.resumeEvents(false);
+			t.resumeEvents(false); 
 		});
 		this.down('button[save]').disable();
 		this.updateLayout();
