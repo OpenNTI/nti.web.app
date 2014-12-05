@@ -1,3 +1,37 @@
+NTIStrings['UnresolvedUsernamePattern'] = 'username';
+
+NTIStrings['default_scoreboard_message'] = 'Results';
+
+NTIStrings['Apologies'] = 'Our Apologies!';
+NTIStrings['Cannot load page.'] = 'Cannot load page. Please try again later.';
+
+NTIStrings['forum_sharing_label'] = 'Share with all students.';
+
+NTIStrings['forums.empty_boards_header'] = 'Oh no! It\'s empty!';
+NTIStrings['forums.empty_boards_sub'] = 'There are no forum boards yet.';
+
+NTIStrings['contact_us_title'] = 'Contact Us...';
+NTIStrings['contact_us_message'] = 'Please use the form below to share your comments, report an issue, or suggest new features.  If you need help or have a question about the features, please take a look at the NextThought Help Center.  We may already have content there to help you.';
+
+NTIStrings['alias_request_title'] = 'Request Name Change';
+NTIStrings['alias_request_message'] = 'Please use the form below to request a change in the way your name is displayed. Submit the name you would like to use and the reason for making this change.';
+
+NTIStrings['no_contact_header'] = 'No Contacts Yet';
+NTIStrings['no_contact_sub'] = 'Click search to find some.';
+NTIStrings['no_list_header'] = 'No Lists Yet';
+NTIStrings['no_list_sub'] = 'Click create list to add one.';
+NTIStrings['no_group_header'] = 'No Groups Yet';
+NTIStrings['no_group_sub'] = 'Click create or join to add some.';
+
+NTIStrings['course-enrollment-enroll'] = 'Get Started';
+
+NTIStrings['course-info.course-supoprt.photo'] = 'resources/images/platform.ou.edu/tech_support.jpg';
+
+NTIStrings['enrollment.enroll.header'] = 'Congratulations!';
+NTIStrings['enrollment.enroll.description'] = 'Your enrollment was successful. This course is open, and you can start participating right away. Visit My Courses to access your materials and get started today.';
+NTIStrings['enrollment.unenroll.header'] = 'Goodbye!';
+NTIStrings['enrollment.unenroll.description'] = 'You are no longer enrolled in this course.';
+
 window.NTIStrings = window.NTIStrings || {};
 NTIStrings['NextThought.view.MessageBar.remember'] = 'I get it. Don&apos;t show this again...';
 NTIStrings['NextThought.view.MessageBar.dismiss'] = 'Dismiss';
@@ -748,8 +782,7 @@ NTIStrings['NextThought.view.courseware.enrollment.Redeem.Cancel'] = 'Cancel';
 NTIStrings['NextThought.view.courseware.enrollment.Redeem.AccessKeyRedeem'] = 'Redeem this course with an Access Key.';
 NTIStrings['NextThought.view.courseware.enrollment.Redeem.AccessKeyInput'] = 'Access Key';
 NTIStrings['NextThought.view.courseware.enrollment.Redeem.HelpFindAccessKey'] = 'Not sure where to find your Access Key?';
-NTIStrings['NextThought.view.courseware.enrollment.Redeem.CheckEmail'] = 'Please check your purchase confirmation emails.';
-NTIStrings['NextThought.view.courseware.enrollment.Redeem.ContactSupport'] = 'Contact {support} if additional support is required.';
+NTIStrings['NextThought.view.courseware.enrollment.Redeem.CheckEmail'] = 'Please check your purchase confirmation emails. Contact <a href="{link}">{support}</a> if additional support is required.';
 NTIStrings['NextThought.view.courseware.enrollment.Redeem.LicensingAgree'] = 'I have read and agree to the <a data-event="viewLicense">licensing terms.</a>';
 NTIStrings['NextThought.view.courseware.enrollment.PaymentConfirmation.SubmitPayment'] = 'Submit Payment';
 NTIStrings['NextThought.view.courseware.enrollment.PaymentConfirmation.Cancel'] = 'Cancel';
@@ -828,7 +861,7 @@ NTIStrings['NextThought.view.courseware.enrollment.GiftConfirmation.AccessKey'] 
 NTIStrings['NextThought.view.courseware.enrollment.GiftConfirmation.TransID'] = 'Transaction ID:';
 NTIStrings['NextThought.view.courseware.enrollment.GiftConfirmation.CourseOnline'] = '{course} starts on {date} and will be conducted fully online.';
 NTIStrings['NextThought.view.courseware.enrollment.GiftConfirmation.TransID'] = 'Transaction ID:';
-NTIStrings['NextThought.view.courseware.enrollment.GiftConfirmation.EmailReceipt'] = 'We&apos;ve sent an email receipt of this transaction to you at {email}.';
+NTIStrings['NextThought.view.courseware.enrollment.GiftConfirmation.EmailReceipt'] = 'We&apos;ve sent an email receipt of this transaction to you at {senderEmail}.';
 NTIStrings['NextThought.view.courseware.enrollment.GiftConfirmation.GiftCopy'] = 'We&apos;ve also sent a copy of the gift notification that was sent to {receiverEmail}';
 NTIStrings['NextThought.view.courseware.enrollment.GiftConfirmation.RedeemCopy'] = 'We&apos;ve also sent you a separate email that contains instructions on how to redeem this gift.';
 NTIStrings['NextThought.view.courseware.enrollment.GiftConfirmation.PassGift'] = 'Please be sure to pass this information along to the gift recipient in time to take advantage of the course.';

@@ -28,9 +28,9 @@ Ext.define('NextThought.view.courseware.enrollment.Redeem', {
 							help: Ext.DomHelper.markup({
 								cls: 'token-help',
 								cn: [
-									{tag: 'span', cls: 'bold', html: '{{{NextThought.view.courseware.enrollment.Redeem.HelpFindAccessKey}}}'},
-									getString('NextThought.view.courseware.enrollment.Redeem.CheckEmail'),
-									getFormattedString('NextThought.view.courseware.enrollment.Redeem.ContactSupport', {support: getString('gift-support.link')}),
+									{tag: 'span', cls: 'bold', html: getString('NextThought.view.courseware.enrollment.Redeem.HelpFindAccessKey') + ' '},
+									getFormattedString('NextThought.view.courseware.enrollment.Redeem.CheckEmail', {support: getString('gift-support.label'), link: getString('gift-support.link')})
+									//getFormattedString('NextThought.view.courseware.enrollment.Redeem.ContactSupport', {support: getString('gift-support.link')})
 									
 									//commenting out current line so that the world doesn't explode if the above solution doesn't work quite right 
 									/*'Contact ',

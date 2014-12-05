@@ -8,13 +8,13 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 
 	giftInfoTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{cn: [
-			getFormattedString('NextThought.view.courseware.enrollment.GiftConfirmation.EmailReceipt', {email: senderEmail}),
+			'{{{NextThought.view.courseware.enrollment.GiftConfirmation.EmailReceipt}}} ',
 			{tag: 'tpl', 'if': 'receiverEmail', cn: [
-				getFormattedString('NextThought.view.courseware.enrollment.GiftConfirmation.GiftCopy', {receiverEmail: receiverEmail}),
+				'{{{NextThought.view.courseware.enrollment.GiftConfirmation.GiftCopy}}} ',
 				getString('NextThought.view.courseware.enrollment.GiftConfirmation.InstructionstoRedeem')
 			]},
 			{tag: 'tpl', 'if': '!receiverEmail', cn: [
-				getString('NextThought.view.courseware.enrollment.GiftConfirmation.RedeemCopy'),
+				'{{{NextThought.view.courseware.enrollment.GiftConfirmation.RedeemCopy}}} ',
 				{tag: 'p', cls: 'bold', html: '{{{NextThought.view.courseware.enrollment.GiftConfirmation.PassGift}}}'}
 			]}
 		]}
@@ -36,7 +36,7 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 		{cls: 'transaction', cn: [
 			{tag: 'span', cls: 'label', html: '{{{NextThought.view.courseware.enrollment.GiftConfirmation.TransID}}}'},
 			{cls: 'transaction-id'}
-		]},
+		]}
 	]),
 
 	renderSelectors: {
@@ -57,7 +57,7 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 			heading: getString('NextThought.view.courseware.enrollment.GiftConfirmation.GiftSuccessful'),
 			prompt: prompt
 		});
-	}
+	},
 
 
 	afterRender: function() {
@@ -91,7 +91,7 @@ Ext.define('NextThought.view.courseware.enrollment.GiftConfirmation', {
 			start = c.get('StartDate'),
 			prompt;
 
-		prompt = getFormattedString('NextThought.view.courseware.enrollment.GiftConfirmation.CourseOnline', {course: c.get('Title')}, {date: Ext.Date.format(start, 'F j, Y'));
+		prompt = getFormattedString('NextThought.view.courseware.enrollment.GiftConfirmation.CourseOnline', {course: c.get('Title'), date: Ext.Date.format(start, 'F j, Y')}) + ' ';
 
 		//prompt = prompt.replace('{course}', c.get('Title'));
 		//prompt = prompt.replace('{date}', Ext.Date.format(start, 'F j, Y'));

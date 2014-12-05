@@ -15,7 +15,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 
 	defaultMessages: {
 		Message: '',
-		ContactInformation: getString('NextThought.view.courseware.enrollment.Admission.ContactHelpDesk'),
+		ContactInformation: getString('NextThought.view.courseware.enrollment.Admission.ContactHelpDesk')
 	},
 
 	buttonCfg: [
