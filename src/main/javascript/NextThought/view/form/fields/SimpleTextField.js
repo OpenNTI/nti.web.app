@@ -50,15 +50,19 @@ Ext.define('NextThought.view.form.fields.SimpleTextField', {
 		e.dom.value = '';
 		e.removeCls('error');
 		this.clearEl.hide();
-		this.keyPressed(new Ext.EventObjectImpl());
+
 		if (!silent) {
 			this.focus();
 			this.fireEvent('clear');
+			this.keyPressed(new Ext.EventObjectImpl());
 		}
 	},
 
 
-	reset: function() { this.clearValue(true); },
+	reset: function() {
+		this.clearValue(true);
+		this.keyPressed(new Ext.EventObjectImpl());
+	},
 
 
 	getValue: function() {
