@@ -891,7 +891,7 @@ NTIStrings['NextThought.view.courseware.enrollment.GiftConfirmation.GiftActivate
 NTIStrings['NextThought.view.courseware.enrollment.GiftConfirmation.GiftRedeemed'] = 'Please ensure the gift is redeemed before classes start!';`
 NTIStrings['NextThought.view.courseware.enrollment.Details.dropped'] = 'You are no longer enrolled in {title}';
 NTIStrings['NextThought.view.courseware.enrollment.Details.DropDetails'] = 'Dropping {title} will remove it from your library and you will no longer have access to the course materials.';
-NTIStrings['NextThought.view.courseware.enrollment.Details.CourseGift'] = 'Gift This Course as a Gift';
+NTIStrings['NextThought.view.courseware.enrollment.Details.CourseGift'] = 'Give This Course as a Gift';
 NTIStrings['NextThought.view.courseware.enrollment.Details.RedeemGift'] = 'Redeem a Gift';
 NTIStrings['NextThought.view.courseware.enrollment.Details.PriceFree'] = 'Free';
 NTIStrings['NextThought.view.courseware.enrollment.Details.DollarSign'] = '$';
