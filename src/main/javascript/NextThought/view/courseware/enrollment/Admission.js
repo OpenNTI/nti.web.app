@@ -80,7 +80,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 				},
 				{
 					xtype: 'enrollment-set',
-					label: getString('NextThought.view.courseware.enrollment.Admission.OptAddress'),
+					label: getString('NextThought.view.courseware.enrollment.Admission.AddressOpt'),
 					inputs: [
 						{type: 'text', name: 'contact_street_line1', placeholder: getString('NextThought.view.courseware.enrollment.Admission.AddressLine'), size: 'full'},
 						{type: 'text', name: 'contact_street_line2', placeholder: getString('NextThought.view.courseware.enrollment.Admission.AddressLine'), size: 'full'},
