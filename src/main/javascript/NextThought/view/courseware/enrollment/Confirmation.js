@@ -17,7 +17,7 @@ Ext.define('NextThought.view.courseware.enrollment.Confirmation', {
 			{cls: 'transaction-id'}
 		]},
 		{cls: 'support', cn: [
-				{cls: 'support-text', html: '{{{NextThought.view.courseware.enrollment.Confirmation.ContactTechSupport}}}'},
+				{cls: 'support-text', html: '{{{NextThought.view.courseware.enrollment.Confirmation.ContactTechSupport}}}\'},
 			{cls: 'help-link phone', html: '{phone}'},
 			{tag: 'tpl', 'for': 'helplinks', cn: [
 				{tag: 'a', href: '{href}', html: '{text}', target: '_blank'}

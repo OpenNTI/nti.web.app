@@ -80,7 +80,7 @@ Ext.define('NextThought.view.courseware.enrollment.Purchase', {
 						{type: 'text', name: 'address_city', placeholder: getString('NextThought.view.courseware.enrollment.Purchase.CityTown'), size: 'large'},
 						{type: 'text', name: 'address_state', placeholder: getString('NextThought.view.courseware.enrollment.Purchase.StateProvTerrReg'), size: 'full'},
 						{type: 'text', name: 'address_country', placeholder: getString('NextThought.view.courseware.enrollment.Purchase.Country'), required: true, size: 'large left'},
-						{type: 'text', name: 'address_zip', placeholder: getString('NextThought.view.courseware.enrollment.Purchase.ZIPPostalCode'), size: 'small left', required: false}
+						{type: 'text', name: 'address_zip', placeholder: getString('NextThought.view.courseware.enrollment.Purchase.ZIPPostCode'), size: 'small left', required: false}
 					]//,
 					// help: [
 					//	{text: 'Add Address Line', type: 'event', event: 'add-address-line'}
