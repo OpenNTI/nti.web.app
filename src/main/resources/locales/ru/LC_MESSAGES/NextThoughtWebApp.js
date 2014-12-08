@@ -905,7 +905,7 @@ NTIStrings['NextThought.view.courseware.enrollment.Details.HowtoDrop'] = 'How do
 NTIStrings['NextThought.view.courseware.enrollment.Confirmation.TransID'] = 'Transaction ID:';
 NTIStrings['NextThought.view.courseware.enrollment.Confirmation.ContactTechSupport'] = 'Please contact tech support if you have any issues.';
 NTIStrings['NextThought.view.courseware.enrollment.Confirmation.ClassStartInfo'] = '<span class=\'bold\' >{course}</span> starts on {date} and will be conducted fully online. Here are some things to do before class starts:';
-NTIStrings['NextThought.view.courseware.enrollment.Confirmation.CompleteProfile'] = 'Complete Your Profile:';
+NTIStrings['NextThought.view.courseware.enrollment.Confirmation.CompleteProfile'] = 'Complete Your Profile';
 NTIStrings['NextThought.view.courseware.enrollment.Admission.ContactHelpDesk'] = 'Please contact the <a href=\'mailto:support@nextthought.com\'>help desk</a> for further information.';
 NTIStrings['NextThought.view.courseware.enrollment.Admission.SubmitApp'] = 'Submit Application';
 NTIStrings['NextThought.view.courseware.enrollment.Admission.CancelApp'] = 'Cancel';
