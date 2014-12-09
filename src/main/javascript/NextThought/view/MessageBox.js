@@ -18,6 +18,30 @@ Ext.define('NextThought.view.MessageBox', {
 	layout: 'auto',
 	componentLayout: 'natural',
 
+	statics: {
+		OK: 1,
+		YES: 2,
+		NO: 4,
+		CANCEL: 8,
+		OKCANCEL: 9,
+		YESNO: 6,
+		YESNOCANCEL: 14,
+		INFO: 'info',
+		WARNING: 'warning-red',
+		QUESTION: 'question',
+		ERROR: 'error',
+
+		alert: function() {
+			this.show.apply(this, arguments);
+		},
+
+		show: function() {
+			this.SHARED_INSTANCE = this.SHARED_INSTANCE || this.create();
+
+			this.SHARED_INSTANCE.show.apply(this.SHARED_INSTANCE, arguments);
+		}
+	},
+
 	//Legacy Constants taken from Ext.window.MessageBox
 	OK: 1,
 	YES: 2,
@@ -73,10 +97,11 @@ Ext.define('NextThought.view.MessageBox', {
 
 	initComponent: function() {
 		this.callParent(arguments);
-		Ext.apply(this.buttonText, {
+
+		this.buttonText = {
 			primary: getString('NextThought.view.MessageBox.ok'),
 			secondary: getString('NextThought.view.MessageBox.cancel')
-		});
+		};
 
 		//make the execution of show take place in the next event loop
 		this.show = Ext.Function.createBuffered(this.show, 1);
@@ -281,7 +306,7 @@ Ext.define('NextThought.view.MessageBox', {
 	}
 }, function() {
 	//This needs to be come lazy! create on first use, not at define time. (the current constructor seems to trigger an early Ext.isReady)
-	//Ext.MessageBox = Ext.Msg = new NextThought.view.MessageBox();
+	Ext.MessageBox = Ext.Msg = NextThought.view.MessageBox;
 
 	window.alert = function(cfg, fn) {
 		Globals.removeLoaderSplash();
