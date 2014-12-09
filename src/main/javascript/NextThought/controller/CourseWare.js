@@ -217,7 +217,9 @@ Ext.define('NextThought.controller.CourseWare', {
 			return Service.requestDelete(enrollement.get('href'));
 		}
 
-		return Service.post(collection, catelogEntry.raw);
+		return Service.post(collection, {
+			NTIID: catelogEntry.get('NTIID')
+		});
 	},
 
 
