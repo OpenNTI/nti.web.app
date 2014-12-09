@@ -280,7 +280,8 @@ Ext.define('NextThought.view.MessageBox', {
 		});
 	}
 }, function() {
-	Ext.MessageBox = Ext.Msg = new NextThought.view.MessageBox();
+	//This needs to be come lazy! create on first use, not at define time. (the current constructor seems to trigger an early Ext.isReady)
+	//Ext.MessageBox = Ext.Msg = new NextThought.view.MessageBox();
 
 	window.alert = function(cfg, fn) {
 		Globals.removeLoaderSplash();
