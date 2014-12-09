@@ -189,6 +189,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 	},
 
 
+	//FIXME: getString CANNOT be called at class define time. (breaks MANY things, Chrome is holding your hand)
 	ENROLLMENT_STATES: getString('EnrollmentText').StoreEnrollment || {},
 
 

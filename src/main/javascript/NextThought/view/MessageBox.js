@@ -45,10 +45,6 @@ Ext.define('NextThought.view.MessageBox', {
 
 	buttonOrder: ['primary', 'secondary'],
 
-	buttonText: {
-		primary: getString('NextThought.view.MessageBox.ok'),
-		secondary: getString('NextThought.view.MessageBox.cancel')
-	},
 
 	defaultButtons: {
 		primary: true
@@ -77,6 +73,10 @@ Ext.define('NextThought.view.MessageBox', {
 
 	initComponent: function() {
 		this.callParent(arguments);
+		Ext.apply(this.buttonText, {
+			primary: getString('NextThought.view.MessageBox.ok'),
+			secondary: getString('NextThought.view.MessageBox.cancel')
+		});
 
 		//make the execution of show take place in the next event loop
 		this.show = Ext.Function.createBuffered(this.show, 1);
