@@ -6,16 +6,13 @@ Ext.define('NextThought.util.courseware.options.OpenEnrollment', {
 	NAME: 'OpenEnrollment',
 	isBase: true,
 
-	//FIXME: getString CANNOT be called at class define time. (breaks MANY things, Chrome is holding your hand)
-	EnrolledWording: getString('course-info.description-widget.open-enrolled'),
+
+	EnrolledWordingKey: 'course-info.description-widget.open-enrolled',
 
 
 	buildEnrollmentSteps: function() {
 		return [];
 	},
-
-	//FIXME: getString CANNOT be called at class define time. (breaks MANY things, Chrome is holding your hand)
-	ENROLLMENT_STATES: getString('EnrollmentText').OpenEnrollment || {},
 
 
 	__getEnrollmentText: function(course, option) {

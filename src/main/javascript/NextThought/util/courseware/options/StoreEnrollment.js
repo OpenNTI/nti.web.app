@@ -7,6 +7,8 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 	display: 'Lifelong Learner',
 	isBase: true,
 
+	//set it to true so the getEnrolledWording won't short circuit
+	EnrolledWordingKey: true,
 	EnrolledWording: 'You are enrolled as a Lifelong Learner',
 
 	buildEnrollmentSteps: function(course, type, config) {
@@ -187,10 +189,6 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 
 		return steps;
 	},
-
-
-	//FIXME: getString CANNOT be called at class define time. (breaks MANY things, Chrome is holding your hand)
-	ENROLLMENT_STATES: getString('EnrollmentText').StoreEnrollment || {},
 
 
 	__getEnrollmentText: function(course, option) {

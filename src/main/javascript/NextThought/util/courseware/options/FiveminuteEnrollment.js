@@ -7,8 +7,8 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 	display: 'For Credit',
 	isBase: false,
 
-	//FIXME: getString CANNOT be called at class define time. (breaks MANY things, Chrome is holding your hand)
-	EnrolledWording: getString('course-info.description-widget.enrolled'),
+
+	EnrolledWordingKey: 'course-info.description-widget.enrolled',
 
 	buildEnrollmentSteps: function(course) {
 		var enrollmentOption = course.getEnrollmentOption(this.NAME),
@@ -134,8 +134,6 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 		return steps;
 	},
 
-	//FIXME: getString CANNOT be called at class define time. (breaks MANY things, Chrome is holding your hand)
-	ENROLLMENT_STATES: getString('EnrollmentText').FiveminuteEnrollment || {},
 
 	__getEnrollmentText: function(course, option) {
 		var state = {}, now = new Date(),

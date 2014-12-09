@@ -1,7 +1,19 @@
 Ext.define('NextThought.util.courseware.options.Base', {
 	NAME: '', //the name of the option
 
-	EnrolledWording: '',
+	EnrolledWordingKey: '',//key to pass to get string to get Enrolled wording
+
+	/**
+	 * get the enrolled wording for this option if we haven't already
+	 * @return {String} the wording for this option
+	 */
+	getEnrolledWording: function() {
+		if (!this.EnrolledWordingKey) { return ''; }
+
+		this.EnrolledWording = this.EnrolledWording || getString(this.EnrolledWordingKey);
+
+		return this.EnrolledWording;
+	},
 
 	/*
 	Enrollment steps are object that contain info about which views/forms users need to fill out before
@@ -65,13 +77,24 @@ Ext.define('NextThought.util.courseware.options.Base', {
 	 *
 	 * @type {Object}
 	 */
-	ENROLLMENT_STATES: {},
+	ENROLLMENT_STATES: null,
+
+
+	/**
+	 * if we haven't gotten this.ENROLLMENT_STATES get the string and get the value for this enrollment option
+	 * @param  {String} state the state to get strings for
+	 * @return {Object}       the different wordings for this state
+	 */
+	getEnrollmentState: function(state) {
+		this.ENROLLMENT_STATES = this.ENROLLMENT_STATES || getString('EnrollmentText')[this.NAME];
+
+		return this.ENROLLMENT_STATES ? this.ENROLLMENT_STATES[state] : {};
+	},
 
 	DateFormat: 'F j, g:i A T',
 
-
 	getWording: function(state, data) {
-		var text = this.ENROLLMENT_STATES[state],
+		var text = this.getEnrollmentState(state),
 			prop, key;
 
 		if (!text) {

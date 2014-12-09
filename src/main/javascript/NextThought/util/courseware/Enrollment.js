@@ -46,7 +46,7 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 				var courseOption = course.getEnrollmentOption(option.name);
 
 				if (courseOption && courseOption.IsEnrolled) {
-					text = me.getOption(option.name).EnrolledWording;
+					text = me.getOption(option.name).getEnrolledWording();
 				}
 			});
 		}
