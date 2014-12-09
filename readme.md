@@ -41,8 +41,8 @@ The unit tests in this project are written in javascript and use the `Jasmine` a
 ##### Setting up Karma (Optional, but recommended)
 Dependencies: `npm`, and thus `node.js`
 
-1. npm install -g karma 
-2. npm install -g karma-coverage
+1. npm install -g karma-cli
+2. npm install
 3. from `src/test` type `karma start`
 
 
