@@ -343,7 +343,13 @@ Ext.define('NextThought.util.Globals', {
 	removeLoaderSplash: function() {
 		var me = this;
 		me.removeLoaderSplash = Ext.emptyFn;
-		setTimeout(function() { Ext.get('loading-mask').fadeOut({remove: true}); }, 100);
+		setTimeout(function() {
+			var mask = Ext.get('loading-mask');
+
+			if (mask) {
+				mask.fadeOut({remove: true});
+			}
+		}, 100);
 	},
 
 
