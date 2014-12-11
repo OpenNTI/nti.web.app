@@ -26,7 +26,7 @@ Ext.define('NextThought.overrides.grid.plugin.BufferedRenderer', {
 		if (this.grid && this.grid.isVisible(true)) {
 			this.callParent(arguments);
 		} else {
-			console.debug('BufferedRenderer: droped renderRange, not visible');
+			console.debug('BufferedRenderer: dropped renderRange, not visible');
 		}
 	},
 
