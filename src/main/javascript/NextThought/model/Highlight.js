@@ -13,7 +13,7 @@ Ext.define('NextThought.model.Highlight', {
 		{ name: 'tags', type: 'Auto'},
 		{ name: 'selectedText', type: 'string'},
 		{ name: 'style', type: 'string'},
-		{ name: 'fillColor', type: 'string'},
+		{ name: 'fillColor', type: 'string', defaultValue: 'blue'},
 		{ name: 'presentationProperties', type: 'auto'},
 		{ name: 'applicableRange', type: 'ContentRangeDescription'},
 
