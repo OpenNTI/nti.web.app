@@ -85,6 +85,17 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 	},
 
 
+	onSynced: function() {
+		var cls = this.get('Class');
+
+		if (cls === 'UsersCourseAssignmentHistoryItemSummary') {
+			this.isSummary = true;
+		} else {
+			this.isSummary = false;
+		}
+	},
+
+
 	getAssignmentId: function() {
 		var r = this.raw,
 			g = r.Grade,

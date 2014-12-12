@@ -54,6 +54,10 @@ Ext.define('NextThought.util.PageSource', {
 					//don't trigger an id change
 					delete data[record.idProperty];
 					storeRec.set(data);
+
+					if (storeRec.onSynced) {
+						storeRec.onSynced();
+					}
 				}
 			}
 		}
