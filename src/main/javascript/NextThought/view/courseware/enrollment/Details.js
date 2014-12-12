@@ -664,6 +664,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 		}
 
 		title = me.course.get('Title');
+		course = me.course.get('Title');
 
 		if (title.length >= 50) {
 			title = title.substr(0, 47) + '...';
@@ -695,7 +696,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 		if (option.Enrolled && option.undoEnrollment) {
 			me.changingEnrollment = true;
 			Ext.Msg.show({
-				msg: getFormattedString('NextThought.view.courseware.enrollment.Details.DropDetails', {title: title}),
+				msg: getFormattedString('NextThought.view.courseware.enrollment.Details.DropDetails', {course: course}),
 				title: getString('NextThought.view.courseware.enrollment.Details.AreSure'),
 				icon: 'warning-red',
 				buttons: {
@@ -708,7 +709,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 								.then(function(changed) {
 									me.fireEvent('enrolled-action', false);
 									me.showMessage(getFormattedString('NextThought.view.courseware.enrollment.Details.dropped', {
-										title: title
+										course: course
 									}));
 									done(true, changed);
 								})
