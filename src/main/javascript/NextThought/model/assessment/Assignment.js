@@ -206,6 +206,15 @@ Ext.define('NextThought.model.assessment.Assignment', {
 		}
 
 		recs.forEach(update);
-	}
+	},
 
+
+	updateGradeBookEntry: function(grade) {
+		if (!this._gradeBookEntry) { return; }
+
+		var username = grade.get('Username'),
+			gradeBookGrade = this._gradeBookEntry.getFieldItem('Items', username);
+
+		gradeBookGrade.set('value', grade.get('value'));
+	}
 });

@@ -53,6 +53,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 	changeGrade: function(number, letter) {
 		var me = this,
 			store = this.pageSource,
+			assignment = this.assignment,
 			historyItem = this.assignmentHistory,
 			grade = historyItem.get('Grade');
 
@@ -77,6 +78,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 							//so fill it in with the previous history item's item
 							newHistoryItem.set('item', historyItem.get('item'));
 							store.syncBackingStore(newHistoryItem);
+
+							assignment.updateGradeBookEntry(newHistoryItem.get('Grade'));
 						})
 						.fail(function(reason) {
 							console.error('Failed to update assignmenthistoryitem from new grade:', reason);
