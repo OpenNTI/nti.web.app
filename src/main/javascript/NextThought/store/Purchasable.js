@@ -9,7 +9,7 @@ Ext.define('NextThought.store.Purchasable', {
 	model: 'NextThought.model.GenericObject',
 
 	sorters: [
-		function(a,b) {
+		function(a, b) {
 			var re = /NTI/;
 			a = re.test(a.get('Provider') || a.get('Title'));
 			b = re.test(b.get('Provider') || b.get('Title'));

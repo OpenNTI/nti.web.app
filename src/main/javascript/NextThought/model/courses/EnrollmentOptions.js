@@ -1,5 +1,6 @@
 Ext.define('NextThought.model.courses.EnrollmentOptions', {
 	extend: 'NextThought.model.Base',
+	mimeType: 'application/vnd.nextthought.courseware.enrollmentoptions',
 
 	fields: [
 		{name: 'Items', type: 'auto', converter: function(v) {

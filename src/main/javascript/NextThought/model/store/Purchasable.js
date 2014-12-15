@@ -1,6 +1,6 @@
 Ext.define('NextThought.model.store.Purchasable', {
 	extend: 'NextThought.model.Base',
-	mimeType: 'application/vnd.nextthought.purchasable',
+	mimeType: 'application/vnd.nextthought.store.purchasable',
 
 	requires: [
 		'NextThought.model.store.StripeConnectKey'
