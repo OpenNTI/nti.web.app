@@ -96,7 +96,7 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			}));
 		}
 
-		if (this.injectedAssignment && this.injectedAssignment.isTimed && !h.get('completed')) {
+		if (this.injectedAssignment && this.injectedAssignment.isTimed && !h.get('completed')  && !isInstructor) {
 			this.showAssignmentTimer();
 		}
 

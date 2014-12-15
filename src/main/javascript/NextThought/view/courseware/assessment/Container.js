@@ -187,7 +187,7 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 				});
 		}
 
-		if (assignment.isTimed && !assignment.isStarted()) {
+		if (assignment.isTimed && !assignment.isStarted() && isMe(student)) {
 			Ext.Msg.show({
 				title: 'Are you sure?',
 				msg: 'This assignment is a timed assignment once started you will only have ' + assignment.getMaxTimeString() + ' to complete it.',
