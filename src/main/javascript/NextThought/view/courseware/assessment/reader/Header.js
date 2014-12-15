@@ -10,7 +10,9 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 			{ cls: 'title', html: '{title}' },
 			{ cls: 'turned-in', cn: [
 				{ tag: 'span', cls: 'date', html: '{{{NextThought.view.courseware.assessment.reader.Header.completed}}}' },
-				{ tag: 'span', cls: 'late', html: '{late}'}
+				{ tag: 'span', cls: 'late', html: '{late}'},
+				{ tag: 'span', cls: 'completed-in', html: ''},
+				{ tag: 'span', cls: 'allowed', html: ''}
 			]}
 		]},
 		{ cls: 'grade-container', cn: [
@@ -23,6 +25,8 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 		'ontimeIconEl': '.quiz-container .ontime-icon',
 		'completedEl': '.quiz-container .turned-in .date',
 		'lateEl': '.quiz-container .turned-in .late',
+		'completedInEl': '.quiz-container .turned-in .completed-in',
+		'allowedEl': '.quiz-container .turned-in .allowed',
 		'gradeContainerEl': '.grade-container',
 		'gradeEl': '.grade-container .grade'
 	},
@@ -94,6 +98,14 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 
 		this.hideTimer();
 
+		if (this.assignment.isTimed) {
+			this.assignment.getDurationString()
+				.then(this.setDuration.bind(this));
+		} else {
+			this.completedInEl.hide();
+			this.allowedEl.hide();
+		}
+
 		this.completedEl.update('completed ' + Ext.Date.format(completed, 'm/d'));
 
 		grade = grade && grade.getValues();
@@ -121,5 +133,13 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 	goTo: function(rec) {
 		var v = this.parentView;
 		Ext.defer(v.showAssignment, 1, v, [rec]);
+	},
+
+
+	setDuration: function(duration) {
+		var maxTime = this.assignment.getMaxTimeString();
+
+		this.completedInEl.update('Completed in ' + duration);
+		this.allowedEl.update('Allowed ' + maxTime);
 	}
 });

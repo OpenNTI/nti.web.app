@@ -121,7 +121,7 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 
 
 	showAssignment: function(view, assignment, assignmentHistory, student, path, pageSource) {
-		var me = this,
+		var me = this, time,
 			active = me._showAssignmentPromise || Promise.resolve();
 
 		function finish() {
@@ -188,9 +188,11 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 		}
 
 		if (assignment.isTimed && !assignment.isStarted() && isMe(student)) {
+			time = assignment.getMaxTimeString();
+
 			Ext.Msg.show({
-				title: 'Are you sure?',
-				msg: 'This assignment is a timed assignment once started you will only have ' + assignment.getMaxTimeString() + ' to complete it.',
+				title: time,
+				msg: 'You have ' + time + ' to complete this assignment. Once you\'ve started the timer will not stop.',
 				buttons: {
 					primary: {
 						text: 'Start',

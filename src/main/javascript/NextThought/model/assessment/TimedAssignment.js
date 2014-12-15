@@ -5,14 +5,14 @@ Ext.define('NextThought.model.assessment.TimedAssignment', {
 
 	fields: [
 		{name: 'IsTimedAssignment', type: 'bool'},
-		{name: 'MaximumTimeAllowed', type: 'int'},
+		{name: 'MaximumTimeAllowed', type: 'int'}, //this is in seconds
 		{name: 'StartTime', type: 'date'},
-		{name: 'Duration', type: 'int'},
 		//ui fields
 		{name: 'isStarted', type: 'bool', persist: false, convert: function(v, rec) {
 			return v || !!rec.getLink('StartTime');
 		}},
-		{name: 'startTime', type: 'int', persist: false}
+		{name: 'duration', type: 'int', persist: false}, // this is in seconds
+		{name: 'startTime', type: 'int', persist: false}//this is in seconds
 	],
 
 
@@ -46,12 +46,16 @@ Ext.define('NextThought.model.assessment.TimedAssignment', {
 			});
 	},
 
-
-	getMaxTimeString: function() {
-		var maxTime = this.get('MaximumTimeAllowed'),//max time is given in seconds
-			hours = parseInt(maxTime / (60 * 60)),
-			minutes = parseInt(maxTime / 60) % 60,
-			seconds = parseInt(maxTime) % 60,
+	/**
+	 * Take a number of seconds and return a string that looks like
+	 * '# hour(s), # minute(s), and # second(s)'
+	 * @param  {Number} seconds the number of seconds, since the server is sending these values back as seconds
+	 * @return {String}         the time string
+	 */
+	__getTimeString: function(seconds) {
+		var hours = parseInt(seconds / (60 * 60)),
+			minutes = parseInt(seconds / 60) % 60,
+			seconds = parseInt(seconds) % 60,
 			time = '';
 
 		if (hours) {
@@ -83,6 +87,13 @@ Ext.define('NextThought.model.assessment.TimedAssignment', {
 		}
 
 		return time;
+	},
+
+
+	getMaxTimeString: function() {
+		var maxTime = this.get('MaximumTimeAllowed');
+
+		return this.__getTimeString(maxTime);
 	},
 
 
@@ -128,9 +139,40 @@ Ext.define('NextThought.model.assessment.TimedAssignment', {
 
 				return maxTime - diff;
 			})
-			//if get start time fails assume we haven't started
+			//if get start time fails assume we haven't started and have the max time remaining
 			.fail(function() {
 				return maxTime;
+			});
+	},
+
+
+	getDuration: function() {
+		var link = this.getLink('Metadata');
+
+		if (!link) {
+			return Promise.reject('No MetaData link');
+		}
+
+		return Service.request(link)
+			.then(function(response) {
+				var json = Ext.decode(response);
+
+				if (!json || !json.Duration) {
+					console.error('Unexpected Response', response);
+					return Promise.reject();
+				}
+
+				return json.Duration;
+			});
+	},
+
+
+	getDurationString: function() {
+		var me = this;
+
+		return me.getDuration()
+			.then(function(duration) {
+				return me.__getTimeString(duration);
 			});
 	}
 });
