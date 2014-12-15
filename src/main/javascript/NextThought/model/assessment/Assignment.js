@@ -213,8 +213,9 @@ Ext.define('NextThought.model.assessment.Assignment', {
 		if (!this._gradeBookEntry) { return; }
 
 		var username = grade.get('Username'),
+			value = grade && grade.get('value'),
 			gradeBookGrade = this._gradeBookEntry.getFieldItem('Items', username);
 
-		gradeBookGrade.set('value', grade.get('value'));
+		gradeBookGrade.set('value', value);
 	}
 });

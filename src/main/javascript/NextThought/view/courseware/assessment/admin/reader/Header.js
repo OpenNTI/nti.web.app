@@ -90,15 +90,22 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 	showActionsMenu: function(e) {
 		if (e.getTarget('.disabled') || !this.assignmentHistory) { return; }
 
-		var menu = NextThought.view.courseware.assessment.AssignmentStatus.getActionsMenu(this.assignmentHistory);
+		var me = this,
+			menu = NextThought.view.courseware.assessment.AssignmentStatus.getActionsMenu(me.assignmentHistory);
 
-		menu.showBy(this.actionsEl, 'tr-br');
+		menu.showBy(me.actionsEl, 'tr-br');
 
-		if (!this.deleteMon) {
-			this.mon(this.assignmentHistory, {
+		if (!me.deleteMon) {
+			me.mon(me.assignmentHistory, {
 				single: true,
 				destroyable: true,
-				'was-destroyed': this.fireGoUp.bind(this)
+				'was-destroyed': function() {
+					var store = me.pageSource;
+
+					store.syncBackingStore(me.assignmentHistory);
+
+					me.fireGoUp();
+				}
 			});
 		}
 	},
