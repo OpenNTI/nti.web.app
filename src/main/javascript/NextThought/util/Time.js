@@ -200,7 +200,6 @@ Ext.define('NextThought.util.Time', {
 
 		return s;
 	}
-
 },
 function() {
 	window.TimeUtils = this;
@@ -221,8 +220,12 @@ function() {
 
 		direction = direction || 1;
 
+		function getRemainingDays(time) {
+			return parseInt(time / (24 * 60 * 60 * 1000), 10); // milli / 1000 = seconds / 60  = minutes / 60 = hours / 24 = days
+		}
+
 		function getRemainingHours(time) {
-			return parseInt(time / (60 * 60 * 1000), 10);//milli / 1000 = seconds, seconds / 60 = minutes, minutes / 60 = hours
+			return parseInt(time / (60 * 60 * 1000), 10) % 24;//milli / 1000 = seconds, seconds / 60 = minutes, minutes / 60 = hours
 		}
 
 		function getRemainingMinutes(time) {
@@ -265,6 +268,7 @@ function() {
 			tickFn = fn;
 
 			tickFn.call(null, {
+				days: getRemainingDays(time),
 				hours: getRemainingHours(time),
 				minutes: getRemainingMinutes(time),
 				seconds: getRemainingSeconds(time),
@@ -280,6 +284,7 @@ function() {
 
 			if (tickFn) {
 				tickFn.call(null, {
+					days: getRemainingDays(time),
 					hours: getRemainingHours(time),
 					minutes: getRemainingMinutes(time),
 					seconds: getRemainingSeconds(time),
@@ -289,7 +294,7 @@ function() {
 			}
 
 			//if we are on the last interval before 0 and counting down stop
-			if ((time - interval) <= 0 && direction < 0) {
+			if (time <= 0 && direction < 0) {
 				clearInterval(timerInterval);
 
 				if (alarmFn) {

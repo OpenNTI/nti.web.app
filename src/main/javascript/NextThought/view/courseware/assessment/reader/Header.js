@@ -92,6 +92,10 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 			this.timer.stop();
 		}
 
+		if (this.hideTimer) {
+			this.hideTimer();
+		}
+
 		grade = grade && grade.getValues();
 
 		if (grade) {

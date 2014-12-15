@@ -151,25 +151,47 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 		}
 	},
 
-	getTimeString: function(time, current) {
-		var s = '';
+	getTimeString: function(time) {
+		var s = '',
+			days = time.days,
+			hours = time.hours,
+			minutes = time.minutes,
+			seconds = time.seconds;
 
-		current = current || {};
+		if (days) {
+			if (hours === 23) {
+				days += 1;
+				hours = 0;
+			} else {
+				hours += 1;
+			}
+		} else if (minutes === 59) {
+			hours += 1;
+			minutes = 0;
+		}
 
-		if (time.hour && time.hour !== current.hour) {
-			s += Ext.util.Format.plural(time.hours, 'hour');
+		if (days) {
+			s += Ext.util.Format.plural(days, 'Day');
 
-			if (time.minutes) {
+			if (hours) {
 				s += ' and ';
 			}
 		}
 
-		if (time.minutes && time.minutes !== current.minutes) {
-			s += Ext.util.Format.plural(time.minutes + 1, 'minute');
+		if (hours) {
+			s += Ext.util.Format.plural(hours, 'Hour');
+
+			if (minutes) {
+				s += ' and ';
+			}
 		}
 
-		if (!time.hours && !time.minutes) {
-			s += Ext.util.Format.plural(time.seconds, 'second');
+		if (minutes && !days) {
+			s += Ext.util.Format.plural(minutes + 1, 'Minute');
+		}
+
+		if (!days && !hours && !minutes) {
+			s += Ext.util.Format.plural(seconds, 'Second');
 		}
 
 		return s;
@@ -240,10 +262,11 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 
 		me.timer
 			.tick(function(t) {
-				var s = me.getTimeString(t, current);
+				var s = me.getTimeString(t);
 
-				if (s) {
-					me.timeEl.update(s + ' remaining');
+				if (s && s !== current) {
+					current = s;
+					me.timeEl.update(s);
 				}
 
 				current = t;
