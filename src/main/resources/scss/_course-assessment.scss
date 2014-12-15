@@ -676,6 +676,12 @@ canvas.x-component-course-assessment {
 					color: white;
 					border: none;
 				}
+
+				&.warning-orange {
+					background-color: #fa8700;
+					color: white;
+					border: none;
+				}
 			}
 
 			.path-items {

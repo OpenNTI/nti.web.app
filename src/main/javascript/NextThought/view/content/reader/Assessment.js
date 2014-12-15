@@ -119,11 +119,12 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 
 
 	showAssignmentTimer: function() {
-		var me = this;
+		var me = this,
+			max = me.injectedAssignment.getMaxTime();
 
 		me.injectedAssignment.getTimeRemaining()
 			.then(function(remaining) {
-				me.reader.showRemainingTime(remaining);
+				me.reader.showRemainingTime(remaining, max);
 			});
 	},
 

@@ -90,6 +90,13 @@ Ext.define('NextThought.model.assessment.TimedAssignment', {
 	},
 
 
+	getMaxTime: function() {
+		var maxTime = this.get('MaximumTimeAllowed');
+
+		return maxTime * 1000;
+	},
+
+
 	getMaxTimeString: function() {
 		var maxTime = this.get('MaximumTimeAllowed');
 

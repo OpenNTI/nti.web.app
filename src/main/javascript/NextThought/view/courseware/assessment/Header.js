@@ -5,6 +5,8 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 
 	cls: 'course-assessment-header assignment-item',
 
+	WARNING_PERCENT: 0.2,
+
 	renderTpl: Ext.DomHelper.markup([
 		//toolbar
 		{
@@ -142,7 +144,7 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 	},
 
 
-	showRemainingTime: function(time) {
+	showRemainingTime: function(time, max) {
 		if (!this.rendered) {
 			this.on('afterrender', this.showRemainingTime.bind(this, time));
 			return;
@@ -150,10 +152,10 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 
 		if (time < 0) {
 			wait()
-				.then(this.showOverdueTime.bind(this, -1 * time));
+				.then(this.showOverdueTime.bind(this, -1 * time, max));
 		} else {
 			wait()
-				.then(this.showDueTime.bind(this, time));
+				.then(this.showDueTime.bind(this, time, max));
 		}
 
 		this.timeContainerEl.removeCls('hidden');
@@ -166,6 +168,7 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 
 		me.timer = TimeUtils.getTimer(time, 1);
 
+		me.timeContainerEl.removeCls('warning-orange');
 		me.timeContainerEl.addCls('warning-red');
 
 		me.timer
@@ -178,7 +181,7 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 	},
 
 
-	showDueTime: function(time) {
+	showDueTime: function(time, max) {
 		var me = this,
 			current = {};
 
@@ -189,6 +192,13 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 				var s = me.getTimeString(t);
 
 				me.timeEl.update(s + ' remaining');
+
+				if (t.remaining < 30000) {
+					me.timeContainerEl.addCls('warning-red');
+					me.timeContainerEl.removeCls('warning-orange');
+				} else if (t.remaining <= max * me.WARNING_PERCENT) {
+					me.timeContainerEl.addCls('warning-orange');
+				}
 			})
 			.alarm(function() {
 				me.timer.stop();
