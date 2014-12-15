@@ -150,6 +150,14 @@ function() {
 		this.tick = function(fn) {
 			tickFn = fn;
 
+			tickFn.call(null, {
+				hours: getRemainingHours(),
+				minutes: getRemainingMinutes(),
+				seconds: getRemainingSeconds(),
+				milliseconds: getRemainingMilliSeconds(),
+				remaining: time
+			});
+
 			return this;
 		};
 

@@ -676,17 +676,6 @@ canvas.x-component-course-assessment {
 					color: white;
 					border: none;
 				}
-
-				.label {
-					font-weight: 600;
-					margin-right: 0.5em;
-				}
-
-				.hours::after,
-				.minutes::after {
-					content: ':';
-					margin: 0 0.1em;
-				}
 			}
 
 			.path-items {

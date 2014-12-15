@@ -29,10 +29,7 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 				{
 					cls: 'time-remaining hidden',
 					cn: [
-						{tag: 'span', cls: 'label', html: 'Time Remaining:'},
-						{tag: 'span', cls: 'hours time'},
-						{tag: 'span', cls: 'minutes time'},
-						{tag: 'span', cls: 'seconds time'}
+						{tag: 'span', cls: 'time'}
 					]
 				}
 			]
@@ -51,11 +48,8 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 		pathEl: '.toolbar .path-items',
 		previousEl: '.toolbar .controls .up',
 		nextEl: '.toolbar .controls .down',
-		timeEl: '.time-remaining',
-		timeLabelEl: '.time-remaining .label',
-		hoursEl: '.time-remaining .hours',
-		minutesEl: '.time-remaining .minutes',
-		secondsEl: '.time-remaining .seconds'
+		timeContainerEl: '.time-remaining',
+		timeEl: '.time-remaining .time'
 	},
 
 	headerTpl: '',
@@ -118,22 +112,33 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 
 
 	hideTimer: function() {
-		this.timeEl.addCls('hidden');
+		this.timeContainerEl.addCls('hidden');
 
 		if (this.timer) {
 			this.timer.stop();
 		}
 	},
 
+	getTimeString: function(time, current) {
+		var s = '';
 
-	updateTimeEl: function(el, time) {
-		var s = time.toFixed(0);
+		if (time.hours) {
+			s += Ext.util.Format.plural(time.hours, 'hour');
 
-		if (time < 10) {
-			s = '0' + s;
+			if (time.minutes) {
+				s += ' and ';
+			}
 		}
 
-		el.update(s);
+		if (time.minutes) {
+			s += Ext.util.Format.plural(time.minutes + 1, 'minute');
+		}
+
+		if (!time.hours && !time.minutes) {
+			s += Ext.util.Format.plural(time.seconds, 'second');
+		}
+
+		return s;
 	},
 
 
@@ -144,12 +149,14 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 		}
 
 		if (time < 0) {
-			this.showOverdueTime(-1 * time);
+			wait()
+				.then(this.showOverdueTime.bind(this, -1 * time));
 		} else {
-			this.showDueTime(time);
+			wait()
+				.then(this.showDueTime.bind(this, time));
 		}
 
-		this.timeEl.removeCls('hidden');
+		this.timeContainerEl.removeCls('hidden');
 	},
 
 
@@ -159,23 +166,13 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 
 		me.timer = TimeUtils.getTimer(time, 1);
 
-		me.timeLabelEl.update('Past Due');
-		me.timeEl.addCls('warning-red');
+		me.timeContainerEl.addCls('warning-red');
 
 		me.timer
 			.tick(function(t) {
+				var s = me.getTimeString(t);
 
-				if (current.hours !== t.hours) {
-					me.updateTimeEl(me.hoursEl, t.hours);
-				}
-
-				if (current.minutes !== t.minutes) {
-					me.updateTimeEl(me.minutesEl, t.minutes);
-				}
-
-				me.updateTimeEl(me.secondsEl, t.seconds);
-
-				current = t;
+				me.timeEl.update(s + ' past due');
 			})
 			.start(1000);//1 second
 	},
@@ -187,25 +184,19 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 
 		me.timer = TimeUtils.getTimer(time, -1);
 
-		me.timeLabelEl.update('Time Remaining');
-
 		me.timer
 			.tick(function(t) {
-				if (current.hours !== t.hours) {
-					me.updateTimeEl(me.hoursEl, t.hours);
-				}
+				var s = me.getTimeString(t);
 
-				if (current.minutes !== t.minutes) {
-					me.updateTimeEl(me.minutesEl, t.minutes);
-				}
-
-				me.updateTimeEl(me.secondsEl, t.seconds);
-
-				current = t;
+				me.timeEl.update(s + ' remaining');
 			})
 			.alarm(function() {
 				me.timer.stop();
-				me.showOverdueTime(0);
+
+				me.timeEl.update(me.getTimeString({seconds: 0}) + ' remaining');
+
+				wait(1000)
+					.then(me.showOverdueTime.bind(me, 0));
 			})
 			.start(1000);
 	},
