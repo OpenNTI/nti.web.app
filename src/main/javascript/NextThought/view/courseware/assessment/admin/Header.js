@@ -3,6 +3,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 	alias: 'widget.course-assessment-admin-header',
 	ui: 'course-assessment',
 
+	requires: ['NextThought.view.courseware.assessment.AssignmentStatus'],
+
 	mixins: {
 		enableProfiles: 'NextThought.mixins.ProfileLinks',
 		enableChat: 'NextThought.mixins.ChatLinks'
@@ -17,6 +19,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 				{ cls: 'dropdown letter grade', html: '{letter}'}
 			]}
 		]},
+		{cls: 'assignment-actions disabled'},
 		{cls: 'status', cn: [
 			{cls: 'status-item', cn: {tag: 'span', cls: 'completed'}},
 			{cls: 'status-item', cn: {tag: 'span', cls: 'timed'}}
@@ -46,7 +49,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 		gradeEl: '.header .grade .gradebox input',
 		completedEl: '.header .status .completed',
 		timedEl: '.header .status .timed',
-		gradeBoxEl: '.header .grade'
+		gradeBoxEl: '.header .grade',
+		actionsEl: '.header .assignment-actions'
 	},
 
 
@@ -75,7 +79,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 		this.on({
 			emailEl: { click: 'openEmail'},
 			letterEl: { click: 'showGradeMenu'},
-			gradeEl: { blur: 'gradeChanged', keypress: 'maybeChangeGrade'}
+			gradeEl: { blur: 'gradeChanged', keypress: 'maybeChangeGrade'},
+			actionsEl: {click: 'showActionsMenu'}
 		});
 	},
 
@@ -200,5 +205,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 		if (email) {
 			Globals.sendEmailTo(email);
 		}
-	}
+	},
+
+
+	showActionsMenu: function() {}
 });

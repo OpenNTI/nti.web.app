@@ -1034,6 +1034,24 @@ canvas.x-component-course-assessment {
 				}
 			}
 
+			.assignment-actions {
+				right: 40px;
+				top: 50%;
+				height: 10px;
+				@include experimental('transform', translateY(-50%));
+				cursor: pointer;
+
+				@include icon('more-options', $position: absolute);
+
+				&.disabled {
+					display: none;
+				}
+
+				&:hover {
+					@include icon('more-options_active', $position: absolute);
+				}
+			}
+
 			.grade {
 				width: 15em;
 				font-size: 0.8em;

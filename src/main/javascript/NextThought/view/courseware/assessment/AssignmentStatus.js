@@ -145,7 +145,7 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 		 *	due: date,
 		 *	completed: date, [optional] //only if it has been completed
 		 *	maxTime: Number, [optional] //if the assignment is timed the max time allowed
-		 * 	duration: Number [optional] //if the assignment is timed and completed how long they took
+		 *	duration: Number [optional] //if the assignment is timed and completed how long they took
 		 *
 		 * @param  {Object} data the above fields for the assignment
 		 * @return {String}      [description]
@@ -161,6 +161,46 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 			var diff = due.getTime() - (new Date()).getTime();
 
 			return TimeUtils.getNaturalDuration(diff, 1) + ' remaining';
+		},
+
+
+		/**
+		 * If there are any actions for a history item
+		 * @param  {UsersCourseAssignmentHistoryItem}  record history item to check
+		 * @return {Boolean}        if there are actions
+		 */
+		hasActions: function(record) {
+			return record.get('submission');
+		},
+
+		/**
+		 * Return a menu of actions available for a history item
+		 * @param  {UsersCourseAssignmentHistoryItem} record the history item we are getting actions for
+		 * @return {Ext.Menu}        a menu component
+		 */
+		getActionsMenu: function(record) {
+			var menu = Ext.widget('menu', {
+				ownerCmp: this,
+				constrainTo: Ext.getBody(),
+				defaults: {
+					ui: 'nt-menuitem',
+					plain: true
+				}
+			});
+
+			if (record.get('submission')) {
+				menu.add(new Ext.Action({
+					text: 'Reset Assignment',
+					scope: this,
+					handler: Ext.bind(record.beginReset, record),
+					itemId: 'delete-assignment-history',
+					ui: 'nt-menuitem', plain: true
+				}));
+			}
+
+			menu.on('hide', 'destroy');
+
+			return menu;
 		}
 	}
 });

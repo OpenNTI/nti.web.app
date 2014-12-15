@@ -2,8 +2,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 	extend: 'NextThought.view.courseware.assessment.admin.Header',
 	alias: 'widget.course-assessment-admin-reader-header',
 
-	requires: ['NextThought.view.courseware.assessment.AssignmentStatus'],
-
 	cls: 'reader-header',
 
 
@@ -37,6 +35,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 			}
 		}
 
+		if (NextThought.view.courseware.assessment.AssignmentStatus.hasActions(this.assignmentHistory)) {
+			this.actionsEl.removeCls('disabled');
+		} else {
+			this.actionsEl.addCls('disabled');
+		}
+
 		if (status.completed) {
 			if (status.overdue) {
 				this.completedEl.addCls('late');
@@ -59,11 +63,15 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 				}
 			}
 		} else {
+			this.completedEl.removeCls(['late', 'ontime']);
 			this.completedEl.dom.setAttribute('data-qtip', status.due.qtip);
 			this.completedEl.update(status.due.html);
 
 			if (status.maxTime) {
-				this.timedEl.update(status.maxTime);
+				this.timedEl.removeCls(['late', 'ontime']);
+				this.timedEl.update(status.maxTime.html);
+			} else {
+				this.timedEl.update('');
 			}
 		}
 
@@ -75,6 +83,23 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 		if (letter) {
 			this.currentLetter = letter;
 			//this.letterEl.update(letter);
+		}
+	},
+
+
+	showActionsMenu: function(e) {
+		if (e.getTarget('.disabled') || !this.assignmentHistory) { return; }
+
+		var menu = NextThought.view.courseware.assessment.AssignmentStatus.getActionsMenu(this.assignmentHistory);
+
+		menu.showBy(this.actionsEl, 'tr-br');
+
+		if (!this.deleteMon) {
+			this.mon(this.assignmentHistory, {
+				single: true,
+				destroyable: true,
+				'was-destroyed': this.fireGoUp.bind(this)
+			});
 		}
 	},
 

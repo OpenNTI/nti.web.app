@@ -1,7 +1,8 @@
 Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 	extend: 'Ext.grid.Panel',
 	alias: 'widget.course-admin-grid',
-	requires: [],
+
+	requires: ['NextThought.view.courseware.assessment.AssignmentStatus'],
 
 	mixins: {
 		gridGrades: 'NextThought.mixins.grid-feature.GradeInputs'
@@ -302,33 +303,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 	onItemClicked: function(v, record, dom, ix, e) {
 		var nib = e.getTarget('.actions');
 		if (nib) {
-			this.getActionsMenu(record).showBy(nib, 'tr-br');
+			NextThought.view.courseware.assessment.AssignmentStatus.getActionsMenu(record).showBy(nib, 'tr-br');
 			return false;
 		}
-	},
-
-
-	getActionsMenu: function(record) {
-		var menu = Ext.widget('menu', {
-			ownerCmp: this,
-			constrainTo: Ext.getBody(),
-			defaults: {
-				ui: 'nt-menuitem',
-				plain: true
-			}
-		});
-
-		menu.add(new Ext.Action({
-			text: 'Reset Assignment',
-			scope: this,
-			handler: Ext.bind(record.beginReset, record),
-			itemId: 'delete-assignment-history',
-			ui: 'nt-menuitem', plain: true
-		}));
-
-
-		menu.on('hide', 'destroy');
-
-		return menu;
 	}
 });

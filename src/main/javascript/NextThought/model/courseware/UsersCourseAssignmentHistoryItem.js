@@ -175,6 +175,7 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 										Submission: null,
 										Grade: null,
 										Feedback: null,
+										Metadata: null,
 										completed: null,
 										submission: null
 									});
@@ -226,9 +227,11 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 									Submission: null,
 									Grade: null,
 									Feedback: null,
+									Metadata: null,
 									completed: null,
 									submission: null
 								});
+								record.fireEvent('was-destroyed');
 							});
 
 				}
