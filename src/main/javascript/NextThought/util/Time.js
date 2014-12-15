@@ -91,10 +91,131 @@ Ext.define('NextThought.util.Time', {
 		}
 
 		return str;
+	},
+
+
+	getTimer: function(startTime, direction) {
+		return new this._timer(startTime, direction);
 	}
 
 },
 function() {
 	window.TimeUtils = this;
 	Ext.util.Format.timeDifference = Ext.bind(this.timeDifference, this);
+
+	/**
+	 * A utility to start a timer down from a number of milliseconds, or up
+	 *
+	 * @param  {Number} remaining the number of milliseconds to countdown from, if falsy the timer will count up
+	 * @param {Number} direction 1 to count up, -1 to count down, default to 1
+	 */
+	this._timer = function(startTime, direction) {
+		var time = startTime || 0,
+			interval, timerInterval,
+			tickFn, alarmFn;
+
+		direction = direction || 1;
+
+		function getRemainingHours() {
+			return parseInt(time / (60 * 60 * 1000), 10);//milli / 1000 = seconds, seconds / 60 = minutes, minutes / 60 = hours
+		}
+
+		function getRemainingMinutes() {
+			return parseInt(time / (60 * 1000), 10) % 60;//milli / 10000 = seconds, seconds / 60 = minutes
+		}
+
+		function getRemainingSeconds() {
+			return parseInt(time / 1000) % 60;//milli / 1000 = seconds
+		}
+
+		function getRemainingMilliSeconds() {
+			return time % 1000;
+		}
+
+ 		/**
+ 		 * Add a callback to be called everytime the interval passes
+ 		 *
+ 		 *	Will be called with an object containing...
+ 		 *	{
+ 		 *		hours: int, //number of hours left
+ 		 *		minutes: int, //number of minutes left after hours
+ 		 *		seconds: int, //number of seconds left after minutes
+ 		 *		milliseconds: int, //number of milliseconds left after seconds
+ 		 *		remaining: int, //total number of milliseconds left
+ 		 *	}
+ 		 *
+ 		 * @param  {Function} fn callback to be called
+ 		 * @return {Object}      return this so calls can be chained
+ 		 */
+		this.tick = function(fn) {
+			tickFn = fn;
+
+			return this;
+		};
+
+		function updateTime() {
+			time = time + (direction * interval);
+
+			if (tickFn) {
+				tickFn.call(null, {
+					hours: getRemainingHours(),
+					minutes: getRemainingMinutes(),
+					seconds: getRemainingSeconds(),
+					milliseconds: getRemainingMilliSeconds(),
+					remaining: time
+				});
+			}
+
+			//if we are on the last interval before 0 and counting down stop
+			if ((time - interval) <= 0 && direction < 0) {
+				clearInterval(timerInterval);
+
+				if (alarmFn) {
+					alarmFn.call();
+				}
+			}
+		}
+
+		/**
+		 * Start an interval to do the countdown
+		 * @param  {Number} val length of the interval in milliseconds
+		 * @return {Object}     this so calls can be changed
+		 */
+		this.start = function(val) {
+			var me = this;
+
+			if (!val) {
+				val = 1000;
+			}
+
+			interval = val;
+
+			updateTime();
+
+			timerInterval = setInterval(function() {
+				updateTime();
+			}, interval);
+
+			return me;
+		};
+
+		/**
+		 * Clear the interval, make sure you call this eventually
+		 */
+		this.stop = function() {
+			clearInterval(timerInterval);
+		};
+
+
+		/**
+		 * A callback to be called when the timer reaches 0
+		 * @param  {Function} fn callback
+		 * @return {Object}      return this so calls can be chained
+		 */
+		this.alarm = function(fn) {
+			alarmFn = fn;
+
+			return this;
+		};
+	};
 });
