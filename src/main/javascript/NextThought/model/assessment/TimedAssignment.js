@@ -138,15 +138,5 @@ Ext.define('NextThought.model.assessment.TimedAssignment', {
 		var metaData = this.get('Metadata');
 
 		return metaData && (metaData.Duration * 1000);
-	},
-
-
-	getCompletedInTime: function() {
-		var maxTime = this.get('MaximumTimeAllowed');
-
-		return this.getDuration()
-					.then(function(duration) {
-						return duration < maxTime;
-					});
 	}
 });
