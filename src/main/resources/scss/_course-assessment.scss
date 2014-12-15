@@ -33,6 +33,49 @@ canvas.x-component-course-assessment {
 
 
 .x-component-course-assessment {
+	.assignment-status {
+		font: normal 600 0.6em/1 $font;
+		text-transform: uppercase;
+		color: $tertiary-grey;
+
+		* {
+			display: inline;
+		}
+
+		.status-item{
+
+			&:first-of-type::before {
+				display: none;
+			}
+
+			&::before {
+				content: '\b7';
+				font-size: 1.2em;
+				vertical-align: middle;
+				margin: 0 0.3em;
+			}
+		}
+
+		.completed {
+			.completed-label {
+				margin-right: 0.3em;
+
+				&.ontime {
+					color: $secondary-green;
+				}
+			}
+
+			.completed-errors {
+				color: $primary-red;
+				margin-right: 0.3em;
+			}
+		}
+
+		.due.today {
+			color: $primary-orange;
+		}
+	}
+
 	&.nav-outline{
 		position: relative;
 		background: #f5f4f4;

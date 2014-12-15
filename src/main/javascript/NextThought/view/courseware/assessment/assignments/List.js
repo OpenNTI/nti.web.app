@@ -20,19 +20,28 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 								' / {total}'
 							]},*/
 							{ cls: 'name', html: '{name:htmlEncode}'},
-							{ cls: 'status {[this.isOverDue(values)]}', cn: [
-								{ tag: 'time', cls: 'due', datetime: '{due:date("c")}', html: '{[this.getDueDate(values)]}'},
-								{ tag: 'time', cls: 'completed', datetime: '{completed:date("c")}', html: 'Completed {completed:date("n/j")}'}
-							]},
-							{ tag: 'tpl', 'if': 'maxTime', cn: [
-								{cls: 'timed {timedCls}', cn: [
-									{tag: 'span', cls: 'label', html: 'Timed: '},
-									{tag: 'span', cls: 'duration', html: '{maxTime}'}
-								]}
-							]}
+							'{[this.getStatus(values)]}'
+							// { cls: 'status {[this.isOverDue(values)]}', cn: [
+							// 	{ tag: 'time', cls: 'due', datetime: '{due:date("c")}', html: '{[this.getDueDate(values)]}'},
+							// 	{ tag: 'time', cls: 'completed', datetime: '{completed:date("c")}', html: 'Completed {completed:date("n/j")}'}
+							// ]},
+							// { tag: 'tpl', 'if': 'maxTime', cn: [
+							// 	{cls: 'timed {timedCls}', cn: [
+							// 		{tag: 'span', cls: 'label', html: 'Timed: '},
+							// 		{tag: 'span', cls: 'duration', html: '{maxTime}'}
+							// 	]}
+							// ]}
 						]}
 					]}), {
 				//template functions
+				getStatus: function(values) {
+					return NextThought.view.courseware.assessment.AssignmentStatus.getStatusHTML({
+						due: values.due,
+						completed: values.completed,
+						maxTime: values.maxTime,
+						duration: values.duration
+					});
+				},
 
 				getCorrectCls: function(values) {
 					return values.correct ? 'correct' : '';
@@ -105,9 +114,31 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 		this.mon(this.store, 'datachanged', 'maybeHideParent');
 	},
 
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		this.mon(this.el, 'mouseover', 'itemHover');
+	},
+
+
 	maybeHideParent: function(store) {
 		var count = store.getCount();
 		this.fireEvent((count > 0) ? 'show-parent' : 'hide-parent');
+	},
+
+
+	itemHover: function(e) {
+		var node = e.getTarget(this.itemSelector),
+			rec = this.getRecord(node),
+			due = rec.get('due'),
+			qtip,
+			dueEl = e.getTarget('[data-qtip-fn]');
+
+		if (dueEl && rec) {
+			qtip = NextThought.view.courseware.assessment.AssignmentStatus.getTimeRemaining(due);
+			dueEl.setAttribute('data-qtip', qtip);
+		}
 	},
 
 

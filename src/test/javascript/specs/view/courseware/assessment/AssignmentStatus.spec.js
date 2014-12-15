@@ -174,23 +174,23 @@ describe('assignment status tests', function() {
 		}
 
 		function getDue() {
-			return testBody.querySelector('.item.due');
+			return testBody.querySelector('.status-item.due');
 		}
 
 		function getMaxTime() {
-			return testBody.querySelector('.item.maxTime');
+			return testBody.querySelector('.status-item.maxTime');
 		}
 
 		function getCompleted() {
-			return testBody.querySelector('.item.completed');
+			return testBody.querySelector('.status-item.completed');
 		}
 
 		function getOverTime() {
-			return testBody.querySelector('.item.completed .overtime');
+			return testBody.querySelector('.status-item.completed .overtime');
 		}
 
 		function getOverDue() {
-			return testBody.querySelector('.item.completed .overdue');
+			return testBody.querySelector('.status-item.completed .overdue');
 		}
 
 		function expectEls(e) {

@@ -6,12 +6,11 @@ Ext.define('NextThought.model.assessment.TimedAssignment', {
 	fields: [
 		{name: 'IsTimedAssignment', type: 'bool'},
 		{name: 'MaximumTimeAllowed', type: 'int'}, //this is in seconds
-		{name: 'StartTime', type: 'date'},
+		{name: 'Metadata', type: 'auto'},
 		//ui fields
 		{name: 'isStarted', type: 'bool', persist: false, convert: function(v, rec) {
 			return v || !!rec.getLink('StartTime');
 		}},
-		{name: 'duration', type: 'int', persist: false}, // this is in seconds
 		{name: 'startTime', type: 'int', persist: false}//this is in seconds
 	],
 
@@ -107,35 +106,17 @@ Ext.define('NextThought.model.assessment.TimedAssignment', {
 
 
 	getStartTime: function() {
-		var link = this.getLink('StartTime'),
-			startTime = this.get('startTime');
+		var metaData = this.get('Metadata');
 
-		if (!link && !startTime) {
-			return Promise.reject();
-		}
-
-		if (startTime) {
-			return Promise.resolve(startTime);
-		}
-
-		return Service.request(link)
-			.then(function(response) {
-				var json = Ext.decode(response, true);
-
-				if (!json || !json.StartTime) {
-					console.error('Unexpected Response', response);
-					return Promise.reject();
-				}
-
-				return json.StartTime;
-			});
+		return metaData && (metaData.StartTime * 1000);
 	},
+
 
 
 	getTimeRemaining: function() {
 		var maxTime = (this.get('MaximumTimeAllowed') || 0) * 1000;
 
-		return this.getStartTime()
+		return Promise.resolve(this.getStartTime())
 			.then(function(startTime) {
 				var now = new Date(),
 					start = new Date(startTime * 1000),
@@ -156,40 +137,9 @@ Ext.define('NextThought.model.assessment.TimedAssignment', {
 
 
 	getDuration: function() {
-		var me = this,
-			link = me.getLink('Metadata'),
-			duration = me.get('duration');
+		var metaData = this.get('Metadata');
 
-		if (!link && !duration) {
-			return Promise.reject();
-		}
-
-		if (duration) {
-			return Promise.resolve(duration);
-		}
-
-		return Service.request(link)
-			.then(function(response) {
-				var json = Ext.decode(response);
-
-				if (!json || !json.Duration) {
-					console.error('Unexpected Response', response);
-					return Promise.reject();
-				}
-
-				me.set('duration', json.Duration);
-				return json.Duration;
-			});
-	},
-
-
-	getDurationString: function() {
-		var me = this;
-
-		return me.getDuration()
-			.then(function(duration) {
-				return me.__getTimeString(duration);
-			});
+		return metaData && (metaData.Duration * 1000);
 	},
 
 

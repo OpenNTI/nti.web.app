@@ -4,11 +4,11 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 		statusTpl: new Ext.XTemplate(
 			Ext.DomHelper.markup({cls: 'assignment-status', cn: [
 				{tag: 'tpl', 'if': 'maxTime', cn: [
-					{tag: 'span', cls: 'item maxTime {maxTime.cls}', html: '{maxTime.html}'}
+					{cls: 'status-item maxTime {maxTime.cls}', html: '{maxTime.html}'}
 				]},
 				{tag: 'tpl', 'if': 'completed', cn: [
-					{cls: 'item completed', cn: [
-						{tag: 'span', cls: '{completed.cls}', 'data-qtip': '{completed.tip}', html: '{completed.html}'},
+					{cls: 'status-item completed', cn: [
+						{tag: 'span', cls: 'completed-label {completed.cls}', 'data-qtip': '{completed.qtip}', html: '{completed.html}'},
 						{tag: 'tpl', 'if': 'overdue || overtime', cn: [
 							{tag: 'span', cls: 'completed-errors', cn: [
 								'(',
@@ -22,11 +22,11 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 								')'
 							]}
 						]},
-						{tag: 'span', html: '{completed.date}'}
+						{tag: 'span', cls: 'completed-date', html: '{completed.date}'}
 					]}
 				]},
 				{tag: 'tpl', 'if': 'due && !completed', cn: [
-					{tag: 'span', cls: 'item due {due.cls}', 'data-qtip-fn': '{due.qtipFn}', html: '{due.html}'}
+					{cls: 'status-item due {due.cls}', 'data-qtip-fn': '{due.qtipFn}', html: '{due.html}'}
 				]}
 			]})
 		),
@@ -62,6 +62,7 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 			if (TimeUtils.isSameDay(now, data.due)) {
 				d.html = 'Due Today!';
 				d.cls = 'today';
+				d.qtipFn = 'getTimeUntilDue';
 			} else {
 				d.html = 'Due ' + Ext.Date.format(data.due, 'l, F j');
 
@@ -76,7 +77,7 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 
 
 		__getSubmittedToolTip: function(submitted) {
-			return 'Submitted At ' + Ext.Date.format(submitted, 'g:i A n/j/Y');
+			return '<span>' + 'Submitted At ' + Ext.Date.format(submitted, 'g:i A n/j/Y') + '</span>';
 		},
 
 
@@ -115,7 +116,7 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 			if (!data.completed || data.completed <= data.due) { return null; }
 
 			var diff = data.completed.getTime() - data.due.getTime(),
-				qtip = TimeUtils.getNaturalDuration(diff, 1) + ' ago';
+				qtip = TimeUtils.getNaturalDuration(diff, 1) + ' overdue';
 				d = {
 					html: 'overdue'
 				};
@@ -153,6 +154,13 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 			var renderData = this.__getRenderData(data);
 
 			return this.statusTpl.apply(renderData);
+		},
+
+
+		getTimeRemaining: function(due) {
+			var diff = due.getTime() - (new Date()).getTime();
+
+			return TimeUtils.getNaturalDuration(diff, 1) + ' remaining';
 		}
 	}
 });
