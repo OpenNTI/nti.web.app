@@ -190,7 +190,7 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 		if (assignment.isTimed && !assignment.isStarted()) {
 			Ext.Msg.show({
 				title: 'Are you sure?',
-				msg: 'This assignment is a timed assignment once started you will only have ### seconds to complete it.',
+				msg: 'This assignment is a timed assignment once started you will only have ' + assignment.getMaxTimeString() + ' to complete it.',
 				buttons: {
 					primary: {
 						text: 'Start',

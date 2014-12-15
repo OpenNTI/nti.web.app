@@ -46,6 +46,46 @@ Ext.define('NextThought.model.assessment.TimedAssignment', {
 			});
 	},
 
+
+	getMaxTimeString: function() {
+		var maxTime = this.get('MaximumTimeAllowed'),//max time is given in seconds
+			hours = parseInt(maxTime / (60 * 60)),
+			minutes = parseInt(maxTime / 60) % 60,
+			seconds = parseInt(maxTime) % 60,
+			time = '';
+
+		if (hours) {
+			time += Ext.util.Format.plural(hours, 'hour');
+
+			if (minutes) {
+				if (seconds) {
+					time += ', ';
+				} else {
+					time += ' and ';
+				}
+			}
+		}
+
+		if (minutes) {
+			time += Ext.util.Format.plural(minutes, 'minute');
+
+			if (seconds) {
+				if (hours) {
+					time += ', and ';
+				} else {
+					time += ' and ';
+				}
+			}
+		}
+
+		if (seconds) {
+			time += Ext.util.Format.plural(seconds, 'second');
+		}
+
+		return time;
+	},
+
+
 	getStartTime: function() {
 		var link = this.getLink('StartTime'),
 			startTime = this.get('startTime');
