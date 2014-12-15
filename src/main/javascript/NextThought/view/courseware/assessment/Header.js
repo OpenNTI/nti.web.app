@@ -25,6 +25,15 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 							{tag: 'span', cls: "path part {[ xindex === xcount? 'current' : xindex === 1? 'root' : '']}", html: '{.}'}
 						]}
 					]
+				},
+				{
+					cls: 'time-remaining hidden',
+					cn: [
+						{tag: 'span', cls: 'label', html: 'Time Remaining:'},
+						{tag: 'span', cls: 'hours time'},
+						{tag: 'span', cls: 'minutes time'},
+						{tag: 'span', cls: 'seconds time'}
+					]
 				}
 			]
 		},
@@ -41,7 +50,12 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 		pageEl: '.toolbar .page',
 		pathEl: '.toolbar .path-items',
 		previousEl: '.toolbar .controls .up',
-		nextEl: '.toolbar .controls .down'
+		nextEl: '.toolbar .controls .down',
+		timeEl: '.time-remaining',
+		timeLabelEl: '.time-remaining .label',
+		hoursEl: '.time-remaining .hours',
+		minutesEl: '.time-remaining .minutes',
+		secondsEl: '.time-remaining .seconds'
 	},
 
 	headerTpl: '',
@@ -72,19 +86,21 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 	beforeRender: function() {
 		this.callParent(arguments);
 
-		this.renderData = Ext.apply(this.renderData || {}, {
-			path: this.path || [],
-			page: this.pageSource.getPageNumber(),
-			total: this.pageSource.getTotal(),
-			noNext: !this.pageSource.hasNext(),
-			noPrev: !this.pageSource.hasPrevious()
+		var me = this;
+
+		me.renderData = Ext.apply(me.renderData || {}, {
+			path: me.path || [],
+			page: me.pageSource.getPageNumber(),
+			total: me.pageSource.getTotal(),
+			noNext: !me.pageSource.hasNext(),
+			noPrev: !me.pageSource.hasPrevious()
 		});
 
-		this.onPagerUpdate();
+		me.onPagerUpdate();
 
-		this.mon(this.pageSource, 'update', 'onPagerUpdate');
+		me.mon(me.pageSource, 'update', 'onPagerUpdate');
 
-		this.on({
+		me.on({
 			pathEl: {
 				click: 'onPathClicked',
 				mouseover: 'onPathHover'
@@ -92,12 +108,101 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 			previousEl: { click: 'firePreviousEvent' },
 			nextEl: { click: 'fireNextEvent' }
 		});
+
+		me.on('destroy', function() {
+			me.timer.stop();
+		});
+	},
+
+
+	updateTimeEl: function(el, time) {
+		var s = time.toFixed(0);
+
+		if (time < 10) {
+			s = '0' + s;
+		}
+
+		el.update(s);
+	},
+
+
+	showRemainingTime: function(time) {
+		if (!this.rendered) {
+			this.on('afterrender', this.showRemainingTime.bind(this, time));
+			return;
+		}
+
+		if (time < 0) {
+			this.showOverdueTime(-1 * time);
+		} else {
+			this.showDueTime(time);
+		}
+
+		this.timeEl.removeCls('hidden');
+	},
+
+
+	showOverdueTime: function(time) {
+		var me = this,
+			current = {};
+
+		me.timer = TimeUtils.getTimer(time, 1);
+
+		me.timeLabelEl.update('Past Due');
+		me.timeEl.addCls('warning-red');
+
+		me.timer
+			.tick(function(t) {
+
+				if (current.hours !== t.hours) {
+					me.updateTimeEl(me.hoursEl, t.hours);
+				}
+
+				if (current.minutes !== t.minutes) {
+					me.updateTimeEl(me.minutesEl, t.minutes);
+				}
+
+				me.updateTimeEl(me.secondsEl, t.seconds);
+
+				current = t;
+			})
+			.start(1000);//1 second
+	},
+
+
+	showDueTime: function(time) {
+		var me = this,
+			current = {};
+
+		me.timer = TimeUtils.getTimer(time, -1);
+
+		me.timeLabelEl.update('Time Remaining');
+
+		me.timer
+			.tick(function(t) {
+				if (current.hours !== t.hours) {
+					me.updateTimeEl(me.hoursEl, t.hours);
+				}
+
+				if (current.minutes !== t.minutes) {
+					me.updateTimeEl(me.minutesEl, t.minutes);
+				}
+
+				me.updateTimeEl(me.secondsEl, t.seconds);
+
+				current = t;
+			})
+			.alarm(function() {
+				me.timer.stop();
+				me.showOverdueTime(0);
+			})
+			.start(1000);
 	},
 
 
 	showToast: function(msgOrConfig) {
 		if (!this.rendered) {
-			this.on('afterrender', this.showToast.bind(this, arguments));
+			this.on('afterrender', this.showToast.bind(this, msgOrConfig));
 			return;
 		}
 

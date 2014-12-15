@@ -64,7 +64,7 @@ Ext.define('NextThought.view.toast.Manager', {
 		toast.show();
 
 		if (timeout && timeout > 0) {
-			toast.timeoutId = Ext.delay(this.eatToast, timeout, this, [toast]);
+			toast.timeoutId = Ext.defer(toast.close, timeout, toast);
 		}
 
 		return toast;

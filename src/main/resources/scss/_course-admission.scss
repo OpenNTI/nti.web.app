@@ -253,6 +253,56 @@
 		}
 	}
 
+	.admission-set.gift-recipient {
+		padding: 15px;
+		background-color: #f7fdf8;
+		border: 1px solid #d6f1d9;
+		margin-bottom: 0;
+
+		.label {
+			color: #52b85f;
+			margin-bottom: 10px;
+		}
+
+		.body-container {
+			width: 652px;
+			background: none;
+			
+			.large.left {
+				width: 212px;
+				&.last {
+					margin-right: 0;
+				}
+			}
+		}
+	}
+
+	.admission-set.gift-message {
+		padding: 15px;
+		padding-bottom: 10px;
+		border: 1px solid #d6f1d9;
+		border-top-width: 0;
+
+		.body-container {
+			width: 652px;
+		}
+
+		.enrollment-input {
+			width: 100%;
+		}
+
+		textarea {
+			width: 100%;
+			min-height: 100px;
+			resize: vertical;
+			max-height: 200px;
+			font-size: 1.1em;
+			font-weight: 200;
+			padding: 5px;
+			border-color: #efefef;
+		}
+	}
+
 	.admission-set {
 		&.gift-from,
 		&.gift-message,

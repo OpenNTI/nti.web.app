@@ -99,6 +99,15 @@ Ext.define('NextThought.view.reader.Panel', {
 	},
 
 
+	showRemainingTime: function() {
+		var header = this.getToolbar();
+
+		if (header && header.showRemainingTime) {
+			header.showRemainingTime.apply(header, arguments);
+		}
+	},
+
+
 	showHeaderToast: function() {
 		var header = this.getToolbar();
 

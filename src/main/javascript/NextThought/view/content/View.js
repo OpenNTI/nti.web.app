@@ -178,7 +178,7 @@ Ext.define('NextThought.view.content.View', {
 			needsChanging = vId !== active.id,
 			//only reset the view if we are already there and the spec flagged that it can be reset.
 			reset = target.flagged && !needsChanging,
-			txn;
+			txn, maybeStop;
 
 		if (Ext.isEmpty(vId)) {
 			return false;
@@ -190,8 +190,16 @@ Ext.define('NextThought.view.content.View', {
 		}
 
 		if (needsChanging) {
-			txn = history.beginTransaction('tab-change-' + guidGenerator());
-			this.setActiveTab(vId)
+			txn = history.beginTransaction('tab-change' + guidGenerator());
+
+			if (active.stopClose) {
+				maybeStop = active.stopClose();
+			} else {
+				maybeStop = Promise.resolve();
+			}
+
+			maybeStop
+				.then(this.setActiveTab.bind(this, vId))
 				.then(
 					function() {
 						this.updateTitle();
@@ -203,7 +211,6 @@ Ext.define('NextThought.view.content.View', {
 					}
 				);
 		} else if (reset) {
-
 			//should build in some smarts about allowing this to toggle through if the views are 'ready'
 			active = active.layout.setActiveItem(0);
 			if (active) {
@@ -551,7 +558,9 @@ Ext.define('NextThought.view.content.View', {
 
 		if (result) {
 			active = this.getLayout().getActiveItem();
-			if (active) {
+			if (active.onBeforeDeactivate) {
+				resut = active.onBeforeDeactivate();
+			} else {
 				result = active.fireEvent('beforedeactivate', this);
 			}
 		}

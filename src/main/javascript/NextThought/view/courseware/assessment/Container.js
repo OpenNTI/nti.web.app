@@ -50,9 +50,19 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 		return this.items.first();
 	},
 
+	//we can't really stop it at this point, but we can at least show the toast
+	onBeforeDeactivate: function() {
+		this.stopClose(true);
+	},
+
+
+	stopClose: function(forced) {
+		return this.maybePreventNavigation(forced);
+	},
+
 	//if we have a reader with an assessment
 	//and it is allowing close don't allow navigation
-	maybePreventNavigation: function(assignment) {
+	maybePreventNavigation: function(forced) {
 		var reader = this.down('reader-content'),
 			assessment = reader && reader.getAssessment();
 
@@ -60,14 +70,14 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 			return Promise.resolve();
 		}
 
-		return assessment.stopClose(assignment);
+		return assessment.stopClose(forced);
 	},
 
 
 	showRoot: function(assignment) {
 		var me = this;
 
-		return me.maybePreventNavigation(assignment)
+		return me.maybePreventNavigation(true)
 			.then(function() {
 				me.getLayout().setActiveItem(0);
 				Ext.destroy(me.items.getRange().slice(1));
@@ -114,66 +124,92 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 		var me = this,
 			active = me._showAssignmentPromise || Promise.resolve();
 
-		this.maybePreventNavigation()
-			.then(function() {
-				return active.always(function() {
-					active = me._showAssignmentPromise = new Promise(function(fulfill, reject) {
-						var r = assignmentHistory,
-							link = r && r.getLink && r.getLink('UsersCourseAssignmentHistoryItem');
+		function finish() {
+			me.maybePreventNavigation()
+				.then(function() {
+					return active.always(function() {
+						active = me._showAssignmentPromise = new Promise(function(fulfill, reject) {
+							var r = assignmentHistory,
+								link = r && r.getLink && r.getLink('UsersCourseAssignmentHistoryItem');
 
-						if (!r || !r.isSummary) {
-							fulfill(r);
-							return;
-						}
+							if (!r || !r.isSummary) {
+								fulfill(r);
+								return;
+							}
 
-						Service.request(link)
-								.done(function(json) {
-									var o = ParseUtils.parseItems(json)[0];
+							Service.request(link)
+									.done(function(json) {
+										var o = ParseUtils.parseItems(json)[0];
 
-									r.set({
-										Feedback: o.get('Feedback'),
-										Submission: o.get('Submission'),
-										pendingAssessment: o.get('pendingAssessment'),
-										Grade: o.get('Grade')
-									});
-									delete r.isSummary;
+										r.set({
+											Feedback: o.get('Feedback'),
+											Submission: o.get('Submission'),
+											pendingAssessment: o.get('pendingAssessment'),
+											Grade: o.get('Grade')
+										});
+										delete r.isSummary;
 
-									fulfill(r);
-								})
-								.fail(reject);
+										fulfill(r);
+									})
+									.fail(reject);
 
-					});
-
-					return active.done(function(history) {
-							//both course-asessment-reader and the admin-reader extend the reader so this takes care of both
-							Ext.destroy(me.down('reader'));
-
-							var reader = me.add({
-								xtype: isMe(student) ? 'course-assessment-reader' : 'course-assessment-admin-reader',
-								parentView: view,
-								assignmentHistory: history,
-								student: student,
-								path: path,
-								location: assignment.getId(),
-								assignment: assignment,
-								pageSource: pageSource
-							});
-
-							me.mon(reader, {
-								'goup': 'showRoot'
-							});
-
-							return reader;
-						})
-						.fail(function(reason) {
-							alert({
-								title: getString('NextThought.view.courseware.assessment.Container.errortitle'),
-								msg: getString('NextThought.view.courseware.assessment.Container.errormsg')
-							});
-							setTimeout(function() { throw reason; }, 1);
 						});
+
+						return active.done(function(history) {
+								//both course-asessment-reader and the admin-reader extend the reader so this takes care of both
+								Ext.destroy(me.down('reader'));
+
+								var reader = me.add({
+									xtype: isMe(student) ? 'course-assessment-reader' : 'course-assessment-admin-reader',
+									parentView: view,
+									assignmentHistory: history,
+									student: student,
+									path: path,
+									location: assignment.getId(),
+									assignment: assignment,
+									pageSource: pageSource
+								});
+
+								me.mon(reader, {
+									'goup': 'showRoot'
+								});
+
+								return reader;
+							})
+							.fail(function(reason) {
+								alert({
+									title: getString('NextThought.view.courseware.assessment.Container.errortitle'),
+									msg: getString('NextThought.view.courseware.assessment.Container.errormsg')
+								});
+								setTimeout(function() { throw reason; }, 1);
+							});
+					});
 				});
+		}
+
+		if (assignment.isTimed && !assignment.isStarted()) {
+			Ext.Msg.show({
+				title: 'Are you sure?',
+				msg: 'This assignment is a timed assignment once started you will only have ### seconds to complete it.',
+				buttons: {
+					primary: {
+						text: 'Start',
+						handler: function() {
+							assignment.start()
+								.then(finish)
+								.fail(function() {
+									alert('There was a problem starting this assignment, please try again later.');
+								});
+						}
+					},
+					secondary: 'Cancel'
+				}
 			});
+		} else {
+			finish();
+		}
+
+
 	},
 
 

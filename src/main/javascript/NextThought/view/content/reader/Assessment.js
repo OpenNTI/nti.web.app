@@ -96,6 +96,10 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			}));
 		}
 
+		if (this.injectedAssignment && this.injectedAssignment.isTimed) {
+			this.showAssignmentTimer();
+		}
+
 		if (pendingAssessment) {
 			this.submission.setGradingResult(pendingAssessment);
 		} else if (this.injectedSavePoint) {
@@ -113,27 +117,65 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 		}
 	},
 
-	//do not allow close if we don't have a submission and it has answers
-	stopClose: function(id) {
-		//if the reader isn't visible or we are passed an id and it is not the assignment we are currently looking at
-		//don't alert
-		//TODO: figure out a better way to do this
-		if (!this.reader.isVisible(true) || (Ext.isString(id) && id !== this.injectedAssignment.getId())) {
-			return Promise.resolve();
+
+	showAssignmentTimer: function() {
+		var me = this;
+
+		me.injectedAssignment.getTimeRemaining()
+			.then(function(remaining) {
+				me.reader.showRemainingTime(remaining);
+			});
+	},
+
+
+	notSubmittedToast: function() {
+		var me = this,
+			assignment = me.injectedAssignment,
+			title = (assignment && assignment.get('title')),
+			progress = ' Your progress has been saved and can be resumed at a later date.',
+			due = assignment ? 'It is due on ' + Ext.Date.format(assignment.getDueDate(), 'l, F j') + '.' : '';
+
+		if (!me.toast || me.toast.isDestroyed) {
+			me.toast = Toaster.makeToast({
+				//title: 'Did you mean to not submit that assignment?',
+				message: 'You left ' + title + ' without submitting it. ' + progress,
+				timeout: 10000,
+				callback: function() {
+					delete me.toast;
+				},
+				buttons: [
+					{
+						label: 'Take me Back',
+						callback: function() {
+							var cid = assignment.get('ContainerId'),
+								course = CourseWareUtils.courseForNtiid(cid);
+
+							if (course) {
+								CourseWareUtils.findCourseBy(course.findByMyCourseInstance())
+									.then(function(instance) {
+										instance = instance.get('CourseInstance') || instance;
+
+										return instance.fireNavigationEvent(me.reader);
+									})
+									.then(function() {
+										me.reader.fireEvent('navigate-to-assignment', assignment.getId());
+									});
+							}
+						}
+					}
+				]
+			});
 		}
 
-		var shouldPrompt = this.submission && this.submission.hasAnyAnswers(),
-			progressSaved = this.submission && this.submission.hasProgressSaved(),
-			assignment = this.injectedAssignment,
-			title = (assignment && assignment.get('title')) || 'This assignment',
-			progress = progressSaved ?
-				' Your progress has been saved and can be resumed at a later date.' :
-				' Your progress will be lost.',
-			due = assignment ? ' It is due on ' + Ext.Date.format(assignment.getDueDate(), 'l, F j') + '.' : '';
+		return Promise.resolve();
+	},
 
-		if (!shouldPrompt) {
-			return Promise.resolve();
-		}
+
+	notSubmittedAlert: function() {
+		var assignment = this.injectedAssignment,
+			title = (assignment && assignment.get('title')),
+			progress = ' Your progress will be lost.',
+			due = assignment ? 'It is due on ' + Ext.Date.format(assignment.getDueDate(), 'l, F j') + '.' : '';
 
 		return new Promise(function(fulfill, reject) {
 			Ext.Msg.show({
@@ -153,6 +195,41 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			});
 		});
 	},
+
+	/**
+	 * Let the user know when they leave an assignment that is not submitted if
+	 * 1.) there are answers but no progress saved
+	 * 2.) it is completely filled out but not submitted
+	 * @param  {Boolean} forced if true the navigation behind it cannot be stopped
+	 * @return {Promise}        fulfills if it is save to leave rejects otherwise
+	 */
+	stopClose: function(forced) {
+		//if the reader isn't visible don't stop navigation
+		//or if the quiz doesn't have a submission widget
+		if (!this.reader.isVisible(true) || !this.submission) {
+			return Promise.resolve();
+		}
+
+		var hasAnswers = this.submission.hasAnyAnswers(),
+			missingAnswers = this.submission.hasAnyMissing(),
+			isSubmitted = this.submission.isSubmitted(),
+			progressSaved = this.submission.hasProgressSaved();
+
+		if (isSubmitted) {
+			return Promise.resolve();
+		}
+
+		if (hasAnswers && !progressSaved && !forced) {
+			return forced ? false : this.notSubmittedAlert();
+		}
+
+		if (!missingAnswers) {
+			return this.notSubmittedToast();
+		}
+
+		return Promise.resolve();
+	},
+
 
 	showSavingProgress: function() {
 		if (this.progressToast && !this.progressToast.el.isDestroyed) {

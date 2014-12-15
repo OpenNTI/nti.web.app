@@ -206,6 +206,11 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 	},
 
 
+	hasAnyMissing: function() {
+		return !this.noParts && !this.allQuestionsAnswered;
+	},
+
+
 	hasProgressSaved: function() {
 		return this.progressSaved;
 	},
@@ -246,6 +251,20 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 
 		if (totalQuestionCount === unansweredQuestions) {
 			this.moveToInActive();
+		}
+
+		if (totalQuestionCount === 0) {
+			this.noParts = true;
+		}
+
+		if (unansweredQuestions === 0) {
+			this.statusMessage.update(getString('NextThought.view.assessment.QuizSubmission.all-answered'));
+			this.allQuestionsAnswered = true;
+		} else {
+			this.allQuestionsAnswered = false;
+			this.statusMessage.update(getFormattedString('NextThought.view.assessment.QuizSubmission.unanswered', {
+				questions: Ext.util.Format.plural(unansweredQuestions, 'question')
+			}));
 		}
 
 		this.statusMessage.update(unansweredQuestions === 0 ?

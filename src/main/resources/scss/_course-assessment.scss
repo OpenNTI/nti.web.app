@@ -640,9 +640,44 @@ canvas.x-component-course-assessment {
 			padding: 0 17px 0 30px;
 			font: normal normal 0.75em/49px $font;
 			color: $primary-grey;
-			overflow: hidden;
 			height: 50px;
 			white-space: nowrap;
+
+			.time-remaining {
+				position: absolute;
+				z-index: 5;
+				right: 20px;
+				bottom: -40px;
+				height: 40px;
+				line-height: 40px;
+				min-width: 200px;
+				text-align: center;
+				background-color: $panel-background;
+				border: 1px solid #efefef;
+				border-top-width: 0;
+
+
+				&.hidden {
+					display: none;
+				}
+
+				&.warning-red {
+					background-color: $primary-red;
+					color: white;
+					border: none;
+				}
+
+				.label {
+					font-weight: 600;
+					margin-right: 0.5em;
+				}
+
+				.hours::after,
+				.minutes::after {
+					content: ':';
+					margin: 0 0.1em;
+				}
+			}
 
 			.path-items {
 				position: relative;
