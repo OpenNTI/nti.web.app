@@ -410,6 +410,21 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 	},
 
 
+	shouldAllowSubmit: function() {
+		if (this.shouldShow) {
+			if (!this.submitBtn || this.submitBtn.hasCls('disabled')) {
+				return false;
+			}
+
+			if (this.isSubmitted()) {
+				return false;
+			}
+		}
+
+		return this.submitClicked.bind(this);
+	},
+
+
 	submitClicked: function(e) {
 		var q = this.questionSet,
 			isAssignment = !!q.associatedAssignment,

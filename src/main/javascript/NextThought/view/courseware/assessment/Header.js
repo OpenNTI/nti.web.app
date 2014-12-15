@@ -144,7 +144,7 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 	},
 
 
-	showRemainingTime: function(time, max) {
+	showRemainingTime: function(time, max, getSubmitFn) {
 		if (!this.rendered) {
 			this.on('afterrender', this.showRemainingTime.bind(this, time));
 			return;
@@ -155,7 +155,7 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 				.then(this.showOverdueTime.bind(this, -1 * time, max));
 		} else {
 			wait()
-				.then(this.showDueTime.bind(this, time, max));
+				.then(this.showDueTime.bind(this, time, max, getSubmitFn));
 		}
 
 		this.timeContainerEl.removeCls('hidden');
@@ -181,7 +181,7 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 	},
 
 
-	showDueTime: function(time, max) {
+	showDueTime: function(time, max, getSubmitFn) {
 		var me = this,
 			current = {};
 
@@ -193,9 +193,10 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 
 				me.timeEl.update(s + ' remaining');
 
-				if (t.remaining < 30000) {
+				if (t.remaining < 30000 && !me.timeContainerEl.hasCls('warning-red')) {
 					me.timeContainerEl.addCls('warning-red');
 					me.timeContainerEl.removeCls('warning-orange');
+					me.showSubmitToast(getSubmitFn);
 				} else if (t.remaining <= max * me.WARNING_PERCENT) {
 					me.timeContainerEl.addCls('warning-orange');
 				}
@@ -209,6 +210,28 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 					.then(me.showOverdueTime.bind(me, 0));
 			})
 			.start(1000);
+	},
+
+
+	showSubmitToast: function(getSubmitFn) {
+		if (!getSubmitFn) { return; }
+
+		var submitFn = getSubmitFn();
+
+		if (Ext.isFunction(submitFn)) {
+			Toaster.makeToast({
+				message: 'There are 30 seconds left on this assignment. Would you like to submit your progress for grading?',
+				timeout: 30000,
+				buttons: [
+					{
+						label: 'Submit',
+						callback: function() {
+							submitFn();
+						}
+					}
+				]
+			});
+		}
 	},
 
 

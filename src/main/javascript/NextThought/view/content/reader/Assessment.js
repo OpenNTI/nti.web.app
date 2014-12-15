@@ -96,8 +96,8 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			}));
 		}
 
-		if (this.injectedAssignment && this.injectedAssignment.isTimed && !h.get('completed')  && !isInstructor) {
-			this.showAssignmentTimer();
+		if (this.injectedAssignment && this.injectedAssignment.isTimed && !h.get('completed') && !isInstructor) {
+			this.showAssignmentTimer(this.submission.shouldAllowSubmit && this.submission.shouldAllowSubmit.bind(this.submission));
 		}
 
 		if (pendingAssessment) {
@@ -118,13 +118,13 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 	},
 
 
-	showAssignmentTimer: function() {
+	showAssignmentTimer: function(submitFn) {
 		var me = this,
 			max = me.injectedAssignment.getMaxTime();
 
 		me.injectedAssignment.getTimeRemaining()
 			.then(function(remaining) {
-				me.reader.showRemainingTime(remaining, max);
+				me.reader.showRemainingTime(remaining, max, submitFn);
 			});
 	},
 

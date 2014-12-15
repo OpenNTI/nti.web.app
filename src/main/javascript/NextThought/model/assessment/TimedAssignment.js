@@ -67,6 +67,8 @@ Ext.define('NextThought.model.assessment.TimedAssignment', {
 				} else {
 					time += ' and ';
 				}
+			} else if (seconds) {
+				time += ' and ';
 			}
 		}
 
@@ -154,10 +156,16 @@ Ext.define('NextThought.model.assessment.TimedAssignment', {
 
 
 	getDuration: function() {
-		var link = this.getLink('Metadata');
+		var me = this,
+			link = me.getLink('Metadata'),
+			duration = me.get('duration');
 
-		if (!link) {
-			return Promise.reject('No MetaData link');
+		if (!link && !duration) {
+			return Promise.reject();
+		}
+
+		if (duration) {
+			return Promise.resolve(duration);
 		}
 
 		return Service.request(link)
@@ -169,6 +177,7 @@ Ext.define('NextThought.model.assessment.TimedAssignment', {
 					return Promise.reject();
 				}
 
+				me.set('duration', json.Duration);
 				return json.Duration;
 			});
 	},
@@ -181,5 +190,15 @@ Ext.define('NextThought.model.assessment.TimedAssignment', {
 			.then(function(duration) {
 				return me.__getTimeString(duration);
 			});
+	},
+
+
+	getCompletedInTime: function() {
+		var maxTime = this.get('MaximumTimeAllowed');
+
+		return this.getDuration()
+					.then(function(duration) {
+						return duration < maxTime;
+					});
 	}
 });

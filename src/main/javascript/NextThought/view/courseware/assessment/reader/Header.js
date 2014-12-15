@@ -11,7 +11,6 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 			{ cls: 'turned-in', cn: [
 				{ tag: 'span', cls: 'date', html: '{{{NextThought.view.courseware.assessment.reader.Header.completed}}}' },
 				{ tag: 'span', cls: 'late', html: '{late}'},
-				{ tag: 'span', cls: 'completed-in', html: ''},
 				{ tag: 'span', cls: 'allowed', html: ''}
 			]}
 		]},
@@ -96,7 +95,12 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 			this.addCls('ontime');
 		}
 
-		this.hideTimer();
+		//we don't want to show the remaining time if we have a submission
+		this.showRemainingTime = function() {};
+
+		if (this.timer) {
+			this.timer.stop();
+		}
 
 		if (this.assignment.isTimed) {
 			this.assignment.getDurationString()
@@ -137,9 +141,22 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 
 
 	setDuration: function(duration) {
-		var maxTime = this.assignment.getMaxTimeString();
+		var me = this,
+			maxTime = me.assignment.getMaxTimeString();
 
-		this.completedInEl.update('Completed in ' + duration);
-		this.allowedEl.update('Allowed ' + maxTime);
+		me.timeEl.update('Completed in ' + duration);
+		me.timeContainerEl.removeCls('hidden');
+		me.timeContainerEl.addCls('completed');
+
+		me.assignment.getCompletedInTime()
+			.then(function(inTime) {
+				if (inTime) {
+					me.timeContainerEl.addCls('in-time');
+				} else {
+					me.timeContainerEl.addCls('warning-red');
+				}
+			});
+
+		me.allowedEl.update('Timed: ' + maxTime);
 	}
 });
