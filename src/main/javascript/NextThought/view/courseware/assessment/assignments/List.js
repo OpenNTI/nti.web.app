@@ -4,6 +4,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 	ui: 'course-assessment',
 	cls: 'assignment-list',
 
+	requires: ['NextThought.view.courseware.assessment.AssignmentStatus'],
+
 	view: 'student',
 	overItemCls: 'over',
 	selectedItemCls: 'selected',

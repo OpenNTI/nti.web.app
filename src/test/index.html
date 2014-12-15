@@ -10,7 +10,6 @@ https://github.com/pivotal/jasmine/wiki
 	<script type="text/javascript" src="javascript/lib/jasmine-1.3.1/jasmine.js"></script>
 	<script type="text/javascript" src="javascript/lib/jasmine-1.3.1/jasmine-html.js"></script>
 
-
 	<script type="text/javascript">
 		var karma = window.__karma__ = {};
 		karma.start = function() {
@@ -19,23 +18,16 @@ https://github.com/pivotal/jasmine/wiki
 		};
 
 		/**
+		 * A flag to prevent the polyfills from making the console functions empty
+		 * @type {Boolean}
+		 */
+		window.fromIndexHTML = true;
+
+		/**
 		 * Empty NTIStrings object
 		 * @type {Object}
 		 */
 		window.NTIStrings = {};
-
-		/**
-		 * Returns a random integer between the min (inclusive) and max (exclusive)
-		 *
-		 * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-		 * 
-		 * @param  {Integer} min lower bound
-		 * @param  {Integer} max upper bound
-		 * @return {Interger}     random int
-		 */
-		window.getRandomInt = function(min, max) {
-    		return Math.floor(Math.random() * (max - min + 1) + min);
-		};
 
 		karma.files = {
 			'javascript/specs/example.spec.js': 1,
@@ -96,6 +88,7 @@ https://github.com/pivotal/jasmine/wiki
 			'javascript/specs/view/chat/log/Entry.spec.js': 1,
 			'javascript/specs/view/chat/transcript/Main.spec.js': 1,
 			'javascript/specs/view/content/Navigation.spec.js': 1,
+			'javascript/specs/view/courseware/assessment/AssignmentStatus.spec.js': 1,
 			'javascript/specs/view/forums/Comment.spec.js': 1,
 			'javascript/specs/view/store/purchase/Form.js': 1,
 			'javascript/specs/editor/Editor.spec.js': 1,
@@ -116,6 +109,7 @@ https://github.com/pivotal/jasmine/wiki
 	<!-- <x-bootstrap> -->
 	<script type="text/javascript" src="ext-4.2/ext-all-debug.js" id="ext-js-library"></script>
 	<script type="text/javascript" src="bootstrap.js"></script>
+	<script type="text/javascript" src="karma.paths.js"></script>
 	<!-- </x-bootstrap> -->
 	<script type="text/javascript" src="config.js"></script>
 	<script type="text/javascript" src="javascript/app.js"></script>
