@@ -193,10 +193,12 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 
 				me.timeEl.update(s + ' remaining');
 
-				if (t.remaining < 30000 && !me.timeContainerEl.hasCls('warning-red')) {
-					me.timeContainerEl.addCls('warning-red');
-					me.timeContainerEl.removeCls('warning-orange');
-					me.showSubmitToast(getSubmitFn);
+				if (t.remaining < 30000) {
+					if (!me.timeContainerEl.hasCls('warning-red')) {
+						me.timeContainerEl.addCls('warning-red');
+						me.timeContainerEl.removeCls('warning-orange');
+						me.showSubmitToast(getSubmitFn);
+					}
 				} else if (t.remaining <= max * me.WARNING_PERCENT) {
 					me.timeContainerEl.addCls('warning-orange');
 				}

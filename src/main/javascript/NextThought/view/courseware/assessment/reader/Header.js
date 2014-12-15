@@ -145,7 +145,7 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 			maxTime = me.assignment.getMaxTimeString();
 
 		me.timeEl.update('Completed in ' + duration);
-		me.timeContainerEl.removeCls('hidden');
+		me.timeContainerEl.removeCls(['hidden', 'warning-red', 'warning-orange']);
 		me.timeContainerEl.addCls('completed');
 
 		me.assignment.getCompletedInTime()
