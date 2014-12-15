@@ -26,8 +26,6 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Videos', {
 					if (!seen[id]) {
 						seen[id] = true;
 						videos.push(n);
-					} else {
-						console.warn(r, 'has dups');
 					}
 				};
 			}
