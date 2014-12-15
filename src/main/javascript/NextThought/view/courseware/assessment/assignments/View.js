@@ -201,6 +201,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 			{name: 'opens', type: 'date'},
 			{name: 'completed', type: 'date'},
 			{name: 'correct', type: 'int'},
+			{name: 'maxTime', type: 'string'},
+			{name: 'timeCls', type: 'string'},
 			{name: 'history', type: 'auto'},
 			{name: 'total', type: 'int'},
 			{name: 'item', type: 'auto'},
@@ -379,6 +381,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 				name: o.get('title'),
 				opens: o.get('availableBeginning'),
 				due: o.get('availableEnding'),
+				maxTime: o.isTimed && o.getMaxTimeString(),
+				timeCls: o.isTimed && o.isStarted() ? 'started' : 'not-started',
 
 				completed: h && h.get('completed'),
 				correct: h && h.get('correct'),

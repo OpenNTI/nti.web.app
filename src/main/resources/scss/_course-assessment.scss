@@ -236,12 +236,22 @@ canvas.x-component-course-assessment {
 				text-transform: uppercase;
 				font: normal 600 0.6em/1 $font;
 				color: $tertiary-grey;
+				float: left;
+
 				&.due {
 					color: $primary-red;
 				}
 
 				.completed { display: none; }
 				.due { display: block; }
+			}
+
+			.timed {
+				margin-left: 0.5em;
+				text-transform: uppercase;
+				font: normal 600 0.6em/1 $font;
+				color: $primary-blue;
+				float: left;
 			}
 
 			.score {

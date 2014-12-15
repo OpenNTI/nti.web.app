@@ -21,6 +21,12 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 							{ cls: 'status {[this.isOverDue(values)]}', cn: [
 								{ tag: 'time', cls: 'due', datetime: '{due:date("c")}', html: '{[this.getDueDate(values)]}'},
 								{ tag: 'time', cls: 'completed', datetime: '{completed:date("c")}', html: 'Completed {completed:date("n/j")}'}
+							]},
+							{ tag: 'tpl', 'if': 'maxTime', cn: [
+								{cls: 'timed {timedCls}', cn: [
+									{tag: 'span', cls: 'label', html: 'Timed: '},
+									{tag: 'span', cls: 'duration', html: '{maxTime}'}
+								]}
 							]}
 						]}
 					]}), {
