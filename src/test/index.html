@@ -18,6 +18,25 @@ https://github.com/pivotal/jasmine/wiki
 			jasmine.getEnv().execute();
 		};
 
+		/**
+		 * Empty NTIStrings object
+		 * @type {Object}
+		 */
+		window.NTIStrings = {};
+
+		/**
+		 * Returns a random integer between the min (inclusive) and max (exclusive)
+		 *
+		 * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+		 * 
+		 * @param  {Integer} min lower bound
+		 * @param  {Integer} max upper bound
+		 * @return {Interger}     random int
+		 */
+		window.getRandomInt = function(min, max) {
+    		return Math.floor(Math.random() * (max - min + 1) + min);
+		};
+
 		karma.files = {
 			'javascript/specs/example.spec.js': 1,
 			'javascript/specs/Library.spec.js': 1,
