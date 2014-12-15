@@ -55,11 +55,23 @@ Ext.define('NextThought.view.courseware.assessment.reader.Panel', {
 	},
 
 
+	showAllowedTime: function() {
+		var toolbar = this.getToolbar();
+
+		if (toolbar && toolbar.showAllowedTime) {
+			toolbar.showAllowedTime(this.assignment.getMaxTime());
+		}
+	},
+
+
 	afterRender: function() {
 		this.callParent(arguments);
 
 		//if we are a placeholder then don't set the assignment items
-		if (this.hasTimedPlaceholder) { return; }
+		if (this.hasTimedPlaceholder) {
+			this.showAllowedTime();
+			return;
+		}
 
 		var r = this.down('reader-content'),
 			container = this.up('[currentBundle]'),

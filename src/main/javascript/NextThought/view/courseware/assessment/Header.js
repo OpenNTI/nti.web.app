@@ -31,7 +31,12 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 				{
 					cls: 'time-remaining hidden',
 					cn: [
-						{tag: 'span', cls: 'time'}
+						{cls: 'time'},
+						{cls: 'help', html: 'Report a Problem'},
+						{cls: 'submit', cn: [
+							{cls: 'unanswered'},
+							{cls: 'submit-btn', html: 'I\'m Finished!'}
+						]}
 					]
 				}
 			]
@@ -51,7 +56,11 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 		previousEl: '.toolbar .controls .up',
 		nextEl: '.toolbar .controls .down',
 		timeContainerEl: '.time-remaining',
-		timeEl: '.time-remaining .time'
+		timeEl: '.time-remaining .time',
+		helpEl: '.time-remaining .help',
+		submitEl: '.time-remaining .submit',
+		unansweredEl: '.time-remaining .submit .unanswered',
+		submitBtnEl: '.time-remaining .submit .submit-btn'
 	},
 
 	headerTpl: '',
@@ -113,6 +122,27 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 	},
 
 
+	afterRender: function() {
+		this.callParent(arguments);
+
+		var panel = this.up('reader');
+
+		if (panel) {
+			panel.el.appendChild(this.timeContainerEl);
+
+			this.on('destroy', 'destroy', this.timeContainerEl);
+		}
+
+		this.mon(this.submitBtnEl, 'click', 'submitAssignmentClicked');
+		this.mon(this.helpEl, 'click', 'helpClicked');
+	},
+
+
+	helpClicked: function() {
+		console.log('help clicked');
+	},
+
+
 	hideTimer: function() {
 		this.timeContainerEl.addCls('hidden');
 
@@ -143,6 +173,25 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 		}
 
 		return s;
+	},
+
+
+	showAllowedTime: function(time) {
+		if (!this.rendered) {
+			this.on('afterrender', this.showAllowedTime.bind(this, time));
+			return;
+		}
+
+		var t = TimeUtils.getNaturalDuration(time, 1, false, {
+			week: 'Week',
+			day: 'Day',
+			hour: 'Hour',
+			minute: 'Minute',
+			second: 'Second'
+		});
+
+		this.timeContainerEl.removeCls('hidden');
+		this.timeEl.update(t);
 	},
 
 
@@ -224,21 +273,36 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 	showSubmitToast: function(getSubmitFn) {
 		if (!getSubmitFn) { return; }
 
-		var submitFn = getSubmitFn();
+		var submitState = getSubmitFn(this.updateSubmitState.bind(this));
 
-		if (Ext.isFunction(submitFn)) {
-			Toaster.makeToast({
-				message: 'There are 30 seconds left on this assignment. Would you like to submit your progress for grading?',
-				timeout: 30000,
-				buttons: [
-					{
-						label: 'Submit',
-						callback: function() {
-							submitFn();
-						}
-					}
-				]
-			});
+		this.updateSubmitState(submitState);
+	},
+
+
+	updateSubmitState: function(submitState) {
+		this.submitFn = submitState.submitFn;
+
+		this.timeContainerEl.addCls('submit-showing');
+
+		if (submitState.enabled) {
+			this.submitBtnEl.removeCls('disabled');
+		} else {
+			this.submitBtnEl.addCls('disabled');
+		}
+
+		if (submitState.unanswered === 0) {
+			this.unansweredEl.addCls('good');
+			this.unansweredEl.update('All questions answered.');
+		} else {
+			this.unansweredEl.removeCls('good');
+			this.unansweredEl.update(Ext.util.Format.plural(submitState.unanswered, 'question') + ' unanswered.');
+		}
+	},
+
+
+	submitAssignmentClicked: function(e) {
+		if (!e.getTarget('.disabled') && this.submitFn) {
+			this.submitFn.call(null);
 		}
 	},
 

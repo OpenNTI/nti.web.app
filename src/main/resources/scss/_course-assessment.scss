@@ -805,6 +805,101 @@ canvas.x-component-course-assessment {
 	}
 }
 
+.assignment-reader {
+	.time-remaining {
+		position: absolute;
+		z-index: 5;
+		top: 0;
+		right: 0;
+		height: 60px;
+		line-height: 60px;
+		width: 258px;
+		color: white;
+
+		&.hidden {
+			display: none;
+		}
+
+		&.warning-red .time{
+			background-color: $primary-red;
+			color: white;
+		}
+
+		&.warning-orange .time{
+			background-color: $primary-orange;
+			color: white;
+		}
+
+		.time {
+			height: 60px;
+			text-align: center;
+			line-height: 60px;
+			background-color: $secondary-green;
+		}
+
+		.help {
+			line-height: 3em;
+			padding: 0 1em;
+			color: $primary-blue;
+			font-size: 0.9em;
+		}
+
+		.submit {
+			padding: 0;
+			height: 0px;
+			font-size: 0.9em;
+			border-bottom: 0px solid #efefef;
+			overflow: hidden;
+
+			@include experimental(transition, height 1s);
+
+			.unanswered {
+				line-height: 20px;
+				height: 20px;
+				text-align: left;
+				color: $primary-red;
+
+				&.good {
+					color: $primary-green;
+				}
+			}
+
+			.submit-btn {
+				display: none;
+				height: 40px;
+				line-height: 40px;
+				margin-top: 10px;
+				text-align: center;
+				background-color: $primary-blue;
+				cursor: pointer;
+				border-radius: 3px;
+				font-style: italic;
+
+				&.disabled {
+					opacity: 0.6;
+					cursor: default;
+				}
+			}
+		}
+
+		&.submit-showing {
+			.help {
+				display: none;
+			}
+
+			.submit {
+				padding: 10px;
+				height: 90px;
+				border-bottom-width: 1px;
+
+				.submit-btn {
+					display: block;
+				}
+			}
+		}
+	}
+}
+
 .course-assessment-header {
 	font-size: 16px;//force a base em size
 
@@ -817,38 +912,6 @@ canvas.x-component-course-assessment {
 			color: $primary-grey;
 			height: 50px;
 			white-space: nowrap;
-
-			.time-remaining {
-				position: absolute;
-				z-index: 5;
-				right: 20px;
-				bottom: -40px;
-				height: 40px;
-				line-height: 40px;
-				min-width: 200px;
-				text-align: center;
-				background-color: $panel-background;
-				border: 1px solid #efefef;
-				border-top-width: 0;
-				padding: 0 10px;
-
-
-				&.hidden {
-					display: none;
-				}
-
-				&.warning-red {
-					background-color: $primary-red;
-					color: white;
-					border: none;
-				}
-
-				&.warning-orange {
-					background-color: #fa8700;
-					color: white;
-					border: none;
-				}
-			}
 
 			.path-items {
 				position: relative;

@@ -274,7 +274,13 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 								})
 		);
 
+		this.unansweredQuestions = unansweredQuestions;
+
 		this.statusMessage[((unansweredQuestions === 0) ? 'add' : 'remove') + 'Cls']('ready');
+
+		if (this.submitChangedHandler) {
+			this.submitChangedHandler.call(null, this.shouldAllowSubmit(this.submitChangedHandler));
+		}
 	},
 
 
@@ -410,18 +416,28 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 	},
 
 
-	shouldAllowSubmit: function() {
+	shouldAllowSubmit: function(onChangeHandler) {
+		var enabled;
+
 		if (this.shouldShow) {
 			if (!this.submitBtn || this.submitBtn.hasCls('disabled')) {
-				return false;
+				enabled = false;
+			} else {
+				enabled = true;
 			}
 
 			if (this.isSubmitted()) {
-				return false;
+				enabled = false;
 			}
 		}
 
-		return this.submitClicked.bind(this);
+		this.submitChangedHandler = onChangeHandler;
+
+		return {
+			enabled: enabled,
+			unanswered: this.unansweredQuestions,
+			submitFn: this.submitClicked.bind(this)
+		};
 	},
 
 
