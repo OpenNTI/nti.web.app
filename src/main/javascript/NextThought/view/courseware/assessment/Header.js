@@ -31,7 +31,7 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 				{
 					cls: 'time-remaining hidden',
 					cn: [
-						{cls: 'time'},
+						{cls: 'time', cn: {tag: 'span'}},
 						{cls: 'help', html: 'Report a Problem'},
 						{cls: 'submit', cn: [
 							{cls: 'unanswered'},
@@ -56,7 +56,7 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 		previousEl: '.toolbar .controls .up',
 		nextEl: '.toolbar .controls .down',
 		timeContainerEl: '.time-remaining',
-		timeEl: '.time-remaining .time',
+		timeEl: '.time-remaining .time span',
 		helpEl: '.time-remaining .help',
 		submitEl: '.time-remaining .submit',
 		unansweredEl: '.time-remaining .submit .unanswered',
