@@ -63,11 +63,12 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 		var grade = history && history.get('Grade'),
 			due = this.assignmentHistory && this.assignmentHistory.get('due'),
 			submission = history && history.get('Submission'),
-			hasParts = this.assignment.get('parts').length > 0,
+			parts = this.assignment.get('parts'),
+			hasParts = parts && parts.length > 0,
 			completed = submission && submission.get('CreatedTime'),
 			overdue;
 
-		if ((!history || !submission) && hasParts) {
+		if (((!history || !submission) && hasParts) || (this.assignment.isTimed && !this.assignment.isStarted())) {
 			this.removeCls('submitted');
 			this.updateLayout();
 			return;
@@ -89,12 +90,6 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 
 		if (this.timer) {
 			this.timer.stop();
-		}
-
-		if (this.assignment.isTimed) {
-
-		} else {
-
 		}
 
 		grade = grade && grade.getValues();

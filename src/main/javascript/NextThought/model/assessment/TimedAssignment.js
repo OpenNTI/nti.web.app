@@ -31,17 +31,10 @@ Ext.define('NextThought.model.assessment.TimedAssignment', {
 
 		return Service.post(link)
 			.then(function(response) {
-				var json = Ext.decode(response, true);
+				var newAssignment = ParseUtils.parseItems(response)[0];
 
-				if (!json || !json.StartTime) {
-					console.error('Unexpected Response', response);
-					return Promise.reject();
-				}
 
-				me.set({
-					isStarted: true,
-					startTime: json.StartTime
-				});
+				me.set(newAssignment.getData());
 			});
 	},
 
@@ -52,21 +45,21 @@ Ext.define('NextThought.model.assessment.TimedAssignment', {
 	 * @return {String}         the time string
 	 */
 	__getTimeString: function(seconds) {
-		var hours = parseInt(seconds / (60 * 60)),
-			minutes = parseInt(seconds / 60) % 60,
-			seconds = parseInt(seconds) % 60,
+		var hours = parseInt(seconds / (60 * 60), 10),
+			minutes = parseInt(seconds / 60, 10) % 60,
+			secs = parseInt(seconds, 10) % 60,
 			time = '';
 
 		if (hours) {
 			time += Ext.util.Format.plural(hours, 'hour');
 
 			if (minutes) {
-				if (seconds) {
+				if (secs) {
 					time += ', ';
 				} else {
 					time += ' and ';
 				}
-			} else if (seconds) {
+			} else if (secs) {
 				time += ' and ';
 			}
 		}
@@ -74,7 +67,7 @@ Ext.define('NextThought.model.assessment.TimedAssignment', {
 		if (minutes) {
 			time += Ext.util.Format.plural(minutes, 'minute');
 
-			if (seconds) {
+			if (secs) {
 				if (hours) {
 					time += ', and ';
 				} else {
@@ -83,8 +76,8 @@ Ext.define('NextThought.model.assessment.TimedAssignment', {
 			}
 		}
 
-		if (seconds) {
-			time += Ext.util.Format.plural(seconds, 'second');
+		if (secs) {
+			time += Ext.util.Format.plural(secs, 'second');
 		}
 
 		return time;

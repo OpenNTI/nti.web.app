@@ -124,94 +124,67 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 		var me = this, time,
 			active = me._showAssignmentPromise || Promise.resolve();
 
-		function finish() {
-			me.maybePreventNavigation()
-				.then(function() {
-					return active.always(function() {
-						active = me._showAssignmentPromise = new Promise(function(fulfill, reject) {
-							var r = assignmentHistory,
-								link = r && r.getLink && r.getLink('UsersCourseAssignmentHistoryItem');
+		me.maybePreventNavigation()
+			.then(function() {
+				return active.always(function() {
+					active = me._showAssignmentPromise = new Promise(function(fulfill, reject) {
+						var r = assignmentHistory,
+							link = r && r.getLink && r.getLink('UsersCourseAssignmentHistoryItem');
 
-							if (!r || !r.isSummary) {
-								fulfill(r);
-								return;
-							}
-
-							Service.request(link)
-									.done(function(json) {
-										var o = ParseUtils.parseItems(json)[0];
-
-										r.set({
-											Feedback: o.get('Feedback'),
-											Submission: o.get('Submission'),
-											pendingAssessment: o.get('pendingAssessment'),
-											Grade: o.get('Grade')
-										});
-										delete r.isSummary;
-
-										fulfill(r);
-									})
-									.fail(reject);
-
-						});
-
-						return active.done(function(history) {
-								//both course-asessment-reader and the admin-reader extend the reader so this takes care of both
-								Ext.destroy(me.down('reader'));
-
-								var reader = me.add({
-									xtype: isMe(student) ? 'course-assessment-reader' : 'course-assessment-admin-reader',
-									parentView: view,
-									assignmentHistory: history,
-									student: student,
-									path: path,
-									location: assignment.getId(),
-									assignment: assignment,
-									pageSource: pageSource
-								});
-
-								me.mon(reader, {
-									'goup': 'showRoot'
-								});
-
-								return reader;
-							})
-							.fail(function(reason) {
-								alert({
-									title: getString('NextThought.view.courseware.assessment.Container.errortitle'),
-									msg: getString('NextThought.view.courseware.assessment.Container.errormsg')
-								});
-								setTimeout(function() { throw reason; }, 1);
-							});
-					});
-				});
-		}
-
-		if (assignment.isTimed && !assignment.isStarted() && isMe(student)) {
-			time = assignment.getMaxTimeString();
-
-			Ext.Msg.show({
-				title: time,
-				msg: 'You have ' + time + ' to complete this assignment. Once you\'ve started the timer will not stop.',
-				buttons: {
-					primary: {
-						text: 'Start',
-						handler: function() {
-							assignment.start()
-								.then(finish)
-								.fail(function() {
-									alert('There was a problem starting this assignment, please try again later.');
-								});
+						if (!r || !r.isSummary) {
+							fulfill(r);
+							return;
 						}
-					},
-					secondary: 'Cancel'
-				}
+
+						Service.request(link)
+								.done(function(json) {
+									var o = ParseUtils.parseItems(json)[0];
+
+									r.set({
+										Feedback: o.get('Feedback'),
+										Submission: o.get('Submission'),
+										pendingAssessment: o.get('pendingAssessment'),
+										Grade: o.get('Grade')
+									});
+									delete r.isSummary;
+
+									fulfill(r);
+								})
+								.fail(reject);
+
+					});
+
+					return active.done(function(history) {
+							//both course-asessment-reader and the admin-reader extend the reader so this takes care of both
+							Ext.destroy(me.down('reader'));
+
+							var reader = me.add({
+								xtype: isMe(student) ? 'course-assessment-reader' : 'course-assessment-admin-reader',
+								parentView: view,
+								assignmentHistory: history,
+								student: student,
+								path: path,
+								location: assignment.getId(),
+								assignment: assignment,
+								pageSource: pageSource
+							});
+
+							me.mon(reader, {
+								'goup': 'showRoot',
+								'removed-placeholder': me.showAssignment.bind(me, view, assignment, assignmentHistory, student, path, pageSource)
+							});
+
+							return reader;
+						})
+						.fail(function(reason) {
+							alert({
+								title: getString('NextThought.view.courseware.assessment.Container.errortitle'),
+								msg: getString('NextThought.view.courseware.assessment.Container.errormsg')
+							});
+							setTimeout(function() { throw reason; }, 1);
+						});
+				});
 			});
-		} else {
-			finish();
-		}
-
-
 	},
 
 

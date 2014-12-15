@@ -30,6 +30,122 @@ canvas.x-component-course-assessment {
 }
 
 
+.timed-placeholder {
+	font-size: 1rem;
+	padding: 0 60px 0 35px;
+	max-height: 800px;
+	overflow: visible;
+
+	.header {
+		color: #494949;
+		display: block;
+		font-size: 31px;
+		font-weight: 200;
+		border: none;
+		margin-top: 2em;
+		margin-bottom: 0.5em;
+	}
+
+	.nti-alert {
+		position: absolute;
+		width: 62%;
+		top: 40%;
+		top: calc(50% - 60px);
+		@include experimental(transform, translateY(-50%));
+		left: 50%;
+		margin-left: -31%;
+		box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.3);
+
+		.title {
+			color: $secondary-green;
+		}
+
+		.bold {
+			font-weight: 600;
+		}
+
+		.red {
+			font-weight: 500;
+			color: $primary-red;
+		}
+	}
+
+	.fake-questions {
+		.question {
+			background: #fbfbfb;
+			border: 1px solid #e2e2e2;
+			border-radius: 3px;
+			box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.08);
+			margin-bottom: 30px;
+
+			.prompt {
+				background: #ffffff;
+				color: #494949;
+				overflow: hidden;
+				position: relative;
+				padding: 17px 40px 15px 40px;
+
+				.line {
+					width: 80%;
+					height: 2em;
+					margin-bottom: 1em;
+					background-color: #f6f6f6;
+
+					&:last-of-type {
+						margin-bottom: 0;
+					}
+
+					&.long {
+						height: 5em;
+					}
+				}
+			}
+
+			.answer-container {
+				margin: 0;
+				border-radius: 0 0 3px 3px;
+				border: 0px solid #e2e2e2;
+				border-top-width: 1px !important;
+				padding: 20px;
+
+				.answers {
+					position: relative;
+					min-height: 38px;
+					background: #ffffff;
+					border: 1px solid #b8b8b8;
+
+					.answer {
+						position: relative;
+						color: #494949;
+						vertical-align: middle;
+						min-height: 38px;
+						background: #ffffff;
+						border: 0px solid #b8b8b8;
+						border-bottom-width: 1px;
+						padding-left: 54px;
+
+						&:last-of-type {
+							border-bottom-width: 0;
+						}
+
+						@include icon('radio-button-16', $side: before, $top: 11px, $left: 10px);
+
+						&::after {
+							content: '';
+							position: absolute;
+							top: 50%;
+							@include experimental(transform, translateY(-50%));
+							left: 54px;
+							height: 1.5em;
+							width: 80%;
+							background-color: #f6f6f6;
+						}
+					}
+				}
+			}
+		}
+	}
+}
 
 
 .x-component-course-assessment {

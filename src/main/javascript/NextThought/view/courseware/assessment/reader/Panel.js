@@ -2,7 +2,8 @@ Ext.define('NextThought.view.courseware.assessment.reader.Panel', {
 	extend: 'NextThought.view.reader.Panel',
 	alias: 'widget.course-assessment-reader',
 	requires: [
-		'NextThought.view.courseware.assessment.reader.Header'
+		'NextThought.view.courseware.assessment.reader.Header',
+		'NextThought.view.courseware.assessment.reader.TimedPlaceholder'
 	],
 
 	mixins: {
@@ -37,8 +38,29 @@ Ext.define('NextThought.view.courseware.assessment.reader.Panel', {
 	},
 
 
+	getReaderConfig: function() {
+		var assignment = this.assignment;
+
+		if (assignment.isTimed && !assignment.isStarted() && isMe(this.student)) {
+			this.hasTimedPlaceholder = true;
+			return {xtype: 'courseware-assessment-timedplaceholder', assignment: assignment, startAssignment: this.startTimed.bind(this), flex: 1};
+		} else {
+			return this.callParent(arguments);
+		}
+	},
+
+
+	startTimed: function() {
+		this.fireEvent('removed-placeholder');
+	},
+
+
 	afterRender: function() {
 		this.callParent(arguments);
+
+		//if we are a placeholder then don't set the assignment items
+		if (this.hasTimedPlaceholder) { return; }
+
 		var r = this.down('reader-content'),
 			container = this.up('[currentBundle]'),
 			a = r.getAssessment(),

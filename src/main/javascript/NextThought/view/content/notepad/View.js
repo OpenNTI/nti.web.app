@@ -79,13 +79,15 @@ Ext.define('NextThought.view.content.notepad.View', {
 		try {
 			this.syncHight();
 
-			ref.notepadRef = this;
+			if (ref) {
+				ref.notepadRef = this;
 
-			this.mon(ref, {
-				scroll: 'syncScroll',
-				'sync-height': 'syncHight',
-				'set-content': 'clearItems'
-			});
+				this.mon(ref, {
+					scroll: 'syncScroll',
+					'sync-height': 'syncHight',
+					'set-content': 'clearItems'
+				});
+			}
 		}
 		catch (e) {
 			console.error(e.stack || e.message || e);
@@ -164,9 +166,11 @@ Ext.define('NextThought.view.content.notepad.View', {
 
 		editor.mask(getString('NextThought.view.content.notepad.View.saving'));
 		try {
-			rangeInfo = reader.getNoteOverlay().rangeForLineInfo(editor.lineInfo, style);
-			reader.fireEvent('save-new-note', null, note, rangeInfo.range,
-					rangeInfo.container || reader.getLocation().NTIID, null, style, afterSave);
+			if (reader) {
+				rangeInfo = reader.getNoteOverlay().rangeForLineInfo(editor.lineInfo, style);
+				reader.fireEvent('save-new-note', null, note, rangeInfo.range,
+						rangeInfo.container || reader.getLocation().NTIID, null, style, afterSave);
+			}
 		}
 		catch (error) {
 			console.error('Error saving note - ' + Globals.getError(error));
@@ -233,7 +237,11 @@ Ext.define('NextThought.view.content.notepad.View', {
 
 	//<editor-fold desc="Synchronizing Handlers">
 	syncHight: function() {
-		this.scroller.setHeight(this.getReaderRef().getIframe().get().getHeight());
+		var reader = this.getReaderRef();
+
+		if (reader) {
+			this.scroller.setHeight(reader.getIframe().get().getHeight());
+		}
 	},
 
 
@@ -241,7 +249,12 @@ Ext.define('NextThought.view.content.notepad.View', {
 		if (!this.rendered) {
 			return;
 		}
-		this.getEl().setScrollTop(this.getReaderRef().getScroll().top());
+
+		var reader = this.getReaderRef();
+
+		if (reader) {
+			this.getEl().setScrollTop(reader.getScroll().top());
+		}
 	},
 
 
@@ -250,9 +263,12 @@ Ext.define('NextThought.view.content.notepad.View', {
 
 	onPushScroll: function pushScroll(e) {
 		var d = e.getWheelDelta(),
-			h = (this.scroller.getHeight() / this.getHeight()) / 2; //make sure the scale kinda matches
+			h = (this.scroller.getHeight() / this.getHeight()) / 2,//make sure the scale kinda matches
+			reader = this.getReaderRef();
 
-		this.getReaderRef().getScroll().by(d * h);
+		if (reader) {
+			reader.getScroll().by(d * h);
+		}
 	},
 	//</editor-fold>
 
@@ -260,13 +276,15 @@ Ext.define('NextThought.view.content.notepad.View', {
 	//<editor-fold desc="Line Resolving">
 	getContentY: function(e) {
 		var ref = this.getReaderRef(),
-			t = ref.getAnnotationOffsets().top;
-		return e.getY() - t;
+			t = ref && ref.getAnnotationOffsets().top;
+		return e.getY() - (t || 0);
 	},
 
 
 	getLineInfo: function(y) {
-		return this.getReaderRef().getNoteOverlay().lineInfoForY(y);
+		var reader = this.getReaderRef();
+
+		return reader.getNoteOverlay().lineInfoForY(y);
 	},
 	//</editor-fold>
 

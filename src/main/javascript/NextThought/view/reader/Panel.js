@@ -27,7 +27,10 @@ Ext.define('NextThought.view.reader.Panel', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		var toolbarConfig = this.getToolbarConfig();
+		var items = [],
+			toolbarConfig = this.getToolbarConfig(),
+			readerConfig = this.getReaderConfig(),
+			readerContent;
 
 		this.flatPageStore = NextThought.store.FlatPage.create({ storeId: 'FlatPage-' + this.id });
 		this.fireEvent('add-flatpage-store-context', this);
@@ -44,7 +47,7 @@ Ext.define('NextThought.view.reader.Panel', {
 				},
 				items: [
 					toolbarConfig,
-					{ xtype: 'reader-content', prefix: this.prefix, flex: 1 }
+					readerConfig
 				]
 			},{
 				width: 258,
@@ -79,10 +82,14 @@ Ext.define('NextThought.view.reader.Panel', {
 			}
 		]);
 
-		this.mon(this.down('reader-content'), {
-			'filter-by-line': 'selectDiscussion'
-		});
-		this.down('annotation-view').anchorComponent = this.down('reader-content');
+		readerContent = this.getReaderContent();
+
+		if (readerContent) {
+			this.mon(readerContent, {
+				'filter-by-line': 'selectDiscussion'
+			});
+			this.down('annotation-view').anchorComponent = readerContent;
+		}
 
 		this.on('beforedeactivate', this.beforeDeactivate, this);
 
@@ -96,6 +103,11 @@ Ext.define('NextThought.view.reader.Panel', {
 
 	getToolbarConfig: function() {
 		return { xtype: 'content-toolbar', hidden: true };
+	},
+
+
+	getReaderConfig: function() {
+		 return {xtype: 'reader-content', prefix: this.prefix, flex: 1 };
 	},
 
 
@@ -119,6 +131,11 @@ Ext.define('NextThought.view.reader.Panel', {
 
 	getToolbar: function() {
 		return this.down('[isReaderToolBar]');
+	},
+
+
+	getReaderContent: function() {
+		return this.down('reader-content');
 	},
 
 
