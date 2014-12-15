@@ -124,7 +124,9 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 	getTimeString: function(time, current) {
 		var s = '';
 
-		if (time.hours) {
+		current = current || {};
+
+		if (time.hour && time.hour !== current.hour) {
 			s += Ext.util.Format.plural(time.hours, 'hour');
 
 			if (time.minutes) {
@@ -132,7 +134,7 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 			}
 		}
 
-		if (time.minutes) {
+		if (time.minutes && time.minutes !== current.minutes) {
 			s += Ext.util.Format.plural(time.minutes + 1, 'minute');
 		}
 
@@ -189,9 +191,13 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 
 		me.timer
 			.tick(function(t) {
-				var s = me.getTimeString(t);
+				var s = me.getTimeString(t, current);
 
-				me.timeEl.update(s + ' remaining');
+				if (s) {
+					me.timeEl.update(s + ' remaining');
+				}
+
+				current = t;
 
 				if (t.remaining < 30000) {
 					if (!me.timeContainerEl.hasCls('warning-red')) {
