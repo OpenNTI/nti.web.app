@@ -5,10 +5,11 @@ Ext.define('NextThought.model.courses.AssignmentCollection', {
 		fromJson: function(assignments, notAssignments, rosterURL, gradeBook, historyBaseURL) {
 			if (!assignments) { return null; }
 			var ASSIGNMENT = 'application/vnd.nextthought.assessment.assignment',
+				TIMEDASSIGNMENT = 'application/vnd.nextthought.assessment.timedassignment',
 				href = assignments.href, collection, hitmap = {}, nodemap = {};
 
 			function filter(i) {
-				return i.MimeType === ASSIGNMENT && i.NTIID;
+				return (i.MimeType === ASSIGNMENT || i.MimeType === TIMEDASSIGNMENT) && i.NTIID;
 			}
 
 			function count(c, i) {

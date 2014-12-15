@@ -7,6 +7,7 @@ Ext.define('NextThought.controller.Assessment', {
 		'assessment.AssessedQuestionSet',
 		'assessment.AssessmentItemContainer',
 		'assessment.Assignment',
+		'assessment.TimedAssignment',
 		'assessment.AssignmentPart',
 		'assessment.AssignmentSubmission',
 		'assessment.AssignmentSubmissionPendingAssessment',
