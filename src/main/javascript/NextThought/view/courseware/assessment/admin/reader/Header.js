@@ -18,7 +18,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 			submission = this.assignmentHistory.get('Submission'),
 			completed = submission && submission.get('CreatedTime'),
 			maxTime = this.assignment.isTimed && this.assignment.getMaxTime(),
-			duration = this.assignment.isTimed && this.assignment.getDuration(),
+			duration = this.assignment.isTimed && this.assignmentHistory.getDuration(),
 			status = NextThought.view.courseware.assessment.AssignmentStatus.getRenderData({
 				due: due,
 				completed: completed,
@@ -51,7 +51,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 			if (status.maxTime) {
 				if (status.overtime) {
 					this.timedEl.addCls('late');
-					this.timedEl.dom.setAttribute('data-qtip', status.overdue.qtip);
+					this.timedEl.dom.setAttribute('data-qtip', status.overtime.qtip);
 					this.timedEl.update(status.maxTime.html);
 				} else {
 					this.timedEl.addCls('ontime');

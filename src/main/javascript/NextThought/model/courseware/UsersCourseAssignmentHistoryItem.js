@@ -10,6 +10,7 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 		{name: 'Grade', type: 'singleItem', persist: false},
 		{name: 'Submission', type: 'singleItem', persist: false},
 		{name: 'pendingAssessment', type: 'singleItem', persist: false},
+		{name: 'Metadata', type: 'auto', persit: false},
 
 		//set by the Assignment model when loading history. This will be unset for all other uses.
 		{name: 'item', type: 'auto', persist: false},
@@ -104,6 +105,13 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 			i = this.get('item');
 
 		return (i && i.getId()) || (g && g.AssignmentId) || (s && s.assignmentId) || (p && p.assignmentId);
+	},
+
+
+	getDuration: function() {
+		var metaData = this.get('Metadata');
+
+		return metaData && ((metaData.Duration || 0) * 1000);
 	},
 
 
