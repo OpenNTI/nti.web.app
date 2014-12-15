@@ -128,6 +128,45 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 	},
 
 
+	notSubmittedTimedToast: function() {
+		var me = this,
+			assignment = me.injectedAssignment,
+			title = assignment && assignment.get('title');
+
+		if (!me.toast || me.toast.isDestroyed) {
+			me.toast = Toaster.makeToast({
+				message: 'The timed assignment is still in progress. Be sure to submit the assignment before time runs out.',
+				callback: function() {
+					delete me.toast;
+				},
+				buttons: [
+					{
+						label: 'Take Me Back',
+						callback: function() {
+							var cid = assignment.get('ContainerId'),
+								course = CourseWareUtils.courseForNtiid(cid);
+
+							if (course) {
+								CourseWareUtils.findCourseBy(course.findByMyCourseInstance())
+									.then(function(instance) {
+										instance = instance.get('CourseInstance') || instance;
+
+										return instance.fireNavigationEvent(me.reader);
+									})
+									.then(function() {
+										me.reader.fireEvent('navigate-to-assignment', assignment.getId());
+									});
+							}
+						}
+					}
+				]
+			});
+		}
+
+		return Promise.resolve();
+	},
+
+
 	notSubmittedToast: function() {
 		var me = this,
 			assignment = me.injectedAssignment,
@@ -210,13 +249,18 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			return Promise.resolve();
 		}
 
-		var hasAnswers = this.submission.hasAnyAnswers(),
+		var assignment = this.injectedAssignment,
+			hasAnswers = this.submission.hasAnyAnswers(),
 			missingAnswers = this.submission.hasAnyMissing(),
 			isSubmitted = this.submission.isSubmitted(),
 			progressSaved = this.submission.hasProgressSaved();
 
 		if (isSubmitted) {
 			return Promise.resolve();
+		}
+
+		if (assignment.isTimed) {
+			return this.notSubmittedTimedToast();
 		}
 
 		if (hasAnswers && !progressSaved && !forced) {
