@@ -2,6 +2,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 	extend: 'NextThought.view.courseware.assessment.admin.Header',
 	alias: 'widget.course-assessment-admin-reader-header',
 
+	requires: ['NextThought.view.courseware.assessment.AssignmentStatus'],
+
 	cls: 'reader-header',
 
 
@@ -12,7 +14,17 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 			values = grade && grade.getValues(),
 			number = values && values.value,
 			letter = values && values.letter,
-			submission = this.assignmentHistory.get('Submission');
+			due = this.assignment.getDueDate(),
+			submission = this.assignmentHistory.get('Submission'),
+			completed = submission && submission.get('CreatedTime'),
+			maxTime = this.assignment.isTimed && this.assignment.getMaxTime(),
+			duration = this.assignment.isTimed && this.assignment.getDuration(),
+			status = NextThought.view.courseware.assessment.AssignmentStatus.getRenderData({
+				due: due,
+				completed: completed,
+				maxTime: maxTime,
+				duration: duration
+			});
 
 		this.letterEl.setStyle({display: 'none'});
 
@@ -25,18 +37,35 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 			}
 		}
 
-		if (submission && (submission.get('parts') || []).length > 0) {
-			if (this.assignmentHistory.get('due') < submission.get('CreatedTime')) {
-				this.lateEl.update(getString('NextThought.view.courseware.assessment.admin.reader.Header.late'));
+		if (status.completed) {
+			if (status.overdue) {
+				this.completedEl.addCls('late');
+				this.completedEl.dom.setAttribute('data-qtip', status.overdue.qtip);
+				this.completedEl.update(TimeUtils.getNaturalDuration(completed.getTime() - due.getTime(), 1) + ' late');
 			} else {
-				this.lateEl.addCls('good');
-				this.lateEl.update(getString('NextThought.view.courseware.assessment.admin.reader.Header.ontime'));
+				this.completedEl.addCls('ontime');
+				this.completedEl.dom.setAttribute('data-qtip', status.completed.qtip);
+				this.completedEl.update('On Time');
 			}
-		} else if ((this.assignment.get('parts') || []).length > 0) {
-			this.lateEl.update(getString('NextThought.view.courseware.assessment.admin.reader.Header.notsubmitted'));
-		}
 
-		//TODO: if the submission was late, set the lateEl to X units late.
+			if (status.maxTime) {
+				if (status.overtime) {
+					this.timedEl.addCls('late');
+					this.timedEl.dom.setAttribute('data-qtip', status.overdue.qtip);
+					this.timedEl.update(status.maxTime.html);
+				} else {
+					this.timedEl.addCls('ontime');
+					this.timedEl.update(status.maxTime.html);
+				}
+			}
+		} else {
+			this.completedEl.dom.setAttribute('data-qtip', status.due.qtip);
+			this.completedEl.update(status.due.html);
+
+			if (status.maxTime) {
+				this.timedEl.update(status.maxTime);
+			}
+		}
 
 		if (number || number === '') {
 			this.currentGrade = number;

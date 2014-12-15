@@ -12,11 +12,14 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 	headerTpl: Ext.DomHelper.markup([
 		{ cls: 'grade', cn: [
 			{ cls: 'label', html: '{gradeTitle} {{{NextThought.view.courseware.assessment.admin.Header.grade}}}'},
-			{ cls: 'late', html: '{late}'},
 			{ cls: 'gradebox', cn: [
 				{ tag: 'input', size: 3, type: 'text', value: '{grade}'},
 				{ cls: 'dropdown letter grade', html: '{letter}'}
 			]}
+		]},
+		{cls: 'status', cn: [
+			{cls: 'status-item', cn: {tag: 'span', cls: 'completed'}},
+			{cls: 'status-item', cn: {tag: 'span', cls: 'timed'}}
 		]},
 		{ cls: 'user', cn: [
 			{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'}},
@@ -41,7 +44,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 		chatEl: '.header .user .wrap .actions .chat',
 		letterEl: '.header .grade .gradebox .letter',
 		gradeEl: '.header .grade .gradebox input',
-		lateEl: '.header .grade .late',
+		completedEl: '.header .status .completed',
+		timedEl: '.header .status .timed',
 		gradeBoxEl: '.header .grade'
 	},
 

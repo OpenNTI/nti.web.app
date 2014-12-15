@@ -129,7 +129,7 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 		},
 
 
-		__getRenderData: function(data) {
+		getRenderData: function(data) {
 			return {
 					maxTime: this.__getMaxTimeStatus(data),
 					completed: this.__getCompletedStatus(data),
@@ -151,7 +151,7 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 		 * @return {String}      [description]
 		 */
 		getStatusHTML: function(data) {
-			var renderData = this.__getRenderData(data);
+			var renderData = this.getRenderData(data);
 
 			return this.statusTpl.apply(renderData);
 		},

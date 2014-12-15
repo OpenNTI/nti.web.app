@@ -4,7 +4,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.List', {
 	cls: 'assignment-list admin',
 
 	requires: [
-		'NextThought.view.menus.Reports'
+		'NextThought.view.menus.Reports',
+		'NextThought.view.courseware.assessment.AssignmentStatus'
 	],
 
 	view: 'admin',
@@ -32,12 +33,17 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.List', {
 								{ cls: 'report'}
 							]},
 							{ cls: 'name', html: '{name:htmlEncode}'},
-							{ cls: 'status', cn: [
-								{ tag: 'time', cls: 'due', datetime: '{due:date("c")}', html: '{[this.getDueDate(values)]}'}
-							]}
+							'{[this.getStatusHTML(values)]}'
 						]}
 					]}), {
 				//template functions
+
+				getStatusHTML: function(values) {
+					return NextThought.view.courseware.assessment.AssignmentStatus.getStatusHTML({
+						due: values.due,
+						maxTime: values.maxTime
+					});
+				},
 
 				getStatusCls: function(values) {
 					var now = new Date().getTime(),
@@ -47,10 +53,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.List', {
 						cls = opens > now ? 'closed ' : '';
 
 					return cls + (((values && values.due) && due < now) ? 'late' : '');
-				},
-
-				getDueDate: function(values) {
-					return this.ownerCmp.getDueDate(values);
 				},
 
 				hasReportLink: function(values) {

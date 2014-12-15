@@ -71,8 +71,14 @@ canvas.x-component-course-assessment {
 			}
 		}
 
-		.due.today {
-			color: $primary-orange;
+		.due{
+			&.today {
+			 color: $primary-orange;
+			}
+
+			&.late {
+				color: $primary-red;
+			}
 		}
 	}
 
@@ -892,20 +898,9 @@ canvas.x-component-course-assessment {
 					}
 
 					.turned-in{
-						color: $secondary-grey;
-						font: normal 700 .6em/1 $font;
+						font: normal 700 1em/1 $font;
 						line-height: 2.5;
-
-						& > *:not(:first-child)::before {
-							content: '\00B7';
-							margin: 0.5em;
-							color: $secondary-grey;
-						
-						}
-
-						.late{
-							color: $primary-red;
-						}
+						margin-top: 0.3em;
 					}
 				}
 
@@ -947,6 +942,11 @@ canvas.x-component-course-assessment {
 			}
 
 			.header {
+
+				.status {
+					right: 9.7em;
+				}
+
 				.grade {
 					width: 9.7em;
 
@@ -983,7 +983,7 @@ canvas.x-component-course-assessment {
 			.user {
 				overflow: hidden;
 				position: relative;
-				margin: -15px 15em -15px -30px;
+				margin: -15px 20em -15px -30px;
 			}
 
 			.avatar {
@@ -1003,8 +1003,35 @@ canvas.x-component-course-assessment {
 			}
 
 			.controls,
+			.status,
 			.grade {
 				float: right;
+			}
+
+			.status {
+				position: absolute;
+				top: 50%;
+				right: 15em;
+				@include experimental('transform', translateY(-50%));
+				padding-right: 0.5em;
+
+				.status-item{
+					font: normal 600 0.6em/1 $font;
+					text-transform: uppercase;
+					text-align: right;
+
+					&:last-of-type:not(:first-of-type) {
+						margin-top: 0.5em;
+					}
+
+					.late {
+						color: $primary-red;
+					}
+
+					.ontime {
+						color: $secondary-green;
+					}
+				}
 			}
 
 			.grade {

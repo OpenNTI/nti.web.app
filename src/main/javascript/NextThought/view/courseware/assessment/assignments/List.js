@@ -21,16 +21,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 							]},*/
 							{ cls: 'name', html: '{name:htmlEncode}'},
 							'{[this.getStatus(values)]}'
-							// { cls: 'status {[this.isOverDue(values)]}', cn: [
-							// 	{ tag: 'time', cls: 'due', datetime: '{due:date("c")}', html: '{[this.getDueDate(values)]}'},
-							// 	{ tag: 'time', cls: 'completed', datetime: '{completed:date("c")}', html: 'Completed {completed:date("n/j")}'}
-							// ]},
-							// { tag: 'tpl', 'if': 'maxTime', cn: [
-							// 	{cls: 'timed {timedCls}', cn: [
-							// 		{tag: 'span', cls: 'label', html: 'Timed: '},
-							// 		{tag: 'span', cls: 'duration', html: '{maxTime}'}
-							// 	]}
-							// ]}
 						]}
 					]}), {
 				//template functions
@@ -63,17 +53,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 
 				isTaken: function(values) {
 					return values.completed && values.completed.getTime() > 0;
-				},
-
-				isOverDue: function(values) {
-					var due = values.due && values.due.getTime(),
-						now = new Date().getTime();
-
-					return (values.due && !this.isTaken(values) && now >= due) ? 'due' : '';
-				},
-
-				getDueDate: function(values) {
-					return this.ownerCmp.getDueDate(values);
 				}
 			}),
 

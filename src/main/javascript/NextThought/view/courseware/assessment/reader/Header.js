@@ -4,15 +4,15 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 
 	cls: 'student-reader-header reader-header',
 
+	requires: [
+		'NextThought.view.courseware.assessment.AssignmentStatus'
+	],
+
 
 	headerTpl: Ext.DomHelper.markup([
 		{ cls: 'quiz-container ontime', cn: [
 			{ cls: 'title', html: '{title}' },
-			{ cls: 'turned-in', cn: [
-				{ tag: 'span', cls: 'date', html: '{{{NextThought.view.courseware.assessment.reader.Header.completed}}}' },
-				{ tag: 'span', cls: 'late', html: '{late}'},
-				{ tag: 'span', cls: 'allowed', html: ''}
-			]}
+			{ cls: 'turned-in'}
 		]},
 		{ cls: 'grade-container', cn: [
 			{ cls: 'title', html: '{{{NextThought.view.courseware.assessment.reader.Header.grade}}}' },
@@ -22,10 +22,7 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 
 	renderSelectors: {
 		'ontimeIconEl': '.quiz-container .ontime-icon',
-		'completedEl': '.quiz-container .turned-in .date',
-		'lateEl': '.quiz-container .turned-in .late',
-		'completedInEl': '.quiz-container .turned-in .completed-in',
-		'allowedEl': '.quiz-container .turned-in .allowed',
+		'turnedInEl': '.quiz-container .turned-in',
 		'gradeContainerEl': '.grade-container',
 		'gradeEl': '.grade-container .grade'
 	},
@@ -80,20 +77,12 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 
 		if (!this.rendered) { return; }
 
-		if (!hasParts) {
-			if (!submission) {
-				this.completedEl.hide();
-			}
-			this.removeCls('ontime');
-			this.lateEl.hide();
-		} else if (completed > due) {
-			overdue = new Duration((completed - due) / 1000);
-			this.lateEl.update(overdue.ago().replace('ago', 'late').trim());
-			this.removeCls('ontime');
-		} else {
-			this.lateEl.hide();
-			this.addCls('ontime');
-		}
+		this.turnedInEl.update(NextThought.view.courseware.assessment.AssignmentStatus.getStatusHTML({
+			due: this.assignment.getDueDate(),
+			maxTime: this.assignment.isTimed && this.assignment.getMaxTime(),
+			duration: this.assignment.isTimed && this.assignment.getDuration(),
+			completed: completed
+		}));
 
 		//we don't want to show the remaining time if we have a submission
 		this.showRemainingTime = function() {};
@@ -103,14 +92,10 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 		}
 
 		if (this.assignment.isTimed) {
-			this.assignment.getDurationString()
-				.then(this.setDuration.bind(this));
-		} else {
-			this.completedInEl.hide();
-			this.allowedEl.hide();
-		}
 
-		this.completedEl.update('completed ' + Ext.Date.format(completed, 'm/d'));
+		} else {
+
+		}
 
 		grade = grade && grade.getValues();
 
@@ -137,26 +122,5 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 	goTo: function(rec) {
 		var v = this.parentView;
 		Ext.defer(v.showAssignment, 1, v, [rec]);
-	},
-
-
-	setDuration: function(duration) {
-		var me = this,
-			maxTime = me.assignment.getMaxTimeString();
-
-		me.timeEl.update('Completed in ' + duration);
-		me.timeContainerEl.removeCls(['hidden', 'warning-red', 'warning-orange']);
-		me.timeContainerEl.addCls('completed');
-
-		me.assignment.getCompletedInTime()
-			.then(function(inTime) {
-				if (inTime) {
-					me.timeContainerEl.addCls('in-time');
-				} else {
-					me.timeContainerEl.addCls('warning-red');
-				}
-			});
-
-		me.allowedEl.update('Timed: ' + maxTime);
 	}
 });
