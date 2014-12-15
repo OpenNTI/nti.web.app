@@ -92,6 +92,8 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 			this.addCls('ontime');
 		}
 
+		this.hideTimer();
+
 		this.completedEl.update('completed ' + Ext.Date.format(completed, 'm/d'));
 
 		grade = grade && grade.getValues();

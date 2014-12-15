@@ -110,8 +110,19 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 		});
 
 		me.on('destroy', function() {
-			me.timer.stop();
+			if (me.timer) {
+				me.timer.stop();
+			}
 		});
+	},
+
+
+	hideTimer: function() {
+		this.timeEl.addCls('hidden');
+
+		if (this.timer) {
+			this.timer.stop();
+		}
 	},
 
 
