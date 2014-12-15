@@ -91,6 +91,15 @@ Ext.define('NextThought.model.assessment.TimedAssignment', {
 	},
 
 
+	updateMetaData: function(metaData) {
+		var current = this.get('Metadata');
+
+		if (!current) {
+			this.set('Metadata', metaData);
+		}
+	},
+
+
 	getMaxTime: function() {
 		var maxTime = this.get('MaximumTimeAllowed');
 
@@ -106,33 +115,29 @@ Ext.define('NextThought.model.assessment.TimedAssignment', {
 
 
 	getStartTime: function() {
-		var metaData = this.get('Metadata');
+		var metaData = this.get('Metadata'),
+			startTime = this.get('startTime');
 
-		return metaData && (metaData.StartTime * 1000);
+		return (metaData && (metaData.StartTime * 1000)) || startTime * 1000;
 	},
 
 
 
 	getTimeRemaining: function() {
-		var maxTime = (this.get('MaximumTimeAllowed') || 0) * 1000;
+		var maxTime = this.getMaxTime(),
+			startTime = this.getStartTime();
 
-		return Promise.resolve(this.getStartTime())
-			.then(function(startTime) {
-				var now = new Date(),
-					start = new Date(startTime * 1000),
-					diff;
+		return new Promise(function(fulfill, reject) {
+			var now = (new Date()).getTime(), diff;
 
-				now = now.getTime();
-				start = start.getTime();
+			if (!startTime) {
+				fulfill(maxTime);
+			} else {
+				diff = now - startTime;
 
-				diff = now - start;
-
-				return maxTime - diff;
-			})
-			//if get start time fails assume we haven't started and have the max time remaining
-			.fail(function() {
-				return maxTime;
-			});
+				fulfill(maxTime - diff);
+			}
+		});
 	},
 
 

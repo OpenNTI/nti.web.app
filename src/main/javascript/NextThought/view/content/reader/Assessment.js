@@ -113,6 +113,11 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			historyItem = setId && history.getItem(setId);
 
 		if (historyItem) {
+			//if this is a timed assignment update the metadata with the one from the history item
+			if (this.injectedAssignment.isTimed) {
+				this.injectedAssignment.updateMetaData(historyItem.get('Metadata'));
+			}
+
 			this.injectedAssignmentHistory.set('history', historyItem);
 		}
 	},
