@@ -18,10 +18,11 @@ Ext.define('NextThought.model.assessment.Assignment', {
 
 
 	containsId: function(id) {
-		var items = this.get('parts').filter(function(p) {
-			p = p.get('question_set');
-			return p && p.getId() === id;
-		});
+		var parts = this.get('parts') || [],
+			items = parts.filter(function(p) {
+				p = p.get('question_set');
+				return p && p.getId() === id;
+			});
 
 		return items.length > 0;
 	},
