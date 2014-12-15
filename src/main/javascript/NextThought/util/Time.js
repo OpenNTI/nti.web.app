@@ -135,9 +135,10 @@ Ext.define('NextThought.util.Time', {
 	 * @param  {Number} millis         millis to convert
 	 * @param  {Number} numberOfUnits  How many units (weeks, days, hours, etc.) to include
 	 * @param  {Boolean} doNotPluralize whether or not to pluralize the units
+	 * @param  {Object} overrides Strings to use instead of the defaults
 	 * @return {String}                the parsed string
 	 */
-	getNaturalDuration: function(millis, numberOfUnits, doNotPluralize) {
+	getNaturalDuration: function(millis, numberOfUnits, doNotPluralize, overrides) {
 		var units = [], lastItem, s,
 			weeks = parseInt(millis / this.DIVISORS.WEEKS, 10),
 			days = parseInt(millis / this.DIVISORS.DAYS, 10) % 7,
@@ -145,17 +146,19 @@ Ext.define('NextThought.util.Time', {
 			minutes = parseInt(millis / this.DIVISORS.MINUTES, 10) % 60,
 			seconds = parseInt(millis / this.DIVISORS.SECONDS, 10) % 60;
 
+		overrides = overrides || {};
+
 		function add(unit, label) {
 			units.push(doNotPluralize ? unit + ' ' + label : Ext.util.Format.plural(unit, label));
 		}
 
 		//if we have a unit and we haven't pushed the max number add it
 		if (weeks && units.length < numberOfUnits) {
-			add(weeks, 'week');
+			add(weeks, overrides.week || 'week');
 		}
 
 		if (days && units.length < numberOfUnits) {
-			add(days, 'day');
+			add(days, overrides.day || 'day');
 		} else if (weeks) {
 			//if there no days but there are weeks add an empty string to the units to keep the units we show
 			//from being too far about e.x. 2 weeks and 5 seconds
@@ -163,19 +166,19 @@ Ext.define('NextThought.util.Time', {
 		}
 
 		if (hours && units.length < numberOfUnits) {
-			add(hours, 'hour');
+			add(hours, overrides.hour || 'hour');
 		} else if (weeks || days) {
 			units.push('');
 		}
 
 		if (minutes && units.length < numberOfUnits) {
-			add(minutes, 'minute');
+			add(minutes, overrides.minute || 'minute');
 		} else if (weeks || days || hours) {
 			units.push('');
 		}
 
 		if (seconds && units.length < numberOfUnits) {
-			add(seconds, 'second');
+			add(seconds, overrides.second || 'second');
 		}
 
 		//filter out any empty strings we may have added
@@ -210,26 +213,35 @@ function() {
 	 * @param {Number} direction 1 to count up, -1 to count down, default to 1
 	 */
 	this._timer = function(startTime, direction) {
-		var time = startTime || 0,
+		var start = (new Date()).getTime(),
 			interval, timerInterval,
 			tickFn, alarmFn;
 
+		start = start + (startTime || 0);
+
 		direction = direction || 1;
 
-		function getRemainingHours() {
+		function getRemainingHours(time) {
 			return parseInt(time / (60 * 60 * 1000), 10);//milli / 1000 = seconds, seconds / 60 = minutes, minutes / 60 = hours
 		}
 
-		function getRemainingMinutes() {
+		function getRemainingMinutes(time) {
 			return parseInt(time / (60 * 1000), 10) % 60;//milli / 10000 = seconds, seconds / 60 = minutes
 		}
 
-		function getRemainingSeconds() {
+		function getRemainingSeconds(time) {
 			return parseInt(time / 1000, 10) % 60;//milli / 1000 = seconds
 		}
 
-		function getRemainingMilliSeconds() {
+		function getRemainingMilliSeconds(time) {
 			return time % 1000;
+		}
+
+		function getTimeDiff() {
+			var now = (new Date()).getTime();
+
+			//if we are counting down start should be greater than now
+			return direction < 0 ? start - now : now - start;
 		}
 
 		/**
@@ -248,13 +260,15 @@ function() {
 		 * @return {Object}      return this so calls can be chained
 		*/
 		this.tick = function(fn) {
+			var time = getTimeDiff();
+
 			tickFn = fn;
 
 			tickFn.call(null, {
-				hours: getRemainingHours(),
-				minutes: getRemainingMinutes(),
-				seconds: getRemainingSeconds(),
-				milliseconds: getRemainingMilliSeconds(),
+				hours: getRemainingHours(time),
+				minutes: getRemainingMinutes(time),
+				seconds: getRemainingSeconds(time),
+				milliseconds: getRemainingMilliSeconds(time),
 				remaining: time
 			});
 
@@ -262,14 +276,14 @@ function() {
 		};
 
 		function updateTime() {
-			time = time + (direction * interval);
+			var time = getTimeDiff();
 
 			if (tickFn) {
 				tickFn.call(null, {
-					hours: getRemainingHours(),
-					minutes: getRemainingMinutes(),
-					seconds: getRemainingSeconds(),
-					milliseconds: getRemainingMilliSeconds(),
+					hours: getRemainingHours(time),
+					minutes: getRemainingMinutes(time),
+					seconds: getRemainingSeconds(time),
+					milliseconds: getRemainingMilliSeconds(time),
 					remaining: time
 				});
 			}
