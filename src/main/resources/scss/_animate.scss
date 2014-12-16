@@ -31,16 +31,16 @@
 
 // http://daneden.me/animate/build/
 @mixin keyframes($animation-name) {
-	@-webkit-keyframes $animation-name {
+	@-webkit-keyframes #{$animation-name} {
 		@content;
 	}
-	@-moz-keyframes $animation-name {
+	@-moz-keyframes #{$animation-name} {
 		@content;
 	}
-	@-ms-keyframes $animation-name {
+	@-ms-keyframes #{$animation-name} {
 		@content;
 	}
-	@keyframes $animation-name {
+	@keyframes #{$animation-name} {
 		@content;
 	}
 }
@@ -64,8 +64,9 @@
 
 @include keyframes(pulsate) {
 	0% { opacity: 0.50;}
-	50% {opacity: 1.0;}
-	100% {opacity: 0.50;}
+	33% {opacity: 1.0;}
+	66% {opacity: 0.50;}
+	100% {opacity: 1.0;}
 }
 
 @include keyframes(pulse) {

@@ -56,6 +56,10 @@ canvas.x-component-course-assessment {
 		margin-left: -31%;
 		box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.3);
 
+		.alert-container {
+			@include experimental(animation-name, none);
+		}
+
 		.message-container {
 			@include icon('assignment-timed', $top: -5px, $left: 25px);
 		}
@@ -824,14 +828,50 @@ canvas.x-component-course-assessment {
 			display: none;
 		}
 
-		&.warning-red .time{
-			background-color: $primary-red;
-			color: white;
+		&.warning-red,
+		&.over-time {
+			.time{
+				background-color: $primary-red;
+				color: white;
+			}
 		}
 
 		&.warning-orange .time{
 			background-color: $primary-orange;
 			color: white;
+		}
+
+		&.over-time {
+			&.recent {
+				.time {
+					.meta{
+						padding-left: 0;
+						&::after {
+							display: none;
+						}
+					}
+
+					.time-left {
+						display: none;
+					}
+
+					.label {
+						display: block;
+
+						@include animate(pulsate, $duration: 3s, $delay: 0.1s, $iteration: 1);
+					}
+				}
+			}
+
+			&:not(.recent) {
+				.label {
+					display: block;
+					height: 1.7em;
+					text-align: left;
+					margin-top: -1em;
+					font-size: 0.5em;
+				}
+			}
 		}
 
 		.time {
@@ -842,10 +882,16 @@ canvas.x-component-course-assessment {
 			font-size: 1.5em;
 			background-color: $secondary-green;
 
-			span {
+			.meta {
+				display: inline-block;
 				padding-left: 35px;
 
-				@include icon('timer-white', $position: relative, $top: 2px);
+				@include icon('timer-white', $position: relative, $top: 16px);
+			}
+
+			.label {
+				display: none;
+				transition: height 1s;
 			}
 		}
 

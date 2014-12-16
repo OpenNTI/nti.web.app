@@ -93,7 +93,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 
 		//so the elements wont take up space when hidden
 		Object.keys(this.renderSelectors).forEach(function(s) {
-			me[s].setVisibilityMode(Ext.Element.DISPLAY);
+			if (me[s]) {
+				me[s].setVisibilityMode(Ext.Element.DISPLAY);
+			}
 		});
 
 		//for profile link

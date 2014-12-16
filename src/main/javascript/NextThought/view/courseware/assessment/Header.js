@@ -31,7 +31,12 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 				{
 					cls: 'time-remaining hidden',
 					cn: [
-						{cls: 'time', cn: {tag: 'span'}},
+						{cls: 'time', cn: [
+							{cls: 'meta', cn: [
+								{tag: 'span', cls: 'label', html: 'Time Expired'},
+								{tag: 'span', cls: 'time-left'}
+							]}
+						]},
 						{cls: 'help', html: 'Report a Problem'},
 						{cls: 'submit', cn: [
 							{cls: 'unanswered'},
@@ -56,7 +61,9 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 		previousEl: '.toolbar .controls .up',
 		nextEl: '.toolbar .controls .down',
 		timeContainerEl: '.time-remaining',
-		timeEl: '.time-remaining .time span',
+		timeLabelEl: '.time-remaining .time .meta span.label',
+		timeMetaEl: '.time-remaining .time .meta',
+		timeEl: '.time-remaining .time .meta span.time-left',
 		helpEl: '.time-remaining .help',
 		submitEl: '.time-remaining .submit',
 		unansweredEl: '.time-remaining .submit .unanswered',
@@ -151,50 +158,39 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 		}
 	},
 
-	getTimeString: function(time) {
+
+	getTimeString: function(time, roundUp) {
 		var s = '',
 			days = time.days,
 			hours = time.hours,
 			minutes = time.minutes,
 			seconds = time.seconds;
 
-		if (days) {
-			if (hours === 23) {
-				days += 1;
-				hours = 0;
-			} else {
-				hours += 1;
-			}
-		} else if (minutes === 59) {
-			hours += 1;
-			minutes = 0;
+		if (roundUp) {
+			days = Math.ceil(days);
+			hours = Math.ceil(hours);
+			minutes = Math.ceil(minutes);
+			seconds = Math.ceil(seconds);
+		} else {
+			days = Math.floor(days);
+			hours = Math.floor(hours);
+			minutes = Math.floor(minutes);
+			seconds = Math.floor(seconds);
 		}
 
-		if (days) {
-			s += Ext.util.Format.plural(days, 'Day');
-
-			if (hours) {
-				s += ' and ';
-			}
+		if (parseInt(time.days, 10)) {
+			return Ext.util.Format.plural(days, 'Day');
 		}
 
-		if (hours) {
-			s += Ext.util.Format.plural(hours, 'Hour');
-
-			if (minutes) {
-				s += ' and ';
-			}
+		if (parseInt(time.hours, 10)) {
+			return Ext.util.Format.plural(hours, 'Hour');
 		}
 
-		if (minutes && !days) {
-			s += Ext.util.Format.plural(minutes + 1, 'Minute');
+		if (parseInt(time.minutes, 10)) {
+			return Ext.util.Format.plural(minutes, 'Minute');
 		}
 
-		if (!days && !hours && !minutes) {
-			s += Ext.util.Format.plural(seconds, 'Second');
-		}
-
-		return s;
+		return Ext.util.Format.plural(seconds, 'Second');
 	},
 
 
@@ -237,41 +233,54 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 
 	showOverdueTime: function(time) {
 		var me = this,
-			current = {};
+			current;
 
-		me.timer = TimeUtils.getTimer(time, 1);
-
-		me.timeContainerEl.removeCls('warning-orange');
-		me.timeContainerEl.addCls('warning-red');
+		me.timer = TimeUtils.getTimer();
 
 		me.timer
-			.tick(function(t) {
-				var s = me.getTimeString(t);
-
-				me.timeEl.update(s + ' past due');
-			})
-			.start(1000);//1 second
-	},
-
-
-	showDueTime: function(time, max, getSubmitFn) {
-		var me = this,
-			current = {};
-
-		me.timer = TimeUtils.getTimer(time, -1);
-
-		me.timer
+			.countUp(null, time + 3000)
 			.tick(function(t) {
 				var s = me.getTimeString(t);
 
 				if (s && s !== current) {
 					current = s;
+					me.timeEl.update(s + ' Over');
+				}
+
+				me.timeMetaEl.dom.setAttribute('data-qtip', TimeUtils.getNaturalDuration(t.time) + ' over');
+			});
+
+		me.timeContainerEl.removeCls('warning-orange');
+		me.timeContainerEl.addCls(['over-time', 'recent', 'warning-red']);
+		me.timeLabelEl.update('Time Expired');
+
+		wait(3034)
+			.then(me.timeContainerEl.removeCls.bind(me.timeContainerEl, 'recent'))
+			.then(me.timer.start.bind(me, 1000));
+	},
+
+
+	showDueTime: function(time, max, getSubmitFn) {
+		var me = this,
+			current;
+
+		me.timer = TimeUtils.getTimer();
+
+		me.timer
+			.countDown(0, time)
+			.tick(function(t) {
+				var s = me.getTimeString(t, true);
+
+				//don't update the dom unless its different
+				if (s && s !== current) {
+					current = s;
 					me.timeEl.update(s);
 				}
 
-				current = t;
+				me.timeMetaEl.dom.setAttribute('data-qtip', TimeUtils.getNaturalDuration(t.remaining));
 
-				if (t.remaining < 30000) {
+				//if there are only 30 seconds left
+				if (t.remaining < 30 * 1000) {
 					if (!me.timeContainerEl.hasCls('warning-red')) {
 						me.timeContainerEl.addCls('warning-red');
 						me.timeContainerEl.removeCls('warning-orange');
@@ -283,11 +292,7 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 			})
 			.alarm(function() {
 				me.timer.stop();
-
-				me.timeEl.update(me.getTimeString({seconds: 0}) + ' remaining');
-
-				wait(1000)
-					.then(me.showOverdueTime.bind(me, 0));
+				me.showOverdueTime(0);
 			})
 			.start(1000);
 	},
