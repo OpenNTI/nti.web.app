@@ -14,6 +14,33 @@ Ext.define('NextThought.util.courseware.options.OpenEnrollment', {
 		return [];
 	},
 
+	DefaultStrings: {
+		notEnrolled: {
+			title: 'Take the Course for Free',
+			price: 0,
+			information: 'Gain complete access to interact with all course content.'
+		},
+		enrolled: {
+			title: 'You are enrolled in the Open Course',
+			cls: 'enrolled',
+			information: 'Class begins {date} and will be conducted fully online.',
+			links: [
+				{href: 'welcome', text: ''},
+				{href: 'profile', text: 'Complete Your Profile'}
+			]
+		},
+		archivedEnrolled: {
+			title: 'You took the Open Course!',
+			cls: 'enrolled',
+			information: 'Thanks for your participation!' +
+							'The content of this course will remain available for you to review at any time.'
+		},
+		archivedNotEnrolled: {
+			title: 'This Course is Archived.',
+			price: 0,
+			information: 'Archived courses are out of session but all course content will remain available.'
+		}
+	},
 
 	__getEnrollmentText: function(course, option) {
 		var state = {}, now = new Date(),

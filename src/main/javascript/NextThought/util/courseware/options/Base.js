@@ -86,7 +86,7 @@ Ext.define('NextThought.util.courseware.options.Base', {
 	 * @return {Object}       the different wordings for this state
 	 */
 	getEnrollmentState: function(state) {
-		this.ENROLLMENT_STATES = this.ENROLLMENT_STATES || getString('EnrollmentText')[this.NAME];
+		this.ENROLLMENT_STATES = this.ENROLLMENT_STATES || getString('EnrollmentText')[this.NAME] || this.DefaultStrings;
 
 		return this.ENROLLMENT_STATES ? this.ENROLLMENT_STATES[state] : {};
 	},
