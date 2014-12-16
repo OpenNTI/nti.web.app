@@ -43,7 +43,12 @@ Ext.define('NextThought.view.courseware.assessment.reader.Panel', {
 
 		if (assignment.isTimed && !assignment.isStarted() && isMe(this.student)) {
 			this.hasTimedPlaceholder = true;
-			return {xtype: 'courseware-assessment-timedplaceholder', assignment: assignment, startAssignment: this.startTimed.bind(this), flex: 1};
+			return {
+				xtype: 'courseware-assessment-timedplaceholder',
+				assignment: assignment,
+				startAssignment: this.startTimed.bind(this),
+				flex: 1
+			};
 		} else {
 			return this.callParent(arguments);
 		}
@@ -67,6 +72,8 @@ Ext.define('NextThought.view.courseware.assessment.reader.Panel', {
 	afterRender: function() {
 		this.callParent(arguments);
 
+		this.relayEvents(this.down('course-assessment-reader-header'), ['goup']);
+
 		//if we are a placeholder then don't set the assignment items
 		if (this.hasTimedPlaceholder) {
 			this.showAllowedTime();
@@ -88,7 +95,6 @@ Ext.define('NextThought.view.courseware.assessment.reader.Panel', {
 			r.getScroll().unlock();
 		}
 
-		this.relayEvents(this.down('course-assessment-reader-header'), ['goup']);
 		if (!this.location) {
 			console.error('No location configured');
 		}
