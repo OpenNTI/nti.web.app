@@ -104,7 +104,8 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 
 		this.setQuetionSetContainerTitle(assignment.get('title'));
 
-		var score = this.down('assessment-score'),
+		var parts = assignment.get('parts') || [],
+			score = this.down('assessment-score'),
 			tally = this.down('assessment-tally'),
 			format = 'l, F j, g:i a T',
 			opens = assignment.get('availableBeginning'),
@@ -136,7 +137,7 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 			tally.setGreyText(getFormattedString('NextThought.view.courseware.overview.parts.QuestionSet.available', {
 				date: Ext.Date.format(opens, format)
 			}));
-		} else if (assignment.get('parts').length === 0) {
+		} else if (parts.length === 0) {
 			this.down('button').setText(getString('NextThought.view.courseware.overview.parts.QuestionSet.review'));
 		}
 	},
