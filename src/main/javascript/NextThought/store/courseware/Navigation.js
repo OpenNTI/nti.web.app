@@ -46,7 +46,6 @@ Ext.define('NextThought.store.courseware.Navigation', {
 				t = id && tocNodes.getById(id);
 
 				fill = t ? {
-					label: t.get('label'),
 					tocOutlineNode: t
 				} : {};
 
@@ -54,6 +53,10 @@ Ext.define('NextThought.store.courseware.Navigation', {
 					_max_depth: maxDepth,
 					_depth: depth
 				});
+
+				if (!n.get('label')) {
+					fill.label = 'Empty';
+				}
 
 				n.set(Ext.apply({ position: index++ }, fill));
 				r.push(n);
