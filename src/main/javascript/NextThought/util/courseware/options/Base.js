@@ -86,9 +86,11 @@ Ext.define('NextThought.util.courseware.options.Base', {
 	 * @return {Object}       the different wordings for this state
 	 */
 	getEnrollmentState: function(state) {
-		this.ENROLLMENT_STATES = this.ENROLLMENT_STATES || getString('EnrollmentText')[this.NAME] || this.DefaultStrings;
+		var def = this.DefaultString || {};
 
-		return this.ENROLLMENT_STATES ? this.ENROLLMENT_STATES[state] : {};
+		this.ENROLLMENT_STATES = this.ENROLLMENT_STATES || getString('EnrollmentText')[this.NAME] || def;
+
+		return this.ENROLLMENT_STATES ? this.ENROLLMENT_STATES[state] || def[state] : {}
 	},
 
 	DateFormat: 'F j, g:i A T',
