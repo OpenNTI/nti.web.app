@@ -823,6 +823,7 @@ canvas.x-component-course-assessment {
 		line-height: 60px;
 		width: 258px;
 		color: white;
+		background-color: white;
 
 		&.hidden {
 			display: none;
@@ -847,15 +848,18 @@ canvas.x-component-course-assessment {
 					.meta{
 						padding-left: 0;
 						&::after {
-							display: none;
+							opacity: 0;
+							top: 60px;
 						}
 					}
 
 					.time-left {
-						display: none;
+						position: relative;
+						top: 60px;
 					}
 
 					.label {
+						height: 100%;
 						display: block;
 
 						@include animate(pulsate, $duration: 3s, $delay: 0.1s, $iteration: 1);
@@ -868,10 +872,24 @@ canvas.x-component-course-assessment {
 					display: block;
 					height: 1.7em;
 					text-align: left;
-					margin-top: -1em;
-					font-size: 0.5em;
+					margin-top: -1.2em;
+					font-size: 0.4em;
+					text-transform: uppercase;
+					opacity: 0.6;
+				}
+
+				.time-left{
+					font-size: 0.9em;
 				}
 			}
+
+			.time .loading-bar {
+				display: none;
+			}
+		}
+
+		&.max-time .time {
+			background-color: $secondary-green;
 		}
 
 		.time {
@@ -880,18 +898,40 @@ canvas.x-component-course-assessment {
 			line-height: 60px;
 			font-weight: 300;
 			font-size: 1.5em;
+			overflow: hidden;
 			background-color: $secondary-green;
 
+			.loading-bar {
+				position: absolute;
+				z-index: 1;
+				bottom: 0;
+				height: 5px;
+				left: 0;
+				background-color: rgba(0, 0, 0, 0.3);
+			}
+
 			.meta {
+				position: relative;
+				z-index: 2;
 				display: inline-block;
 				padding-left: 35px;
 
 				@include icon('timer-white', $position: relative, $top: 16px);
+
+				&::after {
+					@include experimental(transition, top 0.8s);
+				}
+			}
+
+			.time-left {
+				position: relative;
+				top: 0;
+				@include experimental(transition, top 0.8s);
 			}
 
 			.label {
 				display: none;
-				transition: height 1s;
+				@include experimental(transition, all 0.5s);
 			}
 		}
 

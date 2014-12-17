@@ -6,6 +6,7 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 	cls: 'course-assessment-header assignment-item',
 
 	WARNING_PERCENT: 0.2,
+	RED_PERCENT: 0.1,
 
 	renderTpl: Ext.DomHelper.markup([
 		//toolbar
@@ -32,6 +33,7 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 					cls: 'time-remaining hidden',
 					cn: [
 						{cls: 'time', cn: [
+							{cls: 'loading-bar'},
 							{cls: 'meta', cn: [
 								{tag: 'span', cls: 'label', html: 'Time Expired'},
 								{tag: 'span', cls: 'time-left'}
@@ -61,6 +63,7 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 		previousEl: '.toolbar .controls .up',
 		nextEl: '.toolbar .controls .down',
 		timeContainerEl: '.time-remaining',
+		loadingBarEl: '.time-remaining .time .loading-bar',
 		timeLabelEl: '.time-remaining .time .meta span.label',
 		timeMetaEl: '.time-remaining .time .meta',
 		timeEl: '.time-remaining .time .meta span.time-left',
@@ -209,6 +212,7 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 		});
 
 		this.timeContainerEl.removeCls('hidden');
+		this.timeContainerEl.addCls('max-time');
 		this.timeEl.update(t);
 	},
 
@@ -227,7 +231,7 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 				.then(this.showDueTime.bind(this, time, max, getSubmitFn));
 		}
 
-		this.timeContainerEl.removeCls('hidden');
+		this.timeContainerEl.removeCls(['hidden', 'max-time']);
 	},
 
 
@@ -236,6 +240,8 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 			current;
 
 		me.timer = TimeUtils.getTimer();
+
+		me.loadingBarEl.setWidth('100%');
 
 		me.timer
 			.countUp(null, time + 3000)
@@ -262,14 +268,20 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 
 	showDueTime: function(time, max, getSubmitFn) {
 		var me = this,
-			current;
+			current,
+			warning = max * me.WARNING_PERCENT,
+			red = Math.min(max * me.RED_PERCENT, 30 * 1000); //10% or 30 seconds
 
 		me.timer = TimeUtils.getTimer();
+
 
 		me.timer
 			.countDown(0, time)
 			.tick(function(t) {
-				var s = me.getTimeString(t, true);
+				var s = me.getTimeString(t, true),
+					//since we are counting down the remaining will be the max starting out
+					//so 100 - %remaining of max will give the % of time left
+					percentDone = 100 - ((t.remaining / max) * 100);
 
 				//don't update the dom unless its different
 				if (s && s !== current) {
@@ -279,14 +291,15 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 
 				me.timeMetaEl.dom.setAttribute('data-qtip', TimeUtils.getNaturalDuration(t.remaining));
 
-				//if there are only 30 seconds left
-				if (t.remaining < 30 * 1000) {
+				me.loadingBarEl.setWidth(Math.floor(percentDone) + '%');
+
+				if (t.remaining < red) {
 					if (!me.timeContainerEl.hasCls('warning-red')) {
 						me.timeContainerEl.addCls('warning-red');
 						me.timeContainerEl.removeCls('warning-orange');
 						me.showSubmitToast(getSubmitFn);
 					}
-				} else if (t.remaining <= max * me.WARNING_PERCENT) {
+				} else if (t.remaining <= warning) {
 					me.timeContainerEl.addCls('warning-orange');
 				}
 			})
