@@ -32,7 +32,7 @@ Ext.define('NextThought.util.courseware.options.OpenEnrollment', {
 		archivedEnrolled: {
 			title: 'You took the Open Course!',
 			cls: 'enrolled',
-			information: 'Thanks for your participation!' +
+			information: 'Thanks for your participation! ' +
 							'The content of this course will remain available for you to review at any time.'
 		},
 		archivedNotEnrolled: {
