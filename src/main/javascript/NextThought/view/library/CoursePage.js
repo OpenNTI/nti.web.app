@@ -57,20 +57,19 @@ Ext.define('NextThought.view.library.CoursePage', {
 
 		delete this.emptyCmp;
 		this.removeAll(true);
-		this.binCourses(items);
+		this.addBinnedCourses(this.binCourses(items));
 	},
 
-
+	/*
+		returns {
+			bins: {},
+			years: [],
+			upcoming: [],
+			semesters: []
+		}
+	*/
 	binCourses: function(courses) {
-		/*
-			sample bin:
-				year: {
-					fall: [],
-					winter: [],
-					spring: [],
-					summer: [],
-				}
-		 */
+
 		var	me = this,
 			bins = {upcoming: {}},
 			years = [], upcoming = [],
@@ -112,6 +111,22 @@ Ext.define('NextThought.view.library.CoursePage', {
 				semesterBin = yearBin[semester] = [course];
 			}
 		});
+
+		return {
+			bins: bins,
+			years: years,
+			upcoming: upcoming,
+			semesters: semesters
+		};
+	},
+
+
+	addBinnedCourses: function(binObj) {
+		var me = this,
+			bins = binObj.bins || {},
+			years = binObj.years || [],
+			upcoming = binObj.upcoming || [],
+			semesters = binObj.semesters || [];
 
 		years.sort().reverse();
 		upcoming.sort().reverse();
