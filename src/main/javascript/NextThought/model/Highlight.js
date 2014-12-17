@@ -14,7 +14,7 @@ Ext.define('NextThought.model.Highlight', {
 		{ name: 'selectedText', type: 'string'},
 		{ name: 'style', type: 'string'},
 		{ name: 'fillColor', type: 'string', defaultValue: 'blue'},
-		{ name: 'presentationProperties', type: 'auto'},
+		{ name: 'presentationProperties', type: 'auto', defaultValue: {highlightColorName: 'blue'}},
 		{ name: 'applicableRange', type: 'ContentRangeDescription'},
 
 		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false, affectedBy: 'Last Modified'},
