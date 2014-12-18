@@ -125,11 +125,27 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 
 	showAssignmentTimer: function(submitFn) {
 		var me = this,
-			max = me.injectedAssignment.getMaxTime();
+			max = me.injectedAssignment.getMaxTime(),
+			remaining = me.injectedAssignment.getTimeRemaining();
 
-		me.injectedAssignment.getTimeRemaining()
-			.then(function(remaining) {
-				me.reader.showRemainingTime(remaining, max, submitFn);
+		me.reader.showRemainingTime(remaining, max, submitFn);
+	},
+
+
+	__goBackToAssignment: function(assignment) {
+		var me = this;
+
+		CourseWareUtils.findCourseBy(assignment.findMyCourse())
+			.then(function(instance) {
+				instance = instance.get('CourseInstance') || instance;
+
+				return instance.fireNavigationEvent(me.reader);
+			})
+			.then(function() {
+				me.reader.fireEvent('navigate-to-assignment', assignment.getId());
+			})
+			.fail(function(reason) {
+				console.error('Failed to go back to assignment', reason);
 			});
 	},
 
@@ -137,33 +153,27 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 	notSubmittedTimedToast: function() {
 		var me = this,
 			assignment = me.injectedAssignment,
+			remaining = assignment.getTimeRemaining(),
 			title = assignment && assignment.get('title');
+
+		if (remaining < 0) {
+			remaining = TimeUtils.getNaturalDuration(-1 * remaining, 1) + ' Over';
+		} else {
+			remaining = TimeUtils.getNaturalDuration(remaining, 1) + ' Remaining';
+		}
 
 		if (!me.toast || me.toast.isDestroyed) {
 			me.toast = Toaster.makeToast({
-				message: 'The timed assignment is still in progress. Be sure to submit the assignment before time runs out.',
+				title: remaining,
+				message: title + ' is a timed assignment, and is still in progress. Be sure to submit the assignment before time runs out.',
+				timeout: 10000,
 				callback: function() {
 					delete me.toast;
 				},
 				buttons: [
 					{
 						label: 'Take Me Back',
-						callback: function() {
-							var cid = assignment.get('ContainerId'),
-								course = CourseWareUtils.courseForNtiid(cid);
-
-							if (course) {
-								CourseWareUtils.findCourseBy(course.findByMyCourseInstance())
-									.then(function(instance) {
-										instance = instance.get('CourseInstance') || instance;
-
-										return instance.fireNavigationEvent(me.reader);
-									})
-									.then(function() {
-										me.reader.fireEvent('navigate-to-assignment', assignment.getId());
-									});
-							}
-						}
+						callback: me.__goBackToAssignment.bind(me, assignment)
 					}
 				]
 			});
@@ -191,22 +201,7 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 				buttons: [
 					{
 						label: 'Take me Back',
-						callback: function() {
-							var cid = assignment.get('ContainerId'),
-								course = CourseWareUtils.courseForNtiid(cid);
-
-							if (course) {
-								CourseWareUtils.findCourseBy(course.findByMyCourseInstance())
-									.then(function(instance) {
-										instance = instance.get('CourseInstance') || instance;
-
-										return instance.fireNavigationEvent(me.reader);
-									})
-									.then(function() {
-										me.reader.fireEvent('navigate-to-assignment', assignment.getId());
-									});
-							}
-						}
+						callback: me.__goBackToAssignment.bind(me, assignment)
 					}
 				]
 			});

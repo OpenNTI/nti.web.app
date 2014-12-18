@@ -218,5 +218,24 @@ Ext.define('NextThought.model.assessment.Assignment', {
 			gradeBookGrade = this._gradeBookEntry.getFieldItem('Items', username);
 
 		gradeBookGrade.set('value', value);
+	},
+
+
+	findMyCourse: function() {
+		//returns a string that can be compared. NOTE: not for use as a URL!
+		function nomnom(href) {
+			return (getURL(href) || '').split('/').map(decodeURIComponent).join('/');
+		}
+
+		var link = (this.getLink('History') || this.get('href')).replace(/\/AssignmentHistories.*/, '');
+
+		link = nomnom(link);
+
+		return function(instance) {
+			var course = instance.get('CourseInstance') || instance,
+				href = nomnom(course && course.get('href'));
+
+			return href === link;
+		};
 	}
 });

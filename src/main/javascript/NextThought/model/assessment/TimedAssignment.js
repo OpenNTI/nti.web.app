@@ -71,19 +71,16 @@ Ext.define('NextThought.model.assessment.TimedAssignment', {
 
 	getTimeRemaining: function() {
 		var maxTime = this.getMaxTime(),
+			now = (new Date()).getTime(), diff,
 			startTime = this.getStartTime();
 
-		return new Promise(function(fulfill, reject) {
-			var now = (new Date()).getTime(), diff;
+		if (!startTime) {
+			diff = 0;
+		} else {
+			diff = now - startTime;
+		}
 
-			if (!startTime) {
-				fulfill(maxTime);
-			} else {
-				diff = now - startTime;
-
-				fulfill(maxTime - diff);
-			}
-		});
+		return maxTime - diff;
 	},
 
 
