@@ -149,7 +149,7 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 
 
 	helpClicked: function() {
-		console.log('help clicked');
+		this.fireEvent('show-contact-us');
 	},
 
 

@@ -115,7 +115,8 @@ Ext.define('NextThought.controller.Account', {
 					'resend-consent': 'resendConsent',
 					'set-preference': 'setPreference',
 					'delete-preference': 'delPreference',
-					'show-permanent-welcome-guide': 'showPermanentWelcome'
+					'show-permanent-welcome-guide': 'showPermanentWelcome',
+					'show-contact-us': 'showContactUs'
 				},
 
 				'group-buttons': { 'click': 'groupButtonClicked' },
