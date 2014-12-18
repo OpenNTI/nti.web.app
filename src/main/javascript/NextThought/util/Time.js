@@ -210,7 +210,7 @@ function() {
 	 * A utility to do a count down or count up from a starting point until a stopping point or infinity
 	 */
 	this._timer = function() {
-		var start, from, to, direction, duration, timerInterval, tickFn, alarmFn;
+		var start, from, to, direction, duration, interval, intervalWindow, timerInterval, tickFn, alarmFn;
 
 		function getRemainingDays(time) {
 			return time / (24 * 60 * 60 * 1000); // milli / 1000 = seconds / 60  = minutes / 60 = hours / 24 = days
@@ -243,7 +243,7 @@ function() {
 		}
 
 		function updateTime() {
-			var now = (new Date()).getTime(),
+			var now = Date.now(),
 				diff = now - start,
 				time = from + (direction * diff);
 
@@ -261,7 +261,8 @@ function() {
 
 			//if we've reached the target then call the alarm if there is one
 			//set the alarmFn to null so we don't call it again
-			if (alarmFn && diff >= duration) {
+			//if the diff is with in half of the iteration of the duration
+			if (alarmFn && Math.abs(diff - duration) <= intervalWindow) {
 				alarmFn.call();
 				alarmFn = null;
 			}
@@ -269,12 +270,13 @@ function() {
 
 		/**
 		 * Start the count down/up and update on the interval
-		 * @param  {Number} interval how often to update
+		 * @param  {Number} i how often to update
 		 * @return {Object}          this so calls can be chained
 		 */
-		this.start = function(interval) {
-			interval = interval || 1000; //default to a second
+		this.start = function(i) {
+			interval = i || 1000; //default to a second
 
+			intervalWindow = interval / 2;
 
 			duration = Math.abs(from - to);
 

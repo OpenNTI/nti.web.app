@@ -200,4 +200,168 @@ describe('Time Util Tests', function() {
 			});
 		});
 	});
+
+	describe('Timer tests', function() {
+		var timer, alarmCalled, fns = {
+				tick: null,
+				alarm: function() {}
+			}, timeValues;
+
+		beforeEach(function() {
+			timer = TimeUtils.getTimer();
+
+			timeValues = jasmine.createSpyObj('timeValues', ['days', 'hours', 'minutes', 'seconds', 'milliseconds', 'time', 'remaining']);
+
+			alarmCalled = false;
+		});
+
+		describe('countdown tests', function() {
+			beforeEach(function() {
+				fns.tick = function(t) {
+					timeValues.days(Math.ceil(t.days));
+					timeValues.hours(Math.ceil(t.hours));
+					timeValues.minutes(Math.ceil(t.minutes));
+					timeValues.seconds(Math.ceil(t.seconds));
+					timeValues.milliseconds(Math.ceil(t.milliseconds));
+				};
+
+				fns.alarm = function() {
+					alarmCalled = true;
+					timer.stop();
+				};
+
+				spyOn(fns, 'tick').andCallThrough();
+				spyOn(fns, 'alarm');
+			});
+
+			it('tick function is called every interval, and alarm is called at the end', function() {
+				var flag;
+				runs(function() {
+					flag = false;
+					timer.countDown(0, 10 * 1000) //0 to 10 seconds
+						.tick(fns.tick)
+						.alarm(function() {
+							flag = true;
+							fns.alarm.call();
+						})
+						.start(1000);
+				});
+
+				waitsFor(function() {
+					return flag;
+				}, 'Alarm to be called', 15 * 1000);
+
+				runs(function() {
+					expect(fns.tick.callCount).toEqual(11);//1 when its set, 1 every second for 10 seconds
+					expect(fns.alarm.callCount).toEqual(1);
+					timer.stop();
+				});
+			});
+
+			it('tick function is called with right time, and remaining', function() {
+				var i, start = 10 * 1000, flag;
+
+				runs(function() {
+					flag = false;
+					timer.countDown(0, start) // 0 to 10 seconds
+						.tick(fns.tick)
+						.alarm(function() {
+							flag = true;
+							fns.alarm.call();
+						})
+						.start(1000);
+				});
+
+				waitsFor(function() {
+					return flag;
+				}, 'Alarm to be called', 15 * 1000);
+
+				runs(function() {
+					for (i = 0; i <= 10; i++) {
+						expect(timeValues.days).toHaveBeenCalledWith(0);
+						expect(timeValues.hours).toHaveBeenCalledWith(0);
+						expect(timeValues.minutes).toHaveBeenCalledWith(0);
+						expect(timeValues.seconds).toHaveBeenCalledWith(10 - i);
+					}
+
+					timer.stop();
+				});
+			});
+		});
+
+		describe('countup tests', function() {
+			beforeEach(function() {
+				fns.tick = function(t) {
+					timeValues.days(Math.floor(t.days));
+					timeValues.hours(Math.floor(t.hours));
+					timeValues.minutes(Math.floor(t.minutes));
+					timeValues.seconds(Math.floor(t.seconds));
+					timeValues.milliseconds(Math.floor(t.milliseconds));
+				};
+
+				fns.alarm = function() {
+					alarmCalled = true;
+					timer.stop();
+				};
+
+				spyOn(fns, 'tick').andCallThrough();
+				spyOn(fns, 'alarm');
+			});
+
+			it('tick function is called every interval, and alarm is called at the end', function() {
+				var flag;
+
+				runs(function() {
+					flag = false;
+					timer.countUp(10 * 1000, 0)
+						.tick(fns.tick)
+						.alarm(function() {
+							flag = true;
+							fns.alarm.call();
+						})
+						.start(1000);
+				});
+
+				waitsFor(function() {
+					return flag;
+				}, 'Alarm to be called', 15 * 1000);
+
+				runs(function() {
+					expect(fns.tick.callCount).toEqual(11);
+					expect(fns.alarm.callCount).toEqual(1);
+					timer.stop();
+				});
+			});
+
+			it('tick function is called with right time, and remaining', function() {
+				var i, end = 10 * 1000, flag;
+
+				runs(function() {
+					flag = false;
+					timer.countUp(end, 0) // 0 to 10 seconds
+						.tick(fns.tick)
+						.alarm(function() {
+							flag = true;
+							fns.alarm.call();
+						})
+						.start(1000);
+				});
+
+				waitsFor(function() {
+					return flag;
+				}, 'Alarm to be called', 15 * 1000);
+
+				runs(function() {
+					for (i = 0; i <= 10; i++) {
+						expect(timeValues.days).toHaveBeenCalledWith(0);
+						expect(timeValues.hours).toHaveBeenCalledWith(0);
+						expect(timeValues.minutes).toHaveBeenCalledWith(0);
+						expect(timeValues.seconds).toHaveBeenCalledWith(i);
+					}
+
+					timer.stop();
+				});
+			});
+		});
+	});
 });
