@@ -63,6 +63,11 @@ Ext.define('NextThought.model.assessment.Assignment', {
 	},
 
 
+	isNoSubmit: function() {
+		return this.get('category_name') === 'no_submit';
+	},
+
+
 	doNotShow: function() {
 		return this.get('category_name') === 'no_submit' && this.get('title') === 'Final Grade';
 	},

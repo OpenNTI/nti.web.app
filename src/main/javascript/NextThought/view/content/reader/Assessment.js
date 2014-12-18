@@ -43,14 +43,13 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 	},
 
 
-	makeAssessmentQuiz: function(set) {
+	makeAssessmentQuiz: function(set, guid) {
 		var me = this,
 			isInstructor = this.isInstructorProspective,
 			h = me.injectedAssignmentHistory,
 			o = me.reader.getComponentOverlay(),
 			c = o.componentOverlayEl,
 			r = me.reader,
-			guid = guidGenerator(),
 			questions = set.get('questions'),
 			pendingAssessment;
 
@@ -87,14 +86,6 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			tabIndexTracker: o.tabIndexer,
 			history: h
 		}));
-
-		if (set.associatedAssignment) {
-			this.feedback = o.registerOverlayedPanel(guid + 'feedback', Ext.widget('assignment-feedback', {
-				reader: r, renderTo: c, questionSet: set,
-				tabIndexTracker: o.tabIndexer,
-				history: h
-			}));
-		}
 
 		if (this.injectedAssignment && this.injectedAssignment.isTimed && !h.get('completed') && !isInstructor) {
 			this.showAssignmentTimer(this.submission.shouldAllowSubmit && this.submission.shouldAllowSubmit.bind(this.submission));
@@ -374,7 +365,12 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 	injectAssessments: function(reader, doc, items) {
 		var me = this,
 			slice = Array.prototype.slice,
-			questionObjs;
+			questionObjs,
+			r = me.reader,
+			h = me.injectedAssignmentHistory,
+			o = r.getComponentOverlay(),
+			c = o.componentOverlayEl,
+			guid = guidGenerator();
 
 		//nothing to do.
 		if (!items || items.length < 1) {
@@ -393,13 +389,26 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 		});
 
 		Ext.each(this.cleanQuestionsThatAreInQuestionSets(items, questionObjs), function(q) {
-			if (q.isSet) { me.makeAssessmentQuiz(q); }
+			if (q.isSet) { me.makeAssessmentQuiz(q, guid); }
 			else { me.makeAssessmentQuestion(q); }
 		});
 
 		slice.call(doc.querySelectorAll('object[type*=naquestion][data-ntiid]:not([data-used])')).forEach(function(e) {
 			e.parentNode.removeChild(e);
 		});
+
+		if (!(h instanceof NextThought.model.courseware.UsersCourseAssignmentHistoryItem)) {
+			h = h && h.get('history');
+		}
+
+		if (me.injectedAssignment) {
+			me.feedback = o.registerOverlayedPanel(guid + 'feedback', Ext.widget('assignment-feedback', {
+				reader: r, renderTo: c,
+				noSubmit: me.injectedAssignment.isNoSubmit(),
+				tabIndexTracker: o.tabIndexer,
+				history: h
+			}));
+		}
 	},
 
 

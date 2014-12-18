@@ -50,6 +50,11 @@ Ext.define('NextThought.view.content.overlay.Panel', {
 			}
 
 			el = d[ix];
+
+			if (!el && this.forceInsert) {
+				el = this.reader.getDocumentElement().querySelector('#NTIContent .page-contents');
+			}
+
 			this.contentElement = this.placementHolderTpl[insert](el);
 			} catch (e) {
 				this.insertedElement = false;

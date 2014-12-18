@@ -9,6 +9,7 @@ Ext.define('NextThought.view.assessment.AssignmentFeedback', {
 	cls: 'feedback-panel',
 	ui: 'assessment',
 	appendPlaceholder: true,
+	forceInsert: true,
 	hidden: true,
 	shouldShow: true,
 
