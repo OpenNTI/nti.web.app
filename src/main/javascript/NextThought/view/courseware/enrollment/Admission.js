@@ -86,7 +86,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 						{type: 'text', name: 'contact_street_line2', placeholder: getString('NextThought.view.courseware.enrollment.Admission.AddressLine'), size: 'full'},
 						{type: 'text', name: 'contact_street_line3', hidden: true, placeholder: getString('NextThought.view.courseware.enrollment.Admission.AddressLine'), size: 'full'},
 						{type: 'text', name: 'contact_street_line4', hidden: true, placeholder: getString('NextThought.view.courseware.enrollment.Admission.AddressLine'), size: 'full'},
-						{type: 'text', name: 'contact_street_line4', hidden: true, placeholder: getString('NextThought.view.courseware.enrollment.Admission.AddressLine'), size: 'full'},
+						{type: 'text', name: 'contact_street_line5', hidden: true, placeholder: getString('NextThought.view.courseware.enrollment.Admission.AddressLine'), size: 'full'},
 						{type: 'link', name: 'add_address_line', text: getString('NextThought.view.courseware.enrollment.Admission.AddAddress'), eventName: 'add-address-line', args: ['contact_street_line']},
 						{type: 'text', name: 'contact_city', placeholder: getString('NextThought.view.courseware.enrollment.Admission.CityTown'), size: 'large'},
 						{type: 'text', name: 'contact_state', placeholder: getString('NextThought.view.courseware.enrollment.Admission.StateProvTerrReg'), size: 'full'},
@@ -792,7 +792,8 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 			data = {
 				name: value.contact_name,
 				email: value.contact_email,
-				street_line: value.contact_street_line,
+				phone: value.contact_phone,
+				street_line: value.contact_street_line1,
 				street_line2: value.contact_street_line2,
 				street_line3: value.contact_street_line3,
 				street_line4: value.contact_street_line4,
