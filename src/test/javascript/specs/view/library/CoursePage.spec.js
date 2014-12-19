@@ -1,5 +1,5 @@
 describe('Course Page Unit Tests', function() {
-	
+
 	describe('Binning Tests', function() {
 		var coursePage, testBody;
 
@@ -29,7 +29,7 @@ describe('Course Page Unit Tests', function() {
 				10: 'Fall',
 				11: 'Fall',
 				12: 'Fall'
-			}
+			};
 		});
 
 		var dates = [
@@ -45,42 +45,31 @@ describe('Course Page Unit Tests', function() {
 			'October 31, 2014',
 			'November 26, 2014',
 			'December 25, 2014'
-		]
+		];
 
-		it('Should Return the Right Semester', function() { 
+		it('Should Return the Right Semester', function() {
 			for (index = 0; index < dates.length; index++) {
-				// it('Should Return Right Semester', function() { 
-				var a = 1 + (new Date(dates[index])).getMonth; 
-				if (a < 5) { 
-					expect(NTIStrings[a].toEqual('Spring')); 
-				} 
-				else if (a > 4) { 
-					if (a < 8) { 
-						expect(NTIStrings[a].toEqual('Summer')); 
+				// it('Should Return Right Semester', function() {
+				var a = 1 + (new Date(dates[index])).getMonth;
+				if (a < 5) {
+					expect(NTIStrings[a].toEqual('Spring'));
+				}
+				else if (a > 4) {
+					if (a < 8) {
+						expect(NTIStrings[a].toEqual('Summer'));
 					}
-					else if (a > 8) { 
+					else if (a > 8) {
 						expect(NTIStrings[a].toEqual('Fall'));
 					}
 				}
 			}
 		});
 
-		/*
-			[
-				{
-					id: '',
-					getCatalogEntry: function() {
-						needs to return: getString('NextThought.model.courses.CourseCatalogEntry')
-					}
-				}
-
-			]
-
-		*/
-
-		var testCourses = [ 
+		var testCourses = [
 			{
 				id: 'testCourse1',
+				year: 2015,
+				semester: 'Spring',
 				getCourseCatalogEntry: function() {
 					return NextThought.model.courses.CourseCatalogEntry.create({
 						StartDate: new Date('January 12, 2015'),
@@ -90,6 +79,8 @@ describe('Course Page Unit Tests', function() {
 			},
 			{
 				id: 'testCourse2',
+				year: 2014,
+				semester: 'Fall',
 				getCourseCatalogEntry: function() {
 					return NextThought.model.courses.CourseCatalogEntry.create({
 						StartDate: new Date('August 20, 2014'),
@@ -99,6 +90,8 @@ describe('Course Page Unit Tests', function() {
 			},
 			{
 				id: 'testCourse3',
+				year: 2014,
+				semester: 'Fall',
 				getCourseCatalogEntry: function() {
 					return NextThought.model.courses.CourseCatalogEntry.create({
 						StartDate: new Date('October 31, 2014'),
@@ -108,6 +101,8 @@ describe('Course Page Unit Tests', function() {
 			},
 			{
 				id: 'testCourse4',
+				year: 2014,
+				semester: 'Fall',
 				getCourseCatalogEntry: function() {
 					return NextThought.model.courses.CourseCatalogEntry.create({
 						StartDate: new Date('December 17, 2014'),
@@ -117,6 +112,8 @@ describe('Course Page Unit Tests', function() {
 			},
 			{
 				id: 'testCourse5',
+				year: 2015,
+				semester: 'Summer',
 				getCourseCatalogEntry: function() {
 					return NextThought.model.courses.CourseCatalogEntry.create({
 						StartDate: new Date('May 5, 2015'),
@@ -132,35 +129,71 @@ describe('Course Page Unit Tests', function() {
 			expect(def).toBeTruthy();
 		});
 
-		it('Everything in the right bin', function() { 
+		it('Binned correctly', function() {
+			var i, course, bin,
+			 binObj = coursePage.binCourses(testCourses);
 
-			var def = coursePage.binCourses(testCourses);
-			expect(def.years).toEqual([2014]);
-
-			expect(def.upcoming).toEqual([2015]);
-
-			var testFall = def.bins[2014]; 
-			for (j = 0; j < testFall.length; j++) { 
-				expect(testFall[j]).toEqual('testCourse2' || 'testCourse3' || 'testCourse4');
-			}
-
-			var testUpcoming = def.bins.upcoming[2015];
-			for (j = 0; j < testUpcoming.length; j++) {
-				expect(testUpcoming[j]).toEqual('testCourse1' || 'testCourse5');
-			}
-			//console.log(def.bins[2014]);
-			for (j = 0; j < testFall.length; j++) {
-				if ((testFall[j].id) === ('testCourse2' || 'testCourse3' || 'testCourse4')) {
-					expect(Object.hasOwnPropertyName(def.years)).toEqual('Fall');
+			 function testFunction(idArr) {
+				for (i = 0; i < testCourses.length; i++) {
+					for (j = 0; j < bin.length; j++) {
+						if (testCourses[i].id === bin[j].id) {
+							idArr.push(testCourses[i].id);
+						}
+					}
 				}
+
+				testVar = true;
+				for (k = 0; k < bin.length; k++) {
+					if (bin[k].id === idArr[k]) {
+						testVar = true;
+					}
+					else {
+						testVar = false;
+						break;
+					}
+				}
+				return testVar;
 			}
 
-			for (j = 0; j < testUpcoming.length; j++) {
-				if ((testUpcoming[j].id) === ('testCourse1' || 'testCourse5')) {
-					expect(Object.hasOwnPropertyName(def.upcoming)).toEqual('Spring' && 'Summer');
+
+
+
+
+			function binContains(bin, id) {
+				var k, contains = false;
+
+				for(k = 0; k < bin.length; k++) {
+					if (bin[k].id === id) {
+						contains = true;
+						break;
+					}
+				}
+
+				return contains;
+			}
+
+
+			for (i = 0; i < testCourses.length; i++) {
+				testYear = testCourses[i].year;
+				testID = testCourses[i].id;
+				testSemester = testCourses[i].semester;
+
+				if (testYear < 2015) {
+					bin = binObj.bins[testYear][testSemester];
+					expect(binContains(bin, testID)).toBeTruthy();
+				}
+				else if (testYear > 2014) {
+					bin = binObj.bins.upcoming[testYear][testSemester];
+					expect(binContains(bin, testID)).toBeTruthy();
 				}
 			}
 		});
-	});
 
+		it('Correct years used', function() {
+
+			var def = coursePage.binCourses(testCourses);
+			expect(def.years).toEqual([2014]);
+			expect(def.upcoming).toEqual([2015]);
+		});
+	});
 });
