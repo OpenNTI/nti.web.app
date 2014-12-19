@@ -31,7 +31,7 @@
 
 				.number {
 					font-size: 0.7em;
-					line-height: 1.1em; 
+					line-height: 1.1em;
 				}
 
 				.title {
@@ -267,7 +267,7 @@
 		.body-container {
 			width: 652px;
 			background: none;
-			
+
 			.large.left {
 				width: 212px;
 				&.last {
@@ -356,7 +356,7 @@
 		.body-container {
 			width: 652px;
 			background: none;
-			
+
 			.large.left {
 				width: 212px;
 				&.last {
@@ -377,7 +377,7 @@
 			input[type=checkbox] + label {
 				padding-left: 25px;
 				color: #52b85f;
-				
+
 				&::after {
 					left: 0;
 				}
@@ -390,7 +390,7 @@
 
 			input[type=checkbox]:checked + label::after {
 				left: 0;
-			} 
+			}
 
 			input[type=checkbox]:focus + label {
 				box-shadow: none;
@@ -422,6 +422,7 @@
 
 		textarea {
 			background-color: white;
+			font-family: $font;
 		}
 
 		textarea::-webkit-input-placeholder {
@@ -437,7 +438,7 @@
 		    /* FF 19+ */
 		    font: normal 300 1.3em/1 $font;
 		}
-		
+
 		textarea:-ms-input-placeholder {
 		    /* IE 10+ */
 		    font: normal 300 1em/1 $font;
@@ -534,7 +535,7 @@
 					width: 675px;
 					padding-left: 30px;
 				}
-			
+
 				.enrollment-input:not(.text) {
 					padding-left: 50px;
 					margin: 0;
@@ -609,7 +610,7 @@
 					&:hover {
 						@include icon('info_active', $position: absolute);
 					}
-				} 
+				}
 			}
 		}
 
@@ -783,7 +784,7 @@
 					opacity: 0;
 					position: absolute;
 				}
-				
+
 				input[type=radio] + label {
 					min-height: 40px;
 					padding: 10px 15px 10px 45px;
@@ -986,7 +987,7 @@
 
 						&:focus {
 							border-color: $primary-red;
-						} 
+						}
 					}
 
 					&.required input {
