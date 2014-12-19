@@ -184,6 +184,36 @@ Ext.define('NextThought.controller.Search', {
 	},
 
 
+	__getSearchLocation: function() {
+		var reader = ReaderPanel.get(),
+			location = reader.getLocation(),
+			NTIID = location && location.NTIID,
+			currentNode = location && location.location;
+
+		function isValidSearchNTIID(ntiid) {
+			var data = ParseUtils.parseNTIID(ntiid);
+
+			if (!data || (data.specific && data.specific.type === 'RelatedWorkRef')) { return false; }
+
+			return true;
+		}
+
+		function isValidSearchNode(node) {
+			return node.tagName === 'topic';
+		}
+
+		while (!isValidSearchNTIID(NTIID)) {
+			if (isValidSearchNode(currentNode)) {
+				NTIID = currentNode.getAttribute('ntiid');
+			}
+
+			currentNode = currentNode.parentNode;
+		}
+
+		return NTIID;
+	},
+
+
 	searchForValue: function(value) {
 		if (!value) {
 			return;
@@ -195,14 +225,11 @@ Ext.define('NextThought.controller.Search', {
 			rootUrl = Service.getUserUnifiedSearchURL(),
 			currentBundle = Ext.getCmp('content').currentBundle,
 			bundleId = currentBundle && currentBundle.getId(),
-			readerLocation = (ReaderPanel.get().getLocation() || {}).NTIID,
-			selectedMimeTypes = [], loc, url;
+			selectedMimeTypes = [],
+			loc = this.__getSearchLocation(), url;
 
 		this.clearSearchResults();
 		s.removeAll();
-
-		loc = readerLocation || bundleId || Globals.CONTENT_ROOT;
-
 
 		s.clearFilter();
 		if (filter) {
