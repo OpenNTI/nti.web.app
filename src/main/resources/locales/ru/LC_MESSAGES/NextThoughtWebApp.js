@@ -806,6 +806,7 @@ NTIStrings['NextThought.view.courseware.enrollment.Redeem.AccessKeyInput'] = 'Ac
 NTIStrings['NextThought.view.courseware.enrollment.Redeem.HelpFindAccessKey'] = 'Not sure where to find your Access Key?';
 NTIStrings['NextThought.view.courseware.enrollment.Redeem.CheckEmail'] = 'Please check your purchase confirmation emails. Contact <a href="{link}">{support}</a> if additional support is required.';
 NTIStrings['NextThought.view.courseware.enrollment.Redeem.LicensingAgree'] = 'I have read and agree to the <a data-event="viewLicense">licensing terms.</a>';
+NTIStrings['NextThought.view.courseware.enrollment.Redeem.NotRedeemed'] = 'You have not redeemed your access key!'
 NTIStrings['NextThought.view.courseware.enrollment.PaymentConfirmation.SubmitPayment'] = 'Submit Payment';
 NTIStrings['NextThought.view.courseware.enrollment.PaymentConfirmation.Cancel'] = 'Cancel';
 NTIStrings['NextThought.view.courseware.enrollment.PaymentConfirmation.ReviewPay'] = 'Review and Pay';

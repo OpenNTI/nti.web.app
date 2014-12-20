@@ -31,8 +31,8 @@ Ext.define('NextThought.view.courseware.enrollment.Redeem', {
 									{tag: 'span', cls: 'bold', html: getString('NextThought.view.courseware.enrollment.Redeem.HelpFindAccessKey') + ' '},
 									getFormattedString('NextThought.view.courseware.enrollment.Redeem.CheckEmail', {support: getString('gift-support.label'), link: getString('gift-support.link')})
 									//getFormattedString('NextThought.view.courseware.enrollment.Redeem.ContactSupport', {support: getString('gift-support.link')})
-									
-									//commenting out current line so that the world doesn't explode if the above solution doesn't work quite right 
+
+									//commenting out current line so that the world doesn't explode if the above solution doesn't work quite right
 									/*'Contact ',
 									{tag: 'a', href: getString('gift-support.link'), html: getString('gift-support.label') + ' '},
 									'if additional support is required.'*/
@@ -119,6 +119,38 @@ Ext.define('NextThought.view.courseware.enrollment.Redeem', {
 					me.showError(error);
 				}
 			});
-	}
+	},
 
+
+	//need a separate function to appear when redeeming an access key
+
+	stopClose: function() {
+		var r, me = this;
+
+		if(this.hasMask()) {
+			r = Promise.reject();
+		}
+		else {
+			r = new Promise(function(fulfill, reject) {
+				Ext.Msg.show({
+					title: getString('NextThought.view.courseware.enrollment.Redeem.NotRedeemed'),
+					msg: getString('NextThought.view.courseware.enrollment.Purchase.ProgressLost'),
+					icon: 'warning-red',
+					buttons: {
+						primary: {
+							text: getString('NextThought.view.courseware.enrollment.Purchase.StayFinish'),
+							handler: reject
+						},
+						secondary: {
+							text: getString('NextThought.view.courseware.enrollment.Purchase.LeavePage'),
+							handler: function() {
+								me.clearStorage();
+								fulfill();
+							}
+						}
+					}
+				});
+			});
+		};
+	}
 });
