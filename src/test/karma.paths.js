@@ -1,4 +1,4 @@
-if (!fromIndexHTML) {
+if (typeof fromIndexHTML === 'undefined') {
 	/**
 	 * what to use as the root
 	 * @type {String}
@@ -49,6 +49,7 @@ window.NTIStrings = {};
  * @return {Interger}     random int
  */
 window.getRandomInt = function(min, max) {
+	'use strict';
 	return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
@@ -63,6 +64,7 @@ window.getRandomInt = function(min, max) {
  * @this {Element}
  */
 Element.prototype.matches = Element.prototype.matches || function(selector) {
+	'use strict';
   var element = this;
   var matches = (element.document || element.ownerDocument).querySelectorAll(selector);
   var i = 0;
