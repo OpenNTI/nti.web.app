@@ -116,5 +116,19 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
 			update: update
 		});
 		return monitor;
+	},
+
+
+	getProgress: function() {
+		var link = this.getLink('Progress');
+
+		if (!link) {
+			return Promise.resolve(null);
+		}
+
+		return Service.request(link)
+			.then(function(response) {
+				return Ext.decode(response);
+			});
 	}
 });

@@ -125,6 +125,7 @@ Ext.define('NextThought.view.courseware.overview.View', {
 			(overviewSrc && ContentProxy.get(overviewSrc)) || Promise.resolve(null),
 			course.getAssignments(),
 			course.getWrapper && course.getWrapper()
+			//r.getProgress()
 		])
 			.then(function(data) {
 				var assignments = data && data[1],
