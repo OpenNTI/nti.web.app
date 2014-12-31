@@ -56,7 +56,7 @@ NTIStrings.EnrollmentText = {
 			drop: 'If you are currently enrolled as an OSU student, visit ' +
 				'<a class=\'link\' target=\'_blank\' href=\'http://prodosu.okstate.edu/\'>student self services</a>. ' +
 				'If not, please contact the ' +
-				'<a class=\'link\' target=\'_blank\' href=\'\'>Admission office</a>' +
+				'<a class=\'link\' target=\'_blank\' href=\'https://admissions.okstate.edu\'>Admission Office</a>' +
 				'{drop}.'
 		},
 		archivedEnrolled: {
