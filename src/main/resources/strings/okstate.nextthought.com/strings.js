@@ -1,5 +1,7 @@
 window.NTIStrings = window.NTIStrings || {};
 
+NTIStrings['reset-password-not-allowed-subtext'] = 'You are not allowed to change your password at this time.  Please contact the OSU IT HelpDesk at (405)744-HELP (4357) or <a href="mailto:helpdesk@okstate.edu">helpdesk@okstate.edu</a>';
+
 NTIStrings['library:branding navigation-label'] = 'Oklahoma State University';
 NTIStrings['library:branding logo-alt-text'] = 'Oklahoma State University';
 
