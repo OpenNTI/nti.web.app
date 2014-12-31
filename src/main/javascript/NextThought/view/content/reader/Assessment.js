@@ -145,12 +145,13 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 		var me = this,
 			assignment = me.injectedAssignment,
 			remaining = assignment.getTimeRemaining(),
+			overrides = {week: 'Week', day: 'Day', hour: 'Hour', minute: 'Minute', second: 'Second'},
 			title = assignment && assignment.get('title');
 
 		if (remaining < 0) {
-			remaining = TimeUtils.getNaturalDuration(-1 * remaining, 1) + ' Over';
+			remaining = TimeUtils.getNaturalDuration(-1 * remaining, 1, false, overrides) + ' Over';
 		} else {
-			remaining = TimeUtils.getNaturalDuration(remaining, 1) + ' Remaining';
+			remaining = TimeUtils.getNaturalDuration(remaining, 1, false, overrides) + ' Remaining';
 		}
 
 		if (!me.toast || me.toast.isDestroyed) {
