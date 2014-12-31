@@ -97,7 +97,7 @@ Ext.define('NextThought.view.assessment.input.WordBank', {
 			data = Ext.apply({ inputName: input.getAttribute('name') }, input.dataset);
 
 		if (ctEl) {
-			ctEl = ctEl.querySelector('input[name="' + data.inputName + '"]');
+			ctEl = ctEl.querySelector('input[name="' + data.inputName + '"]') || ctEl;
 			tpl.insertAfter(ctEl, data);
 		}
 
