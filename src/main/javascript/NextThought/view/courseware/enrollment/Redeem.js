@@ -29,7 +29,10 @@ Ext.define('NextThought.view.courseware.enrollment.Redeem', {
 								cls: 'token-help',
 								cn: [
 									{tag: 'span', cls: 'bold', html: getString('NextThought.view.courseware.enrollment.Redeem.HelpFindAccessKey') + ' '},
-									getFormattedString('NextThought.view.courseware.enrollment.Redeem.CheckEmail', {support: getString('gift-support.label'), link: getString('gift-support.link')})
+									getFormattedString('NextThought.view.courseware.enrollment.Redeem.CheckEmail', {
+										support: getString('gift-support.label'),
+										link: getString('gift-support.link')
+									})
 									//getFormattedString('NextThought.view.courseware.enrollment.Redeem.ContactSupport', {support: getString('gift-support.link')})
 
 									//commenting out current line so that the world doesn't explode if the above solution doesn't work quite right
@@ -127,10 +130,9 @@ Ext.define('NextThought.view.courseware.enrollment.Redeem', {
 	stopClose: function() {
 		var r, me = this;
 
-		if(this.hasMask()) {
+		if (this.hasMask()) {
 			r = Promise.reject();
-		}
-		else {
+		} else {
 			r = new Promise(function(fulfill, reject) {
 				Ext.Msg.show({
 					title: getString('NextThought.view.courseware.enrollment.Redeem.NotRedeemed'),
@@ -151,6 +153,8 @@ Ext.define('NextThought.view.courseware.enrollment.Redeem', {
 					}
 				});
 			});
-		};
+		}
+
+		return r;
 	}
 });
