@@ -8,6 +8,14 @@ Ext.define('NextThought.util.Analytics', {
 
 	BATCH_TIME: 10000,
 
+	TYPES_TO_TRACK: {
+		'video-watch': true,
+		'resource-viewed': true,
+		'discussion-viewed': true
+	},
+
+	VIEWED_MAP: {},
+
 	TYPE_TO_MIMETYPE: {
 		'video-watch': 'application/vnd.nextthought.analytics.watchvideoevent',
 		'video-skip': 'application/vnd.nextthought.analytics.skipvideoevent',
@@ -132,6 +140,10 @@ Ext.define('NextThought.util.Analytics', {
 			data.context_path.unshift(data.course);
 		}
 
+		if (this.TYPES_TO_TRACK[data.type]) {
+			this.VIEWED_MAP[resourceId] = true;
+		}
+
 		data.MimeType = this.TYPE_TO_MIMETYPE[data.type];
 		data.user = $AppConfig.username;
 		data.timestamp = now.getTime() / 1000;//send seconds back
@@ -198,6 +210,15 @@ Ext.define('NextThought.util.Analytics', {
 			this.stopResourceTimer = function() {};
 			this.sendBatch = function() {};
 		}
+	},
+
+	/**
+	 * Whether or not we have sent a view event for an ntiid
+	 * @param  {String}  id Ntiid to check
+	 * @return {Boolean}    [description]
+	 */
+	hasBeenViewed: function(id) {
+		return this.VIEWED_MAP[id];
 	}
 }, function() {
 
