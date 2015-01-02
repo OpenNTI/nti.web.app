@@ -114,5 +114,19 @@ Ext.define('NextThought.view.courseware.overview.parts.ContentLink', {
 			this.bypassEvent = false;
 		}
 		return this.callParent(arguments);
+	},
+
+
+	setProgress: function(progress) {
+		var progressItem = progress && progress[this.target],
+			hasBeenViewed = AnalyticsUtil.hasBeenViewed(this.target);
+
+		if (progressItem) {
+			hasBeenViewed = hasBeenViewed || progressItem.AbsoluteProgress > 0;
+		}
+
+		if (hasBeenViewed) {
+			this.addCls('viewed');
+		}
 	}
 });

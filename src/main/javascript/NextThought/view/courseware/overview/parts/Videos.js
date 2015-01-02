@@ -78,7 +78,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 	itemSelector: '.video-row',
 	tpl: Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
 		{
-			cls: 'video-row',
+			cls: 'video-row {viewedCls}',
 			cn: [
 				{ cls: 'label', html: '{label}', 'data-qtip': '{label:htmlEncode}' }//,
 				//{ cls:'comments', html: '{comments:plural("Comment")}' } // No comments yet
@@ -97,7 +97,8 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 				{name: 'thumb', type: 'string'},
 				{name: 'comments', type: 'auto'},
 				{name: 'slidedeck', type: 'string'},
-				{name: 'hasTranscripts', type: 'boolean'}
+				{name: 'hasTranscripts', type: 'boolean'},
+				{name: 'viewedCls', type: 'string'}
 			],
 			data: this.convertItems(config.items || [])
 		});
@@ -480,51 +481,73 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 	onCurtainClicked: function(e) {
 		e.stopEvent();
 
-		var m = this.getSelectedVideo(),
-			li = this.locationInfo,
+		var me = this,
+			m = me.getSelectedVideo(),
+			li = me.locationInfo,
 			slide;
 
 
 		if (!e.getTarget('.launch-player') && e.getTarget('.transcripts')) {
-			if (this.player) {
-				if (this.player.isPlaying()) {
+			if (me.player) {
+				if (me.player.isPlaying()) {
 					console.debug('Pausing video for media');
-					this.player.pausePlayback();
+					me.player.pausePlayback();
 				} else {
 					console.warn('Player did not report being in a state where the media viewer would interfere');
 				}
 
-				if (this.hasCls('playing')) { return; }
+				if (me.hasCls('playing')) { return; }
 			}
 
 			slide = m.get('slidedeck');
 			if (Ext.isEmpty(slide)) {
-				this.fireEvent('start-media-player', this.videoIndex[m.getId()], m.getId(), getURL(li.root));
+				me.fireEvent('start-media-player', me.videoIndex[m.getId()], m.getId(), getURL(li.root), null, {
+					closeCallback: function() {
+						me.setProgress();
+					}
+				});
 			} else {
-				this.fireEvent('open-slide-deck', li.ContentNTIID, slide,
+				me.fireEvent('open-slide-deck', li.ContentNTIID, slide,
 					NextThought.model.PlaylistItem.create(Ext.apply(
 							{
 								NTIID: m.getId()
 							},
-							this.videoIndex[m.getId()])));
+							me.videoIndex[m.getId()])));
 			}
 			return;
 		}
 
-		this.maybeCreatePlayer();
+		me.maybeCreatePlayer();
 
-		if (!m || !this.player) {
-			console.warn('Ignoring on curtain click', this, m);
+		if (!m || !me.player) {
+			console.warn('Ignoring on curtain click', me, m);
 			return;
 		}
 
-		if (e && e.shiftKey && this.player.canOpenExternally()) {
-			this.player.openExternally();
+		if (e && e.shiftKey && me.player.canOpenExternally()) {
+			me.player.openExternally();
 		}
 		else {
 			console.log('Masking z curtain');
-			this.hideCurtain();
-			this.player.resumePlayback(true);
+			me.hideCurtain();
+			me.player.resumePlayback(true);
 		}
+	},
+
+
+	setProgress: function(progress) {
+		this.store.each(function(video) {
+			var id = video.get('id'),
+				progressItem = progress && progress[id],
+				hasBeenViewed = AnalyticsUtil.hasBeenViewed(id);
+
+			if (progressItem) {
+				hasBeenViewed = hasBeenViewed || progressItem.AbsoluteProgress > 0;
+			}
+
+			if (hasBeenViewed) {
+				video.set('viewedCls', 'viewed');
+			}
+		});
 	}
 });

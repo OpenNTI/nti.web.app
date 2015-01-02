@@ -35,9 +35,24 @@ Ext.define('NextThought.view.courseware.overview.parts.Timeline', {
 	shouldOpenInApp: function() { return true; },
 
 	onCardClicked: function() {
-		var win = Ext.widget('timeline-window', this.data);
+		var me = this,
+			win = Ext.widget('timeline-window', me.data);
 
+		me.mon(win, 'close', me.setProgress);
 
 		win.show();
+	},
+
+	setProgress: function(progress) {
+		var progress = progress && progress[this.ntiid],
+			hasBeenViewed = AnalyticsUtil.hasBeenViewed(this.ntiid);
+
+		if (progress) {
+			hasBeenViewed = hasBeenViewed || progress.AbsoluteProgress > 0;
+		}
+
+		if (hasBeenViewed) {
+			this.addCls('viewed');
+		}
 	}
 });

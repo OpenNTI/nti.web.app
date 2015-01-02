@@ -63,7 +63,8 @@ Ext.define('NextThought.view.courseware.overview.View', {
 				if (me.currentPage) {
 					AnalyticsUtil.addContext(me.currentPage);
 				}
-				console.log(me);
+
+				me.__updateProgress();
 			}
 		});
 	},
@@ -94,6 +95,26 @@ Ext.define('NextThought.view.courseware.overview.View', {
 	},
 
 
+	__updateProgress: function() {
+		if (!this.__getCurrentProgress) { return; }
+
+		var me = this;
+
+		return me.__getCurrentProgress()
+					.then(function(progress) {
+						progress = (progress && progress.Items) || {};
+						me.items.each(function(item) {
+							if (item.setProgress) {
+								item.setProgress(progress);
+							}
+						});
+					})
+					.fail(function(reason) {
+						console.error('Failed to load progress:', reason);
+					});
+	},
+
+
 	onNodeSelected: function(s, r) {
 		var me = this,
 			locInfo,
@@ -113,6 +134,9 @@ Ext.define('NextThought.view.courseware.overview.View', {
 		me.clear();
 		me.currentPage = r.getId();
 
+		//stash the function to get progress so we can update the progress when we become visible again
+		me.__getCurrentProgress = r.getProgress ? r.getProgress.bind(r) : null;
+
 		if (AnalyticsUtil.getContextRoot() === 'overview') {
 			AnalyticsUtil.addContext(me.currentPage);
 		}
@@ -125,7 +149,6 @@ Ext.define('NextThought.view.courseware.overview.View', {
 			(overviewSrc && ContentProxy.get(overviewSrc)) || Promise.resolve(null),
 			course.getAssignments(),
 			course.getWrapper && course.getWrapper()
-			//r.getProgress()
 		])
 			.then(function(data) {
 				var assignments = data && data[1],
@@ -139,18 +162,20 @@ Ext.define('NextThought.view.courseware.overview.View', {
 				me.removeAll(true);//make sure its a clean slate
 
 				if (!content) {
-					me.buildFromToc(r, locInfo, assignments);
+					me.buildFromToc(r, locInfo, assignments, course);
 				} else {
 					content = Ext.decode(content);
-					me.buildFromContent(content, r, enrollment, locInfo, assignments);
+					me.buildFromContent(content, r, enrollment, locInfo, assignments, course);
 				}
+
+				return me.__updateProgress();
 			})
 			.fail(function(reason) { console.error(reason); })
 			.done(me.maybeUnmask.bind(me));
 	},
 
 
-	buildFromContent: function(content, node, enrollment, locInfo, assignments) {
+	buildFromContent: function(content, node, enrollment, locInfo, assignments, course) {
 		console.debug(content);
 
 		function getItems(c) {return c.Items || c.items || [];}
@@ -199,7 +224,8 @@ Ext.define('NextThought.view.courseware.overview.View', {
 					xtype: type,
 					locationInfo: locInfo,
 					courseRecord: node,
-					assignment: assignment
+					assignment: assignment,
+					course: course
 				}, item);
 
 				if (cls.buildConfig) {
@@ -219,7 +245,7 @@ Ext.define('NextThought.view.courseware.overview.View', {
 	},
 
 
-	buildFromToc: function(node, locInfo, assignments) {
+	buildFromToc: function(node, locInfo, assignments, course) {
 		var me = this,
 			SECTION_CONTAINER_MAP = me.SECTION_CONTAINER_MAP,
 			SECTION_TYPE_MAP = me.SECTION_TYPE_MAP,
@@ -237,7 +263,7 @@ Ext.define('NextThought.view.courseware.overview.View', {
 				return;
 			}
 
-			i = me.getComponentForNode(i, locInfo, node, assignments);
+			i = me.getComponentForNode(i, locInfo, node, assignments, course);
 			t = i && (i.sectionOverride || SECTION_TYPE_MAP[i.xtype] || 'Unknown');
 			if (t) {
 				if (i.xtype !== 'course-overview-topic') {
@@ -291,7 +317,7 @@ Ext.define('NextThought.view.courseware.overview.View', {
 	},
 
 
-	getComponentForNode: function(node, info, rec, assignments) {
+	getComponentForNode: function(node, info, rec, assignments, course) {
 		var type = node && node.nodeName,
 			section = (node && node.getAttribute('section')) || null,
 			assignment, cls;
@@ -311,7 +337,7 @@ Ext.define('NextThought.view.courseware.overview.View', {
 				assignment = assignments.getItem(node.getAttribute('target-ntiid'));
 			}
 
-			return {xtype: type, node: node, locationInfo: info, courseRecord: rec, sectionOverride: section, assignment: assignment};
+			return {xtype: type, node: node, locationInfo: info, courseRecord: rec, sectionOverride: section, assignment: assignment, course: course};
 		}
 
 		if (this.self.debug) {

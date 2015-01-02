@@ -68,5 +68,14 @@ Ext.define('NextThought.view.courseware.overview.parts.Section', {
 			this.show();
 		}
 
+	},
+
+
+	setProgress: function(progress) {
+		this.items.each(function(item) {
+			if (item.setProgress) {
+				item.setProgress(progress);
+			}
+		});
 	}
 });

@@ -233,6 +233,10 @@ Ext.define('NextThought.controller.SlideDeck', {
 			me.activeMediaPlayer.on('destroy', function() {
 				me.activeMediaPlayer.fireEvent('resume-annotation-manager', this);
 				me.activeMediaPlayer = null;
+
+				if (options.closeCallback) {
+					options.closeCallback.call();
+				}
 			});
 			me.activeMediaPlayer.on('media-viewer-ready', function(viewer) {
 				var fn = options && options.callback,
