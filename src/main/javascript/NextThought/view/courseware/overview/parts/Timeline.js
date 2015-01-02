@@ -21,8 +21,14 @@ Ext.define('NextThought.view.courseware.overview.parts.Timeline', {
 			title: this.label,
 			json: root + this.href,
 			desiredHeight: height,
-			desiredWidth: width
+			desiredWidth: width,
+			ntiid: this.ntiid,
+			course: this.__getActiveBundle()
 		};
+	},
+
+	__getActiveBundle: function() {
+		return this.course && this.course.getId();
 	},
 
 	//always open this up in app

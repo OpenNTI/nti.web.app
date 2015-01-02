@@ -67,6 +67,31 @@ Ext.define('NextThought.ux.TimelineWindow', {
 		});
 
 		this.sizeWindow(this.desiredWidth, this.desiredHeight);
+
+		this.on({
+			show: 'startTimer',
+			close: 'endTimer'
+		});
+	},
+
+
+	startTimer: function() {
+		var data = {
+				type: 'resource-viewed',
+				resource_id: this.ntiid,
+				course: this.course
+			};
+
+		if (this.ntiid) {
+			AnalyticsUtil.getResourceTimer(data.resource_id, data);
+		}
+	},
+
+
+	endTimer: function() {
+		if (this.ntiid) {
+			AnalyticsUtil.stopResourceTimer(this.ntiid, 'resource-viewed');
+		}
 	},
 
 	/**
