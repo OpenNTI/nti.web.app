@@ -202,7 +202,7 @@ Ext.define('NextThought.controller.Search', {
 			return node.tagName === 'topic';
 		}
 
-		while (!isValidSearchNTIID(NTIID)) {
+		while (!isValidSearchNTIID(NTIID) && currentNode) {
 			if (isValidSearchNode(currentNode)) {
 				NTIID = currentNode.getAttribute('ntiid');
 			}
@@ -237,6 +237,8 @@ Ext.define('NextThought.controller.Search', {
 				if (item.value) { selectedMimeTypes.push(item.value); } });
 			s.filter(function(item) { return filter.test(item);});
 		}
+
+		loc = loc || bundleId || Globals.CONTENT_ROOT;
 
 
 		url = [rootUrl, loc, '/', value, partial ? '*' : ''];
