@@ -14,7 +14,7 @@ module.exports = function(config) {
 
 		// list of files / patterns to load in the browser
 		files: [
-			{pattern: 'ext-4.2/examples/ux/ajax/*.js', included: false},
+			{pattern: 'ext-4.2/examples/ux/ajax/**/*', included: false},
 			{pattern: 'resources/lib/**/*', included: false},
 			{pattern: 'javascript/libs.js', included: false},
 			{pattern: 'javascript/NextThought/**/*.js', included: false},
@@ -30,15 +30,15 @@ module.exports = function(config) {
 		// list of files to exclude
 		exclude: [],
 
-		preprocessors: { 'javascript/NextThought/**/*.js': ['coverage'] },
+		//preprocessors: { 'javascript/NextThought/**/*.js': ['coverage'] },
 
-		coverageReporter: { type: 'html', dir: 'coverage/' },
+		//coverageReporter: { type: 'html', dir: 'coverage/' },
 
 		// test results reporter to use
 		// possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
 		reporters: [
 			'progress',
-			'coverage'
+			//'coverage'
 		],
 
 		// web server port
@@ -66,7 +66,7 @@ module.exports = function(config) {
 		// - Safari (only Mac; has to be installed with `npm install karma-safari-launcher`)
 		// - PhantomJS
 		// - IE (only Windows; has to be installed with `npm install karma-ie-launcher`)
-		browsers: ['Chrome'],
+		browsers: ['PhantomJS'],
 
 
 		// If browser does not capture in given timeout [ms], kill it
@@ -76,5 +76,6 @@ module.exports = function(config) {
 		// Continuous Integration mode
 		// if true, it capture browsers, run tests and exit
 		singleRun: true
+
 	});
 };
