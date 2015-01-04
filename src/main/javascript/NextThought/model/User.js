@@ -10,7 +10,7 @@ Ext.define('NextThought.model.User', {
 		{ name: 'OU4x4', type: 'string' },
 		{ name: 'FirstName', type: 'string', mapping: 'NonI18NFirstName', convert: function(v, r){
 			// TODO: The mapping should normally take care of this conversion but it's doesn't seem to do it.
-			var fname = r && r.raw['NonI18NFirstName'];
+			var fname = r && r.raw && r.raw['NonI18NFirstName'];
 			if( Ext.isEmpty(v) && !Ext.isEmpty(fname)){
 				return fname;
 			}
@@ -18,7 +18,7 @@ Ext.define('NextThought.model.User', {
 			return v;
 		}},
 		{ name: 'LastName', type: 'string', mapping: 'NonI18NLastName', convert: function(v, r) {
-			var lname = r && r.raw['NonI18NLastName'];
+			var lname = r && r.raw && r.raw['NonI18NLastName'];
 			if( Ext.isEmpty(v) && !Ext.isEmpty(lname)){
 				return lname;
 			}

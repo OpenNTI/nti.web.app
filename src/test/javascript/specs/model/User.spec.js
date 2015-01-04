@@ -80,6 +80,11 @@ describe("User Tests", function() {
 			var user = Ext.create('NextThought.model.User', u);
 			expect(user.get("LastName")).toEqual("User1");
 		});
+
+		it('Raw user object is null', function(){
+			var user = Ext.create('NextThought.model.User', null);
+			expect(user.get("LastName")).toEqual("");
+		});
 	});
 
 	describe('isUnresolved works', function(){
