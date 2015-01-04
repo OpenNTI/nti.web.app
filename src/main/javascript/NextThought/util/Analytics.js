@@ -14,6 +14,16 @@ Ext.define('NextThought.util.Analytics', {
 		'discussion-viewed': true
 	},
 
+	//types we need to send an event when it starts
+	START_EVENT_TYPES: {
+		'video-watch': true,
+		'resource-viewed': true,
+		'thought-viewed': true,
+		'note-viewed': true,
+		'discussion-viewed': true,
+		'course-catalog-viewed': true
+	},
+
 	VIEWED_MAP: {},
 
 	TYPE_TO_MIMETYPE: {
@@ -89,20 +99,33 @@ Ext.define('NextThought.util.Analytics', {
 		}
 
 		data.context_path = this.getContext();
+		data.timestamp = now.getTime() / 1000;//send seconds back
+		data.MimeType = this.TYPE_TO_MIMETYPE[data.type];
+		data.user = $AppConfig.username;
+		data.resource_id = resourceId;
+
+		if (data.course) {
+			data.context_path.unshift(data.course);
+		}
+
+
 
 		this.TIMER_MAP[resourceId + data.type] = {
 			start: now,
 			data: data
 		};
 
-		return id;
+		if (this.START_EVENT_TYPES[data.type]) {
+			this.batch.push(data);
+			this.__maybeStartBatchTimer();
+		}
 	},
 
 
 	fillInData: function(resource, data) {
 		var now = new Date();
 
-		data.time_length = (now - resource.start) / 1000;
+		data.time_length = (now - resource.start) / 1000;//send seconds back
 
 		return data;
 	},
@@ -128,25 +151,15 @@ Ext.define('NextThought.util.Analytics', {
 
 		data = Ext.applyIf(data, resource.data);
 
-		data.resource_id = resourceId;
-
 		if (this.FILL_IN_MAP[data.type]) {
 			data = this[this.FILL_IN_MAP[data.type]].call(this, resource, data);
 		} else {
 			data = this.fillInData(resource, data);
 		}
 
-		if (data.course) {
-			data.context_path.unshift(data.course);
-		}
-
 		if (this.TYPES_TO_TRACK[data.type]) {
 			this.VIEWED_MAP[resourceId] = true;
 		}
-
-		data.MimeType = this.TYPE_TO_MIMETYPE[data.type];
-		data.user = $AppConfig.username;
-		data.timestamp = now.getTime() / 1000;//send seconds back
 
 		this.batch.push(data);
 
