@@ -118,8 +118,8 @@ Ext.define('NextThought.view.courseware.overview.parts.ContentLink', {
 
 
 	setProgress: function(progress) {
-		var progressItem = progress && progress[this.target],
-			hasBeenViewed = AnalyticsUtil.hasBeenViewed(this.target);
+		var progressItem = progress && (progress[this.target] || progress[this.ntiid]),
+			hasBeenViewed = AnalyticsUtil.hasBeenViewed(this.target) || AnalyticsUtil.hasBeenViewed(this.ntiid);
 
 		if (progressItem) {
 			hasBeenViewed = hasBeenViewed || progressItem.AbsoluteProgress > 0;
