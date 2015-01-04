@@ -177,6 +177,7 @@
 		@extend .overview-section;
 
 		&.singular{
+			position: relative;
 			.body {
 				height: 396px;
 				margin: 0;
@@ -191,6 +192,18 @@
 				.video-list {
 					display: none;
 				}
+			}
+
+			&.viewed::after {
+				content: 'viewed';
+				background-color: $primary-blue;
+				color: white;
+				position: absolute;
+				top: 5px;
+				right: 5px;
+				padding: 2px 5px;
+				font: normal 400 0.6em/1 $font;
+				text-transform: uppercase;
 			}
 		}
 
@@ -240,6 +253,7 @@
 				background: #04232c;
 
 				.video-row {
+					position: relative;
 					cursor: pointer;
 					color: #ebebeb;
 					padding: 8px 10px;
@@ -260,6 +274,18 @@
 					.comments {
 						font: normal 700 0.6em/1.3em $font;
 						color: $secondary-grey;
+						text-transform: uppercase;
+					}
+
+					&.viewed::after {
+						content: 'viewed';
+						background-color: $primary-blue;
+						color: white;
+						position: absolute;
+						bottom: 5px;
+						right: 5px;
+						padding: 2px 5px;
+						font: normal 400 0.6em/1 $font;
 						text-transform: uppercase;
 					}
 
@@ -407,6 +433,18 @@
 	a .thumbnail { @include icon('extern-link',$top:0,$left:auto,$right:0); }
 	&:hover a .thumbnail::after {
 		@include sprite($icons,'extern-link_hover');
+	}
+
+	&.viewed::after {
+		content: 'viewed';
+		background-color: $primary-blue;
+		color: white;
+		position: absolute;
+		top: 5px;
+		right: 5px;
+		padding: 2px 5px;
+		font-size: 0.6em;
+		text-transform: uppercase;
 	}
 
 	.meta {

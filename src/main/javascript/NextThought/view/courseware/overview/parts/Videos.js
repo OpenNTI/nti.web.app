@@ -465,6 +465,8 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 		else {
 			console.warn('noes!');
 		}
+
+		wait().then(this.setProgress.bind(this));
 	},
 
 
@@ -536,7 +538,10 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 
 
 	setProgress: function(progress) {
-		this.store.each(function(video) {
+		var me = this,
+			single = me.store.getCount() === 1;
+
+		me.store.each(function(video) {
 			var id = video.get('id'),
 				progressItem = progress && progress[id],
 				hasBeenViewed = AnalyticsUtil.hasBeenViewed(id);
@@ -546,7 +551,11 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 			}
 
 			if (hasBeenViewed) {
-				video.set('viewedCls', 'viewed');
+				if (single) {
+					me.addCls('viewed');
+				} else {
+					video.set('viewedCls', 'viewed');
+				}
 			}
 		});
 	}

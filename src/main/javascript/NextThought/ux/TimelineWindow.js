@@ -70,7 +70,7 @@ Ext.define('NextThought.ux.TimelineWindow', {
 
 		this.on({
 			show: 'startTimer',
-			close: 'endTimer'
+			beforeclose: 'endTimer'
 		});
 	},
 

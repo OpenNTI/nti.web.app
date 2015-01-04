@@ -38,17 +38,17 @@ Ext.define('NextThought.view.courseware.overview.parts.Timeline', {
 		var me = this,
 			win = Ext.widget('timeline-window', me.data);
 
-		me.mon(win, 'close', me.setProgress);
+		me.mon(win, 'close', 'setProgress');
 
 		win.show();
 	},
 
 	setProgress: function(progress) {
-		var progress = progress && progress[this.ntiid],
+		var progressItem = progress && progress[this.ntiid],
 			hasBeenViewed = AnalyticsUtil.hasBeenViewed(this.ntiid);
 
-		if (progress) {
-			hasBeenViewed = hasBeenViewed || progress.AbsoluteProgress > 0;
+		if (progressItem) {
+			hasBeenViewed = hasBeenViewed || progressItem.AbsoluteProgress > 0;
 		}
 
 		if (hasBeenViewed) {
