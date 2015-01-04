@@ -8,8 +8,21 @@ Ext.define('NextThought.model.User', {
 		{ name: 'NotificationCount', type: 'int' },
 		{ name: 'Username', type: 'string' },
 		{ name: 'OU4x4', type: 'string' },
-		{ name: 'FirstName', type: 'string', mapping: 'NonI18NFirstName'},
+		{ name: 'FirstName', type: 'string', mapping: 'NonI18NFirstName', convert: function(v, r){
+			// TODO: The mapping should normally take care of this conversion but it's doesn't seem to do it.
+			var fname = r && r.raw['NonI18NFirstName'];
+			if( Ext.isEmpty(v) && !Ext.isEmpty(fname)){
+				return fname;
+			}
+
+			return v;
+		}},
 		{ name: 'LastName', type: 'string', mapping: 'NonI18NLastName', convert: function(v, r) {
+			var lname = r && r.raw['NonI18NLastName'];
+			if( Ext.isEmpty(v) && !Ext.isEmpty(lname)){
+				return lname;
+			}
+
 			return v;
 		}},
 

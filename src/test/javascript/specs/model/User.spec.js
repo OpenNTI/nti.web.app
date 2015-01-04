@@ -28,6 +28,60 @@ describe("User Tests", function() {
 
 	});
 
+	describe('Field conversion works', function(){
+		it('converts NonI18NLastName to LastName', function(){
+			var u = {
+				Class: "User",
+				NonI18NLastName: "User1",
+				Username: "testUser1",
+				alias: "Test User1",
+				realname: "Test User1"
+			};
+
+			var user = Ext.create('NextThought.model.User', u);
+			expect(user.get("LastName")).toEqual("User1");
+		});
+
+		it('converts NonI18NFirstName to FirstName', function(){
+			var u = {
+				Class: "User",
+				NonI18NFirstName: "Test",
+				Username: "testUser1",
+				alias: "Test User1",
+				realname: "Test User1"
+			};
+
+			var user = Ext.create('NextThought.model.User', u);
+			expect(user.get("FirstName")).toEqual("Test");
+		});
+
+		it('LastName or NonI18NLastName is not provided', function(){
+			var u = {
+				Class: "User",
+				NonI18NFirstName: "Test",
+				Username: "testUser1",
+				alias: "Test User1",
+				realname: "Test User1"
+			};
+
+			var user = Ext.create('NextThought.model.User', u);
+			expect(user.get("LastName")).toEqual("");
+		});
+
+		it('LastName is set, NonI18NLastName is not. we should keep LastName value.', function(){
+			var u = {
+				Class: "User",
+				LastName: "User1",
+				Username: "testUser1",
+				alias: "Test User1",
+				realname: "Test User1"
+			};
+
+			var user = Ext.create('NextThought.model.User', u);
+			expect(user.get("LastName")).toEqual("User1");
+		});
+	});
+
 	describe('isUnresolved works', function(){
 		it('Returns true for unresolved users', function(){
 			var u = NextThought.model.User.getUnresolved('foobar');
