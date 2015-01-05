@@ -52,6 +52,37 @@ Ext.define('NextThought.model.courseware.Grade', {
 		return vals.letter === letter;
 	},
 
+	isExcusable: function(){
+	    return this.hasLink('excuse') || this.hasLink('unexcuse');
+	},
+
+	isExcused: function(){
+	    return this.hasLink('unexcuse');
+	},
+
+
+	 excuseGrade: function(){
+        var record = this,
+            url = this.getLink('excuse') || this.getLink('unexcuse');
+
+        return new Promise(function(fulfill, reject){
+            Service.request({
+                url: url,
+                method: 'POST'
+            })
+            .fail(function() {
+                console.error('Failed to excuse grade: ', arguments);
+                reject('Request Failed');
+            })
+            .done(function(responseText) {
+                var o = Ext.JSON.decode(responseText, true);
+
+                record.set(o);
+                fulfill(record);
+            });
+        });
+    },
+
 	/**
 	 * Looks at the value for the grade and parses it into a value and letter value
 	 * @return {Object} an object with value and letter for keys
@@ -109,6 +140,7 @@ Ext.define('NextThought.model.courseware.Grade', {
 			});
 		});
 	},
+
 
 	/**
 	 * Check if the value is empty, need to handle

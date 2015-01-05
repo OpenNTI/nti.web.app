@@ -240,6 +240,23 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 	},
 
 
+    handleExcuseGrade: function(menuItemEl){
+        var grade = this.get("Grade"), me = this;
+
+        if(grade && grade.excuseGrade){
+            grade.excuseGrade()
+                .then(function(){
+                    var txt = me.get('Grade').isExcused() === true ? 'Unexcuse Grade' : 'Excuse Grade';
+                    menuItemEl.setText(txt);
+                    console.log(me.get('Grade').isExcused() ? "grade is excused" : "grade is not excused");
+                })
+                .fail(function(err){
+                    console.log('Excusing grade failed: '+ err);
+                });
+        }
+    },
+
+
 	/**
 	 * @throws Ext.Error if not successful.
 	 */

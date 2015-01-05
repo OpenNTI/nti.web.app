@@ -188,6 +188,7 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 				}
 			});
 
+
 			if (record.get('submission')) {
 				menu.add(new Ext.Action({
 					text: 'Reset Assignment',
@@ -196,6 +197,22 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 					itemId: 'delete-assignment-history',
 					ui: 'nt-menuitem', plain: true
 				}));
+			}
+
+            var txt, grade;
+            grade = record.get('Grade');
+			if (grade && grade.isExcusable()){
+			    txt = grade.isExcused() ? 'Unexcuse Grade' : 'Excuse Grade';
+
+			    menu.add(new Ext.Action({
+			        text: txt,
+			        scope: this,
+					handler: Ext.bind(record.handleExcuseGrade, record),
+					itemId: 'excuse-grade-item',
+					ui: 'nt-menuitem',
+					plain: true
+
+			    }));
 			}
 
 			menu.on('hide', 'destroy');
