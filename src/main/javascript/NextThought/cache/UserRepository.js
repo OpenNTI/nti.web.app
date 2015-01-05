@@ -243,35 +243,24 @@ Ext.define('NextThought.cache.UserRepository', {
 					}
 
 					result[name] = null;
-
-					//if we are given an ntiid call getObject instead of makeRequest
-					if (ParseUtils.isNTIID(name)) {
-						Service.getObject(name, function(u) {
-							maybeFinish(name, me.cacheUser(u, true));
-						}, function() {
-							//failed to get by ntiid
-							maybeFinish(name, User.getUnresolved('Unknown'));//dont show ntiid
-						});
+					toResolve.push(name);
+					//Legacy Path begin:
+					if (!isFeature('bulk-resolve-users')) {
+						me.makeRequest(name, {
+							scope: me,
+							failure: function() {
+								maybeFinish(name, User.getUnresolved(name));
+							},
+							success: function(u) {
+								//Note we recache the user here no matter what
+								//if we requestsd it we cache the new values
+								maybeFinish(name, me.cacheUser(u, true));
+							}
+						}, cacheBust);
 					} else {
-						toResolve.push(name);
-						//Legacy Path begin:
-						if (!isFeature('bulk-resolve-users')) {
-							me.makeRequest(name, {
-								scope: me,
-								failure: function() {
-									maybeFinish(name, User.getUnresolved(name));
-								},
-								success: function(u) {
-									//Note we recache the user here no matter what
-									//if we requestsd it we cache the new values
-									maybeFinish(name, me.cacheUser(u, true));
-								}
-							}, cacheBust);
-						} else {
-							console.debug('Defer to Bulk Resolve...', name);
-						}
-						//Legacy Path END
+						console.debug('Defer to Bulk Resolve...', name);
 					}
+					//Legacy Path END
 				});
 
 			if (toResolve.length > 0 && isFeature('bulk-resolve-users')) {

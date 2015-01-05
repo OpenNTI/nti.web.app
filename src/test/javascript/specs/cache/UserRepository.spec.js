@@ -22,6 +22,10 @@ describe('User Repository/Store/Cache Behavior', function() {
 		return NextThought.model.FriendsList.create({Username: username, NTIID: 'ntiid'+username});
 	}
 
+	function createCommunity(username){
+		return NextThought.model.Community.create({Username: username, NTIID: 'tag:nextthought.com,2011-10:'+username});
+	}
+
 
 	it('Defines UserRepository', function() {
 		expect(UserRepository).toBeTruthy();
@@ -160,14 +164,20 @@ describe('User Repository/Store/Cache Behavior', function() {
 			});
 		}
 
-		var scope = {}, hans, holly;
+		var scope = {}, hans, holly, communityid, community;
 
 		beforeEach(function() {
 			hans = createUser('hans');
 			holly = createUser('holly');
+			communityid = "Comm1";
+			community = createCommunity(communityid);
+
+			// Cache community that the user is part of.
+			TUR.cacheUser(community);
 			mockMakeRequest(TUR, {
 				'hans': hans,
-				'holly': holly
+				'holly': holly,
+				'communityid':community
 			});
 		});
 
@@ -226,6 +236,44 @@ describe('User Repository/Store/Cache Behavior', function() {
 				TUR.precacheUser(fl);
 
 				TUR.getUser([fl], createCallbackExpecting([fl.get('Username')], scope), scope);
+			});
+		});
+
+		describe('Handles Resolving Communities', function(){
+			function resolveSuccessCallbackExpecting(expected, s) {
+				return function(users) {
+					var returnedUserNames;
+					expect(this).toBe(s);
+
+					if (!Ext.isArray(expected)) {
+						expect(users.isModel).toBeTruthy();
+						expect(users.get('Username')).toBe(expected);
+						expect(users.get('Unresolved')).toBeFalsy();
+					}
+				};
+			}
+
+			function resolveFailureCallbackExpecting(expected, s) {
+				return function(users) {
+					var returnedUserNames;
+					expect(this).toBe(s);
+
+					if (!Ext.isArray(expected)) {
+						expect(users.isModel).toBeTruthy();
+						expect(users.get('Username')).toBe(expected);
+						expect(users.get('Unresolved')).toBe(true);
+					}
+				};
+			}
+
+			it('resolves community user is part of', function(){
+				var communityid = "Comm1";
+				TUR.getUser(communityid, resolveSuccessCallbackExpecting(communityid, scope), scope);
+			});
+
+			it('resolves community user is NOT part of. Expects unresolved user', function(){
+				var communityid = "Comm2";
+				TUR.getUser(communityid, resolveFailureCallbackExpecting(communityid, scope), scope);
 			});
 		});
 
