@@ -108,13 +108,17 @@ Ext.define('NextThought.util.Analytics', {
 			data.context_path.unshift(data.course);
 		}
 
-
+		//if we need to track this type client side add it to the map
+		if (this.TYPES_TO_TRACK[data.type]) {
+			this.VIEWED_MAP[resourceId] = true;
+		}
 
 		this.TIMER_MAP[resourceId + data.type] = {
 			start: now,
 			data: data
 		};
 
+		//if we need to send this event when it starts send it
 		if (this.START_EVENT_TYPES[data.type]) {
 			this.batch.push(data);
 			this.__maybeStartBatchTimer();
@@ -155,10 +159,6 @@ Ext.define('NextThought.util.Analytics', {
 			data = this[this.FILL_IN_MAP[data.type]].call(this, resource, data);
 		} else {
 			data = this.fillInData(resource, data);
-		}
-
-		if (this.TYPES_TO_TRACK[data.type]) {
-			this.VIEWED_MAP[resourceId] = true;
 		}
 
 		this.batch.push(data);

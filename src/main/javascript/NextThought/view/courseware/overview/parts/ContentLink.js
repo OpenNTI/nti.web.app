@@ -113,6 +113,12 @@ Ext.define('NextThought.view.courseware.overview.parts.ContentLink', {
 			e.stopEvent();
 			this.bypassEvent = false;
 		}
+
+		if (this.bypassEvent) {
+			AnalyticsUtil.getResourceTimer(this.ntiid, 'resource-viewed');
+			this.setProgress();
+		}
+
 		return this.callParent(arguments);
 	},
 
