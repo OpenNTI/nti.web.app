@@ -21,6 +21,7 @@ Ext.application({
 	appFolder: (window.testRoot || '') + 'javascript/NextThought',
 
 	requires: [
+		'NextThought.util.Globals',
 		'NextThought.overrides.*',
 		'NextThought.util.*',
 
