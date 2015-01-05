@@ -6,6 +6,7 @@
 
 
 #checkout a new version of the webapp from the server
+mktemp -d tempWebApp
 svn co https://repos.nextthought.com/svn/nti-svn/NextThoughtWebApp/trunk/ tempWebApp &> /dev/null
 #set variables for path navigation
 pushd .
@@ -29,8 +30,6 @@ npm install &> /dev/null
 #run karma & output to a file
 karma start > output.txt
 #change to folder holding this directory
-popd
-popd
 popd
 popd
 #remove test directory
