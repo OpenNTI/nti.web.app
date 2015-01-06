@@ -168,7 +168,7 @@ Ext.define('NextThought.view.courseware.overview.View', {
 					me.buildFromContent(content, r, enrollment, locInfo, assignments, course);
 				}
 
-				return me.__updateProgress();
+				me.__updateProgress();
 			})
 			.fail(function(reason) { console.error(reason); })
 			.done(me.maybeUnmask.bind(me));
