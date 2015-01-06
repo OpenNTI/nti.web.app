@@ -29,7 +29,8 @@ Ext.define('NextThought.model.courseware.Grade', {
 		}},
 		{name: 'AssignmentId', type: 'string'},
 		{name: 'assignmentName', type: 'string', persist: false},
-		{name: 'assignmentContainer', type: 'string', persist: false}
+		{name: 'assignmentContainer', type: 'string', persist: false},
+        {name: 'IsExcused', type: 'auto', persist: false}
 	],
 
 	/**
@@ -56,11 +57,6 @@ Ext.define('NextThought.model.courseware.Grade', {
 	    return this.hasLink('excuse') || this.hasLink('unexcuse');
 	},
 
-	isExcused: function(){
-	    return this.hasLink('unexcuse');
-	},
-
-
 	 excuseGrade: function(){
         var record = this,
             url = this.getLink('excuse') || this.getLink('unexcuse');
@@ -78,6 +74,7 @@ Ext.define('NextThought.model.courseware.Grade', {
                 var o = Ext.JSON.decode(responseText, true);
 
                 record.set(o);
+                record.fireEvent("excused-changed", record);
                 fulfill(record);
             });
         });

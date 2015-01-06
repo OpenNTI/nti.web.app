@@ -25,11 +25,17 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 					]}), {
 				//template functions
 				getStatus: function(values) {
+                    var grade;
+                    if(values.history && values.history.isModel){
+                        grade = values.history.get("Grade");
+                    }
+
 					return NextThought.view.courseware.assessment.AssignmentStatus.getStatusHTML({
 						due: values.due,
 						completed: values.completed,
 						maxTime: values.maxTime,
-						duration: values.duration
+						duration: values.duration,
+                        isExcused: grade && grade.get("IsExcused")
 					});
 				},
 

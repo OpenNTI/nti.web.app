@@ -395,6 +395,7 @@ NTIStrings['NextThought.view.courseware.assessment.admin.Grid.completed'] = 'Com
 NTIStrings['NextThought.view.courseware.assessment.admin.Grid.score'] = 'Score';
 NTIStrings['NextThought.view.courseware.assessment.admin.Grid.feedback'] = 'Feedback';
 NTIStrings['NextThought.view.courseware.assessment.admin.Grid.oldbrowser'] = 'We don&apos;t support this feature on your browser. Please use Chrome 18+, FF 14+, Safari 6+ or IE11';
+NTIStrings['NextThought.view.courseware.assessment.admin.Grid.excused'] = 'Excused';
 NTIStrings['NextThought.view.courseware.assessment.admin.Header.grade'] = 'Grade';
 NTIStrings['NextThought.view.courseware.assessment.admin.Header.profile'] = 'Profile';
 NTIStrings['NextThought.view.courseware.assessment.admin.Header.email'] = 'Email';

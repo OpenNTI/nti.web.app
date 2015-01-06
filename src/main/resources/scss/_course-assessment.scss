@@ -199,6 +199,11 @@ canvas.x-component-course-assessment {
 			}
 		}
 
+        .excused{
+            padding-left: 6px;
+            color: $primary-red;
+        }
+
 		.due{
 			&.today {
 			 color: $primary-orange;
@@ -1322,6 +1327,17 @@ canvas.x-component-course-assessment {
 					.ontime {
 						color: $secondary-green;
 					}
+
+                    .excused{
+                        &.on{
+                            display: block;
+                            color: $primary-red;
+                        }
+
+                        &.off{
+                            display: none;
+                        }
+                    }
 				}
 			}
 

@@ -154,11 +154,27 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 
 					{
 						text: getString('NextThought.view.courseware.assessment.admin.Grid.feedback'),
-						xtype: 'templatecolumn',
 						dataIndex: 'feedback',
 						name: 'feedback',
+                        tdCls: 'feedback',
 						width: 140,
-						tpl: Ext.DomHelper.markup('{feedback:pluralIf("Comment")}'),
+                        renderer:function(v, col, rec){
+                            var grade = rec.get('Grade'),
+                                isExcused = grade && grade.get("IsExcused"), excusedTpl, excusedCls,
+                                feedbackTpl, commentText = rec.get('feedback') === 1 ? ' Comment' : " Comments";
+
+                            excusedCls = isExcused === true ? 'on' : 'off';
+                            excusedTpl = Ext.DomHelper.markup({
+                                cls: 'grade-excused '+ excusedCls,
+                                html: getFormattedString('NextThought.view.courseware.assessment.admin.Grid.excused')
+                            });
+
+                            feedbackTpl = Ext.DomHelper.markup({cls:'feedback', html: rec.get('feedback') + commentText});
+                            if(rec.get('feedback')){
+                                return excusedTpl + feedbackTpl;
+                            }
+                            return excusedTpl;
+                        },
 						doSort: function(state) {
 							var store = this.up('grid').getStore(),
 								sorter = new Ext.util.Sorter({

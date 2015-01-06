@@ -212,6 +212,26 @@
 			@include icon('more-options', $top: 15px, $left: 9px);
 		}
 
+        &.feedback{
+            padding-left: 10px;
+
+            .x-grid-cell-inner {
+                line-height: 30px;
+
+                .grade-excused{
+                    &.off{
+                        display: none;
+                    }
+
+                    &.on{
+                        display: block;
+                        color: $primary-red;
+                    }
+                }
+            }
+
+        }
+
 		.disclosure {
 			cursor: pointer;
 			width: 40px;

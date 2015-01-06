@@ -108,7 +108,8 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 			page: me.pageSource.getPageNumber(),
 			total: me.pageSource.getTotal(),
 			noNext: !me.pageSource.hasNext(),
-			noPrev: !me.pageSource.hasPrevious()
+			noPrev: !me.pageSource.hasPrevious(),
+            excused: me.__getExcusedTpl()
 		});
 
 		me.onPagerUpdate();
@@ -130,6 +131,17 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 			}
 		});
 	},
+
+    __getExcusedTpl: function(){
+        var excusedTpl = {cls: 'off', html:'Excused'};
+        if(this.assignmentHistory && this.assignmentHistory.isModel){
+            this.activeGradeRecord = this.assignmentHistory.get('Grade');
+            if(this.activeGradeRecord && this.activeGradeRecord.get("IsExcused")){
+                excusedTpl = {cls: 'on', html:'Excused'};
+            }
+        }
+        return excusedTpl;
+    },
 
 
 	afterRender: function() {

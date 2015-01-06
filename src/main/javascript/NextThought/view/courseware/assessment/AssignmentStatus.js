@@ -27,7 +27,10 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 				]},
 				{tag: 'tpl', 'if': 'due && !completed', cn: [
 					{cls: 'status-item due {due.cls}', 'data-qtip-fn': '{due.qtipFn}', html: '{due.html}'}
-				]}
+				]},
+                {tag: 'tpl', 'if': 'excused', cn: [
+                    {tag: 'span', cls: 'excused', html: '{excused.html}', 'data-qtip': '{excused.qtip}'}
+                ]}
 			]})
 		),
 
@@ -128,6 +131,15 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 			return d;
 		},
 
+        __getExcuseGradeStatus: function(data){
+            if(!data.isExcused){ return null; }
+
+            return {
+                html: 'Excused Grade',
+                qtip: 'This assignment will NOT count towards your grade'
+            }
+        },
+
 
 		getRenderData: function(data) {
 			return {
@@ -135,7 +147,8 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 					completed: this.__getCompletedStatus(data),
 					overtime: this.__getOverTimeStatus(data),
 					overdue: this.__getOverDueStatus(data),
-					due: this.__getDueStatus(data)
+					due: this.__getDueStatus(data),
+                    excused: this.__getExcuseGradeStatus(data)
 				};
 		},
 
@@ -202,7 +215,7 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
             var txt, grade;
             grade = record.get('Grade');
 			if (grade && grade.isExcusable()){
-			    txt = grade.isExcused() ? 'Unexcuse Grade' : 'Excuse Grade';
+			    txt = grade.get("IsExcused") ? 'Unexcuse Grade' : 'Excuse Grade';
 
 			    menu.add(new Ext.Action({
 			        text: txt,

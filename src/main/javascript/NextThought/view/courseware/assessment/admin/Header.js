@@ -22,7 +22,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 		{cls: 'assignment-actions disabled'},
 		{cls: 'status', cn: [
 			{cls: 'status-item', cn: {tag: 'span', cls: 'completed'}},
-			{cls: 'status-item', cn: {tag: 'span', cls: 'timed'}}
+			{cls: 'status-item', cn: {tag: 'span', cls: 'timed'}},
+            {cls: 'status-item', cn: {tag: 'span', cls: 'excused {excused.cls}', html: '{excused.html}'}}
 		]},
 		{ cls: 'user', cn: [
 			{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'}},
@@ -50,7 +51,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 		completedEl: '.header .status .completed',
 		timedEl: '.header .status .timed',
 		gradeBoxEl: '.header .grade',
-		actionsEl: '.header .assignment-actions'
+		actionsEl: '.header .assignment-actions',
+        excusedEl: '.header .status .excused'
 	},
 
 
@@ -113,6 +115,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 		}
 
 		me.maybeShowChat(me.chatEl);
+
+        if(this.activeGradeRecord){
+            this.mon(this.activeGradeRecord, "excused-changed", this.excuseGradeStatusChanged, this);
+        }
 
 		this.mon(Ext.getStore('PresenceInfo'), 'presence-changed', function(username, presence) {
 			if (username === me.user.getId()) {
@@ -199,6 +205,14 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 
 		this.changeGrade(this.currentGrade, this.currentLetter);
 	},
+
+
+    excuseGradeStatusChanged: function(record){
+        var cls = record.get("IsExcused") === true ? 'on' : 'off',
+            rCls = record.get("IsExcused") === true ? 'off' : 'on';
+        this.excusedEl.removeCls(rCls);
+        this.excusedEl.addCls(cls);
+    },
 
 
 	openEmail: function() {
