@@ -96,12 +96,16 @@ Ext.define('NextThought.view.courseware.overview.parts.ContentLink', {
 	},
 
 
-	navigateToTarget: function() {
-		var container = this.up('content-view-container'),
-			currentBundle = container && container.currentBundle;
+	getCurrentBundle: function() {
+		var container = this.up('content-view-container');
 
+		return container && container.currentBundle;
+	},
+
+
+	navigateToTarget: function() {
 		if (ParseUtils.isNTIID(this.target)) {
-			return this.fireEvent('set-location-rooted', this.target, null, null, currentBundle);
+			return this.fireEvent('set-location-rooted', this.target, null, null, this.getCurrentBundle());
 		}
 
 		return this.callParent(arguments);
@@ -109,13 +113,19 @@ Ext.define('NextThought.view.courseware.overview.parts.ContentLink', {
 
 
 	onCardClicked: function(e) {
+		var bundle = this.getCurrentBundle();
+
 		if (e && e.getTarget('.comment')) {
 			e.stopEvent();
 			this.bypassEvent = false;
 		}
 
 		if (this.bypassEvent) {
-			AnalyticsUtil.getResourceTimer(this.ntiid, 'resource-viewed');
+			AnalyticsUtil.getResourceTimer(this.ntiid, {
+				type: 'resource-viewed',
+				course: bundle && bundle.getId()
+			});
+
 			this.setProgress();
 		}
 
