@@ -1,7 +1,7 @@
 Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.courses.courseoutlinenode',
-	requires: ['NextThought.model.converters.Date', 'NextThought.model.courses.LessonProgress'],
+	requires: ['NextThought.model.converters.Date', 'NextThought.model.courses.navigation.CourseOutlineNodeProgress'],
 	isNode: true,
 
 	fields: [

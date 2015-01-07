@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.courses.LessonProgress', {
+Ext.define('NextThought.model.courses.navigation.CourseOutlineNodeProgress', {
 	extend: 'NextThought.model.Base',
 
 	fields: [
