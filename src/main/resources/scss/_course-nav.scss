@@ -194,16 +194,26 @@
 				}
 			}
 
-			&.viewed::after {
-				content: 'viewed';
-				background-color: $primary-blue;
-				color: white;
-				position: absolute;
-				top: 5px;
-				right: 5px;
-				padding: 2px 5px;
-				font: normal 400 0.6em/1 $font;
-				text-transform: uppercase;
+			&.viewed {
+				@include icon('circle-check-white-small', $top: 7px, $left: auto, $right: 58px);
+
+				&::after {
+					z-index: 2;
+				}
+
+				&::before {
+					content: 'viewed';
+					text-transform: uppercase;
+					font: normal 500 0.6em/24px "Open Sans",sans-serif;
+					position: absolute;
+					top: 5px;
+					right: 5px;
+					padding: 0px 10px 0 30px;
+					color: white;
+					background-color: $secondary-green;
+					z-index: 1;
+					border-radius: 20px;
+				}
 			}
 		}
 
@@ -271,22 +281,15 @@
 						overflow:hidden;
 					}
 
-					.comments {
+					.comments, .viewed {
 						font: normal 700 0.6em/1.3em $font;
 						color: $secondary-grey;
 						text-transform: uppercase;
 					}
 
-					&.viewed::after {
-						content: 'viewed';
-						background-color: $primary-blue;
-						color: white;
-						position: absolute;
-						bottom: 5px;
-						right: 5px;
-						padding: 2px 5px;
-						font: normal 400 0.6em/1 $font;
-						text-transform: uppercase;
+					&.viewed{
+						padding-left: 35px;
+						@include icon('circle-check-white-small', $top: 10px, $left: 12px);
 					}
 
 					&.over{
@@ -306,7 +309,7 @@
 						border-color: $c;
 						color: #ffffff;
 
-						.comments{
+						.comments, .viewed{
 							color: #aaeafc;
 						}
 					}
@@ -435,16 +438,28 @@
 		@include sprite($icons,'extern-link_hover');
 	}
 
-	&.viewed::after {
-		content: 'viewed';
-		background-color: $primary-blue;
-		color: white;
-		position: absolute;
-		top: 5px;
-		right: 5px;
-		padding: 2px 5px;
-		font-size: 0.6em;
-		text-transform: uppercase;
+	&.viewed {
+		@include icon('circle-check-white-large', $top: 50%, $left: 50px);
+
+		&::after {
+			margin-left: -20px;
+			margin-top: -20px;
+
+			background-color: rgba(0, 0, 0, 0.5);
+			border-radius: 20px;
+		}
+
+		.thumbnail{
+			position: relative;
+
+			&::before {
+				content: '';
+				position: absolute;
+				top: 0; bottom: 0;
+				left: 0; right: 0;
+				background-color: rgba(0, 0, 0, 0.5);
+			}
+		}
 	}
 
 	.meta {

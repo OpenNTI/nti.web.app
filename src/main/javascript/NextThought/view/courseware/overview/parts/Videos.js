@@ -80,7 +80,10 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 		{
 			cls: 'video-row {viewedCls}',
 			cn: [
-				{ cls: 'label', html: '{label}', 'data-qtip': '{label:htmlEncode}' }//,
+				{ cls: 'label', html: '{label}', 'data-qtip': '{label:htmlEncode}' },
+				{tag: 'tpl', 'if': 'viewed', cn: [
+					{cls: 'viewed', html: 'viewed'}
+				]}//,
 				//{ cls:'comments', html: '{comments:plural("Comment")}' } // No comments yet
 			]
 		}
@@ -98,7 +101,8 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 				{name: 'comments', type: 'auto'},
 				{name: 'slidedeck', type: 'string'},
 				{name: 'hasTranscripts', type: 'boolean'},
-				{name: 'viewedCls', type: 'string'}
+				{name: 'viewedCls', type: 'string'},
+				{name: 'viewed', type: 'boolean'}
 			],
 			data: this.convertItems(config.items || [])
 		});
@@ -303,9 +307,15 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 
 
 	maybeCreatePlayer: function() {
+		var single = this.store.getCount() === 1;
+
 		if (!this.rendered) {
 			this.on({afterRender: Ext.bind(this.maybeCreatePlayer, this, arguments), single: true});
 			return;
+		}
+
+		if (single) {
+			this.removeCls('viewed');
 		}
 
 		if (this.player) {
@@ -403,6 +413,8 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 		else if (el) {
 			el.setStyle({zIndex: 9});
 		}
+
+		wait().then(this.setProgress.bind(this));
 	},
 
 
@@ -554,6 +566,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 				if (single) {
 					me.addCls('viewed');
 				} else {
+					video.set('viewed', true);
 					video.set('viewedCls', 'viewed');
 				}
 			}
