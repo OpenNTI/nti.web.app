@@ -179,7 +179,9 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 			days = time.days,
 			hours = time.hours,
 			minutes = time.minutes,
-			seconds = time.seconds;
+			seconds = time.seconds,
+            timeString = "", tmp, timeBin = [], MAX_UNITS= 2,
+            WARNING_MIN = 1;   // under 1 minute start showing seconds.
 
 		if (roundUp) {
 			days = Math.ceil(days);
@@ -194,18 +196,29 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 		}
 
 		if (parseInt(time.days, 10)) {
-			return Ext.util.Format.plural(days, 'Day');
+			tmp = Ext.util.Format.plural(days, 'Day');
+            timeBin.push(tmp);
 		}
 
 		if (parseInt(time.hours, 10)) {
-			return Ext.util.Format.plural(hours, 'Hour');
+            tmp = Ext.util.Format.plural(hours, 'Hour');
+            timeBin.push(tmp);
 		}
 
 		if (parseInt(time.minutes, 10)) {
-			return Ext.util.Format.plural(minutes, 'Minute');
+            tmp = Ext.util.Format.plural(minutes, 'Minute');
+            if(timeBin.length === MAX_UNITS){
+                return timeBin.join(" ");
+            }
+            timeBin.push(tmp);
 		}
 
-		return Ext.util.Format.plural(seconds, 'Second');
+        if (minutes < WARNING_MIN && timeBin.length < MAX_UNITS){
+            tmp = Ext.util.Format.plural(seconds, 'Second');
+            timeBin.push(tmp);
+        }
+
+        return timeBin.join(" ");
 	},
 
 
