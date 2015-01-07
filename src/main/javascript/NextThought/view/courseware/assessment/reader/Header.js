@@ -83,7 +83,7 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 			maxTime: this.assignment.isTimed && this.assignment.getMaxTime(),
 			duration: this.assignment.isTimed && this.assignment.getDuration(),
 			completed: completed,
-            isExcused: grade.get("IsExcused")
+            isExcused: grade && grade.get("IsExcused")
 		}));
 
 		//we don't want to show the remaining time if we have a submission

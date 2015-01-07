@@ -208,6 +208,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 
 
     excuseGradeStatusChanged: function(record){
+        if(!record || !record.isModel){ return; }
+
         var cls = record.get("IsExcused") === true ? 'on' : 'off',
             rCls = record.get("IsExcused") === true ? 'off' : 'on';
         this.excusedEl.removeCls(rCls);
