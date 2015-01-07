@@ -1553,6 +1553,26 @@ canvas.x-component-course-assessment {
 		.incomplete {
 			color: $tertiary-grey;
 		}
+
+        &.feedback{
+            padding-left: 10px;
+
+            .x-grid-cell-inner {
+                line-height: 30px;
+
+                .grade-excused{
+                    &.off{
+                        display: none;
+                    }
+
+                    &.on{
+                        display: block;
+                        color: $primary-red;
+                    }
+                }
+            }
+
+        }
 	}
 }
 

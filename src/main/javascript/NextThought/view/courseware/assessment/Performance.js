@@ -47,8 +47,19 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 							return (v && v.getTime() > 0) ? this.checkMarkTpl : '';
 						} },
 						{ text: 'Score', dataIndex: 'grade', width: 70, resizable: false },
-						{ text: 'Feedback', dataIndex: 'feedback', width: 140, resizable: false, renderer: function(value) {
-							return value ? Ext.util.Format.plural(value, 'Comment') : '';
+						{ text: 'Feedback', dataIndex: 'feedback', tdCls: 'feedback', width: 140, resizable: false,
+                            renderer: function(value, col, rec) {
+                                var grade = rec.get('Grade'),
+                                    isExcused = grade && grade.get("IsExcused"), excusedTpl, excusedCls,
+                                    feedbackTpl = value ? Ext.util.Format.plural(value, 'Comment') : '';
+
+                                excusedCls = isExcused === true ? 'on' : 'off';
+                                excusedTpl = Ext.DomHelper.markup({
+                                    cls: 'grade-excused '+ excusedCls,
+                                    html: getFormattedString('NextThought.view.courseware.assessment.admin.Grid.excused')
+                                });
+
+                                return excusedTpl + feedbackTpl;
 						} }
 					],
 
