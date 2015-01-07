@@ -102,7 +102,6 @@ Ext.define('NextThought.view.courseware.overview.View', {
 
 		return me.__getCurrentProgress()
 					.then(function(progress) {
-						progress = (progress && progress.Items) || {};
 						me.items.each(function(item) {
 							if (item.setProgress) {
 								item.setProgress(progress);

@@ -550,19 +550,17 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 
 
 	setProgress: function(progress) {
+		progress = progress || this.progress;
+
+		this.progress = progress;
+
+		if (!progress) { return; }
+
 		var me = this,
 			single = me.store.getCount() === 1;
 
 		me.store.each(function(video) {
-			var id = video.get('id'),
-				progressItem = progress && progress[id],
-				hasBeenViewed = AnalyticsUtil.hasBeenViewed(id);
-
-			if (progressItem) {
-				hasBeenViewed = hasBeenViewed || progressItem.AbsoluteProgress > 0;
-			}
-
-			if (hasBeenViewed) {
+			if (progress.hasBeenViewed(video.get('id'))) {
 				if (single) {
 					me.addCls('viewed');
 				} else {

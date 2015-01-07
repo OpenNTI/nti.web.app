@@ -1,7 +1,7 @@
 Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.courses.courseoutlinenode',
-	requires: ['NextThought.model.converters.Date'],
+	requires: ['NextThought.model.converters.Date', 'NextThought.model.courses.LessonProgress'],
 	isNode: true,
 
 	fields: [
@@ -128,7 +128,7 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
 
 		return Service.request(link)
 			.then(function(response) {
-				return Ext.decode(response);
+				return ParseUtils.parseItems(response)[0];
 			});
 	}
 });

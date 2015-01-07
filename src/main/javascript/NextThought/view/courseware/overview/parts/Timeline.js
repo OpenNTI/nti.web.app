@@ -38,20 +38,21 @@ Ext.define('NextThought.view.courseware.overview.parts.Timeline', {
 		var me = this,
 			win = Ext.widget('timeline-window', me.data);
 
-		me.mon(win, 'close', 'setProgress');
+		me.mon(win, 'close', this.setProgress.bind(this, null));
 
 		win.show();
 	},
 
 	setProgress: function(progress) {
-		var progressItem = progress && progress[this.ntiid],
-			hasBeenViewed = AnalyticsUtil.hasBeenViewed(this.ntiid);
+		progress = progress || this.progress;
 
-		if (progressItem) {
-			hasBeenViewed = hasBeenViewed || progressItem.AbsoluteProgress > 0;
-		}
+		this.progress = progress;
 
-		if (hasBeenViewed) {
+		if (!progress) { return; }
+
+		var beenViewed = progress.hasBeenViewed(this.ntiid);
+
+		if (beenViewed) {
 			this.addCls('viewed');
 		}
 	}

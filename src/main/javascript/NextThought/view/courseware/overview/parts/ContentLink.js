@@ -124,14 +124,15 @@ Ext.define('NextThought.view.courseware.overview.parts.ContentLink', {
 
 
 	setProgress: function(progress) {
-		var progressItem = progress && (progress[this.target] || progress[this.ntiid]),
-			hasBeenViewed = AnalyticsUtil.hasBeenViewed(this.target) || AnalyticsUtil.hasBeenViewed(this.ntiid);
+		progress = progress || this.progress;
 
-		if (progressItem) {
-			hasBeenViewed = hasBeenViewed || progressItem.AbsoluteProgress > 0;
-		}
+		this.progress = progress;
 
-		if (hasBeenViewed) {
+		if (!progress) { return; }
+
+		var beenViewed = progress.hasBeenViewed(this.target) || progress.hasBeenViewed(this.ntiid);
+
+		if (beenViewed) {
 			this.addCls('viewed');
 		}
 	}
