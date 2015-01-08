@@ -140,7 +140,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 							newHistoryItem.set('item', historyItem.get('item'));
 							store.syncBackingStore(newHistoryItem);
 
-							assignment.updateGradeBookEntry(newHistoryItem.get('Grade'));
+							assignment.updateGradeBookEntry(newHistoryItem.get('Grade'), 'value');
 						})
 						.fail(function(reason) {
 							console.error('Failed to update assignmenthistoryitem from new grade:', reason);

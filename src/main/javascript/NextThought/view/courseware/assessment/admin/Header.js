@@ -207,11 +207,41 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 	},
 
 
-    excuseGradeStatusChanged: function(record){
-        if(!record || !record.isModel){ return; }
+    excuseGradeStatusChanged: function(grade){
+        if(!grade || !grade.isModel){ return; }
 
-        var cls = record.get("IsExcused") === true ? 'on' : 'off',
-            rCls = record.get("IsExcused") === true ? 'off' : 'on';
+        var me = this,
+            store = this.pageSource,
+            assignment = this.assignment,
+            historyItem = this.assignmentHistory;
+
+        var link = grade.getLink('AssignmentHistoryItem');
+        //if the grade that comes back from saving has an assignment history item link
+        //and we have a store get the history item from the server and update the backing store
+        if (link && store) {
+            Service.request(link)
+                .then(function(item) {
+                    var newHistoryItem = ParseUtils.parseItems(item)[0];
+                    //the item field is set with the assignment and does not come back from the server
+                    //so fill it in with the previous history item's item
+                    newHistoryItem.set('item', historyItem.get('item'));
+                    store.syncBackingStore(newHistoryItem);
+
+                    assignment.updateGradeBookEntry(newHistoryItem.get('Grade'), 'IsExcused');
+                    me.markGradeAsExcused(grade);
+                })
+                .fail(function(reason) {
+                    console.error('Failed to update assignmenthistoryitem from new grade:', reason);
+                });
+        }
+    },
+
+
+    markGradeAsExcused: function(grade){
+        if(!grade || !grade.isModel){ return; }
+
+        var cls = grade.get("IsExcused") === true ? 'on' : 'off',
+            rCls = grade.get("IsExcused") === true ? 'off' : 'on';
         this.excusedEl.removeCls(rCls);
         this.excusedEl.addCls(cls);
     },

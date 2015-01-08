@@ -215,14 +215,15 @@ Ext.define('NextThought.model.assessment.Assignment', {
 	},
 
 
-	updateGradeBookEntry: function(grade) {
+	updateGradeBookEntry: function(grade, field) {
 		if (!this._gradeBookEntry) { return; }
 
 		var username = grade.get('Username'),
-			value = grade && grade.get('value'),
+            f = field || 'value',
+			value = grade && grade.get(f),
 			gradeBookGrade = this._gradeBookEntry.getFieldItem('Items', username);
 
-		gradeBookGrade.set('value', value);
+		gradeBookGrade.set(f, value);
 	},
 
 
