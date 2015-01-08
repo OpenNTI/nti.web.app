@@ -315,6 +315,75 @@ describe('assignment status tests', function() {
 			});
 		});
 	});
+
+    describe('time string tests', function(){
+        it('expects hours to be rounded up', function(){
+            var t = {
+                days: "1.116121212",
+                hours: "2.6333",
+                minutes: "15.556667788",
+                seconds: "23.243432345"
+            }, s;
+
+            s = Status.getTimeString(t, true);
+            expect(s).toEqual("1 Day 3 Hours");
+        });
+
+        it('expects minutes to be rounded up', function(){
+            var t = {
+                days: "0",
+                hours: "2.0333",
+                minutes: "15.556667788",
+                seconds: "23.243432345"
+            }, s;
+
+            s = Status.getTimeString(t, true);
+            expect(s).toEqual("2 Hours 16 Minutes");
+        });
+
+        it('expects to only see minutes', function(){
+            var t = {
+                days: "0",
+                hours: "0",
+                minutes: "15.556667788",
+                seconds: "23.643432345"
+            }, s;
+
+            s = Status.getTimeString(t, true);
+            expect(s).toEqual("16 Minutes");
+        });
+
+        it('expects to only see seconds', function(){
+            var t = {
+                days: "0",
+                hours: "0",
+                minutes: "0.556667788",
+                seconds: "23.643432345"
+            }, s;
+
+            s = Status.getTimeString(t, true);
+            expect(s).toEqual("24 Seconds");
+        });
+
+        it('checks if time is null', function(){
+            var s = Status.getTimeString(null, false);
+
+            expect(s).toBeFalsy();
+        });
+
+        it('days and hours not provided.', function(){
+            var t = {
+                minutes: "3.912",
+                seconds: "12.8"
+            }, s;
+
+            s = Status.getTimeString(t, false);
+
+            expect(s).toEqual("3 Minutes");
+        });
+
+
+    });
 });
 
 

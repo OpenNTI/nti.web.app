@@ -231,6 +231,69 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 			menu.on('hide', 'destroy');
 
 			return menu;
-		}
+		},
+
+        MAX_TIME_UNITS: 2,
+
+        WARNING_TIME_MINUTES: 1,
+
+        getTimeString: function(time, roundUp){
+            function buildTimeString(timeArray, ceil){
+                if(Ext.isEmpty(timeArray)){ return ""; }
+
+                var str = [], len = timeArray.length, tmp, u;
+                for(var i=0; i<len; i++){
+                    u = timeArray[i];
+
+                    // If it's the last unit, roundup or down depending on passed parameter.
+                    if(i === (len-1)){
+                        if(ceil){
+                            tmp = Ext.util.Format.plural(Math.ceil(u.value), u.unit);
+                        } else{
+                            tmp = Ext.util.Format.plural(Math.floor(u.value), u.unit);
+                        }
+                    }
+                    else{
+                        tmp = Ext.util.Format.plural(Math.floor(u.value), u.unit);
+                    }
+
+                    str.push(tmp);
+                }
+
+                return str.join(" ");
+            }
+
+            if(!time){ return null;}
+
+            var timeBin = [],
+                maxUnits = this.MAX_TIME_UNITS,
+                warnTime = this.WARNING_TIME_MINUTES;
+
+            if (parseInt(time.days, 10)) {
+                timeBin.push({'unit': 'Day', value: time.days});
+            }
+
+            if (parseInt(time.hours, 10)) {
+                if(timeBin.length < maxUnits){
+                    timeBin.push({'unit': "Hour", value: time.hours});
+                } else{
+                    return buildTimeString(timeBin, roundUp);
+                }
+            }
+
+            if (parseInt(time.minutes, 10)) {
+                if(timeBin.length < maxUnits){
+                    timeBin.push({'unit': "Minute", value: time.minutes});
+                } else{
+                    return buildTimeString(timeBin, roundUp);
+                }
+            }
+
+            if (time.minutes < warnTime && timeBin.length < maxUnits){
+                timeBin.push({'unit': "Second", value: time.seconds});
+            }
+
+            return buildTimeString(timeBin, roundUp);
+        }
 	}
 });

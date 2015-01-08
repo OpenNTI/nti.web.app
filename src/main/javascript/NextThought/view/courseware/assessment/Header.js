@@ -3,6 +3,8 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 	alias: 'widget.course-assessment-header',
 	ui: 'course-assessment',
 
+    requires: ['NextThought.view.courseware.assessment.AssignmentStatus'],
+
 	cls: 'course-assessment-header assignment-item',
 
 	WARNING_PERCENT: 0.2,
@@ -173,55 +175,6 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 		}
 	},
 
-
-	getTimeString: function(time, roundUp) {
-		var s = '',
-			days = time.days,
-			hours = time.hours,
-			minutes = time.minutes,
-			seconds = time.seconds,
-            timeString = "", tmp, timeBin = [], MAX_UNITS= 2,
-            WARNING_MIN = 1;   // under 1 minute start showing seconds.
-
-		if (roundUp) {
-			days = Math.ceil(days);
-			hours = Math.ceil(hours);
-			minutes = Math.ceil(minutes);
-			seconds = Math.ceil(seconds);
-		} else {
-			days = Math.floor(days);
-			hours = Math.floor(hours);
-			minutes = Math.floor(minutes);
-			seconds = Math.floor(seconds);
-		}
-
-		if (parseInt(time.days, 10)) {
-			tmp = Ext.util.Format.plural(days, 'Day');
-            timeBin.push(tmp);
-		}
-
-		if (parseInt(time.hours, 10)) {
-            tmp = Ext.util.Format.plural(hours, 'Hour');
-            timeBin.push(tmp);
-		}
-
-		if (parseInt(time.minutes, 10)) {
-            tmp = Ext.util.Format.plural(minutes, 'Minute');
-            if(timeBin.length === MAX_UNITS){
-                return timeBin.join(" ");
-            }
-            timeBin.push(tmp);
-		}
-
-        if (minutes < WARNING_MIN && timeBin.length < MAX_UNITS){
-            tmp = Ext.util.Format.plural(seconds, 'Second');
-            timeBin.push(tmp);
-        }
-
-        return timeBin.join(" ");
-	},
-
-
 	showAllowedTime: function(time) {
 		if (!this.rendered) {
 			this.on('afterrender', this.showAllowedTime.bind(this, time));
@@ -271,7 +224,7 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 		me.timer
 			.countUp(null, time + 3000)
 			.tick(function(t) {
-				var s = me.getTimeString(t);
+				var s = NextThought.view.courseware.assessment.AssignmentStatus.getTimeString(t);
 
 				if (s && s !== current) {
 					current = s;
@@ -303,7 +256,7 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 		me.timer
 			.countDown(0, time)
 			.tick(function(t) {
-				var s = me.getTimeString(t, true),
+				var s = NextThought.view.courseware.assessment.AssignmentStatus.getTimeString(t, true),
 					//since we are counting down the remaining will be the max starting out
 					//so 100 - %remaining of max will give the % of time left
 					percentDone = 100 - ((t.remaining / max) * 100);
