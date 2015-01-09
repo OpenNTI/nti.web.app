@@ -181,13 +181,7 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 			return;
 		}
 
-		var t = TimeUtils.getNaturalDuration(time, 1, false, {
-			week: 'Week',
-			day: 'Day',
-			hour: 'Hour',
-			minute: 'Minute',
-			second: 'Second'
-		});
+		var t = TimeUtils.getNaturalDuration(time, 2);
 
 		this.timeContainerEl.removeCls('hidden');
 		this.timeContainerEl.addCls('max-time');

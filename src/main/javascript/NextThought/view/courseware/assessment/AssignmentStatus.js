@@ -50,7 +50,7 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 					d.cls = 'overtime';
 				}
 			} else {
-				d.html = TimeUtils.getNaturalDuration(data.maxTime, 1, true) + ' time limit';
+				d.html = TimeUtils.getNaturalDuration(data.maxTime, 2, true) + ' time limit';
 			}
 
 
