@@ -255,9 +255,15 @@
 		$menu_color: nth($item,2);
 		$hover_color: nth($item,3);
 		$highlight_color: rgba($hover_color,.65);
-		
+
 		$prefix: if($onParentSelector,'&','');
-		#{$prefix}.#{$name} #{$selector} {
+
+		$withColor: "#{$prefix}.#{$name} #{$selector}";
+		$withOutColor: "#{$prefix} #{$selector}";
+
+		$computedSelector: if($name=='blue', $withOutColor, $withColor);
+
+		#{$computedSelector} {
 			// color: $menu_color;
 			background-color: $highlight_color;
 			@include transition(all 0.2s);
@@ -722,9 +728,9 @@
 }
 
 @mixin order($val) {
-  -webkit-box-ordinal-group: $val;  
-  -moz-box-ordinal-group: $val;     
-  -ms-flex-order: $val;     
-  -webkit-order: $val;  
+  -webkit-box-ordinal-group: $val;
+  -moz-box-ordinal-group: $val;
+  -ms-flex-order: $val;
+  -webkit-order: $val;
   order: $val;
 }
