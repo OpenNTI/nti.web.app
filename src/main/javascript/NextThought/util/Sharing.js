@@ -237,14 +237,17 @@ Ext.define('NextThought.util.Sharing', {
 				var toResolve = resolvedUsers.length;
 
 				Ext.each(resolvedUsers || [], function(u) {
-					var dn = isMe(u) ? 'me' : u.getName(),
-						onlyMe = prefix === 'Only Me';
+					var onlyMe = prefix === 'Only Me', dn;
 
 					if (onlyMe && dn === 'me') {
 						toResolve -= 1;
 					}
 
-					if (dn.toLowerCase() !== 'unknown' && !Ext.isEmpty(dn) && (!onlyMe || dn !== 'me')) {
+                    if (!u.Unresolved){
+                        dn = isMe(u) ? 'me' : u.getName();
+                    }
+
+					if (!Ext.isEmpty(dn) && dn.toLowerCase() !== 'unknown' && (!onlyMe || dn !== 'me')) {
 						names.push(' ' + dn);
 						return !maxLength || names.length <= maxLength;
 					}
@@ -291,9 +294,9 @@ Ext.define('NextThought.util.Sharing', {
 		//Exactly one, resolve the user then callback
 		return UserRepository.getUser(explicitEntities.first())
 			.then(function(resolved) {
-				var dn = resolved.getName();
+				var dn = resolved.Unresolved !== true ? resolved.getName() : null;
 
-				if (dn.toLowerCase() === 'unknown' || Ext.isEmpty(dn)) {
+				if (Ext.isEmpty(dn) || dn.toLowerCase() === 'unknown') {
 					str = Ext.String.format('{0} {1}', prefix, '1 other');
 				} else {
 					str = Ext.String.format('{0} {1}', prefix, resolved.getName());
