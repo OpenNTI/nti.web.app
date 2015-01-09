@@ -68,7 +68,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Discussion', {
 		var parsedId = ParseUtils.parseNTIID(ntiid),
 			bundle = this.getBundle(),
 			e;
-
+/*
 		if (parsedId && (/^Topic:EnrolledCourse(Section|Root)$/).test(parsedId.specific.type)) {
 			if (bundle && bundle.getCourseCatalogEntry) {
 				e = bundle.getCourseCatalogEntry(); //this may not be filled in yet.
@@ -78,7 +78,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Discussion', {
 				console.warn('Did not get the thing we were expecting...', bundle);
 			}
 		}
-
+*/
 		Service.getObject(ntiid, this.onTopicResolved, this.onTopicResolveFailure, this, true);
 	},
 
