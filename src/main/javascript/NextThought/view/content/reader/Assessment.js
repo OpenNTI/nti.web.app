@@ -4,7 +4,8 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 		'NextThought.view.assessment.Scoreboard',
 		'NextThought.view.assessment.Question',
 		'NextThought.view.assessment.QuizSubmission',
-		'NextThought.view.assessment.AssignmentFeedback'
+		'NextThought.view.assessment.AssignmentFeedback',
+        'NextThought.view.courseware.assessment.AssignmentStatus'
 	],
 
 	uses: [
@@ -146,12 +147,14 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			assignment = me.injectedAssignment,
 			remaining = assignment.getTimeRemaining(),
 			overrides = {week: 'Week', day: 'Day', hour: 'Hour', minute: 'Minute', second: 'Second'},
-			title = assignment && assignment.get('title');
+			title = assignment && assignment.get('title'), time;
 
 		if (remaining < 0) {
-			remaining = TimeUtils.getNaturalDuration(-1 * remaining, 1, false, overrides) + ' Over';
+            time = TimeUtils.getTimePartsFromTime(-1 * remaining);
+            remaining = NextThought.view.courseware.assessment.AssignmentStatus.getTimeString(time) + " Over";
 		} else {
-			remaining = TimeUtils.getNaturalDuration(remaining, 1, false, overrides) + ' Remaining';
+            time = TimeUtils.getTimePartsFromTime(remaining);
+            remaining = NextThought.view.courseware.assessment.AssignmentStatus.getTimeString(time, true) + " Remaining";
 		}
 
 		if (!me.toast || me.toast.isDestroyed) {

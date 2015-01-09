@@ -126,6 +126,35 @@ Ext.define('NextThought.util.Time', {
 		return a.getTime() === b.getTime();
 	},
 
+    getDays: function(time) {
+        return time / (24 * 60 * 60 * 1000); // milli / 1000 = seconds / 60  = minutes / 60 = hours / 24 = days
+    },
+
+    getHours: function getRemainingHours(time) {
+        return (time / (60 * 60 * 1000)) % 24;//milli / 1000 = seconds, seconds / 60 = minutes, minutes / 60 = hours
+    },
+
+    getMinutes: function (time) {
+        return (time / (60 * 1000)) % 60;//milli / 10000 = seconds, seconds / 60 = minutes
+    },
+
+    getSeconds: function(time) {
+        return (time / 1000) % 60;//milli / 1000 = seconds
+    },
+
+    getMilliSeconds: function(time) {
+        return time % 1000;
+    },
+
+    getTimePartsFromTime: function(time){
+        return {
+            days: this.getDays(time),
+            hours: this.getHours(time),
+            minutes: this.getMinutes(time),
+            seconds: this.getSeconds(time)
+        }
+    },
+
 	/**
 	 * Takes a number of milliseconds and returns a string that is more similar
 	 * to how a human would say it (hopefully)
@@ -212,26 +241,6 @@ function() {
 	this._timer = function() {
 		var start, from, to, direction, duration, interval, intervalWindow, timerInterval, tickFn, alarmFn;
 
-		function getRemainingDays(time) {
-			return time / (24 * 60 * 60 * 1000); // milli / 1000 = seconds / 60  = minutes / 60 = hours / 24 = days
-		}
-
-		function getRemainingHours(time) {
-			return (time / (60 * 60 * 1000)) % 24;//milli / 1000 = seconds, seconds / 60 = minutes, minutes / 60 = hours
-		}
-
-		function getRemainingMinutes(time) {
-			return (time / (60 * 1000)) % 60;//milli / 10000 = seconds, seconds / 60 = minutes
-		}
-
-		function getRemainingSeconds(time) {
-			return (time / 1000) % 60;//milli / 1000 = seconds
-		}
-
-		function getRemainingMilliSeconds(time) {
-			return time % 1000;
-		}
-
 		function getTimeStamp(d) {
 			if (!d && d !== 0) {
 				d = (new Date()).getTime();
@@ -249,11 +258,11 @@ function() {
 
 			if (tickFn) {
 				tickFn.call(null, {
-					days: getRemainingDays(time),
-					hours: getRemainingHours(time),
-					minutes: getRemainingMinutes(time),
-					seconds: getRemainingSeconds(time),
-					millisseconds: getRemainingMinutes(time),
+					days: TimeUtils.getDays(time),
+					hours: TimeUtils.getHours(time),
+					minutes: TimeUtils.getMinutes(time),
+					seconds: TimeUtils.getSeconds(time),
+					millisseconds: TimeUtils.getMilliSeconds(time),
 					time: time,
 					remaining: Math.abs(to - time)
 				});
@@ -348,11 +357,11 @@ function() {
 			tickFn = fn;
 
 			tickFn.call(null, {
-				days: getRemainingDays(time),
-				hours: getRemainingHours(time),
-				minutes: getRemainingMinutes(time),
-				seconds: getRemainingSeconds(time),
-				milliseconds: getRemainingMilliSeconds(time),
+				days: TimeUtils.getDays(time),
+				hours: TimeUtils.getHours(time),
+				minutes: TimeUtils.getMinutes(time),
+				seconds: TimeUtils.getSeconds(time),
+				milliseconds: TimeUtils.getMilliSeconds(time),
 				time: time,
 				remaining: Math.abs(to - from)
 			});
