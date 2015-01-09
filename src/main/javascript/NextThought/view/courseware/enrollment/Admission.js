@@ -292,7 +292,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 				{
 					xtype: 'enrollment-set',
 					inputs: [
-						{type: 'checkbox', name: 'affirm', doNotSend: true, doNotStore: true, correct: true, text:          
+						{type: 'checkbox', name: 'affirm', doNotSend: true, doNotStore: true, correct: true, text:
 						getString('NextThought.view.courseware.enrollment.Admission.IntegrityPledge')
 						}
 					]
@@ -871,7 +871,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 
 				if (!response) {
 					json = {
-						message: getString('NextThought.view.courseware.enrollment.Admission.TryLater')
+						message: getString('NextThought.view.courseware.enrollment.Admission.AlreadyEnrolled')
 					};
 				} else {
 					json = Ext.JSON.decode(response.responseText || response, true);

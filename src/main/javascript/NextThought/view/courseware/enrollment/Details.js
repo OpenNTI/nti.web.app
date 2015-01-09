@@ -507,7 +507,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 		} else if (option.price) {
 			cls = 'paid';
 		} else {
-			cls = 'free'; 
+			cls = 'free';
 		}
 
 		return cls;
@@ -715,7 +715,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 								})
 								.fail(function(reason) {
 									console.error('failed to drop course', reason);
-									me.showMessage(getString('NextThought.view.courseware.enrollment.Details.ProblemDropping'), true);
+									me.showMessage(getString('NextThought.view.courseware.enrollment.Details.AlreadyDropped'), true);
 									done(false);
 								});
 						}
@@ -751,7 +751,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 								})
 								.fail(function(reason) {
 									alert('Unable to find course.');
-									console.error('Unable to fined course.', reason);
+									console.error('Unable to find course.', reason);
 								});
 						};
 
@@ -760,7 +760,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 					.fail(function(reason) {
 						console.error('failed to enroll in course', reason);
 
-						me.showMessage(getString('NextThought.view.courseware.enrollment.Details.ProblemDropping'), true);
+						me.showMessage(getString('NextThought.view.courseware.enrollment.Details.AlreadyEnrolled'), true);
 
 						done(false);
 					});

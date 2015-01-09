@@ -894,7 +894,8 @@ NTIStrings['NextThought.view.courseware.enrollment.Details.RedeemGift'] = 'Redee
 NTIStrings['NextThought.view.courseware.enrollment.Details.PriceFree'] = 'Free';
 NTIStrings['NextThought.view.courseware.enrollment.Details.DollarSign'] = '$';
 NTIStrings['NextThought.view.courseware.enrollment.Details.AddDollarSign'] = 'Add $';
-NTIStrings['NextThought.view.courseware.enrollment.Details.ProblemDropping'] = 'There was an error dropping the course. Please try again later.';
+NTIStrings['NextThought.view.courseware.enrollment.Details.AlreadyDropped'] = 'You have already dropped this course.';
+NTIStrings['NextThought.view.courseware.enrollment.Details.AlreadyEnrolled'] = 'You are already enrolled in this course.';
 NTIStrings['NextThought.view.courseware.enrollment.Details.DropCourse'] = 'Drop Course';
 NTIStrings['NextThought.view.courseware.enrollment.Details.DropCancel'] = 'Cancel';
 NTIStrings['NextThought.view.courseware.enrollment.Details.Enrolled'] = 'Enrolled';
@@ -974,7 +975,7 @@ NTIStrings['NextThought.view.courseware.enrollment.Admission.AppNotSubmitted'] =
 NTIStrings['NextThought.view.courseware.enrollment.Admission.ProgressLost'] = 'If you leave now, all progress will be lost.';
 NTIStrings['NextThought.view.courseware.enrollment.Admission.StayFinish'] = 'Stay and Finish';
 NTIStrings['NextThought.view.courseware.enrollment.Admission.LeavePage'] = 'Leave this Page';
-NTIStrings['NextThought.view.courseware.enrollment.Admission.TryLater'] = 'An unknown error occured. Please try again later.';
+NTIStrings['NextThought.view.courseware.enrollment.Admission.AlreadyEnrolled'] = 'You have already enrolled in this course.';
 NTIStrings['NextThought.view.courseware.enrollment.Admission.HelpOrResubmit'] = 'Please contact the <a href=\'mailto:support@nextthought.com\'>help desk</a> for further information or resubmit your application.';
 NTIStrings['NextThought.view.courseware.enrollment.Admission.Corrections'] = 'A Problem Occurred. Please Correct the Following:';
 NTIStrings['NextThought.view.courseware.enrollment.Admission.UnabletoConfirm'] = 'We are unable to confirm your eligibility to enroll through this process.';
@@ -998,7 +999,7 @@ NTIStrings['NextThought.view.courseware.enrollment.Enroll.Stay'] = 'Stay';
 NTIStrings['NextThought.view.courseware.enrollment.Enroll.Leave'] = 'Leave';
 NTIStrings['NextThought.view.courseware.enrollment.Enroll.AreYouSure'] = 'Are you sure?';
 NTIStrings['NextThought.view.courseware.enrollment.Enroll.NotFinished'] = 'You have not finished enrolling in this course yet.';
-NTIStrings['NextThought.view.courseware.enrollment.Enroll.TryLater'] = 'An unknown error has occurred. Please try again later.';
+NTIStrings['NextThought.view.courseware.enrollment.Enroll.AlreadyEnrolled'] = 'You are already enrolled in this course.';
 NTIStrings['NextThought.view.courseware.enrollment.Enroll.ExternalPay'] = 'Finalizing your enrollment. You will be redirected to a secure external payment site to complete this transaction.';
 NTIStrings['NextThought.view.courseware.enrollment.Enroll.HelpDesk'] = 'Please contact <a href=\'mailto:support@nextthought.com\'>help desk</a> for further information.';
 NTIStrings['undefined'] = 'undefined';

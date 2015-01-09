@@ -140,7 +140,7 @@ Ext.define('NextThought.view.courseware.enrollment.Enroll', {
 		if (json && json.Message) {
 			this.fireEvent('show-msg', json.Message, true, 5000);
 		} else {
-			this.fireEvent('show-msg', getString('NextThought.view.courseware.enrollment.Enroll.TryLater'), true, 5000);
+			this.fireEvent('show-msg', getString('NextThought.view.courseware.enrollment.Enroll.AlreadyEnrolled'), true, 5000);
 		}
 	},
 
