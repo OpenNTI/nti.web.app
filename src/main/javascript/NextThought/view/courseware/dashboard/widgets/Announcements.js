@@ -4,27 +4,62 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Announcements', {
 	requires: ['NextThought.view.courseware.dashboard.tiles.Announcement'],
 
 	statics: {
-		getTiles: function(course, courseNode, startDate, endDate) {
-			return new Promise(function(fulfill, reject) {
-				var tiles = [], i;
 
-				for (i = 0; i < 20; i ++) {
-					tiles.push({
-						xtype: 'box',
-						cls: 'tile',
-						height: (Math.floor(Math.random() * 5) + 1) * 100,
-						autoEl: {html: 'hello-' + moment(startDate).format('MMM D') + '-' + moment(endDate).format('MMM D')}
-					});
-				}
-
-				fulfill(tiles);
-			})
+		__queryParams: {
+			sortOn: 'CreatedTime',
+			sortOrder: 'descending'
 		},
 
-		getStaticTiles: function(course, courseNode, date) {
-			return Ext.widget('dashboard-announcements-list', {
-					loadAnnouncements: course.getAnnouncements()
+
+		getTiles: function(course, startDate, endDate) {
+			var section = course.getMySectionAnnouncements(),
+				parent = course.getParentAnnouncements(),
+				params = this.__queryParams;
+
+			function getCmpConfig(topic, sectionName) {
+				return {
+					xtype: 'dashboard-announcement',
+					record: topic,
+					label: sectionName
+				};
+			}
+
+			function loadContents(forum) {
+				var contentsLink = forum.getLink('contents');
+
+				return StoreUtils.loadItems(contentsLink, params)
+							.fail(function() {
+								return [];
+							});
+			}
+
+			function loadForum(forum, sectionName) {
+				return loadContents(forum)
+					.then(function(topics) {
+						return topics.map(function(topic) {
+							return getCmpConfig(topic, sectionName);
+						});
+					});
+			}
+
+			function loadForums(forums, sectionName) {
+				var loading = [];
+
+				(forums || []).forEach(function(forum) {
+					loading.push(loadForum(forum, sectionName));
 				});
+
+				return Promise.all(loading)
+						.then(function(tiles) {
+							return tiles.reduce(function(a, b) {
+								return a.concat(b);
+							}, []);
+						});
+			}
+
+			if (Ext.isEmpty(section) && Ext.isEmpty(parent)) { return Promise.resolve([]); }
+
+			return loadForums(section, 'My Section');
 		}
 	}
 });

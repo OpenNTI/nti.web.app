@@ -18,6 +18,8 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 	fields: [
+		{ name: 'AnnouncementForums', type: 'auto'},
+		{ name: 'ParentAnnouncementForums', type: 'auto'},
 		{ name: 'Bundle', type: 'singleItem', mapping: 'ContentPackageBundle'},
 		{ name: 'Discussions', type: 'singleItem', persist: false },
 		{ name: 'ParentDiscussions', type: 'singleItem', persist: false},
@@ -622,9 +624,6 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
-	getAnnouncements: function() { return Promise.resolve([]);},
-
-
 	represents: function(catalogEntry) {
 		var cceId = catalogEntry.getId(),
 			cceHref = catalogEntry.get('href'),
@@ -638,5 +637,63 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 	containsNTIID: function(id) {
 		return this.get('Bundle').containsNTIID(id);
+	},
+
+
+	/**
+	 * A helper to parse the object in AnnouncementForums or ParentAnnouncementForums
+	 * @param  {Object} items []
+	 * @return {[type]}       [description]
+	 */
+	__getAnnouncementsForums: function(items) {
+		var keys = Object.keys(items) || [],
+			forums = [];
+
+		keys.forEach(function(key) {
+			var forum = ParseUtils.parseItems(items[key] || {})[0];
+
+			if (!Ext.isEmpty(forum)) {
+				forums.sharingScope = key;
+				forums.push(forum);
+			}
+		});
+
+		return forums;
+	},
+
+
+	/**
+	 * AnnouncementForums contain the forums for all the scopes the user is in their section
+	 *{
+	 *	Items: {
+	 *		Public: Forum,
+	 *		ForCredit: Forum
+	 *	}
+	 *}
+	 * @return {Array} a flattened list of the forums
+	 */
+	getMySectionAnnouncements: function() {
+		var announcements = this.get('AnnouncementForums');
+
+		announcements = announcements && announcements.Items;
+
+		this.__sectionAnnouncements = this.__sectionAnnouncements || this.__getAnnouncementsForums(announcements || {});
+
+		return this.__sectionAnnouncements;
+	},
+
+
+	/**
+	 * Same as getMySectionAnnouncements just for my parent section
+	 * @return {Array} a flattened list of the forums
+	 */
+	getParentAnnouncements: function() {
+		var announcements = this.get('ParentAnnouncementForums');
+
+		announcements = announcements && announcements.Items;
+
+		this.__parentAnnouncements = this.__parentAnnouncements || this.__getAnnouncementsForums(announcements || {});
+
+		return this.__parentAnnouncements;
 	}
 });
