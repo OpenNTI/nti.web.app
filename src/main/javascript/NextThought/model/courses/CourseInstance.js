@@ -695,5 +695,12 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		this.__parentAnnouncements = this.__parentAnnouncements || this.__getAnnouncementsForums(announcements || {});
 
 		return this.__parentAnnouncements;
+	},
+
+
+	getStreamLink: function() {
+		var streamStore = Ext.getStore('Stream');
+
+		return streamStore && streamStore.proxy.url;
 	}
 });

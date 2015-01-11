@@ -20,7 +20,8 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Announcements', {
 				return {
 					xtype: 'dashboard-announcement',
 					record: topic,
-					label: sectionName
+					label: sectionName,
+					weight: 2
 				};
 			}
 
@@ -45,6 +46,10 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Announcements', {
 			function loadForums(forums, sectionName) {
 				var loading = [];
 
+				if (Ext.isEmpty(forums)) {
+					return Promise.resolve([]);
+				}
+
 				(forums || []).forEach(function(forum) {
 					loading.push(loadForum(forum, sectionName));
 				});
@@ -57,9 +62,18 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Announcements', {
 						});
 			}
 
-			if (Ext.isEmpty(section) && Ext.isEmpty(parent)) { return Promise.resolve([]); }
+			if (Ext.isEmpty(section) && Ext.isEmpty(parent)) {
+				return Promise.resolve([]);
+			}
 
-			return loadForums(section, 'My Section');
+			return Promise.all([
+					loadForums(section, 'My Section'),
+					loadForums(parent, 'Parent Section')
+				]).then(function(results) {
+					return results.reduce(function(a, b) {
+						return a.concat(b);
+					}, []);
+				});
 		}
 	}
 });
