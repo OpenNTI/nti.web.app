@@ -5,20 +5,6 @@ Ext.define('NextThought.store.courseware.Stream', {
 		BucketSize: 25
 	},
 
-	//A map of start date to bin
-	WEEK_MAP: {},
-
-	/**
-	 * Holds objects that has
-	 *{
-	 *	start: TimeStamp,
-	 *	end: TimeStamp,
-	 *	key: Number, key in the WEEK_MAP
-	 *}
-	 * @type {Array}
-	 */
-	WEEK_RANGES: [],
-
 	EMPTY_BIN: {
 		BucketItemCount: 0,
 		Items: []
@@ -26,6 +12,21 @@ Ext.define('NextThought.store.courseware.Stream', {
 
 
 	constructor: function(config) {
+
+		//A map of start date to bin
+		this.WEEK_MAP = {};
+
+		/**
+		 * Holds objects that has
+		 *{
+		 *	start: TimeStamp,
+		 *	end: TimeStamp,
+		 *	key: Number, key in the WEEK_MAP
+		 *}
+		 * @type {Array}
+		 */
+		this.WEEK_RANGES = [];
+
 		this.url = config.url;
 		this.latestBinDate = moment.utc().endOf('isoWeek').toDate().getTime();
 
