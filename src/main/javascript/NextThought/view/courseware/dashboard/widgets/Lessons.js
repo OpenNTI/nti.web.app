@@ -28,6 +28,18 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Lessons', {
 				return end.isAfter(date) || end.isSame(date);
 			}
 
+			function getCmpConfig(record) {
+				var config = NextThought.view.courseware.dashboard.tiles.Lesson.getTileConfig(record);
+
+				if (config) {
+					config.record = record;
+					config.weight = getWeight(record);
+					config.course = course;
+				}
+
+				return config
+			}
+
 			return course.getNavigationStore().building
 				.then(function(store) {
 					var lessons = [];
@@ -36,12 +48,7 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Lessons', {
 						var nodeStart = node.get('startDate');
 
 						if (node.get('type') === 'lesson' && isAfterStart(nodeStart) && isBeforeEnd(nodeStart)) {
-							lessons.push({
-								xtype: 'dashboard-lesson',
-								record: node,
-								weight: getWeight(node),
-								course: course
-							});
+							lessons.push(getCmpConfig(node));
 						}
 					});
 

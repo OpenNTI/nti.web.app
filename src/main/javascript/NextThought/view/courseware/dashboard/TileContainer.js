@@ -163,7 +163,7 @@ Ext.define('NextThought.view.courseware.dashboard.TileContainer', {
 						me.setHeight(null);
 					});
 			} else {
-				me.setTiles(me.tiles);
+				me.addTilesBack();
 				//me.setHeight(null);
 			}
 		});

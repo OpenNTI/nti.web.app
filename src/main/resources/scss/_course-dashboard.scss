@@ -894,25 +894,22 @@
 		overflow: hidden;
 		margin-bottom: 10px;
 
-		.dashboard-column {
-			float: left;
-			padding-right: 10px;
-
-			&:last-of-type {
-				padding-right: 0;
-			}
+		.dashboard-tiles {
+			position: relative;
+			left: -10px;
 		}
 
 		.tile {
 			background-color: red;
 			margin-bottom: 22px;
 			overflow: hidden;
+			position: absolute;
 		}
 
 		.dashboard-header {
 			color: white;
 			background-color: $primary-blue;
-			width: 100%;
+			display: inline-block;
 
 			&.locked {
 				position: absolute;

@@ -20,12 +20,14 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Assignments', {
 				getWeight = this.getWeight.bind(this);
 
 			function getCmpConfig(assignment) {
-				return {
-					xtype: 'dashboard-assignment',
-					record: assignment,
-					weight: getWeight(assignment),
-					course: course
-				};
+				var config = NextThought.view.courseware.dashboard.tiles.Assignment.getTileConfig(assignment);
+
+				if (config) {
+					config.record = assignment;
+					config.weight = getWeight(assignment);
+					config.course = course;
+				}
+				return config;
 			}
 
 			return course.getAssignments()

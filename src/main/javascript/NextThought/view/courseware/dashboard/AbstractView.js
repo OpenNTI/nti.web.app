@@ -5,7 +5,8 @@ Ext.define('NextThought.view.courseware.dashboard.AbstractView', {
 		'NextThought.view.courseware.dashboard.tiles.Header'
 	],
 
-	COLUMNS: 3,
+	COLUMN_PADDING: 10,
+	COLUMN_COUNT: 3,
 	width: 1024,
 
 	ui: 'course',
@@ -13,29 +14,21 @@ Ext.define('NextThought.view.courseware.dashboard.AbstractView', {
 	layout: 'none',
 
 	items: [
-		{xtype: 'dashboard-header'}
+		{xtype: 'dashboard-header'},
+		{
+			xtype: 'container',
+			layout: 'none',
+			tileContainer: true,
+			cls: 'dashboard-tiles'
+		}
 	],
 
 
 	initComponent: function() {
 		this.callParent(arguments);
 
-		var i, columns = this.COLUMNS,
-			columnWidth = (this.width - 17) / columns;
-
-		this.COLUMN_MAP = {};
-
-		for (i = 0; i < columns; i++) {
-			this.COLUMN_MAP[i] = this.add({
-				xtype: 'container',
-				cls: 'dashboard-column',
-				width: columnWidth,
-				layout: 'none',
-				column: i
-			});
-		}
-
 		this.header = this.down('dashboard-header');
+		this.tileContainer = this.down('[tileContainer]');
 	},
 
 
@@ -48,20 +41,82 @@ Ext.define('NextThought.view.courseware.dashboard.AbstractView', {
 		};
 	},
 
+	/**
+	 * Fit the tiles in to columns and try to get the columns height to be as
+	 * close to the same as possible. Set the top and left for the tiles,
+	 * the cmps need to have width and height on them.
+	 *
+	 * See http://stackoverflow.com/a/7128902
+	 *
+	 * @param  {Array} tiles 	list of cmp configs to set top and left on
+ 	 * @return {Array}       the list with top and left set on them
+	 */
+	fitTiles: function(tiles) {
+		//if we don't have any tiles there's no need to do anything
+		if (Ext.isEmpty(tiles)) { return; }
+
+		tiles.sort(this.getSortFn());
+
+		var padding = this.COLUMN_PADDING,
+			colWidth = tiles[0].width,
+			colHeights = [], i;
+
+		function getShortestCol() {
+			var j, minIndex, minHeight = Infinity;
+
+			for (j = 0; j < colHeights.length; j ++) {
+				if (colHeights[j] < minHeight) {
+					minHeight = colHeights[j];
+					minIndex = j;
+				}
+			}
+
+			return minIndex;
+		}
+
+		function getHeight() {
+			var j, maxHeight = 0;
+
+			for (j = 0; j < colHeights.length; j ++) {
+				if (colHeights[j] > maxHeight) {
+					maxHeight = colHeights[j];
+				}
+			}
+
+			return maxHeight;
+		}
+
+		function getLeftForColumn(index) {
+			return padding + (index * (colWidth + padding)); 
+		}
+
+		for (i = 0; i < this.COLUMN_COUNT; i++) {
+			colHeights.push(padding);
+		}
+
+		tiles.forEach(function(tile) {
+			var index = getShortestCol(),
+				top = colHeights[index],
+				left = getLeftForColumn(index);
+
+			tile.top = top;
+			tile.left = left;
+
+			colHeights[index] = top + tile.height + padding;
+		});
+
+		this.tileContainer.setHeight(getHeight());
+
+		return tiles;	
+	},
 
 	/**
-	 * Add a component to a column at an index
-	 * @param {Number} index column to add to
-	 * @param {Component} cmp   component to add
+	 * Add the tiles back, use the previous configs so the layout doesn't change any
 	 */
-	addToColumn: function(index, cmp) {
-		var column = this.COLUMN_MAP[index];
-
-		if (column) {
-			column.add(cmp);
-		} else {
-			console.error('No column for index:', index);
-		}
+	addTilesBack: function() {
+		this.tileContainer.removeAll(true);
+		this.hasTiles = this.tiles.length > 0;
+		this.tileContainer.add(this.tiles);
 	},
 
 
@@ -70,29 +125,14 @@ Ext.define('NextThought.view.courseware.dashboard.AbstractView', {
 	 * @param {Array} tiles components to add
 	 */
 	setTiles: function(tiles) {
-		//sort the tiles so the most important tiles are on top
-		tiles.sort(this.getSortFn());
+		this.tiles = this.fitTiles(tiles);
 
-		var i, columns = this.COLUMNS,
-			length = tiles.length;
-
-		//add tiles to columns from left to right
-		for (i = 0; i < length; i++) {
-			this.addToColumn(i % columns, tiles[i]);
-		}
-
-		this.hasTiles = tiles.length > 0;
-		this.tiles = tiles;
+		this.addTilesBack();
 	},
 
 
 	clearTiles: function() {
-		var i, columns = this.COLUMNS;
-
-		for (i = 0; i < columns; i++) {
-			this.COLUMN_MAP[i].removeAll(true);
-		}
-
+		this.tileContainer.removeAll(true);
 		this.hasTiles = false;
 	}
 });

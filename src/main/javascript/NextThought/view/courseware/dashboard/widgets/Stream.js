@@ -16,10 +16,10 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Stream', {
 		},
 
 
-		__CLASS_TO_XTYPE: {
-			'Note': 'dashboard-note',
-			'CommunityHeadlineTopic': 'dashboard-topic',
-			'GeneralForumComment': 'dashboard-topic-comment'
+		__CLASS_TO_TILE: {
+			'Note': 'Note',
+			'CommunityHeadlineTopic': 'Topic',
+			'GeneralForumComment': 'TopicComment'
 		},
 
 		__BASE_WEIGHT: 2,
@@ -35,15 +35,19 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Stream', {
 			var link = course.getStreamLink(),
 				params = this.__queryParams,
 				getWeight = this.getWeight.bind(this),
-				classMap = this.__CLASS_TO_XTYPE;
+				classMap = this.__CLASS_TO_TILE;
 
 			function getCmpConfig(record) {
-				return {
-					xtype: classMap[record.get('Class')],
-					record: record,
-					weight: getWeight(record),
-					course: course
-				};
+				var cls = classMap[record.get('Class')],
+					config = cls && NextThought.view.courseware.dashboard.tiles[cls].getTileConfig(record);
+
+				if (config) {
+					config.record = record;
+					config.weight = getWeight(record);
+					config.course = course;
+				}
+
+				return config;
 			}
 
 			if (!link) { return Promise.resolve([]); }
