@@ -25,12 +25,12 @@ Ext.define('NextThought.view.courseware.dashboard.TileContainer', {
 
 		me.lastLoaded = new Date();
 
-		return me.loadingTiles = me.loadTiles()
-			.then(function(tiles) {
-				me.removeLoadingMask();
+		me.loadingTiles = me.loadTiles().then(function(tiles) {
+			me.removeLoadingMask();
+			me.setTiles(tiles);
+		});
 
-				me.setTiles(tiles);
-			});
+		return me.loadingTiles;
 	},
 
 
@@ -52,7 +52,7 @@ Ext.define('NextThought.view.courseware.dashboard.TileContainer', {
 		return {
 			offsetTop: dom.offsetTop,
 			offsetHeight: dom.offsetHeight
-		}
+		};
 	},
 
 
@@ -122,13 +122,11 @@ Ext.define('NextThought.view.courseware.dashboard.TileContainer', {
 		return load.fail(function() {
 
 			if (me.__shouldReload(containerPos.refreshDate, containerPos.force)) {
-				console.log('Dashboard dirty set reload from server')
 				me.reloadTiles()
 					.then(function() {
 						me.setHeight(null);
 					});
 			} else {
-				console.log('dashboard not dirty reload cached tiles');
 				me.setTiles(me.tiles);
 				//me.setHeight(null);
 			}

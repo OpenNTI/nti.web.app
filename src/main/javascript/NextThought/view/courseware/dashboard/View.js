@@ -68,12 +68,14 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 
 			me.lastScrollTop = el.dom.scrollTop;
 		});
+
+		this.initialLoad();
 	},
 
 
 	bundleChanged: function(bundle) {
 		var id = bundle && bundle.getId(),
-			locationInfo, toc, courseNode, courseCatalog;
+			courseCatalog;
 
 		this.maxPast = bundle.get('CreatedTime');
 		this.maxFuture = '2016-01-01';
@@ -87,33 +89,37 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 			return;
 		}
 
-		locationInfo = bundle.getLocationInfo();
-
-		if (locationInfo && locationInfo !== ContentUtils.NO_LOCATION) {
-			toc = locationInfo.toc.querySelector('toc');
-			courseNode = toc && toc.querySelector('course');
-		}
-
 		courseCatalog = bundle.getCourseCatalogEntry();
 
 		this.course = bundle;
-		this.courseNode = courseNode;
 		this.currentWeek = TimeUtils.getWeek();
 		this.weekToLoad = this.currentWeek;
 		this.startDate = courseCatalog.get('StartDate');
 
-		this.maybeLoadNextWeek({}, true);
-		
+		this.initialLoad();
 	},
 
 
-	queryTiles: function(course, courseNode, startDate, endDate) {
+	initialLoad: function() {
+		//if we aren't rendered, have already done the initial load, or haven't been given a bundle yet
+		//don't do the initial load
+		if (!this.rendered || this.loaded || !this.course) { return; }
+
+		while (this.weekToLoad && this.el.getHeight() >= this.el.dom.scrollHeight) {
+			this.maybeLoadNextWeek({}, true);
+		}
+
+		this.loaded = true;
+	},
+
+
+	queryTiles: function(course, startDate, endDate) {
 		var widgets = NextThought.view.courseware.dashboard.widgets,
 			tiles = [];
 
 		Ext.Object.each(widgets, function(clsName, cls) {
 			if (cls.getTiles) {
-				tiles.push(cls.getTiles(course, courseNode, startDate, endDate));
+				tiles.push(cls.getTiles(course, startDate, endDate));
 			}
 		});
 
@@ -188,7 +194,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 		this.items.each(function(item) {
 			var handler = item.parentScrollChanged(getState);
 
-			if (handler) { changes.push(handler)}
+			if (handler) { changes.push(handler); }
 		});
 
 		me.oldScrollChanged = me.scrollChanged;
@@ -208,7 +214,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 
 		this.add({
 			xtype: 'dashboard-tile-container',
-			loadTiles: this.queryTiles.bind(this, this.course, this.courseNode, week.start, week.end),
+			loadTiles: this.queryTiles.bind(this, this.course, week.start, week.end),
 			week: week,
 			number: this.items.getCount(),
 			currentState: NextThought.view.courseware.dashboard.View.IN_BUFFER

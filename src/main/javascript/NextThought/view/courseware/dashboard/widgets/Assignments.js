@@ -4,25 +4,6 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Assignments', {
 	requires: [],
 
 	statics: {
-		getTiles: function(course, courseNode, startDate, endDate) { return Promise.resolve([]); },
-
-
-		getDeadlines: function(course, courseNode, date) {
-			return course.getAssignments()
-					.then(function(collection) {
-						var comingSoon = [],
-							items = collection.get('Items') || [];
-
-							items.forEach(function(item) {
-								var due = item.get('availableEnding');
-
-								if (due > date) {
-									comingSoon.push(item);
-								}
-							});
-
-						return comingSoon;
-					});
-		}
+		getTiles: function(course, startDate, endDate) { return Promise.resolve([]); }
 	}
 });

@@ -4,7 +4,7 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Lessons', {
 	requires: ['NextThought.view.courseware.dashboard.tiles.Lesson'],
 
 	statics: {
-		getTiles: function(course, courseNode, startDate, endDate) {
+		getTiles: function(course, startDate, endDate) {
 			var	start = moment(startDate);
 			var end = moment(endDate);
 
