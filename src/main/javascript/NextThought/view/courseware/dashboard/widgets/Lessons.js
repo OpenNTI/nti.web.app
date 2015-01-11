@@ -18,7 +18,7 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Lessons', {
 						if (node.get('type') === 'lesson' && start.isBefore(nodeStart) && end.isAfter(nodeStart)) {
 							lessons.push({
 								xtype: 'dashboard-lesson',
-								lesson: node,
+								record: node,
 								weight: 2
 							});
 						}

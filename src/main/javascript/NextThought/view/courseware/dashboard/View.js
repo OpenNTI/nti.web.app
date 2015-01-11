@@ -113,13 +113,14 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 	},
 
 
-	queryTiles: function(course, startDate, endDate) {
+	queryTiles: function(startDate, endDate, isCurrent) {
 		var widgets = NextThought.view.courseware.dashboard.widgets,
+			course = this.course,
 			tiles = [];
 
 		Ext.Object.each(widgets, function(clsName, cls) {
 			if (cls.getTiles) {
-				tiles.push(cls.getTiles(course, startDate, endDate));
+				tiles.push(cls.getTiles(course, startDate, endDate, isCurrent));
 			}
 		});
 
@@ -208,14 +209,16 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 
 	maybeLoadNextWeek: function(scrollInfo, force) {
 		var scrolledDown = scrollInfo.scrollTop + this.loadThreshold > scrollInfo.scrollHeight - scrollInfo.offSetHeight,
-			week = this.weekToLoad;
+			week = this.weekToLoad,
+			isCurrent = week === this.currentWeek;
 
 		if ((!scrolledDown && !force) || !week) { return; }
 
 		this.add({
 			xtype: 'dashboard-tile-container',
-			loadTiles: this.queryTiles.bind(this, this.course, week.start, week.end),
+			loadTiles: this.queryTiles.bind(this, week.start, week.end, isCurrent),
 			week: week,
+			current: true,
 			number: this.items.getCount(),
 			currentState: NextThought.view.courseware.dashboard.View.IN_BUFFER
 		});

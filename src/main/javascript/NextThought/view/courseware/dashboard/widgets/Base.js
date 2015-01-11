@@ -11,9 +11,10 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Base', {
 		 * @param  {Node} courseNode	the course node from the TOC
 		 * @param  {Date} startDate		the start of the range to get tiles for (inclusive)
 		 * @param  {Date} endDate		the end of the range to get tiles for (inclusive)
+		 * @param  {Boolean} isNow		if we are getting tiles for the current week
 		 * @return {Promise}			Promise that will fulfill with an array of tiles to add
 		 */
-		getTiles: function(course, startDate, endDate) {
+		getTiles: function(course, startDate, endDate, isNow) {
 			return Promise.resolve([]);
 		}
 	}
