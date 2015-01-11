@@ -19,5 +19,6 @@ loadExternalLibraries([
 	{'Timeline': {
 		url: 'resources/lib/timeline/js/storyjs-embed.js',
 		waitFor: 'jQuery'
-	}}
+	}},
+	{'Moment': 'resources/lib/moment.js'}
 ]);
