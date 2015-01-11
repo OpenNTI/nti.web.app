@@ -32,7 +32,7 @@ Ext.define('NextThought.view.courseware.dashboard.TileContainer', {
 		me.loadingTiles = me.loadTiles().then(function(tiles) {
 			if (tiles.length === 0) {
 				me.isEmpty = true;
-				me.start = me.week.start;
+				me.startDate = me.week.start;
 				me.fireEvent('is-empty', me);
 			} else {
 				me.fireEvent('not-empty', me);
