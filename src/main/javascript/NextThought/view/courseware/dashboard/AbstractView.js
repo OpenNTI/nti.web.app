@@ -7,7 +7,7 @@ Ext.define('NextThought.view.courseware.dashboard.AbstractView', {
 
 	COLUMN_PADDING: 10,
 	COLUMN_COUNT: 3,
-	width: 1024,
+	width: 1024 - 17, //17 to account for potential scrollbard
 
 	ui: 'course',
 	cls: 'course-dashboard-container scrollable',
@@ -48,12 +48,12 @@ Ext.define('NextThought.view.courseware.dashboard.AbstractView', {
 	 *
 	 * See http://stackoverflow.com/a/7128902
 	 *
-	 * @param  {Array} tiles 	list of cmp configs to set top and left on
- 	 * @return {Array}       the list with top and left set on them
+	 * @param {Array} tiles	list of cmp configs to set top and left on
+	 * @return {Array}			the list with top and left set on them
 	 */
 	fitTiles: function(tiles) {
 		//if we don't have any tiles there's no need to do anything
-		if (Ext.isEmpty(tiles)) { return; }
+		if (Ext.isEmpty(tiles)) { return []; }
 
 		tiles.sort(this.getSortFn());
 
@@ -64,7 +64,7 @@ Ext.define('NextThought.view.courseware.dashboard.AbstractView', {
 		function getShortestCol() {
 			var j, minIndex, minHeight = Infinity;
 
-			for (j = 0; j < colHeights.length; j ++) {
+			for (j = 0; j < colHeights.length; j++) {
 				if (colHeights[j] < minHeight) {
 					minHeight = colHeights[j];
 					minIndex = j;
@@ -77,7 +77,7 @@ Ext.define('NextThought.view.courseware.dashboard.AbstractView', {
 		function getHeight() {
 			var j, maxHeight = 0;
 
-			for (j = 0; j < colHeights.length; j ++) {
+			for (j = 0; j < colHeights.length; j++) {
 				if (colHeights[j] > maxHeight) {
 					maxHeight = colHeights[j];
 				}
@@ -87,7 +87,7 @@ Ext.define('NextThought.view.courseware.dashboard.AbstractView', {
 		}
 
 		function getLeftForColumn(index) {
-			return padding + (index * (colWidth + padding)); 
+			return padding + (index * (colWidth + padding));
 		}
 
 		for (i = 0; i < this.COLUMN_COUNT; i++) {
@@ -101,13 +101,14 @@ Ext.define('NextThought.view.courseware.dashboard.AbstractView', {
 
 			tile.top = top;
 			tile.left = left;
+			tile.CACHE = tile.CACHE || {};
 
 			colHeights[index] = top + tile.height + padding;
 		});
 
 		this.tileContainer.setHeight(getHeight());
 
-		return tiles;	
+		return tiles;
 	},
 
 	/**
@@ -122,7 +123,6 @@ Ext.define('NextThought.view.courseware.dashboard.AbstractView', {
 
 	/**
 	 * Add an array of tile components
-	 * @param {Array} tiles components to add
 	 */
 	setTiles: function(tiles) {
 		this.tiles = this.fitTiles(tiles);

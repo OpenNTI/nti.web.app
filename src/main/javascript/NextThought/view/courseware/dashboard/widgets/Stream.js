@@ -37,28 +37,37 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Stream', {
 				getWeight = this.getWeight.bind(this),
 				classMap = this.__CLASS_TO_TILE;
 
+			params.startDate = startDate;
+			params.endDate = endDate;
+
+			delete params.startDate;
+			delete params.endDate;
+
 			function getCmpConfig(record) {
 				var cls = classMap[record.get('Class')],
-					config = cls && NextThought.view.courseware.dashboard.tiles[cls].getTileConfig(record);
+					getConfig = cls && NextThought.view.courseware.dashboard.tiles[cls].getTileConfig(record);
 
-				if (config) {
-					config.record = record;
-					config.weight = getWeight(record);
-					config.course = course;
-				}
+				return getConfig
+					.then(function(config) {
+						config.record = record;
+						config.weight = getWeight(record);
+						config.course = course;
 
-				return config;
+						return config;
+					});
 			}
 
 			if (!link) { return Promise.resolve([]); }
 
 			return StoreUtils.loadItems(link, params)
 				.then(function(items) {
-					return (items || []).map(function(change) {
+					items = (items || []).map(function(change) {
 						var item = change.getItem();
 
 						return getCmpConfig(item);
 					});
+
+					return Promise.all(items);
 				})
 				.fail(function(reason) {
 					console.error('failed to load dashboard stream:', reason);

@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.courseware.dashboard.tiles.Assignment', {
-	extend: 'NextThought.view.courseware.dashboard.tiles.Base',
+	extend: 'NextThought.view.courseware.dashboard.tiles.BaseCmp',
 	alias: 'widget.dashboard-assignment',
 
 	cls: 'assignment-tile',

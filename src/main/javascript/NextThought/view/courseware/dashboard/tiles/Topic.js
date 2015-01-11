@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.courseware.dashboard.tiles.Topic', {
-	extend: 'NextThought.view.courseware.dashboard.tiles.Base',
+	extend: 'NextThought.view.courseware.dashboard.tiles.BaseCmp',
 	alias: 'widget.dashboard-topic',
 
 	renderTpl: Ext.DomHelper.markup([

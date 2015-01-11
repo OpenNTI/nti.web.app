@@ -29,15 +29,16 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Lessons', {
 			}
 
 			function getCmpConfig(record) {
-				var config = NextThought.view.courseware.dashboard.tiles.Lesson.getTileConfig(record);
+				var getConfig = NextThought.view.courseware.dashboard.tiles.Lesson.getTileConfig(record);
 
-				if (config) {
-					config.record = record;
-					config.weight = getWeight(record);
-					config.course = course;
-				}
+				return getConfig
+						.then(function(config) {
+							config.record = record;
+							config.weight = getWeight(record);
+							config.course = course;
 
-				return config
+							return config;
+						});
 			}
 
 			return course.getNavigationStore().building
@@ -52,7 +53,7 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Lessons', {
 						}
 					});
 
-					return lessons;
+					return Promise.all(lessons);
 				});
 		}
 	}

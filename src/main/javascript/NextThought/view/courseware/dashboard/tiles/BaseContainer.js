@@ -1,24 +1,23 @@
-Ext.define('NextThought.view.courseware.dashboard.tiles.Base', {
-	extend: 'Ext.Component',
+Ext.define('NextThought.view.courseware.dashboard.tiles.BaseContainer', {
+	extend: 'Ext.Container',
 
 	cls: 'tile',
 
 	inheritableStatics: {
-		WIDTH: 326,
+		WIDTH: 330,
 		HEIGHT: 200,
 
 		/**
-		 * Return a config to create a tile for a given record,
-		 * needs to give a height, and a width
-		 * @param 	{Model} record the record we are building the tile for
-		 * @return {Object} the config to build this tile
+		 * returns Promise the fulfills with a config with a width and height
+		 * @param	{Model} record the record we are building the tile for
+		 * @return	{Object} the config to build this tile
 		 */
-		getTileConfig: function(record) {
-			return {
+		getTileConfig: function(/*record*/) {
+			return Promise.resolve({
 				xtype: this.xtype,
 				width: this.WIDTH,
 				height: this.HEIGHT
-			};
+			});
 		}
 	},
 

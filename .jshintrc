@@ -2,7 +2,7 @@
     "node": true,
     "browser": true,
     "esnext": true,
-    "strict": true,
+    "strict": false,
     "bitwise": true,
     "camelcase": true,
     "curly": true,
@@ -40,6 +40,12 @@
 		"Library",
 		"getURL",
 		"getString",
-		"guidGenerator"
+		"guidGenerator",
+        "ContentUtils",
+        "LocationMeta",
+        "UserRepository",
+        "SharingUtils",
+        "moment",
+        "StoreUtils"
     ]
 }

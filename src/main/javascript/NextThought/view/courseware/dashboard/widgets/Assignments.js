@@ -20,14 +20,16 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Assignments', {
 				getWeight = this.getWeight.bind(this);
 
 			function getCmpConfig(assignment) {
-				var config = NextThought.view.courseware.dashboard.tiles.Assignment.getTileConfig(assignment);
+				var getConfig = NextThought.view.courseware.dashboard.tiles.Assignment.getTileConfig(assignment);
 
-				if (config) {
-					config.record = assignment;
-					config.weight = getWeight(assignment);
-					config.course = course;
-				}
-				return config;
+				return getConfig
+						.then(function(config) {
+							config.record = assignment;
+							config.weight = getWeight(assignment);
+							config.course = course;
+
+							return config;
+						});
 			}
 
 			return course.getAssignments()
@@ -51,7 +53,7 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Assignments', {
 								}
 							});
 
-							return assignments;
+							return Promise.all(assignments);
 						});
 		},
 
@@ -62,6 +64,8 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Assignments', {
 		getUpcomingTiles: function(course, date) {
 			var now = moment(date), load,
 				upcomingCutoff = this.UPCOMING_DAYS_CUTOFF;
+
+			console.log(upcomingCutoff);
 
 			load = course.getAssignments()
 						.then(function(assignmentCollection) {
@@ -74,13 +78,15 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Assignments', {
 								var due = item.get('availableEnding'),
 									start = item.get('availableBeginning');
 
+								console.log(start);
+
 								//if we don't have due date or due is before now
 								return due ? now.isAfter(due) : false;
 							});
 
 							notPastDue.sort(function(a, b) {
 								var dA = a.get('availableEnding'),
-									dB = a.get('availableEnding');
+									dB = b.get('availableEnding');
 
 								return dA < dB ? -1 : dA === dB ? 0 : 1;
 							});
