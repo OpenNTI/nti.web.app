@@ -11,48 +11,23 @@ Ext.define('NextThought.view.courseware.dashboard.AbstractView', {
 
 	ui: 'course',
 	cls: 'course-dashboard-container scrollable',
-	layout: 'auto',
+	layout: 'none',
 
-	items: [
-		{
-			layout: 'auto',
-			ui: 'course',
-			cls: 'course-dashboard main',
-			xtype: 'container',
-			items: [
-				{
-					layout: 'auto',
-					staticWidgets: true,
-					cls: 'course-dashboard-group static',
-					xtype: 'container',
-					items: []
-				},
-				{
-					layout: 'auto',
-					widgets: true,
-					cls: 'course-dashboard-group tiles',
-					xtype: 'container',
-					items: []
-				}
-			]
-		},
-		{
-			layout: 'auto',
-			ui: 'course',
-			floatingWidgets: true,
-			cls: 'course-dashboard course-dashboard-group floating',
-			xtype: 'container',
-			items: []
-		}
-	],
+	items: {
+		layout: 'none',
+		ui: 'course',
+		cls: 'course-dashboard grid',
+		isContainer: true,
+		xtype: 'container',
+		defaultType: 'box',
+		items: []
+	},
 
 
 	constructor: function(config) {
 		delete config.items;//don't replace our inner item
 		this.callParent(arguments);
-		this.staticsContainer = this.down('[staticWidgets=true]');
-		this.floatingContainer = this.down('[floatingWidgets=true]');
-		this.tileContainer = this.down('[widgets=true]');
+		this.tileContainer = this.down('[isContainer]');
 
 		this.sorter = this.buildSorter();
 	},
@@ -290,9 +265,6 @@ Ext.define('NextThought.view.courseware.dashboard.AbstractView', {
 		}
 
 		try {
-			//Sort the items by modified & weight
-			Ext.Array.sort(items, this.sorter);
-
 			if (!this.needsFitting(items, rows, cols)) {
 				console.log('Nothing to do :)');
 				return;
@@ -335,18 +307,6 @@ Ext.define('NextThought.view.courseware.dashboard.AbstractView', {
 		catch (e) {
 			console.error(e.stack || e.message);
 		}
-	},
-
-
-	setStaticTiles: function(items) {
-		this.staticsContainer.removeAll(true);
-		this.staticsContainer.add(items);
-	},
-
-
-	setFloatingTiles: function(items) {
-		this.floatingContainer.removeAll(true);
-		this.floatingContainer.add(items);
 	},
 
 

@@ -1,13 +1,10 @@
 Ext.define('NextThought.view.courseware.dashboard.tiles.Deadline', {
-	extend: 'Ext.Component',
+	extend: 'NextThought.view.courseware.dashboard.tiles.Base',
 	alias: 'widget.dashboard-deadline',
 
-	initComponent: function() {
-		this.callParent(arguments);
+	weight: 100,
 
-		this.loaded
-			.then(function(deadlines) {
-
-			});
-	}
+	renderTpl: Ext.DomHelper.markup([
+		{html: 'Deadline'}
+	])
 });

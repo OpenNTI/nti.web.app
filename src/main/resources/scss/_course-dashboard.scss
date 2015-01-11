@@ -884,30 +884,22 @@
 // 	}
 // }
 
-.course-dashboard-container {
-	position: relative;
-	width: 1024px;
-}
-
 .course-dashboard {
-	padding: 0 5px;
+	position: relative;
+	overflow-y: auto;
 
-	&.main {
-		width: 682px; //2/3rds ish of 1024
-	}
-
-	&.floating {
+	.static-container {
 		position: absolute;
-		right: 0;
-		top: 0;
-		width: 341px;//1/3rds ish of 1024
+		top: 0; right: 0;
+		width: 255px;
+		background-color: blue;
 	}
 
-}
-
-.course-dashboard-group {
-	min-height: 100px;
-	background-color: red;
+	.activity-container {
+		padding-right: 260px;
+		min-height: 100px;
+		background-color: red;
+	}
 }
 
 

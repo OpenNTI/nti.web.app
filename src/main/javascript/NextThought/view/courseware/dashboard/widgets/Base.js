@@ -7,12 +7,13 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Base', {
 		 * NOTE: if there are no tiles fulfill with an empty array, if the promise is rejected the
 		 * dashboard tab will be hidden
 		 *
-		 * @param  {NextThought.model.courseware.CourseInstance} course     the course instance model
+		 * @param  {CourseInstance} course     the course instance model
 		 * @param  {Node} courseNode	the course node from the TOC
-		 * @param {Date} date the date to build the dashboard for
-		 * @return {Promise}	Promise that will fulfill with an array of tiles to add
+		 * @param  {Date} startDate 	the start of the range to get tiles for (inclusive)
+		 * @param  {Date} endDate 		the end of the range to get tiles for (inclusive)
+		 * @return {Promise}			Promise that will fulfill with an array of tiles to add
 		 */
-		getTiles: function(course, courseNode, date) {
+		getTiles: function(course, courseNode, startDate, endDate) {
 			return Promise.resolve([]);
 		},
 
@@ -23,11 +24,11 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Base', {
 		 *
 		 * @param  {CourseInstance} course     the course instance model
 		 * @param  {Node} courseNode the course node from the toc
-		 * @param  {Date} date       the date to build the dashboard for
-		 * @return {Object}          map of name to widget
+		 * @param  {Date} date  	 date to get the static tiles for
+		 * @return {Object}          widget to show
 		 */
 		getStaticTiles: function(course, courseNode, date) {
-			return {};
+			return false;
 		},
 
 
@@ -40,12 +41,12 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Base', {
 		 *		due: Date,
 		 *		navigate: Function
 		 *}
-		 * @param  {NextThought.model.courseware.CourseInstance} course     the course instance model
+		 * @param  {CourseInstance} course     the course instance model
 		 * @param  {Node} courseNode the course node from the TOC
-		 * @param  {Date} date       the date to build the dashboard for
+		 * @param  {Date} date 		 the date to get the deadlines from
 		 * @return {Promise}         fulfills with an array of deadline configs
 		 */
-		getDeadLines: function(course, courseNode, date) {
+		getDeadLines: function(course, courseNode, startDate, endDate) {
 			return Promise.resolve([]);
 		}
 	}

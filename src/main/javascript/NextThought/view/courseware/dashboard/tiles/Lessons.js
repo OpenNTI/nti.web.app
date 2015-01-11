@@ -1,14 +1,30 @@
 Ext.define('NextThought.view.courseware.dashboard.tiles.Lessons', {
-	extend: 'Ext.view.View',
+	extend: 'NextThought.ux.Carousel',
 	alias: 'widget.dashboard-lessons',
 
-	itemSelector: '.item',
+	label: 'New Lessons Available',
 
-	tpl: new Ext.XTemplate(Ext.DomHelper.markup(
-		{tag: 'tpl', 'for': '.', cn: [
-			{cls: 'item'}
-		]}
-	)),
 
-	initComponent: function() {}
+	initComponent: function() {
+		this.callParent(arguments);
+
+		var me = this;
+
+		me.getLessons
+			.then(function(lessons) {
+				return lessons.map(me.buildCmp);
+			})
+			.then(me.add.bind(me));
+	},
+
+
+	buildCmp: function(node) {
+		var title = node.get('title');
+
+		return {
+			xtype: 'box',
+			cls: 'test',
+			autoEl: {html: title}
+		};
+	}
 });

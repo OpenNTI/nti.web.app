@@ -622,6 +622,9 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
+	getAnnouncements: function() { return Promise.resolve([]);},
+
+
 	represents: function(catalogEntry) {
 		var cceId = catalogEntry.getId(),
 			cceHref = catalogEntry.get('href'),

@@ -229,6 +229,30 @@ Ext.define('NextThought.util.Time', {
 		}
 
 		return s;
+	},
+
+	/**
+	 * Takes a moment constructor config (http://momentjs.com/docs/#/parsing/) and returns an object with:
+	 *
+	 * day: the moment for the date passed
+	 * start: the moment for the start of the current week (last Monday)
+	 * end: the moment for the end of the current week (next Sunday)
+	 * getNext: calls this function with a week from the date given
+	 * getPrevious: calls this function with a week before the date given
+	 *
+	 * @param  {Date|String} date argument to pass to the moment constructor, falsy means today
+	 * @return {Object}      utility for stepping through the weeks
+	 */
+	getWeek: function(date) {
+		var m = date ? moment(date) : moment();
+
+		return {
+			day: m,
+			start: moment(m).startOf('isoWeek'),
+			end: moment(m).endOf('isoWeek'),
+			getNext: this.getWeek.bind(this, moment(m).add(1, 'weeks')),
+			getPrevious: this.getWeek.bind(this, moment(m).subtract(1, 'weeks'))
+		};
 	}
 },
 function() {

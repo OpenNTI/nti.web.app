@@ -1,18 +1,38 @@
 Ext.define('NextThought.view.courseware.dashboard.View', {
-	extend: 'NextThought.view.courseware.dashboard.AbstractView',
+	extend: 'Ext.container.Container',
 	alias: 'widget.course-dashboard',
+
+	cls: 'course-dashboard',
 
 	requires: [
 		'NextThought.view.courseware.dashboard.tiles.*',
-		'NextThought.view.courseware.dashboard.widgets.*'
+		'NextThought.view.courseware.dashboard.widgets.*',
+		'NextThought.view.courseware.dashboard.TileContainer'
 	],
 
 	mixins: {
 		customScroll: 'NextThought.mixins.CustomScroll'
 	},
 
-	STATIC_ORDER: ['announcements', 'assignments', 'lessons'],
-	FLOATING_ORDER: ['deadlines', 'progress'],
+	layout: 'none',
+
+	items: [
+		{
+			xtype: 'container',
+			layout: 'none',
+			cls: 'activity-container',
+			activityContainer: true,
+			items: []
+		},
+		{
+			xtype: 'container',
+			layout: 'none',
+			cls: 'static-container',
+			staticContainer: true,
+			items: []
+		}
+	],
+
 
 	initComponent: function() {
 		this.callParent(arguments);
@@ -20,6 +40,9 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 		var me = this;
 
 		me.initCustomScrollOn('content');
+
+		me.activityContainer = this.down('[activityContainer]');
+		me.staticContainer = this.down('[staticContainer]');
 
 		me.on({
 			'visibility-changed': function(visible) {
@@ -32,7 +55,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 
 
 	statics: {
-		dateOverride: null//new Date('2013-12-30')
+		dateOverride: null//new Date('2013-12-30'),
 	},
 
 
@@ -40,9 +63,13 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 		var id = bundle && bundle.getId(),
 			locationInfo, toc, courseNode;
 
+		this.maxPast = bundle.get('CreatedTime');
+		this.maxFuture = '2016-01-01';
+
 		if (id !== this.courseId) {
 			this.hasItems = true;
-			this.tileContainer.removeAll(true);
+			this.activityContainer.removeAll(true);
+			this.staticContainer.removeAll(true);
 		}
 
 		if (!bundle || $AppConfig.disableDashboard) {
@@ -56,18 +83,32 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 			courseNode = toc && toc.querySelector('course');
 		}
 
-		try {
-			this.queryTiles(bundle, courseNode, new Date());
-		} catch (e) {
-			console.error('Failed to load dashboard', e);
-			this.hideDashboard();
-		}
+		this.course = bundle;
+		this.courseNode = courseNode;
+		this.week = TimeUtils.getWeek();
+
+		this.queryStaticTiles(bundle, courseNode, this.week.day.toDate())
+			.then(this.addStaticTiles.bind(this));
+
+		this.setCurrentWeek(this.week);
+		this.setPreviousWeek(this.week.getPrevious());
+		this.setNextWeek(this.week.getNext());
 	},
 
 
-	queryTiles: function(course, courseNode, date) {
+	getSortFn: function() {
+		return function(a, b) {
+			var wA = a.getWeight ? a.getWeight() : 1,
+				wB = b.getWeight ? b.getWeight() : 1;
+
+			return wA < wB ? 1 : wA === wB ? 0 : -1;
+		};
+	},
+
+
+	queryStaticTiles: function(course, courseNode, date) {
 		var widgets = NextThought.view.courseware.dashboard.widgets,
-			tiles = [], deadlines = [], staticTiles = {};
+			deadlines = [], staticTiles = [];
 
 		function flatten(results) {
 			if (Ext.isEmpty(results)) {
@@ -81,11 +122,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 
 		Ext.Object.each(widgets, function(clsName, cls) {
 			if (cls.getStaticTiles) {
-				Ext.apply(staticTiles, cls.getStaticTiles(course, courseNode, date));
-			}
-
-			if (cls.getTiles) {
-				tiles.push(cls.getTiles(course, courseNode, date));
+				staticTiles.push(cls.getStaticTiles(course, courseNode, date));
 			}
 
 			if (cls.getDeadlines) {
@@ -94,45 +131,117 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 		});
 
 
-		staticTiles.deadline = Ext.widget('dashboard-deadline', {
+		staticTiles.push(Ext.widget('dashboard-deadline', {
 			loaded: Promise.all(deadlines).then(flatten)
-		});
+		}));
 
-		staticTiles.progress = Ext.widget('dashboard-progress', {
-			loaded: course.getCompletionStatus()
-		});
-
-		this.addStaticTiles(staticTiles);
-
-		Promise.all(tiles)
-			.then(flatten)
-			.then(this.addTiles.bind(this));
+		return Promise.resolve(staticTiles);
 	},
 
 
-	addTiles: function(tiles) {
-		this.setTiles(tiles);
+	queryTiles: function(course, courseNode, startDate, endDate) {
+		var widgets = NextThought.view.courseware.dashboard.widgets,
+			tiles = [], sortFn = this.getSortFn();
+
+		Ext.Object.each(widgets, function(clsName, cls) {
+			if (cls.getTiles) {
+				tiles.push(cls.getTiles(course, courseNode, startDate, endDate));
+			}
+		});
+
+		return Promise.all(tiles)
+					.then(function(results) {
+						if (Ext.isEmpty(results)) {
+							return [];
+						}
+
+						return results.reduce(function(a, b) {
+							return a.concat(b);
+						}, []);
+					})
+					.then(function(cmps) {
+						return cmps.sort(sortFn);
+					});
 	},
 
 
 	addStaticTiles: function(tiles) {
-		var staticTiles = [], floatingTiles = [];
+		tiles = tiles.filter(function(a) { return !!a; });
 
-		this.STATIC_ORDER.forEach(function(name) {
-			if (tiles[name]) {
-				staticTiles.push(tiles[name]);
-			}
+		tiles.sort(this.getSortFn());
+
+		//this.staticContainer.add(tiles);
+	},
+
+
+	addAt: function(index, week, name) {
+		var container = Ext.widget('dashboard-tile-container', {
+			loadTiles: this.queryTiles(this.course, this.courseNode, week.start.toDate(), week.end.toDate()),
+			week: week,
+			name: name
 		});
 
+		this.activityContainer.insert(index, container);
+	},
 
-		this.FLOATING_ORDER.forEach(function(name) {
-			if (tiles[name]) {
-				floatingTiles.push(tiles[name]);
-			}
-		});
 
-		this.setStaticTiles(staticTiles);
-		this.setFloatingTiles(floatingTiles);
+	setCurrentWeek: function(week) {
+		this.addAt(1, week, 'current');
+	},
+
+
+	setPreviousWeek: function(week) {
+		this.addAt(0, week, 'previous');
+	},
+
+
+	setNextWeek: function(week) {
+		this.addAt(2, week, 'next');
+	},
+
+
+	getCurrentWeek: function() {
+		return this.activityContainer.down('[name=current]');
+	},
+
+
+
+	getPreviousWeek: function() {
+		return this.activityContainer.down('[name=previous]');
+	},
+
+
+
+	getNextWeek: function() {
+		return this.activityContainer.down('[name=next]');
+	},
+
+
+	showPreviousWeek: function() {
+		var current = this.getCurrentWeek(),
+			previous = this.getPreviousWeek(),
+			next = this.getNextWeek();
+
+		next.destroy();
+
+		current.updateName('next');
+		previous.updateName('current');
+
+		this.setPreviousWeek(previous.week.getNext());
+	},
+
+
+	showNextWeek: function() {
+		var current = this.getCurrentWeek(),
+			previous = this.getPreviousWeek(),
+			next = this.getNextWeek();
+
+		previous.destroy();
+
+		current.updateName('previous');
+		next.updateName('current');
+
+		this.setNextWeek(next.week.getPrevious());
 	},
 
 

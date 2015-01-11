@@ -4,19 +4,13 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Lessons', {
 	requires: ['NextThought.view.courseware.dashboard.tiles.Lessons'],
 
 	statics: {
-		getTiles: function(course, courseNode, date) {
-			return Promise.resolve([]);
-		},
-
-
-		getStaticTiles: function(course, courseNode, date) {
-			return {
-				lessons: Ext.widget('dashboard-lessons', {
-					course: course,
-					courseNode: courseNode,
-					date: date
-				})
-			};
+		getTiles: function(course, courseNode, startDate, endDate) {
+			return Promise.resolve([Ext.widget({
+				xtype: 'box',
+				height: 1000,
+				cls: 'testing',
+				autoEl: {html: moment(startDate).format('dddd, MMMM Do YYYY') + '-' + moment(endDate).format('dddd, MMMM Do YYYY')}
+			})]);
 		},
 
 
