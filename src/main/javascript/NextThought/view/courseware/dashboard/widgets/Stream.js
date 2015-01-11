@@ -8,14 +8,6 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Stream', {
 	],
 
 	statics: {
-
-		__queryParams: {
-			exclude: 'application/vnd.nextthought.redaction',
-			sortOn: 'lastModified',
-			sortOrder: 'descending'
-		},
-
-
 		__CLASS_TO_TILE: {
 			'Note': 'Note',
 			'CommunityHeadlineTopic': 'Topic',
@@ -32,16 +24,9 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Stream', {
 
 
 		getTiles: function(course, startDate, endDate) {
-			var link = course.getStreamLink(),
-				params = this.__queryParams,
+			var stream = course.getStream(),
 				getWeight = this.getWeight.bind(this),
 				classMap = this.__CLASS_TO_TILE;
-
-			params.startDate = startDate;
-			params.endDate = endDate;
-
-			delete params.startDate;
-			delete params.endDate;
 
 			function getCmpConfig(record) {
 				var cls = classMap[record.get('Class')],
@@ -57,13 +42,9 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Stream', {
 					});
 			}
 
-			if (!link) { return Promise.resolve([]); }
-
-			return StoreUtils.loadItems(link, params)
+			return stream.getWeek(startDate, endDate)
 				.then(function(items) {
-					items = (items || []).map(function(change) {
-						var item = change.getItem();
-
+					items = (items || []).map(function(item) {
 						return getCmpConfig(item);
 					});
 

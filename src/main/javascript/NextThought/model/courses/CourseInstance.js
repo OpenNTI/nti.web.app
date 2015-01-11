@@ -9,7 +9,8 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		'NextThought.model.courses.CourseInstanceBoard',
 		'NextThought.model.assessment.UsersCourseAssignmentSavepoint',
 		'NextThought.store.courseware.Navigation',
-		'NextThought.store.courseware.ToCBasedOutline'
+		'NextThought.store.courseware.ToCBasedOutline',
+		'NextThought.store.courseware.Stream'
 	],
 
 	mixins: {
@@ -607,13 +608,13 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 				} catch (e) {
 					console.error('Failed to parse parent, ', e);
 
-					parentContent = null;
+					parentContents = null;
 				}
 			})
 			.fail(function(reason) {
 				console.error('Parent contents fail: ', reason);
 			})
-			.then(function(results) {//bin the forums
+			.then(function() {//bin the forums
 
 				if (!sectionContents && !parentContents) {
 					return Promise.reject('Failed to load any board contents');
@@ -698,9 +699,13 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
-	getStreamLink: function() {
-		var streamStore = Ext.getStore('Stream');
+	getStream: function() {
+		var link = this.getLink('CourseRecursiveStreamByBucket');
 
-		return streamStore && streamStore.proxy.url;
+		this.__streamStore = this.__streamStore || NextThought.store.courseware.Stream.create({
+			url: link
+		});
+
+		return this.__streamStore;
 	}
 });

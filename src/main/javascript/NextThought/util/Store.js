@@ -73,6 +73,16 @@ Ext.define('NextThought.util.Store', {
 
 	},
 
+	loadRawItems: function(url, queryParams) {
+		var queryString = queryParams && Ext.Object.toQueryString(queryParams),
+			a = document.createElement('a');
+
+		a.setAttribute('href', getURL(url));
+		a.search = queryString || '';
+
+		return Service.request(a.href);
+	},
+
 	/**
 	 * A helper method for when we don't need a full store, to just load the items
 	 * from a url
@@ -82,13 +92,7 @@ Ext.define('NextThought.util.Store', {
 	 * @return {Promise}            fulfills with the parsed items from the response
 	 */
 	loadItems: function(url, queryParams) {
-		var queryString = queryParams && Ext.Object.toQueryString(queryParams),
-			a = document.createElement('a');
-
-		a.setAttribute('href', getURL(url));
-		a.search = queryString || '';
-
-		return Service.request(a.href)
+		return this.loadRawItems(url, queryParams)
 			.then(function(response) {
 				var json = Ext.decode(response, true) || [];
 

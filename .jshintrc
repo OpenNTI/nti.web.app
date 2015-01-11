@@ -46,6 +46,11 @@
         "UserRepository",
         "SharingUtils",
         "moment",
-        "StoreUtils"
+        "StoreUtils",
+        "ObjectUtils",
+        "CourseWareUtils",
+        "Service",
+        "ParseUtils",
+        "Proimse"
     ]
 }
