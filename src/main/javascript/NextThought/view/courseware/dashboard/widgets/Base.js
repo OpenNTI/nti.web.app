@@ -1,5 +1,12 @@
 Ext.define('NextThought.view.courseware.dashboard.widgets.Base', {
 	statics: {
+
+		//the base weight for tiles we return
+		__BASE_WEIGHT: 1,
+
+		//how much weight to give the time weight
+		__TIME_MODIFIER: 0.1,
+
 		/**
 		 * Take the course and returns a list of tiles
 		 * that should be put in the dashboard
@@ -28,6 +35,28 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Base', {
 		 */
 		getUpcomingTiles: function(course, now) {
 			return Promise.resolve([]);
+		},
+
+		/**
+		 * Return the weight of a tile for a record
+		 * @param  {Model} record   the record to get the weight for
+		 * @return {Number}         weight of the tile
+		 */
+		getWeight: function(record) {
+			return this.__BASE_WEIGHT + record.get('Last Modified');
+		},
+
+		/**
+		 * Return a number between [0,1] to help put newer items nearer the top
+		 * @param  {Date} time			the time from the record
+		 * @return {Number}				the time modifier to add to the weight
+		 */
+		getTimeWeight: function(time) {
+			time = moment(time).toDate().getTime();
+
+			var now = (new Date()).getTime();
+
+			return (time / now) * this.__TIME_MODIFIER;
 		}
 	}
 });

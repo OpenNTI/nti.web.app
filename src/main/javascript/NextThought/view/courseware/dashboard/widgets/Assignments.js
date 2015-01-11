@@ -4,14 +4,26 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Assignments', {
 	requires: ['NextThought.view.courseware.dashboard.tiles.Assignment'],
 
 	statics: {
+
+		__BASE_WEIGHT: 4,
+
+		getWeight: function(record) {
+			var time = NextThought.view.courseware.dashboard.widgets.Base.getTimeWeight(record.get('availableEnding'));
+
+			return this.__BASE_WEIGHT - time;
+		},
+
+
 		getTiles: function(course, startDate, endDate, isNow) {
 			var start = moment(startDate),
-				end = moment(endDate);
+				end = moment(endDate),
+				getWeight = this.getWeight.bind(this);
 
 			function getCmpConfig(assignment) {
 				return {
 					xtype: 'dashboard-assignment',
-					record: assignment
+					record: assignment,
+					weight: getWeight(assignment)
 				};
 			}
 

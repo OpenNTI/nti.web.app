@@ -5,23 +5,33 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Announcements', {
 
 	statics: {
 
+		__BASE_WEIGHT: 3,
+
 		__queryParams: {
 			sortOn: 'CreatedTime',
 			sortOrder: 'descending'
 		},
 
 
+		getWeight: function(record) {
+			var time = NextThought.view.courseware.dashboard.widgets.Base.getTimeWeight(record.get('Last Modified'));
+
+			return this.__BASE_WEIGHT + time;
+		},
+
+
 		getTiles: function(course, startDate, endDate) {
 			var section = course.getMySectionAnnouncements(),
 				parent = course.getParentAnnouncements(),
-				params = this.__queryParams;
+				params = this.__queryParams,
+				getWeight = this.getWeight.bind(this);
 
 			function getCmpConfig(topic, sectionName) {
 				return {
 					xtype: 'dashboard-announcement',
 					record: topic,
 					label: sectionName,
-					weight: 2
+					weight: getWeight(topic)
 				};
 			}
 

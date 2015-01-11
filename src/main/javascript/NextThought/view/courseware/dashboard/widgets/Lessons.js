@@ -4,9 +4,21 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Lessons', {
 	requires: ['NextThought.view.courseware.dashboard.tiles.Lesson'],
 
 	statics: {
+
+		__BASE_WEIGHT: 2.5,
+
+
+		getWeight: function(record) {
+			var time = NextThought.view.courseware.dashboard.widgets.Base.getTimeWeight(record.get('AvailableBeginning'));
+
+			return this.__BASE_WEIGHT + time;
+		},
+
+
 		getTiles: function(course, startDate, endDate) {
 			var	start = moment(startDate);
-			var end = moment(endDate);
+			var end = moment(endDate),
+				getWeight = this.getWeight.bind(this);
 
 			return course.getNavigationStore().building
 				.then(function(store) {
@@ -19,7 +31,7 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Lessons', {
 							lessons.push({
 								xtype: 'dashboard-lesson',
 								record: node,
-								weight: 2
+								weight: getWeight(node)
 							});
 						}
 					});
