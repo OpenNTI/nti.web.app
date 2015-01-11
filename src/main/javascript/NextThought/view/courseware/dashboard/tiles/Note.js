@@ -2,8 +2,10 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Note', {
 	extend: 'NextThought.view.courseware.dashboard.tiles.Post',
 	alias: 'widget.dashboard-note',
 
+	requires: ['NextThought.view.courseware.dashboard.tiles.parts.NoteComment'],
+
 	statics: {
-		HEIGHT: 230,
+		HEIGHT: 200,
 		COMMENT_HEIGHT: 100,
 		VIDEO_THUMB_ASPECT: 1.77,
 
@@ -40,7 +42,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Note', {
 
 						return {
 							xtype: me.xtype,
-							height: me.HEIGHT + height,
+							baseHeight: me.HEIGHT + height,
 							width: me.WIDTH,
 							CACHE: {
 								context: context,
@@ -70,7 +72,13 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Note', {
 				return ContentUtils.getLineageLabels(rec.get('ContainerId'), true);
 			});
 
-		return this.CACHE.loadLineage;
+		return this.CACHE.loadLineage
+			.then(function(path) {
+				path.pop();
+				path.push('Lessons');
+
+				return path;
+			});
 	},
 
 
@@ -134,5 +142,26 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Note', {
 						}
 						return {};
 				});
+	},
+
+
+	hasComments: function() {
+		return this.record.get('ReplyCount') > 0;
+	},
+
+
+	loadComments: function() {
+		var rec = this.record,
+			link = rec.getLink('replies');
+
+		return StoreUtils.loadItems(link, this.self.COMMENT_PARAMS);
+	},
+
+
+	getCmpForComment: function(comment) {
+		return {
+			xtype: 'dashboard-note-comment',
+			record: comment
+		};
 	}
 });

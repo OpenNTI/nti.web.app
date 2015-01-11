@@ -16,7 +16,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.BaseCmp', {
 			return Promise.resolve({
 				xtype: this.xtype,
 				width: this.WIDTH,
-				height: this.HEIGHT
+				baseHeight: this.HEIGHT
 			});
 		}
 	},
@@ -38,18 +38,5 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.BaseCmp', {
 
 	getRenderData: function() {
 		return {};
-	},
-
-
-	afterRender: function() {
-		this.callParent(arguments);
-
-		if (this.top) {
-			this.el.setTop(this.top);
-		}
-
-		if (this.left) {
-			this.el.setLeft(this.left);
-		}
 	}
 });

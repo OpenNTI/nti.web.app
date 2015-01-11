@@ -15,7 +15,11 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Post', {
 	layout: 'none',
 
 	inheritableStatics: {
-		WHITEBOARD_SIZE: 300
+		WHITEBOARD_SIZE: 300,
+
+		COMMENT_PARAMS: {
+			batchSize: 2
+		}
 	},
 
 
@@ -114,10 +118,12 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Post', {
 		me.getContext()
 			.then(me.callWhenRendered.bind(me, 'setContext'));
 
-		// if (me.hasComments()) {
-		// 	me.commentsContianerEl.addCls('loading');
-		// 	me.loadComments();
-		// }
+		if (me.hasComments()) {
+			me.commentsContianerEl.addCls('loading');
+			me.loadComments()
+				.then(me.addComments.bind(me))
+				.fail(me.showCommentError.bind(me));
+		}
 	},
 
 
@@ -138,8 +144,8 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Post', {
 	getSharedWith: function() { return ''; },
 	getTitle: function() { return ''; },
 	getBody: function() { return ''; },
-	getCommentCount: function() { return ''; },
-	getContext: function() { return ''; },
+	getCommentCount: function() { return 0; },
+	getContext: function() { return Promise.resolve({}); },
 
 	//this should be the same for all sub instances
 	getCreatedTime: function() {
@@ -236,5 +242,24 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Post', {
 		if (!this.CACHE.height) {
 			this.CACHE.height = this.height + 186;
 		}
-	}
+	},
+
+
+	hasComments: function() {},
+	loadComments: function() {},
+	getCmpForComment: function() {},
+
+	addComments: function(items) {
+		var me = this;
+
+		items = items.slice(0, 2);
+
+		items = (items || []).map(function(item) {
+			return me.getCmpForComment(item);
+		});
+
+		me.add(items);
+	},
+
+	showCommentError: function() {}
 });

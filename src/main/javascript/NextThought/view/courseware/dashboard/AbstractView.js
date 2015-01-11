@@ -7,7 +7,7 @@ Ext.define('NextThought.view.courseware.dashboard.AbstractView', {
 
 	COLUMN_PADDING: 10,
 	COLUMN_COUNT: 3,
-	width: 1024 - 17, //17 to account for potential scrollbard
+	width: 1024 - 17, //17 to account for potential scrollbars
 
 	ui: 'course',
 	cls: 'course-dashboard-container scrollable',
@@ -27,8 +27,21 @@ Ext.define('NextThought.view.courseware.dashboard.AbstractView', {
 	initComponent: function() {
 		this.callParent(arguments);
 
+		var i;
+
+		this.COLUMN_MAP = {};
+
 		this.header = this.down('dashboard-header');
-		this.tileContainer = this.down('[tileContainer]');
+
+
+		for (i = 0; i < this.COLUMN_COUNT; i++) {
+			this.COLUMN_MAP[i] = this.add({
+				xtype: 'container',
+				layout: 'none',
+				tileContainer: true,
+				cls: 'dashboard-column'
+			});
+		}
 	},
 
 
@@ -39,6 +52,21 @@ Ext.define('NextThought.view.courseware.dashboard.AbstractView', {
 
 			return wA < wB ? 1 : wA === wB ? 0 : -1;
 		};
+	},
+
+
+	addToColumn: function(index, cmp) {
+		var column = this.COLUMN_MAP[index];
+
+		if (column) {
+			if (column.items.getCount() === 0) {
+				column.setWidth(cmp.width);
+			}
+
+			column.add(cmp);
+		} else {
+			console.error('No column for index', index);
+		}
 	},
 
 	/**
@@ -57,8 +85,8 @@ Ext.define('NextThought.view.courseware.dashboard.AbstractView', {
 
 		tiles.sort(this.getSortFn());
 
-		var padding = this.COLUMN_PADDING,
-			colWidth = tiles[0].width,
+		var me = this,
+			padding = me.COLUMN_PADDING,
 			colHeights = [], i;
 
 		function getShortestCol() {
@@ -74,39 +102,20 @@ Ext.define('NextThought.view.courseware.dashboard.AbstractView', {
 			return minIndex;
 		}
 
-		function getHeight() {
-			var j, maxHeight = 0;
-
-			for (j = 0; j < colHeights.length; j++) {
-				if (colHeights[j] > maxHeight) {
-					maxHeight = colHeights[j];
-				}
-			}
-
-			return maxHeight;
-		}
-
-		function getLeftForColumn(index) {
-			return padding + (index * (colWidth + padding));
-		}
-
-		for (i = 0; i < this.COLUMN_COUNT; i++) {
+		for (i = 0; i < me.COLUMN_COUNT; i++) {
 			colHeights.push(padding);
 		}
 
 		tiles.forEach(function(tile) {
-			var index = getShortestCol(),
-				top = colHeights[index],
-				left = getLeftForColumn(index);
+			var index = getShortestCol();
 
-			tile.top = top;
-			tile.left = left;
 			tile.CACHE = tile.CACHE || {};
+			tile.column = index;
 
-			colHeights[index] = top + tile.height + padding;
+			me.addToColumn(index, tile);
+
+			colHeights[index] = colHeights[index] + tile.baseHeight + padding;
 		});
-
-		this.tileContainer.setHeight(getHeight());
 
 		return tiles;
 	},
@@ -115,9 +124,15 @@ Ext.define('NextThought.view.courseware.dashboard.AbstractView', {
 	 * Add the tiles back, use the previous configs so the layout doesn't change any
 	 */
 	addTilesBack: function() {
-		this.tileContainer.removeAll(true);
-		this.hasTiles = this.tiles.length > 0;
-		this.tileContainer.add(this.tiles);
+		var i, me = this;
+
+		for (i = 0; i < me.COLUMN_COUNT; i++) {
+			me.COLUMN_MAP[i].removeAll(true);
+		}
+
+		me.tiles.forEach(function(tile) {
+			me.addToColumn(tile.column, tile);
+		});
 	},
 
 
@@ -132,7 +147,12 @@ Ext.define('NextThought.view.courseware.dashboard.AbstractView', {
 
 
 	clearTiles: function() {
-		this.tileContainer.removeAll(true);
+		var i;
+
+		for (i = 0; i < this.COLUMN_COUNT; i++) {
+			this.COLUMN_MAP[i].removeAll(true);
+		}
+
 		this.hasTiles = false;
 	}
 });

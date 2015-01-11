@@ -894,23 +894,28 @@
 		overflow: hidden;
 		margin-bottom: 10px;
 
-		.dashboard-tiles {
-			position: relative;
-			left: -10px;
+		.dashboard-column {
+			float: left;
+			margin-right: 8px;
+
+			&:last-of-type {
+				margin-right: 0;
+			}
 		}
 
 		.tile {
 			background-color: white;
 			border-radius: 3px;
 			box-shadow: 0 0 5px 0 rgba(0,0,0,0.5);
+			margin-bottom: 10px;
 			overflow: hidden;
-			position: absolute;
 		}
 
 		.dashboard-header {
 			color: white;
 			background-color: $primary-blue;
 			display: inline-block;
+			margin-bottom: 10px;
 
 			&.locked {
 				position: absolute;
@@ -923,14 +928,24 @@
 		}
 
 		.dashboard-post {
-			background-color: #e6e9ea;
+			min-height: 200px;
+			background-color: rgba(255,255,255,0.8);
+
+			&.topic {
+				min-height: 185px;
+				.location {
+					min-height: 1.3em;
+				}
+			}
 
 			.location {
 				background-color: white;
 				border-bottom: 1px solid #efefef;
-				font: normal 400 0.75em/1.3em $font;
+				font: normal 400 0.6em/1.3em $font;
 				color: $tertiary-grey;
-				padding: 3px 15px;
+				text-transform: uppercase;
+				padding: 4px 15px;
+				min-height: 33px;
 
 				.path {
 					overflow: hidden;
@@ -962,33 +977,33 @@
 					left: 50%;
 					@include experimental(transform, translateX(-50%));
 					margin-top: -24px;
-					line-height: 48px;
-					max-width: 100%;
-
+					line-height: 38px;
+					max-width: 80%;
+					font-size: 0.8em;
 					color: white;
 					background-color: rgba(0,0,0,0.68);
 					box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15),0 0 3px 0 #000;
 					border-radius: 5em;
 					overflow: hidden;
 					@include ellipsis;
-					padding: 0 5px 0 50px;
+					padding: 0 10px 0 50px;
 
-					@include icon('play', $position: absolute, $top: 3px, $left: 3px);
+					@include icon('play-small', $position: absolute, $top: 3px, $left: 3px);
 				}
 			}
 
 			.list-item {
-				display: inline;
+				display: inline-block;
 				font-size: 0.75em;
 				color: $tertiary-grey;
 
-				&::after {
+				&::before {
 					content: '\a0\b7\a0';
 					font-size: 1.3em;
 					vertical-align: middle;
 				}
 
-				&:last-of-type::after {
+				&:first-of-type::before {
 					content: '';
 				}
 			}
@@ -1035,10 +1050,23 @@
 							overflow: hidden;
 							@include ellipsis;
 						}
+
+						.shared-with, .created {
+							display: inline-block;
+							max-width: 90px;
+							overflow: hidden;
+							vertical-align: middle;
+							@include ellipsis;
+						}
+
+						.created {
+							max-width: 200px;
+						}
 					}
 				}
 
 				.post {
+					color: $primary-grey;
 					padding: 5px 15px;
 					font: normal 400 0.9em/1.2em $font;
 
@@ -1049,14 +1077,66 @@
 					}
 
 					.body {
-						height: 3.6em;
+						max-height: 3.6em;
 						overflow: hidden;
 					}
 				}
 			}
 
+			.body-container:not(:empty) {
+				padding: 10px 15px 0;
+			}
+
+			.post-comment {
+				position: relative;
+				padding-left: 40px;
+
+				.avatar {
+					position: absolute;
+					left: 0;
+					top: 0;
+					width: 30px;
+					height: 30px;
+					background-size: contain;
+				}
+
+				.meta {
+					color: $primary-grey;
+					font-size: 0.9em;
+					overflow: hidden;
+					padding-top: 5px;
+
+					.name {
+						float: left;
+						font-weight: 600;
+						margin-right: 5px;
+						max-width: 120px;
+						overflow: hidden;
+						@include ellipsis;
+					}
+
+					.created {
+						font-weight: 300;
+						float: left;
+					}
+				}
+
+				.body {
+					font-size: 0.9em;
+					line-height: 1.2em;
+					max-height: 3.6em;
+					overflow: hidden;
+				}
+
+				.actions {
+					.comments {
+						color: $primary-blue;
+					}
+				}
+			}
+
 			.add-comment {
-				margin: 4px 15px;
+				margin: 6px;
 				background-color: white;
 				line-height: 30px;
 				border-radius: 3px;
