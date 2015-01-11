@@ -7,7 +7,11 @@ Ext.define('NextThought.view.courseware.dashboard.TileContainer', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.header.setWeek(this.week);
+		if (this.isUpcoming) {
+			this.header.setUpcoming();
+		} else {
+			this.header.setWeek(this.week);
+		}
 	},
 
 

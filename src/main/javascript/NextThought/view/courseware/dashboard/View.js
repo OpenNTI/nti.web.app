@@ -6,6 +6,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 
 
 	statics: {
+		DATE_OVERRIDE: null, //'2015-5-2', 'YYYY-MM-DD'
 		OUT_OF_BUFFER: 'out-of-buffer',
 		IN_BUFFER: 'in-buffer',
 		CURRENT: 'current'
@@ -75,7 +76,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 
 	bundleChanged: function(bundle) {
 		var id = bundle && bundle.getId(),
-			courseCatalog;
+			courseCatalog, date = this.self.DATE_OVERRIDE || new Date();
 
 		this.maxPast = bundle.get('CreatedTime');
 		this.maxFuture = '2016-01-01';
@@ -92,11 +93,45 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 		courseCatalog = bundle.getCourseCatalogEntry();
 
 		this.course = bundle;
-		this.currentWeek = TimeUtils.getWeek();
+		this.currentWeek = TimeUtils.getWeek(date);
 		this.weekToLoad = this.currentWeek;
 		this.startDate = courseCatalog.get('StartDate');
 
+		//this.addUpcoming(date);
+
 		this.initialLoad();
+	},
+
+
+	queryUpcomingTiles: function(date) {
+		var widgets = NextThought.view.courseware.dashboard.widgets,
+			course = this.course, tiles = [];
+
+		Ext.Object.each(widgets, function(clsName, cls) {
+			if (cls.getUpcomingTiles) {
+				tiles.push(cls.getUpcomingTiles(course, date));
+			}
+		});
+
+		return Promise.all(tiles)
+					.then(function(results) {
+						if (Ext.isEmpty(results)) {
+							return [];
+						}
+
+						return results.reduce(function(a, b) {
+							return a.concat(b);
+						}, []);
+					});
+	},
+
+
+	addUpcoming: function(date) {
+		this.add({
+			xtype: 'dashboard-tile-container',
+			loadTiles: this.queryUpcomingTiles.bind(this, date),
+			isUpcoming: true
+		});
 	},
 
 
@@ -115,8 +150,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 
 	queryTiles: function(startDate, endDate, isCurrent) {
 		var widgets = NextThought.view.courseware.dashboard.widgets,
-			course = this.course,
-			tiles = [];
+			course = this.course, tiles = [];
 
 		Ext.Object.each(widgets, function(clsName, cls) {
 			if (cls.getTiles) {
@@ -218,7 +252,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 			xtype: 'dashboard-tile-container',
 			loadTiles: this.queryTiles.bind(this, week.start, week.end, isCurrent),
 			week: week,
-			current: true,
+			isCurrent: isCurrent,
 			number: this.items.getCount(),
 			currentState: NextThought.view.courseware.dashboard.View.IN_BUFFER
 		});

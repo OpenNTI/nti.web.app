@@ -38,6 +38,47 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Assignments', {
 
 							return assignments;
 						});
+		},
+
+
+		UPCOMING_DAYS_CUTOFF: 10,
+
+
+		getUpcomingTiles: function(course, date) {
+			var now = moment(date), load,
+				upcomingCutoff = this.UPCOMING_DAYS_CUTOFF;
+
+			load = course.getAssignments()
+						.then(function(assignmentCollection) {
+							var items = Ext.clone(assignmentCollection.get('Items')),
+								notPastDue;
+
+							items = items || [];
+
+							notPastDue = items.filter(function(item) {
+								var due = item.get('availableEnding'),
+									start = item.get('availableBeginning');
+
+								//if we don't have due date or due is before now
+								return due ? now.isAfter(due) : false;
+							});
+
+							notPastDue.sort(function(a, b) {
+								var dA = a.get('availableEnding'),
+									dB = a.get('availableEnding');
+
+								return dA < dB ? -1 : dA === dB ? 0 : 1;
+							});
+
+							return notPastDue.slice(0, 3);
+						});
+
+			return Promise.resolve([
+				{
+					xtype: 'dashboard-assignment-list',
+					load: load
+				}
+			]);
 		}
 	}
 });

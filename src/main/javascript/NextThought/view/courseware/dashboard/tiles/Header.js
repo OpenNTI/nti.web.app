@@ -5,14 +5,27 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Header', {
 	cls: 'dashboard-header',
 
 	renderTpl: Ext.DomHelper.markup([
-		{tag: 'span', cls: 'start'},
-		'-',
-		{tag: 'span', cls: 'end'}
+		{cls: 'label', cn: [
+			{tag: 'span', cls: 'start'},
+			'-',
+			{tag: 'span', cls: 'end'}
+		]}
 	]),
 
 	renderSelectors: {
+		labelEl: '.label',
 		startEl: '.start',
 		endEl: '.end'
+	},
+
+
+	setUpcoming: function() {
+		if (!this.rendered) {
+			this.on('afterrender', this.setUpcoming.bind(this));
+			return;
+		}
+
+		this.labelEl.update('Upcoming');
 	},
 
 
