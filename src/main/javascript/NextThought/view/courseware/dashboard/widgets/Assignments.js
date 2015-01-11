@@ -1,7 +1,7 @@
 Ext.define('NextThought.view.courseware.dashboard.widgets.Assignments', {
 	extend: 'NextThought.view.courseware.dashboard.widgets.Base',
 
-	requires: ['NextThought.view.courseware.dashboard.tiles.Assignments'],
+	requires: [],
 
 	statics: {
 		getTiles: function(course, courseNode, startDate, endDate) { return Promise.resolve([]); },

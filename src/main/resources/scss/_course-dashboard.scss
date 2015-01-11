@@ -887,18 +887,36 @@
 .course-dashboard {
 	position: relative;
 	overflow-y: auto;
+	overflow-x: hidden;
 
-	.static-container {
-		position: absolute;
-		top: 0; right: 0;
-		width: 255px;
-		background-color: blue;
-	}
+	.tile-container {
+		min-height: 300px;
+		overflow: hidden;
+		margin-bottom: 10px;
 
-	.activity-container {
-		padding-right: 260px;
-		min-height: 100px;
-		background-color: red;
+		.dashboard-column {
+			float: left;
+			padding-right: 10px;
+
+			&:last-of-type {
+				padding-right: 0;
+			}
+		}
+
+		.tile {
+			background-color: red;
+			margin-bottom: 22px;
+		}
+
+		.dashboard-header {
+			color: white;
+			background-color: $primary-blue;
+			width: 100%;
+
+			&.locked {
+				position: absolute;
+			}
+		}
 	}
 }
 
