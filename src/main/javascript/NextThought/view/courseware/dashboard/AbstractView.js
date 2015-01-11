@@ -7,7 +7,7 @@ Ext.define('NextThought.view.courseware.dashboard.AbstractView', {
 		'NextThought.util.MasonryPacker'
 	],
 
-	GRID_WIDTH: 8,
+	GRID_WIDTH: 6,
 
 	ui: 'course',
 	cls: 'course-dashboard-container scrollable',
@@ -68,7 +68,7 @@ Ext.define('NextThought.view.courseware.dashboard.AbstractView', {
 
 		function get(r) {
 			var base = r.getBaseWeight(), //give more important tiles a higher base weight to keep them on top
-				inner = (r.innerWeight > 0) ? r.innerWeight / r.maxInner : 0, //% of the max inner, if the innerWeight is 0 the max might be so make sure we don't divide by zero
+				inner = (r.innerWeight > 0) ? r.innerWeight / r.maxInner : 0, //% of the max inner
 				time = (r.getTimeWeight() / today.getTime()) * 0.001; //how close the record is to today, decreased so it doesn't over turn the inner weight
 
 			return base + inner + time;

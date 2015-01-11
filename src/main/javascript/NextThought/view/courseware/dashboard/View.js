@@ -3,7 +3,8 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 	alias: 'widget.course-dashboard',
 
 	requires: [
-		'NextThought.view.courseware.dashboard.tiles.*'
+		'NextThought.view.courseware.dashboard.tiles.*',
+		'NextThought.view.courseware.dashboard.widgets.*'
 	],
 
 	mixins: {
@@ -33,173 +34,102 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 
 
 	bundleChanged: function(bundle) {
-		var bundleId = bundle && bundle.getId(),
-			l, toc, course, courseNavStore, me = this,
-			testId = bundle && (bundle.isCourse ? bundle.get('Bundle').getId() : bundleId),
-			date = this.self.dateOverride || new Date();//now
+		var id = bundle && bundle.getId(),
+			locationInfo, toc, courseNode;
 
-		if (this.course !== bundleId) {
+		if (id !== this.courseId) {
 			this.hasItems = true;
 			this.tileContainer.removeAll(true);
 		}
 
-		if (!bundle || $AppConfig.disableDashboard || /UCOL/i.test(testId)) {
-			this.hasItems = false;
+		if (!bundle || $AppConfig.disableDashboard) {
 			return;
 		}
 
-		this.course = bundleId;
+		locationInfo = bundle.getLocationInfo();
 
-		l = bundle.getLocationInfo();
+		if (locationInfo && locationInfo !== ContentUtils.NO_LOCATION) {
+			toc = locationInfo.toc.querySelector('toc');
+			courseNode = toc && toc.querySelector('course');
+		}
 
-		if (l && l !== ContentUtils.NO_LOCATION) {
-			toc = l.toc.querySelector('toc');
-			course = toc && toc.querySelector('course');
-			courseNavStore = bundle.getNavigationStore && bundle.getNavigationStore();
-			if (!courseNavStore) {
-				this.hasItems = false;
-				this.fireEvent('hide-dashboard-tab', this);
-				return;
+		this.queryTiles(bundle, courseNode, new Date())
+			.then(this.applyTiles.bind(this))
+			.fail(this.hideDashboard.bind(this));
+	},
+
+
+	queryTiles: function(course, courseNode, date) {
+		var widgets = NextThought.view.courseware.dashboard.widgets,
+			tilesToLoad = [], deadlinesToLoad = [],
+			tilesLoaded, deadlinesLoaded;
+
+		Ext.Object.each(widgets, function(clsName, cls) {
+			if (cls.getTiles) {
+				tilesToLoad.push(cls.getTiles(course, courseNode, date));
 			}
 
-			if (courseNavStore.onceBuilt) {
-				courseNavStore.onceBuilt().then(function() {
-					if (me.course === bundleId) {
-						me.applyStore(courseNavStore, date, course, l);
-					}
+			if (cls.getDeadlines) {
+				deadlinesToLoad.push(cls.getDeadlines(course, courseNode, date));
+			}
+		});
+
+		tilesLoaded = Promise.all(tilesToLoad)
+			.then(function(results) {
+				if (Ext.isEmpty(results)) {
+					return [];
+				}
+
+				return results.reduce(function(a, b) {
+					return a.concat(b);
+				}, []);
+			});
+
+		deadlinesLoaded = Promise.all(deadlinesToLoad)
+			.then(function(results) {
+				if (Ext.isEmpty(results)) {
+					return [];
+				}
+
+				return results.reduce(function(a, b) {
+					return a.concat(b);
+				}, []);
+			});
+
+		return Promise.all([
+					tilesLoaded,
+					deadlinesLoaded,
+					course.getCompletionStatus()
+				])
+				.then(function(config) {
+					return {
+						tiles: config[0],
+						deadlines: config[1],
+						status: config[2]
+					};
 				});
-			}
-		}
 	},
 
 
-	applyStore: function(store, date, course, locationInfo) {
-		var me = this, nodes, que = [];
+	applyTiles: function(config) {
+		var tiles = config.tiles,
+			deadlines = config.deadlines,
+			status = config.status;
 
-		if (this.el) {
-			this.el.mask(getString('NextThought.view.courseware.dashboard.View.loading'));
-		}
-
-		nodes = store.findByDate(date);
-		if (!nodes.length) {
-			if (this.el) {
-				this.el.unmask();
+		this.add([
+			{
+				xtype: 'dashboard-deadlines',
+				items: deadlines
+			},
+			{
+				xtype: 'dashboard-status',
+				status: status
 			}
-			this.hasItems = false;
-			this.fireEvent('hide-dashboard-tab', this);
-			return;
-		}
-
-		nodes.forEach(function(node) {
-			que.push(new Promise(function(fulfill) {
-				me.queryTiles(date, course, locationInfo, node, fulfill);
-			}));
-		});
-
-		return Promise.all(que)
-			.done(this.applyTiles.bind(this))
-			.fail(function() { if (me.el) {me.el.unmask();} });
+		]);
 	},
 
 
-	applyTiles: function(tiles) {
-		try {
-			var video;
-			tiles = tiles.reduce(function(agg, v) { return agg.concat(v); }, []);
-			tiles = tiles.filter(function(o) {
-				if (o && o instanceof NextThought.view.courseware.dashboard.tiles.Videos) {
-					if (!video || video.sources.length < o.sources.length) {
-						video = o;
-					}
-					return false;
-				}
-				return !!o;
-			});
+	hideDashboard: function() {
 
-			if (video) {
-				tiles.push(video);
-			}
-
-
-			this.setTiles(tiles);
-			if (!tiles.length) {
-				this.hasItems = false;
-				this.fireEvent('hide-dashboard-tab', this);
-			}
-		}
-		catch (e) {
-			console.error(e.stack || e.message || e);
-		}
-		finally {
-			if (this.el) {
-				this.el.unmask();
-			}
-		}
-	},
-
-
-	/**
-	 * Return a set of tile configs/instances for the given arguments.
-	 *
-	 * This will ask each implementation if it has something to show, if it does it will return a config
-	 *
-	 * @see NextThought.view.courseware.dashboard.tiles.Tile#getTileFor
-	 *
-	 * @param {Date} date
-	 * @param {Node} course
-	 * @param {Object} location
-	 * @param {NextThought.model.courses.navigation.Node} courseNode
-	 * @param {Function} callback
-	 * @param {Array} callback.tiles
-	 */
-	queryTiles: function(date, course, location, courseNode, callback) {
-		var NS = NextThought.view.courseware.dashboard.tiles,
-			tiles = [],
-			queue = [],
-			me = this,
-			push = tiles.push;
-
-		Ext.Object.each(NS, function(clsName, cls) {
-			var fn = cls.getTileFor;
-			if (fn) {
-				//make each query in to the dashboard tiles release the current
-				// processes so that its long-exec time does not make the course-set
-				// time does not appear to take several seconds/minutes
-				fn = Ext.Function.createBuffered(fn, 1, cls, null);
-				fn.$test = cls.$className;
-				queue.push(fn);
-			}
-		});
-
-
-		if (!courseNode) {
-			console.warn('No course node');
-			Ext.callback(callback, me, [tiles]);
-			return;
-		}
-
-
-		Ext.each(queue.slice(), function(fn) {
-			//console.debug(fn.$test + ' Started');
-			fn(date, course, location, courseNode, function finish(o) {
-				//console.debug(fn.$test + ' Finished');
-				queue.pop();
-				if (o) {
-					push[Ext.isArray(o) ? 'apply' : 'call'](tiles, o);
-				}
-
-				if (!callback) {
-					console.error('Called more than once?');
-				}
-
-				if (queue.length === 0) {
-					Ext.callback(callback, me, [tiles], 1);
-					callback = null;
-				}
-			});
-		});
 	}
 });
-
-
-

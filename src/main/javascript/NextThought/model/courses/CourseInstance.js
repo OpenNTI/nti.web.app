@@ -115,6 +115,10 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
+	//get a count of how many things the user has done in the course
+	getCompletionStatus: function() {},
+
+
 	getNavigationStore: function() {
 		var temp;
 		if (!this.navStore) {
