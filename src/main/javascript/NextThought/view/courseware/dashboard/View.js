@@ -78,9 +78,6 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 		var id = bundle && bundle.getId(),
 			courseCatalog, date = this.self.DATE_OVERRIDE || new Date();
 
-		this.maxPast = bundle.get('CreatedTime');
-		this.maxFuture = '2016-01-01';
-
 		if (id !== this.courseId) {
 			this.hasItems = true;
 			this.removeAll(true);
@@ -96,6 +93,9 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 		this.currentWeek = TimeUtils.getWeek(date);
 		this.weekToLoad = this.currentWeek;
 		this.startDate = courseCatalog.get('StartDate');
+		//null out values set from a previous bundle
+		this.loaded = false;
+		this.emptyContainer = null;
 
 		//this.addUpcoming(date);
 
