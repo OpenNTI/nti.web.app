@@ -241,14 +241,32 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 	},
 
 
-	maybeLoadNextWeek: function(scrollInfo, force) {
-		var scrolledDown = scrollInfo.scrollTop + this.loadThreshold > scrollInfo.scrollHeight - scrollInfo.offSetHeight,
-			week = this.weekToLoad,
-			isCurrent = week === this.currentWeek;
+	maybeLoadNextWeek: function(scrollInfo, forced) {
+		var scrolledDown = scrollInfo.scrollTop + this.loadThreshold > scrollInfo.scrollHeight - scrollInfo.offSetHeight;
 
-		if ((!scrolledDown && !force) || !week) { return; }
+		if (forced || (scrolledDown && !this.loadingWeek)) {
+			this.__loadNextWeek();
+		}
+	},
 
-		this.add({
+
+	__loadNextWeek: function() {
+		var me = this,
+			week = me.weekToLoad,
+			isCurrent = week === me.currentWeek,
+			tileContainer;
+
+		if (!week) {
+			//if we have an empty week update the range
+			if (this.emptyContainer) {
+				this.emptyContainer.lockInEmptyRange();
+				this.emptyContainer = false;
+			}
+
+			return;
+		}
+
+		tileContainer = this.add({
 			xtype: 'dashboard-tile-container',
 			loadTiles: this.queryTiles.bind(this, week.start, week.end, isCurrent),
 			week: week,
@@ -257,12 +275,44 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 			currentState: NextThought.view.courseware.dashboard.View.IN_BUFFER
 		});
 
+		this.loadingWeek = true;
+
+		this.mon(tileContainer, {
+			single: true,
+			'is-empty': '__emptyContainer',
+			'not-empty': '__notEmptyContainer'
+		});
 
 		if (!week.start.isBefore(this.startDate)) {
 			this.weekToLoad = week.getPrevious();
 		} else {
 			this.weekToLoad = null;
 		}
+	},
+
+
+	__emptyContainer: function(container) {
+		if (this.emptyContainer) {
+			this.emptyContainer.updateEmptyRangeStart(container.week.start);
+
+			this.remove(container, true);
+		} else {
+			this.emptyContainer = container;
+		}
+
+		this.loadingWeek = false;
+		this.maybeLoadNextWeek({}, true);
+	},
+
+
+	__notEmptyContainer: function() {
+		if (this.emptyContainer) {
+			this.emptyContainer.lockInEmptyRange();
+			this.emptyContainer = false;
+		}
+
+		this.loadingWeek = false;
+		this.scrollChanged();
 	},
 
 

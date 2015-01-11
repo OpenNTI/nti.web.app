@@ -30,11 +30,33 @@ Ext.define('NextThought.view.courseware.dashboard.TileContainer', {
 		me.lastLoaded = new Date();
 
 		me.loadingTiles = me.loadTiles().then(function(tiles) {
-			me.removeLoadingMask();
-			me.setTiles(tiles);
+			if (tiles.length === 0) {
+				me.isEmpty = true;
+				me.start = me.week.start;
+				me.fireEvent('is-empty', me);
+			} else {
+				me.fireEvent('not-empty', me);
+				me.removeLoadingMask();
+				me.setTiles(tiles);
+			}
 		});
 
 		return me.loadingTiles;
+	},
+
+
+	updateEmptyRangeStart: function(start) {
+		this.startDate = start;
+	},
+
+
+	lockInEmptyRange: function() {
+		this.header.setWeek({
+			start: this.startDate,
+			end: this.week.end
+		});
+
+		this.removeLoadingMask();
 	},
 
 
@@ -64,7 +86,7 @@ Ext.define('NextThought.view.courseware.dashboard.TileContainer', {
 		var state = getState.call(null, this.getPositionInfo()),
 			handler;
 
-		if (state === this.currentState) { return; }
+		if (state === this.currentState || this.isEmpty) { return; }
 
 		if (state === NextThought.view.courseware.dashboard.View.CURRENT) {
 			handler = this.updateCurrent.bind(this);
