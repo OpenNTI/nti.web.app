@@ -96,7 +96,7 @@ Ext.define('NextThought.view.courseware.dashboard.TileContainer', {
 		var state = getState.call(null, this.getPositionInfo()),
 			handler;
 
-		if (state === this.currentState || this.isEmpty) { return; }
+		if (state === this.currentState || this.isEmpty()) { return; }
 
 		if (state === NextThought.view.courseware.dashboard.View.CURRENT) {
 			handler = this.updateCurrent.bind(this);
