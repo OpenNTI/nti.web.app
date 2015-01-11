@@ -3,7 +3,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Note', {
 	alias: 'widget.dashboard-note',
 
 	statics: {
-
+		HEIGHT: 230,
 		COMMENT_HEIGHT: 100,
 		VIDEO_THUMB_ASPECT: 1.77,
 
@@ -77,7 +77,8 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Note', {
 	getCurrent: function() {
 		return this.getPath()
 			.then(function(path) {
-				return path.shift();
+				path = Ext.clone(path);
+				return path.first();
 			});
 	},
 

@@ -900,8 +900,9 @@
 		}
 
 		.tile {
-			background-color: red;
-			margin-bottom: 22px;
+			background-color: white;
+			border-radius: 3px;
+			box-shadow: 0 0 5px 0 rgba(0,0,0,0.5);
 			overflow: hidden;
 			position: absolute;
 		}
@@ -919,6 +920,152 @@
 		.lesson-tile {
 			background-color: $secondary-green;
 			color: white;
+		}
+
+		.dashboard-post {
+			background-color: #e6e9ea;
+
+			.location {
+				background-color: white;
+				border-bottom: 1px solid #efefef;
+				font: normal 400 0.75em/1.3em $font;
+				color: $tertiary-grey;
+				padding: 3px 15px;
+
+				.path {
+					overflow: hidden;
+					@include ellipsis;
+					
+					&.has-current::after {
+						content: '\a0/';
+					}
+				}
+
+				.current {
+					overflow: hidden;
+					color: $primary-blue;
+					@include ellipsis;
+				}
+			}
+
+			.context-image {
+				position: relative;
+				height: 186px;
+				&:not(.has-context) { display: none; }
+
+				img {
+					width: 100%;
+				}
+
+				.title {
+					top: 50%;
+					left: 50%;
+					@include experimental(transform, translateX(-50%));
+					margin-top: -24px;
+					line-height: 48px;
+					max-width: 100%;
+
+					color: white;
+					background-color: rgba(0,0,0,0.68);
+					box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15),0 0 3px 0 #000;
+					border-radius: 5em;
+					overflow: hidden;
+					@include ellipsis;
+					padding: 0 5px 0 50px;
+
+					@include icon('play', $position: absolute, $top: 3px, $left: 3px);
+				}
+			}
+
+			.list-item {
+				display: inline;
+				font-size: 0.75em;
+				color: $tertiary-grey;
+
+				&::after {
+					content: '\a0\b7\a0';
+					font-size: 1.3em;
+					vertical-align: middle;
+				}
+
+				&:last-of-type::after {
+					content: '';
+				}
+			}
+
+			.post-body {
+				background-color: white;
+				position: relative;
+				border-bottom: 1px solid #daddde;
+
+				.controls {
+					position: absolute;
+					top: 1px;
+					right: 0;
+					@include like-and-favorite;
+
+					.favorite-spacer { display: none;}
+					.like { margin: 4px; }
+				}
+
+				.post-meta {
+					padding: 10px 60px 0 10px;
+					overflow: hidden;
+
+					.avatar {
+						background-size: contain;
+						float: left;
+						width: 40px;
+						height: 40px;
+						border-radius: 20px;
+					}
+
+					.meta {
+						padding-top: 5px;
+						float: left;
+						margin-left: 5px;
+						max-width: 215px;
+
+						.name {
+							color: $primary-grey;
+							font-size: 1.1em;
+							font-weight: 300;
+							margin-bottom: -7px;
+
+							overflow: hidden;
+							@include ellipsis;
+						}
+					}
+				}
+
+				.post {
+					padding: 5px 15px;
+					font: normal 400 0.9em/1.2em $font;
+
+					.title {
+						font-weight: 600;
+						overflow: hidden;
+						@include ellipsis;
+					}
+
+					.body {
+						height: 3.6em;
+						overflow: hidden;
+					}
+				}
+			}
+
+			.add-comment {
+				margin: 4px 15px;
+				background-color: white;
+				line-height: 30px;
+				border-radius: 3px;
+				box-shadow: inset 0 0 0 1px #daddde;
+				padding: 0 15px;
+				font-size: 0.8em;
+				font-style: italic;
+				color: $tertiary-grey;
+			}
 		}
 	}
 }

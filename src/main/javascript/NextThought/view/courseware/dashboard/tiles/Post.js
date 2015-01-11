@@ -1,7 +1,9 @@
 Ext.define('NextThought.view.courseware.dashboard.tiles.Post', {
 	extend: 'NextThought.view.courseware.dashboard.tiles.BaseContainer',
 
-	mixins: ['NextThought.mixins.LikeFavoriteActions'],
+	mixins: {
+		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
+	},
 
 	getTargetEl: function() {
 		return this.body;
@@ -45,8 +47,8 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Post', {
 			{cls: 'post', cn: [
 				{cls: 'title', html: '{Title}'},
 				{cls: 'body', html: '{Body}'},
-				{tag: 'span list-item more', html: 'Read More'},
-				{tag: 'span list-item comment-count', html: '{CommentCount:plural("Comment")}'}
+				{tag: 'span', cls: 'list-item more', html: 'Read More'},
+				{tag: 'span', cls: 'list-item comment-count', html: '{CommentCount:plural("Comment")}'}
 			]}
 		]},
 		{ id: '{id}-body', cls: 'body-container', cn: ['{%this.renderContainer(out,values)%}'] },
@@ -60,7 +62,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Post', {
 		contextEl: '.context-image',
 		contextImageEl: '.context-image .image',
 		contextTitleEl: '.context-image .title',
-		liked: '.controls .liked',
+		liked: '.controls .like',
 		favorites: '.controls .favorite',
 		avatarEl: '.post-meta .avatar',
 		nameEl: '.post-meta .name',
@@ -99,6 +101,8 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Post', {
 		});
 
 		this.renderData = Ext.apply(this.renderData || {}, renderData);
+
+		this.mixins.likeAndFavoriteActions.constructor.call(this);
 	},
 
 
@@ -141,7 +145,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Post', {
 	getCreatedTime: function() {
 		var created = this.record.get('CreatedTime');
 
-		return moment(created).format('MMM Do H:m A');
+		return moment(created).format('MMM Do h:mm A');
 	},
 
 	//this should be the same for all sub instances
@@ -161,6 +165,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Post', {
 
 
 	setPath: function(value) {
+		value = Ext.clone(value);
 		this.setCurrent(value.shift());
 
 		value.reverse();
@@ -170,6 +175,9 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Post', {
 
 
 	setCurrent: function(value) {
+		if (value) {
+			this.pathEl.addCls('has-current');
+		}
 		this.currentEl.update(value);
 	},
 
