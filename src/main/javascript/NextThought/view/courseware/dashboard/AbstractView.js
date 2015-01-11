@@ -41,8 +41,8 @@ Ext.define('NextThought.view.courseware.dashboard.AbstractView', {
 
 	getSortFn: function() {
 		return function(a, b) {
-			var wA = a.getWeight ? a.getWeight() : 1,
-				wB = b.getWeight ? b.getWeight() : 1;
+			var wA = a.weight || 0,
+				wB = b.weight || 0;
 
 			return wA < wB ? 1 : wA === wB ? 0 : -1;
 		};
@@ -71,7 +71,7 @@ Ext.define('NextThought.view.courseware.dashboard.AbstractView', {
 	 */
 	setTiles: function(tiles) {
 		//sort the tiles so the most important tiles are on top
-		tiles.sort(this.getSortFn);
+		tiles.sort(this.getSortFn());
 
 		var i, columns = this.COLUMNS,
 			length = tiles.length;

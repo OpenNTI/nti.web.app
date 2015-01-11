@@ -3,10 +3,9 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Base', {
 
 	cls: 'tile',
 
-	rows: 2,
-	cols: 2,
-
-	weight: 1,
-
-	getWeight: function() { return this.weight; }
+	onClassExtended: function(cls, data) {
+		if (data.cls) {
+			data.cls = [cls.superclass.cls, data.cls].join(' ');
+		}
+	}
 });
