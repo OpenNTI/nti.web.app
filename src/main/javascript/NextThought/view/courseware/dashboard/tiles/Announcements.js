@@ -1,6 +1,6 @@
-Ext.define('NextThought.view.courseware.dashboard.tiles.Lessons', {
+Ext.define('NextThought.view.courseware.dashboard.tiles.Announcements', {
 	extend: 'Ext.view.View',
-	alias: 'widget.dashboard-lessons',
+	alias: 'widget.dashboard-announcements',
 
 	itemSelector: '.item',
 
@@ -8,7 +8,5 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Lessons', {
 		{tag: 'tpl', 'for': '.', cn: [
 			{cls: 'item'}
 		]}
-	)),
-
-	initComponent: function() {}
+	))
 });

@@ -13,19 +13,46 @@ Ext.define('NextThought.view.courseware.dashboard.AbstractView', {
 	cls: 'course-dashboard-container scrollable',
 	layout: 'auto',
 
-	items: {
-		layout: 'auto',
-		ui: 'course',
-		cls: 'course-dashboard grid',
-		xtype: 'container',
-		defaultType: 'box',
-		items: []
-	},
+	items: [
+		{
+			layout: 'auto',
+			ui: 'course',
+			cls: 'course-dashboard main',
+			xtype: 'container',
+			items: [
+				{
+					layout: 'auto',
+					staticWidgets: true,
+					cls: 'course-dashboard-group static',
+					xtype: 'container',
+					items: []
+				},
+				{
+					layout: 'auto',
+					widgets: true,
+					cls: 'course-dashboard-group tiles',
+					xtype: 'container',
+					items: []
+				}
+			]
+		},
+		{
+			layout: 'auto',
+			ui: 'course',
+			floatingWidgets: true,
+			cls: 'course-dashboard course-dashboard-group floating',
+			xtype: 'container',
+			items: []
+		}
+	],
+
 
 	constructor: function(config) {
 		delete config.items;//don't replace our inner item
 		this.callParent(arguments);
-		this.tileContainer = this.items.first();
+		this.staticsContainer = this.down('[staticWidgets=true]');
+		this.floatingContainer = this.down('[floatingWidgets=true]');
+		this.tileContainer = this.down('[widgets=true]');
 
 		this.sorter = this.buildSorter();
 	},
@@ -308,6 +335,18 @@ Ext.define('NextThought.view.courseware.dashboard.AbstractView', {
 		catch (e) {
 			console.error(e.stack || e.message);
 		}
+	},
+
+
+	setStaticTiles: function(items) {
+		this.staticsContainer.removeAll(true);
+		this.staticsContainer.add(items);
+	},
+
+
+	setFloatingTiles: function(items) {
+		this.floatingContainer.removeAll(true);
+		this.floatingContainer.add(items);
 	},
 
 

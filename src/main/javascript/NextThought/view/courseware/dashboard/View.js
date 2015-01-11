@@ -11,6 +11,9 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 		customScroll: 'NextThought.mixins.CustomScroll'
 	},
 
+	STATIC_ORDER: ['announcements', 'assignments', 'lessons'],
+	FLOATING_ORDER: ['deadlines', 'progress'],
+
 	initComponent: function() {
 		this.callParent(arguments);
 
@@ -53,79 +56,83 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 			courseNode = toc && toc.querySelector('course');
 		}
 
-		this.queryTiles(bundle, courseNode, new Date())
-			.then(this.applyTiles.bind(this))
-			.fail(this.hideDashboard.bind(this));
+		try {
+			this.queryTiles(bundle, courseNode, new Date());
+		} catch (e) {
+			console.error('Failed to load dashboard', e);
+			this.hideDashboard();
+		}
 	},
 
 
 	queryTiles: function(course, courseNode, date) {
 		var widgets = NextThought.view.courseware.dashboard.widgets,
-			tilesToLoad = [], deadlinesToLoad = [],
-			tilesLoaded, deadlinesLoaded;
+			tiles = [], deadlines = [], staticTiles = {};
+
+		function flatten(results) {
+			if (Ext.isEmpty(results)) {
+				return [];
+			}
+
+			return results.reduce(function(a, b) {
+				return a.concat(b);
+			}, []);
+		}
 
 		Ext.Object.each(widgets, function(clsName, cls) {
+			if (cls.getStaticTiles) {
+				Ext.apply(staticTiles, cls.getStaticTiles(course, courseNode, date));
+			}
+
 			if (cls.getTiles) {
-				tilesToLoad.push(cls.getTiles(course, courseNode, date));
+				tiles.push(cls.getTiles(course, courseNode, date));
 			}
 
 			if (cls.getDeadlines) {
-				deadlinesToLoad.push(cls.getDeadlines(course, courseNode, date));
+				deadlines.push(cls.getDeadlines(course, courseNode, date));
 			}
 		});
 
-		tilesLoaded = Promise.all(tilesToLoad)
-			.then(function(results) {
-				if (Ext.isEmpty(results)) {
-					return [];
-				}
 
-				return results.reduce(function(a, b) {
-					return a.concat(b);
-				}, []);
-			});
+		staticTiles.deadline = Ext.widget('dashboard-deadline', {
+			loaded: Promise.all(deadlines).then(flatten)
+		});
 
-		deadlinesLoaded = Promise.all(deadlinesToLoad)
-			.then(function(results) {
-				if (Ext.isEmpty(results)) {
-					return [];
-				}
+		staticTiles.progress = Ext.widget('dashboard-progress', {
+			loaded: course.getCompletionStatus()
+		});
 
-				return results.reduce(function(a, b) {
-					return a.concat(b);
-				}, []);
-			});
+		this.addStaticTiles(staticTiles);
 
-		return Promise.all([
-					tilesLoaded,
-					deadlinesLoaded,
-					course.getCompletionStatus()
-				])
-				.then(function(config) {
-					return {
-						tiles: config[0],
-						deadlines: config[1],
-						status: config[2]
-					};
-				});
+		Promise.all(tiles)
+			.then(flatten)
+			.then(this.addTiles.bind(this));
 	},
 
 
-	applyTiles: function(config) {
-		var tiles = config.tiles,
-			deadlines = config.deadlines,
-			status = config.status;
+	addTiles: function(tiles) {
+		this.setTiles(tiles);
+	},
 
-		this.add([
-			{
-				xtype: 'dashboard-deadlines',
-				items: deadlines
-			},
-			{
-				xtype: 'dashboard-status',
-				status: status
+
+	addStaticTiles: function(tiles) {
+		var staticTiles = [], floatingTiles = [];
+
+		this.STATIC_ORDER.forEach(function(name) {
+			if (tiles[name]) {
+				staticTiles.push(tiles[name]);
 			}
-		]);
+		});
+
+
+		this.FLOATING_ORDER.forEach(function(name) {
+			if (tiles[name]) {
+				floatingTiles.push(tiles[name]);
+			}
+		});
+
+		this.setStaticTiles(staticTiles);
+		this.setFloatingTiles(floatingTiles);
 	},
 
 

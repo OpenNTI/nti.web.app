@@ -5,25 +5,40 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Lessons', {
 
 	statics: {
 		getTiles: function(course, courseNode, date) {
-			var lastChecked = new Date();
+			return Promise.resolve([]);
+		},
 
-			lastChecked.setDate(lastChecked.getDate() - 3);//set last checked to 3 days ago to for now
 
+		getStaticTiles: function(course, courseNode, date) {
+			return {
+				lessons: Ext.widget('dashboard-lessons', {
+					course: course,
+					courseNode: courseNode,
+					date: date
+				})
+			};
+		},
+
+
+		getDeadlines: function(course, courseNode, date) {
 			return course.getNavigationStore().building
 						.then(function(store) {
 							var lessons = [];
 
 							store.each(function(node) {
-								var start = node.get('AvailableBeginning');
+								var end = node.get('AvailableEnding');
 
-								if (node.get('type') === 'lesson' && start > lastChecked) {
-									lessons.push(node);
+								if (node.get('type') === 'lesson' && end > date) {
+									lessons.push({
+										label: 'lesson',
+										title: node.get('label'),
+										due: end,
+										navigation: function() {}
+									});
 								}
 							});
 
-							//return [Ext.widget('dashboard-lessons', {
-							//	lessons: lessons
-							//})];
+							return lessons;
 						});
 		}
 	}

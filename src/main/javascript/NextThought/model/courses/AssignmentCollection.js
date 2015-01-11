@@ -105,7 +105,6 @@ Ext.define('NextThought.model.courses.AssignmentCollection', {
 		return items[0];
 	},
 
-
 	/**
 	 * Sets the gradebook on the collection and all sub-items. So that when the
 	 * history items load, we force the Grade instance to be the shared instance.
