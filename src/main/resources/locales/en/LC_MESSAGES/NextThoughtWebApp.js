@@ -901,6 +901,7 @@ NTIStrings['NextThought.view.courseware.enrollment.Details.DropCancel'] = 'Cance
 NTIStrings['NextThought.view.courseware.enrollment.Details.Enrolled'] = 'Enrolled';
 NTIStrings['NextThought.view.courseware.enrollment.Details.AreSure'] = 'Are you sure?';
 NTIStrings['NextThought.view.courseware.enrollment.Details.HowtoDrop'] = 'How do I drop?';
+NTIStrings['NextThought.view.courseware.enrollment.Details.ProblemDropping'] = 'There was a problem dropping the course. Please try again later.';
 NTIStrings['NextThought.view.courseware.enrollment.Confirmation.TransID'] = 'Transaction ID:';
 NTIStrings['NextThought.view.courseware.enrollment.Confirmation.ContactTechSupport'] = 'Please contact tech support if you have any issues.';
 NTIStrings['NextThought.view.courseware.enrollment.Confirmation.ClassStartInfo'] = '<span class=\'bold\' >{course}</span> starts on {date} and will be conducted fully online. Here are some things to do before class starts:';

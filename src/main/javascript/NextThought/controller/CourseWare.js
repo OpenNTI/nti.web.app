@@ -373,7 +373,7 @@ Ext.define('NextThought.controller.CourseWare', {
 			.then(function(enrollment) {//enrolled
 				//if we trying to enroll, and we are already enrolled no need to enroll again
 				if (enrolled) {
-					callback.call(null, true, false);
+					callback.call(null, true, false, reason && reason.status);
 					return;
 				}
 				//if we aren't trying to enroll, and we already are drop the course
@@ -398,12 +398,12 @@ Ext.define('NextThought.controller.CourseWare', {
 					.fail(function(reason) {
 						console.error(reason);
 						panel.removeMask();
-						callback.call(null, false);
+						callback.call(null, false, false, reason && reason.status);
 					});
 			}, function() {
 				//if we are trying to drop, and we aren't enrolled no need to drop
 				if (!enrolled) {
-					callback.call(null, true, false);
+					callback.call(null, true, false, reason && reason.status);
 					return;
 				}
 				//if we are trying to enroll and we aren't

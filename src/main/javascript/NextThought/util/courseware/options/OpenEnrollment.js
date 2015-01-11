@@ -113,22 +113,22 @@ Ext.define('NextThought.util.courseware.options.OpenEnrollment', {
 					lock: true,
 					doEnrollment: function(cmp) {
 						return new Promise(function(fulfill, reject) {
-							cmp.fireEvent('change-enrollment', course, true, function(success, changed) {
+							cmp.fireEvent('change-enrollment', course, true, function(success, changed, status) {
 								if (success) {
 									fulfill(changed);
 								} else {
-									reject();
+									reject(status);
 								}
 							});
 						});
 					},
 					undoEnrollment: function(cmp) {
 						return new Promise(function(fulfill, reject) {
-							cmp.fireEvent('change-enrollment', course, false, function(success, changed) {
+							cmp.fireEvent('change-enrollment', course, false, function(success, changed, status) {
 								if (success) {
 									fulfill(changed);
 								} else {
-									reject();
+									reject(status);
 								}
 							});
 						});

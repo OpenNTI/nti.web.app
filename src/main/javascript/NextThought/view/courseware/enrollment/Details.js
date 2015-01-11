@@ -714,8 +714,17 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 									done(true, changed);
 								})
 								.fail(function(reason) {
-									console.error('failed to drop course', reason);
-									me.showMessage(getString('NextThought.view.courseware.enrollment.Details.AlreadyDropped'), true);
+									var msg;
+
+									if (reason === 404) {
+										msg = getString('NextThought.view.courseware.enrollment.Details.AlreadyDropped');
+									} else {
+										msg = getString('NextThought.view.courseware.enrollment.Details.ProblemDropping');
+									}
+
+ 									console.error('failed to drop course', reason);
+									//already dropped?? -- double check the string to make sure it's correct
+									me.showMessage(msg, true);
 									done(false);
 								});
 						}
@@ -738,7 +747,6 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 				action
 					.then(function(changed) {
 						me.fireEvent('enrolled-action', true);
-
 						me.msgClickHandler = function() {
 							CourseWareUtils.findCourseBy(me.course.findByMyCourseInstance())
 								.then(function(course) {
@@ -758,11 +766,13 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 						done(true, changed);
 					})
 					.fail(function(reason) {
-						console.error('failed to enroll in course', reason);
-
-						me.showMessage(getString('NextThought.view.courseware.enrollment.Details.AlreadyEnrolled'), true);
-
-						done(false);
+						if (reason === 409) {
+							console.error('failed to enroll in course', reason);
+							me.showMessage(getString('NextThought.view.courseware.enrollment.Details.AlreadyEnrolled'), true);
+						}
+						else {
+							done(false);
+						}
 					});
 			}
 		}

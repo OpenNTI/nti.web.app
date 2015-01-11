@@ -871,7 +871,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 
 				if (!response) {
 					json = {
-						message: getString('NextThought.view.courseware.enrollment.Admission.AlreadyEnrolled')
+						message: getString('NextThought.view.courseware.enrollment.Admission.TryLater')
 					};
 				} else {
 					json = Ext.JSON.decode(response.responseText || response, true);
