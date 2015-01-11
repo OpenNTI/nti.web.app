@@ -41,7 +41,8 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Stream', {
 				return {
 					xtype: classMap[record.get('Class')],
 					record: record,
-					weight: getWeight(record)
+					weight: getWeight(record),
+					course: course
 				};
 			}
 

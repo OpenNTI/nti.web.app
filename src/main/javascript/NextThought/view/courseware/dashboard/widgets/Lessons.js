@@ -39,7 +39,8 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Lessons', {
 							lessons.push({
 								xtype: 'dashboard-lesson',
 								record: node,
-								weight: getWeight(node)
+								weight: getWeight(node),
+								course: course
 							});
 						}
 					});

@@ -1,7 +1,7 @@
 Ext.define('NextThought.view.courseware.dashboard.widgets.Announcements', {
 	extend: 'NextThought.view.courseware.dashboard.widgets.Base',
 
-	requires: ['NextThought.view.courseware.dashboard.tiles.Announcement'],
+	//requires: ['NextThought.view.courseware.dashboard.tiles.AnnouncementsList'],
 
 	statics: {
 
@@ -21,69 +21,71 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Announcements', {
 
 
 		getTiles: function(course, startDate, endDate) {
-			var section = course.getMySectionAnnouncements(),
-				parent = course.getParentAnnouncements(),
-				params = this.__queryParams,
-				getWeight = this.getWeight.bind(this);
+			return Promise.resolve([]);
 
-			function getCmpConfig(topic, sectionName) {
-				return {
-					xtype: 'dashboard-announcement',
-					record: topic,
-					label: sectionName,
-					weight: getWeight(topic)
-				};
-			}
+			//var section = course.getMySectionAnnouncements(),
+			//	parent = course.getParentAnnouncements(),
+			//	params = this.__queryParams,
+			//	getWeight = this.getWeight.bind(this);
 
-			function loadContents(forum) {
-				var contentsLink = forum.getLink('contents');
+			//function getCmpConfig(topic, sectionName) {
+			//	return {
+			//		xtype: 'dashboard-announcement',
+			//		record: topic,
+			//		label: sectionName,
+			//		weight: getWeight(topic)
+			//	};
+			//}
 
-				return StoreUtils.loadItems(contentsLink, params)
-							.fail(function() {
-								return [];
-							});
-			}
+			//function loadContents(forum) {
+			//	var contentsLink = forum.getLink('contents');
 
-			function loadForum(forum, sectionName) {
-				return loadContents(forum)
-					.then(function(topics) {
-						return topics.map(function(topic) {
-							return getCmpConfig(topic, sectionName);
-						});
-					});
-			}
+			//	return StoreUtils.loadItems(contentsLink, params)
+			//				.fail(function() {
+			//					return [];
+			//				});
+			//}
 
-			function loadForums(forums, sectionName) {
-				var loading = [];
+			//function loadForum(forum, sectionName) {
+			//	return loadContents(forum)
+			//		.then(function(topics) {
+			//			return topics.map(function(topic) {
+			//				return getCmpConfig(topic, sectionName);
+			//			});
+			//		});
+			//}
 
-				if (Ext.isEmpty(forums)) {
-					return Promise.resolve([]);
-				}
+			//function loadForums(forums, sectionName) {
+			//	var loading = [];
 
-				(forums || []).forEach(function(forum) {
-					loading.push(loadForum(forum, sectionName));
-				});
+			//	if (Ext.isEmpty(forums)) {
+			//		return Promise.resolve([]);
+			//	}
 
-				return Promise.all(loading)
-						.then(function(tiles) {
-							return tiles.reduce(function(a, b) {
-								return a.concat(b);
-							}, []);
-						});
-			}
+			//	(forums || []).forEach(function(forum) {
+			//		loading.push(loadForum(forum, sectionName));
+			//	});
 
-			if (Ext.isEmpty(section) && Ext.isEmpty(parent)) {
-				return Promise.resolve([]);
-			}
+			//	return Promise.all(loading)
+			//			.then(function(tiles) {
+			//				return tiles.reduce(function(a, b) {
+			//					return a.concat(b);
+			//				}, []);
+			//			});
+			//}
 
-			return Promise.all([
-					loadForums(section, 'My Section'),
-					loadForums(parent, 'Parent Section')
-				]).then(function(results) {
-					return results.reduce(function(a, b) {
-						return a.concat(b);
-					}, []);
-				});
+			//if (Ext.isEmpty(section) && Ext.isEmpty(parent)) {
+			//	return Promise.resolve([]);
+			//}
+
+			//return Promise.all([
+			//		loadForums(section, 'My Section'),
+			//		loadForums(parent, 'Parent Section')
+			//	]).then(function(results) {
+			//		return results.reduce(function(a, b) {
+			//			return a.concat(b);
+			//		}, []);
+			//	});
 		}
 	}
 });

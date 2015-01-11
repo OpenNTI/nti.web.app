@@ -7,5 +7,17 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Base', {
 		if (data.cls) {
 			data.cls = [cls.superclass.cls, data.cls].join(' ');
 		}
+	},
+
+
+	beforeRender: function() {
+		this.callParent(arguments);
+
+		this.renderData = Ext.apply(this.renderData || {}, this.getRenderData());
+	},
+
+
+	getRenderData: function() {
+		return {};
 	}
 });

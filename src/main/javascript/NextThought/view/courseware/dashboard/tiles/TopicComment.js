@@ -7,11 +7,10 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.TopicComment', {
 		{cls: 'title', html: '{title}'}
 	]),
 
-	beforeRender: function() {
-		this.callParent(arguments);
 
-		this.renderData = Ext.apply(this.renderData || {}, {
+	getRenderData: function() {
+		return {
 			title: this.record.getBodyText()
-		});
+		};
 	}
 });

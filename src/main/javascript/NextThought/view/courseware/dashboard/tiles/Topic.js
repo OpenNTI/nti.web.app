@@ -3,16 +3,44 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Topic', {
 	alias: 'widget.dashboard-topic',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'label', html: 'Topic'},
+		{cls: 'label', html: '{label}'},
 		{cls: 'title', html: '{title}'}
 	]),
 
 
-	beforeRender: function() {
-		this.callParent(arguments);
+	getRenderData: function() {
+		var sectionAnnouncements = this.course.getMySectionAnnouncements(),
+			parentAnnouncements = this.course.getParentAnnouncements(),
+			inSection = this.containedIn(sectionAnnouncements),
+			inParent = this.containedIn(parentAnnouncements),
+			label;
 
-		this.renderData = Ext.apply(this.renderData || {}, {
-			title: this.record.get('headline').get('title')
+		if (inSection) {
+			label = 'Announcement - My Section';
+		} else if (inParent) {
+			label = 'Announcement - Parent Section';
+		} else {
+			label = 'Topic';
+		}
+
+
+		return {
+			title: this.record.get('headline').get('title'),
+			label: label
+		};
+	},
+
+
+	containedIn: function(forums) {
+		forums = Ext.isArray(forums) ? forums : [forums];
+
+		var id = this.record.get('ContainerId'),
+			contained = false;
+
+		forums.forEach(function(forum) {
+			contained = contained || forum.getId() === id;
 		});
+
+		return contained;
 	}
 });

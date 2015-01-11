@@ -23,7 +23,8 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Assignments', {
 				return {
 					xtype: 'dashboard-assignment',
 					record: assignment,
-					weight: getWeight(assignment)
+					weight: getWeight(assignment),
+					course: course
 				};
 			}
 
