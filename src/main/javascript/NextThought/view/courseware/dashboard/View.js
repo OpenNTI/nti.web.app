@@ -73,7 +73,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 
 	bundleChanged: function(bundle) {
 		var id = bundle && bundle.getId(),
-			locationInfo, toc, courseNode;
+			locationInfo, toc, courseNode, courseCatalog;
 
 		this.maxPast = bundle.get('CreatedTime');
 		this.maxFuture = '2016-01-01';
@@ -94,10 +94,13 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 			courseNode = toc && toc.querySelector('course');
 		}
 
+		courseCatalog = bundle.getCourseCatalogEntry();
+
 		this.course = bundle;
 		this.courseNode = courseNode;
-		this.startWeek = TimeUtils.getWeek();
-		this.weekToLoad = this.startWeek;
+		this.currentWeek = TimeUtils.getWeek();
+		this.weekToLoad = this.currentWeek;
+		this.startDate = courseCatalog.get('StartDate');
 
 		this.maybeLoadNextWeek({}, true);
 		
@@ -201,7 +204,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 		var scrolledDown = scrollInfo.scrollTop + this.loadThreshold > scrollInfo.scrollHeight - scrollInfo.offSetHeight,
 			week = this.weekToLoad;
 
-		if (!scrolledDown && !force) { return; }
+		if ((!scrolledDown && !force) || !week) { return; }
 
 		this.add({
 			xtype: 'dashboard-tile-container',
@@ -211,7 +214,12 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 			currentState: NextThought.view.courseware.dashboard.View.IN_BUFFER
 		});
 
-		this.weekToLoad = week.getPrevious();
+
+		if (!week.start.isBefore(this.startDate)) {
+			this.weekToLoad = week.getPrevious();
+		} else {
+			this.weekToLoad = null;
+		}
 	},
 
 

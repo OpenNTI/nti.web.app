@@ -130,7 +130,7 @@ Ext.define('NextThought.view.courseware.dashboard.TileContainer', {
 			} else {
 				console.log('dashboard not dirty reload cached tiles');
 				me.setTiles(me.tiles);
-				me.setHeight(null);
+				//me.setHeight(null);
 			}
 		});
 	}
