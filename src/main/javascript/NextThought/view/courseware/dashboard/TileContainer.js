@@ -30,14 +30,15 @@ Ext.define('NextThought.view.courseware.dashboard.TileContainer', {
 		me.lastLoaded = new Date();
 
 		me.loadingTiles = me.loadTiles().then(function(tiles) {
+			me.setTiles(tiles);
+
 			if (tiles.length === 0) {
-				me.isEmpty = true;
-				me.startDate = me.week.start;
+				me.addCls('empty');
+				me.hasNoTiles = true;
 				me.fireEvent('is-empty', me);
 			} else {
-				me.fireEvent('not-empty', me);
 				me.removeLoadingMask();
-				me.setTiles(tiles);
+				me.fireEvent('not-empty', me);
 			}
 		});
 
@@ -45,16 +46,25 @@ Ext.define('NextThought.view.courseware.dashboard.TileContainer', {
 	},
 
 
-	updateEmptyRangeStart: function(start) {
-		this.startDate = start;
+	isEmpty: function() {
+		return this.hasNoTiles;
 	},
 
 
-	lockInEmptyRange: function() {
-		this.header.setWeek({
-			start: this.startDate,
-			end: this.week.end
-		});
+	getRangeStart: function() {
+		return this.week.start;
+	},
+
+
+	updateRangeStart: function(start) {
+		this.week.start = start;
+
+		this.updateRange();
+	},
+
+
+	updateRange: function() {
+		this.header.setWeek(this.week);
 
 		this.removeLoadingMask();
 	},

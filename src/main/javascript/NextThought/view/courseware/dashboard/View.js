@@ -40,6 +40,8 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 		me.initCustomScrollOn('content');
 
 		me.refreshDate = new Date(0);
+		me.emptiesToRemove = [];
+
 
 		me.on({
 			'visibility-changed': function(visible) {
@@ -95,7 +97,6 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 		this.startDate = courseCatalog.get('StartDate');
 		//null out values set from a previous bundle
 		this.loaded = false;
-		this.emptyContainer = null;
 
 		//this.addUpcoming(date);
 
@@ -140,11 +141,12 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 		//don't do the initial load
 		if (!this.rendered || this.loaded || !this.course) { return; }
 
-		while (this.weekToLoad && this.el.getHeight() >= this.el.dom.scrollHeight) {
+		if (!this.weekToLoad || this.el.getHeight() < this.el.dom.scrollHeight) {
+			this.removeEmpties();
+			this.loaded = true;
+		} else {
 			this.maybeLoadNextWeek({}, true);
 		}
-
-		this.loaded = true;
 	},
 
 
@@ -251,16 +253,17 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 
 
 	__loadNextWeek: function() {
-		var me = this,
+		var me = this, last,
 			week = me.weekToLoad,
 			isCurrent = week === me.currentWeek,
 			tileContainer;
 
 		if (!week) {
-			//if we have an empty week update the range
-			if (this.emptyContainer) {
-				this.emptyContainer.lockInEmptyRange();
-				this.emptyContainer = false;
+			this.removeEmpties();
+			last = this.getLastCmp();
+
+			if (last && last.isEmpty()) {
+				last.updateRange();
 			}
 
 			return;
@@ -291,28 +294,60 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 	},
 
 
-	__emptyContainer: function(container) {
-		if (this.emptyContainer) {
-			this.emptyContainer.updateEmptyRangeStart(container.week.start);
+	getLastCmp: function() {
+		var count = this.items.getCount();
 
-			this.remove(container, true);
-		} else {
-			this.emptyContainer = container;
+		if (count) {
+			return this.getComponent(count - 1);
 		}
+	},
+
+
+	collapseCmps: function(a, b) {
+		a.updateRangeStart(b.getRangeStart());
+		b.updateRangeStart = a.updateRangeStart.bind(a);
+		this.emptiesToRemove.push(b);
+	},
+
+
+	removeEmpties: function() {
+		var me = this;
+
+		this.emptiesToRemove.forEach(function(cmp) {
+			if (!cmp.isDestroyed) {
+				me.remove(cmp, true);
+			}
+		});
+
+		this.emptiesToRemove = [];
+	},
+
+
+	__emptyContainer: function(cmp) {
+		var index = cmp.number,
+			previousCmp = index && this.getComponent(index - 1),
+			nextCmp = index && this.getComponent(index + 1);
+
+		if (nextCmp && nextCmp.isEmpty()) {
+			this.collapseCmps(cmp, nextCmp);
+		}
+
+		if (previousCmp && previousCmp.isEmpty()) {
+			this.collapseCmps(previousCmp, cmp);
+		} else {
+			cmp.updateRange();
+		}
+
 
 		this.loadingWeek = false;
 		this.maybeLoadNextWeek({}, true);
 	},
 
 
-	__notEmptyContainer: function() {
-		if (this.emptyContainer) {
-			this.emptyContainer.lockInEmptyRange();
-			this.emptyContainer = false;
-		}
-
+	__notEmptyContainer: function(cmp) {
 		this.loadingWeek = false;
-		this.scrollChanged();
+		this.initialLoad();
+		this.removeEmpties();
 	},
 
 
