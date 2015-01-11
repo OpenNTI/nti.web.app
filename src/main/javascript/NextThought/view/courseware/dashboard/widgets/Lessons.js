@@ -20,6 +20,14 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Lessons', {
 			var end = moment(endDate),
 				getWeight = this.getWeight.bind(this);
 
+			function isAfterStart(date) {
+				return start.isBefore(date) || start.isSame(date);
+			}
+
+			function isBeforeEnd(date) {
+				return end.isAfter(date) || end.isSame(date);
+			}
+
 			return course.getNavigationStore().building
 				.then(function(store) {
 					var lessons = [];
@@ -27,7 +35,7 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Lessons', {
 					store.each(function(node) {
 						var nodeStart = node.get('startDate');
 
-						if (node.get('type') === 'lesson' && start.isBefore(nodeStart) && end.isAfter(nodeStart)) {
+						if (node.get('type') === 'lesson' && isAfterStart(nodeStart) && isBeforeEnd(nodeStart)) {
 							lessons.push({
 								xtype: 'dashboard-lesson',
 								record: node,
