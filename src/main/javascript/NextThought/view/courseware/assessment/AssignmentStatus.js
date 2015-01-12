@@ -67,7 +67,11 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 				d.cls = 'today';
 				d.qtipFn = 'getTimeUntilDue';
 			} else {
-				d.html = 'Due ' + Ext.Date.format(data.due, 'l, F j');
+				if (!data.due && data.isNoSubmitAssignment) {
+					d.html = '';
+				} else {
+					d.html = 'Due ' + Ext.Date.format(data.due, 'l, F j');
+				}
 
 				if (data.isNoSubmitAssignment) {
 					d.cls = 'nosubmit';
