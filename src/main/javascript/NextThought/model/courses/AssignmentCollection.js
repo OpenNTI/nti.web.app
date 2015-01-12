@@ -214,7 +214,7 @@ Ext.define('NextThought.model.courses.AssignmentCollection', {
     },
 
 
-    syncStoreForRecord: function(store, record, field){
+    syncStoreForRecord: function(store, record, field, action){
 
         var storeRec, data;
 
@@ -234,6 +234,17 @@ Ext.define('NextThought.model.courses.AssignmentCollection', {
                         storeRec.set(field, record.get(field));
                     } else {
                         data = record.getData();
+                        //
+                        if(action === "delete"){
+                            delete storeRec.isSummary;
+                            delete storeRec.raw.SubmissionCreatedTime;
+                            delete storeRec.raw.Submission;
+                            delete storeRec.raw.FeedbackCount;
+                            delete storeRec.raw.Grade;
+                            delete storeRec.raw.Feedback;
+                            delete storeRec.raw.Metadata;
+                        }
+
                         //don't trigger an id change
                         delete data[record.idProperty];
                         storeRec.set(data);

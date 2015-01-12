@@ -129,7 +129,7 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 	 */
 	resetAssignment: function(isMine) {
 		var record = this,
-			msg, url = record.getLink('edit');
+			msg, url = record.getLink('edit'), store = this.store;
 
 		if (!isMine) {
 			msg = 'This will reset this assignment for this student. It is not recoverable.' +
@@ -170,6 +170,9 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 									delete record.raw.SubmissionCreatedTime;
 									delete record.raw.Submission;
 									delete record.raw.FeedbackCount;
+                                    delete record.raw.Grade;
+                                    delete record.raw.Feedback;
+                                    delete record.raw.Metadata;
 
 									record.set({
 										Submission: null,
@@ -179,6 +182,10 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 										completed: null,
 										submission: null
 									});
+
+                                    if(store && store.assignmentsCollection){
+                                        store.assignmentsCollection.syncStoreForRecord(store, record, null, "delete");
+                                    }
 
 									fulfill(true);
 								});
@@ -225,6 +232,10 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 								delete record.raw.SubmissionCreatedTime;
 								delete record.raw.Submission;
 								delete record.raw.FeedbackCount;
+                                delete record.raw.Grade;
+                                delete record.raw.Feedback;
+                                delete record.raw.Metadata;
+
 								record.set({
 									Submission: null,
 									Grade: null,
@@ -236,7 +247,7 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 								record.fireEvent('was-destroyed');
 
                                 if(store && store.assignmentsCollection){
-                                    store.assignmentsCollection.syncStoreForRecord(store, record);
+                                    store.assignmentsCollection.syncStoreForRecord(store, record, null, "delete");
                                 }
 							});
 
