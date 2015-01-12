@@ -9,7 +9,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Header', {
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'label', cn: [
 			{tag: 'span', cls: 'start'},
-			' - ',
+			' &ndash; ',
 			{tag: 'span', cls: 'end'}
 		]}
 	]),
@@ -37,8 +37,16 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Header', {
 			return;
 		}
 
-		this.startEl.update(this.formatDate(week.start));
-		this.endEl.update(this.formatDate(week.end));
+		var start = moment(week.start),
+			end = moment(week.end);
+
+		if (start.isSame(end, 'month')) {
+			this.startEl.update(this.formatDate(start));
+			this.endEl.update(end.format('D'));
+		} else {
+			this.startEl.update(this.formatDate(start));
+			this.endEl.update(this.formatDate(end));
+		}
 	},
 
 	formatDate: function(date) {

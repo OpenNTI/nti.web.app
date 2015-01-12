@@ -12,6 +12,10 @@
 		overflow: hidden;
 		margin-bottom: 10px;
 
+		&.empty {
+			display: none;
+		}
+
 		.dashboard-column {
 			float: left;
 			margin-right: 8px;
