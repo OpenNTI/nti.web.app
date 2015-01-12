@@ -158,7 +158,7 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 				//treat the stripe enrollment as open
 				isOpen = true;
 				//TODO: REMOVE THIS
-				fmaepOption.IsAvailable = true;
+				fmaepOption.IsAvailable = false;
 			} else if (fmaepOption && fmaepOption.IsEnrolled) {
 				//treat the fmaep enrollment as for credit
 				isOpen = false;
