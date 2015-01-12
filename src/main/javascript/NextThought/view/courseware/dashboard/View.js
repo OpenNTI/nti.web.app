@@ -85,14 +85,17 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 			this.removeAll(true);
 		}
 
-		if (!bundle || $AppConfig.disableDashboard || /UCOL/i.test(id)) {
+		courseCatalog = bundle.getCourseCatalogEntry && bundle.getCourseCatalogEntry();
+
+		if (!bundle || !bundle.isCourse ||
+			$AppConfig.disableDashboard ||
+			(courseCatalog && /UCOL/i.test(courseCatalog.getId()))) {
 			this.hasItems = false;
 			return;
 		}
 
-		courseCatalog = bundle.getCourseCatalogEntry();
-
 		this.course = bundle;
+		this.courseId = id;
 		this.currentWeek = TimeUtils.getWeek(date);
 		this.weekToLoad = this.currentWeek;
 		this.startDate = courseCatalog.get('StartDate');
