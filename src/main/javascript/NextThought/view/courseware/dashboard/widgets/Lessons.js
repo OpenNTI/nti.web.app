@@ -48,7 +48,8 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Lessons', {
 					store.each(function(node) {
 						var nodeStart = node.get('startDate');
 
-						if (node.get('type') === 'lesson' && isAfterStart(nodeStart) && isBeforeEnd(nodeStart)) {
+						//the node has a start date, is a lesson and starts in the range of the week
+						if (nodeStart && node.get('type') === 'lesson' && isAfterStart(nodeStart) && isBeforeEnd(nodeStart)) {
 							lessons.push(getCmpConfig(node));
 						}
 					});

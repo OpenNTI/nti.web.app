@@ -1,18 +1,26 @@
 Ext.define('NextThought.view.courseware.dashboard.tiles.Lesson', {
-	extend: 'NextThought.view.courseware.dashboard.tiles.BaseCmp',
+	extend: 'NextThought.view.courseware.dashboard.tiles.Item',
 	alias: 'widget.dashboard-lesson',
 
-	cls: 'lesson-tile',
-
-	renderTpl: Ext.DomHelper.markup([
-		{cls: 'label', html: 'Lesson Available'},
-		{cls: 'title', html: '{title}'}
-	]),
+	cls: 'dashboard-item lesson-tile',
 
 
-	getRenderData: function() {
-		return {
-			title: this.record.get('title')
-		};
+	getPath: function() {
+		return 'Lessons';
+	},
+
+
+	getTitle: function() {
+		return this.record.get('title');
+	},
+
+
+	getBullets: function() { return []; },
+
+
+	getFooter: function() {
+		var start = this.record.get('startDate');
+
+		return moment(start).format('dddd, MMMM D');
 	}
 });
