@@ -28,13 +28,13 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Lessons', {
 				return end.isAfter(date) || end.isSame(date);
 			}
 
-			function getCmpConfig(record) {
+			function getCmpConfig(record, innerWeight) {
 				var getConfig = NextThought.view.courseware.dashboard.tiles.Lesson.getTileConfig(record);
 
 				return getConfig
 						.then(function(config) {
 							config.record = record;
-							config.weight = getWeight(record);
+							config.weight = getWeight(record) + (innerWeight * 0.01);
 							config.course = course;
 
 							return config;
@@ -45,12 +45,12 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Lessons', {
 				.then(function(store) {
 					var lessons = [];
 
-					store.each(function(node) {
+					store.each(function(node, i, total) {
 						var nodeStart = node.get('startDate');
 
 						//the node has a start date, is a lesson and starts in the range of the week
 						if (nodeStart && node.get('type') === 'lesson' && isAfterStart(nodeStart) && isBeforeEnd(nodeStart)) {
-							lessons.push(getCmpConfig(node));
+							lessons.push(getCmpConfig(node, (total - i) / total));
 						}
 					});
 
