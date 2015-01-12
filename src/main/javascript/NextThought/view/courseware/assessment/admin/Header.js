@@ -228,7 +228,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
                     newHistoryItem.set('item', historyItem.get('item'));
                     store.syncBackingStore(newHistoryItem);
                     if(assignmentCollection){
-                        assignmentCollection.syncStoreForRecord(store, newHistoryItem, 'IsExcused');
+                        assignmentCollection.syncStoreForRecord(store, newHistoryItem, 'Grade');
                     }
 
                     assignment.updateGradeBookEntry(newHistoryItem.get('Grade'), 'IsExcused');

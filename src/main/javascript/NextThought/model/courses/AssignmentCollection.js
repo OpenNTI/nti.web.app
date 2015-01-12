@@ -226,7 +226,7 @@ Ext.define('NextThought.model.courses.AssignmentCollection', {
             try {
                 storeRec = s.getById && s.getById(record.getId());
             } catch (e) {
-                console.warn('No record in store for ', record);
+//                console.warn('No record in store for ', record);
             } finally {
                 if (storeRec) {
                     //if we are passed a field only update that field
