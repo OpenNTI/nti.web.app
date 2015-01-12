@@ -456,7 +456,7 @@ Ext.define('NextThought.view.video.Video', {
 		}
 
 		//Not an else if so a new timer will start when the other one ends
-		if (!this.hasWatchEvent && state.state !== this.states.UNSTARTED) {
+		if (!this.hasWatchEvent && ((state.state === this.states.PLAYING) || (state.state === this.states.BUFFERING))) {
 			AnalyticsUtil.getResourceTimer(id, {
 				type: 'video-watch',
 				with_transcript: hasTranscript,
