@@ -214,13 +214,14 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 
 		var submission = history.get('Submission'),
 			completed = (submission && submission.get('CreatedTime')) || new Date(),
-			due = this.assignment && this.assignment.get('availableEnding');
+			due = this.assignment && this.assignment.get('availableEnding'),
+			isNoSubmit = this.assignment && this.assignment.isNoSubmit();
 
-		this.markAssignmentTurnedIn(completed, completed > due, type);
+		this.markAssignmentTurnedIn(completed, completed > due, isNoSubmit);
 	},
 
 
-	markAssignmentTurnedIn: function(completed, late, nosubmit) {
+	markAssignmentTurnedIn: function(completed, late, noSubmit) {
 		var button = this.down('button'),
 			tally = this.down('assessment-tally');
 
@@ -228,7 +229,7 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 			button.setText('Review');
 		}
 
-		if (type === true) {
+		if (noSubmit === true) {
 			this.addCls('nosubmit');
 		} else {
 			this.addCls('turned-in-assignment');
