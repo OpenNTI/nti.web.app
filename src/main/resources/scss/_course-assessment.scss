@@ -862,6 +862,7 @@ canvas.x-component-course-assessment {
 		&.over-time {
 			&.recent {
 				.time {
+					font-size: 1.3em;
 					.meta{
 						padding-left: 0;
 						&::after {
@@ -915,11 +916,10 @@ canvas.x-component-course-assessment {
 
 		.time {
 			height: 60px;
-			text-align: left;
+			text-align: center;
 			line-height: 60px;
 			font-weight: 300;
 			font-size: 1.2em;
-            padding-left: 15px;
 			overflow: hidden;
 			background-color: $secondary-green;
 
