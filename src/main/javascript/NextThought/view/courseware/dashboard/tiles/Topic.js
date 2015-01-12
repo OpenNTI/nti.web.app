@@ -23,7 +23,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Topic', {
 
 
 	handleNavigation: function() {
-		this.fireEvent('show-topic', this, this.record);
+		this.fireEvent('goto-forum-item', this.record, this.course);
 	},
 
 
@@ -86,7 +86,8 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Topic', {
 	getCmpForComment: function(comment) {
 		return {
 			xtype: 'dashboard-topic-comment-part',
-			record: comment
+			record: comment,
+			course: this.course
 		};
 	}
 });

@@ -3,7 +3,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.parts.TopicComment', {
 	alias: 'widget.dashboard-topic-comment-part',
 
 	handleNavigation: function() {
-		this.fireEvent('show-topic-comment', this, this.record);
+		this.fireEvent('goto-forum-item', this.record, this.course);
 	},
 
 	fillInComments: function() {
