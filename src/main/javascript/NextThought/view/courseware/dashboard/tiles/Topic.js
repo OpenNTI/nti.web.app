@@ -22,6 +22,11 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Topic', {
 	},
 
 
+	handleNavigation: function() {
+		this.fireEvent('show-topic', this, this.record);
+	},
+
+
 	containedIn: function(forums) {
 		forums = Ext.isArray(forums) ? forums : [forums];
 
