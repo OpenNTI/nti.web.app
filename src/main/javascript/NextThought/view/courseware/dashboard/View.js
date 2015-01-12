@@ -85,7 +85,8 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 			this.removeAll(true);
 		}
 
-		if (!bundle || $AppConfig.disableDashboard) {
+		if (!bundle || $AppConfig.disableDashboard || /UCOL/i.test(id)) {
+			this.hasItems = false;
 			return;
 		}
 

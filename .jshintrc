@@ -56,6 +56,8 @@
         "wait",
         "alert",
         "Globals",
-        "SlideDeck"
+        "SlideDeck",
+        "AnalyticsUtil",
+        "TimeUtils"
     ]
 }
