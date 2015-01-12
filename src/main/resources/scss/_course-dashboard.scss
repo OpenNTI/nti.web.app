@@ -912,14 +912,10 @@
 		}
 
 		.dashboard-header {
-			color: white;
-			background-color: $primary-blue;
+			color: $tertiary-grey;
 			display: inline-block;
 			margin-bottom: 10px;
-
-			&.locked {
-				position: absolute;
-			}
+			text-transform: uppercase;
 		}
 
 		.lesson-tile {
