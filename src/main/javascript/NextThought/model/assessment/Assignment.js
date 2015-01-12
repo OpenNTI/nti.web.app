@@ -243,5 +243,13 @@ Ext.define('NextThought.model.assessment.Assignment', {
 
 			return href === link;
 		};
+	},
+
+
+	getQuestionCount: function() {
+		var parts = this.get('parts'),
+			part = parts && parts[0];
+
+		return part && part.tallyParts();
 	}
 });

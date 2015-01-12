@@ -51,6 +51,7 @@
         "CourseWareUtils",
         "Service",
         "ParseUtils",
-        "Proimse"
+        "Proimse",
+        "isFeature"
     ]
 }
