@@ -35,6 +35,16 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.parts.PostComment', {
 		this.fillInCreated();
 		this.fillInBody();
 		this.fillInComments();
+
+		this.mon(this.el, 'click', 'itemClicked');
+	},
+
+
+	itemClicked: function(e) {
+		if (this.handleNavigation) {
+			e.stopPropagation();
+			this.handleNavigation();
+		}
 	},
 
 

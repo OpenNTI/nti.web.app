@@ -234,7 +234,7 @@ Ext.define('NextThought.controller.SlideDeck', {
 				me.activeMediaPlayer.fireEvent('resume-annotation-manager', this);
 				me.activeMediaPlayer = null;
 
-				if (options.closeCallback) {
+				if (options && options.closeCallback) {
 					options.closeCallback.call();
 				}
 			});
@@ -400,6 +400,7 @@ Ext.define('NextThought.controller.SlideDeck', {
 		if (active && !this.getController('State').isRestoring()) {
 			Ext.Msg.show({
 				msg: 'You are about to exit the media viewer.',
+				/*jshint bitwise:false */
 				buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 				icon: 'warning-red',
 				buttonText: {'ok': 'caution:Exit'},

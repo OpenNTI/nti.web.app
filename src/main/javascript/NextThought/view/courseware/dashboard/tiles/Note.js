@@ -54,6 +54,13 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Note', {
 	},
 
 
+	handleNavigation: function() {
+		var cid = this.record.get('ContainerId');
+
+		this.fireEvent('navigation-selected', cid, this.record);
+	},
+
+
 	getMeta: function() {
 		this.CACHE.loadMeta = this.CACHE.loadMeta || LocationMeta.getMeta(this.record.get('ContainerId'));
 

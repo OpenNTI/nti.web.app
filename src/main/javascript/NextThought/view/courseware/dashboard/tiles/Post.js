@@ -124,6 +124,15 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Post', {
 				.then(me.addComments.bind(me))
 				.fail(me.showCommentError.bind(me));
 		}
+
+		this.mon(this.el, 'click', 'itemClicked');
+	},
+
+
+	itemClicked: function(e) {
+		if (!e.getTarget('.body-container') && !e.getTarget('.controls') && this.handleNavigation) {
+			this.handleNavigation();
+		}
 	},
 
 

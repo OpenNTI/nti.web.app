@@ -53,6 +53,9 @@
         "ParseUtils",
         "Proimse",
         "isFeature",
-        "wait"
+        "wait",
+        "alert",
+        "Globals",
+        "SlideDeck"
     ]
 }
