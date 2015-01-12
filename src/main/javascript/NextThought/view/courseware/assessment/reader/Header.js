@@ -66,22 +66,28 @@ Ext.define('NextThought.view.courseware.assessment.reader.Header', {
 			parts = this.assignment.get('parts'),
 			hasParts = parts && parts.length > 0,
 			completed = submission && submission.get('CreatedTime'),
-			overdue;
+			overdue,
+			type = this.assignment.isNoSubmit();
 
 		if (((!history || !submission) && hasParts) || (this.assignment.isTimed && !this.assignment.isStarted())) {
 			this.removeCls('submitted');
 			this.updateLayout();
 			return;
 		}
-
+		if (type === true) {
+			this.addCls('nosubmit');
+		}
 		this.addCls('submitted');
 
-		if (!this.rendered) { return; }
+		if (!this.rendered) {
+			return;
+		}
 
 		this.turnedInEl.update(NextThought.view.courseware.assessment.AssignmentStatus.getStatusHTML({
 			due: this.assignment.getDueDate(),
 			maxTime: this.assignment.isTimed && this.assignment.getMaxTime(),
 			duration: this.assignment.isTimed && this.assignment.getDuration(),
+			isNoSubmitAssignment: this.assignment.isNoSubmit(),
 			completed: completed,
             isExcused: grade && grade.get("IsExcused")
 		}));

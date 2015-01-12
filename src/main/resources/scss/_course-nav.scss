@@ -61,11 +61,14 @@
 
 	&.overview-header{
 		margin: 0 0 15px 0;
-		
+
 		.date {
 			color: $tertiary-grey;
 			&.expired {
 				color: $primary-red;
+			}
+			&.nosubmit {
+				color: $tertiary-grey;
 			}
 			font: normal 700 0.6em/1.2em $font;
 			text-transform: uppercase;
@@ -127,7 +130,7 @@
 		& + :not(.overview-discussion) {
 			clear: both;
 		}
-		
+
 		.image {
 			height: 50%;
 			background:{
@@ -235,7 +238,7 @@
 					repeat: no-repeat;
 				}
 
-				
+
 				&.x-masked {
 					.ctr, .play {display: none;}
 				}
@@ -355,7 +358,10 @@
 			&.late::before{
 				@include sprite($icons, 'assignment_late');
 			}
-		}		
+			&.nosubmit::before{
+				@include sprite($icons, 'assignment_due');
+			}
+		}
 	}
 
 }

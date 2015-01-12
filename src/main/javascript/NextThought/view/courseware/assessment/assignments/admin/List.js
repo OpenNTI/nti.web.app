@@ -41,7 +41,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.List', {
 				getStatusHTML: function(values) {
 					return NextThought.view.courseware.assessment.AssignmentStatus.getStatusHTML({
 						due: values.due,
-						maxTime: values.maxTime
+						maxTime: values.maxTime,
+						isNoSubmitAssignment: values.item.isNoSubmit()
 					});
 				},
 
@@ -49,10 +50,15 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.List', {
 					var now = new Date().getTime(),
 						due = ((values && values.due) || new Date(now)).getTime(),//if no due date give, use now
 						opens = (values.opens || new Date(0)).getTime(),//if no open date given, use epoc
-
+						isNoSubmitAssignment = values.item.isNoSubmit(),
 						cls = opens > now ? 'closed ' : '';
 
-					return cls + (((values && values.due) && due < now) ? 'late' : '');
+						if (isNoSubmitAssignment === true) {
+							return cls + 'nosubmit';
+						}
+						else {
+							return cls + (((values && values.due) && due < now) ? 'late' : '');
+						}
 				},
 
 				hasReportLink: function(values) {

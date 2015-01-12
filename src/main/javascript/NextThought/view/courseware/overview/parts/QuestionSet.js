@@ -105,6 +105,8 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 		this.setQuetionSetContainerTitle(assignment.get('title'));
 
 		var parts = assignment.get('parts') || [],
+			//added to determine whether or not assignment is a no-submit
+			type = assignment.isNoSubmit(),
 			score = this.down('assessment-score'),
 			tally = this.down('assessment-tally'),
 			format = 'l, F j, g:i a T',
@@ -117,7 +119,8 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 		if (date) {
 			if (day === today) {
 				html += getString('NextThought.view.courseware.overview.parts.QuestionSet.today');
-			} else {
+			}
+			else {
 				html += Ext.Date.format(date, format);
 			}
 		}
@@ -130,14 +133,24 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 		tally.setGreyText(html || '');
 
 		if (date && date < today) {
-			this.addCls('late');
-			tally.setRedText(html);
-		} else if (opens && opens > new Date()) {
+			//if assignment is a no-submit, don't make it late
+			if (type === true) {
+					this.addCls('nosubmit')
+					tally.setGreyText(html);
+			}
+			else {
+				this.addCls('late');
+				tally.setRedText(html);
+			}
+
+		}
+		else if (opens && opens > new Date()) {
 			this.down('button').destroy();
 			tally.setGreyText(getFormattedString('NextThought.view.courseware.overview.parts.QuestionSet.available', {
 				date: Ext.Date.format(opens, format)
 			}));
-		} else if (parts.length === 0) {
+		}
+		else if (parts.length === 0) {
 			this.down('button').setText(getString('NextThought.view.courseware.overview.parts.QuestionSet.review'));
 		}
 	},
@@ -203,22 +216,27 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 			completed = (submission && submission.get('CreatedTime')) || new Date(),
 			due = this.assignment && this.assignment.get('availableEnding');
 
-		this.markAssignmentTurnedIn(completed, completed > due);
+		this.markAssignmentTurnedIn(completed, completed > due, type);
 	},
 
 
-	markAssignmentTurnedIn: function(completed, late) {
+	markAssignmentTurnedIn: function(completed, late, nosubmit) {
 		var button = this.down('button'),
 			tally = this.down('assessment-tally');
 
-		if (button) { button.setText('Review'); }
-
-		this.addCls('turned-in-assignment');
-		this[late ? 'addCls' : 'removeCls']('late');
-
-		tally[late ? 'setRedText' : 'setGreyText'](getFormattedString('NextThought.view.courseware.overview.parts.QuestionSet.completed', {
-			date: Ext.Date.format(completed, 'l, F j g:i a T')
-		}));
+		if (button) {
+			button.setText('Review');
+		}
+		if(type === true) {
+			this.addCls('nosubmit');
+		}
+		else {
+			this.addCls('turned-in-assignment');
+			this[late ? 'addCls' : 'removeCls']('late');
+			tally[late ? 'setRedText' : 'setGreyText'](getFormattedString('NextThought.view.courseware.overview.parts.QuestionSet.completed', {
+				date: Ext.Date.format(completed, 'l, F j g:i a T')
+			}));
+		}
 	},
 
 

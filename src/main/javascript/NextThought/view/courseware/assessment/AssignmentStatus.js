@@ -69,7 +69,9 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 			} else {
 				d.html = 'Due ' + Ext.Date.format(data.due, 'l, F j');
 
-				if (now >= data.due) {
+				if (data.isNoSubmitAssignment) {
+					d.cls = 'nosubmit';
+				} else if (now >= data.due) {
 					d.cls = 'late';
 				}
 			}
@@ -116,7 +118,7 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 
 		__getOverDueStatus: function(data) {
 			//if we aren't completed or we were completed on time there is no overdue string
-			if (!data.completed || data.completed <= data.due) { return null; }
+			if (!data.completed || data.completed <= data.due || data.isNoSubmitAssignment) { return null; }
 
 			var diff = data.completed.getTime() - data.due.getTime(),
 				qtip = TimeUtils.getNaturalDuration(diff, 1) + ' overdue';

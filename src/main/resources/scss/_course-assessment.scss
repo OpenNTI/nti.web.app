@@ -212,6 +212,10 @@ canvas.x-component-course-assessment {
 			&.late {
 				color: $primary-red;
 			}
+
+			&.nosubmit {
+				color: $tertiary-grey;
+			}
 		}
 	}
 
@@ -320,7 +324,6 @@ canvas.x-component-course-assessment {
 				}
 			}
 		}
-
 		.more {
 			&.hidden {visibility: hidden;}
 			display: block;
@@ -356,6 +359,11 @@ canvas.x-component-course-assessment {
 				&.late {
 					&::after {
 						@include sprite($icons,'assignment_late_small');
+					}
+				}
+				&.nosubmit {
+					&::after {
+						@include sprite($icons, 'assignment_due_small');
 					}
 				}
 
@@ -1162,9 +1170,9 @@ canvas.x-component-course-assessment {
 		&.student-reader-header{
 			text-transform: uppercase;
 
-			&.submitted{ 
+			&.submitted{
 				.header{
-					display: block; 
+					display: block;
 				}
 			}
 
@@ -1174,7 +1182,13 @@ canvas.x-component-course-assessment {
 					@include sprite($icons,'assignment_ontime');
 				}
 			}
-			
+
+			&.nosubmit{
+				.header::before{
+					@include sprite($icons, 'assignment_due');
+				}
+			}
+
 			.header{
 				padding-left: 80px;
 				display: none;
@@ -1321,6 +1335,10 @@ canvas.x-component-course-assessment {
 						margin-top: 0.5em;
 					}
 
+					.nosubmit {
+						color: $tertiary-grey;
+					}
+
 					.late {
 						color: $primary-red;
 					}
@@ -1456,7 +1474,7 @@ canvas.x-component-course-assessment {
 				span {
 					&.link { color: $primary-blue; cursor: pointer; }
 
-		
+
 					&::before {
 						content: '\00B7';
 						margin: 0.5em;
@@ -1587,4 +1605,3 @@ canvas.x-component-course-assessment {
 
 	&.student-performance-overview { top: 171px; }
 }
-

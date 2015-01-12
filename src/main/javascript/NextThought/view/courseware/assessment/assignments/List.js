@@ -35,7 +35,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 						completed: values.completed,
 						maxTime: values.maxTime,
 						duration: values.duration,
-                        isExcused: grade && grade.get("IsExcused")
+            isExcused: grade && grade.get("IsExcused"),
+						isNoSubmitAssignment: values.item.isNoSubmit()
 					});
 				},
 
