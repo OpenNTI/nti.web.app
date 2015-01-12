@@ -5,18 +5,21 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Assignments', {
 
 	statics: {
 
-		__BASE_WEIGHT: 4,
+		__BASE_WEIGHT: 2,
+
+		MAX_NOT_DUE: 5,
 
 		getWeight: function(record) {
 			var time = NextThought.view.courseware.dashboard.widgets.Base.getTimeWeight(record.get('availableEnding'));
 
-			return this.__BASE_WEIGHT - time;
+			return this.__BASE_WEIGHT + time;
 		},
 
 
 		getTiles: function(course, startDate, endDate, isNow) {
 			var start = moment(startDate),
 				end = moment(endDate),
+				maxNotDue = 5,
 				getWeight = this.getWeight.bind(this);
 
 			function getCmpConfig(assignment) {
@@ -55,6 +58,18 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Assignments', {
 							});
 
 							return Promise.all(assignments);
+						})
+						.then(function(tiles) {
+							if (!isNow) { return tiles.reverse(); }
+
+							tiles.sort(function(a, b) {
+								var wA = a.record.get('availableEnding'),
+									wB = b.record.get('availableEnding');
+
+								return wA < wB ? -1 : wA === wB ? 0 : 1;
+							});
+
+							return tiles.slice(0, maxNotDue).reverse();
 						});
 		},
 
