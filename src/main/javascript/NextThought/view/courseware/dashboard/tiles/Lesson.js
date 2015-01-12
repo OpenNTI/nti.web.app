@@ -22,5 +22,10 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Lesson', {
 		var start = this.record.get('startDate');
 
 		return moment(start).format('dddd, MMMM D');
+	},
+
+
+	handleNavigation: function() {
+		this.fireEvent('navigate-to-lesson', this.record.getId());
 	}
 });

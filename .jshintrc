@@ -23,7 +23,7 @@
     "plusplus": false,
     //"quotmark": "single",
     "undef": true,
-    "unused": true,
+    "unused": false,
     //"maxparams": 4,
     //"maxdepth": 3,
     "maxlen": 160,
@@ -52,6 +52,7 @@
         "Service",
         "ParseUtils",
         "Proimse",
-        "isFeature"
+        "isFeature",
+        "wait"
     ]
 }

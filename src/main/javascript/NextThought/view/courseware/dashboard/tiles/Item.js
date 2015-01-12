@@ -51,6 +51,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Item', {
 		this.renderData = Ext.apply(this.renderData || {}, renderData);
 	},
 
+
 	callWhenRendered: function(name, value) {
 		if (!this.rendered) {
 			this.on('afterrender', this[name].bind(this, value));
@@ -58,6 +59,20 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Item', {
 		}
 
 		this[name].call(this, value);
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		this.mon(this.el, 'click', 'itemClicked');
+	},
+
+
+	itemClicked: function(e) {
+		if (this.handleNavigation) {
+			this.handleNavigation();
+		}
 	},
 
 
