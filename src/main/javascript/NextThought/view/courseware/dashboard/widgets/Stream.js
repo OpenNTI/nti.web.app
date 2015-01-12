@@ -10,8 +10,8 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Stream', {
 	statics: {
 		__CLASS_TO_TILE: {
 			'Note': 'Note',
-			'CommunityHeadlineTopic': 'Topic',
-			'GeneralForumComment': 'TopicComment'
+			'CommunityHeadlineTopic': 'Topic'
+			//'GeneralForumComment': 'TopicComment'
 		},
 
 		__BASE_WEIGHT: 2,
@@ -44,11 +44,15 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Stream', {
 
 			return stream.getWeek(startDate, endDate)
 				.then(function(items) {
-					items = (items || []).map(function(item) {
-						return getCmpConfig(item);
+					var tiles = [];
+
+					(items || []).forEach(function(item) {
+						if (classMap[item.get('Class')]) {
+							tiles.push(getCmpConfig(item));
+						}
 					});
 
-					return Promise.all(items);
+					return Promise.all(tiles);
 				})
 				.fail(function(reason) {
 					console.error('failed to load dashboard stream:', reason);
