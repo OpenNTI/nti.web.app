@@ -91,23 +91,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 		if (e.getTarget('.disabled') || !this.assignmentHistory) { return; }
 
 		var me = this,
-			menu = NextThought.view.courseware.assessment.AssignmentStatus.getActionsMenu(me.assignmentHistory);
+			menu = NextThought.view.courseware.assessment.AssignmentStatus.getActionsMenu(me.assignmentHistory),
+            assignment = me.assignment,
+            assignmentCollection = this.pageSource && this.pageSource.assignmentsCollection;
 
 		menu.showBy(me.actionsEl, 'tr-br');
-
-		if (!me.deleteMon) {
-			me.mon(me.assignmentHistory, {
-				single: true,
-				destroyable: true,
-				'was-destroyed': function() {
-					var store = me.pageSource;
-
-					store.syncBackingStore(me.assignmentHistory);
-
-					me.fireGoUp();
-				}
-			});
-		}
 	},
 
 
@@ -116,7 +104,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 			store = this.pageSource,
 			assignment = this.assignment,
 			historyItem = this.assignmentHistory,
-			grade = historyItem.get('Grade');
+			grade = historyItem.get('Grade'),
+            assignmentCollection = this.pageSource && this.pageSource.assignmentsCollection;
 
 		if (!grade) {
 			console.error('No assignmentHistroy set, cannot change the grade');
@@ -139,7 +128,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 							//so fill it in with the previous history item's item
 							newHistoryItem.set('item', historyItem.get('item'));
 							store.syncBackingStore(newHistoryItem);
-
+                            if(assignmentCollection){
+                                assignmentCollection.syncStoreForRecord(store, newHistoryItem, 'Grade');
+                            }
 							assignment.updateGradeBookEntry(newHistoryItem.get('Grade'), 'value');
 						})
 						.fail(function(reason) {

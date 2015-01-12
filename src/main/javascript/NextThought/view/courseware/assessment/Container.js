@@ -174,6 +174,11 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 								'removed-placeholder': me.showAssignment.bind(me, view, assignment, assignmentHistory, student, path, pageSource)
 							});
 
+                            var assignmentCollection = me.down("#course-assessment-root") && me.down("#course-assessment-root").assignmentsCollection;
+                            if(assignmentCollection){
+                                assignmentCollection.addStoreToStoreSync(pageSource);
+                            }
+
 							return reader;
 						})
 						.fail(function(reason) {

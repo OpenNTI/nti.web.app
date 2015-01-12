@@ -213,7 +213,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
         var me = this,
             store = this.pageSource,
             assignment = this.assignment,
-            historyItem = this.assignmentHistory;
+            historyItem = this.assignmentHistory,
+            assignmentCollection = this.pageSource && this.pageSource.assignmentsCollection;
 
         var link = grade.getLink('AssignmentHistoryItem');
         //if the grade that comes back from saving has an assignment history item link
@@ -226,6 +227,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
                     //so fill it in with the previous history item's item
                     newHistoryItem.set('item', historyItem.get('item'));
                     store.syncBackingStore(newHistoryItem);
+                    if(assignmentCollection){
+                        assignmentCollection.syncStoreForRecord(store, newHistoryItem, 'IsExcused');
+                    }
 
                     assignment.updateGradeBookEntry(newHistoryItem.get('Grade'), 'IsExcused');
                     me.markGradeAsExcused(grade);

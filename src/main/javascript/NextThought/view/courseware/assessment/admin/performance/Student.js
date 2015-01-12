@@ -103,6 +103,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 			load: 'unmask'
 		});
 		this.down('grid').bindStore(this.store);
+
+        var assignmentCollection = this.up("#course-assessment-root") && this.up("#course-assessment-root").assignmentsCollection;
+        if(assignmentCollection){
+            assignmentCollection.addStoreToStoreSync(this.store);
+        }
+
 		this.store.load();
 		return Promise.resolve();
 	},

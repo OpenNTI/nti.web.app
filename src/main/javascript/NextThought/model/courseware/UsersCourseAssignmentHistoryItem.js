@@ -194,7 +194,9 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 
 
 	beginReset: function() {
-		var record = this;
+		var record = this,
+            store = record.store;
+
 		Ext.MessageBox.alert({
 			title: 'Are you sure?',
 			msg: 'This will reset this assignment for this student. It is not recoverable.' +
@@ -232,6 +234,10 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 									submission: null
 								});
 								record.fireEvent('was-destroyed');
+
+                                if(store && store.assignmentsCollection){
+                                    store.assignmentsCollection.syncStoreForRecord(store, record);
+                                }
 							});
 
 				}
@@ -245,9 +251,14 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 
         if(grade && grade.excuseGrade){
             grade.excuseGrade()
-                .then(function(){
-                    var txt = grade.get("IsExcused") === true ? 'Unexcuse Grade' : 'Excuse Grade';
+                .then(function(record){
+                    var txt = grade.get("IsExcused") === true ? 'Unexcuse Grade' : 'Excuse Grade',
+                        store = me.store, field = "Grade";
                     menuItemEl.setText(txt);
+
+                    if(store && store.assignmentsCollection){
+                        store.assignmentsCollection.syncStoreForRecord(store, me, "Grade");
+                    }
                 })
                 .fail(function(err){
                     console.log('Excusing grade failed: '+ err);

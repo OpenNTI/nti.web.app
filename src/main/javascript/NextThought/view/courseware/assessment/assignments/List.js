@@ -102,8 +102,12 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 
 	afterRender: function() {
 		this.callParent(arguments);
-
 		this.mon(this.el, 'mouseover', 'itemHover');
+
+        var assignmentCollection = this.up("#course-assessment-root") && this.up("#course-assessment-root").assignmentsCollection;
+        if(assignmentCollection){
+            assignmentCollection.addStoreToStoreSync(this.store);
+        }
 	},
 
 

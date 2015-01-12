@@ -133,7 +133,8 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 	editGrade: function(record, value) {
 		var view = this.__getGridView(), store = this.store,
 			grade = record.get('Grade'),
-			v = grade && grade.getValues();
+			v = grade && grade.getValues(),
+            assignmentCollection = store && store.assignmentsCollection;
 
 		/**
 		 * only set the grade if:
@@ -161,6 +162,9 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 			grade.saveValue(value, '-')
 				.then(function(grade) {
 					record.set('Grade', grade);
+                    if(assignmentCollection){
+                        assignmentCollection.syncStoreForRecord(store, record, 'Grade');
+                    }
 				})
 				.fail(function() {
 					grade.reject();

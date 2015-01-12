@@ -203,6 +203,50 @@ Ext.define('NextThought.model.courses.AssignmentCollection', {
 		return me._studentViews[student];
 	},
 
+    addStoreToStoreSync: function(store){
+        if(!store){ return; }
+
+        if(!this._storesToSync){
+            this._storesToSync = [];
+        }
+        store.assignmentsCollection = this;
+        this._storesToSync.push(store);
+    },
+
+
+    syncStoreForRecord: function(store, record, field){
+
+        var storeRec, data;
+
+        Ext.each(this._storesToSync, function(s){
+            if(store === s){ return true; }
+
+            //getById will throw an error if its not there, we are okay with it not being there
+            //so catch it and don't blow up
+            try {
+                storeRec = s.getById && s.getById(record.getId());
+            } catch (e) {
+                console.warn('No record in store for ', record);
+            } finally {
+                if (storeRec) {
+                    //if we are passed a field only update that field
+                    if (field) {
+                        storeRec.set(field, record.get(field));
+                    } else {
+                        data = record.getData();
+                        //don't trigger an id change
+                        delete data[record.idProperty];
+                        storeRec.set(data);
+
+                        if (storeRec.onSynced) {
+                            storeRec.onSynced();
+                        }
+                    }
+                }
+            }
+        });
+
+    },
 
 	getAssignmentsForContainer: function(containerId) {
 		var items = this.get('Items') || [],

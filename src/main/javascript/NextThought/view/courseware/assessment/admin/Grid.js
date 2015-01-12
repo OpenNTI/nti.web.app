@@ -272,11 +272,21 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 			itemclick: {fn: 'onItemClicked', scope: this},
 			select: function(cmp, record) {
 				me.selModel.deselect(record);
-			},
-			afterrender: 'monitorSubTree'
+			}
 		});
 	},
 
+
+    afterRender: function(){
+        this.callParent(arguments);
+
+        this.monitorSubTree(arguments);
+
+        var assignmentCollection = this.up("#course-assessment-root") && this.up("#course-assessment-root").assignmentsCollection;
+        if(assignmentCollection){
+            assignmentCollection.addStoreToStoreSync(this.store);
+        }
+    },
 
 	bindStore: function(store) {
 		var res = this.callParent(arguments),
@@ -310,7 +320,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 				}
 			}
 		}
-
 
 		return res;
 	},
