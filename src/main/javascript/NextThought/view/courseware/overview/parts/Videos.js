@@ -554,7 +554,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 
 		this.progress = progress;
 
-		if (!progress) { return; }
+		if (!progress || !this.store) { return; }
 
 		var me = this,
 			single = me.store.getCount() === 1;
