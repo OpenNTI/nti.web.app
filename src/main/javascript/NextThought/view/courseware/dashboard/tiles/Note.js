@@ -57,7 +57,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Note', {
 	handleNavigation: function() {
 		var cid = this.record.get('ContainerId');
 
-		this.fireEvent('navigation-selected', cid, this.record);
+		this.fireEvent('navigation-selected', cid, this.record, null, this.course);
 	},
 
 

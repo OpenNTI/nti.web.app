@@ -522,12 +522,26 @@ Ext.define('NextThought.controller.CourseWare', {
 	},
 
 
-	handleNavigation: function(cid, rec, meta) {
+	handleNavigation: function(cid, rec, course, meta) {
 		if (!meta || !meta.isCourse) {
 			return Promise.resolve();
 		}
 
-		var courseEntry, me = this;
+		var courseEntry, me = this,
+			content = me.getContentView(),
+			current = content && content.currentBundle;
+
+		if (course) {
+			if (course === current) {
+				return Promise.resolve();
+			} else {
+				return new Promise(function(fullfill, reject) {
+					var instance = course.get('CourseInstance') || course;
+
+					fulfill(instance.fireNavigationEvent(me));
+				});
+			}
+		}
 
 		courseEntry = CourseWareUtils.courseForNtiid(cid);
 

@@ -304,8 +304,8 @@ Ext.define('NextThought.controller.Navigation', {
 	},
 
 
-	navigate: function(cid, rec, options) {
-		var me = this, perform = this.performAnd.bind(this, 'handleNavigation', cid, rec),
+	navigate: function(cid, rec, options, bundle) {
+		var me = this, perform = this.performAnd.bind(this, 'handleNavigation', cid, rec, bundle),
 			performAfter = this.performAnd.bind(this, 'afterHandleNavigation', cid, rec),
 			txn = history.beginTransaction('navigate-in-controller-' + guidGenerator()),
 			result,
