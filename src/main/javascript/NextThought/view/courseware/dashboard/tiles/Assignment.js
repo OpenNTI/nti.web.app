@@ -12,6 +12,12 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Assignment', {
 			.fail(this.callWhenRendered.bind(this, 'setLate'));
 	},
 
+
+	handleNavigation: function() {
+		this.fireEvent('navigate-to-assignment', this.record.getId(), $AppConfig.userObject);
+	},
+
+
 	getPath: function() {
 		return ContentUtils.getLineageLabels(this.record.get('ContainerId'))
 			.then(function(path) {
