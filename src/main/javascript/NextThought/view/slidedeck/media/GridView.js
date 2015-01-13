@@ -217,7 +217,6 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 
 				fillIn(videoIds);
 			}
-			console.log(data);
 		});
 
 		me.store = new Ext.data.Store({
