@@ -1,3 +1,4 @@
+/*globals Duration: false*/
 Ext.define('NextThought.util.Time', {
 	singleton: true,
 
@@ -126,34 +127,34 @@ Ext.define('NextThought.util.Time', {
 		return a.getTime() === b.getTime();
 	},
 
-    getDays: function(time) {
-        return time / (24 * 60 * 60 * 1000); // milli / 1000 = seconds / 60  = minutes / 60 = hours / 24 = days
-    },
+	getDays: function(time) {
+		return time / (24 * 60 * 60 * 1000); // milli / 1000 = seconds / 60  = minutes / 60 = hours / 24 = days
+	},
 
-    getHours: function getRemainingHours(time) {
-        return (time / (60 * 60 * 1000)) % 24;//milli / 1000 = seconds, seconds / 60 = minutes, minutes / 60 = hours
-    },
+	getHours: function getRemainingHours(time) {
+		return (time / (60 * 60 * 1000)) % 24;//milli / 1000 = seconds, seconds / 60 = minutes, minutes / 60 = hours
+	},
 
-    getMinutes: function (time) {
-        return (time / (60 * 1000)) % 60;//milli / 10000 = seconds, seconds / 60 = minutes
-    },
+	getMinutes: function(time) {
+		return (time / (60 * 1000)) % 60;//milli / 10000 = seconds, seconds / 60 = minutes
+	},
 
-    getSeconds: function(time) {
-        return (time / 1000) % 60;//milli / 1000 = seconds
-    },
+	getSeconds: function(time) {
+		return (time / 1000) % 60;//milli / 1000 = seconds
+	},
 
-    getMilliSeconds: function(time) {
-        return time % 1000;
-    },
+	getMilliSeconds: function(time) {
+		return time % 1000;
+	},
 
-    getTimePartsFromTime: function(time){
-        return {
-            days: this.getDays(time),
-            hours: this.getHours(time),
-            minutes: this.getMinutes(time),
-            seconds: this.getSeconds(time)
-        }
-    },
+	getTimePartsFromTime: function(time) {
+		return {
+			days: this.getDays(time),
+			hours: this.getHours(time),
+			minutes: this.getMinutes(time),
+			seconds: this.getSeconds(time)
+		};
+	},
 
 	/**
 	 * Takes a number of milliseconds and returns a string that is more similar
@@ -263,7 +264,7 @@ function() {
 	 * A utility to do a count down or count up from a starting point until a stopping point or infinity
 	 */
 	this._timer = function() {
-		var start, from, to, direction, duration, interval, intervalWindow, timerInterval, tickFn, alarmFn;
+		var start, from, to, direction, duration, interval, intervalWindow, timerInterval, tickFn, alarmFn, intervalUnit;
 
 		function getTimeStamp(d) {
 			if (!d && d !== 0) {
@@ -276,9 +277,17 @@ function() {
 		}
 
 		function updateTime() {
-			var now = Date.now(),
-				diff = now - start,
-				time = from + (direction * diff);
+			var now = new Date(),
+				diff, time;
+
+			if (intervalUnit === 'seconds') {
+				now.setMilliseconds(0);
+			}
+
+			now = now.getTime();
+
+			diff = now - start;
+			time = from + (direction * diff);
 
 			if (tickFn) {
 				tickFn.call(null, {
@@ -307,13 +316,25 @@ function() {
 		 * @return {Object}          this so calls can be chained
 		 */
 		this.start = function(i) {
-			interval = i || 1000; //default to a second
-
-			intervalWindow = interval / 2;
+			interval = i || 'seconds'; //default to a second
 
 			duration = Math.abs(from - to);
 
+			if (typeof interval === 'string') {
+				intervalUnit = interval;
+			}
+
+			//if we are using seconds set the millis to 0 so we start on an
+			//even second
+			if (intervalUnit === 'seconds') {
+				interval = 1000;
+				start = new Date();
+				start.setMilliseconds(0);
+				start = start.getTime();
+			}
+
 			start = start || (new Date()).getTime();
+			intervalWindow = interval / 2;
 
 			timerInterval = setInterval(updateTime, interval);
 

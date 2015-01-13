@@ -234,7 +234,7 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 
 		wait(3034)
 			.then(me.timeContainerEl.removeCls.bind(me.timeContainerEl, 'recent'))
-			.then(me.timer.start.bind(me, 1000));
+			.then(me.timer.start.bind(me, 'seconds'));
 	},
 
 
@@ -279,7 +279,7 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 				me.timer.stop();
 				me.showOverdueTime(0);
 			})
-			.start(1000);
+			.start('seconds');
 	},
 
 
