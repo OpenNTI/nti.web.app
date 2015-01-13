@@ -13,7 +13,8 @@ Ext.define('NextThought.model.assessment.Assignment', {
 		{ name: 'availableEnding', type: 'ISODate', mapping: 'available_for_submission_ending' },
 		{ name: 'parts', type: 'arrayItem' },
 		{ name: 'title', type: 'string' },
-		{ name: 'SubmittedCount', type: 'int', mapping: 'GradeAssignmentSubmittedCount'}
+		{ name: 'SubmittedCount', type: 'int', mapping: 'GradeAssignmentSubmittedCount'},
+		{ name: 'no_submit', type: 'boolean'}
 	],
 
 
@@ -64,12 +65,12 @@ Ext.define('NextThought.model.assessment.Assignment', {
 
 
 	isNoSubmit: function() {
-		return this.get('category_name') === 'no_submit';
+		return this.get('no_submit');
 	},
 
 
 	doNotShow: function() {
-		return this.get('category_name') === 'no_submit' && this.get('title') === 'Final Grade';
+		return this.isNoSubmit() && this.get('title') === 'Final Grade';
 	},
 
 
