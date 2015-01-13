@@ -700,10 +700,12 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 
 	getStream: function() {
-		var link = this.getLink('CourseRecursiveStreamByBucket');
+		var catalog = this.getCourseCatalogEntry(),
+			link = this.getLink('CourseRecursiveStreamByBucket');
 
 		this.__streamStore = this.__streamStore || NextThought.store.courseware.Stream.create({
-			url: link
+			url: link,
+			startDate: catalog.get('StartDate')
 		});
 
 		return this.__streamStore;

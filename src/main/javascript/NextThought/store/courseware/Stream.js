@@ -29,6 +29,7 @@ Ext.define('NextThought.store.courseware.Stream', {
 
 		this.url = config.url;
 		this.latestBinDate = moment.utc().endOf('isoWeek').toDate().getTime();
+		this.params.Oldest = (config.startDate || new Date(0)).getTime() / 1000;//the server is expecting seconds
 
 		this.__loadNextBatch();
 	},
