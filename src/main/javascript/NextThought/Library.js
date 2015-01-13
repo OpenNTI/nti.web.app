@@ -1,3 +1,4 @@
+/*global Deferred:false, ContentProxy:false */
 //TODO: this needs to become a controller.
 
 Ext.define('NextThought.Library', {
@@ -197,6 +198,7 @@ Ext.define('NextThought.Library', {
 					var c = toc.querySelector(query('topic', a)) || toc.querySelector(query('toc', a)),
 						d = toc.querySelector(query('topic', b)),
 						p = c.compareDocumentPosition(d);
+					/*jshint bitwise:false */
 					return ((p & Node.DOCUMENT_POSITION_PRECEDING) === Node.DOCUMENT_POSITION_PRECEDING) ? 1 : -1;
 				});
 			} catch (e) {
@@ -218,6 +220,7 @@ Ext.define('NextThought.Library', {
 			}
 
 			vi._order = keyOrder;
+			vi.containers = containers;
 
 			return vi;
 		}
@@ -323,14 +326,14 @@ Ext.define('NextThought.Library', {
 						console.log('Could not load "' + o.get('index') + '"... removing form library view');
 						store.remove(o);
 					})
-			)
+			);
 		});
 
 		Promise.all(loadTocs)
 			.then(callback.bind(this))
 			.fail(function(reason) {
 				console.error('Failed to load library: ', reason);
-			})
+			});
 	},
 
 

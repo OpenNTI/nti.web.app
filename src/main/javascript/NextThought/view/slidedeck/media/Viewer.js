@@ -1,3 +1,4 @@
+/*globals TemporaryStorage:false*/
 Ext.define('NextThought.view.slidedeck.media.Viewer', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.media-viewer',
@@ -208,8 +209,9 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			floatParent: me,
 			noTranscript: me.noTranscript
 		});
+
 		me.identity = Ext.widget({xtype: 'identity', renderTo: me.toolbar.getEl(), floatParent: me.toolbar});
-		me.gridView = Ext.widget({xtype: 'media-grid-view', renderTo: me.gridViewEl, floatParent: me, source: me.video});
+		me.gridView = Ext.widget({xtype: 'media-grid-view', renderTo: me.gridViewEl, floatParent: me, source: me.video, currentBundle: me.currentBundle});
 
 		me.on('destroy', 'destroy', me.toolbar);
 		me.on('destroy', 'destroy', me.gridView);

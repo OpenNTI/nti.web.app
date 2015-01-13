@@ -74,9 +74,14 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 			location = ContentUtils.getLocation(lineage.last()),
 			title = location.title;
 
-		this.setLocationInfo(location);
+		//if we can determine bundle to use its outline to order by
+		//use it, otherwise just use the video index
+		wait()
+			.then(this.getBundleOutline.bind(this))
+			.then(this.fillInFromOutline.bind(this, title))
+			.fail(this.getVideoData.bind(this, title));
 
-		Ext.defer(this.getVideoData, 1, this, [title]);
+		this.setLocationInfo(location);
 
 		this.on({
 			itemclick: function(cmp, record, item) {
@@ -122,6 +127,38 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 	},
 
 
+	getBundleOutline: function() {
+		var catalog, load;
+
+		//if we were passed a bundle to use
+		if (this.currentBundle) {
+			load = this.currentBundle.getNavigationStore().building;
+		//else if we can find a course for the source
+		} else {
+			catalog = CourseWareUtils.courseForNtiid(this.source.getId());
+
+			if (!catalog) {
+				load = Promise.reject();
+			} else {
+				load = CourseWareUtils.findCourseBy(catalog.findByMyCourseInstance())
+						.then(function(course) {
+							course = course.get('CourseInstance') || course;
+
+							return course.getNavigationStore().building;
+						});
+			}
+		}
+
+		return load;
+	},
+
+
+	fillInFromOutline: function(title, navStore) {
+		Library.getVideoIndex(title)
+			.then(this.applyNavigationData.bind(this, navStore));
+	},
+
+
 	processSpecialEvent: function(e) {
 		var k = e.getKey();
 		if (k === e.SPACE || k === e.ENTER) {
@@ -144,6 +181,60 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 
 	getVideoData: function(title) {
 		Library.getVideoIndex(title).then(this.applyVideoData.bind(this));
+	},
+
+
+	applyNavigationData: function(navStore, data) {
+		var me = this,
+			reader = Ext.data.reader.Json.create({model: NextThought.model.PlaylistItem}),
+			currentId = me.source.get('NTIID'),
+			selected,
+			videos = [];
+
+		function fillIn(ids) {
+			var i, v;
+
+			for (i = 0; i < ids.length; i++) {
+				v = NextThought.model.PlaylistItem(data[ids[i]]);
+				v.NTIID = v.ntiid;
+
+				videos.push(v);
+			}
+		}
+
+		//go through the navigation store and add the videos in order
+		//the lessons they appear in do
+		navStore.each(function(node) {
+			if (node.get('type') !== 'lesson') { return; }
+
+			var videoIds = data.containers[node.getId()];
+
+			if (videoIds && videoIds.length) {
+				videos.push(NextThought.model.PlaylistItem({
+					section: node.get('label'),
+					sources: []
+				}));
+
+				fillIn(videoIds);
+			}
+			console.log(data);
+		});
+
+		me.store = new Ext.data.Store({
+			model: NextThought.model.PlaylistItem,
+			proxy: 'memory',
+			data: videos
+		});
+
+		me.bindStore(me.store);
+
+		me.fireEvent('store-set', me.store);
+
+		selected = me.store.getById(currentId);
+
+		if (selected) {
+			me.getSelectionModel().select(selected, false, true);
+		}
 	},
 
 

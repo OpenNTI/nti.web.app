@@ -17,7 +17,8 @@ Ext.define('NextThought.controller.SlideDeck', {
 
 	refs: [
 		{ ref: 'activeMediaViewer', selector: 'media-viewer' },
-		{ ref: 'activeSlideDeck', selector: 'slidedeck-overlay' }
+		{ ref: 'activeSlideDeck', selector: 'slidedeck-overlay' },
+		{ ref: 'contentView', selector: 'content-view-container' }
 	],
 
 	init: function() {
@@ -178,7 +179,6 @@ Ext.define('NextThought.controller.SlideDeck', {
 
 
 	launchMediaPlayer: function(v, videoId, basePath, rec, options) {
-
 		//Only allow one media player at a time
 		console.debug('Launching media viewer');
 		if (this.getActiveMediaViewer()) {
@@ -193,7 +193,9 @@ Ext.define('NextThought.controller.SlideDeck', {
 		}
 
 		//See if we have a transcript.
-		var transcript, video, videoEl, frag, me = this;
+		var transcript, video, videoEl, frag, me = this,
+			content = me.getContentView(),
+			currentBundle = content && content.currentBundle;
 
 		if (v && !v.isModel) {
 			video = Ext.clone(v);
@@ -227,7 +229,8 @@ Ext.define('NextThought.controller.SlideDeck', {
 				autoShow: true,
 				record: record,
 				scrollToId: scrollToId,
-				startAtMillis: options && options.startAtMillis
+				startAtMillis: options && options.startAtMillis,
+				currentBundle: currentBundle
 			});
 			me.activeMediaPlayer.fireEvent('suspend-annotation-manager', this);
 			me.activeMediaPlayer.on('destroy', function() {
