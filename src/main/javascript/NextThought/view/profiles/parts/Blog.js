@@ -1,3 +1,4 @@
+/*globals isMe:false, swallow:false*/
 Ext.define('NextThought.view.profiles.parts.Blog', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.profile-blog',
@@ -648,7 +649,11 @@ Ext.define('NextThought.view.profiles.parts.Blog', {
 
 		this.postViewEl.scrollTo('top', 0);
 		this.activePost = Ext.widget(xtype, cfg);
-		this.activePost.updateRecord(record, this.store);
+
+		if (this.activePost.updateRecord) {
+			this.activePost.updateRecord(record, this.store);
+		}
+
 		this.updateLayout();
 	},
 
