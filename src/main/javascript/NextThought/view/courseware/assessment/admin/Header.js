@@ -120,6 +120,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
             this.mon(this.activeGradeRecord, "excused-changed", this.excuseGradeStatusChanged, this);
         }
 
+        if(this.assignmentHistory){
+            this.mon(this.assignmentHistory, 'was-destroyed', this.markAssignmentAsReset, this);
+        }
+
 		this.mon(Ext.getStore('PresenceInfo'), 'presence-changed', function(username, presence) {
 			if (username === me.user.getId()) {
 				me.nameEl.removeCls('dnd away available unavailable');
@@ -248,6 +252,13 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
             rCls = grade.get("IsExcused") === true ? 'off' : 'on';
         this.excusedEl.removeCls(rCls);
         this.excusedEl.addCls(cls);
+    },
+
+
+    markAssignmentAsReset: function(){
+        this.excusedEl.removeCls('on');
+        this.excusedEl.addCls('off');
+        this.setUpGradebox();
     },
 
 

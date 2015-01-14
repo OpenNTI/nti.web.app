@@ -249,7 +249,11 @@ Ext.define('NextThought.model.courses.AssignmentCollection', {
                         delete data[record.idProperty];
                         storeRec.set(data);
 
-                        if (storeRec.onSynced) {
+                        // NOTE: the OnSynced method currently sets the 'isSummary' property. For deleted record,
+                        // we don't want to set the isSummary because first it doesn't make any difference and second,
+                        // when it is set, it will prompt the navigation to try to load the full AssignmentHistoryItem
+                        // which will result in a 404 because the assignment has been reset
+                        if (storeRec.onSynced && action !== 'delete') {
                             storeRec.onSynced();
                         }
                     }

@@ -224,7 +224,9 @@ Ext.define('NextThought.model.assessment.Assignment', {
 			value = grade && grade.get(f),
 			gradeBookGrade = this._gradeBookEntry.getFieldItem('Items', username);
 
-		gradeBookGrade.set(f, value);
+        if(gradeBookGrade){
+            gradeBookGrade.set(f, value);
+        }
 	},
 
 

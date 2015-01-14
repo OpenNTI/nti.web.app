@@ -159,6 +159,8 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 
 		this.mon(this.submitBtnEl, 'click', 'submitAssignmentClicked');
 		this.mon(this.helpEl, 'click', 'helpClicked');
+
+        this.activeGradeRecord = this.assignmentHistory && this.assignmentHistory.get('Grade');
 	},
 
 

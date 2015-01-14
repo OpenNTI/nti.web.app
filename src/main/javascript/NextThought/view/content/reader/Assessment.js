@@ -85,7 +85,7 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 		this.submission = o.registerOverlayedPanel(guid + 'submission', Ext.widget('assessment-quiz-submission', {
 			reader: r, renderTo: c, questionSet: set,
 			tabIndexTracker: o.tabIndexer,
-			history: h
+			history: h, isInstructor: this.isInstructorProspective
 		}));
 
 		if (this.injectedAssignment && this.injectedAssignment.isTimed && !h.get('completed') && !isInstructor) {

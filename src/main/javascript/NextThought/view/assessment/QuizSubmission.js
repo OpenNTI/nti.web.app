@@ -86,6 +86,10 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 			}
 		},1);
 		this.fireEvent('has-been-submitted', this);
+
+        if(this.isInstructor && this.history){
+            this.mon(this.history,'was-destroyed', function(){ this.maybeDoReset(false); }, this);
+        }
 	},
 
 

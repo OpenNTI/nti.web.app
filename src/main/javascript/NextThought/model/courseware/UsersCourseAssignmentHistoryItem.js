@@ -180,7 +180,8 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 										Feedback: null,
 										Metadata: null,
 										completed: null,
-										submission: null
+										submission: null,
+                                        pendingAssessment: null
 									});
 
                                     if(store && store.assignmentsCollection){
@@ -242,7 +243,8 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 									Feedback: null,
 									Metadata: null,
 									completed: null,
-									submission: null
+									submission: null,
+                                    pendingAssessment: null
 								});
 								record.fireEvent('was-destroyed');
 
@@ -267,9 +269,6 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
                         store = me.store, field = "Grade";
                     menuItemEl.setText(txt);
 
-                    if(store && store.assignmentsCollection){
-                        store.assignmentsCollection.syncStoreForRecord(store, me, "Grade");
-                    }
                 })
                 .fail(function(err){
                     console.log('Excusing grade failed: '+ err);
