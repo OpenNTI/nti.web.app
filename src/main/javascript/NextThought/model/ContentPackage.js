@@ -43,7 +43,7 @@ Ext.define('NextThought.model.ContentPackage', {
 		if (me.self.TOC_REQUESTS[index]) {
 			me.tocPromise = me.self.TOC_REQUESTS[index];
 		} else {
-			me.tocPromise = Service.request(me.get('index'))
+			me.tocPromise = Service.request(getURL(me.get('index')))
 								.then(Library.parseXML)
 							//BEGIN: ToC Cleanup
 								.then(me.__cleanToCNodes.bind(me))
