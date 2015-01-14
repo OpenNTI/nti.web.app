@@ -74,7 +74,6 @@ Ext.define('NextThought.model.courseware.Grade', {
                 var o = Ext.JSON.decode(responseText, true);
 
                 record.set(o);
-                record.fireEvent("excused-changed", record);
                 fulfill(record);
             });
         });

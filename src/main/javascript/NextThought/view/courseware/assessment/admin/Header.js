@@ -116,12 +116,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 
 		me.maybeShowChat(me.chatEl);
 
-        if(this.activeGradeRecord){
-            this.mon(this.activeGradeRecord, "excused-changed", this.excuseGradeStatusChanged, this);
-        }
-
         if(this.assignmentHistory){
             this.mon(this.assignmentHistory, 'was-destroyed', this.markAssignmentAsReset, this);
+            this.mon(this.assignmentHistory, "excused-changed", this.excuseGradeStatusChanged, this);
         }
 
 		this.mon(Ext.getStore('PresenceInfo'), 'presence-changed', function(username, presence) {
@@ -211,14 +208,15 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 	},
 
 
-    excuseGradeStatusChanged: function(grade){
-        if(!grade || !grade.isModel){ return; }
-
+    excuseGradeStatusChanged: function(){
         var me = this,
+            grade = this.assignmentHistory.get('Grade'),
             store = this.pageSource,
             assignment = this.assignment,
             historyItem = this.assignmentHistory,
             assignmentCollection = this.pageSource && this.pageSource.assignmentsCollection;
+
+        if(!grade){ return; }
 
         var link = grade.getLink('AssignmentHistoryItem');
         //if the grade that comes back from saving has an assignment history item link

@@ -136,9 +136,9 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 
     __getExcusedTpl: function(){
         var excusedTpl = {cls: 'off', html:'Excused'};
-        if(this.assignmentHistory && this.assignmentHistory.isModel){
-            this.activeGradeRecord = this.assignmentHistory.get('Grade');
-            if(this.activeGradeRecord && this.activeGradeRecord.get("IsExcused")){
+        if(this.assignmentHistory){
+            var grade = this.assignmentHistory.get("Grade");
+            if(grade && grade.get("IsExcused")){
                 excusedTpl = {cls: 'on', html:'Excused'};
             }
         }
@@ -159,8 +159,6 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 
 		this.mon(this.submitBtnEl, 'click', 'submitAssignmentClicked');
 		this.mon(this.helpEl, 'click', 'helpClicked');
-
-        this.activeGradeRecord = this.assignmentHistory && this.assignmentHistory.get('Grade');
 	},
 
 

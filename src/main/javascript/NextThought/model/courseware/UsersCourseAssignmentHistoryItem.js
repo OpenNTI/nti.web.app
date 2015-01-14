@@ -269,6 +269,8 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
                         store = me.store, field = "Grade";
                     menuItemEl.setText(txt);
 
+                    me.set('Grade', record);
+                    me.fireEvent("excused-changed");
                 })
                 .fail(function(err){
                     console.log('Excusing grade failed: '+ err);

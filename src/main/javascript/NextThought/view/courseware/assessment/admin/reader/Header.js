@@ -29,6 +29,13 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 		if (!grade) {
 			try {
 				this.assignmentHistory.buildGrade();
+
+                // update the grade values
+                grade = this.assignmentHistory.get('Grade');
+                values = grade && grade.getValues();
+                number = values && values.value;
+                letter = values && values.letter;
+
 			} catch (noGrade) {
 				console.warn(noGrade.stack || noGrade.message || noGrade);
 				this.gradeBoxEl.hide();
