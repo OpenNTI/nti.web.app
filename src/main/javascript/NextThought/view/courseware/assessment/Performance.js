@@ -29,7 +29,27 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 				//} }
 
 				{ xtype: 'box', cls: 'grade-value', html: getString('NextThought.view.courseware.assessment.Performance.notentered'), grade: true },
-				{ xtype: 'box', cls: 'label', html: getString('NextThought.view.courseware.assessment.Performance.coursegrade') },
+				{
+					xtype: 'box',
+					cls: 'label',
+					html: getString('NextThought.view.courseware.assessment.Performance.coursegrade'),
+					gradeLabel: true,
+					disclaimerTpl: new Ext.XTemplate(Ext.DomHelper.markup({
+						cls: 'disclaimer', 'data-qtip': '{qtip}'
+					})),
+					addDisclaimer: function(disclaimer) {
+						if (!this.rendered) {
+							this.on('afterrender', this.addDisclaimer.bind(this, disclaimer));
+							return;
+						}
+
+						if (!this.el.down('.disclaimer')) {
+							this.disclaimerTpl.append(this.el, {
+								qtip: disclaimer
+							});
+						}
+					}
+				},
 
 				{ xtype: 'box', cls: 'assignments-completed', html: '', msgTpl: getString('NextThought.view.courseware.assessment.Performance.outof') },
 				{ xtype: 'box', cls: 'label', html: getString('NextThought.view.courseware.assessment.Performance.completed') }
@@ -102,6 +122,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 		//this.chartGrade = this.down('grade-chart');
 		//this.chartPerformance = this.down('grade-performance-chart');
 		this.tempGrade = this.down('[grade]');
+		this.gradeLabel = this.down('[gradeLabel]');
 		this.tempCount = this.down('box[msgTpl]');
 		this.grid = this.down('grid');
 
@@ -163,7 +184,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 		} else if (currentBundle) {
 			currentBundle.getCurrentGrade()
 				.then(function(grade) {
-					var elements = [],
+					var elements = [];
 						value = grade.getValues();
 
 					if (value.value) {
@@ -179,7 +200,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 					}
 
 					if (value.letter || value.value) {
-						elements.push({cls: 'disclaimer', html: 'Estimated from the grading policy in the Syllabus'});
+						me.gradeLabel.addDisclaimer('Estimated from the grading policy in the Syllabus');
 					}
 
 					me.tempGrade.update(Ext.DomHelper.markup(elements));

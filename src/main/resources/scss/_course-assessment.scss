@@ -1533,6 +1533,14 @@ canvas.x-component-course-assessment {
 		color: $tertiary-grey;
 		text-transform: uppercase;
 		z-index: 1;
+
+		.disclaimer {
+			margin-left: 0.5em;
+			width: 16px;
+			height: 18px;
+			display: inline-block;
+			@include icon('info', $top: -7px, $position: absolute);
+		}
 	}
 
 	.grade-value, .assignments-completed {
@@ -1542,14 +1550,6 @@ canvas.x-component-course-assessment {
 
 		font: italic normal 1em/1 $font;
 		color: $secondary-grey;
-
-		.disclaimer {
-			font-size: 0.65em;
-			text-transform: uppercase;
-			font-style: normal;
-			font-weight: 600;
-			line-height: 2em;
-		}
 	}
 
 	.assignments-completed {
