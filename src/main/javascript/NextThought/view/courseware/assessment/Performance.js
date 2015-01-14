@@ -1,3 +1,4 @@
+/*globals getFormattedString:false*/
 Ext.define('NextThought.view.courseware.assessment.Performance', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-assessment-performance',
@@ -48,18 +49,18 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 						} },
 						{ text: 'Score', dataIndex: 'grade', width: 70, resizable: false },
 						{ text: 'Feedback', dataIndex: 'feedback', tdCls: 'feedback', width: 140, resizable: false,
-                            renderer: function(value, col, rec) {
-                                var grade = rec.get('Grade'),
-                                    isExcused = grade && grade.get("IsExcused"), excusedTpl, excusedCls,
-                                    feedbackTpl = value ? Ext.util.Format.plural(value, 'Comment') : '';
+							renderer: function(value, col, rec) {
+								var grade = rec.get('Grade'),
+									isExcused = grade && grade.get('IsExcused'), excusedTpl, excusedCls,
+									feedbackTpl = value ? Ext.util.Format.plural(value, 'Comment') : '';
 
-                                excusedCls = isExcused === true ? 'on' : 'off';
-                                excusedTpl = Ext.DomHelper.markup({
-                                    cls: 'grade-excused '+ excusedCls,
-                                    html: getFormattedString('NextThought.view.courseware.assessment.admin.Grid.excused')
-                                });
+								excusedCls = isExcused === true ? 'on' : 'off';
+								excusedTpl = Ext.DomHelper.markup({
+									cls: 'grade-excused ' + excusedCls,
+									html: getFormattedString('NextThought.view.courseware.assessment.admin.Grid.excused')
+								});
 
-                                return excusedTpl + feedbackTpl;
+								return excusedTpl + feedbackTpl;
 						} }
 					],
 
@@ -122,7 +123,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 				{name: 'Submission', type: 'auto'},
 				{name: 'pendingAssessment', type: 'auto'},
 				{name: 'Feedback', type: 'auto'}
-		    ],
+			],
 			sorters: [
 				{property: 'due', direction: 'DESC'}
 			]
@@ -140,22 +141,49 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 	updateHeader: function() {
 		function complete(o) {return !!o.get('completed'); }
 
-		var tpl = this.tempCount.msgTpl,
-			t = this.store.getCount(),
-			c = this.store.getRange().filter(complete).length,
+		var me = this,
+			container = me.up('content-view-container'),
+			currentBundle = container && container.currentBundle,
+			tpl = me.tempCount.msgTpl,
+			t = me.store.getCount(),
+			c = me.store.getRange().filter(complete).length,
 			value, number, letter, grades;
-		this.tempCount.update(Ext.String.format(tpl, c, t));
+		me.tempCount.update(Ext.String.format(tpl, c, t));
 
-		if (this.finalGrade && !Ext.isEmpty(this.finalGrade.trim())) {
-			//FIXME: This is duplicated with the instructor view.  Move to shared place
-			grades = this.finalGrade && this.finalGrade.split(' ');
+		if (me.finalGrade && !Ext.isEmpty(me.finalGrade.trim())) {
+			//FIXME: me is duplicated with the instructor view.  Move to shared place
+			grades = me.finalGrade && me.finalGrade.split(' ');
 			number = grades && grades[0];
 			letter = (grades && grades[1]) || '-';
-			this.tempGrade.update(Ext.DomHelper.markup([
+			me.tempGrade.update(Ext.DomHelper.markup([
 				{tag: 'span', cls: 'score-grade', html: number},
 				'&nbsp;',
 				{tag: 'span', cls: 'letter-grade', html: letter}
 			]));
+		} else if (currentBundle) {
+			currentBundle.getCurrentGrade()
+				.then(function(grade) {
+					var elements = [],
+						value = grade.getValues();
+
+					if (value.value) {
+						elements.push({tag: 'span', cls: 'score-grade', html: value.value});
+
+						if (value.letter) {
+							elements.push('&nbdps;');
+						}
+					}
+
+					if (value.letter) {
+						elements.push({tag: 'span', cls: 'score-grade', html: value.letter});
+					}
+
+					if (value.letter || value.value) {
+						elements.push({cls: 'disclaimer', html: 'Estimated from the grading policy in the Syllabus'});
+					}
+
+					me.tempGrade.update(Ext.DomHelper.markup(elements));
+				});
 		}
 	},
 

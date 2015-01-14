@@ -1542,6 +1542,14 @@ canvas.x-component-course-assessment {
 
 		font: italic normal 1em/1 $font;
 		color: $secondary-grey;
+
+		.disclaimer {
+			font-size: 0.65em;
+			text-transform: uppercase;
+			font-style: normal;
+			font-weight: 600;
+			line-height: 2em;
+		}
 	}
 
 	.assignments-completed {

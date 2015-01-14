@@ -709,5 +709,17 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		});
 
 		return this.__streamStore;
+	},
+
+
+	getCurrentGrade: function() {
+		var link = this.getLink('CurrentGrade');
+
+		if (!link) { return Promise.reject(); }
+
+		return Service.request(link)
+					.then(function(response) {
+						return ParseUtils.parseItems(response)[0];
+					});
 	}
 });
