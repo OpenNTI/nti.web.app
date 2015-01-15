@@ -1,3 +1,4 @@
+/*globals isMe:false, Toaster:false, swallow:false*/
 Ext.define('NextThought.view.content.reader.Assessment', {
 	alias: 'reader.assessment',
 	requires: [
@@ -5,7 +6,7 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 		'NextThought.view.assessment.Question',
 		'NextThought.view.assessment.QuizSubmission',
 		'NextThought.view.assessment.AssignmentFeedback',
-        'NextThought.view.courseware.assessment.AssignmentStatus'
+		'NextThought.view.courseware.assessment.AssignmentStatus'
 	],
 
 	uses: [

@@ -137,6 +137,16 @@ Ext.define('NextThought.view.assessment.Parts', {
 		});
 	},
 
+
+	instructorReset: function() {
+		var inputs = this.query('abstract-question-input,assessment-multipart-submission');
+
+		Ext.each(inputs, function(input) {
+			input.instructorReset();
+		});
+	},
+
+
 	afterRender: function() {
 		this.callParent(arguments);
 		var me = this;

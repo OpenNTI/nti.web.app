@@ -509,6 +509,13 @@ Ext.define('NextThought.view.assessment.input.Base', {
 	},
 
 
+	instructorReset: function() {
+		this.reset();
+
+		this.setSubmitted();
+	},
+
+
 	saveProgress: function() {
 		if (this.questionSet) {
 			this.questionSet.saveProgress(this.question, this);

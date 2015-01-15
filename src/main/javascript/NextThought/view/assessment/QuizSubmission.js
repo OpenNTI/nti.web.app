@@ -1,3 +1,4 @@
+/*globals getFormattedString:false*/
 Ext.define('NextThought.view.assessment.QuizSubmission', {
 	extend: 'NextThought.view.content.overlay.Panel',
 	alias: 'widget.assessment-quiz-submission',
@@ -87,9 +88,9 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		},1);
 		this.fireEvent('has-been-submitted', this);
 
-        if(this.isInstructor && this.history){
-            this.mon(this.history,'was-destroyed', function(){ this.maybeDoReset(false); }, this);
-        }
+		if (this.isInstructor && this.history) {
+			this.mon(this.history, 'was-destroyed', this.instructorReset.bind(this), this);
+		}
 	},
 
 
@@ -295,6 +296,13 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 
 	graded: function() {
 		this.moveToSubmitted();
+	},
+
+
+	instructorReset: function() {
+		var q = this.questionSet;
+
+		q.fireEvent('instructor-reset');
 	},
 
 

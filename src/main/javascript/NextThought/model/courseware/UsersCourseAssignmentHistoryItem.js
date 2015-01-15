@@ -1,3 +1,4 @@
+/*globals Duration:false*/
 Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 	alternateClassName: 'NextThought.model.courseware.UsersCourseAssignmentHistoryItemSummary',
 	extend: 'NextThought.model.Base',
@@ -170,9 +171,9 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 									delete record.raw.SubmissionCreatedTime;
 									delete record.raw.Submission;
 									delete record.raw.FeedbackCount;
-                                    delete record.raw.Grade;
-                                    delete record.raw.Feedback;
-                                    delete record.raw.Metadata;
+									delete record.raw.Grade;
+									delete record.raw.Feedback;
+									delete record.raw.Metadata;
 
 									record.set({
 										Submission: null,
@@ -181,12 +182,12 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 										Metadata: null,
 										completed: null,
 										submission: null,
-                                        pendingAssessment: null
+										pendingAssessment: null
 									});
 
-                                    if(store && store.assignmentsCollection){
-                                        store.assignmentsCollection.syncStoreForRecord(store, record, null, "delete");
-                                    }
+									if (store && store.assignmentsCollection) {
+										store.assignmentsCollection.syncStoreForRecord(store, record, null, 'delete');
+									}
 
 									fulfill(true);
 								});
@@ -203,7 +204,7 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 
 	beginReset: function() {
 		var record = this,
-            store = record.store;
+			store = record.store;
 
 		Ext.MessageBox.alert({
 			title: 'Are you sure?',
@@ -233,9 +234,9 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 								delete record.raw.SubmissionCreatedTime;
 								delete record.raw.Submission;
 								delete record.raw.FeedbackCount;
-                                delete record.raw.Grade;
-                                delete record.raw.Feedback;
-                                delete record.raw.Metadata;
+								delete record.raw.Grade;
+								delete record.raw.Feedback;
+								delete record.raw.Metadata;
 
 								record.set({
 									Submission: null,
@@ -244,13 +245,14 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 									Metadata: null,
 									completed: null,
 									submission: null,
-                                    pendingAssessment: null
+									pendingAssessment: null
 								});
+
 								record.fireEvent('was-destroyed');
 
-                                if(store && store.assignmentsCollection){
-                                    store.assignmentsCollection.syncStoreForRecord(store, record, null, "delete");
-                                }
+								if (store && store.assignmentsCollection) {
+									store.assignmentsCollection.syncStoreForRecord(store, record, null, 'delete');
+								}
 							});
 
 				}
@@ -259,26 +261,26 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 	},
 
 
-    handleExcuseGrade: function(menuItemEl){
-        var grade = this.get("Grade"), me = this;
+	handleExcuseGrade: function(menuItemEl) {
+		var grade = this.get('Grade'), me = this;
 
-        if(grade && grade.excuseGrade){
-            grade.excuseGrade()
-                .then(function(record){
-                    var txt = record.get("IsExcused") === true ? 'Unexcuse Grade' : 'Excuse Grade',
-                        store = me.store, grade = me.get('Grade');
-                    menuItemEl.setText(txt);
+		if (grade && grade.excuseGrade) {
+			grade.excuseGrade()
+				.then(function(record) {
+					var txt = record.get('IsExcused') === true ? 'Unexcuse Grade' : 'Excuse Grade',
+						store = me.store, grade = me.get('Grade');
+					menuItemEl.setText(txt);
 
-                    if(grade){
-                        grade.set('IsExcused', record.get('IsExcused'));
-                    }
-                    me.fireEvent("excused-changed", grade);
-                })
-                .fail(function(err){
-                    console.log('Excusing grade failed: '+ err);
-                });
-        }
-    },
+					if (grade) {
+						grade.set('IsExcused', record.get('IsExcused'));
+					}
+					me.fireEvent('excused-changed', grade);
+				})
+				.fail(function(err) {
+					console.log('Excusing grade failed: ' + err);
+				});
+		}
+	},
 
 
 	/**

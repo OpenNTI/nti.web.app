@@ -23,7 +23,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 		{cls: 'status', cn: [
 			{cls: 'status-item', cn: {tag: 'span', cls: 'completed'}},
 			{cls: 'status-item', cn: {tag: 'span', cls: 'timed'}},
-            {cls: 'status-item', cn: {tag: 'span', cls: 'excused {excused.cls}', html: '{excused.html}'}}
+			{cls: 'status-item', cn: {tag: 'span', cls: 'excused {excused.cls}', html: '{excused.html}'}}
 		]},
 		{ cls: 'user', cn: [
 			{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'}},
@@ -52,7 +52,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 		timedEl: '.header .status .timed',
 		gradeBoxEl: '.header .grade',
 		actionsEl: '.header .assignment-actions',
-        excusedEl: '.header .status .excused'
+		excusedEl: '.header .status .excused'
 	},
 
 
@@ -116,10 +116,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 
 		me.maybeShowChat(me.chatEl);
 
-        if(this.assignmentHistory){
-            this.mon(this.assignmentHistory, 'was-destroyed', this.markAssignmentAsReset, this);
-            this.mon(this.assignmentHistory, "excused-changed", this.excuseGradeStatusChanged, this);
-        }
+		if (this.assignmentHistory) {
+			this.mon(this.assignmentHistory, 'was-destroyed', this.markAssignmentAsReset, this);
+			this.mon(this.assignmentHistory, 'excused-changed', this.excuseGradeStatusChanged, this);
+		}
 
 		this.mon(Ext.getStore('PresenceInfo'), 'presence-changed', function(username, presence) {
 			if (username === me.user.getId()) {
@@ -208,58 +208,58 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 	},
 
 
-    excuseGradeStatusChanged: function(){
-        var me = this,
-            grade = this.assignmentHistory.get('Grade'),
-            store = this.pageSource,
-            assignment = this.assignment,
-            historyItem = this.assignmentHistory,
-            assignmentCollection = this.pageSource && this.pageSource.assignmentsCollection;
+	excuseGradeStatusChanged: function() {
+		var me = this,
+			grade = this.assignmentHistory.get('Grade'),
+			store = this.pageSource,
+			assignment = this.assignment,
+			historyItem = this.assignmentHistory,
+			assignmentCollection = this.pageSource && this.pageSource.assignmentsCollection;
 
-        if(!grade){ return; }
+		if (!grade) { return; }
 
-        var link = grade.getLink('AssignmentHistoryItem');
-        //if the grade that comes back from saving has an assignment history item link
-        //and we have a store get the history item from the server and update the backing store
-        if (link && store) {
-            Service.request(link)
-                .then(function(item) {
-                    var newHistoryItem = ParseUtils.parseItems(item)[0];
-                    //the item field is set with the assignment and does not come back from the server
-                    //so fill it in with the previous history item's item
-                    newHistoryItem.set('item', historyItem.get('item'));
+		var link = grade.getLink('AssignmentHistoryItem');
+		//if the grade that comes back from saving has an assignment history item link
+		//and we have a store get the history item from the server and update the backing store
+		if (link && store) {
+			Service.request(link)
+				.then(function(item) {
+					var newHistoryItem = ParseUtils.parseItems(item)[0];
+					//the item field is set with the assignment and does not come back from the server
+					//so fill it in with the previous history item's item
+					newHistoryItem.set('item', historyItem.get('item'));
 
-                    // Update the grade instance on the gradebook
-                    assignment.getGradeBookEntry().addItem(newHistoryItem.get('Grade'));
+					// Update the grade instance on the gradebook
+					assignment.getGradeBookEntry().addItem(newHistoryItem.get('Grade'));
 
-                    store.syncBackingStore(newHistoryItem);
-                    if(assignmentCollection){
-                        assignmentCollection.syncStoreForRecord(store, newHistoryItem, 'Grade');
-                    }
-                    me.markGradeAsExcused(grade);
-                })
-                .fail(function(reason) {
-                    console.error('Failed to update assignmenthistoryitem from new grade:', reason);
-                });
-        }
-    },
-
-
-    markGradeAsExcused: function(grade){
-        if(!grade || !grade.isModel){ return; }
-
-        var cls = grade.get("IsExcused") === true ? 'on' : 'off',
-            rCls = grade.get("IsExcused") === true ? 'off' : 'on';
-        this.excusedEl.removeCls(rCls);
-        this.excusedEl.addCls(cls);
-    },
+					store.syncBackingStore(newHistoryItem);
+					if (assignmentCollection) {
+						assignmentCollection.syncStoreForRecord(store, newHistoryItem, 'Grade');
+					}
+					me.markGradeAsExcused(grade);
+				})
+				.fail(function(reason) {
+					console.error('Failed to update assignmenthistoryitem from new grade:', reason);
+				});
+		}
+	},
 
 
-    markAssignmentAsReset: function(){
-        this.excusedEl.removeCls('on');
-        this.excusedEl.addCls('off');
-        this.setUpGradebox();
-    },
+	markGradeAsExcused: function(grade) {
+		if (!grade || !grade.isModel) { return; }
+
+		var cls = grade.get('IsExcused') === true ? 'on' : 'off',
+			rCls = grade.get('IsExcused') === true ? 'off' : 'on';
+		this.excusedEl.removeCls(rCls);
+		this.excusedEl.addCls(cls);
+	},
+
+
+	markAssignmentAsReset: function() {
+		this.excusedEl.removeCls('on');
+		this.excusedEl.addCls('off');
+		this.setUpGradebox();
+	},
 
 
 	openEmail: function() {

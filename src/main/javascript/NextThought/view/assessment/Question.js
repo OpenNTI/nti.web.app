@@ -44,7 +44,8 @@ Ext.define('NextThought.view.assessment.Question', {
 				'graded': this.updateWithResults,
 				'set-progress': this.updateWithProgress,
 				'reset': this.reset,
-				'reapply-progress': this.reapplyProgress
+				'reapply-progress': this.reapplyProgress,
+				'instructor-reset': this.instructorReset
 			});
 		}
 		this.mon(this, {
@@ -317,6 +318,12 @@ Ext.define('NextThought.view.assessment.Question', {
 		delete this.submitted;
 		this.removeCls('submitted no-data');
 		this.determineSubmissionState();
+	},
+
+
+	instructorReset: function() {
+		this.down('question-header').reset();
+		this.down('question-parts').instructorReset();
 	},
 
 
