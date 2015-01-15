@@ -175,6 +175,21 @@
 
 					@include icon('play-small', $position: absolute, $top: 3px, $left: 3px);
 				}
+
+				&.word-context {
+					height: 5.9em;
+
+					.text {
+						color: #7593a4;
+						background-color: #f6fcff;
+						position: absolute;
+						top: 0;
+						bottom: 0;
+						overflow: hidden;
+						padding: 10px 15px;
+						font: italic 300 1.1em/1.5em $font;
+					}
+				}
 			}
 
 			.list-item {

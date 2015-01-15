@@ -1,8 +1,13 @@
+/*globals RangeUtils:false*/
 Ext.define('NextThought.view.courseware.dashboard.tiles.Note', {
 	extend: 'NextThought.view.courseware.dashboard.tiles.Post',
 	alias: 'widget.dashboard-note',
 
 	requires: ['NextThought.view.courseware.dashboard.tiles.parts.NoteComment'],
+
+	mixins: {
+		questionContent: 'NextThought.mixins.QuestionContent'
+	},
 
 	statics: {
 		HEIGHT: 200,
@@ -125,30 +130,64 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Note', {
 	},
 
 
-	getContext: function() {
+	__loadContextFromMeta: function(meta) {
+		var me = this,
+			record = me.record;
+
+		return new Promise(function(fulfill, reject) {
+			ContentUtils.spider(meta.NTIID, function spiderComplete() {
+				fulfill('');
+			}, function parse(doc) {
+				doc = ContentUtils.parseXML(ContentUtils.fixReferences(doc, meta.absoluteContentRoot));
+
+				var newContext = RangeUtils.getContextAroundRange(record.get('applicableRange'), doc, doc, record.get('ContainerId')),
+					temp = Ext.fly(newContext);
+
+				Ext.fly(newContext).select('object').remove();
+				Ext.fly(newContext).select('input').addCls('preview').set({readonly: true});
+
+				return fulfill({
+					text: me.buildContent(newContext, true)
+				});
+			}, reject);
+		});
+	},
+
+
+	__loadContextFromObj: function() {
 		var me = this;
 
-		return this.CACHE.context
+		return me.CACHE.context
 				.then(function(obj) {
 					var src;
 
-						if (obj && /ntivideo/.test(obj.mimeType || obj.MimeType)) {
-							if (!Ext.isEmpty(obj.sources)) {
-								src = obj.sources.first();
-							}
+					if (obj && /ntivideo/.test(obj.mimeType || obj.MimeType)) {
+						if (!Ext.isEmpty(obj.sources)) {
+							src = obj.sources.first();
 						}
+					}
 
-						if (src) {
-							return me.getCurrent()
+					if (src) {
+						return me.getCurrent()
 								.then(function(current) {
 									return {
 										thumbnail: src.thumbnail,
 										name: current
 									};
 								});
-						}
-						return {};
+					}
+
+					return {};
 				});
+	},
+
+
+	getContext: function() {
+		var me = this;
+
+		return this.getMeta()
+			.then(this.__loadContextFromMeta.bind(this))
+			.fail(this.__loadContextFromObj.bind(this));
 	},
 
 

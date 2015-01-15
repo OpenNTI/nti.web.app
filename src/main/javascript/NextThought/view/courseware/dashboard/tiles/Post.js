@@ -32,7 +32,8 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Post', {
 		]},
 		{cls: 'context-image', cn: [
 			{tag: 'img', cls: 'image'},
-			{cls: 'title'}
+			{cls: 'title'},
+			{cls: 'text'}
 		]},
 		{cls: 'post-body', cn: [
 			{cls: 'controls', cn: [
@@ -66,6 +67,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Post', {
 		contextEl: '.context-image',
 		contextImageEl: '.context-image .image',
 		contextTitleEl: '.context-image .title',
+		contextTextEl: '.context-image .text',
 		liked: '.controls .like',
 		favorites: '.controls .favorite',
 		avatarEl: '.post-meta .avatar',
@@ -239,13 +241,22 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Post', {
 
 
 	setContext: function(context) {
-		if (Ext.isEmpty(context) || !context.thumbnail) { return; }
+		if (Ext.isEmpty(context) || Ext.Object.isEmpty(context)) { return; }
 
-		if (context.name) {
-			this.contextTitleEl.update(context.name);
+		if (context.text) {
+			this.contextEl.addCls('word-context');
+			this.contextTextEl.update(context.text);
+		} else {
+			this.contextEl.addCls('image-context');
+			if (context.name) {
+				this.contextTitleEl.update(context.name);
+			}
+
+			if (context.thumbanil) {
+				this.contextImageEl.set({'src': context.thumbnail});
+			}
 		}
 
-		this.contextImageEl.set({'src': context.thumbnail});
 		this.contextEl.addCls('has-context');
 
 		if (!this.CACHE.height) {
