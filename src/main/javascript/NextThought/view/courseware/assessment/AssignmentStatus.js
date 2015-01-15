@@ -28,9 +28,9 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 				{tag: 'tpl', 'if': 'due && !completed', cn: [
 					{cls: 'status-item due {due.cls}', 'data-qtip-fn': '{due.qtipFn}', html: '{due.html}'}
 				]},
-                {tag: 'tpl', 'if': 'excused', cn: [
-                    {tag: 'span', cls: 'excused', html: '{excused.html}', 'data-qtip': '{excused.qtip}'}
-                ]}
+				{tag: 'tpl', 'if': 'excused', cn: [
+					{tag: 'span', cls: 'excused', html: '{excused.html}', 'data-qtip': '{excused.qtip}'}
+				]}
 			]})
 		),
 
@@ -125,10 +125,8 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 			if (!data.completed || data.completed <= data.due || data.isNoSubmitAssignment) { return null; }
 
 			var diff = data.completed.getTime() - data.due.getTime(),
-				qtip = TimeUtils.getNaturalDuration(diff, 1) + ' overdue';
-				d = {
-					html: 'overdue'
-				};
+				qtip = TimeUtils.getNaturalDuration(diff, 1) + ' overdue',
+				d = {html: 'overdue'};
 
 			qtip += ' &middot; ' + this.__getSubmittedToolTip(data.completed);
 
@@ -137,14 +135,14 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 			return d;
 		},
 
-        __getExcuseGradeStatus: function(data){
-            if(!data.isExcused){ return null; }
+		__getExcuseGradeStatus: function(data) {
+			if (!data.isExcused) { return null; }
 
-            return {
-                html: 'Excused Grade',
-                qtip: 'This assignment will NOT count towards your grade'
-            }
-        },
+			return {
+				html: 'Excused Grade',
+				qtip: 'This assignment will NOT count towards your grade'
+			};
+		},
 
 
 		getRenderData: function(data) {
@@ -154,7 +152,7 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 					overtime: this.__getOverTimeStatus(data),
 					overdue: this.__getOverDueStatus(data),
 					due: this.__getDueStatus(data),
-                    excused: this.__getExcuseGradeStatus(data)
+					excused: this.__getExcuseGradeStatus(data)
 				};
 		},
 
@@ -199,13 +197,13 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 		 */
 		getActionsMenu: function(record) {
 			var menu = Ext.widget('menu', {
-				ownerCmp: this,
-				constrainTo: Ext.getBody(),
-				defaults: {
-					ui: 'nt-menuitem',
-					plain: true
-				}
-			});
+					ownerCmp: this,
+					constrainTo: Ext.getBody(),
+					defaults: {
+						ui: 'nt-menuitem',
+						plain: true
+					}
+				}), txt, grade;
 
 
 			if (record.get('submission')) {
@@ -218,20 +216,20 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 				}));
 			}
 
-            var txt, grade;
-            grade = record.get('Grade');
-			if (grade && grade.isExcusable()){
-			    txt = grade.get("IsExcused") ? 'Unexcuse Grade' : 'Excuse Grade';
+			grade = record.get('Grade');
 
-			    menu.add(new Ext.Action({
-			        text: txt,
-			        scope: this,
+			if (grade && grade.isExcusable()) {
+				txt = grade.get('IsExcused') ? 'Unexcuse Grade' : 'Excuse Grade';
+
+				menu.add(new Ext.Action({
+					text: txt,
+					scope: this,
 					handler: Ext.bind(record.handleExcuseGrade, record),
 					itemId: 'excuse-grade-item',
 					ui: 'nt-menuitem',
 					plain: true
 
-			    }));
+				}));
 			}
 
 			menu.on('hide', 'destroy');
@@ -239,67 +237,67 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 			return menu;
 		},
 
-        MAX_TIME_UNITS: 2,
+		MAX_TIME_UNITS: 2,
 
-        WARNING_TIME_MINUTES: 1,
+		WARNING_TIME_MINUTES: 1,
 
-        getTimeString: function(time, roundUp){
-            function buildTimeString(timeArray, ceil){
-                if(Ext.isEmpty(timeArray)){ return ""; }
+		getTimeString: function(time, roundUp) {
+			function buildTimeString(timeArray, ceil) {
+				if (Ext.isEmpty(timeArray)) { return ''; }
 
-                var str = [], len = timeArray.length, tmp, u;
-                for(var i=0; i<len; i++){
-                    u = timeArray[i];
+				var str = [], len = timeArray.length, tmp, u;
 
-                    // If it's the last unit, roundup or down depending on passed parameter.
-                    if(i === (len-1)){
-                        if(ceil){
-                            tmp = Ext.util.Format.plural(Math.ceil(u.value), u.unit);
-                        } else{
-                            tmp = Ext.util.Format.plural(Math.floor(u.value), u.unit);
-                        }
-                    }
-                    else{
-                        tmp = Ext.util.Format.plural(Math.floor(u.value), u.unit);
-                    }
+				for (var i = 0; i < len; i++) {
+					u = timeArray[i];
 
-                    str.push(tmp);
-                }
+					// If it's the last unit, roundup or down depending on passed parameter.
+					if (i === (len - 1)) {
+						if (ceil) {
+							tmp = Ext.util.Format.plural(Math.ceil(u.value), u.unit);
+						} else {
+							tmp = Ext.util.Format.plural(Math.floor(u.value), u.unit);
+						}
+					} else {
+						tmp = Ext.util.Format.plural(Math.floor(u.value), u.unit);
+					}
 
-                return str.join(" ");
-            }
+					str.push(tmp);
+				}
 
-            if(!time){ return null;}
+				return str.join(' ');
+			}
 
-            var timeBin = [],
-                maxUnits = this.MAX_TIME_UNITS,
-                warnTime = this.WARNING_TIME_MINUTES;
+			if (!time) { return null;}
 
-            if (parseInt(time.days, 10)) {
-                timeBin.push({'unit': 'Day', value: time.days});
-            }
+			var timeBin = [],
+				maxUnits = this.MAX_TIME_UNITS,
+				warnTime = this.WARNING_TIME_MINUTES;
 
-            if (parseInt(time.hours, 10)) {
-                if(timeBin.length < maxUnits){
-                    timeBin.push({'unit': "Hour", value: time.hours});
-                } else{
-                    return buildTimeString(timeBin, roundUp);
-                }
-            }
+			if (parseInt(time.days, 10)) {
+				timeBin.push({'unit': 'Day', value: time.days});
+			}
 
-            if (parseInt(time.minutes, 10)) {
-                if(timeBin.length < maxUnits){
-                    timeBin.push({'unit': "Minute", value: time.minutes});
-                } else{
-                    return buildTimeString(timeBin, roundUp);
-                }
-            }
+			if (parseInt(time.hours, 10)) {
+				if (timeBin.length < maxUnits) {
+					timeBin.push({'unit': 'Hour', value: time.hours});
+				} else {
+					return buildTimeString(timeBin, roundUp);
+				}
+			}
 
-            if (time.minutes < warnTime && timeBin.length < maxUnits){
-                timeBin.push({'unit': "Second", value: time.seconds});
-            }
+			if (parseInt(time.minutes, 10)) {
+				if (timeBin.length < maxUnits) {
+					timeBin.push({'unit': 'Minute', value: time.minutes});
+				} else {
+					return buildTimeString(timeBin, roundUp);
+				}
+			}
 
-            return buildTimeString(timeBin, roundUp);
-        }
+			if (time.minutes < warnTime && timeBin.length < maxUnits) {
+				timeBin.push({'unit': 'Second', value: time.seconds});
+			}
+
+			return buildTimeString(timeBin, roundUp);
+		}
 	}
 });
