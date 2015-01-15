@@ -167,15 +167,9 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 				if (v) {
 					r.set('hasTranscripts', !Ext.isEmpty(v.transcripts) || !Ext.isEmpty(v.slidedeck));
 					if (me.curtainEl && selected.contains(r)) {
-						if (r.get('hasTranscripts')) {
-							me.playBtnEl.addCls('transcripts');
-							me.curtainEl.addCls('transcripts');
-							me.playLabelEl.dom.setAttribute('data-qtip', getString('NextThought.view.courseware.overview.parts.Videos.playtranscript'));
-						} else {
-							me.playBtnEl.removeCls('transcripts');
-							me.curtainEl.removeCls('transcripts');
-							me.playLabelEl.dom.setAttribute('data-qtip', getString('NextThought.view.courseware.overview.parts.Videos.play'));
-						}
+                        me.playBtnEl.addCls('transcripts');
+                        me.curtainEl.addCls('transcripts');
+                        me.playLabelEl.dom.setAttribute('data-qtip', getString('NextThought.view.courseware.overview.parts.Videos.playtranscript'));
 					}
 
 					raw = v.sources[0];
@@ -464,15 +458,9 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 			this.playBlurEl.setStyle({backgroundImage: p});
 			this.playLabelEl.update(rec.get('label'));
 
-			if (rec.get('hasTranscripts')) {
-				this.playBtnEl.addCls('transcripts');
-				this.curtainEl.addCls('transcripts');
-				this.playLabelEl.dom.setAttribute('data-qtip', getString('NextThought.view.courseware.overview.parts.Videos.playtranscript'));
-			} else {
-				this.playBtnEl.removeCls('transcripts');
-				this.curtainEl.removeCls('transcripts');
-				this.playLabelEl.dom.setAttribute('data-qtip', getString('NextThought.view.courseware.overview.parts.Videos.play'));
-			}
+            this.playBtnEl.addCls('transcripts');
+            this.curtainEl.addCls('transcripts');
+            this.playLabelEl.dom.setAttribute('data-qtip', getString('NextThought.view.courseware.overview.parts.Videos.playtranscript'));
 		}
 		else {
 			console.warn('noes!');

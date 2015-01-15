@@ -1346,6 +1346,17 @@ $experimental-support-for-svg: true;
 						visibility: hidden;
 					}
 				}
+
+                &.no-transcript{
+                    margin-top: 200px;
+                    margin: 200px 0 50px 0 !important;
+
+                    .text-content{
+                        font: 200 normal 16px/18px $font !important;
+                        color: $secondary-grey;
+                        font-style: italic !important;
+                    }
+                }
 			}
 		}
 	}
@@ -1368,6 +1379,17 @@ $experimental-support-for-svg: true;
 							visibility: visible;
 						}
 					}
+
+                    &.no-transcript{
+                        margin-top: 200px;
+                        margin: 200px 0 50px 0 !important;
+
+                        .text-content{
+                            font: 200 normal 16px/18px $font !important;
+                            color: $secondary-grey;
+                            font-style: italic !important;
+                        }
+                    }
 				}
 			}
 		}

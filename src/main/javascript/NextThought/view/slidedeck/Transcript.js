@@ -10,7 +10,8 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		'NextThought.view.slidedeck.transcript.Slide',
 		'NextThought.view.annotations.renderer.Manager',
 		'NextThought.view.annotations.View',
-		'NextThought.view.slidedeck.transcript.VideoTitle'
+		'NextThought.view.slidedeck.transcript.VideoTitle',
+        'NextThought.view.video.transcript.NoTranscript'
 	],
 
 	ui: 'transcript',
@@ -39,6 +40,11 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			this.setupSingleTranscript(this.transcript);
 			this.hasSlides = false;
 		}
+
+        if (!this.slideStore && !this.transcript) {
+            this.setupNoTranscript();
+            this.hasNoPresentationParts = true;
+        }
 
 		this.flatPageStore = new NextThought.store.FlatPage();
 		this.fireEvent('add-flatpage-store-context', this);
@@ -175,6 +181,24 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		this.items = items;
 	},
 
+    setupNoTranscript: function() {
+        var items = [];
+        items.push({
+            xtype: 'video-title-component',
+            video: this.videoPlaylist[0]
+        });
+        items.push(
+            {
+                xtype: 'no-video-transcript',
+                flex: 1,
+                layout: {
+                    type: 'vbox',
+                    align: 'stretch'
+                }
+            });
+
+        this.items = items;
+    },
 
 	buildPresentationTimeLine: function(slideStore, transcriptStore) {
 		var items = [], lastVideoId;

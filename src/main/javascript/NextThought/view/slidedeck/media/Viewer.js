@@ -128,33 +128,29 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 
 		this.callParent(arguments);
 
-		if (this.transcript) {
-			transcript = this.add({
-				xtype: 'slidedeck-transcript',
-				transcript: this.transcript,
-				record: this.record,
-				accountForScrollbars: false,
-				scrollToId: this.scrollToId,
-				videoPlaylist: [this.video],
-				xhooks: {
-					getScrollTarget: function() {
-						return this.ownerCt.getTargetEl().dom;
-					}
-				},
-				listeners: {
-					'presentation-parts-ready': function() {me.fireEvent('media-viewer-ready', me);}
-				}
-			});
+        transcript = this.add({
+            xtype: 'slidedeck-transcript',
+            transcript: this.transcript,
+            record: this.record,
+            accountForScrollbars: false,
+            scrollToId: this.scrollToId,
+            videoPlaylist: [this.video],
+            xhooks: {
+                getScrollTarget: function() {
+                    return this.ownerCt.getTargetEl().dom;
+                }
+            },
+            listeners: {
+                'presentation-parts-ready': function() {me.fireEvent('media-viewer-ready', me);}
+            }
+        });
 
-			transcript.mon(this, 'animation-end', 'onAnimationEnd');
-			this.mon(transcript, {
-				'will-show-annotation': 'willShowAnnotation',
-				'will-hide-annotation': 'willHideAnnotation',
-				'unsync-video': 'unsyncVideo'
-			});
-		} else {
-			this.noTranscript = true;
-		}
+        transcript.mon(this, 'animation-end', 'onAnimationEnd');
+        this.mon(transcript, {
+            'will-show-annotation': 'willShowAnnotation',
+            'will-hide-annotation': 'willHideAnnotation',
+            'unsync-video': 'unsyncVideo'
+        });
 
 		if (!Ext.isEmpty(this.startAtMillis)) {
 			this.on('media-viewer-ready', Ext.bind(this.startAtSpecificTime, this, [this.startAtMillis]), this);
@@ -198,7 +194,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			me.el.addCls('video-only');
 		}
 		//check if we need to restore a type or use the default
-		playerType = (me.noTranscript) ? 'full-video' : me.getStorageManager().get('media-viewer-player-type') || 'video-focus';
+		playerType = me.getStorageManager().get('media-viewer-player-type') || 'video-focus';
 
 		//TODO: redo this. better.
 		me.toolbar = Ext.widget({
@@ -206,8 +202,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			renderTo: me.headerEl,
 			currentType: playerType,
 			video: me.video,
-			floatParent: me,
-			noTranscript: me.noTranscript
+			floatParent: me
 		});
 
 		me.identity = Ext.widget({xtype: 'identity', renderTo: me.toolbar.getEl(), floatParent: me.toolbar});
