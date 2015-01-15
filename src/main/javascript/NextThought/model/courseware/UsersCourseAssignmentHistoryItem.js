@@ -265,12 +265,14 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
         if(grade && grade.excuseGrade){
             grade.excuseGrade()
                 .then(function(record){
-                    var txt = grade.get("IsExcused") === true ? 'Unexcuse Grade' : 'Excuse Grade',
-                        store = me.store, field = "Grade";
+                    var txt = record.get("IsExcused") === true ? 'Unexcuse Grade' : 'Excuse Grade',
+                        store = me.store, grade = me.get('Grade');
                     menuItemEl.setText(txt);
 
-                    me.set('Grade', record);
-                    me.fireEvent("excused-changed");
+                    if(grade){
+                        grade.set('IsExcused', record.get('IsExcused'));
+                    }
+                    me.fireEvent("excused-changed", grade);
                 })
                 .fail(function(err){
                     console.log('Excusing grade failed: '+ err);

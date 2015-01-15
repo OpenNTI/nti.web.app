@@ -160,8 +160,8 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 			console.debug('saving: ' + value, 'to', grade.get('href'));
 
 			grade.saveValue(value, '-')
-				.then(function(grade) {
-					record.set('Grade', grade);
+				.then(function(newGrade) {
+					grade.set('value', newGrade.get('value'));
                     if(assignmentCollection){
                         assignmentCollection.syncStoreForRecord(store, record, 'Grade');
                     }

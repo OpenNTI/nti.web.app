@@ -228,12 +228,14 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
                     //the item field is set with the assignment and does not come back from the server
                     //so fill it in with the previous history item's item
                     newHistoryItem.set('item', historyItem.get('item'));
+
+                    // Update the grade instance on the gradebook
+                    assignment.getGradeBookEntry().addItem(newHistoryItem.get('Grade'));
+
                     store.syncBackingStore(newHistoryItem);
                     if(assignmentCollection){
                         assignmentCollection.syncStoreForRecord(store, newHistoryItem, 'Grade');
                     }
-
-                    assignment.updateGradeBookEntry(newHistoryItem.get('Grade'), 'IsExcused');
                     me.markGradeAsExcused(grade);
                 })
                 .fail(function(reason) {
