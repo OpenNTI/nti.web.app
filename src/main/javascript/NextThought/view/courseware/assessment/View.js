@@ -130,7 +130,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 					return Promise.all([
 								!e.isAdministrative && instance.getAssignmentHistory(),
-								instance.getAssignments()
+								instance.getAssignmentsAndGradeBook()
 					]);
 				})
 				.then(function applyData(objs) {

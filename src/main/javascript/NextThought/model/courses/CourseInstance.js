@@ -268,34 +268,110 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		return !!this.getLink('AssignmentsByOutlineNode');
 	},
 
+	/**
+	 * get the link, and cache the results
+	 * @param  {String} link rel of the link to get
+	 * @return {Promise}      the request for the link
+	 */
+	__getAssignmentList: function(link) {
+		var promiseName = '__get' + link + 'Promise',
+			link;
 
-	getAssignments: function() {
-		if (this.getAssignmentsPromise) { return this.getAssignmentsPromise; }
-
-		var me = this,
-			assignmentsLink = me.getLink('AssignmentsByOutlineNode'),
-			roster = me.getLink('CourseEnrollmentRoster');
-
-		if (!assignmentsLink) {
-			return Promise.resolve(NextThought.model.courses.AssignmentCollection.fromJson(
-				{},{},null, null, me.getLink('AssignmentHistory')));
+		if (this[promiseName]) {
+			return this[promiseName];
 		}
 
-		me.getAssignmentsPromise = Promise.all([
-			Service.request(assignmentsLink),
-			Service.request(me.getLink('NonAssignmentAssessmentItemsByOutlineNode')),
-			me.getLink('GradeBook') ? me._getGradeBook() : Promise.resolve()
+		link = this.getLink(link);
+
+		if (!link) { return Promise.reject('No link', link); }
+
+		this[promiseName] = Service.request(link)
+								.then(function(response) {
+									return Ext.decode(response, true);
+								});
+
+		return this[promiseName];
+	},
+
+
+	__getAssignmentsByOutline: function() {
+		return this.__getAssignmentList('AssignmentsByOutlineNode');
+	},
+
+
+	__getNonAssignmentsByOutline: function() {
+		return this.__getAssignmentList('NonAssignmentAssessmentItemsByOutlineNode');
+	},
+
+
+	__getGradeBook: function() {
+		if (this.__getGradeBookPromise) { return this.__getGradeBookPromise; }
+
+		var link = this.getLink('GradeBook');
+
+		//don't reject do it doesn't break the Promise.all
+		if (!link) { return Promise.resolve(null); }
+
+		this.__getGradeBookPromise = Service.request({
+			url: link,
+			timeout: 120000 //2 minutes
+		})
+			.then(function(json) { return ParseUtils.parseItems(json)[0]; });
+
+		return this.__getGradeBookPromise;
+	},
+
+
+	/**
+	 * Retuan an assignment collection with out the gradebook
+	 * @return {[type]} [description]
+	 */
+	getAssignments: function() {
+		if (this.__getAssignmentsPromise) { return this.__getAssignmentsPromise; }
+
+		var roster = this.getLink('CourseEnrollmentRoster'),
+			history = this.getLink('AssignmentHistory');
+
+		this.__getAssignmentsPromise = Promise.all([
+			this.__getAssignmentsByOutline(),
+			this.__getNonAssignmentsByOutline()
 		])
-			.done(function(json) {
-				var assignments = Ext.decode(json[0], true),
-					nonAssignments = Ext.decode(json[1], true),
-					gradeBook = json[2];
+			.then(function(results) {
+				var assignments = results[0],
+					nonAssignment = results[1];
 
 				return NextThought.model.courses.AssignmentCollection.fromJson(
-						assignments, nonAssignments, roster, gradeBook, me.getLink('AssignmentHistory'));
+							assignments, nonAssignment, roster, null, history);
 			});
 
-		return me.getAssignmentsPromise;
+		return this.__getAssignmentsPromise;
+	},
+
+	/**
+	 * Return an assignment collection with the grade book
+	 * @return {Promise} Fulfills with the assignment collection
+	 */
+	getAssignmentsAndGradeBook: function() {
+		if (this.__getAssignmentsAndGradeBookPromise) { return this.__getAssignmentsAndGradeBookPromise; }
+
+		var roster = this.getLink('CourseEnrollmentRoster'),
+			history = this.getLink('AssignmentHistory');
+
+		this.__getAssignmentsAndGradeBookPromise = Promise.all([
+			this.__getAssignmentsByOutline(),
+			this.__getNonAssignmentsByOutline(),
+			this.__getGradeBook()
+		])
+			.then(function(results) {
+				var assignments = results[0],
+					nonAssignments = results[1],
+					gradeBook = results[2];
+
+				return NextThought.model.courses.AssignmentCollection.fromJson(
+							assignments, nonAssignments, roster, gradeBook, history);
+			});
+
+		return this.__getAssignmentsAndGradeBookPromise;
 	},
 
 
@@ -328,25 +404,6 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		return p;
 	},
 
-
-	_getGradeBook: function() {
-		if (!this._gradebookPromise) {
-			var p, link = this.getLink('GradeBook');
-
-			if (link) {
-				p = Service.request({
-						url: link,
-						timeout: 120000 //2 minutes
-					})
-						.done(function(json) { return ParseUtils.parseItems(json)[0]; });
-			} else {
-				p = Promise.reject('Not present');
-			}
-
-			this._gradebookPromise = p;
-		}
-		return this._gradebookPromise;
-	},
 
 
 	fireNavigationEvent: function(eventSource) {
