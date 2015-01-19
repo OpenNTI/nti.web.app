@@ -1,3 +1,4 @@
+/*globals getFormattedString:false*/
 Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 	extend: 'Ext.view.View',
 	alias: 'widget.course-assessment-assignment-list',
@@ -25,17 +26,18 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 					]}), {
 				//template functions
 				getStatus: function(values) {
-                    var grade;
-                    if(values.history && values.history.isModel){
-                        grade = values.history.get("Grade");
-                    }
+					var grade;
+
+					if (values.history && values.history.isModel) {
+						grade = values.history.get('Grade');
+					}
 
 					return NextThought.view.courseware.assessment.AssignmentStatus.getStatusHTML({
 						due: values.due,
 						completed: values.completed,
 						maxTime: values.maxTime,
 						duration: values.duration,
-            isExcused: grade && grade.get("IsExcused"),
+						isExcused: grade && grade.get('IsExcused'),
 						isNoSubmitAssignment: values.item.isNoSubmit()
 					});
 				},
@@ -105,10 +107,11 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 		this.callParent(arguments);
 		this.mon(this.el, 'mouseover', 'itemHover');
 
-        var assignmentCollection = this.up("#course-assessment-root") && this.up("#course-assessment-root").assignmentsCollection;
-        if(assignmentCollection){
-            assignmentCollection.addStoreToStoreSync(this.store);
-        }
+		var assignmentCollection = this.up('#course-assessment-root') && this.up('#course-assessment-root').assignmentsCollection;
+
+		if (assignmentCollection) {
+			assignmentCollection.addStoreToStoreSync(this.store);
+		}
 	},
 
 
@@ -120,8 +123,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.List', {
 
 	itemHover: function(e) {
 		var node = e.getTarget(this.itemSelector),
-			rec = this.getRecord(node),
-			due = rec.get('due'),
+			rec = node && this.getRecord(node),
+			due = rec && rec.get('due'),
 			qtip,
 			dueEl = e.getTarget('[data-qtip-fn]');
 
