@@ -73,23 +73,33 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		this.reflectStateChange();
 		this.mon(this.resetBtn, 'click', this.resetClicked, this);
 		this.mon(this.submitBtn, 'click', this.submitClicked, this);
-		var r = this.resetBtn,
-			s = this.submitBtn,
-			t = this.tabIndexTracker;
+
+		var me = this,
+			r = me.resetBtn,
+			s = me.submitBtn,
+			t = me.tabIndexTracker;
+
+		function setTabIndex(el, attr) {
+			if (el.dom) {
+				el.set(attr);
+			}
+		}
+
 		setTimeout(function() {
 			try {
-				s.set({tabIndex: t.getNext()});
-				r.set({tabIndex: t.getNext()});
+				setTabIndex(s, {tabIndex: t.getNext()});
+				setTabIndex(r, {tabIndex: t.getNext()});
 			} catch (e) {
-				if (!this.isDestroyed) {
+				if (!me.isDestroyed) {
 					throw e;
 				}
 			}
 		},1);
-		this.fireEvent('has-been-submitted', this);
 
-		if (this.isInstructor && this.history) {
-			this.mon(this.history, 'was-destroyed', this.instructorReset.bind(this), this);
+		me.fireEvent('has-been-submitted', me);
+
+		if (me.isInstructor && me.history) {
+			me.mon(me.history, 'was-destroyed', me.instructorReset.bind(me), me);
 		}
 	},
 
