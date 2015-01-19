@@ -232,10 +232,14 @@ Ext.define('NextThought.controller.SlideDeck', {
 				startAtMillis: options && options.startAtMillis,
 				currentBundle: currentBundle
 			});
+
 			me.activeMediaPlayer.fireEvent('suspend-annotation-manager', this);
+
 			me.activeMediaPlayer.on('destroy', function() {
-				me.activeMediaPlayer.fireEvent('resume-annotation-manager', this);
-				me.activeMediaPlayer = null;
+				if (me.activeMediaPlayer) {
+					me.activeMediaPlayer.fireEvent('resume-annotation-manager', this);
+					me.activeMediaPlayer = null;
+				}
 
 				if (options && options.closeCallback) {
 					options.closeCallback.call();
