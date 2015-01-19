@@ -65,7 +65,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 		me.mon(el, 'scroll', function() {
 			var diff = Math.abs(el.dom.scrollTop - me.lastScrollTop);
 
-			if (diff > threshold) {
+			if (diff > threshold && !me.loadingWeek) {
 				me.scrollChanged();
 			}
 
@@ -282,6 +282,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 			currentState: NextThought.view.courseware.dashboard.View.IN_BUFFER
 		});
 
+		//set a flag to keep us from trying to loading too many weeks at once
 		this.loadingWeek = true;
 
 		this.mon(tileContainer, {
@@ -352,6 +353,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 		this.loadingWeek = false;
 		this.initialLoad();
 		this.removeEmpties();
+		this.maybeLoadNextWeek(this.getScrollInfo());
 	},
 
 

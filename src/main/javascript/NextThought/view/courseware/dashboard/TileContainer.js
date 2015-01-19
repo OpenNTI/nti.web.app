@@ -83,6 +83,13 @@ Ext.define('NextThought.view.courseware.dashboard.TileContainer', {
 
 
 	getPositionInfo: function() {
+		if (!this.rendered) {
+			return {
+				offsetTop: 0,
+				offsetHeight: 0
+			};
+		}
+
 		var dom = this.el.dom;
 
 		return {
