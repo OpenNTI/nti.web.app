@@ -1,3 +1,4 @@
+/*globals getFormattedString: false*/
 Ext.define('NextThought.view.content.Pager', {
 	extend: 'Ext.Component',
 	alias: 'widget.content-pager',
@@ -72,6 +73,12 @@ Ext.define('NextThought.view.content.Pager', {
 
 				me[info && info.previous ? 'enableButton' : 'disableButton'](prev);
 				prev.set({'data-ntiid': (info && info.previous) || undefined});
+			})
+			.fail(function(reason) {
+				console.error('Failed to get navigation info for', ntiid, rootId, reason);
+
+				me.disableButton(next);
+				me.disableButton(prev);
 			});
 	},
 

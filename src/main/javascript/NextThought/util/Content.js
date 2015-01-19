@@ -1,3 +1,4 @@
+/*globals ContentProxy:false, AnnotationUtils:false*/
 Ext.define('NextThought.util.Content', {
 	singleton: true,
 
@@ -818,13 +819,13 @@ Ext.define('NextThought.util.Content', {
 
 	getNavigationInfo: function(ntiid, rootId) {
 		if (!ntiid) {
-			Ext.Error.raise('No NTIID');
+			return Promise.reject('No NTIID');
 		}
 
 		var me = this, course,
 			loc = me.find(ntiid),
 			doc = loc && loc.toc,
-			root = doc.firstChild,
+			root = doc && doc.firstChild,
 			onSuppressed = false,
 			walker, info, nodes = [], visibleNodes, currentIndex,
 			topicOrTocRegex = /topic|toc/i;
@@ -857,6 +858,8 @@ Ext.define('NextThought.util.Content', {
 
 			return node.getAttribute('ntiid') || null;
 		}
+
+		if (!loc || !doc) { return Promise.reject('Not Found'); }
 
 		//If we have a rootId, lets make that what we consider the root.
 		if (rootId) {
