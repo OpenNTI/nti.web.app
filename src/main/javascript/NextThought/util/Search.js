@@ -49,9 +49,11 @@ Ext.define('NextThought.util.Search', {
 
 	contentRegexFromSearchTerm: function(term, isPhrase) {
 
-		term = XRegExp.replace(term, new XRegExp('\\p{P}+', 'g'), '\\p{P}+');
 		if (isPhrase) {
 			term = XRegExp.replace(term, new XRegExp('\\p{^L}+([^\\]]|$)', 'g'), '\\p{^L}+$1');
+		}
+		else {
+			term = XRegExp.replace(term, new XRegExp('\\p{P}+', 'g'), '\\p{P}+');
 		}
 		return term;
 

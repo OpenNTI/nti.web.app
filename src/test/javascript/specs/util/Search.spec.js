@@ -1,5 +1,7 @@
 describe("Search utils", function() {
 
+	/*global XRegExp*/
+
 	var TestSearchUtils;
 
 	beforeEach(function(){
@@ -15,9 +17,8 @@ describe("Search utils", function() {
 		it("Deals with funky unicode equality", function(){
 			var content = 'Court\u0027s',
 				term = 'Court\'s', re;
-
 			re = TestSearchUtils.contentRegexFromSearchTerm(term);
-			expect(new RegExp(re).test(content)).toBeTruthy();
+			expect(new XRegExp(re).test(content)).toBeTruthy();
 		});
 
 		it('Non-phrase doesn\'t span space', function(){
@@ -25,15 +26,15 @@ describe("Search utils", function() {
 				term = 'sandwhich', re;
 
 			re = TestSearchUtils.contentRegexFromSearchTerm(term);
-			expect(new RegExp(re).test(content)).toBeFalsy();
+			expect(new XRegExp(re).test(content)).toBeFalsy();
 		});
 
 		it('Phrase search ignores punctuation', function(){
 			var content = 'were, did? Court\u0027s belong!',
-				term = 'were did Court\'s belong', re;
+				term = 'were did Court\'s belong?', re;
 
 			re = TestSearchUtils.contentRegexFromSearchTerm(term, true);
-			expect(new RegExp(re).test(content)).toBeTruthy();
+			expect(new XRegExp(re).test(content)).toBeTruthy();
 		});
 
 		it('Allows phrase search to span ?', function(){
@@ -41,7 +42,7 @@ describe("Search utils", function() {
 				term = 'beef chicken', re;
 
 			re = TestSearchUtils.contentRegexFromSearchTerm(term, true);
-			expect(new RegExp(re).test(content)).toBeTruthy();
+			expect(new XRegExp(re).test(content)).toBeTruthy();
 		});
 
 		it('checks a long phrase search', function(){
@@ -49,13 +50,13 @@ describe("Search utils", function() {
 				term = "to shareholders how to apply what little I'd learned about management to the business of the company how to maintain editorial quality while exercising financial";
 
 			re = TestSearchUtils.contentRegexFromSearchTerm(term, true);
-			expect(new RegExp(re).test(content)).toBeTruthy();
+			expect(new XRegExp(re).test(content)).toBeTruthy();
 		});
 
 		it('Survives punctuation that are regex special chars', function(){
 			var content = "of basketball have developed for casual play. Competitive basketball is primarily an indoor sport played";
 			re = TestSearchUtils.contentRegexFromSearchTerm(content, true);
-			expect(new RegExp(re).test(content)).toBeTruthy();
+			expect(new XRegExp(re).test(content)).toBeTruthy();
 		});
 	});
 
@@ -178,4 +179,3 @@ describe("Search utils", function() {
 	});
 
 });
-
