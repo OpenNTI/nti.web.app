@@ -13,10 +13,6 @@ describe('LocationMeta tests', function() {
 			var expected = 'tag:nextthought.com,2011-10:PRMIA-HTML-PRMIA_RiskCourse';
 			expect(LM.bookPrefixIfQuestion(qid)).toBe(expected);
 		});
-
-		it('Ignores things that arent questions', function() {
-			expect(LM.bookPrefixIfQuestion('tag:nextthought.com,2011-10:LitWorld-HTML-LitClub_Overview.litclub_overview')).toBeFalsy();
-		});
 	});
 
 	describe('findTitleWithPrefix', function() {
