@@ -38,6 +38,10 @@
 			display: inline-block;
 			margin-bottom: 10px;
 			text-transform: uppercase;
+
+			&.loading {
+				height: 2em;
+			}
 		}
 
 		.lesson-tile {

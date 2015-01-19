@@ -72,13 +72,13 @@ Ext.define('NextThought.view.courseware.dashboard.TileContainer', {
 
 	addLoadingMask: function() {
 		this.addCls('loading');
-		this.el.mask('loading...');
+		this.header.addLoadingMask();
 	},
 
 
 	removeLoadingMask: function() {
 		this.removeCls('loading');
-		this.el.unmask();
+		this.header.removeLoadingMask();
 	},
 
 

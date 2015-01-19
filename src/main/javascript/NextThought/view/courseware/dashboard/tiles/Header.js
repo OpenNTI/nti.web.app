@@ -51,5 +51,27 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Header', {
 
 	formatDate: function(date) {
 		return moment(date).format(this.DATE_FORMAT);
+	},
+
+
+	addLoadingMask: function() {
+		if (!this.rendered) {
+			this.on('afterrender', this.addLoadingMask.bind(this));
+			return;
+		}
+
+		this.addCls('loading');
+		this.el.mask('loading...');
+	},
+
+
+	removeLoadingMask: function() {
+		if (!this.rendered) {
+			this.on('afterrender', this.removeLoadingMask.bind(this));
+			return;
+		}
+
+		this.addCls('loading');
+		this.el.unmask();
 	}
 });
