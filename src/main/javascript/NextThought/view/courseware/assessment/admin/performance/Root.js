@@ -109,6 +109,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 							direction: state,
 							property: 'username',
 							transform: function(r) {
+								var v = r.get('Username');
+
 								return r && (r.get('Status') === 'ForCredit' ? (r.get('OU4x4') || v) : '');
 							},
 							defaultSorterFn: function(o1, o2) {
