@@ -1,3 +1,4 @@
+/*globals User*/
 Ext.define('NextThought.model.Note', {
 	extend: 'NextThought.model.Base',
 
@@ -241,7 +242,7 @@ Ext.define('NextThought.model.Note', {
 			if (this.isWhiteboardOnly(body)) {
 				snip = '[Image]';
 			}else {
-				snip = Ext.String.ellipsis(this.simplifyBody(body)[0], max, true);
+				snip = Ext.String.ellipsis(this.simplifyTitle(body)[0], max, true);
 			}
 		}
 
@@ -281,6 +282,19 @@ Ext.define('NextThought.model.Note', {
 
 		Ext.callback(cb, null, [snip, t]);
 	},
+
+
+	//get the simplified body and filter out all non string parts
+	simplifyTitle: function(body) {
+		var text = this.simplifyBody(body) || [];
+
+		text = text.filter(function(t) {
+			return Ext.isString(t);
+		});
+
+		return text;
+	},
+
 
 	simplifyBody: function(body) {
 		var text = [];
