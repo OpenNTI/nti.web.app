@@ -157,7 +157,13 @@ describe('Localization utility tests', function() {
 			var i, pl = localUtils.pluralizeString;
 
 			for (i = 0; i <= 8; i++) {
-				expect(pl(i, 'rule')).toBe(addSs('rule', i % 4));
+				if ((i % 4) === 0) {
+					var j = (i % 4);
+					expect(pl(i, 'rule')).toBe(addSs(i + ' ' + 'rule', i % 4));
+				}
+				else {
+					expect(pl(i, 'rule')).toBe(addSs('rule', i % 4));
+				}
 			}
 		});
 	});
