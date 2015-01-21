@@ -843,7 +843,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			gradebookentry = me.gradeBook.getItem('Final Grade', 'no_submit'),
 			grade = gradebookentry && gradebookentry.getFieldItem('Items', record.getId()),
 			oldValues = grade && grade.getValues(),
-			url = me.gradeBook.get('href');
+			url = me.gradeBook.get('href'),
+			save;
 
 		//if we were not given a value for letter use the old letter value
 		if (!letter) {
@@ -879,15 +880,21 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 			grade.phantom = false;
 
-			return grade.saveValue(number, letter)
-				.always(function() {
-					var n = view.getNode(record);
+			if (grade.shouldSave(number, letter)) {
+				save = grade.saveValue(number, letter);
+			} else {
+				save = Promise.resolve();
+			}
 
-					if (n) {
-						Ext.fly(n).setStyle({opacity: 1});
-					}
-				});
+			save.always(function() {
+				var n = view.getNode(record);
+
+				if (n) {
+					Ext.fly(n).setStyle({opacity: 1});
+				}
 			});
+
+		});
 	}
 	//</editor-fold>
 });

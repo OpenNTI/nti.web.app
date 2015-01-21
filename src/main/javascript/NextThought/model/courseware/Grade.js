@@ -103,6 +103,13 @@ Ext.define('NextThought.model.courseware.Grade', {
 		};
 	},
 
+	//return false if we are already trying to save the same value
+	shouldSave: function(value, letter) {
+		var val = value + ' ' + letter;
+
+		return this.pendingSaveValue !== val;
+	},
+
 
 	saveValue: function(value, letter) {
 		value = (value && value.trim()) || '';
@@ -110,6 +117,11 @@ Ext.define('NextThought.model.courseware.Grade', {
 
 		var me = this,
 			val = value + ' ' + letter;
+
+		//if we are attempting to save the same value we are already in the middle of saving stop
+		if (val === me.pendingSaveValue) { return Promise.resolve(me); }
+
+		me.pendingSaveValue = val;
 
 		me.set('value', val);
 
@@ -129,6 +141,7 @@ Ext.define('NextThought.model.courseware.Grade', {
 					} catch (e) {
 						console.error('failed to parse response text for a saved grade:', e, text);
 					} finally {
+						delete me.pendingSaveValue;
 						fulfill(grade);
 					}
 				},

@@ -134,7 +134,8 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 		var view = this.__getGridView(), store = this.store,
 			grade = record.get('Grade'),
 			v = grade && grade.getValues(),
-            assignmentCollection = store && store.assignmentsCollection;
+			assignmentCollection = store && store.assignmentsCollection,
+			save;
 
 		/**
 		 * only set the grade if:
@@ -159,25 +160,31 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 
 			console.debug('saving: ' + value, 'to', grade.get('href'));
 
-			grade.saveValue(value, '-')
-				.then(function(newGrade) {
-					grade.set('value', newGrade.get('value'));
-                    if(assignmentCollection){
-                        assignmentCollection.syncStoreForRecord(store, record, 'Grade');
-                    }
-				})
-				.fail(function() {
-					grade.reject();
-				})
-				.always(function() {
-					store.resumeEvents();
+			//if we should save the new value
+			if  (grade.shouldSave(value, '-')) {
+				save = grade.saveValue(value, '-')
+					.then(function(newGrade) {
+						grade.set('value', newGrade.get('value'));
+						if(assignmentCollection){
+							assignmentCollection.syncStoreForRecord(store, record, 'Grade');
+						}
+					})
+					.fail(function() {
+						grade.reject();
+					});
+			} else {
+				save = Promise.resolve();
+			}
 
-					var n = view.getNode(record);
+			save.always(function() {
+				store.resumeEvents();
 
-					if (n) {
-						Ext.fly(n).setStyle({opacity: 1});
-					}
-				});
+				var n = view.getNode(record);
+
+				if (n) {
+					Ext.fly(n).setStyle({opacity: 1});
+				}
+			});
 		}
 	}
 });
