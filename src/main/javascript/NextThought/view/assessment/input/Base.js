@@ -242,6 +242,11 @@ Ext.define('NextThought.view.assessment.input.Base', {
 
 	hasValue: function() { return !Ext.isEmpty(this.getValue()); },
 
+	//return a number between [0, 1] to indicate what % of this question is answered
+	getAnsweredCount: function() {
+		return this.hasValue() ? 1 : 0;
+	},
+
 
 	getValue: function() {
 		console.log(this.$className + ' does not implement the getValue function');
@@ -536,7 +541,7 @@ Ext.define('NextThought.view.assessment.input.Base', {
 
 		this.checkItBtn.removeCls('disabled');
 		if (this.questionSet) {
-			if (!this.questionSet.fireEvent('answered', this.question, this.part, this.hasValue(), true)) {
+			if (!this.questionSet.fireEvent('answered', this.question, this.part, this.getAnsweredCount(), true)) {
 				this.submissionDisabled = true;
 			}
 		}
@@ -552,7 +557,7 @@ Ext.define('NextThought.view.assessment.input.Base', {
 		this.submissionDisabled = true;
 		this.checkItBtn.addCls('disabled');
 		if (this.questionSet) {
-			this.questionSet.fireEvent('answered', this.question, this.part, this.hasValue(), false);
+			this.questionSet.fireEvent('answered', this.question, this.part, this.getAnsweredCount(), false);
 		}
 		this.fireEvent('disable-submission', this.ordinal);
 

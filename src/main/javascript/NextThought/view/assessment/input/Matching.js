@@ -90,6 +90,23 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 		},
 
 
+		getAnsweredCount: function() {
+			var value = this.getValue(),
+				total, answered;
+
+			if (Ext.isEmpty(value)) { return 0; }
+
+			answered = (Object.keys(value) || []).length;
+			total = (this.part.get('values') || []).length;
+
+			if (total === 0) {
+				return 1;
+			}
+
+			return answered / total;
+		},
+
+
 		injectMatchTerms: function() {
 			var s = this.shelfEl,
 				el, ownerMain;

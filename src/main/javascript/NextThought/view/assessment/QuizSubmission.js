@@ -52,7 +52,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 			var questionMap = {};
 
 			Ext.each(q.get('parts'), function(p) {
-				questionMap[p.id] = false;
+				questionMap[p.id] = 0;
 			});
 
 			answeredMap[q.getId()] = questionMap;
@@ -231,12 +231,16 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 	},
 
 
-	updateStatus: function(question, part, status, enabling) {
+	updateStatus: function(question, part, count, enabling) {
 		if (enabling) {
 			this.transitionToActive();
 		}
 
-		this.answeredMap[question.getId()][part.id] = Boolean(status);
+		if (!Ext.isNumber(count)) {
+			count = count ? 1 : 0;
+		}
+
+		this.answeredMap[question.getId()][part.id] = count;
 		this.reflectStateChange();
 
 		return status;
@@ -244,54 +248,52 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 
 
 	reflectStateChange: function() {
-		var unansweredQuestions = 0,
-			totalQuestionCount = 0;
-		if (!this.rendered) { return; }
+		var totalAnsweredParts = 0,
+			totalParts = 0,
+			answeredQuestions = 0,
+			totalQuestions = 0,
+			newStatus;
 
-		Ext.Object.each(this.answeredMap, function(key, val) {
-			var answered = 0, total = 0;
+		Ext.Object.each(this.answeredMap, function(key, parts) {
+			var answeredParts = 0, partsCount = 0;
 
-			Ext.Object.each(val, function(id, done) {
-				total++;
+			Ext.Object.each(parts, function(id, done) {
+				partsCount += 1;
 
-				if (done) { answered++; }
+				answeredParts += done || 0;
 			});
 
-			if (answered < total) {
-				unansweredQuestions++;
+			totalAnsweredParts += answeredParts;
+			totalParts += partsCount;
+
+			if (answeredParts === partsCount) {
+				answeredQuestions += 1;
 			}
 
-			totalQuestionCount += 1;
+			totalQuestions += 1;
 		});
 
-		if (totalQuestionCount === unansweredQuestions) {
+		if (totalAnsweredParts === 0) {
 			this.moveToInActive();
 		}
 
-		if (totalQuestionCount === 0) {
+		if (totalQuestions === 0) {
 			this.noParts = true;
 		}
 
-		if (unansweredQuestions === 0) {
-			this.statusMessage.update(getString('NextThought.view.assessment.QuizSubmission.all-answered'));
+		if (answeredQuestions === totalQuestions) {
+			newStatus = getString('NextThought.view.assessment.QuizSubmission.all-answered');
 			this.allQuestionsAnswered = true;
+			this.statusMessage.addCls('ready');
 		} else {
+			newStatus = getFormattedString('NextThought.view.assessment.QuizSubmission.unanswered', {
+							questions: Ext.util.Format.plural(totalQuestions - answeredQuestions, 'question')
+						});
 			this.allQuestionsAnswered = false;
-			this.statusMessage.update(getFormattedString('NextThought.view.assessment.QuizSubmission.unanswered', {
-				questions: Ext.util.Format.plural(unansweredQuestions, 'question')
-			}));
+			this.statusMessage.removeCls('ready');
 		}
 
-		this.statusMessage.update(unansweredQuestions === 0 ?
-								getString('NextThought.view.assessment.QuizSubmission.all-answered') :
-								getFormattedString('NextThought.view.assessment.QuizSubmission.unanswered', {
-									questions: Ext.util.Format.plural(unansweredQuestions, 'question')
-								})
-		);
-
-		this.unansweredQuestions = unansweredQuestions;
-
-		this.statusMessage[((unansweredQuestions === 0) ? 'add' : 'remove') + 'Cls']('ready');
+		this.statusMessage.update(newStatus);
 
 		if (this.submitChangedHandler) {
 			this.submitChangedHandler.call(null, this.shouldAllowSubmit(this.submitChangedHandler));
