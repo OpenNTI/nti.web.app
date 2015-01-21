@@ -1178,25 +1178,6 @@ $experimental-support-for-svg: true;
 	}
 
 
-	.grid-view-body {
-		position: absolute;
-		top: 75px;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		display: none;
-		z-index: 10;
-		background: $slidedeck-controls-background;
-		overflow: {
-			x: hidden;
-			y: auto; //scroll;
-		}
-
-		&.active {
-			display: block;
-		}
-	}
-
 	.x-component-media-viewer-grid{
 		position: relative;
 		overflow: hidden;

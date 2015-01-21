@@ -11,37 +11,21 @@ Ext.define('NextThought.view.slidedeck.media.Container',{
 
     ui: 'media',
     floating: true,
-//    border: false,
-//    plain: true,
-//    frame: false,
-//    layout: 'auto',
-//    componentLayout: 'natural',
-//    childEls: ['body'],
-//
-//    getTargetEl: function() { return this.body; },
-//
-//    defaults: {
-//        border: false,
-//        plain: true,
-//        hideOnClick: true
-//    },
-
-
     layout: 'card',
+
+
     onAdd: function(item) {
         this.getLayout().setActiveItem(item);
     },
 
     renderTpl: Ext.DomHelper.markup([
         {cls: 'header'},
-        {cls: 'grid-view-body'},
         {id: '{id}-body', cn: ['{%this.renderContainer(out, values)%}']}
     ]),
 
 
     renderSelectors: {
-        headerEl: '.header',
-        gridViewEl: '.grid-view-body'
+        headerEl: '.header'
     },
 
 
@@ -104,10 +88,8 @@ Ext.define('NextThought.view.slidedeck.media.Container',{
             floatParent: this.toolbar
         });
 
-        this.gridView = Ext.widget({
+        this.gridView = this.add({
             xtype: 'media-grid-view',
-            renderTo: this.gridViewEl,
-            floatParent: this,
             source: this.video,
             currentBundle: this.currentBundle
         });
@@ -180,13 +162,14 @@ Ext.define('NextThought.view.slidedeck.media.Container',{
 
     adjustOnResize: function(){
         var toolbarHeight = this.toolbar.el && this.toolbar.getHeight() || 0,
-            availableHeight, paddingHeight = 30, availableWidth;
+            availableHeight, paddingHeight = 30, availableWidth,
+            activeItem = this.getLayout().getActiveItem();
 
-        if(this.viewer){
+        if(activeItem && activeItem.adjustOnResize){
             availableHeight = Ext.Element.getViewportHeight() - toolbarHeight - paddingHeight;
             availableWidth = Ext.Element.getViewportWidth();
 
-            this.viewer.adjustOnResize(availableHeight, availableWidth);
+            activeItem.adjustOnResize(availableHeight, availableWidth);
         }
     },
 
@@ -256,7 +239,7 @@ Ext.define('NextThought.view.slidedeck.media.Container',{
 
 
     switchVideoViewer: function(type){
-        if(!type || type === this.viewer.viewerType){ return; }
+        if(!type || type === (this.viewer && this.viewer.viewerType)){ return; }
 
         var me = this,
             viewerXType = this.viewerXtypeMap[type],
@@ -264,9 +247,9 @@ Ext.define('NextThought.view.slidedeck.media.Container',{
             targetViewer = targetViewerId && Ext.getCmp(targetViewerId);
 
         console.debug("Should switch video viewer to: " + type);
-        console.debug("Current Video viewer is : " + this.viewer.viewerType);
+        console.debug("Current Video viewer is : " + (this.viewer && this.viewer.viewerType));
 
-        if(!this.viewer.beforeDeactivate()){
+        if(this.viewer && (this.viewer.beforeDeactivate() === false)){
             console.log("Cannot switch viewer because the current view refuses to deactivate.");
             return false;
         }
@@ -297,20 +280,16 @@ Ext.define('NextThought.view.slidedeck.media.Container',{
 
 
     hideGridViewer: function() {
-        if (this.gridViewEl) {
-            this.gridViewEl.removeCls('active');
-            this.afterGridViewerHide();
-        }
+        this.el.setStyle('overflowY', 'hidden');
+        this.getLayout().setActiveItem(this.viewer);
     },
 
 
     showGridViewer: function() {
-        if (!this.gridViewEl) {
-            return;
-        }
-
-        this.viewer.beforeGridViewerShow();
-        this.gridViewEl.addCls('active');
+        this.getLayout().setActiveItem(this.gridView);
+        this.el.setStyle('overflowY', 'auto');
+        this.gridView.refresh();
+        Ext.defer(this.adjustOnResize, 1000, this);
     }
 
 });

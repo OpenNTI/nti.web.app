@@ -17,7 +17,7 @@ Ext.define('NextThought.controller.SlideDeck', {
 	videoMimeTypeRegEx: /vnd.nextthought.ntivideo/,
 
 	refs: [
-		{ ref: 'activeMediaViewer', selector: 'media-viewer' },
+		{ ref: 'activeMediaViewer', selector: 'media-container' },
 		{ ref: 'activeSlideDeck', selector: 'slidedeck-overlay' },
 		{ ref: 'contentView', selector: 'content-view-container' }
 	],
