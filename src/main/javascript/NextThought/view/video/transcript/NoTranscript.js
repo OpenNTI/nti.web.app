@@ -1,8 +1,8 @@
 Ext.define('NextThought.view.video.transcript.NoTranscript', {
-    extend: 'Ext.Component',
+    extend: 'NextThought.view.slidedeck.transcript.VideoTitle',
     alias: 'widget.no-video-transcript',
 
-    cls: 'content-video-transcript no-transcript',
+    cls: 'no-transcript',
 
     renderTpl: Ext.DomHelper.markup([
         {cls:'text-content', html:'{text}'}
@@ -17,7 +17,7 @@ Ext.define('NextThought.view.video.transcript.NoTranscript', {
         this.callParent(arguments);
 
         this.renderData = Ext.apply(this.renderData || {}, {
-            'text': getString('NextThought.view.video.transcript.NoTranscript')
+            'text': 'Temp'
         });
     }
 

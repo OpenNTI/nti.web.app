@@ -183,14 +183,11 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
     setupNoTranscript: function() {
         var items = [];
-        items.push({
-            xtype: 'video-title-component',
-            video: this.videoPlaylist[0]
-        });
         items.push(
             {
                 xtype: 'no-video-transcript',
                 flex: 1,
+                video: this.videoPlaylist[0],
                 layout: {
                     type: 'vbox',
                     align: 'stretch'
@@ -664,11 +661,28 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		if (this.annotationView && this.annotationView.store) {
 			//Make sure we clear the line filter, since this store could be bound to another view.
 			this.annotationView.store.removeFilter(this.lineFilterId);
-			this.annotationView.destroy();
 		}
+
+        if(this.annotationView){
+            this.annotationView.destroy();
+        }
+
 		this.callParent(arguments);
 
 	},
+
+
+    beforeDeactivate: function(){
+        if(this.noteOverlay && !this.noteOverlay.fireEvent('beforedeactivate')){
+            return false;
+        }
+
+        if(this.annotationView && this.annotationView.isVisible()){
+            this.annotationView.hide();
+        }
+
+        return true;
+    },
 
 
 	mayBeHideAnnotationView: function(e) {

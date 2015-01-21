@@ -121,7 +121,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 	//<editor-fold desc="Init">
 	initComponent: function() {
 		var me = this, keyMap, transcript;
-    this.on('no-presentation-parts', function() {
+        this.on('no-presentation-parts', function() {
 			me.videoOnly = true;
 			me.fireEvent('media-viewer-ready', me);
 		}, this);
@@ -202,7 +202,8 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			renderTo: me.headerEl,
 			currentType: playerType,
 			video: me.video,
-			floatParent: me
+			floatParent: me,
+            noTranscript: this.noTranscript
 		});
 
 		me.identity = Ext.widget({xtype: 'identity', renderTo: me.toolbar.getEl(), floatParent: me.toolbar});
@@ -347,7 +348,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 			this.videoplayer.setVideoAndPosition(this.videoplayer.currentVideoId, startTimeSeconds);
 		}
 
-    this.on('jump-video-to', Ext.bind(this.videoplayer.jumpToVideoLocation, this.videoplayer), this);
+        this.on('jump-video-to', Ext.bind(this.videoplayer.jumpToVideoLocation, this.videoplayer), this);
 	},
 
 

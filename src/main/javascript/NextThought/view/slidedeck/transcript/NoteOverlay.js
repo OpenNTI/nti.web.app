@@ -22,7 +22,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 		var me = this;
 
-		this.adjustAnnotationOverlayPosition = Ext.Function.createBuffered(this.adjustAnnotationOverlayPosition, 10);
+//		this.adjustAnnotationOverlayPosition = Ext.Function.createBuffered(this.adjustAnnotationOverlayPosition, 10);
 		this.syncHeight = Ext.Function.createBuffered(this.syncHeight, 10);
 
 		this.insertOverlay();
@@ -156,11 +156,11 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		w = w < maxWidth ? w - 75 : maxWidth - 75;
 		this.annotationOverlay.setStyle('left', w + 'px');
 
-		Ext.each(cmps, function(cmp) {
-			if (Ext.isFunction(cmp.positionAnnotationNibs)) {
-				cmp.positionAnnotationNibs(me.reader.el);
-			}
-		});
+//		Ext.each(cmps, function(cmp) {
+//			if (Ext.isFunction(cmp.positionAnnotationNibs)) {
+//				cmp.positionAnnotationNibs(me.reader.el);
+//			}
+//		});
 
 		this.realignNotes();
 	},
@@ -425,17 +425,17 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 
 	updateAnnotationCountAtLine: function(line, count) {
-		var tpl = this.controlTpl,
+        var tpl = this.controlTpl,
 			el = this.getAnnotationEl(line);
 
-		if (Ext.isEmpty(el)) {
-			el = tpl.append(this.annotationOverlay, {line: line, count: count}, true);
-			el.setStyle('top', line + 'px');
-			//this.mon(el, 'click', 'showAnnotationsAtLine', this);
-		} else {
-			Ext.fly(el).update(count);
-		}
-	},
+        if (Ext.isEmpty(el)) {
+            el = tpl.append(this.annotationOverlay, {line: line, count: count}, true);
+            el.setStyle('top', line + 'px');
+            //this.mon(el, 'click', 'showAnnotationsAtLine', this);
+        } else {
+            Ext.fly(el).update(count);
+        }
+    },
 
 	getAnnotationEl: function(line) {
 		var annotations = this.annotationOverlay.query('.count[data-line]'),
@@ -465,7 +465,9 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 	onAnnotationRemoved: function(o) {
 		var count = this.getAnnotationsAtLine(o.line).getCount();
-		this.updateAnnotationCountAtLine(o.line, count);
+        if(count > 0){
+            this.updateAnnotationCountAtLine(o.line, count);
+        }
 	},
 
 
