@@ -98,6 +98,10 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 				date: Ext.Date.format(data.completed, 'l, F j')
 			};
 
+			if (data.isNoSubmitAssignment) {
+				d.html = 'graded';
+			}
+
 			if (data.completed < data.due) {
 				d.cls = 'ontime';
 				d.qtip = this.__getSubmittedToolTip(data.completed);
