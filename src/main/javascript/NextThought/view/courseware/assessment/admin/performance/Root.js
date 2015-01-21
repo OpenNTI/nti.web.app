@@ -1,3 +1,4 @@
+/*globals swallow*/
 Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-assessment-admin-performance-root',
@@ -30,7 +31,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 						{ cls: 'label', html: getString('NextThought.view.courseware.assessment.admin.performance.Root.allitems') }
 					] },
 					{ cls: 'third search', cn: [
-						{ tag: 'input', type: 'text', placeholder: getString('NextThought.view.courseware.assessment.admin.performance.Root.search'), required: 'required' },
+						{
+							tag: 'input',
+							type: 'text',
+							placeholder: getString('NextThought.view.courseware.assessment.admin.performance.Root.search'),
+							required: 'required'
+						},
 						{ cls: 'clear' }
 					] }
 				]},
@@ -880,8 +886,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 					if (n) {
 						Ext.fly(n).setStyle({opacity: 1});
 					}
-
-					return me.setFocusedInput(input);
 				});
 			});
 	}
