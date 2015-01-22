@@ -295,6 +295,8 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 
 		this.statusMessage.update(newStatus);
 
+		this.unansweredQuestions = totalQuestions - answeredQuestions;
+
 		if (this.submitChangedHandler) {
 			this.submitChangedHandler.call(null, this.shouldAllowSubmit(this.submitChangedHandler));
 		}
