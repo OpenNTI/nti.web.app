@@ -108,7 +108,6 @@ Ext.define('NextThought.view.slidedeck.media.Container',{
         });
 
         this.mon(this.toolbar, {
-            'switch-video-viewer': 'switchVideoViewer',
             'hide-grid-viewer': 'hideGridViewer',
             'show-grid-viewer': 'showGridViewer'
         });
@@ -239,7 +238,7 @@ Ext.define('NextThought.view.slidedeck.media.Container',{
 
 
     switchVideoViewer: function(type, item){
-        if(!type || type === (this.viewer && this.viewer.viewerType)){ return; }
+        if(!type || type === (this.viewer && this.viewer.viewerType)){ return Promise.reject(); }
 
         var me = this,
             viewerXType = this.viewerXtypeMap[type],
@@ -249,7 +248,7 @@ Ext.define('NextThought.view.slidedeck.media.Container',{
 
         if(this.viewer && (this.viewer.beforeDeactivate() === false)){
             console.log("Cannot switch viewer because the current view refuses to deactivate.");
-            return false;
+            return Promise.reject();
         }
 
         //store the current type so we can retrieve it later
@@ -273,11 +272,10 @@ Ext.define('NextThought.view.slidedeck.media.Container',{
             this.getLayout().setActiveItem(this.viewer);
         }
 
-        if(item){
-            item.setChecked(true, true);
-        }
+        wait(1000)
+            .then(this.fireEvent.bind(this, 'animation-end'));
 
-        Ext.defer(this.fireEvent, 1000, this, ['animation-end']);
+        return Promise.resolve();
     },
 
 

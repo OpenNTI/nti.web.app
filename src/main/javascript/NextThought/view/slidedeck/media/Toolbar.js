@@ -152,20 +152,21 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar', {
 
 
 	handleClick: function(item, menu) {
-		if (this.currentType !== item.action) {
-			var previousType = this.currentType;
+        var previousType = this.currentType, me = this;
 
-			this.pickerEl.removeCls(previousType).addCls(item.action);
-			this.pickerEl.update(item.text);
-			this.currentType = item.action;
+        this.floatParent.switchVideoViewer(item.action)
+            .then(function(){
+                me.pickerEl.removeCls(previousType).addCls(item.action);
+                me.pickerEl.update(item.text);
+                me.currentType = item.action;
 
-			Ext.each(menu.query('menuitem[checked]'), function(i) {
-				i.setChecked(false, true);
-			});
+                Ext.each(menu.query('menuitem[checked]'), function(i) {
+                    i.setChecked(false, true);
+                });
 
-            this.fireEvent('switch-video-viewer', item.action, item);
-			menu.destroy();//why is this always destroying?
-		}
+                item.setChecked(true, true);
+            });
+
 		return false;
 	}
 });

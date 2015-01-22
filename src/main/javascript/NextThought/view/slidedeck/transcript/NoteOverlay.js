@@ -390,7 +390,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		if (this.isRecordAlreadyAdded(rec)) {return;}
 
 		var domRange = this.rangeForDescription(rec, cmp, recStore),
-				rect, line, d;
+				rect, line, readerTop;
 
 		if (Ext.isEmpty(domRange)) {
 			return;
@@ -399,8 +399,8 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		rect = RangeUtils.safeBoundingBoxForRange(domRange);
 
 		//Get the scroll target.
-		d = this.reader.getScrollTarget();
-		line = rect ? rect.top + d.scrollTop - d.offsetTop : 0;
+		readerTop = this.reader.el.getTop();
+		line = rect ? rect.top - readerTop : 0;
 		rec.set('pline', line);
 
 		this.annotationManager.add({
