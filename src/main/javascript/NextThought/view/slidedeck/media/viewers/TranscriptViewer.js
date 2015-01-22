@@ -269,7 +269,9 @@ Ext.define('NextThought.view.slidedeck.media.viewers.TranscriptViewer', {
 
     beforeGridViewerShow: function(){
         if(this.resourceView && this.resourceView.beforeDeactivate){
-            this.resourceView.beforeDeactivate();
+            if(this.resourceView.beforeDeactivate() === false){
+                return;
+            }
         }
 
         if (this.videoplayer.isPlaying()) {

@@ -238,7 +238,7 @@ Ext.define('NextThought.view.slidedeck.media.Container',{
     },
 
 
-    switchVideoViewer: function(type){
+    switchVideoViewer: function(type, item){
         if(!type || type === (this.viewer && this.viewer.viewerType)){ return; }
 
         var me = this,
@@ -246,8 +246,6 @@ Ext.define('NextThought.view.slidedeck.media.Container',{
             targetViewerId = this.viewerIdMap[viewerXType],
             targetViewer = targetViewerId && Ext.getCmp(targetViewerId);
 
-        console.debug("Should switch video viewer to: " + type);
-        console.debug("Current Video viewer is : " + (this.viewer && this.viewer.viewerType));
 
         if(this.viewer && (this.viewer.beforeDeactivate() === false)){
             console.log("Cannot switch viewer because the current view refuses to deactivate.");
@@ -273,6 +271,10 @@ Ext.define('NextThought.view.slidedeck.media.Container',{
         else{
             this.viewer = targetViewer;
             this.getLayout().setActiveItem(this.viewer);
+        }
+
+        if(item){
+            item.setChecked(true, true);
         }
 
         Ext.defer(this.fireEvent, 1000, this, ['animation-end']);

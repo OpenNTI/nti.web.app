@@ -673,11 +673,15 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 
 
     beforeDeactivate: function(){
-        if(this.noteOverlay && !this.noteOverlay.fireEvent('beforedeactivate')){
+        if(this.noteOverlay && (this.noteOverlay.fireEvent('beforedeactivate') === false)){
             return false;
         }
 
         if(this.annotationView && this.annotationView.isVisible()){
+            if(this.annotationView.fireEvent('beforedeactivate') === false){
+                return false;
+            }
+
             this.annotationView.hide();
         }
 

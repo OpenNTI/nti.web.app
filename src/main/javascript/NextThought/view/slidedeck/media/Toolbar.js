@@ -162,8 +162,8 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar', {
 			Ext.each(menu.query('menuitem[checked]'), function(i) {
 				i.setChecked(false, true);
 			});
-			item.setChecked(true, true);
-			this.fireEvent('switch-video-viewer', item.action);
+
+            this.fireEvent('switch-video-viewer', item.action, item);
 			menu.destroy();//why is this always destroying?
 		}
 		return false;
