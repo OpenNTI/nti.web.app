@@ -252,7 +252,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Post', {
 				this.contextTitleEl.update(context.name);
 			}
 
-			if (context.thumbanil) {
+			if (context.thumbnail) {
 				this.contextImageEl.set({'src': context.thumbnail});
 			}
 		}
