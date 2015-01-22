@@ -283,7 +283,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 		link = this.getLink(link);
 
-		if (!link) { return Promise.reject('No link', link); }
+		if (!link) { return Promise.reject('No link'); }
 
 		this[promiseName] = Service.request(link)
 								.then(function(response) {
@@ -332,6 +332,11 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		var roster = this.getLink('CourseEnrollmentRoster'),
 			history = this.getLink('AssignmentHistory');
 
+		if (!this.getLink('AssignmentsByOutlineNode')) {
+			return Promise.resolve(NextThought.model.courses.AssignmentCollection.fromJson(
+				{},{},null, null, this.getLink('AssignmentHistory')));
+		}
+
 		this.__getAssignmentsPromise = Promise.all([
 			this.__getAssignmentsByOutline(),
 			this.__getNonAssignmentsByOutline()
@@ -356,6 +361,11 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 		var roster = this.getLink('CourseEnrollmentRoster'),
 			history = this.getLink('AssignmentHistory');
+
+		if (!this.getLink('AssignmentsByOutlineNode')) {
+			return Promise.resolve(NextThought.model.courses.AssignmentCollection.fromJson(
+				{},{},null, null, this.getLink('AssignmentHistory')));
+		}
 
 		this.__getAssignmentsAndGradeBookPromise = Promise.all([
 			this.__getAssignmentsByOutline(),
