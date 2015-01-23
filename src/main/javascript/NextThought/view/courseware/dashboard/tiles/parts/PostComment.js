@@ -1,3 +1,4 @@
+/*globals User*/
 Ext.define('NextThought.view.courseware.dashboard.tiles.parts.PostComment', {
 	extend: 'Ext.Component',
 
@@ -31,12 +32,23 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.parts.PostComment', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		this.fillInUser();
-		this.fillInCreated();
+		if (this.isDeleted()) {
+			this.avatarEl.setStyle({backgroundImage: 'url(' + User.BLANK_AVATAR + ')'});
+		} else {
+			this.fillInUser();
+			this.fillInCreated();
+		}
+
 		this.fillInBody();
 		this.fillInComments();
 
+
 		this.mon(this.el, 'click', 'itemClicked');
+	},
+
+
+	isDeleted: function() {
+		return false;
 	},
 
 
