@@ -114,7 +114,6 @@ Ext.define('NextThought.view.slidedeck.media.Container',{
 
         Ext.EventManager.onWindowResize(this.adjustOnResize, this, {buffer: 250});
 
-        this.adjustOnResize();
     },
 
 

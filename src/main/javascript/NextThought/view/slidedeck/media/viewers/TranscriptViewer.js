@@ -149,10 +149,13 @@ Ext.define('NextThought.view.slidedeck.media.viewers.TranscriptViewer', {
 
 
     adjustOnResize: function(availableHeight, availableWidth){
+        if(!this.resourceView){ return; }
+
         var videoWidth = this.videoPlayerEl.getWidth(),
             targetEl = this.getTargetEl(),
             transcriptWidth = Math.floor(availableWidth * this.transcriptRatio),
-            tEl = this.el.down('.content-video-transcript');
+            tEl = this.el.down('.content-video-transcript'),
+            marginTop = 0, innerPadding = 40, diff = 0;
 
         targetEl.setStyle('height', availableHeight + 'px');
         if (tEl) {
@@ -164,7 +167,17 @@ Ext.define('NextThought.view.slidedeck.media.viewers.TranscriptViewer', {
                 tEl.parent('.transcript-view').hide();
             }
             videoWidth += 80;
-            this.getTargetEl().setStyle('marginLeft', videoWidth + 'px');
+            targetEl.setStyle('marginLeft', videoWidth + 'px');
+        }
+        else{
+            // NOTE: when there is no transcript, align the body next to the video
+            videoWidth += 20;
+            diff = this.videoPlayerEl.getTop() - targetEl.getTop();
+            if(diff > innerPadding){
+                marginTop = this.videoPlayerEl.getTop() - targetEl.getTop() - innerPadding;
+                targetEl.setStyle('marginTop', marginTop + 'px');
+            }
+            targetEl.setStyle('marginLeft', videoWidth + 'px');
         }
         console.log('Media viewer resizing');
     },

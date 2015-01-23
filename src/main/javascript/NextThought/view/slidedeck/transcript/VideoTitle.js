@@ -10,7 +10,7 @@ Ext.define('NextThought.view.slidedeck.transcript.VideoTitle', {
 		cn: [
 			{cls: 'title', html: '{title}'},
 			{tag: 'span', cls: 'control-container', cn: {
-				cls: 'note-here-control-box add-note-here hidden', tag: 'span'
+				cls: 'note-here-control-box add-note-here hidden', 'data-qtip': 'Add a Note', tag: 'span'
 			}}
 		]
 	}),
