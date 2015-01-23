@@ -1,5 +1,5 @@
-Ext.define('NextThought.view.video.transcript.NoTranscript', {
-    extend: 'NextThought.view.slidedeck.transcript.VideoTitle',
+Ext.define('NextThought.view.slidedeck.transcript.parts.NoTranscript', {
+    extend: 'NextThought.view.slidedeck.transcript.parts.VideoTitle',
     alias: 'widget.no-video-transcript',
 
     cls: 'no-transcript',

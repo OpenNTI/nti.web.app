@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.slidedeck.TranscriptItem', {
+Ext.define('NextThought.view.slidedeck.transcript.parts.TranscriptItemMixin', {
 
 	isPresentationPartReady: false,
 

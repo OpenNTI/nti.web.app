@@ -4,14 +4,14 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	requires: [
 		'NextThought.layout.component.Natural',
 		'NextThought.util.Store',
-		'NextThought.view.video.transcript.Transcript',
+		'NextThought.view.slidedeck.transcript.parts.Transcript',
 		'NextThought.view.content.reader.NoteOverlay',
 		'NextThought.view.slidedeck.transcript.NoteOverlay',
-		'NextThought.view.slidedeck.transcript.Slide',
+		'NextThought.view.slidedeck.transcript.parts.Slide',
 		'NextThought.view.annotations.renderer.Manager',
 		'NextThought.view.annotations.View',
-		'NextThought.view.slidedeck.transcript.VideoTitle',
-        'NextThought.view.video.transcript.NoTranscript'
+		'NextThought.view.slidedeck.transcript.parts.VideoTitle',
+        'NextThought.view.slidedeck.transcript.parts.NoTranscript'
 	],
 
 	ui: 'transcript',

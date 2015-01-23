@@ -1,9 +1,9 @@
-Ext.define('NextThought.view.slidedeck.transcript.VideoTitle', {
+Ext.define('NextThought.view.slidedeck.transcript.parts.VideoTitle', {
 	extend: 'Ext.Component',
 	alias: 'widget.video-title-component',
 
 	mixins: {
-		transcriptItem: 'NextThought.view.slidedeck.TranscriptItem'
+		transcriptItem: 'NextThought.view.slidedeck.transcript.parts.TranscriptItemMixin'
 	},
 
 	renderTpl: Ext.DomHelper.markup({
