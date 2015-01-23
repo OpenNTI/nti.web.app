@@ -187,10 +187,10 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 
 
 	getThumbnail: function(video) {
-		var source = video.sources[0],
-			thumbnail = source.thumbnail;
+		var source = video.get('sources')[0],
+			thumbnail = source && source.thumbnail;
 
-		if (!thumbnail) {
+		if (!thumbnail && source) {
 			NextThought.model.resolvers.VideoPosters.resolveForSource(source)
 				.then(function(obj) {
 					source.thumbnail = obj.thumbnail;
@@ -214,8 +214,6 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 			for (i = 0; i < ids.length; i++) {
 				v = NextThought.model.PlaylistItem(data[ids[i]]);
 				v.NTIID = v.ntiid;
-
-				me.getThumbnail(v);
 
 				videos.push(v);
 			}
@@ -242,6 +240,10 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 			model: NextThought.model.PlaylistItem,
 			proxy: 'memory',
 			data: videos
+		});
+
+		me.store.each(function(record) {
+			me.getThumbnail(record);
 		});
 
 		me.bindStore(me.store);

@@ -433,6 +433,8 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 
 
 	onSelectChange: function(s, rec) {
+		if (!rec) { return; }
+
 		var p = rec.get('poster') || null, idx;
 
 		if (p) {
