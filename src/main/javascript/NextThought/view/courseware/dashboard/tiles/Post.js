@@ -1,6 +1,8 @@
 Ext.define('NextThought.view.courseware.dashboard.tiles.Post', {
 	extend: 'NextThought.view.courseware.dashboard.tiles.BaseContainer',
 
+	requires: ['NextThought.model.resolvers.VideoPosters'],
+
 	mixins: {
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'
 	},
@@ -243,6 +245,9 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Post', {
 	setContext: function(context) {
 		if (Ext.isEmpty(context) || Ext.Object.isEmpty(context)) { return; }
 
+		var me = this,
+			emptySrc = Globals.CANVAS_BROKEN_IMAGE.src;
+
 		if (context.text) {
 			this.contextEl.addCls('word-context');
 			this.contextTextEl.update(context.text);
@@ -254,6 +259,19 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Post', {
 
 			if (context.thumbnail) {
 				this.contextImageEl.set({'src': context.thumbnail});
+			} else {
+				this.contextImageEl.set({'src': ''});
+				this.contextImageEl.addCls('no-thumbnail');
+
+				if (context.source) {
+					NextThought.model.resolvers.VideoPosters.resolveForSource(context.source)
+						.then(function(obj) {
+							if (obj.poster && obj.poster !== emptySrc) {
+								me.contextImageEl.set({'src': obj.poster});
+								me.contextImage.removeCls('no-thumbnail');
+							}
+						});
+				}
 			}
 		}
 

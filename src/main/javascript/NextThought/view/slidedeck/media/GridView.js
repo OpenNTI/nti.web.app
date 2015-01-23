@@ -2,6 +2,8 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 	extend: 'Ext.view.View',
 	alias: 'widget.media-grid-view',
 
+	requies: ['NextThought.model.resolvers.VideoPosters'],
+
 
 	//<editor-fold desc="Config">
 	config: {
@@ -184,6 +186,21 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 	},
 
 
+	getThumbnail: function(video) {
+		var source = video.sources[0],
+			thumbnail = source.thumbnail;
+
+		if (!thumbnail) {
+			NextThought.model.resolvers.VideoPosters.resolveForSource(source)
+				.then(function(obj) {
+					source.thumbnail = obj.thumbnail;
+
+					video.set('sources', [source]);
+				});
+		}
+	},
+
+
 	applyNavigationData: function(navStore, data) {
 		var me = this,
 			reader = Ext.data.reader.Json.create({model: NextThought.model.PlaylistItem}),
@@ -197,6 +214,8 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 			for (i = 0; i < ids.length; i++) {
 				v = NextThought.model.PlaylistItem(data[ids[i]]);
 				v.NTIID = v.ntiid;
+
+				me.getThumbnail(v);
 
 				videos.push(v);
 			}

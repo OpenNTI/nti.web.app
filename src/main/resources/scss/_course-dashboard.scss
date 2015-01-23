@@ -159,6 +159,11 @@
 
 				img {
 					width: 100%;
+
+					&.no-thumbnail {
+						height: 100%;
+						background-color: white;
+					}
 				}
 
 				& > .title {

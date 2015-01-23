@@ -172,7 +172,8 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Note', {
 								.then(function(current) {
 									return {
 										thumbnail: src.thumbnail,
-										name: current
+										name: current,
+										source: src
 									};
 								});
 					}
