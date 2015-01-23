@@ -9,7 +9,7 @@ Ext.define('NextThought.controller.SlideDeck', {
 		'slidedeck.Slide',
 		'slidedeck.Video',
 		'slidedeck.View',
-		'slidedeck.Transcript',
+		'slidedeck.transcript.TranscriptView',
 		'slidedeck.media.Viewer',
         'slidedeck.media.Container'
 	],

@@ -5,7 +5,7 @@ Ext.define('NextThought.view.slidedeck.media.Viewer', {
 	requires: [
 		'NextThought.view.slidedeck.media.GridView',
 		'NextThought.view.slidedeck.media.Toolbar',
-		'NextThought.view.slidedeck.Transcript',
+		'NextThought.view.slidedeck.transcript.TranscriptView',
 		'NextThought.view.video.Video'
 	],
 

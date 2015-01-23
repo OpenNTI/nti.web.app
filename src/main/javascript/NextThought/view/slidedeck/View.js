@@ -5,7 +5,7 @@ Ext.define('NextThought.view.slidedeck.View', {
 		'NextThought.view.slidedeck.Slide',
 		'NextThought.view.slidedeck.Queue',
 		'NextThought.view.slidedeck.Video',
-		'NextThought.view.slidedeck.Transcript',
+		'NextThought.view.slidedeck.transcript.TranscriptView',
 		'NextThought.model.transcript.TranscriptItem',
 		'NextThought.view.slidedeck.media.Viewer'
 	],

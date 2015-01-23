@@ -2,7 +2,7 @@ Ext.define('NextThought.view.slidedeck.media.viewers.TranscriptViewer', {
     extend: 'Ext.container.Container',
     alias: 'widget.media-transcript-viewer',
     requires: [
-        'NextThought.view.slidedeck.Transcript',
+        'NextThought.view.slidedeck.transcript.TranscriptView',
         'NextThought.view.video.Video'
     ],
 
