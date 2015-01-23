@@ -112,6 +112,10 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			}
 
 			this.injectedAssignmentHistory.set('history', historyItem);
+
+			if (this.feedback) {
+				this.feedback.setHistory(historyItem);
+			}
 		}
 	},
 
