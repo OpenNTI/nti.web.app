@@ -1,3 +1,4 @@
+/*globals spyOn*/
 describe("Service Tests", function() {
 
 	describe("urlWithQueryParams", function(){
@@ -32,32 +33,37 @@ describe("Service Tests", function() {
 				'tag:nextthought.com,2011-10:system-NamedEntity:ntiid2',
 				'tag:nextthought.com,2011-10:system-NamedEntity:ntiid3'
 			];
-
 			spyOn(service,'getObject').andCallFake(function(ntiid, success, failure, scope, safe){
+				var model = NextThought.model.Base.create({
+					NTIID: ntiid
+				});
+
 				callCount++;
-				success.call(scope, ntiid);
+				return Promise.resolve(model);
 			});
 		});
 
 		it('Calling getObjects with only ntiids preserves order', function(){
 			var flag = false, result, me = this;
-			
-			function success(r){
-				result = r;
-				flag = true;
-			}
 
-			function failure(){
-				flag = true;
-			}
-
-			service.getObjects(ntiids, success, failure, me, false);
+			service.getObjects(ntiids)
+				.then(function(r) {
+					result = r;
+				})
+				.always(function() {
+					flag = true;
+				});
 
 			waitsFor(function(){
 				return flag;
 			},'getObjects never finished', 600);
 
 			runs(function(){
+
+				result = result.map(function(model) {
+					return model.get('NTIID');
+				});
+
 				var diff = Ext.Array.difference(result, ntiids);
 
 				expect(Ext.isEmpty(diff)).toBeTruthy();
@@ -67,7 +73,7 @@ describe("Service Tests", function() {
 				Ext.each(ntiids, function(n){
 					var f = jasmine.any(Function);
 
-					expect(service.getObject).toHaveBeenCalledWith(n, f, f, me, false);
+					expect(service.getObject).toHaveBeenCalledWith(n, null, null, null, undefined);
 				}, this);
 			});
 		});
@@ -99,10 +105,8 @@ describe("Service Tests", function() {
 				expect(Ext.Array.equals(expected, result));
 				expect(callCount).toBe(entities.length);
 				Ext.each(ntiids, function(n){
-					var f = jasmine.any(Function);
-
-					expect(service.getObject).toHaveBeenCalledWith(n, f, f, me, false);
-				}, this);
+					expect(service.getObject).toHaveBeenCalledWith(n, null, null, null, false);
+				});
 			});
 		});
 	});
