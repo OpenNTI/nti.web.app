@@ -2041,14 +2041,14 @@ describe("Anchor Utils", function() {
 			root.appendChild(p2);
 			testBody.appendChild(root);
 
-			recreatedRange = Anchors.toDomRange(emptyDesc.description, document, document.body, null, 'foo');
+			recreatedRange = Anchors.toDomRange(emptyDesc.description, document, document.body.parentNode, null, 'foo');
 			expect(recreatedRange).toBeTruthy();
-			expect(recreatedRange.commonAncestorContainer).toBe(document.body);
+			expect(recreatedRange.commonAncestorContainer).toBe(document.body.parentNode);
 
 			root.setAttribute('id', '123242354543523');
-			recreatedRange = Anchors.toDomRange(emptyDesc.description, document, document.body, '123242354543523', 'pagecontainer');
+			recreatedRange = Anchors.toDomRange(emptyDesc.description, document, document.body.parentNode, '123242354543523', 'pagecontainer');
 			expect(recreatedRange).toBeTruthy();
-			expect(recreatedRange.commonAncestorContainer).toBe(root);
+			expect(recreatedRange.commonAncestorContainer).toBe(root.parentNode);
 		});
 
 	});
@@ -2366,7 +2366,6 @@ describe("Anchor Utils", function() {
 				start = Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {role: 'start', elementTagName: 'div', elementId: 'child'}),
 				end = Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {role: 'end', elementTagName: 'div', elementId: 'child'}),
 				desc = Ext.create('NextThought.model.anchorables.DomContentRangeDescription', {start: start, end: end, ancestor: ancestor})	,
-				result;
 
 			anotherDiv.setAttribute('id', 'thisIsNotTheDivYouSeek');
 			div.setAttribute('id', 'parent');
@@ -2375,7 +2374,7 @@ describe("Anchor Utils", function() {
 			testBody.appendChild(anotherDiv);
 			testBody.appendChild(div);
 
-			result = Anchors.doesContentRangeDescriptionResolve(desc, div);
+			var result = Anchors.doesContentRangeDescriptionResolve(desc, div);
 			expect(result).toBeTruthy();
 			desc.attachLocator(null);
 			result = Anchors.doesContentRangeDescriptionResolve(desc, anotherDiv);
