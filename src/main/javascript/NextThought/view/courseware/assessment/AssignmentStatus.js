@@ -101,7 +101,7 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 			if (data.isNoSubmitAssignment) {
 				d.html = 'graded';
 			}
-
+			//if due is undefined this will be false
 			if (data.completed < data.due) {
 				d.cls = 'ontime';
 				d.qtip = this.__getSubmittedToolTip(data.completed);
@@ -126,7 +126,8 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 
 		__getOverDueStatus: function(data) {
 			//if we aren't completed or we were completed on time there is no overdue string
-			if (!data.completed || data.completed <= data.due || data.isNoSubmitAssignment) { return null; }
+			//if we don't have a due date we can't be over due
+			if (!data.completed || !data.due || data.completed <= data.due || data.isNoSubmitAssignment) { return null; }
 
 			var diff = data.completed.getTime() - data.due.getTime(),
 				qtip = TimeUtils.getNaturalDuration(diff, 1) + ' overdue',
