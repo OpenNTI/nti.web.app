@@ -98,7 +98,7 @@ Ext.define('NextThought.model.courseware.Grade', {
 		}
 
 		return {
-			value: grade,
+			value: grade.trim(),
 			letter: letter
 		};
 	},
