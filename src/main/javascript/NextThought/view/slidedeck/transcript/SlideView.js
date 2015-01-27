@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.slidedeck.transcript.SlideView', {
-    extends: 'NextThought.view.slidedeck.transcript.TranscriptView',
+    extend: 'NextThought.view.slidedeck.transcript.TranscriptView',
     alias: 'widget.slidedeck-slideview',
 
     buildComponents: function(){
