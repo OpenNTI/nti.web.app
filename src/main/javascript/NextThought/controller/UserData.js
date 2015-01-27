@@ -88,7 +88,7 @@ Ext.define('NextThought.controller.UserData', {
 				'slidedeck-view': {
 					exited: 'presentationExited'
 				},
-				'media-viewer': {
+				'media-container': {
 					exited: 'presentationExited'
 				},
 

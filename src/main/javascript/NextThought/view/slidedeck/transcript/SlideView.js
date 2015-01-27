@@ -99,6 +99,13 @@ Ext.define('NextThought.view.slidedeck.transcript.SlideView', {
     },
 
 
+    afterRender: function(){
+        this.callParent(arguments);
+
+        this.ownerCt.hasSlides = this.hasSlides;
+    },
+
+
     selectSlide: function(slide) {
         if (!slide || !slide.isModel) {
             console.error('Unexpected argument, given', slide, 'expected a record');

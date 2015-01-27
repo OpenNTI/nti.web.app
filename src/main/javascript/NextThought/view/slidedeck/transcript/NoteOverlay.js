@@ -443,12 +443,15 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
         var tpl = this.controlTpl,
 			el = this.getAnnotationEl(line);
 
-        if (Ext.isEmpty(el)) {
+        if(el){
+            Ext.fly(el).update(count);
+            return;
+        }
+
+        // Only create new element is count is greater than zero.
+        if (Ext.isEmpty(el) && count > 0) {
             el = tpl.append(this.annotationOverlay, {line: line, count: count}, true);
             el.setStyle('top', line + 'px');
-            //this.mon(el, 'click', 'showAnnotationsAtLine', this);
-        } else {
-            Ext.fly(el).update(count);
         }
     },
 
@@ -480,9 +483,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 	onAnnotationRemoved: function(o) {
 		var count = this.getAnnotationsAtLine(o.line).getCount();
-        if(count > 0){
-            this.updateAnnotationCountAtLine(o.line, count);
-        }
+        this.updateAnnotationCountAtLine(o.line, count);
 	},
 
 

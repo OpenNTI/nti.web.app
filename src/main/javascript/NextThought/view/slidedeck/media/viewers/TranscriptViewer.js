@@ -155,7 +155,7 @@ Ext.define('NextThought.view.slidedeck.media.viewers.TranscriptViewer', {
             targetEl = this.getTargetEl(),
             transcriptWidth = Math.floor(availableWidth * this.transcriptRatio),
             tEl = this.el.down('.content-video-transcript'),
-            marginTop = 0, innerPadding = 40, diff = 0;
+            marginTop = 0, innerPadding = 20, diff = 0;
 
         targetEl.setStyle('height', availableHeight + 'px');
         if (tEl) {
@@ -174,7 +174,7 @@ Ext.define('NextThought.view.slidedeck.media.viewers.TranscriptViewer', {
             videoWidth += 20;
             diff = this.videoPlayerEl.getTop() - targetEl.getTop();
             if(diff > innerPadding){
-                marginTop = this.videoPlayerEl.getTop() - targetEl.getTop() - innerPadding;
+                marginTop = this.videoPlayerEl.getTop() - targetEl.getTop();
                 targetEl.setStyle('marginTop', marginTop + 'px');
             }
             targetEl.setStyle('marginLeft', videoWidth + 'px');

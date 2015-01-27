@@ -10,5 +10,11 @@ Ext.define('NextThought.view.slidedeck.transcript.parts.NoTranscript', {
                 cls: 'note-here-control-box add-note-here','data-qtip': 'Add a Note', tag: 'span'
             }}
         ]
-    })
+    }),
+
+
+    initComponent: function(){
+        this.callParent(arguments);
+        this.enableBubble(['presentation-part-ready', 'register-records', 'unregister-records']);
+    }
 });

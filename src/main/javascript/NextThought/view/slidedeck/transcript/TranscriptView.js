@@ -77,7 +77,7 @@ Ext.define('NextThought.view.slidedeck.transcript.TranscriptView', {
             }];
         }
         else{
-            items.push[{
+            items.push({
                 xtype: 'no-video-transcript',
                 flex: 1,
                 video: this.videoPlaylist[0],
@@ -85,7 +85,7 @@ Ext.define('NextThought.view.slidedeck.transcript.TranscriptView', {
                     type: 'vbox',
                     align: 'stretch'
                 }
-            }];
+            });
 
             this.hasNoPresentationParts = true;
         }
@@ -201,16 +201,17 @@ Ext.define('NextThought.view.slidedeck.transcript.TranscriptView', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		this.ownerCt.hasSlides = this.hasSlides;
-
 		this.setupNoteOverlay();
 		this.el.unselectable();
 		this.addMask();
-		//this.maybeLoadData();
 		this.mon(this.el, {
 			scope: this,
 			'mousedown': 'mayBeHideAnnotationView'
 		});
+
+        if(!this.transcript){
+            this.el.addCls('no-transcript-view');
+        }
 
 		this.mon(Ext.get(this.getScrollTarget()), 'scroll', 'onScroll');
 
@@ -316,6 +317,7 @@ Ext.define('NextThought.view.slidedeck.transcript.TranscriptView', {
 			scrollingEl = Ext.get(this.getScrollTarget());
 
 		//if we are in the media view there is only one transcript
+        // FIXME: What are we doing here exactly?
 		if (this.up('media-viewer')) {
 			cmp = cmps[0];
 			offset = scrollingEl.getY();
@@ -476,7 +478,7 @@ Ext.define('NextThought.view.slidedeck.transcript.TranscriptView', {
 				floatParent: this,
 				listeners: {
 					itemremove: function() {
-						if (this.getNodes().length === 0) {
+						if (this.store && this.store.count() === 0) {
 							Ext.defer(this.hide, 1, this);
 						}
 					}
