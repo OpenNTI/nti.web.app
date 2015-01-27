@@ -275,6 +275,8 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 
 		if (totalAnsweredParts === 0) {
 			this.moveToInActive();
+		} else {
+			this.transitionToActive();
 		}
 
 		if (totalQuestions === 0) {
