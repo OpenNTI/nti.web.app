@@ -177,7 +177,8 @@ Ext.define('NextThought.view.assessment.input.Base', {
 
 		this.reset();
 
-		this.disableSubmission(true);
+		wait()
+			.then(this.disableSubmission.bind(this, true));
 
 		if (this.canHaveAnswerHistory()) {
 			this.mon(this.historyMenuEl, {

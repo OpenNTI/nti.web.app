@@ -68,6 +68,11 @@ Ext.define('NextThought.view.assessment.input.Ordering', {
 	},
 
 
+	getAnsweredCount: function() {
+		return 1;
+	},
+
+
 	setValue: function(val) {
 		if (!this.rendered) {
 			this.on({
