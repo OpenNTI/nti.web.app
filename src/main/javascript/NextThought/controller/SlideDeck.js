@@ -10,7 +10,6 @@ Ext.define('NextThought.controller.SlideDeck', {
 		'slidedeck.Video',
 		'slidedeck.View',
 		'slidedeck.transcript.TranscriptView',
-		'slidedeck.media.Viewer',
         'slidedeck.media.Container'
 	],
 
@@ -39,9 +38,6 @@ Ext.define('NextThought.controller.SlideDeck', {
 				},
 				'slidedeck-view': {
 					'exited': 'slideDeckDidExit'
-				},
-				'media-viewer' : {
-					'exited': 'mediaViewerDidExit'
 				},
                 'media-container': {
                     'exited': 'mediaViewerDidExit'
