@@ -121,8 +121,8 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar', {
 		var me = this,
 			type = this.currentType,
 			items = [
-				{ text: me.clsToName('video-focus'), cls: 'label video-focus', action: 'video-focus', checked: type === 'video-focus'},
-				{ text: me.clsToName('transcript-focus'), cls: 'label transcript-focus', action: 'transcript-focus', checked: type === 'transcript-focus'},
+				{ text: me.clsToName('video-focus'), cls: 'label video-focus', action: 'video-focus', checked: type === 'video-focus', disabled: this.noTranscript},
+				{ text: me.clsToName('transcript-focus'), cls: 'label transcript-focus', action: 'transcript-focus', checked: type === 'transcript-focus', disabled: this.noTranscript},
 				{ text: me.clsToName('full-video'), cls: 'label full-video', action: 'full-video', checked: type === 'full-video'}
 			];
 

@@ -24,6 +24,9 @@ Ext.define('NextThought.view.slidedeck.media.Container',{
     ]),
 
 
+    lockVideoWithNoTranscript: true,
+
+
     renderSelectors: {
         headerEl: '.header'
     },
@@ -72,7 +75,7 @@ Ext.define('NextThought.view.slidedeck.media.Container',{
     afterRender: function(){
         this.callParent(arguments);
 
-        var playerType = this.getStorageManager().get('media-viewer-player-type') || 'video-focus';
+        var playerType = this.getViewerType();
         this.toolbar = Ext.widget({
             xtype: 'media-toolbar',
             renderTo: this.headerEl,
@@ -118,7 +121,7 @@ Ext.define('NextThought.view.slidedeck.media.Container',{
 
 
     buildInitialViewer: function(){
-        var playerType = this.getStorageManager().get('media-viewer-player-type') || 'video-focus',
+        var playerType = this.getViewerType(),
             viewerType = this.viewerXtypeMap[playerType];
 
         this.viewer = this.add({
@@ -133,6 +136,15 @@ Ext.define('NextThought.view.slidedeck.media.Container',{
 
         this.viewerIdMap[viewerType] = this.viewer.getId();
         this.mon(this.viewer, 'media-viewer-ready', 'adjustOnResize', this);
+    },
+
+
+    getViewerType: function(type){
+        if(this.lockVideoWithNoTranscript && !this.transcript){
+            return 'full-video';
+        }
+
+        return type || this.getStorageManager().get('media-viewer-player-type') || 'video-focus';
     },
 
 
@@ -240,7 +252,8 @@ Ext.define('NextThought.view.slidedeck.media.Container',{
         if(!type || type === (this.viewer && this.viewer.viewerType)){ return Promise.reject(); }
 
         var me = this,
-            viewerXType = this.viewerXtypeMap[type],
+            playerType = this.getViewerType(type),
+            viewerXType = this.viewerXtypeMap[playerType],
             targetViewerId = this.viewerIdMap[viewerXType],
             targetViewer = targetViewerId && Ext.getCmp(targetViewerId);
 
@@ -251,7 +264,7 @@ Ext.define('NextThought.view.slidedeck.media.Container',{
         }
 
         //store the current type so we can retrieve it later
-        me.getStorageManager().set('media-viewer-player-type', type);
+        me.getStorageManager().set('media-viewer-player-type', playerType);
 
         if(!targetViewer){
             this.viewer = this.add({
