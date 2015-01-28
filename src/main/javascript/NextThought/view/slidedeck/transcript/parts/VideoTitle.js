@@ -1,16 +1,16 @@
-Ext.define('NextThought.view.slidedeck.transcript.VideoTitle', {
+Ext.define('NextThought.view.slidedeck.transcript.parts.VideoTitle', {
 	extend: 'Ext.Component',
 	alias: 'widget.video-title-component',
 
 	mixins: {
-		transcriptItem: 'NextThought.view.slidedeck.TranscriptItem'
+		transcriptItem: 'NextThought.view.slidedeck.transcript.parts.TranscriptItemMixin'
 	},
 
 	renderTpl: Ext.DomHelper.markup({
 		cn: [
 			{cls: 'title', html: '{title}'},
 			{tag: 'span', cls: 'control-container', cn: {
-				cls: 'note-here-control-box add-note-here hidden', tag: 'span'
+				cls: 'note-here-control-box add-note-here hidden', 'data-qtip': 'Add a Note', tag: 'span'
 			}}
 		]
 	}),

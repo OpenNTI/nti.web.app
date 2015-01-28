@@ -5,9 +5,8 @@ Ext.define('NextThought.view.slidedeck.View', {
 		'NextThought.view.slidedeck.Slide',
 		'NextThought.view.slidedeck.Queue',
 		'NextThought.view.slidedeck.Video',
-		'NextThought.view.slidedeck.Transcript',
-		'NextThought.model.transcript.TranscriptItem',
-		'NextThought.view.slidedeck.media.Viewer'
+		'NextThought.view.slidedeck.transcript.SlideView',
+		'NextThought.model.transcript.TranscriptItem'
 	],
 
 	cls: 'view',
@@ -42,7 +41,7 @@ Ext.define('NextThought.view.slidedeck.View', {
 			},
 			{
 				flex: 1,
-				xtype: 'slidedeck-transcript',
+				xtype: 'slidedeck-slideview',
 				accountForScrollbars: true
 			}
 		];
@@ -88,8 +87,8 @@ Ext.define('NextThought.view.slidedeck.View', {
 		this.mon(q, 'slide-selected', function(slide) {
 			var link = (this.video && this.video.linkWithSlides) || true;
 
-			if (this.down('slidedeck-transcript') && link && this.syncWithTranscript) {
-				this.down('slidedeck-transcript').selectSlide(slide);
+			if (this.down('slidedeck-slideview') && link && this.syncWithTranscript) {
+				this.down('slidedeck-slideview').selectSlide(slide);
 			}
 		}, this);
 		this.mon(q, 'beforeselect', function(dvm) {
@@ -122,7 +121,7 @@ Ext.define('NextThought.view.slidedeck.View', {
 		}, this);
 
 		if (this.hasTranscript) {
-			this.mon(this.down('slidedeck-transcript'), {
+			this.mon(this.down('slidedeck-slideview'), {
 				scope: this,
 				'jump-video-to': Ext.bind(this.video.jumpToVideoLocation, this.video),
 				'unsync-video': 'unsyncVideo'
@@ -202,7 +201,7 @@ Ext.define('NextThought.view.slidedeck.View', {
 			link = this.video.linkWithSlides;
 
 		if (this.hasTranscript) {
-			this.down('slidedeck-transcript').syncWithVideo(s, link);
+			this.down('slidedeck-slideview').syncWithVideo(s, link);
 		}
 	},
 
@@ -284,7 +283,7 @@ Ext.define('NextThought.view.slidedeck.View', {
 
 		function close() {
 			var slide = me.getSlide().slide,
-				transcript = me.down('slidedeck-transcript');
+				transcript = me.down('slidedeck-slideview');
 
 			if (transcript && !transcript.fireEvent('beforedestroy')) {
 				return;
@@ -305,6 +304,6 @@ Ext.define('NextThought.view.slidedeck.View', {
 
 		this.identity = Ext.widget({xtype: 'identity', renderTo: this.getEl(), floatParent: this});
 		this.on('destroy', 'destroy', this.identity);
-		this.down('slidedeck-transcript').maybeLoadData();
+		this.down('slidedeck-slideview').maybeLoadData();
 	}
 });

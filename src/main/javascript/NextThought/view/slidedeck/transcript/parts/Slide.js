@@ -1,9 +1,9 @@
-Ext.define('NextThought.view.slidedeck.transcript.Slide', {
+Ext.define('NextThought.view.slidedeck.transcript.parts.Slide', {
 	extend: 'Ext.Component',
 	alias: 'widget.slide-component',
 
 	mixins: {
-		transcriptItem: 'NextThought.view.slidedeck.TranscriptItem'
+		transcriptItem: 'NextThought.view.slidedeck.transcript.parts.TranscriptItemMixin'
 	},
 
 	renderTpl: Ext.DomHelper.markup([

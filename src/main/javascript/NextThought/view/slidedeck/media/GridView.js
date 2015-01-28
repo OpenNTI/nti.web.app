@@ -329,5 +329,8 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 
 		//console.log('Change video to:', rec);
 		Ext.defer(this.fireEvent, 1, this, ['change-media-in-player', rec.raw, rec.get('NTIID'), getURL(li.root)]);
-	}
+	},
+
+
+    adjustOnResize: function(availableWidth, availableHeight){}
 });

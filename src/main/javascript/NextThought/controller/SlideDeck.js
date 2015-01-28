@@ -9,14 +9,14 @@ Ext.define('NextThought.controller.SlideDeck', {
 		'slidedeck.Slide',
 		'slidedeck.Video',
 		'slidedeck.View',
-		'slidedeck.Transcript',
-		'slidedeck.media.Viewer'
+		'slidedeck.transcript.TranscriptView',
+        'slidedeck.media.Container'
 	],
 
 	videoMimeTypeRegEx: /vnd.nextthought.ntivideo/,
 
 	refs: [
-		{ ref: 'activeMediaViewer', selector: 'media-viewer' },
+		{ ref: 'activeMediaViewer', selector: 'media-container' },
 		{ ref: 'activeSlideDeck', selector: 'slidedeck-overlay' },
 		{ ref: 'contentView', selector: 'content-view-container' }
 	],
@@ -39,9 +39,9 @@ Ext.define('NextThought.controller.SlideDeck', {
 				'slidedeck-view': {
 					'exited': 'slideDeckDidExit'
 				},
-				'media-viewer' : {
-					'exited': 'mediaViewerDidExit'
-				}
+                'media-container': {
+                    'exited': 'mediaViewerDidExit'
+                }
 			},
 			'controller': {
 				'*': {
@@ -223,7 +223,7 @@ Ext.define('NextThought.controller.SlideDeck', {
 				}
 			});
 
-			me.activeMediaPlayer = Ext.widget('media-viewer', {
+			me.activeMediaPlayer = Ext.widget('media-container', {
 				video: video,
 				transcript: transcript,
 				autoShow: true,

@@ -22,7 +22,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 		var me = this;
 
-		this.adjustAnnotationOverlayPosition = Ext.Function.createBuffered(this.adjustAnnotationOverlayPosition, 10);
+//		this.adjustAnnotationOverlayPosition = Ext.Function.createBuffered(this.adjustAnnotationOverlayPosition, 10);
 		this.syncHeight = Ext.Function.createBuffered(this.syncHeight, 10);
 
 		this.insertOverlay();
@@ -94,6 +94,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		me.reader.fireEvent('uses-page-preferences', this);
 
 		me.on('beforedestroy', 'beforeDestroy');
+        me.on('beforedeactivate', 'beforeDeactivate');
 	},
 
 
@@ -123,6 +124,20 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 		return true;
 	},
+
+
+    beforeDeactivate: function(){
+        if (this.editor && this.editor.isActive()) {
+            var msg = 'You are currently creating a note. Please save or cancel it first.';
+            Ext.defer(function() {
+                alert({msg: msg});
+            }, 1);
+
+            return false;
+        }
+
+        return this.reader && this.reader.fireEvent('beforedeactivate');
+    },
 
 
 	destroy: function() {
@@ -156,11 +171,11 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		w = w < maxWidth ? w - 75 : maxWidth - 75;
 		this.annotationOverlay.setStyle('left', w + 'px');
 
-		Ext.each(cmps, function(cmp) {
-			if (Ext.isFunction(cmp.positionAnnotationNibs)) {
-				cmp.positionAnnotationNibs(me.reader.el);
-			}
-		});
+//		Ext.each(cmps, function(cmp) {
+//			if (Ext.isFunction(cmp.positionAnnotationNibs)) {
+//				cmp.positionAnnotationNibs(me.reader.el);
+//			}
+//		});
 
 		this.realignNotes();
 	},
@@ -375,7 +390,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		if (this.isRecordAlreadyAdded(rec)) {return;}
 
 		var domRange = this.rangeForDescription(rec, cmp, recStore),
-				rect, line, d;
+				rect, line, readerTop;
 
 		if (Ext.isEmpty(domRange)) {
 			return;
@@ -384,8 +399,8 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		rect = RangeUtils.safeBoundingBoxForRange(domRange);
 
 		//Get the scroll target.
-		d = this.reader.getScrollTarget();
-		line = rect ? rect.top + d.scrollTop - d.offsetTop : 0;
+		readerTop = this.reader.el.getTop();
+		line = rect ? rect.top - readerTop : 0;
 		rec.set('pline', line);
 
 		this.annotationManager.add({
@@ -425,17 +440,20 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 
 	updateAnnotationCountAtLine: function(line, count) {
-		var tpl = this.controlTpl,
+        var tpl = this.controlTpl,
 			el = this.getAnnotationEl(line);
 
-		if (Ext.isEmpty(el)) {
-			el = tpl.append(this.annotationOverlay, {line: line, count: count}, true);
-			el.setStyle('top', line + 'px');
-			//this.mon(el, 'click', 'showAnnotationsAtLine', this);
-		} else {
-			Ext.fly(el).update(count);
-		}
-	},
+        if(el){
+            Ext.fly(el).update(count);
+            return;
+        }
+
+        // Only create new element is count is greater than zero.
+        if (Ext.isEmpty(el) && count > 0) {
+            el = tpl.append(this.annotationOverlay, {line: line, count: count}, true);
+            el.setStyle('top', line + 'px');
+        }
+    },
 
 	getAnnotationEl: function(line) {
 		var annotations = this.annotationOverlay.query('.count[data-line]'),
@@ -465,7 +483,7 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 
 	onAnnotationRemoved: function(o) {
 		var count = this.getAnnotationsAtLine(o.line).getCount();
-		this.updateAnnotationCountAtLine(o.line, count);
+        this.updateAnnotationCountAtLine(o.line, count);
 	},
 
 

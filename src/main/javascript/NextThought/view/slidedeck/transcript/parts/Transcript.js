@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.video.transcript.Transcript', {
+Ext.define('NextThought.view.slidedeck.transcript.parts.Transcript', {
 	extend: 'Ext.view.View',
 	alias: 'widget.video-transcript',
 
@@ -9,7 +9,7 @@ Ext.define('NextThought.view.video.transcript.Transcript', {
 	],
 
 	mixins: {
-		transcriptItem: 'NextThought.view.slidedeck.TranscriptItem'
+		transcriptItem: 'NextThought.view.slidedeck.transcript.parts.TranscriptItemMixin'
 	},
 
 	//	ui: 'content-launcher',
@@ -154,7 +154,7 @@ Ext.define('NextThought.view.video.transcript.Transcript', {
 
 	loadTranscript: function() {
 		function transcriptLoadFinish(text) {
-			var cueList = NextThought.view.video.transcript.Transcript.processTranscripts(text);
+			var cueList = NextThought.view.slidedeck.transcript.parts.Transcript.processTranscripts(text);
 
 			cueList = me.groupByTimeInterval(cueList, 30);
 			me.store = me.buildStore(cueList, me.getTimeRangeFilter());

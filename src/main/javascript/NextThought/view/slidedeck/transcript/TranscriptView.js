@@ -1,17 +1,17 @@
-Ext.define('NextThought.view.slidedeck.Transcript', {
+Ext.define('NextThought.view.slidedeck.transcript.TranscriptView', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.slidedeck-transcript',
 	requires: [
 		'NextThought.layout.component.Natural',
 		'NextThought.util.Store',
-		'NextThought.view.video.transcript.Transcript',
+		'NextThought.view.slidedeck.transcript.parts.Transcript',
 		'NextThought.view.content.reader.NoteOverlay',
 		'NextThought.view.slidedeck.transcript.NoteOverlay',
-		'NextThought.view.slidedeck.transcript.Slide',
+		'NextThought.view.slidedeck.transcript.parts.Slide',
 		'NextThought.view.annotations.renderer.Manager',
 		'NextThought.view.annotations.View',
-		'NextThought.view.slidedeck.transcript.VideoTitle',
-        'NextThought.view.video.transcript.NoTranscript'
+		'NextThought.view.slidedeck.transcript.parts.VideoTitle',
+        'NextThought.view.slidedeck.transcript.parts.NoTranscript'
 	],
 
 	ui: 'transcript',
@@ -31,21 +31,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	initComponent: function() {
 		this.enableBubble(['presentation-parts-ready', 'no-presentation-parts', 'jump-video-to']);
 
-		//TODO: this needs to be more centralized.
-		if (this.slideStore) {
-			this.buildPresentationTimeLine(this.slideStore, this.transcriptStore);
-			this.hasSlides = true;
-		}
-		if (this.transcript) {
-			this.setupSingleTranscript(this.transcript);
-			this.hasSlides = false;
-		}
-
-        if (!this.slideStore && !this.transcript) {
-            this.setupNoTranscript();
-            this.hasNoPresentationParts = true;
-        }
-
+        this.buildComponents();
 		this.flatPageStore = new NextThought.store.FlatPage();
 		this.fireEvent('add-flatpage-store-context', this);
 
@@ -72,6 +58,40 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			this.fireEvent('sync-height');
 		}, this);
 	},
+
+
+    buildComponents: function(){
+        var items = [];
+        if (this.transcript) {
+            items = [{
+                xtype: 'video-title-component',
+                video: this.videoPlaylist[0]
+            }, {
+                xtype: 'video-transcript',
+                flex: 1,
+                transcript: this.transcript,
+                layout: {
+                    type: 'vbox',
+                    align: 'stretch'
+                }
+            }];
+        }
+        else{
+            items.push({
+                xtype: 'no-video-transcript',
+                flex: 1,
+                video: this.videoPlaylist[0],
+                layout: {
+                    type: 'vbox',
+                    align: 'stretch'
+                }
+            });
+
+            this.hasNoPresentationParts = true;
+        }
+
+        this.items = items;
+    },
 
 
 	beforeRender: function() {
@@ -161,116 +181,6 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		}
 	},
 
-	setupSingleTranscript: function(transcript) {
-		var items = [];
-		items.push({
-			xtype: 'video-title-component',
-			video: this.videoPlaylist[0]
-		});
-		items.push(
-			{
-				xtype: 'video-transcript',
-				flex: 1,
-				transcript: transcript,
-				layout: {
-					type: 'vbox',
-					align: 'stretch'
-				}
-			});
-
-		this.items = items;
-	},
-
-    setupNoTranscript: function() {
-        var items = [];
-        items.push({
-            xtype: 'video-title-component',
-            video: this.videoPlaylist[0]
-        });
-        items.push(
-            {
-                xtype: 'no-video-transcript',
-                flex: 1,
-                layout: {
-                    type: 'vbox',
-                    align: 'stretch'
-                }
-            });
-
-        this.items = items;
-    },
-
-	buildPresentationTimeLine: function(slideStore, transcriptStore) {
-		var items = [], lastVideoId;
-
-		function itemWithId(list, id) {
-			var item = null;
-
-			if (Ext.isEmpty(list) || !id) {
-				return null;
-			}
-
-			Ext.each(list, function(i) {
-				if (i.get('NTIID') === id) {
-					item = i;
-				}
-				return !item;
-			});
-
-			return item;
-		}
-
-		slideStore.each(function(slide) {
-			var m = slide.get('media'),
-				vid = m && m.getAssociatedVideoId(),
-				t = transcriptStore.findRecord('associatedVideoId', vid, 0, false, true, true),
-				start = slide.get('video-start'),
-				end = slide.get('video-end'), videoObj, transcript;
-
-			console.log('slide starts: ', start, ' slide ends: ', end, ' and has transcript for videoid: ', t && t.get('associatedVideoId'));
-
-			if (!lastVideoId || lastVideoId !== vid) {
-				lastVideoId = vid;
-				videoObj = itemWithId(this.videoPlaylist, lastVideoId);
-				if (videoObj) {
-					items.push({
-						xtype: 'video-title-component',
-						video: videoObj
-					});
-				}
-			}
-
-			items.push({
-				xtype: 'slide-component',
-				slide: slide,
-				layout: {
-					type: 'vbox',
-					align: 'stretch'
-				}
-			});
-
-			if (t) {
-				// NOTE: make a copy of the transcript record,
-				// since many slide can have the same transcript but different start and end time.
-				t = t.copy();
-				t.set('desired-time-start', start);
-				t.set('desired-time-end', end);
-
-				items.push({
-					xtype: 'video-transcript',
-					flex: 1,
-					transcript: t,
-					layout: {
-						type: 'vbox',
-						align: 'stretch'
-					}
-				});
-			}
-		}, this);
-
-		this.items = items;
-	},
-
 
 	getTranscriptForVideo: function(id, transcriptStore) {
 		var s = transcriptStore.findRecord('associatedVideoId', id);
@@ -291,16 +201,17 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		this.ownerCt.hasSlides = this.hasSlides;
-
 		this.setupNoteOverlay();
 		this.el.unselectable();
 		this.addMask();
-		//this.maybeLoadData();
 		this.mon(this.el, {
 			scope: this,
 			'mousedown': 'mayBeHideAnnotationView'
 		});
+
+        if(!this.transcript){
+            this.el.addCls('no-transcript-view');
+        }
 
 		this.mon(Ext.get(this.getScrollTarget()), 'scroll', 'onScroll');
 
@@ -397,56 +308,12 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	},
 
 
-	selectInitialSlide: function() {
-		var startOn = this.startOn,
-			s = this.query('slide-component'), me = this,
-			targetImageEl;
-
-
-		Ext.each(s, function(i) {
-			var id = i.slide.get('NTIID'), img;
-			if (id === startOn) {
-				targetImageEl = i.el.down('img.slide');
-			}
-		});
-
-		if (targetImageEl) {
-			console.log('should scroll into view: ', targetImageEl.dom);
-			Ext.defer(function() {
-				targetImageEl.scrollIntoView(me.getTargetEl(), false, {listeners: {}});
-			}, 10, me);
-		}
-	},
-
-
 	highlightAtTime: function(seconds, allowScroll) {
-		var cmps = this.query('video-transcript[transcript]') || [],
-			cmp, tEl, shouldScroll, offset, bottom, me = this;
-			scrollingEl = Ext.get(this.getScrollTarget());
+		var cmp = this.down('video-transcript[transcript]'),
+			scrollingEl = Ext.get(this.getScrollTarget()),
+            offset = scrollingEl.getY(), tEl;
 
-		//if we are in the media view there is only one transcript
-		if (this.up('media-viewer')) {
-			cmp = cmps[0];
-			offset = scrollingEl.getY();
-		} else {
-			offset = 10;
-			cmps.every(function(c) {
-				var t = c.transcript, current,
-					start = t.get('desired-time-start'),
-					end = t.get('desired-time-end');
-
-				if (start <= seconds && end > seconds) {
-					cmp = c;
-					return;
-				}
-
-				return true;
-			});
-		}
-
-		if (!cmp) {
-			return;
-		}
+		if (!cmp) { return; }
 
 		tEl = cmp.getElementAtTime && cmp.getElementAtTime(seconds);
 
@@ -517,31 +384,6 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 	},
 
 
-	selectSlide: function(slide) {
-		if (!slide || !slide.isModel) {
-			console.error('Unexpected argument, given', slide, 'expected a record');
-			return;
-		}
-		var s = this.query('slide-component'),
-			me = this,
-			targetImageEl;
-
-		Ext.each(s, function(i) {
-			var id = i.slide.get('NTIID');
-
-			if (id === slide.getId()) {
-				targetImageEl = i.el.down('img.slide');
-			}
-		});
-
-		if (!this.isMasked && targetImageEl) {
-			Ext.defer(function() {
-				me.scrollToEl(targetImageEl);
-			}, 10, me);
-		}
-	},
-
-
 	syncWithVideo: function(videoState, allowScroll) {
 			if (videoState && videoState.time) {
 				this.highlightAtTime(videoState.time, allowScroll);
@@ -574,7 +416,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 			s.addFilter({
 				id: this.lineFilterId,
 				filterFn: function(r) {
-					console.log('rec: ', r.getId(), ' line: ', r.get('line'));
+//					console.log('rec: ', r.getId(), ' line: ', r.get('line'));
 					return r.get('pline') === line;
 				}
 			});
@@ -610,7 +452,7 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 				floatParent: this,
 				listeners: {
 					itemremove: function() {
-						if (this.getNodes().length === 0) {
+						if (this.store && this.store.count() === 0) {
 							Ext.defer(this.hide, 1, this);
 						}
 					}
@@ -664,11 +506,32 @@ Ext.define('NextThought.view.slidedeck.Transcript', {
 		if (this.annotationView && this.annotationView.store) {
 			//Make sure we clear the line filter, since this store could be bound to another view.
 			this.annotationView.store.removeFilter(this.lineFilterId);
-			this.annotationView.destroy();
 		}
+
+        if(this.annotationView){
+            this.annotationView.destroy();
+        }
+
 		this.callParent(arguments);
 
 	},
+
+
+    beforeDeactivate: function(){
+        if(this.noteOverlay && (this.noteOverlay.fireEvent('beforedeactivate') === false)){
+            return false;
+        }
+
+        if(this.annotationView && this.annotationView.isVisible()){
+            if(this.annotationView.fireEvent('beforedeactivate') === false){
+                return false;
+            }
+
+            this.annotationView.hide();
+        }
+
+        return true;
+    },
 
 
 	mayBeHideAnnotationView: function(e) {
