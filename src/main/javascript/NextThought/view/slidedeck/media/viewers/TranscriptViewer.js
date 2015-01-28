@@ -155,10 +155,14 @@ Ext.define('NextThought.view.slidedeck.media.viewers.TranscriptViewer', {
             targetEl = this.getTargetEl(),
             transcriptWidth = Math.floor(availableWidth * this.transcriptRatio),
             tEl = this.el.down('.content-video-transcript'),
-            marginTop = 0, innerPadding = 20, diff = 0;
+            top = this.videoPlayerEl.getTop() - targetEl.getTop();
 
         targetEl.setStyle('height', availableHeight + 'px');
-        if (tEl) {
+
+        if(!tEl){
+            this.alignResourceViewNextToVideo(videoWidth, top);
+        }
+        else {
             if (transcriptWidth > 80) {
                 transcriptWidth -= 80;
                 tEl.parent('.transcript-view').show();
@@ -169,17 +173,19 @@ Ext.define('NextThought.view.slidedeck.media.viewers.TranscriptViewer', {
             videoWidth += 80;
             targetEl.setStyle('marginLeft', videoWidth + 'px');
         }
-        else{
-            // NOTE: when there is no transcript, align the body next to the video
-            videoWidth += 20;
-            diff = this.videoPlayerEl.getTop() - targetEl.getTop();
-            if(diff > innerPadding){
-                marginTop = this.videoPlayerEl.getTop() - targetEl.getTop();
-                targetEl.setStyle('marginTop', marginTop + 'px');
-            }
-            targetEl.setStyle('marginLeft', videoWidth + 'px');
-        }
+
         console.log('Media viewer resizing');
+    },
+
+
+    alignResourceViewNextToVideo: function(left, top){
+        var padding = 20,
+            targetEl = this.getTargetEl();
+
+        if(top > padding){
+            targetEl.setStyle('marginTop', top + 'px');
+        }
+        targetEl.setStyle('marginLeft', left + padding + 'px');
     },
 
 

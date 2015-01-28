@@ -26,22 +26,49 @@ Ext.define('NextThought.view.slidedeck.media.viewers.VideoViewer',{
                 return defaultWidth;
             }
 
-            newWidth = Math.round((1 - (Math.abs(diff) / screenHeight)) * defaultWidth);
-
+            // Let the available height help determine the appropriate width.
+            newWidth = ((screenHeight -  y - 50) * (1/ratio));
             return Math.max(newWidth, 512);
         }
     },
 
 
-    buildResourceView: function(){},
+    buildResourceView: function(){
+        if(!this.transcript){
+            this.callParent(arguments);
+        }
+    },
+
+
+    afterRender: function(){
+        this.callParent(arguments);
+
+        if(!this.transcript){
+            this.el.addCls('has-gutter-view');
+        }
+
+        if(this.viewerContainer){
+            wait(1000)
+                .then(this.viewerContainer.adjustOnResize.bind(this.viewerContainer));
+        }
+    },
 
 
     adjustOnResize: function(availableHeight, availableWidth){
-        var videoWidth = this.videoPlayerEl.getWidth(), mLeft = 0;
+        if(!availableHeight || !availableWidth){ return; }
 
-        this.getTargetEl().setStyle('height', availableHeight + 'px');
-        mLeft = Math.floor((availableWidth - videoWidth) /2);
-        this.videoPlayerEl.setStyle('marginLeft', mLeft + 'px');
+        var videoWidth = this.videoPlayerEl.getWidth(),
+            mLeft = Math.floor((availableWidth - videoWidth) /2),
+            targetEl= this.getTargetEl(),
+            diff = this.videoPlayerEl.getTop() - targetEl.getTop();
+
+
+        if(!this.transcript){
+            this.getTargetEl().setStyle('height', availableHeight + 'px');
+            this.videoPlayerEl.setStyle('marginLeft', mLeft + 'px');
+
+            this.alignResourceViewNextToVideo(videoWidth + mLeft, diff);
+        }
         console.log('Media viewer resizing');
     }
 });

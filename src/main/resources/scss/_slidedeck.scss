@@ -1374,6 +1374,7 @@ $experimental-support-for-svg: true;
 
         &.full-video-player{
             right: 0 !important;
+            padding-bottom: 70px;
 
             .video-player{
                 position: relative;
@@ -1387,6 +1388,15 @@ $experimental-support-for-svg: true;
 
             .body{
                 display: none;
+            }
+
+            &.has-gutter-view{
+                .video-player{
+                    position: absolute;
+                }
+                .body{
+                    display: block;
+                }
             }
         }
     }

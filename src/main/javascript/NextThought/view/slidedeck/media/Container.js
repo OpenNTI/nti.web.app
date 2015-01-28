@@ -273,6 +273,8 @@ Ext.define('NextThought.view.slidedeck.media.Container',{
 
         wait(1000)
             .then(this.fireEvent.bind(this, 'animation-end'));
+        wait(1001)
+            .then(this.adjustOnResize.bind(this));
 
         return Promise.resolve();
     },
