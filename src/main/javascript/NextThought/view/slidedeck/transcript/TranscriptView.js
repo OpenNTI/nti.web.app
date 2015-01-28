@@ -308,38 +308,12 @@ Ext.define('NextThought.view.slidedeck.transcript.TranscriptView', {
 	},
 
 
-	selectInitialSlide: function() {},
-
-
 	highlightAtTime: function(seconds, allowScroll) {
-		var cmps = this.query('video-transcript[transcript]') || [],
-			cmp, tEl, shouldScroll, offset, bottom, me = this;
-			scrollingEl = Ext.get(this.getScrollTarget());
+		var cmp = this.down('video-transcript[transcript]'),
+			scrollingEl = Ext.get(this.getScrollTarget()),
+            offset = scrollingEl.getY(), tEl;
 
-		//if we are in the media view there is only one transcript
-        // FIXME: What are we doing here exactly?
-		if (this.up('media-viewer')) {
-			cmp = cmps[0];
-			offset = scrollingEl.getY();
-		} else {
-			offset = 10;
-			cmps.every(function(c) {
-				var t = c.transcript, current,
-					start = t.get('desired-time-start'),
-					end = t.get('desired-time-end');
-
-				if (start <= seconds && end > seconds) {
-					cmp = c;
-					return;
-				}
-
-				return true;
-			});
-		}
-
-		if (!cmp) {
-			return;
-		}
+		if (!cmp) { return; }
 
 		tEl = cmp.getElementAtTime && cmp.getElementAtTime(seconds);
 

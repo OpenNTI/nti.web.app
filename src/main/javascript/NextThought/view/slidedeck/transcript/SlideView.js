@@ -128,6 +128,42 @@ Ext.define('NextThought.view.slidedeck.transcript.SlideView', {
                 me.scrollToEl(targetImageEl);
             }, 10, me);
         }
+    },
+
+
+    highlightAtTime: function(seconds, allowScroll) {
+        var cmps = this.query('video-transcript[transcript]') || [],
+            cmp, tEl, offset = 10;
+
+        cmps.every(function(c) {
+            var t = c.transcript, current,
+                start = t.get('desired-time-start'),
+                end = t.get('desired-time-end');
+
+            if (start <= seconds && end > seconds) {
+                cmp = c;
+                return;
+            }
+            return true;
+        });
+
+        if (!cmp) { return; }
+
+        tEl = cmp.getElementAtTime && cmp.getElementAtTime(seconds);
+
+        if (tEl && this.currentTime !== seconds) {
+            if (this.currentCue) {
+                this.currentCue.removeCls('current');
+            }
+
+            tEl.addCls('current');
+            this.currentCue = tEl;
+            this.currentTime = seconds;
+
+            if (allowScroll) {
+                this.scrollToEl(tEl, offset);
+            }
+        }
     }
 
 });

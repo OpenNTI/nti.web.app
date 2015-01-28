@@ -1183,25 +1183,6 @@ $experimental-support-for-svg: true;
 		overflow: hidden;
 		padding: 0 145px;
 
-        .sync-button {
-            position: absolute;
-            top: 15px;
-            z-index: 1;
-            text-align: center;
-
-            span {
-                font: normal 600 0.65em/1 $font;
-                background-color: #2a2a2a;
-                color: $tertiary-grey;
-                cursor: pointer;
-                z-index: 1;
-                text-transform: uppercase;
-                border-radius: 15px;
-                padding: 10px 15px;
-            }
-
-        }
-
 		.heading {
 			$indent: 75px;
 			margin: 50px 0 0 (-$indent);
@@ -1291,6 +1272,25 @@ $experimental-support-for-svg: true;
         position: relative;
         overflow: hidden;
         display: block;
+
+        .sync-button {
+            position: absolute;
+            top: 15px;
+            z-index: 1;
+            text-align: center;
+
+            span {
+                font: normal 600 0.65em/1 $font;
+                background-color: #2a2a2a;
+                color: $tertiary-grey;
+                cursor: pointer;
+                z-index: 1;
+                text-transform: uppercase;
+                border-radius: 15px;
+                padding: 10px 15px;
+            }
+
+        }
 
         &.inactive{
             display: none !important;
