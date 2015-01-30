@@ -1,75 +1,24 @@
+/*globals getHistoryStoreForMimeType*/
+
 describe("UserDataPanel",function(){
-	var testBody, view, noop = function(){};
+	var noteStore;
 
-	beforeEach(function(){
-		testBody = document.createElement("div");
+	beforeEach(function() {
+		noteStore = Ext.create('Ext.data.Store', {
+			fields: [
+				{name: 'firstName', type: 'string'},
+				{name: 'lastName',  type: 'string'},
+				{name: 'age',       type: 'int'},
+				{name: 'eyeColor',  type: 'string'}
+			],
+			storeId: 'noteHighlightStore'
+		});
+	})
 
-		document.body.appendChild(testBody);
+	it('Should call getHistoryStoreForMimeType', function() {
+		var testID = 'noteHighlightStore';
+		expect(NextThought.view.UserDataPanel.getHistoryStoreForMimeType('note')).toEqual(noteStore);
+
 	});
 
-	afterEach(function(){
-		document.body.removeChild(testBody);
-	});
-
-	it('store.findRecord returns null', function(){
-		view = Ext.create("NextThought.view.UserDataPanel",{
-			initComponent: noop,
-			afterRender: noop,
-			mon: noop,
-			mimeType: ['favorite'],
-			store: false,
-			buildStore: noop,
-			getStore: function(){
-				return {
-					isLoading: function(){
-						return false;
-					},
-					findRecord: function(){
-						return null;
-					}
-				}
-			}
-		});
-
-		NextThought.store.PageItem.prototype.proxy.url = "anything else";
-		view.initializeStore();
-		spyOn(view,'removeBookmark');
-		NextThought.model.events.Bus.fireEvent('favorite-changed',{
-			isFavorited: function(){return false;},
-			get: function(){return 'id'}
-		});
-
-		expect(view.removeBookmark).not.toHaveBeenCalled();
-	});
-
-	it('store.findRecord returns something', function(){
-		view = Ext.create("NextThought.view.UserDataPanel",{
-			initComponent: noop,
-			afterRender: noop,
-			mon: noop,
-			mimeType: ['favorite'],
-			buildStore: noop,
-			store: false,
-			getStore: function(){
-				return {
-					isLoading: function(){
-						return false;
-					},
-					findRecord: function(){
-						return "record";
-					}
-				}
-			}
-		});
-
-		NextThought.store.PageItem.prototype.proxy.url = "anything else";
-		view.initializeStore();
-		spyOn(view,'removeBookmark');
-		NextThought.model.events.Bus.fireEvent('favorite-changed',{
-			isFavorited: function(){return false;},
-			get: function(){return 'id'}
-		});
-
-		expect(view.removeBookmark).toHaveBeenCalled();
-	});
 });
