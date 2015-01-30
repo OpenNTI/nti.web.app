@@ -75,7 +75,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 						cn: [
 							{ //inner div for IE
 								//default value (U+2060 -- allow the cursor in to this placeholder div, but don't take any space)
-								html: '&#8288;'
+								html: '\u200B'
 							}
 						]
 					}
@@ -272,7 +272,10 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	afterRender: function() {
-		var aux, objectsControl;
+		var aux, objectsControl,
+            d = this.contentEl.down(" > div"),
+            txt = d && d.getHTML() || "";
+
 		this.callParent(arguments);
 		this.setupEditor();
 
@@ -295,6 +298,10 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		this.maybeEnableSave();
 
+        txt = txt.replace(this.REGEX_INITIAL_CHAR, '\u200B');
+        if(d && txt){
+            d.setHTML(txt);
+        }
 	},
 
 
@@ -540,9 +547,17 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	activate: function() {
-		this.maybeEnableSave();
+        var d = this.contentEl.down("> div");
+
+        this.maybeEnableSave();
 		this.el.addCls('active');
 		this.fireEvent('activated-editor', this);
+
+        // FIXME: this is a bit of a hack to make up for Chrome's (v.40.0+) rendering of zero width character.
+        if(d && (Ext.isEmpty(d.getHTML()) || d.getHTML().length === 1)){
+            d.setHTML('\u200B');
+            this.contentEl.addCls('show-placeholder');
+        }
 	},
 
 
