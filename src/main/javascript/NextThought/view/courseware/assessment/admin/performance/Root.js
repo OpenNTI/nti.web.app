@@ -788,7 +788,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				{text: 'B'},
 				{text: 'C'},
 				{text: 'D'},
-				{text: 'F'}
+				{text: 'F'},
+				{text: 'I'},
+				{text: 'W'}
 			]
 		});
 	},

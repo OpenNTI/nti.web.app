@@ -148,12 +148,14 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 	createGradeMenu: function() {
 		//Wasn't sure if this needs to be translated or not?
 		var items = [
+			{text: '-'},
 			{text: 'A'},
 			{text: 'B'},
 			{text: 'C'},
 			{text: 'D'},
 			{text: 'F'},
-			{text: '-'}
+			{text: 'I'},
+			{text: 'W'}
 		];
 
 		this.gradeMenu = Ext.widget('menu', {
