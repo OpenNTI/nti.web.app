@@ -75,7 +75,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 						cn: [
 							{ //inner div for IE
 								//default value (U+2060 -- allow the cursor in to this placeholder div, but don't take any space)
-								html: '\u200B'
+								html: '\u2060'
 							}
 						]
 					}
@@ -126,8 +126,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	supportedTypingAttributes: ['bold', 'underline', 'italic'],
 
-	//default value (U+2060 -- allow the cursor into the placeholder div, but don't take any space)
-	defaultValue: '&#8288;',
+	//default value (U+200B -- allow the cursor into the placeholder div, but don't take any space)
+	defaultValue: '\u200B',
 
 	REGEX_INITIAL_CHAR: /\u200B|\u2060/ig, //used to identify and strip out
 
@@ -272,8 +272,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	afterRender: function() {
-		var aux, objectsControl,
-            d, txt;
+		var aux, objectsControl;
 
 		this.callParent(arguments);
 		this.setupEditor();
@@ -296,12 +295,6 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		this.mon(Ext.getBody(), 'click', 'hidePopovers');
 
 		this.maybeEnableSave();
-
-        d = this.contentEl && this.contentEl.down(" > div");
-        if(d && (Ext.isEmpty(d.getHTML()) || d.getHTML().length === 1)){
-            d.setHTML('\u200B');
-            this.contentEl.addCls('show-placeholder');
-        }
 	},
 
 
@@ -547,17 +540,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	activate: function() {
-        var d = this.contentEl.down("> div");
-
         this.maybeEnableSave();
 		this.el.addCls('active');
 		this.fireEvent('activated-editor', this);
-
-        // FIXME: this is a bit of a hack to make up for Chrome's (v.40.0+) rendering of zero width character.
-        if(d && (Ext.isEmpty(d.getHTML()) || d.getHTML().length === 1)){
-            d.setHTML('\u200B');
-            this.contentEl.addCls('show-placeholder');
-        }
 	},
 
 
