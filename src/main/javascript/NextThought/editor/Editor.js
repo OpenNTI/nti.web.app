@@ -273,8 +273,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 	afterRender: function() {
 		var aux, objectsControl,
-            d = this.contentEl.down(" > div"),
-            txt = d && d.getHTML() || "";
+            d, txt;
 
 		this.callParent(arguments);
 		this.setupEditor();
@@ -298,9 +297,10 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		this.maybeEnableSave();
 
-        txt = txt.replace(this.REGEX_INITIAL_CHAR, '\u200B');
-        if(d && txt){
-            d.setHTML(txt);
+        d = this.contentEl && this.contentEl.down(" > div");
+        if(d && (Ext.isEmpty(d.getHTML()) || d.getHTML().length === 1)){
+            d.setHTML('\u200B');
+            this.contentEl.addCls('show-placeholder');
         }
 	},
 
