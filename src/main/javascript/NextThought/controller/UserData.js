@@ -1278,7 +1278,7 @@ Ext.define('NextThought.controller.UserData', {
 				}
 			}
 			catch (err) {
-				console.error('Something went teribly wrong... ', err.stack || err.message);
+				console.error('Something went terribly wrong... ', err.stack || err.message);
 			}
 			Ext.callback(callback, this, [success, rec]);
 		};
