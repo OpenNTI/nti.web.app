@@ -241,8 +241,6 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		}
 
 		this.answeredMap[question.getId()][part.id] = count;
-		this.reflectStateChange();
-
 		return status;
 	},
 
