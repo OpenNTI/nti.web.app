@@ -206,14 +206,6 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 	},
 
 
-	transitionToActive: function() {
-		if (this.isSubmitted()) {
-			this.maybeDoReset(true);
-		}
-		this.moveToActive();
-	},
-
-
 	//just use us being in the active state to determine if
 	//we have any answers
 	hasAnyAnswers: function() {
@@ -233,7 +225,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 
 	updateStatus: function(question, part, count, enabling) {
 		if (enabling) {
-			this.transitionToActive();
+			this.moveToActive();
 		}
 
 		if (!Ext.isNumber(count)) {
@@ -241,6 +233,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		}
 
 		this.answeredMap[question.getId()][part.id] = count;
+        this.reflectStateChange();
 		return status;
 	},
 
@@ -274,7 +267,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		if (totalAnsweredParts === 0) {
 			this.moveToInActive();
 		} else {
-			this.transitionToActive();
+			this.moveToActive();
 		}
 
 		if (totalQuestions === 0) {
