@@ -268,7 +268,7 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			return forced ? false : this.notSubmittedAlert();
 		}
 
-		if (!missingAnswers) {
+		if (!missingAnswers&& !this.submission.submitted && !this.isInstructorProspective) {
 			return this.notSubmittedToast();
 		}
 
