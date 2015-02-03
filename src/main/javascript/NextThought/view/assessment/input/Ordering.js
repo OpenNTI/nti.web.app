@@ -281,14 +281,15 @@ Ext.define('NextThought.view.assessment.input.Ordering', {
 		Ext.fly(targetParent).removeCls('target-hover');
 
 		this.swap(a, b);
-
-		//Make sure we enable the submit button, since the user has started dragging.
-		if (this.submissionDisabled) {
-			this.enableSubmission();
-		}
-
 		return true;
 	},
+
+
+    onNodeDropEnd: function(target, dd){
+        if (this.submissionDisabled) {
+            this.enableSubmission();
+        }
+    },
 
 
 	initializeDragZone: function() {
@@ -368,6 +369,7 @@ Ext.define('NextThought.view.assessment.input.Ordering', {
 				}
 				return e.getTarget('.draggable-area', null, true);
 			},
+
 			onNodeEnter: function(target, dd, e, data) {
 				var p = target.up('.ordinal'),
 					scroll = me.reader.getScroll();
@@ -380,21 +382,15 @@ Ext.define('NextThought.view.assessment.input.Ordering', {
 					}
 				}
 			},
+
 			onNodeOut: function(target, dd, e, data) {
 				var p = target.up('.ordinal');
 				if (p) { Ext.fly(p).removeCls('target-hover'); }
 			},
-			onNodeOver: function(target, dd, e, data) {
-				if (target.dom === dd.dragData.sourceEl.dom) {
-					return false;
-				}
 
-				// NOTE: We could also swap onNodeOver however it doesn't feel right.
-		//				Ext.defer(me.swapNodes, 250, me, [target, dd]);
-				return Ext.dd.DropZone.prototype.dropAllowed;
-			},
+            onNodeOver: function(target, dd, e, data) { me.swapNodes(target, dd); },
 
-			onNodeDrop: function(target, dd, e, data) { me.swapNodes(target, dd); }
+			onNodeDrop: me.onNodeDropEnd
 		});
 	}
 });
