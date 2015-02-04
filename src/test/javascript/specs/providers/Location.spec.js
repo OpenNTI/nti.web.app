@@ -7,6 +7,47 @@ describe('Library Store', function() {
 	}
 
 	beforeEach(function() {
+
+		//fake loading courses
+		availableStore = Ext.create('Ext.data.Store', {
+			fields: [
+				{name: 'firstName', type: 'string'},
+				{name: 'lastName',  type: 'string'},
+				{name: 'age',       type: 'int'},
+				{name: 'eyeColor',  type: 'string'}
+			],
+			storeId: 'courseware.AvailableCourses',
+			onceLoaded: function() {
+				return Promise.resolve();
+			}
+		});
+
+		administeredStore = Ext.create('Ext.data.Store', {
+			fields: [
+				{name: 'firstName', type: 'string'},
+				{name: 'lastName',  type: 'string'},
+				{name: 'age',       type: 'int'},
+				{name: 'eyeColor',  type: 'string'}
+			],
+			storeId: 'courseware.AdministeredCourses',
+			onceLoaded: function() {
+				return Promise.resolve();
+			}
+		});
+
+		enrolledStore = Ext.create('Ext.data.Store', {
+			fields: [
+				{name: 'firstName', type: 'string'},
+				{name: 'lastName',  type: 'string'},
+				{name: 'age',       type: 'int'},
+				{name: 'eyeColor',  type: 'string'}
+			],
+			storeId: 'courseware.EnrolledCourses',
+			onceLoaded: function() {
+				return Promise.resolve();
+			}
+		});
+
 		Library.clearListeners(); //don't invoke the UI
 		Library.getStore().removeAll();
 		Library.load();
@@ -22,8 +63,8 @@ describe('Library Store', function() {
 	it('can determine navigation', function() {
 		var n = ContentUtils.getNavigationInfo('tag:nextthought.com,2011-10:test-HTML-book2-1-1');
 		expect(n).toBeTruthy();
-		expect(n.next).toBe('tag:nextthought.com,2011-10:test-HTML-book2-1-2');
-		expect(n.previous).toBe('tag:nextthought.com,2011-10:test-HTML-book2-1-0');
+		expect(n.value.next).toBe('tag:nextthought.com,2011-10:test-HTML-book2-1-2');
+		expect(n.value.previous).toBe('tag:nextthought.com,2011-10:test-HTML-book2-1-0');
 	});
 
 
