@@ -32,11 +32,14 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 				{ tag: 'span', cls: 'name', html: '{section}'}
 			] } },
 			{ tag: 'tpl', 'if': '!this.is(values)', cn: [
-				{ cls: 'item video', cn: [
+				{ cls: 'item video {progress}', cn: [
 					{ cls: 'thumbnail', style: { backgroundImage: 'url({[this.thumb(values.sources)]})'} },
 					{ cls: 'meta', cn: [
 						{ cls: 'title', html: '{title}' },
 						{ cls: 'info', cn: [
+                            {tag: 'tpl', 'if': 'progress', cn: [
+                                {tag: 'span', html: '{progress}'}
+                            ]}
             //							{ tag: 'span', html: '{duration}'},
             //							{ tag: 'span', html: '{comments:plural("Comment")}'}
 						] }
@@ -155,6 +158,11 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 	},
 
 
+    __getCurrentProgress: function(){
+        return this._currentProgress || Promise.reject();
+    },
+
+
 	fillInFromOutline: function(title, navStore) {
 		Library.getVideoIndex(title)
 			.then(this.applyNavigationData.bind(this, navStore));
@@ -248,6 +256,9 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 
 		me.bindStore(me.store);
 
+        me._currentProgress = navStore.courseInstance.getVideoProgress();
+        me.__updateProgress();
+
 		me.fireEvent('store-set', me.store);
 
 		selected = me.store.getById(currentId);
@@ -314,6 +325,8 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 
 				me.bindStore(me.store);
 
+                me.__updateProgress();
+
 				me.fireEvent('store-set', me.store);
 				if (!Ext.isString(selected)) {
 					me.getSelectionModel().select(selected, false, true);
@@ -321,6 +334,23 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 			});
 	},
 	//</editor-fold>
+
+
+    __updateProgress: function(){
+        var currentProgress = this.__getCurrentProgress(), me = this;
+
+        this.__getCurrentProgress()
+            .then(function(progress){
+                me.store.each(function(r){
+                    if(progress.hasBeenViewed(r.get("id"))){
+                        r.set("progress", "viewed");
+                    }
+                });
+            })
+            .fail(function(reason){
+                console.error("Could not load the video progress: " + reason);
+            });
+    },
 
 
 	fireSelection: function() {

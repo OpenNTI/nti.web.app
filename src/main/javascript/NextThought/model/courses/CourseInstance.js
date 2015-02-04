@@ -10,7 +10,8 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		'NextThought.model.assessment.UsersCourseAssignmentSavepoint',
 		'NextThought.store.courseware.Navigation',
 		'NextThought.store.courseware.ToCBasedOutline',
-		'NextThought.store.courseware.Stream'
+		'NextThought.store.courseware.Stream',
+        'NextThought.model.PlaylistItemProgress'
 	],
 
 	mixins: {
@@ -788,5 +789,17 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 					.then(function(response) {
 						return ParseUtils.parseItems(response)[0];
 					});
-	}
+	},
+
+
+    getVideoProgress: function(){
+        var link = this.getLink('VideoProgress');
+
+        if (!link) { return Promise.reject(); }
+
+        return Service.request(link)
+                    .then(function(response) {
+                        return ParseUtils.parseItems(response)[0];
+                    });
+    }
 });
