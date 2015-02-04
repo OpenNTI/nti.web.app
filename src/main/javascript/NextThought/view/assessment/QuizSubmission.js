@@ -115,7 +115,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 
 
 	isSubmitted: function() {
-		return this.state === 'submitted';
+		return this.state === 'submitted' || this.submitted;
 	},
 
 
