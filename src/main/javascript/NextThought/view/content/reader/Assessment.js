@@ -256,7 +256,7 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			isSubmitted = this.submission.isSubmitted(),
 			progressSaved = this.submission.hasProgressSaved();
 
-		if (isSubmitted) {
+		if (isSubmitted || this.isInstructorProspective) {
 			return Promise.resolve();
 		}
 
@@ -268,7 +268,7 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			return forced ? false : this.notSubmittedAlert();
 		}
 
-		if (!missingAnswers && !this.isInstructorProspective) {
+		if (!missingAnswers) {
 			return this.notSubmittedToast();
 		}
 
