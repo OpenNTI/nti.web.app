@@ -37,9 +37,6 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 					{ cls: 'meta', cn: [
 						{ cls: 'title', html: '{title}' },
 						{ cls: 'info', cn: [
-                            {tag: 'tpl', 'if': 'progress', cn: [
-                                {tag: 'span', html: '{progress}'}
-                            ]}
             //							{ tag: 'span', html: '{duration}'},
             //							{ tag: 'span', html: '{comments:plural("Comment")}'}
 						] }
@@ -187,6 +184,13 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 			this.addCls('scrollable');
 		}
 	},
+
+
+    afterRender: function(){
+        this.callParent(arguments);
+
+        this.on('refresh', this.__updateProgress, this);
+    },
 
 
 	getVideoData: function(title) {
@@ -337,18 +341,18 @@ Ext.define('NextThought.view.slidedeck.media.GridView', {
 
 
     __updateProgress: function(){
-        var currentProgress = this.__getCurrentProgress(), me = this;
+        var me = this;
 
         this.__getCurrentProgress()
             .then(function(progress){
                 me.store.each(function(r){
-                    if(progress.hasBeenViewed(r.get("id"))){
+                    if(r.get('NTIID') && progress.hasBeenViewed(r.get('NTIID'))){
                         r.set("progress", "viewed");
                     }
                 });
             })
             .fail(function(reason){
-                console.error("Could not load the video progress: " + reason);
+                console.log("Could not load the video progress: " + reason);
             });
     },
 

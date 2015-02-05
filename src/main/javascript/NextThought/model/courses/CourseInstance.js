@@ -11,7 +11,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		'NextThought.store.courseware.Navigation',
 		'NextThought.store.courseware.ToCBasedOutline',
 		'NextThought.store.courseware.Stream',
-        'NextThought.model.PlaylistItemProgress'
+        'NextThought.model.courses.CourseVideoProgress'
 	],
 
 	mixins: {
@@ -793,6 +793,8 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 
     getVideoProgress: function(){
+        if(!isFeature('video-progress')){ return Promise.reject(); }
+
         var link = this.getLink('VideoProgress');
 
         if (!link) { return Promise.reject(); }

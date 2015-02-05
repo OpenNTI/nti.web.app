@@ -1250,6 +1250,28 @@ $experimental-support-for-svg: true;
 				}
 			}
 
+            &.viewed {
+                @include icon('circle-check-white-small', $top: 7px, $left: auto, $right: 58px);
+
+                &::after {
+                    z-index: 2;
+                }
+
+                &::before {
+                    content: 'viewed';
+                    text-transform: uppercase;
+                    font: normal 500 0.6em/24px "Open Sans",sans-serif;
+                    position: absolute;
+                    top: 5px;
+                    right: 5px;
+                    padding: 0px 10px 0 30px;
+                    color: white;
+                    background-color: $secondary-green;
+                    z-index: 1;
+                    border-radius: 20px;
+                }
+            }
+
 			&.selected,
 			&:hover {
 				.thumbnail {
