@@ -1562,7 +1562,8 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 		var me = this, body,
 			r = isNoteBodyEmpty(),
-			cls = 'disabled';
+			cls = 'disabled',
+            forceSubmissionCheck = false;
 
 		if (r.enableSave && this.saveButtonEl.hasCls(cls)) {
 			this.saveButtonEl.removeCls(cls);
@@ -1572,13 +1573,17 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			this.saveButtonEl.addCls(cls);
 			body = me.getBodyValue();
 
+            // If the body has just been cleared, then we want to force checking submission state.
+            // This will make sure that the question is now considered as non answered.
+            forceSubmissionCheck = true;
+
 			if (body.length <= 1 && Ext.isEmpty(body[0])) {
 				me.setValue('', true);
 			}
 
 		}
 
-		this.fireEvent('enable-save', r.enableSave, silent);
+		this.fireEvent('enable-save', r.enableSave, silent, forceSubmissionCheck);
 
 		this.contentEl[r.clearPlaceholder ? 'removeCls' : 'addCls']('show-placeholder');
 	},

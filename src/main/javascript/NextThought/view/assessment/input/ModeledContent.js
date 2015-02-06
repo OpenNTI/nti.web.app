@@ -49,13 +49,17 @@ Ext.define('NextThought.view.assessment.input.ModeledContent', {
 	 * Enable or disable submission accordingly, if we aren't silent save the progress
 	 * @param  {Boolean} enable is the editor has something in it
 	 * @param  {Boolean} silent if we are setting the value, don't save the progress
+     * @param  {Boolean} forceSubmissionCheck if we want to force checking submission status, thus skipping the early return
 	 */
-	updateState: function(enable, silent) {
+	updateState: function(enable, silent, forceSubmissionCheck) {
 		//Prevent setting enabled/disabled repeatedly.
 		enable = enable || undefined;
 		if (this.submissionDisabled !== enable && !silent) {
 			this.saveProgress();
-			return;
+
+            if(!forceSubmissionCheck){
+                return;
+            }
 		}
 
 		if (enable) { this.enableSubmission(silent); }
