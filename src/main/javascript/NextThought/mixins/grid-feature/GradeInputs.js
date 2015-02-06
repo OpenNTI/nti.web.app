@@ -65,15 +65,16 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 	},
 
 
-	onViewScroll: function() {
+	onViewScroll: function(e) {
 		if (!this.currentFocused) { return; }
 
 		var input = this.currentFocused,
 			v = this.__getGridView(),
 			row = input.up(v.itemSelector),
-			rec = v && v.getRecord(row);
+			rec = v && v.getRecord(row),
+            eventRecord = this.getRecordFromEvent(e);
 
-		if (rec) {
+		if (rec && eventRecord && rec.getId() === eventRecord.getId()) {
 			this.editGrade(rec, input.dom.value);
 		}
 	},
@@ -86,6 +87,9 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 		if (record) {
 			this.editGrade(record, value);
 		}
+
+        // Clear the focused flag
+        delete this.currentFocused;
 	},
 
 
