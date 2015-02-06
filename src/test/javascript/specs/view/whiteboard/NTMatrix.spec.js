@@ -46,10 +46,6 @@ describe('Whiteboard Matrix Utility Class Tests', function() {
 		function getTarget(i) {
 			var n = i * step;
 
-			if (n.toFixed(4) === _2PI.toFixed(4)) {
-				return 0;
-			}
-
 			return n;
 		}
 
@@ -69,7 +65,6 @@ describe('Whiteboard Matrix Utility Class Tests', function() {
 
 			rad = matrix.getRotation(); //should always be (-2PI, 2PI), both -2PI and 2PI should be represented as 0.
 			if (rad < 0) { rad += _2PI; }
-
 			expect(rad).toBeCloseTo(getTarget(steps + 1), 4);
 		}
 	});
@@ -112,10 +107,6 @@ describe('Whiteboard Matrix Utility Class Tests', function() {
 
 		function getTarget(i) {
 			var n = i * step;
-
-			if (n.toFixed(4) === _2PI.toFixed(4)) {
-				return 0;
-			}
 
 			return n;
 		}
