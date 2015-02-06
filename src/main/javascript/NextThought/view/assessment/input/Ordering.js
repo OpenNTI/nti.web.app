@@ -288,7 +288,10 @@ Ext.define('NextThought.view.assessment.input.Ordering', {
     onNodeDropEnd: function(target, dd){
         if (this.submissionDisabled) {
             this.enableSubmission();
+            return;
         }
+
+        this.saveProgress();
     },
 
 
@@ -390,7 +393,7 @@ Ext.define('NextThought.view.assessment.input.Ordering', {
 
             onNodeOver: function(target, dd, e, data) { me.swapNodes(target, dd); },
 
-			onNodeDrop: me.onNodeDropEnd
+			onNodeDrop: me.onNodeDropEnd.bind(me)
 		});
 	}
 });
