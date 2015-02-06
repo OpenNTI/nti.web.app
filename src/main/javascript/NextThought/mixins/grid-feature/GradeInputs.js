@@ -65,16 +65,16 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 	},
 
 
-	onViewScroll: function(e) {
+	onViewScroll: function() {
 		if (!this.currentFocused) { return; }
 
 		var input = this.currentFocused,
 			v = this.__getGridView(),
 			row = input.up(v.itemSelector),
 			rec = v && v.getRecord(row),
-            eventRecord = this.getRecordFromEvent(e);
+            targetRecordId = row && row.dom.getAttribute('data-recordid');
 
-		if (rec && eventRecord && rec.getId() === eventRecord.getId()) {
+		if (rec && rec.getId() === targetRecordId) {
 			this.editGrade(rec, input.dom.value);
 		}
 	},
