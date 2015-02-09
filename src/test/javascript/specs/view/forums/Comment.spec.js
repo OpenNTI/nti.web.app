@@ -33,7 +33,7 @@ describe("Forum comments test",function(){
 		var user = createNewUser('cached',{ 'alias' : 'cachedName'});
 		TUR.cacheUser(user);
 
-		comment = Ext.create('NextThought.view.forums.Comment',{
+		comment = Ext.create('NextThought.view.forums.old.Comment',{
 			record : {
 				'data' : {
 					'UserName' : 'cached',
@@ -57,7 +57,7 @@ describe("Forum comments test",function(){
 	it('User isnt cached',function(){
 		var  user = createNewUser('noncached',{'alias' : 'noncachedName'});
 
-		comment = Ext.create('NextThought.view.forums.Comment',{
+		comment = Ext.create('NextThought.view.forums.old.Comment',{
 			record : {
 				'data' : {
 					'UserName' : 'cached',
