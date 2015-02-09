@@ -154,7 +154,9 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 			}
 
 			store.suspendEvents();
-			Ext.fly(view.getNode(record)).setStyle({opacity: '0.3'});
+            if(view.getNode(record)){
+                Ext.fly(view.getNode(record)).setStyle({opacity: '0.3'});
+            }
 
 			if (!grade) {
 				//this might throw an exception...what should we do?

@@ -133,11 +133,13 @@ Ext.define('NextThought.model.courseware.Grade', {
 						json;
 
 					try {
-						json = JSON.parse(text);
+                        if(!Ext.isEmpty(text)){
+                            json = JSON.parse(text);
 
-						//update the links so we can get the link for the assignment history item
-						//if there is one
-						grade.set('Links', json.Links);
+                            //update the links so we can get the link for the assignment history item
+                            //if there is one
+                            grade.set('Links', json.Links);
+                        }
 					} catch (e) {
 						console.error('failed to parse response text for a saved grade:', e, text);
 					} finally {
