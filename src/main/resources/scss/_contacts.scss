@@ -1199,7 +1199,7 @@ div.contact-buttons {
 								opacity: 0.6;
 							}
 						}
-						&.create {
+						&.create, &.suggest {
 							@include icon('editor-attach', $top: 14px, $left: 10px);
 						}
 
@@ -1210,6 +1210,11 @@ div.contact-buttons {
 							padding-left: 35px;
 							@include icon('rhp-search',$top:11px,$left:9px);
 							&::after{ opacity: 0.6; }
+
+                            &.half{
+                                width: 50%;
+                                float: left;
+                            }
 
 							input {
 								@include experimental(transition, opacity 0.5s);

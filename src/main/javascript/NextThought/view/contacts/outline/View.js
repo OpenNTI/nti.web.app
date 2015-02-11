@@ -23,12 +23,19 @@ Ext.define('NextThought.view.contacts.outline.View', {
 				cls: 'join join-{type} contact-button', html: '{{{NextThought.view.contacts.outline.View.join}}}' } },
 			{ tag: 'tpl', 'if': 'cancreate', cn: {
 				cls: 'create create-{type} contact-button', html: '{{{NextThought.view.contacts.outline.View.create}}}' } },
-			{ tag: 'tpl', 'if': 'hasSearch', cn: {
-				cls: 'contact-button search', html: '{{{NextThought.view.contacts.outline.View.search}}}', cn: [
+            { tag: 'tpl', 'if': 'isContact && suggestedContactsLabel', cn: [
+                {cls: 'contact-button search half', html: '{{{NextThought.view.contacts.outline.View.search}}}', cn: [
+                    {tag: 'input', type: 'text'},
+                    {cls: 'clear', style: {display: 'none'}}
+                ]},
+                {cls: 'contact-button suggest', html:'{suggestedContactsLabel}'}
+            ]},
+			{ tag: 'tpl', 'if': 'isContact', cn: [
+                {cls: 'contact-button search', html: '{{{NextThought.view.contacts.outline.View.search}}}', cn: [
 					{tag: 'input', type: 'text'},
 					{cls: 'clear', style: {display: 'none'}}
 				]}
-			}
+            ]}
 		]}}
 	]),
 
@@ -86,7 +93,8 @@ Ext.define('NextThought.view.contacts.outline.View', {
 			type: this.subType,
 			cancreate: (this.subType !== 'contact' && (this.subType !== 'group' || Service.canCreateDynamicGroups())),
 			canjoin: this.subType === 'group',
-			hasSearch: this.subType === 'contact'
+            isContact: this.subType === 'contact',
+            suggestedContactsLabel: isFeature('suggest-contacts') && this.subType === 'contact' && "Suggested Contacts"
 		});
 
 		this.on({

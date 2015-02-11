@@ -26,6 +26,8 @@ Ext.define('NextThought.controller.Account', {
 		'account.contacts.createlist.Window',
 		'account.contacts.View',
 		'account.code.Window',
+        'contacts.suggestions.Main',
+        'contacts.suggestions.Window',
 		'profiles.Panel'
 	],
 
@@ -369,6 +371,10 @@ Ext.define('NextThought.controller.Account', {
 			this.createListWin = Ext.widget('createlist-window');
 			this.createListWin.show();
 		}
+        else if (flyBtn.hasCls('suggest')) {
+            this.suggestContactsWin = Ext.widget('suggest-contacts-window');
+            this.suggestContactsWin.show();
+        }
 		else {
 			console.error('Group button clicked but I do not know what to do', btn);
 		}
