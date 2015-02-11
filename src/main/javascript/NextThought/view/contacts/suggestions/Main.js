@@ -43,7 +43,9 @@ Ext.define('NextThought.view.contacts.suggestions.Main',{
                     ]
                 },
                 {
-                    cls: 'add-to-contacts', html: '{{{NextThought.view.contacts.Card.add}}}'
+                    cls: 'add-to-contacts', cn: [
+                        {tag: 'a', cls: 'button add-contact', role: 'button', html: 'Add'}
+                    ]
                 }
             ]
         }

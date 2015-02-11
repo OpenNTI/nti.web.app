@@ -336,6 +336,7 @@ NTIStrings['NextThought.view.contacts.outline.View.join'] = 'Join {type:capitali
 NTIStrings['NextThought.view.contacts.outline.View.create'] = 'Create {type:capitalize}';
 NTIStrings['NextThought.view.contacts.outline.View.search'] = 'Search';
 NTIStrings['NextThought.view.contacts.outline.search.View.empty'] = 'No users found.';
+NTIStrings['NextThought.view.contacts.suggestions.window.title'] = "Add Peers to Contacts";
 NTIStrings['NextThought.view.content.Navigation.toc'] = 'Table of Contents';
 NTIStrings['NextThought.view.content.Navigation.select-chapter'] = 'Select a chapter';
 NTIStrings['NextThought.view.content.Navigation.select-section'] = 'Select a section';

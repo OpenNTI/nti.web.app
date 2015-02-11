@@ -5,7 +5,7 @@ Ext.define('NextThought.view.contacts.suggestions.Window', {
         'NextThought.view.contacts.suggestions.Main'
     ],
 
-    cls: 'suggest-window codecreation-window',
+    cls: 'suggest-window',
     ui: 'nt-window',
     minimizable: false,
     constrain: true,
@@ -15,17 +15,40 @@ Ext.define('NextThought.view.contacts.suggestions.Window', {
     dialog: true,
     closeAction: 'destroy',
 
-    width: 640,
+    width: 720,
 
-    layout: {
-        type: 'vbox',
-        align: 'stretch'
+    childEls: ['body'],
+    getTargetEl: function() {
+        return this.body;
     },
 
-    items:[
-        {xtype: 'component', renderTpl: Ext.DomHelper.markup([
+    componentLayout: 'natural',
+    layout: 'auto',
+
+
+    getDockedItems: function() {
+        return [];
+    },
+
+    renderTpl: Ext.DomHelper.markup([
+        {cls: 'header', cn: [
             {cls: 'title', html: '{{{NextThought.view.contacts.suggestions.window.title}}}'}
-        ])},
+        ]},
+        {id: '{id}-body', cls: 'container-body scrollable', html: '{%this.renderContainer(out,values)%}'},
+        {cls: 'footer', cn: [
+            {tag: 'a', cls: 'button confirm', role: 'button', html: 'Add Contacts'},
+            {tag: 'a', cls: 'button cancel', role: 'button', html: 'Cancel'},
+        ]}
+    ]),
+
+
+    renderSelectors:{
+        cancelEl: ".footer .cancel",
+        confirmEl: ".footer .confirm"
+    },
+
+
+    items:[
         {xtype: 'suggest-contacts-view'}
     ]
 });
