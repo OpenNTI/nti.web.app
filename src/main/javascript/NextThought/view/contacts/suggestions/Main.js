@@ -6,7 +6,7 @@ Ext.define('NextThought.view.contacts.suggestions.Main',{
     overItemCls: 'over',
     itemSelector: '.contact-card',
 
-    tpl: Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
+    tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
         {
             cls: 'contact-card',
             cn: [
@@ -33,8 +33,7 @@ Ext.define('NextThought.view.contacts.suggestions.Main',{
                                     { tag: 'span', html: '{affiliation}', 'data-field': 'affiliation' }
                                 ]
                                 }
-                            ]
-                            }
+                            ]}
                         ]
                         },
                         { tag: 'tpl', 'if': '!hideProfile && location', cn: [
@@ -44,25 +43,30 @@ Ext.define('NextThought.view.contacts.suggestions.Main',{
                 },
                 {
                     cls: 'add-to-contacts', cn: [
-                        {tag: 'a', cls: 'button add-contact', role: 'button', html: 'Add'}
+                        {tag: 'tpl', 'if': 'this.isContact(values)', cn:[
+                            {tag: 'a', cls: 'button remove-contact', role: 'button', html: 'Remove'}
+                        ]},
+                        {tag: 'tpl', 'if': '!this.isContact(values)', cn:[
+                            {tag: 'a', cls: 'button add-contact', role: 'button', html: 'Add'}
+                        ]}
                     ]
                 }
             ]
         }
-    ]}),
+    ]}), {
+        isContact: function(values){
+            var a = Ext.getStore('all-contacts-store');
+            return a && a.contains(values.Username);
+        }
+    }),
 
-
-    hideProfile: false,
-
-
-    beforeRender: function(){
-        this.callParent(arguments);
+    renderSelectors: {
+        contactActionEl: ".add-to-contacts a"
     },
 
 
     initComponent: function(){
         this.callParent(arguments);
-
         this.buildStore();
     },
 
@@ -110,7 +114,7 @@ Ext.define('NextThought.view.contacts.suggestions.Main',{
 
 
     __fillIn: function(courseClassmates){
-        var peersObj = {}, peers = [];
+        var peersObj = {}, peers = [], me = this;
 
         Ext.each(courseClassmates, function(m){
             for(var k in m){
@@ -134,8 +138,51 @@ Ext.define('NextThought.view.contacts.suggestions.Main',{
         });
 
         this.bindStore(this.store);
+        this.on('itemclick', 'itemClicked', this);
+    },
+
+
+    itemClicked: function(view, record, item, index, e){
+        if (Ext.fly(e.getTarget()).hasCls('add-contact')){
+            this.addContact(view, record, item);
+        }
+        else if (Ext.fly(e.getTarget()).hasCls('remove-contact')){
+            this.removeContact(view, record, item);
+        }
+    },
+
+
+    addContact: function(view, record, item){
+        var u = record && record.get('Username'), me = this;
+
+        function finish(){
+            me.refreshNode(me.store.indexOf(record));
+        }
+
+        if(u){
+            this.fireEvent('add-contact', u, null, finish);
+        }
+    },
+
+
+    removeContact: function(view, record, item){
+        var u = record && record.get('Username'), me = this;
+
+        function finish(){
+            me.refreshNode(me.store.indexOf(record));
+        }
+
+        if(u){
+            this.fireEvent('remove-contact', null, record.get('Username'), finish);
+        }
+    },
+
+
+    addAllContacts: function(finish){
+        var records = this.store && this.store.getRange();
+        if (records){
+            this.fireEvent('add-contacts', records, finish);
+        }
     }
-
-
 
 });

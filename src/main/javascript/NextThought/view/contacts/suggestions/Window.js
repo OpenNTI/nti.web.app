@@ -50,5 +50,26 @@ Ext.define('NextThought.view.contacts.suggestions.Window', {
 
     items:[
         {xtype: 'suggest-contacts-view'}
-    ]
+    ],
+
+
+    afterRender: function(){
+        this.callParent(arguments);
+
+        this.mon(this.cancelEl, 'click', 'close', this);
+        this.mon(this.confirmEl, 'click', 'addContactsAndClose', this);
+    },
+
+
+    addContactsAndClose: function(e){
+        var view = this.down('suggest-contacts-view'), me = this;
+
+        function finish(){
+            me.close();
+        }
+
+        if(view.addAllContacts){
+            view.addAllContacts(finish);
+        }
+    }
 });

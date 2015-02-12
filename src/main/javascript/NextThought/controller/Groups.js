@@ -316,7 +316,7 @@ Ext.define('NextThought.controller.Groups', {
 		//TODO simplify this further
 		if (!contacts.hasFriend(username)) {
 			//add one just in case the contacts group is already in the list...
-			if (groupList.length) {
+			if (groupList && groupList.length) {
 				tracker.push({});
 			}
 			oldContacts = contacts.get('friends').slice();

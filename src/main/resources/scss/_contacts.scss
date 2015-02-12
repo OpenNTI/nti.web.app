@@ -780,13 +780,8 @@ div.contact-buttons {
 }
 
 .suggest-window{
-    @extend .nti-window;
-    @include reset-window-border-radius(3px);
-    box-shadow: 0 0 50px 5px rgba(0, 0, 0, 0.3), 0 0 0 110px transparent;
-
-    background: $quad-grey;
-
-    .x-mask { background: rgba(255,255,255,0.9); }
+    box-shadow: 0 0 5px 0 rgba(0,0,0,0.35);
+    background-color: white;
 
     .header{
         position: relative;
@@ -857,11 +852,19 @@ div.contact-buttons {
                     color: $secondary-grey;
                     background: $quad-grey;
                     border-radius: 5px;
-                    border-color: $tertiary-grey;
+                    border: 1px solid $tertiary-grey-alt;
+                    cursor: pointer;
 
                     &:hover{
                         background: $secondary-green;
                         color: #ffffff;
+                        border: none;
+                    }
+
+                    &.remove-contact{
+                        color: #3fb3f6;
+                        background: none;
+                        border: none;
                     }
                 }
             }
@@ -871,16 +874,27 @@ div.contact-buttons {
     .footer{
         position: relative;
         color: $tertiary-grey;
-        box-shadow: inset 0 -1px 0 0 white;
-        height: 38px;
-        border-top: 1px solid $quad-grey;
+        height: 40px;
+
+        &:after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            height: 10px;
+            left: 0;
+            right: 0;
+            background-color: rgba(0,0,0,0.35);
+            box-shadow: 0 0 5px 0 rgba(0,0,0,0.35);
+            clip: rect(10px, auto, 20px, auto);
+            border-radius: 335em / 2em;
+        }
 
 
         a.button {
             cursor: pointer;
             display: inline-block;
-            height: 38px;
-            line-height: 38px;
+            height: 40px;
+            line-height: 40px;
             font-size: 14px;
             text-align: center;
             color: $secondary-grey;
