@@ -258,7 +258,7 @@ describe('Preference Manager Tests', function() {
 		});
 
 		it('Saving a field calls Ext.Ajax.request with the correct values', function() {
-			var flag = false, result;
+			var flag = false, result, url, method, jsonData;
 
 			PreferenceManager.getPreference('ChatPresence', function(value) {
 				result = value;
@@ -273,13 +273,19 @@ describe('Preference Manager Tests', function() {
 				var expected = {
 					url: result.getResourceUrl(),
 					method: 'PUT',
-					jsonData: result.asJSON()
+					jsonData: result.asJSON(),
 				};
 
-				spyOn(Ext.Ajax, 'request');
-				result.save();
+				spyOn(Ext.Ajax, 'request').andCallFake(function(obj) {
+						url = obj.url;
+						method = obj.method;
+						jsonData = obj.jsonData;
+				});
 
-				expect(Ext.Ajax.request).toHaveBeenCalledWith(expected);
+				result.save();
+				expect(url).toBe(expected.url);
+				expect(method).toBe(expected.method);
+				expect(jsonData).toEqual(expected.jsonData);
 			});
 		});
 
