@@ -261,7 +261,20 @@ Ext.define('NextThought.model.User', {
 			name: this.getName(),
 			verb: ((/circled/i).test(type) ? ' added you as a contact.' : '?')
 		});
-	}
+	},
+
+
+    getSuggestContacts: function(){
+        if(!isFeature("suggest-contacts") || !this.hasLink('SuggestContacts')) { return Promise.reject(); }
+
+        var link = this.getLink('SuggestContacts');
+
+        return Service.request(link)
+            .then(function(response) {
+                return ParseUtils.parseItems(response)[0];
+            });
+    }
+
 
 }, function() {
 	window.User = this;

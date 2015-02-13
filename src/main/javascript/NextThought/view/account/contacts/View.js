@@ -104,8 +104,18 @@ Ext.define('NextThought.view.account.contacts.View', {
 
 
 	onClickRaw: function(e) {
+        var suggestContactLink, me = this;
 		if (e.getTarget('a.button')) {
-			this.mon(Ext.widget('oobe-contact-window'), 'destroy', 'refresh');
+            $AppConfig.userObject.getSuggestContacts()
+                .then(function(items){
+                    // TODO: start using GlobalSuggestContacts data when available
+                    me.suggestContactsWin = Ext.widget('suggest-contacts-window');
+                    me.suggestContactsWin.show();
+                    me.mon(me.suggestContactsWin, 'destroy', 'refresh');
+                })
+                .fail(function(){
+                    me.mon(Ext.widget('oobe-contact-window'), 'destroy', 'refresh');
+                });
 		}
 	},
 
