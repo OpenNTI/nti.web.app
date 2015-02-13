@@ -37,7 +37,7 @@ Ext.define('NextThought.view.contacts.suggestions.Window', {
         {id: '{id}-body', cls: 'container-body scrollable', html: '{%this.renderContainer(out,values)%}'},
         {cls: 'footer', cn: [
             {tag: 'a', cls: 'button confirm', role: 'button', html: 'Add Contacts'},
-            {tag: 'a', cls: 'button cancel', role: 'button', html: 'Cancel'},
+            {tag: 'a', cls: 'button cancel', role: 'button', html: 'Cancel'}
         ]}
     ]),
 
