@@ -139,6 +139,23 @@ Ext.define('NextThought.view.contacts.suggestions.Main',{
 
         this.bindStore(this.store);
         this.on('itemclick', 'itemClicked', this);
+        this.__updateCount();
+    },
+
+
+    __updateCount: function(){
+        var a = Ext.getStore('all-contacts-store'), isContact, count = 0;
+
+        this.store.each(function(rec){
+            isContact = a && a.contains(rec.get("Username"));
+            if(!isContact){
+                count++;
+            }
+        });
+
+        if(this.ownerCt && this.ownerCt.updateContactsCount){
+            this.ownerCt.updateContactsCount(count);
+        }
     },
 
 
@@ -149,6 +166,8 @@ Ext.define('NextThought.view.contacts.suggestions.Main',{
         else if (Ext.fly(e.getTarget()).hasCls('remove-contact')){
             this.removeContact(view, record, item);
         }
+
+        this.__updateCount();
     },
 
 
@@ -162,6 +181,8 @@ Ext.define('NextThought.view.contacts.suggestions.Main',{
         if(u){
             this.fireEvent('add-contact', u, null, finish);
         }
+
+        this.__updateCount();
     },
 
 

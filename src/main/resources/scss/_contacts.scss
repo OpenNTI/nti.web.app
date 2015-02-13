@@ -906,6 +906,13 @@ div.contact-buttons {
                 color: #ffffff;
                 background: $primary-blue;
             }
+
+            &.disabled{
+                cursor: default;
+                border: 1px solid #d0d0d0;
+                background: rgba(184,184,184,0.5);
+                color: rgba(255,255,255,0.7);
+            }
         }
     }
 }

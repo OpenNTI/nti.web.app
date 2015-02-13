@@ -48,9 +48,13 @@ Ext.define('NextThought.view.contacts.suggestions.Window', {
     },
 
 
-    items:[
-        {xtype: 'suggest-contacts-view'}
-    ],
+    items:[],
+
+
+    initComponent: function(){
+        this.callParent(arguments);
+        this.add({xtype: 'suggest-contacts-view', ownerCt: this});
+    },
 
 
     afterRender: function(){
@@ -70,6 +74,17 @@ Ext.define('NextThought.view.contacts.suggestions.Window', {
 
         if(view.addAllContacts){
             view.addAllContacts(finish);
+        }
+    },
+
+
+    updateContactsCount: function(count){
+        if(count > 0){
+            this.confirmEl.setHTML("Add "+ count + " Contacts");
+        }
+        else{
+            // FIXME: should we disable the button instead?
+            this.confirmEl.setHTML("Done");
         }
     }
 });
