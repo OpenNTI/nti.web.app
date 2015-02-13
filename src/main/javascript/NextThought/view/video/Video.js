@@ -9,6 +9,7 @@ Ext.define('NextThought.view.video.Video', {
 		instanceTracking: 'NextThought.mixins.InstanceTracking'
 	},
 
+
 	requires: [
 		'NextThought.util.Globals',
 		'NextThought.util.media.*',
@@ -26,15 +27,6 @@ Ext.define('NextThought.view.video.Video', {
 	},
 
 	ASPECT_RATIO: 0.5625,
-
-	states: {
-		UNSTARTED: -1,
-		ENDED: 0,
-		PLAYING: 1,
-		PAUSED: 2,
-		BUFFERING: 3,
-		CUED: 5
-	},
 
 	loadFirstEntry: true,
 	playerWidth: 640,
@@ -77,6 +69,15 @@ Ext.define('NextThought.view.video.Video', {
 
 
 	statics: {
+
+		states: {
+			UNSTARTED: -1,
+			ENDED: 0,
+			PLAYING: 1,
+			PAUSED: 2,
+			BUFFERING: 3,
+			CUED: 5
+		},
 
 		urlToPlaylist: function(url) {
 			var item = NextThought.model.PlaylistItem.fromURL(url);
@@ -442,7 +443,7 @@ Ext.define('NextThought.view.video.Video', {
 
 			//send a seek event saying the skipped over this part of the video
 			//if the player is still ready and not reset
-			if (state.state !== this.states.UNSTARTED) {
+			if (state.state !== this.self.states.UNSTARTED) {
 				AnalyticsUtil.getResourceTimer(id, {
 					type: 'video-skip',
 					course: bundle,
@@ -456,7 +457,7 @@ Ext.define('NextThought.view.video.Video', {
 		}
 
 		//Not an else if so a new timer will start when the other one ends
-		if (!this.hasWatchEvent && ((state.state === this.states.PLAYING) || (state.state === this.states.BUFFERING))) {
+		if (!this.hasWatchEvent && ((state.state === this.self.states.PLAYING) || (state.state === this.self.states.BUFFERING))) {
 			AnalyticsUtil.getResourceTimer(id, {
 				type: 'video-watch',
 				with_transcript: hasTranscript,

@@ -28,7 +28,7 @@ Ext.define('NextThought.util.media.VimeoPlayer', {
 		this.parentEl = Ext.get(config.el);
 		this.id = config.parentId + '-vimeo-' + this.self.kind;
 		this.playerId = this.id + '-player';
-		this.playerState = NextThought.Video.UNSTARTED;
+		this.playerState = NextThought.Video.states.UNSTARTED;
 		this.player = null;
 		this.width = config.width;
 		this.height = config.height;
@@ -183,7 +183,7 @@ Ext.define('NextThought.util.media.VimeoPlayer', {
 
 
 	onPlay: function() {
-		this.playerState = NextThought.Video.PLAYING;
+		this.playerState = NextThought.Video.states.PLAYING;
 		this.notify('play');
 	},
 
@@ -194,7 +194,7 @@ Ext.define('NextThought.util.media.VimeoPlayer', {
 
 
 	onPause: function() {
-		this.playerState = NextThought.Video.PAUSED;
+		this.playerState = NextThought.Video.states.PAUSED;
 		this.notify('pause');
 	},
 
@@ -234,13 +234,13 @@ Ext.define('NextThought.util.media.VimeoPlayer', {
 
 	stop: function() {
 		this.currentPosition = 0;
-		this.playerState = NextThought.Video.UNSTARTED;
+		this.playerState = NextThought.Video.states.UNSTARTED;
 		this.postMessage('unload');
 	},
 
 
 	onFinish: function() {
-		this.playerState = NextThought.Video.ENDED;
+		this.playerState = NextThought.Video.states.ENDED;
 		this.notify('ended');
 	},
 
@@ -254,7 +254,7 @@ Ext.define('NextThought.util.media.VimeoPlayer', {
 
 
 	cleanPlayer: function() {
-		this.playerState = NextThought.Video.UNSTARTED;
+		this.playerState = NextThought.Video.states.UNSTARTED;
 		delete this.playerReadyForCommands;
 		this.isReady = false;
 		if (this.player) {
