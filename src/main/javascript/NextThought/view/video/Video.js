@@ -68,8 +68,7 @@ Ext.define('NextThought.view.video.Video', {
 	},
 
 
-	statics: {
-
+	inheritableStatics: {
 		states: {
 			UNSTARTED: -1,
 			ENDED: 0,
@@ -77,8 +76,11 @@ Ext.define('NextThought.view.video.Video', {
 			PAUSED: 2,
 			BUFFERING: 3,
 			CUED: 5
-		},
+		}
+	},
 
+
+	statics: {
 		urlToPlaylist: function(url) {
 			var item = NextThought.model.PlaylistItem.fromURL(url);
 			return item && [item];
