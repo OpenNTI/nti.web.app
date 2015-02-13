@@ -766,6 +766,8 @@ function() {
 		var re = /(__cov_\$[^\[]+\['\d+'\])(\[\d+\])?(\+\+)[;,]\s*/ig,//istanbul's (code coverage) instrumentation pattern
 			code = worker.toString();
 
+		if (Ext.isIE11p) { throw 'Webworkers are broken in IE11'; }
+
 		//unit tests' coverage reporter doesn't instrument the generated
 		// code correctly and causes code execution to halt. So, strip it out for now.
 		code = code.replace(re, '');
