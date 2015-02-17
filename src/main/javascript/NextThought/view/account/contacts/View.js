@@ -2,7 +2,8 @@ Ext.define('NextThought.view.account.contacts.View', {
 	extend: 'Ext.view.View',
 	alias: 'widget.contacts-view',
 	requires: [
-		'NextThought.view.account.contacts.GroupChat'
+		'NextThought.view.account.contacts.GroupChat',
+        'NextThought.view.contacts.suggestions.Window'
 	],
 
 	title: 'Chat',
@@ -104,12 +105,19 @@ Ext.define('NextThought.view.account.contacts.View', {
 
 
 	onClickRaw: function(e) {
-        var suggestContactLink, me = this;
+        var suggestContactLink, me = this, peersStore;
+
 		if (e.getTarget('a.button')) {
             $AppConfig.userObject.getSuggestContacts()
                 .then(function(items){
-                    // TODO: start using GlobalSuggestContacts data when available
-                    me.suggestContactsWin = Ext.widget('suggest-contacts-window');
+                    if(Ext.isEmpty(items)){ return Promise.reject(); }
+
+                    peersStore = new Ext.data.Store({
+                        model: NextThought.model.User,
+                        proxy: 'memory',
+                        data: items
+                    });
+                    me.suggestContactsWin = Ext.widget('suggest-contacts-window', {store: peersStore});
                     me.suggestContactsWin.show();
                     me.mon(me.suggestContactsWin, 'destroy', 'refresh');
                 })

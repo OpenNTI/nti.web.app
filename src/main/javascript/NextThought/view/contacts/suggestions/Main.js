@@ -67,7 +67,12 @@ Ext.define('NextThought.view.contacts.suggestions.Main',{
 
     initComponent: function(){
         this.callParent(arguments);
-        this.buildStore();
+        if(!this.suggestedContactStore){
+            this.buildStore();
+        }
+        else {
+            this.bindStore(this.suggestedContactStore);
+        }
     },
 
 
@@ -138,6 +143,11 @@ Ext.define('NextThought.view.contacts.suggestions.Main',{
         });
 
         this.bindStore(this.store);
+    },
+
+
+    afterRender: function(){
+        this.callParent(arguments);
         this.on('itemclick', 'itemClicked', this);
         this.__updateCount();
     },

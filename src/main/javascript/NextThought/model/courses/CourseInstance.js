@@ -803,5 +803,18 @@ Ext.define('NextThought.model.courses.CourseInstance', {
                     .then(function(response) {
                         return ParseUtils.parseItems(response)[0];
                     });
+    },
+
+
+    getSuggestContacts: function(){
+        if(!isFeature("suggest-contacts") || !this.hasLink('Classmates')) { return Promise.reject(); }
+
+        var link = this.getLink('Classmates');
+
+        return Service.request(link)
+            .then(function(response) {
+                var parent = JSON.parse(response);
+                return ParseUtils.parseItems(parent.Items);
+            });
     }
 });

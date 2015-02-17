@@ -265,13 +265,14 @@ Ext.define('NextThought.model.User', {
 
 
     getSuggestContacts: function(){
-        if(!isFeature("suggest-contacts") || !this.hasLink('SuggestContacts')) { return Promise.reject(); }
+        if(!isFeature("suggest-contacts") || !(this.hasLink('SuggestContacts') || this.hasLink('Classmates'))) { return Promise.reject(); }
 
-        var link = this.getLink('SuggestContacts');
+        var link = this.getLink('SuggestContacts') || this.getLink('Classmates');
 
         return Service.request(link)
             .then(function(response) {
-                return ParseUtils.parseItems(response)[0];
+                var parent = JSON.parse(response);
+                return ParseUtils.parseItems(parent.Items);
             });
     }
 

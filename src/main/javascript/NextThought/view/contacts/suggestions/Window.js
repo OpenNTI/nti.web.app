@@ -53,7 +53,7 @@ Ext.define('NextThought.view.contacts.suggestions.Window', {
 
     initComponent: function(){
         this.callParent(arguments);
-        this.add({xtype: 'suggest-contacts-view', ownerCt: this});
+        this.add({xtype: 'suggest-contacts-view', ownerCt: this, suggestedContactStore: this.store});
     },
 
 

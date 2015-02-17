@@ -3,7 +3,8 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 	alias: 'widget.course-enrollment-details',
 
 	requires: [
-		'NextThought.view.courseware.info.Panel'
+		'NextThought.view.courseware.info.Panel',
+        'NextThought.view.contacts.suggestions.Window'
 	],
 
 	cls: 'course-details',
@@ -54,6 +55,29 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			]}
 		]}
 	])),
+
+
+    enrollmentConfirmationTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+        {cls: 'complete-enrollment-layer', cn: [
+            {cls: 'congrats-container', cn: [
+                {cls: 'congrats', cn:[
+                    {cls: 'title', html: '{{{NextThought.view.courseware.enrollment.Details.Congrats}}}, {firstName}!'},
+                    {cls: 'sub', html: "{{{NextThought.view.courseware.enrollment.Details.CongratsSubtitle}}}"},
+                    {cls: 'actions', cn: [
+                        {tag: 'a', html: '{{{NextThought.view.courseware.enrollment.Details.CongratsAccountCreated}}}'},
+                        {tag: 'a', html: '{{{NextThought.view.courseware.enrollment.Details.CongratsCourseCreated}}}'},
+                        {tag: 'a', cls: 'button suggest-contacts', html: '{{{NextThought.view.courseware.enrollment.Details.ConnectWithPeers}}}'}
+                    ]}
+                ]},
+                {cls: 'add-selection', cn: [
+                    {tag: 'span', html: '{{{NextThought.view.courseware.enrollment.Details.NeedToAddCourses}}}'},
+                    {tag: 'span', cn: [
+                        {tag: 'a', cls: 'button add-course', html: '{{{NextThought.view.courseware.enrollment.Details.AddSelectionButton}}}'}
+                    ]}
+                ]}
+            ]}
+        ]}
+    ])),
 
 
 	renderTpl: Ext.DomHelper.markup([
@@ -399,6 +423,23 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 	},
 
 
+    __buildCongratsCard: function(state){
+        var data = {
+                base: state && state.base,
+                firstName: Ext.String.capitalize($AppConfig.userObject.get("FirstName") || "")
+            },
+            me = this, congratsEl;
+
+        me.el.setScrollTop(0);
+        me.el.addCls('has-overlay');
+        me.enrollmentConfirmationTpl.append(me.el, data);
+        congratsEl = me.el.down('.complete-enrollment-layer');
+        if(congratsEl){
+            me.mon(congratsEl, 'click', 'congratsLayerClicked', me);
+        }
+    },
+
+
 	__showError: function() {
 
 	},
@@ -533,6 +574,16 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			}});
 	},
 
+
+    clearMessage: function(){
+        var win = this.up('[closeMsg]');
+
+        if(win){
+            win.closeMsg();
+            Ext.destroy(this.__showMessageClickMonitor);
+        }
+    },
+
 	/**
 	 * Handles a click on the enrollment card and calls the appropriate handler
 	 * @param  {Event} e the click event
@@ -656,7 +707,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 		var me = this, title,
 			video = me.details.getVideo(),
 			name = button.getAttribute('data-name'),
-			option = me.enrollmentOptions[name], action;
+			option = me.enrollmentOptions[name], action, course;
 
 		if (!option) {
 			console.error('No enrollment option with that name', button);
@@ -745,6 +796,13 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			if (action) {
 				me.addMask();
 				action
+                    .then(function(changed){
+                        // TODO: We're not ready to show this yet.
+                        if(isFeature('suggest-contacts')){
+                            me.__buildCongratsCard(me.state);
+                        }
+                        return changed;
+                    })
 					.then(function(changed) {
 						me.fireEvent('enrolled-action', true);
 						me.msgClickHandler = function() {
@@ -763,6 +821,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 								});
 						};
 
+                        me.clearMessage();
 						done(true, changed);
 					})
 					.fail(function(reason) {
@@ -799,5 +858,47 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 		if (option) {
 			option.doEnrollment(this);
 		}
-	}
+	},
+
+
+    congratsLayerClicked: function(el){
+        var suggestEl = el.getTarget('.suggest-contacts'),
+            nextSelectionEl = el.getTarget(".add-course");
+
+        if(suggestEl){
+            this.suggestContacts();
+        }
+        if(nextSelectionEl){
+            //TODO
+        }
+    },
+
+
+    suggestContacts: function(){
+        var me = this, peersStore;
+
+        CourseWareUtils.findCourseBy(me.course.findByMyCourseInstance())
+            .then(function(course){
+                var instance = course.get("CourseInstance");
+
+                if(instance && instance.getSuggestContacts){
+                    instance.getSuggestContacts()
+                        .then(function(items){
+                            if(Ext.isEmpty(items)){ return Promise.reject(); }
+
+                            peersStore = new Ext.data.Store({
+                                model: NextThought.model.User,
+                                proxy: 'memory',
+                                data: items
+                            });
+                            me.suggestContactsWin = Ext.widget('suggest-contacts-window', {store: peersStore});
+                            me.suggestContactsWin.show();
+                            me.mon(me.suggestContactsWin, 'destroy', 'refresh');
+                        })
+                        .fail(function(){
+                            me.mon(Ext.widget('oobe-contact-window'), 'destroy', 'refresh');
+                        });
+                }
+            });
+    }
 });
