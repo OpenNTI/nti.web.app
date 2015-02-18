@@ -869,16 +869,14 @@
                             top: 5px;
                             left: 0;
                             right: auto;
-                            background: url('../images/icons/circle-check-white-green-small.png') no-repeat;
+                            background: url('../images/icons/circle-check-white-22.png') no-repeat;
                             height: 22px;
                             width: 22px;
                         }
 
-                        &.button{
-                            cursor: pointer;
-
+                        &.completed{
                             &::before{
-                                background: url('../images/icons/circle-check-white-22.png') no-repeat;
+                                background: url('../images/icons/circle-check-white-green-small.png') no-repeat;
                             }
                         }
                     }

@@ -800,6 +800,7 @@ NTIStrings['NextThought.view.account.notifications.types.Badge.wording'] = '{bad
 NTIStrings['NextThought.view.profiles.parts.events.Badge.name'] = '{username} earned the {badgename} badge.';
 NTIStrings['NextThought.view.account.notifications.types.Note.titlewording'] = '{creator} shared a note: {title}.';
 NTIStrings['NextThought.view.library.available.CourseWindow.Finished'] = 'Finished';
+NTIStrings['NextThought.view.library.available.CourseWindow.Continue'] = 'Continue';
 NTIStrings['NextThought.view.courseware.enrollment.Redeem.Redeem'] = 'Redeem';
 NTIStrings['NextThought.view.courseware.enrollment.Redeem.Cancel'] = 'Cancel';
 NTIStrings['NextThought.view.courseware.enrollment.Redeem.AccessKeyRedeem'] = 'Redeem this course with an Access Key.';
