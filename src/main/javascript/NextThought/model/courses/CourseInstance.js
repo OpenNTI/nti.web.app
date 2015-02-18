@@ -793,8 +793,6 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 
     getVideoProgress: function(){
-        if(!isFeature('video-progress')){ return Promise.reject(); }
-
         var link = this.getLink('VideoProgress');
 
         if (!link) { return Promise.reject(); }
