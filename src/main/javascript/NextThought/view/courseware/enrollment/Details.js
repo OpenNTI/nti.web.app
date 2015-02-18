@@ -102,7 +102,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.enableBubble(['enrolled-action', 'show-msg']);
+		this.enableBubble(['enrolled-action', 'show-msg', 'go-back']);
 
 		AnalyticsUtil.getResourceTimer(this.course.getId(), {
 			type: 'course-catalog-viewed',
@@ -426,7 +426,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
     __buildCongratsCard: function(state){
         var data = {
                 base: state && state.base,
-                firstName: Ext.String.capitalize($AppConfig.userObject.get("FirstName") || "")
+                firstName: Ext.String.capitalize($AppConfig.userObject.get("FirstName") || $AppConfig.userObject.getName())
             },
             me = this, congratsEl;
 
@@ -869,7 +869,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
             this.suggestContacts();
         }
         if(nextSelectionEl){
-            //TODO
+            this.fireEvent('go-back');
         }
     },
 

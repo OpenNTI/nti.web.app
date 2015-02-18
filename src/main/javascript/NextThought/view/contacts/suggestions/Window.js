@@ -32,12 +32,12 @@ Ext.define('NextThought.view.contacts.suggestions.Window', {
 
     renderTpl: Ext.DomHelper.markup([
         {cls: 'header', cn: [
-            {cls: 'title', html: '{{{NextThought.view.contacts.suggestions.window.title}}}'}
+            {cls: 'title', html: '{{{NextThought.view.contacts.suggestions.Window.title}}}'}
         ]},
         {id: '{id}-body', cls: 'container-body scrollable', html: '{%this.renderContainer(out,values)%}'},
         {cls: 'footer', cn: [
-            {tag: 'a', cls: 'button confirm', role: 'button', html: 'Add Contacts'},
-            {tag: 'a', cls: 'button cancel', role: 'button', html: 'Cancel'}
+            {tag: 'a', cls: 'button confirm', role: 'button', html: '{addContactText}'},
+            {tag: 'a', cls: 'button cancel', role: 'button', html: '{{{NextThought.view.contacts.suggestions.Window.Cancel}}}'}
         ]}
     ]),
 
@@ -54,6 +54,15 @@ Ext.define('NextThought.view.contacts.suggestions.Window', {
     initComponent: function(){
         this.callParent(arguments);
         this.add({xtype: 'suggest-contacts-view', ownerCt: this, suggestedContactStore: this.store});
+    },
+
+
+    beforeRender: function(){
+        this.callParent(arguments);
+
+        this.renderData = Ext.applyIf(this.renderData || {}, {
+            'addContactText': getFormattedString('NextThought.view.contacts.suggestions.Window.AddContacts', {number: ""})
+        });
     },
 
 
@@ -79,12 +88,15 @@ Ext.define('NextThought.view.contacts.suggestions.Window', {
 
 
     updateContactsCount: function(count){
+        var txt = "";
         if(count > 0){
-            this.confirmEl.setHTML("Add "+ count + " Contacts");
+            txt = getFormattedString('NextThought.view.contacts.suggestions.Window.AddContacts', {number: count+" "});
         }
         else{
             // FIXME: should we disable the button instead?
-            this.confirmEl.setHTML("Done");
+            txt = getString('NextThought.view.contacts.suggestions.Window.Done');
         }
+
+        this.confirmEl.setHTML(txt);
     }
 });
