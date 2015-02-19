@@ -43,10 +43,16 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 							return;
 						}
 
-						if (!this.el.down('.disclaimer')) {
-							this.disclaimerTpl.append(this.el, {
-								qtip: disclaimer
-							});
+						var current = this.el.down('.disclaimer');
+
+						if (disclaimer) {
+							if (!current) {
+								this.disclaimerTpl.append(this.el, {
+									qtip: disclaimer
+								});
+							}
+						} else if (current) {
+							current.destroy();
 						}
 					}
 				},
@@ -168,42 +174,45 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 			tpl = me.tempCount.msgTpl,
 			t = me.store.getCount(),
 			c = me.store.getRange().filter(complete).length,
-			value, number, letter, grades;
+			values;
+
+		function addGrade(values) {
+			var elements = [];
+
+			if (values.value) {
+				elements.push({tag: 'span', cls: 'score-grade', html: values.value});
+
+				if (values.letter) {
+					elements.push('&nbsp;');
+				}
+			}
+
+			if (values.letter) {
+				elements.push({tag: 'span', cls: 'letter-grade', html: values.letter});
+			}
+
+			me.tempGrade.update(Ext.DomHelper.markup(elements));
+		}
+
 		me.tempCount.update(Ext.String.format(tpl, c, t));
 
-		if (me.finalGrade && !Ext.isEmpty(me.finalGrade.trim())) {
-			//FIXME: me is duplicated with the instructor view.  Move to shared place
-			grades = me.finalGrade && me.finalGrade.split(' ');
-			number = grades && grades[0];
-			letter = (grades && grades[1]) || '-';
-			me.tempGrade.update(Ext.DomHelper.markup([
-				{tag: 'span', cls: 'score-grade', html: number},
-				'&nbsp;',
-				{tag: 'span', cls: 'letter-grade', html: letter}
-			]));
+		if (me.finalGrade && !me.finalGrade.isEmpty()) {
+			values = me.finalGrade.getValues();
+
+			addGrade(values);
+
+			me.gradeLabel.addDisclaimer(false);
 		} else if (currentBundle) {
 			currentBundle.getCurrentGrade()
 				.then(function(grade) {
 					var elements = [];
-						value = grade.getValues();
+						values = grade.getValues();
 
-					if (value.value) {
-						elements.push({tag: 'span', cls: 'score-grade', html: value.value});
+					addGrade(values);
 
-						if (value.letter) {
-							elements.push('&nbdps;');
-						}
-					}
-
-					if (value.letter) {
-						elements.push({tag: 'span', cls: 'score-grade', html: value.letter});
-					}
-
-					if (value.letter || value.value) {
+					if (values.letter || values.value) {
 						me.gradeLabel.addDisclaimer('Estimated from the grading policy in the Syllabus');
 					}
-
-					me.tempGrade.update(Ext.DomHelper.markup(elements));
 				});
 		}
 	},
@@ -279,7 +288,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 		}
 
 		try {
-			this.finalGrade = grade && grade.get('value');
+			this.finalGrade = grade;
 			this.updateHeader();
 			return true;
 		} catch (e) {

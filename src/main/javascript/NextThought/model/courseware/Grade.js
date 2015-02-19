@@ -27,10 +27,12 @@ Ext.define('NextThought.model.courseware.Grade', {
 
 			return v;
 		}},
+		{name: 'Correctness', type: 'string', persist: false},
+		{name: 'IsPredicted', type: 'bool', persist: false},
 		{name: 'AssignmentId', type: 'string'},
 		{name: 'assignmentName', type: 'string', persist: false},
 		{name: 'assignmentContainer', type: 'string', persist: false},
-        {name: 'IsExcused', type: 'auto', persist: false}
+		{name: 'IsExcused', type: 'auto', persist: false}
 	],
 
 	/**
@@ -54,37 +56,58 @@ Ext.define('NextThought.model.courseware.Grade', {
 	},
 
 	isExcusable: function(){
-	    return this.hasLink('excuse') || this.hasLink('unexcuse');
+		return this.hasLink('excuse') || this.hasLink('unexcuse');
 	},
 
 	 excuseGrade: function(){
-        var record = this,
-            url = this.getLink('excuse') || this.getLink('unexcuse');
+		var record = this,
+			url = this.getLink('excuse') || this.getLink('unexcuse');
 
-        return new Promise(function(fulfill, reject){
-            Service.request({
-                url: url,
-                method: 'POST'
-            })
-            .fail(function() {
-                console.error('Failed to excuse grade: ', arguments);
-                reject('Request Failed');
-            })
-            .done(function(responseText) {
-                var o = Ext.JSON.decode(responseText, true);
+		return new Promise(function(fulfill, reject) {
+			Service.request({
+				url: url,
+				method: 'POST'
+			})
+			.fail(function() {
+				console.error('Failed to excuse grade: ', arguments);
+				reject('Request Failed');
+			})
+			.done(function(responseText) {
+				var o = Ext.JSON.decode(responseText, true);
 
-                record.set(o);
-                fulfill(record);
-            });
-        });
-    },
+				record.set(o);
+				fulfill(record);
+			});
+		});
+	},
+
+
+	isPredicted: function() {
+		return this.get('IsPredicted');
+	},
+
+
+	getPredictedValue: function() {
+		var grade = this.get('Correctness'),
+			letter = this.get('value');
+
+		return {
+			value: grade,
+			letter: letter
+		};
+	},
 
 	/**
 	 * Looks at the value for the grade and parses it into a value and letter value
 	 * @return {Object} an object with value and letter for keys
 	 */
 	getValues: function() {
-		var val = this.get('value') || '', parts, letter, grade;
+		if (this.isPredicted()) {
+			return this.getPredictedValue();
+		}
+
+		var val = this.get('value') || '', parts, letter, grade,
+			correctness = this.get('Correctness');
 
 		//check if it ends in a character we recognize as a letter grade
 		//if it does use the last part of the value as the letter grade
@@ -133,13 +156,13 @@ Ext.define('NextThought.model.courseware.Grade', {
 						json;
 
 					try {
-                        if(!Ext.isEmpty(text)){
-                            json = JSON.parse(text);
+						if(!Ext.isEmpty(text)){
+							json = JSON.parse(text);
 
-                            //update the links so we can get the link for the assignment history item
-                            //if there is one
-                            grade.set('Links', json.Links);
-                        }
+							//update the links so we can get the link for the assignment history item
+							//if there is one
+							grade.set('Links', json.Links);
+						}
 					} catch (e) {
 						console.error('failed to parse response text for a saved grade:', e, text);
 					} finally {
