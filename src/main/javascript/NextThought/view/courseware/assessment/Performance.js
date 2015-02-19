@@ -207,7 +207,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 				.then(function(grade) {
 					//if the final grade was set after getCurrentGrade was called
 					//but before it finished make sure we don't unset it
-					if (me.finalGrade) {
+					if (me.finalGrade && !me.finalGrade.isEmpty()) {
 						return;
 					}
 
