@@ -140,7 +140,7 @@ Ext.define('NextThought.view.slidedeck.Video', {
 		 * failing to switch videos on slide change.
 		 */
 
-		if (s.state === this.states.PLAYING) {
+		if (s.state === this.self.states.PLAYING) {
 
 			/*console.log('[video status] service: '+ s.service
 						+', state: '+s.state
