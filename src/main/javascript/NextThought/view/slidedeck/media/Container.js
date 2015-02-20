@@ -48,10 +48,6 @@ Ext.define('NextThought.view.slidedeck.media.Container',{
     initComponent: function() {
         this.callParent(arguments);
 
-        if (!Ext.isEmpty(this.startAtMillis)) {
-            this.on('media-viewer-ready', Ext.bind(this.startAtSpecificTime, this, [this.startAtMillis]), this);
-        }
-
         if (!Ext.getBody().hasCls('media-viewer-open')) {
             Ext.getBody().mask('Loading...');
             this.animateIn();//will listen to afterRender
@@ -136,6 +132,9 @@ Ext.define('NextThought.view.slidedeck.media.Container',{
 
         this.viewerIdMap[viewerType] = this.viewer.getId();
         this.mon(this.viewer, 'media-viewer-ready', 'adjustOnResize', this);
+        if (!Ext.isEmpty(this.startAtMillis)) {
+            this.mon(this.viewer, 'media-viewer-ready', this.startAtSpecificTime.bind(this, this.startAtMillis));
+        }
     },
 
 
@@ -151,6 +150,13 @@ Ext.define('NextThought.view.slidedeck.media.Container',{
     cleanup: function () {
         Ext.getBody().removeCls('media-viewer-open media-viewer-closing');
         Ext.EventManager.removeResizeListener(this.adjustOnResize, this);
+    },
+
+
+    startAtSpecificTime: function(startAt){
+        if(this.viewer && this.viewer.startAtSpecificTime){
+            this.viewer.startAtSpecificTime(startAt);
+        }
     },
 
 

@@ -241,6 +241,20 @@ Ext.define('NextThought.view.slidedeck.media.viewers.TranscriptViewer', {
     },
 
 
+    startAtSpecificTime: function(time, isSeconds) {
+        var startTimeSeconds = !isSeconds ? (time || 0) / 1000 : time;
+
+        console.debug('Should scroll cmps to time: ', startTimeSeconds);
+        if (this.videoplayer) {
+            this.videoplayer.setVideoAndPosition(this.videoplayer.currentVideoId, startTimeSeconds);
+        }
+
+        if (this.resourceView) {
+            this.resourceView.scrollToStartingTime(startTimeSeconds);
+        }
+    },
+
+
     syncVideo: function() {
         this.syncWithTranscript = true;
 
