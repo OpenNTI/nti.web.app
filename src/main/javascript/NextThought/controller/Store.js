@@ -429,18 +429,6 @@ Ext.define('NextThought.controller.Store', function() {
 			this.showPurchasable(purchasable, true);
 		},
 
-
-		//navigateToPurchasable: function(obj) {
-		//	var me = this;
-
-		//	if (obj instanceof NextThought.model.store.Purchasable) {
-		//		me.showPurchasable(obj);
-		//		return false;
-		//	}
-		//	return true;
-		//},
-
-
 		getHandlerForNavigationToObject: function(obj, fragment) {
 			if (obj instanceof NextThought.model.store.Purchasable) {
 				return this.showPurchasable.bind(this);
