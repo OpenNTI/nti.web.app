@@ -4,7 +4,8 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 	requires: [
 		'NextThought.view.courseware.info.Panel',
-        'NextThought.view.contacts.suggestions.Window'
+        'NextThought.view.contacts.suggestions.Window',
+        'NextThought.view.profiles.create.Window'
 	],
 
 	cls: 'course-details',
@@ -877,7 +878,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
             if(el){
                 el.addCls('completed');
             }
-            me.updateWindowButtons('close', getString('NextThought.view.library.available.CourseWindow.Finished'));
+            me.updateWindowButtons('createProfile');
         }
 
         CourseWareUtils.findCourseBy(me.course.findByMyCourseInstance())
@@ -907,6 +908,16 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
     },
 
 
+    showCreateProfile: function(){
+        var me = this,
+            str = getString('NextThought.view.library.available.CourseWindow.Finished');
+
+        me.createProfileWin = Ext.widget('profile-create-window');
+        me.createProfileWin.show();
+        me.mon(me.createProfileWin, 'destroy', this.updateWindowButtons.bind(me, 'close', str));
+    },
+
+
     updateWindowButtons: function(action, name){
         if(!action){ return; }
 
@@ -929,8 +940,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
             this.suggestContacts();
         }
         else if(action === 'createProfile'){
-            //TODO: Not implemented
-            console.error('Action: create-profile is NOT implemented yet');
+            this.showCreateProfile();
         }
         else{
             console.error('Action: ', action ,' is NOT supported');

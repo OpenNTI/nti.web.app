@@ -34,11 +34,11 @@ Ext.define('NextThought.view.account.settings.PictureEditor', {
 			},
 			items: [
 				{xtype: 'tbspacer', flex: 4},
-				{text: getString('NextThought.view.account.settings.PictureEditor.rotate'), rotate: true, iconCls: 'rotate', disabled: true,
+				{text: getString('NextThought.view.account.settings.PictureEditor.rotate'), rotate: true, iconCls: 'rotate', cls: 'rotate', disabled: true,
 					handler: function(b) {b.up('picture-editor').rotate();} },
 				{xtype: 'tbspacer', flex: 1},
-				{text: getString('NextThought.view.account.settings.PictureEditor.cancel') },
-				{text: getString('NextThought.view.account.settings.PictureEditor.save'), save: true, ui: 'flat-blue', disabled: true }
+				{text: getString('NextThought.view.account.settings.PictureEditor.cancel'), cls: 'cancel' },
+				{text: getString('NextThought.view.account.settings.PictureEditor.save'), save: true, ui: 'flat-blue', disabled: true, cls: 'save' }
 			]
 		}
 	],
@@ -51,11 +51,14 @@ Ext.define('NextThought.view.account.settings.PictureEditor', {
 			'image-loaded': function() {
 				me.down('button[save]').enable();
 				me.down('button[rotate]').enable();
+                me.el.addCls('hasImage');
 			},
 			'image-cleared': function() {
 				me.down('button[save]').disable();
 				me.down('button[rotate]').disable();
-			}
+                me.el.removeCls('hasImage');
+
+            }
 		});
 	},
 

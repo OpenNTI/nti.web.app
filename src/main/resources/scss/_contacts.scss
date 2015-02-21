@@ -779,7 +779,7 @@ div.contact-buttons {
 	}
 }
 
-.suggest-window{
+.suggest-window, .profile-create-window{
     box-shadow: 0 0 5px 0 rgba(0,0,0,0.35);
     background-color: white;
 
@@ -869,7 +869,7 @@ div.contact-buttons {
         }
     }
 
-    .footer{
+    > .footer{
         position: relative;
         color: $tertiary-grey;
         height: 40px;
@@ -911,6 +911,146 @@ div.contact-buttons {
                 border: 1px solid #d0d0d0;
                 background: rgba(184,184,184,0.5);
                 color: rgba(255,255,255,0.7);
+            }
+        }
+    }
+}
+
+.profile-create-window{
+    .picture-container {
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 300px;
+        height: 340px;
+        padding: 20px;
+
+        .picture-editor {
+            > .x-box-inner > div {
+                &::after {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 20px;
+                    z-index: 0;
+                    background: url('../images/backdrops/add-photo.png') no-repeat;
+                    width: 214px;
+                    height: 214px;
+                }
+
+                &.no-dd::before {
+                    content: "";
+                    position: absolute;
+                    top: 234px;
+                    left: 155px;
+                    width: 132px;
+                    height: 1px;
+                    background: #b8b8b8;
+                    display: block;
+                    overflow: hidden;
+                    z-index: 1;
+                }
+            }
+
+            &.hasImage{
+                > .x-box-inner > div {
+                    &::after{
+                        background: none;
+                    }
+                }
+
+                .footer{
+                    visibility: visible;
+                }
+            }
+
+            canvas {
+                z-index: 2;
+
+                &.withImage{
+                    background: #e1e1e1;
+                }
+            }
+
+            .file-input {
+                display: block;
+                position: absolute;
+                top: 0px;
+                left: 17px;
+                filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+                opacity: 0;
+                font-size: 60px;
+                cursor: pointer;
+                width: 220px;
+                height: 218px;
+                z-index: 4;
+            }
+
+            .footer{
+                top: 217px !important;
+                visibility: hidden;
+
+                .x-btn{
+                    &.rotate{
+                        left: 50px !important;
+                    }
+                    &.cancel{
+                        display: none;
+                    }
+
+                    &.save{
+                        left: 140px !important;
+                        padding: 8px 17px;
+                        height: 38px;
+                        color: #ffffff;
+                        background: $secondary-green;
+                        border-radius: 5px;
+                        border: none;
+                        cursor: pointer;
+                    }
+
+                    .x-btn-button{
+                        .rotate {
+                            background: $icons no-repeat;
+                            @include sprite($icons,'rotate',$dimensions: true);
+                            left: 0;
+                            top: 13px;
+                        }
+                    }
+                }
+
+
+            }
+        }
+    }
+
+    .container-body{
+        position: relative;
+        max-height: none;
+        margin-left: 300px;
+        height: inherit;
+
+        .fold{
+             margin-top: 20px;
+            .field{
+
+                .label{
+                    display: none;
+                }
+
+                input, textarea{
+                    width: 80%;
+                    padding: 7px 13px;
+                    margin-bottom: 15px;
+                    border-radius: 4px;
+                    border: 1px solid $quad-grey;
+                    font-size: 1em;
+                    color: $secondary-grey;
+                }
+
+                textarea{
+                    height: 60px;
+                }
             }
         }
     }
