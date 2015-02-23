@@ -7,22 +7,14 @@ Ext.define('NextThought.view.profiles.mixins.EditUserMixin', {
 
         (fields || []).forEach(function(field) {
             var prop = field.getAttribute('data-field'),
-                isRich = field.getAttribute('data-rich-text'),
-                text = field.textContent, valid,
-                old = user.get(prop);
+                old = user.get(prop),
+                text = me.getValueForField(field), valid;
 
             //if it has the placeholder don't set the value
-            if (field.querySelector('.placeholder')) {
+            if(text === false){
                 newValues[prop] = null;
                 return;
             }
-
-            if (isRich) {
-                text = DomUtils.sanitizeExternalContentForInput(field.innerHTML);
-            }
-
-            //use null instead of the empty string
-            text = text === '' ? null : text;
 
             valid = me.validate(prop, text);
 
@@ -55,6 +47,26 @@ Ext.define('NextThought.view.profiles.mixins.EditUserMixin', {
         }
 
         return true;
+    },
+
+
+    getValueForField: function(field){
+        var isRich = field.getAttribute('data-rich-text'),
+            text = field.textContent;
+
+        //if it has the placeholder don't set the value
+        if (field.querySelector('.placeholder')) {
+            return false;
+        }
+
+        if (isRich) {
+            text = DomUtils.sanitizeExternalContentForInput(field.innerHTML);
+        }
+
+        //use null instead of the empty string
+        text = text === '' ? null : text;
+
+        return text;
     },
 
 
@@ -113,17 +125,20 @@ Ext.define('NextThought.view.profiles.mixins.EditUserMixin', {
 
     onCancelEdits: function(finish) {
         var me = this,
-            fields = me.el.query('.editable[data-field]'),
+            fields = me.getEditableFields(),
             user = me.user, hasChanged;
 
-        (fields || []).forEach(function(field) {
+        (fields || []).every(function(field) {
             var prop = field.getAttribute('data-field'),
-                text = field.textContent;
+                text = me.getValueForField(field);
 
             //if its not the placeholder and the text has changed
             if (!field.querySelector('.placeholder') && text !== user.get(prop)) {
                 hasChanged = true;
+                return false;
             }
+
+            return true;
         });
 
         //if we have changes alert the user before canceling
@@ -232,5 +247,11 @@ Ext.define('NextThought.view.profiles.mixins.EditUserMixin', {
             errorEls = this.el.select(query);
 
         errorEls.hide();
-    }
+    },
+
+    // Override if needed
+    resetFields: function(fields, values) {},
+
+    // Override if needed
+    onHideEditing: function(){}
 });

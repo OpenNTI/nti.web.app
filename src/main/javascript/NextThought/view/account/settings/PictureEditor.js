@@ -105,7 +105,9 @@ Ext.define('NextThought.view.account.settings.PictureEditor', {
 
 		}
 
-		w.changeView({ associatedPanel: 'avatar-choices', pressed: true });
+        if(w){
+            w.changeView({ associatedPanel: 'avatar-choices', pressed: true });
+        }
 	}
 
 

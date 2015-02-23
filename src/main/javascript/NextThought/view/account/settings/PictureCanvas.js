@@ -318,11 +318,8 @@ Ext.define('NextThought.view.account.settings.PictureCanvas', {
 				scale = Math.max(h / size.height, w / size.width),
 				x, y;
 
-			if (scale > 1) {
-				w = Math.round(w / scale);
-				h = Math.round(h / scale);
-			}
-
+			w = Math.round(w / scale);
+			h = Math.round(h / scale);
 			x = Math.round((size.width - w) / 2);
 			y = Math.round((size.height - h) / 2);
 

@@ -925,6 +925,69 @@ div.contact-buttons {
         height: 340px;
         padding: 20px;
 
+        .picture{
+            width: 214px;
+            margin: 0 auto;
+            position: relative;
+
+            img{
+                width: 214px;
+            }
+
+            .actions{
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 40px;
+                height: 214px;
+                background-color: $primary-grey;
+                opacity: 0.6;
+                visibility: hidden;
+
+                .link{
+                    background-color: black;
+                    border-radius: 5px;
+                    width: 30px;
+                    height: 30px;
+                    margin-top: 10px;
+                    cursor: pointer;
+                    position: relative;
+                    margin-left: 5px;
+
+                    &::after{
+                        content: '';
+                        overflow: hidden;
+                        position: absolute;
+                        top: 6px;
+                        left: auto;
+                        right: 6px;
+                        height: 15px;
+                        width: 15px;
+                    }
+
+                    &.edit{
+                        &::after{
+                            background: url('../images/icons-sba061eb9dd.png') no-repeat;
+                            background-position: -132px -137px;
+                        }
+                    }
+
+                    &.upload{
+                        &::after{
+                            @include sprite($icons,'rotate',$dimensions: true);
+                        }
+                    }
+                }
+            }
+
+            &:hover{
+                .actions{
+                    visibility: visible;
+                }
+            }
+        }
+
+
         .picture-editor {
             > .x-box-inner > div {
                 &::after {
@@ -966,10 +1029,6 @@ div.contact-buttons {
 
             canvas {
                 z-index: 2;
-
-                &.withImage{
-                    background: #e1e1e1;
-                }
             }
 
             .file-input {
@@ -1039,17 +1098,17 @@ div.contact-buttons {
                 }
 
                 input, textarea{
-                    width: 80%;
-                    padding: 7px 13px;
+                    width: 87%;
+                    padding: 10px 13px;
                     margin-bottom: 15px;
                     border-radius: 4px;
-                    border: 1px solid $quad-grey;
+                    border: 1px solid $tertiary-grey-alt;
                     font-size: 1em;
-                    color: $secondary-grey;
+                    color: #757474;
                 }
 
                 textarea{
-                    height: 60px;
+                    height: 100px;
                 }
             }
         }
