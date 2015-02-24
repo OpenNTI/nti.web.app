@@ -3,7 +3,7 @@ Ext.define('NextThought.view.profiles.create.View', {
     alias: 'widget.profile-create-view',
 
     requires: [
-        'NextThought.view.profiles.About',
+        'NextThought.view.profiles.About'
     ],
 
 
@@ -43,7 +43,7 @@ Ext.define('NextThought.view.profiles.create.View', {
 
             { cls: 'field', cn: [
                 { cls: 'label', cn: { tag: 'span', 'data-field': 'about', 'data-placeholder': '{{{NextThought.view.profiles.About.write}}}' } },
-                { cn: { tag: 'textarea', 'data-field': 'about', value: '{about}', 'placeholder': '{{{NextThought.view.profiles.About.write}}}' } },
+                { cn: { tag: 'textarea', 'data-field': 'about', value: '{about}', html:'{about}', 'placeholder': '{{{NextThought.view.profiles.About.write}}}' } },
                 { cls: 'error-msg', 'data-prop': 'about'}
             ]}
         ]},
@@ -78,13 +78,14 @@ Ext.define('NextThought.view.profiles.create.View', {
             'name': this.user && this.user.getName(),
             'location': this.user && this.user.get('location'),
             'affiliation': this.user && this.user.get('affiliation'),
-            'role': this.user && this.user.get('role')
+            'role': this.user && this.user.get('role'),
+            'about': this.user && this.user.get('about')
         });
     },
 
 
     getEditableFields: function(){
-        return this.el && this.el.query('[data-field]:not(.locked)');
+        return this.el && this.el.query('input[data-field]:not(.locked),textarea[data-field]');
     },
 
 

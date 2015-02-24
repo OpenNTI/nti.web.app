@@ -232,6 +232,9 @@ Ext.define('NextThought.view.MessageBox', {
 
 		me.callParent(arguments);
 		me.addCls('showing');
+
+        // Make sure this is always up front
+        this.toFront();
 	},
 
 

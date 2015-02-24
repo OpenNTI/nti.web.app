@@ -41,7 +41,7 @@ Ext.define('NextThought.view.profiles.create.Window', {
                     {tag: 'img', src: '{avatarURL}'},
                     {cls: 'actions', cn: [
                         {cls: 'link edit'},
-                        {cls: 'link edit'}
+                        {cls: 'link upload'}
                     ]}
                 ]}
             ]
@@ -57,7 +57,10 @@ Ext.define('NextThought.view.profiles.create.Window', {
     renderSelectors:{
         cancelEl: ".footer .cancel",
         confirmEl: ".footer .confirm",
-        pictureEl: '.picture-container'
+        pictureContainerEl: '.picture-container',
+        pictureEl: '.picture',
+        editPictureEl: '.picture .edit',
+        uploadPictureEl: '.picture .upload'
     },
 
 
@@ -84,18 +87,49 @@ Ext.define('NextThought.view.profiles.create.Window', {
 
         var hasAvatar = this.user && this.user.get('avatarURL');
         if(Ext.isEmpty(hasAvatar)){
-            this.pictureCmp = Ext.widget({
-                xtype: 'picture-editor',
-                renderTo: this.pictureEl,
-                width: 260,
-                height: 290
-            });
-
-            this.mon(this.pictureCmp, 'saved', 'newProfilePicSaved', this);
+            this.createPictureEditor();
         }
 
         this.mon(this.cancelEl, 'click', this.fieldsCmp.fireEvent.bind(this.fieldsCmp, 'cancel-edits', this.close.bind(this)));
         this.mon(this.confirmEl, 'click', this.fieldsCmp.fireEvent.bind(this.fieldsCmp, 'save-edits', this.close.bind(this)));
+        this.mon(this.editPictureEl, 'click', 'editPictureClicked', this);
+        this.mon(this.uploadPictureEl, 'click', 'uploadPictureClicked', this);
+
+        this.pictureEl.setVisibilityMode(Ext.Element.DISPLAY);
+    },
+
+
+    createPictureEditor: function(){
+        this.pictureCmp = Ext.widget({
+            xtype: 'picture-editor',
+            renderTo: this.pictureContainerEl,
+            width: 260,
+            height: 290
+        });
+
+        this.mon(this.pictureCmp, 'saved', 'newProfilePicSaved', this);
+    },
+
+
+    editPictureClicked: function(){
+        if(!this.pictureCmp){
+            this.createPictureEditor();
+        }
+
+        this.pictureEl.hide();
+        this.pictureCmp.editMode();
+        this.pictureCmp.show();
+    },
+
+
+    uploadPictureClicked: function(e){
+        if(!this.pictureCmp){
+            this.createPictureEditor();
+        }
+
+        this.pictureEl.hide();
+        this.pictureCmp.reset();
+        this.pictureCmp.show();
     },
 
 
@@ -106,6 +140,7 @@ Ext.define('NextThought.view.profiles.create.Window', {
 
         if(this.pictureEl.down('img')){
             this.pictureEl.down('img').set({'src': url});
+            this.pictureEl.show();
         }
     }
 
