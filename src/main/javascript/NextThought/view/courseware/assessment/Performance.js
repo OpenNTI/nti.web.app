@@ -240,8 +240,8 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 	},
 
 	//This is a read-only view from the STUDENT'S perspective. READ: updates when students navigate to it.
-	setAssignmentsData: function(assignments, history) {
-		var raw = [], me = this;
+	setAssignmentsData: function(assignments) {
+		var raw = [], waitsOn = [], me = this;
 
 		this.clearAssignmentsData();
 
@@ -251,40 +251,41 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 		}
 
 		function collect(o) {
-			var id = o.getId(),
-				h = history && history.getItem(id),
-				submission = h && h.get('Submission'),
-				feedback = h && h.get('Feedback'),
-				grade = h && h.get('Grade'),
-				pendingAssessment = h && h.get('pendingAssessment');
+			var id = o.getId();
 
-			//if (o.doNotShow()) {
-			if (me.maybeSetFinalGrade(o, h, grade)) {
-				return;
-			}
+			waitsOn.push(assignments.getHistoryItem(o.getId())
+				.then(function(h) {
+					var submission = h && h.get('Submission'),
+						feedback = h && h.get('Feedback'),
+						grade = h && h.get('Grade'),
+						pendingAssessment = h && h.get('pendingAssessment');
 
-			raw.push({
-				ntiid: id,
-				containerId: o.get('containerId'),
-				item: o,
-				name: o.get('title'),
-				assigned: o.get('availableBeginning'),
-				due: o.get('availableEnding'),
-				completed: submission && submission.get('CreatedTime'),
-				Grade: grade,
-				grade: grade && grade.getValues().value,
-				average: grade && grade.get('average'),
-				Feedback: feedback,
-				feedback: feedback && feedback.get('Items').length,
-				pendingAssessment: pendingAssessment,
-				Submission: submission
-			});
+					if (me.maybeSetFinalGrade(o, h, grade)) { return; }
+
+					return {
+						ntiid: id,
+						containerId: o.get('containerId'),
+						item: o,
+						name: o.get('title'),
+						assigned: o.get('availableBeginning'),
+						due: o.get('availableEnding'),
+						completed: submission && submission.get('CreatedTime'),
+						Grade: grade,
+						grade: grade && grade.getValues().value,
+						average: grade && grade.get('average'),
+						Feedback: feedback,
+						feedback: feedback && feedback.get('Items').length,
+						pendingAssessment: pendingAssessment,
+						Submission: submission
+					};
+				})
+			);
 		}
 
-		assignments.get('Items').forEach(collect);
+		assignments.each(collect);
 
-		this.store.loadRawData(raw);
-		return Promise.resolve();
+		return Promise.all(waitsOn)
+				.then(this.store.loadRawData.bind(this.store));
 	},
 
 

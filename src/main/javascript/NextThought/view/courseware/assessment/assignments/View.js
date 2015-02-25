@@ -209,6 +209,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 			{name: 'item', type: 'auto'},
 			{name: 'submittedCount', type: 'int'},
 			{name: 'enrolledCount', type: 'int'},
+			{name: 'pendingAssessment', type: 'int'},
 			{name: 'reportLinks', type: 'auto'}
 		];
 	},
@@ -304,7 +305,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 	},
 
 
-	setAssignmentsData: function(assignments, history, instance) {
+	setAssignmentsData: function(assignments, instance) {
 		var me = this;
 
 		me.clearAssignmentsData();
@@ -316,7 +317,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 		me.data = {
 			assigments: assignments,
-			history: history,
 			instance: instance
 		};
 
@@ -339,69 +339,77 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 
 	applyAssignmentsData: function() {
-		var lesson, raw = [], d = this.data,
-			history = d.history,
+		var lesson, raw = [], waitsOn = [], d = this.data,
 			assignments = d.assigments;
 
+		//given an assignment built the record for the store
 		function collect(o) {
 			if (o.doNotShow()) { return; }
-			var id = o.getId(), node,
-				h = history && history.getItem(id),
-				gradeBookEntry = o.getGradeBookEntry();
 
-			raw.push(gradeBookEntry.then(function(grade) {
-				lesson = ContentUtils.getLineage(o.get('containerId'));//this function is in need to go asynchronous...but i need it here. :(
-				lesson.pop();//discard the root
+			var id = o.getId();
 
-				//search through the entire lineage to find an outline node for the assignment
-				while (!node) {
-					//doing this the first time through is alright because
-					//it is discarding the leaf page
-					lesson.shift();
+			waitsOn.push(Promise.all([
+				assignments.getHistoryItem(id),
+				assignments.getGradeBookEntry(id)
+			])
+				.then(function(results) {
+					var h = results[0], // history item
+						grade = results[1],
+						node;
 
-					//if there are no lessons in the lineage left we can't find a node
-					//so don't keep looping 'ZZZ' will be placed at the bottom
-					if (lesson.length === 0) {
-						node = 'ZZZ';
-					} else {
-						node = d.outline.getNode(lesson[0]);
+					lesson = ContentUtils.getLineage(o.get('containerId'));//this function is in need to go asynchronous...but i need it here. :(
+					lesson.pop(); //discard the root
+
+					//search through the entire lineage to find an outline node for the assignment
+					while (!node) {
+						//doing this the first time through is alright because
+						//it is discarding the leaf page
+						lesson.shift();
+
+						//if there are no lessons in the lineage left we can't find a node
+						//so don't keep looping 'ZZZ' will be placed at the bottom
+						if (lesson.length === 0) {
+							node = 'ZZZ';
+						} else {
+							node = d.outline.getNode(lesson[0]);
+						}
 					}
-				}
 
-				if (node.get) {
-					node = node.index;
-					node = (node && node.pad && node.pad(3)) || 'ZZZ';
-				}
+					if (node.get) {
+						node = node.index;
+						node = (node && node.pad && node.pad(3)) || 'ZZZ';
+					}
 
-				lesson = node + '|' + lesson.reverse().join('|');
+					lesson = node + '|' + lesson.reverse().join('|');
 
-				return {
-					id: id,
-					containerId: o.get('containerId'),
-					lesson: lesson,
-					item: o,
-					name: o.get('title'),
-					opens: o.get('availableBeginning'),
-					due: o.get('availableEnding'),
-					maxTime: o.isTimed && o.getMaxTime(),
-					duration: o.isTimed && o.getDuration(),
+					return {
+						id: id,
+						containerId: o.get('containerId'),
+						lesson: lesson,
+						item: o,
+						name: o.get('title'),
+						opens: o.get('availableBeginning'),
+						due: o.get('availableEnding'),
+						maxTime: o.isTimed && o.getMaxTime(),
+						duration: o.isTimed && o.getDuration(),
 
-					completed: h && h.get('completed'),
-					correct: h && h.get('correct'),
+						completed: h && h.get('completed'),
+						correct: h && h.get('correct'),
 
-					history: h,
+						history: h,
 
-					total: o.tallyParts(),
-					submittedCount: o.get('SubmittedCount') || 0,
-					enrolledCount: d.instance.get('TotalEnrolledCount'),
-					reportLinks: grade && grade.getReportLinks()
-				};
-			}));
+						total: o.tallyParts(),
+						submittedCount: o.get('SubmittedCount') || 0,
+						enrolledCount: d.instance.get('TotalEnrollment'),
+						reportLinks: grade && grade.getReportLinks()
+					};
+				})
+			);
 		}
 
 		assignments.each(collect);
 
-		Promise.all(raw)
+		Promise.all(waitsOn)
 			.then(this.store.loadRawData.bind(this.store))
 			.then(this.refresh.bind(this));
 	},

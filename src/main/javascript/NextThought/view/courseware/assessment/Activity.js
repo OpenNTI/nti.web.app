@@ -141,8 +141,9 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 	},
 
 
-	setAssignmentsData: function(assignments, history, instance, savepoints) {
-		var me = this;
+	setAssignmentsData: function(assignments, instance, savepoints) {
+		var me = this,
+			waitsOn = [];
 
 		this.clearAssignmentsData();
 
@@ -154,12 +155,20 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 		this.assignments = {};
 		this.savepoints = savepoints;
 
-		function collect(o) { me.collectEvents(o, history); }
+		//given an assignment figure out what activity item to add
+		function collect(o) {
+			waitsOn.push(assignments.getHistoryItem(o.getId())
+				.then(me.collectEvents.bind(me, o))
+				.fail(function() { return; })
+			);
+		}
 
-		assignments.get('Items').forEach(collect);
+		assignments.each(collect);
 
-		this.setLastReadFrom(history);
-		return Promise.resolve();
+		assignments.getHistory()
+			.then(me.setLastReadFrom.bind(this));
+
+		return Promise.all(waitsOn);
 	},
 
 
@@ -208,12 +217,11 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 	},
 
 
-	collectEvents: function(o, historyCollection) {
+	collectEvents: function(o, historyItem) {
 		this.assignments[o.getId()] = o;
 		//if (o.doNotShow()) { return; }
 
-		var h = historyCollection && historyCollection.getItem(o.getId());
-		this.deriveEvents(o, h);
+		this.deriveEvents(o, historyItem);
 	},
 
 

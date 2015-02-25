@@ -26,6 +26,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		{ name: 'Discussions', type: 'singleItem', persist: false },
 		{ name: 'ParentDiscussions', type: 'singleItem', persist: false},
 		{ name: 'Outline', type: 'singleItem', persist: false },
+		{ name: 'GradeBook', type: 'singleItem', persist: false},
 
 		{ name: 'Scopes', type: 'auto', mapping: 'LegacyScopes' },
 		{ name: 'SharingScopes', type: 'singleItem'},
@@ -242,31 +243,23 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
-	getAssignmentHistory: function() {
+	shouldShowAssignments: function() {
+		//we should only show assignments if there is an assignments by outline node link
+		return !!this.getLink('AssignmentsByOutlineNode');
+	},
+
+
+	/**
+	 * Get the AssignmentHistory link off of the enrolled instance or this
+	 * @return {String} link to the assignment history
+	 */
+	__getAssignmentHistoryLink: function() {
 		var me = this;
 
 		function getLink(rel, e) { return e.getLink(rel) || me.getLink(rel); }
 
 		return this.getWrapper()
-			.then(function(e) {
-				return Service.request(getLink('AssignmentHistory', e))
-					.then(function(txt) {
-						return ParseUtils.parseItems(txt)[0];
-					})
-					.fail(function(reason) {
-						if (reason && reason.status === 404) {
-							return NextThought.model.courseware.UsersCourseAssignmentHistory.getEmpty();
-						}
-
-						return Promise.reject(reason);
-					});
-			});
-	},
-
-
-	shouldShowAssignments: function() {
-		//we should only show assignments if there is an assignments by outline node link
-		return !!this.getLink('AssignmentsByOutlineNode');
+			.then(getLink.bind(null, 'AssignmentHistory'));
 	},
 
 	/**
@@ -322,16 +315,14 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		return this.__getGradeBookPromise;
 	},
 
-
 	/**
-	 * Retuan an assignment collection with out the gradebook
-	 * @return {[type]} [description]
+	 * Return an assignment collection for this course
+	 * @return {AssignmentCollection} the assignment collection
 	 */
 	getAssignments: function() {
 		if (this.__getAssignmentsPromise) { return this.__getAssignmentsPromise; }
 
-		var roster = this.getLink('CourseEnrollmentRoster'),
-			history = this.getLink('AssignmentHistory');
+		var gradeBook = this.get('GradeBook');
 
 		if (!this.getLink('AssignmentsByOutlineNode')) {
 			return Promise.resolve(NextThought.model.courses.AssignmentCollection.fromJson(
@@ -339,50 +330,22 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		}
 
 		this.__getAssignmentsPromise = Promise.all([
+			this.getWrapper()
+				.fail(function() { return {}; }),
 			this.__getAssignmentsByOutline(),
-			this.__getNonAssignmentsByOutline()
+			this.__getNonAssignmentsByOutline(),
+			this.__getAssignmentHistoryLink()
 		])
 			.then(function(results) {
-				var assignments = results[0],
-					nonAssignment = results[1];
+				var wrapper = results[0],
+					assignments = results[1],
+					nonAssignments = results[2],
+					historyURL = results[3];
 
-				return NextThought.model.courses.AssignmentCollection.fromJson(
-							assignments, nonAssignment, roster, null, history);
+				return NextThought.model.courses.AssignmentCollection.fromJson(assignments, nonAssignments, gradeBook, historyURL, wrapper.isAdministrative);
 			});
 
 		return this.__getAssignmentsPromise;
-	},
-
-	/**
-	 * Return an assignment collection with the grade book
-	 * @return {Promise} Fulfills with the assignment collection
-	 */
-	getAssignmentsAndGradeBook: function() {
-		if (this.__getAssignmentsAndGradeBookPromise) { return this.__getAssignmentsAndGradeBookPromise; }
-
-		var roster = this.getLink('CourseEnrollmentRoster'),
-			history = this.getLink('AssignmentHistory');
-
-		if (!this.getLink('AssignmentsByOutlineNode')) {
-			return Promise.resolve(NextThought.model.courses.AssignmentCollection.fromJson(
-				{},{},null, null, this.getLink('AssignmentHistory')));
-		}
-
-		this.__getAssignmentsAndGradeBookPromise = Promise.all([
-			this.__getAssignmentsByOutline(),
-			this.__getNonAssignmentsByOutline(),
-			this.__getGradeBook()
-		])
-			.then(function(results) {
-				var assignments = results[0],
-					nonAssignments = results[1],
-					gradeBook = results[2];
-
-				return NextThought.model.courses.AssignmentCollection.fromJson(
-							assignments, nonAssignments, roster, gradeBook, history);
-			});
-
-		return this.__getAssignmentsAndGradeBookPromise;
 	},
 
 

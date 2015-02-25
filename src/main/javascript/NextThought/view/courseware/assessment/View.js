@@ -117,8 +117,10 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 		return instance.getWrapper()
 				.then(function addViews(e) {
-					if (!isSync()) { return; }
+					//if we are reloading for the instance we already have set don't push views
+					if (!isSync()) { return instance.getAssignments(); }
 
+					//if we get here and we already have views, don't push more
 					if (me.shouldPushViews()) {
 						if (e && e.isAdministrative) {
 							me.addAdminViews(function(rel) { return getLink(rel, e); });
@@ -128,16 +130,10 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 						me.onViewChanged();
 					}
 
-					return Promise.all([
-								!e.isAdministrative && instance.getAssignmentHistory(),
-								instance.getAssignmentsAndGradeBook()
-					]);
+					return instance.getAssignments();
 				})
-				.then(function applyData(objs) {
+				.then(function applyData(assignments) {
 					if (!isSync()) { return; }
-
-					var history = objs[0],
-						assignments = objs[1];
 
 					me.assignmentsCollection = assignments;
 					me.hasAssignments = !assignments.isEmpty();
@@ -148,14 +144,21 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 						return;
 					}
 
-					try {
-						me.fireEvent('set-assignment-history', history);
-					} catch (e) {
-						Error.raiseForReport(e);
-					}
+					assignments.getHistory()
+						.then(function(history) {
+							try {
+								me.fireEvent('set-assignment-history', history);
+							} catch (e) {
+								Error.raiseForReport(e);
+							}
+						});
 
-					return Promise.all(me.forEachView(
-							me.callFunction('setAssignmentsData', [assignments, history, instance])));
+
+					return Promise.all(
+								me.forEachView(
+									me.callFunction('setAssignmentsData', [assignments, instance])
+								)
+							);
 				})
 				.done(function() {
 					me.maybeUnmask();

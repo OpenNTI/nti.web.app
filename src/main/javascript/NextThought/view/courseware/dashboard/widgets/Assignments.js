@@ -30,6 +30,7 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Assignments', {
 							config.record = assignment;
 							config.weight = getWeight(assignment);
 							config.course = course;
+							//TODO: get rid of getAssignmentHistory
 							config.getAssignmentHistory = course.getAssignmentHistory();
 
 							return config;

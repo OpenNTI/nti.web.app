@@ -156,25 +156,25 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 						text: getString('NextThought.view.courseware.assessment.admin.Grid.feedback'),
 						dataIndex: 'feedback',
 						name: 'feedback',
-                        tdCls: 'feedback',
+						tdCls: 'feedback',
 						width: 140,
-                        renderer:function(v, col, rec){
-                            var grade = rec.get('Grade'),
-                                isExcused = grade && grade.get("IsExcused"), excusedTpl, excusedCls,
-                                feedbackTpl, commentText = rec.get('feedback') === 1 ? ' Comment' : " Comments";
+						renderer:function(v, col, rec){
+							var grade = rec.get('Grade'),
+								isExcused = grade && grade.get("IsExcused"), excusedTpl, excusedCls,
+								feedbackTpl, commentText = rec.get('feedback') === 1 ? ' Comment' : " Comments";
 
-                            excusedCls = isExcused === true ? 'on' : 'off';
-                            excusedTpl = Ext.DomHelper.markup({
-                                cls: 'grade-excused '+ excusedCls,
-                                html: getFormattedString('NextThought.view.courseware.assessment.admin.Grid.excused')
-                            });
+							excusedCls = isExcused === true ? 'on' : 'off';
+							excusedTpl = Ext.DomHelper.markup({
+								cls: 'grade-excused '+ excusedCls,
+								html: getFormattedString('NextThought.view.courseware.assessment.admin.Grid.excused')
+							});
 
-                            feedbackTpl = Ext.DomHelper.markup({cls:'feedback', html: rec.get('feedback') + commentText});
-                            if(rec.get('feedback')){
-                                return excusedTpl + feedbackTpl;
-                            }
-                            return excusedTpl;
-                        },
+							feedbackTpl = Ext.DomHelper.markup({cls:'feedback', html: rec.get('feedback') + commentText});
+							if(rec.get('feedback')){
+								return excusedTpl + feedbackTpl;
+							}
+							return excusedTpl;
+						},
 						doSort: function(state) {
 							var store = this.up('grid').getStore(),
 								sorter = new Ext.util.Sorter({
@@ -277,16 +277,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 	},
 
 
-    afterRender: function(){
-        this.callParent(arguments);
+	afterRender: function() {
+		this.callParent(arguments);
 
-        this.monitorSubTree(arguments);
-
-        var assignmentCollection = this.up("#course-assessment-root") && this.up("#course-assessment-root").assignmentsCollection;
-        if(assignmentCollection){
-            assignmentCollection.addStoreToStoreSync(this.store);
-        }
-    },
+		this.monitorSubTree(arguments);
+	},
 
 	bindStore: function(store) {
 		var res = this.callParent(arguments),
