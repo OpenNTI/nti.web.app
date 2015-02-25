@@ -72,7 +72,7 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 			v = this.__getGridView(),
 			row = input.up(v.itemSelector),
 			rec = v && v.getRecord(row),
-            targetRecordId = row && row.dom.getAttribute('data-recordid');
+			targetRecordId = row && row.dom.getAttribute('data-recordid');
 
 		if (rec && rec.getId() === targetRecordId) {
 			this.editGrade(rec, input.dom.value);
@@ -88,8 +88,8 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 			this.editGrade(record, value);
 		}
 
-        // Clear the focused flag
-        delete this.currentFocused;
+		// Clear the focused flag
+		delete this.currentFocused;
 	},
 
 
@@ -136,59 +136,28 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 
 	editGrade: function(record, value) {
 		var view = this.__getGridView(), store = this.store,
-			grade = record.get('Grade'),
-			v = grade && grade.getValues(),
-			assignmentCollection = store && store.assignmentsCollection,
+			node = view.getNode(record),
 			save;
 
-		/**
-		 * only set the grade if:
-		 * 1.) there is no grade set and we are given a value
-		 * 2.) there is a grade set and it is different from the value given
-		 * 3.) there is a grade but no value given (deleting)
-		 */
-		if ((!v && value) || (v && v.value !== value) || (!value && v && v.value)) {
-			//if there's no grade and no value don't bother creating one
-			if (!grade && !value) {
-				return;
-			}
-
-			store.suspendEvents();
-            if(view.getNode(record)){
-                Ext.fly(view.getNode(record)).setStyle({opacity: '0.3'});
-            }
-
-			if (!grade) {
-				console.error('No Grade, not even a place holder.');
-			}
-
-			console.debug('saving: ' + value, 'to', grade.get('href'));
-
-			//if we should save the new value
-			if  (grade.shouldSave(value, '-')) {
-				save = grade.saveValue(value, '-')
-					.then(function(newGrade) {
-						grade.set('value', newGrade.get('value'));
-						if(assignmentCollection){
-							assignmentCollection.syncStoreForRecord(store, record, 'Grade');
-						}
-					})
-					.fail(function() {
-						grade.reject();
-					});
-			} else {
-				save = Promise.resolve();
-			}
-
-			save.always(function() {
-				store.resumeEvents();
-
-				var n = view.getNode(record);
-
-				if (n) {
-					Ext.fly(n).setStyle({opacity: 1});
-				}
-			});
+		//mask the input
+		if (node) {
+			Ext.fly(node).setStyle({opacity: '0.3'});
 		}
+
+		if (record.shouldSaveGrade(value, '-')) {
+			save = record.saveGrade(value, '-');
+		} else {
+			save = Promise.resolve();
+		}
+
+		save.always(function() {
+			var n = view.getNode(record);//get the node fresh since it may have changed
+
+			console.log(node);
+			if (n) {
+				Ext.fly(n).setStyle({opacity: 1});
+			}
+		});
+
 	}
 });

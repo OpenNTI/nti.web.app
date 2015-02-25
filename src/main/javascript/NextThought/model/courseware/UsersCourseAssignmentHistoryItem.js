@@ -318,10 +318,24 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 	},
 
 
+	shouldSaveGrade: function(value, letter) {
+		var grade = this.get('Grade');
+
+		return grade.shouldSave(value, letter);
+	},
+
+
+	/**
+	 * Given a value and letter for a grade, either create one or update an existing one
+	 * @param  {String} value  value of the grade
+	 * @param  {Char} letter letter of the grade
+	 * @return {Promise}     fulfills when the grade has been saved
+	 */
 	saveGrade: function(value, letter) {
 		var me = this,
 			grade = me.get('Grade');
 
+		//if we are a placeholder create a new grade
 		if (this.isPlaceholder) {
 			return grade.createNewGrade(value, letter)
 				.then(function(response) {
@@ -337,12 +351,16 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 					me.set(historyItem);
 					me.isPlaceholder = false;
 				});
+		//if we aren't a placeholder and the grade has different values save the new ones
+		} else if (!grade.valueEquals(value, letter)) {
+			return grade.saveValue(value, letter)
+				.then(function() {
+					console.log('Grade saved');
+				});
 		}
 
-		return grade.saveValue(value, letter)
-			.then(function() {
-				console.log('Grade Saved');
-			});
+		//otherwise the grade doesn't need to be updated so just resolve
+		return Promise.resolve();
 	}
 }, function() {
 	NextThought.model.MAP['application/vnd.nextthought.assessment.userscourseassignmenthistoryitemsummary'] = this.$className;

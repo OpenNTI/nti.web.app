@@ -132,7 +132,7 @@ Ext.define('NextThought.model.courseware.Grade', {
 	shouldSave: function(value, letter) {
 		var val = value + ' ' + letter;
 
-		return this.pendingSaveValue !== val;
+		return this.pendingSaveValue !== val && !this.valueEquals(value, letter);
 	},
 
 
