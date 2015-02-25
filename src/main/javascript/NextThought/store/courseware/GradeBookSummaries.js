@@ -8,6 +8,7 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 		{name: 'Alias', type: 'string'},
 		{name: 'Username', type: 'string'},
 		{name: 'avatar', type: 'string', defaultValue: User.BLANK_AVATAR},
+		{name: 'HistoryItemSummary', type: 'auto'},
 		{name: 'FinalGrade', type: 'auto'},
 		{name: 'OverdueAssignmentCount', type: 'int'},
 		{name: 'UngradedAssignmentCount', type: 'int'},
@@ -106,23 +107,47 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 		(records || []).forEach(this.__fillInRecord.bind(this));
 	},
 
-
+	/**
+	 * Take a record fill in the user and replace its HistoryItemSummary with a shared instance or a placeholder
+	 * @param  {Model} record record to fill in
+	 */
 	__fillInRecord: function(record) {
-		var finalGrade = record.get('FinalGrade'),
-			user = record.get('User').Username;
+		var finalGradeAssignment = this.assignments.getFinalGradeAssignment(),
+			user = record.get('User'),
+			userId = user && NextThought.model.User.getIdFromRaw(user),
+			historyItem = record.get('HistoryItemSummary'),
+			grade;
 
-		record.set('Username', user);
-
-		if (finalGrade) {
-			record.set('FinalGrade', this.GradeCache.getRecord(finalGrade));
+		if (!userId) {
+			console.error('No user id found for:', user);
+			return;
 		}
 
 		UserRepository.getUser(user)
-			.then(function(user) {
-				record.set('User', user);
-
-				record.set('avatar', user.get('avatarURL'));
+			.then(function(u) {
+				record.set('User', u);
+				record.set('avatar', u.get('avatarURL'));
 			});
+
+		if (historyItem) {
+			grade = historyItem.get('Grade');
+
+			if (grade) {
+				grade = this.GradeCache.getRecord(grade);
+			} else {
+				grade = this.assignments.createPlaceholderGrade(finalGradeAssignment, userId);
+			}
+
+			historyItem = this.HistoryItemCache.getRecord(historyItem);
+
+			historyItem.set('Grade', grade);
+
+			record.set('HistoryItemSummary', historyItem);
+		} else if (finalGradeAssignment) {
+			historyItem = this.assignments.createPlaceholderHistoryItem(finalGradeAssignment, userId);
+
+			record.set('HistoryItemSummary', historyItem);
+		}
 	},
 
 
