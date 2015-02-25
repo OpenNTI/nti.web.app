@@ -26,7 +26,7 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 
 		reader: {
 			root: 'Items',
-			totalProperty: 'FilteredTotalItemCount',
+			totalProperty: 'TotalItemCount',
 
 			readRecords: function() {
 				var data = this.self.prototype.readRecords.apply(this, arguments),

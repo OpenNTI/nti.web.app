@@ -3,7 +3,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.View', {
 	alias: 'widget.course-assessment-admin-performance',
 	requires: [
 		'NextThought.view.courseware.assessment.admin.performance.Root',
-		'NextThought.view.courseware.assessment.admin.performance.Student'
+		'NextThought.view.courseware.assessment.admin.performance.Student',
+		'NextThought.proxy.courseware.PagedPageSource'
 	],
 
 	layout: 'card',
@@ -54,9 +55,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.View', {
 			student: rec.get('User'),
 			historiesURL: historyURL,
 			FinalGradeHistoryItem: rec.get('HistoryItemSummary'),
-			pageSource: NextThought.util.PageSource.create({
+			pageSource: NextThought.proxy.courseware.PagedPageSource.create({
 				store: this.store,
-				current: this.store.indexOf(rec)
+				startingRec: rec
 			})
 		});
 

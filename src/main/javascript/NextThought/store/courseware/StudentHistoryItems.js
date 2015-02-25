@@ -19,7 +19,7 @@ Ext.define('NextThought.store.courseware.StudentHistoryItems', {
 			me.fillInHistories();
 		};
 
-		this.callParent([options]);
+		return this.callParent([options]);
 	},
 
 	/**

@@ -3,7 +3,7 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 	alias: 'widget.course-assessment-header',
 	ui: 'course-assessment',
 
-    requires: ['NextThought.view.courseware.assessment.AssignmentStatus'],
+	requires: ['NextThought.view.courseware.assessment.AssignmentStatus'],
 
 	cls: 'course-assessment-header assignment-item',
 
@@ -111,7 +111,7 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 			total: me.pageSource.getTotal(),
 			noNext: !me.pageSource.hasNext(),
 			noPrev: !me.pageSource.hasPrevious(),
-            excused: me.__getExcusedTpl()
+			excused: me.__getExcusedTpl()
 		});
 
 		me.onPagerUpdate();
@@ -134,16 +134,16 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 		});
 	},
 
-    __getExcusedTpl: function(){
-        var excusedTpl = {cls: 'off', html:'Excused'};
-        if(this.assignmentHistory){
-            var grade = this.assignmentHistory.get("Grade");
-            if(grade && grade.get("IsExcused")){
-                excusedTpl = {cls: 'on', html:'Excused'};
-            }
-        }
-        return excusedTpl;
-    },
+	__getExcusedTpl: function() {
+		var excusedTpl = {cls: 'off', html: 'Excused'},
+			grade = this.assginmentHistory && this.assignmentHistory.get('Grade');
+
+		if (grade && grade.get('IsExcused')) {
+			excusedTpl = {cls: 'on', html: 'Excused'};
+		}
+
+		return excusedTpl;
+	},
 
 
 	afterRender: function() {
@@ -447,7 +447,14 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 			e.stopEvent();
 			return;
 		}
-		this.goTo(this.pageSource.getPrevious());
+
+		var rec = this.pageSource.getPrevious();
+
+		if (rec instanceof Promise) {
+			rec.then(this.goTo.bind(this));
+		} else {
+			this.goTo(rec);
+		}
 	},
 
 
@@ -456,7 +463,14 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 			e.stopEvent();
 			return;
 		}
-		this.goTo(this.pageSource.getNext());
+
+		var rec = this.pageSource.getNext();
+
+		if (rec instanceof Promise) {
+			rec.then(this.goTo.bind(this));
+		} else {
+			this.goTo(rec);
+		}
 	},
 
 

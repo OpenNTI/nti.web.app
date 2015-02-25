@@ -7,7 +7,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		'NextThought.layout.component.CustomTemplate',
 		'NextThought.store.courseware.AssignmentView',
 		'NextThought.view.courseware.assessment.admin.PagedGrid',
-		'NextThought.ux.FilterMenu'
+		'NextThought.ux.FilterMenu',
+		'NextThought.proxy.courseware.PagedPageSource'
 	],
 
 	ui: 'course-assessment',
@@ -503,28 +504,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		}
 
 		if (!pageSource) {
-			pageSource = NextThought.proxy.courseware.PageSource.create({
-				batchAroundParam: 'batchAroundCreator',
-				current: record,
-				backingStore: this.store,
-				model: this.store.getProxy().getModel(),
-				url: NextThought.proxy.courseware.PageSource.urlFrom(this.store),
-				idExtractor: function(o) {
-					var u = o && o.get('Creator');
-					return u && ((u.getId && u.getId()) || u);
-				},
-				modelAugmentationHook: function(rec) {
-					rec.set('item', item); //Assignment instances are shared across all history item instances. (this gives them the meta data)
-
-					item.getGradeBookEntry()
-						.then(function(grade) {
-							grade.updateHistoryItem(rec);
-						});
-
-					item.getGradeBookEntry().updateHistoryItem(rec);
-
-					return rec;
-				}
+			pageSource = NextThought.proxy.courseware.PagedPageSource.create({
+				store: this.store,
+				startingRec: record
 			});
 		}
 
