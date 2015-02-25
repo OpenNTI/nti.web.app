@@ -107,7 +107,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 		historyItem.saveGrade(number, letter)
 			.then(me.fireEvent.bind(me, 'grade-saved'))
 			.fail(function(reason) {
-				alert('There was an error saving the grade. Please try again later.');
 				console.error('Failed to save Grade:', reason);
 				Error.raiseForReport(reason);
 			})

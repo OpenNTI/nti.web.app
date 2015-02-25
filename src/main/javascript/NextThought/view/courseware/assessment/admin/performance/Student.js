@@ -93,7 +93,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 			return Promise.reject('no data?');
 		}
 
-		this.header.setGradeBook(assignments);
+		this.header.setGradeBook(this.FinalGradeHistoryItem);
 
 		this.store = assignments.getStudentHistory(this.historiesURL, this.student.getId());
 

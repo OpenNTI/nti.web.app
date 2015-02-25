@@ -53,7 +53,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.View', {
 			xtype: 'course-assessment-admin-performance-student',
 			student: rec.get('User'),
 			historiesURL: historyURL,
-			FinalGrade: rec.get('FinalGrade'),
+			FinalGradeHistoryItem: rec.get('HistoryItemSummary'),
 			pageSource: NextThought.util.PageSource.create({
 				store: this.store,
 				current: this.store.indexOf(rec)

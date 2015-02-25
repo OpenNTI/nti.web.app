@@ -219,6 +219,16 @@ Ext.define('NextThought.model.courseware.Grade', {
 		}).fail(function(reason) {
 			me.set('value', null);
 
+			Ext.MessageBox.alert({
+				title: 'Error',
+				msg: 'There was an error saving the grade value.',
+				icon: 'warning-red',
+				buttonText: true,
+				buttons: {
+					primary: 'Ok'
+				}
+			});
+
 			return Promise.reject(reason);
 		});
 	},

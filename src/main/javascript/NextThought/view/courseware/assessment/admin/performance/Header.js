@@ -8,19 +8,22 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Header', {
 		gradeboxEl: '.header > .grade'
 	},
 
-	setGradeBook: function(assignments) {
-		this.assignments = assignments;
+	setGradeBook: function(historyItem) {
+		this.historyItem = historyItem;
 		this.setUpGradebox();
 	},
 
 
 	setUpGradebox: function() {
-		if (!this.assignments) { return; }
+		if (!this.historyItem) {
+			this.gradeboxEl.hide();
+			return;
+		}
 
 		var me = this,
-			finalGrade = me.assignments.getFinalGradeAssignment();
+			grade = me.historyItem.get('Grade');
 
-		function fillInValue(grade) {
+		function fillInValue() {
 			var values = grade && grade.getValues(),
 				number = values && values.value,
 				letter = values && values.letter;
@@ -36,88 +39,35 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Header', {
 			}
 		}
 
-		me.gradePromise = finalGrade ? me.assignments.getGradeFor(finalGrade, me.student.getId()) : Promise.reject();
-
-
-		me.gradePromise.then(function(grade) {
-			me.mon(grade, {
-				'value-change': fillInValue.bind(me, grade),
-				single: true //Why is this only a single event?
-			});
-
-			fillInValue(grade);
+		me.mon(grade, {
+			'value-change': fillInValue,
+			single: true //Why is this only a single event?
 		});
 
-		//Do we need to do this based off of the gradebook entry?
-		//Not just the fact that a final grade assignment exists.
-		me.gradeboxEl[finalGrade ? 'show' : 'hide']();
+		fillInValue();
+
+		me.gradeboxEl.show();
 	},
 
 
 	changeGrade: function(number, letter) {
-		if (!this.assignments || !this.gradePromise) { return; }
-
-		// var me = this;
-
-		// me.gradePromse
-		// 	.then(function(grade) {
-		// 		grade.saveValue(number, letter)
-		// 			.then
-		// 	});
+		if (!this.historyItem) { return; }
 
 		var me = this,
-			finalGrade = this.assignments.getFinalGradeAssignment(),
-			gradePromise = this.assignments.getGradeFor(finalGrade, this.student.getId());
-		if (!this.gradebook) { return; }
+			grade = me.historyItem.get('Grade'),
+			oldValues = grade && grade.getValues();
 
-		var gradebookentry = this.gradebook.getItem('Final Grade', 'no_submit'),
-			grade = gradebookentry && gradebookentry.getFieldItem('Items', this.student.getId()),
-			value = number + ' ' + letter,
-			url = this.gradebook.get('href').split(/[\?#]/)[0];
-
-
-		if (!grade) {
-			console.log('No final grade entry cant set it.');
-
-
-			url += '/no_submit/Final Grade/' + this.student.getId();
-
-			Ext.Ajax.request({
-				url: url,
-				method: 'PUT',
-				jsonData: { value: value },
-				success: function(r) {
-					var json = Ext.decode(r.responseText, true),
-						rec = json && ParseUtils.parseItems(json)[0];
-
-					if (rec) {
-						gradebookentry.addItem(rec);
-					}
-				},
-				failure: function() {
-					//probably should do something here
-					console.error('Failed to save final grade:', arguments);
-				}
-			});
-			return;
+		if (!letter) {
+			letter = oldValues && oldValues.letter;
 		}
 
-		grade.saveValue(number, letter)
-			.fail(function() {
-				grade.reject();
-			});
-
-		// url += '/no_submit/Final Grade/' + this.student.getId();
-
-		// Ext.Ajax.request({
-		// url: url,
-		//	method: 'PUT',
-		//	jsonData: { value: value },
-		//	failure: function() {
-		//		//probably should do something here
-		//		console.error('Failed to save final grade:', arguments);
-		//	}
-		//	});
+		if (me.historyItem.shouldSaveGrade(number, letter)) {
+			me.historyItem.saveGrade(number, letter)
+				.fail(function(reason) {
+					console.error('Failed to save final grade:', arguments);
+					Error.raiseForReport(reason);
+				});
+		}
 	},
 
 

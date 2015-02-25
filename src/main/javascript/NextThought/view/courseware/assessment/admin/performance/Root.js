@@ -110,15 +110,17 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 						]}
 					]), {
 						getGrade: function(values) {
-							var grade = (values.FinalGrade && values.FinalGrade.getValue()) || {};
+							var grade = values.HistoryItemSummary && values.HistoryItemSummary.get('Grade'),
+								gradeVals = (grade && grade.getValues()) || {};
 
-							return grade.value || '';
+							return gradeVals.value || '';
 						},
 
 						getLetter: function(values) {
-							var grade = (values.FinalGrade && values.FinalGrade.getValue()) || {};
+							var grade = values.HistoryItemSummary && values.HistoryItemSummary.get('Grade'),
+								gradeVals = (grade && grade.getValues()) || {};
 
-							return grade.letter || '';
+							return gradeVals.letter || '';
 						}
 					})
 				}
@@ -631,6 +633,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	editGrade: function(record, value, letter) {
+		debugger;
 		var me = this,
 			view = me.__getGridView(),
 			node = view.getNode(record),
@@ -644,7 +647,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			letter = oldValues && oldValues.letter;
 		}
 
-		if (!historyItem) { return; }
+		if (!historyItem || !historyItem.shouldSaveGrade(value, letter)) { return; }
 
 
 		if (node) {
@@ -652,9 +655,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		}
 
 		wait(300).then(function() {
-			if (historyItem.shouldSaveGrade(value, letter)) {
-				return historyItem.saveGrade(value, letter);
-			}
+			return historyItem.saveGrade(value, letter);
 		}).always(function() {
 			var n = view.getNode(record);
 

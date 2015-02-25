@@ -104,7 +104,19 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 
 
 	__onRecordsLoaded: function(s, records) {
-		(records || []).forEach(this.__fillInRecord.bind(this));
+		var me = this,
+			loaded;
+
+		//suspend events so we don't update needlessly
+		me.suspendEvents();
+
+		loaded = (records || []).map(me.__fillInRecord.bind(me));
+
+		Promise.all(loaded)
+			.always(function() {
+				me.resumeEvents();
+				me.fireEvent('refresh');
+			});
 	},
 
 	/**
@@ -122,12 +134,6 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 			console.error('No user id found for:', user);
 			return;
 		}
-
-		UserRepository.getUser(user)
-			.then(function(u) {
-				record.set('User', u);
-				record.set('avatar', u.get('avatarURL'));
-			});
 
 		if (historyItem) {
 			grade = historyItem.get('Grade');
@@ -148,6 +154,18 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 
 			record.set('HistoryItemSummary', historyItem);
 		}
+
+		historyItem.stores.push(record);
+
+
+		//Users are added to the cache when the data loads so this should be a no-op
+		return UserRepository.getUser(user)
+			.then(function(u) {
+				record.set({
+					'User': u,
+					'avatar': u.get('avatarURL')
+				});
+			});
 	},
 
 
