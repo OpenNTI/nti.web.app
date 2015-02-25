@@ -212,42 +212,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 
 
 	excuseGradeStatusChanged: function() {
-		var me = this,
-			grade = this.assignmentHistory.get('Grade'),
-			store = this.pageSource,
-			assignment = this.assignment,
-			historyItem = this.assignmentHistory,
-			assignmentCollection = this.pageSource && this.pageSource.assignmentsCollection;
+		var grade = this.assignmentHistory.get('Grade');
 
 		if (!grade) { return; }
 
-		var link = grade.getLink('AssignmentHistoryItem');
-		//if the grade that comes back from saving has an assignment history item link
-		//and we have a store get the history item from the server and update the backing store
-		if (link && store) {
-			Service.request(link)
-				.then(function(item) {
-					var newHistoryItem = ParseUtils.parseItems(item)[0];
-					//the item field is set with the assignment and does not come back from the server
-					//so fill it in with the previous history item's item
-					newHistoryItem.set('item', historyItem.get('item'));
-
-					// Update the grade instance on the gradebook
-					assignment.getGradeBookEntry()
-						.then(function(grade) {
-							grade.addItem(newHistoryItem.get('Grade'));
-						});
-
-					store.syncBackingStore(newHistoryItem);
-					if (assignmentCollection) {
-						assignmentCollection.syncStoreForRecord(store, newHistoryItem, 'Grade');
-					}
-					me.markGradeAsExcused(grade);
-				})
-				.fail(function(reason) {
-					console.error('Failed to update assignmenthistoryitem from new grade:', reason);
-				});
-		}
+		this.markGradeAsExcused(grade);
 	},
 
 

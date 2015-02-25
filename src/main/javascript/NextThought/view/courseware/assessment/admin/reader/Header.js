@@ -58,6 +58,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 					this.timedEl.update(status.maxTime.html);
 				}
 			}
+
+			this.markGradeAsExcused(grade);
 		} else {
 			this.completedEl.removeCls(['late', 'ontime']);
 			this.completedEl.dom.setAttribute('data-qtip', status.due.qtip);

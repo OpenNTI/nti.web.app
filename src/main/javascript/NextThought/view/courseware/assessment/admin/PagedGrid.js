@@ -347,10 +347,16 @@ Ext.define('NextThought.view.courseware.assessment.admin.PagedGrid', {
 	},
 
 
-	onItemClicked: function(v, record, dom, ix, e) {
-		var nib = e.getTarget('.actions');
+	onItemClicked: function(v, record, dom, i, e) {
+		var nib = e.getTarget('.actions'),
+			historyItem = record.get('HistoryItemSummary') || record,
+			menu;
+
 		if (nib) {
-			NextThought.view.courseware.assessment.AssignmentStatus.getActionsMenu(record).showBy(nib, 'tr-br');
+			menu = NextThought.view.courseware.assessment.AssignmentStatus.getActionsMenu(historyItem);
+
+			menu.showBy(nib, 'tr-br');
+
 			return false;
 		}
 	},
