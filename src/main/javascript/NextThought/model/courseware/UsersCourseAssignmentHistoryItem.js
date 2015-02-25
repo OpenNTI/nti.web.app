@@ -335,6 +335,11 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 		var me = this,
 			grade = me.get('Grade');
 
+		//if the grade is a placeholder and we aren't trying to save any values
+		if (grade.isPlaceholder && NextThought.model.courseware.Grade.isEmpty(value, letter)) {
+			return Promise.resolve();
+		}
+
 		//if we are a placeholder create a new grade
 		if (this.isPlaceholder) {
 			return grade.createNewGrade(value, letter)

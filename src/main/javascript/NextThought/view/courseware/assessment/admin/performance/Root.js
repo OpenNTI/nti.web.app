@@ -465,6 +465,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	setAssignmentsData: function(assignments, instance) {
 		this.clearAssignmentsData();
 
+		this.assignments = assignments;
+
 		this.store = assignments.getGradeSummaries();
 
 		if (assignments.hasFinalGrade()) {
@@ -628,65 +630,37 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	editGrade: function(record, number, letter) {
-		if (!this.gradeBook) { return; }
-
+	editGrade: function(record, value, letter) {
 		var me = this,
 			view = me.__getGridView(),
-			gradebookentry = me.gradeBook.getItem('Final Grade', 'no_submit'),
-			grade = gradebookentry && gradebookentry.getFieldItem('Items', record.getId()),
+			node = view.getNode(record),
+			historyItem = record.get('HistoryItemSummary'),
+			grade = historyItem.get('Grade'),
 			oldValues = grade && grade.getValues(),
-			url = me.gradeBook.get('href'),
 			save;
 
-		//if we were not given a value for letter use the old letter value
+		//if a letter has not been passed use the old one
 		if (!letter) {
 			letter = oldValues && oldValues.letter;
 		}
 
-		//if there isn't a grade and the values we are trying to save are empty don't bother
-		if (!grade && NextThought.model.courseware.Grade.isEmpty(number, letter)) {
-			return;
+		if (!historyItem) { return; }
+
+
+		if (node) {
+			Ext.fly(node).setStyle({opacity: '0.3'});
 		}
 
-		//if we are trying to save the same values that are already set don't bother
-		if (grade && grade.valueEquals(number, letter)) {
-			return;
-		}
-
-		Ext.fly(view.getNode(record)).setStyle({opacity: '0.3'});
-
-		if (!grade) {
-			url += '/no_submit/Final Grade/' + record.getId();
-			grade = NextThought.model.courseware.Grade.create({
-				href: url,
-				Username: record.getId()
-			});
-
-			me.gradeBook.add(grade, null);
-		}
-
-		console.debug('saving: %s %s to %s', number, letter, grade.get('href'));
-
-		return wait(300).then(function() {
-			var input = me.getFocusedInput();
-
-			grade.phantom = false;
-
-			if (grade.shouldSave(number, letter)) {
-				save = grade.saveValue(number, letter);
-			} else {
-				save = Promise.resolve();
+		wait(300).then(function() {
+			if (historyItem.shouldSaveGrade(value, letter)) {
+				return historyItem.saveGrade(value, letter);
 			}
+		}).always(function() {
+			var n = view.getNode(record);
 
-			save.always(function() {
-				var n = view.getNode(record);
-
-				if (n) {
-					Ext.fly(n).setStyle({opacity: 1});
-				}
-			});
-
+			if (n) {
+				Ext.fly(n).setStyle({opacity: 1});
+			}
 		});
 	}
 	//</editor-fold>
