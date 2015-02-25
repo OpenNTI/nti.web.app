@@ -59,6 +59,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.Pager', {
 			nextCls: current < pageCount ? 'enabled' : 'disabled'
 		});
 
+		if (current > pageCount) {
+			this.store.loadPage(pageCount);
+		}
+
 		if (this.rendered) {
 			this.renderTpl.overwrite(this.el, this.renderData);
 		}
