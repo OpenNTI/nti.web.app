@@ -147,8 +147,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 		var me = this,
 			grid = me.down('grid'),
-			completed = grid && grid.down('[name=completed]'),
-			submission = grid && grid.down('[name=submision]');
+			completed = grid && grid.down('[name=completed]');
 
 		me.mon(me.pageSource, 'update', 'onPagerUpdate');
 
@@ -174,9 +173,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 		//if there is a completed column but no parts on the assignment
 		//hide the completed column
-		if (me.assignment.isEmpty()) {
+		if (me.assignment.isEmpty() && completed) {
 			completed.hide();
-			submission.hide();
 		}
 
 		$AppConfig.Preferences.getPreference('Gradebook')
@@ -191,8 +189,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 	beforeRender: function() {
 		var grid = this.down('grid'),
-			assignment = this.assignment,
-			parts = assignment.get('parts');
+			assignment = this.assignment;
 
 		this.callParent(arguments);
 

@@ -192,7 +192,9 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 		 * @return {Boolean}        if there are actions
 		 */
 		hasActions: function(record) {
-			return record.get('submission');
+			var grade = record.get('Grade');
+
+			return record.get('submission') || grade.isExcusable();
 		},
 
 		/**
