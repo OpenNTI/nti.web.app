@@ -55,11 +55,14 @@ Ext.define('NextThought.model.courseware.Grade', {
 		return vals.letter === letter;
 	},
 
-	isExcusable: function(){
+
+	isExcusable: function() {
 		return this.hasLink('excuse') || this.hasLink('unexcuse');
 	},
 
-	 excuseGrade: function(){
+
+
+	excuseGrade: function() {
 		var record = this,
 			url = this.getLink('excuse') || this.getLink('unexcuse');
 
@@ -80,7 +83,6 @@ Ext.define('NextThought.model.courseware.Grade', {
 			});
 		});
 	},
-
 
 	isPredicted: function() {
 		return this.get('IsPredicted');
@@ -156,7 +158,7 @@ Ext.define('NextThought.model.courseware.Grade', {
 						json;
 
 					try {
-						if(!Ext.isEmpty(text)){
+						if (!Ext.isEmpty(text)) {
 							json = JSON.parse(text);
 
 							//update the links so we can get the link for the assignment history item

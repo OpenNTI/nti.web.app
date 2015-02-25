@@ -88,7 +88,7 @@ Ext.define('NextThought.model.courses.assignments.BaseCollection', {
 
 	isAssignment: function(id) {
 		//Its an assignment unless its listed in the "NotItems"
-		return (!!this.getItem(id)) || (!this.getItem(id, 'NotItems'));
+		return (!!this.getItem(id)) || (!this.getItem(id, 'NonAssignments'));
 	},
 
 
@@ -135,5 +135,22 @@ Ext.define('NextThought.model.courses.assignments.BaseCollection', {
 
 	//override these
 	getGradeBookEntry: function(assignment) { return Promise.resolve(null); },
-	getGradeFor: function(assignment, user) { return Promise.resolve(null); }
+	getGradeFor: function(assignment, user) { return Promise.resolve(null); },
+
+
+	hasFinalGrade: function() {
+		if (this.__hasFinalGrade) { return this.__hasFinalGrade; }
+
+		var hasFinalGrade = false;
+
+		this.each(function(assignment) {
+			if (assignment.isNoSubmit() && assignment.get('title') === 'Final Grade') {
+				hasFinalGrade = true;
+			}
+		});
+
+		this.__hasFinalGrade = hasFinalGrade;
+
+		return this.__hasFinalGrade;
+	}
 });

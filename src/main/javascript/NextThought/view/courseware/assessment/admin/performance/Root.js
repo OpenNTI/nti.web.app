@@ -44,6 +44,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 					cls: 'tools',
 					cn: [
 						{ tag: 'a', href: '{exportLink}', cls: 'download button', html: getString('NextThought.view.courseware.assessment.admin.performance.Root.export')},
+						{cls: 'pager', cn: [
+							{cls: 'previous-page', html: 'Previous Page'},
+							{cls: 'next-page', html: 'Next Page'}
+						]},
 						{ cls: 'toggle-avatar enabled', html: 'Hide Avatars'}
 					]
 				}
@@ -54,90 +58,70 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				inputEl: '.search input',
 				clearEl: '.search .clear',
 				exportButton: 'a.download.button',
-				avatarEl: '.toggle-avatar'
+				avatarEl: '.toggle-avatar',
+				previousPageEl: '.tools .pager .previous-page',
+				nextPageEl: '.tools .pager .next-page'
 			}
-		},{
+		},
+		{
 			anchor: '0 -115',
 			xtype: 'grid',
 
 			scroll: 'vertical',
 
-			// verticalScroller: {
-			// 	synchronousRender: true
-			// },
-
-			// plugins: [{ptype: 'bufferedrenderer'}],
 			columns: [
-				{ text: 'Student', dataIndex: 'LastName', flex: 1, xtype: 'templatecolumn', tpl: new Ext.XTemplate(Ext.DomHelper.markup([
-					{ cls: 'studentbox', cn: [
-						{ cls: 'avatar', style: {backgroundImage: 'url({avatar})'}},
-						{ cls: 'wrap', cn: [
-							{ cls: 'name', html: '{[this.displayName(values)]}'},
-							{ cls: 'action-items', cn: [
-								{ tag: 'tpl', 'if': 'overdue &gt; 0', cn: {cls: 'overdue', html: '{overdue:plural("Assignment")} Overdue'}},
-								{ tag: 'tpl', 'if': 'ungraded &gt; 0', cn: { html: '{ungraded:plural("Ungraded Assignment")}'}}
+				{
+					text: 'Student',
+					dataIndex: 'Alias',
+					flex: 1,
+					xtype: 'templatecolumn',
+					tpl: new Ext.XTemplate(Ext.DomHelper.markup([
+						{cls: 'studentbox', cn: [
+							{cls: 'avatar', style: {backgroundImage: 'url({avatar})'}},
+							{cls: 'wrap', cn: [
+								{cls: 'name', html: '{[this.displayName(values)]}'},
+								{cls: 'action-items', cn: [
+									{tag: 'tpl', 'if': 'OverdueAssignmentCount &gt; 0', cn:
+										{cls: 'overdue', html: '{OverdueAssignmentCount:plural("Assignment")} Overdue'}
+									},
+									{tag: 'tpl', 'if': 'UngradedAssignmentCount &gt; 0', cn:
+										{cls: 'overdue', html: '{UngradedAssignmentCount:plural("Ungraded Assignment")}'}
+									}
+								]}
 							]}
 						]}
-					]}
-				]), {
-					displayName: function(values) {
-						var d = values.displayName,
-							f = values.FirstName,
-							l = values.LastName,
-							lm;
-
-						if (l) {
-							lm = Ext.DomHelper.markup({tag: 'b', html: l});
-							d = d.replace(l, lm);
-							if (d === values.displayName) {
-								d += (' (' + (f ? f + ' ' : '') + lm + ')');
-							}
-							d = Ext.DomHelper.markup({cls: 'accent-name', html: d});
+					]), {
+						displayName: function(values) {
+							//TODO: highlight search values
+							return values.Alias;
 						}
-
-						return d;
-					}
-				})},
-
-
-
-				{ text: 'Username', dataIndex: 'Username',
-					renderer: function(v, cellStuff, r) {
-						try {
-							return r.get('Status') === 'ForCredit' ? (r.get('OU4x4') || v) : '';
-						} catch (e) {
-							console.error(e.stack || e.message || e);
-							return '';
-						}
-					},
-					doSort: function(state) {
-						this.up('grid').getStore().sort(new Ext.util.Sorter({
-							direction: state,
-							property: 'username',
-							transform: function(r) {
-								var v = r.get('Username');
-
-								return r && (r.get('Status') === 'ForCredit' ? (r.get('OU4x4') || v) : '');
-							},
-							defaultSorterFn: function(o1, o2) {
-								var v1 = this.transform(o1);
-								var v2 = this.transform(o2);
-								return v1 > v2 ? 1 : (v1 < v2 ? -1 : 0);
-							}
-						}));
-					}
+					})
 				},
+				{ text: 'Username', dataIndex: 'Username'},
+				{
+					text: 'Grade',
+					dataIndex: 'FinalGrade',
+					width: 160,
+					xtype: 'templatecolumn',
+					tpl: new Ext.XTemplate(Ext.DomHelper.markup([
+						{cls: 'gradebox', cn: [
+							{tag: 'input', size: 3, tabindex: '1', type: 'text', value: '{[this.getGrade(values)]}'},
+							{cls: 'dropdown letter grade', tabindex: '1', html: '{[this.getLetter(values)]}'}
+						]}
+					]), {
+						getGrade: function(values) {
+							var grade = (values.FinalGrade && values.FinalGrade.getValue()) || {};
 
+							return grade.value || '';
+						},
 
+						getLetter: function(values) {
+							var grade = (values.FinalGrade && values.FinalGrade.getValue()) || {};
 
-				{ text: 'Grade', dataIndex: 'grade', width: 160, xtype: 'templatecolumn', tpl: Ext.DomHelper.markup([
-					{ cls: 'gradebox', cn: [
-						{ tag: 'input', size: 3, tabindex: '1', type: 'text', value: '{grade}'},
-						{ cls: 'dropdown letter grade', tabindex: '1', html: '{letter}'}
-					]}
-				])}
-
-
+							return grade.letter || '';
+						}
+					})
+				}
 			],
 
 			listeners: {
@@ -167,66 +151,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	],
 
 
-	//<editor-fold desc="Init">
-	constructor: function() {
-		this.store = new Ext.data.Store({
-			proxy: 'nti.roster',
-
-			fields: [
-				{name: 'id', type: 'string', mapping: 'Username'},
-				{name: 'user', type: 'auto'},
-				{name: 'avatar', type: 'string', defaultValue: 'resources/images/icons/unresolved-user.png'},
-				{name: 'displayName', type: 'string', defaultValue: getString('NextThought.view.courseware.assessment.admin.performance.Root.resolving')},
-				{name: 'FirstName', type: 'string' },
-				{name: 'LastName', type: 'string' },
-				{name: 'Username', type: 'string', defaultValue: ''},
-				{name: 'OU4x4', type: 'string', defaultValue: ''},
-				{name: 'grade', type: 'string'},
-				{name: 'letter', type: 'string', defaultValue: '-'},
-				{name: 'action', type: 'int'},
-				{name: 'ungraded', type: 'int', defaultValue: 0},
-				{name: 'overdue', type: 'int', defaultValue: 0},
-				{name: 'Status', type: 'string', mapping: 'LegacyEnrollmentStatus'}
-			],
-
-			filters: [
-				{property: 'LegacyEnrollmentStatus', value: 'ForCredit'}
-			],
-
-			sorters: [
-				{property: 'LastName', direction: 'ascending'}
-			],
-
-			remoteSort: false,
-			remoteFilter: false,
-
-			setSource: function(source) {
-				this.currentPage = 1;
-				this.getProxy().setSource(source);
-				this.reload();
-			}
-		});
-
-		Ext.apply(this.store.proxy, {
-			sortParam: undefined,
-			filterParam: undefined,
-			idParam: undefined,
-			startParam: undefined,
-			limitParam: undefined
-		});
-
-		this.resortAndFilter = Ext.Function.createBuffered(this.resortAndFilter, 200, null, null);
-		this.callParent(arguments);
-	},
-
-
 	initComponent: function() {
 		var me = this;
 
 		me.callParent(arguments);
 		me.supported = true;
 		me.grid = me.down('grid');
-		me.grid.bindStore(me.store);
 		me.header = me.down('box');
 		me.createGradeMenu();
 
@@ -263,18 +193,13 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			itemEl: {click: 'showItemMenu', scope: this},
 			inputEl: {keyup: 'changeNameFilter', scope: this, buffer: 350},
 			clearEl: {click: 'clearSearch', scope: this},
-			avatarEl: {click: 'toggleAvatarsClicked', scope: this}
+			avatarEl: {click: 'toggleAvatarsClicked', scope: this},
+			nextPageEl: {click: 'loadNextPage', scope: this},
+			previousPageEl: {click: 'loadPreviousPage', scope: this}
 		});
 
 		this.mon(this.grid, {
 			cellclick: 'onCellClick'
-		});
-
-		this.mon(this.store, 'refresh', function(store) {
-			//if there are no records in the scrollTo will case an exception
-			if (!store.getCount()) { return; }
-
-			grid.verticalScroller.scrollTo(0);
 		});
 	},
 	//</editor-fold>
@@ -378,7 +303,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		this.updateExportEl(item.type);
 
-		this.store.setSource(item.type);
 		this.maybeSwitch(noEmpty);
 		this.updateFilter();
 	},
@@ -526,69 +450,32 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			s.filter(filters);
 		}
 	},
-	//</editor-fold>
 
 
-	//<editor-fold desc="Data Bindings">
-	resortAndFilter: function() {
-		var focused = this.getFocusedInput(),
-			s = this.store;
-
-		if (s.isFiltered()) {s.filter();}//refilter
-		s.sort();
-
-		this.setFocusedInput(focused);
+	loadNextPage: function() {
+		this.store.loadNextPage();
 	},
 
 
-	setAssignmentsData: function(assignments) {
+	loadPreviousPage: function() {
+		this.store.loadPreviousPage();
+	},
+
+
+	setAssignmentsData: function(assignments, instance) {
 		this.clearAssignmentsData();
 
-		var s = this.store,
-			gradeBook = assignments.gradeBook;
-		this.gradeBook = gradeBook;
-		this.gradeBookDefaultPart = gradeBook && gradeBook.getFieldItem('Items', 'default');
+		this.store = assignments.getGradeSummaries();
 
-		this.updateExportEl(this.currentStudent);
-
-		if (this.header.exportButton) {
-			this.header.exportButton.set({
-				href: gradeBook.getLink('ExportContents')
-			});
+		if (assignments.hasFinalGrade()) {
+			this.addCls('show-final-grade');
 		}
 
-		this.assignments = assignments;
-		this.mon(s, {load: 'applyRoster', prefetch: 'applyRoster'});
-		s.getProxy().setURL(assignments.getRosterURL());
+		this.grid.bindStore(this.store);
+
+		this.store.loadPage(1);
+
 		return Promise.resolve();
-	},
-
-
-	applyRoster: function(s, rec, success) {
-		if (!success) {return;}
-
-		var users = [],
-			recsMap = {},
-			applyUsers = this.applyUserData.bind(this, recsMap),
-			getCounts = this.getCountsFor.bind(this);
-
-		s.suspendEvents(true);
-
-		rec.forEach(function(r) {
-			var u = r.get('Username');
-			users.push(u);
-			recsMap[u] = r;
-
-			getCounts(u)
-				.then(r.set.bind(r));
-
-			r.commit(true);
-		});
-
-		s.resumeEvents();
-		this.resortAndFilter();
-
-		UserRepository.makeBulkRequest(users).done(applyUsers);
 	},
 
 
@@ -600,116 +487,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	clearAssignmentsData: function() { this.clear(); },
 
 
-	getCountsFor: function(username) {
-		var gradeBookEntries = [],
-			counts = {
-				ungraded: 0,
-				overdue: 0
-			};
-
-		this.assignments.get('Items').forEach(function(assignment) {
-			var due = assignment.getDueDate(),
-				parts = (assignment.get('parts') || []).length,
-				getEntry = assignment.getGradeBookEntry();
-
-			gradeBookEntries.push(getEntry.then(function(entry) {
-				var i = entry && entry.getFieldItem('Items', username),
-					g = ((i && i.get('value')) || '').toString().split(' ')[0].trim();
-
-				if (i && parts > 0 && Ext.isEmpty(g)) { counts.ungraded += 1; }
-
-				//if we have a due date and its beofre now increment the overdue count
-				//if we don't have a due date don't increment the overdue count
-				if (!i && due && due < new Date()) { counts.overdue += 1; }
-			}).fail(function() { return {}; }));
-		});
-
-
-		return Promise.all(gradeBookEntries)
-			.then(function() {
-				return counts;
-			});
-	},
-
-
-	updateActionables: function(rec, username) {
-		this.getCountsFor(username)
-			.then(rec.set.bind(rec));
-		rec.set(this.getCountsFor(username));
-		//this.resortAndFilter();
-	},
-
-
-	applyUserData: function(recsMap, users) {
-		var me = this,
-			s = me.store,
-			gradebookentry = me.gradeBook.getItem('Final Grade', 'no_submit');
-
-		function getGrade(entry, user) {
-			return entry && entry.getFieldItem('Items', user.getId());
-		}
-
-		function setGrade(r, value) {
-			var v = value.getValues();
-			r.set({
-				grade: v.value,
-				letter: v.letter
-			});
-			r.commit(true);
-		}
-
-		function updateGrade(r, grade) {
-			setGrade(r, grade);
-			me.mon(grade, 'value-changed', function() {
-				setGrade(r, grade);
-			});
-		}
-
-
-		if (gradebookentry && this.supported) {
-			this.addCls('show-final-grade');
-		}
-
-		s.suspendEvents(true);
-
-		users.forEach(function(u) {
-			var grade = getGrade(gradebookentry, u),
-				r = recsMap[u.getId()], monitor;
-
-			if (grade) {
-				updateGrade(r, grade);
-			} else if (gradebookentry) {
-				monitor = me.mon(gradebookentry, {
-					destroyable: true,
-					'Items-changed': function() {
-						var grade = getGrade(gradebookentry, u);
-						if (grade) {
-							Ext.destroy(monitor);
-							updateGrade(r, grade);
-						}
-					}
-				});
-			}
-
-			me.mon(me.gradeBook, 'Items-changed', function() {
-				me.updateActionables(r, u.getId());
-			});
-
-			r.set({
-				user: u,
-				avatar: u.get('avatarURL'),
-				displayName: u.toString(),
-				FirstName: u.get('FirstName'),
-				LastName: u.get('LastName'),
-				OU4x4: r.get('Status') === 'Open' ? '' : u.get('OU4x4'),
-				Username: r.get('Status') === 'Open' ? '' : u.get('Username')
-			});
-			r.commit(true);
-		});
-
-		s.resumeEvents();
-		this.resortAndFilter();
-	},
+	updateActionables: function(username) {},
 
 
 	getNode: function(record) {
