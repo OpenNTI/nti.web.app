@@ -20,6 +20,7 @@ Ext.define('NextThought.store.courseware.HistoryItems', {
 					}
 					item = {Creator: item[0], Class: 'UsersCourseAssignmentHistoryItem'};
 				}
+
 				return item;
 			}
 		},

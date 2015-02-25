@@ -27,19 +27,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 		this.letterEl.setStyle({display: 'none'});
 
 		if (!grade) {
-			try {
-				this.assignmentHistory.buildGrade();
-
-				// update the grade values
-				grade = this.assignmentHistory.get('Grade');
-				values = grade && grade.getValues();
-				number = values && values.value;
-				letter = values && values.letter;
-
-			} catch (noGrade) {
-				console.warn(noGrade.stack || noGrade.message || noGrade);
-				this.gradeBoxEl.hide();
-			}
+			console.warn('No grade not even a placeholder');
+			this.gradeBoxEl.hide();
 		}
 
 		if (NextThought.view.courseware.assessment.AssignmentStatus.hasActions(this.assignmentHistory)) {
@@ -108,53 +97,21 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 
 	changeGrade: function(number, letter) {
 		var me = this,
-			store = this.pageSource,
-			assignment = this.assignment,
-			historyItem = this.assignmentHistory,
-			grade = historyItem.get('Grade'),
-			assignmentCollection = this.pageSource && this.pageSource.assignmentsCollection;
+			historyItem = this.assignmentHistory;
 
-		if (!grade) {
+		if (!historyItem) {
 			console.error('No assignmentHistroy set, cannot change the grade');
 			return;
 		}
 
-		//if it hasn't changed don't try to save it
-		if (grade.valueEquals(number, letter)) { return; }
-
-		grade.saveValue(number, letter)
-			.then(function(g) {
-				var link = g.getLink('AssignmentHistoryItem');
-				//if the grade that comes back from saving has an assignment history item link
-				//and we have a store get the history item from the server and update the backing store
-				if (link && store) {
-					Service.request(link)
-						.then(function(item) {
-							var newHistoryItem = ParseUtils.parseItems(item)[0];
-							//the item field is set with the assignment and does not come back from the server
-							//so fill it in with the previous history item's item
-							newHistoryItem.set('item', historyItem.get('item'));
-
-							assignment.getGradeBookEntry()
-								.then(function(entry) {
-									entry.addItem(newHistoryItem.get('Grade'));
-								});
-
-							assignment.getGradeBookEntry().addItem(newHistoryItem.get('Grade'));
-
-							store.syncBackingStore(newHistoryItem);
-							if (assignmentCollection) {
-								assignmentCollection.syncStoreForRecord(store, newHistoryItem, 'Grade');
-							}
-
-						})
-						.fail(function(reason) {
-							console.error('Failed to update assignmenthistoryitem from new grade:', reason);
-						});
-				}
+		historyItem.saveGrade(number, letter)
+			.then(me.fireEvent.bind(me, 'grade-saved'))
+			.fail(function(reason) {
+				alert('There was an error saving the grade. Please try again later.');
+				console.error('Failed to save Grade:', reason);
+				Error.raiseForReport(reason);
 			})
-			.fail(function() {
-				grade.reject();
+			.always(function() {
 				me.setUpGradebox();
 			});
 	},

@@ -136,17 +136,33 @@ Ext.define('NextThought.model.courseware.Grade', {
 	},
 
 
+	setValue: function(value, letter) {
+		value = (value && value.trim()) || '';
+		letter = (letter && letter.trim()) || '';
+
+		var val = value + ' ' + letter;
+
+		this.set('value', val);
+
+		return val;
+	},
+
+
 	saveValue: function(value, letter) {
+		if (this.isPlaceholder) { return this.createNewGrade(value, letter); }
+
 		value = (value && value.trim()) || '';
 		letter = (letter && letter.trim()) || '-';
 
-		var me = this,
+		var me = this, oldVal,
 			val = value + ' ' + letter;
 
 		//if we are attempting to save the same value we are already in the middle of saving stop
 		if (val === me.pendingSaveValue) { return Promise.resolve(me); }
 
 		me.pendingSaveValue = val;
+
+		oldVal = me.get('value');
 
 		me.set('value', val);
 
@@ -172,8 +188,38 @@ Ext.define('NextThought.model.courseware.Grade', {
 						fulfill(grade);
 					}
 				},
-				failure: reject
+				failure: function() {
+					delete me.pendingSaveValue;
+					me.set('value', oldVal);
+					reject();
+				}
 			});
+		});
+	},
+
+
+	/**
+	 * Creates a grade for an assignment with out a submission. Uses the SetGrade link on the gradebook
+	 * set as the href in the assignment collection
+	 *
+	 * @param  {string} value the value of the grade
+	 * @param  {char} letter the letter value of the grade
+	 * @return {Promise}     fulfills with the assignment history item that was created
+	 */
+	createNewGrade: function(value, letter) {
+		var me = this,
+			href = me.get('href');
+
+		me.setValue(value, letter);
+
+		return Service.post(href, {
+			Username: me.get('Username'),
+			AssignmentId: me.get('AssignmentId'),
+			value: me.get('value')
+		}).fail(function(reason) {
+			me.set('value', null);
+
+			return Promise.reject(reason);
 		});
 	},
 

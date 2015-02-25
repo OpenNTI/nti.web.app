@@ -159,9 +159,7 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
             }
 
 			if (!grade) {
-				//this might throw an exception...what should we do?
-				record.buildGrade();
-				grade = record.get('Grade');
+				console.error('No Grade, not even a place holder.');
 			}
 
 			console.debug('saving: ' + value, 'to', grade.get('href'));

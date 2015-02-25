@@ -8,18 +8,19 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Header', {
 		gradeboxEl: '.header > .grade'
 	},
 
-	//TODO: fill this in to show the final grade
-	setGradeBook: function(assignments) {},
+	setGradeBook: function(assignments) {
+		this.assignments = assignments;
+		this.setUpGradebox();
+	},
+
 
 	setUpGradebox: function() {
-		if (!this.gradebook) { return; }
+		if (!this.assignments) { return; }
 
 		var me = this,
-			gradebookentry = me.gradebook.getItem('Final Grade', 'no_submit'),
-			grade = gradebookentry && gradebookentry.getFieldItem('Items', me.student.getId()),
-			value = grade && grade.get('value');
+			finalGrade = me.assignments.getFinalGradeAssignment();
 
-		function fillInValue(key, value) {
+		function fillInValue(grade) {
 			var values = grade && grade.getValues(),
 				number = values && values.value,
 				letter = values && values.letter;
@@ -35,20 +36,38 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Header', {
 			}
 		}
 
-		if (grade) {
+		me.gradePromise = finalGrade ? me.assignments.getGradeFor(finalGrade, me.student.getId()) : Promise.reject();
+
+
+		me.gradePromise.then(function(grade) {
 			me.mon(grade, {
-				'value-changed': fillInValue,
-				single: true
+				'value-change': fillInValue.bind(me, grade),
+				single: true //Why is this only a single event?
 			});
-		}
 
-		fillInValue(null, value);
+			fillInValue(grade);
+		});
 
-		this.gradeboxEl[gradebookentry ? 'show' : 'hide']();
+		//Do we need to do this based off of the gradebook entry?
+		//Not just the fact that a final grade assignment exists.
+		me.gradeboxEl[finalGrade ? 'show' : 'hide']();
 	},
 
 
 	changeGrade: function(number, letter) {
+		if (!this.assignments || !this.gradePromise) { return; }
+
+		// var me = this;
+
+		// me.gradePromse
+		// 	.then(function(grade) {
+		// 		grade.saveValue(number, letter)
+		// 			.then
+		// 	});
+
+		var me = this,
+			finalGrade = this.assignments.getFinalGradeAssignment(),
+			gradePromise = this.assignments.getGradeFor(finalGrade, this.student.getId());
 		if (!this.gradebook) { return; }
 
 		var gradebookentry = this.gradebook.getItem('Final Grade', 'no_submit'),

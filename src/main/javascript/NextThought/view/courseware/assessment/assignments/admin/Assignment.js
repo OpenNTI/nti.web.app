@@ -582,7 +582,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 					item.getGradeBookEntry().updateHistoryItem(rec);
 
-					try {rec.buildGrade();} catch (e) {Error.raiseForReport(e);}
 					return rec;
 				}
 			});

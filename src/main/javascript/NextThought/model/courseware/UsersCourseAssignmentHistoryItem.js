@@ -283,51 +283,6 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 	},
 
 
-	/**
-	 * @throws Ext.Error if not successful.
-	 */
-	buildGrade: function() {
-		//if we already have a grade don't set a new one
-		if (this.get('Grade')) { return; }
-
-		var item = this.get('item'),
-			student = this.get('Creator'),
-			username = student.get ? student.getId() : student,
-			gradeBook = item._gradeBook,
-			gradeBookRef = gradeBook && gradeBook.get('href'),
-			base = gradeBookRef && gradeBookRef.split(/[\?#]/)[0],
-			path = item && gradeBook && gradeBook.findGradeBookEntryFor(item.getId()),
-			href = [base || '/???/']
-							  .concat(path.map(encodeURIComponent))
-							  .concat([username])
-					  .join('/'),
-			grade = path && item && NextThought.model.courseware.Grade.create({
-				href: href,
-				Username: username,
-				Links: [
-					{
-						Class: 'Link',
-						href: href,
-						rel: 'edit'
-					}
-				]
-			});
-
-		if (item && !path) {
-			Ext.Error.raise('Could not find a GradeBookEntry for ' + item.getId());
-		}
-
-		if (grade) {
-			gradeBook.add(grade, item.getId());
-			grade.phantom = false;
-
-			this.set('Grade', grade);
-		} else {
-			Ext.Error.raise('No Assignment associated!');
-		}
-	},
-
-
 	getSubmissionStatus: function(due) {
 		due = due || this.get('due');
 
@@ -360,6 +315,34 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 		due = due.ago().replace('ago', '').trim();
 
 		return {cls: 'late', html: due + ' Late'};
+	},
+
+
+	saveGrade: function(value, letter) {
+		var me = this,
+			grade = me.get('Grade');
+
+		if (this.isPlaceholder) {
+			return grade.createNewGrade(value, letter)
+				.then(function(response) {
+					return Ext.decode(response);
+				})
+				.then(function(historyItem) {
+					//update the grade with the new values;
+					grade.set(historyItem.Grade);
+
+					historyItem.Grade = grade;
+
+					//update with the new history item values
+					me.set(historyItem);
+					me.isPlaceholder = false;
+				});
+		}
+
+		return grade.saveValue(value, letter)
+			.then(function() {
+				console.log('Grade Saved');
+			});
 	}
 }, function() {
 	NextThought.model.MAP['application/vnd.nextthought.assessment.userscourseassignmenthistoryitemsummary'] = this.$className;

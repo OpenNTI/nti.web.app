@@ -1,3 +1,4 @@
+/*globals B64*/
 Ext.define('NextThought.model.User', {
 	extend: 'NextThought.model.Base',
 	requires: ['NextThought.model.converters.PresenceInfo'],
@@ -8,18 +9,18 @@ Ext.define('NextThought.model.User', {
 		{ name: 'NotificationCount', type: 'int' },
 		{ name: 'Username', type: 'string' },
 		{ name: 'OU4x4', type: 'string' },
-		{ name: 'FirstName', type: 'string', mapping: 'NonI18NFirstName', convert: function(v, r){
+		{ name: 'FirstName', type: 'string', mapping: 'NonI18NFirstName', convert: function(v, r) {
 			// TODO: The mapping should normally take care of this conversion but it's doesn't seem to do it.
-			var fname = r && r.raw && r.raw['NonI18NFirstName'];
-			if( Ext.isEmpty(v) && !Ext.isEmpty(fname)){
+			var fname = r && r.raw && r.raw.NonI18NFirstName;
+			if (Ext.isEmpty(v) && !Ext.isEmpty(fname)) {
 				return fname;
 			}
 
 			return v;
 		}},
 		{ name: 'LastName', type: 'string', mapping: 'NonI18NLastName', convert: function(v, r) {
-			var lname = r && r.raw && r.raw['NonI18NLastName'];
-			if( Ext.isEmpty(v) && !Ext.isEmpty(lname)){
+			var lname = r && r.raw && r.raw.NonI18NLastName;
+			if (Ext.isEmpty(v) && !Ext.isEmpty(lname)) {
 				return lname;
 			}
 
@@ -229,6 +230,10 @@ Ext.define('NextThought.model.User', {
 				username: filter(decodeURIComponent(o[1])),
 				activeTab: o[2]
 			} : null;
+		},
+
+		getIdFromRaw: function(raw) {
+			return raw.getId ? raw.getId() : raw.Username;
 		}
 
 	},
@@ -256,6 +261,7 @@ Ext.define('NextThought.model.User', {
 		Ext.Ajax.request(req);
 	},
 
+
 	getActivityItemConfig: function(type) {
 		return Promise.resolve({
 			name: this.getName(),
@@ -264,17 +270,17 @@ Ext.define('NextThought.model.User', {
 	},
 
 
-    getSuggestContacts: function(){
-        if(!isFeature("suggest-contacts") || !(this.hasLink('SuggestContacts') || this.hasLink('Classmates'))) { return Promise.reject(); }
+	getSuggestContacts: function() {
+		if (!isFeature('suggest-contacts') || !(this.hasLink('SuggestContacts') || this.hasLink('Classmates'))) { return Promise.reject(); }
 
-        var link = this.getLink('SuggestContacts') || this.getLink('Classmates');
+		var link = this.getLink('SuggestContacts') || this.getLink('Classmates');
 
-        return Service.request(link)
-            .then(function(response) {
-                var parent = JSON.parse(response);
-                return ParseUtils.parseItems(parent.Items);
-            });
-    }
+		return Service.request(link)
+			.then(function(response) {
+				var parent = JSON.parse(response);
+				return ParseUtils.parseItems(parent.Items);
+			});
+	}
 
 
 }, function() {

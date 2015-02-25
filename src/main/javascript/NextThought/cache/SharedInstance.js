@@ -9,13 +9,18 @@ Ext.define('NextThought.cache.SharedInstance', {
 		//TODO: We might need to have multiple keys point to the same record
 		//so we would need a KEY_TO_INDEX and INDEX_TO_RECORD
 		this.KEY_TO_RECORD = {};
+
+		if (config) {
+			Ext.apply(this, config);
+		}
+
 		this.callParent(arguments);
 	},
 
 	/**
 	 * Given a record determine what key should be used to locate it
 	 * can be overridden
-	 * @param  {Model|JSON} record the record to look up or data for a record
+	 * @param  {ModelInstance|JSON} record the record to look up or data for a record
 	 * @return {String}        key
 	 */
 	getKeyForRecord: function(record) {
@@ -33,7 +38,7 @@ Ext.define('NextThought.cache.SharedInstance', {
 	/**
 	 * Given a record return the url used to get it
 	 * can be overridden
-	 * @param  {Model|JSON} record record to get url for or data for a record
+	 * @param  {ModelInstance|JSON} record record to get url for or data for a record
 	 * @return {String}        the url
 	 */
 	getHrefForRecord: function(record) {
@@ -71,16 +76,13 @@ Ext.define('NextThought.cache.SharedInstance', {
 	__updateRecord: function(key, json) {
 		var cachedRecord = this.__getRecordForKey(key);
 
-		//TODO check the last modified to see if the client got a cached version
-		//so we don't overwrite any local changed
-
 		cachedRecord.set(json);
 	},
 
 
 	/**
 	 * Fetch the record from the server and update the values in the shared instance
-	 * @param  {Model} record record to sync
+	 * @param  {ModelInstance} record record to sync
 	 */
 	__syncRecordWithServer: function(record) {
 		var href = this.getHrefForRecord(record),
@@ -104,16 +106,18 @@ Ext.define('NextThought.cache.SharedInstance', {
 	 * Given a record either:
 	 *
 	 * 1.) If we have it return a shared instance of it
-	 * 2.) If its not already cached add it and return the it
+	 * 2.) If its not already cached add it and return the cached record
 	 *
-	 * @param {Model|JSON} record record to get
+	 * @param {ModelInstance|JSON} record record to get
 	 * @param {Boolean} sync true to request the record from the server
-	 * @param {Boolean} update update the shared instance's data with the data from the record
-	 * @return {Model}        shared instance of that record
+	 * @param {Boolean} forceUpdate update the shared instance's data with the data from the record
+	 * @return {ModelInstance}        shared instance of that record
 	 */
-	getRecord: function(record, sync, update) {
+	getRecord: function(record, sync, forceUpdate) {
 		var key = this.getKeyForRecord(record),
-			cachedRecord = key && this.__getRecordForKey(key);
+			cachedRecord = key && this.__getRecordForKey(key),
+			lastMod = record.get('Last Modified'),
+			cachedLastMod = cachedRecord && cachedRecord.get('Last Modified');
 
 		if (!cachedRecord) {
 			this.__storeRecordAtKey(key, record);
@@ -124,10 +128,21 @@ Ext.define('NextThought.cache.SharedInstance', {
 			this.__syncRecordWithServer(record);
 		}
 
-		if (update) {
+		//If the record has been modified after the cached copy, update the cache
+		if (lastMod > cachedLastMod || forceUpdate) {
 			this.__updateRecord(key, record.asJSON());
 		}
 
 		return cachedRecord;
+	},
+
+
+	/**
+	 * Given a key find the record in the cache if it exists
+	 * @param  {String} key key for the record
+	 * @return {ModelInstance}     the cached record
+	 */
+	findRecord: function(key) {
+		return this.__getRecordForKey(key);
 	}
 });

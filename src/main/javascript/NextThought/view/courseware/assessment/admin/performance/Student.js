@@ -88,8 +88,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 
 
 	setAssignmentsData: function(assignments) {
-		var user = this.student.getId();
-
 		if (!assignments) {
 			console.error('No assignments??');
 			return Promise.reject('no data?');

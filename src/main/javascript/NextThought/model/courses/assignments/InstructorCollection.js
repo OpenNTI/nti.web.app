@@ -15,14 +15,36 @@ Ext.define('NextThought.model.courses.assignments.InstructorCollection', {
 		this.HistoryItemCache = this.__createHistoryItemCache();
 	},
 
+	__getIdOf: function(obj) {
+		return Ext.isString(obj) ? obj : obj.getId();
+	},
+
 
 	__createGradeCache: function() {
-		return NextThought.cache.SharedInstance.create();
+		return NextThought.cache.SharedInstance.create({
+			getKeyForRecord: function(record) {
+				var userName = record.get ? record.get('Username') : record.Username,
+					assignmentId = record.get ? record.get('AssignmentId') : record.AssignmentId;
+
+				return userName + '/' + assignmentId;
+			}
+		});
 	},
 
 
 	__createHistoryItemCache: function() {
-		return NextThought.cache.SharedInstance.create();
+		var me = this;
+
+		return NextThought.cache.SharedInstance.create({
+			getKeyForRecord: function(record) {
+				var user = record.get ? record.get('Creator') : record.Creator,
+					assignment = record.get ? record.get('item') : record.item,
+					userName = me.__getIdOf(user),
+					assignmentId = me.__getIdOf(assignment);
+
+				return userName + '/' + assignmentId;
+			}
+		});
 	},
 
 
@@ -52,7 +74,8 @@ Ext.define('NextThought.model.courses.assignments.InstructorCollection', {
 	 * Get the HistoryItemSummaries for a user
 	 * returns a store that can be pages, filtered, and searched though
 	 *
-	 * @param  {String} historyLink link to the assignment histories for a user
+	 * @param {String} historyLink link to the assignment histories for a user
+	 * @param {User} [] [description]
 	 * @return {Store}      store proxied to load the summaries
 	 */
 	getStudentHistory: function(historyLink, studentId) {
@@ -61,6 +84,7 @@ Ext.define('NextThought.model.courses.assignments.InstructorCollection', {
 			GradeCache: this.GradeCache,
 			HistoryItemCache: this.HistoryItemCache,
 			assignments: this,
+			student: studentId,
 			pageSize: this.getCount() //load all of the history item for a student
 		});
 	},
@@ -83,7 +107,16 @@ Ext.define('NextThought.model.courses.assignments.InstructorCollection', {
 	 * @return {Promise}            fulfills with the grade
 	 */
 	getGradeFor: function(assignment, user) {
-		return Promise.resolve();
+		user = this.__getIdOf(user);
+		assignment = this.__getIdOf(assignment);
+
+		var grade = this.GradeCache.findRecord(user + '/' + assignment);
+
+		if (grade) {
+			return Promise.resolve(grade);
+		}
+
+		return Promise.resolve(this.createPlaceholderGrade(assignment, user));
 	},
 
 
@@ -96,7 +129,9 @@ Ext.define('NextThought.model.courses.assignments.InstructorCollection', {
 
 		return NextThought.store.courseware.GradeBookSummaries.create({
 			url: gradeBook.getLink('GradeBookSummary'),
-			GradeCache: this.GradeCache
+			GradeCache: this.GradeCache,
+			HistoryItemCache: this.HistoryItemCache,
+			assignments: this
 		});
 	},
 
@@ -123,5 +158,40 @@ Ext.define('NextThought.model.courses.assignments.InstructorCollection', {
 					});
 
 		return this.__loadHistoryRequest;
+	},
+
+
+	getCreateGradeLink: function() {
+		var gradebook = this.getGradeBook();
+
+		return gradebook && gradebook.getLink('SetGrade');
+	},
+
+
+	createPlaceholderGrade: function(assignment, user) {
+		var href = this.getCreateGradeLink(),
+			grade = NextThought.model.courseware.Grade.create({
+				href: href,
+				AssignmentId: this.__getIdOf(assignment),
+				Username: this.__getIdOf(user)
+			});
+
+		grade.isPlaceholder = true;
+
+		return this.GradeCache.getRecord(grade);
+	},
+
+
+	createPlaceholderHistoryItem: function(assignment, user) {
+		var grade = this.createPlaceholderGrade(assignment, user),
+			historyItem = NextThought.model.courseware.UsersCourseAssignmentHistoryItem.create({
+				Creator: user,
+				item: assignment,
+				Grade: grade
+			});
+
+		historyItem.isPlaceholder = true;
+
+		return this.HistoryItemCache.getRecord(historyItem);
 	}
 });

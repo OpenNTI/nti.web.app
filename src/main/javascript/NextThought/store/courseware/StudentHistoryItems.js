@@ -36,10 +36,7 @@ Ext.define('NextThought.store.courseware.StudentHistoryItems', {
 			if (entry) {
 				entry.set('item', assignment);
 			} else if (!assignment.doNotShow()) {
-				me.add(NextThought.model.courseware.UsersCourseAssignmentHistoryItem.create({
-					Creator: me.student,
-					item: assignment
-				}));
+				me.add(me.assignments.createPlaceholderHistoryItem(assignment, me.student));
 			}
 		});
 	}

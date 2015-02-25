@@ -49,7 +49,6 @@ Ext.define('NextThought.model.courses.assignments.BaseCollection', {
 				return items;
 			}
 
-
 			return this.create({
 				HitMap: hitmap,
 				NodeMap: nodemap,
@@ -140,24 +139,39 @@ Ext.define('NextThought.model.courses.assignments.BaseCollection', {
 		return assignments;
 	},
 
+
+	getGradeBook: function() {
+		return this.get('GradeBook');
+	},
+
+
 	//override these
 	getGradeBookEntry: function(assignment) { return Promise.resolve(null); },
 	getGradeFor: function(assignment, user) { return Promise.resolve(null); },
 
+	/**
+	 * Get the no submit assignment that has a title of Final Grade if there is one
+	 * TODO: figure out where there is a link to this to compare instead
+	 * @return {Assignment} the final grade assignment or null if there isn't one
+	 */
+	getFinalGradeAssignment: function() {
+		if (this.__finalGrade !== undefined) { return this.__finalGrade; }
 
-	hasFinalGrade: function() {
-		if (this.__hasFinalGrade !== undefined) { return this.__hasFinalGrade; }
-
-		var hasFinalGrade = false;
+		var finalGrade = null;
 
 		this.each(function(assignment) {
 			if (assignment.isNoSubmit() && assignment.get('title') === 'Final Grade') {
-				hasFinalGrade = true;
+				finalGrade = assignment;
 			}
 		});
 
-		this.__hasFinalGrade = hasFinalGrade;
+		this.__finalGrade = finalGrade;
 
-		return this.__hasFinalGrade;
+		return this.__finalGrade;
+	},
+
+
+	hasFinalGrade: function() {
+		return !!this.getFinalGradeAssignment();
 	}
 });
