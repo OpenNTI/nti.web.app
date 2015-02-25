@@ -38,17 +38,22 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.View', {
 
 
 	showStudent: function(rec) {
-		if (!rec.get('user')) {
-			console.warn('No user, view not ready');
+		var view,
+			links = rec.get('Links'),
+			historyURL = Service.getLinkFrom(rec.get('Links'), 'AssignmentHistory');
+
+		if (!rec.get('User') || !historyURL) {
+			console.warn('Unable to show student view', rec.get('User'), historyURL);
 			return;
 		}
 
 		Ext.destroy(this.down('course-assessment-admin-performance-student'));
 
-		var view = this.add({
+		view = this.add({
 			xtype: 'course-assessment-admin-performance-student',
-			student: rec.get('user'),
-			status: rec.get('Status'),
+			student: rec.get('User'),
+			historiesURL: historyURL,
+			FinalGrade: rec.get('FinalGrade'),
 			pageSource: NextThought.util.PageSource.create({
 				store: this.store,
 				current: this.store.indexOf(rec)

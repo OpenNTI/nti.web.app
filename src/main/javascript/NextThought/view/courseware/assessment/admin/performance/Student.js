@@ -95,17 +95,21 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 			return Promise.reject('no data?');
 		}
 
-		this.header.setGradeBook(assignments.gradeBook);
-		this.store = assignments.getViewForStudent(user);
+		this.header.setGradeBook(assignments);
+
+		this.store = assignments.getStudentHistory(this.historiesURL, this.student.getId());
+
 		this.store.on({
 			scope: this,
 			beforeload: 'mask',
 			load: 'unmask'
 		});
+
 		this.down('grid').bindStore(this.store);
 
 		this.store.load();
-		return Promise.resolve();
+
+		return;
 	},
 
 

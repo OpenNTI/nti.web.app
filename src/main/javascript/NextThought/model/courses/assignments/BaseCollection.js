@@ -120,6 +120,13 @@ Ext.define('NextThought.model.courses.assignments.BaseCollection', {
 	},
 
 
+	getCount: function() {
+		var items = this.get('Assignments');
+
+		return items.length;
+	},
+
+
 	getAssignmentsForContainer: function(containerId) {
 		var items = this.get('Assignments') || [],
 			assignments = [];
@@ -139,7 +146,7 @@ Ext.define('NextThought.model.courses.assignments.BaseCollection', {
 
 
 	hasFinalGrade: function() {
-		if (this.__hasFinalGrade) { return this.__hasFinalGrade; }
+		if (this.__hasFinalGrade !== undefined) { return this.__hasFinalGrade; }
 
 		var hasFinalGrade = false;
 

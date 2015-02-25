@@ -8,10 +8,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Header', {
 		gradeboxEl: '.header > .grade'
 	},
 
-	setGradeBook: function(gradebook) {
-		this.gradebook = gradebook;
-		this.setUpGradebox();
-	},
+	//TODO: fill this in to show the final grade
+	setGradeBook: function(assignments) {},
 
 	setUpGradebox: function() {
 		if (!this.gradebook) { return; }

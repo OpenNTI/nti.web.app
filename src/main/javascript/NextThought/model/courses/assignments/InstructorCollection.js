@@ -3,7 +3,8 @@ Ext.define('NextThought.model.courses.assignments.InstructorCollection', {
 
 	requires: [
 		'NextThought.cache.SharedInstance',
-		'NextThought.store.courseware.GradeBookSummaries'
+		'NextThought.store.courseware.GradeBookSummaries',
+		'NextThought.store.courseware.StudentHistoryItems'
 	],
 
 
@@ -11,10 +12,16 @@ Ext.define('NextThought.model.courses.assignments.InstructorCollection', {
 		this.callParent(arguments);
 
 		this.GradeCache = this.__createGradeCache();
+		this.HistoryItemCache = this.__createHistoryItemCache();
 	},
 
 
 	__createGradeCache: function() {
+		return NextThought.cache.SharedInstance.create();
+	},
+
+
+	__createHistoryItemCache: function() {
 		return NextThought.cache.SharedInstance.create();
 	},
 
@@ -45,12 +52,19 @@ Ext.define('NextThought.model.courses.assignments.InstructorCollection', {
 	 * Get the HistoryItemSummaries for a user
 	 * returns a store that can be pages, filtered, and searched though
 	 *
-	 * @param  {String} user Username of the user
+	 * @param  {String} historyLink link to the assignment histories for a user
 	 * @return {Store}      store proxied to load the summaries
 	 */
-	getUserHistory: function(user) {
-		return Promise.resolve();
+	getStudentHistory: function(historyLink, studentId) {
+		return NextThought.store.courseware.StudentHistoryItems.create({
+			url: historyLink,
+			GradeCache: this.GradeCache,
+			HistoryItemCache: this.HistoryItemCache,
+			assignments: this,
+			pageSize: this.getCount() //load all of the history item for a student
+		});
 	},
+
 
 	/**
 	 * Returns the gradebook entry for an assignment
