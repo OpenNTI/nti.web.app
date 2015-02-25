@@ -58,7 +58,26 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 
 		pageParam: undefined,
 		startParam: 'batchStart',
-		limitParam: 'batchSize'
+		limitParam: 'batchSize',
+
+		buildUrl: function(request) {
+			var sort, dir,
+				p = request.params;
+
+			if (p && p.sort) {
+				dir = {
+					asc: 'ascending',
+					desc: 'descending'
+				};
+				sort = Ext.decode(p.sort)[0];
+				p.sortOn = sort.property;
+				p.sortOrder = dir[(sort.direction || 'asc').toLowerCase()] || sort.direction;
+				delete p.sort;
+			}
+
+			return this.url;
+		}
+
 	},
 
 
@@ -164,10 +183,19 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 	},
 
 
-	loadNextPage: function() {
-		var current = this.currentPage;
+	getTotalPages: function() {
+		var total = this.getTotalCount(),
+			pageSize = this.getPageSize();
 
-		if (current < 10000) {
+		return Math.ceil(total / pageSize);
+	},
+
+
+	loadNextPage: function() {
+		var current = this.currentPage,
+			total = this.getTotalPages();
+
+		if (current < total) {
 			this.loadPage(current + 1);
 		}
 	},

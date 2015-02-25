@@ -22,7 +22,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.PagedGrid', {
 		defaults: {
 			//reverse the default state order (descending first)
 			possibleSortStates: ['DESC', 'ASC'],
-			resizable: false
+			resizable: false,
+
+			getSortParam: function() {
+				return this.sortOn || this.dataIndex;
+			}
 		},
 
 		items: []
@@ -35,6 +39,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.PagedGrid', {
 			text: 'Student',
 			dataIndex: 'Alias',
 			name: 'student',
+			sortOn: 'LastName',
 			flex: 1,
 			xtype: 'templatecolumn',
 			tpl: new Ext.XTemplate(Ext.DomHelper.markup([{
@@ -334,6 +339,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.PagedGrid', {
 				Ext.select(c.getCellSelector()).addCls(cls);
 			}
 		}
+	},
+
+
+	getHistoryItemFromRecord: function(record) {
+		return record.get('HistoryItemSummary');
 	},
 
 
