@@ -13,7 +13,10 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 		{name: 'pendingAssessment', type: 'singleItem', persist: false},
 		{name: 'Metadata', type: 'auto', persit: false},
 
-		//set by the Assignment model when loading history. This will be unset for all other uses.
+		//set by the store when it loads
+		{name: 'AssignmentId', type: 'string', persit: false},
+
+		//set by the store when it loads
 		{name: 'item', type: 'auto', persist: false},
 
 		//<editor-fold desc="Synthetic fields derived from server data and the assocated assignment.">
@@ -66,7 +69,7 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 		{name: 'submission', type: 'string', persist: false, affectedBy: 'Submission', convert: function(v, r) {
 			r = r.raw || {};
 			return (r.hasOwnProperty('SubmissionCreatedTime') || r.hasOwnProperty('Submission')) ? 'true' : '';
-		} },
+		}},
 
 
 		{name: 'grade', type: 'Synthetic', persist: false, fn: function(r) {

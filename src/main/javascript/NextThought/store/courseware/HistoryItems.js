@@ -10,16 +10,23 @@ Ext.define('NextThought.store.courseware.HistoryItems', {
 		url: 'tbd',
 
 		reader: {
+			type: 'nti',
 			root: 'Items',
 			totalProperty: 'FilteredTotalItemCount',
+			collectionTypes: {
+				'application/vnd.nextthought.assessment.userscourseassignmenthistory': 1
+			},
 
-			onItemRead: function(item) {
+			onItemRead: function(item, key) {
 				if (Ext.isArray(item)) {
 					if (item[1] !== null) {
-						return item[1];
+						item = item[1];
+					} else {
+						item = {Creator: item[0], Class: 'UsersCourseAssignmentHistoryItem'};
 					}
-					item = {Creator: item[0], Class: 'UsersCourseAssignmentHistoryItem'};
 				}
+
+				item.AssignmentId = key;
 
 				return item;
 			}

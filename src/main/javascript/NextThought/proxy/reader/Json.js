@@ -29,7 +29,7 @@ Ext.define('NextThought.proxy.reader.Json', {
 		if (this.collectionTypes[mimeType] || (mimeType === undefined && items)) {
 			for (key in items) {
 				if (items.hasOwnProperty(key)) {
-					item = this.onItemRead(items[key]);
+					item = this.onItemRead(items[key], key);
 
 					if (typeof item === 'string') {
 						console.warn('IGNORING: Received string item at key:', key, item);
