@@ -8,7 +8,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 	requires: [
-		'NextThought.view.courseware.assessment.admin.PagedGrid'
+		'NextThought.view.courseware.assessment.admin.PagedGrid',
+		'NextThought.view.courseware.assessment.admin.Pager'
 	],
 
 	__inputSelector: '.gradebox input',
@@ -44,10 +45,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 					cls: 'tools',
 					cn: [
 						{ tag: 'a', href: '{exportLink}', cls: 'download button', html: getString('NextThought.view.courseware.assessment.admin.performance.Root.export')},
-						{cls: 'pager', cn: [
-							{cls: 'previous-page', html: 'Previous Page'},
-							{cls: 'next-page', html: 'Next Page'}
-						]},
 						{ cls: 'toggle-avatar enabled', html: 'Hide Avatars'}
 					]
 				}
@@ -63,6 +60,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 				nextPageEl: '.tools .pager .next-page'
 			}
 		},
+		{ xtype: 'course-assessment-admin-pager'},
 		{
 			anchor: '0 -115',
 			xtype: 'course-admin-paged-grid',
@@ -91,7 +89,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 						}
 					})
 				},
-				Grade: { dataIndex: 'FinalGrade', width: 150}
+				Grade: { dataIndex: 'FinalGrade', sortOn: 'Grade', width: 150}
 			}
 		}
 	],
@@ -103,6 +101,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		me.callParent(arguments);
 		me.supported = true;
 		me.grid = me.down('grid');
+		me.pager = me.down('course-assessment-admin-pager');
 		me.header = me.down('box');
 		me.createGradeMenu();
 
@@ -139,9 +138,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			itemEl: {click: 'showItemMenu', scope: this},
 			inputEl: {keyup: 'changeNameFilter', scope: this, buffer: 350},
 			clearEl: {click: 'clearSearch', scope: this},
-			avatarEl: {click: 'toggleAvatarsClicked', scope: this},
-			nextPageEl: {click: 'loadNextPage', scope: this},
-			previousPageEl: {click: 'loadPreviousPage', scope: this}
+			avatarEl: {click: 'toggleAvatarsClicked', scope: this}
 		});
 
 		this.mon(this.grid, {
@@ -391,16 +388,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	loadNextPage: function() {
-		this.store.loadNextPage();
-	},
-
-
-	loadPreviousPage: function() {
-		this.store.loadPreviousPage();
-	},
-
-
 	setAssignmentsData: function(assignments, instance) {
 		this.clearAssignmentsData();
 
@@ -411,6 +398,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		if (assignments.hasFinalGrade()) {
 			this.addCls('show-final-grade');
 		}
+
+		this.pager.bindStore(this.store);
 
 		this.grid.bindStore(this.store);
 
@@ -570,6 +559,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	editGrade: function(record, value, letter) {
+		debugger;
 		var me = this,
 			view = me.__getGridView(),
 			node = view.getNode(record),

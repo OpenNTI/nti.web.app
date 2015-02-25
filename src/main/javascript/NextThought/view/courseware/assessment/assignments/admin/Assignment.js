@@ -8,7 +8,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		'NextThought.store.courseware.AssignmentView',
 		'NextThought.view.courseware.assessment.admin.PagedGrid',
 		'NextThought.ux.FilterMenu',
-		'NextThought.proxy.courseware.PagedPageSource'
+		'NextThought.proxy.courseware.PagedPageSource',
+		'NextThought.view.courseware.assessment.admin.Pager'
 	],
 
 	ui: 'course-assessment',
@@ -66,7 +67,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 						{ tag: 'span', cls: 'toggle-avatar link enabled', html: 'Hide Avatars'},
 						{ tag: 'span', cls: 'link filters arrow'}
 					]
-				}
+				},
+				{ cls: 'pager-wrapper'}
 			]
 		},
 		{ id: '{id}-body', cls: 'x-panel-body body', cn: ['{%this.renderContainer(out,values)%}'] }
@@ -81,7 +83,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		changeDateEl: '.header .controls .email',
 		filtersEl: '.header span.filters',
 		avatarEl: '.header span.toggle-avatar',
-		reportsEl: '.header .controls .reports'
+		reportsEl: '.header .controls .reports',
+		pagerEl: '.header .pager-wrapper'
 	},
 
 
@@ -95,12 +98,30 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 
 	items: [
-		{
+		{	
+			anchor: '0 -115',
 			xtype: 'course-admin-paged-grid',
 			cls: 'student-assignment-overview',
 			columnOrder: ['Student', 'Username', 'Completed', 'Grade', 'Feedback', 'Submission'],
 			columnOverrides: {
-				Student: {padding: '0 0 0 30'}
+				Student: {padding: '0 0 0 30'},
+				Grade: {
+					text: getString('NextThought.view.courseware.assessment.admin.Grid.score'),
+					componentCls: 'score',
+					tdCls: 'text score',
+					tpl: new Ext.XTemplate(Ext.DomHelper.markup([
+						{cls: 'gradebox', cn: [
+							{tag: 'input', size: 3, tabindex: '1', type: 'text', value: '{[this.getGrade(values)]}'}
+						]}
+						]), {
+							getGrade: function(values) {
+								var grade = values.Grade,
+									gradeVals = (grade && grade.getValues()) || {};
+
+								return gradeVals.value || '';
+							}
+					})
+				}
 			}
 		},
 		{
@@ -194,6 +215,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	afterRender: function() {
 		this.callParent(arguments);
 
+		var pager;
+
 		this.el.query('a.button').forEach(this._setupButtons);
 
 		if (this._masked) {
@@ -204,6 +227,14 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		this.onPagerUpdate();
 
 		this.mon(this.avatarEl, 'click', 'toggleAvatarsClicked');
+
+		pager = Ext.widget('course-assessment-admin-pager', {
+			renderTo: this.pagerEl
+		});
+
+		this.on('destory', 'destory', pager);
+
+		pager.bindStore(this.store);
 	},
 
 
