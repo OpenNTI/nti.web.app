@@ -91,7 +91,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 						}
 					})
 				},
-				Grade: { dataIndex: 'FinalGrade'}
+				Grade: { dataIndex: 'FinalGrade', width: 150}
 			}
 		}
 	],
