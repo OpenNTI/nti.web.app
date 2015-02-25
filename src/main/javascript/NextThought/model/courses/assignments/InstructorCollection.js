@@ -4,7 +4,8 @@ Ext.define('NextThought.model.courses.assignments.InstructorCollection', {
 	requires: [
 		'NextThought.cache.SharedInstance',
 		'NextThought.store.courseware.GradeBookSummaries',
-		'NextThought.store.courseware.StudentHistoryItems'
+		'NextThought.store.courseware.StudentHistoryItems',
+		'NextThought.store.courseware.AssignmentHistoryItems'
 	],
 
 
@@ -66,7 +67,13 @@ Ext.define('NextThought.model.courses.assignments.InstructorCollection', {
 	 * @return {Store}            store proxied to load the summaries
 	 */
 	getAssignmentHistory: function(assignment) {
-		return Promise.resolve();
+		return NextThought.store.courseware.AssignmentHistoryItems.create({
+			url: assignment.getLink('GradeBookByAssignment'),
+			GradeCache: this.GradeCache,
+			HistoryItemCache: this.HistoryItemCache,
+			assignment: assignment,
+			assignments: this
+		});
 	},
 
 

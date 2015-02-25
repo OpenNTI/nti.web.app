@@ -8,7 +8,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 	requires: [
-		'NextThought.proxy.courseware.Roster'
+		'NextThought.view.courseware.assessment.admin.PagedGrid'
 	],
 
 	__inputSelector: '.gradebox input',
@@ -65,16 +65,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		},
 		{
 			anchor: '0 -115',
-			xtype: 'grid',
-
-			scroll: 'vertical',
-
-			columns: [
-				{
-					text: 'Student',
-					dataIndex: 'Alias',
-					flex: 1,
-					xtype: 'templatecolumn',
+			xtype: 'course-admin-paged-grid',
+			columnOrder: ['Student', 'Username', 'Grade'],
+			columnOverrides: {
+				Student: {
 					tpl: new Ext.XTemplate(Ext.DomHelper.markup([
 						{cls: 'studentbox', cn: [
 							{cls: 'avatar', style: {backgroundImage: 'url({avatar})'}},
@@ -97,57 +91,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 						}
 					})
 				},
-				{ text: 'Username', dataIndex: 'Username'},
-				{
-					text: 'Grade',
-					dataIndex: 'FinalGrade',
-					width: 160,
-					xtype: 'templatecolumn',
-					tpl: new Ext.XTemplate(Ext.DomHelper.markup([
-						{cls: 'gradebox', cn: [
-							{tag: 'input', size: 3, tabindex: '1', type: 'text', value: '{[this.getGrade(values)]}'},
-							{cls: 'dropdown letter grade', tabindex: '1', html: '{[this.getLetter(values)]}'}
-						]}
-					]), {
-						getGrade: function(values) {
-							var grade = values.HistoryItemSummary && values.HistoryItemSummary.get('Grade'),
-								gradeVals = (grade && grade.getValues()) || {};
-
-							return gradeVals.value || '';
-						},
-
-						getLetter: function(values) {
-							var grade = values.HistoryItemSummary && values.HistoryItemSummary.get('Grade'),
-								gradeVals = (grade && grade.getValues()) || {};
-
-							return gradeVals.letter || '';
-						}
-					})
-				}
-			],
-
-			listeners: {
-				sortchange: function(ct, column) {
-					ct.items.each(function(c) { c.tdCls = ''; }, ct);
-					ct.up('grid').markColumn(column);
-				},
-				selectionchange: function(sm, selected) { sm.deselect(selected); },
-				viewready: function(grid) {
-					grid.mon(grid.getView(), 'refresh', function() {
-						grid.markColumn(grid.down('gridcolumn[sortState]'));
-					});
-				}
-			},
-
-			markColumn: function(c) {
-				var cls = 'sortedOn', el = this.getEl();
-				if (el) {
-					el.select('.' + cls).removeCls(cls);
-					if (c) {
-						c.tdCls = 'sortedOn';
-						Ext.select(c.getCellSelector()).addCls(cls);
-					}
-				}
+				Grade: { dataIndex: 'FinalGrade'}
 			}
 		}
 	],
@@ -633,7 +577,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	editGrade: function(record, value, letter) {
-		debugger;
 		var me = this,
 			view = me.__getGridView(),
 			node = view.getNode(record),

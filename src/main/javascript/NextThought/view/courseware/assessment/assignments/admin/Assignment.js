@@ -6,7 +6,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		'NextThought.proxy.courseware.PageSource',
 		'NextThought.layout.component.CustomTemplate',
 		'NextThought.store.courseware.AssignmentView',
-		'NextThought.view.courseware.assessment.admin.Grid',
+		'NextThought.view.courseware.assessment.admin.PagedGrid',
 		'NextThought.ux.FilterMenu'
 	],
 
@@ -95,78 +95,12 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 	items: [
 		{
-			xtype: 'course-admin-grid',
+			xtype: 'course-admin-paged-grid',
 			cls: 'student-assignment-overview',
-			nameOrder: ['creator', 'username', 'completed', 'grade', 'feedback', 'submission'],
+			columnOrder: ['Student', 'Username', 'Completed', 'Grade', 'Feedback', 'Submission'],
 			columnOverrides: {
-				0: {
-					text: getString('NextThought.view.courseware.assessment.assignments.admin.Assignment.student'),
-					xtype: 'templatecolumn',
-					dataIndex: 'Creator',
-					name: 'creator',
-					flex: 1,
-					padding: '0 0 0 30',
-					possibleSortStates: ['ASC', 'DESC'],//restore the default order of state(since the grid reverses it)
-					tpl: new Ext.XTemplate(Ext.DomHelper.markup([{
-								cls: 'padded-cell user-cell student-cell', cn: [
-									{ cls: 'avatar', style: {backgroundImage: 'url({Creator:avatarURL})'} },
-									{ cls: 'name', html: '{[this.displayName(values)]}'}
-								]
-						}]), {
-							displayName: function(values) {
-								if (Ext.isString(values.Creator)) {
-									return 'Resolving';
-								}
-
-								var creator = values.Creator,
-									displayName = creator && creator.get && creator.get('displayName'),
-									f = creator && creator.get && creator.get('FirstName'),
-									l = creator && creator.get && creator.get('LastName'),
-									lm, d = displayName;
-
-								if (l) {
-									lm = Ext.DomHelper.markup({tag: 'b', html: l});
-									d = displayName.replace(l, lm);
-									if (d === displayName) {
-										d += (' (' + (f ? f + ' ' : '') + lm + ')');
-									}
-									d = Ext.DomHelper.markup({cls: 'accent-name', html: d});
-								}
-
-								return d;
-							}
-						}
-					),
-					doSort: function(state) {
-						this.up('grid').getStore().sort(new Ext.util.Sorter({
-							direction: state,
-							property: 'realname'
-						}));
-					} }
-			},
-			extraColumns: [
-				{ text: getString('NextThought.view.courseware.assessment.assignments.admin.Assignment.username'), dataIndex: 'Creator', name: 'username',
-					possibleSortStates: ['ASC', 'DESC'],//restore the default order of state(since the grid reverses it)
-					renderer: function(v, g, record) {
-						var username = (v.get && (v.get('OU4x4') || v.get('Username'))) || v,
-							f = record.store && record.store.filters;
-
-						f = f && f.getByKey('LegacyEnrollmentStatus');
-
-						if (!f || f.value === 'Open') {
-							return '';
-						}
-
-						return username;
-					},
-					doSort: function(state) {
-						this.up('grid').getStore().sort(new Ext.util.Sorter({
-							direction: state,
-							property: 'username'
-						}));
-					}
-				}
-			]
+				Student: {padding: '0 0 0 30'}
+			}
 		},
 		{
 			xtype: 'filter-menupanel',
@@ -181,10 +115,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 	constructor: function(config) {
 		this.items = Ext.clone(this.items);
-		this.store = config.assignment.getSubmittedHistoryStore();
-		this.items[0].store = this.store;
 		this.callParent(arguments);
-		this.mon(this.store, 'load', 'updateFilterCount');
 	},
 
 
@@ -193,6 +124,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		this.callParent(arguments);
 		this.enableBubble(['show-assignment']);
 		this.mon(this.pageSource, 'update', 'onPagerUpdate');
+
+		this.store = this.assignments.getAssignmentHistory(this.assignment);
+
 
 		this.filterMenu = this.down('filter-menupanel');
 		this.mon(this.filterMenu, {
@@ -203,6 +137,12 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		var me = this,
 			grid = me.down('grid'),
 			completed = grid && grid.down('[dataIndex=completed]');
+
+		if (grid) {
+			grid.bindStore(this.store);
+		}
+
+		this.store.load();
 
 		if (completed && Ext.isEmpty(me.assignment.get('parts'))) {
 			completed.hide();
@@ -548,8 +488,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 
 	fireGoToAssignment: function(v, record, pageSource) {
-		var student = record.get('Creator'),
-			item = record.get('item'), //Assignment Instance
+		var student = record.get('User'),
+			historyItem = record.get('HistoryItemSummary'),
+			item = historyItem && historyItem.get('item'), //Assignment Instance
 			path = [
 				this.pathRoot,
 				this.pathBranch,
@@ -592,7 +533,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			return;
 		}
 
-		return container.rootContainerShowAssignment(this, this.assignment, record, student, path, pageSource);
+		return container.rootContainerShowAssignment(this, this.assignment, historyItem, student, path, pageSource);
 		// this.fireEvent('show-assignment', this, this.assignment, record, student, path, pageSource);
 	}
 });

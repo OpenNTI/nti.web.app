@@ -9,7 +9,7 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 		{name: 'Username', type: 'string'},
 		{name: 'avatar', type: 'string', defaultValue: User.BLANK_AVATAR},
 		{name: 'HistoryItemSummary', type: 'auto'},
-		{name: 'FinalGrade', type: 'auto'},
+		{name: 'Grade', type: 'auto'},
 		{name: 'OverdueAssignmentCount', type: 'int'},
 		{name: 'UngradedAssignmentCount', type: 'int'},
 		{name: 'Links', type: 'auto'},
@@ -110,7 +110,7 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 		//suspend events so we don't update needlessly
 		me.suspendEvents();
 
-		loaded = (records || []).map(me.__fillInRecord.bind(me));
+		loaded = (records || []).map(me.fillInRecord.bind(me));
 
 		Promise.all(loaded)
 			.always(function() {
@@ -123,8 +123,8 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 	 * Take a record fill in the user and replace its HistoryItemSummary with a shared instance or a placeholder
 	 * @param  {Model} record record to fill in
 	 */
-	__fillInRecord: function(record) {
-		var finalGradeAssignment = this.assignments.getFinalGradeAssignment(),
+	fillInRecord: function(record) {
+		var assignment = this.getAssignment(),
 			user = record.get('User'),
 			userId = user && NextThought.model.User.getIdFromRaw(user),
 			historyItem = record.get('HistoryItemSummary'),
@@ -141,20 +141,20 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 				grade = historyItem.get('Grade');
 
 				if (!historyItem.get('item')) {
-					historyItem.set('item', finalGradeAssignment);
+					historyItem.set('item', assignment);
 				}
 			} else {
 				grade = historyItem.Grade;
 
 				if (!historyItem.item) {
-					historyItem.item = finalGradeAssignment;
+					historyItem.item = assignment;
 				}
 			}
 
 			if (grade) {
 				grade = this.GradeCache.getRecord(grade);
 			} else {
-				grade = this.assignments.createPlaceholderGrade(finalGradeAssignment, userId);
+				grade = this.assignments.createPlaceholderGrade(assignment, userId);
 			}
 
 
@@ -164,13 +164,15 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 			historyItem.set('Grade', grade);
 
 			record.set('HistoryItemSummary', historyItem);
-		} else if (finalGradeAssignment) {
-			historyItem = this.assignments.createPlaceholderHistoryItem(finalGradeAssignment, userId);
+		} else if (assignment) {
+			historyItem = this.assignments.createPlaceholderHistoryItem(assignment, userId);
 
 			record.set('HistoryItemSummary', historyItem);
 		}
 
 		historyItem.stores.push(record);
+
+		record.set('Grade', historyItem.get('Grade'));
 
 
 		//Users are added to the cache when the data loads so this should be a no-op
@@ -178,9 +180,15 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 			.then(function(u) {
 				record.set({
 					'User': u,
-					'avatar': u.get('avatarURL')
+					'avatar': u.get('avatarURL'),
+					'Username': u.get('Username')
 				});
 			});
+	},
+
+
+	getAssignment: function() {
+		return this.assignments.getFinalGradeAssignment();
 	},
 
 
