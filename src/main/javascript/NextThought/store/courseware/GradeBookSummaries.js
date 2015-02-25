@@ -136,13 +136,28 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 		}
 
 		if (historyItem) {
-			grade = historyItem.get('Grade');
+
+			if (historyItem.isModel) {
+				grade = historyItem.get('Grade');
+
+				if (!historyItem.get('item')) {
+					historyItem.set('item', finalGradeAssignment);
+				}
+			} else {
+				grade = historyItem.Grade;
+
+				if (!historyItem.item) {
+					historyItem.item = finalGradeAssignment;
+				}
+			}
 
 			if (grade) {
 				grade = this.GradeCache.getRecord(grade);
 			} else {
 				grade = this.assignments.createPlaceholderGrade(finalGradeAssignment, userId);
 			}
+
+
 
 			historyItem = this.HistoryItemCache.getRecord(historyItem);
 

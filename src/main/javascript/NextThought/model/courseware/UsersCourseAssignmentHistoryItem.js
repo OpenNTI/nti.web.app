@@ -349,6 +349,7 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 				.then(function(historyItem) {
 					//update the grade with the new values;
 					grade.set(historyItem.Grade);
+					grade.isPlaceholder = false;
 
 					historyItem.Grade = grade;
 

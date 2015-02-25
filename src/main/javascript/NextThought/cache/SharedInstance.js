@@ -108,7 +108,7 @@ Ext.define('NextThought.cache.SharedInstance', {
 	 * 1.) If we have it return a shared instance of it
 	 * 2.) If its not already cached add it and return the cached record
 	 *
-	 * @param {ModelInstance|JSON} record record to get
+	 * @param {ModelInstance} record record to get
 	 * @param {Boolean} sync true to request the record from the server
 	 * @param {Boolean} forceUpdate update the shared instance's data with the data from the record
 	 * @return {ModelInstance}        shared instance of that record
@@ -116,10 +116,14 @@ Ext.define('NextThought.cache.SharedInstance', {
 	getRecord: function(record, sync, forceUpdate) {
 		var key = this.getKeyForRecord(record),
 			cachedRecord = key && this.__getRecordForKey(key),
-			lastMod = record.get('Last Modified'),
+			lastMod = record.get ? record.get('Last Modified') : record['Last Modified'],
 			cachedLastMod = cachedRecord && cachedRecord.get('Last Modified');
 
 		if (!cachedRecord) {
+			if (!record.isModel) {
+				record = ParseUtils.parseItems(record)[0];
+			}
+
 			this.__storeRecordAtKey(key, record);
 			cachedRecord = record;
 		}
@@ -130,7 +134,7 @@ Ext.define('NextThought.cache.SharedInstance', {
 
 		//If the record has been modified after the cached copy, update the cache
 		if (lastMod > cachedLastMod || forceUpdate) {
-			this.__updateRecord(key, record.asJSON());
+			this.__updateRecord(key, record.asJSON ? record.asJSON() : record);
 		}
 
 		return cachedRecord;
