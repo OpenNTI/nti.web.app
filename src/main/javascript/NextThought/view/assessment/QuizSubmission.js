@@ -310,9 +310,10 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 
 
 	instructorReset: function() {
-		var q = this.questionSet;
+		var assessmentReader = this.reader.getAssessment();
 
-		q.fireEvent('instructor-reset');
+		assessmentReader.wasReset();
+		this.questionSet.fireEvent('instructor-reset');
 	},
 
 

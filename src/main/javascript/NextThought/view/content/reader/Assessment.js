@@ -362,6 +362,13 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 	},
 
 
+	wasReset: function() {
+		if (this.feedback) {
+			this.feedback.hide();
+		}
+	},
+
+
 	forceSubmitted: function() {
 		var history = this.injectedAssignmentHistory;
 
