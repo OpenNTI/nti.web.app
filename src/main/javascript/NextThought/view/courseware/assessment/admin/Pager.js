@@ -9,11 +9,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.Pager', {
 	renderTpl: Ext.DomHelper.markup({
 		cls: 'pager-container',
 		cn: [
-			{tag: 'span', cls: 'prev', html: '&lt;'},
+			{tag: 'span', cls: 'prev {prevCls}', html: '&lt;'},
 			{tag: 'tpl', 'for': 'pages', cn: [
-				{tag: 'span', cls: 'page', 'data-index': '{#}', html: '{#}'}
+				{tag: 'span', cls: 'page {cls}', 'data-index': '{#}', html: '{#}'}
 			]},
-			{tag: 'span', cls: 'next', html: '&gt;'}
+			{tag: 'span', cls: 'next {nextCls}', html: '&gt;'}
 		]
 	}),
 
@@ -36,10 +36,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.Pager', {
 
 	onStoreLoad: function() {
 		var s = this.store,
-			pages = [], pageCount, i,
+			pages = [], i,
 			total = this.store.getTotalCount(),
-			pageSize = this.store.pageSize,
-			current = this.store.currentPage;
+			pageCount = this.store.getTotalPages(),
+			current = parseInt(this.store.currentPage);
 
 		//if there isn't a total count it probably means the store hasn't loaded yet
 		//so just return
@@ -47,14 +47,16 @@ Ext.define('NextThought.view.courseware.assessment.admin.Pager', {
 			return;
 		}
 
-		pageCount = Math.ceil(total / pageSize);
-
 		for (i = 0; i < pageCount; i++) {
-			pages.push( (i + 1) === current);
+			pages.push( {
+				cls: (i + 1) === current ? 'active' : 'not-active'
+			});
 		}
 
 		this.renderData = Ext.apply(this.renderData || {}, {
-			pages: pages
+			pages: pages,
+			prevCls: current > 1 ? 'enabled' : 'disabled',
+			nextCls: current < pageCount ? 'enabled' : 'disabled'
 		});
 
 		if (this.rendered) {
@@ -84,13 +86,20 @@ Ext.define('NextThought.view.courseware.assessment.admin.Pager', {
 
 
 	loadPrev: function() {
-		debugger;
-		this.store.loadPrevPage();
+		var current = parseInt(this.store.currentPage);
+
+		if (current > 1) {
+			this.loadPage(current - 1);
+		}
 	},
 
 
 	loadNext: function() {
-		debugger;
-		this.store.loadNextPage();
+		var current = parseInt(this.store.currentPage),
+			total = this.store.getTotalPages();
+
+		if (current < total) {
+			this.loadPage(current + 1);
+		}
 	}
 });

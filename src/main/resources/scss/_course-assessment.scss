@@ -470,6 +470,31 @@ canvas.x-component-course-assessment {
 	}
 }
 
+.course-assessment-header, .course-assessment-admin {
+	.pager {
+		.pager-container {
+			text-align: center;
+		}
+
+		span {
+			color: $primary-blue;
+			font-size: 0.875rem;
+			padding: 0 0.5em;
+			cursor: pointer;
+
+			&.disabled {
+				cursor: default;
+				color: $tertiary-grey;
+			}
+
+			&.active {
+				font-weight: 600;
+				text-decoration: underline;
+			}
+		}
+	}
+}
+
 .course-assessment-admin.performance {
 
 	&.show-final-grade {

@@ -187,7 +187,7 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 
 	getTotalPages: function() {
 		var total = this.getTotalCount(),
-			pageSize = this.getPageSize();
+			pageSize = this.pageSize;
 
 		return Math.ceil(total / pageSize);
 	},
