@@ -119,40 +119,113 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		this.callParent(arguments);
 	},
 
-
 	initComponent: function() {
 		this._masked = 0;
 		this.callParent(arguments);
 		this.enableBubble(['show-assignment']);
-		this.mon(this.pageSource, 'update', 'onPagerUpdate');
 
-		this.store = this.assignments.getAssignmentHistory(this.assignment);
+		var me = this,
+			grid = me.down('grid'),
+			completed = grid && grid.down('[name=completed]'),
+			submission = grid && grid.down('[name=submision]');
 
+		me.mon(me.pageSource, 'update', 'onPagerUpdate');
 
-		this.filterMenu = this.down('filter-menupanel');
-		this.mon(this.filterMenu, {
+		me.filterMenu = this.down('filter-menupanel');
+
+		me.mon(me.filterMenu, {
 			filter: 'doFilter',
 			search: {fn: 'doSearch', buffer: 450}
 		});
 
-		var me = this,
-			grid = me.down('grid'),
-			completed = grid && grid.down('[dataIndex=completed]');
+		me.store = me.assignments.getAssignmentHistory(me.assignment);
 
-		if (grid) {
-			grid.bindStore(this.store);
-		}
+		//mask when the store is loading
+		me.mon(me.store, {
+			beforeload: 'mask',
+			load: 'onStoreLoad'
+		});
 
-		this.store.load();
+		grid.bindStore(me.store);
+		grid.dueDate = me.assignment.getDueDate();
 
-		if (completed && Ext.isEmpty(me.assignment.get('parts'))) {
+		me.mon(grid, 'itemclick', 'onItemClick');
+
+		//if there is a completed column but no parts on the assignment
+		//hide the completed column
+		if (me.assignment.isEmpty()) {
 			completed.hide();
+			submission.hide();
 		}
 
 		$AppConfig.Preferences.getPreference('Gradebook')
 			.then(function(value) {
 				me.toggleAvatars(!value.get('hide_avatars'));
 			});
+
+		//load the store
+		me.store.load();
+	},
+
+
+	beforeRender: function() {
+		var grid = this.down('grid'),
+			assignment = this.assignment,
+			parts = assignment.get('parts');
+
+		this.callParent(arguments);
+
+		this.exportFilesLink = assignment.getLink('ExportFiles');
+		this.pathBranch = this.assignmentTitle;
+
+		this.renderData = Ext.apply(this.renderData || {}, {
+			pathRoot: this.pathRoot,
+			pathBranch: this.pathBranch,
+			assignmentTitle: this.assignmentTitle,
+			due: this.due,
+			page: this.pageSource.getPageNumber(),
+			exportFilesLink: this.exportFilesLink
+		});
+
+		this.maybeShowDownload();
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		this.el.query('a.button').forEach(this._setupButtons);
+
+		if (this._masked) {
+			this._showMask();
+		}
+		this.syncFilterToUI(true);
+
+		this.onPagerUpdate();
+
+		this.mon(this.avatarEl, 'click', 'toggleAvatarsClicked');
+	},
+
+
+	syncFilterToUI: function(firstPass) {
+		if (!this.rendered) {
+			this.on({afterrender: 'syncFilterToUI', single: true});
+			return;
+		}
+
+		var filter = this.currentFilter || 'ForCredit',
+			search = this.searchTerm;
+
+		this.updateColumns(filter);
+		
+		this.filterMenu.setState(filter, search || '');
+
+		this.updateFilterCount();
+
+		if (firstPass) {
+			this.filterMenu.initialState = filter;
+			this.maybeSwitch();
+		}
 	},
 
 
@@ -190,20 +263,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	},
 
 
-	afterRender: function() {
-		this.callParent(arguments);
-
-		this.el.query('a.button').forEach(this._setupButtons);
-
-		if (this._masked) {
-			this._showMask();
-		}
-		this.syncFilterToUI(true);
-
-		this.mon(this.avatarEl, 'click', 'toggleAvatarsClicked');
-	},
-
-
 	toggleAvatarsClicked: function(e) {
 		this.toggleAvatars(!e.getTarget('.enabled'));
 	},
@@ -232,31 +291,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 				value.set('hide_avatars', !show);
 				value.save();
 			});
-	},
-
-
-	syncFilterToUI: function(firstPass) {
-		if (!this.rendered) {
-			this.on({afterrender: 'syncFilterToUI', single: true});
-			return;
-		}
-
-		var f = this.store.filters,
-			filter = f.getByKey('LegacyEnrollmentStatus'),
-			search = f.getByKey('search');
-
-		if (filter) {
-			filter = filter.value;
-			this.updateColumns(filter);
-		}
-
-		this.filterMenu.setState(filter, (search && search.value) || '');
-		this.updateFilterCount();
-
-		if (firstPass) {
-			this.filterMenu.initialState = filter;
-			this.maybeSwitch();
-		}
 	},
 
 
@@ -331,50 +365,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	},
 
 
-	beforeRender: function() {
-		var a = this.assignment, s = this.store, grid, p,
-			parts = this.assignment.get('parts');
-
-		this.callParent();
-		this.exportFilesLink = this.assignment.getLink('ExportFiles');
-		this.pathBranch = this.assignmentTitle;
-		this.renderData = Ext.apply(this.renderData || {}, {
-			pathRoot: this.pathRoot,
-			pathBranch: this.pathBranch,
-			assignmentTitle: this.assignmentTitle,
-			due: this.due,
-			page: this.pageSource.getPageNumber(),
-			total: this.pageSource.getTotal(),
-			noNext: !this.pageSource.hasNext(),
-			noPrev: !this.pageSource.hasPrevious(),
-			exportFilesLink: this.exportFilesLink
-		});
-
-		p = new Promise(function(fulfill, reject) {
-			if (!s.loading) {
-				fulfill(s);
-			} else {
-				s.on({ single: true, load: fulfill });
-			}
-		});
-
-		this.mask();
-		p.always(this.unmask.bind(this));
-
-		grid = this.down('grid');
-		grid.dueDate = a.getDueDate();
-
-		if (!parts || !parts.length) {
-			grid.down('[dataIndex=submission]').hide();
-		}
-
-		this.maybeShowDownload();
-		this.mon(grid, 'itemclick', 'onItemClick');
-
-		this.mon(s, {
-			beforeload: 'mask',
-			load: 'unmask'
-		});
+	onStoreLoad: function() {
+		this.syncFilterToUI();
+		this.unmask();
 	},
 
 
@@ -424,7 +417,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 
 	updateColumns: function(filter) {
-		var c = this.down('gridcolumn[name="username"]');
+		var c = this.down('gridcolumn[name=username]');
 		c[filter === 'ForCredit' ? 'show' : 'hide']();
 	},
 
@@ -436,7 +429,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 	doSearch: function(str) {
 		this.down('grid').getSelectionModel().deselectAll(true);
-		this.store.filter([{id: 'search', property: 'usernameSearchTerm', value: str}]);
+		this.searchTerm = str;
+		this.updateFilter();
 	},
 
 
@@ -444,12 +438,31 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		this.updateColumns(filter);
 		try {
 			this.down('grid').getSelectionModel().deselectAll(true);
-			this.store.filter([
-				{id: 'LegacyEnrollmentStatus', property: 'LegacyEnrollmentStatus', value: filter}
-			]);
+			this.currentFilter = filter;
+			this.updateFilter();
 		} catch (e) {
 			console.log('Meh');
 		}
+	},
+
+
+	updateFilter: function() {
+		var s = this.store,
+			params = s.proxy.extraParams;
+
+		if (this.currentFilter) {
+			params.filter = this.currentFilter;
+		} else {
+			delete params.filter;
+		}
+
+		if (this.searchTerm) {
+			params.search = this.searchTerm;
+		} else {
+			delete params.search;
+		}
+
+		s.load();
 	},
 
 

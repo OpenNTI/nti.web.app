@@ -34,6 +34,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.PagedGrid', {
 		Student: {
 			text: 'Student',
 			dataIndex: 'Alias',
+			name: 'student',
 			flex: 1,
 			xtype: 'templatecolumn',
 			tpl: new Ext.XTemplate(Ext.DomHelper.markup([{
@@ -72,6 +73,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.PagedGrid', {
 		Username: {
 			text: 'Username',
 			dataIndex: 'Username',
+			name: 'username',
 			width: 100,
 			possibleSortStates: ['ASC', 'DESC']//restore the default order of state(since the grid reverses it)
 		},
@@ -177,6 +179,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.PagedGrid', {
 		Grade: {
 			text: 'Grade',
 			dataIndex: 'Grade',
+			name: 'grade',
 			width: 70,
 			xtype: 'templatecolumn',
 			tpl: new Ext.XTemplate(Ext.DomHelper.markup([
