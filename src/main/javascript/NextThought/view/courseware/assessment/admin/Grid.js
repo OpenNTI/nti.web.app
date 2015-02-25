@@ -1,3 +1,4 @@
+/*globals getFormattedString:false, Duration:false*/
 Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 	extend: 'Ext.grid.Panel',
 	alias: 'widget.course-admin-grid',
@@ -138,8 +139,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 										o = o && o.getValues();
 										o = o && o.value;
 
-										//convert it to a number so the sort makes sense
-										f = parseFloat(o, 10);
+										if (o) {
+											f = parseFloat(o, 10);
+										} else {
+											f = -1;
+										}
 
 										if (!isFinite(f)) {
 											f = o;
