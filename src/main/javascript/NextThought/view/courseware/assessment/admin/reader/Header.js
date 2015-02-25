@@ -30,11 +30,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 			try {
 				this.assignmentHistory.buildGrade();
 
-                // update the grade values
-                grade = this.assignmentHistory.get('Grade');
-                values = grade && grade.getValues();
-                number = values && values.value;
-                letter = values && values.letter;
+				// update the grade values
+				grade = this.assignmentHistory.get('Grade');
+				values = grade && grade.getValues();
+				number = values && values.value;
+				letter = values && values.letter;
 
 			} catch (noGrade) {
 				console.warn(noGrade.stack || noGrade.message || noGrade);
@@ -99,8 +99,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 
 		var me = this,
 			menu = NextThought.view.courseware.assessment.AssignmentStatus.getActionsMenu(me.assignmentHistory),
-            assignment = me.assignment,
-            assignmentCollection = this.pageSource && this.pageSource.assignmentsCollection;
+			assignment = me.assignment,
+			assignmentCollection = this.pageSource && this.pageSource.assignmentsCollection;
 
 		menu.showBy(me.actionsEl, 'tr-br');
 	},
@@ -112,7 +112,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 			assignment = this.assignment,
 			historyItem = this.assignmentHistory,
 			grade = historyItem.get('Grade'),
-            assignmentCollection = this.pageSource && this.pageSource.assignmentsCollection;
+			assignmentCollection = this.pageSource && this.pageSource.assignmentsCollection;
 
 		if (!grade) {
 			console.error('No assignmentHistroy set, cannot change the grade');
@@ -135,12 +135,17 @@ Ext.define('NextThought.view.courseware.assessment.admin.reader.Header', {
 							//so fill it in with the previous history item's item
 							newHistoryItem.set('item', historyItem.get('item'));
 
-                            assignment.getGradeBookEntry().addItem(newHistoryItem.get('Grade'));
+							assignment.getGradeBookEntry()
+								.then(function(entry) {
+									entry.addItem(newHistoryItem.get('Grade'));
+								});
+
+							assignment.getGradeBookEntry().addItem(newHistoryItem.get('Grade'));
 
 							store.syncBackingStore(newHistoryItem);
-                            if(assignmentCollection){
-                                assignmentCollection.syncStoreForRecord(store, newHistoryItem, 'Grade');
-                            }
+							if (assignmentCollection) {
+								assignmentCollection.syncStoreForRecord(store, newHistoryItem, 'Grade');
+							}
 
 						})
 						.fail(function(reason) {

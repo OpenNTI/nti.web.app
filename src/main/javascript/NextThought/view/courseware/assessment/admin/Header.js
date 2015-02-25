@@ -232,7 +232,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 					newHistoryItem.set('item', historyItem.get('item'));
 
 					// Update the grade instance on the gradebook
-					assignment.getGradeBookEntry().addItem(newHistoryItem.get('Grade'));
+					assignment.getGradeBookEntry()
+						.then(function(grade) {
+							grade.addItem(newHistoryItem.get('Grade'));
+						});
 
 					store.syncBackingStore(newHistoryItem);
 					if (assignmentCollection) {

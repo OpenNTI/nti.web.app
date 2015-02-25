@@ -252,10 +252,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	afterRender: function() {
 		this.callParent(arguments);
 
-		var gradeBookEntry = this.assignment.getGradeBookEntry(),
-			reportLinks = gradeBookEntry && gradeBookEntry.getReportLinks(),
-			reportsEl = this.reportsEl;
-
 		this.el.query('a.button').forEach(this._setupButtons);
 
 		if (this._masked) {
@@ -578,6 +574,12 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 				},
 				modelAugmentationHook: function(rec) {
 					rec.set('item', item); //Assignment instances are shared across all history item instances. (this gives them the meta data)
+
+					item.getGradeBookEntry()
+						.then(function(grade) {
+							grade.updateHistoryItem(rec);
+						});
+
 					item.getGradeBookEntry().updateHistoryItem(rec);
 
 					try {rec.buildGrade();} catch (e) {Error.raiseForReport(e);}

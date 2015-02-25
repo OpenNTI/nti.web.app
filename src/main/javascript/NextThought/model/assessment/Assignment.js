@@ -105,7 +105,9 @@ Ext.define('NextThought.model.assessment.Assignment', {
 	},
 
 
-	getGradeBookEntry: function() { return this._gradeBookEntry; },
+	getGradeBookEntry: function() {
+		return Promise.resolve(this._gradeBookEntry);
+	},
 
 
 	getSubmittedHistoryStore: function() {

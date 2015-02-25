@@ -62,11 +62,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 			scroll: 'vertical',
 
-			verticalScroller: {
-				synchronousRender: true
-			},
+			// verticalScroller: {
+			// 	synchronousRender: true
+			// },
 
-			plugins: [{ptype: 'bufferedrenderer'}],
+			// plugins: [{ptype: 'bufferedrenderer'}],
 			columns: [
 				{ text: 'Student', dataIndex: 'LastName', flex: 1, xtype: 'templatecolumn', tpl: new Ext.XTemplate(Ext.DomHelper.markup([
 					{ cls: 'studentbox', cn: [
@@ -578,7 +578,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			var u = r.get('Username');
 			users.push(u);
 			recsMap[u] = r;
-			r.set(getCounts(u));
+
+			getCounts(u)
+				.then(r.set.bind(r));
+
 			r.commit(true);
 		});
 
@@ -598,30 +601,40 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	getCountsFor: function(username) {
-		var counts = {
+		var gradeBookEntries = [],
+			counts = {
 				ungraded: 0,
 				overdue: 0
 			};
+
 		this.assignments.get('Items').forEach(function(assignment) {
 			var due = assignment.getDueDate(),
 				parts = (assignment.get('parts') || []).length,
-				entry = assignment.getGradeBookEntry(),
-				i = entry && entry.getFieldItem('Items', username),
-				g = ((i && i.get('value')) || '').toString().split(' ')[0].trim();
+				getEntry = assignment.getGradeBookEntry();
 
-			if (i && parts > 0 && Ext.isEmpty(g)) { counts.ungraded++; }
-			//If we have a due date and its before now increment the overdue count
-			//if we don't have a due date don't increment the overdue count
-			if (!i && due && due < new Date()) {counts.overdue++;}
+			gradeBookEntries.push(getEntry.then(function(entry) {
+				var i = entry && entry.getFieldItem('Items', username),
+					g = ((i && i.get('value')) || '').toString().split(' ')[0].trim();
+
+				if (i && parts > 0 && Ext.isEmpty(g)) { counts.ungraded += 1; }
+
+				//if we have a due date and its beofre now increment the overdue count
+				//if we don't have a due date don't increment the overdue count
+				if (!i && due && due < new Date()) { counts.overdue += 1; }
+			}).fail(function() { return {}; }));
 		});
 
-		counts.action = counts.ungraded + counts.overdue;
 
-		return counts;
+		return Promise.all(gradeBookEntries)
+			.then(function() {
+				return counts;
+			});
 	},
 
 
 	updateActionables: function(rec, username) {
+		this.getCountsFor(username)
+			.then(rec.set.bind(rec));
 		rec.set(this.getCountsFor(username));
 		//this.resortAndFilter();
 	},

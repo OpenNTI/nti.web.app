@@ -68,7 +68,11 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 					}
 
 					assignmentHistory.set('item', item);
-					item.getGradeBookEntry().updateHistoryItem(assignmentHistory);
+
+					item.getGradeBookEntry()
+						.then(function(grade) {
+							grade.updateHistoryItem(assignmentHistory);
+						});
 
 					//Should be a cache hit... so lets just do the most straight forward thing.
 					return UserRepository.getUser(username)

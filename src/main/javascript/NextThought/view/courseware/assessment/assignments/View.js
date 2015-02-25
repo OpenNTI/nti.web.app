@@ -1,3 +1,4 @@
+/*globals getFormattedString:false*/
 Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-assessment-assignments',
@@ -348,57 +349,61 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 				h = history && history.getItem(id),
 				gradeBookEntry = o.getGradeBookEntry();
 
-			lesson = ContentUtils.getLineage(o.get('containerId'));//this function is in need to go asynchronous...but i need it here. :(
-			lesson.pop();//discard the root
+			raw.push(gradeBookEntry.then(function(grade) {
+				lesson = ContentUtils.getLineage(o.get('containerId'));//this function is in need to go asynchronous...but i need it here. :(
+				lesson.pop();//discard the root
 
-			//search through the entire lineage to find an outline node for the assignment
-			while (!node) {
-				//doing this the first time through is alright because
-				//it is discarding the leaf page
-				lesson.shift();
+				//search through the entire lineage to find an outline node for the assignment
+				while (!node) {
+					//doing this the first time through is alright because
+					//it is discarding the leaf page
+					lesson.shift();
 
-				//if there are no lessons in the lineage left we can't find a node
-				//so don't keep looping 'ZZZ' will be placed at the bottom
-				if (lesson.length === 0) {
-					node = 'ZZZ';
-				} else {
-					node = d.outline.getNode(lesson[0]);
+					//if there are no lessons in the lineage left we can't find a node
+					//so don't keep looping 'ZZZ' will be placed at the bottom
+					if (lesson.length === 0) {
+						node = 'ZZZ';
+					} else {
+						node = d.outline.getNode(lesson[0]);
+					}
 				}
-			}
 
-			if (node.get) {
-				node = node.index;
-				node = (node && node.pad && node.pad(3)) || 'ZZZ';
-			}
+				if (node.get) {
+					node = node.index;
+					node = (node && node.pad && node.pad(3)) || 'ZZZ';
+				}
 
-			lesson = node + '|' + lesson.reverse().join('|');
+				lesson = node + '|' + lesson.reverse().join('|');
 
-			raw.push({
-				id: id,
-				containerId: o.get('containerId'),
-				lesson: lesson,
-				item: o,
-				name: o.get('title'),
-				opens: o.get('availableBeginning'),
-				due: o.get('availableEnding'),
-				maxTime: o.isTimed && o.getMaxTime(),
-				duration: o.isTimed && o.getDuration(),
+				return {
+					id: id,
+					containerId: o.get('containerId'),
+					lesson: lesson,
+					item: o,
+					name: o.get('title'),
+					opens: o.get('availableBeginning'),
+					due: o.get('availableEnding'),
+					maxTime: o.isTimed && o.getMaxTime(),
+					duration: o.isTimed && o.getDuration(),
 
-				completed: h && h.get('completed'),
-				correct: h && h.get('correct'),
+					completed: h && h.get('completed'),
+					correct: h && h.get('correct'),
 
-				history: h,
+					history: h,
 
-				total: o.tallyParts(),
-				submittedCount: o.get('SubmittedCount') || 0,
-				enrolledCount: d.instance.get('TotalEnrolledCount'),
-				reportLinks: gradeBookEntry && gradeBookEntry.getReportLinks()
-			});
+					total: o.tallyParts(),
+					submittedCount: o.get('SubmittedCount') || 0,
+					enrolledCount: d.instance.get('TotalEnrolledCount'),
+					reportLinks: grade && grade.getReportLinks()
+				};
+			}));
 		}
 
 		assignments.each(collect);
-		this.store.loadRawData(raw);
-		this.refresh();
+
+		Promise.all(raw)
+			.then(this.store.loadRawData.bind(this.store))
+			.then(this.refresh.bind(this));
 	},
 
 
