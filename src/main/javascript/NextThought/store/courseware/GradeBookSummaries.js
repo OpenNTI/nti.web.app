@@ -164,9 +164,10 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 			record.set('HistoryItemSummary', historyItem);
 		}
 
-		historyItem.stores.push(record);
-
-		record.set('Grade', historyItem.get('Grade'));
+		if (historyItem) {
+			historyItem.stores.push(record);
+			record.set('Grade', historyItem.get('Grade'));
+		}
 
 
 		//Users are added to the cache when the data loads so this should be a no-op
