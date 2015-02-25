@@ -262,7 +262,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 
 					if (me.maybeSetFinalGrade(o, h, grade)) { return; }
 
-					return {
+					raw.push({
 						ntiid: id,
 						containerId: o.get('containerId'),
 						item: o,
@@ -277,7 +277,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 						feedback: feedback && feedback.get('Items').length,
 						pendingAssessment: pendingAssessment,
 						Submission: submission
-					};
+					});
 				})
 			);
 		}
@@ -285,6 +285,9 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 		assignments.each(collect);
 
 		return Promise.all(waitsOn)
+				.then(function() {
+					return raw;
+				})
 				.then(this.store.loadRawData.bind(this.store));
 	},
 
