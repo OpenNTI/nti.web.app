@@ -58,35 +58,7 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 
 		pageParam: undefined,
 		startParam: 'batchStart',
-		limitParam: 'batchSize',
-
-		buildUrl: function(request) {
-			var sort, dir,
-				p = request.params;
-
-			if (p && p.filter) {
-				Ext.decode(p.filter).forEach(function(filter) {
-					if (filter.property === 'LegacyEnrollmentStatus') {
-						p.filter = filter.property + filter.value;
-					} else if (filter.property === 'usernameSearchTerm') {
-						p.usernameSearchTerm = filter.value;
-					}
-				});
-			}
-
-			if (p && p.sort) {
-				dir = {
-					asc: 'ascending',
-					desc: 'descending'
-				};
-				sort = Ext.decode(p.sort)[0];
-				p.sortOn = sort.property;
-				p.sortOrder = dir[(sort.direction || 'asc').toLowerCase()] || sort.direction;
-				delete p.sort;
-			}
-
-			return this.url;
-		}
+		limitParam: 'batchSize'
 	},
 
 

@@ -276,7 +276,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	updateExportEl: function(type) {
-		var base = this.gradeBook && this.gradeBook.getLink('ExportContents');
+		var gradebook = this.assignments.getGradeBook(),
+			base = gradebook && gradebook.getLink('ExportContents');
 
 		if (!base || !this.header.exportButton) {
 			return;
@@ -306,7 +307,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		var type = this.currentItem,
 			items = [
 				{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.alloption'), type: 'all', checked: type === 'all'},
-				{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.actionoption'), type: 'action', checked: type === 'action'},
+				{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.actionoption'), type: 'actionable', checked: type === 'actionable'},
 				{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.overoption'), type: 'overdue', checked: type === 'overdue'},
 				{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.unoption'), type: 'ungraded', checked: type === 'ungraded'}
 			];
@@ -368,33 +369,25 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	updateFilter: function() {
-		var filters = [],
-			s = this.store;
+		var s = this.store,
+			filters = [],
+			params = s.proxy.extraParams;
+
+		filters.push(this.currentStudent || 'ForCredit');
 
 		if (this.currentItem && !/all/i.test(this.currentItem)) {
-			filters.push({
-				property: this.currentItem,
-				filterFn: function(r) {
-					return Boolean(r && r.get(this.property));
-				}
-			});
+			filters.push(this.currentItem);
 		}
 
 		if (!Ext.isEmpty(this.searchKey)) {
-			filters.push({
-				re: new RegExp(RegExp.escape(this.searchKey), 'i'),
-				filterFn: function(r) {
-					return this.re.test(r.get('displayName'));
-				}
-			});
+			params.search = this.searchKey;
+		} else {
+			delete params.search;
 		}
 
-		if (!filters.length) {
-			s.clearFilter();
-		} else {
-			s.filters.removeAll();
-			s.filter(filters);
-		}
+		params.filter = filters.join(',');
+
+		s.load();
 	},
 
 
