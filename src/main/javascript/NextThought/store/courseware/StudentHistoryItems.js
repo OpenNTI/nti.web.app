@@ -1,6 +1,11 @@
 Ext.define('NextThought.store.courseware.StudentHistoryItems', {
 	extend: 'NextThought.store.courseware.HistoryItems',
 
+	getTotalCount: function() {
+		return this.getCount();
+	},
+
+
 	load: function(options) {
 		var me = this,
 			oldCallBack;
