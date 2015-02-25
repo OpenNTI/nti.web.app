@@ -79,6 +79,8 @@ Ext.define('NextThought.store.courseware.StudentHistoryItems', {
 
 		record = this.HistoryItemCache.getRecord(record);
 
+		record.collection = this.assignments;
+
 		this.insert(index, record);
 	}
 });

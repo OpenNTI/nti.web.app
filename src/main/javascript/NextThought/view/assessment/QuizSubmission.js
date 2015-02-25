@@ -99,7 +99,10 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		me.fireEvent('has-been-submitted', me);
 
 		if (me.isInstructor && me.history) {
-			me.mon(me.history, 'was-destroyed', me.instructorReset.bind(me), me);
+			me.mon(me.history, {
+				'was-destroyed': me.instructorReset.bind(me),
+				'force-submission': me.forceSubmitted.bind(me)
+			});
 		}
 	},
 
@@ -310,6 +313,15 @@ Ext.define('NextThought.view.assessment.QuizSubmission', {
 		var q = this.questionSet;
 
 		q.fireEvent('instructor-reset');
+	},
+
+
+	forceSubmitted: function() {
+		var assessmentReader = this.reader.getAssessment();
+
+		assessmentReader.forceSubmitted();
+
+		this.setGradingResult(null, this.history);
 	},
 
 

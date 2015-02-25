@@ -559,7 +559,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	editGrade: function(record, value, letter) {
-		debugger;
 		var me = this,
 			view = me.__getGridView(),
 			node = view.getNode(record),

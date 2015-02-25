@@ -362,6 +362,13 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 	},
 
 
+	forceSubmitted: function() {
+		var history = this.injectedAssignmentHistory;
+
+		this.feedback.setHistory(history);
+	},
+
+
 	injectAssignmentSavePoint: function(point) {
 		this.injectedSavePoint = point;
 

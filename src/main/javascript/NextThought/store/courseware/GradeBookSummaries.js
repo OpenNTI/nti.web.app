@@ -154,6 +154,8 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 
 			historyItem.set('Grade', grade);
 
+			historyItem.collection = this.assignments;
+
 			record.set('HistoryItemSummary', historyItem);
 		} else if (assignment) {
 			historyItem = this.assignments.createPlaceholderHistoryItem(assignment, userId);

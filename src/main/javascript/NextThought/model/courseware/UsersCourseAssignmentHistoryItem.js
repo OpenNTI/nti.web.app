@@ -170,6 +170,10 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 									reject('Request Failed');
 								})
 								.done(function() {
+									var user = record.get('Creator'),
+										item = record.get('item'),
+										grade = null;
+
 									delete record.isSummary;
 									delete record.raw.SubmissionCreatedTime;
 									delete record.raw.Submission;
@@ -178,9 +182,15 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 									delete record.raw.Feedback;
 									delete record.raw.Metadata;
 
+									if (record.collection && record.collection.createPlaceholderGrade) {
+										grade = record.collection.createPlaceholderGrade(item, user);
+
+										record.raw.Grade = grade;
+									}
+
 									record.set({
 										Submission: null,
-										Grade: null,
+										Grade: grade,
 										Feedback: null,
 										Metadata: null,
 										completed: null,
@@ -188,9 +198,7 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 										pendingAssessment: null
 									});
 
-									if (store && store.assignmentsCollection) {
-										store.assignmentsCollection.syncStoreForRecord(store, record, null, 'delete');
-									}
+									record.isPlaceholder = true;
 
 									fulfill(true);
 								});
@@ -233,6 +241,10 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 								console.error(arguments);
 							})
 							.done(function() {
+								var user = record.get('Creator'),
+									item = record.get('item'),
+									grade = null;
+
 								delete record.isSummary;
 								delete record.raw.SubmissionCreatedTime;
 								delete record.raw.Submission;
@@ -241,9 +253,15 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 								delete record.raw.Feedback;
 								delete record.raw.Metadata;
 
+								if (record.collection && record.collection.createPlaceholderGrade) {
+									grade = record.collection.createPlaceholderGrade(item, user);
+
+									record.raw.Grade = grade;
+								}
+
 								record.set({
 									Submission: null,
-									Grade: null,
+									Grade: grade,
 									Feedback: null,
 									Metadata: null,
 									completed: null,
@@ -251,11 +269,9 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 									pendingAssessment: null
 								});
 
-								record.fireEvent('was-destroyed');
+								record.isPlaceholder = true;
 
-								if (store && store.assignmentsCollection) {
-									store.assignmentsCollection.syncStoreForRecord(store, record, null, 'delete');
-								}
+								record.fireEvent('was-destroyed');
 							});
 
 				}
@@ -357,8 +373,13 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 					historyItem.Grade = grade;
 
 					//update with the new history item values
+					me.raw = Ext.apply(me.raw || {}, historyItem);
 					me.set(historyItem);
 					me.isPlaceholder = false;
+
+					//if we get here the submission has been forced from setting the grade
+					//so fire an event to update the ui appropriately
+					me.fireEvent('force-submission');
 				});
 		//if we aren't a placeholder and the grade has different values save the new ones
 		} else if (!grade.valueEquals(value, letter)) {

@@ -5,6 +5,9 @@
  */
 Ext.define('NextThought.cache.SharedInstance', {
 
+	//A list of props to include in the JSON of a record when updating
+	UPDATE_WHITELIST: ['href'],
+
 	constructor: function(config) {
 		//TODO: We might need to have multiple keys point to the same record
 		//so we would need a KEY_TO_INDEX and INDEX_TO_RECORD
@@ -71,10 +74,18 @@ Ext.define('NextThought.cache.SharedInstance', {
 	/**
 	 * Set the values of the record from the server to the shared instance
 	 * @param {String} key key for the record
-	 * @param {Object} json the values to update the data with
+	 * @param {ModelInstance} record the record to sync from
 	 */
-	__updateRecord: function(key, json) {
-		var cachedRecord = this.__getRecordForKey(key);
+	__updateRecord: function(key, record) {
+		var cachedRecord = this.__getRecordForKey(key),
+			json = record.asJSON(), i, prop;
+
+		for (i = 0; i < this.UPDATE_WHITELIST.length; i++) {
+			prop = this.UPDATE_WHITELIST[i];
+
+			json[prop] = record.get(prop);
+		}
+
 
 		cachedRecord.set(json);
 	},
@@ -134,7 +145,7 @@ Ext.define('NextThought.cache.SharedInstance', {
 
 		//If the record has been modified after the cached copy, update the cache
 		if (lastMod > cachedLastMod || forceUpdate) {
-			this.__updateRecord(key, record.asJSON ? record.asJSON() : record);
+			this.__updateRecord(key, record);
 		}
 
 		return cachedRecord;

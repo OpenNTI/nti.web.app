@@ -183,9 +183,13 @@ Ext.define('NextThought.model.courses.assignments.InstructorCollection', {
 				Username: this.__getIdOf(user)
 			});
 
+		//pass the update flag to force incase we already have a cached instance
+		//so it will be updated to a placeholder
+		grade = this.GradeCache.getRecord(grade, null, true);
+
 		grade.isPlaceholder = true;
 
-		return this.GradeCache.getRecord(grade);
+		return grade;
 	},
 
 
@@ -197,8 +201,13 @@ Ext.define('NextThought.model.courses.assignments.InstructorCollection', {
 				Grade: grade
 			});
 
-		historyItem.isPlaceholder = true;
+		//pass the update flag to force incase we already have a cached instance
+		//so it will be updated to a placeholder
+		historyItem = this.HistoryItemCache.getRecord(historyItem, null, true);
 
-		return this.HistoryItemCache.getRecord(historyItem);
+		historyItem.isPlaceholder = true;
+		historyItem.collection = this;
+
+		return historyItem;
 	}
 });
