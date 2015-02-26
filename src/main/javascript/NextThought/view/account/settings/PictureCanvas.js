@@ -167,7 +167,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas', {
 	createFileInput: function() {
 		var me = this,
 			old = me.fileInputEl,
-			file = me.fileInputEl = Ext.DomHelper.insertAfter(me.el, {
+			file = me.fileInputEl = Ext.DomHelper.insertAfter(me.targetInputEl || me.el, {
 			name: 'file1',
 			cls: 'file-input',
 			tag: 'input',
