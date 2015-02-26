@@ -3,15 +3,13 @@ Ext.define('NextThought.model.courses.assignments.StudentCollection', {
 
 
 	getHistory: function() {
-		if (this.__loadHistoryRequest) { return this.__loadHistoryRequest; }
-
 		var link = this.get('HistoryURL');
 
 		if (!link) {
 			return Promise.reject('No History Link');
 		}
 
-		this.__loadHistoryRequest = Service.request(link)
+		return Service.request(link)
 					.then(function(response) {
 						return ParseUtils.parseItems(response)[0];
 					})
@@ -22,8 +20,6 @@ Ext.define('NextThought.model.courses.assignments.StudentCollection', {
 
 						return reason;
 					});
-
-		return this.__loadHistoryRequest;
 	},
 
 	/**
