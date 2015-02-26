@@ -58,27 +58,27 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 	])),
 
 
-    enrollmentConfirmationTpl: new Ext.XTemplate(Ext.DomHelper.markup([
-        {cls: 'complete-enrollment-layer', cn: [
-            {cls: 'congrats-container', cn: [
-                {cls: 'congrats', cn:[
-                    {cls: 'title', html: '{{{NextThought.view.courseware.enrollment.Details.Congrats}}}, {firstName}!'},
-                    {cls: 'sub', html: "{{{NextThought.view.courseware.enrollment.Details.CongratsSubtitle}}}"},
-                    {cls: 'actions', cn: [
-                        {tag: 'a', cls:'completed', html: '{{{NextThought.view.courseware.enrollment.Details.CongratsAccountCreated}}}'},
-                        {tag: 'a', cls:'completed', html: '{{{NextThought.view.courseware.enrollment.Details.CongratsCourseCreated}}}'},
-                        {tag: 'a', cls: 'suggest-contacts', html: '{{{NextThought.view.courseware.enrollment.Details.ConnectWithPeers}}}'}
-                    ]}
-                ]},
-                {cls: 'add-selection', cn: [
-                    {tag: 'span', html: '{{{NextThought.view.courseware.enrollment.Details.NeedToAddCourses}}}'},
-                    {tag: 'span', cn: [
-                        {tag: 'a', cls: 'button add-course', html: '{{{NextThought.view.courseware.enrollment.Details.AddSelectionButton}}}'}
-                    ]}
-                ]}
-            ]}
-        ]}
-    ])),
+	enrollmentConfirmationTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+		{cls: 'complete-enrollment-layer', cn: [
+			{cls: 'congrats-container', cn: [
+				{cls: 'congrats', cn: [
+					{cls: 'title', html: '{{{NextThought.view.courseware.enrollment.Details.Congrats}}}, {firstName}!'},
+					{cls: 'sub', html: '{{{NextThought.view.courseware.enrollment.Details.CongratsSubtitle}}}'},
+					{cls: 'actions', cn: [
+						{tag: 'a', cls: 'completed', html: '{{{NextThought.view.courseware.enrollment.Details.CongratsAccountCreated}}}'},
+						{tag: 'a', cls: 'completed', html: '{{{NextThought.view.courseware.enrollment.Details.CongratsCourseCreated}}}'},
+						{tag: 'a', cls: 'suggest-contacts', html: '{{{NextThought.view.courseware.enrollment.Details.ConnectWithPeers}}}'}
+					]}
+				]},
+				{cls: 'add-selection', cn: [
+					{tag: 'span', html: '{{{NextThought.view.courseware.enrollment.Details.NeedToAddCourses}}}'},
+					{tag: 'span', cn: [
+						{tag: 'a', cls: 'button add-course', html: '{{{NextThought.view.courseware.enrollment.Details.AddSelectionButton}}}'}
+					]}
+				]}
+			]}
+		]}
+	])),
 
 
 	renderTpl: Ext.DomHelper.markup([
@@ -424,18 +424,18 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 	},
 
 
-    __buildCongratsCard: function(state){
-        var data = {
-                base: state && state.base,
-                firstName: Ext.String.capitalize($AppConfig.userObject.get("FirstName") || $AppConfig.userObject.getName())
-            },
-            me = this;
+	__buildCongratsCard: function(state) {
+		var data = {
+				base: state && state.base,
+				firstName: Ext.String.capitalize($AppConfig.userObject.get('FirstName') || $AppConfig.userObject.getName())
+			},
+			me = this;
 
-        me.el.setScrollTop(0);
-        me.el.addCls('has-overlay');
-        me.congratsLayerEl = Ext.get(me.enrollmentConfirmationTpl.append(me.el, data));
-        me.mon(me.congratsLayerEl, 'click', 'congratsLayerClicked', me);
-    },
+		me.el.setScrollTop(0);
+		me.el.addCls('has-overlay');
+		me.congratsLayerEl = Ext.get(me.enrollmentConfirmationTpl.append(me.el, data));
+		me.mon(me.congratsLayerEl, 'click', 'congratsLayerClicked', me);
+	},
 
 
 	__showError: function() {
@@ -569,18 +569,19 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 				if (msgId === guid) {
 					Ext.callback(me.msgClickHandler);
 				}
-			}});
+			}
+		});
 	},
 
 
-    clearMessage: function(){
-        var win = this.up('[closeMsg]');
+	clearMessage: function() {
+		var win = this.up('[closeMsg]');
 
-        if(win){
-            win.closeMsg();
-            Ext.destroy(this.__showMessageClickMonitor);
-        }
-    },
+		if (win) {
+			win.closeMsg();
+			Ext.destroy(this.__showMessageClickMonitor);
+		}
+	},
 
 	/**
 	 * Handles a click on the enrollment card and calls the appropriate handler
@@ -794,14 +795,14 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			if (action) {
 				me.addMask();
 				action
-                    .then(function(changed){
-                        // TODO: We're not ready to show this yet.
-                        if(isFeature('suggest-contacts')){
-                            me.updateWindowButtons('suggestContacts');
-                            me.__buildCongratsCard(me.state);
-                        }
-                        return changed;
-                    })
+					.then(function(changed) {
+						// TODO: We're not ready to show this yet.
+						if (isFeature('suggest-contacts')) {
+							me.updateWindowButtons('createProfile');
+							me.__buildCongratsCard(me.state);
+						}
+						return changed;
+					})
 					.then(function(changed) {
 						me.fireEvent('enrolled-action', true);
 						me.msgClickHandler = function() {
@@ -820,7 +821,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 								});
 						};
 
-                        me.clearMessage();
+						me.clearMessage();
 						done(true, changed);
 					})
 					.fail(function(reason) {
@@ -860,90 +861,90 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 	},
 
 
-    congratsLayerClicked: function(el){
-        var nextSelectionEl = el.getTarget(".add-course");
+	congratsLayerClicked: function(el) {
+		var nextSelectionEl = el.getTarget('.add-course');
 
-        if(nextSelectionEl){
-            this.fireEvent('go-back');
+		if (nextSelectionEl) {
+			this.fireEvent('go-back');
+		}
+	},
+
+
+	suggestContacts: function() {
+		var me = this, peersStore;
+
+		function onSuggestContactsClose() {
+			var el = me.congratsLayerEl && me.congratsLayerEl.down('.suggest-contacts');
+
+			if (el) {
+				el.addCls('completed');
+			}
+			me.updateWindowButtons('close');
         }
-    },
+
+		CourseWareUtils.findCourseBy(me.course.findByMyCourseInstance())
+			.then(function(course) {
+				var instance = course.get('CourseInstance');
+
+				if (instance && instance.getSuggestContacts) {
+					instance.getSuggestContacts()
+						.then(function(items) {
+							if (Ext.isEmpty(items)) { return Promise.reject(); }
+
+							peersStore = new Ext.data.Store({
+								model: NextThought.model.User,
+								proxy: 'memory',
+								data: items
+							});
+							me.suggestContactsWin = Ext.widget('suggest-contacts-window', {store: peersStore});
+							me.suggestContactsWin.show();
+							me.mon(me.suggestContactsWin, 'destroy', onSuggestContactsClose);
+							me.mon(me.suggestContactsWin, 'destroy', 'refresh');
+						})
+						.fail(function() {
+							me.mon(Ext.widget('oobe-contact-window'), 'destroy', 'refresh');
+						});
+				}
+			});
+	},
 
 
-    suggestContacts: function(){
-        var me = this, peersStore;
+	showCreateProfile: function() {
+		var me = this,
+			str = getString('NextThought.view.library.available.CourseWindow.Finished');
 
-        function onSuggestContactsClose(){
-            var el = me.congratsLayerEl && me.congratsLayerEl.down('.suggest-contacts');
-
-            if(el){
-                el.addCls('completed');
-            }
-            me.updateWindowButtons('createProfile');
-        }
-
-        CourseWareUtils.findCourseBy(me.course.findByMyCourseInstance())
-            .then(function(course){
-                var instance = course.get("CourseInstance");
-
-                if(instance && instance.getSuggestContacts){
-                    instance.getSuggestContacts()
-                        .then(function(items){
-                            if(Ext.isEmpty(items)){ return Promise.reject(); }
-
-                            peersStore = new Ext.data.Store({
-                                model: NextThought.model.User,
-                                proxy: 'memory',
-                                data: items
-                            });
-                            me.suggestContactsWin = Ext.widget('suggest-contacts-window', {store: peersStore});
-                            me.suggestContactsWin.show();
-                            me.mon(me.suggestContactsWin, 'destroy', onSuggestContactsClose);
-                            me.mon(me.suggestContactsWin, 'destroy', 'refresh');
-                        })
-                        .fail(function(){
-                            me.mon(Ext.widget('oobe-contact-window'), 'destroy', 'refresh');
-                        });
-                }
-            });
-    },
+		me.createProfileWin = Ext.widget('profile-create-window');
+		me.createProfileWin.show();
+		me.mon(me.createProfileWin, 'destroy', this.updateWindowButtons.bind(me, 'suggestContacts', str));
+	},
 
 
-    showCreateProfile: function(){
-        var me = this,
-            str = getString('NextThought.view.library.available.CourseWindow.Finished');
+	updateWindowButtons: function(action, name) {
+		if (!action) { return; }
 
-        me.createProfileWin = Ext.widget('profile-create-window');
-        me.createProfileWin.show();
-        me.mon(me.createProfileWin, 'destroy', this.updateWindowButtons.bind(me, 'close', str));
-    },
+		var me = this;
+		me.getButtonCfg = function() {
+			return {
+				name: name || getString('NextThought.view.library.available.CourseWindow.Continue'),
+				action: action
+			};
+		};
 
-
-    updateWindowButtons: function(action, name){
-        if(!action){ return; }
-
-        var me = this;
-        me.getButtonCfg = function(){
-            return {
-                name: name || getString('NextThought.view.library.available.CourseWindow.Continue'),
-                action: action
-            };
-        };
-
-        if( me.ownerCt && me.ownerCt.updateButtons ) {
-            me.ownerCt.updateButtons();
-        }
-    },
+		if (me.ownerCt && me.ownerCt.updateButtons) {
+			me.ownerCt.updateButtons();
+		}
+	},
 
 
-    buttonClick: function(action){
-        if(action === 'suggestContacts'){
-            this.suggestContacts();
-        }
-        else if(action === 'createProfile'){
-            this.showCreateProfile();
-        }
-        else{
-            console.error('Action: ', action ,' is NOT supported');
-        }
-    }
+	buttonClick: function(action) {
+		if (action === 'suggestContacts') {
+			this.suggestContacts();
+		}
+		else if (action === 'createProfile') {
+			this.showCreateProfile();
+		}
+		else {
+			console.error('Action: ', action, ' is NOT supported');
+		}
+	}
 });

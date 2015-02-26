@@ -72,8 +72,15 @@ Ext.define('NextThought.view.profiles.create.Window', {
 	afterRender: function() {
 		this.callParent(arguments);
 		this.createPictureEditor();
-		this.mon(this.cancelEl, 'click', this.fieldsCmp.fireEvent.bind(this.fieldsCmp, 'cancel-edits', this.close.bind(this)));
+		this.mon(this.cancelEl, 'click', this.fieldsCmp.fireEvent.bind(this.fieldsCmp, 'cancel-edits', this.maybeClose.bind(this)));
 		this.mon(this.confirmEl, 'click', this.fieldsCmp.fireEvent.bind(this.fieldsCmp, 'save-edits', this.close.bind(this)));
+	},
+
+
+	maybeClose: function(success, force) {
+		if (success || force) {
+			this.close();
+		}
 	},
 
 

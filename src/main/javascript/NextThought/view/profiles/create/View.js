@@ -17,8 +17,8 @@ Ext.define('NextThought.view.profiles.create.View', {
 		{
 			cls: 'fold',
 			cn: [
-				{ cls: 'field', cn: [
-					{ tag: 'input', type: 'text', 'data-field': 'username', value: '{name}', cls: 'locked', 'placeholder': '{{{NextThought.view.profiles.About.name}}}' },
+				{ cls: 'field locked', cn: [
+					{ tag: 'input', type: 'text', 'data-field': 'username', value: '{name}', disabled: 'true', 'placeholder': '{{{NextThought.view.profiles.About.name}}}' },
 					{ cls: 'error-msg', 'data-prop': 'username'}
 				]},
 
@@ -71,7 +71,7 @@ Ext.define('NextThought.view.profiles.create.View', {
 
 
 	getEditableFields: function() {
-		return this.el && this.el.query('input[data-field]:not(.locked),textarea[data-field]');
+		return this.el && this.el.query('input[data-field]:not([disabled=true]),textarea[data-field]');
 	},
 
 

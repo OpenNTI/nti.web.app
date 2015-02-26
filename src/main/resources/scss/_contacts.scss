@@ -971,10 +971,8 @@ div.contact-buttons {
                             }
 
                             &.upload{
-                                &::after{
-                                    background: url('../images/icons-sba061eb9dd.png') no-repeat;
-                                    background-position: -132px -137px;
-                                }
+								cursor: pointer;
+								@include icon('edit-15-white', $left:auto, $top: 7px, $right: 6px);
                             }
                         }
 
@@ -1096,6 +1094,16 @@ div.contact-buttons {
                 textarea{
                     height: 100px;
                 }
+
+				&.locked{
+					@include icon('lock', $left:auto, $top: 13px, $right: 67px);
+					&::after{
+						position: absolute;
+						display: block;
+						content: '';
+
+					}
+				}
             }
         }
     }
