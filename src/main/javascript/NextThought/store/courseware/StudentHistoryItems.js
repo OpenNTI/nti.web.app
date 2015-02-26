@@ -54,8 +54,8 @@ Ext.define('NextThought.store.courseware.StudentHistoryItems', {
 		me.assignments.each(function(assignment) {
 			var entry = me.__getEntryForAssignment(assignment.getId());
 
-			//if its a no submit assignment filter it out
-			if (assignment.isNoSubmit()) {
+			//filter out the final grade assignment
+			if (me.assignments.isFinalGradeAssignment(assignment)) {
 				if (entry) {
 					me.remove(entry);
 				}

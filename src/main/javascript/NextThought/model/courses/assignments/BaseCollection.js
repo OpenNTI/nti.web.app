@@ -157,17 +157,23 @@ Ext.define('NextThought.model.courses.assignments.BaseCollection', {
 	getFinalGradeAssignment: function() {
 		if (this.__finalGrade !== undefined) { return this.__finalGrade; }
 
-		var finalGrade = null;
+		var me = this,
+			finalGrade = null;
 
-		this.each(function(assignment) {
-			if (assignment.isNoSubmit() && assignment.get('title') === 'Final Grade') {
+		me.each(function(assignment) {
+			if (me.isFinalGradeAssignment(assignment)) {
 				finalGrade = assignment;
 			}
 		});
 
-		this.__finalGrade = finalGrade;
+		me.__finalGrade = finalGrade;
 
-		return this.__finalGrade;
+		return me.__finalGrade;
+	},
+
+
+	isFinalGradeAssignment: function(assignment) {
+		return assignment.isNoSubmit() && assignment.get('title') === 'Final Grade';
 	},
 
 
