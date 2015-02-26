@@ -874,12 +874,13 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 		var me = this, peersStore;
 
 		function onSuggestContactsClose() {
-			var el = me.congratsLayerEl && me.congratsLayerEl.down('.suggest-contacts');
+			var el = me.congratsLayerEl && me.congratsLayerEl.down('.suggest-contacts'),
+				str = getString('NextThought.view.library.available.CourseWindow.Finished');
 
 			if (el) {
 				el.addCls('completed');
 			}
-			me.updateWindowButtons('close');
+			me.updateWindowButtons('close', str);
         }
 
 		CourseWareUtils.findCourseBy(me.course.findByMyCourseInstance())
@@ -911,11 +912,11 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 	showCreateProfile: function() {
 		var me = this,
-			str = getString('NextThought.view.library.available.CourseWindow.Finished');
+			str = getString('NextThought.view.library.available.CourseWindow.Continue');
 
 		me.createProfileWin = Ext.widget('profile-create-window');
 		me.createProfileWin.show();
-		me.mon(me.createProfileWin, 'destroy', this.updateWindowButtons.bind(me, 'suggestContacts', str));
+		me.mon(me.createProfileWin, 'destroy', me.updateWindowButtons.bind(me, 'suggestContacts', str));
 	},
 
 
