@@ -87,6 +87,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.PagedGrid', {
 			text: getString('NextThought.view.courseware.assessment.admin.Grid.completed'),
 			dataIndex: 'HistoryItem',
 			name: 'completed',
+			sortOn: 'dateSubmitted',
 			width: 150,
 			renderer: function(v, col, rec) {
 				if (!rec.get('HistoryItemSummary')) {
@@ -148,36 +149,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.PagedGrid', {
 						date: Ext.Date.format(submitted, dateFormat)
 					})
 				});
-			},
-			doSort: function(state) {
-				function get(o) { o = o.data; return o.completed || o.due; }
-				var store = this.up('grid').getStore(),
-					groupModifier = state === 'ASC' ? 1 : -1,
-					sorters = [
-						{
-							direction: state,
-							property: 'dateSubmitted',
-							sorterFn: function(a, b) {
-								var v1 = !!a.get('completed'),
-									v2 = !!b.get('completed'),
-									v = v1 && !v2 ? -1 : (!v1 && v2 ? 1 : 0);
-
-								//keep the completed items on top
-								return groupModifier * v;
-							}
-						},
-						{
-							direction: state,
-							property: 'dateSubmitted',
-							//not invoked if remote sort.
-							sorterFn: function(a, b) {
-								var v1 = get(a), v2 = get(b);
-								return v1 > v2 ? 1 : (v1 < v2 ? -1 : 0);
-							}
-						}
-				  ];
-
-				store.sort(sorters);
 			}
 		},
 
@@ -214,6 +185,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.PagedGrid', {
 			dataIndex: 'HistoryItemSummary',
 			name: 'feedback',
 			tdCls: 'feedback',
+			sortOn: 'feedbackCount',
 			width: 140,
 			renderer: function(v, col, rec) {
 				if (!rec.get('HistoryItemSummary')) {
@@ -241,20 +213,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.PagedGrid', {
 				}
 
 				return excusedTpl + feedbackTpl;
-			},
-			doSort: function(state) {
-				var store = this.up('grid').getStore(),
-					sorter = new Ext.util.Sorter({
-						direction: state,
-						property: store.remoteSort ? 'feedbackCount' : 'feedback',
-
-						root: 'data',
-						transform: function(o) {
-							return o || 0;
-						}
-					});
-
-				store.sort(sorter);
 			}
 		},
 
