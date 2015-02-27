@@ -67,6 +67,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 					{cls: 'actions', cn: [
 						{tag: 'a', cls: 'completed', html: '{{{NextThought.view.courseware.enrollment.Details.CongratsAccountCreated}}}'},
 						{tag: 'a', cls: 'completed', html: '{{{NextThought.view.courseware.enrollment.Details.CongratsCourseCreated}}}'},
+						{tag: 'a', cls: 'create-profile', html: '{{{NextThought.view.courseware.enrollment.Details.CreateProfile}}}'},
 						{tag: 'a', cls: 'suggest-contacts', html: '{{{NextThought.view.courseware.enrollment.Details.ConnectWithPeers}}}'}
 					]}
 				]},
@@ -911,12 +912,19 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 
 
 	showCreateProfile: function() {
-		var me = this,
-			str = getString('NextThought.view.library.available.CourseWindow.Continue');
+		var me = this;
+
+		function onCreateProfileClose() {
+			var el = me.congratsLayerEl && me.congratsLayerEl.down('.create-profile'),
+				str = getString('NextThought.view.library.available.CourseWindow.Continue');
+
+			if (el) { el.addCls('completed'); }
+			me.updateWindowButtons('suggestContacts', str);
+		}
 
 		me.createProfileWin = Ext.widget('profile-create-window');
 		me.createProfileWin.show();
-		me.mon(me.createProfileWin, 'destroy', me.updateWindowButtons.bind(me, 'suggestContacts', str));
+		me.mon(me.createProfileWin, 'destroy', onCreateProfileClose);
 	},
 
 
