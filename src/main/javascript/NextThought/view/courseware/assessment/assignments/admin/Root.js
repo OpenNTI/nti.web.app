@@ -11,12 +11,19 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 	},
 
 
-	onItemClicked: function(view, rec, extraParams) {
+	onItemClicked: function(view, rec) {
 		if (!rec) {
 			console.error('Ignoring click because no record was passed.', arguments);
 			return;
 		}
 		//This is the admin view... we will let instructors view them no matter what. (so we will ignore the closed state)
+		this.goToRecord(rec);
+	},
+
+	
+	goToRecord: function(rec, extraParams) {
+		if (!rec) { return; }
+
 		this.fireEvent('assignment-clicked', rec, extraParams);
 	},
 
@@ -56,7 +63,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 			};
 		}
 
-		me.onItemClicked(null, x, params);
+		me.goToRecord(x, params);
 
 		view = me.up('course-assessment-admin-assignments');
 		assignmentView = view && view.down('course-assessment-admin-assignments-item');
