@@ -6,7 +6,7 @@
 Ext.define('NextThought.cache.SharedInstance', {
 
 	//A list of props to include in the JSON of a record when updating
-	UPDATE_WHITELIST: ['href'],
+	UPDATE_WHITELIST: ['href', 'IsExcused'],
 
 	constructor: function(config) {
 		//TODO: We might need to have multiple keys point to the same record
@@ -78,10 +78,15 @@ Ext.define('NextThought.cache.SharedInstance', {
 	 */
 	__updateRecord: function(key, record) {
 		var cachedRecord = this.__getRecordForKey(key),
-			json = record.asJSON(), i, prop;
+			json = record.asJSON(), i, prop, value;
 
 		for (i = 0; i < this.UPDATE_WHITELIST.length; i++) {
 			prop = this.UPDATE_WHITELIST[i];
+			value = record.get(prop);
+
+			if (value !== undefined) {
+				json[prop] = value;
+			}
 
 			json[prop] = record.get(prop);
 		}

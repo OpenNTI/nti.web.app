@@ -180,7 +180,8 @@ Ext.define('NextThought.model.courses.assignments.InstructorCollection', {
 			grade = NextThought.model.courseware.Grade.create({
 				href: href,
 				AssignmentId: this.__getIdOf(assignment),
-				Username: this.__getIdOf(user)
+				Username: this.__getIdOf(user),
+				IsExcused: false
 			});
 
 		//pass the update flag to force incase we already have a cached instance
