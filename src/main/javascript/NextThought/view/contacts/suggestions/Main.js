@@ -21,7 +21,7 @@ Ext.define('NextThought.view.contacts.suggestions.Main', {
 							{ cls: 'email', html: '{email}', 'data-field': 'email' }
 						]},
 
-						{ tag: 'tpl', 'if': '!hideProfile && (role || affiliation)', cn: [
+						{ tag: 'tpl', 'if': '(role || affiliation)', cn: [
 							{ cls: 'composite-line', cn: [
 								{ tag: 'tpl', 'if': 'role', cn: [
 									{ tag: 'span', html: '{role}', 'data-field': 'role'}
@@ -36,7 +36,7 @@ Ext.define('NextThought.view.contacts.suggestions.Main', {
 							]}
 						]
 						},
-						{ tag: 'tpl', 'if': '!hideProfile && location', cn: [
+						{ tag: 'tpl', 'if': 'location', cn: [
 							{ cls: 'location', html: '{location}', 'data-field': 'location' }
 						]}
 					]
@@ -149,20 +149,14 @@ Ext.define('NextThought.view.contacts.suggestions.Main', {
 
 	afterRender: function() {
 		this.callParent(arguments);
+		this.selectedRecords = new Ext.util.MixedCollection();
 		this.on('itemclick', 'itemClicked', this);
 		this.__updateCount();
 	},
 
 
 	__updateCount: function() {
-		var a = Ext.getStore('all-contacts-store'), isContact, count = 0;
-
-		this.store.each(function(rec) {
-			isContact = a && a.contains(rec.get('Username'));
-			if (!isContact) {
-				count++;
-			}
-		});
+		var count = this.el.query('.selected').length;
 
 		if (this.ownerCt && this.ownerCt.updateContactsCount) {
 			this.ownerCt.updateContactsCount(count);
@@ -171,13 +165,20 @@ Ext.define('NextThought.view.contacts.suggestions.Main', {
 
 
 	itemClicked: function(view, record, item, index, e) {
-		if (Ext.fly(e.getTarget()).hasCls('add-contact')) {
-			this.addContact(view, record, item);
-		}
-		else if (Ext.fly(e.getTarget()).hasCls('remove-contact')) {
-			this.removeContact(view, record, item);
-		}
+		var targetEl = Ext.fly(e.getTarget());
 
+		if (targetEl.hasCls('add-contact')) {
+			targetEl.removeCls('add-contact');
+			targetEl.addCls('selected');
+			targetEl.setHTML('Selected');
+			this.selectedRecords.add(record.getId(), record);
+		}
+		else if (targetEl.hasCls('selected')) {
+			targetEl.removeCls('selected');
+			targetEl.addCls('add-contact');
+			targetEl.setHTML('Add');
+			this.selectedRecords.remove(record);
+		}
 		this.__updateCount();
 	},
 
@@ -211,8 +212,8 @@ Ext.define('NextThought.view.contacts.suggestions.Main', {
 
 
 	addAllContacts: function(finish) {
-		var records = this.store && this.store.getRange();
-		if (records) {
+		var records = this.selectedRecords.getRange();
+		if (!Ext.isEmpty(records)) {
 			this.fireEvent('add-contacts', records, finish);
 		}
 	}
