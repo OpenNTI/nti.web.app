@@ -130,6 +130,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 						assignmentView.currentFilter = store.getEnrollmentScope();
 						assignmentView.syncFilterToUI();
 
+						store.proxy.extraParams.filter = assignmentView.currentFilter;
+
 						return assignmentView.fireGoToAssignment(null, record);
 					})
 					.always(function() {
