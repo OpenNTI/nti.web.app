@@ -893,10 +893,16 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 						.then(function(items) {
 							if (Ext.isEmpty(items)) { return Promise.reject(); }
 
+							var a = Ext.getStore('all-contacts-store');
 							peersStore = new Ext.data.Store({
 								model: NextThought.model.User,
 								proxy: 'memory',
-								data: items
+								data: items,
+								filters: [
+									function(item) {
+										return !(a && a.contains(item.get('Username')));
+									}
+								]
 							});
 							me.suggestContactsWin = Ext.widget('suggest-contacts-window', {store: peersStore});
 							me.suggestContactsWin.show();

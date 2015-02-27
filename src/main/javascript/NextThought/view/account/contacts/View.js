@@ -105,26 +105,32 @@ Ext.define('NextThought.view.account.contacts.View', {
 
 
 	onClickRaw: function(e) {
-        var suggestContactLink, me = this, peersStore;
+		var me = this, peersStore,
+			a = Ext.getStore('all-contacts-store');
 
-		if (e.getTarget('a.button')) {
-            $AppConfig.userObject.getSuggestContacts()
-                .then(function(items){
-                    if(Ext.isEmpty(items)){ return Promise.reject(); }
+		if (!e.getTarget('a.button')) { return; }
 
-                    peersStore = new Ext.data.Store({
-                        model: NextThought.model.User,
-                        proxy: 'memory',
-                        data: items
-                    });
-                    me.suggestContactsWin = Ext.widget('suggest-contacts-window', {store: peersStore});
-                    me.suggestContactsWin.show();
-                    me.mon(me.suggestContactsWin, 'destroy', 'refresh');
-                })
-                .fail(function(){
-                    me.mon(Ext.widget('oobe-contact-window'), 'destroy', 'refresh');
-                });
-		}
+		$AppConfig.userObject.getSuggestContacts()
+			.then(function(items) {
+				if (Ext.isEmpty(items)) { return Promise.reject(); }
+
+				peersStore = new Ext.data.Store({
+					model: NextThought.model.User,
+					proxy: 'memory',
+					data: items,
+					filters: [
+						function(item) {
+							return !(a && a.contains(item.get('Username')));
+						}
+					]
+				});
+				me.suggestContactsWin = Ext.widget('suggest-contacts-window', {store: peersStore});
+				me.suggestContactsWin.show();
+				me.mon(me.suggestContactsWin, 'destroy', 'refresh');
+			})
+			.fail(function() {
+				me.mon(Ext.widget('oobe-contact-window'), 'destroy', 'refresh');
+			});
 	},
 
 

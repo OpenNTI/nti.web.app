@@ -44,12 +44,7 @@ Ext.define('NextThought.view.contacts.suggestions.Main', {
 				{
 					cls: 'add-to-contacts',
 					cn: [
-						{tag: 'tpl', 'if': 'this.isContact(values)', cn: [
-							{tag: 'a', cls: 'button remove-contact', role: 'button', html: 'Remove'}
-						]},
-						{tag: 'tpl', 'if': '!this.isContact(values)', cn: [
-							{tag: 'a', cls: 'button add-contact', role: 'button', html: 'Add'}
-						]}
+						{tag: 'a', cls: 'button add-contact', role: 'button', html: 'Add'}
 					]
 				}
 			]
@@ -78,72 +73,26 @@ Ext.define('NextThought.view.contacts.suggestions.Main', {
 
 
 	buildStore: function() {
-		Promise.all(this.loadSuggestedContacts())
-			.then(this.__fillIn.bind(this));
-	},
+		var peersStore,
+			a = Ext.getStore('all-contacts-store'), me = this;
 
+		$AppConfig.userObject.getSuggestContacts()
+			.then(function(items) {
+				if (Ext.isEmpty(items)) { return Promise.reject(); }
 
-	loadSuggestedContacts: function() {
-		var courses = Ext.getStore('courseware.EnrolledCourses'),
-			links = [], course, toLoad = [], p;
+				peersStore = new Ext.data.Store({
+					model: NextThought.model.User,
+					proxy: 'memory',
+					data: items,
+					filters: [
+						function(item) {
+							return !(a && a.contains(item.get('Username')));
+						}
+					]
+				});
 
-		courses.each(function(entry) {
-			course = entry.get('CourseInstance');
-			if (course && course.hasLink('Classmates')) {
-				links.push(course.getLink('Classmates'));
-			}
-		});
-
-		Ext.each(links, function(link) {
-			p = new Promise(function(fulfill, reject) {
-				Service.request({
-					url: link,
-					method: 'GET'
-				})
-					.fail(function() {
-						console.error('Failed to retrieve classmates');
-						reject('Request Failed');
-					})
-					.done(function(responseText) {
-						var o = Ext.JSON.decode(responseText, true),
-							items = o && o.Items;
-
-						fulfill(items);
-					});
+				me.bindStore(peersStore);
 			});
-
-			toLoad.push(p);
-		});
-
-		return toLoad;
-	},
-
-
-	__fillIn: function(courseClassmates) {
-		var peersObj = {}, peers = [], me = this;
-
-		Ext.each(courseClassmates, function(m) {
-			for (var k in m) {
-				// A dict will eliminate duplicate.
-				if (m.hasOwnProperty(k)) {
-					peersObj[k] = m[k];
-				}
-			}
-		});
-
-		for (var o in peersObj) {
-			if (peersObj.hasOwnProperty(o)) {
-				peers.push(peersObj[o]);
-			}
-		}
-
-		this.store = new Ext.data.Store({
-			model: NextThought.model.User,
-			proxy: 'memory',
-			data: peers
-		});
-
-		this.bindStore(this.store);
 	},
 
 
@@ -195,19 +144,6 @@ Ext.define('NextThought.view.contacts.suggestions.Main', {
 		}
 
 		this.__updateCount();
-	},
-
-
-	removeContact: function(view, record, item) {
-		var u = record && record.get('Username'), me = this;
-
-		function finish() {
-			me.refreshNode(me.store.indexOf(record));
-		}
-
-		if (u) {
-			this.fireEvent('remove-contact', null, record.get('Username'), finish);
-		}
 	},
 
 
