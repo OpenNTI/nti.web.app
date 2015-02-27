@@ -9,6 +9,6 @@ Ext.define('NextThought.model.courses.assignments.Summary', {
 		{name: 'HistoryItemSummary', type: 'singleItem'},
 		{name: 'OverdueAssignmentCount', type: 'int'},
 		{name: 'UngradedAssignmentCount', type: 'int'},
-		{name: 'User', type: 'auto'},
+		{name: 'User', type: 'auto'}
 	]
 });
