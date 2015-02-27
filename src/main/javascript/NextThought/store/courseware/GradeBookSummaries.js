@@ -18,10 +18,13 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 			root: 'Items',
 			totalProperty: 'TotalItemCount',
 
-			readRecords: function() {
+			readRecords: function(resp) {
 				var data = this.self.prototype.readRecords.apply(this, arguments),
 					list = (data && data.records) || [],
 					i = list.length - 1, o, u;
+
+				this.currentPage = resp.BatchPage;
+				this.EnrollmentScope = resp.EnrollmentScope;
 
 				for (i; i >= 0; i--) {
 					o = list[i] && list[i].raw;
@@ -172,6 +175,16 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 
 	getAssignment: function() {
 		return this.assignments.getFinalGradeAssignment();
+	},
+
+
+	getCurrentPage: function() {
+		return this.proxy.reader.currentPage || 1;
+	},
+
+
+	getEnrollmentScope: function() {
+		return this.proxy.reader.EnrollmentScope || 'ForCredit';
 	},
 
 

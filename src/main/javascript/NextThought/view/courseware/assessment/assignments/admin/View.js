@@ -37,12 +37,12 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.View', {
 	},
 
 
-	showAssignmentFromClick: function(rec) {
-		this._doShowAssignment(rec);
+	showAssignmentFromClick: function(rec, extraParams) {
+		this._doShowAssignment(rec, extraParams);
 	},
 
 
-	_doShowAssignment: function(rec) {
+	_doShowAssignment: function(rec, extraParams) {
 		Ext.destroy(this.down('course-assessment-admin-assignments-item'));
 
 		if (!rec) {
@@ -57,6 +57,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.View', {
 			due: rec.get('due'),
 			assignment: rec.get('item'),
 			assignments: this.assignments,
+			extraParams: extraParams,
 			pageSource: NextThought.util.PageSource.create({
 				store: this.store,
 				current: this.store.indexOf(rec)

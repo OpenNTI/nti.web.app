@@ -182,6 +182,10 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 				me.toggleAvatars(!value.get('hide_avatars'));
 			});
 
+		if (me.extraParams) {
+			me.store.proxy.extraParams = Ext.apply(me.store.proxy.extraParams || {}, me.extraParams);
+		}
+
 		//load the store
 		me.store.load();
 	},

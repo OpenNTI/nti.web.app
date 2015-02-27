@@ -111,7 +111,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Pager', {
 			pages,
 			total = this.store.getTotalCount(),
 			pageCount = this.store.getTotalPages(),
-			current = parseInt(this.store.currentPage, 10);
+			current = parseInt(this.store.getCurrentPage(), 10);
 
 		pages = this.getPages(pageCount, current);
 
@@ -185,7 +185,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Pager', {
 
 
 	loadPrev: function() {
-		var current = parseInt(this.store.currentPage);
+		var current = parseInt(this.store.getCurrentPage());
 
 		if (current > 1) {
 			this.loadPage(current - 1);
@@ -194,7 +194,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Pager', {
 
 
 	loadNext: function() {
-		var current = parseInt(this.store.currentPage),
+		var current = parseInt(this.store.getCurrentPage()),
 			total = this.store.getTotalPages();
 
 		if (current < total) {

@@ -11,13 +11,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 	},
 
 
-	onItemClicked: function(view, rec) {
+	onItemClicked: function(view, rec, extraParams) {
 		if (!rec) {
 			console.error('Ignoring click because no record was passed.', arguments);
 			return;
 		}
 		//This is the admin view... we will let instructors view them no matter what. (so we will ignore the closed state)
-		this.fireEvent('assignment-clicked', rec);
+		this.fireEvent('assignment-clicked', rec, extraParams);
 	},
 
 
@@ -45,11 +45,18 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 			x = me.store.getById(id),
 			item = x && x.get('item'),
 			tab = me.up('[isTabView]').getEl(),
-			view, assignmentView, store, username;
+			view, assignmentView, store, username, params;
 
+		username = user && ((user.getId && user.getId()) || user);
 
-		me.onItemClicked(null, x);
+		//if we are drilling in to one user, batch the store around it
+		if (user) {
+			params = {
+				'batchAroundUsernameFilterByScope': username
+			};
+		}
 
+		me.onItemClicked(null, x, params);
 
 		view = me.up('course-assessment-admin-assignments');
 		assignmentView = view && view.down('course-assessment-admin-assignments-item');
@@ -58,54 +65,73 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 			mask(true);
 
 			store = assignmentView.store;
-			username = user && ((user.getId && user.getId()) || user);
 
-			return Service.request([store.getProxy().url, username].join('/'))
-				.done(function(res) {
-					var assignmentHistory = ParseUtils.parseItems(res)[0];
-					if (assignmentHistory.get('Creator') !== username) {
-						Ext.Error.raise('Username did not match!');
+			return new Promise(function(fulfill, reject) {
+
+				function loaded(success) {
+					var params = store.proxy.extraParams;
+
+					//remove the param so it doesn't affect the next loads
+					delete params.batchAroundUsernameFilterByScope;
+
+					if (success) {
+						fulfill();
+					} else {
+						reject('Failed to load store');
 					}
+				}
 
-					assignmentHistory.set('item', item);
+				//if the store hasn't loaded yet wait until it does
+				if (store.loading) {
+					me.mon(store, {
+						single: true,
+						load: function(store, records, success) {
+							loaded(success);
+						}
+					});
+				} else {
+					loaded(true);
+				}
 
-					item.getGradeBookEntry()
-						.then(function(grade) {
-							grade.updateHistoryItem(assignmentHistory);
-						});
+			}).then(function() {
+				var record,
+					//find the record for this user
+					index = store.findBy(function(rec) {
+						var user = rec.get('User'),
+							userId = user && NextThought.model.User.getIdFromRaw(user);
+					
+						return userId && userId === username;
+					});
 
-					//Should be a cache hit... so lets just do the most straight forward thing.
-					return UserRepository.getUser(username)
-							.then(function(user) {
-								assignmentHistory.set('Creator', user);
+				if (index >= 0) {
+					record = store.getAt(index);
+				}
 
-								var inst = me.data.instance,
-									url = [user.get('href').split(/[\?#]/)[0], 'Courses', 'EnrolledCourses',
-										   encodeURIComponent(inst.getCourseCatalogEntry().getId())].join('/');
+				if (!record) {
+					return Promise.reject('No Record for that user');
+				}
 
-								return Service.request(url);
+				return record;
+			}).then(function(record) {
+				return UserRepository.getUser(username)
+					.then(function(user) {
+						var historyItem = record.get('HistoryItemSummary');
 
-							})
-							.then(function(json) {
-								json = Ext.decode(json, true) || {};
-								return json.LegacyEnrollmentStatus || 'ForCredit';
-							})
-							.done(function(status) {
-								mask(false);
+						record.set('User', user);
+						historyItem.set('Creator', user);
 
-								assignmentView.doFilter(status);
-								assignmentView.syncFilterToUI();
-								return assignmentView.fireGoToAssignment(null, assignmentHistory);
-							})
-							.fail(function(reason) {
-								mask(false);
-								console.error('Could not resove ', username, ' because ', reason);
-							});
-				})
-				.fail(function(reason) {
-					mask(false);
-					console.error('Failure Reason: ', reason);
-				});
+						assignmentView.currentFilter = store.getEnrollmentScope();
+						assignmentView.syncFilterToUI();
+
+						return assignmentView.fireGoToAssignment(null, record);
+					})
+					.always(function() {
+						mask(false);
+					});
+			}).fail(function(reason) {
+				mask(false);
+				console.error('Failed to load users assignment:', reason );
+			});
 		}
 	}
 });
