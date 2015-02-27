@@ -41,12 +41,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.Pager', {
 			pageCount = this.store.getTotalPages(),
 			current = parseInt(this.store.currentPage);
 
-		//if there isn't a total count it probably means the store hasn't loaded yet
-		//so just return
-		if (!total) {
-			return;
-		}
-
 		for (i = 0; i < pageCount; i++) {
 			pages.push( {
 				cls: (i + 1) === current ? 'active' : 'not-active'
@@ -59,7 +53,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Pager', {
 			nextCls: current < pageCount ? 'enabled' : 'disabled'
 		});
 
-		if (current > pageCount) {
+		if (current > pageCount && pageCount > 0) {
 			this.store.loadPage(pageCount);
 		}
 
