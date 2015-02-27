@@ -474,22 +474,30 @@ canvas.x-component-course-assessment {
 	.pager {
 		.pager-container {
 			text-align: center;
-		}
 
-		span {
-			color: $primary-blue;
-			font-size: 0.875rem;
-			padding: 0 0.5em;
-			cursor: pointer;
+			ul {
+				list-style: none;
+				padding: 0;
+				display: inline-block;
+				margin: 0;
 
-			&.disabled {
-				cursor: default;
-				color: $tertiary-grey;
-			}
+				li {
+					color: $primary-blue;
+					font-size: 0.875rem;
+					margin: 0 0.2em;
+					float: left;
+					cursor: pointer;
 
-			&.active {
-				font-weight: 600;
-				text-decoration: underline;
+					&.disabled {
+						cursor: default;
+						color: $tertiary-grey;
+					}
+
+					&.active {
+						font-weight: 600;
+						text-decoration: underline;
+					}
+				}
 			}
 		}
 	}

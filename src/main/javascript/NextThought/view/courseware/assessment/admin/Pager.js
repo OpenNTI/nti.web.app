@@ -2,6 +2,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.Pager', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-assessment-admin-pager',
 
+	MAX_VISIBLE: 20,
+	MIDDLE_RANGE: 10,
+
 	height: 22,
 
 	cls: 'pager',
@@ -9,19 +12,37 @@ Ext.define('NextThought.view.courseware.assessment.admin.Pager', {
 	renderTpl: Ext.DomHelper.markup({
 		cls: 'pager-container',
 		cn: [
-			{tag: 'span', cls: 'prev {prevCls}', html: '&lt;'},
-			{tag: 'tpl', 'for': 'pages', cn: [
-				{tag: 'span', cls: 'page {cls}', 'data-index': '{#}', html: '{#}'}
-			]},
-			{tag: 'span', cls: 'next {nextCls}', html: '&gt;'}
+			// {tag: 'tpl', 'if': 'hasRandomAccess', cn: [
+			// 	{tag: 'label', cls: 'page', cn: [
+			// 		'Page:',
+			// 		{tag: 'input', type: 'text', value: '{current}'}
+			// 	]}
+			// ]},
+			{tag: 'ul', cls: 'pages', cn: [
+				{tag: 'tpl', 'for': 'pages', cn: [
+					{tag: 'tpl', 'if': 'isEllipse', cn: [
+						{tag: 'li', cls: 'page ellipse', 'data-start': '{start}', 'data-end': '{end}', html: '{html}'}
+					]},
+					{tag: 'tpl', 'if': '!isEllipse', cn: [
+						{tag: 'li', cls: 'page {cls}', 'data-index': '{index}', html: '{html}'}
+					]}
+				]}
+			]}
 		]
 	}),
+
+
+	renderSelectors: {
+		pageInput: 'label input[type=text]'
+	},
 
 
 	afterRender: function() {
 		this.callParent(arguments);
 
 		this.mon(this.el, 'click', 'onItemClick');
+
+		this.attachListeners();
 	},
 
 
@@ -34,23 +55,84 @@ Ext.define('NextThought.view.courseware.assessment.admin.Pager', {
 	},
 
 
-	onStoreLoad: function() {
-		var s = this.store,
-			pages = [], i,
-			total = this.store.getTotalCount(),
-			pageCount = this.store.getTotalPages(),
-			current = parseInt(this.store.currentPage);
+	getPages: function(count, current) {
+		var pages = [],
+			halfRange = Math.floor(this.MIDDLE_RANGE / 2);
 
-		for (i = 0; i < pageCount; i++) {
-			pages.push( {
-				cls: (i + 1) === current ? 'active' : 'not-active'
+		function addRange(start, end) {
+			var i;
+
+			for (i = start; i <= end; i++) {
+				pages.push({
+					html: i,
+					isEllipse: false,
+					index: i,
+					cls: i === current ? 'active' : 'not-active'
+				});
+			}
+		}
+
+		function addEllipsis(start, end) {
+			pages.push({
+				html: '...',
+				isEllipse: true,
+				start: start,
+				end: end
 			});
 		}
 
+		// if we have less pages than the max add them all
+		if (count <= this.MAX_VISIBLE) {
+			addRange(1, count);
+		//if the first half of the middle range is at or before the start
+		} else if (current - halfRange <= 1) {
+			addRange(1, this.MIDDLE_RANGE);
+			addEllipsis(this.MIDDLE_RANGE + 1, count - 4);
+			addRange(count - 2, count);
+		//if the last half of the middle range is at or after the end
+		} else if (current + halfRange >= count) {
+			addRange(1, 3);
+			addEllipsis(4, count - this.MIDDLE_RANGE - 1);
+			addRange(count - this.MIDDLE_RANGE, count);
+		} else {
+			addRange(1, 3);
+			addEllipsis(4, current - halfRange - 1);
+			addRange(current - halfRange, current + halfRange);
+			addEllipsis(current + halfRange + 1, count);
+			addRange(count - 2, count);
+		}
+
+		return pages;
+	},
+
+
+	onStoreLoad: function() {
+		var s = this.store,
+			pages,
+			total = this.store.getTotalCount(),
+			pageCount = this.store.getTotalPages(),
+			current = parseInt(this.store.currentPage, 10);
+
+		pages = this.getPages(pageCount, current);
+
+		pages.unshift({
+			html: '<',
+			index: 'prev',
+			isEllipse: false,
+			cls: current > 1 ? 'enabled' : 'disabled'
+		});
+
+		pages.push({
+			html: '>',
+			index: 'next',
+			isEllipse: false,
+			cls: current < pageCount ? 'enabled' : 'disabled'
+		});
+
 		this.renderData = Ext.apply(this.renderData || {}, {
+			current: current,
 			pages: pages,
-			prevCls: current > 1 ? 'enabled' : 'disabled',
-			nextCls: current < pageCount ? 'enabled' : 'disabled'
+			hasRandomAccess: pageCount > this.MAX_VISIBLE
 		});
 
 		if (current > pageCount && pageCount > 0) {
@@ -59,21 +141,40 @@ Ext.define('NextThought.view.courseware.assessment.admin.Pager', {
 
 		if (this.rendered) {
 			this.renderTpl.overwrite(this.el, this.renderData);
+			this.attachListeners();
+		}
+	},
+
+
+	attachListeners: function() {
+		if (!this.rendered) { return; }
+
+		var pageInput = this.el.down('label.page input[type=text]');
+
+		Ext.destroy(this.pageInputMons);
+
+		if (pageInput) {
+			this.pageInputMons = this.mon(pageInput, {
+				'keypress': 'onKeyPress',
+				'destroyable': true
+			});
 		}
 	},
 
 
 	onItemClick: function(e) {
-		var page = e.getTarget('.page');
-
 		if (e.getTarget('.disabled')) { return; }
 
-		if (page) {
-			this.loadPage(page.getAttribute('data-index'));
-		} else if (e.getTarget('.prev')) {
+		var page = e.getTarget('.page'),
+			index = page && page.getAttribute('data-index');
+
+
+		if (index === 'prev') {
 			this.loadPrev();
-		} else if (e.getTarget('.next')) {
+		} else if (index === 'next') {
 			this.loadNext();
+		} else if (index){
+			this.loadPage(index);
 		}
 	},
 
@@ -98,6 +199,36 @@ Ext.define('NextThought.view.courseware.assessment.admin.Pager', {
 
 		if (current < total) {
 			this.loadPage(current + 1);
+		}
+	},
+
+
+	getPageInputValue: function() {
+		var pageInput = this.el.down('label.page input[type=text'),
+			value = (pageInput && pageInput.getValue()) || 1;
+
+		return parseInt(value, 10);
+	},
+
+
+	onKeyPress: function(e) {
+		var keyCode = e.keyCode,
+			allowed = [e.BACKSPACE, e.TAB, e.ESCAPE];
+
+		if (keyCode === e.ENTER) {
+			this.loadPage(this.getPageInputValue());
+		}
+
+		if (Ext.Array.contains(allowed, keyCode)) {
+			return;
+		}
+
+		if (keyCode === 65 && e.ctrlKey) {
+			return;
+		}
+
+		if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+			e.preventDefault();
 		}
 	}
 });
