@@ -40,8 +40,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.View', {
 
 	showStudent: function(rec) {
 		var view,
-			links = rec.get('Links'),
-			historyURL = Service.getLinkFrom(rec.get('Links'), 'AssignmentHistory');
+			historyURL = rec.getLink('AssignmentHistory');
 
 		if (!rec.get('User') || !historyURL) {
 			console.warn('Unable to show student view', rec.get('User'), historyURL);

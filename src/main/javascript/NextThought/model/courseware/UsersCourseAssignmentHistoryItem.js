@@ -384,8 +384,8 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 		//if we aren't a placeholder and the grade has different values save the new ones
 		} else if (!grade.valueEquals(value, letter)) {
 			return grade.saveValue(value, letter)
-				.then(function() {
-					console.log('Grade saved');
+				.then(function(newGrade) {
+					grade.set(newGrade.asJSON());
 				});
 		}
 

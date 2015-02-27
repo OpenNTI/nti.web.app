@@ -115,7 +115,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 						]}
 						]), {
 							getGrade: function(values) {
-								var grade = values.Grade,
+								var grade = values.HistoryItemSummary.get('Grade'),
 									gradeVals = (grade && grade.getValues()) || {};
 
 								return gradeVals.value || '';

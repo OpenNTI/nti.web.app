@@ -2,19 +2,9 @@
 Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 	extend: 'Ext.data.Store',
 
-	remoteSort: true,
+	model: 'NextThought.model.courses.assignments.Summary',
 
-	fields: [
-		{name: 'Alias', type: 'string'},
-		{name: 'Username', type: 'string'},
-		{name: 'avatar', type: 'string', defaultValue: User.BLANK_AVATAR},
-		{name: 'HistoryItemSummary', type: 'auto'},
-		{name: 'Grade', type: 'auto'},
-		{name: 'OverdueAssignmentCount', type: 'int'},
-		{name: 'UngradedAssignmentCount', type: 'int'},
-		{name: 'Links', type: 'auto'},
-		{name: 'User', type: 'auto'}
-	],
+	remoteSort: true,
 
 	pageSize: 50,
 
@@ -162,11 +152,6 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 			historyItem = this.assignments.createPlaceholderHistoryItem(assignment, userId);
 
 			record.set('HistoryItemSummary', historyItem);
-		}
-
-		if (historyItem) {
-			historyItem.stores.push(record);
-			record.set('Grade', historyItem.get('Grade'));
 		}
 
 

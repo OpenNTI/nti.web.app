@@ -95,16 +95,16 @@ Ext.define('NextThought.view.courseware.assessment.admin.PagedGrid', {
 				}
 
 				var item = rec.get('HistoryItemSummary'),
-					completed = item.get('completed'),
+					completed = item && item.get('completed'),
 					due = this.dueDate || item.get('due'),
 					//pretty sure completed will always be a time stamp not sure why this is this complicated,
 					//but I don't want to change the logic just in case
 					submitted = (completed && completed.get && completed.get('Last Modifed')) || completed,
-					assignment = item.get('item'),
+					assignment = item && item.get('item'),
 					parts = assignment && assignment.get('parts'),
 					dateFormat = 'm/d', late;
 
-				if (!submitted && !due) {
+				if ((!submitted && !due) || !item) {
 					return '';
 				}
 
@@ -154,8 +154,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.PagedGrid', {
 
 		Grade: {
 			text: 'Grade',
-			dataIndex: 'Grade',
+			dataIndex: 'HistoryItemSummary',
 			name: 'grade',
+			sortOn: 'Grade',
 			width: 70,
 			xtype: 'templatecolumn',
 			tpl: new Ext.XTemplate(Ext.DomHelper.markup([
@@ -165,14 +166,14 @@ Ext.define('NextThought.view.courseware.assessment.admin.PagedGrid', {
 				]}
 			]), {
 				getGrade: function(values) {
-					var grade = values.Grade,
+					var grade = values.HistoryItemSummary.get('Grade'),
 						gradeVals = (grade && grade.getValues()) || {};
 
 					return gradeVals.value || '';
 				},
 
 				getLetter: function(values) {
-					var grade = values.Grade,
+					var grade = values.HistoryItemSummary.get('Grade'),
 						gradeVals = (grade && grade.getValues()) || {};
 
 					return gradeVals.letter || '';
@@ -315,6 +316,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.PagedGrid', {
 
 			menu.showBy(nib, 'tr-br');
 
+			return false;
+		}
+
+		if (e.getTarget('.gradebox')) {
 			return false;
 		}
 	},
