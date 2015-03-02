@@ -803,107 +803,108 @@
     &.has-overlay{
         overflow: hidden;
     }
+}
 
-    .complete-enrollment-layer {
-        background: $secondary-green;
-        opacity: 0.97;
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
+.complete-enrollment-layer, .welcome-card {
+	background: $secondary-green;
+	opacity: 0.97;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 10;
 
-        .congrats-container{
+	.congrats-container{
 
-            .congrats{
-                text-align: center;
-                margin-top: 20%;
-                height: 250px;
-                width: inherit;
-                position: relative;
+		.congrats{
+			text-align: center;
+			margin-top: 20%;
+			height: 250px;
+			width: inherit;
+			position: relative;
 
-                &::after{
-                    content: '';
-                    position: absolute;
-                    display: block;
-                    width: 117px;
-                    height: 117px;
-                    background: url('../images/icons/circle-check-white-green-large.png') no-repeat;
-                    top: -125px;
-                    left: 43%;
-                }
+			&::after{
+				content: '';
+				position: absolute;
+				display: block;
+				width: 117px;
+				height: 117px;
+				background: url('../images/icons/circle-check-white-green-large.png') no-repeat;
+				top: -125px;
+				left: 43%;
+			}
 
-                .title {
-                    font-size: 2.8em;
-                    line-height: 1.5em;
-                    font-weight: 300;
-                    text-transform: none;
-                    color: white;
-                }
+			.title {
+				font-size: 2.8em;
+				line-height: 1.5em;
+				font-weight: 300;
+				text-transform: none;
+				color: white;
+			}
 
-                .sub {
-                    color: $quad-grey;
-                    font-size: 1.4em;
-                    font-weight: 300;
-                    opacity: 0.8;
-                }
+			.sub {
+				color: $quad-grey;
+				font-size: 1.4em;
+				font-weight: 300;
+				opacity: 0.8;
+			}
 
-                .actions{
-                    margin: 30px auto 10px;
-                    width: 175px;
-                    position: relative;
-                    text-align: left;
+			.actions{
+				margin: 30px auto 10px;
+				width: 175px;
+				position: relative;
+				text-align: left;
 
-                    > a{
-                        position: relative;
-                        display: block;
-                        padding: 7px 0 7px 32px;
-                        color: $quad-grey;
-                        text-transform: uppercase;
-                        font-size: 0.8em;
+				> a{
+					position: relative;
+					display: block;
+					padding: 7px 0 7px 32px;
+					color: $quad-grey;
+					text-transform: uppercase;
+					font-size: 0.8em;
 
-                        &::before{
-                            content: '';
-                            overflow: hidden;
-                            position: absolute;
-                            top: 5px;
-                            left: 0;
-                            right: auto;
-                            background: url('../images/icons/circle-check-white-22.png') no-repeat;
-                            height: 22px;
-                            width: 22px;
-                        }
+					&::before{
+						content: '';
+						overflow: hidden;
+						position: absolute;
+						top: 5px;
+						left: 0;
+						right: auto;
+						background: url('../images/icons/circle-check-white-22.png') no-repeat;
+						height: 22px;
+						width: 22px;
+					}
 
-                        &.completed{
-                            &::before{
-                                background: url('../images/icons/circle-check-white-green-small.png') no-repeat;
-                            }
-                        }
-                    }
-                }
-            }
+					&.completed{
+						&::before{
+							background: url('../images/icons/circle-check-white-green-small.png') no-repeat;
+						}
+					}
+				}
+			}
+		}
 
-            .add-selection{
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                text-align: center;
-                margin: 10px;
+		.add-selection{
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			text-align: center;
+			margin: 10px;
 
-                > span{
-                    font-size: 0.9em;
-                    color: $quad-grey;
-                    font-style: italic;
-                    margin: 10px;
+			> span{
+				font-size: 0.9em;
+				color: $quad-grey;
+				font-style: italic;
+				margin: 10px;
 
-                    a.button{
-                        border-bottom: 1px solid $quad-grey;
-                        cursor: pointer;
-                    }
-                }
-            }
-        }
+				a.button{
+					border-bottom: 1px solid $quad-grey;
+					cursor: pointer;
+				}
+			}
+		}
+	}
 
-    }
 }

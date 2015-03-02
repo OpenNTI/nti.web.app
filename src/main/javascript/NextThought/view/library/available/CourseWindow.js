@@ -474,5 +474,11 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 
 		me.getLayout().setActiveItem(me.courseEnrollment);
 		me.closeMsg();
+	},
+
+
+	updateLabelText: function(text) {
+		if (Ext.isEmpty(text)) { return; }
+		this.labelEl.update(text);
 	}
 });

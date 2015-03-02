@@ -28,6 +28,23 @@ Ext.define('NextThought.view.courseware.coursecatalog.TabPanel', {
 	},
 
 
+	welcomeCardTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+		{cls: 'welcome-card', cn: [
+			{cls: 'congrats-container', cn: [
+				{cls: 'congrats', cn: [
+					{cls: 'sub', html: '{{{NextThought.view.courseware.coursecatalog.TabPanel.Setup}}}'},
+					{cls: 'actions', cn: [
+						{tag: 'a', cls: 'completed', html: '{{{NextThought.view.courseware.enrollment.Details.CongratsAccountCreated}}}'},
+						{tag: 'a', cls: 'enrollment', html: '{{{NextThought.view.courseware.enrollment.Details.CongratsCourseCreated}}}'},
+						{tag: 'a', cls: 'create-profile', html: '{{{NextThought.view.courseware.enrollment.Details.CreateProfile}}}'},
+						{tag: 'a', cls: 'suggest-contacts', html: '{{{NextThought.view.courseware.enrollment.Details.ConnectWithPeers}}}'}
+					]}
+				]},
+			]}
+		]}
+	])),
+
+
 	initComponent: function() {
 		this.callParent(arguments);
 
@@ -63,6 +80,18 @@ Ext.define('NextThought.view.courseware.coursecatalog.TabPanel', {
 			model: 'NextThought.model.courses.CourseCatalogEntry',
 			data: data
 		});
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+		var me = this;
+
+		if ($AppConfig.userObject.hasLink('first_time_logon') && isFeature('suggest-contacts')) {
+			wait().then(function() {
+				me.showWelcomeMessage();
+			});
+		}
 	},
 
 
@@ -183,5 +212,47 @@ Ext.define('NextThought.view.courseware.coursecatalog.TabPanel', {
 		}
 
 		return cmp;
+	},
+
+
+	showWelcomeMessage: function() {
+		var targetEl = this.ownerCt ? this.ownerCt.getTargetEl() : this.getTargetEl();
+		this.welcomeCard = Ext.get(this.welcomeCardTpl.append(targetEl));
+		this.updateWindowButtons('enroll');
+		if (this.ownerCt && this.ownerCt.updateLabelText) {
+			this.ownerCt.updateLabelText(getString('NextThought.view.library.available.CourseWindow.Welcome'));
+		}
+	},
+
+
+	updateWindowButtons: function(action, name) {
+		if (!action) { return; }
+
+		var me = this;
+		me.getButtonCfg = function() {
+			return {
+				name: name || getString('NextThought.view.library.available.CourseWindow.Continue'),
+				action: action
+			};
+		};
+
+		if (me.ownerCt && me.ownerCt.updateButtons) {
+			me.ownerCt.updateButtons();
+		}
+	},
+
+
+	buttonClick: function(action) {
+		if (action === 'enroll') {
+			if (this.ownerCt && this.ownerCt.updateLabelText) {
+				this.ownerCt.updateLabelText(getString('NextThought.view.library.available.CourseWindow.AddCourses'));
+			}
+			this.updateWindowButtons('close', getString('NextThought.view.library.available.CourseWindow.Finished'));
+			this.welcomeCard.remove();
+			delete this.welcomeCard;
+		}
+		else {
+			console.error('Action: ', action, ' is NOT supported');
+		}
 	}
 });
