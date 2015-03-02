@@ -98,7 +98,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 
 	items: [
-		{	
+		{
 			anchor: '0 -115',
 			xtype: 'course-admin-paged-grid',
 			cls: 'student-assignment-overview',
@@ -115,7 +115,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 						]}
 						]), {
 							getGrade: function(values) {
-								var grade = values.HistoryItemSummary.get('Grade'),
+								var historyItem = values.HistoryItemSummary,
+									grade = historyItem && historyItem.get('Grade'),
 									gradeVals = (grade && grade.getValues()) || {};
 
 								return gradeVals.value || '';
@@ -249,7 +250,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			search = this.searchTerm;
 
 		this.updateColumns(filter);
-		
+
 		this.filterMenu.setState(filter, search || '');
 
 		this.updateFilterCount();

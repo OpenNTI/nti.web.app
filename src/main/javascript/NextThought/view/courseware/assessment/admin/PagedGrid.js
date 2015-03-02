@@ -166,14 +166,16 @@ Ext.define('NextThought.view.courseware.assessment.admin.PagedGrid', {
 				]}
 			]), {
 				getGrade: function(values) {
-					var grade = values.HistoryItemSummary.get('Grade'),
+					var historyItem = values.HistoryItemSummary,
+						grade = historyItem && historyItem.get('Grade'),
 						gradeVals = (grade && grade.getValues()) || {};
 
 					return gradeVals.value || '';
 				},
 
 				getLetter: function(values) {
-					var grade = values.HistoryItemSummary.get('Grade'),
+					var historyItem = values.HistoryItemSummary,
+						grade = historyItem && historyItem.get('Grade'),
 						gradeVals = (grade && grade.getValues()) || {};
 
 					return gradeVals.letter || '';
