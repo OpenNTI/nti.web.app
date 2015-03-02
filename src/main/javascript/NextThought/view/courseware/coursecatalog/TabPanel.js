@@ -254,5 +254,13 @@ Ext.define('NextThought.view.courseware.coursecatalog.TabPanel', {
 		else {
 			console.error('Action: ', action, ' is NOT supported');
 		}
+	},
+
+
+	stopClose: function() {
+		if ($AppConfig.userObject.hasLink('first_time_logon')) {
+			$AppConfig.userObject.removeFirstTimeLoginLink();
+		}
+		return false;
 	}
 });

@@ -280,8 +280,18 @@ Ext.define('NextThought.model.User', {
 				var parent = JSON.parse(response);
 				return ParseUtils.parseItems(parent.Items);
 			});
-	}
+	},
 
+
+	removeFirstTimeLoginLink: function() {
+		var link = this.getLink('first_time_logon');
+		if (!link) { return Promise.reject(); }
+
+		return Service.requestDelete(link)
+			.then(function(response) {
+				return Promise.resolve();
+			});
+	}
 
 }, function() {
 	window.User = this;
