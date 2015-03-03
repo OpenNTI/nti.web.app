@@ -200,6 +200,12 @@ Ext.define('NextThought.view.library.available.CourseWindow', {
 			}
 		});
 
+		me.on('destroy', function() {
+			if ($AppConfig.userObject.hasLink('first_time_logon')) {
+				$AppConfig.userObject.removeFirstTimeLoginLink();
+			}
+		});
+
 		me.updateButtons();
 	},
 

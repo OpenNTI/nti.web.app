@@ -1,6 +1,10 @@
 Ext.define('NextThought.view.courseware.coursecatalog.TabPanel', {
 	extend: 'Ext.tab.Panel',
 	alias: 'widget.course-catalog-tabpanel',
+	requires: [
+		'NextThought.view.contacts.suggestions.Window',
+		'NextThought.view.profiles.create.Window'
+	],
 
 	defaultType: 'course-catalog-collection',
 	ui: 'available',
@@ -35,9 +39,9 @@ Ext.define('NextThought.view.courseware.coursecatalog.TabPanel', {
 					{cls: 'sub', html: '{{{NextThought.view.courseware.coursecatalog.TabPanel.Setup}}}'},
 					{cls: 'actions', cn: [
 						{tag: 'a', cls: 'completed', html: '{{{NextThought.view.courseware.enrollment.Details.CongratsAccountCreated}}}'},
-						{tag: 'a', cls: 'enrollment', html: '{{{NextThought.view.courseware.enrollment.Details.CongratsCourseCreated}}}'},
-						{tag: 'a', cls: 'create-profile', html: '{{{NextThought.view.courseware.enrollment.Details.CreateProfile}}}'},
-						{tag: 'a', cls: 'suggest-contacts', html: '{{{NextThought.view.courseware.enrollment.Details.ConnectWithPeers}}}'}
+						{tag: 'a', cls: 'enroll {enrollmentStatus}', html: '{{{NextThought.view.courseware.enrollment.Details.CongratsCourseCreated}}}'},
+						{tag: 'a', cls: 'createProfile', html: '{{{NextThought.view.courseware.enrollment.Details.CreateProfile}}}'},
+						{tag: 'a', cls: 'suggestContacts', html: '{{{NextThought.view.courseware.enrollment.Details.ConnectWithPeers}}}'}
 					]}
 				]},
 			]}
@@ -216,12 +220,78 @@ Ext.define('NextThought.view.courseware.coursecatalog.TabPanel', {
 
 
 	showWelcomeMessage: function() {
-		var targetEl = this.ownerCt ? this.ownerCt.getTargetEl() : this.getTargetEl();
-		this.welcomeCard = Ext.get(this.welcomeCardTpl.append(targetEl));
-		this.updateWindowButtons('enroll');
+		var targetEl = this.ownerCt ? this.ownerCt.getTargetEl() : this.getTargetEl(),
+			courseStore = Ext.getStore('courseware.EnrolledCourses'),
+			enrollmentStatus = courseStore && courseStore.getCount() > 0 ? 'completed' : '';
+
 		if (this.ownerCt && this.ownerCt.updateLabelText) {
 			this.ownerCt.updateLabelText(getString('NextThought.view.library.available.CourseWindow.Welcome'));
 		}
+		this.welcomeCard = Ext.get(this.welcomeCardTpl.append(targetEl, {enrollmentStatus: enrollmentStatus}));
+		this.welcomeCard.setVisibilityMode(Ext.Element.DISPLAY);
+
+		// Order of which action we would like the user to take.
+		this.requiredActions = ['enroll', 'createProfile', 'suggestContacts'];
+		this.updateWindowButtons(this.requiredActions.first());
+	},
+
+
+	showCreateProfile: function(onComplete) {
+		var me = this;
+		me.createProfileWin = Ext.widget('profile-create-window');
+		me.createProfileWin.show();
+		me.mon(me.createProfileWin, 'destroy', onComplete);
+	},
+
+
+	onActionComplete: function(actionName) {
+		var me = this,
+			el = me.welcomeCard && me.welcomeCard.down('.' + actionName), nextAction;
+
+		// Mark action as done
+		if (el) {
+			el.addCls('completed');
+			me.welcomeCard.show();
+		}
+		Ext.Array.remove(me.requiredActions, actionName);
+
+		// Prepare for next action
+		nextAction = me.requiredActions.first();
+		if (nextAction) {
+			me.updateWindowButtons(nextAction);
+		}
+		else {
+			me.updateWindowButtons('close', getString('NextThought.view.library.available.CourseWindow.Finished'));
+		}
+	},
+
+
+	suggestContacts: function(onComplete) {
+		var me = this, peersStore;
+
+		$AppConfig.userObject.getSuggestContacts()
+			.then(function(items) {
+				if (Ext.isEmpty(items)) { return Promise.reject(); }
+
+				var a = Ext.getStore('all-contacts-store');
+				peersStore = new Ext.data.Store({
+					model: NextThought.model.User,
+					proxy: 'memory',
+					data: items,
+					filters: [
+						function(item) {
+							return !(a && a.contains(item.get('Username')));
+						}
+					]
+				});
+				me.suggestContactsWin = Ext.widget('suggest-contacts-window', {store: peersStore});
+				me.suggestContactsWin.show();
+				me.mon(me.suggestContactsWin, 'destroy', onComplete);
+				me.mon(me.suggestContactsWin, 'destroy', 'refresh');
+			})
+			.fail(function() {
+				onComplete.call(me);
+			});
 	},
 
 
@@ -247,20 +317,17 @@ Ext.define('NextThought.view.courseware.coursecatalog.TabPanel', {
 			if (this.ownerCt && this.ownerCt.updateLabelText) {
 				this.ownerCt.updateLabelText(getString('NextThought.view.library.available.CourseWindow.AddCourses'));
 			}
-			this.updateWindowButtons('close', getString('NextThought.view.library.available.CourseWindow.Finished'));
-			this.welcomeCard.remove();
-			delete this.welcomeCard;
+			this.welcomeCard.hide();
+			this.onActionComplete(action);
+		}
+		else if (action === 'createProfile') {
+			this.showCreateProfile(this.onActionComplete.bind(this, action));
+		}
+		else if (action === 'suggestContacts') {
+			this.suggestContacts(this.onActionComplete.bind(this, action));
 		}
 		else {
 			console.error('Action: ', action, ' is NOT supported');
 		}
-	},
-
-
-	stopClose: function() {
-		if ($AppConfig.userObject.hasLink('first_time_logon')) {
-			$AppConfig.userObject.removeFirstTimeLoginLink();
-		}
-		return false;
 	}
 });
