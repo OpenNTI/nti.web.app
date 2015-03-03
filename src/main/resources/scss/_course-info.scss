@@ -815,29 +815,7 @@
 	bottom: 0;
 	z-index: 10;
 
-	&.welcome-card{
-		background: {
-			image: url('../images/backdrops/welcome.jpg');
-			size: cover;
-			position: center center;
-			repeat: no-repeat;
-		}
-		opacity: 1;
-
-		.congrats-container{
-			.congrats{
-				&::after{
-					background: url('../images/platform.ou.edu/ou_janux_white.png') no-repeat;
-					width: 315px;
-					height: 94px;
-					left: 35%;
-				}
-			}
-		}
-	}
-
 	.congrats-container{
-
 		.congrats{
 			text-align: center;
 			margin-top: 20%;
@@ -923,6 +901,27 @@
 				a.button{
 					border-bottom: 1px solid $quad-grey;
 					cursor: pointer;
+				}
+			}
+		}
+	}
+
+	&.welcome-card{
+		background: {
+			image: url('../images/backdrops/welcome.jpg');
+			size: cover;
+			position: center center;
+			repeat: no-repeat;
+		}
+		opacity: 1;
+
+		.congrats-container{
+			.congrats{
+				&::after{
+					background: url('../images/platform.ou.edu/ou_janux_white.png') no-repeat;
+					width: 315px;
+					height: 94px;
+					left: 35%;
 				}
 			}
 		}
