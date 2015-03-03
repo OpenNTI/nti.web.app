@@ -284,11 +284,13 @@ Ext.define('NextThought.model.User', {
 
 
 	removeFirstTimeLoginLink: function() {
-		var link = this.getLink('first_time_logon');
+		var rel = 'first_time_logon',
+			link = this.getLink(rel), me = this;
 		if (!link) { return Promise.reject(); }
 
 		return Service.requestDelete(link)
 			.then(function(response) {
+				me.deleteLink(rel);
 				return Promise.resolve();
 			});
 	}

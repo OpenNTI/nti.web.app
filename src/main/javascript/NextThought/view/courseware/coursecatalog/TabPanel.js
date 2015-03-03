@@ -317,8 +317,8 @@ Ext.define('NextThought.view.courseware.coursecatalog.TabPanel', {
 			if (this.ownerCt && this.ownerCt.updateLabelText) {
 				this.ownerCt.updateLabelText(getString('NextThought.view.library.available.CourseWindow.AddCourses'));
 			}
-			this.welcomeCard.hide();
 			this.onActionComplete(action);
+			this.welcomeCard.hide();
 		}
 		else if (action === 'createProfile') {
 			this.showCreateProfile(this.onActionComplete.bind(this, action));

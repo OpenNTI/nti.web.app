@@ -17,6 +17,22 @@ Ext.define('NextThought.mixins.HasLinks', {
 	},
 
 
+	deleteLink: function(rel) {
+		var links = this.get('Links').links || (this.raw && this.raw.Links), reqLink;
+
+		Ext.Array.every(links || [], function(link) {
+			if (link && link.rel === rel) {
+				reqLink = link;
+				return false;
+			}
+		});
+
+		if (reqLink) {
+			Ext.Array.remove(links, reqLink);
+		}
+	},
+
+
 	getReportLinks: function() {
 		var links = this.get('Links').links || (this.raw && this.raw.Links),
 			reports = [];
