@@ -43,7 +43,7 @@ Ext.define('NextThought.view.courseware.coursecatalog.TabPanel', {
 						{tag: 'a', cls: 'createProfile', html: '{{{NextThought.view.courseware.enrollment.Details.CreateProfile}}}'},
 						{tag: 'a', cls: 'suggestContacts', html: '{{{NextThought.view.courseware.enrollment.Details.ConnectWithPeers}}}'}
 					]}
-				]},
+				]}
 			]}
 		]}
 	])),
