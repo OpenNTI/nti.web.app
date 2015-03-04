@@ -401,7 +401,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 						total: o.tallyParts(),
 						submittedCount: o.get('SubmittedCount') || 0,
 						enrolledCount: d.instance.get('TotalEnrolledCount'),
-						reportLinks: grade && grade.getReportLinks()
+						reportLinks: o.getReportLinks()
 					};
 				})
 			);
