@@ -818,10 +818,13 @@
 	.congrats-container{
 		.congrats{
 			text-align: center;
-			margin-top: 20%;
+			position: absolute;
+			transform: translateY(-50%);
+			top: 60%;
+			left: 0;
+			right: 0;
 			height: 250px;
 			width: inherit;
-			position: relative;
 
 			&::after{
 				content: '';
