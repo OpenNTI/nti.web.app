@@ -25,6 +25,7 @@ Ext.define('NextThought.mixins.HasLinks', {
 				reqLink = link;
 				return false;
 			}
+			return true;
 		});
 
 		if (reqLink) {

@@ -86,6 +86,11 @@ Ext.define('NextThought.controller.Library', {
 				split(enrolled, 'setEnrolledCourses');
 				split(administered, 'setAdministeredCourses');
 				splitAvailable(available, 'setAvailableCourses');
+			})
+			.then(function() {
+				if ($AppConfig.userObject.hasLink('first_time_logon')) {
+					panel.showAvailable();
+				}
 			});
 
 		this.mon(enrolled, 'load', function() {
