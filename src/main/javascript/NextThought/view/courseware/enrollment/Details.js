@@ -1,11 +1,12 @@
+/*globals getFormattedString*/
 Ext.define('NextThought.view.courseware.enrollment.Details', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-enrollment-details',
 
 	requires: [
 		'NextThought.view.courseware.info.Panel',
-        'NextThought.view.contacts.suggestions.Window',
-        'NextThought.view.profiles.create.Window'
+		'NextThought.view.contacts.suggestions.Window',
+		'NextThought.view.profiles.create.Window'
 	],
 
 	cls: 'course-details',
@@ -74,7 +75,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 						{tag: 'tpl', 'if': '!isFirstLogin', cn: [
 							{tag: 'a', cls: 'enroll completed', html: '{{{NextThought.view.courseware.enrollment.Details.CongratsCourseCreated}}}'},
 							{tag: 'a', cls: 'suggestContacts', html: '{{{NextThought.view.courseware.enrollment.Details.ConnectWithPeers}}}'}
-						]},
+						]}
 					]}
 				]},
 				{cls: 'add-selection', cn: [
@@ -783,7 +784,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 										msg = getString('NextThought.view.courseware.enrollment.Details.ProblemDropping');
 									}
 
- 									console.error('failed to drop course', reason);
+									console.error('failed to drop course', reason);
 									//already dropped?? -- double check the string to make sure it's correct
 									me.showMessage(msg, true);
 									done(false);
