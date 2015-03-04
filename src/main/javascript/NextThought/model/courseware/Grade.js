@@ -185,6 +185,9 @@ Ext.define('NextThought.model.courseware.Grade', {
 						console.error('failed to parse response text for a saved grade:', e, text);
 					} finally {
 						delete me.pendingSaveValue;
+
+						//alert that the value succesfully changed
+						me.fireEvent('value-change');
 						fulfill(grade);
 					}
 				},
@@ -216,7 +219,11 @@ Ext.define('NextThought.model.courseware.Grade', {
 			Username: me.get('Username'),
 			AssignmentId: me.get('AssignmentId'),
 			value: me.get('value')
-		}).fail(function(reason) {
+		})
+		.then(function() {
+			me.fireEvent('value-change');
+		})
+		.fail(function(reason) {
 			me.set('value', null);
 
 			Ext.MessageBox.alert({
