@@ -112,14 +112,25 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	restoreState: function(state) {
+	restoreState: function(state, fromAfterRender) {
 		var me = this,
 			params, store = me.store,
 			storeState = (state && state.rootStore) || {};
 
+		//if this is coming form after render and we've already restored
+		//a state don't overwrite it. The main reason this is here is so
+		//if they hit the back button the component is already rendered with
+		//a state so we want to override it, but if we are coming from after
+		//render we don't want to override a previous state.
+		if (fromAfterRender && me.stateRestored) {
+			return;
+		}
+
 		if (!me.store) {
 			me.initialState = state;
 		}
+
+		me.stateRestored = true;
 
 		me.currentStudent = storeState.student || 'ForCredit';
 
@@ -140,8 +151,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 					fulfill();
 				}
 			});
-
-			this.stateRestored = true;
 
 			if (state && state.activeStudent) {
 				store.proxy.extraParams.batchAroundUsernameFilterByScope = state.activeStudent;
@@ -207,13 +216,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		});
 
 		if (!this.stateRestored) {
-			this.currentStudent = 'ForCredit';
-			this.currentItem = 'all';
-
-			this.store.proxy.extraParams = Ext.apply(this.store.proxy.extraParams || {}, this.__getParams());
-			this.updateUIFromRestore();
-
-			this.store.load(1);
+			//bump this to the next event pump so the restore state has a chance to be called
+			wait().then(this.restoreState.bind(this, {}, true));
 		}
 	},
 	//</editor-fold>
