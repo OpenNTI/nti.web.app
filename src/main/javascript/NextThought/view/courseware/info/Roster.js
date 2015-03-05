@@ -13,7 +13,7 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 	cls: 'course-info-roster course-performance make-white',
 
 	layout: 'anchor',
-
+	margin: '0 0 10 0',
 
 	items: [
 		{
@@ -44,6 +44,7 @@ Ext.define('NextThought.view.courseware.info.Roster', {
 						leadingBufferZone: 150
 					},*/
 					scroll: 'vertical',
+					margin: '0 0 72 0',		// Add some margin to account for the space taken by the header.
 					columns: [
 						{
 							text: getString('NextThought.view.courseware.info.Roster.student'),
