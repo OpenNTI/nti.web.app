@@ -71,12 +71,22 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 	},
 
 
+	suspendState: function() {
+		this.stateSuspended = true;
+	},
+
+
+	resumeState: function() {
+		this.stateSuspended = false;
+	},
+
+
 	pushState: function(view, values) {
 		var layout = this.body.getLayout(),
 			active = layout && layout.getActiveItem(),
 			state = this.__getState(view, values);
 
-		if (view === active && !this.restoringState) {
+		if (view === active && !this.restoringState && !this.stateSuspended) {
 			history.pushState({
 				content: {
 					assignments: state
@@ -109,6 +119,14 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 		if (!item.pushState) {
 			item.pushState = this.pushState.bind(this, item);
+		}
+
+		if (!item.suspendState) {
+			item.suspendState = this.suspendState.bind(this, item);
+		}
+
+		if (!item.resumeState) {
+			item.resumeState = this.resumeState.bind(this, item);
 		}
 
 		this.mon(this.navigation, {

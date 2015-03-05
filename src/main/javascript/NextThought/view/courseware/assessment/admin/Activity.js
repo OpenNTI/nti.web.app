@@ -1,3 +1,4 @@
+/*globals isMe*/
 Ext.define('NextThought.view.courseware.assessment.admin.Activity', {
 	extend: 'NextThought.view.courseware.assessment.Activity',
 	alias: 'widget.course-assessment-admin-activity',
@@ -145,6 +146,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Activity', {
 			user = null;
 		}
 
+		this.suspendState();
 		this.fireEvent('goto-assignment', record.get('item'), user);
 	}
 });
