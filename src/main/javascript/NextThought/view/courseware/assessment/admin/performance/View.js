@@ -20,7 +20,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.View', {
 
 	restoreState: function(state, active) {
 		var me = this,
-			store = me.store,
 			root = me.getRoot();
 
 		return root.restoreState(state)

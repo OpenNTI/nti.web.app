@@ -534,6 +534,33 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	},
 
 
+	restoreStudent: function(student) {
+		if (this.store.loading) {
+			this.mon(this.store, {
+				single: true,
+				delay: 1,
+				load: this.restoreStudent.bind(this, student)
+			});
+
+			return;
+		}
+
+		var record;
+
+		record = this.store.findBy(function(rec) {
+			var user = rec.get('User');
+
+			return student === NextThought.model.User.getIdFromRaw(user);
+		});
+
+		if (record >= 0) {
+			record = this.store.getAt(record);
+
+			this.fireGoToAssignment(null, record, null);
+		}
+	},
+
+
 	fireGoToAssignment: function(v, record, pageSource) {
 		var student = record.get('User'),
 			historyItem = record.get('HistoryItemSummary'),

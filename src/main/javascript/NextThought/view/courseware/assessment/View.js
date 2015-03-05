@@ -50,7 +50,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 		me.body.items.each(function(item) {
 			if (item.restoreState) {
-				waitFor.push(item.restoreState(state[view.label], item === view));
+				waitFor.push(item.restoreState(state[item.label], item === view));
 			}
 		});
 

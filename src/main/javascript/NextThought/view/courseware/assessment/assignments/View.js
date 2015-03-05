@@ -261,6 +261,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 			g.call(this, cmp, s);
 		}
 
+		this.syncFilterToState();
+
 		//on keyup in search get all the groups, filter each store, in list.js listen for datachange
 		//if the store is empty hide its parent, else show its parent
 	},
@@ -291,6 +293,16 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 					}
 				}], true);
 			}
+		});
+	},
+
+
+	syncFilterToState: function() {
+		var bar = this.getFilterBar(),
+			group = bar.getGroupBy();
+
+		this.pushState({
+			group: group
 		});
 	},
 

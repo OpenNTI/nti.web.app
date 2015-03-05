@@ -13,11 +13,68 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.View', {
 	onAdd: function(item) { this.getLayout().setActiveItem(item); },
 
 
+	restoreState: function(state, active) {
+		var me = this,
+			root = me.getRoot();
+
+		return root.restoreState(state)
+			.then(function() {
+				if (state && state.activeAssignment) {
+					me.restoreToAssignment(state.activeAssignment, state.activeStudent);
+				} else {
+					me.showRoot();
+					me.fireEvent('close-reader');
+				}
+			});
+	},
+
+
+	restoreToAssignment: function(assignment, student) {
+		var record, view, params;
+
+		if (student) {
+			params = {
+				batchAroundUsernameFilterByScope: student
+			};
+		}
+
+		record = this.store.findBy(function(rec) {
+			var item = rec.get('item');
+
+			return assignment === (item && item.getId());
+		});
+
+		if (record >= 0) {
+			record = this.store.getAt(record);
+
+			view = this._doShowAssignment(record, params);
+		}
+
+		if (view && student) {
+			view.restoreStudent(student);
+		} else {
+			this.fireEvent('close-reader');
+		}
+	},
+
+
+	setStateForAssignment: function(student, assignment) {
+		this.pushState({
+			activeStudent: student.getId ? student.getId() : student,
+			activeAssignment: assignment.getId ? assignment.getId() : assignment
+		});
+	},
+
+
 	setAssignmentsData: function(assignments) {
 		this.clearAssignmentsData();
 
-		var root = this.add({ xtype: 'course-assessment-admin-assignments-root' }),
+		var root = this.add({ xtype: 'course-assessment-admin-assignments-root', pushState: this.pushState }),
 			p = root.setAssignmentsData.apply(root, arguments);
+
+		this.pushState({
+			activeAssignment: null
+		});
 
 		this.assignments = assignments;
 		this.store = root.store;
@@ -31,9 +88,24 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.View', {
 	},
 
 
+	getRoot: function() {
+		return this.items.first();
+	},
+
+
 	showRoot: function() {
-		this.getLayout().setActiveItem(0);
-		Ext.destroy(this.items.getRange(1));
+		var root = this.getRoot(),
+			layout = this.getLayout(),
+			active = layout.getActiveItem();
+
+		if (root !== active) {
+			layout.setActiveItem(root);
+			Ext.destroy(this.items.getRange(1));
+		}
+
+		this.pushState({
+			activeAssignment: null
+		});
 	},
 
 
@@ -51,21 +123,31 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.View', {
 			return;
 		}
 
-		this.mon(this.add({
+		var assignment = rec.get('item'), view;
+
+		this.pushState({
+			activeAssignment: assignment.getId()
+		});
+
+		view = this.add({
 			xtype: 'course-assessment-admin-assignments-item',
 			assignmentTitle: rec.get('name'),
 			due: rec.get('due'),
-			assignment: rec.get('item'),
+			assignment: assignment,
 			assignments: this.assignments,
 			extraParams: extraParams,
 			pageSource: NextThought.util.PageSource.create({
 				store: this.store,
 				current: this.store.indexOf(rec)
 			})
-		}), {
+		});
+
+		this.mon(view, {
 			'goto': '_doShowAssignment',
 			'goup': 'showRoot'
 		});
+
+		return view;
 	},
 
 

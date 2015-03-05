@@ -6,6 +6,27 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 		'NextThought.view.courseware.assessment.assignments.admin.List'
 	],
 
+
+	restoreState: function(state) {
+		var record, params,
+			bar = this.getFilterBar();
+
+		if (!state) { return Promise.resolve(); }
+
+		if (state.group) {
+			bar.selectGroupBy(state.group);
+		}
+
+		if (state.activeStudent) {
+			params = {
+				batchAroundUsernameFilterByScope: state.activeStudent
+			};
+		}
+
+		return Promise.resolve();
+	},
+
+
 	newAssignmentList: function(grouper) {
 		return { xtype: 'course-assessment-assignment-admin-list', store: grouper.store };
 	},
@@ -20,7 +41,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 		this.goToRecord(rec);
 	},
 
-	
+
 	goToRecord: function(rec, extraParams) {
 		if (!rec) { return; }
 
@@ -106,7 +127,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 					index = store.findBy(function(rec) {
 						var user = rec.get('User'),
 							userId = user && NextThought.model.User.getIdFromRaw(user);
-					
+
 						return userId && userId === username;
 					});
 
@@ -139,7 +160,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 					});
 			}).fail(function(reason) {
 				mask(false);
-				console.error('Failed to load users assignment:', reason );
+				console.error('Failed to load users assignment:', reason);
 			});
 		}
 	}

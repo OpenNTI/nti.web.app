@@ -94,6 +94,22 @@ Ext.define('NextThought.view.courseware.assessment.assignments.FilterBar', {
 			},
 			items: items
 		});
+
+		this.groupByMenu.show().hide();
+	},
+
+
+	selectGroupBy: function(groupBy) {
+		if (!this.rendered) {
+			this.on('afterrender', this.selectGroupBy.bind(this, groupBy));
+			return;
+		}
+
+		var item = this.groupByMenu.down('[groupBy="' + groupBy + '"]');
+
+		if (item) {
+			item.setChecked(true);
+		}
 	},
 
 
