@@ -88,7 +88,7 @@ Ext.define('NextThought.controller.Library', {
 				splitAvailable(available, 'setAvailableCourses');
 			})
 			.then(function() {
-				if ($AppConfig.userObject.hasLink('first_time_logon')) {
+				if ($AppConfig.userObject.hasLink('first_time_logon') && isFeature('suggest-contacts')) {
 					panel.showAvailable();
 				}
 			});
