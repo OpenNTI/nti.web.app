@@ -173,7 +173,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Pager', {
 			this.loadPrev();
 		} else if (index === 'next') {
 			this.loadNext();
-		} else if (index){
+		} else if (index) {
 			this.loadPage(index);
 		}
 	},

@@ -36,6 +36,53 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 	},
 
 
+	restoreState: function(state) {
+		if (!state) { return; }
+
+		var view;
+
+		this.restoringState = true;
+
+		if (state.activeView) {
+			view = this.activateView(state.activeView);
+		}
+
+		this.body.items.each(function(item) {
+			if (item.restoreState) {
+				item.restoreState(state[view.label], item === view);
+			}
+		});
+
+		this.restoringState = false;
+	},
+
+
+	__getState: function(view, values) {
+		var state = {};
+
+		state[view.label] = values;
+
+		return state;
+	},
+
+
+	pushState: function(view, values) {
+		var layout = this.body.getLayout(),
+			active = layout && layout.getActiveItem(),
+			state = this.__getState(view, values);
+
+		if (view === active && !this.restoringState) {
+			history.pushState({
+				content: {
+					assignments: state
+				}
+			});
+		} else {
+			view.internalState = values;
+		}
+	},
+
+
 	onViewAdd: function(body, item) {
 		this.navigation.addView(item);
 		this.mon(item, {
@@ -44,6 +91,10 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 			destroy: 'removeNavigationItem',
 			notify: 'onSubViewNotify'
 		});
+
+		if (!item.pushState) {
+			item.pushState = this.pushState.bind(this, item);
+		}
 
 		this.mon(this.navigation, {
 			'show-view': 'changeView'
@@ -199,19 +250,19 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 	addAdminViews: function(getLink) {
 		this.body.add([
-			{ xtype: 'course-assessment-admin-activity', title: getString('NextThought.view.courseware.assessment.View.activity'), label: 'notifications',
-				activityFeedURL: getLink('CourseActivity') },
-			{ xtype: 'course-assessment-admin-assignments', title: getString('NextThought.view.courseware.assessment.View.assignments'), label: 'assignments' },
-			{ xtype: 'course-assessment-admin-performance', title: getString('NextThought.view.courseware.assessment.View.grades'), label: 'performance' }
+			{xtype: 'course-assessment-admin-activity', title: getString('NextThought.view.courseware.assessment.View.activity'), label: 'notifications',
+				activityFeedURL: getLink('CourseActivity')},
+			{xtype: 'course-assessment-admin-assignments', title: getString('NextThought.view.courseware.assessment.View.assignments'), label: 'assignments'},
+			{xtype: 'course-assessment-admin-performance', title: getString('NextThought.view.courseware.assessment.View.grades'), label: 'performance'}
 		]);
 	},
 
 
 	addStudentViews: function() {
 		this.body.add([
-			{ xtype: 'course-assessment-activity', title: getString('NextThought.view.courseware.assessment.View.activity'), label: 'notifications'},
-			{ xtype: 'course-assessment-assignments', title: getString('NextThought.view.courseware.assessment.View.assignments'), label: 'assignments'},
-			{ xtype: 'course-assessment-performance', title: getString('NextThought.view.courseware.assessment.View.grades'), label: 'performance'}
+			{xtype: 'course-assessment-activity', title: getString('NextThought.view.courseware.assessment.View.activity'),	label: 'notifications'},
+			{xtype: 'course-assessment-assignments', title: getString('NextThought.view.courseware.assessment.View.assignments'), label: 'assignments'},
+			{xtype: 'course-assessment-performance', title: getString('NextThought.view.courseware.assessment.View.grades'), label: 'performance'}
 		]);
 	},
 
@@ -265,6 +316,29 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 			activeCmp = this.body.getLayout().getActiveItem();
 		}
 
+		//if we still don't have an active cmp no need in going any further
+		if (!activeCmp) { return; }
+
+		var state;
+
+		//if there has been some internal state added to the component
+		//when it becomes the active view push it to the history
+		if (activeCmp.internalState) {
+			state = this.__getState(activeCmp, activeCmp.internalState);
+
+		} else {
+			state = {};
+		}
+
+		//add the active view
+		state.activeView = activeCmp.xtype;
+
+		history.pushState({
+			content: {
+				assignments: state
+			}
+		});
+
 		this.navigation.updateSelection(activeCmp);
 	},
 
@@ -280,6 +354,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 			console.error('No view selected from query: ' + view);
 			return;
 		}
+
 		this.body.getLayout().setActiveItem(c);
 		return c;
 	},

@@ -1,3 +1,4 @@
+/*globals PersistentStorage, ContentManagementUtils*/
 Ext.define('NextThought.view.content.View', {
 	extend: 'NextThought.view.Base',
 	alias: 'widget.content-view-container',
@@ -559,7 +560,7 @@ Ext.define('NextThought.view.content.View', {
 		if (result) {
 			active = this.getLayout().getActiveItem();
 			if (active.onBeforeDeactivate) {
-				resut = active.onBeforeDeactivate();
+				result = active.onBeforeDeactivate();
 			} else {
 				result = active.fireEvent('beforedeactivate', this);
 			}
@@ -874,6 +875,7 @@ Ext.define('NextThought.view.content.View', {
 							me.fireEvent('track-from-restore', bundle);
 							me.courseForum.restoreState(forum, topic);
 							me.courseNav.restoreState(st);
+							me.courseAssignmentsContainer.restoreState(st);
 							return bundle;//restore the promise value
 						});
 		}

@@ -1,3 +1,4 @@
+/*globals isMe*/
 Ext.define('NextThought.view.courseware.assessment.Container', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-assessment-container',
@@ -16,11 +17,20 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 	}],
 
 	layout: 'card',
+
+
 	onAdd: function(item) {
 		this.getLayout().setActiveItem(item);
 		this.mon(item, {
 			notify: 'onSubViewNotify'
 		});
+	},
+
+
+	restoreState: function(state) {
+		if (state.activeTab === 'course-assessment') {
+			this.getRoot().restoreState(state.assignments);
+		}
 	},
 
 	initComponent: function() {

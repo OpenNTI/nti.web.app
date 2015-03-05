@@ -100,6 +100,7 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 			.always(function() {
 				me.resumeEvents();
 				me.fireEvent('refresh');
+				me.fireEvent('records-filled-in');
 			});
 	},
 
@@ -169,6 +170,8 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 					'avatar': u.get('avatarURL'),
 					'Username': u.get('Username')
 				});
+
+				return wait();
 			});
 	},
 

@@ -112,6 +112,19 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
+	restoreState: function(state, active) {
+		if (!state || !state.rootStore) { return; }
+
+		if (!this.store) {
+			this.initialState = state;
+		}
+
+		if (state.rootStore.page) {
+			this.store.loadPage(parseInt(state.rootStore.page, 10));
+		}
+	},
+
+
 	afterRender: function() {
 		this.callParent(arguments);
 
@@ -389,6 +402,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	setAssignmentsData: function(assignments, instance) {
+		var page = this.initialState && this.initialState.page;
+
 		this.clearAssignmentsData();
 
 		this.assignments = assignments;
@@ -399,13 +414,27 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			this.addCls('show-final-grade');
 		}
 
+		this.mon(this.store, 'load', 'syncStateToStore');
+
 		this.pager.bindStore(this.store);
 
 		this.grid.bindStore(this.store);
 
-		this.store.loadPage(1);
+
+		if (page) {
+			this.store.loadPage(page);
+		}
 
 		return Promise.resolve();
+	},
+
+
+	syncStateToStore: function() {
+		var state = {};
+
+		state.page = this.store.currentPage;
+
+		this.pushState({rootStore: state});
 	},
 
 
