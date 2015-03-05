@@ -902,6 +902,7 @@ NTIStrings['NextThought.view.courseware.enrollment.GiftConfirmation.PassGift'] =
 NTIStrings['NextThought.view.courseware.enrollment.GiftConfirmation.GiftActivated'] = 'Please ensure the gift is activated before classes start!';
 NTIStrings['NextThought.view.courseware.enrollment.GiftConfirmation.GiftRedeemed'] = 'Please ensure the gift is redeemed before classes start!';
 NTIStrings['NextThought.view.courseware.enrollment.Details.dropped'] = 'You are no longer enrolled in {course}.';
+NTIStrings['NextThought.view.courseware.enrollment.Details.enrollmentSuccess'] = 'You have successfully enrolled in {course}.';
 NTIStrings['NextThought.view.courseware.enrollment.Details.DropDetails'] = 'Dropping {course} will remove it from your library and you will no longer have access to the course materials.';
 NTIStrings['NextThought.view.courseware.enrollment.Details.CourseGift'] = 'Give This Course as a Gift';
 NTIStrings['NextThought.view.courseware.enrollment.Details.RedeemGift'] = 'Redeem a Gift';

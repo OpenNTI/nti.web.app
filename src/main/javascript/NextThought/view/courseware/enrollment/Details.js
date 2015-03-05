@@ -832,7 +832,13 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 								});
 						};
 
-						me.clearMessage();
+						if (!isFeature('suggest-contacts')) {
+							me.showMessage(getFormattedString('NextThought.view.courseware.enrollment.Details.enrollmentSuccess', {
+								course: course
+							}));
+						} else {
+							me.clearMessage();
+						}
 						done(true, changed);
 					})
 					.fail(function(reason) {
