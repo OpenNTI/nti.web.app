@@ -76,13 +76,20 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 		this.callParent(arguments);
 		this.tpl.ownerCmp = this;
 		this.setTitle(this.title);
-		this.enableBubble(['goto-assignment']);
+		this.enableBubble(['goto-assignment', 'close-reader']);
 		this.mon(this.store, 'datachanged', 'maybeNotify');
 		this.on({
 			deactivate: 'clearBadge',
 			itemclick: 'fireGoToAssignment',
 			loadMoreLink: { click: 'onLoadMore' }
 		});
+	},
+
+
+	restoreState: function(state, active) {
+		if (active) {
+			this.fireEvent('close-reader');
+		}
 	},
 
 
@@ -327,6 +334,7 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 
 
 	fireGoToAssignment: function(s, record) {
+		this.suspendState();
 		this.fireEvent('goto-assignment', record.get('item'), $AppConfig.userObject);
 	}
 });

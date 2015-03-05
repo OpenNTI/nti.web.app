@@ -218,7 +218,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 	initComponent: function() {
 		this.subviewBackingStores = [];
 		this.callParent(arguments);
-		this.enableBubble(['show-assignment', 'update-assignment-view']);
+		this.enableBubble(['show-assignment', 'update-assignment-view', 'close-reader']);
 
 		this.on('filters-changed', 'refresh');
 		this.on('search-changed', 'filterSearchValue');
@@ -455,6 +455,57 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 				var d = rec.get('opens');
 				return (!d || d < now); //ensure the assignment is open.
 			}
+		});
+	},
+
+
+	restoreState: function(state) {
+		if (!state) { reutrn; }
+
+		var me = this,
+			bar = me.getFilterBar();
+
+		if (state.group) {
+			bar.selectGroupBy(state.group);
+		}
+
+		if (!state.activeAssignment) {
+			me.fireEvent('close-reader');
+			return;
+		}
+
+		return new Promise(function(fulfill, reject) {
+
+			function showAssignment() {
+				var record = me.store.findBy(function(rec) {
+					var item = rec.get('item');
+
+					return item && item.getId() === state.activeAssignment;
+				});
+
+				if (record >= 0) {
+					record = me.store.getAt(record);
+
+					me._showAssignment(record);
+				}
+				console.log(me);
+			}
+
+			if (me.store.getCount() === 0) {
+				me.mon(me.store, {
+					'datachanged': showAssignment,
+					single: true
+				});
+			} else {
+				showAssignment();
+			}
+		});
+	},
+
+
+	setStateForAssignment: function(student, assignment) {
+		this.pushState({
+			activeAssignment: assignment && assignment.getId ? assignment.getId() : assignment
 		});
 	},
 

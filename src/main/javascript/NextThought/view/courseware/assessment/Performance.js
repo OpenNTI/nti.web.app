@@ -123,7 +123,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.enableBubble(['goto-assignment']);
+		this.enableBubble(['goto-assignment', 'close-reader']);
 
 		//this.chartGrade = this.down('grade-chart');
 		//this.chartPerformance = this.down('grade-performance-chart');
@@ -229,6 +229,13 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 	},
 
 
+	restoreState: function(state, active) {
+		if (active) {
+			this.fireEvent('close-reader');
+		}
+	},
+
+
 	fireGoToAssignment: function(selModel, record) {
 		var date = Ext.Date.format(record.get('assigned'), 'l F j \\a\\t g:i A');
 
@@ -236,6 +243,8 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 			alert(getFormattedString('NextThought.view.courseware.assessment.Performance.notyet', {date: date}));
 			return;
 		}
+
+		this.suspendState();
 		this.fireEvent('goto-assignment', record.get('item'), $AppConfig.userObject);
 	},
 
