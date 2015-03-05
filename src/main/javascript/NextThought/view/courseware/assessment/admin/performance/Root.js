@@ -495,7 +495,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			this.addCls('show-final-grade');
 		}
 
-		this.mon(this.store, 'load', 'syncStateToStore');
+		//Comment this out for now so we can test the state
+		//with out dealing with the store
+		// this.mon(this.store, 'load', 'syncStateToStore');
 
 		this.pager.bindStore(this.store);
 
