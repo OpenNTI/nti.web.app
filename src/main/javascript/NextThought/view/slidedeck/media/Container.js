@@ -106,11 +106,6 @@ Ext.define('NextThought.view.slidedeck.media.Container', {
 			'store-set': 'listStoreSet'
 		});
 
-		this.mon(this.toolbar, {
-			'hide-grid-viewer': 'hideGridViewer',
-			'show-grid-viewer': 'showGridViewer'
-		});
-
 		Ext.EventManager.onWindowResize(this.adjustOnResize, this, {buffer: 250});
 
 	},
@@ -299,17 +294,23 @@ Ext.define('NextThought.view.slidedeck.media.Container', {
 	},
 
 
-	hideGridViewer: function() {
-		this.el.setStyle('overflowY', 'hidden');
-		this.getLayout().setActiveItem(this.viewer);
-	},
+	showGridViewer: function(action) {
+		if (action === 'show' && this.viewer && (this.viewer.beforeDeactivate() === false)) {
+			console.log('Cannot switch viewer because the current view refuses to deactivate.');
+			return Promise.reject();
+		}
 
-
-	showGridViewer: function() {
-		this.getLayout().setActiveItem(this.gridView);
-		this.el.setStyle('overflowY', 'auto');
-		this.gridView.refresh();
-		Ext.defer(this.adjustOnResize, 1000, this);
+		if (action === 'show') {
+			this.getLayout().setActiveItem(this.gridView);
+			this.el.setStyle('overflowY', 'auto');
+			this.gridView.refresh();
+			Ext.defer(this.adjustOnResize, 1000, this);
+		}
+		else {
+			this.el.setStyle('overflowY', 'hidden');
+			this.getLayout().setActiveItem(this.viewer);
+		}
+		return Promise.resolve();
 	}
 
 });

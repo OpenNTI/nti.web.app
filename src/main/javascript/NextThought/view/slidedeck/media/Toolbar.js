@@ -102,11 +102,13 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar', {
 
 	showGridPicker: function() {
 		var el = this.gridEl,
-			cls = 'active',
-			action = el.hasCls(cls) ? 'hide' : 'show';//because we haven't toggled yet, we flip the actions.
+			cls = 'active', me = this,
+			action = el.hasCls(cls) ? 'hide' : 'show';
 
-		el.toggleCls(cls);
-		this.fireEvent(action + '-grid-viewer');
+		this.floatParent.showGridViewer(action)
+			.then(function() {
+				el.toggleCls(cls);
+			});
 	},
 
 
@@ -121,9 +123,26 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar', {
 		var me = this,
 			type = this.currentType,
 			items = [
-				{ text: me.clsToName('video-focus'), cls: 'label video-focus', action: 'video-focus', checked: type === 'video-focus', disabled: this.noTranscript},
-				{ text: me.clsToName('transcript-focus'), cls: 'label transcript-focus', action: 'transcript-focus', checked: type === 'transcript-focus', disabled: this.noTranscript},
-				{ text: me.clsToName('full-video'), cls: 'label full-video', action: 'full-video', checked: type === 'full-video'}
+				{
+					text: me.clsToName('video-focus'),
+					cls: 'label video-focus',
+					action: 'video-focus',
+					checked: type === 'video-focus',
+					disabled: this.noTranscript
+				},
+				{
+					text: me.clsToName('transcript-focus'),
+					cls: 'label transcript-focus',
+					action: 'transcript-focus',
+					checked: type === 'transcript-focus',
+					disabled: this.noTranscript
+				},
+				{
+					text: me.clsToName('full-video'),
+					cls: 'label full-video',
+					action: 'full-video',
+					checked: type === 'full-video'
+				}
 			];
 
 		//Make selected item is at the top of the list.
@@ -155,16 +174,16 @@ Ext.define('NextThought.view.slidedeck.media.Toolbar', {
         var previousType = this.currentType, me = this;
 
         this.floatParent.switchVideoViewer(item.action)
-            .then(function(){
-                me.pickerEl.removeCls(previousType).addCls(item.action);
-                me.pickerEl.update(item.text);
-                me.currentType = item.action;
+            .then(function() {
+				me.pickerEl.removeCls(previousType).addCls(item.action);
+				me.pickerEl.update(item.text);
+				me.currentType = item.action;
 
-                Ext.each(menu.query('menuitem[checked]'), function(i) {
-                    i.setChecked(false, true);
-                });
+				Ext.each(menu.query('menuitem[checked]'), function(i) {
+					i.setChecked(false, true);
+				});
 
-                item.setChecked(true, true);
+				item.setChecked(true, true);
             });
 
 		return false;
