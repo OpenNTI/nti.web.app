@@ -8,8 +8,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 
 
 	restoreState: function(state) {
-		var record, params,
-			bar = this.getFilterBar();
+		var record, me = this,
+			bar = me.getFilterBar();
 
 		if (!state) { return Promise.resolve(); }
 
@@ -17,10 +17,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 			bar.selectGroupBy(state.group);
 		}
 
-		if (state.activeStudent) {
-			params = {
-				batchAroundUsernameFilterByScope: state.activeStudent
-			};
+		if (me.store.getCount() === 0) {
+			return new Promise(function(fulfill, reject) {
+				me.mon(me.store, {
+					datachanged: fulfill,
+					single: true
+				});
+			});
 		}
 
 		return Promise.resolve();

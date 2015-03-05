@@ -87,6 +87,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 			state = this.__getState(view, values);
 
 		if (view === active && !this.restoringState && !this.stateSuspended) {
+			state.activeView = active.xtype;
 			history.pushState({
 				content: {
 					assignments: state
@@ -366,11 +367,14 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 		//add the active view
 		state.activeView = activeCmp.xtype;
 
-		history.pushState({
-			content: {
-				assignments: state
-			}
-		});
+		if (!this.stateSuspended) {
+			history.pushState({
+				content: {
+					assignments: state
+				}
+			});
+		}
+
 
 		this.navigation.updateSelection(activeCmp);
 	},

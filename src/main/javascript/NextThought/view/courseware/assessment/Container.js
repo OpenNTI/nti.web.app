@@ -126,8 +126,7 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 				return me.activeCourseSetup
 					.then(function() {
 						return v.showAssignment && v.showAssignment(assignment, user);
-					})
-					.then(r.resumeState.bind(r));
+					});
 			});
 	},
 
@@ -136,7 +135,7 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 		var me = this, time, root = me.getRoot(),
 			active = me._showAssignmentPromise || Promise.resolve();
 
-		return me.maybePreventNavigation()
+		me.maybePreventNavigation()
 			.then(function() {
 				return active.always(function() {
 					active = me._showAssignmentPromise = new Promise(function(fulfill, reject) {
@@ -170,6 +169,7 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 							//both course-asessment-reader and the admin-reader extend the reader so this takes care of both
 							Ext.destroy(me.down('reader'));
 
+							root.resumeState();
 							root.pushAssignment(student, assignment);
 
 							var reader = me.add({
