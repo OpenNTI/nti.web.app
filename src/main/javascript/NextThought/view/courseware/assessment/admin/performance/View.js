@@ -18,13 +18,19 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.View', {
 			this.showRoot();
 		}
 
-		var activeItem = this.getLayout().getActiveItem();
+		var activeItem = this.getLayout().getActiveItem(),
+			waitFor = [];
 
 		this.items.each(function(item) {
 			if (item.restoreState) {
-				item.restoreState(state, activeItem === item);
+				waitFor.push(item.restoreState(state, activeItem === item));
 			}
 		});
+
+		return Promise.all(waitFor)
+			.fail(function(reason) {
+				console.error('Failed to restore performance state:', reason);
+			});
 	},
 
 

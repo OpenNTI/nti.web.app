@@ -113,15 +113,53 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	restoreState: function(state, active) {
-		if (!state || !state.rootStore) { return; }
+		var me = this,
+			params, store = me.store,
+			storeState = (state && state.rootStore) || {};
 
-		if (!this.store) {
-			this.initialState = state;
+		if (!me.store) {
+			me.initialState = state;
 		}
 
-		if (state.rootStore.page) {
-			this.store.loadPage(parseInt(state.rootStore.page, 10));
+		me.currentStudent = storeState.student || 'ForCredit';
+
+		me.currentItem = storeState.item || 'all';
+
+		params = me.__getParams();
+
+		store.proxy.extraParams = Ext.apply(store.proxy.extraParams || {}, params);
+
+		me.updateUIFromRestore();
+
+		return new Promise(function(fulfill, reject) {
+			me.mon(store, {
+				single: true,
+				'load': fulfill
+			});
+
+			if (storeState.page) {
+				store.loadPage(parseInt(storeState.page, 10));
+			} else {
+				store.loadPage(1);
+			}
+		});
+	},
+
+	/**
+	 * Make sure the UI is synced to what ever state we restored
+	 */
+	updateUIFromRestore: function() {
+		if (!this.rendered) {
+			this.on('afterrender', 'updateUIFromRestore');
+			return;
 		}
+
+		var student = this.studentMenu.down('[type="' + this.currentStudent + '"]'),
+			item = this.itemMenu.down('[type="' + this.currentItem + '"]');
+
+		if (student) { this.updateStudentUI(student); }
+
+		if (item) { this.updateItemUI(item); }
 	},
 
 
@@ -224,13 +262,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		});
 		this.studentMenu.show().hide();
 		this.studentMenu.initialType = type;
-
-		this.switchStudent(
-			this.studentMenu.down('[checked]'),
-			true,
-			null,
-			true
-		);
 	},
 
 
@@ -239,25 +270,34 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	switchStudent: function(item, status, opts, noEmpty) {
-		if (!status) { return; }
+	updateStudentUI: function(item) {
+		var offset, x;
 
-		var me = this, offset, x;
 		try {
 			offset = item.getOffsetsTo(this.studentMenu);
 			x = offset && offset[1];
-			me.header.studentEl.el.down('.label').update(item.text);
+			this.header.studentEl.el.down('.label').update(item.text);
 		} catch (e) {
 			swallow(e);
 		}
 
-		me.studentMenu.offset = [0, -x];
-		me.currentStudent = item.type;
+		this.studentMenu.offset = [0, x ? -x : 0];
 
-		x = me.down('[dataIndex="Username"]');
+		x = this.down('[dataIndex="Username"]');
+
 		x[item.type === 'ForCredit' ? 'show' : 'hide']();
 
 		this.updateExportEl(item.type);
+	},
+
+
+	switchStudent: function(item, status, opts, noEmpty) {
+		if (!status) { return; }
+
+		this.currentStudent = item.type;
+
+		this.updateStudentUI(item);
+
 
 		this.maybeSwitch(noEmpty);
 		this.updateFilter();
@@ -342,6 +382,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			},
 			items: items
 		});
+
+		this.itemMenu.show().hide();
 	},
 
 
@@ -350,16 +392,22 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	switchItem: function(item, status) {
-		if (!status) { return; }
-
-		var offset = item.getOffsetsTo(this.itemMenu),
-				x = offset && offset[1];
+	updateItemUI: function(item) {
+		var offset = item && item.getOffsetsTo(this.itemMenu),
+			x = offset ? offset[1] : 1;
 
 		this.header.itemEl.el.down('.label').update(item.text);
 
-		this.itemMenu.offset = [0, -x];
+		this.itemMenu.offset = [0, x ? -x : 0];
+	},
+
+
+	switchItem: function(item, status) {
+		if (!status) { return; }
+
 		this.currentItem = item.type;
+
+		this.updateItemUI(item);
 
 		this.updateFilter();
 	},
@@ -378,10 +426,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	updateFilter: function() {
-		var s = this.store,
-			filters = [],
-			params = s.proxy.extraParams;
+	__getParams: function() {
+		var filters = [],
+			params = {};
 
 		filters.push(this.currentStudent || 'ForCredit');
 
@@ -396,6 +443,16 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		}
 
 		params.filter = filters.join(',');
+
+		return params;
+	},
+
+
+	updateFilter: function() {
+		var s = this.store,
+			params = this.__getParams();
+
+		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, params);
 
 		s.load();
 	},
@@ -432,7 +489,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	syncStateToStore: function() {
 		var state = {};
 
-		state.page = this.store.currentPage;
+		//push the current page, student filter, and item filter to the state
+		state.page = this.store.currentPage || 1;
+		state.student = this.currentStudent || 'ForCredit';
+		state.item = this.currentItem || 'all';
 
 		this.pushState({rootStore: state});
 	},

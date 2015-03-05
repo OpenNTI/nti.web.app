@@ -39,21 +39,26 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 	restoreState: function(state) {
 		if (!state) { return; }
 
-		var view;
+		var me = this,
+			view, waitFor = [];
 
-		this.restoringState = true;
+		me.restoringState = true;
 
 		if (state.activeView) {
-			view = this.activateView(state.activeView);
+			view = me.activateView(state.activeView);
 		}
 
-		this.body.items.each(function(item) {
+		me.body.items.each(function(item) {
 			if (item.restoreState) {
-				item.restoreState(state[view.label], item === view);
+				waitFor.push(item.restoreState(state[view.label], item === view));
 			}
 		});
 
-		this.restoringState = false;
+		//wait for all the sub views to finish restoring
+		Promise.all(waitFor)
+			.always(function() {
+				me.restoringState = false;
+			});
 	},
 
 
