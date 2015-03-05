@@ -88,6 +88,16 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 	},
 
 
+	pushAssignment: function(student, assignment, view) {
+		var layout = this.body.getLayout(),
+			active = view || (layout && layout.getActiveItem());
+
+		if (active && active.setStateForAssignment) {
+			active.setStateForAssignment(student, assignment);
+		}
+	},
+
+
 	onViewAdd: function(body, item) {
 		this.navigation.addView(item);
 		this.mon(item, {

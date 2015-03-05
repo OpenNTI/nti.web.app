@@ -128,6 +128,33 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 
 	maybeRemoveFilter: function() {},
 
+
+	restoreAssignment: function(assignment) {
+		if (this.store.loading) {
+			this.mon(this.store, {
+				single: true,
+				delay: 1,
+				load: this.restoreAssignment.bind(this, assignment)
+			});
+
+			return;
+		}
+
+		var record;
+
+		record = this.store.findBy(function(rec) {
+			var item = rec.get('item');
+
+			return assignment === item.getId();
+		});
+
+		if (record >= 0) {
+			record = this.store.getAt(record);
+
+			this.showAssignment(null, record);
+		}
+	},
+
 	//<editor-fold desc="Navigation Events">
 	showAssignment: function(selModel, record) {
 		var path = [

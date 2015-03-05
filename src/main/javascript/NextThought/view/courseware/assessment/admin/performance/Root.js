@@ -112,7 +112,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	restoreState: function(state, active) {
+	restoreState: function(state) {
 		var me = this,
 			params, store = me.store,
 			storeState = (state && state.rootStore) || {};
@@ -134,10 +134,20 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		return new Promise(function(fulfill, reject) {
 			me.mon(store, {
 				single: true,
-				'load': fulfill
+				'records-filled-in': function() {
+					delete store.proxy.extraParams.batchAroundUsernameFilterByScope;
+
+					fulfill();
+				}
 			});
 
-			if (storeState.page) {
+			this.stateRestored = true;
+
+			if (state && state.activeStudent) {
+				store.proxy.extraParams.batchAroundUsernameFilterByScope = state.activeStudent;
+
+				store.load();
+			} else if (storeState.page) {
 				store.loadPage(parseInt(storeState.page, 10));
 			} else {
 				store.loadPage(1);
@@ -195,6 +205,16 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		this.mon(this.grid, {
 			cellclick: 'onCellClick'
 		});
+
+		if (!this.stateRestored) {
+			this.currentStudent = 'ForCredit';
+			this.currentItem = 'all';
+
+			this.store.proxy.extraParams = Ext.apply(this.store.proxy.extraParams || {}, this.__getParams());
+			this.updateUIFromRestore();
+
+			this.store.load(1);
+		}
 	},
 	//</editor-fold>
 

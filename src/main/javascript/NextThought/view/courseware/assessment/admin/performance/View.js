@@ -11,26 +11,62 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.View', {
 	onAdd: function(item) { this.getLayout().setActiveItem(item); },
 
 
+	initComponent: function() {
+		this.callParent(arguments);
+
+		this.enableBubble('close-reader');
+	},
+
+
 	restoreState: function(state, active) {
-		if (state && state.activeStudent) {
-			this.findAndShowStudent(state.activeStudent);
-		} else if (active) {
-			this.showRoot();
-		}
+		var me = this,
+			store = me.store,
+			root = me.getRoot();
 
-		var activeItem = this.getLayout().getActiveItem(),
-			waitFor = [];
+		return root.restoreState(state)
+			.then(function() {
+				var record;
 
-		this.items.each(function(item) {
-			if (item.restoreState) {
-				waitFor.push(item.restoreState(state, activeItem === item));
-			}
+				if (state && state.activeStudent) {
+					me.restoreStudent(state.activeStudent, state.activeAssignment);
+				} else {
+					me.showRoot();
+					me.fireEvent('close-reader');
+				}
+			});
+	},
+
+
+	restoreStudent: function(username, assignment) {
+		var record, view;
+
+		record = this.store.findBy(function(rec) {
+			var user = rec.get('User');
+
+			return username === NextThought.model.User.getIdFromRaw(user);
 		});
 
-		return Promise.all(waitFor)
-			.fail(function(reason) {
-				console.error('Failed to restore performance state:', reason);
-			});
+		if (record >= 0) {
+			record = this.store.getAt(record);
+
+			view = this.showStudent(record);
+		} else {
+			console.error('Failed to load the store to the correct page for a student');
+		}
+
+		if (view && assignment) {
+			view.restoreAssignment(assignment);
+		} else {
+			this.fireEvent('close-reader');
+		}
+	},
+
+
+	setStateForAssignment: function(student, assignment) {
+		this.pushState({
+			activeStudent: student.getId ? student.getId() : student,
+			activeAssignment: assignment.getId ? assignment.getId() : assignment
+		});
 	},
 
 
@@ -90,7 +126,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.View', {
 			return;
 		}
 
-		if (this.activeId !== NextThought.model.User.getIdFromRaw(user)) {
+		if (this.activeUser !== NextThought.model.User.getIdFromRaw(user)) {
 			this.pushState({
 				activeStudent: NextThought.model.User.getIdFromRaw(user)
 			});
@@ -116,33 +152,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.View', {
 			'goto': 'showStudent',
 			'goup': 'showRoot'
 		});
-	},
 
-
-	findAndShowStudent: function(username) {
-		var record;
-
-		if (this.store.loading) {
-			this.mon(this.store, {
-				'records-filled-in': this.findAndShowStudent.bind(this, username),
-				single: true
-			});
-
-			return;
-		}
-
-		record = this.store.findBy(function(rec) {
-			var user = rec.get('User');
-
-			return username === NextThought.model.User.getIdFromRaw(user);
-		});
-
-		this.acitveId = username;
-
-		if (record >= 0) {
-			return this.showStudent(this.store.getAt(record), true);
-		}
-
-		console.log('Load the store to the correct page');
+		return view;
 	}
 });

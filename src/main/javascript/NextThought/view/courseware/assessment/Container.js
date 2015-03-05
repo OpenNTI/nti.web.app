@@ -38,7 +38,8 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 		this.on({
 			'goto-assignment': 'gotoAssignment',
 			'show-assignment': 'showAssignment',
-			'update-assignment-view': 'maybeUpdateAssignmentView'
+			'update-assignment-view': 'maybeUpdateAssignmentView',
+			'close-reader': 'showRoot'
 		});
 
 		this.rootContainerShowAssignment = this.showAssignment.bind(this);
@@ -131,7 +132,7 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 
 
 	showAssignment: function(view, assignment, assignmentHistory, student, path, pageSource) {
-		var me = this, time,
+		var me = this, time, root = me.getRoot(),
 			active = me._showAssignmentPromise || Promise.resolve();
 
 		me.maybePreventNavigation()
@@ -168,16 +169,19 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 							//both course-asessment-reader and the admin-reader extend the reader so this takes care of both
 							Ext.destroy(me.down('reader'));
 
+							root.pushAssignment(student, assignment);
+
 							var reader = me.add({
-								xtype: isMe(student) ? 'course-assessment-reader' : 'course-assessment-admin-reader',
-								parentView: view,
-								assignmentHistory: history,
-								student: student,
-								path: path,
-								location: assignment.getId(),
-								assignment: assignment,
-								pageSource: pageSource
-							});
+									xtype: isMe(student) ? 'course-assessment-reader' : 'course-assessment-admin-reader',
+									parentView: view,
+									assignmentHistory: history,
+									student: student,
+									path: path,
+									location: assignment.getId(),
+									assignment: assignment,
+									pageSource: pageSource
+								});
+
 
 							me.mon(reader, {
 								'goup': 'showRoot',
