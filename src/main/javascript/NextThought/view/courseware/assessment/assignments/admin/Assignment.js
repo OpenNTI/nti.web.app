@@ -401,6 +401,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	onStoreLoad: function() {
 		this.syncFilterToUI();
 		this.unmask();
+
+		delete this.store.proxy.extraParams.batchAroundUsernameFilterByScope;
 	},
 
 
