@@ -149,6 +149,12 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 					delete store.proxy.extraParams.batchAroundUsernameFilterByScope;
 
 					fulfill();
+
+					if (fromAfterRender) {
+						me.maybeSwitchStudents();
+					}
+
+					me.initialLoad = true;
 				}
 			});
 
@@ -325,6 +331,22 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		this.maybeSwitch(noEmpty);
 		this.updateFilter();
+	},
+
+
+	maybeSwitchStudents: function() {
+		if (this.initialLoad || this.store.getCount() > 0) { return; }
+
+		var scope = this.store.proxy.reader.EnrollmentScope,
+			menu = this.studentMenu,
+			open = menu.down('[type=Open]'),
+			credit = menu.down('[type=ForCredit]');
+
+		if (scope === 'ForCredit') {
+			open.setChecked(true);
+		} else {
+			credit.setChecked(true);
+		}
 	},
 
 
