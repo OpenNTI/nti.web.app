@@ -150,9 +150,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 					fulfill();
 
-					if (fromAfterRender) {
-						me.maybeSwitchStudents();
-					}
+					me.maybeSwitchStudents();
 
 					me.initialLoad = true;
 				}
