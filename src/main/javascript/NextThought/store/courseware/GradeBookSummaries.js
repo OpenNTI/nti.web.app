@@ -111,6 +111,7 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 	fillInRecord: function(record) {
 		var assignment = this.getAssignment(),
 			alias = record.get('Alias'),
+			username = record.get('Username'),
 			user = record.get('User'),
 			userId = user && NextThought.model.User.getIdFromRaw(user),
 			historyItem = record.get('HistoryItemSummary'),
@@ -162,13 +163,14 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 		//Users are added to the cache when the data loads so this should be a no-op
 		return UserRepository.getUser(user)
 			.then(function(u) {
-				var a = alias || u.getName();
+				var a = alias || u.getName(),
+					name = username || u.get('Username');
 
 				record.set({
 					'Alias': a,
 					'User': u,
 					'avatar': u.get('avatarURL'),
-					'Username': u.get('Username')
+					'Username': name
 				});
 
 				return wait();
