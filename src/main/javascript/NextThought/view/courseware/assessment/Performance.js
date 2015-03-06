@@ -263,7 +263,7 @@ Ext.define('NextThought.view.courseware.assessment.Performance', {
 			var id = o.getId();
 
 			waitsOn.push(assignments.getHistoryItem(o.getId())
-				.then(function(h) {
+				.always(function(h) {
 					var submission = h && h.get('Submission'),
 						feedback = h && h.get('Feedback'),
 						grade = h && h.get('Grade'),

@@ -299,11 +299,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 	syncFilterToState: function() {
 		var bar = this.getFilterBar(),
-			group = bar.getGroupBy();
+			group = bar && bar.getGroupBy();
 
-		this.pushState({
-			group: group
-		});
+		if (group) {
+			this.pushState({
+				group: group
+			});
+		}
 	},
 
 
@@ -361,7 +363,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 			var id = o.getId();
 
 			waitsOn.push(Promise.all([
-				assignments.getHistoryItem(id),
+				assignments.getHistoryItem(id).fail(function() { return; }),
 				assignments.getGradeBookEntry(id)
 			])
 				.then(function(results) {

@@ -52,14 +52,7 @@ Ext.define('NextThought.view.courseware.dashboard.tiles.Assignment', {
 
 
 	getHistory: function() {
-		var rec = this.record;
-
-		return this.getAssignmentHistory
-			.then(function(history) {
-				var item = history.getItem(rec.getId());
-
-				return item || Promise.reject();
-			});
+		return this.getAssignmentHistory;
 	},
 
 

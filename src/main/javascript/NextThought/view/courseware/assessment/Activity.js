@@ -164,9 +164,9 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 
 		//given an assignment figure out what activity item to add
 		function collect(o) {
-			waitsOn.push(assignments.getHistoryItem(o.getId())
-				.then(me.collectEvents.bind(me, o))
-				.fail(function() { return; })
+			waitsOn.push(
+				assignments.getHistoryItem(o.getId())
+					.always(me.collectEvents.bind(me, o))
 			);
 		}
 

@@ -50,13 +50,12 @@ Ext.define('NextThought.model.courses.assignments.InstructorCollection', {
 
 
 	/**
-	 * Get the HistoryItem (not summary) for the user for an assignment
+	 * Get the HistoryItem for an assignment, doesn't make sense for an instructor so reject
 	 * @param  {String} assignment NTIID of the assignment
-	 * @param  {String} user       Username of the user
 	 * @return {Promse}            fulfills with the history item
 	 */
-	getHistoryItem: function(assignment, user) {
-		return Promise.resolve();
+	getHistoryItem: function(assignment, useCache) {
+		return Promise.reject();
 	},
 
 	/**

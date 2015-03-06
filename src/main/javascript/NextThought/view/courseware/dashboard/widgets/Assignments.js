@@ -22,7 +22,7 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Assignments', {
 				maxNotDue = 5,
 				getWeight = this.getWeight.bind(this);
 
-			function getCmpConfig(assignment) {
+			function getCmpConfig(assignment, assignments) {
 				var getConfig = NextThought.view.courseware.dashboard.tiles.Assignment.getTileConfig(assignment);
 
 				return getConfig
@@ -31,7 +31,7 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Assignments', {
 							config.weight = getWeight(assignment);
 							config.course = course;
 							//TODO: get rid of getAssignmentHistory
-							config.getAssignmentHistory = course.getAssignmentHistory();
+							config.getAssignmentHistory = assignments.getHistoryItem(assignment.getId(), true);
 
 							return config;
 						});
@@ -45,16 +45,19 @@ Ext.define('NextThought.view.courseware.dashboard.widgets.Assignments', {
 								var assignmentStart = assignment.get('availableBeginning'),
 									assignmentEnd = assignment.get('availableEnding');
 
+								//don't show the final grade assignment
+								if (assignmentCollection.isFinalGradeAssignment(assignment)) { return; }
+
 								//if we are building for the current week
 								if (isNow) {
 									//if the assignment starts before the end of the week
 									//and the assignment hasn't ended before the start of the week
 									if (end.isAfter(assignmentStart) && start.isBefore(assignmentEnd)) {
-										assignments.push(getCmpConfig(assignment));
+										assignments.push(getCmpConfig(assignment, assignmentCollection));
 									}
 								//else if the assignment has ended this week
 								} else if (end.isAfter(assignmentEnd) && start.isBefore(assignmentEnd)) {
-									assignments.push(getCmpConfig(assignment));
+									assignments.push(getCmpConfig(assignment, assignmentCollection));
 								}
 							});
 
