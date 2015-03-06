@@ -14,7 +14,7 @@ Ext.define('NextThought.proxy.courseware.PagedPageSource', {
 
 
 	setCurrent: function(record) {
-		var currentPage = this.store.currentPage,
+		var currentPage = this.store.getCurrentPage(),
 			pageSize = this.store.pageSize,
 			currentIndex = this.store.indexOf(record);
 
@@ -136,7 +136,7 @@ Ext.define('NextThought.proxy.courseware.PagedPageSource', {
 		//if we aren't the first record try to get the previous one
 		if (currentIndex > 0) {
 			prevIndex = currentIndex - 1;
-			prevPage = Math.ceil(prevIndex / me.store.pageSize);
+			prevPage = Math.floor(prevIndex / me.store.pageSize) + 1;
 		}
 
 		return me.__loadPage(prevPage)
@@ -154,7 +154,7 @@ Ext.define('NextThought.proxy.courseware.PagedPageSource', {
 		var currentPosition = this.getCurrentPosition(),
 			total = this.getTotal();
 
-		return currentPosition < total;
+		return currentPosition < total - 1;
 	},
 
 
