@@ -302,6 +302,8 @@ Ext.define('NextThought.view.slidedeck.transcript.NoteOverlay', {
 		this.activateEditor(cueInfo, cb);
 		this.editor.alignTo(el, 'tl-tr?');
 		this.editor.show();
+		this.editor.toFront();
+		this.editor.focus();
 	},
 
 
