@@ -33,6 +33,13 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 		this.navigation.setTitle(this.title);
 		this.mon(this.body, 'add', 'onViewAdd');
 		this.clearViews();
+
+		if (!isFeature('gradebook-state')) {
+			this.pushState = function() {};
+			this.suspendState = function() {};
+			this.resumeState = function() {};
+			this.pushAssignment = function() {};
+		}
 	},
 
 
@@ -367,7 +374,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 		//add the active view
 		state.activeView = activeCmp.xtype;
 
-		if (!this.stateSuspended) {
+		if (!this.stateSuspended && isFeature('gradebook-state')) {
 			history.pushState({
 				content: {
 					assignments: state

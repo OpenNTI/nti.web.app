@@ -28,7 +28,7 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 
 
 	restoreState: function(state) {
-		if (state.activeTab === 'course-assessment') {
+		if (state.activeTab === 'course-assessment' && isFeature('gradebook-state')) {
 			this.getRoot().restoreState(state.assignments);
 		}
 	},
