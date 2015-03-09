@@ -88,6 +88,11 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 	]),
 
 
+	loadMoreTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+		{ cls: 'load-more', html: 'View more comments'}
+	])),
+
+
 	listeners: {
 		itemclick: {
 			element: 'el',
@@ -175,7 +180,9 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 			s = NextThought.store.forums.Comments.create({
 				parentTopic: me.topic,
 				storeId: me.topic.get('Class') + '-' + me.topic.get('NTIID'),
-				url: me.topic.getLink('contents')
+				url: me.topic.getLink('contents'),
+				pageSize: 20,
+				clearOnPageLoad: false
 			});
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {},{
@@ -211,6 +218,13 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 		if (this.notLoadedYet) {
 			delete this.notLoadedYet;
 			this.initialLoad.fulfill(true);
+		}
+		if (store.currentPage < store.getTotalPages()) {
+			if (this.moreEl) {
+				this.moreEl.remove();
+			}
+			this.moreEl = Ext.get(this.loadMoreTpl.append(this.el));
+			this.mon(this.moreEl, 'click', 'loadMore', this);
 		}
 
 		(records || []).forEach(this.fillInData, this);
@@ -404,6 +418,13 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 			me.fireEvent('realign-editor');
 		}
 
+	},
+
+
+	loadMore: function() {
+		if (this.store.currentPage < this.store.getTotalPages()) {
+			this.store.loadNextPage();
+		}
 	},
 
 

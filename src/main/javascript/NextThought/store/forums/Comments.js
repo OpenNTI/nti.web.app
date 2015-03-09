@@ -149,6 +149,33 @@ Ext.define('NextThought.store.forums.Comments', {
 	},
 
 
+	getTotalPages: function() {
+		var total = this.getTotalCount(),
+			pageSize = this.pageSize;
+
+		return Math.ceil(total / pageSize);
+	},
+
+
+	loadNextPage: function() {
+		var current = this.currentPage,
+			total = this.getTotalPages();
+
+		if (current < total) {
+			this.loadPage(current + 1);
+		}
+	},
+
+
+	loadPreviousPage: function() {
+		var current = this.currentPage;
+
+		if (current > 1) {
+			this.loadPage(current - 1);
+		}
+	},
+
+
 	//insert a single record into the right spot in the store
 	insertSingleRecord: function(record) {
 		this.__clearFilters();
