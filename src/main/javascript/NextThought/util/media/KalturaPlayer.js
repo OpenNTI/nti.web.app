@@ -591,6 +591,22 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 	},
 
 
+	durationChangeHandler: function(message) {
+		var data = message && message.data,
+			obj = data && data[0],
+			duration = (obj && obj.newValue) || 0;
+
+		//duration will be in seconds so make it in milli like
+		//everything else in JS
+		this.video_duration = duration * 1000;
+	},
+
+
+	getDuration: function() {
+		return this.video_duration;
+	},
+
+
 	playerPlayEndHandler: function() {
 		if (this.isFullScreenMode) {
 			this.deferDeactivateTillExit = true;
@@ -825,7 +841,8 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 							'startup',
 							'playerSeekStart',
 							'playerSeekEnd',
-							'doSeek'
+							'doSeek',
+							'durationChange'
 						],
 						i = events.length - 1;
 

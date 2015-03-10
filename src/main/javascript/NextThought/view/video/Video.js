@@ -360,7 +360,8 @@ Ext.define('NextThought.view.video.Video', {
 				service: target,
 				video: this.currentVideoId,
 				time: this.issueCommand(target, 'getCurrentTime'),
-				state: this.issueCommand(target, 'getPlayerState')
+				state: this.issueCommand(target, 'getPlayerState'),
+				duration: t.getDuration ? t.getDuration() : 0
 			};
 		}
 		finally {
@@ -440,7 +441,8 @@ Ext.define('NextThought.view.video.Video', {
 		if (this.hasWatchEvent && (diff > threshold || diff < 0)) {
 			delete this.hasWatchEvent;
 			AnalyticsUtil.stopResourceTimer(id, 'video-watch', {
-				video_end_time: this.lasttime
+				video_end_time: this.lasttime,
+				MaxDuration: state.duration / 1000
 			});
 
 			//send a seek event saying the skipped over this part of the video
@@ -464,7 +466,8 @@ Ext.define('NextThought.view.video.Video', {
 				type: 'video-watch',
 				with_transcript: hasTranscript,
 				course: bundle,
-				video_start_time: time
+				video_start_time: time,
+				MaxDuration: state.duration / 1000
 			});
 			this.hasWatchEvent = true;
 		}

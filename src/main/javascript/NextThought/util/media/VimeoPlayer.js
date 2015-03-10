@@ -121,6 +121,7 @@ Ext.define('NextThought.util.media.VimeoPlayer', {
 		this.postMessage('addEventListener', 'pause');
 		this.postMessage('addEventListener', 'finish');
 		this.postMessage('addEventListener', 'seek');
+		this.postMessage('getDuration', null);
 
 		this.isReady = true;
 
@@ -270,5 +271,19 @@ Ext.define('NextThought.util.media.VimeoPlayer', {
 		Ext.destroy(this.el);
 		delete this.el;
 		window.removeEventListener('message', this.handleMessage, false);
+	},
+
+
+	onGetDuration: function(e) {
+		var value = e.value;
+
+		//value is in seconds so make it milliseconds
+		//like everything else in JS
+		this.video_duration = value * 1000;
+	},
+
+
+	getDuration: function() {
+		return this.video_duration || 0;
 	}
 });

@@ -316,6 +316,13 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 			el.clearListeners();
 			Ext.destroy(el);
 		}
+	},
+
+
+	getDuration: function() {
+		var duration = this.player && this.player.getDuration();
+
+		return (duration || 0) * 1000;
 	}
 
 }, function() {
