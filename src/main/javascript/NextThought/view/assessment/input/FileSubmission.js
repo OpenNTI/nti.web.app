@@ -156,6 +156,7 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 					delete me.value;
 					me.el.mask('Deleting...');
 					me.saveProgress();
+					me.disableSubmission();
 				}
 			}
 		});
