@@ -220,8 +220,10 @@ Ext.define('NextThought.model.courseware.Grade', {
 			AssignmentId: me.get('AssignmentId'),
 			value: me.get('value')
 		})
-		.then(function() {
+		.then(function(response) {
 			me.fireEvent('value-change');
+
+			return response;
 		})
 		.fail(function(reason) {
 			me.set('value', null);
