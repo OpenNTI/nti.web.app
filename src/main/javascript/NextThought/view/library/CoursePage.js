@@ -122,14 +122,17 @@ Ext.define('NextThought.view.library.CoursePage', {
 
 
 	addBinnedCourses: function(binObj) {
-		var me = this,
+		var me = this, i, semester,
 			bins = binObj.bins || {},
 			years = binObj.years || [],
 			upcoming = binObj.upcoming || [],
 			semesters = binObj.semesters || [];
 
+		//show the ongoing courses by biggest year first (biggest will be the current)
 		years.sort().reverse();
-		upcoming.sort().reverse();
+		//show the upcoming courses by smallest year first (smallest will be closest to the current)
+		upcoming.sort();
+		//show the ongoing courses by last semester first (it will be the current)
 		semesters = ((semesters && Ext.Array.unique(semesters)) || []).reverse();
 
 
@@ -151,7 +154,8 @@ Ext.define('NextThought.view.library.CoursePage', {
 		upcoming.forEach(function(year) {
 			var bin = bins.upcoming[year];
 
-			semesters.forEach(function(semester) {
+			//show the first semester first
+			semesters.reverse().forEach(function(semester) {
 				if (bin[semester] && bin[semester].length) {
 					me.add({
 						label: 'upcoming',
