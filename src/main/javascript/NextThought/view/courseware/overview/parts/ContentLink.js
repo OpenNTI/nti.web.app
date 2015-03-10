@@ -12,7 +12,9 @@ Ext.define('NextThought.view.courseware.overview.parts.ContentLink', {
 			href = n.getAttribute('href'),
 			ntiid = n.getAttribute('ntiid');
 
-		if (!ParseUtils.isNTIID(href) && !Globals.HOST_PREFIX_PATTERN.test(href)) {
+		if (Globals.ROOT_URL_PATTERN.test(href)) {
+			href = getURL(href);
+		} else if (!ParseUtils.isNTIID(href) && !Globals.HOST_PREFIX_PATTERN.test(href)) {
 			href = getURL(i.root + href);
 		}
 
