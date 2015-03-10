@@ -171,7 +171,7 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 		resetTerm: function resetTerm(e) {
 			var toReset = e.getTarget('.target.drag');
 			if (toReset) {
-				this.moveTerm(toReset, this.shelfEl);
+				this.moveTerm(toReset, this.shelfEl.dom);
 			}
 			this.maybeChangeSubmitButtonState();
 		},
