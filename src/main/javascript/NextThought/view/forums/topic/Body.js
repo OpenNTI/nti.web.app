@@ -45,10 +45,12 @@ Ext.define('NextThought.view.forums.topic.Body', {
 				single: true,
 				ready: function() {
 					me.fireEvent('highlight-ready');
+					topic.buildCommentPagingNav(comment);
 				}
 			});
 		} else {
 			me.fireEvent('highlight-ready');
+			topic.buildCommentPagingNav(comment);
 		}
 
 		Ext.destroy(this.topicMonitors);

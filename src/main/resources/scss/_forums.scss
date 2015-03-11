@@ -1656,8 +1656,30 @@
 
 				.meta,
 				.foot {
-					.link{
-						cursor: pointer !important;
+					position: relative;
+
+					.paging-comments-nav{
+						position: absolute;
+						top: -15px;
+						right: 0;
+						width: 300px;
+						text-align: right;
+
+						.pager-container{
+							.pages{
+								.page{
+									color: $primary-blue;
+									display: inline-block;
+									padding-right: 20px;
+									cursor: pointer;
+
+									&.disabled, &.active{
+										color: $tertiary-grey;
+										cursor: default;
+									}
+								}
+							}
+						}
 					}
 				}
 			}

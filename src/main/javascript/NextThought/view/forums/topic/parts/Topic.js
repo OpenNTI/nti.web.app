@@ -16,7 +16,8 @@ Ext.define('NextThought.view.forums.topic.parts.Topic', {
 		'NextThought.view.menus.BlogTogglePublish',
 		'NextThought.ux.SearchHits',
 		'NextThought.layout.component.Natural',
-		'NextThought.view.menus.Reports'
+		'NextThought.view.menus.Reports',
+		'NextThought.view.forums.topic.parts.Pager'
 	],
 
 	onClassExtended: function(cls, data) {
@@ -86,6 +87,11 @@ Ext.define('NextThought.view.forums.topic.parts.Topic', {
 		reportLinkEl: '.comment-box .response .report',
 		commentEditorBox: '.editor-box'
 	},
+
+
+	pagingCommentsNavTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+		{cls: 'paging-comments-nav'}
+	])),
 
 
 	initComponent: function() {
@@ -370,6 +376,19 @@ Ext.define('NextThought.view.forums.topic.parts.Topic', {
 				}
 			});
 		}
+	},
+
+
+	buildCommentPagingNav: function(commentCmp) {
+		var numPages = 0, me = this;
+
+		this.pagingCommentsNav = Ext.get(this.pagingCommentsNavTpl.append(this.el.down('.foot')));
+
+		this.pager = Ext.widget('topic-comment-pager', {
+			renderTo: this.pagingCommentsNav
+		});
+
+		this.pager.bindStore(commentCmp.store);
 	},
 
 

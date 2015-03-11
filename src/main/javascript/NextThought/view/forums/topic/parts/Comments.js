@@ -88,11 +88,6 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 	]),
 
 
-	loadMoreTpl: new Ext.XTemplate(Ext.DomHelper.markup([
-		{ cls: 'load-more', html: 'View more comments'}
-	])),
-
-
 	listeners: {
 		itemclick: {
 			element: 'el',
@@ -219,13 +214,6 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 			delete this.notLoadedYet;
 			this.initialLoad.fulfill(true);
 		}
-		if (store.currentPage < store.getTotalPages()) {
-			if (this.moreEl) {
-				this.moreEl.remove();
-			}
-			this.moreEl = Ext.get(this.loadMoreTpl.append(this.el));
-			this.mon(this.moreEl, 'click', 'loadMore', this);
-		}
 
 		(records || []).forEach(this.fillInData, this);
 		this.clearLoadBox();
@@ -290,6 +278,28 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 		});
 
 		me.recordsToRefresh = [];
+	},
+
+
+	loadLastPage: function() {
+		var targetPage = Math.ceil((this.store.getTotalCount() + 1) / this.store.pageSize), me = this;
+
+		return new Promise(function(fulfill, reject) {
+			if (me.store.getCurrentPage() === targetPage) {
+				fulfill(true);
+			}
+			else {
+				me.mon(me.store, {
+					'load': function() { fulfill(); },
+					single: true,
+					delay: 1
+				});
+
+				// Loading the lastPage will also have the last record, otherwise we risk adding it twice
+				delete me.isNewRecord;
+				me.store.loadPage(targetPage);
+			}
+		});
 	},
 
 
@@ -418,13 +428,6 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 			me.fireEvent('realign-editor');
 		}
 
-	},
-
-
-	loadMore: function() {
-		if (this.store.currentPage < this.store.getTotalPages()) {
-			this.store.loadNextPage();
-		}
 	},
 
 

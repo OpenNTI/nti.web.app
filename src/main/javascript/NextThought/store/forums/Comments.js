@@ -157,6 +157,11 @@ Ext.define('NextThought.store.forums.Comments', {
 	},
 
 
+	getCurrentPage: function() {
+		return parseInt(this.currentPage, 10);
+	},
+
+
 	loadNextPage: function() {
 		var current = this.currentPage,
 			total = this.getTotalPages();

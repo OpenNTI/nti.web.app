@@ -638,7 +638,22 @@ Ext.define('NextThought.controller.Forums', {
 						}
 					}
 
-					Ext.callback(successCallback, null, [editor, postCmp, rec]);
+					if (editor.ownerCt && editor.ownerCt.loadLastPage) {
+						editor.ownerCt.loadLastPage()
+							.then(function(isOnLastPage) {
+								Ext.callback(successCallback, null, [editor, postCmp, rec]);
+
+								// NOTE: if we are on the last page, we don't need to load it,
+								// so make sure the totalCount is updated.
+								if (isOnLastPage && rec.isTopLevel()) {
+									editor.ownerCt.store.totalCount += 1;
+								}
+							});
+					}
+					else {
+						Ext.callback(successCallback, null, [editor, postCmp, rec]);
+					}
+
 
 					//TODO: increment PostCount in postRecord the same way we increment reply count in notes.
 					if (!isEdit) {
