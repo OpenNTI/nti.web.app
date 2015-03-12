@@ -106,15 +106,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Pager', {
 	},
 
 
-	onStoreLoad: function() {
-		var s = this.store,
-			pages,
-			total = this.store.getTotalCount(),
-			pageCount = this.store.getTotalPages(),
-			current = parseInt(this.store.getCurrentPage(), 10);
-
-		pages = this.getPages(pageCount, current);
-
+	addNavigationPages: function(pages, pageCount, current) {
 		pages.unshift({
 			html: '<',
 			index: 'prev',
@@ -128,6 +120,19 @@ Ext.define('NextThought.view.courseware.assessment.admin.Pager', {
 			isEllipse: false,
 			cls: current < pageCount ? 'enabled' : 'disabled'
 		});
+		return pages;
+	},
+
+
+	onStoreLoad: function() {
+		var s = this.store,
+			pages,
+			total = this.store.getTotalCount(),
+			pageCount = this.store.getTotalPages(),
+			current = parseInt(this.store.getCurrentPage(), 10);
+
+		pages = this.getPages(pageCount, current);
+		pages = this.addNavigationPages(pages, pageCount, current);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			current: current,
@@ -173,7 +178,14 @@ Ext.define('NextThought.view.courseware.assessment.admin.Pager', {
 			this.loadPrev();
 		} else if (index === 'next') {
 			this.loadNext();
-		} else if (index) {
+		}
+		else if (index === 'first') {
+			this.loadFirstPage();
+		}
+		else if (index === 'last') {
+			this.loadLastPage();
+		}
+		else if (index) {
 			this.loadPage(index);
 		}
 	},
@@ -199,6 +211,25 @@ Ext.define('NextThought.view.courseware.assessment.admin.Pager', {
 
 		if (current < total) {
 			this.loadPage(current + 1);
+		}
+	},
+
+
+	loadLastPage: function() {
+		var current = parseInt(this.store.getCurrentPage()),
+			lastPage = this.store.getTotalPages();
+
+		if (current !== lastPage) {
+			this.loadPage(lastPage);
+		}
+	},
+
+
+	loadFirstPage: function() {
+		var current = parseInt(this.store.getCurrentPage());
+
+		if (current !== 1) {
+			this.loadPage(1);
 		}
 	},
 

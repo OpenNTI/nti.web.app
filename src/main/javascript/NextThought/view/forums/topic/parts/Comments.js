@@ -177,7 +177,7 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 				storeId: me.topic.get('Class') + '-' + me.topic.get('NTIID'),
 				url: me.topic.getLink('contents'),
 				pageSize: 20,
-				clearOnPageLoad: false
+				clearOnPageLoad: true
 			});
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {},{
