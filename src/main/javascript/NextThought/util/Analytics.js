@@ -85,6 +85,12 @@ Ext.define('NextThought.util.Analytics', {
 				.fail(function() {
 					console.error('Failed to start analytic session: ', arguments);
 				});
+		} else {
+			this.addContext = function() {};
+			this.beginSession = function() {};
+			this.getResourceTimer = function() {};
+			this.stopResourceTimer = function() {};
+			this.sendBatch = function() {};
 		}
 	},
 
@@ -149,7 +155,7 @@ Ext.define('NextThought.util.Analytics', {
 		data = data || {};
 
 		if (!resource) {
-			console.error('No resource for ID: ', id);
+			console.error('No resource for ID: ', resourceId);
 			return;
 		}
 
