@@ -369,6 +369,7 @@
 	.foot {
 		font: normal 400 14px/1.5 $font;
 		color: $tertiary-grey;
+		cursor: default;
 
 		.state,
 		.comment-count {
@@ -681,6 +682,8 @@
 				}
 
 				.foot{
+					cursor: default;
+
 					.link{
 						color: $primary-blue;
 					}
@@ -1664,6 +1667,11 @@
 						right: 0;
 						width: 330px;
 						text-align: right;
+						display: block;
+
+						&.single {
+							display: none;
+						}
 
 						.pager-container{
 							.pages{
