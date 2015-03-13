@@ -1,3 +1,4 @@
+/*globals Toaster*/
 Ext.define('NextThought.util.Visibility', {
 	singleton: true,
 
@@ -91,10 +92,11 @@ Ext.define('NextThought.util.Visibility', {
 			browserPrefixes = ['moz', 'ms', 'o', 'webkit'];
 
 		function checkPrefixes() {
-			var i, hidden;
+			var i, hidden, prefix;
 
 			for (i = 0; i < browserPrefixes.length; i++) {
-				hidden = browserPrefixes[i] + 'Hidden';
+				prefix = browserPrefixes[i];
+				hidden = prefix + 'Hidden';
 
 				if (hidden in document) {
 					me.HIDDEN = hidden;
@@ -231,7 +233,7 @@ Ext.define('NextThought.util.Visibility', {
 		if (inactiveTime) {
 			this[name] = setTimeout(this.__setInactive, inactiveTime);
 		} else {
-			inactiveTime();
+			this.__setInactive();
 		}
 	},
 
