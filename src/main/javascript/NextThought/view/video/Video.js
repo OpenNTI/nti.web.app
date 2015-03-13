@@ -470,6 +470,8 @@ Ext.define('NextThought.view.video.Video', {
 				MaxDuration: state.duration / 1000
 			});
 			this.hasWatchEvent = true;
+
+			PageVisibility.lockActive();
 		}
 
 		this.lasttime = time;
@@ -486,6 +488,8 @@ Ext.define('NextThought.view.video.Video', {
 				video_end_time: state && state.time
 			});
 		}
+
+		PageVisibility.unlockActive();
 
 		this.currentVideoId = null;
 

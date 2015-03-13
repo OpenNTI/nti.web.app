@@ -1,3 +1,4 @@
+/*globals PageVisibility*/
 Ext.define('NextThought.util.Analytics', {
 	singleton: true,
 
@@ -5,6 +6,10 @@ Ext.define('NextThought.util.Analytics', {
 		'NextThought.util.Globals',
 		'Ext.util.Cookies'
 	],
+
+	mixins: {
+		observable: 'Ext.util.Observable'
+	},
 
 	BATCH_TIME: 10000,
 
@@ -24,8 +29,6 @@ Ext.define('NextThought.util.Analytics', {
 		'course-catalog-viewed': true
 	},
 
-	VIEWED_MAP: {},
-
 	TYPE_TO_MIMETYPE: {
 		'video-watch': 'application/vnd.nextthought.analytics.watchvideoevent',
 		'video-skip': 'application/vnd.nextthought.analytics.skipvideoevent',
@@ -43,9 +46,23 @@ Ext.define('NextThought.util.Analytics', {
 	},
 
 	TIMER_MAP: {},
+	VIEWED_MAP: {},
 
 	batch: [],
 	context: [],
+
+
+	constructor: function(config) {
+		this.callParent(arguments);
+
+		this.mixins.observable.constructor.call(this, config);
+
+		if (!isFeature('no-analytic-end') && isFeature('capture-analytics')) {
+			window.addEventListener('beforeunload', this.endSession.bind(this));
+			this.mon(PageVisibility, 'inactive', this.endSession.bind(this));
+			this.mon(PageVisibility, 'active', this.beginSession.bind(this));
+		}
+	},
 
 
 	addContext: function(context, isRoot) {
@@ -73,13 +90,18 @@ Ext.define('NextThought.util.Analytics', {
 
 
 	beginSession: function() {
-		var collection = Service.getWorkspace('Analytics'),
+		//if we've already started one don't start another
+		if (this.session_started) { return; }
+
+		var me = this,
+			collection = Service.getWorkspace('Analytics'),
 			links = collection && collection.Links,
 			url = links && Service.getLinkFrom(links, 'analytics_session');
 
 		if (url) {
 			Service.post(url)
 				.then(function() {
+					me.session_started = true;
 					console.log('Analytics session started.');
 				})
 				.fail(function() {
@@ -92,6 +114,30 @@ Ext.define('NextThought.util.Analytics', {
 			this.stopResourceTimer = function() {};
 			this.sendBatch = function() {};
 		}
+	},
+
+
+	endSession: function() {
+		this.closeOnGoing();
+
+		var collection = Service.getWorkspace('Analytics'),
+			links = collection && collection.Links,
+			link = links && Service.getLinkFrom(links, 'end_analytics_session'),
+			xmlhttp = new XMLHttpRequest();
+
+		if (!link) {
+			console.error('No Link for end analytics session');
+			return;
+		}
+
+		xmlhttp.open('POST', link, false);
+		xmlhttp.setRequestHeader('Content-Type', 'application/json');
+		xmlhttp.send(JSON.stringify({
+			MimeType: 'application/vnd.nextthought.analytics.batchevents',
+			events: this.batch
+		}));
+
+		this.session_started = false;
 	},
 
 
@@ -148,7 +194,29 @@ Ext.define('NextThought.util.Analytics', {
 	},
 
 
-	stopResourceTimer: function(resourceId, type, data) {
+	maybePush: function(data) {
+		//if the data isn't for an event that adds a resource when it
+		//is started, then we know its not going to be in the batch yet
+		if (!this.START_EVENT_TYPES[data.type]) {
+			delete data.isStart;
+			this.batch.push(data);
+			return;
+		}
+
+		//if a resource is added on start, check if we've sent it to the
+		//server yet. (look if its still in the batch)
+		var notInBatch = this.batch.every(function(item) {
+			return item !== data;
+		});
+
+		//if its not in the batch add it
+		if (notInBatch) {
+			this.batch.push(data);
+		}
+	},
+
+
+	stopResourceTimer: function(resourceId, type, data, doNotStartTimer) {
 		var resource = this.TIMER_MAP[resourceId + type],
 			now = new Date();
 
@@ -167,9 +235,14 @@ Ext.define('NextThought.util.Analytics', {
 			data = this.fillInData(resource, data);
 		}
 
-		this.batch.push(data);
+		this.maybePush(data);
 
-		this.__maybeStartBatchTimer();
+		if (doNotStartTimer) {
+			this.__maybeStartBatchTimer();
+		}
+
+		//remove the resource from the timer map, since its already in the batch
+		delete this.TIMER_MAP[resourceId + type];
 	},
 
 
@@ -200,21 +273,34 @@ Ext.define('NextThought.util.Analytics', {
 
 		if (!url) {
 			console.error('No url to send the analytics batch to');
-			return;
+			return Promise.reject('No url to send analytics batch to');
 		}
 
 		delete this.batchTimer;
 
-		Service.post(url, {
+		return Service.post(url, {
 			MimeType: 'application/vnd.nextthought.analytics.batchevents',
 			events: this.batch
 		})
-			.then(function(response) {
+			.then(function() {
 				me.batch = [];
 			})
 			.fail(function(response) {
 				console.error('Failed to save the analytic batch', response, me.batch);
 			});
+	},
+
+
+	closeOnGoing: function() {
+		var key, resource;
+
+		for (key in this.TIMER_MAP) {
+			if (this.TIMER_MAP.hasOwnProperty(key)) {
+				resource = this.TIMER_MAP[key];
+
+				this.stopResourceTimer(resource.data.resource_id, resource.data.type, null, true);
+			}
+		}
 	},
 
 
