@@ -470,35 +470,287 @@ canvas.x-component-course-assessment {
 	}
 }
 
+.pager-settings {
+	.x-menu-item.x-menu-item-separator.labeled-separator {
+		background: none !important;
+		border-top: none;
+		margin-bottom: 0;
+
+		span {
+			left: 15px;
+			padding: 0;
+		}
+	}
+
+	.x-menu-item.x-menu-item-checked, .x-menu-item.x-menu-item-unchecked {
+		padding: 0 15px;
+		line-height: 30px;
+
+		&::after {
+			display: none;
+		}
+	}
+
+	.x-menu-item.x-menu-item-checked:not(.avatar-toggle) {
+		background-color: $primary-blue;
+		color: white !important;
+
+		&.x-menu-item-active {
+			background-color: $primary-blue !important;
+		}
+	}
+
+	.x-menu-item.avatar-toggle {
+		padding-left: 40px;
+
+		&.x-menu-item-unchecked {
+			@include icon('checkbox-light-unchecked', $position: relative, $side: before, $top: 5px, $left: 15px);
+		}
+
+		&.x-menu-item-checked {
+			@include icon('checkbox-light-checked', $position: relative, $side: before, $top: 5px, $left: 15px);
+		}
+	}
+}
+
+.pager-settings.page {
+	font-size: 0.875em;
+}
+
 .course-assessment-header, .course-assessment-admin {
-	.pager {
-		.pager-container {
-			text-align: center;
+	.admin-list-header {
+		background: $quad-grey;
+		position: relative;
+		border-bottom: 1px solid #dddddd;
 
-			ul {
-				list-style: none;
-				padding: 0;
-				display: inline-block;
-				margin: 0;
+		.header-container {
+			overflow: hidden;
+		}
 
-				li {
-					color: $primary-blue;
-					font-size: 0.875rem;
-					margin: 0 0.2em;
-					float: left;
-					cursor: pointer;
+		&::after {
+			content: '';
+			box-shadow: 0 -5px 15px 5px rgba(0,0,0,0.2);
+			position: absolute;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			height: 100px;
+			clip: rect(100px, auto, 150px, auto);
+			background: #dddddd;
+			border-radius: 40em / 10px;
+		}
 
-					&.disabled {
-						cursor: default;
+		.assignment {
+			margin-bottom: 0.5em;
+			float: left;
+			max-width: 420px;
+
+			.title {
+				font: normal 300 1.3em/1 $font;
+				color: $primary-grey;
+				overflow: hidden;
+				@include ellipsis();
+			}
+
+			.meta {
+				font: normal 600 0.6em/1 $font;
+				text-transform: uppercase;
+				color: $tertiary-grey;
+				margin-top: 1em;
+
+				span {
+					&.link { color: $primary-blue; cursor: pointer; }
+
+					&::before {
+						content: '\00B7';
+						margin: 0.5em;
 						color: $tertiary-grey;
 					}
-
-					&.active {
-						font-weight: 600;
-						text-decoration: underline;
+					&:first-of-type::before {
+						content: none;
 					}
 				}
 			}
+
+			&.hidden {
+				display: none;
+			}
+		}
+
+		.controls {
+			background: #fff;
+			border: 1px solid #e3e3e3;
+			border-radius: 3px;
+			white-space: nowrap;
+			line-height: 0;
+			position: absolute;
+			right: 15px;
+
+			.request, .export, .settings {
+				display: inline-block;
+				cursor: pointer;
+				width: 42px;
+				height: 36px;
+				overflow: hidden;
+				white-space: nowrap;
+
+				&.hidden {
+					display: none;
+				}
+			}
+
+			.request {
+				@include icon('mail', $position: relative, $top: 10px, $left: 10px);
+
+				&:hover {
+					@include icon('mail_hover', $position: relative, $top: 10px, $left: 10px);
+				}
+			}
+
+			.export {
+				@include icon('download', $position: relative, $top: 8px, $left: 10px);
+
+				&:hover {
+					@include icon('download_hover', $position: relative, $top: 8px, $left: 10px);
+				}
+			}
+
+			.settings {
+				@include icon('settings-28x17', $position: relative, $top: 9px, $left: 10px);
+
+				&:hover {
+					@include icon('settings-28x17_hover', $position: relative, $top: 9px, $left: 10px);
+				}
+			}
+		}
+
+		.page {
+			overflow: hidden;
+			display: inline-block;
+			line-height: 36px;
+			height: 65px;
+
+			.viewing {
+				cursor: pointer;
+				float: left;
+				width: 200px;
+				background-color: white;
+				border: 1px solid #e3e3e3;
+				border-radius: 3px;
+				font-weight: 400;
+				font-size: 0.875em;
+				color: $secondary-grey;
+				padding: 0 15px 0 10px;
+				
+				@include icon('mv-dropdown-arrow_hover', $position: relative, $side: after, $top: 16px, $left: auto, $right: 15px);
+
+				&:hover {
+					color: $primary-grey;
+					@include icon('mv-dropdown-arrow', $position: relative, $side: after, $top: 16px, $left: auto, $right: 15px);
+				}
+			}
+		}
+	}
+
+	td.page-row {
+		background-color: $panel-background;
+		text-align: center;
+		height: 60px;
+		color: $tertiary-grey;
+		font-size: 1.25em;
+		cursor: pointer;
+
+		@include icon('arrow-next_hover', $position: relative, $side: after);
+
+		&:hover {
+			color: $secondary-grey;
+
+			@include icon('arrow-next', $position: relative, $side: after);
+		}
+
+		&.nextPage {
+			padding-bottom: 20px;
+
+			&::after {
+				top: auto;
+				bottom: 10px;
+				left: 50%;
+				margin-left: -6px;
+				transform: rotate(90deg);
+			}
+
+			&::before {
+				content: '';
+				box-shadow: 0 -5px 15px 5px rgba(0,0,0,0.2);
+				position: absolute;
+				right: 0;
+				top: -100px;
+				left: 0;
+				height: 100px;
+				clip: rect(100px, auto, 150px, auto);
+				background: #dddddd;
+				border-radius: 40em / 10px;
+			}
+		}
+
+		&.prevPage {
+			padding-top: 20px;
+
+			&::after {
+				top: 10px;
+				left: 50%;
+				margin-left: -6px;
+				transform: rotate(-90deg);
+			}
+
+			&::before {
+				content: '';
+				box-shadow: 0 5px 15px 5px rgba(0,0,0,0.2);
+				position: absolute;
+				right: 0;
+				bottom: -100px;
+				left: 0;
+				height: 100px;
+				clip: rect(-10px, auto, 0px, auto);
+				background: #dddddd;
+				border-radius: 40em / 10px;
+			}
+		}
+	}
+}
+
+.course-assessment-header {
+	.admin-list-header {
+		padding: 0.5em 150px 0.5em 2em;
+
+		.controls {
+			top: 0.5em;
+			margin-top: 0;
+		}
+
+		.page {
+			float: right;
+			height: 40px;
+
+			.viewing {
+				width: 150px;
+			}
+		}
+	}
+}
+
+.course-assessment-admin {
+	.admin-list-header {
+		padding: 0 2em;
+
+		.controls {
+			top: 50%;
+			margin-top: -19px;//(36 + 2)/2 for the border
+		}
+
+		.page {
+			width: 615px;
+			padding: 15px 0;
 		}
 	}
 }

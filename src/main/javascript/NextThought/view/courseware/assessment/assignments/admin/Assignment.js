@@ -9,13 +9,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		'NextThought.view.courseware.assessment.admin.PagedGrid',
 		'NextThought.ux.FilterMenu',
 		'NextThought.proxy.courseware.PagedPageSource',
-		'NextThought.view.courseware.assessment.admin.Pager'
+		'NextThought.view.courseware.assessment.admin.ListHeader'
 	],
 
 	ui: 'course-assessment',
 	cls: 'course-assessment-header assignment-item',
 
-	layout: 'fit',
+	layout: 'anchor',
 	componentLayout: 'customtemplate',
 	childEls: ['body'],
 	getTargetEl: function() { return this.body; },
@@ -45,32 +45,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 				}
 			]
 		},
-		//header
-		{
-			cls: 'header',
-			cn: [
-				{ cls: 'controls', cn: [
-					//{ tag: 'a', href: '#', cls: 'reports', html: 'Reports'},
-					{
-						tag: 'a',
-						href: '{exportFilesLink}',
-						cls: 'download button hidden',
-						html: '{{{NextThought.view.courseware.assessment.assignments.admin.Assignment.download}}}'
-					},
-					{ tag: 'a', href: '#request_change', cls: 'email button', html: '{{{NextThought.view.courseware.assessment.assignments.admin.Assignment.request}}}'}
-				]},
-				{ cls: 'title', html: '{assignmentTitle}' },
-				{
-					cls: 'subtitle',
-					cn: [
-						{ tag: 'span', cls: 'due', html: '{{{NextThought.view.courseware.assessment.assignments.admin.Assignment.due}}}'},
-						{ tag: 'span', cls: 'toggle-avatar link enabled', html: 'Hide Avatars'},
-						{ tag: 'span', cls: 'link filters arrow'}
-					]
-				},
-				{ cls: 'pager-wrapper'}
-			]
-		},
 		{ id: '{id}-body', cls: 'x-panel-body body', cn: ['{%this.renderContainer(out,values)%}'] }
 	]),
 
@@ -91,15 +65,14 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	listeners: {
 		rootPathEl: { click: 'fireGoUp' },
 		previousEl: { click: 'firePreviousEvent' },
-		nextEl: { click: 'fireNextEvent' },
-		changeDateEl: { click: 'requestDateChange' },
-		filtersEl: { click: 'onFiltersClicked' }
+		nextEl: { click: 'fireNextEvent' }
 	},
 
 
 	items: [
+		{xtype: 'course-assessment-admin-listheader'},
 		{
-			anchor: '0 -115',
+			anchor: '0 -65',
 			xtype: 'course-admin-paged-grid',
 			cls: 'student-assignment-overview',
 			columnOrder: ['Student', 'Username', 'Completed', 'Grade', 'Feedback', 'Submission'],
@@ -147,6 +120,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		this.enableBubble(['show-assignment']);
 
 		var me = this,
+			pageHeader = me.down('course-assessment-admin-listheader'),
 			grid = me.down('grid'),
 			completed = grid && grid.down('[name=completed]');
 
@@ -180,7 +154,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 		$AppConfig.Preferences.getPreference('Gradebook')
 			.then(function(value) {
-				me.toggleAvatars(!value.get('hide_avatars'));
+				pageHeader.setAvatarToggle(!value.get('hide_avatars'));
 			});
 
 		if (me.extraParams) {
@@ -189,6 +163,17 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 		//load the store
 		me.store.load();
+
+		me.pageHeader = pageHeader;
+
+		me.pageHeader.setAssignment(me.assignment);
+		me.pageHeader.setRequestActive(true, getString('NextThought.view.courseware.assessment.assignments.admin.Assignment.request'));
+		me.pageHeader.bindStore(me.store);
+
+		me.mon(pageHeader, {
+			'toggle-avatars': 'toggleAvatars',
+			'request-change': 'requestDateChange'
+		});
 	},
 
 
@@ -198,19 +183,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 		this.callParent(arguments);
 
-		this.exportFilesLink = assignment.getLink('ExportFiles');
 		this.pathBranch = this.assignmentTitle;
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			pathRoot: this.pathRoot,
 			pathBranch: this.pathBranch,
-			assignmentTitle: this.assignmentTitle,
-			due: this.due,
-			page: this.pageSource.getPageNumber(),
-			exportFilesLink: this.exportFilesLink
+			page: this.pageSource.getPageNumber()
 		});
-
-		this.maybeShowDownload();
 	},
 
 
@@ -228,15 +207,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 		this.onPagerUpdate();
 
-		this.mon(this.avatarEl, 'click', 'toggleAvatarsClicked');
 
-		pager = Ext.widget('course-assessment-admin-pager', {
-			renderTo: this.pagerEl
-		});
-
-		this.on('destory', 'destory', pager);
-
-		pager.bindStore(this.store);
+		this.mon(this.pageHeader, 'showFilters', 'onFiltersClicked');
 	},
 
 
@@ -307,17 +279,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			return;
 		}
 
-		if (show) {
-			this.avatarEl.update('Hide Avatars');
-			this.avatarEl.removeCls('disabled');
-			this.avatarEl.addCls('enabled');
-			this.removeCls('hide-avatars');
-		} else {
-			this.avatarEl.update('Show Avatars');
-			this.avatarEl.removeCls('enabled');
-			this.avatarEl.addCls('disabled');
-			this.addCls('hide-avatars');
-		}
+		this[show ? 'removeCls' : 'addCls']('hide-avatars');
 
 		$AppConfig.Preferences.getPreference('Gradebook')
 			.then(function(value) {
@@ -333,8 +295,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			return;
 		}
 
-		this.filtersEl.update(this.filterMenu.getFilterLabel(this.store.getTotalCount()));
-		this.filtersEl.repaint();
+		this.pageHeader.updateFilterCount(this.filterMenu.getFilterLabel(this.store.getTotalCount()));
 	},
 
 
@@ -406,36 +367,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	},
 
 
-	maybeShowDownload: function() {
-		if (Ext.isEmpty(this.exportFilesLink)) {
-			return;
-		}
-
-		Ext.destroy(this._maybeShowDownload);
-		if (!this.rendered) {
-			this._maybeShowDownload = this.mon(this, {
-				destroyable: true, single: true,
-				afterRender: 'maybeShowDownload'
-			});
-			return;
-		}
-
-		var s = this.store;
-		if (s.getCount() === 0 || s.isLoading()) {
-			this.mon(s, {load: 'maybeShowDownload', single: true});
-			return;
-		}
-
-		//function hasSubmission(r) { return !!r.get('submission'); }
-		//if (s.getRange().filter(hasSubmission).length > 0) {
-
-		//the store is now buffered, and we cannot make this determination client side...
-		// so always show it even if there are no submissions ('cause we can't know if there are or not)
-		this.el.down('a.download').removeCls('hidden');
-		//}
-	},
-
-
 	requestDateChange: function(e) {
 		e.stopEvent();
 
@@ -457,8 +388,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	},
 
 
-	onFiltersClicked: function() {
-		this.filterMenu.showBy(this.filtersEl, 'tl-tl', [0, -39]);
+	onFiltersClicked: function(el) {
+		this.filterMenu.showBy(el, 'tl-tl', [0, -39]);
 	},
 
 

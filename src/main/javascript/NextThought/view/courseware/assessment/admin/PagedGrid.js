@@ -32,6 +32,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.PagedGrid', {
 		items: []
 	},
 
+	pageRowTpl: new Ext.XTemplate(Ext.DomHelper.markup({
+		tag: 'td', cls: '{cls} page-row', colspan: '{col}', html: '{start} - {end}'
+	})),
+
 	columnOrder: ['Student', 'Username', 'Completed', 'Grade'],
 
 	definedColumns: {
@@ -288,8 +292,149 @@ Ext.define('NextThought.view.courseware.assessment.admin.PagedGrid', {
 	afterRender: function() {
 		this.callParent(arguments);
 
+		var view = this.getView();
+
+		this.mon(view, 'refresh', 'setUpPageRows');
+
+		this.mon(this.el, 'click', 'maybeLoadPage');
+
 		this.monitorSubTree();
 	},
+
+
+	maybeLoadPage: function(e) {
+		var pageRow = e.getTarget('td.page-row');
+
+
+		if (!pageRow) { return; }
+
+		pageRow = Ext.get(pageRow);
+
+		if (pageRow.hasCls('nextPage')) {
+			this.loadNextPage();
+		} else if (pageRow.hasCls('prevPage')) {
+			this.loadPreviousPage();
+		}
+	},
+
+
+	loadPreviousPage: function() {
+		var current = parseInt(this.store.getCurrentPage());
+
+		if (current > 1) {
+			this.store.loadPage(current - 1);
+		}
+	},
+
+
+	loadNextPage: function() {
+		var current = parseInt(this.store.getCurrentPage()),
+			total = this.store.getTotalPages();
+
+		if (current < total) {
+			this.store.loadPage(current + 1);
+		}
+	},
+
+
+	setUpPageRows: function() {
+		var view = this.getView(),
+			store = this.store,
+			totalPage = store.getTotalPages(),
+			tbody = view.el.down('tbody');
+
+		if (!totalPage || !tbody) { return; }
+
+		this.addPrevRow(tbody);
+		this.addNextRow(tbody);
+	},
+
+
+	addPrevRow: function(tbody) {
+		var prevPageRow = tbody && tbody.down('tr.prevPage'),
+			currentPage = this.store.getCurrentPage(),
+			pageSize = this.store.pageSize,
+			prevPage = currentPage - 1, start, end;
+
+		//if the prev page is less than the first one
+		if (prevPage < 1) {
+			if (prevPageRow) {
+				tbody.removeChild(prevPageRow);
+			}
+
+			return;
+		}
+
+		//account for the 0 based index
+		start = ((prevPage - 1) * pageSize) + 1;
+		end = start + pageSize - 1;
+
+		//if theres isn't a prev row or the range is different from whats currently showing
+		if (!prevPageRow || (start !== this.prevStartIndex || end !== this.prevEndIndex)) {
+			if (prevPageRow) {
+				tbody.removeChild(prevPageRow);
+			}
+			//inset at the front
+			prevPageRow = tbody.dom.insertRow(0);
+
+			this.prevStartIndex = start;
+			this.prevEndIndex = end;
+
+			this.pageRowTpl.append(prevPageRow, {
+				cls: 'prevPage',
+				start: start,
+				end: end,
+				col: this.columns.length
+			});
+		}
+	},
+
+
+	addNextRow: function(tbody) {
+		var nextPageRow = tbody && tbody.down('tr.nextPage'),
+			currentPage = this.store.getCurrentPage(),
+			totalPages = this.store.getTotalPages(),
+			pageSize = this.store.pageSize,
+			totalCount = this.store.getTotalCount(),
+			currentPageSize = this.store.getCount(),
+			nextPage = currentPage + 1, start, end;
+
+		if (nextPage > totalPages) {
+			if (nextPageRow) {
+				tbody.removeChild(nextPageRow);
+			}
+
+			return;
+		}
+
+		start = ((nextPage - 1) * pageSize) + 1;
+		end = start + currentPageSize - 1;
+
+		//the end can't be more than the total
+		if (end > totalCount) {
+			end = totalCount;
+		}
+
+		//if there isn't a next row or the range is different from whats currently showing
+		if (!nextPageRow || (start !== this.nextStartIndex || end !== this.nextEndIndex)) {
+			if (nextPageRow) {
+				tbody.removeChild(nextPageRow);
+			}
+			//insert at the end
+			nextPageRow = tbody.dom.insertRow();
+
+			this.nextStartIndex = start;
+			this.nextEndIndex = end;
+
+			this.pageRowTpl.append(nextPageRow, {
+				cls: 'nextPage',
+				start: start,
+				end: end,
+				col: this.columns.length
+			});
+		}
+	},
+
 
 	markColumn: function(c) {
 		var cls = 'sortedOn', el = this.getEl();

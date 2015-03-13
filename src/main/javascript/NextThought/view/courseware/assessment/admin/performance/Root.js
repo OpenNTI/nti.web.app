@@ -9,7 +9,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 	requires: [
 		'NextThought.view.courseware.assessment.admin.PagedGrid',
-		'NextThought.view.courseware.assessment.admin.Pager'
+		'NextThought.view.courseware.assessment.admin.ListHeader'
 	],
 
 	__inputSelector: '.gradebox input',
@@ -40,29 +40,18 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 						},
 						{ cls: 'clear' }
 					] }
-				]},
-				{
-					cls: 'tools',
-					cn: [
-						{ tag: 'a', href: '{exportLink}', cls: 'download button', html: getString('NextThought.view.courseware.assessment.admin.performance.Root.export')},
-						{ cls: 'toggle-avatar enabled', html: 'Hide Avatars'}
-					]
-				}
+				]}
 			]},
 			renderSelectors: {
 				studentEl: '.student',
 				itemEl: '.item',
 				inputEl: '.search input',
-				clearEl: '.search .clear',
-				exportButton: 'a.download.button',
-				avatarEl: '.toggle-avatar',
-				previousPageEl: '.tools .pager .previous-page',
-				nextPageEl: '.tools .pager .next-page'
+				clearEl: '.search .clear'
 			}
 		},
-		{ xtype: 'course-assessment-admin-pager'},
+		{ xtype: 'course-assessment-admin-listheader'},
 		{
-			anchor: '0 -115',
+			anchor: '0 -90',
 			xtype: 'course-admin-paged-grid',
 			columnOrder: ['Student', 'Username', 'Grade'],
 			columnOverrides: {
@@ -101,13 +90,13 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		me.callParent(arguments);
 		me.supported = true;
 		me.grid = me.down('grid');
-		me.pager = me.down('course-assessment-admin-pager');
+		me.pageHeader = me.down('course-assessment-admin-listheader');
 		me.header = me.down('box');
 		me.createGradeMenu();
 
 		$AppConfig.Preferences.getPreference('Gradebook')
 			.then(function(value) {
-				me.toggleAvatars(!value.get('hide_avatars'));
+				me.pageHeader.setAvatarToggle(!value.get('hide_avatars'));
 			});
 	},
 
@@ -200,24 +189,20 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			this.removeCls('show-final-grade');
 		}
 
-		//if we have a gradebook and haven't set the export link yet
-		if (this.gradeBook && this.header.exportButton.el.getAttribute('href') === '{exportLink}') {
-			this.header.exportButton.set({
-				href: this.gradeBook.getLink('ExportContents')
-			});
-		}
+		this.updateExportEl(this.currentStudent);
 
 		this.mon(this.header, {
 			studentEl: {click: 'showStudentMenu', scope: this},
 			itemEl: {click: 'showItemMenu', scope: this},
 			inputEl: {keyup: 'changeNameFilter', scope: this, buffer: 350},
-			clearEl: {click: 'clearSearch', scope: this},
-			avatarEl: {click: 'toggleAvatarsClicked', scope: this}
+			clearEl: {click: 'clearSearch', scope: this}
 		});
 
 		this.mon(this.grid, {
 			cellclick: 'onCellClick'
 		});
+
+		this.mon(this.pageHeader, 'toggle-avatars', 'toggleAvatars');
 
 		if (!this.stateRestored) {
 			//bump this to the next event pump so the restore state has a chance to be called
@@ -226,10 +211,6 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 	//</editor-fold>
 
-	toggleAvatarsClicked: function(e) {
-		this.toggleAvatars(!e.getTarget('.enabled'));
-	},
-
 
 	toggleAvatars: function(show) {
 		if (!this.rendered) {
@@ -237,17 +218,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			return;
 		}
 
-		var avatarEl = this.header.avatarEl;
-
 		if (show) {
-			avatarEl.update('Hide Avatars');
-			avatarEl.removeCls('disabled');
-			avatarEl.addCls('enabled');
 			this.removeCls('hide-avatars');
 		} else {
-			avatarEl.update('Show Avatars');
-			avatarEl.removeCls('enabled');
-			avatarEl.addCls('disabled');
 			this.addCls('hide-avatars');
 		}
 
@@ -370,29 +343,22 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	updateExportEl: function(type) {
+
 		var gradebook = this.assignments.getGradeBook(),
+			url,
 			base = gradebook && gradebook.getLink('ExportContents');
 
-		if (!base || !this.header.exportButton) {
+		if (!base) {
+			this.pageHeader.setExportURL();
 			return;
 		}
 
-		/*if (type === 'all') {
-			this.header.exportButton.update('Export All Students');
-			this.header.exportButton.set({
-				href: base
-			});
-		} else*/
-		if (type === 'ForCredit') {
-			this.header.exportButton.update(getString('NextThought.view.courseware.assessment.admin.performance.Root.exportenrolled'));
-			this.header.exportButton.set({
-				href: base + '?LegacyEnrollmentStatus=ForCredit'
-			});
-		} else if (type === 'Open') {
-			this.header.exportButton.update(getString('NextThought.view.courseware.assessment.admin.performance.Root.exportopen'));
-			this.header.exportButton.set({
-				href: base + '?LegacyEnrollmentStatus=Open'
-			});
+		if (type === 'Open') {
+			url = base + '?LegacyEnrollmentStatus=Open';
+			this.pageHeader.setExportURL(url, getString('NextThought.view.courseware.assessment.admin.performance.Root.exportopen'));
+		} else {
+			url = base + '?LegacyEnrollmentStatus=ForCredit';
+			this.pageHeader.setExportURL(url, getString('NextThought.view.courseware.assessment.admin.performance.Root.exportenrolled'));
 		}
 	},
 
@@ -519,7 +485,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		//with out dealing with the store
 		// this.mon(this.store, 'load', 'syncStateToStore');
 
-		this.pager.bindStore(this.store);
+		this.pageHeader.bindStore(this.store);
 
 		this.grid.bindStore(this.store);
 
