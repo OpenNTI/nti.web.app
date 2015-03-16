@@ -237,7 +237,7 @@ Ext.define('NextThought.util.Analytics', {
 
 		this.maybePush(data);
 
-		if (doNotStartTimer) {
+		if (!doNotStartTimer) {
 			this.__maybeStartBatchTimer();
 		}
 
