@@ -120,7 +120,7 @@ Ext.define('NextThought.util.Analytics', {
 	endSession: function() {
 		this.closeOnGoing();
 
-		var collection = Service && Service.getWorkspace('Analytics'),
+		var collection = typeof Service === 'undefined' ? null : Service.getWorkspace('Analytics'),
 			links = collection && collection.Links,
 			link = links && Service.getLinkFrom(links, 'end_analytics_session'),
 			xmlhttp = new XMLHttpRequest();
