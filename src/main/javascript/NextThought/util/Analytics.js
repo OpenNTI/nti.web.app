@@ -4,6 +4,7 @@ Ext.define('NextThought.util.Analytics', {
 
 	requires: [
 		'NextThought.util.Globals',
+		'NextThought.util.Visibility',
 		'Ext.util.Cookies'
 	],
 
