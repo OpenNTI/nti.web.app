@@ -13,6 +13,15 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistory', {
 	},
 
 
+	addItem: function(key, item) {
+		var items = this.get('Items'),
+			index = items.length;
+
+		items.push(item);
+		items.INDEX_KEYMAP[key] = index;
+	},
+
+
 	statics: {
 		getEmpty: function() {
 			var e = this.create({lastViewed: new Date()});

@@ -269,14 +269,31 @@ Ext.define('NextThought.controller.Assessment', {
 		a.save({
 			url: Service.getObjectURL(assignmentId),
 			success: function(self, op) {
-				var result = op.getResultSet().records.first().get('parts').first();//hack
+				var collection = progress.assignmentsCollection,
+					pendingAssessment = op.getResultSet().records.first(),
+					update,
+					itemLink = pendingAssessment.getLink('AssignmentHistoryItem'),
+					result = pendingAssessment.get('parts').first();//hack?
 
 				safelyCall('unmask', widget);
 				safelyCall('setGradingResult', widget, result);
 
-				if (progress.instance) {
-					progress.bundleChanged(progress.instance);
+
+				if (itemLink && collection && collection.updateHistoryItem) {
+					update = Service.request(itemLink)
+						.then(function(response) {
+							return JSON.parse(response);
+						})
+						.then(collection.updateHistoryItem.bind(collection, assignmentId));
+				} else {
+					update = Promise.resolve();
 				}
+
+				update.always(function() {
+					if (progress.instance) {
+						progress.bundleChanged(progress.instance);
+					}
+				});
 			},
 			failure: function() {
 				console.error('FAIL', arguments);

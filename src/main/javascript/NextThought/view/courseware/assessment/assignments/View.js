@@ -363,7 +363,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 			var id = o.getId();
 
 			waitsOn.push(Promise.all([
-				assignments.getHistoryItem(id).fail(function() { return; }),
+				assignments.getHistoryItem(id, true).fail(function() { return; }),
 				assignments.getGradeBookEntry(id)
 			])
 				.then(function(results) {

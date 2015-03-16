@@ -45,5 +45,26 @@ Ext.define('NextThought.model.courses.assignments.StudentCollection', {
 
 					return Promise.reject();
 				});
+	},
+
+
+	/**
+	 * Update the history item in the cache with data
+	 * @param  {String} assignment id of the assignment to update
+	 * @param  {Object} data       data to update with
+	 */
+	updateHistoryItem: function(assignment, data) {
+		this.getHistory(true)
+			.then(function(history) {
+				var item = history.getItem(assignment);
+
+				if (item) {
+					item.raw = Ext.apply(item.raw || {}, data);
+					item.set(data);
+				} else {
+					item = ParseUtils.parseItems(data)[0];
+					history.addItem(assignment, item);
+				}
+			});
 	}
 });

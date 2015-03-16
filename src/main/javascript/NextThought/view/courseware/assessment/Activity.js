@@ -172,7 +172,8 @@ Ext.define('NextThought.view.courseware.assessment.Activity', {
 
 		assignments.each(collect);
 
-		assignments.getHistory()
+		//passed true so it uses the cached copy and doesn't make a needless request
+		assignments.getHistory(true)
 			.then(me.setLastReadFrom.bind(this));
 
 		return Promise.all(waitsOn);

@@ -236,7 +236,7 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 						return;
 					}
 
-					assignments.getHistory()
+					assignments.getHistory(true)
 						.then(function(history) {
 							try {
 								me.fireEvent('set-assignment-history', history);
