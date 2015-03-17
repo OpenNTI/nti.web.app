@@ -302,7 +302,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 			group = bar && bar.getGroupBy();
 
 		if (group) {
-			this.pushState({
+			this.replaceState({
 				group: group
 			});
 		}

@@ -121,13 +121,19 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		me.stateRestored = true;
 
-		me.currentStudent = storeState.student || 'ForCredit';
+		if (!state || !state.activeStudent) {
+			me.currentStudent = storeState.student || 'ForCredit';
+		}
 
 		me.currentItem = storeState.item || 'all';
 
 		params = me.__getParams();
 
 		store.proxy.extraParams = Ext.apply(store.proxy.extraParams || {}, params);
+
+		if (storeState.sortOn) {
+			store.sort(storeState.sortOn, storeState.sortDirection, null, false);
+		}
 
 		me.updateUIFromRestore();
 
@@ -139,18 +145,20 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 					fulfill();
 
+					me.currentPage = store.getCurrentPage();
+
 					me.maybeSwitchStudents();
 
 					me.initialLoad = true;
 				}
 			});
 
-			if (state && state.activeStudent) {
+			if (storeState.page) {
+				store.loadPage(parseInt(storeState.page, 10));
+			} else if (state && state.activeStudent) {
 				store.proxy.extraParams.batchAroundUsernameFilterByScope = state.activeStudent;
 
 				store.load();
-			} else if (storeState.page) {
-				store.loadPage(parseInt(storeState.page, 10));
 			} else {
 				store.loadPage(1);
 			}
@@ -483,7 +491,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		//Comment this out for now so we can test the state
 		//with out dealing with the store
-		// this.mon(this.store, 'load', 'syncStateToStore');
+		this.mon(this.store, 'load', 'syncStateToStore');
 
 		this.pageHeader.bindStore(this.store);
 
@@ -499,14 +507,26 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 
 	syncStateToStore: function() {
-		var state = {};
+		var state = {}, store = this.store,
+			page = store.getCurrentPage(),
+			sort = (store.getSorters() || [])[0];
 
-		//push the current page, student filter, and item filter to the state
-		state.page = this.store.currentPage || 1;
 		state.student = this.currentStudent || 'ForCredit';
 		state.item = this.currentItem || 'all';
 
-		this.pushState({rootStore: state});
+		if (sort) {
+			state.sortOn = sort.property;
+			state.sortDirection = sort.direction;
+		}
+
+		if (page !== this.currentPage && this.currentPage) {
+			state.page = page;
+			this.currentPage = page;
+
+			this.pushState({rootStore: state});
+		} else {
+			this.replaceState({rootStore: state});
+		}
 	},
 
 

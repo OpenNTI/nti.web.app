@@ -80,6 +80,13 @@ Ext.define('NextThought.view.courseware.assessment.admin.ListHeader', {
 
 		Ext.destroy(this.pageMenu);
 
+		//if there are not pages
+		if (!totalPages) {
+			this.startIndexEl.update('0');
+			this.endIndexEl.update('0');
+			this.totalEl.update('0');
+		}
+
 		for (i = 1; i <= totalPages; i++) {
 			start = ((i - 1) * pageSize) + 1;
 			end = start + pageSize - 1;

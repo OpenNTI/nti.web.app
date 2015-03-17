@@ -106,6 +106,23 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 	},
 
 
+	replaceState: function(view, values) {
+		var layout = this.body.getLayout(),
+			active = layout && layout.getActiveItem(),
+			state = this.__getState(view, values);
+
+		if (view === active && !this.restoringState && !this.stateSuspended) {
+			history.replaceState({
+				content: {
+					assignments: state
+				}
+			});
+		} else {
+			view.internalState = values;
+		}
+	},
+
+
 	pushAssignment: function(student, assignment, view) {
 		var layout = this.body.getLayout(),
 			active = view || (layout && layout.getActiveItem());
@@ -127,6 +144,10 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 		if (!item.pushState) {
 			item.pushState = this.pushState.bind(this, item);
+		}
+
+		if (!item.replaceState) {
+			item.replaceState = this.replaceState.bind(this, item);
 		}
 
 		if (!item.suspendState) {

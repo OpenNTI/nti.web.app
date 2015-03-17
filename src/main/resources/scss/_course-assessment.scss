@@ -546,7 +546,7 @@ canvas.x-component-course-assessment {
 			max-width: 420px;
 
 			.title {
-				font: normal 300 1.3em/1 $font;
+				font: normal 300 1.3em/1.5 $font;
 				color: $primary-grey;
 				overflow: hidden;
 				@include ellipsis();

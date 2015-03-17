@@ -161,9 +161,6 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			me.store.proxy.extraParams = Ext.apply(me.store.proxy.extraParams || {}, me.extraParams);
 		}
 
-		//load the store
-		me.store.load();
-
 		me.pageHeader = pageHeader;
 
 		me.pageHeader.setAssignment(me.assignment);
@@ -173,6 +170,63 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		me.mon(pageHeader, {
 			'toggle-avatars': 'toggleAvatars',
 			'request-change': 'requestDateChange'
+		});
+	},
+
+
+	restoreState: function(state, fromAfterRender) {
+		var me = this,
+			store = me.store,
+			params = store.proxy.extraParams,
+			storeState = (state && state.store) || {};
+
+		//if this is coming form after render and we've already restored
+		//a state don't overwrite it. The main reason this is here is so
+		//if they hit the back button the component is already rendered with
+		//a state so we want to override it, but if we are coming from after
+		//render we don't want to override a previous state.
+		if (fromAfterRender && me.stateRestored) {
+			return;
+		}
+
+
+		me.stateRestored = true;
+
+		if (!state || !state.activeStudent) {
+			params.filter = storeState.currentStudent || 'ForCredit';
+		} else {
+			delete params.filter;
+		}
+
+		if (storeState.sortOn) {
+			store.sort(storeState.sortOn, storeState.sortDirection, null, false);
+		}
+
+		return new Promise(function(fulfill, reject) {
+			me.mon(store, {
+				single: true,
+				'records-filled-in': function() {
+					delete store.proxy.extraParams.batchAroundUsernameFilterByScope;
+
+					fulfill();
+
+					me.currentPage = store.getCurrentPage();
+
+					me.maybeSwitch();
+
+					me.initialLoad = true;
+				}
+			});
+
+			if (state && state.activeStudent) {
+				store.proxy.extraParams.batchAroundUsernameFilterByScope = state.activeStudent;
+
+				store.load();
+			} else if (storeState.page) {
+				store.loadPage(parseInt(storeState.page, 10));
+			} else {
+				store.loadPage(1);
+			}
 		});
 	},
 
@@ -207,8 +261,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 		this.onPagerUpdate();
 
-
 		this.mon(this.pageHeader, 'showFilters', 'onFiltersClicked');
+
+
+		if (!this.stateRestored) {
+			//bump this to the next event pump so the restore state has a chance to be called
+			wait().then(this.restoreState.bind(this, {}, true));
+		}
 	},
 
 
@@ -218,7 +277,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			return;
 		}
 
-		var filter = this.currentFilter || 'ForCredit',
+		var filter = this.store.getEnrollmentScope(),
 			search = this.searchTerm;
 
 		this.updateColumns(filter);
@@ -363,7 +422,27 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		this.syncFilterToUI();
 		this.unmask();
 
-		delete this.store.proxy.extraParams.batchAroundUsernameFilterByScope;
+		var state = {}, store = this.store,
+			page = store.getCurrentPage();
+			sort = (store.getSorters() || [])[0];
+
+		delete store.proxy.extraParams.batchAroundUsernameFilterByScope;
+
+		state.currentStudent = store.getEnrollmentScope();
+
+		if (sort) {
+			state.sortOn = sort.property;
+			state.sortDirection = sort.direction;
+		}
+
+		if (page !== this.currentPage && this.currentPage) {
+			state.page = page;
+			this.currentPage = page;
+
+			this.pushState({store: state});
+		} else {
+			this.replaceState({store: state});
+		}
 	},
 
 

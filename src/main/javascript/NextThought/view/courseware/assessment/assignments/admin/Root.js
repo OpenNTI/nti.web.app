@@ -113,7 +113,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 				}
 
 				//if the store hasn't loaded yet wait until it does
-				if (store.loading) {
+				if (store.loading || !store.getCount()) {
 					me.mon(store, {
 						single: true,
 						load: function(store, records, success) {

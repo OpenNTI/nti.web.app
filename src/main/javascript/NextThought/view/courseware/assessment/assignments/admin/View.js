@@ -20,7 +20,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.View', {
 		return root.restoreState(state)
 			.then(function() {
 				if (state && state.activeAssignment) {
-					me.restoreToAssignment(state.activeAssignment, state.activeStudent);
+					me.restoreToAssignment(state.activeAssignment, state.activeStudent, state);
 				} else {
 					me.showRoot();
 					me.fireEvent('close-reader');
@@ -29,14 +29,9 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.View', {
 	},
 
 
-	restoreToAssignment: function(assignment, student) {
-		var record, view, params;
-
-		if (student) {
-			params = {
-				batchAroundUsernameFilterByScope: student
-			};
-		}
+	restoreToAssignment: function(assignment, student, state) {
+		var me = this,
+			record, view, params;
 
 		record = this.store.findBy(function(rec) {
 			var item = rec.get('item');
@@ -47,13 +42,18 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.View', {
 		if (record >= 0) {
 			record = this.store.getAt(record);
 
-			view = this._doShowAssignment(record, params);
+			view = this._doShowAssignment(record);
 		}
 
-		if (view && student) {
-			view.restoreStudent(student);
-		} else {
-			this.fireEvent('close-reader');
+		if (view) {
+			view.restoreState(state)
+				.then(function() {
+					if (student) {
+						view.restoreStudent(student);
+					} else {
+						me.fireEvent('close-reader');
+					}
+				});
 		}
 	},
 
@@ -69,7 +69,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.View', {
 	setAssignmentsData: function(assignments) {
 		this.clearAssignmentsData();
 
-		var root = this.add({ xtype: 'course-assessment-admin-assignments-root', pushState: this.pushState }),
+		var root = this.add({ xtype: 'course-assessment-admin-assignments-root', pushState: this.pushState, replaceState: this.replaceState }),
 			p = root.setAssignmentsData.apply(root, arguments);
 
 		this.pushState({
@@ -135,6 +135,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.View', {
 			due: rec.get('due'),
 			assignment: assignment,
 			assignments: this.assignments,
+			pushState: this.pushState,
+			replaceState: this.replaceState,
 			extraParams: extraParams,
 			pageSource: NextThought.util.PageSource.create({
 				store: this.store,
