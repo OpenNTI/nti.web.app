@@ -450,9 +450,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	},
 
 
-	__getParams: function() {
-		var filters = [],
-			params = {};
+	__getParams: function(params) {
+		params = params || {};
+
+		var filters = [];
 
 		filters.push(this.currentStudent || 'ForCredit');
 
@@ -474,9 +475,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 	updateFilter: function() {
 		var s = this.store,
-			params = this.__getParams();
+			params = this.__getParams(s.proxy.extraParams);
 
-		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, params);
+		s.proxy.extraParams = params;
 
 		s.load();
 	},
