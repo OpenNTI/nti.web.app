@@ -133,7 +133,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		store.proxy.extraParams = Ext.apply(store.proxy.extraParams || {}, params);
 
 		if (storeState.pageSize) {
-			store.pageSize = storeState.pageSize;
+			store.setPageSize(storeState.pageSize);
 		}
 
 		if (storeState.sortOn) {

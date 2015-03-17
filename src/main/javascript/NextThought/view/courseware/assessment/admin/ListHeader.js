@@ -217,7 +217,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.ListHeader', {
 
 		var size = item.size;
 
-		this.store.pageSize = size;
+		this.store.setPageSize(size);
 
 		this.loadPage(1);
 	},

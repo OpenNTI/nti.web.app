@@ -1,4 +1,4 @@
-/*globals User*/
+/*globals User, PersistentStorage*/
 Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 	extend: 'Ext.data.Store',
 
@@ -7,6 +7,7 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 	remoteSort: true,
 
 	pageSize: 50,
+	PAGE_SIZE_KEY: 'summary-page-size',
 
 	proxy: {
 		type: 'ajax',
@@ -78,12 +79,25 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 		this.proxy = Ext.clone(this.proxy);//get a local instance copy
 		this.callParent(arguments);
 
+		var size = PersistentStorage.get(this.PAGE_SIZE_KEY);
+
+		if (size) {
+			this.pageSize = size;
+		}
+
 		if (this.url) {
 			this.proxy.url = this.url;
 			delete this.url;
 		}
 
 		this.on('load', '__onRecordsLoaded');
+	},
+
+
+	setPageSize: function(size) {
+		this.pageSize = size;
+
+		PersistentStorage.set(this.PAGE_SIZE_KEY, size);
 	},
 
 

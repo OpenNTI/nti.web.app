@@ -199,7 +199,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		}
 
 		if (storeState.pageSize) {
-			store.pageSize = storeState.pageSize;
+			store.setPageSize(storeState.pageSize);
 		}
 
 		if (storeState.sortOn) {
