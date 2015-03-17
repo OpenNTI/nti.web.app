@@ -121,6 +121,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		me.stateRestored = true;
 
+		//if we have an active student don't at the scope filter
 		if (!state || !state.activeStudent) {
 			me.currentStudent = storeState.student || 'ForCredit';
 		}
@@ -133,6 +134,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		if (storeState.sortOn) {
 			store.sort(storeState.sortOn, storeState.sortDirection, null, false);
+		}
+
+		//if we have an active student set the current scope filter so the UI will sync properly
+		if (state && state.activeStudent) {
+			me.currentStudent = storeState.student || 'ForCredit';
 		}
 
 		me.updateUIFromRestore();
