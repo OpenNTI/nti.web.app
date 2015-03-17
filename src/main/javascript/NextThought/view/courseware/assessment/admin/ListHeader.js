@@ -190,8 +190,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.ListHeader', {
 	},
 
 
-	showRequestChange: function() {
-		this.fireEvent('request-change');
+	showRequestChange: function(e) {
+		this.fireEvent('request-change', e);
 	},
 
 
