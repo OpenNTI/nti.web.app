@@ -132,6 +132,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		store.proxy.extraParams = Ext.apply(store.proxy.extraParams || {}, params);
 
+		if (storeState.pageSize) {
+			store.pageSize = storeState.pageSize;
+		}
+
 		if (storeState.sortOn) {
 			store.sort(storeState.sortOn, storeState.sortDirection, null, false);
 		}
@@ -518,6 +522,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			page = store.getCurrentPage(),
 			sort = (store.getSorters() || [])[0];
 
+		state.pageSize = store.pageSize;
 		state.student = this.currentStudent || 'ForCredit';
 		state.item = this.currentItem || 'all';
 

@@ -106,7 +106,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.ListHeader', {
 				xtype: 'menucheckitem',
 				height: 30,
 				plain: true,
-				group: 'currentPage',
+				group: 'currentPage' + this.id,
 				text: start + ' - ' + end + ' (' + totalCount + ')',
 				page: i,
 				checked: currentPage === i,
@@ -145,7 +145,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.ListHeader', {
 				xtype: 'menucheckitem',
 				height: 30,
 				plain: true,
-				group: 'pageSize',
+				group: 'pageSize' + me.id,
 				text: size + ' Students per page',
 				size: size,
 				checked: size === pageSize,
@@ -241,6 +241,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.ListHeader', {
 		if (!this.store || !this.rendered) { return; }
 
 		this.buildPageMenu();
+		this.buildSettingsMenu();
 	},
 
 

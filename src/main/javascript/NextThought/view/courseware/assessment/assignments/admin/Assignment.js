@@ -198,6 +198,10 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			delete params.filter;
 		}
 
+		if (storeState.pageSize) {
+			store.pageSize = storeState.pageSize;
+		}
+
 		if (storeState.sortOn) {
 			store.sort(storeState.sortOn, storeState.sortDirection, null, false);
 		}
@@ -423,12 +427,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		this.unmask();
 
 		var state = {}, store = this.store,
-			page = store.getCurrentPage();
+			page = store.getCurrentPage(),
 			sort = (store.getSorters() || [])[0];
 
 		delete store.proxy.extraParams.batchAroundUsernameFilterByScope;
 
 		state.currentStudent = store.getEnrollmentScope();
+		state.pageSize = store.pageSize;
 
 		if (sort) {
 			state.sortOn = sort.property;
