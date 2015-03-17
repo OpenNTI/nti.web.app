@@ -483,7 +483,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 
 		s.proxy.extraParams = params;
 
-		s.load();
+		s.loadPage(1);
 	},
 
 

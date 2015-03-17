@@ -512,7 +512,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			delete params.search;
 		}
 
-		s.load();
+		s.loadPage(1);
 	},
 
 
