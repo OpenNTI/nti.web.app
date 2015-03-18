@@ -52,7 +52,6 @@ Ext.application({
 		'CourseWare',
 		'FilterControl',
 		'Forums',
-		'Google',
 		'Groups',
 		'Library',
 		'Navigation',
@@ -146,15 +145,7 @@ Ext.application({
 
 		Globals.loadScript(getURL('/socket.io/static/socket.io.js'));
 
-		g = me.getController('Google');
-
-
-		if (g.isHangout()) {
-			g.onHangoutReady(start);
-		}
-		else {
-			start();
-		}
+		start();
 	}
 });
 

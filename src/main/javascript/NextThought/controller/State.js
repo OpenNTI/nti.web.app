@@ -155,7 +155,6 @@ PREVIOUS_STATE = 'previous-state';
 
 			this.currentState = {};
 
-			this.isHangout = this.getController('Google').isHangout();
 
 			this.listen({
 				component: {
@@ -570,7 +569,7 @@ PREVIOUS_STATE = 'previous-state';
 
 		//<editor-fold desc="Handlers">
 		onPopState: function(e) {
-			if (!NextThought.isInitialized || this.isHangout) {
+			if (!NextThought.isInitialized) {
 				return;
 			}
 			var s = e ? e.state : null;
@@ -724,11 +723,6 @@ PREVIOUS_STATE = 'previous-state';
 
 
 		loadState: function() {
-			if (this.isHangout) {
-				console.info('Setting up state for Hangout...');
-				return {};
-			}
-
 			var defaultState = this.buildDefaultState(),
 				lastLocation,
 				previousState,
