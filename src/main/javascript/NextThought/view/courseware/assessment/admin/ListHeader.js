@@ -37,11 +37,16 @@ Ext.define('NextThought.view.courseware.assessment.admin.ListHeader', {
 			]},
 			{cls: 'page', cn: [
 				{cls: 'viewing', cn: [
-					{tag: 'span', cls: 'startIndex', html: '{startIndex}'},
-					' - ',
-					{tag: 'span', cls: 'endIndex', html: '{endIndex}'},
-					' of ',
-					{tag: 'span', cls: 'total', html: '{total}'}
+					{cls: 'count', cn: [
+						{tag: 'span', cls: 'startIndex', html: '{startIndex}'},
+						' - ',
+						{tag: 'span', cls: 'endIndex', html: '{endIndex}'},
+						' of ',
+						{tag: 'span', cls: 'total', html: '{total}'}
+					]},
+					{cls: 'empty', cn: [
+						'0 of 0'
+					]}
 				]}
 			]}
 		]}
@@ -93,9 +98,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.ListHeader', {
 
 		//if there are not pages
 		if (!totalPages) {
-			this.startIndexEl.update('0');
-			this.endIndexEl.update('0');
-			this.totalEl.update('0');
+			this.viewingEl.addCls('empty');
+		} else {
+			this.viewingEl.removeCls('empty');
 		}
 
 		for (i = 1; i <= totalPages; i++) {
@@ -206,8 +211,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.ListHeader', {
 	},
 
 
-	showPageMenu: function() {
-		if (!this.pageMenu) { return; }
+	showPageMenu: function(e) {
+		if (!this.pageMenu || e.getTarget('.empty')) { return; }
 
 		this.pageMenu.showBy(this.viewingEl, 'tr-br');
 	},

@@ -641,6 +641,30 @@ canvas.x-component-course-assessment {
 				font-size: 0.875em;
 				color: $secondary-grey;
 				padding: 0 15px 0 10px;
+
+				.empty {
+					display: none;
+				}
+
+				&.empty {
+					cursor: default;
+
+					.empty {
+						display: block;
+					}
+
+					.count {
+						display: none;
+					}
+
+					&:hover {
+						color: $secondary-grey;
+					}
+
+					&::after {
+						display: none;
+					}
+				}
 				
 				@include icon('mv-dropdown-arrow_hover', $position: relative, $side: after, $top: 16px, $left: auto, $right: 15px);
 
