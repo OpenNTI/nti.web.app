@@ -237,10 +237,11 @@ Ext.define('NextThought.view.content.notepad.View', {
 
 	//<editor-fold desc="Synchronizing Handlers">
 	syncHight: function() {
-		var reader = this.getReaderRef();
+		var reader = this.getReaderRef(),
+			iFrame = reader && reader.getIframe().get();
 
 		if (reader) {
-			this.scroller.setHeight(reader.getIframe().get().getHeight());
+			this.scroller.setHeight(iFrame && iFrame.getHeight());
 		}
 	},
 

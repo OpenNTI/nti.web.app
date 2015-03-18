@@ -147,6 +147,15 @@ Ext.define('NextThought.view.assessment.Parts', {
 	},
 
 
+	showQuestionSetWithAnswers: function() {
+		var parts = this.query('[markSubmitted]');
+		Ext.each(parts, function(part) {
+			part.setSubmitted();
+			part.markSubmitted();
+		});
+	},
+
+
 	afterRender: function() {
 		this.callParent(arguments);
 		var me = this;

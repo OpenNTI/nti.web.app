@@ -113,5 +113,23 @@ Ext.define('NextThought.view.courseware.assessment.reader.Panel', {
 
 		r.getContentMaskTarget().mask('Loading...', 'navigation');
 		r.setLocation(this.location, done, true, container.currentBundle);
+	},
+
+
+	getReaderAssessment: function() {
+		var me = this, r;
+		return new Promise(function(fulfill, reject) {
+			if (!me.rendered) {
+				me.on('afterrender', function() {
+					r = me.down('reader-content');
+					fulfill(r && r.getAssessment());
+				});
+
+				return;
+			}
+
+			r = me.down('reader-content');
+			fulfill(r && r.getAssessment());
+		});
 	}
 });

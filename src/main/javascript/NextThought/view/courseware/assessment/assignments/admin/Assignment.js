@@ -268,6 +268,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 		this.onPagerUpdate();
 
 		this.mon(this.pageHeader, 'showFilters', 'onFiltersClicked');
+		this.mon(this.pageHeader, 'goToRawAssignment', 'goToRawAssignment');
 
 
 		if (!this.stateRestored) {
@@ -609,5 +610,20 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 		return container.rootContainerShowAssignment(this, this.assignment, historyItem, student, path, pageSource);
 		// this.fireEvent('show-assignment', this, this.assignment, record, student, path, pageSource);
+	},
+
+
+	goToRawAssignment: function() {
+		var student = $AppConfig.userObject,
+			historyItem = null,
+			path = [
+				this.pathRoot,
+				this.pathBranch,
+				student.toString()
+			],
+			container = this.up('[rootContainerShowAssignment]'),
+			pageSource = null;
+
+		return container.rootContainerShowAssignment(this, this.assignment, historyItem, student, path, pageSource, true);
 	}
 });

@@ -16,11 +16,13 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 			cls: 'toolbar',
 			cn: [
 				{ cls: 'right controls', cn: [
-					{ cls: 'page', cn: [
-						{ tag: 'span', cls: 'currentPage', html: '{page}'}, ' of ', {tag: 'span', cls: 'total', html: '{total}'}
-					] },
-					{ cls: 'up {noPrev:boolStr("disabled")}' },
-					{ cls: 'down {noNext:boolStr("disabled")}' }
+					{ tag: 'tpl', 'if': 'showPaging', cn: [
+						{ cls: 'page', cn: [
+							{ tag: 'span', cls: 'currentPage', html: '{page}'}, ' of ', {tag: 'span', cls: 'total', html: '{total}'}
+						] },
+						{ cls: 'up {noPrev:boolStr("disabled")}' },
+						{ cls: 'down {noNext:boolStr("disabled")}' }
+					]}
 				] },
 				//path (bread crumb)
 				{
@@ -107,16 +109,22 @@ Ext.define('NextThought.view.courseware.assessment.Header', {
 
 		me.renderData = Ext.apply(me.renderData || {}, {
 			path: me.path || [],
-			page: me.pageSource.getPageNumber(),
-			total: me.pageSource.getTotal(),
-			noNext: !me.pageSource.hasNext(),
-			noPrev: !me.pageSource.hasPrevious(),
 			excused: me.__getExcusedTpl()
 		});
 
-		me.onPagerUpdate();
+		if (me.pageSource) {
+			me.renderData = Ext.apply(me.renderData || {}, {
+				page: me.pageSource.getPageNumber(),
+				total: me.pageSource.getTotal(),
+				noNext: !me.pageSource.hasNext(),
+				noPrev: !me.pageSource.hasPrevious(),
+				showPaging: true
+			});
 
-		me.mon(me.pageSource, 'update', 'onPagerUpdate');
+			me.onPagerUpdate();
+
+			me.mon(me.pageSource, 'update', 'onPagerUpdate');
+		}
 
 		me.on({
 			pathEl: {

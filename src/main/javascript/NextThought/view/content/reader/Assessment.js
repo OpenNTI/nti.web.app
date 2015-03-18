@@ -98,6 +98,11 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 		} else if (this.injectedSavePoint) {
 			this.submission.setFromSavePoint(this.injectedSavePoint);
 		}
+
+		if (this.instructorRawAssignment) {
+			this.submission.disableView();
+			set.fireEvent('instructor-show-solutions');
+		}
 	},
 
 

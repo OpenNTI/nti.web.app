@@ -131,7 +131,7 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 	},
 
 
-	showAssignment: function(view, assignment, assignmentHistory, student, path, pageSource) {
+	showAssignment: function(view, assignment, assignmentHistory, student, path, pageSource, isInstructorProspective) {
 		var me = this, time, root = me.getRoot(),
 			active = me._showAssignmentPromise || Promise.resolve();
 
@@ -188,6 +188,14 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 								'goup': 'showRoot',
 								'removed-placeholder': me.showAssignment.bind(me, view, assignment, assignmentHistory, student, path, pageSource)
 							});
+
+							// Note: if we don't have a history item and it's an instructor, show the raw assignment
+							if (!assignmentHistory && isInstructorProspective && reader.getReaderAssessment) {
+								reader.getReaderAssessment()
+									.then(function(assignmentCmp) {
+										assignmentCmp.instructorRawAssignment = true;
+									});
+							}
 
 							return reader;
 						})

@@ -28,6 +28,9 @@ Ext.define('NextThought.view.courseware.assessment.admin.ListHeader', {
 				{cls: 'meta', cn: [
 					{tag: 'span', cls: 'due link', html: '{assignmentDue}'},
 					{tag: 'span', cls: 'filter link arrow', html: ''}
+				]},
+				{cls: 'extras', cn: [
+					{tag: 'span', cls: 'link raw', html: 'View Raw Assignment'}
 				]}
 			]},
 			{cls: 'controls', cn: [
@@ -64,7 +67,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.ListHeader', {
 		viewingEl: '.page .viewing',
 		startIndexEl: '.page .viewing .startIndex',
 		endIndexEl: '.page .viewing .endIndex',
-		totalEl: '.page .viewing .total'
+		totalEl: '.page .viewing .total',
+		viewAssignmentEl: '.extras .raw'
 	},
 
 
@@ -82,6 +86,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.ListHeader', {
 		this.mon(this.requestEl, 'click', 'showRequestChange');
 		this.mon(this.viewingEl, 'click', 'showPageMenu');
 		this.mon(this.filterEl, 'click', this.fireEvent.bind(this, 'showFilters', this.filterEl));
+		this.mon(this.viewAssignmentEl, 'click', this.fireEvent.bind(this, 'goToRawAssignment'));
 	},
 
 

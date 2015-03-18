@@ -45,7 +45,8 @@ Ext.define('NextThought.view.assessment.Question', {
 				'set-progress': this.updateWithProgress,
 				'reset': this.reset,
 				'reapply-progress': this.reapplyProgress,
-				'instructor-reset': this.instructorReset
+				'instructor-reset': this.instructorReset,
+				'instructor-show-solutions': this.showInstructorSolutions
 			});
 		}
 		this.mon(this, {
@@ -151,7 +152,7 @@ Ext.define('NextThought.view.assessment.Question', {
 				'false': 'markIncorrect'
 			};
 
-		if (assessedQuestionSet.isSet) {
+		if (assessedQuestionSet && assessedQuestionSet.isSet) {
 			Ext.each(assessedQuestionSet.get('questions'), function(i) {
 				if (i.getId() === id || i.get('questionId') === id) {
 					q = i;
@@ -171,7 +172,7 @@ Ext.define('NextThought.view.assessment.Question', {
 		if (!fn[correct]) {
 			correct = 'null';
 		}
-		this[fn[correct]](assessedQuestionSet.noMark);
+		this[fn[correct]](assessedQuestionSet && assessedQuestionSet.noMark);
 
 		this.down('question-parts').updateWithResults(q);
 	},
@@ -324,6 +325,11 @@ Ext.define('NextThought.view.assessment.Question', {
 	instructorReset: function() {
 		this.down('question-header').reset();
 		this.down('question-parts').instructorReset();
+	},
+
+
+	showInstructorSolutions: function() {
+		this.down('question-parts').showQuestionSetWithAnswers();
 	},
 
 
