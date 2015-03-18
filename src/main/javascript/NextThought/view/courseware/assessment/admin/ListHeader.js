@@ -6,6 +6,17 @@ Ext.define('NextThought.view.courseware.assessment.admin.ListHeader', {
 		'NextThought.view.menus.LabeledSeparator'
 	],
 
+
+	statics: {
+		setPageSize: function(size) {
+			var instances = Ext.ComponentQuery.query(this.xtype) || [];
+
+			instances.forEach(function(instance) {
+				instance.setPageSize(parseInt(size, 10));
+			});
+		}
+	},
+
 	cls: 'admin-list-header',
 
 	PAGE_SIZES: [50, 75, 100],
@@ -217,6 +228,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.ListHeader', {
 
 		var size = item.size;
 
+		this.setPageSize(size);
+	},
+
+
+	setPageSize: function(size) {
 		this.store.setPageSize(size);
 
 		this.loadPage(1);
