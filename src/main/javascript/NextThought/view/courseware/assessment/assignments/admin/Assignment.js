@@ -198,6 +198,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			delete params.filter;
 		}
 
+		this.currentFilter = storeState.currentStudent || 'ForCredit';
+
 		if (storeState.pageSize) {
 			store.setPageSize(storeState.pageSize);
 		}
