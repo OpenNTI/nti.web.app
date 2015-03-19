@@ -25,7 +25,7 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 	tpl: Ext.DomHelper.markup([
 		{ cls: 'new-root'},
 		{ tag: 'tpl', 'for': '.', cn: [
-			{ cls: 'topic-comment-container {[values.threadShowing? "expanded" : "collapsed"]}', 'data-depth': '{depth}', tabindex: -1, cn: [
+			{ cls: 'topic-comment-container {[values.threadShowing ? "expanded" : "collapsed"]}', 'data-depth': '{depth}', tabindex: -1, cn: [
 				{ tag: 'tpl', 'if': 'Deleted', cn: {
 					cls: 'topic-comment placeholder {[values.threadShowing? "expanded" : "collapsed"]}',
 					'data-depth': '{depth}',
@@ -41,7 +41,7 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 					]
 				}},
 				{ tag: 'tpl', 'if': '!Deleted', cn: {
-					cls: 'topic-comment {[values.threadShowing? "expanded" : "collapsed"]} {[values.depth === 0? "toggle" : ""]}',
+					cls: 'topic-comment {[values.threadShowing ? "expanded" : "collapsed"]} {[values.depth === 0 && values.ReferencedByCount > 0 ? "toggle" : ""]}',
 					'data-depth': '{depth}',
 					cn: [
 						{ cls: 'controls', cn: [
@@ -62,7 +62,7 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 							{ cls: 'body', html: '{bodyContent}'},
 							{ cls: 'foot', cn: [
 								{ tag: 'tpl', 'if': 'depth === 0', cn: [
-									{ tag: 'span', cls: 'comments toggle {[values.ReferencedByCount > 0 ? "link" : ""]}', html: '{ReferencedByCount:plural("Comment")}'}
+									{ tag: 'span', cls: 'comments  {[values.ReferencedByCount > 0 ? "link toggle" : ""]}', html: '{ReferencedByCount:plural("Comment")}'}
 								]},
 								{ tag: 'span', cls: 'reply thread-reply link', html: '{{{NextThought.view.forums.topic.parts.Comments.reply}}}'},
 								{ tag: 'tpl', 'if': 'isModifiable', cn: [
