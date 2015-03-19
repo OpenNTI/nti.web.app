@@ -30,7 +30,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.ListHeader', {
 					{tag: 'span', cls: 'filter link arrow', html: ''}
 				]},
 				{cls: 'extras', cn: [
-					{tag: 'span', cls: 'link raw', html: 'View Raw Assignment'}
+					{tag: 'span', cls: 'link raw', html: '{{{NextThought.view.courseware.assessment.admin.ListHeader.rawAssignment}}}'}
 				]}
 			]},
 			{cls: 'controls', cn: [
