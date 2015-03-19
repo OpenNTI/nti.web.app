@@ -462,7 +462,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 
 	restoreState: function(state) {
-		if (!state) { reutrn; }
+		if (!state) { return; }
 
 		var me = this,
 			bar = me.getFilterBar();
