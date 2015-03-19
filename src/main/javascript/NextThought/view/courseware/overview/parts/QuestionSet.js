@@ -261,7 +261,7 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 
 		//console.log('navigate to', this.getContainerId());
 		if (this.assignment) {
-			this.fireEvent('navigate-to-assignment', this.assignmentId);
+			this.fireEvent('navigate-to-assignment', this.assignmentId, $AppConfig.userObject);
 			return;
 		}
 		this.fireEvent('set-location-rooted', this.getContainerId(), null, null, bundle);

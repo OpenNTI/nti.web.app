@@ -93,6 +93,12 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 		assignmentView = view && view.down('course-assessment-admin-assignments-item');
 
 		if (user && assignmentView) {
+			if (isMe(user)) {
+				assignmentView.goToRawAssignment();
+				return;
+			}
+
+
 			mask(true);
 
 			store = assignmentView.store;
