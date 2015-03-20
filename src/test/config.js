@@ -9,6 +9,7 @@ var $AppConfig = {
 		host: location.toString().split(/[?#]/)[0].split('/').slice(0, -1).join('/') + (window.testRoot || '/') + 'mock',
 		data: '/dataserver/'
 	},
+	activity_timeouts: {inactive_timeout: 900, inactive_warn: 720, blur_timeout: 900, blur_warn: 0},
 	Preferences: {
 		getPreference: function(key, cb, scope) {
 			if (cb && cb.call) {

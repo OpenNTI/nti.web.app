@@ -41,7 +41,6 @@ Ext.application({
 		'CourseWare',
 		'FilterControl',
 		'Forums',
-		'Google',
 		'Groups',
 		'Navigation',
 		'Notifications',
