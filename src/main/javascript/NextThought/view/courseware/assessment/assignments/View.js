@@ -512,6 +512,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 	},
 
 
+	popStateForAssignment: function() {
+		this.pushState({
+			activeAssignment: null
+		});
+	},
+
+
 	showAssignment: function(assignment) {
 		var id = assignment && ((assignment.getId && assignment.getId()) || assignment),
 			x = this.store.getById(id);

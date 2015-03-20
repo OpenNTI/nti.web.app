@@ -69,6 +69,13 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.View', {
 	},
 
 
+	popStateForAssignment: function() {
+		this.pushState({
+			activeAssignment: null
+		});
+	},
+
+
 	setAssignmentsData: function() {
 		this.clearAssignmentsData();
 		var root = this.add({ xtype: 'course-assessment-admin-performance-root', pushState: this.pushState, replaceState: this.replaceState}),

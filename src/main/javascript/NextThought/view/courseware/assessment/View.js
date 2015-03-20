@@ -133,6 +133,16 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 	},
 
 
+	popAssignment: function() {
+		var layout = this.body.getLayout(),
+			active = layout && layout.getActiveItem();
+
+		if (active && active.popStateForAssignment) {
+			active.popStateForAssignment();
+		}
+	},
+
+
 	onViewAdd: function(body, item) {
 		this.navigation.addView(item);
 		this.mon(item, {

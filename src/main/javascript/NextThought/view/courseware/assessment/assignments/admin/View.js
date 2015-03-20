@@ -66,6 +66,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.View', {
 	},
 
 
+	popStateForAssignment: function() {
+		this.pushState({
+			activeStudent: null
+		});
+	},
+
+
 	setAssignmentsData: function(assignments) {
 		this.clearAssignmentsData();
 

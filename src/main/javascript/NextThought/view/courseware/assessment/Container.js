@@ -86,11 +86,17 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 
 
 	showRoot: function(assignment) {
-		var me = this;
+		var me = this,
+			root = me.getRoot();
 
 		return me.maybePreventNavigation(true)
 			.then(function() {
-				me.getLayout().setActiveItem(0);
+				me.getLayout().setActiveItem(root);
+
+				if (assignment) {
+					root.popAssignment();
+				}
+
 				Ext.destroy(me.items.getRange().slice(1));
 			});
 	},
