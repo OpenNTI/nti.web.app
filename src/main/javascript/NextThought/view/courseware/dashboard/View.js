@@ -85,7 +85,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 			this.removeAll(true);
 		}
 
-		courseCatalog = bundle.getCourseCatalogEntry && bundle.getCourseCatalogEntry();
+		courseCatalog = bundle && bundle.getCourseCatalogEntry && bundle.getCourseCatalogEntry();
 
 		if (!bundle || !bundle.isCourse ||
 			$AppConfig.disableDashboard ||
