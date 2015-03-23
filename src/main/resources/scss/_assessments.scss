@@ -830,6 +830,10 @@ body.dragging * {
 				}
 			}
 
+			.x-mask {
+				background: rgba(245,245,245,0.66);
+			}
+
 			input.answer-field {
 				@extend .assessment-content;
 				color: $primary-grey;

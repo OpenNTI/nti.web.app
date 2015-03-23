@@ -150,6 +150,7 @@ Ext.define('NextThought.view.assessment.Parts', {
 	showQuestionSetWithAnswers: function() {
 		var parts = this.query('[markSubmitted]');
 		Ext.each(parts, function(part) {
+			part.maskResponseBox();
 			part.setSubmitted();
 			part.markSubmitted();
 		});

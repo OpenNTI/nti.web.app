@@ -515,6 +515,11 @@ Ext.define('NextThought.view.assessment.input.Base', {
 	},
 
 
+	maskResponseBox: function() {
+		this.inputBox.mask();
+	},
+
+
 	instructorReset: function() {
 		this.reset();
 
