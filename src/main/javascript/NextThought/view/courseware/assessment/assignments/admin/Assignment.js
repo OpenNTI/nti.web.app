@@ -72,7 +72,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 	items: [
 		{xtype: 'course-assessment-admin-listheader'},
 		{
-			anchor: '0 -65',
+			anchor: '0 -95',
 			xtype: 'course-admin-paged-grid',
 			cls: 'student-assignment-overview',
 			columnOrder: ['Student', 'Username', 'Completed', 'Grade', 'Feedback', 'Submission'],
