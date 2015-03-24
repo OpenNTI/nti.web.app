@@ -20,6 +20,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Header', {
 			return;
 		}
 
+		if (!this.rendered) {
+			this.on('afterrender', this.setUpGradebox.bind(this));
+			return;
+		}
+
 		var me = this,
 			grade = me.historyItem.get('Grade');
 
