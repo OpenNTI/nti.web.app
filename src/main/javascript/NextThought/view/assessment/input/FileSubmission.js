@@ -308,10 +308,9 @@ Ext.define('NextThought.view.assessment.input.FileSubmission', {
 		var dontSetBack,
 			q = this.questionSet;
 
+		this.setNotUploaded();
+
 		this.removeCls('has-file');
-		this.addCls('not-submitted');
-		this.setLabel(this.renderData.label);
-		this.dueEl.update(this.dueString);
 
 		this.downloadBtn.removeCls('active');
 		dontSetBack = true;
