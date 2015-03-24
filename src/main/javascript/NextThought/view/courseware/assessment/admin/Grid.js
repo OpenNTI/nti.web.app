@@ -127,30 +127,37 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 						//editor: 'textfield',
 						tpl: Ext.DomHelper.markup({tag: 'input', type: 'text', value: '{grade}'}),
 						doSort: function(state) {
+							function get(o) {
+								var grade = o.get('Grade'),
+									values = grade && grade.getValues(),
+									value = values && values.value,
+									completed = o.get('completed');
+
+								if (!completed) {
+									value = -2;
+								} else if (!value) {
+									value = -1;
+								} else {
+									value = parseFloat(value, 10);
+								}
+
+								return value;
+							}
+
 							var store = this.up('grid').getStore(),
 								sorter = new Ext.util.Sorter({
 									direction: state,
 									property: store.remoteSort ? 'gradeValue' : 'Grade',
 									//the transform and root are ignored on remote sort
 									root: 'data',
-									transform: function(o) {
-										var f;
+									sorterFn: function(a, b) {
+										var vA = get(a),
+											vB = get(b);
 
-										o = o && o.getValues();
-										o = o && o.value;
-
-										if (o) {
-											f = parseFloat(o, 10);
-										} else {
-											f = -1;
-										}
-
-										if (!isFinite(f)) {
-											f = o;
-										}
-										return f || '';
+										return vA > vB ? 1 : (vA < vB ? -1 : 0);
 									}
 								});
+
 							store.sort(sorter);
 						}
 					},
@@ -162,21 +169,23 @@ Ext.define('NextThought.view.courseware.assessment.admin.Grid', {
 						name: 'feedback',
 						tdCls: 'feedback',
 						width: 140,
-						renderer:function(v, col, rec){
+						renderer: function(v, col, rec) {
 							var grade = rec.get('Grade'),
-								isExcused = grade && grade.get("IsExcused"), excusedTpl, excusedCls,
-								feedbackTpl, commentText = rec.get('feedback') === 1 ? ' Comment' : " Comments";
+								isExcused = grade && grade.get('IsExcused'), excusedTpl, excusedCls,
+								feedbackTpl, commentText = rec.get('feedback') === 1 ? ' Comment' : ' Comments';
 
 							excusedCls = isExcused === true ? 'on' : 'off';
 							excusedTpl = Ext.DomHelper.markup({
-								cls: 'grade-excused '+ excusedCls,
+								cls: 'grade-excused ' + excusedCls,
 								html: getFormattedString('NextThought.view.courseware.assessment.admin.Grid.excused')
 							});
 
-							feedbackTpl = Ext.DomHelper.markup({cls:'feedback', html: rec.get('feedback') + commentText});
-							if(rec.get('feedback')){
+							feedbackTpl = Ext.DomHelper.markup({cls: 'feedback', html: rec.get('feedback') + commentText});
+
+							if (rec.get('feedback')) {
 								return excusedTpl + feedbackTpl;
 							}
+
 							return excusedTpl;
 						},
 						doSort: function(state) {
