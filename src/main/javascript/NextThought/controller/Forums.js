@@ -638,7 +638,7 @@ Ext.define('NextThought.controller.Forums', {
 						}
 					}
 
-					if (editor.ownerCt && editor.ownerCt.loadLastPage) {
+					if (rec.isTopLevel() && editor.ownerCt && editor.ownerCt.loadLastPage) {
 						editor.ownerCt.loadLastPage()
 							.then(function(isOnLastPage) {
 								Ext.callback(successCallback, null, [editor, postCmp, rec]);
