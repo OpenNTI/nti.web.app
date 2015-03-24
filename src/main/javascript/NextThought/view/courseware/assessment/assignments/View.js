@@ -269,7 +269,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.View', {
 
 
 	filterSearchValue: function(val) {
-		this.activeStores.forEach(function(store) {
+		(this.activeStores || []).forEach(function(store) {
 			//if we are grouped by lessons we will have an ntiid here
 			var name = store.groupName.split('|').last();
 
