@@ -410,11 +410,15 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 	unmask: function() {
 		this._masked--;
+
 		var gridMask = (this.down('gridview') || {}).loadMask;
+
 		if (this._masked <= 0) {
 			this._masked = 0;
+
 			clearTimeout(this._maskIn);
-			if (gridMask && !gridMask.isDestroyed) {
+
+			if (gridMask && !gridMask.isDestroyed && gridMask.removeCls) {
 				gridMask.removeCls('masked-mask');
 			}
 
