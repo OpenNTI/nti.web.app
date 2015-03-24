@@ -39,6 +39,11 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.View', {
 	restoreStudent: function(username, assignment) {
 		var record, view;
 
+		if (!this.rendered) {
+			this.on('afterrender', this.restoreStudent.bind(this, username, assignment));
+			return;
+		}
+
 		record = this.store.findBy(function(rec) {
 			var user = rec.get('User');
 
