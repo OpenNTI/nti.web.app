@@ -1,3 +1,4 @@
+/* global isMe*/
 Ext.define('NextThought.view.courseware.assessment.reader.Panel', {
 	extend: 'NextThought.view.reader.Panel',
 	alias: 'widget.course-assessment-reader',
@@ -41,7 +42,7 @@ Ext.define('NextThought.view.courseware.assessment.reader.Panel', {
 	getReaderConfig: function() {
 		var assignment = this.assignment;
 
-		if (assignment.isTimed && !assignment.isStarted() && isMe(this.student)) {
+		if (assignment.isTimed && !assignment.isStarted() && isMe(this.student) && !this.instructorProspective) {
 			this.hasTimedPlaceholder = true;
 			return {
 				xtype: 'courseware-assessment-timedplaceholder',
@@ -106,6 +107,12 @@ Ext.define('NextThought.view.courseware.assessment.reader.Panel', {
 		}
 
 		a.setAssignmentFromStudentProspective(assignment, history);
+
+		a.isInstructorProspective = this.instructorProspective;
+
+		if (assignment.isTimed && this.instructorProspective) {
+			this.showAllowedTime();
+		}
 
 		//if (assignment.get('availableEnding') >= now || !completed) {
 			r.getNoteOverlay().disable();

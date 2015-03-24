@@ -181,6 +181,7 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 							var reader = me.add({
 									xtype: isMe(student) ? 'course-assessment-reader' : 'course-assessment-admin-reader',
 									parentView: view,
+									instructorProspective: isInstructorProspective,
 									assignmentHistory: history,
 									student: student,
 									path: path,
@@ -192,7 +193,7 @@ Ext.define('NextThought.view.courseware.assessment.Container', {
 
 							me.mon(reader, {
 								'goup': 'showRoot',
-								'removed-placeholder': me.showAssignment.bind(me, view, assignment, assignmentHistory, student, path, pageSource)
+								'removed-placeholder': me.showAssignment.bind(me, view, assignment, assignmentHistory, student, path, pageSource, isInstructorProspective)
 							});
 
 							// Note: if we don't have a history item and it's an instructor, show the raw assignment

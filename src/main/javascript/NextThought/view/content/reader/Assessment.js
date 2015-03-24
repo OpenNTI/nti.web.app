@@ -89,7 +89,7 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			history: h, isInstructor: this.isInstructorProspective
 		}));
 
-		if (this.injectedAssignment && this.injectedAssignment.isTimed && !h.get('completed') && !isInstructor) {
+		if (this.injectedAssignment && this.injectedAssignment.isTimed && !isInstructor && !h.get('completed')) {
 			this.showAssignmentTimer(this.submission.shouldAllowSubmit && this.submission.shouldAllowSubmit.bind(this.submission));
 		}
 
@@ -160,11 +160,11 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			title = assignment && assignment.get('title'), time;
 
 		if (remaining < 0) {
-            time = TimeUtils.getTimePartsFromTime(-1 * remaining);
-            remaining = NextThought.view.courseware.assessment.AssignmentStatus.getTimeString(time) + " Over";
+			time = TimeUtils.getTimePartsFromTime(-1 * remaining);
+			remaining = NextThought.view.courseware.assessment.AssignmentStatus.getTimeString(time) + ' Over';
 		} else {
-            time = TimeUtils.getTimePartsFromTime(remaining);
-            remaining = NextThought.view.courseware.assessment.AssignmentStatus.getTimeString(time, true) + " Remaining";
+			time = TimeUtils.getTimePartsFromTime(remaining);
+			remaining = NextThought.view.courseware.assessment.AssignmentStatus.getTimeString(time, true) + ' Remaining';
 		}
 
 		if (!me.toast || me.toast.isDestroyed) {
