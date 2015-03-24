@@ -372,13 +372,38 @@ Ext.define('NextThought.controller.Account', {
 			this.createListWin.show();
 		}
         else if (flyBtn.hasCls('suggest')) {
-            this.suggestContactsWin = Ext.widget('suggest-contacts-window');
-            this.suggestContactsWin.show();
+			this.suggestContactsAction();
         }
 		else {
 			console.error('Group button clicked but I do not know what to do', btn);
 		}
 
+	},
+
+
+	suggestContactsAction: function() {
+		var peersStore, me = this;
+		$AppConfig.userObject.getSuggestContacts()
+			.then(function(items) {
+				if (Ext.isEmpty(items)) { return Promise.reject(); }
+
+				peersStore = new Ext.data.Store({
+					model: NextThought.model.User,
+					proxy: 'memory',
+					data: items,
+					filters: [
+						function(item) {
+							return !(a && a.contains(item.get('Username')));
+						}
+					]
+				});
+				me.suggestContactsWin = Ext.widget('suggest-contacts-window', {store: peersStore});
+				me.suggestContactsWin.show();
+				me.mon(me.suggestContactsWin, 'destroy', 'refresh');
+			})
+			.fail(function() {
+				me.mon(Ext.widget('oobe-contact-window'), 'destroy', 'refresh');
+			});
 	},
 
 
