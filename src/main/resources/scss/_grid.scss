@@ -297,6 +297,9 @@
 
 				.accent-name{
 					font-weight: normal;
+					padding-right: 0.5em;
+					overflow: hidden;
+					@include ellipse;
 				}
 			}
 		}

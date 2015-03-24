@@ -904,9 +904,14 @@ canvas.x-component-course-assessment {
 
 			.name {
 				color: $secondary-grey !important;
+				padding-right: 0.5em;
+				overflow: hidden;
+				@include ellipsis;
 
 				.accent-name {
 					font-weight: normal;
+					overflow: hidden;
+					@include ellipsis;
 				}
 			}
 		}

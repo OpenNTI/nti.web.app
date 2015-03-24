@@ -69,7 +69,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.PagedGrid', {
 							if (d === displayName) {
 								d += (' (' + (f ? f + ' ' : '') + lm + ')');
 							}
-							d = Ext.DomHelper.markup({cls: 'accent-name', html: d});
+							d = Ext.DomHelper.markup({cls: 'accent-name', 'data-qtip': d, html: d});
 						}
 
 						return d;
