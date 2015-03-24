@@ -51,18 +51,6 @@ Ext.define('NextThought.view.profiles.outline.View', {
 		this.callParent(arguments);
 		this.monitorUser(this.user);
 
-		this.groupsListMenu = Ext.widget({
-			xtype: 'menu',
-			width: 255,
-			items: [
-				{xtype: 'management-group-list', allowSelect: true}
-			]
-		});
-		this.on('destroy', 'destroy', this.groupsListMenu);
-
-		this.groupsList = this.groupsListMenu.down('management-group-list');
-		this.mon(this.groupsList, 'added-contact', 'convertToContact');
-
 		this.on({
 			avatarEl: {click: 'onControlsClicked'},
 			controlsEl: {click: 'onControlsClicked'},
@@ -180,18 +168,17 @@ Ext.define('NextThought.view.profiles.outline.View', {
 
 
 	applyRenderData: function(user) {
+		if (this.rendered && user && user.getId() === this.user.getId()) { return; }
+
 		var m;
 		this.isMe = isMe(user);
 		this.isContact = Ext.getStore('FriendsList').isContact(this.user);
-		this.groupsList.setUser(user).isContact = this.isContact;
-
-		Ext.destroy(this.optionsMenu);
 
 		m = this.optionsMenu = Ext.widget({xtype: 'person-options-menu', width: 255, ownerCmp: this, user: this.user, isContact: this.isContact });
-
 		m.add({xtype: 'management-group-list', allowSelect: true});
 
 		this.groupsList = m.down('management-group-list');
+		this.groupsList.setUser(user).isContact = this.isContact;
 		this.mon(this.groupsList, 'added-contact', 'convertToContact');
 
 		m.mon(this, 'destroy', 'destroy');
