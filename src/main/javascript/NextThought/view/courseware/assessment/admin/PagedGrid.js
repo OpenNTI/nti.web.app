@@ -193,24 +193,13 @@ Ext.define('NextThought.view.courseware.assessment.admin.PagedGrid', {
 			name: 'feedback',
 			tdCls: 'feedback',
 			sortOn: 'feedbackCount',
-			width: 140,
+			width: 120,
 			renderer: function(v, col, rec) {
-				if (!rec.get('HistoryItemSummary')) {
-					return;
-				}
+				if (!rec.get('HistoryItemSummary')) { return; }
 
 				var item = rec.get('HistoryItemSummary'),
-					grade = item && item.get('Grade'),
 					feedback = item && item.get('feedback'),
-					isExcused = grade && grade.get('IsExcused'),
-					excusedTpl = '', feedbackTpl = '';
-
-				if (isExcused) {
-					excusedTpl = Ext.DomHelper.markup({
-						cls: 'grade-excused on',
-						html: getFormattedString('NextThought.view.courseware.assessment.admin.Grid.excused')
-					});
-				}
+					feedbackTpl = '';
 
 				if (feedback) {
 					feedbackTpl = Ext.DomHelper.markup({
@@ -219,7 +208,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.PagedGrid', {
 					});
 				}
 
-				return excusedTpl + feedbackTpl;
+				return feedbackTpl;
 			}
 		},
 

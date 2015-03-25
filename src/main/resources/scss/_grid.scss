@@ -262,13 +262,19 @@
 
 			input {
 				font: normal normal 1em/1 'Open Sans';
-				width: 100%;
-				padding: 0.7em 0.3em;
+				width: 45%;
+				padding: 0.7em 0.3em 0.7em 1.0em;
 				margin-left: -0.3em;
 				&:hover,
 				&:focus {
 					border-color: #b8b8b8;
 				}
+			}
+
+			.grade-excused{
+				color: $primary-red;
+				padding-left: 5px;
+				width: 45%;
 			}
 		}
 

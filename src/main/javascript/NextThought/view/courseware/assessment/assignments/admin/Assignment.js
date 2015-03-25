@@ -82,9 +82,16 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 					text: getString('NextThought.view.courseware.assessment.admin.Grid.score'),
 					componentCls: 'score',
 					tdCls: 'text score',
+					width: 110,
 					tpl: new Ext.XTemplate(Ext.DomHelper.markup([
 						{cls: 'gradebox', cn: [
-							{tag: 'input', size: 3, tabindex: '1', type: 'text', value: '{[this.getGrade(values)]}'}
+							{tag: 'input', size: 3, tabindex: '1', type: 'text', value: '{[this.getGrade(values)]}'},
+							{ tag: 'tpl', 'if': 'this.isGradeExcused(values)', cn: [
+								{
+									tag: 'span', cls: 'grade-excused',
+									html: getFormattedString('NextThought.view.courseware.assessment.admin.Grid.excused')
+								}
+							]}
 						]}
 						]), {
 							getGrade: function(values) {
@@ -93,8 +100,16 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 									gradeVals = (grade && grade.getValues()) || {};
 
 								return gradeVals.value || '';
+							},
+
+							isGradeExcused: function(values) {
+								var historyItem = values.HistoryItemSummary,
+									grade = historyItem && historyItem.get('Grade');
+
+								return grade && grade.get('IsExcused');
 							}
-					})
+						}
+					)
 				}
 			}
 		},
