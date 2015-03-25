@@ -118,7 +118,7 @@ Ext.define('NextThought.view.courseware.overview.View', {
 		var me = this,
 			locInfo,
 			course = me.up('course').currentBundle,
-			overviewSrc = (r && r.get('src')) || null;
+			overviewSrc = (r && r.getLink('overview-content')) || null;
 
 		if (!r || r.getId() === me.currentPage || !course || !course.getAssignments) {
 			//show empty state??
@@ -138,10 +138,6 @@ Ext.define('NextThought.view.courseware.overview.View', {
 
 		if (AnalyticsUtil.getContextRoot() === 'overview') {
 			AnalyticsUtil.addContext(me.currentPage);
-		}
-
-		if (overviewSrc) {
-			overviewSrc = getURL(locInfo.root + overviewSrc);
 		}
 
 		Promise.all([
