@@ -29,6 +29,13 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 
 	items: [],
 
+	emptyStateTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+		{cls: 'empty-state', cn: [
+			{cls: 'title', html: getString('NextThought.view.courseware.dashboard.View.EmptyActivityTitle')},
+			{cls: 'sub', html: getString('NextThought.view.courseware.dashboard.View.EmptyActivitySubTitle')}
+		]}
+	])),
+
 	//how much the user has to scroll to trigger a scroll change
 	scrollChangeThreshold: 0,
 
@@ -147,6 +154,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 
 		if (!this.weekToLoad || this.el.getHeight() < this.el.dom.scrollHeight) {
 			this.removeEmpties();
+			this.maybeDisplayEmptyState();
 			this.loaded = true;
 		} else {
 			this.maybeLoadNextWeek({}, true);
@@ -263,7 +271,7 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 			tileContainer;
 
 		if (!week) {
-			this.removeEmpties();
+			this.initialLoad();
 			last = this.getLastCmp();
 
 			if (last && last.isEmpty()) {
@@ -325,6 +333,23 @@ Ext.define('NextThought.view.courseware.dashboard.View', {
 		});
 
 		this.emptiesToRemove = [];
+	},
+
+
+	maybeDisplayEmptyState: function() {
+		var tileContainers = this.query('dashboard-tile-container'),
+			isEmpty = true;
+
+		Ext.each(tileContainers, function(tileContainer) {
+			if (!tileContainer.hasNoTiles) {
+				isEmpty = false;
+				return false;
+			}
+		});
+
+		if (isEmpty) {
+			this.emptyState = Ext.get(this.emptyStateTpl.append(this.getTargetEl()));
+		}
 	},
 
 

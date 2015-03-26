@@ -7,6 +7,25 @@
 	overflow-y: auto;
 	overflow-x: hidden;
 
+	.empty-state {
+		height: 300px;
+		background: #ffffff;
+		padding: 50px;
+		margin-top: 0;
+
+		.title {
+			font: normal 300  22px/30px $font;
+			color: $tertiary-grey;
+			text-align: center;
+			margin-top: 2em;
+		}
+
+		.sub {
+			text-align: center;
+			color: $tertiary-grey;
+		}
+	}
+
 	.tile-container {
 		min-height: 300px;
 		overflow: hidden;
