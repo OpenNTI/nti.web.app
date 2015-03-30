@@ -73,8 +73,26 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 						]}
 					]), {
 						displayName: function(values) {
-							//TODO: highlight search values
-							return values.Alias;
+							if (!values.User || !values.User.isModel) {
+								return 'Resolving';
+							}
+
+							var creator = values.User,
+								displayName = creator && creator.get && creator.get('displayName'),
+								f = creator && creator.get && creator.get('FirstName'),
+								l = creator && creator.get && creator.get('LastName'),
+								lm, d = displayName;
+
+							if (l) {
+								lm = Ext.DomHelper.markup({tag: 'b', html: l});
+								d = displayName.replace(l, lm);
+								if (d === displayName) {
+									d += (' (' + (f ? f + ' ' : '') + lm + ')');
+								}
+								d = Ext.DomHelper.markup({cls: 'accent-name', 'data-qtip': d, html: d});
+							}
+
+							return d;
 						}
 					})
 				},
