@@ -37,11 +37,22 @@ Ext.define('NextThought.view.contacts.outline.search.View', {
 
 
 	constructor: function(config) {
-		this.buildStore();
-		this.callParent(arguments);
-		this.mon(Ext.getStore('FriendsList'), {
-			scope: this,
+		var me = this;
+
+		me.buildStore();
+		me.callParent(arguments);
+		me.mon(Ext.getStore('FriendsList'), {
+			scope: me,
 			'update': 'refresh'
+		});
+
+		me.mon(Ext.getStore('PresenceInfo'), 'presence-changed', function(username, presence) {
+			var user = me.store.getById(username);
+
+			if (user) {
+				user.set('Presence', presence);
+				me.refresh();
+			}
 		});
 	},
 
