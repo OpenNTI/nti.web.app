@@ -540,7 +540,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	activate: function() {
-        this.maybeEnableSave();
+		this.maybeEnableSave();
 		this.el.addCls('active');
 		this.fireEvent('activated-editor', this);
 	},
@@ -929,7 +929,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		if (el && !e.getTarget('.control')) {
 			el[action]('selected');
 			el.set({'data-qtip': tip});
-      //			Ext.QuickTipManager.getQuickTip().hide();
+	  //			Ext.QuickTipManager.getQuickTip().hide();
 			this.el.down('.content').focus();
 			this.editorFocus();
 		}
@@ -1022,9 +1022,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			p = this.trackedParts[guid];
 			if (p) {
 				if (!p.isDestroyed && p.show) {
-          if (Ext.is.iOS) {
-            content.blur();
-          }
+		  if (Ext.is.iOS) {
+			content.blur();
+		  }
 					p.show();
 				}
 				return;
@@ -1117,8 +1117,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 
 
 	addWhiteboard: function(data, guid, append) {
-		data = data || (function() {
-		}()); //force the falsy value of data to always be undefinded.
+		data = data || void undefined;//force the falsy value of data to always be undefinded.
 
 		var me = this, wbWin, content;
 
@@ -1129,50 +1128,49 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			return;
 		}
 
-    if (Ext.is.iOS) {
-      this.el.down('.content').blur();
-    }
+		if (Ext.is.iOS) {
+			this.el.down('.content').blur();
+		}
 
-    //pop open a whiteboard:
-    wbWin = Ext.widget('wb-window', { width: 802, value: data, closeAction: 'hide', cancelOnce: false });
-    content = me.el.down('.content');
-    //remember the whiteboard window:
-    wbWin.guid = guid;
-    this.trackedParts[guid] = wbWin;
+		//pop open a whiteboard:
+		wbWin = Ext.widget('wb-window', { width: 802, value: data, closeAction: 'hide', cancelOnce: false });
+		content = me.el.down('.content');
+		//remember the whiteboard window:
+		wbWin.guid = guid;
+		this.trackedParts[guid] = wbWin;
 
-    //Hide note nav-helper - to avoid it from being on top of the WB
-    if (Ext.query('.nav-helper')[0]) {
-      Ext.fly(Ext.query('.nav-helper')[0]).hide();
-    }
+		//Hide note nav-helper - to avoid it from being on top of the WB
+		if (Ext.query('.nav-helper')[0]) {
+			Ext.fly(Ext.query('.nav-helper')[0]).hide();
+		}
 
 
-    if (data) {
-      me.insertObjectThumbnail(content, guid, wbWin.down('whiteboard-editor'), append);
-    }
+		if (data) {
+			me.insertObjectThumbnail(content, guid, wbWin.down('whiteboard-editor'), append);
+		}
 
-    //hook into the window's save and cancel operations:
-    this.mon(wbWin, {
-      save: function(win, wb) {
-        data = wb.getValue();
-        me.insertObjectThumbnail(content, guid, wb, append, true);
-        if (Ext.query('.nav-helper')[0]) {
-          Ext.fly(Ext.query('.nav-helper')[0]).show();
-        }
-        wbWin.hide();
-      },
-      cancel: function() {
-        //if we haven't added the wb to the editor, then clean up, otherwise let the window handle it.
-        if (!data) {
-          me.cleanTrackedParts(guid);
-          wbWin.close();
-        }
+		//hook into the window's save and cancel operations:
+		this.mon(wbWin, {
+			save: function(win, wb) {
+				data = wb.getValue();
+				me.insertObjectThumbnail(content, guid, wb, append, true);
+				if (Ext.query('.nav-helper')[0]) {
+					Ext.fly(Ext.query('.nav-helper')[0]).show();
+				}
+				wbWin.hide();
+		  	},
+			cancel: function() {
+				//if we haven't added the wb to the editor, then clean up, otherwise let the window handle it.
+				if (!data) {
+					me.cleanTrackedParts(guid);
+					wbWin.close();
+				}
+			}
+		});
 
-      }
-    });
-
-    if (!data) {
-      wbWin.show();
-    }
+		if (!data) {
+			wbWin.show();
+		}
 	},
 
 
@@ -1195,48 +1193,27 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			if (sel.getRangeAt && sel.rangeCount) {
 				range = sel.getRangeAt(0);
 
-				beforeRange = document.createRange();
-				beforeRange.setStart(content, 0);
-				beforeRange.setEnd(range.startContainer, range.startOffset);
-				beforeContent = beforeRange.cloneContents();
-				beforeRange.detach();
-
-				afterRange = document.createRange();
-				afterRange.setStart(range.endContainer, range.endOffset);
-				afterRange.setEnd(content, content.childNodes.length);
-				afterContent = afterRange.cloneContents();
-				afterRange.detach();
-
-				sameNode = beforeContent.isEqualNode(afterContent);
-
-				range.detach();
+				range.deleteContents();
+				range.collapse(false);
 
 				el = document.createElement('div');
 				el.innerHTML = html;
 
-				frag = document.createDocumentFragment();
-				frag.appendChild(beforeContent);
-				do {
-					node = el.firstChild;
-					if (node) {
-						lastNode = frag.appendChild(node);
+				if (Ext.fly(range.startContainer).hasCls('body-divider') || Ext.fly(range.startContainer).is('.body-divider *')) {
+					part = Ext.fly(range.startContainer).up('.body-divider', false, true) || range.startContainer;
+
+					//get the next sibling so insertBefore will be after the body divider
+					part = part && part.nextSibling;
+
+					//if there is a part, insert before it
+					if (part) {
+						content.insertBefore(el, part);
+					} else {
+					// otherwise just append it to the content
+						content.appendChild(el);
 					}
-				} while (node);
-				//if they are the same node don't add it to prevent defaults
-				if (!sameNode) {
-					frag.appendChild(afterContent);
-				}
-
-				content.innerHTML = '';
-				content.appendChild(frag);
-
-				// Preserve the selection
-				if (lastNode) {
-					range = document.createRange();
-					range.setStartAfter(lastNode);
-					range.collapse(true);
-					sel.removeAllRanges();
-					sel.addRange(range);
+				} else {
+					range.insertNode(el);
 				}
 			}
 		}
@@ -1563,7 +1540,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		var me = this, body,
 			r = isNoteBodyEmpty(),
 			cls = 'disabled',
-            forceSubmissionCheck = false;
+			forceSubmissionCheck = false;
 
 		if (r.enableSave && this.saveButtonEl.hasCls(cls)) {
 			this.saveButtonEl.removeCls(cls);
@@ -1573,9 +1550,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			this.saveButtonEl.addCls(cls);
 			body = me.getBodyValue();
 
-            // If the body has just been cleared, then we want to force checking submission state.
-            // This will make sure that the question is now considered as non answered.
-            forceSubmissionCheck = true;
+			// If the body has just been cleared, then we want to force checking submission state.
+			// This will make sure that the question is now considered as non answered.
+			forceSubmissionCheck = true;
 
 			if (body.length <= 1 && Ext.isEmpty(body[0])) {
 				me.setValue('', true);
