@@ -189,5 +189,10 @@ Ext.define('NextThought.util.media.HTML5Player', {
 		if (this.el) {
 			this.el.clearListeners();
 		}
+	},
+
+
+	getDuration: function() {
+		return (this.player.duration || 0) * 1000;
 	}
 });
