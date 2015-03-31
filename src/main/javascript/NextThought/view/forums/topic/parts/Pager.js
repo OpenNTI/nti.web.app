@@ -96,6 +96,11 @@ Ext.define('NextThought.view.forums.topic.parts.Pager', {
 			}
 		}
 
+		//if there is only one page don't show any
+		if (count === 1) {
+			return [];
+		}
+
 		pageList = this.getPageList(count, current);
 		addPages(pageList);
 		return pages;

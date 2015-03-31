@@ -90,7 +90,7 @@ Ext.define('NextThought.view.forums.topic.parts.Topic', {
 
 
 	pagingCommentsNavTpl: new Ext.XTemplate(Ext.DomHelper.markup([
-		{cls: 'paging-comments-nav {[values.pages > 1 ? "multiples" : "single"]}'}
+		{cls: 'paging-comments-nav'}
 	])),
 
 
@@ -382,7 +382,7 @@ Ext.define('NextThought.view.forums.topic.parts.Topic', {
 	buildCommentPagingNav: function(commentCmp) {
 		var numPages = 0, me = this;
 
-		this.pagingCommentsNav = Ext.get(this.pagingCommentsNavTpl.append(this.el.down('.foot'), {'pages': commentCmp.store.getTotalPages()}));
+		this.pagingCommentsNav = Ext.get(this.pagingCommentsNavTpl.append(this.el.down('.foot')));
 
 		this.pager = Ext.widget('topic-comment-pager', {
 			renderTo: this.pagingCommentsNav

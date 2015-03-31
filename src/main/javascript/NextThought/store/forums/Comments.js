@@ -221,6 +221,7 @@ Ext.define('NextThought.store.forums.Comments', {
 			}
 
 			this.add(record);
+			this.fireEvent('load');
 		} finally {
 			this.__applyFilters();
 		}
