@@ -451,8 +451,8 @@ NTIStrings['NextThought.view.courseware.assessment.assignments.admin.Root.loadin
 NTIStrings['NextThought.view.courseware.assessment.reader.Header.completed'] = 'completed {completed}';
 NTIStrings['NextThought.view.courseware.assessment.reader.Header.grade'] = 'assignment grade';
 NTIStrings['NextThought.view.courseware.dashboard.View.loading'] = 'Loading...';
-NTIStrings['NextThought.view.courseware.dashboard.View.EmptyActivityTitle'] = 'You don\'t have any activity for this course yet...';
-NTIStrings['NextThought.view.courseware.dashboard.View.EmptyActivitySubTitle'] = 'Please check back again later';
+NTIStrings['NextThought.view.courseware.dashboard.View.EmptyActivityTitle'] = 'You don\'t have any activity for this course yet.';
+NTIStrings['NextThought.view.courseware.dashboard.View.EmptyActivitySubTitle'] = 'Please check again later.';
 NTIStrings['NextThought.view.courseware.dashboard.widget.InstructorForumView.announcements'] = 'Announcements';
 NTIStrings['NextThought.view.courseware.dashboard.widget.QuestionSetView.title'] = 'Assessment';
 NTIStrings['NextThought.view.courseware.dashboard.widget.QuestionSetView.tryagain'] = 'Try Again';

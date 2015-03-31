@@ -451,8 +451,8 @@ NTIStrings['NextThought.view.courseware.assessment.assignments.admin.Root.loadin
 NTIStrings['NextThought.view.courseware.assessment.reader.Header.completed'] = 'закончено {completed}';
 NTIStrings['NextThought.view.courseware.assessment.reader.Header.grade'] = 'оценка за задание';
 NTIStrings['NextThought.view.courseware.dashboard.View.loading'] = 'Загрузка...';
-NTIStrings['NextThought.view.courseware.dashboard.View.EmptyActivityTitle'] = 'You don\'t have any activity for this course yet...';
-NTIStrings['NextThought.view.courseware.dashboard.View.EmptyActivitySubTitle'] = 'Please check back again later';
+NTIStrings['NextThought.view.courseware.dashboard.View.EmptyActivityTitle'] = 'You don\'t have any activity for this course yet.';
+NTIStrings['NextThought.view.courseware.dashboard.View.EmptyActivitySubTitle'] = 'Please check again later.';
 NTIStrings['NextThought.view.courseware.dashboard.widget.InstructorForumView.announcements'] = 'Объявления';
 NTIStrings['NextThought.view.courseware.dashboard.widget.QuestionSetView.title'] = 'Оценка';
 NTIStrings['NextThought.view.courseware.dashboard.widget.QuestionSetView.tryagain'] = 'Начать сначала';
