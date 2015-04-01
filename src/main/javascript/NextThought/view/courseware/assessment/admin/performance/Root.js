@@ -181,7 +181,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			me.mon(store, {
 				single: true,
 				'records-filled-in': function() {
-					delete store.proxy.extraParams.batchAroundUsernameFilterByScope;
+					delete store.proxy.extraParams.batchContainingUsernameFilterByScope;
 
 					fulfill();
 
@@ -196,7 +196,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			if (storeState.page) {
 				store.loadPage(parseInt(storeState.page, 10));
 			} else if (state && state.activeStudent) {
-				store.proxy.extraParams.batchAroundUsernameFilterByScope = state.activeStudent;
+				store.proxy.extraParams.batchContainingUsernameFilterByScope = state.activeStudent;
 
 				store.load();
 			} else {

@@ -83,7 +83,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 		//if we are drilling in to one user, batch the store around it
 		if (user) {
 			params = {
-				'batchAroundUsernameFilterByScope': username
+				'batchContainingUsernameFilterByScope': username
 			};
 		}
 
@@ -109,7 +109,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 					var params = store.proxy.extraParams;
 
 					//remove the param so it doesn't affect the next loads
-					delete params.batchAroundUsernameFilterByScope;
+					delete params.batchContainingUsernameFilterByScope;
 
 					if (success) {
 						fulfill();

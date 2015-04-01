@@ -227,7 +227,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			me.mon(store, {
 				single: true,
 				'records-filled-in': function() {
-					delete store.proxy.extraParams.batchAroundUsernameFilterByScope;
+					delete store.proxy.extraParams.batchContainingUsernameFilterByScope;
 
 					fulfill();
 
@@ -240,7 +240,7 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			});
 
 			if (state && state.activeStudent) {
-				store.proxy.extraParams.batchAroundUsernameFilterByScope = state.activeStudent;
+				store.proxy.extraParams.batchContainingUsernameFilterByScope = state.activeStudent;
 
 				store.load();
 			} else if (storeState.page) {
