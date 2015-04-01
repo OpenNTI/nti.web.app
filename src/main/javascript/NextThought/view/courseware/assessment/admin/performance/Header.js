@@ -76,5 +76,20 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Header', {
 	},
 
 
+	setPredictedGrade: function(grade) {
+		if (!this.rendered) {
+			this.on('afterrender', this.setPredictedGrade.bind(this, grade));
+			return;
+		}
+
+		if (grade) {
+			this.predictedEl.update(grade);
+			this.predictedContainerEl.removeCls('hidden');
+		} else {
+			this.predictedContainerEl.addCls('hidden');
+		}
+	},
+
+
 	cls: 'performance-header'
 });

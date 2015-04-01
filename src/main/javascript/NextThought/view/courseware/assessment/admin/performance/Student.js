@@ -94,6 +94,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Student', {
 		}
 
 		this.header.setGradeBook(this.FinalGradeHistoryItem);
+		this.header.setPredictedGrade(this.predictedGrade);
 
 		this.store = assignments.getStudentHistory(this.historiesURL, this.student.getId());
 

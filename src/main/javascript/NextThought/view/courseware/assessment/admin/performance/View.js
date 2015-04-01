@@ -150,6 +150,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.View', {
 			student: user,
 			historiesURL: historyURL,
 			FinalGradeHistoryItem: rec.get('HistoryItemSummary'),
+			predictedGrade: rec.get('PredictedGrade'),
 			container: this,
 			pageSource: NextThought.proxy.courseware.PagedPageSource.create({
 				store: this.store,

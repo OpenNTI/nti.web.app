@@ -12,6 +12,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 
 
 	headerTpl: Ext.DomHelper.markup([
+		{cls: 'predicted hidden', cn: [
+			{cls: 'label', 'data-qtip': 'Estimated from the grading policy in the Syllabus', html: 'Course Grade'},
+			{cls: 'value', html: '{predicted}'}
+		]},
 		{ cls: 'grade', cn: [
 			{ cls: 'label', html: '{gradeTitle} {{{NextThought.view.courseware.assessment.admin.Header.grade}}}'},
 			{ cls: 'gradebox', cn: [
@@ -51,6 +55,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.Header', {
 		completedEl: '.header .status .completed',
 		timedEl: '.header .status .timed',
 		gradeBoxEl: '.header .grade',
+		predictedContainerEl: '.header .predicted',
+		predictedEl: '.header .predicted .value',
 		actionsEl: '.header .assignment-actions',
 		excusedEl: '.header .status .excused'
 	},

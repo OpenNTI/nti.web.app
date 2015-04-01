@@ -114,6 +114,12 @@
 			color: $primary-grey;
 		}
 	}
+
+	.disclaimer-header {
+		display: inline-block;
+		padding-right: 12px;
+		@include icon('info', $left: auto, $right: -6px, $top: 7px);
+	}
 }
 
 .x-grid-body {

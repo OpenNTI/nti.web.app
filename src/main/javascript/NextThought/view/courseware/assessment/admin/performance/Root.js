@@ -53,7 +53,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		{
 			anchor: '0 -90',
 			xtype: 'course-admin-paged-grid',
-			columnOrder: ['Student', 'Username', 'Grade'],
+			columnOrder: ['Student', 'Username', 'PredictedGrade', 'Grade'],
 			columnOverrides: {
 				Student: {
 					tpl: new Ext.XTemplate(Ext.DomHelper.markup([
@@ -97,6 +97,16 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 					})
 				},
 				Grade: { dataIndex: 'FinalGrade', sortOn: 'Grade', width: 150}
+			},
+			extraColumns: {
+				PredictedGrade: {
+					dataIndex: 'PredictedGrade',
+					sortOn: 'PredictedGrade',
+					width: 120,
+					text: Ext.DomHelper.markup({
+						cls: 'disclaimer-header', 'data-qtip': 'Estimated from the grading policy in the Syllabus', html: 'Course Grade'
+					})
+				}
 			}
 		}
 	],
@@ -111,6 +121,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		me.pageHeader = me.down('course-assessment-admin-listheader');
 		me.header = me.down('box');
 		me.createGradeMenu();
+
+		me.hidePredicted();
 
 		$AppConfig.Preferences.getPreference('Gradebook')
 			.then(function(value) {
@@ -192,6 +204,26 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			}
 		});
 	},
+
+
+	hidePredicted: function() {
+		var column = this.grid.down('[dataIndex=PredictedGrade]');
+
+		if (column) {
+			column.hide();
+		}
+	},
+
+
+	maybeShowPredicted: function() {
+		var rec = this.store.getRange()[0],
+			column = this.grid.down('[dataIndex=PredictedGrade]');
+
+		if (rec && rec.raw.hasOwnProperty('PredictedGrade')) {
+			column.show();
+		}
+	},
+
 
 	/**
 	 * Make sure the UI is synced to what ever state we restored
@@ -539,6 +571,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 		var state = {}, store = this.store,
 			page = store.getCurrentPage(),
 			sort = (store.getSorters() || [])[0];
+
+		this.maybeShowPredicted();
 
 		state.pageSize = store.pageSize;
 		state.student = this.currentStudent || 'ForCredit';
