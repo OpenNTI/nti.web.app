@@ -9,6 +9,19 @@ Ext.define('NextThought.model.courseware.Grade', {
 			var v = value + ' ' + letter;
 
 			return Ext.isEmpty(v.replace('-', '').trim());
+		},
+
+		/**
+		 * Takes a grade object and returns a display value
+		 * It looks for value, letter, correctness, and grade
+		 * @param  {Object} values grade values to get the display for
+		 * @return {String}        [escription]
+		 */
+		getDisplay: function(values) {
+			var value = values.value || values.Correctness,
+				letter = values.letter || values.Grade;
+
+			return value + ' ' + letter;
 		}
 	},
 

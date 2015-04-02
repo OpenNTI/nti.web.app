@@ -83,7 +83,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Header', {
 		}
 
 		if (grade) {
-			this.predictedEl.update(grade);
+			this.predictedEl.update(NextThought.model.courseware.Grade.getDisplay(grade));
 			this.predictedContainerEl.removeCls('hidden');
 		} else {
 			this.predictedContainerEl.addCls('hidden');

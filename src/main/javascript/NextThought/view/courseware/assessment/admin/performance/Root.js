@@ -105,7 +105,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 					width: 120,
 					text: Ext.DomHelper.markup({
 						cls: 'disclaimer-header', 'data-qtip': 'Estimated from the grading policy in the Syllabus', html: 'Course Grade'
-					})
+					}),
+					renderer: function(val) {
+						return NextThought.model.courseware.Grade.getDisplay(val);
+					}
 				}
 			}
 		}
