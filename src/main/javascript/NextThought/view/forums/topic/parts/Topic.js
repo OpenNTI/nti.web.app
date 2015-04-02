@@ -382,13 +382,13 @@ Ext.define('NextThought.view.forums.topic.parts.Topic', {
 	buildCommentPagingNav: function(commentCmp) {
 		var numPages = 0, me = this;
 
-		this.pagingCommentsNav = Ext.get(this.pagingCommentsNavTpl.append(this.el.down('.foot')));
-
-		this.pager = Ext.widget('topic-comment-pager', {
-			renderTo: this.pagingCommentsNav
+		this.onceRendered.then(function() {
+			me.pagingCommentsNav = Ext.get(me.pagingCommentsNavTpl.append(me.el.down('.foot')));
+			me.pager = Ext.widget('topic-comment-pager', {
+				renderTo: me.pagingCommentsNav
+			});
+			me.pager.bindStore(commentCmp.store);
 		});
-
-		this.pager.bindStore(commentCmp.store);
 	},
 
 

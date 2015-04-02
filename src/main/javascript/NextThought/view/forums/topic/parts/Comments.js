@@ -121,6 +121,7 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 		me.initialLoad.done(function() {
 			if (me.activeComment) {
 				me.goToComment(me.activeComment).done(ready);
+				delete me.store.proxy.extraParams.batchContaining;
 			} else {
 				ready();
 			}
@@ -183,7 +184,8 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {},{
 			sortOn: 'CreatedTime',
 			sortOrder: 'ascending',
-			filter: 'TopLevel'
+			filter: 'TopLevel',
+			batchContaining: me.activeComment ? me.activeComment.getId() : ''
 		});
 
 		function storeLoad() {

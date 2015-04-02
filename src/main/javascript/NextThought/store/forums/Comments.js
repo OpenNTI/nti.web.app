@@ -7,6 +7,28 @@ Ext.define('NextThought.store.forums.Comments', {
 
 	model: 'NextThought.model.forums.CommentPost',
 
+	proxy: {
+		type: 'rest',
+		noCache: false,
+		limitParam: 'batchSize',
+		pageParam: undefined,
+		startParam: 'batchStart',
+		reader: {
+			type: 'nti',
+			root: 'Items',
+			totalProperty: 'FilteredTotalItemCount',
+			readRecords: function(resp) {
+				var data = this.self.prototype.readRecords.apply(this, arguments);
+				this.currentPage = resp.BatchPage;
+				return data;
+			}
+		},
+		headers: {
+			'Accept': 'application/vnd.nextthought.collection+json'
+		}
+	},
+
+
 	constructor: function() {
 		this.callParent(arguments);
 
@@ -158,12 +180,12 @@ Ext.define('NextThought.store.forums.Comments', {
 
 
 	getCurrentPage: function() {
-		return parseInt(this.currentPage, 10);
+		return this.proxy.reader.currentPage;
 	},
 
 
 	loadNextPage: function() {
-		var current = this.currentPage,
+		var current = this.getCurrentPage(),
 			total = this.getTotalPages();
 
 		if (current < total) {
@@ -173,7 +195,7 @@ Ext.define('NextThought.store.forums.Comments', {
 
 
 	loadPreviousPage: function() {
-		var current = this.currentPage;
+		var current = this.getCurrentPage();
 
 		if (current > 1) {
 			this.loadPage(current - 1);
