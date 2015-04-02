@@ -1345,6 +1345,52 @@
 			}
 		}
 
+		.email-verification{
+			.email-verified {
+				width: 30px;
+				height: 30px;
+				display: inline-block;
+				margin-left: 5px;
+
+				@include icon('ico_enrollment_circhlecheck', $top: 9px, $right: 5px, $left: auto);
+			}
+
+			.email-not-verified {
+				color: #ffffff;
+				padding: 0 15px 0 40px;
+				@include icon('circle-check-white-small', $top: 10px, $left: 13px);
+
+				&.button {
+					border-radius: 5px;
+					display: inline-block;
+					font: italic 600 0.9em/40px $font;
+					cursor: pointer;
+					position: relative;
+					background-color: $primary-blue;
+					border: 1px solid #f0f0f0;
+					margin-left: 10px;
+
+					&.disabled {
+						display: none;
+					}
+				}
+			}
+
+			.verification-token{
+				display: block;
+				margin: 5px 0;
+				font-size: 18px;
+
+				&.hidden{
+					display: none;
+				}
+
+				a.link {
+					color: $primary-blue;
+				}
+			}
+		}
+
 		.error-msg{
 			margin-top: 4px;
 			color: red;

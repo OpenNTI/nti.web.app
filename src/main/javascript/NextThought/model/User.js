@@ -270,6 +270,32 @@ Ext.define('NextThought.model.User', {
 	},
 
 
+	sendEmailVerification: function() {
+		if (!this.hasLink('RequestEmailVerification')) {
+			return Promise.reject();
+		}
+
+		var reqLink = this.getLink('RequestEmailVerification');
+		return Service.post(reqLink)
+			.then(function(response) {
+				return Promise.resolve();
+			});
+	},
+
+
+	verifyEmailToken: function(token) {
+		if (!this.hasLink('VerifyEmailWithToken') || !token) {
+			return Promise.reject();
+		}
+
+		var link = this.getLink('VerifyEmailWithToken');
+		return Service.post(link, {token: token})
+			.then(function(response) {
+				return Promise.resolve(response);
+			});
+	},
+
+
 	getSuggestContacts: function() {
 		if (!isFeature('suggest-contacts') || !(this.hasLink('SuggestContacts') || this.hasLink('Classmates'))) { return Promise.reject(); }
 

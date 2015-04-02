@@ -4,13 +4,14 @@ Ext.define('NextThought.view.profiles.About', {
 
 	//<editor-fold desc="Config">
 	requires: [
-		'NextThought.view.profiles.ProfileFieldEditor'
+		'NextThought.view.profiles.ProfileFieldEditor',
+		'NextThought.view.account.verification.EmailToken'
 	],
 
 
-    mixins: {
+	mixins: {
         EditingUser: 'NextThought.view.profiles.mixins.EditUserMixin'
-    },
+	},
 
 	uriFriendlyName: 'about',
 	html: 'about',
@@ -86,6 +87,22 @@ Ext.define('NextThought.view.profiles.About', {
 		homePageEl: '.profile-about .meta [data-field=home_page]'
 	},
 
+
+	emailVerificationTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+		{ cls: 'email-verification', cn: [
+			{ tag: 'tpl', 'if': 'isEmailVerified', cn: [
+				{ tag: 'span', cls: 'email-verified'}
+			]},
+			{ tag: 'tpl', 'if': '!isEmailVerified', cn: [
+				{ tag: 'span', cls: 'email-not-verified button', html: 'Verify Email'},
+			]},
+			{ cls: 'verification-token hidden', cn: [
+				{tag: 'span', html: 'Thank you! We sent you a verification email.'},
+				{tag: 'a', cls: 'link', html: 'Click here '},
+				{tag: 'span', html: 'to enter your verification token'}
+			]}
+		]}
+	])),
 	//</editor-fold>
 
 
@@ -288,6 +305,10 @@ Ext.define('NextThought.view.profiles.About', {
 			}
 		});
 		this.on('destroy', 'destroy', this.metaEditor);
+
+		if (isFeature('email-verify')) {
+			this.markEmailVerificationStatus(user);
+		}
 	},
 
 
@@ -327,6 +348,48 @@ Ext.define('NextThought.view.profiles.About', {
 	},
 	//</editor-fold>
 
+
+	markEmailVerificationStatus: function(user) {
+		if (!isMe(user)) { return; }
+
+		var targetEl = this.metaEl.down('[data-field=email]');
+		if (user.hasLink('RequestEmailVerification')) {
+			this.emailVerificationEl = Ext.get(this.emailVerificationTpl.append(targetEl.parent(), {'isEmailVerified': false}));
+			this.mon(this.emailVerificationEl, 'click', 'doEmailVerification', this);
+		}
+	},
+
+
+	doEmailVerification: function(e) {
+		e.preventDefault();
+		var me = this;
+
+		if (Ext.fly(e.target).up('.verification-token')) {
+			me.showVerificationTokenWindow();
+			return false;
+		}
+
+		$AppConfig.userObject.sendEmailVerification()
+			.then(function() {
+				var tokenEl = me.emailVerificationEl.down('.verification-token');
+				if (tokenEl) {
+					tokenEl.removeCls('hidden');
+				}
+				console.log('Email verification sent. Arguments: ', arguments);
+			})
+			.fail(function() {
+				console.log('Email verification failed. Arguments: ', arguments);
+			});
+	},
+
+
+	showVerificationTokenWindow: function() {
+		this.emailVerificationWin = Ext.widget('email-token-window', {
+			user: $AppConfig.userObject
+		});
+
+		this.emailVerificationWin.showBy(this.emailVerificationEl, 'br-tr', [0, 0]);
+	},
 
 	//<editor-fold desc="Field Editor">
 	editName: function(nameEl) {
