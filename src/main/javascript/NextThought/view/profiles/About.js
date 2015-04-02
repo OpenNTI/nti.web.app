@@ -94,7 +94,7 @@ Ext.define('NextThought.view.profiles.About', {
 				{ tag: 'span', cls: 'email-verified'}
 			]},
 			{ tag: 'tpl', 'if': '!isEmailVerified', cn: [
-				{ tag: 'span', cls: 'email-not-verified button', html: 'Verify Email'},
+				{ tag: 'span', cls: 'email-not-verified button', html: 'Verify Email'}
 			]},
 			{ cls: 'verification-token hidden', cn: [
 				{tag: 'span', html: 'Thank you! We sent you a verification email.'},
