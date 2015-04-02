@@ -382,7 +382,8 @@ Ext.define('NextThought.controller.Account', {
 
 
 	suggestContactsAction: function() {
-		var peersStore, me = this;
+		var peersStore, me = this,
+			a = Ext.getStore('all-contacts-store');
 		$AppConfig.userObject.getSuggestContacts()
 			.then(function(items) {
 				if (Ext.isEmpty(items)) { return Promise.reject(); }
