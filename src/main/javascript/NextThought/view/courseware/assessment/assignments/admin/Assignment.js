@@ -1,3 +1,4 @@
+/*global getFormattedString*/
 Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-assessment-admin-assignments-item',
@@ -440,6 +441,19 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 			if (this.el && this.el.dom) {
 				this.el.unmask();
 			}
+		}
+	},
+
+
+	scrollToRecord: function(record) {
+		var grid = this.down('grid'),
+			index = this.store.indexOf(record),
+			node = grid && index >= 0 && grid.view.getNodeByRecord(record);
+
+		node = node && Ext.get(node);
+
+		if (node) {
+			node.scrollIntoView(grid.view.el, false);
 		}
 	},
 

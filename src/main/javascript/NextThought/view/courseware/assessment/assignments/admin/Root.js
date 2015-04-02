@@ -1,3 +1,4 @@
+/*global isMe*/
 Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 	extend: 'NextThought.view.courseware.assessment.assignments.View',
 	alias: 'widget.course-assessment-admin-assignments-root',
@@ -161,6 +162,8 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Root', {
 						assignmentView.syncFilterToUI();
 
 						store.proxy.extraParams.filter = assignmentView.currentFilter;
+
+						assignmentView.scrollToRecord(record);
 
 						return assignmentView.fireGoToAssignment(null, record);
 					})

@@ -13,7 +13,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.PagedGrid', {
 	scroll: 'vertical',
 
 	viewConfig: {
-		loadMask: true
+		loadMask: true,
+		preserveScrollOnRefresh: true
 	},
 
 	selType: 'cellmodel',
