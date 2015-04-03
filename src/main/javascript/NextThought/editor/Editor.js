@@ -443,6 +443,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			keyup: 'onKeyup',
 			paste: 'handlePaste',
 			click: 'handleClick',
+			drop: 'handleDrop',
 			contextmenu: 'handleContext',
 			mouseup: 'onMouseUp',
 			mousedown: stop,
@@ -618,6 +619,17 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		this.maybeEnableSave();
 
 		return false;
+	},
+
+
+	handleDrop: function(e) {
+		var browserEvent = e.browserEvent,
+			data = browserEvent && browserEvent.dataTransfer,
+			files = data && data.files;
+
+		if (files && files.length) {
+			e.stopEvent();
+		}
 	},
 
 
