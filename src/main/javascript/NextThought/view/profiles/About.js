@@ -95,11 +95,6 @@ Ext.define('NextThought.view.profiles.About', {
 			]},
 			{ tag: 'tpl', 'if': '!isEmailVerified', cn: [
 				{ tag: 'span', cls: 'email-not-verified button', html: 'Verify Email'}
-			]},
-			{ cls: 'verification-token hidden', cn: [
-				{tag: 'span', html: 'Thank you! We sent you a verification email.'},
-				{tag: 'a', cls: 'link', html: 'Click here '},
-				{tag: 'span', html: 'to enter your verification token'}
 			]}
 		]}
 	])),
@@ -350,11 +345,13 @@ Ext.define('NextThought.view.profiles.About', {
 
 
 	markEmailVerificationStatus: function(user) {
-		if (!isMe(user)) { return; }
+		if (!isMe(user) || !user) { return; }
 
-		var targetEl = this.metaEl.down('[data-field=email]');
-		if (user.hasLink('RequestEmailVerification')) {
-			this.emailVerificationEl = Ext.get(this.emailVerificationTpl.append(targetEl.parent(), {'isEmailVerified': false}));
+		var targetEl = this.metaEl.down('[data-field=email]'),
+			isEmailVerified = !(user.hasLink('RequestEmailVerification'));
+
+		this.emailVerificationEl = Ext.get(this.emailVerificationTpl.append(targetEl.parent(), {'isEmailVerified': isEmailVerified}));
+		if (!isEmailVerified) {
 			this.mon(this.emailVerificationEl, 'click', 'doEmailVerification', this);
 		}
 	},
@@ -362,33 +359,34 @@ Ext.define('NextThought.view.profiles.About', {
 
 	doEmailVerification: function(e) {
 		e.preventDefault();
+		if (this.isVerifyingEmail || Ext.fly(e.target).up('.sent')) { return; }
+
 		var me = this;
-
-		if (Ext.fly(e.target).up('.verification-token')) {
-			me.showVerificationTokenWindow();
-			return false;
-		}
-
+		me.isVerifyingEmail = true;
 		$AppConfig.userObject.sendEmailVerification()
 			.then(function() {
-				var tokenEl = me.emailVerificationEl.down('.verification-token');
-				if (tokenEl) {
-					tokenEl.removeCls('hidden');
-				}
-				console.log('Email verification sent. Arguments: ', arguments);
+				me.showVerificationTokenWindow();
+				me.emailVerificationEl.addCls('sent');
+				me.emailVerificationEl.down('.button').setHTML('Verification Email Sent');
+				delete me.isVerifyingEmail;
 			})
 			.fail(function() {
-				console.log('Email verification failed. Arguments: ', arguments);
+				delete me.isVerifyingEmail;
 			});
 	},
 
 
 	showVerificationTokenWindow: function() {
+		var me = this;
 		this.emailVerificationWin = Ext.widget('email-token-window', {
-			user: $AppConfig.userObject
+			user: me.user,
+			autoShow: true
 		});
 
-		this.emailVerificationWin.showBy(this.emailVerificationEl, 'br-tr', [0, 0]);
+		wait()
+			.then(function() {
+				me.emailVerificationWin.alignTo(me.emailVerificationEl, 'bl-br?');
+			});
 	},
 
 	//<editor-fold desc="Field Editor">

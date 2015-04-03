@@ -1346,6 +1346,10 @@
 		}
 
 		.email-verification{
+			display: inline-block;
+			width: 280px;
+			position: relative;
+
 			.email-verified {
 				width: 30px;
 				height: 30px;
@@ -1373,20 +1377,6 @@
 					&.disabled {
 						display: none;
 					}
-				}
-			}
-
-			.verification-token{
-				display: block;
-				margin: 5px 0;
-				font-size: 18px;
-
-				&.hidden{
-					display: none;
-				}
-
-				a.link {
-					color: $primary-blue;
 				}
 			}
 		}

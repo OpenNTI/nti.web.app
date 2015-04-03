@@ -6,31 +6,46 @@ Ext.define('NextThought.view.account.verification.EmailToken', {
 	ui: 'nt-window',
 	minimizable: false,
 	constrain: true,
-//	modal: true,
+	constrainTo: Ext.getBody(),
+	floating: true,
 	closable: true,
 	resizable: false,
+	width: 450,
 	dialog: true,
 	closeAction: 'destroy',
+	childEls: ['body'],
+	getTargetEl: function() {
+		return this.body;
+	},
+
+	getDockedItems: function() {
+		return [];
+	},
+
+	layout: 'auto',
+	componentLayout: 'natural',
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header', cn: [
-			{cls: 'title', html: 'Enter an Email Verification Code'},
-			{cls: 'sub', html: 'Please check your email for the verification code'}
+			{cls: 'title', html: 'Thank you! We sent you a verification email.'},
+			{cls: 'sub', html: 'To finish verifying your email, enter the verification token, we sent you.'}
 		]},
-		{ cls: 'body', cn: [
-			{cls: 'input-box', cn: [
-				{tag: 'input', cls: 'token-field', placeholder: 'Enter Token'},
-				{tag: 'span', cls: 'clear'}
-			]}
+		{cls: 'input-box', cn: [
+			{tag: 'input', cls: 'token-field', placeholder: 'Enter Token'},
+			{tag: 'span', cls: 'clear'}
 		]},
+		{
+			id: '{id}-body', cls: 'body-container', cn: ['{%this.renderContainer(out,values)%}']
+		},
 		{cls: 'footer', cn: [
 			{cls: 'controls', cn: [
-				{tag: 'a', cls: 'button cancel', role: 'button', html: '{{{NextThought.view.courseware.enrollment.Window.cancel}}}'},
-				{tag: 'a', cls: 'button confirm', role: 'button', html: 'Submit'}
+				{tag: 'a', cls: 'button confirm', role: 'button', html: 'Submit'},
+				{tag: 'a', cls: 'button cancel', role: 'button', html: '{{{NextThought.view.courseware.enrollment.Window.cancel}}}'}
 			]}
 		]}
 	]),
 
+	items: [],
 
 	renderSelectors: {
 		tokenEl: '.input-box input',

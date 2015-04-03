@@ -373,15 +373,14 @@
 
 .email-verification-window {
 	@extend .nti-window;
-//	box-shadow: 0 2px 4px 1px rgba(0,0,0,0.14),inset 0 2px rgba(255,255,255,0.5);
-//	border: solid 1px #cecece;
 	outline: 0;
 	border-radius: 0;
 	box-shadow: rgba(0, 0, 0, 0.137255) 0px 2px 4px 1px, rgba(255, 255, 255, 0.498039) 0px 2px inset;
 	border: 1px solid rgb(206, 206, 206);
+	min-height: 204px;
 
 	.header {
-		margin: 24px 34px;
+		margin: 16px 26px;
 		color: $secondary-grey;
 
 		.title {
@@ -418,40 +417,42 @@
 	}
 
 	.footer{
-		border-top: 1px solid $border-grey;
-		padding: 7px 0;
+		background-color: #f8f8f8;
+		overflow: hidden;
+		position: relative;
 
-		.controls{
-			text-align: right;
-			margin: 10px 20px;
+		&::before {
+			content: '';
+			position: absolute;
+			bottom: 40px;
+			height: 300px;
+			left: 0;
+			right: 0;
+			background-color: #f0f0f0;
+			box-shadow: 0 0 5px 0 rgba(0,0,0,0.35);
+			clip: rect(300px, auto, 310px, auto);
+			border-radius: 350em / 4em;
+		}
 
-			a.button {
-				padding: 8px 20px;
-				height: 38px;
-				color: $primary-grey;
-				background: #e1e1e1;
-				border-radius: 5px;
-				border: 1px solid #dcdcdc;
-				cursor: pointer;
-				margin-left: 10px;
-				box-shadow: 0 0px 1px 1px #fff;
+		a.button {
+			float: right;
+			padding: 0 20px;
+			cursor: pointer;
+			font: normal 400 0.9em/40px $font;
+			text-align: center;
+			min-width: 90px;
 
-				&.confirm {
-					font-weight: 500;
-					font-style: italic;
-					color: #ffffff;
-					background: #75bc30;
+			&.confirm {
+				background-color: $primary-blue;
+				color: white;
+				box-shadow: inset 1px 0 0 0 $border-blue;
 
-					&.disabled {
-						opacity: 0.6;
-						background: #dcdcdc;
-						outline: none;
-					}
+				&:hover {
+					opacity: 0.9;
+				}
 
-					&.red{
-						background: $primary-red;
-						outline: 1px solid $border-red;
-					}
+				&.decline, &.caution {
+					box-shadow: inset 1px 0 0 0 #dd4845;
 				}
 			}
 		}
