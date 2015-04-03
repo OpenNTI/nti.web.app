@@ -27,8 +27,17 @@ Ext.define('NextThought.view.assessment.DateMenu', {
 
 
 	addResult: function(assessment) {
-		//create a new menu item for this:
-		this.insert(0, this.getMenuItem(assessment, true));
+		//check if there is already a menu item for this assessment
+		var alreadyExists = this.items.find(function(item) {
+			return item.assessment === assessment;
+		});
+
+		//if not create one
+		if (alreadyExists) {
+			alreadyExists.setChecked(true);
+		} else {
+			this.insert(0, this.getMenuItem(assessment, true));
+		}
 	},
 
 
