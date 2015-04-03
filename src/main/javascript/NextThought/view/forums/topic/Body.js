@@ -39,6 +39,9 @@ Ext.define('NextThought.view.forums.topic.Body', {
 		topic = topicContainer.add({xtype: 'forums-topic-topic', record: record, forum: forum});
 		comment = topicContainer.add({xtype: 'forums-topic-comment-thread', topic: record, activeComment: forum.comment});
 
+		//unset the active comment so it doesn't stick around
+		delete forum.comment;
+
 		//wait until the comments are loaded to fire highlight-ready
 		if (!comment.ready) {
 			me.mon(comment, {
