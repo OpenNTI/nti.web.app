@@ -718,6 +718,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 		var me = this, title,
 			video = me.details.getVideo(),
 			name = button.getAttribute('data-name'),
+			win = this.up('window'),
 			option = me.enrollmentOptions[name], action, course;
 
 		if (!option) {
