@@ -179,14 +179,22 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 				url: me.topic.getLink('contents'),
 				pageSize: 20,
 				clearOnPageLoad: true
-			});
+			}),
+			refs = me.activeComment && me.activeComment.get('references'),
+			containingId;
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {},{
 			sortOn: 'CreatedTime',
 			sortOrder: 'ascending',
-			filter: 'TopLevel',
-			batchContaining: me.activeComment ? me.activeComment.getId() : ''
+			filter: 'TopLevel'
 		});
+
+		if (me.activeComment) {
+			containingId = Ext.isEmpty(refs) ? me.activeComment.getId() : refs[0];
+			s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {},{
+				batchContaining: containingId
+			});
+		}
 
 		function storeLoad() {
 			if (me.notLoadedYet) {
