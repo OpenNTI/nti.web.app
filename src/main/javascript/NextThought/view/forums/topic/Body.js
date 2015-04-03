@@ -34,7 +34,7 @@ Ext.define('NextThought.view.forums.topic.Body', {
 			pageSource: pageSource
 		});
 
-		topicContainer = this.add({xtype: 'container', cls: 'topic-container scroll-content', isTopicContainer: true});
+		topicContainer = this.add({xtype: 'container', cls: 'topic-container scroll-content', isTopicContainer: true, layout: 'none'});
 
 		topic = topicContainer.add({xtype: 'forums-topic-topic', record: record, forum: forum});
 		comment = topicContainer.add({xtype: 'forums-topic-comment-thread', topic: record, activeComment: forum.comment});
