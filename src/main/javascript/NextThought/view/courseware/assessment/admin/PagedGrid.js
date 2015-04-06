@@ -292,6 +292,15 @@ Ext.define('NextThought.view.courseware.assessment.admin.PagedGrid', {
 	},
 
 
+	scrollToTop: function() {
+		var dom = this.view && this.view.el && this.view.el.dom;
+
+		if (dom) {
+			dom.scrollTop = 0;
+		}
+	},
+
+
 	maybeLoadPage: function(e) {
 		var pageRow = e.getTarget('td.page-row');
 
@@ -312,6 +321,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.PagedGrid', {
 		var current = parseInt(this.store.getCurrentPage());
 
 		if (current > 1) {
+			this.mon(this.store, {
+				single: true,
+				'load': 'scrollToTop'
+			});
 			this.store.loadPage(current - 1);
 		}
 	},
@@ -322,6 +335,10 @@ Ext.define('NextThought.view.courseware.assessment.admin.PagedGrid', {
 			total = this.store.getTotalPages();
 
 		if (current < total) {
+			this.mon(this.store, {
+				single: true,
+				'load': 'scrollToTop'
+			});
 			this.store.loadPage(current + 1);
 		}
 	},
