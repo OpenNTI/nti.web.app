@@ -41,13 +41,15 @@ Ext.define('NextThought.view.badge.Window', {
 				return;
 			}
 
+			var issuer = record.get('issuer');
+
 			this.imgEl.setStyle('background-image', 'url(' + record.get('image') + ')');
 			this.nameEl.update(record.get('name'));
 			this.descriptionEl.update(record.get('description'));
 			this.criteriaLink.set({'href': record.get('criteria')});
 			this.criteriaLink.update(record.get('criteria'));
-			this.issuerLink.set({'href': record.get('issuer')});
-			this.issuerLink.update(record.get('issuer'));
+			this.issuerLink.set({'href': issuer && issuer.url});
+			this.issuerLink.update(issuer.name);
 		}
 	}],
 
