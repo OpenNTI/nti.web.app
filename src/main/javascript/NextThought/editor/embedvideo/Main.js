@@ -30,9 +30,16 @@ Ext.define('NextThought.editor.embedvideo.Main', {
 
 	afterRender: function() {
 		this.callParent(arguments);
-		var url = this.up('window').getUrl();
+
+		var url = this.up('window').getUrl(),
+			textEl = this.down('[name=embed]');
+
 		if (url) {
 			this.down('[name=embed]').getEl().dom.value = url;
+		}
+
+		if (textEl && textEl.el) {
+			textEl.el.allowContextMenu();
 		}
 	},
 
