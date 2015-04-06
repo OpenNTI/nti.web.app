@@ -288,9 +288,10 @@ Ext.define('NextThought.model.User', {
 			return Promise.reject();
 		}
 
-		var link = this.getLink('VerifyEmailWithToken');
+		var link = this.getLink('VerifyEmailWithToken'), me = this;
 		return Service.post(link, {token: token})
 			.then(function(response) {
+				me.deleteLink('RequestEmailVerification');
 				return Promise.resolve(response);
 			});
 	},

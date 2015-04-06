@@ -1381,6 +1381,10 @@
 			}
 		}
 
+		.editable[contenteditable=true] + .email-verification{
+			display: none;
+		}
+
 		.error-msg{
 			margin-top: 4px;
 			color: red;

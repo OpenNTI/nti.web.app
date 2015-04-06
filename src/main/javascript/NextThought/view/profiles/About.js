@@ -300,10 +300,7 @@ Ext.define('NextThought.view.profiles.About', {
 			}
 		});
 		this.on('destroy', 'destroy', this.metaEditor);
-
-		if (isFeature('email-verify')) {
-			this.markEmailVerificationStatus(user);
-		}
+		this.markEmailVerificationStatus(user);
 	},
 
 
@@ -345,10 +342,16 @@ Ext.define('NextThought.view.profiles.About', {
 
 
 	markEmailVerificationStatus: function(user) {
-		if (!isMe(user) || !user) { return; }
+		if (!isMe(user) || !user || !isFeature('email-verify')) { return; }
 
 		var targetEl = this.metaEl.down('[data-field=email]'),
 			isEmailVerified = !(user.hasLink('RequestEmailVerification'));
+
+		// cleanup first
+		if (this.emailVerificationEl) {
+			this.emailVerificationEl.remove();
+			delete this.emailVerificationEl;
+		}
 
 		this.emailVerificationEl = Ext.get(this.emailVerificationTpl.append(targetEl.parent(), {'isEmailVerified': isEmailVerified}));
 		if (!isEmailVerified) {
@@ -383,6 +386,7 @@ Ext.define('NextThought.view.profiles.About', {
 			autoShow: true
 		});
 
+		me.mon(me.emailVerificationWin, 'close', me.markEmailVerificationStatus.bind(me, me.user), me);
 		wait()
 			.then(function() {
 				me.emailVerificationWin.alignTo(me.emailVerificationEl, 'bl-br?');
@@ -469,6 +473,7 @@ Ext.define('NextThought.view.profiles.About', {
 		fields.set({contenteditable: false});
 		this.clearError();
 		this.removeCls('editing');
+		this.markEmailVerificationStatus(this.user);
 	},
 
 

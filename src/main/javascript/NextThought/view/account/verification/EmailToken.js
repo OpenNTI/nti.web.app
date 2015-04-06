@@ -28,8 +28,9 @@ Ext.define('NextThought.view.account.verification.EmailToken', {
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header', cn: [
 			{cls: 'title', html: 'Thank you! We sent you a verification email.'},
-			{cls: 'sub', html: 'To finish verifying your email, enter the verification token, we sent you.'}
+			{cls: 'sub', html: 'To finish verifying your email, enter the verification token:'}
 		]},
+		{cls: 'error-msg', html: ''},
 		{cls: 'input-box', cn: [
 			{tag: 'input', cls: 'token-field', placeholder: 'Enter Token'},
 			{tag: 'span', cls: 'clear'}
@@ -44,6 +45,16 @@ Ext.define('NextThought.view.account.verification.EmailToken', {
 			]}
 		]}
 	]),
+
+
+	congratsWrapperTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+		{cls: 'congrats-wrapper', cn: [
+			{cls: 'text', cn: [
+				{cls: 'title', html: 'Congratulations!'},
+				{cls: 'sub', html: 'Your email is successfully verified!'}
+			]}
+		]}
+	])),
 
 	items: [],
 
@@ -63,19 +74,42 @@ Ext.define('NextThought.view.account.verification.EmailToken', {
 
 
 	saveToken: function(e) {
-		var tokenVal = this.tokenEl.getValue();
+		var tokenVal = this.tokenEl.getValue(),
+			me = this;
+
+		if (Ext.fly(e.target).hasCls('done')) {
+			this.close();
+			return;
+		}
 
 		if (tokenVal && isMe(this.user)) {
-			$AppConfig.userObject.verifyEmailToken(tokenVal)
-				.then(function() {
-					console.log('Congratulations, your email was successfully verified');
+			this.user.verifyEmailToken(tokenVal)
+				.then(function(resp) {
+					me.showCongrats();
 				})
 				.fail(function() {
-					console.log('Sorry, we could not recognized that email token. aArguments: ', arguments);
+					me.showError();
 				});
 		}
 		else {
 			this.close();
+		}
+	},
+
+
+	showCongrats: function() {
+		this.congratsWrapperTpl.append(this.el);
+		this.submitEl.addCls('done');
+		this.submitEl.update('Dismiss');
+		this.cancelEl.hide();
+	},
+
+
+	showError: function() {
+		var errorEl = this.el.down('.error-msg');
+		if (errorEl) {
+			errorEl.addCls('visible');
+			errorEl.update('Invalid Token. We could not recognize your token.');
 		}
 	}
 

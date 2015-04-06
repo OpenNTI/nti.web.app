@@ -380,7 +380,7 @@
 	min-height: 204px;
 
 	.header {
-		margin: 16px 26px;
+		margin: 16px 26px 5px 26px;
 		color: $secondary-grey;
 
 		.title {
@@ -398,7 +398,7 @@
 		border: 1px solid #dbdbdb;
 		padding-right: 30px;
 		background: #ffffff;
-		margin: 20px 34px;
+		margin: 0px 34px 12px 34px;
 
 		input{
 			color: #757474;
@@ -416,10 +416,26 @@
 		}
 	}
 
+	.error-msg {
+		visibility: hidden;
+		color: $primary-red;
+		margin: 5px 34px;
+		font: normal 300 15px/normal $font;
+		line-height: 20px;
+		min-height: 20px;
+
+		&.visible {
+			visibility: visible;
+		}
+	}
+
 	.footer{
 		background-color: #f8f8f8;
 		overflow: hidden;
-		position: relative;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
 
 		&::before {
 			content: '';
@@ -454,6 +470,32 @@
 				&.decline, &.caution {
 					box-shadow: inset 1px 0 0 0 #dd4845;
 				}
+			}
+		}
+	}
+
+	.congrats-wrapper {
+		position: absolute;
+		top: 1px;
+		right: 0;
+		left: 0;
+		bottom: 40px;
+		background: #fff;
+
+		.text{
+			text-align: center;
+			margin-top: 30px;
+			color: $secondary-green;
+			position: relative;
+			padding-top: 48px;
+			font: normal 300 21px/normal $font;
+
+			&::after{
+				content: ' ';
+				position: absolute;
+				top: 3px; left: 45%;
+				background: $icons no-repeat;
+				@include sprite($icons,'assignment_ontime',$dimensions: true);
 			}
 		}
 	}
