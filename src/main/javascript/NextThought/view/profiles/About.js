@@ -342,7 +342,7 @@ Ext.define('NextThought.view.profiles.About', {
 
 
 	markEmailVerificationStatus: function(user) {
-		if (!isMe(user) || !user || !isFeature('email-verify')) { return; }
+		if (!isMe(user) || !user) { return; }
 
 		var targetEl = this.metaEl.down('[data-field=email]'),
 			isEmailVerified = !(user.hasLink('RequestEmailVerification'));

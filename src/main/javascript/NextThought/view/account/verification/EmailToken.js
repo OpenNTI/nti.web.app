@@ -27,12 +27,12 @@ Ext.define('NextThought.view.account.verification.EmailToken', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header', cn: [
-			{cls: 'title', html: 'Thank you! We sent you a verification email.'},
-			{cls: 'sub', html: 'To finish verifying your email, enter the verification token:'}
+			{cls: 'title', html: '{{{NextThought.view.account.verification.EmailToken.Title}}}'},
+			{cls: 'sub', html: '{{{NextThought.view.account.verification.EmailToken.SubTitle}}}'}
 		]},
 		{cls: 'error-msg', html: ''},
 		{cls: 'input-box', cn: [
-			{tag: 'input', cls: 'token-field', placeholder: 'Enter Token'},
+			{tag: 'input', cls: 'token-field', placeholder: '{{{NextThought.view.account.verification.EmailToken.Placeholder}}}'},
 			{tag: 'span', cls: 'clear'}
 		]},
 		{
@@ -40,8 +40,8 @@ Ext.define('NextThought.view.account.verification.EmailToken', {
 		},
 		{cls: 'footer', cn: [
 			{cls: 'controls', cn: [
-				{tag: 'a', cls: 'button confirm', role: 'button', html: 'Submit'},
-				{tag: 'a', cls: 'button cancel', role: 'button', html: '{{{NextThought.view.courseware.enrollment.Window.cancel}}}'}
+				{tag: 'a', cls: 'button confirm', role: 'button', html: '{{{NextThought.view.account.verification.EmailToken.Submit}}}'},
+				{tag: 'a', cls: 'button cancel', role: 'button', html: '{{{NextThought.view.account.verification.EmailToken.Cancel}}}'}
 			]}
 		]}
 	]),
@@ -50,8 +50,8 @@ Ext.define('NextThought.view.account.verification.EmailToken', {
 	congratsWrapperTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{cls: 'congrats-wrapper', cn: [
 			{cls: 'text', cn: [
-				{cls: 'title', html: 'Congratulations!'},
-				{cls: 'sub', html: 'Your email is successfully verified!'}
+				{cls: 'title', html: '{{{NextThought.view.account.verification.EmailToken.CongratulationsTitle}}}'},
+				{cls: 'sub', html: '{{{NextThought.view.account.verification.EmailToken.CongratulationsSubTitle}}}'}
 			]}
 		]}
 	])),
@@ -109,7 +109,7 @@ Ext.define('NextThought.view.account.verification.EmailToken', {
 		var errorEl = this.el.down('.error-msg');
 		if (errorEl) {
 			errorEl.addCls('visible');
-			errorEl.update('Invalid Token. We could not recognize your token.');
+			errorEl.update(getString('NextThought.view.account.verification.EmailToken.InvalidToken'));
 		}
 	}
 

@@ -29,7 +29,12 @@ Ext.define('NextThought.view.profiles.mixins.EditUserMixin', {
 		if (hasChanged) {
 			user.set(newValues);
 			user.save({
-				success: function() {
+				success: function(resp) {
+					var o = resp.responseText,
+						newUser = ParseUtils.parseItems(o)[0];
+
+					// NOTE: Update the links that way in case the email changed, we request verification.
+					user.set('Links', newUser.get('Links'));
 					finish(true);
 					me.onHideEditing();
 				},
