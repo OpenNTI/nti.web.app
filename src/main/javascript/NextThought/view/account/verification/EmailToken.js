@@ -50,8 +50,8 @@ Ext.define('NextThought.view.account.verification.EmailToken', {
 	congratsWrapperTpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{cls: 'congrats-wrapper', cn: [
 			{cls: 'text', cn: [
-				{cls: 'title', html: '{{{NextThought.view.account.verification.EmailToken.CongratulationsTitle}}}'},
-				{cls: 'sub', html: '{{{NextThought.view.account.verification.EmailToken.CongratulationsSubTitle}}}'}
+				{cls: 'title', html: '{{{NextThought.view.account.verification.EmailToken.CongratulationTitle}}}'},
+				{cls: 'sub', html: '{{{NextThought.view.account.verification.EmailToken.CongratulationSubTitle}}}'}
 			]}
 		]}
 	])),
