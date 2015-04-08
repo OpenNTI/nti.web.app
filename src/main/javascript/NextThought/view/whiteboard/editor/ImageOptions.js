@@ -2,6 +2,7 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions', {
 	alias: 'widget.wb-tool-image-options',
 	extend: 'Ext.toolbar.Toolbar',
 	requires: [
+		'NextThought.view.whiteboard.Utils',
 		'NextThought.view.menus.file.BrowserItem'
 	],
 	ui: 'options',
@@ -124,12 +125,12 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions', {
 		//file.size
 		if (!file || !(/image\/.*/i).test(file.type)) {
 			//TODO: alert user
-      cfg = {
-        title: 'Sorry.',
-        icon: 'warning-red',
-        msg: "You can't upload that type of file."
-            };
-      alert(cfg);
+	  cfg = {
+		title: 'Sorry.',
+		icon: 'warning-red',
+		msg: "You can't upload that type of file."
+			};
+	  alert(cfg);
 			console.log('selected file was invalid, or the browser does not support FileAPI');
 			return;
 		}
@@ -170,8 +171,8 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions', {
 		var image = new Image(),
 			e = this.up('whiteboard-editor'),
 			c = e.canvas,
-            width,
-            height;
+			width,
+			height;
 
 		function addImageToWhiteboard() {
 			var m = new NTMatrix(),
@@ -200,50 +201,51 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions', {
 			c.drawScene();
 		}
 
-    function scaleImage(maxW, maxH) {
-      var aspectRatio = 1.0,
-          nw, nh,
-          cs = Ext.DomHelper.append(Ext.getBody(), {tag: 'canvas', style: {visibility: 'hidden', position: 'absolute'}}),
-          ctx = cs.getContext('2d');
+		function scaleImage(maxW, maxH) {
+			var aspectRatio = 1.0,
+				nw, nh,
+				cs = Ext.DomHelper.append(Ext.getBody(), {tag: 'canvas', style: {visibility: 'hidden', position: 'absolute'}}),
+				ctx = cs.getContext('2d');
 
-      if (width > height) {
-        aspectRatio = width / height;
-        nw = maxW;
-        nh = Math.round(maxH / aspectRatio);
-      }
-      else {
-        aspectRatio = height / width;
-        nw = Math.round(maxW / aspectRatio);
-        nh = maxH;
-      }
+			if (width > height) {
+				aspectRatio = width / height;
+				nw = maxW;
+				nh = Math.round(maxH / aspectRatio);
+			}
+			else {
+				aspectRatio = height / width;
+				nw = Math.round(maxW / aspectRatio);
+				nh = maxH;
+			}
 
-      //Now we want to create a new scaled image
-      cs.width = nw;
-      cs.height = nh;
-      ctx.drawImage(image, 0, 0, width, height, 0, 0, nw, nh);
+			//Now we want to create a new scaled image
+			cs.width = nw;
+			cs.height = nh;
+			ctx.drawImage(image, 0, 0, width, height, 0, 0, nw, nh);
 
-      width = nw;
-      height = nh;
-      dataUrl = cs.toDataURL('image/png');
-      Ext.fly(cs).remove();    //clean up
+			width = nw;
+			height = nh;
+			dataUrl = cs.toDataURL('image/png');
+			Ext.fly(cs).remove();	//clean up
 
-    }
+		}
 
-    image.onload = function() {
-      var maxImgH = 500,
-          maxImgW = 500;
+		image.onload = function() {
+			var maxImgH = 500,
+				maxImgW = 500;
 
-      width = image.width;
-      height = image.height;
+			width = image.width;
+			height = image.height;
+			dataUrl = image.src;//just incase it was proxied.
 
-      if (width > maxImgW || height > maxImgH) {
-        scaleImage(maxImgW, maxImgH);
-      }
+			if (width > maxImgW || height > maxImgH) {
+				scaleImage(maxImgW, maxImgH);
+			}
 
-      addImageToWhiteboard();
-    };
+			addImageToWhiteboard();
+		};
 
-    image.src = dataUrl;
+		WBUtils.maybeProxyImage(dataUrl, image);
 	},
 
 	getOptions: function() {

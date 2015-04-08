@@ -1,10 +1,6 @@
 Ext.define('NextThought.view.whiteboard.shapes.Url', {
 	extend:	'NextThought.view.whiteboard.shapes.Base',
 
-	requires: [
-		'NextThought.view.whiteboard.Utils'
-	],
-
 	constructor: function() {
 		this.calculatedAttributes = ['url'];
 		this.callParent(arguments);
@@ -23,10 +19,10 @@ Ext.define('NextThought.view.whiteboard.shapes.Url', {
 
 
 			image = new Image();
-			image.onload = Ext.bind(me.imageLoaded, me, [image, ctx, renderCallback]);
+			image.onload = Ext.bind(me.draw, me, [ctx, renderCallback]);
 			image.onerror = Ext.bind(me.imageFailed, me, [image, ctx, renderCallback]);
-			WBUtils.maybeProxyImage(me.url, image);
 			me.cache.url = image;
+			image.src = me.url;
 			return;
 		}
 
@@ -45,17 +41,6 @@ Ext.define('NextThought.view.whiteboard.shapes.Url', {
 		renderCallback.call(me);
 	},
 
-
-	imageLoaded: function(image,ctx,cb) {
-		if (WBUtils.canUse(image)) {
-			this.draw(ctx, cb);
-			return;
-		}
-
-		if (image.src !== Globals.CANVAS_URL_SHAPE_BROKEN_IMAGE.src && Globals.CANVAS_URL_SHAPE_BROKEN_IMAGE.src) {
-			image.src = Globals.CANVAS_URL_SHAPE_BROKEN_IMAGE.src;
-		}
-	},
 
 	imageFailed: function(image,ctx,cb) {
 		console.log('failed to load: ' + this.url);

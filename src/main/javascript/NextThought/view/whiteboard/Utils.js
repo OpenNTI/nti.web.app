@@ -59,13 +59,26 @@ Ext.define('NextThought.view.whiteboard.Utils', {
 
 
 
-	canUse: function(image) {
-		var c, img;
+	canUse: function(image, fastOnCORS) {
+		var c, img, l = location;
+		var origin = l.protocol + "//" + l.hostname + (l.port ? ':' + l.port: '');
 		try {
+			var src = image.src;
+			var cors = src.indexOf(origin) < 0;
+			if (/^data:/i.test(src) || !cors) {
+				return true;
+			}
+			else if (fastOnCORS && cors) {
+				return false;
+			}
+
 			img = Ext.getDom(image);
 			c = document.createElement('canvas');
 			c.getContext('2d').drawImage(img, 0, 0);
+
+			//This call is god-awefully-slow. Avoid it at all costs.
 			c.toDataURL('image/png');
+
 			c.width = 0;//should free the buffer we just rendered
 		}
 		catch (e) {
@@ -84,7 +97,7 @@ Ext.define('NextThought.view.whiteboard.Utils', {
 		function passthrough() { image.src = url; }
 
 		function finishTest() {
-			if (!me.canUse(tempImage)) {
+			if (!me.canUse(tempImage, true)) {
 				image.src = me.proxyImage(url);
 				return;
 			}
