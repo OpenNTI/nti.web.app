@@ -606,6 +606,11 @@
 	margin-bottom: 20px;
 	position: relative;
 
+	&.nti-mask-element {
+		height: 200px;
+		overflow: hidden;
+	}
+
 	.threaded-forum-editor{
 		position: absolute;
 		z-index: 1;

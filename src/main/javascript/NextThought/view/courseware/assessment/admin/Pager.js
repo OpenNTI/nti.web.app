@@ -148,6 +148,8 @@ Ext.define('NextThought.view.courseware.assessment.admin.Pager', {
 			this.renderTpl.overwrite(this.el, this.renderData);
 			this.attachListeners();
 		}
+
+		this.fireEvent('unmask-view');
 	},
 
 
@@ -192,6 +194,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.Pager', {
 
 
 	loadPage: function(page) {
+		this.fireEvent('mask-view');
 		this.store.loadPage(page);
 	},
 

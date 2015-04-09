@@ -388,6 +388,23 @@ Ext.define('NextThought.view.forums.topic.parts.Topic', {
 				renderTo: me.pagingCommentsNav
 			});
 			me.pager.bindStore(commentCmp.store);
+
+			me.mon(me.pager, {
+				'mask-view': function() {
+					var commentRect = commentCmp.el && commentCmp.el.dom.getBoundingClientRect(),
+						viewHeight = Ext.Element.getViewportHeight(),
+						h = viewHeight - commentRect.top;
+
+					h = h < 200 ? 200 : h;
+
+					commentCmp.el.setHeight(h);
+					commentCmp.addCls('nti-mask-element');
+				},
+				'unmask-view': function() {
+					commentCmp.el.setHeight('auto');
+					commentCmp.removeCls('nti-mask-element');
+				}
+			});
 		});
 	},
 
