@@ -155,11 +155,15 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 		}
 
 		me.editor = Ext.widget('nti-editor', {ownerCt: me, renderTo: me.el, record: null, saveCallback: function(editor, postCmp, record) {
-			if (me.isNewRecord) {
-				me.store.insertSingleRecord(record);
-			}
-
 			me.editor.deactivate();
+
+			if (me.isNewRecord) {
+				if (record.isTopLevel()) {
+					me.loadLastPage();
+				} else {
+					me.store.insertSingleRecord(record);
+				}
+			}
 		}});
 		me.relayEvents(me.editor, ['activated-editor', 'deactivated-editor']);
 		me.editor.addCls('threaded-forum-editor');
