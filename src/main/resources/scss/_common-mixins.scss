@@ -556,6 +556,10 @@
 		width: 240px !important;
 		clear: both;
 	}
+
+	img:not(.whiteboard-thumbnail) {
+		max-width: 100%;
+	}
 }
 
 @mixin add-to-contacts {

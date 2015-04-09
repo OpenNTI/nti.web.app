@@ -996,6 +996,10 @@
 			color: $primary-grey;
 			margin-top: 5px;
 			font: normal 500 14px/20px $font;
+
+			img {
+				max-width: 100%;
+			}
 		}
 
 		&.deleted-reply{
