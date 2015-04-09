@@ -1,3 +1,4 @@
+/*globals swallow*/
 Ext.define('NextThought.view.whiteboard.Canvas', {
 	extend: 'Ext.Component',
 	alias:	'widget.whiteboard-canvas',
@@ -149,7 +150,7 @@ Ext.define('NextThought.view.whiteboard.Canvas', {
 		},
 
 
-		drawScene: function(data, canvas, finished) {
+		drawScene: function(data, canvas, finished, width, height) {
 
 			function draw(x, cb) {
 				if (x < 0) {
@@ -166,8 +167,8 @@ Ext.define('NextThought.view.whiteboard.Canvas', {
 			}
 
 			var c = canvas.dom,
-				w = canvas.getWidth(),
-				h = canvas.getHeight(),
+				w = width || canvas.getWidth(),
+				h = height || canvas.getHeight(),
 				ctx,
 				shapes = data.shapeList || [],
 				i = shapes.length - 1;
@@ -196,12 +197,14 @@ Ext.define('NextThought.view.whiteboard.Canvas', {
 				resultCallback.call(window, data);
 			}
 
-			var c = Ext.DomHelper.append(Ext.getBody(), {tag: 'canvas', style: {visibility: 'hidden', position: 'absolute'}},true);
+			var c = Ext.DomHelper.append(Ext.getBody(), {tag: 'canvas', style: {visibility: 'hidden', position: 'absolute'}},true),
+				width = 580,
+				height = width / (scene.viewportRatio || 1);
 
-			c.dom.width = 580;
-			c.dom.height = 580 / (scene.viewportRatio || 1);
+			c.dom.width = width;
+			c.dom.height = height;
 
-			this.drawScene(this.updateData(scene), c, finish);
+			this.drawScene(this.updateData(scene), c, finish, width, height);
 		}
 	}
 });
