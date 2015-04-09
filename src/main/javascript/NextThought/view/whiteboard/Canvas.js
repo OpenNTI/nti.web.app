@@ -70,11 +70,19 @@ Ext.define('NextThought.view.whiteboard.Canvas', {
 
 	hasResized: function(cmp, width, height) {
 		height = Math.round(width / (this.viewportRatio || 1));
+
 		this.el.setStyle({
 			width: width + 'px',
 			height: height + 'px'
 		});
+
+		this.el.set({
+			width: width,
+			height: height
+		});
+
 		var me = this;
+
 		setTimeout(function() {
 			me.drawScene();
 		},1);
@@ -150,7 +158,7 @@ Ext.define('NextThought.view.whiteboard.Canvas', {
 		},
 
 
-		drawScene: function(data, canvas, finished, width, height) {
+		drawScene: function(data, canvas, finished) {
 
 			function draw(x, cb) {
 				if (x < 0) {
@@ -167,8 +175,8 @@ Ext.define('NextThought.view.whiteboard.Canvas', {
 			}
 
 			var c = canvas.dom,
-				w = width || canvas.getWidth(),
-				h = height || canvas.getHeight(),
+				w = c.width,
+				h = c.height,
 				ctx,
 				shapes = data.shapeList || [],
 				i = shapes.length - 1;
@@ -204,7 +212,7 @@ Ext.define('NextThought.view.whiteboard.Canvas', {
 			c.dom.width = width;
 			c.dom.height = height;
 
-			this.drawScene(this.updateData(scene), c, finish, width, height);
+			this.drawScene(this.updateData(scene), c, finish);
 		}
 	}
 });
