@@ -16,14 +16,25 @@ Ext.define('NextThought.model.openbadges.Badge', {
 	],
 
 
-	downloadBadge: function() {
+	downloadBadge: function(record, e) {
+		var me = this;
 		this.lockBadge()
 			.then(function() {
-				// TODO: Start downloading file
+				me.triggerFileDownload();
 			})
 			.fail(function() {
 				console.error('Failed to lock badge...', arguments);
 			});
+	},
+
+
+	triggerFileDownload: function() {
+		var el = new Ext.XTemplate(Ext.DomHelper.markup([
+				{ tag: 'a', href: '{href}', html: 'Download Badge'}
+			])),
+			dom = el.append(Ext.getBody(), {href: this.getLink('baked-image')});
+
+		dom.click();
 	},
 
 

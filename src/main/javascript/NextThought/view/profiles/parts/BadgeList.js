@@ -138,7 +138,7 @@ Ext.define('NextThought.view.profiles.parts.BadgeList', {
 
 
 	onItemClick: function(record, item, index, e) {
-		if (Ext.fly(e.target).hasCls('export')) {
+		if (e.getTarget('.export')) {
 			this.showExportMenu(record, Ext.get(item));
 			return;
 		}
