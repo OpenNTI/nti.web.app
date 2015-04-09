@@ -283,6 +283,11 @@ Ext.define('NextThought.model.User', {
 	},
 
 
+	isEmailVerified: function() {
+		return !this.hasLink('RequestEmailVerification');
+	},
+
+
 	verifyEmailToken: function(token) {
 		if (!this.hasLink('VerifyEmailWithToken') || !token) {
 			return Promise.reject();

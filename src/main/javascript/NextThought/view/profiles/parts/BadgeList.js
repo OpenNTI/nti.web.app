@@ -14,11 +14,18 @@ Ext.define('NextThought.view.profiles.parts.BadgeList', {
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag: 'tpl', 'for': '.', cn: [
 			{cls: 'badge {earnedCls}', cn: [
-				{cls: 'img', style: {backgroundImage: 'url({image})'}}//,
-				//{cls: 'title', html: '{name}'}
+				{cls: 'img', style: {backgroundImage: 'url({image})'}},
+				{tag: 'tpl', 'if': 'this.canExport(values)', cn: [
+					{cls: 'link export', html: 'Export'}
+				]}
 			]}
 		]}
-	])),
+	]),
+	{
+		canExport: function(values) {
+			return values.earnedCls === 'earned' && values.Locked === true && isFeature('export-badges');
+		}
+	}),
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'header-container', cn: [
@@ -130,11 +137,52 @@ Ext.define('NextThought.view.profiles.parts.BadgeList', {
 	},
 
 
-	onItemClick: function(record) {
+	onItemClick: function(record, item, index, e) {
+		if (Ext.fly(e.target).hasCls('export')) {
+			this.showExportMenu(record, Ext.get(item));
+			return;
+		}
+
 		var win = Ext.widget('badge-window', {
 			badge: record
 		});
 
 		win.show();
+	},
+
+
+	showExportMenu: function(record, itemEl) {
+		if (!this.exportMenu) {
+			this.exportMenu = Ext.widget('menu', {
+				ownerCmp: this,
+				constrainTo: Ext.getBody(),
+				defaults: {
+					ui: 'nt-menuitem',
+					plain: true
+				}
+			});
+
+			if (record.hasLink('baked-image')) {
+				this.exportMenu.add(new Ext.Action({
+					text: 'Download Badge',
+					scope: this,
+					handler: Ext.bind(record.downloadBadge, record),
+					itemId: 'download-badge',
+					ui: 'nt-menuitem', plain: true
+				}));
+			}
+
+			if (record.hasLink('mozilla-backpack')) {
+				this.exportMenu.add(new Ext.Action({
+					text: 'Push to Mozilla BackPack',
+					scope: this,
+					handler: Ext.bind(record.exportToBackPack, record),
+					itemId: 'export-backpack',
+					ui: 'nt-menuitem', plain: true
+				}));
+			}
+		}
+
+		this.exportMenu.showBy(itemEl, 'tl-bl?');
 	}
 });
