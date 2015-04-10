@@ -12,7 +12,8 @@ Ext.define('NextThought.model.openbadges.Badge', {
 		{name: 'Locked', type: 'boolean'},
 		//properties for the ui
 		{name: 'earnedCls', type: 'string', persist: false},
-		{name: 'isEmpty', type: 'bool', persist: false}
+		{name: 'isEmpty', type: 'bool', persist: false},
+		{name: 'isMe', type: 'boolean', persist: false}
 	],
 
 
@@ -23,6 +24,14 @@ Ext.define('NextThought.model.openbadges.Badge', {
 				me.triggerFileDownload();
 			})
 			.fail(function() {
+				Ext.MessageBox.alert({
+					msg: getString('NextThought.model.openbadges.Badge.LockFailedEmailReason'),
+					buttons: Ext.MessageBox.OK,
+					scope: me,
+					icon: 'warning-red',
+					buttonText: {'ok': 'Close'},
+					title: getString('NextThought.model.openbadges.Badge.LockFailed')
+				});
 				console.error('Failed to lock badge...', arguments);
 			});
 	},
@@ -39,7 +48,51 @@ Ext.define('NextThought.model.openbadges.Badge', {
 
 
 	exportToBackPack: function() {
-		// TODO: To be implemented
+		var me = this;
+		this.lockBadge()
+			.then(function() {
+				return me.pushToMozillaBackpack()
+					.then(function() {
+						console.log('Congratulations, your badge was sent to backpack');
+					})
+					.fail(function() {
+						console.error('Failed to push to Mozilla Backpack');
+					});
+			})
+			.fail(function() {
+				Ext.MessageBox.alert({
+					msg: getString('NextThought.model.openbadges.Badge.LockFailedEmailReason'),
+					buttons: Ext.MessageBox.OK,
+					scope: me,
+					icon: 'warning-red',
+					buttonText: {'ok': 'Close'},
+					title: getString('NextThought.model.openbadges.Badge.LockFailed')
+				});
+				console.error('Failed to lock badge...', arguments);
+			});
+	},
+
+
+	pushToMozillaBackpack: function() {
+		var jsonURL = this.getLink('mozilla-backpack');
+
+		if (Ext.isEmpty(jsonURL)) {
+			return Promise.reject();
+		}
+
+		return new Promise(function(fulfill, reject) {
+			OpenBadges.issue([jsonURL], function(errors, successes) {
+				Ext.each(errors, function(error) {
+					console.error('Failed Assertion: ' + error.assertion + ' Reason: ' + error.reason);
+				});
+
+				if (!Ext.isEmpty(errors)) {
+					reject(errors);
+				} else {
+					fulfill(successes);
+				}
+			});
+		});
 	},
 
 

@@ -23,7 +23,7 @@ Ext.define('NextThought.view.profiles.parts.BadgeList', {
 	]),
 	{
 		canExport: function(values) {
-			return values.earnedCls === 'earned' && values.Locked === true && isFeature('export-badges');
+			return values.earnedCls === 'earned' && values.isMe === true && isFeature('export-badges');
 		}
 	}),
 
@@ -162,25 +162,21 @@ Ext.define('NextThought.view.profiles.parts.BadgeList', {
 				}
 			});
 
-			if (record.hasLink('baked-image')) {
-				this.exportMenu.add(new Ext.Action({
-					text: 'Download Badge',
-					scope: this,
-					handler: Ext.bind(record.downloadBadge, record),
-					itemId: 'download-badge',
-					ui: 'nt-menuitem', plain: true
-				}));
-			}
+			this.exportMenu.add(new Ext.Action({
+				text: 'Download Badge',
+				scope: this,
+				handler: Ext.bind(record.downloadBadge, record),
+				itemId: 'download-badge',
+				ui: 'nt-menuitem', plain: true
+			}));
 
-			if (record.hasLink('mozilla-backpack')) {
-				this.exportMenu.add(new Ext.Action({
-					text: 'Push to Mozilla BackPack',
-					scope: this,
-					handler: Ext.bind(record.exportToBackPack, record),
-					itemId: 'export-backpack',
-					ui: 'nt-menuitem', plain: true
-				}));
-			}
+			this.exportMenu.add(new Ext.Action({
+				text: 'Push to Mozilla BackPack',
+				scope: this,
+				handler: Ext.bind(record.exportToBackPack, record),
+				itemId: 'export-backpack',
+				ui: 'nt-menuitem', plain: true
+			}));
 		}
 
 		this.exportMenu.showBy(itemEl, 'tl-bl?');

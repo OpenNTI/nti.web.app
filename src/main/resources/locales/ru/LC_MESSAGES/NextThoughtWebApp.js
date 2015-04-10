@@ -52,6 +52,8 @@ NTIStrings['enrollment.unenroll.description'] = 'You are no longer enrolled in t
 
 
 window.NTIStrings = window.NTIStrings || {};
+NTIStrings['NextThought.model.openbadges.Badge.LockFailed'] = 'Permission Denied...';
+NTIStrings['NextThought.model.openbadges.Badge.LockFailedEmailReason'] = 'Your email needs to be verified, click the About tab and Then click Verify Email button';
 NTIStrings['NextThought.view.MessageBar.remember'] = 'Понятно. Больше не показывать.';
 NTIStrings['NextThought.view.MessageBar.dismiss'] = 'Убрать';
 NTIStrings['NextThought.view.MessageBox.ok'] = 'ОК';

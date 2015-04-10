@@ -210,6 +210,7 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 
 			earned.forEach(function(item) {
 				item.earnedCls = 'earned';
+				item.isMe = isMe(me.user);
 
 				if (isCourse(item)) {
 					completed.push(item);
@@ -220,6 +221,7 @@ Ext.define('NextThought.view.profiles.parts.Achievements', {
 
 			earnable.forEach(function(item) {
 				item.earnedCls = 'earnable';
+				item.isMe = isMe(me.user);
 
 				if (isCourse(item)) {
 					current.push(item);

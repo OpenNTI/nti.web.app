@@ -52,6 +52,7 @@
 	<script type="text/javascript" src="error.reporter.js"></script>
 	<script type="text/javascript" src="resources/strings/strings.js"></script>
 	<script type="text/javascript" src="resources/strings/site.js"></script>
+	<script src="https://backpack.openbadges.org/issuer.js"></script>
 	<!-- <x-compile> -->
 		<!-- <x-bootstrap> -->
 			<script type="text/javascript" src="ext-4.2/ext-debug.js" id="ext-js-library"></script>
