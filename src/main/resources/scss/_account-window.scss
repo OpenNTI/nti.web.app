@@ -474,7 +474,7 @@
 		}
 	}
 
-	.congrats-wrapper {
+	.congrats-wrapper, .pending-wrapper {
 		position: absolute;
 		top: 1px;
 		right: 0;
@@ -487,8 +487,12 @@
 			margin-top: 30px;
 			color: $secondary-green;
 			position: relative;
-			padding-top: 48px;
-			font: normal 300 21px/normal $font;
+			padding: 48px 20px 5px 20px;
+			font: normal 300 16px/normal $font;
+
+			.title{
+				font: normal 300 21px/normal $font;
+			}
 
 			&::after{
 				content: ' ';
@@ -496,6 +500,20 @@
 				top: 3px; left: 45%;
 				background: $icons no-repeat;
 				@include sprite($icons,'assignment_ontime',$dimensions: true);
+			}
+		}
+
+		&.pending-wrapper{
+			.text{
+				color: $secondary-grey;
+
+				.title{
+					color: $primary-red;
+				}
+
+				&::after {
+					@include sprite($icons,'modal-red-sign',$dimensions: true);
+				}
 			}
 		}
 	}

@@ -94,7 +94,8 @@ Ext.define('NextThought.view.profiles.About', {
 				{ tag: 'span', cls: 'email-verified'}
 			]},
 			{ tag: 'tpl', 'if': '!isEmailVerified', cn: [
-				{ tag: 'span', cls: 'email-not-verified button', html: 'Verify Email'}
+				{ tag: 'span', cls: 'email-not-verified', html: '{{{NextThought.view.profiles.About.VerifyEmail}}}'},
+				{ tag: 'span', cls: 'info', html: '', 'data-qtip': '{{{NextThought.view.profiles.About.EmailInfo}}}'}
 			]}
 		]}
 	])),
@@ -363,17 +364,23 @@ Ext.define('NextThought.view.profiles.About', {
 	doEmailVerification: function(e) {
 		e.preventDefault();
 		if (this.isVerifyingEmail || Ext.fly(e.target).up('.sent')) { return; }
+		var me = this,
+			buttonEl = me.emailVerificationEl.down('.email-not-verified');
 
-		var me = this;
 		me.isVerifyingEmail = true;
 		$AppConfig.userObject.sendEmailVerification()
 			.then(function() {
 				me.showVerificationTokenWindow();
 				me.emailVerificationEl.addCls('sent');
-				me.emailVerificationEl.down('.button').setHTML('Verification Email Sent');
+				me.emailVerificationEl.down('.email-not-verified').setHTML('Verification Email Sent');
 				delete me.isVerifyingEmail;
 			})
-			.fail(function() {
+			.fail(function(resp) {
+				var e = Ext.decode(resp.responseText);
+				if (resp.status === 422) {
+					me.showVerificationTokenWindow();
+					me.emailVerificationWin.onceRendered.then(me.emailVerificationWin.presentPendingVerification.bind(me.emailVerificationWin, e.seconds));
+				}
 				delete me.isVerifyingEmail;
 			});
 	},

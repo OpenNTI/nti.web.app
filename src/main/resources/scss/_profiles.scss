@@ -1364,24 +1364,24 @@
 			}
 
 			.email-not-verified {
+				color: $primary-blue;
+				padding: 0 7px;
+				cursor: pointer;
+			}
+
+			.info {
+				width: 40px;
+				height: 30px;
+				@include icon('info_active', $top: 3px, $left: 0);
+			}
+
+			.x-mask {
+				opacity: 0.6;
+				background: rgba(0,0,0, 0.9);
+			}
+
+			.x-mask-msg-text{
 				color: #ffffff;
-				padding: 0 15px 0 40px;
-				@include icon('circle-check-white-small', $top: 10px, $left: 13px);
-
-				&.button {
-					border-radius: 5px;
-					display: inline-block;
-					font: italic 600 0.9em/40px $font;
-					cursor: pointer;
-					position: relative;
-					background-color: $primary-blue;
-					border: 1px solid #f0f0f0;
-					margin-left: 10px;
-
-					&.disabled {
-						display: none;
-					}
-				}
 			}
 		}
 

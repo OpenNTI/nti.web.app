@@ -56,6 +56,17 @@ Ext.define('NextThought.view.account.verification.EmailToken', {
 		]}
 	])),
 
+
+	pendingVerificationWrapperTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+		{cls: 'pending-wrapper', cn: [
+			{cls: 'text', cn: [
+				{cls: 'title', html: '{{{NextThought.view.account.verification.EmailToken.PendingTitle}}}'},
+				{cls: 'sub', html: '{{{NextThought.view.account.verification.EmailToken.PendingSubTitle}}}'}
+			]}
+		]}
+	])),
+
+
 	items: [],
 
 	renderSelectors: {
@@ -99,6 +110,18 @@ Ext.define('NextThought.view.account.verification.EmailToken', {
 
 	showCongrats: function() {
 		this.congratsWrapperTpl.append(this.el);
+		this.submitEl.addCls('done');
+		this.submitEl.update('Dismiss');
+		this.cancelEl.hide();
+	},
+
+
+	presentPendingVerification: function(waitingSeconds) {
+		if (!waitingSeconds) { return; }
+
+		var time = TimeUtils.getNaturalDuration(waitingSeconds * 1000),
+			timeTxt = '<b>' + time + '</b>';
+		this.pendingVerificationWrapperTpl.append(this.el, {time: timeTxt});
 		this.submitEl.addCls('done');
 		this.submitEl.update('Dismiss');
 		this.cancelEl.hide();
