@@ -299,10 +299,10 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 		var targetPage = Math.ceil((this.store.getTotalCount() + 1) / this.store.pageSize), me = this;
 
 		return new Promise(function(fulfill, reject) {
-			if (me.store.getCurrentPage() === targetPage) {
+			//if the pages are the same and the store has records don't bother
+			if (me.store.getCurrentPage() === targetPage && me.store.getCount()) {
 				fulfill(true);
-			}
-			else {
+			} else {
 				me.mon(me.store, {
 					'load': function() { fulfill(); },
 					single: true,
