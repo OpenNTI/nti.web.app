@@ -44,7 +44,8 @@ Ext.define('NextThought.view.courseware.assessment.View', {
 
 
 	restoreState: function(state) {
-		if (!state) { return; }
+		//if there was no state passed or we don't have assignments don't bother
+		if (!state || !this.hasAssignments) { return; }
 
 		var me = this,
 			view, waitFor = [];
