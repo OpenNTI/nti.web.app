@@ -52,10 +52,39 @@ Ext.define('NextThought.model.openbadges.Badge', {
 		this.lockBadge()
 			.then(function() {
 				return me.pushToMozillaBackpack()
-					.then(function() {
+					.then(function(successes) {
+						Ext.MessageBox.alert({
+							msg: getFormattedString('NextThought.model.openbadges.Badge.MozillaBackpack.SUCCESS.Message', {badgeName: me.get('name')}),
+							buttons: Ext.MessageBox.OK,
+							scope: me,
+							buttonText: {'ok': 'Close'},
+							title: getString('NextThought.model.openbadges.Badge.MozillaBackpack.SUCCESS.Title')
+						});
 						console.log('Congratulations, your badge was sent to backpack');
 					})
-					.fail(function() {
+					.fail(function(errors) {
+						var errorString = '', str;
+						Ext.each(errors, function(err) {
+							var s = 'NextThought.model.openbadges.Badge.MozillaBackpackFailed.' + err.reason,
+								str = getString(s);
+							if (s !== str) {
+								errorString += str + '<br>';
+							}
+							console.error('Failed Assertion: ' + err.assertion + ' Reason: ' + err.reason);
+						});
+
+						if (Ext.isEmpty(errorString)) {
+							errorString = getString('NextThought.model.openbadges.Badge.MozillaBackpackFailed.GENERAL');
+						}
+
+						Ext.MessageBox.alert({
+							msg: errorString,
+							buttons: Ext.MessageBox.OK,
+							scope: me,
+							icon: 'warning-red',
+							buttonText: {'ok': 'Close'},
+							title: getString('NextThought.model.openbadges.Badge.MozillaBackpackFailed.Title')
+						});
 						console.error('Failed to push to Mozilla Backpack');
 					});
 			})
@@ -82,10 +111,6 @@ Ext.define('NextThought.model.openbadges.Badge', {
 
 		return new Promise(function(fulfill, reject) {
 			OpenBadges.issue([jsonURL], function(errors, successes) {
-				Ext.each(errors, function(error) {
-					console.error('Failed Assertion: ' + error.assertion + ' Reason: ' + error.reason);
-				});
-
 				if (!Ext.isEmpty(errors)) {
 					reject(errors);
 				} else {
