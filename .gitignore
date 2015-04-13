@@ -1,0 +1,15 @@
+#css and sass
+.sass-cache
+src/main/resources/css
+src/main/resources/images/elements-*png
+src/main/resources/images/icons-*png
+
+#ignore minification byproducts
+src/main/index-minify.html
+src/main/index-unminify.html
+src/main/index.html
+app.min.js*
+
+#ext source and byproducts
+ext-4.2
+src/main/bootstrap.js
