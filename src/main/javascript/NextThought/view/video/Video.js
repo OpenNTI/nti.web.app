@@ -293,6 +293,8 @@ Ext.define('NextThought.view.video.Video', {
 						'player-seek'
 					]));
 
+			me.mon(p, 'playback-speed-changed', 'playBackSpeedChanged');
+
 			me.playerIds[cls.type] = p.id;
 		});
 		this.initializedPlayers = Ext.Object.getKeys(this.players);
@@ -361,7 +363,8 @@ Ext.define('NextThought.view.video.Video', {
 				video: this.currentVideoId,
 				time: this.issueCommand(target, 'getCurrentTime'),
 				state: this.issueCommand(target, 'getPlayerState'),
-				duration: t.getDuration ? t.getDuration() : 0
+				duration: t.getDuration ? t.getDuration() : 0,
+				speed: t.getPlaybackSpeed ? t.getPlaybackSpeed() : 1
 			};
 		}
 		finally {
@@ -421,6 +424,28 @@ Ext.define('NextThought.view.video.Video', {
 	},
 
 
+	playBackSpeedChanged: function(oldSpeed, newSpeed) {
+		var state = this.queryPlayer(),
+			time = state && state.time,
+			current = this.playlist[this.playlistIndex],
+			id = current && current.getId(),
+			container = this.up('[currentBundle]') || Ext.getCmp('content'),
+			bundle = container && container.currentBundle && container.currentBundle.getId();
+
+		//if we dont' have a player state, we aren't suppose to capture analytics,
+		//or we don't have a resource id don't send any events
+		if (!state || this.doNotCaptureAnalytics || !id) { return; }
+
+		AnalyticsUtil.addResource(id, {
+			type: 'video-speed-change',
+			course: bundle,
+			OldPlaySpeed: oldSpeed,
+			NewPlaySpeed: newSpeed,
+			VideoTime: time
+		});
+	},
+
+
 	onHeartBeat: function() {
 		var state = this.queryPlayer(),
 			time = state && state.time,
@@ -467,7 +492,8 @@ Ext.define('NextThought.view.video.Video', {
 				with_transcript: hasTranscript,
 				course: bundle,
 				video_start_time: time,
-				MaxDuration: state.duration / 1000
+				MaxDuration: state.duration / 1000,
+				PlaySpeed: state.speed
 			});
 			this.hasWatchEvent = true;
 

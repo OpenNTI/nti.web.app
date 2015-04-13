@@ -33,6 +33,7 @@ Ext.define('NextThought.util.Analytics', {
 	TYPE_TO_MIMETYPE: {
 		'video-watch': 'application/vnd.nextthought.analytics.watchvideoevent',
 		'video-skip': 'application/vnd.nextthought.analytics.skipvideoevent',
+		'video-speed-change': 'application/vnd.nextthought.analytics.videoplayspeedchange',
 		'assessment': '',
 		'resource-viewed': 'application/vnd.nextthought.analytics.resourceevent',
 		'thought-viewed': 'application/vnd.nextthought.analytics.blogviewevent',
@@ -244,6 +245,27 @@ Ext.define('NextThought.util.Analytics', {
 
 		//remove the resource from the timer map, since its already in the batch
 		delete this.TIMER_MAP[resourceId + type];
+	},
+
+
+	addResource: function(resourceId, data) {
+		var now = new Date();
+
+		if (Ext.isString(data)) {
+			data = {
+				type: data
+			};
+		}
+
+		data.context_path = this.getContext();
+		data.timestamp = now.getTime() / 1000;//send seconds back
+		data.MimeType = this.TYPE_TO_MIMETYPE[data.type];
+		data.user = $AppConfig.username;
+		data.resource_id = resourceId;
+
+		this.maybePush(data);
+		this.__maybeStartBatchTimer();
+
 	},
 
 

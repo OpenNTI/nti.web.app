@@ -602,8 +602,25 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 	},
 
 
+	updatedPlaybackRateHandler: function(message) {
+		var data = message && message.data,
+			rate = data && data[0];
+
+		rate = (rate && parseFloat(rate, 10)) || 1;
+
+		this.fireEvent('playback-speed-changed', this.playbackSpeed || 1, rate);
+
+		this.playbackSpeed = rate;
+	},
+
+
 	getDuration: function() {
 		return this.video_duration;
+	},
+
+
+	getPlaybackSpeed: function() {
+		return this.playbackSpeed || 1;
 	},
 
 
@@ -842,7 +859,8 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 							'playerSeekStart',
 							'playerSeekEnd',
 							'doSeek',
-							'durationChange'
+							'durationChange',
+							'updatedPlaybackRate'
 						],
 						i = events.length - 1;
 
