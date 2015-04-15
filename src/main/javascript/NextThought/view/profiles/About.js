@@ -379,7 +379,6 @@ Ext.define('NextThought.view.profiles.About', {
 				var e = Ext.decode(resp.responseText);
 				if (resp.status === 422) {
 					me.showVerificationTokenWindow();
-					me.emailVerificationWin.onceRendered.then(me.emailVerificationWin.presentPendingVerification.bind(me.emailVerificationWin, e.seconds));
 				}
 				delete me.isVerifyingEmail;
 			});
