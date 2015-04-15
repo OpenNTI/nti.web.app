@@ -35,13 +35,20 @@ Ext.define('NextThought.view.account.verification.EmailVerify', {
 
 
 	submitClicked: function(e) {
+		var me = this, tokenVal;
 		e.stopEvent();
-		// Handle submit if we are
+		
+		if (e.getTarget('.done')) {
+			this.close();
+			return;
+		}
+		
 		if(this.emailVerificationEl && this.emailVerificationEl.hasCls('email-verify-wrapper')) {
 			this.doEmailVerification(e);
 		}
 		else {
-			this.saveToken(e);
+			tokenVal = this.tokenEl.getValue();
+			this.saveToken(tokenVal);
 		}
 	},
 
@@ -61,7 +68,6 @@ Ext.define('NextThought.view.account.verification.EmailVerify', {
 				var e = Ext.decode(resp.responseText);
 				if (resp.status === 422) {
 					me.showVerificationTokenWindow();
-					me.presentPendingVerification(e.seconds);
 				}
 				delete me.isVerifyingEmail;
 			});

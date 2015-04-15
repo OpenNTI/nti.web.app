@@ -98,21 +98,22 @@ Ext.define('NextThought.view.account.verification.EmailToken', {
 
 
 	submitClicked: function(e) {
-		this.saveToken(e);
-	},
-
-
-	saveToken: function(e) {
 		var tokenVal = this.tokenEl.getValue(),
 			me = this;
 
-		if (Ext.fly(e.target).hasCls('done')) {
+		if (e.getTarget('.done')) {
 			this.close();
 			return;
 		}
 
-		if (tokenVal && isMe(this.user)) {
-			this.user.verifyEmailToken(tokenVal)
+		me.saveToken(tokenVal);
+	},
+
+
+	saveToken: function(tokenVal) {
+		var me = this;
+		if (!Ext.isEmpty(tokenVal) && isMe(this.user)) {
+			return this.user.verifyEmailToken(tokenVal)
 				.then(function(resp) {
 					me.showCongrats();
 				})
@@ -120,9 +121,8 @@ Ext.define('NextThought.view.account.verification.EmailToken', {
 					me.showError();
 				});
 		}
-		else {
-			this.close();
-		}
+
+		return Promise.reject();
 	},
 
 

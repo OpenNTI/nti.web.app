@@ -8,7 +8,7 @@ Ext.define('NextThought.mixins.ExportBadge', {
 			})
 			.fail(function() {
 				console.error('Failed to lock badge...', arguments);
-				me.askForEmailVerification(itemEl);
+				me.askForEmailVerification('downloadBadge', record, itemEl);
 			});
 	},
 
@@ -46,7 +46,7 @@ Ext.define('NextThought.mixins.ExportBadge', {
 			})
 			.fail(function() {
 				console.error('Failed to lock badge...', arguments);
-				me.askForEmailVerification(itemEl);
+				me.askForEmailVerification('exportToBackPack', record, itemEl);
 			});
 	},
 
@@ -73,7 +73,14 @@ Ext.define('NextThought.mixins.ExportBadge', {
 	},
 
 
-	askForEmailVerification: function(targetEl) {
+	maybeTakeNextAction: function(actionName, record) {
+		if(actionName && $AppConfig.userObject.isEmailVerified()) {
+			this[actionName](record);
+		}
+	},
+
+
+	askForEmailVerification: function(nextActionName, record, targetEl) {
 		if ($AppConfig.userObject.isEmailVerified()) { return; }
 
 		var me = this;
@@ -83,6 +90,7 @@ Ext.define('NextThought.mixins.ExportBadge', {
 			autoShow: true
 		});
 
+		this.mon(this.emailVerificationWin, 'close', me.maybeTakeNextAction.bind(me, nextActionName, record));
 		if(targetEl) {
 			wait()
 				.then(function() {
