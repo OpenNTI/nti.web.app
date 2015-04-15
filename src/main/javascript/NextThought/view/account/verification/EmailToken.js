@@ -40,7 +40,7 @@ Ext.define('NextThought.view.account.verification.EmailToken', {
 		},
 		{cls: 'footer', cn: [
 			{cls: 'controls', cn: [
-				{tag: 'a', cls: 'button confirm', role: 'button', html: '{{{NextThought.view.account.verification.EmailToken.Submit}}}'},
+				{tag: 'a', cls: 'button confirm disabled', role: 'button', html: '{{{NextThought.view.account.verification.EmailToken.Submit}}}'},
 				{tag: 'a', cls: 'button cancel', role: 'button', html: '{{{NextThought.view.account.verification.EmailToken.Cancel}}}'}
 			]}
 		]}
@@ -79,8 +79,26 @@ Ext.define('NextThought.view.account.verification.EmailToken', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		this.mon(this.submitEl, 'click', 'saveToken', this);
+		this.mon(this.submitEl, 'click', 'submitClicked', this);
 		this.mon(this.cancelEl, 'click', 'close', this);
+		this.mon(this.tokenEl, 'keyup', 'maybeEnableSubmit', this);
+	},
+
+
+	maybeEnableSubmit: function(e) {
+		var val = this.tokenEl.getValue(),
+			cls = 'disabled';
+
+		if (Ext.isEmpty(val) && !this.submitEl.hasCls(cls)) {
+			this.submitEl.addCls(cls);
+		} else if (!Ext.isEmpty(val) && this.submitEl.hasCls(cls)) {
+			this.submitEl.removeCls(cls);
+		}
+	},
+
+
+	submitClicked: function(e) {
+		this.saveToken(e);
 	},
 
 
@@ -124,6 +142,7 @@ Ext.define('NextThought.view.account.verification.EmailToken', {
 		this.pendingVerificationWrapperTpl.append(this.el, {time: timeTxt});
 		this.submitEl.addCls('done');
 		this.submitEl.update('Dismiss');
+		this.submitEl.removeCls('disabled');
 		this.cancelEl.hide();
 	},
 

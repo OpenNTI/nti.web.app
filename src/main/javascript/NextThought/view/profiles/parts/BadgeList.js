@@ -6,6 +6,10 @@ Ext.define('NextThought.view.profiles.parts.BadgeList', {
 		'NextThought.view.badge.Window'
 	],
 
+	mixins: {
+		exportBadge: 'NextThought.mixins.ExportBadge'
+	},
+
 	cls: 'badge-list',
 	itemSelector: '.badge',
 
@@ -16,7 +20,7 @@ Ext.define('NextThought.view.profiles.parts.BadgeList', {
 			{cls: 'badge {earnedCls}', cn: [
 				{cls: 'img', style: {backgroundImage: 'url({image})'}},
 				{tag: 'tpl', 'if': 'this.canExport(values)', cn: [
-					{cls: 'link export', html: 'Export'}
+					{cls: 'link export', html: ''}
 				]}
 			]}
 		]}
@@ -152,6 +156,7 @@ Ext.define('NextThought.view.profiles.parts.BadgeList', {
 
 
 	showExportMenu: function(record, itemEl) {
+		var me = this;
 		if (!this.exportMenu) {
 			this.exportMenu = Ext.widget('menu', {
 				ownerCmp: this,
@@ -164,16 +169,14 @@ Ext.define('NextThought.view.profiles.parts.BadgeList', {
 
 			this.exportMenu.add(new Ext.Action({
 				text: 'Download Badge',
-				scope: this,
-				handler: Ext.bind(record.downloadBadge, record),
+				handler: me.downloadBadge.bind(me, record, itemEl),
 				itemId: 'download-badge',
 				ui: 'nt-menuitem', plain: true
 			}));
 
 			this.exportMenu.add(new Ext.Action({
 				text: 'Push to Mozilla BackPack',
-				scope: this,
-				handler: Ext.bind(record.exportToBackPack, record),
+				handler: me.exportToBackPack.bind(me, record, itemEl),
 				itemId: 'export-backpack',
 				ui: 'nt-menuitem', plain: true
 			}));
