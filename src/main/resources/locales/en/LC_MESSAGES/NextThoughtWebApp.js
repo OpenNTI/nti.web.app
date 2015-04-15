@@ -222,6 +222,8 @@ NTIStrings['NextThought.view.account.verification.EmailToken.CongratulationSubTi
 NTIStrings['NextThought.view.account.verification.EmailToken.PendingTitle'] = 'We sent you an email verification already.';
 NTIStrings['NextThought.view.account.verification.EmailToken.PendingSubTitle'] = 'If you did not receive it, wait {time} before requesting another one.';
 NTIStrings['NextThought.view.account.verification.EmailToken.InvalidToken'] = 'Invalid Token. We could not recognize your token.';
+NTIStrings['NextThought.view.account.verification.EmailVerify.Title'] = 'Email Verification Required';
+NTIStrings['NextThought.view.account.verification.EmailVerify.SubTitle'] = 'You need to verify your email before exporting your badges. This helps to ensure maximum security for your account.';
 NTIStrings['NextThought.view.annotations.Base.share'] = 'Share With...';
 NTIStrings['NextThought.view.annotations.Base.get'] = 'Get Info...';
 NTIStrings['NextThought.view.annotations.Redaction.toggle'] = 'Toggle Redaction';
@@ -754,7 +756,7 @@ NTIStrings['NextThought.view.profiles.About.unknown'] = 'An unknown error occurr
 NTIStrings['NextThought.view.profiles.About.emptyheader'] = 'Empty Profile :(';
 NTIStrings['NextThought.view.profiles.About.emptysub'] = 'This user has not filled out their profile.';
 NTIStrings['NextThought.view.profiles.About.VerifyEmail'] = 'Verify Email';
-NTIStrings['NextThought.view.profiles.About.EmailInfo'] = 'Verifying your email will allow you to export badges.';
+NTIStrings['NextThought.view.profiles.About.EmailInfo'] = 'Verifying your Email will enable you to receive email notifications for your account.';
 NTIStrings['NextThought.view.profiles.ProfileFieldEditor.cancel'] = 'Cancel';
 NTIStrings['NextThought.view.profiles.ProfileFieldEditor.save'] = 'Save';
 NTIStrings['NextThought.view.profiles.View.profile'] = 'Profile';

@@ -471,6 +471,11 @@
 					box-shadow: inset 1px 0 0 0 #dd4845;
 				}
 			}
+
+			&.disabled {
+				background-color: $tertiary-grey-alt;
+				box-shadow: inset 1px 0 0 0 $border-grey;
+			}
 		}
 	}
 
@@ -514,6 +519,48 @@
 				&::after {
 					@include sprite($icons,'modal-red-sign',$dimensions: true);
 				}
+			}
+		}
+	}
+
+	.email-verify-wrapper {
+		position: absolute;
+		top: 1px;
+		right: 0;
+		left: 0;
+		bottom: 40px;
+		background: #fff;
+
+		.header {
+			margin: 16px 26px 5px 26px;
+			color: $secondary-grey;
+
+			.title {
+				font-weight: 400;
+				font-size: 20px;
+				font-style: italic;
+			}
+
+			.sub{
+				font-size: 14px;
+			}
+		}
+
+		.meta {
+			margin: 20px 34px;
+			color: $secondary-grey;
+			font: normal 300 18px/24px $font;
+
+			.link {
+				color: $primary-blue;
+				padding: 0 7px;
+				cursor: pointer;
+			}
+
+			.info {
+				width: 40px;
+				height: 30px;
+				@include icon('info_active', $top: 3px, $left: 0);
 			}
 		}
 	}
