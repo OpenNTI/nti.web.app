@@ -4,7 +4,7 @@ Ext.define('NextThought.mixins.ExportBadge', {
 		var me = this;
 		record.lockBadge()
 			.then(function() {
-				me.triggerFileDownload();
+				me.triggerFileDownload(record);
 			})
 			.fail(function() {
 				console.error('Failed to lock badge...', arguments);
@@ -51,11 +51,11 @@ Ext.define('NextThought.mixins.ExportBadge', {
 	},
 
 
-	triggerFileDownload: function() {
+	triggerFileDownload: function(record) {
 		var el = new Ext.XTemplate(Ext.DomHelper.markup([
 				{ tag: 'a', href: '{href}', html: 'Download Badge'}
 			])),
-			dom = el.append(Ext.getBody(), {href: this.getLink('baked-image')});
+			dom = el.append(Ext.getBody(), {href: record.getLink('baked-image')});
 
 		// TODO: we are creating a click event to trigger the download, maybe do it better?
 		dom.click();
