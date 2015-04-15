@@ -520,11 +520,12 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 		else {
 			contentHeight = content.getBoundingClientRect().height;
 		}
-		h = Math.ceil(Math.max(this.reader.getEl().getHeight(), contentHeight));
+		h = Math.ceil(contentHeight);
 
 		if (h === this.lastHeight) {
 			return;
 		}
+
 		i.setHeight(h);
 		this.reader.updateLayout();
 		this.lastHeight = h;

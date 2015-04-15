@@ -1,0 +1,31 @@
+.reader-container {
+	.center {
+		float: left;
+		width: 766px;
+		background-color: white;
+		font-size: 0.75em;
+		height: 100%;
+
+		.x-reader-pane {
+			max-height: 100%;
+			overflow-y: auto;
+		}
+	}
+
+	.tabpanel {
+		float: right;
+		position: relative;
+		height: 100%;
+	}
+}
+
+.content-viewer {
+	&::before {
+		content: '';
+		position: fixed;
+		top: 0; bottom: 0;
+		left: 0; right: 0;
+		z-index: -1;
+		background-color: rgba(0, 0, 0, 0.3);
+	}
+}
