@@ -356,32 +356,8 @@ Ext.define('NextThought.view.profiles.About', {
 
 		this.emailVerificationEl = Ext.get(this.emailVerificationTpl.append(targetEl.parent(), {'isEmailVerified': isEmailVerified}));
 		if (!isEmailVerified) {
-			this.mon(this.emailVerificationEl, 'click', 'doEmailVerification', this);
+			this.mon(this.emailVerificationEl, 'click', 'showVerificationTokenWindow', this);
 		}
-	},
-
-
-	doEmailVerification: function(e) {
-		e.preventDefault();
-		if (this.isVerifyingEmail || Ext.fly(e.target).up('.sent')) { return; }
-		var me = this,
-			buttonEl = me.emailVerificationEl.down('.email-not-verified');
-
-		me.isVerifyingEmail = true;
-		$AppConfig.userObject.sendEmailVerification()
-			.then(function() {
-				me.showVerificationTokenWindow();
-				me.emailVerificationEl.addCls('sent');
-				me.emailVerificationEl.down('.email-not-verified').setHTML('Verification Email Sent');
-				delete me.isVerifyingEmail;
-			})
-			.fail(function(resp) {
-				var e = Ext.decode(resp.responseText);
-				if (resp.status === 422) {
-					me.showVerificationTokenWindow();
-				}
-				delete me.isVerifyingEmail;
-			});
 	},
 
 
