@@ -31,40 +31,40 @@ Ext.application({
 		'NextThought.util.Globals',
 		'NextThought.overrides.*',
 		'NextThought.util.Localization',//require this SUPER early.
-		'NextThought.util.*'
+		'NextThought.util.*',
 
-		// 'Ext.grid.Panel',
-		// 'Ext.grid.column.Date',
-		// 'Ext.grid.plugin.CellEditing',
+		'Ext.grid.Panel',
+		'Ext.grid.column.Date',
+		'Ext.grid.plugin.CellEditing',
 
-		// //Require this early so we have it if we need it
-		// 'NextThought.view.MessageBar',
-		// 'NextThought.view.MessageBox'
+		//Require this early so we have it if we need it
+		'NextThought.view.MessageBar',
+		'NextThought.view.MessageBox'
 	],
 
 	controllers: [
-		// 'Account',
-		// 'UserData',
-		'Application'
-		// 'Assessment',
-		// 'Chat',
-		// 'ContentManagement',
-		// 'CourseWare',
-		// 'FilterControl',
-		// 'Forums',
-		// 'Groups',
-		// 'Library',
-		// 'Navigation',
-		// 'Notifications',
-		// 'Profile',
-		// 'Reader',
-		// 'Search',
-		// 'Session',
-		// 'SlideDeck',
-		// 'State',
-		// 'Store',
-		// 'Stream',
-		// 'Updates'
+		'Account',
+		'UserData',
+		'Application',
+		'Assessment',
+		'Chat',
+		'ContentManagement',
+		'CourseWare',
+		'FilterControl',
+		'Forums',
+		'Groups',
+		'Library',
+		'Navigation',
+		'Notifications',
+		'Profile',
+		'Reader',
+		'Search',
+		'Session',
+		'SlideDeck',
+		'State',
+		'Store',
+		'Stream',
+		'Updates'
 	],
 
 	launch: function() {
