@@ -72,11 +72,46 @@ Ext.define('NextThought.mixins.ExportBadge', {
 		});
 	},
 
+	buildDownloadAction: function(record) {
+		var me = this,
+			action = {
+				name: 'downloadBadge',
+				buttonTitle: 'Verify and Download',
+				verificationDone: function(){
+					me.downloadBadge(record);
+					return Promise.resolve();
+				},
+				verificationFailed: function() {
+					return Promise.reject();
+				}
+			};
 
-	maybeTakeNextAction: function(actionName, record) {
-		if(actionName && $AppConfig.userObject.isEmailVerified()) {
-			this[actionName](record);
-		}
+		me.possibleExportActions[action.name] = action;
+	},
+
+
+	buildMozillaBackpackAction: function(record) {
+		var me = this,
+			action = {
+				name: 'exportToBackPack',
+				buttonTitle: 'Verify and Export',
+				verificationDone: function(){
+					me.exportToBackPack(record);
+					return Promise.resolve();
+				},
+				verificationFailed: function() {
+					return Promise.reject();
+				}
+			};
+
+		me.possibleExportActions[action.name] = action;
+	},
+
+
+	addAllExportActions: function(record) {
+		this.possibleExportActions = {};
+		this.buildDownloadAction(record);
+		this.buildMozillaBackpackAction(record);
 	},
 
 
@@ -85,12 +120,16 @@ Ext.define('NextThought.mixins.ExportBadge', {
 
 		var me = this;
 
+		if(!this.possibleExportActions) {
+			this.addAllExportActions(record);
+		}
+
 		this.emailVerificationWin = Ext.widget('email-verify-window', {
 			user: $AppConfig.userObject,
-			autoShow: true
+			autoShow: true,
+			emailActionOption: this.possibleExportActions[nextActionName]
 		});
 
-		this.mon(this.emailVerificationWin, 'close', me.maybeTakeNextAction.bind(me, nextActionName, record));
 		if(targetEl) {
 			wait()
 				.then(function() {
@@ -100,5 +139,4 @@ Ext.define('NextThought.mixins.ExportBadge', {
 			this.emailVerificationWin.show();
 		}
 	}
-
 });

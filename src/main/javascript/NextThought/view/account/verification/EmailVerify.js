@@ -9,9 +9,7 @@ Ext.define('NextThought.view.account.verification.EmailVerify', {
 				{cls: 'sub', html: '{subTitle}'}
 			]},
 			{cls: 'meta', cn: [
-				{tag: 'span', cls: 'email', html: 'Email: {email}'}//,
-//				{ tag: 'span', cls: 'link', html: '{{{NextThought.view.profiles.About.VerifyEmail}}}'},
-//				{ tag: 'span', cls: 'info', html: '', 'data-qtip': '{{{NextThought.view.profiles.About.EmailInfo}}}'}
+				{tag: 'span', cls: 'email', html: 'Email: {email}'}
 			]}
 		]}
 	])),
@@ -27,9 +25,10 @@ Ext.define('NextThought.view.account.verification.EmailVerify', {
 
 
 	askForEmailVerification: function() {
-		var user = $AppConfig.userObject;
+		var user = $AppConfig.userObject, btnTitle;
 		this.emailVerificationEl = Ext.get(this.emailVerificationWrapperTpl.append(this.getEl(), {email: user.get('email'), title: this.title, subTitle: this.subTitle}));
-		this.submitEl.update('Verify');
+
+		this.submitEl.update('Verify Email');
 		this.submitEl.removeCls('disabled');
 	},
 
@@ -42,41 +41,33 @@ Ext.define('NextThought.view.account.verification.EmailVerify', {
 			this.close();
 			return;
 		}
-		
+
 		if(this.emailVerificationEl && this.emailVerificationEl.hasCls('email-verify-wrapper')) {
-			this.doEmailVerification(e);
+			this.showVerificationTokenWindow();
 		}
 		else {
 			tokenVal = this.tokenEl.getValue();
-			this.saveToken(tokenVal);
+			this.saveToken(tokenVal)
+				.then(function() {
+					if(me.emailActionOption && me.emailActionOption.verificationDone) {
+						me.emailActionOption.verificationDone()
+						.then(function () {
+							me.close();
+						});
+					}
+				})
+				.fail(function (){
+					me.showError();
+				});
 		}
-	},
-
-
-	doEmailVerification: function(e) {
-		e.preventDefault();
-		if (this.isVerifyingEmail || Ext.fly(e.target).up('.sent')) { return; }
-		var me = this;
-
-		me.isVerifyingEmail = true;
-		$AppConfig.userObject.sendEmailVerification()
-			.then(function() {
-				me.showVerificationTokenWindow();
-				delete me.isVerifyingEmail;
-			})
-			.fail(function(resp) {
-				var e = Ext.decode(resp.responseText);
-				if (resp.status === 422) {
-					me.showVerificationTokenWindow();
-				}
-				delete me.isVerifyingEmail;
-			});
 	},
 
 
 	showVerificationTokenWindow: function() {
+		var submitBtnTitle = this.emailActionOption && this.emailActionOption.buttonTitle ? this.emailActionOption.buttonTitle : 'Submit';
+
 		this.submitEl.addCls('disabled');
-		this.submitEl.update('Submit');
+		this.submitEl.update(submitBtnTitle);
 		// Reveal the token window
 		this.emailVerificationEl.remove();
 		delete this.emailVerificationEl;
