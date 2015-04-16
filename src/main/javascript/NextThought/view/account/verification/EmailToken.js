@@ -150,7 +150,10 @@ Ext.define('NextThought.view.account.verification.EmailToken', {
 			.fail(function(resp) {
 				var e = Ext.decode(resp.responseText);
 				if (resp.status === 422) {
-
+					var txt = getString('NextThought.view.account.verification.EmailToken.Title'),
+						sub= getString('NextThought.view.account.verification.EmailToken.SubTitle');
+					me.titleEl.update(txt);
+					me.subtitleEl.update(sub);
 				}
 				delete me.isVerifyingEmail;
 			});
@@ -185,5 +188,6 @@ Ext.define('NextThought.view.account.verification.EmailToken', {
 			errorEl.update(getString('NextThought.view.account.verification.EmailToken.InvalidToken'));
 		}
 	}
+
 
 });
