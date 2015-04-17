@@ -27,7 +27,7 @@ Ext.define('NextThought.view.profiles.parts.BadgeList', {
 	]),
 	{
 		canExport: function(values) {
-			return values.earnedCls === 'earned' && values.isMe === true && isFeature('export-badges');
+			return values.earnedCls === 'earned' && values.isMe === true;
 		}
 	}),
 
