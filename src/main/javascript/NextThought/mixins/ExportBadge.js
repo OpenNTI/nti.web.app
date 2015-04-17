@@ -1,6 +1,6 @@
 Ext.define('NextThought.mixins.ExportBadge', {
 
-	downloadBadge: function(record, itemEl) {
+	downloadBadge: function(record, targetEl, menuItem, e) {
 		var me = this;
 		record.lockBadge()
 			.then(function() {
@@ -8,12 +8,12 @@ Ext.define('NextThought.mixins.ExportBadge', {
 			})
 			.fail(function() {
 				console.error('Failed to lock badge...', arguments);
-				me.askForEmailVerification('downloadBadge', record, itemEl);
+				me.askForEmailVerification('downloadBadge', record, targetEl);
 			});
 	},
 
 
-	exportToBackPack: function(record, itemEl) {
+	exportToBackPack: function(record, targetEl, menuItem, e) {
 		var me = this;
 		record.lockBadge()
 			.then(function() {
@@ -46,7 +46,7 @@ Ext.define('NextThought.mixins.ExportBadge', {
 			})
 			.fail(function() {
 				console.error('Failed to lock badge...', arguments);
-				me.askForEmailVerification('exportToBackPack', record, itemEl);
+				me.askForEmailVerification('exportToBackPack', record, targetEl);
 			});
 	},
 
@@ -55,10 +55,23 @@ Ext.define('NextThought.mixins.ExportBadge', {
 		var el = new Ext.XTemplate(Ext.DomHelper.markup([
 				{ tag: 'a', href: '{href}', html: 'Download Badge'}
 			])),
-			dom = el.append(Ext.getBody(), {href: record.getLink('baked-image')});
+			filename = record.getLink('baked-image'),
+			dom = el.append(Ext.getBody(), {href: filename});
 
-		// TODO: we are creating a click event to trigger the download, maybe do it better?
-		dom.click();
+		// HTML5 download tag
+		dom.setAttribute('download', filename);
+
+		// Trigger a click event
+		// TODO: We still need to find a more reliable solution that doesn't depend on triggering a click event ourselves.
+		// For now however, this should cover all the browsers that we support.
+	    if (document.createEvent) {
+	        var event = document.createEvent('MouseEvents');
+	        event.initEvent('click', true, true);
+	        dom.dispatchEvent(event);
+	    }
+	    else {
+	        dom.click();
+	    }
 	},
 
 
