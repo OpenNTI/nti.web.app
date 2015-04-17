@@ -1620,3 +1620,22 @@
 		}
 	}
 }
+
+
+.badge-window{
+	.x-btn-new-medium {
+		.x-btn-icon-el{
+			&.export-badge{
+				width: 50px;
+				height: 30px;
+				display: none;
+
+				@include icon('download_hover', $top: 5px, $left: 5px);
+
+				&:active, &:hover {
+					@include icon('download_active', $top: 5px, $left: 5px);
+				}
+			}
+		}
+	}
+}

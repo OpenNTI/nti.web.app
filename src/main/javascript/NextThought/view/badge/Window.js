@@ -2,6 +2,10 @@ Ext.define('NextThought.view.badge.Window', {
 	extend: 'NextThought.view.window.Window',
 	alias: 'widget.badge-window',
 
+	mixins: {
+		'exportBadge': 'NextThought.mixins.ExportBadge'
+	},
+
 	cls: 'badge-window',
 	width: 500,
 	constrainTo: Ext.getBody(),
@@ -73,7 +77,18 @@ Ext.define('NextThought.view.badge.Window', {
 			layout: 'auto',
 			defaults: { xtype: 'button', ui: 'blue', scale: 'large'},
 			items: [
-				//{text: 'Save', cls: 'x-btn-flat-large save', action: 'save', href: '{url}', style: { float: 'left'}},
+				{
+					text: 'Export',
+					// iconCls: 'export-badge',
+					// tooltip: 'Export Badge',
+					cls: 'x-btn-blue-large export',
+					action: 'export', 
+					style: { float: 'left'},
+					handler: function(b, e) {
+						e.stopEvent(); 
+						b.up('window').exportClicked(b);
+					}
+				},
 				// { xtype: 'box', cls: 'iframe-save', save: true, autoEl: { tag: 'a', href: '{url}', html: 'Save', target: '_blank'}},
 				{
 					text: 'Close',
@@ -97,5 +112,10 @@ Ext.define('NextThought.view.badge.Window', {
 		if (badge) {
 			badge.setBadge(this.badge);
 		}
+	},
+
+
+	exportClicked: function(b) {
+		this.showExportMenu(this.badge, b);
 	}
 });
