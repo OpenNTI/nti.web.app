@@ -1,6 +1,9 @@
 Ext.define('NextThought.model.openbadges.Badge', {
 	extend: 'NextThought.model.Base',
 
+	requires: [
+		'NextThought.view.account.verification.EmailVerify'
+	],
 	fields: [
 		{name: 'alignment', type: 'auto'},
 		{name: 'criteria', type: 'string'},
@@ -17,62 +20,6 @@ Ext.define('NextThought.model.openbadges.Badge', {
 	],
 
 
-	downloadBadge: function(record, e) {
-		var me = this;
-		this.lockBadge()
-			.then(function() {
-				me.triggerFileDownload();
-			})
-			.fail(function() {
-				Ext.MessageBox.alert({
-					msg: getString('NextThought.model.openbadges.Badge.LockFailedEmailReason'),
-					buttons: Ext.MessageBox.OK,
-					scope: me,
-					icon: 'warning-red',
-					buttonText: {'ok': 'Close'},
-					title: getString('NextThought.model.openbadges.Badge.LockFailed')
-				});
-				console.error('Failed to lock badge...', arguments);
-			});
-	},
-
-
-	triggerFileDownload: function() {
-		var el = new Ext.XTemplate(Ext.DomHelper.markup([
-				{ tag: 'a', href: '{href}', html: 'Download Badge'}
-			])),
-			dom = el.append(Ext.getBody(), {href: this.getLink('baked-image')});
-
-		dom.click();
-	},
-
-
-	exportToBackPack: function() {
-		var me = this;
-		this.lockBadge()
-			.then(function() {
-				return me.pushToMozillaBackpack()
-					.then(function() {
-						console.log('Congratulations, your badge was sent to backpack');
-					})
-					.fail(function() {
-						console.error('Failed to push to Mozilla Backpack');
-					});
-			})
-			.fail(function() {
-				Ext.MessageBox.alert({
-					msg: getString('NextThought.model.openbadges.Badge.LockFailedEmailReason'),
-					buttons: Ext.MessageBox.OK,
-					scope: me,
-					icon: 'warning-red',
-					buttonText: {'ok': 'Close'},
-					title: getString('NextThought.model.openbadges.Badge.LockFailed')
-				});
-				console.error('Failed to lock badge...', arguments);
-			});
-	},
-
-
 	pushToMozillaBackpack: function() {
 		var jsonURL = this.getLink('mozilla-backpack');
 
@@ -82,10 +29,6 @@ Ext.define('NextThought.model.openbadges.Badge', {
 
 		return new Promise(function(fulfill, reject) {
 			OpenBadges.issue([jsonURL], function(errors, successes) {
-				Ext.each(errors, function(error) {
-					console.error('Failed Assertion: ' + error.assertion + ' Reason: ' + error.reason);
-				});
-
 				if (!Ext.isEmpty(errors)) {
 					reject(errors);
 				} else {
@@ -100,10 +43,6 @@ Ext.define('NextThought.model.openbadges.Badge', {
 		if (this.isBadgeLocked()) { return Promise.resolve(); }
 
 		var me = this;
-		if (!$AppConfig.userObject.isEmailVerified()) {
-			return Promise.reject();
-		}
-
 		return Service.post(this.getLink('lock'))
 			.then(function(resp) {
 				me.deleteLink('lock');

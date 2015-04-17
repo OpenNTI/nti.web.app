@@ -27,8 +27,12 @@ Ext.define('NextThought.view.account.verification.EmailToken', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header', cn: [
-			{cls: 'title', html: '{{{NextThought.view.account.verification.EmailToken.Title}}}'},
-			{cls: 'sub', html: '{{{NextThought.view.account.verification.EmailToken.SubTitle}}}'}
+			{cls: 'title', html: 'Enter the verification token to verify your email.'},
+			{cls: 'sub', cn: [
+					{tag: 'span', html: 'Didn\'t receive a verification email? '},
+					{tag: 'span', cls: 'link verify-link', html: 'Click here'}
+				]
+			}
 		]},
 		{cls: 'error-msg', html: ''},
 		{cls: 'input-box', cn: [
@@ -40,7 +44,7 @@ Ext.define('NextThought.view.account.verification.EmailToken', {
 		},
 		{cls: 'footer', cn: [
 			{cls: 'controls', cn: [
-				{tag: 'a', cls: 'button confirm', role: 'button', html: '{{{NextThought.view.account.verification.EmailToken.Submit}}}'},
+				{tag: 'a', cls: 'button confirm disabled', role: 'button', html: '{{{NextThought.view.account.verification.EmailToken.Submit}}}'},
 				{tag: 'a', cls: 'button cancel', role: 'button', html: '{{{NextThought.view.account.verification.EmailToken.Cancel}}}'}
 			]}
 		]}
@@ -72,39 +76,87 @@ Ext.define('NextThought.view.account.verification.EmailToken', {
 	renderSelectors: {
 		tokenEl: '.input-box input',
 		submitEl: '.footer .confirm',
-		cancelEl: '.footer .cancel'
+		cancelEl: '.footer .cancel',
+		requestLinkEl: '.header .sub .verify-link',
+		titleEl: '.header .title',
+		subtitleEl: '.header .sub'
 	},
 
 
 	afterRender: function() {
 		this.callParent(arguments);
 
-		this.mon(this.submitEl, 'click', 'saveToken', this);
+		this.mon(this.submitEl, 'click', 'submitClicked', this);
 		this.mon(this.cancelEl, 'click', 'close', this);
+		this.mon(this.tokenEl, 'keyup', 'maybeEnableSubmit', this);
+		this.mon(this.requestLinkEl, 'click', 'sendEmailVerification', this);
 	},
 
 
-	saveToken: function(e) {
+	maybeEnableSubmit: function(e) {
+		var val = this.tokenEl.getValue(),
+			cls = 'disabled';
+
+		if (Ext.isEmpty(val) && !this.submitEl.hasCls(cls)) {
+			this.submitEl.addCls(cls);
+		} else if (!Ext.isEmpty(val) && this.submitEl.hasCls(cls)) {
+			this.submitEl.removeCls(cls);
+		}
+	},
+
+
+	submitClicked: function(e) {
 		var tokenVal = this.tokenEl.getValue(),
 			me = this;
 
-		if (Ext.fly(e.target).hasCls('done')) {
+		if (e.getTarget('.done')) {
 			this.close();
 			return;
 		}
 
-		if (tokenVal && isMe(this.user)) {
-			this.user.verifyEmailToken(tokenVal)
+		me.saveToken(tokenVal)
+			.fail(function (){
+				me.showError();
+			});
+	},
+
+
+	saveToken: function(tokenVal) {
+		var me = this;
+		if (!Ext.isEmpty(tokenVal) && isMe(this.user)) {
+			return this.user.verifyEmailToken(tokenVal)
 				.then(function(resp) {
 					me.showCongrats();
-				})
-				.fail(function() {
-					me.showError();
 				});
 		}
-		else {
-			this.close();
-		}
+
+		return Promise.reject();
+	},
+
+
+	sendEmailVerification: function(e) {
+		var me = this;
+
+		me.isVerifyingEmail = true;
+		$AppConfig.userObject.sendEmailVerification()
+			.then(function() {
+				var txt = getString('NextThought.view.account.verification.EmailToken.Title'),
+					sub= getString('NextThought.view.account.verification.EmailToken.SubTitle');
+
+				me.titleEl.update(txt);
+				me.subtitleEl.update(sub);
+				delete me.isVerifyingEmail;
+			})
+			.fail(function(resp) {
+				var e = Ext.decode(resp.responseText);
+				if (resp.status === 422) {
+					var txt = getString('NextThought.view.account.verification.EmailToken.Title'),
+						sub= getString('NextThought.view.account.verification.EmailToken.SubTitle');
+					me.titleEl.update(txt);
+					me.subtitleEl.update(sub);
+				}
+				delete me.isVerifyingEmail;
+			});
 	},
 
 
@@ -124,6 +176,7 @@ Ext.define('NextThought.view.account.verification.EmailToken', {
 		this.pendingVerificationWrapperTpl.append(this.el, {time: timeTxt});
 		this.submitEl.addCls('done');
 		this.submitEl.update('Dismiss');
+		this.submitEl.removeCls('disabled');
 		this.cancelEl.hide();
 	},
 
@@ -135,5 +188,6 @@ Ext.define('NextThought.view.account.verification.EmailToken', {
 			errorEl.update(getString('NextThought.view.account.verification.EmailToken.InvalidToken'));
 		}
 	}
+
 
 });

@@ -158,8 +158,8 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 			me.editor.deactivate();
 
 			if (me.isNewRecord) {
-				if (record.isTopLevel()) {
-					me.loadLastPage();
+				if (record.isTopLevel() && !me.isOnLastPage()) {
+					me.loadLastPage(true);
 				} else {
 					me.store.insertSingleRecord(record);
 				}
@@ -292,6 +292,13 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 		});
 
 		me.recordsToRefresh = [];
+	},
+
+
+	isOnLastPage: function() {
+		var targetPage = Math.ceil((this.store.getTotalCount() + 1) / this.store.pageSize);
+
+		return targetPage === this.store.getCurrentPage();
 	},
 
 

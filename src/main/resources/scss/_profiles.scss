@@ -1351,7 +1351,7 @@
 
 		.email-verification{
 			display: inline-block;
-			width: 280px;
+			width: 150px;
 			position: relative;
 
 			.email-verified {
@@ -1545,10 +1545,26 @@
 			transition: all 0.5s ease;
 		}
 
+		.export {
+			width: 30px;
+			height: 30px;
+			display: none;
+
+			@include icon('download_hover', $top: 5px, $left: 5px);
+
+			&:active, &:hover {
+				@include icon('download_active', $top: 5px, $left: 5px);
+			}
+		}
+
 		&:hover {
 			.title {
 				max-height: 100%;
 				white-space: normal;
+			}
+
+			.export {
+				display: block;
 			}
 		}
 	}

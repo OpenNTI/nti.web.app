@@ -1197,6 +1197,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			frag,
 			node,
 			lastNode,
+			i, length,
 			content = this.el.down('.content', true), sameNode;
 
 		if (window.getSelection) {
@@ -1227,6 +1228,13 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				} else {
 					range.insertNode(el);
 				}
+
+				for (i = 0, length = el.childNodes.length; i < length; i++) {
+					//insertBefore removes its from the child list so always insert the first one
+					el.parentNode.insertBefore(el.firstChild, el);
+				}
+
+				el.parentNode.removeChild(el);
 			}
 		}
 		/*else if(document.selection && document.selection.type != "Control") {

@@ -60,7 +60,8 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 			events: {
 				'onReady': Ext.bind(this.playerReady, this),
 				'onError': Ext.bind(this.playerError, this),
-				'onStateChange': Ext.bind(this.playerStatusChange, this)
+				'onStateChange': Ext.bind(this.playerStatusChange, this),
+				'onPlaybackRateChange': this.playBackRateChange.bind(this)
 			}
 		});
 	},
@@ -162,6 +163,16 @@ Ext.define('NextThought.util.media.YouTubePlayer', {
 		}
 
 		this.fireEvent('player-event-' + type, this.id, this);
+	},
+
+
+	playBackRateChange: function(event) {
+		var data = event.data,
+			rate = parseFloat(data, 10);
+
+		this.fireEvent('playback-speed-changed', this.playbackspeed || 1, data);
+
+		this.playbackspeed = rate;
 	},
 
 
