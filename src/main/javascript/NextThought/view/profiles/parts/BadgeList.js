@@ -169,14 +169,14 @@ Ext.define('NextThought.view.profiles.parts.BadgeList', {
 
 			this.exportMenu.add(new Ext.Action({
 				text: 'Download Badge',
-				handler: me.downloadBadge.bind(me, record, itemEl),
+				handler: me.downloadItemClicked.bind(me, record, itemEl),
 				itemId: 'download-badge',
 				ui: 'nt-menuitem', plain: true
 			}));
 
 			this.exportMenu.add(new Ext.Action({
 				text: 'Push to Mozilla BackPack',
-				handler: me.exportToBackPack.bind(me, record, itemEl),
+				handler: me.exportItemClicked.bind(me, record, itemEl),
 				itemId: 'export-backpack',
 				ui: 'nt-menuitem', plain: true
 			}));
