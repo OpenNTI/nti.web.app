@@ -39,29 +39,15 @@ Ext.define('NextThought.mixins.ExportBadge', {
 			.then(function() {
 				return record.pushToMozillaBackpack()
 					.then(function(successes) {
-						console.log('Congratulations, your badge was sent to backpack: ' + record.get('name'));
+						console.log('Congratulations, your badge was sent to backpack: ' + successes);
 					})
 					.fail(function(errors) {
-						console.error('Failed to push to Mozilla Backpack');
-
-						var errorString = '', str;
 						Ext.each(errors, function(err) {
-							var s = 'NextThought.model.openbadges.Badge.MozillaBackpackFailed.' + err.reason,
-								str = getString(s);
-							if (s !== str) {
-								errorString += str + '<br>';
-							}
-							console.error('Failed Assertion: ' + err.assertion + ' Reason: ' + err.reason);
+							console.warn('Failed Assertion: ' + err.assertion + ' Reason: ' + err.reason);
 						});
-
-						if (Ext.isEmpty(errorString)) {
-							errorString = getString('NextThought.model.openbadges.Badge.MozillaBackpackFailed.GENERAL');
-						}
-						me.presentError(getString('NextThought.model.openbadges.Badge.MozillaBackpackFailed.Title'), errorString);
 					});
 			})
 			.fail(function() {
-				console.error('Failed to lock badge...', arguments);
 				me.askForEmailVerification('exportToBackPack', record, targetEl);
 			});
 	},
@@ -207,8 +193,8 @@ Ext.define('NextThought.mixins.ExportBadge', {
 		this.emailVerificationWin = Ext.widget('email-verify-window', {
 			user: u,
 			autoShow: true,
-			title: 'Associate this badge with your email.',
-			subTitle: 'This badge will be permenantely associated with the following email address: ',
+			title: getString('NextThought.mixins.ExportBadge.LockEmail.Title'),
+			subTitle: getString('NextThought.mixins.ExportBadge.LockEmail.SubTitle'),
 			emailActionOption: emailActionOption
 		});
 
