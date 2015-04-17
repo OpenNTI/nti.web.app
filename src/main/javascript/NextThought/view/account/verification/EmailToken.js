@@ -27,10 +27,10 @@ Ext.define('NextThought.view.account.verification.EmailToken', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'header', cn: [
-			{cls: 'title', html: 'Enter the verification token to verify your email.'},
+			{cls: 'title', html: '{{{NextThought.view.account.verification.EmailToken.VerifyTitle}}}'},
 			{cls: 'sub', cn: [
-					{tag: 'span', html: 'Didn\'t receive a verification email? '},
-					{tag: 'span', cls: 'link verify-link', html: 'Click here'}
+					{tag: 'span', html: '{{{NextThought.view.account.verification.EmailToken.RequestVerifyEmailTitle}}}'},
+					{tag: 'span', cls: 'link verify-link', html: '{{{NextThought.view.account.verification.EmailToken.RequestVerifyEmailLink}}}'}
 				]
 			}
 		]},
