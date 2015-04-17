@@ -207,8 +207,8 @@ Ext.define('NextThought.mixins.ExportBadge', {
 		this.emailVerificationWin = Ext.widget('email-verify-window', {
 			user: u,
 			autoShow: true,
-			title: 'Associate your badge to your email',
-			subTitle: 'This badge is permenantely associated with the following address: ',
+			title: 'Associate this badge with your email.',
+			subTitle: 'This badge will be permenantely associated with the following email address: ',
 			emailActionOption: emailActionOption
 		});
 
