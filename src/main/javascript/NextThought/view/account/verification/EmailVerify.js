@@ -20,15 +20,27 @@ Ext.define('NextThought.view.account.verification.EmailVerify', {
 
 	afterRender: function() {
 		this.callParent(arguments);
-		this.askForEmailVerification();
+
+		var user = $AppConfig.userObject;
+		if(!user.isEmailVerified()) {
+			this.askForEmailVerification(user);
+		}
 	},
 
 
-	askForEmailVerification: function() {
-		var user = $AppConfig.userObject, btnTitle;
-		this.emailVerificationEl = Ext.get(this.emailVerificationWrapperTpl.append(this.getEl(), {email: user.get('email'), title: this.title, subTitle: this.subTitle}));
-
+	askForEmailVerification: function(user) {
+		var data = {email: user.get('email'), title: this.title, subTitle: this.subTitle};
+		this.emailVerificationEl = Ext.get(this.emailVerificationWrapperTpl.append(this.getEl(), data));
 		this.submitEl.update('Verify Email');
+		this.submitEl.removeCls('disabled');
+	},
+
+
+	askForEmailLock: function(user) {
+		var submitBtnTitle = this.emailActionOption && this.emailActionOption.buttonTitle ? this.emailActionOption.buttonTitle : 'Lock',
+			data = {email: user.get('email'), title: this.title, subTitle: this.subTitle};	
+		this.emailVerificationEl = Ext.get(this.emailVerificationWrapperTpl.append(this.getEl(), data));
+		this.submitEl.update(submitBtnTitle);
 		this.submitEl.removeCls('disabled');
 	},
 
@@ -42,15 +54,21 @@ Ext.define('NextThought.view.account.verification.EmailVerify', {
 			return;
 		}
 
-		if(this.emailVerificationEl && this.emailVerificationEl.hasCls('email-verify-wrapper')) {
+		if(this.emailActionOption && this.emailActionOption.onSubmitClick) {
+			this.emailActionOption.onSubmitClick(e)
+				.then(function() {
+					me.close();
+				});
+		}
+		else if(this.emailVerificationEl && this.emailVerificationEl.hasCls('email-verify-wrapper')) {
 			this.showVerificationTokenWindow();
 		}
 		else {
 			tokenVal = this.tokenEl.getValue();
 			this.saveToken(tokenVal)
 				.then(function() {
-					if(me.emailActionOption && me.emailActionOption.verificationDone) {
-						me.emailActionOption.verificationDone()
+					if(me.emailActionOption && me.emailActionOption.done) {
+						me.emailActionOption.done()
 						.then(function () {
 							me.close();
 						});

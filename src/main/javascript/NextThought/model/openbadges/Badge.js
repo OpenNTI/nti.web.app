@@ -45,8 +45,10 @@ Ext.define('NextThought.model.openbadges.Badge', {
 		var me = this;
 		return Service.post(this.getLink('lock'))
 			.then(function(resp) {
-				me.deleteLink('lock');
-				Promise.resolve(resp);
+				var rec = ParseUtils.parseItems(resp)[0];
+				me.set('Links', rec.get('Links'));
+				me.set('Locked', rec.get('Locked'));
+				Promise.resolve();
 			});
 	},
 

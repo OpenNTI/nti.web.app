@@ -1,29 +1,45 @@
 Ext.define('NextThought.mixins.ExportBadge', {
 
-	downloadBadge: function(record, itemEl) {
+	downloadItemClicked: function(record, targetEl, menuItem, e) {
+		if ($AppConfig.userObject.isEmailVerified() && !record.get('Locked')) {
+			this.askForEmailLock('downloadBadge', record, targetEl);
+		}
+		else {
+			this.downloadBadge(record, targetEl);
+		}
+	},
+
+
+	exportItemClicked: function(record, targetEl, menuItem, e) {
+		if ($AppConfig.userObject.isEmailVerified() && !record.get('Locked')) {
+			this.askForEmailLock('exportToBackPack', record, targetEl);
+		}
+		else {
+			this.exportToBackPack(record, targetEl);
+		}
+	},
+
+
+	downloadBadge: function(record, targetEl) {
 		var me = this;
 		record.lockBadge()
 			.then(function() {
 				me.triggerFileDownload(record);
 			})
 			.fail(function() {
-				console.error('Failed to lock badge...', arguments);
-				me.askForEmailVerification('downloadBadge', record, itemEl);
+				console.warn('Failed to lock badge...', arguments);
+				me.askForEmailVerification('downloadBadge', record, targetEl);
 			});
 	},
 
 
-	exportToBackPack: function(record, itemEl) {
+	exportToBackPack: function(record, targetEl) {
 		var me = this;
 		record.lockBadge()
 			.then(function() {
 				return record.pushToMozillaBackpack()
 					.then(function(successes) {
-						var msg = getFormattedString('NextThought.model.openbadges.Badge.MozillaBackpack.SUCCESS.Message', {badgeName: me.get('name')}),
-							title = getString('NextThought.model.openbadges.Badge.MozillaBackpack.SUCCESS.Title');
-
-						me.presentError(title, msg);
-						console.log('Congratulations, your badge was sent to backpack');
+						console.log('Congratulations, your badge was sent to backpack: ' + record.get('name'));
 					})
 					.fail(function(errors) {
 						console.error('Failed to push to Mozilla Backpack');
@@ -46,7 +62,7 @@ Ext.define('NextThought.mixins.ExportBadge', {
 			})
 			.fail(function() {
 				console.error('Failed to lock badge...', arguments);
-				me.askForEmailVerification('exportToBackPack', record, itemEl);
+				me.askForEmailVerification('exportToBackPack', record, targetEl);
 			});
 	},
 
@@ -55,10 +71,23 @@ Ext.define('NextThought.mixins.ExportBadge', {
 		var el = new Ext.XTemplate(Ext.DomHelper.markup([
 				{ tag: 'a', href: '{href}', html: 'Download Badge'}
 			])),
-			dom = el.append(Ext.getBody(), {href: record.getLink('baked-image')});
+			filename = record.getLink('baked-image'),
+			dom = el.append(Ext.getBody(), {href: filename});
 
-		// TODO: we are creating a click event to trigger the download, maybe do it better?
-		dom.click();
+		// HTML5 download tag
+		dom.setAttribute('download', filename);
+
+		// Trigger a click event
+		// TODO: We still need to find a more reliable solution that doesn't depend on triggering a click event ourselves.
+		// For now however, this should cover all the browsers that we support.
+	    if (document.createEvent) {
+	        var event = document.createEvent('MouseEvents');
+	        event.initEvent('click', true, true);
+	        dom.dispatchEvent(event);
+	    }
+	    else {
+	        dom.click();
+	    }
 	},
 
 
@@ -72,16 +101,17 @@ Ext.define('NextThought.mixins.ExportBadge', {
 		});
 	},
 
+
 	buildDownloadAction: function(record) {
 		var me = this,
 			action = {
 				name: 'downloadBadge',
 				buttonTitle: 'Verify and Download',
-				verificationDone: function(){
+				done: function(){
 					me.downloadBadge(record);
 					return Promise.resolve();
 				},
-				verificationFailed: function() {
+				done: function() {
 					return Promise.reject();
 				}
 			};
@@ -95,12 +125,43 @@ Ext.define('NextThought.mixins.ExportBadge', {
 			action = {
 				name: 'exportToBackPack',
 				buttonTitle: 'Verify and Export',
-				verificationDone: function(){
+				done: function(){
 					me.exportToBackPack(record);
 					return Promise.resolve();
 				},
-				verificationFailed: function() {
+				failed: function() {
 					return Promise.reject();
+				}
+			};
+
+		me.possibleExportActions[action.name] = action;
+	},
+
+
+	buildLockDownloadAction: function(record) {
+		var me = this,
+			action = {
+				name: 'lock_downloadBadge',
+				buttonTitle: 'Lock and Download',
+				onSubmitClick: function(e){
+					e.stopEvent();
+					me.downloadBadge(record);
+					return Promise.resolve();
+				}
+			};
+		me.possibleExportActions[action.name] = action;
+	},
+
+
+	buildLockMozillaBackpackAction: function(record) {
+		var me = this,
+			action = {
+				name: 'lock_exportToBackPack',
+				buttonTitle: 'Lock and Export',
+				onSubmitClick: function(e){
+					e.stopEvent();
+					me.exportToBackPack(record);
+					return Promise.resolve();
 				}
 			};
 
@@ -112,13 +173,13 @@ Ext.define('NextThought.mixins.ExportBadge', {
 		this.possibleExportActions = {};
 		this.buildDownloadAction(record);
 		this.buildMozillaBackpackAction(record);
+		this.buildLockDownloadAction(record);
+		this.buildLockMozillaBackpackAction(record);
 	},
 
 
 	askForEmailVerification: function(nextActionName, record, targetEl) {
 		if ($AppConfig.userObject.isEmailVerified()) { return; }
-
-		var me = this;
 
 		if(!this.possibleExportActions) {
 			this.addAllExportActions(record);
@@ -130,13 +191,45 @@ Ext.define('NextThought.mixins.ExportBadge', {
 			emailActionOption: this.possibleExportActions[nextActionName]
 		});
 
-		if(targetEl) {
-			wait()
-				.then(function() {
-					me.emailVerificationWin.alignTo(targetEl, 'tl-bl?');
-				});
-		} else {
-			this.emailVerificationWin.show();
+		this.showWindow(this.emailVerificationWin, targetEl);
+	},
+
+
+	askForEmailLock: function(nextActionName, record, targetEl) {
+		if (record.get('Locked')) { return; }
+
+		var u = $AppConfig.userObject,
+			emailActionOption, me = this;
+
+		if(!this.possibleExportActions) { this.addAllExportActions(record); }
+		emailActionOption = this.possibleExportActions['lock_'+nextActionName];
+
+		this.emailVerificationWin = Ext.widget('email-verify-window', {
+			user: u,
+			autoShow: true,
+			title: 'Associate this badge with your email.',
+			subTitle: 'This badge will be permenantely associated with the following email address: ',
+			emailActionOption: emailActionOption
+		});
+
+		this.emailVerificationWin.onceRendered
+			.then(function () {
+				me.emailVerificationWin.askForEmailLock(u);
+			});
+
+		this.showWindow(this.emailVerificationWin, targetEl);
+	},
+
+
+	showWindow: function(win, targetEl) {
+		if (!targetEl) {
+			win.show();
+			return;
 		}
+
+		wait()
+			.then(function() {
+				win.alignTo(targetEl, 'tl-bl?');
+			});
 	}
 });

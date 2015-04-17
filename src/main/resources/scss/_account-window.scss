@@ -538,13 +538,11 @@
 			color: $secondary-grey;
 
 			.title {
-				font-weight: 400;
-				font-size: 20px;
-				font-style: italic;
+				font: normal 300 19px/normal $font;
 			}
 
 			.sub{
-				font-size: 14px;
+				font: normal 300 14px/normal $font;
 			}
 		}
 
