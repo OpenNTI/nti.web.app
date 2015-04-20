@@ -20,5 +20,12 @@ Ext.define('NextThought.common.StateStore', {
 
 			return this.__instance;
 		}
+	},
+
+
+	constructor: function(config) {
+		this.callParent(arguments);
+
+		this.mixins.observable.constructor.call(this, config);
 	}
 });

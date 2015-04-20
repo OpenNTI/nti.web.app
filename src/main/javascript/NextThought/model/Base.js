@@ -2,7 +2,7 @@ Ext.define('NextThought.model.Base', {
 	extend: 'Ext.data.Model',
 	requires: [
 		'NextThought.mixins.HasLinks',
-		'NextThought.common.model.converters.*',
+		'NextThought.model.converters.*',
 		'NextThought.util.Time',
 		'NextThought.util.Parsing',
 		'NextThought.proxy.Rest'

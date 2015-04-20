@@ -1,8 +1,8 @@
-Ext.define('NextThought.common.model.converters.VideoSources', {
+Ext.define('NextThought.model.converters.VideoSources', {
 	override: 'Ext.data.Types',
 	requires: [
 		'Ext.data.SortTypes',
-		'NextThought.common.model.resolvers.VideoPosters'
+		'NextThought.model.resolvers.VideoPosters'
 	],
 
 	VIDEOSOURCES: {

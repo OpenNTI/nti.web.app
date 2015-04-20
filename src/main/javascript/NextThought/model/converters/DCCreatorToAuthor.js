@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.model.converters.DCCreatorToAuthor', {
+Ext.define('NextThought.model.converters.DCCreatorToAuthor', {
 	override: 'Ext.data.Types',
 	requires: ['Ext.data.SortTypes'],
 

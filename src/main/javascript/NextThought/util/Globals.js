@@ -50,6 +50,20 @@ Ext.define('NextThought.util.Globals', {
 		}
 	},
 
+	//A utility wrapper around JSON.parse to catch errors
+	parseJSON: function(s, safe) {
+		try {
+			return JSON.parse(s);
+		} catch (e) {
+			if (safe) {
+				return null;
+			}
+
+			throw e;
+		}
+	},
+
+
 	getError: function(e) {
 		return e.stack || e;
 	},

@@ -1,9 +1,9 @@
 /*
 	TODO: Does this need to be a model?
  */
-Ext.define('NextThought.common.model.resolvers.VideoPosters', {
+Ext.define('NextThought.model.resolvers.VideoPosters', {
 	requires: [
-		'NextThought.common.model.resolvers.videoservices.*'
+		'NextThought.model.resolvers.videoservices.*'
 	],
 
 	statics: {

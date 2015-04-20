@@ -1,0 +1,21 @@
+#view {
+	@include hardware-accelerate();
+	overflow: hidden;
+    background: white;
+    height: 100%;
+	padding: 105px 165px 0 100px;
+	background: #343434;
+	background-size: cover;
+
+	.make-white {
+		background: white;
+	}
+}
+
+.main-navigation {
+	position: fixed;
+	top: 0; left: 0;
+	right: 0;
+	height: 57px;
+	background-color: #ebebec;
+}
