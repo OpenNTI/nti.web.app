@@ -84,7 +84,7 @@ Ext.define('NextThought.view.badge.Window', {
 					tooltip: 'Export Badge',
 					cls: 'export',
 					action: 'export', 
-					style: { float: 'left'},
+					style: { 'float': 'left'},
 					handler: function(b, e) {
 						e.stopEvent(); 
 						b.up('window').exportClicked(b);
