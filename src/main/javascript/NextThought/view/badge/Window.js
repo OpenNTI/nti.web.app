@@ -78,10 +78,11 @@ Ext.define('NextThought.view.badge.Window', {
 			defaults: { xtype: 'button', ui: 'blue', scale: 'large'},
 			items: [
 				{
-					text: 'Export',
-					// iconCls: 'export-badge',
-					// tooltip: 'Export Badge',
-					cls: 'x-btn-blue-large export',
+					ui: 'flat',
+					scale: 'medium',
+					iconCls: 'export-icon',
+					tooltip: 'Export Badge',
+					cls: 'export',
 					action: 'export', 
 					style: { float: 'left'},
 					handler: function(b, e) {
@@ -111,6 +112,10 @@ Ext.define('NextThought.view.badge.Window', {
 
 		if (badge) {
 			badge.setBadge(this.badge);
+
+			if(!this.badge.get('isMe')){
+				this.down('[action=export]').destroy();
+			}
 		}
 	},
 

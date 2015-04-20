@@ -1623,17 +1623,23 @@
 
 
 .badge-window{
-	.x-btn-new-medium {
-		.x-btn-icon-el{
-			&.export-badge{
-				width: 50px;
-				height: 30px;
+	.export {
+		.x-btn-button {
+			width: 30px;
+			height: 30px;
+			padding: 5px;
+
+			.x-btn-inner{
 				display: none;
+			}
 
-				@include icon('download_hover', $top: 5px, $left: 5px);
+			.x-btn-icon-el{
+				&.export-icon{
+					@include icon('download_hover', $top: 0, $left: 0);
 
-				&:active, &:hover {
-					@include icon('download_active', $top: 5px, $left: 5px);
+					&:active, &:hover {
+						@include icon('download_active', $top: 0, $left: 0);
+					}
 				}
 			}
 		}
