@@ -42,6 +42,7 @@ Ext.define('NextThought.mixins.Router', {
 	/**
 	 * Add a handler for a route to the route map
 	 *
+	 * handler should return its part of the current url
 	 * the handler can return a promise
 	 *
 	 * @param {String} route   the path to add the handler to
@@ -114,6 +115,7 @@ Ext.define('NextThought.mixins.Router', {
 	/**
 	 * Add a default handler for unknown paths
 	 *
+	 * handler should return its part of the url
 	 * the handler can return a promise
 	 * @param {Function} handler
 	 */

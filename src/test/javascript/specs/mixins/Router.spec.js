@@ -137,6 +137,30 @@ describe('Router mixin tests', function() {
 			expect(params).toEqual({test: 'b', foo: 'c'});
 			expect(subRoute).toBe('/subPath2/subPath3');
 		});
+
+		it('default route gets called', function() {
+			var a = '/root/',
+				called = '';
+
+			function fn() {
+				called = 'root';
+			}
+
+			function defFn() {
+				called = 'default';
+			}
+
+			router.addRoute(a, fn);
+			router.addDefaultRoute(defFn);
+
+			router.handleRoute('/root/');
+
+			expect(called).toEqual('root');
+
+			router.handleRoute('/unknown/');
+
+			expect(called).toEqual('default');
+		});
 	});
 
 });
