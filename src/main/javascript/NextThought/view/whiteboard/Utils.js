@@ -60,7 +60,7 @@ Ext.define('NextThought.view.whiteboard.Utils', {
 
 
 	canUse: function(image, fastOnCORS) {
-		var c, img, l = location;
+		var c, ctx, img, l = location;
 		var origin = l.protocol + "//" + l.hostname + (l.port ? ':' + l.port: '');
 		try {
 			var src = image.src;
@@ -74,10 +74,10 @@ Ext.define('NextThought.view.whiteboard.Utils', {
 
 			img = Ext.getDom(image);
 			c = document.createElement('canvas');
-			c.getContext('2d').drawImage(img, 0, 0);
+			ctx = c.getContext('2d');
+			ctx.drawImage(image, 0, 0);
 
-			//This call is god-awefully-slow. Avoid it at all costs.
-			c.toDataURL('image/png');
+			ctx.getImageData(0, 0, 1, 1);//way faster than toDataURL
 
 			c.width = 0;//should free the buffer we just rendered
 		}
