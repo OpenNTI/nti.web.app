@@ -29,7 +29,14 @@ https://github.com/pivotal/jasmine/wiki
 		 */
 		window.NTIStrings = {};
 
+		/**
+		 * Set the root so external libraries load correctly
+		 * @type {String}
+		 */
+		window.testRoot = '';
+
 		karma.files = {
+			'javascript/specs/mixins/History.spec.js': 1,
 			'javascript/specs/mixins/Router.spec.js': 1,
 			'javascript/specs/example.spec.js': 1,
 			'javascript/specs/Library.spec.js': 1,
