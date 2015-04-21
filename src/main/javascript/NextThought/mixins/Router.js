@@ -168,7 +168,9 @@ Ext.define('NextThought.mixins.Router', {
 			}, '/' + subRoute);
 		//if there is no handler but we have a default handler call that
 		} else if (this.defaultRouteHandler) {
-			val = this.defaultRouteHandler.call();
+			val = this.defaultRouteHandler.call(null, {
+				path: '/' + route
+			});
 		} else {
 			console.warn('No Handler for route', route);
 		}
