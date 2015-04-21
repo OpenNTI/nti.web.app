@@ -24,7 +24,7 @@ Ext.Loader.setConfig('disableCaching', false); //for when unminified
 Ext.application({
 	name: 'NextThought',
 	appProperty: 'appInstance',
-	appFolder: 'javascript/NextThought',
+	appFolder: '/app/javascript/NextThought',
 	autoCreateViewport: false,
 
 	requires: [
