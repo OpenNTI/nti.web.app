@@ -1,4 +1,4 @@
-Ext.define('NextThought.common.model.converters.ContentRangeDescription', {
+Ext.define('NextThought.model.converters.ContentRangeDescription', {
 	override: 'Ext.data.Types',
 	requires: ['Ext.data.SortTypes'],
 

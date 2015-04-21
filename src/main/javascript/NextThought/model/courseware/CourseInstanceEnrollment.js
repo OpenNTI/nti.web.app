@@ -1,0 +1,27 @@
+Ext.define('NextThought.model.courseware.CourseInstanceEnrollment', {
+	extend: 'NextThought.model.Base',
+
+	idProperty: 'href',
+	fields: [
+		{ name: 'CourseInstance', type: 'singleItem', persist: false },
+		{ name: 'Username', type: 'string' },
+		{ name: 'Status', type: 'string', mapping: 'LegacyEnrollmentStatus'},
+		{ name: 'RealEnrollmentStatus', type: 'string'}
+	],
+
+
+	__precacheEntry: function() {
+		return this.get('CourseInstance').__precacheEntry();
+	},
+
+
+	getCourseCatalogEntry: function() {
+		return this.get('CourseInstance').getCourseCatalogEntry();
+	},
+
+	isOpen: function() {
+		var status = this.get('Status');
+
+		return status === 'Open';
+	}
+});

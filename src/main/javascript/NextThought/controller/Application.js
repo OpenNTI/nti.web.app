@@ -5,7 +5,13 @@ Ext.define('NextThought.controller.Application', {
 		'NextThought.cache.*',
 		'NextThought.login.StateStore',
 		'NextThought.login.Actions',
-		'NextThought.app.Index'
+		'NextThought.app.Index',
+		'NextThought.app.library.Actions'
+	],
+
+	refs: [
+		{ref: 'body', selector: 'main-views'},
+		{ref: 'nav', selector: 'main-navigation'}
 	],
 
 	init: function() {
@@ -13,6 +19,8 @@ Ext.define('NextThought.controller.Application', {
 
 		me.LoginActions = NextThought.login.Actions.create();
 		me.LoginStore = NextThought.login.StateStore.getInstance();
+
+		me.LibraryActions = NextThought.app.library.Actions.create();
 
 		window.addEventListener('popstate', function(e) {
 			me.restoreState(e.state);
@@ -28,7 +36,14 @@ Ext.define('NextThought.controller.Application', {
 
 
 	restoreState: function(state) {
-		var masterView = Ext.widget('master-view');
+		var masterView = Ext.widget('master-view'),
+			body = this.getBody(), nav = this.getNav(),
+			path = window.location.pathname;
+
+		//the path will always have /app in front of it so remove it
+		path = path.split('/').slice(2).join('/');
+
+		body.handleRoute(path);
 
 		Globals.removeLoaderSplash();
 	}

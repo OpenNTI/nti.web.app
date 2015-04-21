@@ -25,7 +25,6 @@ Ext.define('NextThought.app.Index', {
 
 
 	initComponent: function() {
-		debugger;
 		this.callParent();
 		this.el = Ext.DomHelper.insertFirst(Ext.getBody(), { cls: 'viewport' }, true);
 		this.renderTo = this.el;
