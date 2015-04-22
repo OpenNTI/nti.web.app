@@ -27,5 +27,27 @@ Ext.define('NextThought.common.StateStore', {
 		this.callParent(arguments);
 
 		this.mixins.observable.constructor.call(this, config);
+	},
+
+
+	isLoading: function() {
+		return this.loading;
+	},
+
+
+	hasLoaded: function() {
+		return this.hasFinishedLoad;
+	},
+
+
+	setLoading: function() {
+		this.loading = true;
+	},
+
+
+	setLoaded: function() {
+		this.loading = false;
+		this.hasFinishedLoad = true;
+		this.fireEvent('loaded');
 	}
 });

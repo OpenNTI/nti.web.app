@@ -21,13 +21,13 @@ Ext.define('NextThought.app.library.content.Actions', {
 			return;
 		}
 
-		store.loading = true;
+		store.setLoading();
 
 		return Promise.all([
 			this.setUpContentPackages((service.getCollection('Main', 'Library') || {}).href),
 			this.setUpContentBundles((service.getCollection('VisibleContentBundles', 'ContentBundles') || {}).href)
-		]).then(function() {
-			store.loading = false;
+		]).always(function() {
+			store.setLoaded();
 		});
 	},
 
@@ -43,7 +43,7 @@ Ext.define('NextThought.app.library.content.Actions', {
 			.then(function(items) {
 				//filter out packages that are courses
 				return items.filter(function(item) {
-					return !items.get('isCourse');
+					return !item.get('isCourse');
 				});
 			})
 			.then(this.ContentStore.setContentPackages.bind(this.ContentStore));

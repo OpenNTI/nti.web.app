@@ -6,7 +6,8 @@ Ext.define('NextThought.controller.Application', {
 		'NextThought.login.StateStore',
 		'NextThought.login.Actions',
 		'NextThought.app.Index',
-		'NextThought.app.library.Actions'
+		'NextThought.app.library.Actions',
+		'NextThought.app.store.Actions'
 	],
 
 	refs: [
@@ -20,7 +21,10 @@ Ext.define('NextThought.controller.Application', {
 		me.LoginActions = NextThought.login.Actions.create();
 		me.LoginStore = NextThought.login.StateStore.getInstance();
 
+		//create the actions that need to do something on login
 		me.LibraryActions = NextThought.app.library.Actions.create();
+		me.StoreActions = NextThought.app.store.Actions.create();
+
 
 		window.addEventListener('popstate', function(e) {
 			me.restoreState(e.state);

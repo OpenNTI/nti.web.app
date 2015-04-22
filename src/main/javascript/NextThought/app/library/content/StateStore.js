@@ -4,7 +4,7 @@ Ext.define('NextThought.app.library.content.StateStore', {
 	CONTENT_PACKAGES: [],
 	CONTENT_BUNDLES: [],
 
-
+	
 	getContentPackages: function() {
 		return this.CONTENT_PACKAGES;
 	},
@@ -26,5 +26,18 @@ Ext.define('NextThought.app.library.content.StateStore', {
 		this.CONTENT_BUNDLES = bundles;
 
 		this.fireEvent('content-bundles-set', bundles);
+	},
+
+
+	getTitle: function(index) {
+		var title, i, packages = this.CONTENT_PACKAGES, content;
+
+		for(i = 0; i < packages.length; i++) {
+			content = packages[i];
+
+			if (content.get('index') === index || content.get('NTIID') === index) {
+				return content;
+			}
+		}
 	}
 });

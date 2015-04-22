@@ -29,14 +29,14 @@ Ext.define('NextThought.app.library.courses.Actions', {
 			return; 
 		}
 
-		store.loading = true;
+		store.setLoading();
 
 		return Promise.all([
 			this.setUpAdministeredCourses((s.getCollection('AdministeredCourses', 'Courses') || {}).href),
 			this.setUpAllCourses((s.getCollection('AllCourses', 'Courses') || {}).href),
 			this.setUpEnrolledCourses((s.getCollection('EnrolledCourses', 'Courses') || {}).href)
 		]).always(function() {
-			store.loading = false;
+			store.setLoaded();
 		});
 	},
 

@@ -5,8 +5,5 @@ Ext.define('NextThought.app.library.Index', {
 	requires: [
 		'NextThought.app.library.Actions',
 		'NextThought.app.library.StateStore'
-	],
-
-
-
+	]
 });

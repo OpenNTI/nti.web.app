@@ -31,13 +31,13 @@ Ext.define('NextThought.app.library.Actions', {
 			store = this.LibraryStore;
 
 
-		s.loading = true;
+		store.setLoading();
 
 		Promise.all([
 			this.CourseActions.loadCourses(s),
 			this.ContentActions.loadContent(s)
 		]).then(function() {
-			s.loading = false;
+			store.setLoaded();
 		});
 	}
 });
