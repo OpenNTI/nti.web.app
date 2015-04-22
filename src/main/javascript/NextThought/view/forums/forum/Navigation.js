@@ -96,7 +96,7 @@ Ext.define('NextThought.view.forums.forum.Navigation', {
 
 
 	buildStore: function(forumList) {
-		if (formList && forumList.isBoard) {
+		if (forumList && forumList.isBoard) {
 			forumList = [];
 		}
 
