@@ -3,6 +3,13 @@ Ext.define('NextThought.mixins.History', {
 	constructor: function(config) {
 		this.callParent(arguments);
 
+		this.initState(config);
+	},
+
+
+	initHistoryState: function(config) {
+		config = config || this;
+
 		this.history_key = config.history_key || '';
 		this.history_title = config.history_title || '';
 		this.history_url = config.history_url || '';

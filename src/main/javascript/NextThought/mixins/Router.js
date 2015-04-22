@@ -30,6 +30,7 @@ Ext.define('NextThought.mixins.Router', {
 	__routeMap: {},
 
 	trimRoute: function(route) {
+		route = route || '';
 		//get rid of any leading slash
 		route = route.replace(/^\//, '');
 		//get rid of any trailing slash
