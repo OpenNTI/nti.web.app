@@ -16,7 +16,7 @@ Ext.define('NextThought.mixins.History', {
 	 */
 	addChildState: function(cmp) {
 		var key = cmp.history_key || cmp.xtype,
-			defaults = {};
+			state = this.getHistoryState();
 
 		if (!key) {
 			console.warn('No Key to track state of child cmp: ', cmp);
@@ -29,6 +29,10 @@ Ext.define('NextThought.mixins.History', {
 		cmp.pushState = this.pushChildState.bind(this, cmp, key);
 		cmp.replaceState = this.replaceChildState.bind(this, cmp, key);
 		this.history_children.push(cmp);
+
+		if (state[key]) {
+			cmp.setState(state[key]);
+		}
 	},
 
 

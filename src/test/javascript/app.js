@@ -23,6 +23,7 @@ Ext.application({
 	autoCreateViewport: false,
 
 	requires: [
+		'NextThought.cache.*',
 		'NextThought.util.Globals',
 		'NextThought.overrides.*',
 		'NextThought.util.Localization',//require this SUPER early.

@@ -157,6 +157,8 @@ describe('History mixin tests', function() {
 				history_url: 'second'
 			});
 
+			parent.state = {};
+
 			parent.addChildState(first);
 			first.addChildState(second);
 
@@ -233,6 +235,41 @@ describe('History mixin tests', function() {
 				expect(first.state.name).toBe('first');
 				expect(second.state.name).toBe('second');
 			});
+		});
+
+		it('add child after state is applied', function() {
+			var third = NextThought.mixins.History.create({
+					history_key: 'third',
+					history_title: 'third',
+					history_url: 'third'
+				}),
+				cont = false,
+				state = {name: 'parent', first: {name: 'first'}, third: {name: 'third'}};
+
+			spyOn(third, 'applyState').andCallThrough();
+
+			parent.setState(state)
+				.then(function() {
+					cont = true;
+				});
+
+			waitsFor(function() {
+				return cont;
+			}, 'set state never finishes', 1000);
+
+			runs(function() {
+				expect(parent.applyState).toHaveBeenCalledWith(jasmine.any(Object));
+				expect(first.applyState).toHaveBeenCalledWith(jasmine.any(Object));
+				expect(third.applyState).not.toHaveBeenCalled();
+
+				expect(parent.state.name).toBe('parent');
+				expect(first.state.name).toBe('first');
+
+				parent.addChildState(third);
+
+				expect(third.applyState).toHaveBeenCalledWith(jasmine.any(Object));
+				expect(third.state.name).toBe('third');
+			})
 		});
 	});
 });
