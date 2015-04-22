@@ -2,8 +2,10 @@ Ext.define('NextThought.cache.UserRepository', {
 	alias: 'UserRepository',
 	singleton: true,
 	isDebug: $AppConfig.userRepositoryDebug,
+
 	requires: [
-		'NextThought.util.Parsing'
+		'NextThought.util.Parsing',
+		'NextThought.model.User'
 	],
 
 	constructor: function() {

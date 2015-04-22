@@ -23,12 +23,8 @@ Ext.define('NextThought.app.navigation.Index', {
 	},
 
 
-	setTabs: function(tabs) {
-		debugger;
-	},
+	setTabs: function(tabs) {},
 
 
-	setActiveContent: function(bundle) {
-		debugger;
-	}
+	setActiveContent: function(bundle) {}
 });
