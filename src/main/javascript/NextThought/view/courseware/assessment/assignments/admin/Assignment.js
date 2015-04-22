@@ -185,7 +185,13 @@ Ext.define('NextThought.view.courseware.assessment.assignments.admin.Assignment'
 
 		me.mon(pageHeader, {
 			'toggle-avatars': 'toggleAvatars',
-			'request-change': 'requestDateChange'
+			'request-change': 'requestDateChange',
+			'page-change': function(){
+				me.mon(me.store, {
+					single: true,
+					'load': grid.scrollToTop.bind(grid)
+				});
+			}
 		});
 	},
 
