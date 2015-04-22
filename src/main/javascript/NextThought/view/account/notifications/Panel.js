@@ -394,6 +394,9 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 			delete this.currentCount;
 			this.prefetchNext();
 		}
+		else {
+			this.removeMask();
+		}
 	},
 
 
@@ -434,6 +437,25 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		if (!this.store || !this.store.getCount()) {
 			this.deferEmptyText = false;
 			this.refresh();
+		}
+
+		this.addMask();
+	},
+
+
+	addMask: function(width, height) {
+		var targetEl = this.ownerCt && this.ownerCt.getTargetEl(),
+			mask = this.el && this.el.mask('Loading...');
+
+		if (targetEl && targetEl.getHeight() > 0) {
+			mask.setHeight(targetEl.getHeight());
+		}
+	},
+
+
+	removeMask: function(width, height) {
+		if (this.el) {
+			this.el.unmask();
 		}
 	},
 
@@ -561,6 +583,7 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 		s = s && s.backingStore;
 
 		if (!s || !s.hasOwnProperty('data')) {
+			this.removeMask();
 			return;
 		}
 
@@ -570,6 +593,8 @@ Ext.define('NextThought.view.account.notifications.Panel', {
 
 			s.clearOnPageLoad = false;
 			s.nextPage();
+		} else {
+			this.removeMask();
 		}
 	}, 500, null, null),
 

@@ -1,5 +1,35 @@
 Ext.define('NextThought.mixins.ExportBadge', {
 
+	showExportMenu: function(record, itemEl) {
+		var me = this;
+		if (!this.exportMenu) {
+			this.exportMenu = Ext.widget('menu', {
+				ownerCmp: this,
+				constrainTo: Ext.getBody(),
+				defaults: {
+					ui: 'nt-menuitem',
+					plain: true
+				}
+			});
+
+			this.exportMenu.add(new Ext.Action({
+				text: 'Download Badge',
+				handler: me.downloadItemClicked.bind(me, record, itemEl),
+				itemId: 'download-badge',
+				ui: 'nt-menuitem', plain: true
+			}));
+
+			this.exportMenu.add(new Ext.Action({
+				text: 'Send to Mozilla BackPack',
+				handler: me.exportItemClicked.bind(me, record, itemEl),
+				itemId: 'export-backpack',
+				ui: 'nt-menuitem', plain: true
+			}));
+		}
+
+		this.exportMenu.showBy(itemEl, 'tl-bl?');
+	},
+
 	downloadItemClicked: function(record, targetEl, menuItem, e) {
 		if ($AppConfig.userObject.isEmailVerified() && !record.get('Locked')) {
 			this.askForEmailLock('downloadBadge', record, targetEl);
@@ -216,6 +246,7 @@ Ext.define('NextThought.mixins.ExportBadge', {
 		wait()
 			.then(function() {
 				win.alignTo(targetEl, 'tl-bl?');
+				win.toFront();
 			});
 	}
 });
