@@ -1,6 +1,8 @@
 Ext.define('NextThought.app.store.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
+	requires: ['NextThought.model.store.*'],
+
 	PURCHASABLES: [],
 
 
