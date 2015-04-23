@@ -14,6 +14,7 @@ Ext.define('NextThought.app.navigation.Actions', {
 	 *
 	 * {
 	 * 	backHandler: Function, //if falsy or we have an array of tab configs don't show the back arrow
+	 * 	cmp: Ext.Component, //a component to render in the header, tabs are ignored if this is present
 	 *  tabs: [
 	 *  	{
 	 *  		name: String, //Display name of this option
@@ -32,7 +33,7 @@ Ext.define('NextThought.app.navigation.Actions', {
 	 *
 	 * @param  {Array|Object} tabs configuration to build the tabs
 	 */
-	updateTabs: function(tabs) {
+	updateNavBar: function(config) {
 		this.store.fireEvent('set-tabs', tabs);
 	},
 
