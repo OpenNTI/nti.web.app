@@ -49,5 +49,22 @@ Ext.define('NextThought.common.StateStore', {
 		this.loading = false;
 		this.hasFinishedLoad = true;
 		this.fireEvent('loaded');
+	},
+
+	/**
+	 * A wrapper so we don't have to repeat this everywhere
+	 * make sure setLoaded is called at some point if you use this
+	 * @return {Promise} fulfills once setLoaded has been called
+	 */
+	onceLoaded: function() {
+		if (this.hasLoaded()) {
+			return Promise.resolve(this);
+		}
+
+		var me = this
+
+		return new Promise(function(fulfill, reject) {
+			me.on('loaded', fulfill.bind(null, me));
+		});
 	}
 });

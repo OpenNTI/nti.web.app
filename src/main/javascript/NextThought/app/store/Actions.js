@@ -30,10 +30,12 @@ Ext.define('NextThought.app.store.Actions', {
 
 		if (!link) { return; }
 
+		store.setLoading();
 
 		StoreUtils.loadItems(getURL(link))
 			.then(this.__updateLibraryWithPurchasables.bind(this))
-			.then(store.setPurchasables.bind(store));
+			.then(store.setPurchasables.bind(store))
+			.then(store.setLoaded.bind(store));
 	},
 
 
