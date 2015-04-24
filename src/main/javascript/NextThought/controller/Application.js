@@ -49,8 +49,7 @@ Ext.define('NextThought.controller.Application', {
 		//the path will always have /app in front of it so remove it
 		path = path.split('/').slice(2).join('/');
 
-		body.handleRoute(path);
-
-		Globals.removeLoaderSplash();
+		body.handleRoute(path)
+			.then(Globals.removeLoaderSplash.bind(Globals));
 	}
 });

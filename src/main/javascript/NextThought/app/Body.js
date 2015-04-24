@@ -29,7 +29,7 @@ Ext.define('NextThought.app.Body', {
 	},
 
 
-	setActiveCmp: function(xtype) {
+	setActiveCmp: function(xtype) { 
 		var cmp = this.down(xtype);
 
 		if (!cmp) {
@@ -46,6 +46,8 @@ Ext.define('NextThought.app.Body', {
 	setLibraryActive: function(route, subRoute) {
 		var library = this.setActiveCmp('library-view-container');
 
-		library.handleRoute(subRoute);
+		library.addParentRoute(this);
+
+		return library.handleRoute(subRoute);
 	}
 });
