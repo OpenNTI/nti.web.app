@@ -136,6 +136,7 @@ Ext.define('NextThought.mixins.Router', {
 		var parts = route.split('/'),
 			varKey = this.VARIABLE_KEY,
 			params = {}, subRoute,
+			currentRoute = '',
 			sub, i, key, val;
 
 		sub = this.__routeMap;
@@ -156,10 +157,14 @@ Ext.define('NextThought.mixins.Router', {
 			} else {
 				break;
 			}
+
+			currentRoute = currentRoute + '/' + key;
 		}
 
 		//add the remaining parts as sub route
 		subRoute = parts.slice(i).join('/');
+
+		this.currentRoute = currentRoute;
 
 		//if the sub route has a handler call it
 		if (sub.handler) {
@@ -181,5 +186,119 @@ Ext.define('NextThought.mixins.Router', {
 		}
 
 		return Promise.resolve(val);
-	}
+	},
+
+
+	getCurrentRoute: function() {
+		return this.currentRoute;
+	},
+
+
+	addParentRouter: function(cmp) {
+		this.parentRouter = cmp;
+
+		if (!cmp.__pushChildRoute) {
+			console.error('Cant set a non route cmp as the parent router');
+			return;
+		}
+
+		this.pushRoute = cmp.__pushChildRoute.bind(cmp);
+		this.replaceRoute = cmp.__replaceChildRoute.bind(cmp);
+		this.pushRootRoute = cmp.pushRootRoute.bind(cmp);
+		this.replaceRootRoute = cmp.replaceRootRoute.bind(cmp);
+	},
+
+	/**
+	 * Return a title to put in the document's title for this route
+	 * @override
+	 * @return {String} a title to describe the state of this route
+	 */
+	getTitle: function() { return ''; },
+
+
+	/**
+	 * Merge a title and sub route into mine
+	 *
+	 * @param  {String} title
+	 * @param  {String} subRoute
+	 * @return {Object}           map of the values
+	 */
+	__mergeChildRoute: function(title, subRoute) {
+		var myTitle = this.getTitle(),
+			route = this.getCurrentRoute();
+
+		if (myTitle) {
+			title = myTitle + ' | ' + title;
+		}
+
+		route = this.trimRoute(route);
+		subRoute = this.trimRoute(subRoute);
+
+		route = route + '/' + subRoute;
+
+		return {
+			title: title,
+			route: route
+		};
+	},
+
+
+	/**
+	 * Merge the childs route with mine and push it
+	 * @param  {String} title    title of the route
+	 * @param  {String} subRoute the childs route
+	 */
+	__pushChildRoute: function(title, subRoute) {
+		var merged = this.__mergeChildRoute(title, subRoute);
+
+		this.pushRoute(merged.title, merged.route);
+	},
+
+
+	/**
+	 * Merge the childs route with mine and replace it
+	 * @param  {String} title    title of the route
+	 * @param  {String} subRoute the childs route
+	 */
+	__replaceChildRoute: function(title, subRoute) {
+		var merged = this.__mergeChildRoute(title, subRoute);
+
+		this.replaceRoute(merged.title, merged.route);
+	},
+
+
+	/**
+	 * Push a current route
+	 * @override
+	 * @param  {String} title the title to set on the document
+	 * @param  {String} route   the route to set
+	 */
+	pushRoute: function(title, route) {},
+
+
+	/**
+	 * Replace the current route
+	 * @override
+	 * @param  {String} title the title to set on the document
+	 * @param  {String} route   the route to replace with
+	 */
+	replaceRoute: function(title, route) {},
+
+
+	/**
+	 * Skips all the route building and sets it on the root
+	 * @override
+	 * @param  {String} title the title to set on the document
+	 * @param  {String} route   the route to set
+	 */
+	pushRootRoute: function(title, route) {},
+
+
+	/**
+	 * Skips all the route building and sets it on the root
+	 * @override
+	 * @param  {String} title the title to set on the document
+	 * @param  {String} route   the route to set
+	 */
+	replaceRootRoute: function(title, route) {}
 });

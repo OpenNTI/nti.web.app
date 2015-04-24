@@ -98,7 +98,7 @@ describe('Router mixin tests', function() {
 		});
 	});
 
-	describe('Handling routes is down correctly', function() {
+	describe('Handling routes is done correctly', function() {
 		beforeEach(function() {
 			router.__routeMap = {};
 		});
@@ -162,5 +162,70 @@ describe('Router mixin tests', function() {
 			expect(called).toEqual('default');
 		});
 	});
+	
+	describe('Adding a subroute', function() {
+		var parent, first, second, testCtrl;
 
+		beforeEach(function() {
+			//the push and replace function will be set on the main view by the 
+			//application controller, so fake that out here
+			testCtrl = {
+				pushRootRoute: function() {},
+				replaceRootRoute: function() {}
+			};
+
+			parent = NextThought.mixins.Router.create({});
+			first = NextThought.mixins.Router.create({});
+			second = NextThought.mixins.Router.create({});
+
+			parent.currentRoute = 'first';
+			parent.getTitle = function() { return 'parent'; }
+
+			parent.pushRootRoute = function(title, url) { testCtrl.pushRootRoute(title, url); }
+			parent.replaceRootRoute = function(title, url) { testCtrl.replaceRootRoute(title, url); }
+
+			first.currentRoute = 'second';
+			first.getTitle = function() { return 'first'; }
+
+			second.currentRoute = 'foo';
+			second.getTitle = function() { return 'second'; }
+
+			first.addParentRouter(parent);
+			second.addParentRouter(first);
+
+			spyOn(parent, 'pushRoute').andCallThrough();
+			spyOn(parent, 'replaceRoute').andCallThrough();
+			spyOn(testCtrl, 'pushRootRoute').andCallThrough();
+			spyOn(testCtrl, 'replaceRootRoute').andCallThrough();
+			spyOn(first, 'pushRoute').andCallThrough();
+			spyOn(first, 'replaceRoute').andCallThrough();
+		});
+
+		it('pushRoute', function() {
+			second.pushRoute('second', 'third');
+
+			expect(first.pushRoute).toHaveBeenCalledWith('first | second', 'second/third');
+			expect(parent.pushRoute).toHaveBeenCalledWith('parent | first | second', 'first/second/third');
+		});
+
+		it('replaceRoute', function() {
+			second.replaceRoute('second', 'third');
+
+			expect(first.replaceRoute).toHaveBeenCalledWith('first | second', 'second/third');
+			expect(parent.replaceRoute).toHaveBeenCalledWith('parent | first | second', 'first/second/third');
+		});
+
+		it('pushRootRoute', function() {
+			debugger;
+			second.pushRootRoute('second', 'third');
+
+			expect(testCtrl.pushRootRoute).toHaveBeenCalledWith('second', 'third');
+		});
+
+		it('replaceRootRoute', function() {
+			second.replaceRootRoute('second', 'third');
+
+			expect(testCtrl.replaceRootRoute).toHaveBeenCalledWith('second', 'third');
+		});
+	});
 });
