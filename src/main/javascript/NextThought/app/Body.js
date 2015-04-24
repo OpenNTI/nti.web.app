@@ -21,8 +21,6 @@ Ext.define('NextThought.app.Body', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.initHistoryState();
-
 		this.addRoute('/library', this.setLibraryActive.bind(this));
 
 		this.addDefaultRoute(this.setLibraryActive.bind(this));
@@ -34,7 +32,10 @@ Ext.define('NextThought.app.Body', {
 
 		if (!cmp) {
 			cmp = Ext.widget(xtype);
-			this.addChildState(cmp);
+
+			if (cmp.addParentRouter) {
+				cmp.addParentRouter(this);
+			}
 		}
 
 		this.getLayout().setActiveItem(cmp);
@@ -45,8 +46,6 @@ Ext.define('NextThought.app.Body', {
 
 	setLibraryActive: function(route, subRoute) {
 		var library = this.setActiveCmp('library-view-container');
-
-		library.addParentRoute(this);
 
 		return library.handleRoute(subRoute);
 	}
