@@ -6,8 +6,10 @@ Ext.define('NextThought.controller.Application', {
 		'NextThought.login.StateStore',
 		'NextThought.login.Actions',
 		'NextThought.app.Index',
+		//require actions that need to do something on login
 		'NextThought.app.library.Actions',
-		'NextThought.app.store.Actions'
+		'NextThought.app.store.Actions',
+		'NextThought.common.state.Actions'
 	],
 
 	refs: [

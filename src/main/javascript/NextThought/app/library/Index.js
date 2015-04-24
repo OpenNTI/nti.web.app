@@ -4,7 +4,7 @@ Ext.define('NextThought.app.library.Index', {
 
 	mixins: {
 		Router: 'NextThought.mixins.Router',
-		State: 'NextThought.mixins.History'
+		State: 'NextThought.mixins.State'
 	},
 
 	requires: [

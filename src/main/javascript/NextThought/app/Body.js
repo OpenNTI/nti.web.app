@@ -8,7 +8,7 @@ Ext.define('NextThought.app.Body', {
 
 	mixins: {
 		Router: 'NextThought.mixins.Router',
-		State: 'NextThought.mixins.History'
+		State: 'NextThought.mixins.State'
 	},
 
 	layout: 'card',
