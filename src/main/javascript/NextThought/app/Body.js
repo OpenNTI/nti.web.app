@@ -23,7 +23,7 @@ Ext.define('NextThought.app.Body', {
 
 		this.addRoute('/library', this.setLibraryActive.bind(this));
 
-		this.addDefaultRoute(this.setLibraryActive.bind(this));
+		this.addDefaultRoute('/library');
 	},
 
 

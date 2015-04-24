@@ -138,7 +138,7 @@ describe('Router mixin tests', function() {
 			expect(subRoute).toBe('/subPath2/subPath3');
 		});
 
-		it('default route gets called', function() {
+		it('default route handler gets called', function() {
 			var a = '/root/',
 				called = '';
 
@@ -161,6 +161,22 @@ describe('Router mixin tests', function() {
 
 			expect(called).toEqual('default');
 		});
+
+		it('default route path gets called', function() {
+			var a = '/root/',
+				called = '';
+
+			function fn() {
+				called = 'root';
+			}
+
+			router.addRoute(a, fn);
+			router.addDefaultRoute(a);
+
+			router.handleRoute('/unknown/');
+
+			expect(called).toEqual('root');
+		});
 	});
 	
 	describe('Adding a subroute', function() {
@@ -179,16 +195,16 @@ describe('Router mixin tests', function() {
 			second = NextThought.mixins.Router.create({});
 
 			parent.currentRoute = 'first';
-			parent.getTitle = function() { return 'parent'; }
+			parent.getRouteTitle = function() { return 'parent'; }
 
 			parent.pushRootRoute = function(title, url) { testCtrl.pushRootRoute(title, url); }
 			parent.replaceRootRoute = function(title, url) { testCtrl.replaceRootRoute(title, url); }
 
 			first.currentRoute = 'second';
-			first.getTitle = function() { return 'first'; }
+			first.getRouteTitle = function() { return 'first'; }
 
 			second.currentRoute = 'foo';
-			second.getTitle = function() { return 'second'; }
+			second.getRouteTitle = function() { return 'second'; }
 
 			first.addParentRouter(parent);
 			second.addParentRouter(first);
@@ -204,19 +220,18 @@ describe('Router mixin tests', function() {
 		it('pushRoute', function() {
 			second.pushRoute('second', 'third');
 
-			expect(first.pushRoute).toHaveBeenCalledWith('first | second', 'second/third');
-			expect(parent.pushRoute).toHaveBeenCalledWith('parent | first | second', 'first/second/third');
+			expect(first.pushRoute).toHaveBeenCalledWith('second - first', 'second/third');
+			expect(parent.pushRoute).toHaveBeenCalledWith('second - first - parent', 'first/second/third');
 		});
 
 		it('replaceRoute', function() {
 			second.replaceRoute('second', 'third');
 
-			expect(first.replaceRoute).toHaveBeenCalledWith('first | second', 'second/third');
-			expect(parent.replaceRoute).toHaveBeenCalledWith('parent | first | second', 'first/second/third');
+			expect(first.replaceRoute).toHaveBeenCalledWith('second - first', 'second/third');
+			expect(parent.replaceRoute).toHaveBeenCalledWith('second - first - parent', 'first/second/third');
 		});
 
 		it('pushRootRoute', function() {
-			debugger;
 			second.pushRootRoute('second', 'third');
 
 			expect(testCtrl.pushRootRoute).toHaveBeenCalledWith('second', 'third');

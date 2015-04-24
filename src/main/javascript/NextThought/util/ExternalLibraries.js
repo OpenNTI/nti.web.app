@@ -16,7 +16,7 @@
  */
 
 (function(global) {
-	var prefix = global.testRoot || '';
+	var prefix = global.testRoot !== undefined ? global.testRoot : '/app/';
 
 	function finish() { Ext.define('NextThought.util.ExternalLibraries', {}); }
 

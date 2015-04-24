@@ -29,14 +29,9 @@ Ext.define('NextThought.mixins.Router', {
 	 */
 	__routeMap: {},
 
-	trimRoute: function(route) {
-		route = route || '';
-		//get rid of any leading slash
-		route = route.replace(/^\//, '');
-		//get rid of any trailing slash
-		route = route.replace(/\/$/, '');
 
-		return route;
+	trimRoute: function(route) {
+		return Globals.trimRoute(route);
 	},
 
 
@@ -116,12 +111,16 @@ Ext.define('NextThought.mixins.Router', {
 	/**
 	 * Add a default handler for unknown paths
 	 *
-	 * handler should return its part of the url
+	 * handler should return its part of the url, or a string to use as the route
 	 * the handler can return a promise
-	 * @param {Function} handler
+	 * @param {Function|String} handler
 	 */
 	addDefaultRoute: function(handler) {
-		this.defaultRouteHandler = handler;
+		if (typeof handler === 'string') {
+			this.defaultRoutePath = handler;
+		} else {
+			this.defaultRouteHandler = handler;
+		}
 	},
 
 
@@ -177,6 +176,8 @@ Ext.define('NextThought.mixins.Router', {
 			val = this.defaultRouteHandler.call(null, {
 				path: '/' + route
 			});
+		} else if (this.defaultRoutePath) {
+			val = this.handleRoute(this.defaultRoutePath);
 		} else {
 			console.warn('No Handler for route', route);
 		}
@@ -213,7 +214,7 @@ Ext.define('NextThought.mixins.Router', {
 	 * @override
 	 * @return {String} a title to describe the state of this route
 	 */
-	getTitle: function() { return ''; },
+	getRouteTitle: function() { return ''; },
 
 
 	/**
@@ -224,11 +225,11 @@ Ext.define('NextThought.mixins.Router', {
 	 * @return {Object}           map of the values
 	 */
 	__mergeChildRoute: function(title, subRoute) {
-		var myTitle = this.getTitle(),
+		var myTitle = this.getRouteTitle(),
 			route = this.getCurrentRoute();
 
 		if (myTitle) {
-			title = myTitle + ' | ' + title;
+			title = title + ' - ' + myTitle;
 		}
 
 		route = this.trimRoute(route);

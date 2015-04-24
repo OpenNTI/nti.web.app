@@ -63,6 +63,17 @@ Ext.define('NextThought.util.Globals', {
 		}
 	},
 
+	//Remove leading and trailing /'s from a route
+	trimRoute: function(route) {
+		route = route || '';
+		//get rid of any leading slash
+		route = route.replace(/^\//, '');
+		//get rid of any trailing slash
+		route = route.replace(/\/$/, '');
+
+		return route;
+	},
+
 
 	getError: function(e) {
 		return e.stack || e;
