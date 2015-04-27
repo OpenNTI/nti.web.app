@@ -124,7 +124,6 @@ Ext.define('NextThought.view.courseware.enrollment.parts.GroupedSet', {
 
 
 	isCorrect: function() {
-		debugger;
 		var values = this.getValue(),
 			inputs = this.inputs || [], i,
 			correct = true;

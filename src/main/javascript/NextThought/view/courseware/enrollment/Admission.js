@@ -344,47 +344,48 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 			]);
 		}
 
-
 		form.unshift({
-				name: 'preliminary',
-				label: getString('NextThought.view.courseware.enrollment.Admission.PrelimQuest'),
-				reveals: ['general', 'signature'],
-				items: [
-					{
-						xtype: 'enrollment-set',
-						label: getString('NextThought.view.courseware.enrollment.Admission.OKHSStudent'),
-						name: 'attending-highschool',
-						inputs: [
+			name: 'preliminary',
+			label: getString('NextThought.view.courseware.enrollment.Admission.PrelimQuest'),
+			reveals: ['general', 'signature'],
+			items: [
+				{
+					xtype: 'enrollment-grouped-set',
+					label: 'Are you currently attending high school?',
+					name: 'attending-highschool',
+					required: true,
+					noIncorrect: true,
+					options: [
+						{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'Y', inputs: [
 							{
 								type: 'radio-group',
-								name: 'is_currently_attending_highschool',
+								label: 'Are you an Oklahoma resident?',
+								name: 'ok-highschool-student',
 								correct: 'N',
 								noIncorrect: true,
-								reveals: {
-									name: 'attending',
-									ifNotEmpty: true
-								},
 								hides: 'concurrent-contact',
+								defaultAnswer: 'N',
 								options: [
 									{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'Y'},
 									{text: getString('NextThought.view.courseware.enrollment.Admission.No'), value: 'N'}
 								]
 							}
-						]
-					},
-					{
-						xtype: 'enrollment-set',
-
-						label: getString('NextThought.view.courseware.enrollment.Admission.OUStudent'),
-						name: 'attending',
-						inputs: [
-							{type: 'radio-group', name: 'is_currently_attending_ou', correct: 'N', options: [
-								{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'Y',	content: currentStudent},
-								{text: getString('NextThought.view.courseware.enrollment.Admission.No'), value: 'N'}
-							]}
-						]
-					}
-				]
+						]},
+						{text: getString('NextThought.view.courseware.enrollment.Admission.No'), value: 'N'}
+					]
+				},
+				{
+					xtype: 'enrollment-set',
+					label: getString('NextThought.view.courseware.enrollment.Admission.OUStudent'),
+					name: 'attending',
+					inputs: [
+						{type: 'radio-group', name: 'is_currently_attending_ou', correct: 'N', options: [
+							{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'Y',	content: currentStudent},
+							{text: getString('NextThought.view.courseware.enrollment.Admission.No'), value: 'N'}
+						]}
+					]
+				}
+			]
 		});
 
 		me.submitBtnCfg = me.buttonCfg[0];
