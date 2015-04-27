@@ -19,7 +19,7 @@ Ext.define('NextThought.app.library.courses.components.Collection', {
 			{cls: 'label', html: '{label}'},
 			{cls: 'group', html: '{group}'}
 		]},
-		{ cls: 'grid', 'role': 'group', 'aria-label': '{name}', cn: {
+		{ tag: 'ul', cls: 'library-grid', 'role': 'group', 'aria-label': '{name}', cn: {
 			tag: 'tpl', 'for': 'items', cn: ['{entry}']}
 		}
 	]),

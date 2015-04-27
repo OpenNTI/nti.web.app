@@ -12,6 +12,9 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 	getAdminCourses: function() { return this.ADMIN_COURSES; },
 
 
+	getAllCourses: function() {	return this.ALL_COURSES; },
+
+
 	setEnrolledCourses: function(courses) {
 		this.ENROLLED_COURSES = courses;
 
@@ -24,6 +27,28 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 
 		this.fireEvent('admin-courses-set', this.ADMIN_COURSES);
 	},
+
+	setAllCourses: function(courses) {
+		this.ALL_COURSES = courses;
+
+		this.fireEvent('all-courses-set', this.ALL_COURSES);
+	},
+
+
+	setAllCoursesLink: function(link) {
+		this.all_courses_link = link;
+	},
+
+
+	getAllCoursesLink: function(link) {
+		return this.all_courses_link;
+	},
+
+
+	hasAllCoursesLink: function() {
+		return !!this.all_courses_link;
+	},
+
 
 	/**
 	 * Filter the courses down to the ones that haven't expired yet

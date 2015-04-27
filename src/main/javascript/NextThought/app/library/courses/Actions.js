@@ -90,5 +90,17 @@ Ext.define('NextThought.app.library.courses.Actions', {
 	},
 
 
-	setUpAllCourses: function(link) {}
+	setUpAllCourses: function(link) {
+		this.CourseStore.setAllCoursesLink(link);
+	},
+
+
+	loadAllCourses: function() {
+		var link = this.CourseStore.getAllCoursesLink();
+
+		if (!link) { return Promise.resolve(); }
+
+		return StoreUtils.loadItems(getURL(link))
+			.then(this.CourseStore.setAllCourses.bind(this.CourseStore));
+	}
 });

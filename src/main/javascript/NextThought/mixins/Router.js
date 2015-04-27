@@ -27,7 +27,9 @@ Ext.define('NextThought.mixins.Router', {
 		'root/sub2/var/' will be handled by fn4 passed test = var as params
 		'root/sub2/var/varSub' will be handled by fn4 passed test = var as params
 	 */
-	__routeMap: {},
+	initRouter: function() {
+		this.__routeMap = {};
+	},
 
 
 	trimRoute: function(route) {
@@ -195,22 +197,23 @@ Ext.define('NextThought.mixins.Router', {
 	},
 
 
-	addParentRouter: function(cmp) {
-		this.parentRouter = cmp;
+	addChildRouter: function(cmp) {
+		cmp.parentRouter = this;
 
-		if (!cmp.__pushChildRoute) {
-			console.error('Cant set a non route cmp as the parent router');
+		if (!cmp.pushRoute) {
+			console.error('Cant set a non route cmp as a child router router');
 			return;
 		}
 
-		this.pushRoute = cmp.__pushChildRoute.bind(cmp);
-		this.replaceRoute = cmp.__replaceChildRoute.bind(cmp);
-		this.pushRootRoute = cmp.pushRootRoute.bind(cmp);
-		this.replaceRootRoute = cmp.replaceRootRoute.bind(cmp);
+		cmp.pushRoute = this.__pushChildRoute.bind(this);
+		cmp.replaceRoute = this.__replaceChildRoute.bind(this);
+		cmp.pushRootRoute = this.pushRootRoute.bind(this);
+		cmp.replaceRootRoute = this.replaceRootRoute.bind(this);
+		cmp.setTitle = this.__setChildTitle.bind(this);
 	},
 
 	/**
-	 * Return a title to put in the document's title for this route
+	 * Return a title to put in the history.pushState title for this route
 	 * @override
 	 * @return {String} a title to describe the state of this route
 	 */
@@ -245,7 +248,7 @@ Ext.define('NextThought.mixins.Router', {
 
 
 	/**
-	 * Merge the childs route with mine and push it
+	 * Merge the child's route with mine and push it
 	 * @param  {String} title    title of the route
 	 * @param  {String} subRoute the childs route
 	 */
@@ -267,6 +270,25 @@ Ext.define('NextThought.mixins.Router', {
 		this.replaceRoute(merged.title, merged.route);
 	},
 
+	/**
+	 * Merge my title in to the childs and set it
+	 * @param {String} title title to set on the document
+	 */
+	__setChildTitle: function(title) {
+		var myTitle = this.getRouteTitle();
+
+		if (myTitle) {
+			title = title + '-' + mytitle;
+		}
+
+		this.setTitle(title);
+	},
+
+	/**
+	 * Set the title of the document
+	 * @param {String} title title to set on the document
+	 */
+	setTitle: function(title) {},
 
 	/**
 	 * Push a current route
@@ -303,3 +325,22 @@ Ext.define('NextThought.mixins.Router', {
 	 */
 	replaceRootRoute: function(title, route) {}
 });
+
+
+
+/*
+	addRoute: Function(path, config)
+
+	activateSubRoute: Function(name)
+
+	config = {
+		title: String or Function,
+		canonical: String or Function,
+		handler: Function,
+		subRoute: String
+	}
+
+
+
+
+ */

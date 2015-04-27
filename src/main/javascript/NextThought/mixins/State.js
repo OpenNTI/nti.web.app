@@ -29,11 +29,11 @@ Ext.define('NextThought.mixins.State', {
 
 		store.setState(this.state_key, state);
 
-		this.applyState(state);
+		return this.applyState(state);
 	},
 
 	/**
-	 * Apply a state to the ui
+	 * Apply a state to the ui, return promise that fulfills when its down
 	 * @override
 	 * @param {Object} state state to apply
 	 */

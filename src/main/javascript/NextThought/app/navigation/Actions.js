@@ -10,15 +10,30 @@ Ext.define('NextThought.app.navigation.Actions', {
 
 
 	/**
-	 * Takes an array or object config
+	 * Takes object config
 	 *
 	 * {
 	 * 	backHandler: Function, //if falsy or we have an array of tab configs don't show the back arrow
-	 * 	cmp: Ext.Component, //a component to render in the header, tabs are ignored if this is present
+	 * 	cmp: Ext.Component, //a component to render in the header, tabs are ignored if this is present,
+	 * 	cls: String, // a custom class to apply styles
+	 * 	quickSwitcher: [
+	 * 		{
+	 * 			text: String, //Display
+	 * 			cls: String, //custom class
+	 * 			handler: Function, //called when selected
+	 * 		 	active: Boolean, //set this one active
+	 * 		 	thumbnail: String //src for the thumbnail to show,
+	 * 		 	notification: {
+	 * 		 		text: String, //display
+	 * 		 		handler: Function //called when the notification is selected
+	 * 		 	}
+	 * 		}
+	 * 	],
 	 *  tabs: [
 	 *  	{
 	 *  		name: String, //Display name of this option
 	 *  		cls: String, //custom class to add to the tab
+	 *  		active: Boolean, //if this is the active tab
 	 *  		handler: Function, //Called when the tab is clicked
 	 *  		menuItems: [ //Nested tab configs to show under this one
 	 *  			{
@@ -34,7 +49,7 @@ Ext.define('NextThought.app.navigation.Actions', {
 	 * @param  {Array|Object} tabs configuration to build the tabs
 	 */
 	updateNavBar: function(config) {
-		this.store.fireEvent('set-tabs', tabs);
+		this.store.updateNavBar(config);
 	},
 
 

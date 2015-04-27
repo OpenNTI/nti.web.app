@@ -21,21 +21,21 @@ Ext.define('NextThought.app.Body', {
 	initComponent: function() {
 		this.callParent(arguments);
 
+		this.initRouter();
+
 		this.addRoute('/library', this.setLibraryActive.bind(this));
 
 		this.addDefaultRoute('/library');
 	},
 
 
-	setActiveCmp: function(xtype) { 
+	setActiveCmp: function(xtype) {
 		var cmp = this.down(xtype);
 
 		if (!cmp) {
 			cmp = Ext.widget(xtype);
 
-			if (cmp.addParentRouter) {
-				cmp.addParentRouter(this);
-			}
+			this.addChildRouter(cmp);
 		}
 
 		this.getLayout().setActiveItem(cmp);

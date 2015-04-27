@@ -13,13 +13,13 @@ Ext.define('NextThought.app.library.components.Collection', {
 		//		'{name}', {cls: 'count', 'aria-hidden': 'true', html: '{count}'}
 		//	]
 		//}},
-		{ cls: 'grid', 'role': 'group', 'aria-label': '{name}', cn: {
+		{ tag: 'ul', cls: 'library-grid', 'role': 'group', 'aria-label': '{name}', cn: {
 			tag: 'tpl', 'for': 'items', cn: ['{entry}']}
 		}
 	]),
 
 	entryTpl: Ext.DomHelper.markup({
-		cls: '{inGrid} item {featured} row-{rows} col-{cols}', 'role': 'link', 'aria-label': '{title}', cn: [
+		tag: 'li', cls: 'library-grid-item item {featured} allow-zoom', 'role': 'link', 'aria-label': '{title}', cn: [
 			{ cls: 'cover', cn: [
 				{tag: 'img', src: '{icon}'}
 			]},
@@ -55,25 +55,6 @@ Ext.define('NextThought.app.library.components.Collection', {
 		if (!Ext.is.iOS) {
 			this.addCls('allow-zoom');
 		}
-	},
-
-
-	prepareData: function(data, index, record) {
-		var i = this.callParent(arguments),
-			rows = this.rowSpan,
-			cols = 2;
-
-		i.inGrid = 'grid-item';
-
-		if (rows > 1 && index === 0) {
-			i.featured = 'featured';
-			cols = 4;
-		}
-
-		i.rows = rows;
-		i.cols = cols;
-
-		return i;
 	},
 
 

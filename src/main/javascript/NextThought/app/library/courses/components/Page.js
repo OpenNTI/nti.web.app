@@ -1,11 +1,12 @@
 Ext.define('NextThought.app.library.courses.components.Page', {
 	extend: 'Ext.container.Container',
 	alias: ['widget.library-view-course-page', 'widget.library-view-tab'],
-	
+
 	requires: [
 		'NextThought.app.library.courses.components.Collection'
 	],
 
+	layout: 'none',
 	defaultType: 'course-collection',
 	showPage: true,
 	cls: 'page scrollable',

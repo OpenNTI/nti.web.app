@@ -206,8 +206,8 @@ describe('Router mixin tests', function() {
 			second.currentRoute = 'foo';
 			second.getRouteTitle = function() { return 'second'; }
 
-			first.addParentRouter(parent);
-			second.addParentRouter(first);
+			parent.addChildRouter(first);
+			first.addChildRouter(second);
 
 			spyOn(parent, 'pushRoute').andCallThrough();
 			spyOn(parent, 'replaceRoute').andCallThrough();

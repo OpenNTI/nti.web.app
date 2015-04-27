@@ -8,7 +8,15 @@ Ext.define('NextThought.app.navigation.Index', {
 
 	cls: 'main-navigation',
 
-	renderTpl: Ext.DomHelper.markup({html: 'nav'}),
+
+	renderTpl: Ext.DomHelper.markup([
+		{cls: 'nav-container'}
+	]),
+
+
+	renderSelectors: {
+		navContainerEl: '.nav-container'
+	},
 
 
 	initComponent: function() {
@@ -17,13 +25,29 @@ Ext.define('NextThought.app.navigation.Index', {
 		this.NavStore = NextThought.app.navigation.StateStore.getInstance();
 
 		this.mon(this.NavStore, {
-			'set-tabs': this.setTabs.bind(this),
+			'update-nav': this.updateNav.bind(this),
 			'set-active-content': this.setActiveContent.bind(this)
 		});
 	},
 
 
-	setTabs: function(tabs) {},
+	__renderNavCmp: function(cmp) {
+		if (this.nav_cmp === cmp) { return; }
+		Ext.destroy(this.nav_cmp);
+		cmp.render(this.navContainerEl);
+		this.nav_cmp = cmp;
+	},
+
+	updateNav: function(config) {
+		if (!this.rendered) {
+			this.on('afterrender', this.updateNav.bind(this));
+			return;
+		}
+
+		if (config.cmp) {
+			this.__renderNavCmp(config.cmp);
+		}
+	},
 
 
 	setActiveContent: function(bundle) {}
