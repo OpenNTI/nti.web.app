@@ -844,40 +844,44 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 			preflight = Promise.resolve();
 		}
 
-		preflight
-			.then(function() {
-				isValid = true;
-				return me[groupConfig.submit].call(me, value);
-			}, function() {
-				isValid = false;
+		me.shouldAllowSubmission()
+			.then( function() {
+				preflight
+					.then(function() {
+						isValid = true;
+						return me[groupConfig.submit].call(me, value);
+					}, function() {
+						isValid = false;
 
-				return Promise.reject();
+						return Promise.reject();
+					})
+					.then(function(response) {
+						var json = Ext.JSON.decode(response, true);
+
+						me.removeMask();
+
+						me[groupConfig.handler].call(me, json, true);
+					})
+					.fail(function(response) {
+						me.removeMask();
+
+						if (!isValid) {
+							return;
+						}
+
+						var json;
+
+						if (!response) {
+							json = {
+								message: getString('NextThought.view.courseware.enrollment.Admission.TryLater')
+							};
+						} else {
+							json = Ext.JSON.decode(response.responseText || response, true);
+						}
+
+						me[groupConfig.handler].call(me, json, false);
+					});
 			})
-			.then(function(response) {
-				var json = Ext.JSON.decode(response, true);
-
-				me.removeMask();
-
-				me[groupConfig.handler].call(me, json, true);
-			})
-			.fail(function(response) {
-				me.removeMask();
-
-				if (!isValid) {
-					return;
-				}
-
-				var json;
-
-				if (!response) {
-					json = {
-						message: getString('NextThought.view.courseware.enrollment.Admission.TryLater')
-					};
-				} else {
-					json = Ext.JSON.decode(response.responseText || response, true);
-				}
-
-				me[groupConfig.handler].call(me, json, false);
-			});
+		
 	}
 });
