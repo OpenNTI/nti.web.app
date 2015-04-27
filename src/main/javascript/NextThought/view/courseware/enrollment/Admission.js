@@ -707,31 +707,40 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 
 		groupConfig = me.groups[value.group];
 
-		return new Promise(function(fulfill, reject) {
-			if (!me.isValid(value.group)) {
-				me.fireEvent('show-msg', getString('NextThought.view.courseware.enrollment.Admission.FillOutAllInfo'), true, 5000);
-				reject();
-				return;
-			}
-
-			if (!groupConfig.preflight) {
-				fulfill();
-			} else if (!preflightlink) {
-				console.error('No Preflight to validate the admission form, allowing submit anyway');
-				fulfill();
-			} else {
-				Service.post(preflightlink, value.postData)
-					.then(function(response) {
+		return me.isValidForSubmission(value.group)
+			.then(function() {
+				return new Promise(function(fulfill, reject) {
+					if (!groupConfig.preflight) {
 						fulfill();
-					})
-					.fail(function(response) {
-						var json = Ext.JSON.decode(response && response.responseText, true);
+					} else if (!preflightlink) {
+						console.error('No Preflight to validate the admission form, allowing submit anyway');
+						fulfill();
+					} else {
+						Service.post(preflightlink, value.postData)
+							.then(function(response) {
+								fulfill();
+							})
+							.fail(function(response) {
+								var json = Ext.JSON.decode(response && response.responseText, true);
 
-						me.showError(json);
-						reject();
-					});
-			}
-		});
+								me.showError(json);
+								reject();
+							});
+					}
+				});
+			});
+	},
+
+
+	isValidForSubmission: function(group) {
+		var valid = this.isValid(group);
+
+		if (!valid)  {
+			this.fireEvent('show-msg', getString('NextThought.view.courseware.enrollment.Admission.FillOutAllInfo'), true, 5000);
+			return Promise.reject();
+		}
+
+		return Promise.resolve();
 	},
 
 
@@ -788,7 +797,8 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 		var value = this.mixins.form.getValue.call(this),
 			group = 'admission', data;
 
-		if (value.is_currently_attending_highschool === 'Y') {
+
+		if (value['ok-highschool-student'] === 'Y') {
 			group = 'concurrent';
 			data = {
 				name: value.contact_name,
@@ -842,47 +852,44 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 		if (groupConfig.preflight) {
 			preflight = me[groupConfig.preflight].call(me, value);
 		} else {
-			preflight = Promise.resolve();
+			preflight = me.isValidForSubmission(value.group);
 		}
 
-		me.shouldAllowSubmission()
-			.then( function() {
-				preflight
-					.then(function() {
-						isValid = true;
-						return me[groupConfig.submit].call(me, value);
-					}, function() {
-						isValid = false;
+		preflight
+			.then(function() {
+				isValid = true;
 
-						return Promise.reject();
-					})
-					.then(function(response) {
-						var json = Ext.JSON.decode(response, true);
+				return me[groupConfig.submit].call(me, value);
+			}, function() {
+				isValid = false;
 
-						me.removeMask();
-
-						me[groupConfig.handler].call(me, json, true);
-					})
-					.fail(function(response) {
-						me.removeMask();
-
-						if (!isValid) {
-							return;
-						}
-
-						var json;
-
-						if (!response) {
-							json = {
-								message: getString('NextThought.view.courseware.enrollment.Admission.TryLater')
-							};
-						} else {
-							json = Ext.JSON.decode(response.responseText || response, true);
-						}
-
-						me[groupConfig.handler].call(me, json, false);
-					});
+				return Promise.reject();
 			})
-		
+			.then(function(response) {
+				var json = Ext.JSON.decode(response, true);
+
+				me.removeMask();
+
+				me[groupConfig.handler].call(me, json, true);
+			})
+			.fail(function(response) {
+				me.removeMask();
+
+				if (!isValid) {
+					return;
+				}
+
+				var json;
+
+				if (!response) {
+					json = {
+						message: getString('NextThought.view.courseware.enrollment.Admission.TryLater')
+					};
+				} else {
+					json = Ext.JSON.decode(response.responseText || response, true);
+				}
+
+				me[groupConfig.handler].call(me, json, false);
+			});
 	}
 });
