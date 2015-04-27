@@ -11,7 +11,8 @@ Ext.define('NextThought.view.courseware.enrollment.parts.GroupedSet', {
 				type: 'split-radio',
 				text: option.text,
 				value: option.value,
-				name: me.name
+				name: me.name,
+				correct: me.correct
 			});
 
 			if (!Ext.isEmpty(option.inputs)) {
@@ -121,12 +122,20 @@ Ext.define('NextThought.view.courseware.enrollment.parts.GroupedSet', {
 		body.removeCls('error');
 	},
 
+
 	isCorrect: function() {
-		if (!this.correct) { return true; }
-
+		debugger;
 		var values = this.getValue(),
-			value = values && values[this.name];
+			inputs = this.inputs || [], i,
+			correct = true;
 
-		return value && value === this.correct;
+		for (i = 0; i < inputs.length; i++) {
+			if (inputs[i].correct && inputs[i].correct !== values[inputs[i].name]) {
+				correct = false;
+				break;
+			}
+		}
+
+		return correct;
 	}
 });
