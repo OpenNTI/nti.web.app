@@ -265,13 +265,13 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 		}
 
 
-		if (giftPurchasable.isGiftable()) {
+		if (giftPurchasable && giftPurchasable.isGiftable()) {
 			state.giftClass = 'show';
 			state.giveClass = 'show';
 			state.giveTitle = 'Lifelong Learner Only';
 		}
 
-		if (giftPurchasable.isRedeemable() && !details.Enrolled) {
+		if (giftPurchasable && giftPurchasable.isRedeemable() && !details.Enrolled) {
 			state.giftClass = 'show';
 			state.redeemClass = 'show';
 		}
@@ -314,7 +314,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 					Name: me.NAME,
 					BaseOption: me.isBase,
 					Enrolled: option.IsEnrolled,
-					Redeemable: giftPurchasable.isRedeemable(),
+					Redeemable: giftPurchasable && giftPurchasable.isRedeemable(),
 					Price: null,
 					Wording: me.__getEnrollmentText(details, option),
 					doEnrollment: function(cmp, type, config) {
