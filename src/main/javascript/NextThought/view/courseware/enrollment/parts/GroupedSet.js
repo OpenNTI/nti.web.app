@@ -116,7 +116,7 @@ Ext.define('NextThought.view.courseware.enrollment.parts.GroupedSet', {
 		});
 	},
 
-	changed: function(name, value, doNotStore) {
+	changed: function(name, value, doNotStore, sets) {
 		this.callParent(arguments);
 
 		var body = this.el.down('.body-container');

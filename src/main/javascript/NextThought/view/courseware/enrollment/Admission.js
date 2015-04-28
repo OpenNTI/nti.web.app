@@ -366,6 +366,11 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 								noIncorrect: true,
 								hides: 'concurrent-contact',
 								defaultAnswer: 'N',
+								sets: {
+									input: 'years_of_oklahoma_residency',
+									//This input's answer to mapped to what to set on the other input
+									N: '0'
+								},
 								options: [
 									{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'Y'},
 									{text: getString('NextThought.view.courseware.enrollment.Admission.No'), value: 'N'}
