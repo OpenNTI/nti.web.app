@@ -10,7 +10,3 @@ Ext.define('NextThought.model.store.StripePurchaseError', {
 		{ name: 'Type', type: 'string', persist: false }
 	]
 });
-
-Ext.define('NextThought.model.store.StripeOperationError', {
-	extend: 'NextThought.model.store.StripePurchaseError'
-});

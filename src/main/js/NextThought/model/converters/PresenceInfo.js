@@ -5,8 +5,7 @@ Ext.define('NextThought.model.converters.PresenceInfo', {
 	PRESENCEINFO: {
 		type: 'PresenceInfo',
 		sortType: 'none',
-		convert: function(v,record) {
-
+		convert: function(v, record) {
 			if (!v.isPresenceInfo) {
 				return NextThought.model.PresenceInfo.createPresenceInfo(record.get('username'), 'unavailable');
 			}

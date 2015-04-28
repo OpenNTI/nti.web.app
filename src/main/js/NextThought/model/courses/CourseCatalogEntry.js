@@ -4,7 +4,9 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	mimeType: 'application/vnd.nextthought.courses.coursecataloglegacyentry',
 	requires: [
 		'NextThought.model.converters.Date',
-		'NextThought.model.courses.EnrollmentOptions'
+		'NextThought.model.courses.EnrollmentOptions',
+		'NextThought.model.courses.CourseCreditLegacyInfo',
+		'NextThought.model.courses.CourseCatalogInstructorInfo'
 	],
 	mixins: {
 		PresentationResources: 'NextThought.mixins.PresentationResources'

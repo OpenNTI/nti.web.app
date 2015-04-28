@@ -1,118 +1,94 @@
 Ext.define('NextThought.controller.Application', {
 	extend: 'Ext.app.Controller',
-
 	requires: [
-		'NextThought.cache.*',
-		'NextThought.login.StateStore',
-		'NextThought.login.Actions',
-		'NextThought.app.Index',
-		//require actions that need to do something on login
-		'NextThought.app.library.Actions',
-		'NextThought.app.store.Actions',
-		'NextThought.common.state.Actions'
+		'NextThought.Library'
 	],
 
-	refs: [
-		{ref: 'body', selector: 'main-views'},
-		{ref: 'nav', selector: 'main-navigation'}
-	],
+	views: ['Main', 'MessageBar'],
+
+	launchToken: {timeout: 3600000},//hour
+
+	load: function(app) {
+		debugger;
+	},
 
 	init: function() {
-		var me = this;
+		this.application.registerInitializeTask(this.launchToken);
 
-		me.LoginActions = NextThought.login.Actions.create();
-		me.LoginStore = NextThought.login.StateStore.getInstance();
-
-		//create the actions that need to do something on login
-		me.LibraryActions = NextThought.app.library.Actions.create();
-		me.StoreActions = NextThought.app.store.Actions.create();
-
-
-		window.addEventListener('popstate', function(e) {
-			me.handleCurrentState();
+		this.application.on('finished-loading', function() {
+			NextThought.isInitialized = true;
+			Globals.removeLoaderSplash();
 		});
 	},
 
+	restore: function() {
+		var token = {id: 'state-restore'},
+			app = this.application;
+		try {
+			app.registerInitializeTask(token);
+			this.getController('State').restoreState(PREVIOUS_STATE)
+					.always(function() {
+						app.finishInitializeTask(token);
+					});
+		}
+		catch (e) {//restoring state
+			console.error('Restoring State: ', e, e.message, e.stack);
+			this.getController('Navigation').setView('profile');
+		}
+		this.application.finishInitializeTask(this.launchToken);
 
-	load: function() {
-		this.mon(this.LoginStore, 'login-ready', 'onLogin');
-
-		this.LoginActions.login();
 	},
 
 
-	onLogin: function() {
-		var masterView = Ext.widget('master-view'),
-			body = this.getBody();
+	openViewport: function() {
+		var v;
+		try {
+			v = Ext.widget('master-view');
+		}
+		catch (e1) {
+			console.error('Loading View: ', Globals.getError(e1));
+		}
 
-		body.pushRoute = this.pushRoute.bind(this);
-		body.replaceRoute = this.replaceRoute.bind(this);
-		body.pushRootRoute = this.pushRoute.bind(this);
-		body.replaceRootRoute = this.replaceRoute.bind(this);
-		body.setTitle = this.setTitle.bind(this);
+		Promise.all([
+			//todo: add ContentManagement.onceLoaded()
+			Library.onceLoaded(),
+			CourseWareUtils.onceLoaded()])
+				.then(
+				this.restore.bind(this),
+				function(reason) {//failure
+					//check library... (it will only have a value if it fails)
+					if (reason[0]) {
+						console.error('Library failed to load:', reason[0]);
+					}
 
-		this.handleCurrentState()
-			.then(Globals.removeLoaderSplash.bind(Globals));
-	},
+					//check courses
+					reason = reason[1];
 
+					if (!(reason[0] instanceof Ext.data.Store)) {
+						console.error('Enrolled Courses failed to load:', reason[0]);
+					}
 
-	handleCurrentState: function() {
-		var path = window.location.pathname;
+					if (!(reason[1] instanceof Ext.data.Store)) {
+						console.error('Administered Courses failed to load:', reason[1]);
+					}
 
-		//the path will always have /app in front of it so remove it
-		path = path.split('/').slice(2).join('/');
+					try {
+						Ext.destroy(v);
+					} catch (e) {
+						console.error(e.stack || e.message || e);
+					}
 
-		return this.handleRoute(path);
-	},
+					Ext.DomHelper.overwrite(Ext.getBody(), {
+						cls: 'empty-state error-message-component',
+						cn: [
+							{tag: 'h1', html: 'There was an error communicating with the server.'},
+							{ html: 'Please try again in a few moments.'}
+						]
+					});
+				});
 
+		Library.load();
 
-	handleRoute: function(route) {
-		var body = this.getBody();
-
-		return body.handleRoute(route);
-	},
-
-
-	__mergeTitle: function(title) {
-		var rootTitle = getString('application.title-bar-prefix', 'NextThought');
-
-		title = rootTitle + ': ' + title;
-
-		return title;
-	},
-
-
-	__mergeRoute: function(route) {
-		route = Globals.trimRoute(route);
-		route = '/app/' + route + '/';
-
-		return route;
-	},
-
-
-	pushRoute: function(title, route) {
-		title = this.__mergeTitle(title);
-		route = this.__mergeRoute(route);
-
-		history.pushState({}, title, route);
-		document.title = title;
-		this.handleRoute(route);
-	},
-
-
-	replaceRoute: function(title, route) {
-		title = this.__mergeTitle(title);
-		route = this.__mergeRoute(route);
-
-		history.replaceState({}, title, route);
-		document.title = title;
-		this.handleRoute(route);
-	},
-
-
-	setTitle: function(title) {
-		title = this.__mergeTitle(title);
-
-		document.title = title;
 	}
+
 });

@@ -16,7 +16,7 @@
  */
 
 (function(global) {
-	var prefix = global.testRoot === undefined ? '/app/' : global.testRoot;
+	var prefix = global.testRoot !== undefined ? global.testRoot : '/app/';
 
 	function finish() { Ext.define('NextThought.util.ExternalLibraries', {}); }
 
@@ -61,7 +61,7 @@
 
 	if (!global.libsLoaded) {
 		global.loadExternalLibraries = loadExternalLibraries;
-		Ext.Loader.loadScript(prefix + 'javascript/libs.js');
+		Ext.Loader.loadScript(prefix + 'js/libs.js');
 	}
 	else {
 		finish();

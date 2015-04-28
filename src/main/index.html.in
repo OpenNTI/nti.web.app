@@ -61,7 +61,7 @@
 			<!--<script type="text/javascript" src="ext-4.2/src/diag/layout/ContextItem.js"></script>-->
 
 		<!-- </x-bootstrap> -->
-		<script type="text/javascript" src="/app/javascript/app.js"></script>
+		<script type="text/javascript" src="/app/js/app.js"></script>
 	<!-- </x-compile> -->
 	<!-- analytics -->
 </body>

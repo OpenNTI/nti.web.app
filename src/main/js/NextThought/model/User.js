@@ -1,7 +1,7 @@
 /*globals B64*/
 Ext.define('NextThought.model.User', {
 	extend: 'NextThought.model.Base',
-	requires: ['NextThought.model.converters.PresenceInfo'],
+	requires: ['NextThought.model.PresenceInfo', 'NextThought.model.converters.PresenceInfo'],
 	idProperty: 'Username',
 
 	fields: [

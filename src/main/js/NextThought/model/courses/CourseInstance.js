@@ -11,7 +11,13 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		'NextThought.store.courseware.Navigation',
 		'NextThought.store.courseware.ToCBasedOutline',
 		'NextThought.store.courseware.Stream',
-        'NextThought.model.courses.CourseVideoProgress'
+        'NextThought.model.courses.CourseVideoProgress',
+        'NextThought.model.courses.CourseOutline',
+        'NextThought.model.courses.CourseInstanceSharingScopes',
+        'NextThought.model.courses.CourseCatalogEntry',
+        'NextThought.model.courseware.GradeBook',
+        'NextThought.model.ContentBundle',
+        'NextThought.model.forums.CommunityBoard'
 	],
 
 	mixins: {

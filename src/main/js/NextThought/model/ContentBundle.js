@@ -3,7 +3,8 @@ Ext.define('NextThought.model.ContentBundle', {
 	extend: 'NextThought.model.Base',
 
 	requires: [
-		'NextThought.model.forums.ContentBoard'
+		'NextThought.model.forums.ContentBoard',
+		'NextThought.model.ContentPackage'
 	],
 
 	mixins: {

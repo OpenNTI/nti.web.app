@@ -4,7 +4,7 @@ Ext.define('NextThought.model.converters.ContentRangeDescription', {
 
 	CONTENTRANGEDESCRIPTION: {
 		type: 'ContentRangeDescription',
-		convert: function(v,record) {
+		convert: function(v, record) {
 			try {
 				if (v) {
 					return NextThought.model.anchorables.ContentRangeDescription.createFromObject(v);

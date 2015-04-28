@@ -1,6 +1,8 @@
 Ext.define('NextThought.model.ContentPackage', {
 	extend: 'NextThought.model.Base',
-	requires: ['NextThought.model.converters.DCCreatorToAuthor'],
+	requires: [
+		'NextThought.model.converters.DCCreatorToAuthor'
+	],
 
 	statics: {
 		TOC_REQUESTS: {}
@@ -37,45 +39,49 @@ Ext.define('NextThought.model.ContentPackage', {
 	constructor: function() {
 		this.callParent(arguments);
 
-		var me = this,
-			index = me.get('index');
-
-		if (me.self.TOC_REQUESTS[index]) {
-			me.tocPromise = me.self.TOC_REQUESTS[index];
-		} else {
-			me.tocPromise = Service.request(getURL(me.get('index')))
-								.then(Library.parseXML)
-							//BEGIN: ToC Cleanup
-								.then(me.__cleanToCNodes.bind(me))
-							//END: ToC Cleanup
-								.then(function(x) {
-									var d = x.documentElement;
-
-									d.setAttribute('base', me.get('root'));
-									d.setAttribute('icon', me.get('icon'));
-									d.setAttribute('title', me.get('title'));
-
-									return x;
-								});
-
-			me.self.TOC_REQUESTS[index] = me.tocPromise;
-		}
-
-		me.tocPromise
-			.then(function(x) {
-				var d = x.documentElement;
-
-				me.set({
-					toc: x,
-					NTIID: d.getAttribute('ntiid'),
-					isCourse: d.getAttribute('isCourse') === 'true'
-				});
-
-			});
-
 		wait()
-				.then(me.__cacheContentPreferences.bind(me))
-				.then(me.__setImage.bind(me));
+			.then(this.__setImage.bind(this));
+		// var me = this,
+		// 	index = me.get('index');
+
+		// me.LibraryActions = NextThought.app.library.Actions.create();
+
+		// if (me.self.TOC_REQUESTS[index]) {
+		// 	me.tocPromise = me.self.TOC_REQUESTS[index];
+		// } else {
+		// 	me.tocPromise = Service.request(getURL(me.get('index')))
+		// 						.then(L.parseXML)
+		// 					//BEGIN: ToC Cleanup
+		// 						.then(me.__cleanToCNodes.bind(me))
+		// 					//END: ToC Cleanup
+		// 						.then(function(x) {
+		// 							var d = x.documentElement;
+
+		// 							d.setAttribute('base', me.get('root'));
+		// 							d.setAttribute('icon', me.get('icon'));
+		// 							d.setAttribute('title', me.get('title'));
+
+		// 							return x;
+		// 						});
+
+		// 	me.self.TOC_REQUESTS[index] = me.tocPromise;
+		// }
+
+		// me.tocPromise
+		// 	.then(function(x) {
+		// 		var d = x.documentElement;
+
+		// 		me.set({
+		// 			toc: x,
+		// 			NTIID: d.getAttribute('ntiid'),
+		// 			isCourse: d.getAttribute('isCourse') === 'true'
+		// 		});
+
+		// 	});
+
+		// wait()
+		// 		.then(me.__cacheContentPreferences.bind(me))
+		// 		.then(me.__setImage.bind(me));
 	},
 
 

@@ -2,8 +2,6 @@
 Ext.define('NextThought.util.Visibility', {
 	singleton: true,
 
-	requires: ['NextThought.common.toast.Manager'],
-
 	mixins: {
 		observable: 'Ext.util.Observable'
 	},

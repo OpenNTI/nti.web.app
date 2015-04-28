@@ -50,6 +50,31 @@ Ext.define('NextThought.util.Globals', {
 		}
 	},
 
+	//A utility wrapper around JSON.parse to catch errors
+	parseJSON: function(s, safe) {
+		try {
+			return JSON.parse(s);
+		} catch (e) {
+			if (safe) {
+				return null;
+			}
+
+			throw e;
+		}
+	},
+
+	//Remove leading and trailing /'s from a route
+	trimRoute: function(route) {
+		route = route || '';
+		//get rid of any leading slash
+		route = route.replace(/^\//, '');
+		//get rid of any trailing slash
+		route = route.replace(/\/$/, '');
+
+		return route;
+	},
+
+
 	getError: function(e) {
 		return e.stack || e;
 	},

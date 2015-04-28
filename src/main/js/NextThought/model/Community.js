@@ -16,7 +16,7 @@ Ext.define('NextThought.model.Community', {
 		{ name: 'alias', type: 'string' },
 		{ name: 'realname', type: 'string' },
 		{ name: 'avatarURL', type: 'AvatarURL' },
-		{ name: 'displayName', convert: function(v,r) {return r.getName();}}
+		{ name: 'displayName', convert: function(v, r) {return r.getName();}}
 	],
 
 
