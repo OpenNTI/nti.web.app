@@ -34,7 +34,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 
 
 	__getGiftPurchasable: function(option) {
-		var ntiid = option && option.Purchasables && option.Purchasables.DefaultGifting;
+		var ntiid = option && option.Purchasables && option.Purchasables.DefaultGiftingNTIID;
 
 		if (!ntiid) {
 			return null;
@@ -45,7 +45,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 
 
 	__getPurchasable: function(option) {
-		var ntiid = option && option.Purchasables && option.Purchasables.DefaultPurchase;
+		var ntiid = option && option.Purchasables && option.Purchasables.DefaultPurchaseNTIID;
 
 		if (!ntiid) {
 			return null;
