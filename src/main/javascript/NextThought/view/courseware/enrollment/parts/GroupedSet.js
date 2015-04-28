@@ -97,11 +97,16 @@ Ext.define('NextThought.view.courseware.enrollment.parts.GroupedSet', {
 
 
 	showSubInputs: function(value) {
-		var allInputs = this.query('[groupParent]') || [],
-			toShow = this.query('[groupParent="' + value + '"]') || [];
+		var me = this,
+			allInputs = me.query('[groupParent]') || [],
+			toShow = me.query('[groupParent="' + value + '"]') || [];
 
 		allInputs.forEach(function(input) {
 			input.hide();
+
+			if (input.hides) {
+				me.fireEvent('hide-item', input.hides);
+			}
 		});
 
 		toShow.forEach(function(input) {
@@ -126,13 +131,22 @@ Ext.define('NextThought.view.courseware.enrollment.parts.GroupedSet', {
 	isCorrect: function() {
 		var values = this.getValue(),
 			inputs = this.inputs || [], i,
-			correct = true;
+			correct = true, empty = true;
+
 
 		for (i = 0; i < inputs.length; i++) {
+			if (inputs[i].name === this.name && values[this.name] !== undefined) {
+				empty = false;
+			}
+
 			if (inputs[i].correct && inputs[i].correct !== values[inputs[i].name]) {
 				correct = false;
 				break;
 			}
+		}
+
+		if (empty && this.wrongIfEmpty) {
+			return false;
 		}
 
 		return correct;

@@ -354,6 +354,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 					label: 'Are you currently attending high school?',
 					name: 'attending-highschool',
 					required: true,
+					wrongIfEmpty: true,
 					noIncorrect: true,
 					options: [
 						{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'Y', inputs: [
