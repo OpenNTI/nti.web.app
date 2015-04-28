@@ -538,7 +538,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 	showRejection: function(json) {
 		this.removeAll(true);
 
-		var fields = this.form.slice(),
+		var fields = this.getFormForGroup('admission'),
 			defaults = {
 				Message: getString('NextThought.view.courseware.enrollment.Admission.TryLater'),
 				ContactInformation: getString('NextThought.view.courseware.enrollment.Admission.HelpOrResubmit')
