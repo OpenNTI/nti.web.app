@@ -366,8 +366,12 @@ Ext.define('NextThought.model.Base', {
 	},
 
 
-	convertToPlaceholder: function() {
-		var me = this, keepList = {
+	/*
+	*	Allow subclasses to overrides the attributes 
+	* 	they would like to keep when converting to a placeholder.
+	*/
+	getPlaceholderKeepList: function() {
+		var keepList = {
 			'Class': 1,
 			'ContainerId': 1,
 			'ID': 1,
@@ -376,7 +380,15 @@ Ext.define('NextThought.model.Base', {
 			'OID': 1,
 			'inReplyTo': 1,
 			'references': 1
-		};
+		}
+
+		return keepList;
+	},
+
+
+	convertToPlaceholder: function() {
+		var me = this, 
+			keepList = this.getPlaceholderKeepList();
 		me.placeholder = true;
 		me.fields.each(function(f) {
 			if (!keepList[f.name]) {

@@ -109,6 +109,7 @@ Ext.define('NextThought.view.forums.forum.parts.TopicListView', {
 					load: function(store, records) {
 						me.addGrouper();
 						me.fillInData(records, me.filterBar.getSearch());
+						me.getTargetEl().scrollTo('top', 0);
 					}
 				});
 			});

@@ -161,7 +161,12 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 				if (record.isTopLevel() && !me.isOnLastPage()) {
 					me.loadLastPage(true);
 				} else {
+					if (record.isTopLevel()) {
+						me.store.totalCount += 1;
+					}
+
 					me.store.insertSingleRecord(record);
+					me.goToComment(record);
 				}
 			}
 		}});

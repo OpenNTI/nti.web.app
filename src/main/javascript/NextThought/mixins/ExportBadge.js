@@ -246,6 +246,7 @@ Ext.define('NextThought.mixins.ExportBadge', {
 		wait()
 			.then(function() {
 				win.alignTo(targetEl, 'tl-bl?');
+				win.toFront();
 			});
 	}
 });

@@ -249,7 +249,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		var grid = this.grid;
+		var grid = this.grid, me = this;
 
 		this.createStudentMenu();
 		this.createItemMenu();
@@ -273,7 +273,15 @@ Ext.define('NextThought.view.courseware.assessment.admin.performance.Root', {
 			cellclick: 'onCellClick'
 		});
 
-		this.mon(this.pageHeader, 'toggle-avatars', 'toggleAvatars');
+		this.mon(this.pageHeader, {
+			'toggle-avatars': 'toggleAvatars',
+			'page-change': function(){
+				me.mon(me.store, {
+					single: true,
+					'load': grid.scrollToTop.bind(grid)
+				});
+			}
+		});
 
 		if (!this.stateRestored) {
 			//bump this to the next event pump so the restore state has a chance to be called

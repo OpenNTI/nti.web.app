@@ -78,9 +78,36 @@ Ext.define('NextThought.mixins.enrollment-feature.Form', {
 	},
 
 
-	changed: function(name, value, doNotStore) {
+	setInput: function(name, value) {
+		var input = this.down('[name=' + name + ']');
+
+		if (input && input.setValue && value) {
+			input.setValue(value);
+		}
+	},
+
+
+	getFormForGroup: function(name) {
+		var form = this.form.slice(), i,
+			items = [];
+
+		for (i = 0; i < form.length; i++) {
+			if (form[i].group === name) {
+				items.push(form[i]);
+			}
+		}
+
+		return items;
+	},
+
+
+	changed: function(name, value, doNotStore, sets) {
 		if (this.changeMonitors[name]) {
 			this[this.changeMonitors[name]].call(this, value);
+		}
+
+		if (sets) {
+			this.setInput(sets.input, sets[value]);
 		}
 
 		if (!name || doNotStore) { return; }

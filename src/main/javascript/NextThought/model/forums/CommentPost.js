@@ -88,5 +88,16 @@ Ext.define('NextThought.model.forums.CommentPost', {
 			p.set('ReferencedByCount', count + 1);
 			p = p.parent;
 		}
+	},
+
+
+	getPlaceholderKeepList: function() {
+		var k = this.callParent(arguments);
+
+		Ext.apply(k || {}, {
+			'ReferencedByCount': 1
+		});
+
+		return k;
 	}
 });
