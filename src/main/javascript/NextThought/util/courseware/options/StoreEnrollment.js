@@ -62,17 +62,20 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 		option.display = this.display;
 		option.hasCredit = false;
 		//option.Refunds = false;
-		option.noRefunds = true;
-		option.Price = option.Price;
+		
+		function addPurchasable(purchasable) {
+			option.Purchasable = purchasable;
+			option.Price = option.Price || purchasable.get('Amount');
+		}
 
 		if (!type || type === 'self') {
-			option.Purchasable = this.__getPurchasable(option);
+			addPurchasable(this.__getPurchasable(option));
 			steps = this.__addBaseSteps(course, option, steps, config);
 		} else if (type === 'gift') {
-			option.Purchasable = this.__getGiftPurchasable(option);
+			addPurchasable(this.__getGiftPurchasable(option));
 			steps = this.__addGiftSteps(course, option, steps, config);
 		} else if (type === 'redeem') {
-			option.Purchasable = this.__getGiftPurchasable(option);
+			addPurchasable(this.__getGiftPurchasable(option));
 			steps = this.__addRedeemSteps(course, option, steps, config);
 		}
 
