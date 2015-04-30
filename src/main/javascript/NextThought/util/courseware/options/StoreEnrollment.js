@@ -65,7 +65,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 		
 		function addPurchasable(purchasable) {
 			option.Purchasable = purchasable;
-			option.Price = option.Price || purchasable.get('Amount');
+			option.Price = purchasable.get('Amount');
 		}
 
 		if (!type || type === 'self') {
@@ -300,6 +300,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 		var me = this,
 			option = course.getEnrollmentOption(this.NAME),
 			giftPurchasable = this.__getGiftPurchasable(option),
+			defaultPurchasable = this.__getPurchasable(option),
 			loadDetails;
 
 
@@ -309,6 +310,10 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 				loaded: Promise.reject(),
 				IsEnrolled: false
 			};
+		}
+
+		if (!option.Price && defaultPurchasable) {
+			option.Price = defaultPurchasable.get('Amount');
 		}
 
 
