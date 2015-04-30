@@ -212,7 +212,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 					return Promise.reject();
 				}
 				return new Promise(function(fulfill, reject) {
-					cmp.fireEvent('redeem-gift', cmp, data.purchasable, data.token, data.AllowVendorUpdates, fulfill, reject);
+					cmp.fireEvent('redeem-gift', cmp, data.purchasable, data.token, data.AllowVendorUpdates, course.getId(), fulfill, reject);
 				}).then(function(result) {
 					//trigger the library to reload
 					return new Promise(function(fulfill, reject) {
