@@ -2,7 +2,11 @@
 * Use this mixin to truncate text and add ellipsis depending on its parent node or itself
 */
 Ext.define('NextThought.mixins.EllipsisText', {
-
+	/**
+	* @param: node - HTML element that we would like to ellipsis or expand into multiple lines
+	* @param: measure - the box that we should use as reference. Defaults to self node. 
+	* NOTE: the box should have a max-height property set on it. 	
+	*/
 	truncateText: function(node, measure) {
 		var box = node,
 			textProperty = node.textContent !== null ? 'textContent' : 'innerText';
