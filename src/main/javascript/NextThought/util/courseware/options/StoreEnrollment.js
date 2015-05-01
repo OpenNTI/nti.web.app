@@ -240,7 +240,6 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 
 	__getEnrollmentText: function(course, option) {
 		var state = {}, now = new Date(),
-			giftPurchasable = this.__getGiftPurchasable(option),
 			details = this.__getOptionDetails(course, option);
 
 		//if the course is archived
@@ -267,19 +266,25 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 			}
 		}
 
+		state.name = this.NAME;
 
-		if (giftPurchasable && giftPurchasable.isGiftable()) {
+		return state;
+	},
+
+	__getGiftText: function(purchasable, course, option) {
+		var state = {},
+			details = this.__getOptionDetails(course, option);
+
+		if (purchasable && purchasable.isGiftable()) {
 			state.giftClass = 'show';
 			state.giveClass = 'show';
 			state.giveTitle = 'Lifelong Learner Only';
 		}
 
-		if (giftPurchasable && giftPurchasable.isRedeemable() && !details.Enrolled) {
+		if (purchasable && purchasable.isRedeemable() && !details.Enrolled) {
 			state.giftClass = 'show';
 			state.redeemClass = 'show';
 		}
-
-		state.name = this.NAME;
 
 		return state;
 	},
@@ -303,7 +308,6 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 			defaultPurchasable = this.__getPurchasable(option),
 			loadDetails;
 
-
 		//if there is an option, and its either enrolled or available
 		if (!option || (!option.IsEnrolled && !option.IsAvailable)) {
 			return {
@@ -322,7 +326,6 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 					Name: me.NAME,
 					BaseOption: me.isBase,
 					Enrolled: option.IsEnrolled,
-					Redeemable: giftPurchasable && giftPurchasable.isRedeemable(),
 					Price: null,
 					Wording: me.__getEnrollmentText(details, option),
 					doEnrollment: function(cmp, type, config) {
@@ -336,7 +339,26 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 
 		return {
 			loaded: loadDetails,
-			IsEnrolled: option.isEnroll
+			IsEnrolled: option.IsEnrolled
+		};
+	},
+
+
+	buildGiftOptions: function(course, details) {
+		var me = this,
+			option = course.getEnrollmentOption(this.NAME),
+			giftPurchasable = this.__getGiftPurchasable(option),
+			loadDetails;
+
+		if (!giftPurchasable || !(giftPurchasable.isGiftable() || giftPurchasable.isRedeemable())) {
+			return {};
+		}
+
+		return {
+			Wording: me.__getGiftText(giftPurchasable, details, option),
+			doEnrollment: function(cmp, type, config) {
+				cmp.fireEvent('enroll-in-course', course, me.NAME, type, config);
+			}
 		};
 	}
 });

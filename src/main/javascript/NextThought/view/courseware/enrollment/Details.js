@@ -47,12 +47,12 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 				]}
 			]}
 		]},
-		{cls: 'gift-card {base.giftClass}', cn: [
-			{cls: 'give {base.giveClass}', cn: [
+		{cls: 'gift-card {gifts.giftClass}', cn: [
+			{cls: 'give {gifts.giveClass}', cn: [
 				{cls: 'title', html: '{{{NextThought.view.courseware.enrollment.Details.CourseGift}}}'},
-				{cls: 'sub', html: '{base.giveTitle}'}
+				{cls: 'sub', html: '{gifts.giveTitle}'}
 			]},
-			{cls: 'redeem {base.redeemClass}', cn: [
+			{cls: 'redeem {gifts.redeemClass}', cn: [
 				{cls: 'title', html: '{{{NextThought.view.courseware.enrollment.Details.RedeemGift}}}'}
 			]}
 		]}
@@ -283,7 +283,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 	 * @param  {Object} details the enrollment details
 	 * @return {Promise}         resolved if the option is available, reject if not;
 	 */
-	__addEnrollmentOption: function(option, details) {
+	__addEnrollmentOption: function(option, details, name) {
 		var me = this, loading;
 
 		if (option) {
@@ -410,7 +410,8 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 				buttonName: state.base.name,
 				buttonCls: this.getButtonCls(state.base),
 				buttonText: state.base.buttonText || '',
-				drop: state.base.drop
+				drop: state.base.drop,
+				gifts: state.gifts
 			},
 			me = this,
 			addOns = Ext.Object.getValues(state.addOns);
@@ -491,13 +492,24 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 			gifts: null
 		};
 
-		CourseWareUtils.Enrollment.getEnrollmentDetails(me.course)
-			.then(me.__onDetailsLoaded.bind(me))
+		Promise.all([
+			CourseWareUtils.Enrollment.getEnrollmentDetails(me.course),
+			CourseWareUtils.Enrollment.getGiftDetails(me.course)
+		])
+			.then(function(results) {
+				var enrollment = results[0],
+					gift = results[1];
+
+				me.enrollmentOptions.GiftOption = gift;
+				me.state.gifts = gift.Wording;
+
+				return me.__onDetailsLoaded(enrollment);
+			})
 			.then(function() {
 				return me.state;
 			})
 			.fail(function(reason) {
-				console.error('Failed to load enrollment details,', reason);
+				console.error('Failed to load enrollment details', reason);
 				me.__showError();
 				return Promise.reject();//keep the failure going
 			})
@@ -507,7 +519,6 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 					me.__stateToRestore.call();
 				}
 			});
-
 	},
 
 	/**
@@ -860,7 +871,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 	giftClicked: function(el, e) {
 		var give = e.getTarget('.give'),
 			redeem = e.getTarget('.redeem'),
-			option = this.enrollmentOptions.StoreEnrollment;
+			option = this.enrollmentOptions.GiftOption;
 
 		if (give) {
 			option.doEnrollment(this, 'gift');
