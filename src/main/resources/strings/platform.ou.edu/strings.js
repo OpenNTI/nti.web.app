@@ -56,7 +56,7 @@ NTIStrings['SubscribeToVendorLegal'] = 'By opting in for email updates you agree
 									'<a href="http://www.aenetworks.com/terms" target="_blank">Terms of Use</a> | ' +
 									'<a href="http://www.aenetworks.com/contact" target="_blank">Contact Us</a>';
 
-NTIStrings['OUStudentAdmissionMessage'] = 'Please sign up for the course using your <a href="http://ozone.ou.edu" target="_blank">Ozone</a> account. Note: not all Janux courses are available for credit to ou students.' 
+NTIStrings['OUStudentAdmissionMessage'] = 'Please sign up for the course using your <a href="http://ozone.ou.edu" target="_blank">Ozone</a> account. Note: not all Janux courses are available for credit to ou students.'; 
 
 NTIStrings.CourseSpecific = {
 	'tag:nextthought.com,2011-10:NTI-CourseInfo-Spring2015_LSTD_1153': {
