@@ -76,6 +76,12 @@ Ext.define('NextThought.view.courseware.outline.View', {
 		}
 	},
 
+	initComponent: function() {
+		this.callParent(arguments);
+		this.on('refresh', 'truncateLabels', this);
+		this.on('select', 'truncateLabels', this);
+	},
+
 
 	beforeRender: function() {
 		this.callParent();
@@ -96,15 +102,17 @@ Ext.define('NextThought.view.courseware.outline.View', {
 		if (Ext.is.iOS) {
 			Ext.apply(this, {overItemCls: ''});
 		}
-		this.on('refresh', 'truncateLabels', this);
-		this.on('select', 'truncateLabels', this);
-		this.truncateLabels();
 	},
 
 
 	truncateLabels: function() {
 		var me = this;
 
+		if (!me.el) { 
+			me.onceRendered().then(me.truncateLabels.bind(me));
+			return; 
+		}
+		
 		wait(100).then(function() {
 			var labels = me.el.select('.outline-row .label');
 			labels.each(function(label) {

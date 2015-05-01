@@ -42,7 +42,7 @@
 		background: #ffffff;
 		color: $secondary-grey;
 		font: normal 400 0.9em/2.8em $font;
-		padding: 0 0.35em 0 1.39em;
+		  padding: 0.65em 0.35em 0.65em 1.39em;
 		cursor: pointer;
 
 		.label{
@@ -50,13 +50,10 @@
 		}
 
 		&:not(.heading) {
-			max-height: 60px;
-			min-height: 40px;
-			font: normal 300 0.9em/2em $font;
-
-			.label{
-				padding-top: 5px;
-			}			
+			// To compute max height, multiply min-height by 2 (2 lines) and add padding top and bottom
+			max-height: 6.9em;
+  			min-height: 2.8em;
+  			font: normal 400 0.9em/1.5em $font;		
 		}
 
 		.report-icon {
@@ -173,13 +170,12 @@
 					}
 				}
 
-				color: $secondary-grey;
-				font: normal 100 1.35em 'Open Sans Condensed', $font;
-				text-transform: none;
-				/* -webkit-font-smoothing: antialiased; */
-				padding: 1.25em 0.42em 0 0.84em;
-				max-height: 82px;
-				min-height: 60px;
+				  color: $secondary-grey;
+				  font: normal 100 1.5em "Open Sans Condensed", $font;
+				  text-transform: none;
+				  padding: 1.75em 0.42em 0.5em 0.84em;
+				  max-height: 6.45em;
+				  min-height: 2.1em;
 			}
 		}
 	}
