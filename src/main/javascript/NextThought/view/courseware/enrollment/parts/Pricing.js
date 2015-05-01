@@ -213,8 +213,6 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 
 
 	update: function(coupon) {
-		if (!coupon) { this.priceEl.update('$' + this.getPrice()); }
-
 		var me = this,
 			desc = { Purchasable: me.enrollmentOption.Purchasable };
 
@@ -263,7 +261,11 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 			me.updatePricing();
 		}
 
-		this.fireEvent('price-enroll-purchase', this, desc, onSuccess, onFailure);
+		if (!coupon) {
+			onFailure();
+		} else {
+			this.fireEvent('price-enroll-purchase', this, desc, onSuccess, onFailure);
+		}
 	},
 
 
