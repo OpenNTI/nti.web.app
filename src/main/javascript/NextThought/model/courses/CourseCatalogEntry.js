@@ -160,9 +160,9 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 
 				//if we have a fmaep option but are enrolled in store enrollment
 				//set the fmaep as unavailable for now
-				//TODO: Figure out how to remove this
+				//TODO: Figure out how to remove this, and have it come entirely from the server
 				if (fmaepOption) {
-					fmaepOption.isAvailable = false;
+					fmaepOption.IsAvailable = false;
 				}
 			} else if (fmaepOption && fmaepOption.IsEnrolled) {
 				//treat the fmaep enrollment as for credit

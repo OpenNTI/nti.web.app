@@ -3,6 +3,14 @@ Ext.define('NextThought.view.navigation.Collection', {
 	//disabling invoking this directly. Only use this through subclasses
 	alias: 'widget.navigation-collection',
 
+	requires: [
+		'NextThought.mixins.EllipsisText'
+	],
+
+	mixins: {
+		'EllipsisText': 'NextThought.mixins.EllipsisText'
+	},
+
 	ui: 'navigation-collection',
 
 	trackOver: true,
@@ -72,23 +80,32 @@ Ext.define('NextThought.view.navigation.Collection', {
 				node = [node];
 			}
 
-			node.forEach(me.clamptitle.bind(me));
+			wait(100).then(function() {
+				node.forEach(function(node){
+					var title = Ext.fly(node).down('.title'),
+						author = Ext.fly(node).down('.author');
+
+					if (title) { me.truncateText(title.dom); }
+					if (author) { me.truncateText(author.dom); }
+				});
+			});
 		});
 
 		me.on('refresh', function() {
-			var titles = me.el.select('.item .title');
+			var titles = me.el.select('.item .title'),
+				authors = me.el.select('.item .author');
 
-			titles.each(function(title) {
-				me.clampTitle(title.dom);
+			// Since we are manipulating the Dom, do it last since it's expensive.
+			wait(100).then(function() {
+				titles.each(function(title) {
+					me.truncateText(title.dom);
+				});
+				authors.each(function(author) {
+					me.truncateText(author.dom, 'parent');
+				});
 			});
 		});
 	},
-
-
-	clampTitle: function(node) {
-		$clamp(node, {clamp: 3});
-	},
-
 
 	updateCount: function() {
 		if (this.rendered && this.el.down('.count')) {

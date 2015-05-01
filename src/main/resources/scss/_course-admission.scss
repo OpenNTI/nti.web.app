@@ -526,7 +526,6 @@
 			position: relative;
 
 			&.nested {
-				margin: -5px 0 0;
 				display: inline-block;
 				padding-right: 20px;
 				background-color: #f9f9f9;
@@ -1480,7 +1479,7 @@
 	.payment-info, .billing-info, .gift-info {
 		position: relative;
 		float: left;
-		margin: 20px 400px 0 0;
+		margin: 20px 380px 0 0;
 		padding-right: 30px;
 
 		.title {

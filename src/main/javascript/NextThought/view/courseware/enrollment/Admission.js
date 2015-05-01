@@ -334,57 +334,60 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 
 		var me = this,
 			form = me.form.slice(),
-			courseSpecific = this.course ? getString('CourseSpecific')[this.course.getId()] : null,
-			currentStudent;
+			currentStudent = getString('OUStudentAdmissionMessage', null, true);
 
-		if (courseSpecific && courseSpecific.AlreadyEnrolled) {
-			currentStudent = courseSpecific.AlreadyEnrolled;
-		} else {
-			currentStudent = Ext.DomHelper.markup([getString('NextThought.view.courseware.enrollment.Admission.SignUpOzone')
-			]);
+		if (!currentStudent) {
+			currentStudent = Ext.DomHelper.markup([getString('NextThought.view.courseware.enrollment.Admission.SignUpOzone')]);
 		}
 
-
 		form.unshift({
-				name: 'preliminary',
-				label: getString('NextThought.view.courseware.enrollment.Admission.PrelimQuest'),
-				reveals: ['general', 'signature'],
-				items: [
-					{
-						xtype: 'enrollment-set',
-						label: getString('NextThought.view.courseware.enrollment.Admission.OKHSStudent'),
-						name: 'attending-highschool',
-						inputs: [
+			name: 'preliminary',
+			label: getString('NextThought.view.courseware.enrollment.Admission.PrelimQuest'),
+			reveals: ['general', 'signature'],
+			items: [
+				{
+					xtype: 'enrollment-grouped-set',
+					label: 'Are you currently attending high school?',
+					name: 'attending-highschool',
+					required: true,
+					wrongIfEmpty: true,
+					noIncorrect: true,
+					options: [
+						{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'Y', inputs: [
 							{
 								type: 'radio-group',
-								name: 'is_currently_attending_highschool',
+								label: 'Are you an Oklahoma resident?',
+								name: 'ok-highschool-student',
 								correct: 'N',
 								noIncorrect: true,
-								reveals: {
-									name: 'attending',
-									ifNotEmpty: true
-								},
 								hides: 'concurrent-contact',
+								defaultAnswer: 'N',
+								sets: {
+									input: 'years_of_oklahoma_residency',
+									//This input's answer to mapped to what to set on the other input
+									N: '0'
+								},
 								options: [
 									{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'Y'},
 									{text: getString('NextThought.view.courseware.enrollment.Admission.No'), value: 'N'}
 								]
 							}
-						]
-					},
-					{
-						xtype: 'enrollment-set',
-
-						label: getString('NextThought.view.courseware.enrollment.Admission.OUStudent'),
-						name: 'attending',
-						inputs: [
-							{type: 'radio-group', name: 'is_currently_attending_ou', correct: 'N', options: [
-								{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'Y',	content: currentStudent},
-								{text: getString('NextThought.view.courseware.enrollment.Admission.No'), value: 'N'}
-							]}
-						]
-					}
-				]
+						]},
+						{text: getString('NextThought.view.courseware.enrollment.Admission.No'), value: 'N'}
+					]
+				},
+				{
+					xtype: 'enrollment-set',
+					label: getString('NextThought.view.courseware.enrollment.Admission.OUStudent'),
+					name: 'attending',
+					inputs: [
+						{type: 'radio-group', name: 'is_currently_attending_ou', correct: 'N', options: [
+							{text: getString('NextThought.view.courseware.enrollment.Admission.Yes'), value: 'Y',	content: currentStudent},
+							{text: getString('NextThought.view.courseware.enrollment.Admission.No'), value: 'N'}
+						]}
+					]
+				}
+			]
 		});
 
 		me.submitBtnCfg = me.buttonCfg[0];
@@ -531,7 +534,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 	showRejection: function(json) {
 		this.removeAll(true);
 
-		var fields = this.form.slice(),
+		var fields = this.getFormForGroup('admission'),
 			defaults = {
 				Message: getString('NextThought.view.courseware.enrollment.Admission.TryLater'),
 				ContactInformation: getString('NextThought.view.courseware.enrollment.Admission.HelpOrResubmit')
@@ -706,31 +709,40 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 
 		groupConfig = me.groups[value.group];
 
-		return new Promise(function(fulfill, reject) {
-			if (!me.isValid(value.group)) {
-				me.fireEvent('show-msg', getString('NextThought.view.courseware.enrollment.Admission.FillOutAllInfo'), true, 5000);
-				reject();
-				return;
-			}
-
-			if (!groupConfig.preflight) {
-				fulfill();
-			} else if (!preflightlink) {
-				console.error('No Preflight to validate the admission form, allowing submit anyway');
-				fulfill();
-			} else {
-				Service.post(preflightlink, value.postData)
-					.then(function(response) {
+		return me.isValidForSubmission(value.group)
+			.then(function() {
+				return new Promise(function(fulfill, reject) {
+					if (!groupConfig.preflight) {
 						fulfill();
-					})
-					.fail(function(response) {
-						var json = Ext.JSON.decode(response && response.responseText, true);
+					} else if (!preflightlink) {
+						console.error('No Preflight to validate the admission form, allowing submit anyway');
+						fulfill();
+					} else {
+						Service.post(preflightlink, value.postData)
+							.then(function(response) {
+								fulfill();
+							})
+							.fail(function(response) {
+								var json = Ext.JSON.decode(response && response.responseText, true);
 
-						me.showError(json);
-						reject();
-					});
-			}
-		});
+								me.showError(json);
+								reject();
+							});
+					}
+				});
+			});
+	},
+
+
+	isValidForSubmission: function(group) {
+		var valid = this.isValid(group);
+
+		if (!valid)  {
+			this.fireEvent('show-msg', getString('NextThought.view.courseware.enrollment.Admission.FillOutAllInfo'), true, 5000);
+			return Promise.reject();
+		}
+
+		return Promise.resolve();
 	},
 
 
@@ -787,7 +799,8 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 		var value = this.mixins.form.getValue.call(this),
 			group = 'admission', data;
 
-		if (value.is_currently_attending_highschool === 'Y') {
+
+		if (value['ok-highschool-student'] === 'Y') {
 			group = 'concurrent';
 			data = {
 				name: value.contact_name,
@@ -841,12 +854,13 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 		if (groupConfig.preflight) {
 			preflight = me[groupConfig.preflight].call(me, value);
 		} else {
-			preflight = Promise.resolve();
+			preflight = me.isValidForSubmission(value.group);
 		}
 
 		preflight
 			.then(function() {
 				isValid = true;
+
 				return me[groupConfig.submit].call(me, value);
 			}, function() {
 				isValid = false;

@@ -22,7 +22,7 @@ Ext.define('NextThought.view.courseware.enrollment.parts.SplitRadio', {
 	},
 
 	getValue: function() {
-		var isChecked = this.el.down('input[type=radio]:checked'),
+		var isChecked = this.el && this.el.down('input[type=radio]:checked'),
 			val = {};
 
 		if (isChecked) {

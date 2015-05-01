@@ -228,7 +228,7 @@ Ext.define('NextThought.view.courseware.assessment.admin.ListHeader', {
 
 
 		var page = item.page || 1;
-
+		this.fireEvent('page-change');
 		this.loadPage(page);
 	},
 

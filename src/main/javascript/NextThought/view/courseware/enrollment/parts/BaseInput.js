@@ -96,7 +96,7 @@ Ext.define('NextThought.view.courseware.enrollment.parts.BaseInput', {
 				}
 
 				if (parent) {
-					parent.changed(me.name, me.getValue(true)[me.name], me.doNotStore);
+					parent.changed(me.name, me.getValue(true)[me.name], me.doNotStore, me.sets);
 				}
 			});
 	},
