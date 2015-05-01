@@ -77,12 +77,6 @@ Ext.define('NextThought.view.courseware.outline.View', {
 	},
 
 
-	initComponent: function(){
-		this.callParent(arguments);
-		this.on('refresh', 'truncateLabels', this);
-		this.on('select', 'truncateLabels', this);
-	},
-
 	beforeRender: function() {
 		this.callParent();
 		var me = this, s = this.getSelectionModel();
@@ -102,6 +96,9 @@ Ext.define('NextThought.view.courseware.outline.View', {
 		if (Ext.is.iOS) {
 			Ext.apply(this, {overItemCls: ''});
 		}
+		this.on('refresh', 'truncateLabels', this);
+		this.on('select', 'truncateLabels', this);
+		this.truncateLabels();
 	},
 
 

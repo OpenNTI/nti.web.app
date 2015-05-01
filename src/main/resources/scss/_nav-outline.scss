@@ -52,7 +52,11 @@
 		&:not(.heading) {
 			max-height: 60px;
 			min-height: 40px;
-			font: normal 300 0.9em/2em $font;			
+			font: normal 300 0.9em/2em $font;
+
+			.label{
+				padding-top: 5px;
+			}			
 		}
 
 		.report-icon {
