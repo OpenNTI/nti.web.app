@@ -281,7 +281,8 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 			state.giveTitle = 'Lifelong Learner Only';
 		}
 
-		if (purchasable && purchasable.isRedeemable() && !details.Enrolled) {
+		//if you are enrolled at all don't show the redeem option
+		if (purchasable && purchasable.isRedeemable() && !details.Enrolled && !course.Enrolled) {
 			state.giftClass = 'show';
 			state.redeemClass = 'show';
 		}
@@ -350,13 +351,15 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 			giftPurchasable = this.__getGiftPurchasable(option),
 			loadDetails;
 
+
 		if (!giftPurchasable || !(giftPurchasable.isGiftable() || giftPurchasable.isRedeemable())) {
 			return {};
 		}
 
 		return {
 			Wording: me.__getGiftText(giftPurchasable, details, option),
-			Redeemable: giftPurchasable.isRedeemable(),
+			//if the purchasable is redeemable and you're not enrolled
+			Redeemable: giftPurchasable.isRedeemable() && !course.isActive(),
 			doEnrollment: function(cmp, type, config) {
 				cmp.fireEvent('enroll-in-course', course, me.NAME, type, config);
 			}
