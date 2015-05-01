@@ -47,12 +47,7 @@
 
 		.label{
 			overflow: hidden;
-		}
-
-		&:not(.heading) {
-			max-height: 60px;
-			min-height: 40px;
-			font: normal 300 0.9em/2em $font;			
+			@include ellipse;
 		}
 
 		.report-icon {
@@ -154,7 +149,6 @@
 			&.heading {
 				&:first-of-type {
 					padding-top: 0.20835em;
-					min-height: 40px;
 				}
 
 				&:not(:first-of-type) {
@@ -170,12 +164,11 @@
 				}
 
 				color: $secondary-grey;
-				font: normal 100 1.35em 'Open Sans Condensed', $font;
+				font: normal 100 1.5em/2.1 'Open Sans Condensed', $font;
 				text-transform: none;
 				/* -webkit-font-smoothing: antialiased; */
 				padding: 1.25em 0.42em 0 0.84em;
-				max-height: 82px;
-				min-height: 60px;
+
 			}
 		}
 	}
