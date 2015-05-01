@@ -356,6 +356,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 
 		return {
 			Wording: me.__getGiftText(giftPurchasable, details, option),
+			Redeemable: giftPurchasable.isRedeemable(),
 			doEnrollment: function(cmp, type, config) {
 				cmp.fireEvent('enroll-in-course', course, me.NAME, type, config);
 			}
