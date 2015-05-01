@@ -2,6 +2,10 @@ Ext.define('NextThought.view.courseware.outline.View', {
 	extend: 'Ext.view.View',
 	alias: 'widget.course-outline',
 
+	mixins: {
+		'EllipsisText': 'NextThought.mixins.EllipsisText'
+	},
+
 	ui: 'course',
 	cls: 'nav-outline scrollable',
 	preserveScrollOnRefresh: true,
@@ -73,6 +77,12 @@ Ext.define('NextThought.view.courseware.outline.View', {
 	},
 
 
+	initComponent: function(){
+		this.callParent(arguments);
+		this.on('refresh', 'truncateLabels', this);
+		this.on('select', 'truncateLabels', this);
+	},
+
 	beforeRender: function() {
 		this.callParent();
 		var me = this, s = this.getSelectionModel();
@@ -89,10 +99,21 @@ Ext.define('NextThought.view.courseware.outline.View', {
 	afterRender: function() {
 		this.callParent(arguments);
 		this.mon(this.frameBodyEl, 'scroll', 'handleScrolling');
-
 		if (Ext.is.iOS) {
 			Ext.apply(this, {overItemCls: ''});
 		}
+	},
+
+
+	truncateLabels: function() {
+		var me = this;
+
+		wait(100).then(function() {
+			var labels = me.el.select('.outline-row .label');
+			labels.each(function(label) {
+				me.truncateText(label.dom, 'parent');
+			});
+		});
 	},
 
 
