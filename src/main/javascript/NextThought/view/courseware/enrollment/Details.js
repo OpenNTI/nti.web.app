@@ -182,7 +182,7 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 		var option, checkbox;
 
 		if (type === 'redeem') {
-			option = this.enrollmentOptions.StoreEnrollment;
+			option = this.enrollmentOptions.GiftOption;
 
 			if (option && option.Redeemable) {
 				option.doEnrollment(this, 'redeem', config);
