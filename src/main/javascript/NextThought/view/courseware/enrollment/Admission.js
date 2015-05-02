@@ -334,14 +334,10 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 
 		var me = this,
 			form = me.form.slice(),
-			courseSpecific = this.course ? getString('CourseSpecific')[this.course.getId()] : null,
-			currentStudent;
+			currentStudent = getString('OUStudentAdmissionMessage', null, true);
 
-		if (courseSpecific && courseSpecific.AlreadyEnrolled) {
-			currentStudent = courseSpecific.AlreadyEnrolled;
-		} else {
-			currentStudent = Ext.DomHelper.markup([getString('NextThought.view.courseware.enrollment.Admission.SignUpOzone')
-			]);
+		if (!currentStudent) {
+			currentStudent = Ext.DomHelper.markup([getString('NextThought.view.courseware.enrollment.Admission.SignUpOzone')]);
 		}
 
 		form.unshift({

@@ -62,17 +62,20 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 		option.display = this.display;
 		option.hasCredit = false;
 		//option.Refunds = false;
-		option.noRefunds = true;
-		option.Price = option.Price;
+		
+		function addPurchasable(purchasable) {
+			option.Purchasable = purchasable;
+			option.Price = purchasable.get('Amount');
+		}
 
 		if (!type || type === 'self') {
-			option.Purchasable = this.__getPurchasable(option);
+			addPurchasable(this.__getPurchasable(option));
 			steps = this.__addBaseSteps(course, option, steps, config);
 		} else if (type === 'gift') {
-			option.Purchasable = this.__getGiftPurchasable(option);
+			addPurchasable(this.__getGiftPurchasable(option));
 			steps = this.__addGiftSteps(course, option, steps, config);
 		} else if (type === 'redeem') {
-			option.Purchasable = this.__getGiftPurchasable(option);
+			addPurchasable(this.__getGiftPurchasable(option));
 			steps = this.__addRedeemSteps(course, option, steps, config);
 		}
 
@@ -212,7 +215,7 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 					return Promise.reject();
 				}
 				return new Promise(function(fulfill, reject) {
-					cmp.fireEvent('redeem-gift', cmp, data.purchasable, data.token, data.AllowVendorUpdates, fulfill, reject);
+					cmp.fireEvent('redeem-gift', cmp, data.purchasable, data.token, data.AllowVendorUpdates, course.getId(), fulfill, reject);
 				}).then(function(result) {
 					//trigger the library to reload
 					return new Promise(function(fulfill, reject) {
@@ -237,7 +240,6 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 
 	__getEnrollmentText: function(course, option) {
 		var state = {}, now = new Date(),
-			giftPurchasable = this.__getGiftPurchasable(option),
 			details = this.__getOptionDetails(course, option);
 
 		//if the course is archived
@@ -264,19 +266,26 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 			}
 		}
 
+		state.name = this.NAME;
 
-		if (giftPurchasable.isGiftable()) {
+		return state;
+	},
+
+	__getGiftText: function(purchasable, course, option) {
+		var state = {},
+			details = this.__getOptionDetails(course, option);
+
+		if (purchasable && purchasable.isGiftable()) {
 			state.giftClass = 'show';
 			state.giveClass = 'show';
 			state.giveTitle = 'Lifelong Learner Only';
 		}
 
-		if (giftPurchasable.isRedeemable() && !details.Enrolled) {
+		//if you are enrolled at all don't show the redeem option
+		if (purchasable && purchasable.isRedeemable() && !details.Enrolled && !course.Enrolled) {
 			state.giftClass = 'show';
 			state.redeemClass = 'show';
 		}
-
-		state.name = this.NAME;
 
 		return state;
 	},
@@ -297,8 +306,8 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 		var me = this,
 			option = course.getEnrollmentOption(this.NAME),
 			giftPurchasable = this.__getGiftPurchasable(option),
+			defaultPurchasable = this.__getPurchasable(option),
 			loadDetails;
-
 
 		//if there is an option, and its either enrolled or available
 		if (!option || (!option.IsEnrolled && !option.IsAvailable)) {
@@ -308,13 +317,16 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 			};
 		}
 
+		if (!option.Price && defaultPurchasable) {
+			option.Price = defaultPurchasable.get('Amount');
+		}
+
 
 		loadDetails = new Promise(function(fulfill, reject) {
 			var catalogData = {
 					Name: me.NAME,
 					BaseOption: me.isBase,
 					Enrolled: option.IsEnrolled,
-					Redeemable: giftPurchasable.isRedeemable(),
 					Price: null,
 					Wording: me.__getEnrollmentText(details, option),
 					doEnrollment: function(cmp, type, config) {
@@ -328,7 +340,29 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 
 		return {
 			loaded: loadDetails,
-			IsEnrolled: option.isEnroll
+			IsEnrolled: option.IsEnrolled
+		};
+	},
+
+
+	buildGiftOptions: function(course, details) {
+		var me = this,
+			option = course.getEnrollmentOption(this.NAME),
+			giftPurchasable = this.__getGiftPurchasable(option),
+			loadDetails;
+
+
+		if (!giftPurchasable || !(giftPurchasable.isGiftable() || giftPurchasable.isRedeemable())) {
+			return {};
+		}
+
+		return {
+			Wording: me.__getGiftText(giftPurchasable, details, option),
+			//if the purchasable is redeemable and you're not enrolled
+			Redeemable: giftPurchasable.isRedeemable() && !course.isActive(),
+			doEnrollment: function(cmp, type, config) {
+				cmp.fireEvent('enroll-in-course', course, me.NAME, type, config);
+			}
 		};
 	}
 });

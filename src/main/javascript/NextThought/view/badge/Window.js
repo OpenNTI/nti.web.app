@@ -113,7 +113,7 @@ Ext.define('NextThought.view.badge.Window', {
 		if (badge) {
 			badge.setBadge(this.badge);
 
-			if(!this.badge.get('isMe')){
+			if(!this.badge.get('isMe') || this.badge.get('earnedCls') !== "earned"){
 				this.down('[action=export]').destroy();
 			}
 		}

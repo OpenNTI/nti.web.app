@@ -353,15 +353,16 @@ li.library-grid-item {
 					text-transform: uppercase;
 					font: normal bold 0.6em/1.6em $font;
 					overflow: hidden;
-					@include ellipse();
 				}
 				.courseName {
 					text-transform: uppercase;
 					color: $tertiary-grey;
+					@include ellipse();
 				}
 
 				.author {
 					color: $primary-blue;
+					margin-bottom: 5px;
 				}
 
 				.author:not(:empty):not(.provider-id)::before{content: 'By ';}
@@ -529,16 +530,17 @@ li.library-grid-item {
 			overflow: hidden;
 			color: $primary-grey;
 			padding: 0 10px;
+			max-height: 80px;
 
 			.author,.courseName {
 				text-transform: uppercase;
 				font: normal bold 0.6em/1.6em $font;
 				overflow: hidden;
-				@include ellipse();
 			}
 			.courseName {
 				text-transform: uppercase;
 				color: $tertiary-grey;
+				@include ellipse();
 			}
 
 			.author {
@@ -554,6 +556,8 @@ li.library-grid-item {
 				margin-bottom: 10px;
 				text-transform: uppercase;
 				overflow: hidden;
+				vertical-align: top;
+				padding: 0;
 			}
 
 			.description{

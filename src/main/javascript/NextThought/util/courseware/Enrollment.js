@@ -134,6 +134,29 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 	},
 
 
+	getGiftDetails: function(course) {
+		var me = this,
+			catalogData = {
+				Enrolled: course.isActive()
+			};
+
+
+		return new Promise(function(fulfill, reject) {
+			var wording;
+
+			me.forEachOption(function(option) {
+				option = me.getOption(option.name);
+
+				if (option.buildGiftOptions) {
+					wording = option.buildGiftOptions(course, catalogData);
+				}
+			});
+
+			fulfill(wording || {});
+		});
+	},
+
+
 	__fillInOptionDetails: function(course, catalogData) {
 		var me = this;
 

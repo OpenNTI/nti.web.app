@@ -712,6 +712,12 @@ Ext.define('NextThought.view.content.View', {
 		tab = preview ? 'course-info' : tab || 'course-book';
 		this.setActiveTab(tab);
 
+		if (preview) {
+			subs = [
+				this.courseInfo
+			];
+		}
+
 		this.isPreview = preview;
 
 		return Promise.all(subs.map(
