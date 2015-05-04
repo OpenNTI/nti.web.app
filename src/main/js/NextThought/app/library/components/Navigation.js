@@ -70,6 +70,11 @@ Ext.define('NextThought.app.library.components.Navigation', {
 
 
 	updateState: function(active, options) {
+		if (!this.rendered) {
+			this.on('afterrender', this.updateState.bind(this, active, options));
+			return;
+		}
+
 		this.activeItem = active;
 		this.labelEl.update(active.text);
 

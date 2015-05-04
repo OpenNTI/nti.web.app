@@ -106,5 +106,33 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 
 	getArchivedAdminCourses: function() {
 		return this.__getArchivedCourses(this.ADMIN_COURSES);
+	},
+
+
+	__findIn: function(list, fn) {
+		var i, item = null;
+
+		for (i = 0; i < list.length; i++) {
+			if (fn.call(null, list[i])) {
+				item = list[i];
+			}
+		}
+
+		return item;
+	},
+
+
+	findCourseBy: function(fn) {
+		var enrolled = this.ENROLLED_COURSES || [],
+			admin = this.ADMIN_COURSES || [],
+			i, course;
+
+		course = this.__findIn(enrolled, fn);
+
+		if (!course) {
+			course = this.__findIn(admin, fn);
+		}
+
+		return course;
 	}
 });

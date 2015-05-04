@@ -145,7 +145,8 @@ Ext.define('NextThought.app.library.courses.components.Page', {
 					me.add({
 						label: bin.label || me.groupLabel,
 						group: semester + ' ' + year,
-						store: me.getCourseStore(bin[semester])
+						store: me.getCourseStore(bin[semester]),
+						navigate: me.navigate && me.navigate.bind(me)
 					});
 				}
 			});
@@ -161,7 +162,8 @@ Ext.define('NextThought.app.library.courses.components.Page', {
 					me.add({
 						label: 'upcoming',
 						group: semester + ' ' + year,
-						store: me.getCourseStore(bin[semester])
+						store: me.getCourseStore(bin[semester]),
+						navigate: me.navigate && me.navigate.bind(me)
 					});
 				}
 			});

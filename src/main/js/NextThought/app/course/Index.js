@@ -1,0 +1,373 @@
+Ext.define('NextThought.app.course.Index', {
+	extend: 'NextThought.app.content.Index',
+	alias: 'widget.course-view-container',
+
+	mixins: {
+		Router: 'NextThought.mixins.Router',
+		State: 'NextThought.mixins.State'
+	},
+
+	requires: [
+		'NextThought.app.course.StateStore',
+		'NextThought.app.library.courses.StateStore',
+		'NextThought.app.navigation.Actions',
+		'NextThought.app.course.assessment.Index',
+		'NextThought.app.course.dashboard.Index',
+		'NextThought.app.course.forum.Index',
+		'NextThought.app.course.info.Index',
+		'NextThought.app.course.overview.Index',
+		'NextThought.app.course.reports.Index'
+	],
+
+
+	cmp_map: {},
+
+
+	items: [
+		{
+			xtype: 'course-dashboard',
+			id: 'course-dashboard'
+		},
+		{
+			xtype: 'course-overview',
+			id: 'course-overview'
+		},
+		{
+			xtype: 'course-assessment',
+			id: 'course-assessment'
+		},
+		{
+			xtype: 'course-forum',
+			id: 'course-forum'
+		},
+		{
+			xtype: 'course-reports',
+			id: 'course-reports'
+		},
+		{
+			xtype: 'course-info',
+			id: 'course-info'
+		}
+	],
+
+
+	initComponent: function() {
+		this.callParent(arguments);
+
+		this.initRouter();
+
+		this.CourseViewStore = NextThought.app.course.StateStore.getInstance();
+		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
+		this.NavigationActions = NextThought.app.navigation.Actions.create();
+
+		this.getActiveCourse = Promise.reject();
+
+		this.addRoute('/activity', this.showDashboard.bind(this));
+		this.addRoute('/lessons', this.showOverview.bind(this));
+		this.addRoute('/assignments', this.showAssignments.bind(this));
+		this.addRoute('/discussions', this.showDiscussions.bind(this));
+		this.addRoute('/reports', this.showReports.bind(this));
+		this.addRoute('/info', this.showInfo.bind(this));
+
+		this.addDefaultRoute('/activity')
+	},
+
+
+	onBack: function() {
+		this.pushRootRoute('', '/');
+	},
+
+
+	onTabChange: function(title, route) {
+		this.pushRoute('', route);
+	},
+
+
+	getRouteTitle: function() {
+		if (!this.activeCourse) { return ''; }
+
+		var data = this.activeCourse.asUIData();
+
+		return data.title;
+	},
+
+
+	setActiveCourse: function(ntiid) {
+		var me = this;
+
+		ntiid = ntiid.toLowerCase();
+
+		//if we are setting my current course no need to do anything
+		if (me.activeCourse && (me.activeCourse.getId() || '').toLowerCase() === ntiid) {
+			me.getActiveCourse = Promise.resolve(me.activeCourse);
+		} else {
+			me.getActiveCourse = me.CourseStore.onceLoaded()
+				.then(function() {
+					var course;
+					//if the course was stashed on the CourseViewStore, no need to look for it
+					if (me.CourseViewStore.activeCourse && me.CourseViewStore.activeCourse.getId() === ntiid) {
+						course = me.CourseViewStore.activeCourse;
+					} else {
+						//find which ever course whose ntiid matches
+						course = me.CourseStore.findCourseBy(function(enrollment) {
+							var instance = enrollment.get('CourseInstance'),
+								instanceId = instance.getId() || '',
+								enrollmentId = enrollment.get('NTIID') || '';
+
+							return instanceId.toLowerCase() === ntiid || enrollmentId.toLowerCase() === ntiid;
+						});
+					}
+
+					if (!course) {
+						return Promise.reject('No Course found for:', ntiid);
+					}
+
+					me.activeCourse = course.get('CourseInstance') || course;
+
+					return course;
+				});
+		}
+
+		return me.getActiveCourse;
+	},
+
+
+	getItem: function(xtype) {
+		if (!this.cmp_map[xtype]) {
+			this.cmp_map[xtype] = this.down(xtype);
+			this.addChildRouter(this.cmp_map[xtype]);
+		}
+
+		return this.cmp_map[xtype];
+	},
+
+
+	setItemBundle: function(xtypes, bundle) {
+		if (!Ext.isArray(xtypes)) {
+			xtypes = [xtypes];
+		}
+
+		bundle = bundle || this.activeCourse;
+
+		var me = this;
+
+		xtypes.map(function(xtype) {
+			var item = me.getItem(xtype);
+
+			return item.bundleChanged(bundle);
+		});
+
+		return Promise.all(xtypes);
+	},
+
+
+	setActiveItem: function(xtype) {
+		var item = this.getItem(xtype);
+
+		this.getLayout().setActiveItem(item);
+
+		if (item.onActivate) {
+			item.onActivate();
+		}
+	},
+
+
+	applyState: function(state) {
+		var bundle = this.activeCourse,
+			active = state.active,
+			course = NextThought.app.course,
+			tabs = [];
+
+		/**
+		 * Wether or not a view should show its tab
+		 * if the view doesn't have a static showTab then show it,
+		 * otherwise return the value of showTab
+		 * @param  {Object} index the view to check
+		 * @return {Boolean}      show the tab or not
+		 */
+		function showTab(index) {
+			return !index.showTab || index.showTab(bundle);
+		} 
+
+		if (showTab(course.dashboard.Index)) {
+			tabs.push({
+				text: getString('NextThought.view.content.View.dashboardtab', 'Activity'),
+				route: 'activity',
+				title: 'Activity',
+				active: active === 'course-dashboard'
+			});
+		}
+
+		if (showTab(course.overview.Index)) {
+			tabs.push({
+				text: getString('NextThought.view.content.View.lessontab', 'Lessons'),
+				route: 'lessons',
+				title: 'Lessons',
+				active: active === 'course-overview'
+			});
+		}
+
+		if (showTab(course.assessment.Index)) {
+			tabs.push({
+				text: getString('NextThought.view.content.View.assessmenttab', 'Assignments'),
+				route: 'assignments',
+				title: 'Assignments',
+				active: active === 'course-assessment'
+			});
+		}
+
+		if (showTab(course.forum.Index)) {
+			tabs.push({
+				text: getString('NextThought.view.content.View.discussiontab', 'Discussions'),
+				route: 'discussions',
+				title: 'Discussions',
+				active: active === 'course-forum'
+			});
+		}
+
+		if (showTab(course.reports.Index)) {
+			tabs.push({
+				text: getString('NextThought.view.content.View.reporttab', 'Reports'),
+				route: 'reports',
+				title: 'Reports',
+				active: active === 'course-reports'
+			});
+		}
+
+		if (showTab(course.info.Index)) {
+			tabs.push({
+				text: getString('NextThought.view.content.View.infotab'),
+				route: 'info',
+				title: 'Info',
+				active: active === 'course-info'
+			});
+		}
+
+		this.navigation.setTabs(tabs);
+	},
+
+
+	__loadCourse: function() {
+		var bundle = this.activeCourse;
+
+		this.NavigationActions.updateNavBar({
+			cmp: this.getNavigation()
+		});
+
+		this.NavigationActions.setActiveContent(bundle);
+	},
+
+
+	setPreview: function() {
+		var me = this;
+
+		this.navigation.setTabs([]);
+
+		return me.setActiveItem('course-info');
+	},
+
+
+	/**
+	 * Set up the active tab
+	 * @param  {String} active   xtype of the active tab
+	 * @param  {Array} inactive xtypes of the other views to set the active course on, but not wait
+	 * @return {Promise}         fulfills when the tab is set up
+	 */
+	__setActiveView: function(active, inactive) {
+		var me = this;
+
+		if (this.activeCourse.get('Preview')) {
+			return this.setPreview();
+		}
+
+		me.__loadCourse();
+
+		me.navigation.bundleChanged(this.activeCourse);
+
+		me.applyState({
+			active: active
+		});
+
+		function updateInactive() {
+			wait().then(me.setItemBundle.bind(me, inactive));
+		}
+
+		return me.setItemBundle(active)
+				.then(me.setActiveItem.bind(me, active))
+				.then(function() {
+					var item = me.getItem(active);
+
+					updateInactive();
+					return item;
+				})
+				.fail(function(reason) {
+					me.replaceRoute('Info', 'info');
+				});
+	},
+
+
+	showDashboard: function(route, subRoute) {
+		return this.__setActiveView('course-dashboard', [
+				'course-overview',
+				'course-assessment',
+				'course-forum',
+				'course-reports',
+				'course-info'
+			]);
+	},
+
+
+	showOverview: function(route, subRoute) {
+		return this.__setActiveView('course-overview', [
+				'course-dashboard',
+				'course-assessment',
+				'course-forum',
+				'course-reports',
+				'course-info'
+			]);
+	},
+
+
+	showAssignments: function(route, subRoute) {
+		return this.__setActiveView('course-assessment', [
+				'course-dashboard',
+				'course-overview',
+				'course-forum',
+				'course-reports',
+				'course-info'
+			]);
+	},
+
+
+	showDiscussions: function(route, subRoute) {
+		return this.__setActiveView('course-forum', [
+				'course-dashboard',
+				'course-overview',
+				'course-assessment',
+				'course-reports',
+				'course-info'
+			]);
+	},
+
+
+	showReports: function(route, subRoute) {
+		return this.__setActiveView('course-reports', [
+				'course-dashboard',
+				'course-overview',
+				'course-assessment',
+				'course-forum',
+				'course-info'
+			]);
+	},
+
+
+	showInfo: function(route, subRoute) {
+		return this.__setActiveView('course-info', [
+				'course-dashboard',
+				'course-overview',
+				'course-assessment',
+				'course-forum',
+				'course-reports'
+			]);
+	}
+});

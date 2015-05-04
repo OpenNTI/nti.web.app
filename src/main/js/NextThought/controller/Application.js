@@ -84,27 +84,32 @@ Ext.define('NextThought.controller.Application', {
 
 	__mergeRoute: function(route) {
 		route = Globals.trimRoute(route);
-		route = '/app/' + route + '/';
+
+		if (route) {
+			route = '/app/' + route + '/';
+		} else {
+			route = '/app/';
+		}
 
 		return route;
 	},
 
 
 	pushRoute: function(title, route) {
-		title = this.__mergeTitle(title);
-		route = this.__mergeRoute(route);
+		var myTitle = this.__mergeTitle(title),
+			myRoute = this.__mergeRoute(route);
 
-		history.pushState({}, title, route);
+		history.pushState({}, myTitle, myRoute);
 		document.title = title;
 		this.handleRoute(route);
 	},
 
 
 	replaceRoute: function(title, route) {
-		title = this.__mergeTitle(title);
-		route = this.__mergeRoute(route);
+		var myTitle = this.__mergeTitle(title),
+			myRoute = this.__mergeRoute(route);
 
-		history.replaceState({}, title, route);
+		history.replaceState({}, myTitle, myRoute);
 		document.title = title;
 		this.handleRoute(route);
 	},

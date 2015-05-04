@@ -72,7 +72,11 @@ Ext.define('NextThought.app.library.courses.components.Collection', {
 
 	handleSelect: function(selModel, record) {
 		selModel.deselect(record);
-		var instance = record && record.get('CourseInstance');
-		instance.fireNavigationEvent(this);
+
+		var node = this.getNodeByRecord(record);
+		
+		if (this.navigate) {
+			this.navigate.call(this, record, node);
+		}
 	}
 });

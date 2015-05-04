@@ -3,7 +3,10 @@ Ext.define('NextThought.app.Body', {
 	alias: 'widget.main-views',
 
 	requires: [
-		'NextThought.app.library.Index'
+		'NextThought.app.library.Index',
+		'NextThought.app.course.Index',
+		'NextThought.util.Parsing',
+		'NextThought.app.navigation.StateStore'
 	],
 
 	mixins: {
@@ -23,10 +26,16 @@ Ext.define('NextThought.app.Body', {
 
 		this.initRouter();
 
+		this.NavigationStore = NextThought.app.navigation.StateStore.getInstance();
+
+		this.mon(this.NavigationStore, 'set-active-content', this.updateBodyContent.bind(this));
+
 		this.addRoute('/library', this.setLibraryActive.bind(this));
+		this.addRoute('/course/:id', this.setCourseActive.bind(this));
 
 		this.addDefaultRoute('/library');
 	},
+
 
 
 	setActiveCmp: function(xtype) {
@@ -48,5 +57,32 @@ Ext.define('NextThought.app.Body', {
 		var library = this.setActiveCmp('library-view-container');
 
 		return library.handleRoute(subRoute);
+	},
+
+
+	setCourseActive: function(route, subRoute) {
+		var me = this;
+			course = me.setActiveCmp('course-view-container'),
+			ntiid = route.params.id;
+
+		ntiid = ParseUtils.decodeFromURI(ntiid);
+
+		return course.setActiveCourse(ntiid)
+			.then(course.handleRoute.bind(course, subRoute))
+			.fail(function() {
+				me.replaceRoute('', '/library');
+			});
+	},
+
+
+	updateBodyContent: function(bundle) {
+		var body = Ext.getBody();
+
+
+		if (!bundle) {
+			body.setStyle({backgroundImage: ''});
+		} else {
+			body.setStyle({backgroundImage: 'url(' + bundle.getBackgroundImage() + ')'});
+		}
 	}
 });

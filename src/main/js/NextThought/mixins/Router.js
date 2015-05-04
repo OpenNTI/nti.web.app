@@ -231,8 +231,10 @@ Ext.define('NextThought.mixins.Router', {
 		var myTitle = this.getRouteTitle(),
 			route = this.getCurrentRoute();
 
-		if (myTitle) {
+		if (myTitle && title) {
 			title = title + ' - ' + myTitle;
+		} else if (!title) {
+			title = myTitle;
 		}
 
 		route = this.trimRoute(route);
@@ -277,8 +279,10 @@ Ext.define('NextThought.mixins.Router', {
 	__setChildTitle: function(title) {
 		var myTitle = this.getRouteTitle();
 
-		if (myTitle) {
-			title = title + '-' + mytitle;
+		if (myTitle && title) {
+			title = title + ' - ' + myTitle;
+		} else if (!title) {
+			title = myTitle;
 		}
 
 		this.setTitle(title);

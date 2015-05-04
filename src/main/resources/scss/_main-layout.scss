@@ -1,4 +1,4 @@
-html.x-viewport { height: auto !important; overflow-y: auto; margin-top: 72px; }
+html.x-viewport { height: auto !important; overflow-y: auto; margin-top: $header-height; }
 
 
 body.x-body {
@@ -16,7 +16,6 @@ body.x-body {
 
 #view {
 	@include hardware-accelerate();
-	overflow: hidden;
     min-height: 100%;
     width: 1024px;
     margin: 0 auto;
@@ -26,9 +25,10 @@ body.x-body {
 	position: fixed;
 	top: 0; left: 0;
 	right: 0;
-	height: 72px;
+	height: $header-height;
 	z-index: 150;
 	background-color: white;
+	backface-visibility: hidden;
 
 	&::after{
 		content: '';

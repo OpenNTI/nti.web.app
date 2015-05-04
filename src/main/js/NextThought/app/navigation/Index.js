@@ -32,10 +32,36 @@ Ext.define('NextThought.app.navigation.Index', {
 
 
 	__renderNavCmp: function(cmp) {
-		if (this.nav_cmp === cmp) { return; }
-		Ext.destroy(this.nav_cmp);
-		cmp.render(this.navContainerEl);
-		this.nav_cmp = cmp;
+		var me = this;
+
+		function render(animate) {
+			if (animate) {
+				cmp.addCls('showing');
+
+				wait(300)
+					.then(cmp.removeCls.bind(cmp, 'showing'));
+			}
+
+			cmp.render(me.navContainerEl);
+			
+			me.nav_cmp = cmp;
+		}
+
+		if (this.nav_cmp && this.nav_cmp.xtype === cmp.xtype) {
+			return;
+		}
+
+		if (this.nav_cmp) {
+			this.nav_cmp.addCls('removing');
+			wait(300)
+				.then(function() {
+					me.nav_cmp.destroyed = true;
+					Ext.destroy(me.nav_cmp);
+				})
+				.then(render.bind(null, true));
+		} else {
+			render(true);
+		}
 	},
 
 	updateNav: function(config) {

@@ -8,6 +8,8 @@ Ext.define('NextThought.util.Parsing', {
 		'NextThought.proxy.reader.Json'
 	],
 
+	COMMON_PREFIX: 'tag:nextthought.com,2011-10:',
+
 	/**
 	 * @param {String|String[]|Object|Object[]} items
 	 * @param {Object} [supplemental] Properties to add to the parsed items (such as flags)
@@ -280,8 +282,28 @@ Ext.define('NextThought.util.Parsing', {
 			return out.join('&');
 		};
 		return r;
-	}
+	},
 
+
+	encodeForURI: function(ntiid) {
+		var cut = this.COMMON_PREFIX.length;
+
+		if (ntiid && ntiid.substr(0, cut) === this.COMMON_PREFIX) {
+			ntiid = ntiid.substr(cut);
+		}
+
+		return encodeURIComponent(ntiid);
+	},
+
+	decodeFromURI: function(component) {
+		var ntiid = decodeURIComponent(component);
+
+		if (!this.isNTIID(ntiid) && ntiid.substr(0,3) !== 'tag') {
+			ntiid = this.COMMON_PREFIX + ntiid;
+		}
+
+		return ntiid;
+	}
 },function() {
 	window.ParseUtils = this;
 

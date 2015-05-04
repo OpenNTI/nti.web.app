@@ -11,6 +11,7 @@ Ext.define('NextThought.app.library.Index', {
 
 	requires: [
 		'NextThought.app.navigation.Actions',
+		'NextThought.app.course.Actions',
 		'NextThought.app.library.Actions',
 		'NextThought.app.library.StateStore',
 		'NextThought.app.library.components.Navigation',
@@ -32,6 +33,7 @@ Ext.define('NextThought.app.library.Index', {
 	initComponent: function() {
 		this.callParent(arguments);
 
+		this.CourseViewActions = NextThought.app.course.Actions.create();
 		this.NavActions = NextThought.app.navigation.Actions.create();
 		this.LibraryStore = NextThought.app.library.StateStore.getInstance();
 		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
@@ -45,10 +47,15 @@ Ext.define('NextThought.app.library.Index', {
 		this.addRoute('/catalog/books/', this.showAvailableBooks.bind(this));
 
 		this.addDefaultRoute(this.showLibrary.bind(this));
+	},
 
+
+	getNavigation: function() {
 		this.navigation = NextThought.app.library.components.Navigation.create({
 			bodyView: this
 		});
+
+		return this.navigation;
 	},
 
 
@@ -57,7 +64,8 @@ Ext.define('NextThought.app.library.Index', {
 
 		this.add({
 			xtype: 'library-view-course-page',
-			courses: current
+			courses: current,
+			navigate: this.navigateToCourse.bind(this)
 		});
 	},
 
@@ -144,7 +152,7 @@ Ext.define('NextThought.app.library.Index', {
 							available: {
 								enabled: hasAvailablePurchases,
 								text: 'Find Books',
-								tilte: 'Available Books',
+								title: 'Available Books',
 								route: '/catalog/books/'
 							}
 						};
@@ -165,7 +173,7 @@ Ext.define('NextThought.app.library.Index', {
 
 
 	showAvailable: function(title, route) {
-		this.pushRoute(title, route);
+		this.pushRoute(route, title);
 	},
 
 
@@ -173,8 +181,10 @@ Ext.define('NextThought.app.library.Index', {
 		var state = this.getState();
 
 		this.NavActions.updateNavBar({
-			cmp: this.navigation
+			cmp: this.getNavigation()
 		});
+
+		this.NavActions.setActiveContent(null);
 
 		this.setTitle(title);
 
@@ -201,6 +211,17 @@ Ext.define('NextThought.app.library.Index', {
 			.then(this.showAvailableBooks.bind(this))
 			.then(function(win) {
 				win.handleRoute(subRoute);
+			});
+	},
+
+
+	navigateToCourse: function(enrollment, img) {
+		var me = this,
+			instance = enrollment.get('CourseInstance');
+
+		me.CourseViewActions.transitionToCourse(instance, img)
+			.then(function(route) {
+				me.pushRootRoute(null, route);
 			});
 	}
 });
