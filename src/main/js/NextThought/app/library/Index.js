@@ -120,7 +120,7 @@ Ext.define('NextThought.app.library.Index', {
 							}
 						};
 
-						me.showMyCourses(me.CourseStore.getCurrentEnrolledCourses());
+						me.showMyCourses(me.CourseStore.getEnrolledCourses());
 					} else {
 						options.push({
 							text: 'Your Courses',
@@ -135,7 +135,7 @@ Ext.define('NextThought.app.library.Index', {
 							text: 'Your Administered Courses'
 						};
 
-						me.showMyAdminCourses(me.CourseStore.getCurrentAdminCourses());
+						me.showMyAdminCourses(me.CourseStore.getAdminCourses());
 					} else {
 						options.push({
 							text: 'Your Administered Courses',

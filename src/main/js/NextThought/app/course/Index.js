@@ -149,7 +149,8 @@ Ext.define('NextThought.app.course.Index', {
 
 		bundle = bundle || this.activeCourse;
 
-		var me = this;
+		var me = this,
+			activeCourse = this.activeCourse;
 
 		xtypes.map(function(xtype) {
 			var item = me.getItem(xtype);
@@ -276,23 +277,23 @@ Ext.define('NextThought.app.course.Index', {
 	__setActiveView: function(active, inactive) {
 		var me = this;
 
-		if (this.activeCourse.get('Preview')) {
-			return this.setPreview();
+		if (me.activeCourse.get('Preview')) {
+			return me.setPreview();
 		}
 
 		me.__loadCourse();
 
-		me.navigation.bundleChanged(this.activeCourse);
+		me.navigation.bundleChanged(me.activeCourse);
 
 		me.applyState({
 			active: active
 		});
 
 		function updateInactive() {
-			wait().then(me.setItemBundle.bind(me, inactive));
+			wait().then(me.setItemBundle.bind(me, inactive, me.activeCourse));
 		}
 
-		return me.setItemBundle(active)
+		return me.setItemBundle(active, me.activeCourse)
 				.then(me.setActiveItem.bind(me, active))
 				.then(function() {
 					var item = me.getItem(active);

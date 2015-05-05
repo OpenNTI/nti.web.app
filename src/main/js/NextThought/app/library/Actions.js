@@ -18,7 +18,9 @@ Ext.define('NextThought.app.library.Actions', {
 		this.LibraryStore = NextThought.app.library.StateStore.getInstance();
 		this.LoginStore = NextThought.login.StateStore.getInstance();
 
-		if (window.Service) {
+		var store = this.LibraryStore;
+
+		if (window.Service && !store.loading && !store.hasFinishedLoading) {
 			this.onLogin();
 		} else {
 			this.mon(this.LoginStore, 'login-ready', this.onLogin.bind(this));
@@ -39,5 +41,17 @@ Ext.define('NextThought.app.library.Actions', {
 		]).then(function() {
 			store.setLoaded();
 		});
+	},
+
+
+	parseXML: function(xml) {
+		try {
+			return new DOMParser().parseFromString(xml, 'text/xml');
+		}
+		catch (e) {
+			console.error('Could not parse xml for TOC');
+		}
+
+		return undefined;
 	}
 });

@@ -84,6 +84,16 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
+	setEnrollment: function(enrollment) {
+		this.__instanceEnrollment = enrollment;
+	},
+
+
+	getEnrollment: function(enrollment) {
+		return this.__instanceEnrollment;
+	},
+
+
 	__precacheEntry: function() {
 		var p = this.precachePromise,
 			me = this,
@@ -131,20 +141,25 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 
 	getNavigationStore: function() {
-		var temp;
-		if (!this.navStore) {
-			//This function is wrapping the temporary stop-gap...
-			temp = this.getLocationInfo();
-			if (temp && temp.toc) {
-				this.navStore = new NextThought.store.courseware.Navigation({
-					tocNodes: new NextThought.store.courseware.ToCBasedOutline({data: temp.toc}),
-					outlinePromise: this.getOutline()
-				});
-				this.navStore.courseInstance = this;
-			}
+		var me = this;
+
+		if (!me.navStore) {
+			me.navStore = new NextThought.store.courseware.Navigation({
+				outlinePromise: me.getOutline()
+			});
 		}
 
-		return this.navStore;
+		return me.navStore;
+	},
+
+
+	getTocs: function() {
+		var bundle = this.get('Bundle');
+
+		return this.getWrapper()
+			.then(function(enrollment) {
+				return bundle.getTocs(enrollment.get('Status'));
+			});
 	},
 
 
@@ -155,15 +170,22 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 
 	getLocationInfo: function() {
-		var locationInfo = this.get('Bundle').getLocationInfo();
+		var me = this,
+			bundle = me.get('Bundle');
 
-		if (locationInfo) {
-			locationInfo.isCourse = true;
-			//add a reference to myself so the course tiles can get the course instance form the locationInfo for now
-			locationInfo.courseInstance = this;
-		}
+		return me.getWrapper()
+			.then(function(enrollment) {
+				return bundle.getLocationInfo(enrollment.get('Status'));
+			})
+			.then(function(locationInfo) {
+				if (locationInfo) {
+					locationInfo.isCourse = true;
+					//add a reference to myself so the course tiles can get the course instance form the locationInfo for now
+					locationInfo.courseInstance = me;
+				}
 
-		return locationInfo;
+				return locationInfo
+			});
 	},
 
 
@@ -206,28 +228,44 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
+	/**
+	 * Return the enrollment instance for this course.
+	 *
+	 * The enrollment instance should've set itself on the course instance on precache
+	 *
+	 * Because of how the ParsingUtils work, and since the CourseInstance is a property
+	 * on the enrollment instance the enrollment instance should be in the course instance's stores
+	 *
+	 * @return {Promise} fulfills with the enrollment instance
+	 */
 	getWrapper: function() {
-		var p, s = this.stores,
-			id = this.getId(), found = false;
+		var me = this;
 
-		p = new Promise(function(fulfill, reject) {
-			s.forEach(function(o) {
-				if (o.isModel) {
-					fulfill(o);
+		//the enrollment instance shouldn't change so we can cache this logic
+		if (!me.__findWrapper) {
+			me.__findWrapper = new Promise(function(fulfill, reject) {
+				var found = false,
+					enrollment = me.getEnrollment();
+
+				if (enrollment) {
 					found = true;
-					return false;
+					fulfill(enrollment);
+				} else {
+					me.stores.forEach(function(obj) {
+						if (obj.isModel) {
+							fulfill(obj);
+							found = true;
+						}
+					});
+				}
+
+				if (!found) {
+					console.error('The Enrollment instance wasnt in the course instances stores');
 				}
 			});
-			if (!found) {
-				reject('not found');
-			}
-		});
-
-		if (!found) {
-			return CourseWareUtils.resolveCourseInstanceContainer(id);
 		}
 
-		return p;
+		return me.__findWrapper;
 	},
 
 

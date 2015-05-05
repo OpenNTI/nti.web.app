@@ -2,6 +2,12 @@ Ext.define('NextThought.model.courses.CourseOutline', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.courses.courseoutline',
 
+	requires: [
+		'NextThought.model.courses.navigation.CourseOutlineNode',
+		'NextThought.model.courses.navigation.CourseOutlineContentNode',
+		'NextThought.model.courses.navigation.CourseOutlineCalendarNode'
+	],
+
 	fields: [
 		{name: 'Items', type: 'auto', persist: false}
 	],
@@ -60,7 +66,7 @@ Ext.define('NextThought.model.courses.CourseOutline', {
 		return node;
 	},
 
-
+	//TODO: do we need this funtion?
 	isVisible: function(ntiid) {
 		var i = 0, rec,
 			lineage = ContentUtils.getLineage(ntiid) || [];

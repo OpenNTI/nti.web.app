@@ -57,7 +57,7 @@ Ext.define('NextThought.app.library.content.Actions', {
 			return Promise.resolve();
 		}
 
-		return StoreUtils.loadItems(getURL(link))
+		return StoreUtils.loadItems(getURL(link), null, 'titles')
 			.then(this.ContentStore.setContentBundles.bind(this.ContentStore));
 	}
 });

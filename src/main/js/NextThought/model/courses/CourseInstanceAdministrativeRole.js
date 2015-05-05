@@ -11,7 +11,11 @@ Ext.define('NextThought.model.courses.CourseInstanceAdministrativeRole', {
 
 
 	__precacheEntry: function() {
-		return this.get('CourseInstance').__precacheEntry();
+		var instance = this.get('CourseInstance');
+
+		instance.setEnrollment(this);
+
+		return instance.__precacheEntry();
 	},
 
 

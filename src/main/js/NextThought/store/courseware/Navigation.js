@@ -18,8 +18,11 @@ Ext.define('NextThought.store.courseware.Navigation', {
 		if (!config.outlinePromise) {
 			config.outlinePromise = Promise.reject('Not Given');
 		}
+
 		this.building = config.outlinePromise
-				.then(this.fillFromOutline.bind(this), this.failedToBuild.bind(this));
+				.then(this.fillFromOutline.bind(this))
+				.fail(this.failedToBuild.bind(this));
+		
 		this.callParent(arguments);
 	},
 
@@ -34,43 +37,36 @@ Ext.define('NextThought.store.courseware.Navigation', {
 		return this;
 	},
 
-
 	fillFromOutline: function(outline) {
-		var index = 0, r = [], t, fill, maxDepth, depth = 0,
-			tocNodes = this.tocNodes;
+		var index = 0, r = [],
+			depth = 0, maxDepth;
 
-		function itr(n) {
-			var id = n.getId();
+		function itr(node) {
+			var id = node.getId(),
+				fill = {};
 
-			if (n.isNode) {
-				t = id && tocNodes.getById(id);
+			if (node.isNode) {
+				node._max_depth = maxDepth;
+				node._depth = depth;
 
-				fill = t ? {
-					tocOutlineNode: t
-				} : {};
-
-				Ext.apply(n, {
-					_max_depth: maxDepth,
-					_depth: depth
-				});
-
-				if (!n.get('label')) {
-					fill.label = 'Empty';
+				if (!node.get('label')) {
+					node.set('label', 'Empty');
 				}
 
-				n.set(Ext.apply({ position: index++ }, fill));
-				r.push(n);
+				r.push(node);
 			}
+
 			depth++;
-			(n.get('Items') || []).forEach(itr);
+			(node.get('Items') || []).forEach(itr);
 			depth--;
 		}
 
-		//we agreed to just count the depth of the first branch. :}
 		function getDepth(n) {
 			var i = ((n && n.get('Items')) || [])[0];
+
 			return i ? (getDepth(i) + 1) : 0;
 		}
+
 
 		try {
 			maxDepth = this.depth = getDepth(outline);
@@ -80,10 +76,10 @@ Ext.define('NextThought.store.courseware.Navigation', {
 			this.add(r);
 			this.resumeEvents();
 			this.fireEvent('clear', this);
+		} finally {
+			this.fireEvent('build', this);
 		}
-		finally {
-			this.fireEvent('built', this);
-		}
+
 		return this;
 	},
 

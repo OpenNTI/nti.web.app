@@ -12,7 +12,7 @@ Ext.define('NextThought.app.content.Index', {
 	getNavigation: function() {
 		if (!this.navigation || this.navigation.destroyed) {
 			this.navigation = NextThought.app.content.components.Navigation.create({
-				bodyView: this,
+				bodyView: this
 			});
 		}
 

@@ -109,22 +109,37 @@ Ext.define('NextThought.model.ContentBundle', {
 	},
 
 
-	getLocationInfo: function() {
-		var data = this.asUIData(),
-			firstPackage = this.get('ContentPackages')[0],
-			firstPage = this.getFirstPage(),
-			toc = firstPackage.get('toc');
+	getTocs: function(status) {
+		var packages = this.get('ContentPackages');
 
-		return !toc ? null : Ext.applyIf({
-				toc: toc,
-				location: toc.documentElement,
-				NTIID: firstPage,
-				ContentNTIID: firstPackage,
-				title: firstPackage,
-				root: firstPackage.get('root'),
-				getIcon: function() { return data.icon; },
-				getPathLabel: function() { return Promise.resolve(data.title); }
-			}, data);
+		packages = packages.map(function(pack) {
+			return pack.getToc(status);
+		});
+
+		return Promise.all(packages);
+	},
+
+
+	getLocationInfo: function(status) {
+		var firstPackage = this.get('ContentPackages')[0],
+			firstPage = this.getFirstPage(),
+			uiData = this.asUIData();
+
+		return firstPackage.getToc(status)
+			.then(function(toc) {
+				if (!toc) { return null; }
+
+				return Ext.applyIf({
+					toc: toc,
+					location: toc.documentElement,
+					NTIID: firstPage,
+					ContentNTIID: firstPackage,
+					title: firstPackage,
+					root: firstPackage.get('root'),
+					getIcon: function() { return uiData.icon; },
+					getPathLabel: function() { return Promise.resolve(data.title); }
+				}, uiData);
+			});
 	},
 
 

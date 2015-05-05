@@ -40,91 +40,101 @@ Ext.define('NextThought.model.ContentPackage', {
 		this.callParent(arguments);
 
 		wait()
+			//preload the page info to make the other loads faster
+			.then(this.__cacheContentPreferences.bind(this))
+			//pre resolve which image assets to use
 			.then(this.__setImage.bind(this));
-		// var me = this,
-		// 	index = me.get('index');
 
-		// me.LibraryActions = NextThought.app.library.Actions.create();
-
-		// if (me.self.TOC_REQUESTS[index]) {
-		// 	me.tocPromise = me.self.TOC_REQUESTS[index];
-		// } else {
-		// 	me.tocPromise = Service.request(getURL(me.get('index')))
-		// 						.then(L.parseXML)
-		// 					//BEGIN: ToC Cleanup
-		// 						.then(me.__cleanToCNodes.bind(me))
-		// 					//END: ToC Cleanup
-		// 						.then(function(x) {
-		// 							var d = x.documentElement;
-
-		// 							d.setAttribute('base', me.get('root'));
-		// 							d.setAttribute('icon', me.get('icon'));
-		// 							d.setAttribute('title', me.get('title'));
-
-		// 							return x;
-		// 						});
-
-		// 	me.self.TOC_REQUESTS[index] = me.tocPromise;
-		// }
-
-		// me.tocPromise
-		// 	.then(function(x) {
-		// 		var d = x.documentElement;
-
-		// 		me.set({
-		// 			toc: x,
-		// 			NTIID: d.getAttribute('ntiid'),
-		// 			isCourse: d.getAttribute('isCourse') === 'true'
-		// 		});
-
-		// 	});
-
-		// wait()
-		// 		.then(me.__cacheContentPreferences.bind(me))
-		// 		.then(me.__setImage.bind(me));
+		this.LibraryActions = NextThought.app.library.Actions.create();
 	},
 
 
-	getToc: function() {
-		return this.tocPromise;
+	getToc: function(status) {
+		var me = this,
+			library = me.LibraryActions
+			index = me.get('index');
+
+		if (me.self.TOC_REQUESTS[index]) {
+			me.tocPromise = me.self.TOC_REQUESTS[index + '-' + status];
+		} else {
+			me.tocPromise = Service.request(getURL(index))
+					//parse the response into a xml
+					.then(library.parseXML.bind(library))
+					//remove all the nodes that aren't visible to us
+					.then(me.__cleanToCNodes.bind(me, status))
+					//set my root, icon, and title on the doc
+					.then(function(xml) {
+						var doc = xml.documentElement;
+
+						doc.setAttribute('base', me.get('root'));
+						doc.setAttribute('icon', me.get('icon'));
+						doc.setAttribute('title', me.get('title'));
+
+						return xml;
+					});
+
+			me.self.TOC_REQUESTS[index + '-' + status] = me.tocPromise;
+		}
+
+		me.tocPromise
+			.then(function(xml) {
+				var doc = xml.documentElement;
+
+				//make sure I am synced with the toc
+				me.set({
+					toc: xml,
+					NTIID: doc.getAttribute('ntiid'),
+					isCourse: doc.getAttribute('isCourse') === 'true'
+				});
+			})
+
+
+		return me.tocPromise
 	},
 
 
-	__cleanToCNodes: function(x) {
+	__cleanToCNodes: function(status, xml) {
 		function strip(e) { Ext.fly(e).remove(); }
 
-		function getAllNodesReferencingContentID(ntiid, xml) {
-			if (!xml || !ntiid) {
-				console.warn('Error: toc/xml or ntiid is empty. Should provide valid toc');
+		//returns all nodes that reference an ntiid
+		function getAllNodesReferencing(ntiid) {
+			if (!ntiid) {
+				console.warn('Ntiid is empty. Should provide a valid toc');
 				return [];
 			}
 
-			function getNodesForKey(keys) {
-				var nodes = [];
-				ntiid = ParseUtils.escapeId(ntiid);
-				Ext.each(keys, function(k) {
-							nodes = Ext.Array.merge(nodes, Ext.DomQuery.select(
-											'[' + k + '="' + ntiid + '"]', xml));
-						}
-				);
+			var nodes = [];
 
-				return nodes;
-			}
+			ntiid = ParseUtils.escapeId(ntiid);
 
-			return getNodesForKey(['ntiid', 'target-ntiid']);
+			//look at target-ntiid and ntiid attributes
+			nodes = xml.querySelectorAll('[target-ntiid="' + ntiid + '"],[ntiid="' + ntiid + '"]');
+
+			return Array.prototype.slice.call(nodes);
 		}
 
-		function permitOrRemove(e) {
-			var status = CourseWareUtils.getEnrollmentStatus(ntiid);
-			if (!ContentUtils.hasVisibilityForContent(e, status)) {
-				getAllNodesReferencingContentID(e.getAttribute('target-ntiid'), x).forEach(strip);
+		function permitOrRemove(node) {
+			//if the node isn't visible for the status
+			if (!ContentUtils.hasVisibilityForContent(node, status)) {
+				getAllNodesReferencing(node.getAttribute('target-ntiid')).forEach(strip);
 			}
 		}
 
-		var ntiid = this.get('NTIID');
+		var i, nodes;
 
-		Ext.each(Ext.DomQuery.select('[visibility]:not([visibility=everyone])', x), permitOrRemove);
-		return x;
+		//all nodes that have a visibility attribute not set to everyone
+		if (xml) {
+			//TODO: figure out if we have to use the Ext.DomQuery, or if we can use querySelectorAll
+			nodes = Ext.DomQuery.select('[visibility]:not([visibility=everyone])', xml);//xml.querySelectorAll('[visibility]:not([visibility=everyone])');
+		} else {
+			return;
+		}
+
+		for(i = 0; i < nodes.length; i++) {
+			permitOrRemove(nodes[i]);
+		}
+
+		return xml;
 	},
 
 
