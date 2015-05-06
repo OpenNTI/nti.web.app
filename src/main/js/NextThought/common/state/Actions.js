@@ -12,6 +12,8 @@ Ext.define('NextThought.common.state.Actions', {
 		this.LoginStore = NextThought.login.StateStore.getInstance();
 		this.StateStore = NextThought.common.state.StateStore.getInstance();
 
+		if (this.StateStore.loaded) { return; }
+
 		if ($AppConfig.username) {
 			this.onLogin();
 		} else {

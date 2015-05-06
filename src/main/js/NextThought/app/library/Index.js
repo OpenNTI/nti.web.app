@@ -178,7 +178,7 @@ Ext.define('NextThought.app.library.Index', {
 
 
 	__setActive: function(title) {
-		var state = this.getState();
+		var state = this.getCurrentState();
 
 		this.NavActions.updateNavBar({
 			cmp: this.getNavigation()

@@ -3,11 +3,11 @@ Ext.define('NextThought.common.state.StateStore', {
 
 	setStateKey: function(key) {
 		if (this.state_key) {
-			console.error('State key already defined');
 			return;
 		}
 
-		this.state_key;
+		this.state_key = key;
+		this.loaded = true;
 
 		this.getCurrentState();
 	},
@@ -19,8 +19,18 @@ Ext.define('NextThought.common.state.StateStore', {
 			return  {};
 		}
 
-		if (!this.current_state) {
-			this.current_state = localStorage.getItem(this.state_key);
+		if (this.current_state) {
+			return this.current_state;
+		}
+
+		//attempt to parse the current state in the local storage
+		try {
+			this.current_state = JSON.parse(localStorage.getItem(this.state_key))
+		} catch(e) {
+			swallow(e);
+		} finally {
+			//if its still null set it to the empty object
+			this.current_state = this.current_state || {};
 		}
 
 		return this.current_state;
@@ -33,7 +43,7 @@ Ext.define('NextThought.common.state.StateStore', {
 			return;
 		}
 
-		localStorage.setItem(this.state_key, state);
+		localStorage.setItem(this.state_key, JSON.stringify(state));
 	},
 
 
