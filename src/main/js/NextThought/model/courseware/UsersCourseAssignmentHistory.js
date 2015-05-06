@@ -2,6 +2,12 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistory', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.assessment.userscourseassignmenthistory',
 
+	requires: [
+		'NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedback',
+		'NextThought.model.courseware.UsersCourseAssignmentHistoryItemFeedbackContainer',
+		'NextThought.model.courseware.Grade'
+	],
+
 	fields: [
 		{name: 'Items', type: 'collectionItem', persist: false},
 		{name: 'lastViewed', type: 'date', dateFormat: 'timestamp'}
