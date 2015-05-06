@@ -49,13 +49,17 @@ Ext.define('NextThought.app.course.dashboard.Index', {
 		me.refreshDate = new Date(0);
 		me.emptiesToRemove = [];
 
+		me.onScroll = me.onScroll.bind(me);
 
 		me.on({
 			'visibility-changed': function(visible) {
 				if (visible) {
 					AnalyticsUtil.addContext('dashboard', true);
 				}
-			}
+			},
+			'activate': this.onActivate.bind(this),
+			'deactivate': this.onDeactivate.bind(this),
+			'destroy': this.onDeactivate.bind(this)
 		});
 	},
 
@@ -68,23 +72,37 @@ Ext.define('NextThought.app.course.dashboard.Index', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		var me = this,
-			threshold = this.scrollChangeThreshold,
-			el = this.getScrollTarget();
-
-		me.lastScrollTop = 0;
-
-		me.mon(Ext.fly(document), 'scroll', function() {
-			var diff = Math.abs(el.scrollTop - me.lastScrollTop);
-
-			if (diff > threshold && !me.loadingWeek) {
-				me.scrollChanged();
-			}
-
-			me.lastScrollTop = el.scrollTop;
-		});
+		this.lastScrollTop = 0;
 
 		this.initialLoad();
+	},
+
+
+	onScroll: function() {
+		var el = this.getScrollTarget(),
+			threshold = this.scrollChangeThreshold,
+			diff = Math.abs(el.scrollTop - this.lastScrollTop);
+
+		if (diff > threshold && !this.loadingWeek) {
+			this.scrollChanged();
+		}
+
+		this.lastScrollTop = el.scrollTop;
+	},
+
+
+	onDeactivate: function() {
+		window.removeEventListener('scroll', this.onScroll);
+	},
+
+
+	onActivate: function() {
+		if (!this.rendered) {
+			this.on('afterrender', this.onActivate.bind(this));
+			return;
+		}
+
+		window.addEventListener('scroll', this.onScroll);
 	},
 
 

@@ -69,7 +69,16 @@ Ext.define('NextThought.app.course.Index', {
 		this.addRoute('/reports', this.showReports.bind(this));
 		this.addRoute('/info', this.showInfo.bind(this));
 
-		this.addDefaultRoute('/activity')
+		this.addDefaultRoute('/activity');
+
+		this.on('deactivate', this.onDeactivate.bind(this));
+	},
+
+
+	onDeactivate: function() {
+		var current = this.getLayout().getActiveItem();
+
+		current.fireEvent('deactivate');
 	},
 
 
@@ -163,13 +172,15 @@ Ext.define('NextThought.app.course.Index', {
 
 
 	setActiveItem: function(xtype) {
-		var item = this.getItem(xtype);
+		var layout = this.getLayout(),
+			item = this.getItem(xtype),
+			current = layout.getActiveItem();
+
+		if (current === item) {
+			item.fireEvent('activate');
+		}
 
 		this.getLayout().setActiveItem(item);
-
-		if (item.onActivate) {
-			item.onActivate();
-		}
 	},
 
 
