@@ -32,5 +32,34 @@ Ext.define('NextThought.app.navigation.Actions', {
 	 */
 	setActiveContent: function(bundle) {
 		this.store.fireEvent('set-active-content', bundle);
+	},
+
+
+	/**
+	 * Take an object or ntiid, and an optional course and figure out the
+	 * route to take to get there.
+	 * @param  {Object|String} objectOrNTIID item to navigate to
+	 * @param  {Object} context       object to navigate in context of
+	 */
+	navigateToObject: function(objectOrNTIID, context) {
+		var resolveObject,
+			store = this.store;
+
+		if (typeof objectOrNTIID === 'string') {
+			resolveObject = Service.getObject(objectOrNTIID);
+		} else {
+			resolveObject = Promise.resolve(objectOrNTIID);
+		}
+
+
+		resolveObject
+			.then(function(object) {
+				this.fireEvent('navigate-to-')
+			});
+		if (bundle) {
+			this.__navigateWithinBundle(bundle, resolveObject);
+		} else {
+			this.__navigateWithinGlobal(bundle);
+		}
 	}
 });

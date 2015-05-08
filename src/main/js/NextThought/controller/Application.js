@@ -67,10 +67,10 @@ Ext.define('NextThought.controller.Application', {
 	},
 
 
-	handleRoute: function(route) {
+	handleRoute: function(route, precache) {
 		var body = this.getBody();
 
-		return body.handleRoute(route);
+		return body.handleRoute(route, precache);
 	},
 
 
@@ -96,23 +96,23 @@ Ext.define('NextThought.controller.Application', {
 	},
 
 
-	pushRoute: function(title, route) {
+	pushRoute: function(title, route, precache) {
 		var myTitle = this.__mergeTitle(title),
 			myRoute = this.__mergeRoute(route);
 
 		history.pushState({}, myTitle, myRoute);
 		document.title = title;
-		this.handleRoute(route);
+		this.handleRoute(route, precache);
 	},
 
 
-	replaceRoute: function(title, route) {
+	replaceRoute: function(title, route, precache) {
 		var myTitle = this.__mergeTitle(title),
 			myRoute = this.__mergeRoute(route);
 
 		history.replaceState({}, myTitle, myRoute);
 		document.title = title;
-		this.handleRoute(route);
+		this.handleRoute(route, precache);
 	},
 
 

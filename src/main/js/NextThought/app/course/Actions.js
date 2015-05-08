@@ -23,8 +23,6 @@ Ext.define('NextThought.app.course.Actions', {
 
 		ntiid = ParseUtils.encodeForURI(ntiid);
 
-		this.StateStore.activeCourse = course;
-
 		return Promise.resolve('/course/' + ntiid);
 	}
 });

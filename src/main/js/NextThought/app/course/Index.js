@@ -19,6 +19,8 @@ Ext.define('NextThought.app.course.Index', {
 		'NextThought.app.course.reports.Index'
 	],
 
+	// cls: 'x-component-course',
+
 
 	cmp_map: {},
 
@@ -101,7 +103,7 @@ Ext.define('NextThought.app.course.Index', {
 	},
 
 
-	setActiveCourse: function(ntiid) {
+	setActiveCourse: function(ntiid, course) {
 		var me = this;
 
 		ntiid = ntiid.toLowerCase();
@@ -113,8 +115,8 @@ Ext.define('NextThought.app.course.Index', {
 			me.getActiveCourse = me.CourseStore.onceLoaded()
 				.then(function() {
 					var course;
-					//if the course was stashed on the CourseViewStore, no need to look for it
-					if (me.CourseViewStore.activeCourse && me.CourseViewStore.activeCourse.getId() === ntiid) {
+					//if the course was cached, no need to look for it
+					if (course && course.getId() === ntiid) {
 						course = me.CourseViewStore.activeCourse;
 					} else {
 						//find which ever course whose ntiid matches
@@ -179,6 +181,7 @@ Ext.define('NextThought.app.course.Index', {
 		if (current === item) {
 			item.fireEvent('activate');
 		}
+
 
 		this.getLayout().setActiveItem(item);
 	},

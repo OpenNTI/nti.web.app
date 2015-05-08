@@ -2,7 +2,10 @@ Ext.define('NextThought.app.content.Index', {
 	extend: 'Ext.container.Container',
 	//Should only be extended
 	
-	layout: 'card',
+	layout: {
+		type: 'card',
+		deferredRender: true
+	},
 	
 	requires: [
 		'NextThought.app.content.components.Navigation'

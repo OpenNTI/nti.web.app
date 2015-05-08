@@ -221,7 +221,7 @@ Ext.define('NextThought.app.library.Index', {
 
 		me.CourseViewActions.transitionToCourse(instance, img)
 			.then(function(route) {
-				me.pushRootRoute(null, route);
+				me.pushRootRoute(null, route, {course: instance});
 			});
 	}
 });

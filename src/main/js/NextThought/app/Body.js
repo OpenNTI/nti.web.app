@@ -56,19 +56,20 @@ Ext.define('NextThought.app.Body', {
 	setLibraryActive: function(route, subRoute) {
 		var library = this.setActiveCmp('library-view-container');
 
-		return library.handleRoute(subRoute);
+		return library.handleRoute(subRoute, route.precache);
 	},
 
 
 	setCourseActive: function(route, subRoute) {
 		var me = this;
-			course = me.setActiveCmp('course-view-container'),
-			ntiid = route.params.id;
+			courseView = me.setActiveCmp('course-view-container'),
+			ntiid = route.params.id,
+			course = route.precache.course;
 
 		ntiid = ParseUtils.decodeFromURI(ntiid);
 
-		return course.setActiveCourse(ntiid)
-			.then(course.handleRoute.bind(course, subRoute))
+		return courseView.setActiveCourse(ntiid, course)
+			.then(courseView.handleRoute.bind(courseView, subRoute, route.precache))
 			.fail(function() {
 				me.replaceRoute('', '/library');
 			});
@@ -76,10 +77,10 @@ Ext.define('NextThought.app.Body', {
 
 
 	updateBodyContent: function(bundle) {
-		var body = Ext.getBody();
+		var body = Ext.getBody(),
+			backgroundImage = bundle && bundle.getBackgroundImage();
 
-
-		if (!bundle) {
+		if (!backgroundImage) {
 			body.setStyle({backgroundImage: ''});
 		} else {
 			body.setStyle({backgroundImage: 'url(' + bundle.getBackgroundImage() + ')'});

@@ -117,6 +117,8 @@ Ext.define('NextThought.app.content.components.Navigation', {
 			tabs, active;
 
 		function alignCurrentTab() {
+			//if for some reason the element was removed before we could call this
+			if (!me.activeTabEl) { return; }
 			active = active.getBoundingClientRect();
 			container = container.getBoundingClientRect();
 

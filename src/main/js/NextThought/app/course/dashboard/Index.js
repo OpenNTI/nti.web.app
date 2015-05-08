@@ -64,11 +64,6 @@ Ext.define('NextThought.app.course.dashboard.Index', {
 	},
 
 
-	onActivate: function() {
-		this.setTitle(this.title);
-	},
-
-
 	afterRender: function() {
 		this.callParent(arguments);
 
@@ -97,6 +92,8 @@ Ext.define('NextThought.app.course.dashboard.Index', {
 
 
 	onActivate: function() {
+		this.setTitle(this.title);
+
 		if (!this.rendered) {
 			this.on('afterrender', this.onActivate.bind(this));
 			return;

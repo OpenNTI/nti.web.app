@@ -64,7 +64,10 @@ Ext.define('NextThought.common.StateStore', {
 		var me = this
 
 		return new Promise(function(fulfill, reject) {
-			me.on('loaded', fulfill.bind(null, me));
+			me.on({
+				single: true,
+				'loaded': fulfill.bind(null, me)
+			});
 		});
 	}
 });
