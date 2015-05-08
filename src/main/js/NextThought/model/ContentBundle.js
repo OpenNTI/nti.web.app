@@ -120,6 +120,11 @@ Ext.define('NextThought.model.ContentBundle', {
 	},
 
 
+	getContentPackages: function() {
+		return this.get('ContentPackages');
+	},
+
+
 	getLocationInfo: function(status) {
 		var firstPackage = this.get('ContentPackages')[0],
 			firstPage = this.getFirstPage(),

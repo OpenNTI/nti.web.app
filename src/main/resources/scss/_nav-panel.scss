@@ -1,0 +1,27 @@
+.navigation-panel {
+	overflow: hidden;
+	height: auto;
+
+	.navigation-view.floating {
+		position: fixed;
+		top: 92px;//$header-height + 20;
+		bottom: 20px;
+	}
+
+	//Override these, since the placeholder is not suppose to be visible
+	.navigation-placeholder {
+		background: none !important;
+		box-shadow: none !important;
+		border: none !important;
+
+		width: 255px;
+		float: left;
+		margin-right: 5px;
+	}
+
+	.body-view {
+		float: right;
+		width: 764px;
+		padding-top: 20px;
+	}
+}

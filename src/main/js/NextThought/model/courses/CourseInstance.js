@@ -163,6 +163,13 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
+	getContentPackages: function() {
+		var bundle = this.get('Bundle');
+
+		return bundle.getContentPackages();
+	},
+
+
 	isExpired: function() {
 		var c = this.getCourseCatalogEntry();
 		return c && c.isExpired();

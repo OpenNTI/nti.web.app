@@ -2,11 +2,25 @@
 Ext.define('NextThought.util.Content', {
 	singleton: true,
 
-	requires: ['NextThought.util.Parsing'],
+	requires: ['NextThought.util.Parsing', 'NextThought.app.library.StateStore'],
+
+	mixins: {
+		observable: 'Ext.util.Observable'
+	},
+
 
 	CONTENT_VISIBILITY_MAP: {
 		'OU': 'OUID'
 	},
+
+
+	constructor: function() {
+		this.callParent(arguments);
+
+		this.LibraryStore = NextThought.app.library.StateStore.getInstance();
+		this.clearCache();
+	},
+
 
 	hasVisibilityForContent: function(content, status) {
 		var u = $AppConfig.userObject,
@@ -51,32 +65,44 @@ Ext.define('NextThought.util.Content', {
 		} else if (x.getTocs) {
 			load = x.getTocs();
 		} else  {
-			load = Promise.resolve(x);
+			load = Promise.resolve([x]);
 		}
 
 		return load;
 	},
 
-	
-	__getNodes: function(ntiid, bundleOrTocOrNTIID, fn) {
+	/**
+	 * Resolve the node for a ntiid with in a bundle or toc
+	 *
+	 * Returns an array of nodes for each toc in the bundle
+	 *
+	 * @param  {String} ntiid              ntiid to resolve
+	 * @param  {Bundle|XML} bundleOrTocOrNTIID the bundle to get the tocs from or the toc itself
+	 * @return {Promise}                    fulfills with the nodes
+	 */
+	__getNodes: function(ntiid, bundleOrTocOrNTIID) {
 		function iterateToc(toc) {
 			if (toc.documentElement.getAttribute('ntiid') === ntiid) {
 				return toc.documentElement;
 			}
 
-			ntiid = ParseUtils.escapeId(ntiid);
-
-			var selectors = [
-					'topic[ntiid="' + ntiid + "']",
-					'unit[ntiid="' + ntiid + "']",
-					'object[ntiid="' + ntiid + "']"
+			var escaped = ParseUtils.escapeId(ntiid),
+				selectors = [
+					'topic[ntiid="' + escaped + "']",
+					'unit[ntiid="' + escaped + "']",
+					'object[ntiid="' + escaped + "']"
 				], i, namespaced, node;
 
 			for (i = 0; i < selectors.length; i++) {
 				node = Ext.DomQuery.select(selectors[i], toc);
 
 				if (node.length > 0) {
-					return node[0];
+					return {
+						toc: toc,
+						location: node[0],
+						NTIID: ntiid,
+						ContentNTIID: node[0].ownerDocument.documentElement.getAttribute('ntiid')
+					};
 				}
 			}
 
@@ -85,18 +111,38 @@ Ext.define('NextThought.util.Content', {
 			for (i = namespaced.length - 1; i >= 0; i--) {
 				node = namespaced[i];
 
-				if (node && node.getAttribute('ntiid') === ntiid) {
-					return node;
+				if (node && node.getAttribute('ntiid') === escaped) {
+					return {
+						toc: toc,
+						location: node,
+						NTIID: ntiid,
+						ContentNTIID: node.ownerDocument.documentElement.getAttribute('ntiid')
+					};
 				}
 			}
 		}
 
-		return this.__resolveTocs(bundleOrTocOrNTIID)
+		var result;
+
+		result = this.findCache[ntiid];
+
+		if (!result) {
+			result = this.__resolveTocs(bundleOrTocOrNTIID)
 				.then(function(tocs) {
 					var nodes = (tocs || []).map(iterateToc);
 
+					//filter out falsy values
+					nodes = nodes.filter(function(node) {
+						return !!node
+					});
+
 					return nodes;
 				});
+
+			this.findCache[ntiid] === result;
+		}
+
+		return result; 
 	},
 
 
@@ -111,6 +157,8 @@ Ext.define('NextThought.util.Content', {
 		function mapNode(node) {
 			var lineage = [],
 				value;
+
+			node = node.location;
 
 			while (node) {
 				value = fn.call(null, node);
@@ -133,8 +181,17 @@ Ext.define('NextThought.util.Content', {
 				});
 	},
 
-
+	/**
+	 * Return the an array of arrays of ids of the paths from the ntiid to the root
+	 * for all the tocs in the bundle
+	 *
+	 * @param  {String} ntiid       ntiid to start at
+	 * @param  {Bundle|XML} bundleOrToc context to look under
+	 * @return {Promise}             fulfills with the paths for all the tocs that have one
+	 */
 	getLineage: function(ntiid, bundleOrToc) {
+		ntiid = this.getNTIIDFromThing(ntiid);
+
 		return this.__getNodesLineage(ntiid, bundleOrToc, function(node) {
 			var id = node.getAttribute ? node.getAttribute('ntiid') : null;
 
@@ -147,8 +204,17 @@ Ext.define('NextThought.util.Content', {
 		});
 	},
 
-
+	/**
+	 * Return the an array of arrays of labels of the paths from the ntiid to the root
+	 * for all the tocs in the bundle
+	 *
+	 * @param  {String} ntiid       ntiid to start at
+	 * @param  {Bundle|XML} bundleOrToc context to look under
+	 * @return {Promise}             fulfills with the paths for all the tocs that have one
+	 */
 	getLineageLabels: function(ntiid, showBundleAsRoot, bundleOrToc) {
+		ntiid = this.getNTIIDFromThing(ntiid);
+
 		return this.__getNodesLineage(ntiid, bundleOrToc, function(node) {
 			var label = node.getAttribute ? node.getAttribute('label') : null;
 
@@ -165,6 +231,107 @@ Ext.define('NextThought.util.Content', {
 
 			return labels
 		});
+	},
+
+
+	listenToLibrary: function() {
+		if (this.libraryMon) {
+			return;
+		}
+
+		this.libraryMon = this.mon(this.LibraryStore, {
+			destroyable: true,
+			loaded: this.clearCache.bind(this)
+		});
+	},
+
+
+	clearCache: function() {
+		this.cache = {};
+		this.findCache = {};
+	},
+
+	/**
+	 * Get the location info for a ntiid within the context of the bundle or toc
+	 *
+	 * @param  {String} ntiid       ntiid to look for
+	 * @param  {Bundle|Toc} bundleOrToc context to look in
+	 * @return {Promise}             fulfills with location info
+	 */
+	getLocation: function(ntiid, bundleOrToc) {
+		ntiid = this.getNTIIDFromThing(ntiid);
+
+		var me = this, result;
+
+		function getAttribute(elements, attr) {
+			var i, value;
+
+			for (i = 0; i < elements.length; i++) {
+				value = elements[i];
+
+				try {
+					value = value ? value.getAttribute(attr) : null;
+
+					if (value) {
+						return value;
+					}
+				} catch (e) {
+					console.warn('element did not have getAttribute');
+				}
+			}
+
+			return null;
+		}
+
+		function mapNode(node) {
+			var doc = node.toc.documentElement,
+				loc = node.location;
+
+			return Ext.apply({
+				NTIID: ntiid,
+				icon: getAttribute([loc, doc], 'icon'),
+				isCourse: (getAttribute([loc, doc], 'isCourse') || '').toLowerCase() === 'true',
+				root: getAttribute([loc, doc], 'base'),
+				title: getAttribute([loc, doc], 'title'),
+				label: getAttribute([loc, doc], 'label'),
+				thumbnail: getAttribute([loc, doc], 'thumbnail'),
+				getIcon: function(fromBook) {
+					var iconPath = fromBook ? this.title.get('icon') : this.icon;
+
+					if (iconPath.substr(0, this.root.length) !== root) {
+						iconPath = this.root + this.icon;
+					}
+
+					return iconPath;
+				},
+				getPathLabel: function() {
+					return me.getLineageLabels(this.NTIID, bundleOrToc)
+							.then(function(lineages) {
+								var lineage = lineages[0],
+									sep = lineage.length <= 2 ? ' / ' : ' /.../ ',
+									base = linage.last() || '',
+									leaf = lineage.first();
+
+								return lineage.length <= 1 ? base : base + sep + leaf;
+							});
+				}
+			}, node);
+		}
+
+		me.listenToLibrary();
+
+		result = me.cache[ntiid];
+
+		if (!result) {
+			result = this.__getNodes(ntiid, bundleOrToc)
+						.then(function(nodes) {
+							return (nodes || []).map(mapNode);
+						});
+
+			me.cache[ntiid] = result;
+		}
+
+		return result;
 	}
 
 }, function() {

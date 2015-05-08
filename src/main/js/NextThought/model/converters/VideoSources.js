@@ -85,10 +85,12 @@ Ext.define('NextThought.model.converters.VideoSources', {
 							r.set(name, data[name]);
 							if (name === 'poster') {
 								wait(1).then(function() {
-									r.fireEvent('resoloved-poster', r);
+									r.fireEvent('resolved-poster', r);
 								});
 							}
 						});
+			} else {
+				wait().then(r.fireEvent.bind(r, 'resolved-poster', r));
 			}
 
 			return v;
