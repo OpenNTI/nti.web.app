@@ -231,11 +231,12 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 
 		Ext.each(items, function(item) {
 			var n = item.node || {getAttribute: function(a) { return item[a];} },
+				poster = item.sources && item.sources[0] && item.sources[0].poster,
 				i = item.locationInfo || {},
 				r = item.courseRecord;
 
 			out.push({
-				poster: getURL(n.getAttribute('poster'), i.root),
+				poster: getURL(poster || n.getAttribute('poster'), i.root),
 				ntiid: n.getAttribute('ntiid'),
 				label: n.getAttribute('label'),
 				comments: getString('NextThought.view.courseware.overview.parts.Videos.loading') + ' ',
