@@ -55,6 +55,13 @@ Ext.define('NextThought.mixins.routing.Path', {
 
 		root = parts[0];
 
+		if (root[0] === ':') {
+			this.__routeMap[varKey] = {};
+			this.__routeMap[varKey].handler = handler;
+			this.__routeMap[varKey].varName = root.slice(1);
+			return;
+		}
+
 		//remove the roots from the part
 		parts = parts.slice(1);
 

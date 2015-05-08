@@ -2,6 +2,10 @@ Ext.define('NextThought.app.course.overview.Index', {
 	extend: 'NextThought.common.components.NavPanel',
 	alias: 'widget.course-overview',
 
+	mixins: {
+		Router: 'NextThought.mixins.Router'
+	},
+
 	requires: [
 		'NextThought.app.course.overview.components.Outline',
 		'NextThought.app.course.overview.components.Body'
@@ -24,6 +28,12 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 		var me = this;
 
+		this.initRouter();
+
+		this.addRoute('/:lesson', this.showLesson.bind(this));
+
+		this.addDefaultRoute(this.showLesson.bind(this));
+
 		me.on('activate', me.onActivate.bind(me));
 
 		me.mon(me.navigation, {
@@ -31,9 +41,9 @@ Ext.define('NextThought.app.course.overview.Index', {
 				me.unmask();
 			},
 			'select-lesson': function(record) {
-				me.unmask();
-				me.body.showLesson(record)
-					.then(me.alignNavigation.bind(me));
+				var id = ParseUtils.encodeForURI(record.getId());
+
+				me.pushRoute(record.get('label'), id, {lesson: record});
 			}
 		});
 	},
@@ -88,5 +98,37 @@ Ext.define('NextThought.app.course.overview.Index', {
 		if (this.el) {
 			this.el.unmask();
 		}
+	},
+
+
+	showLesson: function(route, subRoute) {
+		var me = this,
+			id = route.params.lesson && ParseUtils.decodeFromURI(route.params.lesson),
+			record = route.precache.lesson;
+
+		this.store.onceBuilt()
+			.then(function() {
+				if (id && (!record || record.getId() !== id)) {
+					record = me.store.findRecord('NTIID', id, false, true, true);
+				}
+
+				if (!record || record.get('type') !== 'lesson' || !record.get('NTIID')) {
+					record = me.store.findBy(function(rec) {
+						return rec.get('type') === 'lesson' && record.get('NTIID');
+					});
+				}
+
+
+				if (!record) {
+					console.error('No valid lesson to show');
+					return;
+				}
+
+				record = me.navigation.selectRecord(record);
+				me.unmask();
+				me.body.showLesson(record)
+					.then(me.alignNavigation.bind(me));
+				me.setTitle(record.get('label'));
+			});
 	}
 });

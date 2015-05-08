@@ -109,7 +109,7 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 		var me = this;
 
 		if (!me.el) { 
-			me.onceRendered().then(me.truncateLabels.bind(me));
+			me.onceRendered.then(me.truncateLabels.bind(me));
 			return; 
 		}
 		
@@ -229,7 +229,6 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 		function bindStore() {
 			me.bindStore(store);
 			me.refresh();
-			me.doChangeSelection(bundle.get('NTIID'));
 		}
 
 		this.currentBundle = bundle;
@@ -245,5 +244,16 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 				store.onceBuilt().then(bindStore);
 			}
 		}
+	},
+
+
+	selectRecord: function(record) {
+		if (typeof record === 'number' && isFinite(record)) {
+			record = this.store.getAt(record);
+		}
+
+		this.getSelectionModel().select(record, false, true);
+
+		return record;
 	}
 });
