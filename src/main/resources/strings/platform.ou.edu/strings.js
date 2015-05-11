@@ -141,6 +141,10 @@ NTIStrings.EnrollmentText = {
 							'we cannot process an application at this time. Please contact the ' +
 							'<a class=\'link\' href=\'mailto:support@nextthought.com\'>help desk.</a>',
 			cls: 'down'
+		},
+		unsupported: {
+			title: 'Earn College Credit',
+			information: 'Your browser (FireFox) does not support the enrollment process. Please try Chrome, Safari, or IE.'
 		}
 	},
 	StoreEnrollment: {
