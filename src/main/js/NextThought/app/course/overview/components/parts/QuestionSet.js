@@ -159,7 +159,7 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 				date: Ext.Date.format(opens, format)
 			}));
 		}
-		else if (parts.length === 0 && !this.assignment.isTimed) {
+		else if (parts.length === 0 && !this.assignment.isTimed && !isNoSubmit) {
 			this.down('button').setText(getString('NextThought.view.courseware.overview.parts.QuestionSet.review'));
 		}
 	},
