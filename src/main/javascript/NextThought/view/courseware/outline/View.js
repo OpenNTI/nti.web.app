@@ -109,7 +109,7 @@ Ext.define('NextThought.view.courseware.outline.View', {
 		var me = this;
 
 		if (!me.el) { 
-			me.onceRendered().then(me.truncateLabels.bind(me));
+			me.onceRendered.then(me.truncateLabels.bind(me));
 			return; 
 		}
 		

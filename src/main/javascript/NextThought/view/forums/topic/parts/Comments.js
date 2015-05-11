@@ -125,6 +125,8 @@ Ext.define('NextThought.view.forums.topic.parts.Comments', {
 			} else {
 				ready();
 			}
+		}).fail(function(error){
+			console.error('Failure to load Comments store. Error: ', error);
 		});
 	},
 

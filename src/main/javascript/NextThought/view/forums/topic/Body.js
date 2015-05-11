@@ -22,7 +22,8 @@ Ext.define('NextThought.view.forums.topic.Body', {
 
 		var me = this, topicContainer = this.down('[isTopicContainer]'),
 			topic, comment,
-			header = this.down('forums-topic-header');
+			header = this.down('forums-topic-header'),
+			commentRec = forum.comment && forum.comment.isModel ? forum.comment : null;
 
 		Ext.destroy(header, topicContainer);
 
@@ -37,7 +38,7 @@ Ext.define('NextThought.view.forums.topic.Body', {
 		topicContainer = this.add({xtype: 'container', cls: 'topic-container scroll-content', isTopicContainer: true, layout: 'none'});
 
 		topic = topicContainer.add({xtype: 'forums-topic-topic', record: record, forum: forum});
-		comment = topicContainer.add({xtype: 'forums-topic-comment-thread', topic: record, activeComment: forum.comment});
+		comment = topicContainer.add({xtype: 'forums-topic-comment-thread', topic: record, activeComment: commentRec});
 
 		//unset the active comment so it doesn't stick around
 		delete forum.comment;
