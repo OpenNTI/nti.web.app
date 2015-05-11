@@ -1,7 +1,11 @@
 Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
 	extend: 'NextThought.common.components.cards.Card',
 
-	requires: ['NextThought.model.Note'],
+	requires: [
+		'NextThought.model.Note',
+		'NextThought.app.contentviewer.Actions',
+		'NextThought.util.Parsing'
+	],
 
 	alias: [
 		'widget.course-overview-content',
@@ -33,6 +37,8 @@ Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
 			notTarget: !NextThought.common.components.cards.Card.prototype.shouldOpenInApp.call(this, ntiid, href),
 			asDomSpec: DomUtils.asDomSpec
 		};
+
+		this.ContentActions = NextThought.app.contentviewer.Actions.create();
 
 		this.callParent([config]);
 	},
@@ -104,27 +110,28 @@ Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
 
 
 	getCurrentBundle: function() {
-		var container = this.up('content-view-container');
-
-		return container && container.currentBundle;
+		return this.course;
 	},
 
 
 	navigateToTarget: function() {
-		var container = this.up('content-view-container'),
-			reader = Ext.widget('content-viewer', {
-				contentId: this.target,
-				width: 1024,
-				height: '90%'
-			});
+		if (!this.navigate) {
+			console.error('No navigate set on content link');
+			return;
+		}
 
-		reader.showBy(container.el, 'tl-tl');
-		// debugger;
-		// if (ParseUtils.isNTIID(this.target)) {
-		// 	return this.fireEvent('set-location-rooted', this.target, null, null, this.getCurrentBundle());
-		// }
+		var config;
 
-		// return this.callParent(arguments);
+		if (ParseUtils.isNTIID(this.target)) {
+			config = {
+				mimeType: NextThought.model.PageInfo,
+				NTIID: this.ntiid
+			};
+		} else {
+			confg = this.ContentActions.getTarget(this.data);
+		}
+
+		this.navigate.call(null, config);
 	},
 
 

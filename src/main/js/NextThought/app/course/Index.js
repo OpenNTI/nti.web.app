@@ -71,6 +71,8 @@ Ext.define('NextThought.app.course.Index', {
 		this.addRoute('/reports', this.showReports.bind(this));
 		this.addRoute('/info', this.showInfo.bind(this));
 
+		this.addObjectHandler(NextThought.model.PageInfo.mimeType, this.showPageInfo.bind(this));
+
 		this.addDefaultRoute('/activity');
 
 		this.on('deactivate', this.onDeactivate.bind(this));
@@ -388,5 +390,9 @@ Ext.define('NextThought.app.course.Index', {
 				'course-forum',
 				'course-reports'
 			]);
+	},
+
+
+	showPageInfo: function(obj) {
 	}
 });

@@ -30,6 +30,8 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 		this.initRouter();
 
+		this.addChildRouter(this.body);
+
 		this.addRoute('/:lesson', this.showLesson.bind(this));
 
 		this.addDefaultRoute(this.showLesson.bind(this));
@@ -114,7 +116,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 				if (!record || record.get('type') !== 'lesson' || !record.get('NTIID')) {
 					record = me.store.findBy(function(rec) {
-						return rec.get('type') === 'lesson' && record.get('NTIID');
+						return rec.get('type') === 'lesson' && rec.get('NTIID');
 					});
 				}
 

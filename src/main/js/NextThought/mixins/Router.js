@@ -13,9 +13,6 @@ Ext.define('NextThought.mixins.Router', {
 	addChildRouter: function(cmp) {
 		cmp.__parentRouter = this;
 
-		this.__childrenRouters = this.__childrenRouters || [];
-
-		this.__childrenRouters.push(cmp);
 		this.mixins.Path.addChildRouter.call(this, cmp);
 		// this.mixins.Object.addChildRouter.call(this, cmp);
 	},

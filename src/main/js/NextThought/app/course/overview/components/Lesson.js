@@ -3,6 +3,10 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 	alias: 'widget.course-overview-lesson',
 	ui: 'course',
 
+	mixins: {
+		Router: 'NextThought.mixins.Router'
+	},
+
 	cls: 'course-overview',
 
 	requires: [
@@ -137,6 +141,8 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 
 
 	buildFromContent: function(content, node, enrollment, locInfo, assignments, course) {
+		var me = this;
+
 		function getItems(c) { return c.Items || c.items || {};}
 		function getType(i) { return 'course-overview-' + (i.MimeType || i.type || '').split('.').last();}
 		function getClass(t) { return t && Ext.ClassManager.getByAlias('widget.' + t); }
@@ -184,7 +190,8 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 					locationInfo: locInfo,
 					courseRecord: node,
 					assignment: assignment,
-					course: course
+					course: course,
+					navigate: me.navigate.bind(me)
 				}, item);
 
 				if (cls.buildConfig) {
@@ -201,6 +208,105 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 
 		var items = getItems(content).reduce(process, []);
 
-		this.add([{xtype: 'course-overview-header', title: content.title, record: node}].concat(items));
+		me.add([{xtype: 'course-overview-header', title: content.title, record: node}].concat(items));
+	},
+
+
+	buildFromToc: function(node, locInfo, assignments, course) {
+		var me = this,
+			SECTION_CONTAINER_MAP = me.SECTION_CONTAINER_MAP,
+			SECTION_TYPE_MAP = me.SECTION_TYPE_MAP,
+			SECTION_TITLE_MAP = me.SECTION_TITLE_MAP,
+			sections = {},
+			items = [];
+
+		Ext.each(node.getChildren(), function(i) {
+			var c, t, p;
+
+			if (i.getAttribute('suppressed') === 'true') {
+				return;
+			}
+
+			if (/^object$/i.test(i.tagName) && i.getAttribute('mimeType') === 'application/vnd.nextthought.relatedworkref') {
+				return;
+			}
+
+			i = me.getComponentForNode(i, locInfo, node, assignments, course);
+			t = i && (i.sectionOverride || SECTION_TYPE_MAP[i.xtype] || 'Unknown');
+
+			if (t) {
+				if (i.xtype !== 'course-overview-topic') {
+					c = sections[t];
+					if (!c) {
+						c = sections[t] = {
+							xtype: SECTION_CONTAINER_MAP[t] || 'course-overview-section',
+							type: t,
+							title: SECTION_TITLE_MAP[t] || 'Section ' + t,
+							items: []
+						};
+						items.push(c);
+					}
+
+					if (t === 'video') {
+						if (c.items.length === 0) {
+							c.items.push({xtype: 'course-overview-video', items: []});
+						}
+						c = c.items[0];
+					}
+
+					c.items.push(i);
+				}
+				else {
+					items.push(i);
+				}
+
+			}
+		});
+
+		this.add([{xtype: 'course-overview-header', record: node}].concat(items));
+	},
+
+
+	getComponentForNode: function(node, info, rec, assignments, course) {
+		var type = node && node.nodeName,
+			section = (node && node.getAttribute('section')) || null,
+			assignment, cls;
+
+		if (/^content:related$/i.test(type) || /^object$/i.test(type)) {
+			type = node.getAttribute('type') || node.getAttribute('mimeType');
+			type = type && type.replace(/^application\/vnd\.nextthought\./, '');
+		}
+
+		type = type && ('course-overview-' + type.toLowerCase());
+		cls = Ext.ClassManager.getByAlias('widget.' + type);
+
+		if (cls) {
+			if (cls && cls.isAssessmentWidget) {
+				assignment = assignments.isAssignment(node.getAttribute('target-ntiid'));
+				type = assignment ? 'course-overview-assignment' : type;
+				assignment = assignments.getItem(node.getAttribute('target-ntiid'));
+			}
+
+			return {
+				xtype: type,
+				node: node,
+				locationInfo: info,
+				courseRecord: rec,
+				sectionOverride: section,
+				assignment: assignment,
+				course: course,
+				navigate: me.navigate.bind(me)
+			};
+		}
+
+		if (this.self.debug) {
+			console.warn('Unknown overview type:', type, node);
+		}
+		return null;
+	},
+
+
+	navigate: function(obj) {
+		this.navigateToObject(obj);
 	}
 });

@@ -66,10 +66,9 @@ Ext.define('NextThought.mixins.routing.Object', {
 			mimeType = this.__getMimeType(objectOrMimeType),
 			val;
 
-		if (mimeType && this.__mimeMap[mimeType]) {
+		if (mimeType && this.__mimeMap && this.__mimeMap[mimeType]) {
 			val = this.__mimeMap[mimeType].call(null, object);
 		} else {
-			console.warn('No Handler for object:', objectOrMimeType);
 			val = Promise.reject();
 		}
 

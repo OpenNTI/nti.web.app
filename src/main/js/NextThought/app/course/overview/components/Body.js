@@ -2,6 +2,10 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.course-overview-body',
 
+	mixins: {
+		Router: 'NextThought.mixins.Router'
+	},
+
 	requires: [
 		'NextThought.app.course.overview.components.Lesson'
 	],
@@ -25,6 +29,8 @@ Ext.define('NextThought.app.course.overview.components.Body', {
 			xtype: 'course-overview-lesson',
 			bundle: this.currentBundle
 		});
+
+		this.addChildRouter(lesson);
 
 		return lesson.renderLesson(record);
 	}
