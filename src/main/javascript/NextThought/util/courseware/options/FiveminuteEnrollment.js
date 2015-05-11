@@ -164,7 +164,7 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 			//Hard code this for now, since the strings aren't updating correctly on the server
 			state = !Ext.Object.isEmpty(state) ? state : {
 						title: 'Earn College Credit',
-						information: 'Your browser (FireFox) does not support the enrollment process. Please try Chrome, Safari, or IE.'
+						information: 'Your browser (FireFox) does not support the enrollment process. Please try Chrome, Safari, or Internet Explorer.'
 					};
 			state.price = details.Price;
 		} else if (details.AdmissionState === 'Rejected') {//if our application was rejected

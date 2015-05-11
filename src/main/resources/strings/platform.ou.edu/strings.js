@@ -144,7 +144,7 @@ NTIStrings.EnrollmentText = {
 		},
 		unsupported: {
 			title: 'Earn College Credit',
-			information: 'Your browser (FireFox) does not support the enrollment process. Please try Chrome, Safari, or IE.'
+			information: 'Your browser (FireFox) does not support the enrollment process. Please try Chrome, Safari, or Internet Explorer.'
 		}
 	},
 	StoreEnrollment: {
