@@ -43,6 +43,8 @@ Ext.define('NextThought.overrides.tip.QuickTip', {
 			}
 		});
 
+		this.onScroll = this.onScroll.bind(this);
+
 		this.callParent([config]);
 	},
 
@@ -165,9 +167,17 @@ Ext.define('NextThought.overrides.tip.QuickTip', {
 			}
 		}
 
+		window.addEventListener('scroll', this.onScroll);
+
 		Ext.defer(detectCrash, 10, this);
 
 		return this.callParent(arguments);
+	},
+
+
+	onScroll: function() {
+		this.hide();
+		window.removeEventListener('scroll', this.onScroll);
 	},
 
 
