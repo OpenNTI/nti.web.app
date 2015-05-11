@@ -204,10 +204,19 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 				if (!me.playerDeactivated && doc) {
 					if (doc.readyState === 'complete' || doc.readyState === 'uninitialized') {
 						stopTask();
-						doc.open();
-						doc.write(me.PLAYER_BODY_TPL.apply(data));
-						doc.close();
-						console.log(me.id, ' Setup done for ', me.id);
+						wait().then(function() {
+							var m = me.PLAYER_BODY_TPL.apply(data);
+							doc.open();
+							// console.log(m);
+							doc.write(m);
+							doc.close();
+							console.log(me.id, ' Setup done for ', me.id);	
+						})
+						.fail(function(e){
+							console.error(arguments);
+							stopTask(e.stack || e.message || e);
+							me.playerErrorHandler(e);
+						});
 					}
 				}
 			}
