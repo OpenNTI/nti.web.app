@@ -206,8 +206,10 @@ Ext.define('NextThought.util.media.KalturaPlayer', {
 						stopTask();
 						wait().then(function() {
 							var m = me.PLAYER_BODY_TPL.apply(data);
+
+							//recapture the context document
+							doc = me.getPlayerContextDocument();
 							doc.open();
-							// console.log(m);
 							doc.write(m);
 							doc.close();
 							console.log(me.id, ' Setup done for ', me.id);	
