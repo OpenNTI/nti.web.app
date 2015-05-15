@@ -537,6 +537,6 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 	}
 
 }, function() {
-	var c = NextThought.view.content.reader.ComponentOverlay.prototype;
+	var c = NextThought.app.contentviewer.reader.ComponentOverlay.prototype;
 	Ext.copyTo(this.prototype, c, ['getRelatedElement', 'getContentElement']);
 });

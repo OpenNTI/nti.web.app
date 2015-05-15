@@ -1,5 +1,5 @@
 Ext.define('NextThought.proxy.courseware.PagedPageSource', {
-	extend: 'NextThought.util.PageSource',
+	extend: 'NextThought.util.PageSourceStore',
 
 	constructor: function(cfg) {
 		this.mixins.observable.constructor.call(this);

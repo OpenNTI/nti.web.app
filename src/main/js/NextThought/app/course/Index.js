@@ -16,7 +16,10 @@ Ext.define('NextThought.app.course.Index', {
 		'NextThought.app.course.forum.Index',
 		'NextThought.app.course.info.Index',
 		'NextThought.app.course.overview.Index',
-		'NextThought.app.course.reports.Index'
+		'NextThought.app.course.reports.Index',
+		'NextThought.app.course.content.Index',
+		'NextThought.app.contentviewer.Index',
+		'NextThought.app.contentviewer.Actions'
 	],
 
 	// cls: 'x-component-course',
@@ -49,6 +52,10 @@ Ext.define('NextThought.app.course.Index', {
 		{
 			xtype: 'course-info',
 			id: 'course-info'
+		},
+		{
+			xtype: 'course-content',
+			id: 'course-content'
 		}
 	],
 
@@ -61,6 +68,7 @@ Ext.define('NextThought.app.course.Index', {
 		this.CourseViewStore = NextThought.app.course.StateStore.getInstance();
 		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
 		this.NavigationActions = NextThought.app.navigation.Actions.create();
+		this.ContentActions = NextThought.app.contentviewer.Actions.create();
 
 		this.getActiveCourse = Promise.reject();
 
@@ -70,19 +78,31 @@ Ext.define('NextThought.app.course.Index', {
 		this.addRoute('/discussions', this.showDiscussions.bind(this));
 		this.addRoute('/reports', this.showReports.bind(this));
 		this.addRoute('/info', this.showInfo.bind(this));
+		this.addRoute('/content', this.showContent.bind(this));
 
-		this.addObjectHandler(NextThought.model.PageInfo.mimeType, this.showPageInfo.bind(this));
+		this.addObjectHandler(NextThought.model.PageInfo.mimeType, this.getPageInfoRoute.bind(this));
+		this.addObjectHandler(NextThought.model.RelatedWork.mimeType, this.getRelatedWorkRoute.bind(this));
 
 		this.addDefaultRoute('/activity');
 
-		this.on('deactivate', this.onDeactivate.bind(this));
+		this.on({
+			'beforedeactivate': this.onBeforeDeactivate.bind(this),
+			'deactivate': this.onDeactivate.bind(this)
+		});
+	},
+
+
+	onBeforeDeactivate: function() {
+		var current = this.getLayout().getActiveItem();
+
+		return current.fireEvent('beforedeactivate');
 	},
 
 
 	onDeactivate: function() {
 		var current = this.getLayout().getActiveItem();
 
-		current.fireEvent('deactivate');
+		return current.fireEvent('deactivate');
 	},
 
 
@@ -168,7 +188,7 @@ Ext.define('NextThought.app.course.Index', {
 		xtypes.map(function(xtype) {
 			var item = me.getItem(xtype);
 
-			return item.bundleChanged(bundle);
+			return item.bundleChanged && item.bundleChanged(bundle);
 		});
 
 		return Promise.all(xtypes);
@@ -218,7 +238,7 @@ Ext.define('NextThought.app.course.Index', {
 		if (showTab(course.overview.Index)) {
 			tabs.push({
 				text: getString('NextThought.view.content.View.lessontab', 'Lessons'),
-				route: 'lessons',
+				route: state.lessonRoute || 'lessons',
 				title: 'Lessons',
 				active: active === 'course-overview'
 			});
@@ -290,7 +310,7 @@ Ext.define('NextThought.app.course.Index', {
 	 * @param  {Array} inactive xtypes of the other views to set the active course on, but not wait
 	 * @return {Promise}         fulfills when the tab is set up
 	 */
-	__setActiveView: function(active, inactive) {
+	__setActiveView: function(active, inactive, tab) {
 		var me = this;
 
 		if (me.activeCourse.get('Preview')) {
@@ -302,7 +322,7 @@ Ext.define('NextThought.app.course.Index', {
 		me.navigation.bundleChanged(me.activeCourse);
 
 		me.applyState({
-			active: active
+			active: tab || active
 		});
 
 		function updateInactive() {
@@ -393,6 +413,47 @@ Ext.define('NextThought.app.course.Index', {
 	},
 
 
-	showPageInfo: function(obj) {
+	showContent: function(route, subRoute) {
+		return this.__setActiveView('course-content', [
+				'course-dashboard',
+				'course-overview',
+				'course-assessment',
+				'course-forum',
+				'course-reports',
+				'course-info'
+			], 'course-overview').then(function(item) {
+				item.handleRoute(subRoute, route.precache);
+			});
+	},
+
+
+	getPageInfoRoute: function(obj) {
+		var id = obj.getId ? obj.getId() : obj.NTIID;
+
+		id = ParseUtils.encodeForURI(id);
+
+		return {
+			route: '/content/' + id,
+			title: obj.get ? obj.get('label') : obj.label,
+			precache: {
+				pageinfo: obj.isModel ? obj : null
+			}
+		}
+	},
+
+
+	getRelatedWorkRoute: function(obj) {
+		var id = obj.getId();
+
+		id = ParseUtils.encodeForURI(id);
+
+		return {
+			route: '/content/' + id,
+			title: obj.get('label'),
+			precache: {
+				relatedWork: obj
+			}
+		};
+
 	}
 });

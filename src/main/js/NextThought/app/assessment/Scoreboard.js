@@ -115,5 +115,5 @@ Ext.define('NextThought.app.assessment.Scoreboard', {
 	}
 
 }, function() {
-	this.borrow(NextThought.view.assessment.QuizSubmission, ['resetBasedOnButtonClick', 'maybeDoReset']);
+	this.borrow(NextThought.app.assessment.QuizSubmission, ['resetBasedOnButtonClick', 'maybeDoReset']);
 });

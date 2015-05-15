@@ -68,17 +68,25 @@ Ext.define('NextThought.model.courses.CourseOutline', {
 
 	//TODO: do we need this funtion?
 	isVisible: function(ntiid) {
-		var i = 0, rec,
-			lineage = ContentUtils.getLineage(ntiid) || [];
-
-		for (i = 0; i < lineage.length; i++) {
-			rec = this.getNode(lineage[i]);
-
-			if (rec && rec.get('AvailableBeginning') < new Date()) {
-				return true;
-			}
+		if (!this.bundle) {
+			return Promise.resolve(true);
 		}
 
-		return false;
+		var me = this;
+
+		return ContentUtils.getLineage(ntiid, me.bundle)
+			.then(function(lineages) {
+				var lineage = lineages[0], i, rec;
+
+				for (i = 0; i < lineage.length; i++) {
+					rec = me.getNode(lineage[i]);
+
+					if (rec && rec.get('AvailableBeginning') < new Date()) {
+						return true;
+					}
+				}
+
+				return false;
+			});
 	}
 });

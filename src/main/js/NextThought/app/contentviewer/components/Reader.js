@@ -61,12 +61,9 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 		this.getRangePositionAdjustments = this.forwardToModule('annotations', 'getRangePositionAdjustments');
 		this.rangesForSearchHits = this.forwardToModule('annotations', 'rangesForSearchHits');
 
-		this.getIframe().on('iframe-ready', 'bootstrap', this, {single: true});
-
 		this.on({
 			scope: this,
-			navigateAbort: 'onNavigationAborted',
-			navigateComplete: 'onNavigateComplete'
+			navigateAbort: 'onNavigationAborted'
 		});
 
 
@@ -150,43 +147,13 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 	},
 
 
-	bootstrap: function(loc) {
-		//differed reader startup. State restore will not do anything on an un-rendered reader...so start it after the
-		// reader is rendered.
-		var l = loc || this.getLocation().NTIID,
-				cb = null,
-				silent = true;
-
-		if (Ext.isEmpty(l)) {
-			return;
-		}
-		if (!Ext.isString(l)) {
-			silent = l[2];
-			cb = Ext.isFunction(l[1]) ? l[1] : null;
-			l = l[0];
-		}
-
-		this.setLocation(l, cb, silent);
-	},
-
-
-	//endregion
-
-
-
-	//region Analytics
-	___getActiveBundle: function() {
-		var c = (this.up('#content') || {}).currentBundle;
-		return c && c.getId();
-	},
-
-
 	beginViewAnalytics: function() {
-		var begin = {
-			type: 'resource-viewed',
-			resource_id: this.getLocation().NTIID,
-			course: this.___getActiveBundle()
-		};
+		var location = this.getLocation(),
+			begin = {
+				type: 'resource-viewed',
+				resource_id: location.NTIID,
+				course: location.currentBundle.getId()
+			};
 
 		if (Ext.isEmpty(begin.resource_id) || !this.isVisible(true)) {
 			return;
@@ -245,7 +212,7 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 			target = this.maskTarget;
 		} else if (this.el) {
 			//if we have an el cache the mask target
-			target = this.maskTarget = this.el.parent('.main-view-container');
+			target = this.maskTarget = this.el.parent('.content-viewer');
 		} else {
 			//if we don't have an el return the body but don't cache it
 			//since we may not be rendered
@@ -329,14 +296,30 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 	},
 
 
-	setPageInfo: function(pageInfo) {
-		var location = this.getLocationProvider();
+	setPageInfo: function(pageInfo, bundle) {
+		if (!this.rendered) {
+			this.on('afterrender', this.setPageInfo.bind(this, pageInfo, bundle));
+			return;
+		}
 
-		location.currentNTIID = pageInfo.getId();
+		if (!this.iframeReady) {
+			this.getIframe().on('iframe-ready', this.setPageInfo.bind(this, pageInfo, bundle), this, {single: true});
+			return;
+		}
 
-		this.onNavigateComplete(pageInfo, function() {
-			location.currentPageInfo = pageInfo;
-		});
+		var me = this,
+			maskTarget = this.getContentMaskTarget();
+		
+		maskTarget.mask('Loading...', 'navigation');
+
+		this.setLocation(pageInfo, bundle)
+			.then(me.loadPageInfo.bind(me, pageInfo))
+			.then(me.fireEvent.bind(me, 'navigateComplete'))
+			.fail(me.fireEvent.bind(me, 'navigateAbort'))
+			.always(function() {
+				maskTarget.unmask();
+				me.splash.removeCls('initial');
+			});
 	},
 
 
@@ -345,46 +328,28 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 	},
 
 
-	onNavigateComplete: function(pageInfo, finish, hasCallback) {
+	loadPageInfo: function(pageInfo) {
 		var me = this,
 			proxy = ContentProxy;
 
-		function success(resp) {
-			me.beginViewAnalytics();
-			me.splash.hide();
-			me.splash.removeCls('initial');
-			me.getContent().setContent(resp, pageInfo.get('AssessmentItems'), finish, hasCallback);
-		}
-
-
-		//TODO: don't know how we get into this state but sometimes the pageInfo is null.
-		// FIXME: In this case try aborting and the navigation. Don't know if it's the right approach.
-		if (!pageInfo) {
-			console.error('onNavigateComplete called with no page info. Shouldnt happen', arguments);
-			me.onNavigationAborted();
-		}
-
-		//TODO: doing error handling here doesn't really make sense.  We need
-		//to move it up a few levels (using an error callback?) such that
-		//the thing initiating the navigation request can handle the error.
-		//We may want to do differnt things depending on where the navigation request
-		//occurred from
-		else if (!pageInfo.isModel) {
-			//If its not a model it may be a response object indicating an error.
-			//leave the mask in place and for now we assume something else is handling the
-			//error or presenting it appropriately. We will call anything no
-			if (pageInfo.status !== undefined && Ext.Ajax.isHTTPErrorCode(pageInfo.status)) {
-				console.warn('onNavigationComplete called with pageInfo that looks like an error http response.' +
-							 ' Expecting someone else would have handled the error by now', pageInfo);
+		return new Promise(function(fulfill, reject) {
+			function success(resp) {
+				me.beginViewAnalytics();
+				me.splash.hide();
+				me.getContent().setContent(resp, pageInfo.get('AssessmentItems'));
+				fulfill();
 			}
-			else {
-				console.warn('onNavigationComplete not called with pageInfo but it doesn\'t look like an error.', pageInfo);
+
+			function failure(r) {
+				console.error('Failed to load pageInfo content', r.status, r.responseText);
+				me.splash.show();
+				reject();
 			}
-			me.onNavigationAborted();
-		}
-		else {
-			if (!Ext.isEmpty(pageInfo.get('content')) || pageInfo.isPartOfCourseNav()) {
-				proxy = this.self.MOCK_PAGE_PROXY;
+
+			//if we already have the page info's contents no need to actually request it
+			//so fake it out
+			if (!Ext.isEmpty(pageInfo.get('content'))) {
+				proxy = me.self.MOCK_PAGE_PROXY;
 			}
 
 			proxy.request({
@@ -393,17 +358,13 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 				jsonpUrl: pageInfo.getLink('jsonp_content'),
 				url: pageInfo.getLink('content'),
 				expectedContentType: 'text/html',
-				scope: this,
+				scope: me,
 				success: success,
-				failure: function(r) {
-					console.log('server-side failure with status code ' + r.status + '. Message: ' + r.responseText);
-					me.splash.show();
-					me.onNavigationAborted();
-					Ext.callback(finish, null, [me, r]);
-				}
+				failure: failure
 			});
-		}
+		});
 	},
+
 	//endregion
 
 

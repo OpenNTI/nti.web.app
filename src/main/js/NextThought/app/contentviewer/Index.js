@@ -1,29 +1,37 @@
 /**
  * Renders a piece of content
  *
+ * TODO: figure out how we can share the reader with the mobile app, once it has feature parity. 
+ *
  * config {
  *		contentId: the ntiid of the content calls Service.getPageInfo on it
  *		pageInfo: the page info to render,
+ *		relatedWork: the related work ref to show,
  *		bundle: the bundle/content package we are in,
- *  	pageSource: what to fill in the next and previous arrows with
- *   	path: the breadcrumb to show where you are
+ *  	pageSource: what to fill in the next and previous arrows with, or a promise that fills in with the page source
+ *   	path: the breadcrumb to show where you are, or a promise that fulfills with path,
+ *   	toc: (optional) store to fill in the toc fly out, 
+ *   	next: ???? what to show as the next thing when you are at the bottom of the reader
  *   	assignment(optional): the assignment you are rendering
  *   	student(optional): if rendering an assignment the student you are rendering for
  *    	assignmentHistory(optional): if rendering an assignment and you already have the history item,
- *    	navigate: function to call to navigate
+ *    	navigate: function to call to navigate,
+ *    	onClose: function
  * }
  *
  *
- * The path is an array of either:
+ * The path is an array or a promise that fulfills with an array of either:
  *
  * 1.) String: the label to show for this path item,
  * 2.) Object: A config with
  * 			{
  * 				label: String,
+ * 				cls: String,
  * 				ntiid: NTIID to navigate to,
  * 				siblings: [ //items to fill out the hover menu
  * 					{
  * 						label: String,
+ * 						cls: String,
  * 						ntiid: NTIID to navigate to
  * 					}
  * 				]
@@ -42,10 +50,37 @@ Ext.define('NextThought.app.contentviewer.Index', {
 		// 'NextThought.view.contentviewer.Readers',
 		// 'NextThought.view.contentviewer.Annotations',
 		// 'NextThought.view.contentviewer.Header'
-		// 'NextThought.view.reader.Panel'
+		// 'NextThought.view.reader.Panel',
+		'NextThought.app.contentviewer.Actions'
 	],
 
 	layout: 'none',
+
+
+
+	constructor: function(config) {
+		var readerConfig = {
+			xtype: 'reader',
+			height: '100%',
+			width: '100%',
+			path: config.path,
+			pageSource: config.pageSource,
+			bundle: config.bundle
+		};
+
+		if (config.assignment) {
+			readerConfig.xtype = !student || isMe(student) ? 'assignment-reader' : 'admin-assignment-reader';
+			readerConfig.assignment = config.assignment;
+			readerConfig.assignmentHistory = config.assignmentHistory;
+			readerConfig.assignmentId = config.assignment.getId();
+			readerConfig.student = config.student;
+		}
+
+
+		config.readerConfig = readerConfig;
+
+		this.callParent(arguments);
+	},
 
 
 	initComponent: function() {
@@ -53,31 +88,30 @@ Ext.define('NextThought.app.contentviewer.Index', {
 
 		var me = this;
 
-		this.resolvePageInfo()
+		me.ContentViewerActions = NextThought.app.contentviewer.Actions.create();
+
+		me.resolvePageInfo()
 			.then(function(pageInfo) {
-				me.add({
-					xtype: 'reader',
-					height: '100%',
-					width: '100%',
-					pageInfo: pageInfo,
-					prefix: guidGenerator()
-				});
+				me.readerConfig.pageInfo = pageInfo;
+
+				me.add(me.readerConfig);
 			});
 	},
 
 
 	resolvePageInfo: function() {
-		var ntiid = this.contentId;
+		var p;
 
-		if (!ntiid) {
-			return Promise.reject();
+		if (this.pageInfo) {
+			p = Promise.resolve(this.pageInfo);
+		} else if (this.relatedWork) {
+			p = this.ContentViewerActions.getRelatedWorkPageInfo(this.relatedWork, this.bundle);
+		} else if (this.assignment) {
+			p = Service.getPageInfo(this.assignment.getId());
+		} else if (this.contentId) {
+			p = Service.getPageInfo(this.contentId);
 		}
 
-		if (ParseUtils.isNTIID(ntiid)) {
-			return Service.getPageInfo(ntiid);
-		}
-
-		console.error('Dont know how to handle that content id yet:', ntiid);
-		return Promise.reject();
+		return p;
 	}
 });

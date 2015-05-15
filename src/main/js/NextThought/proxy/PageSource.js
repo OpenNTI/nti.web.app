@@ -1,5 +1,5 @@
 Ext.define('NextThought.proxy.PageSource', {
-	extend: 'NextThought.util.PageSource',
+	extend: 'NextThought.util.PageSourceStore',
 
 	statics: {
 

@@ -170,6 +170,69 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
+	getContentRoots: function() {
+		var bundle = this.get('Bundle');
+
+		return bundle.getContentRoots();
+	},
+
+
+	getContentIds: function() {
+		var bundle = this.get('Bundle');
+
+		return bundle.getContentIds();
+	},
+
+
+	canGetToContent: function(ntiid) {
+		var me = this;
+
+		return Promise.all([
+			ContentUtils.getLineage(ntiid, me),
+			me.getLocationInfo()
+		]).then(function (results) {
+			var lineages = results[0],
+				locationInfo = results[1],
+				store = me.getNavigationStore(),
+				canGetTo = false;
+
+			if (locationInfo) {
+				(lineages || []).forEach(function(lineage) {
+					//not in the same content
+					if (locationInfo.NTIID !== lineage.last()) {
+						canGetTo = true;
+					}
+				});
+			}
+
+			if (me.isExpired()) {
+				canGetTo = true;
+			}
+
+			// the last item in the lineage is the root of the content.
+			// the next to last entry is the first branch from the root
+			// of the content (so its a unit or a lesson... if we can
+			// find it in the nav store, its available.)
+			//TODO: This needs to go away. Favor scoped reader navigation.
+			if (!store.getCount()) {
+				canGetTo = true;
+			}
+
+			if (canGetTo) {
+				return true;
+			}
+
+			(lineage || []).forEach(function(lineage) {
+				if (store.getById(lineage[Math.max(0, lineage.length - 2)])) {
+					canGetTo = true;
+				}
+			});
+
+			return canGetTo;
+		});
+	},
+
+
 	isExpired: function() {
 		var c = this.getCourseCatalogEntry();
 		return c && c.isExpired();
@@ -193,6 +256,16 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 				return locationInfo
 			});
+	},
+
+
+	getPresentationProperties: function(id) {
+		return this.get('Bundle').getPresentationProperties(id);
+	},
+
+
+	getAssetRoot: function() {
+		return this.get('Bundle').getAssetRoot();
 	},
 
 
@@ -284,6 +357,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 			this._outlinePromise = o.getContents()
 					.done(function() {
+						o.bundle = me;
 						o.navStore = me.getNavigationStore();
 						return o;
 					});

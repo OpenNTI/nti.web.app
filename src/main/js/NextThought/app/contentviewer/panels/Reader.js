@@ -3,8 +3,9 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 	alias: 'widget.reader',
 	requires: [
 		'NextThought.app.contentviewer.components.Reader',
-		// 'NextThought.view.content.Toolbar',
+		'NextThought.app.contentviewer.navigation.Base',
 		'NextThought.app.contentviewer.notepad.View',
+		'NextThought.store.FlatPage',
 		'NextThought.app.annotations.Index'
 	],
 
@@ -36,6 +37,7 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 				xtype: 'container',
 				cls: 'center',
 				layout: 'none',
+				width: 766,
 				items: [
 					toolbarConfig,
 					readerConfig
@@ -92,18 +94,29 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 		this.callParent(arguments);
 
 		if (this.pageInfo) {
-			this.setPageInfo(this.pageInfo);
+			this.setPageInfo(this.pageInfo, this.bundle);
+		} else {
+			console.error('No Page Info set on the reader. Everyone PANIC!!!!!!');
 		}
 	},
 
 
 	getToolbarConfig: function() {
-		return { xtype: 'content-toolbar', hidden: true };
+		return {
+			xtype: 'content-toolbar',
+			bundle: this.bundle,
+			path: this.path,
+			pageSource: this.pageSource
+		};
 	},
 
 
 	getReaderConfig: function() {
-		 return {xtype: 'reader-content', prefix: this.prefix, flex: 1 };
+		 return {
+		 	xtype: 'reader-content',
+		 	prefix: this.prefix,
+		 	flex: 1
+		 };
 	},
 
 
@@ -135,11 +148,10 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 	},
 
 
-	setPageInfo: function(pageInfo) {
+	setPageInfo: function(pageInfo, bundle) {
 		var reader = this.getReaderContent();
 
-		wait(1)
-			.then(reader.setPageInfo.bind(reader, pageInfo));
+		reader.setPageInfo(pageInfo, bundle);
 	},
 
 

@@ -108,7 +108,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 			id = route.params.lesson && ParseUtils.decodeFromURI(route.params.lesson),
 			record = route.precache.lesson;
 
-		this.store.onceBuilt()
+		return this.store.onceBuilt()
 			.then(function() {
 				if (id && (!record || record.getId() !== id)) {
 					record = me.store.findRecord('NTIID', id, false, true, true);
@@ -128,9 +128,10 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 				record = me.navigation.selectRecord(record);
 				me.unmask();
-				me.body.showLesson(record)
-					.then(me.alignNavigation.bind(me));
 				me.setTitle(record.get('label'));
+
+				return me.body.showLesson(record)
+					.then(me.alignNavigation.bind(me));
 			});
 	}
 });

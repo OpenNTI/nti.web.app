@@ -3,6 +3,7 @@ Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
 
 	requires: [
 		'NextThought.model.Note',
+		'NextThought.model.RelatedWork',
 		'NextThought.app.contentviewer.Actions',
 		'NextThought.util.Parsing'
 	],
@@ -34,7 +35,7 @@ Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
 			thumbnail: getURL(i.root + n.getAttribute('icon')),
 			ntiid: ntiid,
 			title: n.getAttribute('label'),
-			notTarget: !NextThought.common.components.cards.Card.prototype.shouldOpenInApp.call(this, ntiid, href),
+			notTarget: !Globals.shouldOpenInApp(ntiid, href),
 			asDomSpec: DomUtils.asDomSpec
 		};
 
@@ -123,12 +124,9 @@ Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
 		var config;
 
 		if (ParseUtils.isNTIID(this.target)) {
-			config = {
-				mimeType: NextThought.model.PageInfo,
-				NTIID: this.ntiid
-			};
+			config = NextThought.model.PageInfo.fromOutlineNode(this.data);
 		} else {
-			confg = this.ContentActions.getTarget(this.data);
+			config = NextThought.model.RelatedWork.fromOutlineNode(this.data);
 		}
 
 		this.navigate.call(null, config);

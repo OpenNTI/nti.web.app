@@ -79,6 +79,7 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 		me.clear();
 
 		me.currentPage = record.getId();
+		me.curretnNode = record;
 
 		me.__getCurrentProgress = record.getProgress ? record.getProgress.bind(record) : null;
 
@@ -109,6 +110,7 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 				me.buildFromToc(record, locInfo, assignments, course);
 			} else {
 				content = Globals.parseJSON(content);
+				me.currentContent = content;
 				me.buildFromContent(content, record, enrollment, locInfo, assignments, course);
 			}
 

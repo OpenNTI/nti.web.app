@@ -148,7 +148,7 @@ Ext.define('NextThought.app.content.components.Navigation', {
 	onTabClick: function(e) {
 		var tab = e.getTarget('.tab');
 
-		if (this.bodyView.onTabChange && tab) {
+		if (this.bodyView.onTabChange && tab && !tab.classList.contains('active')) {
 			this.bodyView.onTabChange(tab.getAttribute('data-title'), tab.getAttribute('data-route'), tab);
 		}
 	}

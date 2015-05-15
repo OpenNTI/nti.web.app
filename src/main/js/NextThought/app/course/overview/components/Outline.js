@@ -228,7 +228,8 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 
 		function bindStore() {
 			me.bindStore(store);
-			me.refresh();
+
+			wait().then(me.refresh.bind(me));
 		}
 
 		this.currentBundle = bundle;

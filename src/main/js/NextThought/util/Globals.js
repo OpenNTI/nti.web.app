@@ -75,6 +75,27 @@ Ext.define('NextThought.util.Globals', {
 	},
 
 
+	shouldOpenInApp: function(ntiid, url, basePath) {
+		var isTargetAnNTIID = ParseUtils.isNTIID(url),
+			//isLocal = (new RegExp('^'+RegExp.escape(basePath),'i')).test(url),
+			pdf = (/\.pdf$/i).test((url || '').split('?')[0]),
+			anchor = document.createElement('a'),
+			internal = true;
+
+		if ($AppConfig.openExternalPDFsInNewWindow) {
+			anchor.setAttribute('href', url);
+			internal = location.protocol === anchor.protocol && location.host === anchor.host;
+		}
+
+		//if the target is an NTIID, must open in the app. OR
+		//if we have an NTIID AND the target is a PDF open in the app.
+		// otherwise it cannot open in the app.
+		// HOWEVER: (if enabled)
+		// If the url's origin is not our origin, (protocol & domain) then we must open it out of the app.
+		return isTargetAnNTIID || (ntiid && pdf && internal);
+	},
+
+
 	getError: function(e) {
 		return e.stack || e;
 	},

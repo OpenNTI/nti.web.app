@@ -6,6 +6,19 @@ Ext.define('NextThought.model.PageInfo', {
 		'NextThought.util.Parsing',
 		'NextThought.model.assessment.Question'
 	],
+
+
+	statics: {
+		fromOutlineNode: function(data) {
+			return {
+				mimeType: this.mimeType,
+				NTIID: data.href,
+				label: data.ttle
+			};
+		}
+	},
+
+
 	fields: [
 		{ name: 'AssessmentItems', type: 'arrayItem' },
 		{ name: 'sharingPreference', type: 'auto' },

@@ -14,6 +14,9 @@ Ext.define('NextThought.util.Content', {
 	},
 
 
+	IGNORE_ROOTING: new RegExp(RegExp.escape('tag:nextthought.com,2011-10:Alibra-'), 'i'),
+
+
 	constructor: function() {
 		this.callParent(arguments);
 
@@ -71,6 +74,40 @@ Ext.define('NextThought.util.Content', {
 		return load;
 	},
 
+
+	__findNode: function(ntiid, toc) {
+		if (toc.documentElement.getAttribute('ntiid') === ntiid) {
+			return toc.documentElement;
+		}
+
+		var escaped = ParseUtils.escapeId(ntiid),
+			selectors = [
+				'related[ntiid="' + escaped + '"]',
+				'object[ntiid="' + escaped + '"]',
+				'unit[ntiid="' + escaped + '"]',
+				'topic[ntiid="' + escaped + '"]'				
+			], i, node;
+
+		function getNode(node) {
+			return {
+				toc: toc,
+				location: node,
+				NTIID: ntiid,
+				ContentNTIID: node.ownerDocument.documentElement.getAttribute('ntiid')
+			};
+		}
+
+		for (i = 0; i < selectors.length; i++) {
+			node = toc.querySelector(selectors[i]);
+
+			if (node) {
+				return getNode(node);
+			}
+		}
+	},
+
+
+
 	/**
 	 * Resolve the node for a ntiid with in a bundle or toc
 	 *
@@ -80,56 +117,17 @@ Ext.define('NextThought.util.Content', {
 	 * @param  {Bundle|XML} bundleOrTocOrNTIID the bundle to get the tocs from or the toc itself
 	 * @return {Promise}                    fulfills with the nodes
 	 */
-	__getNodes: function(ntiid, bundleOrTocOrNTIID) {
-		function iterateToc(toc) {
-			if (toc.documentElement.getAttribute('ntiid') === ntiid) {
-				return toc.documentElement;
-			}
+	getNodes: function(ntiid, bundleOrTocOrNTIID) {
+		var result, me = this;
 
-			var escaped = ParseUtils.escapeId(ntiid),
-				selectors = [
-					'topic[ntiid="' + escaped + "']",
-					'unit[ntiid="' + escaped + "']",
-					'object[ntiid="' + escaped + "']"
-				], i, namespaced, node;
-
-			for (i = 0; i < selectors.length; i++) {
-				node = Ext.DomQuery.select(selectors[i], toc);
-
-				if (node.length > 0) {
-					return {
-						toc: toc,
-						location: node[0],
-						NTIID: ntiid,
-						ContentNTIID: node[0].ownerDocument.documentElement.getAttribute('ntiid')
-					};
-				}
-			}
-
-			namespaced = Ext.Array.toArray(toc.getElementsByTagNameNS('http://www.nextthought.com/toc', 'related'));
-
-			for (i = namespaced.length - 1; i >= 0; i--) {
-				node = namespaced[i];
-
-				if (node && node.getAttribute('ntiid') === escaped) {
-					return {
-						toc: toc,
-						location: node,
-						NTIID: ntiid,
-						ContentNTIID: node.ownerDocument.documentElement.getAttribute('ntiid')
-					};
-				}
-			}
-		}
-
-		var result;
-
-		result = this.findCache[ntiid];
+		result = me.findCache[ntiid];
 
 		if (!result) {
-			result = this.__resolveTocs(bundleOrTocOrNTIID)
+			result = me.__resolveTocs(bundleOrTocOrNTIID)
 				.then(function(tocs) {
-					var nodes = (tocs || []).map(iterateToc);
+					var nodes = (tocs || []).map(function(toc) {
+						return me.__findNode(ntiid, toc);
+					});
 
 					//filter out falsy values
 					nodes = nodes.filter(function(node) {
@@ -139,7 +137,7 @@ Ext.define('NextThought.util.Content', {
 					return nodes;
 				});
 
-			this.findCache[ntiid] === result;
+			me.findCache[ntiid] === result;
 		}
 
 		return result; 
@@ -175,7 +173,7 @@ Ext.define('NextThought.util.Content', {
 			return lineage
 		}
 
-		return this.__getNodes(ntiid, bundleOrToc)
+		return this.getNodes(ntiid, bundleOrToc)
 				.then(function(nodes) {
 					return (nodes || []).map(mapNode);
 				});
@@ -323,7 +321,7 @@ Ext.define('NextThought.util.Content', {
 		result = me.cache[ntiid];
 
 		if (!result) {
-			result = this.__getNodes(ntiid, bundleOrToc)
+			result = this.getNodes(ntiid, bundleOrToc)
 						.then(function(nodes) {
 							return (nodes || []).map(mapNode);
 						});
@@ -332,6 +330,343 @@ Ext.define('NextThought.util.Content', {
 		}
 
 		return result;
+	},
+
+
+	__getNavInfoFromToc: function(node, toc, rootId) {
+		var root = toc && toc.firstChild,
+			onSuppressed = false,
+			walker, nodes = [], visibleNodes, currentIndex,
+			topicOrTocRegex = /topic|toc/i;
+
+		function maybeBlocker(id) {
+			return (!id || /\.blocker(\.)?/ig.test(id)) ? undefined : id;
+		}
+
+		function isTopicOrToc(n) {
+			if (!n) { return false; }
+
+			var result = NodeFilter.FILTER_SKIP,
+				topicOrToc = topicOrTocRegex.test(n.tagName),
+				href = (n.getAttribute) ? n.getAttribute('href') : null;
+
+			//decide if this is a navigate-able thing, it must be a topic or toc, it must
+			//have an href, and that hre must NOT have a fragment
+			if (topicOrToc && href && href.lastIndexOf('#') === -1 && !node.hasAttribute('suppressed')) {
+				result = NodeFilter.FILTER_ACCEPT;
+			}
+
+			return result;
+		}
+
+		function getRef(n) {
+			if (!n || !n.getAttribute) {
+				return null;
+			}
+
+			return node.getAttribute('ntiid') || null;
+		}
+
+		if (!node || !toc) {
+			return null;
+		}
+
+		//If we have a rootId, lets make that what we consider the root.
+		if (rootId) {
+			root = doc.querySelector('[ntiid="' + ParseUtils.escaprId(rootId) + '"]') || root;
+		}
+
+		if (node.hasAttribute('suppressed')) {
+			node.removeAttribute('suppressed');
+			onSuppressed = true;
+		}
+
+		visibleNodes = Array.prototype.slice.call(root.querySelectorAll('topic[ntiid]:not([suppressed]):not([href*="#"])'));
+		visibleNodes.unshift(root);
+
+		if (onSuppressed) {
+			node.setAttribute('suppressed', 'true');
+		}
+
+		currentIndex = visibleNodes.indexOf(node);
+
+		if (node) {
+			walker = toc.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, isTopicOrToc, false);
+
+			walker.currentNode = node;
+			nodes[0] = getRef(walker.previousNode());
+
+			walker.currentNode = node;
+			nodes[1] = getRef(walker.nextNode());
+		}
+
+		return {
+			isSuppressed: onSuppressed,
+			currentIndex: currentIndex,
+			totalNodes: visibleNodes.length,
+			previous: maybeBlocker(nodes[0]),
+			next: maybeBlocker(nodes[1])
+		};
+	},
+
+
+	getNavigationInfo: function(ntiid, rootId, bundleOrToc) {
+		if (!ntiid) {
+			return Promise.reject('No NTIID');
+		}
+
+		var me = this;
+
+		function mapNode(node) {
+			return me.__getNavInfoFromToc(node && node.location, node && node.toc, rootId);
+		}
+
+
+		return this.getNodes(ntiid, bundleOrToc)
+			.then(function(nodes) {
+				nodes = (nodes || []).map(mapNode);
+
+				nodes = nodes.filter(function(node) {
+					return !!node;
+				});
+
+				return nodes[0]
+			})
+			.then(function(info) {
+				if (bundleOrToc.canGetToContent) {
+					return Promise.all([
+						bundleOrToc.canGetToContent(info.previous),
+						bundleOrToc.canGetToContent(info.next)
+					]).then(function(result) {
+						info.previous = result[0] ? info.previous : null;
+						info.next = result[1] ? info.next : null;
+
+						return info;
+					});
+				}
+
+				return info;
+			});
+	},
+
+
+	/**
+	 * Return the ntiid for the page containing the ntiid passed in the toc passed in
+	 *
+	 * TODO: I'm not sure if we should even be using this, but the current way of getting the breadcrumb
+	 * for a reading is relying on it so keep it around for now
+	 * 
+	 * @param  {String} ntiid       nttid to look for the containing page
+	 * @param  {Bundle|XML} bundleOrToc TOC to look in
+	 * @return {Promise}             fulfills with the page id
+	 */
+	getPageID: function(ntiid, bundleOrToc) {
+		var me = this, result;
+
+		function getPageInToc(toc) {
+			return me.getLineage(ntiid, toc)
+				.then(function (lineages) {
+					var	l = (lineages && lineages[0]) || [],
+						i, href, node;
+
+					for(; l.length > 0;) {
+						i = me.__findNode(l.shift(), toc);
+
+						node = i && i.location;
+						href = node && node.getAttribute('href');
+
+						if (href && href.indexOf('#') < 0) {
+							return i.NTIID;
+						}
+					}
+				});
+		}
+
+
+		return me.__resolveTocs(bundleOrToc)
+			.then(function(tocs) {
+				return Promise.all((tocs || []).map(getPageInToc));
+			})
+			.then(function(pages) {
+				return pages && pages[0]
+			});
+	},
+
+
+	getRootForLocation: function(ntiid, bundleOrToc) {
+		var me = this;
+
+		if (me.IGNORE_ROOTING.test(ntiid)) {
+			return Promise.resolve(null);
+		}
+
+		return me.getNodes(ntiid, bundleOrToc)
+				.then(function(info) {
+					if (!info) { return null; }
+
+					var n, node;
+
+					n = node == info.location;
+
+					while (node && node.parentNode) {
+						if (node.parentNode === node.ownerDocument.firstChild) { break; }
+
+						node = node.parentNode;
+
+						if (/\.blocker/i.test(node.getAttribute && node.getAttribute('ntiid'))) {
+								console.error('\n\n\n\nBLOCKER NODE DETECTED IN HIERARCHY!!\n');
+						}
+					}
+
+					return (node && node.getAttribute && node.getAttribute('ntiid')) || null;
+				});
+	},
+
+
+	getFirstTopic: function(node) {
+		return node.querySelector && node.querySelector('topic');
+	},
+
+
+	hasChildren: function(node) {
+		var num = 0;
+
+		node = this.getFirstTopic(node);
+
+		for (node; node && node.nextSibling; node = node.nextSibling) {
+			if (!/topic/i.test(node.tagName) || (node.getAttribute('href') || '').indexOf('#') >= 0) {
+				continue;
+			}
+
+			num++;
+		}
+
+		return num > 0;
+	},
+
+
+	getSiblings: function(node, bundleOrToc) {
+		var	ntiid = node && node.getAttribute && node.getAttribute('ntiid'),
+			nodes = [];
+
+		function getSiblings(info) {
+			var children,
+				p = node && node.parentNode,
+				courseNode = info && info.toc && info.toc.querySelector('unit[ntiid="' + ntiid + '"],lesson[topic-ntiid="' + ntiid + '"]');
+
+			if (courseNode) {
+				p = courseNode.parentNode;
+			}
+
+			children = p && p.getChildren();
+
+			children = children ? Array.prototype.slice.call(children) : [];
+
+			children.forEach(function(child) {
+				var ntiid;
+
+				if (/topic/i.test(child.tagName)) {
+					nodes.push(child);
+					return;
+				}
+
+				if (/content:related/i.test(child.tagName) && /^application\/vnd.nextthought\.content$/i.test(child.getAttribute('type'))) {
+					ntiid = child.getAttribute('href');
+				} else if (/lesson/i.test(child.tagName)) {
+					ntiid = child.getAttribute('topic-ntiid');
+				} else {
+					return;
+				}
+
+				if (!ParseUtils.isNTIID(ntiid)) {
+					console.warn('bad ntiid in content!!');
+					return;
+				}
+
+				child = info && info.toc && info.toc.querySelector('topic[ntiid="' + ntiid + '"]');
+				if (child) {
+					nodes.push(child);
+				}
+			});
+
+			return nodes;
+		}
+
+		return this.getNodes(ntiid, bundleOrToc)
+				.then(function(infos) {
+					infos = (infos || []).map(getSiblings);
+
+					infos.filter(function(x) { return !!x; });
+
+					return infos[0];			
+				});
+	},
+
+
+	/** @private */
+	externalUriRegex: /^((\/\/)|([a-z][a-z0-9\+\-\.]*):)/i,
+
+
+	bustCorsForResources: function(string, name, value) {
+		//Look for things we know come out of a different domain
+		//and append a query param.  This allows us to, for example,
+		//add a query param related to our location host so that
+		//we can tell amazon's caching servers to take that into consideration
+
+		//We are looking for an attribute whose valus is a quoted string
+		//referenceing resources.  We ignore urls with a protocol or protcolless
+		//absolute urls (//).  We look for relative urls rooted at resources.
+		//or absolute urls whose first folder is resources.
+		//TODO Processing html with a regex is stupid
+		//consider parsing and using selectors here instead.  Note
+		//we omit things that contain query strings here
+		var regex = /(\S+)\s*=\s*"(((\/[^"\/]+\/)||\/)resources\/[^?"]*?)"/igm;
+
+		function cleanup(original, attr, url) {
+			return attr + '="' + url + '?' + name + '=' + value + '"';
+		}
+
+		return string.replace(regex, cleanup);
+	},
+
+
+	fixReferences: function(string, basePath) {
+		var me = this,
+			envSalt = $AppConfig.corsSalt ? ('?' + $AppConfig.corsSalt) : '',
+			locationHash = String.hash(window.location.hostname + envSalt);
+
+		function fixReferences(original, attr, url) {
+			var firstChar = url.charAt(0),
+				absolute = firstChar === '/',
+				anchor = firstChar === '#',
+				external = me.externalUriRegex.test(url),
+				host = absolute ? getURL() : basePath,
+				params;
+
+			if (/src/i.test(attr) && /youtube/i.test(url)) {
+				params = [
+					'html5=1',
+					'enablejsapi=1',
+					'autohide=1',
+					'modestbranding=1',
+					'rel=0',
+					'showinfo=0',
+					'wmode=opaque',
+					'origin=' + encodeURIComponent(location.protocol + '//' + location.host)];
+
+				return Ext.String.format('src="{0}?{1}"',
+					url.replace(/http:/i, 'https:').replace(/\?.*/i, ''),
+					params.join('&'));
+			}
+
+			//inline
+			return (anchor || external || /^data:/i.test(url)) ?
+				original : attr + '="' + host + url + '"';
+		}
+
+		string = this.bustCorsForResources(string, 'h', locationHash);
+		string = string.replace(/(src|href|poster)="(.*?)"/igm, fixReferences);
+		return string;
 	}
 
 }, function() {

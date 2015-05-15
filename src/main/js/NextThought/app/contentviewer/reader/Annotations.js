@@ -55,7 +55,7 @@ Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 			annotations: {},
 			filter: null,
 			searchAnnotations: null,
-			annotationManager: new NextThought.view.annotations.renderer.Manager(reader)
+			annotationManager: new NextThought.app.annotations.renderer.Manager(reader)
 		});
 
 		reader.on('afterRender', function() {

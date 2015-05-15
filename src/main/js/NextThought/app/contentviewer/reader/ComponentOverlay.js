@@ -12,7 +12,7 @@ Ext.define('NextThought.app.contentviewer.reader.ComponentOverlay', {
 		this.reader.on({
 			scope: this,
 			'set-content': 'clearOverlayedPanels',
-			'content-updated': 'clearOverlayedPanels',
+			// 'content-updated': 'clearOverlayedPanels',
 			'destroy': 'clearOverlayedPanels',
 			'image-loaded': 'adjustOverlayedPanels',
 			'afterRender': 'insertComponentOverlay',
@@ -82,7 +82,7 @@ Ext.define('NextThought.app.contentviewer.reader.ComponentOverlay', {
 	},
 
 	adjustOverlayedPanels: function() {
-		NextThought.view.content.overlay.Panel.syncPositioning();
+		NextThought.app.contentviewer.overlay.Panel.syncPositioning();
 	},
 
 

@@ -78,67 +78,68 @@ Ext.define('NextThought.app.contentviewer.reader.Content', {
 		var position = body.query('#NTIContent .chapter.title')[0],
 			reader = this.reader,
 			tpl = this.relatedTemplate, last = null,
-			related, c = 0,
+			c = 0,
 			container = {
 				tag: 'div',
 				cls: 'injected-related-items',
-				html: 'Related Topics: '
+				html: 'Related Topics:'
 			};
 
-		try {
-			related = reader.getRelated();
-		} catch (e) {
-			console.warn('Could not insert related links due to: ', e.stack || e.message || e);
-			return;
-		}
+		reader.getRelated()
+			.then(function(related) {
+				if (Ext.Object.getKeys(related).length === 0) {
+					return;
+				}
 
-		if (Ext.Object.getKeys(related).length === 0) {
-			return;
-		}
+				try {
+					container = Ext.DomHelper.insertAfter(position, container);
+				} catch (er) {
+					try {
+						position = Ext.fly(doc.body).query('#NTIContent .page-contents')[0];
+						container = Ext.DomHelper.insertFirst(position, container);
+					}
+					catch (ffs) {
+						return;
+					}
+				}
 
-		try {
-			container = Ext.DomHelper.insertAfter(position, container);
-		} catch (er) {
-			try {
-				position = Ext.fly(doc.body).query('#NTIContent .page-contents')[0];
-				container = Ext.DomHelper.insertFirst(position, container);
-			}
-			catch (ffs) {
+				container = Ext.DomHelper.append(container, {tag: 'span', cls: 'related'});
+
+				if (!tpl) {
+					tpl = Ext.DomHelper.createTemplate({
+						tag: 'a', href: '{0}',
+						onclick: 'window.top.ReaderPanel.get(\'{3}\').relatedItemHandler(this);return false;',
+						cls: 'related c{2}', html: '{1}'}).compile();
+
+					this.relatedTemplate = tpl;
+				}
+
+				Ext.Object.each(related, function(key, value) {
+					c++;
+					last = tpl.append(container, [key, value.label, c, reader.prefix]);
+					last.relatedInfo = value;
+				});
+
+				if (last) {
+					container = container.parentNode;
+
+					if (c > 10) {
+						Ext.DomHelper.append(container, {tag: 'span', cls: 'more', html: getString('NextThought.view.content.reader.Content.showmore')});
+					}
+
+					Ext.fly(container).on('click', function() {
+						Ext.fly(container).removeAllListeners().addCls('showall');
+					});
+				} else {
+					Ext.fly(container).remove();
+				}
+			})
+			.fail(function(reason) {
+				console.warn('Could not insert related links due to: ', e.stack || e.message || e);
 				return;
-			}
-		}
-
-		container = Ext.DomHelper.append(container, {tag: 'span', cls: 'related'});
-
-		if (!tpl) {
-			tpl = Ext.DomHelper.createTemplate({
-				tag: 'a', href: '{0}',
-				onclick: 'window.top.ReaderPanel.get(\'{3}\').relatedItemHandler(this);return false;',
-				cls: 'related c{2}', html: '{1}'}).compile();
-
-			this.relatedTemplate = tpl;
-		}
-
-		Ext.Object.each(related, function(key, value) {
-			c++;
-			last = tpl.append(container, [key, value.label, c, reader.prefix]);
-			last.relatedInfo = value;
-		});
-
-		if (last) {
-			container = container.parentNode;
-
-			if (c > 10) {
-				Ext.DomHelper.append(container, {tag: 'span', cls: 'more', html: getString('NextThought.view.content.reader.Content.showmore')});
-			}
-
-			Ext.fly(container).on('click', function() {
-				Ext.fly(container).removeAllListeners().addCls('showall');
 			});
-		} else {
-			Ext.fly(container).remove();
-		}
 	},
+
 
 
   //TODO: move this to a better place.

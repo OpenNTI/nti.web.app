@@ -125,6 +125,34 @@ Ext.define('NextThought.model.ContentBundle', {
 	},
 
 
+	getContentRoots: function() {
+		return (this.get('ContentPackages') || []).map(function(content) {
+			return content && content.get('root');
+		});
+	},
+
+
+	getContentIds: function() {
+		return (this.get('ContentPackages') || []).map(function(content) {
+			return content && content.get('NTIID');
+		});
+	},
+
+
+	getPresentationProperties: function(id) {
+		var packages = this.get('ContentPackages') || [],
+			props;
+
+		packages.forEach(function(content) {
+			if (content.get('NTIID') === id) {
+				props = content.get('PresentationProperties');
+			}
+		});
+
+		return props;
+	},
+
+
 	getLocationInfo: function(status) {
 		var firstPackage = this.get('ContentPackages')[0],
 			firstPage = this.getFirstPage(),

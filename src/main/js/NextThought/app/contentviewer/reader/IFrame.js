@@ -141,7 +141,8 @@ Ext.define('NextThought.app.contentviewer.reader.IFrame', {
 
 	initContentFrame: function() {
 		var me = this,
-			base = (function() {var d = document.createElement('a'); d.href = './'; return d.href;} ()),
+			base = (function() {
+				var d = document.createElement('a'); d.href = './'; return d.protocol + '//' + d.host;} ()),
 			doc = me.getDocumentElement(),
 			con = console, tip,
 			meta, g = Globals;

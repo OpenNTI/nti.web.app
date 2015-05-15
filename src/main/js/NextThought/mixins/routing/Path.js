@@ -272,7 +272,7 @@ Ext.define('NextThought.mixins.routing.Path', {
 	__pushChildRoute: function(title, subRoute, precache) {
 		var merged = this.__mergeChildRoute(title, subRoute);
 
-		this.pushRoute(merged.title, merged.route);
+		this.pushRoute(merged.title, merged.route, precache);
 	},
 
 
@@ -285,7 +285,7 @@ Ext.define('NextThought.mixins.routing.Path', {
 	__replaceChildRoute: function(title, subRoute, precache) {
 		var merged = this.__mergeChildRoute(title, subRoute);
 
-		this.replaceRoute(merged.title, merged.route);
+		this.replaceRoute(merged.title, merged.route, precache);
 	},
 
 	/**
