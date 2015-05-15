@@ -32,6 +32,17 @@ Ext.define('NextThought.app.course.content.Index', {
 		this.initRouter();
 
 		this.addRoute('/:id', this.showContent.bind(this));
+
+		this.on('beforedeactivate', this.onBeforeDeactivate.bind(this));
+	},
+
+
+	onBeforeDeactivate: function() {
+		if (!this.reader) { return; }
+
+		this.reader.hide();
+
+		this.reader.destroy();
 	},
 
 
@@ -52,6 +63,19 @@ Ext.define('NextThought.app.course.content.Index', {
 		}
 
 		return Service.getObject(id);
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		var me = this;
+
+		Ext.EventManager.onWindowResize(me.alignReader, me, false);
+
+		this.on('destroy', function() {
+			Ext.EventManager.removeWindowResize(me.alignReader, me);
+		});
 	},
 
 
@@ -84,11 +108,13 @@ Ext.define('NextThought.app.course.content.Index', {
 			return;
 		}
 
-		var rect = this.readerPlaceholderEl.dom.getBoundingClientRect();
+		var rect = this.readerPlaceholderEl.dom.getBoundingClientRect(),
+			height = Ext.Element.getViewportHeight();
 
 		this.reader.el.setStyle({
 			top: rect.top + 'px',
-			left: rect.left + 'px'
+			left: rect.left + 'px',
+			'min-height': (height - rect.top) + 'px'
 		});
 	},
 

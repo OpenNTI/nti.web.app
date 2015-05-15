@@ -18,7 +18,7 @@ Ext.define('NextThought.mixins.Router', {
 	},
 
 
-	__handleObjectRoute: function(result) {
+	__handleObjectNav: function(result) {
 		result = result || {};
 
 		if (typeof result === 'string') {
@@ -27,9 +27,20 @@ Ext.define('NextThought.mixins.Router', {
 			}
 		}
 
-		var me = this;
+		this.pushRoute(result.title || '', result.route, result.precache);
+	},
 
-		me.replaceRoute(result.title || '', result.route, result.precache);
+
+	__handleObjectRoute: function(result) {
+		result = result || {};
+
+		if (typeof result === 'string') {
+			result = {
+				route: result
+			};
+		}
+
+		this.replaceRoute(result.title || '', result.route, result.precache);
 	},
 
 
@@ -42,7 +53,7 @@ Ext.define('NextThought.mixins.Router', {
 
 	navigateToObject: function(object) {
 		return this.mixins.Object.handleObject.call(this, object)
-			.then(this.__handleObjectRoute.bind(this))
+			.then(this.__handleObjectNav.bind(this))
 			.fail(this.__handleNoObjectNavigation.bind(this, object));
 	},
 

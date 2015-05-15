@@ -93,11 +93,18 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 	afterRender: function() {
 		this.callParent(arguments);
 
+		var center = this.el.down('.center'),
+			height = Ext.Element.getViewportHeight();
+
 		if (this.pageInfo) {
 			this.setPageInfo(this.pageInfo, this.bundle);
 		} else {
 			console.error('No Page Info set on the reader. Everyone PANIC!!!!!!');
 		}
+
+		center.setStyle({
+			'min-height': (height - 72) + 'px'
+		});
 	},
 
 
