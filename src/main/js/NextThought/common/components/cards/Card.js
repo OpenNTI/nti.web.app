@@ -69,8 +69,7 @@ Ext.define('NextThought.common.components.cards.Card', {
 		}
 
 		try {
-			this.reader = this.reader || ReaderPanel.get();
-			var p = this.reader.getLocation().pageInfo;
+			var p = this.reader && this.reader.getLocation().pageInfo;
 			if (this.reader && (p && p.originalNTIIDRequested === this.data.ntiid)) {
 				Ext.defer(this.onCardClicked, 1, this);
 			}

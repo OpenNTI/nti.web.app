@@ -13,7 +13,7 @@ Ext.define('NextThought.app.content.Actions', {
 
 	MAX_PATH_LENGTH: 2,
 
-	getContentPath: function(ntiid, bundle) {
+	getContentPath: function(ntiid, bundle, parent) {
 		var me = this;
 		
 		return ContentUtils.getPageID(ntiid, bundle)
@@ -62,6 +62,15 @@ Ext.define('NextThought.app.content.Actions', {
 				}
 
 				return me.buildContentPath(parentNode, location.location, lineage, leftOvers, allowMenus, bundle);
+			})
+			.then(function(path) {
+				var root = path[0];
+
+				if (parent && root.ntiid !== parent.ntiid) {
+					path[0] = parent;
+				}
+
+				return path;
 			});
 	},
 
@@ -111,11 +120,18 @@ Ext.define('NextThought.app.content.Actions', {
 					part = {};
 
 				part.label = label || l.label;
+				part.ntiid = l.NTIID;
 
 				if (allowMenus) {
 					return me.buildContentPathPartMenu(l, parentNode, bundle)
 							.then(function(siblings) {
 								part.siblings = siblings;
+
+								if (!siblings.length) {
+									part.cls = 'locked';
+								} else {
+									part.cls = '';
+								}
 
 								return part;
 							});
@@ -219,6 +235,8 @@ Ext.define('NextThought.app.content.Actions', {
 					presentation = me.__getPresentationProps(parentNode, bundle),
 					num = presentation.start || 1;
 
+				currentNode = currentNode.getAttribute('ntiid');
+
 				visible = siblings.map(function(sibling) {
 					if (!/topic/i.test(sibling.tagName) || sibling.getAttribute('suppressed') === 'true') {
 						return Promise.resolve(null);
@@ -242,14 +260,14 @@ Ext.define('NextThought.app.content.Actions', {
 						return visible.map(function(node) {
 							var label = node.getAttribute('label'), text;
 
-							text = presentation.suppress ? label : (me.styleList(num, presentation.type) + presentation.separate + label);
+							text = presentation.suppress ? (me.styleList(num, presentation.type) + presentation.separate + label) : label;
 
 							num += 1;
 
 							return {
 								label: text,
 								ntiid: node.getAttribute('ntiid'),
-								cls: node === currentNode ? 'current' : ''
+								cls: node.getAttribute('ntiid') === currentNode ? 'current' : ''
 							}
 						});
 					});

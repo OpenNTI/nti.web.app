@@ -1,6 +1,7 @@
 Ext.define('NextThought.app.contentviewer.navigation.Base', {
 	extend: 'Ext.Component',
-	alias: 'widget.content-toolbar',
+
+	requires: ['NextThought.common.menus.JumpTo'],
 
 	cls: 'content-toolbar',
 
@@ -11,24 +12,26 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 				' of ',
 				{tag: 'span', cls: 'total', html: '{total}'}
 			]},
-			{cls: 'up {noPrev:boolStr("disabled")}'},
-			{cls: 'down {noNext:boolStr("disabled)}'}
+			{cls: 'prev {noPrev:boolStr("disabled")}', title: '{prevTitle}'},
+			{cls: 'next {noNext:boolStr("disabled")}', title: '{nextTitle}'}
 		]}
 	),
 
 
 	pathTpl: Ext.DomHelper.markup([
-		{cls: 'toc', cn: [
+		{cls: 'toc {tocCls}', cn: [
 			{cls: 'icon'},
 			{cls: 'label', html: '{{{NextThought.view.content.Navigation.toc}}}'}
 		]},
-		{tag: 'tpl', 'for': 'path', cn: [
-			{
-				tag: 'span',
-				cls: "path part {[xindex === xcount? 'current' : xindex === 1 ? 'root' : '']}",
-				'data-index': '{#}',
-				html: '{.}'
-			}
+		{cls: 'breadcrumb', cn: [
+			{tag: 'tpl', 'for': 'path', cn: [
+				{
+					tag: 'span',
+					cls: "path part{[xindex === xcount?  ' current' : xindex === 1 ? ' root' : '']}{[values.cls ? ' ' + values.cls : '']}{[values.ntiid ? ' link' : '']}",
+					'data-index': '{#}',
+					html: '{label}'
+				}
+			]}
 		]}
 	]),
 
@@ -43,7 +46,7 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'content-toolbar toolbar', html: '{toolbarContent}'},
+		{cls: 'content-toolbar toolbar', html: '{toolbarContents}'},
 		{cls: 'header', html: '{headerContents}'}
 	]),
 
@@ -52,17 +55,14 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 		pathEl: '.path-items',
 		totalEl: '.page .total',
 		currentPageEl: '.page .currentPage',
-		nextEl: '.right.controls .down',
-		previousEl: '.right.controls .up',
+		nextEl: '.right.controls .next',
+		previousEl: '.right.controls .prev',
 		tocEl: '.toc'
 	},
 
 
 	onClassExtended: function(cls, data) {
 		data.renderSelectors = Ext.applyIf(data.renderSelectors || {}, cls.superclass.renderSelectors);
-		data.pagingTpl = data.pagingTpl || cls.superclass.pagingTpl || false;
-		data.pathTpl = data.pathTpl || cls.superclass.pathTpl || false;
-		data.toolbarTpl = data.toolbarTpl || cls.superclass.toolbarTpl || false;
 
 		var tpl = cls.superclass.renderTpl;
 
@@ -99,6 +99,7 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 			data.toolbarTpl = data.toolbarTpl.replace('{pathContent}', data.pathTpl || '');
 		}
 
+		data.renderTpl = data.renderTpl.replace('{toolbarContents}', data.toolbarTpl || '');
 		data.renderTpl  = data.renderTpl.replace('{headerContents}', data.headerTpl || '');
 	},
 
@@ -116,18 +117,27 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 			rd.path = me.path;
 		}
 
-		if (me.pageSource && me.pageSource instanceof Promise) {
-			me.pageSource.then(me.onPageSourceLoad.bind(me));
-		} else if (me.pageSource) {
-			rd.page = me.pageSource.getPageNumber();
-			rd.total = me.pageSource.getTotal();
-			noNext = !me.pageSource.hasNext();
-			noPrev = !me.pageSource.hasPrevious();
-			showPagine = true;
+		if (!me.hideControls && me.pageSource) {
+			if (me.pageSource  instanceof Promise) {
+				rd.showPaging = true;
+				me.pageSource.then(me.onPageSourceLoad.bind(me));
+			} else {
+				rd.page = me.pageSource.getPageNumber();
+				rd.total = me.pageSource.getTotal();
+				rd.noNext = !me.pageSource.hasNext();
+				rd.noPrev = !me.pageSource.hasPrevious();
+				rd.nextTitle = me.pageSource.getNextTitle();
+				rd.prevTitle = me.pageSource.getPreviousTitle();
+				rd.showPaging = true;
 
-			me.onPagerUpdate();
+				me.onPagerUpdate();
 
-			me.mon(me.pageSource, 'update', 'onPagerUpdate');
+				me.mon(me.pageSource, 'update', 'onPagerUpdate');
+			}
+		}
+
+		if (!me.toc) {
+			rd.tocCls = 'hidden';
 		}
 
 		me.renderData = Ext.apply(me.renderData || {}, rd);
@@ -135,7 +145,8 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 		me.on({
 			pathEl: {
 				click: 'onPathClicked',
-				mouseover: 'onPathHover'
+				mouseover: 'onPathHover',
+				mouseout: 'onPathOut'
 			},
 			previousEl: {click: 'onPrevious'},
 			nextEl: {click: 'onNext'}
@@ -144,17 +155,39 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 
 	afterRender: function() {
 		this.callParent(arguments);
-
-		// if (!this.toc) {
-		// 	this.tocEl.hide();
-		// }
 	},
 
 
-	onPathLoad: function(path) {},
+	onPathLoad: function(path) {
+		if (!this.rendered) {
+			this.on('afterrender', this.onPathLoad.bind(this, path));
+			return;
+		}
+
+		var tpl = new Ext.XTemplate(this.pathTpl);
+
+		this.path = path;
+
+		//clear out the old path
+		this.pathEl.dom.innerHTML = '';
+
+		tpl.append(this.pathEl, {
+			tocCls: this.toc ? '' : 'hidden',
+			path: path
+		});
+	},
 
 
-	onPageSourceLoad: function(pageSource) {},
+	onPageSourceLoad: function(pageSource) {
+		if (!this.rendered) {
+			this.on('afterrender', this.onPageSourceLoad.bind(this, pageSource));
+			return;
+		}
+
+		this.pageSource = pageSource;
+		this.mon(pageSource, 'update', 'onPagerUpdate');
+		this.onPagerUpdate();
+	},
 
 
 	__getPathFromEvent: function(e) {
@@ -162,10 +195,80 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 	},
 
 
-	onPathClicked: function(e) {},
+	__getPathPart: function(part) {
+		var index = part && part.getAttribute('data-index');
+
+		index = parseInt(index, 10);
+		return this.path[index - 1];
+	},
 
 
-	onPathHover: function(e) {},
+	onPathClicked: function(e) {
+		var part = e.getTarget('.part'), path;
+
+		if (e.getTarget('.locked') || !part) { return; }
+
+		path = this.__getPathPart(part);
+
+		if (path && path.ntiid) {
+
+		}
+	},
+
+
+	onPathHover: function(e) {
+		var part = e.getTarget('.part'), path;
+
+		if (e.getTarget('.locked') || !part) { return; }
+
+		path = this.__getPathPart(part);
+
+		if (path && path.siblings && path.siblings.length) {
+			this.startShowingPathMenu(part, path);
+		}
+	},
+
+
+	startShowingPathMenu: function(el, path) {
+		var items = path.siblings,
+			rect = el.getBoundingClientRect();
+
+		items = items.map(function(item) {
+			return {
+				text: item.label,
+				ntiid: item.ntiid,
+				cls: item.cls
+			}
+		});
+
+		if (this.pathMenu) {
+			this.pathMenu.destroy();
+		}
+
+		this.pathMenu = Ext.widget('jump-menu', {
+			ownerCmp: this,
+			items: items,
+			handleClick: this.switchPath.bind(this),
+			maxHeight: Ext.Element.getViewportHeight() - (rect.top + rect.height + 40),
+			defaults: {
+				ui: 'nt-menuitems',
+				xtype: 'menuitem',
+				plain: true
+			}
+		});
+
+		this.pathMenu.startShow(el, 'tl-bl', [-10, -20]);
+	},
+
+
+	onPathOut: function(e) {
+		if (this.pathMenu && (!Ext.is.iPad || !this.pathMenu.isVisible())) {
+			this.pathMenu.stopShow();
+		}
+	},
+
+
+	switchPath: function(menu, item) {},
 
 
 	onPagerUpdate: function() {
@@ -173,6 +276,17 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 			this.on('afterrender', this.onPagerUpdate.bind(this));
 			return;
 		}
+
+		var ps = this.pageSource;
+
+		this.currentPageEl.update(ps.getPageNumber());
+		this.totalEl.update(ps.getTotal());
+
+		this.nextEl[ps.hasNext() ? 'removeCls' : 'addCls']('disabled');
+		this.previousEl[ps.hasPrevious() ? 'removeCls' : 'addCls']('disabled');
+ 
+		this.nextEl.dom.setAttribute('title', ps.getNextTitle());
+		this.previousEl.dom.setAttribute('title', ps.getPreviousTitle());
 	},
 
 

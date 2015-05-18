@@ -256,5 +256,10 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 		this.getSelectionModel().select(record, false, true);
 
 		return record;
+	},
+
+
+	getActiveItem: function() {
+		return this.getSelectionModel().getSelection()[0];
 	}
 });

@@ -1,7 +1,5 @@
-
-
-.x-component-content-navigation.jumpto {
-	width: 620px;
+.content-toolbar .path-items {
+	width: 600px;
 
 	display: -ms-flexbox;
 	-ms-box-orient: horizontal;
@@ -10,8 +8,6 @@
 	@include experimental(flex-wrap, nowrap);
 
 	text-transform: uppercase;
-
-	.detected-scrollbars & {width: 635px;}
 
 	.tabs {
 		@include experimental(flex, none);
@@ -38,6 +34,11 @@
 		display: -ms-flexbox;
 		-ms-box-orient: horizontal;
 		-ms-flex-align: center;
+
+		&.hidden {
+			visibility: hidden;
+			width: 20px;
+		}
 
 		@include experimental-value(display, flex);
 		@include experimental(flex-wrap, nowrap);
@@ -309,11 +310,12 @@
 	}
 }
 
-.x-component-content-pager {
+.content-toolbar .right.controls {
 	position: relative;
 	padding-right: 10px;
 	white-space: nowrap;
 	height: 60px;
+	float: right;
 
 
 	.page {

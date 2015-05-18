@@ -79,7 +79,7 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 		me.clear();
 
 		me.currentPage = record.getId();
-		me.curretnNode = record;
+		me.currentNode = record;
 
 		me.__getCurrentProgress = record.getProgress ? record.getProgress.bind(record) : null;
 
@@ -309,6 +309,7 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 
 
 	navigate: function(obj) {
+		obj.parent = this.currentNode
 		this.navigateToObject(obj);
 	}
 });

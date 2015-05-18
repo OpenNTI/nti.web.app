@@ -3,7 +3,7 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 	alias: 'widget.reader',
 	requires: [
 		'NextThought.app.contentviewer.components.Reader',
-		'NextThought.app.contentviewer.navigation.Base',
+		'NextThought.app.contentviewer.navigation.Content',
 		'NextThought.app.contentviewer.notepad.View',
 		'NextThought.store.FlatPage',
 		'NextThought.app.annotations.Index'
@@ -113,7 +113,8 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 			xtype: 'content-toolbar',
 			bundle: this.bundle,
 			path: this.path,
-			pageSource: this.pageSource
+			pageSource: this.pageSource,
+			hideControls: this.pageInfo.hideControls
 		};
 	},
 

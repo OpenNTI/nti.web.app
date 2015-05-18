@@ -336,11 +336,12 @@ Ext.define('NextThought.util.Content', {
 	__getNavInfoFromToc: function(node, toc, rootId) {
 		var root = toc && toc.firstChild,
 			onSuppressed = false,
-			walker, nodes = [], visibleNodes, currentIndex,
+			prev, next, prevTitle, nextTitle,
+			walker, visibleNodes, currentIndex,
 			topicOrTocRegex = /topic|toc/i;
 
 		function maybeBlocker(id) {
-			return (!id || /\.blocker(\.)?/ig.test(id)) ? undefined : id;
+			return (!id || /\.blocker(\.)?/ig.test(id)) ? true : false;
 		}
 
 		function isTopicOrToc(n) {
@@ -364,8 +365,18 @@ Ext.define('NextThought.util.Content', {
 				return null;
 			}
 
-			return node.getAttribute('ntiid') || null;
+			return n.getAttribute('ntiid') || null;
 		}
+
+
+		function getTitle(n) {
+			if (!n || !n.getAttribute) {
+				return '';
+			}
+
+			return n.getAttribute('label') || '';
+		}
+
 
 		if (!node || !toc) {
 			return null;
@@ -394,18 +405,30 @@ Ext.define('NextThought.util.Content', {
 			walker = toc.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, isTopicOrToc, false);
 
 			walker.currentNode = node;
-			nodes[0] = getRef(walker.previousNode());
+			prev = walker.previousNode();
 
 			walker.currentNode = node;
-			nodes[1] = getRef(walker.nextNode());
+			next = walker.nextNode();
+		}
+
+		if (!maybeBlocker(getRef(prev))) {
+			prevTitle = getTitle(prev);
+			prev = getRef(prev);
+		}
+
+		if (!maybeBlocker(getRef(next))) {
+			nextTitle = getTitle(next);
+			next = getRef(next);
 		}
 
 		return {
 			isSuppressed: onSuppressed,
 			currentIndex: currentIndex,
 			totalNodes: visibleNodes.length,
-			previous: maybeBlocker(nodes[0]),
-			next: maybeBlocker(nodes[1])
+			previous: prev,
+			next: next,
+			previousTitle: prevTitle,
+			nextTitle: nextTitle
 		};
 	},
 

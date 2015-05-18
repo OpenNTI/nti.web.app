@@ -166,12 +166,15 @@ Ext.define('NextThought.app.course.Index', {
 
 
 	getItem: function(xtype) {
-		if (!this.cmp_map[xtype]) {
-			this.cmp_map[xtype] = this.down(xtype);
-			this.addChildRouter(this.cmp_map[xtype]);
+		var cmp = this.cmp_map[xtype];
+
+		if (!cmp) {
+			cmp = this.cmp_map[xtype] = this.down(xtype);
+			this.addChildRouter(cmp);
+			cmp.courseContainer = this;
 		}
 
-		return this.cmp_map[xtype];
+		return cmp;
 	},
 
 
@@ -436,7 +439,7 @@ Ext.define('NextThought.app.course.Index', {
 			route: '/content/' + id,
 			title: obj.get ? obj.get('label') : obj.label,
 			precache: {
-				pageinfo: obj.isModel ? obj : null
+				pageInfo: obj.isModel ? obj : null
 			}
 		}
 	},

@@ -79,7 +79,7 @@ Ext.define('NextThought.app.course.content.Index', {
 	},
 
 
-	showReader: function(page) {
+	showReader: function(page, parent) {
 		if (!this.rendered) {
 			this.on('afterrender', this.showReader.bind(this, page));
 			return;
@@ -92,10 +92,12 @@ Ext.define('NextThought.app.course.content.Index', {
 		this.reader = NextThought.app.contentviewer.Index.create({
 			pageInfo: page instanceof NextThought.model.PageInfo ? page : null,
 			relatedWork: page instanceof NextThought.model.RelatedWork ? page : null,
-			path: this.ContentActions.getContentPath(page.getId(), this.currentBundle),
-			pageSource: this.ContentActions.getContentPageSource(page.getId(), this.currentBundle),
+			path: this.ContentActions.getContentPath(page.getId(), this.currentBundle, parent),
+			pageSource: this.ContentActions.getContentPageSource(page.getId(), this.currentBundle, parent),
 			bundle: this.currentBundle
 		});
+
+		this.setTitle(page.get('label'));
 
 		this.reader.show();
 
@@ -104,7 +106,7 @@ Ext.define('NextThought.app.course.content.Index', {
 
 
 	alignReader: function() {
-		if (!this.rendered || !this.reader) {
+		if (!this.rendered || !this.reader || !this.reader.el) {
 			return;
 		}
 
@@ -120,12 +122,15 @@ Ext.define('NextThought.app.course.content.Index', {
 
 
 	showContent: function(route, subRoute) {
-		var ntiid = route.params.id,
+		var me = this,
+			ntiid = route.params.id,
 			obj = route.precache.pageInfo || route.precache.relatedWork;
 
 		ntiid = ParseUtils.decodeFromURI(ntiid);
 
 		this.__loadContent(ntiid, obj)
-			.then(this.showReader.bind(this));
+			.then(function(page) {
+				me.showReader(page, route.precache.parent);
+			});
 	}
 });

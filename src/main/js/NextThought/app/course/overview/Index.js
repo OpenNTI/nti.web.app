@@ -1,5 +1,5 @@
 Ext.define('NextThought.app.course.overview.Index', {
-	extend: 'NextThought.common.components.NavPanel',
+	extend: 'Ext.container.Container',
 	alias: 'widget.course-overview',
 
 	mixins: {
@@ -7,131 +7,176 @@ Ext.define('NextThought.app.course.overview.Index', {
 	},
 
 	requires: [
-		'NextThought.app.course.overview.components.Outline',
-		'NextThought.app.course.overview.components.Body'
+		'NextThought.app.course.overview.components.View',
+		'NextThought.app.course.content.Index'
 	],
 
 	title: 'Lessons',
+	layout: 'card',
 
-	cls: 'course-overview',
 
-	mixins: {
-		Router: 'NextThought.mixins.Router'
-	},
-
-	navigation: {xtype: 'course-outline'},
-	body: {xtype: 'course-overview-body'},
+	items: [
+		{xtype: 'course-overview-view'}
+	],
 
 
 	initComponent: function() {
 		this.callParent(arguments);
 
-		var me = this;
-
 		this.initRouter();
 
-		this.addChildRouter(this.body);
+		this.addRoute('/:lesson/content/:id', this.showContent.bind(this));
 
-		this.addRoute('/:lesson', this.showLesson.bind(this));
+		this.addDefaultRoute(this.showLessons.bind(this));
 
-		this.addDefaultRoute(this.showLesson.bind(this));
+		this.addObjectHandler(NextThought.model.PageInfo.mimeType, this.getPageInfoRoute.bind(this));
+		this.addObjectHandler(NextThought.model.RelatedWork.mimeType, this.getRelatedWorkRoute.bind(this));
 
-		me.on('activate', me.onActivate.bind(me));
+		this.lessons = this.down('course-overview-view');
 
-		me.mon(me.navigation, {
-			'empty-outline': function() {
-				me.unmask();
-			},
-			'select-lesson': function(record) {
-				var id = ParseUtils.encodeForURI(record.getId());
+		this.addChildRouter(this.lessons);
 
-				me.pushRoute(record.get('label'), id, {lesson: record});
-			}
-		});
+		this.on('activate', this.onActivate.bind(this));
 	},
 
 
 	onActivate: function() {
+		var item = this.getLayout().getActiveItem();
+
 		this.setTitle(this.title);
-		this.alignNavigation();
+		if (item.onActivate) {
+			item.onActivate();
+		}
+	},
+
+
+	getLessons: function() {
+		return this.lessons;
 	},
 
 
 	bundleChanged: function(bundle) {
-		if (this.currentBundle === bundle) { return; }
+		var item = this.getLayout().getActiveItem(),
+			lessons = this.getLessons();
 
-		this.clear();
 		this.currentBundle = bundle;
-
-		if (!bundle || !bundle.getNavigationStore) {
-			delete this.currentBundle;
-			return;
-		}
-
 		this.store = bundle.getNavigationStore();
 
-		this.navigation.setNavigationStore(bundle, this.store);
-		this.body.setActiveBundle(bundle);
-	},
-
-
-	clear: function() {
-		var me = this;
-
-		me.mon(me.body, {
-			single: true,
-			buffer: 1,
-			add: me.unmask.bind(me)
-		});
-
-		wait()
-			.then(function() {
-				if (me.el && me.el.dom) {
-					me.el.mask('NextThought.view.courseware.View.loading', 'loading');
-				}
-			});
-
-		me.navigation.clear();
-		me.body.clear();
-	},
-
-
-	unmask: function() {
-		if (this.el) {
-			this.el.unmask();
+		if (lessons === item) {
+			return lessons.bundleChanged(bundle);
 		}
+
+		lessons.bundleChanged(bundle);
+
+		return item.bundleChanged(bundle);
 	},
 
 
-	showLesson: function(route, subRoute) {
+	showLessons: function(route, subRoute) {
+		var lessons = this.getLessons();
+
+		this.getLayout().setActiveItem(lessons);
+
+		return lessons.handleRoute(route.path, route.precache);
+	},
+
+
+	showContent: function(route, subRoute) {
 		var me = this,
-			id = route.params.lesson && ParseUtils.decodeFromURI(route.params.lesson),
-			record = route.precache.lesson;
+			contentPath,
+			lessonId = route.params.lesson,
+			lesson = route.precache.lesson;
 
-		return this.store.onceBuilt()
+		lessonId = ParseUtils.decodeFromURI(lessonId);
+
+		contentPath = Globals.trimRoute(route.path).split('/').slice(2).join('/');
+
+		return me.store.onceBuilt()
 			.then(function() {
-				if (id && (!record || record.getId() !== id)) {
-					record = me.store.findRecord('NTIID', id, false, true, true);
+				var siblings;
+
+				if (lessonId && (!lesson || lesson.getId() !== lessonId)) {
+					lesson = me.store.findRecord('NTIID', lessonId, false, true, true);
 				}
 
-				if (!record || record.get('type') !== 'lesson' || !record.get('NTIID')) {
-					record = me.store.findBy(function(rec) {
-						return rec.get('type') === 'lesson' && rec.get('NTIID');
-					});
+				siblings = me.store.getRange().reduce(function(c, item) {
+					if (item.get('type') === 'lesson') {
+						c.push({
+							ntiid: item.get('NTIID'),
+							label: item.get('label'),
+							cls: item === lesson ? 'current' : ''
+						});
+					}
+
+					return c;
+				}, []);
+
+				route.precache.parent = {
+					label: lesson.get('label'),
+					ntiid: lesson.get('NTIID'),
+					siblings: siblings
+				};
+
+				if (me.reader) {
+					me.reader.destroy();
 				}
 
+				me.reader = me.add({
+					xtype: 'course-content',
+					currentBundle: me.currentBundle
+				});
 
-				if (!record) {
-					console.error('No valid lesson to show');
-					return;
-				}
+				me.reader.handleRoute(contentPath, route.precache);
 
-				record = me.navigation.selectRecord(record);
-				me.unmask();
-				me.setTitle(record.get('label'));
-
-				return me.body.showLesson(record)
-					.then(me.alignNavigation.bind(me));
+				me.getLayout().setActiveItem(me.reader);
 			});
+	},
+
+
+
+	getPageInfoRoute: function(obj) {
+		var lesson = obj.parent,
+			lessonId = lesson && lesson.getId(),
+			label = obj.get ? obj.get('label') : obj.label,
+			pageInfo = obj.getId ? obj.getId() : obj.NTIID;
+
+		if (!lessonId) {
+			return Promise.reject();
+		}
+
+		lessonId = ParseUtils.encodeForURI(lessonId);
+		pageInfo = ParseUtils.encodeForURI(pageInfo);
+
+		return {
+			route: lessonId + '/content/' + pageInfo,
+			title: label + ' - ' + lesson.get('label'),
+			precache: {
+				pageInfo: obj.isModel ? obj : null,
+				lesson: lesson
+			}
+		};
+	},
+
+
+	getRelatedWorkRoute: function(obj) {
+		var	lesson = obj.parent,
+			lessonId = lesson && lesson.getId(),
+			relatedWork = obj.getId();
+
+		if (!lessonId) {
+			return Promise.reject();
+		}
+
+		lessonId = ParseUtils.encodeForURI(lessonId);
+		relatedWork = ParseUtils.encodeForURI(relatedWork);
+
+		return {
+			route: lessonId + '/content/' + relatedWork,
+			title: obj.get('label') + ' - ' + lesson.get('label'),
+			precache: {
+				relatedWork: obj,
+				lesson: lesson
+			}
+		};
 	}
 });

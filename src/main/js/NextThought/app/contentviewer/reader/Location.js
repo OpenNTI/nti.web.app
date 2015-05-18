@@ -49,7 +49,7 @@ Ext.define('NextThought.app.contentviewer.reader.Location', {
 					var location = locations[0] || {};
 
 					location.pageInfo = pageInfo;
-					location.currentBundle = bundle
+					location.currentBundle = bundle;
 
 					me.currentPageInfo = pageInfo;
 					me.currentLocation = location;

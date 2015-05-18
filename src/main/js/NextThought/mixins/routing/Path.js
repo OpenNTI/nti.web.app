@@ -55,12 +55,13 @@ Ext.define('NextThought.mixins.routing.Path', {
 
 		root = parts[0];
 
-		if (root[0] === ':') {
+		if (root[0] === ':' && parts.length === 1) {
 			this.__routeMap[varKey] = {};
 			this.__routeMap[varKey].handler = handler;
 			this.__routeMap[varKey].varName = root.slice(1);
 			return;
 		}
+
 
 		//remove the roots from the part
 		parts = parts.slice(1);
@@ -76,10 +77,21 @@ Ext.define('NextThought.mixins.routing.Path', {
 
 		root = root.toLowerCase();
 
-		if (!this.__routeMap[root]) {
-			root = this.__routeMap[root] = {};
+
+		if (root[0] === ':') {
+			if (!this.__routeMap[varKey]) {
+				root = this.__routeMap[varKey] = {
+					varName: root.slice(1)
+				};
+			} else {
+				root = this.__routeMap[varKey];
+			}
 		} else {
-			root = this.__routeMap[root];
+			if (!this.__routeMap[root]) {
+				root = this.__routeMap[root] = {};
+			} else {
+				root = this.__routeMap[root];
+			}
 		}
 
 		sub = root;
@@ -163,9 +175,9 @@ Ext.define('NextThought.mixins.routing.Path', {
 			//if the sub route has a key use that sub route
 			if (sub[key]) {
 				sub = sub[key];
-			//else is the sub route has a variable sub route
+			//else is the sub route has a variable sub route and the part is not empty
 			//add the part to the params and use that sub route
-			} else if (sub[varKey]) {
+			} else if (sub[varKey] && parts[i]) {
 				params[sub[varKey].varName] = parts[i];
 				sub = sub[varKey];
 			//otherwise stop looking at the parts
