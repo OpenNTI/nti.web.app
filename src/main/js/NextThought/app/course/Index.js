@@ -38,8 +38,8 @@ Ext.define('NextThought.app.course.Index', {
 			id: 'course-overview'
 		},
 		{
-			xtype: 'course-assessment',
-			id: 'course-assessment'
+			xtype: 'course-assessment-container',
+			id: 'course-assessment-container'
 		},
 		{
 			xtype: 'course-forum',
@@ -188,7 +188,7 @@ Ext.define('NextThought.app.course.Index', {
 		var me = this,
 			activeCourse = this.activeCourse;
 
-		xtypes.map(function(xtype) {
+		xtypes = xtypes.map(function(xtype) {
 			var item = me.getItem(xtype);
 
 			return item.bundleChanged && item.bundleChanged(bundle);
@@ -250,9 +250,9 @@ Ext.define('NextThought.app.course.Index', {
 		if (showTab(course.assessment.Index)) {
 			tabs.push({
 				text: getString('NextThought.view.content.View.assessmenttab', 'Assignments'),
-				route: 'assignments',
+				route: 'assignments/notifications',
 				title: 'Assignments',
-				active: active === 'course-assessment'
+				active: active === 'course-assessment-container'
 			});
 		}
 
@@ -349,7 +349,7 @@ Ext.define('NextThought.app.course.Index', {
 	showDashboard: function(route, subRoute) {
 		return this.__setActiveView('course-dashboard', [
 				'course-overview',
-				'course-assessment',
+				'course-assessment-container',
 				'course-forum',
 				'course-reports',
 				'course-info'
@@ -360,7 +360,7 @@ Ext.define('NextThought.app.course.Index', {
 	showOverview: function(route, subRoute) {
 		return this.__setActiveView('course-overview', [
 				'course-dashboard',
-				'course-assessment',
+				'course-assessment-container',
 				'course-forum',
 				'course-reports',
 				'course-info'
@@ -373,13 +373,17 @@ Ext.define('NextThought.app.course.Index', {
 
 
 	showAssignments: function(route, subRoute) {
-		return this.__setActiveView('course-assessment', [
+		return this.__setActiveView('course-assessment-container', [
 				'course-dashboard',
 				'course-overview',
 				'course-forum',
 				'course-reports',
 				'course-info'
-			]);
+			]).then(function(item) {
+				if (item.handleRoute) {
+					return item.handleRoute(subRoute, route.precache);
+				}
+			});
 	},
 
 
@@ -387,7 +391,7 @@ Ext.define('NextThought.app.course.Index', {
 		return this.__setActiveView('course-forum', [
 				'course-dashboard',
 				'course-overview',
-				'course-assessment',
+				'course-assessment-container',
 				'course-reports',
 				'course-info'
 			]);
@@ -398,7 +402,7 @@ Ext.define('NextThought.app.course.Index', {
 		return this.__setActiveView('course-reports', [
 				'course-dashboard',
 				'course-overview',
-				'course-assessment',
+				'course-assessment-container',
 				'course-forum',
 				'course-info'
 			]);
@@ -409,7 +413,7 @@ Ext.define('NextThought.app.course.Index', {
 		return this.__setActiveView('course-info', [
 				'course-dashboard',
 				'course-overview',
-				'course-assessment',
+				'course-assessment-container',
 				'course-forum',
 				'course-reports'
 			]);
@@ -420,7 +424,7 @@ Ext.define('NextThought.app.course.Index', {
 		return this.__setActiveView('course-content', [
 				'course-dashboard',
 				'course-overview',
-				'course-assessment',
+				'course-assessment-container',
 				'course-forum',
 				'course-reports',
 				'course-info'

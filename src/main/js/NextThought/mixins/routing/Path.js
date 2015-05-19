@@ -66,9 +66,8 @@ Ext.define('NextThought.mixins.routing.Path', {
 		//remove the roots from the part
 		parts = parts.slice(1);
 
-		if (!root) {
-			console.error('Invalid Route:', route);
-			throw 'Invalid Route';
+		if (root === '') {
+			root = '/';
 		}
 
 		if (!this.__routeMap) {
@@ -171,6 +170,8 @@ Ext.define('NextThought.mixins.routing.Path', {
 		//for each part in the url
 		for (i = 0; i < parts.length; i++) {
 			key = parts[i].toLowerCase();
+
+			if (key === '') { key = '/'; }
 
 			//if the sub route has a key use that sub route
 			if (sub[key]) {

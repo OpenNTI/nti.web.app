@@ -61,5 +61,15 @@ Ext.define('NextThought.common.components.NavPanel', {
 			width: rect.width + 'px',
 			left: rect.left + 'px'
 		});
+	},
+
+
+	getActiveItem: function() {
+		return this.body.getLayout().getActiveItem();
+	},
+
+
+	setActiveItem: function(item) {
+		this.body.getLayout().setActiveItem(item);
 	}
 });
