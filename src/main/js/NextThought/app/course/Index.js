@@ -416,7 +416,11 @@ Ext.define('NextThought.app.course.Index', {
 				'course-assessment-container',
 				'course-forum',
 				'course-reports'
-			]);
+			]).then( function(item) {
+				if (item && item.handleRoute) {
+					item.handleRoute(subRoute, route.precache);
+				}
+			});
 	},
 
 
