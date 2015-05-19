@@ -238,7 +238,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 			out.push({
 				poster: getURL(poster || n.getAttribute('poster'), i.root),
 				ntiid: n.getAttribute('ntiid'),
-				label: n.getAttribute('label'),
+				label: n.getAttribute('label') || n.getAttribute('title'),
 				comments: getString('NextThought.view.courseware.overview.parts.Videos.loading') + ' ',
 				date: r && r.get('date')
 			});

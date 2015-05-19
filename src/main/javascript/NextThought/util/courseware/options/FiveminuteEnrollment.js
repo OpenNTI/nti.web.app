@@ -7,6 +7,8 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 	display: 'For Credit',
 	isBase: false,
 
+	RV_REGEX: /rv:(\d+\.?\d*)/,
+
 
 	EnrolledWordingKey: 'course-info.description-widget.enrolled',
 
@@ -157,6 +159,14 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 		} else if (details.API_DOWN) {//if we detect the admission api is down
 			state = this.getWording('apiDown');
 			state.price = details.Price;
+		} else if (details.UNSUPPORTED) {
+			state = this.getWording('unsupported');
+			//Hard code this for now, since the strings aren't updating correctly on the server
+			state = !Ext.Object.isEmpty(state) ? state : {
+						title: 'Earn College Credit',
+						information: 'Your browser (FireFox) does not support the enrollment process. Please try Chrome, Safari, or Internet Explorer.'
+					};
+			state.price = details.Price;
 		} else if (details.AdmissionState === 'Rejected') {//if our application was rejected
 			state = this.getWording('admissionRejected');
 		} else {//we aren't enrolled
@@ -192,10 +202,25 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 
 	__getOptionDetails: function(course, option) {
 		var drop = option.OU_DropCutOffDate,
-			enroll = option.EnrollCutOffDate;
+			enroll = option.EnrollCutOffDate,
+			rv,	unsupported = Ext.isGecko;
 
 		drop = drop && new Date(drop);
 		enroll = enroll ? new Date(enroll) : new Date();
+
+		if (unsupported) {
+			rv = this.RV_REGEX.exec(navigator.userAgent);
+
+			rv = rv && rv[1];
+
+			rv = rv && parseFloat(rv, 10);
+
+			if (rv && rv > 36) {
+				unsupported = true;
+			} else {
+				unsupported = false;
+			}
+		}
 
 		return {
 			StartDate: course.StartDate,
@@ -206,7 +231,8 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 			AdmissionState: $AppConfig.userObject.get('admission_status'),
 			Price: option.OU_Price,
 			API_DOWN: option.API_DOWN,
-			AvailableSeats: option.AvailableSeats
+			AvailableSeats: option.AvailableSeats,
+			UNSUPPORTED: unsupported
 		};
 	},
 
