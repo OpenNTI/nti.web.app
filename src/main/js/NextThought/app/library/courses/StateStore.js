@@ -127,10 +127,10 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 			admin = this.ADMIN_COURSES || [],
 			i, course;
 
-		course = this.__findIn(enrolled, fn);
+		course = this.__findIn(admin, fn);
 
 		if (!course) {
-			course = this.__findIn(admin, fn);
+			course = this.__findIn(enrolled, fn);
 		}
 
 		return course;
