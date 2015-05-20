@@ -17,6 +17,8 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 	body: {xtype: 'course-assessment-body'},
 
 
+	cls: 'course-assessment-view',
+
 	initComponent: function() {
 		this.callParent(arguments);
 
@@ -87,7 +89,7 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 				//if we get here and we already have views, don't push more
 				if (me.shouldPushViews()) {
 					if (enrollment && enrollment.isAdministrative) {
-						me.addAdminViews(function(rel) { return getLink(rel, e); });
+						me.addAdminViews(function(rel) { return getLink(rel, enrollment); });
 					} else {
 						me.addStudentViews();
 					}
@@ -184,7 +186,7 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 
 		this.assignmentsView = this.body.add({
 			xtype: 'course-assessment-admin-assignments',
-			title: getString('NextThought.view.courseware.assessment.View.assignment'),
+			title: getString('NextThought.view.courseware.assessment.View.assignments'),
 			route: '/'
 		});
 
@@ -221,6 +223,11 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 			route: '/performance'
 		});
 
+
+		this.addChildRouter(this.notificationsView);
+		this.addChildRouter(this.assignmentsView);
+		this.addChildRouter(this.performanceView);
+
 		this.navigation.addItems([
 			this.notificationsView,
 			this.assignmentsView,
@@ -239,7 +246,8 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 		return me.notificationsView.setAssignmentsData(me.assignmentCollection, me.currentBundle)
 			.then(me.setActiveItem.bind(me, me.notificationsView))
 			.then(me.maybeUnmask.bind(me))
-			.then(me.setTitle.bind(me, me.notificationsView.title));
+			.then(me.setTitle.bind(me, me.notificationsView.title))
+			.then(me.alignNavigation.bind(me));
 	},
 
 
@@ -253,7 +261,8 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 		return me.performanceView.setAssignmentsData(me.assignmentCollection, me.currentBundle)
 			.then(me.setActiveItem.bind(me, me.performanceView))
 			.then(me.maybeUnmask.bind(me))
-			.then(me.setTitle.bind(me, me.performanceView.title));
+			.then(me.setTitle.bind(me, me.performanceView.title))
+			.then(me.alignNavigation.bind(me));
 	},
 
 
@@ -267,7 +276,9 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 		return me.assignmentsView.setAssignmentsData(me.assignmentCollection, me.currentBundle)
 			.then(me.setActiveItem.bind(me, me.assignmentsView))
 			.then(me.maybeUnmask.bind(me))
-			.then(me.setTitle.bind(me, me.assignmentsView.title));
+			.then(me.setTitle.bind(me, me.assignmentsView.title))
+			.then(function() { return wait(1); })
+			.then(me.alignNavigation.bind(me));
 	},
 
 

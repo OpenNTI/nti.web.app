@@ -4,5 +4,10 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.View'
 
 	renderTpl: Ext.DomHelper.markup({
 		html: 'Admin Performance'
-	})
+	}),
+
+
+	setAssignmentsData: function() {
+		return Promise.resolve();
+	}
 });

@@ -159,6 +159,14 @@ canvas.x-component-course-assessment {
 	}
 }
 
+.course-assessment-view.navigation-panel {
+	padding-top: 20px;
+	.body-view {
+		background: white;
+		padding-top: 0;
+	}
+}
+
 
 .x-component-course-assessment {
 	.assignment-status {

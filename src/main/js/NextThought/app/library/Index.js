@@ -75,7 +75,8 @@ Ext.define('NextThought.app.library.Index', {
 
 		this.add({
 			xtype: 'library-view-course-page',
-			courses: current
+			courses: current,
+			navigate: this.navigateToCourse.bind(this)
 		});
 	},
 

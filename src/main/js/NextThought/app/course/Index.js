@@ -136,13 +136,13 @@ Ext.define('NextThought.app.course.Index', {
 		} else {
 			me.getActiveCourse = me.CourseStore.onceLoaded()
 				.then(function() {
-					var course;
+					var current;
 					//if the course was cached, no need to look for it
 					if (course && course.getId() === ntiid) {
-						course = me.CourseViewStore.activeCourse;
+						current = me.CourseViewStore.activeCourse;
 					} else {
 						//find which ever course whose ntiid matches
-						course = me.CourseStore.findCourseBy(function(enrollment) {
+						current = me.CourseStore.findCourseBy(function(enrollment) {
 							var instance = enrollment.get('CourseInstance'),
 								instanceId = instance.getId() || '',
 								enrollmentId = enrollment.get('NTIID') || '';
@@ -151,13 +151,13 @@ Ext.define('NextThought.app.course.Index', {
 						});
 					}
 
-					if (!course) {
+					if (!current) {
 						return Promise.reject('No Course found for:', ntiid);
 					}
 
-					me.activeCourse = course.get('CourseInstance') || course;
+					me.activeCourse = current.get('CourseInstance') || current;
 
-					return course;
+					return current;
 				});
 		}
 
