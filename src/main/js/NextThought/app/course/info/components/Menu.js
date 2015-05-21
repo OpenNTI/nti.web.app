@@ -1,5 +1,5 @@
 Ext.define('NextThought.app.course.info.components.Menu', {
-	extend: 'Ext.view.View',
+	extend: 'Ext.Component',
 	alias: 'widget.course-info-outline-menu',
 
 	//<editor-fold desc="Config">
@@ -15,114 +15,80 @@ Ext.define('NextThought.app.course.info.components.Menu', {
 		{ cls: 'outline-menu'}
 	]),
 
-	config: {
-		info: null
-	},
+	itemTpl: new Ext.XTemplate(Ext.DomHelper.markup({
+		cls: 'outline-row{[values.active ? " x-item-selected" : ""]}', 'data-qtip': '{title:htmlEncode}', 'data-route': '{route}', cn: [
+			{cls: 'label', html: '{title:htmlEncode}'}
+		]
+	})),
 
 	renderSelectors: {
-		frameBodyEl: '.outline-menu'
+		menuEl: '.outline-menu'
 	},
-
 
 	getTargetEl: function() {
-		return this.frameBodyEl;
+		return this.menuEl;
 	},
 
-
-	overItemCls: 'over',
-	itemSelector: '.outline-row',
-	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
-		{ cls: 'outline-row', cn: [
-			{cls: 'label', html: '{label}'}
-		]}
-	]})),
-	//</editor-fold>
-
-	initComponent: function() {
+	afterRender: function() {
 		this.callParent(arguments);
-		this.bindStore(this.buildStore());
-		this.getSelectionModel().select(0);
-		this.on({
-			scope: this,
-			select: 'view'
+		this.addMenuItems();
+
+		this.mon(this.menuEl, 'click', this.onClick.bind(this));
+	},
+
+	addMenuItems: function() {
+		var me = this, items = [],
+			i = this.info && this.info.get('Instructors');
+		if (!this.rendered) {
+			this.onceRendered.then(me.addMenuItems.bind(me));
+			return;
+		}
+
+		me.itemTpl.append(me.menuEl, {
+			title: 'About',
+			route: '/',
+			active: true
 		});
+
+		me.itemTpl.append(me.menuEl, {
+			title: getFormattedString('NextThought.view.courseware.info.outline.Menu.courseinstructors', {
+						instructor: Ext.util.Format.plural(i.length, 'Instructor', true)}),
+			route: '/instructors'
+		});
+
+		me.itemTpl.append(me.menuEl, {
+			title: getString('NextThought.view.courseware.info.outline.Menu.support'),
+			route: '/support'
+		});
+
+		if(this.showRoster) {
+			me.itemTpl.append(me.menuEl, {
+				title: getString('NextThought.view.courseware.info.outline.Menu.roster'),
+				route: '/roster'
+			});	
+		}
+	},
+
+	setActiveItem: function(route){
+		var activeItem = this.el.down('.x-item-selected'),
+			activeItemRoute = activeItem && activeItem.getAttribute('data-route');
+
+		if (activeItemRoute === route) { return; }
+
+		activeItem.removeCls('x-item-selected');
+		activeItem = this.el.down("[data-route="+route+"]");
+		if (activeItem) {
+			activeItem.addCls('x-item-selected');
+		}
 	},
 
 
-	buildStore: function() {
-		var ifo = this.getInfo(),
-			i = ifo && ifo.get('Instructors'),
-			plural = (i && i.length > 1) ? 's' : '';//this is wrong way to go about it
+	onClick: function(e){
+		var item = e.getTarget('.outline-row');
 
-		if (!this.menuStore) {
-			this.menuStore = new Ext.data.Store({
-				fields: [
-					{ name: 'hash', type: 'string' },
-					{ name: 'label', type: 'string' },
-					{ name: 'view', type: 'string', defaultValue: 'info' }
-				],
-				data: [
-					{ hash: 'top', label: 'About' },
-					{ hash: 'course-info-instructors', label: getFormattedString('NextThought.view.courseware.info.outline.Menu.courseinstructors', {
-						instructor: Ext.util.Format.plural(i.length, 'Instructor', true)
-					}) },
-					//{ hash: 'course-info-faq', label: 'Frequently Asked Questions' },
-					{ hash: 'course-info-support', label: getString('NextThought.view.courseware.info.outline.Menu.support') },
-					{ hash: 'top', view: 'roster', label: getString('NextThought.view.courseware.info.outline.Menu.roster')}
-				]
-			});
+		if (!item) { return; }
 
-			if (!this.showRoster) {
-				this.menuStore.filter({
-					property: 'view',
-					value: 'info'
-				});
-			}
-		}
-
-		return this.menuStore;
-	},
-
-
-	scrollTo: function(selModel, record) {
-		//This is going to be very dirty so that we can just get it done.
-		var hash = (record && record.get('hash')) || 'top',
-			ci = this.up('course-info'),
-			scrollingThing = ci.down('course-info-panel').getEl(),
-			scrollReference = ci.down('course-info-panel').child().getEl(),
-			scrollTarget = ci.down(hash),
-			scrollTargetY;
-
-		if (hash === 'top') {
-			scrollingThing.scrollTo('top', 0, true);
-			return;
-		}
-
-		if (!scrollTarget) {
-			selModel.deselect(record);
-			return;
-		}
-
-		scrollTargetY = scrollTarget.getEl().getOffsetsTo(scrollReference)[1];
-		scrollingThing.scrollTo('top', scrollTargetY, true);
-	},
-
-
-	view: function(selModel, rec) {
-		var viewId = rec.get('view'),
-			ci = this.up('course-info'),
-			current = ci.body.getLayout().getActiveItem();
-		if (current && current.itemId === viewId) {
-			if (viewId === 'info') {
-				this.scrollTo(selModel, rec);
-			}
-			return;
-		}
-
-		//switch!
-		ci.body.getLayout().setActiveItem(viewId);
-		this.scrollTo(selModel, rec);//scroll the course info up
+		this.fireEvent('select-route', item.getAttribute('data-qtip'), item.getAttribute('data-route'));
 	}
-
 });
 
