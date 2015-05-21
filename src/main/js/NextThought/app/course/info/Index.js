@@ -21,8 +21,12 @@ Ext.define('NextThought.app.course.info.Index', {
 
 		var me = this;
 		me.initRouter();
-		me.addDefaultRoute(this.showInfo.bind(me));
+		me.addRoute('/', this.showInfo.bind(me));
+		me.addRoute('/instructors', me.showInstructors.bind(me));
+		me.addRoute('/support', me.showSupport.bind(me));
+		me.addRoute('/roster', me.showRoster.bind(me));
 		me.on('activate', this.onActivate.bind(me));
+		me.mon(me.navigation, 'select-route', me.changeRoute.bind(this));
 	},
 
 	onActivate: function() {
@@ -39,9 +43,7 @@ Ext.define('NextThought.app.course.info.Index', {
 			me[me.infoOnly ? 'addCls' : 'removeCls']('info-only');
 			me.navigation.margin = (me.infoOnly ? '105' : '0') + ' 5 5 0';
 
-			me.body.getLayout().setActiveItem('info');//always reset
-			me.body.getComponent('info').setContent(info, status);
-			// me.body.getComponent('roster').setContent(showRoster && bundle);
+			me.body.setContent(info, status, showRoster, bundle);
 			me.navigation.setContent(info, status, showRoster);
 		}
 
@@ -61,9 +63,43 @@ Ext.define('NextThought.app.course.info.Index', {
 		return Promise.resolve();
 	},
 
-	showInfo: function(route, subroute){
-		// TODO: NOT IMPLEMENTED
-		console.log(arguments);
-	}
+	showInfo: function(route, subRoute){
+		var me = this;
 
+		me.navigation.setActiveItem(route);
+		me.body.setActiveItem('info').then(function(){
+			me.body.scrollInfoSectionIntoView(route);
+		});
+	},
+
+	showInstructors: function(route, subRoute) {
+		var me = this;
+
+		me.navigation.setActiveItem(route);
+		me.body.setActiveItem('info').then(function(){
+			me.body.scrollInfoSectionIntoView(route);
+		});
+	},
+
+	showSupport: function(route, subRoute) {
+		var me = this;
+
+		me.navigation.setActiveItem(route);
+		me.body.setActiveItem('info').then(function(){
+			me.body.scrollInfoSectionIntoView(route);
+		});
+	},
+
+	showRoster: function(route, subRoute) {
+		var me = this;
+
+		me.navigation.setActiveItem(route);
+		me.body.setActiveItem('roster').then(function(){
+			me.body.getComponent('roster').scrollTo('top', 0, true);
+		});
+	},
+
+	changeRoute: function(title, route){
+		this.pushRoute(title, route || '/');
+	}
 });

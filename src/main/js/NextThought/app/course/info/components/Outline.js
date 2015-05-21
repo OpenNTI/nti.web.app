@@ -7,6 +7,11 @@ Ext.define('NextThought.app.course.info.components.Outline', {
 		'NextThought.app.course.info.components.OpenCourseInfo'
 	],
 
+	initComponent: function() {
+		this.callParent(arguments);
+		// this.enableBubble('select-route');
+	},
+
 	setContent: function(info, status, showRoster) {
 		this.removeAll(true);
 
@@ -15,6 +20,8 @@ Ext.define('NextThought.app.course.info.components.Outline', {
 			info: info,
 			showRoster: showRoster
 		});
+
+		this.mon(this.menu, 'select-route', this.changeRoute.bind(this));
 
 
 		if (!showRoster) {
@@ -26,7 +33,16 @@ Ext.define('NextThought.app.course.info.components.Outline', {
 		}
 	},
 
+	setActiveItem: function(route){
+		this.menu.setActiveItem(route.path);
+	},
+
 	getMenu: function() {
 		return this.menu || this.down('course-info-outline-menu');
+	},
+
+	changeRoute: function(title, route) {
+		this.fireEvent('select-route', title, route);
 	}
+
 });
