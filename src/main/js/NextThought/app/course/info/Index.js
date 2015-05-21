@@ -47,8 +47,14 @@ Ext.define('NextThought.app.course.info.Index', {
 			me.navigation.setContent(info, status, showRoster);
 		}
 
+		if(me.bundle === bundle) {
+			// Short-circuit since we already have the bundle
+			return Promise.resolve();
+		}
+
 		me.hasInfo = !!catalogEntry;
 		me.infoOnly = catalogEntry && catalogEntry.get('Preview') === true;
+		me.bundle = bundle;
 
 		if (bundle && bundle.getWrapper) {
 			return bundle.getWrapper()

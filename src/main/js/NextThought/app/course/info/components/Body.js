@@ -38,16 +38,15 @@ Ext.define('NextThought.app.course.info.components.Body', {
 
 	scrollInfoSectionIntoView: function(route) {
 		var infoCmp = this.getComponent('info'),
-			scrollTarget, scrollReference, hash, scrollTargetY, brect;
+			scrollTarget, hash, scrollTargetY, brect;
 
 		if(!infoCmp.rendered){ 
 			this.mon(infoCmp, 'afterrender', this.scrollInfoSectionIntoView.bind(this, route));
 		}
 
-		scrollReference = infoCmp.child().getEl();
 		route = route && route.path || '/';
 		if (route === '/') {
-			// We are scroll top already
+			Ext.getBody().dom.scrollTop = 0;
 			return;
 		}
 		
