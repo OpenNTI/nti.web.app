@@ -22,12 +22,21 @@ Ext.define('NextThought.util.courseware.Enrollment', {
 	},
 
 
+	getBasePriority: function() {
+		return {
+			OpenEnrollment: 3,
+			StoreEnrollment: 2,
+			FiveminuteEnrollment: 1
+		};
+	},
+
+
 	addOption: function(option) {
 		this.__Option_Map[option.NAME] = option;
 
 		this.__Options.push({
 			name: option.NAME,
-			wait: option.isBase
+			base: option.isBase
 		});
 	},
 

@@ -314,8 +314,10 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 		//if there is an option, and its either enrolled or available
 		if (!option || (!option.IsEnrolled && !option.IsAvailable)) {
 			return {
+				name: this.NAME,
 				loaded: Promise.reject(),
-				IsEnrolled: false
+				IsEnrolled: false,
+				IsAvailable: false
 			};
 		}
 
@@ -341,8 +343,10 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 		});
 
 		return {
+			name: this.NAME,
 			loaded: loadDetails,
-			IsEnrolled: option.IsEnrolled
+			IsEnrolled: option.IsEnrolled,
+			IsAvailable: true
 		};
 	},
 

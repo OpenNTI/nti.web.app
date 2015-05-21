@@ -5,7 +5,7 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 
 	NAME: 'FiveminuteEnrollment',
 	display: 'For Credit',
-	isBase: false,
+	isBase: true,
 
 	RV_REGEX: /rv:(\d+\.?\d*)/,
 
@@ -241,6 +241,7 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 		var me = this;
 
 		return {
+			name: me.NAME,
 			loaded: new Promise(function(fulfill, reject) {
 				var state = me.getWording('enrolled', {
 					date: Ext.Date.format(details.StartDate, me.DateFormat),
@@ -256,7 +257,8 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 					Wording: state
 				});
 			}),
-			IsEnrolled: true
+			IsEnrolled: true,
+			IsAvailable: true
 		};
 	},
 
@@ -273,8 +275,10 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 				return this.__getForCreditEnrolled(details);
 			} else {
 				return {
+					name: this.NAME,
 					loaded: Promise.reject(),
-					IsEnrolled: false
+					IsEnrolled: false,
+					IsAvailable: false
 				};
 			}
 		}
@@ -323,8 +327,10 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 
 
 		return {
+			name: this.NAME,
 			loaded: loadDetails,
-			IsEnrolled: option.IsEnrolled
+			IsEnrolled: option.IsEnrolled,
+			IsAvailable: true
 		};
 	}
 
