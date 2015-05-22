@@ -712,11 +712,12 @@ Ext.define('NextThought.view.content.View', {
 		tab = preview ? 'course-info' : tab || 'course-book';
 		this.setActiveTab(tab);
 
-		if (preview) {
-			subs = [
-				this.courseInfo
-			];
-		}
+		//apparently we can't speed this up without breaking the video
+		// if (preview) {
+		// 	subs = [
+		// 		this.courseInfo
+		// 	];
+		// }
 
 		this.isPreview = preview;
 
