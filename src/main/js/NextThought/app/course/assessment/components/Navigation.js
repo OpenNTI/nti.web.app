@@ -90,6 +90,8 @@ Ext.define('NextThought.app.course.assessment.components.Navigation', {
 
 		me.cmp_map = me.cmp_map || {};
 
+		me.clear();
+
 		(items || []).forEach(function(item) {
 			me.cmp_map[item.xtype] = me.itemTpl.append(me.outlineEl, {
 				route: item.route,

@@ -89,7 +89,7 @@ Ext.define('NextThought.app.course.assessment.components.student.Activity', {
 
 		this.on({
 			deactivate: 'clearBadge',
-			itemclick: 'fireGoToAssignment',
+			itemclick: 'goToAssignment',
 			loadMoreLink: { click: 'onLoadMore' }
 		});
 	},
@@ -343,5 +343,14 @@ Ext.define('NextThought.app.course.assessment.components.student.Activity', {
 	},
 
 
-	fireGoToAssignment: function(s, record) {}
+	goToAssignment: function(s, record) {
+		var assignment = record.get('item');
+
+		if (!assignment) {
+			console.error('No Assignment to navigate to');
+			return;
+		}
+
+		this.navigateToObject(assignment);
+	}
 });

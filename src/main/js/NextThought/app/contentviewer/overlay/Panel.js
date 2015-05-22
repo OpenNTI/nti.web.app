@@ -142,6 +142,7 @@ Ext.define('NextThought.app.contentviewer.overlay.Panel', {
 
 	syncTop: function() {
 		if (!this.contentElement) {return;}
+
 		try {
 			if (!this.reader.isDestroyed) {
 				var o = this.reader.getAnnotationOffsets(),

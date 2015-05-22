@@ -254,7 +254,8 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 				scrollStatics = cache.scrollStatics || {},
 				currentWindowSize = Ext.dom.Element.getViewSize(),
 				f = this.getIframe().get(),
-				scrollPosition = this.body.getScroll().top;
+				//since the body is scrolling now get its scroll top
+				scrollPosition = Ext.getBody().getScroll().top;
 
 		//Other things are based on the windowSize. left and height
 		if (!windowSizeStatics.hasOwnProperty('windowSize') ||
@@ -312,7 +313,7 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 		
 		maskTarget.mask('Loading...', 'navigation');
 
-		this.setLocation(pageInfo, bundle)
+		return this.setLocation(pageInfo, bundle)
 			.then(me.loadPageInfo.bind(me, pageInfo))
 			.then(me.fireEvent.bind(me, 'navigateComplete'))
 			.fail(me.fireEvent.bind(me, 'navigateAbort'))

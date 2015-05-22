@@ -29,7 +29,7 @@ Ext.define('NextThought.app.assessment.PartContent', {
 
 	setupContent: function() {
 		var me = this,
-			root = ContentUtils.getRoot(this.reader.getLocation().NTIID),
+			root = this.reader.getLocation().root,
 			c = this.part.get('content') || '';
 
 		c = this.buildContent(

@@ -24,10 +24,7 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 
 		this.initRouter();
 
-		this.addRoute('/', this.showAssignments.bind(this));
-		this.addRoute('/notifications', this.showNotifications.bind(this));
-		this.addRoute('/performance', this.showPerformance.bind(this));
-		this.addRoute('/:id/students', this.show);
+		
 
 		this.addDefaultRoute('/');
 
@@ -118,6 +115,23 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 			.fail(function(reason) {
 				console.error('Failed to load assignments:', reason);
 				resetView(false);
+			});
+	},
+
+
+	getAssignmentList: function() {
+		var me = this;
+
+		return me.assignmentsView.setAssignmentsData(me.assignmentCollection, me.currentBundle)
+			.then(function() {
+				var items = me.assignmentsView.store.getRange() || [];
+
+
+				items = items.map(function(item) {
+					return item.get('item');
+				});
+
+				return items;
 			});
 	},
 
@@ -243,8 +257,9 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 
 		me.maybeMask();
 
+		me.setActiveItem(me.notificationsView);
+
 		return me.notificationsView.setAssignmentsData(me.assignmentCollection, me.currentBundle)
-			.then(me.setActiveItem.bind(me, me.notificationsView))
 			.then(me.maybeUnmask.bind(me))
 			.then(me.setTitle.bind(me, me.notificationsView.title))
 			.then(me.alignNavigation.bind(me));
@@ -258,8 +273,9 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 
 		me.maybeMask();
 
+		me.setActiveItem(me.performanceView);
+
 		return me.performanceView.setAssignmentsData(me.assignmentCollection, me.currentBundle)
-			.then(me.setActiveItem.bind(me, me.performanceView))
 			.then(me.maybeUnmask.bind(me))
 			.then(me.setTitle.bind(me, me.performanceView.title))
 			.then(me.alignNavigation.bind(me));
@@ -273,16 +289,12 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 
 		me.maybeMask();
 
+		me.setActiveItem(me.assignmentsView);
+
 		return me.assignmentsView.setAssignmentsData(me.assignmentCollection, me.currentBundle)
-			.then(me.setActiveItem.bind(me, me.assignmentsView))
 			.then(me.maybeUnmask.bind(me))
 			.then(me.setTitle.bind(me, me.assignmentsView.title))
 			.then(function() { return wait(1); })
 			.then(me.alignNavigation.bind(me));
-	},
-
-
-	changeRoute: function(title, route) {
-		this.pushRoute(title, route || '/');
 	}
 });

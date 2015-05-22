@@ -3,7 +3,9 @@ Ext.define('NextThought.app.course.assessment.Index', {
 	alias: 'widget.course-assessment-container',
 
 	requires: [
-		'NextThought.app.course.assessment.components.View'
+		'NextThought.app.course.assessment.components.View',
+		'NextThought.app.course.assessment.components.Assignment',
+		'NextThought.util.PageSource'
 	],
 
 	mixins: {
@@ -34,13 +36,23 @@ Ext.define('NextThought.app.course.assessment.Index', {
 
 		this.initRouter();
 
-		this.addDefaultRoute(this.onRoute.bind(this));
+		this.addRoute('/', this.showAssignments.bind(this));
+		this.addRoute('/notifications', this.showNotifications.bind(this));
+		this.addRoute('/performance', this.showPerformance.bind(this));
+
+		this.addRoute('/:assignment', this.showAssignment.bind(this));
+		this.addRoute('/performance/:student/:assignment', this.showAssignmentForStudent.bind(this));
+		this.addRoute('/:assignment/students/:student', this.showStudentForAssignment.bind(this));
+
+		this.addDefaultRoute('/');
+
+		this.addObjectHandler(NextThought.model.assessment.Assignment.mimeType, this.getAssignmentRoute.bind(this));
 
 		this.add({
 			xtype: 'course-assessment',
 			title: this.title,
-			showAssignment: this.showAssignment.bind(this),
-			root: this
+			root: this,
+			changeRoute: this.changeRoute.bind(this)
 		});
 
 		this.addChildRouter(this.getView());
@@ -66,7 +78,123 @@ Ext.define('NextThought.app.course.assessment.Index', {
 	},
 
 
-	showAssignment: function() {},
+	showReader: function(config) {
+		if (this.assignment) {
+			this.assignment.destroy();
+		}
+
+		config.bundle = this.currentBundle;
+
+		this.assignment = this.add({
+			xtype: 'course-assessment-assignment',
+			readerConfig: config,
+			setTitle: this.setTitle.bind(this)
+		});
+
+		this.getLayout().setActiveItem(this.assignment);
+	},
+
+
+	showAssignment: function(route, subRoute) {
+		var id = route.params.assignment,
+			assignment = route.precache.assignment,
+			view = this.getView();
+
+		id = ParseUtils.decodeFromURI(id);
+
+		assignment = assignment || Service.getObject(id);
+
+		return Promise.all([
+			assignment,
+			view.getAssignmentList()
+		]).then(function(result) {
+			var	assignment = result[0],
+				assignments = result[1] || [],
+				index, prev, next, path = [], pageSource;
+
+			assignments.forEach(function(item, i) {
+				if (item.getId() === assignment.getId()) {
+					index = i;
+				}
+			});
+
+			prev = index - 1;
+			next = index + 1;
+
+			if (prev >= 0) {
+				prev = assignments[prev];
+			} else {
+				prev = undefined;
+			}
+
+			if (next < assignments.length) {
+				next = assignments[next];
+			} else {
+				next = undefined;
+			}
+
+			path.push({
+				label: 'Assignments',
+				route: '/'
+			});
+
+			path.push({
+				label: assignment.get('title')
+			});
+
+			pageSource = NextThought.util.PageSource({
+				next: next && next.getId(),
+				nextTitle: next && next.get('title'),
+				prev: prev && prev.getId(),
+				prevTitle: prev && prev.get('title')
+			});
+
+			return {
+				path: path,
+				assignment: assignment,
+				student: $AppConfig.userObject,
+				assignmentHistory: view.assignmentCollection.getHistory(assignment.getId(), true)
+			}
+		})
+		.then(this.showReader.bind(this));
+	},
+
+
+	showAssignments: function(route, subRoute) {
+		var view = this.getView();
+
+		this.getLayout().setActiveItem(view);
+
+		return view.showAssignments(route, subRoute);
+	},
+
+
+	showNotifications: function(route, subRoute) {
+		var view = this.getView();
+
+		this.getLayout().setActiveItem(view);
+
+		return view.showNotifications(route, subRoute);
+	},
+
+
+	showPerformance: function(route, subRoute) {
+		var view = this.getView();
+
+		this.getLayout().setActiveItem(view);
+
+		return view.showPerformance(route, subRoute);
+	},
+
+
+	showAssignmentForStudent: function(route, subRoute) {
+		debugger;
+	},
+
+
+	showStudentForAssignment: function(route, subRoute) {
+		debugger;
+	},
 
 
 	onRoute: function(route, subRoute) {
@@ -75,5 +203,30 @@ Ext.define('NextThought.app.course.assessment.Index', {
 		this.getLayout().setActiveItem(view);
 
 		return view.handleRoute(route.path, route.precache);
+	},
+
+
+	getAssignmentRoute: function(obj) {
+		var id = obj.getId();
+
+		id = ParseUtils.encodeForURI(id);
+
+		return {
+			route: id,
+			title: obj.get('title'),
+			precache: {
+				assignment: obj
+			}
+		}
+	},
+
+
+	changeRoute: function(title, route) {
+		this.pushRoute(title, route || '/');
+	},
+
+
+	onAssignmentNavigate: function() {
+		debugger;
 	}
 });

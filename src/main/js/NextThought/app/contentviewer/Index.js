@@ -16,6 +16,7 @@
  *   	student(optional): if rendering an assignment the student you are rendering for
  *    	assignmentHistory(optional): if rendering an assignment and you already have the history item,
  *    	navigate: function to call to navigate,
+ *    	onRoute: function to call when a route is changed,
  *    	onClose: function
  * }
  *
@@ -28,6 +29,7 @@
  * 				label: String,
  * 				cls: String,
  * 				ntiid: NTIID to navigate to,
+ * 				route: String route to navigate to
  * 				siblings: [ //items to fill out the hover menu
  * 					{
  * 						label: String,
@@ -51,7 +53,8 @@ Ext.define('NextThought.app.contentviewer.Index', {
 		// 'NextThought.view.contentviewer.Annotations',
 		// 'NextThought.view.contentviewer.Header'
 		// 'NextThought.view.reader.Panel',
-		'NextThought.app.contentviewer.Actions'
+		'NextThought.app.contentviewer.Actions',
+		'NextThought.app.contentviewer.panels.*'
 	],
 
 	layout: 'none',
@@ -69,7 +72,7 @@ Ext.define('NextThought.app.contentviewer.Index', {
 		};
 
 		if (config.assignment) {
-			readerConfig.xtype = !student || isMe(student) ? 'assignment-reader' : 'admin-assignment-reader';
+			readerConfig.xtype = !config.student || isMe(config.student) ? 'assignment-reader' : 'admin-assignment-reader';
 			readerConfig.assignment = config.assignment;
 			readerConfig.assignmentHistory = config.assignmentHistory;
 			readerConfig.assignmentId = config.assignment.getId();

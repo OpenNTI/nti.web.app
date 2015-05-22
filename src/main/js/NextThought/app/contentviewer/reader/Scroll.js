@@ -8,7 +8,7 @@ Ext.define('NextThought.app.contentviewer.reader.Scroll', {
 		var me = this, reader = me.reader;
 
 		function afterReaderRenders() {
-			me.scrollingEl = reader.getTargetEl();
+			me.scrollingEl = Ext.getBody();
 			reader.on('destroy', 'destroy',
 					reader.relayEvents(me.scrollingEl, [
 						'scroll'
@@ -30,6 +30,7 @@ Ext.define('NextThought.app.contentviewer.reader.Scroll', {
 
 
 	lock: function() {
+		debugger;
 		if (!Ext.getDom(this.scrollingEl)) {
 			return;
 		}

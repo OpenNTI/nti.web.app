@@ -274,7 +274,6 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 
 
 	applyState: function(state) {
-		debugger;
 		var cmp = this.getContent(),
 			store = this.store,
 			g = this.getGrouper(state);
@@ -468,8 +467,6 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 	restoreState: function() {
 		var state = this.getCurrentState(),
 			bar = this.getFilterBar();
-
-		debugger;
 
 		if (state && state.groupBy) {
 			bar.selectGroupBy(state.groupBy);

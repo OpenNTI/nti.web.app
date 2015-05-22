@@ -240,7 +240,7 @@ Ext.define('NextThought.app.assessment.Question', {
 
 	setQuestionContent: function(part) {
 		var me = this,
-			root = ContentUtils.getRoot(this.reader.getLocation().NTIID), c, p;
+			root = me.reader.getLocation().root, c, p;
 
 		c = this.question.get('content') || '';
 		p = part ? part.get('content') : '';

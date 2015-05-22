@@ -71,7 +71,7 @@ Ext.define('NextThought.app.assessment.input.Base', {
 
 
 	filterHTML: function(html) {
-		var root = ContentUtils.getRoot(this.reader.getLocation().NTIID);
+		var root = this.reader.getLocation().root;
 		function fixRef(original, attr, url) {
 			return (/^data:/i.test(url) || Globals.HOST_PREFIX_PATTERN.test(url)) ? original : attr + '="' + root + url + '"';
 		}
