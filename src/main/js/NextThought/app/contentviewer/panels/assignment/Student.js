@@ -19,7 +19,8 @@ Ext.define('NextThought.app.contentviewer.panels.assignment.Student', {
 			path: this.path,
 			assignmentHistory: this.assignmentHistory,
 			assignment: this.assignment,
-			assignmentId: this.assignment.getId()
+			assignmentId: this.assignment.getId(),
+			doNavigation: this.doNavigation.bind(this)
 		};
 	},
 
@@ -74,7 +75,7 @@ Ext.define('NextThought.app.contentviewer.panels.assignment.Student', {
 			assignmentHistory = me.assignmentHistory;
 
 		reader.getScroll().lock();
-		reader.pageWidgets.hide();
+		reader.hidePageWidgets();
 
 		function done() {
 			reader.getScroll().unlock();

@@ -94,6 +94,16 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 	},
 
 
+	hidePageWidgets: function() {
+		if (!this.rendered) {
+			this.on('afterrender', this.hidePageWidgets.bind(this));
+			return;
+		}
+
+		this.pageWidgets.hide();
+	},
+
+
 	beforeDestroy: function() {
 		var items = this.floatingItems;
 		if (items) {

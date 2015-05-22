@@ -62,7 +62,7 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 
 
 	onClassExtended: function(cls, data) {
-		data.renderSelectors = Ext.applyIf(data.renderSelectors || {}, cls.superclass.renderSelectors);
+		data.renderSelectors = Ext.applyIf(cls.superclass.renderSelectors, data.renderSelectors || {});
 
 		var tpl = cls.superclass.renderTpl;
 
@@ -91,7 +91,7 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 		if (!data.toolbarTpl) {
 			data.toolbarTpl = cls.superclass.toolbarTpl || false;
 		} else {
-			data.toolbarTpl = data.toolbarTpl.replace('{super}', cls.superclass.pathTpl || '');
+			data.toolbarTpl = data.toolbarTpl.replace('{super}', cls.superclass.toolbarTpl || '');
 		}
 
 		if (data.toolbarTpl) {
@@ -290,8 +290,26 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 	},
 
 
-	onPrevious: function(e) {},
+	onPrevious: function(e) {
+		if (e.getTarget('.disabled')) {
+			return;
+		}
+
+		var previous = this.pageSource.getPrevious(),
+			title = this.pageSource.getPreviousTitle();
+
+		this.doNavigation(title, previous);
+	},
 
 
-	onNext: function(e) {}
+	onNext: function(e) {
+		if (e.getTarget('.disabled')) {
+			return; 
+		}
+
+		var next = this.pageSource.getNext(),
+			title = this.pageSource.getNextTitle();
+
+		this.doNavigation(title, next);
+	}
 });

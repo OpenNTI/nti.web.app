@@ -114,7 +114,8 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 			bundle: this.bundle,
 			path: this.path,
 			pageSource: this.pageSource,
-			hideControls: this.pageInfo.hideControls
+			hideControls: this.pageInfo.hideControls,
+			doNavigation: this.doNavigation.bind(this)
 		};
 	},
 
@@ -171,5 +172,10 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 	selectDiscussion: function() {
 		this.down('tabpanel[ui=notes-and-discussion]').setActiveTab(
 			this.down('annotation-view[discussion]'));
+	},
+
+
+	doNavigation: function(title, ntiidOrRoute) {
+		this.handleNavigation(title, ntiidOrRoute);
 	}
 });

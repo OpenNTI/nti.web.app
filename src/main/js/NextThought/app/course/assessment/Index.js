@@ -80,10 +80,15 @@ Ext.define('NextThought.app.course.assessment.Index', {
 
 	showReader: function(config) {
 		if (this.assignment) {
+			if (this.assignment.reader && this.assignment.reader.el) {
+				this.assignment.reader.el.unmask();
+			}
+
 			this.assignment.destroy();
 		}
 
 		config.bundle = this.currentBundle;
+		config.handleNavigation = this.handleNavigation.bind(this);
 
 		this.assignment = this.add({
 			xtype: 'course-assessment-assignment',
@@ -98,13 +103,18 @@ Ext.define('NextThought.app.course.assessment.Index', {
 
 
 	showAssignment: function(route, subRoute) {
-		var id = route.params.assignment,
+		var me = this,
+			id = route.params.assignment,
 			assignment = route.precache.assignment,
 			view = this.getView();
 
 		id = ParseUtils.decodeFromURI(id);
 
 		assignment = assignment || Service.getObject(id);
+
+		if (this.assignment && this.assignment.reader && this.assignment.reader.el) {
+			this.assignment.reader.el.mask('Loading...');
+		}
 
 		return Promise.all([
 			assignment,
@@ -137,28 +147,38 @@ Ext.define('NextThought.app.course.assessment.Index', {
 
 			path.push({
 				label: 'Assignments',
+				title: 'Assignments',
 				route: '/'
 			});
 
 			path.push({
+				cls: 'locked',
 				label: assignment.get('title')
 			});
 
-			pageSource = NextThought.util.PageSource({
+			pageSource = NextThought.util.PageSource.create({
 				next: next && next.getId(),
 				nextTitle: next && next.get('title'),
-				prev: prev && prev.getId(),
-				prevTitle: prev && prev.get('title')
+				previous: prev && prev.getId(),
+				previousTitle: prev && prev.get('title'),
+				currentIndex: index + 1,
+				total: assignments.length
 			});
 
 			return {
 				path: path,
+				pageSource: pageSource,
 				assignment: assignment,
 				student: $AppConfig.userObject,
 				assignmentHistory: view.assignmentCollection.getHistory(assignment.getId(), true)
 			}
 		})
-		.then(this.showReader.bind(this));
+		.then(me.showReader.bind(me))
+		.then(function() {
+			if (me.assignment && me.assignment.reader && me.assignment.reader.el) {
+				me.assignment.reader.el.unmask();
+			}
+		});
 	},
 
 
@@ -189,14 +209,10 @@ Ext.define('NextThought.app.course.assessment.Index', {
 	},
 
 
-	showAssignmentForStudent: function(route, subRoute) {
-		debugger;
-	},
+	showAssignmentForStudent: function(route, subRoute) {},
 
 
-	showStudentForAssignment: function(route, subRoute) {
-		debugger;
-	},
+	showStudentForAssignment: function(route, subRoute) {},
 
 
 	onRoute: function(route, subRoute) {
@@ -228,7 +244,13 @@ Ext.define('NextThought.app.course.assessment.Index', {
 	},
 
 
-	onAssignmentNavigate: function() {
-		debugger;
+	handleNavigation: function(title, ntiidOrRoute) {
+		var route = ntiidOrRoute;
+
+		if (ParseUtils.isNTIID(route)) {
+			route = ParseUtils.encodeForURI(route);
+		}
+
+		this.pushRoute(title, route);
 	}
 });
