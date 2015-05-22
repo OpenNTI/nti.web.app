@@ -36,6 +36,11 @@ Ext.define('NextThought.app.course.info.components.Body', {
 		 return Promise.resolve();
 	},
 
+	scrollRosterIntoView: function(route, subRoute) {
+		// Set scroll to top. Maybe change scroll based on route and subroute??
+		Ext.getBody().dom.scrollTop = 0;
+	},
+
 	scrollInfoSectionIntoView: function(route) {
 		var infoCmp = this.getComponent('info'),
 			scrollTarget, hash, scrollTargetY, brect;

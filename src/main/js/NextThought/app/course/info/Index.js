@@ -101,7 +101,7 @@ Ext.define('NextThought.app.course.info.Index', {
 
 		me.navigation.setActiveItem(route);
 		me.body.setActiveItem('roster').then(function(){
-			me.body.getComponent('roster').scrollTo('top', 0, true);
+			me.body.scrollRosterIntoView(route, subRoute);
 		});
 	},
 
