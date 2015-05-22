@@ -15,6 +15,7 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 	buildEnrollmentSteps: function(course) {
 		var enrollmentOption = course.getEnrollmentOption(this.NAME),
 			openOption = course.getEnrollmentOption(NextThought.util.courseware.options.OpenEnrollment.NAME),
+			storeOption = course.getEnrollmentOption(NextThought.util.courseware.options.StoreEnrollment.NAME),
 			steps = [];
 
 		enrollmentOption.display = this.display;
@@ -37,7 +38,8 @@ Ext.define('NextThought.util.courseware.options.FiveminuteEnrollment', {
 			xtype: 'enrollment-admission',
 			name: 'Admissions',
 			hasPricingCard: true,
-			baseIsOpen: openOption && openOption.Enabled,
+			hasOpenOption: openOption && openOption.Enabled,
+			hasStoreOption: storeOption && storeOption.IsAvailable,
 			enrollmentOption: enrollmentOption,
 			isComplete: function() {
 				return new Promise(function(fulfill, reject) {

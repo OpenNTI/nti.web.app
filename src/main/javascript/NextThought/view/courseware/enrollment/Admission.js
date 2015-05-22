@@ -334,6 +334,7 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 
 		var me = this,
 			form = me.form.slice(),
+			descriptionInputs = [],
 			currentStudent = getString('OUStudentAdmissionMessage', null, true);
 
 		if (!currentStudent) {
@@ -406,19 +407,32 @@ Ext.define('NextThought.view.courseware.enrollment.Admission', {
 		}else if (me.status === 'Rejected') {
 			me.showRejection();
 		} else {
+			descriptionInputs.push({
+				type: 'description',
+				text: getString('NextThought.view.courseware.enrollment.Admission.OUQuest')
+			});
+
+			if (me.hasOpenOption) {
+				descriptionInputs.push({
+					type: 'link',
+					text: getString('NextThought.view.courseware.enrollment.Admission.FreeCourse'),
+					eventName: 'go-back'
+				});
+			} else if (me.hasStoreOption) {
+				descriptionInputs.push({
+					type: 'link',
+					text: getString('NextThought.view.courseware.enrollment.Admission.LifelongLearner'),
+					eventName: 'go-back'
+				});
+			}
+
 			form.unshift({
 				name: 'intro',
 				label: getString('NextThought.view.courseware.enrollment.Admission.OUJanux'),
 				items: [
 					{
 						xtype: 'enrollment-set',
-						inputs: [
-							{
-								type: 'description',
-								text: getString('NextThought.view.courseware.enrollment.Admission.OUQuest')
-							},
-							{type: 'link', text: (me.baseIsOpen ? getString('NextThought.view.courseware.enrollment.Admission.FreeCourse') : getString('NextThought.view.courseware.enrollment.Admission.LifelongLearner')), eventName: 'go-back'}
-						]
+						inputs: descriptionInputs
 					}
 				]
 			});
