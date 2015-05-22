@@ -104,7 +104,7 @@ NTIStrings.EnrollmentText = {
 		},
 		enrolled: {
 			title: 'Enrolled for College Credit!',
-			information: 'Class begins {date} and will be conducted fully online.',
+			information: 'Class begins {date}.',
 			links: [
 				{href: 'welcome', text: 'Get Acquainted with Janux'},
 				{href: 'profile', text: 'Complete Your Profile'}

@@ -95,11 +95,12 @@ Ext.define('NextThought.util.courseware.options.OpenEnrollment', {
 			loadDetails,
 			option = course.getEnrollmentOption(me.NAME);
 
-
-		if (!option || (!option.Enabled && !option.IsEnrolled)) {
+		if (!option || (!option.IsAvailable && !option.IsEnrolled)) {
 			return {
+				name: this.NAME,
 				loaded: Promise.reject(),
-				IsEnrolled: false
+				IsEnrolled: false,
+				IsAvailable: false
 			};
 		}
 
@@ -139,8 +140,10 @@ Ext.define('NextThought.util.courseware.options.OpenEnrollment', {
 		});
 
 		return {
+			name: this.NAME,
 			loaded: loadDetails,
-			IsEnrolled: option.IsEnrolled
+			IsEnrolled: option.IsEnrolled,
+			IsAvailable: true
 		};
 	}
 });

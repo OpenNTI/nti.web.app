@@ -37,7 +37,7 @@ Ext.define('NextThought.view.courseware.enrollment.Enroll', {
 		confirmEl: '.confirm',
 		availableEl: '.available',
 		detailsEl: '.details',
-		subscribeContainerEl: '.subscribe',
+		subscribeContainerEl: '.subscribe-container',
 		subscribeEl: '.subscribe input[name=subscribe]',
 		subscribeLabelEl: '.subscribe label',
 		subscribeLegalEl: '.subscribe-container .legal'
