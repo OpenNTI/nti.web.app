@@ -92,6 +92,8 @@ Ext.define('NextThought.app.course.assessment.Index', {
 		});
 
 		this.getLayout().setActiveItem(this.assignment);
+
+		this.assignment.alignReader();
 	},
 
 

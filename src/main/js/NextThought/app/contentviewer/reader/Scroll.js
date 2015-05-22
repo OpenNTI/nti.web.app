@@ -30,7 +30,6 @@ Ext.define('NextThought.app.contentviewer.reader.Scroll', {
 
 
 	lock: function() {
-		debugger;
 		if (!Ext.getDom(this.scrollingEl)) {
 			return;
 		}

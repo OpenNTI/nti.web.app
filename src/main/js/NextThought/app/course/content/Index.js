@@ -74,7 +74,7 @@ Ext.define('NextThought.app.course.content.Index', {
 		Ext.EventManager.onWindowResize(me.alignReader, me, false);
 
 		this.on('destroy', function() {
-			Ext.EventManager.removeWindowResize(me.alignReader, me);
+			Ext.EventManager.removeResizeListener(me.alignReader, me);
 		});
 	},
 
