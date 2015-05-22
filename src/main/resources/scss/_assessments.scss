@@ -890,7 +890,7 @@ body.dragging * {
 			&:last-of-type { border-bottom-width: 0px; }
 			padding-left: 54px;
 
-			span {
+			& > span {
 				line-height: 38px;
 			}
 

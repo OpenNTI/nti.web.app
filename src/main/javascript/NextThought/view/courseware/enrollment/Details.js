@@ -278,23 +278,41 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 	},
 
 	/**
-	 * Given enrollment details, fetch all the data for the option given
-	 * @param  {Promise} option    promise to load the option details
-	 * @param  {Object} details the enrollment details
-	 * @return {Promise}         resolved if the option is available, reject if not;
+	 * Given a base enrollment option, fetch all the data
+	 * @param  {Object} option option to load
+	 * @return {Promise}       fulfills when its loaded
 	 */
-	__addEnrollmentOption: function(option, details, name) {
+	__addEnrollmentBase: function(option) {
 		var me = this, loading;
 
 		if (option) {
-			loading = option.then(function(data) {
+			loading = option.loaded
+				.then(function(data) {
+					me.enrollmentOptions[data.Name] = data;
+
+					me.__addBaseOption(option, data);
+				});
+		} else {
+			loading = Promise.reject();
+		}
+
+		return loading
+	},
+
+
+	/**
+	 * Given an enrollment option, fetch all the data for the option given
+	 * @param  {Object} option the enrollment details
+	 * @return {Promise}         resolved if the option is available, reject if not;
+	 */
+	__addEnrollmentOption: function(option) {
+		var me = this, loading;
+
+		if (option) {
+			loading = option.loaded.then(function(data) {
 				me.enrollmentOptions[data.Name] = data;
 
-				if (data.BaseOption) {
-					me.__addBaseOption(details, data);
-				} else {
-					me.__addAddOnOption(details, data);
-				}
+				me.__addAddOnOption(option, data);
 			});
 		} else {
 			loading = Promise.reject();
@@ -311,37 +329,65 @@ Ext.define('NextThought.view.courseware.enrollment.Details', {
 	 * @return {Promise}         fulfills when its done, a rejection is not expected
 	 */
 	__onDetailsLoaded: function(details) {
-		var loading = Promise.reject(),
+		var loading,
+			base, addOns = [],
+			priority = CourseWareUtils.Enrollment.getBasePriority(),
 			me = this;
 
-		//iterate through the all the possible options and load their data
-		//if the option is configured to wait, do not unmask the card before its is loaded
-		//if the option isn't ocnfigured to wait, do not block showing the card
+		function addBase(option, details) {
+			details.name = details.name || option.name;
+
+			//if we are enrolled in an option it is the base
+			//and any other base is would be an add on
+			if (details.IsEnrolled) {
+				addOns.push(base);
+				base = details;
+			//if we don't already have a base option, it is by default
+			} else if (!base) {
+				base = details;
+			//if we are enrolled in current base, we are an addon
+			} else if (base.IsEnrolled) {
+				addOns.push(details);
+			//if the current base is a higher priority, we are an addon
+			} else if (priority[base.name] > priority[details.name]) {
+				addOns.push(details);
+			//otherwise the current base is an add on and we are the base
+			} else {
+				addOns.push(base);
+				base = details;
+			}
+		}
+
+		//iterate through all the options and figure out which one
+		//should be the base and what the add ons should be
 		CourseWareUtils.Enrollment.forEachOption(function(option) {
 			var optionDetails = details.Options[option.name];
 
-			//if we are enrolled in the option always wait for it to finish
-			if (optionDetails.IsEnrolled) {
-				loading = loading
-							.always(me.__addEnrollmentOption.bind(me, optionDetails.loaded, details));
-			} else if (option.wait) {
-				//if we aren't enrolled only wait if we should for this option
-				loading = loading
-							.fail(me.__addEnrollmentOption.bind(me, optionDetails.loaded, details));
-			} else {
-				//add a placeholder for the add on to show that there is another option coming
-				me.state.addOns[option.name] = {
-					name: option.name,
-					loading: true
-				};
+			//if we're not available stop here
+			if (!optionDetails.IsAvailable) { return; }
 
-				//if the option is not available it will be a rejected promise immediately
-				//so on fail remove it from the addons
-				me.__addEnrollmentOption(optionDetails.loaded, details)
-					.fail(function() {
-						delete me.state.addOns[option.name];
-					});
+			if (option.base || optionDetails.IsEnrolled) {
+				addBase(option, optionDetails);
+			} else {
+				addOns.push(option);
 			}
+		});
+
+		if (!base) {
+			return Promise.reject('No base enrollment found');
+		}
+
+		loading = me.__addEnrollmentBase(base);
+
+		addOns.forEach(function(addOn) {
+			if (!addOn) { return; }
+
+			me.state.addOns[addOn.name] = {
+				name: addOn.name,
+				loading: true
+			};
+
+			me.__addEnrollmentOption(addOn);
 		});
 
 		return loading;

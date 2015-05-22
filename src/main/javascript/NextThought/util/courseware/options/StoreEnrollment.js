@@ -248,11 +248,13 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 			if (!details.Enrolled) {
 				state = this.getWording('archivedNotEnrolled');
 				state.buttonText = 'Add Archived Course';
+				state.price = details.Price;
 			//if we enrolled before it was archived
 			} else if (details.EndDate > details.EnrollStartDate) {
 				state = this.getWording('arhcivedEnrolled');
 			} else { //if we didn't enroll before it was archived
 				state = this.getWording('archivedNotEnrolled');
+				state.price = details.Price;
 			}
 		} else {
 			if (details.Enrolled) {
@@ -312,8 +314,10 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 		//if there is an option, and its either enrolled or available
 		if (!option || (!option.IsEnrolled && !option.IsAvailable)) {
 			return {
+				name: this.NAME,
 				loaded: Promise.reject(),
-				IsEnrolled: false
+				IsEnrolled: false,
+				IsAvailable: false
 			};
 		}
 
@@ -339,8 +343,10 @@ Ext.define('NextThought.util.courseware.options.StoreEnrollment', {
 		});
 
 		return {
+			name: this.NAME,
 			loaded: loadDetails,
-			IsEnrolled: option.IsEnrolled
+			IsEnrolled: option.IsEnrolled,
+			IsAvailable: true
 		};
 	},
 

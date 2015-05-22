@@ -84,7 +84,7 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 		stateEl: '.billing-info .state',
 		zipEl: '.billing-info .zip',
 		countryEl: '.billing-info .country',
-		subscribeContainerEl: '.subscribe',
+		subscribeContainerEl: '.subscribe-container',
 		subscribeEl: '.subscribe input[name=subscribe]',
 		subscribeLabelEl: '.subscribe label',
 		subscribeLegalEl: '.subscribe-container .legal',
@@ -126,7 +126,7 @@ Ext.define('NextThought.view.courseware.enrollment.PaymentConfirmation', {
 		this.submitButton.disabled = false;
 		this.fireEvent('update-buttons');
 
-		if (this.enrollmentOption.AllowVendorUpdates) {
+		if (this.enrollmentOption.AllowVendorUpdates && false) {
 			this.subscribeLabelEl.update(getString('SubscribeToVendor') || 'Subscribe to updates.');
 			this.subscribeLegalEl.update(getString('SubscribeToVendorLegal'));
 			this.subscribeContainerEl.show();

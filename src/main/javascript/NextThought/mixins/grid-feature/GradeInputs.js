@@ -17,6 +17,8 @@ Ext.define('NextThought.mixins.grid-feature.GradeInputs', {
 			return false;
 		}
 
+		this.editGrade = Ext.Function.createBuffered(this.editGrade.bind(this), 100);
+
 		observer = new MutationObserver(this.bindInputs.bind(this));
 
 		observer.observe(Ext.getDom(this.__getGridView().getEl()), { childList: true, subtree: true });

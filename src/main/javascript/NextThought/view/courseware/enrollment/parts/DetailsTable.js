@@ -48,11 +48,11 @@ Ext.define('NextThought.view.courseware.enrollment.parts.DetailsTable', {
 				{cls: 'field fourth', cn: [
 					{cls: 'name', html: 'duration'},
 					{cls: 'value', html: '{duration}'}
-				]},
-				{cls: 'field fourth', cn: [
-					{cls: 'name', html: 'course type'},
-					{cls: 'value', html: '{type}'}
 				]}
+				// {cls: 'field fourth', cn: [
+				// 	{cls: 'name', html: 'course type'},
+				// 	{cls: 'value', html: '{type}'}
+				// ]}
 			]}
 		]}
 	),
