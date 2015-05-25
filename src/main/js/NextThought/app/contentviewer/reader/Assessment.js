@@ -241,6 +241,38 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 		});
 	},
 
+
+	allowNavigation: function() {
+		if (!this.submission) {
+			return true;
+		}
+
+		var assignment = this.injectedAssignment,
+			hasAnswers = this.submission.hasAnyAnswers(),
+			missingAnswers = this.submission.hasAnyMissing(),
+			isSubmitted = this.submission.isSubmitted(),
+			progressSaved = this.submission.hasProgressSaved();
+
+		return new Promise(function(fulfill, reject) {
+			Ext.Msg.show({
+				title: 'Are you sure?',
+				msg: 'Testing this out',
+				buttons: {
+					primary: {
+						cls: 'caution',
+						text: 'Leave',
+						handler: fulfill
+					},
+					secondary: {
+						text: 'Stay',
+						handler: reject
+					}
+				}
+			});
+		});
+	},
+
+
 	/**
 	 * Let the user know when they leave an assignment that is not submitted if
 	 * 1.) there are answers but no progress saved

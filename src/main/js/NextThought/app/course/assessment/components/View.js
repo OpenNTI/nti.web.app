@@ -24,8 +24,6 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 
 		this.initRouter();
 
-		
-
 		this.addDefaultRoute('/');
 
 		this.navigation.setTitle(this.title);

@@ -96,23 +96,42 @@ Ext.define('NextThought.controller.Application', {
 	},
 
 
-	pushRoute: function(title, route, precache) {
-		var myTitle = this.__mergeTitle(title),
-			myRoute = this.__mergeRoute(route);
+	__doRoute: function(fn, title, route, precache) {
+		var me = this,
+			body = me.getBody(),
+			myTitle = me.__mergeTitle(title),
+			myRoute = me.__mergeRoute(route),
+			allow = body.allowNavigation();
 
-		history.pushState({}, myTitle, myRoute);
-		document.title = title;
-		this.handleRoute(route, precache);
+		function finish() {
+			history[fn]({}, myTitle, myRoute);
+			document.title = title;
+			me.handleRoute(route, precache);
+		}
+
+		function stopNav() {
+			console.warn('NAVIGATION STOPPED:', title, route);
+		}
+
+		if (allow instanceof Promise) {
+			allow
+				.then(finish)
+				.fail(stopNav);
+		} else if (allow === false) {
+			stopNav();
+		} else {
+			finish();
+		}
+	},
+
+
+	pushRoute: function(title, route, precache) {
+		this.__doRoute('pushState', title, route, precache);
 	},
 
 
 	replaceRoute: function(title, route, precache) {
-		var myTitle = this.__mergeTitle(title),
-			myRoute = this.__mergeRoute(route);
-
-		history.replaceState({}, myTitle, myRoute);
-		document.title = title;
-		this.handleRoute(route, precache);
+		this.__doRoute('replaceState', title, route, precache);
 	},
 
 

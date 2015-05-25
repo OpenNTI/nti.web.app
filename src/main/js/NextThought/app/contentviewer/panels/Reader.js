@@ -175,6 +175,18 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 	},
 
 
+	/**
+	 * Return true if the reader should allow itself to be close
+	 * false should attempt to stop the navigation if it can
+	 * @return {Promise} fulfills once it can navigate, or rejects if it needs to stop
+	 */
+	allowNavigation: function(forced) {
+		var reader = this.getReaderContent();
+
+		return !reader || reader.allowNavigation(forced);
+	},
+
+
 	doNavigation: function(title, ntiidOrRoute) {
 		this.handleNavigation(title, ntiidOrRoute);
 	}

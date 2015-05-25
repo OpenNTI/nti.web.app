@@ -79,5 +79,30 @@ Ext.define('NextThought.mixins.Router', {
 		this.mixins.Object.handleObject.call(this, object)
 			.then(this.__handleObjectRoute.bind(this))
 			.then(this.__handleNoObjectRoute.bind(this, object));
+	},
+
+	/**
+	 * Return the active cmp for this route
+	 * @override
+	 * @return {Object} the active cmp
+	 */
+	getActiveItem: function() {
+		var layout = this.getLayout && this.getLayout(),
+			item = layout && layout.getActiveItem && layout.getActiveItem();
+
+		return item || {};
+	},
+
+
+	/**
+	 * Whether or not we need to stop route change before we go any further
+	 * can return a boolean or a promise if we need to confirm with the user first
+	 * @override
+	 * @return {Boolean|Promise} if we can navigate
+	 */
+	allowNavigation: function() {
+		var activeItem = this.getActiveItem();
+
+		return activeItem && activeItem.allowNavigation ? activeItem.allowNavigation() : true;
 	}
 });

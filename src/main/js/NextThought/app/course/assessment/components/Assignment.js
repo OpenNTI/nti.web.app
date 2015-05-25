@@ -13,5 +13,17 @@ Ext.define('NextThought.app.course.assessment.components.Assignment', {
 		this.reader.show();
 
 		this.alignReader();
+	},
+
+
+	allowNavigation: function() {
+		return this.reader ? this.reader.allowNavigation() : true;
+	},
+
+
+	close: function() {
+		if (this.reader) {
+			this.reader.destroy();
+		}
 	}
 });

@@ -602,6 +602,12 @@ Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
 			return {range: null, container: c};
 		}
 		return {range: line.range, container: null};
+	},
+
+	
+	//TODO: fill this out
+	allowNavigation: function() {
+		return Promise.resolve();
 	}
 
 });

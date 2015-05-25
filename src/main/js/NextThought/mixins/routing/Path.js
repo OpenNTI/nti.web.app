@@ -232,8 +232,8 @@ Ext.define('NextThought.mixins.routing.Path', {
 			return;
 		}
 
-		cmp.pushRoute = this.__pushChildRoute.bind(this);
-		cmp.replaceRoute = this.__replaceChildRoute.bind(this);
+		cmp.pushRoute = this.__pushChildRoute.bind(this, cmp);
+		cmp.replaceRoute = this.__replaceChildRoute.bind(this, cmp);
 		cmp.pushRootRoute = this.pushRootRoute.bind(this);
 		cmp.replaceRootRoute = this.replaceRootRoute.bind(this);
 		cmp.setTitle = this.__setChildTitle.bind(this);
@@ -246,6 +246,12 @@ Ext.define('NextThought.mixins.routing.Path', {
 	 */
 	getRouteTitle: function() { return ''; },
 
+	/**
+	 * Return objects to apply to the cache to speed up handling a route
+	 * @return {Object} items to merge into the precache
+	 */
+	getRoutePrecache: function() { return {}; },
+
 
 	/**
 	 * Merge a title and sub route into mine
@@ -254,14 +260,21 @@ Ext.define('NextThought.mixins.routing.Path', {
 	 * @param  {String} subRoute
 	 * @return {Object}           map of the values
 	 */
-	__mergeChildRoute: function(title, subRoute) {
+	__mergeChildRoute: function(title, subRoute, precache) {
 		var myTitle = this.getRouteTitle(),
-			route = this.getCurrentRoute();
+			route = this.getCurrentRoute(),
+			myCache = this.getRoutePrecache();
 
 		if (myTitle && title) {
 			title = title + ' - ' + myTitle;
 		} else if (!title) {
 			title = myTitle;
+		}
+
+		if (myCache && precache) {
+			precache = Ext.apply(myCache, precache);
+		} else if (!precache) {
+			precache = myCache;
 		}
 
 		route = this.trimRoute(route);
@@ -271,8 +284,34 @@ Ext.define('NextThought.mixins.routing.Path', {
 
 		return {
 			title: title,
-			route: route
+			route: route,
+			precache: precache
 		};
+	},
+
+
+	__doRoute: function(fn, cmp, title, subRoute, precache) {
+		var me = this,
+			merged = me.__mergeChildRoute(title, subRoute, precache),
+			allow = cmp.allowNavigation ? cmp.allowNavigation() : true;
+
+		function finishNav() {
+			me[fn](merged.title, merged.route, merged.pecache);
+		}
+
+		function stopNav() {
+			console.warn('ROUTING STOPPED:', title, subroute, precache);
+		}
+
+		if (allow instanceof Promise) {
+			allow
+				.then(finishNav)
+				.fail(stopNav);
+		} else if (allow === false) {
+			stopNav();
+		} else {
+			finishNav();
+		}
 	},
 
 
@@ -282,10 +321,8 @@ Ext.define('NextThought.mixins.routing.Path', {
 	 * @param  {String} subRoute the childs route
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
 	 */
-	__pushChildRoute: function(title, subRoute, precache) {
-		var merged = this.__mergeChildRoute(title, subRoute);
-
-		this.pushRoute(merged.title, merged.route, precache);
+	__pushChildRoute: function(cmp, title, subRoute, precache) {
+		this.__doRoute('pushRoute', cmp, title, subRoute, precache);
 	},
 
 
@@ -295,11 +332,10 @@ Ext.define('NextThought.mixins.routing.Path', {
 	 * @param  {String} subRoute the childs route
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
 	 */
-	__replaceChildRoute: function(title, subRoute, precache) {
-		var merged = this.__mergeChildRoute(title, subRoute);
-
-		this.replaceRoute(merged.title, merged.route, precache);
+	__replaceChildRoute: function(cmp, title, subRoute, precache) {
+		this.__doRoute('replaceRoute', cmp, title, subRoute, precache);
 	},
+
 
 	/**
 	 * Merge my title in to the childs and set it
@@ -360,5 +396,14 @@ Ext.define('NextThought.mixins.routing.Path', {
 	 * @param  {String} route   the route to set
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
 	 */
-	replaceRootRoute: function(title, route, precache) {}
+	replaceRootRoute: function(title, route, precache) {},
+
+
+	/**
+	 * Whether or not we need to stop route change before we go any further
+	 * can return a boolean or a promise if we need to confirm with the user first
+	 * @override
+	 * @return {Boolean|Promise} if we can navigate
+	 */
+	allowNavigation: function() { return true; }
 });

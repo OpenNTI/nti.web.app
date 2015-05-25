@@ -98,7 +98,7 @@ Ext.define('NextThought.app.contentviewer.Index', {
 			.then(function(pageInfo) {
 				me.readerConfig.pageInfo = pageInfo;
 
-				me.add(me.readerConfig);
+				me.reader = me.add(me.readerConfig);
 			});
 	},
 
@@ -117,5 +117,10 @@ Ext.define('NextThought.app.contentviewer.Index', {
 		}
 
 		return p;
+	},
+
+
+	allowNavigation: function() {
+		return this.reader ? this.reader.allowNavigation() : true;
 	}
 });

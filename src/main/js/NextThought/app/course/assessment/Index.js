@@ -56,11 +56,22 @@ Ext.define('NextThought.app.course.assessment.Index', {
 		});
 
 		this.addChildRouter(this.getView());
+
+		this.on('deactivate', this.onDeactivate.bind(this));
 	},
 
 	
 	onActivate: function() {
 		this.setTitle(this.title);
+	},
+
+
+	onDeactivate: function() {
+		var reader = this.down('course-assessment-assignment');
+
+		if (reader) {
+			reader.close();
+		}
 	},
 
 

@@ -334,6 +334,15 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 	},
 
 
+	allowNavigation: function() {
+		var note = this.getNoteOverlay(),
+			assessment = this.getAssessment();
+
+		return note.allowNavigation()
+			.then(assessment.allowNavigation.bind(assessment));
+	},
+
+
 	onNavigationAborted: function(resp, ntiid) {
 		this.splash.removeCls('initial');
 	},
