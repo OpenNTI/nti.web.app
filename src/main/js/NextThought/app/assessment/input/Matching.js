@@ -210,6 +210,7 @@ Ext.define('NextThought.app.assessment.input.Matching', function() {
 
 			cfg = {
 				scrollEl: me.reader.getScroll().scrollingEl,
+				containerScroll: true,
 				animRepair: true,
 				proxy: this.getDragProxy(),
 
@@ -267,8 +268,8 @@ Ext.define('NextThought.app.assessment.input.Matching', function() {
 				}
 			};
 
-			this.dd = new NextThought.dd.ScrollingDragZone(this.shelfEl, cfg);
-			this.reDD = new NextThought.dd.ScrollingDragZone(this.inputBox, cfg);
+			this.dd = new Ext.dd.DragZone(this.shelfEl, cfg);
+			this.reDD = new Ext.dd.DragZone(this.inputBox, cfg);
 			this.on('destroy', 'destroy', this.dd);
 			this.on('destroy', 'destroy', this.reDD);
 		},

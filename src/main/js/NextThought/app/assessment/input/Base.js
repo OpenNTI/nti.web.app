@@ -535,6 +535,11 @@ Ext.define('NextThought.app.assessment.input.Base', {
 
 
 	enableSubmission: function(fromReset) {
+		if (!this.rendered) {
+			this.on('afterrender', this.enableSubmission.bind(this, fromReset));
+			return;
+		}
+
 		if (this.isAssignment && this.submitted) {
 			return;
 		}
@@ -560,6 +565,11 @@ Ext.define('NextThought.app.assessment.input.Base', {
 
 
 	disableSubmission: function(doNotSave) {
+		if (!this.rendered) {
+			this.on('afterrender', this.disableSubmission.bind(this, doNotSave));
+			return;
+		}
+
 		this.submissionDisabled = true;
 		this.checkItBtn.addCls('disabled');
 		if (this.questionSet) {

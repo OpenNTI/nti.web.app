@@ -1,5 +1,5 @@
 Ext.define('NextThought.app.course.content.Index', {
-	extend: 'Ext.Component',
+	extend: 'Ext.container.Container',
 	alias: 'widget.course-content',
 
 	requires: [
@@ -11,17 +11,11 @@ Ext.define('NextThought.app.course.content.Index', {
 		Router: 'NextThought.mixins.Router'
 	},
 
+
+	layout: 'none',
+
 	
 	cls: 'course-content',
-
-	renderTpl: Ext.DomHelper.markup({
-		cls: 'reader-placeholder'
-	}),
-
-
-	renderSelectors: {
-		readerPlaceholderEl: '.reader-placeholder'
-	},
 
 
 	initComponent: function() {
@@ -66,19 +60,6 @@ Ext.define('NextThought.app.course.content.Index', {
 	},
 
 
-	afterRender: function() {
-		this.callParent(arguments);
-
-		var me = this;
-
-		Ext.EventManager.onWindowResize(me.alignReader, me, false);
-
-		this.on('destroy', function() {
-			Ext.EventManager.removeResizeListener(me.alignReader, me);
-		});
-	},
-
-
 	showReader: function(page, parent) {
 		if (!this.rendered) {
 			this.on('afterrender', this.showReader.bind(this, page));
@@ -99,26 +80,9 @@ Ext.define('NextThought.app.course.content.Index', {
 
 		this.setTitle(page.get('label'));
 
-		this.reader.show();
-
-		this.alignReader();
+		this.add(this.reader);
 	},
 
-
-	alignReader: function() {
-		if (!this.rendered || !this.reader || !this.reader.el) {
-			return;
-		}
-
-		var rect = this.readerPlaceholderEl.dom.getBoundingClientRect(),
-			height = Ext.Element.getViewportHeight();
-
-		this.reader.el.setStyle({
-			top: rect.top + 'px',
-			left: rect.left + 'px',
-			'min-height': (height - rect.top) + 'px'
-		});
-	},
 
 
 	showContent: function(route, subRoute) {

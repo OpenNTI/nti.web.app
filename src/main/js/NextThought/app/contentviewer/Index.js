@@ -46,8 +46,6 @@ Ext.define('NextThought.app.contentviewer.Index', {
 
 	cls: 'content-viewer',
 
-	floating: true,
-
 	requires: [
 		// 'NextThought.view.contentviewer.Readers',
 		// 'NextThought.view.contentviewer.Annotations',
@@ -58,8 +56,6 @@ Ext.define('NextThought.app.contentviewer.Index', {
 	],
 
 	layout: 'none',
-
-
 
 	constructor: function(config) {
 		var readerConfig = {
