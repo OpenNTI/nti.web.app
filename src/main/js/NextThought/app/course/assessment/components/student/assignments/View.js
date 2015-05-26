@@ -186,7 +186,8 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 				this.filterSearchValue(state.search);
 			}
 
-			return groupPromise;
+			return groupPromise
+				.then(this.alignNavigation.bind(this));
 		};
 	},
 
@@ -328,8 +329,21 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 	},
 
 
+	/**
+	 * Apply an assignment collection and a bundle
+	 *
+	 * if we already have the same instance don't do anything
+	 * 
+	 * @param {AssignmentCollection} assignments    the assignment collection 
+	 * @param {Bundle} instance    the bundle we are in
+	 */
 	setAssignmentsData: function(assignments, instance) {
 		var me = this;
+
+
+		if (me.data && me.data.instance === instance) {
+			return Promise.resolve();
+		}
 
 		me.clearAssignmentsData();
 
@@ -359,7 +373,7 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 	},
 
 
-	applyAssignmentsData: function() {
+	applyAssignmentsData: function(silent) {
 		var lesson, raw = [], waitsOn = [],
 			bundle = this.data.instance,
 			outline = this.data.outline,
@@ -491,23 +505,12 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 
 
 	_showAssignment: function(record) {
-		var path = [
-			'Assignments',
-			record.get('name')
-		], container = this.up('[rootContainerShowAssignment]');
+		var item = record.get('item');
 
-		this.applyPagerFilter();
-
-		if (!container) {
-			console.error('No container with rootContainerShowAssignment');
-			return;
+		if (item) {
+			this.navigateToObject(item);
+		} else {
+			console.error('No Assignment to navigate to');
 		}
-
-		return container.rootContainerShowAssignment(this, record.get('item'), record, $AppConfig.userObject, path,
-				NextThought.util.PageSource.create({
-					store: this.store,
-					current: this.store.indexOf(record)
-				})
-		);
 	}
 });

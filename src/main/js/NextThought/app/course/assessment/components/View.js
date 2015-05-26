@@ -120,6 +120,7 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 	getAssignmentList: function() {
 		var me = this;
 
+		//apply the assignments data and let it restore state so we can get that order
 		return me.assignmentsView.setAssignmentsData(me.assignmentCollection, me.currentBundle)
 			.then(function() {
 				var items = me.assignmentsView.store.getRange() || [];
@@ -220,19 +221,22 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 		this.notificationsView = this.body.add({
 			xtype: 'course-assessment-activity',
 			title: getString('NextThought.view.courseware.assessment.View.activity'),
-			route: 'notifications'
+			route: 'notifications',
+			alignNavigation: this.alignNavigation.bind(this)
 		});
 
 		this.assignmentsView = this.body.add({
 			xtype: 'course-assessment-assignments',
 			title: getString('NextThought.view.courseware.assessment.View.assignments'),
-			route: '/'
+			route: '/',
+			alignNavigation: this.alignNavigation.bind(this)
 		});
 
 		this.performanceView = this.body.add({
 			xtype: 'course-assessment-performance',
 			title: getString('NextThought.view.courseware.assessment.View.grades'),
-			route: '/performance'
+			route: '/performance',
+			alignNavigation: this.alignNavigation.bind(this)
 		});
 
 
