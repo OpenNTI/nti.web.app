@@ -93,6 +93,8 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Student', {
 			this.removeCls('submitted');
 			this.updateLayout();
 			return;
+		} else {
+			this.addCls('submitted');
 		}
 
 		if (isNoSubmit === true) {

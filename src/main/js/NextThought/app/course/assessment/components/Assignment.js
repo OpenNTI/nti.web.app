@@ -9,11 +9,22 @@ Ext.define('NextThought.app.course.assessment.components.Assignment', {
 
 		this.setTitle(this.readerConfig.assignment.get('title'));
 
+		this.mon(this.reader, {
+			'assignment-submitted': this.handleSubmission.bind(this)
+		});
+
 		this.add(this.reader);
 	},
 
 
 	allowNavigation: function() {
 		return this.reader ? this.reader.allowNavigation() : true;
+	},
+
+
+	handleSubmission: function(historyItemLink) {
+		if (this.onSubmission) {
+			this.onSubmission(historyItemLink);
+		}
 	}
 });

@@ -2,7 +2,9 @@
 Ext.define('NextThought.app.assessment.QuizSubmission', {
 	extend: 'NextThought.app.contentviewer.overlay.Panel',
 	alias: 'widget.assessment-quiz-submission',
+
 	requires: [
+		'NextThought.app.assessment.Actions'
 	],
 
 	cls: 'submission-panel',
@@ -64,6 +66,8 @@ Ext.define('NextThought.app.assessment.QuizSubmission', {
 		this.questionSet.addSaveProgressHandler(this, this.beforeSaveProgress.bind(this), this.afterSaveProgress.bind(this));
 		this.questionSet.setStartTime(this.startTimestamp);
 		this.questionSet.clearProgress();
+
+		this.AssessmentActions = NextThought.app.assessment.Actions.create();
 	},
 
 
@@ -474,13 +478,14 @@ Ext.define('NextThought.app.assessment.QuizSubmission', {
 
 
 	submitClicked: function(e) {
-		var q = this.questionSet,
-			isAssignment = !!q.associatedAssignment,
+		var questionSet = this.questionSet,
+			isAssignment = !!questionSet.associatedAssignment,
 			submission = {};
 
-		if (this.shouldShow) {//skip this part if we're being driven by the file-submission UI.
+		if (this.shouldShow) {
 			if (!this.submitBtn || this.submitBtn.hasCls('disabled')) {
-				if (e) {e.stopEvent();}
+				if (e) { e.stopEvent(); }
+
 				return false;
 			}
 
@@ -489,19 +494,62 @@ Ext.define('NextThought.app.assessment.QuizSubmission', {
 			}
 		}
 
-		if (!q.fireEvent('beforesubmit', q, submission)) {
+		if (!questionSet.fireEvent('beforesubmit', questionSet, submission)) {
 			console.log('submit aborted');
 			return;
 		}
 
-		Ext.getBody().mask(
-				getString('Submitting...'), 'navigation');
-		this.fireEvent(isAssignment ? 'submit-assignment' : 'grade-it', this, q, submission);
+		Ext.getBody().mask(getString('Submitting...'), 'navigation');
+
+		if (isAssignment) {
+			this.submitAssignment(questionSet, submission);
+		} else {
+			this.submitAssessment(questionSet, submission);
+		}
 
 		if (e) {
 			e.stopEvent();
 			return false;
 		}
+	},
+
+
+	submitAssignment: function(questionSet, submission) {
+		var me = this,
+			container = me.reader.getLocation().NTIID;
+
+		me.mask();
+
+		me.AssessmentActions.submitAssignment(questionSet, submission, container, me.startTimestamp)
+			.then(function(obj) {
+				var result = obj.result;
+
+				me.unmask();
+				me.setGradingResult(result);
+
+				me.reader.fireEvent('assignment-submitted', obj.assignmentId, obj.itemLink);
+			}, function() {
+				me.onFailure();
+				me.maybeDoReset(true);
+				me.unmask();
+			});
+	},
+
+
+	submitQuestionSet: function(questionSet, submission) {
+		var me = this,
+			container = me.reader.getLocation().NTIID;
+
+		me.mask();
+
+		me.AssessmentActions.gradeAssessment(questionSet, submission, container, me.startTimestamp)
+			.then(function(result) {
+				me.setGradingResult(result);
+
+				me.reader.fireEvent('assessment-graded', result);
+			}, function() {
+				me.onFailure();
+			});
 	},
 
 

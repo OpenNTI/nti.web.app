@@ -102,10 +102,24 @@ Ext.define('NextThought.app.course.assessment.Index', {
 		this.assignment = this.add({
 			xtype: 'course-assessment-assignment',
 			readerConfig: config,
-			setTitle: this.setTitle.bind(this)
+			setTitle: this.setTitle.bind(this),
+			onSubmission: this.onAssignmentSubmission.bind(this)
 		});
 
 		this.getLayout().setActiveItem(this.assignment);
+	},
+
+
+	onAssignmentSubmission: function(assignmentId, historyItemLink) {
+		var view = this.getView(),
+			assignmentCollection = view.assignmentCollection;
+
+		Service.request(historyItemLink)
+			.then(function(response) {
+				return JSON.parse(response);
+			})
+			.then(assignmentCollection.updateHistoryItem.bind(assignmentCollection, assignmentId))
+			.always(this.bundleChanged.bind(this, this.currentBundle));
 	},
 
 

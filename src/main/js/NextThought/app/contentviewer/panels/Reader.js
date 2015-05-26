@@ -81,7 +81,9 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 
 		if (readerContent) {
 			this.mon(readerContent, {
-				'filter-by-line': 'selectDiscussion'
+				'filter-by-line': 'selectDiscussion',
+				'assignment-submitted': this.fireEvent.bind(this, 'assignment-submitted'),
+				'assessment-graded': this.fireEvent.bind(this, 'assessment-graded')
 			});
 			this.down('annotation-view').anchorComponent = readerContent;
 		}

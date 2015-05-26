@@ -1521,6 +1521,7 @@ canvas.x-component-course-assessment {
 			.header{
 				padding-left: 80px;
 				height: 70px;
+				display: none;
 
 				@include icon('assignment_late', $side:'before', $top:16px, $left:30px);
 
