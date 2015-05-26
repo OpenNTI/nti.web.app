@@ -237,6 +237,10 @@ Ext.define('NextThought.mixins.routing.Path', {
 		cmp.pushRootRoute = this.pushRootRoute.bind(this);
 		cmp.replaceRootRoute = this.replaceRootRoute.bind(this);
 		cmp.setTitle = this.__setChildTitle.bind(this);
+
+		if (cmp.onAddedToParentRouter) {
+			cmp.onAddedToParentRouter(this);
+		}
 	},
 
 	/**

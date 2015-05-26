@@ -40,6 +40,12 @@ Ext.define('NextThought.app.course.overview.Index', {
 	},
 
 
+	onAddedToParentRouter: function() {
+		//replace lesson's push route with mine
+		this.lessons.pushRoute = this.pushRoute.bind(this);
+	},
+
+
 	onActivate: function() {
 		var item = this.getLayout().getActiveItem();
 
