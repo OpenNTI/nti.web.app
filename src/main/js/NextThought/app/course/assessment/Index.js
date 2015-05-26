@@ -57,7 +57,7 @@ Ext.define('NextThought.app.course.assessment.Index', {
 
 		this.addChildRouter(this.getView());
 
-		this.on('deactivate', this.onDeactivate.bind(this));
+		this.on('deactivate', this.closeAssignment.bind(this));
 	},
 
 	
@@ -66,11 +66,9 @@ Ext.define('NextThought.app.course.assessment.Index', {
 	},
 
 
-	onDeactivate: function() {
-		var reader = this.down('course-assessment-assignment');
-
-		if (reader) {
-			reader.close();
+	closeAssignment: function() {
+		if (this.assignment) {
+			this.assignment.destroy();
 		}
 	},
 
@@ -196,6 +194,8 @@ Ext.define('NextThought.app.course.assessment.Index', {
 	showAssignments: function(route, subRoute) {
 		var view = this.getView();
 
+		this.closeAssignment();
+
 		this.getLayout().setActiveItem(view);
 
 		return view.showAssignments(route, subRoute);
@@ -205,6 +205,8 @@ Ext.define('NextThought.app.course.assessment.Index', {
 	showNotifications: function(route, subRoute) {
 		var view = this.getView();
 
+		this.closeAssignment();
+
 		this.getLayout().setActiveItem(view);
 
 		return view.showNotifications(route, subRoute);
@@ -213,6 +215,8 @@ Ext.define('NextThought.app.course.assessment.Index', {
 
 	showPerformance: function(route, subRoute) {
 		var view = this.getView();
+
+		this.closeAssignment();
 
 		this.getLayout().setActiveItem(view);
 
