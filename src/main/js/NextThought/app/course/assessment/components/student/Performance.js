@@ -14,13 +14,13 @@ Ext.define('NextThought.app.course.assessment.components.student.Performance', {
 	ui: 'course-assessment',
 	cls: 'course-performance',
 
-	layout: 'anchor',
+	layout: 'none',
 
 	items: [
 		{
 			cls: 'nti-header course-performance-header',
 			xtype: 'container',
-			layout: 'auto',
+			layout: 'none',
 			items: [
 				//{ xtype: 'grade-chart' },
 				//{ xtype: 'box', cls: 'label', html: 'Cumulative Grade' },
@@ -66,13 +66,13 @@ Ext.define('NextThought.app.course.assessment.components.student.Performance', {
 			]
 		},
 		{xtype: 'grouping', title: 'All Grades',
-			anchor: '0 -200', layout: 'fit',
-			cls: 'grades', items: [
+			anchor: '0 -200', layout: 'none',
+			cls: 'grades scrollable', items: [
 			{
 				xtype: 'grid',
-				width: 694,
+				width: 709,
 				columns: [
-						{ text: 'Assignment Name', dataIndex: 'name', columnWidth: 254, flex: 1, resizable: false},
+						{ text: 'Assignment Name', dataIndex: 'name', flex: 1, resizable: false},
 						{ text: 'Assigned', dataIndex: 'assigned', xtype: 'datecolumn', width: 80, format: 'm/d', resizable: false },
 						{ text: 'Due', dataIndex: 'due', xtype: 'datecolumn', width: 70, format: 'm/d', resizable: false },
 						{ text: 'Completed', dataIndex: 'completed', width: 80, resizable: false, renderer: function(v) {
@@ -242,8 +242,7 @@ Ext.define('NextThought.app.course.assessment.components.student.Performance', {
 			return;
 		}
 
-		this.suspendState();
-		this.fireEvent('goto-assignment', record.get('item'), $AppConfig.userObject);
+		this.navigateToObject(record.get('item'));
 	},
 
 	//This is a read-only view from the STUDENT'S perspective. READ: updates when students navigate to it.

@@ -1117,6 +1117,12 @@ canvas.x-component-course-assessment {
 	}
 }
 
+.course-performance {
+	.x-container.grouping table {
+		table-layout: fixed !important;
+	}
+}
+
 .course-assessment-assignments {
 	.show-older-container{
 		height: 1em;
