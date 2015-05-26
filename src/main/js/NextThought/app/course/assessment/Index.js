@@ -177,7 +177,7 @@ Ext.define('NextThought.app.course.assessment.Index', {
 				pageSource: pageSource,
 				assignment: assignment,
 				student: $AppConfig.userObject,
-				assignmentHistory: view.assignmentCollection.getHistory(assignment.getId(), true)
+				assignmentHistory: view.assignmentCollection.getHistoryItem(assignment.getId(), true)
 			}
 		})
 		.then(me.showReader.bind(me))

@@ -31,7 +31,7 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Student', {
 			{cls: 'turned-in'}
 		]},
 		{cls: 'grade-container', cn: [
-			{cls: 'title', html: '{{NextThought.view.courseware.assessment.reader.Header.grade}}}'},
+			{cls: 'title', html: '{{{NextThought.view.courseware.assessment.reader.Header.grade}}}'},
 			{cls: 'grade'}
 		]}
 	]),

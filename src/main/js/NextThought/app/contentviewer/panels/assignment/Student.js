@@ -68,6 +68,7 @@ Ext.define('NextThought.app.contentviewer.panels.assignment.Student', {
 
 	showAssignment: function() {
 		var me = this,
+			header = me.getToolbar(),
 			reader = me.getReaderContent(),
 			readerAssessment = reader.getAssessment(),
 			assignment = me.assignment,
@@ -93,6 +94,7 @@ Ext.define('NextThought.app.contentviewer.panels.assignment.Student', {
 		assignmentHistory.then(function(h) {
 			readerAssessment.setAssignmentFromStudentProspective(assignment, h);
 			readerAssessment.isInstructorProspective = me.instructorProspective;
+			header.setHistory(h);
 
 			if (assignment.isTimed && this.instructorProspective) {
 				me.showAllowedTime();
@@ -103,6 +105,8 @@ Ext.define('NextThought.app.contentviewer.panels.assignment.Student', {
 					readerAssessment.injectAssignmentSavePoint(point);
 				});
 			}
+
+			reader.getNoteOverlay().disable();
 
 			return reader.setPageInfo(me.pageInfo, me.bundle);
 		}).then(done.bind(this));
