@@ -36,6 +36,7 @@ extend: 'Ext.container.Container',
 			items: [
 				{
 					xtype: 'grid',
+					layout: 'fit',
 					/*verticalScroller: {
 						synchronousRender: true,
 						scrollToLoadBuffer: 100,
@@ -65,7 +66,13 @@ extend: 'Ext.container.Container',
 								return rec.get('OU4x4') || v;
 							}
 						},
-						{ text: getString('NextThought.view.courseware.info.Roster.status'), sortable: false, dataIndex: 'LegacyEnrollmentStatus' },
+						{ text: getString('NextThought.view.courseware.info.Roster.status'), sortable: false, 
+							xtype: 'templatecolumn',
+							dataIndex: 'LegacyEnrollmentStatus',
+							tpl: Ext.DomHelper.markup({
+								cls: 'right-aligned status', html: '{LegacyEnrollmentStatus}'
+							}) 
+						},
 						{
 							//disclosure column
 							sortable: false,
@@ -109,6 +116,8 @@ extend: 'Ext.container.Container',
 			filter: 'doFilter',
 			search: {fn: 'doSearch', buffer: 450}
 		});
+
+		this.on('activate', this.onActivate.bind(this));
 	},
 
 
@@ -123,6 +132,13 @@ extend: 'Ext.container.Container',
 		});
 
 		this.mon(this.grid, 'itemClick', 'maybeShowDisclosureMenu');
+	},
+
+	onActivate: function(){
+		var grid = this.down('grid');
+		if(grid && grid.store){
+			grid.getView().refresh();
+		}
 	},
 
 
