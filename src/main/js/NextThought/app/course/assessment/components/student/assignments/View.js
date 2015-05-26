@@ -337,11 +337,11 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 	 * @param {AssignmentCollection} assignments    the assignment collection 
 	 * @param {Bundle} instance    the bundle we are in
 	 */
-	setAssignmentsData: function(assignments, instance) {
+	setAssignmentsData: function(assignments, instance, silent) {
 		var me = this;
 
 
-		if (me.data && me.data.instance === instance) {
+		if (me.data && me.data.instance === instance && silent) {
 			return Promise.resolve();
 		}
 

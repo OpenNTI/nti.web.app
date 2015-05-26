@@ -54,7 +54,7 @@ Ext.define('NextThought.model.courses.assignments.StudentCollection', {
 	 * @param  {Object} data       data to update with
 	 */
 	updateHistoryItem: function(assignment, data) {
-		this.getHistory(true)
+		return this.getHistory(true)
 			.then(function(history) {
 				var item = history.getItem(assignment);
 

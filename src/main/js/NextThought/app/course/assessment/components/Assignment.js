@@ -22,9 +22,9 @@ Ext.define('NextThought.app.course.assessment.components.Assignment', {
 	},
 
 
-	handleSubmission: function(historyItemLink) {
+	handleSubmission: function(assignmentId, historyItemLink) {
 		if (this.onSubmission) {
-			this.onSubmission(historyItemLink);
+			this.onSubmission(assignmentId, historyItemLink);
 		}
 	}
 });

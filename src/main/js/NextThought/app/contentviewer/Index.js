@@ -97,8 +97,8 @@ Ext.define('NextThought.app.contentviewer.Index', {
 				me.reader = me.add(me.readerConfig);
 
 				me.mon(me.reader, {
-					'assignment-submitted': me.fireEvent.bind(this, 'assignment-submitted'),
-					'assessment-graded': me.fireEvent.bind(this, 'assessment-graded')
+					'assignment-submitted': me.fireEvent.bind(me, 'assignment-submitted'),
+					'assessment-graded': me.fireEvent.bind(me, 'assessment-graded')
 				});
 			});
 	},

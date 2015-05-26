@@ -61,8 +61,6 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 
 		if (!isSync) {
 			me.clearViews();
-		} else {
-			return;
 		}
 
 		me.currentBundle = bundle;
@@ -121,7 +119,7 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 		var me = this;
 
 		//apply the assignments data and let it restore state so we can get that order
-		return me.assignmentsView.setAssignmentsData(me.assignmentCollection, me.currentBundle)
+		return me.assignmentsView.setAssignmentsData(me.assignmentCollection, me.currentBundle, true)
 			.then(function() {
 				var items = me.assignmentsView.store.getRange() || [];
 
