@@ -232,8 +232,8 @@ Ext.define('NextThought.mixins.routing.Path', {
 			return;
 		}
 
-		cmp.pushRoute = this.__pushChildRoute.bind(this, cmp);
-		cmp.replaceRoute = this.__replaceChildRoute.bind(this, cmp);
+		cmp.pushRoute = this.__pushChildRoute.bind(this);
+		cmp.replaceRoute = this.__replaceChildRoute.bind(this);
 		cmp.pushRootRoute = this.pushRootRoute.bind(this);
 		cmp.replaceRootRoute = this.replaceRootRoute.bind(this);
 		cmp.setTitle = this.__setChildTitle.bind(this);
@@ -290,27 +290,14 @@ Ext.define('NextThought.mixins.routing.Path', {
 	},
 
 
-	__doRoute: function(fn, cmp, title, subRoute, precache) {
-		var me = this,
-			merged = me.__mergeChildRoute(title, subRoute, precache),
-			allow = cmp.allowNavigation ? cmp.allowNavigation() : true;
+	__doRoute: function(fn, title, subRoute, precache) {
+		var merged = this.__mergeChildRoute(title, subRoute, precache);
 
-		function finishNav() {
-			me[fn](merged.title, merged.route, merged.pecache);
-		}
 
-		function stopNav() {
-			console.warn('ROUTING STOPPED:', title, subroute, precache);
-		}
-
-		if (allow instanceof Promise) {
-			allow
-				.then(finishNav)
-				.fail(stopNav);
-		} else if (allow === false) {
-			stopNav();
+		if (this[fn]) {
+			this[fn](merged.title, merged.route, merged.pecache);
 		} else {
-			finishNav();
+			console.error('No fn to do route', fn)
 		}
 	},
 
@@ -321,8 +308,8 @@ Ext.define('NextThought.mixins.routing.Path', {
 	 * @param  {String} subRoute the childs route
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
 	 */
-	__pushChildRoute: function(cmp, title, subRoute, precache) {
-		this.__doRoute('pushRoute', cmp, title, subRoute, precache);
+	__pushChildRoute: function(title, subRoute, precache) {
+		this.__doRoute('pushRoute', title, subRoute, precache);
 	},
 
 
@@ -332,8 +319,8 @@ Ext.define('NextThought.mixins.routing.Path', {
 	 * @param  {String} subRoute the childs route
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
 	 */
-	__replaceChildRoute: function(cmp, title, subRoute, precache) {
-		this.__doRoute('replaceRoute', cmp, title, subRoute, precache);
+	__replaceChildRoute: function(title, subRoute, precache) {
+		this.__doRoute('replaceRoute', title, subRoute, precache);
 	},
 
 
