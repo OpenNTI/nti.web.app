@@ -244,7 +244,7 @@ Ext.define('NextThought.controller.Reader', {
 		function fail(req, resp) {
 			var location = ContentUtils.getLocation(id),
 				data, href;
-			if (resp && resp.status === 404 && location) {
+			if (resp && (resp.status === 404 || resp.status === 406) && location) {
 
 				data = DomUtils.parseDomObject(location.location);
 				href = data['attribute-href'];

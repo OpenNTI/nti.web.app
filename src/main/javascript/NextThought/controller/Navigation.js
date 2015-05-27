@@ -360,7 +360,7 @@ Ext.define('NextThought.controller.Navigation', {
 		}
 
 		function recover(reason) {
-			if (reason && reason.status === 404) {
+			if (reason && (reason.status === 404 || reason.status === 406)) {
 				return ContentUtils.findRelatedContentObject(cid)
 						.then(function(obj) {
 							//findRelatedContentObject fulfills promises with an object with the key container that is the ntiid
