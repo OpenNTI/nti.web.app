@@ -9,6 +9,7 @@ Ext.define('NextThought.controller.Application', {
 		//require actions that need to do something on login
 		'NextThought.app.library.Actions',
 		'NextThought.app.store.Actions',
+		'NextThought.app.chat.Actions',
 		'NextThought.common.state.Actions'
 	],
 
@@ -27,6 +28,7 @@ Ext.define('NextThought.controller.Application', {
 		me.LibraryActions = NextThought.app.library.Actions.create();
 		me.StoreActions = NextThought.app.store.Actions.create();
 		me.StateActions = NextThought.common.state.Actions.create();
+		me.ChatActions = NextThought.app.chat.Actions.create();
 
 
 		window.addEventListener('popstate', function(e) {

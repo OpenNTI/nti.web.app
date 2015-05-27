@@ -5,7 +5,8 @@ Ext.define('NextThought.cache.UserRepository', {
 
 	requires: [
 		'NextThought.util.Parsing',
-		'NextThought.model.User'
+		'NextThought.model.User',
+		'NextThought.app.chat.StateStore'
 	],
 
 	constructor: function() {
@@ -48,6 +49,10 @@ Ext.define('NextThought.cache.UserRepository', {
 		});
 
 		queued.on('add', 'start', task);
+
+		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
+
+		this.setPresenceChangeListener(this.ChatStore);
 	},
 
 
@@ -658,14 +663,17 @@ Ext.define('NextThought.cache.UserRepository', {
 
 
 	updatePresenceFromResolve: function(list) {
+		var store = this.ChatStore;
+
 		list.forEach(function(u) {
 			//check if we already have a presence info for them
-			var presence = Ext.getStore('PresenceInfo').getPresenceOf(u.get('Username'));
+			var presence = store.getPresenceOf(u.get('Username'));
 			if (presence) {
 				u.set('Presence', presence);
 			}
 		});
 	},
+
 
 	presenceChanged: function(username, presence) {
 		var u = this.getStore().getById(username), newPresence;
