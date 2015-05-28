@@ -1,0 +1,729 @@
+Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assignment', {
+	extend: 'Ext.container.Container',
+	alias: 'widget.course-assessment-admin-assignments-item',
+
+	state_key: 'admin-assignment-students',
+
+	mixins: {
+		State: 'NextThought.mixins.State'
+	},
+
+	requires: [
+		'NextThought.layout.component.CustomTemplate',
+		'NextThought.common.ux.FilterMenu',
+		'NextThought.app.course.assessment.components.admin.ListHeader',
+		'NextThought.app.course.assessment.components.admin.PagedGrid'
+	],
+
+	ui: 'course-assessment',
+	cls: 'course-assessment-header assignment-item',
+
+	layout: 'none',
+	componentLayout: 'customtemplate',
+	childEls: ['body'],
+	getTargetEl: function() { return this.body; },
+
+	pathRoot: 'Assignments',
+
+	renderTpl: Ext.DomHelper.markup([
+		//toolbar
+		{
+			cls: 'toolbar',
+			cn: [
+				{ cls: 'right controls', cn: [
+					{ cls: 'page', cn: [
+						{tag: 'tpl', 'if': 'page', cn: [{ tag: 'span', html: '{page}'}, ' {{{NextThought.view.courseware.assessment.assignments.admin.Assignment.of}}} ']},
+						{tag: 'tpl', 'if': '!page', cn: ['{{{NextThought.view.courseware.assessment.assignments.admin.Assignment.total}}} ']},
+						{tag: 'span', cls: 'total', html: '{total}'}
+					] },
+					{ cls: 'up {noPrev:boolStr("disabled")}' },
+					{ cls: 'down {noNext:boolStr("disabled")}' }
+				] },
+				//path (bread crumb)
+				{
+					cn: [
+						{ tag: 'span', cls: 'path part root', html: '{pathRoot}'},
+						' / ',
+						{ tag: 'span', cls: 'path part current', html: '{pathBranch}'}
+					]
+				}
+			]
+		},
+		{ id: '{id}-body', cls: 'x-panel-body body', cn: ['{%this.renderContainer(out,values)%}'] }
+	]),
+
+
+	renderSelectors: {
+		rootPathEl: '.toolbar .path.part.root',
+		previousEl: '.toolbar .controls .up',
+		nextEl: '.toolbar .controls .down',
+		totalEl: '.toolbar .controls .page .total',
+		changeDateEl: '.header .controls .email',
+		filtersEl: '.header span.filters',
+		avatarEl: '.header span.toggle-avatar',
+		reportsEl: '.header .controls .reports',
+		pagerEl: '.header .pager-wrapper'
+	},
+
+
+	listeners: {
+		rootPathEl: { click: 'fireGoUp' },
+		previousEl: { click: 'firePreviousEvent' },
+		nextEl: { click: 'fireNextEvent' }
+	},
+
+
+	items: [
+		{xtype: 'course-assessment-admin-listheader'},
+		{
+			xtype: 'course-admin-paged-grid',
+			cls: 'student-assignment-overview',
+			columnOrder: ['Student', 'Username', 'Completed', 'Grade', 'Feedback', 'Submission'],
+			columnOverrides: {
+				Student: {padding: '0 0 0 30'},
+				Grade: {
+					text: getString('NextThought.view.courseware.assessment.admin.Grid.score'),
+					componentCls: 'score',
+					tdCls: 'text score',
+					width: 110,
+					tpl: new Ext.XTemplate(Ext.DomHelper.markup([
+						{cls: 'gradebox', cn: [
+							{tag: 'input', size: 3, tabindex: '1', type: 'text', value: '{[this.getGrade(values)]}'},
+							{ tag: 'tpl', 'if': 'this.isGradeExcused(values)', cn: [
+								{
+									tag: 'span', cls: 'grade-excused',
+									html: getFormattedString('NextThought.view.courseware.assessment.admin.Grid.excused')
+								}
+							]}
+						]}
+						]), {
+							getGrade: function(values) {
+								var historyItem = values.HistoryItemSummary,
+									grade = historyItem && historyItem.get('Grade'),
+									gradeVals = (grade && grade.getValues()) || {};
+
+								return gradeVals.value || '';
+							},
+
+							isGradeExcused: function(values) {
+								var historyItem = values.HistoryItemSummary,
+									grade = historyItem && historyItem.get('Grade');
+
+								return grade && grade.get('IsExcused');
+							}
+						}
+					)
+				}
+			}
+		},
+		{
+			xtype: 'filter-menupanel',
+			searchPlaceHolderText: getString('NextThought.view.courseware.assessment.assignments.admin.Assignment.search'),
+			filters: [
+				{ text: getString('NextThought.view.courseware.assessment.assignments.admin.Assignment.enrolled'), filter: 'ForCredit'},
+				{ text: getString('NextThought.view.courseware.assessment.assignments.admin.Assignment.open'), filter: 'Open'}
+			]
+		}
+	],
+
+
+	constructor: function(config) {
+		this.items = Ext.clone(this.items);
+		this.callParent(arguments);
+	},
+
+
+	initComponent: function() {
+		this._masked = 0;
+		this.callParent(arguments);
+
+		var me = this,
+			pageHeader = me.down('course-assessment-admin-listheader'),
+			grid = me.down('grid'),
+			completed = grid.down('[name=completed]');
+
+		me.filterMenu = this.down('filter-menupanel');
+
+		me.mon(me.filterMenu, {
+			filter: 'doFilter',
+			search: {fn: 'doSearch', buffer: 450}
+		});
+
+		me.store = me.assignments.getAssignmentHistory(me.assignment);
+
+		me.mon(me.store, {
+			beforeload: 'mask',
+			load: 'onStoreLoad'
+		});
+
+		grid.bindStore(me.store);
+		grid.dueDate = me.assignment.getDueDate();
+
+		me.mon(grid, {
+			'load-page': me.loadPage.bind(me),
+			'sortchange': me.changeSort.bind(me)
+		});
+
+		//if there is a completed column but no parts on the assignment
+		//hide the completed column
+		if (me.assignment.isEmpty() && completed) {
+			completed.hide();
+		}
+
+		$AppConfig.Preferences.getPreference('Gradebook')
+			.then(function(value) {
+				pageHeader.setAvatarToggle(!value.get('hide_avatars'));
+			});
+
+		if (me.student) {
+			me.store.proxy.extraParams = Ext.apply(me.store.proxy.extraParams || {}, {
+				batchContainingUsernameFilterByScope: me.student
+			});
+		}
+
+		me.pageHeader = pageHeader;
+
+		me.pageHeader.setAssignment(me.assignment);
+		me.pageHeader.setRequestActive(true, getString('NextThought.view.courseware.assessment.assignments.admin.Assignment.request'));
+		me.pageHeader.bindStore(me.store);
+
+		me.mon(pageHeader, {
+			'toggle-avatars': 'toggleAvatars',
+			'request-change': 'requestDataChange',
+			'page-change': function() {
+				me.mon(me.store, {
+					single: true,
+					'load': grid.scrollToTop.bind(grid)
+				});
+			},
+			'load-page': me.loadPage.bind(me),
+			'set-page-size': me.setPageSize.bind(me)
+		});
+	},
+
+
+	restoreState: function(state, fromAfterRender) {
+		var me = this;
+
+		state = state || me.getCurrentState();
+
+		//if this is coming form after render and we've already restored
+		//a state don't overwrite it. The main reason this is here is so
+		//if they hit the back button the component is already rendered with
+		//a state so we want to override it, but if we are coming from after
+		//render we don't want to override a previous state.
+		if (fromAfterRender && me.stateRestored) {
+			return;
+		}
+
+		me.stateRestored = true;
+
+		me.applyState(state);
+	},
+
+
+	beforeRender: function() {
+		this.callParent(arguments);
+
+		this.pathBranch = this.assignmentTitle;
+
+		this.renderData = Ext.apply(this.renderData || {}, {
+			pathRoot: this.pathRoot,
+			pathBranch: this.pathBranch,
+			page: this.pageSource.getPageNumber(),
+			noPrev: !this.pageSource.hasPrevious(),
+			noNext: !this.pageSource.hasNext()
+		});
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		var pager;
+
+		this.el.query('a.button').forEach(this._setupButtons);
+
+		if (this._masked) {
+			this._showMask();
+		}
+
+		this.syncFilterToUI(true);
+
+		this.onPagerUpdate();
+
+		this.mon(this.pageHeader, {
+			'showFilters': this.onFiltersClicked.bind(this),
+			'goToRawAssignment': this.goToRawAssignment.bind(this)
+		});
+
+		if (!this.stateRestored) {
+			//bump this to the next event pump so the restore state has a change to be called
+			wait().then(this.restoreState.bind(this, {}, true));
+		}
+	},
+
+
+	syncFilterToUI: function(firstPass) {
+		if (!this.rendered) {
+			this.on('afterrender', this.synceFilterToUI.bind(this, firstPass));
+			return;
+		}
+
+		var filter = this.store.getEnrollmentScope(),
+			search = this.searchTerm;
+
+		this.updateColumns(filter);
+
+		this.filterMenu.setState(filter, search || '');
+
+		this.updateFilterCount();
+
+		if (firstPass) {
+			this.filterMenu.initialState = filter;
+			this.maybeSwitch();
+		}
+	},
+
+
+	maybeSwitch: function() {
+		var menu = this.filterMenu,
+			s = this.store,
+			item = menu.down('[checked]'),
+			initial = menu.initialState;
+
+		function loaded(s) {
+			if (!s.getCount()) {
+				item = menu.down('filter-menu-item:not([checked])');
+
+				if (item) {
+					item.setChecked(true);
+				}
+			}
+		}
+
+		if (item && item.filter === initial) {
+			if (!s.loading && s.loaded) {
+				loaded(s);
+			} else {
+				s.on({single: true, loaded: loaded});
+			}
+		}
+	},
+
+
+	_setupButtons: function(el) {
+		var tip = el.textContent;
+
+		Ext.fly(el).set({
+			title: tip,
+			'data-qtip': tip
+		});
+	},
+
+
+	toggleAvatarsClicked: function(e) {
+		this.toggleAvatars(!e.getTarget('.enabled'));
+	},
+
+
+	toggleAvatars: function(show) {
+		if (!this.rendered) {
+			this.on('afterrender', this.toggleAvatars.bind(this, show));
+			return;
+		}
+
+		this[show ? 'removeCls' : 'addCls']('hide-avatars');
+
+		$AppConfig.Preferences.getPreference('Gradebook')
+			.then(function(value) {
+				value.set('hide_avatars', !show);
+				value.save();
+			});
+	},
+
+
+	updateFilterCount: function() {
+		if (!this.rendered) {
+			this.on('afterrender', this.updateFilterCount.bind(this));
+			return;
+		}
+
+		this.pageHeader.updateFilterCount(this.filterMenu.getFilterLabel(this.store.getTotalCount()));
+	},
+
+
+	onPagerUpdate: function() {
+		if (!this.rendered) {
+			this.on({afterrender: 'onPagerUpdate', single: true});
+			return;
+		}
+
+		if (this.pageSource.hasNext()) {
+			this.nextEl.removeCls('disabled');
+		}
+
+		if (this.pageSource.hasPrevious()) {
+			this.previousEl.removeCls('disabled');
+		}
+
+		this.totalEl.update(this.pageSource.getTotal());
+	},
+
+
+	_showMask: function() {
+		var me = this,
+			el = me.el;
+
+		me._maskIn = setTimeout(function() {
+			var gridMask = (me.down('gridview') || {}).loadMask;
+
+			if (gridMask && !gridMask.isDestroyed) {
+				gridMask.addCls('masked-mask');
+			}
+
+			if (el && el.dom) {
+				el.mask(getString('NextThought.view.courseware.assessment.assignments.admin.Assignment.loading'), 'loading', true);
+			}
+		}, 1);
+	},
+
+
+	mask: function() {
+		this._masked++;
+
+		if (this.rendered) {
+			this._showMask();
+		}
+	},
+
+
+	unmask: function() {
+		this._masked--;
+
+		var gridMask = (this.down('gridview') || {}).loadMask;
+
+		if (this._masked <= 0) {
+			this._masked = 0;
+
+			clearTimeout(this._maskIn);
+
+			if (gridMask && !gridMask.isDestroyed && gridMask.removeCls) {
+				gridMask.removeCls('masked-mask');
+			}
+
+			if (this.el && this.el.dom) {
+				this.el.unmask();
+			}
+		}
+	},
+
+
+	scrollToRecord: function(record) {
+		var grid = this.down('grid'),
+			index = this.store.indexOf(record),
+			node = grid && index >= 0 && grid.view.getNodeByRecord(record);
+
+		node = node && Ext.get(node);
+
+		if (node) {
+			node.scrollIntoView(grid.view.el, false);
+		}
+	},
+
+
+	applyState: function(state) {
+		var me = this,
+			store = me.store,
+			params = store.proxy.extraParams;
+
+		state = state || {};
+
+		if (state.filter) {
+			params.filter = me.currentFilter = state.filter || 'ForCredit';
+		} else {
+			delete params.filter;
+		}
+
+		if (state.pageSize) {
+			store.setPageSize(state.pageSize);
+		}
+
+		if (state.sort && state.sort.prop) {
+			store.sort(state.sort.prop, state.sort.direction, null, false);
+		}
+
+		if (this.student) {
+			params.batchContainingUsernameFilterByScope = student;
+		}
+
+		return new Promise(function(fulfill, reject) {
+			me.mon(store, {
+				single: true,
+				'records-filled-in': function() {
+					delete store.proxy.extraParams.batchContainingUsernameFilterByScope;
+
+					me.currentPage = store.getCurrentPage();
+					me.maybeSwitch();
+					me.initialLoad = true;
+					me.unmask();
+
+					fulfill();
+				}
+			});
+
+			if (params.batchContainingUsernameFilterByScope) {
+				store.load();
+			} else if (state.currentPage) {
+				store.loadPage(parseInt(state.currentPage, 10));
+			} else {
+				store.loadPage(1);
+			}
+		});
+	},
+
+
+	onStoreLoad: function() {
+		this.syncFilterToUI();
+		this.unmask();
+		this.alignNavigation();
+
+		return;
+	},
+
+
+	requestDateChange: function(e) {
+		e.stopEvent();
+
+		Globals.sendEmailTo(
+				'support@nextthought.com',
+				Ext.String.format('[CHANGE REQUEST] ({0}) {1}: {2}',
+						location.hostname,
+						$AppConfig.username,
+						this.assignmentTitle)
+		);
+
+		return false;
+	},
+
+
+	updateColumns: function(filter) {
+		var c = this.down('gridcolumn[name=username]');
+		c[filter === 'ForCredit' ? 'show' : 'hide']();
+	},
+
+
+	onFiltersClicked: function(el) {
+		this.filterMenu.showBy(el, 'tl-tl', [0, -39]);
+	},
+
+
+	doSearch: function(str) {
+		this.down('grid').getSelectionModel().deselectAll(true);
+		this.searchTerm = str;
+		this.updateFilter();
+	},
+
+
+	doFilter: function(filter) {
+		this.updateColumns(filter);
+		try {
+			this.down('grid').getSelectionModel().deselectAll(true);
+			this.currentFilter = filter;
+			this.updateFilter();
+		} catch (e) {
+			console.log('Meh');
+		}
+	},
+
+
+	updateFilter: function() {
+		var state = this.getCurrentState() || {},
+			header = this.pageHeader;
+
+		if (this.currentFilter) {
+			state.filter = this.currentFilter;
+		} else {
+			delete state.filter;
+		}
+
+		if (this.searchTerm) {
+			state.search = this.searchTerm;
+		} else {
+			delete state.search;
+		}
+
+		if (this.currentPage) {
+			state.currentPage = this.currentPage;
+		} else {
+			delete state.currentPage;
+		}
+
+		if (this.pageSize) {
+			state.pageSize = this.pageSize;
+		} else {
+			delete state.pageSize;
+		}
+
+		if (this.sort && this.sort.prop) {
+			state.sort = this.sort;
+		} else {
+			delete state.sort;
+		}
+		
+		this.setState(state);
+	},
+
+
+	loadPage: function(page) {
+		this.currentPage = page;
+
+		this.updateFilter();
+	},
+
+
+	setPageSize: function(size) {
+		this.pageSize = size;
+
+		this.updateFilter();
+	},
+
+
+	changeSort: function(ct, column, direction) {
+		var prop = column.sortOn;
+
+		if (prop) {
+			this.sort = {
+				prop: prop,
+				direction: direction
+			};
+		} else {
+			this.sort = {};
+		}
+
+		this.updateFilter();
+
+		return false;
+	},
+
+
+	fireGoUp: function() {
+		this.pushRoute('', '/');
+	},
+
+
+	firePreviousEvent: function(e) {
+		if (e.getTarget('.disabled')) {
+			e.stopEvent();
+			return;
+		}
+
+		var prev = this.pageSource.getPrevious(),
+			title = this.pageSource.getNextTitle();
+
+		prev = ParseUtils.encodeForURI(prev);
+
+		this.pushRoute(title, prev + '/students');
+	},
+
+
+	fireNextEvent: function(e) {
+		if (e.getTarget('.disabled')) {
+			e.stopEvent();
+			return;
+		}
+
+		var next = this.pageSource.getNext(),
+			title = this.pageSource.getNextTitle();
+
+		next = ParseUtils.encodeForURI(next);
+
+		this.pushRoute(title, next + '/students');
+	},
+
+
+	onItemClick: function(v, record) {
+		var selModel = v.getSelectionModel(),
+			selection = selModel && selModel.selection,
+			dataIndex = selection && selection.columnHeader.dataIndex;
+
+
+		if (dataIndex !== 'Grade') {
+			this.fireGoToAssignment(selModel, record);
+		}
+	},
+
+
+	restoreStudent: function(student) {
+		if (this.store.loading) {
+			this.mon(this.store, {
+				single: true,
+				delay: 1,
+				load: this.restoreStudent.bind(this, student)
+			});
+
+			return;
+		}
+
+		var record;
+
+		record = this.store.findBy(function(rec) {
+			var user = rec.get('User');
+
+			return student === NextThought.model.User.getIdFromRaw(user);
+		});
+
+		if (record >= 0) {
+			record = this.store.getAt(record);
+
+			this.fireGoToAssignment(null, record, null);
+		}
+	},
+
+
+	fireGoToAssignment: function(v, record, pageSource) {
+		var student = record.get('User'),
+			historyItem = record.get('HistoryItemSummary'),
+			item = historyItem && historyItem.get('item'), //Assignment Instance
+			path = [
+				this.pathRoot,
+				this.pathBranch,
+				student.toString()
+			],
+			container = this.up('[rootContainerShowAssignment]');
+
+		if (typeof student === 'string') {
+			return;
+		}
+
+		if (!pageSource) {
+			pageSource = NextThought.proxy.courseware.PagedPageSource.create({
+				store: this.store,
+				startingRec: record
+			});
+		}
+
+		if (!container) {
+			console.error('No container with rootContainerShowAssignment');
+			return;
+		}
+
+		return container.rootContainerShowAssignment(this, this.assignment, historyItem, student, path, pageSource);
+		// this.fireEvent('show-assignment', this, this.assignment, record, student, path, pageSource);
+	},
+
+
+	goToRawAssignment: function() {
+		var student = $AppConfig.userObject,
+			historyItem = null,
+			path = [
+				this.pathRoot,
+				this.pathBranch,
+				student.toString()
+			],
+			container = this.up('[rootContainerShowAssignment]'),
+			pageSource = null;
+
+		return container.rootContainerShowAssignment(this, this.assignment, historyItem, student, path, pageSource, true);
+	}
+});

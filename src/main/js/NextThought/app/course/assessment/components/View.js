@@ -192,20 +192,28 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 			xtype: 'course-assessment-admin-activity',
 			title: getString('NextThought.view.courseware.assessment.View.activity'),
 			activityFeedURL: getLink('CourseActivity'),
-			route: 'notifications'
+			route: 'notifications',
+			alignNavigation: this.alignNavigation.bind(this)
 		});
 
 		this.assignmentsView = this.body.add({
 			xtype: 'course-assessment-admin-assignments',
 			title: getString('NextThought.view.courseware.assessment.View.assignments'),
-			route: '/'
+			route: '/',
+			alignNavigation: this.alignNavigation.bind(this)
 		});
 
 		this.performanceView = this.body.add({
 			xtype: 'course-assessment-admin-performance',
 			title: getString('NextThought.view.courseware.assessment.View.grades'),
-			route: '/performance'
+			route: '/performance',
+			alignNavigation: this.alignNavigation.bind(this)
 		});
+
+		//override the push route to use my change route, since my parent is incharge of handling routes
+		this.notificationsView.pushRoute = this.changeRoute.bind(this);
+		this.assignmentsView.pushRoute = this.changeRoute.bind(this);
+		this.performanceView.pushRoute = this.changeRoute.bind(this);
 
 		this.navigation.addItems([
 			this.notificationsView,
@@ -294,7 +302,28 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 		return me.assignmentsView.setAssignmentsData(me.assignmentCollection, me.currentBundle)
 			.then(me.maybeUnmask.bind(me))
 			.then(me.setTitle.bind(me, me.assignmentsView.title))
-			.then(function() { return wait(1); })
+			.then(me.alignNavigation.bind(me));
+	},
+
+
+	showStudentsForAssignment: function(route, subRoute) {
+		if (!this.assignmentsView) { return; }
+
+		var me = this,
+			assignment = route.precache.assignment,
+			id = ParseUtils.decodeFromURI(route.params.assignment);
+
+		if (!assignment || assignment.getId() !== id) {
+			assignment = me.assignmentCollection.getItem(id);
+		}
+
+		me.maybeMask();
+
+		me.setActiveItem(me.assignmentsView);
+
+		return me.assignmentsView.setAssignmentsData(me.assignmentCollection, me.currentBundle, true)
+			.then(me.assignmentsView.showAssignment.bind(me.assignmentsView, assignment))
+			.then(me.maybeUnmask.bind(me))
 			.then(me.alignNavigation.bind(me));
 	}
 });

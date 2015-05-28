@@ -133,6 +133,17 @@ Ext.define('NextThought.model.User', {
 	},
 
 
+	getURLPart: function() {
+		var id = this.get('Username');
+
+		if ($AppConfig.obscureUsernames) {
+			id = B64.encodeURLFriendly(id);
+		}
+
+		return encodeURIComponent(id);
+	},
+
+
 	getProfileUrl: function(subPage) {
 		var id = this.get('Username'),
 			subPages = subPage || [];
@@ -234,6 +245,17 @@ Ext.define('NextThought.model.User', {
 
 		getIdFromRaw: function(raw) {
 			return raw.getId ? raw.getId() : raw.Username;
+		},
+
+
+		getIdFromURIPart: function(part) {
+			part = decodeURIComponent(part);
+
+			if ($AppConfig.obscureUsernames) {
+				return B64.decodeURLFriendly(part) || part;
+			}
+
+			return part;
 		}
 
 	},

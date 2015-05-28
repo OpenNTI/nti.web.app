@@ -41,12 +41,14 @@ Ext.define('NextThought.app.course.assessment.Index', {
 		this.addRoute('/performance', this.showPerformance.bind(this));
 
 		this.addRoute('/:assignment', this.showAssignment.bind(this));
+		this.addRoute('/:assignment/students', this.showStudentsForAssignment.bind(this));
 		this.addRoute('/performance/:student/:assignment', this.showAssignmentForStudent.bind(this));
 		this.addRoute('/:assignment/students/:student', this.showStudentForAssignment.bind(this));
 
 		this.addDefaultRoute('/');
 
 		this.addObjectHandler(NextThought.model.assessment.Assignment.mimeType, this.getAssignmentRoute.bind(this));
+		this.addObjectHandler(NextThought.model.assessment.TimedAssignment.mimeType, this.getAssignmentRoute.bind(this));
 
 		this.add({
 			xtype: 'course-assessment',
@@ -236,6 +238,17 @@ Ext.define('NextThought.app.course.assessment.Index', {
 	},
 
 
+	showStudentsForAssignment: function(route, subRoute) {
+		var view = this.getView();
+
+		this.closeAssignment();
+
+		this.getLayout().setActiveItem(view);
+
+		return view.showStudentsForAssignment(route, subRoute);
+	},
+
+
 	showAssignmentForStudent: function(route, subRoute) {},
 
 
@@ -266,8 +279,8 @@ Ext.define('NextThought.app.course.assessment.Index', {
 	},
 
 
-	changeRoute: function(title, route) {
-		this.pushRoute(title, route || '/');
+	changeRoute: function(title, route, precache) {
+		this.pushRoute(title, route || '/', precache);
 	},
 
 

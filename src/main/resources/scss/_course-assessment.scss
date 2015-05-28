@@ -1907,6 +1907,16 @@ canvas.x-component-course-assessment {
 
 .x-container-course-assessment.grade > .body { margin-top: 0; }
 
+.student-assignment-overview {
+	.x-grid-header-ct {
+		position: static !important;
+	}
+
+	.x-grid-body {
+		top: 0 !important;
+	}
+}
+
 
 .x-grid-body {
 	.x-grid-row .x-grid-cell {

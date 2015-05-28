@@ -63,11 +63,15 @@ Ext.define('NextThought.app.contentviewer.reader.ResourceManagement', {
 						html: '{caption}'
 					}
 				},{
-					tag: 'a',
-					href: '#mark',
-					'data-qtip': '{{{NextThought.view.content.reader.ResourceManagement.commentonthis}}}',
-					cls: 'mark',
-					html: '{{{NextThought.view.content.reader.ResourceManagement.comment}}}'
+					tag: 'tpl',
+					'if': 'annotatable',
+					cn: {
+						tag: 'a',
+						href: '#mark',
+						'data-qtip': '{{{NextThought.view.content.reader.ResourceManagement.commentonthis}}}',
+						cls: 'mark',
+						html: '{{{NextThought.view.content.reader.ResourceManagement.comment}}}'
+					}
 				}]
 			}]
 		}
@@ -285,7 +289,7 @@ Ext.define('NextThought.app.contentviewer.reader.ResourceManagement', {
 
 
 	activateAnnotatableItems: function(reader, doc) {
-		var els = doc.querySelectorAll('[itemprop~=nti-data-markupenabled],[itemprop~=nti-slide-video]'),
+		var els = doc.querySelectorAll('[itemprop*=nti-data-markup],[itemprop~=nti-slide-video]'),
 			tpl = this.IMAGE_TEMPLATE,
 			activators = {
 				'nti-data-resizeable': Ext.bind(this.activateZoomBox, this)
@@ -303,10 +307,12 @@ Ext.define('NextThought.app.contentviewer.reader.ResourceManagement', {
 				target = Ext.fly(el).down('img,iframe', true),
 				title = get(target, 'data-title'),
 				caption = get(target, 'data-caption'),
+				annotatable = Ext.Array.contains(p, 'nti-data-markupenabled'),
 				width, button, comment,
 				bar = tpl.append(el, {
 					title: title,
-					caption: caption
+					caption: caption,
+					annotatable: annotatable
 				},false);
 
 			if (Ext.is.iOS) {
