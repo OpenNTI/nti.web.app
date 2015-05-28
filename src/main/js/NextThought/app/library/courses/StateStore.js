@@ -59,7 +59,7 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 		var current = [];
 
 		courses.forEach(function(course) {
-			var catalog = course.getCourseCatalogEntry();
+			var catalog = course.getCourseCatalogEntry ? course.getCourseCatalogEntry() : course;
 
 			if (catalog && !catalog.isExpired()) {
 				current.push(course);
@@ -78,10 +78,10 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 		var archived = [];
 
 		courses.forEach(function(course) {
-			var catalog = course.getCourseCatalogEntry();
+			var catalog = course.getCourseCatalogEntry ? course.getCourseCatalogEntry() : course;
 
 			if (!catalog || catalog.isExpired()) {
-				archived.push(coure);
+				archived.push(course);
 			}
 		});
 
@@ -89,25 +89,63 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 	},
 
 
+	/**
+	 * Filter courses down to ones that haven't started yet
+	 * @param  {Array} courses list of courses
+	 * @return {Array} courses that haven't started
+	 */
+	__getUpcomingCourses: function(courses){
+		var upcoming = [];
+
+		courses.forEach(function(course) {
+			var catalog = course.getCourseCatalogEntry ? course.getCourseCatalogEntry() : course;
+				start = catalog && catalog.get('StartDate'),
+				end = catalog && catalog.get('EndDate'),
+				now = new Date();
+
+			if(catalog && start > now) {
+				upcoming.push(course)
+			}
+		});
+
+		return upcoming;
+	},
+
+	getAllCurrentCourses: function() {
+		return this.__getCurrentCourses(this.ALL_COURSES);
+	},
+
+	getAllArchivedCourses: function() {
+		return this.__getArchivedCourses(this.ALL_COURSES);
+	},
+
+	getAllUpcomingCourses: function() {
+		return this.__getUpcomingCourses(this.ALL_COURSES);
+	},
+
 	getCurrentEnrolledCourses: function() {
 		return this.__getCurrentCourses(this.ENROLLED_COURSES);
 	},
-
 
 	getArchivedEnrolledCourses: function() {
 		return this.__getArchivedCourses(this.ENROLLED_COURSES);
 	},
 
+	getUpcomingEnrolledCourses: function() {
+		return this.__getUpcomingCourses(this.ENROLLED_COURSES);
+	},
 
 	getCurrentAdminCourses: function() {
 		return this.__getCurrentCourses(this.ADMIN_COURSES);
 	},
 
-
 	getArchivedAdminCourses: function() {
 		return this.__getArchivedCourses(this.ADMIN_COURSES);
 	},
 
+	getUpcomingAdminCourses: function() {
+		return this.__getUpcomingCourses(this.ADMIN_COURSES);
+	},
 
 	__findIn: function(list, fn) {
 		var i, item = null;

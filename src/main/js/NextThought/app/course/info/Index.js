@@ -6,7 +6,8 @@ Ext.define('NextThought.app.course.info.Index', {
 
 	requires: [
 		'NextThought.app.course.info.components.Outline',
-		'NextThought.app.course.info.components.Body'
+		'NextThought.app.course.info.components.Body',
+		'NextThought.app.course.info.Actions'
 	],
 
 	mixins: {
@@ -26,7 +27,14 @@ Ext.define('NextThought.app.course.info.Index', {
 		me.addRoute('/support', me.showSupport.bind(me));
 		me.addRoute('/roster', me.showRoster.bind(me));
 		me.on('activate', this.onActivate.bind(me));
-		me.mon(me.navigation, 'select-route', me.changeRoute.bind(this));
+
+		me.courseInfoActions = NextThought.app.course.info.Actions.create();
+		me.mon(me.navigation, 
+			{
+				'select-route': me.changeRoute.bind(me),
+				'show-enrollment': me.showEnrollment.bind(me)
+			}
+		);
 	},
 
 	onActivate: function() {
@@ -107,5 +115,13 @@ Ext.define('NextThought.app.course.info.Index', {
 
 	changeRoute: function(title, route){
 		this.pushRoute(title, route || '/');
+	},
+
+	showEnrollment: function(catalogEntry) {
+		var me = this;
+		this.courseInfoActions.openEnrollmentWindow(catalogEntry)
+			.then(function(route){
+				me.pushRootRoute(null, route, {course: catalogEntry});
+			});
 	}
 });

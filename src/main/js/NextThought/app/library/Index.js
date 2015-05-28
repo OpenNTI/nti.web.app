@@ -18,7 +18,9 @@ Ext.define('NextThought.app.library.Index', {
 		'NextThought.app.library.content.StateStore',
 		'NextThought.app.library.courses.StateStore',
 		'NextThought.app.library.courses.components.Page',
-		'NextThought.app.store.StateStore'
+		'NextThought.app.store.StateStore',
+		'NextThought.app.course.catalog.TabPanel',
+		'NextThought.app.library.courses.components.available.CourseWindow'
 	],
 
 
@@ -88,9 +90,6 @@ Ext.define('NextThought.app.library.Index', {
 			xtype: 'box', autoEl: {html: 'My Books'}
 		});
 	},
-
-
-	showAvailableCourses: function() {},
 
 
 	showAvailableBooks: function() {},
@@ -174,7 +173,7 @@ Ext.define('NextThought.app.library.Index', {
 
 
 	showAvailable: function(title, route) {
-		this.pushRoute(route, title);
+		this.pushRoute(title, route);
 	},
 
 
@@ -197,12 +196,27 @@ Ext.define('NextThought.app.library.Index', {
 		return this.__setActive('Library');
 	},
 
+	__showAvailableCourses: function() {
+		// Build the available courses window
+		var win = Ext.widget('library-available-courses-window', {
+			showAvailable: true
+			// course: course
+		});
+
+		win.show();
+		return Promise.resolve(function(){
+			return win;
+		});
+	},
+
 
 	showAvailableCourses: function(route, subRoute) {
 		return this.__setActive('Available Courses')
-			.then(this.showAvailableCourses.bind(this))
+			.then(this.__showAvailableCourses.bind(this))
 			.then(function(win) {
-				win.handleRoute(subRoute);
+				if(win && win.handleRoute){
+					win.handleRoute(subRoute);	
+				}
 			});
 	},
 
@@ -211,7 +225,9 @@ Ext.define('NextThought.app.library.Index', {
 		return this.__setActive('Available Books')
 			.then(this.showAvailableBooks.bind(this))
 			.then(function(win) {
-				win.handleRoute(subRoute);
+				if(win && win.handleRoute){
+					win.handleRoute(subRoute);	
+				}
 			});
 	},
 

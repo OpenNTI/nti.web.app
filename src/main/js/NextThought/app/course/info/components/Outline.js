@@ -9,7 +9,6 @@ Ext.define('NextThought.app.course.info.components.Outline', {
 
 	initComponent: function() {
 		this.callParent(arguments);
-		// this.enableBubble('select-route');
 	},
 
 	setContent: function(info, status, showRoster) {
@@ -25,11 +24,13 @@ Ext.define('NextThought.app.course.info.components.Outline', {
 
 
 		if (!showRoster) {
-			this.add({
+			this.openCourseInfo = this.add({
 				xtype: 'course-info-outline-open-course',
 				info: info,
 				enrollmentStatus: status
 			});
+
+			this.mon(this.openCourseInfo, 'show-enrollment', this.fireEvent.bind(this, 'show-enrollment'));
 		}
 	},
 

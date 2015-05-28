@@ -55,10 +55,12 @@ Ext.define('NextThought.app.course.info.components.OpenCourseInfo', {
 
 	showEnrollWindow: function() {
 		var me = this;
-		me.getInfo().fireAcquisitionEvent(me, function(enrolled) {
-			if (!enrolled) {
-				me.fireEvent('go-to-library', me);
-			}
-		});
+		me.fireEvent('show-enrollment', me.getInfo());
+		
+		// me.getInfo().fireAcquisitionEvent(me, function(enrolled) {
+		// 	if (!enrolled) {
+		// 		me.fireEvent('go-to-library', me);
+		// 	}
+		// });
 	}
 });

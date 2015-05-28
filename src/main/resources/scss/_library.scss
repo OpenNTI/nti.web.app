@@ -847,7 +847,7 @@ li.library-grid-item {
 		right: 0; left: 0;
 		background-color: black;
 		opacity: 0.5;
-		z-index: -1;
+		z-index: 0;
 	}
 
 	.msg-container {
@@ -905,6 +905,7 @@ li.library-grid-item {
 		position: absolute;
 		bottom: 0;
 		left: 0; right: 0;
+		z-index: 10 !important;
 	}
 
 	.body-container {
@@ -912,6 +913,7 @@ li.library-grid-item {
 		@include experimental-value(height, calc(100% - 100px));
 		background-color: $panel-background;
 		position: relative;
+		z-index: 10 !important;
 	}
 }
 
