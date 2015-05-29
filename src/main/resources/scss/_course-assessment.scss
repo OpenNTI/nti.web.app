@@ -1907,7 +1907,8 @@ canvas.x-component-course-assessment {
 
 .x-container-course-assessment.grade > .body { margin-top: 0; }
 
-.student-assignment-overview {
+.student-assignment-overview,
+.course-assessment-admin {
 	.x-grid-header-ct {
 		position: static !important;
 	}

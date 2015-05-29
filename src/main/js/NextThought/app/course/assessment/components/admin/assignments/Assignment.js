@@ -208,6 +208,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 			return;
 		}
 
+		state.currentPage = state.currentPage || 1;
+
 		this.current_state = state || {};
 		this.stateRestored = true;
 
@@ -432,13 +434,13 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 
 		me.applyingState = true;
 
-		state = state || {};
-
-		if (state.filter) {
+		if (!state || state.filter) {
 			params.filter = me.currentFilter = state.filter || 'ForCredit';
 		} else {
 			delete params.filter;
 		}
+
+		state = state || {};
 
 		if (state.pageSize) {
 			store.setPageSize(state.pageSize);
@@ -446,6 +448,12 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 
 		if (state.sort && state.sort.prop) {
 			store.sort(state.sort.prop, state.sort.direction, null, false);
+		}
+
+		if (state.searchTerm) {
+			params.search = state.searchTerm;
+		} else {
+			delete params.search;
 		}
 
 		if (this.student) {
@@ -457,6 +465,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 				single: true,
 				'records-filled-in': function() {
 					delete store.proxy.extraParams.batchContainingUsernameFilterByScope;
+					delete me.student;
 
 					me.currentPage = store.getCurrentPage();
 					me.maybeSwitch();
@@ -546,9 +555,9 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 		}
 
 		if (this.searchTerm) {
-			state.search = this.searchTerm;
+			state.searchTerm = this.searchTerm;
 		} else {
-			delete state.search;
+			delete state.searchTerm;
 		}
 
 		if (this.currentPage) {
@@ -576,7 +585,6 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 		} else {
 			this.replaceRouteState(state);
 		}
-		
 	},
 
 

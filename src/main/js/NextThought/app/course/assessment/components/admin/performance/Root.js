@@ -1,0 +1,805 @@
+Ext.define('NextThought.app.course.assessment.components.admin.performance.Root', {
+	extend: 'Ext.container.Container',
+	alias: 'widget.course-assessment-admin-performance-root',
+
+	mixins: {
+		gridGrades: 'NextThought.mixins.grid-feature.GradeInputs',
+		State: 'NextThought.mixins.State',
+	},
+
+
+	requires: [
+		'NextThought.app.course.assessment.components.admin.PagedGrid',
+		'NextThought.app.course.assessment.components.admin.ListHeader'
+	],
+
+	__inputSelector: '.gradebox input',
+
+	ui: 'course-assessment',
+	cls: 'course-assessment-admin performance',
+
+	layout: 'none',
+	viewRoot: true,
+
+	items: [
+		{
+			xtype: 'box',
+			autoEl: { cls: 'header', cn: [
+				{ cls: 'assignment-filterbar', cn: [
+					{ cls: 'third dropmenu student', cn: [
+						{ cls: 'label', html: getString('NextThought.view.courseware.assessment.admin.performance.Root.allstudents') }
+					] },
+					{ cls: 'third dropmenu item', cn: [
+						{ cls: 'label', html: getString('NextThought.view.courseware.assessment.admin.performance.Root.allitems') }
+					] },
+					{ cls: 'third search', cn: [
+						{
+							tag: 'input',
+							type: 'text',
+							placeholder: getString('NextThought.view.courseware.assessment.admin.performance.Root.search'),
+							required: 'required'
+						},
+						{ cls: 'clear' }
+					] }
+				]}
+			]},
+			renderSelectors: {
+				studentEl: '.student',
+				itemEl: '.item',
+				inputEl: '.search input',
+				clearEl: '.search .clear'
+			}
+		},
+		{ xtype: 'course-assessment-admin-listheader'},
+		{
+			xtype: 'course-admin-paged-grid',
+			columnOrder: ['Student', 'Username', 'PredictedGrade', 'Grade'],
+			columnOverrides: {
+				Student: {
+					tpl: new Ext.XTemplate(Ext.DomHelper.markup([
+						{cls: 'studentbox', cn: [
+							{cls: 'avatar', style: {backgroundImage: 'url({avatar})'}},
+							{cls: 'wrap', cn: [
+								{cls: 'name', html: '{[this.displayName(values)]}'},
+								{cls: 'action-items', cn: [
+									{tag: 'tpl', 'if': 'OverdueAssignmentCount &gt; 0', cn:
+										{cls: 'overdue', html: '{OverdueAssignmentCount:plural("Assignment")} Overdue'}
+									},
+									{tag: 'tpl', 'if': 'UngradedAssignmentCount &gt; 0', cn:
+										{cls: 'overdue', html: '{UngradedAssignmentCount:plural("Ungraded Assignment")}'}
+									}
+								]}
+							]}
+						]}
+					]), {
+						displayName: function(values) {
+							if (!values.User || !values.User.isModel) {
+								return 'Resolving';
+							}
+
+							var creator = values.User,
+								displayName = creator && creator.get && creator.get('displayName'),
+								f = creator && creator.get && creator.get('FirstName'),
+								l = creator && creator.get && creator.get('LastName'),
+								lm, d = displayName;
+
+							if (l) {
+								lm = Ext.DomHelper.markup({tag: 'b', html: l});
+								d = displayName.replace(l, lm);
+								if (d === displayName) {
+									d += (' (' + (f ? f + ' ' : '') + lm + ')');
+								}
+								d = Ext.DomHelper.markup({cls: 'accent-name', 'data-qtip': d, html: d});
+							}
+
+							return d;
+						}
+					})
+				},
+				Grade: { dataIndex: 'FinalGrade', sortOn: 'Grade', width: 150}
+			},
+			extraColumns: {
+				PredictedGrade: {
+					dataIndex: 'PredictedGrade',
+					sortOn: 'PredictedGrade',
+					width: 120,
+					text: Ext.DomHelper.markup({
+						cls: 'disclaimer-header', 'data-qtip': 'Estimated from the grading policy in the Syllabus', html: 'Course Grade'
+					}),
+					renderer: function(val) {
+						return NextThought.model.courseware.Grade.getDisplay(val);
+					}
+				}
+			}
+		}
+	],
+
+
+	initComponent: function() {
+		this.callParent(arguments);
+
+		var me = this;
+
+		this.store = this.assignments.getGradeSummaries();
+
+		this.mon(this.store, 'load', this.maybeShowPredicted.bind(this));
+
+		me.supported = true;
+		me.grid = me.down('grid');
+		me.pageHeader = me.down('course-assessment-admin-listheader');
+		me.header = me.down('box');
+		me.createGradeMenu();
+
+		me.grid.bindStore(this.store);
+		me.pageHeader.bindStore(this.store);
+
+		me.mon(me.grid, {
+			'load-page': me.loadPage.bind(me),
+			'sortchange': me.changeSort.bind(me)
+		});
+
+		me.mon(me.pageHeader, {
+			'toggle-avatars': 'toggleAvatars',
+			'page-change': function(){
+				me.mon(me.store, {
+					single: true,
+					'load': me.grid.scrollToTop.bind(me.grid)
+				});
+			},
+			'load-page': me.loadPage.bind(me),
+			'set-page-size': me.setPageSize.bind(me)
+		});
+
+		me.hidePredicted();
+
+		$AppConfig.Preferences.getPreference('Gradebook')
+			.then(function(values) {
+				me.pageHeader.setAvatarToggle(!value.get('hide_avatar'));
+			});
+	},
+
+
+	restoreState: function(state, fromAfterRender) {
+		//if this is coming form after render and we've already restored
+		//a state don't overwrite it. The main reason this is here is so
+		//if they hit the back button the component is already rendered with
+		//a state so we want to override it, but if we are coming from after
+		//render we don't want to override a previous state.
+		if (fromAfterRender && this.stateRestored) {
+			return;
+		}
+
+		this.stateRestored = true;
+
+		this.studentFilter = state.studentFilter = state.studentFilter || (isFeature('show-open-students-first') ? 'Open' : 'ForCredit');
+		this.itemFilter = state.itemFilter = state.itemFilter || 'all';
+		state.currentPage = state.currentPage || 1;
+
+		this.current_state = state || {};
+
+		return this.applyState(this.current_state);
+	},
+
+
+	hidePredicted: function() {
+		var column = this.grid.down('[dataIndex=PredictedGrade]');
+
+		if (column) {
+			column.hide();
+		}
+	},
+
+
+	maybeShowPredicted: function() {
+		var rec = this.store.getRange()[0],
+			column = this.grid.down('[dataIndex=PredictedGrade]');
+
+		if (rec && rec.raw.hasOwnProperty('PredictedGrade')) {
+			column.show();
+		}
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		var grid = this.grid, me = this;
+
+		me.createStudentMenu();
+		me.createItemMenu();
+
+		if (this.assignments.hasFinalGrade()) {
+			this.addCls('show-final-grade');
+		}
+
+		if (!me.monitorSubTree()) {
+			console.warn('Hiding Grade boxes because the browser does not support NutationObserver');
+			me.supported = false,
+			me.removeCls('show-final-grade');
+		}
+
+		me.updateExportEl(me.studentFilter);
+
+		me.mon(me.header, {
+			studentEl: {click: this.showStudentMenu.bind(this)},
+			itemEl: {click: this.showItemMenu.bind(this)},
+			inputEl: {click: this.changeNameFilter.bind(this)},
+			clearEl: {click: this.clearSearch.bind(this)}
+		});
+
+		me.mon(grid, {
+			cellClick: this.onCellClick.bind(this)
+		});
+
+		if (!this.stateRestored) {
+			//bump this to the next event pump so the restore state has a chance to be called
+			wait().then(this.restoreState.bind(this, {}, true));
+		}
+	},
+
+
+	toggleAvatars: function(show) {
+		if (!this.rendered) {
+			this.on('afterrender', this.toggleAvatars.bind(this, show));
+			return;
+		}
+
+		if (show) {
+			this.removeCls('hide-avatars');
+		} else {
+			this.addCls('hide-avatars');
+		}
+
+		$AppConfig.Preferences.getPreference('Gradebook')
+			.then(function(value) {
+				value.set('hiade_avatars', !show);
+				value.save();
+			});
+	},
+
+
+	createStudentMenu: function() {
+		var type = this.studentFilter || (isFeature('show-open-students-first') ? 'Open' : 'ForCredit'),
+			items = [
+				//{ text: 'All Students', type: 'all', checked: type === 'all'},
+				{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.open'), type: 'Open', checked: type === 'Open'},
+				{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.enrolled'), type: 'ForCredit', checked: type === 'ForCredit'}
+			];
+
+		this.studentMenu = Ext.widget('menu', {
+			cls: 'group-by-menu',
+			width: 257,
+			ownerCmp: this,
+			constrainTo: Ext.getBody(),
+			offset: [0, 0],
+			defaults: {
+				ui: 'nt-menuitem',
+				xtype: 'menucheckitem',
+				group: 'groupByOptions',
+				cls: 'group-by-option',
+				height: 50,
+				plain: true,
+				listeners: {
+					scope: this,
+					'checkchange': 'switchStudent'
+				}
+			},
+			items: items
+		});
+		this.studentMenu.show().hide();
+		this.studentMenu.initialType = type;
+	},
+
+
+	showStudentMenu: function() {
+		this.studentMenu.showBy(this.header.studentEl, 'tl-tl?', this.studentMenu.offset);
+	},
+
+
+	updateStudentUI: function(item) {
+		var offset, x;
+
+		try {
+			offset = item.getOffsetsTo(this.studentMenu);
+			x = offset && offset[1];
+			this.header.studentEl.el.down('.label').update(item.text);
+		} catch (e) {
+			swallow(e);
+		}
+
+		this.studentMenu.offset = [0, x ? -x : 0];
+
+		x = this.down('[dataIndex="Username"]');
+
+		x[item.type === 'ForCredit' ? 'show' : 'hide']();
+
+		this.updateExportEl(item.type);
+	},
+
+
+	switchStudent: function(item, status, opts, noEmpty) {
+		if (!status) { return; }
+
+		this.studentFilter = item.type;
+
+		this.maybeSwitch(noEmpty);
+		this.updateFilter();
+	},
+
+
+	maybeSwitchStudents: function() {
+		if (this.initialLoad || this.store.getCount() > 0) { return; }
+
+		var scope = this.store.proxy.reader.EnrollmentScope,
+			menu = this.studentMenu,
+			open = menu.down('[type=Open]'),
+			credit = menu.down('[type=ForCredit]');
+
+		if (scope === 'ForCredit') {
+			open.setChecked(true);
+		} else {
+			credit.setChecked(true);
+		}
+	},
+
+
+	maybeSwitch: function(noEmpty) {
+		var menu = this.studentMenu,
+			item = menu.down('[checked]'),
+			initial = menu.initialType;
+
+		if (item && item.type === initial) {
+			this.store.on({
+				single: true,
+				load: function(s) {
+					if (!s.getCount() && noEmpty) {
+						item = menu.down('menuitem:not([checked])');
+						if (item) {
+							item.setChecked(true);
+						}
+					}
+				}
+			});
+		}
+	},
+
+
+	updateExportEl: function(type) {
+
+		var gradebook = this.assignments.getGradeBook(),
+			url,
+			base = gradebook && gradebook.getLink('ExportContents');
+
+		if (!base) {
+			this.pageHeader.setExportURL();
+			return;
+		}
+
+		if (type === 'Open') {
+			url = base + '?LegacyEnrollmentStatus=Open';
+			this.pageHeader.setExportURL(url, getString('NextThought.view.courseware.assessment.admin.performance.Root.exportopen'));
+		} else {
+			url = base + '?LegacyEnrollmentStatus=ForCredit';
+			this.pageHeader.setExportURL(url, getString('NextThought.view.courseware.assessment.admin.performance.Root.exportenrolled'));
+		}
+	},
+
+
+	createItemMenu: function() {
+		var type = this.itemFilter,
+			items = [
+				{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.alloption'), type: 'all', checked: type === 'all'},
+				{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.actionoption'), type: 'actionable', checked: type === 'actionable'},
+				{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.overoption'), type: 'overdue', checked: type === 'overdue'},
+				{ text: getString('NextThought.view.courseware.assessment.admin.performance.Root.unoption'), type: 'ungraded', checked: type === 'ungraded'}
+			];
+
+		this.itemMenu = Ext.widget('menu', {
+			cls: 'group-by-menu',
+			width: 257,
+			ownerCmp: this,
+			constrainTo: Ext.getBody(),
+			offset: [0, 0],
+			defaults: {
+				ui: 'nt-menuitem',
+				xtype: 'menucheckitem',
+				group: 'groupByOptions',
+				cls: 'group-by-option',
+				height: 50,
+				plain: true,
+				listeners: {
+					scope: this,
+					'checkchange': 'switchItem'
+				}
+			},
+			items: items
+		});
+
+		this.itemMenu.show().hide();
+	},
+
+
+	showItemMenu: function() {
+		this.itemMenu.showBy(this.header.itemEl, 'tl-tl?', this.itemMenu.offset);
+	},
+
+
+	updateItemUI: function(item) {
+		var offset = item && item.getOffsetsTo(this.itemMenu),
+			x = offset ? offset[1] : 1;
+
+		this.header.itemEl.el.down('.label').update(item.text);
+
+		this.itemMenu.offset = [0, x ? -x : 0];
+	},
+
+
+	switchItem: function(item, status) {
+		if (!status) { return; }
+
+		this.itemFilter = item.type;
+
+		this.updateFilter();
+	},
+
+
+	changeNameFilter: function() {
+		this.searchKey = this.header.inputEl.getValue();
+		this.updateFilter();
+	},
+
+
+	clearSearch: function() {
+		this.searchKey = '';
+		this.header.inputEl.dom.value = '';
+		this.updateFilter();
+	},
+
+
+	updateUIFromState: function() {
+		if (!this.rendered) {
+			this.on('afterrender', this.updateUIFromState.bind(this));
+			return;
+		}
+
+		var student = this.studentMenu.down('[type="' + this.studentFilter + '"]'),
+			item = this.itemMenu.down('[type="' + this.itemFilter + '"]');
+
+		if (student) {
+			student.setChecked(true, true);
+			this.updateStudentUI(student);
+		}
+
+		if (item) {
+			item.setChecked(true, true);
+			this.updateItemUI(item);
+		}
+	},
+
+
+	applyState: function(state) {
+		if (this.applyingState) { return; }
+
+		var me = this,
+			store = me.store,
+			filters = [],
+			params = store.proxy.extraParams;
+
+		me.applyingState = true;
+		state = state || {};
+
+		filters.push(state.studentFilter || this.studentFilter || 'ForCredit');
+
+		if (state.itemFilter && !/all/i.test(state.itemFilter)) {
+			filters.push(state.itemFilter);
+		}
+
+		params.filter = filters.join(',');
+
+		if (state.searchTerm) {
+			params.search = state.searchTerm;
+		} else {
+			delete params.search;
+		}
+
+		if (state.sort && state.sort.prop) {
+			store.sort(state.sort.prop, state.sort.direction, null, false);
+		}
+
+		if (me.student) {
+			params.batchContainingUsernameFilterByScope = me.student;
+		}
+
+		if (state.pageSize) {
+			store.setPageSize(state.pageSize);
+		}
+
+		return new Promise(function(fulfill, reject) {
+			me.mon(store, {
+				single: true,
+				'records-filled-in': function() {
+					delete store.proxy.extraParams.batchContainingUsernameFilterByScope;
+					delete me.student;
+
+					me.currentPage = store.getCurrentPage();
+					me.maybeSwitchStudents();
+					me.updateUIFromState();
+					me.initialLoad = true;
+
+					delete me.applyingState;
+
+					fulfill();
+				}
+			});
+
+			if (params.batchContainingUsernameFilterByScope) {
+				store.load();
+			} else if (state.currentPage) {
+				store.loadPage(parseInt(state.currentPage, 10));
+			} else {
+				store.loadPage(1);
+			}
+		});
+	},
+
+
+	updateFilter: function() {
+		var state = this.current_state || {},
+			newPage = state.currentPage !== this.currentPage,
+			header = this.pageHeader;
+
+		if (this.studentFilter) {
+			state.studentFilter = this.studentFilter;
+		} else {
+			delete state.studentFilter;
+		}
+
+		if (this.itemFilter) {
+			state.itemFilter = this.itemFilter;
+		} else {
+			delete state.itemFilter;
+		}
+
+		if (this.currentPage) {
+			state.currentPage = this.currentPage;
+		} else {
+			delete state.currentPage;
+		}
+
+		if (this.pageSize) {
+			state.pageSize = this.pageSize;
+		} else {
+			delete state.pageSize;
+		}
+
+		if (this.sort && this.sort.prop) {
+			state.sort = this.sort;
+		} else {
+			delete state.sort;
+		}
+
+		this.current_state = state;
+
+		if (newPage) {
+			this.pushRouteState(state);
+		} else {
+			this.replaceRouteState(state);
+		}
+	},
+
+
+	loadPage: function(page) {
+		this.currentPage = page;
+
+		this.updateFilter();
+	},
+
+
+	changeSort: function(ct, column, direction) {
+		var prop = column.sortOn || column.dataIndex;
+
+		if (prop) {
+			this.sort = {
+				prop: prop,
+				direction: direction
+			};
+		} else {
+			this.sort = {};
+		}
+
+		if (!this.applyingState) {
+			this.updateFilter();
+		}
+
+		return false;
+	},
+
+
+	setPageSize: function(pageSize) {
+		this.pageSize = pageSize;
+
+		this.updateFilter();
+	},
+
+
+	clear: function() {
+		//this.store.removeAll();
+	},
+
+
+	clearAssignmentsData: function() { this.clear(); },
+
+
+	updateActionables: function(username) {},
+
+
+	getNode: function(record) {
+		var v = this.grid.getView();
+		return v.getNode.apply(v, arguments);
+	},
+
+
+	getRecord: function(node) {
+		var v = this.grid.getView();
+		return v.getRecord.apply(v, arguments);
+	},
+
+
+	getFocusedInput: function() {
+		var input = document.querySelector(':focus');
+
+		function toSelector(tag) {
+			var s = tag.tagName,
+				cls = tag.className.replace(/\W+/g, '.');
+			return Ext.isEmpty(cls) ? s : (s + '.' + cls);
+		}
+
+		return input && {record: this.getRecord(Ext.fly(input).up(this.__getGridView().itemSelector)), tag: toSelector(input)};
+	},
+
+
+	setFocusedInput: function(info) {
+		var record = info && info.record,
+			tag = info && info.tag,
+			n = record && this.__getGridView().getNode(record);
+		return n && wait(1).then(function() {
+			n = n.querySelector(tag);
+			if (n) {
+				n.focus();
+			}
+		});
+	},
+	//</editor-fold>
+
+
+	//<editor-fold desc="Event Handlers">
+	__getGridView: function() {
+		return this.grid.getView();
+	},
+
+
+	onCellClick: function(me, td, cellIndex, record, tr, rowIndex, e) {
+		var isControl = !!e.getTarget('.gradebox');
+		if (isControl && e.type === 'click') {
+			try {
+				if (e.getTarget('.dropdown')) {
+					this.onDropDown(td, record);
+				}
+			}
+			finally {
+				e.stopPropagation();
+			}
+			return;
+		}
+
+		this.fireEvent('student-clicked', this, record);
+	},
+
+
+	createGradeMenu: function() {
+		this.gradeMenu = Ext.widget('menu', {
+			cls: 'letter-grade-menu',
+			width: 67,
+			minWidth: 67,
+			ownerCmp: this,
+			offset: [-1, -1],
+			defaults: {
+				ui: 'nt-menuitem',
+				xtype: 'menucheckitem',
+				group: 'gradeOptions',
+				cls: 'letter-grade-option',
+				height: 35,
+				plain: true,
+				listeners: {
+					scope: this,
+					'checkchange': 'changeLetterGrade'
+				}
+			},
+			//Don't know if these need to be translated
+			items: [
+				{text: '-'},
+				{text: 'A'},
+				{text: 'B'},
+				{text: 'C'},
+				{text: 'D'},
+				{text: 'F'},
+				{text: 'I'},
+				{text: 'W'}
+			]
+		});
+	},
+
+
+	onDropDown: function(node, record) {
+		var me = this,
+			rec = record || me.grid.getRecord(node),
+			el = Ext.get(node),
+			dropdown = el && el.down('.gradebox .letter'),
+			current;
+
+		me.gradeMenu.items.each(function(item, index) {
+			var x = item.height * index;
+
+			if (item.text === rec.get('letter')) {
+				item.setChecked(true, true);
+				me.gradeMenu.offset = [-1, -x];
+				current = item;
+			} else {
+				item.setChecked(false, true);
+			}
+		});
+
+		if (dropdown) {
+			me.activeGradeRecord = rec;
+			me.gradeMenu.showBy(dropdown, 'tl-tl', me.gradeMenu.offset);
+		}
+	},
+
+
+	changeLetterGrade: function(item, status) {
+		if (!this.activeGradeRecord || !status) { return; }
+		var g = this.activeGradeRecord.get('grade'),
+			n = this.getNode(this.activeGradeRecord);
+
+		n = n && n.querySelector('.gradebox input');
+
+		if (n && n.value !== g) {
+			g = n.value;
+		}
+
+		this.editGrade(this.activeGradeRecord, g, item.text);
+	},
+
+
+	editGrade: function(record, value, letter) {
+		var me = this,
+			view = me.__getGridView(),
+			node = view.getNode(record),
+			historyItem = record.get('HistoryItemSummary'),
+			grade = historyItem.get('Grade'),
+			oldValues = grade && grade.getValues(),
+			save;
+
+		//if a letter has not been passed use the old one
+		if (!letter) {
+			letter = oldValues && oldValues.letter;
+		}
+
+		if (!historyItem || !historyItem.shouldSaveGrade(value, letter)) { return; }
+
+
+		if (node) {
+			Ext.fly(node).setStyle({opacity: '0.3'});
+		}
+
+		wait(300).then(function() {
+			return historyItem.saveGrade(value, letter);
+		}).always(function() {
+			var n = view.getNode(record);
+
+			if (n) {
+				Ext.fly(n).setStyle({opacity: 1});
+			}
+		});
+	}
+});
