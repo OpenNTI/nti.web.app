@@ -211,7 +211,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 		this.current_state = state || {};
 		this.stateRestored = true;
 
-		this.applyState(this.current_state);
+		return this.applyState(this.current_state);
 	},
 
 

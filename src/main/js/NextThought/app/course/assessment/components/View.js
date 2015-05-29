@@ -306,6 +306,11 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 		me.setActiveItem(me.assignmentsView);
 
 		return me.assignmentsView.setAssignmentsData(me.assignmentCollection, me.currentBundle)
+			.then(function() {
+				if (me.assignmentsView.showRoot) {
+					me.assignmentsView.showRoot();
+				}
+			})
 			.then(me.maybeUnmask.bind(me))
 			.then(me.setTitle.bind(me, me.assignmentsView.title))
 			.then(me.alignNavigation.bind(me));
