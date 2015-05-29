@@ -4,10 +4,6 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 
 	state_key: 'admin-assignment-students',
 
-	mixins: {
-		State: 'NextThought.mixins.State'
-	},
-
 	requires: [
 		'NextThought.layout.component.CustomTemplate',
 		'NextThought.common.ux.FilterMenu',
@@ -203,22 +199,19 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 
 
 	restoreState: function(state, fromAfterRender) {
-		var me = this;
-
-		state = state || me.getCurrentState();
-
 		//if this is coming form after render and we've already restored
 		//a state don't overwrite it. The main reason this is here is so
 		//if they hit the back button the component is already rendered with
 		//a state so we want to override it, but if we are coming from after
 		//render we don't want to override a previous state.
-		if (fromAfterRender && me.stateRestored) {
+		if (fromAfterRender && this.stateRestored) {
 			return;
 		}
 
-		me.stateRestored = true;
+		this.current_state = state || {};
+		this.stateRestored = true;
 
-		me.applyState(state);
+		this.applyState(this.current_state);
 	},
 
 
@@ -437,6 +430,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 			store = me.store,
 			params = store.proxy.extraParams;
 
+		me.applyingState = true;
+
 		state = state || {};
 
 		if (state.filter) {
@@ -467,6 +462,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 					me.maybeSwitch();
 					me.initialLoad = true;
 					me.unmask();
+
+					delete me.applyingState;
 
 					fulfill();
 				}
@@ -538,7 +535,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 
 
 	updateFilter: function() {
-		var state = this.getCurrentState() || {},
+		var state = this.current_state || {},
+			newPage = state.currentPage !== this.currentPage,
 			header = this.pageHeader;
 
 		if (this.currentFilter) {
@@ -570,8 +568,15 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 		} else {
 			delete state.sort;
 		}
+
+		this.current_state = state;
+
+		if (newPage) {
+			this.pushRouteState(state);
+		} else {
+			this.replaceRouteState(state);
+		}
 		
-		this.setState(state);
 	},
 
 
@@ -590,7 +595,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 
 
 	changeSort: function(ct, column, direction) {
-		var prop = column.sortOn;
+		var prop = column.sortOn || column.dataIndex;
 
 		if (prop) {
 			this.sort = {
@@ -601,7 +606,9 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 			this.sort = {};
 		}
 
-		this.updateFilter();
+		if (!this.applyingState) {
+			this.updateFilter();
+		}
 
 		return false;
 	},

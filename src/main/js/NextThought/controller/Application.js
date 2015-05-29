@@ -52,6 +52,8 @@ Ext.define('NextThought.controller.Application', {
 		body.replaceRoute = this.replaceRoute.bind(this);
 		body.pushRootRoute = this.pushRoute.bind(this);
 		body.replaceRootRoute = this.replaceRoute.bind(this);
+		body.pushRouteState = this.pushRouteState.bind(this);
+		body.replaceRouteState = this.replaceRouteState.bind(this);
 		body.setTitle = this.setTitle.bind(this);
 
 		this.handleCurrentState()
@@ -98,7 +100,7 @@ Ext.define('NextThought.controller.Application', {
 	},
 
 
-	__doRoute: function(fn, title, route, precache) {
+	__doRoute: function(fn, state, title, route, precache) {
 		var me = this,
 			body = me.getBody(),
 			myTitle = me.__mergeTitle(title),
@@ -106,7 +108,7 @@ Ext.define('NextThought.controller.Application', {
 			allow = body.allowNavigation();
 
 		function finish() {
-			history[fn]({}, myTitle, myRoute);
+			history[fn](state || history.state, myTitle, myRoute);
 			document.title = title;
 			me.handleRoute(route, precache);
 		}
@@ -128,12 +130,32 @@ Ext.define('NextThought.controller.Application', {
 
 
 	pushRoute: function(title, route, precache) {
-		this.__doRoute('pushState', title, route, precache);
+		this.__doRoute('pushState', null, title, route, precache);
 	},
 
 
 	replaceRoute: function(title, route, precache) {
-		this.__doRoute('replaceState', title, route, precache);
+		this.__doRoute('replaceState', null, title, route, precache);
+	},
+
+
+	pushRouteState: function(state, title, route, precache) {
+		var body = this.getBody(),
+			historyState = {};
+
+		historyState[body.state_key] = state;
+
+		this.__doRoute('pushState', historyState, title, route, precache);
+	},
+
+
+	replaceRouteState: function(state, title, route, precache) {
+		var body = this.getBody(),
+			historyState = {};
+
+		historyState[body.state_key] = state;
+
+		this.__doRoute('replaceState', historyState, title, route, precache);
 	},
 
 

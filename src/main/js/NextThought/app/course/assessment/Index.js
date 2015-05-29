@@ -75,6 +75,11 @@ Ext.define('NextThought.app.course.assessment.Index', {
 	},
 
 
+	getRouteTitle: function() {
+		return this.title;
+	},
+
+
 	getView: function() {
 		return this.down('course-assessment');
 	},

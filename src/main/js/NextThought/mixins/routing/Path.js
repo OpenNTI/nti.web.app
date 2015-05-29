@@ -232,10 +232,16 @@ Ext.define('NextThought.mixins.routing.Path', {
 			return;
 		}
 
+		var key = cmp.state_key || cmp.xtype,
+			state = this.getRouteState() || {};
+
 		cmp.pushRoute = this.__pushChildRoute.bind(this);
 		cmp.replaceRoute = this.__replaceChildRoute.bind(this);
 		cmp.pushRootRoute = this.pushRootRoute.bind(this);
 		cmp.replaceRootRoute = this.replaceRootRoute.bind(this);
+		cmp.pushRouteState = this.__pushChildState.bind(this, key);
+		cmp.replaceRouteState = this.__replaceChildState.bind(this, key);
+		cmp.getRouteState = this.__getChildState.bind(this, key);
 		cmp.setTitle = this.__setChildTitle.bind(this);
 
 		if (cmp.onAddedToParentRouter) {
@@ -255,6 +261,20 @@ Ext.define('NextThought.mixins.routing.Path', {
 	 * @return {Object} items to merge into the precache
 	 */
 	getRoutePrecache: function() { return {}; },
+
+
+	getRouteState: function() {
+		var key = this.state_key || this.xtype;
+
+		return (history.state || {})[key] || {};
+	},
+
+
+	__getChildState: function(key) {
+		var state = this.getRouteState() || {};
+
+		return state[key] || {};
+	},
 
 
 	/**
@@ -328,6 +348,47 @@ Ext.define('NextThought.mixins.routing.Path', {
 	},
 
 
+	__doState: function(fn, key, obj, title, subRoute, precache) {
+		var merged = this.__mergeChildRoute(title, subRoute, precache);
+
+		this.history_state = this.getRouteState();
+
+		this.history_state[key] = obj;
+
+		if (this[fn]) {
+			this[fn](this.history_state, merged.title, merged.route, merged.precache);
+		} else {
+			console.error('No fn to change state', fn);
+		}
+	},
+
+
+	/**
+	 * Merge the childs route with mine and push it
+	 * @param {String} key key of the cmp
+	 * @param {Object} obj state object
+	 * @param  {String} title    title of the route
+	 * @param  {String} subRoute the childs route
+	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
+	 */
+	__pushChildState: function(key, obj, title, subRoute, precache) {
+		this.__doState('pushRouteState', key, obj, title, subRoute, precache);
+	},
+
+
+	/**
+	 * Merge the childs route with mine and replace it
+	 * @param {String} key the key of the cmp
+	 * @param {Object} obj state object
+	 * @param  {String} title    title of the route
+	 * @param  {String} subRoute the childs route
+	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
+	 */
+	__replaceChildState: function(key, obj, title, subRoute, precache) {
+		this.__doState('replaceRouteState', key, obj, title, subRoute, precache);
+	},
+
+
 	/**
 	 * Merge my title in to the childs and set it
 	 * @param {String} title title to set on the document
@@ -388,6 +449,25 @@ Ext.define('NextThought.mixins.routing.Path', {
 	 * @param {Object} precache a map of keys to object to prevent resolving them more than once
 	 */
 	replaceRootRoute: function(title, route, precache) {},
+
+
+	/**
+	 * Push a state object to the history
+	 * @param  {Object} obj      state object to push
+	 * @param  {String} title    title of the state
+	 * @param  {String} route    route for the state
+	 * @param  {Object} precache a map of keys to prevent resolving them more than once
+	 */
+	pushRouteState: function(obj, title, route, precache) {},
+
+	/**
+	 * Push a state object to the history
+	 * @param  {Object} obj      state object to push
+	 * @param  {String} title    title of the state
+	 * @param  {String} route    route for the state
+	 * @param  {Object} precache a map of keys to prevent resolving them more than once
+	 */
+	replaceRouteState: function(obj, title, route, precache) {},
 
 
 	/**

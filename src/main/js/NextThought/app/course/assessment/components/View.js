@@ -187,6 +187,12 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 	},
 
 
+	addChildRouter: function(cmp) {
+		this.mixins.Router.addChildRouter.call(this, cmp);
+		cmp.pushRoute = this.changeRoute.bind(this);
+	},
+
+
 	addAdminViews: function(getLink) {
 		this.notificationsView = this.body.add({
 			xtype: 'course-assessment-admin-activity',
@@ -211,9 +217,9 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 		});
 
 		//override the push route to use my change route, since my parent is incharge of handling routes
-		this.notificationsView.pushRoute = this.changeRoute.bind(this);
-		this.assignmentsView.pushRoute = this.changeRoute.bind(this);
-		this.performanceView.pushRoute = this.changeRoute.bind(this);
+		this.addChildRouter(this.notificationsView);
+		this.addChildRouter(this.assignmentsView);
+		this.addChildRouter(this.performanceView);
 
 		this.navigation.addItems([
 			this.notificationsView,

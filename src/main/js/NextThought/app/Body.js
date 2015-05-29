@@ -2,6 +2,8 @@ Ext.define('NextThought.app.Body', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.main-views',
 
+	state_key: 'main-view',
+
 	requires: [
 		'NextThought.app.library.Index',
 		'NextThought.app.course.Index',

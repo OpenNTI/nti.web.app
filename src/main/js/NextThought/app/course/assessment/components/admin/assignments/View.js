@@ -118,6 +118,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.View'
 			student: student,
 			alignNavigation: this.alignNavigation.bind(this),
 			pushRoute: this.pushRoute.bind(this),
+			pushRouteState: this.pushRouteState.bind(this),
+			replaceRouteState: this.replaceRouteState.bind(this),
 			pageSource: NextThought.util.PageSource.create({
 				next: next && next.getId(),
 				nextTitle: next && next.get('name'),
@@ -128,7 +130,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.View'
 			})
 		});
 
-		return view.restoreState();
+		return view.restoreState(this.getRouteState());
 	},
 
 

@@ -2,6 +2,8 @@ Ext.define('NextThought.app.course.Index', {
 	extend: 'NextThought.app.content.Index',
 	alias: 'widget.course-view-container',
 
+	state_key: 'course_index',
+
 	mixins: {
 		Router: 'NextThought.mixins.Router',
 		State: 'NextThought.mixins.State'

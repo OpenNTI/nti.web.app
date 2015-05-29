@@ -112,7 +112,7 @@ Ext.define('NextThought.model.courses.assignments.BaseCollection', {
 		var items = this.get(field || 'Assignments');
 
 		items = items.filter(function(rec) {
-			return rec.getId() === id || (rec.containsId && rec.containsId(id));
+			return rec.getId().toLowerCase() === id.toLowerCase() || (rec.containsId && rec.containsId(id));
 		});
 
 		return items[0];
