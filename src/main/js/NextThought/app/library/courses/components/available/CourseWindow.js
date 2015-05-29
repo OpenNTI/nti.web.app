@@ -6,7 +6,8 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 		'NextThought.app.course.catalog.Collection',
 		'NextThought.app.course.catalog.TabPanel',
 		'NextThought.app.library.courses.components.available.Actions',
-		'NextThought.app.library.courses.StateStore'
+		'NextThought.app.library.courses.StateStore',
+		'NextThought.app.course.enrollment.Details'
 		// 'NextThought.view.courseware.enrollment.Details',
 		// 'NextThought.view.courseware.enrollment.Process'
 	],
@@ -126,31 +127,13 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 	initComponent: function() {
 		this.callParent(arguments);
 
-		var course;
-
-		this.__StateActions = NextThought.app.library.courses.components.available.Actions.create();
 		this.CourseActions = NextThought.app.library.courses.Actions.create();
 		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
 
-
-		if (this.showAvailable) {
-			this.showTabpanel();
-			this.mon(this.CourseStore, 'all-courses-set', this.setupCourses.bind(this));
-			this.CourseActions.loadAllCourses();
-		}
-
-		if (this.course) {
-			this.__StateActions.showCourse(this.course);
-		} else if (this.activeId) {
-			course = CourseWareUtils.courseForNtiid(this.activeId);
-
-			if (course) {
-				this.__StateActions.showCourse(course);
-			} else {
-				console.error('Faild to load active id, ', this.activeId);
-			}
-		}
-
+		this.initRouter();
+		this.addRoute('/', this.showCourses.bind(this));
+		this.addRoute('/:id', this.showCourseDetail.bind(this));
+		this.addDefaultRoute('/');
 		this.on('beforeclose', this.onBeforeClose, this);
 	},
 
@@ -238,7 +221,6 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 
 		me.updateButtons();
 	},
-
 
 	updateAvailableCourses: function(current, upcoming, archived) {
 		if (!this.tabpanel) { return; }
@@ -401,8 +383,6 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 
 
 	showTabpanel: function() {
-		if (!this.showAvailable) { return; }
-
 		var me = this;
 
 		if (!me.tabpanel) {
@@ -414,7 +394,10 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 				ownerCt: me
 			});
 
-			me.mon(me.tabpanel, 'show-course-detail', 'showCourse');
+			me.mon(me.tabpanel, 'show-course-detail', function(course){
+				me.pushRoute(course.get('Title'), ParseUtils.encodeForURI(course.getId()), {course: course});
+			});
+			
 		}
 
 		function updateLabel() {
@@ -432,6 +415,83 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 		}
 
 		me.getLayout().setActiveItem(me.tabpanel);
+	},
+
+	showCourses: function(route, subRoute) {
+		this.mon(this.CourseStore, 'all-courses-set', this.setupCourses.bind(this));
+		this.CourseActions.loadAllCourses();
+		this.showTabpanel();
+	},
+
+	showCourseDetail: function(route, subRoute) {
+		var ntiid = ParseUtils.decodeFromURI(route.params.id),
+			course = route.precache.course,
+			me = this;
+
+		if(course && course.getId().toLowerCase() === ntiid.toLowerCase()) {
+			this.showCourse(course);	
+		}
+		else {
+			this.mon(this.CourseStore, {
+				'all-courses-set': function(courses) {
+					me.showTabpanel();
+					me.setupCourses(courses);
+
+					course = me.CourseStore.findCourseForNtiid(ntiid);
+					if(course) {
+						wait()
+							.then(function() {
+								me.showCourse(course);
+							});
+					}
+				}
+			});
+			this.CourseActions.loadAllCourses();
+		}
+	},
+
+	showCourse: function(course) {
+		var me = this;
+
+		function addView() {
+			me.courseDetail = me.add({
+				xtype: 'course-enrollment-details',
+				course: course,
+				ownerCt: me
+			});
+		}
+
+		if (!me.courseDetail) {
+			addView();
+		} else if (me.courseDetail.course !== course) {
+			addView();
+		} else {
+			me.courseDetail.updateEnrollmentCard(true);
+		}
+
+		function updateLabel() {
+			var activeTab;
+			if (me.showAvailable) {
+				me.labelEl.addCls('back');
+				activeTab = me.tabpanel.getTabForCourse(course);
+
+				me.labelEl.update(activeTab.title + ' Courses');
+			} else {
+				me.labelEl.update(course.get('Title'));
+			}
+
+			me.footerEl.removeCls(['enroll', 'admission']);
+		}
+
+		if (!me.rendered) {
+			me.on('afterrender', updateLabel);
+		} else {
+			updateLabel();
+		}
+
+		// me.mon(me.courseDetail, 'enroll-in-course', 'showEnrollmentOption');
+
+		me.getLayout().setActiveItem(me.courseDetail);
 	},
 
 	showEnrollmentOption: function(course, name, type, config) {

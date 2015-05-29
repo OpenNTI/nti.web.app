@@ -172,5 +172,17 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 		}
 
 		return course;
+	},
+
+	findCourseForNtiid: function(ntiid) {
+		function fn(rec) {
+			//if ntiid is my id or my oid
+			var match = rec.getId() === ntiid || rec.get('OID') === ntiid;
+			//
+			match = match || rec.get('CourseEntryNTIID') === ntiid;
+			return match;
+		}
+
+		return this.__findIn(this.ALL_COURSES, fn);
 	}
 });
