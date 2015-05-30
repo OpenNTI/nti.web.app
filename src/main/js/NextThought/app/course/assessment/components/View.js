@@ -290,6 +290,11 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 		me.setActiveItem(me.performanceView);
 
 		return me.performanceView.setAssignmentsData(me.assignmentCollection, me.currentBundle)
+			.then(function() {
+				if (me.performanceView.showRoot) {
+					me.performanceView.showRoot();
+				}
+			})
 			.then(me.maybeUnmask.bind(me))
 			.then(me.setTitle.bind(me, me.performanceView.title))
 			.then(me.alignNavigation.bind(me));
@@ -335,6 +340,26 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 		return me.assignmentsView.setAssignmentsData(me.assignmentCollection, me.currentBundle, true)
 			.then(me.assignmentsView.showAssignment.bind(me.assignmentsView, assignment))
 			.then(me.maybeUnmask.bind(me))
+			.then(me.alignNavigation.bind(me));
+	},
+
+
+	showAssignmentsForStudent: function(route, subRoute) {
+		if (!this.performanceView) { return; }
+
+		var me = this,
+			student = route.params.student;
+
+		student = NextThought.model.User.getIdFromURIPart(student);
+
+		me.maybeMask();
+
+		me.setActiveItem(me.performanceView);
+
+		return me.performanceView.setAssignmentsData(me.assignmentCollection, me.currentBundle, student)
+			.then(me.performanceView.showStudent.bind(me.performanceView, student))
+			.then(me.maybeUnmask.bind(me))
+			.then(function() { return wait(); })
 			.then(me.alignNavigation.bind(me));
 	}
 });

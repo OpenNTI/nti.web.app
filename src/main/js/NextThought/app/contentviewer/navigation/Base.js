@@ -100,7 +100,7 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 		}
 
 		data.renderTpl = data.renderTpl.replace('{toolbarContents}', data.toolbarTpl || '');
-		data.renderTpl  = data.renderTpl.replace('{headerContents}', data.headerTpl || '');
+		data.renderTpl = data.renderTpl.replace('{headerContents}', data.headerTpl || '');
 	},
 
 
@@ -118,7 +118,7 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 		}
 
 		if (!me.hideControls && me.pageSource) {
-			if (me.pageSource  instanceof Promise) {
+			if (me.pageSource instanceof Promise) {
 				rd.showPaging = true;
 				me.pageSource.then(me.onPageSourceLoad.bind(me));
 			} else {
@@ -238,7 +238,7 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 				text: item.label,
 				ntiid: item.ntiid,
 				cls: item.cls
-			}
+			};
 		});
 
 		if (this.pathMenu) {
@@ -284,7 +284,7 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 
 		this.nextEl[ps.hasNext() ? 'removeCls' : 'addCls']('disabled');
 		this.previousEl[ps.hasPrevious() ? 'removeCls' : 'addCls']('disabled');
- 
+
 		this.nextEl.dom.setAttribute('title', ps.getNextTitle());
 		this.previousEl.dom.setAttribute('title', ps.getPreviousTitle());
 	},
@@ -304,7 +304,7 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 
 	onNext: function(e) {
 		if (e.getTarget('.disabled')) {
-			return; 
+			return;
 		}
 
 		var next = this.pageSource.getNext(),

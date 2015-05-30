@@ -70,7 +70,7 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 	 *	->type menu is fixed to 'all' (wildcard, for now)...it will filter the set down. (just like search)
 	 *	->search filters down on name only. (for now)
 	 *
-	 * @param {Object} state 
+	 * @param {Object} state
 	 */
 	getGrouper: function(state) {
 		var me = this,
@@ -178,7 +178,7 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 						});
 					});
 				}, wait(10));
-			} else  {
+			} else {
 				groupPromise = Promise.resolve();
 			}
 
@@ -333,8 +333,8 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 	 * Apply an assignment collection and a bundle
 	 *
 	 * if we already have the same instance don't do anything
-	 * 
-	 * @param {AssignmentCollection} assignments    the assignment collection 
+	 *
+	 * @param {AssignmentCollection} assignments    the assignment collection
 	 * @param {Bundle} instance    the bundle we are in
 	 */
 	setAssignmentsData: function(assignments, instance, silent) {
@@ -439,7 +439,7 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 						submittedCount: assignment.get('SubmittedCount') | 0,
 						enrolledCount: bundle.get('TotalEnrolledCount'),
 						reportLinks: assignment.getReportLinks()
-					}
+					};
 				}));
 		}
 
@@ -484,7 +484,7 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 
 		if (state && state.groupBy) {
 			bar.selectGroupBy(state.groupBy);
-		} 
+		}
 
 		return this.applyState(state);
 	},

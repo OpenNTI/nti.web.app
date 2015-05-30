@@ -19,7 +19,7 @@ Ext.define('NextThought.util.PageSource', {
 	},
 
 	getPageNumber: function() {
-		return this.currentIndex
+		return this.currentIndex;
 	},
 
 

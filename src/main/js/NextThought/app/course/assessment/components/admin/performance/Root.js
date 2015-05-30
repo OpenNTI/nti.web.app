@@ -4,7 +4,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 	mixins: {
 		gridGrades: 'NextThought.mixins.grid-feature.GradeInputs',
-		State: 'NextThought.mixins.State',
+		State: 'NextThought.mixins.State'
 	},
 
 
@@ -140,7 +140,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 		me.mon(me.pageHeader, {
 			'toggle-avatars': 'toggleAvatars',
-			'page-change': function(){
+			'page-change': function() {
 				me.mon(me.store, {
 					single: true,
 					'load': me.grid.scrollToTop.bind(me.grid)
@@ -154,7 +154,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 		$AppConfig.Preferences.getPreference('Gradebook')
 			.then(function(values) {
-				me.pageHeader.setAvatarToggle(!value.get('hide_avatar'));
+				me.pageHeader.setAvatarToggle(!values.get('hide_avatar'));
 			});
 	},
 
@@ -478,7 +478,10 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 
 	applyState: function(state) {
+		//if we are already applying state or the state hasn't changed and the store has loaded don't do anything
 		if (this.applyingState) { return; }
+
+		if (Ext.Object.equals(state, this.current_state) && this.initialLoad) { return Promise.resolve(); }
 
 		var me = this,
 			store = me.store,
@@ -679,7 +682,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 
 	onCellClick: function(me, td, cellIndex, record, tr, rowIndex, e) {
-		var isControl = !!e.getTarget('.gradebox');
+		var isControl = !!e.getTarget('.gradebox'), user;
+
 		if (isControl && e.type === 'click') {
 			try {
 				if (e.getTarget('.dropdown')) {
@@ -692,7 +696,9 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 			return;
 		}
 
-		this.fireEvent('student-clicked', this, record);
+		user = record.get('User');
+
+		this.showAssignmentsForStudent(user);
 	},
 
 

@@ -42,6 +42,7 @@ Ext.define('NextThought.app.course.assessment.Index', {
 
 		this.addRoute('/:assignment', this.showAssignment.bind(this));
 		this.addRoute('/:assignment/students', this.showStudentsForAssignment.bind(this));
+		this.addRoute('/performance/:student', this.showAssignmentsForStudent.bind(this));
 		this.addRoute('/performance/:student/:assignment', this.showAssignmentForStudent.bind(this));
 		this.addRoute('/:assignment/students/:student', this.showStudentForAssignment.bind(this));
 
@@ -251,6 +252,17 @@ Ext.define('NextThought.app.course.assessment.Index', {
 		this.getLayout().setActiveItem(view);
 
 		return view.showStudentsForAssignment(route, subRoute);
+	},
+
+
+	showAssignmentsForStudent: function(route, subRoute) {
+		var view = this.getView();
+
+		this.closeAssignment();
+
+		this.getLayout().setActiveItem(view);
+
+		return view.showAssignmentsForStudent(route, subRoute);
 	},
 
 

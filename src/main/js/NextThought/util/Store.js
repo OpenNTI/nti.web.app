@@ -90,16 +90,22 @@ Ext.define('NextThought.util.Store', {
 	 * @param  {String} url         the url to load
 	 * @param  {Object} queryParams query params to attach
 	 * @param  {String} itemProp 	the item prop to parse off of the response
+	 * @param {Object} model the model to use to parse the items
 	 * @return {Promise}            fulfills with the parsed items from the response
 	 */
-	loadItems: function(url, queryParams, itemProp) {
+	loadItems: function(url, queryParams, itemProp, model) {
 		itemProp = itemProp || 'Items';
 
 		return this.loadRawItems(url, queryParams)
 			.then(function(response) {
-				var json = Ext.decode(response, true) || [];
+				var json = Ext.decode(response, true) || [],
+					items = json[itemProp];
 
-				return ParseUtils.parseItems(json[itemProp]);
+				if (model && model.create) {
+					return items.map(function(item) { return model.create(item); });
+				}
+
+				return ParseUtils.parseItems(items);
 			});
 	}
 

@@ -35,7 +35,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Root'
 		});
 	},
 
-	
+
 	goToRecord: function(rec) {
 		var assignment = rec.get('item');
 
