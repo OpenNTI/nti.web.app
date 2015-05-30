@@ -319,9 +319,9 @@ Ext.define('NextThought.mixins.routing.Path', {
 
 
 		if (this[fn]) {
-			this[fn](merged.title, merged.route, merged.pecache);
+			this[fn](merged.title, merged.route, merged.precache);
 		} else {
-			console.error('No fn to do route', fn)
+			console.error('No fn to do route', fn);
 		}
 	},
 
