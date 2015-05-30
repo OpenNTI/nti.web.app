@@ -129,7 +129,7 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Admin', {
 		});
 
 		if (this.assignmentHistory && this.assignmentHistory instanceof Promise) {
-			this.assignmentHistory.then(this.setUpGradebox.bind(this));
+			this.assignmentHistory.then(this.setUpGradeBox.bind(this));
 		} else {
 			this.setUpGradebox();
 		}

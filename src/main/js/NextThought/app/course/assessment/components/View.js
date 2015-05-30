@@ -133,6 +133,20 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 	},
 
 
+	getStudentListForAssignment: function(assignment, student) {
+		var me = this;
+
+		//apply the assignments data and let it restore state so we can get that order
+		return me.assignmentsView.setAssignmentsData(me.assignmentCollection, me.currentBundle, true)
+			.then(me.assignmentsView.showAssignment.bind(me.assignmentsView, assignment, student))
+			.then(function() {
+				var view = me.assignmentsView.getAssignmentView();
+
+				return view.store;
+			});
+	},
+
+
 	maybeMask: function() {
 		var el = this.body.el;
 

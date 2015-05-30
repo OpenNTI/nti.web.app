@@ -45,6 +45,11 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.View'
 	},
 
 
+	getAssignmentView: function() {
+		return this.down('course-assessment-admin-assignments-item');
+	},
+
+
 	showRoot: function() {
 		var root = this.getRoot(),
 			layout = this.getLayout(),
@@ -83,6 +88,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.View'
 			pushRoute: this.pushRoute.bind(this),
 			pushRouteState: this.pushRouteState.bind(this),
 			replaceRouteState: this.replaceRouteState.bind(this),
+			showStudentForAssignment: this.showStudentForAssignment.bind(this),
 			pageSource: NextThought.util.PageSource.create({
 				next: next && next.getId(),
 				nextTitle: next && next.get('name'),
@@ -106,6 +112,23 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.View'
 
 		this.pushRoute(rec.get('title'), id + '/students', {
 			assignment: rec
+		});
+	},
+
+
+	showStudentForAssignment: function(student, assignment, historyItem) {
+		var assignmentId = assignment.getId(),
+			assignmentTitle = assignment.get('title'),
+			studentTitle = student.getName(),
+			studentId = student.getURLPart();
+
+		assignmentId = ParseUtils.encodeForURI(assignmentId);
+
+		debugger;
+		this.pushRoute(studentTitle + ' | ' + assignmentTitle, assignmentId + '/students/' + studentId, {
+			student: student,
+			assignment: assignment,
+			historyItem: historyItem
 		});
 	}
 });

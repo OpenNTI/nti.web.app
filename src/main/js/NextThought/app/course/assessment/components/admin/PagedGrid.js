@@ -226,7 +226,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.PagedGrid', {
 			renderer: function(v, col, rec) {
 				var item = rec.get('HistoryItemSummary');
 
-				if (item && NextThought.view.courseware.assessment.AssignmentStatus.hasActions(item)) {
+				if (item && NextThought.app.course.assessment.AssignmentStatus.hasActions(item)) {
 					return v && Ext.DomHelper.markup({cls: 'actions'});
 				}
 			}

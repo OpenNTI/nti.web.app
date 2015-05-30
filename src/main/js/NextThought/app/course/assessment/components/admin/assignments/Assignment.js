@@ -157,7 +157,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 
 		me.mon(grid, {
 			'load-page': me.loadPage.bind(me),
-			'sortchange': me.changeSort.bind(me)
+			'sortchange': me.changeSort.bind(me),
+			'itemclick': me.onItemClick.bind(me)
 		});
 
 		//if there is a completed column but no parts on the assignment
@@ -462,7 +463,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 		}
 
 		if (this.student) {
-			params.batchContainingUsernameFilterByScope = student;
+			params.batchContainingUsernameFilterByScope = this.student;
 		}
 
 		return new Promise(function(fulfill, reject) {
@@ -674,76 +675,18 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 	},
 
 
-	restoreStudent: function(student) {
-		if (this.store.loading) {
-			this.mon(this.store, {
-				single: true,
-				delay: 1,
-				load: this.restoreStudent.bind(this, student)
-			});
-
-			return;
-		}
-
-		var record;
-
-		record = this.store.findBy(function(rec) {
-			var user = rec.get('User');
-
-			return student === NextThought.model.User.getIdFromRaw(user);
-		});
-
-		if (record >= 0) {
-			record = this.store.getAt(record);
-
-			this.fireGoToAssignment(null, record, null);
-		}
-	},
-
-
 	fireGoToAssignment: function(v, record, pageSource) {
 		var student = record.get('User'),
-			historyItem = record.get('HistoryItemSummary'),
-			item = historyItem && historyItem.get('item'), //Assignment Instance
-			path = [
-				this.pathRoot,
-				this.pathBranch,
-				student.toString()
-			],
-			container = this.up('[rootContainerShowAssignment]');
+			historyItem = record.get('HistoryItemSummary');
 
-		if (typeof student === 'string') {
+		if (typeof student === 'string' || !student.isModel) {
+			console.error('Unable to show assignment for student', student.getName(), this.assignment.get('title'));
 			return;
 		}
 
-		if (!pageSource) {
-			pageSource = NextThought.proxy.courseware.PagedPageSource.create({
-				store: this.store,
-				startingRec: record
-			});
-		}
-
-		if (!container) {
-			console.error('No container with rootContainerShowAssignment');
-			return;
-		}
-
-		return container.rootContainerShowAssignment(this, this.assignment, historyItem, student, path, pageSource);
-		// this.fireEvent('show-assignment', this, this.assignment, record, student, path, pageSource);
+		this.showStudentForAssignment(student, this.assignment, historyItem);
 	},
 
 
-	goToRawAssignment: function() {
-		var student = $AppConfig.userObject,
-			historyItem = null,
-			path = [
-				this.pathRoot,
-				this.pathBranch,
-				student.toString()
-			],
-			container = this.up('[rootContainerShowAssignment]'),
-			pageSource = null;
-
-		return container.rootContainerShowAssignment(this, this.assignment, historyItem, student, path, pageSource, true);
-	}
+	goToRawAssignment: function() {}
 });
