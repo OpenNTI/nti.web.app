@@ -6,6 +6,16 @@ Ext.define('NextThought.store.courseware.StudentHistoryItems', {
 	},
 
 
+	getTotalPages: function() {
+		return 1;
+	},
+
+
+	getCurrentPage: function() {
+		return 1;
+	},
+
+
 	load: function(options) {
 		var me = this,
 			oldCallBack;

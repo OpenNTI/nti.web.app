@@ -180,7 +180,14 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Stude
 	},
 
 
-	showAssignment: function(selModel, record) {},
+	showAssignment: function(selModel, record) {
+		var userId = this.student.getURLPart(),
+			assignmentId = record.get('AssignmentId');
+
+		assignmentId = ParseUtils.encodeForURI(assignmentId);
+
+		this.pushRoute('', '/performance/' + userId + '/' + assignmentId);
+	},
 
 
 	doNavigation: function(title, record) {

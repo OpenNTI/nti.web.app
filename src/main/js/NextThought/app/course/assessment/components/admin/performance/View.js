@@ -47,6 +47,11 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.View'
 	},
 
 
+	getStudentView: function() {
+		return this.down('course-assessment-admin-performance-student');
+	},
+
+
 	showRoot: function() {
 		var root = this.getRoot(),
 			layout = this.getLayout(),
@@ -83,7 +88,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.View'
 		view = me.down('course-assessment-admin-performance-student');
 
 		if (view && view.student.getId() === (user && user.getId())) {
-			return;
+			return Promise.resolve();
 		} else {
 			Ext.destroy(view);
 		}

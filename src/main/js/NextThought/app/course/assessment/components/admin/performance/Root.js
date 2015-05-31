@@ -330,6 +330,11 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 	maybeSwitchStudents: function() {
 		if (this.initialLoad || this.store.getCount() > 0) { return; }
 
+		if (!this.rendered) {
+			this.on('afterrender', this.maybeSwitchStudents.bind(this));
+			return;
+		}
+
 		var scope = this.store.proxy.reader.EnrollmentScope,
 			menu = this.studentMenu,
 			open = menu.down('[type=Open]'),

@@ -27,10 +27,6 @@ Ext.define('NextThought.app.course.assessment.Index', {
 		}
 	},
 
-	items: [
-		{xtype: 'box', autoEl: {html: 'assessment'}}
-	],
-
 
 	initComponent: function() {
 		this.callParent(arguments);
@@ -267,6 +263,34 @@ Ext.define('NextThought.app.course.assessment.Index', {
 	},
 
 
+	__getHistoryItem: function(historyItem) {
+		var link = historyItem.getLink('UsersCourseAssignmentHistoryItem'),
+			load;
+
+		if (link && historyItem.isSummary) {
+			load = Service.request(link)
+				.then(function(json) {
+					var o = ParseUtils.parseItems(json)[0];
+
+					historyItem.set({
+						Feedback: o.get('Feedback'),
+						Submission: o.get('Submission'),
+						pendingAssessment: o.get('pendingAssessment'),
+						Grade: o.get('Grade')
+					});
+
+					delete historyItem.isSummary;
+
+					return historyItem;
+				});
+		} else {
+			load = Promise.resolve(historyItem);
+		}
+
+		return load;
+	},
+
+
 	showStudentForAssignment: function(route, subRoute) {
 		var me = this,
 			view = this.getView(),
@@ -341,7 +365,7 @@ Ext.define('NextThought.app.course.assessment.Index', {
 
 				pageSource = NextThought.util.PagedPageSource.create({
 					store: students,
-					current: current,
+					currentIndex: current,
 					getTitle: function(rec) {
 						return rec ? rec.get('Alias') : '';
 					},
@@ -390,7 +414,108 @@ Ext.define('NextThought.app.course.assessment.Index', {
 	},
 
 
-	showAssignmentForStudent: function(route, subRoute) {},
+	showAssignmentForStudent: function(route, subRoute) {
+		var me = this,
+			view = this.getView(),
+			assignmentId = route.params.assignment,
+			studentId = route.params.student,
+			assignment = route.precache.assignment,
+			student = route.precache.student;
+
+		if (me.assignment && me.assignment.reader && me.assignment.reader.el) {
+			me.assignment.reader.el.mask('Loading...');
+		} else {
+			view.maybeMask();
+		}
+
+		assignmentId = ParseUtils.decodeFromURI(assignmentId);
+		studentId = NextThought.model.User.getIdFromURIPart(studentId);
+
+		assignment = assignment && assignment.getId() === assignmentId ? assignment : view.assignmentCollection.getItem(assignmentId);
+		student = student && student.getId() === studentId ? student : UserRepository.getUser(studentId);
+
+		return Promise.all([
+				assignment,
+				student
+			])
+			.then(function(results) {
+				assignment = results[0];
+				student = results[1];
+
+				return view.getAssignmentListForStudent(student.get('Username'));
+			})
+			.then(function(assignments) {
+				var record, pageSource, path = [], next, previous,
+					current = assignments.findBy(function(rec) {
+						return rec.get('AssignmentId') === assignment.getId();
+					});
+
+				if (current < 0) {
+					console.error('Failed to find assignment');
+					me.pushRoute('Grades & Performance', '/performance');
+					return Promise.reject();
+				}
+
+				record = assignments.getAt(current);
+
+				pageSource = NextThought.util.PagedPageSource.create({
+					store: assignments,
+					currentIndex: current,
+					getTitle: function(rec) {
+						if (!rec) { return ''; }
+
+						var id = rec.get('AssignmentId'),
+							assignment = view.assignmentCollection.getItem(id);
+
+						if (assignment) {
+							return assignment.get('title');
+						}
+					},
+					getRoute: function(rec) {
+						if (!rec) { return ''; }
+
+						var id = rec.get('AssignmentId');
+
+						id = ParseUtils.encodeForURI(id);
+
+						return 'performance/' + studentId + '/' + id;
+					}
+				});
+
+				path.push({
+					label: 'Grades & Performance',
+					title: 'Grades & Performance',
+					route: '/performance'
+				});
+
+				path.push({
+					label: student.getName(),
+					title: student.getName(),
+					route: '/performance/' + student.getURLPart()
+				});
+
+				path.push({
+					label: assignment.get('title')
+				});
+
+
+				return {
+					path: path,
+					pageSource: pageSource.load(),
+					assignment: assignment,
+					assignmentHistory: me.__getHistoryItem(record),
+					student: student
+				};
+			})
+			.then(me.showReader.bind(me))
+			.always(function() {
+				if (me.assignment && me.assignment.reader && me.assignment.reader.el) {
+					me.assignment.reader.el.unmask();
+				}
+
+				view.maybeUnmask();
+			});
+	},
 
 
 	onRoute: function(route, subRoute) {

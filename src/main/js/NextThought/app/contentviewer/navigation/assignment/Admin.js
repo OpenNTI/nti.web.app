@@ -131,7 +131,7 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Admin', {
 		if (this.assignmentHistory && this.assignmentHistory instanceof Promise) {
 			this.assignmentHistory.then(this.setUpGradeBox.bind(this));
 		} else {
-			this.setUpGradebox();
+			this.setUpGradeBox();
 		}
 
 		//for profile link
@@ -273,7 +273,7 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Admin', {
 				Error.raiseForReport(reason);
 			})
 			.always(function() {
-				me.setUpGradebox();
+				me.setUpGradeBox();
 			});
 	},
 
@@ -372,7 +372,7 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Admin', {
 	markAssignmentAsReset: function() {
 		this.excusedEl.removeCls('on');
 		this.excusedEl.addCls('off');
-		this.setUpGradebox();
+		this.setUpGradeBox();
 	},
 
 
