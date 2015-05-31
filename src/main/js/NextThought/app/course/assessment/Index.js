@@ -317,10 +317,10 @@ Ext.define('NextThought.app.course.assessment.Index', {
 
 				historyItem = record && record.get('HistoryItemSummary');
 
-				link = historyItem.getLink('UserCourseAssignmentHistoryItem');
+				link = historyItem.getLink('UsersCourseAssignmentHistoryItem');
 
-				if (link && history.isSummary) {
-					load = Service.getLink(link)
+				if (link && historyItem.isSummary) {
+					load = Service.request(link)
 						.then(function(json) {
 							var o = ParseUtils.parseItems(json)[0];
 
@@ -344,6 +344,14 @@ Ext.define('NextThought.app.course.assessment.Index', {
 					current: current,
 					getTitle: function(rec) {
 						return rec ? rec.get('Alias') : '';
+					},
+					getRoute: function(rec) {
+						if (!rec) { return ''; }
+
+						var user = rec.get('User'),
+							id = user.getURLPart();
+
+						return ParseUtils.encodeForURI(assignmentId) + '/students/' + id;
 					}
 				});
 
@@ -414,13 +422,13 @@ Ext.define('NextThought.app.course.assessment.Index', {
 	},
 
 
-	handleNavigation: function(title, ntiidOrRoute) {
+	handleNavigation: function(title, ntiidOrRoute, precache) {
 		var route = ntiidOrRoute;
 
 		if (ParseUtils.isNTIID(route)) {
 			route = ParseUtils.encodeForURI(route);
 		}
 
-		this.pushRoute(title, route);
+		this.pushRoute(title, route, precache);
 	}
 });

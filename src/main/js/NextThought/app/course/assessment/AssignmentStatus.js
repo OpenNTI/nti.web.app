@@ -1,5 +1,7 @@
 Ext.define('NextThought.app.course.assessment.AssignmentStatus', {
 
+	requires: ['Ext.Action'],
+
 	statics: {
 		statusTpl: new Ext.XTemplate(
 			Ext.DomHelper.markup({cls: 'assignment-status', cn: [

@@ -19,6 +19,10 @@ Ext.define('NextThought.util.PagedPageSource', {
 		if (config.getTitle) {
 			this.getTitle = config.getTitle.bind(this);
 		}
+
+		if (config.getRoute) {
+			this.getRoute = config.getRoute.bind(this);
+		}
 	},
 
 	//Relative to the total
@@ -125,21 +129,21 @@ Ext.define('NextThought.util.PagedPageSource', {
 
 
 	getPrevious: function() {
-		return this.previous;
+		return this.getRoute ? this.getRoute(this.previous) : this.previous;
 	},
 
 
 	getNext: function() {
-		return this.next;
+		return this.getRoute ? this.getRoute(this.next) : this.next;
 	},
 
 
 	getPreviousTitle: function() {
-		return this.getTitle(this.getPrevious());
+		return this.getTitle(this.previous);
 	},
 
 
 	getNextTitle: function() {
-		return this.getTitle(this.getNext());
+		return this.getTitle(this.next);
 	}
 });

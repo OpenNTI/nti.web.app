@@ -181,7 +181,7 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Admin', {
 			completed = submission && submission.get('CreatedTime'),
 			maxTime = this.assignment.isTimed && this.assignment.getMaxTime(),
 			duration = this.assignment.isTimed && this.assignmentHistory.getDuration(),
-			status = NextThought.view.courseware.assessment.AssignmentStatus.getRenderData({
+			status = NextThought.app.course.assessment.AssignmentStatus.getRenderData({
 				due: due,
 				completed: completed,
 				maxTime: maxTime,
@@ -193,7 +193,7 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Admin', {
 			this.gradeBoxEl.hide();
 		}
 
-		if (NextThought.view.courseware.assessment.AssignmentStatus.hasActions(this.assignmentHistory)) {
+		if (NextThought.app.course.assessment.AssignmentStatus.hasActions(this.assignmentHistory)) {
 			this.actionsEl.removeCls('disabled');
 		} else {
 			this.actionsEl.addCls('disabled');

@@ -16,7 +16,8 @@ Ext.define('NextThought.app.contentviewer.panels.assignment.Admin', {
 			path: this.path,
 			pageSource: this.pageSource,
 			assignment: this.assignment,
-			assignmentHistory: this.assignmentHistory
+			assignmentHistory: this.assignmentHistory,
+			doNavigation: this.doNavigation.bind(this)
 		};
 	},
 
