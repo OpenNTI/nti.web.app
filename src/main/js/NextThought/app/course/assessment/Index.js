@@ -211,9 +211,9 @@ Ext.define('NextThought.app.course.assessment.Index', {
 	showAssignments: function(route, subRoute) {
 		var view = this.getView();
 
-		this.closeAssignment();
-
 		this.getLayout().setActiveItem(view);
+
+		this.closeAssignment();
 
 		return view.showAssignments(route, subRoute);
 	},
@@ -222,9 +222,9 @@ Ext.define('NextThought.app.course.assessment.Index', {
 	showNotifications: function(route, subRoute) {
 		var view = this.getView();
 
-		this.closeAssignment();
-
 		this.getLayout().setActiveItem(view);
+
+		this.closeAssignment();
 
 		return view.showNotifications(route, subRoute);
 	},
@@ -233,9 +233,9 @@ Ext.define('NextThought.app.course.assessment.Index', {
 	showPerformance: function(route, subRoute) {
 		var view = this.getView();
 
-		this.closeAssignment();
-
 		this.getLayout().setActiveItem(view);
+
+		this.closeAssignment();
 
 		return view.showPerformance(route, subRoute);
 	},
@@ -244,9 +244,9 @@ Ext.define('NextThought.app.course.assessment.Index', {
 	showStudentsForAssignment: function(route, subRoute) {
 		var view = this.getView();
 
-		this.closeAssignment();
-
 		this.getLayout().setActiveItem(view);
+
+		this.closeAssignment();
 
 		return view.showStudentsForAssignment(route, subRoute);
 	},
@@ -255,9 +255,9 @@ Ext.define('NextThought.app.course.assessment.Index', {
 	showAssignmentsForStudent: function(route, subRoute) {
 		var view = this.getView();
 
-		this.closeAssignment();
-
 		this.getLayout().setActiveItem(view);
+
+		this.closeAssignment();
 
 		return view.showAssignmentsForStudent(route, subRoute);
 	},
