@@ -151,9 +151,7 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 		var el = this.body.el;
 
 		if (el && el.dom) {
-			if (!this.finished) {
-				el.mask('Loading...', 'loading');
-			}
+			el.mask('Loading...', 'loading');
 		} else {
 			this.on('afterrender', this.maybeMask.bind(this), {single: true});
 		}

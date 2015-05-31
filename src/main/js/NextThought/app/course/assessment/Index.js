@@ -275,8 +275,11 @@ Ext.define('NextThought.app.course.assessment.Index', {
 			assignment = route.precache.assignment,
 			student = route.precache.student;
 
+
 		if (me.assignment && me.assignment.reader && me.assignment.reader.el) {
 			me.assignment.reader.el.mask('Loading...');
+		} else {
+			view.maybeMask();
 		}
 
 		assignmentId = ParseUtils.decodeFromURI(assignmentId);
@@ -373,6 +376,8 @@ Ext.define('NextThought.app.course.assessment.Index', {
 				if (me.assignment && me.assignment.reader && me.assignment.reader.el) {
 					me.assignment.reader.el.unmask();
 				}
+
+				view.maybeUnmask();
 			});
 	},
 

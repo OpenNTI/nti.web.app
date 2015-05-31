@@ -217,6 +217,37 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 		return this.applyState(this.current_state);
 	},
 
+	/**
+	 * If the store has already loaded and the record for the students is there don't do anything
+	 * otherwise load the store to that student
+	 *
+	 * @param  {Object} state   state to restore
+	 * @param  {String} student id of the student to restore to
+	 * @return {Promise}         fulfills once the store is loaded with the student
+	 */
+	restoreStudent: function(state, student) {
+		if (!this.initialLoad) {
+			this.student = student;
+
+			return this.restoreState(state);
+		}
+
+		var record;
+
+		record = this.store.findBy(function(rec) {
+			var user = rec.get('User');
+
+			return student === NextThought.model.User.getIdFromRaw(user);
+		});
+
+		if (record < 0) {
+			this.student = student;
+			return this.applyState(state);
+		}
+
+		return Promise.resolve();
+	},
+
 
 	beforeRender: function() {
 		this.callParent(arguments);
@@ -262,7 +293,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 
 	syncFilterToUI: function(firstPass) {
 		if (!this.rendered) {
-			this.on('afterrender', this.synceFilterToUI.bind(this, firstPass));
+			this.on('afterrender', this.syncFilterToUI.bind(this, firstPass));
 			return;
 		}
 

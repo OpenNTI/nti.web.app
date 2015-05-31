@@ -160,6 +160,8 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Admin', {
 		if (!this.showingUsername) {
 			this.usernameEl.hide();
 		}
+
+		this.letterEl.setStyle({display: 'none'});
 	},
 
 
@@ -185,8 +187,6 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Admin', {
 				maxTime: maxTime,
 				duration: duration
 			});
-
-		this.letterEl.setStyle({display: 'none'});
 
 		if (!grade) {
 			console.warn('No grade not even a placeholder');

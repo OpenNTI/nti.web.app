@@ -63,8 +63,6 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.View'
 
 
 	showAssignment: function(assignment, student) {
-		Ext.destroy(this.down('course-assessment-admin-assignments-item'));
-
 		if (!assignment) {
 			console.error('No assignment passed, showing root');
 			this.showRoot();
@@ -72,32 +70,43 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.View'
 		}
 
 		var current = this.store.indexOf(assignment),
+			oldView = this.down('course-assessment-admin-assignments-item'),
 			next, previous, view;
 
 		next = this.store.getAt(current + 1);
 		previous = this.store.getAt(current - 1);
 
-		view = this.add({
-			xtype: 'course-assessment-admin-assignments-item',
-			assignmentTitle: assignment.get('title'),
-			due: assignment.get('due'),
-			assignment: assignment,
-			assignments: this.assignments,
-			student: student,
-			alignNavigation: this.alignNavigation.bind(this),
-			pushRoute: this.pushRoute.bind(this),
-			pushRouteState: this.pushRouteState.bind(this),
-			replaceRouteState: this.replaceRouteState.bind(this),
-			showStudentForAssignment: this.showStudentForAssignment.bind(this),
-			pageSource: NextThought.util.PageSource.create({
-				next: next && next.getId(),
-				nextTitle: next && next.get('name'),
-				previous: previous && previous.getId(),
-				previoustitle: previous && previous.get('name'),
-				currentIndex: current + 1,
-				total: this.store.getCount()
-			})
-		});
+		//if we already have a view for this assignment no need to create a new one
+		if (oldView && oldView.assignment === assignment) {
+			view = oldView;
+		} else {
+			Ext.destroy(oldView);
+			view = this.add({
+				xtype: 'course-assessment-admin-assignments-item',
+				assignmentTitle: assignment.get('title'),
+				due: assignment.get('due'),
+				assignment: assignment,
+				assignments: this.assignments,
+				student: student,
+				alignNavigation: this.alignNavigation.bind(this),
+				pushRoute: this.pushRoute.bind(this),
+				pushRouteState: this.pushRouteState.bind(this),
+				replaceRouteState: this.replaceRouteState.bind(this),
+				showStudentForAssignment: this.showStudentForAssignment.bind(this),
+				pageSource: NextThought.util.PageSource.create({
+					next: next && next.getId(),
+					nextTitle: next && next.get('name'),
+					previous: previous && previous.getId(),
+					previoustitle: previous && previous.get('name'),
+					currentIndex: current + 1,
+					total: this.store.getCount()
+				})
+			});
+		}
+
+		if (student) {
+			return view.restoreStudent(this.getRouteState(), student);
+		}
 
 		this.getLayout().setActiveItem(view);
 
@@ -124,7 +133,6 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.View'
 
 		assignmentId = ParseUtils.encodeForURI(assignmentId);
 
-		debugger;
 		this.pushRoute(studentTitle + ' | ' + assignmentTitle, assignmentId + '/students/' + studentId, {
 			student: student,
 			assignment: assignment,
