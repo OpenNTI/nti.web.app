@@ -459,11 +459,21 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 	},
 
 
+	refresh: function() {
+		var grid = this.down('grid');
+
+		grid.view.refresh();
+	},
+
+
 	applyState: function(state) {
 		//if we are already applying state or the state hasn't changed and the store has loaded don't do anything
 		if (this.applyingState) { return; }
 
-		if (Ext.Object.equals(state, this.current_state) && this.initalLoad) { return Promise.resolve(); }
+		if (Ext.Object.equals(state, this.current_state) && this.initalLoad) {
+			this.refresh();
+			return Promise.resolve();
+		}
 
 		var me = this,
 			store = me.store,

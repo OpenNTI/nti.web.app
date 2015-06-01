@@ -22,6 +22,10 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.View'
 	setAssignmentsData: function(assignments, bundle, student) {
 		//if we haven't changed bundles
 		if (this.currentBundle === bundle) {
+			if (student) {
+				return this.getRoot().restoreStudent(this.getRouteState(), student);
+			}
+
 			return this.getRoot().restoreState(this.getRouteState());
 		}
 
@@ -87,8 +91,9 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.View'
 		user = record.get('User');
 		view = me.down('course-assessment-admin-performance-student');
 
+		//if we already have a view for this student
 		if (view && view.student.getId() === (user && user.getId())) {
-			return Promise.resolve();
+			return view.refresh();
 		} else {
 			Ext.destroy(view);
 		}

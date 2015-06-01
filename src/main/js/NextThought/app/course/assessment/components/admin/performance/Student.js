@@ -99,6 +99,16 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Stude
 	},
 
 
+	refresh: function() {
+		var grid = this.down('grid'),
+			view = grid && grid.view;
+
+		view.refresh();
+
+		return Promise.resolve();
+	},
+
+
 	setAssignmentsData: function(assignments) {
 		if (!assignments) {
 			console.error('No Assignments?');

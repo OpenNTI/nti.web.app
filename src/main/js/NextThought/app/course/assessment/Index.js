@@ -136,7 +136,7 @@ Ext.define('NextThought.app.course.assessment.Index', {
 
 		id = ParseUtils.decodeFromURI(id);
 
-		assignment = assignment || Service.getObject(id);
+		assignment = assignment || view.assignmentCollection.getItem(id);
 
 		if (this.assignment && this.assignment.reader && this.assignment.reader.el) {
 			this.assignment.reader.el.mask('Loading...');
@@ -309,7 +309,7 @@ Ext.define('NextThought.app.course.assessment.Index', {
 		assignmentId = ParseUtils.decodeFromURI(assignmentId);
 		studentId = NextThought.model.User.getIdFromURIPart(studentId);
 
-		assignment = assignment && assignment.getId() === assignmentId ? assignment : Service.getObject(assignmentId);
+		assignment = assignment && assignment.getId() === assignmentId ? assignment : view.assignmentCollection.getItem(assignmentId);
 		student = student && student.getId() === studentId ? student : UserRepository.getUser(studentId);
 
 		return Promise.all([

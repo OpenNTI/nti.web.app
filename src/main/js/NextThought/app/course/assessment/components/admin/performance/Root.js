@@ -181,6 +181,38 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 	},
 
 
+	/**
+	 * If the store has already loaded and the record for the students is there don't do anything
+	 * otherwise load the store to that student
+	 *
+	 * @param  {Object} state   state to restore
+	 * @param  {String} student id of the student to restore to
+	 * @return {Promise}         fulfills once the store is loaded with the student
+	 */
+	restoreStudent: function(state, student) {
+		if (!this.initialLoad) {
+			this.student = student;
+
+			return this.restoreState(state);
+		}
+
+		var record;
+
+		record = this.store.findBy(function(rec) {
+			var user = rec.get('User');
+
+			return student === NextThought.model.User.getIdFromRaw(user);
+		});
+
+		if (record < 0) {
+			this.student = student;
+			return this.applyState(state);
+		}
+
+		return Promise.resolve();
+	},
+
+
 	hidePredicted: function() {
 		var column = this.grid.down('[dataIndex=PredictedGrade]');
 
@@ -482,11 +514,21 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 	},
 
 
+	refresh: function() {
+		var view = this.grid.view;
+
+		view.refresh();
+	},
+
+
 	applyState: function(state) {
 		//if we are already applying state or the state hasn't changed and the store has loaded don't do anything
 		if (this.applyingState) { return; }
 
-		if (Ext.Object.equals(state, this.current_state) && this.initialLoad) { return Promise.resolve(); }
+		if (Ext.Object.equals(state, this.current_state) && this.initialLoad) {
+			this.refresh();
+			return Promise.resolve();
+		}
 
 		var me = this,
 			store = me.store,

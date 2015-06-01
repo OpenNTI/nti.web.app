@@ -35,7 +35,6 @@ Ext.define('NextThought.model.assessment.AssessedQuestion', {
 			};
 
 			q.get('parts').forEach(function(p) {
-				console.log(p);
 				raw.parts.push(new NextThought.model.assessment.AssessedPart());
 			});
 
