@@ -66,7 +66,7 @@ Ext.define('NextThought.app.content.Actions', {
 			.then(function(path) {
 				var root = path[0];
 
-				if (parent && root.ntiid !== parent.ntiid) {
+				if (parent) {
 					path[0] = parent;
 				}
 
