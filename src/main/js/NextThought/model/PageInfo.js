@@ -13,7 +13,7 @@ Ext.define('NextThought.model.PageInfo', {
 			return {
 				mimeType: this.mimeType,
 				NTIID: data.href,
-				label: data.ttle
+				label: data.title
 			};
 		}
 	},

@@ -49,7 +49,8 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 	},
 
 	constructor: function(config) {
-		var n = config.node || {getAttribute: function(a) { return config[a];} },
+		var me = this,
+			n = config.node || {getAttribute: function(a) { return config[a];} },
 			ntiid = n.getAttribute('target-ntiid') || 'no-value',
 			req;
 
@@ -62,11 +63,11 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 
 		delete config.title;
 
-		this.callParent([config]);
+		me.callParent([config]);
 
 		if (config.xtype !== 'course-overview-assignment') {
 			req = {
-				scope: this,
+				scope: me,
 				method: 'GET',
 				params: {
 					accept: NextThought.model.assessment.AssessedQuestionSet.mimeType,
@@ -76,14 +77,15 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 					sortOrder: 'descending',
 					filter: 'TopLevel'
 				},
-				callback: this.containerLoaded.bind(this)
+				callback: me.containerLoaded.bind(me)
 			};
 
-			ContentUtils.getLineage(ntiid, this.course)
+			ContentUtils.getLineage(ntiid, me.course)
 				.then(function(lineages) {
 					var lineage = lineages[0],
 						containerId = lineage && lineage[1];
 
+					me.setContainerId(containerId);
 					req.url = Service.getContainerUrl(containerId, Globals.USER_GENERATED_DATA);
 
 					return req;
@@ -92,14 +94,14 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 					Ext.Ajax.request(r);
 				});
 		} else {
-			if (this.assignment) {
-				this.setAsAssignment(this.assignment);
-				this.assignmentId = this.assignment.getId();
-				//TODO: Figure this out
-				this.fireEvent('has-been-submitted', this);
+			if (me.assignment) {
+				me.setAsAssignment(me.assignment);
+				me.assignmentId = me.assignment.getId();
+				//TODO: Figure me out
+				me.fireEvent('has-been-submitted', me);
 			} else {
 				console.warn('Hidding Assignment widget. Assignmet was null. %o', config);
-				this.hide();
+				me.hide();
 			}
 		}
 	},
@@ -265,15 +267,13 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 
 
 	reviewClicked: function() {
-		var container = this.up('content-view-container'),
-			bundle = container && container.currentBundle;
-
-		//console.log('navigate to', this.getContainerId());
 		if (this.assignment) {
-			this.fireEvent('navigate-to-assignment', this.assignmentId, $AppConfig.userObject);
+			this.navigate(this.assignment);
 			return;
 		}
-		this.fireEvent('set-location-rooted', this.getContainerId(), null, null, bundle);
-		//this.fireEvent('navigate-to-href', this, this.getContainerId());
+
+		this.navigate(NextThought.model.PageInfo.fromOutlineNode({
+			href: this.getContainerId()
+		}));
 	}
 });

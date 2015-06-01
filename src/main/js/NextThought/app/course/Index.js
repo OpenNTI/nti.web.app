@@ -84,6 +84,7 @@ Ext.define('NextThought.app.course.Index', {
 
 		this.addObjectHandler(NextThought.model.PageInfo.mimeType, this.getPageInfoRoute.bind(this));
 		this.addObjectHandler(NextThought.model.RelatedWork.mimeType, this.getRelatedWorkRoute.bind(this));
+		this.addObjectHandler(NextThought.model.assessment.Assignment.mimeType, this.getAssignmentRoute.bind(this));
 
 		this.addDefaultRoute('/activity');
 
@@ -141,7 +142,7 @@ Ext.define('NextThought.app.course.Index', {
 					var current;
 					//if the course was cached, no need to look for it
 					if (course && course.getId() === ntiid) {
-						current = me.CourseViewStore.activeCourse;
+						current = course;
 					} else {
 						//find which ever course whose ntiid matches
 						current = me.CourseStore.findCourseBy(function(enrollment) {
@@ -155,6 +156,12 @@ Ext.define('NextThought.app.course.Index', {
 
 					if (!current) {
 						return Promise.reject('No Course found for:', ntiid);
+					}
+
+					if (current instanceof NextThought.model.courses.CourseInstanceAdministrativeRole) {
+						me.isAdmin = true;
+					} else {
+						me.isAdmin = false;
 					}
 
 					me.activeCourse = current.get('CourseInstance') || current;
@@ -229,7 +236,7 @@ Ext.define('NextThought.app.course.Index', {
 		 */
 		function showTab(index) {
 			return !index.showTab || index.showTab(bundle);
-		} 
+		}
 
 		if (showTab(course.dashboard.Index)) {
 			tabs.push({
@@ -418,7 +425,7 @@ Ext.define('NextThought.app.course.Index', {
 				'course-assessment-container',
 				'course-forum',
 				'course-reports'
-			]).then( function(item) {
+			]).then(function(item) {
 				if (item && item.handleRoute) {
 					item.handleRoute(subRoute, route.precache);
 				}
@@ -451,7 +458,7 @@ Ext.define('NextThought.app.course.Index', {
 			precache: {
 				pageInfo: obj.isModel ? obj : null
 			}
-		}
+		};
 	},
 
 
@@ -468,5 +475,23 @@ Ext.define('NextThought.app.course.Index', {
 			}
 		};
 
+	},
+
+
+	getAssignmentRoute: function(obj) {
+		var id = obj.getId ? obj.getId() : obj.NTIID,
+			route;
+
+		id = ParseUtils.encodeForURI(id);
+
+		route = '/assignments/' + id;
+
+		return {
+			route: route,
+			title: obj.get ? obj.get('title') : obj.title,
+			precache: {
+				assignment: obj.isModel ? obj : null
+			}
+		};
 	}
 });

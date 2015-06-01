@@ -155,7 +155,6 @@ Ext.define('NextThought.app.course.assessment.Index', {
 					index = i;
 				}
 			});
-
 			prev = index - 1;
 			next = index + 1;
 
@@ -177,10 +176,23 @@ Ext.define('NextThought.app.course.assessment.Index', {
 				route: '/'
 			});
 
-			path.push({
-				cls: 'locked',
-				label: assignment.get('title')
-			});
+			if (view.isAdmin) {
+				path.push({
+					label: assignment.get('title'),
+					title: assignment.get('title'),
+					route: '/' + ParseUtils.encodeForURI(assignment.getId()) + '/students'
+				});
+
+				path.push({
+					cls: 'locked',
+					label: $AppConfig.userObject.getName()
+				});
+			} else {
+				path.push({
+					cls: 'locked',
+					label: assignment.get('title')
+				});
+			}
 
 			pageSource = NextThought.util.PageSource.create({
 				next: next && next.getId(),
@@ -196,7 +208,8 @@ Ext.define('NextThought.app.course.assessment.Index', {
 				pageSource: pageSource,
 				assignment: assignment,
 				student: $AppConfig.userObject,
-				assignmentHistory: view.assignmentCollection.getHistoryItem(assignment.getId(), true)
+				assignmentHistory: view.assignmentCollection.getHistoryItem(assignment.getId(), true),
+				instructorProspective: view.isAdmin
 			};
 		})
 		.then(me.showReader.bind(me))

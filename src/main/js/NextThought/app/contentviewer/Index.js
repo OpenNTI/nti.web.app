@@ -75,6 +75,7 @@ Ext.define('NextThought.app.contentviewer.Index', {
 			readerConfig.assignmentHistory = config.assignmentHistory;
 			readerConfig.assignmentId = config.assignment.getId();
 			readerConfig.student = config.student;
+			readerConfig.instructorProspective = config.instructorProspective;
 		}
 
 

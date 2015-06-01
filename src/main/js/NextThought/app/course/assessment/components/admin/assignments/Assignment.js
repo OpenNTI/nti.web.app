@@ -729,5 +729,12 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 	},
 
 
-	goToRawAssignment: function() {}
+	goToRawAssignment: function() {
+		var title = this.assignment.get('title'),
+			id = this.assignment.getId();
+
+		id = ParseUtils.encodeForURI(id);
+
+		this.pushRoute(title, id, {assignment: this.assignment});
+	}
 });

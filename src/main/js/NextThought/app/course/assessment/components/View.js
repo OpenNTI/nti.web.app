@@ -220,6 +220,7 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 
 
 	addAdminViews: function(getLink) {
+		this.isAdmin = true;
 		this.notificationsView = this.body.add({
 			xtype: 'course-assessment-admin-activity',
 			title: getString('NextThought.view.courseware.assessment.View.activity'),
@@ -256,6 +257,7 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 
 
 	addStudentViews: function() {
+		this.isAdmin = false;
 		this.notificationsView = this.body.add({
 			xtype: 'course-assessment-activity',
 			title: getString('NextThought.view.courseware.assessment.View.activity'),

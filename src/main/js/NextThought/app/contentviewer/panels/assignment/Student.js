@@ -87,18 +87,19 @@ Ext.define('NextThought.app.contentviewer.panels.assignment.Student', {
 			return;
 		}
 
+		readerAssessment.isInstructorProspective = me.instructorProspective;
+
+		if (assignment.isTimed && this.instructorProspective) {
+			me.showAllowedTime();
+		}
+
 		if (!assignmentHistory || !(assignmentHistory instanceof Promise)) {
 			assignmentHistory = Promise.resolve(assignmentHistory);
 		}
 
 		assignmentHistory.then(function(h) {
 			readerAssessment.setAssignmentFromStudentProspective(assignment, h);
-			readerAssessment.isInstructorProspective = me.instructorProspective;
 			header.setHistory(h);
-
-			if (assignment.isTimed && this.instructorProspective) {
-				me.showAllowedTime();
-			}
 
 			if (savepoint) {
 				savepoint.then(function(point) {
@@ -109,6 +110,6 @@ Ext.define('NextThought.app.contentviewer.panels.assignment.Student', {
 			reader.getNoteOverlay().disable();
 
 			return reader.setPageInfo(me.pageInfo, me.bundle);
-		}).then(done.bind(this));
+		}).always(done.bind(this));
 	}
 });
