@@ -98,6 +98,10 @@ Ext.define('NextThought.app.contentviewer.components.assignment.TimedPlaceholder
 	afterRender: function() {
 		this.callParent(arguments);
 
+		var height = Ext.Element.getViewportHeight();
+
+		this.el.setHeight(height - 100);
+
 		this.mon(this.startEl, 'click', 'start');
 	},
 

@@ -1,6 +1,7 @@
 Ext.define('NextThought.app.contentviewer.panels.Reader', {
-	extend: 'Ext.container.Container',
+	extend: 'NextThought.common.components.NavPanel',
 	alias: 'widget.reader',
+
 	requires: [
 		'NextThought.app.contentviewer.components.Reader',
 		'NextThought.app.contentviewer.navigation.Content',
@@ -18,6 +19,30 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 	scrollTargetSelector: '.x-panel-body-reader',
 	secondaryElSelector: '.x-panel-notes-and-discussion',
 
+	navigation: {
+		height: 'auto',
+		xtype: 'tabpanel',
+		ui: 'notes-and-discussion',
+		layout: 'none',
+		tabBar: {
+			plain: true,
+			baseCls: 'nti',
+			ui: 'notes-and-discussion-tabbar',
+			cls: 'notes-and-discussion-tabs',
+			defaults: {plain: true, ui: 'notes-and-discussion-tab'}
+		},
+		defaults: {
+			border: false,
+			plain: true
+		},
+		stateFul: isFeature('notepade'),
+		stateId: 'notes-and-discussions',
+		items: []
+	},
+
+
+	body: {xtype: 'container', cls: 'center', layout: 'none', width: 766},
+
 	initComponent: function() {
 		this.callParent(arguments);
 
@@ -33,49 +58,31 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 		//add a flag to it so we can find it easily
 		toolbarConfig.isReaderToolBar = true;
 
-		this.add([{
-				xtype: 'container',
-				cls: 'center',
-				layout: 'none',
-				width: 766,
-				items: [
-					toolbarConfig,
-					readerConfig
-				]
-			},{
-				width: 258,
-				height: '100%',
-				xtype: 'tabpanel',
-				cls: 'tabpanel',
-				ui: 'notes-and-discussion',
-				layout: 'none',
-				tabBar: {
-					plain: true,
-					baseCls: 'nti',
-					ui: 'notes-and-discussion-tabbar',
-					cls: 'notes-and-discussion-tabs',
-					defaults: { plain: true, ui: 'notes-and-discussion-tab' }
-				},
-				defaults: {
-					border: false,
-					plain: true
-				},
-
-				deferredRender: false,
-
-				stateful: isFeature('notepad'),
-				stateId: 'notes-and-discussions',
-
-				activeTab: 1,
-				items: [
-					{ title: 'Notepad', iconCls: 'notepad', xtype: 'content-notepad', refs: [
-							{ ref: 'readerRef', selector: '#' + this.id + ' reader-content' }
-						],
-						disabled: !isFeature('notepad'), hidden: !isFeature('notepad') },
-					{ title: 'Discussion', iconCls: 'discuss', xtype: 'annotation-view', discussion: true, store: this.flatPageStore }
-				]
-			}
+		this.body.add([
+			toolbarConfig,
+			readerConfig
 		]);
+
+		this.navigation.setActiveTab(this.navigation.add(
+			// {
+			// 	title: 'Notepad',
+			// 	iconCls: 'notepad',
+			// 	xtype: 'content-notepad',
+			// 	refs: [
+			// 		{ref: 'readerRed', selector: '#' + this.id + ' reader-content'}
+			// 	],
+			// 	disabled: !isFeature('notepad'),
+			// 	hidden: !isFeature('notepad')
+			// },
+			{
+				title: 'Discussion',
+				iconCls: 'discuss',
+				xtype: 'annotation-view',
+				discussion: true,
+				store: this.flatPageStore
+			}
+		));
+
 
 		readerContent = this.getReaderContent();
 
@@ -83,12 +90,24 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 			this.mon(readerContent, {
 				'filter-by-line': 'selectDiscussion',
 				'assignment-submitted': this.fireEvent.bind(this, 'assignment-submitted'),
-				'assessment-graded': this.fireEvent.bind(this, 'assessment-graded')
+				'assessment-graded': this.fireEvent.bind(this, 'assessment-graded'),
+				'sync-height': this.alignNavigation.bind(this)
 			});
 			this.down('annotation-view').anchorComponent = readerContent;
 		}
 
 		this.on('beforedeactivate', this.beforeDeactivate, this);
+	},
+
+
+	alignNavigation: function() {
+		var header = this.getToolbar();
+
+		if (header && header.alignTimer) {
+			header.alignTimer();
+		}
+
+		this.callParent(arguments);
 	},
 
 
@@ -162,7 +181,10 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 	setPageInfo: function(pageInfo, bundle) {
 		var reader = this.getReaderContent();
 
-		reader.setPageInfo(pageInfo, bundle);
+		//the reader might not be defined if we are in a timed assignment
+		if (reader) {
+			reader.setPageInfo(pageInfo, bundle);
+		}
 	},
 
 

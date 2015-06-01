@@ -63,7 +63,7 @@ Ext.define('NextThought.app.assessment.QuizSubmission', {
 		this.answeredMap = answeredMap;
 		this.startTimestamp = new Date().getTime();
 
-		this.questionSet.addSaveProgressHandler(this, this.beforeSaveProgress.bind(this), this.afterSaveProgress.bind(this));
+		this.questionSet.addSaveProgressHandler(this.saveProgress.bind(this), this.beforeSaveProgress.bind(this), this.afterSaveProgress.bind(this));
 		this.questionSet.setStartTime(this.startTimestamp);
 		this.questionSet.clearProgress();
 
@@ -240,7 +240,7 @@ Ext.define('NextThought.app.assessment.QuizSubmission', {
 		}
 
 		this.answeredMap[question.getId()][part.id] = count;
-        this.reflectStateChange();
+		this.reflectStateChange();
 		return status;
 	},
 
@@ -449,6 +449,11 @@ Ext.define('NextThought.app.assessment.QuizSubmission', {
 		this.progressSaved = success;
 
 		assessmentReader[success ? 'showProgressSaved' : 'showProgressFailed']();
+	},
+
+
+	saveProgress: function(progress) {
+		return this.AssessmentActions.saveProgress(this.questionSet, progress, this.startTimestamp);
 	},
 
 

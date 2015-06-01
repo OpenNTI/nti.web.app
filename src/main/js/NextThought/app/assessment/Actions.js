@@ -9,7 +9,7 @@ Ext.define('NextThought.app.assessment.Actions', {
 
 	__getDataForSubmission: function(questionSet, submissionData, containerId, startTime) {
 		var me = this, key, value,
-			endTimeStamp = (new Date()).getTime(),	
+			endTimeStamp = (new Date()).getTime(),
 			//in seconds
 			duration = (endTimeStamp - startTime) / 1000,
 			data = {
@@ -34,7 +34,7 @@ Ext.define('NextThought.app.assessment.Actions', {
 			}
 		}
 
-		return data
+		return data;
 	},
 
 
@@ -57,7 +57,7 @@ Ext.define('NextThought.app.assessment.Actions', {
 					alert('There was a problem grading your quiz.');
 					reject();
 				}
-			})
+			});
 		});
 	},
 
@@ -69,7 +69,7 @@ Ext.define('NextThought.app.assessment.Actions', {
 
 		data.CreatorRecordedEffortDuration += questionSet.getPreviousEffortDuration();
 
-		qsetSubmission = NextThought.model.assessment.QuestionSetSubmission.create(data),
+		qsetSubmission = NextThought.model.assessment.QuestionSetSubmission.create(data);
 		assignmentSubmission = NextThought.model.assessment.AssignmentSubmission.create({
 			assignmentId: assignmentId,
 			parts: [qsetSubmission],
@@ -92,9 +92,47 @@ Ext.define('NextThought.app.assessment.Actions', {
 					});
 				},
 				fail: function() {
-					console.error('FAIL', arguments)
+					console.error('FAIL', arguments);
 					alert('There was a problem submitting your assignment.');
 					reject();
+				}
+			});
+		});
+	},
+
+
+	saveProgress: function(questionSet, submissionData, startTime) {
+		var data = this.__getDataForSubmission(questionSet, submissionData, '', startTime),
+			qsetSubmission, assignmentSubmission,
+			assignment = questionSet.associatedAssignment,
+			url = assignment && assignment.getLink('Savepoint');
+
+		if (!url) {
+			console.error('No url to save assignemnt progress to');
+			return Promise.reject();
+		}
+
+		data.CreatorRecordedEffortDuration += questionSet.getPreviousEffortDuration();
+
+		qsetSubmission = NextThought.model.assessment.QuestionSetSubmission.create(data);
+		assignmentSubmission = NextThought.model.assessment.AssignmentSubmission.create({
+			assignmentId: assignment.getId(),
+			parts: [qsetSubmission],
+			CreatorRecordedEffortDuration: data.CreatorRecordedEffortDuration
+		});
+
+		return new Promise(function(fulfill, reject) {
+			assignmentSubmission.save({
+				url: url,
+				success: function(self, op) {
+					var result = op.getResultSet().records.first();
+
+					fulfill(result);
+				},
+				failure: function() {
+					console.error('Failed to save assignment progress');
+
+					fulfill(null);
 				}
 			});
 		});

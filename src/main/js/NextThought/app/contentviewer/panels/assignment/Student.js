@@ -98,6 +98,10 @@ Ext.define('NextThought.app.contentviewer.panels.assignment.Student', {
 		}
 
 		assignmentHistory.then(function(h) {
+			return h;
+		}).fail(function() {
+			return null;
+		}).then(function(h) {
 			readerAssessment.setAssignmentFromStudentProspective(assignment, h);
 			header.setHistory(h);
 

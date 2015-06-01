@@ -320,7 +320,7 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 
 		var me = this,
 			maskTarget = this.getContentMaskTarget();
-		
+
 		maskTarget.mask('Loading...', 'navigation');
 
 		return this.setLocation(pageInfo, bundle)

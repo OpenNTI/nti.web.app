@@ -77,7 +77,7 @@ Ext.define('NextThought.model.assessment.QuestionSet', {
 			this.setProgress(question, input);
 		}
 
-		if (!this.saveProgressEventSrc) {
+		if (!this.saveProgressHandler) {
 			console.error('No cmp to fire save progress on...');
 			return;
 		}
@@ -87,7 +87,8 @@ Ext.define('NextThought.model.assessment.QuestionSet', {
 				this.beforeSaveProgress.call();
 			}
 
-			this.saveProgressEventSrc.fireEvent('save-progress', this, this.progress, this.onSaveProgress.bind(this, question, input));
+			this.saveProgressHandler(this.progress)
+				.then(this.onSaveProgress.bind(this, question, input));
 		}
 	},
 
@@ -115,12 +116,19 @@ Ext.define('NextThought.model.assessment.QuestionSet', {
 			});
 		}
 
-		this.afterSaveProgress.call(null, true);
+		if (this.afterSaveProgress) {
+			this.afterSaveProgress.call(null, true);
+		}
 	},
 
-
-	addSaveProgressHandler: function(cmp, before, after) {
-		this.saveProgressEventSrc = cmp;
+	/**
+	 * Add handlers for saving progress
+	 * @param {Function} save   saves the progress and returns a promise
+	 * @param {Function} before called before progress is saved
+	 * @param {Function} after  called after progress is saved
+	 */
+	addSaveProgressHandler: function(save, before, after) {
+		this.saveProgressHandler = save;
 		this.beforeSaveProgress = before;
 		this.afterSaveProgress = after;
 	}

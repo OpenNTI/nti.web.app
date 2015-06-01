@@ -472,7 +472,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.PagedGrid', {
 			menu;
 
 		if (nib) {
-			menu = NextThought.view.courseware.assessment.AssignmentStatus.getActionsMenu(historyItem);
+			menu = NextThought.app.course.assessment.AssignmentStatus.getActionsMenu(historyItem);
 
 			menu.showBy(nib, 'tr-br');
 

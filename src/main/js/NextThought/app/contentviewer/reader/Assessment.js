@@ -48,6 +48,7 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 	makeAssessmentQuiz: function(set, guid) {
 		var me = this,
 			isInstructor = this.isInstructorProspective,
+			completed,
 			h = me.injectedAssignmentHistory,
 			o = me.reader.getComponentOverlay(),
 			c = o.componentOverlayEl,
@@ -89,7 +90,9 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 			history: h, isInstructor: this.isInstructorProspective
 		}));
 
-		if (this.injectedAssignment && this.injectedAssignment.isTimed && !isInstructor && !h.get('completed')) {
+		completed = h && h.get('Completed');
+
+		if (this.injectedAssignment && this.injectedAssignment.isTimed && !isInstructor && !completed) {
 			this.showAssignmentTimer(this.submission.shouldAllowSubmit && this.submission.shouldAllowSubmit.bind(this.submission));
 		}
 

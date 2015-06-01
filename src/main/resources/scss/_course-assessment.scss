@@ -34,7 +34,8 @@ canvas.x-component-course-assessment {
 	font-size: 1rem;
 	padding: 0 60px 0 35px;
 	max-height: 800px;
-	overflow: visible;
+	overflow: hidden;
+	position: relative;
 
 	.header {
 		color: #494949;
@@ -1164,10 +1165,9 @@ canvas.x-component-course-assessment {
 
 .assignment-reader, .course-assessment-header {
 	.time-remaining {
-		position: absolute;
+		position: fixed;
 		z-index: 5;
-		top: 0;
-		right: 0;
+		top: 92px;
 		height: 60px;
 		line-height: 60px;
 		width: 258px;
@@ -1390,6 +1390,11 @@ canvas.x-component-course-assessment {
 				&.show-toast {
 					.path.current {
 						top: -8px;
+
+						&::before {
+							position: relative;
+							top: 8px
+						}
 					}
 
 					.header-toast {

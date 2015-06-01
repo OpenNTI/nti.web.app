@@ -315,5 +315,58 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 			title = this.pageSource.getNextTitle();
 
 		this.doNavigation(title, next);
+	},
+
+
+	showToast: function(msgOrConfig) {
+		if (!this.rendered) {
+			this.on('afterrender', this.showToast.bind(this, msgOrConfig));
+			return;
+		}
+
+		var me = this, toast,
+			config = Ext.isString(msgOrConfig) ? { text: msgOrConfig} : msgOrConfig,
+			content = config.content || {html: config.text},
+			currentPath = this.pathEl.down('.path.current'),//the last item in the bread crumb
+			currentPathLeft = currentPath && currentPath.getX(),
+			pathLeft = this.pathEl.getX(),
+			left = currentPathLeft && pathLeft ? currentPathLeft - pathLeft : 0;
+
+		config.cls = config.cls ? 'header-toast ' + config.cls : 'header-toast';
+
+		toast = Ext.widget('box', {
+			cls: config.cls,
+			autoEl: content,
+			renderTo: this.pathEl,
+			style: {
+				left: left + 12 + 'px;'
+			}
+		});
+
+		if (config.minTime) {
+			toast.waitToClose = wait(config.minTime);
+		}
+
+		me.pathEl.addCls('show-toast');
+
+		return {
+			el: toast,
+			//fulfills after the minimum time the toast has to be open passes
+			openLongEnough: toast.waitToClose,
+			close: function(time) {
+				this.closing = true;
+				wait(time || 0)
+					.then(function() {
+						//if the path el is still around
+						if (me.pathEl) {
+							me.pathEl.removeCls('show-toast');
+						}
+
+						//wait to give the animations a chance to finish before we
+						//remove the toast from the dom
+						wait(500).then(toast.destroy.bind(toast));
+					});
+			}
+		};
 	}
 });

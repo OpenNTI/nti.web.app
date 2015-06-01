@@ -136,7 +136,6 @@ Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 
 		me.gutterEl = container;
 		me.reader.on('destroy', 'remove', container);
-		me.reader.on('sync-height', 'setHeight', container);
 		me.mon(container, 'click', 'onGutterClicked', me);
 		me.annotationManager.registerGutter(container, me.reader);
 	},
