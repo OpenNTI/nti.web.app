@@ -1564,7 +1564,7 @@ canvas.x-component-course-assessment {
 			}
 		}
 
-		&.reader-header {
+		&:not(.performance-header).reader-header {
 			.toolbar {
 				height: 60px;
 				line-height: 59px;

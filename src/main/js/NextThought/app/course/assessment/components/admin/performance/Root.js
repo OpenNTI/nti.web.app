@@ -769,16 +769,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 				}
 			},
 			//Don't know if these need to be translated
-			items: [
-				{text: '-'},
-				{text: 'A'},
-				{text: 'B'},
-				{text: 'C'},
-				{text: 'D'},
-				{text: 'F'},
-				{text: 'I'},
-				{text: 'W'}
-			]
+			items: NextThought.model.courseware.Grade.Items
 		});
 	},
 

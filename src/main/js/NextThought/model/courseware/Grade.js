@@ -22,7 +22,19 @@ Ext.define('NextThought.model.courseware.Grade', {
 				letter = values.letter || values.Grade;
 
 			return value + ' ' + letter;
-		}
+		},
+
+
+		Items: [
+			{text: '-'},
+			{text: 'A'},
+			{text: 'B'},
+			{text: 'C'},
+			{text: 'D'},
+			{text: 'F'},
+			{text: 'I'},
+			{text: 'W'}
+		]
 	},
 
 	mimeType: 'application/vnd.nextthought.grade',

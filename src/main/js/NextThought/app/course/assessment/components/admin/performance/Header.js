@@ -17,7 +17,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Heade
 	},
 
 
-	setUpGradebox: function() {
+	setUpGradeBox: function() {
 		if (!this.historyItem) {
 			this.gradeBoxEl.hide();
 			return;
@@ -31,36 +31,34 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Heade
 		var me = this,
 			grade = me.historyItem.get('Grade');
 
-		function filllInValue() {
+		var values = grade && grade.getValues(),
+			number = values && values.value,
+			letter = values && values.letter;
+
+		function fillInValue() {
 			var values = grade && grade.getValues(),
 				number = values && values.value,
 				letter = values && values.letter;
 
-			function fillInValue() {
-				var values = grade && grade.getValues(),
-					number = values && values.value,
-					letter = values && values.letter;
-
-				if (number) {
-					me.currentGrade = number;
-					me.gradeEl.dom.value = number;
-				}
-
-				if (letter) {
-					me.currentLetter = letter;
-					me.letterEl.update(letter);
-				}
+			if (number) {
+				me.currentGrade = number;
+				me.gradeEl.dom.value = number;
 			}
 
-			me.mon(grade, {
-				'value-change': fillInValue,
-				single: true //Why is this only a single event?
-			});
-
-			fillInValue();
-
-			me.gradeboxEl.show();
+			if (letter) {
+				me.currentLetter = letter;
+				me.letterEl.update(letter);
+			}
 		}
+
+		me.mon(grade, {
+			'value-change': fillInValue,
+			single: true //Why is this only a single event?
+		});
+
+		fillInValue();
+
+		me.gradeBoxEl.show();
 	},
 
 
