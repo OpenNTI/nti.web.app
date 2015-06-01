@@ -309,13 +309,16 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 	showPerformance: function(route, subRoute) {
 		if (!this.performanceView) { return; }
 
-		var me = this;
+		var me = this,
+			student = route.precache.student;
 
 		me.maybeMask();
 
+		student = student && student.getId();
+
 		me.setActiveItem(me.performanceView);
 
-		return me.performanceView.setAssignmentsData(me.assignmentCollection, me.currentBundle)
+		return me.performanceView.setAssignmentsData(me.assignmentCollection, me.currentBundle, student)
 			.then(function() {
 				if (me.performanceView.showRoot) {
 					me.performanceView.showRoot();
@@ -352,6 +355,7 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 		if (!this.assignmentsView) { return; }
 
 		var me = this,
+			student = route.precache.student,
 			assignment = route.precache.assignment,
 			id = ParseUtils.decodeFromURI(route.params.assignment);
 
@@ -359,12 +363,14 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 			assignment = me.assignmentCollection.getItem(id);
 		}
 
+		student = student && student.getId();
+
 		me.maybeMask();
 
 		me.setActiveItem(me.assignmentsView);
 
 		return me.assignmentsView.setAssignmentsData(me.assignmentCollection, me.currentBundle, true)
-			.then(me.assignmentsView.showAssignment.bind(me.assignmentsView, assignment))
+			.then(me.assignmentsView.showAssignment.bind(me.assignmentsView, assignment, student))
 			.then(me.maybeUnmask.bind(me))
 			.then(me.alignNavigation.bind(me));
 	},

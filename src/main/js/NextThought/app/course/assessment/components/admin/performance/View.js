@@ -103,6 +103,11 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.View'
 			store: me.store,
 			getTitle: function(rec) {
 				return rec ? rec.get('Alias') : '';
+			},
+			getRoute: function(rec) {
+				var user = rec.get('User');
+
+				return 'performance/' + user.getURLPart();
 			}
 		});
 

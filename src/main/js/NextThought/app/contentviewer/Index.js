@@ -1,7 +1,7 @@
 /**
  * Renders a piece of content
  *
- * TODO: figure out how we can share the reader with the mobile app, once it has feature parity. 
+ * TODO: figure out how we can share the reader with the mobile app, once it has feature parity.
  *
  * config {
  *		contentId: the ntiid of the content calls Service.getPageInfo on it
@@ -10,7 +10,7 @@
  *		bundle: the bundle/content package we are in,
  *  	pageSource: what to fill in the next and previous arrows with, or a promise that fills in with the page source
  *   	path: the breadcrumb to show where you are, or a promise that fulfills with path,
- *   	toc: (optional) store to fill in the toc fly out, 
+ *   	toc: (optional) store to fill in the toc fly out,
  *   	next: ???? what to show as the next thing when you are at the bottom of the reader
  *   	assignment(optional): the assignment you are rendering
  *   	student(optional): if rendering an assignment the student you are rendering for
@@ -28,8 +28,9 @@
  * 			{
  * 				label: String,
  * 				cls: String,
- * 				ntiid: NTIID to navigate to,
  * 				route: String route to navigate to
+ * 				title: String title of the route
+ * 				precache: String items to prepopulate the route with
  * 				siblings: [ //items to fill out the hover menu
  * 					{
  * 						label: String,

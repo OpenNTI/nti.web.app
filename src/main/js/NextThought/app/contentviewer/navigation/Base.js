@@ -210,8 +210,8 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 
 		path = this.__getPathPart(part);
 
-		if (path && path.ntiid) {
-
+		if (path) {
+			this.doNavigation(path.title || '', path.route, path.precache || {});
 		}
 	},
 

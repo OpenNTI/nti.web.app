@@ -18,6 +18,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Stude
 
 	pathRoot: {
 		label: 'Grades & Performance',
+		title: 'Grades & Performance',
 		route: 'performance'
 	},
 
@@ -33,6 +34,9 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Stude
 		this.callParent(arguments);
 
 		var grid = this.down('grid');
+
+
+		this.pathRoot.precache = {student: this.student};
 
 		this.pathBranch = {
 			label: this.student.toString()
@@ -200,10 +204,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Stude
 	},
 
 
-	doNavigation: function(title, record) {
-		var user = record.get('User'),
-			id = user.getURLPart();
-
-		this.pushRoute(title, '/performance/' + id);
+	doNavigation: function(title, route, precache) {
+		this.pushRoute(title, route, precache);
 	}
 });

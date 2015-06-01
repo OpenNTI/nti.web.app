@@ -189,7 +189,7 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 	},
 
 
-	doNavigation: function(title, ntiidOrRoute) {
-		this.handleNavigation(title, ntiidOrRoute);
+	doNavigation: function(title, route, precache) {
+		this.handleNavigation(title, route, precache);
 	}
 });

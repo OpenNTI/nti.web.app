@@ -388,7 +388,10 @@ Ext.define('NextThought.app.course.assessment.Index', {
 				path.push({
 					label: assignment.get('title'),
 					title: assignment.get('title'),
-					route: '/' + ParseUtils.encodeForURI(assignment.getId())
+					route: '/' + ParseUtils.encodeForURI(assignment.getId()) + '/students',
+					precache: {
+						student: student
+					}
 				});
 
 				path.push({
@@ -485,7 +488,10 @@ Ext.define('NextThought.app.course.assessment.Index', {
 				path.push({
 					label: 'Grades & Performance',
 					title: 'Grades & Performance',
-					route: '/performance'
+					route: '/performance',
+					precache: {
+						student: student
+					}
 				});
 
 				path.push({
@@ -547,13 +553,7 @@ Ext.define('NextThought.app.course.assessment.Index', {
 	},
 
 
-	handleNavigation: function(title, ntiidOrRoute, precache) {
-		var route = ntiidOrRoute;
-
-		if (ParseUtils.isNTIID(route)) {
-			route = ParseUtils.encodeForURI(route);
-		}
-
+	handleNavigation: function(title, route, precache) {
 		this.pushRoute(title, route, precache);
 	}
 });
