@@ -236,7 +236,9 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 		items = items.map(function(item) {
 			return {
 				text: item.label,
-				ntiid: item.ntiid,
+				title: item.title,
+				route: item.route,
+				precache: item.precache,
 				cls: item.cls
 			};
 		});
@@ -268,7 +270,9 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 	},
 
 
-	switchPath: function(menu, item) {},
+	switchPath: function(menu, item) {
+		this.doNavigation(item.title || '', item.route, item.precache || {});
+	},
 
 
 	onPagerUpdate: function() {

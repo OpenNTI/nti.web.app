@@ -46,7 +46,7 @@ Ext.define('NextThought.util.Content', {
 
 	getNTIIDFromThing: function(thing) {
 		var ntiid;
-		
+
 		if (thing && thing.getAttribute) {
 			ntiid = thing.getAttribute('ntiid');
 		} else if (thing && thing.isModel) {
@@ -67,7 +67,7 @@ Ext.define('NextThought.util.Content', {
 			load = Promise.reject();
 		} else if (x.getTocs) {
 			load = x.getTocs();
-		} else  {
+		} else {
 			load = Promise.resolve([x]);
 		}
 
@@ -85,7 +85,7 @@ Ext.define('NextThought.util.Content', {
 				'related[ntiid="' + escaped + '"]',
 				'object[ntiid="' + escaped + '"]',
 				'unit[ntiid="' + escaped + '"]',
-				'topic[ntiid="' + escaped + '"]'				
+				'topic[ntiid="' + escaped + '"]'
 			], i, node;
 
 		function getNode(node) {
@@ -131,7 +131,7 @@ Ext.define('NextThought.util.Content', {
 
 					//filter out falsy values
 					nodes = nodes.filter(function(node) {
-						return !!node
+						return !!node;
 					});
 
 					return nodes;
@@ -140,7 +140,7 @@ Ext.define('NextThought.util.Content', {
 			me.findCache[ntiid] === result;
 		}
 
-		return result; 
+		return result;
 	},
 
 
@@ -150,7 +150,7 @@ Ext.define('NextThought.util.Content', {
 		}
 
 		var me = this;
-		
+
 
 		function mapNode(node) {
 			var lineage = [],
@@ -170,7 +170,7 @@ Ext.define('NextThought.util.Content', {
 				node = node.parentNode;
 			}
 
-			return lineage
+			return lineage;
 		}
 
 		return this.getNodes(ntiid, bundleOrToc)
@@ -227,7 +227,7 @@ Ext.define('NextThought.util.Content', {
 				//TODO: figure this out
 			}
 
-			return labels
+			return labels;
 		});
 	},
 
@@ -384,7 +384,7 @@ Ext.define('NextThought.util.Content', {
 
 		//If we have a rootId, lets make that what we consider the root.
 		if (rootId) {
-			root = doc.querySelector('[ntiid="' + ParseUtils.escaprId(rootId) + '"]') || root;
+			root = toc.querySelector('[ntiid="' + ParseUtils.escapeId(rootId) + '"]') || root;
 		}
 
 		if (node.hasAttribute('suppressed')) {
@@ -453,7 +453,7 @@ Ext.define('NextThought.util.Content', {
 					return !!node;
 				});
 
-				return nodes[0]
+				return nodes[0];
 			})
 			.then(function(info) {
 				if (bundleOrToc.canGetToContent) {
@@ -478,7 +478,7 @@ Ext.define('NextThought.util.Content', {
 	 *
 	 * TODO: I'm not sure if we should even be using this, but the current way of getting the breadcrumb
 	 * for a reading is relying on it so keep it around for now
-	 * 
+	 *
 	 * @param  {String} ntiid       nttid to look for the containing page
 	 * @param  {Bundle|XML} bundleOrToc TOC to look in
 	 * @return {Promise}             fulfills with the page id
@@ -488,11 +488,11 @@ Ext.define('NextThought.util.Content', {
 
 		function getPageInToc(toc) {
 			return me.getLineage(ntiid, toc)
-				.then(function (lineages) {
+				.then(function(lineages) {
 					var	l = (lineages && lineages[0]) || [],
 						i, href, node;
 
-					for(; l.length > 0;) {
+					for (; l.length > 0;) {
 						i = me.__findNode(l.shift(), toc);
 
 						node = i && i.location;
@@ -511,7 +511,7 @@ Ext.define('NextThought.util.Content', {
 				return Promise.all((tocs || []).map(getPageInToc));
 			})
 			.then(function(pages) {
-				return pages && pages[0]
+				return pages && pages[0];
 			});
 	},
 
@@ -525,11 +525,14 @@ Ext.define('NextThought.util.Content', {
 
 		return me.getNodes(ntiid, bundleOrToc)
 				.then(function(info) {
+					info = info && info[0];
+
 					if (!info) { return null; }
 
-					var n, node;
+					var node;
 
-					n = node == info.location;
+
+					node = info.location;
 
 					while (node && node.parentNode) {
 						if (node.parentNode === node.ownerDocument.firstChild) { break; }
@@ -621,7 +624,7 @@ Ext.define('NextThought.util.Content', {
 
 					infos.filter(function(x) { return !!x; });
 
-					return infos[0];			
+					return infos[0];
 				});
 	},
 

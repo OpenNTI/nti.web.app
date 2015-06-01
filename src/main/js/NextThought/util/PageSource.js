@@ -19,7 +19,7 @@ Ext.define('NextThought.util.PageSource', {
 	},
 
 	getPageNumber: function() {
-		return this.currentIndex;
+		return this.currentIndex + 1;
 	},
 
 
@@ -39,12 +39,12 @@ Ext.define('NextThought.util.PageSource', {
 
 
 	getNext: function() {
-		return this.next;
+		return this.getRoute ? this.getRoute(this.next) : this.next;
 	},
 
 
 	getPrevious: function() {
-		return this.previous;
+		return this.getRoute ? this.getRoute(this.previous) : this.previous;
 	},
 
 

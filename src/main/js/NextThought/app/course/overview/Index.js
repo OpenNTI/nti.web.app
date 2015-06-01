@@ -90,10 +90,12 @@ Ext.define('NextThought.app.course.overview.Index', {
 	showContent: function(route, subRoute) {
 		var me = this,
 			contentPath,
+			rootId = route.params.id,
 			lessonId = route.params.lesson,
 			lesson = route.precache.lesson;
 
 		lessonId = ParseUtils.decodeFromURI(lessonId);
+		rootId = ParseUtils.decodeFromURI(rootId);
 
 		contentPath = Globals.trimRoute(route.path).split('/').slice(2).join('/');
 
@@ -106,10 +108,18 @@ Ext.define('NextThought.app.course.overview.Index', {
 				}
 
 				siblings = me.store.getRange().reduce(function(c, item) {
+					var id;
+
 					if (item.get('type') === 'lesson') {
+						id = item.getId();
+
 						c.push({
-							ntiid: item.get('NTIID'),
+							route: ParseUtils.encodeForURI(id),
+							precache: {
+								lesson: item
+							},
 							label: item.get('label'),
+							title: item.get('label'),
 							cls: item === lesson ? 'current' : ''
 						});
 					}
@@ -119,7 +129,11 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 				route.precache.parent = {
 					label: lesson.get('label'),
-					ntiid: lesson.get('NTIID'),
+					title: lesson.get('label'),
+					route: ParseUtils.encodeForURI(lesson.getId()),
+					precache: {
+						lesson: lesson
+					},
 					siblings: siblings
 				};
 
@@ -129,7 +143,10 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 				me.reader = me.add({
 					xtype: 'course-content',
-					currentBundle: me.currentBundle
+					currentBundle: me.currentBundle,
+					handleNavigation: me.handleNavigation.bind(me),
+					root: rootId,
+					rootRoute: route.precache.parent.route + '/content/'
 				});
 
 				me.reader.handleRoute(contentPath, route.precache);
@@ -184,5 +201,10 @@ Ext.define('NextThought.app.course.overview.Index', {
 				lesson: lesson
 			}
 		};
+	},
+
+
+	handleNavigation: function(title, route, precache) {
+		this.pushRoute(title, route, precache);
 	}
 });

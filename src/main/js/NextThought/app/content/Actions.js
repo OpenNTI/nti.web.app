@@ -15,7 +15,7 @@ Ext.define('NextThought.app.content.Actions', {
 
 	getContentPath: function(ntiid, bundle, parent) {
 		var me = this;
-		
+
 		return ContentUtils.getPageID(ntiid, bundle)
 			.then(function(page) {
 				return Promise.all([
@@ -135,7 +135,6 @@ Ext.define('NextThought.app.content.Actions', {
 
 								return part;
 							});
-					;
 				} else {
 					part.cls = 'locked';
 				}
@@ -241,7 +240,7 @@ Ext.define('NextThought.app.content.Actions', {
 					if (!/topic/i.test(sibling.tagName) || sibling.getAttribute('suppressed') === 'true') {
 						return Promise.resolve(null);
 					}
-					
+
 					return outline.isVisible(sibling.getAttribute('ntiid'))
 						.then(function(visible) {
 							if (!visible) {
@@ -268,15 +267,22 @@ Ext.define('NextThought.app.content.Actions', {
 								label: text,
 								ntiid: node.getAttribute('ntiid'),
 								cls: node.getAttribute('ntiid') === currentNode ? 'current' : ''
-							}
+							};
 						});
 					});
 			});
 	},
 
 
-	getContentPageSource: function(ntiid, bundle) {
-		return ContentUtils.getRootForLocation(ntiid, bundle)
+	getContentPageSource: function(ntiid, bundle, root) {
+		var getRoot;
+
+		if (root) {
+			getRoot = Promise.resolve(root);
+		} else {
+			getRoot = ContentUtils.getRootForLocation(ntiid, bundle);
+		}
+		return getRoot
 			.then(function(rootId) {
 				return ContentUtils.getNavigationInfo(ntiid, rootId, bundle);
 			})

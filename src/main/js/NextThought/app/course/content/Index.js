@@ -14,7 +14,7 @@ Ext.define('NextThought.app.course.content.Index', {
 
 	layout: 'none',
 
-	
+
 	cls: 'course-content',
 
 
@@ -66,16 +66,26 @@ Ext.define('NextThought.app.course.content.Index', {
 			return;
 		}
 
+		var rootRoute = this.rootRoute || '',
+			pageSource = this.ContentActions.getContentPageSource(page.getId(), this.currentBundle, this.root);
+
 		if (this.reader) {
 			this.reader.destroy();
 		}
+
+		pageSource.then(function(ps) {
+			ps.getRoute = function(ntiid) {
+				return rootRoute + ParseUtils.encodeForURI(ntiid);
+			};
+		});
 
 		this.reader = NextThought.app.contentviewer.Index.create({
 			pageInfo: page instanceof NextThought.model.PageInfo ? page : null,
 			relatedWork: page instanceof NextThought.model.RelatedWork ? page : null,
 			path: this.ContentActions.getContentPath(page.getId(), this.currentBundle, parent),
-			pageSource: this.ContentActions.getContentPageSource(page.getId(), this.currentBundle, parent),
-			bundle: this.currentBundle
+			pageSource: pageSource,
+			bundle: this.currentBundle,
+			handleNavigation: this.handleNavigation.bind(this)
 		});
 
 		this.setTitle(page.get('label'));
@@ -96,5 +106,8 @@ Ext.define('NextThought.app.course.content.Index', {
 			.then(function(page) {
 				me.showReader(page, route.precache.parent);
 			});
-	}
+	},
+
+
+	handleNavigation: function(title, route, precache) {}
 });

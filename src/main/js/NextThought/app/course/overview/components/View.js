@@ -103,7 +103,7 @@ Ext.define('NextThought.app.course.overview.components.View', {
 
 
 	getActiveItem: function() {
-		return this.navigation.getActiveItem()
+		return this.navigation.getActiveItem();
 	},
 
 
