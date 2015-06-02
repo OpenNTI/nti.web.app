@@ -151,13 +151,21 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 
 
 	stopClose: function() {
-		var active = this.getLayout().getActiveItem();
+		var active = this.getLayout().getActiveItem(),
+			stop;
 
 		if (active && active.stopClose) {
-			return active.stopClose();
+			stop = active.stopClose();
+		} else {
+			stop = Promise.resolve();
 		}
 
-		return Promise.resolve();
+
+		if (this.pricingInfo) {
+			stop.then(this.pricingInfo.removePricingInfo.bind(this.pricingInfo));
+		}
+
+		return stop;
 	},
 
 
