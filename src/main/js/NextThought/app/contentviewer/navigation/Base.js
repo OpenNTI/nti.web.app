@@ -62,9 +62,10 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 
 
 	onClassExtended: function(cls, data) {
-		data.renderSelectors = Ext.applyIf(cls.superclass.renderSelectors, data.renderSelectors || {});
+		var tpl = cls.superclass.renderTpl,
+			superSelectors = Ext.clone(cls.superclass.renderSelectors);
 
-		var tpl = cls.superclass.renderTpl;
+		data.renderSelectors = Ext.applyIf(superSelectors, data.renderSelectors || {});
 
 		if (data.cls) {
 			data.cls = [cls.superclass.cls, data.cls].join(' ');
