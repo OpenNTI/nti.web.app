@@ -373,6 +373,7 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 
 		return me.assignmentsView.setAssignmentsData(me.assignmentCollection, me.currentBundle, true)
 			.then(me.assignmentsView.showAssignment.bind(me.assignmentsView, assignment, student))
+			.then(me.setTitle.bind(me, assignment.get('title')))
 			.then(me.maybeUnmask.bind(me))
 			.then(me.alignNavigation.bind(me));
 	},
@@ -389,6 +390,11 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 		me.maybeMask();
 
 		me.setActiveItem(me.performanceView);
+
+		UserRepository.getUser(student)
+			.then(function(user) {
+				me.setTitle(user.getName());
+			});
 
 		return me.performanceView.setAssignmentsData(me.assignmentCollection, me.currentBundle, student)
 			.then(me.performanceView.showStudent.bind(me.performanceView, student))
