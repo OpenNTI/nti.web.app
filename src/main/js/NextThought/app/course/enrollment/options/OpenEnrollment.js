@@ -114,7 +114,7 @@ Ext.define('NextThought.app.course.enrollment.options.OpenEnrollment', {
 					lock: true,
 					doEnrollment: function(cmp) {
 						return new Promise(function(fulfill, reject) {
-							cmp.fireEvent('change-enrollment', course, true, function(success, changed, status) {
+							cmp.CourseEnrollmentActions.changeEnrollmentStatus(course, true, function(success, changed, status) {
 								if (success) {
 									fulfill(changed);
 								} else {
@@ -125,7 +125,7 @@ Ext.define('NextThought.app.course.enrollment.options.OpenEnrollment', {
 					},
 					undoEnrollment: function(cmp) {
 						return new Promise(function(fulfill, reject) {
-							cmp.fireEvent('change-enrollment', course, false, function(success, changed, status) {
+							cmp.CourseEnrollmentActions.changeEnrollmentStatus(course, false, function(success, changed, status) {
 								if (success) {
 									fulfill(changed);
 								} else {

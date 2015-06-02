@@ -9,7 +9,8 @@ Ext.define('NextThought.app.course.enrollment.StateStore', {
 	requires: [
 		'NextThought.app.course.enrollment.options.OpenEnrollment',
 		'NextThought.app.course.enrollment.options.FiveminuteEnrollment',
-		'NextThought.app.course.enrollment.options.StoreEnrollment'
+		'NextThought.app.course.enrollment.options.StoreEnrollment',
+		'NextThought.app.library.courses.StateStore'
 	],
 
 	constructor: function() {
@@ -18,6 +19,7 @@ Ext.define('NextThought.app.course.enrollment.StateStore', {
 		this.addOption(NextThought.app.course.enrollment.options.OpenEnrollment);
 		this.addOption(NextThought.app.course.enrollment.options.FiveminuteEnrollment);
 		this.addOption(NextThought.app.course.enrollment.options.StoreEnrollment);
+		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
 	},
 
 
@@ -118,7 +120,7 @@ Ext.define('NextThought.app.course.enrollment.StateStore', {
 				};
 
 		if (catalogData.Enrolled) {
-			p = CourseWareUtils.findCourseBy(course.findByMyCourseInstance())
+			p = this.CourseStore.findCourseBy(course.findByMyCourseInstance())
 				.then(function(instance) {
 					if (instance) {
 						catalogData.EnrolledStartDate = instance.get('CreatedTime');

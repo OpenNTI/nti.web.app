@@ -171,7 +171,29 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 			course = this.__findIn(enrolled, fn);
 		}
 
-		return course;
+		return Promise.resolve(course);
+	},
+
+
+	findEnrollmentForCourse: function(courseOrNtiid) {
+		var ntiid = courseOrNtiid && courseOrNtiid.isModel ? courseOrNtiid.getId() : courseOrNtiid, me = this;
+
+		function fn(rec){
+			var catalog = rec.getCourseCatalogEntry(),
+				match = catalog.getId() === ntiid || catalog.get('OID') === ntiid;
+
+			match = match || catalog.get('CourseEntryNTIID') === ntiid;
+			return match;
+		}
+
+		return new Promise(function(fulfill, reject){
+			var match = me.__findIn(me.ENROLLED_COURSES, fn);
+			if(match){
+				return fulfill(match);
+			}
+			
+			return reject(match);
+		});
 	},
 
 	findCourseForNtiid: function(ntiid) {

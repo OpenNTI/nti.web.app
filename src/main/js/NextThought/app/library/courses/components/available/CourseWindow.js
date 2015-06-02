@@ -144,7 +144,7 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 			upcoming = this.CourseStore.getAllUpcomingCourses();
 
 		this.updateAvailableCourses(current, upcoming, archived);
-		if(!this.tabpanel) { return; }
+		if(!this.tabpanel || this.tabpanel.activeTab) { return; }
 
 		if (!Ext.isEmpty(upcoming)) {
 			this.tabpanel.selectTabWithName('Upcoming');
@@ -214,9 +214,13 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 		});
 
 		me.on('destroy', function() {
+			// For first time login, remove the login link to avoid presenting the user with OOBE again.
 			if ($AppConfig.userObject.hasLink('first_time_logon') && isFeature('suggest-contacts')) {
 				$AppConfig.userObject.removeFirstTimeLoginLink();
 			}
+
+			// Push the root route.
+			me.pushRootRoute(null, '/');
 		});
 
 		me.updateButtons();
@@ -272,16 +276,19 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 		}
 
 		return p.then(function() {
+			var course;
 			if (current.is('course-enrollment-details')) {
-				me.showTabpanel();
-
 				me.courseDetail.destroy();
 				delete me.courseDetail;
+				me.pushRoute(null, '/');
 			}
 
 			if (current.is('enrollment-process')) {
-				me.showCourse(current.course);
-				delete me.courseEnrollment;
+				course = current.course;
+				if (course) {
+					delete me.courseEnrollment;
+					me.pushRoute(course.get('Title'), ParseUtils.encodeForURI(course.getId()), {course: course});
+				}
 			}
 
 			me.updateButtons();
@@ -418,6 +425,7 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 	},
 
 	showCourses: function(route, subRoute) {
+		this.mun(this.CourseStore, 'all-courses-set');
 		this.mon(this.CourseStore, 'all-courses-set', this.setupCourses.bind(this));
 		this.CourseActions.loadAllCourses();
 		this.showTabpanel();
@@ -432,6 +440,7 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 			this.showCourse(course);	
 		}
 		else {
+			this.mun(this.CourseStore, 'all-courses-set');
 			this.mon(this.CourseStore, {
 				'all-courses-set': function(courses) {
 					me.showTabpanel();
@@ -471,7 +480,7 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 
 		function updateLabel() {
 			var activeTab;
-			if (me.showAvailable) {
+			if (!me.isSingle) {
 				me.labelEl.addCls('back');
 				activeTab = me.tabpanel.getTabForCourse(course);
 

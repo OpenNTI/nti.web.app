@@ -6,7 +6,8 @@ Ext.define('NextThought.app.course.enrollment.Details', {
 	requires: [
 		'NextThought.app.course.info.components.Panel',
 		'NextThought.app.course.enrollment.StateStore',
-		'NextThought.app.course.enrollment.Actions'
+		'NextThought.app.course.enrollment.Actions',
+		'NextThought.app.library.courses.StateStore'
 		// 'NextThought.view.contacts.suggestions.Window',
 		// 'NextThought.view.profiles.create.Window'
 	],
@@ -122,6 +123,8 @@ Ext.define('NextThought.app.course.enrollment.Details', {
 
 		this.on('beforedeactivate', 'onBeforeDeactivate');
 		this.CourseEnrollmentStore = NextThought.app.course.enrollment.StateStore.getInstance();
+		this.CourseEnrollmentActions = NextThought.app.course.enrollment.Actions.create();
+		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
 
 		window.EnrollInOption = this.enrollInOption.bind(this);
 	},
@@ -798,9 +801,7 @@ Ext.define('NextThought.app.course.enrollment.Details', {
 		function done(success, changed) {
 			delete me.changingEnrollment;
 
-			var store = Ext.getStore('courseware.AvailableCourses'),
-				c = store.getById(me.course.getId());
-
+			var c = me.CourseStore.findCourseForNtiid(me.course.getId());
 			if (success && changed) {
 				if (c) {
 					me.course = c;
@@ -878,7 +879,7 @@ Ext.define('NextThought.app.course.enrollment.Details', {
 					.then(function(changed) {
 						me.fireEvent('enrolled-action', true);
 						me.msgClickHandler = function() {
-							CourseWareUtils.findCourseBy(me.course.findByMyCourseInstance())
+							me.CourseStore.findCourseBy(me.course.findByMyCourseInstance())
 								.then(function(course) {
 									var instance = course.get('CourseInstance');
 									instance.fireNavigationEvent(me);
@@ -951,7 +952,7 @@ Ext.define('NextThought.app.course.enrollment.Details', {
 	suggestContacts: function(onComplete) {
 		var me = this, peersStore;
 
-		CourseWareUtils.findCourseBy(me.course.findByMyCourseInstance())
+		this.CourseStore.findCourseBy(me.course.findByMyCourseInstance())
 			.then(function(course) {
 				var instance = course.get('CourseInstance');
 
