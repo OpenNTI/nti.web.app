@@ -135,7 +135,10 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 
 			this.on('destroy', 'destroy', this.couponInput);
 
-			this.mon(this.couponInput, 'changed', 'couponChanged');
+			this.mon(this.couponInput, {
+				'changed': this.couponChanged.bind(this),
+				'clear': this.couponChanged.bind(this, '')
+			});
 		}
 
 		Ext.EventManager.onWindowResize(this.onContainerScroll.bind(this));
