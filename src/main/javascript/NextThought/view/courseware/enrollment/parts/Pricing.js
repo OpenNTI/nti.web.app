@@ -118,7 +118,7 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 			this.priceEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 			this.priceEl.hide();
 		}
- 
+
 		if (!this.scrollTarget) {
 			console.error('No scroll target for pricing info');
 		} else {
@@ -135,10 +135,18 @@ Ext.define('NextThought.view.courseware.enrollment.parts.Pricing', {
 
 			this.on('destroy', 'destroy', this.couponInput);
 
-			this.mon(this.couponInput, 'changed', 'couponChanged');
+			this.mon(this.couponInput, {
+				'changed': this.couponChanged.bind(this),
+				'clear': this.couponChanged.bind(this, '')
+			});
 		}
 
 		Ext.EventManager.onWindowResize(this.onContainerScroll.bind(this));
+	},
+
+
+	removePricingInfo: function() {
+		delete this.enrollmentOption.pricing;
 	},
 
 
