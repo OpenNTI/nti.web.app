@@ -94,7 +94,7 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 	 * @param  {Array} courses list of courses
 	 * @return {Array} courses that haven't started
 	 */
-	__getUpcomingCourses: function(courses){
+	__getUpcomingCourses: function(courses) {
 		var upcoming = [];
 
 		courses.forEach(function(course) {
@@ -103,8 +103,8 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 				end = catalog && catalog.get('EndDate'),
 				now = new Date();
 
-			if(catalog && start > now) {
-				upcoming.push(course)
+			if (catalog && start > now) {
+				upcoming.push(course);
 			}
 		});
 
@@ -171,14 +171,14 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 			course = this.__findIn(enrolled, fn);
 		}
 
-		return Promise.resolve(course);
+		return course;
 	},
 
 
 	findEnrollmentForCourse: function(courseOrNtiid) {
 		var ntiid = courseOrNtiid && courseOrNtiid.isModel ? courseOrNtiid.getId() : courseOrNtiid, me = this;
 
-		function fn(rec){
+		function fn(rec) {
 			var catalog = rec.getCourseCatalogEntry(),
 				match = catalog.getId() === ntiid || catalog.get('OID') === ntiid;
 
@@ -186,12 +186,12 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 			return match;
 		}
 
-		return new Promise(function(fulfill, reject){
+		return new Promise(function(fulfill, reject) {
 			var match = me.__findIn(me.ENROLLED_COURSES, fn);
-			if(match){
+			if (match) {
 				return fulfill(match);
 			}
-			
+
 			return reject(match);
 		});
 	},

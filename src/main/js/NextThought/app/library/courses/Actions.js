@@ -26,7 +26,7 @@ Ext.define('NextThought.app.library.courses.Actions', {
 
 		if (!s) {
 			console.error('No Service document defined');
-			return; 
+			return;
 		}
 
 		store.setLoading();
@@ -51,7 +51,7 @@ Ext.define('NextThought.app.library.courses.Actions', {
 
 		precache = items.map(function(item) {
 			if (item.__precacheEntry) {
-				return item.__precacheEntry().fail(function(){});
+				return item.__precacheEntry().fail(function() {});
 			}
 
 			return Promise.resolve(null);
