@@ -29,7 +29,7 @@ Ext.define('NextThought.app.contentviewer.panels.assignment.Student', {
 		var assignment = this.assignment;
 
 		if (assignment.isTimed && !assignment.isStarted() && isMe(this.student) && !this.instructorProspective) {
-			this.hasTimedPlacholder = true;
+			this.hasTimedPlaceholder = true;
 
 			return {
 				xtype: 'assignment-timedplaceholder',
@@ -43,7 +43,19 @@ Ext.define('NextThought.app.contentviewer.panels.assignment.Student', {
 	},
 
 
-	startTimed: function() {},
+	startTimed: function(assignment) {
+		if (this.pageInfo) {
+			this.pageInfo.replaceAssignment(assignment);
+		}
+		this.assignment = assignment;
+		this.showReader();
+
+		if (!this.rendered) {
+			delete this.hasTimedPlaceholder;
+		} else {
+			this.showAssignment();
+		}
+	},
 
 
 	showAllowedTime: function() {

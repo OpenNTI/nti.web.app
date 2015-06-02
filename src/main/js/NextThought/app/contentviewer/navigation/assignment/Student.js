@@ -94,7 +94,7 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Student', {
 			Ext.EventManager.onWindowResize(me.alignTimer, me, false);
 
 			me.on('destroy', function() {
-				Ext.EventManager.removeWindowResize(me.alignTimer, me);
+				Ext.EventManager.removeResizeListener(me.alignTimer, me);
 			});
 
 			me.on('destroy', me.timeContainerEl.destroy.bind(me.timeContainerEl));
@@ -133,7 +133,6 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Student', {
 			this.on('afterrender', this.showAllowedTime.bind(this, time));
 			return;
 		}
-
 
 		var t = TimeUtils.getNaturalDuration(time, 2);
 

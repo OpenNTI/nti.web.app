@@ -1,7 +1,7 @@
 Ext.define('NextThought.common.components.NavPanel', {
 	extend: 'Ext.container.Container',
 	//alias: Extend, do not use this directly
-	
+
 	layout: 'none',
 
 	cls: 'navigation-panel',
@@ -9,7 +9,7 @@ Ext.define('NextThought.common.components.NavPanel', {
 	navigation: { xtype: 'box', autoEl: {html: 'navigation'}},
 	body: {xtype: 'box', autoEl: {html: 'body'}},
 
-	
+
 	onClassExtended: function(cls, data) {
 		if (data.cls) {
 			data.cls = [cls.superclass.cls, data.cls].join(' ');
@@ -46,7 +46,7 @@ Ext.define('NextThought.common.components.NavPanel', {
 		Ext.EventManager.onWindowResize(me.alignNavigation, me, false);
 
 		this.on('destroy', function() {
-			Ext.EventManager.removeWindowResize(me.alignNavigation, me);
+			Ext.EventManager.removeResizeListener(me.alignNavigation, me);
 		});
 	},
 

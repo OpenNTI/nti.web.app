@@ -46,12 +46,21 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		var items = [],
-			toolbarConfig = this.getToolbarConfig(),
+		this.showReader();
+
+		this.on('beforedeactivate', this.beforeDeactivate, this);
+	},
+
+
+	showReader: function() {
+		this.navigation.removeAll(true);
+		this.body.removeAll(true);
+
+		var toolbarConfig = this.getToolbarConfig(),
 			readerConfig = this.getReaderConfig(),
 			readerContent;
 
-		this.flatPageStore = NextThought.store.FlatPage.create({ storeId: 'FlatPage-' + this.id });
+		this.flatPageStore = this.flatPageStore || NextThought.store.FlatPage.create({ storeId: 'FlatPage-' + this.id });
 		this.fireEvent('add-flatpage-store-context', this);
 
 		//since the toolbar can be a bunch of different xtypes
@@ -86,8 +95,11 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 
 		readerContent = this.getReaderContent();
 
+		Ext.destroy(this.readerMons);
+
 		if (readerContent) {
-			this.mon(readerContent, {
+			this.readerMons = this.mon(readerContent, {
+				'destroyable': true,
 				'filter-by-line': 'selectDiscussion',
 				'assignment-submitted': this.fireEvent.bind(this, 'assignment-submitted'),
 				'assessment-graded': this.fireEvent.bind(this, 'assessment-graded'),
@@ -96,7 +108,9 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 			this.down('annotation-view').anchorComponent = readerContent;
 		}
 
-		this.on('beforedeactivate', this.beforeDeactivate, this);
+		if (this.rendered && this.pageInfo) {
+			this.setPageInfo(this.pageInfo, this.bundle);
+		}
 	},
 
 

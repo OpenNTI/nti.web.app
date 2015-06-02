@@ -165,5 +165,20 @@ Ext.define('NextThought.model.PageInfo', {
 					me.set('AssessmentItems', newAssessment);
 				}
 			});
+	},
+
+
+	replaceAssignment: function(assignment) {
+		var items = this.get('AssessmentItems') || [];
+
+		items = items.map(function(item) {
+			if (item.getId() === assignment.getId()) {
+				return assignment;
+			}
+
+			return item;
+		});
+
+		this.set('AssessmentItems', items);
 	}
 });

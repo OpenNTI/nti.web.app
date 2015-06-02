@@ -32,8 +32,8 @@ Ext.define('NextThought.model.assessment.TimedAssignment', {
 			.then(function(response) {
 				var newAssignment = ParseUtils.parseItems(response)[0];
 
-
 				me.set(newAssignment.getData());
+				return me;
 			});
 	},
 
