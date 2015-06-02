@@ -713,6 +713,7 @@ li.library-grid-item {
 .course-settings-window, .available-courses, .available-books {
 	box-shadow: 0 0 5px 0 rgba(0,0,0,0.35);
 	background-color: white;
+	position: fixed !important;
 
 	.header{
 		position: relative;

@@ -18,6 +18,7 @@
 	box-shadow: 3px 3px 3px 0 rgba(0,0,0,0.1);
 	border: 1px solid $border-grey;
 	overflow: hidden;
+	position: fixed !important;
 
 	iframe {
         &.padded {
@@ -126,6 +127,7 @@
 
 .nti-alert {
 	overflow: visible;
+	position: fixed !important;
 
 	&:not(.showing) {
 		.alert-container {
@@ -278,6 +280,8 @@
 }
 
 .iframe-window, .confirm-window{
+	position: fixed !important;
+
 	.iframe{
 		width: auto;
 
@@ -301,6 +305,8 @@
 
 
 .badge-window {
+	position: fixed !important;
+
 	.badge-preview {
 		.img{
 			width: 128px;
