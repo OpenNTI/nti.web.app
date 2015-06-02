@@ -7,6 +7,9 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Student', {
 		'NextThought.app.course.assessment.AssignmentStatus'
 	],
 
+	WARNING_PERCENT: 0.2,
+	RED_PERCENT: 0.1,
+
 	cls: 'student-reader-header reader-header course-assessment-header assignment-item',
 
 	toolbarTpl: Ext.DomHelper.markup([

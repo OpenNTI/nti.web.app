@@ -77,6 +77,9 @@ Ext.define('NextThought.app.contentviewer.panels.assignment.Student', {
 		}
 	},
 
+	//Override this so the reader doesn't set the page info twice
+	setPageInfo: function() {},
+
 
 	showAssignment: function() {
 		var me = this,
