@@ -48,7 +48,7 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 
 		(this.steps || []).forEach(this.addStep.bind(this));
 
-		this.on('beforedeactivate', 'clearStorage', this);
+		this.on('beforedeactivate', 'beforeDeactivate', this);
 	},
 
 
@@ -58,6 +58,15 @@ Ext.define('NextThought.view.courseware.enrollment.Process', {
 		this.addTabs(this.tabsToAdd);
 
 		this.activateStep(0);
+	},
+
+
+	beforeDeactivate: function() {
+		if (this.pricingInfo) {
+			this.pricingInfo.removePricingInfo();
+		}
+
+		this.clearStorage();
 	},
 
 
