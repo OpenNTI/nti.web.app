@@ -215,7 +215,7 @@ Ext.define('NextThought.ux.ImageZoomView', {
 	statics: {
 		zoomImage: function(el,reader,ownerCmp) {
 			var img = Ext.fly(el)
-					.up('[itemprop~=nti-data-markupenabled]')
+					.up('[itemprop*=nti-data-markup]')
 					.down('img[id]').dom,
 				sizes = [
 					'data-nti-image-quarter',

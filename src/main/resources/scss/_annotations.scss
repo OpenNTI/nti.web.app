@@ -529,7 +529,7 @@
 .note-window .main-view .context,
 #NTIContent {
 
-	[itemprop~="nti-data-markupenabled"],
+	[itemprop*="nti-data-markup"],
 	[itemprop~="nti-slide-video"]{
 		@include hardware-accelerate();
 		display: inline-block;
