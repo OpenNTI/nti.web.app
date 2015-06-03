@@ -54,11 +54,15 @@ Ext.define('NextThought.ux.ImageZoomView', {
 					html: '{caption}'
 				}
 			},{
-				tag: 'a',
-				href: '#mark',
-				'data-qtip': 'Comment on this',
-				cls: 'mark',
-				html: 'Comment'
+				tag: 'tpl',
+				'if': 'markUpEnabled',
+				cn: {
+					tag: 'a',
+					href: '#mark',
+					'data-qtip': 'Comment on this',
+					cls: 'mark',
+					html: 'Comment'
+				}
 			}]
 		}]
 	}]),
@@ -75,11 +79,12 @@ Ext.define('NextThought.ux.ImageZoomView', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		function get(el,attr) { return el ? el.getAttribute(attr) : null; }
+		function get(el, attr) { return el ? el.getAttribute(attr) : null; }
 
 		this.renderData = Ext.apply(this.renderData || {},{
 			title: get(this.refEl, 'data-title'),
-			caption: get(this.refEl, 'data-caption')
+			caption: get(this.refEl, 'data-caption'),
+			markUpEnabled: !this.markUpDisabled
 		});
 
 		var n, keyMap = new Ext.util.KeyMap({
@@ -114,7 +119,10 @@ Ext.define('NextThought.ux.ImageZoomView', {
 		this.mon(this.closeEl, 'click', this.close, this);
 		this.mon(this.closeEl2, 'click', this.close, this);
 		this.mon(this.presentationEl, 'click', this.openPresentation, this);
-		this.mon(this.commentEl, 'click', this.commentOn, this);
+
+		if (this.commentEl) {
+			this.mon(this.commentEl, 'click', this.commentOn, this);
+		}
 
 		var me = this,
 			img = me.imageCache = new Image(),
@@ -213,10 +221,9 @@ Ext.define('NextThought.ux.ImageZoomView', {
 
 
 	statics: {
-		zoomImage: function(el,reader,ownerCmp) {
-			var img = Ext.fly(el)
-					.up('[itemprop*=nti-data-markup]')
-					.down('img[id]').dom,
+		zoomImage: function(el, reader, ownerCmp) {
+			var span = Ext.fly(el).up('[itemprop*=nti-data-markup]'),
+				img = span.down('img[id]').dom,
 				sizes = [
 					'data-nti-image-quarter',
 					'data-nti-image-half',
@@ -240,7 +247,13 @@ Ext.define('NextThought.ux.ImageZoomView', {
 			// For now, i'm not going to grab the full.
 			console.log('zoom', img.width + 'x' + img.height, rect, currentSize, nextSize, nextSizeUrl);
 
-			Ext.widget('image-zoom-view', {url: nextSizeUrl, refEl: img, reader: reader, ownerCmp: ownerCmp}).show();
+			Ext.widget('image-zoom-view', {
+				url: nextSizeUrl,
+				refEl: img,
+				reader: reader,
+				ownerCmp: ownerCmp,
+				markUpDisabled: span && span.is('[itemprop~=nti-data-markupdisabled]')
+			}).show();
 		}
 	}
 
