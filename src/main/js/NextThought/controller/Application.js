@@ -10,6 +10,7 @@ Ext.define('NextThought.controller.Application', {
 		'NextThought.app.library.Actions',
 		'NextThought.app.store.Actions',
 		'NextThought.app.chat.Actions',
+		'NextThought.app.groups.Actions',
 		'NextThought.common.state.Actions'
 	],
 
@@ -29,7 +30,7 @@ Ext.define('NextThought.controller.Application', {
 		me.StoreActions = NextThought.app.store.Actions.create();
 		me.StateActions = NextThought.common.state.Actions.create();
 		me.ChatActions = NextThought.app.chat.Actions.create();
-
+		me.GroupActions = NextThought.app.groups.Actions.create();
 
 		window.addEventListener('popstate', function(e) {
 			me.handleCurrentState();

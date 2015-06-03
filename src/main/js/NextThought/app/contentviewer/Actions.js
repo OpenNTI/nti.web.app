@@ -16,7 +16,7 @@ Ext.define('NextThought.app.contentviewer.Actions', {
 			.then(function(locations) {
 				var location = locations[0],
 					root = location.root,
-					postfix, pageInfo
+					postfix, pageInfo,
 					pageURI = encodeURIComponent('Pages(' + ntiid + ')'),
 					userURI = encodeURIComponent($AppConfig.username);
 

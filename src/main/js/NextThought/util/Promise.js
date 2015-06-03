@@ -276,7 +276,7 @@ Promise.first = Promise.first || function(values) {
 		return Promsie.reject('No promise');
 	}
 
-	return new Promise(function(fulfills, reject) {
+	return new Promise(function(fulfill, reject) {
 		var total = values.length;
 
 		function add(index) {

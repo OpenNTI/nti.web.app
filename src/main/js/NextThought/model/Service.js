@@ -3,7 +3,8 @@ Ext.define('NextThought.model.Service', {
 	idProperty: 'Class',
 
 	requires: [
-		'NextThought.model.PageInfo'
+		'NextThought.model.PageInfo',
+		'NextThought.app.userdata.Actions'
 	],
 
 	fields: [
@@ -416,7 +417,9 @@ Ext.define('NextThought.model.Service', {
 
 			pageInfos.forEach(function(p) { (p || {}).originalNTIIDRequested = ntiid; });
 
-			me.fireEvent('update-pageinfo-preferences', pageInfos);
+			me.UserDataActions = me.UserDataActions || NextThought.app.userdata.Actions.create();
+
+			me.UserDataActions.updatePreferences(pageInfos);
 			Ext.callback(success, scope, pageInfos);//back-compat
 			return pageInfo;
 		}

@@ -3,7 +3,9 @@ Ext.define('NextThought.common.form.fields.UserTokenField', {
 	alias: ['widget.user-sharing-list'],
 	requires: [
 		'NextThought.app.sharing.ShareSearchList',
-		'NextThought.util.Search'
+		'NextThought.util.Search',
+		'NextThought.store.UserSearch',
+		'Ext.view.BoundListKeyNav'
 	],
 
 	cls: 'user-token-field',

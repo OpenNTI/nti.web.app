@@ -6,7 +6,8 @@ Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
 	requires: [
 		'NextThought.util.Line',
 		'NextThought.app.whiteboard.Utils',
-		'NextThought.editor.Editor'
+		'NextThought.editor.Editor',
+		'NextThought.app.userdata.Actions'
 	],
 
 
@@ -41,6 +42,8 @@ Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
 		};
 
 		this.reader.fireEvent('uses-page-preferences', this);
+
+		this.UserDataActions = NextThought.app.userdata.Actions.create();
 	},
 
 
@@ -183,7 +186,9 @@ Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
 		if (this.disabled) { return Promise.reject(); }
 
 		var me = this,
-			pageId = me.reader.getLocation().NTIID,
+			location = me.reader.getLocation(),
+			pageId = location.NTIID,
+			currentBundle = location.currentBundle,
 			targetEl = this.reader.getEl().up('.x-container-reader.reader-container'),
 			tabPanel = me.getTabPanel(),
 			lineInfo = me.data.box.activeLineInfo;
@@ -192,10 +197,10 @@ Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
 			return Promise.reject();
 		}
 
-		function work(prefs, bundle) {
+		function work(prefs) {
 			var sharing = prefs && prefs.sharing,
 				sharedWith = sharing && sharing.sharedWith,
-				shareInfo = SharingUtils.sharedWithToSharedInfo(SharingUtils.resolveValue(sharedWith), bundle);
+				shareInfo = SharingUtils.sharedWithToSharedInfo(SharingUtils.resolveValue(sharedWith), currentBundle);
 
 
 			me.mouseOut();
@@ -229,7 +234,7 @@ Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
 			}).addCls('active in-gutter');
 			me.editor.toFront();
 			me.editor.focus();
-
+			//TODO: Figure out how to align this with the window scrolling
 			me.editor.alignTo(me.data.box, 't-t?');
 			me.editor.rtlSetLocalX(0);
 			if (me.editor.getLocalY() < 59) {
@@ -261,15 +266,9 @@ Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
 			me.syncEditorWidth(tabPanel, tabPanel.getWidth());
 		}
 
-		return Promise.all([
-			this.getPagePreferences(pageId)
-					.fail(function() {
-						return null;
-					}),
-			this.reader.getLocation().pageInfo.targetBundle
-		]).then(function(data) {
-			work.apply(this, data);
-		});
+		return this.UserDataActions.getPreferences(pageId, currentBundle)
+			.then(work.bind(this))
+			.fail(function() { return null; });
 	},
 
 
@@ -604,7 +603,7 @@ Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
 		return {range: line.range, container: null};
 	},
 
-	
+
 	//TODO: fill this out
 	allowNavigation: function() {
 		return Promise.resolve();
