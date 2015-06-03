@@ -114,7 +114,7 @@ Ext.define('NextThought.app.course.enrollment.components.Purchase', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.enableBubble(['show-msg', 'update-buttons']);
+		this.enableBubble(['show-msg', 'update-buttons', 'create-enroll-purchase']);
 
 		this.submitBtnCfg = this.buttonCfg[0];
 

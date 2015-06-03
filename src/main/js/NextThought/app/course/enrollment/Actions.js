@@ -74,38 +74,15 @@ Ext.define('NextThought.app.course.enrollment.Actions', {
 
 
 	courseEnrolled: function(fulfill, reject) {
-		var enrolledStore,
-			panel = this.getLibraryView().getPanel();
+		var me = this, 
+			collection = (Service.getCollection('EnrolledCourses', 'Courses') || {}).href;
 
-		if (fulfill || reject) {
-			enrolledStore = Ext.getStore('courseware.EnrolledCourses');
-			this.mon(enrolledStore, {
-				single: true,
-				load: function() {
-					enrolledStore.promiseToLoaded
-						.then(function() {
-							return wait();
-						})
-						.then(function() {
-							fulfill();
-							panel.removeMask();
-						})
-						.fail(function() {
-							reject();
-							panel.removeMask();
-						});
-				}
-			});
-		} else {
-			panel.removeMask();
-		}
-
-		this.enrollmentChanged();
+		me.LibraryActions.setUpEnrolledCourses(collection).then(fulfill).fail(reject);	
 	},
 
 
 	courseDropped: function(catalogEntry) {
-		this.enrollmentChanged();
+		// this.enrollmentChanged();
 		this.fireEvent('content-dropped', catalogEntry);
 	}
 

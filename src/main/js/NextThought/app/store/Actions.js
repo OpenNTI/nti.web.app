@@ -56,5 +56,343 @@ Ext.define('NextThought.app.store.Actions', {
 		});
 
 		return items;
+	},
+
+	/**
+	 * Called to generate a stripe payment token from purchase information
+	 *
+	 * @param {NextThought.view.store.purchase.Form} cmp the owner cmp
+	 * @param {Object} desc
+	 * @param {Object} cardinfo to provide to stripe in exchange for a token
+	 */
+	createEnrollmentPurchase: function(sender, desc, cardinfo, success, failure) {
+		var purchasable = desc.Purchasable || {},
+			connectInfo = purchasable.get('StripeConnectKey'),
+			pKey = connectInfo && connectInfo.get('PublicKey'),
+			tokenObject, me = this;
+
+		if (!pKey) {
+			console.error('No Stripe connection infor for the purchasable', purchasable);
+			failure.call();
+			return;
+		}
+
+		if (sender.lockPurchaseAction) {
+			failure.call();
+			return;
+		}
+
+		function onPriced(result) {
+			delete sender.lockPurchaseAction;
+			success.call(null, {pricing: result, tokenObject: tokenObject});
+		}
+
+		function onFail(reason) {
+			delete sender.lockPurchaseAction;
+			failure.call(null, reason);
+		}
+
+		function tokenResponseHandler(status, response) {
+			if (status !== 200 || response.error) {
+				console.error('An error occurred during the token generation for purchasable', purchasable, response);
+				onFail(response.error);
+			} else {
+				console.log('Stripe token response handler', arguments);
+				tokenObject = response;
+				me.priceEnrollmentPurchase(me, desc, onPriced, onFail);
+			}
+		}
+
+		sender.lockPurchaseAction = true;
+
+		try {
+			if (desc.from && !Globals.isEmail(desc.from)) {
+				onFail({
+					Type: 'FormError',
+					Message: 'Invalid Email',
+					field: 'from'
+				});
+			} else if (desc.receiver && !Globals.isEmail(desc.receiver)) {
+				onFail({
+					Type: 'FormError',
+					Message: 'Invalid Email',
+					field: 'receiver'
+				});
+			} else {
+				Stripe.setPublishableKey(pKey);
+				Stripe.createToken(cardinfo, tokenResponseHandler);
+			}
+		} catch (e) {
+			console.error('Error generating a stripe token', e);
+			delete sender.lockPurchaseAction;
+			failure.call();
+		}
+	},
+
+	/**
+	 * validates a coupon code or figures the cost for activation keys
+	 * @param {Component} sender  the form that is sending the request
+	 * @param {Object} desc an object containing the Purchasable, Quantity, and Coupon.  Ommitted quantity is assumed 1, Coupon is optional.
+	 * @param {Function} success The success callback called if the provided coupone is valid
+	 * @param {Function} failure The failure callback called if we are unable to validate the coupon for any reason
+	 */
+	priceEnrollmentPurchase: function(sender, desc, success, failure) {
+		desc = desc || {};
+		success = success || function() {};
+		failure = failure || function() {};
+
+		var purchasable = desc.Purchasable,
+			data = {},
+			pricingLink = purchasable && purchasable.getLink('pricing');
+
+		if (!pricingLink) {
+			console.error('Must supply a purchasable with a pricing link', arguments);
+			Ext.Error.raise('Must supply a purchasable');
+		}
+
+		if (sender !== this && sender.lockPurchaseAction) {
+			console.error('Already locked aborting pricePurchase', arguments);
+			return false;
+		}
+
+		if (sender !== this) {
+			sender.lockPurchaseAction = true;
+		}
+
+		data.purchasableID = purchasable.getId();
+
+		if (desc.Coupon) {
+			data.Coupon = desc.Coupon.ID || desc.Coupon;
+		}
+
+		if (desc.Quantity > 0) {
+			data.Quantity = desc.Quantity;
+		}
+
+		try {
+			this.doEnrollmentPricingRequest(pricingLink, data)
+				.then(function(result) {
+					delete sender.lockPurchaseAction;
+
+					if (result) {
+						result = ParseUtils.parseItems(result)[0];
+					}
+
+					if (!result || !result.isPricedPurchase) {
+						throw 'Unknown response from pricing call';
+					} else {
+						success.call(null, result);
+					}
+				})
+				.fail(function(reason) {
+					console.error('Error processing price,', reason);
+
+					if (reason && reason.responseText) {
+						reason = Ext.JSON.decode(reason.responseText, true);
+					}
+
+					failure.call(null, reason);
+					delete sender.lockPurchaseAction;
+				});
+		} catch (e) {
+			console.error('Error process price', e);
+			failure.call();
+			delete sender.lockPurchaseAction;
+		}
+	},
+
+	doPricingRequest: function(url, data, callback) {
+		Ext.Ajax.request({
+			url: url,
+			jsonData: data,
+			method: 'POST',
+			scope: this,
+			callback: callback
+		});
+	},
+
+
+	doEnrollmentPricingRequest: function(url, data) {
+		return Service.post(url, data);
+	},
+
+
+	__attemptPurchase: function(purchaseDescription, tokenObject, expectedPrice, linkName) {
+		var purchasable = purchaseDescription.Purchasable,
+			tokenId = tokenObject.id,
+			url = purchasable && purchasable.getLink(linkName),
+			data;
+
+		if (!purchasable || !tokenId) {
+			console.error('Invalid arugments supplied to submit purchase', arguments);
+			return Promise.reject();
+		}
+
+		if (!url) {
+			console.error('No link with that name', linkName, purchasable);
+			return Promise.reject();
+		}
+
+		data = {
+			token: tokenId,
+			purchasableID: purchasable.getId(),
+			context: {
+				AllowVendorUpdates: purchaseDescription.subscribe
+			}
+		};
+
+		if (purchaseDescription.sender !== undefined) {
+			data.sender = purchaseDescription.sender;
+		}
+
+		if (purchaseDescription.from !== undefined) {
+			data.from = purchaseDescription.from;
+		}
+
+		if (purchaseDescription.receiver !== undefined) {
+			data.receiver = purchaseDescription.receiver;
+		}
+
+		if (purchaseDescription.to !== undefined) {
+			data.to = purchaseDescription.to;
+		}
+
+		if (purchaseDescription.immediate !== undefined) {
+			data.immediate = purchaseDescription.immediate;
+		}
+
+		if (purchaseDescription.message !== undefined) {
+			data.message = purchaseDescription.message;
+		}
+
+		if (purchaseDescription.Coupon !== undefined) {
+			data.coupon = purchaseDescription.Coupon;
+		}
+
+		if (purchaseDescription.Quantity) {
+			data.quantity = purchaseDescription.Quantity;
+		}
+
+		if (expectedPrice !== undefined) {
+			data.expectedAmount = expectedPrice;
+		}
+
+		return Service.post(url, data)
+				.then(this.__parsePurchaseAttempt.bind(this));
+	},
+
+	__parsePurchaseAttempt: function(response) {
+		var result = Ext.JSON.decode(response, true);
+
+		if (result) {
+			result = ParseUtils.parseItems(result.Items || result)[0];
+		}
+
+		if (!result || !result.isPurchaseAttempt) {
+			console.error('Unexpected response type');
+
+			return Promise.reject();
+		}
+
+		return result;
+	},
+
+
+	__pollPurchaseAttempt: function(purchaseAttempt) {
+		var me = this,
+			startedPollingAt = (new Date()).getTime(),
+			maxWaitInMillis = 2 * 60 * 1000, //2 minutes
+			pollingIntervalInMillis = 5 * 1000; //5 seconds
+
+		function poll(attempt) {
+			var url = attempt.getLink('get_purchase_attempt');
+
+			return Service.request(url)
+					.then(me.__parsePurchaseAttempt.bind(me));
+		}
+
+		return new Promise(function(fulfill, reject) {
+			function process(delay, attempt) {
+				var now = (new Date()).getTime();
+
+				if (attempt && attempt.isComplete()) {
+					if (attempt.isSuccess()) {
+						fulfill(attempt);
+					} else if (attempt.isFailure()) {
+						reject(attempt);
+					} else {
+						reject();
+					}
+				} else if (startedPollingAt + maxWaitInMillis < now) {
+					reject(attempt);
+				} else if (delay) {
+					wait(delay)
+						.then(poll.bind(me, attempt))
+						.then(process.bind(me, pollingIntervalInMillis))
+						.fail(reject);
+				} else {
+					poll(attempt)
+						.then(process.bind(me, pollingIntervalInMillis))
+						.fail(reject);
+				}
+			}
+
+			process(0, purchaseAttempt);
+		});
+	},
+
+
+	/**
+	 * Make the purchase for purchasable using tokenObject
+	 *
+	 * @param {Component} cmp the owner cmp
+	 * @param {Object} purchaseDescription an object containing the Purchasable, Quantity, and Coupon.  Omitted quantity is assumed 1, Coupon is optional.
+	 * @param {Object} tokenObject the stripe token object
+	 * @param {NextThought.model.store.StripePricedPurchasable} pricingInfo
+	 * @param {Function} success success callback
+	 * @param {Function} failure failure callback
+	 */
+	submitEnrollmentPurchase: function(sender, purchaseDescription, tokenObject, pricingInfo, success, failure) {
+		var me = this;
+
+		if (sender.lockPurchaseAction) {
+			console.error('window already locked aborting submitEnrollmentPurchase', arguments);
+			failure.call(null, {
+				Message: 'Purchase already in progress'
+			});
+			return;
+		}
+
+		sender.lockPurchaseAction = true;
+
+		function done() {
+			delete sender.lockPurchaseAction;
+		}
+
+		me.__attemptPurchase(purchaseDescription, tokenObject, pricingInfo.get('PurchasePrice'), 'purchase')
+			.then(me.__pollPurchaseAttempt.bind(me))
+			.then(function(attempt) {
+				done();
+
+				success.call(null, {
+					Message: 'Purchase attempt success',
+					purchaseAttempt: attempt
+				});
+			})
+			.fail(function(attempt) {
+				done();
+
+				if (attempt && attempt.isPurchaseAttempt) {
+					failure.call(null, {
+						Message: 'Purchase attempt failed',
+						purchaseAttempt: attempt
+					});
+				} else {
+					failure.call(null, {
+						Message: '',
+						tokenObject: tokenObject
+					});
+				}
+			});
 	}
 });

@@ -44,7 +44,7 @@ Ext.define('NextThought.app.course.enrollment.components.Process', {
 	initComponent: function() {
 		this.callParent(arguments);
 		this.tabsToAdd = [];
-		this.enableBubble('update-buttons');
+		this.enableBubble(['update-buttons', 'create-enroll-purchase', 'submit-enroll-purchase', 'enrollment-enrolled-complete']);
 
 		(this.steps || []).forEach(this.addStep.bind(this));
 

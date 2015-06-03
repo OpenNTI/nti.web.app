@@ -7,9 +7,11 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 		'NextThought.app.course.catalog.TabPanel',
 		'NextThought.app.library.courses.components.available.Actions',
 		'NextThought.app.library.courses.StateStore',
-		'NextThought.app.course.enrollment.Details'
-		// 'NextThought.view.courseware.enrollment.Details',
-		// 'NextThought.view.courseware.enrollment.Process'
+		'NextThought.app.course.enrollment.Details',
+		'NextThought.app.course.enrollment.StateStore',
+		'NextThought.app.course.enrollment.Details',
+		'NextThought.app.course.enrollment.components.Process',
+		'NextThought.app.store.Actions'
 	],
 
 	mixins: {
@@ -129,6 +131,9 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 
 		this.CourseActions = NextThought.app.library.courses.Actions.create();
 		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
+		this.CourseEnrollmentStore = NextThought.app.course.enrollment.StateStore.getInstance();
+		this.CourseEnrollmentActions = NextThought.app.course.enrollment.Actions.create();
+		this.StoreActions = NextThought.app.store.Actions.create();
 
 		this.initRouter();
 		this.addRoute('/', this.showCourses.bind(this));
@@ -498,7 +503,7 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 			updateLabel();
 		}
 
-		// me.mon(me.courseDetail, 'enroll-in-course', 'showEnrollmentOption');
+		me.mon(me.courseDetail, 'enroll-in-course', 'showEnrollmentOption');
 
 		me.getLayout().setActiveItem(me.courseDetail);
 	},
@@ -509,7 +514,7 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 		function addView() {
 			me.courseEnrollment = me.add({
 				xtype: 'enrollment-process',
-				steps: CourseWareUtils.Enrollment.getEnrollmentSteps(course, name, type, config),
+				steps: me.CourseEnrollmentStore.getEnrollmentSteps(course, name, type, config),
 				course: course
 			});
 		}
@@ -530,6 +535,13 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 		} else {
 			updateLabel();
 		}
+
+		me.mon(me.courseEnrollment, {
+			'create-enroll-purchase': me.StoreActions.createEnrollmentPurchase.bind(me.StoreActions),
+			'submit-enroll-purchase': me.StoreActions.submitEnrollmentPurchase.bind(me.StoreActions),
+			'enrollment-enrolled-complete': me.CourseEnrollmentActions.courseEnrolled.bind(me.CourseEnrollmentActions)
+		});
+
 
 		me.getLayout().setActiveItem(me.courseEnrollment);
 		me.closeMsg();

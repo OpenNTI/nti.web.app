@@ -117,10 +117,11 @@ Ext.define('NextThought.app.course.enrollment.StateStore', {
 					EndDate: course.get('EndDate'),
 					Enrolled: course.isActive(),
 					Options: {}
-				};
+				}, course;
 
 		if (catalogData.Enrolled) {
-			p = this.CourseStore.findCourseBy(course.findByMyCourseInstance())
+			course = this.CourseStore.findCourseBy(course.findByMyCourseInstance());
+			p = Promise.resolve(course)
 				.then(function(instance) {
 					if (instance) {
 						catalogData.EnrolledStartDate = instance.get('CreatedTime');

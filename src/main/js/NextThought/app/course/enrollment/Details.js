@@ -518,16 +518,11 @@ Ext.define('NextThought.app.course.enrollment.Details', {
 			return;
 		}
 
-		var me = this, c,
-			store = Ext.getStore('courseware.AvailableCourses'),
-			loading;
+		var me = this, c;
 
-		if (updateFromStore) {
-			c = store.getById(me.course.getId());
-
-			if (c) {
-				me.course = c;
-			}
+		c = this.CourseStore.findCourseForNtiid(me.course.getId());
+		if (c) {
+			me.course = c;
 		}
 
 
@@ -879,7 +874,8 @@ Ext.define('NextThought.app.course.enrollment.Details', {
 					.then(function(changed) {
 						me.fireEvent('enrolled-action', true);
 						me.msgClickHandler = function() {
-							me.CourseStore.findCourseBy(me.course.findByMyCourseInstance())
+							var c = me.CourseStore.findCourseBy(me.course.findByMyCourseInstance());
+							Promise.resolve(c)
 								.then(function(course) {
 									var instance = course.get('CourseInstance');
 									instance.fireNavigationEvent(me);
@@ -950,9 +946,10 @@ Ext.define('NextThought.app.course.enrollment.Details', {
 
 
 	suggestContacts: function(onComplete) {
-		var me = this, peersStore;
+		var me = this, peersStore, c;
 
-		this.CourseStore.findCourseBy(me.course.findByMyCourseInstance())
+		c = this.CourseStore.findCourseBy(me.course.findByMyCourseInstance());
+		Promise.resolve(c)
 			.then(function(course) {
 				var instance = course.get('CourseInstance');
 
