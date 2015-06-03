@@ -14,17 +14,29 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 
 	getAllCourses: function() {	return this.ALL_COURSES; },
 
+	__updateCoursesEnrollmentState: function(courses) {
+		courses.forEach(function(course){
+			var catalog = course.getCourseCatalogEntry && course.getCourseCatalogEntry(),
+				instance = course.get('CourseInstance'),
+				isOpen = course.isOpen(),
+				isAdmin = course instanceof NextThought.model.courses.CourseInstanceAdministrativeRole;
+
+			if (catalog) {
+				catalog.updateEnrollmentState(course.get('RealEnrollmentStatus') || course.get('Status'), isOpen, isAdmin);	
+			}
+		});
+	},
 
 	setEnrolledCourses: function(courses) {
 		this.ENROLLED_COURSES = courses;
-
+		this.__updateCoursesEnrollmentState(courses);
 		this.fireEvent('enrolled-courses-set', this.ENROLLED_COURSES);
 	},
 
 
 	setAdministeredCourses: function(courses) {
 		this.ADMIN_COURSES = courses;
-
+		this.__updateCoursesEnrollmentState(courses);
 		this.fireEvent('admin-courses-set', this.ADMIN_COURSES);
 	},
 
