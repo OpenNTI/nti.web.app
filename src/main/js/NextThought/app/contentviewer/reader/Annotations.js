@@ -18,7 +18,8 @@ Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 		'NextThought.app.assessment.Scoreboard',
 		'NextThought.cache.IdCache',
 		'NextThought.util.Search',
-		'NextThought.util.TextRangeFinder'
+		'NextThought.util.TextRangeFinder',
+		'NextThought.app.userdata.Actions'
 	],
 	mixins: {
 		observable: 'Ext.util.Observable'
@@ -37,6 +38,7 @@ Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 
 		me.up = reader.up.bind(reader);
 		me.mixins.observable.constructor.apply(me);
+		me.UserDataActions = NextThought.app.userdata.Actions.create();
 
 		reader.on('destroy', 'destroy',
 				  reader.relayEvents(me, [
@@ -59,8 +61,8 @@ Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 		});
 
 		reader.on('afterRender', function() {
-			reader.fireEvent('listens-to-page-stores', this, {
-				scope: this,
+			me.UserDataActions.listenToPageStores(this, {
+				scope: me,
 				add: 'storeEventsAdd',
 				'paged-in': 'storeEventsAdd',
 				remove: 'storeEventsRemove',
@@ -163,8 +165,10 @@ Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 
 
 	loadAnnotations: function(containerId, subContainers) {
+		var location = this.reader.getLocation();
+
 		this.clearAnnotations();
-		this.fireEvent('annotations-load', this.reader, containerId, subContainers);
+		this.UserDataActions.loadAnnotations(this.reader, containerId, location.pageInfo, subContainers);
 	},
 
 

@@ -5,7 +5,8 @@ Ext.define('NextThought.app.slidedeck.Slide', {
 		'NextThought.layout.component.Natural',
 		'NextThought.app.slidedeck.CommentHeader',
 		'NextThought.app.slidedeck.ThreadRoot',
-		'NextThought.util.Anchors'
+		'NextThought.util.Anchors',
+		'NextThought.app.userdata.Actions'
 	],
 
 	ui: 'slide',
@@ -33,7 +34,9 @@ Ext.define('NextThought.app.slidedeck.Slide', {
 
 
 	initComponent: function() {
-		this.fireEvent('uses-page-stores', this);
+		var UserDataActions = NextThought.app.userdata.Actions.create();
+
+		UserDataActions.setupPageStoreDelegates(this);
 		this.callParent(arguments);
 		this.addEvents('editorActivated', 'editorDeactivated');
 		this.enableBubble('editorActivated', 'editorDeactivated');
@@ -46,7 +49,7 @@ Ext.define('NextThought.app.slidedeck.Slide', {
 	},
 
 
-	updateSlide: function(v,slide) {
+	updateSlide: function(v, slide) {
 		this.slide = slide;
 		if (!this.slideImage) {
 			return;
@@ -220,7 +223,7 @@ Ext.define('NextThought.app.slidedeck.Slide', {
 	},
 
 
-	handleExpandingThread: function(root /*,childrenDom*/) {
+	handleExpandingThread: function(root /*, childrenDom*/) {
 		var h = 0, t = this.el.getScroll().top;
 		Ext.each(this.query(this.defaultType), function(i) {
 			if (i === root) {return;}

@@ -5,14 +5,18 @@ Ext.define('NextThought.app.contentviewer.reader.Location', {
 		'NextThought.app.library.Actions',
 		'NextThought.cache.AbstractStorage',
 		'NextThought.app.video.Window',
-		'NextThought.util.Content'
+		'NextThought.util.Content',
+		'NextThought.app.userdata.Actions'
 	],
 
 	constructor: function(config) {
 		Ext.apply(this, config);
 
 		this.mixins.observable.constructor.call(this);
-		var reader = this.reader;
+
+		var reader = this.reader,
+			UserDataActions = NextThought.app.userdata.Actions.create();
+
 		reader.on('destroy', 'destroy',
 			reader.relayEvents(this, [
 				'location-cleared',
@@ -26,8 +30,10 @@ Ext.define('NextThought.app.contentviewer.reader.Location', {
 			]));
 
 		this.up = reader.up.bind(reader);
+
 		reader.on('afterRender', function() {
-			reader.fireEvent('uses-page-stores', this); }, this);
+			UserDataActions.setupPageStoreDelegates(this);
+		}, this);
 
 		Ext.apply(reader, {
 			getLocation: this.getLocation.bind(this),

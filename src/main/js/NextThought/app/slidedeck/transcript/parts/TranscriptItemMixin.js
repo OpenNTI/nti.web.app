@@ -1,10 +1,13 @@
 Ext.define('NextThought.app.slidedeck.transcript.parts.TranscriptItemMixin', {
+	requires: ['NextThought.app.userdata.Actions'],
 
 	isPresentationPartReady: false,
 
 	constructor: function() {
+		var UserDataStore = NextThought.app.userdata.Actions.create();
+
 		this.on('added', function() {
-			this.fireEvent('uses-page-stores', this);
+			UserDataStore.setupPageStoreDelegates(this);
 		}, this);
 	},
 

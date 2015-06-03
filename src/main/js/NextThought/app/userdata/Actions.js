@@ -3,7 +3,9 @@ Ext.define('NextThought.app.userdata.Actions', {
 
 	requires: [
 		'NextThought.app.userdata.StateStore',
-		'NextThought.app.groups.StateStore'
+		'NextThought.app.groups.StateStore',
+		'NextThought.store.PageItem',
+		'NextThought.filter.FilterManager'
 	],
 
 	constructor: function() {
@@ -158,5 +160,283 @@ Ext.define('NextThought.app.userdata.Actions', {
 
 	 			return result;
 	 		});
+	 },
+
+
+	 listenToPageStores: function(monitor, listeners) {
+	 	var context = this.UserDataStore.getContext(monitor) || this.UserDataStore.getMainReaderContext();
+
+	 	monitor.mon(context.pageStoreEvents, listeners);
+	 },
+
+
+	 initPageStores: function(cmpContext) {
+	 	var context = this.UserDataStore.getContext(cmpContext),
+	 		currentPageStoresMap = {};
+
+	 	context.pageStoreEvents = new Ext.util.Observable();
+	 	ObjectUtils.defineAttributes(context, {
+	 		currrentPageStores: {
+	 			getter: function() { return currentPageStoresMap; },
+	 			setter: function(s) {
+	 				var key, o, m = currentPageStoresMap || {};
+
+	 				currentPageStoresMap = s;
+
+	 				for (key in m) {
+	 					if (m.hasOwnProperty(key)) {
+	 						o = m[key];
+	 						delete m[key];
+
+	 						if (o) {
+	 							console.debug('Setting currentPageStores:', o.storeId, 'Does not clear:', o.doesNotClear);
+
+	 							if (!o.doesNotClear) {
+	 								o.fireEvent('clearnup', o);
+	 								o.clearListeners();
+	 								o.clearFilter(true);
+	 								o.removeAll();
+	 							} else {
+	 								s[key] = o;
+	 							}
+	 						}
+	 					}
+	 				}
+	 			}
+	 		}
+	 	});
+	 },
+
+
+	 clearPageStore: function(ctx) {
+	 	ctx = ctx || this.UserDataStore.getContext();
+
+	 	var fp = ctx.flatPageStore;
+
+	 	ctx.currentPageStores = {};
+	 	fp.removeFilter('lineFilter');
+	 	fp.removeAll();
+
+	 	if (fp.getRange().length !== 0) {
+	 		console.error('Flat Page store not empty!');
+	 	}
+	 },
+
+
+	 getPageStore: function(id, ctx) {
+	 	ctx = ctx || this.UserDataStore.getContext();
+
+	 	var theStore, root;
+
+	 	if (!id) {
+	 		Ext.Error.raise('ID required');
+	 	}
+
+	 	function bad() { console.error('There is no store for id:' + id); }
+
+	 	theStore = ctx.currentPageStore[id];
+
+	 	if (!theStore) {
+	 		root = ctx.currentPageStore.root;
+
+	 		if (root && (id === root.containerId)) {
+	 			theStore = root;
+	 		}
+	 	}
+
+	 	return theStore || {bad: true, add: bad, getById: bad, remove: bad, on: bad, each: bad, un: bad, getItems: bad, getCount: bad};
+	 },
+
+
+	 hasPageStore: function(id, ctx) {
+	 	ctx = ctx || this.UserDataStore.getContext();
+
+	 	return !id ? false : (ctx.currentPageStores || {}).hasOwnProperty(id);
+	 },
+
+
+	 addPageStore: function(id, store, ctx) {
+	 	ctx = ctx || this.UserDataStore.getContext();
+
+		var events = ctx.pageStoreEvents,
+			monitors = events.managedListeners || [];
+
+		if (this.hasPageStore(id, ctx) && this.pageStoreId() !== store) {
+			console.warn('replacing an existing store??');
+		}
+
+		store.cacheMapId = store.cacheMapId || id;
+
+		ctx.currentPageStores[id] = store;
+
+		if (!store.doesNotParticipateWithFlattenedPage) {
+			ctx.flatPageStore.bind(store);
+		}
+
+		store.on({
+			scope: this,
+			load: StoreUtils.fillInUsers,
+			add: StoreUtils.fillInUsers
+		});
+
+		/**
+		 * For specialty stores that do not want to trigger events all over the application, they will set this flag.
+		 * See the PageItem store's property documentation
+		 * {@see NextThought.store.PageItem}
+		 *
+		 * An example of when you would want to set this is if there are two stores that represent the same set of data
+		 * and they are currently active ...such as the "notes only" store in the slide deck, and the general purpose
+		 * store on the page...  adding to the slide's store would trigger a duplicate event (the page's store would be
+		 * added to as well)
+		 */
+		if (store.doesNotShareEventsImplicitly) {
+			return;
+		}
+
+		//Because root is just an alias of the NTIID store that represents the page root, it was causing two monitors
+		// to be put on the store...so we will skip stores we are already monitoring
+		if (Ext.Array.contains(Ext.Array.pluck(monitors, 'item'), store)) {
+			//This prevents two invocations of event handlers for one event.
+			return;
+		}
+
+		store.on('cleanup', 'destroy',
+				events.relayEvents(store, ['add', 'bulkremove', 'remove']));
+	 },
+
+
+	 onAnnotationsFilter: function(cmp) {
+	 	var context = this.UserDataStore.getContext(cmp),
+	 		listParams = FilterManager.getServerListParams(),
+	 		filter = ['TopLevel'];
+
+	 	if (listParams.filter) {
+	 		filter.push(listParams.filter);
+	 	}
+
+	 	function loaded(store, records, success) {
+	 		var bins = store.getBins();
+
+	 		if (!success) {
+	 			return;
+	 		}
+
+	 		cmp.getAnnotations().objectsLoaded(store.getItems(bins), bins, store.containerId);
+	 	}
+
+	 	function containerStorePredicate(k, s) {
+			return s.hasOwnProperty('containerId') && !!context.currentPageStores[s.containerId];
+		}
+
+	 	this.UserDataStore.applyToStores(function(k, s) {
+	 		var params = s.proxy.extraParams || {};
+
+	 		params = Ext.apply(params, {
+	 			sortOn: 'lastModified',
+	 			sortOrder: 'descending'
+	 		});
+
+	 		s.on('load', loaded, this, {single: true});
+
+	 		//Clear out any old filter information. It has changed after all
+	 		delete params.filter;
+	 		delete params.accept;
+	 		delete params.sharedWith;
+
+	 		if (Ext.isEmpty(filter)) {
+	 			params.filter = filter.join(',').replace(/,+$/, '');
+	 		}
+
+	 		if (listParams.accept) {
+	 			params.accept = listParams.accept;
+	 		}
+
+	 		if (!Ext.isEmpty(listParams.sharedWith)) {
+	 			params.sharedWith = listParams.sharedWith.join(',');
+	 		}
+
+	 		s.proxy.extraParams = params;
+
+	 		s.removeAll();
+	 		s.loadPage(1);
+	 	}, containerStorePredicate);
+	 },
+
+
+	 loadAnnotations: function(cmp, containerId, pageInfo, containers) {
+	 	var me = this,
+	 		Store = NextThought.store.PageItem,
+	 		userDataStore = me.UserDataStore,
+	 		context = userDataStore.getContext(cmp),
+	 		rel = Globals.USER_GENERATED_DATA, //TODO: should this be recursive generated data
+	 		pageStore = pageInfo && Store.make(pageInfo.getLink(rel), containerId, true);
+
+	 	if (!pageInfo) {
+	 		return;
+	 	}
+
+	 	userDataStore.setContext(context);
+
+	 	try {
+	 		me.clearPageStore(context);
+
+	 		me.addPageStore('root', pageStore, context);
+
+	 		if (!Ext.Array.contains(containers, containerId)) {
+	 			containers.push(containerId);
+	 		}
+
+	 		Ext.each(containers, function(id) {
+	 			me.addPageStore(id, (containerId === id) ?//ensure we don't duplicate the root store
+									pageStore : Store.make(pageInfo.getSubContainerURL(rel, id), id));
+	 		});
+
+	 		this.onAnnotationsFilter(cmp);
+	 	} finally {
+	 		userDataStore.clearContext();
+	 	}
+	 },
+
+
+	 applyToStores: function() {
+	 	this.UserDataStore.applyToStores.apply(this.UserDataStore, arguments);
+	 },
+
+
+	 applyToStoresThatWantItem: function() {
+	 	this.UserDataStore.applyToStoresThatWantItem.apply(this.UserDataStore, arguments);
+	 },
+
+
+	 setupPageStoreDelegates: function(cmp) {
+	 	var context = this.UserDataStore.getContext(cmp),
+	 		delegate, delegates = {};
+
+	 	function bind(fn, me) {
+	 		return function() {
+	 			try {
+	 				me.UserDataStore.setContext(context);
+	 				return fn.apply(me, args);
+	 			} finally {
+	 				this.UserDataStore.clearContext();
+	 			}
+	 		}
+	 	}
+
+	 	delegates.clearPageStore = bind(this.clearPageStore, this);
+	 	delegates.addPageStore = bind(this.addPageStore, this);
+	 	delegates.getPageStore = bind(this.getPageStore, this);
+	 	delegates.hasPageStore = bind(this.hasPageStore, this);
+	 	delegates.applyToStores = bind(this.applyToStores, this);
+	 	delegates.applyToStoresThatWantItem = bind(this.applyToStoresThatWantItem, this);
+
+	 	for (delegate in delegates) {
+	 		if (delegates.hasOwnProperty(delegate)) {
+	 			if (cmp[delegate]) {
+	 				console.warn('[W] !!!Overwritting existing property: ' + delegate + ' on ' + cmp.id, cmp);
+	 			}
+	 			cmp[delegate] = delegates[delegate];
+	 		}
+	 	}
 	 }
 });

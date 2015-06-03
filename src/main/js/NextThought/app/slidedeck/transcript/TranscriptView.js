@@ -11,7 +11,8 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 		'NextThought.app.annotations.renderer.Manager',
 		'NextThought.app.annotations.Index',
 		'NextThought.app.slidedeck.transcript.parts.VideoTitle',
-        'NextThought.app.slidedeck.transcript.parts.NoTranscript'
+        'NextThought.app.slidedeck.transcript.parts.NoTranscript',
+        'NextThought.app.userdata.Actions'
 	],
 
 	ui: 'transcript',
@@ -33,7 +34,9 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 
         this.buildComponents();
 		this.flatPageStore = new NextThought.store.FlatPage();
-		this.fireEvent('add-flatpage-store-context', this);
+		this.UserDataActions = NextThought.app.userdata.create();
+
+		this.UserDataActions.initPageStores(this);
 
 		this.callParent(arguments);
 
@@ -42,13 +45,15 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 		if (!this.slideStore && !this.transcript) {
 			this.hasNoPresentationParts = true;
 		}
-		this.fireEvent('uses-page-stores', this);
 
-		this.fireEvent('listens-to-page-stores', this, {
+		this.UserDataActions.setUpPageStoreDelegates(this);
+
+		this.UserDataActions.listenToPageStores(this, {
 			scope: this,
 			add: 'onStoreEventsAdd',
 			remove: 'onStoreEventsRemove'
 		});
+
 
 		Ext.EventManager.onWindowResize(function() {
 			this.fireEvent('sync-height');

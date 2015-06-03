@@ -7,7 +7,8 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 		'NextThought.app.contentviewer.navigation.Content',
 		'NextThought.app.contentviewer.notepad.View',
 		'NextThought.store.FlatPage',
-		'NextThought.app.annotations.Index'
+		'NextThought.app.annotations.Index',
+		'NextThought.app.userdata.Actions'
 	],
 
 
@@ -46,6 +47,7 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 	initComponent: function() {
 		this.callParent(arguments);
 
+		this.UserDataActions = NextThought.app.userdata.Actions.create();
 		this.showReader();
 
 		this.on('beforedeactivate', this.beforeDeactivate, this);
@@ -61,7 +63,7 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 			readerContent;
 
 		this.flatPageStore = this.flatPageStore || NextThought.store.FlatPage.create({ storeId: 'FlatPage-' + this.id });
-		this.fireEvent('add-flatpage-store-context', this);
+		this.UserDataActions.initPageStores(this);
 
 		//since the toolbar can be a bunch of different xtypes
 		//add a flag to it so we can find it easily
