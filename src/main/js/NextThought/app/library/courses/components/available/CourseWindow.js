@@ -538,7 +538,10 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 
 		me.mon(me.courseEnrollment, {
 			'create-enroll-purchase': me.StoreActions.createEnrollmentPurchase.bind(me.StoreActions),
+			'create-gift-purchase': me.StoreActions.createEnrollmentPurchase.bind(me.StoreActions),
 			'submit-enroll-purchase': me.StoreActions.submitEnrollmentPurchase.bind(me.StoreActions),
+			'submit-gift-purchase': me.StoreActions.submitGiftPurchase.bind(me.StoreActions),
+			'redeem-gift': me.StoreActions.redeemGift.bind(me.StoreActions),
 			'enrollment-enrolled-complete': me.CourseEnrollmentActions.courseEnrolled.bind(me.CourseEnrollmentActions)
 		});
 

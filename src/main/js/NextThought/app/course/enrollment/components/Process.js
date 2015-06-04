@@ -8,7 +8,8 @@ Ext.define('NextThought.app.course.enrollment.components.Process', {
 		'NextThought.app.course.enrollment.components.Admission',
 		'NextThought.app.course.enrollment.components.PaymentConfirmation',
 		'NextThought.app.course.enrollment.components.Gift',
-		'NextThought.app.course.enrollment.components.Redeem'
+		'NextThought.app.course.enrollment.components.Redeem',
+		'NextThought.app.course.enrollment.components.GiftConfirmation'
 	],
 
 	layout: 'card',
@@ -44,7 +45,15 @@ Ext.define('NextThought.app.course.enrollment.components.Process', {
 	initComponent: function() {
 		this.callParent(arguments);
 		this.tabsToAdd = [];
-		this.enableBubble(['update-buttons', 'create-enroll-purchase', 'submit-enroll-purchase', 'enrollment-enrolled-complete']);
+		this.enableBubble([
+			'update-buttons',
+			'create-enroll-purchase',
+			'create-gift-purchase',
+			'submit-gift-purchase',
+			'submit-enroll-purchase', 
+			'enrollment-enrolled-complete',
+			'redeem-gift'
+			]);
 
 		(this.steps || []).forEach(this.addStep.bind(this));
 

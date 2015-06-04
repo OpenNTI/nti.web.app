@@ -170,6 +170,8 @@ Ext.define('NextThought.app.course.enrollment.components.Gift', {
 				checkbox.setValue(true);
 			}
 		});
+
+		this.enableBubble(['create-gift-purchase']);
 	},
 
 

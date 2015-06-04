@@ -78,6 +78,7 @@ Ext.define('NextThought.app.course.enrollment.components.Redeem', {
 
 	afterRender: function() {
 		this.callParent(arguments);
+		this.enableBubble('redeem-gift');
 
 		if (this.enrollmentOption.AllowVendorUpdates) {
 			this.revealItem('allowupdates_container');

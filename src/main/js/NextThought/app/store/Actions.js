@@ -394,5 +394,115 @@ Ext.define('NextThought.app.store.Actions', {
 					});
 				}
 			});
+	},
+
+	/**
+	 * Make the purchase for purchasable using tokenObject
+	 *
+	 * @param {Component} cmp the owner cmp
+	 * @param {Object} purchaseDescription an object containing the Purchasable, Quantity, and Coupon.  Omitted quantity is assumed 1, Coupon is optional.
+	 * @param {Object} tokenObject the stripe token object
+	 * @param {NextThought.model.store.StripePricedPurchasable} pricingInfo
+	 * @param {Function} success success callback
+	 * @param {Function} failure failure callback
+	 */
+	submitGiftPurchase: function(sender, purchaseDescription, tokenObject, pricingInfo, success, failure) {
+		var me = this;
+
+		if (sender.lockPurchaseAction) {
+			console.error('window already locked aborting submitGirfPurchase', arguments);
+			failure.call(null, {
+				Message: 'Purchase already in progress'
+			});
+			return;
+		}
+
+		sender.lockPurchaseAction = true;
+
+		function done() {
+			delete sender.lockPurchaseAction;
+		}
+
+		me.__attemptPurchase(purchaseDescription, tokenObject, pricingInfo.get('PurchasePrice'), 'gift_stripe_payment')
+			.then(me.__pollPurchaseAttempt.bind(me))
+			.then(function(attempt) {
+				done();
+
+				success.call(null, {
+					Message: 'Purchase attempt success',
+					purchaseAttempt: attempt
+				});
+			})
+			.fail(function(attempt) {
+				done();
+
+				if (attempt && attempt.isPurchaseAttempt) {
+					failure.call(null, {
+						Message: 'Purchase attempt failed',
+						purchaseAttempt: attempt
+					});
+				} else {
+					failure.call(null, {
+						Message: '',
+						tokenObject: tokenObject
+					});
+				}
+			});
+	},
+
+	/**
+	 * Submit a redeem token for a purchasable
+	 * @param  {Ext.Component} sender      the component sending the request
+	 * @param  {NextThought.model.store.Purchasable} purchasable the purchasable the token is for
+	 * @param  {String} token       the redeem token
+	 * @param  {Boolean} allowVendorUpdates subscribe the user to updates from the vendor
+	 * @param {String} ntiid ntiid of the thing you are redeeming
+	 * @param  {Function} success   success callback
+	 * @param  {Function} failure   failure callback
+	 */
+	redeemGift: function(sender, purchasable, token, allowVendorUpdates, ntiid, success, failure) {
+		var me = this,
+			url = purchasable && purchasable.getLink('redeem_gift');
+
+		if (sender.lockPurchaseAction) {
+			console.error('Window already locked aborting redeem gift', arguments);
+			failure.call();
+			return;
+		}
+
+		if (!url) {
+			console.error('No redeem gift link');
+			failure.call();
+			return;
+		}
+
+		sender.lockPurchaseAction = true;
+
+		function done() {
+			delete sender.lockPurchaseAction;
+		}
+
+		Service.post(url, {
+			code: token,
+			AllowVendorUpdates: allowVendorUpdates,
+			NTIID: ntiid
+		})
+			.then(function() {
+				done();
+				success.call();
+			})
+			.fail(function(response) {
+				done();
+
+				var json = Ext.decode(response && response.responseText, true);
+
+				if (!json) {
+					json = {
+						Message: 'An unknown error occurred. Please try again later.'
+					};
+				}
+
+				failure.call(null, json);
+			});
 	}
 });
