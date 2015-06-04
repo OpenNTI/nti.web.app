@@ -51,10 +51,10 @@ Ext.define('NextThought.model.ContentPackage', {
 
 	getToc: function(status) {
 		var me = this,
-			library = me.LibraryActions
+			library = me.LibraryActions;
 			index = me.get('index');
 
-		if (me.self.TOC_REQUESTS[index]) {
+		if (me.self.TOC_REQUESTS[index + '-' + status]) {
 			me.tocPromise = me.self.TOC_REQUESTS[index + '-' + status];
 		} else {
 			me.tocPromise = Service.request(getURL(index))
@@ -86,10 +86,10 @@ Ext.define('NextThought.model.ContentPackage', {
 					NTIID: doc.getAttribute('ntiid'),
 					isCourse: doc.getAttribute('isCourse') === 'true'
 				});
-			})
+			});
 
 
-		return me.tocPromise
+		return me.tocPromise;
 	},
 
 
@@ -130,7 +130,7 @@ Ext.define('NextThought.model.ContentPackage', {
 			return;
 		}
 
-		for(i = 0; i < nodes.length; i++) {
+		for (i = 0; i < nodes.length; i++) {
 			permitOrRemove(nodes[i]);
 		}
 
