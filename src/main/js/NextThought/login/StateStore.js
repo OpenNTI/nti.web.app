@@ -48,12 +48,12 @@ Ext.define('NextThought.login.StateStore', {
 	},
 
 
-	setLogOutURL: function(url) {
-		this.setLogOutURL = url;
+	setLogoutURL: function(url) {
+		this.logOutURL = url;
 	},
 
 
-	getLogOutURL: function() {
+	getLogoutURL: function() {
 		return this.logOutURL;
 	},
 

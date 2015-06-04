@@ -217,7 +217,7 @@ Ext.define('NextThought.login.Actions', {
 			})
 			.then(function(response) {
 				me.store.maybeAddImmediateAction(response);
-				me.store.setLogOutURL(me.ServiceInterface.getLinkFrom(response.Links, 'logon.logout'));
+				me.store.setLogoutURL(me.ServiceInterface.getLinkFrom(response.Links, 'logon.logout'));
 
 				return me.resolveService();
 			});
@@ -247,6 +247,7 @@ Ext.define('NextThought.login.Actions', {
 
 	resolveService: function() {
 		var me = this,
+			unauthed = {401: true, 403: true},
 			server = $AppConfig.server;
 
 		return me.ServiceInterface.request({
@@ -272,11 +273,15 @@ Ext.define('NextThought.login.Actions', {
 				}
 			})
 			.fail(function(r) {
-				alert({
-					title: getString('Apologies'),
-					msg: getString('Cannot load page.')
-				});
-				me.handleLogout();
+				if (unauthed[r.status]) {
+					me.handleLogout();
+				} else {
+					alert({
+						title: getString('Apologies'),
+						msg: getString('Cannot load page.')
+					});
+				}
+
 				console.log('Could not resolve service document\nrequest:', null, '\n\nresponse:', r, '\n\n');
 				return Promise.reject(r);
 			});
