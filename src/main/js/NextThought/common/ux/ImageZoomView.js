@@ -1,9 +1,9 @@
-Ext.define('NextThought.ux.ImageZoomView', {
+Ext.define('NextThought.common.ux.ImageZoomView', {
 	alias: 'widget.image-zoom-view',
 	extend: 'Ext.Component',
 
 	requires: [
-		'NextThought.ux.SlideDeck'
+		'NextThought.common.ux.SlideDeck'
 	],
 
 	ui: 'image-zoom-view',
