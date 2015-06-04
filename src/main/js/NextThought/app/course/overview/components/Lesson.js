@@ -87,7 +87,7 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 		// if (AnalyticsUtil.getContextRoot() === 'overview') {
 		// 	AnalyticsUtil.addContext(me.currentPage);
 		// }
-		
+
 		return Promise.all([
 			(overviewSrc && ContentProxy.get(overviewSrc)) || Promise.resolve(null),
 			course.getAssignments(),
@@ -309,7 +309,7 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 
 
 	navigate: function(obj) {
-		obj.parent = this.currentNode
+		obj.parent = this.currentNode;
 		this.navigateToObject(obj);
 	}
 });

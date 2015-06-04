@@ -61,7 +61,7 @@ Ext.define('NextThought.common.StateStore', {
 			return Promise.resolve(this);
 		}
 
-		var me = this
+		var me = this;
 
 		return new Promise(function(fulfill, reject) {
 			me.on({

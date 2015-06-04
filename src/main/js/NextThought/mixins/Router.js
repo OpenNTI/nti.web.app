@@ -24,7 +24,7 @@ Ext.define('NextThought.mixins.Router', {
 		if (typeof result === 'string') {
 			result = {
 				route: result
-			}
+			};
 		}
 
 		this.pushRoute(result.title || '', result.route, result.precache);
@@ -79,6 +79,50 @@ Ext.define('NextThought.mixins.Router', {
 		this.mixins.Object.handleObject.call(this, object)
 			.then(this.__handleObjectRoute.bind(this))
 			.then(this.__handleNoObjectRoute.bind(this, object));
+	},
+
+	/**
+	 * Return the current context
+	 * @override
+	 * @return {Object|String}
+	 */
+	getContext: function() {},
+
+	/**
+	 * Returns an array of the current context the view is in
+	 * @return {[type]} [description]
+	 */
+	getCurrentContext: function() {
+		var context = [],
+			myContext = this.getContext(),
+			child = this.getActiveItem(),
+			childContext = child && child.getCurrentContext && child.getCurrentContext();
+
+		function addContext(c) {
+			if (Ext.isArray(c)) {
+				context = context.concat(c);
+			} else if (c) {
+				context.push(c);
+			}
+		}
+
+		if (!(myContext instanceof Promise)) {
+			myContext = Promise.resolve(myContext);
+		}
+
+		if (!(childContext instanceof Promise)) {
+			childContext = Promise.resolve(childContext);
+		}
+
+		return Promise.all([
+				myContext,
+				childContext
+			]).then(function(results) {
+				addContext(results[0]);
+				addContext(results[1]);
+
+				return context;
+			});
 	},
 
 	/**

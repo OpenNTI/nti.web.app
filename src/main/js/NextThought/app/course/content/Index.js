@@ -31,6 +31,13 @@ Ext.define('NextThought.app.course.content.Index', {
 	},
 
 
+	getContext: function() {
+		if (this.reader) {
+			return this.reader.pageInfo || this.reader.relatedWork;
+		}
+	},
+
+
 	onBeforeDeactivate: function() {
 		if (!this.reader) { return; }
 

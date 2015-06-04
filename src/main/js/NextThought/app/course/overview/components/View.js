@@ -56,6 +56,11 @@ Ext.define('NextThought.app.course.overview.components.View', {
 	},
 
 
+	getActiveLesson: function() {
+		return this.activeLesson;
+	},
+
+
 	bundleChanged: function(bundle) {
 		if (this.currentBundle === bundle) { return; }
 
@@ -133,6 +138,7 @@ Ext.define('NextThought.app.course.overview.components.View', {
 				record = me.navigation.selectRecord(record);
 				me.unmask();
 				me.setTitle(record.get('label'));
+				me.activeLesson = record;
 
 				return me.body.showLesson(record)
 					.then(me.alignNavigation.bind(me));

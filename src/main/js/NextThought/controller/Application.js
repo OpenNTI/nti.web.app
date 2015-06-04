@@ -11,6 +11,7 @@ Ext.define('NextThought.controller.Application', {
 		'NextThought.app.store.Actions',
 		'NextThought.app.chat.Actions',
 		'NextThought.app.groups.Actions',
+		'NextThought.app.context.StateStore',
 		'NextThought.common.state.Actions'
 	],
 
@@ -31,6 +32,7 @@ Ext.define('NextThought.controller.Application', {
 		me.StateActions = NextThought.common.state.Actions.create();
 		me.ChatActions = NextThought.app.chat.Actions.create();
 		me.GroupActions = NextThought.app.groups.Actions.create();
+		me.ContextStore = NextThought.app.context.StateStore.getInstance();
 
 		window.addEventListener('popstate', function(e) {
 			me.handleCurrentState();
@@ -75,7 +77,16 @@ Ext.define('NextThought.controller.Application', {
 	handleRoute: function(route, precache) {
 		var body = this.getBody();
 
-		return body.handleRoute(route, precache);
+		return body.handleRoute(route, precache)
+			.then(this.onRoute.bind(this));
+	},
+
+
+	onRoute: function() {
+		var body = this.getBody();
+
+		body.getCurrentContext()
+			.then(this.ContextStore.setContext.bind(this.ContextStore));
 	},
 
 
@@ -111,7 +122,8 @@ Ext.define('NextThought.controller.Application', {
 		function finish() {
 			history[fn](state || history.state, myTitle, myRoute);
 			document.title = title;
-			me.handleRoute(route, precache);
+			me.handleRoute(route, precache)
+				.then(me.onRoute.bind(me));
 		}
 
 		function stopNav() {

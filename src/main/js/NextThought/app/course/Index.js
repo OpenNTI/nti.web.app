@@ -95,6 +95,11 @@ Ext.define('NextThought.app.course.Index', {
 	},
 
 
+	getContext: function() {
+		return this.activeCourse;
+	},
+
+
 	onBeforeDeactivate: function() {
 		var current = this.getLayout().getActiveItem();
 

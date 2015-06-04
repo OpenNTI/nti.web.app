@@ -56,6 +56,13 @@ Ext.define('NextThought.app.course.overview.Index', {
 	},
 
 
+	getContext: function() {
+		var lessons = this.getLessons();
+
+		return this.activeLesson || lessons.getActiveLesson();
+	},
+
+
 	getLessons: function() {
 		return this.lessons;
 	},
@@ -80,6 +87,11 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 	showLessons: function(route, subRoute) {
 		var lessons = this.getLessons();
+
+		if (this.reader) {
+			Ext.destroy(this.reader);
+			delete this.reader;
+		}
 
 		this.getLayout().setActiveItem(lessons);
 
@@ -127,6 +139,8 @@ Ext.define('NextThought.app.course.overview.Index', {
 					return c;
 				}, []);
 
+				me.activeLesson = lesson;
+
 				route.precache.parent = {
 					label: lesson.get('label'),
 					title: lesson.get('label'),
@@ -145,13 +159,14 @@ Ext.define('NextThought.app.course.overview.Index', {
 					xtype: 'course-content',
 					currentBundle: me.currentBundle,
 					handleNavigation: me.handleNavigation.bind(me),
+					navigateToObject: me.navigateToObject.bind(me),
 					root: rootId,
 					rootRoute: route.precache.parent.route + '/content/'
 				});
 
-				me.reader.handleRoute(contentPath, route.precache);
-
 				me.getLayout().setActiveItem(me.reader);
+
+				return me.reader.handleRoute(contentPath, route.precache);
 			});
 	},
 
