@@ -188,7 +188,8 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 
 
 	findEnrollmentForCourse: function(courseOrNtiid) {
-		var ntiid = courseOrNtiid && courseOrNtiid.isModel ? courseOrNtiid.getId() : courseOrNtiid, me = this;
+		var ntiid = courseOrNtiid && courseOrNtiid.isModel ? courseOrNtiid.getId() : courseOrNtiid, 
+			me = this, match;
 
 		function fn(rec) {
 			var catalog = rec.getCourseCatalogEntry(),
@@ -198,14 +199,7 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 			return match;
 		}
 
-		return new Promise(function(fulfill, reject) {
-			var match = me.__findIn(me.ENROLLED_COURSES, fn);
-			if (match) {
-				return fulfill(match);
-			}
-
-			return reject(match);
-		});
+		return me.__findIn(me.ENROLLED_COURSES, fn);
 	},
 
 	findCourseForNtiid: function(ntiid) {

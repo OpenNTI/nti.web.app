@@ -93,7 +93,7 @@ Ext.define('NextThought.app.course.enrollment.options.OpenEnrollment', {
 	buildEnrollmentDetails: function(course, details) {
 		var me = this,
 			loadDetails,
-			option = course.getEnrollmentOption(me.NAME);
+			option = course.getEnrollmentOption && course.getEnrollmentOption(me.NAME);
 
 		if (!option || (!option.IsAvailable && !option.IsEnrolled)) {
 			return {
@@ -114,7 +114,7 @@ Ext.define('NextThought.app.course.enrollment.options.OpenEnrollment', {
 					lock: true,
 					doEnrollment: function(cmp) {
 						return new Promise(function(fulfill, reject) {
-							cmp.CourseEnrollmentActions.changeEnrollmentStatus(course, true, function(success, changed, status) {
+							cmp.CourseEnrollmentActions.enrollCourse(course, function(success, changed, status) {
 								if (success) {
 									fulfill(changed);
 								} else {
@@ -125,7 +125,7 @@ Ext.define('NextThought.app.course.enrollment.options.OpenEnrollment', {
 					},
 					undoEnrollment: function(cmp) {
 						return new Promise(function(fulfill, reject) {
-							cmp.CourseEnrollmentActions.changeEnrollmentStatus(course, false, function(success, changed, status) {
+							cmp.CourseEnrollmentActions.dropCourse(course, function(success, changed, status) {
 								if (success) {
 									fulfill(changed);
 								} else {
