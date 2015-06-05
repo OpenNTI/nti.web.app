@@ -1,6 +1,15 @@
 Ext.define('NextThought.app.userdata.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
+	getSocket: function() {
+		if (!this.socket) {
+			this.socket = Socket;
+		}
+
+		return this.socket;
+	},
+
+
 	setPreference: function(key, pref) {
 		this.page_preference_map = this.page_preference_map || {};
 

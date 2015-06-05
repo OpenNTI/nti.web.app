@@ -298,7 +298,9 @@ Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
 		var me = this,
 				note = v.body,
 				title = v.title,
-				pageInfo = this.reader.getLocation().pageInfo,
+				location = this.reader.getLocation(),
+				pageInfo = location.pageInfo,
+				bundle = location.currentBundle,
 				pageId = pageInfo.getId(),
 				style = editor.lineInfo.style || 'suppressed',
 				rangeInfo;
@@ -319,11 +321,16 @@ Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
 		editor.el.mask(getString('NextThought.view.content.reader.NoteOverlay.saving'));
 
 		rangeInfo = me.rangeForLineInfo(editor.lineInfo, style);
-		me.reader.fireEvent('save-new-note',
+		me.UserDataActions.saveNewNote(
 			title, note, rangeInfo.range, rangeInfo.container || pageId,
-			SharingUtils.sharedWithForSharingInfo(v.sharingInfo),
+			SharingUtils.sharedWithForSharingInfo(v.sharingInfo, bundle),
 			style, afterSave
-		);
+		).then(function() {
+			editor.unmask();
+			editor.deactivate();
+		}).fail(function() {
+			editor.unmask();
+		});
 
 		return false;
 	},

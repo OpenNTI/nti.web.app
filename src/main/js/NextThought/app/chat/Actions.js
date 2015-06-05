@@ -45,7 +45,7 @@ Ext.define('NextThought.app.chat.Actions', {
 		var me = this;
 
 		//TODO: Get all the active chats out of temp storage and restore them
-		
+
 		$AppConfig.Preferences.getPreference('ChatPresence/Active')
 			.then(function(value) {
 				if (value) {

@@ -1,7 +1,8 @@
 Ext.define('NextThought.store.UserSearch', {
 	extend: 'Ext.data.Store',
 	requires: [
-		'NextThought.proxy.UserSearch'
+		'NextThought.proxy.UserSearch',
+		'NextThought.app.groups.StateStore'
 	],
 
 	model: 'NextThought.model.UserSearch',
@@ -16,10 +17,10 @@ Ext.define('NextThought.store.UserSearch', {
 	],
 
 	sorters: [
-		{sorterFn: function(a,b) {
+		{sorterFn: function(a, b) {
 			var list = this.contactsList, aa, bb;
 			if (!this.contactsList || (new Date() - (this.lastUsed || 0)) > 0) {
-				this.contactsList = list = Ext.getStore('FriendsList').getContacts();
+				this.contactsList = list = NextThought.app.groups.StateStore.getInstance().getFriendsList().getContacts();
 				this.lastUsed = new Date();
 			}
 

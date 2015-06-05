@@ -2,7 +2,8 @@ Ext.define('NextThought.model.UserSearch', {
 	extend: 'NextThought.model.Base',
 	requires: [
 		'NextThought.model.User',
-		'NextThought.proxy.UserSearch'
+		'NextThought.proxy.UserSearch',
+		'NextThought.app.chat.StateStore'
 	],
 
 	mixins: { shareEntity: 'NextThought.mixins.ShareEntity' },
@@ -32,7 +33,7 @@ Ext.define('NextThought.model.UserSearch', {
 	fields: [
 		{ name: 'Username', type: 'string' },
 		{ name: 'Presence', convert: function(v, record) {
-			var presence = Ext.getStore('PresenceInfo').getPresenceOf(record.get('Username'));
+			var presence = NextThought.app.chat.StateStore.getInstance().getPresenceOf(record.get('Username'));
 			if (presence) {
 				console.log(presence, presence.toString());
 			} else if ($AppConfig.debug) {

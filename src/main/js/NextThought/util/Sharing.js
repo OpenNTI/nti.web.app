@@ -243,9 +243,9 @@ Ext.define('NextThought.util.Sharing', {
 						toResolve -= 1;
 					}
 
-                    if (!u.Unresolved){
-                        dn = isMe(u) ? 'me' : u.getName();
-                    }
+					if (!u.Unresolved) {
+						dn = isMe(u) ? 'me' : u.getName();
+					}
 
 					if (!Ext.isEmpty(dn) && dn.toLowerCase() !== 'unknown' && (!onlyMe || dn !== 'me')) {
 						names.push(' ' + dn);

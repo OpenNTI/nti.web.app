@@ -252,7 +252,7 @@ Ext.define('NextThought.app.annotations.note.Main', {
 				.then(this.setContext.bind(this));
 		}
 
-		// this.callParent(arguments);
+		this.callParent(arguments);
 		if (this.record) {
 			this.mun(this.record, 'destroy', this.wasDeleted, this);
 		}

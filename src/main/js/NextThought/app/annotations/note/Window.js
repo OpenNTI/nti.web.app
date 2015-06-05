@@ -4,6 +4,8 @@ Ext.define('NextThought.app.annotations.note.Window', {
 
 	layout: 'none',
 
+	cls: 'note-window',
+
 	requires: [
 		'NextThought.app.windows.StateStore',
 		'NextThought.app.windows.components.Header',
