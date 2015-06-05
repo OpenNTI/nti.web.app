@@ -41,7 +41,7 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 		},
 		'due': {
 			'property': 'due',
-			'direction': 'DESC',
+			'direction': 'ASC',
 			'getGroupString': function(val) {
 				var today = (new Date()).setHours(0, 0, 0),
 					due = val.get('due'),
