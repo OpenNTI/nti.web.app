@@ -37,7 +37,7 @@ Ext.define('NextThought.app.groups.StateStore', {
 			this.friendsListStores[pid] = new Ext.data.Store({model: 'NextThought.model.User', id: pid});
 		}
 
-		return this.friendsListStore[pid];
+		return this.friendsListStores[pid];
 	},
 
 

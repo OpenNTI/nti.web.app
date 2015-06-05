@@ -126,10 +126,10 @@ Ext.define('NextThought.app.groups.Actions', {
 	},
 
 
-	createFriendsListUnguarded: function(displayName, username, friends, dyamic, callback, errorCallback, scope) {
+	createFriendsListUnguarded: function(displayName, username, friends, dynamic, callback, errorCallback, scope) {
 		var me = this,
 			rec = NextThought.model.FriendsList.create(),
-			store = me.GroupsStore.getFriendsList();
+			store = me.GroupStore.getFriendsList();
 
 		rec.set('Username', username);
 		//We used to set realname here, but we really want alias
