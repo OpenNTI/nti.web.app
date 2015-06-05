@@ -21,11 +21,12 @@ Ext.define('NextThought.app.annotations.Index', {
 	]})),
 
 
-    afterRender: function(){
-        this.callParent(arguments);
+	afterRender: function() {
+		this.callParent(arguments);
 
-        this.on('beforedeactivate', 'beforeDeactivate');
-    },
+		this.on('beforedeactivate', 'beforeDeactivate');
+		this.on('select', 'navigateToNote');
+	},
 
 
 	handleEvent: function(e) {
@@ -36,18 +37,29 @@ Ext.define('NextThought.app.annotations.Index', {
 	},
 
 
-    beforeDeactivate: function(){
-        // FIXME: they should be a better way to check if the editor is open on the note window.
-        var editorEl = Ext.getBody().down(".note-window .editor-active");
+	beforeDeactivate: function() {
+		// FIXME: they should be a better way to check if the editor is open on the note window.
+		var editorEl = Ext.getBody().down('.note-window .editor-active');
 
-        if(editorEl && editorEl.isVisible()){
-            var msg = getString('NextThought.view.content.reader.NoteOverlay.editing');
-            Ext.defer(function() {
-                alert({msg: msg});
-            }, 1);
-            return false;
-        }
+		if (editorEl && editorEl.isVisible()) {
+			var msg = getString('NextThought.view.content.reader.NoteOverlay.editing');
+			Ext.defer(function() {
+				alert({msg: msg});
+			}, 1);
+			return false;
+		}
 
-        return true;
-    }
+		return true;
+	},
+
+
+	navigateToNote: function(sel, rec) {
+		var el = this.getNodeByRecord(rec);
+
+		if (this.showNote) {
+			this.showNote(rec, el);
+		} else {
+			console.error('No Handler to show note');
+		}
+	}
 });

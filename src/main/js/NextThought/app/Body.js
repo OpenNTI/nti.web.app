@@ -8,7 +8,8 @@ Ext.define('NextThought.app.Body', {
 		'NextThought.app.library.Index',
 		'NextThought.app.course.Index',
 		'NextThought.util.Parsing',
-		'NextThought.app.navigation.StateStore'
+		'NextThought.app.navigation.StateStore',
+		'NextThought.app.windows.Index'
 	],
 
 	mixins: {

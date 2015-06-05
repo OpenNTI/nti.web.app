@@ -6,7 +6,8 @@ Ext.define('NextThought.app.Index', {
 		'NextThought.app.MessageBox',
 		'NextThought.app.MessageBar',
 		'NextThought.app.navigation.Index',
-		'NextThought.app.Body'
+		'NextThought.app.Body',
+		'NextThought.app.windows.Index'
 	],
 
 	border: false,
@@ -20,7 +21,8 @@ Ext.define('NextThought.app.Index', {
 
 	items: [
 		{xtype: 'main-navigation', id: 'nav'},
-		{xtype: 'main-views', id: 'view'}
+		{xtype: 'main-views', id: 'view'},
+		{xtype: 'windows-view', id: 'window'}
 	],
 
 

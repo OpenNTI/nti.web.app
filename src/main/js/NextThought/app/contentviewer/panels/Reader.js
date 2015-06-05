@@ -8,7 +8,8 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 		'NextThought.app.contentviewer.notepad.View',
 		'NextThought.store.FlatPage',
 		'NextThought.app.annotations.Index',
-		'NextThought.app.userdata.Actions'
+		'NextThought.app.userdata.Actions',
+		'NextThought.app.windows.Actions'
 	],
 
 
@@ -48,6 +49,7 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 		this.callParent(arguments);
 
 		this.UserDataActions = NextThought.app.userdata.Actions.create();
+		this.WindowActions = NextThought.app.windows.Actions.create();
 		this.showReader();
 
 		this.on('beforedeactivate', this.beforeDeactivate, this);
@@ -90,7 +92,8 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 				iconCls: 'discuss',
 				xtype: 'annotation-view',
 				discussion: true,
-				store: this.flatPageStore
+				store: this.flatPageStore,
+				showNote: this.showNote.bind(this)
 			}
 		));
 
@@ -229,5 +232,10 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 
 	doNavigation: function(title, route, precache) {
 		this.handleNavigation(title, route, precache);
+	},
+
+
+	showNote: function(record, el) {
+		this.WindowActions.showWindow(record, null, el);
 	}
 });

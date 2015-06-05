@@ -284,7 +284,7 @@ Ext.define('NextThought.app.annotations.renderer.Manager', {
 					}
 
 					y = o.render();
-					if (y !== NextThought.view.annotations.Base.HIDDEN) {
+					if (y !== NextThought.app.annotations.Base.HIDDEN) {
 						b = me.getBucket(Math.ceil(y));
 						if (b) {
 							o.getRecord().set('line', b.line);

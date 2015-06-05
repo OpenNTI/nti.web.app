@@ -1742,7 +1742,7 @@ Ext.define('NextThought.util.Anchors', {
 		}
 
 		var result,
-				body = docElement.body || this.findElementsWithTagName(docElement, 'body'),
+				body = docElement.body || this.findElementsWithTagName(docElement, 'body')[0],
 				referenceNode = staticResult.referencePointer.locateRangePointInAncestor(body).node,
 				container,
 				parts,

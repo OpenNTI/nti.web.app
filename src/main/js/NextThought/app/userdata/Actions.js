@@ -305,6 +305,26 @@ Ext.define('NextThought.app.userdata.Actions', {
 	 },
 
 
+	 onAnnotationsLineFilter: function(cmp, line) {
+	 	var context = this.UserDataStore.getContext(cmp),
+	 		store = context.flatPageStore;
+
+	 	store.removeFilter('lineFilter');
+
+	 	if (line) {
+	 		store.filteredLine = line;
+	 		store.addFilter({
+	 			id: 'lineFilter',
+	 			filterFn: function(r) {
+	 				return r.get('line') === line;
+	 			}
+	 		});
+	 	}
+
+	 	store.sort();
+	 },
+
+
 	 onAnnotationsFilter: function(cmp) {
 	 	var context = this.UserDataStore.getContext(cmp),
 	 		listParams = FilterManager.getServerListParams(),

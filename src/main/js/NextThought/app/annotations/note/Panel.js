@@ -738,46 +738,21 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 	},
 
 
-	setContext: function(doc, cleanRoot) {
+	setContext: function(context) {
 		if (!this.rendered) {
 			this.on('afterrender', Ext.bind(this.setContext, this, arguments), this, {single: true});
 			return;
 		}
-		var r = this.record, newContext, reader = this.reader,
-			rangeDesc = r.get('applicableRange'),
-			cid = r.get('ContainerId'),
-			page = doc && doc.querySelector('#NTIContent');
 
-		try {
-			//if the range is empty and the cid is a page
-			if (rangeDesc.isEmpty && page && page.getAttribute('data-page-ntiid') === cid) {
-				this.context.destroy();
-				return;
-			}
+		this.context.setHTML('');
 
-			this.context.setHTML('');
-			newContext = doc && RangeUtils.getContextAroundRange(rangeDesc, doc, cleanRoot, cid);
-
-			if (!newContext) {
-				reader = reader || ReaderPanel.get('default');
-				//last ditch...TODO: remove this dependancy:
-				newContext = reader.getDomContextForRecord(r, doc, cleanRoot);
-			}
-
-			if (newContext) {
-				newContext = this.fixUpCopiedContext(newContext);
-				this.context.appendChild(newContext);
-			}
+		if (context) {
+			this.context.appendChild(context);
 
 			if (Ext.isGecko || Ext.isIE9) {
 				this.resizeMathJax(this.context);
 			}
-
 		}
-		catch (e2) {
-			console.error(Globals.getError(e2));
-		}
-
 	},
 
 

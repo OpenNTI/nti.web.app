@@ -66,7 +66,8 @@ Ext.define('NextThought.app.contentviewer.Index', {
 			path: config.path,
 			pageSource: config.pageSource,
 			bundle: config.bundle,
-			handleNavigation: config.handleNavigation
+			handleNavigation: config.handleNavigation,
+			navigateToObject: config.navigateToObject
 		};
 
 		if (config.assignment) {

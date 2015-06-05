@@ -395,7 +395,7 @@ Ext.define('NextThought.util.Ranges', {
 	 */
 	getContextAroundRange: function(applicableRange, doc, cleanRoot, containerId) {
 		var utils = Boolean(applicableRange.isTimeRange) ? NextThought.view.slidedeck.transcript.AnchorResolver : Anchors,
-			range = utils.toDomRange.apply(this, arguments);
+			range = utils.toDomRange.apply(utils, arguments);
 
 		if (range) {
 			return this.fixUpCopiedContext(this.expandRangeGetNode(range, doc));

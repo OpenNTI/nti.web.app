@@ -95,7 +95,8 @@ Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 				toggle = t && t.hasCls('active'),
 				line = !toggle && t && parseInt(t.getAttribute('data-line'), 10);
 
-		this.fireEvent('filter-by-line', this.reader, line);
+		this.UserDataActions.onAnnotationsLineFilter(this.reader, line);
+
 		this.gutterEl.select('[data-line]').removeCls('active');
 		if (t && !toggle) {
 			t.addCls('active');

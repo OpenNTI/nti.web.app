@@ -92,7 +92,8 @@ Ext.define('NextThought.app.course.content.Index', {
 			path: this.ContentActions.getContentPath(page.getId(), this.currentBundle, parent),
 			pageSource: pageSource,
 			bundle: this.currentBundle,
-			handleNavigation: this.handleNavigation.bind(this)
+			handleNavigation: this.handleNavigation.bind(this),
+			navigateToObject: this.navigateToObject && this.navigateToObject.bind(this)
 		});
 
 		this.setTitle(page.get('label'));
@@ -109,7 +110,7 @@ Ext.define('NextThought.app.course.content.Index', {
 
 		ntiid = ParseUtils.decodeFromURI(ntiid);
 
-		this.__loadContent(ntiid, obj)
+		return this.__loadContent(ntiid, obj)
 			.then(function(page) {
 				me.showReader(page, route.precache.parent);
 			});

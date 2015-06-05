@@ -240,8 +240,6 @@ Ext.define('NextThought.app.annotations.note.Main', {
 
 
 	setRecord: function(r) {
-		var reader = this.reader;
-
 		//If we have an editor active for god sake don't blast it away
 		if (this.editorActive()) {
 			console.log('Need to buffer set record', r);
@@ -249,7 +247,12 @@ Ext.define('NextThought.app.annotations.note.Main', {
 			return;
 		}
 
-		this.callParent(arguments);
+		if (this.readerContext) {
+			this.readerContext.load()
+				.then(this.setContext.bind(this));
+		}
+
+		// this.callParent(arguments);
 		if (this.record) {
 			this.mun(this.record, 'destroy', this.wasDeleted, this);
 		}
@@ -258,9 +261,6 @@ Ext.define('NextThought.app.annotations.note.Main', {
 		}
 
 		this.replyOptions.show();
-		this.setContext(
-			reader.getDocumentElement(),
-			reader.getCleanContent());
 	},
 
 

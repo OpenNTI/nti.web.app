@@ -222,7 +222,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 				return true;
 			}
 
-			(lineage || []).forEach(function(lineage) {
+			(lineages || []).forEach(function(lineage) {
 				if (store.getById(lineage[Math.max(0, lineage.length - 2)])) {
 					canGetTo = true;
 				}
