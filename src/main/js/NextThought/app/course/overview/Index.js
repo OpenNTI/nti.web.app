@@ -88,12 +88,12 @@ Ext.define('NextThought.app.course.overview.Index', {
 	showLessons: function(route, subRoute) {
 		var lessons = this.getLessons();
 
+		this.getLayout().setActiveItem(lessons);
+
 		if (this.reader) {
 			Ext.destroy(this.reader);
 			delete this.reader;
 		}
-
-		this.getLayout().setActiveItem(lessons);
 
 		return lessons.handleRoute(route.path, route.precache);
 	},
