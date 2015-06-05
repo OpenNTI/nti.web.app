@@ -307,7 +307,7 @@ Ext.define('NextThought.view.content.reader.ResourceManagement', {
 				target = Ext.fly(el).down('img,iframe', true),
 				title = get(target, 'data-title'),
 				caption = get(target, 'data-caption'),
-				annotatable = Ext.Array.contains('nti-data-markupenabled'),
+				annotatable = Ext.Array.contains(p, 'nti-data-markupenabled'),
 				width, button, comment,
 				bar = tpl.append(el, {
 					title: title,
