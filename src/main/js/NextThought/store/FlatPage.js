@@ -78,6 +78,8 @@ Ext.define('NextThought.store.FlatPage', {
 			return;
 		}
 
+		this.mon(otherStore, 'bookmark-loaded', this.fireEvent.bind(this, 'bookmark-loaded'));
+
 		if (Ext.Array.contains(otherStore.$boundToFlat || [], this)) { return; }
 
 

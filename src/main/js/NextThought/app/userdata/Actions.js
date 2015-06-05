@@ -5,7 +5,9 @@ Ext.define('NextThought.app.userdata.Actions', {
 		'NextThought.app.userdata.StateStore',
 		'NextThought.app.groups.StateStore',
 		'NextThought.store.PageItem',
-		'NextThought.filter.FilterManager'
+		'NextThought.filter.FilterManager',
+		'NextThought.model.Bookmark',
+		'NextThought.model.anchorables.ContentRangeDescription'
 	],
 
 	constructor: function() {
@@ -458,5 +460,28 @@ Ext.define('NextThought.app.userdata.Actions', {
 	 			cmp[delegate] = delegates[delegate];
 	 		}
 	 	}
+	 },
+
+
+	 saveNewBookmark: function(container) {
+	 	var me = this,
+	 		bm = NextThought.model.Bookmark.create({
+	 			 ContainerId: container,
+	 			 applicableRange: NextThought.model.anchorables.ContentRangeDescription.create()
+	 		});
+
+	 	return new Promise(function(fulfill, reject) {
+	 		bm.save({
+	 			callback: function(record, operation) {
+	 				try {
+	 					if (operation.success) {
+	 						fulfill(record);
+	 					}
+	 				} catch (err) {
+	 					console.error('Something went terribly wrong...', err.stack || err.message);
+	 				}
+	 			}
+	 		});
+	 	});
 	 }
 });

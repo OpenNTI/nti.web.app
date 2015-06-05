@@ -100,6 +100,10 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 
 		readerContent = this.getReaderContent();
 
+		this.mon(this.flatPageStore, 'bookmark-loaded', function(r) {
+			readerContent.pageWidgets.onBookmark(r);
+		});
+
 		Ext.destroy(this.readerMons);
 
 		if (readerContent) {
