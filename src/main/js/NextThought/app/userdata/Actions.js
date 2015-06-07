@@ -10,7 +10,8 @@ Ext.define('NextThought.app.userdata.Actions', {
 		'NextThought.model.Bookmark',
 		'NextThought.model.anchorables.ContentRangeDescription',
 		'NextThought.app.context.StateStore',
-		'NextThought.util.Anchors'
+		'NextThought.util.Anchors',
+		'NextThought.util.Annotations'
 	],
 
 	constructor: function() {
@@ -788,5 +789,34 @@ Ext.define('NextThought.app.userdata.Actions', {
 
 		selectedText = range ? range.toString() : '';
 		return this.__saveNote(rangeDescription.description, body, title, container, shareWith, selectedText, style, callback);
+	},
+
+
+	saveNewReply: function(recordRepliedTo, replyBody, shareWith, callback) {
+		//some validation of input:
+		if (!recordRepliedTo) {
+			return Promise.reject('Must reply a record to reply to');
+		}
+
+		if (!Array.isArray(replyBody)) {
+			replyBody = [replyBody];
+		}
+
+		var me = this,
+			replyRecord = recordRepliedTo.makeReply(),
+			root = AnnotationUtils.getNoteRoot(recordRepliedTo);
+
+		replyRecord.set('body', replyBody);
+		console.log('Saving reply', replyRecord, ' to ', recordRepliedTo);
+
+		return new Promise(function(fulfill, reject) {
+			replyRecord.save({scope: me, callback: me.getSaveCallback(fulfill, reject)});
+		}).then(function(record) {
+			if (!root.store) {
+				recordRepliedTo.fireEvent('child-added', record);
+			}
+
+			return record;
+		});
 	}
 });

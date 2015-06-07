@@ -5,7 +5,8 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 	requires: [
 		'NextThought.cache.UserRepository',
 		'NextThought.app.annotations.note.Templates',
-		'NextThought.layout.component.Natural'
+		'NextThought.layout.component.Natural',
+		'NextThought.app.userdata.Actions'
 	],
 
 	mixins: {
@@ -145,6 +146,7 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 		this.mixins.likeAndFavoriteActions.constructor.call(this);
 		this.mixins.flagActions.constructor.call(this);
 		this.on('beforedestroy', this.onBeforeDestroyCheck, this);
+		this.UserDataActions = NextThought.app.userdata.Actions.create();
 	},
 
 	replyIdPrefix: function() {
@@ -427,7 +429,9 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 			}
 
 			try {
-				me.fireEvent('save-new-reply', r, v.body, [], callback);
+				me.UserDataActions.saveNewReply(r, v.body, [])
+					.then(callback.bind(this, true))
+					.fail(callback.bind(this, false));
 			}
 			catch (e) {
 				console.error(Globals.getError(e));

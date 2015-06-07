@@ -693,6 +693,72 @@ Ext.define('NextThought.util.Content', {
 		string = this.bustCorsForResources(string, 'h', locationHash);
 		string = string.replace(/(src|href|poster)="(.*?)"/igm, fixReferences);
 		return string;
+	},
+
+
+	/**
+	 * @param  {String|Node} html content to get the snippet from
+	 * @param  {int} max
+	 * @return {String}
+	 */
+	getHTMLSnippet: function(html, max) {
+		var i = /[^\.\?!]+[\.\?!]?/,
+			spaces = /(\s{2,})/,
+			df = document.createDocumentFragment(),
+			d = document.createElement('div'),
+			out = document.createElement('div'),
+			texts, c = 0,
+			r = document.createRange();
+
+		df.appendChild(d);
+		if (Ext.isString(html)) {
+			d.innerHTML = html;
+		}
+		else if (html && html.cloneNode) {
+			d.appendChild(html.cloneNode(true));
+		}
+		else {
+			Ext.Error.raise('IllegalArgument');
+		}
+
+		Ext.each(Ext.DomQuery.select('.body-divider .toolbar', d), function(e) { e.parentNode.removeChild(e); });
+		html = d.innerHTML; //filter out whiteboard controls
+
+		if (d.firstChild) {
+			r.setStartBefore(d.firstChild);
+		}
+		texts = AnnotationUtils.getTextNodes(d);
+
+		Ext.each(texts, function(t) {
+			var o = c + t.length,
+				v = t.nodeValue,
+				offset;
+
+			Ext.each(spaces.exec(v) || [], function(gap) {
+				o -= (gap.length - 1);//subtract out the extra spaces, reduce them to count as 1 space(hence the -1)
+			});
+
+
+			if (o > max) { //Time to split!
+				offset = max - c;
+				v = v.substr(offset);
+				v = i.exec(v);
+				offset += (v && v.length > 0 ? v[0].length : 0);
+				r.setEnd(t, offset);
+				return false;
+			}
+
+			c = o;
+			return true;
+		});
+
+		if (!r.collapsed) {
+			out.appendChild(r.cloneContents());
+			return out.innerHTML;
+		}
+
+		//wasn't long enough to split
+		return html;
 	}
 
 }, function() {
