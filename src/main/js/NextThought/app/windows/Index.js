@@ -2,6 +2,10 @@ Ext.define('NextThought.app.windows.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.windows-view',
 
+	mixins: {
+		Router: 'NextThought.mixins.Router'
+	},
+
 	layout: 'none',
 
 	requires: [
@@ -37,6 +41,13 @@ Ext.define('NextThought.app.windows.Index', {
 	},
 
 
+	removeOpenCls: function() {
+		var html = document.getElementsByTagName('html')[0];
+
+		html.classList.remove('window-open');
+	},
+
+
 	showWindow: function(object, path, el) {
 		var cmp = this.WindowStore.getComponentForMimeType(object.mimeType);
 
@@ -56,5 +67,9 @@ Ext.define('NextThought.app.windows.Index', {
 	},
 
 
-	doClose: function() {}
+	doClose: function() {
+		this.viewContainer.removeAll();
+		this.removeOpenCls();
+
+	}
 });
