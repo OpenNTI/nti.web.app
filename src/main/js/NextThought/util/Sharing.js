@@ -72,10 +72,6 @@ Ext.define('NextThought.util.Sharing', {
 		var communities = [], sharedWithIds,
 				publicScope;
 
-		if (!scopeProvider) {
-			scopeProvider = this.getCurrentSharingInfo();
-		}
-
 		publicScope = (scopeProvider && scopeProvider.getPublicScope()) || [];
 		sharedWithIds = Ext.Array.map(sharedWith, function(u) {
 			return u.getId ? u.getId() : u;
@@ -135,10 +131,6 @@ Ext.define('NextThought.util.Sharing', {
 				targets;
 
 		if (!scopeProvider) {
-			scopeProvider = this.getCurrentSharingInfo();
-		}
-
-		if (!scopeProvider) {
 			Error.raiseForReport('No scope provider');//won't interupt. :/
 		}
 
@@ -160,7 +152,7 @@ Ext.define('NextThought.util.Sharing', {
 
 
 	sharedWithToSharedInfo: function(sharedWith, scopeProvider) {
-		var sp = scopeProvider || this.getCurrentSharingInfo(),
+		var sp = scopeProvider,
 				isPublic = this.isPublic(sharedWith, sp),
 				communities = [],
 				list = [],
