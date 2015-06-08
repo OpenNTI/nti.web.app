@@ -11,6 +11,7 @@ Ext.define('NextThought.app.windows.Index', {
 	requires: [
 		'NextThought.app.windows.components.Container',
 		'NextThought.app.windows.StateStore',
+		'NextThought.app.windows.Actions',
 		'NextThought.app.annotations.note.Window'
 	],
 
@@ -25,6 +26,7 @@ Ext.define('NextThought.app.windows.Index', {
 		this.callParent(arguments);
 
 		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
+		this.WindowActions = NextThought.app.windows.Actions.create();
 
 		this.viewContainer = this.down('window-container');
 
@@ -70,6 +72,6 @@ Ext.define('NextThought.app.windows.Index', {
 	doClose: function() {
 		this.viewContainer.removeAll();
 		this.removeOpenCls();
-
+		this.WindowActions.closeWindow();
 	}
 });

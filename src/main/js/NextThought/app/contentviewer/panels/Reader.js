@@ -240,6 +240,6 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 
 
 	showNote: function(record, el) {
-		this.WindowActions.showWindow(record, null, el);
+		this.WindowActions.pushWindow(record, el);
 	}
 });

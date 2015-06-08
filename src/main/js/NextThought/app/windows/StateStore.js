@@ -10,6 +10,9 @@ Ext.define('NextThought.app.windows.StateStore', {
 	},
 
 
+	obj_map: {},
+
+
 	getComponentForMimeType: function(type) {
 		return this.self.MIME_TO_CMP[type];
 	},
@@ -17,5 +20,23 @@ Ext.define('NextThought.app.windows.StateStore', {
 
 	fireShowWindow: function(object, path, el) {
 		this.fireEvent('show-window', object, path, el);
+	},
+
+
+	firePushWindow: function(obj, title, route, precache) {
+		this.fireEvent('push-window', obj, title, route, precache);
+	},
+
+
+	cacheObject: function(id, obj, el) {
+		this.obj_map[id] = {
+			obj: obj,
+			el: el
+		};
+	},
+
+
+	getObject: function(id) {
+		return this.obj_map[id];
 	}
 });

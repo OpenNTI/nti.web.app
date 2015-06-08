@@ -213,12 +213,17 @@ Ext.define('NextThought.mixins.routing.Path', {
 			console.warn('No Handler for route', route);
 		}
 
-		if (val instanceof Promise) {
-			return val;
+		if (!(val instanceof Promise)) {
+		 	val = Promise.resolve(val);
 		}
 
-		return Promise.resolve(val);
+		val.then(this.afterRoute.bind(this));
+
+		return val;
 	},
+
+
+	afterRoute: function() {},
 
 
 	getCurrentRoute: function() {

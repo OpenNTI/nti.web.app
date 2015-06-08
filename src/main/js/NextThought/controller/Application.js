@@ -78,15 +78,18 @@ Ext.define('NextThought.controller.Application', {
 		var body = this.getBody();
 
 		return body.handleRoute(route, precache)
-			.then(this.onRoute.bind(this));
+			.then(this.onRoute.bind(this, null, route));
 	},
 
 
-	onRoute: function() {
-		var body = this.getBody();
+	onRoute: function(title, route) {
+		var body = this.getBody(),
+			store = this.ContextStore;
 
 		body.getCurrentContext()
-			.then(this.ContextStore.setContext.bind(this.ContextStore));
+			.then(function(context) {
+				store.setContext(context, title || document.title, route);
+			});
 	},
 
 
@@ -123,7 +126,7 @@ Ext.define('NextThought.controller.Application', {
 			history[fn](state || history.state, myTitle, myRoute);
 			document.title = title;
 			me.handleRoute(route, precache)
-				.then(me.onRoute.bind(me));
+				.then(me.onRoute.bind(me, title, route));
 		}
 
 		function stopNav() {
@@ -176,5 +179,7 @@ Ext.define('NextThought.controller.Application', {
 		title = this.__mergeTitle(title);
 
 		document.title = title;
+
+		this.ContextStore.setCurrentTitle(title);
 	}
 });

@@ -19,7 +19,35 @@ Ext.define('NextThought.app.windows.Actions', {
 
 
 	/**
-	 * Given an object or NTIID show a modal for it
+	 * Push a window to the state
+	 * @param  {String|Model} objectOrNTIID the object or ntiid of the object to show
+	 * @param  {Array} path          the path to show for the model
+	 * @param  {Element} el           element to show the note opening from
+	 */
+	pushWindow: function(objectOrNTIID, el) {
+		var id = objectOrNTIID;
+
+		if (typeof objectOrNTIID !== 'string') {
+			id = objectOrNTIID.getId();
+		}
+
+		if (objectOrNTIID.isModel) {
+			this.WindowStore.cacheObject(id, objectOrNTIID, el);
+		}
+
+		this.WindowStore.firePushWindow({
+			openWindow: id
+		});
+	},
+
+
+	closeWindow: function() {
+		this.WindowStore.firePushWindow({openWindow: null});
+	},
+
+
+	/**
+	 * Given an object or NTIID show a modal for it, without pushing or replacing state
 	 *
 	 *
 	 * @param  {String|Model} objectOrNTIID the object or ntiid of the object to show
@@ -27,18 +55,27 @@ Ext.define('NextThought.app.windows.Actions', {
 	 * @return {Promise}          fulfills when the window is open
 	 */
 	showWindow: function(objectOrNTIID, path, el) {
-		var me = this,
+		var me = this, id, cache,
 			fetchObject;
 
+		if (typeof objectOrNTIID !== 'string') {
+			id = object.getId();
+		} else {
+			id = objectOrNTIID;
+		}
+
+		cache = this.WindowStore.getObject(id);
+
+		if (cache) {
+			objectOrNTIID = cache.obj;
+			el = el || cache.el;
+		}
+
 		if (typeof objectOrNTIID === 'string') {
-			fetchObject = this.__resolveBeforeShow(objectOrNTIID)
-				.then(function(object) {
-					me.showModal(object, context);
-				});
+			fetchObject = this.__resolveBeforeShow(objectOrNTIID);
 		} else {
 			fetchObject = objectOrNTIID;
 		}
-
 
 		return Promise.all([
 				fetchObject,

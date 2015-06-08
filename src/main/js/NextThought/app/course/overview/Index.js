@@ -109,6 +109,12 @@ Ext.define('NextThought.app.course.overview.Index', {
 		lessonId = ParseUtils.decodeFromURI(lessonId);
 		rootId = ParseUtils.decodeFromURI(rootId);
 
+		if (me.reader) {
+			if (me.reader.root === rootId) {
+				return Promise.resolve();
+			}
+		}
+
 		return me.store.onceBuilt()
 			.then(function() {
 				var siblings;

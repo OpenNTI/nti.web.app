@@ -9,7 +9,10 @@ Ext.define('NextThought.app.Body', {
 		'NextThought.app.course.Index',
 		'NextThought.util.Parsing',
 		'NextThought.app.navigation.StateStore',
-		'NextThought.app.windows.Index'
+		'NextThought.app.windows.Index',
+		'NextThought.app.windows.StateStore',
+		'NextThought.app.windows.Actions',
+		'NextThought.app.context.StateStore'
 	],
 
 	mixins: {
@@ -30,8 +33,12 @@ Ext.define('NextThought.app.Body', {
 		this.initRouter();
 
 		this.NavigationStore = NextThought.app.navigation.StateStore.getInstance();
+		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
+		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.ContextStore = NextThought.app.context.StateStore.getInstance();
 
 		this.mon(this.NavigationStore, 'set-active-content', this.updateBodyContent.bind(this));
+		this.mon(this.WindowStore, 'push-window', this.pushWindow.bind(this));
 
 		this.addRoute('/library', this.setLibraryActive.bind(this));
 		this.addRoute('/course/:id', this.setCourseActive.bind(this));
@@ -53,6 +60,28 @@ Ext.define('NextThought.app.Body', {
 		this.getLayout().setActiveItem(cmp);
 
 		return cmp;
+	},
+
+
+	afterRoute: function() {
+		var state = this.getRouteState();
+
+		if (state.openWindow) {
+			this.WindowActions.showWindow(state.openWindow);
+		}
+	},
+
+
+	pushWindow: function(obj, title, route, precache) {
+		if (!title) {
+			title = this.ContextStore.getCurrentTitle();
+		}
+
+		if (!route) {
+			route = this.ContextStore.getCurrentRoute();
+		}
+
+		this.pushRouteState(obj, title, route, precache);
 	},
 
 
