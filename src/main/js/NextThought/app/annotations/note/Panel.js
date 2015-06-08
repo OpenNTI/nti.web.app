@@ -7,7 +7,8 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 		'NextThought.app.annotations.note.Templates',
 		'NextThought.layout.component.Natural',
 		'NextThought.app.userdata.Actions',
-		'NextThought.app.sharing.Window'
+		'NextThought.app.sharing.Window',
+		'NextThought.app.context.StateStore'
 	],
 
 	mixins: {
@@ -148,6 +149,7 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 		this.mixins.flagActions.constructor.call(this);
 		this.on('beforedestroy', this.onBeforeDestroyCheck, this);
 		this.UserDataActions = NextThought.app.userdata.Actions.create();
+		this.ContextStore = NextThought.app.context.StateStore.getInstance();
 	},
 
 	replyIdPrefix: function() {
@@ -1139,8 +1141,11 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 	onShare: function(e) {
 		if (e && e.stopEvent) {e.stopEvent();}
 
+		var bundle = this.ContextStore.getRootBundle();
+
 		this.sharingWindow = Ext.widget('share-window', {
-			record: this.record
+			record: this.record,
+			bundle: bundle
 		});
 
 		this.sharingWindow.show();

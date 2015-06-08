@@ -186,9 +186,11 @@ Ext.define('NextThought.app.sharing.Window', {
 
 
 	save: function() {
+		var checkbox = this.down('checkbox');
+
 		this.el.mask('Sharing...');
 
-		this.UserDataActions.updateShareWith(this.record, this.getValue())
+		this.UserDataActions.updateShareWith(this.record, this.getValue(), checkbox.checked, this.bundle)
 			.then(this.close.bind(this))
 			.fail(this.el.unmask.bind(this.el));
 	}

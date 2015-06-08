@@ -236,7 +236,7 @@ Ext.define('NextThought.app.userdata.Actions', {
 		if (sharing && sharing.sharedWith) {
 			// Let's pre-resolve the users that are part of the default sharing list.
 			// By the time, we look it up, it should be in the userRepository cache, if it's resolvable.
-			userRepository.getUser(sharing.sharedWith);
+			UserRepository.getUser(sharing.sharedWith);
 		}
 	},
 
@@ -322,7 +322,7 @@ Ext.define('NextThought.app.userdata.Actions', {
 							//If its not a user its a fl, or dfl we have to have it in
 							//the fl store.  If its a community it would need to be in  our
 							//community list
-							if (entitiy.isFriendsList) {
+							if (entity.isFriendsList) {
 								if (!flStore.getById(entity.getId())) {
 									sharingIsValid = false;
 								}
@@ -821,12 +821,53 @@ Ext.define('NextThought.app.userdata.Actions', {
 	},
 
 
-	saveSharingPrefs: function(container, shareWith) {
+	/**
+	 * Save the sharing prefs as the default for the container in this context
+	 * where context is a bundle.
+	 *
+	 * @param  {String} container NTIID for the container
+	 * @param  {Object} shareWith entities and public toggle
+	 * @param  {Bundle} context   the bundle to make this the default sharing prefs for
+	 * @return {Promsie}
+	 */
+	saveSharingPrefs: function(container, prefs, context) {
+		debugger;
+		var me = this;
+
+		if (!context) {
+			console.error('No context passed to save sharing prefs to');
+			return;
+		}
+
+		return ContentUtils.getLineage(container, context)
+			.then(function(lineages) {
+				var lineage = lineages[0],
+					root = lineage.last() || container;
+
+				return root;
+			})
+			.then(Service.getPageInfo.bind(Service))
+			.then(function(pageInfo) {
+				if (!pageInfo) {
+					return Promise.reject('No page info');
+				}
+
+				return new Promise(function(fulfill, reject) {
+					pageInfo.saveField('sharingPreference', {sharedWith: prefs}, function(field, value, pi, newPageInfo) {
+						//always happen if success only:
+						me.updatePreferences(newPageInfo);
+						fulfill([]);
+					});
+				});
+			})
+			.fail(function(reason) {
+				console.error('failed to save default sharing, ', reason);
+			});
 
 	},
 
 
-	updateShareWith: function(record, sharedWith, saveAsDefault) {
+	updateShareWith: function(record, sharedWith, saveAsDefault, context) {
 		if (!record) {
 			return Promise.resolve();
 		}
@@ -844,7 +885,7 @@ Ext.define('NextThought.app.userdata.Actions', {
 
 		if (saveAsDefault) {
 			//update the default sharing setting if we have a shared with:
-			me.saveSharingPrefs(record.get('ContainerId'), newSharedWith);
+			this.saveSharingPrefs(record.get('ContainerId'), newSharedWith, context);
 		}
 
 		if (Globals.arrayEquals(record.get('shareWith') || [], newSharedWith || [])) {
