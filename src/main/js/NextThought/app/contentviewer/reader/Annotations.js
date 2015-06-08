@@ -405,7 +405,7 @@ Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 					var hColor = Ext.Array.findBy(highlightColors, function(item) {return item.color === selColor;});
 					record.set('fillColor', Color.toRGBA(selColor));
 					record.set('presentationProperties', {highlightColorName: hColor.name});
-					me.fireEvent('save-phantom', record, false);
+					me.UserDataActions.savePhantomAnnotation(record, false);
 					me.clearSelection();
 					menu.hide();
 				}
@@ -434,7 +434,7 @@ Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 				me.clearSelection();
 				var r = NextThought.model.Redaction.createFromHighlight(record, block);
 				try {
-					me.fireEvent('save-phantom', r, true);
+					me.UserDataActions.savePhantomAnnotation(r, true);
 				}
 				catch (e) {
 					alert(getString('NextThought.view.content.reader.Annotations.error'));
@@ -558,7 +558,7 @@ Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 					 text: getString('NextThought.view.content.reader.Annotations.save-highlight'),
 					 handler: function() {
 						 createHighlight();
-						 me.fireEvent('save-phantom', record, false);
+						 me.UserDataActions.savePhantomAnnotation(record, false);
 					 }
 				 });
 
@@ -577,7 +577,7 @@ Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 				me.clearSelection();
 				var r = NextThought.model.Redaction.createFromHighlight(record, block);
 				try {
-					me.fireEvent('save-phantom', r, true);
+					me.UserDataActions.savePhantomAnnotation(r, true);
 				}
 				catch (e) {
 					alert(getString('NextThought.view.content.reader.Annotations.error'));

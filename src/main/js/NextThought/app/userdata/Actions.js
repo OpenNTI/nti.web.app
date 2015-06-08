@@ -821,6 +821,31 @@ Ext.define('NextThought.app.userdata.Actions', {
 	},
 
 
+	savePhantomAnnotation: function(record, applySharing, successFn, failureFn) {
+		var p,
+			me = this;
+
+		if (applySharing) {
+			p = this.getPreferences(record.get('ContainerId'))
+				.then(function(sharing) {
+					return ((sharing || {}).sharing || {}).sharedWith || null;
+				}, function() {
+					return null;
+				});
+		} else {
+			p = Promise.resolve(null);
+		}
+
+		return p.then(function(share) {
+			record.set('SharedWith', share);
+
+			return new Promise(function(fulfill, reject) {
+				record.save({scope: me, callback: me.getSaveCallback(fulfill, reject)});
+			});
+		});
+	},
+
+
 	/**
 	 * Save the sharing prefs as the default for the container in this context
 	 * where context is a bundle.
