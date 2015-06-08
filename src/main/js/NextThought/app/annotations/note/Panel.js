@@ -6,7 +6,8 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 		'NextThought.cache.UserRepository',
 		'NextThought.app.annotations.note.Templates',
 		'NextThought.layout.component.Natural',
-		'NextThought.app.userdata.Actions'
+		'NextThought.app.userdata.Actions',
+		'NextThought.app.sharing.Window'
 	],
 
 	mixins: {
@@ -159,6 +160,12 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 			this.setPlaceholderContent();
 			return false;//stop the destroy
 		}
+
+		if (this.sharingWindow) {
+			this.sharingWindow.close();
+			Ext.destroy(this.sharingWindow);
+		}
+
 		return true;//allow the destroy to continue
 	},
 
@@ -1131,8 +1138,11 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 
 	onShare: function(e) {
 		if (e && e.stopEvent) {e.stopEvent();}
-		this.fireEvent('share', this.record);
+
+		this.sharingWindow = Ext.widget('share-window', {
+			record: this.record
+		});
+
+		this.sharingWindow.show();
 	}
-
-
 });

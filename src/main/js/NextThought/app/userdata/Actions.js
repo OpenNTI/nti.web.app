@@ -818,5 +818,51 @@ Ext.define('NextThought.app.userdata.Actions', {
 
 			return record;
 		});
+	},
+
+
+	saveSharingPrefs: function(container, shareWith) {
+
+	},
+
+
+	updateShareWith: function(record, sharedWith, saveAsDefault) {
+		if (!record) {
+			return Promise.resolve();
+		}
+
+		//Clean the body
+		//TODO: FIXME seems strange we should have to clean the body here...
+		var body = record.get('body'),
+			newSharedWith = SharingUtils.sharedWithForSharingInfo(sharedWith);
+
+		if (Ext.isArray(body)) {
+			body = Ext.Array.clean(body);
+		}
+
+		record.set('body', body);
+
+		if (saveAsDefault) {
+			//update the default sharing setting if we have a shared with:
+			me.saveSharingPrefs(record.get('ContainerId'), newSharedWith);
+		}
+
+		if (Globals.arrayEquals(record.get('shareWith') || [], newSharedWith || [])) {
+			console.oog('Sharing not mutated. Not showing changes', rec.get('shareWith'), newSharedWith);
+			return Promise.resolve();
+		}
+
+		return new Promise(function(fulfill, reject) {
+			SharingUtils.setSharedWith(record, newSharedWith, function(newRec, op) {
+				if (op.success) {
+					record.fireEvent('updated', newRec);
+					fulfill();
+				} else {
+					console.error('Failed to save object');
+					alert('Opps!\nCould not save');
+					reject();
+				}
+			});
+		});
 	}
 });
