@@ -27,6 +27,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.Activity', {
 				})
 		);
 
+		me.nextPageURL = me.activityFeedURL;
+
 		return me.loadPage();
 	},
 
@@ -60,7 +62,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.Activity', {
 	loadPage: function() {
 		var me = this;
 		me.mask();
-		return Service.request(me.activityFeedURL).done(function(json) {
+		return Service.request(me.nextPageURL).done(function(json) {
 			if (me.isDestroyed) {return;}
 
 			json = Ext.decode(json, true);
@@ -70,8 +72,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.Activity', {
 			var activity = ParseUtils.parseItems([json])[0],
 				links = Ext.data.Types.LINKS.convert(json.Links);
 
-			me.activityFeedURL = links.getRelHref('batch-next');
-			me.setMoreLinkState(!!me.activityFeedURL);
+			me.nextPageURL = links.getRelHref('batch-next');
+			me.setMoreLinkState(!!me.nextPageURL);
 
 			me.store.suspendEvents();
 			activity.get('Items').forEach(function(o) {
