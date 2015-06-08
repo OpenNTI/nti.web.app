@@ -46,7 +46,7 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'content-toolbar toolbar', html: '{toolbarContents}'},
+		{cls: 'toolbar', html: '{toolbarContents}'},
 		{cls: 'header', html: '{headerContents}'}
 	]),
 

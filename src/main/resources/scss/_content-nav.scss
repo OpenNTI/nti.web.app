@@ -29,7 +29,7 @@
 	.toc {
 		@include experimental(flex, none);
 		padding: 0 0 0 20px;
-		font: normal 500 1.2em/60px $font;
+		font: normal 500 1.2em/59px $font;
 
 		display: -ms-flexbox;
 		-ms-box-orient: horizontal;
@@ -74,7 +74,7 @@
 		-ms-box-orient: horizontal;
 		@include experimental-value(display, inline-flex);
 		@include experimental(flex-wrap, nowrap);
-		font: normal 500 1em/60px $font;
+		font: normal 500 1em/59px $font;
 
 		&, * {
 			color: $primary-blue;
@@ -314,7 +314,7 @@
 	position: relative;
 	padding-right: 10px;
 	white-space: nowrap;
-	height: 60px;
+	height: 59px;
 	float: right;
 
 

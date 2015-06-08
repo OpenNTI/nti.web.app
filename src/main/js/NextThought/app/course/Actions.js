@@ -19,7 +19,7 @@ Ext.define('NextThought.app.course.Actions', {
 	 * @return {Promise}            fulfills with the route for the course, once the animation is done
 	 */
 	transitionToCourse: function(course, libraryCard) {
-		var ntiid = course.getId(); 
+		var ntiid = course.getId();
 
 		ntiid = ParseUtils.encodeForURI(ntiid);
 
