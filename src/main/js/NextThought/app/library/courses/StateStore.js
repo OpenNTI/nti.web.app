@@ -15,8 +15,10 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 	getAllCourses: function() {	return this.ALL_COURSES; },
 
 	__updateCoursesEnrollmentState: function(courses) {
+		var me = this
 		courses.forEach(function(course){
-			var catalog = course.getCourseCatalogEntry && course.getCourseCatalogEntry(),
+			var ntiid = course.getCourseCatalogEntry().getId(),
+				catalog = me.findCourseForNtiid(ntiid),
 				instance = course.get('CourseInstance'),
 				isOpen = course.isOpen(),
 				isAdmin = course instanceof NextThought.model.courses.CourseInstanceAdministrativeRole;
@@ -42,6 +44,10 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 
 	setAllCourses: function(courses) {
 		this.ALL_COURSES = courses;
+
+		//Update catalog entries for enrolled and admin courses.
+		this.__updateCoursesEnrollmentState(this.ENROLLED_COURSES);
+		this.__updateCoursesEnrollmentState(this.ADMIN_COURSES);
 
 		this.fireEvent('all-courses-set', this.ALL_COURSES);
 	},
@@ -165,6 +171,7 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 		for (i = 0; i < list.length; i++) {
 			if (fn.call(null, list[i])) {
 				item = list[i];
+				break;
 			}
 		}
 
