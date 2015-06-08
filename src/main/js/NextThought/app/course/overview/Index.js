@@ -25,7 +25,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 		this.initRouter();
 
-		this.addRoute('/:lesson/content/', this.showContent.bind(this));
+		this.addRoute('/:lesson/content/:id', this.showContent.bind(this));
 
 		this.addDefaultRoute(this.showLessons.bind(this));
 
@@ -170,7 +170,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 				me.getLayout().setActiveItem(me.reader);
 
-				return me.reader.handleRoute(subRoute, route.precache);
+				return me.reader.handleRoute(route.params.id, route.precache);
 			});
 	},
 
