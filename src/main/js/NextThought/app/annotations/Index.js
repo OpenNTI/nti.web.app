@@ -57,9 +57,18 @@ Ext.define('NextThought.app.annotations.Index', {
 		var el = this.getNodeByRecord(rec);
 
 		if (this.showNote) {
-			this.showNote(rec, el);
+			this.showNote(rec, el, {
+				afterClose: this.onNoteClose.bind(this)
+			});
 		} else {
 			console.error('No Handler to show note');
+		}
+	},
+
+
+	onNoteClose: function() {
+		if (this.el) {
+			this.getSelectionModel().deselectAll();
 		}
 	}
 });

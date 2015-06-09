@@ -18,8 +18,8 @@ Ext.define('NextThought.app.windows.StateStore', {
 	},
 
 
-	fireShowWindow: function(object, path, el) {
-		this.fireEvent('show-window', object, path, el);
+	fireShowWindow: function(object, path, el, monitors) {
+		this.fireEvent('show-window', object, path, el, monitors);
 	},
 
 
@@ -28,10 +28,11 @@ Ext.define('NextThought.app.windows.StateStore', {
 	},
 
 
-	cacheObject: function(id, obj, el) {
+	cacheObject: function(id, obj, el, monitors) {
 		this.obj_map[id] = {
 			obj: obj,
-			el: el
+			el: el,
+			monitors: monitors
 		};
 	},
 

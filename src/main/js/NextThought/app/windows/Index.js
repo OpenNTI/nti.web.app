@@ -50,28 +50,35 @@ Ext.define('NextThought.app.windows.Index', {
 	},
 
 
-	showWindow: function(object, path, el) {
-		var cmp = this.WindowStore.getComponentForMimeType(object.mimeType);
+	showWindow: function(object, path, el, monitors) {
+		var type = this.WindowStore.getComponentForMimeType(object.mimeType),
+			cmp;
 
-		if (!cmp) {
+		if (!type) {
 			console.error('No component to show object of ', object.mimeType);
 			return;
 		}
 
 		this.viewContainer.removeAll();
 
-		this.viewContainer.add(cmp.create({
+		cmp = type.create({
 			record: object,
-			doClose: this.doClose.bind(this)
-		}));
+			doClose: this.doClose.bind(this, monitors && monitors.afterClose)
+		});
+
+		this.viewContainer.add(cmp);
 
 		this.addOpenCls();
 	},
 
 
-	doClose: function() {
+	doClose: function(afterClose) {
 		this.viewContainer.removeAll();
 		this.removeOpenCls();
 		this.WindowActions.closeWindow();
+
+		if (afterClose) {
+			afterClose.call();
+		}
 	}
 });

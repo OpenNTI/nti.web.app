@@ -239,7 +239,7 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 	},
 
 
-	showNote: function(record, el) {
-		this.WindowActions.pushWindow(record, el);
+	showNote: function(record, el, monitors) {
+		this.WindowActions.pushWindow(record, el, monitors);
 	}
 });

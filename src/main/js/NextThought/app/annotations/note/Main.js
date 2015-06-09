@@ -253,6 +253,7 @@ Ext.define('NextThought.app.annotations.note.Main', {
 		}
 
 		this.callParent(arguments);
+
 		if (this.record) {
 			this.mun(this.record, 'destroy', this.wasDeleted, this);
 		}
@@ -279,7 +280,7 @@ Ext.define('NextThought.app.annotations.note.Main', {
 
 		this.callParent(arguments);
 		if (c === 0) {
-			this.destroy();
+			this.doClose();
 		}
 	},
 
