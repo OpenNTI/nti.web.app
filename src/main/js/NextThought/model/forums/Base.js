@@ -24,11 +24,7 @@ Ext.define('NextThought.model.forums.Base', {
 
 		store = Ext.getStore(id) || NextThought.store.NTI.create(Ext.apply({
 			storeId: id,
-			url: this.getLink('contents'),
-			sorters: [{
-				property: 'CreatedTime',
-				direction: 'DESC'
-			}]
+			url: this.getLink('contents')
 		}, cfg || {}));
 
 		store.proxy.extraParams = Ext.apply(

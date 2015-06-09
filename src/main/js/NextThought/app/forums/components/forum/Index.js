@@ -26,6 +26,7 @@ Ext.define('NextThought.app.forums.components.forum.Index', {
 		this.navigation.pushRoute = this.pushRoute.bind(this);
 		this.body.pushRouteState = this.pushRouteState.bind(this);
 		this.body.replaceRouteState = this.replaceRouteState.bind(this);
+		this.body.getRouteState = this.getRouteState.bind(this);
 		this.body.alignNavigation = this.alignNavigation.bind(this);
 	},
 
@@ -39,9 +40,6 @@ Ext.define('NextThought.app.forums.components.forum.Index', {
 
 
 	setForum: function(id) {
-		if (this.body.activeTopic && this.body.activeTopic.getId() === id) {
-			return;
-		}
 		var record = this.navigation.selectRecord(id),
 			title = record && record.get('title');
 
@@ -49,8 +47,12 @@ Ext.define('NextThought.app.forums.components.forum.Index', {
 			this.setTitle(title);
 		}
 
-		wait().then(this.alignNavigation.bind(this));
+		if (this.body.activeTopic && this.body.activeTopic.getId() === record.getId()) {
+			return this.body.updateForum()
+				.then(this.alignNavigation.bind(this));
+		}
 
-		return this.body.setForum(record);
+		return this.body.setForum(record)
+			.then(this.alignNavigation.bind(this));
 	}
 });

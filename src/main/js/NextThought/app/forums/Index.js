@@ -38,6 +38,7 @@ Ext.define('NextThought.app.forums.Index', {
 		this.forumView.pushRoute = this.pushRoute.bind(this);
 		this.forumView.pushRouteState = this.pushRouteState.bind(this);
 		this.forumView.replaceRouteState = this.replaceRouteState.bind(this);
+		this.forumView.getRouteState = this.getRouteState.bind(this);
 		this.forumView.setTitle = this.setTitle.bind(this);
 		this.forumView.onAddedToParentRouter();
 	},

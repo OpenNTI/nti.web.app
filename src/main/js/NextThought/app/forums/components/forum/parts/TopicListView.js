@@ -87,8 +87,6 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 
 		me.tpl.searchTerm = 'adsfasdf';
 
-		me.updateView();
-
 		if (!me.record.getLink('add')) {
 			me.emptyText = Ext.DomHelper.markup({
 				cls: 'empty-forum',
@@ -98,29 +96,20 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 
 		if (me.filterBar) {
 			me.mon(me.filterBar, {
-				'sorters-changed': 'updateView',
-				'search-changed': 'updateView'
+				'sorters-changed': 'updateSort',
+				'search-changed': 'updateSearch'
 			});
 		}
 
 		if (me.header) {
-			me.mon(me.header, 'page-change', function() {
-				me.mon(this.store, {
-					single: true,
-					load: function(store, records) {
-						me.addGrouper();
-						me.fillInData(records, me.filterBar.getSearch());
-						me.getTargetEl().scrollTo('top', 0);
-					}
-				});
-			});
+			me.mon(me.header, 'page-change', 'updatePage');
 		}
 	},
 
 
 	beforeRender: function() {
 		this.callParent(arguments);
-		debugger;
+
 		this.loadMask.renderTo = this.ownerCt.el;
 	},
 
@@ -130,7 +119,7 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 
 		this.mon(this.loadMask, {
 			'beforeactivate': this.beforeLoadMask.bind(this),
-			'destroy': this.afterLoadMask.bind(this)
+			'beforehide': this.afterLoadMask.bind(this)
 		});
 
 		if (this.loadMask.isVisible) {
@@ -263,17 +252,6 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 	},
 
 
-	getSorter: function(by, searchTerm, batchAround) {
-		var sort = this.sorters[by];
-
-		sort.searchTerm = searchTerm || '';
-
-		sort.batchAround = batchAround || '';
-
-		return sort;
-	},
-
-
 	setGrouper: function(by) {
 
 		function getHeader(name, value) {
@@ -335,25 +313,80 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 	},
 
 
-	reloadStore: function(sorter) {
-		if (this.store.getCount() > 0) {
-			this.store.removeAll(true);
-			this.store.clearGrouping();
+	restoreState: function(state) {
+		state.currentPage = state.currentPage || 1;
+		state.sortBy = state.sortBy || 'active';
+
+		this.currentState = state;
+
+		return this.applyState(state);
+	},
+
+
+	applyState: function(state) {
+		if (this.applyingState) { return;}
+
+		var me = this,
+			store = me.store,
+			params = me.store.proxy.extraParams;
+
+		me.applyingState = true;
+
+		if (state.sortBy) {
+			params = Ext.apply(params || {}, me.sorters[state.sortBy]);
+		} else {
+			delete params.sortOn;
+			delete params.sortOrder;
+			delete params.sorters;
 		}
 
-		this.store.pageSize = 10;
+		if (state.search) {
+			params.searchTerm = state.search;
+		} else {
+			delete params.searchTerm;
+		}
 
-		delete this.store.proxy.extraParams.sorters;
+		if (this.topic) {
+			params.batchAround = this.topic;
+		}
 
-		this.store.proxy.extraParams = Ext.apply(this.store.proxy.extraParams || {}, sorter);
+		return new Promise(function(fulfill, reject) {
+			me.mon(store, {
+				single: true,
+				load: function(store, records) {
+					delete params.batchAround;
 
-		this.mon(this.store, {
-			single: true,
-			load: 'updateView'
+					me.fillInData(records, state.search);
+
+					me.setGrouper(state.sortBy);
+
+					me.currentPage = state.currentPage;
+					me.currentSortBy = state.sortBy;
+					me.currentSearch = state.search;
+
+					me.updateUI();
+
+					me.initialLoad = true;
+					delete me.applyingState;
+
+					fulfill();
+				}
+			});
+
+			if (params.batchAround) {
+				store.load();
+			} else if (state.current_page) {
+				store.loadPage(state.current_page);
+			} else {
+				store.loadPage(1);
+			}
 		});
-		this.store.currentPage = 1;
+	},
 
-		this.store.load();
+
+	updateUI: function() {
+		this.filterBar.setSortBy(this.currentSortBy);
+		this.filterBar.setSearch(this.currentSearch);
 	},
 
 
@@ -380,5 +413,59 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 		delete this.fromMe;
 
 		this.setGrouper(by);
+	},
+
+
+	updateFilter: function() {
+		var state = this.currentState || {},
+			newPage = state.currentPage !== this.currentPage;
+
+		if (this.currentSearch) {
+			state.search = this.currentSearch;
+		} else {
+			delete state.search;
+		}
+
+		if (this.currentSortBy) {
+			state.sortBy = this.currentSortBy;
+		} else {
+			delete state.sortBy;
+		}
+
+		if (this.currentPage) {
+			state.currentPage = this.currentPage;
+		} else {
+			delete state.currentPage;
+		}
+
+		this.currentState = state;
+
+		if (newPage) {
+			this.pushRouteState(state);
+		} else {
+			this.replaceRouteState(state);
+		}
+	},
+
+
+	updateSort: function(sort, search) {
+		this.currentSortBy = sort;
+		this.currentSearch = search;
+
+		this.updateFilter();
+	},
+
+
+	updateSearch: function(search) {
+		this.currentSearch = search;
+
+		this.updateFilter();
+	},
+
+
+	updatePage: function(page) {
+		this.currentPage = page;
+
+		this.updateFilter();
 	}
 });

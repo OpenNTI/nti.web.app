@@ -37,9 +37,21 @@ Ext.define('NextThought.app.forums.components.forum.Forum', {
 			store: store,
 			filterBar: filterBar,
 			header: header,
-			alignNavigation: this.alignNavigation.bind(this)
+			alignNavigation: this.alignNavigation.bind(this),
+			replaceRouteState: this.replaceRouteState.bind(this),
+			pushRouteState: this.pushRouteState.bind(this)
 		});
 
-		return true;
+
+		this.activeTopic = record;
+
+		return topicList.restoreState(this.getRouteState());
+	},
+
+
+	updateForum: function() {
+		var topicList = this.down('forums-forum-topic-list-view');
+
+		return topicList.restoreState(this.getRouteState());
 	}
 });

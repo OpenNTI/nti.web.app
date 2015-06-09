@@ -22,7 +22,7 @@ Ext.define('NextThought.util.Search', {
 
 		if (re) { return re; }
 
-		return this._regexcache = this.searchRe(str, partial, wholeWordOnly);
+		return this._regexcache[str] = this.searchRe(str, partial, wholeWordOnly);
 	},
 
 	 /*

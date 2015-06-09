@@ -35,10 +35,8 @@ Ext.define('NextThought.model.forums.Forum', {
 	buildContentsStore: function(idSuffix, cfg, extraParams) {
 		return this.callParent([idSuffix, Ext.apply({stateKey: 'forum'},cfg),
 			Ext.apply({
-				sorters: [{
-					property: 'NewestDescendantCreatedTime',
-					direction: 'DESC'
-				}]
+				sortOn: 'NewestDescendantCreatedTime',
+				sortOrder: 'DESC'
 			},extraParams
 		)]);
 	}

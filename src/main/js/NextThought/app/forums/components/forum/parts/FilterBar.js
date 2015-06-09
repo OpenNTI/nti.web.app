@@ -31,6 +31,8 @@ Ext.define('NextThought.app.forums.components.forum.parts.FilterBar', {
 		this.currentSort = 'active';
 		this.searchKey = '';
 
+		this.searchKeyPressed = Ext.Function.createBuffered(this.searchKeyPressed, 500, this);
+
 		this.createGroupByMenu();
 
 		this.mon(this.groupEl, 'click', 'showGroupByMenu');
@@ -46,7 +48,7 @@ Ext.define('NextThought.app.forums.components.forum.parts.FilterBar', {
 
 		if (key === e.ENTER) {
 			//refresh the list
-			this.fireEvent('sorters-changed');
+			this.fireEvent('sorters-changed', this.currentSort, this.searchKey);
 			return;
 		}
 
@@ -109,7 +111,22 @@ Ext.define('NextThought.app.forums.components.forum.parts.FilterBar', {
 		this.groupByMenu.offset = [0, -x];
 
 		this.currentSort = item.groupBy;
-		this.fireEvent('sorters-changed');
+		this.fireEvent('sorters-changed', item.groupBy, this.searchKey);
+	},
+
+
+	setSortBy: function(group) {
+		var item = this.groupByMenu.down('[groupBy="' + group + '"]');
+
+		if (item) {
+			item.setChecked(true, true);
+			this.groupEl.el.down('.label').update(item.text);
+		}
+	},
+
+
+	setSearch: function(search) {
+		this.searchEl.dom.value = search || '';
 	},
 
 

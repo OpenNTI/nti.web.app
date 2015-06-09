@@ -68,8 +68,7 @@ Ext.define('NextThought.app.forums.components.forum.parts.Header', {
 		var current = this.store.currentPage;
 
 		if (current - 1 > 0) {
-			this.fireEvent('page-change');
-			this.store.previousPage();
+			this.fireEvent('page-change', current - 1);
 		}
 	},
 
@@ -79,8 +78,7 @@ Ext.define('NextThought.app.forums.components.forum.parts.Header', {
 			current = this.store.currentPage;
 
 		if (current + 1 <= total) {
-			this.fireEvent('page-change');
-			this.store.nextPage();
+			this.fireEvent('page-change', current + 1);
 		}
 	}
 });
