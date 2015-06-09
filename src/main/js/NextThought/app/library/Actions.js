@@ -74,7 +74,7 @@ Ext.define('NextThought.app.library.Actions', {
 
 		if (cache[index]) { return cache[index]; }
 
-		cache[index] =  bundle.getTocs()
+		cache[index] = bundle.getTocs()
 			.then(function(tocs) {
 				toc = tocs[0];
 
@@ -114,8 +114,8 @@ Ext.define('NextThought.app.library.Actions', {
 
 						/*jshing bitwise:false*/
 						return ((p & Node.DOCUMENT_POSITION_PRECEDING) === Node.DOCUMENT_POSITION_PRECEDING) ? 1 : -1;
-					})
-				} catch(e) {
+					});
+				} catch (e) {
 					console.warn('Potentially unsorted:', e.stack || e.message || e);
 				}
 

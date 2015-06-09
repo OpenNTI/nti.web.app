@@ -7,7 +7,8 @@ Ext.define('NextThought.app.video.OverlayedPanel', {
 	requires: [
 		'NextThought.util.Dom',
 		'NextThought.model.PlaylistItem',
-		'NextThought.app.video.Video'
+		'NextThought.app.video.Video',
+		'NextThought.app.library.Actions'
 	],
 
 	ui: 'content-video',
@@ -44,7 +45,7 @@ Ext.define('NextThought.app.video.OverlayedPanel', {
 			reader = config.reader,
 			data = DomUtils.parseDomObject(dom),
 			description = el.down('span.description'),
-			loc = ContentUtils.getLocation(reader.getLocation().NTIID),
+			bundle = reader.getLocation().currentBundle,
 			playlist = [],
 			size = this.getSize(dom, 640);
 
@@ -56,6 +57,8 @@ Ext.define('NextThought.app.video.OverlayedPanel', {
 		});
 
 		this.size = size;
+
+		this.LibraryActions = NextThought.app.library.Actions.create();
 
 		Ext.apply(config, {
 			layout: 'fit',
@@ -102,7 +105,9 @@ Ext.define('NextThought.app.video.OverlayedPanel', {
 
 		this.callParent([config]);
 
-		Library.getVideoIndex(loc.title).then(this.fillVideo.bind(this));
+		//TODO: figure out how to not need the getVideoIndex
+		this.LibraryActions.getVideoIndex(bundle)
+			.then(this.fillVideo.bind(this));
 	},
 
 
