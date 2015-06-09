@@ -26,6 +26,7 @@ Ext.define('NextThought.app.forums.components.forum.Index', {
 		this.navigation.pushRoute = this.pushRoute.bind(this);
 		this.body.pushRouteState = this.pushRouteState.bind(this);
 		this.body.replaceRouteState = this.replaceRouteState.bind(this);
+		this.body.alignNavigation = this.alignNavigation.bind(this);
 	},
 
 
@@ -47,6 +48,8 @@ Ext.define('NextThought.app.forums.components.forum.Index', {
 		if (title) {
 			this.setTitle(title);
 		}
+
+		wait().then(this.alignNavigation.bind(this));
 
 		return this.body.setForum(record);
 	}

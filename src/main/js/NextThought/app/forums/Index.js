@@ -6,7 +6,10 @@ Ext.define('NextThought.app.forums.Index', {
 		Router: 'NextThought.mixins.Router'
 	},
 
-	requires: ['NextThought.app.forums.components.forum.Index'],
+	requires: [
+		'NextThought.app.forums.components.forum.Index',
+		'NextThought.model.forums.*'
+	],
 
 	isForumContainer: true,
 	layout: 'none',

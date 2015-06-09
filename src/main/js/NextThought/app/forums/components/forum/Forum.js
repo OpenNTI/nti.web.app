@@ -31,7 +31,14 @@ Ext.define('NextThought.app.forums.components.forum.Forum', {
 
 		filterBar = this.add({xtype: 'forums-forum-filterbar'});
 		header = this.add({xtype: 'forums-forum-header', record: record, store: store});
-		topicList = this.add({xtype: 'forums-forum-topic-list-view', record: record, store: store, filterBar: filterBar, header: header});
+		topicList = this.add({
+			xtype: 'forums-forum-topic-list-view',
+			record: record,
+			store: store,
+			filterBar: filterBar,
+			header: header,
+			alignNavigation: this.alignNavigation.bind(this)
+		});
 
 		return true;
 	}

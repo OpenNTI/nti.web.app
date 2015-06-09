@@ -7,7 +7,8 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 	],
 
 	loadMask: {
-		hideMode: 'display'
+		hideMode: 'display',
+		msg: 'Loading...'
 	},
 
 	cls: 'topic-list list scrollable',
@@ -114,26 +115,43 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 				});
 			});
 		}
-
-		me.on('render', function() {
-			var mask = me.loadMask,
-				height = me.getHeight(),
-				paddingBottom = me.el.getPadding('b') || 0;
-
-			if (mask && height) {
-				console.log('SETTING HEIGHT ON MASK: ', height);
-				mask.setHeight(height - paddingBottom);
-			}
-		});
 	},
 
 
 	beforeRender: function() {
 		this.callParent(arguments);
-
+		debugger;
 		this.loadMask.renderTo = this.ownerCt.el;
 	},
 
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		this.mon(this.loadMask, {
+			'beforeactivate': this.beforeLoadMask.bind(this),
+			'destroy': this.afterLoadMask.bind(this)
+		});
+
+		if (this.loadMask.isVisible) {
+			this.beforeLoadMask();
+		}
+	},
+
+
+	beforeLoadMask: function() {
+		var top = this.el.dom.getBoundingClientRect().top,
+			height = Ext.Element.getViewportHeight() - top;
+
+		this.el.setStyle({height: height + 'px'});
+		this.addCls('loading');
+	},
+
+
+	afterLoadMask: function() {
+		this.el.setStyle({height: 'auto'});
+		this.removeCls('loading');
+	},
 
 
 	fillInData: function(records, search) {
@@ -334,6 +352,7 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 			load: 'updateView'
 		});
 		this.store.currentPage = 1;
+
 		this.store.load();
 	},
 
@@ -355,6 +374,8 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 		if (records) {
 			this.fillInData(records, search);
 		}
+
+		this.alignNavigation();
 
 		delete this.fromMe;
 
