@@ -81,7 +81,7 @@ Ext.define('NextThought.app.content.Actions', {
 
 		if ((lineage.length + leftOvers.length) <= 1) {
 			if (ContentUtils.hasChildren(topic)) {
-				path.push(this.buildContentPathPart(this.levelLabels[lineage.length]), ContentUtils.getFirstTopic(topic), parentNode, true, bundle);
+				path.push(this.buildContentPathPart(this.levelLabels[lineage.length], topic.getAttribute('ntiid'), parentNode, true, bundle));
 			} else {
 				path.push(this.buildContentPathPart(this.levelLabels[NaN]), null, null, false, bundle);
 			}
@@ -119,7 +119,7 @@ Ext.define('NextThought.app.content.Actions', {
 				var l = locations[0],
 					part = {};
 
-				part.label = label || l.label;
+				part.label = l.label || label;
 				part.ntiid = l.NTIID;
 
 				if (allowMenus) {
