@@ -1,5 +1,5 @@
-Ext.define('NextThought.app.slidedeck.media.viewers.SplitViewer', {
-    extend: 'NextThought.app.slidedeck.media.viewers.TranscriptViewer',
+Ext.define('NextThought.app.slidedeck.media.components.viewers.SplitViewer', {
+    extend: 'NextThought.app.slidedeck.media.components.viewers.TranscriptViewer',
     alias: 'widget.media-split-viewer',
 
     transcriptRatio: 0.35,

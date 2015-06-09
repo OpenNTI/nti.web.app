@@ -8,7 +8,8 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 	requires: [
 		'NextThought.app.course.overview.components.View',
-		'NextThought.app.course.content.Index'
+		'NextThought.app.course.content.Index',
+		'NextThought.app.slidedeck.media.components.View'
 	],
 
 	title: 'Lessons',
@@ -26,11 +27,13 @@ Ext.define('NextThought.app.course.overview.Index', {
 		this.initRouter();
 
 		this.addRoute('/:lesson/content/:id', this.showContent.bind(this));
+		this.addRoute('/:lesson/video/:id', this.showMediaViewer.bind(this));
 
 		this.addDefaultRoute(this.showLessons.bind(this));
 
 		this.addObjectHandler(NextThought.model.PageInfo.mimeType, this.getPageInfoRoute.bind(this));
 		this.addObjectHandler(NextThought.model.RelatedWork.mimeType, this.getRelatedWorkRoute.bind(this));
+		this.addObjectHandler(NextThought.model.PlaylistItem.mimeType, this.getVideoRoute.bind(this));
 
 		this.lessons = this.down('course-overview-view');
 
@@ -175,6 +178,64 @@ Ext.define('NextThought.app.course.overview.Index', {
 	},
 
 
+	showMediaViewer: function(route, subRoute) {
+		var video = route.precache.video,
+			basePath = route.precache.basePath,
+			rec = route.precache.rec,
+			options = route.precache.options,
+			transcript, me = this;
+
+		if (video && video.isModel) {
+			transcript = NextThought.model.transcript.TranscriptItem.fromVideo(video, basePath);
+		}
+		else{
+			// TODO: Need to handle case where we don't have the video object.
+		}
+
+		function createMediaPlayer(record, scrollToId) {
+			me.activeMediaPlayer = Ext.widget('media-view', {
+				video: video,
+				transcript: transcript,
+				autoShow: true,
+				record: record,
+				scrollToId: scrollToId,
+				startAtMillis: options && options.startAtMillis,
+				currentBundle: me.currentBundle
+			});
+
+			me.activeMediaPlayer.fireEvent('suspend-annotation-manager', this);
+
+			me.activeMediaPlayer.on('destroy', function() {
+				if (me.activeMediaPlayer) {
+					me.activeMediaPlayer.fireEvent('resume-annotation-manager', this);
+					me.activeMediaPlayer = null;
+				}
+
+				if (options && options.closeCallback) {
+					options.closeCallback.call();
+				}
+			});
+			// me.activeMediaPlayer.on('media-viewer-ready', function(viewer) {
+			// 	var fn = options && options.callback,
+			// 		scope = this;
+			// 	if (Ext.isObject(fn)) {
+			// 		fn = fn.fn;
+			// 		scope = fn.scope;
+			// 	}
+
+			// 	Ext.callback(fn, scope, [viewer]);
+			// });
+		}
+
+		if (!rec || rec.isTopLevel()) {
+			createMediaPlayer(rec);
+			return;
+		}
+
+		//Otherwise, will need to load the parent record before we can navigate to it.
+		// this.navigateToReply(rec, createMediaPlayer, me);
+	},
+
 
 	getPageInfoRoute: function(obj) {
 		var lesson = obj.parent,
@@ -220,6 +281,26 @@ Ext.define('NextThought.app.course.overview.Index', {
 				lesson: lesson
 			}
 		};
+	},
+
+
+	getVideoRoute: function(obj) {
+		var lesson = obj.parent,
+			lessonId = lesson && lesson.getId(),
+			videoId = obj.get && obj.getId();
+
+		lessonId = ParseUtils.encodeForURI(lessonId);
+		videoId = ParseUtils.encodeForURI(videoId);
+
+		return {
+			route: lessonId + '/video/' + videoId,
+			title: obj.get && obj.get('title'),
+			precache: {
+				video: obj.isModel ? obj : null,
+				lesson: lesson,
+				basePath: obj.basePath
+			}
+		}
 	},
 
 

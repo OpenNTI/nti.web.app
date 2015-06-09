@@ -1,27 +1,37 @@
-Ext.define('NextThought.app.slidedeck.media.Container', {
+Ext.define('NextThought.app.slidedeck.media.components.View', {
 	extend: 'Ext.container.Container',
-	alias: 'widget.media-container',
+	alias: 'widget.media-view',
 	requires: [
-		'NextThought.app.slidedeck.media.GridView',
-		'NextThought.app.slidedeck.media.Toolbar',
-		'NextThought.app.slidedeck.media.viewers.TranscriptViewer',
-		'NextThought.app.slidedeck.media.viewers.SplitViewer',
-		'NextThought.app.slidedeck.media.viewers.VideoViewer'
+		'NextThought.app.slidedeck.media.components.Grid',
+		'NextThought.app.slidedeck.media.components.Toolbar',
+		'NextThought.app.slidedeck.media.components.viewers.SplitViewer',
+		'NextThought.app.slidedeck.media.components.viewers.TranscriptViewer',
+		'NextThought.app.slidedeck.media.components.viewers.VideoViewer',
+
 	],
+
+	mixins: {
+		Router: 'NextThought.mixins.Router',
+		State: 'NextThought.mixins.State'
+	},
 
 	ui: 'media',
 	floating: true,
-	layout: 'card',
-
-
-	onAdd: function(item) {
-		this.getLayout().setActiveItem(item);
+	layout: {
+		type: 'card',
+		deferredRender: true
 	},
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'header'},
 		{id: '{id}-body', cn: ['{%this.renderContainer(out, values)%}']}
 	]),
+
+	getTargetEl: function() {
+		return this.body;
+	},
+
+	childEls: ['body'],
 
 
 	lockVideoWithNoTranscript: true,
@@ -39,6 +49,10 @@ Ext.define('NextThought.app.slidedeck.media.Container', {
 	},
 
 	viewerIdMap: {},
+
+	items: [
+		// { 'xtype': 'media-grid-view'}
+	],
 
 	getStorageManager: function() {
 		return TemporaryStorage;
@@ -76,23 +90,21 @@ Ext.define('NextThought.app.slidedeck.media.Container', {
 			xtype: 'media-toolbar',
 			renderTo: this.headerEl,
 			currentType: playerType,
-			video: this.video,
 			floatParent: this,
-			noTranscript: !this.transcript
 		});
+		this.toolbar.setContent(this.video, this.transcript);
 
-		this.identity = Ext.widget({
-			xtype: 'identity',
-			renderTo: this.toolbar.getEl(),
-			floatParent: this.toolbar
-		});
+		// this.identity = Ext.widget({
+		// 	xtype: 'identity',
+		// 	renderTo: this.toolbar.getEl(),
+		// 	floatParent: this.toolbar
+		// });
 
-		this.gridView = this.add({
-			xtype: 'media-grid-view',
-			source: this.video,
-			currentBundle: this.currentBundle
-		});
+		// Video Grid
+		// this.gridView = this.down('media-grid-view');
+		// this.gridView.setContent(this.video, this.currentBundle);
 
+		// Video Viewer
 		this.buildInitialViewer();
 
 		this.on('destroy', 'destroy', this.toolbar);
@@ -101,10 +113,10 @@ Ext.define('NextThought.app.slidedeck.media.Container', {
 		this.on('exit-viewer', 'exitViewer', this);
 		this.on('destroy', 'cleanup', this);
 
-		this.mon(this.gridView, {
-			'hide-grid': {fn: 'showGridPicker', scope: this.toolbar},
-			'store-set': 'listStoreSet'
-		});
+		// this.mon(this.gridView, {
+		// 	'hide-grid': {fn: 'showGridPicker', scope: this.toolbar},
+		// 	'store-set': 'listStoreSet'
+		// });
 
 		Ext.EventManager.onWindowResize(this.adjustOnResize, this, {buffer: 250});
 

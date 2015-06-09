@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.slidedeck.media.Toolbar', {
+Ext.define('NextThought.app.slidedeck.media.components.Toolbar', {
 	extend: 'Ext.Component',
 	alias: 'widget.media-toolbar',
 
@@ -16,13 +16,13 @@ Ext.define('NextThought.app.slidedeck.media.Toolbar', {
 			{cls: 'navigation', cn: [
 				'{[this.splitNumberFromTitle(values)]}',
 				{tag: 'tpl', 'if': 'sectionNumber', cn: [
-					{ cls: 'section-number', html: '{sectionNumber}' }
+					{ cls: 'section-number'}
 				]},
 				{
 					cls: 'wrap',
 					cn: [
-						{ cls: 'section-name', html: '{description}'},
-						{ cls: 'title', html: '{title}'}
+						{ cls: 'section-name'},
+						{ cls: 'title'}
 					]
 				}
 			]}
@@ -50,7 +50,9 @@ Ext.define('NextThought.app.slidedeck.media.Toolbar', {
 	renderSelectors: {
 		gridEl: '.grid-view',
 		pickerEl: '.selected-mv-type',
-		exitEl: '.back-button'
+		exitEl: '.back-button',
+		titleEl: '.navigation .wrap .title',
+		sectionNameEl: '.navigation .wrap .section-name'
 	},
 
 	clsToName: function(cls) {
@@ -77,24 +79,29 @@ Ext.define('NextThought.app.slidedeck.media.Toolbar', {
 	},
 
 
-	beforeRender: function() {
-		this.callParent(arguments);
+	setContent: function(video, transcript) {
+		var me = this, title, description;
 
-		var t = this.currentType,
-			title = this.video && this.video.get('title'),
-			description = this.video && this.video.get('description'),
-			sectionNumber = null;//this.video && this.video.get('section'); //this isn't what 'section' means.
+		me.video = video;
+		me.transcript = transcript;
+		me.noTranscript = !transcript;
+		title = me.video && me.video.get('title'),
+		description = me.video && me.video.get('description')
 
-		this.renderData = Ext.apply(this.renderData || {}, { type: t, title: title, description: description, sectionNumber: sectionNumber });
+		me.onceRendered.then(function() {
+			me.titleEl.update(title);
+			me.sectionNameEl.update(description);
+
+			if (me.noTranscript) {
+				me.pickerEl.removeCls('hasTranscript');
+			}
+		});
+
 	},
 
 
 	afterRender: function() {
 		this.callParent(arguments);
-
-		if (this.noTranscript) {
-			this.pickerEl.removeCls('hasTranscript');
-		}
 		this.pickerEl.removeCls('video-focus').addCls(this.currentType);
 		this.pickerEl.update(this.clsToName(this.currentType));
 	},

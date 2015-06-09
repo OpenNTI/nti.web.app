@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.slidedeck.media.GridView', {
+Ext.define('NextThought.app.slidedeck.media.components.Grid', {
 	extend: 'Ext.view.View',
 	alias: 'widget.media-grid-view',
 
@@ -72,19 +72,6 @@ Ext.define('NextThought.app.slidedeck.media.GridView', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		var lineage = ContentUtils.getLineage(this.getSource().get('NTIID')),
-			location = ContentUtils.getLocation(lineage.last()),
-			title = location.title;
-
-		//if we can determine bundle to use its outline to order by
-		//use it, otherwise just use the video index
-		wait()
-			.then(this.getBundleOutline.bind(this))
-			.then(this.fillInFromOutline.bind(this, title))
-			.fail(this.getVideoData.bind(this, title));
-
-		this.setLocationInfo(location);
-
 		this.on({
 			itemclick: function(cmp, record, item) {
 				var selectionChanged = cmp.getSelectedNodes()[0] !== item;
@@ -126,6 +113,25 @@ Ext.define('NextThought.app.slidedeck.media.GridView', {
 				delete this.fromKey;
 			}
 		});
+	},
+
+	setContent: function(source, bundle){
+		var me = this,
+			lineage = ContentUtils.getLineage(source.get('NTIID')),
+			location = ContentUtils.getLocation(lineage.last()),
+			title = location.title;
+
+		me.source = source,
+		me.currentBundle = bundle;
+		
+		//if we can determine bundle to use its outline to order by
+		//use it, otherwise just use the video index
+		wait()
+			.then(this.getBundleOutline.bind(this))
+			.then(this.fillInFromOutline.bind(this, title))
+			.fail(this.getVideoData.bind(this, title));
+
+		this.setLocationInfo(location);
 	},
 
 

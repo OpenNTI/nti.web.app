@@ -1,6 +1,7 @@
 /*global DomUtils, ParseUtils */
 Ext.define('NextThought.model.PlaylistItem', {
 	extend: 'Ext.data.Model',
+	// extend: 'NextThought.model.Base',
 
 	requires: [
 		'NextThought.model.converters.VideoSources'
@@ -32,6 +33,10 @@ Ext.define('NextThought.model.PlaylistItem', {
 	],
 
 	statics: {
+		// FIXME: This is a Hack since a playlistItem doesn't have to be a video. 
+		// So far we're using like so and we need to use this mimeType for routing
+		mimeType: "application/vnd.nextthought.ntivideo",
+
 		compareSources: function(a, b) {
 			var i;
 			if (Ext.isArray(a) && Ext.isArray(b)) {

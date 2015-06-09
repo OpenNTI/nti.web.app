@@ -1,5 +1,5 @@
-Ext.define('NextThought.app.slidedeck.media.viewers.VideoViewer',{
-    extend: 'NextThought.app.slidedeck.media.viewers.SplitViewer',
+Ext.define('NextThought.app.slidedeck.media.components.viewers.VideoViewer',{
+    extend: 'NextThought.app.slidedeck.media.components.viewers.SplitViewer',
     alias: 'widget.media-video-viewer',
 
     cls: 'full-video-player',

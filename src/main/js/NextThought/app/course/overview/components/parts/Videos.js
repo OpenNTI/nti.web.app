@@ -15,7 +15,8 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 			return {
 				xtype: this.xtype,
 				items: [item],
-				course: item.course
+				course: item.course,
+				navigate: item.navigate
 			};
 		}
 	},
@@ -505,11 +506,12 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 
 			slide = m.get('slidedeck');
 			if (Ext.isEmpty(slide)) {
-				me.fireEvent('start-media-player', me.videoIndex[m.getId()], m.getId(), getURL(li.root), null, {
-					closeCallback: function() {
-						me.setProgress();
-					}
-				});
+				// me.fireEvent('start-media-player', me.videoIndex[m.getId()], m.getId(), getURL(li.root), null, {
+				// 	closeCallback: function() {
+				// 		me.setProgress();
+				// 	}
+				// });
+				me.navigateToTarget(m, getURL(li.root));
 			} else {
 				me.fireEvent('open-slide-deck', li.ContentNTIID, slide,
 					NextThought.model.PlaylistItem.create(Ext.apply(
@@ -536,6 +538,19 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 			me.hideCurtain();
 			me.player.resumePlayback(true);
 		}
+	},
+
+	navigateToTarget: function(videoItem, basePath) {
+		if (!this.navigate) {
+			console.error('No navigate set on content link');
+			return;
+		}
+
+		var o = this.videoIndex[videoItem.getId()];
+			video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
+
+		video.basePath = basePath;
+		this.navigate.call(null, video);
 	},
 
 

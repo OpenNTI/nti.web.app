@@ -34,7 +34,7 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 
         this.buildComponents();
 		this.flatPageStore = new NextThought.store.FlatPage();
-		this.UserDataActions = NextThought.app.userdata.create();
+		this.UserDataActions = NextThought.app.userdata.Actions.create();
 
 		this.UserDataActions.initPageStores(this);
 
@@ -46,7 +46,7 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 			this.hasNoPresentationParts = true;
 		}
 
-		this.UserDataActions.setUpPageStoreDelegates(this);
+		// this.UserDataActions.setUpPageStoreDelegates(this);
 
 		this.UserDataActions.listenToPageStores(this, {
 			scope: this,
