@@ -408,7 +408,11 @@ Ext.define('NextThought.app.course.Index', {
 				'course-assessment-container',
 				'course-reports',
 				'course-info'
-			]);
+			]).then(function(item) {
+				if (item.handleRoute) {
+					return item.handleRoute(subRoute, route.precache);
+				}
+			});
 	},
 
 

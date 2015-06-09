@@ -11,13 +11,14 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		'NextThought.store.courseware.Navigation',
 		'NextThought.store.courseware.ToCBasedOutline',
 		'NextThought.store.courseware.Stream',
-        'NextThought.model.courses.CourseVideoProgress',
-        'NextThought.model.courses.CourseOutline',
-        'NextThought.model.courses.CourseInstanceSharingScopes',
-        'NextThought.model.courses.CourseCatalogEntry',
-        'NextThought.model.courseware.GradeBook',
-        'NextThought.model.ContentBundle',
-        'NextThought.model.forums.CommunityBoard'
+		'NextThought.model.courses.CourseVideoProgress',
+		'NextThought.model.courses.CourseOutline',
+		'NextThought.model.courses.CourseInstanceSharingScopes',
+		'NextThought.model.courses.CourseCatalogEntry',
+		'NextThought.model.courseware.GradeBook',
+		'NextThought.model.ContentBundle',
+		'NextThought.model.forums.CommunityBoard',
+		'NextThought.model.forums.CommunityForum'
 	],
 
 	mixins: {
@@ -190,7 +191,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		return Promise.all([
 			ContentUtils.getLineage(ntiid, me),
 			me.getLocationInfo()
-		]).then(function (results) {
+		]).then(function(results) {
 			var lineages = results[0],
 				locationInfo = results[1],
 				store = me.getNavigationStore(),
@@ -254,7 +255,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 					locationInfo.courseInstance = me;
 				}
 
-				return locationInfo
+				return locationInfo;
 			});
 	},
 
@@ -722,6 +723,14 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
+	hasForumList: function() {
+		var board = this.get('Discussions'),
+			parentBoard = this.get('ParentDiscussions');
+
+		return !!(board.getLink('contents') || parentBoard.getLink('contents'));
+	},
+
+
 	getForumList: function() {
 		var me = this,
 			sectionContents,
@@ -880,27 +889,27 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
-    getVideoProgress: function(){
-        var link = this.getLink('VideoProgress');
+	getVideoProgress: function() {
+		var link = this.getLink('VideoProgress');
 
-        if (!link) { return Promise.reject(); }
+		if (!link) { return Promise.reject(); }
 
-        return Service.request(link)
-                    .then(function(response) {
-                        return ParseUtils.parseItems(response)[0];
-                    });
-    },
+		return Service.request(link)
+					.then(function(response) {
+						return ParseUtils.parseItems(response)[0];
+					});
+	},
 
 
-    getSuggestContacts: function(){
-        if(!isFeature("suggest-contacts") || !this.hasLink('Classmates')) { return Promise.reject(); }
+	getSuggestContacts: function() {
+		if (!isFeature('suggest-contacts') || !this.hasLink('Classmates')) { return Promise.reject(); }
 
-        var link = this.getLink('Classmates');
+		var link = this.getLink('Classmates');
 
-        return Service.request(link)
-            .then(function(response) {
-                var parent = JSON.parse(response);
-                return ParseUtils.parseItems(parent.Items);
-            });
-    }
+		return Service.request(link)
+			.then(function(response) {
+				var parent = JSON.parse(response);
+				return ParseUtils.parseItems(parent.Items);
+			});
+	}
 });

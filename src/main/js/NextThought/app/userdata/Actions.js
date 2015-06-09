@@ -856,7 +856,6 @@ Ext.define('NextThought.app.userdata.Actions', {
 	 * @return {Promsie}
 	 */
 	saveSharingPrefs: function(container, prefs, context) {
-		debugger;
 		var me = this;
 
 		if (!context) {

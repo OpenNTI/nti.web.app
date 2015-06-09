@@ -209,6 +209,12 @@ Ext.define('NextThought.model.ContentBundle', {
 		return s.filter(function(v) {return !Ext.isEmpty(v);});
 	},
 
+
+	hasForumList: function() {
+		return !!this.getLink('DiscussionBoard');
+	},
+
+
 	/**
 	 * See getForumList in CourseInstance for more details
 	 * @return {Object} a forum list of the contents of this board

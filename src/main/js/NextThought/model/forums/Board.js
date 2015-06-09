@@ -1,6 +1,11 @@
 Ext.define('NextThought.model.forums.Board', {
 	extend: 'NextThought.model.forums.Base',
 
+	requires: [
+		'NextThought.store.NTI',
+		'NextThought.model.forums.CommentPost'
+	],
+
 	isBoard: true,
 
 	statics: {
@@ -98,6 +103,9 @@ Ext.define('NextThought.model.forums.Board', {
 			return false;
 		});
 	},
+
+
+	hasForumList: function() { return true; },
 
 	/**
 	 * See CourseInstance getForumList for more details the structure this is returning
