@@ -83,7 +83,7 @@ Ext.define('NextThought.app.content.Actions', {
 			if (ContentUtils.hasChildren(topic)) {
 				path.push(this.buildContentPathPart(this.levelLabels[lineage.length], topic.getAttribute('ntiid'), parentNode, true, bundle));
 			} else {
-				path.push(this.buildContentPathPart(this.levelLabels[NaN]), null, null, false, bundle);
+				path.push(this.buildContentPathPart(this.levelLabels[NaN], topic.getAttribute('ntiid'), null, false, bundle));
 			}
 		}
 
