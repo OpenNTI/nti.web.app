@@ -3,7 +3,10 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 	extend: 'NextThought.app.course.dashboard.components.tiles.Post',
 	alias: 'widget.dashboard-note',
 
-	requires: ['NextThought.app.course.dashboard.components.tiles.parts.NoteComment'],
+	requires: [
+		'NextThought.app.course.dashboard.components.tiles.parts.NoteComment',
+		'NextThought.app.context.ContainerContext'
+	],
 
 	mixins: {
 		questionContent: 'NextThought.mixins.QuestionContent'
@@ -14,47 +17,43 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 		COMMENT_HEIGHT: 100,
 		VIDEO_THUMB_ASPECT: 1.77,
 
-		loadContext: function(record) {
-			return new Promise(function(fulfill) {
-					ContentUtils.findContentObject(record.get('ContainerId'), function(obj) {
-						fulfill(obj);
-					});
-				});
-		},
-
 		/*
 			For notes we need to know if it is in a video to determine the height of the tile
 			so wait to determine this and cache the useful async stuff we do along the way
 		 */
 		getTileConfig: function(record) {
+			debugger;
 			var me = this,
-				loadMeta = LocationMeta.getMeta(record.get('ContainerId')),
-				context = loadMeta
-							.then(function() {
-								return {};
-							})
-							.fail(me.loadContext.bind(me, record));
+				context = NextThought.app.context.ContainerContext.create({
+					container: record.get('ContainerId')
+				});
 
-			return context
-					.then(function(obj) {
-						//add height for the number of comments we are going to show
-						var height = Math.min((record.get('ReplyCount') || 0), 2) * me.COMMENT_HEIGHT;
+			return context.load()
+				.then(function(context) {
+					var height = Math.min((record.get('ReplyCount') || 0), 2) * me.COMMENT_HEIGHT;
 
-						//if we are in a video add height for the thumbnail
-						if (obj && /ntivideo/.test(obj.mimeType || obj.MimeType)) {
-							height += me.WIDTH / me.VIDEO_THUMB_ASPECT;
+					if (obj.type === NextThought.app.context.types.Video.type) {
+						height += me.WIDTH / me.VIDEO_THUMB_ASPECT;
+					}
+
+					return {
+						xtype: me.xtype,
+						baseHeight: me.HEIGHT + height,
+						width: me.WIDTH,
+						CACHE: {
+							context: context.load()
 						}
-
-						return {
-							xtype: me.xtype,
-							baseHeight: me.HEIGHT + height,
-							width: me.WIDTH,
-							CACHE: {
-								context: context,
-								loadMeta: loadMeta
-							}
-						};
-					});
+					}
+				}).fail(function() {
+					return {
+						xtype: me.xtype,
+						baseHeight: me.HEIGHT,
+						width: me.WIDTH,
+						CACHE: {
+							context: Promise.reject()
+						}
+					}
+				});
 		}
 	},
 
@@ -76,13 +75,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 	getPath: function() {
 		var rec = this.record;
 
-		this.CACHE.loadLineage = this.CACHE.loadLineage || this.getMeta()
-			.then(function(meta) {
-				return ContentUtils.getLineageLabels((meta && meta.NTIID) || rec.get('ContainerId'), true, this.course);
-			})
-			.fail(function() {
-				return ContentUtils.getLineageLabels(rec.get('ContainerId'), true, this.course);
-			});
+		this.CACHE.loadLineage = ContentUtils.getLineageLabels(rec.get('ContainerId'), true, this.course);
 
 		return this.CACHE.loadLineage
 			.then(function(paths) {
@@ -132,65 +125,19 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 	},
 
 
-	__loadContextFromMeta: function(meta) {
-		var me = this,
-			record = me.record;
-
-		return new Promise(function(fulfill, reject) {
-			ContentUtils.spider(meta.NTIID, function spiderComplete() {
-				fulfill('');
-			}, function parse(doc) {
-				doc = ContentUtils.parseXML(ContentUtils.fixReferences(doc, meta.absoluteContentRoot));
-
-				var newContext = RangeUtils.getContextAroundRange(record.get('applicableRange'), doc, doc, record.get('ContainerId')),
-					temp = Ext.fly(newContext);
-
-				Ext.fly(newContext).select('object').remove();
-				Ext.fly(newContext).select('input').addCls('preview').set({readonly: true});
-
-				return fulfill({
-					text: me.buildContent(newContext, true)
-				});
-			}, reject);
-		});
-	},
-
-
-	__loadContextFromObj: function() {
-		var me = this;
-
-		return me.CACHE.context
-				.then(function(obj) {
-					var src;
-
-					if (obj && /ntivideo/.test(obj.mimeType || obj.MimeType)) {
-						if (!Ext.isEmpty(obj.sources)) {
-							src = obj.sources.first();
-						}
-					}
-
-					if (src) {
-						return me.getCurrent()
-								.then(function(current) {
-									return {
-										thumbnail: src.thumbnail,
-										name: current,
-										source: src
-									};
-								});
-					}
-
-					return {};
-				});
-	},
-
-
 	getContext: function() {
-		var me = this;
+		debugger;
+		if (this.CACHE.context) {
+			return this.CACHE.context
+		}
 
-		return this.getMeta()
-			.then(this.__loadContextFromMeta.bind(this))
-			.fail(this.__loadContextFromObj.bind(this));
+		var context = NextThought.app.context.ContainerContext.create({
+			container: this.record.get('ContainerId')
+		});
+
+		this.CACHE.context = context;
+
+		return this.CACHE.context;
 	},
 
 

@@ -247,21 +247,25 @@ Ext.define('NextThought.app.annotations.note.Main', {
 			return;
 		}
 
-		if (this.readerContext) {
-			this.readerContext.load()
-				.then(this.setContext.bind(this));
+		var me = this;
+
+		if (me.readerContext) {
+			me.readerContext.load()
+				.then(function(context) {
+					me.setContext(context.html);
+				});
 		}
 
-		this.callParent(arguments);
+		me.callParent(arguments);
 
-		if (this.record) {
-			this.mun(this.record, 'destroy', this.wasDeleted, this);
+		if (me.record) {
+			me.mun(me.record, 'destroy', me.wasDeleted, me);
 		}
-		if (!this.rendered) {
+		if (!me.rendered) {
 			return;
 		}
 
-		this.replyOptions.show();
+		me.replyOptions.show();
 	},
 
 

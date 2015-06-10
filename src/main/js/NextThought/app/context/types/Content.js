@@ -12,6 +12,8 @@ Ext.define('NextThought.app.context.types.Content', {
 
 
 	statics: {
+		type: 'content',
+
 		canHandle: function(obj) {
 			return obj instanceof Node;
 		}
@@ -40,7 +42,10 @@ Ext.define('NextThought.app.context.types.Content', {
 
 			context = doc && RangeUtils.getContextAroundRange(range, doc, doc.body, cid);
 
-			return this.__fixUpContext(context);
+			return {
+				type: this.self.type,
+				html: this.__fixUpContext(context)
+			}
 		} catch (e) {
 			console.error('Faild to load content context:', e);
 		}

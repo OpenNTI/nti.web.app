@@ -246,13 +246,20 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 		if (Ext.isEmpty(context) || Ext.Object.isEmpty(context)) { return; }
 
 		var me = this,
+			show = false;
 			emptySrc = Globals.CANVAS_BROKEN_IMAGE.src;
 
-		if (context.text) {
+		if (context.type === NextThought.app.context.types.Content.type) {
 			this.contextEl.addCls('word-context');
 			this.contextTextEl.update(context.text);
+			show = true;
+		} else if (context.type === NextThought.app.context.types.RelatedWork.type) {
+			this.contextEl.addCls('word-context');
+			this.contextEl.update('');
 		} else {
+			show = true;
 			this.contextEl.addCls('image-context');
+
 			if (context.name) {
 				this.contextTitleEl.update(context.name);
 			}
@@ -268,17 +275,17 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 						.then(function(obj) {
 							if (obj.poster && obj.poster !== emptySrc) {
 								me.contextImageEl.set({'src': obj.poster});
-								me.contextImage.removeCls('no-thumbnail');
+								me.contextImageEl.removeCls('no-thumbnail');
 							}
 						});
 				}
 			}
 		}
 
-		this.contextEl.addCls('has-context');
+		this.contextEl[show ? 'addCls' : 'removeCls']('has-context');
 
 		if (!this.CACHE.height) {
-			this.CACHE.height = this.height + 186;
+			this.CACHE.height  = this.height + 1(show ? 86 : 0);
 		}
 	},
 
