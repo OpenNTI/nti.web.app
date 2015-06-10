@@ -413,25 +413,6 @@
 	background: #fff;
 	box-shadow: 3px 0px 9px -3px rgba(0,0,0,0.3);
 
-	.window-header{
-		position: relative;
-		height: 44px;
-		border-bottom: 1px solid #ededed;
-
-		.close{
-			@include icon('note-window-x', $side: after, $position: absolute);
-			top: 10px;
-			right: 10px;
-			cursor: pointer;
-			width: 24px;
-			height: 24px;
-
-			&:hover{
-				@include icon('note-window-x_hover', $side: after, $position: absolute);
-			}
-		}
-	}
-
 	.note {
 		box-shadow: inset 0 1px 0 0 #ffffff;
 	}

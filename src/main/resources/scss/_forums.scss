@@ -1202,6 +1202,90 @@
 	}
 }
 
+.topic-window {
+	-webkit-font-smoothing: antialiased;
+	.topic-post, .forum-comment-thread {
+		position: relative;
+		margin-top: 0;
+		.header-container {
+			height: 50px;
+			z-index: 3;
+			border: 0 solid #f1f1f1;
+			border-bottom-width: 1px !important;
+		}
+
+		.avatar {
+			position: absolute;
+			width: 60px; height: 60px;
+			top: 35px; left: 30px;
+			border-radius: 3px;
+			background:{
+				color: transparent;
+				position: center;
+				repeat: no-repeat;
+				size: cover;
+			}
+		}
+
+		& > .wrap {
+			padding: 30px 25px 0 25px;
+			position: relative;
+
+			.meta{
+				margin-left: 75px;
+			}
+
+			.meta,
+			.foot {
+				position: relative;
+
+				.paging-comments-nav{
+					position: absolute;
+					bottom: -3px;
+					right: 0;
+					width: 330px;
+					text-align: right;
+					display: block;
+
+					&.single {
+						display: none;
+					}
+
+					.pager-container{
+						.pages{
+							.page{
+								color: $primary-blue;
+								display: inline-block;
+								padding-right: 20px;
+								cursor: pointer;
+
+								&.disabled, &.active{
+									color: $tertiary-grey;
+									cursor: default;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		@include post-view;
+
+		.searchHit-overlay{
+			z-index: 1;
+			left: 0;
+			pointer-events: none;
+		}
+
+		.title{
+			margin-left: 70px;
+			cursor: default;
+			white-space: normal;
+		}
+	}
+}
+
 #forums, 
 .course-forum{
 	-webkit-font-smoothing: antialiased;
@@ -1629,87 +1713,6 @@
 				.header {
 					@include forum-navigation;
 				}
-			}
-		}
-
-		&.topic-post, &.topic-body {
-			position: relative;
-			margin-top: 0;
-			.header-container {
-				height: 50px;
-				z-index: 3;
-				border: 0 solid #f1f1f1;
-				border-bottom-width: 1px !important;
-			}
-
-			.avatar {
-				position: absolute;
-				width: 60px; height: 60px;
-				top: 35px; left: 30px;
-				border-radius: 3px;
-				background:{
-					color: transparent;
-					position: center;
-					repeat: no-repeat;
-					size: cover;
-				}
-			}
-
-			& > .wrap {
-				padding: 30px 25px 0 25px;
-				position: relative;
-
-				.meta{
-					margin-left: 75px;
-				}
-
-				.meta,
-				.foot {
-					position: relative;
-
-					.paging-comments-nav{
-						position: absolute;
-						bottom: -3px;
-						right: 0;
-						width: 330px;
-						text-align: right;
-						display: block;
-
-						&.single {
-							display: none;
-						}
-
-						.pager-container{
-							.pages{
-								.page{
-									color: $primary-blue;
-									display: inline-block;
-									padding-right: 20px;
-									cursor: pointer;
-
-									&.disabled, &.active{
-										color: $tertiary-grey;
-										cursor: default;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-
-			@include post-view;
-
-			.searchHit-overlay{
-				z-index: 1;
-				left: 0;
-				pointer-events: none;
-			}
-
-			.title{
-				margin-left: 70px;
-				cursor: default;
-				white-space: normal;
 			}
 		}
 	}

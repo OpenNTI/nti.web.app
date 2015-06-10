@@ -3,7 +3,8 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 	alias: 'widget.forums-forum-topic-list-view',
 
 	require: [
-		'NextThought.view.menus.Reports'
+		'NextThought.view.menus.Reports',
+		'NextThought.app.windows.Actions'
 	],
 
 	loadMask: {
@@ -86,6 +87,8 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 		me.callParent(arguments);
 
 		me.tpl.searchTerm = 'adsfasdf';
+
+		me.WindowActions = NextThought.app.windows.Actions.create();
 
 		if (!me.record.getLink('add')) {
 			me.emptyText = Ext.DomHelper.markup({
@@ -182,7 +185,9 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 
 		if (record.get('isGroupHeader')) { return; }
 
-		this.fireEvent('show-topic-list', this, this.record, record);
+		this.WindowActions.pushWindow(record, node, {}, {
+			forum: this.record
+		});
 	},
 
 

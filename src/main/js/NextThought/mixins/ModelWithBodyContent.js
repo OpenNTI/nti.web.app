@@ -73,7 +73,7 @@ Ext.define('NextThought.mixins.ModelWithBodyContent', {
 	whiteboardRenderer: function(o, clickHandlerMaker, size, callback, scope) {
 		var id = guidGenerator(),
 				me = this,
-				Canvas = NextThought.view.whiteboard.Canvas;
+				Canvas = NextThought.app.whiteboard.Canvas;
 		Canvas.getThumbnail(o, function(thumbnail) {
 			var t = me.WHITEBOARD_THUMBNAIL_TPL.apply([
 				id,

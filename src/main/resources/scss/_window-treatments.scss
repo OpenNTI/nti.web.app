@@ -359,6 +359,50 @@
 	}
 }
 
+.object-window {
+
+	.window-loading {
+		height: 100px;
+		padding: 45px 0 0 6px;
+		position: relative;
+
+		div {
+			position: absolute;
+			width: 100px;
+			top: 50%;
+			left: 50%;
+			line-height: 24px;
+			padding-left: 28px;
+			margin-top: -12px;
+			margin-left: -50px;
+
+			&::before {
+				@include loadingSpinner($top: 0, $left: 0);
+			}
+		}
+
+	}
+
+	.window-header{
+		position: relative;
+		height: 44px;
+		border-bottom: 1px solid #ededed;
+
+		.close{
+			@include icon('note-window-x', $side: after, $position: absolute);
+			top: 10px;
+			right: 10px;
+			cursor: pointer;
+			width: 24px;
+			height: 24px;
+
+			&:hover{
+				@include icon('note-window-x_hover', $side: after, $position: absolute);
+			}
+		}
+	}
+}
+
 .timeline-window {
 	.nti-window-header {
 		height: 50px;

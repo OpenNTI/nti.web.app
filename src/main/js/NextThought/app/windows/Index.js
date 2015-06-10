@@ -50,7 +50,7 @@ Ext.define('NextThought.app.windows.Index', {
 	},
 
 
-	showWindow: function(object, path, el, monitors) {
+	showWindow: function(object, path, el, monitors, precache) {
 		var type = this.WindowStore.getComponentForMimeType(object.mimeType),
 			cmp;
 
@@ -63,8 +63,11 @@ Ext.define('NextThought.app.windows.Index', {
 
 		cmp = type.create({
 			record: object,
+			precache: precache || {},
 			doClose: this.doClose.bind(this, monitors && monitors.afterClose)
 		});
+
+		cmp.addCls('object-window');
 
 		this.viewContainer.add(cmp);
 

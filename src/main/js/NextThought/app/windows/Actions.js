@@ -24,7 +24,7 @@ Ext.define('NextThought.app.windows.Actions', {
 	 * @param  {Array} path          the path to show for the model
 	 * @param  {Element} el           element to show the note opening from
 	 */
-	pushWindow: function(objectOrNTIID, el, monitors) {
+	pushWindow: function(objectOrNTIID, el, monitors, precache) {
 		var id = objectOrNTIID;
 
 		if (typeof objectOrNTIID !== 'string') {
@@ -32,7 +32,7 @@ Ext.define('NextThought.app.windows.Actions', {
 		}
 
 		if (objectOrNTIID.isModel) {
-			this.WindowStore.cacheObject(id, objectOrNTIID, el, monitors);
+			this.WindowStore.cacheObject(id, objectOrNTIID, el, monitors, precache);
 		}
 
 		this.WindowStore.firePushWindow({
@@ -54,7 +54,7 @@ Ext.define('NextThought.app.windows.Actions', {
 	 * @param  {Array} path       the path to show for the modal, or a promise that fulfills with the path
 	 * @return {Promise}          fulfills when the window is open
 	 */
-	showWindow: function(objectOrNTIID, path, el, monitors) {
+	showWindow: function(objectOrNTIID, path, el, monitors, precache) {
 		var me = this, id, cache,
 			fetchObject;
 
@@ -70,6 +70,7 @@ Ext.define('NextThought.app.windows.Actions', {
 			objectOrNTIID = cache.obj;
 			el = el || cache.el;
 			monitors = monitors || cache.monitors;
+			precache = precache || cache.precache;
 		}
 
 		if (typeof objectOrNTIID === 'string') {
@@ -82,7 +83,7 @@ Ext.define('NextThought.app.windows.Actions', {
 				fetchObject,
 				path
 			]).then(function(results) {
-				me.WindowStore.fireShowWindow(results[0], results[1], el, monitors);
+				me.WindowStore.fireShowWindow(results[0], results[1], el, monitors, precache);
 			});
 	}
 });

@@ -8,6 +8,7 @@ Ext.define('NextThought.app.forums.Index', {
 
 	requires: [
 		'NextThought.app.forums.components.forum.Index',
+		'NextThought.app.forums.components.topic.Window',
 		'NextThought.model.forums.*'
 	],
 
@@ -26,7 +27,6 @@ Ext.define('NextThought.app.forums.Index', {
 
 		this.addRoute('/', this.showForum.bind(this));
 		this.addRoute('/:forum', this.showForum.bind(this));
-		this.addRoute('/:forum/:topic', this.showTopic.bind(this));
 		this.addDefaultRoute('/');
 
 		this.forumView = this.down('forum-view');
@@ -71,8 +71,5 @@ Ext.define('NextThought.app.forums.Index', {
 				me.forumView.setForumList(forumList);
 				return me.forumView.setForum(id);
 			});
-	},
-
-
-	showTopic: function(route, subRoute) {}
+	}
 });
