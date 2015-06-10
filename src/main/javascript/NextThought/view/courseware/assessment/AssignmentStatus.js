@@ -63,14 +63,14 @@ Ext.define('NextThought.view.courseware.assessment.AssignmentStatus', {
 				d = {};
 
 			if (TimeUtils.isSameDay(now, data.due)) {
-				d.html = 'Due Today!';
+				d.html = 'Due Today at ' + Ext.Date.format(data.due, 'g:i a T') + '!';
 				d.cls = 'today';
 				d.qtipFn = 'getTimeUntilDue';
 			} else {
 				if (!data.due && data.isNoSubmitAssignment) {
 					d.html = '';
 				} else {
-					d.html = 'Due ' + Ext.Date.format(data.due, 'l, F j');
+					d.html = 'Due ' + Ext.Date.format(data.due, 'l, F j g:i a T');
 				}
 
 				if (data.isNoSubmitAssignment) {

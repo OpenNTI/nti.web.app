@@ -119,6 +119,7 @@ Ext.define('NextThought.view.courseware.overview.parts.QuestionSet', {
 		if (date) {
 			if (day === today) {
 				html += getString('NextThought.view.courseware.overview.parts.QuestionSet.today');
+				html += ' at ' + Ext.Date.format(date, 'g:i a T');
 			}
 			else {
 				html += Ext.Date.format(date, format);
