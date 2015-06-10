@@ -22,7 +22,6 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 			so wait to determine this and cache the useful async stuff we do along the way
 		 */
 		getTileConfig: function(record) {
-			debugger;
 			var me = this,
 				context = NextThought.app.context.ContainerContext.create({
 					container: record.get('ContainerId')
@@ -126,7 +125,6 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 
 
 	getContext: function() {
-		debugger;
 		if (this.CACHE.context) {
 			return this.CACHE.context
 		}

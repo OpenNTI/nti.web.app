@@ -58,7 +58,7 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 		if (!comment.ready) {
 			this.mon(comment, {
 				single: true,
-				reader: function() {
+				ready: function() {
 					//TODO: highlight results
 					topic.buildCommentPagingNav(comment);
 				}

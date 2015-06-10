@@ -5,7 +5,8 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 	requires: [
 		'NextThought.store.forums.Comments',
 		'NextThought.util.UserDataThreader',
-		'NextThought.app.whiteboard.Window'
+		'NextThought.app.whiteboard.Window',
+		'NextThought.app.forums.Actions'
 	],
 
 	mixins: {
@@ -110,6 +111,8 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 		this.notLoadedYet = true;
 		this.initialLoad = new Promise(this.buildStore.bind(this));
 		this.buildReadyPromise();
+
+		this.ForumActions = NextThought.app.forums.Actions.create();
 	},
 
 
@@ -159,25 +162,12 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 			scrollEl.el.mask();
 		}
 
-		me.editor = Ext.widget('nti-editor', {ownerCt: me, renderTo: me.el, record: null, saveCallback: function(editor, postCmp, record) {
-			me.editor.deactivate();
-
-			if (me.isNewRecord) {
-				if (record.isTopLevel() && !me.isOnLastPage()) {
-					me.loadLastPage(true);
-				} else {
-					if (record.isTopLevel()) {
-						me.store.totalCount += 1;
-					}
-
-					me.store.insertSingleRecord(record);
-					me.goToComment(record);
-				}
-			}
-		}});
+		me.editor = Ext.widget('nti-editor', {ownerCt: me, renderTo: me.el, record: null});
 		me.relayEvents(me.editor, ['activated-editor', 'deactivated-editor']);
 		me.editor.addCls('threaded-forum-editor');
 		me.el.selectable();
+
+		me.mon(me.editor, 'save', me.saveComment.bind(me));
 
 		if (me.scrollToComment) {
 			me.goToComment(me.scrollToComment);
@@ -660,6 +650,47 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 	},
 
 
+	saveComment: function(editor, record, values) {
+		var me = this;
+
+		function unmask() {
+			if (editor.el) {
+				editor.el.unmask();
+			}
+		}
+
+		if (editor.el) {
+			editor.el.mask('Saving...');
+			editor.el.repaint();
+		}
+
+		me.ForumActions.saveTopicComment(me.topic, record, values)
+			.then(function(record) {
+				unmask();
+				me.editor.deactivate();
+				me.editor.setValue('');
+				me.editor.reset();
+
+				if (me.isNewRecord) {
+					if (record.isTopLevel() && !me.isOnLastPage()) {
+						me.loadLastPage(true);
+					} else {
+						if (record.isTopLevel()) {
+							me.store.totalCount += 1;
+						}
+
+						me.store.insertSingleRecord(record);
+						me.goToComment(record);
+					}
+				}
+			})
+			.fail(function() {
+				editor.markError(editor.getEl(), 'Could not save comment');
+				unmask();
+			});
+	},
+
+
 	goToComment: function(comment) {
 		if (!this.rendered) {
 			this.scrollToComment = comment;
@@ -702,7 +733,8 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 
 
 	scrollCommentIntoView: function(comment) {
-		var node = this.getNode(comment);
+		var node = this.getNode(comment),
+			win = this.up('windows-view');
 
 		node = Ext.get(node);
 
@@ -711,7 +743,11 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 			return;
 		}
 
-		node.scrollCompletelyIntoView(node.getScrollingEl());
+		if (win) {
+			node.scrollCompletelyIntoView(win.el);
+		} else {
+			node.scrollCompletelyIntoView(node.getScrollingEl());
+		}
 	},
 
 
