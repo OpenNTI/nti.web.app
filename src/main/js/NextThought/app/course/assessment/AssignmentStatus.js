@@ -65,7 +65,7 @@ Ext.define('NextThought.app.course.assessment.AssignmentStatus', {
 				d = {};
 
 			if (TimeUtils.isSameDay(now, data.due)) {
-				d.html = 'Due Today!';
+				d.html = 'Due Today at ' + Ext.Date.format(data.due, 'g:i a T') + '!';
 				d.cls = 'today';
 				d.qtipFn = 'getTimeUntilDue';
 			} else {
