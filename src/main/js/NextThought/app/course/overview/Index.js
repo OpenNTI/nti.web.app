@@ -40,6 +40,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 		this.addChildRouter(this.lessons);
 
 		this.on('activate', this.onActivate.bind(this));
+		this.LibraryActions = NextThought.app.library.Actions.create();
 	},
 
 
@@ -179,17 +180,32 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 
 	showMediaViewer: function(route, subRoute) {
-		var video = route.precache.video,
+		var videoId = route.params.id,
+			video = route.precache.video,
 			basePath = route.precache.basePath,
 			rec = route.precache.rec,
 			options = route.precache.options,
 			transcript, me = this;
 
+		videoId = ParseUtils.decodeFromURI(videoId);
+
 		if (video && video.isModel) {
 			transcript = NextThought.model.transcript.TranscriptItem.fromVideo(video, basePath);
 		}
 		else{
-			// TODO: Need to handle case where we don't have the video object.
+			this.LibraryActions.getVideoIndex(me.currentBundle)
+				.then(function(videoIndex) {
+					var o = videoIndex[videoId];
+					if (!o) { return; }
+
+					basePath = me.currentBundle.getContentRoots()[0];
+					video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
+					transcript = NextThought.model.transcript.TranscriptItem.fromVideo(video, basePath);
+					
+					// Create the media viewer
+					createMediaPlayer(rec);
+				});
+			return;
 		}
 
 		function createMediaPlayer(record, scrollToId) {
