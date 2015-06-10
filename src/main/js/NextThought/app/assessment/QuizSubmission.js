@@ -63,7 +63,10 @@ Ext.define('NextThought.app.assessment.QuizSubmission', {
 		this.answeredMap = answeredMap;
 		this.startTimestamp = new Date().getTime();
 
-		this.questionSet.addSaveProgressHandler(this.saveProgress.bind(this), this.beforeSaveProgress.bind(this), this.afterSaveProgress.bind(this));
+		if (this.questionSet.associatedAssignment) {
+			this.questionSet.addSaveProgressHandler(this.saveProgress.bind(this), this.beforeSaveProgress.bind(this), this.afterSaveProgress.bind(this));
+		}
+
 		this.questionSet.setStartTime(this.startTimestamp);
 		this.questionSet.clearProgress();
 
@@ -541,7 +544,7 @@ Ext.define('NextThought.app.assessment.QuizSubmission', {
 	},
 
 
-	submitQuestionSet: function(questionSet, submission) {
+	submitAssessment: function(questionSet, submission) {
 		var me = this,
 			container = me.reader.getLocation().NTIID;
 
@@ -551,8 +554,10 @@ Ext.define('NextThought.app.assessment.QuizSubmission', {
 			.then(function(result) {
 				me.setGradingResult(result);
 
+				me.unmask();
 				me.reader.fireEvent('assessment-graded', result);
 			}, function() {
+				me.unmask();
 				me.onFailure();
 			});
 	},
