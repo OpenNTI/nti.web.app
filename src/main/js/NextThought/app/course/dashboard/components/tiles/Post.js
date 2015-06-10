@@ -44,7 +44,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 				{ cls: 'like' }
 			]},
 			{cls: 'post-meta', cn: [
-				{ cls: 'avatar', style: {backgroundImage: 'url({Creator:avatarURL()})'}},
+				'{Creator:avatar}',
 				{ cls: 'meta', cn: [
 					{cls: 'name', html: '{Creator:displayName()}'},
 					{tag: 'span', cls: 'list-item shared-with', html: '{SharedWith}'},

@@ -28,7 +28,7 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 						{ cls: 'like {likeState} {[values.LikeCount==0?\"\":"keep"]}', html: '{[values.LikeCount==0?\"\":values.LikeCount]}' },
 						{ tag: 'tpl', 'if': 'this.showReport(values)', cn: { cls: 'reports off', 'data-qtip': '{{{NextThought.view.forums.forum.parts.TopicListView.reports}}}'} }
 					]},
-					{ cls: 'avatar', style: 'background: url({Creator:avatarURL})'},
+					'{Creator:avatar("commentAvatar")}',
 					{ cls: 'header', cn: [
 						{ cls: 'author', html: '{Creator:displayName}' },
 						{ cls: 'title', html: '{title}'}

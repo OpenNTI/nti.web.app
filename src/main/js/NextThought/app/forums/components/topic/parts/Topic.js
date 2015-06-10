@@ -36,7 +36,7 @@ Ext.define('NextThought.app.forums.components.topic.parts.Topic', {
 				{cls: 'favorite'},
 				{cls: 'like'}
 			]},
-			{ cls: 'avatar', style: { backgroundImage: 'url({headline.Creator:avatarURL()});'}},
+			'{headline.Creator:avatar}',
 			{ cls: 'title', html: '{title}' },
 			{ cls: 'meta', cn: [
 				{ tag: 'tpl', 'if': 'showName', cn: { tag: 'span', cls: 'name link', html: '{headline.Creator}'}},

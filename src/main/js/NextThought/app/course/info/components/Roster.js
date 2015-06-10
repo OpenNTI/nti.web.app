@@ -56,7 +56,7 @@ extend: 'Ext.container.Container',
 							possibleSortStates: ['ASC', 'DESC'],//restore the default order of state(since the grid reverses it)
 							tpl: Ext.DomHelper.markup({
 								cls: 'padded-cell user-cell', cn: [
-									{ cls: 'avatar', style: {backgroundImage: 'url({Creator:avatarURL})'} },
+									'{Creator:avatar}',
 									{ cls: 'name', html: '{Creator:displayName}'}
 								]
 							})

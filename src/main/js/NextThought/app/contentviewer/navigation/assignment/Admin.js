@@ -35,7 +35,7 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Admin', {
 			{cls: 'status-item', cn: {tag: 'span', cls: 'excused {excused.cls}', html: '{excused.html}'}}
 		]},
 		{ cls: 'user', cn: [
-			{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'}},
+			'{create:avatar}',
 			{ cls: 'wrap', cn: [
 				{ cls: 'title name {presence}', cn: {html: '{displayName}' }},
 				{ cls: 'username', cn: {html: '({Username})'}},
@@ -89,7 +89,7 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Admin', {
 			displayName: this.student.toString(),
 			Username: this.showingUsername ? Username : '',
 			gradeTitle: this.gradeTitle || getString('NextThought.view.courseware.assessment.admin.Header.assignment'),
-			avatarURL: this.student.get('avatarURL'),
+			creator: this.student,
 			presence: this.student.getPresence().getName(),
 			excused: this.__getExcusedTpl()
 		});

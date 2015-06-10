@@ -32,6 +32,31 @@ Ext.define('NextThought.util.Format', {
 			   User.BLANK_AVATAR;
 	},
 
+
+	avatar: function(value, cls) {
+		var avatar = (value && value.get && value.get('avatarURL')) || (value && value.avatarURL),
+			clsList = [cls || 'avatar', 'avatar-container'];
+
+		function get(link) {
+			return 'url(' + link + ')'
+		}
+
+
+		clsList = clsList.join(' ');
+
+		if (avatar) {
+			return Ext.DomHelper.markup({cls: clsList, cn: [
+				{cls: 'fallback avatar-pic', style: {backgroundImage: get(User.BLANK_AVATAR)}},
+				{cls: 'profile avatar-pic', style: {backgroundImage: get(avatar)}}
+			]});
+		}
+
+		return Ext.DomHelper.markup({cls: clsList, cn: [
+				{cls: 'fallback avatar-pic', style: {backgroundImage: get(User.BLANK_AVATAR)}}
+			]});
+	},
+
+
 	boolStr: function(value, trueString, falseString) {
 		trueString = trueString && getString(trueString);
 		falseString = falseString && getString(falseString);
@@ -62,4 +87,5 @@ Ext.define('NextThought.util.Format', {
 	Ext.util.Format.boolStr = NTIFormat.boolStr;
 	Ext.util.Format.displayName = NTIFormat.displayName;
 	Ext.util.Format.pluralIf = NTIFormat.pluralIf;
+	Ext.util.Format.avatar = NTIFormat.avatar;
 });

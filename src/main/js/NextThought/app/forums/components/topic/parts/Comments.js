@@ -51,7 +51,7 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 							{cls: 'favorite-spacer'},
 							{cls: 'like {[values.liked? "on" : "off"]}', html: '{likeCount}'}
 						]},
-						{ cls: 'commentAvatar', style: { backgroundImage: 'url({Creator:avatarURL()});'}},
+						'{Creator:avatar("commentAvatar")}',
 						{ cls: 'wrap', 'data-commentid': '{ID}', cn: [
 							{ cls: 'meta', cn: [
 								{ tag: 'span', html: '{Creator:displayName()}', cls: 'name link'},

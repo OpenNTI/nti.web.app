@@ -1,3 +1,22 @@
+.avatar-container {
+	position: relative;
+
+	.avatar-pic {
+		position: absolute;
+		top: 0; bottom: 0;
+		left: 0; right: 0;
+		background-size: contain;
+	}
+
+	.fallback {
+		z-index: 1;
+	}
+
+	.profile {
+		z-index: 2;
+	}
+}
+
 #view > .profile-tabs {
 	border-top-color: white;
 	background: white;

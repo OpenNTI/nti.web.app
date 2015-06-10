@@ -33,7 +33,7 @@ Ext.define('NextThought.app.assessment.AssignmentFeedback', {
 			tpl: Ext.DomHelper.markup([
 				{tag: 'tpl', 'for': '.', cn: {
 					cls: 'feedback-item', cn: [
-						{ cls: 'avatar', style: {backgroundImage: 'url({Creator:avatarURL()})'}},
+						'{Creator:avatar}',
 						{ cls: 'wrap', cn: [
 							{ cls: 'meta', cn: [
 								{ tag: 'span', cls: 'name', html: '{Creator}'},

@@ -193,7 +193,7 @@ Ext.define('NextThought.model.User', {
 
 	statics: {
 
-		BLANK_AVATAR: 'resources/images/icons/unresolved-user.png',
+		BLANK_AVATAR: '/app/resources/images/icons/unresolved-user.png',
 
 		getUnresolved: function(username) {
 			username = username || 'Unknown';
