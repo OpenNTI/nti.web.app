@@ -136,6 +136,10 @@ Ext.define('NextThought.app.slidedeck.media.components.Grid', {
 						});
 				});
 
+			// Since the bundle didn't change but the current video changed,
+			// firing store-set will trigger setting next and previous video
+			me.fireEvent('store-set', me.store);
+
 			me.__scrollSelectedIntoView();
 		}
 	},

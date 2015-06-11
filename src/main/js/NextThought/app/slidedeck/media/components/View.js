@@ -202,6 +202,8 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 			accountForScrollbars: false,
 			scrollToId: this.scrollToId,
 			video: this.video,
+			nextVideo: this.nextVideo,
+			prevVideo: this.prevVideo,
 			viewerContainer: this
 		});
 
