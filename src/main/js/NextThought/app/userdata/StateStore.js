@@ -26,6 +26,7 @@ Ext.define('NextThought.app.userdata.StateStore', {
 		this.currentContext = ctx;
 	},
 
+
 	clearContext: function() {
 		delete this.currentContext;
 	},
@@ -33,6 +34,21 @@ Ext.define('NextThought.app.userdata.StateStore', {
 
 	getMainReaderContext: function() {
 		return this.flatPageContextMap['main-reader-view'];
+	},
+
+
+	addStore: function(store) {
+		if (!this.flatPageContextMap) {
+			this.flatPageContextMap = {};
+		}
+
+		if (!this.flatPageContextMap.others) {
+			this.flatPageContextMap.others = {
+				currentPageStores: {}
+			};
+		}
+
+		this.flatPageContextMap.others.currentPageStores[store.storeId] = store;
 	},
 
 

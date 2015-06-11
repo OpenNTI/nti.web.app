@@ -73,7 +73,7 @@ Ext.define('NextThought.app.windows.Actions', {
 			precache = precache || cache.precache;
 		}
 
-		if (typeof objectOrNTIID === 'string') {
+		if (typeof objectOrNTIID === 'string' && ParseUtils.isNTIID(objectOrNTIID)) {
 			fetchObject = this.__resolveBeforeShow(objectOrNTIID);
 		} else {
 			fetchObject = objectOrNTIID;

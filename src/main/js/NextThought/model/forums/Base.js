@@ -1,7 +1,10 @@
 Ext.define('NextThought.model.forums.Base', {
 	extend: 'NextThought.model.Base',
 
-	requires: ['NextThought.util.Store'],
+	requires: [
+		'NextThought.util.Store',
+		'NextThought.app.userdata.StateStore'
+	],
 
 	fields: [
 		{name: 'isGroupHeader', type: 'boolean', persist: false, defaultValue: false},
@@ -20,12 +23,19 @@ Ext.define('NextThought.model.forums.Base', {
 
 	buildContentsStore: function(idSuffix, cfg, extraParams) {
 		var store,
+			UserDataStore = NextThought.app.userdata.StateStore.getInstance(),
 			id = this.getContentsStoreId('', idSuffix);
 
-		store = Ext.getStore(id) || NextThought.store.NTI.create(Ext.apply({
-			storeId: id,
-			url: this.getLink('contents')
-		}, cfg || {}));
+		store = Ext.getStore(id);
+
+		if (!store) {
+			store = NextThought.store.NTI.create(Ext.apply({
+				storeId: id,
+				url: this.getLink('contents')
+			}, cfg || {}));
+
+			UserDataStore.addStore(store);
+		}
 
 		store.proxy.extraParams = Ext.apply(
 			store.proxy.extraParams || {},

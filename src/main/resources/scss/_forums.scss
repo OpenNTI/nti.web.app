@@ -1284,6 +1284,21 @@
 			white-space: normal;
 		}
 	}
+
+	.forums-topic-editor-box{
+		margin: 0 auto;
+
+		.forums-topic-editor{
+			border: none !important;
+			
+			.title {
+				margin-left: 0;
+			}
+
+
+			@include forum-post-editor;
+		}
+	}
 }
 
 #forums, 
@@ -1581,21 +1596,6 @@
 				span {
 					font-weight: 600;
 				}
-			}
-		}
-
-		&.forums-topic-editor-box{
-			margin: 0 auto;
-
-			.forums-topic-editor{
-				border: none !important;
-				
-				.title {
-					margin-left: 0;
-				}
-
-
-				@include forum-post-editor;
 			}
 		}
 

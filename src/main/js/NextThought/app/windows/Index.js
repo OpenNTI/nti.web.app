@@ -51,7 +51,7 @@ Ext.define('NextThought.app.windows.Index', {
 
 
 	showWindow: function(object, path, el, monitors, precache) {
-		var type = this.WindowStore.getComponentForMimeType(object.mimeType),
+		var type = this.WindowStore.getComponentForMimeType(object.mimeType || object),
 			cmp;
 
 		if (!type) {
@@ -62,7 +62,7 @@ Ext.define('NextThought.app.windows.Index', {
 		this.viewContainer.removeAll();
 
 		cmp = type.create({
-			record: object,
+			record: object.isModel && object,
 			precache: precache || {},
 			doClose: this.doClose.bind(this, monitors && monitors.afterClose)
 		});

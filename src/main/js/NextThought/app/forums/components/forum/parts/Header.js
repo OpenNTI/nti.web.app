@@ -40,7 +40,7 @@ Ext.define('NextThought.app.forums.components.forum.parts.Header', {
 			me.newTopicEl.destroy();
 		} else {
 			me.mon(me.newTopicEl, 'click', function() {
-				me.fireEvent('new-topic', me, me.record);
+				me.fireEvent('new-topic', me, me.record, me.newTopicEl);
 			});
 		}
 

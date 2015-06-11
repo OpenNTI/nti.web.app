@@ -2,6 +2,10 @@ Ext.define('NextThought.app.forums.components.topic.parts.Editor', {
 	extend: 'NextThought.editor.Editor',
 	alias: 'widget.forums-topic-editor',
 
+	requires: [
+		'NextThought.app.forums.Actions'
+	],
+
 	cls: 'forums-topic-editor-box',
 	border: 1,
 
@@ -29,6 +33,7 @@ Ext.define('NextThought.app.forums.components.topic.parts.Editor', {
 	initComponent: function() {
 		this.callParent(arguments);
 		this.addEvents(['save-post']);
+		this.ForumActions = NextThought.app.forums.Actions.create();
 	},
 
 
@@ -133,13 +138,14 @@ Ext.define('NextThought.app.forums.components.topic.parts.Editor', {
 
 	onSave: function(e) {
 		e.stopEvent();
-		var v = this.getValue(),
-				re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g,
-				trimEndRe = /((<p><br><\/?p>)|(<br\/?>))*$/g, l;
+		var me = this,
+			v = me.getValue(),
+			re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g,
+			trimEndRe = /((<p><br><\/?p>)|(<br\/?>))*$/g, l;
 
 		if (!Ext.isArray(v.body) || v.body.join('').replace(re, '') === '') {
 			console.error('bad forum post');
-			this.markError(this.contentEl, getString('NextThought.view.forums.topic.parts.Editor.emptycontent'));
+			me.markError(me.contentEl, getString('NextThought.view.forums.topic.parts.Editor.emptycontent'));
 			return;
 		}
 
@@ -150,28 +156,46 @@ Ext.define('NextThought.app.forums.components.topic.parts.Editor', {
 
 		if (Ext.isEmpty(v.title)) {
 			console.error('You need a title');
-			this.markError(this.titleWrapEl, getString('NextThought.view.forums.topic.parts.Editor.emptytitle'));
-			this.titleWrapEl.addCls('error-on-bottom');
+			me.markError(me.titleWrapEl, getString('NextThought.view.forums.topic.parts.Editor.emptytitle'));
+			me.titleWrapEl.addCls('error-on-bottom');
 			return;
 		}
 
 		/*if (/^[^a-z0-9]+$/i.test(v.title)) {
 			console.error('Title cant be all special chars');
-			this.markError(this.titleWrapEl, getString('NextThought.view.forums.topic.parts.Editor.specialtitle'));
-			this.titleWrapEl.addCls('error-on-bottom');
+			me.markError(me.titleWrapEl, getString('NextThought.view.forums.topic.parts.Editor.specialtitle'));
+			me.titleWrapEl.addCls('error-on-bottom');
 			return;
 		}*/
 
 		if (/^@{1,}/.test(v.title)) {
 			console.error('Title cant start with @');
-			this.markError(this.titleWrapEl, getString('NextThought.view.forums.topic.parts.Editor.attitle'));
-			this.titleWrapEl.addCls('error-on-bottom');
+			me.markError(me.titleWrapEl, getString('NextThought.view.forums.topic.parts.Editor.attitle'));
+			me.titleWrapEl.addCls('error-on-bottom');
 			return;
 		}
 
-		//console.debug('Save:',v);
-		//If new there will not be a record on this, it will be undefined
-		this.fireEvent('save-post', this, this.record, this.forum, v.title, v.tags, v.body, v.publish);
+		function unmask() {
+			if (me.el) {
+				me.el.unmask();
+			}
+		}
+
+		if (me.el) {
+			me.el.mask('Saving...');
+		}
+
+		me.ForumActions.saveTopic(me.rec, me.forum, v.title, v.tags, v.body, v.publish)
+			.then(function(record) {
+				unmask();
+
+				me.fireEvent('after-save', record);
+			})
+			.fail(function(reason) {
+				unmask();
+				console.error('Failed to save the discussion: ', reason);
+				alert('There was trouble saving the discussion');
+			});
 	},
 
 
@@ -199,14 +223,6 @@ Ext.define('NextThought.app.forums.components.topic.parts.Editor', {
 	onCancel: function(e) {
 		e.stopEvent();
 
-		this.isClosed = true;
-		if (this.closeCallback) {
-			this.destroy();
-			this.closeCallback.call();
-		} else if (this.record) {
-			this.fireEvent('goto-record', this.record);
-		} else {
-			this.fireEvent('pop-view');
-		}
+		this.fireEvent('cancel');
 	}
 });

@@ -105,7 +105,10 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 		}
 
 		if (me.header) {
-			me.mon(me.header, 'page-change', 'updatePage');
+			me.mon(me.header, {
+				'page-change': 'updatePage',
+				'new-topic': 'newTopic'
+			});
 		}
 	},
 
@@ -187,6 +190,13 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 
 		this.WindowActions.pushWindow(record, node, {}, {
 			forum: this.record
+		});
+	},
+
+
+	newTopic: function(header, forum, el) {
+		this.WindowActions.showWindow('new-topic', null, el, null, {
+			forum: forum
 		});
 	},
 
@@ -354,6 +364,8 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 		if (this.topic) {
 			params.batchAround = this.topic;
 		}
+
+		me.store.sorters.removeAll();
 
 		return new Promise(function(fulfill, reject) {
 			me.mon(store, {

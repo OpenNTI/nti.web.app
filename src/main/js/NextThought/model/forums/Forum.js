@@ -33,7 +33,15 @@ Ext.define('NextThought.model.forums.Forum', {
 	],
 
 	buildContentsStore: function(idSuffix, cfg, extraParams) {
-		return this.callParent([idSuffix, Ext.apply({stateKey: 'forum'},cfg),
+		var ntiid = this.get('NTIID'),
+			myConfig = {
+				stateKey: 'forum',
+				wantsItem: function(record) {
+					return record.get('ContainerId') === ntiid;
+				}
+			};
+
+		return this.callParent([idSuffix, Ext.apply(myConfig,cfg),
 			Ext.apply({
 				sortOn: 'NewestDescendantCreatedTime',
 				sortOrder: 'DESC'

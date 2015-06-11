@@ -1,6 +1,8 @@
 Ext.define('NextThought.app.forums.Actions', {
 	extend: 'NextThought.common.Actions',
 
+	requires: ['NextThought.app.userdata.Actions'],
+
 	saveTopicComment: function(topic, comment, values) {
 		var isEdit = Boolean(comment) && !comment.phantom,
 			postLink = topic.getLink('add');
@@ -34,5 +36,90 @@ Ext.define('NextThought.app.forums.Actions', {
 				}
 			});
 		});
+	},
+
+
+	saveTopic: function(record, forum, title, tags, body, autoPublish) {
+		var isEdit = Boolean(record),
+			post = isEdit ? record.get('headeline') : NextThought.model.forums.Post.create(),
+			me = this;
+
+		//NOTE: Forums entries are PUBLIC only.
+		autoPublish = true;
+
+		post.set({
+			'title': title,
+			'body': body,
+			'tags': tags || []
+		});
+
+		if (isEdit) {
+			record.set({'title': title});
+		}
+
+		return new Promise(function(fulfill, reject) {
+			post.getProxy().on('exception', reject, null, {single: true});
+			post.save({
+				url: isEdit ? undefined : forum && forum.getLink('add'),//only use post record if its a new post
+				scope: this,
+				success: function(post, operation) {
+					var entry = isEdit ? record : ParseUtils.parseItems(operation.response.responseText)[0];
+
+					if (autoPublish !== undefined) {
+						if (autoPublish !== entry.isPublished()) {
+							//TODO: figure out what we need to do heres
+						}
+					}
+
+					//we have nested objects here. The entry contains a headline whose body, title, and tags
+					//have been updates. Our magic multi object setter won't find the nested object in the store
+					//so we set it back on the original record to trigger other instance of the entry to be updated.
+					//Not doing this reflects itself by the body of the topic not updating in the activity view
+					if (isEdit && record) {
+						record.afterEdit('headline');
+					}
+
+					fulfill(entry);
+				},
+				failure: reject
+			})
+		}).then(function(entry) {
+			var record;
+
+			//This is how the views are reading the display name... pre-set the Creator as your userObject.
+			if (isMe(entry.get('Creator'))) {
+				entry.set('Creator', $AppConfig.userObject);
+			}
+
+			me.applyTopicToStores(entry);
+
+			return entry;
+		});
+	},
+
+
+	applyTopicToStores: function(topic) {
+		var actions = NextThought.app.userdata.Actions.create(),
+			recordForStore;
+
+		actions.applyToStoresThatWantItem(function(id, store) {
+			if (store) {
+				if (store.findRecord('NTIID', topic.get('NTIID'), 0, false, true, true)) {
+					console.warn('Store already has item with id:' + topic.get('NTIID'), topic);
+				}
+
+				if (!recordForStore) {
+					//Each store gets its own copy of the record. A null value indicates we already added one to a
+					//store, so we need a new instance. Read it out of the original raw value.
+					recordForStore = ParseUtils.parseItems([topic.raw])[0];
+				}
+
+				//The store will handle making all the threading/placement, etc
+				store.add(recordForStore);
+				//once added, null out this pointer so that subsequent loop iterations don't read the same instance to
+				//another store. (I don't think our threading algorithm would appreciate that)
+				recordForStore = null;
+			}
+		}, topic);
 	}
 });
