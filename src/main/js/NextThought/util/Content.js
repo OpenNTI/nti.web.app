@@ -282,7 +282,7 @@ Ext.define('NextThought.util.Content', {
 		}
 
 		function mapNode(node) {
-			var doc = node.toc.documentElement,
+			var doc = node.toc && node.toc.documentElement,
 				loc = node.location;
 
 			return Ext.apply({

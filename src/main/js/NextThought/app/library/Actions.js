@@ -110,7 +110,7 @@ Ext.define('NextThought.app.library.Actions', {
 					keys.sort(function(a, b) {
 						var c = toc.querySelector(query('topic', a)) || toc.querySelector(query('toc', a)),
 							d = toc.querySelector(query('topic', b)),
-							p = c.compareDocumentPosition(d);
+							p = d && c.compareDocumentPosition(d);
 
 						/*jshing bitwise:false*/
 						return ((p & Node.DOCUMENT_POSITION_PRECEDING) === Node.DOCUMENT_POSITION_PRECEDING) ? 1 : -1;
