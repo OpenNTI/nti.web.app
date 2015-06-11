@@ -247,6 +247,7 @@ Ext.define('NextThought.app.course.Index', {
 			tabs.push({
 				text: getString('NextThought.view.content.View.dashboardtab', 'Activity'),
 				route: 'activity',
+				subRoute: this.dashboardRoute,
 				title: 'Activity',
 				active: active === 'course-dashboard'
 			});
@@ -255,7 +256,8 @@ Ext.define('NextThought.app.course.Index', {
 		if (showTab(course.overview.Index)) {
 			tabs.push({
 				text: getString('NextThought.view.content.View.lessontab', 'Lessons'),
-				route: state.lessonRoute || 'lessons',
+				route: 'lessons',
+				subRoute: this.overviewRoute,
 				title: 'Lessons',
 				active: active === 'course-overview'
 			});
@@ -264,7 +266,8 @@ Ext.define('NextThought.app.course.Index', {
 		if (showTab(course.assessment.Index)) {
 			tabs.push({
 				text: getString('NextThought.view.content.View.assessmenttab', 'Assignments'),
-				route: 'assignments/notifications',
+				route: 'assignments',
+				subRoute: this.assignmentRoute,
 				title: 'Assignments',
 				active: active === 'course-assessment-container'
 			});
@@ -274,6 +277,7 @@ Ext.define('NextThought.app.course.Index', {
 			tabs.push({
 				text: getString('NextThought.view.content.View.discussiontab', 'Discussions'),
 				route: 'discussions',
+				subRoute: this.discussionsRoute,
 				title: 'Discussions',
 				active: active === 'course-forum'
 			});
@@ -361,6 +365,8 @@ Ext.define('NextThought.app.course.Index', {
 
 
 	showDashboard: function(route, subRoute) {
+		this.dashboardRoute = subRoute;
+
 		return this.__setActiveView('course-dashboard', [
 				'course-overview',
 				'course-assessment-container',
@@ -372,6 +378,8 @@ Ext.define('NextThought.app.course.Index', {
 
 
 	showOverview: function(route, subRoute) {
+		this.overviewRoute = subRoute;
+
 		return this.__setActiveView('course-overview', [
 				'course-dashboard',
 				'course-assessment-container',
@@ -387,6 +395,8 @@ Ext.define('NextThought.app.course.Index', {
 
 
 	showAssignments: function(route, subRoute) {
+		this.assignmentRoute = subRoute;
+
 		return this.__setActiveView('course-assessment-container', [
 				'course-dashboard',
 				'course-overview',
@@ -402,6 +412,8 @@ Ext.define('NextThought.app.course.Index', {
 
 
 	showDiscussions: function(route, subRoute) {
+		this.discussionsRoute = subRoute;
+
 		return this.__setActiveView('course-forum', [
 				'course-dashboard',
 				'course-overview',
@@ -417,6 +429,8 @@ Ext.define('NextThought.app.course.Index', {
 
 
 	showReports: function(route, subRoute) {
+		this.reportsRoute = subRoute;
+
 		return this.__setActiveView('course-reports', [
 				'course-dashboard',
 				'course-overview',
@@ -428,6 +442,8 @@ Ext.define('NextThought.app.course.Index', {
 
 
 	showInfo: function(route, subRoute) {
+		this.reportsRoute = subRoute;
+
 		return this.__setActiveView('course-info', [
 				'course-dashboard',
 				'course-overview',

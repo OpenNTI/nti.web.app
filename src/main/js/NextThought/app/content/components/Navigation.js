@@ -11,6 +11,7 @@ Ext.define('NextThought.app.content.components.Navigation', {
 					tag: 'li',
 					'data-index': '{#}',
 					'data-route': '{route}',
+					'data-subroute': '{subRoute}',
 					'data-title': '{title}',
 					'data-text': '{text}',
 					cls: 'tab{[values.active ? " active": ""]}',
@@ -145,11 +146,36 @@ Ext.define('NextThought.app.content.components.Navigation', {
 	},
 
 
+	updateRoute: function(route, subRoute) {
+		if (!this.rendered) {
+			this.on('afterrender', this.updateRoute.bind(this, route, subRoute));
+			return;
+		}
+
+		route = Globals.trimRoute(route);
+		subRoute = Globals.trimRoute(subRoute);
+
+		var tab = this.el.dom.querySelector('[data-route="' + route + '"]');
+
+		if (tab) {
+			if (subRoute) {
+				tab.setAttribute('data-subroute', subRoute);
+			} else {
+				tab.removeAttribute('data-subroute');
+			}
+		}
+	},
+
+
 	onTabClick: function(e) {
-		var tab = e.getTarget('.tab');
+		var tab = e.getTarget('.tab'),
+			route = tab && tab.getAttribute('data-route'),
+			subRoute = tab && tab.getAttribute('data-subroute');
+
+		route = Globals.trimRoute(route) + '/' + Globals.trimRoute(subRoute);
 
 		if (this.bodyView.onTabChange && tab && !tab.classList.contains('active')) {
-			this.bodyView.onTabChange(tab.getAttribute('data-title'), tab.getAttribute('data-route'), tab);
+			this.bodyView.onTabChange(tab.getAttribute('data-title'), route, tab);
 		}
 	}
 });

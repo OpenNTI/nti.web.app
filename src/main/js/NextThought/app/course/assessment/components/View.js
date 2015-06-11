@@ -249,9 +249,9 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 		this.addChildRouter(this.performanceView);
 
 		this.navigation.addItems([
-			this.notificationsView,
 			this.assignmentsView,
-			this.performanceView
+			this.performanceView,
+			this.notificationsView
 		]);
 	},
 
@@ -285,9 +285,9 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 		this.addChildRouter(this.performanceView);
 
 		this.navigation.addItems([
-			this.notificationsView,
 			this.assignmentsView,
-			this.performanceView
+			this.performanceView,
+			this.notificationsView,
 		]);
 	},
 
