@@ -28,12 +28,30 @@ Ext.define('NextThought.app.windows.Index', {
 		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
 		this.WindowActions = NextThought.app.windows.Actions.create();
 
+		this.WindowStore.addAllowNavigationHandler(this.allowNavigation.bind(this));
+
 		this.viewContainer = this.down('window-container');
 
 		this.mon(this.WindowStore, {
 			'show-window': this.showWindow.bind(this),
-			'close-window': this.closeWindow.bind(this)
+			'close-window': this.closeWindow.bind(this),
+			'allow-navigation': this.allowNavigation.bind(this)
 		});
+	},
+
+
+	allowNavigation: function() {
+		var allow = true;
+
+		this.viewContainer.items.each(function(item) {
+			if (item && item.allowNavigation) {
+				allow = item.allowNavigation();
+			}
+
+			return allow;
+		});
+
+		return allow;
 	},
 
 
@@ -87,8 +105,6 @@ Ext.define('NextThought.app.windows.Index', {
 
 
 	doClose: function(afterClose) {
-		this.viewContainer.removeAll();
-		this.removeOpenCls();
 		this.WindowActions.closeWindow();
 
 		if (afterClose) {

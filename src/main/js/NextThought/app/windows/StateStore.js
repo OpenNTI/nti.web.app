@@ -45,5 +45,19 @@ Ext.define('NextThought.app.windows.StateStore', {
 
 	getObject: function(id) {
 		return this.obj_map[id];
+	},
+
+
+	addAllowNavigationHandler: function(fn) {
+		if (!this.allow_navigation_handler) {
+			this.allow_navigation_handler = fn;
+		} else {
+			console.error('The window cannot have more than one navigation handler');
+		}
+	},
+
+
+	allowNavigation: function() {
+		return (this.allow_navigation_handler && this.allow_navigation_handler.call(null)) || false;
 	}
 });

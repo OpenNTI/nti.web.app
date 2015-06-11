@@ -81,6 +81,27 @@ Ext.define('NextThought.app.forums.components.topic.parts.Editor', {
 	},
 
 
+	allowNavigation: function() {
+		return new Promise(function(fulfill, reject) {
+			Ext.Msg.show({
+				title: 'Attention!',
+				msg: 'You are currently creating a topic. Would you like to leave without saving?',
+				buttons: {
+					primary: {
+						text: 'Leave',
+						cls: 'caution',
+						handler: fulfill
+					},
+					secondary: {
+						text: 'Stay',
+						handler: reject
+					}
+				}
+			});
+		});
+	},
+
+
 	// destroy: function() {
 	//	var container = this.ownerCt.getEl();
 	//	container.removeCls('scroll-lock scroll-padding-right');

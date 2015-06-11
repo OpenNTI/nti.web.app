@@ -175,6 +175,38 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 	},
 
 
+	allowNavigation: function() {
+		if (!this.editor.isActive()) {
+			return true;
+		}
+
+		var title = 'Attention!';
+			msg = 'You are currently creating a topic. Would you like to leave without saving?';
+
+		if (this.editor.record) {
+			msg = 'You are currently editing a topic. Would you like to leave without saving?';
+		}
+
+		return new Promise(function(fulfill, reject) {
+			Ext.Msg.show({
+				title: title,
+				msg: msg,
+				buttons: {
+					primary: {
+						text: 'Leave',
+						cls: 'caution',
+						handler: fulfill
+					},
+					secondary: {
+						text: 'Stay',
+						handler: reject
+					}
+				}
+			});
+		});
+	},
+
+
 	buildStore: function(fulfill, reject) {
 		var me = this,
 			s = NextThought.store.forums.Comments.create({

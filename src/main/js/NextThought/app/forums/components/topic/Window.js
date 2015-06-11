@@ -51,6 +51,18 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 	},
 
 
+	allowNavigation: function() {
+		var editor = this.down('forums-topic-editor'),
+			comment = this.down('forums-topic-comment-thread');
+
+		if (!editor && !comment) {
+			return true;
+		}
+
+		return (editor && editor.allowNavigation()) || (comment && comment.allowNavigation());
+	},
+
+
 	showTopic: function() {
 		var topic = this.down('forums-topic-topic'),
 			comment = this.down('forums-topic-comment-thread'),

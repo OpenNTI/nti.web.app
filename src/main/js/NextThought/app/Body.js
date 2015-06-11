@@ -50,6 +50,18 @@ Ext.define('NextThought.app.Body', {
 	},
 
 
+	allowNavigation: function() {
+		var win = this.WindowStore.allowNavigation()
+
+		//if the window stops it or returns a promise don't keep looking
+		if ((win === false) || win instanceof Promise) {
+			return win
+		}
+
+		return this.mixins.Router.allowNavigation.call(this);
+	},
+
+
 	setActiveCmp: function(xtype) {
 		var cmp = this.down(xtype);
 
