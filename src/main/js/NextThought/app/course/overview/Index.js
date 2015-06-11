@@ -27,7 +27,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 		this.initRouter();
 
 		this.addRoute('/:lesson/content/:id', this.showContent.bind(this));
-		this.addRoute('/:lesson/video/:id', this.showMediaViewer.bind(this));
+		this.addRoute('/:lesson/video/', this.showMediaViewer.bind(this));
 
 		this.addDefaultRoute(this.showLessons.bind(this));
 
@@ -97,6 +97,10 @@ Ext.define('NextThought.app.course.overview.Index', {
 		if (this.reader) {
 			Ext.destroy(this.reader);
 			delete this.reader;
+		}
+		if (this.activeMediaPlayer) {
+			Ext.destroy(this.activeMediaPlayer);
+			delete this.activeMediaPlayer;
 		}
 
 		return lessons.handleRoute(route.path, route.precache);
@@ -180,76 +184,25 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 
 	showMediaViewer: function(route, subRoute) {
-		var videoId = route.params.id,
-			video = route.precache.video,
-			basePath = route.precache.basePath,
-			rec = route.precache.rec,
-			options = route.precache.options,
-			transcript, me = this;
+		var me = this;
 
-		videoId = ParseUtils.decodeFromURI(videoId);
-
-		if (video && video.isModel) {
-			transcript = NextThought.model.transcript.TranscriptItem.fromVideo(video, basePath);
-		}
-		else{
-			this.LibraryActions.getVideoIndex(me.currentBundle)
-				.then(function(videoIndex) {
-					var o = videoIndex[videoId];
-					if (!o) { return; }
-
-					basePath = me.currentBundle.getContentRoots()[0];
-					video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
-					transcript = NextThought.model.transcript.TranscriptItem.fromVideo(video, basePath);
-					
-					// Create the media viewer
-					createMediaPlayer(rec);
-				});
-			return;
-		}
-
-		function createMediaPlayer(record, scrollToId) {
-			me.activeMediaPlayer = Ext.widget('media-view', {
-				video: video,
-				transcript: transcript,
+		me.activeMediaPlayer = Ext.widget('media-view', {
+				currentBundle: me.currentBundle,
 				autoShow: true,
-				record: record,
-				scrollToId: scrollToId,
-				startAtMillis: options && options.startAtMillis,
-				currentBundle: me.currentBundle
+				handleNavigation: me.handleNavigation.bind(me),
+				handleClose: me.handleMediaClose.bind(me)
 			});
 
-			me.activeMediaPlayer.fireEvent('suspend-annotation-manager', this);
+		me.addChildRouter(me.activeMediaPlayer);
 
-			me.activeMediaPlayer.on('destroy', function() {
-				if (me.activeMediaPlayer) {
-					me.activeMediaPlayer.fireEvent('resume-annotation-manager', this);
-					me.activeMediaPlayer = null;
-				}
+		me.activeMediaPlayer.fireEvent('suspend-annotation-manager', this);
+		me.activeMediaPlayer.on('destroy', function() {
+			if (me.activeMediaPlayer) {
+				me.activeMediaPlayer.fireEvent('resume-annotation-manager', this);
+			}
+		});
 
-				if (options && options.closeCallback) {
-					options.closeCallback.call();
-				}
-			});
-			// me.activeMediaPlayer.on('media-viewer-ready', function(viewer) {
-			// 	var fn = options && options.callback,
-			// 		scope = this;
-			// 	if (Ext.isObject(fn)) {
-			// 		fn = fn.fn;
-			// 		scope = fn.scope;
-			// 	}
-
-			// 	Ext.callback(fn, scope, [viewer]);
-			// });
-		}
-
-		if (!rec || rec.isTopLevel()) {
-			createMediaPlayer(rec);
-			return;
-		}
-
-		//Otherwise, will need to load the parent record before we can navigate to it.
-		// this.navigateToReply(rec, createMediaPlayer, me);
+		return me.activeMediaPlayer.handleRoute(subRoute, route.precache);
 	},
 
 
@@ -322,5 +275,9 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 	handleNavigation: function(title, route, precache) {
 		this.pushRoute(title, route, precache);
+	},
+
+	handleMediaClose: function(cmp) {		
+		this.pushRoute(null, '/');
 	}
 });

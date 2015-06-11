@@ -7,7 +7,8 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 		'NextThought.app.slidedeck.media.components.viewers.SplitViewer',
 		'NextThought.app.slidedeck.media.components.viewers.TranscriptViewer',
 		'NextThought.app.slidedeck.media.components.viewers.VideoViewer',
-
+		'NextThought.app.library.Actions',
+		'NextThought.model.transcript.TranscriptItem'
 	],
 
 	mixins: {
@@ -50,10 +51,6 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 
 	viewerIdMap: {},
 
-	items: [
-		// { 'xtype': 'media-grid-view'}
-	],
-
 	getStorageManager: function() {
 		return TemporaryStorage;
 	},
@@ -62,13 +59,121 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		if (!Ext.getBody().hasCls('media-viewer-open')) {
-			Ext.getBody().mask('Loading...');
-			this.animateIn();//will listen to afterRender
-		} else {
-			this.on('afterrender', Ext.bind(this.fireEvent, this, ['animation-end']), null, {single: true, buffered: 1000});
+		this.initRouter();
+
+		this.LibraryActions = NextThought.app.library.Actions.create();
+		this.addRoute('/:id', this.showVideoViewer.bind(this));
+		this.addDefaultRoute(this.showVideoGrid.bind(this));
+
+		this.__addKeyMapListeners();			
+	},
+
+
+	showVideoViewer: function(route, subRoute) {
+		var videoId = route.params.id,
+			video = route.precache.video,
+			basePath = route.precache.basePath,
+			rec = route.precache.rec,
+			options = route.precache.options || {},
+			transcript, me = this;
+
+		videoId = ParseUtils.decodeFromURI(videoId);
+		options.rec = rec;
+
+		// Cache the lesson if it was passed to us.
+		me.lesson = route.precache.lesson;
+
+		if (video && video.isModel) {
+			transcript = NextThought.model.transcript.TranscriptItem.fromVideo(video, basePath);
+			me.setContent(video, transcript, options);
+		}
+		else{
+			this.LibraryActions.getVideoIndex(me.currentBundle)
+				.then(function(videoIndex) {
+					var o = videoIndex[videoId];
+					if (!o) { return; }
+
+					basePath = me.currentBundle.getContentRoots()[0];
+					video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
+					transcript = NextThought.model.transcript.TranscriptItem.fromVideo(video, basePath);
+					
+					me.setContent(video, transcript, options);
+				});
+			return;
+		}
+	},
+
+
+	setContent: function(video, transcript, options) {
+		var me = this;
+
+		if(!this.rendered) {
+			this.onceRendered.then(function(){
+				wait().then(me.setContent.bind(me, video, transcript, options));
+			});
+			return;
 		}
 
+		this.video = video;
+		this.transcript = transcript;
+		this.options = options;
+
+		this.toolbar.setContent(this.video, this.transcript);
+		this.gridView.setContent(this.video, this.currentBundle);
+		this.buildInitialViewer();
+
+		this.getLayout().setActiveItem(this.viewer);
+		Ext.EventManager.onWindowResize(this.adjustOnResize, this, {buffer: 250});
+	},
+
+
+	showVideoGrid: function(route, subRoute) {
+		//TOOD: not yet handled
+		console.error('route not yet implemented: ', arguments);
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+		
+		if (!Ext.getBody().hasCls('media-viewer-open')) {
+			this.animateIn();
+		}
+		else {
+			this.maybeMask();
+		}
+
+		var playerType = this.getViewerType();
+		this.toolbar = Ext.widget({
+			xtype: 'media-toolbar',
+			renderTo: this.headerEl,
+			currentType: playerType,
+			floatParent: this,
+		});
+
+		this.gridView = this.add({
+			xtype: 'media-grid-view'
+		});
+
+		// this.identity = Ext.widget({
+		// 	xtype: 'identity',
+		// 	renderTo: this.toolbar.getEl(),
+		// 	floatParent: this.toolbar
+		// });
+
+		this.on('destroy', 'destroy', this.toolbar);
+		this.on('destroy', 'destroy', this.gridView);
+		// this.on('destroy', 'destroy', this.identity);
+		this.on('exit-viewer', 'exitViewer', this);
+		this.on('destroy', 'cleanup', this);
+
+		this.mon(this.gridView, {
+			'hide-grid': {fn: 'showGridPicker', scope: this.toolbar},
+			'store-set': 'listStoreSet'
+		});
+	},
+
+	__addKeyMapListeners: function() {
 		keyMap = new Ext.util.KeyMap({
 			target: document,
 			binding: [{
@@ -82,50 +187,9 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 	},
 
 
-	afterRender: function() {
-		this.callParent(arguments);
-
-		var playerType = this.getViewerType();
-		this.toolbar = Ext.widget({
-			xtype: 'media-toolbar',
-			renderTo: this.headerEl,
-			currentType: playerType,
-			floatParent: this,
-		});
-		this.toolbar.setContent(this.video, this.transcript);
-
-		// this.identity = Ext.widget({
-		// 	xtype: 'identity',
-		// 	renderTo: this.toolbar.getEl(),
-		// 	floatParent: this.toolbar
-		// });
-
-		// Video Grid
-		// this.gridView = this.down('media-grid-view');
-		// this.gridView.setContent(this.video, this.currentBundle);
-
-		// Video Viewer
-		this.buildInitialViewer();
-
-		this.on('destroy', 'destroy', this.toolbar);
-		this.on('destroy', 'destroy', this.gridView);
-		this.on('destroy', 'destroy', this.identity);
-		this.on('exit-viewer', 'exitViewer', this);
-		this.on('destroy', 'cleanup', this);
-
-		// this.mon(this.gridView, {
-		// 	'hide-grid': {fn: 'showGridPicker', scope: this.toolbar},
-		// 	'store-set': 'listStoreSet'
-		// });
-
-		Ext.EventManager.onWindowResize(this.adjustOnResize, this, {buffer: 250});
-
-	},
-
-
 	buildInitialViewer: function() {
 		var playerType = this.getViewerType(),
-			viewerType = this.viewerXtypeMap[playerType];
+			viewerType = this.viewerXtypeMap[playerType], me = this;
 
 		this.viewer = this.add({
 			xtype: this.viewerXtypeMap[playerType],
@@ -138,10 +202,14 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 		});
 
 		this.viewerIdMap[viewerType] = this.viewer.getId();
-		this.mon(this.viewer, 'media-viewer-ready', 'adjustOnResize', this);
-		if (!Ext.isEmpty(this.startAtMillis)) {
-			this.mon(this.viewer, 'media-viewer-ready', this.startAtSpecificTime.bind(this, this.startAtMillis));
-		}
+		this.mon(this.viewer, 'media-viewer-ready', function(){
+				me.adjustOnResize();
+				me.maybeUnmask();
+
+				if (!Ext.isEmpty(me.startAtMillis)) {
+					me.startAtSpecificTime(me.startAtMillis);
+				}
+			});
 	},
 
 
@@ -170,16 +238,32 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 	animateIn: function() {
 		var me = this;
 		if (!this.rendered) {
-			this.on('afterrender', 'animateIn', this, {buffer: 300});
+			this.on('afterrender', 'animateIn', this);
 			return;
 		}
 
 		Ext.getBody().addCls('media-viewer-open');
-		this.addCls('ready');
-		this.el.setStyle('visibility', 'visible');
-		Ext.getBody().unmask();
+		this.maybeMask();
+
 		//TODO use the animationend event for the browsers that support it
 		Ext.defer(this.fireEvent, 1100, this, ['animation-end']);
+	},
+
+	maybeMask: function() {
+		if (!this.rendered) {
+			return;
+		}
+
+		this.addCls('loading');
+		this.el.mask('Loading media viewer comtents...', 'loading');
+	},
+
+
+	maybeUnmask: function() {
+		if (this.rendered) {
+			this.removeCls('loading');
+			this.el.unmask();
+		}
 	},
 
 
@@ -201,6 +285,11 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 		console.log('about to exit the video viewer');
 
 		if (!this.viewer.beforeExitViewer()) {
+			return;
+		}
+
+		if (this.handleClose) {
+			this.handleClose();
 			return;
 		}
 

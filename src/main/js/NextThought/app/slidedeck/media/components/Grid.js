@@ -2,8 +2,10 @@ Ext.define('NextThought.app.slidedeck.media.components.Grid', {
 	extend: 'Ext.view.View',
 	alias: 'widget.media-grid-view',
 
-	requies: ['NextThought.model.resolvers.VideoPosters'],
-
+	requies: [
+		'NextThought.model.resolvers.VideoPosters',
+		'NextThought.app.library.Actions'
+	],
 
 	//<editor-fold desc="Config">
 	config: {
@@ -72,6 +74,8 @@ Ext.define('NextThought.app.slidedeck.media.components.Grid', {
 	initComponent: function() {
 		this.callParent(arguments);
 
+		this.LibraryActions = NextThought.app.library.Actions.create();
+
 		this.on({
 			itemclick: function(cmp, record, item) {
 				var selectionChanged = cmp.getSelectedNodes()[0] !== item;
@@ -116,22 +120,26 @@ Ext.define('NextThought.app.slidedeck.media.components.Grid', {
 	},
 
 	setContent: function(source, bundle){
-		var me = this,
-			lineage = ContentUtils.getLineage(source.get('NTIID')),
-			location = ContentUtils.getLocation(lineage.last()),
-			title = location.title;
+		var me = this;
 
 		me.source = source,
 		me.currentBundle = bundle;
 		
-		//if we can determine bundle to use its outline to order by
-		//use it, otherwise just use the video index
-		wait()
-			.then(this.getBundleOutline.bind(this))
-			.then(this.fillInFromOutline.bind(this, title))
-			.fail(this.getVideoData.bind(this, title));
+		this.LibraryActions.getVideoIndex(me.currentBundle)
+				.then(me.applyVideoData.bind(me));
+		// wait()
+		// 	.then(this.getBundleOutline.bind(this))
+		// 	.then(this.fillInFromOutline.bind(this, title))
+		// 	.fail(this.getVideoData.bind(this, title));
 
-		this.setLocationInfo(location);
+		ContentUtils.getLineage(source.get('NTIID'), bundle)
+			.then(function(lineages) {
+				var lineage = lineages[0];
+				ContentUtils.getLocation(lineage.last(), bundle)
+					.then(function (location) {
+						me.setLocationInfo(location);
+					});
+			});
 	},
 
 
@@ -294,28 +302,38 @@ Ext.define('NextThought.app.slidedeck.media.components.Grid', {
 				console.error(key, '!=', v);
 			}
 
-			//get the ntiid of the section to key the groups by
-			section = ContentUtils.getLineage(key)[1];
+			return new Promise(function(fulfill, reject) {
+				ContentUtils.getLineage(key, me.currentBundle)
+					.then(function(lineages) {
+						//get the ntiid of the section to key the groups by
+						var lineage = lineages[0];
+						section = lineage[1];
+						return Promise.resolve(lineage[1]);
+					})
+					.then(function(section) {
+						//get the label to show to the user
+						ContentUtils.getLineageLabels(key, false, me.currentBundle)
+							.then(function(labels) {
+								var label = labels[0] && labels[0][1];
 
-			//get the label to show to the user
-			return ContentUtils.getLineageLabels(key)
-				.then(function(labels) {
-					var label = labels[1];
+								if (!sections.hasOwnProperty(section)) {
+									sections[section] = NextThought.model.PlaylistItem({section: label, sources: []});
+									videos.push(sections[section]);
+								}
 
-					if (!sections.hasOwnProperty(section)) {
-						sections[section] = NextThought.model.PlaylistItem({section: label, sources: []});
-						videos.push(sections[section]);
-					}
+								videos.push(reader.read(Ext.apply(v, {
+									NTIID: v.ntiid,
+									section: section
+								})).records[0]);
 
-					videos.push(reader.read(Ext.apply(v, {
-						NTIID: v.ntiid,
-						section: section
-					})).records[0]);
+								if (key === selected) {
+									selected = videos.last();
+								}
 
-					if (key === selected) {
-						selected = videos.last();
-					}
-
+								fulfill();
+							});
+					})
+					.fail(reject)
 				});
 		}
 
