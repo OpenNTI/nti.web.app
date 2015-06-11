@@ -122,24 +122,52 @@ Ext.define('NextThought.app.slidedeck.media.components.Grid', {
 	setContent: function(source, bundle){
 		var me = this;
 
-		me.source = source,
-		me.currentBundle = bundle;
-		
-		this.LibraryActions.getVideoIndex(me.currentBundle)
-				.then(me.applyVideoData.bind(me));
-		// wait()
-		// 	.then(this.getBundleOutline.bind(this))
-		// 	.then(this.fillInFromOutline.bind(this, title))
-		// 	.fail(this.getVideoData.bind(this, title));
+		me.source = source;
+		if(me.currentBundle !== bundle) {
+			me.__bundleChanged(bundle);
+		}
+		else {
+			ContentUtils.getLineage(source.get('NTIID'), bundle)
+				.then(function(lineages) {
+					var lineage = lineages[0];
+					ContentUtils.getLocation(lineage.last(), bundle)
+						.then(function (location) {
+							me.setLocationInfo(location);
+						});
+				});
 
-		ContentUtils.getLineage(source.get('NTIID'), bundle)
+			me.__scrollSelectedIntoView();
+		}
+	},
+
+	__bundleChanged: function(bundle) {
+		var me = this;
+
+		me.currentBundle = bundle;
+		me.LibraryActions.getVideoIndex(me.currentBundle)
+				.then(me.applyVideoData.bind(me));
+
+		ContentUtils.getLineage(me.source.get('NTIID'), bundle)
 			.then(function(lineages) {
 				var lineage = lineages[0];
 				ContentUtils.getLocation(lineage.last(), bundle)
 					.then(function (location) {
 						me.setLocationInfo(location);
 					});
-			});
+			});		
+	},
+
+
+	__scrollSelectedIntoView: function() {
+		if(!this.rendered) { return; }
+
+		var r = this.getSelectionModel().getLastSelected(),
+			node = r && this.getNodeByRecord(r),
+			ct = this.el && this.el.getScrollingEl();
+
+		if (node && Ext.fly(node).needsScrollIntoView(ct)) {
+			node.scrollIntoView(ct, false, {});
+		}
 	},
 
 
@@ -383,10 +411,13 @@ Ext.define('NextThought.app.slidedeck.media.components.Grid', {
 
 	fireSelection: function() {
 		var rec = this.getSelectionModel().getSelection().first(),
-			li = this.getLocationInfo();
+			li = this.getLocationInfo(), 
+			section = rec && rec.get('section'),
+			route = section && ParseUtils.encodeForURI(section) + '/video/' + ParseUtils.encodeForURI(rec.getId());
 
-		//console.log('Change video to:', rec);
-		Ext.defer(this.fireEvent, 1, this, ['change-media-in-player', rec.raw, rec.get('NTIID'), getURL(li.root)]);
+		if (this.ownerCt && this.ownerCt.handleNavigation) {
+			this.ownerCt.handleNavigation(rec.get('title'), route, {video: rec, basePath: getURL(li.root)});
+		}
 	},
 
 

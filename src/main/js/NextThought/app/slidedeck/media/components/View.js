@@ -84,6 +84,10 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 		me.lesson = route.precache.lesson;
 
 		if (video && video.isModel) {
+			if(!basePath && basePath != "") {
+				basePath = me.currentBundle.getContentRoots()[0];					
+			}
+
 			transcript = NextThought.model.transcript.TranscriptItem.fromVideo(video, basePath);
 			me.setContent(video, transcript, options);
 		}
@@ -250,7 +254,7 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 	},
 
 	maybeMask: function() {
-		if (!this.rendered) {
+		if (!this.rendered || this.hasCls('loading')) {
 			return;
 		}
 
@@ -380,6 +384,7 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 			});
 
 			this.viewerIdMap[viewerXType] = this.viewer.getId();
+			this.getLayout().setActiveItem(this.viewer);
 		}
 		else {
 			this.viewer = targetViewer;

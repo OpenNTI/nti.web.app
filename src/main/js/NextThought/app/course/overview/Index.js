@@ -186,22 +186,25 @@ Ext.define('NextThought.app.course.overview.Index', {
 	showMediaViewer: function(route, subRoute) {
 		var me = this;
 
-		me.activeMediaPlayer = Ext.widget('media-view', {
+		if (!me.activeMediaPlayer) {
+			me.activeMediaPlayer = Ext.widget('media-view', {
 				currentBundle: me.currentBundle,
 				autoShow: true,
 				handleNavigation: me.handleNavigation.bind(me),
 				handleClose: me.handleMediaClose.bind(me)
 			});
 
-		me.addChildRouter(me.activeMediaPlayer);
+			me.addChildRouter(me.activeMediaPlayer);
 
-		me.activeMediaPlayer.fireEvent('suspend-annotation-manager', this);
-		me.activeMediaPlayer.on('destroy', function() {
-			if (me.activeMediaPlayer) {
-				me.activeMediaPlayer.fireEvent('resume-annotation-manager', this);
-			}
-		});
-
+			me.activeMediaPlayer.fireEvent('suspend-annotation-manager', this);
+			me.activeMediaPlayer.on('destroy', function() {
+				if (me.activeMediaPlayer) {
+					me.activeMediaPlayer.fireEvent('resume-annotation-manager', this);
+				}
+			});	
+		}
+		
+		me.activeMediaPlayer.currentBundle = me.currentBundle;
 		return me.activeMediaPlayer.handleRoute(subRoute, route.precache);
 	},
 

@@ -56,6 +56,8 @@ Ext.define('NextThought.app.slidedeck.media.components.viewers.TranscriptViewer'
 
 
     buildResourceView: function(){
+        var me = this;
+
         this.resourceView = this.add({
             xtype: 'slidedeck-transcript',
             transcript: this.transcript,
@@ -74,9 +76,10 @@ Ext.define('NextThought.app.slidedeck.media.components.viewers.TranscriptViewer'
         this.mon(this.resourceView, 'will-hide-annotation', 'willHideAnnotation', this);
         this.mon(this.resourceView, 'unsync-video', 'unSyncVideo', this);
 
-        if(this.viewerContainer){
-            this.resourceView.mon(this.viewerContainer, 'animation-end', 'onAnimationEnd');
-        }
+        wait(500)
+            .then(function() {
+                me.resourceView.maybeLoadData();
+            });
     },
 
 
@@ -265,10 +268,20 @@ Ext.define('NextThought.app.slidedeck.media.components.viewers.TranscriptViewer'
 
 
     getLocationInfo: function() {
-        var ntiid = this.video && this.video.get('NTIID'),
-            lineage = ntiid && ContentUtils.getLineage(ntiid);
-
-        return lineage && lineage.last() && ContentUtils.getLocation(lineage.last());
+        var me = this;
+        
+        return new Promise(function(fufill, reject) {
+            ContentUtils.getLineage(me.video.get('NTIID'), this.ownerCt && this.ownerCt.currentBundle)
+                .then(function(lineages) {
+                    var lineage = lineages[0];
+                    ContentUtils.getLocation(lineage.last(), bundle)
+                        .then(function (location) {
+                            me.setLocationInfo(location);
+                            fulfill(location);
+                        });
+                })
+                .fail(reject);
+        });
     },
 
 
@@ -277,15 +290,18 @@ Ext.define('NextThought.app.slidedeck.media.components.viewers.TranscriptViewer'
             return;
         }
 
-        var li = this.getLocationInfo(),
-            ntiid = video && video.get('NTIID');
+        var ntiid = video && video.get('NTIID'),
+            section = video && video.get('section'),
+            route = section && ParseUtils.encodeForURI(section) + '/video/' + ParseUtils.encodeForURI(ntiid);
 
-        if (!li || !video.raw || !ntiid) {
+        if (!video.raw || !ntiid) {
             console.log('Dont know how to handle the navigation');
             return;
         }
 
-        Ext.defer(this.fireEvent, 1, this, ['change-media-in-player', video.raw, ntiid, getURL(li.root)]);
+        if (this.ownerCt && this.ownerCt.handleNavigation) {
+            this.ownerCt.handleNavigation(video.get('title'), route, {video: video});
+        }
     },
 
 

@@ -302,7 +302,7 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 				p.$presentationUUID = guidGenerator();
 			}
 			readyMap[p.$presentationUUID] = p.isPresentationPartReady;
-			if (p.isPresentationPartReady === false) {
+			if (!p.isPresentationPartReady) {
 				this.mon(p, 'presentation-part-ready', function(sender) {
 					readyMap[sender.$presentationUUID] = true;
 					maybeDone();
