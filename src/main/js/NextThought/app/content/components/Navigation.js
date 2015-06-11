@@ -138,7 +138,7 @@ Ext.define('NextThought.app.content.components.Navigation', {
 
 		//if we are animating in, wait until we are finished to the the left will be correct
 		if (me.hasCls('showing')) {
-			wait(1000)
+			wait(1500)
 				.then(alignCurrentTab);
 		} else {
 			alignCurrentTab()
@@ -177,7 +177,9 @@ Ext.define('NextThought.app.content.components.Navigation', {
 
 		if (!tab || !this.bodyView.onTabChange) { return; }
 
-		if (tab.classList.contains('active')) {
+		//if we are active and we have a subroute, that means the tab is not at
+		//its root so set the root route
+		if (tab.classList.contains('active') && subRoute) {
 			this.bodyView.onTabChange(tab.getAttribute('data-title'), route, tab);
 		} else {
 			this.bodyView.onTabChange(tab.getAttribute('data-title'), route + subRoute, tab);
