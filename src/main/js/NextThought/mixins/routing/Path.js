@@ -157,6 +157,8 @@ Ext.define('NextThought.mixins.routing.Path', {
 	handleRoute: function(route, precache) {
 		route = this.trimRoute(route);
 
+		this.beforeRoute();
+
 		var parts = route.split('/'),
 			varKey = this.VARIABLE_KEY,
 			params = {}, subRoute,
@@ -222,7 +224,7 @@ Ext.define('NextThought.mixins.routing.Path', {
 		return val;
 	},
 
-
+	beforeRoute: function() {},
 	afterRoute: function() {},
 
 

@@ -182,7 +182,7 @@ Ext.define('NextThought.app.content.components.Navigation', {
 		if (tab.classList.contains('active') && subRoute) {
 			this.bodyView.onTabChange(tab.getAttribute('data-title'), route, tab);
 		} else {
-			this.bodyView.onTabChange(tab.getAttribute('data-title'), route + subRoute, tab);
+			this.bodyView.onTabChange(tab.getAttribute('data-title'), route + '/' + subRoute, tab);
 		}
 	}
 });

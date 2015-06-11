@@ -39,6 +39,7 @@ Ext.define('NextThought.app.Body', {
 
 		this.mon(this.NavigationStore, 'set-active-content', this.updateBodyContent.bind(this));
 		this.mon(this.WindowStore, 'push-window', this.pushWindow.bind(this));
+		this.mon(this.ContextStore, 'new-context', this.onNewContext.bind(this));
 
 		this.addRoute('/library', this.setLibraryActive.bind(this));
 		this.addRoute('/course/:id', this.setCourseActive.bind(this));
@@ -63,16 +64,21 @@ Ext.define('NextThought.app.Body', {
 	},
 
 
-	afterRoute: function() {
-		var state = this.getRouteState();
+	beforeRoute: function() {
+		this.WindowActions.closeActiveWindow();
+	},
 
-		if (state.openWindow) {
-			this.WindowActions.showWindow(state.openWindow);
+
+	onNewContext: function() {
+		var id = this.ContextStore.getCurrentObjectId();
+
+		if (id) {
+			this.WindowActions.showWindow(id);
 		}
 	},
 
 
-	pushWindow: function(obj, title, route, precache) {
+	pushWindow: function(id, title, route, precache) {
 		if (!title) {
 			title = this.ContextStore.getCurrentTitle();
 		}
@@ -81,7 +87,15 @@ Ext.define('NextThought.app.Body', {
 			route = this.ContextStore.getCurrentRoute();
 		}
 
-		this.pushRouteState(obj, title, route, precache);
+		if (id) {
+			id = ParseUtils.encodeForURI(id);
+			route = Globals.trimRoute(route) + '/object/' + id; 
+		} else {
+			route = this.ContextStore.removeObjectRoute();
+		}
+
+
+		this.pushRoute(title, route, precache);
 	},
 
 

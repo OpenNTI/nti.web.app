@@ -162,10 +162,12 @@ Ext.define('NextThought.app.forums.components.forum.Navigation', {
 		var record,
 			selModel = this.getSelectionModel();
 
-		if (!id) {
-			record = this.getFirstForum();
-		} else {
+		if (id) {
 			record = this.store.getById(id);
+		}
+
+		if (!id || !record) {
+			record = this.getFirstForum();
 		}
 
 		selModel.select(record, false, true);

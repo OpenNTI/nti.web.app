@@ -35,14 +35,17 @@ Ext.define('NextThought.app.windows.Actions', {
 			this.WindowStore.cacheObject(id, objectOrNTIID, el, monitors, precache);
 		}
 
-		this.WindowStore.firePushWindow({
-			openWindow: id
-		});
+		this.WindowStore.firePushWindow(id);
 	},
 
 
 	closeWindow: function() {
-		this.WindowStore.firePushWindow({openWindow: null});
+		this.WindowStore.firePushWindow(null);
+	},
+
+
+	closeActiveWindow: function() {
+		this.WindowStore.fireCloseWindow();
 	},
 
 

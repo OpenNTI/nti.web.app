@@ -31,7 +31,8 @@ Ext.define('NextThought.app.windows.Index', {
 		this.viewContainer = this.down('window-container');
 
 		this.mon(this.WindowStore, {
-			'show-window': this.showWindow.bind(this)
+			'show-window': this.showWindow.bind(this),
+			'close-window': this.closeWindow.bind(this)
 		});
 	},
 
@@ -72,6 +73,12 @@ Ext.define('NextThought.app.windows.Index', {
 		this.viewContainer.add(cmp);
 
 		this.addOpenCls();
+	},
+
+
+	closeWindow: function() {
+		this.viewContainer.removeAll();
+		this.removeOpenCls();
 	},
 
 

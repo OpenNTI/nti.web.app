@@ -6,6 +6,8 @@ Ext.define('NextThought.app.context.StateStore', {
 
 		this.current_title = title;
 		this.current_route = route;
+
+		this.fireEvent('new-context');
 	},
 
 
@@ -40,5 +42,27 @@ Ext.define('NextThought.app.context.StateStore', {
 
 	getCurrentTitle: function() {
 		return this.current_title;
+	},
+
+
+	getCurrentObjectId: function() {
+		var route = Globals.trimRoute(this.getCurrentRoute()),
+			parts = route.split('/');
+
+		if (parts[parts.length - 2] === 'object') {
+			return ParseUtils.decodeFromURI(parts.last());
+		}
+	},
+
+
+	removeObjectRoute: function() {
+		var route = Globals.trimRoute(this.getCurrentRoute()),
+			parts = route.split('/');
+
+		if (parts[parts.length - 2] === 'object') {
+			parts = parts.slice(0, -2)
+		}
+
+		return parts.join('/');
 	}
 });

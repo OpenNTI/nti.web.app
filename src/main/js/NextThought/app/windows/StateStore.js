@@ -28,6 +28,11 @@ Ext.define('NextThought.app.windows.StateStore', {
 	},
 
 
+	fireCloseWindow: function() {
+		this.fireEvent('close-window');
+	},
+
+
 	cacheObject: function(id, obj, el, monitors, precache) {
 		this.obj_map[id] = {
 			obj: obj,
