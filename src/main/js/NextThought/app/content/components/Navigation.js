@@ -172,10 +172,15 @@ Ext.define('NextThought.app.content.components.Navigation', {
 			route = tab && tab.getAttribute('data-route'),
 			subRoute = tab && tab.getAttribute('data-subroute');
 
-		route = Globals.trimRoute(route) + '/' + Globals.trimRoute(subRoute);
+		route = Globals.trimRoute(route);
+		subRoute = Globals.trimRoute(subRoute);
 
-		if (this.bodyView.onTabChange && tab && !tab.classList.contains('active')) {
+		if (!tab || !this.bodyView.onTabChange) { return; }
+
+		if (tab.classList.contains('active')) {
 			this.bodyView.onTabChange(tab.getAttribute('data-title'), route, tab);
+		} else {
+			this.bodyView.onTabChange(tab.getAttribute('data-title'), route + subRoute, tab);
 		}
 	}
 });
