@@ -38,7 +38,9 @@ Ext.define('NextThought.app.Body', {
 		this.ContextStore = NextThought.app.context.StateStore.getInstance();
 
 		this.mon(this.NavigationStore, 'set-active-content', this.updateBodyContent.bind(this));
-		this.mon(this.WindowStore, 'push-window', this.pushWindow.bind(this));
+		this.mon(this.WindowStore, {
+			'push-window': this.pushWindow.bind(this)
+		});
 		this.mon(this.ContextStore, 'new-context', this.onNewContext.bind(this));
 
 		this.addRoute('/library', this.setLibraryActive.bind(this));
@@ -46,7 +48,6 @@ Ext.define('NextThought.app.Body', {
 
 		this.addDefaultRoute('/library');
 	},
-
 
 
 	setActiveCmp: function(xtype) {
@@ -75,6 +76,31 @@ Ext.define('NextThought.app.Body', {
 		if (id) {
 			this.WindowActions.showWindow(id);
 		}
+	},
+
+
+	lockHeight: function() {
+		if (!this.rendered) {
+			this.on('afterrender', this.lockHeight.bind(this));
+			return;
+		}
+
+		var headerHeight = this.el.dom.getBoundingClientRect().top,
+			windowHeight = Ext.Element.getViewportHeight();
+
+		this.el.setStyle({height: (windowHeight - headerHeight) + 'px'});
+		this.addCls('height-locked');
+	},
+
+
+	unlockHeight: function() {
+		if (!this.rendered) {
+			this.on('afterrender', this.unlockHeight.bind(this));
+			return;
+		}
+
+		this.el.setStyle({height: 'auto'});
+		this.removeCls('height-locked');
 	},
 
 

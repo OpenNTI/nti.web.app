@@ -40,12 +40,16 @@ Ext.define('NextThought.app.windows.Index', {
 	addOpenCls: function() {
 		var html = document.getElementsByTagName('html')[0];
 
+		this.WindowStore.fireEvent('lock-body-height');
+
 		html.classList.add('window-open');
 	},
 
 
 	removeOpenCls: function() {
 		var html = document.getElementsByTagName('html')[0];
+
+		this.WindowStore.fireEvent('unlock-body-height');
 
 		html.classList.remove('window-open');
 	},

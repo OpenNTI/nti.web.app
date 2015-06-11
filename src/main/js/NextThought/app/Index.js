@@ -16,6 +16,7 @@ Ext.define('NextThought.app.Index', {
 	layout: 'none',
 	id: 'viewport',
 	ui: 'nextthought',
+	cls: 'main-viewport',
 	minWidth: 1024,
 	touchStartTime: -1,
 
