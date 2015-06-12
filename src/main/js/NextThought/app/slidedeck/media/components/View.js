@@ -204,7 +204,8 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 			video: this.video,
 			nextVideo: this.nextVideo,
 			prevVideo: this.prevVideo,
-			viewerContainer: this
+			viewerContainer: this,
+			currentBundle: this.currentBundle
 		});
 
 		this.viewerIdMap[viewerType] = this.viewer.getId();

@@ -194,7 +194,12 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 
 	setupNoteOverlay: function() {
 		var me = this;
-		this.noteOverlay = Ext.widget('presentation-note-overlay', {reader: this, readerHeight: this.getHeight()});
+		
+		this.noteOverlay = Ext.create('NextThought.app.slidedeck.transcript.NoteOverlay', {
+			reader: this, 
+			readerHeight: this.getHeight()
+		});
+
 		this.on('destroy', 'destroy', this.relayEvents(this.noteOverlay, ['editorActivated', 'editorDeactivated']));
 
 		Ext.each(this.items.items, function(vt) {

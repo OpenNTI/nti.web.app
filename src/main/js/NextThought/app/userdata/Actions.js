@@ -11,7 +11,8 @@ Ext.define('NextThought.app.userdata.Actions', {
 		'NextThought.model.anchorables.ContentRangeDescription',
 		'NextThought.app.context.StateStore',
 		'NextThought.util.Anchors',
-		'NextThought.util.Annotations'
+		'NextThought.util.Annotations',
+		'NextThought.app.slidedeck.transcript.AnchorResolver'
 	],
 
 	constructor: function() {
@@ -789,6 +790,17 @@ Ext.define('NextThought.app.userdata.Actions', {
 
 		selectedText = range ? range.toString() : '';
 		return this.__saveNote(rangeDescription.description, body, title, container, shareWith, selectedText, style, callback);
+	},
+
+
+	saveNewSeriesNote: function(title, body, range, cueInfo, containerId, shareWith, style, callback) {
+		console.log(cueInfo);
+		var doc = range ? range.commonAncestorContainer.ownerDocument : null,
+				AnchorResolver = NextThought.app.slidedeck.transcript.AnchorResolver,
+				rangeDescription = AnchorResolver.createRangeDescriptionFromRange(range, doc, cueInfo),
+				selectedText = range ? range.toString() : '';
+
+		return this.__saveNote(rangeDescription.description, body, title, containerId, shareWith, selectedText, style, callback);
 	},
 
 

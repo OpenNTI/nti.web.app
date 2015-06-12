@@ -1648,6 +1648,9 @@ $experimental-support-for-svg: true;
 
 .x-menu{
 	&.video-player-options-menu{
+		position: fixed !important;
+		top: 0 !important;
+
 		.x-menu-body{
 			padding: 0 !important;
 			border-width: 0 !important;

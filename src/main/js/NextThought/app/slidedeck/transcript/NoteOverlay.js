@@ -1,10 +1,10 @@
 Ext.define('NextThought.app.slidedeck.transcript.NoteOverlay', {
-	alias: 'widget.presentation-note-overlay',//THIS IS NOT A COMPONENT!! IT SHOULD NOT HAVE AN ALIAS, MUCH LESS A **WIDGET.** PREFIX!
 
 	requires: [
 		'NextThought.util.Line',
 		'NextThought.app.whiteboard.Utils',
-		'NextThought.editor.Editor'
+		'NextThought.editor.Editor',
+		'NextThought.app.userdata.Actions'
 	],
 	mixins: {
 		'observable': 'Ext.util.Observable'
@@ -22,7 +22,9 @@ Ext.define('NextThought.app.slidedeck.transcript.NoteOverlay', {
 
 		var me = this;
 
-//		this.adjustAnnotationOverlayPosition = Ext.Function.createBuffered(this.adjustAnnotationOverlayPosition, 10);
+		this.UserDataActions = NextThought.app.userdata.Actions.create();
+
+		this.adjustAnnotationOverlayPosition = Ext.Function.createBuffered(this.adjustAnnotationOverlayPosition, 10);
 		this.syncHeight = Ext.Function.createBuffered(this.syncHeight, 10);
 
 		this.insertOverlay();
@@ -171,11 +173,11 @@ Ext.define('NextThought.app.slidedeck.transcript.NoteOverlay', {
 		w = w < maxWidth ? w - 75 : maxWidth - 75;
 		this.annotationOverlay.setStyle('left', w + 'px');
 
-//		Ext.each(cmps, function(cmp) {
-//			if (Ext.isFunction(cmp.positionAnnotationNibs)) {
-//				cmp.positionAnnotationNibs(me.reader.el);
-//			}
-//		});
+		Ext.each(cmps, function(cmp) {
+			if (Ext.isFunction(cmp.positionAnnotationNibs)) {
+				cmp.positionAnnotationNibs(me.reader.el);
+			}
+		});
 
 		this.realignNotes();
 	},
@@ -232,10 +234,18 @@ Ext.define('NextThought.app.slidedeck.transcript.NoteOverlay', {
 		try {
 			// NOTE: For slide notes, for now we're keeping them domRange notes.
 			if (me.data.isDomRange) {
-				me.fireEvent('save-new-note', title, note, range, container, sharing, style, callback);
+				// me.fireEvent('save-new-note', title, note, range, container, sharing, style, callback);
+				me.UserDataActions.saveNewNote(title, note, range, container, sharing, style, callback);
 			}
 			else {
-				me.fireEvent('save-new-series-note', title, note, range, me.data, container, sharing, style, callback);
+				// me.fireEvent('save-new-series-note', title, note, range, me.data, container, sharing, style, callback);
+				me.UserDataActions.saveNewSeriesNote(title, note, range, me.data, container, sharing, style)
+					.then(function() {
+						editor.unmask();
+						editor.deactivate();
+					}).fail(function() {
+						editor.unmask();
+					});
 			}
 		}
 		catch (error) {
@@ -326,7 +336,7 @@ Ext.define('NextThought.app.slidedeck.transcript.NoteOverlay', {
 				pageId = pageInfo.getId();
 				p = Promise.all([
 					me.getPagePreferences(pageId).fail(recover),
-					Ext.getCmp('content').currentBundle
+					me.currentBundle
 				])
 					.then(function(data) {
 						var prefs = data[0],
@@ -515,12 +525,14 @@ Ext.define('NextThought.app.slidedeck.transcript.NoteOverlay', {
 
 
 	resolveRootPageInfoFor: function(ntiid) {
-		var rootId = ContentUtils.getLineage(ntiid);
-
-		rootId = rootId && rootId.last();
-		if (!rootId) {
-			return Promise.reject('No ID');
-		}
-		return LocationMeta.getMeta(rootId);
+		return ContentUtils.getLineage(ntiid, this.reader.currentBundle)
+			.then(function(rootId) {
+				rootId = rootId && rootId.last();
+				if (!rootId) {
+					return Promise.reject('No ID');
+				}
+				return LocationMeta.getMeta(rootId);		
+			});
+		
 	}
 });

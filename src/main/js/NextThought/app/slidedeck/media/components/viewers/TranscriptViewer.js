@@ -65,6 +65,7 @@ Ext.define('NextThought.app.slidedeck.media.components.viewers.TranscriptViewer'
             accountForScrollbars: false,
             scrollToId: this.scrollToId,
             videoPlaylist: [this.video],
+            currentBundle: this.currentBundle,
             xhooks: {
                 getScrollTarget: function() { return this.ownerCt.getTargetEl().dom; }
             }

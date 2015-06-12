@@ -112,7 +112,7 @@ Ext.define('NextThought.cache.LocationMeta', {
 	loadMeta: function(ntiid, ignoreCache) {
 		var me = this;
 
-		me.listenToLibrary();
+		// me.listenToLibrary();
 
 		return Service.getPageInfo(ntiid)
 				.then(function(info) {

@@ -440,6 +440,7 @@ span.tab{
 	&.in-gutter{
 		background: #ffffff;
 		border: 1px solid #cfcfcf;//#ededed
+		position: fixed !important;
 
 		.main {
 			margin: 0 10px;
