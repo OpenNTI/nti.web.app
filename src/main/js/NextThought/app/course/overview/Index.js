@@ -8,7 +8,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 	requires: [
 		'NextThought.app.course.overview.components.View',
-		'NextThought.app.course.content.Index',
+		'NextThought.app.content.content.Index',
 		'NextThought.app.slidedeck.media.components.View'
 	],
 
@@ -168,7 +168,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 				}
 
 				me.reader = me.add({
-					xtype: 'course-content',
+					xtype: 'bundle-content',
 					currentBundle: me.currentBundle,
 					handleNavigation: me.handleNavigation.bind(me),
 					navigateToObject: me.navigateToObject.bind(me),

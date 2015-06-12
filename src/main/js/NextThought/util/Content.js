@@ -76,8 +76,17 @@ Ext.define('NextThought.util.Content', {
 
 
 	__findNode: function(ntiid, toc) {
+		function getNode(node) {
+			return {
+				toc: toc,
+				location: node,
+				NTIID: ntiid,
+				ContentNTIID: node.ownerDocument.documentElement.getAttribute('ntiid')
+			};
+		}
+
 		if (toc.documentElement.getAttribute('ntiid') === ntiid) {
-			return toc.documentElement;
+			return getNode(toc.documentElement);
 		}
 
 		var escaped = ParseUtils.escapeId(ntiid),
@@ -87,15 +96,6 @@ Ext.define('NextThought.util.Content', {
 				'unit[ntiid="' + escaped + '"]',
 				'topic[ntiid="' + escaped + '"]'
 			], i, node;
-
-		function getNode(node) {
-			return {
-				toc: toc,
-				location: node,
-				NTIID: ntiid,
-				ContentNTIID: node.ownerDocument.documentElement.getAttribute('ntiid')
-			};
-		}
 
 		for (i = 0; i < selectors.length; i++) {
 			node = toc.querySelector(selectors[i]);

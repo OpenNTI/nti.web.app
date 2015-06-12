@@ -46,7 +46,9 @@ Ext.define('NextThought.common.components.ResourceNotFound', {
 
 
 	goLibrary: function() {
-		this.fireEvent('go-to-library');
+		if (this.gotoLibrary) {
+			this.gotoLibrary.call();
+		}
 	}
 });
 

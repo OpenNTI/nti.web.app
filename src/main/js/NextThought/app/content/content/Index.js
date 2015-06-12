@@ -1,10 +1,11 @@
-Ext.define('NextThought.app.course.content.Index', {
+Ext.define('NextThought.app.content.content.Index', {
 	extend: 'Ext.container.Container',
-	alias: 'widget.course-content',
+	alias: 'widget.bundle-content',
 
 	requires: [
 		'NextThought.app.content.Actions',
-		'NextThought.app.contentviewer.StateStore'
+		'NextThought.app.contentviewer.StateStore',
+		'NextThought.common.components.ResourceNotFound'
 	],
 
 	mixins: {
@@ -15,7 +16,7 @@ Ext.define('NextThought.app.course.content.Index', {
 	layout: 'none',
 
 
-	cls: 'course-content',
+	cls: 'bundle-content',
 
 
 	initComponent: function() {
@@ -25,6 +26,7 @@ Ext.define('NextThought.app.course.content.Index', {
 
 		this.initRouter();
 
+		this.addRoute('/', this.showRoot.bind(this));
 		this.addRoute('/:id', this.showContent.bind(this));
 
 		this.on('beforedeactivate', this.onBeforeDeactivate.bind(this));
@@ -54,6 +56,7 @@ Ext.define('NextThought.app.course.content.Index', {
 			this.reader.destroy();
 		}
 
+		this.root = bundle.getFirstPage();
 		this.currentBundle = bundle;
 	},
 
@@ -102,6 +105,19 @@ Ext.define('NextThought.app.course.content.Index', {
 	},
 
 
+	__onFail: function(reason) {
+		console.error('Failed to load page:', reason);
+		this.setTitle('Not Found');
+
+		if (!this.notFound) {
+			this.notFound = this.add({
+				xtype: 'notfound',
+				gotoLibrary: this.pushRootRoute.bind(this, 'Library', '/')
+			});
+		}
+	},
+
+
 
 	showContent: function(route, subRoute) {
 		var me = this,
@@ -117,5 +133,14 @@ Ext.define('NextThought.app.course.content.Index', {
 	},
 
 
-	handleNavigation: function(title, route, precache) {}
+	showRoot: function(route, subRoute) {
+		return Service.getPageInfo(this.root)
+			.then(this.showReader.bind(this))
+			.fail(this.__onFail.bind(this));
+	},
+
+
+	handleNavigation: function(title, route, precache) {
+
+	}
 });

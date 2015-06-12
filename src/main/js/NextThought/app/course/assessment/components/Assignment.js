@@ -1,5 +1,5 @@
 Ext.define('NextThought.app.course.assessment.components.Assignment', {
-	extend: 'NextThought.app.course.content.Index',
+	extend: 'NextThought.app.content.content.Index',
 	alias: 'widget.course-assessment-assignment',
 	
 	afterRender: function() {

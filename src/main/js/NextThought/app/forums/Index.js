@@ -30,7 +30,6 @@ Ext.define('NextThought.app.forums.Index', {
 		this.addDefaultRoute('/');
 
 		this.forumView = this.down('forum-view');
-		this.addChildRouter(this.forumView);
 	},
 
 

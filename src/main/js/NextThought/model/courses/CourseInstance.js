@@ -137,6 +137,13 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
+	getFirstPage: function() {
+		var bundle = this.get('Bundle');
+
+		return bundle.getFirstPage();
+	},
+
+
 	//get a count of how many things the user has done in the course
 	getCompletionStatus: function() {},
 

@@ -12,22 +12,18 @@ Ext.define('NextThought.app.course.Index', {
 	requires: [
 		'NextThought.app.course.StateStore',
 		'NextThought.app.library.courses.StateStore',
-		'NextThought.app.navigation.Actions',
 		'NextThought.app.course.assessment.Index',
 		'NextThought.app.course.dashboard.Index',
-		'NextThought.app.course.forum.Index',
+		'NextThought.app.content.forum.Index',
 		'NextThought.app.course.info.Index',
 		'NextThought.app.course.overview.Index',
 		'NextThought.app.course.reports.Index',
-		'NextThought.app.course.content.Index',
+		'NextThought.app.content.content.Index',
 		'NextThought.app.contentviewer.Index',
 		'NextThought.app.contentviewer.Actions'
 	],
 
 	// cls: 'x-component-course',
-
-
-	cmp_map: {},
 
 
 	items: [
@@ -44,8 +40,8 @@ Ext.define('NextThought.app.course.Index', {
 			id: 'course-assessment-container'
 		},
 		{
-			xtype: 'course-forum',
-			id: 'course-forum'
+			xtype: 'bundle-forum',
+			id: 'bundle-forum'
 		},
 		{
 			xtype: 'course-reports',
@@ -56,8 +52,8 @@ Ext.define('NextThought.app.course.Index', {
 			id: 'course-info'
 		},
 		{
-			xtype: 'course-content',
-			id: 'course-content'
+			xtype: 'bundle-content',
+			id: 'bundle-content'
 		}
 	],
 
@@ -69,7 +65,6 @@ Ext.define('NextThought.app.course.Index', {
 
 		this.CourseViewStore = NextThought.app.course.StateStore.getInstance();
 		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
-		this.NavigationActions = NextThought.app.navigation.Actions.create();
 		this.ContentActions = NextThought.app.contentviewer.Actions.create();
 
 		this.getActiveCourse = Promise.reject();
@@ -87,49 +82,6 @@ Ext.define('NextThought.app.course.Index', {
 		this.addObjectHandler(NextThought.model.assessment.Assignment.mimeType, this.getAssignmentRoute.bind(this));
 
 		this.addDefaultRoute('/activity');
-
-		this.on({
-			'beforedeactivate': this.onBeforeDeactivate.bind(this),
-			'deactivate': this.onDeactivate.bind(this)
-		});
-	},
-
-
-	getContext: function() {
-		return this.activeCourse;
-	},
-
-
-	onBeforeDeactivate: function() {
-		var current = this.getLayout().getActiveItem();
-
-		return current.fireEvent('beforedeactivate');
-	},
-
-
-	onDeactivate: function() {
-		var current = this.getLayout().getActiveItem();
-
-		return current.fireEvent('deactivate');
-	},
-
-
-	onBack: function() {
-		this.pushRootRoute('', '/');
-	},
-
-
-	onTabChange: function(title, route) {
-		this.pushRoute('', route);
-	},
-
-
-	getRouteTitle: function() {
-		if (!this.activeCourse) { return ''; }
-
-		var data = this.activeCourse.asUIData();
-
-		return data.title;
 	},
 
 
@@ -139,8 +91,8 @@ Ext.define('NextThought.app.course.Index', {
 		ntiid = ntiid.toLowerCase();
 
 		//if we are setting my current course no need to do anything
-		if (me.activeCourse && (me.activeCourse.getId() || '').toLowerCase() === ntiid) {
-			me.getActiveCourse = Promise.resolve(me.activeCourse);
+		if (me.activeBundle && (me.activeBundle.getId() || '').toLowerCase() === ntiid) {
+			me.getActiveCourse = Promise.resolve(me.activeBundle);
 		} else {
 			me.getActiveCourse = me.CourseStore.onceLoaded()
 				.then(function() {
@@ -169,7 +121,7 @@ Ext.define('NextThought.app.course.Index', {
 						me.isAdmin = false;
 					}
 
-					me.activeCourse = current.get('CourseInstance') || current;
+					me.activeBundle = current.get('CourseInstance') || current;
 
 					return current;
 				});
@@ -179,55 +131,8 @@ Ext.define('NextThought.app.course.Index', {
 	},
 
 
-	getItem: function(xtype) {
-		var cmp = this.cmp_map[xtype];
-
-		if (!cmp) {
-			cmp = this.cmp_map[xtype] = this.down(xtype);
-			this.addChildRouter(cmp);
-			cmp.courseContainer = this;
-		}
-
-		return cmp;
-	},
-
-
-	setItemBundle: function(xtypes, bundle) {
-		if (!Ext.isArray(xtypes)) {
-			xtypes = [xtypes];
-		}
-
-		bundle = bundle || this.activeCourse;
-
-		var me = this,
-			activeCourse = this.activeCourse;
-
-		xtypes = xtypes.map(function(xtype) {
-			var item = me.getItem(xtype);
-
-			return item.bundleChanged && item.bundleChanged(bundle);
-		});
-
-		return Promise.all(xtypes);
-	},
-
-
-	setActiveItem: function(xtype) {
-		var layout = this.getLayout(),
-			item = this.getItem(xtype),
-			current = layout.getActiveItem();
-
-		if (current === item) {
-			item.fireEvent('activate');
-		}
-
-
-		this.getLayout().setActiveItem(item);
-	},
-
-
 	applyState: function(state) {
-		var bundle = this.activeCourse,
+		var bundle = this.activeBundle,
 			active = state.active,
 			course = NextThought.app.course,
 			tabs = [];
@@ -273,13 +178,13 @@ Ext.define('NextThought.app.course.Index', {
 			});
 		}
 
-		if (showTab(course.forum.Index)) {
+		if (showTab(NextThought.app.content.forum.Index)) {
 			tabs.push({
 				text: getString('NextThought.view.content.View.discussiontab', 'Discussions'),
 				route: 'discussions',
 				subRoute: this.discussionsRoute,
 				title: 'Discussions',
-				active: active === 'course-forum'
+				active: active === 'bundle-forum'
 			});
 		}
 
@@ -305,17 +210,6 @@ Ext.define('NextThought.app.course.Index', {
 	},
 
 
-	__loadCourse: function() {
-		var bundle = this.activeCourse;
-
-		this.NavigationActions.updateNavBar({
-			cmp: this.getNavigation()
-		});
-
-		this.NavigationActions.setActiveContent(bundle);
-	},
-
-
 	setPreview: function() {
 		var me = this;
 
@@ -325,52 +219,22 @@ Ext.define('NextThought.app.course.Index', {
 	},
 
 
-	/**
-	 * Set up the active tab
-	 * @param  {String} active   xtype of the active tab
-	 * @param  {Array} inactive xtypes of the other views to set the active course on, but not wait
-	 * @return {Promise}         fulfills when the tab is set up
-	 */
-	__setActiveView: function(active, inactive, tab) {
-		var me = this;
-
-		if (me.activeCourse.get('Preview')) {
-			return me.setPreview();
+	setActiveView: function() {
+		if (this.activeBundle.get('Preview')) {
+			return this.setPreview();
 		}
 
-		me.__loadCourse();
-
-		me.navigation.bundleChanged(me.activeCourse);
-
-		me.applyState({
-			active: tab || active
-		});
-
-		function updateInactive() {
-			wait().then(me.setItemBundle.bind(me, inactive, me.activeCourse));
-		}
-
-		return me.setItemBundle(active, me.activeCourse)
-				.then(me.setActiveItem.bind(me, active))
-				.then(function() {
-					var item = me.getItem(active);
-
-					updateInactive();
-					return item;
-				})
-				.fail(function(reason) {
-					me.replaceRoute('Info', 'info');
-				});
+		return this.callParent(arguments);
 	},
 
 
 	showDashboard: function(route, subRoute) {
 		this.dashboardRoute = subRoute;
 
-		return this.__setActiveView('course-dashboard', [
+		return this.setActiveView('course-dashboard', [
 				'course-overview',
 				'course-assessment-container',
-				'course-forum',
+				'bundle-forum',
 				'course-reports',
 				'course-info'
 			]);
@@ -380,10 +244,10 @@ Ext.define('NextThought.app.course.Index', {
 	showOverview: function(route, subRoute) {
 		this.overviewRoute = subRoute;
 
-		return this.__setActiveView('course-overview', [
+		return this.setActiveView('course-overview', [
 				'course-dashboard',
 				'course-assessment-container',
-				'course-forum',
+				'bundle-forum',
 				'course-reports',
 				'course-info'
 			]).then(function(item) {
@@ -397,10 +261,10 @@ Ext.define('NextThought.app.course.Index', {
 	showAssignments: function(route, subRoute) {
 		this.assignmentRoute = subRoute;
 
-		return this.__setActiveView('course-assessment-container', [
+		return this.setActiveView('course-assessment-container', [
 				'course-dashboard',
 				'course-overview',
-				'course-forum',
+				'bundle-forum',
 				'course-reports',
 				'course-info'
 			]).then(function(item) {
@@ -414,7 +278,7 @@ Ext.define('NextThought.app.course.Index', {
 	showDiscussions: function(route, subRoute) {
 		this.discussionsRoute = subRoute;
 
-		return this.__setActiveView('course-forum', [
+		return this.setActiveView('bundle-forum', [
 				'course-dashboard',
 				'course-overview',
 				'course-assessment-container',
@@ -431,11 +295,11 @@ Ext.define('NextThought.app.course.Index', {
 	showReports: function(route, subRoute) {
 		this.reportsRoute = subRoute;
 
-		return this.__setActiveView('course-reports', [
+		return this.setActiveView('course-reports', [
 				'course-dashboard',
 				'course-overview',
 				'course-assessment-container',
-				'course-forum',
+				'bundle-forum',
 				'course-info'
 			]);
 	},
@@ -444,11 +308,11 @@ Ext.define('NextThought.app.course.Index', {
 	showInfo: function(route, subRoute) {
 		this.reportsRoute = subRoute;
 
-		return this.__setActiveView('course-info', [
+		return this.setActiveView('course-info', [
 				'course-dashboard',
 				'course-overview',
 				'course-assessment-container',
-				'course-forum',
+				'bundle-forum',
 				'course-reports'
 			]).then(function(item) {
 				if (item && item.handleRoute) {
@@ -459,11 +323,11 @@ Ext.define('NextThought.app.course.Index', {
 
 
 	showContent: function(route, subRoute) {
-		return this.__setActiveView('course-content', [
+		return this.setActiveView('bundle-content', [
 				'course-dashboard',
 				'course-overview',
 				'course-assessment-container',
-				'course-forum',
+				'bundle-forum',
 				'course-reports',
 				'course-info'
 			], 'course-overview').then(function(item) {

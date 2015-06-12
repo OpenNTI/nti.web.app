@@ -119,7 +119,7 @@ Ext.define('NextThought.app.content.Actions', {
 				var l = locations[0],
 					part = {};
 
-				part.label = l.label || label;
+				part.label = (parentNode === ntiid) ? label || l.label : l.label || label;
 				part.ntiid = l.NTIID;
 
 				if (allowMenus) {
@@ -216,6 +216,11 @@ Ext.define('NextThought.app.content.Actions', {
 	},
 
 
+	__getFirstTopic: function(node) {
+		return node.querySelector('topic');
+	},
+
+
 	buildContentPathPartMenu: function(location, parentNode, bundle) {
 		var me = this,
 			p = bundle && bundle.getOutline && bundle.getOutline(),
@@ -226,7 +231,7 @@ Ext.define('NextThought.app.content.Actions', {
 
 		return Promise.all([
 				p,
-				ContentUtils.getSiblings(currentNode, bundle)
+				ContentUtils.getSiblings(this.__getFirstTopic(currentNode), bundle)
 			]).then(function(results) {
 				var outline = results[0],
 					siblings = results[1] || [],
@@ -241,14 +246,19 @@ Ext.define('NextThought.app.content.Actions', {
 						return Promise.resolve(null);
 					}
 
-					return outline.isVisible(sibling.getAttribute('ntiid'))
-						.then(function(visible) {
-							if (!visible) {
-								return null;
-							}
+					if (outline) {
+						return outline.isVisible(sibling.getAttribute('ntiid'))
+							.then(function(visible) {
+								if (!visible) {
+									return null;
+								}
 
-							return sibling;
-						});
+								return sibling;
+							});
+
+					}
+
+					return Promise.resolve(sibling);
 				});
 
 				return Promise.all(visible)

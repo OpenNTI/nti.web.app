@@ -1,6 +1,6 @@
-Ext.define('NextThought.app.course.forum.Index', {
+Ext.define('NextThought.app.content.forum.Index', {
 	extend: 'Ext.container.Container',
-	alias: 'widget.course-forum',
+	alias: 'widget.bundle-forum',
 
 	layout: 'none',
 

@@ -5,7 +5,9 @@ Ext.define('NextThought.app.bundle.Index', {
 	state_key: 'bundle_index',
 
 	requires: [
-		'NextThought.app.library.content.StateStore'
+		'NextThought.app.library.content.StateStore',
+		'NextThought.app.content.content.Index',
+		'NextThought.app.content.forum.Index'
 	],
 
 	mixins: {
@@ -14,7 +16,14 @@ Ext.define('NextThought.app.bundle.Index', {
 	},
 
 	items: [
-		{xtype: 'box', autoEl: {html: 'bundle'}}
+		{
+			xtype: 'bundle-forum',
+			id: 'bundle-forum'
+		},
+		{
+			xtype: 'bundle-content',
+			id: 'bundle-content'
+		}
 	],
 
 
@@ -22,6 +31,16 @@ Ext.define('NextThought.app.bundle.Index', {
 		this.callParent(arguments);
 
 		this.ContentStore = NextThought.app.library.content.StateStore.getInstance();
+
+		this.getActiveBundle = Promise.reject();
+
+		this.initRouter();
+
+		this.addRoute('/', this.showContent.bind(this));
+		this.addRoute('/content', this.showContent.bind(this));
+		this.addRoute('/discussions', this.showDiscussions.bind(this));
+
+		this.addDefaultRoute('/');
 	},
 
 
@@ -57,5 +76,61 @@ Ext.define('NextThought.app.bundle.Index', {
 		}
 
 		return me.getActiveBundle;
+	},
+
+
+	applyState: function(state) {
+		var bundle = this.activeBundle,
+			active = state.active,
+			content = NextThought.app.content,
+			tabs = [];
+
+		/**
+		 * Wether or not a view should show its tab
+		 * if the view doesn't have a static showTab then show it,
+		 * otherwise return the value of showTab
+		 * @param  {Object} index the view to check
+		 * @return {Boolean}      show the tab or not
+		 */
+		function showTab(index) {
+			return !index.showTab || index.showTab(bundle);
+		}
+
+		if (showTab(content.content.Index)) {
+			tabs.push({
+				text: getString('NextThought.view.content.View.booktab', 'Book'),
+				route: 'content',
+				subRoute: this.contentRoute,
+				title: 'Book',
+				active: active === 'bundle-content'
+			});
+		}
+
+		if (showTab(content.forum.Index)) {
+			tabs.push({
+				text: getString('NextThought.view.content.View.discussiontab', 'Discussions'),
+				route: 'discussions',
+				subRoute: this.discussionsRoute,
+				active: active === 'bundle-forum'
+			});
+		}
+
+		this.navigation.setTabs(tabs);
+	},
+
+
+	showContent: function(route, subRoute) {
+		return this.setActiveView('bundle-content',[
+				'bundle-forum'
+			]).then(function(item) {
+				if (item.handleRoute) {
+					item.handleRoute(subRoute, route);
+				}
+			});
+	},
+
+
+	showDiscussions: function() {
+
 	}
 });
