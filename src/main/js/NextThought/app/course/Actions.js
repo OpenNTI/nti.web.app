@@ -13,7 +13,7 @@ Ext.define('NextThought.app.course.Actions', {
 	},
 
 	/**
-	 * Transition to a course, if passed a img element from the library show the image expanding
+	 * Transition to a course, if passed an element from the library show the image expanding
 	 * @param  {CourseInstance} course     the course to navigate to
 	 * @param  {Element} libraryCars dom node of the image to expand
 	 * @return {Promise}            fulfills with the route for the course, once the animation is done

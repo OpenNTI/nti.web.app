@@ -11,11 +11,13 @@ Ext.define('NextThought.app.library.Index', {
 
 	requires: [
 		'NextThought.app.navigation.Actions',
+		'NextThought.app.bundle.Actions',
 		'NextThought.app.course.Actions',
 		'NextThought.app.library.Actions',
 		'NextThought.app.library.StateStore',
 		'NextThought.app.library.components.Navigation',
 		'NextThought.app.library.content.StateStore',
+		'NextThought.app.library.content.components.Page',
 		'NextThought.app.library.courses.StateStore',
 		'NextThought.app.library.courses.components.Page',
 		'NextThought.app.store.StateStore',
@@ -36,6 +38,7 @@ Ext.define('NextThought.app.library.Index', {
 		this.callParent(arguments);
 
 		this.CourseViewActions = NextThought.app.course.Actions.create();
+		this.BundleViewActions = NextThought.app.bundle.Actions.create();
 		this.NavActions = NextThought.app.navigation.Actions.create();
 		this.LibraryStore = NextThought.app.library.StateStore.getInstance();
 		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
@@ -83,11 +86,14 @@ Ext.define('NextThought.app.library.Index', {
 	},
 
 
-	showMyBooks: function() {
+	showMyBooks: function(bundles, packages) {
 		this.removeAll(true);
 
 		this.add({
-			xtype: 'box', autoEl: {html: 'My Books'}
+			xtype: 'library-view-book-page',
+			bundles: bundles,
+			packages: packages,
+			navigate: this.navigateToBundle.bind(this)
 		});
 	},
 
@@ -148,16 +154,17 @@ Ext.define('NextThought.app.library.Index', {
 				if (me.ContentStore.getContentBundles().length > 0 || me.ContentStore.getContentPackages().length > 0 || hasAvailablePurchases) {
 					if (active === 'books') {
 						current = {
-							text: 'Your Books',
-							available: {
-								enabled: hasAvailablePurchases,
-								text: 'Find Books',
-								title: 'Available Books',
-								route: '/catalog/books/'
-							}
+							text: 'Your Books'
+							//Comment this out for now
+							// available: {
+							// 	enabled: hasAvailablePurchases,
+							// 	text: 'Find Books',
+							// 	title: 'Available Books',
+							// 	route: '/catalog/books/'
+							// }
 						};
 
-						me.showMyBooks();
+						me.showMyBooks(me.ContentStore.getContentBundles(), me.ContentStore.getContentPackages());
 					} else {
 						options.push({
 							text: 'Your Books',
@@ -234,13 +241,23 @@ Ext.define('NextThought.app.library.Index', {
 	},
 
 
-	navigateToCourse: function(enrollment, img) {
+	navigateToCourse: function(enrollment, el) {
 		var me = this,
 			instance = enrollment.get('CourseInstance');
 
-		me.CourseViewActions.transitionToCourse(instance, img)
+		me.CourseViewActions.transitionToCourse(instance, el)
 			.then(function(route) {
 				me.pushRootRoute(null, route, {course: instance});
 			});
+	},
+
+
+	navigateToBundle: function(bundle, el) {
+		var me = this;
+
+		me.BundleViewActions.transitionToBundle(bundle, el)
+			.then(function(route) {
+				me.pushRootRoute(null, route, {bundle: bundle});
+			})
 	}
 });

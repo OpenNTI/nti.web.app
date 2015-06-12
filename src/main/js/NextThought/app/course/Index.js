@@ -146,7 +146,7 @@ Ext.define('NextThought.app.course.Index', {
 				.then(function() {
 					var current;
 					//if the course was cached, no need to look for it
-					if (course && course.getId() === ntiid) {
+					if (course && (course.getId() || '').toLowerCase() === ntiid) {
 						current = course;
 					} else {
 						//find which ever course whose ntiid matches

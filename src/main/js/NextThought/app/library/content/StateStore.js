@@ -39,5 +39,34 @@ Ext.define('NextThought.app.library.content.StateStore', {
 				return content;
 			}
 		}
+	},
+
+
+	__findIn: function(list, fn) {
+		var i, item = null;
+
+		for (i = 0; i < list.length; i++) {
+			if (fn.call(null, list[i])) {
+				item = list[i];
+				break;
+			}
+		}
+
+		return item;
+	},
+
+
+	findContentBy: function(fn) {
+		var bundles = this.CONTENT_BUNDLES || [],
+			packages = this.CONTENT_PACKAGES || [],
+			content;
+
+		content = this.__findIn(bundles, fn);
+
+		if (!content) {
+			content = this.__findIn(packages, fn);
+		}
+
+		return content;
 	}
 });

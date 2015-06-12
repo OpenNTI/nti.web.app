@@ -59,7 +59,12 @@ Ext.define('NextThought.app.library.components.Collection', {
 
 
 	handleSelect: function(selModel, record) {
-		record.fireNavigationEvent(this);
-		this.callParent(arguments);
+		selModel.deselect(record);
+
+		var node = this.getNodeByRecord(record);
+
+		if (this.navigate) {
+			this.navigate(record, node);
+		}
 	}
 });

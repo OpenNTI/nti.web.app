@@ -6,6 +6,7 @@ Ext.define('NextThought.app.Body', {
 
 	requires: [
 		'NextThought.app.library.Index',
+		'NextThought.app.content.Index',
 		'NextThought.app.course.Index',
 		'NextThought.util.Parsing',
 		'NextThought.app.navigation.StateStore',
@@ -45,6 +46,7 @@ Ext.define('NextThought.app.Body', {
 
 		this.addRoute('/library', this.setLibraryActive.bind(this));
 		this.addRoute('/course/:id', this.setCourseActive.bind(this));
+		this.addRoute('/content/:id', this.setBundleActive.bind(this));
 
 		this.addDefaultRoute('/library');
 	},
@@ -145,7 +147,7 @@ Ext.define('NextThought.app.Body', {
 
 
 	setCourseActive: function(route, subRoute) {
-		var me = this;
+		var me = this,
 			courseView = me.setActiveCmp('course-view-container'),
 			ntiid = route.params.id,
 			course = route.precache.course;
@@ -156,6 +158,22 @@ Ext.define('NextThought.app.Body', {
 			.then(courseView.handleRoute.bind(courseView, subRoute, route.precache))
 			.fail(function() {
 				me.replaceRoute('', '/library');
+			});
+	},
+
+
+	setBundleActive: function(route, subRoute) {
+		var me = this,
+			bundleView = me.setActiveCmp('bundle-view-container'),
+			ntiid = route.params.id,
+			bundle = route.precache.bundle;
+
+		ntiid = ParseUtils.decodeFromURI(ntiid);
+
+		return bundleView.setActiveBundle(ntiid, bundle)
+			.then(bundleView.handleRoute.bind(bundleView, subRoute, route.precache))
+			.fail(function() {
+				me.replaceRoute('', '/library')
 			});
 	},
 
