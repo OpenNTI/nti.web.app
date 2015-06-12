@@ -342,30 +342,6 @@ Ext.define('NextThought.app.annotations.note.Main', {
 	},
 
 
-	setContext: function() {
-		if (this.purchasableId) {
-			this.setPurchasableContext(this.purchasableId);
-			return;
-		}
-
-		this.callParent(arguments);
-
-		if (this.record.placeholder) {
-			this.hideImageCommentLink();
-		}
-
-		try {
-			this.context.setStyle({display: 'block'});
-
-			if (!this.context.getHeight()) {
-				this.context.parent().setStyle({display: 'none'});
-			}
-		} catch (e) {
-			console.error(e);
-		}
-	},
-
-
 	contextAnnotationActions: function(e, dom) {
 		e.stopEvent();
 		var action = (dom.getAttribute('href') || '').replace('#', ''),
@@ -425,5 +401,39 @@ Ext.define('NextThought.app.annotations.note.Main', {
 	resizeMathJax: function(/*node*/) {
 		var e = Ext.select('div.equation .mi').add(Ext.select('div.equation .mn')).add(Ext.select('div.equation .mo'));
 		e.setStyle('font-size', '13px');
+	},
+
+
+	allowNavigation: function() {
+		var msg = 'You are currently creating a comment. Would you like to leave without saving?',
+			hasChildEditor = this.el.down('.note.editor-active');
+
+		if (!this.editor.isActive() && !hasChildEditor) {
+			return true;
+		}
+
+		if (this.editMode) {
+			msg = 'You are currently editing a note. Would you like to leave without saving?';
+		} else if (hasChildEditor) {
+			msg = 'You are currently editing a comment. Would you like to leave without saving?';
+		}
+
+		return new Promise(function(fulfill, reject) {
+			Ext.Msg.show({
+				title: 'Attention!',
+				msg: msg,
+				buttons: {
+					primary: {
+						text: 'Leave',
+						cls: 'caution',
+						handler: fulfill
+					},
+					secondary: {
+						text: 'Stay',
+						handler: reject
+					}
+				}
+			});
+		});
 	}
 });

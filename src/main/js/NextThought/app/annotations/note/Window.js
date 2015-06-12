@@ -30,6 +30,15 @@ Ext.define('NextThought.app.annotations.note.Window', {
 			readerContext: context,
 			doClose: this.doClose.bind(this)
 		}]);
+	},
+
+
+	allowNavigation: function() {
+		var panel = this.down('note-main-view');
+
+		if (!panel) { return true; }
+
+		return panel.allowNavigation();
 	}
 }, function() {
 	NextThought.app.windows.StateStore.register(NextThought.model.Note.mimeType, this);

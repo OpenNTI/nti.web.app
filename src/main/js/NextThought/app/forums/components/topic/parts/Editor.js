@@ -82,10 +82,16 @@ Ext.define('NextThought.app.forums.components.topic.parts.Editor', {
 
 
 	allowNavigation: function() {
+		var msg = 'You are currently creating a topic. Would you like to leave without saving?';
+
+		if (this.record) {
+			msg = 'You are currently editing a topic. Would you like to leave without saving?';
+		}
+
 		return new Promise(function(fulfill, reject) {
 			Ext.Msg.show({
 				title: 'Attention!',
-				msg: 'You are currently creating a topic. Would you like to leave without saving?',
+				msg: msg,
 				buttons: {
 					primary: {
 						text: 'Leave',
