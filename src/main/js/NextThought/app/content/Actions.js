@@ -75,13 +75,25 @@ Ext.define('NextThought.app.content.Actions', {
 	},
 
 
+	__getFirstTopic: function(node) {
+		var topic = node.querySelector('topic');
+
+		if (!topic) {
+			console.error('NO first topic');
+			throw 'no topic';
+		}
+
+		return topic.getAttribute('ntiid');
+	},
+
+
 	buildContentPath: function(parentNode, topic, lineage, leftOvers, allowMenus, bundle) {
 		var path = [],
 			i = 0, pathLength = 0;
 
 		if ((lineage.length + leftOvers.length) <= 1) {
 			if (ContentUtils.hasChildren(topic)) {
-				path.push(this.buildContentPathPart(this.levelLabels[lineage.length], topic.getAttribute('ntiid'), parentNode, true, bundle));
+				path.push(this.buildContentPathPart(this.levelLabels[lineage.length], this.__getFirstTopic(topic), parentNode, true, bundle));
 			} else {
 				path.push(this.buildContentPathPart(this.levelLabels[NaN], topic.getAttribute('ntiid'), null, false, bundle));
 			}
@@ -119,7 +131,7 @@ Ext.define('NextThought.app.content.Actions', {
 				var l = locations[0],
 					part = {};
 
-				part.label = (parentNode === ntiid) ? label || l.label : l.label || label;
+				part.label = (bundle.isCourse) ? l.label || label : label || l.label;
 				part.ntiid = l.NTIID;
 
 				if (allowMenus) {
@@ -216,11 +228,6 @@ Ext.define('NextThought.app.content.Actions', {
 	},
 
 
-	__getFirstTopic: function(node) {
-		return node.querySelector('topic');
-	},
-
-
 	buildContentPathPartMenu: function(location, parentNode, bundle) {
 		var me = this,
 			p = bundle && bundle.getOutline && bundle.getOutline(),
@@ -231,7 +238,7 @@ Ext.define('NextThought.app.content.Actions', {
 
 		return Promise.all([
 				p,
-				ContentUtils.getSiblings(this.__getFirstTopic(currentNode), bundle)
+				ContentUtils.getSiblings(currentNode, bundle)
 			]).then(function(results) {
 				var outline = results[0],
 					siblings = results[1] || [],
@@ -275,6 +282,8 @@ Ext.define('NextThought.app.content.Actions', {
 
 							return {
 								label: text,
+								title: text,
+								route: ParseUtils.encodeForURI(node.getAttribute('ntiid')),
 								ntiid: node.getAttribute('ntiid'),
 								cls: node.getAttribute('ntiid') === currentNode ? 'current' : ''
 							};

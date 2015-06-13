@@ -17,6 +17,6 @@ Ext.define('NextThought.app.bundle.Actions', {
 
 		ntiid = ParseUtils.encodeForURI(ntiid);
 
-		return Promise.resolve('/content/' + ntiid);
+		return Promise.resolve('/bundle/' + ntiid);
 	}
 });

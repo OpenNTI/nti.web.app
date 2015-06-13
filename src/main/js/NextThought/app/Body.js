@@ -46,18 +46,18 @@ Ext.define('NextThought.app.Body', {
 
 		this.addRoute('/library', this.setLibraryActive.bind(this));
 		this.addRoute('/course/:id', this.setCourseActive.bind(this));
-		this.addRoute('/content/:id', this.setBundleActive.bind(this));
+		this.addRoute('/bundle/:id', this.setBundleActive.bind(this));
 
 		this.addDefaultRoute('/library');
 	},
 
 
 	allowNavigation: function() {
-		var win = this.WindowStore.allowNavigation()
+		var win = this.WindowStore.allowNavigation();
 
 		//if the window stops it or returns a promise don't keep looking
 		if ((win === false) || win instanceof Promise) {
-			return win
+			return win;
 		}
 
 		return this.mixins.Router.allowNavigation.call(this);
@@ -129,7 +129,7 @@ Ext.define('NextThought.app.Body', {
 
 		if (id) {
 			id = ParseUtils.encodeForURI(id);
-			route = Globals.trimRoute(route) + '/object/' + id; 
+			route = Globals.trimRoute(route) + '/object/' + id;
 		} else {
 			route = this.ContextStore.removeObjectRoute();
 		}
@@ -173,7 +173,7 @@ Ext.define('NextThought.app.Body', {
 		return bundleView.setActiveBundle(ntiid, bundle)
 			.then(bundleView.handleRoute.bind(bundleView, subRoute, route.precache))
 			.fail(function() {
-				me.replaceRoute('', '/library')
+				me.replaceRoute('', '/library');
 			});
 	},
 

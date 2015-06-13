@@ -29,6 +29,8 @@ Ext.define('NextThought.app.content.content.Index', {
 		this.addRoute('/', this.showRoot.bind(this));
 		this.addRoute('/:id', this.showContent.bind(this));
 
+		this.addDefaultRoute('/');
+
 		this.on('beforedeactivate', this.onBeforeDeactivate.bind(this));
 	},
 
@@ -141,6 +143,6 @@ Ext.define('NextThought.app.content.content.Index', {
 
 
 	handleNavigation: function(title, route, precache) {
-
+		this.pushRoute(title, route, precache);
 	}
 });

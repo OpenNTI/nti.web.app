@@ -36,11 +36,10 @@ Ext.define('NextThought.app.bundle.Index', {
 
 		this.initRouter();
 
-		this.addRoute('/', this.showContent.bind(this));
 		this.addRoute('/content', this.showContent.bind(this));
 		this.addRoute('/discussions', this.showDiscussions.bind(this));
 
-		this.addDefaultRoute('/');
+		this.addDefaultRoute('/content');
 	},
 
 
@@ -120,7 +119,7 @@ Ext.define('NextThought.app.bundle.Index', {
 
 
 	showContent: function(route, subRoute) {
-		return this.setActiveView('bundle-content',[
+		return this.setActiveView('bundle-content', [
 				'bundle-forum'
 			]).then(function(item) {
 				if (item.handleRoute) {
