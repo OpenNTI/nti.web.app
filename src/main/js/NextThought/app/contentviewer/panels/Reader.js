@@ -159,7 +159,8 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 			path: this.path,
 			pageSource: this.pageSource,
 			hideControls: this.pageInfo.hideControls,
-			doNavigation: this.doNavigation.bind(this)
+			doNavigation: this.doNavigation.bind(this),
+			toc: this.toc
 		};
 	},
 
@@ -202,7 +203,12 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 
 
 	setPageInfo: function(pageInfo, bundle) {
-		var reader = this.getReaderContent();
+		var reader = this.getReaderContent(),
+			toolbar = this.getToolbar();
+
+		if (toolbar) {
+			toolbar.setPageInfo(pageInfo, bundle);
+		}
 
 		//the reader might not be defined if we are in a timed assignment
 		if (reader) {

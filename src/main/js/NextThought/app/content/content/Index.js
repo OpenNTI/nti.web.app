@@ -94,6 +94,7 @@ Ext.define('NextThought.app.content.content.Index', {
 		this.reader = NextThought.app.contentviewer.Index.create({
 			pageInfo: page instanceof NextThought.model.PageInfo ? page : null,
 			relatedWork: page instanceof NextThought.model.RelatedWork ? page : null,
+			toc: !this.currentBundle.isCourse ? this.ContentActions.getTocStore(this.currentBundle) : null,
 			path: this.ContentActions.getContentPath(page.getId(), this.currentBundle, parent),
 			pageSource: pageSource,
 			bundle: this.currentBundle,

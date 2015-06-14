@@ -1,7 +1,10 @@
 Ext.define('NextThought.app.contentviewer.navigation.Base', {
 	extend: 'Ext.Component',
 
-	requires: ['NextThought.common.menus.JumpTo'],
+	requires: [
+		'NextThought.common.menus.JumpTo',
+		'NextThought.app.contentviewer.navigation.TableOfContents'
+	],
 
 	cls: 'content-toolbar',
 
@@ -139,6 +142,10 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 
 		if (!me.toc) {
 			rd.tocCls = 'hidden';
+		} else if (me.toc instanceof Promise) {
+			me.toc.then(me.buildTocComponent.bind(me));
+		} else {
+			me.buildTocComponent(me.toc);
 		}
 
 		me.renderData = Ext.apply(me.renderData || {}, rd);
@@ -152,10 +159,6 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 			previousEl: {click: 'onPrevious'},
 			nextEl: {click: 'onNext'}
 		});
-	},
-
-	afterRender: function() {
-		this.callParent(arguments);
 	},
 
 
@@ -206,6 +209,11 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 
 	onPathClicked: function(e) {
 		var part = e.getTarget('.part'), path;
+
+		if (e.getTarget('.toc')) {
+			this.onShowToc();
+			return;
+		}
 
 		if (e.getTarget('.locked') || !part) { return; }
 
@@ -369,5 +377,41 @@ Ext.define('NextThought.app.contentviewer.navigation.Base', {
 					});
 			}
 		};
+	},
+
+
+	setPageInfo: function(pageInfo) {
+		this.activeNTIID = pageInfo.getId();
+
+		if (this.tocComponent) {
+			this.tocComponent.selectId(this.activeNTIID);
+		}
+	},
+
+
+	buildTocComponent: function(store) {
+		this.tocComponent = Ext.widget({
+			xtype: 'table-of-contents-flyout',
+			store: store,
+			doNavigation: this.doNavigation.bind(this)
+		});
+
+		if (this.activeNTIID) {
+			this.tocComponent.selectId(this.activeNTIID);
+		}
+
+		if (this.hasTocOpen) {
+			this.onShowToc();
+		}
+	},
+
+
+	onShowToc: function() {
+		if (!this.tocComponent) {
+			this.hasTocOpen = true;
+			return;
+		}
+
+		this.tocComponent.showBy(this.el, 'tl-tl', [0, 0]);
 	}
 });

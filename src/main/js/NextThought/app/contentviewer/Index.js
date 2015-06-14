@@ -65,6 +65,7 @@ Ext.define('NextThought.app.contentviewer.Index', {
 			width: '100%',
 			path: config.path,
 			pageSource: config.pageSource,
+			toc: config.toc,
 			bundle: config.bundle,
 			handleNavigation: config.handleNavigation,
 			navigateToObject: config.navigateToObject

@@ -2,7 +2,8 @@ Ext.define('NextThought.app.content.Actions', {
 
 	requires: [
 		'NextThought.util.Content',
-		'NextThought.util.PageSource'
+		'NextThought.util.PageSource',
+		'NextThought.model.TopicNode'
 	],
 
 	levelLabels: {
@@ -307,6 +308,43 @@ Ext.define('NextThought.app.content.Actions', {
 			})
 			.then(function(navInfo) {
 				return NextThought.util.PageSource.create(navInfo);
+			});
+	},
+
+
+	getTocStore: function(bundle, root) {
+		return bundle.getTocs()
+			.then(function(tocs) {
+				var toc = tocs[0];
+
+				if (tocs.length > 1) {
+					console.warn('Do not know how to handle multiple tocs here yet... Just use the first one');
+				}
+
+				return toc;
+			})
+			.then(function(toc) {
+				var rec,
+					store = new Ext.data.Store({
+						model: NextThought.model.TopicNode,
+						data: toc
+					});
+
+				store.remove(store.getRange().filter(function(_) {
+					return _.get('supressed');
+				}));
+
+				if (root) {
+					rec = store.getById(root);
+
+					if (rec) {
+						rec.set('isRoot', true);
+					} else {
+						console.warn('Strange, we set a root, but did not find it.');
+					}
+				}
+
+				return store;
 			});
 	}
 });
