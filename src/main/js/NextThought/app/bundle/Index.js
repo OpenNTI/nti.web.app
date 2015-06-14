@@ -119,6 +119,8 @@ Ext.define('NextThought.app.bundle.Index', {
 
 
 	showContent: function(route, subRoute) {
+		this.contentRoute = subRoute;
+
 		return this.setActiveView('bundle-content', [
 				'bundle-forum'
 			]).then(function(item) {
@@ -129,7 +131,15 @@ Ext.define('NextThought.app.bundle.Index', {
 	},
 
 
-	showDiscussions: function() {
+	showDiscussions: function(route, subRoute) {
+		this.discussionsRoute = subRoute;
 
+		return this.setActiveView('bundle-forum', [
+				'bundle-forum'
+			]).then(function(item) {
+				if (item.handleRoute) {
+					item.handleRoute(subRoute, route);
+				}
+			});
 	}
 });

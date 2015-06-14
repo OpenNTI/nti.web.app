@@ -12,7 +12,7 @@ Ext.define('NextThought.app.library.content.Actions', {
 		this.ContentStore = NextThought.app.library.content.StateStore.getInstance();
 	},
 
-	
+
 	loadContent: function(service) {
 		var store = this.ContentStore;
 

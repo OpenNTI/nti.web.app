@@ -125,9 +125,10 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 				me.record = rec;
 				me.showTopic();
 			}
-		})
+		});
 	}
 }, function() {
+	NextThought.app.windows.StateStore.register(NextThought.model.forums.ContentHeadlineTopic.mimeType, this);
 	NextThought.app.windows.StateStore.register(NextThought.model.forums.CommunityHeadlineTopic.mimeType, this);
 	NextThought.app.windows.StateStore.register('new-topic', this);
 });
