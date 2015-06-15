@@ -59,6 +59,7 @@ Ext.define('NextThought.app.contentviewer.reader.Location', {
 
 					me.currentPageInfo = pageInfo;
 					me.currentLocation = location;
+					me.fireEvent('location-set');
 				});
 	},
 
@@ -72,8 +73,16 @@ Ext.define('NextThought.app.contentviewer.reader.Location', {
 	getRelated: function(givenNtiid) {
 		var me = this,
 			location = me.getLocation(),
-			ntiid = givenNtiid || location.NTIID,
+			ntiid = givenNtiid || (location && location.NTIID),
 			map = {};
+
+		if (!location) {
+			return new Promise(function(fulfill, reject) {
+				me.on('location-set', function() {
+					fulfill(me.getRelated(givenNtiid));
+				});
+			});
+		}
 
 		return ContentUtils.getNodes(ntiid, location.currentBundle)
 			.then(function(infos) {
