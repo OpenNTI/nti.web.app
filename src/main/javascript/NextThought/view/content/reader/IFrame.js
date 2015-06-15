@@ -585,9 +585,19 @@ Ext.define('NextThought.view.content.reader.IFrame', {
 		var doc = this.getDocumentElement(),
 			body = Ext.get(doc.body || doc.getElementsByName('body')[0]),
 			head = doc.getElementsByTagName('head')[0],
+			div = document.createElement('div'),
+			fallback = document.createElement('div'),
 			metaNames = ['NTIID', 'last-modified'];
 
 		Ext.select('meta[nti-injected="true"]', false, head).remove();
+
+		div.innerHTML = html || '';
+
+		Ext.each(div.querySelectorAll('object object'), function(object) {
+			object.appendChild(fallback.cloneNode(true));
+		});
+
+		html = div.innerHTML;
 
 		//Append some tags to the head
 		if (metaData) {
