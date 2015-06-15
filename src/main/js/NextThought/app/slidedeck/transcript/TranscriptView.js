@@ -12,7 +12,9 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 		'NextThought.app.annotations.Index',
 		'NextThought.app.slidedeck.transcript.parts.VideoTitle',
         'NextThought.app.slidedeck.transcript.parts.NoTranscript',
-        'NextThought.app.userdata.Actions'
+        'NextThought.app.userdata.Actions',
+        'NextThought.app.slidedeck.media.Actions',
+        'NextThought.app.slidedeck.media.StateStore'
 	],
 
 	ui: 'transcript',
@@ -35,6 +37,8 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
         this.buildComponents();
 		this.flatPageStore = new NextThought.store.FlatPage();
 		this.UserDataActions = NextThought.app.userdata.Actions.create();
+		this.MediaViewerActions = NextThought.app.slidedeck.media.Actions.create();
+		this.MediaViewerStore = NextThought.app.slidedeck.media.StateStore.getInstance();
 
 		this.UserDataActions.initPageStores(this);
 
@@ -73,23 +77,13 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
                 video: this.videoPlaylist[0]
             }, {
                 xtype: 'video-transcript',
-                flex: 1,
-                transcript: this.transcript,
-                layout: {
-                    type: 'vbox',
-                    align: 'stretch'
-                }
+                transcript: this.transcript
             }];
         }
         else{
             items.push({
                 xtype: 'no-video-transcript',
-                flex: 1,
-                video: this.videoPlaylist[0],
-                layout: {
-                    type: 'vbox',
-                    align: 'stretch'
-                }
+                video: this.videoPlaylist[0]
             });
 
             this.hasNoPresentationParts = true;
@@ -106,66 +100,6 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 		}
 	},
 
-
-	bindStoreToComponents: function(store, cmps) {
-		var r, sEl,
-			m = this.noteOverlay.annotationManager,
-			k = this.record, o, mc, me = this, win;
-
-		this.cmpMap[store.containerId] = cmps;
-
-		Ext.each(cmps, function(cmp) {
-			this.fireEvent('register-records', store, store.getRange(), cmp);
-			cmp.bindToStore(store);
-			me.relayEvents(cmp, 'jump-video-to');
-		});
-
-		if (this.record) {
-			// Since we've already added the record when its component registered its records,
-			// let's just get its annotation object.
-			o = m.findBy(function(item) {
-				return item.record.getId() === k.getId();
-			});
-			if (!o) {
-				console.warn('could not find annotation for record', k, ' in annotationManager: ', m);
-				return;
-			}
-
-			r = o.range;
-			if (r) {
-				console.log('Need to scroll to range', r);
-				sEl = this.el.getScrollingEl();
-				if (sEl) {
-					sEl.scrollTo('top', RangeUtils.safeBoundingBoxForRange(r).top - sEl.getY());
-				}
-
-				mc = new Ext.util.MixedCollection();
-				mc.add(o);
-				this.showAnnotations(mc, o.line);
-				if (this.scrollToId) {
-
-					// NOTE: If it's a reply, we're create the note viewer ourselves,
-					// since we want to specify the scrollToId property.
-					win = Ext.widget({
-						autoShow: true,
-						xtype: 'note-window',
-						record: this.record,
-						reader: this,
-						scrollToId: this.scrollToId,
-						xhooks: this.getViewerHooks()
-					});
-
-					me.fireEvent('register-note-window', this, win);
-					delete this.record;
-					return;
-				}
-
-				//Select record to open the note viewer.
-				this.annotationView.getSelectionModel().select(o.record);
-				delete this.record;
-			}
-		}
-	},
 
 	onStoreEventsAdd: function(store, records) {
 		var cmps = this.cmpMap[store.containerId || ''];
@@ -292,7 +226,8 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 				me.removeMask();
 
 				me.fireEvent('presentation-parts-ready', me, me.getPartComponents(), me.startOn);
-				me.fireEvent('load-presentation-userdata', me, me.getPartComponents());
+				// me.fireEvent('load-presentation-userdata', me, me.getPartComponents());
+				me.MediaViewerActions.loadUserData(partCmps, me);
 			}
 		}
 

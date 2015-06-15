@@ -12,6 +12,13 @@ Ext.define('NextThought.app.slidedeck.transcript.parts.Transcript', {
 		transcriptItem: 'NextThought.app.slidedeck.transcript.parts.TranscriptItemMixin'
 	},
 
+    flex: 1,
+
+	layout: {
+	    type: 'vbox',
+	    align: 'stretch'
+	},
+
 	//	ui: 'content-launcher',
 	cls: 'content-video-transcript',
 

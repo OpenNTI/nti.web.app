@@ -4,7 +4,8 @@ Ext.define('NextThought.app.slidedeck.transcript.NoteOverlay', {
 		'NextThought.util.Line',
 		'NextThought.app.whiteboard.Utils',
 		'NextThought.editor.Editor',
-		'NextThought.app.userdata.Actions'
+		'NextThought.app.userdata.Actions',
+		'NextThought.app.slidedeck.media.StateStore'
 	],
 	mixins: {
 		'observable': 'Ext.util.Observable'
@@ -361,10 +362,13 @@ Ext.define('NextThought.app.slidedeck.transcript.NoteOverlay', {
 
 		var me = this,
 			reader = me.reader;
-		//TODO: This function should be buffered, but doing so would cause
-		// the previous calls to be dropped.
-		if (!reader.el || !reader.el.isVisible(true)) {
-			Ext.defer(this.registerGutterRecords, 10, this, arguments);
+
+		if (!reader.rendered) {
+			reader.onceRendered
+				.then(function() {
+					wait(10)
+						.then(me.registerGutterRecords.bind(me));
+				});
 			return;
 		}
 

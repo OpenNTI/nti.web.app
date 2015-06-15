@@ -4,6 +4,13 @@ Ext.define('NextThought.app.slidedeck.transcript.parts.NoTranscript', {
 
     cls: 'no-transcript',
 
+    flex: 1,
+
+    layout: {
+        type: 'vbox',
+        align: 'stretch'
+    },
+
     renderTpl: Ext.DomHelper.markup({
         cn: [
             {tag: 'span', cls: 'control-container', cn: {
