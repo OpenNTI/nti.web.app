@@ -103,11 +103,10 @@ Ext.define('NextThought.app.account.Actions', {
 		Ext.widget('updated-tos', {link: link, deleteOnDestroy: true}).show();
 	},
 
-
-	showTermsOfService: function(link) {
-		Ext.widget('nti-window', {
-			title: 'Terms of Service',
-			closeAction: 'hide',
+	__createWindow: function(link, title) {
+		var win = Ext.widget('nti-window', {
+			title: title,
+			closeAction: 'destroy',
 			width: 695,
 			height: 640,
 			layout: 'none',
@@ -124,10 +123,35 @@ Ext.define('NextThought.app.account.Actions', {
 					seamless: true,
 					transparent: true,
 					allowTransparency: true,
-					style: 'overflow-x: hidden; overflow-y:auto; height: 600px;'
+					style: 'overflow-x: hidden; overflow-y:auto; height: 600px; width: 680px;'
 				}
 			}
-		}).show();
+		});
+
+		if (Ext.is.iPad) {
+			win.on('afterrender', function() {
+				var iframe = this.el.down('.x-fit-item');
+				iframe.parent().el.setStyle('-webkit-overflow-scrolling', 'touch');
+				iframe.parent().el.setStyle('overflow', 'auto');
+			});
+		}
+
+		return win;
+	},
+
+
+	showTermsOfService: function(link) {
+		this.__createWindow(link, 'Terms of Service').show();
+	},
+
+
+	showChildrensPrivacy: function(link) {
+		this.__createWindow(link, 'Children\'s Privacy').show();
+	},
+
+
+	showPrivacy: function(link) {
+		this.__createWindow(link, 'Privacy').show();
 	},
 
 

@@ -111,10 +111,22 @@ Ext.define('NextThought.app.account.identity.components.Settings', {
 	showAbout: function() {},
 
 
-	showPrivacy: function() {},
+	showPrivacy: function() {
+		var link = $AppConfig.userObject.getLink('content.permanent_general_privacy_page');
+
+		if (link) {
+			this.AccountActions.showPrivacy(link);
+		}
+	},
 
 
-	showChildPrivacy: function() {},
+	showChildPrivacy: function() {
+		var link = $AppConfig.userObject.getLink('childrens-privacy');
+
+		if (link) {
+			this.AccountActions.showChildrensPrivacy(link);
+		}
+	},
 
 
 	showTerms: function(item) {
