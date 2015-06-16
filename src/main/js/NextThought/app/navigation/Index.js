@@ -3,19 +3,22 @@ Ext.define('NextThought.app.navigation.Index', {
 	alias: 'widget.main-navigation',
 
 	requires: [
-		'NextThought.app.navigation.StateStore'
+		'NextThought.app.navigation.StateStore',
+		'NextThought.app.account.identity.Index'
 	],
 
 	cls: 'main-navigation',
 
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'nav-container'}
+		{cls: 'nav-container'},
+		{cls: 'identity-container'}
 	]),
 
 
 	renderSelectors: {
-		navContainerEl: '.nav-container'
+		navContainerEl: '.nav-container',
+		identityEl: '.identity-container'
 	},
 
 
@@ -43,7 +46,7 @@ Ext.define('NextThought.app.navigation.Index', {
 			}
 
 			cmp.render(me.navContainerEl);
-			
+
 			me.nav_cmp = cmp;
 		}
 
@@ -76,5 +79,16 @@ Ext.define('NextThought.app.navigation.Index', {
 	},
 
 
-	setActiveContent: function(bundle) {}
+	setActiveContent: function(bundle) {},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		this.identityCmp = NextThought.app.account.identity.Index.create();
+
+		this.identityCmp.render(this.identityEl);
+
+		this.on('destroy', 'destroy', this.identityCmp);
+	}
 });

@@ -45,7 +45,7 @@ Ext.define('NextThought.app.context.types.Content', {
 			return {
 				type: this.self.type,
 				html: this.__fixUpContext(context)
-			}
+			};
 		} catch (e) {
 			console.error('Faild to load content context:', e);
 		}

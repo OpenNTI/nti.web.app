@@ -38,7 +38,7 @@ Ext.define('NextThought.util.Format', {
 			clsList = [cls || 'avatar', 'avatar-container'];
 
 		function get(link) {
-			return 'url(' + link + ')'
+			return 'url(' + link + ')';
 		}
 
 

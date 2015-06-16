@@ -37,7 +37,7 @@ body.x-body {
 	right: 0;
 	height: $header-height;
 	z-index: 150;
-	background-color: white;
+	background-color: rgba(255, 255, 255, 0.97);
 	backface-visibility: hidden;
 
 	&::after{
@@ -70,6 +70,10 @@ body.x-body {
 		box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
 		clip: rect(10px, auto, 20px, auto);
 	}
+
+	.identity-container {
+		float: right;
+	}
 }
 
 
@@ -83,7 +87,7 @@ html.window-open {
 
 .window-container {
 	position: fixed;
-	top: 72px; bottom: 0;
+	top: $header-height; bottom: 0;
 	left: 0; right: 0;
 	background-color: rgba(0, 0, 0, 0.3);
 	z-index: 100;
