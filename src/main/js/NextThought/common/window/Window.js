@@ -26,7 +26,7 @@ Ext.define('NextThought.common.window.Window', {
 	dialog: false,
 	modal: false,
 
-	layout: { type: 'vbox', align: 'stretch' },
+	layout: 'none',
 	items: [
 		{xtype: 'nti-window-header' },
 		{xtype: 'container', flex: 1, windowContentWrapper: true}

@@ -5,7 +5,7 @@ Ext.define('NextThought.common.ux.IframeWindow', {
 	cls: 'iframe-window',
 	width: 695,
 	height: 640,
-	layout: 'fit',
+	layout: 'none',
 	modal: true,
 	header: false,
 
@@ -16,56 +16,52 @@ Ext.define('NextThought.common.ux.IframeWindow', {
 		loadingText: 'Loading...'
 	},
 
-	items: [{
-		xtype: 'box',
-		itemId: 'iframe',
-		cls: 'iframe loading',
-		autoEl: {
-			tag: 'iframe',
-			src: '{url}',
-			frameBorder: 0,
-			marginWidth: 0,
-			marginHeight: 0,
-			seamless: true,
-			transparent: true,
-			allowTransparency: true,
-			style: 'overflow-x: hidden; overflow-y:auto'
-		}
-	}],
-	dockedItems: {
-		xtype: 'container',
-		dock: 'bottom',
-		ui: 'footer',
-		height: 55,
-		baseCls: 'nti-window',
-		layout: {
-			type: 'hbox',
-			align: 'stretchmax'
+	items: [
+		{
+			xtype: 'box',
+			itemId: 'iframe',
+			cls: 'iframe loading',
+			autoEl: {
+				tag: 'iframe',
+				src: '{url}',
+				frameBorder: 0,
+				marginWidth: 0,
+				marginHeight: 0,
+				seamless: true,
+				transparent: true,
+				allowTransparency: true,
+				style: 'overflow-x: hidden; overflow-y:auto; height: 585px;'
+			}
 		},
-		defaults: {
-			cls: 'footer-region',
+		{
 			xtype: 'container',
-			flex: 1,
-			layout: 'hbox'
-		},
-		items: [{
-			layout: 'auto',
-			defaults: { xtype: 'button', ui: 'blue', scale: 'large'},
-			items: [
-				//{text: 'Save', cls: 'x-btn-flat-large save', action: 'save', href: '{url}', style: { float: 'left'}},
-				{ xtype: 'box', cls: 'iframe-save', save: true, autoEl: { tag: 'a', href: '{url}', html: '', target: '_blank'}},
-				{
-					text: 'Close',
-					cls: 'x-btn-blue-large dismiss',
-					action: 'cancel',
-					style: { 'float': 'right'},
-					handler: function(b, e) {
-						e.stopEvent(); b.up('window').close();
+			height: 55,
+			layout: 'none',
+			defaults: {
+				cls: 'footer-region',
+				xtype: 'container',
+				flex: 1,
+				layout: 'none'
+			},
+			items: [{
+				layout: 'none',
+				defaults: { xtype: 'button', ui: 'blue', scale: 'large'},
+				items: [
+					//{text: 'Save', cls: 'x-btn-flat-large save', action: 'save', href: '{url}', style: { float: 'left'}},
+					{ xtype: 'box', cls: 'iframe-save', save: true, autoEl: { tag: 'a', href: '{url}', html: '', target: '_blank'}},
+					{
+						text: 'Close',
+						cls: 'x-btn-blue-large dismiss',
+						action: 'cancel',
+						style: { 'float': 'right'},
+						handler: function(b, e) {
+							e.stopEvent(); b.up('window').close();
+						}
 					}
-				}
-			]
-		}]
-	},
+				]
+			}]
+		}
+	],
 
 	initComponent: function() {
 		this.callParent(arguments);

@@ -99,7 +99,7 @@ Ext.define('NextThought.login.StateStore', {
 		//What is the exact relationships between these windows?
 		//currently above and below are piling on top of one another
 		if (this.__shouldShowContentFor('content.initial_welcome_page')) {
-			this.AccountActions.showWelcomePage();
+			this.AccountActions.showWelcomePage($AppConfig.userObject.getLink('content.initial_welcome_page'));
 		}
 
 		if (this.__shouldShowContentFor('irb_html')) {

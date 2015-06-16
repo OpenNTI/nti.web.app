@@ -4,7 +4,9 @@ Ext.define('NextThought.app.account.Actions', {
 	requires: [
 		'NextThought.app.account.coppa.Window',
 		'NextThought.app.account.recovery.Window',
-		'NextThought.app.account.coppa.upgraded.Window'
+		'NextThought.app.account.coppa.upgraded.Window',
+		'NextThought.common.ux.WelcomeGuide',
+		'NextThought.common.ux.IframeConfirmWindow'
 	],
 
 	maybeShowCoppaWindow: function() {
@@ -63,10 +65,36 @@ Ext.define('NextThought.app.account.Actions', {
 	},
 
 
-	showWelcomePage: function() {},
+	showWelcomePage: function(link) {
+		Ext.widget('welcome-guide', {link: link, deleteOnDestroy: true}).show();
+	},
 
 
-	showResearchAgreement: function() {},
+	showResearchAgreement: function() {
+		var user = $AppConfig.userObject,
+			html = user.getLink('irb_html'),
+			pdf = user.getLink('irb_pdf'),
+			post = user.getLink('SetUserResearch');
+
+		function sendRequest(agreed) {
+			if (!post) {
+				return Promise.reject('No link to post to');
+			}
+
+			return Service.post(post, {
+				allow_research: agreed
+			});
+		}
+
+		Ext.widget('iframe-confirm-window', {
+			link: html,
+			title: 'Research Agreement',
+			confirmText: 'Consent',
+			denyText: 'Do Not Consent',
+			confirmAction: sendRequest.bind(null, true),
+			denyAction: sendRequest.bind(null, true)
+		}).show();
+	},
 
 
 	showNewTermsOfService: function() {},

@@ -76,7 +76,7 @@ Ext.define('NextThought.app.windows.StateStore', {
 
 
 	hasOpenWindows: function() {
-		return this.OPEN_COUNT === 0;
+		return this.OPEN_COUNT > 0;
 	},
 
 

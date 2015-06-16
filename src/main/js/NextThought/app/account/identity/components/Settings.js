@@ -4,7 +4,8 @@ Ext.define('NextThought.app.account.identity.components.Settings', {
 
 	requires: [
 		'NextThought.app.account.identity.components.MenuItem',
-		'NextThought.app.account.identity.components.Presence'
+		'NextThought.app.account.identity.components.Presence',
+		'NextThought.app.account.Actions'
 	],
 
 	cls: 'user-settings-menu',
@@ -30,6 +31,8 @@ Ext.define('NextThought.app.account.identity.components.Settings', {
 			u = $AppConfig.userObject, contactItem,
 			welcomeLink = u.getLink('content.permanent_welcome_page'),
 			childsLink = u.getLink('childrens-privacy');
+
+		this.AccountActions = NextThought.app.account.Actions.create();
 
 		items.push({xtype: 'account-menuitem'});
 
@@ -100,7 +103,9 @@ Ext.define('NextThought.app.account.identity.components.Settings', {
 	},
 
 
-	showWelcome: function() {},
+	showWelcome: function(item) {
+		this.AccountActions.showWelcomePage(item.link);
+	},
 
 
 	showAbout: function() {},
