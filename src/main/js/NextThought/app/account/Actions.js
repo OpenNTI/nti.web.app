@@ -6,7 +6,9 @@ Ext.define('NextThought.app.account.Actions', {
 		'NextThought.app.account.recovery.Window',
 		'NextThought.app.account.coppa.upgraded.Window',
 		'NextThought.common.ux.WelcomeGuide',
-		'NextThought.common.ux.IframeConfirmWindow'
+		'NextThought.common.ux.IframeConfirmWindow',
+		'NextThought.common.ux.UpdatedTos',
+		'NextThought.common.ux.IframeWindow'
 	],
 
 	maybeShowCoppaWindow: function() {
@@ -97,7 +99,36 @@ Ext.define('NextThought.app.account.Actions', {
 	},
 
 
-	showNewTermsOfService: function() {},
+	showNewTermsOfService: function(link) {
+		Ext.widget('updated-tos', {link: link, deleteOnDestroy: true}).show();
+	},
+
+
+	showTermsOfService: function(link) {
+		Ext.widget('nti-window', {
+			title: 'Terms of Service',
+			closeAction: 'hide',
+			width: 695,
+			height: 640,
+			layout: 'none',
+			modal: true,
+			items: {
+				xtype: 'component',
+				cls: 'padded',
+				autoEl: {
+					tag: 'iframe',
+					src: link,
+					frameBorder: 0,
+					marginWidth: 0,
+					marginHeight: 0,
+					seamless: true,
+					transparent: true,
+					allowTransparency: true,
+					style: 'overflow-x: hidden; overflow-y:auto; height: 600px;'
+				}
+			}
+		}).show();
+	},
 
 
 	submitCoppaInfo: function(values) {

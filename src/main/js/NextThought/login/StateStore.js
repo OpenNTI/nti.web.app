@@ -84,6 +84,8 @@ Ext.define('NextThought.login.StateStore', {
 
 	//TODO: Fill this in from controller/Session
 	takeImmediateAction: function() {
+		var user = $AppConfig.userObject;
+
 		if (this.actions['show-coppa-window']) {
 			this.AccountActions.maybeShowCoppaWindow();
 		} else if (this.actions['bounced-contact']) {
@@ -99,7 +101,7 @@ Ext.define('NextThought.login.StateStore', {
 		//What is the exact relationships between these windows?
 		//currently above and below are piling on top of one another
 		if (this.__shouldShowContentFor('content.initial_welcome_page')) {
-			this.AccountActions.showWelcomePage($AppConfig.userObject.getLink('content.initial_welcome_page'));
+			this.AccountActions.showWelcomePage(user.getLink('content.initial_welcome_page'));
 		}
 
 		if (this.__shouldShowContentFor('irb_html')) {
@@ -108,7 +110,7 @@ Ext.define('NextThought.login.StateStore', {
 
 		//NOTE we show the ToS last so it stacks on top. Need a better solution for this
 		if (this.__shouldShowContentFor('content.initial_tos_page')) {
-			this.AccountActions.showNewTermsOfService();
+			this.AccountActions.showNewTermsOfService(user.getLink('content.initial_tos_page'));
 		}
 	},
 

@@ -117,7 +117,11 @@ Ext.define('NextThought.app.account.identity.components.Settings', {
 	showChildPrivacy: function() {},
 
 
-	showTerms: function() {},
+	showTerms: function(item) {
+		var link = Service.getSupportLinks().termsOfService;
+
+		this.AccountActions.showTermsOfService(link);
+	},
 
 
 	contactUs: function() {},
