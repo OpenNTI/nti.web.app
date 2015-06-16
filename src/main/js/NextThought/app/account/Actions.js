@@ -155,6 +155,11 @@ Ext.define('NextThought.app.account.Actions', {
 	},
 
 
+	showHref: function(href, target) {
+		window.open(href, target);
+	},
+
+
 	submitCoppaInfo: function(values) {
 		var linkToDelete = $AppConfig.userObject.getLink('account.profile.needs.updated'),
 			key;
@@ -239,5 +244,98 @@ Ext.define('NextThought.app.account.Actions', {
 				}, optionalLinkName);
 			});
 		}
+	},
+
+
+	showContactUs: function() {
+		var help = Service.getSupportLinks().supportEmail;
+
+		if (help) {
+			Globals.sendEmailTo(help);
+			return;
+		}
+
+		Ext.widget('contact-us-window', {
+			handleSubmit: this.submitContactForm.bind(this)
+		}).show();
+	},
+
+
+	__contactUsBodyForMessage: function(data) {
+		var body = data.email || '[NO EMAIL SUPPLIED]';
+
+		body += (' wrote: ' + data.message);
+		return body;
+	},
+
+
+	__aliasBodyForMessage: function(data) {
+		var body = data.email || '[NO EMAIL SUPPLIED]';
+
+		body += (' has requested an alias change for account ' + $AppConfig.username);
+		body += ('. message: ' + data.message);
+
+		return body;
+	},
+
+
+	submitContactForm: function(values, role) {
+		var feedbackLink = $AppConfig.userObject.getLink('send-feedback'),
+			url = getURL(feedbackLink),
+			body,
+			bodyFormatters = {
+				contact: this.__contactUsBodyForMessage,
+				alias: this.__aliasBodyForMessage
+			};
+
+		if (!values.message) {
+			return Promise.reject({
+				field: 'message',
+				message: 'Message cannot be empty.'
+			});
+		}
+
+		if (!feedbackLink) {
+			console.error('No where to send feedback to');
+			return Promise.reject({
+				field: '',
+				message: 'Unable to send feedback at this time.'
+			});
+		}
+
+		if (bodyFormatters[role]) {
+			body = bodyFormatters[role](values);
+		} else {
+			console.error('Unknown role for contact window');
+			return Promise.reject({
+				field: '',
+				message: 'Unable to send feedback at this time'
+			});
+		}
+
+		if (!Globals.isEmail(values.email)) {
+			return Promise.reject({
+				field: 'email',
+				message: 'You must enter a valid email address.'
+			});
+		}
+
+		return new Promise(function(fulfill, reject) {
+			Ext.Ajax.request({
+				url: url,
+				jsonData: Ext.encode({body: body}),
+				method: 'POST',
+				headers: {
+					Accept: 'application/json'
+				},
+				callback: function(q, success, r) {
+					if (!success) {
+						reject(Ext.decode(r.responseText));
+					} else {
+						fulfill();
+					}
+				}
+			});
+		});
 	}
 });

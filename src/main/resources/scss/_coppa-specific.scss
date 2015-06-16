@@ -430,6 +430,7 @@
 			@include top-etch($dark: #e2e2e2, $light: #fafafa);
 			background-color: #f3f3f3;
 			padding: 15px 10px;
+			overflow: hidden;
 
 			.privacyLink, .policy-link{
 				text-decoration: none;

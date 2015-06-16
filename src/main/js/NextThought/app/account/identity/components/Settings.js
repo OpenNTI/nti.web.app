@@ -45,7 +45,12 @@ Ext.define('NextThought.app.account.identity.components.Settings', {
 			items.push({handler: this.showWelcome.bind(this), text: getString('NextThought.view.menus.Settings.welcome'), link: welcomeLink});
 		}
 
-		items.push({handler: this.showAbout.bind(this), text: getString('NextThought.view.menus.Settings.about'), href: Service.getSupportLinks().about});
+		items.push({
+			handler: this.showAbout.bind(this),
+			text: getString('NextThought.view.menus.Settings.about'),
+			href: Service.getSupportLinks().about,
+			target: '_blank'
+		});
 
 		//disable help because there are now 3 seperate help documents for different environments.  ugh!
 		//items.push({ handler: 'help', text: 'Help'})
@@ -108,7 +113,9 @@ Ext.define('NextThought.app.account.identity.components.Settings', {
 	},
 
 
-	showAbout: function() {},
+	showAbout: function(item) {
+		this.AccountActions.showHref(item.href, item.target);
+	},
 
 
 	showPrivacy: function() {
@@ -136,7 +143,9 @@ Ext.define('NextThought.app.account.identity.components.Settings', {
 	},
 
 
-	contactUs: function() {},
+	contactUs: function() {
+		this.AccountActions.showContactUs();
+	},
 
 
 	contactSomeoneElse: function() {},
