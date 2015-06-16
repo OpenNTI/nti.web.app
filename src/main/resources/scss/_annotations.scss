@@ -910,6 +910,7 @@ div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7 }
 	$transition-duration:.1s;
 	background: $annotations-menu-bg;
 	border-radius:6px;
+	position: fixed !important;
 	opacity: 0.01; // so we can show the menu, compute its width, and center it. (can't get the width until it's rendered in the dom.)
 	&.visible {
 		opacity: 1;

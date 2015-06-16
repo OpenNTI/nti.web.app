@@ -5,7 +5,8 @@ Ext.define('NextThought.app.contentviewer.reader.Scroll', {
 
 	constructor: function(config) {
 		Ext.apply(this, config);
-		var me = this, reader = me.reader;
+		var me = this, reader = me.reader,
+			scroll = me.menuHideOnScroll.bind(me);
 
 		function afterReaderRenders() {
 			me.scrollingEl = Ext.getBody();
@@ -13,6 +14,12 @@ Ext.define('NextThought.app.contentviewer.reader.Scroll', {
 					reader.relayEvents(me.scrollingEl, [
 						'scroll'
 					]));
+
+			reader.on('destroy', function() {
+				window.removeEventListener('scroll', scroll);
+			});
+
+			window.addEventListener('scroll', scroll);
 		}
 
 		reader.on({

@@ -348,6 +348,7 @@ Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 
 
 	addAnnotation: function(range, xy) {
+		debugger;
 		if (!range) {
 			console.warn('bad range');
 			return;
@@ -381,6 +382,7 @@ Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 		menu = Ext.widget('menu', {
 			closeAction: 'destroy',
 			minWidth: 4,
+			top: 0,
 			ui: 'nt-annotation',
 			cls: 'nt-annotation-menu',
 			layout: 'hbox',
@@ -465,49 +467,38 @@ Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 			delete this.reader.creatingAnnotation;
 		}, this);
 
-		// identify the top coordinate of the nearest client rect (nearest line of text)
-		// so we can position the menu consistently instead of relying solely on the y coordinate
-		// of the mouse event.
-		function nearestTextTopOffset(range, xy) {
-			var rects = range.getClientRects(),
-				scrollOffset = me.reader.getScroll().get().top,
-				targetY = xy[1],
-				miny, i = 0;
-			for (i; i < rects.length; i++) {
-				var dy = Math.abs(targetY - rects[i].top + scrollOffset);
-				miny = Math.min(miny, dy) || dy;
-				//showRect(r);
-			}
-			return miny;
-		}
-
-		// debug utility for visualizing where the given rect is on the page.
-		/*function showRect(rect) {
-			var offset = me.reader.getEl().getXY();
-			var scroll = me.reader.getScroll().get().top;
-			var d = document.createElement('div');
-			d.style.position = 'absolute';
-			d.style.top = (rect.top + offset[1] - scroll) + 'px';
-			d.style.left = (rect.left + offset[0]) + 'px';
-			d.style.border = '1px solid red';
-			d.style.width = rect.width + 'px';
-			d.style.height = rect.height + 'px';
-			d.style.zIndex = 9999;
-			document.body.appendChild(d);
-		}*/
-
+		//Figure out where to position the menu, at the top right of the
+		//highest client rect in the range
 		function menuPosition(range, xy) {
-			var yoffset = (nearestTextTopOffset(range, xy) || 0);
-			var x = xy[0] - (menu.getWidth() / 2);
-			var y =	xy[1] - menu.getHeight() - yoffset - 10;
-			var offset = me.reader.getEl().getXY();
-			x += offset[0];
-			y += offset[1];
+			var readerRect = me.reader.el.dom.getBoundingClientRect(),
+				scrollOffSet = Ext.getBody().getScroll().top,
+				menuHeight = menu.getHeight() || 0,
+				menuWidth = menu.getWidth() || 0,
+				rects = range.getClientRects(), i,
+				dy, dx, y = readerRect.bottom, x = readerRect.right;
+
+			for (i = 0; i < rects.length; i++) {
+				dy = rects[i].top + readerRect.top;
+				dx = rects[i].right + readerRect.left;
+
+				if (dy < y) {
+					y = dy;
+					x = dx;
+				}
+			}
+
+			//account for the current top which is the scroll top for some reason...
+			y += scrollOffSet;
+
+			//center the menu at that x, y
+			x -= menuWidth / 2;
+			y -= (menuHeight + 20);
+
 			return [x, y];
 		}
 
 		if (this.reader.getLocation().NTIID.indexOf('mathcounts') < 0) {
-			menu.showAt(xy); // opacity still at 0 via css so we can center it. (we can't get the dimensions until it renders)
+			menu.showAt(xy[0], xy[1]); // opacity still at 0 via css so we can center it. (we can't get the dimensions until it renders)
 			menu.setXY(menuPosition(range, xy), false); // center it
 			menu.addClass('visible'); // show it.
 		} else {
@@ -615,7 +606,7 @@ Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 		offset = me.reader.getEl().getXY();
 		innerDocOffset = document.getElementsByTagName('iframe')[0].offsetLeft;
 		xy[0] += offset[0] + innerDocOffset;
-		xy[1] += offset[1] - me.reader.getScroll().get().top;
+		xy[1] += offset[1] - Ext.getBody().getScroll().top;
 
 		if (this.reader.getLocation().NTIID.indexOf('mathcounts') < 0) {
 			menu.showAt(xy);

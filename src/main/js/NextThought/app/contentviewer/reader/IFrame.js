@@ -275,7 +275,7 @@ Ext.define('NextThought.app.contentviewer.reader.IFrame', {
 
 		on(doc, 'mouseup', function(e) {
 			var fakeEvent = Ext.EventObject.setEvent(e || event),
-					t = me.reader.getScroll().get().top,
+					t = Ext.getBody().getScroll().top,
 					s = me.get().win.getSelection();
 
 			if (!fakeEvent.getTarget('a') || !s.isCollapsed) {
