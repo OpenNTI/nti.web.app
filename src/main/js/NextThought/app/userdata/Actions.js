@@ -925,7 +925,7 @@ Ext.define('NextThought.app.userdata.Actions', {
 		}
 
 		if (Globals.arrayEquals(record.get('shareWith') || [], newSharedWith || [])) {
-			console.oog('Sharing not mutated. Not showing changes', rec.get('shareWith'), newSharedWith);
+			console.log('Sharing not mutated. Not showing changes', record.get('shareWith'), newSharedWith);
 			return Promise.resolve();
 		}
 
