@@ -11,6 +11,7 @@ Ext.define('NextThought.app.windows.StateStore', {
 
 
 	obj_map: {},
+	OPEN_COUNT: 0,
 
 
 	getComponentForMimeType: function(type) {
@@ -59,5 +60,45 @@ Ext.define('NextThought.app.windows.StateStore', {
 
 	allowNavigation: function() {
 		return (this.allow_navigation_handler && this.allow_navigation_handler.call(null)) || false;
+	},
+
+
+	incrementOpenWindows: function() {
+		this.OPEN_COUNT = this.OPEN_COUNT < 0 ? 0 : this.OPEN_COUNT;
+
+		this.OPEN_COUNT += 1;
+	},
+
+
+	decrementOpenWindows: function() {
+		this.OPEN_COUNT -= 1;
+	},
+
+
+	hasOpenWindows: function() {
+		return this.OPEN_COUNT === 0;
+	},
+
+
+	addOpenCls: function() {
+		var html = document.getElementsByTagName('html')[0];
+
+		this.fireEvent('lock-body-height');
+		this.incrementOpenWindows();
+
+		html.classList.add('window-open');
+	},
+
+
+	removeOpenCls: function() {
+		this.decrementOpenWindows();
+
+		if (this.hasOpenWindows()) { return; }
+
+		var html = document.getElementsByTagName('html')[0];
+
+		this.fireEvent('unlock-body-height');
+
+		html.classList.remove('window-open');
 	}
 });

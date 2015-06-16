@@ -8,9 +8,7 @@ Ext.define('NextThought.app.account.Header', {
     {
       cls: 'account-header-view',
       cn: [
-        {cls: 'avatar', tag: 'span', cn: [
-          {tag: 'img', src: '{img}'}
-        ]},
+        '{user:avatar}',
         {cls: 'text', cn: [
           {cls: 'title', html: '{title}'},
           {cls: 'detail', html: '{detail}'}
@@ -33,7 +31,7 @@ Ext.define('NextThought.app.account.Header', {
         }
         */
 		 this.renderData = Ext.apply(this.renderData || {},{
-      img: iconURL || $AppConfig.userObject.get('avatarURL'),
+      user: $AppConfig.userObject,
       title: this.title || getString('NextThought.view.account.Header.title'),
       detail: this.detail || getString('NextThought.view.account.Header.detail')
     });

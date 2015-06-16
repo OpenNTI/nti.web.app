@@ -4,7 +4,8 @@ Ext.define('NextThought.common.window.Window', {
 
 	requires: [
 		'NextThought.util.Ranges',
-		'NextThought.common.window.Header'
+		'NextThought.common.window.Header',
+		'NextThought.app.windows.StateStore'
 	],
 
 	cls: 'nti-window',
@@ -106,6 +107,13 @@ Ext.define('NextThought.common.window.Window', {
 		}
 
 		this.titleBar = this.down('nti-window-header');
+
+		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
+
+		this.on({
+			'show': this.WindowStore.addOpenCls.bind(this.WindowStore),
+			'close': this.WindowStore.removeOpenCls.bind(this.WindowStore)
+		});
 	},
 
 

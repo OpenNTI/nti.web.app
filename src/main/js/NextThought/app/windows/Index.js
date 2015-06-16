@@ -55,24 +55,6 @@ Ext.define('NextThought.app.windows.Index', {
 	},
 
 
-	addOpenCls: function() {
-		var html = document.getElementsByTagName('html')[0];
-
-		this.WindowStore.fireEvent('lock-body-height');
-
-		html.classList.add('window-open');
-	},
-
-
-	removeOpenCls: function() {
-		var html = document.getElementsByTagName('html')[0];
-
-		this.WindowStore.fireEvent('unlock-body-height');
-
-		html.classList.remove('window-open');
-	},
-
-
 	showWindow: function(object, path, el, monitors, precache) {
 		var type = this.WindowStore.getComponentForMimeType(object.mimeType || object),
 			cmp;
@@ -94,13 +76,13 @@ Ext.define('NextThought.app.windows.Index', {
 
 		this.viewContainer.add(cmp);
 
-		this.addOpenCls();
+		this.WindowStore.addOpenCls();
 	},
 
 
 	closeWindow: function() {
 		this.viewContainer.removeAll();
-		this.removeOpenCls();
+		this.WindowStore.removeOpenCls();
 	},
 
 

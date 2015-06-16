@@ -3,14 +3,17 @@ Ext.define('NextThought.login.StateStore', {
 
 	requires: [
 		'NextThought.preference.Manager',
-		'NextThought.proxy.Socket'
+		'NextThought.proxy.Socket',
+		'NextThought.app.account.Actions'
 	],
 
 	sessionTrackerKey: 'sidt',
-	actions: [],
+	actions: {},
 
 	constructor: function() {
 		this.callParent(arguments);
+
+		this.AccountActions = NextThought.app.account.Actions.create();
 
 		//Make sure the session is still valid when the window is focused
 		this.mon(Ext.get(window), {
@@ -63,18 +66,51 @@ Ext.define('NextThought.login.StateStore', {
 			links = handshake.Links;
 
 		if (fakeService.getLink(links, 'account.profile.needs.updated')) {
-			this.actions.push('show-coppa-window');
+			this.actions['show-coppa-window'] = true;
 		} else if (fakeService.getLink(links, 'state-bounced-contact-email')) {
-			this.actions.push('bounced-contact');
+			this.actions['bounced-contact'] = true;
 		} else if (fakeService.getLink(links, 'state-bounced-email')) {
-			this.actions.push('bounced-email');
+			this.actions['bounced-email'];
 		} else if (fakeService.getLink('coppa.upgraded.rollbacked')) {
-			this.actions.push('confirm-birthday-coppa');
+			this.actions['confirm-birthday-coppa'];
 		}
 	},
 
+
+	__shouldShowContentFor: function(linkRel) {
+		return !Ext.isEmpty($AppConfig.userObject.getLink(linkRel));
+	},
+
+
 	//TODO: Fill this in from controller/Session
-	takeImmediateAction: function() {},
+	takeImmediateAction: function() {
+		if (this.actions['show-coppa-window']) {
+			this.AccountActions.maybeShowCoppaWindow();
+		} else if (this.actions['bounced-contact']) {
+			this.AccountActions.showEmailRecoveryWindow('contact_email', 'state-bounced-contact-email');
+		} else if (this.actions['bounced-email']) {
+			this.AccountActions.showEmailRecoveryWindow('email', 'state-bounced-email');
+		}
+
+		if (this.actions['confirm-birthday-coppa']) {
+			this.AccountActions.showCoppaConfirmWindow();
+		}
+
+		//What is the exact relationships between these windows?
+		//currently above and below are piling on top of one another
+		if (this.__shouldShowContentFor('content.initial_welcome_page')) {
+			this.AccountActions.showWelcomePage();
+		}
+
+		if (this.__shouldShowContentFor('irb_html')) {
+			this.AccountActions.showResearchAgreement();
+		}
+
+		//NOTE we show the ToS last so it stacks on top. Need a better solution for this
+		if (this.__shouldShowContentFor('content.initial_tos_page')) {
+			this.AccountActions.showNewTermsOfService();
+		}
+	},
 
 
 	willLogOut: function(callback) {
@@ -84,6 +120,7 @@ Ext.define('NextThought.login.StateStore', {
 
 	onLogin: function() {
 		this.fireEvent('login-ready');
+		wait().then(this.takeImmediateAction.bind(this));
 	},
 
 

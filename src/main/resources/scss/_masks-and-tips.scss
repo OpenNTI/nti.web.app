@@ -10,6 +10,15 @@
 	}
 }
 
+body > .x-mask {
+	position: fixed;
+	top: 0 !important;
+	left: 0 !important;
+	right: 0 !important;
+	bottom: 0 !important;
+	background-color: rgba(0, 0, 0, 0.3);
+}
+
 .nt-mask-msg,
 .x-mask-msg{
     border: none !important;
