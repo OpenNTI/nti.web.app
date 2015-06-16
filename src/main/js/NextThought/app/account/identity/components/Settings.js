@@ -5,7 +5,8 @@ Ext.define('NextThought.app.account.identity.components.Settings', {
 	requires: [
 		'NextThought.app.account.identity.components.MenuItem',
 		'NextThought.app.account.identity.components.Presence',
-		'NextThought.app.account.Actions'
+		'NextThought.app.account.Actions',
+		'NextThought.login.Actions'
 	],
 
 	cls: 'user-settings-menu',
@@ -33,6 +34,7 @@ Ext.define('NextThought.app.account.identity.components.Settings', {
 			childsLink = u.getLink('childrens-privacy');
 
 		this.AccountActions = NextThought.app.account.Actions.create();
+		this.LoginActions = NextThought.login.Actions.create();
 
 		items.push({xtype: 'account-menuitem'});
 
@@ -69,7 +71,6 @@ Ext.define('NextThought.app.account.identity.components.Settings', {
 		if (!Ext.isEmpty(Service.getSupportLinks().supportEmail)) {
 			Ext.apply(contactItem, {
 				onClick: Ext.emptyFn,
-				handler: this.contactSomeoneElse.bind(this),
 				autoEl: {
 					tag: 'a',
 					target: '_blank',
@@ -148,11 +149,12 @@ Ext.define('NextThought.app.account.identity.components.Settings', {
 	},
 
 
-	contactSomeoneElse: function() {},
+	impersonate: function() {
+		this.LoginActions.handleImpersonate();
+	},
 
 
-	impersonate: function() {},
-
-
-	logout: function() {}
+	logout: function() {
+		this.LoginActions.handleLogout();
+	}
 });

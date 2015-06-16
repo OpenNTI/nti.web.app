@@ -39,7 +39,7 @@ Ext.define('NextThought.login.Actions', {
 		var me = this,
 			url = getURL(Ext.String.urlAppend(
 				me.store.getLogoutURL(),
-				'success=' + encodeURICompnent(location.href)
+				'success=' + encodeURIComponent(location.href)
 			));
 
 		TemporaryStorage.removeAll();

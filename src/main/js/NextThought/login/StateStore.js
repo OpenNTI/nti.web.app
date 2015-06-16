@@ -115,7 +115,7 @@ Ext.define('NextThought.login.StateStore', {
 	},
 
 
-	willLogOut: function(callback) {
+	willLogout: function(callback) {
 		this.fireEvent('will-logout', callback);
 	},
 

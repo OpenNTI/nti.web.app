@@ -56,7 +56,7 @@ Ext.define('NextThought.app.chat.StateStore', {
 					prevToast.destroy();
 				}
 			} else {
-				oldPresence = this.presenceMap[key];
+				oldPresence = this.PRESENCE_MAP[username];
 
 				//if we didn't trigger being offline and our old presence was online alert the user
 				if (!this.didSetMySelfOffline && oldPresence && oldPresence.isOnline()) {

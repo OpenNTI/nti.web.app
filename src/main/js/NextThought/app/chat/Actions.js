@@ -18,7 +18,7 @@ Ext.define('NextThought.app.chat.Actions', {
 		var store = this.ChatStore;
 
 
-		if (window.Service && !store.loading && !store.hasFinishedLoading) {
+		if (window.Service && !store.loading && !store.hasFinishedLoad) {
 			this.onLogin();
 		} else if (!window.Service) {
 			this.mon(this.LoginStore, 'login-ready', this.onLogin.bind(this));
@@ -27,15 +27,20 @@ Ext.define('NextThought.app.chat.Actions', {
 
 
 	onLogin: function() {
-		var socket = this.ChatStore.getSocket();
+		var me = this,
+			socket = me.ChatStore.getSocket();
 
-		this.ChatStore.setLoaded();
+		me.ChatStore.setLoaded();
 
 		socket.register({
-			'chat_setPresenceOfUsersTo': this.handleSetPresence.bind(this)
+			'chat_setPresenceOfUsersTo': me.handleSetPresence.bind(me)
 		});
 
-		socket.onSocketAvailable(this.onSessionReady, this);
+		socket.onSocketAvailable(me.onSessionReady, me);
+
+		me.mon(me.LoginStore, 'will-logout', function(callback) {
+			me.changePresence('unavailable', null, null, callback);
+		});
 	},
 
 
