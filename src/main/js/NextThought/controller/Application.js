@@ -145,7 +145,6 @@ Ext.define('NextThought.controller.Application', {
 
 
 	pushRoute: function(title, route, precache) {
-		debugger;
 		this.__doRoute('pushState', null, title, route, precache);
 	},
 

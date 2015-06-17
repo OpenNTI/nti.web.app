@@ -13,6 +13,31 @@ Ext.define('NextThought.app.windows.StateStore', {
 	obj_map: {},
 	OPEN_COUNT: 0,
 
+	constructor: function() {
+		this.callParent(arguments);
+
+		this.HTML_ELEMENT = document.getElementsByTagName('html')[0];
+		this.VIEWPORT_ELEMENT = document.querySelector('.main-viewport');
+	},
+
+
+	getHTML: function() {
+		if (!this.HTML_ELEMENT) {
+			this.HTML_ELEMENT = document.getElementsByTagName('html')[0];
+		}
+
+		return this.HTML_ELEMENT;
+	},
+
+
+	getViewport: function() {
+		if (!this.VIEWPORT_ELEMENT) {
+			this.VIEWPORT_ELEMENT = document.querySelector('.main-viewport');
+		}
+
+		return this.VIEWPORT_ELEMENT;
+	},
+
 
 	getComponentForMimeType: function(type) {
 		return this.self.MIME_TO_CMP[type];
@@ -80,12 +105,15 @@ Ext.define('NextThought.app.windows.StateStore', {
 
 
 	addOpenCls: function() {
-		var html = document.getElementsByTagName('html')[0];
+		var html = this.getHTML(),
+			viewport = this.getViewport();
 
 		this.fireEvent('lock-body-height');
 		this.incrementOpenWindows();
 
+
 		html.classList.add('window-open');
+		// viewport.style.paddingRight = Ext.getScrollBarWidth() + 'px';
 	},
 
 
@@ -94,10 +122,12 @@ Ext.define('NextThought.app.windows.StateStore', {
 
 		if (this.hasOpenWindows()) { return; }
 
-		var html = document.getElementsByTagName('html')[0];
+		var html = this.getHTML(),
+			viewport = this.getViewport();
 
 		this.fireEvent('unlock-body-height');
 
 		html.classList.remove('window-open');
+		// viewport.style.paddingRight = null;
 	}
 });

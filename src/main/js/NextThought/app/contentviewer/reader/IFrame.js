@@ -1,7 +1,8 @@
 Ext.define('NextThought.app.contentviewer.reader.IFrame', {
 	alias: 'reader.iframe',
 	requires: [
-		'NextThought.app.contentviewer.reader.ContentAPIRegistry'
+		'NextThought.app.contentviewer.reader.ContentAPIRegistry',
+		'NextThought.app.contentviewer.components.SimplePopoverWidget'
 	],
 
 	mixins: {
@@ -19,6 +20,7 @@ Ext.define('NextThought.app.contentviewer.reader.IFrame', {
 		Ext.apply(this, config);
 
 		var me = this,
+			scroll = me.dismissPopover.bind(me),
 			reader = me.reader;
 
 		me.mixins.observable.constructor.apply(me);
@@ -46,15 +48,87 @@ Ext.define('NextThought.app.contentviewer.reader.IFrame', {
 		me.iframe = me.reader.add(me.getConfig());
 
 		me.mon(me.reader, {
-			destroy: function() { clearInterval(me.syncInterval); },
-			resize: function() { delete me.lastHeight; },
-			scroll: 'dismissPopover'
+			destroy: function() {
+				window.removeEventListener('scroll');
+				clearInterval(me.syncInterval);
+			},
+			resize: function() { delete me.lastHeight; }
 		});
+
+		window.addEventListener('scroll', scroll);
+	},
+
+
+	displayPopover: function(href, html, node) {
+		var me = this,
+			nibHeight = 10,
+			offsets = me.reader.getAnnotationOffsets(),
+			readerLeft = offsets.rect.left,
+			readerRight = offsets.rect.left + offsets.width,
+			scrollOffSet = Ext.getBody().getScroll().top,
+			viewHeight = Ext.Element.getViewportHeight(),
+			x, y,
+			nodeRect = node.getBoundingClientRect(),
+			midpoint = nodeRect.width / 2;
+
+		//start out positioned centered, relative to the window
+		x = offsets.rect.left + nodeRect.left + midpoint;
+		//start out positioned at the bpttom, relative to the window
+		y = offsets.rect.top + nodeRect.top + nodeRect.height;
+
+		function adjustPosition(x, y) {
+			var horizontalSpaceNeeded = me.popoverWidget.getWidth() / 2,
+				width = me.popoverWidget.getWidth(),
+				height = me.popoverWidget.getHeight();
+
+			//if the top + the height of the popover is more than the view height
+			//position the popover on top
+			if ((y + height) > viewHeight) {
+				//move it up the height of the popover, node, and the nib
+				y = y - height - nodeRect.height - nibHeight;
+				me.popoverWidget.addCls('bottom');
+			} else {
+				y += nibHeight;
+				me.popoverWidget.addCls('top');
+			}
+
+			//if the right of the popover widget is past the right side of the reader
+			//make it 10 px from the right of the reader
+			if ((x + horizontalSpaceNeeded) > readerRight) {
+				x = (readerRight - 10) - width;
+				me.popoverWidget.addCls('right');
+			//if the left of the popover widget is before the left side of the reader
+			//make it 10 px from the left of the reader
+			} else if (x - horizontalSpaceNeeded < readerLeft) {
+				x = readerLeft + 10;
+				me.popoverWidget.addCls('left');
+			//else center it
+			} else {
+				x -= horizontalSpaceNeeded;
+			}
+
+			//Don't know why we need this here... Ext is trying to transition the x,y and messing everything up...
+			y += scrollOffSet;
+
+			return [x, y];
+		}
+
+		if (me.popoverWidget) {
+			me.popoverWidget.destroy();
+			delete me.popoverWidget;
+		}
+
+		Ext.fly(html).select('a[href]', true).set({target: '_blank'});
+
+		me.popoverWidget = Ext.widget('simple-popover-widget', {reader: this.reader, text: html.innerHTML});
+		me.popoverWidget.showAt(adjustPosition(x, y));
 	},
 
 
 	dismissPopover: function() {
-		this.fireEvent('dismiss-popover');
+		if (this.popoverWidget) {
+			this.popoverWidget.startCloseTimer();
+		}
 	},
 
 
@@ -419,7 +493,8 @@ Ext.define('NextThought.app.contentviewer.reader.IFrame', {
 				console.log('Error: Could not find popover content for id:' + href + ' from target: ' + target);
 				return;
 			}
-			me.fireEvent('display-popover', me, href, popContent, target);
+
+			me.displayPopover(href, popContent, target);
 		});
 
 		ContentAPIRegistry.on('update', me.applyContentAPI, me);
