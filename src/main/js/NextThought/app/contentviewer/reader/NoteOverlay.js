@@ -174,23 +174,24 @@ Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
 
 
 	openEditorClick: function(e) {
-		var nib = e.getTarget('.note-here-control-box');
+		var nib = e.getTarget('.note-here-control-box'),
+			rect = nib && nib.getBoundingClientRect();
 
 		if (this.allowOpenEditor() && this.getTabPanel()) {
-			this.openEditor(nib);
+			this.openEditor(rect.top);
 			return true;
 		}
 
 		return false;
 	},
 
-	openEditor: function(nib) {
+	openEditor: function(top) {
 		if (this.disabled) { return Promise.reject(); }
 
 		var me = this,
 			location = me.reader.getLocation(),
 			pageId = location.NTIID,
-			nibRect = nib && nib.getBoundingClientRect(),
+			readerRect = me.reader.getAnnotationOffsets().rect, left,
 			currentBundle = location.currentBundle,
 			targetEl = this.reader.getEl().up('.x-container-reader.reader-container'),
 			tabPanel = me.getTabPanel(),
@@ -228,28 +229,37 @@ Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
 						if (Ext.is.iPad) {
 							return;
 						}
-						var h = this.getHeight(), b = h + this.getY(), v = Ext.Element.getViewportHeight();
-						if (b > v) {
-							this.setY(v - h);
+
+						var height = this.getHeight(),
+							y = this.el.getStyle('top'),
+							bottom = height + y,
+							viewHeight = Ext.Element.getViewportHeight();
+
+						y = parseInt(y, 10);
+
+						if (bottom > viewHeight) {
+							this.el.setStyle({
+								top: (viewHeight - height) + 'px'
+							});
+						} else if (y < 70) {
+							this.el.setStyle({
+								top: '70px'
+							});
 						}
 					}
 				}
 			}).addCls('active in-gutter');
 			me.editor.toFront();
 			me.editor.focus();
+
+			//20 px left of the right side of the reader
+			left = readerRect.right - 20;
+
 			//TODO: Figure out how to align this with the window scrolling
-			if (!nib) {
-				me.editor.alignTo(me.data.box, 't-t?');
-				me.editor.rtlSetLocalX(0);
-				if (me.editor.getLocalY() < 59) {
-					me.editor.setLocalY(59);
-				}
-			} else {
-				me.editor.el.setStyle({
-					top: nibRect.top + 'px',
-					left: nibRect.left + 'px'
-				});
-			}
+			me.editor.el.setStyle({
+				top: top + 'px',
+				left: left + 'px'
+			});
 
 			me.editor.on({
 				save: 'saveNewNote',
@@ -345,7 +355,7 @@ Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
 	},
 
 
-	noteHereEvent: function(range, rect, style) {
+	noteHereEvent: function(range, rect, style, top) {
 		this.data.box.activeLineInfo = Ext.apply(
 				{style: style},
 				this.lineInfoForRangeAndRect(range, rect));
@@ -353,10 +363,10 @@ Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
 	},
 
 
-	noteHere: function(range, rect, style) {
+	noteHere: function(range, rect, style, top) {
 		this.positionInputBox(Ext.apply(this.lineInfoForRangeAndRect(range, rect), {style: style}));
 
-		return this.openEditor()
+		return this.openEditor(top)
 			.fail(function() {
 				alert(getString('NextThought.view.content.reader.NoteOverlay.inprogress'));
 				return Promise.reject();
@@ -366,17 +376,20 @@ Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
 
 	contentDefinedAnnotationAction: function(dom, action) {
 		var d = Ext.fly(dom).up('[itemprop~=nti-data-markupenabled]').down('[id]:not([id^=ext])'),
-				id = d ? d.id : null, me = this,
-				img = d && d.is('img') ? d.dom : null,
-				doc = dom ? dom.ownerDocument : null,
-				range, offsets, rect;
+			id = d ? d.id : null, me = this,
+			img = d && d.is('img') ? d.dom : null,
+			doc = dom ? dom.ownerDocument : null,
+			readerRect = this.reader.getAnnotationOffsets().rect,
+			range, offsets, rect, top;
 
 		if (/mark/i.test(action)) {
 			range = doc.createRange();
 			range.selectNode(img);
 			rect = img.getBoundingClientRect();
 
-			this.noteHere(range, rect)
+			top = rect ? rect.top + readerRect.top : 0;
+
+			this.noteHere(range, rect, null, top)
 				.then(function() {
 					WBUtils.createFromImage(img, function(data) {
 						me.editor.reset();
