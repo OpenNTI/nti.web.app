@@ -64,14 +64,13 @@ Ext.define('NextThought.app.windows.StateStore', {
 
 
 	incrementOpenWindows: function() {
-		this.OPEN_COUNT = this.OPEN_COUNT < 0 ? 0 : this.OPEN_COUNT;
-
 		this.OPEN_COUNT += 1;
 	},
 
 
 	decrementOpenWindows: function() {
 		this.OPEN_COUNT -= 1;
+		this.OPEN_COUNT = this.OPEN_COUNT < 0 ? 0 : this.OPEN_COUNT;
 	},
 
 

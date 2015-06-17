@@ -70,15 +70,15 @@ Ext.define('NextThought.controller.Application', {
 		//the path will always have /app in front of it so remove it
 		path = path.split('/').slice(2).join('/');
 
-		return this.handleRoute(path);
+		return this.handleRoute(document.title, path);
 	},
 
 
-	handleRoute: function(route, precache) {
+	handleRoute: function(title, route, precache) {
 		var body = this.getBody();
 
 		return body.handleRoute(route, precache)
-			.then(this.onRoute.bind(this, null, route));
+			.then(this.onRoute.bind(this, title, route));
 	},
 
 
@@ -125,8 +125,7 @@ Ext.define('NextThought.controller.Application', {
 		function finish() {
 			history[fn](state || history.state, myTitle, myRoute);
 			document.title = title;
-			me.handleRoute(route, precache)
-				.then(me.onRoute.bind(me, title, route));
+			me.handleRoute(title, route, precache);
 		}
 
 		function stopNav() {
@@ -146,6 +145,7 @@ Ext.define('NextThought.controller.Application', {
 
 
 	pushRoute: function(title, route, precache) {
+		debugger;
 		this.__doRoute('pushState', null, title, route, precache);
 	},
 

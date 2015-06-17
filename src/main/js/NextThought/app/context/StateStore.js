@@ -60,7 +60,7 @@ Ext.define('NextThought.app.context.StateStore', {
 			parts = route.split('/');
 
 		if (parts[parts.length - 2] === 'object') {
-			parts = parts.slice(0, -2)
+			parts = parts.slice(0, -2);
 		}
 
 		return parts.join('/');
