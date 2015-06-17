@@ -173,21 +173,24 @@ Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
 	},
 
 
-	openEditorClick: function() {
+	openEditorClick: function(e) {
+		var nib = e.getTarget('.note-here-control-box');
+
 		if (this.allowOpenEditor() && this.getTabPanel()) {
-			this.openEditor();
+			this.openEditor(nib);
 			return true;
 		}
 
 		return false;
 	},
 
-	openEditor: function() {
+	openEditor: function(nib) {
 		if (this.disabled) { return Promise.reject(); }
 
 		var me = this,
 			location = me.reader.getLocation(),
 			pageId = location.NTIID,
+			nibRect = nib && nib.getBoundingClientRect(),
 			currentBundle = location.currentBundle,
 			targetEl = this.reader.getEl().up('.x-container-reader.reader-container'),
 			tabPanel = me.getTabPanel(),
@@ -235,12 +238,18 @@ Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
 			me.editor.toFront();
 			me.editor.focus();
 			//TODO: Figure out how to align this with the window scrolling
-			me.editor.alignTo(me.data.box, 't-t?');
-			me.editor.rtlSetLocalX(0);
-			if (me.editor.getLocalY() < 59) {
-				me.editor.setLocalY(59);
+			if (!nib) {
+				me.editor.alignTo(me.data.box, 't-t?');
+				me.editor.rtlSetLocalX(0);
+				if (me.editor.getLocalY() < 59) {
+					me.editor.setLocalY(59);
+				}
+			} else {
+				me.editor.el.setStyle({
+					top: nibRect.top + 'px',
+					left: nibRect.left + 'px'
+				});
 			}
-
 
 			me.editor.on({
 				save: 'saveNewNote',
