@@ -348,7 +348,6 @@ Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 
 
 	addAnnotation: function(range, xy) {
-		debugger;
 		if (!range) {
 			console.warn('bad range');
 			return;

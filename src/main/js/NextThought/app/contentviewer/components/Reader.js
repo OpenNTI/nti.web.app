@@ -294,7 +294,8 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 		return {
 			top: scrollStatics.top, //static by scroll position
 			left: windowSizeStatics.left, //static based on window size
-			scrollTop: scrollPosition //dynamic
+			scrollTop: scrollPosition, //dynamic
+			rect: this.el && this.el.dom && this.el.dom.getBoundingClientRect()
 		};
 	},
 	//endregion

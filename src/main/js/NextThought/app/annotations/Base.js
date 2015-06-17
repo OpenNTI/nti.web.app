@@ -290,6 +290,7 @@ Ext.define('NextThought.app.annotations.Base', {
 
 		return Ext.widget('menu', {
 			items: items,
+			cls: 'annotation-menu',
 			minWidth: 150,
 			defaults: {ui: 'nt-annotaion', plain: true }
 		});
@@ -339,13 +340,14 @@ Ext.define('NextThought.app.annotations.Base', {
 
 		var menu, a,
 			xy = e.getXY().slice(),
+			scrollOffset = Ext.getBody().getScroll().top,
 			offsets = this.ownerCmp.getAnnotationOffsets(),
 			item = null,
 			me = this;
 
 		//adjust points
 		xy[0] += offsets.left;
-		xy[1] += offsets.top;
+		xy[1] += (offsets.rect.top + scrollOffset);
 
 		//the event is an anchor
 		a = e.getTarget('a');
@@ -367,7 +369,12 @@ Ext.define('NextThought.app.annotations.Base', {
 			}
 
 			menu.showAt.apply(menu, xy);
-			menu.setPosition(xy[0] - menu.getWidth() / 2, xy[1] + 10);
+
+			xy[0] = xy[0] - (menu.getWidth() / 2);
+			xy[1] = xy[1] + 10;
+
+			menu.setXY(xy, false);
+			// menu.setPosition(xy[0] - menu.getWidth() / 2, xy[1] + 10);
 		}
 	}
 
