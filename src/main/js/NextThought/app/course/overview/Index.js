@@ -9,7 +9,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 	requires: [
 		'NextThought.app.course.overview.components.View',
 		'NextThought.app.content.content.Index',
-		'NextThought.app.slidedeck.media.components.View'
+		'NextThought.app.slidedeck.media.Index'
 	],
 
 	title: 'Lessons',
@@ -98,9 +98,9 @@ Ext.define('NextThought.app.course.overview.Index', {
 			Ext.destroy(this.reader);
 			delete this.reader;
 		}
-		if (this.activeMediaPlayer) {
-			Ext.destroy(this.activeMediaPlayer);
-			delete this.activeMediaPlayer;
+		if (this.activeMediaWindow) {
+			Ext.destroy(this.activeMediaWindow);
+			delete this.activeMediaWindow;
 		}
 
 		return lessons.handleRoute(route.path, route.precache);
@@ -186,26 +186,26 @@ Ext.define('NextThought.app.course.overview.Index', {
 	showMediaViewer: function(route, subRoute) {
 		var me = this;
 
-		if (!me.activeMediaPlayer) {
-			me.activeMediaPlayer = Ext.widget('media-view', {
+		if (!me.activeMediaWindow) {
+			me.activeMediaWindow = Ext.widget('media-window-view', {
 				currentBundle: me.currentBundle,
 				autoShow: true,
 				handleNavigation: me.handleNavigation.bind(me),
 				handleClose: me.handleMediaClose.bind(me)
 			});
 
-			me.addChildRouter(me.activeMediaPlayer);
+			me.addChildRouter(me.activeMediaWindow);
 
-			me.activeMediaPlayer.fireEvent('suspend-annotation-manager', this);
-			me.activeMediaPlayer.on('destroy', function() {
-				if (me.activeMediaPlayer) {
-					me.activeMediaPlayer.fireEvent('resume-annotation-manager', this);
+			me.activeMediaWindow.fireEvent('suspend-annotation-manager', this);
+			me.activeMediaWindow.on('destroy', function() {
+				if (me.activeMediaWindow) {
+					me.activeMediaWindow.fireEvent('resume-annotation-manager', this);
 				}
 			});	
 		}
 		
-		me.activeMediaPlayer.currentBundle = me.currentBundle;
-		return me.activeMediaPlayer.handleRoute(subRoute, route.precache);
+		me.activeMediaWindow.currentBundle = me.currentBundle;
+		return me.activeMediaWindow.handleRoute(subRoute, route.precache);
 	},
 
 

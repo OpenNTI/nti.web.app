@@ -11,11 +11,6 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 		'NextThought.model.transcript.TranscriptItem'
 	],
 
-	mixins: {
-		Router: 'NextThought.mixins.Router',
-		State: 'NextThought.mixins.State'
-	},
-
 	ui: 'media',
 	floating: true,
 	layout: {
@@ -58,53 +53,7 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 
 	initComponent: function() {
 		this.callParent(arguments);
-
-		this.initRouter();
-
 		this.LibraryActions = NextThought.app.library.Actions.create();
-		this.addRoute('/:id', this.showVideoViewer.bind(this));
-		this.addDefaultRoute(this.showVideoGrid.bind(this));
-
-		this.__addKeyMapListeners();			
-	},
-
-
-	showVideoViewer: function(route, subRoute) {
-		var videoId = route.params.id,
-			video = route.precache.video,
-			basePath = route.precache.basePath,
-			rec = route.precache.rec,
-			options = route.precache.options || {},
-			transcript, me = this;
-
-		videoId = ParseUtils.decodeFromURI(videoId);
-		options.rec = rec;
-
-		// Cache the lesson if it was passed to us.
-		me.lesson = route.precache.lesson;
-
-		if (video && video.isModel) {
-			if(!basePath && basePath != "") {
-				basePath = me.currentBundle.getContentRoots()[0];					
-			}
-
-			transcript = NextThought.model.transcript.TranscriptItem.fromVideo(video, basePath);
-			me.setContent(video, transcript, options);
-		}
-		else{
-			this.LibraryActions.getVideoIndex(me.currentBundle)
-				.then(function(videoIndex) {
-					var o = videoIndex[videoId];
-					if (!o) { return; }
-
-					basePath = me.currentBundle.getContentRoots()[0];
-					video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
-					transcript = NextThought.model.transcript.TranscriptItem.fromVideo(video, basePath);
-					
-					me.setContent(video, transcript, options);
-				});
-			return;
-		}
 	},
 
 
@@ -122,32 +71,33 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 		this.transcript = transcript;
 		this.options = options;
 
-		this.toolbar.setContent(this.video, this.transcript);
-		this.gridView.setContent(this.video, this.currentBundle);
-		this.buildInitialViewer();
-
-		this.getLayout().setActiveItem(this.viewer);
-		Ext.EventManager.onWindowResize(this.adjustOnResize, this, {buffer: 250});
-	},
-
-
-	showVideoGrid: function(route, subRoute) {
-		//TOOD: not yet handled
-		console.error('route not yet implemented: ', arguments);
+		// Only build set the contect and build a new viewer if the video actually changed.
+		if (!this.viewer || this.viewer.video.getId() !== this.video.getId()) {
+			this.toolbar.setContent(this.video, this.transcript);
+			this.gridView.setContent(this.video, this.currentBundle);
+			this.buildInitialViewer();	
+		}
+	
+		
+		if(this.getLayout().getActiveItem() !== this.viewer) {
+			this.getLayout().setActiveItem(this.viewer);	
+			// Ext.EventManager.onWindowResize(this.adjustOnResize, this, {buffer: 250});
+		}
 	},
 
 
 	afterRender: function() {
 		this.callParent(arguments);
 		
+		var me  = this, 
+			playerType = this.getViewerType();
+
+		this.addCls('ready');
 		if (!Ext.getBody().hasCls('media-viewer-open')) {
-			this.animateIn();
-		}
-		else {
-			this.maybeMask();
+			wait(100)
+				.then(me.animateIn.bind(me));
 		}
 
-		var playerType = this.getViewerType();
 		this.toolbar = Ext.widget({
 			xtype: 'media-toolbar',
 			renderTo: this.headerEl,
@@ -165,29 +115,21 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 		// 	floatParent: this.toolbar
 		// });
 
+		this.on('destroy', 'cleanup', this);
 		this.on('destroy', 'destroy', this.toolbar);
 		this.on('destroy', 'destroy', this.gridView);
 		// this.on('destroy', 'destroy', this.identity);
-		this.on('exit-viewer', 'exitViewer', this);
-		this.on('destroy', 'cleanup', this);
+		
+
+		debugger;
+		if(this.parentContainer && this.parentContainer.exitViewer) {
+			this.on('exit-viewer', this.parentContainer.exitViewer.bind(this.parentContainer));			
+		}
 
 		this.mon(this.gridView, {
 			'hide-grid': {fn: 'showGridPicker', scope: this.toolbar},
 			'store-set': 'listStoreSet'
 		});
-	},
-
-	__addKeyMapListeners: function() {
-		keyMap = new Ext.util.KeyMap({
-			target: document,
-			binding: [{
-				key: Ext.EventObject.ESC,
-				fn: this.exitViewer,
-				scope: this
-			}]
-		});
-
-		this.on('destroy', function() {keyMap.destroy(false);});
 	},
 
 
@@ -211,7 +153,6 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 		this.viewerIdMap[viewerType] = this.viewer.getId();
 		this.mon(this.viewer, 'media-viewer-ready', function(){
 				me.adjustOnResize();
-				me.maybeUnmask();
 
 				if (!Ext.isEmpty(me.startAtMillis)) {
 					me.startAtSpecificTime(me.startAtMillis);
@@ -230,6 +171,7 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 
 
 	cleanup: function() {
+		debugger;
 		Ext.getBody().removeCls('media-viewer-open media-viewer-closing');
 		Ext.EventManager.removeResizeListener(this.adjustOnResize, this);
 	},
@@ -250,27 +192,14 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 		}
 
 		Ext.getBody().addCls('media-viewer-open');
-		this.maybeMask();
+		// this.addCls('ready');
+
+		if (this.parentContainer && this.parentContainer.maybeUnmask) {
+			this.parentContainer.maybeUnmask();
+		}
 
 		//TODO use the animationend event for the browsers that support it
-		Ext.defer(this.fireEvent, 1100, this, ['animation-end']);
-	},
-
-	maybeMask: function() {
-		if (!this.rendered || this.hasCls('loading')) {
-			return;
-		}
-
-		this.addCls('loading');
-		this.el.mask('Loading media viewer comtents...', 'loading');
-	},
-
-
-	maybeUnmask: function() {
-		if (this.rendered) {
-			this.removeCls('loading');
-			this.el.unmask();
-		}
+		// Ext.defer(this.fireEvent, 1100, this, ['animation-end']);
 	},
 
 
@@ -288,26 +217,14 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 	},
 
 
-	exitViewer: function() {
-		console.log('about to exit the video viewer');
-
+	beforeClose: function() {
 		if (!this.viewer.beforeExitViewer()) {
-			return;
-		}
-
-		if (this.handleClose) {
-			this.handleClose();
-			return;
+			return false;
 		}
 
 		Ext.getBody().removeCls('media-viewer-open').addCls('media-viewer-closing');
 		this.removeCls('ready');
 		this.addCls('closing');
-
-		this.fireEvent('exited');
-
-		Ext.defer(this.destroy, 1100, this);
-		Ext.defer(this.fireEvent, 1100, this, ['exited', this]);
 	},
 
 
