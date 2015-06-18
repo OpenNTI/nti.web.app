@@ -287,7 +287,7 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 		this.navigation.addItems([
 			this.assignmentsView,
 			this.performanceView,
-			this.notificationsView,
+			this.notificationsView
 		]);
 	},
 

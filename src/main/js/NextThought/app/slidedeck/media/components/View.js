@@ -152,7 +152,7 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 			xtype: 'media-toolbar',
 			renderTo: this.headerEl,
 			currentType: playerType,
-			floatParent: this,
+			floatParent: this
 		});
 
 		this.gridView = this.add({
