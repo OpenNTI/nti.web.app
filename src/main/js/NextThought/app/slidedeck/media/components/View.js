@@ -121,7 +121,6 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 		// this.on('destroy', 'destroy', this.identity);
 		
 
-		debugger;
 		if(this.parentContainer && this.parentContainer.exitViewer) {
 			this.on('exit-viewer', this.parentContainer.exitViewer.bind(this.parentContainer));			
 		}
@@ -171,7 +170,6 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 
 
 	cleanup: function() {
-		debugger;
 		Ext.getBody().removeCls('media-viewer-open media-viewer-closing');
 		Ext.EventManager.removeResizeListener(this.adjustOnResize, this);
 	},

@@ -22,7 +22,6 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 
 	
 	showMediaView: function(route, subRoute) {
-		debugger;
 		var videoId = route.params.id,
 			video = route.precache.video,
 			basePath = route.precache.basePath,
@@ -117,7 +116,6 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 
 
 	exitViewer: function() {
-		debugger;
 		var me = this;
 		
 		if(me.activeMediaView.beforeClose() === false) {
