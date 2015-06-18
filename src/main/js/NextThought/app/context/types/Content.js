@@ -7,7 +7,8 @@ Ext.define('NextThought.app.context.types.Content', {
 		'NextThought.app.slidedeck.OverlayedPanel',
 		'NextThought.app.slidedeck.SlideDeck',
 		'NextThought.app.slidedeck.slidevideo.SlideVideo',
-		'NextThought.app.slidedeck.slidevideo.OverlayedPanel'
+		'NextThought.app.slidedeck.slidevideo.OverlayedPanel',
+		'NextThought.app.context.components.Card'
 	],
 
 
@@ -33,7 +34,7 @@ Ext.define('NextThought.app.context.types.Content', {
 		var page = doc && doc.querySelector('#NTIContent'),
 			context,
 			range = this.range,
-			cid = this.container;
+			cid = this.container, config, cleanContext, cmp;
 
 		try {
 			if (this.range.isEmpty && page && page.getAttribute('data-page-ntiid') === cid) {
@@ -41,11 +42,16 @@ Ext.define('NextThought.app.context.types.Content', {
 			}
 
 			context = doc && RangeUtils.getContextAroundRange(range, doc, doc.body, cid);
+			cleanContext = this.__fixUpContext(context);
 
-			return {
-				type: this.self.type,
-				html: this.__fixUpContext(context)
-			};
+			cmp = Ext.widget('context-card', {
+					type: this.self.type,
+					range: cleanContext,
+					html: cleanContext,
+					containerId: cid
+				});
+
+			return cmp;
 		} catch (e) {
 			console.error('Faild to load content context:', e);
 		}

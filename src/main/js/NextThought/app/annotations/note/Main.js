@@ -252,7 +252,7 @@ Ext.define('NextThought.app.annotations.note.Main', {
 		if (me.readerContext) {
 			me.readerContext.load()
 				.then(function(context) {
-					me.setContext(context.html);
+					me.setContext(context);
 				});
 		}
 

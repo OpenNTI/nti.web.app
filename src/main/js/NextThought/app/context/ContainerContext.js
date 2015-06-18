@@ -32,8 +32,9 @@ Ext.define('NextThought.app.context.ContainerContext', {
 	__parseResponse: function(response) {
 		var parse;
 
-		return new Promise(function(fufill) {
-			return ParseUtils.parseItems(response)[0];
+		return new Promise(function(fulfill) {
+			parse = ParseUtils.parseItems(response)[0];
+			fulfill(parse || Ext.decode(response, true));
 		})
 		.fail(function() {
 			var xml = (new DOMParser()).parseFromString(response, 'text/xml');

@@ -8,7 +8,8 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 		'NextThought.layout.component.Natural',
 		'NextThought.app.userdata.Actions',
 		'NextThought.app.sharing.Window',
-		'NextThought.app.context.StateStore'
+		'NextThought.app.context.StateStore',
+		'NextThought.app.context.components.Card'
 	],
 
 	mixins: {
@@ -759,8 +760,8 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 
 		this.context.setHTML('');
 
-		if (context) {
-			this.context.appendChild(context);
+		if (!Ext.isEmpty(context)) {
+			context.render(this.context);
 
 			if (Ext.isGecko || Ext.isIE9) {
 				this.resizeMathJax(this.context);
