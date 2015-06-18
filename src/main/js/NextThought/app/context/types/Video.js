@@ -16,7 +16,6 @@ Ext.define('NextThought.app.context.types.Video', {
 	},
 
 	constructor: function(config){
-		debugger;
 		this.callParent(arguments);
 		// this.range = config.range;
 		Ext.applyIf(this, config || {});
