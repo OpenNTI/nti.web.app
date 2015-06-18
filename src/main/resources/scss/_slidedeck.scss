@@ -941,11 +941,21 @@ $experimental-support-for-svg: true;
 	min-width: 1024px;
 	box-shadow: 0 1px 0 0 rgba(0,0,0, 0.1);
 	background: $slidedeck-controls-background !important;
+	display: none;
+	z-index: 199 !important;
+	
 
 	&.ready {
+		display: block;
 		@include animate(FullScreenSlideInRight);
 		.x-gecko &{
 			animation: none;
+		}
+
+		.header{
+			.media-toolbar{
+				display: block;
+			}
 		}
 	}
 
@@ -961,6 +971,7 @@ $experimental-support-for-svg: true;
 		top: 0; left: 0;
 
 		.media-toolbar{
+			display: none;
 			background-color: $video-background;
 			//height: 75px;
 
@@ -1749,18 +1760,12 @@ $experimental-support-for-svg: true;
 //Make sure the identity el is on top of the mv.
 body.media-viewer-open{
 
-	& > div.viewport {
-		@include animate(FullScreenSlideOutLeft);
+	#window{
+		z-index: 200;
 	}
 
 	.media-toolbar .x-component.identity{
 		display: block;
 		top: 17px !important;
-	}
-}
-
-body.media-viewer-closing {
-	& > div.viewport {
-		@include animate(FullScreenSlideInLeft);
 	}
 }
