@@ -14,7 +14,8 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
         'NextThought.app.slidedeck.transcript.parts.NoTranscript',
         'NextThought.app.userdata.Actions',
         'NextThought.app.slidedeck.media.Actions',
-        'NextThought.app.slidedeck.media.StateStore'
+        'NextThought.app.slidedeck.media.StateStore',
+        'NextThought.app.windows.Actions'
 	],
 
 	ui: 'transcript',
@@ -39,6 +40,7 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 		this.UserDataActions = NextThought.app.userdata.Actions.create();
 		this.MediaViewerActions = NextThought.app.slidedeck.media.Actions.create();
 		this.MediaViewerStore = NextThought.app.slidedeck.media.StateStore.getInstance();
+		this.WindowActions = NextThought.app.windows.Actions.create();
 
 		this.UserDataActions.initPageStores(this);
 
@@ -226,8 +228,14 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 				me.removeMask();
 
 				me.fireEvent('presentation-parts-ready', me, me.getPartComponents(), me.startOn);
-				// me.fireEvent('load-presentation-userdata', me, me.getPartComponents());
-				me.MediaViewerActions.loadUserData(partCmps, me);
+
+				Promise.all(me.MediaViewerActions.loadUserData(partCmps, me))
+					.then( function() {
+						wait(10).then(me.fireEvent.bind(me, 'sync-height'));		
+					})
+					.fail(function() {
+						console.error('*****FAILED to load UserData in the Media Viewer: ', arguments);
+					});
 			}
 		}
 
@@ -395,6 +403,7 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 				anchorComponent: this,
 				anchorComponentHooks: this.getViewerHooks(),
 				floatParent: this,
+				showNote: this.showNote.bind(this),
 				listeners: {
 					itemremove: function() {
 						if (this.store && this.store.count() === 0) {
@@ -548,6 +557,10 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 				this.setHeight(h);
 			}
 		};
-	}
+	},
+
+	showNote: function(record, el, monitors) {
+   		this.WindowActions.pushWindow(record, el, monitors);
+   	}
 
 });

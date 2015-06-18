@@ -61,6 +61,44 @@ Ext.define('NextThought.app.slidedeck.transcript.AnchorResolver', {
 	},
 
 
+	/**
+	 * Get the dom element given a timeRange description
+	 * This function filters the cueStore to find cues at a given time
+	 * given by the timeRange description. 
+	 * It also doesn't rely on the content being in the dom.
+	 * This is used as a lightweight approach to get timeRange's dom element
+	 * when conmputing the context of a note for instance.
+	 * 
+	 * @param  {[TranscriptTimeRange]} description [the range of a given userdata]
+	 * @param  {[Ext.Store]} cueStore    [store of cue]
+	 * @return {[HTMLElement]}             [html element containing the described time range]
+	 */
+	getDomElementForTranscriptTimeRange: function(description, cueStore) {
+		if (!description || description.isEmpty) { return; }
+
+		var start = description.getStart() && description.getStart().seconds,
+			end = description.getEnd() && description.getEnd().seconds,
+		    cues,
+			els = [], resultRange, n, context;
+
+		//Conversions.
+		start = this.fromMillSecondToSecond(start);
+		end = this.fromMillSecondToSecond(end);
+		cues = this.getCuesWithinRange(cueStore, start, end);
+		console.log('Cues within time range: ', start, end, cues);
+		console.log('cues count: ', cues && cues.getCount());
+
+		context = document.createElement('div');
+		cues.each(function(cue) {
+			n = document.createElement('span');
+			n.innerHTML = cue.get('text');
+			context.appendChild(n);
+		});
+
+		return context;
+	},
+
+
 	//TODO: this function is too customized for resolving time range to dom range in transcript.
 	// It needs to be reworked to handle more of a general case( any time of time range to dom Range.)
 	fromTimeRangeToDomRange: function(description, cueStore, container, docElement) {
