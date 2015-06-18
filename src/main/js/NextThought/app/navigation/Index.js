@@ -2,6 +2,10 @@ Ext.define('NextThought.app.navigation.Index', {
 	extend: 'Ext.Component',
 	alias: 'widget.main-navigation',
 
+	mixins: {
+		State: 'NextThought.mixins.State'
+	},
+
 	requires: [
 		'NextThought.app.navigation.StateStore',
 		'NextThought.app.account.identity.Index',
@@ -88,12 +92,44 @@ Ext.define('NextThought.app.navigation.Index', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		this.identityCmp = NextThought.app.account.identity.Index.create();
-		this.notificationCmp = NextThought.app.notifications.Index.create();
+		this.identityCmp = NextThought.app.account.identity.Index.create({
+			setMenuOpen: this.setState.bind(this, {active: 'identityCmp'}),
+			setMenuClosed: this.setState.bind(this, {})
+		});
+
+		this.notificationCmp = NextThought.app.notifications.Index.create({
+			setMenuOpen: this.setState.bind(this, {active: 'notificationCmp'}),
+			setMenuClosed: this.setState.bind(this, {})
+		});
 
 		this.identityCmp.render(this.identityEl);
 		this.notificationCmp.render(this.notificationEl);
 
 		this.on('destroy', 'destroy', this.identityCmp);
+	},
+
+
+	/**
+	 * Override this method in the state mixin so it doesn't
+	 * write the state to local storage. We only want this state
+	 * to persist in memory, not across refreshs.
+	 * @param {Object} state the state to apply
+	 */
+	setState: function(state) {
+		return this.applyState(state);
+	},
+
+
+	applyState: function(state) {
+		var me = this,
+			hide = 'onMenuHide',
+			show = 'onMenuShow';
+
+		function showOrHide(name) {
+			me[name][state.active === name ? show : hide]();
+		}
+
+		showOrHide('identityCmp');
+		showOrHide('notificationCmp');
 	}
 });

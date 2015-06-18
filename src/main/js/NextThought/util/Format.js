@@ -41,7 +41,6 @@ Ext.define('NextThought.util.Format', {
 			return 'url(' + link + ')';
 		}
 
-
 		clsList = clsList.join(' ');
 
 		if (avatar) {

@@ -20,8 +20,9 @@ Ext.define('NextThought.app.account.identity.components.Settings', {
 
 
 	listeners: {
-		'mouseenter': 'cancelHide',
-		'mouseleave': 'startHide'
+		//TODO: do we want these to hide on mouse out or just clicking outside?
+		// 'mouseenter': 'cancelHide',
+		// 'mouseleave': 'startHide'
 	},
 
 

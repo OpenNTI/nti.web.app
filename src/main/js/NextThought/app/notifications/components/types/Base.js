@@ -50,7 +50,7 @@ Ext.define('NextThought.app.notifications.components.types.Base', {
 			{
 				cls: 'item notification {hidden:boolStr("x-hidden")} ' + previewCls + ' ' + me.itemCls,
 				cn: [
-					{ cls: 'icon', style: {backgroundImage: '{[this.getIcon(values)]}'}},
+					'{[this.getIcon(values)]}',
 					{ cls: 'wrap', cn: [
 						'{[this.getWording(values)]}',
 						'{[this.getBody(values)]}',
@@ -126,8 +126,9 @@ Ext.define('NextThought.app.notifications.components.types.Base', {
 	},
 
 	getIcon: function(values) {
-		if (!values || !this.showCreator) { return 'none'; }
-		return (values && ('url(' + NTIFormat.avatarURL(values.Creator || values) + ')')) || '';
+		if (!values || !this.showCreator) { return ''; }
+
+		return NTIFormat.avatar(values.Creator || values);
 	},
 
 

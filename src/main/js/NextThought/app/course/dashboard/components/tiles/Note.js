@@ -31,7 +31,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 				.then(function(context) {
 					var height = Math.min((record.get('ReplyCount') || 0), 2) * me.COMMENT_HEIGHT;
 
-					if (obj.type === NextThought.app.context.types.Video.type) {
+					if (context && context.type === NextThought.app.context.types.Video.type) {
 						height += me.WIDTH / me.VIDEO_THUMB_ASPECT;
 					}
 

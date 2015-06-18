@@ -73,12 +73,13 @@ Ext.define('NextThought.app.account.identity.Index', {
 		this.monitorUser(me.user);
 
 		this.mon(this.el, {
-			'click': 'toggleMenu',
-			'mouseout': 'startToHideMenu'
+			'click': 'toggleMenu'
+			//TODO: do we want to hide this on mouse out, or just on click?
+			// 'mouseout': 'startToHideMenu'
 		});
 
 		this.mon(this.menu, {
-			'mouseenter': 'cancelHideShowEvents',
+			// 'mouseenter': 'cancelHideShowEvents',
 			'show': this.addCls.bind(this, 'menu-showing'),
 			'hide': this.removeCls.bind(this, 'menu-showing')
 		});
@@ -98,6 +99,16 @@ Ext.define('NextThought.app.account.identity.Index', {
 	},
 
 
+	onMenuShow: function() {
+		this.menu.show();
+	},
+
+
+	onMenuHide: function() {
+		this.menu.hide();
+	},
+
+
 	cancelHideShowEvents: function() {
 		clearTimeout(this.hideTimeout);
 	},
@@ -105,10 +116,10 @@ Ext.define('NextThought.app.account.identity.Index', {
 
 	toggleMenu: function() {
 		if (this.menu.isVisible()) {
-			this.menu.hide();
+			this.setMenuClosed();
 		} else {
-			clearTimeout(this.hideTimeout);
-			this.menu.show();
+			// clearTimeout(this.hideTimeout);
+			this.setMenuOpen();
 		}
 	},
 

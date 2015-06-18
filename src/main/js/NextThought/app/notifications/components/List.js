@@ -1,7 +1,6 @@
 Ext.define('NextThought.app.notifications.components.List', {
 	extend: 'Ext.view.View',
 	alias: 'widget.notifications-panel',
-	floating: true,
 
 	requires: [
 		'NextThought.store.PageItem',
@@ -9,13 +8,15 @@ Ext.define('NextThought.app.notifications.components.List', {
 		'NextThought.app.notifications.components.types.*'
 	],
 
-	cls: 'user-data-panel',
+	cls: 'user-data-panel notifications',
+
+	ISCHANGE: /change$/,	
 
 	deferEmptyText: true,
 	emptyText: Ext.DomHelper.markup([
 		{
 			cls: 'history nothing rhp-empty-list',
-			html: getString('NextThought.view.account.notifications.Panel.tooltip')
+			html: getString('NextThought.view.account.notifications.Panel.empty-state')
 		}
 	]),
 
@@ -23,11 +24,11 @@ Ext.define('NextThought.app.notifications.components.List', {
 
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag: 'tpl', 'for': '.', cn: [
-			{tag: 'tpl', 'if': 'values.divider', cn: {cls: 'divider iterm', cn: [{tag: 'span', html: '{label}'}]}},
-			{tag: 'tpl', 'if': '!values.divider', cn: ['{%this.getTemplateFor(values, out%}']}
+			{tag: 'tpl', 'if': 'values.divider', cn: {cls: 'divider item', cn: [{tag: 'span', html: '{label}'}]}},
+			{tag: 'tpl', 'if': '!values.divider', cn: ['{%this.getTemplateFor(values, out)%}']}
 		]}
 	]), {
-		ISCHANGE: '/change$/',
+		ISCHANGE: /change$/,
 
 		getTemplateFor: function(values, out) {
 			if (this.ISCHANGE.test(values.MimeType)) {
@@ -67,7 +68,7 @@ Ext.define('NextThought.app.notifications.components.List', {
 		}
 
 		(!Ext.isArray(key) ? [key] : key).forEach(function(key) {
-			me.fillData[key] = key;
+			me.fillData[key] = fn;
 		});
 	},
 
@@ -337,7 +338,7 @@ Ext.define('NextThought.app.notifications.components.List', {
 
 		rec = this.unwrap(rec);
 
-		if (Ext.isFunction(this.fillData && fillData[rec.get('MimeType')])) {
+		if (Ext.isFunction(this.fillData && this.fillData[rec.get('MimeType')])) {
 			this.fillData[rec.get('MimeType')](rec, wrapped);
 		}
 	},
@@ -353,7 +354,7 @@ Ext.define('NextThought.app.notifications.components.List', {
 
 		this.lastScroll = 0;
 
-		this.mon(htis.el, {
+		this.mon(this.el, {
 			buffer: 500,
 			scroll: 'onScroll'
 		});
@@ -362,8 +363,6 @@ Ext.define('NextThought.app.notifications.components.List', {
 			this.deferEmptyText = false;
 			this.refresh();
 		}
-
-		this.addMask();
 	},
 
 
@@ -417,7 +416,7 @@ Ext.define('NextThought.app.notifications.components.List', {
 			//trigger when the top goes over the a limit value.
 			//That limit value is defined by the max scrollTop can be, minus a buffer zone. (defined here as 10% of the viewable area)
 			triggerZone = scrollTopMax - Math.floor(dom.clientHeight * 0.1),
-			wantedDirection = this.lastScroll < dcom.scrollTop; //false(up), true(down)
+			wantedDirection = this.lastScroll < dom.scrollTop; //false(up), true(down)
 
 		this.lastScroll = dom.scrollTop;
 

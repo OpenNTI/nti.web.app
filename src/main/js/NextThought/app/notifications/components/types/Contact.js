@@ -23,7 +23,7 @@ Ext.define('NextThought.app.notifications.components.types.Contact', {
 
 
 	getIcon: function(values) {
-		return (values && ('url(' + NTIFormat.avatarURL(values) + ')')) || '';
+		return (values && NTIFormat.avatar(values)) || '';
 	},
 
 

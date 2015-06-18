@@ -5,7 +5,7 @@
 
 	@include icon('rhp-notification', $side: after, $top: 23px, $left: 25px);
 
-	&:hover {
+	&:hover, &.menu-showing {
 		@include icon('rhp-notification_active', $side: after, $top: 23px, $left: 25px);
 	}
 
@@ -26,9 +26,38 @@
 		line-height: 1em;
 		width: auto;
 	}
+
+	&.menu-showing {
+		transition: background-color 0.3s, box-shadow 0.3s;
+	}
 }
 
-.x-component-notifications.user-data-panel {
+
+.notifications-view {
+	position: fixed !important;
+	top: 85px !important;
+	right: 15px !important;
+	left: auto !important;
+	border: 1px solid #dcdcdc;
+	width: 300px;
+	background-color: white;
+	overflow: visible;
+	box-shadow: 3px 3px 3px -3px rgba(0,0,0,0.3);
+
+	&::after {
+		content: '';
+		position: absolute;
+		right: 80px; // 70 + (70 / 2) - 15 - (20 / 2)
+		top: -10px;
+		width: 0; 
+		height: 0; 
+		border-left: 10px solid transparent;
+		border-right: 10px solid transparent;
+		border-bottom: 10px solid white;
+	}
+}
+
+.user-data-panel.notifications {
 	background: #fffefe;
 
 	.notification,
@@ -48,7 +77,7 @@
 		position: relative;
 		color: $secondary-grey;
 
-		.icon {
+		.icon, .avatar {
 			float: left;
 			display: inline-block;
 			position: relative;

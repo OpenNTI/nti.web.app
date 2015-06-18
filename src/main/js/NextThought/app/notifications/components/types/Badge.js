@@ -26,7 +26,7 @@ Ext.define('NextThought.app.notifications.components.types.Badge', {
 	},
 
 	getIcon: function(values) {
-		return 'url(' + values.image + ')';
+		return Ext.DomHelper.markup({cls: 'icon', style: {backgroundImage: 'url(' + values.image + ')'}});
 	},
 
 	clicked: function(view, rec) {
