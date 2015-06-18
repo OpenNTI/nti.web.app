@@ -25,7 +25,7 @@ Ext.define('NextThought.app.userdata.Actions', {
 
 		var store = this.UserDataStore;
 
-		if (window.Service && !store.loading && !store.hasFinishedLoading) {
+		if (window.Service && !store.loading && !store.hasFinishedLoad) {
 			this.onLogin();
 		} else if (!window.Service) {
 			this.mon(this.LoginStore, 'login-ready', this.onLogin.bind(this));

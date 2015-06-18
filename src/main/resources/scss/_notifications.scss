@@ -1,4 +1,32 @@
+.notifications-icon {
+	width: 70px;
+	cursor: pointer;
+	height: $header-height;
 
+	@include icon('rhp-notification', $side: after, $top: 23px, $left: 25px);
+
+	&:hover {
+		@include icon('rhp-notification_active', $side: after, $top: 23px, $left: 25px);
+	}
+
+	&[data-badge]:not([data-badge="0"])::before {
+		content: attr(data-badge);
+		background-color: $primary-red;
+		font-size: 0.55em;
+		font-weight: 500;
+		color: white;
+		padding: 0.3em 0.5em;
+		border: 2px solid white;
+		position: absolute;
+		top: 13px;
+		left: 34px;
+		border-radius: 10em;
+		z-index: 2;
+		text-indent: 0;
+		line-height: 1em;
+		width: auto;
+	}
+}
 
 .x-component-notifications.user-data-panel {
 	background: #fffefe;

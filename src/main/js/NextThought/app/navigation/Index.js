@@ -4,7 +4,8 @@ Ext.define('NextThought.app.navigation.Index', {
 
 	requires: [
 		'NextThought.app.navigation.StateStore',
-		'NextThought.app.account.identity.Index'
+		'NextThought.app.account.identity.Index',
+		'NextThought.app.notifications.Index'
 	],
 
 	cls: 'main-navigation',
@@ -12,13 +13,15 @@ Ext.define('NextThought.app.navigation.Index', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'nav-container'},
-		{cls: 'identity-container'}
+		{cls: 'identity-container'},
+		{cls: 'notification-container'}
 	]),
 
 
 	renderSelectors: {
 		navContainerEl: '.nav-container',
-		identityEl: '.identity-container'
+		identityEl: '.identity-container',
+		notificationEl: '.notification-container'
 	},
 
 
@@ -86,8 +89,10 @@ Ext.define('NextThought.app.navigation.Index', {
 		this.callParent(arguments);
 
 		this.identityCmp = NextThought.app.account.identity.Index.create();
+		this.notificationCmp = NextThought.app.notifications.Index.create();
 
 		this.identityCmp.render(this.identityEl);
+		this.notificationCmp.render(this.notificationEl);
 
 		this.on('destroy', 'destroy', this.identityCmp);
 	}

@@ -120,7 +120,7 @@ Ext.define('NextThought.app.account.identity.Index', {
 
 		if (!Ext.is.iPad || this.menu.isHidden()) {
 			this.hideTimeout = setTimeout(function() {
-				// me.menu.hide();
+				me.menu.hide();
 			}, 500);
 		}
 	}

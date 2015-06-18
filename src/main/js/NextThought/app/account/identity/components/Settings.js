@@ -99,7 +99,7 @@ Ext.define('NextThought.app.account.identity.components.Settings', {
 		me.cancelHide();
 
 		me.hideTimeout = setTimeout(function() {
-			// me.hide();
+			me.hide();
 		}, 500);
 	},
 
