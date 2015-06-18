@@ -47,7 +47,7 @@ Ext.define('NextThought.app.context.components.Card', {
 			this.content = this.html;
 		}
 
-		if (this.rendered) {
+		if (this.rendered && this.content) {
 			this.targetEl.appendChild(this.content);
 		}
 	}

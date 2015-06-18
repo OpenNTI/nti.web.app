@@ -17,7 +17,6 @@ Ext.define('NextThought.app.context.types.Video', {
 
 	constructor: function(config){
 		this.callParent(arguments);
-		// this.range = config.range;
 		Ext.applyIf(this, config || {});
 		this.MediaActions = NextThought.app.slidedeck.media.Actions.create();
 	},
