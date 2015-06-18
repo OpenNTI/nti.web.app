@@ -1,6 +1,18 @@
 Ext.define('NextThought.app.slidedeck.media.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
+	obj_map: {},
+
+	cacheTranscriptObject: function(id, content) {
+		this.obj_map[id] = content;
+	},
+
+
+	getTranscriptObject: function(id) {
+		return this.obj_map[id];
+	},
+
+
 	getContext: function(cmp) {
 		if (!this.pageContextMap) {
 			this.pageContextMap = {};

@@ -2,18 +2,19 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 	extend: 'NextThought.common.Actions',
 
 	requires: [
-		'NextThought.app.slidedeck.media.StateStore'
+		'NextThought.app.slidedeck.media.StateStore',
+		'NextThought.webvtt.Transcript'
 	],
 
 	constructor: function() {
 		this.callParent(arguments);
 
-		this.mediaUserDataStore = NextThought.app.slidedeck.media.StateStore.getInstance();
+		this.MediaUserDataStore = NextThought.app.slidedeck.media.StateStore.getInstance();
 	},
 
 
 	initPageStores: function(cmp, cid) {
-		var context = this.mediaUserDataStore.getContext(cmp);
+		var context = this.MediaUserDataStore.getContext(cmp);
 		context.currentPageStores = {};
 	},
 
@@ -44,29 +45,39 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 
 	
 	loadUserData: function(cmps, reader) {
-		var cid, me = this;
+		var cid, me = this, loaded;
 
-		Ext.each(cmps, function(cmp) {
+		loaded = Ext.Array.map(cmps, function(cmp) {
 			var p;
 			cid = cmp.containerIdForData && cmp.containerIdForData();
 
 			if(cid){
 				me.initPageStores(cmp);
-				me.loadAnnotations(cmp, cid)
+				p = me.loadAnnotations(cmp, cid)
 					.then(function(store, cmp) {
 						var o = reader && reader.noteOverlay;
 
 						if(o && o.registerGutterRecords){
 							o.registerGutterRecords(store, store.getRange(), cmp);
+							return Promise.resolve();
 						}
+
+						return Promise.reject();
+					})
+					.fail(function() {
+						return Promise.reject();
 					});
 			}
+
+			return p || Promise.reject();
 		});
+
+		return loaded;
 	},
 
 
 	loadAnnotations: function(cmp, containerId) {
-		var context = this.mediaUserDataStore.getContext(cmp),
+		var context = this.MediaUserDataStore.getContext(cmp),
 			store, me = this;
 
 		return new Promise(function(fulfill, reject) {
@@ -117,5 +128,56 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 
 		Ext.apply(store, props || {});
 		return store;
+	},
+
+	
+	loadTranscript: function(transcript) {
+		var me = this;
+		return new Promise(function(fulfill, reject) {
+			me.loadRawTranscript(transcript)
+				.then(function(c) {
+					var parser = new NextThought.webvtt.Transcript({ input: c, ignoreLFs: true }), 
+						cueList = parser.parseWebVTT();
+
+					// cache content and so we don't have to load it again.
+					if (!me.MediaUserDataStore.getTranscriptObject(transcript.get('associatedVideoId'))) {
+						me.MediaUserDataStore.cacheTranscriptObject(transcript.get('associatedVideoId'), c);
+					}
+
+					fulfill(cueList);
+				})
+				.fail(reject);	
+		});
+	},
+
+
+	loadRawTranscript: function(transcript) {
+		var me = this,
+			content = me.MediaUserDataStore.getTranscriptObject(transcript && transcript.get('associatedVideoId'));
+
+		if (!transcript) {
+			return new Promise.reject();
+		}
+
+		if (content) {
+			return new Promise.resolve(content);
+		}
+
+		return new Promise(function(fulfill, reject) {
+			ContentProxy.request({
+				jsonpUrl: transcript.get('jsonpUrl'),
+				url: transcript.get('url'),
+				ntiid: 'webvtt',
+				expectedContentType: transcript.get('contentType'),
+				success: function(res, req) {
+					console.log('SUCCESS Loading Transcripts: ', arguments);
+					fulfill(res.responseText);
+				},
+				failure: function() {
+					console.log('FAILURE Loading Transcripts: ', arguments);
+					reject(arguments);
+				}
+			});
+		});
 	}
 });

@@ -5,7 +5,8 @@ Ext.define('NextThought.app.slidedeck.transcript.parts.Transcript', {
 	requires: [
 		'NextThought.webvtt.Transcript',
 		'NextThought.webvtt.Cue',
-		'NextThought.model.transcript.Cue'
+		'NextThought.model.transcript.Cue',
+		'NextThought.app.slidedeck.media.Actions'
 	],
 
 	mixins: {
@@ -76,7 +77,9 @@ Ext.define('NextThought.app.slidedeck.transcript.parts.Transcript', {
 		this.callParent(arguments);
 		this.mixins.transcriptItem.constructor.apply(this, arguments);
 		this.enableBubble(['jump-video-to', 'presentation-part-ready', 'register-records', 'unregister-records']);
-		this.loadTranscript();
+
+		this.MediaViewerActions = NextThought.app.slidedeck.media.Actions.create();
+		this.__setContent();
 	},
 
 
@@ -159,52 +162,18 @@ Ext.define('NextThought.app.slidedeck.transcript.parts.Transcript', {
 	},
 
 
-	loadTranscript: function() {
-		function transcriptLoadFinish(text) {
-			var cueList = NextThought.app.slidedeck.transcript.parts.Transcript.processTranscripts(text);
-
-			cueList = me.groupByTimeInterval(cueList, 30);
-			me.store = me.buildStore(cueList, me.getTimeRangeFilter());
-			me.bindStore(me.store);
-			// Save the content and hopefully we won't have to load it again.
-			if (Ext.isEmpty(me.transcript.get('content'))) {
-				me.transcript.set('content', text);
-			}
-
-			me.cueList = cueList;
-
-			//If we don't defer this the line tracking doens't work...
-			Ext.defer(me.notifyReady, 1, me);
-		}
-
-		var me = this,
-			content = this.transcript && this.transcript.get('content');
-
-		if (!this.transcript) {
-			console.warn('No transcript data available..');
-			return;
-		}
-
-		//Avoid loading the content if we already have it.
-		if (!Ext.isEmpty(content)) {
-			transcriptLoadFinish(content);
-			return;
-		}
-
-		ContentProxy.request({
-			jsonpUrl: this.getTranscriptJsonpUrl(),
-			url: this.getTranscriptUrl(),
-			ntiid: 'webvtt',
-			expectedContentType: this.transcript.get('contentType'),
-			scope: this,
-			success: function(res, req) {
-				console.log('SUCCESS Loading Transcripts: ', arguments);
-				Ext.callback(transcriptLoadFinish, me, [res.responseText]);
-			},
-			failure: function() {
-				console.log('FAILURE Loading Transcripts: ', arguments);
-			}
-		});
+	__setContent: function() {
+		var me = this;
+		this.MediaViewerActions.loadTranscript(this.transcript)
+			.then(function(cueList) {
+				cueList = me.groupByTimeInterval(cueList, 30);
+				me.store = me.buildStore(cueList, me.getTimeRangeFilter());
+				me.bindStore(me.store);
+				me.cueList = cueList;
+				
+				wait()
+					.then(me.notifyReady.bind(me));
+			});
 	},
 
 
@@ -228,16 +197,6 @@ Ext.define('NextThought.app.slidedeck.transcript.parts.Transcript', {
 		});
 
 		return list;
-	},
-
-
-	getTranscriptJsonpUrl: function() {
-		return this.transcript.get('jsonpUrl');
-	},
-
-
-	getTranscriptUrl: function() {
-		return this.transcript.get('url');
 	},
 
 
