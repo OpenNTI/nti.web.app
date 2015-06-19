@@ -15,6 +15,12 @@
 		height: 360px !important;
 	}
 
+	&.context-video-curtain {
+		right: auto; bottom: auto;
+		width: 330px;
+		height: 188px;
+	}
+
 	.ctr {
 		position: absolute;
 		overflow: visible;

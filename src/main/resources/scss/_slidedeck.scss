@@ -1452,14 +1452,14 @@ $experimental-support-for-svg: true;
 
 		border-width: 0px;
 		width: 240px;
-		position: absolute !important;
+		position: fixed !important;
 		top: 77px !important;
 		bottom: 0 !important;
 		right: 0 !important;
 		left: auto !important;
 
 		& ~ .note-window {
-			position: absolute !important;
+			position: fixed !important;
 			//z-index: 30000 !important;
 		}
 	}

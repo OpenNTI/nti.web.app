@@ -425,6 +425,7 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 					}));
 
 			this.annotationView.show().hide();
+			this.on('destroy', 'destroy', this.annotationView);
 
 			this.annotationView.on({
 				scope: this,
@@ -447,7 +448,9 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 		else {
 			this.annotationView.refresh();
 		}
+
 		this.annotationView.show();
+		// this.getLayout().setActiveItem(this.annotationView);
 	},
 
 

@@ -23,14 +23,14 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 	
 	showMediaView: function(route, subRoute) {
 		var videoId = route.params.id,
-			video = route.precache.video,
 			basePath = route.precache.basePath,
 			rec = route.precache.rec,
 			options = route.precache.options || {},
-			transcript, me = this;
+			me = this;
 
 		videoId = ParseUtils.decodeFromURI(videoId);
 		options.rec = rec;
+		this.video = route.precache.video;
 
 		if(!me.activeMediaView) {
 			me.activeMediaView = Ext.widget('media-view', {
@@ -41,13 +41,13 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 			});
 		}
 
-		if (video && video.isModel) {
+		if (this.video && this.video.isModel) {
 			if(!basePath && basePath != "") {
 				basePath = me.currentBundle.getContentRoots()[0];					
 			}
 
-			transcript = NextThought.model.transcript.TranscriptItem.fromVideo(video, basePath);
-			me.activeMediaView.setContent(video, transcript, options);
+			me.transcript = NextThought.model.transcript.TranscriptItem.fromVideo(this.video, basePath);
+			me.activeMediaView.setContent(this.video, me.transcript, options);
 		}
 		else{
 			this.LibraryActions.getVideoIndex(me.currentBundle)
@@ -56,10 +56,10 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 					if (!o) { return; }
 
 					basePath = me.currentBundle.getContentRoots()[0];
-					video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
-					transcript = NextThought.model.transcript.TranscriptItem.fromVideo(video, basePath);
+					me.video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
+					me.transcript = NextThought.model.transcript.TranscriptItem.fromVideo(me.video, basePath);
 					
-					me.activeMediaView.setContent(video, transcript, options);
+					me.activeMediaView.setContent(me.video, me.transcript, options);
 				});
 		}
 	},
@@ -94,6 +94,19 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 	destroy: function() {
 		this.activeMediaView.destroy();
 		this.callParent(arguments);
+	},
+
+
+	getContext: function() {
+		return this.video;
+	},
+
+
+	bundleChanged: function(bundle){
+		if(bundle && bundle !== this.currentBundle) {
+			// TODO: Do more, maybe?
+			this.currentBundle = bundle;
+		}
 	},
 
 

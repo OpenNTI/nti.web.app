@@ -146,7 +146,10 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 
 					fulfill(cueList);
 				})
-				.fail(reject);	
+				.fail(function(){
+					console.log('Failure to load transcripts... ', arguments);
+					reject(arguments);
+				});	
 		});
 	},
 
