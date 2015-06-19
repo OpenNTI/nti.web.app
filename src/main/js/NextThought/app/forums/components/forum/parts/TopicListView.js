@@ -339,7 +339,7 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 
 
 	applyState: function(state) {
-		if (this.applyingState) { return;}
+		if (this.applyingState) { return Promise.resolve();}
 
 		var me = this,
 			store = me.store,
