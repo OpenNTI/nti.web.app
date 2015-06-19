@@ -6,6 +6,7 @@ Ext.define('NextThought.app.library.courses.Actions', {
 		'NextThought.model.courses.CourseInstance',
 		'NextThought.model.courses.CourseInstanceAdministrativeRole',
 		'NextThought.model.courseware.CourseInstanceEnrollment',
+		'NextThought.model.courses.LegacyCommunityBasedCourseInstance',
 		'NextThought.util.Store'
 	],
 
