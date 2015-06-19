@@ -99,12 +99,12 @@ def _combine_javascript( output_file, input_files ):
 					output.write( line )
 
 def _minify_app( app_root, extjs_sdk, closure ):
-	output_file = 'javascript/app.min.js'
+	output_file = 'js/app.min.js'
 
 	sencha_bootstrap_command = [ 'sencha',
 				     '-sdk', extjs_sdk,
 				     'compile',
-				     '-classpath=javascript/libs.js,javascript/app.js,javascript/NextThought',
+				     '-classpath=js/libs.js,js/app.js,js/NextThought',
 				     'meta', '-alias',
 				     '-out', 'bootstrap.js',
 				     'and',
@@ -113,7 +113,7 @@ def _minify_app( app_root, extjs_sdk, closure ):
 		'sencha',
 		'-sdk', extjs_sdk,
 		'compile',
-		'-classpath=javascript/libs.js,javascript/app.js,javascript/NextThought',
+		'-classpath=js/libs.js,js/app.js,js/NextThought',
 		'exclude', '-namespace', 'Ext.diag',
 		'and',
 		'-option', 'debug:false',
