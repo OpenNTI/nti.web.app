@@ -10,7 +10,9 @@ Ext.define('NextThought.app.course.reports.Index', {
 
 	statics: {
 		showTab: function(bundle) {
-			return true
+			var reportLinks = bundle && bundle.getReportLinks && bundle.getReportLinks();
+
+			return false && reportLinks && isFeature('course-reports');
 		}
 	},
 
