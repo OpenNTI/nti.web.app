@@ -67,10 +67,13 @@ Ext.define('NextThought.controller.Application', {
 
 
 	handleCurrentState: function() {
-		var path = window.location.pathname;
+		var path = Globals.trimRoute(window.location.pathname),
+			parts = path.split('/');
 
-		//the path will always have /app in front of it so remove it
-		path = path.split('/').slice(2).join('/');
+		//Get the first part of the path and use that as the path root for all the routes
+		this.APP_ROOT = parts[0];
+
+		path = parts.slice(1).join('/');
 
 		return this.handleRoute(document.title, path);
 	},
@@ -108,9 +111,9 @@ Ext.define('NextThought.controller.Application', {
 		route = Globals.trimRoute(route);
 
 		if (route) {
-			route = '/app/' + route + '/';
+			route = '/' + this.APP_ROOT + '/' + route + '/';
 		} else {
-			route = '/app/';
+			route = '/' + this.APP_ROOT + '/';
 		}
 
 		return route;
