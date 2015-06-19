@@ -61,13 +61,13 @@ Ext.define('NextThought.app.groups.Actions', {
 
 			if (!record.isDFL) {
 				console.debug('Resolving users from list:', record.get('Username'), 'potentially made # of requests:', record.get('friends').length);
-				UserRepository.getUser(r.get('friends'))
+				UserRepository.getUser(record.get('friends'))
 					.then(function(friends) {
 						store.loadData(friends);
 						store.fireEvent('load', store, friends, true);
 					});
 			} else {
-				console.debug('Not resolving users from DFL:', r.get('Username'), 'potentially saved # of requests:', record.get('friends').length);
+				console.debug('Not resolving users from DFL:', record.get('Username'), 'potentially saved # of requests:', record.get('friends').length);
 			}
 		});
 
