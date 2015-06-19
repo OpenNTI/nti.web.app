@@ -295,7 +295,7 @@ Ext.define('NextThought.app.notifications.components.List', {
 
 
 	recordsAdded: function(store, records) {
-		Ext.each(records, ths.fillInData, this);
+		Ext.each(records, this.fillInData, this);
 	},
 
 
