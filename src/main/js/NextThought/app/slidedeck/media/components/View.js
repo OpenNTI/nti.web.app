@@ -8,8 +8,13 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 		'NextThought.app.slidedeck.media.components.viewers.TranscriptViewer',
 		'NextThought.app.slidedeck.media.components.viewers.VideoViewer',
 		'NextThought.app.library.Actions',
-		'NextThought.model.transcript.TranscriptItem'
+		'NextThought.model.transcript.TranscriptItem',
+		'NextThought.app.account.identity.Index'
 	],
+
+	mixins: {
+		State: 'NextThought.mixins.State'
+	},
 
 	ui: 'media',
 	floating: true,
@@ -109,16 +114,18 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 			xtype: 'media-grid-view'
 		});
 
-		// this.identity = Ext.widget({
-		// 	xtype: 'identity',
-		// 	renderTo: this.toolbar.getEl(),
-		// 	floatParent: this.toolbar
-		// });
+		this.identityCmp = Ext.widget({
+			xtype: 'identity',
+			renderTo: this.toolbar.getEl(),
+			floatParent: this.toolbar,
+			setMenuOpen: this.setState.bind(this, {active: 'identityCmp'}),
+			setMenuClosed: this.setState.bind(this, {})
+		});
 
 		this.on('destroy', 'cleanup', this);
 		this.on('destroy', 'destroy', this.toolbar);
 		this.on('destroy', 'destroy', this.gridView);
-		// this.on('destroy', 'destroy', this.identity);
+		this.on('destroy', 'destroy', this.identityCmp);
 		
 
 		if(this.parentContainer && this.parentContainer.exitViewer) {
@@ -129,6 +136,24 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 			'hide-grid': {fn: 'showGridPicker', scope: this.toolbar},
 			'store-set': 'listStoreSet'
 		});
+	},
+
+
+	setState: function(state) {
+		return this.applyState(state);
+	},
+
+
+	applyState: function(state) {
+		var me = this,
+			hide = 'onMenuHide',
+			show = 'onMenuShow';
+
+		function showOrHide(name) {
+			me[name][state.active === name ? show : hide]();
+		}
+
+		showOrHide('identityCmp');
 	},
 
 
@@ -190,14 +215,9 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 		}
 
 		Ext.getBody().addCls('media-viewer-open');
-		// this.addCls('ready');
-
 		if (this.parentContainer && this.parentContainer.maybeUnmask) {
 			this.parentContainer.maybeUnmask();
 		}
-
-		//TODO use the animationend event for the browsers that support it
-		// Ext.defer(this.fireEvent, 1100, this, ['animation-end']);
 	},
 
 

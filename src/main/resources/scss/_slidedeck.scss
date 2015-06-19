@@ -1766,6 +1766,9 @@ body.media-viewer-open{
 
 	.media-toolbar .x-component.identity{
 		display: block;
-		top: 17px !important;
+	  	top: 2px !important;
+	  	width: 70px;
+	  	position: absolute;
+	  	right: 0px;
 	}
 }
