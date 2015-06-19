@@ -1,6 +1,6 @@
 /*
-    TimelineJS - ver. 2014-11-26-21-25-11 - 2014-11-26
-    Copyright (c) 2012-2013 Northwestern University
+    TimelineJS - ver. 2015-06-10-16-17-35 - 2015-06-10
+    Copyright (c) 2012-2015 Northwestern University
     a project of the Northwestern University Knight Lab, originally created by Zach Wise
     https://github.com/NUKnightLab/TimelineJS
     This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
@@ -2001,12 +2001,16 @@ if(typeof VMM != 'undefined' && typeof VMM.Util == 'undefined') {
 			    return text.replace(exp, "<a href='$1' target='_blank'>$3</a>");
 			}
 			// Email addresses
-			var emailAddressPattern = /([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)/gim;
+			var emailAddressPattern = /([a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)/gim;
 			
+			//var twitterHandlePattern = /(@([\w]+))/g;
 			var twitterHandlePattern = /\B@([\w-]+)/gm;
 			var twitterSearchPattern = /(#([\w]+))/g;
 
 			return text
+				//.replace(urlPattern, "<a target='_blank' href='$&' onclick='void(0)'>$&</a>")
+				.replace(url_pattern, url_replace)
+				.replace(pseudoUrlPattern, "$1<a target='_blank' class='hyphenate' onclick='void(0)' href='http://$2'>$2</a>")
 				.replace(emailAddressPattern, "<a target='_blank' onclick='void(0)' href='mailto:$1'>$1</a>")
 				.replace(twitterHandlePattern, "<a href='http://twitter.com/$1' target='_blank' onclick='void(0)'>@$1</a>");
 				
@@ -2720,7 +2724,8 @@ if(typeof VMM != 'undefined' && typeof VMM.Language == 'undefined') {
 			contract_timeline: "Contract Timeline",
 			wikipedia: "From Wikipedia, the free encyclopedia",
 			loading_content: "Loading Content",
-			loading: "Loading"
+			loading: "Loading",
+			swipe_nav: "Swipe to Navigate"
 		}
 	}
 };
@@ -2918,7 +2923,7 @@ if(typeof VMM != 'undefined' && typeof VMM.ExternalAPI == 'undefined') {
 						
 			getOEmbed: function(tweet, callback) {
 				
-				var the_url = "//api.twitter.com/1/statuses/oembed.json?id=" + tweet.mid + "&omit_script=true&include_entities=true&callback=?",
+				var the_url = "https://api.twitter.com/1/statuses/oembed.json?id=" + tweet.mid + "&omit_script=true&include_entities=true&callback=?",
 					twitter_timeout	= setTimeout(VMM.ExternalAPI.twitter.errorTimeOutOembed, VMM.master_config.timers.api, tweet);
 					//callback_timeout= setTimeout(callback, VMM.master_config.timers.api, tweet);
 				
@@ -2962,7 +2967,7 @@ if(typeof VMM != 'undefined' && typeof VMM.ExternalAPI == 'undefined') {
 			
 			getHTML: function(id) {
 				//var the_url = document.location.protocol + "//api.twitter.com/1/statuses/oembed.json?id=" + id+ "&callback=?";
-				var the_url = "//api.twitter.com/1/statuses/oembed.json?id=" + id+ "&omit_script=true&include_entities=true&callback=?";
+				var the_url = "https://api.twitter.com/1/statuses/oembed.json?id=" + id+ "&omit_script=true&include_entities=true&callback=?";
 				VMM.getJSON(the_url, VMM.ExternalAPI.twitter.onJSONLoaded);
 			},
 			
@@ -3650,7 +3655,7 @@ if(typeof VMM != 'undefined' && typeof VMM.ExternalAPI == 'undefined') {
 				}
 			},
 			
-			map_subdomains: ["", "a.", "b.", "c.", "d."],
+			map_subdomains: ["a", "b", "c", "d"],
 			
 			map_attribution: {
 				"stamen": 			"Map tiles by <a href='http://stamen.com'>Stamen Design</a>, under <a href='http://creativecommons.org/licenses/by/3.0'>CC BY 3.0</a>. Data by <a href='http://openstreetmap.org'>OpenStreetMap</a>, under <a href='http://creativecommons.org/licenses/by-sa/3.0'>CC BY SA</a>.",
@@ -3660,26 +3665,26 @@ if(typeof VMM != 'undefined' && typeof VMM.ExternalAPI == 'undefined') {
 									
 			map_providers: {
 				"toner": {
-					"url": 			"//{S}tile.stamen.com/toner/{Z}/{X}/{Y}.png",
+					"url": "https://stamen-tiles-{S}.a.ssl.fastly.net/toner/{Z}/{X}/{Y}.png",
 					"minZoom": 		0,
 					"maxZoom": 		20,
 					"attribution": 	"stamen"
 					
 				},
 				"toner-lines": {
-					"url": 			"//{S}tile.stamen.com/toner-lines/{Z}/{X}/{Y}.png",
+					"url": "https://stamen-tiles-{S}.a.ssl.fastly.net/toner-lines/{Z}/{X}/{Y}.png",
 					"minZoom": 		0,
 					"maxZoom": 		20,
 					"attribution": 	"stamen"
 				},
 				"toner-labels": {
-					"url": 			"//{S}tile.stamen.com/toner-labels/{Z}/{X}/{Y}.png",
+					"url": "https://stamen-tiles-{S}.a.ssl.fastly.net/toner-labels/{Z}/{X}/{Y}.png",
 					"minZoom": 		0,
 					"maxZoom": 		20,
 					"attribution": 	"stamen"
 				},
 				"sterrain": {
-					"url": 			"//{S}tile.stamen.com/terrain/{Z}/{X}/{Y}.jpg",
+					"url": "https://stamen-tiles-{S}.a.ssl.fastly.net/terrain/{Z}/{X}/{Y}.jpg",
 					"minZoom": 		4,
 					"maxZoom": 		20,
 					"attribution": 	"stamen"
@@ -3691,7 +3696,7 @@ if(typeof VMM != 'undefined' && typeof VMM.ExternalAPI == 'undefined') {
 					"attribution": 	"apple"
 				},
 				"watercolor": {
-					"url": 			"//{S}tile.stamen.com/watercolor/{Z}/{X}/{Y}.jpg",
+					"url": "https://stamen-tiles-{S}.a.ssl.fastly.net/watercolor/{Z}/{X}/{Y}.jpg",
 					"minZoom": 		3,
 					"maxZoom": 		16,
 					"attribution": 	"stamen"
@@ -4186,12 +4191,12 @@ if(typeof VMM != 'undefined' && typeof VMM.ExternalAPI == 'undefined') {
 					height: 				'390',
 					width: 					'640',
 					playerVars: {
-						enablejsapi:		1,
-						color: 				'white',
-						showinfo:			0,
-						theme:				'light',
-						start:				m.start,
-						rel:				0
+						enablejsapi: 1,
+						color: ("dark" == VMM.master_config.Timeline.youtubeTheme) ? "red" : "white", // https://developers.google.com/youtube/player_parameters#color
+						showinfo: 0,
+						theme: ("undefined" !== VMM.master_config.Timeline.youtubeTheme) ? VMM.master_config.Timeline.youtubeTheme : "light", // https://developers.google.com/youtube/player_parameters#theme
+						start: m.start,
+						rel: 0
 					},
 					videoId: m.id,
 					events: {
@@ -4318,7 +4323,7 @@ if(typeof VMM != 'undefined' && typeof VMM.ExternalAPI == 'undefined') {
 				
 				// VIDEO
 				// TODO: NEED TO ADD ASYNC SCRIPT TO TIMELINE FLOW
-				VMM.attachElement("#" + m.uid, "<iframe frameborder='0' width='100%' height='100%' src='" + video_url + "'></iframe><script async src='http://platform.vine.co/static/scripts/embed.js' charset='utf-8'></script>");
+				VMM.attachElement("#" + m.uid, "<iframe frameborder='0' width='100%' height='100%' src='" + video_url + "'></iframe><script async src='https://platform.vine.co/static/scripts/embed.js' charset='utf-8'></script>");
 				
 			},
 			
@@ -4537,7 +4542,7 @@ if(typeof VMM != 'undefined' && typeof VMM.MediaElement == 'undefined') {
 					VMM.ExternalAPI.vimeo.get(m);
 			// DAILYMOTION
 				} else if (m.type		==	"dailymotion") {
-					mediaElem			=	"<div class='media-shadow'><iframe class='media-frame video dailymotion' autostart='false' frameborder='0' width='100%' height='100%' src='http://www.dailymotion.com/embed/video/" + m.id + "'></iframe></div>";
+					mediaElem			=	"<div class='media-shadow'><iframe class='media-frame video dailymotion' autostart='false' frameborder='0' width='100%' height='100%' src='//www.dailymotion.com/embed/video/" + m.id + "'></iframe></div>";
 			// VINE
 				} else if (m.type		==	"vine") {
 					mediaElem			=	"<div class='media-shadow media-frame video vine' id='" + m.uid + "'>" + loading_messege + "</div>";
@@ -4755,7 +4760,7 @@ if(typeof VMM != 'undefined' && typeof VMM.MediaType == 'undefined') {
 			media.id = wiki_id.replace(" ", "%20");
 			media.lang = d.split("//")[1].split(".wikipedia")[0];
 			success = true;
-		} else if (d.indexOf('http://') == 0) {
+		} else if (d.indexOf('http://') == 0 || d.indexOf('https://') == 0) {
 			media.type = "website";
 			media.id = d;
 			success = true;
@@ -4779,6 +4784,7 @@ if(typeof VMM != 'undefined' && typeof VMM.MediaType == 'undefined') {
 		return false;
 	}
 }
+
 
 /* **********************************************
      Begin VMM.TextElement.js
@@ -5856,7 +5862,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Slider == 'undefined') {
 				
 				// EXPLAINER
 				$explainer = VMM.appendAndGetElement($slider_mask, "<div>", "vco-feedback", "");
-				showMessege(null, "Swipe to Navigate");
+				showMessege(null, VMM.master_config.language.messages.swipe_nav);
 				VMM.Lib.height($explainer, config.slider.height);
 				VMM.bindEvent($explainer, onExplainerClick);
 				VMM.bindEvent($explainer, onExplainerClick, 'touchend');
@@ -7087,7 +7093,12 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 			ease: 					"easeInOutExpo",
 			duration: 				1000,
 			gmap_key: 				"",
-			language: 				VMM.Language
+			language: 				VMM.Language,
+			tagSortFunction: 		function (arr) {
+				arr.sort(function (a, b) {
+					return a.localeCompare(b);
+				})
+			}
 		};
 		
 		if ( w != null && w != "") {
@@ -7213,10 +7224,6 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 			buildDates();
 			
 		};
-		
-		function onDatesProcessed() {
-			build();
-		}
 		
 		function reSize() {
 			
@@ -7424,7 +7431,10 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 		/* BUILD DISPLAY
 		================================================== */
 		function build() {
-			
+			if (!(data && data.date && data.date.length && data.date.length > 0)) {
+				showMessege(null, "Error reading data.");
+				return;
+			}
 			// START AT SLIDE
 			if (parseInt(config.start_at_slide) > 0 && config.current_slide == 0) {
 				config.current_slide = parseInt(config.start_at_slide); 
@@ -7497,6 +7507,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 		};
 		
 		// BUILD DATE OBJECTS
+		// called from onDataReady, passes to function build 
 		function buildDates() {
 			
 			_dates = [];
@@ -7514,7 +7525,9 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 					_date.startdate		= do_start.date;
 					_date.precisiondate	= do_start.precision;
 					
-					if (!isNaN(_date.startdate)) {
+					if (isNaN(_date.startdate)) {
+						trace("Failed to parse start date " + data.date[i].startDate);
+					} else {
 						
 					
 						// END DATE
@@ -7552,6 +7565,11 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 				}
 				
 			};
+
+			if (data.date.length != _dates.length) {
+				showMessege(null,"Error processing data. Check for invalid date formats.")
+				return;
+			}
 			
 			/* CUSTOM SORT
 			================================================== */
@@ -7632,7 +7650,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Timeline == 'undefined') {
 				});
 			}
 			
-			onDatesProcessed();
+			build();
 		}
 		
 	};
@@ -9193,6 +9211,9 @@ if(typeof VMM.Timeline != 'undefined' && typeof VMM.Timeline.TimeNav == 'undefin
 			
 			// CREATE TAGS
 			tags = VMM.Util.deDupeArray(tags);
+
+			config.tagSortFunction(tags);
+
 			if (tags.length > 3) {
 				config.nav.rows.current = config.nav.rows.half;
 			} else {
@@ -9472,7 +9493,7 @@ if (typeof VMM.Timeline !== 'undefined' && typeof VMM.Timeline.DataObj == 'undef
 					// that format doesn't seem to have a way to specify a worksheet.
 					key	= VMM.Timeline.DataObj.model.googlespreadsheet.extractSpreadsheetKey(raw);
 					worksheet = VMM.Util.getUrlVars(raw)["worksheet"];
-					if (typeof worksheet == "undefined") worksheet = "od6";
+					if (typeof worksheet == "undefined") worksheet = "1";
 					
 					url	= "https://spreadsheets.google.com/feeds/list/" + key + "/" + worksheet + "/public/values?alt=json";
 					
@@ -9545,6 +9566,10 @@ if (typeof VMM.Timeline !== 'undefined' && typeof VMM.Timeline.DataObj == 'undef
 							}
 						
 							if (dd_type.match("start") || dd_type.match("title") ) {
+								if (data_obj.timeline.startDate) {
+									VMM.fireEvent(global, VMM.Timeline.Config.events.messege, "Invalid data: Multiple 'title' slides. You should only have one row with 'title' in the 'type' column.");
+									return;
+								}
 								data_obj.timeline.startDate		= getGVar(dd.gsx$startdate);
 								data_obj.timeline.headline		= getGVar(dd.gsx$headline);
 								data_obj.timeline.asset.media	= getGVar(dd.gsx$media);
