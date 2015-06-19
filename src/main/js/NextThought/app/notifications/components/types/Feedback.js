@@ -13,23 +13,7 @@ Ext.define('NextThought.app.notifications.components.types.Feedback', {
 
 
 	clicked: function(view, rec) {
-		var course = rec.course;
-		if (!course) {
-			alert({title: 'Uh...', msg: 'This isn`t suppossed to happen...'});
-			return;
-		}
-
-		CourseWareUtils.findCourseBy(course.findByMyCourseInstance())
-				.then(function(instance) {
-					instance = instance.get('CourseInstance') || instance;
-					return instance.fireNavigationEvent(view);
-				})
-				.done(function() {
-					view.fireEvent('navigate-to-assignment', rec.get('AssignmentId'));
-				})
-				.fail(function(reason) {
-					console.error(reason);
-				});
+		//TODO: figure out this navigation
 	},
 
 
@@ -45,6 +29,7 @@ Ext.define('NextThought.app.notifications.components.types.Feedback', {
 
 		if (rec.get('assignmentContainer') || rec.data.hidden) {return;}
 
+		//TODO: figure out what happens here
 		Service.getObject(rec.get('AssignmentId'), function(assignment) {
 			var cid = assignment.get('ContainerId'),
 				course = CourseWareUtils.courseForNtiid(cid);

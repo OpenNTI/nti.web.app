@@ -28,6 +28,6 @@ Ext.define('NextThought.app.notifications.components.types.ForumTopic', {
 	},
 
 	clicked: function(view, rec) {
-		view.fireEvent('show-topic', view, rec);
+		//TODO: figure this out
 	}
 });

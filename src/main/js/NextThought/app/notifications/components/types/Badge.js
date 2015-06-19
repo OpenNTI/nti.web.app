@@ -30,7 +30,7 @@ Ext.define('NextThought.app.notifications.components.types.Badge', {
 	},
 
 	clicked: function(view, rec) {
-		view.fireEvent('show-profile', $AppConfig.userObject, ['Achievements']);
+		//TODO: figure out this navigation		
 	},
 
 

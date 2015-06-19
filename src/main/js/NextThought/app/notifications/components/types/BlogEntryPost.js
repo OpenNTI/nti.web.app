@@ -14,8 +14,6 @@ Ext.define('NextThought.app.notifications.components.types.BlogEntryPost', {
 		var u = rec.get('Creator'),
 			postId = rec.get('ContainerId');
 
-		Service.getObject(postId, function(post) {
-			view.fireEvent('navigate-to-blog', u, post.get('ID'));
-		});
+		//TODO: figure out this navigation
 	}
 });

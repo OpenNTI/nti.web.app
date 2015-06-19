@@ -31,7 +31,7 @@ Ext.define('NextThought.app.notifications.components.types.ForumComment', {
 
 
 	clicked: function(view, rec) {
-		view.fireEvent('show-topic-comment', view, rec);
+		//TODO: figure this out
 	},
 
 

@@ -28,6 +28,6 @@ Ext.define('NextThought.app.notifications.components.types.Contact', {
 
 
 	clicked: function(view, rec) {
-		view.fireEvent('show-profile', rec);
+		//TODO: figure out this click
 	}
 });

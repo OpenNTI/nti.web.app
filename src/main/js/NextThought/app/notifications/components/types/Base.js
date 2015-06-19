@@ -151,7 +151,6 @@ Ext.define('NextThought.app.notifications.components.types.Base', {
 	},
 
 	clicked: function(view, rec) {
-		var cid = rec.get('ContainerId');
-		view.fireEvent('navigation-selected', cid, rec);
+		//TODO: figure out how to do this
 	}
 });
