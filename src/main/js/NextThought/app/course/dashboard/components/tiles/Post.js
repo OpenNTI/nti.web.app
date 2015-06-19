@@ -251,7 +251,8 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 
 		if (context.type === NextThought.app.context.types.Content.type) {
 			this.contextEl.addCls('word-context');
-			this.contextTextEl.update(context.text);
+			// this.contextTextEl.update(context.text);
+			context.render(this.contextEl);
 			show = true;
 		} else if (context.type === NextThought.app.context.types.RelatedWork.type) {
 			this.contextEl.addCls('word-context');
@@ -259,33 +260,13 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 		} else {
 			show = true;
 			this.contextEl.addCls('image-context');
-
-			if (context.name) {
-				this.contextTitleEl.update(context.name);
-			}
-
-			if (context.thumbnail) {
-				this.contextImageEl.set({'src': context.thumbnail});
-			} else {
-				this.contextImageEl.set({'src': ''});
-				this.contextImageEl.addCls('no-thumbnail');
-
-				if (context.source) {
-					NextThought.model.resolvers.VideoPosters.resolveForSource(context.source)
-						.then(function(obj) {
-							if (obj.poster && obj.poster !== emptySrc) {
-								me.contextImageEl.set({'src': obj.poster});
-								me.contextImageEl.removeCls('no-thumbnail');
-							}
-						});
-				}
-			}
+			context.render(this.contextEl);
 		}
 
 		this.contextEl[show ? 'addCls' : 'removeCls']('has-context');
 
 		if (!this.CACHE.height) {
-			this.CACHE.height  = this.height + 1(show ? 86 : 0);
+			this.CACHE.height  = this.height + (show ? 186 : 10);
 		}
 	},
 

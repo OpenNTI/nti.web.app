@@ -61,7 +61,11 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 
 	getContext: function() {
-		var lessons = this.getLessons();
+		var lessons = this.getLessons(), item = this.getLayout().getActiveItem();
+
+		if (item === this.activeMediaWindow){
+			return item;
+		}
 
 		return this.activeLesson || lessons.getActiveLesson();
 	},
@@ -187,7 +191,8 @@ Ext.define('NextThought.app.course.overview.Index', {
 		var me = this;
 
 		if (!me.activeMediaWindow) {
-			me.activeMediaWindow = Ext.widget('media-window-view', {
+			me.activeMediaWindow = me.add({
+				xtype: 'media-window-view',
 				currentBundle: me.currentBundle,
 				autoShow: true,
 				handleNavigation: me.handleNavigation.bind(me),
@@ -204,6 +209,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 			});	
 		}
 		
+		me.getLayout().setActiveItem(me.activeMediaWindow);
 		me.activeMediaWindow.currentBundle = me.currentBundle;
 		return me.activeMediaWindow.handleRoute(subRoute, route.precache);
 	},

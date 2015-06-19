@@ -26,29 +26,11 @@ Ext.define('NextThought.app.context.components.Card', {
 
 	afterRender: function() {
 		this.callParent(arguments);
-		this.__setContent();
+		this.setContent();
 	},
 
-
-	__setContent: function() {
-		var context = this.ContextStore.getContext(),
-			currentContext = context.last(),
-			contextRecord = currentContext && currentContext.obj;
-
-		// If we are within the current context, so just render the simpler version of context.
-		// i.e. For content's note, we will just render the range context we were given.
-		// For video object, we will only render the transcript range corresponding to that context.
-		// Otherwise, render the longer version of context's card 
-		// since we are not within the original userData(i.e. Note) context.
-		if (contextRecord && contextRecord.get('NTIID') === this.containerId) {
-			this.content = this.range;
-		}
-		else {
-			this.content = this.html;
-		}
-
-		if (this.rendered && this.content) {
-			this.targetEl.appendChild(this.content);
-		}
-	}
+	/**
+	 * Override to set the right content.
+	 */
+	setContent: function() {}
 });

@@ -8,7 +8,8 @@ Ext.define('NextThought.app.context.types.Content', {
 		'NextThought.app.slidedeck.SlideDeck',
 		'NextThought.app.slidedeck.slidevideo.SlideVideo',
 		'NextThought.app.slidedeck.slidevideo.OverlayedPanel',
-		'NextThought.app.context.components.Card'
+		'NextThought.app.context.components.Card',
+		'NextThought.app.context.components.Default'
 	],
 
 
@@ -44,10 +45,10 @@ Ext.define('NextThought.app.context.types.Content', {
 			context = doc && RangeUtils.getContextAroundRange(range, doc, doc.body, cid);
 			cleanContext = this.__fixUpContext(context);
 
-			cmp = Ext.widget('context-card', {
+			cmp = Ext.widget('context-default', {
 					type: this.self.type,
-					range: cleanContext,
-					html: cleanContext,
+					snippet: cleanContext,
+					fullContext: cleanContext,
 					containerId: cid
 				});
 

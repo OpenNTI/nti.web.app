@@ -27,12 +27,14 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 					container: record.get('ContainerId')
 				});
 
-			return context.load()
+			return context.load('card')
 				.then(function(context) {
 					var height = Math.min((record.get('ReplyCount') || 0), 2) * me.COMMENT_HEIGHT;
 
 					if (context && context.type === NextThought.app.context.types.Video.type) {
 						height += me.WIDTH / me.VIDEO_THUMB_ASPECT;
+						context.width = me.WIDTH;
+						context.height = Math.round(me.WIDTH / me.VIDEO_THUMB_ASPECT);
 					}
 
 					return {
@@ -40,7 +42,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 						baseHeight: me.HEIGHT + height,
 						width: me.WIDTH,
 						CACHE: {
-							context: context.load()
+							context: Promise.resolve(context)
 						}
 					}
 				}).fail(function() {
