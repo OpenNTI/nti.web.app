@@ -20,7 +20,6 @@ Ext.define('NextThought.app.context.ContainerContext', {
 	 */
 	load: function(type) {
 		var url = Service.getObjectURL(this.container);
-		debugger;
 		if (!this.load_promise) {
 			this.load_promise = Service.request({
 				url: url ,

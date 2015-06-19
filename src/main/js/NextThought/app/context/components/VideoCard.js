@@ -26,7 +26,6 @@ Ext.define('NextThought.app.context.components.VideoCard', {
 	},
 
 	__buildVideoPosterElement: function(video) {
-		debugger;
 		var d = document.createElement('div'),
 			t = this.videoPlayerTpl.append(d), o, 
 			src = video && video.get('sources')[0].poster;
