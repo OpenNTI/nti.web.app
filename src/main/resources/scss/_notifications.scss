@@ -55,6 +55,13 @@
 		border-right: 10px solid transparent;
 		border-bottom: 10px solid white;
 	}
+
+	.show-all {
+		cursor: pointer;
+		text-align: center;
+		line-height: 2em;
+		color: $primary-blue;
+	}
 }
 
 .user-data-panel.notifications {

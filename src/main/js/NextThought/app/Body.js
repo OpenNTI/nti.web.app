@@ -8,6 +8,7 @@ Ext.define('NextThought.app.Body', {
 		'NextThought.app.library.Index',
 		'NextThought.app.content.Index',
 		'NextThought.app.course.Index',
+		'NextThought.app.notifications.Index',
 		'NextThought.util.Parsing',
 		'NextThought.app.navigation.StateStore',
 		'NextThought.app.windows.Index',
@@ -47,6 +48,7 @@ Ext.define('NextThought.app.Body', {
 		this.addRoute('/library', this.setLibraryActive.bind(this));
 		this.addRoute('/course/:id', this.setCourseActive.bind(this));
 		this.addRoute('/bundle/:id', this.setBundleActive.bind(this));
+		this.addRoute('/notifications/', this.setNotificationsActive.bind(this));
 
 		this.addDefaultRoute('/library');
 	},
@@ -175,6 +177,14 @@ Ext.define('NextThought.app.Body', {
 			.fail(function() {
 				me.replaceRoute('', '/library');
 			});
+	},
+
+
+	setNotificationsActive: function(route, subRoute) {
+		var me = this,
+			notableView = me.setActiveCmp('notifications-index');
+
+		return notableView.handleRoute(subRoute, route.precache);
 	},
 
 

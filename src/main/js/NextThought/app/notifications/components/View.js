@@ -13,10 +13,20 @@ Ext.define('NextThought.app.notifications.components.View', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.add({
+		this.add([{
 			xtype: 'notifications-panel',
 			updateBadge: this.updateBadge.bind(this)
-		});
+		}, {
+			xtype: 'box',
+			cls: 'show-all',
+			autoEl: {html: 'Show All'},
+			listeners: {
+				click: {
+					element: 'el',
+					fn: this.pushRootRoute.bind(this, 'Notifications', 'notifications')
+				}
+			}
+		}]);
 
 		this.onBodyClick = this.onBodyClick.bind(this);
 

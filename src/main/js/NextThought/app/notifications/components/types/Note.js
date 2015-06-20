@@ -49,28 +49,11 @@ Ext.define('NextThought.app.notifications.components.types.Note', {
 	fillInData: function(rec) {
 		this.callParent(arguments);
 
-		if (!Ext.isEmpty(rec.get('location')) || !Ext.isEmpty(rec.get('path'))) {
-			return;
-		}
-
-		LocationMeta.getMeta(rec.get('ContainerId'))
-			.then(function(meta) {
-				return ContentUtils.getLineage((meta && meta.NTIID) || rec.get('ContainerId'), true);
-			})
-			.then(function(labels) {
-				var location = '';
-
-				if (!Ext.isEmpty(labels)) {
-					location = labels.shift();
-					labels.reverse();
-				}
-
+		if (!rec.get('textBodyContent')) {
 				rec.set({
-					location: Ext.String.ellipsis(location, 150, false),
-					path: labels.join(' / '),
 					textBodyContent: rec.getBodyText && rec.getBodyText()
 				});
-			});
+		}
 
 		// rec.on("convertedToPlaceholder", function(){
 		//	console.log("Item removed");

@@ -84,6 +84,35 @@ Ext.define('NextThought.util.Store', {
 	},
 
 	/**
+	 * A helper method to return a batch, with links, counts, and items
+	 *
+	 * @param  {String} url         url to load
+	 * @param  {Object} queryParams params to add to the request
+	 * @param  {String} itemProp    the item property of the batch
+	 * @param  {Object} model       model to use to parse the items
+	 * @return {Promise}            fulfills with the batch
+	 */
+	loadBatch: function(url, queryParams, itemProp, model) {
+		itemProp = itemProp || 'Items';
+
+		return this.loadRawItems(url, queryParams)
+			.then(function(response) {
+				var json = Ext.decode(response, true) || {},
+					items = json[itemProp];
+
+				if (model && model.create) {
+					items = items.map(function(item) { return model.create(item); });
+				} else {
+					items = ParseUtils.parseItems(items);
+				}
+
+				json[itemProp] = items;
+
+				return json
+			});
+	},
+
+	/**
 	 * A helper method for when we don't need a full store, to just load the items
 	 * from a url
 	 *
@@ -96,19 +125,11 @@ Ext.define('NextThought.util.Store', {
 	loadItems: function(url, queryParams, itemProp, model) {
 		itemProp = itemProp || 'Items';
 
-		return this.loadRawItems(url, queryParams)
-			.then(function(response) {
-				var json = Ext.decode(response, true) || [],
-					items = json[itemProp];
-
-				if (model && model.create) {
-					return items.map(function(item) { return model.create(item); });
-				}
-
-				return ParseUtils.parseItems(items);
+		return this.loadBatch(url, queryParams, itemProp, model)
+			.then(function(json) {
+				return json[itemProp];
 			});
 	}
-
 
 }, function() {
 	window.StoreUtils = this;

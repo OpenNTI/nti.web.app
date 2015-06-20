@@ -10,7 +10,9 @@ Ext.define('NextThought.app.notifications.components.List', {
 
 	cls: 'user-data-panel notifications',
 
-	ISCHANGE: /change$/,	
+	ISCHANGE: /change$/,
+
+	PREVIEW_SIZE: 20,
 
 	deferEmptyText: true,
 	emptyText: Ext.DomHelper.markup([
@@ -108,14 +110,16 @@ Ext.define('NextThought.app.notifications.components.List', {
 
 		this.NotificationsStore = NextThought.app.notifications.StateStore.getInstance();
 
-		this.NotificationsStore.getStore()
-			.then(this.buildStore.bind(this));
+		Promise.all([
+			this.NotificationsStore.getURL(),
+			this.NotificationsStore.getLastViewed()
+		]).then(this.buildStore.bind(this));
 	},
 
 
 	maybeNotify: function() {
 		var count = 0,
-			store = this.store.backingStore,
+			store = this.store,
 			cap = store.pageSize - 1,
 			lastViewed = store.lastViewed || new Date(0),
 			links = store.batchLinks || {};
@@ -176,19 +180,20 @@ Ext.define('NextThought.app.notifications.components.List', {
 	},
 
 
-	buildStore: function(parentStore) {
+	buildStore: function(results) {
 		var me = this,
 			registry = me.tpl.subTemplates,
-			s = NextThought.store.PageItem.create({
-				proxy: 'memory',
-				storeId: me.storeId,
-				sortOnLoad: true,
-				statefulFilters: false,
-				remoteStort: false,
-				remoteFilter: false,
-				remoteGroup: false,
-				filterOnLoad: true,
-				sortOnFilter: true,
+			url = results[0],
+			lastViewed = results[1];
+
+		this.loading = true;
+
+		StoreUtils.loadItems(url, {
+			batchSize: me.PREVIEW_SIZE
+		}).then(function(items) {
+			var s = new Ext.data.Store({
+				model: 'NextThought.model.GenericObject',
+				pageSize: me.PREVIEW_SIZE,
 				groupers: [
 					{
 						direction: 'DESC',
@@ -199,7 +204,7 @@ Ext.define('NextThought.app.notifications.components.List', {
 					//put the headers at the top of their groups
 					function(a, b) { return a.isHeader === b.isHeader ? 0 : a.isHeader ? -1 : 1; },
 					{
-						direction: 'DESC',
+						direct: 'DESC',
 						property: 'CreatedTime'
 					}
 				],
@@ -213,7 +218,7 @@ Ext.define('NextThought.app.notifications.components.List', {
 							f = !m || registry.hasOwnProperty(m);
 
 						if (!f) {
-							console.warn('Unregistered Type: ' + m, 'This component does not know how to render this item');
+							console.warn('Unregistered Type: ' + m, 'This component does not know hot to render this item');
 						}
 
 						return f;
@@ -221,49 +226,29 @@ Ext.define('NextThought.app.notifications.components.List', {
 				]
 			});
 
-		me.store = s;
-		s.backingStore = parentStore;
-
-		ObjectUtils.defineAttributes(s, {
-			lastViewed: {
-				getter: function() { return parentStore.lastViewed; },
-				setter: function(v) { parentStore.lastViewed = v; }
-			}
-		});
-
-		me.mon(parentStore, {
-			add: function(store, recs) {
-				if (recs) {
-					s.add(recs);
-					s.sort();
+			me.mon(s, {
+				add: function() {
+					me.recordsAdded.apply(me, arguments);
+					me.maybeNotify();
+				},
+				refresh: function() {
+					me.storeLoaded.apply(me, arguments);
+					me.maybeNotify();
 				}
-			},
-			load: function(store, recs) {
-				if (recs) {
-					s.loadRecords(recs, {addRecords: true});
-					s.sort();
-				}
+			});
 
-				me.maybeLoadMoreIfNothingNew();
+			s.lastViewed = lastViewed;
+			me.store = s;
+			me.bindStore(s);
+
+			s.loadRecords(items, {addRecords: true});
+
+			this.loading = false;
+
+			if (me.rendered) {
+				me.removeMask();
 			}
 		});
-
-		me.mon(s, {
-			add: function() {
-				me.recordsAdded.apply(me, arguments);
-				me.maybeNotify();
-			},
-			refresh: function() {
-				me.storeLoaded.apply(me, arguments);
-				me.maybeNotify();
-			}
-		});
-
-
-		me.bindStore(s);
-		me.setMaskBind(parentStore);
-
-		s.loadRecords(parentStore.getRange(), {addRecords: true});
 	},
 
 
@@ -310,26 +295,6 @@ Ext.define('NextThought.app.notifications.components.List', {
 			}
 		});
 		this.insertDividers();
-		this.maybeShowMoreItems();
-	},
-
-
-	maybeShowMoreItems: function() {
-		//if we can't scroll
-		if (this.el && this.el.isVisible() && this.el.getHeight() >= this.el.dom.scrollHeight) {
-			this.prefetchNext();
-		}
-	},
-
-
-	maybeLoadMoreIfNothingNew: function() {
-		if (this.currentCount !== undefined && this.store.getCount() <= this.currentCount) {
-			console.log('Need to fetch again. Didnt return any new data');
-			delete this.currentCount;
-			this.prefetchNext();
-		} else {
-			this.removeMask();
-		}
 	},
 
 
@@ -348,16 +313,11 @@ Ext.define('NextThought.app.notifications.components.List', {
 		this.callParent(arguments);
 
 		this.on({
-			itemClick: this.rowClicked.bind(this),
-			show: this.maybeShowMoreItems.bind(this)
+			itemClick: this.rowClicked.bind(this)
 		});
 
 		this.lastScroll = 0;
 
-		this.mon(this.el, {
-			buffer: 500,
-			scroll: 'onScroll'
-		});
 
 		if (!this.store || !this.store.getCount()) {
 			this.deferEmptyText = false;
@@ -384,45 +344,6 @@ Ext.define('NextThought.app.notifications.components.List', {
 		if (Ext.isFunction(this.clickHandlers && this.clickHandlers[rec.get('MimeType')])) {
 			this.clickHandlers[rec.get('MimeType')](view, rec);
 			this.beginClearBadge(1000);
-		}
-	},
-
-
-	prefetchNext: Ext.Function.createBuffered(function() {
-		var s = this.getStore(), max;
-
-		s = s && s.backingStore;
-
-		if (!s || !s.hasOwnProperty('data')) {
-			this.removeMask();
-			return;
-		}
-
-		this.currentCount = s.getCount();
-		max = s.getPageFromRecordIndex(s.getTotalCount());
-
-		if (s.currentPage < max && !s.isLoading()) {
-			s.clearOnPageLoad = false;
-			s.nextPage();
-		} else {
-			this.removeMask();
-		}
-	}, 500, null, null),
-
-
-	onScroll: function(e, dom) {
-		var top = dom.scrollTop,
-			scrollTopMax = dom.scrollHeight - dom.clientHeight,
-			//trigger when the top goes over the a limit value.
-			//That limit value is defined by the max scrollTop can be, minus a buffer zone. (defined here as 10% of the viewable area)
-			triggerZone = scrollTopMax - Math.floor(dom.clientHeight * 0.1),
-			wantedDirection = this.lastScroll < dom.scrollTop; //false(up), true(down)
-
-		this.lastScroll = dom.scrollTop;
-
-		if (wantedDirection && top > triggerZone) {
-			this.prefetchNext();
-			this.begineClearBadge();
 		}
 	}
 });

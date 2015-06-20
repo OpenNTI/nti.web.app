@@ -1,71 +1,74 @@
 Ext.define('NextThought.app.notifications.Index', {
-	extend: 'Ext.Component',
-	alias: 'widget.notifications',
+	extend: 'Ext.container.Container',
+	alias: 'widget.notifications-index',
+
+	cls: 'notifications-index',
 
 	requires: [
-		'NextThought.app.notifications.components.View'
+		'NextThought.app.navigation.Actions',
+		'NextThought.app.notifications.StateStore',
+		'NextThought.app.notifications.components.Header',
+		'NextThought.app.stream.List',
+		'NextThought.app.stream.util.StreamSource'
 	],
 
-	cls: 'notifications-icon',
+	mixins: {
+		Router: 'NextThought.mixins.Router'
+	},
+
+	items: [
+		{
+			xtype: 'notification-header'
+		}
+	],
+
 
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.list = Ext.widget({
-			xtype: 'notifications-view',
-			ownerCt: this,
-			updateBadge: this.updateBadge.bind(this),
-			close: this.setMenuClosed.bind(this)
-		});
+		this.initRouter();
 
-		this.on('destroy', 'destroy', this.listComponent);
+		this.NavActions = NextThought.app.navigation.Actions.create();
+		this.NotableStore = NextThought.app.notifications.StateStore.getInstance();
+
+		this.addRoute('/', this.showNotifications.bind(this));
+
+		this.addDefaultRoute('/');
 	},
 
 
-	afterRender: function() {
-		this.callParent(arguments);
+	showNotifications: function() {
+		var me = this;
 
-		this.mon(this.el, {
-			click: this.toggleMenu.bind(this),
-			mouseout: this.startToHideMenu.bind(this)
-		});
+		me.NavActions.setActiveContent(null);
+		me.NavActions.updateNavBar(null);
 
-
-		this.mon(this.list, {
-			mouseenter: this.cancelHide.bind(this),
-			show: this.addCls.bind(this, 'menu-showing'),
-			hide: this.removeCls.bind(this, 'menu-showing')
-		});
-	},
-
-
-	updateBadge: function(badge) {
-		if (this.el && this.el.dom) {
-			this.el.dom.setAttribute('data-badge', badge || 0);
+		if (!me.stream) {
+			return me.buildStream();
 		}
-	},
 
-	onMenuShow: function() {
-		this.list.show();
-	},
-
-
-	onMenuHide: function() {
-		this.list.hide();
+		return Promise.resolve();
 	},
 
 
-	toggleMenu: function() {
-		if (this.list.isVisible()) {
-			this.setMenuClosed();
-		} else {
-			this.setMenuOpen();
-		}
-	},
+	buildStream: function() {
+		var me = this;
 
+		return Promise.all([
+				me.NotableStore.getURL(),
+				me.NotableStore.getLastViewed()
+			]).then(function(results) {
+				var url = results[0],
+					lastViewed = results[1];
 
-	startToHideMenu: function() {},
+				me.StreamSource = NextThought.app.stream.util.StreamSource.create({
+					url: url
+				});
 
-
-	cancelHide: function() {}
+				me.stream = me.add({
+					xtype: 'stream-list',
+					StreamSource: me.StreamSource
+				});
+			});
+	}
 });

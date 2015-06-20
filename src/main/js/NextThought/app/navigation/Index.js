@@ -9,7 +9,8 @@ Ext.define('NextThought.app.navigation.Index', {
 	requires: [
 		'NextThought.app.navigation.StateStore',
 		'NextThought.app.account.identity.Index',
-		'NextThought.app.notifications.Index'
+		'NextThought.app.notifications.Tab',
+		'NextThought.app.navigation.components.Default'
 	],
 
 	cls: 'main-navigation',
@@ -80,8 +81,12 @@ Ext.define('NextThought.app.navigation.Index', {
 			return;
 		}
 
-		if (config.cmp) {
+		if (config && config.cmp) {
 			this.__renderNavCmp(config.cmp);
+		} else {
+			this.__renderNavCmp(NextThought.app.navigation.components.Default.create({
+				gotoLibrary: this.gotoLibrary.bind(this)
+			}));
 		}
 	},
 
@@ -94,18 +99,30 @@ Ext.define('NextThought.app.navigation.Index', {
 
 		this.identityCmp = NextThought.app.account.identity.Index.create({
 			setMenuOpen: this.setState.bind(this, {active: 'identityCmp'}),
-			setMenuClosed: this.setState.bind(this, {})
+			setMenuClosed: this.setState.bind(this, {}),
+			pushRootRoute: this.pushRoute.bind(this)
 		});
 
-		this.notificationCmp = NextThought.app.notifications.Index.create({
+		this.notificationCmp = NextThought.app.notifications.Tab.create({
 			setMenuOpen: this.setState.bind(this, {active: 'notificationCmp'}),
-			setMenuClosed: this.setState.bind(this, {})
+			setMenuClosed: this.setState.bind(this, {}),
+			pushRootRoute: this.pushRoute.bind(this)
 		});
 
 		this.identityCmp.render(this.identityEl);
 		this.notificationCmp.render(this.notificationEl);
 
 		this.on('destroy', 'destroy', this.identityCmp);
+	},
+
+
+	pushRoute: function() {
+		this.pushRootRoute.apply(this, arguments);
+	},
+
+
+	gotoLibrary: function() {
+		this.pushRootRoute('Library', '/library');
 	},
 
 

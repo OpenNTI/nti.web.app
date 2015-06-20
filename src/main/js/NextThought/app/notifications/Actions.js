@@ -4,7 +4,8 @@ Ext.define('NextThought.app.notifications.Actions', {
 	requires: [
 		'NextThought.login.StateStore',
 		'NextThought.app.notifications.StateStore',
-		'NextThought.app.userdata.StateStore'
+		'NextThought.app.userdata.StateStore',
+		'NextThought.model.Change'
 	],
 
 
@@ -45,7 +46,7 @@ Ext.define('NextThought.app.notifications.Actions', {
 						console.warn('Could not resolve notifications lastViewed');
 					})
 					.always(function() {
-						store.buildStore(url, lastViewed);
+						store.setURL(url, lastViewed);
 					});
 			}, function() {
 				console.error('Could not setup notifications!');

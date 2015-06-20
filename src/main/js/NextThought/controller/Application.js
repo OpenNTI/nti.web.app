@@ -51,11 +51,13 @@ Ext.define('NextThought.controller.Application', {
 
 	onLogin: function() {
 		var masterView = Ext.widget('master-view'),
+			nav = this.getNav(),
 			body = this.getBody();
 
 		body.pushRoute = this.pushRoute.bind(this);
 		body.replaceRoute = this.replaceRoute.bind(this);
 		body.pushRootRoute = this.pushRoute.bind(this);
+		nav.pushRootRoute = this.pushRoute.bind(this);
 		body.replaceRootRoute = this.replaceRoute.bind(this);
 		body.pushRouteState = this.pushRouteState.bind(this);
 		body.replaceRouteState = this.replaceRouteState.bind(this);
