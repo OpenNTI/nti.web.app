@@ -21,11 +21,12 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 			For notes we need to know if it is in a video to determine the height of the tile
 			so wait to determine this and cache the useful async stuff we do along the way
 		 */
-		getTileConfig: function(record) {
+		getTileConfig: function(record, course) {
 			var me = this,
 				context = NextThought.app.context.ContainerContext.create({
 					container: record.get('ContainerId'),
-					range: record.get('applicableRange')
+					range: record.get('applicableRange'),
+					course: course
 				});
 
 			return context.load('card')
@@ -133,7 +134,8 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 		}
 
 		var context = NextThought.app.context.ContainerContext.create({
-			container: this.record.get('ContainerId')
+			container: this.record.get('ContainerId'),
+			course: this.course
 		});
 
 		this.CACHE.context = context;

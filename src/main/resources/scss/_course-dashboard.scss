@@ -225,6 +225,29 @@
 						}
 					}
 				}
+
+				&.related-context {
+					color: #7593a4;
+					background-color: #f6fcff;
+					overflow: hidden;
+					height: 150px;
+  					padding: 10px 10px 15px 10px;
+
+					.thumbnail {
+						width: 100px;
+  						height: 125px;
+					  	background-size: cover;
+					  	background-repeat: no-repeat;
+					  	background-position: center;
+					  	box-shadow: 0px 0px 3px 0 rgba(0,0,0,0.35);
+					  	float: left;
+					}
+
+					.meta {
+						margin-left: 110px;
+						font: italic 300 1.1em/1.6em $font;
+					}
+				}
 			}
 
 			.list-item {

@@ -8,7 +8,7 @@ Ext.define('NextThought.app.context.types.Content', {
 		'NextThought.app.slidedeck.SlideDeck',
 		'NextThought.app.slidedeck.slidevideo.SlideVideo',
 		'NextThought.app.slidedeck.slidevideo.OverlayedPanel',
-		'NextThought.app.context.components.Card',
+		'NextThought.app.context.components.cards.*',
 		'NextThought.app.context.components.Default'
 	],
 
@@ -46,7 +46,7 @@ Ext.define('NextThought.app.context.types.Content', {
 			cleanContext = this.__fixUpContext(context);
 
 
-			xtype = contextKind === 'card' ? 'context-card' : 'context-default';
+			xtype = contextKind === 'card' ? 'context-content-card' : 'context-default';
 			cmp = Ext.widget(xtype, {	
 					type: this.self.type,
 					snippet: cleanContext,

@@ -4,9 +4,8 @@ Ext.define('NextThought.app.context.types.Video', {
 		'NextThought.model.transcript.TranscriptItem',
 		'NextThought.app.slidedeck.media.Actions',
 		'NextThought.app.slidedeck.transcript.AnchorResolver',
-		'NextThought.app.context.components.Card',
-		'NextThought.app.context.components.VideoCard',
-		'NextThought.app.context.components.Default'
+		'NextThought.app.context.components.Default',
+		'NextThought.app.context.components.cards.*'
 	],
 
 	videoPlayerTpl: new Ext.XTemplate(Ext.DomHelper.markup([

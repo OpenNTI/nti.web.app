@@ -1,6 +1,6 @@
-Ext.define('NextThought.app.context.components.Card', {
+Ext.define('NextThought.app.context.components.cards.Content', {
 	extend: 'Ext.Component',
-	alias: 'widget.context-card',
+	alias: 'widget.context-content-card',
 
 	requires: [
 		'NextThought.app.context.StateStore'
@@ -27,11 +27,15 @@ Ext.define('NextThought.app.context.components.Card', {
 
 	afterRender: function() {
 		this.callParent(arguments);
-		this.textEl.appendChild(this.snippet);
+		this.setContent();
 	},
 
 	/**
-	 * Override to set the right content.
+	 * Override this if you want to set content after the component's been rendered.
 	 */
-	setContent: function() {}
+	setContent: function() {
+		if(this.textEl) {
+			this.textEl.appendChild(this.snippet);	
+		}
+	}
 });

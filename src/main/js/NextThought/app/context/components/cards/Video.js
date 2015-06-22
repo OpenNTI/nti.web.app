@@ -1,5 +1,5 @@
-Ext.define('NextThought.app.context.components.VideoCard', {
-	extend: 'NextThought.app.context.components.Card',
+Ext.define('NextThought.app.context.components.cards.Video', {
+	extend: 'NextThought.app.context.components.cards.Content',
 	alias: 'widget.context-video-card',
 
 	renderTpl: Ext.DomHelper.markup([
@@ -24,5 +24,7 @@ Ext.define('NextThought.app.context.components.VideoCard', {
 			poster: src,
 			title: this.video.get('title')
 		});
-	}
+	},
+
+	setContent: function() {}
 });

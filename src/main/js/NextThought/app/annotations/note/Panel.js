@@ -9,7 +9,7 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 		'NextThought.app.userdata.Actions',
 		'NextThought.app.sharing.Window',
 		'NextThought.app.context.StateStore',
-		'NextThought.app.context.components.Card'
+		'NextThought.app.context.components.cards.*'
 	],
 
 	mixins: {

@@ -242,9 +242,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 			show = false;
 			emptySrc = Globals.CANVAS_BROKEN_IMAGE.src;
 
-		if (context.type === NextThought.app.context.types.RelatedWork.type) {
-			show = false;
-		} else {
+		if (context.type) {
 			show = true;
 			context.render(this.contextEl);
 		}
