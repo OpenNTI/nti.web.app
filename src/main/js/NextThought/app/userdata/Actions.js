@@ -741,7 +741,7 @@ Ext.define('NextThought.app.userdata.Actions', {
 
 
 		for (i = context.length - 1; i >= 0; i--) {
-			c = context[0];
+			c = context[i];
 
 			if (c && c.obj && c.obj.getLink && c.obj.getLink('Pages')) {
 				url = c.obj.getLink('Pages');
@@ -754,7 +754,11 @@ Ext.define('NextThought.app.userdata.Actions', {
 				reject({proxy: proxy, repsonse: reposne});
 			}, null, {single: true});
 
-			noteRecord.save({callback: me.getSaveCallback(fulfill, reject)});
+			if (url) {
+				noteRecord.save({url: url, callback: me.getSaveCallback(fulfill, reject)});
+			} else {
+				noteRecord.save({callback: me.getSaveCallback(fulfill, reject)});
+			}
 		});
 	},
 
