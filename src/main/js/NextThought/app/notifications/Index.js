@@ -61,6 +61,7 @@ Ext.define('NextThought.app.notifications.Index', {
 				var url = results[0],
 					lastViewed = results[1];
 
+				me.setTitle('Notifications');
 				me.StreamSource = NextThought.app.stream.util.StreamSource.create({
 					url: url
 				});

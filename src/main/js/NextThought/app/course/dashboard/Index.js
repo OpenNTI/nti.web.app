@@ -104,7 +104,7 @@ Ext.define('NextThought.app.course.dashboard.Index', {
 
 
 	getScrollTarget: function() {
-		return document.body
+		return document.body;
 	},
 
 

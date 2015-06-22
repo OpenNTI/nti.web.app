@@ -48,8 +48,8 @@ Ext.define('NextThought.app.notifications.components.List', {
 		}
 	}),
 
-	
-	registerSubType: function (key, itemTpl) {
+
+	registerSubType: function(key, itemTpl) {
 		var me = this;
 
 		if (!me.tpl.subTemplates) {
@@ -148,7 +148,7 @@ Ext.define('NextThought.app.notifications.components.List', {
 		this.updateBadge(this.badgeValue);
 	},
 
-	
+
 	beginClearBadge: function(delay) {
 		this.store.lastViewed = new Date();
 

@@ -15,7 +15,7 @@ Ext.define('NextThought.app.stream.Base', {
 	requires: [
 		'NextThought.app.stream.components.ListPage'
 	],
-		
+
 	layout: 'none',
 	cls: 'stream',
 
@@ -44,25 +44,24 @@ Ext.define('NextThought.app.stream.Base', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		this.addLoadingCmp();
-
-		this.doInitialLoad()
-			.then(this.removeLoadingCmp());
+		this.doInitialLoad();
 	},
 
 
 	addLoadingCmp: function() {
-		this.loadingCmp = this.add({
-			xtype: 'box',
-			cls: 'loading-container',
-			autoEl: {cls: 'loading', html: 'Loading...'}
-		});
+		if (!this.loadignCmp) {
+			this.loadingCmp = this.add({
+				xtype: 'box',
+				cls: 'loading-container',
+				autoEl: {cls: 'loading', html: 'Loading...'}
+			});
+		}
 	},
 
 
 	removeLoadingCmp: function() {
 		if (this.loadingCmp) {
-			this.remove(this.loadingCpm, true);
+			this.remove(this.loadingCmp, true);
 			delete this.loadingCmp;
 		}
 	},
@@ -86,24 +85,27 @@ Ext.define('NextThought.app.stream.Base', {
 	loadNextPage: function() {
 		var me = this;
 
+		me.addLoadingCmp();
+
 		return me.StreamSource.loadNextPage()
 			.then(me.addPage.bind(me))
 			.fail(function(reason) {
 				//On error if the reason is DONE then show the end of the stream
 				if (reason === me.StreamSource.DONE) {
-					me.addEnd();
+					me.addDone();
 				//else show an error
 				} else {
 					me.addError();
 				}
 
 				//either way prevent loadNextPage from being called again
-				me.loadNextPage = function () { return Promise.resolve(); }
+				me.loadNextPage = function() { return Promise.resolve(); };
 			})
+			.always(me.removeLoadingCmp.bind(me));
 	},
 
 	/**
-	 * @override 
+	 * @override
 	 * @param  {[Object]} items the items to put in the page
 	 * @return {[type]}       [description]
 	 */

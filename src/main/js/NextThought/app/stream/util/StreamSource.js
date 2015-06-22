@@ -1,5 +1,5 @@
 Ext.define('NextThought.app.stream.util.StreamSource', {
-		
+
 	requires: ['NextThought.util.Store'],
 
 	DONE: 'done',
@@ -84,7 +84,7 @@ Ext.define('NextThought.app.stream.util.StreamSource', {
 	 * @param {String} filters the filter(s) to add
 	 */
 	addFilter: function(filter) {
-		this.addFilters([filter])
+		this.addFilters([filter]);
 	},
 
 
@@ -107,7 +107,7 @@ Ext.define('NextThought.app.stream.util.StreamSource', {
 	/**
 	 * Add a filter if its not currently there, or remove it if it is
 	 * trigger a reset
-	 * @param  {String} filter 
+	 * @param  {String} filter
 	 * @return {[type]}        [description]
 	 */
 	toggleFilter: function(filter) {
