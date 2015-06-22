@@ -7,6 +7,9 @@ Ext.define('NextThought.app.stream.List', {
 	],
 
 
+	cls: 'list-stream',
+
+
 	getPageConfig: function() {
 		return {
 			xtype: 'stream-list-page'

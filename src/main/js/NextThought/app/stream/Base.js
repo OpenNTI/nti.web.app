@@ -52,8 +52,7 @@ Ext.define('NextThought.app.stream.Base', {
 		if (!this.loadignCmp) {
 			this.loadingCmp = this.add({
 				xtype: 'box',
-				cls: 'loading-container',
-				autoEl: {cls: 'loading', html: 'Loading...'}
+				autoEl: {cls: 'loading-container item', cn: {cls: 'loading', html: 'Loading...'}}
 			});
 		}
 	},
@@ -95,6 +94,7 @@ Ext.define('NextThought.app.stream.Base', {
 					me.addDone();
 				//else show an error
 				} else {
+					console.error(reason);
 					me.addError();
 				}
 
@@ -121,8 +121,18 @@ Ext.define('NextThought.app.stream.Base', {
 	},
 
 
-	addDone: function() {},
+	addDone: function() {
+		console.log('End of stream');
+	},
 
 
-	addError: function() {}
+	addError: function() {
+		if (!this.errorCmp) {
+			this.errorCmp = this.add({
+				xtype: 'box',
+				cls: 'error-container item',
+				autoEl: {html: 'Error: Unable to load more data.'}
+			});
+		}
+	}
 });

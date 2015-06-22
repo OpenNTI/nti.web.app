@@ -43,16 +43,10 @@ Ext.define('NextThought.util.Format', {
 
 		clsList = clsList.join(' ');
 
-		if (avatar) {
-			return Ext.DomHelper.markup({cls: clsList, cn: [
-				{cls: 'fallback avatar-pic', style: {backgroundImage: get(User.BLANK_AVATAR)}},
-				{cls: 'profile avatar-pic', style: {backgroundImage: get(avatar)}}
-			]});
-		}
-
 		return Ext.DomHelper.markup({cls: clsList, cn: [
-				{cls: 'fallback avatar-pic', style: {backgroundImage: get(User.BLANK_AVATAR)}}
-			]});
+			{cls: 'fallback avatar-pic', style: {backgroundImage: get(User.BLANK_AVATAR)}},
+			{cls: 'profile avatar-pic', style: {backgroundImage: get(avatar)}}
+		]});
 	},
 
 

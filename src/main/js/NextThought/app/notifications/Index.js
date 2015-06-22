@@ -4,6 +4,8 @@ Ext.define('NextThought.app.notifications.Index', {
 
 	cls: 'notifications-index',
 
+	layout: 'none',
+
 	requires: [
 		'NextThought.app.navigation.Actions',
 		'NextThought.app.notifications.StateStore',

@@ -7,6 +7,9 @@ Ext.define('NextThought.app.stream.components.ListPage', {
 	],
 
 
+	cls: 'list-page',
+
+
 	initComponent: function() {
 		this.callParent(arguments);
 
@@ -31,7 +34,7 @@ Ext.define('NextThought.app.stream.components.ListPage', {
 
 }, function() {
 	var me = this,
-		tiles = NextThought.app.stream.components.listTiles,
+		tiles = NextThought.app.stream.components.tiles,
 		keys = Object.keys(tiles) || [];
 
 	keys.forEach(function(key) {
