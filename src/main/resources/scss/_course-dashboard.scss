@@ -175,7 +175,6 @@
 			.context-image {
 				position: relative;
 				height: 186px;
-				&:not(.has-context) { display: none; }
 
 				img {
 					width: 100%;

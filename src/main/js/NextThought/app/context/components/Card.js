@@ -8,14 +8,15 @@ Ext.define('NextThought.app.context.components.Card', {
 
 	cls: 'context-card',
 
-
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'content'}
+		{cls: 'context-image word-context', cn: [
+			{cls: 'text', html: '{text}'}
+		]}
 	]),
 
 
 	renderSelectors: {
-		targetEl: '.content'
+		textEl: '.text'
 	},
 	
 	
@@ -26,7 +27,7 @@ Ext.define('NextThought.app.context.components.Card', {
 
 	afterRender: function() {
 		this.callParent(arguments);
-		this.setContent();
+		this.textEl.appendChild(this.snippet);
 	},
 
 	/**

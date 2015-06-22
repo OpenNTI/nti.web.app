@@ -32,11 +32,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 			{cls: 'path', html: '{Path}'},
 			{cls: 'current', html: '{Current}'}
 		]},
-		{cls: 'context-image', cn: [
-			{tag: 'img', cls: 'image'},
-			{cls: 'title'},
-			{cls: 'text'}
-		]},
+		{cls: 'context'},
 		{cls: 'post-body', cn: [
 			{cls: 'controls', cn: [
 				{ cls: 'favorite-spacer' },
@@ -66,10 +62,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 		locationEl: '.location',
 		pathEl: '.location .path',
 		currentEl: '.location .current',
-		contextEl: '.context-image',
-		contextImageEl: '.context-image .image',
-		contextTitleEl: '.context-image .title',
-		contextTextEl: '.context-image .text',
+		contextEl: '.context',
 		liked: '.controls .like',
 		favorites: '.controls .favorite',
 		avatarEl: '.post-meta .avatar',
@@ -249,21 +242,17 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 			show = false;
 			emptySrc = Globals.CANVAS_BROKEN_IMAGE.src;
 
-		if (context.type === NextThought.app.context.types.Content.type) {
-			this.contextEl.addCls('word-context');
-			// this.contextTextEl.update(context.text);
-			context.render(this.contextEl);
-			show = true;
-		} else if (context.type === NextThought.app.context.types.RelatedWork.type) {
-			this.contextEl.addCls('word-context');
-			this.contextEl.update('');
+		if (context.type === NextThought.app.context.types.RelatedWork.type) {
+			show = false;
 		} else {
 			show = true;
-			this.contextEl.addCls('image-context');
 			context.render(this.contextEl);
 		}
-
-		this.contextEl[show ? 'addCls' : 'removeCls']('has-context');
+		
+		if(!show) {
+			this.contextEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
+			this.contextEl.hide();
+		}
 
 		if (!this.CACHE.height) {
 			this.CACHE.height  = this.height + (show ? 186 : 10);

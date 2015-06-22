@@ -24,7 +24,8 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 		getTileConfig: function(record) {
 			var me = this,
 				context = NextThought.app.context.ContainerContext.create({
-					container: record.get('ContainerId')
+					container: record.get('ContainerId'),
+					range: record.get('applicableRange')
 				});
 
 			return context.load('card')

@@ -31,11 +31,11 @@ Ext.define('NextThought.app.context.types.Content', {
 	},
 
 
-	parse: function(doc) {
+	parse: function(doc, contextKind) {
 		var page = doc && doc.querySelector('#NTIContent'),
 			context,
 			range = this.range,
-			cid = this.container, config, cleanContext, cmp;
+			cid = this.container, config, cleanContext, cmp, xtype;
 
 		try {
 			if (this.range.isEmpty && page && page.getAttribute('data-page-ntiid') === cid) {
@@ -45,7 +45,9 @@ Ext.define('NextThought.app.context.types.Content', {
 			context = doc && RangeUtils.getContextAroundRange(range, doc, doc.body, cid);
 			cleanContext = this.__fixUpContext(context);
 
-			cmp = Ext.widget('context-default', {
+
+			xtype = contextKind === 'card' ? 'context-card' : 'context-default';
+			cmp = Ext.widget(xtype, {	
 					type: this.self.type,
 					snippet: cleanContext,
 					fullContext: cleanContext,
