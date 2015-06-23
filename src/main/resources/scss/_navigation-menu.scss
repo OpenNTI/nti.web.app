@@ -3,6 +3,73 @@
 		float: left;
 		height: 100%;
 	}
+
+	.identity-container {
+		float: right;
+	}
+
+	.notification-container {
+		float: right;
+	}
+
+	.back-container {
+		float: left;
+		height: 100%;
+		margin-right: 10px;
+	}
+
+	.branding {
+		display: none;
+		height: 100%;
+		background-size: cover;
+		min-width: 72px;
+		cursor: pointer;
+	}
+
+	.back {
+		display: none;
+		width: 70px;
+		height: 100%;
+		float: left;
+		cursor: pointer;
+		opacity: 1;
+		left: 0;
+		transition: opacity 0.5s, left 0.5s;
+
+		@include icon('mv-back-arrow', $top: 50%, $left: 50%);
+
+		&::after {
+			margin-top: -18px;
+			margin-left: -9px;
+			opacity: 0.7
+		}
+
+		&.disabled {
+			cursor: defalut;
+
+			&::after {
+				opacity: 0.5;
+			}
+
+			&::hover::after {
+				opacity: 0.5;
+			}
+		}
+
+		&:hover::after {
+			opacity: 1;
+		}
+	}
+
+	&.hide-branding {
+		.branding {
+			display: none;
+		}
+
+		.back {
+			display: block;
+		}
+	}
 }
 
 

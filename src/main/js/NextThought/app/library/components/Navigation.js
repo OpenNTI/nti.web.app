@@ -5,7 +5,6 @@ Ext.define('NextThought.app.library.components.Navigation', {
 	cls: 'library-navigation',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'branding'},
 		{
 			cls: 'dropdown',
 			cn: [

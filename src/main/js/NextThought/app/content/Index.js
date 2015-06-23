@@ -1,12 +1,12 @@
 Ext.define('NextThought.app.content.Index', {
 	extend: 'Ext.container.Container',
 	//Should only be extended
-	
+
 	layout: {
 		type: 'card',
 		deferredRender: true
 	},
-	
+
 	requires: [
 		'NextThought.app.content.components.Navigation',
 		'NextThought.app.navigation.Actions'
@@ -67,7 +67,7 @@ Ext.define('NextThought.app.content.Index', {
 
 
 	getNavigation: function() {
-		if (!this.navigation || this.navigation.destroyed) {
+		if (!this.navigation || this.navigation.isDestroyed) {
 			this.navigation = NextThought.app.content.components.Navigation.create({
 				bodyView: this
 			});

@@ -65,7 +65,10 @@ Ext.define('NextThought.app.notifications.Index', {
 		var me = this;
 
 		me.NavActions.setActiveContent(null);
-		me.NavActions.updateNavBar(null);
+		me.NavActions.updateNavBar({
+			hideBranding: true
+		});
+
 		me.setTitle('Notifications');
 
 		if (!me.stream) {

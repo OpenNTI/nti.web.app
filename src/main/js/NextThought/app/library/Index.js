@@ -188,7 +188,8 @@ Ext.define('NextThought.app.library.Index', {
 		var state = this.getCurrentState();
 
 		this.NavActions.updateNavBar({
-			cmp: this.getNavigation()
+			cmp: this.getNavigation(),
+			noLibraryLink: true
 		});
 
 		this.NavActions.setActiveContent(null);
@@ -206,9 +207,9 @@ Ext.define('NextThought.app.library.Index', {
 	__showAvailableCourses: function() {
 		var me = this;
 		// Build the available courses window
-		if(!this.availableWin) {
+		if (!this.availableWin) {
 			this.availableWin = Ext.widget('library-available-courses-window', {});
-			this.mon(this.availableWin, 'destroy', function(){
+			this.mon(this.availableWin, 'destroy', function() {
 				delete me.availableWin;
 			});
 		}
@@ -223,8 +224,8 @@ Ext.define('NextThought.app.library.Index', {
 			.then(this.__showAvailableCourses.bind(this))
 			.then(function(win) {
 				me.addChildRouter(win);
-				if(win && win.handleRoute){
-					win.handleRoute(subRoute, route.precache);	
+				if (win && win.handleRoute) {
+					win.handleRoute(subRoute, route.precache);
 				}
 			});
 	},
@@ -234,8 +235,8 @@ Ext.define('NextThought.app.library.Index', {
 		return this.__setActive('Available Books')
 			.then(this.showAvailableBooks.bind(this))
 			.then(function(win) {
-				if(win && win.handleRoute){
-					win.handleRoute(subRoute);	
+				if (win && win.handleRoute) {
+					win.handleRoute(subRoute);
 				}
 			});
 	},
@@ -258,6 +259,6 @@ Ext.define('NextThought.app.library.Index', {
 		me.BundleViewActions.transitionToBundle(bundle, el)
 			.then(function(route) {
 				me.pushRootRoute(null, route, {bundle: bundle});
-			})
+			});
 	}
 });

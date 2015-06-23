@@ -17,6 +17,10 @@ Ext.define('NextThought.app.navigation.Index', {
 
 
 	renderTpl: Ext.DomHelper.markup([
+		{cls: 'back-container', cn: [
+			{cls: 'branding'},
+			{cls: 'back'}
+		]},
 		{cls: 'nav-container'},
 		{cls: 'identity-container'},
 		{cls: 'notification-container'}
@@ -24,6 +28,8 @@ Ext.define('NextThought.app.navigation.Index', {
 
 
 	renderSelectors: {
+		brandingEl: '.back-container .branding',
+		backEl: '.back-container .back',
 		navContainerEl: '.nav-container',
 		identityEl: '.identity-container',
 		notificationEl: '.notification-container'
@@ -39,6 +45,23 @@ Ext.define('NextThought.app.navigation.Index', {
 			'update-nav': this.updateNav.bind(this),
 			'set-active-content': this.setActiveContent.bind(this)
 		});
+	},
+
+
+	__removeNavCmp: function() {
+		if (!this.nav_cmp) {
+			return Promise.resolve();
+		}
+
+		var me = this;
+
+		me.nav_cmp.addCls('removing');
+
+		return wait(300)
+			.then(function() {
+				Ext.destroy(me.nav_cmp);
+				delete me.nav_cmp;
+			});
 	},
 
 
@@ -62,17 +85,8 @@ Ext.define('NextThought.app.navigation.Index', {
 			return;
 		}
 
-		if (this.nav_cmp) {
-			this.nav_cmp.addCls('removing');
-			wait(300)
-				.then(function() {
-					me.nav_cmp.destroyed = true;
-					Ext.destroy(me.nav_cmp);
-				})
-				.then(render.bind(null, true));
-		} else {
-			render(true);
-		}
+		this.__removeNavCmp()
+			.then(render.bind(null, true));
 	},
 
 	updateNav: function(config) {
@@ -84,9 +98,20 @@ Ext.define('NextThought.app.navigation.Index', {
 		if (config && config.cmp) {
 			this.__renderNavCmp(config.cmp);
 		} else {
-			this.__renderNavCmp(NextThought.app.navigation.components.Default.create({
-				gotoLibrary: this.gotoLibrary.bind(this)
-			}));
+			this.__removeNavCmp();
+			//Show the large search bar
+		}
+
+		if (config && config.hideBranding) {
+			this.addCls('hide-branding');
+		} else {
+			this.removeCls('hide-branding');
+		}
+
+		if (config && config.noLibraryLink) {
+			this.noLibraryLink = true;
+		} else {
+			this.noLibraryLink = false;
 		}
 	},
 
@@ -113,6 +138,14 @@ Ext.define('NextThought.app.navigation.Index', {
 		this.notificationCmp.render(this.notificationEl);
 
 		this.on('destroy', 'destroy', this.identityCmp);
+
+		this.mon(this.brandingEl, 'click', this.gotoLibrary.bind(this));
+		this.mon(this.backEl, 'click', this.goBack.bind(this));
+	},
+
+
+	goBack: function() {
+		history.back();
 	},
 
 
@@ -122,7 +155,9 @@ Ext.define('NextThought.app.navigation.Index', {
 
 
 	gotoLibrary: function() {
-		this.pushRootRoute('Library', '/library');
+		if (!this.noLibraryLink) {
+			this.pushRootRoute('Library', '/library');
+		}
 	},
 
 

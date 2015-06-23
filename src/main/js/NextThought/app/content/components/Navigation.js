@@ -22,10 +22,7 @@ Ext.define('NextThought.app.content.components.Navigation', {
 	)),
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'back'},
 		{cls: 'content-container', cn: [
-			{cls: 'branding'},
-			{cls: 'icon'},
 			{cls: 'content', cn: [
 				{cls: 'active-content', html: ''},
 				{cls: 'tab-container'},
@@ -36,9 +33,6 @@ Ext.define('NextThought.app.content.components.Navigation', {
 
 
 	renderSelectors: {
-		backEl: '.back',
-		brandingEl: '.content-container .branding',
-		iconEl: '.content-container .icon',
 		titleEl: '.content .active-content',
 		tabContainerEl: '.content .tab-container',
 		activeTabEl: '.content .active-tab'
@@ -47,13 +41,6 @@ Ext.define('NextThought.app.content.components.Navigation', {
 
 	afterRender: function() {
 		this.callParent(arguments);
-
-		//if the body view doesn't have an on back handler disable the button
-		if (!this.bodyView.onBack) {
-			this.backEl.addCls('disabled');
-		} else {
-			this.mon(this.backEl, 'click', this.bodyView.onBack.bind(this.bodyView));
-		}
 
 		this.mon(this.tabContainerEl, 'click', this.onTabClick.bind(this));
 
@@ -80,19 +67,7 @@ Ext.define('NextThought.app.content.components.Navigation', {
 		this.currentBundle = bundle;
 
 		var cls = 'is-book',
-			icon = this.iconEl,
 			data = bundle.asUIData();
-
-		icon[data.isCourse ? 'removeCls': 'addCls'](cls);
-		icon.setStyle({backgroundImage: 'url(' + (data.thumb || data.icon) + ')'});
-
-		if (data.vendorIcon) {
-			this.brandingEl.addCls('custom-vendor');
-			this.brandingEl.setStyle({backgroundImage: 'url(' + data.vendorIcon + ')'});
-		} else {
-			this.brandingEl.removeCls('custom-vendor');
-			this.brandingEl.setStyle({backgroundImage: undefined});
-		}
 
 		this.titleEl.update(data.title);
 	},
@@ -141,7 +116,7 @@ Ext.define('NextThought.app.content.components.Navigation', {
 			wait(1500)
 				.then(alignCurrentTab);
 		} else {
-			alignCurrentTab()
+			alignCurrentTab();
 		}
 	},
 
