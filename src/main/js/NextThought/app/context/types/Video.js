@@ -5,6 +5,7 @@ Ext.define('NextThought.app.context.types.Video', {
 		'NextThought.app.slidedeck.media.Actions',
 		'NextThought.app.slidedeck.transcript.AnchorResolver',
 		'NextThought.app.context.components.Default',
+		'NextThought.app.context.components.VideoContext',
 		'NextThought.app.context.components.cards.*'
 	],
 
@@ -54,20 +55,6 @@ Ext.define('NextThought.app.context.types.Video', {
 		return s;
 	},
 
-	__buildVideoPosterElement: function(video) {
-		var d = document.createElement('div'),
-			t = this.videoPlayerTpl.append(d), o, 
-			src = video && video.get('sources')[0].poster;
-
-		o = Ext.fly(t).setStyle({
-				backgroundImage: 'url(' + src + ')',
-				backgroundSize: '640px',
-				backgroundPosition: '0 0'
-			});
-
-		return o.dom;
-	},
-
 
 	/**
 	 * Parse a video object and build the context component
@@ -77,7 +64,8 @@ Ext.define('NextThought.app.context.types.Video', {
 	 */
 	parse: function(obj, kind) {
 		var video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: obj.ntiid }, obj)),
-			transcript = NextThought.model.transcript.TranscriptItem.fromVideo(video),
+			root = this.course && this.course.getContentRoots && this.course.getContentRoots()[0],
+			transcript = NextThought.model.transcript.TranscriptItem.fromVideo(video, root),
 			Resolver = NextThought.app.slidedeck.transcript.AnchorResolver,
 			context, cmp, me = this, store;
 
@@ -96,11 +84,12 @@ Ext.define('NextThought.app.context.types.Video', {
 					store = me.__buildTranscriptStore(cueList);
 					context = Resolver.getDomElementForTranscriptTimeRange(me.range, store);
 
-					cmp = Ext.widget('context-default', {
+					cmp = Ext.widget('context-video', {
 						type: me.self.type,
 						snippet: context,
-						fullContext: me.__buildVideoPosterElement(video),
-						containerId: me.container
+						containerId: me.container,
+						video: video,
+						range: me.range
 					});
 
 					return Promise.resolve(cmp);

@@ -22,15 +22,14 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 
 	
 	showMediaView: function(route, subRoute) {
-		var videoId = route.params.id,
-			basePath = route.precache.basePath,
+		var basePath = route.precache.basePath,
 			rec = route.precache.rec,
 			options = route.precache.options || {},
 			me = this;
 
-		videoId = ParseUtils.decodeFromURI(videoId);
-		options.rec = rec;
+		this.videoId = ParseUtils.decodeFromURI(route.params.id);
 		this.video = route.precache.video;
+		options.rec = rec;
 
 		if(!me.activeMediaView) {
 			me.activeMediaView = Ext.widget('media-view', {
@@ -41,27 +40,17 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 			});
 		}
 
-		if (this.video && this.video.isModel) {
-			if(!basePath && basePath != "") {
-				basePath = me.currentBundle.getContentRoots()[0];					
-			}
+		me.resolveVideo(me.videoId) 
+			.then(function (videoRec) {
+				me.video = videoRec;
 
-			me.transcript = NextThought.model.transcript.TranscriptItem.fromVideo(this.video, basePath);
-			me.activeMediaView.setContent(this.video, me.transcript, options);
-		}
-		else{
-			this.LibraryActions.getVideoIndex(me.currentBundle)
-				.then(function(videoIndex) {
-					var o = videoIndex[videoId];
-					if (!o) { return; }
+				if(!basePath && basePath != "") {
+					basePath = me.currentBundle.getContentRoots()[0];					
+				}
 
-					basePath = me.currentBundle.getContentRoots()[0];
-					me.video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
-					me.transcript = NextThought.model.transcript.TranscriptItem.fromVideo(me.video, basePath);
-					
-					me.activeMediaView.setContent(me.video, me.transcript, options);
-				});
-		}
+ 				me.transcript = NextThought.model.transcript.TranscriptItem.fromVideo(me.video, basePath);
+				me.activeMediaView.setContent(me.video, me.transcript, options);
+			});
 	},
 
 	
@@ -97,8 +86,33 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 	},
 
 
+	resolveVideo: function(id){
+		var me = this, video, basePath;
+
+		if (!id || !this.currentBundle) {
+			return Promise.reject();
+		}
+
+		if(me.video && me.video.isModel && me.video.getId() === id) {
+			return Promise.resolve(me.video);
+		}
+
+		return new Promise(function(fulfill, reject) {
+			me.LibraryActions.getVideoIndex(me.currentBundle)
+				.then(function(videoIndex) {
+					var o = videoIndex[id];
+					if (!o) { return reject(); }
+
+					basePath = me.currentBundle.getContentRoots()[0];
+					video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: o.ntiid }, o));
+					fulfill(video);
+				});
+		});
+	},
+
+
 	getContext: function() {
-		return this.video;
+		return this.resolveVideo(this.videoId);
 	},
 
 
