@@ -64,9 +64,7 @@ Ext.define('NextThought.app.stream.components.tiles.Note', {
 	},
 
 
-	onEdit: function() {
-		debugger;
-	},
+	onEdit: function() {},
 
 
 	onAddComment: function() {
@@ -74,12 +72,8 @@ Ext.define('NextThought.app.stream.components.tiles.Note', {
 	},
 
 
-	onReport: function() {
-		debugger;
-	},
+	onReport: function() {},
 
 
-	onDelete: function() {
-		debugger;
-	}
+	onDelete: function() {}
 });

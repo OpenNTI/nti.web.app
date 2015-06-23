@@ -94,7 +94,6 @@ Ext.define('NextThought.app.notifications.components.MostRecent', {
 		var range = this.store.backingStore.getRange(),
 			subRange = range.slice(0, this.SHOW_COUNT);
 
-		debugger;
 		this.store.loadRecords(subRange);
 		this.storeLoaded(this.store);
 		this.maybeNotify();

@@ -32,6 +32,27 @@
 	}
 }
 
+.notifications-index {
+	.loading-container {
+		height: 50px;
+		position: relative;
+		background-color: white;
+
+		.loading {
+			position: absolute;
+			color: $primary-grey;
+			line-height: 24px;//height of the spinner
+			padding-left: 30px;//width of the spinner + 6px
+			top: 50%; left: 50%;
+			margin-top: -12px;
+			margin-left: -51px;
+
+			&::before {
+				@include loadingSpinner($top: 0, $left: 0);
+			}
+		}
+	}
+}
 
 .notifications-view {
 	position: fixed !important;

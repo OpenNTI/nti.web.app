@@ -35,6 +35,29 @@ Ext.define('NextThought.app.notifications.Index', {
 		this.addRoute('/', this.showNotifications.bind(this));
 
 		this.addDefaultRoute('/');
+
+		this.on({
+			activate: this.onActivate.bind(this),
+			deactivate: this.onDeactivate.bind(this)
+		});
+	},
+
+
+	onActivate: function() {
+		if (this.stream) {
+			this.stream.onActivate();
+		}
+
+		this.isActive = true;
+	},
+
+
+	onDeactivate: function() {
+		if (this.stream) {
+			this.stream.onDeactivate();
+		}
+
+		this.isActive = false;
 	},
 
 
@@ -53,9 +76,33 @@ Ext.define('NextThought.app.notifications.Index', {
 	},
 
 
+	showLoading: function() {
+		if (!this.loadingCmp) {
+			this.loadingCmp = this.add({
+				xtype: 'box',
+				autoEl: {cls: 'loading-container item', cn: {cls: 'loading', html: 'Loading...'}}
+			});
+		}
+	},
+
+
+	removeLoading: function() {
+		if (this.loadingCmp) {
+			this.remove(this.loadingCmp, true);
+			delete this.loadingCmp;
+		}
+	},
+
+
 	buildStream: function() {
 		this.stream = this.add({
-			xtype: 'notifications-stream-list'
+			xtype: 'notifications-stream-list',
+			addMask: this.showLoading.bind(this),
+			removeMask: this.removeLoading.bind(this)
 		});
+
+		if (this.isActive) {
+			this.stream.onActivate();
+		}
 	}
 });

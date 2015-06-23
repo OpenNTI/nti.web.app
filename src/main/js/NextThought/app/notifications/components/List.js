@@ -117,7 +117,8 @@ Ext.define('NextThought.app.notifications.components.List', {
 
 		this.NotificationsStore.getStore()
 			.then(this.buildStore.bind(this))
-			.then(this.setUpListeners.bind(this));
+			.then(this.setUpListeners.bind(this))
+			.fail(this.failedToGetStore.bind(this));
 	},
 
 
@@ -259,17 +260,23 @@ Ext.define('NextThought.app.notifications.components.List', {
 	},
 
 
+	failedToGetStore: function() {
+		if (this.rendered) {
+			this.on('afterrender', this.failedToGetStore.bind(this));
+			return;
+		}
+
+		this.deferEmptyText = false;
+		this.refresh();
+	},
+
+
 	afterRender: function() {
 		this.callParent(arguments);
 
 		this.on({
 			itemClick: this.rowClicked.bind(this)
 		});
-
-		if (!this.store || !this.store.getCount()) {
-			this.deferEmptyText = false;
-			this.refresh();
-		}
 	},
 
 
