@@ -64,11 +64,9 @@ Ext.define('NextThought.app.library.courses.Actions', {
 
 		return Promise.all(precache)
 				.then(function(results) {
-					results.filter(function(r) {
+					return results.filter(function(r) {
 						return !!r;
 					});
-
-					return results;
 				});
 	},
 
