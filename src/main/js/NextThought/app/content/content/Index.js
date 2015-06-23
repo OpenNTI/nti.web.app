@@ -28,6 +28,7 @@ Ext.define('NextThought.app.content.content.Index', {
 
 		this.addRoute('/', this.showRoot.bind(this));
 		this.addRoute('/:id', this.showContent.bind(this));
+		this.addRoute('/:id/:page', this.showPage.bind(this));
 
 		this.addDefaultRoute('/');
 
@@ -91,6 +92,8 @@ Ext.define('NextThought.app.content.content.Index', {
 			};
 		});
 
+		this.pageId = page.getId();
+
 		this.reader = NextThought.app.contentviewer.Index.create({
 			pageInfo: page instanceof NextThought.model.PageInfo ? page : null,
 			relatedWork: page instanceof NextThought.model.RelatedWork ? page : null,
@@ -133,6 +136,28 @@ Ext.define('NextThought.app.content.content.Index', {
 			.then(function(page) {
 				me.showReader(page, route.precache.parent);
 			});
+	},
+
+
+	showPage: function(route, subRoute) {
+	 	var me = this,
+	 		root = route.params.id,
+	 		page = route.params.page,
+	 		obj = route.precache.pageInfo || route.precache.relatedWork;
+
+	 	root = ParseUtils.decodeFromURI(root);
+	 	page = ParseUtils.decodeFromURI(page);
+
+	 	if (!this.root) {
+	 		this.root = root;
+	 	} else if (this.root !== root) {
+	 		console.warn('Trying to show a reading a root that is different form what we got the root set as...');
+	 	}
+
+	 	return this.__loadContent(page, obj)
+	 		.then(function(page) {
+	 			me.showReader(page, route.precache.parent);
+	 		});
 	},
 
 

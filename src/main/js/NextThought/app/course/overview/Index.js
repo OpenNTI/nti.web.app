@@ -27,6 +27,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 		this.initRouter();
 
 		this.addRoute('/:lesson/content/:id', this.showContent.bind(this));
+		this.addRoute('/:lesson/content/:id/:page', this.showContent.bind(this));
 		this.addRoute('/:lesson/video/', this.showMediaViewer.bind(this));
 
 		this.addDefaultRoute(this.showLessons.bind(this));
@@ -63,7 +64,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 	getContext: function() {
 		var lessons = this.getLessons(), item = this.getLayout().getActiveItem();
 
-		if (item === this.activeMediaWindow){
+		if (item === this.activeMediaWindow) {
 			return item;
 		}
 
@@ -115,15 +116,19 @@ Ext.define('NextThought.app.course.overview.Index', {
 		var me = this,
 			contentPath,
 			rootId = route.params.id,
+			pageId = route.params.page,
 			lessonId = route.params.lesson,
 			lesson = route.precache.lesson;
 
 		lessonId = ParseUtils.decodeFromURI(lessonId);
 		rootId = ParseUtils.decodeFromURI(rootId);
+		pageId = ParseUtils.decodeFromURI(pageId);
 
 		if (me.reader) {
 			if (me.reader.root === rootId) {
-				return Promise.resolve();
+				if (pageId && me.reader.pageId && me.reader.pageId === pageId) {
+					return Promise.resolve();
+				}
 			}
 		}
 
@@ -177,12 +182,12 @@ Ext.define('NextThought.app.course.overview.Index', {
 					handleNavigation: me.handleNavigation.bind(me),
 					navigateToObject: me.navigateToObject.bind(me),
 					root: rootId,
-					rootRoute: route.precache.parent.route + '/content/'
+					rootRoute: route.precache.parent.route + '/content/' + route.params.id + '/'
 				});
 
 				me.getLayout().setActiveItem(me.reader);
 
-				return me.reader.handleRoute(route.params.id, route.precache);
+				return me.reader.handleRoute(route.params.id + '/' + (route.params.page || ''), route.precache);
 			});
 	},
 
@@ -206,9 +211,9 @@ Ext.define('NextThought.app.course.overview.Index', {
 				if (me.activeMediaWindow) {
 					me.activeMediaWindow.fireEvent('resume-annotation-manager', this);
 				}
-			});	
+			});
 		}
-		
+
 		me.getLayout().setActiveItem(me.activeMediaWindow);
 		me.activeMediaWindow.currentBundle = me.currentBundle;
 		return me.activeMediaWindow.handleRoute(subRoute, route.precache);
@@ -278,7 +283,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 				lesson: lesson,
 				basePath: obj.basePath
 			}
-		}
+		};
 	},
 
 
@@ -286,7 +291,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 		this.pushRoute(title, route, precache);
 	},
 
-	handleMediaClose: function(cmp) {		
+	handleMediaClose: function(cmp) {
 		this.pushRoute(null, '/');
 	}
 });
