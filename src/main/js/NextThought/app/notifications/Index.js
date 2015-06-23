@@ -10,8 +10,7 @@ Ext.define('NextThought.app.notifications.Index', {
 		'NextThought.app.navigation.Actions',
 		'NextThought.app.notifications.StateStore',
 		'NextThought.app.notifications.components.Header',
-		'NextThought.app.stream.List',
-		'NextThought.app.stream.util.StreamSource'
+		'NextThought.app.notifications.components.Stream'
 	],
 
 	mixins: {
@@ -44,6 +43,7 @@ Ext.define('NextThought.app.notifications.Index', {
 
 		me.NavActions.setActiveContent(null);
 		me.NavActions.updateNavBar(null);
+		me.setTitle('Notifications');
 
 		if (!me.stream) {
 			return me.buildStream();
@@ -54,24 +54,8 @@ Ext.define('NextThought.app.notifications.Index', {
 
 
 	buildStream: function() {
-		var me = this;
-
-		return Promise.all([
-				me.NotableStore.getURL(),
-				me.NotableStore.getLastViewed()
-			]).then(function(results) {
-				var url = results[0],
-					lastViewed = results[1];
-
-				me.setTitle('Notifications');
-				me.StreamSource = NextThought.app.stream.util.StreamSource.create({
-					url: url
-				});
-
-				me.stream = me.add({
-					xtype: 'stream-list',
-					StreamSource: me.StreamSource
-				});
-			});
+		this.stream = this.add({
+			xtype: 'notifications-stream-list'
+		});
 	}
 });

@@ -3,7 +3,7 @@ Ext.define('NextThought.app.notifications.Tab', {
 	alias: 'widget.notifications-tab',
 
 	requires: [
-		'NextThought.app.notifications.components.View'
+		'NextThought.app.notifications.components.TabView'
 	],
 
 	cls: 'notifications-icon',
@@ -12,7 +12,7 @@ Ext.define('NextThought.app.notifications.Tab', {
 		this.callParent(arguments);
 
 		this.list = Ext.widget({
-			xtype: 'notifications-view',
+			xtype: 'notifications-tab-view',
 			ownerCt: this,
 			updateBadge: this.updateBadge.bind(this),
 			close: this.setMenuClosed.bind(this),

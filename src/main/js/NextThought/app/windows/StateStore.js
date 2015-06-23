@@ -44,13 +44,18 @@ Ext.define('NextThought.app.windows.StateStore', {
 	},
 
 
-	fireShowWindow: function(object, path, el, monitors, precache) {
-		this.fireEvent('show-window', object, path, el, monitors, precache);
+	hasComponentForMimeType: function(type) {
+		return !!this.self.MIME_TO_CMP[type];
 	},
 
 
-	firePushWindow: function(obj, title, route, precache) {
-		this.fireEvent('push-window', obj, title, route, precache);
+	fireShowWindow: function(object, state, path, el, monitors, precache) {
+		this.fireEvent('show-window', object, state, path, el, monitors, precache);
+	},
+
+
+	firePushWindow: function(object, state, title, route, precache) {
+		this.fireEvent('push-window', object, state, title, route, precache);
 	},
 
 

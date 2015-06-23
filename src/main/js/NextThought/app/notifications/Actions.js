@@ -46,7 +46,7 @@ Ext.define('NextThought.app.notifications.Actions', {
 						console.warn('Could not resolve notifications lastViewed');
 					})
 					.always(function() {
-						store.setURL(url, lastViewed);
+						store.buildStore(url, lastViewed);
 					});
 			}, function() {
 				console.error('Could not setup notifications!');

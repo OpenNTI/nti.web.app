@@ -1,10 +1,10 @@
-Ext.define('NextThought.app.notifications.components.View', {
+Ext.define('NextThought.app.notifications.components.TabView', {
 	extend: 'Ext.container.Container',
-	alias: 'widget.notifications-view',
+	alias: 'widget.notifications-tab-view',
 
 	floating: true,
 
-	requires: ['NextThought.app.notifications.components.List'],
+	requires: ['NextThought.app.notifications.components.MostRecent'],
 
 	layout: 'none',
 	cls: 'notifications-view',
@@ -14,7 +14,7 @@ Ext.define('NextThought.app.notifications.components.View', {
 		this.callParent(arguments);
 
 		this.add([{
-			xtype: 'notifications-panel',
+			xtype: 'notifications-most-recent',
 			updateBadge: this.updateBadge.bind(this)
 		}, {
 			xtype: 'box',
@@ -23,10 +23,12 @@ Ext.define('NextThought.app.notifications.components.View', {
 			listeners: {
 				click: {
 					element: 'el',
-					fn: this.pushRootRoute.bind(this, 'Notifications', 'notifications')
+					fn: this.showAll.bind(this)
 				}
 			}
 		}]);
+
+		this.list = this.down('notifications-most-recent');
 
 		this.onBodyClick = this.onBodyClick.bind(this);
 
@@ -48,10 +50,16 @@ Ext.define('NextThought.app.notifications.components.View', {
 		var me = this;
 
 		Ext.getBody().on('click', this.onBodyClick);
+		this.list.onActivate();
 	},
 
 
 	removeBodyListener: function() {
 		Ext.getBody().un('click', this.onBodyClick);
+	},
+
+
+	showAll: function() {
+		this.pushRootRoute('Notifications', 'notifications');
 	}
 });

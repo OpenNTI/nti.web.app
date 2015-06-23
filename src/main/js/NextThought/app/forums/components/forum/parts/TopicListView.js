@@ -188,7 +188,7 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 
 		if (record.get('isGroupHeader')) { return; }
 
-		this.WindowActions.pushWindow(record, node, {}, {
+		this.WindowActions.pushWindow(record, null, node, {}, {
 			forum: this.record
 		});
 	},

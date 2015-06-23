@@ -87,10 +87,11 @@ Ext.define('NextThought.app.Body', {
 
 
 	onNewContext: function() {
-		var id = this.ContextStore.getCurrentObjectId();
+		var id = this.ContextStore.getCurrentObjectId(),
+			state = window.location.hash.replace('#', '');
 
 		if (id) {
-			this.WindowActions.showWindow(id);
+			this.WindowActions.showWindow(id, state);
 		}
 	},
 
@@ -120,7 +121,7 @@ Ext.define('NextThought.app.Body', {
 	},
 
 
-	pushWindow: function(id, title, route, precache) {
+	pushWindow: function(id, state, title, route, precache) {
 		if (!title) {
 			title = this.ContextStore.getCurrentTitle();
 		}
@@ -133,11 +134,16 @@ Ext.define('NextThought.app.Body', {
 			id = ParseUtils.encodeForURI(id);
 			route = Globals.trimRoute(route) + '/object/' + id;
 		} else {
+			state = null;
 			route = this.ContextStore.removeObjectRoute();
 		}
 
+		if (state) {
+			route += '#' + state;
+		}
 
-		this.pushRoute(title, route, precache);
+
+		this.pushRoute(title, route, precache, state);
 	},
 
 

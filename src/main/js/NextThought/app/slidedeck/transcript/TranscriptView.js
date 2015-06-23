@@ -563,7 +563,7 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 	},
 
 	showNote: function(record, el, monitors) {
-   		this.WindowActions.pushWindow(record, el, monitors);
+   		this.WindowActions.pushWindow(record, null, el, monitors);
    	}
 
 });

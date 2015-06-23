@@ -110,65 +110,19 @@ Ext.define('NextThought.app.notifications.components.List', {
 
 		this.NotificationsStore = NextThought.app.notifications.StateStore.getInstance();
 
-		Promise.all([
-			this.NotificationsStore.getURL(),
-			this.NotificationsStore.getLastViewed()
-		]).then(this.buildStore.bind(this));
-	},
-
-
-	maybeNotify: function() {
-		var count = 0,
-			store = this.store,
-			cap = store.pageSize - 1,
-			lastViewed = store.lastViewed || new Date(0),
-			links = store.batchLinks || {};
-
-		this._lastViewedURL = links.lastViewed;
-
-		this.store.each(function(c) {
-			if (c.get('CreatedTime') > lastViewed) {
-				count += 1;
-			}
+		this.on({
+			activate: this.onActivate.bind(this),
+			deactivate: this.onDeactivate.bind(this)
 		});
 
-		if (count > cap) {
-			count = cap + '+';
-		}
-
-		this.setBadgeValue(count);
+		this.NotificationsStore.getStore()
+			.then(this.buildStore.bind(this))
+			.then(this.setUpListeners.bind(this));
 	},
 
 
-	setBadgeValue: function(count) {
-		var v = count || '';
-
-		this.badgeValue = v;
-
-		this.updateBadge(this.badgeValue);
-	},
-
-
-	beginClearBadge: function(delay) {
-		this.store.lastViewed = new Date();
-
-		wait(delay || 3000)
-			.then(this.clearBadge.bind(this));
-	},
-
-
-	clearBadge: function() {
-		if (!this.badgeValue) {
-			return;
-		}
-
-		this.maybeNotify();
-
-		if (this._lastViewedURL && this.store && this.store.lastViewed) {
-			//the server is expecting seconds
-			Service.put(this._lastViewedURL, this.store.lastViewed.getTime() / 1000);
-		}
-	},
+	onActivate: function() {},
+	onDeactivate: function() {},
 
 
 	unwrap: function(record) {
@@ -180,31 +134,29 @@ Ext.define('NextThought.app.notifications.components.List', {
 	},
 
 
-	buildStore: function(results) {
+	buildStore: function(parentStore) {
 		var me = this,
 			registry = me.tpl.subTemplates,
-			url = results[0],
-			lastViewed = results[1];
-
-		this.loading = true;
-
-		StoreUtils.loadItems(url, {
-			batchSize: me.PREVIEW_SIZE
-		}).then(function(items) {
-			var s = new Ext.data.Store({
-				model: 'NextThought.model.GenericObject',
-				pageSize: me.PREVIEW_SIZE,
+			s = NextThought.store.PageItem.create({
+				proxy: 'memory',
+				storeId: me.storeId,
+				sortOnLoad: true,
+				statefulFilters: false,
+				remoteSort: false,
+				remoteFilter: false,
+				remoteGroup: false,
+				filterOnLoad: true,
+				sortOnFilter: true,
 				groupers: [
 					{
 						direction: 'DESC',
 						property: 'NotificationGroupingField'
 					}
 				],
-				sorter: [
-					//put the headers at the top of their groups
+				sorters: [
 					function(a, b) { return a.isHeader === b.isHeader ? 0 : a.isHeader ? -1 : 1; },
 					{
-						direct: 'DESC',
+						direction: 'DESC',
 						property: 'CreatedTime'
 					}
 				],
@@ -218,7 +170,7 @@ Ext.define('NextThought.app.notifications.components.List', {
 							f = !m || registry.hasOwnProperty(m);
 
 						if (!f) {
-							console.warn('Unregistered Type: ' + m, 'This component does not know hot to render this item');
+							console.warn('Unregistered Type:' + item.get('MimeType'), 'This component does not know how to render this item.');
 						}
 
 						return f;
@@ -226,30 +178,24 @@ Ext.define('NextThought.app.notifications.components.List', {
 				]
 			});
 
-			me.mon(s, {
-				add: function() {
-					me.recordsAdded.apply(me, arguments);
-					me.maybeNotify();
-				},
-				refresh: function() {
-					me.storeLoaded.apply(me, arguments);
-					me.maybeNotify();
-				}
-			});
+		me.store = s;
+		s.backingStore = parentStore;
 
-			s.lastViewed = lastViewed;
-			me.store = s;
-			me.bindStore(s);
+		me.bindStore(s);
+		me.setMaskBind(parentStore);
 
-			s.loadRecords(items, {addRecords: true});
-
-			this.loading = false;
-
-			if (me.rendered) {
-				me.removeMask();
+		ObjectUtils.defineAttributes(s, {
+			lastViewed: {
+				getter: function() { return parentStore.lastViewed; },
+				setter: function(v) { parentStore.lastViewed = v; }
 			}
 		});
+
+		return s;
 	},
+
+
+	setUpListeners: function(store) {},
 
 
 	insertDividers: function() {
@@ -295,7 +241,11 @@ Ext.define('NextThought.app.notifications.components.List', {
 			}
 		});
 		this.insertDividers();
+		this.maybeShowMoreItems();
 	},
+
+
+	maybeShowMoreItems: function() {},
 
 
 	fillInData: function(rec) {
@@ -316,9 +266,6 @@ Ext.define('NextThought.app.notifications.components.List', {
 			itemClick: this.rowClicked.bind(this)
 		});
 
-		this.lastScroll = 0;
-
-
 		if (!this.store || !this.store.getCount()) {
 			this.deferEmptyText = false;
 			this.refresh();
@@ -337,13 +284,12 @@ Ext.define('NextThought.app.notifications.components.List', {
 		}
 	},
 
-
-	rowClicked: function(view, rec, item) {
-		rec = this.unwrap(rec);
-
-		if (Ext.isFunction(this.clickHandlers && this.clickHandlers[rec.get('MimeType')])) {
-			this.clickHandlers[rec.get('MimeType')](view, rec);
-			this.beginClearBadge(1000);
-		}
-	}
+	/**
+	 * What to do when an item is clicked
+	 * @override
+	 * @param  {Object} view this
+	 * @param  {Object} rec  the record for the node that was clicked
+	 * @param  {Object} item the Ext.Element of the node
+	 */
+	rowClicked: function(view, rec, item) {}
 });

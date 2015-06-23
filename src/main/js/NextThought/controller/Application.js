@@ -93,6 +93,10 @@ Ext.define('NextThought.controller.Application', {
 		var body = this.getBody(),
 			store = this.ContextStore;
 
+		//if we set the route with a fragment it get passed in here
+		//so make sure we split it off
+		route = route.split('#')[0];
+
 		body.getCurrentContext()
 			.then(function(context) {
 				store.setContext(context, title || document.title, route);
@@ -112,10 +116,19 @@ Ext.define('NextThought.controller.Application', {
 	__mergeRoute: function(route) {
 		route = Globals.trimRoute(route);
 
+		var parts = route.split('#'),
+			fragment = parts[1];
+
+		route = parts[0];
+
 		if (route) {
 			route = '/' + this.APP_ROOT + '/' + route + '/';
 		} else {
 			route = '/' + this.APP_ROOT + '/';
+		}
+
+		if (fragment) {
+			route += '#' + fragment;
 		}
 
 		return route;
@@ -156,12 +169,12 @@ Ext.define('NextThought.controller.Application', {
 	},
 
 
-	replaceRoute: function(title, route, precache) {
+	replaceRoute: function(title, route, precache, fragment) {
 		this.__doRoute('replaceState', null, title, route, precache);
 	},
 
 
-	pushRouteState: function(state, title, route, precache) {
+	pushRouteState: function(state, title, route, precache, fragment) {
 		var body = this.getBody(),
 			historyState = {};
 
@@ -171,7 +184,7 @@ Ext.define('NextThought.controller.Application', {
 	},
 
 
-	replaceRouteState: function(state, title, route, precache) {
+	replaceRouteState: function(state, title, route, precache, fragment) {
 		var body = this.getBody(),
 			historyState = {};
 

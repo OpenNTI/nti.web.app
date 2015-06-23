@@ -45,19 +45,19 @@ Ext.define('NextThought.app.stream.components.parts.BodyContent', {
 		{cls: 'body', html: '{body}'},
 		{cls: 'actions', cn: [
 			{tag: 'tpl', 'if': 'commentCount || commentCount === 0', cn: [
-				{tag: 'span', cls: 'list-item blue', html: '{commentCount:plural("Comment")}'}
+				{tag: 'span', cls: 'list-item blue link comments', html: '{commentCount:plural("Comment")}'}
 			]},
 			{tag: 'tpl', 'if': 'replyAction', cn: [
-				{tag: 'span', cls: 'list-item blue', html: 'Reply'}
+				{tag: 'span', cls: 'list-item blue link reply', html: 'Reply'}
 			]},
 			{tag: 'tpl', 'if': 'editAction', cn: [
-				{tag: 'span', cls: 'list-item blue', html: 'Edit'}
+				{tag: 'span', cls: 'list-item blue link edit', html: 'Edit'}
 			]},
 			{tag: 'tpl', 'if': 'reportAction', cn: [
-				{tag: 'span', cls: 'list-item blue', html: 'Report'}
+				{tag: 'span', cls: 'list-item blue link report', html: 'Report'}
 			]},
 			{tag: 'tpl', 'if': 'deleteAction', cn: [
-				{tag: 'span', cls: 'list-item blue', html: 'Delete'}
+				{tag: 'span', cls: 'list-item blue link delete', html: 'Delete'}
 			]}
 		]}
 	]),
@@ -70,7 +70,14 @@ Ext.define('NextThought.app.stream.components.parts.BodyContent', {
 
 		liked: '.controls .like',
 		favorites: '.controls .favorite',
-		favoritesSpacer: '.controls .favorite-spacer'
+		favoritesSpacer: '.controls .favorite-spacer',
+
+		titleEl: '.meta .title',
+		commentEl: '.list-item.comments',
+		replyEl: '.list-item.reply',
+		editEl: '.list-item.edit',
+		reportEl: '.list-item.report',
+		deleteEl: '.list-item.delete'
 	},
 
 
@@ -98,6 +105,45 @@ Ext.define('NextThought.app.stream.components.parts.BodyContent', {
 		this.mixins.likeAndFavoriteActions.constructor.call(this);
 
 		this.renderData = Ext.apply(this.renderData || {}, rd);
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		this.mon(this.titleEl, {
+			click: this.showObject.bind(this)
+		});
+
+		if (this.commentEl) {
+			this.mon(this.commentEl, {
+				click: this.showObject.bind(this)
+			});
+		}
+
+		if (this.replyEl) {
+			this.mon(this.replyEl, {
+				click: this.addComment.bind(this)
+			});
+		}
+
+		if (this.editEl) {
+			this.mon(this.editEl, {
+				click: this.editObject.bind(this)
+			});
+		}
+
+		if (this.reportEl) {
+			this.mon(this.reportEl, {
+				click: this.reportObject.bind(this)
+			});
+		}
+
+		if (this.deleteEl) {
+			this.mon(this.deleteEl, {
+				click: this.deleteObject.bind(this)
+			});
+		}
 	},
 
 
@@ -139,5 +185,40 @@ Ext.define('NextThought.app.stream.components.parts.BodyContent', {
 
 		el.select('.whiteboard-container .toolbar').remove();
 		el.select('.whiteboard-container .overlay').remove();
+	},
+
+
+	showObject: function() {
+		if (this.onShow) {
+			this.onShow();
+		}
+	},
+
+
+	addComment: function() {
+		if (this.onAddComment) {
+			this.onAddComment();
+		}
+	},
+
+
+	editObject: function() {
+		if (this.onEdit) {
+			this.onEdit();
+		}
+	},
+
+
+	reportObject: function() {
+		if (this.onReport) {
+			this.onReport();
+		}
+	},
+
+
+	deleteObject: function() {
+		if (this.onDelete) {
+			this.onDelete();
+		}
 	}
 });

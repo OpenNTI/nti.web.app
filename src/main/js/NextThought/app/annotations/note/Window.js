@@ -28,7 +28,8 @@ Ext.define('NextThought.app.annotations.note.Window', {
 			xtype: 'note-main-view',
 			record: this.record,
 			readerContext: context,
-			doClose: this.doClose.bind(this)
+			doClose: this.doClose.bind(this),
+			state: this.state
 		}]);
 	},
 

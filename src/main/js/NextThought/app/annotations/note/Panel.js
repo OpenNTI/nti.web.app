@@ -610,7 +610,17 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 		this.addAdditionalRecordListeners(r);
 		this.listenForLikeAndFavoriteChanges(r);
 		this.listenForFlagChanges(r);
+
 		return true;
+	},
+
+
+	maybeApplyState: function() {
+		if (this.state === 'reply') {
+			this.onReply();
+		} else if (this.state === 'edit') {
+			this.onEdit();
+		}
 	},
 
 	//Subclass can override it they care.
@@ -655,6 +665,9 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 			if (toMask) {
 				toMask.unmask();
 			}
+
+			me.maybeApplyState();
+
 			if (me.hasCallback) {
 				Ext.callback(me.hasCallback);
 				delete me.hasCallback;

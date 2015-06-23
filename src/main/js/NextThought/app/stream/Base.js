@@ -116,6 +116,7 @@ Ext.define('NextThought.app.stream.Base', {
 		var page = this.getPageConfig();
 
 		page.streamItems = items;
+		page.tileOverrides = this.tileOverrides;
 
 		this.PAGES.push(this.add(page));
 	},
