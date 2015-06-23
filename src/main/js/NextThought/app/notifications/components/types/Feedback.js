@@ -32,7 +32,8 @@ Ext.define('NextThought.app.notifications.components.types.Feedback', {
 		//TODO: figure out what happens here
 		Service.getObject(rec.get('AssignmentId'), function(assignment) {
 			var cid = assignment.get('ContainerId'),
-				course = CourseWareUtils.courseForNtiid(cid);
+				//TODO figure this out
+				course = null;//CourseWareUtils.courseForNtiid(cid);
 
 			if (!course) {
 				rec.data.hidden = true;

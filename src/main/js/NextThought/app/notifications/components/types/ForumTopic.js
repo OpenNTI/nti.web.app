@@ -24,7 +24,7 @@ Ext.define('NextThought.app.notifications.components.types.ForumTopic', {
 
 
 	fillInData: function(rec) {
-		return NextThought.view.account.notifications.types.Base.prototype.fillInData.apply(this, arguments);
+		return NextThought.app.notifications.components.types.Base.prototype.fillInData.apply(this, arguments);
 	},
 
 	clicked: function(view, rec) {
