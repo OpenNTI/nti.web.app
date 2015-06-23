@@ -52,15 +52,23 @@ Ext.define('NextThought.app.library.courses.Actions', {
 
 		precache = items.map(function(item) {
 			if (item.__precacheEntry) {
-				return item.__precacheEntry().fail(function() {});
+				return item.__precacheEntry()
+					//if its successful fulfill with the course enrollment
+					.then(function() { return item})
+					//otherwise fulfill with null so it can be filtered out
+					.fail(function() { return null});
 			}
 
 			return Promise.resolve(null);
 		});
 
 		return Promise.all(precache)
-				.then(function() {
-					return items;
+				.then(function(results) {
+					results.filter(function(r) {
+						return !!r;
+					});
+
+					return results;
 				});
 	},
 
