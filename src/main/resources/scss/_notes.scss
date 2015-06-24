@@ -584,6 +584,32 @@
 					margin: 10px auto;
 					width: 512px;
 				}
+
+				.context-authorization {
+					.context-image {
+						.meta {
+							.message {
+								font-size: 14px;
+							}
+
+							.action {
+								  	background-color: #3fb34f;
+  									width: 120px;
+  									
+								&.button {
+								  	line-height: 42px;
+								  	text-align: center;
+								  	font-weight: 300;
+								  	font-size: 1.2em;
+								  	letter-spacing: 1px;
+								  	color: white;
+								  	cursor: pointer;
+								  	border-radius: 3px;
+								}
+							}
+						}
+					}
+				}
 			}
 
 			//experiment to kill links in note window

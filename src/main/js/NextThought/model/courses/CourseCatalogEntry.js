@@ -2,6 +2,9 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 	alternateClassName: 'NextThought.model.courses.CourseCatalogLegacyEntry',
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.courses.coursecataloglegacyentry',
+	statics: {
+		mimeType: 'application/vnd.nextthought.courses.coursecataloglegacyentry'
+	},
 	requires: [
 		'NextThought.model.converters.Date',
 		'NextThought.model.courses.EnrollmentOptions',

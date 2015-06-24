@@ -1,6 +1,7 @@
 Ext.define('NextThought.app.context.ContainerContext', {
 	requires: [
-		'NextThought.app.context.types.*'
+		'NextThought.app.context.types.*',
+		'NextThought.app.context.components.AuthorizationContext'
 	],
 
 	constructor: function(config) {
@@ -28,7 +29,8 @@ Ext.define('NextThought.app.context.ContainerContext', {
 				}
 			})
 				.then(this.__parseResponse.bind(this))
-				.then(this.__parseContext.bind(this, type));
+				.then(this.__parseContext.bind(this, type))
+				.fail(this.__handle403Response.bind(this));
 		}
 
 		return this.load_promise;
@@ -72,5 +74,23 @@ Ext.define('NextThought.app.context.ContainerContext', {
 
 		console.error('No handler to get context from obj:', obj);
 		return Promise.resolve(null);
+	},
+
+
+	__handle403Response: function(response){
+		var o =  Ext.decode(response.responseText, true),
+			status = response.status,
+			catalogEntry = o && ParseUtils.parseItems(o)[0], cmp;
+
+
+		if (status === 403 && catalogEntry) {
+			cmp = Ext.widget('context-authorization', {
+						catalogEntry: catalogEntry
+					});
+
+			return Promise.resolve(cmp);
+		}
+
+		return Promise.reject();
 	}
 });

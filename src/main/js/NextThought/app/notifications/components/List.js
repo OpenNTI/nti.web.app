@@ -5,7 +5,8 @@ Ext.define('NextThought.app.notifications.components.List', {
 	requires: [
 		'NextThought.store.PageItem',
 		'NextThought.app.notifications.StateStore',
-		'NextThought.app.notifications.components.types.*'
+		'NextThought.app.notifications.components.types.*',
+		'NextThought.app.windows.Actions'
 	],
 
 	cls: 'user-data-panel notifications',
@@ -109,6 +110,8 @@ Ext.define('NextThought.app.notifications.components.List', {
 		this.highlightItem = this.types[1];
 
 		this.NotificationsStore = NextThought.app.notifications.StateStore.getInstance();
+
+		this.WindowActions = NextThought.app.windows.Actions.create();
 
 		this.on({
 			activate: this.onActivate.bind(this),

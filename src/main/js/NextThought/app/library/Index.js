@@ -22,7 +22,8 @@ Ext.define('NextThought.app.library.Index', {
 		'NextThought.app.library.courses.components.Page',
 		'NextThought.app.store.StateStore',
 		'NextThought.app.course.catalog.TabPanel',
-		'NextThought.app.library.courses.components.available.CourseWindow'
+		'NextThought.app.library.courses.components.available.CourseWindow',
+		'NextThought.app.library.courses.components.available.CourseDetailWindow'
 	],
 
 
