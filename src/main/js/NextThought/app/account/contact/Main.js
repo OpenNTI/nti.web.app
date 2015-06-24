@@ -37,7 +37,7 @@ Ext.define('NextThought.app.account.contact.Main', {
 					ui: 'primary',
 					scale: 'large',
 					name: 'submit',
-					style: {float: 'right'},
+					style: {'float': 'right'},
 					text: getString('NextThought.view.account.contact.Main.submit'),
 					handler: function(b) {
 						b.up('contact-main-view').submit(b);
@@ -48,7 +48,7 @@ Ext.define('NextThought.app.account.contact.Main', {
 					ui: 'secondary',
 					scale: 'large',
 					name: 'cancel',
-					style: {float: 'right'},
+					style: {'float': 'right'},
 					text: getString('NextThought.view.account.contact.Main.cancel'),
 					handler: function(b) {
 						b.up('window').close();
