@@ -10,7 +10,7 @@ Ext.define('NextThought.app.navigation.Index', {
 		'NextThought.app.navigation.StateStore',
 		'NextThought.app.account.identity.Index',
 		'NextThought.app.notifications.Tab',
-		'NextThought.app.navigation.components.Default'
+		'NextThought.app.search.SearchBar'
 	],
 
 	cls: 'main-navigation',
@@ -23,7 +23,8 @@ Ext.define('NextThought.app.navigation.Index', {
 		]},
 		{cls: 'nav-container'},
 		{cls: 'identity-container'},
-		{cls: 'notification-container'}
+		{cls: 'notification-container'},
+		{cls: 'search-container'}
 	]),
 
 
@@ -32,7 +33,8 @@ Ext.define('NextThought.app.navigation.Index', {
 		backEl: '.back-container .back',
 		navContainerEl: '.nav-container',
 		identityEl: '.identity-container',
-		notificationEl: '.notification-container'
+		notificationEl: '.notification-container',
+		searchEl: '.search-container'
 	},
 
 
@@ -134,8 +136,17 @@ Ext.define('NextThought.app.navigation.Index', {
 			pushRootRoute: this.pushRoute.bind(this)
 		});
 
+		this.searchCmp = NextThought.app.search.SearchBar.create({
+			setMenuOpen: this.setState.bind(this, {active: 'searchCmp'}),
+			setMenuClosed: this.setState.bind(this, {}),
+			pushRootRoute: this.pushRoute.bind(this),
+			onSearchFocus: this.onSearchFocus.bind(this),
+			onSearchBlur: this.onSearchBlur.bind(this)
+		});
+
 		this.identityCmp.render(this.identityEl);
 		this.notificationCmp.render(this.notificationEl);
+		this.searchCmp.render(this.searchEl);
 
 		this.on('destroy', 'destroy', this.identityCmp);
 
@@ -161,6 +172,16 @@ Ext.define('NextThought.app.navigation.Index', {
 	},
 
 
+	onSearchFocus: function() {
+		this.addCls('search-focused');
+	},
+
+
+	onSearchBlur: function() {
+		this.removeCls('search-focused');
+	},
+
+
 	/**
 	 * Override this method in the state mixin so it doesn't
 	 * write the state to local storage. We only want this state
@@ -183,5 +204,6 @@ Ext.define('NextThought.app.navigation.Index', {
 
 		showOrHide('identityCmp');
 		showOrHide('notificationCmp');
+		showOrHide('searchCmp');
 	}
 });

@@ -2,6 +2,18 @@
 	.nav-container {
 		float: left;
 		height: 100%;
+		position: relative;
+		z-index: -1;
+		left: 0;
+		transition: left 0.5s;
+	}
+
+	.search-container {
+		position: absolute;
+		top: 0; bottom: 0;
+		right: 140px; //70 for the identity and 70 for the notifications
+		width: 200px;
+		transition: width 0.5s, right 0.5s, margin-right 0.5s;
 	}
 
 	.identity-container {
@@ -21,7 +33,7 @@
 	.branding {
 		display: none;
 		height: 100%;
-		background-size: cover;
+		background-size: cover !important;
 		min-width: 72px;
 		cursor: pointer;
 	}
@@ -68,6 +80,18 @@
 
 		.back {
 			display: block;
+		}
+	}
+
+	&.search-focused {
+		.nav-container {
+			left: -100%;
+		}
+
+		.search-container {
+			right: 50%;
+			width: 600px;
+			margin-right: -300px;
 		}
 	}
 }

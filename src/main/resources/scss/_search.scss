@@ -1,25 +1,18 @@
 
 
-.search-field-wrap{
-	height: 62px;
-	border: 1px solid #d2d2d2 !important;
-	border-top-width: 0 !important;
-	border-right-width: 0 !important;
-	border-left-width: 0 !important;
+.search-field-wrap {
 	padding: 0;
 
 	.search-field {
-		position: absolute;
-		top: 13px;
-		left: 20px; right: 13px;
-
-		box-shadow: inset 1px 1px 2px 0 rgba(0,0,0,0.2);
-
-		border: 1px solid #a0a0a0;
+		border: 1px solid #e7e7e7;
 		border-radius: 3px;
-		background: #ffffff;
+		background: #f5f5f5;
+		margin: 18px 0;
 		white-space: nowrap;
 		overflow: hidden;
+		position: relative;
+
+		@include icon('rhp-search', $top: 7px, $left: auto, $right: 5px);
 
 		* {
 			vertical-align: middle;
@@ -32,21 +25,17 @@
 			padding-right: 0;
 			font: 11pt $font;
 			width: 100%;
-		}
 
-		.placeholder {
-			@include placeholder-style;
-			position: absolute;
-			top: 0; left: 0;
-			font: 11pt $font;
-			font-style: italic;
-			margin: 7px 0 0 7px;
+			&::-webkit-input-placeholder ,
+			&::-moz-placeholder { /* Firefox 18- */
+				   color: red;  
+			}
 		}
 
 		a.trigger {
+			display: none;
 			right:0; top:0;
 			position: absolute;
-			display: block;
 			background: url(../images/elements/search-nib.png) left center no-repeat;
 			width: 20px;
 			height: 36px
