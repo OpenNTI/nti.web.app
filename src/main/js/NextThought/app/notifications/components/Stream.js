@@ -116,5 +116,10 @@ Ext.define('NextThought.app.notifications.components.Stream', {
 		if (wantedDirection && top > triggerZone) {
 			this.prefetchNext();
 		}
+	},
+
+
+	rowClicked: function(view, rec, item) {
+		this.WindowActions.pushWindow(rec, null, item);
 	}
 });
