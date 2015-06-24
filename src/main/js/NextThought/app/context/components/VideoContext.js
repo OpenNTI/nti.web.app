@@ -35,8 +35,8 @@ Ext.define('NextThought.app.context.components.VideoContext', {
 
 		var context = this.ContextStore.getContext(),
 			currentContext = context.last(),
-			contextRecord = currentContext && currentContext.obj, 
-			startTimeSeconds;
+			contextRecord = currentContext && currentContext.obj,
+			startTimeSeconds, pointer;
 
 		if (contextRecord && contextRecord.get('NTIID') === this.containerId) {
 			this.videoEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
@@ -44,24 +44,24 @@ Ext.define('NextThought.app.context.components.VideoContext', {
 		}
 		else {
 			this.videoplayer = Ext.widget('content-video-navigation', {
-	            playlist: [this.video],
-	            renderTo: this.videoEl,
-	            playerWidth: this.WIDTH,
-	            width: this.WIDTH,
-	            floatParent: this
-	        });	
+				playlist: [this.video],
+				renderTo: this.videoEl,
+				playerWidth: this.WIDTH,
+				width: this.WIDTH,
+				floatParent: this
+			});
 
-	        if (this.range) {
-	            pointer = this.range.start || {};
-	            startTimeSeconds = pointer.seconds / 1000; //They are actually millis not seconds
-	        }
-	        if (startTimeSeconds > 0) {
-	            this.videoplayer.setVideoAndPosition(this.videoplayer.currentVideoId, startTimeSeconds);
-	        }
+			if (this.range) {
+				pointer = this.range.start || {};
+				startTimeSeconds = pointer.seconds / 1000; //They are actually millis not seconds
+			}
+			if (startTimeSeconds > 0) {
+				this.videoplayer.setVideoAndPosition(this.videoplayer.currentVideoId, startTimeSeconds);
+			}
 		}
 
-        if(this.snippet) {
-        	this.textEl.appendChild(this.snippet);
-        }
+		if(this.snippet) {
+			this.textEl.appendChild(this.snippet);
+		}
 	}
 });
