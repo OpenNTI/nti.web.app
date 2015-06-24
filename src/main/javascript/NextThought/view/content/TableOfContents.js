@@ -174,7 +174,8 @@ Ext.define('NextThought.view.content.TableOfContents', {
 		var rec, store = new Ext.data.Store({
 			model: NextThought.model.TopicNode,
 			data: Library.getToc(record)
-		});
+		}), maxLevel = record.get('PresentationProperties').toc["max-level"];
+
 
 		store.remove(
 			store.getRange().filter(function(_) { return _.get('suppressed'); }));
@@ -193,6 +194,16 @@ Ext.define('NextThought.view.content.TableOfContents', {
 					return o.isUnder(root);
 				}
 			});*/
+		}
+		if (maxLevel || maxLevel === 0)  {
+			store.filter([
+				{
+					filterFn: function(item) { 
+						return item.get('levelnum') <= maxLevel;
+
+					}
+				}
+			]);
 		}
 
 		this.bindStore(store);
