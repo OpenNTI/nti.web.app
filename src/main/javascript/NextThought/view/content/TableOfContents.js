@@ -174,7 +174,9 @@ Ext.define('NextThought.view.content.TableOfContents', {
 		var rec, store = new Ext.data.Store({
 			model: NextThought.model.TopicNode,
 			data: Library.getToc(record)
-		}), maxLevel = record.get('PresentationProperties').toc["max-level"];
+		}), presentationProperties = record.get('PresentationProperties'),
+        tocProps = presentationProperties && presentationProperties.toc,
+        maxLevel = tocProps && tocProps['max-level'];
 
 
 		store.remove(
@@ -195,6 +197,7 @@ Ext.define('NextThought.view.content.TableOfContents', {
 				}
 			});*/
 		}
+
 		if (maxLevel || maxLevel === 0)  {
 			store.filter([
 				{
