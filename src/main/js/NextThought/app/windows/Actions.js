@@ -62,7 +62,7 @@ Ext.define('NextThought.app.windows.Actions', {
 			fetchObject;
 
 		if (typeof objectOrNTIID !== 'string') {
-			id = object.getId();
+			id = objectOrNTIID.getId();
 		} else {
 			id = objectOrNTIID;
 		}
