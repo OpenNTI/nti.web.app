@@ -61,10 +61,6 @@ Ext.define('NextThought.app.search.Index', {
 		this.isActive = true;
 
 		this.mon(this.SearchStore, 'context-updated', this.onContextUpdate);
-
-		if (this.currentSearch) {
-			this.doNewSearch();
-		}
 	},
 
 
@@ -100,16 +96,15 @@ Ext.define('NextThought.app.search.Index', {
 
 		query = Ext.Object.toQueryString(query);
 
-		//TODO: change this to query params once the server can support it
-		this.replaceRoute('Search', '/#' + query);
+		this.replaceRoute('Search', '/?' + query);
 	},
 
 
 	showSearch: function(route, subRoute) {
 		var params = route.queryParams,
-			term = params.term,
-			bundle = params.bundle,
-			page = params.page,
+			term = params.q,
+			bundle = params.s,
+			page = params.p,
 			filter = params.filter;
 
 		this.NavActions.updateNavBar({
@@ -143,7 +138,7 @@ Ext.define('NextThought.app.search.Index', {
 		};
 
 		if (!this.isActive) {
-			return this.onActivate();
+			this.onActivate();
 		}
 
 		this.doNewSearch();

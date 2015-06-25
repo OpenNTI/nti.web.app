@@ -62,9 +62,12 @@ Ext.define('NextThought.app.search.components.Results', {
 
 
 	showEmpty: function() {
-		if (!this.emptyCmp) {
-			this.emptyCmp = this.add({
+		var emptyCmp = this.down('[emptyCmp]');
+
+		if (!emptyCmp) {
+			this.add({
 				xtype: 'box',
+				emptyCmp: true,
 				autoEl: {cls: 'empty control-item', html: 'No results found.'}
 			});
 		}
@@ -72,9 +75,12 @@ Ext.define('NextThought.app.search.components.Results', {
 
 
 	showError: function() {
-		if (!this.erroCmp) {
-			this.emptyCmp = this.add({
+		var errorCmp = this.down('[errorCmp]');
+
+		if (!erroCmp) {
+			this.add({
 				xtype: 'box',
+				errorCmp: true,
 				autoEl: {cls: 'error control-item', html: 'Error loading search results.'}
 			});
 		}
@@ -82,9 +88,12 @@ Ext.define('NextThought.app.search.components.Results', {
 
 
 	showLoading: function() {
-		if (!this.loadingCmp) {
-			this.loadingCmp = this.add({
+		var loadingCmp = this.down('[loadingCmp]');
+
+		if (!loadingCmp) {
+			this.add({
 				xtype: 'box',
+				loadingCmp: true,
 				autoEl: {cls: 'loading-container control-item', cn: {cls: 'loading', html: 'Loading...'}}
 			});
 		}
@@ -92,17 +101,21 @@ Ext.define('NextThought.app.search.components.Results', {
 
 
 	removeLoading: function() {
-		if (this.loadingCmp) {
-			this.remove(this.loadingCmp, true);
-			delete this.loadingCmp;
+		var loadingCmp = this.down('[loadingCmp]');
+
+		if (loadingCmp) {
+			this.remove(loadingCmp, true);
 		}
 	},
 
 
 	showNext: function(handler) {
-		if (!this.nextCmp) {
-			this.nextCmp = this.add({
+		var nextCmp = this.down('[nextCmp]');
+
+		if (!nextCmp) {
+			nextCmp = this.add({
 				xtype: 'box',
+				nextCmp: true,
 				autoEl: {cls: 'control-item load-more', html: 'Load More'},
 				afterRender: function() {
 					this.mon(this.el, 'click', handler);
@@ -113,9 +126,10 @@ Ext.define('NextThought.app.search.components.Results', {
 
 
 	removeNext: function() {
-		if (this.nextCmp) {
-			this.remove(this.nextCmp);
-			delete this.nextCmp;
+		var nextCmp = this.down('[nextCmp]');
+
+		if (nextCmp) {
+			this.remove(nextCmp, true);
 		}
 	}
 });

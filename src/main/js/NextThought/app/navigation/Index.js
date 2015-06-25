@@ -218,6 +218,5 @@ Ext.define('NextThought.app.navigation.Index', {
 
 		showOrHide('identityCmp');
 		showOrHide('notificationCmp');
-		showOrHide('searchCmp');
 	}
 });

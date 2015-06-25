@@ -159,7 +159,7 @@ Ext.define('NextThought.mixins.routing.Path', {
 
 		this.beforeRoute();
 
-		var pathParts = path.split('#'),//TODO: change this back to ? after the server can support it
+		var pathParts = path.split('?'),
 			route = pathParts[0],
 			query = pathParts[1],
 			parts = route.split('/'),
@@ -198,7 +198,7 @@ Ext.define('NextThought.mixins.routing.Path', {
 		subRoute = parts.slice(i).join('/');
 
 		if (query) {
-			subRoute += '#' + query;
+			subRoute += '?' + query;
 		}
 
 		this.currentRoute = currentRoute;

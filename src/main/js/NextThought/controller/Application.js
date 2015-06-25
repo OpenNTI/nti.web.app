@@ -78,8 +78,8 @@ Ext.define('NextThought.controller.Application', {
 		path = parts.slice(1).join('/');
 
 		//TODO: change to search once we can handle query params
-		if (window.location.hash) {
-			path += window.location.hash;
+		if (window.location.search) {
+			path += window.location.search;
 		}
 
 		return this.handleRoute(document.title, path);
@@ -98,7 +98,7 @@ Ext.define('NextThought.controller.Application', {
 		var body = this.getBody(),
 			store = this.ContextStore;
 
-		//if we set the route with a fragment it get passed in here
+		//if we set the route with a fragement it get passed in here
 		//so make sure we split it off
 		route = route.split('#')[0];
 
@@ -121,7 +121,7 @@ Ext.define('NextThought.controller.Application', {
 	__mergeRoute: function(route) {
 		route = Globals.trimRoute(route);
 
-		var parts = route.split('#'),//TODO: change this back to query params after the server can support it
+		var parts = route.split('?'),
 			queryString = parts[1];
 
 		route = Globals.trimRoute(parts[0]);
@@ -133,7 +133,7 @@ Ext.define('NextThought.controller.Application', {
 		}
 
 		if (queryString) {
-			route += '#' + queryString;
+			route += '?' + queryString;
 		}
 
 		return route;

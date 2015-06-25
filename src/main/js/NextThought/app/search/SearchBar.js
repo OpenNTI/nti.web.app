@@ -135,18 +135,18 @@ Ext.define('NextThought.app.search.SearchBar', {
 		if (this.noRouteOnSearch) { return true; }
 
 		var params = {},
-			route = '/search/#',//TODO: change this back to query params once the server can support them
+			route = '/search/?',
 			page = this.SearchStore.getPageLocation(),
 			bundle = this.SearchStore.getBundleLocation();
 
-		params.term = encodeURIComponent(this.getValue());
+		params.q = encodeURIComponent(this.getValue());
 
 		if (bundle) {
-			params.bundle = ParseUtils.encodeForURI(bundle);
+			params.s = ParseUtils.encodeForURI(bundle);
 		}
 
 		if (page) {
-			params.page = ParseUtils.encodeForURI(page);
+			params.p = ParseUtils.encodeForURI(page);
 		}
 
 		route += Ext.Object.toQueryString(params);
