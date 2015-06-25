@@ -268,8 +268,12 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 
 		if (!bar) { return; }
 
+		bar.enableGroupBy(false);
 		this.setState({
 			groupBy: groupBy
+		})
+		.then(function(){
+			bar.enableGroupBy(true);
 		});
 	},
 

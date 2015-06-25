@@ -63,13 +63,18 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Fil
 
 
 	showGroupByMenu: function() {
-		this.groupByMenu.showBy(this.groupEl, 'tl-tl', this.groupByMenu.offset);
+		var menu = this.groupByMenu, item = menu.down('[checked]');;
+		if (!this.groupEl.hasCls('disabled')) {
+				if (item) {
+					menu.insert(0, item);
+				}
+				menu.showBy(this.groupEl, 'tl-tl');
+		}
 	},
 
 
 	createGroupByMenu: function() {
-		var type = this.currentGrouping,
-			items = [
+		var type = this.currentGrouping, items = [
 				{ text: getString('NextThought.view.courseware.assessment.assignments.FilterBar.alllessons'), groupBy: 'lesson', checked: type === 'lesson'},
 				{ text: getString('NextThought.view.courseware.assessment.assignments.FilterBar.due'), groupBy: 'due', checked: type === 'due'},
 				{ text: getString('NextThought.view.courseware.assessment.assignments.FilterBar.completion'), groupBy: 'completion', checked: type === 'completion'}
@@ -127,12 +132,21 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Fil
 
 	switchOrdering: function(item, status) {
 		if (!status) { return; }
-		
+
 
 		this.updateOrdering(item);
 		this.fireEvent('filters-changed');
 	},
 
+	enableGroupBy: function(status){
+		if(status){
+			this.groupEl.el.removeCls('disabled');
+			this.groupByMenu.enable(true);
+		}else{
+			this.groupEl.el.addCls('disabled');
+			this.groupByMenu.disable(true);
+		}
+	},
 
 	getShowType: function() {
 

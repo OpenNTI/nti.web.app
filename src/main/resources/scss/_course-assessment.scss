@@ -1013,7 +1013,8 @@ canvas.x-component-course-assessment {
 		&.disabled{
 			cursor: default;
 			opacity: 0.5;
-
+			pointer-events: none; 
+			
 			&:hover {
 				color: inherit;
 				&::after{
