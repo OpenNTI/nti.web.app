@@ -55,7 +55,7 @@ Ext.define('NextThought.app.windows.Index', {
 	},
 
 
-	showWindow: function(object, state, path, el, monitors, precache) {
+	showWindow: function(object, state, el, monitors, precache) {
 		var type = this.WindowStore.getComponentForMimeType(object.mimeType || object),
 			cmp;
 

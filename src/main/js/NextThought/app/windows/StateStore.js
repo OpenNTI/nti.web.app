@@ -49,8 +49,8 @@ Ext.define('NextThought.app.windows.StateStore', {
 	},
 
 
-	fireShowWindow: function(object, state, path, el, monitors, precache) {
-		this.fireEvent('show-window', object, state, path, el, monitors, precache);
+	fireShowWindow: function(object, state, el, monitors, precache) {
+		this.fireEvent('show-window', object, state, el, monitors, precache);
 	},
 
 

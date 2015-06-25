@@ -54,10 +54,9 @@ Ext.define('NextThought.app.windows.Actions', {
 	 *
 	 *
 	 * @param  {String|Model} objectOrNTIID the object or ntiid of the object to show
-	 * @param  {Array} path       the path to show for the modal, or a promise that fulfills with the path
 	 * @return {Promise}          fulfills when the window is open
 	 */
-	showWindow: function(objectOrNTIID, state, path, el, monitors, precache) {
+	showWindow: function(objectOrNTIID, state, el, monitors, precache) {
 		var me = this, id, cache,
 			fetchObject;
 
@@ -79,14 +78,12 @@ Ext.define('NextThought.app.windows.Actions', {
 		if (typeof objectOrNTIID === 'string' && ParseUtils.isNTIID(objectOrNTIID)) {
 			fetchObject = this.__resolveBeforeShow(objectOrNTIID);
 		} else {
-			fetchObject = objectOrNTIID;
+			fetchObject = Promise.resolve(objectOrNTIID);
 		}
 
-		return Promise.all([
-				fetchObject,
-				path
-			]).then(function(results) {
-				me.WindowStore.fireShowWindow(results[0], state, results[1], el, monitors, precache);
+		return fetchObject
+			.then(function(result) {
+				me.WindowStore.fireShowWindow(result, state, el, monitors, precache);
 			});
 	}
 });
