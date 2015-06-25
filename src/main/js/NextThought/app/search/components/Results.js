@@ -15,8 +15,8 @@ Ext.define('NextThought.app.search.components.Results', {
 		'communityheadlinepost': 'Topic',
 		'generalforumcomment': 'Topic Comment',
 		'messageinfo': 'Chat',
-		'personalblogentrypost': 'Blog',
-		'personalblogcomment': 'Blog Comment',
+		'personalblogentrypost': 'Thought',
+		'personalblogcomment': 'Thought Comment',
 		'bookcontent': 'Reading'
 	},
 
@@ -58,5 +58,64 @@ Ext.define('NextThought.app.search.components.Results', {
 			hit: hit,
 			label: label
 		};
+	},
+
+
+	showEmpty: function() {
+		if (!this.emptyCmp) {
+			this.emptyCmp = this.add({
+				xtype: 'box',
+				autoEl: {cls: 'empty control-item', html: 'No results found.'}
+			});
+		}
+	},
+
+
+	showError: function() {
+		if (!this.erroCmp) {
+			this.emptyCmp = this.add({
+				xtype: 'box',
+				autoEl: {cls: 'error control-item', html: 'Error loading search results.'}
+			});
+		}
+	},
+
+
+	showLoading: function() {
+		if (!this.loadingCmp) {
+			this.loadingCmp = this.add({
+				xtype: 'box',
+				autoEl: {cls: 'loading-container control-item', cn: {cls: 'loading', html: 'Loading...'}}
+			});
+		}
+	},
+
+
+	removeLoading: function() {
+		if (this.loadingCmp) {
+			this.remove(this.loadingCmp, true);
+			delete this.loadingCmp;
+		}
+	},
+
+
+	showNext: function(handler) {
+		if (!this.nextCmp) {
+			this.nextCmp = this.add({
+				xtype: 'box',
+				autoEl: {cls: 'control-item load-more', html: 'Load More'},
+				afterRender: function() {
+					this.mon(this.el, 'click', handler);
+				}
+			});
+		}
+	},
+
+
+	removeNext: function() {
+		if (this.nextCmp) {
+			this.remove(this.nextCmp);
+			delete this.nextCmp;
+		}
 	}
 });

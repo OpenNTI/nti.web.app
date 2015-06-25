@@ -16,9 +16,42 @@
 }
 
 .search-results {
-	.search-result {
+
+	.search-result, .control-item {
 		background-color: white;
 		margin-bottom: 10px;
+	}
+
+	.control-item {
+		height: 75px;
+		line-height: 75px;
+		text-align: center;
+		color: $primary-blue;
+
+		&.error {
+			color: $primary-red;
+		}
+
+		&.loading-container {
+			position: relative;
+
+			.loading {
+				position: absolute;
+				color: $primary-grey;
+				line-height: 24px;//height of the spinner
+				padding-left: 30px;//width of the spinner + 6px
+				top: 50%; left: 50%;
+				margin-top: -12px;
+				margin-left: -51px;
+
+				&::before {
+					@include loadingSpinner($top: 0, $left: 0);
+				}
+			}
+		}
+	}
+
+	.search-result {
 		padding: 10px;
 
 		.title {

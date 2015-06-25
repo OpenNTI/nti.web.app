@@ -72,6 +72,7 @@ Ext.define('NextThought.app.search.Index', {
 		this.isActive = false;
 
 		this.mun(this.SearchStore, 'context-update', this.onContextUpdate);
+		this.clearResults();
 	},
 
 
@@ -99,6 +100,7 @@ Ext.define('NextThought.app.search.Index', {
 
 		query = Ext.Object.toQueryString(query);
 
+		//TODO: change this to query params once the server can support it
 		this.replaceRoute('Search', '/#' + query);
 	},
 
@@ -158,13 +160,11 @@ Ext.define('NextThought.app.search.Index', {
 		this.clearResults();
 
 		this.loadSearchPage(1);
-
-		// me.SearchActions.loadSearchPage(search.term, accepts, search.bundle, search.page);
 	},
 
 
 	clearResults: function() {
-
+		this.Results.removeAll(true);
 	},
 
 
@@ -173,22 +173,34 @@ Ext.define('NextThought.app.search.Index', {
 	},
 
 
-	showLoading: function() {},
+	showLoading: function() {
+		this.Results.showLoading();
+	},
 
 
-	removeLoading: function() {},
+	removeLoading: function() {
+		this.Results.removeLoading();
+	},
 
 
-	showError: function() {},
+	showError: function() {
+		this.Results.showError();
+	},
 
 
-	showNext: function() {},
+	showNext: function() {
+		this.Results.showNext(this.loadNextPage.bind(this));
+	},
 
 
-	removeNext: function() {},
+	removeNext: function() {
+		this.Results.removeNext();
+	},
 
 
-	showEmpty: function() {},
+	showEmpty: function() {
+		this.Results.showEmpty();
+	},
 
 
 	changeFilter: function(filter) {
@@ -219,6 +231,7 @@ Ext.define('NextThought.app.search.Index', {
 			return this.loadSearchPage(1);
 		}
 
+		this.removeNext();
 		this.showLoading();
 
 		StoreUtils.loadBatch(this.nextPageLink)
@@ -230,18 +243,20 @@ Ext.define('NextThought.app.search.Index', {
 	onLoadResults: function(batch) {
 		var nextLink = batch.Links && Service.getLinkFrom(batch.Links, 'batch-next');
 
+		this.removeLoading();
+
+		if (batch.Items && batch.Items.length) {
+			this.Results.addResults(batch.Items);
+		} else {
+			this.showEmpty();
+		}
+
 		if (nextLink) {
 			this.nextPageLink = nextLink;
 			this.showNext();
 		} else {
 			delete this.nextPageLink;
 			this.removeNext();
-		}
-
-		if (batch.Items && batch.Items.length) {
-			this.Results.addResults(batch.Items);
-		} else {
-			this.showEmpty();
 		}
 
 		this.OptionMenu.selectType(this.currentSearch.filter);
