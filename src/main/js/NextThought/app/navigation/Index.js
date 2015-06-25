@@ -116,6 +116,18 @@ Ext.define('NextThought.app.navigation.Index', {
 		} else {
 			this.noLibraryLink = false;
 		}
+
+		if (config && config.noRouteOnSearch) {
+			this.noRouteOnSearch = true;
+			if (this.searchCmp) {
+				this.searchCmp.noRouteOnSearch = true;
+			}
+		} else {
+			delete this.noRouteOnSearch;
+			if (this.searchCmp) {
+				delete this.searchCmp.noRouteOnSearch;
+			}
+		}
 	},
 
 
@@ -142,7 +154,8 @@ Ext.define('NextThought.app.navigation.Index', {
 			setMenuClosed: this.setState.bind(this, {}),
 			pushRootRoute: this.pushRoute.bind(this),
 			onSearchFocus: this.onSearchFocus.bind(this),
-			onSearchBlur: this.onSearchBlur.bind(this)
+			onSearchBlur: this.onSearchBlur.bind(this),
+			noRouteOnSearch: this.noRouteOnSearch
 		});
 
 		this.identityCmp.render(this.identityEl);

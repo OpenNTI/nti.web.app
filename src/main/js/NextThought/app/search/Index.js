@@ -60,7 +60,7 @@ Ext.define('NextThought.app.search.Index', {
 	onActivate: function() {
 		this.isActive = true;
 
-		this.mon(this.SearchStore, 'context-update', this.onContextUpdate);
+		this.mon(this.SearchStore, 'context-updated', this.onContextUpdate);
 
 		if (this.currentSearch) {
 			this.doNewSearch();
@@ -71,7 +71,7 @@ Ext.define('NextThought.app.search.Index', {
 	onDeactivate: function() {
 		this.isActive = false;
 
-		this.mun(this.SearchStore, 'context-update', this.onContextUpdate);
+		this.mun(this.SearchStore, 'context-updated', this.onContextUpdate);
 		this.clearResults();
 	},
 
@@ -113,7 +113,8 @@ Ext.define('NextThought.app.search.Index', {
 			filter = params.filter;
 
 		this.NavActions.updateNavBar({
-			hideBranding: true
+			hideBranding: true,
+			noRouteOnSearch: true
 		});
 
 		this.setTitle('Search');
@@ -151,7 +152,29 @@ Ext.define('NextThought.app.search.Index', {
 	},
 
 
-	onContextUpdate: function() {},
+	onContextUpdate: function() {
+		var term = this.SearchStore.getTerm();
+
+		if (this.currentSearch.term === term) {
+			return;
+		}
+
+		this.currentSearch.term = term;
+
+		this.updateRoute();
+	},
+
+
+	changeFilter: function(filter) {
+		if (this.currentSearch.filter === filter) {
+			return;
+		}
+
+		this.currentSearch.filter = filter;
+
+		this.updateRoute();
+	},
+
 
 
 	doNewSearch: function() {
@@ -200,17 +223,6 @@ Ext.define('NextThought.app.search.Index', {
 
 	showEmpty: function() {
 		this.Results.showEmpty();
-	},
-
-
-	changeFilter: function(filter) {
-		if (this.currentSearch.filter === filter) {
-			return;
-		}
-
-		this.currentSearch.filter = filter;
-
-		this.updateRoute();
 	},
 
 

@@ -132,6 +132,8 @@ Ext.define('NextThought.app.search.SearchBar', {
 
 
 	doNavigation: function() {
+		if (this.noRouteOnSearch) { return true; }
+
 		var params = {},
 			route = '/search/#',//TODO: change this back to query params once the server can support them
 			page = this.SearchStore.getPageLocation(),
