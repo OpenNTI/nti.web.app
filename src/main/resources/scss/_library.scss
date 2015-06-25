@@ -715,6 +715,10 @@ li.library-grid-item {
 	background-color: white;
 	position: fixed !important;
 
+	&.object-window {
+		top: 110px !important;
+	}
+
 	.header{
 		position: relative;
 		background-color: $quad-grey;

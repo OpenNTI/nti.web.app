@@ -113,6 +113,8 @@ Ext.define('NextThought.app.windows.StateStore', {
 		var html = this.getHTML(),
 			viewport = this.getViewport();
 
+		if (html.classList.contains("window-open")) { return; }
+
 		this.fireEvent('lock-body-height');
 		this.incrementOpenWindows();
 

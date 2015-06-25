@@ -12,7 +12,24 @@ Ext.define('NextThought.app.library.courses.components.available.CourseDetailWin
 		me.showCourse(this.record);
 		wait()
 			.then(me.show.bind(me));
+	},
 
+	onBeforeClose: function() {
+		var me = this,
+			active = me.getLayout().getActiveItem(),
+			warning;
+
+		if (active && active.stopClose) {
+			warning = active.stopClose();
+		}
+
+		if (warning) {
+			warning
+				.then(function() {
+					me.doClose();
+				});
+			return false;
+		}
 	}
 }, function() {
 	NextThought.app.windows.StateStore.register(NextThought.model.courses.CourseCatalogEntry.mimeType, this);

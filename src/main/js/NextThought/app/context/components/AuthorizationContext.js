@@ -55,7 +55,6 @@ Ext.define('NextThought.app.context.components.AuthorizationContext', {
 
 
 	onEnrollClick: function(e) {
-		debugger;
 		this.WindowActions.pushWindow(this.catalogEntry, null, e);
 	}
 });
