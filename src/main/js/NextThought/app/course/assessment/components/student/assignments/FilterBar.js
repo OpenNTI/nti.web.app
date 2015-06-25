@@ -63,7 +63,7 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Fil
 
 
 	showGroupByMenu: function() {
-		var menu = this.groupByMenu, item = menu.down('[checked]');;
+		var menu = this.groupByMenu, item = menu.down('[checked]');
 		if (!this.groupEl.hasCls('disabled')) {
 				if (item) {
 					menu.insert(0, item);

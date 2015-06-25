@@ -65,7 +65,13 @@ Ext.define('NextThought.app.forums.components.forum.parts.FilterBar', {
 
 
 	showGroupByMenu: function() {
-		this.groupByMenu.showBy(this.groupEl, 'tl-tl', this.groupByMenu.offset);
+		var menu = this.groupByMenu, item = menu.down('[checked]');
+		if(!this.groupEl.hasCls('disabled')){
+			if(item){
+				menu.insert(0, item);
+			}
+			menu.showBy(this.groupEl, 'tl-tl');
+		}
 	},
 
 
