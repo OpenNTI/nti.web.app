@@ -21,6 +21,11 @@ Ext.define('NextThought.app.context.StateStore', {
 	},
 
 
+	getRootContext: function() {
+		return this.current_context[this.current_context.length - 1];
+	},
+
+
 	getRootBundle: function() {
 		var context = this.current_context,
 			i, x;
@@ -32,6 +37,18 @@ Ext.define('NextThought.app.context.StateStore', {
 				return x.obj;
 			}
 		}
+	},
+
+
+	getReaderLocation: function() {
+		var root = this.getRootContext(),
+			cmp = root && root.cmp;
+
+		if (cmp && cmp instanceof NextThought.app.content.content.Index) {
+			return cmp.getLocation();
+		}
+
+		return null;
 	},
 
 

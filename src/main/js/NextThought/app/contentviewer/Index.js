@@ -127,5 +127,10 @@ Ext.define('NextThought.app.contentviewer.Index', {
 
 	allowNavigation: function() {
 		return this.reader ? this.reader.allowNavigation() : true;
+	},
+
+
+	getLocation: function() {
+		return this.reader.getLocation();
 	}
 });

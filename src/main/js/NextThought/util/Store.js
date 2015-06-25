@@ -108,7 +108,7 @@ Ext.define('NextThought.util.Store', {
 
 				json[itemProp] = items;
 
-				return json
+				return json;
 			});
 	},
 

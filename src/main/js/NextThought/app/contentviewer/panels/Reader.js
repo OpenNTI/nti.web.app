@@ -202,6 +202,13 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 	},
 
 
+	getLocation: function() {
+		var reader = this.getReaderContent();
+
+		return reader && reader.getLocation();
+	},
+
+
 	setPageInfo: function(pageInfo, bundle) {
 		var reader = this.getReaderContent(),
 			toolbar = this.getToolbar();

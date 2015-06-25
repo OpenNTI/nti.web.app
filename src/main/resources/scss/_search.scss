@@ -1,3 +1,45 @@
+.search-advanced-menu {
+	margin: 40px 0;
+
+	.search-option {
+		font-weight: 300;
+		line-height: 1.75em;
+		font-size: 1em;
+		margin-right: 1.5em;
+		color: $tertiary-grey;
+		cursor: pointer;
+
+		&.active {
+			color: $primary-blue;
+		}
+	}
+}
+
+.search-results {
+	.search-result {
+		background-color: white;
+		margin-bottom: 10px;
+		padding: 10px;
+
+		.title {
+			color: $primary-blue;
+			font-size: 1.25em;
+		}
+
+		.fragments {
+			font-size: 0.875em;
+
+			.fragment {
+				line-height: 2em;
+				span, .term {
+					font-weight: 700;
+					font-size: 0.9rem;
+				}
+			}
+		}
+	}
+}
+
 
 
 .search-field-wrap {
@@ -12,7 +54,6 @@
 		overflow: hidden;
 		position: relative;
 
-		@include icon('rhp-search', $top: 7px, $left: auto, $right: 5px);
 
 		* {
 			vertical-align: middle;
@@ -39,6 +80,15 @@
 			background: url(../images/elements/search-nib.png) left center no-repeat;
 			width: 20px;
 			height: 36px
+		}
+
+		.search-icon {
+			top: 0; right: 0;
+			height: 36px;
+			width: 25px;
+			cursor: pointer;
+
+			@include icon('rhp-search', $position: absolute, $top: 9px, $left: 0);
 		}
 	}
 }

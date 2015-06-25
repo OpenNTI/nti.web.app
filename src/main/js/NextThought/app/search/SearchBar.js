@@ -3,8 +3,21 @@ Ext.define('NextThought.app.search.SearchBar', {
 	alias: 'widget.search-searchbar',
 
 	requires: [
+		'NextThought.app.search.Actions',
 		'NextThought.app.search.components.AdvancedOptions'
 	],
+
+	BUFFER: 500,
+
+	specialKeys: {
+		8: true,	//Ext.EventObject.BACKSPACE
+		13: true,	//Ext.EventObject.ENTER
+		27: true,	//Ext.EventObject.ESC
+		32: true,	//Ext.EventObject.SPACE
+		46: true,	//Ext.EventObject.DELETE
+		37: true,	//Ext.EventObject.LEFT
+		39: true	//Ext.EventObject.RIGHT
+	},
 
 
 	renderTpl: Ext.DomHelper.markup({
@@ -14,7 +27,8 @@ Ext.define('NextThought.app.search.SearchBar', {
 				cls: 'search-field',
 				cn: [
 					{tag: 'input', type: 'text', placeholder: getString('NextThought.view.form.fields.SearchField.placeholder')},
-					{tag: 'a', href: '#', cls: 'trigger'}
+					{tag: 'a', href: '#', cls: 'trigger'},
+					{cls: 'search-icon'}
 				]
 			}
 		]
@@ -24,13 +38,19 @@ Ext.define('NextThought.app.search.SearchBar', {
 	renderSelectors: {
 		boxEl: '.search-field',
 		inputEl: 'input',
-		triggerEl: '.trigger'
+		triggerEl: '.trigger',
+		searchIconEl: '.search-icon'
 	},
 
 
 	constructor: function() {
 		this.callParent(arguments);
 		this.placeholder = 'Search';
+
+		this.SearchActions = NextThought.app.search.Actions.create();
+		this.SearchStore = NextThought.app.search.StateStore.getInstance();
+
+		this.mon(this.SearchStore, 'sync-term', this.syncTerm.bind(this));
 	},
 
 
@@ -39,17 +59,125 @@ Ext.define('NextThought.app.search.SearchBar', {
 
 		this.mon(this.inputEl, {
 			focus: this.onInputFocus.bind(this),
-			blur: this.onInputBlur.bind(this)
+			blur: this.onInputBlur.bind(this),
+			keypress: this.keyPressed.bind(this),
+			keydown: this.keyDown.bind(this)
+		});
+
+		this.mon(this.searchIconEl, {
+			click: this.searchClicked.bind(this)
 		});
 	},
 
 
+	syncTerm: function(term) {
+		if (!this.rendered) {
+			this.on('afterrender', this.syncTerm.bind(this, term));
+			return;
+		}
+
+		this.inputEl.dom.value = term;
+	},
+
+
 	onInputFocus: function() {
+		this.isFocused = true;
 		this.onSearchFocus();
 	},
 
 
 	onInputBlur: function() {
+		this.isFocused = false;
 		this.onSearchBlur();
+	},
+
+
+	keyDown: function(e) {
+		var k = e.getKey();
+
+		if (this.specialKeys[k]) {
+			if (k === e.ESC) {
+				this.inputEl.dom.value = '';
+			}
+
+			e.stopPropagation();
+			this.keyPressed(e);
+		}
+	},
+
+
+	keyPressed: function(e) {
+		e.stopPropagation();
+
+		var k = e.getKey();
+
+		if (k === e.ENTER) {
+			this.doSearch();
+			this.doNavigation();
+		} if (k === e.ESC) {
+			this.doSearch();
+		} else {
+			this.doSearchBuffered();
+		}
+	},
+
+
+	searchClicked: function(e) {
+		if (this.isFocused) {
+			e.stopPropagation();
+			this.doSearch();
+			this.doNavigation();
+		}
+	},
+
+
+	doNavigation: function() {
+		var params = {},
+			route = '/search/#',//TODO: change this back to query params once the server can support them
+			page = this.SearchStore.getPageLocation(),
+			bundle = this.SearchStore.getBundleLocation();
+
+		params.term = encodeURIComponent(this.getValue());
+
+		if (bundle) {
+			params.bundle = ParseUtils.encodeForURI(bundle);
+		}
+
+		if (page) {
+			params.page = ParseUtils.encodeForURI(page);
+		}
+
+		route += Ext.Object.toQueryString(params);
+
+		this.pushRootRoute('Search', route);
+	},
+
+
+	doSearch: function() {
+		clearTimeout(this.searchEventDelayId);
+
+		var val = this.getValue();
+
+		this.SearchActions.setSearchContext(val);
+	},
+
+
+	doSearchBuffered: function() {
+		var me = this;
+
+		clearTimeout(this.searchEventDelayId);
+
+		this.searchEventDelayId = setTimeout(function() {
+			var val = me.getValue();
+
+			if (!val || val.length > 3) {
+				me.doSearch();
+			}
+		}, me.BUFFER);
+	},
+
+
+	getValue: function() {
+		return this.inputEl.getValue();
 	}
 });

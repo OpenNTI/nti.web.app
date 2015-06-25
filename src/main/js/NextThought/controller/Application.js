@@ -77,6 +77,11 @@ Ext.define('NextThought.controller.Application', {
 
 		path = parts.slice(1).join('/');
 
+		//TODO: change to search once we can handle query params
+		if (window.location.hash) {
+			path += window.location.hash;
+		}
+
 		return this.handleRoute(document.title, path);
 	},
 
@@ -116,10 +121,10 @@ Ext.define('NextThought.controller.Application', {
 	__mergeRoute: function(route) {
 		route = Globals.trimRoute(route);
 
-		var parts = route.split('#'),
-			fragment = parts[1];
+		var parts = route.split('#'),//TODO: change this back to query params after the server can support it
+			queryString = parts[1];
 
-		route = parts[0];
+		route = Globals.trimRoute(parts[0]);
 
 		if (route) {
 			route = '/' + this.APP_ROOT + '/' + route + '/';
@@ -127,8 +132,8 @@ Ext.define('NextThought.controller.Application', {
 			route = '/' + this.APP_ROOT + '/';
 		}
 
-		if (fragment) {
-			route += '#' + fragment;
+		if (queryString) {
+			route += '#' + queryString;
 		}
 
 		return route;

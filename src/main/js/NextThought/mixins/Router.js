@@ -93,11 +93,12 @@ Ext.define('NextThought.mixins.Router', {
 	 * @return {[type]} [description]
 	 */
 	getCurrentContext: function() {
-		var context = [],
-			currentRoute = this.getCurrentRoute(),
-			currentTitle = this.getRouteTitle(),
-			myContext = this.getContext(),
-			child = this.getActiveItem(),
+		var me = this,
+			context = [],
+			currentRoute = me.getCurrentRoute(),
+			currentTitle = me.getRouteTitle(),
+			myContext = me.getContext(),
+			child = me.getActiveItem(),
 			childContext = child && child.getCurrentContext && child.getCurrentContext();
 
 		function addContext(c) {
@@ -123,7 +124,8 @@ Ext.define('NextThought.mixins.Router', {
 				var my = {
 					route: currentRoute,
 					title: currentTitle,
-					obj: results[0]
+					obj: results[0],
+					cmp: me
 				};
 
 				addContext(my);

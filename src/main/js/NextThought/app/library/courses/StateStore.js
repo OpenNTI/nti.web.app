@@ -15,8 +15,9 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 	getAllCourses: function() {	return this.ALL_COURSES; },
 
 	__updateCoursesEnrollmentState: function(courses) {
-		var me = this
-		courses.forEach(function(course){
+		var me = this;
+
+		courses.forEach(function(course) {
 			var ntiid = course.getCourseCatalogEntry().getId(),
 				catalog = me.findCourseForNtiid(ntiid),
 				instance = course.get('CourseInstance'),
@@ -24,7 +25,7 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 				isAdmin = course instanceof NextThought.model.courses.CourseInstanceAdministrativeRole;
 
 			if (catalog) {
-				catalog.updateEnrollmentState(course.get('RealEnrollmentStatus') || course.get('Status'), isOpen, isAdmin);	
+				catalog.updateEnrollmentState(course.get('RealEnrollmentStatus') || course.get('Status'), isOpen, isAdmin);
 			}
 		});
 	},
@@ -195,7 +196,7 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 
 
 	findEnrollmentForCourse: function(courseOrNtiid) {
-		var ntiid = courseOrNtiid && courseOrNtiid.isModel ? courseOrNtiid.getId() : courseOrNtiid, 
+		var ntiid = courseOrNtiid && courseOrNtiid.isModel ? courseOrNtiid.getId() : courseOrNtiid,
 			me = this, match;
 
 		function fn(rec) {
@@ -219,5 +220,22 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 		}
 
 		return this.__findIn(this.ALL_COURSES, fn);
+	},
+
+
+	findCourseInstance: function(ntiid) {
+		function fn(rec) {
+			var instance = rec.get('CourseInstance');
+
+			return instance.get('NTIID') === ntiid || rec.get('NTIID') === ntiid;
+		}
+
+		var enrollment = this.__findIn(this.ENROLLED_COURSES, fn);
+
+		if (!enrollment) {
+			enrollment = this.__findIn(this.ADMIN_COURSES, fn);
+		}
+
+		return enrollment && enrollment.get('CourseInstance');
 	}
 });

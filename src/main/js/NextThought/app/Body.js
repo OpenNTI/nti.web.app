@@ -8,6 +8,7 @@ Ext.define('NextThought.app.Body', {
 		'NextThought.app.library.Index',
 		'NextThought.app.content.Index',
 		'NextThought.app.course.Index',
+		'NextThought.app.search.Index',
 		'NextThought.app.notifications.Index',
 		'NextThought.util.Parsing',
 		'NextThought.app.navigation.StateStore',
@@ -49,6 +50,7 @@ Ext.define('NextThought.app.Body', {
 		this.addRoute('/course/:id', this.setCourseActive.bind(this));
 		this.addRoute('/bundle/:id', this.setBundleActive.bind(this));
 		this.addRoute('/notifications/', this.setNotificationsActive.bind(this));
+		this.addRoute('/search/', this.setSearchActive.bind(this));
 
 		this.addDefaultRoute('/library');
 	},
@@ -194,9 +196,21 @@ Ext.define('NextThought.app.Body', {
 	},
 
 
+	setSearchActive: function(route, subRoute) {
+		var searchView = this.setActiveCmp('search-index');
+
+		return searchView.handleRoute(subRoute, route.precache);
+	},
+
+
 	updateBodyContent: function(bundle) {
 		var body = Ext.getBody(),
 			backgroundImage = bundle && bundle.getBackgroundImage();
+
+		//TODO: if the background image hasn't been loaded yet, listen for when it is
+		if (!backgroundImage && bundle) {
+			this.mon(bundle, 'update', this.updateBodyContent.bind(this, bundle), {single: true});
+		}
 
 		if (!backgroundImage) {
 			body.setStyle({backgroundImage: ''});

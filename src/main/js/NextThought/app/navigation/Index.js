@@ -99,9 +99,10 @@ Ext.define('NextThought.app.navigation.Index', {
 
 		if (config && config.cmp) {
 			this.__renderNavCmp(config.cmp);
+			this.removeCls('no-nav');
 		} else {
 			this.__removeNavCmp();
-			//Show the large search bar
+			this.addCls('no-nav');
 		}
 
 		if (config && config.hideBranding) {

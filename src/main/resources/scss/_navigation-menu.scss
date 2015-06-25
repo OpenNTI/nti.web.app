@@ -83,7 +83,7 @@
 		}
 	}
 
-	&.search-focused {
+	&.search-focused, &.no-nav {
 		.nav-container {
 			left: -100%;
 		}

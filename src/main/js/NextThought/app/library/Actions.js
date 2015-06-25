@@ -57,6 +57,12 @@ Ext.define('NextThought.app.library.Actions', {
 	},
 
 
+	findBundle: function(id) {
+		return this.CourseActions.findCourseInstance(id)
+				.fail(this.ContentActions.findContent.bind(this.ContentActions));
+	},
+
+
 	getVideoIndex: function(bundle) {
 		console.warn('DEPCRECIATED: we should try to not rely on getVideoIndex');
 		var cache = this.LibraryStore.videoIndex = this.LibraryStore.videoIndex || {},

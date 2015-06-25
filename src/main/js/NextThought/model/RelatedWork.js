@@ -2,6 +2,8 @@ Ext.define('NextThought.model.RelatedWork', {
 	extend: 'NextThought.model.Base',
 	mimeType: 'application/vnd.nextthought.relatedworkref',
 
+	isPage: true,
+
 	statics: {
 		mimeType: 'application/vnd.nextthought.relatedworkref',
 

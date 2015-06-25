@@ -150,16 +150,19 @@ Ext.define('NextThought.mixins.routing.Path', {
 
 	/**
 	 * Given a route call a handler if we have one for it
-	 * @param  {String} route
+	 * @param  {String} path
 	 * @param {Object} precached a map of keys to precached objects
 	 * @return {Promise} fulfills with the return value of the handler
 	 */
-	handleRoute: function(route, precache) {
-		route = this.trimRoute(route);
+	handleRoute: function(path, precache) {
+		path = this.trimRoute(path);
 
 		this.beforeRoute();
 
-		var parts = route.split('/'),
+		var pathParts = path.split('#'),//TODO: change this back to ? after the server can support it
+			route = pathParts[0],
+			query = pathParts[1],
+			parts = route.split('/'),
 			varKey = this.VARIABLE_KEY,
 			params = {}, subRoute,
 			currentRoute = '',
@@ -194,6 +197,10 @@ Ext.define('NextThought.mixins.routing.Path', {
 		//add the remaining parts as sub route
 		subRoute = parts.slice(i).join('/');
 
+		if (query) {
+			subRoute += '#' + query;
+		}
+
 		this.currentRoute = currentRoute;
 
 		//if the sub route has a handler call it
@@ -201,6 +208,7 @@ Ext.define('NextThought.mixins.routing.Path', {
 			val = sub.handler.call(null, {
 				path: '/' + route,
 				params: params,
+				queryParams: Ext.Object.fromQueryString(query || ''),
 				precache: precache
 			}, '/' + subRoute);
 		//if there is no handler but we have a default handler call that

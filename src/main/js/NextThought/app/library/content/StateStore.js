@@ -72,5 +72,20 @@ Ext.define('NextThought.app.library.content.StateStore', {
 		}
 
 		return content;
+	},
+
+
+	findContent: function(id) {
+		function fn(rec) {
+			return rec.get('NTIID') === id;
+		}
+
+		var bundle = this.__findIn(this.CONTENT_BUNDLES, fn);
+
+		if (!bundle) {
+			bundle = this.__findIn(this.CONTENT_PACKAGES, fn);
+		}
+
+		return bundle;
 	}
 });

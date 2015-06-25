@@ -109,5 +109,11 @@ Ext.define('NextThought.app.library.courses.Actions', {
 
 		return StoreUtils.loadItems(getURL(link))
 			.then(this.CourseStore.setAllCourses.bind(this.CourseStore));
+	},
+
+
+	findCourseInstance: function(id) {
+		return this.CourseStore.onceLoaded()
+			.then(this.CourseStore.findCourseInstance.bind(this.CourseStore, id));
 	}
 });

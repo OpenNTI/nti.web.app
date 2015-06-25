@@ -7,6 +7,7 @@ Ext.define('NextThought.model.PageInfo', {
 		'NextThought.model.assessment.Question'
 	],
 
+	isPage: true,
 
 	statics: {
 		fromOutlineNode: function(data) {
