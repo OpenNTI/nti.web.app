@@ -12,7 +12,7 @@ Ext.define('NextThought.app.navigation.Actions', {
 	/**
 	 * Takes an object config
 	 *
-	 * 
+	 *
 	 * 	cmp: Ext.Component, //a component to render in the header, tabs are ignored if this is present
 	 *
 	 * @param  {Object} configuration to build the nav
@@ -30,8 +30,8 @@ Ext.define('NextThought.app.navigation.Actions', {
 	 *
 	 * @param {Bundle} bundle the bundle to set active
 	 */
-	setActiveContent: function(bundle) {
-		this.store.fireEvent('set-active-content', bundle);
+	setActiveContent: function(bundle, masked) {
+		this.store.fireEvent('set-active-content', bundle, masked);
 	},
 
 

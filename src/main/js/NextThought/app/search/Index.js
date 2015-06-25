@@ -101,7 +101,8 @@ Ext.define('NextThought.app.search.Index', {
 
 
 	showSearch: function(route, subRoute) {
-		var params = route.queryParams,
+		var navActions = this.NavActions,
+			params = route.queryParams,
 			term = params.q,
 			bundle = params.s,
 			page = params.p,
@@ -127,7 +128,9 @@ Ext.define('NextThought.app.search.Index', {
 			this.NavActions.setActiveContent(null);
 		} else {
 			this.LibraryActions.findBundle(bundle)
-				.then(this.NavActions.setActiveContent.bind(this.NavActions));
+				.then(function(bundle) {
+					navActions.setActiveContent(bundle, true);
+				});
 		}
 
 		this.currentSearch = {

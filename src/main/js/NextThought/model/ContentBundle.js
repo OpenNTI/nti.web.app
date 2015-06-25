@@ -57,7 +57,8 @@ Ext.define('NextThought.model.ContentBundle', {
 
 	constructor: function() {
 		this.callParent(arguments);
-		wait().then(this.__setImage.bind(this));
+
+		this.onceAssetsLoaded = wait().then(this.__setImage.bind(this));
 	},
 
 
@@ -93,19 +94,31 @@ Ext.define('NextThought.model.ContentBundle', {
 	__setImage: function() {
 		var me = this;
 
-		me.getImgAsset('landing')
-			.then(function(url) { me.set('icon', url); }, me.set.bind(me, ['icon', null]));
-		me.getImgAsset('thumb')
-			.then(function(url) { me.set('thumb', url); }, me.set.bind(me, ['thumb', null]));
-		me.getImgAsset('background')
-			.then(function(url) { me.set('background', url); }, me.set.bind(me, ['background', null]));
-		me.getImgAsset('vendorIcon')
-			.then(function(url) { me.set('vendorIcon', url);}, me.set.bind(me, ['vendorIcon', null]));
+		//do a head request to make sure the assets exist
+		return Promise.all([
+			me.getImgAsset('landing')
+				.then(function(url) { me.set('icon', url); }, me.set.bind(me, ['icon', null])),
+
+			me.getImgAsset('thumb')
+				.then(function(url) { me.set('thumb', url); }, me.set.bind(me, ['thumb', null])),
+
+			me.getImgAsset('background')
+				.then(function(url) { me.set('background', url); }, me.set.bind(me, ['background', null])),
+
+			me.getImgAsset('vendorIcon')
+				.then(function(url) { me.set('vendorIcon', url);}, me.set.bind(me, ['vendorIcon', null]))
+		]);
 	},
 
-
+	/**
+	 * Return a promise that fulfills with the background image,
+	 * its a promise so the head requests have a change to fail so we can fall back
+	 * if the images aren't there
+	 * @return {Promise} fulfills with the url
+	 */
 	getBackgroundImage: function() {
-		return this.get('background');
+		return this.onceAssetsLoaded
+			.then(this.get.bind(this, 'background'));
 	},
 
 

@@ -277,6 +277,11 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
+	/**
+	 * Return the a promise that fulfills with the background image of the bundle
+	 *
+	 * @return {Promise} fulfills with url
+	 */
 	getBackgroundImage: function() {
 		return this.get('Bundle').getBackgroundImage();
 	},

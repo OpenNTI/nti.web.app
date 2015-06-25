@@ -203,19 +203,45 @@ Ext.define('NextThought.app.Body', {
 	},
 
 
-	updateBodyContent: function(bundle) {
+	/**
+	 * Create and append a div to the body with a class of body-shade-mask
+	 * to add come contrast
+	 *
+	 * @return {Element} the element created and added
+	 */
+	__createMaskDiv: function() {
+		var div = document.createElement('div');
+
+		div.classList.add('body-shade-mask');
+
+		document.body.appendChild(div);
+
+		return div;
+	},
+
+
+	updateBodyContent: function(bundle, masked) {
 		var body = Ext.getBody(),
-			backgroundImage = bundle && bundle.getBackgroundImage();
+			mask = document.querySelector('.body-shade-mask');
 
-		//TODO: if the background image hasn't been loaded yet, listen for when it is
-		if (!backgroundImage && bundle) {
-			this.mon(bundle, 'update', this.updateBodyContent.bind(this, bundle), {single: true});
-		}
-
-		if (!backgroundImage) {
+		if (!bundle) {
 			body.setStyle({backgroundImage: ''});
 		} else {
-			body.setStyle({backgroundImage: 'url(' + bundle.getBackgroundImage() + ')'});
+			bundle.getBackgroundImage()
+				.then(function(src) {
+					body.setStyle({backgroundImage: 'url(' + src + ')'});
+				});
+		}
+
+		//if we should mask make sure there is a mask element
+		if (masked) {
+			if (!mask) {
+				mask = this.__createMaskDiv();
+			}
+		//else if we shouldn't mask and we already have a mask element
+		//remove it
+		} else if (mask) {
+			document.body.removeChild(mask);
 		}
 	}
 });
