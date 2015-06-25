@@ -20,15 +20,12 @@ Ext.define('NextThought.app.context.types.RelatedWork', {
 
 
 	parse: function(obj, kind) {
-		var cmp;
-		if (kind === 'card') {
-			cmp = Ext.widget('context-relatedwork-card', {
+		var cmp = Ext.widget('context-relatedwork-card', {
 				type: this.self.type,
 				content: obj,
 				course: this.course
 			});
-
-			return cmp;
-		}
+		
+		return cmp;
 	}
 });
