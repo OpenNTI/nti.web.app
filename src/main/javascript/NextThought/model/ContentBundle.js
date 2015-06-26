@@ -73,6 +73,21 @@ Ext.define('NextThought.model.ContentBundle', {
 		};
 	},
 
+	containsPackage: function(id) {
+			var packages = this.get('ContentPackages') || [],
+					contains = false;
+
+				if (this.getId() === id) {
+					contains = true;
+				} else {
+					packages.forEach(function(p) {
+						contains = contains || p.getId() === id;
+					});
+				}
+
+				return contains;
+	},
+
 
 	getDefaultAssetRoot: function() {
 		var root = ([this].concat(this.get('ContentPackages')))
