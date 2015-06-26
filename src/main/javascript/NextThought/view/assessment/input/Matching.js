@@ -216,7 +216,7 @@ Ext.define('NextThought.view.assessment.input.Matching', function() {
 				afterRepair: function() { this.dragging = false; }, //override to stop the flash
 
 				getDragData: function(e) {
-					var sourceEl = e.getTarget('.drag', 10), d;
+					var sourceEl = e.getTarget('.drag'), d;
 					if (sourceEl) {
 						d = sourceEl.cloneNode(true);
 						d.id = Ext.id();

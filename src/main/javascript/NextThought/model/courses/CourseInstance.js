@@ -77,6 +77,14 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		return getURL(root).concatPath('/presentation-assets/webapp/v1/');
 	},
 
+	containsPackage: function(id) {
+			if (this.getId() === id) {
+				return true;
+			}
+	
+			return this.get('Bundle').containsPackage(id);
+	},
+
 
 	__precacheEntry: function() {
 		var p = this.precachePromise,
