@@ -173,12 +173,16 @@ Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
 	},
 
 
-	openEditorClick: function(e) {
-		var nib = e.getTarget('.note-here-control-box'),
-			rect = nib && nib.getBoundingClientRect();
+	openEditorClick: function(e, rect) {
+		var nib = e && e.getTarget('.note-here-control-box'),
+				top;
+
+		rect = (nib && nib.getBoundingClientRect()) || rect;
+
+		top = rect && rect.top;
 
 		if (this.allowOpenEditor() && this.getTabPanel()) {
-			this.openEditor(rect.top);
+			this.openEditor(top || 80);
 			return true;
 		}
 
@@ -359,7 +363,12 @@ Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
 		this.data.box.activeLineInfo = Ext.apply(
 				{style: style},
 				this.lineInfoForRangeAndRect(range, rect));
-		return this.openEditorClick();
+
+		var readerRect = this.reader.getAnnotationOffsets().rect;
+	
+		return this.openEditorClick(null, {
+			top: rect.top + readerRect.top
+		});
 	},
 
 
