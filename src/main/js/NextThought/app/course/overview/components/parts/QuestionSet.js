@@ -127,6 +127,8 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 			today = (new Date()).setHours(0, 0, 0, 0),
 			html = date && (getString('NextThought.view.courseware.overview.parts.QuestionSet.due') + ' ');
 
+
+
 		if (date) {
 			if (day === today) {
 				html += getString('NextThought.view.courseware.overview.parts.QuestionSet.today');
@@ -143,6 +145,9 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 		this.setAsNotStarted();
 		this.updateWithScore();
 		tally.setGreyText(html || '');
+
+		assignment.getHistory()
+			.then(this.setHistory.bind(this));
 
 		if (date && date < today) {
 			//if assignment is a no-submit, don't make it late

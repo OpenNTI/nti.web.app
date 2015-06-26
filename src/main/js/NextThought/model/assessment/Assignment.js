@@ -50,6 +50,16 @@ Ext.define('NextThought.model.assessment.Assignment', {
 			});
 	},
 
+  getHistory: function() {
+	  var link = this.getLink('History');
+
+		if (!link) { return Promise.reject(); }
+
+	  return Service.request(link)
+	      .then(function(response) {
+	          return ParseUtils.parseItems(response)[0];
+	      });
+  },
 
 	getDueDate: function() {
 		return this.get('availableEnding') || this.get('availableBeginning');
