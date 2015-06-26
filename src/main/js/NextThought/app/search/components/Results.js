@@ -6,7 +6,8 @@ Ext.define('NextThought.app.search.components.Results', {
 		'NextThought.app.search.components.results.BlogResult',
 		'NextThought.app.search.components.results.ChatResult',
 		'NextThought.app.search.components.results.ForumResult',
-		'NextThought.app.search.components.results.TranscriptResult'
+		'NextThought.app.search.components.results.TranscriptResult',
+		'NextThought.app.navigation.path.Actions'
 	],
 
 	TYPE_TO_LABEL: {
@@ -22,6 +23,12 @@ Ext.define('NextThought.app.search.components.Results', {
 
 	layout: 'none',
 	cls: 'search-results',
+
+
+	initComponent: function() {
+		this.callParent(arguments);
+		this.PathActions = NextThought.app.navigation.path.Actions.create();
+	},
 
 
 	addResults: function(items) {
@@ -56,7 +63,9 @@ Ext.define('NextThought.app.search.components.Results', {
 		return {
 			xtype: type,
 			hit: hit,
-			label: label
+			label: label,
+			navigateToObject: this.navigateToObject.bind(this),
+			getPathToObject: this.PathActions.getPathToObject.bind(this.PathActions)
 		};
 	},
 

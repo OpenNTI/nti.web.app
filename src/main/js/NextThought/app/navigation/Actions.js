@@ -12,8 +12,10 @@ Ext.define('NextThought.app.navigation.Actions', {
 	/**
 	 * Takes an object config
 	 *
-	 *
-	 * 	cmp: Ext.Component, //a component to render in the header, tabs are ignored if this is present
+	 * cmp: Ext.Component, //a component to render in the header, tabs are ignored if this is present
+	 * hideBranding: Boolean, //if true hide the environment branding and show a back button
+	 * noLibraryLink: Boolean, //if true don't let the branding link to the library
+	 * noRouteOnSearch: Boolean, //if true don't do a navigation on search, should really only be used by the search route
 	 *
 	 * @param  {Object} configuration to build the nav
 	 */
@@ -32,34 +34,5 @@ Ext.define('NextThought.app.navigation.Actions', {
 	 */
 	setActiveContent: function(bundle, masked) {
 		this.store.fireEvent('set-active-content', bundle, masked);
-	},
-
-
-	/**
-	 * Take an object or ntiid, and an optional course and figure out the
-	 * route to take to get there.
-	 * @param  {Object|String} objectOrNTIID item to navigate to
-	 * @param  {Object} context       object to navigate in context of
-	 */
-	navigateToObject: function(objectOrNTIID, context) {
-		var resolveObject,
-			store = this.store;
-
-		if (typeof objectOrNTIID === 'string') {
-			resolveObject = Service.getObject(objectOrNTIID);
-		} else {
-			resolveObject = Promise.resolve(objectOrNTIID);
-		}
-
-
-		resolveObject
-			.then(function(object) {
-				this.fireEvent('navigate-to-')
-			});
-		if (bundle) {
-			this.__navigateWithinBundle(bundle, resolveObject);
-		} else {
-			this.__navigateWithinGlobal(bundle);
-		}
 	}
 });

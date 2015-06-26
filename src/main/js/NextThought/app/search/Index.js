@@ -25,7 +25,8 @@ Ext.define('NextThought.app.search.Index', {
 				changeFilter: this.changeFilter.bind(this)
 			},
 			{
-				xtype: 'search-results'
+				xtype: 'search-results',
+				navigateToObject: this.navigateToObject.bind(this)
 			}
 		]);
 
@@ -80,18 +81,18 @@ Ext.define('NextThought.app.search.Index', {
 			bundle = search.bundle,
 			query = {};
 
-		query.term = encodeURIComponent(term);
+		query.q = encodeURIComponent(term);
 
 		if (filter) {
-			query.filter = encodeURIComponent(filter);
+			query.f = encodeURIComponent(filter);
 		}
 
 		if (page) {
-			query.page = ParseUtils.encodeForURI(page);
+			query.p = ParseUtils.encodeForURI(page);
 		}
 
 		if (bundle) {
-			query.bundle = ParseUtils.encodeForURI(bundle);
+			query.s = ParseUtils.encodeForURI(bundle);
 		}
 
 		query = Ext.Object.toQueryString(query);
@@ -106,7 +107,7 @@ Ext.define('NextThought.app.search.Index', {
 			term = params.q,
 			bundle = params.s,
 			page = params.p,
-			filter = params.filter;
+			filter = params.f;
 
 		this.NavActions.updateNavBar({
 			hideBranding: true,

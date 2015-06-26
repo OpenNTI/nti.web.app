@@ -63,6 +63,31 @@ Ext.define('NextThought.app.library.Actions', {
 	},
 
 
+	findBundleBy: function(fn) {
+
+	},
+
+
+	/**
+	 * Takes a function that takes a course and returns a number priority
+	 * and returns an array of the courses ordered by their priority, excluding
+	 * courses that have zero or lower priority
+	 * @param  {Function} fn takes a bundle instance and wrapper and returns a number
+	 * @return {Promise}     fulfills with an array of bundles in order
+	 */
+	findBundleByPriority: function(fn) {
+		return this.CourseActions.findCourseByPriority(fn)
+			.then(function(bundles) {
+				if (!bundles || !bundles.length) {
+					return Promise.reject();
+				}
+
+				return bundles;
+			})
+			.fail(this.ContentActions.findContentByPriority.bind(this.ContentActions, fn));
+	},
+
+
 	getVideoIndex: function(bundle) {
 		console.warn('DEPCRECIATED: we should try to not rely on getVideoIndex');
 		var cache = this.LibraryStore.videoIndex = this.LibraryStore.videoIndex || {},

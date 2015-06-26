@@ -9,7 +9,8 @@ Ext.define('NextThought.app.content.Index', {
 
 	requires: [
 		'NextThought.app.content.components.Navigation',
-		'NextThought.app.navigation.Actions'
+		'NextThought.app.navigation.Actions',
+		'NextThought.app.windows.StateStore'
 	],
 
 
@@ -20,6 +21,7 @@ Ext.define('NextThought.app.content.Index', {
 		this.cmp_map = {};
 
 		this.NavigationActions = NextThought.app.navigation.Actions.create();
+		this.WindowStateStore = NextThought.app.windows.StateStore.getInstance();
 
 		this.on({
 			'beforedeactivate': this.onBeforeDeactivate.bind(this),
@@ -168,5 +170,28 @@ Ext.define('NextThought.app.content.Index', {
 				.fail(function(reason) {
 					me.replaceRoute('Info', 'info');
 				});
+	},
+
+
+	getRouteForForum: function(forum, path) {
+		var root = path.shift(),
+			forumId = forum.getId(),
+			topicId = root && root.getId(),
+			route;
+
+		if (topicId) {
+			this.WindowStateStore.cacheObject(topicId, root);
+		}
+
+		forumId = ParseUtils.encodeForURI(forumId);
+		topicId = topicId && ParseUtils.encodeForURI(topicId);
+
+		route = '/discussions/' + forumId;
+
+		if (topicId) {
+			route += '/object/' + topicId;
+		}
+
+		return route;
 	}
 });

@@ -391,5 +391,18 @@ Ext.define('NextThought.app.course.Index', {
 				assignment: obj.isModel ? obj : null
 			}
 		};
+	},
+
+
+	getRouteForPath: function(path) {
+		var root = path[0],
+			subPath = path.slice(1),
+			route = '';
+
+		if (root.isForum) {
+			route = this.getRouteForForum(root, subPath);
+		}
+
+		return route;
 	}
 });

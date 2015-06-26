@@ -68,7 +68,7 @@ Ext.define('NextThought.app.forums.Index', {
 				id = id && ParseUtils.decodeFromURI(id);
 
 				me.forumView.setForumList(forumList);
-				return me.forumView.setForum(id);
+				me.forumView.setForum(id);
 			});
 	}
 });

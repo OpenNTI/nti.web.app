@@ -87,5 +87,39 @@ Ext.define('NextThought.app.library.content.StateStore', {
 		}
 
 		return bundle;
+	},
+
+
+	findContentByPriority: function(fn) {
+		var priorities = {},
+			keys = [],
+			result = [];
+
+		function find(bundle) {
+			var priority = fn.call(null, bundle);
+
+			if (priority && priority > 0) {
+				if (priorities[priority]) {
+					priorities[priority].push(bundle);
+				} else {
+					keys.push(priority);
+					priorities[priority] = [bundle];
+				}
+			}
+
+			return false;
+		}
+
+
+		this.__findIn(this.CONTENT_BUNDLES, find);
+		this.__findIn(this.CONTENT_PACKAGES, find);
+
+		keys.sort();
+
+		keys.forEach(function(key) {
+			result = result.concat(priorities[key]);
+		});
+
+		return Promise.resolve([]);
 	}
 });

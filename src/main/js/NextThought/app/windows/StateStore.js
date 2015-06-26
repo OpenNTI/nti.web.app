@@ -64,6 +64,11 @@ Ext.define('NextThought.app.windows.StateStore', {
 	},
 
 
+	removeCache: function(id) {
+		delete this.obj_map[id];
+	},
+
+
 	cacheObject: function(id, obj, el, monitors, precache) {
 		this.obj_map[id] = {
 			obj: obj,
@@ -113,7 +118,7 @@ Ext.define('NextThought.app.windows.StateStore', {
 		var html = this.getHTML(),
 			viewport = this.getViewport();
 
-		if (html.classList.contains("window-open")) { return; }
+		if (html.classList.contains('window-open')) { return; }
 
 		this.fireEvent('lock-body-height');
 		this.incrementOpenWindows();

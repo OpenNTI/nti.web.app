@@ -237,5 +237,40 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 		}
 
 		return enrollment && enrollment.get('CourseInstance');
+	},
+
+
+	findCourseInstanceByPriority: function(fn) {
+		var priorities = {},
+			keys = [],
+			result = [];
+
+		function find(enrollment) {
+			var instance = enrollment.get('CourseInstance'),
+				priority = fn.call(null, instance, enrollment);
+
+			if (priority && priority > 0) {
+				if (priorities[priority]) {
+					priorities[priority].push(instance);
+				} else {
+					keys.push(priority);
+					priorities[priority] = [instance];
+				}
+			}
+
+			return false;
+		}
+
+
+		this.__findIn(this.ENROLLED_COURSES, find);
+		this.__findIn(this.ADMIN_COURSES, find);
+
+		keys.sort();
+
+		keys.forEach(function(key) {
+			result = result.concat(priorities[key]);
+		});
+
+		return Promise.resolve(result);
 	}
 });

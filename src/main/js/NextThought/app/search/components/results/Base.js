@@ -6,7 +6,9 @@ Ext.define('NextThought.app.search.components.results.Base', {
 
 	SYSTEM_CREATOR: 'system',
 
-	requires: ['NextThought.util.Search'],
+	requires: [
+		'NextThought.util.Search'
+	],
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'title', html: '{title}'},
@@ -72,8 +74,10 @@ Ext.define('NextThought.app.search.components.results.Base', {
 				});
 		}
 
+		me.getObject = Service.getObject(hit.get('NTIID'));
+
 		if (!me.renderData.title) {
-			Service.getObject(hit.get('NTIID'))
+			me.getObject
 				.then(function(obj) {
 					var title = obj.get('title');
 
@@ -82,9 +86,15 @@ Ext.define('NextThought.app.search.components.results.Base', {
 					if (me.rendered) {
 						me.titleEl.update(title);
 					}
+
+					me.getPathToObject(obj)
+						.then(me.showBreadCrumb.bind(me));
 				});
 		}
 	},
+
+
+	showBreadCrumb: function() {},
 
 
 	wrapFragmentHits: function() {
@@ -121,5 +131,18 @@ Ext.define('NextThought.app.search.components.results.Base', {
 		});
 
 		this.renderData.fragments = wrapped || this.renderData.fragments;
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		this.mon(this.el, 'click', this.clicked.bind(this));
+	},
+
+
+	clicked: function(e) {
+		this.getObject
+			.then(this.navigateToObject.bind(this));
 	}
 });

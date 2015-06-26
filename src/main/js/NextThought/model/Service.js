@@ -461,6 +461,19 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
+	getPathToContainerLink: function() {
+		if (this.__pathToContainerUrl) {
+			return this.__pathToContainerUrl;
+		}
+
+		var collection = this.getCollection('PathToContainerId', 'Global');
+
+		this.__pathToContainerUrl = collection && collection.href;
+
+		return this.__pathToContainerUrl;
+	},
+
+
 	getObject: function(ntiid, success, failure, scope, safe) {
 		var url, result;
 

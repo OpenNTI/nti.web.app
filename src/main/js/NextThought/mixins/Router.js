@@ -46,7 +46,7 @@ Ext.define('NextThought.mixins.Router', {
 
 	__handleNoObjectNavigation: function(object) {
 		if (this.__parentRouter) {
-			this.__parentRouter.navigateToObject(object);
+			 return this.__parentRouter.navigateToObject(object);
 		}
 	},
 

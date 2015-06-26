@@ -1,5 +1,5 @@
 Ext.define('NextThought.mixins.routing.Object', {
-	
+
 	initRouter: function() {
 		this.__mimeMap = {};
 	},
@@ -18,7 +18,7 @@ Ext.define('NextThought.mixins.routing.Object', {
 	 * title:String //The title of the route
 	 * precache:Object //A map of keys to objects that is passed to the routes handler
 	 * 					//so it doesn't have to redo all the work to get the objects
-	 * 
+	 *
 	 * @param {String|Array} mimeTypes MimeType or list of MimeTypes to use the handler for
 	 * @param {Function} handler   function to handle mime types
 	 */
@@ -40,6 +40,11 @@ Ext.define('NextThought.mixins.routing.Object', {
 				map[mimeType] = handler;
 			}
 		});
+	},
+
+
+	addDefaultObjectHandler: function(handler) {
+		this.defaultObjectHandler = handler;
 	},
 
 
@@ -68,7 +73,9 @@ Ext.define('NextThought.mixins.routing.Object', {
 
 		if (mimeType && this.__mimeMap && this.__mimeMap[mimeType]) {
 			val = this.__mimeMap[mimeType].call(null, object);
-		} else {
+		} else if (this.defaultObjectHandler) {
+			val = this.defaultObjectHandler(object);
+		}else {
 			val = Promise.reject();
 		}
 
@@ -77,5 +84,15 @@ Ext.define('NextThought.mixins.routing.Object', {
 		}
 
 		return Promise.resolve(val);
-	}
+	},
+
+	/**
+	 * Return the route needed to navigate to through the items in the path array
+	 * ex: [Course, Forum, Topic];
+	 *
+	 * @override
+	 * @param {Array} path array of objects to navigate to, top down
+	 * @return {String} the route route to navigate to
+	 */
+	getRouteForPath: function(path) {}
 });

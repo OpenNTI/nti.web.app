@@ -12,6 +12,7 @@ Ext.define('NextThought.app.Body', {
 		'NextThought.app.notifications.Index',
 		'NextThought.util.Parsing',
 		'NextThought.app.navigation.StateStore',
+		'NextThought.app.navigation.path.Actions',
 		'NextThought.app.windows.Index',
 		'NextThought.app.windows.StateStore',
 		'NextThought.app.windows.Actions',
@@ -35,6 +36,7 @@ Ext.define('NextThought.app.Body', {
 
 		this.initRouter();
 
+		this.PathActions = NextThought.app.navigation.path.Actions.create();
 		this.NavigationStore = NextThought.app.navigation.StateStore.getInstance();
 		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
 		this.WindowActions = NextThought.app.windows.Actions.create();
@@ -53,6 +55,8 @@ Ext.define('NextThought.app.Body', {
 		this.addRoute('/search/', this.setSearchActive.bind(this));
 
 		this.addDefaultRoute('/library');
+
+		this.addDefaultObjectHandler(this.getObjectRoute.bind(this));
 	},
 
 
@@ -68,14 +72,21 @@ Ext.define('NextThought.app.Body', {
 	},
 
 
-	setActiveCmp: function(xtype) {
+	getCmp: function(xtype) {
 		var cmp = this.down(xtype);
 
 		if (!cmp) {
-			cmp = Ext.widget(xtype);
+			cmp = this.add(Ext.widget(xtype));
 
 			this.addChildRouter(cmp);
 		}
+
+		return cmp;
+	},
+
+
+	setActiveCmp: function(xtype) {
+		var cmp = this.getCmp(xtype);
 
 		this.getLayout().setActiveItem(cmp);
 
@@ -243,5 +254,48 @@ Ext.define('NextThought.app.Body', {
 		} else if (mask) {
 			document.body.removeChild(mask);
 		}
+	},
+
+
+	getObjectRoute: function(obj) {
+		return this.PathActions.getPathToObject(obj)
+			.then(this.getRouteForPath.bind(this))
+			.fail(function(reason) {
+				console.error(('Unable to find path for: ', obj, reason));
+				return {
+					title: 'Library',
+					route: '/library'
+				};
+			});
+	},
+
+
+	getRouteForPath: function(path) {
+		var root = path[0],
+			subPath = path.slice(1),
+			route;
+
+		if (root.isCourse) {
+			route = this.getRouteForCourse(root, subPath);
+		} else {
+			console.error('No route for path: ', root, subPath);
+			route = '';
+		}
+
+		return route;
+	},
+
+
+
+	getRouteForCourse: function(course, path) {
+		var cmp = this.getCmp('course-view-container'),
+			route = cmp.getRouteForPath && cmp.getRouteForPath(path),
+			id = course.getId();
+
+		id = ParseUtils.encodeForURI(id);
+
+		route = Globals.trimRoute(route);
+
+		return '/course/' + id + '/' + route;
 	}
 });
