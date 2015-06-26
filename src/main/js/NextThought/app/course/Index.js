@@ -94,6 +94,7 @@ Ext.define('NextThought.app.course.Index', {
 		if (me.activeBundle && (me.activeBundle.getId() || '').toLowerCase() === ntiid) {
 			me.getActiveCourse = Promise.resolve(me.activeBundle);
 		} else {
+			me.clearRouteStates();
 			me.getActiveCourse = me.CourseStore.onceLoaded()
 				.then(function() {
 					var current;
@@ -128,6 +129,14 @@ Ext.define('NextThought.app.course.Index', {
 		}
 
 		return me.getActiveCourse;
+	},
+
+
+	clearRouteStates: function() {
+		delete this.dashboardRoute;
+		delete this.overviewRoute;
+		delete this.assignmentRoute;
+		delete this.discussionsRoute;
 	},
 
 
