@@ -397,6 +397,8 @@ Ext.define('NextThought.controller.Reader', {
 
 	updateControls: function(reader, doc, assesments, pageInfo) {
 		var fn = (pageInfo && pageInfo.hideControls) ? 'hideControls' : 'showControls',
+			containerId = pageInfo.get('ContentPackageNTIID'),
+			targetBundle = pageInfo.targetBundle,
 			pg = this.getContentPager(),
 			pw = this.getContentPageWidgets(),
 			mn = this.getMainNav(),
@@ -413,8 +415,8 @@ Ext.define('NextThought.controller.Reader', {
 		pw.clearBookmark();
 		pg.updateState(t, reader.currentRoot, pageInfo.targetBundle);
 
-		if (pageInfo.targetBundle) {
-			Promise.resolve(pageInfo.targetBundle)
+		if (targetBundle && targetBundle.containsPackage(containerId)) {
+			Promise.resolve(targetBundle)
 				.then(trackFn);
 		} else {
 			//Do not track content packages if they are marked as bundles/courses...track the bundle instead.
