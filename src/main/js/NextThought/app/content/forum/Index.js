@@ -52,11 +52,13 @@ Ext.define('NextThought.app.content.forum.Index', {
 
 
 	bundleChanged: function(bundle) {
-		var container = this.forumContainer;
+		var container = this.forumContainer,
+			getForumList;
 
 		if (this.currentBundle === bundle) { return; }
 
 		this.currentBundle = bundle;
+		container.clearForumList();
 
 		return bundle.getForumList()
 			.then(container.setForumList.bind(container));

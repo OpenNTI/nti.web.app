@@ -43,11 +43,18 @@ Ext.define('NextThought.app.forums.Index', {
 	},
 
 
+	clearForumList: function() {
+		this.forumView.setForumList(null);
+		this.forumView.setForum(null);
+	},
+
+
 	/**
 	 * Take a forum list or a promise that fulfills with a forum list
 	 * @param {Array|Object} boardList see comments in the CourseInstance model to see structure
 	 */
 	setForumList: function(forumList) {
+		this.forumView.setForumList(null);
 		delete this.forumView.forumList;
 		this.get_forum_list = forumList instanceof Promise ? forumList : Promise.resolve(forumList);
 	},

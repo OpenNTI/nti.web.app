@@ -14,15 +14,18 @@ Ext.define('NextThought.app.forums.components.forum.Forum', {
 
 
 	setForum: function(record) {
-		if (!record) { return; }
-
 		var topicList = this.down('forums-forum-topic-list-view'),
 			filterBar = this.down('forums-forum-filterbar'),
 			header = this.down('forums-forum-header'),
-			store = record.buildContentsStore('topic-list-view', this.storeCfg);
+			store = record && record.buildContentsStore('topic-list-view', this.storeCfg);
+
+		if (!record) {
+			Ext.destroy(topicList, filterBar, header);
+			return Promise.reject();
+		}
 
 		if (topicList && topicList.record === record) {
-			return true;
+			return Promise.resolve();
 		}
 
 		this.store = store;
