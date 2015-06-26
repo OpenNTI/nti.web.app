@@ -68,10 +68,14 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 	},
 
 
-	handleNavigation: function() {
-		var cid = this.record.get('ContainerId');
+	initComponent: function(){
+		this.callParent(arguments);
+		this.WindowActions = NextThought.app.windows.Actions.create();
+	},
 
-		this.fireEvent('navigation-selected', cid, this.record, null, this.course);
+
+	handleNavigation: function(e) {
+		this.WindowActions.pushWindow(this.record, null, e, null, {course: this.course});
 	},
 
 

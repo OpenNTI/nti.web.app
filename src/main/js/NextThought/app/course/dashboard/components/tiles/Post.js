@@ -128,7 +128,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 
 	itemClicked: function(e) {
 		if (!e.getTarget('.body-container') && !e.getTarget('.controls') && this.handleNavigation) {
-			this.handleNavigation();
+			this.handleNavigation(e);
 		}
 	},
 
