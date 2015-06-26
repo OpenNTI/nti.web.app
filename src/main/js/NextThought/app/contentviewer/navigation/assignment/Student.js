@@ -98,6 +98,9 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Student', {
 
 			me.on('destroy', function() {
 				Ext.EventManager.removeResizeListener(me.alignTimer, me);
+				if(me.timer){
+					me.timer.stop();
+				}
 			});
 
 			me.on('destroy', me.timeContainerEl.destroy.bind(me.timeContainerEl));

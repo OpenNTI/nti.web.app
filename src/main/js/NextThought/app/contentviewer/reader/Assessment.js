@@ -155,7 +155,7 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 	},
 
 
-	notSubmittedTimedToast: function() {
+	notSubmittedTimed: function() {
 		var me = this,
 			assignment = me.injectedAssignment,
 			remaining = assignment.getTimeRemaining(),
@@ -164,62 +164,61 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 
 		if (remaining < 0) {
 			time = TimeUtils.getTimePartsFromTime(-1 * remaining);
-			remaining = NextThought.view.courseware.assessment.AssignmentStatus.getTimeString(time) + ' Over';
+			remaining = NextThought.app.course.assessment.AssignmentStatus.getTimeString(time) + ' Over';
 		} else {
 			time = TimeUtils.getTimePartsFromTime(remaining);
-			remaining = NextThought.view.courseware.assessment.AssignmentStatus.getTimeString(time, true) + ' Remaining';
+			remaining = NextThought.app.course.assessment.AssignmentStatus.getTimeString(time, true) + ' Remaining';
 		}
 
-		if (!me.toast || me.toast.isDestroyed) {
-			me.toast = Toaster.makeToast({
+		return new Promise(function(fulfill, reject) {
+			Ext.Msg.show({
 				title: remaining,
-				message: title + ' is a timed assignment, and is still in progress. Be sure to submit the assignment before time runs out.',
-				timeout: 10000,
-				callback: function() {
-					delete me.toast;
-				},
-				buttons: [
-					{
-						label: 'Take Me Back',
-						callback: me.__goBackToAssignment.bind(me, assignment)
+				msg: title + ' is a timed assignment, and is still in progress. Be sure to submit the assignment before time runs out.',
+				buttons: {
+					primary: {
+						cls: 'caution',
+						text: 'Leave',
+						handler: fulfill
+					},
+					secondary: {
+						text: 'Stay',
+						handler: reject
 					}
-				]
+				}
 			});
-		}
-
-		return Promise.resolve();
+		});
 	},
 
 
-	notSubmittedToast: function() {
+	notSubmitted: function() {
 		var me = this,
 			assignment = me.injectedAssignment,
 			title = (assignment && assignment.get('title')),
 			progress = ' Your progress has been saved and can be resumed at a later date.',
 			due = assignment ? 'It is due on ' + Ext.Date.format(assignment.getDueDate(), 'l, F j') + '.' : '';
 
-		if (!me.toast || me.toast.isDestroyed) {
-			me.toast = Toaster.makeToast({
-				//title: 'Did you mean to not submit that assignment?',
-				message: 'You left ' + title + ' without submitting it. ' + progress,
-				timeout: 10000,
-				callback: function() {
-					delete me.toast;
-				},
-				buttons: [
-					{
-						label: 'Take me Back',
-						callback: me.__goBackToAssignment.bind(me, assignment)
+			
+		return new Promise(function(fulfill, reject) {
+			Ext.Msg.show({
+				title: 'Are you sure?',
+				msg: 'You left ' + title + ' without submitting it. ' + progress,
+				buttons: {
+					primary: {
+						cls: 'caution',
+						text: 'Leave',
+						handler: fulfill
+					},
+					secondary: {
+						text: 'Stay',
+						handler: reject
 					}
-				]
+				}
 			});
-		}
-
-		return Promise.resolve();
+		});
 	},
 
 
-	notSubmittedAlert: function() {
+	progressLostAlert: function() {
 		var assignment = this.injectedAssignment,
 			title = (assignment && assignment.get('title')),
 			progress = ' Your progress will be lost.',
@@ -256,60 +255,20 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 			isSubmitted = this.submission.isSubmitted(),
 			progressSaved = this.submission.hasProgressSaved();
 
-		return new Promise(function(fulfill, reject) {
-			Ext.Msg.show({
-				title: 'Are you sure?',
-				msg: 'Testing this out',
-				buttons: {
-					primary: {
-						cls: 'caution',
-						text: 'Leave',
-						handler: fulfill
-					},
-					secondary: {
-						text: 'Stay',
-						handler: reject
-					}
-				}
-			});
-		});
-	},
-
-
-	/**
-	 * Let the user know when they leave an assignment that is not submitted if
-	 * 1.) there are answers but no progress saved
-	 * 2.) it is completely filled out but not submitted
-	 * @param  {Boolean} forced if true the navigation behind it cannot be stopped
-	 * @return {Promise}        fulfills if it is save to leave rejects otherwise
-	 */
-	stopClose: function(forced) {
-		//if the reader isn't visible don't stop navigation
-		//or if the quiz doesn't have a submission widget
-		if (!this.reader.isVisible(true) || !this.submission) {
+		if (isSubmitted || this.isInstructorProspective){
 			return Promise.resolve();
 		}
 
-		var assignment = this.injectedAssignment,
-			hasAnswers = this.submission.hasAnyAnswers(),
-			missingAnswers = this.submission.hasAnyMissing(),
-			isSubmitted = this.submission.isSubmitted(),
-			progressSaved = this.submission.hasProgressSaved();
-
-		if (isSubmitted || this.isInstructorProspective) {
-			return Promise.resolve();
+		if (assignment.isTimed){
+			return this.notSubmittedTimed();
 		}
 
-		if (assignment.isTimed) {
-			return this.notSubmittedTimedToast();
+		if (hasAnswers && !progressSaved){
+			return this.progressLostAlert();
 		}
 
-		if (hasAnswers && !progressSaved && !forced) {
-			return forced ? false : this.notSubmittedAlert();
-		}
-
-		if (!missingAnswers) {
-			return this.notSubmittedToast();
+		if(!missingAnswers){
+			return this.notSubmitted();
 		}
 
 		return Promise.resolve();
