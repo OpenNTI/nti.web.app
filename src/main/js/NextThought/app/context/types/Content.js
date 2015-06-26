@@ -79,7 +79,7 @@ Ext.define('NextThought.app.context.types.Content', {
 		Ext.each(node.query('span[itemprop~=nti-data-markupenabled]'), function(i) {
 			var e = Ext.get(i);
 			//only strip off the style for width that are too wide.
-			if (parseInt(i.style.width, 10) >= maxWidth) {
+			if (i.style && parseInt(i.style.width, 10) >= maxWidth) {
 				e.setStyle({width: undefined});
 			}
 		});
