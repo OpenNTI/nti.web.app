@@ -7,6 +7,7 @@ Ext.define('NextThought.model.PageInfo', {
 		'NextThought.model.assessment.Question'
 	],
 	fields: [
+		{ name: 'ContentPackageNTIID', type: 'string'},
 		{ name: 'AssessmentItems', type: 'arrayItem' },
 		{ name: 'sharingPreference', type: 'auto' },
 		{ name: 'dataFilterPreference', type: 'auto' },
