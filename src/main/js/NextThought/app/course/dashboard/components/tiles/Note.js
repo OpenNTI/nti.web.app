@@ -33,10 +33,17 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 				.then(function(context) {
 					var height = Math.min((record.get('ReplyCount') || 0), 2) * me.COMMENT_HEIGHT;
 
-					if (context && context.type === NextThought.app.context.types.Video.type) {
-						height += me.WIDTH / me.VIDEO_THUMB_ASPECT;
-						context.width = me.WIDTH;
-						context.height = Math.round(me.WIDTH / me.VIDEO_THUMB_ASPECT);
+					if (context) {
+						if (context.type === NextThought.app.context.types.Video.type) {
+							height += me.WIDTH / me.VIDEO_THUMB_ASPECT;
+							context.width = me.WIDTH;
+							context.height = Math.round(me.WIDTH / me.VIDEO_THUMB_ASPECT);
+						}
+						else {
+							// Max-Height
+							height = 95;
+							context.height = height;
+						}
 					}
 
 					return {
@@ -46,7 +53,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 						CACHE: {
 							context: Promise.resolve(context)
 						}
-					}
+					};
 				}).fail(function() {
 					return {
 						xtype: me.xtype,
@@ -130,7 +137,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 
 	getContext: function() {
 		if (this.CACHE.context) {
-			return this.CACHE.context
+			return this.CACHE.context;
 		}
 
 		var context = NextThought.app.context.ContainerContext.create({

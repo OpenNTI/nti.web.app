@@ -70,13 +70,13 @@ Ext.define('NextThought.app.context.types.Video', {
 			context, cmp, me = this, store;
 
 		if (kind === 'card') {
-			cmp = Ext.widget('context-video-card', {
+			cmp = {
+				xtype: 'context-video-card',
 				type: me.self.type,
 				video: video,
 				transcript: transcript
-			});
-
-			return Promise.resolve(cmp);
+			};
+			return cmp;
 		}
 
 		return me.MediaActions.loadTranscript(transcript)

@@ -239,15 +239,17 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 		if (Ext.isEmpty(context) || Ext.Object.isEmpty(context)) { return; }
 
 		var me = this,
-			show = false;
-			emptySrc = Globals.CANVAS_BROKEN_IMAGE.src;
+			show = false,
+			emptySrc = Globals.CANVAS_BROKEN_IMAGE.src, cmp;
 
-		if (context.type) {
+		if (context.type && this.contextEl) {
 			show = true;
-			context.render(this.contextEl);
+			context = Ext.apply(context, {renderTo: this.contextEl});
+			cmp = Ext.widget(context);
+			me.on('destroy', 'destroy', cmp);
 		}
-		
-		if(!show) {
+
+		if(!show && this.contextEl) {
 			this.contextEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 			this.contextEl.hide();
 		}

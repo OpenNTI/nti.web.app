@@ -35,7 +35,7 @@ Ext.define('NextThought.app.context.types.Content', {
 		var page = doc && doc.querySelector('#NTIContent'),
 			context,
 			range = this.range,
-			cid = this.container, config, cleanContext, cmp, xtype;
+			cid = this.container, config, cleanContext;
 
 		try {
 			if (this.range.isEmpty && page && page.getAttribute('data-page-ntiid') === cid) {
@@ -46,15 +46,18 @@ Ext.define('NextThought.app.context.types.Content', {
 			cleanContext = this.__fixUpContext(context);
 
 
-			xtype = contextKind === 'card' ? 'context-content-card' : 'context-default';
-			cmp = Ext.widget(xtype, {	
+			config = {
 					type: this.self.type,
 					snippet: cleanContext,
 					fullContext: cleanContext,
 					containerId: cid
-				});
+				};
 
-			return cmp;
+			if (contextKind === 'card') {
+				return Ext.apply(config, {xtype: 'context-content-card' });
+			}
+			return Ext.widget('context-default', config);
+
 		} catch (e) {
 			console.error('Faild to load content context:', e);
 		}

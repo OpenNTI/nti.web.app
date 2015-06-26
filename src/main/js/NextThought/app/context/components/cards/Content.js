@@ -10,7 +10,7 @@ Ext.define('NextThought.app.context.components.cards.Content', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'context-image word-context', cn: [
-			{cls: 'text', html: '{text}'}
+			{cls: 'text'}
 		]}
 	]),
 
@@ -18,8 +18,8 @@ Ext.define('NextThought.app.context.components.cards.Content', {
 	renderSelectors: {
 		textEl: '.text'
 	},
-	
-	
+
+
 	initComponent: function() {
 		this.callParent(arguments);
 		this.ContextStore = NextThought.app.context.StateStore.getInstance();
@@ -35,7 +35,7 @@ Ext.define('NextThought.app.context.components.cards.Content', {
 	 */
 	setContent: function() {
 		if(this.textEl) {
-			this.textEl.appendChild(this.snippet);	
+			this.textEl.appendChild(this.snippet);
 		}
 	}
 });
