@@ -174,21 +174,30 @@ Ext.define('NextThought.app.content.Index', {
 
 
 	getRouteForForum: function(forum, path) {
-		var root = path.shift(),
+		var topic = path.shift(),
+			comment = path.shift(),
 			forumId = forum.getId(),
-			topicId = root && root.getId(),
+			topicId = topic && topic.getId(),
+			commentId = comment && comment.getId(),
 			route;
 
 		if (topicId) {
-			this.WindowStateStore.cacheObject(topicId, root);
+			this.WindowStateStore.cacheObject(topicId, topic);
+		}
+
+		if (commentId) {
+			this.WindowStateStore.cacheObject(commentId, comment);
 		}
 
 		forumId = ParseUtils.encodeForURI(forumId);
 		topicId = topicId && ParseUtils.encodeForURI(topicId);
+		commentId = commentId && ParseUtils.encodeForURI(commentId);
 
 		route = '/discussions/' + forumId;
 
-		if (topicId) {
+		if (commentId) {
+			route += '/object/' + commentId;
+		} else if (topicId) {
 			route += '/object/' + topicId;
 		}
 

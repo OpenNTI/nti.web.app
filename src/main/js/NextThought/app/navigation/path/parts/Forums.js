@@ -8,6 +8,8 @@ Ext.define('NextThought.app.navigation.path.parts.Forums', {
 
 
 	addHandlers: function(handlers) {
+		handlers['application/vnd.nextthought.forums.generalforumcomment'] = this.getPathToTopicComment.bind(this);
+		handlers[NextThought.model.forums.CommentPost.mimeType] = this.getPathToTopicComment.bind(this);
 		handlers[NextThought.model.forums.CommunityHeadlinePost.mimeType] = this.getPathToTopicPost.bind(this);
 		handlers[NextThought.model.forums.CommunityHeadlineTopic.mimeType] = this.getPathToTopic.bind(this);
 		handlers[NextThought.model.forums.CommunityForum.mimeType] = this.getPathToForum.bind(this);
@@ -69,6 +71,22 @@ Ext.define('NextThought.app.navigation.path.parts.Forums', {
 			})
 			.fail(function(reason) {
 				console.error('Failed to get path to topic: ', reason);
+				return Promise.reject();
+			});
+	},
+
+
+	getPathToTopicComment: function(comment, getPathTo) {
+		return Service.getObject(comment.get('ContainerId'))
+			.then(function(topic) {
+				return getPathTo(topic);
+			})
+			.then(function(path) {
+				path.push(comment);
+				return path;
+			})
+			.fail(function(reason) {
+				console.error('Failed to get path to topic comment: ', reason);
 				return Promise.reject();
 			});
 	}

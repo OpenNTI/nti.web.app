@@ -18,35 +18,75 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		var me = this,
-			loadForum;
+		this.WindowActions = NextThought.app.windows.Actions.create();
 
-		me.WindowActions = NextThought.app.windows.Actions.create();
-
-		if (me.precache.forum) {
-			loadForum = Promise.resolve(me.precache.forum);
-		} else {
-			loadForum = Service.getObject(me.record.get('ContainerId'));
-		}
-
-		me.add({
+		this.add({
 			xtype: 'window-header',
-			doClose: me.doClose.bind(me)
+			doClose: this.doClose.bind(this)
 		});
 
-		me.loadingEl = me.add({xtype: 'window-loading'});
+		this.loadingEl = this.add({xtype: 'window-loading'});
 
-		loadForum
+		if (!this.record) {
+			this.loadEditor();
+		} else if (this.record instanceof NextThought.model.forums.CommentPost) {
+			this.loadComment();
+		} else {
+			this.loadTopic();
+		}
+	},
+
+
+	loadForum: function(topic) {
+		if (this.precache.forum) {
+			return Promise.resolve(this.precache.forum);
+		}
+
+		return Service.getObject(topic.get('ContainerId'));
+	},
+
+
+	loadTopic: function() {
+		var me = this;
+
+		loadForum(me.record)
 			.then(function(forum) {
 				me.forum = forum;
 
 				me.remove(me.loadingEl);
+				me.showTopic(me.record, forum);
+			});
+	},
 
-				if (me.record) {
-					me.showTopic();
-				} else {
-					me.showEditor();
-				}
+
+	loadComment: function() {
+		var me = this,
+			topic;
+
+		Service.getObject(me.record.get('ContainerId'))
+			.then(function(t) {
+				topic = t;
+
+				return me.loadForum(topic);
+			})
+			.then(function(forum) {
+				me.forum = forum;
+
+				me.remove(me.loadingEl);
+				me.showTopic(topic, forum, me.record);
+			});
+	},
+
+
+	loadEditor: function() {
+		var me = this;
+
+		Service.getObject(me.record.get('ContainerId'))
+			.then(function(forum) {
+				me.forum = forum;
+
+				me.remove(me.loadingEl);
+				me.showEditor(me.record, forum);
 			});
 	},
 
@@ -63,59 +103,58 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 	},
 
 
-	showTopic: function() {
-		var topic = this.down('forums-topic-topic'),
-			comment = this.down('forums-topic-comment-thread'),
-			commentRecord = this.precache.activeComment;
+	showTopic: function(topic, forum, activeComment) {
+		var topicCmp = this.down('forums-topic-topic'),
+			commentCmp = this.down('forums-topic-comment-thread');
 
 		if (topic) {
-			Ext.destroy(topic);
-			Ext.destroy(comment);
+			Ext.destroy(topicCmp);
+			Ext.destroy(commentCmp);
 		}
 
-		topic = this.add({xtype: 'forums-topic-topic', record: this.record, forum: this.forum});
-		comment = this.add({xtype: 'forums-topic-comment-thread', topic: this.record, activeComment: commentRecord});
+		topicCmp = this.add({xtype: 'forums-topic-topic', record: topic, forum: forum});
+		commentCmp = this.add({xtype: 'forums-topic-comment-thread', topic: topic, activeComment: activeComment});
 
-		if (!comment.ready) {
-			this.mon(comment, {
+		if (!commentCmp.ready) {
+			this.mon(commentCmp, {
 				single: true,
 				ready: function() {
 					//TODO: highlight results
-					topic.buildCommentPagingNav(comment);
+					topicCmp.buildCommentPagingNav(commentCmp);
 				}
 			});
 		} else {
 			//TODO: highlight results
-			topic.buildCommentPagingNav(comment);
+			topicCmp.buildCommentPagingNav(commentCmp);
 		}
 
-		this.mon(topic, {
-			'create-root-reply': comment.addRootReply.bind(comment),
+		this.mon(topicCmp, {
+			'create-root-reply': commentCmp.addRootReply.bind(commentCmp),
 			'record-deleted': this.doClose.bind(this),
 			'edit-topic': this.showEditor.bind(this)
 		});
 	},
 
 
-	showEditor: function() {
+	showEditor: function(topic, forum) {
 		var me = this,
-			topic = this.down('forums-topic-topic'),
-			comment = this.down('forums-topic-comment-thread'),
+			topicCmp = this.down('forums-topic-topic'),
+			commentCmp = this.down('forums-topic-comment-thread'),
 			editor;
 
-		if (topic) {
-			Ext.destroy(topic);
-			Ext.destroy(comment);
+		if (topicCmp) {
+			Ext.destroy(topicCmp);
+			Ext.destroy(commentCmp);
 		}
 
-		editor = me.add({xtype: 'forums-topic-editor', record: this.record, forum: me.forum});
+		editor = me.add({xtype: 'forums-topic-editor', record: topic, forum: forum});
 
 		me.mon(editor, {
 			'cancel': function(rec) {
 				me.remove(editor);
 
 				if (me.record) {
-					me.showTopic();
+					me.showTopic(topic, forum);
 				} else {
 					me.doClose();
 				}
@@ -123,11 +162,12 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 			'after-save': function(rec) {
 				me.remove(editor);
 				me.record = rec;
-				me.showTopic();
+				me.showTopic(rec, forum);
 			}
 		});
 	}
 }, function() {
+	NextThought.app.windows.StateStore.register('application/vnd.nextthought.forums.generalforumcomment', this);
 	NextThought.app.windows.StateStore.register(NextThought.model.forums.ContentHeadlineTopic.mimeType, this);
 	NextThought.app.windows.StateStore.register(NextThought.model.forums.CommunityHeadlineTopic.mimeType, this);
 	NextThought.app.windows.StateStore.register('new-topic', this);
