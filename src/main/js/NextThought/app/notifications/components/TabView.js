@@ -15,7 +15,8 @@ Ext.define('NextThought.app.notifications.components.TabView', {
 
 		this.add([{
 			xtype: 'notifications-most-recent',
-			updateBadge: this.updateBadge.bind(this)
+			updateBadge: this.updateBadge.bind(this),
+			navigateToObject: this.navigateToObject.bind(this)
 		}, {
 			xtype: 'box',
 			cls: 'show-all',

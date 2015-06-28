@@ -57,11 +57,13 @@ Ext.define('NextThought.controller.Application', {
 		body.pushRoute = this.pushRoute.bind(this);
 		body.replaceRoute = this.replaceRoute.bind(this);
 		body.pushRootRoute = this.pushRoute.bind(this);
-		nav.pushRootRoute = this.pushRoute.bind(this);
 		body.replaceRootRoute = this.replaceRoute.bind(this);
 		body.pushRouteState = this.pushRouteState.bind(this);
 		body.replaceRouteState = this.replaceRouteState.bind(this);
 		body.setTitle = this.setTitle.bind(this);
+
+		nav.pushRootRoute = body.pushRoute.bind(body);
+		nav.navigateToObject = body.navigateToObject.bind(body);
 
 		this.handleCurrentState()
 			.then(Globals.removeLoaderSplash.bind(Globals));

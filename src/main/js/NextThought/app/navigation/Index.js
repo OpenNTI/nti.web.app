@@ -146,7 +146,8 @@ Ext.define('NextThought.app.navigation.Index', {
 		this.notificationCmp = NextThought.app.notifications.Tab.create({
 			setMenuOpen: this.setState.bind(this, {active: 'notificationCmp'}),
 			setMenuClosed: this.setState.bind(this, {}),
-			pushRootRoute: this.pushRoute.bind(this)
+			pushRootRoute: this.pushRoute.bind(this),
+			navigateToObject: this.gotoObject.bind(this)
 		});
 
 		this.searchCmp = NextThought.app.search.SearchBar.create({
@@ -176,6 +177,11 @@ Ext.define('NextThought.app.navigation.Index', {
 
 	pushRoute: function() {
 		this.pushRootRoute.apply(this, arguments);
+	},
+
+
+	gotoObject: function() {
+		this.navigateToObject.apply(this, arguments);
 	},
 
 

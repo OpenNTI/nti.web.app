@@ -2,9 +2,14 @@ Ext.define('NextThought.app.notifications.components.Stream', {
 	extend: 'NextThought.app.notifications.components.List',
 	alias: 'widget.notifications-stream-list',
 
+	mixins: {
+		Router: 'NextThought.mixins.Router'
+	},
 
 	initComponent: function() {
 		this.callParent(arguments);
+
+		this.initRouter();
 
 		this.onScroll = this.onScroll.bind(this);
 	},
@@ -120,6 +125,8 @@ Ext.define('NextThought.app.notifications.components.Stream', {
 
 
 	rowClicked: function(view, rec, item) {
-		this.WindowActions.pushWindow(rec, null, item);
+		rec = this.unwrap(rec);
+
+		this.navigateToObject(rec);
 	}
 });

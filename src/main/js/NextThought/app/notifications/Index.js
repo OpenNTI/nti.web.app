@@ -104,6 +104,8 @@ Ext.define('NextThought.app.notifications.Index', {
 			removeMask: this.removeLoading.bind(this)
 		});
 
+		this.addChildRouter(this.stream);
+
 		if (this.isActive) {
 			this.stream.onActivate();
 		}

@@ -86,9 +86,17 @@ Ext.define('NextThought.app.Body', {
 
 
 	setActiveCmp: function(xtype) {
-		var cmp = this.getCmp(xtype);
+		var old = this.getLayout().getActiveItem();
+			cmp = this.getCmp(xtype);
 
 		this.getLayout().setActiveItem(cmp);
+
+		//if there wasn't already an active item the activate event won't
+		//get fired, and some views rely on it to setup properly
+		if (!old) {
+			cmp.fireEvent('activate');
+		}
+
 
 		return cmp;
 	},

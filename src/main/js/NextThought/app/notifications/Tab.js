@@ -16,7 +16,8 @@ Ext.define('NextThought.app.notifications.Tab', {
 			ownerCt: this,
 			updateBadge: this.updateBadge.bind(this),
 			close: this.setMenuClosed.bind(this),
-			pushRootRoute: this.pushRootRoute.bind(this)
+			pushRootRoute: this.pushRootRoute.bind(this),
+			navigateToObject: this.navigateToObject.bind(this)
 		});
 
 		this.on('destroy', 'destroy', this.listComponent);

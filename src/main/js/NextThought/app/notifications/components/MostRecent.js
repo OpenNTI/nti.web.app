@@ -67,12 +67,7 @@ Ext.define('NextThought.app.notifications.components.MostRecent', {
 	rowClicked: function(view, rec, item) {
 		rec = this.unwrap(rec);
 
-		var mime = rec.get('MimeType'),
-			handler = this.clickHandlers && this.clickHandlers[mime];
-
-		if (Ext.isFunction(handler)) {
-			handler(view, rec);
-		}
+		this.navigateToObject(rec);
 	},
 
 

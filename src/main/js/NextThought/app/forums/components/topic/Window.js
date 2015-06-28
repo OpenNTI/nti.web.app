@@ -81,7 +81,7 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 	loadEditor: function() {
 		var me = this;
 
-		Service.getObject(me.record.get('ContainerId'))
+		me.loadForum(me.record)
 			.then(function(forum) {
 				me.forum = forum;
 

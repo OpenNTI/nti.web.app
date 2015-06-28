@@ -6,7 +6,8 @@ Ext.define('NextThought.app.notifications.components.List', {
 		'NextThought.store.PageItem',
 		'NextThought.app.notifications.StateStore',
 		'NextThought.app.notifications.components.types.*',
-		'NextThought.app.windows.Actions'
+		'NextThought.app.windows.Actions',
+		'NextThought.app.navigation.path.Actions'
 	],
 
 	cls: 'user-data-panel notifications',
@@ -110,6 +111,7 @@ Ext.define('NextThought.app.notifications.components.List', {
 		this.highlightItem = this.types[1];
 
 		this.NotificationsStore = NextThought.app.notifications.StateStore.getInstance();
+		this.PathActions = NextThought.app.navigation.path.Actions.create();
 
 		this.WindowActions = NextThought.app.windows.Actions.create();
 
@@ -256,6 +258,11 @@ Ext.define('NextThought.app.notifications.components.List', {
 		var wrapped = rec;
 
 		rec = this.unwrap(rec);
+
+		if (!(rec instanceof NextThought.model.UIViewHeader)) {
+			this.PathActions.getPathToObject(rec);
+		}
+
 
 		if (Ext.isFunction(this.fillData && this.fillData[rec.get('MimeType')])) {
 			this.fillData[rec.get('MimeType')](rec, wrapped);
