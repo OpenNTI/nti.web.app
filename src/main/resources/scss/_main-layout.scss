@@ -4,7 +4,7 @@ html.x-viewport { height: auto !important; overflow-y: auto; margin-top: $header
 body.x-body {
 	min-height: 100%;
 	height: auto !important;
-	overflow: hidden;
+	overflow: hidden !important;
 	background: white;
 	background: #343434;
 	background-size: cover;
