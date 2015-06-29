@@ -4,7 +4,7 @@ Ext.define('NextThought.app.assessment.Score', {
 	requires: [
 		'Ext.data.JsonStore',
 		'Ext.chart.Chart',
-		'NextThought.common.chart.series.Score'
+		'NextThought.common.chart.Score'
 	],
 
 	correctColor: '#a5c959',
@@ -20,24 +20,10 @@ Ext.define('NextThought.app.assessment.Score', {
 		this.store = Ext.data.JsonStore.create({fields: ['p']});
 		this.callParent(arguments);
 		this.add({
-			xtype: 'chart',
-			width: 75,
-			height: 75,
-			animate: true,
-
+			xtype: 'chart-score',
 			store: this.store,
-			insetPadding: 10,
 			shadow: false,
 			legend: false,
-
-			series: [{
-				 type: 'score',
-				 angleField: 'p',
-				 correctColor: this.correctColor,
-				 incorrectColor: this.incorrectColor,
-				 textColor: this.textColor,
-				 style: this.chartStyle
-			 }]
 		});
 
 		this.setValue(this.value || 0);
@@ -47,28 +33,6 @@ Ext.define('NextThought.app.assessment.Score', {
 	setValue: function(value) {
 		var v = value || 4,
 			data = [{p: v},{p: (100 - v)}],
-			c = this.down('chart'),
-			s = c.series.first(),
-			store = this.store;
-
-		if (s.setValue) {
-			s.setValue(value);
-		}
-		else {
-			s.scoreValue = value;
-		}
-
-		this.value = value;
-
-		//if (value === 0){ data.shift(); }
-
-		Ext.defer(function() {
-			store.loadRawData(data, false);
-			try {
-				if (c.rendered) {c.redraw();}
-			} catch (e) {
-				Error.raiseForReport(e.stack || e.message || e);
-			}
-		},1);
+			c = this.down('chart-score').setValue(value);
 	}
 });

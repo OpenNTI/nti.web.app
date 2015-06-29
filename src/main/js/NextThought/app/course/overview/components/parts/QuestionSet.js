@@ -8,7 +8,7 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 	],
 
 	requires: [
-		'NextThought.app.assessment.Score',
+		'NextThought.common.chart.Score',
 		'NextThought.app.assessment.ScoreboardHeader',
 		'NextThought.app.assessment.ScoreboardTally'
 	],
@@ -29,7 +29,7 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 
 
 	items: [
-		{ xtype: 'assessment-score' },
+		{ xtype: 'chart-score' },
 		{ xtype: 'assessment-tally', flex: 1 },
 		{ xtype: 'button',
 			text: getString('NextThought.view.courseware.overview.parts.QuestionSet.review'),
@@ -118,7 +118,7 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 		var parts = assignment.get('parts') || [],
 			//added to determine whether or not assignment is a no-submit
 			isNoSubmit = assignment.isNoSubmit(),
-			score = this.down('assessment-score'),
+			score = this.down('chart-score'),
 			tally = this.down('assessment-tally'),
 			format = 'l, F j, g:i a T',
 			opens = assignment.get('availableBeginning'),
@@ -260,10 +260,10 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 
 	updateWithScore: function(correct) {
 		var tally = this.down('assessment-tally'),
-			score = this.down('assessment-score');
+			score = this.down('chart-score');
 
 		tally.setTally(correct || 0, this.getTotal(), isNaN(correct));
-		tally.message.update(this.getQuetionSetContainerTitle());
+		tally.setMessage(this.getQuetionSetContainerTitle());
 
 		if (score) {
 			score.setValue(Math.floor(100 * correct / this.getTotal()) || 0);

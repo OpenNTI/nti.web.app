@@ -2,7 +2,7 @@ Ext.define('NextThought.app.assessment.Scoreboard', {
 	extend: 'NextThought.app.contentviewer.overlay.Panel',
 	alias: 'widget.assessment-scoreboard',
 	requires: [
-		'NextThought.app.assessment.Score',
+		'NextThought.common.chart.Score',
 		'NextThought.app.assessment.ScoreboardHeader',
 		'NextThought.app.assessment.ScoreboardTally',
 		'NextThought.app.assessment.QuizSubmission'

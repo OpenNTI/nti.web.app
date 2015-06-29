@@ -216,7 +216,7 @@ body.dragging * {
 			margin-bottom: 10px;
 		}
 
-		&::after {			
+		&::after {
 			content: '';
 			position: absolute;
 			bottom: -1px;
@@ -649,6 +649,7 @@ body.dragging * {
 
 		.tally-box {
 			padding: 0 10px;
+			top: 17px !important;
 			font: {
 				family: $font;
 				weight: normal;
@@ -1513,7 +1514,7 @@ body.dragging * {
 		cursor: default;
 		pointer-events: none;
 	}
-	
+
 	.wordbank-body.locked {
 		background-color: white;
 		border-right: 1px #e2e2e2 solid;
@@ -1708,4 +1709,3 @@ input.preview[readonly] {
 .underline {
 	text-decoration: underline;
 }
-

@@ -43,6 +43,17 @@ Ext.define('NextThought.app.assessment.ScoreboardTally', {
 		}
 	},
 
+
+	setMessage: function(txt) {
+		if (!this.rendered) {
+			this.on('afterrender', this.setMessage.bind(this, txt));
+			return;
+		}
+
+		this.message.update(txt);
+	},
+
+
 	setGreyText: function(text) {
 		if (!this.rendered) {
 			this.on({single: true, afterrender: this.setGreyText.bind(this, [text])});
