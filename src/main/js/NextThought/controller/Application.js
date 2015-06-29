@@ -89,9 +89,18 @@ Ext.define('NextThought.controller.Application', {
 
 
 	handleRoute: function(title, route, precache) {
-		var body = this.getBody();
+		var body = this.getBody(),
+			path = route,
+			parts = path.split('/');
 
-		return body.handleRoute(route, precache)
+		//if we are navigating to an object remove it from the path
+		//so any handlers that have a variable at the end won't accidentally
+		//get 'object'
+		if (parts[parts.length - 2] === 'object') {
+			path = parts.slice(0, -2).join('/');
+		}
+
+		return body.handleRoute(path, precache)
 			.then(this.onRoute.bind(this, title, route));
 	},
 
