@@ -71,7 +71,10 @@ Ext.define('NextThought.mixins.SearchHitHighlighting', {
 			doc = searchIn.ownerDocument,
 			index = this.buildSearchIndex(),
 			ranges = TextRangeFinderUtils.findTextRanges(searchIn, doc, fragRegex.re, fragRegex.matchingGroups, index),
-			range, pos = -2, nodeTop, scrollOffset, p;
+			p = Ext.getBody(),
+			height = Ext.Element.getViewportHeight(),
+			scrollOffset = p.getScrollTop(),
+			range, pos = -2, nodeTop;
 
 
 		if (Ext.isEmpty(ranges)) {
@@ -86,15 +89,12 @@ Ext.define('NextThought.mixins.SearchHitHighlighting', {
 
 		if (range && range.getClientRects().length > 0) {
 			nodeTop = range.getClientRects()[0].top;
-			scrollOffset = this.body.getScroll().top;
 			pos = nodeTop + scrollOffset;
 		}
 
 		console.log('Need to scroll to calculated pos', pos);
 		if (pos > 0) {
-			var mainViewId = this.getSearchHitConfig ? this.getSearchHitConfig().mainViewId : 'profile';
-			p = Ext.get(mainViewId);
-			pos -= p.getHeight() / 2;
+			pos -= height / 2;
 			if (p) {
 				//console.log('Scroll To pos: ', pos, 'current scroll: ', scrollOffset, ' view: ', p);
 				p.scrollTo('top', pos, true);

@@ -10,7 +10,7 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 	],
 
 	mixins: {
-		searchHitHighlighting: 'NextThought.mixins.SearchHitHighlighting'
+		Searchable: 'NextThought.mixins.Searchable'
 	},
 
 	cls: 'forum-comment-thread',
@@ -172,6 +172,19 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 		if (me.scrollToComment) {
 			me.goToComment(me.scrollToComment);
 		}
+
+		this.initSearch();
+	},
+
+
+	getContainerIdForSearch: function() {
+		return this.topic.get('NTIID');
+	},
+
+
+	onceReadyForSearch: function() {
+		return this.initialLoad
+			.then(function() { return wait(); });
 	},
 
 
@@ -731,7 +744,7 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 
 		var me = this;
 
-		return new Promise(function(fulfill, reject) {
+		this.goToComment = new Promise(function(fulfill, reject) {
 			var refs = comment.get('references');
 
 			if (Ext.isEmpty(refs)) {
@@ -761,6 +774,9 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 				});
 			});
 		});
+
+
+		return this.goToComment;
 	},
 
 

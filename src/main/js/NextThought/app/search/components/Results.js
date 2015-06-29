@@ -64,7 +64,7 @@ Ext.define('NextThought.app.search.components.Results', {
 			xtype: type,
 			hit: hit,
 			label: label,
-			navigateToObject: this.navigateToObject.bind(this),
+			navigateToSearchHit: this.navigateToSearchHit.bind(this),
 			getPathToObject: this.PathActions.getPathToObject.bind(this.PathActions)
 		};
 	},

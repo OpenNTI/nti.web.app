@@ -142,7 +142,14 @@ Ext.define('NextThought.app.search.components.results.Base', {
 
 
 	clicked: function(e) {
+		var me = this,
+			hit = me.hit,
+			fragEl = e.getTarget('[ordinal]'),
+			fragIndex = fragEl && fragEl.getAttribute('ordinal');
+
 		this.getObject
-			.then(this.navigateToObject.bind(this));
+			.then(function(obj) {
+				me.navigateToSearchHit(obj, me.hit, fragIndex);
+			});
 	}
 });

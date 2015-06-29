@@ -26,7 +26,7 @@ Ext.define('NextThought.app.search.Index', {
 			},
 			{
 				xtype: 'search-results',
-				navigateToObject: this.navigateToObject.bind(this)
+				navigateToSearchHit: this.navigateToSearchHit.bind(this)
 			}
 		]);
 
@@ -279,5 +279,11 @@ Ext.define('NextThought.app.search.Index', {
 
 		this.removeLoading();
 		this.showError();
+	},
+
+
+	navigateToSearchHit: function(record, hit, frag) {
+		this.SearchStore.setHitForContainer(hit.get('ContainerId'), hit, frag);
+		this.navigateToObject(record);
 	}
 });
