@@ -331,7 +331,8 @@ Ext.define('NextThought.app.course.dashboard.Index', {
 			week: week,
 			isCurrent: isCurrent,
 			number: this.items.getCount(),
-			currentState: this.self.IN_BUFFER
+			currentState: this.self.IN_BUFFER,
+			navigateToObject: this.navigateToObject.bind(this)
 		});
 
 		//set a flag to keep us from trying to loading too many weeks at once

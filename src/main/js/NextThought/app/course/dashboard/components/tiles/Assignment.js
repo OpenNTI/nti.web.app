@@ -14,7 +14,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Assignment', {
 
 
 	handleNavigation: function() {
-		this.fireEvent('navigate-to-assignment', this.record.getId(), $AppConfig.userObject);
+		this.navigateToObject(this.record);
 	},
 
 

@@ -111,6 +111,7 @@ Ext.define('NextThought.app.course.dashboard.components.AbstractView', {
 
 			tile.CACHE = tile.CACHE || {};
 			tile.column = index;
+			tile.navigateToObject = me.navigateToObject.bind(this);
 
 			me.addToColumn(index, tile);
 

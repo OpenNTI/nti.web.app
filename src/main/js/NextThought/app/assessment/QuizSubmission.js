@@ -564,7 +564,7 @@ Ext.define('NextThought.app.assessment.QuizSubmission', {
 
 
 	setFromSavePoint: function(savepoint) {
-		var submission = savepoint.getQuestionSetSubmission();
+		var submission = savepoint && savepoint.getQuestionSetSubmission();
 
 		if (savepoint && !this.assessmentHistory) {
 			this.progressSaved = true;

@@ -80,6 +80,7 @@ Ext.define('NextThought.app.course.Index', {
 		this.addObjectHandler(NextThought.model.PageInfo.mimeType, this.getPageInfoRoute.bind(this));
 		this.addObjectHandler(NextThought.model.RelatedWork.mimeType, this.getRelatedWorkRoute.bind(this));
 		this.addObjectHandler(NextThought.model.assessment.Assignment.mimeType, this.getAssignmentRoute.bind(this));
+		this.addObjectHandler('application/vnd.nextthought.courses.courseoutlinecontentnode', this.getLessonRoute.bind(this));
 
 		this.addDefaultRoute('/activity');
 	},
@@ -389,6 +390,24 @@ Ext.define('NextThought.app.course.Index', {
 			title: obj.get ? obj.get('title') : obj.title,
 			precache: {
 				assignment: obj.isModel ? obj : null
+			}
+		};
+	},
+
+
+	getLessonRoute: function(obj) {
+		var id = obj.getId ? obj.getId() : obj.NTIID,
+			route;
+
+		id = ParseUtils.encodeForURI(id);
+
+		route = '/lessons/' + id;
+
+		return {
+			route: route,
+			title: obj.get ? obj.get('title') : obj.title,
+			precache: {
+				lesson: obj.isModel ? obj : null
 			}
 		};
 	},

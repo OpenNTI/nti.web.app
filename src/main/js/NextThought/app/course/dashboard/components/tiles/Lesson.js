@@ -26,6 +26,6 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Lesson', {
 
 
 	handleNavigation: function() {
-		this.fireEvent('navigate-to-lesson', this.record.getId());
+		this.navigateToObject(this.record);
 	}
 });
