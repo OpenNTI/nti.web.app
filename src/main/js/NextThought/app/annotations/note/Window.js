@@ -18,7 +18,8 @@ Ext.define('NextThought.app.annotations.note.Window', {
 
 		var context = NextThought.app.context.ContainerContext.create({
 			container: this.record.get('ContainerId'),
-			range: this.record.get('applicableRange')
+			range: this.record.get('applicableRange'),
+			contextRecord: this.record
 		});
 
 		this.add([{
