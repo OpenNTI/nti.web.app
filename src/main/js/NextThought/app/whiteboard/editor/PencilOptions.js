@@ -7,14 +7,13 @@ Ext.define('NextThought.app.whiteboard.editor.PencilOptions', {
 	],
 
 	ui: 'options',
-	layout: {
-		type: 'hbox',
-		align: 'stretchmax'
-	},
+	layout: 'none',
+
 	items: [{
 		xtype: 'toolbar',
 		ui: 'options',
 		cls: 'pencil-stroke-options',
+		layout: 'none',
 		defaults: {
 			xtype: 'wb-tool-option',
 			toggleGroup: 'pencil-stroke-'
@@ -30,6 +29,7 @@ Ext.define('NextThought.app.whiteboard.editor.PencilOptions', {
 		xtype: 'toolbar',
 		ui: 'options',
 		cls: 'pencil-color-options',
+		layout: 'none',
 		defaults: {
 			ui: 'option',
 			scale: 'large',

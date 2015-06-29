@@ -14,9 +14,8 @@ Ext.define('NextThought.app.whiteboard.editor.Tools', {
 	ui: 'container',
 	baseCls: 'whiteboard-tools',
 
-	layout: 'anchor',
+	layout: 'none',
 	defaults: {
-		anchor: '100%',
 		baseCls: 'whiteboard-tools'
 	},
 	items: [{

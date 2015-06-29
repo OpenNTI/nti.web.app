@@ -7,10 +7,8 @@ Ext.define('NextThought.app.whiteboard.editor.EraserOptions', {
 	],
 
 	ui: 'options',
-	layout: {
-		type: 'hbox',
-		align: 'middle'
-	},
+	layout: 'none',
+
 	items: [{
 		xtype: 'toolbar',
 		ui: 'options',

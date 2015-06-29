@@ -20,28 +20,19 @@ Ext.define('NextThought.app.whiteboard.Window', {
 	draggable: true,
 
 	modal: true,
-	layout: 'fit',
+	layout: 'none',
 	items: [
-		{ xtype: 'whiteboard-editor' }
-	],
-
-	isWhiteboardWindow: true,
-
-	dockedItems: [
+		{ xtype: 'whiteboard-editor' },
 		{
 			xtype: 'container',
 			dock: 'bottom',
 			ui: 'footer',
-			baseCls: 'nti-window',
-			layout: {
-				type: 'hbox',
-				align: 'stretchmax'
-			},
+			layout: 'none',
+			cls: 'nti-window-footer',
 			defaults: {
 				cls: 'footer-region',
 				xtype: 'container',
-				flex: 1,
-				layout: 'hbox'
+				layout: 'none'
 			},
 			items: [
 				{
@@ -54,7 +45,7 @@ Ext.define('NextThought.app.whiteboard.Window', {
 				},
 				{
 					flex: 2,
-					layout: { type: 'hbox', pack: 'center' },
+					layout: 'none',
 					defaults: { xtype: 'button', scale: 'medium', disabled: true },
 					items: [
 						{iconCls: 'undo', ui: 'history', action: 'undo', tooltip: 'Undo', hidden: true },
@@ -62,7 +53,8 @@ Ext.define('NextThought.app.whiteboard.Window', {
 					]
 				},
 				{
-					layout: { type: 'hbox', pack: 'end' },
+					layout: 'none',
+					cls: 'right',
 					defaults: {xtype: 'button', ui: 'primary', scale: 'large'},
 					items: [
 						{text: 'Cancel', action: 'cancel', ui: 'secondary', handler: function(b, e) {
@@ -79,6 +71,7 @@ Ext.define('NextThought.app.whiteboard.Window', {
 		}
 	],
 
+	isWhiteboardWindow: true,
 
 	constructor: function(config) {
 		var vpHeight = Ext.Element.getViewportHeight();
@@ -171,6 +164,7 @@ Ext.define('NextThought.app.whiteboard.Window', {
 	afterRender: function() {
 		this.callParent(arguments);
 		var me = this;
+
 		me.mon(me.el, 'click', me.absorbeClick, this);
 		me.mon(this.el, 'click', function() {
 			console.log('WB clicked');

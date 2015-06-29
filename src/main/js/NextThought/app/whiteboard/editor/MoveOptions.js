@@ -9,14 +9,13 @@ Ext.define('NextThought.app.whiteboard.editor.MoveOptions', {
 	],
 
 	ui: 'options',
-	layout: {
-		type: 'hbox',
-		align: 'stretchmax'
-	},
+	layout: 'none',
+
 	items: [{
 		xtype: 'toolbar',
 		ui: 'options',
 		cls: 'move-action-picker',
+		layout: 'none',
 		defaults: {
 			xtype: 'wb-tool-option',
 			toggleGroup: 'move-selected-'
@@ -32,6 +31,7 @@ Ext.define('NextThought.app.whiteboard.editor.MoveOptions', {
 		xtype: 'toolbar',
 		ui: 'options',
 		cls: 'pencil-stroke-options',
+		layout: 'none',
 		pathSelectStrokeWidth: true,
 		defaults: {
 			xtype: 'wb-tool-option',
@@ -46,6 +46,7 @@ Ext.define('NextThought.app.whiteboard.editor.MoveOptions', {
 	},{
 		xtype: 'toolbar',
 		ui: 'options',
+		layout: 'none',
 		cls: 'shape-options',
 		defaults: {
 			ui: 'option',

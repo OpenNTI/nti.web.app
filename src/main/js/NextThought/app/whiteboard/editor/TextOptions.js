@@ -9,6 +9,8 @@ Ext.define('NextThought.app.whiteboard.editor.TextOptions', {
 	ui: 'options',
 	cls: 'text-options',
 
+	layout: 'none',
+
 	items: [
 		{
 			ui: 'font-size-select',

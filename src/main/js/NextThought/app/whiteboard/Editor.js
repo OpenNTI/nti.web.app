@@ -15,11 +15,11 @@ Ext.define('NextThought.app.whiteboard.Editor', {
 	autoScroll: true,
 	border: false,
 	ui: 'whiteboard-editor',
-	layout: 'anchor',
-	dockedItems: [
-		{ xtype: 'whiteboard-tools', dock: 'top' }
+	layout: 'none',
+	items: [
+		{ xtype: 'whiteboard-tools', dock: 'top' },
+		{xtype: 'whiteboard-canvas', anchor: '100%'}
 	],
-	items: [{xtype: 'whiteboard-canvas', anchor: '100%'}],
 
 	initComponent: function() {
 		this.callParent(arguments);
@@ -40,6 +40,7 @@ Ext.define('NextThought.app.whiteboard.Editor', {
 		this.callParent(arguments);
 
 		var parentWin = this.up('window');
+
 		if (parentWin && parentWin.readonly) {
 			this.toolbar.disable().hide();
 		}
@@ -48,6 +49,8 @@ Ext.define('NextThought.app.whiteboard.Editor', {
 		}
 
 		this.mon(this.up('wb-window'), 'activate', function() {this.canvas.drawScene();}, this);
+
+		this.canvas.hasResized(this, this.getWidth(), this.getHeight());
 	},
 
 	reset: function() {

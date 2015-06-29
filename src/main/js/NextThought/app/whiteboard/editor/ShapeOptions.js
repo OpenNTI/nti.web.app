@@ -8,13 +8,12 @@ Ext.define('NextThought.app.whiteboard.editor.ShapeOptions', {
 	],
 
 	ui: 'options',
-	layout: {
-		type: 'hbox',
-		align: 'stretchmax'
-	},
+	layout: 'none',
+
 	items: [{
 		xtype: 'toolbar',
 		ui: 'options',
+		layout: 'none',
 		cls: 'shape-picker',
 		defaults: {
 			xtype: 'wb-tool-option',
@@ -43,6 +42,7 @@ Ext.define('NextThought.app.whiteboard.editor.ShapeOptions', {
 		]
 	},{
 		xtype: 'toolbar',
+		layout: 'none',
 		ui: 'options',
 		cls: 'shape-options',
 		defaults: {
