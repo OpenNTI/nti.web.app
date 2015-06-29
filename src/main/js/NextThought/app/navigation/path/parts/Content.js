@@ -41,14 +41,9 @@ Ext.define('NextThought.app.navigation.path.parts.Content', {
 
 
 	getPathToNote: function(note, getPathTo) {
-		//TODO: use the servers getPath view
-		return Service.getObject(note.get('ContainerId'))
-			.then(function(page) {
-				return getPathTo(page);
-			})
+		return Service.getPathToObject(note.get('NTIID'))
 			.then(function(path) {
-				path.push(note);
-				return path;
+				return path.concat([note]);
 			})
 			.fail(function(reason) {
 				console.error('Failed to get path to note: ', reason);

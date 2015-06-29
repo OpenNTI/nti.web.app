@@ -121,5 +121,11 @@ Ext.define('NextThought.app.library.courses.Actions', {
 	findCourseByPriority: function(fn) {
 		return this.CourseStore.onceLoaded()
 			.then(this.CourseStore.findCourseInstanceByPriority.bind(this.CourseStore, fn));
+	},
+
+
+	findForNTIID: function(id) {
+		return this.CourseStore.onceLoaded()
+			.then(this.CourseStore.findForNTIID.bind(this.CourseStore, id));
 	}
 });

@@ -121,5 +121,10 @@ Ext.define('NextThought.app.library.content.StateStore', {
 		});
 
 		return Promise.resolve([]);
+	},
+
+
+	findForNTIID: function() {
+		//TODO: fill this in
 	}
 });

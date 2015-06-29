@@ -59,7 +59,13 @@ Ext.define('NextThought.app.library.Actions', {
 
 	findBundle: function(id) {
 		return this.CourseActions.findCourseInstance(id)
-				.fail(this.ContentActions.findContent.bind(this.ContentActions));
+				.fail(this.ContentActions.findContent.bind(this.ContentActions, id));
+	},
+
+
+	findBundleForNTIID: function(id) {
+		return this.CourseActions.findForNTIID(id)
+			.fail(this.ContentActions.findForNTIID.bind(this.ContentActions, id));
 	},
 
 

@@ -17,5 +17,10 @@ Ext.define('NextThought.app.notifications.components.types.Grade', {
 	getDisplayName: function(values) {
 		if (!values || !values.course) { return ''; }
 		return values.course.get('Title');
+	},
+
+
+	getIcon: function(values) {
+		return Ext.DomHelper.markup({cls: 'icon'});
 	}
 });

@@ -71,5 +71,11 @@ Ext.define('NextThought.app.library.content.Actions', {
 	findContentByPriority: function(fn) {
 		return this.ContentStore.onceLoaded()
 			.then(this.ContentStore.findContentByPriority.bind(this.ContentStore, fn));
+	},
+
+
+	findForNTIID: function(id) {
+		return this.ContentStore.onceLoaded()
+			.then(this.ContentStore.findForNTIID.bind(this.ContentStore, id));
 	}
 });

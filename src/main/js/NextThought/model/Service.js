@@ -474,6 +474,25 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
+	getPathToObject: function(id) {
+		var link = this.getPathToContainerLink(),
+			params = {
+				ObjectId: id
+			};
+
+		link += '?' + Ext.Object.toQueryString(params);
+
+		return Service.request(link)
+			.then(function(response) {
+				response = JSON.parse(response);
+
+				var items = ParseUtils.parseItems(response[0]);
+
+				return items;
+			});
+	},
+
+
 	getObject: function(ntiid, success, failure, scope, safe) {
 		var url, result;
 

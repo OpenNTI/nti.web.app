@@ -20,6 +20,9 @@ Ext.define('NextThought.app.notifications.components.types.Feedback', {
 	fillInData: function(rec) {
 		this.callParent(arguments);
 
+		var libraryActions = this.LibraryActions,
+			assignment, cid;
+
 		if (!rec.fields.getByKey('course')) {
 			rec.fields.add(Ext.data.Field.create({name: 'course', type: 'auto'}));
 		}
@@ -29,28 +32,25 @@ Ext.define('NextThought.app.notifications.components.types.Feedback', {
 
 		if (rec.get('assignmentContainer') || rec.data.hidden) {return;}
 
-		//TODO: figure out what happens here
-		Service.getObject(rec.get('AssignmentId'), function(assignment) {
-			var cid = assignment.get('ContainerId'),
-				//TODO figure this out
-				course = null;//CourseWareUtils.courseForNtiid(cid);
+		Service.getObject(rec.get('AssignmentId'), function(a) {
+			assignment = a;
 
-			if (!course) {
-				rec.data.hidden = true;
-				console.warn('Hidding: ', rec.data, ' Could not find course for ID: ', cid);
-			}
+			cid = assignment.get('ContainerId');
 
+			return libraryActions.findBundleForNTIID(cid);
+		}, function() {
+			rec.data.hidden = true;
+			rec.set('assignmentName', 'Not Found');
+			console.warn('Hiding', rec.data, ' Could not find Assignment: ', rec.get('AssignmentId'));
+		}).then(function(course) {
 			rec.data.course = course;
 			rec.course = course;
+
 			rec.set({
 				assignmentContainer: cid,
 				assignmentName: assignment.get('title'),
 				assignmentDueDate: assignment.getDueDate()
 			});
-		}, function() {
-			rec.data.hidden = true;//secret..shhh
-			rec.set('assignmentName', 'Not Found');
-			console.warn('Hidding: ', rec.data, ' Could not find Assignment: ', rec.get('AssignmentId'));
 		});
 	},
 

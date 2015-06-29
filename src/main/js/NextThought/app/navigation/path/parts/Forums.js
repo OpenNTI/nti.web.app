@@ -50,8 +50,7 @@ Ext.define('NextThought.app.navigation.path.parts.Forums', {
 				return getPathTo(forum);
 			})
 			.then(function(path) {
-				path.push(topic);
-				return path;
+				return path.concat([topic]);
 			})
 			.fail(function(reason) {
 				console.error('Failed to get path to topic:', reason);
@@ -66,8 +65,7 @@ Ext.define('NextThought.app.navigation.path.parts.Forums', {
 				return getPathTo(topic);
 			})
 			.then(function(path) {
-				path.push(post);
-				return path;
+				return path.concat([post]);
 			})
 			.fail(function(reason) {
 				console.error('Failed to get path to topic: ', reason);
@@ -82,8 +80,7 @@ Ext.define('NextThought.app.navigation.path.parts.Forums', {
 				return getPathTo(topic);
 			})
 			.then(function(path) {
-				path.push(comment);
-				return path;
+				return path.concat([comment]);
 			})
 			.fail(function(reason) {
 				console.error('Failed to get path to topic comment: ', reason);

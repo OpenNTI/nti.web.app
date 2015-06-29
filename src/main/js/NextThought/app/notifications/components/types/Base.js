@@ -1,5 +1,7 @@
 Ext.define('NextThought.app.notifications.components.types.Base', {
 
+	requires: ['NextThought.app.library.Actions'],
+
 	//the mime type this item renders
 	keyVal: '',
 
@@ -26,6 +28,8 @@ Ext.define('NextThought.app.notifications.components.types.Base', {
 			panel.registerFillData(val, fill);
 			panel.registerClickHandler(val, clicked);
 		});
+
+		this.LibraryActions = NextThought.app.library.Actions.create();
 
 		// this.panel.registerSubType(this.keyVal, this.getTpl());
 		// this.panel.registerFillData(this.keyVal, this.fillInData.bind(this));

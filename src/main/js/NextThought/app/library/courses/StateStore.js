@@ -272,5 +272,48 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 		});
 
 		return Promise.resolve(result);
+	},
+
+
+	__containsNTIID: function(rec, prefix) {
+		var match = false;
+
+		rec.getContentPackages().every(function(contentPackage) {
+			var id = contentPackage.get('NTIID');
+
+			match = match || (prefix && prefix === ParseUtils.ntiidPrefix(id));
+		});
+
+		return match;
+	},
+
+
+	findForNTIID: function(id) {
+		var me = this,
+			prefix = ParseUtils.ntiidPrefix(id),
+			course;
+
+		function fn(rec) {
+			rec = rec.get('CourseInstance');
+
+			//if the id is my id or oid
+			var match = rec.getId() === id || rec.get('OID') === id;
+
+			match = match || rec.get('CourseEntryNTIID') === id;
+
+			return match || me.__containsNTIID(rec, prefix);
+		}
+
+		course = me.__findIn(me.ENROLLED_COURSES, fn);
+
+		if (!course) {
+			course = me.__findIn(me.ADMIN_COURSES, fn);
+		}
+
+		if (course) {
+			return Promise.resolve(course.get('CourseInstance'));
+		}
+
+		return Promise.reject();
 	}
 });

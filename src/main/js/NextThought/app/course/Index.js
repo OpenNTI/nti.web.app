@@ -401,8 +401,20 @@ Ext.define('NextThought.app.course.Index', {
 
 		if (root.isForum) {
 			route = this.getRouteForForum(root, subPath);
+		} else if (root instanceof NextThought.model.assessment.Assignment) {
+			route = this.getRouteForAssignment(root, subPath);
 		}
 
 		return route;
+	},
+
+
+	getRouteForAssignment: function(assignment, path) {
+		var cmp = this.down('course-assessment-container'),
+			route = '/assignments/';
+
+		path.unshift(assignment);
+
+		return route + Globals.trimRoute(cmp.getRouteForPath(path));
 	}
 });
