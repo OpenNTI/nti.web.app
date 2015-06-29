@@ -122,10 +122,19 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 		lessonId = ParseUtils.decodeFromURI(lessonId);
 		rootId = ParseUtils.decodeFromURI(rootId);
-		pageId = ParseUtils.decodeFromURI(pageId);
+		pageId = pageId && ParseUtils.decodeFromURI(pageId);
 
+		//If we have a reader and its root is the same as the root we are trying to set
+		//and either if:
+		//1.) we aren't trying to set a page and the reader doesn't have a page
+		//2.) we are trying to set a page and its the reader's current page
+		//then don't on set the reader to prevent it from flashing.
 		if (me.reader) {
 			if (me.reader.root === rootId) {
+				if (!pageId && me.reader.pageId === rootId) {
+					return Promise.resolve();
+				}
+
 				if (pageId && me.reader.pageId && me.reader.pageId === pageId) {
 					return Promise.resolve();
 				}
