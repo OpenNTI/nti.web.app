@@ -11,11 +11,11 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 		'NextThought.app.annotations.renderer.Manager',
 		'NextThought.app.annotations.Index',
 		'NextThought.app.slidedeck.transcript.parts.VideoTitle',
-        'NextThought.app.slidedeck.transcript.parts.NoTranscript',
-        'NextThought.app.userdata.Actions',
-        'NextThought.app.slidedeck.media.Actions',
-        'NextThought.app.slidedeck.media.StateStore',
-        'NextThought.app.windows.Actions'
+		'NextThought.app.slidedeck.transcript.parts.NoTranscript',
+		'NextThought.app.userdata.Actions',
+		'NextThought.app.slidedeck.media.Actions',
+		'NextThought.app.slidedeck.media.StateStore',
+		'NextThought.app.windows.Actions'
 	],
 
 	ui: 'transcript',
@@ -35,13 +35,13 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 	initComponent: function() {
 		this.enableBubble(['presentation-parts-ready', 'no-presentation-parts', 'jump-video-to']);
 
-        this.buildComponents();
-		this.flatPageStore = new NextThought.store.FlatPage();
+		this.buildComponents();
 		this.UserDataActions = NextThought.app.userdata.Actions.create();
 		this.MediaViewerActions = NextThought.app.slidedeck.media.Actions.create();
 		this.MediaViewerStore = NextThought.app.slidedeck.media.StateStore.getInstance();
 		this.WindowActions = NextThought.app.windows.Actions.create();
 
+		this.flatPageStore = new NextThought.store.FlatPage();
 		this.UserDataActions.initPageStores(this);
 
 		this.callParent(arguments);
@@ -52,7 +52,8 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 			this.hasNoPresentationParts = true;
 		}
 
-		// this.UserDataActions.setUpPageStoreDelegates(this);
+		//Store Events
+		this.UserDataActions.setupPageStoreDelegates(this);
 
 		this.UserDataActions.listenToPageStores(this, {
 			scope: this,
@@ -71,28 +72,28 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 	},
 
 
-    buildComponents: function(){
-        var items = [];
-        if (this.transcript) {
-            items = [{
-                xtype: 'video-title-component',
-                video: this.videoPlaylist[0]
-            }, {
-                xtype: 'video-transcript',
-                transcript: this.transcript
-            }];
-        }
-        else{
-            items.push({
-                xtype: 'no-video-transcript',
-                video: this.videoPlaylist[0]
-            });
+	buildComponents: function() {
+		var items = [];
+		if (this.transcript) {
+			items = [{
+				xtype: 'video-title-component',
+				video: this.videoPlaylist[0]
+			}, {
+				xtype: 'video-transcript',
+				transcript: this.transcript
+			}];
+		}
+		else {
+			items.push({
+				xtype: 'no-video-transcript',
+				video: this.videoPlaylist[0]
+			});
 
-            this.hasNoPresentationParts = true;
-        }
+			this.hasNoPresentationParts = true;
+		}
 
-        this.items = items;
-    },
+		this.items = items;
+	},
 
 
 	beforeRender: function() {
@@ -104,35 +105,26 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 
 
 	onStoreEventsAdd: function(store, records) {
-		var cmps = this.cmpMap[store.containerId || ''];
-		if (cmps) {
-			Ext.each(cmps, function(c) {
-				this.fireEvent('register-records', store, records, c);
-			});
-		}
+		var cmps = this.MediaViewerStore.getComponentsForStore(store.containerId);
+		Ext.each(cmps, function(c) {
+			this.fireEvent('register-records', store, records, c);
+		});
 	},
 
 
 	onStoreEventsRemove: function(store, records) {
-		var cmps = this.cmpMap[store.containerId || ''];
-		if (cmps) {
-			Ext.each(cmps, function(c) {
-				this.fireEvent('unregister-records', store, records, c);
-			});
-		}
-	},
-
-
-	getTranscriptForVideo: function(id, transcriptStore) {
-		var s = transcriptStore.findRecord('associatedVideoId', id);
+		var cmps = this.MediaViewerStore.getComponentsForStore(store.containerId);
+		Ext.each(cmps, function(c) {
+			this.fireEvent('unregister-records', store, records, c);
+		});
 	},
 
 
 	setupNoteOverlay: function() {
 		var me = this;
-		
+
 		this.noteOverlay = Ext.create('NextThought.app.slidedeck.transcript.NoteOverlay', {
-			reader: this, 
+			reader: this,
 			readerHeight: this.getHeight()
 		});
 
@@ -155,9 +147,9 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 			'mousedown': 'mayBeHideAnnotationView'
 		});
 
-        if(!this.transcript){
-            this.el.addCls('no-transcript-view');
-        }
+		if(!this.transcript){
+			this.el.addCls('no-transcript-view');
+		}
 
 		this.mon(Ext.get(this.getScrollTarget()), 'scroll', 'onScroll');
 
@@ -231,7 +223,7 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 
 				Promise.all(me.MediaViewerActions.loadUserData(partCmps, me))
 					.then( function() {
-						wait(10).then(me.fireEvent.bind(me, 'sync-height'));		
+						wait(10).then(me.fireEvent.bind(me, 'sync-height'));
 					})
 					.fail(function() {
 						console.error('*****FAILED to load UserData in the Media Viewer: ', arguments);
@@ -264,7 +256,7 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 	highlightAtTime: function(seconds, allowScroll) {
 		var cmp = this.down('video-transcript[transcript]'),
 			scrollingEl = Ext.get(this.getScrollTarget()),
-            offset = scrollingEl.getY(), tEl;
+			offset = scrollingEl.getY(), tEl;
 
 		if (!cmp) { return; }
 
@@ -316,7 +308,7 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 
 
 	scrollToStartingTime: function(seconds) {
-		var cmps = this.getPartComponents(), tEl, me = this, scrollingEl;
+		var cmps = this.getPartComponents(), tEl, scrollingEl;
 
 		// scroll the component that contains the given time into view.
 		Ext.each(cmps, function(part) {
@@ -338,10 +330,10 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 
 
 	syncWithVideo: function(videoState, allowScroll) {
-			if (videoState && videoState.time) {
-				this.highlightAtTime(videoState.time, allowScroll);
-			}
-			//this.transcriptView.syncTranscriptWithVideo(videoState);
+		if (videoState && videoState.time) {
+			this.highlightAtTime(videoState.time, allowScroll);
+		}
+		//this.transcriptView.syncTranscriptWithVideo(videoState);
 	},
 
 
@@ -355,7 +347,7 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 		if (!s) {
 			s = NextThought.store.FlatPage.create({
 				storeId: 'presentation-annotations-' + line,
-				filters: [{ id: 'nochildren', filterFn: function(r) { return !r.parent;}}]//override the base filter set
+				filters: [{ id: 'nochildren', filterFn: function(r) { return !r.parent; }}]//override the base filter set
 			});
 			annotations.each(function(annotation) {
 				//Note stores aren't unique here, but flatpage store won't let
@@ -465,30 +457,30 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 			this.annotationView.store.removeFilter(this.lineFilterId);
 		}
 
-        if(this.annotationView){
-            this.annotationView.destroy();
-        }
+		if(this.annotationView) {
+			this.annotationView.destroy();
+		}
 
 		this.callParent(arguments);
 
 	},
 
 
-    beforeDeactivate: function(){
-        if(this.noteOverlay && (this.noteOverlay.fireEvent('beforedeactivate') === false)){
-            return false;
-        }
+	beforeDeactivate: function() {
+		if(this.noteOverlay && (this.noteOverlay.fireEvent('beforedeactivate') === false)){
+			return false;
+		}
 
-        if(this.annotationView && this.annotationView.isVisible()){
-            if(this.annotationView.fireEvent('beforedeactivate') === false){
-                return false;
-            }
+		if(this.annotationView && this.annotationView.isVisible()){
+			if(this.annotationView.fireEvent('beforedeactivate') === false){
+				return false;
+			}
 
-            this.annotationView.hide();
-        }
+			this.annotationView.hide();
+		}
 
-        return true;
-    },
+		return true;
+	},
 
 
 	mayBeHideAnnotationView: function(e) {
@@ -563,7 +555,7 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 	},
 
 	showNote: function(record, el, monitors) {
-   		this.WindowActions.pushWindow(record, null, el, monitors);
-   	}
+		this.WindowActions.pushWindow(record, null, el, monitors);
+	}
 
 });
