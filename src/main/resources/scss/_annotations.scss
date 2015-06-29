@@ -46,7 +46,7 @@
 
 		.bar-cell {
 			display: block;
-			& > span:first-child; { margin-top: 14px; }
+			& > span:first-child { margin-top: 14px; }
 		}
 
 		a.bar-cell {
