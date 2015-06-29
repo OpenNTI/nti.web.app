@@ -49,7 +49,7 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 	loadTopic: function() {
 		var me = this;
 
-		loadForum(me.record)
+		me.loadForum(me.record)
 			.then(function(forum) {
 				me.forum = forum;
 
@@ -131,7 +131,7 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 		this.mon(topicCmp, {
 			'create-root-reply': commentCmp.addRootReply.bind(commentCmp),
 			'record-deleted': this.doClose.bind(this),
-			'edit-topic': this.showEditor.bind(this)
+			'edit-topic': this.showEditor.bind(this, topic, forum)
 		});
 	},
 

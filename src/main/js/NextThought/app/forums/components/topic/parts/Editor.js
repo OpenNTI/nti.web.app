@@ -212,7 +212,7 @@ Ext.define('NextThought.app.forums.components.topic.parts.Editor', {
 			me.el.mask('Saving...');
 		}
 
-		me.ForumActions.saveTopic(me.rec, me.forum, v.title, v.tags, v.body, v.publish)
+		me.ForumActions.saveTopic(me.record, me.forum, v.title, v.tags, v.body, v.publish)
 			.then(function(record) {
 				unmask();
 
