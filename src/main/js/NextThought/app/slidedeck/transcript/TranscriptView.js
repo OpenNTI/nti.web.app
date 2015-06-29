@@ -46,8 +46,6 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 
 		this.callParent(arguments);
 
-		this.cmpMap = {};
-
 		if (!this.slideStore && !this.transcript) {
 			this.hasNoPresentationParts = true;
 		}

@@ -3,13 +3,17 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 
 	requires: [
 		'NextThought.app.slidedeck.media.StateStore',
-		'NextThought.webvtt.Transcript'
+		'NextThought.webvtt.Transcript',
+		'NextThought.app.userdata.Actions',
+		'NextThought.app.userdata.StateStore'
 	],
 
 	constructor: function() {
 		this.callParent(arguments);
 
 		this.MediaUserDataStore = NextThought.app.slidedeck.media.StateStore.getInstance();
+		this.UserDataActions = NextThought.app.userdata.Actions.create();
+		this.UserDataStore = NextThought.app.userdata.StateStore.getInstance();
 	},
 
 
@@ -43,15 +47,17 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 		ctx.currentPageStores[id] = store;
 	},
 
-	
+
 	loadUserData: function(cmps, reader) {
 		var cid, me = this, loaded;
 
 		loaded = Ext.Array.map(cmps, function(cmp) {
 			var p;
-			cid = cmp.containerIdForData && cmp.containerIdForData();
 
-			if(cid){
+			cid = cmp.containerIdForData && cmp.containerIdForData();
+			cid = Ext.isObject(cid) ? cid.containerId : cid;
+
+			if (cid) {
 				me.initPageStores(cmp);
 				p = me.loadAnnotations(cmp, cid)
 					.then(function(store, cmp) {
@@ -78,16 +84,18 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 
 	loadAnnotations: function(cmp, containerId) {
 		var context = this.MediaUserDataStore.getContext(cmp),
-			store, me = this;
+			store, me = this, parentContext = this.UserDataStore.getContext(cmp.ownerCt);
 
+		me.MediaUserDataStore.addComponentForStore(cmp, containerId);
 		return new Promise(function(fulfill, reject) {
 			if (me.hasPageStore(containerId, context)) {
-				store = me.getPageStore(cid);
+				store = me.getPageStore(containerId);
 				fulfill(store, cmp);
 			}
 			else {
 				store = me.__buildPageStore(containerId);
 				me.addPageStore(containerId, store, context);
+				me.UserDataActions.addPageStore(containerId, store, parentContext);
 				cmp.bindToStore(store);
 
 				store.on(me, {
@@ -98,14 +106,13 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 				});
 
 				store.load();
-			}	
+			}
 		});
-		
 	},
 
-	
+
 	__buildPageStore: function(containerId) {
-		var props = {};
+		var props = {}, object;
 
 		if (Ext.isObject(containerId)) {
 			object = containerId;
@@ -130,13 +137,13 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 		return store;
 	},
 
-	
+
 	loadTranscript: function(transcript) {
 		var me = this;
 		return new Promise(function(fulfill, reject) {
 			me.loadRawTranscript(transcript)
 				.then(function(c) {
-					var parser = new NextThought.webvtt.Transcript({ input: c, ignoreLFs: true }), 
+					var parser = new NextThought.webvtt.Transcript({ input: c, ignoreLFs: true }),
 						cueList = parser.parseWebVTT();
 
 					// cache content and so we don't have to load it again.
@@ -149,7 +156,7 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 				.fail(function(){
 					console.log('Failure to load transcripts... ', arguments);
 					reject(arguments);
-				});	
+				});
 		});
 	},
 

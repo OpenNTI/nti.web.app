@@ -375,7 +375,7 @@ Ext.define('NextThought.app.userdata.Actions', {
 
 		context.pageStoreEvents = new Ext.util.Observable();
 		ObjectUtils.defineAttributes(context, {
-			currrentPageStores: {
+			currentPageStores: {
 				getter: function() { return currentPageStoresMap; },
 				setter: function(s) {
 					var key, o, m = currentPageStoresMap || {};

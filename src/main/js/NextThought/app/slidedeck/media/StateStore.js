@@ -3,6 +3,8 @@ Ext.define('NextThought.app.slidedeck.media.StateStore', {
 
 	obj_map: {},
 
+	cmpMap: {},
+
 	cacheTranscriptObject: function(id, content) {
 		this.obj_map[id] = content;
 	},
@@ -10,6 +12,21 @@ Ext.define('NextThought.app.slidedeck.media.StateStore', {
 
 	getTranscriptObject: function(id) {
 		return this.obj_map[id];
+	},
+
+
+	addComponentForStore: function(cmp, store) {
+		var id = store && store.getId ? store.getId() : store,
+			v = this.cmpMap[id] || [];
+
+		v.push(cmp);
+		this.cmpMap[id] = v;
+	},
+
+
+	getComponentsForStore: function(store) {
+		var id = store && store.getId ? store.getId() : store;
+		return this.cmpMap[id] || [];
 	},
 
 
