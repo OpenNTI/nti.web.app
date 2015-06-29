@@ -59,7 +59,7 @@ Ext.define('NextThought.app.whiteboard.Window', {
 					items: [
 						{text: 'Cancel', action: 'cancel', ui: 'secondary', handler: function(b, e) {
 							e.stopEvent();
-							b.up('window').cancel();
+							b.up('window').close();
 						} },
 						{text: 'Save', action: 'save', handler: function(b, e) {
 							e.stopEvent();
@@ -126,6 +126,7 @@ Ext.define('NextThought.app.whiteboard.Window', {
 		wb.initialConfig.value = wb.getValue();
 		//wb.fireEvent('save', wb);
 		win.fireEvent('save', win, wb);
+		win.close();
 	},
 
 	close: function() {

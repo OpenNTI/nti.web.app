@@ -89,8 +89,9 @@ Ext.define('NextThought.common.window.Window', {
 	initComponent: function() {
 		this.callParent(arguments);
 		var me = this,
-				w = this.width,
-				h = this.height;
+			closeCalled, windowStore,
+			w = this.width,
+			h = this.height;
 
 		this.widthPercent = typeof w === 'string' ? (parseInt(w, 10) / 100) : null;
 		this.heightPercent = typeof h === 'string' ? (parseInt(h, 10) / 100) : null;
@@ -109,10 +110,19 @@ Ext.define('NextThought.common.window.Window', {
 		this.titleBar = this.down('nti-window-header');
 
 		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
+		windowStore = this.WindowStore;
 
 		this.on({
 			'show': this.WindowStore.addOpenCls.bind(this.WindowStore),
-			'close': this.WindowStore.removeOpenCls.bind(this.WindowStore)
+			'close': function() {
+				closeCalled = true;
+				windowStore.removeOpenCls();
+			},
+			'destroy': function() {
+				if (!closeCalled) {
+					windowStore.removeOpenCls();
+				}
+			}
 		});
 	},
 

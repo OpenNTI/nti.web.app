@@ -114,15 +114,15 @@ Ext.define('NextThought.app.windows.StateStore', {
 	},
 
 
-	addOpenCls: function() {
+	addOpenCls: function(doNotIncrement) {
 		var html = this.getHTML(),
 			viewport = this.getViewport();
 
-		if (html.classList.contains('window-open')) { return; }
+		if (doNotIncrement !== true) {
+			this.incrementOpenWindows();
+		}
 
 		this.fireEvent('lock-body-height');
-		this.incrementOpenWindows();
-
 
 		html.classList.add('window-open');
 		// viewport.style.paddingRight = Ext.getScrollBarWidth() + 'px';

@@ -77,7 +77,7 @@ Ext.define('NextThought.app.windows.Index', {
 
 		this.viewContainer.add(cmp);
 
-		this.WindowStore.addOpenCls();
+		this.WindowStore.addOpenCls(cmp.isWindow);
 	},
 
 

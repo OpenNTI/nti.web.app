@@ -6,7 +6,6 @@ Ext.define('NextThought.app.library.courses.components.available.CourseDetailWin
 	initComponent: function () {
 		this.callParent(arguments);
 
-		debugger;
 		var me = this;
 		// Go ahead and show the course detail window
 		me.showCourse(this.record);

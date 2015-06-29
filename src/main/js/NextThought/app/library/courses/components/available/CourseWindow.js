@@ -248,6 +248,7 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 	},
 
 
+	//TODO: this needs to be needs to be allowNavigation
 	onBeforeClose: function() {
 		var me = this,
 			active = me.getLayout().getActiveItem(),
