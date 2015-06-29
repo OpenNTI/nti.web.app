@@ -163,7 +163,9 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 
 	loadRawTranscript: function(transcript) {
 		var me = this,
-			content = me.MediaUserDataStore.getTranscriptObject(transcript && transcript.get('associatedVideoId'));
+			content = me.MediaUserDataStore.getTranscriptObject(transcript && transcript.get('associatedVideoId')),
+			jsonpUrl = getURL(transcript.get('jsonpUrl'), transcript.get('basePath')),
+			url = getURL(transcript.get('url'), transcript.get('basePath'));
 
 		if (!transcript) {
 			return new Promise.reject();
@@ -173,10 +175,11 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 			return new Promise.resolve(content);
 		}
 
+
 		return new Promise(function(fulfill, reject) {
 			ContentProxy.request({
-				jsonpUrl: transcript.get('jsonpUrl'),
-				url: transcript.get('url'),
+				jsonpUrl: jsonpUrl,
+				url: url,
 				ntiid: 'webvtt',
 				expectedContentType: transcript.get('contentType'),
 				success: function(res, req) {

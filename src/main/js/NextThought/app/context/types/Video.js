@@ -56,6 +56,29 @@ Ext.define('NextThought.app.context.types.Video', {
 	},
 
 
+	__getBasePath: function(obj) {
+		var me = this,
+			id = this.contextRecord ? this.contextRecord.getId() : obj.ntiid;
+		return new Promise( function (fulfill, reject) {
+			if (me.course && me.course.getContentRoots) {
+				fulfill(me.course.getContentRoots()[0]);
+			}
+			else {
+				Service.getPathToObject(id)
+					.then(function(path) {
+						var course = path[0], p;
+
+						if(course) {
+							p = course.getContentRoots()[0];
+						}
+						fulfill(p);
+					})
+					.fail (reject);
+			}
+		});
+	},
+
+
 	/**
 	 * Parse a video object and build the context component
 	 * @param  {[Object]} obj [video object]
@@ -64,35 +87,44 @@ Ext.define('NextThought.app.context.types.Video', {
 	 */
 	parse: function(obj, kind) {
 		var video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: obj.ntiid }, obj)),
-			root = this.course && this.course.getContentRoots && this.course.getContentRoots()[0],
-			transcript = NextThought.model.transcript.TranscriptItem.fromVideo(video, root),
 			Resolver = NextThought.app.slidedeck.transcript.AnchorResolver,
-			context, cmp, me = this, store;
+			context, cmp, me = this, store, t;
 
-		if (kind === 'card') {
-			cmp = {
-				xtype: 'context-video-card',
-				type: me.self.type,
-				video: video,
-				transcript: transcript
-			};
-			return cmp;
-		}
+		return this.__getBasePath(obj)
+				.then( function(basePath) {
+					t = NextThought.model.transcript.TranscriptItem.fromVideo(video, basePath);
+					return Promise.resolve(t);
+				})
+				.fail( function() {
+					t = NextThought.model.transcript.TranscriptItem.fromVideo(video);
+					return Promise.resolve(t);
+				})
+				.then( function(transcript) {
+					if (kind === 'card') {
+						cmp = {
+							xtype: 'context-video-card',
+							type: me.self.type,
+							video: video,
+							transcript: transcript
+						};
+						return cmp;
+					}
 
-		return me.MediaActions.loadTranscript(transcript)
-				.then(function(cueList) {
-					store = me.__buildTranscriptStore(cueList);
-					context = Resolver.getDomElementForTranscriptTimeRange(me.range, store);
+					return me.MediaActions.loadTranscript(transcript)
+							.then(function(cueList) {
+								store = me.__buildTranscriptStore(cueList);
+								context = Resolver.getDomElementForTranscriptTimeRange(me.range, store);
 
-					cmp = Ext.widget('context-video', {
-						type: me.self.type,
-						snippet: context,
-						containerId: me.container,
-						video: video,
-						range: me.range
-					});
+								cmp = Ext.widget('context-video', {
+									type: me.self.type,
+									snippet: context,
+									containerId: me.container,
+									video: video,
+									range: me.range
+								});
 
-					return Promise.resolve(cmp);
+								return Promise.resolve(cmp);
+							});
 				});
 	}
 });

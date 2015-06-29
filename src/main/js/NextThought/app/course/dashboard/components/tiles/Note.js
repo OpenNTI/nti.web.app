@@ -26,7 +26,8 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 				context = NextThought.app.context.ContainerContext.create({
 					container: record.get('ContainerId'),
 					range: record.get('applicableRange'),
-					course: course
+					course: course,
+					contextRecord: record
 				});
 
 			return context.load('card')
