@@ -33,7 +33,6 @@ canvas.x-component-course-assessment {
 .timed-placeholder {
 	font-size: 1rem;
 	padding: 0 60px 0 35px;
-	max-height: 800px;
 	overflow: hidden;
 	position: relative;
 
@@ -48,10 +47,9 @@ canvas.x-component-course-assessment {
 	}
 
 	.nti-alert {
-		position: absolute;
+		position: absolute !important;
 		width: 62%;
-		top: 40%;
-		top: calc(50% - 60px);
+		top: 250px;
 		@include experimental(transform, translateY(-50%));
 		left: 50%;
 		margin-left: -31%;
@@ -678,7 +676,7 @@ canvas.x-component-course-assessment {
 						display: none;
 					}
 				}
-				
+
 				@include icon('mv-dropdown-arrow_hover', $position: relative, $side: after, $top: 16px, $left: auto, $right: 15px);
 
 				&:hover {
@@ -1013,8 +1011,8 @@ canvas.x-component-course-assessment {
 		&.disabled{
 			cursor: default;
 			opacity: 0.5;
-			pointer-events: none; 
-			
+			pointer-events: none;
+
 			&:hover {
 				color: inherit;
 				&::after{

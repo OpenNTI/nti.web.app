@@ -373,37 +373,39 @@ Ext.define('NextThought.app.userdata.Actions', {
 		var context = this.UserDataStore.getContext(cmpContext),
 			currentPageStoresMap = {};
 
-		context.pageStoreEvents = new Ext.util.Observable();
-		ObjectUtils.defineAttributes(context, {
-			currentPageStores: {
-				getter: function() { return currentPageStoresMap; },
-				setter: function(s) {
-					var key, o, m = currentPageStoresMap || {};
+		if (!context.pageStoreEvents && !context.currentPageStores) {
+				context.pageStoreEvents = new Ext.util.Observable();
+				ObjectUtils.defineAttributes(context, {
+					currentPageStores: {
+						getter: function() { return currentPageStoresMap; },
+						setter: function(s) {
+							var key, o, m = currentPageStoresMap || {};
 
-					currentPageStoresMap = s;
+							currentPageStoresMap = s;
 
-					for (key in m) {
-						if (m.hasOwnProperty(key)) {
-							o = m[key];
-							delete m[key];
+							for (key in m) {
+								if (m.hasOwnProperty(key)) {
+									o = m[key];
+									delete m[key];
 
-							if (o) {
-								console.debug('Setting currentPageStores:', o.storeId, 'Does not clear:', o.doesNotClear);
+									if (o) {
+										console.debug('Setting currentPageStores:', o.storeId, 'Does not clear:', o.doesNotClear);
 
-								if (!o.doesNotClear) {
-									o.fireEvent('clearnup', o);
-									o.clearListeners();
-									o.clearFilter(true);
-									o.removeAll();
-								} else {
-									s[key] = o;
+										if (!o.doesNotClear) {
+											o.fireEvent('clearnup', o);
+											o.clearListeners();
+											o.clearFilter(true);
+											o.removeAll();
+										} else {
+											s[key] = o;
+										}
+									}
 								}
 							}
 						}
 					}
-				}
-			}
-		});
+				});
+		}
 	},
 
 
