@@ -116,12 +116,23 @@ Ext.define('NextThought.app.course.assessment.Index', {
 
 
 	onAssignmentSubmission: function(assignmentId, historyItemLink) {
-		var view = this.getView(),
+		var me = this,
+			view = me.getView(),
 			assignmentCollection = view.assignmentCollection;
 
 		Service.request(historyItemLink)
 			.then(function(response) {
 				return JSON.parse(response);
+			})
+			.then(function(history) {
+				var reader = me.assignment,
+					item = ParseUtils.parseItems(history)[0];
+
+				if (reader && reader.updateHistory) {
+					reader.updateHistory(item);
+				}
+
+				return history;
 			})
 			.then(assignmentCollection.updateHistoryItem.bind(assignmentCollection, assignmentId))
 			.always(this.bundleChanged.bind(this, this.currentBundle));

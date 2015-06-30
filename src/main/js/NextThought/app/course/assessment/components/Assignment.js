@@ -26,5 +26,14 @@ Ext.define('NextThought.app.course.assessment.components.Assignment', {
 		if (this.onSubmission) {
 			this.onSubmission(assignmentId, historyItemLink);
 		}
+	},
+
+
+	updateHistory: function(h) {
+		var reader = this.reader;
+
+		if (reader && reader.updateHistory) {
+			reader.updateHistory(h);
+		}
 	}
 });

@@ -132,5 +132,14 @@ Ext.define('NextThought.app.contentviewer.Index', {
 
 	getLocation: function() {
 		return this.reader.getLocation();
+	},
+
+
+	updateHistory: function(h) {
+		var reader = this.reader;
+
+		if (reader && reader.updateHistory) {
+			reader.updateHistory(h);
+		}
 	}
 });

@@ -130,5 +130,12 @@ Ext.define('NextThought.app.contentviewer.panels.assignment.Student', {
 
 			return reader.setPageInfo(me.pageInfo, me.bundle);
 		}).always(done.bind(this));
+	},
+
+
+	updateHistory: function(h) {
+		var header = this.getToolbar();
+	
+		header.setHistory(h);
 	}
 });
