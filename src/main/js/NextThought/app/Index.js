@@ -7,7 +7,8 @@ Ext.define('NextThought.app.Index', {
 		'NextThought.app.MessageBar',
 		'NextThought.app.navigation.Index',
 		'NextThought.app.Body',
-		'NextThought.app.windows.Index'
+		'NextThought.app.windows.Index',
+		'NextThought.app.chat.Gutter'
 	],
 
 	border: false,
@@ -23,7 +24,8 @@ Ext.define('NextThought.app.Index', {
 	items: [
 		{xtype: 'main-navigation', id: 'nav'},
 		{xtype: 'main-views', id: 'view'},
-		{xtype: 'windows-view', id: 'window'}
+		{xtype: 'windows-view', id: 'window'},
+		{xtype: 'chat-gutter-window', id: 'presence-gutter'}
 	],
 
 
