@@ -46,8 +46,15 @@ Ext.define('NextThought.app.navigation.path.parts.Forums', {
 
 	getPathToTopic: function(topic, getPathTo) {
 		return Service.getObject(topic.get('ContainerId'))
+			//if we can resolve the forum then get the path to that
 			.then(function(forum) {
 				return getPathTo(forum);
+			//otherwise find the creator so we can show it from their profile
+			}, function() {
+				return UserRepository.getUser(topic.get('Creator'))
+					.then(function(user) {
+						return [user];
+					});
 			})
 			.then(function(path) {
 				return path.concat([topic]);
@@ -65,10 +72,10 @@ Ext.define('NextThought.app.navigation.path.parts.Forums', {
 				return getPathTo(topic);
 			})
 			.then(function(path) {
-				return path.concat([post]);
+				return path;
 			})
 			.fail(function(reason) {
-				console.error('Failed to get path to topic: ', reason);
+				console.error('Failed to get path to topic post: ', reason);
 				return Promise.reject();
 			});
 	},
