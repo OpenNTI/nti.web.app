@@ -8,7 +8,7 @@ Ext.define('NextThought.app.forums.components.topic.parts.Topic', {
 		flagActions: 'NextThought.mixins.FlagActions',
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
 		profileLink: 'NextThought.mixins.ProfileLinks',
-		searchHitHighlighting: 'NextThought.mixins.SearchHitHighlighting'
+		Searchable: 'NextThought.mixins.Searchable'
 	},
 
 	requires: [
@@ -199,6 +199,8 @@ Ext.define('NextThought.app.forums.components.topic.parts.Topic', {
 
 			this.mon(this.replyLinkEl, 'click', this.createRootReply, this);
 		}
+
+		this.initSearch();
 	},
 
 
@@ -440,6 +442,16 @@ Ext.define('NextThought.app.forums.components.topic.parts.Topic', {
 			key: 'forum',
 			mainViewId: 'forums'
 		};
+	},
+
+
+	getContainerIdForSearch: function() {
+		return this.record.get('NTIID');
+	},
+
+
+	onceReadyForSearch: function() {
+		return wait();
 	},
 
 
