@@ -18,13 +18,15 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 		var me = this;
 
 		courses.forEach(function(course) {
-			var ntiid = course.getCourseCatalogEntry().getId(),
+			var precached = course.getCourseCatalogEntry(),
+				ntiid = precached.getId(),
 				catalog = me.findCourseForNtiid(ntiid),
 				instance = course.get('CourseInstance'),
 				isOpen = course.isOpen(),
 				isAdmin = course instanceof NextThought.model.courses.CourseInstanceAdministrativeRole;
 
 			if (catalog) {
+				catalog.set('enrolled', precached.get('enrolled'));
 				catalog.updateEnrollmentState(course.get('RealEnrollmentStatus') || course.get('Status'), isOpen, isAdmin);
 			}
 		});
