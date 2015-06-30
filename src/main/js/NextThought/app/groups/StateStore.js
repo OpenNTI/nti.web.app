@@ -2,7 +2,11 @@ Ext.define('NextThought.app.groups.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
 
-	requires: ['NextThought.store.FriendsList'],
+	requires: [
+		'NextThought.store.FriendsList',
+		'NextThought.app.chat.StateStore',
+		'NextThought.store.Contacts'
+	],
 
 
 	MY_CONTACTS_PREFIX_PATTERN: 'mycontacts-{0}',
@@ -38,6 +42,19 @@ Ext.define('NextThought.app.groups.StateStore', {
 		}
 
 		return this.friendsListStores[pid];
+	},
+
+
+	getOnlineContactStore: function() {
+		function onlineFilter(item) {
+			return item.get('Presence') && item.get('Presence').isOnline();
+		}
+
+		if(!this.onlineContactsStore) {
+			this.onlineContactsStore = NextThought.store.Contacts.create({filters: [onlineFilter]});
+		}
+
+		return this.onlineContactsStore;
 	},
 
 

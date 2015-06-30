@@ -16,7 +16,8 @@ Ext.define('NextThought.app.Body', {
 		'NextThought.app.windows.Index',
 		'NextThought.app.windows.StateStore',
 		'NextThought.app.windows.Actions',
-		'NextThought.app.context.StateStore'
+		'NextThought.app.context.StateStore',
+		'NextThought.app.chat.Gutter'
 	],
 
 	mixins: {
@@ -28,7 +29,19 @@ Ext.define('NextThought.app.Body', {
 
 	cls: 'main-body',
 
+	renderTpl: Ext.DomHelper.markup([
+		{cls: 'chat-gutter'},
+		{id: '{id}-body', cn: ['{%this.renderContainer(out, values)%}']}
+	]),
+
+	getTargetEl: function() { return this.body; },
+	childEls: ['body'],
+
 	items: [],
+
+	renderSelectors: {
+		chatGutterEl: '.chat-gutter'
+	},
 
 
 	initComponent: function() {
@@ -57,6 +70,13 @@ Ext.define('NextThought.app.Body', {
 		this.addDefaultRoute('/library');
 
 		this.addDefaultObjectHandler(this.getObjectRoute.bind(this));
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+		this.chatGutterCmp = NextThought.app.chat.Gutter.create();
+		this.chatGutterCmp.render(this.chatGutterEl);
 	},
 
 

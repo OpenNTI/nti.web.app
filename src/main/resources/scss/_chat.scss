@@ -758,3 +758,56 @@
 
 	}
 }
+
+.chat-gutter-window {
+	position: fixed;
+	top: 100px;
+	bottom: 60px;
+	right: 15px;
+  	width: 60px;
+  	background-color: rgba(255, 255, 255, 0.18);
+	border-radius: 5px;
+	padding-bottom: 60px;
+
+	.show-contacts {
+		position: absolute;
+		bottom: 0;
+		left: 10px;
+		margin: 8px auto;
+  		width: 42px;
+  		height: 42px;
+		border-radius: 21px;
+		background: $tertiary-grey;
+		cursor: pointer;
+	}
+
+
+  	.presence-gutter-entry {
+  		margin: 8px auto;
+  		width: 45px;
+  		height: 45px;
+  		cursor: pointer;
+
+  		.profile-pic {
+  			&[data-badge]:not([data-badge="0"]) {
+  				&::before {
+					content: attr(data-badge);
+					background-color: $primary-red;
+					font-size: 0.55em;
+					font-weight: 500;
+					color: white;
+					padding: 0.3em 0.5em;
+					border: 2px solid white;
+					position: absolute;
+					top: 0;
+  					left: -4px;
+					border-radius: 12em;
+					z-index: 2;
+					text-indent: 0;
+					line-height: 1.2em;
+					width: auto;
+				}
+  			}	
+  		}
+  	}
+}

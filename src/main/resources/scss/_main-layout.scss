@@ -25,6 +25,12 @@ body.x-body {
     &.height-locked {
     	overflow: hidden;
     }
+
+   	.chat-gutter {
+   		position: absolute;
+  		top: 0;
+  		right: 0;
+   	}
 }
 
 .body-shade-mask {

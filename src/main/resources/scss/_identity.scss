@@ -78,8 +78,13 @@
 
 	.profile-pic{
 		float: right;
-		position: relative;
 		margin: 14px;//70/2 - 42/2
+	}
+}
+
+.x-component.identity, .presence-gutter-entry {
+	.profile-pic{
+		position: relative;
 
 		.avatar {
 			width: 42px;
