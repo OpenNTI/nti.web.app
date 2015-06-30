@@ -197,7 +197,7 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 			progress = ' Your progress has been saved and can be resumed at a later date.',
 			due = assignment ? 'It is due on ' + Ext.Date.format(assignment.getDueDate(), 'l, F j') + '.' : '';
 
-			
+
 		return new Promise(function(fulfill, reject) {
 			Ext.Msg.show({
 				title: 'Are you sure?',
@@ -333,15 +333,19 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 
 
 	shouldAllowReset: function() {
-		var history;
+		var history,
+			allow = true;
 
-		if (!this.injectedAssignmentHistory) {
-			return true;
+		//if we have an assignment but not an assignment history default to false
+		if (this.injectedAssignment && !this.injectedAssignmentHistory) {
+			allow = false;
+		} else if (this.injectedAssignmentHistory) {
+			//otherwise if the injected history has allowReset allow it
+			history = this.injectedAssignmentHistory.get('history');
+			allow = history && !!history.allowReset();
 		}
 
-		history = this.injectedAssignmentHistory.get('history');
-
-		return history && !!history.allowReset();
+		return allow;
 	},
 
 
