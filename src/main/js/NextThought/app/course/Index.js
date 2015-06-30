@@ -41,7 +41,7 @@ Ext.define('NextThought.app.course.Index', {
 		},
 		{
 			xtype: 'bundle-forum',
-			id: 'bundle-forum'
+			id: 'course-forum'
 		},
 		{
 			xtype: 'course-reports',
@@ -53,7 +53,7 @@ Ext.define('NextThought.app.course.Index', {
 		},
 		{
 			xtype: 'bundle-content',
-			id: 'bundle-content'
+			id: 'course-content'
 		}
 	],
 
