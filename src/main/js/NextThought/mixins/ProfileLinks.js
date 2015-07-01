@@ -7,29 +7,12 @@ Ext.define('NextThought.mixins.ProfileLinks', function() {
 			e.stopEvent();
 		}
 
-		function fin(go) {
-			if (go) {
-				if (u && Ext.isFunction(u.getProfileUrl)) {
-					me.fireEvent('show-profile', u);
-				}
-				else {
-					console.error('This (', me, ') does not have a user object');
-				}
-			}
-		}
+		var u = this.userObject || this.user;
 
-		var u = this.userObject || this.user,
-				event = 'profile-link-clicked', me = this;
+		NextThought.app.navigation.Actions.pushRootRoute(u.getName(), u.getProfileUrl(), {
+			user: u
+		});
 
-		stopShowCard();
-
-		// NOTE: Here we want to fire the event with a callback,
-		// that way whoever listens to the event will choose
-		// to either cancel the event, or continue the navigation.
-		// If no one does, callback.
-		if (this.fireEvent(event, u, fin, this) !== false) {
-			fin(true);
-		}
 		return false;
 	}
 
@@ -74,7 +57,7 @@ Ext.define('NextThought.mixins.ProfileLinks', function() {
 	}
 
 	return {
-
+		requires: ['NextThought.app.navigation.Actions'],
 
 		/**
 		 * Pass in Dom Nodes or Ext.Elements (var arg style) and this will make them clickable and add the css class "over"
@@ -96,15 +79,15 @@ Ext.define('NextThought.mixins.ProfileLinks', function() {
 
 				if (!Ext.isEmpty(el)) {
 					//el.addClsOnOver('over');
-					if ((user && !isMe(user)) && me.profileLinkCard !== false) {
-						events.mouseover = function(e) {
-							return startShowCard.call(me, e, el);
-						};
+					// if ((user && !isMe(user)) && me.profileLinkCard !== false) {
+					// 	events.mouseover = function(e) {
+					// 		return startShowCard.call(me, e, el);
+					// 	};
 
-						events.mouseout = function(e) {
-							return stopShowCard.call(me, e, el);
-						};
-					}
+					// 	events.mouseout = function(e) {
+					// 		return stopShowCard.call(me, e, el);
+					// 	};
+					// }
 
 					me.mon(el, events);
 				}

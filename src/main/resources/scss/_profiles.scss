@@ -17,6 +17,84 @@
 	}
 }
 
+.profile-header {
+	.buttons {
+		height: 60px;
+	}
+
+	.tabs {
+		padding-left: 180px;
+		background-color: rgba(0, 0, 0, 0.2);
+		height: 35px;
+
+		.tab {
+			display: inline-block;
+			line-height: 35px;//180 - 145
+			padding: 0 2em;
+			color: $tertiary-grey;
+			box-shadow: 1px 0 0 0 rgba(0, 0, 0, 0.4);
+			font-size: 0.875em;
+			cursor: pointer;
+
+			&:hover, &.active {
+				color: white;
+				font-weight: 600;
+			}
+
+			&.active {
+				background-color: $primary-blue;
+			}
+
+			&::after {
+				content: attr(data-title);
+				display: block;
+				font-weight: 600;
+				height: 0;
+				color: transparent;
+				overflow: hidden;
+				visibility: hidden;
+			}
+		}
+	}
+
+	.avatar-container {
+		width: 180px;
+		height: 180px;
+		float: left;
+	}
+
+	.meta {
+		padding: 20px 20px 0 200px;
+		height: 145px;//180 - 35
+		background-color: rgba(0, 0, 0, 0.1);
+
+		.about {
+			float: left;
+		}
+
+		.field {
+			display: inline-block;
+			color: white;
+			max-width: 580px;
+			overflow: hidden;
+			@include ellipse;
+		}
+
+		.username {
+			font-size: 1.5em;
+			padding-right: 15px;
+			position: relative;
+
+			@include presence-style-sudo($xSide: 'right', $x: 0, $y: 50%, $side: 'before');
+
+			&::before {
+				margin-top: -3px;
+			}
+		}
+
+	}
+}
+
 #view > .profile-tabs {
 	border-top-color: white;
 	background: white;
@@ -1589,10 +1667,70 @@
 	}
 }
 
-
 .profile-about {
-	background: #fff;
+	&:not(.editing) .edit-only {
+		display: none;
+	}
 
+	h2 {
+		color: $primary-grey;
+		margin: 0;
+		font-weight: 300;
+		padding-bottom: 5px;
+		border-bottom: 1px solid #e8e8e8;
+	}
+
+	.fieldset {
+		width: 75%;
+		float: left;
+		margin: 5px 5px 0 0;
+		padding: 20px 40px;
+		background-color: white;
+
+		.field-label {
+			font-size: 0.625em;
+			font-weight: 600;
+			text-transform: uppercase;
+			color: $tertiary-grey;
+		}
+	
+		&.about {
+			box-shadow: inset 5px 0 0 #fc9f77;
+		}
+
+		&.education {
+			box-shadow: inset 5px 0 0 #fdcf61;
+		}
+
+
+		&.positions {
+			box-shadow: inset 5px 0 0 #7ecfc8;
+		}
+
+		.editable {
+			&[contenteditable="true"] {
+				color: $primary-grey;
+				border: 1px solid #e8e8e8;
+				line-height: 1.5em;
+				padding: 0.25em;
+				max-height: 35px;
+				overflow: hidden;
+
+				&:focus {
+					border-color: $tertiary-grey;
+				}
+
+				&.about {
+					min-height: 8em;
+					max-height: 30em;
+				}
+			}
+		}
+	}
+}
+
+
+.xprofile-about {
 	.label {
 		text-transform: uppercase;
 		font: normal 600 10px/normal $font;

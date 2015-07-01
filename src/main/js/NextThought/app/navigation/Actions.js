@@ -4,6 +4,21 @@ Ext.define('NextThought.app.navigation.Actions', {
 	requires: ['NextThought.app.navigation.StateStore'],
 
 
+	statics: {
+		pushRootRoute: function(title, route, precache) {
+			if (this.doPushRootRoute) {
+				this.doPushRootRoute(title, route, precache);
+			}
+		},
+
+		replaceRootRoute: function(title, route, precache) {
+			if (this.doReplaceRootRoute) {
+				this.doReplaceRootRoute(title, route, precache);
+			}
+		}
+	},
+
+
 	constructor: function() {
 		this.store = NextThought.app.navigation.StateStore.getInstance();
 	},

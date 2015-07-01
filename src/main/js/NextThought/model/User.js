@@ -53,10 +53,21 @@ Ext.define('NextThought.model.User', {
 		} },
 		{ name: 'about', type: 'string'},
 		{ name: 'affiliation', type: 'string'},
+		{ name: 'education', type: 'auto'},
 		{ name: 'role', type: 'string'},
 		{ name: 'location', type: 'string'},
 		{ name: 'home_page', type: 'string'},
-		{ name: 'admission_status', type: 'string', mapping: 'fmaep_admission_state', defaultValue: null, persist: false}
+		{ name: 'admission_status', type: 'string', mapping: 'fmaep_admission_state', defaultValue: null, persist: false},
+
+		//Social Links
+		{name: 'facebook', type: 'string'},
+		{name: 'twitter', type: 'string'},
+		{name: 'googlePlus', type: 'string'},
+		{name: 'linkedIn', type: 'string'},
+
+		{name: 'interests', type: 'auto'},
+		{name: 'education', type: 'auto'},
+		{name: 'positions', type: 'auto'}
 	],
 
 	isUser: true,
@@ -144,20 +155,14 @@ Ext.define('NextThought.model.User', {
 	},
 
 
-	getProfileUrl: function(subPage) {
-		var id = this.get('Username'),
-			subPages = subPage || [];
-
+	getProfileUrl: function() {
+		var id = this.get('Username');
 
 		if ($AppConfig.obscureUsernames) {
 			id = B64.encodeURLFriendly(id);
 		}
 
-		if (!Ext.isArray(subPages) && arguments.length > 0) {
-			subPages = Ext.Array.clone(arguments);
-		}
-		subPages = Ext.isEmpty(subPages, false) ? '' : '/' + Ext.Array.map(subPages, encodeURIComponent).join('/');
-		return ['#!profile/', encodeURIComponent(id), subPages].join('');
+		return '/user/' + id;
 	},
 
 
@@ -188,6 +193,45 @@ Ext.define('NextThought.model.User', {
 
 	isUnresolved: function() {
 		return this.Unresolved === true;
+	},
+
+
+	getSchema: function() {
+		if (this.loadSchema) {
+			return this.loadSchema;
+		}
+
+		var link = this.getLink('account.profile');
+
+		if (link) {
+			this.loadSchema = Service.request(link)
+				.then(function(response) {
+					return JSON.parse(response);
+				});
+		} else {
+			this.loadSchema = Promise.reject({});
+		}
+
+		return this.loadSchema;
+	},
+
+
+	getAboutData: function() {
+		return {
+			displayName: this.getName(),
+			about: this.get('about'),
+			email: this.get('email'),
+			homepage: this.get('homepage'),
+			location: this.get('location'),
+			education: this.get('education') || [],
+			positions: this.get('positions') || [],
+			interests: this.get('interests') || [],
+			facebook: this.get('facebook'),
+			twitter: this.get('twitter'),
+			googlePlus: this.get('googlePlus'),
+			linkedIn: this.get('linkedIn'),
+			interests: this.get('interests') || []
+		};
 	},
 
 

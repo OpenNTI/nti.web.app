@@ -21,6 +21,11 @@ Ext.define('NextThought.app.groups.StateStore', {
 	},
 
 
+	isContact: function(username) {
+		return this.getFriendsList().isContact(username);
+	},
+
+
 	getMyContactsId: function() {
 		if (!this.myContactsId) {
 			this.myContactsId = Ext.String.format(this.MY_CONTACTS_PREFIX_PATTERN, $AppConfig.username);
