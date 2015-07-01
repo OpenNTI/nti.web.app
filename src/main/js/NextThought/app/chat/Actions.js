@@ -33,7 +33,9 @@ Ext.define('NextThought.app.chat.Actions', {
 		me.ChatStore.setLoaded();
 
 		socket.register({
-			'chat_setPresenceOfUsersTo': me.handleSetPresence.bind(me)
+			'chat_setPresenceOfUsersTo': me.handleSetPresence.bind(me),
+			'chat_recvMessage': me.onMessage.bind(me)
+
 		});
 
 		socket.onSocketAvailable(me.onSessionReady, me);
@@ -64,7 +66,7 @@ Ext.define('NextThought.app.chat.Actions', {
 
 	handleSetPresence: function(msg) {
 		var me = this, key,
-			store = me.ChatStore;
+			store = me.ChatStore, value;
 
 		for (key in msg) {
 			if (msg.hasOwnProperty(key)) {
@@ -86,5 +88,67 @@ Ext.define('NextThought.app.chat.Actions', {
 		}
 
 		socket.emit('chat_setPresence', newPresence.asJSON(), callback);
+	},
+
+
+	onMessage: function(msg, opts) {
+		var me = this, args = Array.prototype.slice.call(arguments),
+				m = ParseUtils.parseItems([msg])[0],
+				channel = m.get('channel'),
+				cid = m.get('ContainerId'),
+				w = this.ChatStore.getChatWindow(cid);
+
+		if (!w) {
+			this.rebuildWindow(cid, function() {
+				me.onMessage.apply(me, args);
+			});
+			return;
+		}
+
+		this.channelMap[channel].call(this, m, opts || {});
+
+		if (channel !== 'STATE') {
+			// NOTE: We don't want state channel notifications to trigger showing the window initially or adding
+			// notification counts, only when an actual message is sent should we do this.
+			w.notify(msg);
+			/*if (!w.minimized && !w.isVisible() && w.hasBeenAccepted()) {
+				w.show();
+			}
+			else {
+				w.notify();
+			}*/
+		}
+	},
+
+
+	startChat: function(users, containerId) {
+		var ri, m;
+
+		if (!containerId) {
+			containerId = Globals.CONTENT_ROOT;
+		}
+
+		if(!Ext.isArray(users)) {
+			users = users && users.isModel ? users.getName() : users;
+			users = [users];
+		}
+
+		users.push($AppConfig.username);
+		users = Ext.unique(users);
+
+		ri = this.ChatStore.getRoomInfo(users, containerId);
+		if (ri) {
+			this.ChatStore.showChatWindow(ri);
+		}
+		else {
+			//If there were no existing rooms, create a new one.
+			m = new NextThought.model.RoomInfo({
+				'Occupants': users,
+				'ContainerId': containerId
+			});
+
+			this.ChatStore.showChatWindow(m);
+		}
+
 	}
 });

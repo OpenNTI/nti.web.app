@@ -1,9 +1,18 @@
 Ext.define('NextThought.app.chat.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
+	requires: [
+		'NextThought.model.RoomInfo',
+		'NextThought.app.chat.components.Window'
+	],
+
 	availableForChat: false,
 
 	PRESENCE_MAP: {},
+
+	STATE_KEY: 'chats',
+
+	CHAT_WIN_MAP: {},
 
 	getSocket: function() {
 		if (!this.socket) {
@@ -90,5 +99,123 @@ Ext.define('NextThought.app.chat.StateStore', {
 		this.PRESENCE_MAP[username] = presence;
 
 		this.fireEvent('presence-changed', username, presence);
+	},
+
+
+	showChatWindow: function(roomInfo){
+		this.fireEvent('show-window', roomInfo);
+	},
+
+
+	/**
+	 * Check to see if a room already exists.  A room exists when any of the following conditions are met, in this order:
+	 *1) if there's a roomId sent.  there must be an existing roomId in the active rooms object.
+	 *2) if no roomId is sent, then look for a room with the same constituants, that room must not be a group/class.
+	 *
+	 * @param {Array} users list of users
+	 * @param {String} roomId roomid
+	 * @param {Object} options
+	 * @return {NextThought.model.RoomInfo}
+	 */
+	getRoomInfo: function(users, roomId, options) {
+		//Add ourselves to this list
+		var key, rInfo,
+			allUsers = Ext.Array.unique(users.slice().concat($AppConfig.username)),
+			chats = this.getSessionObject();
+
+		if (options && options.ContainerId && !roomId) {
+			roomId = options.ContainerId;
+		}
+
+		for (key in chats) {
+			if (chats.hasOwnProperty(key)) {
+				// rInfo = this.getRoomInfoFromSession(key, chats[key]);
+				if (rInfo) {
+					if (roomId && roomId === rInfo.getId()) {
+						break;//leave rInfo as is, so we can return it;
+					}
+					else if (!this.isPersistantRoomId(rInfo.getId())) {
+
+						if (Ext.Array.difference(rInfo.get('Occupants'), allUsers).length === 0 &&
+							Ext.Array.difference(allUsers, rInfo.get('Occupants')).length === 0) {
+							break;//leave rInfo as is, so we can return it
+						}
+					}
+					rInfo = null;
+				}
+			}
+		}
+
+		return rInfo;
+	},
+
+
+	putRoomInfoIntoSession: function(roomInfo) {
+		if (!roomInfo) {
+			Ext.Error.raise('Requires a RoomInfo object');
+		}
+		var roomData = roomInfo.getData();
+		roomData.originalOccupants = roomInfo.getOriginalOccupants();
+		//		console.log('****** setting original occupants of room', roomInfo.getId(), ' to: ', roomInfo.getOriginalOccupants());
+
+		this.setSessionObject(roomData, roomInfo.getId());
+	},
+
+
+	/**
+	 *
+	 * @param {String} [key] Optional sub-key
+	 * @return {*}
+	 */
+	getSessionObject: function(key) {
+		var o = TemporaryStorage.get(this.STATE_KEY) || {};
+		if (!Ext.isEmpty(key)) {
+			return o[key];
+		}
+		return o;
+	},
+
+
+	/**
+	 *
+	 * @param {Object} o Value to put into session storage.
+	 * @param {String} [key] Optional key. If present, `o` is assumed to be the new value at the `key` instead of
+	 *              the whole session object.
+	 */
+	setSessionObject: function(o, key) {
+		var leaf = o;
+		if (!Ext.isEmpty(key)) {
+			o = this.getSessionObject();
+			o[key] = leaf;
+		}
+
+		TemporaryStorage.set(this.STATE_KEY, o);
+	},
+
+
+	isPersistantRoomId: function(id) {
+		return (/meetingroom/i).test(id);
+	},
+
+
+	getRoomInfoFromSession: function(key, json) {
+		if (!key) {
+			Ext.Error.raise('Requires key to look up RoomInfo');
+		}
+
+		var m;
+		json = json || this.getSessionObject(key);
+
+		if (json) {
+			try {
+				m = new NextThought.model.RoomInfo(json);
+				m.setOriginalOccupants(json.originalOccupants);
+				return m;
+			}
+			catch (e) {
+				console.warn('Item in session storage is not a roomInfo', json);
+			}
+		}
+		return null; //not there
 	}
 });

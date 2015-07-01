@@ -29,6 +29,17 @@ Ext.define('NextThought.app.chat.components.GutterEntry', {
 	},
 
 
+	afterRender: function() {
+		this.callParent(arguments);
+		this.mon(this.avatar, 'click', this.showChat.bind(this));
+	},
+
+
+	showChat: function(e) {
+		this.openChatWindow(this.user, e);
+	},
+
+
 	setStatus: function() {},
 
 

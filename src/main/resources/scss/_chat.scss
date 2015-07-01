@@ -3,6 +3,11 @@
 .chat-window {
 	@extend .nti-window;
 
+	bottom: 0 !important;
+	right: 90px !important;
+	left: auto !important;
+	top: auto !important;
+
 	.nti-window-header {
 		.header-body {
 			.tools {
@@ -323,6 +328,48 @@
 		}
 	}
 
+	.chat-entry {
+		position: absolute;
+		border-radius: 0 0 5px 5px;
+		background: #f7f7f7;
+		box-shadow: inset 0 0 1px 1px white;
+		bottom: 0;
+  		right: 0;
+  		left: 0;
+  		border-top: 1px solid #e1e1e1;
+
+		div {
+			margin: 10px 8px 10px 8px;
+			.add-whiteboard {
+				float: left;
+				margin: 4px;
+				background: transparent $icons no-repeat;
+				@include sprite($icons,'whiteboard',$dimensions: true);
+				cursor: pointer;
+			}
+
+			div {
+				margin: 0 0 0 37px;
+				input {
+					padding: 5px;
+					color: $primary-grey;
+					height: 30px;
+					font-family: $font;
+					//font-size: 15pt;
+					width: 100%;
+					border-radius: 3px;
+					border: 1px solid #a0a0a0;
+					box-shadow: inset 3px 3px 10px -5px #a0a0a0;
+					//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
+					// REFRESHER: box-shadow syntax is:
+					// box-shadow:  none | <shadow> [,<shadow>]*
+					//	where <shadow> is defined as:
+					//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
+				}
+			}
+		}
+	}
+
 	.entry-card {
 		border-radius: 0 0 5px 5px;
 		.mod-buttons {
@@ -331,43 +378,6 @@
 
 			.x-btn-caution-large {
 				margin-left: 0;
-			}
-		}
-		.chat-entry {
-			position: absolute;
-			border-radius: 0 0 5px 5px;
-			background: #f7f7f7;
-			box-shadow: inset 0 0 1px 1px white;
-
-			div {
-				margin: 10px 8px 10px 8px;
-				.add-whiteboard {
-					float: left;
-					margin: 4px;
-					background: transparent $icons no-repeat;
-					@include sprite($icons,'whiteboard',$dimensions: true);
-					cursor: pointer;
-				}
-
-				div {
-					margin: 0 0 0 37px;
-					input {
-						padding: 5px;
-						color: $primary-grey;
-						height: 30px;
-						font-family: $font;
-						//font-size: 15pt;
-						width: 100%;
-						border-radius: 3px;
-						border: 1px solid #a0a0a0;
-						box-shadow: inset 3px 3px 10px -5px #a0a0a0;
-						//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
-						// REFRESHER: box-shadow syntax is:
-						// box-shadow:  none | <shadow> [,<shadow>]*
-						//	where <shadow> is defined as:
-						//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
-					}
-				}
 			}
 		}
 	}

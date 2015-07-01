@@ -5,6 +5,7 @@ Ext.define('NextThought.app.chat.Gutter', {
 	requires: [
 		'NextThought.app.groups.StateStore',
 		'NextThought.app.chat.StateStore',
+		'NextThought.app.chat.Actions',
 		'NextThought.app.chat.components.GutterEntry'
 	],
 
@@ -28,6 +29,7 @@ Ext.define('NextThought.app.chat.Gutter', {
 		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
 		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
 		this.store = this.GroupStore.getOnlineContactStore();
+		this.ChatActions = NextThought.app.chat.Actions.create();
 
 		this.mon(this.store, {
 			'load': this.updateList.bind(this),
@@ -67,10 +69,15 @@ Ext.define('NextThought.app.chat.Gutter', {
 		users.forEach(function(user) {
 			list.push({
 				xtype: 'chat-gutter-entry',
-				user: user
+				user: user,
+				openChatWindow: me.openChatWindow.bind(me)
 			});
 		});
 
 		me.add(list);
+	},
+
+	openChatWindow: function(user, e) {
+		this.ChatActions.startChat(user);
 	}
 });
