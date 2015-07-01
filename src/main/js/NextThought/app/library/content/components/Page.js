@@ -13,10 +13,17 @@ Ext.define('NextThought.app.library.content.components.Page', {
 		this.setBooks(this.bundles, this.packages);
 	},
 
+	//Override this so the parent doesn't think its empty
+	setItems: function() {},
 
 	setBooks: function(bundles, packages) {
 		if (!this.store) {
 			this.buildStore();
+		}
+
+		if (!bundles.length && !packages.length) {
+			this.showEmptyText();
+			return;
 		}
 
 		this.store.removeAll();
