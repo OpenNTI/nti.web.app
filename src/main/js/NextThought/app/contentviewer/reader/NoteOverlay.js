@@ -478,7 +478,7 @@ Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
 				if (result && result.rect) {
 					//use the negative of the top to adjust y coordinates for this overlayed panel. (its coordinate
 					// space the same as the gutter's so all our conversions need to be undone.)
-					top = -this.getAnnotationOffsets().top;
+					top = -this.getAnnotationOffsets().rect.top;
 					result.rect = this.adjustContentRectForTop(result.rect, top);
 				}
 			}
@@ -531,13 +531,13 @@ Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
 
 	positionInputBox: function(lineInfo) {
 		var o = this.data,
-				offset = this.getAnnotationOffsets(),
-				box = Ext.get(o.box),
-				oldY = box.getY() - offset.top,
-				newY = 0,
+			offset = this.getAnnotationOffsets(),
+			box = Ext.get(o.box),
+			oldY = box.getY() - offset.top,
+			newY = 0,
 		// occ,
 		//activeY = oldY,
-				line = lineInfo || o.lastLine;
+			line = lineInfo || o.lastLine;
 
 		if (line && line.rect) {
 			newY = Math.round(line.rect.top);
