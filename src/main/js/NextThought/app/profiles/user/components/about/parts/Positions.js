@@ -6,25 +6,28 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Positions', {
 	title: 'Professional',
 
 	entryTpl: new Ext.XTemplate(Ext.DomHelper.markup({
-		cls: 'entry', cn: [
-			{tag: 'span', cls: 'field-label edit-only', html: 'Company'},
-			{cls: 'field company', 'data-field': 'companyName', html: '{companyName}', tabindex: '0'},
-			{cls: 'wrap', cn: [
-				{cls: 'title-container', cn: [
-					{tag: 'span', cls: 'field-label edit-only', html: 'Title'},
-					{cls: 'field title', 'data-field': 'title', html: '{title}', tabindex: '0'}
+		cls: 'entry-container', cn: [
+			{cls: 'remove-entry'},
+			{cls: 'entry', cn: [
+				{tag: 'span', cls: 'field-label edit-only', html: 'Company'},
+				{cls: 'field company', 'data-field': 'companyName', html: '{companyName}', tabindex: '0'},
+				{cls: 'wrap', cn: [
+					{cls: 'title-container', cn: [
+						{tag: 'span', cls: 'field-label edit-only', html: 'Title'},
+						{cls: 'field title', 'data-field': 'title', html: '{title}', tabindex: '0'}
+					]},
+					{cls: 'start-container', cn: [
+						{tag: 'span', cls: 'field-label edit-only', html: 'Start Year'},
+						{cls: 'field start', 'data-field': 'startYear', 'data-input-type': 'numeric', html: '{startYear}', tabindex: '0'}
+					]},
+					{cls: 'end-container', cn: [
+						{tag: 'span', cls: 'field-label edit-only', html: 'End Year'},
+						{cls: 'field end', 'data-field': 'endYear', 'data-input-type': 'numeric', html: '{endYear}', tabindex: '0'}
+					]}
 				]},
-				{cls: 'start-container', cn: [
-					{tag: 'span', cls: 'field-label edit-only', html: 'Start Year'},
-					{cls: 'field start', 'data-field': 'startYear', 'data-input-type': 'numeric', html: '{startYear}', tabindex: '0'}
-				]},
-				{cls: 'end-container', cn: [
-					{tag: 'span', cls: 'field-label edit-only', html: 'End Year'},
-					{cls: 'field end', 'data-field': 'endYear', 'data-input-type': 'numeric', html: '{endYear}', tabindex: '0'}
-				]}
-			]},
-			{tag: 'span', cls: 'field-label edit-only', html: 'Description'},
-			{cls: 'field description multi-line', 'data-field': 'description', html: '{description}', tabindex: '0'}
+				{tag: 'span', cls: 'field-label edit-only', html: 'Description'},
+				{cls: 'field description multi-line', 'data-field': 'description', html: '{description}', tabindex: '0'}
+			]}
 		]
 	})),
 

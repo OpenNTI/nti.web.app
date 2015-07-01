@@ -30,9 +30,24 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.EntrySet', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		if (this.addEl) {
-			this.mon(this.addEl, 'click', this.addNewEntry.bind(this));
+
+		this.mon(this.el, 'click', this.onClicked.bind(this));
+	},
+
+
+	onClicked: function(e) {
+		if (e.getTarget('.add')) {
+			this.addNewEntry();
+			return;
 		}
+
+		if (!e.getTarget('.remove-entry')) {
+			return;
+		}
+
+		var entry = e.getTarget('.entry-container');
+
+		this.entriesEl.dom.removeChild(entry);
 	},
 
 
@@ -97,7 +112,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.EntrySet', {
 	},
 
 
-	getValues: function() {
+	getRawValues: function() {
 		var entries = this.entriesEl.dom.querySelectorAll('.entry') || [],
 			values = [];
 

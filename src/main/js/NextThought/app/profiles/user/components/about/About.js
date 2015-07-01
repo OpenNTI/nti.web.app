@@ -55,7 +55,7 @@ Ext.define('NextThought.app.profiles.user.components.about.About', {
 
 	userChanged: function(user, isMe) {
 		if (this.activeUser === user) {
-			return;
+			return Promise.resolve();
 		}
 
 		var cmps = this.profileParts;

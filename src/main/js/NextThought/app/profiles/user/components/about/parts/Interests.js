@@ -46,7 +46,9 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Interests', {
 			interest = e.getTarget('.interest');
 
 		if (interest) {
-			dom.removeChild(interest);
+			interest.classList.add('removing');
+			wait(300)
+				.then(dom.removeChild.bind(dom, interest));
 		}
 	},
 

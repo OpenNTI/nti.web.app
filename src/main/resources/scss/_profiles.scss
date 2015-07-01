@@ -1745,24 +1745,14 @@
 	.interests {
 		overflow: hidden;
 
-		.new-field {
-			height: 40px;
-			background-color: white;
-			border: none !important;
-			box-shadow: 0 0 0 1px #e8e8e8;
-			line-height: 40px !important;
-			max-height: 40px !important;
-
-			&:focus {
-				box-shadow: 0 0 0 1px $tertiary-grey;
-			}
-		}
-
 		.interest {
-			float: left;
-			line-height: 40px;
+			display: inline-block;
+			vertical-align: bottom;
 			width: 222px;
-			padding: 0 25px 0 1em;
+			overflow: hidden;
+			white-space: nowrap;
+			@include ellipse;
+			padding: 0.75em 25px 0.75em 0.75em;
 			font-weight: 600;
 			background: #f4f4f4;
 			box-shadow: 0 0 0 1px #e8e8e8;
@@ -1770,6 +1760,7 @@
 			margin-bottom: 10px;
 			margin-right: 10px;
 			position: relative;
+			transition: width 0.3s, padding 0.3s;
 
 			&:nth-of-type(3n){
 				margin-right: 0;
@@ -1777,6 +1768,24 @@
 
 			&.pending {
 				opacity: 0.7;
+			}
+
+			&.removing {
+				width: 0;
+				padding-left: 0;
+				padding-right: 0;
+			}
+
+			&.new-field[contenteditable="true"] {
+				background-color: white;
+				border: none !important;
+				box-shadow: 0 0 0 1px #e8e8e8;
+				padding: 0.75em 25px 0.75em 0.75em;
+				max-height: 40px;
+
+				&:focus {
+					box-shadow: 0 0 0 1px $tertiary-grey;
+				}
 			}
 
 			.remove {
@@ -1802,8 +1811,23 @@
 		font-size: 0.875em;
 		color: $primary-grey;
 
-		.entry:not(:first-of-type) {
+		.entry-container {
+			position: relative;
+		}
+
+		.entry-container:not(:first-of-type) {
 			margin-top: 3em;
+		}
+
+		.remove-entry {
+			display: none;
+			position: absolute;
+			height: 10px;
+			width: 10px;
+			top: 0; right: -20px;
+			cursor: pointer;
+
+			@include icon('message_box_close', $position: absolute);
 		}
 
 		.school, .company {
@@ -1867,6 +1891,17 @@
 
 	&.editing {
 		.groupset {
+			.entry-container {
+				.remove-entry {
+					display: block;
+
+					&:hover + .entry {
+						background-color: #f8f8f8;
+						  box-shadow: 20px 0 0 6px #f8f8f8, -10px 0 0 6px #f8f8f8;
+					}
+				}
+			}
+
 			.degree-container,
 			.title-container,
 			.start-container,
