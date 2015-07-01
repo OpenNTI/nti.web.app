@@ -1,7 +1,15 @@
 Ext.define('NextThought.app.forums.Actions', {
 	extend: 'NextThought.common.Actions',
 
-	requires: ['NextThought.app.userdata.Actions'],
+	requires: [
+		'NextThought.app.userdata.Actions',
+		'NextThought.app.userdata.StateStore'
+	],
+
+	constructor: function() {
+		this.callParent(arguments);
+		this.UserDataStore = NextThought.app.userdata.StateStore.getInstance();
+	},
 
 	saveTopicComment: function(topic, comment, values) {
 		var isEdit = Boolean(comment) && !comment.phantom,
@@ -97,6 +105,43 @@ Ext.define('NextThought.app.forums.Actions', {
 		});
 	},
 
+	deleteObject: function(record, cmp, callback) {
+		var idToDestroy, me = this;
+		if (!record.get('href')) {
+			record.set('href', record.getLink('contents').replace(/\/contents$/, '') || 'no-luck');
+		}
+		idToDestroy = record.get('NTIID');
+
+		function maybeDeleteFromStore(id, store) {
+			var r;
+			if (store && !store.buffered) {
+				r = store.findRecord('NTIID', idToDestroy, 0, false, true, true);
+				if (!r) {
+					console.warn('Could not remove, the store did not have item with id: ' + idToDestroy, r);
+					return;
+				}
+
+				//The store will handle making it a placeholder if it needs and fire events,etc... this is all we need to do.
+				store.remove(r);
+			}
+		}
+
+		record.destroy({
+			success: function() {
+				me.UserDataStore.applyToStoresThatWantItem(maybeDeleteFromStore, record);
+
+				//Delete anything left that we know of
+				Ext.StoreManager.each(function(s) {
+					maybeDeleteFromStore(null, s);
+				});
+
+				Ext.callback(callback, null, [cmp]);
+			},
+			failure: function() {
+				alert('Sorry, could not delete that');
+			}
+		});
+	},
 
 	applyTopicToStores: function(topic) {
 		var actions = NextThought.app.userdata.Actions.create(),

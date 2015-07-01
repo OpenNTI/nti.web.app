@@ -101,6 +101,7 @@ Ext.define('NextThought.app.forums.components.topic.parts.Topic', {
 		this.on('ready', this.onReady, this);
 		this.on('beforedeactivate', this.onBeforeDeactivate, this);
 		this.on('beforeactivate', this.onBeforeActivate, this);
+		this.ForumActions = NextThought.app.forums.Actions.create();
 	},
 
 
@@ -312,7 +313,7 @@ Ext.define('NextThought.app.forums.components.topic.parts.Topic', {
 	fireDeleteEvent: function() {
 		var me = this;
 
-		me.fireEvent('delete-post', me.record, me, function(cmp) {
+		me.ForumActions.deleteObject(me.record,me,function(cmp) {
 			me.fireEvent('record-deleted');
 			me.destroy();
 		});
