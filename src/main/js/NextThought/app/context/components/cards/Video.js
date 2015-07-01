@@ -19,9 +19,12 @@ Ext.define('NextThought.app.context.components.cards.Video', {
 	beforeRender: function(){
 		this.callParent(arguments);
 
-		var src = this.video && this.video.get('sources')[0].poster;
+		var srcs = this.video && this.video.get('sources'),
+			src = srcs && srcs[0],
+			poster = src && src.poster;
+
 		this.renderData = Ext.applyIf(this.renderData || {}, {
-			poster: src,
+			poster: poster,
 			title: this.video.get('title')
 		});
 	},

@@ -94,7 +94,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 
 		return this.CACHE.loadLineage
 			.then(function(paths) {
-				var path = paths[0];
+				var path = paths[0] || [];
 
 				path.pop();
 				path.push('Lessons');
