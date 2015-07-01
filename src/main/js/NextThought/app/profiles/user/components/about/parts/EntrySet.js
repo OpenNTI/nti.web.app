@@ -141,6 +141,8 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.EntrySet', {
 
 		entries = entries.map(this.validateEntry.bind(this)).filter(function(x) { return !!x; });
 
+		this.hasErrors = entries.length > 0;
+
 		return entries.length ? this.errorMsg : '';
 	},
 

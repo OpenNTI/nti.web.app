@@ -2,6 +2,8 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Positions', {
 	extend: 'NextThought.app.profiles.user.components.about.parts.EntrySet',
 	alias: 'widget.profile-user-about-positions',
 
+	name: 'positions',
+
 	cls: 'positions fieldset groupset',
 	title: 'Professional',
 	errorMsg: 'Missing Required Prosition Field',
@@ -11,18 +13,18 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Positions', {
 			{cls: 'remove-entry'},
 			{cls: 'entry', cn: [
 				{cls: 'field-container', cn: [
-					{tag: 'span', cls: 'field-label edit-only', html: 'Company'},
+					{tag: 'span', cls: 'field-label edit-only required', html: 'Company'},
 					{cls: 'error-msg'},
 					{cls: 'field company', 'data-field': 'companyName', html: '{companyName}', tabindex: '0'}
 				]},
 				{cls: 'wrap', cn: [
 					{cls: 'title-container field-container', cn: [
-						{tag: 'span', cls: 'field-label edit-only', html: 'Title'},
+						{tag: 'span', cls: 'field-label edit-only required', html: 'Title'},
 						{cls: 'error-msg'},
 						{cls: 'field title', 'data-field': 'title', html: '{title}', tabindex: '0'}
 					]},
 					{cls: 'start-container field-container', cn: [
-						{tag: 'span', cls: 'field-label edit-only', html: 'Start Year'},
+						{tag: 'span', cls: 'field-label edit-only required', html: 'Start Year'},
 						{cls: 'error-msg'},
 						{cls: 'field start', 'data-field': 'startYear', 'data-input-type': 'numeric', html: '{startYear}', tabindex: '0'}
 					]},

@@ -1681,6 +1681,16 @@
 		border-bottom: 1px solid #e8e8e8;
 	}
 
+	.error-message {
+		width: 75%;
+		float: left;
+		margin: 5px 5px 0 0;
+		background-color: $primary-red;
+		color: white;
+		line-height: 40px;
+		text-align: center;
+	}
+
 	.fieldset {
 		width: 75%;
 		float: left;
@@ -1695,6 +1705,11 @@
 			color: $tertiary-grey;
 			display: block;
 			margin-top: 1em;
+
+			&.required::after {
+				content: '*';
+				color: $primary-red;
+			}
 		}
 	
 		&.about {

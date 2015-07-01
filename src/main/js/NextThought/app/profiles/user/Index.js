@@ -25,7 +25,8 @@ Ext.define('NextThought.app.profiles.user.Index', {
 		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
 
 		this.headerCmp = this.add({
-			xtype: 'profile-user-header'
+			xtype: 'profile-user-header',
+			saveProfile: this.saveProfile.bind(this)
 		});
 
 		this.bodyCmp = this.add({
@@ -39,6 +40,8 @@ Ext.define('NextThought.app.profiles.user.Index', {
 		this.addRoute('/activity', this.showActivity.bind(this));
 
 		this.addDefaultRoute('/activity');
+
+		window.saveProfile = this.saveProfile.bind(this);
 	},
 
 
@@ -149,5 +152,22 @@ Ext.define('NextThought.app.profiles.user.Index', {
 		}
 
 		return activityCmp.handleRoute(subRoute, route.precache);
+	},
+
+
+	saveProfile: function() {
+		if (!this.isMe) { return Promise.resolve(false); }
+
+		var aboutCmp = this.bodyCmp.down('profile-user-about');
+
+		if (this.bodyCmp.getLayout().getActiveItem() !== aboutCmp) {
+			return Promise.resolve(false);
+		}
+
+		if (!aboutCmp.validate()) {
+			return Promise.resolve(true);
+		}
+
+		return aboutCmp.saveEdits();
 	}
 });

@@ -4,7 +4,46 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.FieldSet', {
 	afterRender: function() {
 		this.callParent(arguments);
 		this.el.selectable();
+
+		this.enableBubble(['clear-errors']);
+
+		this.onKeyPress = this.onKeyPress.bind(this);
+
+		this.el.dom.addEventListener('keypress', this.onKeyPress.bind(this));
 	},
+
+
+	onKeyPress: function(e) {
+		if (this.hasErrors) {
+			this.clearErrors(e);
+		}
+	},
+
+
+	clearErrors: function(e) {
+		//if you haven't typed in a field that has 
+		if (!e.target || !e.target.classList.contains('error')) { return; }
+
+		var entry = e.target,
+			container = entry && entry.parentNode,
+			error = container && container.querySelector('.error-msg'),
+			hasMore;
+
+		if (entry) {
+			entry.classList.remove('error');
+		}
+
+		if (error) {
+			error.innerHTML = '';
+		}
+
+		hasMore = this.el.dom.querySelectorAll('.error').length;
+
+		if (!hasMore) {
+			this.fireEvent('clear-errors', this.name);
+		}
+	},
+
 
 	setSchema: function(schema) {
 		this.profileSchema = schema;
@@ -25,11 +64,17 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.FieldSet', {
 		fields = Array.prototype.slice.call(fields);
 
 		fields.forEach(function(field) {
-			var name = field.getAttribute('data-field'),
+			var container = field && field.parentNode,
+				label = container && container.querySelector('.field-label'),
+				name = field.getAttribute('data-field'),
 				schema = profileSchema[name];
 
 			if (schema && !schema.readonly) {
 				field.classList.add('editable');
+			}
+
+			if (schema && schema.required && label) {
+				label.classList.add('required');
 			}
 		});
 
@@ -76,7 +121,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.FieldSet', {
 
 
 	showErrorForField: function(fieldName, msg) {
-		var entry = this.el.dom.querySelector('[data-field="' + fieldName + '""]'),
+		var entry = this.el.dom.querySelector('[data-field="' + fieldName + '"]'),
 			container = entry && entry.parentNode,
 			error = container && container.querySelector('.error-msg');
 

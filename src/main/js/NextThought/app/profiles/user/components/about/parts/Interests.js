@@ -2,6 +2,8 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Interests', {
 	extend: 'NextThought.app.profiles.user.components.about.parts.EntrySet',
 	alias: 'widget.profile-user-about-interests',
 
+	name: 'interests',
+
 	cls: 'interests fieldset groupset',
 	title: 'Interests',
 
@@ -147,7 +149,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Interests', {
 	},
 
 
-	validate: function() {
+	getErrorMsg: function() {
 		return '';
 	}
 });

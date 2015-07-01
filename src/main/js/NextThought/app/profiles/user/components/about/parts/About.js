@@ -3,6 +3,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 	alias: 'widget.profile-user-about-about',
 
 	cls: 'about fieldset',
+	name: 'about',
 
 	renderTpl: Ext.DomHelper.markup([
 		{tag: 'h2', cls: 'title', html: 'About'},
@@ -108,6 +109,8 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 				valid = false;
 			}
 		});
+
+		this.hasErrors = !valid;
 
 		return valid ? '' : 'Missing Required About Fields';
 	},

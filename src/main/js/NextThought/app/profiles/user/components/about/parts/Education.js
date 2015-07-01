@@ -3,6 +3,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Education', {
 	alias: 'widget.profile-user-about-education',
 
 	cls: 'education fieldset groupset',
+	name: 'education',
 
 	title: 'Education',
 	errorMsg: 'Missing Required Education Field',
@@ -12,7 +13,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Education', {
 			{cls: 'remove-entry'},
 			{cls: 'entry', cn: [
 				{cls: 'field-container', cn: [
-					{tag: 'span', cls: 'field-label edit-only', html: 'School'},
+					{tag: 'span', cls: 'field-label edit-only required', html: 'School'},
 					{cls: 'error-msg'},
 					{cls: 'field school', 'data-field': 'school', html: '{school}', tabindex: '0'}
 				]},
@@ -23,7 +24,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Education', {
 						{cls: 'field degree', 'data-field': 'degree', html: '{degree}', tabindex: '0'}
 					]},
 					{cls: 'start-container field-container', cn: [
-						{tag: 'span', cls: 'field-label edit-only', html: 'Start Year'},
+						{tag: 'span', cls: 'field-label edit-only required', html: 'Start Year'},
 						{cls: 'error-msg'},
 						{cls: 'field start', 'data-field': 'startYear', 'data-input-type': 'numeric', html: '{startYear}', tabindex: '0'}
 					]},

@@ -50,14 +50,12 @@ Ext.define('NextThought.app.profiles.user.components.about.About', {
 			this.down('profile-user-about-communities'),
 			this.down('profile-user-about-groups')
 		];
+
+		this.on('clear-errors', this.clearError.bind(this));
 	},
 
 
 	userChanged: function(user, isMe) {
-		if (this.activeUser === user) {
-			return Promise.resolve();
-		}
-
 		var cmps = this.profileParts;
 
 		this.activeUser = user;
@@ -69,6 +67,49 @@ Ext.define('NextThought.app.profiles.user.components.about.About', {
 
 		return Promise.all(cmps);
 	},
+
+
+	validate: function() {
+		var msgs = [];
+
+		this.profileParts.forEach(function(part) {
+			var msg = part.getErrorMsg && part.getErrorMsg();
+
+			if (msg) {
+				msgs.push({
+					name: part.name,
+					msg: msg	
+				});
+			}
+		});
+
+		msgs.forEach(this.showError.bind(this));
+
+		return !msgs.length;
+	},
+
+
+	clearError: function(name) {
+		var error = this.down('[errorName="' + name + '"]');
+
+		if (error) {
+			this.remove(error, true);
+		}
+	},
+
+
+	showError: function(error) {
+		if (!this.down('[errorName="' + error.name + '"]')) {
+			this.insert(0, {
+				xtype: 'box',
+				errorName: error.name,
+				autoEl: {cls: 'error-message', html: error.msg}
+			});
+		}
+	},
+
+
+	saveEdits: function() {},
 
 
 	setSchema: function(schema) {
