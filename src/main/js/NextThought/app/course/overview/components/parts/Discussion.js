@@ -53,6 +53,7 @@ Ext.define('NextThought.app.course.overview.components.parts.Discussion', {
 		this.renderData = Ext.apply(this.renderData || {},this.data);
 		this.idsToLookup = Ext.clone(this.data.ntiid) || [];
 		this.loadTopic(this.idsToLookup.shift());
+		this.WindowActions = NextThought.app.windows.Actions.create();
 	},
 
 	afterRender: function() {
@@ -133,7 +134,7 @@ Ext.define('NextThought.app.course.overview.components.parts.Discussion', {
 			alert('An error occurred showing this discussion.');
 		}
 		else {
-			this.fireEvent('goto-forum-item', this.topic, this.getBundle());
+			this.WindowActions.pushWindow(this.topic);
 		}
 	}
 });
