@@ -69,12 +69,11 @@ Ext.define('NextThought.app.slidedeck.media.components.Toolbar', {
 		var me = this;
 		me.callParent(arguments);
 		me.currentType = me.currentType || 'video-focus';
-		me.enableBubble('exit-viewer');
-
+		
 		me.on({
 			pickerEl: { click: 'showVideoPlayerPicker' },
 			gridEl: { click: 'showGridPicker' },
-			exitEl: { click: function() { me.fireEvent('exit-viewer'); } }
+			exitEl: { click: function() { history.back() } }
 		});
 	},
 

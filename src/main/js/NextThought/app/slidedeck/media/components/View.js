@@ -80,12 +80,12 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 		if (!this.viewer || this.viewer.video.getId() !== this.video.getId()) {
 			this.toolbar.setContent(this.video, this.transcript);
 			this.gridView.setContent(this.video, this.currentBundle);
-			this.buildInitialViewer();	
+			this.buildInitialViewer();
 		}
-	
-		
+
+
 		if(this.getLayout().getActiveItem() !== this.viewer) {
-			this.getLayout().setActiveItem(this.viewer);	
+			this.getLayout().setActiveItem(this.viewer);
 			// Ext.EventManager.onWindowResize(this.adjustOnResize, this, {buffer: 250});
 		}
 	},
@@ -93,8 +93,8 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 
 	afterRender: function() {
 		this.callParent(arguments);
-		
-		var me  = this, 
+
+		var me  = this,
 			playerType = this.getViewerType();
 
 		this.addCls('ready');
@@ -126,11 +126,6 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 		this.on('destroy', 'destroy', this.toolbar);
 		this.on('destroy', 'destroy', this.gridView);
 		this.on('destroy', 'destroy', this.identityCmp);
-		
-
-		if(this.parentContainer && this.parentContainer.exitViewer) {
-			this.on('exit-viewer', this.parentContainer.exitViewer.bind(this.parentContainer));			
-		}
 
 		this.mon(this.gridView, {
 			'hide-grid': {fn: 'showGridPicker', scope: this.toolbar},
