@@ -127,6 +127,10 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 		this.on('destroy', 'destroy', this.gridView);
 		this.on('destroy', 'destroy', this.identityCmp);
 
+		if(this.parentContainer && this.parentContainer.exitViewer) {
+			this.on('exit-viewer', this.parentContainer.exitViewer.bind(this.parentContainer));
+		}
+
 		this.mon(this.gridView, {
 			'hide-grid': {fn: 'showGridPicker', scope: this.toolbar},
 			'store-set': 'listStoreSet'

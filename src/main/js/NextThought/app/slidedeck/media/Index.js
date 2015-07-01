@@ -144,14 +144,14 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 
 	exitViewer: function() {
 		var me = this;
-		
+
 		if(me.activeMediaView.beforeClose() === false) {
 			return;
 		}
 
 		if (this.handleClose) {
 			wait(120)
-				.then(me.handleClose.bind(me));
+				.then(history.back());
 		}
 	}
 });
