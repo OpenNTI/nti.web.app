@@ -371,7 +371,7 @@ Ext.define('NextThought.app.contentviewer.reader.Content', {
 		}
 
 
-		if (m.fireEvent('navigate-to-href', m.reader, r)) {
+		if (NextThought.app.navigation.Actions.navigateToHref(r)) {
 			//Someone handled us so stop the event
 			return false;
 		}

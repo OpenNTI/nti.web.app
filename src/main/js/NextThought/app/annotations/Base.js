@@ -355,7 +355,7 @@ Ext.define('NextThought.app.annotations.Base', {
 			item = {
 				text: 'Follow Link',
 				handler: function() {
-					me.ownerCmp.fireEvent('navigate-to-href', me.ownerCmp, a.href);
+					NextThought.app.navigation.Actions.navigateToHref(a.href);
 				}
 			};
 		}

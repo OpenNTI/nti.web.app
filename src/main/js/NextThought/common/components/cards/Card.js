@@ -86,7 +86,7 @@ Ext.define('NextThought.common.components.cards.Card', {
 			bundle = container && container.currentBundle;
 
 		if (ParseUtils.isNTIID(this.target)) {
-			status = this.fireEvent('navigate-to-href', this, this.target);
+			status = NextThought.app.navigation.Actions.navigateToHref(this.target);
 		}
 		else {
 			status = this.fireEvent('show-target', this, this.data, !e, Ext.emptyFn/*needs a callback, we just don't care*/, bundle);

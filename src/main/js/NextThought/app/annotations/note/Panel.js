@@ -255,7 +255,7 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 
 				if (a) {
 					e.stopEvent();
-					me.fireEvent('navigate-to-href', me, a.href);
+					NextThought.app.navigation.Actions.navigateToHref(a.href)
 				}
 			}, this);
 		}

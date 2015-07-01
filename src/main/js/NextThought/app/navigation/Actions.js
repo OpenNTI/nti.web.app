@@ -1,7 +1,10 @@
 Ext.define('NextThought.app.navigation.Actions', {
 	extend: 'NextThought.common.Actions',
 
-	requires: ['NextThought.app.navigation.StateStore'],
+	requires: [
+		'NextThought.app.navigation.StateStore',
+		'NextThought.util.Content'
+	],
 
 
 	statics: {
@@ -15,6 +18,37 @@ Ext.define('NextThought.app.navigation.Actions', {
 			if (this.doReplaceRootRoute) {
 				this.doReplaceRootRoute(title, route, precache);
 			}
+		},
+
+		navigateToHref: function(href) {
+			var parts = href.split('#'),
+					newBase = parts[0],
+					newFragment = parts[1],
+					currentLocation = window.location.href,
+					currentParts = currentLocation.split('#'),
+					currentBase = currentParts[0],
+					currentFragment = currentParts[1];
+
+			//Are we an nttid?
+			if (ParseUtils.isNTIID(newBase)) {
+				this.navigateToNtiid(newBase, newFragment);
+				return true;
+			}
+
+			//Is href an exteranl url whose base does not match the current base (i.e. not in our app)?
+			if (ContentUtils.isExternalUri(href) &&
+				(newBase.indexOf(currentBase) !== 0 || (/\/content\//.test(href) && !/\.html$/.test(href)))) {
+				try {
+					window.open(href, '_blank');
+				}
+				catch (er) {
+					console.error('Unable to open ', href, 'with target _blank.', Globals.getError(href));
+				}
+				return true;
+			}
+
+			console.error('Expected href to be an interal url/hash change but it was', href, currentLocation);
+			return false;
 		}
 	},
 

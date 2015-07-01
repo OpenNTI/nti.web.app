@@ -44,7 +44,7 @@ Ext.define('NextThought.app.contentviewer.components.SimplePopoverWidget', {
 		if (!target || !ParseUtils.isNTIID(id)) {return;}
 		e.stopEvent();
 
-		this.fireEvent('navigate-to-href', this.reader, target.href);
+		NextThought.app.navigation.Actions.navigateToHref(target.href)
 		this.destroy();
 	},
 

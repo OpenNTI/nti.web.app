@@ -143,7 +143,7 @@ Ext.define('NextThought.app.chat.components.log.Entry', {
 			);
 		}else if (a) {
 			//its a link
-			if (me.fireEvent('navigate-to-href', me, a.href)) {
+			if (NextThought.app.navigation.Actions.navigateToHref(a.href)) {
 				return false;
 			}
 

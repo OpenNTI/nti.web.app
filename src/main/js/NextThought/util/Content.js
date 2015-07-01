@@ -106,7 +106,12 @@ Ext.define('NextThought.util.Content', {
 		}
 	},
 
+	/** @private */
+	externalUriRegex: /^((\/\/)|([a-z][a-z0-9\+\-\.]*):)/i,
 
+	isExternalUri: function(r) {
+		return this.externalUriRegex.test(r);
+	},
 
 	/**
 	 * Resolve the node for a ntiid with in a bundle or toc
