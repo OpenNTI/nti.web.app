@@ -53,6 +53,34 @@ Ext.define('NextThought.app.library.Index', {
 		this.addRoute('/catalog/books/', this.showAvailableBooks.bind(this));
 
 		this.addDefaultRoute(this.showLibrary.bind(this));
+
+
+		this.mon(this.CourseStore, 'enrolled-courses-set', this.enrolledCoursesSet.bind(this));
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		this.mon(this.el, 'click', this.onClicked.bind(this));
+	},
+
+
+	onClicked: function(e) {
+		var anchor = e.getTarget('a[data-event]');
+
+		if (anchor && anchor.getAttribute('data-event') === 'show-available') {
+			this.showAvailable('Available Courses', '/catalog/courses/');
+		}
+	},
+
+
+	enrolledCoursesSet: function(items) {
+		var myCourses = this.down('library-view-course-page');
+
+		if (myCourses) {
+			myCourses.setItems(items)
+		}
 	},
 
 
@@ -71,7 +99,8 @@ Ext.define('NextThought.app.library.Index', {
 		this.add({
 			xtype: 'library-view-course-page',
 			courses: current,
-			navigate: this.navigateToCourse.bind(this)
+			navigate: this.navigateToCourse.bind(this),
+			emptyText: 'You don\'t have any courses yet...<br><a data-event = "show-available">+ Add Courses</a>'
 		});
 	},
 
@@ -82,7 +111,8 @@ Ext.define('NextThought.app.library.Index', {
 		this.add({
 			xtype: 'library-view-course-page',
 			courses: current,
-			navigate: this.navigateToCourse.bind(this)
+			navigate: this.navigateToCourse.bind(this),
+			emptyText: 'You are not administering any courses.'
 		});
 	},
 
@@ -94,7 +124,8 @@ Ext.define('NextThought.app.library.Index', {
 			xtype: 'library-view-book-page',
 			bundles: bundles,
 			packages: packages,
-			navigate: this.navigateToBundle.bind(this)
+			navigate: this.navigateToBundle.bind(this),
+			emptyText: 'You do not have any books.'
 		});
 	},
 
@@ -202,6 +233,10 @@ Ext.define('NextThought.app.library.Index', {
 
 
 	showLibrary: function(route) {
+		if (this.availableWin) {
+			this.availableWin.close();
+		}
+
 		return this.__setActive('Library');
 	},
 

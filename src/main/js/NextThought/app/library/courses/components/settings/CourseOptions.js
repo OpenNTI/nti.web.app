@@ -1,6 +1,11 @@
-Ext.define('NextThought.app.library.course.components.settings.CourseOptions', {
+Ext.define('NextThought.app.library.courses.components.settings.CourseOptions', {
 	extend: 'Ext.Component',
 	alias: 'widget.library-course-options',
+
+	requires: [
+		'NextThought.app.course.enrollment.StateStore',
+		'NextThought.app.windows.Actions'
+	],
 
 	cls: 'course-setting-options',
 
@@ -18,7 +23,10 @@ Ext.define('NextThought.app.library.course.components.settings.CourseOptions', {
 		var isOpen = this.course.isOpen(),
 			registered;
 
-		registered = CourseWareUtils.Enrollment.getEnrolledText(this.course.getCourseCatalogEntry());
+		this.CourseEnrollmentStore = NextThought.app.course.enrollment.StateStore.getInstance();
+		this.WindowActions = NextThought.app.windows.Actions.create();
+
+		registered = this.CourseEnrollmentStore.getEnrolledText(this.course.getCourseCatalogEntry());
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			enrollCls: isOpen ? 'open' : 'enrolled',
@@ -41,11 +49,7 @@ Ext.define('NextThought.app.library.course.components.settings.CourseOptions', {
 			catalog = instance.getCourseCatalogEntry();
 
 		if (e.getTarget('.drop')) {
-			catalog.fireAcquisitionEvent(this, function(enrolled) {
-				//if (!enrolled) {
-				//	me.fireEvent('go-to-library', me);
-				//}
-			});
+			this.WindowActions.pushWindow(catalog);
 		}
 
 		this.fireEvent('close');

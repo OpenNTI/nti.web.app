@@ -1,9 +1,9 @@
-Ext.define('NextThought.app.library.course.components.settings.CourseWindow', {
+Ext.define('NextThought.app.library.courses.components.settings.CourseWindow', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.library-course-settings',
 
 	requires: [
-		'NextThought.app.library.course.components.settings.CourseOptions'
+		'NextThought.app.library.courses.components.settings.CourseOptions'
 	],
 
 	cls: 'course-settings-window',

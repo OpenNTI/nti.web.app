@@ -1,5 +1,19 @@
 .library-view {
 	margin: 2em 0 2.5em;
+
+	.empty-text {
+		color: $tertiary-grey;
+		font: normal 300 2em $font;
+		margin: 2em auto;
+		width: 530px;
+		text-align: center;
+
+		a {
+			color: white;
+			font-size: 0.8em;
+			cursor: pointer;
+		}
+	}
 }
 
 .x-component-library-collection {
@@ -33,7 +47,7 @@
 
 	.label {
 		font: normal 300 1.5em/#{$header-height} $font;
-		padding: 0 0.875em 0 0; 
+		padding: 0 0.875em 0 0;
 		cursor: pointer;
 		color: $secondary-grey;
 
@@ -152,7 +166,7 @@ li.library-grid-item {
 	}
 
 	.author:not(:empty):not(.provider-id)::before {content: 'By ';}
-				
+
 	.title {
 		font: normal 700 1em/1.1em "Open Sans Condensed";
 		color: $secondary-grey;
@@ -454,7 +468,7 @@ li.library-grid-item {
 				}
 
 				.author:not(:empty):not(.provider-id)::before{content: 'By ';}
-				
+
 				.title {
 					font: normal 700 1em/1.1em "Open Sans Condensed";
 					color: $secondary-grey;
@@ -636,7 +650,7 @@ li.library-grid-item {
 			}
 
 			.author:not(:empty):not(.provider-id)::before{content: 'By ';}
-			
+
 			.title {
 				font: normal 700 1em/1.1em "Open Sans Condensed";
 				color: $secondary-grey;
@@ -672,7 +686,7 @@ li.library-grid-item {
 
 		&.x-menu-item-active {
 			background-color: rgba(255,255,255,0.8) !important;
-			color: #646464 !important; 
+			color: #646464 !important;
 		}
 
 		&.x-menu-item-checked::after {
@@ -710,10 +724,13 @@ li.library-grid-item {
 	}
 }
 
+.available-courses, .available-books {
+	position: fixed !important;
+}
+
 .course-settings-window, .available-courses, .available-books {
 	box-shadow: 0 0 5px 0 rgba(0,0,0,0.35);
 	background-color: white;
-	position: fixed !important;
 
 	&.object-window {
 		top: 110px !important;
@@ -926,7 +943,7 @@ li.library-grid-item {
 	padding: 20px 40px;
 	color: $primary-blue;
 	font: normal 500 1em/1.5em $font;
-	
+
 	.enrollment {
 		font-size: 0.9em;
 		color: $secondary-grey;

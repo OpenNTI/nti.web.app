@@ -2,7 +2,7 @@ Ext.define('NextThought.app.library.courses.components.Collection', {
 	extend: 'NextThought.app.library.components.Collection',
 	alias: 'widget.course-collection',
 
-	// requires: ['NextThought.view.library.settings.CourseWindow'],
+	requires: ['NextThought.app.library.courses.components.settings.CourseWindow'],
 
 	//hidden: true, //don't show this component unless the courseware controller says it can show.
 	courseList: true,
