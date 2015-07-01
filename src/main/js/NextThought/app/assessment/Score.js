@@ -23,7 +23,7 @@ Ext.define('NextThought.app.assessment.Score', {
 			xtype: 'chart-score',
 			store: this.store,
 			shadow: false,
-			legend: false,
+			legend: false
 		});
 
 		this.setValue(this.value || 0);
