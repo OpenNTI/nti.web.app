@@ -1,6 +1,11 @@
 Ext.define('NextThought.app.profiles.user.components.about.parts.FieldSet', {
 	extend: 'Ext.Component',
 
+	afterRender: function() {
+		this.callParent(arguments);
+		this.el.selectable();
+	},
+
 	setSchema: function(schema) {
 		this.profileSchema = schema;
 

@@ -60,6 +60,9 @@ Ext.define('NextThought.app.profiles.user.components.about.About', {
 
 		var cmps = this.profileParts;
 
+		this.activeUser = user;
+		this.isMe = isMe;
+
 		cmps = cmps.map(function(cmp) {
 			return cmp.setUser(user, isMe);
 		});
@@ -92,6 +95,11 @@ Ext.define('NextThought.app.profiles.user.components.about.About', {
 
 	showEdit: function() {
 		this.setTitle('About');
+
+		if (!this.isMe) {
+			this.replaceRoute('', '/');
+			return;
+		}
 
 		this.profileParts.forEach(function(part) {
 			if (part.setEditable) {

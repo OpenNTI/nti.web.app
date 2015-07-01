@@ -1669,7 +1669,7 @@
 
 .profile-about {
 	&:not(.editing) .edit-only {
-		display: none;
+		display: none !important;
 	}
 
 	h2 {
@@ -1677,6 +1677,7 @@
 		margin: 0;
 		font-weight: 300;
 		padding-bottom: 5px;
+		margin-bottom: 0.5em;
 		border-bottom: 1px solid #e8e8e8;
 	}
 
@@ -1692,19 +1693,25 @@
 			font-weight: 600;
 			text-transform: uppercase;
 			color: $tertiary-grey;
+			display: block;
+			margin-top: 1em;
 		}
 	
 		&.about {
-			box-shadow: inset 5px 0 0 #fc9f77;
+			box-shadow: inset 5px 0 0 0 #fc9f77;
 		}
 
 		&.education {
-			box-shadow: inset 5px 0 0 #fdcf61;
+			box-shadow: inset 5px 0 0 0 #fdcf61;
 		}
 
 
 		&.positions {
-			box-shadow: inset 5px 0 0 #7ecfc8;
+			box-shadow: inset 5px 0 0 0 #7ecfc8;
+		}
+
+		&.interests {
+			box-shadow: inset 5px 0 0 0 #c671c1;
 		}
 
 		.editable {
@@ -1720,10 +1727,161 @@
 					border-color: $tertiary-grey;
 				}
 
-				&.about {
+				&.multi-line {
 					min-height: 8em;
 					max-height: 30em;
 				}
+			}
+		}
+	}
+
+	.about {
+		.field.about {
+			color: $primary-grey;
+			font-size: 0.875em;
+		}
+	}
+
+	.interests {
+		overflow: hidden;
+
+		.new-field {
+			height: 40px;
+			background-color: white;
+			border: none !important;
+			box-shadow: 0 0 0 1px #e8e8e8;
+			line-height: 40px !important;
+			max-height: 40px !important;
+
+			&:focus {
+				box-shadow: 0 0 0 1px $tertiary-grey;
+			}
+		}
+
+		.interest {
+			float: left;
+			line-height: 40px;
+			width: 222px;
+			padding: 0 25px 0 1em;
+			font-weight: 600;
+			background: #f4f4f4;
+			box-shadow: 0 0 0 1px #e8e8e8;
+			margin-top: 0 !important;
+			margin-bottom: 10px;
+			margin-right: 10px;
+			position: relative;
+
+			&:nth-of-type(3n){
+				margin-right: 0;
+			}
+
+			&.pending {
+				opacity: 0.7;
+			}
+
+			.remove {
+				position: absolute;
+				width: 10px;
+				height: 10px;
+				top: 15px;
+				right: 10px;
+				opacity: 0.7;
+				cursor: pointer;
+
+				@include icon('message_box_close', $position: absolute);
+
+				&:hover {
+					opacity: 1;
+				}
+			}
+		}
+	}
+
+
+	.groupset {
+		font-size: 0.875em;
+		color: $primary-grey;
+
+		.entry:not(:first-of-type) {
+			margin-top: 3em;
+		}
+
+		.school, .company {
+			font-weight: 700;
+		}
+
+		.wrap {
+			overflow: hidden;
+		}
+
+		.degree-container,
+		.title-container,
+		.start-container,
+		.end-container {
+			float: left;
+
+			.field-label {
+				display: block;
+			}
+		}
+
+		.degree, .field.title{
+
+			&[contenteditable="true"] {
+				min-width: 500px;
+			}
+
+			&:not(:empty){
+				margin-right: 1em;
+
+				&::after {
+					content: ','
+				}
+			}
+		}
+
+
+		.end:not(:empty) {
+			&::before {
+				content: '\2013';
+				margin: 0 0.5em;
+			}
+		}
+
+		.description {
+			margin-top: 0.5em;
+			font-style: italic;
+		}
+
+		.add {
+			cursor: pointer;
+			display: inline-block;
+			padding: 0 2em;
+			margin-top: 1em;
+			line-height: 40px;
+			background-color: $primary-blue;
+			color: white;
+			text-align: center;
+		}
+	}
+
+	&.editing {
+		.groupset {
+			.degree-container,
+			.title-container,
+			.start-container,
+			.end-container {
+				margin-right: 1em;
+			}
+
+			.degree::after,
+			.field.title::after {
+				display: none;
+			}
+
+
+			.end::before {
+				display: none;
 			}
 		}
 	}

@@ -7,7 +7,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 	renderTpl: Ext.DomHelper.markup([
 		{tag: 'h2', cls: 'title', html: 'About'},
 		{tag: 'span', cls: 'field-label edit-only', html: 'Write something about yourself.'},
-		{cls: 'field about', 'data-field': 'about', tabindex: '0'},
+		{cls: 'field about multi-line', 'data-field': 'about', tabindex: '0'},
 		{tag: 'span', cls: 'field-label edit-only', html: 'Email'},
 		{cls: 'field email edit-only', 'data-field': 'email', tabindex: '0'},
 		{tag: 'span', cls: 'field-label edit-only', html: 'Location'},
@@ -36,12 +36,6 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 		googleEl: '.field.google'
 	},
 
-
-	afterRender: function() {
-		this.callParent(arguments);
-		this.el.selectable();
-	},
-
 	setUser: function(user, isMe) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setUser.bind(this, user, isMe));
@@ -49,6 +43,8 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 		}
 
 		var data = user.getAboutData();
+
+		data.about = 'This is a short text to fill out the about field for a user.';
 
 		this.aboutEl.update(data.about || '');
 		this.emailEl.update(data.email || '');
@@ -65,5 +61,24 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 	},
 
 
-	getValues: function() {}
+	isValid: function() {
+		var values = this.getValues(),
+			schema = this.profileSchema.ProfileSchema;
+
+
+	},
+
+
+	getValues: function() {
+		return {
+			about: this.aboutEl.dom.innerHTML,
+			email: this.emailEl.dom.innerHTML,
+			location: this.locationEl.dom.innerHTML,
+			homepage: this.homepageEl.dom.innerHTML,
+			facebook: this.facebookEl.dom.innerHTML,
+			linkedIn: this.linkedInEl.dom.innerHTML,
+			twitter: this.twitterEl.dom.innerHTML,
+			googlePlus: this.googleEl.dom.innerHTML
+		};
+	}
 });
