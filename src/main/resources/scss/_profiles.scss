@@ -1714,6 +1714,13 @@
 			box-shadow: inset 5px 0 0 0 #c671c1;
 		}
 
+		.error-msg {
+			color: #F35252;
+			font-size: 0.625em;
+			text-transform: uppercase;
+			font-weight: 800;
+		}
+
 		.editable {
 			&[contenteditable="true"] {
 				color: $primary-grey;
@@ -1730,6 +1737,10 @@
 				&.multi-line {
 					min-height: 8em;
 					max-height: 30em;
+				}
+
+				&.error {
+					border: 1px solid $primary-red;
 				}
 			}
 		}
@@ -1842,7 +1853,8 @@
 		.title-container,
 		.start-container,
 		.end-container {
-			float: left;
+			display: inline-block;
+			vertical-align: bottom;
 
 			.field-label {
 				display: block;

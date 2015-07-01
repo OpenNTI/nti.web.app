@@ -6,22 +6,46 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{tag: 'h2', cls: 'title', html: 'About'},
-		{tag: 'span', cls: 'field-label edit-only', html: 'Write something about yourself.'},
-		{cls: 'field about multi-line', 'data-field': 'about', tabindex: '0'},
-		{tag: 'span', cls: 'field-label edit-only', html: 'Email'},
-		{cls: 'field email edit-only', 'data-field': 'email', tabindex: '0'},
-		{tag: 'span', cls: 'field-label edit-only', html: 'Location'},
-		{cls: 'field location edit-only', 'data-field': 'location', tabindex: '0'},
-		{tag: 'span', cls: 'field-label edit-only', html: 'Home Page'},
-		{cls: 'field homepage edit-only', 'data-field': 'home_page', tabindex: '0'},
-		{tag: 'span', cls: 'field-label edit-only', html: 'Facebook Profile'},
-		{cls: 'field facebook edit-only', 'data-field': 'facebook', tabindex: '0'},
-		{tag: 'span', cls: 'field-label edit-only', html: 'LinkedIn Profile'},
-		{cls: 'field linked-in edit-only', 'data-field': 'linkedIn', tabindex: '0'},
-		{tag: 'span', cls: 'field-label edit-only', html: 'Twitter Profile'},
-		{cls: 'field twitter edit-only', 'data-field': 'twitter', tabindex: '0'},
-		{tag: 'span', cls: 'field-label edit-only', html: 'Google+ Profile'},
-		{cls: 'field google edit-only', 'data-field': 'googlePlus', tabindex: '0'}
+		{cls: 'field-container', cn: [
+			{tag: 'span', cls: 'field-label edit-only', html: 'Write something about yourself.'},
+			{cls: 'error-msg'},
+			{cls: 'field about multi-line', 'data-field': 'about', tabindex: '0'},
+		]},
+		{cls: 'field-container', cn: [
+			{tag: 'span', cls: 'field-label edit-only', html: 'Email'},
+			{cls: 'error-msg'},
+			{cls: 'field email edit-only', 'data-field': 'email', tabindex: '0'},
+		]},
+		{cls: 'field-container', cn: [
+			{tag: 'span', cls: 'field-label edit-only', html: 'Location'},
+			{cls: 'error-msg'},
+			{cls: 'field location edit-only', 'data-field': 'location', tabindex: '0'}
+		]},
+		{cls: 'field-container', cn: [
+			{tag: 'span', cls: 'field-label edit-only', html: 'Home Page'},
+			{cls: 'error-msg'},
+			{cls: 'field homepage edit-only', 'data-field': 'home_page', tabindex: '0'}
+		]},
+		{cls: 'field-container', cn: [
+			{tag: 'span', cls: 'field-label edit-only', html: 'Facebook Profile'},
+			{cls: 'error-msg'},
+			{cls: 'field facebook edit-only', 'data-field': 'facebook', tabindex: '0'}
+		]},
+		{cls: 'field-container', cn: [
+			{tag: 'span', cls: 'field-label edit-only', html: 'LinkedIn Profile'},
+			{cls: 'error-msg'},
+			{cls: 'field linked-in edit-only', 'data-field': 'linkedIn', tabindex: '0'}
+		]},
+		{cls: 'field-container', cn: [
+			{tag: 'span', cls: 'field-label edit-only', html: 'Twitter Profile'},
+			{cls: 'error-msg'},
+			{cls: 'field twitter edit-only', 'data-field': 'twitter', tabindex: '0'}
+		]},
+		{cls: 'field-container', cn: [
+			{tag: 'span', cls: 'field-label edit-only', html: 'Google+ Profile'},
+			{cls: 'error-msg'},
+			{cls: 'field google edit-only', 'data-field': 'googlePlus', tabindex: '0'}
+		]}
 	]),
 
 
@@ -61,24 +85,85 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 	},
 
 
-	isValid: function() {
-		var values = this.getValues(),
-			schema = this.profileSchema.ProfileSchema;
 
+	getErrorMsg: function() {
+		var me = this,
+			valid = true,
+			schema = this.profileSchema && this.profileSchema.ProfileSchema,
+			values = me.getValues(),
+			fields = Object.keys(values) || [];
 
+		if (!schema) {
+			console.error('No schema to validate profile');
+			return 'Unable to edit profile at this time.';
+		}
+
+		fields.forEach(function(field) {
+			var fieldSchema = schema[field],
+				value = values[field];
+
+			//for now just check if they are required
+			if (fieldSchema.required && !value) {
+				me.showErrorForField(field, 'Required');
+				valid = false;
+			}
+		});
+
+		return valid ? '' : 'Missing Required About Fields';
 	},
 
 
 	getValues: function() {
-		return {
-			about: this.aboutEl.dom.innerHTML,
-			email: this.emailEl.dom.innerHTML,
-			location: this.locationEl.dom.innerHTML,
-			homepage: this.homepageEl.dom.innerHTML,
-			facebook: this.facebookEl.dom.innerHTML,
-			linkedIn: this.linkedInEl.dom.innerHTML,
-			twitter: this.twitterEl.dom.innerHTML,
-			googlePlus: this.googleEl.dom.innerHTML
-		};
+		var me = this,
+			values = {},
+			schema = me.profileSchema && me.profileSchema.ProfileSchema,
+			keys = [
+				{
+					name: 'about',
+					selector: 'aboutEl'
+				},
+				{
+					name: 'email',
+					selector: 'emailEl'
+				},
+				{
+					name: 'location',
+					selector: 'locationEl'
+				},
+				{
+					name: 'home_page',
+					selector: 'homepageEl'
+				},
+				{
+					name: 'facebook',
+					selector: 'facebookEl'
+				},
+				{
+					name: 'linkedIn',
+					selector: 'linkedInEl'
+				},
+				{
+					name: 'twitter',
+					selector: 'twitterEl'
+				},
+				{
+					name: 'googlePlus',
+					selector: 'googleEl'
+				}
+			];
+
+		if (!schema) {
+			return {};
+		}
+
+		keys.forEach(function(key) {
+			var fieldSchema = schema[key.name];
+
+			if (fieldSchema && !fieldSchema.readonly) {
+				values[key.name] = me[key.selector] && me[key.selector].dom.innerHTML;
+			}
+		});
+
+		return values;
 	}
 });

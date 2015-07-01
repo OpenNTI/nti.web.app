@@ -2,6 +2,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.EntrySet', {
 	extend: 'NextThought.app.profiles.user.components.about.parts.FieldSet',
 
 	title: '',
+	errorMsg: '',
 
 	entryTpl: new Ext.XTemplate(),
 
@@ -111,10 +112,46 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.EntrySet', {
 		}
 	},
 
+	showErrorForField: function(entry, fieldName, msg) {
+		var field = entry && entry.querySelector('[data-field="' + fieldName + '"]'),
+			container = field && field.parentNode,
+			error = container && container.querySelector('.error-msg');
 
-	getRawValues: function() {
+		if (field) {
+			field.classList.add('error');
+		}
+
+		if (error) {
+			error.innerHTML = msg;
+		}
+	},
+
+
+	validateEntry: function(entry) {},
+
+
+	getErrorMsg: function() {
+		var entries = this.entriesEl.dom.querySelectorAll('.entry') || [];
+
+		if (this.isReadOnly()) {
+			return '';
+		}
+
+		entries = Array.prototype.slice.call(entries);
+
+		entries = entries.map(this.validateEntry.bind(this)).filter(function(x) { return !!x; });
+
+		return entries.length ? this.errorMsg : '';
+	},
+
+
+	getValues: function() {
 		var entries = this.entriesEl.dom.querySelectorAll('.entry') || [],
 			values = [];
+
+		if (this.isReadOnly) {
+			return [];
+		}
 
 		entries = Array.prototype.slice.call(entries);
 

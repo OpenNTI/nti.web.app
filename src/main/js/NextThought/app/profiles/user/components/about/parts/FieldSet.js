@@ -72,5 +72,21 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.FieldSet', {
 		fields.forEach(function(field) {
 			field.setAttribute('contenteditable', true);
 		});
-	}
+	},
+
+
+	showErrorForField: function(fieldName, msg) {
+		var entry = this.el.dom.querySelector('[data-field="' + fieldName + '""]'),
+			container = entry && entry.parentNode,
+			error = container && container.querySelector('.error-msg');
+
+		if (entry) {
+			entry.classList.add('error');
+		}
+
+		if (error) {
+			error.innerHTML = msg;
+		}
+	},
+
 });

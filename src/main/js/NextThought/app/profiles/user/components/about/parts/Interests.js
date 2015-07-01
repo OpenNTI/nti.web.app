@@ -144,5 +144,10 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Interests', {
 		label = label && label.innerText;
 
 		return label;
+	},
+
+
+	validate: function() {
+		return '';
 	}
 });
