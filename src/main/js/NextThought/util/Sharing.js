@@ -212,30 +212,24 @@ Ext.define('NextThought.util.Sharing', {
 		var explicitEntities = shareInfo.entities,
 			isPublic = shareInfo.publicToggleOn,
 			prefix = isPublic && 'Public',
-			str, others, names = [], comma = ',';
+			str, others, suffix, names = [], comma = ',';
 
 		if (Ext.isEmpty(explicitEntities)) {
 			return Promise.resolve(prefix || 'Only Me');
 		}
-
-		prefix = prefix || 'Only Me';
 
 		return UserRepository.getUser(explicitEntities)
 			.then(function(resolvedUsers) {
 				var toResolve = resolvedUsers.length;
 
 				Ext.each(resolvedUsers || [], function(u) {
-					var onlyMe = prefix === 'Only Me', dn;
-
-					if (onlyMe && dn === 'me') {
-						toResolve -= 1;
-					}
-
+					var dn;
+					
 					if (!u.Unresolved) {
 						dn = isMe(u) ? 'me' : u.getName();
 					}
 
-					if (!Ext.isEmpty(dn) && dn.toLowerCase() !== 'unknown' && (!onlyMe || dn !== 'me')) {
+					if (!Ext.isEmpty(dn) && dn.toLowerCase() !== 'unknown') {
 						names.push(' ' + dn);
 						return !maxLength || names.length <= maxLength;
 					}
@@ -246,17 +240,15 @@ Ext.define('NextThought.util.Sharing', {
 				}
 
 				others = toResolve - names.length;
+				suffix = '';
 
 				if (others) {
-					names.push(Ext.String.format(' and {0}', Ext.util.Format.plural(others, 'other')));
+				    suffix = Ext.String.format('and {0}', Ext.util.Format.plural(others, 'other'));
 				} else if (names.length > 1) {
-					names.push(' and' + names.pop());
+					suffix = ' and' + names.pop();
 				}
 
-				if (names.length === 0) { comma = ''; }
-				if (names.length === 1) { comma = ' and'; }
-
-				str = Ext.String.format('{0}{1} {2}', prefix, comma, names.join(','));
+				str = Ext.String.format('{0}{1} {2}', prefix || '', names.join(','), suffix);
 
 				return str;
 			});
