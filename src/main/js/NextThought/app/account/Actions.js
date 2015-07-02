@@ -8,7 +8,8 @@ Ext.define('NextThought.app.account.Actions', {
 		'NextThought.common.ux.WelcomeGuide',
 		'NextThought.common.ux.IframeConfirmWindow',
 		'NextThought.common.ux.UpdatedTos',
-		'NextThought.common.ux.IframeWindow'
+		'NextThought.common.ux.IframeWindow',
+		'NextThought.model.UserPasswordSet'
 	],
 
 	maybeShowCoppaWindow: function() {
@@ -333,6 +334,24 @@ Ext.define('NextThought.app.account.Actions', {
 						reject(Ext.decode(r.responseText));
 					} else {
 						fulfill();
+					}
+				}
+			});
+		});
+	},
+
+
+	changePassword: function(values) {
+		var u = NextThought.model.UserPasswordSet.fromUser($AppConfig.userObject);
+
+		return new Promise(function(fulfill, reject) {
+			u.set(values);
+			u.save({
+				callback: function(req, success, resp) {
+					if (!success) {
+						reject(Ext.decode(resp.responseText, true) || 'There was an error setting your password.');
+					} else {
+						fulfill()
 					}
 				}
 			});

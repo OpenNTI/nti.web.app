@@ -211,6 +211,10 @@
 		}
 
 		.x-btn-flat-blue-medium {
+			&.footer-btn {
+				float: right;
+			}
+
 			&, .x-btn-button{
 				border-radius: 0 0 3px 0;
 			}
@@ -343,6 +347,7 @@
 		.footer {
 			margin-top: 40px;
 			border-top: 1px solid $border-grey !important;
+			overflow: hidden;
 		}
 
 		.cant-change{
