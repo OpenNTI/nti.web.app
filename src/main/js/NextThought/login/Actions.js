@@ -64,6 +64,7 @@ Ext.define('NextThought.login.Actions', {
 		me.store.willLogout(finishLoggingOut);
 	},
 
+
 	__onLoginSuccess: function() {
 		var me = this,
 			setFromCookie, preference,
@@ -149,7 +150,8 @@ Ext.define('NextThought.login.Actions', {
 
 			return;
 		}
-
+		
+		url = Ext.String.urlAppend(url, Ext.Object.toQueryString(o));
 		location.replace(url);
 
 		return Promise.reject();
@@ -284,7 +286,11 @@ Ext.define('NextThought.login.Actions', {
 			})
 			.fail(function(r) {
 				if (unauthed[r.status]) {
-					me.handleLogout();
+				    //Just let this fall through and reject. we can't
+				    //logout because we never logged in, when we reject 
+				    //the failure handle gets called and we send the user to the
+				    //login page. -cutz
+					//me.handleLogout();
 				} else {
 					alert({
 						title: getString('Apologies'),
