@@ -193,7 +193,7 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 
 		me.mon(me.el, 'click', function(e) {
 			if (e.getTarget('.close')) {
-				me.close();
+				me.handleClose();
 			}
 
 			if (e.getTarget('.back')) {
@@ -225,12 +225,13 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 			if ($AppConfig.userObject.hasLink('first_time_logon') && isFeature('suggest-contacts')) {
 				$AppConfig.userObject.removeFirstTimeLoginLink();
 			}
-
-			// Push the root route.
-			me.pushRootRoute(null, '/');
 		});
 
 		me.updateButtons();
+	},
+
+	handleClose: function() {
+		this.pushRootRoute('', '/');
 	},
 
 	updateAvailableCourses: function(current, upcoming, archived) {
@@ -412,7 +413,7 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 			me.mon(me.tabpanel, 'show-course-detail', function(course){
 				me.pushRoute(course.get('Title'), ParseUtils.encodeForURI(course.getId()), {course: course});
 			});
-			
+
 		}
 
 		function updateLabel() {

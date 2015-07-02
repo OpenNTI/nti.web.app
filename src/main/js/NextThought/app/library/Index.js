@@ -54,6 +54,10 @@ Ext.define('NextThought.app.library.Index', {
 
 		this.addDefaultRoute(this.showLibrary.bind(this));
 
+		this.on({
+			deactivate: this.onDeactivate.bind(this)
+		});
+
 
 		this.mon(this.CourseStore, 'enrolled-courses-set', this.enrolledCoursesSet.bind(this));
 	},
@@ -63,6 +67,13 @@ Ext.define('NextThought.app.library.Index', {
 		this.callParent(arguments);
 
 		this.mon(this.el, 'click', this.onClicked.bind(this));
+	},
+
+
+	onDeactivate: function() {
+		if (this.availableWin) {
+			this.availableWin.close();
+		}
 	},
 
 

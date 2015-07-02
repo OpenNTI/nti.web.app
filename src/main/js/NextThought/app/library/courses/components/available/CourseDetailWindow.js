@@ -29,6 +29,12 @@ Ext.define('NextThought.app.library.courses.components.available.CourseDetailWin
 				});
 			return false;
 		}
+	},
+
+	addMask: function() {},
+
+	handleClose: function() {
+		this.doClose();
 	}
 }, function() {
 	NextThought.app.windows.StateStore.register(NextThought.model.courses.CourseCatalogEntry.mimeType, this);

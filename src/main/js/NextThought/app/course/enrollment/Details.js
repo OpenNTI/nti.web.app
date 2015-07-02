@@ -739,22 +739,23 @@ Ext.define('NextThought.app.course.enrollment.Details', {
 	 */
 	linkClicked: function(link, e) {
 		var href = link.getAttribute('href'), r = true,
-			win = this.up('window');
+			win = this.up('window'), u = $AppConfig.userObject;
 
 		if (href === 'welcome') {
 			e.stopEvent();
 			this.fireEvent('show-permanent-welcome-guide', {
-				link: $AppConfig.userObject.getLink('content.permanent_welcome_page')
+				link: u.getLink('content.permanent_welcome_page')
 			});
 
 			r = false;
 		} else if (href === 'profile') {
-			e.stopEvent();
-			this.fireEvent('show-profile', $AppConfig.userObject, ['about']);
-
-			if (win) {
-				win.close();
+			if (e) {
+				e.stopEvent();
 			}
+
+			NextThought.app.navigation.Actions.pushRootRoute(u.getName(), u.getProfileUrl(), {
+				user: u
+			});
 
 			r = false;
 		} else if (href === 'resubmit') {
