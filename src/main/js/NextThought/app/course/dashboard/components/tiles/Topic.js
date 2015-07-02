@@ -21,9 +21,14 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Topic', {
 		}
 	},
 
+	initComponent: function(){
+		this.callParent(arguments);
+		this.WindowActions = NextThought.app.windows.Actions.create();
+	},
 
-	handleNavigation: function() {
-		this.fireEvent('goto-forum-item', this.record, this.course);
+
+	handleNavigation: function(e) {
+		this.WindowActions.pushWindow(this.record, null, e, null, {course: this.course});
 	},
 
 
