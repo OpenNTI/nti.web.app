@@ -236,7 +236,13 @@ Ext.define('NextThought.app.slidedeck.transcript.NoteOverlay', {
 			// NOTE: For slide notes, for now we're keeping them domRange notes.
 			if (me.data.isDomRange) {
 				// me.fireEvent('save-new-note', title, note, range, container, sharing, style, callback);
-				me.UserDataActions.saveNewNote(title, note, range, container, sharing, style, callback);
+				me.UserDataActions.saveNewNote(title, note, range, container, sharing, style)
+					.then(function(){
+						editor.unmask();
+						editor.deactivate();
+					}).fail(function() {
+						editor.unmask();
+					});
 			}
 			else {
 				// me.fireEvent('save-new-series-note', title, note, range, me.data, container, sharing, style, callback);
