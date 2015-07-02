@@ -82,7 +82,7 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 		courses.forEach(function(course) {
 			var catalog = course.getCourseCatalogEntry ? course.getCourseCatalogEntry() : course;
 
-			if (catalog && !catalog.isExpired()) {
+			if (catalog && catalog.isCurrent()) {
 				current.push(course);
 			}
 		});
@@ -101,7 +101,7 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 		courses.forEach(function(course) {
 			var catalog = course.getCourseCatalogEntry ? course.getCourseCatalogEntry() : course;
 
-			if (!catalog || catalog.isExpired()) {
+			if (!catalog || catalog.isArchived()) {
 				archived.push(course);
 			}
 		});
@@ -120,11 +120,8 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 
 		courses.forEach(function(course) {
 			var catalog = course.getCourseCatalogEntry ? course.getCourseCatalogEntry() : course;
-				start = catalog && catalog.get('StartDate'),
-				end = catalog && catalog.get('EndDate'),
-				now = new Date();
 
-			if (catalog && start > now) {
+			if (catalog && catalog.isUpcoming()) {
 				upcoming.push(course);
 			}
 		});
