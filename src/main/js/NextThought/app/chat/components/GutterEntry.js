@@ -26,6 +26,8 @@ Ext.define('NextThought.app.chat.components.GutterEntry', {
 			presence: this.user && this.user.getPresence().getName(),
 			dataBadge: 0
 		});
+
+		this.unreadMessageIds = [];
 	},
 
 
@@ -43,5 +45,28 @@ Ext.define('NextThought.app.chat.components.GutterEntry', {
 	setStatus: function() {},
 
 
-	setBadgeCount: function() {}
+	updateBadgeCount: function(count) {
+		this.avatar.dom.setAttribute('data-badge', count);
+	},
+
+	handleWindowNotify: function(win, msg) {
+		if (!win || win.isVisible() || isMe(msg.Creator)) {
+			return;
+		}
+
+		// Check if we don't have this message yet
+		var skip = false, i, count;
+		msg = msg && msg.isModel ? msg : ParseUtils.parseItems(msg)[0];
+		for (i = 0; i < this.unreadMessageIds.length; i++) {
+			if(this.unreadMessageIds[i] === msg.getId()) {
+				skip = true;
+			}
+		}
+
+		if (!skip) {
+			this.unreadMessageIds.push(msg.getId());
+			count = this.unreadMessageIds.length;
+			this.updateBadgeCount(count);
+		}
+	}
 });

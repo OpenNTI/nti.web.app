@@ -34,7 +34,11 @@ Ext.define('NextThought.app.chat.Gutter', {
 		this.mon(this.store, {
 			'load': this.updateList.bind(this),
 			'add': this.addContacts.bind(this),
-			'remove': this.removeContacts.bind(this)
+			'remove': this.removeContact.bind(this)
+		});
+
+		this.mon(this.ChatStore, {
+			'notify': this.handleWindowNotify.bind(this)
 		});
 	},
 
@@ -59,8 +63,11 @@ Ext.define('NextThought.app.chat.Gutter', {
 	},
 
 
-	removeContacts: function(store, users) {
-		console.error('Removing contact in Gutter is not yet implemented: ', arguments);
+	removeContact: function(store, user) {
+		var entry = this.findEntryForUser(user.getId());
+		if (entry) {
+			this.remove(entry);
+		}
 	},
 
 
@@ -77,7 +84,48 @@ Ext.define('NextThought.app.chat.Gutter', {
 		me.add(list);
 	},
 
+
 	openChatWindow: function(user, e) {
 		this.ChatActions.startChat(user);
+	},
+
+
+	findEntryForUser: function(userName) {
+		var items = this.items.items, entry, u, i;
+
+		for (i = 0; i < items.length && !entry; i++) {
+			u = items[i].user && items[i].user.getId();
+			if (u === userName) {
+				entry = items[i];
+			}
+		}
+
+		return entry;
+	},
+
+
+	handleWindowNotify: function(win, msg) {
+		var roomInfo = win && win.roomInfo,
+			isGroupChat = roomInfo && roomInfo.isGroupChat(),
+			targetUser, i, occupants = roomInfo &&roomInfo.getOriginalOccupants(), entry;
+
+		// TODO: Clean this up later. We should probably use some kind of map.
+		if (!isGroupChat) {
+			for (i = 0; i < occupants.length; i++) {
+				if(!isMe(occupants[i])) {
+					targetUser = occupants[i];
+					break;
+				}
+			}
+
+			if (targetUser) {
+				entry = this.findEntryForUser(targetUser);
+			}
+
+			if (entry) {
+				entry.handleWindowNotify(win, msg);
+			}
+		}
+
 	}
 });

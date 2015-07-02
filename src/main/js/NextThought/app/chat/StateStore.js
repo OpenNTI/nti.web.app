@@ -2,8 +2,7 @@ Ext.define('NextThought.app.chat.StateStore', {
 	extend: 'NextThought.common.StateStore',
 
 	requires: [
-		'NextThought.model.RoomInfo',
-		'NextThought.app.chat.components.Window'
+		'NextThought.model.RoomInfo'
 	],
 
 	availableForChat: false,
@@ -102,8 +101,70 @@ Ext.define('NextThought.app.chat.StateStore', {
 	},
 
 
-	showChatWindow: function(roomInfo){
+	showChatWindow: function(roomInfo) {
 		this.fireEvent('show-window', roomInfo);
+	},
+
+
+	notify: function(win, msg) {
+		this.fireEvent('notify', win, msg);
+	},
+
+
+	getChatWindow: function(roomInfo) {
+		if (!roomInfo) { return null; }
+
+		var rId = roomInfo && roomInfo.isModel ? roomInfo.getId() : roomInfo,
+			id = IdCache.getIdentifier(rId),
+			xOcc, w, allRooms;
+
+		w = this.getWindow(id);
+
+		if (!w) {
+			allRooms = this.getAllChatWindows();
+			//see if we have rooms with the same occupants list:
+			Ext.each(allRooms, function(x) {
+				xOcc = x.roomInfo.getOriginalOccupants();
+				//only do the next step for 1 to 1 chats, group chat changes like this could really mess everyone else up.
+				if (xOcc.length > 2) {
+					return;
+				}
+
+				//Be defensive.
+				if (Ext.Array.union(xOcc, roomInfo.get('Occupants')).length === xOcc.length) {
+					console.log('found a different room with same occupants: ', xOcc);
+					x.roomInfoChanged(roomInfo);
+					w = x;
+				}
+			});
+		}
+
+		return w;
+	},
+
+
+	cacheChatWindow: function(win, roomInfo) {
+		var id = roomInfo && roomInfo.isModel ? roomInfo.getId() : roomInfo;
+
+		id = IdCache.getIdentifier(id);
+		this.CHAT_WIN_MAP[id] = win;
+	},
+
+
+	getWindow: function(id) {
+		return this.CHAT_WIN_MAP[id];
+	},
+
+
+	getAllChatWindows: function() {
+		var wins = [];
+		for(var k in this.CHAT_WIN_MAP) {
+			if(this.CHAT_WIN_MAP.hasOwnProperty(k)) {
+				wins.push(this.CHAT_WIN_MAP[k]);
+			}
+		}
+
+		return wins;
 	},
 
 
@@ -129,7 +190,7 @@ Ext.define('NextThought.app.chat.StateStore', {
 
 		for (key in chats) {
 			if (chats.hasOwnProperty(key)) {
-				// rInfo = this.getRoomInfoFromSession(key, chats[key]);
+				rInfo = this.getRoomInfoFromSession(key, chats[key]);
 				if (rInfo) {
 					if (roomId && roomId === rInfo.getId()) {
 						break;//leave rInfo as is, so we can return it;
@@ -195,6 +256,34 @@ Ext.define('NextThought.app.chat.StateStore', {
 
 	isPersistantRoomId: function(id) {
 		return (/meetingroom/i).test(id);
+	},
+
+
+	isRoomIdAccepted: function(id) {
+		return Boolean((this.getSessionObject('roomIdsAccepted') || {})[id]);
+	},
+
+
+	setRoomIdStatusAccepted: function(id) {
+		var key = 'roomIdsAccepted',
+				status = this.getSessionObject(key) || {};
+
+		status[id] = true;
+
+		this.setSessionObject(status, key);
+	},
+
+
+	deleteRoomIdStatusAccepted: function(id) {
+		var key = 'roomIdsAccepted',
+				status = this.getSessionObject(key);
+		if (!status) {
+			return;
+		}
+
+		delete status[id];
+
+		this.setSessionObject(status, key);
 	},
 
 

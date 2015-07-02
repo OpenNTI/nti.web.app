@@ -8,6 +8,7 @@ Ext.define('NextThought.app.chat.Actions', {
 		'NextThought.util.Parsing'
 	],
 
+	availableForChat: true,
 
 	constructor: function() {
 		this.callParent(arguments);
@@ -17,6 +18,11 @@ Ext.define('NextThought.app.chat.Actions', {
 
 		var store = this.ChatStore;
 
+		this.channelMap = {
+			'DEFAULT': this.onMessageDefaultChannel.bind(this),
+			'WHISPER': this.onMessageDefaultChannel.bind(this),
+			'STATE': this.onReceiveStateChannel.bind(this)
+		};
 
 		if (window.Service && !store.loading && !store.hasFinishedLoad) {
 			this.onLogin();
@@ -34,8 +40,12 @@ Ext.define('NextThought.app.chat.Actions', {
 
 		socket.register({
 			'chat_setPresenceOfUsersTo': me.handleSetPresence.bind(me),
-			'chat_recvMessage': me.onMessage.bind(me)
-
+			'disconnect': me.createHandlerForChatEvents(me.onSocketDisconnect, 'disconnect'),
+			'serverkill': me.createHandlerForChatEvents(me.onSocketDisconnect, 'serverkill'),
+			'chat_exitedRoom': me.createHandlerForChatEvents(me.onExitedRoom, 'chat_exitedRoom'),
+			'chat_roomMembershipChanged': me.createHandlerForChatEvents(me.onMembershipOrModerationChanged, 'chat_roomMembershipChanged'),
+			'chat_recvMessage': me.createHandlerForChatEvents(me.onMessage, 'chat_recvMessage'),
+			'chat_recvMessageForShadow': me.createHandlerForChatEvents(me.onMessage, 'chat_recvMessageForShadow')
 		});
 
 		socket.onSocketAvailable(me.onSessionReady, me);
@@ -91,6 +101,101 @@ Ext.define('NextThought.app.chat.Actions', {
 	},
 
 
+	startChat: function(users, options) {
+		var ri, m, me = this,
+			socket = this.ChatStore.getSocket();
+
+		options = options || {};
+		if (!options.ContainerId) {
+			options.ContainerId = Globals.CONTENT_ROOT;
+		}
+
+		if(!Ext.isArray(users)) {
+			users = users && users.isModel ? users.getName() : users;
+			users = [users];
+		}
+
+		users.push($AppConfig.username);
+		users = Ext.unique(users);
+
+		ri = this.ChatStore.getRoomInfo(users, options.ContainerId);
+		if (ri) {
+			this.ChatStore.showChatWindow(ri);
+		}
+		else {
+			//If there were no existing rooms, create a new one.
+			m = {'Occupants': users};
+			socket.emit('chat_enterRoom', Ext.apply(m, options), Ext.bind(me.shouldShowRoom, me));
+		}
+	},
+
+
+	shouldShowRoom: function(msg) {
+		// This is mainly used as a callback to the socket to determine showing chat rooms that we created.
+		var rInfo = msg && msg.isModel ? msg : ParseUtils.parseItems([msg])[0], w;
+		if (rInfo) {
+			this.ChatStore.showChatWindow(rInfo);
+		} else {
+			alert({title: 'Error', msg: 'Unable to start your chat at this time. Please try again later.', icon: 'warning-red'});
+		}
+	},
+
+
+	createHandlerForChatEvents: function(fn, eventName) {
+		var me = this;
+
+		return function() {
+			if (me.availableForChat) {
+				fn.apply(me, arguments);
+			}else if (me.debug) {
+				console.log('Dropped ' + eventName + ' handling');
+			}
+		};
+	},
+
+
+	sendMessage: function(f, mid, channel, recipients) {
+		var room = this.getRoomInfoFromComponent(f),
+			val = f.getValue(),
+			me = this;
+
+		if (!room || Ext.isEmpty(val, false)) {
+			console.error('Cannot send message, room', room, 'values', val);
+			return;
+		}
+		this.clearErrorForRoom(room);
+		this.postMessage(room, val, mid, channel, recipients, Ext.bind(me.sendAckHandler, me));
+
+		f.focus();
+	},
+
+
+	postMessage: function(room, message, replyTo, channel, recipients, ack) {
+		if (typeof message === 'string') {
+			message = [message];
+		}
+
+		var m = {ContainerId: room.getId(), body: message, Class: 'MessageInfo'},
+			messageRecord,
+			socket = this.ChatStore.getSocket();
+
+		if (channel) {
+			m.channel = channel;
+		}
+		if (recipients) {
+			m.recipients = recipients;
+		}
+
+		if (ack) {
+			messageRecord = ParseUtils.parseItems([m]);
+			messageRecord = messageRecord && messageRecord.length > 0 ? messageRecord[0] : null;
+			ack = Ext.bind(ack, null, [messageRecord], true);
+		}
+
+		socket.emit('chat_postMessage', m, ack);
+	},
+
+
 	onMessage: function(msg, opts) {
 		var me = this, args = Array.prototype.slice.call(arguments),
 				m = ParseUtils.parseItems([msg])[0],
@@ -110,7 +215,7 @@ Ext.define('NextThought.app.chat.Actions', {
 		if (channel !== 'STATE') {
 			// NOTE: We don't want state channel notifications to trigger showing the window initially or adding
 			// notification counts, only when an actual message is sent should we do this.
-			w.notify(msg);
+			this.ChatStore.notify(w, msg);
 			/*if (!w.minimized && !w.isVisible() && w.hasBeenAccepted()) {
 				w.show();
 			}
@@ -121,34 +226,160 @@ Ext.define('NextThought.app.chat.Actions', {
 	},
 
 
-	startChat: function(users, containerId) {
-		var ri, m;
+	onMessageDefaultChannel: function(msg, opts) {
+		var cid, win, sender, room, isGroupChat;
 
-		if (!containerId) {
-			containerId = Globals.CONTENT_ROOT;
+		cid = msg.get('ContainerId');
+		win = this.ChatStore.getChatWindow(cid);
+		// moderated = Boolean(opts && opts.hasOwnProperty('moderated'));
+		sender = msg.get('Creator');
+		room = win && win.roomInfo || this.ChatStore.getRoomInfoFromSession(cid);
+		isGroupChat = room ? room.get('Occupants').length > 2 : false;
+
+		if (win) {
+			win.handleMessageFromChannel(sender, msg, room, isGroupChat);
+		}
+	},
+
+
+	onReceiveStateChannel: function(msg) {
+		var cid = msg.get('ContainerId'),
+				body = msg.get('body'),
+				sender = msg.get('Creator'),
+				win = this.ChatStore.getChatWindow(cid),
+				isGroupChat = win && win.roomInfo.get('Occupants').length > 2;
+
+		if (win && body) {
+			this.updateChatState(sender, body.state, win, isGroupChat);
+		}
+	},
+
+
+	/**
+	 *  We use this method to update the state of other chat participants.
+	 *  Thus, it is responsible for updating the appropriate view,
+	 *  but we don't keep track of other participants' state, because they manage it themselves.
+	 */
+	updateChatState: function(sender, state, win, isGroupChat, room) {
+		if (!win || !sender || sender === '') {
+			return;
 		}
 
-		if(!Ext.isArray(users)) {
-			users = users && users.isModel ? users.getName() : users;
-			users = [users];
+		room = room || win.roomInfo;
+		if (room) {
+			room.setRoomState(sender, state);
+			console.log('Update chat state: set to ', state, ' for ', sender);
+			win.updateChatState(sender, state, room, isGroupChat);
+		}
+	},
+
+
+	startTrackingChatState: function(sender, room, w) {
+		if (!w) {
+			return;
+		}
+		this.updateChatState(sender, 'active', w, room.get('Occupants').length > 2);
+		if (isMe(sender)) {
+			w.down('chat-view').fireEvent('status-change', {state: 'active'}); //start active timer.
+		}
+	},
+
+
+	/* CLIENT EVENTS */
+
+	sendAckHandler: function(result, m) {
+		function isError(result) {
+			var errorCode = 'error-type';
+			return result.hasOwnProperty(errorCode) && result[errorCode] === 'client-error';
 		}
 
-		users.push($AppConfig.username);
-		users = Ext.unique(users);
+		if (isError(result)) {
+			this.onMessageError(result, m);
+		}
+	},
 
-		ri = this.ChatStore.getRoomInfo(users, containerId);
-		if (ri) {
-			this.ChatStore.showChatWindow(ri);
+
+	getRoomInfoFromComponent: function(c) {
+		if (!c) {
+			console.error('Cannot get RoomInfo from an undefined component.');
+			return null;
+		}
+
+		if (c.roomInfo) {
+			return c.roomInfo;
+		}
+
+		var o = c.up('[roomInfo]');
+
+		if (!o) {
+			console.error('The component', c, 'has no parent component with a roomInfo');
+			return null;
+		}
+
+		return o.roomInfo;
+	},
+
+
+	clearErrorForRoom: function(room) {
+		var cid, win, view;
+
+		//TODO do we need to do the window rebuilding stuff here
+		//like in onMessage?
+		cid = room.getId();
+		win = this.ChatStore.getChatWindow(cid);
+		view = win ? win.down('chat-view') : null;
+		if (view) {
+			view.clearError();
 		}
 		else {
-			//If there were no existing rooms, create a new one.
-			m = new NextThought.model.RoomInfo({
-				'Occupants': users,
-				'ContainerId': containerId
-			});
+			console.error('Unable to clear error for messages window', arguments);
+		}
+	},
 
-			this.ChatStore.showChatWindow(m);
+	onSocketDisconnect: function() {
+		this.removeSessionObject();
+	},
+
+
+	onExitedRoom: function(room) {
+		this.removeSessionObject(room.ID);
+	},
+
+
+	onMembershipOrModerationChanged: function(msg) {
+		var newRoomInfo = ParseUtils.parseItems([msg])[0],
+				oldRoomInfo = this.getRoomInfoFromSession(newRoomInfo.getId()),
+				occupants = newRoomInfo.get('Occupants'),
+				toast;
+
+		if (newRoomInfo.get('Moderators').length === 0 && newRoomInfo.get('Moderated')) {
+			console.log('Transient moderation change encountered, ignoring', newRoomInfo);
+			return null;
 		}
 
+		this.sendChangeMessages(oldRoomInfo, newRoomInfo);
+		this.updateRoomInfo(newRoomInfo);
+
+		//if membership falls to just me, and we have a toast, DESTROY!
+		if (occupants.length === 1 && occupants[0] === $AppConfig.userObject.get('Username')) {
+			toast = Ext.ComponentQuery.query('toast[roomId=' + IdCache.getIdentifier(newRoomInfo.getId()) + ']');
+			if (toast && toast.length === 1) {
+				toast[0].close();
+			}
+			this.removeSessionObject(oldRoomInfo.getId());
+		}
+
+		return newRoomInfo; //for convinience chaining
+	},
+
+
+	removeSessionObject: function(key) {
+		if (!Ext.isEmpty(key)) {
+			var o = this.getSessionObject();
+			delete o[key];
+			this.setSessionObject(o);
+			return;
+		}
+		TemporaryStorage.remove('chats');
 	}
 });

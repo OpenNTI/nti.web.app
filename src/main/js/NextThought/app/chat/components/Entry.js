@@ -6,6 +6,10 @@ Ext.define('NextThought.app.chat.components.Entry', {
 	ui: 'chat-entry',
 	cls: 'chat-entry',
 
+	requires: [
+		'NextThought.app.chat.Actions'
+	],
+
 	renderTpl: Ext.DomHelper.markup([
 		{
 			cn: [
@@ -32,6 +36,8 @@ Ext.define('NextThought.app.chat.components.Entry', {
 		this.addEvents({ 'status-change': true });
 		this.enableBubble(['status-change']);
 		this.callParent(arguments);
+
+		this.ChatActions = NextThought.app.chat.Actions.create();
 	},
 
 	afterRender: function() {
@@ -70,11 +76,11 @@ Ext.define('NextThought.app.chat.components.Entry', {
 			if (Ext.is.iOS) { //Delay event to allow autocorrect to change word beforehand, instead of after
 				wait(10)
 					.then(function() {
-						me.fireEvent('send', me, me.replyTo, me.chanel, me.recipients);
+						me.ChatActions.sendMessage(me, me.replyTo, me.chanel, me.recipients);
 					});
 			}
 			else {
-				this.fireEvent('send', this, this.replyTo, this.chanel, this.recipients);
+				me.ChatActions.sendMessage(me, me.replyTo, me.chanel, me.recipients);
 			}
 		}
 	},

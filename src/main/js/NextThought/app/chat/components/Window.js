@@ -4,7 +4,8 @@ Ext.define('NextThought.app.chat.components.Window', {
 
 	requires: [
 		'NextThought.app.chat.components.View',
-		'NextThought.app.chat.components.Entry'
+		'NextThought.app.chat.components.Entry',
+		'NextThought.app.chat.StateStore'
 		// 'NextThought.view.chat.Gutter' //,
 		// 'NextThought.view.chat.WindowManager'
 	],
@@ -57,7 +58,10 @@ Ext.define('NextThought.app.chat.components.Window', {
 		// 	'hide': this.dragMaskOff
 		// });
 
+		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
 		this.setChatStatesMap();
+		this.logView = this.down('chat-log-view');
+		this.entryView = this.down('chat-entry');
 		// this.roomInfoChanged(this.roomInfo);
 		// this.mon(Ext.getStore('PresenceInfo'), 'presence-changed', 'presenceChanged', this);
 	},
@@ -284,6 +288,41 @@ Ext.define('NextThought.app.chat.components.Window', {
 		}
 
 		//TODO: actually show an interface to add people to the conversation instead of playing with the gutter.
+	},
+
+
+	handleMessageFromChannel: function(sender, msg, room, isGroupChat) {
+		var r = room || this.roomInfo;
+		this.logView.addMessage(msg);
+		this.updateChatState(sender, 'active', r, isGroupChat);
+	},
+
+
+	/**
+	 *  We use this method to update the state of other chat participants.
+	 *  Thus, it is responsible for updating the appropriate view,
+	 *  but we don't keep track of other participants' state, because they manage it themselves.
+	 */
+	updateChatState: function(sender, state, room, isGroupChat) {
+		if (!sender || sender === '') {
+			return;
+		}
+
+		var wasPreviouslyInactive = room.getRoomState(sender) === 'inactive' || !room.getRoomState(sender),
+			inputStates;
+
+		this.logView.clearChatStatusNotifications();
+		inputStates = room.getInputTypeStates();
+
+		if (inputStates.length > 0) {
+			this.logView.showInputStateNotifications(inputStates);
+
+			// NOTE: if the user is typing that means he is active.
+			if (!wasPreviouslyInactive) { return; }
+			state = 'active';
+		}
+
+		this.updateDisplayState(sender, state, isGroupChat);
 	},
 
 

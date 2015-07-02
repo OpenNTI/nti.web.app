@@ -33,6 +33,7 @@ Ext.define('NextThought.app.chat.Index', {
 
 	initComponent: function() {
 		this.callParent(arguments);
+		var socket;
 
 		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
 		this.ChatActions = NextThought.app.windows.Actions.create();
@@ -41,6 +42,9 @@ Ext.define('NextThought.app.chat.Index', {
 			'show-window': this.showChatWindow.bind(this),
 			'close-window': this.closeWindow.bind(this)
 		});
+
+		socket = this.ChatStore.getSocket();
+		socket.register({'chat_enteredRoom': this.enterChatRoom.bind(this)});
 	},
 
 
@@ -51,10 +55,10 @@ Ext.define('NextThought.app.chat.Index', {
 
 
 	showChatWindow: function(roomInfo) {
-		var me = this, w;
+		var w;
 
 		this.enterChatRoom(roomInfo);
-		w = this.getChatWindow(roomInfo);
+		w = this.ChatStore.getChatWindow(roomInfo);
 		if (w) {
 			w.notify();
 			w.show();
@@ -66,64 +70,31 @@ Ext.define('NextThought.app.chat.Index', {
 	},
 
 
-	getChatWindow: function(r) {
-		if (!r) { return null; }
-
-		var rId = r && r.isModel ? r.getId() : r,
-			id = IdCache.getIdentifier(rId),
-			xOcc, w, allRooms;
-
-		w = this.getWindow(id);
-
-		if (!w) {
-			allRooms = this.getAllChatWindows();
-			//see if we have rooms with the same occupants list:
-			Ext.each(allRooms, function(x) {
-				xOcc = x.roomInfo.getOriginalOccupants();
-				//only do the next step for 1 to 1 chats, group chat changes like this could really mess everyone else up.
-				if (xOcc.length > 2) {
-					return;
-				}
-
-				//Be defensive.
-				if (Ext.Array.union(xOcc, r.get('Occupants')).length === xOcc.length) {
-					console.log('found a different room with same occupants: ', xOcc);
-					x.roomInfoChanged(r);
-					w = x;
-				}
-			});
-		}
-
-		return w;
-	},
-
-
 	openChatWindow: function(roomInfo) {
-		var w = this.getChatWindow(roomInfo),
-			id = roomInfo && roomInfo.isModel ? roomInfo.getId() : roomInfo;
+		var w = this.ChatStore.getChatWindow(roomInfo);
 
 		if (!w) {
 			w =  Ext.widget({xtype: 'chat-window', roomInfo: roomInfo});
-			id = IdCache.getIdentifier(id);
-			this.CHAT_WIN_MAP[id] = w;
+			this.ChatStore.cacheChatWindow(w, roomInfo);
 		}
 		return w;
 	},
 
 
-	enterChatRoom: function(roomInfo) {
+	enterChatRoom: function(msg) {
 		var me = this, w,
+			roomInfo = msg && msg.isModel ? msg : ParseUtils.parseItems([msg])[0],
 			occupants = roomInfo.get('Occupants'),
 			isGroupChat = (occupants.length > 2);
 
 		roomInfo = roomInfo && roomInfo.isModel ? roomInfo : ParseUtils.parseItems([roomInfo])[0];
 		roomInfo.setOriginalOccupants(occupants.slice());
-		// me.putRoomInfoIntoSession(roomInfo);
+		me.ChatStore.putRoomInfoIntoSession(roomInfo);
 		w = me.openChatWindow(roomInfo);
 
 		this.presentInvationationToast(roomInfo)
 			.then(function() {
-				// me.setRoomIdStatusAccepted(roomInfo.getId());
+				me.ChatStore.setRoomIdStatusAccepted(roomInfo.getId());
 				w.accept(true);
 				// me.startTrackingChatState(roomInfo.get('Creator'), roomInfo, w);
 				if (isGroupChat) {
@@ -184,20 +155,5 @@ Ext.define('NextThought.app.chat.Index', {
 		});
 	},
 
-	closeWindow: function() {},
-
-	getWindow: function(id) {
-		return this.CHAT_WIN_MAP[id];
-	},
-
-	getAllChatWindows: function() {
-		var wins = [];
-		for(var k in this.CHAT_WIN_MAP) {
-			if(this.CHAT_WIN_MAP.hasOwnProperty(k)) {
-				wins.push(this.CHAT_WIN_MAP[k]);
-			}
-		}
-
-		return wins;
-	}
+	closeWindow: function() {}
 });
