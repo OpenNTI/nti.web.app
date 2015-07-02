@@ -8,6 +8,41 @@
 	left: auto !important;
 	top: auto !important;
 
+	.x-window-body-chat-window {
+	    display: -webkit-box;
+	    display: -webkit-flex;
+	    display: -ms-flexbox;
+	    display: flex;
+	    -webkit-box-orient: vertical;
+	    -webkit-box-direction: normal;
+	    -webkit-flex-direction: column;
+	        -ms-flex-direction: column;
+	            flex-direction: column;
+
+	    & > *:first-child {
+		    -webkit-box-flex: 0;
+		    -webkit-flex: 0 0 auto;
+		        -ms-flex: 0 0 auto;
+		            flex: 0 0 auto;
+		}
+
+		&> * {
+		    -webkit-box-flex: 1;
+		    -webkit-flex: 1 1 auto;
+		        -ms-flex: 1 1 auto;
+		            flex: 1 1 auto;
+		    display: -webkit-box;
+		    display: -webkit-flex;
+		    display: -ms-flexbox;
+		    display: flex;
+		}
+
+
+		.nti-window-header .header-body{
+		    width: 100%;
+		}
+	}
+
 	.nti-window-header {
 		.header-body {
 			.tools {
@@ -91,15 +126,26 @@
 	.chat-view {
 		border-radius: 0 5px 5px 0;
 		box-shadow: -2px 0px 9px -5px #333333;
-		//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
-		// REFRESHER: box-shadow syntax is:
-		// box-shadow:  none | <shadow> [,<shadow>]*
-		//	where <shadow> is defined as:
-		//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
+		
+		display: -webkit-box;
+	    display: -webkit-flex;
+	    display: -ms-flexbox;
+	    display: flex;
+	    -webkit-box-orient: vertical;
+	    -webkit-box-direction: normal;
+	    -webkit-flex-direction: column;
+	        -ms-flex-direction: column;
+	            flex-direction: column;
+	    position: relative;
+	    overflow: hidden;
 
-		.x-box-inner {
-
+	    > * {
+		    -webkit-box-flex: 0;
+		    -webkit-flex: 0 0 auto;
+		        -ms-flex: 0 0 auto;
+		            flex: 0 0 auto;
 		}
+
 
 		.error-box {
 			position: relative;
@@ -150,7 +196,6 @@
 			x: hidden;
 			y: auto; //scroll;
 		}
-		height: 242px;
 		border-radius: 0 5px 0 0;
 		border-bottom: 1px solid #cfcfcf !important;
 		box-shadow: inset  0px -7px 7px -7px #f7f7f7;
@@ -159,6 +204,14 @@
 		// box-shadow:  none | <shadow> [,<shadow>]*
 		//	where <shadow> is defined as:
 		//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
+		//		
+		
+		-webkit-box-flex: 1;
+    	-webkit-flex: 1 1 auto;
+       	-ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        padding-bottom: 50px;	// Account for the chat-entry height.
+
 
 		.control {
 			display: none;
@@ -339,6 +392,8 @@
 		bottom: 0;
   		right: 0;
   		left: 0;
+  		z-index: 10;
+  		border-top: 1px solid #cfcfcf !important;
 
 		div {
 			margin: 10px 8px 10px 8px;
