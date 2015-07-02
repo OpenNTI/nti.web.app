@@ -74,9 +74,6 @@ Ext.define('NextThought.mixins.routing.Path', {
 			this.__routeMap = {};
 		}
 
-		root = root.toLowerCase();
-
-
 		if (root[0] === ':') {
 			if (!this.__routeMap[varKey]) {
 				root = this.__routeMap[varKey] = {
@@ -115,7 +112,7 @@ Ext.define('NextThought.mixins.routing.Path', {
 
 		//for each part of the url add a sub route
 		parts.forEach(function(part) {
-			var key = part.toLowerCase();
+			var key = part;
 
 			//if the key starts with a : add it as a variable sub route
 			//otherwise add it as a regular sub route
@@ -174,7 +171,7 @@ Ext.define('NextThought.mixins.routing.Path', {
 
 		//for each part in the url
 		for (i = 0; i < parts.length; i++) {
-			key = parts[i].toLowerCase();
+			key = parts[i];
 
 			if (key === '') { key = '/'; }
 
