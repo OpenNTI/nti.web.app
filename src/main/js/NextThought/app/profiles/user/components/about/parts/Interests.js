@@ -16,7 +16,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Interests', {
 
 
 	newEntryTpl: new Ext.XTemplate(Ext.DomHelper.markup({
-		cls: 'new-field field editable interest', 'data-field': 'interest', 'data-placeholder': 'New Interest', contenteditable: 'true', tabindex: '0'
+		cls: 'new-field field editable interest entry', 'data-field': 'interest', 'data-placeholder': 'New Interest', contenteditable: 'true', tabindex: '0'
 	})),
 
 
@@ -98,6 +98,13 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Interests', {
 	applySchema: function() {},
 
 
+	isReadOnly: function() {
+		var schema = this.profileSchema.ProfileSchema;
+
+		return !schema || schema.readonly;
+	},
+
+
 	setUneditable: function() {
 		var dom = this.entriesEl.dom,
 			editor = dom && dom.querySelector('.new-field');
@@ -121,16 +128,9 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Interests', {
 
 		var data = user.getAboutData();
 
-		data.interests.push('Computer Hacking');
-		data.interests.push('Nunchucks');
-		data.interests.push('Bow Hunting');
-		data.interests.push('Nunchucks');
-		data.interests.push('Bow Hunting');
-		data.interests.push('Interest 1');
-		data.interests.push('Interest 2');
-		data.interests.push('Interest 3');
-
-		data.interests.map(function(interest) {
+		data.interests.filter(function(x) {
+			return !!x;
+		}).map(function(interest) {
 			return {label: interest};
 		}).forEach(this.addEntry.bind(this));
 
@@ -143,7 +143,8 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Interests', {
 	entryToValues: function(entry) {
 		var label = entry.querySelector('.label');
 
-		label = label && label.innerText;
+		//if we don't have a label we are the editor
+		label = (label && label.innerText) || entry.innerText;
 
 		return label;
 	},

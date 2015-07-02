@@ -41,11 +41,16 @@ Ext.define('NextThought.app.profiles.user.components.about.About', {
 
 		this.addDefaultRoute('/');
 
+		this.aboutCmp = this.down('profile-user-about-about');
+		this.educationCmp = this.down('profile-user-about-education');
+		this.positionsCmp = this.down('profile-user-about-positions');
+		this.interestsCmp = this.down('profile-user-about-interests');
+
 		this.profileParts = [
-			this.down('profile-user-about-about'),
-			this.down('profile-user-about-education'),
-			this.down('profile-user-about-positions'),
-			this.down('profile-user-about-interests'),
+			this.aboutCmp,
+			this.educationCmp,
+			this.positionsCmp,
+			this.interestsCmp,
 			this.down('profile-user-about-suggested'),
 			this.down('profile-user-about-communities'),
 			this.down('profile-user-about-groups')
@@ -109,7 +114,91 @@ Ext.define('NextThought.app.profiles.user.components.about.About', {
 	},
 
 
-	saveEdits: function() {},
+	getValues: function() {
+		var values = this.aboutCmp.getValues();
+
+		values.education = this.educationCmp.getValues();
+		values.positions = this.positionsCmp.getValues();
+		values.interests = this.interestsCmp.getValues();
+
+		return values;
+	},
+
+
+	saveEdits: function() {
+		var me = this,
+			user = me.activeUser,
+			hasChanged = false,
+			newValues = me.getValues(),
+			fields = Object.keys(newValues),
+			oldValues = {};
+
+		fields.forEach(function(field) {
+			oldValues[field] = user.get(field);
+
+			//force falsy values to be null
+			if (!newValues[field]) {
+				newValues[field] = null;
+			}
+
+			if (oldValues[field] !== newValues[field]) {
+				hasChanged = true;
+			}
+		});
+
+		if (!hasChanged) {
+			return Promise.resolve(true);
+		}
+
+		return new Promise(function(fulfill, reject) {
+			user.set(newValues);
+			user.save({
+				success: function(resp) {
+					var o = resp.responseText,
+						newUser = ParseUtils.parseItems(o)[0];
+
+					//NOTE: Update the links that way in case the email changed, we request verification.
+					user.set('Links', newUser.get('Links'));
+					fulfill(true);
+				},
+				failure: function(resp) {
+					var msg = Ext.JSON.decode(resp.responseText, true);
+
+					if (me.aboutCmp.showError(msg)) {
+						me.showError({
+							name: me.aboutCmp.name,
+							msg: msg.message
+						});
+					} else if (me.educationCmp.showError(msg)) {
+						me.showError({
+							name: me.educationCmp.name,
+							msg: msg.message
+						});
+					} else if (me.positionsCmp.showError(msg)) {
+						me.showError({
+							name: me.positionsCmp.name,
+							msg: msg.message
+						})
+					} else if (me.interestsCmp.showError(msg)) {
+						me.showError({
+							name: me.interestsCmp.name,
+							msg: msg.message
+						});
+					} else {
+						me.showError({
+							name: 'this',
+							msg: msg.message
+						});
+					}
+
+					//if we fail reset the old values
+					user.set(oldValues);
+
+					reject(false);
+				}
+			})
+		});
+	},
 
 
 	setSchema: function(schema) {

@@ -63,14 +63,6 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Positions', {
 
 		var data = user.getAboutData();
 
-		data.positions.push({
-			companyName: 'NextThought',
-			title: 'Supreme Overlord',
-			startYear: '2013',
-			endYear: '3000',
-			description: 'Doin work like a boss'
-		});
-
 		data.positions.forEach(this.addEntry.bind(this));
 
 		if (!data.positions.length && !isMe) {
@@ -100,6 +92,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Positions', {
 		description = description && description.innerText;
 
 		return {
+			MimeType: 'application/vnd.nextthought.profile.professionalposition',
 			companyName: companyName,
 			title: title,
 			startYear: startYear,

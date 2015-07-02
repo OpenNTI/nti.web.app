@@ -17,6 +17,20 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.FieldSet', {
 		if (this.hasErrors) {
 			this.clearErrors(e);
 		}
+
+		if (e.target.getAttribute('data-input-type') === 'numeric') {
+			this.limitToNumber(e);
+		}
+	},
+
+
+	limitToNumber: function(e) {
+		var charCode = e.key || e.charCode;
+
+		//if its not a control char and not a number
+		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+			e.preventDefault();
+		}
 	},
 
 
@@ -40,6 +54,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.FieldSet', {
 		hasMore = this.el.dom.querySelectorAll('.error').length;
 
 		if (!hasMore) {
+			this.hasErrors = false;
 			this.fireEvent('clear-errors', this.name);
 		}
 	},
@@ -117,6 +132,19 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.FieldSet', {
 		fields.forEach(function(field) {
 			field.setAttribute('contenteditable', true);
 		});
+	},
+
+
+	showError: function(msg) {
+		var field = msg.field,
+			entry = this.el.dom.querySelector('[data-field="' + field + '"]');
+
+		if (field) {
+			this.hasErrors = true;
+			this.showErrorForField(field, '');
+		}
+
+		return !!entry;
 	},
 
 

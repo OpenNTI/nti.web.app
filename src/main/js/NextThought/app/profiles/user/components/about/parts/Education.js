@@ -63,13 +63,6 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Education', {
 
 		var data = user.getAboutData();
 
-		data.education.push({
-			school: 'University of Oklahoma',
-			degree: 'Computer Science',
-			startYear: '2009',
-			endYear: '2014'
-		});
-
 		data.education.forEach(this.addEntry.bind(this));
 
 		this.applySchema();
@@ -101,6 +94,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Education', {
 		description = description && description.innerText;
 
 		return {
+			MimeType: 'application/vnd.nextthought.profile.educationalexperience',
 			school: school,
 			degree: degree,
 			startYear: startYear,

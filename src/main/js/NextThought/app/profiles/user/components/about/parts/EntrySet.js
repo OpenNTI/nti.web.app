@@ -127,6 +127,11 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.EntrySet', {
 	},
 
 
+	//TODO: figure out what to do here since it doesn't look like the server
+	//is sending back a field name
+	showError: function(msg) {},
+
+
 	validateEntry: function(entry) {},
 
 
@@ -151,7 +156,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.EntrySet', {
 		var entries = this.entriesEl.dom.querySelectorAll('.entry') || [],
 			values = [];
 
-		if (this.isReadOnly) {
+		if (this.isReadOnly()) {
 			return [];
 		}
 
