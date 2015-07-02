@@ -350,7 +350,7 @@ Ext.define('NextThought.app.userdata.Actions', {
 					// or we can't resolve the sharing, the use public scope.
 					return Promise[bundle ? 'resolve' : 'reject'](bundle)
 						.then(function(ci) {
-							return {sharing: {shareWith: ci.getDefaultSharing()}};
+							return {sharing: {sharedWith: ci.getDefaultSharing()}};
 						})
 						.fail(function() {
 							return {sharing: {}};
