@@ -158,6 +158,8 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 		} else if (!Ext.isEmpty(archived)) {
 			this.tabpanel.selectTabWithName('Archived');
 		}
+
+		this.removeMask();
 	},
 
 	beforeRender: function() {
@@ -171,7 +173,7 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 
 	afterRender: function() {
 		this.callParent(arguments);
-
+		this.addMask();
 		var me = this;
 
 		me.msgMonitors = me.mon(me.msgContainerEl, {
@@ -443,7 +445,7 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 			me = this;
 
 		if(course && course.getId().toLowerCase() === ntiid.toLowerCase()) {
-			this.showCourse(course);	
+			this.showCourse(course);
 		}
 		else {
 			this.mun(this.CourseStore, 'all-courses-set');
@@ -551,6 +553,17 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 		me.closeMsg();
 	},
 
+	addMask: function() {
+		if (this.rendered) {
+			this.el.mask('Loading...');
+		}
+	},
+
+	removeMask: function() {
+		if (this.rendered) {
+			this.el.unmask();
+		}
+	},
 
 	updateLabelText: function(text) {
 		if (Ext.isEmpty(text)) { return; }
