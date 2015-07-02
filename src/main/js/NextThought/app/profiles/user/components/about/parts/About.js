@@ -69,8 +69,6 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 
 		var data = user.getAboutData();
 
-		data.about = 'This is a short text to fill out the about field for a user.';
-
 		this.aboutEl.update(data.about || '');
 		this.emailEl.update(data.email || '');
 		this.locationEl.update(data.location || '');

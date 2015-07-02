@@ -19,7 +19,35 @@
 
 .profile-header {
 	.buttons {
-		height: 60px;
+		height: 35px;
+		margin-top: 40px;
+		margin-bottom: 10px;
+
+		.button {
+			float: right;
+			margin-left: 10px;
+			padding: 0 1.5em 0 45px;//1.5em + 20px
+			line-height: 35px;
+			color: white;
+			border-radius: 3px;
+			font-size: 0.875em;
+			cursor: pointer;
+
+			&.edit {
+				background-color: $primary-blue;
+				@include icon('notepad_active_white', $top: 8px, $left: 1.5em);
+			}
+
+			&.save {
+				padding: 0 1.5em;
+				background-color: $primary-green;
+			}
+
+			&.cancel {
+				padding: 0 1.5em;
+				background-color: $primary-red;
+			}
+		}
 	}
 
 	.tabs {

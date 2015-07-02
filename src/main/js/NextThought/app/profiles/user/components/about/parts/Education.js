@@ -60,8 +60,9 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Education', {
 			this.on('afterrender', this.setUser.bind(this, user, isMe));
 			return;
 		}
-
 		var data = user.getAboutData();
+
+		this.clearEntries();
 
 		data.education.forEach(this.addEntry.bind(this));
 

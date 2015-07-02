@@ -57,8 +57,10 @@ Ext.define('NextThought.app.profiles.user.Index', {
 
 		if (me.activeUser && (me.activeUser.get('Username') || '').toLowerCase() === lowerId) {
 			me.getUser = Promise.resolve(me.activeUser);
+			me.isMe = isMe(me.activeUser);
 		} else if (user && (user.get('Username') || '').toLowerCase() == lowerId) {
 			me.activeUser = user;
+			me.isMe = isMe(me.activeUser);
 			me.getUser = Promise.resolve(user);
 		} else {
 			me.getUser = UserRepository.getUser(id)
@@ -111,7 +113,7 @@ Ext.define('NextThought.app.profiles.user.Index', {
 			active: active === 'activity'
 		});
 
-		this.headerCmp.updateUser(this.activeUser, tabs, isContact);
+		this.headerCmp.updateUser(this.activeUser, tabs, isContact, this.isMe);
 
 		this.NavActions.updateNavBar({
 			hideBranding: true
@@ -132,6 +134,8 @@ Ext.define('NextThought.app.profiles.user.Index', {
 					headerCmp.setSchema(schema);
 				});
 		}
+
+		aboutCmp.setHeaderCmp(headerCmp);
 
 		return aboutCmp.userChanged(this.activeUser, this.isMe)
 			.then(aboutCmp.handleRoute.bind(aboutCmp, subRoute, route.params));

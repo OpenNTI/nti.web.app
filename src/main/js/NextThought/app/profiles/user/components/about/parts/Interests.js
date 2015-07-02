@@ -128,6 +128,8 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Interests', {
 
 		var data = user.getAboutData();
 
+		this.clearEntries();
+
 		data.interests.filter(function(x) {
 			return !!x;
 		}).map(function(interest) {

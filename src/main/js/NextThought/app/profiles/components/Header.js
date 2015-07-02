@@ -30,7 +30,7 @@ Ext.define('NextThought.app.profiles.components.Header', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		if (!this.buttonEl) {
+		if (!this.buttonsEl) {
 			this.addButton = function(){};
 			this.clearButtons = function() {};
 		} else {
@@ -71,7 +71,9 @@ Ext.define('NextThought.app.profiles.components.Header', {
 	},
 
 
-	addButton: function(data) {},
+	addButton: function(data) {
+		this.buttonTpl.append(this.buttonsEl, data);
+	},
 
 
 	addTab: function(data) {
@@ -79,7 +81,9 @@ Ext.define('NextThought.app.profiles.components.Header', {
 	},
 
 
-	clearButtons: function() {},
+	clearButtons: function() {
+		this.buttonsEl.dom.innerHTML = '';
+	},
 
 
 	clearTabs: function() {

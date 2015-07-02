@@ -63,6 +63,8 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Positions', {
 
 		var data = user.getAboutData();
 
+		this.clearEntries();
+
 		data.positions.forEach(this.addEntry.bind(this));
 
 		if (!data.positions.length && !isMe) {

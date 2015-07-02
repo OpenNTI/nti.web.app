@@ -41,7 +41,8 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 		linkedInEl: '.social .linked-in',
 		twitterEl: '.social .twitter',
 		googleEl: '.social .google-plus',
-		tabsEl: '.tabs'
+		tabsEl: '.tabs',
+		buttonsEl: '.buttons'
 	},
 
 
@@ -54,7 +55,7 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 	},
 
 
-	updateUser: function(user, tabs, contact) {
+	updateUser: function(user, tabs, contact, isMe) {
 		if (!this.rendered) {
 			this.on('afterrender', this.updateUser.bind(this, user, tabs, contact));
 			return;
@@ -62,7 +63,7 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 
 		this.user = user;
 		this.isContact = contact;
-		this.isMe = isMe(user);
+		this.isMe = isMe;
 
 		var data = user.getAboutData(),
 			presence = user.getPresence();
@@ -73,6 +74,15 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 		this.__updatePresence(presence);
 
 		this.__updateTabs(tabs);
+		this.clearButtons();
+
+		if (isMe) {
+			this.__showMyButtons();
+		} else if (contact) {
+			this.__showContactButtons();
+		} else {
+			this.__showNonContactButtons();
+		}
 	},
 
 
@@ -91,6 +101,59 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 
 		tabs.forEach(this.addTab.bind(this));
 	},
+
+
+	__showMyButtons: function() {
+		this.addButton({
+			cls: 'edit',
+			action: 'onEditProfile',
+			label: 'Edit Profile'
+		});
+	},
+
+
+	showEditingActions: function(save, cancel) {
+		this.clearButtons();
+
+		this.editSaveAction = save,
+		this.editCancelAction = cancel;
+
+		this.addButton({
+			cls: 'save',
+			action: 'onEditSave',
+			label: 'Save'
+		});
+
+		this.addButton({
+			cls: 'cancel',
+			action: 'onEditCancel',
+			label: 'Cancel'
+		});
+	},
+
+
+	onEditProfile: function() {
+		this.pushRoute('Edit', '/about/edit');
+	},
+
+
+	onEditSave: function() {
+		if (this.editSaveAction) {
+			this.editSaveAction();
+		}
+	},
+
+
+	onEditCancel: function() {
+		if (this.editCancelAction) {
+			this.editCancelAction();
+		}
+	},
+
+	__showContactButtons: function() {},
+
+
+	__showNonContactButtons: function() {},
 
 
 	onPresenceChanged: function(username, presence) {

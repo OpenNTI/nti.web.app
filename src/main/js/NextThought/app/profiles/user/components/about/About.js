@@ -201,12 +201,32 @@ Ext.define('NextThought.app.profiles.user.components.about.About', {
 	},
 
 
+	saveProfile: function() {
+		var me = this;
+
+		me.saveEdits()
+			.then(function() {
+				me.pushRoute('About', '/');
+			});
+	},
+
+
+	cancelEdit: function() {
+		this.pushRoute('About', '/');
+	},
+
+
 	setSchema: function(schema) {
 		this.profileParts.forEach(function(part) {
 			if (part.setSchema) {
 				part.setSchema(schema);
 			}
 		});
+	},
+
+
+	setHeaderCmp: function(header) {
+		this.headerCmp = header;
 	},
 
 
@@ -230,6 +250,8 @@ Ext.define('NextThought.app.profiles.user.components.about.About', {
 			this.replaceRoute('', '/');
 			return;
 		}
+
+		this.headerCmp.showEditingActions(this.saveProfile.bind(this), this.cancelEdit.bind(this));
 
 		this.profileParts.forEach(function(part) {
 			if (part.setEditable) {

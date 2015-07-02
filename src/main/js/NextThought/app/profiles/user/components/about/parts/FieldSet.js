@@ -113,7 +113,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.FieldSet', {
 		fields = Array.prototype.slice.call(fields);
 
 		fields.forEach(function(field) {
-			field.removeAttribute('conttenteditable');
+			field.removeAttribute('contenteditable');
 		});
 	},
 
