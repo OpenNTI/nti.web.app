@@ -392,8 +392,8 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 
 			if (params.batchAround) {
 				store.load();
-			} else if (state.current_page) {
-				store.loadPage(state.current_page);
+			} else if (state.currentPage) {
+				store.loadPage(state.currentPage);
 			} else {
 				store.loadPage(1);
 			}
