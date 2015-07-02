@@ -175,9 +175,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 		this.itemFilter = state.itemFilter = state.itemFilter || 'all';
 		state.currentPage = state.currentPage || 1;
 
-		this.current_state = state || {};
-
-		return this.applyState(this.current_state);
+		return this.applyState(state || {});
 	},
 
 
@@ -564,6 +562,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 			store.setPageSize(state.pageSize);
 		}
 
+		this.current_state = state;
+
 		return new Promise(function(fulfill, reject) {
 			me.mon(store, {
 				single: true,
@@ -594,7 +594,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 
 	updateFilter: function() {
-		var state = this.current_state || {},
+		var state = Ext.clone(this.current_state) || {},
 			newPage = state.currentPage !== this.currentPage,
 			header = this.pageHeader;
 
@@ -627,8 +627,6 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 		} else {
 			delete state.sort;
 		}
-
-		this.current_state = state;
 
 		if (newPage) {
 			this.pushRouteState(state);
