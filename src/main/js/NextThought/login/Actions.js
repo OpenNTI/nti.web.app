@@ -216,10 +216,20 @@ Ext.define('NextThought.login.Actions', {
 				return Globals.parseJSON(response, true);
 			})
 			.then(function(response) {
+			    var resolveService, tosLink;
+			
 				me.store.maybeAddImmediateAction(response);
 				me.store.setLogoutURL(me.ServiceInterface.getLinkFrom(response.Links, 'logon.logout'));
-
-				return me.resolveService();
+                tosLink = me.ServiceInterface.getLinkFrom(response.Links, 'content.direct_tos_link');
+				resolveService = me.resolveService();
+				
+				resolveService.then(function(){
+				    if(tosLink){
+	       		      Service.overrideServiceLink('termsOfService', tosLink);
+    			    }
+				});
+				
+				return resolveService;
 			});
 	},
 
