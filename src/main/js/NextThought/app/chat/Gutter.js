@@ -86,7 +86,6 @@ Ext.define('NextThought.app.chat.Gutter', {
 
 
 	openChatWindow: function(user, entry, e) {
-		debugger;
 		if (entry.associatedWindow) {
 			entry.associatedWindow.show();
 		}
@@ -97,7 +96,6 @@ Ext.define('NextThought.app.chat.Gutter', {
 
 
 	bindChatWindow: function(win) {
-		debugger;
 		var roomInfo = win && win.roomInfo,
 			isGroupChat = roomInfo.isGroupChat(),
 			occupants = roomInfo && roomInfo.getOriginalOccupants(), t, i, entry;
