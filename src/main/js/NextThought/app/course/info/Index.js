@@ -7,7 +7,7 @@ Ext.define('NextThought.app.course.info.Index', {
 	requires: [
 		'NextThought.app.course.info.components.Outline',
 		'NextThought.app.course.info.components.Body',
-		'NextThought.app.course.info.Actions'
+		'NextThought.app.windows.Actions'
 	],
 
 	mixins: {
@@ -28,8 +28,8 @@ Ext.define('NextThought.app.course.info.Index', {
 		me.addRoute('/roster', me.showRoster.bind(me));
 		me.on('activate', this.onActivate.bind(me));
 
-		me.courseInfoActions = NextThought.app.course.info.Actions.create();
-		me.mon(me.navigation, 
+		me.WindowActions = NextThought.app.windows.Actions.create();
+		me.mon(me.navigation,
 			{
 				'select-route': me.changeRoute.bind(me),
 				'show-enrollment': me.showEnrollment.bind(me)
@@ -118,10 +118,6 @@ Ext.define('NextThought.app.course.info.Index', {
 	},
 
 	showEnrollment: function(catalogEntry) {
-		var me = this;
-		this.courseInfoActions.openEnrollmentWindow(catalogEntry)
-			.then(function(route){
-				me.pushRootRoute(null, route, {course: catalogEntry});
-			});
+		this.WindowActions.pushWindow(catalogEntry);
 	}
 });
