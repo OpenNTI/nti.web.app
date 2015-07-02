@@ -16,6 +16,8 @@ Ext.define('NextThought.app.notifications.Actions', {
 		this.LoginStore = NextThought.login.StateStore.getInstance();
 		this.UserDataStore = NextThought.app.userdata.StateStore.getInstance();
 
+        this.mon(this.UserDataStore, 'incomingChange', this.incomingChange, this);
+
 		if (window.Service && !store.loading && !store.hasFinishedLoad) {
 			this.doLogin();
 		} else {
@@ -51,5 +53,34 @@ Ext.define('NextThought.app.notifications.Actions', {
 			}, function() {
 				console.error('Could not setup notifications!');
 			});
+	},
+	
+	incomingChange: function(change) {
+	    var me = this;
+		this.NotificationsStore.getStore().then(function(store){
+		    if (!store) { return; }
+		    if (!change.isModel) {
+			     change = ParseUtils.parseItems([change])[0];
+		    }
+
+		    if (change.isNotable()) {
+			     if (/^DELETE/i.test(change.get('ChangeType'))) {
+				      me.__remove(change, store);
+				      return;
+			     }
+
+			     store.add(change);
+		    }
+		});
+	},
+
+	__remove: function(event, store) {
+		var i = event.get('Item');
+		if (!i) { return; }
+		i = i.getId();
+		store.remove(store.getRange().filter(function(c) {
+				var o = c && c.get('item');
+				return i === (o && o.getId());
+			}));
 	}
 });
