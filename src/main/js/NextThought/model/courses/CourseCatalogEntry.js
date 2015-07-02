@@ -235,6 +235,22 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 		return false;
 	},
 
+	isArchived: function(){
+        var end = this.get('EndDate'),
+            now = new Date();
+        return end && end.getTime() < now.getTime();
+	},
+	
+	isCurrent: function(){
+	   return !(this.isUpcoming() || this.isArchived());
+	},
+	
+	isUpcoming: function(){
+	    var start = this.get('StartDate'),
+	        now = new Date();
+	        
+	    return start && start.getTime() > now.getTime();
+	},
 
 	findByMyCourseInstance: function() {
 		//returns a string that can be compared. NOTE: not for use as a URL!
