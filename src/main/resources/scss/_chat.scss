@@ -150,6 +150,7 @@
 			x: hidden;
 			y: auto; //scroll;
 		}
+		height: 242px;
 		border-radius: 0 5px 0 0;
 		border-bottom: 1px solid #cfcfcf !important;
 		box-shadow: inset  0px -7px 7px -7px #f7f7f7;
@@ -222,13 +223,15 @@
 
 			}
 
-			img {
-				cursor: pointer;
+			.avatar-container {
+				width: 42px;
+				height: 42px;
 				float: left;
-				width: 36px;
-				height: auto;
-				margin: 5px 5px 10px 10px;
-				display: none;
+				margin: 2px 3px 2px 5px;
+
+				.avatar-pic {
+					border-radius: 21px;
+				}
 			}
 
 			.log-entry {
@@ -336,7 +339,6 @@
 		bottom: 0;
   		right: 0;
   		left: 0;
-  		border-top: 1px solid #e1e1e1;
 
 		div {
 			margin: 10px 8px 10px 8px;
