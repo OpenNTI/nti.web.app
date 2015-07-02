@@ -187,7 +187,7 @@ Ext.define('NextThought.app.profiles.user.components.about.About', {
 					} else {
 						me.showError({
 							name: 'this',
-							msg: msg.message
+							msg: 'There was an error saving your profile.'
 						});
 					}
 
@@ -204,7 +204,11 @@ Ext.define('NextThought.app.profiles.user.components.about.About', {
 	saveProfile: function() {
 		var me = this;
 
-		me.saveEdits()
+		if (!this.validate()) {
+			return Promise.resolve(false);
+		}
+
+		return me.saveEdits()
 			.then(function() {
 				me.pushRoute('About', '/');
 			});
