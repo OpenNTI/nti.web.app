@@ -2,6 +2,7 @@ Ext.define('NextThought.app.account.identity.components.MenuItem', {
 	extend: 'Ext.Component',
 	alias: 'widget.account-menuitem',
 
+	requires: ['NextThought.app.account.settings.Window'],
 
 	mixins: {
 		eableProfiles: 'NextThought.mixins.ProfileLinks'
@@ -26,6 +27,13 @@ Ext.define('NextThought.app.account.identity.components.MenuItem', {
 		nameEl: '.username',
 		profileEl: '.content .links .profile',
 		accountEl: '.content .links .account'
+	},
+
+
+	listeners: {
+		accountEl: {
+			'click': 'showAccount'
+		}
 	},
 
 
@@ -74,6 +82,9 @@ Ext.define('NextThought.app.account.identity.components.MenuItem', {
 
 
 	showAccount: function() {
-		//TODO: figure out what to do here
+		var win = NextThought.app.account.settings.Window.create();
+
+		win.show();
+		win.center();
 	}
 });

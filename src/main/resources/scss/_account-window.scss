@@ -23,12 +23,18 @@
 		}
 	}
 
+	.button-wrapper {
+		 border-bottom: 1px solid #ebebeb !important;
+	}
+
 	.x-btn-account-small {
 		&, .x-btn-button {
 			height: 35px;
 		}
 
-		border-bottom: 1px solid #ebebeb !important;
+		&.placeholder {
+			width: 5px !important;
+		}
 
 		& + .x-btn-account-small {
 			border-left: 1px solid #ebebeb !important;
@@ -56,32 +62,32 @@
 			border-top: 1px solid #e7e7e7;
 		}
 
+		&::after {
+			content: url(../images/backdrops/choose_file.png);
+			position: absolute;
+			top: 50px;
+			left: 66px;
+			z-index: 0;
+		}
 
-		.x-box-inner > div{
-			&::after {
-				content: url(../images/backdrops/choose_file.png);
-				position: absolute;
-				top: 50px;
-				left: 66px;
-				z-index: 0;
-			}
-
-			&.no-dd::before {
-				content: "";
-				position: absolute;
-				top: 234px;
-				left: 155px;
-				width: 132px;
-				height: 1px;
-				background: #b8b8b8;
-				display: block;
-				overflow: hidden;
-				z-index: 1;
-			}
+		&.no-dd::before {
+			content: "";
+			position: absolute;
+			top: 234px;
+			left: 155px;
+			width: 132px;
+			height: 1px;
+			background: #b8b8b8;
+			display: block;
+			overflow: hidden;
+			z-index: 1;
 		}
 
 		canvas {
+			width: 100%;
 			z-index: 2;
+			position: relative;
+
 			&.withImage {
 				background: #d5d5d5;
 			}
@@ -100,6 +106,10 @@
 			height: 400px;
 			z-index: 4;
 		}
+
+		.footer-btn {
+			float: right;
+		}
 	}
 
 	.identity {
@@ -110,12 +120,17 @@
 		overflow: hidden;
 		padding: 15px 15px 18px 15px;
 
-		img.avatar {
+		.avatar-wrapper {
 			float: left;
 			width: 81px;
 			height: 81px;
 			border-radius: 3px;
 			border: 1px solid #e5e5e5;
+
+			.avatar {
+				height: 100%;
+				width: 100%;
+			}
 		}
 
 		.wrap {
