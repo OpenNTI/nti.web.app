@@ -10,12 +10,12 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 		{cls: 'field-container', cn: [
 			{tag: 'span', cls: 'field-label edit-only', html: 'Write something about yourself.'},
 			{cls: 'error-msg'},
-			{cls: 'field about multi-line', 'data-field': 'about', tabindex: '0'},
+			{cls: 'field about multi-line', 'data-field': 'about', tabindex: '0'}
 		]},
 		{cls: 'field-container', cn: [
 			{tag: 'span', cls: 'field-label edit-only', html: 'Email'},
 			{cls: 'error-msg'},
-			{cls: 'field email edit-only', 'data-field': 'email', tabindex: '0'},
+			{cls: 'field email edit-only', 'data-field': 'email', tabindex: '0'}
 		]},
 		{cls: 'field-container', cn: [
 			{tag: 'span', cls: 'field-label edit-only', html: 'Location'},

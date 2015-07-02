@@ -132,6 +132,5 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.FieldSet', {
 		if (error) {
 			error.innerHTML = msg;
 		}
-	},
-
+	}
 });
