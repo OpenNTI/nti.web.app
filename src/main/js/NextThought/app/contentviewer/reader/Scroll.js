@@ -186,7 +186,7 @@ Ext.define('NextThought.app.contentviewer.reader.Scroll', {
 
 		var el = this.scrollingEl,
 			offsets = (el && el.getScroll()) || {top: 0, left: 0},
-			o = Ext.fly(n).getY() - offets.top,
+			o = Ext.fly(n).getY() - offsets.top,
 			st = el && el.getScroll().top,
 			h = el && el.getHeight(),
 			b = st + h - (bottomThreshold || 0);
