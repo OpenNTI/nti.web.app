@@ -331,35 +331,19 @@ Ext.define('NextThought.app.slidedeck.transcript.NoteOverlay', {
 
 
 	setDefaultSharingFor: function(ntiid) {
-		var me = this;
-		//me.editor.disable();//curious...
-		this.resolveRootPageInfoFor(ntiid).then(function(meta) {
-			var pageInfo = meta && meta.pageInfo, pageId,
-				p = Promise.resolve();
+		var me = this,
+			pageInfo;
 
-			function recover() {return null;}
+		me.UserDataActions.getPreferences(ntiid, me.reader.currentBundle)
+			.then(function(prefs) {
+				var sharing = prefs && prefs.sharing,
+					sharedWith = sharing && sharing.sharedWith;
 
-			if (pageInfo) {
-				pageId = pageInfo.getId();
-				p = Promise.all([
-					me.getPagePreferences(pageId).fail(recover),
-					me.currentBundle
-				])
-					.then(function(data) {
-						var prefs = data[0],
-							sharing = prefs && prefs.sharing,
-							sharedWith = sharing && sharing.sharedWith;
-
-						return SharingUtils.sharedWithToSharedInfo(SharingUtils.resolveValue(sharedWith), data[1]);
-				});
-			}
-
-			return p.then(function(shareInfo) {
+				return SharingUtils.sharedWithToSharedInfo(SharingUtils.resolveValue(sharedWith), me.reader.currentBundle);
+			})
+			.then(function(shareInfo) {
 				me.editor.setSharedWith(shareInfo);
-				me.reader.pageInfo = pageInfo;
-				//me.editor.enable();
 			});
-		});
 	},
 
 
