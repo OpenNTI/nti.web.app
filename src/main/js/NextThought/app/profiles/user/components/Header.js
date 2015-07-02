@@ -14,11 +14,11 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 				{cls: 'about', cn: [
 					{cls: 'field username', 'data-field': 'alias'},
 					{cls: 'field education', 'data-field': 'education'},
-					{cls: 'field professional', 'data-field': 'professional'},
+					{cls: 'field position', 'data-field': 'position'},
 					{cls: 'field location', 'data-field': 'location'},
 					{tag: 'a', target: '_blank', cls: ' field homepage', 'data-field': 'home_page'}
 				]},
-				{cls: 'social', cn: [
+				{cls: 'social-fields', cn: [
 					{tag: 'a', target: '_blank', cls: 'social facebook'},
 					{tag: 'a', target: '_blank', cls: 'social linked-in'},
 					{tag: 'a', target: '_blank', cls: 'social twitter'},
@@ -34,13 +34,13 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 		avatarContainerEl: '.avatar-container',
 		usernameEl: '.about .username',
 		educationEl: '.about .education',
-		professionalEl: '.about .professional',
+		positionEl: '.about .position',
 		locationEl: '.about .location',
 		homepageEl: '.about .homepage',
-		facebookEl: '.social .facebook',
-		linkedInEl: '.social .linked-in',
-		twitterEl: '.social .twitter',
-		googleEl: '.social .google-plus',
+		facebookEl: '.social.facebook',
+		linkedInEl: '.social.linked-in',
+		twitterEl: '.social.twitter',
+		googleEl: '.social.google-plus',
 		tabsEl: '.tabs',
 		buttonsEl: '.buttons'
 	},
@@ -70,6 +70,9 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 
 		this.avatarContainerEl.dom.innerHTML = Ext.util.Format.avatar(user);
 		this.usernameEl.update(data.displayName);
+
+		this.__updateAbout(data);
+		this.__updateSocial(data);
 		
 		this.__updatePresence(presence);
 
@@ -88,6 +91,97 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 
 	setSchema: function(schema) {},
 
+
+	__updateAbout: function(data) {
+		var education = data.education[0],
+			educationString,
+			position = data.positions[0],
+			positionString;
+
+		if (education) {
+			if (education.degree) {
+				educationString = education.degree + ' at ' + education.school;
+			} else {
+				educationString = education.school;
+			}
+		}
+
+		if (position) {
+			if (position.title) {
+				positionString = position.title + ' at ' + position.companyName;
+			} else {
+				positionString = position.companyName;
+			}
+		}
+
+		if (educationString) {
+			this.educationEl.removeCls('hidden');
+			this.educationEl.update(educationString);
+		} else {
+			this.educationEl.addCls('hidden');
+		}
+
+		if (positionString) {
+			this.positionEl.removeCls('hidden');
+			this.positionEl.update(positionString);
+		} else {
+			this.positionEl.addCls('hidden')
+		}
+
+		if (data.location) {
+			this.locationEl.removeCls('hidden');
+			this.locationEl.update(data.location);
+		} else {
+			this.locationEl.addCls('hidden');
+		}
+
+		if (data.home_page) {
+			this.homepageEl.removeCls('hidden');
+			this.homepageEl.update(data.home_page);
+			this.homepageEl.dom.setAttribute('href', data.home_page);
+		} else {
+			this.homepageEl.addCls('hidden');
+			this.homepageEl.dom.setAttribute('href', 'about:blank');
+		}
+	},
+
+
+	__updateSocial: function(data) {
+		var me = this,
+			links = [
+				{
+					field: 'facebook',
+					el: 'facebookEl'
+				},
+				{
+					field: 'twitter',
+					el: 'twitterEl'
+				},
+				{
+					field: 'linkedIn',
+					el: 'linkedInEl'
+				},
+				{
+					field: 'googlePlus',
+					el: 'googleEl'
+				}
+			];
+
+		debugger;
+
+		links.forEach(function(link) {
+			var href = data[link.field],
+				el = me[link.el];
+
+			if (href) {
+				el.removeCls('hidden');
+				el.dom.setAttribute('href', href);
+			} else {
+				el.addCls('hidden');
+				el.dom.setAttribute('href', 'about:blank');
+			}
+		});
+	},
 
 	__updatePresence: function(presence) {
 		this.usernameEl.removeCls(this.currentPresence && this.currentPresence.getName());

@@ -221,7 +221,7 @@ Ext.define('NextThought.model.User', {
 			displayName: this.getName(),
 			about: this.get('about'),
 			email: this.get('email'),
-			homepage: this.get('homepage'),
+			home_page: this.get('home_page'),
 			location: this.get('location'),
 			education: this.get('education') || [],
 			positions: this.get('positions') || [],
