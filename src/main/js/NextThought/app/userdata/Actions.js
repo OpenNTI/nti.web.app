@@ -37,7 +37,7 @@ Ext.define('NextThought.app.userdata.Actions', {
 		var socket = this.UserDataStore.getSocket();
 
 		socket.register({
-			'data_noticeInfomingChange': this.onIncomingChange.bind(this)
+			'data_noticeIncomingChange': this.onIncomingChange.bind(this)
 		});
 
 		this.UserDataStore.setLoaded();
@@ -753,7 +753,7 @@ Ext.define('NextThought.app.userdata.Actions', {
 
 		return new Promise(function(fulfill, reject) {
 			noteRecord.getProxy().on('exception', function(proxy, response) {
-				reject({proxy: proxy, repsonse: reposne});
+				reject({proxy: proxy, repsonse: response});
 			}, null, {single: true});
 
 			if (url) {
