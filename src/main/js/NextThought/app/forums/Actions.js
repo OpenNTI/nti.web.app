@@ -47,7 +47,7 @@ Ext.define('NextThought.app.forums.Actions', {
 	},
 
 
-	saveTopic: function(record, forum, title, tags, body, autoPublish) {
+	saveTopic: function(editorCmp, record, forum, title, tags, body, autoPublish) {
 		var isEdit = Boolean(record),
 			post = isEdit ? record.get('headline') : NextThought.model.forums.Post.create(),
 			me = this;
@@ -75,7 +75,8 @@ Ext.define('NextThought.app.forums.Actions', {
 
 					if (autoPublish !== undefined) {
 						if (autoPublish !== entry.isPublished()) {
-							//TODO: figure out what we need to do heres
+							entry.publish(editorCmp, fulfill, this);
+							return;
 						}
 					}
 
