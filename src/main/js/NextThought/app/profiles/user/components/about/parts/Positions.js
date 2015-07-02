@@ -6,7 +6,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Positions', {
 
 	cls: 'positions fieldset groupset',
 	title: 'Professional',
-	errorMsg: 'Missing Required Prosition Field',
+	errorMsg: 'Missing Required Professional Field',
 
 	entryTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls: 'entry-container', cn: [

@@ -102,8 +102,9 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.FieldSet', {
 
 
 	setUneditable: function() {
+		delete this.editMode;
+
 		if (!this.appliedSchema) {
-			delete this.editMode;
 			return;
 		}
 
@@ -119,8 +120,9 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.FieldSet', {
 
 
 	setEditable: function() {
+		this.editMode = true;
+
 		if (!this.appliedSchema) {
-			this.editMode = true;
 			return;
 		}
 

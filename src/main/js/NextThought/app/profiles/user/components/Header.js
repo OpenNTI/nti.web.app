@@ -167,8 +167,6 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 				}
 			];
 
-		debugger;
-
 		links.forEach(function(link) {
 			var href = data[link.field],
 				el = me[link.el];
