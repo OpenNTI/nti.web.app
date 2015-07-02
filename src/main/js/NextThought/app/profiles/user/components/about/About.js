@@ -162,7 +162,7 @@ Ext.define('NextThought.app.profiles.user.components.about.About', {
 					fulfill(true);
 				},
 				failure: function(resp) {
-					var msg = Ext.JSON.decode(resp.responseText, true);
+					var msg = Ext.JSON.decode(resp.responseText, true) || {};
 
 					if (me.aboutCmp.showError(msg)) {
 						me.showError({
