@@ -1873,6 +1873,11 @@
 				&.error {
 					border: 1px solid $primary-red;
 				}
+
+				&:empty::before {
+					content: 'empty';
+					visibility: hidden;
+				}
 			}
 		}
 	}
