@@ -148,6 +148,7 @@ Ext.define('NextThought.app.chat.StateStore', {
 
 		id = IdCache.getIdentifier(id);
 		this.CHAT_WIN_MAP[id] = win;
+		this.fireEvent('added-chat-window', win);
 	},
 
 
@@ -165,6 +166,24 @@ Ext.define('NextThought.app.chat.StateStore', {
 		}
 
 		return wins;
+	},
+
+
+	rebuildWindow: function(roomInfoId) {
+		var me = this;
+
+		return new Promise( function(fulfill, reject) {
+			Service.getObject(roomInfoId)
+				.then( function(obj) {
+					me.showChatWindow(obj);
+					fulfill(obj);
+				})
+				.fail( function() {
+					alert('Could not recover room info');
+					console.error('Could not resolve roomInfo for: ', roomInfoId);
+					reject();
+				});
+		});
 	},
 
 

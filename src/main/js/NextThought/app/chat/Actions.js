@@ -5,7 +5,8 @@ Ext.define('NextThought.app.chat.Actions', {
 		'NextThought.login.StateStore',
 		'NextThought.app.chat.StateStore',
 		'NextThought.model.PresenceInfo',
-		'NextThought.util.Parsing'
+		'NextThought.util.Parsing',
+		'NextThought.model.MessageInfo'
 	],
 
 	availableForChat: true,
@@ -199,14 +200,13 @@ Ext.define('NextThought.app.chat.Actions', {
 	onMessage: function(msg, opts) {
 		var me = this, args = Array.prototype.slice.call(arguments),
 				m = ParseUtils.parseItems([msg])[0],
-				channel = m.get('channel'),
-				cid = m.get('ContainerId'),
+				channel = m && m.get('channel'),
+				cid = m && m.get('ContainerId'),
 				w = this.ChatStore.getChatWindow(cid);
 
 		if (!w) {
-			this.rebuildWindow(cid, function() {
-				me.onMessage.apply(me, args);
-			});
+			this.ChatStore.rebuildWindow(cid)
+				.then(me.onMessage.bind(me, msg, opts));
 			return;
 		}
 

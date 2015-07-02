@@ -1,5 +1,6 @@
 Ext.define('NextThought.model.MessageInfo', {
 	extend: 'NextThought.model.Base',
+	mimeType: 'application/vnd.nextthought.messageinfo',
 
 	mixins: {
 		bodyContent: 'NextThought.mixins.ModelWithBodyContent'

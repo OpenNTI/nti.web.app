@@ -5,12 +5,13 @@ Ext.define('NextThought.app.chat.components.log.Entry', {
 	requires: [
 		'NextThought.layout.component.Natural',
 		'NextThought.util.Annotations',
-		'NextThought.cache.IdCache'
+		'NextThought.cache.IdCache',
+		'NextThought.util.Format'
 	],
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'log-entry-wrapper {me}', cn: [
-			{tag: 'img', src: '{avatarURL}', cls: 'avatar', alt: '{name}'},
+			'{user:avatar}',
 			{tag: 'span', cls: 'control'},
 			{cls: 'message-bounding-box', cn: [
 				{cls: 'log-entry {me}', 'data-qtip': '{timestamp:htmlEncode}', cn: [
@@ -28,7 +29,7 @@ Ext.define('NextThought.app.chat.components.log.Entry', {
 	getTargetEl: function() { return this.body; },
 
 	renderSelectors: {
-		icon: 'img',
+		icon: '.avatar',
 		name: '.name',
 		text: '.body-text'
 	},
@@ -154,18 +155,14 @@ Ext.define('NextThought.app.chat.components.log.Entry', {
 	},
 
 	fillInUser: function(u) {
-		var name = u.getName(),
-			url = u.get('avatarURL');
-	//		console.log(url, u);
+		var name = u.getName(), avatar;
 
+		this.renderData.user = u;
 		this.renderData.name = name;
-		this.renderData.avatarURL = url;
 		if (this.rendered) {
+			avatar = NTIFormat.avatar(u);
+			this.icon.dom.innerHTML = avatar;
 			this.name.update(name);
-			this.icon.set({
-				src: url,
-				alt: name
-			});
 		}
 	},
 

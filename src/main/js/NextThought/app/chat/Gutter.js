@@ -23,6 +23,8 @@ Ext.define('NextThought.app.chat.Gutter', {
 		contactsButtonEl: '.show-contacts'
 	},
 
+	ROOM_ENTRY_MAP: {},
+
 	initComponent: function() {
 		this.callParent(arguments);
 
@@ -38,14 +40,14 @@ Ext.define('NextThought.app.chat.Gutter', {
 		});
 
 		this.mon(this.ChatStore, {
-			'notify': this.handleWindowNotify.bind(this)
+			'notify': this.handleWindowNotify.bind(this),
+			'added-chat-window': this.bindChatWindow.bind(this)
 		});
 	},
 
 
 	afterRender: function() {
 		this.callParent(arguments);
-
 		this.mon(this.contactsButtonEl, 'click', this.goToContacts.bind(this));
 	},
 
@@ -56,8 +58,6 @@ Ext.define('NextThought.app.chat.Gutter', {
 
 
 	updateList: function(store, users) {
-		var list = [];
-
 		this.removeAll(true);
 		this.addContacts(store, users);
 	},
@@ -85,8 +85,37 @@ Ext.define('NextThought.app.chat.Gutter', {
 	},
 
 
-	openChatWindow: function(user, e) {
-		this.ChatActions.startChat(user);
+	openChatWindow: function(user, entry, e) {
+		debugger;
+		if (entry.associatedWindow) {
+			entry.associatedWindow.show();
+		}
+		else {
+			this.ChatActions.startChat(user);
+		}
+	},
+
+
+	bindChatWindow: function(win) {
+		debugger;
+		var roomInfo = win && win.roomInfo,
+			isGroupChat = roomInfo.isGroupChat(),
+			occupants = roomInfo && roomInfo.getOriginalOccupants(), t, i, entry;
+
+		if (!isGroupChat) {
+			for (i = 0; i < occupants.length; i++) {
+				if(!isMe(occupants[i])) {
+					t = occupants[i];
+					break;
+				}
+			}
+
+			if (t) {
+				entry = this.findEntryForUser(t);
+				this.ROOM_ENTRY_MAP[roomInfo.getId()] = entry;
+				entry.associatedWindow = win;
+			}
+		}
 	},
 
 
@@ -106,26 +135,15 @@ Ext.define('NextThought.app.chat.Gutter', {
 
 	handleWindowNotify: function(win, msg) {
 		var roomInfo = win && win.roomInfo,
-			isGroupChat = roomInfo && roomInfo.isGroupChat(),
-			targetUser, i, occupants = roomInfo &&roomInfo.getOriginalOccupants(), entry;
+			entry;
 
-		// TODO: Clean this up later. We should probably use some kind of map.
-		if (!isGroupChat) {
-			for (i = 0; i < occupants.length; i++) {
-				if(!isMe(occupants[i])) {
-					targetUser = occupants[i];
-					break;
-				}
-			}
-
-			if (targetUser) {
-				entry = this.findEntryForUser(targetUser);
-			}
-
-			if (entry) {
-				entry.handleWindowNotify(win, msg);
-			}
+		entry = this.ROOM_ENTRY_MAP[roomInfo.getId()];
+		if (entry) {
+			entry.handleWindowNotify(win, msg);
 		}
-
+		else {
+			console.error('Do not have an associated entry for roomInfo: ', roomInfo);
+			console.log('Cannot pass notification: ', msg);
+		}
 	}
 });

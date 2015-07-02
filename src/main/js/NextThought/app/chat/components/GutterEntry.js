@@ -38,7 +38,7 @@ Ext.define('NextThought.app.chat.components.GutterEntry', {
 
 
 	showChat: function(e) {
-		this.openChatWindow(this.user, e);
+		this.openChatWindow(this.user, this, e);
 	},
 
 
