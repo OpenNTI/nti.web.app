@@ -9,7 +9,7 @@ Ext.define('NextThought.app.forums.components.forum.Forum', {
 	cls: 'topic-list-body forum-body',
 
 	storeCfg: {
-		pageSize: 50
+		pageSize: 10
 	},
 
 
