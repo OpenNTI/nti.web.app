@@ -144,6 +144,11 @@ Ext.define('NextThought.app.profiles.user.Index', {
 	},
 
 
+	getActiveItem: function() {
+		return this.bodyCmp.getLayout().getActiveItem();
+	},
+
+
 	showActivity: function(route, subRoute) {
 		var activityCmp = this.setActiveItem('profile-user-activity'),
 			headerCmp = this.headerCmp;

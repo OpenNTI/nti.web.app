@@ -234,6 +234,31 @@ Ext.define('NextThought.app.profiles.user.components.about.About', {
 	},
 
 
+	allowNavigation: function() {
+		if (!this.hasCls('editing')) {
+			return true;
+		}
+
+		return new Promise(function(fulfill, reject) {
+			Ext.Msg.show({
+				title: 'Attention!',
+				msg: 'You are currently editing your profile. Would you like to leave without saving?',
+				buttons: {
+					primary: {
+						text: 'Leave',
+						cls: 'caution',
+						handler: fulfill
+					},
+					secondary: {
+						text: 'Stay',
+						handler: reject
+					}
+				}
+			});
+		});
+	},
+
+
 	showAbout: function() {
 		this.setTitle('About');
 
