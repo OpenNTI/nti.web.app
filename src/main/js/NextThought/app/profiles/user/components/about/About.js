@@ -157,6 +157,8 @@ Ext.define('NextThought.app.profiles.user.components.about.About', {
 					var o = resp.responseText,
 						newUser = ParseUtils.parseItems(o)[0];
 
+					me.successfulEdit = true;
+
 					//NOTE: Update the links that way in case the email changed, we request verification.
 					user.set('Links', newUser.get('Links'));
 					fulfill(true);
@@ -235,7 +237,7 @@ Ext.define('NextThought.app.profiles.user.components.about.About', {
 
 
 	allowNavigation: function() {
-		if (!this.hasCls('editing')) {
+		if (!this.hasCls('editing') || this.successfulEdit) {
 			return true;
 		}
 
@@ -262,6 +264,8 @@ Ext.define('NextThought.app.profiles.user.components.about.About', {
 	showAbout: function() {
 		this.setTitle('About');
 
+		delete this.successfulEdit;
+
 		this.profileParts.forEach(function(part) {
 			if (part.setUneditable) {
 				part.setUneditable();
@@ -274,6 +278,8 @@ Ext.define('NextThought.app.profiles.user.components.about.About', {
 
 	showEdit: function() {
 		this.setTitle('About');
+
+		delete this.successfulEdit;
 
 		if (!this.isMe) {
 			this.replaceRoute('', '/');
