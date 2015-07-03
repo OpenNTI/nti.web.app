@@ -13,13 +13,34 @@ Ext.define('NextThought.app.groups.Actions', {
 		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
 		this.LoginStore = NextThought.login.StateStore.getInstance();
 
-		var store = this.GroupStore;
+		this.LoginStore.registerLoginAction(this.loadFriendsList.bind(this));
+	},
 
-		if (window.Service && !store.loading && !store.hasFinishedLoading) {
-			this.onLogin();
-		} else {
-			this.mon(this.LoginStore, 'login-ready', this.onLogin.bind(this));
+
+	loadFriendsList: function() {
+		var me = this,
+			store = me.GroupStore.getFriendsList(),
+			mimeType = store.model.mimeType,
+			collection = Service.getCollectionFor(mimeType, 'FriendsLists');
+
+		$AppConfig.contactsGroupName = me.GroupStore.getMyContactsId();
+
+		if (!collection || !collection.href) {
+			return;
 		}
+
+		return new Promise(function(fulfill, reject) {
+			store.on({
+				load: function(listStore, records) {
+					me.__friendsListsLoaded(listStore, records);
+					fulfill();	
+				}
+			});
+
+			store.proxy.url = getURL(collection.href);
+
+			store.load();
+		});
 	},
 
 

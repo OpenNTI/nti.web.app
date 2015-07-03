@@ -13,12 +13,19 @@ Ext.define('NextThought.login.StateStore', {
 	constructor: function() {
 		this.callParent(arguments);
 
+		this.onLoginActions = [];
+
 		this.AccountActions = NextThought.app.account.Actions.create();
 
 		//Make sure the session is still valid when the window is focused
 		this.mon(Ext.get(window), {
 			focus: '__validateSession'
 		});
+	},
+
+
+	registerLoginAction: function(fn) {
+		this.onLoginActions.push(fn);
 	},
 
 
@@ -121,8 +128,14 @@ Ext.define('NextThought.login.StateStore', {
 
 
 	onLogin: function() {
-		this.fireEvent('login-ready');
-		wait().then(this.takeImmediateAction.bind(this));
+		var me = this;
+
+		Promise.all(this.onLoginActions.map(function(action) { action.call(null); }))
+			.then(this.fireEvent.bind(this, 'login-ready'))
+			.then(function() {
+				wait()
+					.then(me.takeImmediateAction.bind(this));
+			});
 	},
 
 
