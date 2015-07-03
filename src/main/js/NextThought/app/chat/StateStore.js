@@ -200,7 +200,7 @@ Ext.define('NextThought.app.chat.StateStore', {
 	getRoomInfo: function(users, roomId, options) {
 		//Add ourselves to this list
 		var key, rInfo,
-			allUsers = Ext.Array.unique(users.slice().concat($AppConfig.username)),
+			allUsers = Ext.Array.unique(users.slice().concat($AppConfig.userObject.get('Username'))),
 			chats = this.getSessionObject();
 
 		if (options && options.ContainerId && !roomId) {

@@ -112,11 +112,11 @@ Ext.define('NextThought.app.chat.Actions', {
 		}
 
 		if(!Ext.isArray(users)) {
-			users = users && users.isModel ? users.getName() : users;
+			users = users && users.isModel ? users.get('Username') : users;
 			users = [users];
 		}
 
-		users.push($AppConfig.username);
+		users.push($AppConfig.userObject.get('Username'));
 		users = Ext.unique(users);
 
 		ri = this.ChatStore.getRoomInfo(users, options.ContainerId);
@@ -362,11 +362,11 @@ Ext.define('NextThought.app.chat.Actions', {
 
 	onMembershipOrModerationChanged: function(msg) {
 		var newRoomInfo = ParseUtils.parseItems([msg])[0],
-				oldRoomInfo = this.ChatStore.getRoomInfoFromSession(newRoomInfo.getId()),
-				occupants = newRoomInfo.get('Occupants'),
-				toast;
+			oldRoomInfo = newRoomInfo && this.ChatStore.getRoomInfoFromSession(newRoomInfo.getId()),
+			occupants = newRoomInfo && newRoomInfo.get('Occupants'),
+			toast;
 
-		if (newRoomInfo.get('Moderators').length === 0 && newRoomInfo.get('Moderated')) {
+		if (newRoomInfo && newRoomInfo.get('Moderators').length === 0 && newRoomInfo.get('Moderated')) {
 			console.log('Transient moderation change encountered, ignoring', newRoomInfo);
 			return null;
 		}
@@ -380,7 +380,10 @@ Ext.define('NextThought.app.chat.Actions', {
 			if (toast && toast.length === 1) {
 				toast[0].close();
 			}
-			this.ChatStore.removeSessionObject(oldRoomInfo.getId());
+
+			if (oldRoomInfo) {
+				this.ChatStore.removeSessionObject(oldRoomInfo.getId());
+			}
 		}
 
 		return newRoomInfo; //for convinience chaining

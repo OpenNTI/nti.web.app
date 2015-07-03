@@ -111,8 +111,11 @@ Ext.define('NextThought.app.chat.Gutter', {
 
 			if (t) {
 				entry = this.findEntryForUser(t);
-				this.ROOM_ENTRY_MAP[roomInfo.getId()] = entry;
-				entry.associatedWindow = win;
+
+				if (entry) {
+					this.ROOM_ENTRY_MAP[roomInfo.getId()] = entry;
+					entry.associatedWindow = win;
+				}
 			}
 		}
 	},
@@ -132,7 +135,7 @@ Ext.define('NextThought.app.chat.Gutter', {
 		var items = this.items.items, entry, u, i;
 
 		for (i = 0; i < items.length && !entry; i++) {
-			u = items[i].user && items[i].user.getId();
+			u = items[i].user && items[i].user.get('Username');
 			if (u === userName) {
 				entry = items[i];
 			}
