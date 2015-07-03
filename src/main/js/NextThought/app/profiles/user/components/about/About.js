@@ -94,6 +94,21 @@ Ext.define('NextThought.app.profiles.user.components.about.About', {
 	},
 
 
+	removeErrors: function() {
+		var error = this.down('[errorName=this]');
+
+		if(error) {
+			this.remove(error);
+		}
+
+		this.profileParts.forEach(function(part) {
+			if (part.clearAllErrors) {
+				part.clearAllErrors();
+			}
+		});
+	},
+
+
 	clearError: function(name) {
 		var error = this.down('[errorName="' + name + '"]');
 
@@ -158,6 +173,8 @@ Ext.define('NextThought.app.profiles.user.components.about.About', {
 						newUser = ParseUtils.parseItems(o)[0];
 
 					me.successfulEdit = true;
+
+					me.removeErrors();
 
 					//NOTE: Update the links that way in case the email changed, we request verification.
 					user.set('Links', newUser.get('Links'));

@@ -60,6 +60,19 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.FieldSet', {
 	},
 
 
+	clearAllErrors: function() {
+		var errors = this.el.dom.querySelectorAll('.error');
+
+		errors = Array.prototype.slice.call(errors);
+
+		errors.forEach(function(err) {
+			err.classList.remove('error');
+		});
+
+		this.fireEvent('clear-errors', this.name);
+	},
+
+
 	setSchema: function(schema) {
 		schema.ProfileSchema.alias.readonly = true;
 
