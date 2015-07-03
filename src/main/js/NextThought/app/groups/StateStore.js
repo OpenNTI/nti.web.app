@@ -51,12 +51,17 @@ Ext.define('NextThought.app.groups.StateStore', {
 
 
 	getOnlineContactStore: function() {
+		var me = this;
 		function onlineFilter(item) {
 			return item.get('Presence') && item.get('Presence').isOnline();
 		}
 
+		function isMyContactFilter (item) {
+			return me.isContact(item);
+		}
+
 		if(!this.onlineContactsStore) {
-			this.onlineContactsStore = NextThought.store.Contacts.create({filters: [onlineFilter]});
+			this.onlineContactsStore = NextThought.store.Contacts.create({filters: [onlineFilter, isMyContactFilter]});
 		}
 
 		return this.onlineContactsStore;
