@@ -70,6 +70,8 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Education', {
 
 		if (!data.education.length && !isMe) {
 			this.hide();
+		} else {
+			this.show();
 		}
 	},
 

@@ -138,6 +138,8 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Interests', {
 
 		if (!data.interests.length && !isMe) {
 			this.hide();
+		} else {
+			this.show();
 		}
 	},
 

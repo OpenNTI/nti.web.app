@@ -109,6 +109,8 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 
 		if (!isMe && !data.about) {
 			this.hide();
+		} else {
+			this.show();
 		}
 	},
 

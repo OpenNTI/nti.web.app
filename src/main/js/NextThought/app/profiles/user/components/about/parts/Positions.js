@@ -69,6 +69,8 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Positions', {
 
 		if (!data.positions.length && !isMe) {
 			this.hide();
+		} else {
+			this.show();
 		}
 	},
 
