@@ -429,5 +429,19 @@ Ext.define('NextThought.app.chat.Actions', {
 
 	isModerator: function(ri) {
 		return Ext.Array.contains(ri.get('Moderators'), $AppConfig.username);
+	},
+
+	zoomWhiteboard: function(cmp, data) {
+		Ext.widget('wb-window', { width: 802, value: data, readonly: true}).show();
+	},
+
+
+	replyToWhiteboard: function(wbData, cmp, midReplyOf, channel, recipients) {
+		this.ChatStore.fireEvent('show-whiteboard', wbData, cmp, midReplyOf, channel, recipients);
+	},
+
+
+	sendWhiteboard: function(chatEntryWidget, mid, channel, recipients) {
+		this.ChatStore.fireEvent('show-whiteboard', null, chatEntryWidget, mid, channel, recipients);
 	}
 });

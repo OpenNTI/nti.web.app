@@ -111,6 +111,6 @@ Ext.define('NextThought.app.chat.components.Entry', {
 	},
 
 	addWhiteboard: function() {
-		this.fireEvent('send-whiteboard', this, this.replyTo, this.chanel, this.recipients);
+		this.ChatActions.sendWhiteboard(this, this.replyTo, this.chanel, this.recipients);
 	}
 });

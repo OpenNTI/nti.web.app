@@ -6,7 +6,8 @@ Ext.define('NextThought.app.chat.components.log.Entry', {
 		'NextThought.layout.component.Natural',
 		'NextThought.util.Annotations',
 		'NextThought.cache.IdCache',
-		'NextThought.util.Format'
+		'NextThought.util.Format',
+		'NextThought.app.chat.Actions'
 	],
 
 	renderTpl: Ext.DomHelper.markup([
@@ -35,10 +36,11 @@ Ext.define('NextThought.app.chat.components.log.Entry', {
 	},
 
 	initComponent: function() {
-		this.addEvents('rendered-late', 'reply-to-whiteboard');
-		this.enableBubble('rendered-late', 'reply-to-whiteboard');
+		this.addEvents('rendered-late');
+		this.enableBubble('rendered-late');
 		this.callParent(arguments);
 		this.update(this.message);
+		this.ChatActions = NextThought.app.chat.Actions.create();
 	},
 
 	add: function() {
@@ -135,7 +137,7 @@ Ext.define('NextThought.app.chat.components.log.Entry', {
 		if (!t && !a) {return false;}
 
 		if (event.getTarget('.reply')) {
-			this.fireEvent('reply-to-whiteboard',
+			this.ChatActions.replyToWhiteboard(
 					Ext.clone(this.message.get('body')[0]), //wbData
 					this,
 					this.message.getId(),           //midReplyOf
@@ -149,7 +151,7 @@ Ext.define('NextThought.app.chat.components.log.Entry', {
 			}
 
 		}else {
-			me.fireEvent('show-whiteboard', this, me.message.get('body')[0]);
+			me.ChatActions.zoomWhiteboard(this, me.message.get('body')[0]);
 		}
 		return false;
 	},

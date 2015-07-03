@@ -24,7 +24,7 @@ Ext.define('NextThought.app.chat.components.GutterEntry', {
 		this.renderData = Ext.apply(this.renderData || {}, {
 			user: this.user,
 			presence: this.user && this.user.getPresence().getName(),
-			dataBadge: 0
+			dataBadge: this.currentCount || 0
 		});
 
 		this.unreadMessageIds = [];
@@ -46,8 +46,12 @@ Ext.define('NextThought.app.chat.components.GutterEntry', {
 
 
 	updateBadgeCount: function(count) {
-		this.avatar.dom.setAttribute('data-badge', count);
+		this.currentCount = count;
+		if(this.rendered) {
+			this.avatar.dom.setAttribute('data-badge', count);
+		}
 	},
+
 
 	handleWindowNotify: function(win, msg) {
 		if (!win || win.isVisible() || isMe(msg.Creator)) {

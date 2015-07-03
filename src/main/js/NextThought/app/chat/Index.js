@@ -40,7 +40,8 @@ Ext.define('NextThought.app.chat.Index', {
 
 		this.mon(this.ChatStore, {
 			'show-window': this.showChatWindow.bind(this),
-			'close-window': this.closeWindow.bind(this)
+			'close-window': this.closeWindow.bind(this),
+			'show-whiteboard': this.showWhiteboard.bind(this)
 		});
 
 		socket = this.ChatStore.getSocket();
@@ -155,5 +156,47 @@ Ext.define('NextThought.app.chat.Index', {
 		});
 	},
 
-	closeWindow: function() {}
+	closeWindow: function() {},
+
+
+	createWhiteBoard: function(data, ownerCmp, chatStatusEvent) {
+		var win = Ext.widget('wb-window', {
+			width: 802,
+			value: data,
+			chatStatusEvent: chatStatusEvent,
+			ownerCmp: ownerCmp
+		});
+
+		return win;
+	},
+
+
+	showWhiteboard: function(data, cmp, mid, channel, recipients) {
+		var me = this,
+			room = this.ChatActions.getRoomInfoFromComponent(cmp),
+			wbWin = this.createWhiteBoard(data, cmp, 'status-change'),
+			wbData,
+			scrollEl = cmp.up('.chat-view').el.down('.chat-log-view'),
+			scrollTop = scrollEl.getScroll().top;
+
+		//hook into the window's save and cancel operations:
+		wbWin.on({
+			save: function(win, wb) {
+				wbData = wb.getValue();
+				me.ChatActions.clearErrorForRoom(room);
+				me.ChatActions.postMessage(room, [wbData], mid, channel, recipients, Ext.bind(me.sendAckHandler, me));
+				wbWin.close();
+			},
+			cancel: function() {
+				//if we haven't added the wb to the editor, then clean up, otherwise let the window handle it.
+				wbWin.close();
+				if (scrollEl.getScroll().top === 0) {
+					scrollEl.scrollTo('top', scrollTop);
+				}
+			}
+		});
+
+		//show window:
+		wbWin.show();
+	}
 });
