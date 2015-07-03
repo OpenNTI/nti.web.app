@@ -52,12 +52,38 @@
 
 			&.save {
 				padding: 0 1.5em;
-				background-color: $primary-green;
+				background-color: $secondary-green;
 			}
 
 			&.cancel {
 				padding: 0 1.5em;
 				background-color: $primary-red;
+			}
+
+			&.follow {
+				background-color: $secondary-green;
+				@include icon('add_contact', $top: 9px, $left: 1.5em);
+			}
+
+			&.unfollow {
+				background-color: $primary-red;
+				@include icon('rhp-delete-contact_hover', $top: 10px, $left: 1.5em);
+			}
+
+			&.presence {
+				background-color: $primary-blue;
+				padding-left: 50px;//1.5em + with of icon + padding
+				@include icon('chat_active', $top: 10px, $left: 1.5em);
+
+				&.unavailable {
+					cursor: pointer;
+					color: $tertiary-grey;
+					background-color: #f8f8f8;
+					padding-left: 60px;
+					opacity: 0.7;
+
+					@include icon('chat-32', $top: 7px, $left: 1.5em);
+				}
 			}
 		}
 	}

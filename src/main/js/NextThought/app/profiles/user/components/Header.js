@@ -2,7 +2,10 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 	extend: 'NextThought.app.profiles.components.Header',
 	alias: 'widget.profile-user-header',
 
-	requires: ['NextThought.app.chat.StateStore'],
+	requires: [
+		'NextThought.app.chat.Actions',
+		'NextThought.app.chat.StateStore'
+	],
 
 	cls: 'profile-header user-header',
 
@@ -52,6 +55,7 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 		this.callParent(arguments);
 
 		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
+		this.ChatActions = NextThought.app.chat.Actions.create();
 
 		this.mon(this.ChatStore, 'presence-changed', this.onPresenceChanged.bind(this));
 	},
@@ -65,8 +69,6 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 
 		this.user = user;
 		this.isContact = contact;
-		this.isMe = isMe;
-
 		Ext.destroy(this.userMonitor);
 
 		this.userMonitor = this.mon(user, {
@@ -80,8 +82,10 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 		this.clearButtons();
 
 		if (isMe) {
+			this.isMe = true;
 			this.__showMyButtons();
 		} else if (contact) {
+			this.isContact = true;
 			this.__showContactButtons();
 		} else {
 			this.__showNonContactButtons();
@@ -199,6 +203,10 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 		this.usernameEl.removeCls(this.currentPresence && this.currentPresence.getName());
 		this.currentPresence = presence;
 		this.usernameEl.addCls(this.currentPresence.getName());
+
+		if (this.isContact) {
+			this.__showContactButtons();
+		}
 	},
 
 
@@ -210,6 +218,8 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 
 
 	__showMyButtons: function() {
+		this.clearButtons();
+
 		this.addButton({
 			cls: 'edit',
 			action: 'onEditProfile',
@@ -256,10 +266,53 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 		}
 	},
 
-	__showContactButtons: function() {},
+	__showContactButtons: function() {
+		this.clearButtons();
+
+		var presenceCls = this.currentPresence ? this.currentPresence.getName() : 'unavailable',
+			isOnline = this.currentPresence && this.currentPresence.isOnline();
+
+		this.addButton({
+			cls: 'unfollow',
+			action: 'onUnfollow',
+			label: 'Unfollow'
+		});
+
+		this.addButton({
+			cls: 'presence ' + presenceCls,
+			action: 'onMessage',
+			label: 'Mesage',
+			tip: isOnline ? '' : this.user.getName() + ' is offline.'
+		});
+	},
 
 
-	__showNonContactButtons: function() {},
+	__showNonContactButtons: function() {
+		this.clearButtons();
+
+		this.addButton({
+			cls: 'follow',
+			action: 'onFollow',
+			label: 'Follow'
+		});
+	},
+
+
+	onFollow: function() {
+		this.addContact();
+	},
+
+
+	onUnfollow: function() {
+		this.removeContact();
+	},
+
+
+	onMessage: function() {
+		if (this.currentPresence && this.currentPresence.isOnline()) {
+			this.ChatActions.startChat(this.user);
+		}
+	},
 
 
 	onPresenceChanged: function(username, presence) {

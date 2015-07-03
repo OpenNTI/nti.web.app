@@ -134,7 +134,7 @@ Ext.define('NextThought.login.StateStore', {
 			.then(this.fireEvent.bind(this, 'login-ready'))
 			.then(function() {
 				wait()
-					.then(me.takeImmediateAction.bind(this));
+					.then(me.takeImmediateAction.bind(me));
 			});
 	},
 

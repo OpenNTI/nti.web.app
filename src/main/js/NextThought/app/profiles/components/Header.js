@@ -5,10 +5,15 @@ Ext.define('NextThought.app.profiles.components.Header', {
 		Router: 'NextThought.mixins.Router'
 	},
 
+	buttonTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+		{tag: 'tpl', 'if': 'tip', cn: [
+			{cls: 'button {cls}', 'data-action': '{action}', 'data-qtip': '{tip}', html: '{label}'}
+		]},
+		{tag: 'tpl', 'if': '!tip', cn: [
+			{cls: 'button {cls}', 'data-action': '{action}', html: '{label}'}
+		]}	
+	])),
 
-	buttonTpl: new Ext.XTemplate(Ext.DomHelper.markup({
-		cls: 'button {cls}', 'data-action': '{action}', html: '{label}'
-	})),
 
 	tabTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls: 'tab{[values.active ? " active" : ""]}', 'data-route': '{route}', 'data-title': '{label}', html: '{label}'
@@ -72,6 +77,8 @@ Ext.define('NextThought.app.profiles.components.Header', {
 
 
 	addButton: function(data) {
+		data.tip = data.tip || '';
+
 		this.buttonTpl.append(this.buttonsEl, data);
 	},
 

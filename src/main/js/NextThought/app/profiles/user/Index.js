@@ -3,6 +3,7 @@ Ext.define('NextThought.app.profiles.user.Index', {
 	alias: 'widget.profile-user',
 
 	requires: [
+		'NextThought.app.groups.Actions',
 		'NextThought.app.groups.StateStore',
 		'NextThought.app.navigation.Actions',
 		'NextThought.app.profiles.user.components.Header',
@@ -23,10 +24,13 @@ Ext.define('NextThought.app.profiles.user.Index', {
 
 		this.NavActions = NextThought.app.navigation.Actions.create();
 		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
+		this.GroupActions = NextThought.app.groups.Actions.create();
 
 		this.headerCmp = this.add({
 			xtype: 'profile-user-header',
-			saveProfile: this.saveProfile.bind(this)
+			saveProfile: this.saveProfile.bind(this),
+			removeContact: this.removeContact.bind(this),
+			addContact: this.addContact.bind(this)
 		});
 
 		this.bodyCmp = this.add({
@@ -100,6 +104,8 @@ Ext.define('NextThought.app.profiles.user.Index', {
 	setState: function(active) {
 		var tabs = [],
 			isContact = this.GroupStore.isContact(this.activeUser);
+
+		this.activeTab = active;
 
 		tabs.push({
 			label: 'About',
@@ -180,5 +186,51 @@ Ext.define('NextThought.app.profiles.user.Index', {
 		}
 
 		return aboutCmp.saveEdits();
+	},
+
+
+	removeContact: function() {
+		var me = this,
+			actions = me.GroupActions,
+			user = me.activeUser;
+
+		Ext.Msg.show({
+			title: getString('NextThought.view.profiles.outline.View.confirm'),
+			msg: getString('NextThought.view.profiles.outline.View.warn'),
+			icon: 'warning-red',
+			buttons: {
+				primary: {
+					text: getString('NextThought.view.profiles.outline.View.delete'),
+					cls: 'caution',
+					handler: function() {
+						actions.deleteContact(user)
+							.then(function() {
+								me.setState(this.activeTab);
+							})
+							.fail(function() {
+								me.setState(this.activeTab);
+								alert('There was trouble deleting your contact.');
+							});
+					}
+				},
+				secondary: {
+					text: 'Cancel'
+				}
+			}
+		});
+	},
+
+
+	addContact: function() {
+		var me = this;
+
+		me.GroupActions.addContact(me.activeUser)
+			.then(function(){ 
+				me.setState(this.activeTab);
+			})
+			.fail(function() {
+				me.setState(this.activeTab);
+				alert('There was trouble adding your contact.');
+			});
 	}
 });

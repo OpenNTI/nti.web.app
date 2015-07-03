@@ -194,5 +194,115 @@ Ext.define('NextThought.app.groups.Actions', {
 
 	createGroupUnguarded: function(displayName, username, friends, callback, scope, error) {
 		return this.createFriendsListUnguarded(displayName, username, friends, false, callback, scope, error);
+	},
+
+
+	deleteContact: function(user, groups) {
+		var username = (user && user.isModel) ? user.get('Username') : user;
+
+		return this.removeContact(null, username);
+	},
+
+
+	removeContact: function(record, contact) {
+		var store = this.GroupStore.getFriendsList(),
+			userId = typeof contact === 'string' ? contact : contact.get('Username'),
+			count = Globals.getAsynchronousTaskQueueForList(store.getCount());
+
+		return new Promise(function(fulfill, reject) {
+			function finish() {
+				if (!count.pop()) {
+					fulfill();
+				}
+			}
+
+			function revertEditOnError(group, oldValue) {
+				return function() {
+					console.warn('membership adjustment failed reverting to old value', group, oldValue, arguments);
+					group.set('friends', oldValue);
+				};
+			}
+
+			function remove(record) {
+				var oldValue;
+				if (record.hasFriend(userId)) {
+					oldValue = record.get('friends').slice();
+					record.removeFriend(userId).saveField('friends', undefined, finish, revertEditOnError(record, oldValue));
+				}
+				else {
+					finish();
+				}
+			}
+
+			if (record) {
+				count = Globals.getAsynchronousTaskQueueForList(1);
+				remove(record);
+			} else {
+				store.eachUnfiltered(function(g) {
+					//Removing a contact shouldn't remove them from dfls
+					if (!g.isDFL) {
+						remove(g);
+					} else {
+						finish();
+					}
+				});
+			}
+		});
+	},
+
+	//TODO: figure out what groupList is suppose to be, I can't tell from the old code
+	addContact: function(username, groupList) {
+		var contactId = this.GroupStore.getMyContactsId(),
+			contacts = this.GroupStore.getContactGroup(),
+			tracker = Globals.getAsynchronousTaskQueueForList(groupList),
+			oldContacts;
+
+		if (isMe(username)) {
+			console.warn('You should not add yourself to your groups.');
+			return Promise.resolve();
+		}
+
+		return new Promise(function(fulfill, reject) {
+			function finish() {
+				if (!tracker.pop()) {
+					fulfill();
+				}
+			}
+
+			function revertEditOnError(group, oldValue) {
+				return function() {
+					console.warn('membership adjustment failed reverting to old value', group, oldValue, arguments);
+					group.set('friends', oldValue);
+				};
+			}
+
+			if (!contacts) {
+				fulfill();
+				return;
+			}
+
+			//TODO simplify this further
+			if (!contacts.hasFriend(username)) {
+				//add one just in case the contacts group is already in the list...
+				if (groupList && groupList.length) {
+					tracker.push({});
+				}
+
+				oldContacts = contacts.get('friends').slice();
+				contacts.addFriend(username).saveField('friends', undefined, finish, revertEditOnError(contacts, oldContacts));
+			}
+
+			Ext.each(groupList, function(g) {
+				var oldValue;
+				if (g.get('Username') !== contactsId && !g.hasFriend(username)) {
+					oldValue = g.get('friends').slice();
+					g.addFriend(username).saveField('friends', undefined, finish, revertEditOnError(g, oldValue));
+				}
+				else {
+					//skip it, we did this up front.
+					finish();
+				}
+			});
+		});
 	}
 });

@@ -50,6 +50,14 @@ Ext.define('NextThought.app.groups.StateStore', {
 	},
 
 
+	getContactGroup: function() {
+		var contactsId = this.getMyContactsId(),
+			store = this.getFriendsList();
+
+		return this.contactGroup || store.findRecord('Username', contactsId, 0, false, true, true);
+	},
+
+
 	getOnlineContactStore: function() {
 		var me = this;
 		function onlineFilter(item) {
