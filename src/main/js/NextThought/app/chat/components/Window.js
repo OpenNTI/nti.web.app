@@ -59,11 +59,21 @@ Ext.define('NextThought.app.chat.components.Window', {
 		// });
 
 		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
+		this.ChatActions = NextThought.app.chat.Actions.create();
 		this.setChatStatesMap();
 		this.logView = this.down('chat-log-view');
 		this.entryView = this.down('chat-entry');
+
+		this.on({'beforedestroy': this.onDestroy.bind(this)});
 		// this.roomInfoChanged(this.roomInfo);
 		// this.mon(Ext.getStore('PresenceInfo'), 'presence-changed', 'presenceChanged', this);
+	},
+
+
+	onDestroy: function() {
+		if (!this.disableExitRoom) {
+			this.ChatActions.leaveRoom(this.ChatActions.getRoomInfoFromComponent(this));
+		}
 	},
 
 

@@ -36,7 +36,7 @@ Ext.define('NextThought.app.chat.Index', {
 		var socket;
 
 		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
-		this.ChatActions = NextThought.app.windows.Actions.create();
+		this.ChatActions = NextThought.app.chat.Actions.create();
 
 		this.mon(this.ChatStore, {
 			'show-window': this.showChatWindow.bind(this),
@@ -96,7 +96,7 @@ Ext.define('NextThought.app.chat.Index', {
 			.then(function() {
 				me.ChatStore.setRoomIdStatusAccepted(roomInfo.getId());
 				w.accept(true);
-				// me.startTrackingChatState(roomInfo.get('Creator'), roomInfo, w);
+				me.ChatActions.startTrackingChatState(roomInfo.get('Creator'), roomInfo, w);
 				if (isGroupChat) {
 					w.show();
 				}
@@ -107,7 +107,7 @@ Ext.define('NextThought.app.chat.Index', {
 				//we ignore one so we dont try to exit a room twice.
 				console.log('Declined invitation..: ', arguments);
 				if (w && !w.isDestroyed) {
-					me.leaveRoom(roomInfo);
+					me.ChatActions.leaveRoom(roomInfo);
 					w.close();
 				}
 			});

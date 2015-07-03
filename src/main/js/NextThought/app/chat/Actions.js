@@ -197,6 +197,20 @@ Ext.define('NextThought.app.chat.Actions', {
 	},
 
 
+	/**
+	 * NOTE: We will ONLY manage our state in all the rooms we're currently involved in.
+	 */
+	publishChatStatus: function(room, newStatus, username) {
+		var channel = 'STATE', oldStatus;
+		username = username && Ext.isString(username) ? username : $AppConfig.username;
+		oldStatus = room.getRoomState(username || $AppConfig.username);
+		if (oldStatus !== newStatus) {
+			console.log('transitioning room state for: ', $AppConfig.username, ' from ', oldStatus, ' to ', newStatus);
+			this.postMessage(room, {'state': newStatus}, null, channel, null, Ext.emptyFn);
+		}
+	},
+
+
 	onMessage: function(msg, opts) {
 		var me = this, args = Array.prototype.slice.call(arguments),
 				m = ParseUtils.parseItems([msg])[0],
@@ -337,12 +351,12 @@ Ext.define('NextThought.app.chat.Actions', {
 	},
 
 	onSocketDisconnect: function() {
-		this.removeSessionObject();
+		this.ChatStore.removeSessionObject();
 	},
 
 
 	onExitedRoom: function(room) {
-		this.removeSessionObject(room.ID);
+		this.ChatStore.removeSessionObject(room.ID);
 	},
 
 
@@ -366,20 +380,54 @@ Ext.define('NextThought.app.chat.Actions', {
 			if (toast && toast.length === 1) {
 				toast[0].close();
 			}
-			this.removeSessionObject(oldRoomInfo.getId());
+			this.ChatoStore.removeSessionObject(oldRoomInfo.getId());
 		}
 
 		return newRoomInfo; //for convinience chaining
 	},
 
 
-	removeSessionObject: function(key) {
-		if (!Ext.isEmpty(key)) {
-			var o = this.getSessionObject();
-			delete o[key];
-			this.setSessionObject(o);
-			return;
+	leaveRoom: function(room) {
+		if (!room) { return; }
+
+		var me = this,
+			id = this.ChatStore.getTranscriptIdForRoomInfo(room),
+			socket = this.ChatStore.getSocket();
+
+		Service.getObject(id)
+			.then(function(obj) {
+				// TODO: Fix this.
+				var cmp = Ext.getCmp('chat-history'),
+					store = cmp && cmp.getStore();
+
+				if (store) {
+					store.add(obj);
+				}
+			})
+			.fail(function() {
+				console.warn('Failed to save chat history: ', arguments);
+			});
+
+		this.ChatStore.deleteRoomIdStatusAccepted(room.getId());
+
+		if (this.isModerator(room)) {
+			console.log('leaving room but I\'m a moderator, relinquish control');
+			socket.emit('chat_makeModerated', room.getId(), false,
+					function() {
+						//unmoderate called, now exit
+						console.log('unmoderated, now exiting room');
+						socket.emit('chat_exitRoom', room.getId());
+					}
+			);
 		}
-		TemporaryStorage.remove('chats');
+		else {
+			//im not a moderator, just leave
+			socket.emit('chat_exitRoom', room.getId());
+		}
+	},
+
+
+	isModerator: function(ri) {
+		return Ext.Array.contains(ri.get('Moderators'), $AppConfig.username);
 	}
 });

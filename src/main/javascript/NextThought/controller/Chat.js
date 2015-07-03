@@ -1270,6 +1270,7 @@ Ext.define('NextThought.controller.Chat', {
 		delete status[id];
 
 		this.setSessionObject(status, key);
+		this.fireEve('exited-room', id);
 	},
 
 

@@ -4,7 +4,8 @@ Ext.define('NextThought.app.chat.components.View', {
 
 	requires: [
 		'NextThought.app.chat.components.Log',
-		'NextThought.app.chat.components.Entry'
+		'NextThought.app.chat.components.Entry',
+		'NextThought.app.chat.Actions'
 	],
 
 	header: false,
@@ -37,6 +38,7 @@ Ext.define('NextThought.app.chat.components.View', {
 		this.on('resize', this.reanchorLog, this);
 		this.on('status-change', this.trackChatState, this);
 		this.maybeShowFlagIcon();
+		this.ChatActions = NextThought.app.chat.Actions.create();
 
 		if (Ext.is.iOS) {
 			this.makeAdjustmentForiOS();
@@ -104,7 +106,8 @@ Ext.define('NextThought.app.chat.components.View', {
 		}
 
 		if (notification.status !== 'active') {
-			me.fireEvent('publish-chat-status', room, notification.status);
+			debugger;
+			me.ChatActions.publishChatStatus(room, notification.status);
 		}
 	},
 

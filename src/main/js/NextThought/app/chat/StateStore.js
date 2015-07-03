@@ -273,6 +273,17 @@ Ext.define('NextThought.app.chat.StateStore', {
 	},
 
 
+	removeSessionObject: function(key) {
+		if (!Ext.isEmpty(key)) {
+			var o = this.getSessionObject();
+			delete o[key];
+			this.setSessionObject(o);
+			return;
+		}
+		TemporaryStorage.remove('chats');
+	},
+
+
 	isPersistantRoomId: function(id) {
 		return (/meetingroom/i).test(id);
 	},
@@ -303,6 +314,7 @@ Ext.define('NextThought.app.chat.StateStore', {
 		delete status[id];
 
 		this.setSessionObject(status, key);
+		this.fireEvent('exited-room', id);
 	},
 
 
@@ -325,5 +337,20 @@ Ext.define('NextThought.app.chat.StateStore', {
 			}
 		}
 		return null; //not there
+	},
+
+
+	getTranscriptIdForRoomInfo: function(roomInfo) {
+		var roomInfoId = roomInfo.getId(),
+			uname = roomInfo.get('Creator'),
+			id = ParseUtils.parseNTIID(roomInfoId);
+
+		if (!id) {
+			return null;
+		}
+		id.specific.provider = uname;
+		id.specific.type = 'Transcript';
+
+		return id;
 	}
 });

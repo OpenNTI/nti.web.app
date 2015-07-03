@@ -41,7 +41,8 @@ Ext.define('NextThought.app.chat.Gutter', {
 
 		this.mon(this.ChatStore, {
 			'notify': this.handleWindowNotify.bind(this),
-			'added-chat-window': this.bindChatWindow.bind(this)
+			'added-chat-window': this.bindChatWindow.bind(this),
+			'exited-room': this.onRoomExit.bind(this)
 		});
 	},
 
@@ -113,6 +114,16 @@ Ext.define('NextThought.app.chat.Gutter', {
 				this.ROOM_ENTRY_MAP[roomInfo.getId()] = entry;
 				entry.associatedWindow = win;
 			}
+		}
+	},
+
+
+	onRoomExit: function (roomId) {
+		var entry = this.ROOM_ENTRY_MAP[roomId];
+
+		if (entry) {
+			delete entry.associatedWindow;
+			delete this.ROOM_ENTRY_MAP[roomId];
 		}
 	},
 
