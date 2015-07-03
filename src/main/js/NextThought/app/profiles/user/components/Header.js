@@ -12,7 +12,9 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 			{cls: 'avatar-container'},
 			{cls: 'meta', cn: [
 				{cls: 'about', cn: [
-					{cls: 'field username', 'data-field': 'alias'},
+					{cls: 'field-container', cn: [
+						{cls: 'field username', 'data-field': 'alias'}
+					]},
 					{cls: 'field education', 'data-field': 'education'},
 					{cls: 'field position', 'data-field': 'position'},
 					{cls: 'field location', 'data-field': 'location'},
