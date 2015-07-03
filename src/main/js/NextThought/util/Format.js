@@ -50,6 +50,19 @@ Ext.define('NextThought.util.Format', {
 	},
 
 
+	background: function(value) {
+		var background = (value && value.get && value.get('backgroundURL')) || (value && value.backgroundURL);
+
+		if (!background) {
+			return Ext.DomHelper.markup({cls: 'profile background-pic'});
+		}
+
+		return Ext.DomHelper.markup({cls: 'user-background-container', cn: [
+			{cls: 'profile background-pic', style: {backgroundImage: 'url(' + background + ')'}}
+		]});
+	},
+
+
 	boolStr: function(value, trueString, falseString) {
 		trueString = trueString && getString(trueString);
 		falseString = falseString && getString(falseString);
@@ -81,4 +94,5 @@ Ext.define('NextThought.util.Format', {
 	Ext.util.Format.displayName = NTIFormat.displayName;
 	Ext.util.Format.pluralIf = NTIFormat.pluralIf;
 	Ext.util.Format.avatar = NTIFormat.avatar;
+	Ext.util.Format.background = NTIFormat.background;
 });

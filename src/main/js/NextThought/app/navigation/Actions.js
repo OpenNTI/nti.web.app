@@ -31,7 +31,7 @@ Ext.define('NextThought.app.navigation.Actions', {
 
 			//Are we an nttid?
 			if (ParseUtils.isNTIID(newBase)) {
-				this.navigateToNtiid(newBase, newFragment);
+				//TODO: figure this out
 				return true;
 			}
 
@@ -74,14 +74,11 @@ Ext.define('NextThought.app.navigation.Actions', {
 
 
 	/**
-	 * Sets the bundle to show as active and adds it to the recent content switcher
+	 * the active object to set the background from
 	 *
-	 * TODO: will this always be a bundle, or will we have something here for everything
-	 * you look at (i.e. profile).
-	 *
-	 * @param {Bundle} bundle the bundle to set active
+	 * @param {Object} obj the thins to set active
 	 */
-	setActiveContent: function(bundle, masked) {
-		this.store.fireEvent('set-active-content', bundle, masked);
+	setActiveContent: function(obj, masked) {
+		this.store.fireEvent('set-active-content', obj, masked);
 	}
 });

@@ -118,6 +118,8 @@ Ext.define('NextThought.app.profiles.user.Index', {
 		this.NavActions.updateNavBar({
 			hideBranding: true
 		});
+
+		this.NavActions.setActiveContent(this.activeUser);
 	},
 
 

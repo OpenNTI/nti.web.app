@@ -255,27 +255,51 @@ Ext.define('NextThought.app.Body', {
 		return div;
 	},
 
+	removeBodyContent: function(content) {
+		var body = Ext.getBody();
 
-	updateBodyContent: function(bundle, masked) {
+		if (content && content.BODY_CLS) {
+			body.removeCls(content.BODY_CLS);
+		}
+
+		body.setStyle({backgroundImage: ''});
+	},
+
+
+	addBodyContent: function(content) {
 		var body = Ext.getBody(),
-			mask = document.querySelector('.body-shade-mask');
+			getBackground = content && content.getBackgroundImage && content.getBackgroundImage();
 
-		if (!bundle) {
-			body.setStyle({backgroundImage: ''});
-		} else {
-			bundle.getBackgroundImage()
+		if (content && content.BODY_CLS) {
+			body.addCls(content.BODY_CLS);
+		}
+
+		if (getBackground) {
+			getBackground
 				.then(function(src) {
 					body.setStyle({backgroundImage: 'url(' + src + ')'});
 				});
 		}
+	},
+
+
+	updateBodyContent: function(content, masked) {
+		var body = Ext.getBody(),
+			getBackground = content && content.getBackgroundImage && content.getBackgroundImage(),
+			mask = document.querySelector('.body-shade-mask');
+
+		if (content !== this.activeContent) {
+			this.removeBodyContent(this.activeContent);
+			this.addBodyContent(content);
+		}
+
+		this.activeContent = content;
 
 		//if we should mask make sure there is a mask element
 		if (masked) {
 			if (!mask) {
 				mask = this.__createMaskDiv();
 			}
-		//else if we shouldn't mask and we already have a mask element
-		//remove it
 		} else if (mask) {
 			document.body.removeChild(mask);
 		}

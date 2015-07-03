@@ -32,6 +32,7 @@ Ext.define('NextThought.model.User', {
 		{ name: 'email', type: 'string' },
 		{ name: 'realname', type: 'string' },
 		{ name: 'avatarURL', type: 'AvatarURL' },
+		{ name: 'backgroundURL', type: 'string'},
 		{ name: 'AvatarURLChoices', type: 'AvatarURLList', persist: false },
 		{ name: 'accepting', type: 'UserList' },
 		{ name: 'ignoring', type: 'UserList' },
@@ -127,6 +128,17 @@ Ext.define('NextThought.model.User', {
 		}
 
 		return f;
+	},
+
+
+	getBackgroundImage: function() {
+		var background = this.get('backgroundURL');
+
+		if (background && false) {
+			return Promise.resolve(background);
+		}
+
+		return Promise.reject();
 	},
 
 

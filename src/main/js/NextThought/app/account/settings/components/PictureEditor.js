@@ -66,6 +66,11 @@ Ext.define('NextThought.app.account.settings.components.PictureEditor', {
 	},
 
 
+	setField: function(field) {
+		this.activeField = field;
+	},
+
+
 	editMode: function(url) {
 		this.reset();
 		this.down('picture-canvas').setImage(url || $AppConfig.userObject.get('avatarURL'));
@@ -81,7 +86,7 @@ Ext.define('NextThought.app.account.settings.components.PictureEditor', {
 
 		if (isSave) {
 			url = c.getValue(event);
-			u.saveField('avatarURL', url,
+			u.saveField(me.activeField, url,
 
 				function good() {
 					me.fireEvent('saved', url);

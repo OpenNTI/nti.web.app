@@ -11,29 +11,42 @@ Ext.define('NextThought.app.account.settings.components.AvatarChoices', {
 		tag: 'ul',
 		cls: 'avatar-choices',
 		cn: [
-			{tag: 'li', cls: 'custom', cn: [
+			{tag: 'li', cls: 'custom avatar', cn: [
 				{cls: 'avatar-wrapper', html: '{user:avatar}'},
 				{cls: 'wrapper', cn: [
-					{tag: 'h3', cls: 'title', html: '{{{NextThought.view.account.settings.AvatarChoices.custom}}}'},
+					{tag: 'h3', cls: 'title', html: 'Profile Picture'},
 					{cn: [
 						{tag: 'span', cls: 'editCustom', cn: [
-							{tag: 'a', cls: 'editCustom', href: '#edit', html: '{{{NextThought.view.account.settings.AvatarChoices.edit}}}'},
+							{tag: 'a', cls: 'editCustom', href: '#editAvatar', html: '{{{NextThought.view.account.settings.AvatarChoices.edit}}}'},
 							' | '
 						]},
-						{tag: 'a', cls: 'uploadCustom', href: '#upload', html: '{{{NextThought.view.account.settings.AvatarChoices.upload}}}'}
+						{tag: 'a', cls: 'uploadCustom', href: '#uploadAvatar', html: '{{{NextThought.view.account.settings.AvatarChoices.upload}}}'}
 					]}
 				]}
 			]}
+			// {tag: 'li', cls: 'custom background', cn: [
+			// 	{cls: 'avatar-wrapper', html: '{user:background}'},
+			// 	{cls: 'wrapper', cn: [
+			// 		{tag: 'h3', cls: 'title', html: 'Background Picture'},
+			// 		{cn: [
+			// 			{tag: 'span', cls: 'editCustom', cn: [
+			// 				{tag: 'a', cls: 'editCustom', href: '#editBackground', html: '{{{NextThought.view.account.settings.AvatarChoices.edit}}}'},
+			// 				' | '
+			// 			]},
+			// 			{tag: 'a', cls: 'uploadCustom', href: '#uploadBackground', html: '{{{NextThought.view.account.settings.AvatarChoices.upload}}}'}
+			// 		]}
+			// 	]}
+			// ]},
 		]
 	}),
 
 
 	renderSelectors: {
 		list: 'ul.avatar-choices',
-		customAvatarWrapper: 'li.custom .avatar-wrapper',
-		customChoice: 'li.custom',
-		customChoiceImage: 'li.custom img',
-		editCustomChoice: 'li.custom span.editCustom'
+		avatarWrapper: 'li.avatar .avatar-wrapper',
+		editAvatarChoice: 'li.avatar span.editCustom',
+		backgroundWrapper: 'li.background .avatar-wrapper',
+		editBackgroundChoice: 'li.background span.editCustom'
 	},
 
 
@@ -61,28 +74,36 @@ Ext.define('NextThought.app.account.settings.components.AvatarChoices', {
 		var me = this,
 			u = $AppConfig.userObject,
 			url = u.get('avatarURL'),
-			selection = me.customChoice;
+			background = u.get('backgroundURL');
 
 		if (!url) {
-			me.editCustomChoice.setVisibilityMode(Ext.dom.Element.DISPLAY);
-			me.editCustomChoice.hide();
+			me.editAvatarChoice.setVisibilityMode(Ext.dom.Element.DISPLAY);
+			me.editAvatarChoice.hide();
 		}
 
+		// if (!background) {
+		// 	me.editBackgroundChoice.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		// 	me.editBackgroundChoice.hide();
+		// }
 
-		me.select(selection);
 
 		me.mon(me.list, 'click', me.clickHandler.bind(me));
 
 		me.mon(me.up('window').down('picture-editor'), 'saved', function(url) {
-			me.customAvatarWrapper.dom.innerHTML = Ext.util.Format.avatar(u);
-			me.editCustomChoice.show();
+			var url = u.get('avatarURL'),
+				background = u.get('backgroundURL');
+
+			me.avatarWrapper.dom.innerHTML = Ext.util.Format.avatar(u);
+			// me.backgroundURL.dom.innerHTML = Ext.util.Format.background(u);
+
+			if (url) {
+				me.editAvatarChoice.show();
+			}
+
+			// if (background) {
+			// 	me.editBackgroundChoice.show();
+			// }
 		});
-	},
-
-
-	select: function(li) {
-		this.el.select('.selected').removeCls('selected');
-		li.addCls('selected');
 	},
 
 
@@ -101,18 +122,14 @@ Ext.define('NextThought.app.account.settings.components.AvatarChoices', {
 				return false;
 			}
 		}
-
-		if (item) {
-			changing = !item.hasCls('selected');
-			this.select(item);
-		}
 	},
 
+	edit: function(field, src) {
+		var w = this.up('account-window'),
+			picEditor = w.down('picture-editor');
 
-	edit: function() {
-		var w = this.up('account-window');
-
-		w.down('picture-editor').editMode(this.customChoiceImage.getAttribute('src'));
+		picEditor.setField(field);
+		picEditor.editMode(src);
 
 		w.changeView({
 			associatedPanel: 'picture-editor',
@@ -121,14 +138,36 @@ Ext.define('NextThought.app.account.settings.components.AvatarChoices', {
 	},
 
 
-	upload: function() {
-		var w = this.up('account-window');
+	upload: function(field) {
+		var w = this.up('account-window'),
+			picEditor = w.down('picture-editor');
 
-		w.down('picture-editor').reset();
+		picEditor.setField(field);
+		picEditor.reset();
 
 		w.changeView({
 			associatedPanel: 'picture-editor',
 			pressed: true
 		});
+	},
+
+
+	editAvatar: function() {
+		this.edit('avatarURL', $AppConfig.userObject.get('avatarURL'));
+	},
+
+
+	uploadAvatar: function() {
+		this.upload('avatarURL');
+	},
+
+
+	editBackground: function() {
+		this.edit('backgroundURL', $AppConfig.userObject.get('backgroundURL'));
+	},
+
+
+	uploadBackground: function() {
+		this.upload('backgroundURL');
 	}
 });
