@@ -261,6 +261,15 @@ Ext.define('NextThought.app.account.Actions', {
 		}).show();
 	},
 
+	requestAliasChange: function() {
+		Ext.widget('contact-us-window', {
+			role: 'alias',
+			titleKey: 'alias_request_title',
+			detailKey: 'alias_request_message',
+			handleSubmit: this.submitContactForm.bind(this)
+		}).show();
+	},
+
 
 	__contactUsBodyForMessage: function(data) {
 		var body = data.email || '[NO EMAIL SUPPLIED]';

@@ -1895,6 +1895,16 @@
 	}
 
 	.about {
+		.field.alias.request {
+			display: inline-block;
+			line-height: 15px;
+			color: $primary-blue;
+			padding-right: 20px;
+			cursor: pointer;
+
+			@include icon('edit-15', $left:auto, $top: 0, $right: 0);
+		}
+
 		.field.about {
 			color: $primary-grey;
 			font-size: 0.875em;

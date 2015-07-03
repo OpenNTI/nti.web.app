@@ -2,6 +2,8 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 	extend: 'NextThought.app.profiles.user.components.about.parts.FieldSet',
 	alias: 'widget.profile-user-about-about',
 
+	requires: ['NextThought.app.account.Actions'],
+
 	cls: 'about fieldset',
 	name: 'about',
 
@@ -11,6 +13,11 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 			{tag: 'span', cls: 'field-label edit-only', html: 'Write something about yourself.'},
 			{cls: 'error-msg'},
 			{cls: 'field about multi-line', 'data-field': 'about', tabindex: '0'}
+		]},
+		{cls: 'field-container', cn: [
+			{tag: 'span', cls: 'field-label edit-only', html: 'Name'},
+			{cls: 'error-msg'},
+			{cls: 'field alias edit-only', 'data-field': 'alias', tabindex: '0'}
 		]},
 		{cls: 'field-container', cn: [
 			{tag: 'span', cls: 'field-label edit-only', html: 'Email'},
@@ -52,6 +59,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 
 	renderSelectors: {
 		aboutEl: '.field.about',
+		nameEl: '.field.alias',
 		emailEl: '.field.email',
 		locationEl: '.field.location',
 		homepageEl: '.field.homepage',
@@ -61,14 +69,35 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 		googleEl: '.field.google'
 	},
 
+
+	initComponent: function() {
+		this.callParent(arguments);
+
+		this.AccountActions = NextThought.app.account.Actions.create();
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		this.aliasMonitor = this.mon(this.nameEl, {
+			destroyable: true,
+			'click': this.requestAliasChange.bind(this)
+		});
+	},
+
+
 	setUser: function(user, isMe) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setUser.bind(this, user, isMe));
 			return;
 		}
 
+		this.isMe = isMe
+
 		var data = user.getAboutData();
 
+		this.nameEl.update(data.displayName || '');
 		this.aboutEl.update(data.about || '');
 		this.emailEl.update(data.email || '');
 		this.locationEl.update(data.location || '');
@@ -80,6 +109,29 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 
 		if (!isMe && !data.about) {
 			this.hide();
+		}
+	},
+
+
+	setEditable: function() {
+		this.callParent(arguments);
+
+		if (!this.nameEl.hasCls('editable') && isFeature('request-alias-change') && this.isMe) {
+			this.nameEl.addCls('request')
+		}
+	},
+
+
+	setUneditable: function() {
+		this.callParent(arguments);
+
+		this.nameEl.removeCls('request');
+	},
+
+
+	requestAliasChange: function(e) {
+		if (e.getTarget('.request')) {
+			this.AccountActions.requestAliasChange();
 		}
 	},
 

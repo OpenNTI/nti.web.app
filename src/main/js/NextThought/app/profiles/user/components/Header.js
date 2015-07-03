@@ -69,19 +69,10 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 
 		this.userMonitor = this.mon(user, {
 			destroyable: true,
-			'changed': this.updateUser.bind(this, user, tabs, contact, isMe)
+			'changed': this.fillInUser.bind(this, user)
 		});
 
-		var data = user.getAboutData(),
-			presence = user.getPresence();
-
-		this.avatarContainerEl.dom.innerHTML = Ext.util.Format.avatar(user);
-		this.usernameEl.update(data.displayName);
-
-		this.__updateAbout(data);
-		this.__updateSocial(data);
-		
-		this.__updatePresence(presence);
+		this.fillInUser(user);
 
 		this.__updateTabs(tabs);
 		this.clearButtons();
@@ -93,6 +84,20 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 		} else {
 			this.__showNonContactButtons();
 		}
+	},
+
+
+	fillInUser: function(user) {
+		var data = user.getAboutData(),
+			presence = user.getPresence();
+
+		this.avatarContainerEl.dom.innerHTML = Ext.util.Format.avatar(user);
+		this.usernameEl.update(data.displayName);
+
+		this.__updateAbout(data);
+		this.__updateSocial(data);
+		
+		this.__updatePresence(presence);
 	},
 
 

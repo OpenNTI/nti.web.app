@@ -103,8 +103,6 @@ Ext.define('NextThought.app.account.settings.components.AvatarChoices', {
 			// if (background) {
 			// 	me.editBackgroundChoice.show();
 			// }
-
-			// u.fireEvent('changed');
 		});
 	},
 
