@@ -52,7 +52,7 @@ Ext.define('NextThought.app.account.identity.components.MenuItem', {
 				destroyable: true,
 				'changed': function(r) {
 					var name = r.getName(),
-						profile = me.avatarEl && me.avatarEl.down('.profile.avatar');
+						profile = me.avatarEl && me.avatarEl.down('.profile.avatar-pic');
 
 					if (!me.avatarEl || !me.nameEl) { return; }
 

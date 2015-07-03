@@ -43,7 +43,7 @@ Ext.define('NextThought.app.account.identity.Index', {
 				scope: this,
 				destroyable: true,
 				'changed': function(r) {
-					var profile = me.avatar && me.avatar.down('.profile.avatar');
+					var profile = me.avatar && me.avatar.down('.profile.avatar-pic');
 
 					if (profile) {
 						profile.setStyle({backgroundImage: 'url(' + r.get('avatarURL') + ')'});

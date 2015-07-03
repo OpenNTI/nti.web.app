@@ -65,6 +65,13 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 		this.isContact = contact;
 		this.isMe = isMe;
 
+		Ext.destroy(this.userMonitor);
+
+		this.userMonitor = this.mon(user, {
+			destroyable: true,
+			'changed': this.updateUser.bind(this, user, tabs, contact, isMe)
+		});
+
 		var data = user.getAboutData(),
 			presence = user.getPresence();
 
