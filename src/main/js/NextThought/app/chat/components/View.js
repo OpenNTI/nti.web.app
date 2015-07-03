@@ -106,7 +106,6 @@ Ext.define('NextThought.app.chat.components.View', {
 		}
 
 		if (notification.status !== 'active') {
-			debugger;
 			me.ChatActions.publishChatStatus(room, notification.status);
 		}
 	},
