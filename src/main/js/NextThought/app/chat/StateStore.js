@@ -306,13 +306,15 @@ Ext.define('NextThought.app.chat.StateStore', {
 
 	deleteRoomIdStatusAccepted: function(id) {
 		var key = 'roomIdsAccepted',
-				status = this.getSessionObject(key);
+			status = this.getSessionObject(key),
+			hashId = IdCache.getIdentifier(id);
+
 		if (!status) {
 			return;
 		}
 
 		delete status[id];
-
+		delete this.CHAT_WIN_MAP[hashId];
 		this.setSessionObject(status, key);
 		this.fireEvent('exited-room', id);
 	},
