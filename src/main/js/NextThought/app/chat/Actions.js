@@ -362,7 +362,7 @@ Ext.define('NextThought.app.chat.Actions', {
 
 	onMembershipOrModerationChanged: function(msg) {
 		var newRoomInfo = ParseUtils.parseItems([msg])[0],
-				oldRoomInfo = this.getRoomInfoFromSession(newRoomInfo.getId()),
+				oldRoomInfo = this.ChatStore.getRoomInfoFromSession(newRoomInfo.getId()),
 				occupants = newRoomInfo.get('Occupants'),
 				toast;
 
@@ -372,7 +372,7 @@ Ext.define('NextThought.app.chat.Actions', {
 		}
 
 		this.sendChangeMessages(oldRoomInfo, newRoomInfo);
-		this.updateRoomInfo(newRoomInfo);
+		this.ChatStore.updateRoomInfo(newRoomInfo);
 
 		//if membership falls to just me, and we have a toast, DESTROY!
 		if (occupants.length === 1 && occupants[0] === $AppConfig.userObject.get('Username')) {
@@ -380,10 +380,60 @@ Ext.define('NextThought.app.chat.Actions', {
 			if (toast && toast.length === 1) {
 				toast[0].close();
 			}
-			this.ChatoStore.removeSessionObject(oldRoomInfo.getId());
+			this.ChatStore.removeSessionObject(oldRoomInfo.getId());
 		}
 
 		return newRoomInfo; //for convinience chaining
+	},
+
+
+	sendChangeMessages: function(oldRoomInfo, newRoomInfo) {
+		var oldOccupants = oldRoomInfo ? oldRoomInfo.get('Occupants') : [],
+				newOccupants = newRoomInfo.get('Occupants'),
+				oldMods = oldRoomInfo ? oldRoomInfo.get('Moderators') : [],
+				newMods = newRoomInfo.get('Moderators'),
+				left = Ext.Array.difference(oldOccupants, newOccupants),
+				added = Ext.Array.difference(newOccupants, oldOccupants),
+				leftMods = Ext.Array.difference(oldMods, newMods),
+				addedMods = Ext.Array.difference(newMods, oldMods);
+
+		this.onOccupantsChanged(newRoomInfo, left, added, leftMods, addedMods);
+	},
+
+
+	onOccupantsChanged: function(newRoomInfo, peopleWhoLeft, peopleWhoArrived) {
+		var win = this.ChatStore.getChatWindow(newRoomInfo.getId()),
+			log = win ? win.logView : null;
+
+		if (!win) {
+			return;
+		}
+		/*
+		 if (this.isRoomEmpty(newRoomInfo)) {
+		 tab.disableChat();
+		 }
+		 */
+		Ext.each(peopleWhoLeft, function(p) {
+			if (!isMe(p)) {
+				UserRepository.getUser(p, function(u) {
+					var name = u.getName();
+					if (log) {
+						log.addNotification(name + ' has left the chat...');
+					}
+				}, this);
+			}
+		});
+
+		Ext.each(peopleWhoArrived, function(p) {
+			if (!isMe(p)) {
+				UserRepository.getUser(p, function(u) {
+					var name = u.getName();
+					if (log) {
+						log.addNotification(name + ' entered the chat...');
+					}
+				}, this);
+			}
+		});
 	},
 
 

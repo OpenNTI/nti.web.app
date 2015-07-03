@@ -340,6 +340,16 @@ Ext.define('NextThought.app.chat.StateStore', {
 	},
 
 
+	updateRoomInfo: function(ri) {
+		var win = this.getChatWindow(ri.getId()),
+				ro = win ? win.roomInfo : this.getRoomInfoFromSession(ri.getId());
+		if (ro) {
+			ro.fireEvent('changed', ri);
+		}
+		this.putRoomInfoIntoSession(ri);
+	},
+
+
 	getTranscriptIdForRoomInfo: function(roomInfo) {
 		var roomInfoId = roomInfo.getId(),
 			uname = roomInfo.get('Creator'),

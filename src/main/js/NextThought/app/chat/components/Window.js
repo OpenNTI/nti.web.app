@@ -65,7 +65,7 @@ Ext.define('NextThought.app.chat.components.Window', {
 		this.entryView = this.down('chat-entry');
 
 		this.on({'beforedestroy': this.onDestroy.bind(this)});
-		// this.roomInfoChanged(this.roomInfo);
+		this.roomInfoChanged(this.roomInfo);
 		// this.mon(Ext.getStore('PresenceInfo'), 'presence-changed', 'presenceChanged', this);
 	},
 
