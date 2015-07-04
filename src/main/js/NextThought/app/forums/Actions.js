@@ -29,7 +29,7 @@ Ext.define('NextThought.app.forums.Actions', {
 			comment.save({
 				url: postLink,
 				success: function(_, operation) {
-					var rec = isEdit ? commentForum : ParseUtils.parseItems(operation.response.responseText)[0];
+					var rec = isEdit ? comment : ParseUtils.parseItems(operation.response.responseText)[0];
 
 					//TODO: increment PostCount in topic the same way we increment reply count in notes.
 					if (!isEdit) {
