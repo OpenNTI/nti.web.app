@@ -67,6 +67,16 @@ Ext.define('NextThought.common.window.Window', {
 	},
 
 	constructor: function(config) {
+	
+	    //By default windows renderTo the body of the document.  However our windows
+	    //are position:fixed and the body now scrolls so when scrolled the window
+	    //is positioned with a top and left that includes the body scroll offset.
+	    //This causes them to render of screen.  Move the rendering of the window
+	    //to the viewport unless otherwise specified.
+	    //TOOD less nasty way to look for and find the viewport?
+	    var viewport = Ext.getCmp('viewport');
+	    config = Ext.applyIf(config || {}, {renderTo: viewport && viewport.el});
+	
 		if (!this.dialog && !config.dialog) {
 
 			Ext.copyTo(this.items.last(), config, ['items', 'layout']);
