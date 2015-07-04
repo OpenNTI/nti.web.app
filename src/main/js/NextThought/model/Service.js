@@ -466,7 +466,7 @@ Ext.define('NextThought.model.Service', {
 			return this.__pathToContainerUrl;
 		}
 
-		var collection = this.getCollection('PathToContainerId', 'Global');
+		var collection = this.getCollection('LibraryPath', 'Global');
 
 		this.__pathToContainerUrl = collection && collection.href;
 
@@ -479,6 +479,10 @@ Ext.define('NextThought.model.Service', {
 			params = {
 				ObjectId: id
 			};
+			
+		if(!link){
+		    return Promise.reject('No path lookup link');
+		}
 
 		link += '?' + Ext.Object.toQueryString(params);
 
