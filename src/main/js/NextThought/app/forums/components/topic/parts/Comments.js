@@ -10,7 +10,8 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 	],
 
 	mixins: {
-		Searchable: 'NextThought.mixins.Searchable'
+		Searchable: 'NextThought.mixins.Searchable',
+		profileLinks: 'NextThought.mixins.ProfileLinks'
 	},
 
 	cls: 'forum-comment-thread',
@@ -467,6 +468,7 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 		if (e.getTarget('.name')) {
 			UserRepository.getUser(record.get('Creator'))
 				.done(function(u) {
+					me.mixins.profileLinks.navigateToProfile(u);
 					if (!isMe(u)) {
 						me.fireEvent('show-profile', u);
 					}

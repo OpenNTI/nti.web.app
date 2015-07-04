@@ -59,6 +59,12 @@ Ext.define('NextThought.mixins.ProfileLinks', function() {
 	return {
 		requires: ['NextThought.app.navigation.Actions'],
 
+		navigateToProfile: function(u) {
+			NextThought.app.navigation.Actions.pushRootRoute(u.getName(), u.getProfileUrl(), {
+				user: u
+			});
+		},
+
 		/**
 		 * Pass in Dom Nodes or Ext.Elements (var arg style) and this will make them clickable and add the css class "over"
 		 * when the mouse is hovering over these elements. (it will also remove the class as the mouse leaves)
