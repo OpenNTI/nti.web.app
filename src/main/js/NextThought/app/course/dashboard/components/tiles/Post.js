@@ -65,7 +65,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 		contextEl: '.context',
 		liked: '.controls .like',
 		favorites: '.controls .favorite',
-		avatarEl: '.post-meta .avatar',
+		avatarEl: '.post-meta .avatar .profile',
 		nameEl: '.post-meta .name',
 		sharedWithEl: '.post-meta .shared-with',
 		createdEl: '.post-meta .created',
