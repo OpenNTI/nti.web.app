@@ -21,13 +21,27 @@ Ext.define('NextThought.app.profiles.user.components.about.About', {
 	cls: 'profile-about user-about',
 
 	items: [
-		{xtype: 'profile-user-about-about'},
-		{xtype: 'profile-user-about-education'},
-		{xtype: 'profile-user-about-positions'},
-		{xtype: 'profile-user-about-interests'},
-		{xtype: 'profile-user-about-suggested'},
-		{xtype: 'profile-user-about-communities'},
-		{xtype: 'profile-user-about-groups'}
+		{
+			xtype: 'container',
+			layout: 'none',
+			cls: 'left',
+			items: [
+				{xtype: 'profile-user-about-about'},
+				{xtype: 'profile-user-about-education'},
+				{xtype: 'profile-user-about-positions'},
+				{xtype: 'profile-user-about-interests'}
+			]
+		},
+		{
+			xtype: 'container',
+			layout: 'none',
+			cls: 'right',
+			items: [
+				// {xtype: 'profile-user-about-suggested'},
+				{xtype: 'profile-user-about-communities'},
+				{xtype: 'profile-user-about-groups'}
+			]
+		}
 	],
 
 
@@ -51,7 +65,7 @@ Ext.define('NextThought.app.profiles.user.components.about.About', {
 			this.educationCmp,
 			this.positionsCmp,
 			this.interestsCmp,
-			this.down('profile-user-about-suggested'),
+			// this.down('profile-user-about-suggested'),
 			this.down('profile-user-about-communities'),
 			this.down('profile-user-about-groups')
 		];
@@ -65,6 +79,8 @@ Ext.define('NextThought.app.profiles.user.components.about.About', {
 
 		this.activeUser = user;
 		this.isMe = isMe;
+
+		user.getMemberships(true);
 
 		cmps = cmps.map(function(cmp) {
 			return cmp.setUser(user, isMe);
@@ -83,7 +99,7 @@ Ext.define('NextThought.app.profiles.user.components.about.About', {
 			if (msg) {
 				msgs.push({
 					name: part.name,
-					msg: msg	
+					msg: msg
 				});
 			}
 		});
@@ -97,7 +113,7 @@ Ext.define('NextThought.app.profiles.user.components.about.About', {
 	removeErrors: function() {
 		var error = this.down('[errorName=this]');
 
-		if(error) {
+		if (error) {
 			this.remove(error);
 		}
 
@@ -197,7 +213,7 @@ Ext.define('NextThought.app.profiles.user.components.about.About', {
 						me.showError({
 							name: me.positionsCmp.name,
 							msg: msg.message
-						})
+						});
 					} else if (me.interestsCmp.showError(msg)) {
 						me.showError({
 							name: me.interestsCmp.name,
@@ -215,7 +231,7 @@ Ext.define('NextThought.app.profiles.user.components.about.About', {
 
 					reject(false);
 				}
-			})
+			});
 		});
 	},
 

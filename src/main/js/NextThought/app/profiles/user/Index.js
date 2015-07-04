@@ -225,7 +225,7 @@ Ext.define('NextThought.app.profiles.user.Index', {
 		var me = this;
 
 		me.GroupActions.addContact(me.activeUser)
-			.then(function(){ 
+			.then(function() {
 				me.setState(this.activeTab);
 			})
 			.fail(function() {

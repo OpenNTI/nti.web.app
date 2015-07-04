@@ -247,6 +247,50 @@ Ext.define('NextThought.model.User', {
 	},
 
 
+	getMemberships: function(force) {
+		if (this.loadMemberships && !force) {
+			return this.loadMemberships;
+		}
+
+		var link = this.getLink('memberships');
+
+		if (link) {
+			this.loadMemberships = Service.request(link)
+				.then(function(response) {
+					var json = JSON.parse(response);
+
+					return ParseUtils.parseItems(json);
+				});
+		} else {
+			this.loadMemberships = Promise.reject();
+		}
+
+		return this.loadMemberships;
+	},
+
+
+	__filterMemberships: function(fn) {
+		return this.getMemberships()
+			.then(function(memberships) {
+				return memberships.filter(fn);
+			});
+	},
+
+
+	getCommunities: function() {
+		return this.__filterMemberships(function(membership) {
+			return membership instanceof NextThought.model.Community;
+		});
+	},
+
+
+	getGroups: function() {
+		return this.__filterMemberships(function(membership) {
+			return membership instanceof NextThought.model.FriendsList;
+		});
+	},
+
+
 	statics: {
 
 		BLANK_AVATAR: '/app/resources/images/icons/unresolved-user.png',
