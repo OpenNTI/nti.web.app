@@ -235,11 +235,9 @@ Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
 						}
 
 						var height = this.getHeight(),
-							y = this.el.getStyle('top'),
+							y = parseInt(this.el.getStyle('top'), 10),
 							bottom = height + y,
 							viewHeight = Ext.Element.getViewportHeight();
-
-						y = parseInt(y, 10);
 
 						if (bottom > viewHeight) {
 							this.el.setStyle({
