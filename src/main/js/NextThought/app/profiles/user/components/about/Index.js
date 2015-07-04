@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.profiles.user.components.about.About', {
+Ext.define('NextThought.app.profiles.user.components.about.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.profile-user-about',
 
@@ -59,6 +59,8 @@ Ext.define('NextThought.app.profiles.user.components.about.About', {
 		this.educationCmp = this.down('profile-user-about-education');
 		this.positionsCmp = this.down('profile-user-about-positions');
 		this.interestsCmp = this.down('profile-user-about-interests');
+		this.communitiesCmp = this.down('profile-user-about-communities');
+		this.groupsCmp = this.down('profile-user-about-groups');
 
 		this.profileParts = [
 			this.aboutCmp,
@@ -66,11 +68,20 @@ Ext.define('NextThought.app.profiles.user.components.about.About', {
 			this.positionsCmp,
 			this.interestsCmp,
 			// this.down('profile-user-about-suggested'),
-			this.down('profile-user-about-communities'),
-			this.down('profile-user-about-groups')
+			this.communitiesCmp,
+			this.groupsCmp
 		];
 
 		this.on('clear-errors', this.clearError.bind(this));
+	},
+
+
+	onAddedToParentRouter: function() {
+		var me = this;
+
+		this.communitiesCmp.gotoSeeAll = this.groupsCmp.gotoSeeAll = function() {
+			me.gotoMembership();
+		};
 	},
 
 

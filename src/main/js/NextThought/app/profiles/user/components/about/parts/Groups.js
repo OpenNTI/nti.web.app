@@ -16,17 +16,24 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Groups', {
 	setUser: function(user, isMe) {
 		var me = this;
 
+		me.removeAll();
+
 		user.getGroups()
 			.then(function(groups) {
-				groups.slice(0, 4)
-					.map(function(group) {
-						return {
-							group: group,
-							name: group.getName(),
-							route: ParseUtils.encodeForURI(group.getId())
-						};
-					})
-					.forEach(me.addEntry.bind(me));
+				if (groups.length) {
+					groups.slice(0, 4)
+						.map(function(group) {
+							return {
+								group: group,
+								name: group.getName(),
+								route: ParseUtils.encodeForURI(group.getId())
+							};
+						})
+						.forEach(me.addEntry.bind(me));
+				//if there are no groups hide this cmp
+				} else {
+					me.hide();
+				}
 			});
 	},
 

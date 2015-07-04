@@ -16,17 +16,24 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Communities', {
 	setUser: function(user, isMe) {
 		var me = this;
 
+		me.removeAll();
+
 		user.getCommunities()
 			.then(function(communities) {
-				communities.slice(0, 4)
-					.map(function(community) {
-						return {
-							community: community,
-							name: community.getName(),
-							route: ParseUtils.encodeForURI(community.getId())
-						};
-					})
-					.forEach(me.addEntry.bind(me));
+				if (communities.length) {
+					communities.slice(0, 4)
+						.map(function(community) {
+							return {
+								community: community,
+								name: community.getName(),
+								route: ParseUtils.encodeForURI(community.getId())
+							};
+						})
+						.forEach(me.addEntry.bind(me));
+				//if there are no communities hide this cmp
+				} else {
+					me.hide();
+				}
 			});
 	},
 

@@ -8,7 +8,8 @@ Ext.define('NextThought.app.profiles.user.Index', {
 		'NextThought.app.navigation.Actions',
 		'NextThought.app.profiles.user.components.Header',
 		'NextThought.app.profiles.user.components.activity.Stream',
-		'NextThought.app.profiles.user.components.about.About'
+		'NextThought.app.profiles.user.components.about.Index',
+		'NextThought.app.profiles.user.components.membership.Index'
 	],
 
 	mixins: {
@@ -42,6 +43,7 @@ Ext.define('NextThought.app.profiles.user.Index', {
 
 		this.addRoute('/about', this.showAbout.bind(this));
 		this.addRoute('/activity', this.showActivity.bind(this));
+		this.addRoute('/membership', this.showMembership.bind(this));
 
 		this.addDefaultRoute('/activity');
 
@@ -51,6 +53,11 @@ Ext.define('NextThought.app.profiles.user.Index', {
 
 	onAddedToParentRouter: function() {
 		this.headerCmp.pushRoute = this.pushRoute.bind(this);
+	},
+
+
+	getActiveItem: function() {
+		return this.bodyCmp.getLayout().getActiveItem();
 	},
 
 
@@ -81,7 +88,7 @@ Ext.define('NextThought.app.profiles.user.Index', {
 	},
 
 
-	getRouteTilte: function() {
+	getRouteTitle: function() {
 		return this.activeUser.getName();
 	},
 
@@ -119,6 +126,12 @@ Ext.define('NextThought.app.profiles.user.Index', {
 			active: active === 'activity'
 		});
 
+		tabs.push({
+			label: 'Memberships',
+			route: '/membership',
+			active: active === 'membership'
+		});
+
 		this.headerCmp.updateUser(this.activeUser, tabs, isContact, this.isMe);
 
 		this.NavActions.updateNavBar({
@@ -144,14 +157,10 @@ Ext.define('NextThought.app.profiles.user.Index', {
 		}
 
 		aboutCmp.setHeaderCmp(headerCmp);
+		aboutCmp.gotoMembership = this.pushRoute.bind(this, 'Membership', '/membership');
 
 		return aboutCmp.userChanged(this.activeUser, this.isMe)
 			.then(aboutCmp.handleRoute.bind(aboutCmp, subRoute, route.params));
-	},
-
-
-	getActiveItem: function() {
-		return this.bodyCmp.getLayout().getActiveItem();
 	},
 
 
@@ -169,6 +178,24 @@ Ext.define('NextThought.app.profiles.user.Index', {
 		}
 
 		return activityCmp.handleRoute(subRoute, route.precache);
+	},
+
+
+	showMembership: function(route, subRoute) {
+		var membershipCmp = this.setActiveItem('user-profile-membership'),
+			headerCmp = this.headerCmp;
+
+		this.setState('membership');
+
+		if (this.isMe) {
+			this.activeUser.getSchema()
+				.then(function(schema) {
+					headerCmp.setSchema();
+				});
+		}
+
+		return membershipCmp.userChanged(this.activeUser, this.isMe)
+			.then(membershipCmp.handleRoute.bind(membershipCmp, subRoute, route.params));
 	},
 
 

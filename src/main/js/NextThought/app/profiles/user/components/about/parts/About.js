@@ -93,7 +93,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 			return;
 		}
 
-		this.isMe = isMe
+		this.isMe = isMe;
 
 		var data = user.getAboutData();
 
@@ -119,7 +119,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 		this.callParent(arguments);
 
 		if (!this.nameEl.hasCls('editable') && isFeature('request-alias-change') && this.isMe) {
-			this.nameEl.addCls('request')
+			this.nameEl.addCls('request');
 		}
 	},
 

@@ -1,9 +1,6 @@
 Ext.define('NextThought.app.profiles.user.components.about.parts.Membership', {
-	extend: 'Ext.Component',
+	extend: 'NextThought.app.profiles.user.components.membership.parts.Membership',
 
-	title: '',
-
-	entryTpl: '',
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'title', html: '{title}'},
@@ -18,33 +15,14 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Membership', {
 	},
 
 
-	beforeRender: function() {
-		this.callParent(arguments);
-
-		this.renderData = Ext.apply(this.renderData || {}, {
-			title: this.title
-		});
-	},
-
-
 	afterRender: function() {
 		this.callParent(arguments);
 
-		this.mon(this.entriesEl, 'click', this.onEntryClick.bind(this));
 		this.mon(this.seeAllEl, 'click', this.onSeeAll.bind(this));
 	},
 
 
-	addEntry: function(data) {
-		this.entryTpl.append(this.entriesEl, data);
-	},
-
-
-	removeAll: function() {
-		this.entriesEl.dom.innerHTML = '';
-	},
-
-
-	onEntryClick: function() {},
-	onSeeAll: function() {}
+	onSeeAll: function() {
+		this.gotoSeeAll();
+	}
 });
