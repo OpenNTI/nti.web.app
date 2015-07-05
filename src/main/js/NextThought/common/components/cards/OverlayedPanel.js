@@ -21,6 +21,8 @@ Ext.define('NextThought.common.components.cards.OverlayedPanel', {
 
 			//the data-href has the adjusted href.
 			data.href = data['attribute-data-href'];
+			//If we have an icon use that as the base for the thumbnail
+			data.thumbnail = data.icon;
 
 			Ext.applyIf(data, {
 				ntiid: reader && reader.getLocation().NTIID,
