@@ -39,7 +39,7 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 		]}
 	]}), {
 		shouldShowDate: function(values) {
-			return this.allowDates;
+			return this.allowDates && values.startDate;
 		}
 	}),
 
