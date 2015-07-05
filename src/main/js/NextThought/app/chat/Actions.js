@@ -293,7 +293,7 @@ Ext.define('NextThought.app.chat.Actions', {
 			return;
 		}
 		this.updateChatState(sender, 'active', w, room.get('Occupants').length > 2);
-		if (isMe(sender)) {
+		if (isMe(sender) && w.down('chat-view')) {
 			w.down('chat-view').fireEvent('status-change', {state: 'active'}); //start active timer.
 		}
 	},
@@ -405,7 +405,7 @@ Ext.define('NextThought.app.chat.Actions', {
 
 
 	onOccupantsChanged: function(newRoomInfo, peopleWhoLeft, peopleWhoArrived) {
-		var win = this.ChatStore.getChatWindow(newRoomInfo.getId()),
+		var win = this.ChatStore.getChatWindow(newRoomInfo),
 			log = win ? win.logView : null;
 
 		if (!win) {

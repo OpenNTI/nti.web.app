@@ -37,11 +37,13 @@ Ext.define('NextThought.app.chat.Index', {
 
 		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
 		this.ChatActions = NextThought.app.chat.Actions.create();
+		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
 
 		this.mon(this.ChatStore, {
 			'show-window': this.showChatWindow.bind(this),
 			'close-window': this.closeWindow.bind(this),
-			'show-whiteboard': this.showWhiteboard.bind(this)
+			'show-whiteboard': this.showWhiteboard.bind(this),
+			'chat-notification-toast': this.handleNonContactNotification.bind(this)
 		});
 
 		socket = this.ChatStore.getSocket();
@@ -60,14 +62,26 @@ Ext.define('NextThought.app.chat.Index', {
 
 		this.enterChatRoom(roomInfo);
 		w = this.ChatStore.getChatWindow(roomInfo);
-		if (w) {
+		if (w && this.canShowChat(roomInfo)) {
 			w.notify();
 			w.show();
 			wait(500)
 				.then(function() {
-					w.down('chat-entry').focus();
+					if(w.down('chat-entry')) {
+						w.down('chat-entry').focus();
+					}
 				});
 		}
+	},
+
+
+	canShowChat: function (roomInfo) {
+		var creator = roomInfo && roomInfo.get('Creator');
+		if (isMe(creator) || this.GroupStore.isContact(creator) || this.ChatStore.isRoomIdAccepted(roomInfo.getId())) {
+			return true;
+		}
+
+		return false;
 	},
 
 
@@ -98,7 +112,7 @@ Ext.define('NextThought.app.chat.Index', {
 				me.ChatStore.setRoomIdStatusAccepted(roomInfo.getId());
 				w.accept(true);
 				me.ChatActions.startTrackingChatState(roomInfo.get('Creator'), roomInfo, w);
-				if (isGroupChat) {
+				if (w && !w.isVisible()) {
 					w.show();
 				}
 			})
@@ -115,44 +129,64 @@ Ext.define('NextThought.app.chat.Index', {
 	},
 
 
+	handleNonContactNotification: function (win, msg) {
+		var me = this,
+			roomInfo = win && win.roomInfo;
+
+		if (!win || !roomInfo) { return; }
+
+		// Handle chat notification
+		console.log('Cannot add chat notification: ', msg);
+	},
+
+
 	presentInvationationToast: function(roomInfo) {
 		var me = this,
 			occupants = roomInfo.get('Occupants'),
-			isGroupChat = (occupants.length > 2);
+			isGroupChat = (occupants.length > 2),
+			creator = roomInfo.get('Creator');
 
 		//Rules for auto-accepting are getting complicated, I will enumerate them here:
-		//1) if it's not a group chat, accept
+		//1) if it's not a group chat, accept if the creator is a contact.
 		//2) regardless of group or not, if the room has been previously accepted, accept (like a refresh)
 		//3) if you created it, accept
 
-		if (!isGroupChat || me.isRoomIdAccepted(roomInfo.getId()) || isMe(roomInfo.get('Creator'))) {
+		if ( this.canShowChat(roomInfo)) {
 			return Promise.resolve();
 		}
 
 		return new Promise(function (fulfill, reject) {
-			UserRepository.getUser(roomInfo.get('Creator'), function(u) {
-				//at this point, window has been created but not accepted.
-				Toaster.makeToast({
-					roomId: IdCache.getIdentifier(roomInfo.getId()),
-					title: isGroupChat ? 'Group Chat...' : 'Chat Invitation...',
-					message: isGroupChat ?
-							'You\'ve been invited to chat with <span>' + (occupants.length - 1) + '</span> friends.' :
-							'<span>' + u.getName() + '</span> would like to chat.',
-					iconCls: 'icons-chat-32',
-					buttons: [
-						{
-							label: 'decline',
-							callback: reject
+			UserRepository.getUser(roomInfo.get('Creator'))
+				.then(function (u) {
+					if(me.invitationToast && me.invitationToast.roomId === IdCache.getIdentifier(roomInfo.getId())) {
+						// if we have a invitation toast for a roomInfo, don't create another one.
+						return;
+					}
+
+					//at this point, window has been created but not accepted.
+					me.invitationToast = Toaster.makeToast({
+						roomId: IdCache.getIdentifier(roomInfo.getId()),
+						title: isGroupChat ? 'Group Chat...' : 'Chat Invitation...',
+						message: isGroupChat ?
+								'You\'ve been invited to chat with <span>' + (occupants.length - 1) + '</span> friends.' :
+								'<span>' + u.getName() + '</span> would like to chat.',
+						iconCls: 'icons-chat-32',
+						buttons: [
+							{
+								label: 'decline',
+								callback: reject
+							},
+							{
+								label: 'accept',
+								callback: fulfill
+							}
+						],
+						callback: function () {
+							delete me.invitationToast;
 						},
-						{
-							label: 'accept',
-							callback: fulfill
-						}
-					],
-					callback: reject,
-					scope: me
+						scope: me
+					});
 				});
-			});
 		});
 	},
 

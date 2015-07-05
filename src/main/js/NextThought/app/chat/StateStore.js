@@ -131,7 +131,7 @@ Ext.define('NextThought.app.chat.StateStore', {
 				}
 
 				//Be defensive.
-				if (Ext.Array.union(xOcc, roomInfo.get('Occupants')).length === xOcc.length) {
+				if (Ext.Array.union(xOcc, roomInfo.isModel && roomInfo.get('Occupants')).length === xOcc.length) {
 					console.log('found a different room with same occupants: ', xOcc);
 					x.roomInfoChanged(roomInfo);
 					w = x;

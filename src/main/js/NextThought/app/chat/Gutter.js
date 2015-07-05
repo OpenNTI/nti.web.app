@@ -154,8 +154,7 @@ Ext.define('NextThought.app.chat.Gutter', {
 			entry.handleWindowNotify(win, msg);
 		}
 		else {
-			console.error('Do not have an associated entry for roomInfo: ', roomInfo);
-			console.log('Cannot pass notification: ', msg);
+			this.ChatStore.fireEvent('chat-notification-toast', win, msg);
 		}
 	}
 });
