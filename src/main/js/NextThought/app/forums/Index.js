@@ -57,8 +57,7 @@ Ext.define('NextThought.app.forums.Index', {
 
 
 	clearForumList: function() {
-		this.forumView.setForumList(null);
-		this.forumView.setForum(null);
+		this.forumView.clearForum();
 	},
 
 

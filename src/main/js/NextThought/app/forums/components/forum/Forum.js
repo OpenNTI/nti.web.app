@@ -13,6 +13,15 @@ Ext.define('NextThought.app.forums.components.forum.Forum', {
 	},
 
 
+	clearForum: function() {
+		var topicList = this.down('forums-forum-topic-list-view'),
+			filterBar = this.down('forums-forum-filterbar'),
+			header = this.down('forums-forum-header');
+
+		Ext.destroy(topicList, filterBar, header);
+	},
+
+
 	setForum: function(record) {
 		var topicList = this.down('forums-forum-topic-list-view'),
 			filterBar = this.down('forums-forum-filterbar'),
@@ -54,6 +63,10 @@ Ext.define('NextThought.app.forums.components.forum.Forum', {
 
 	updateForum: function() {
 		var topicList = this.down('forums-forum-topic-list-view');
+
+		if (!topicList) {
+			return Promise.resolve();
+		}
 
 		return topicList.restoreState(this.getRouteState());
 	}

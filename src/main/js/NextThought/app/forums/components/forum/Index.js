@@ -31,11 +31,16 @@ Ext.define('NextThought.app.forums.components.forum.Index', {
 	},
 
 
+	clearForum: function() {
+		this.forumList = null;
+		this.navigation.setForumList(null);
+		this.body.clearForum();
+	},
+
+
 	setForumList: function(forumList) {
-		if (!this.forumList) {
-			this.forumList = forumList;
-			this.navigation.setForumList(forumList);
-		}
+		this.forumList = forumList;
+		this.navigation.setForumList(forumList);
 	},
 
 

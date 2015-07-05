@@ -86,6 +86,7 @@ Ext.define('NextThought.app.forums.components.forum.Navigation', {
 		}
 
 		var me = this,
+			store,
 			items = [];
 
 		function addList(list, level) {
@@ -126,10 +127,16 @@ Ext.define('NextThought.app.forums.components.forum.Navigation', {
 			}
 		});
 
-		return Ext.data.Store.create({
-			model: 'NextThought.model.forums.CommunityForum',
-			data: items
-		});
+		if (!me.store || me.store.storeId === 'ext-empty-store') {
+			store = Ext.data.Store.create({
+				model: 'NextThought.model.forums.CommunityForum',
+				data: items
+			});
+
+			me.bindStore(store);
+		} else {
+			me.store.loadRecords(items);
+		}
 	},
 
 
@@ -153,7 +160,6 @@ Ext.define('NextThought.app.forums.components.forum.Navigation', {
 			store = me.buildStore(forumList),
 			selModel = me.getSelectionModel();
 
-		me.bindStore(store);
 		me.refresh();
 	},
 
