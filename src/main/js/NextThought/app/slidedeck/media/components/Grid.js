@@ -382,6 +382,10 @@ Ext.define('NextThought.app.slidedeck.media.components.Grid', {
 						//Globals.getNaturalSorter('title')
 					]
 				});
+				
+				me.store.each(function(record) {
+			         me.getThumbnail(record);
+		        });
 
 				me.bindStore(me.store);
 
