@@ -277,14 +277,14 @@ Ext.define('NextThought.model.User', {
 	},
 
 
-	getCommunities: function() {
+	getCommunityMembership: function() {
 		return this.__filterMemberships(function(membership) {
 			return membership instanceof NextThought.model.Community;
 		});
 	},
 
 
-	getGroups: function() {
+	getGroupMembership: function() {
 		return this.__filterMemberships(function(membership) {
 			return membership instanceof NextThought.model.FriendsList;
 		});

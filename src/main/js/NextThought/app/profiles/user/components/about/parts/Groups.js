@@ -18,7 +18,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Groups', {
 
 		me.removeAll();
 
-		user.getGroups()
+		user.getGroupMembership()
 			.then(function(groups) {
 				if (groups.length) {
 					groups.slice(0, 4)

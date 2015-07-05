@@ -18,7 +18,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Communities', {
 
 		me.removeAll();
 
-		user.getCommunities()
+		user.getCommunityMembership()
 			.then(function(communities) {
 				if (communities.length) {
 					communities.slice(0, 4)
