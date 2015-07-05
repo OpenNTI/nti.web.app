@@ -187,14 +187,16 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 					}).records[0];
 
 					me.mon(item, {
-						single: true,
 						'resolved-poster': function(item) {
-							r.set({
-								poster: item.get('poster'),
-								thumb: item.get('thumbnail')
-							});
+						    if( item.get('poster') !== r.get('poster')
+						       || item.get('thumbnail') !== r.get('thumbnail')){
+							     r.set({
+								    poster: item.get('poster'),
+								    thumb: item.get('thumbnail')
+							     });
 
-							me.onSelectChange(me.store, me.getSelectionModel().getSelection()[0]);
+							     me.onSelectChange(me.store, me.getSelectionModel().getSelection()[0]);
+							}
 						}
 					});
 
