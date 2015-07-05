@@ -746,7 +746,7 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 
 		var me = this;
 
-		this.goToComment = new Promise(function(fulfill, reject) {
+		return new Promise(function(fulfill, reject) {
 			var refs = comment.get('references');
 
 			if (Ext.isEmpty(refs)) {
@@ -776,9 +776,6 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 				});
 			});
 		});
-
-
-		return this.goToComment;
 	},
 
 
