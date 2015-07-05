@@ -38,12 +38,7 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 			//cls: 'note-reply',
 			cls: 'note',
 			cn: [
-				{
-					cls: 'avatar',
-					cn: [
-						{tag: 'img', src: Ext.BLANK_IMAGE_URL}
-					]
-				},
+				'{user:avatar}',
 				{
 					cls: 'meta',
 					cn: [
@@ -87,7 +82,7 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 	]),
 
 	renderSelectors: {
-		avatar: '.avatar img',
+		avatar: '.avatar .profile.avatar-pic',
 		noteBody: '.note',
 		liked: '.meta .controls .like',
 		favorites: '.meta .controls .favorite',

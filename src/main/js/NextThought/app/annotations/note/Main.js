@@ -30,10 +30,7 @@ Ext.define('NextThought.app.annotations.note.Main', {
 		{
 			cls: 'note main-view',
 			cn: [
-				{
-					cls: 'avatar',
-					tag: 'img', src: Ext.BLANK_IMAGE_URL
-				},
+				'{user:avatar}',
 				{
 					cls: 'meta',
 					cn: [
@@ -81,7 +78,7 @@ Ext.define('NextThought.app.annotations.note.Main', {
 
 
 	renderSelectors: {
-		avatar: 'img.avatar',
+		avatar: '.avatar .profile.avatar-pic',
 		contextContainer: '.context'
 	},
 
