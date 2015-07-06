@@ -113,7 +113,7 @@ Ext.define('NextThought.app.chat.components.Window', {
 
 			Ext.each(users, function(u) {
 				var name = u.getId(),
-						presence = Ext.getStore('PresenceInfo').getPresenceOf(name);
+					presence = me.ChatStore.getPresenceOf(name);
 
 				//if we don't have a presence for them or they are online add them to onlineOccupants
 				if (!presence || presence.isOnline()) {
