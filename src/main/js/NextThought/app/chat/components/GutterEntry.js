@@ -54,6 +54,7 @@ Ext.define('NextThought.app.chat.components.GutterEntry', {
 
 
 	clearUnreadCount: function() {
+		this.unreadMessageIds = [];
 		this.updateBadgeCount(0);
 	},
 
