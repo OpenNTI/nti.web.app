@@ -24,6 +24,7 @@ Ext.define('NextThought.app.chat.components.Window', {
 	title: 'chat',
 
 	layout: 'none',
+	isOverlay: false,
 
 	items: [
 		{xtype: 'chat-view'}

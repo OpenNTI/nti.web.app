@@ -24,6 +24,7 @@ Ext.define('NextThought.common.window.Window', {
 
 	dialog: false,
 	modal: false,
+	isOverlay: true,
 
 	layout: 'none',
 	items: [
@@ -111,18 +112,22 @@ Ext.define('NextThought.common.window.Window', {
 		this.WindowStore = NextThought.app.windows.StateStore.getInstance();
 		windowStore = this.WindowStore;
 
-		this.on({
-			'show': this.WindowStore.addOpenCls.bind(this.WindowStore),
-			'close': function() {
-				closeCalled = true;
-				windowStore.removeOpenCls();
-			},
-			'destroy': function() {
-				if (!closeCalled) {
+		// NOTE: most windows are currently treated as an overlay.
+		// The overlay flag will allow us to opt in or out.
+		if(this.isOverlay) {
+			this.on({
+				'show': this.WindowStore.addOpenCls.bind(this.WindowStore),
+				'close': function() {
+					closeCalled = true;
 					windowStore.removeOpenCls();
+				},
+				'destroy': function() {
+					if (!closeCalled) {
+						windowStore.removeOpenCls();
+					}
 				}
-			}
-		});
+			});
+		}
 	},
 
 
