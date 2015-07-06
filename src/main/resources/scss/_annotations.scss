@@ -30,8 +30,6 @@
 		background: #fafafa;
 		min-height: 37px;
 
-		span:first-child { margin-top: 14px; }
-
 		.image-caption,.image-title {
 			line-height: 1.2em;
 			display: block;
@@ -48,6 +46,7 @@
 
 		.bar-cell {
 			display: block;
+			& > span:first-child { margin-top: 14px; }
 		}
 
 		a.bar-cell {
