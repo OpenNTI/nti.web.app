@@ -52,6 +52,8 @@ Ext.define('NextThought.app.contentviewer.reader.Annotations', {
 					  'share-with',
 					  'resize'
 				  ]));
+				  
+	    reader.on('destroy', 'clearAnnotations', this);
 
 		Ext.apply(me, {
 			annotations: {},
