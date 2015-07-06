@@ -59,7 +59,21 @@ Ext.define('NextThought.app.course.overview.components.Lesson', {
 
 
 	__updateProgress: function() {
+        if (!this.__getCurrentProgress) { return; }
 
+		var me = this;
+
+		return me.__getCurrentProgress()
+					.then(function(progress) {
+						me.items.each(function(item) {
+							if (item.setProgress) {
+								item.setProgress(progress);
+							}
+						});
+					})
+					.fail(function(reason) {
+						console.error('Failed to load progress:', reason);
+					});
 	},
 
 
