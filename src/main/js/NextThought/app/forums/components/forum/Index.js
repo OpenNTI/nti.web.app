@@ -23,7 +23,7 @@ Ext.define('NextThought.app.forums.components.forum.Index', {
 
 
 	onAddedToParentRouter: function() {
-		this.navigation.pushRoute = this.pushRoute.bind(this);
+		this.navigation.pushRoute = this.pushForum.bind(this);
 		this.body.pushRouteState = this.pushRouteState.bind(this);
 		this.body.replaceRouteState = this.replaceRouteState.bind(this);
 		this.body.getRouteState = this.getRouteState.bind(this);
@@ -35,6 +35,15 @@ Ext.define('NextThought.app.forums.components.forum.Index', {
 		this.forumList = null;
 		this.navigation.setForumList(null);
 		this.body.clearForum();
+	},
+
+
+	pushForum: function(title, route, precache) {
+		var state = this.getRouteState();
+
+		delete state.currentPage;
+
+		this.pushRouteState(state, title, route, precache);
 	},
 
 
@@ -52,7 +61,7 @@ Ext.define('NextThought.app.forums.components.forum.Index', {
 			this.setTitle(title);
 		}
 
-		if (this.body.activeTopic && this.body.activeTopic.getId() === record.getId()) {
+		if (this.body.activeTopicList && this.body.activeTopicList.getId() === record.getId()) {
 			return this.body.updateForum()
 				.then(this.alignNavigation.bind(this));
 		}

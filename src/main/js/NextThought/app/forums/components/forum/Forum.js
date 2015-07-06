@@ -54,8 +54,7 @@ Ext.define('NextThought.app.forums.components.forum.Forum', {
 			pushRouteState: this.pushRouteState.bind(this)
 		});
 
-
-		this.activeTopic = record;
+		this.activeTopicList = record;
 
 		return topicList.restoreState(this.getRouteState());
 	},
