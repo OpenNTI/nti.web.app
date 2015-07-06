@@ -206,12 +206,6 @@ Ext.define('NextThought.app.slidedeck.media.components.Grid', {
     },
 
 
-	fillInFromOutline: function(title, navStore) {
-		Library.getVideoIndex(title)
-			.then(this.applyNavigationData.bind(this, navStore));
-	},
-
-
 	processSpecialEvent: function(e) {
 		var k = e.getKey();
 		if (k === e.SPACE || k === e.ENTER) {
@@ -255,66 +249,6 @@ Ext.define('NextThought.app.slidedeck.media.components.Grid', {
 
 					video.set('sources', [source]);
 				});
-		}
-	},
-
-
-	applyNavigationData: function(navStore, data) {
-		var me = this,
-			reader = Ext.data.reader.Json.create({model: NextThought.model.PlaylistItem}),
-			currentId = me.source.get('NTIID'),
-			selected,
-			videos = [];
-
-		function fillIn(ids) {
-			var i, v;
-
-			for (i = 0; i < ids.length; i++) {
-				v = NextThought.model.PlaylistItem(data[ids[i]]);
-				v.NTIID = v.ntiid;
-
-				videos.push(v);
-			}
-		}
-
-		//go through the navigation store and add the videos in order
-		//the lessons they appear in do
-		navStore.each(function(node) {
-			if (node.get('type') !== 'lesson') { return; }
-
-			var videoIds = data.containers[node.getId()];
-
-			if (videoIds && videoIds.length) {
-				videos.push(NextThought.model.PlaylistItem({
-					section: node.get('label'),
-					sources: []
-				}));
-
-				fillIn(videoIds);
-			}
-		});
-
-		me.store = new Ext.data.Store({
-			model: NextThought.model.PlaylistItem,
-			proxy: 'memory',
-			data: videos
-		});
-
-		me.store.each(function(record) {
-			me.getThumbnail(record);
-		});
-
-		me.bindStore(me.store);
-
-        me._currentProgress = navStore.courseInstance.getVideoProgress();
-        me.__updateProgress();
-
-		me.fireEvent('store-set', me.store);
-
-		selected = me.store.getById(currentId);
-
-		if (selected) {
-			me.getSelectionModel().select(selected, false, true);
 		}
 	},
 
