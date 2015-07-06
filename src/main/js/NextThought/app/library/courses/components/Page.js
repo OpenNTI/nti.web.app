@@ -89,7 +89,7 @@ Ext.define('NextThought.app.library.courses.components.Page', {
 				semesterBin = yearBin && yearBin[semester];
 
 			//if it hasn't started yet put it in an upcoming bin
-			if (start > new Date()) {
+			if (catalog.isUpcoming()) {
 				yearBin = bins.upcoming[year];
 				semesterBin = yearBin && yearBin[semester];
 				list = upcoming;
@@ -110,6 +110,7 @@ Ext.define('NextThought.app.library.courses.components.Page', {
 				list.push(year);
 				yearBin = bin[year] = {};
 				semesterBin = yearBin[semester] = [course];
+				semesterBin.label = catalog.isArchived() ? 'Archived' : 'Current';
 			}
 		});
 
@@ -143,7 +144,7 @@ Ext.define('NextThought.app.library.courses.components.Page', {
 			semesters.forEach(function(semester) {
 				if (bin[semester] && bin[semester].length) {
 					me.add({
-						label: bin.label || me.groupLabel,
+						label: bin.label || me.groupLabel || bin[semester].label,
 						group: semester + ' ' + year,
 						store: me.getCourseStore(bin[semester]),
 						navigate: me.navigate && me.navigate.bind(me)
