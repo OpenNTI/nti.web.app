@@ -198,7 +198,7 @@ Ext.define('NextThought.app.course.dashboard.Index', {
 
 		if (!this.weekToLoad || height < el.scrollHeight) {
 			this.removeEmpties();
-			this.maybeDisplayEmptyState;
+			this.maybeDisplayEmptyState();
 			this.loaded = true;
 		}
 	},
