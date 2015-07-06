@@ -37,8 +37,6 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 			isSync = (me.currentBundle && me.currentBundle.getId()) === (bundle && bundle.getId());
 
 		function resetView(noAssignments) {
-			if (!isSync) { return; }
-
 			me.clearViews();
 			me.maybeUnmask();
 
