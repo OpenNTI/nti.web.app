@@ -832,28 +832,40 @@
 	bottom: 60px;
 	right: 15px;
   	width: 60px;
-  	background-color: rgba(255, 255, 255, 0.18);
+  	background-color: rgba(35, 35, 35, 0.70);
 	border-radius: 5px;
 	padding-bottom: 60px;
-
-	.show-contacts {
-		position: absolute;
-		bottom: 0;
-		left: 10px;
-		margin: 8px auto;
-  		width: 42px;
-  		height: 42px;
-		border-radius: 21px;
-		background: $tertiary-grey;
-		cursor: pointer;
-	}
-
 
   	.presence-gutter-entry {
   		margin: 8px auto;
   		width: 45px;
   		height: 45px;
   		cursor: pointer;
+
+  		&.show-contacts {
+  			position: absolute !important;
+  			bottom: 0;
+  			left: 8px;
+  			@include icon('contacts-gutter',$top:1px,$left:1px);		
+  		}
+
+  		&.other-contacts {
+			position: absolute !important;
+			color: #ffffff;
+			bottom: 55px;
+			left: 8px;
+			font-style: italic;
+			font-weight: 300;
+			font-size: 14px;
+			
+			.profile-pic {
+				width: 42px;
+				height: 42px;
+				border-radius: 21px;
+				background-color: #494949;
+				padding: 10px 0 0 9px;
+			}
+		}
 
   		.profile-pic {
   			&[data-badge]:not([data-badge="0"]) {

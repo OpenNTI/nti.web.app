@@ -12,18 +12,28 @@ Ext.define('NextThought.app.chat.Gutter', {
 	cls: 'chat-gutter-window',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'show-contacts', 'data-qtip': 'Show Contacts'},
-		{id: '{id}-body', cn: ['{%this.renderContainer(out, values)%}']}
+		{id: '{id}-body', cn: ['{%this.renderContainer(out, values)%}']},
+		{cls: 'presence-gutter-entry other-contacts', 'data-qtip': 'Other Online Contacts', cn: [
+			{cls: 'profile-pic', cn: [
+				{cls: 'count'},
+				{cls: 'presence available'}
+			]}
+		]},
+		{cls: 'presence-gutter-entry show-contacts', 'data-qtip': 'Show Contacts'}
 	]),
 
 	getTargetEl: function() { return this.body; },
 	childEls: ['body'],
 
 	renderSelectors: {
-		contactsButtonEl: '.show-contacts'
+		contactsButtonEl: '.show-contacts',
+		otherContactsEl: '.other-contacts',
+		otherConctactsCountEl: '.other-contacts .count'
 	},
 
 	ROOM_ENTRY_MAP: {},
+
+	ENTRY_BOTTOM_OFFSET: 120,
 
 	initComponent: function() {
 		this.callParent(arguments);
@@ -44,12 +54,15 @@ Ext.define('NextThought.app.chat.Gutter', {
 			'added-chat-window': this.bindChatWindow.bind(this),
 			'exited-room': this.onRoomExit.bind(this)
 		});
+		this.otherContacts = [];
 	},
 
 
 	afterRender: function() {
 		this.callParent(arguments);
 		this.mon(this.contactsButtonEl, 'click', this.goToContacts.bind(this));
+		this.mon(this.otherContactsEl, 'click', this.goToContacts.bind(this));
+		this.maybeUpdateOtherButton();
 	},
 
 
@@ -73,16 +86,43 @@ Ext.define('NextThought.app.chat.Gutter', {
 
 
 	addContacts: function(store, users) {
-		var me = this, list = [];
+		var me = this;
 		users.forEach(function(user) {
-			list.push({
-				xtype: 'chat-gutter-entry',
-				user: user,
-				openChatWindow: me.openChatWindow.bind(me)
-			});
+			if(me.haveRoomForNewEntry()) {
+				me.add({
+					xtype: 'chat-gutter-entry',
+					user: user,
+					openChatWindow: me.openChatWindow.bind(me)
+				});
+			}
+			else {
+				me.otherContacts.push(user);
+			}
 		});
 
-		me.add(list);
+		me.maybeUpdateOtherButton();
+	},
+
+
+	haveRoomForNewEntry: function(u) {
+		var gutterHeight = this.getHeight(),
+			gutterEntryHeight = 60,
+			maxEntryNumber = Math.floor((gutterHeight - this.ENTRY_BOTTOM_OFFSET) / gutterEntryHeight),
+			currentCount = this.query('chat-gutter-entry').length;
+
+		return currentCount < maxEntryNumber;
+	},
+
+
+	maybeUpdateOtherButton: function() {
+		var count = this.otherContacts.length;
+		if (count > 0) {
+			this.otherConctactsCountEl.update('+' + count);
+			this.otherContactsEl.show();
+		}
+		else {
+			this.otherContactsEl.hide();
+		}
 	},
 
 
