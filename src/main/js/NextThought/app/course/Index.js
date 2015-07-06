@@ -234,7 +234,7 @@ Ext.define('NextThought.app.course.Index', {
 
 	setActiveView: function() {
 		if (this.activeBundle.get('Preview')) {
-			return this.setPreview();
+			return this.callParent(['course-info', []]);
 		}
 
 		return this.callParent(arguments);

@@ -23,7 +23,7 @@ Ext.define('NextThought.app.course.assessment.Index', {
 				return false;
 			}
 
-			return true;
+			return !bundle.get('Preview');
 		}
 	},
 

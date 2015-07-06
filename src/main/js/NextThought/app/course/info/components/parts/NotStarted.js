@@ -36,7 +36,7 @@ Ext.define('NextThought.app.course.info.components.parts.NotStarted', {
 
 		this.callParent(arguments);
 
-		registeredText = CourseWareUtils.Enrollment.getEnrolledText(i);
+		registeredText = 'foo' || CourseWareUtils.Enrollment.getEnrolledText(i);
 
 		Ext.apply(data || {}, {
 			startDate: i.get('StartDate'),

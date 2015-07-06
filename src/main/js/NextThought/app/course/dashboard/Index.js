@@ -14,7 +14,10 @@ Ext.define('NextThought.app.course.dashboard.Index', {
 		DATE_OVERRIDE: null, //'2015-5-2', 'YYYY-MM-DD'
 		OUT_OF_BUFFER: 'out-of-buffer',
 		IN_BUFFER: 'in-buffer',
-		CURRENT: 'current'
+		CURRENT: 'current',
+		showTab: function(bundle) {
+			return bundle && !bundle.get('Preview');
+		}
 	},
 
 	loadThreshold: 300,

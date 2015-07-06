@@ -11,6 +11,12 @@ Ext.define('NextThought.app.course.overview.Index', {
 		'NextThought.app.content.content.Index',
 		'NextThought.app.slidedeck.media.Index'
 	],
+	
+	statics: {
+	    showTab: function(bundle) {
+			return bundle && !bundle.get('Preview');
+		}
+	},
 
 	title: 'Lessons',
 	layout: 'card',
