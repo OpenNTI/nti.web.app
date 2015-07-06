@@ -7,7 +7,7 @@ Ext.define('NextThought.app.profiles.user.Index', {
 		'NextThought.app.groups.StateStore',
 		'NextThought.app.navigation.Actions',
 		'NextThought.app.profiles.user.components.Header',
-		'NextThought.app.profiles.user.components.activity.Stream',
+		'NextThought.app.profiles.user.components.activity.Index',
 		'NextThought.app.profiles.user.components.about.Index',
 		'NextThought.app.profiles.user.components.membership.Index'
 	],
@@ -177,7 +177,9 @@ Ext.define('NextThought.app.profiles.user.Index', {
 				});
 		}
 
-		return activityCmp.handleRoute(subRoute, route.precache);
+
+		return activityCmp.userChanged(this.activeUser, this.isMe)
+			.then(activityCmp.handleRoute.bind(activityCmp, subRoute, route.params));
 	},
 
 

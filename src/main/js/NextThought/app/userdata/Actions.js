@@ -637,9 +637,9 @@ Ext.define('NextThought.app.userdata.Actions', {
 			return function() {
 				try {
 					me.UserDataStore.setContext(context);
-					return fn.apply(me, args);
+					return fn.apply(me, arguments);
 				} finally {
-					this.UserDataStore.clearContext();
+					me.UserDataStore.clearContext();
 				}
 			}
 		}
