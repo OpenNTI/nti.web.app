@@ -1,7 +1,7 @@
 Ext.define('NextThought.util.media.VimeoPlayer', {
 
 	statics: {
-		PLAYER_ORIGIN: window.location.protocol + '//player.vimeo.com',
+		PLAYER_ORIGIN: 'https://player.vimeo.com',
 		kind: 'video',
 		type: 'vimeo',
 		valid: function() { return true; }
@@ -64,7 +64,6 @@ Ext.define('NextThought.util.media.VimeoPlayer', {
 		this.el = Ext.get(this.id);
 		window.addEventListener('message', this.handleMessage, false);
 	},
-
 
 	handleMessage: function(event) {
 		if (event.origin.toLowerCase() !== this.self.PLAYER_ORIGIN) {
