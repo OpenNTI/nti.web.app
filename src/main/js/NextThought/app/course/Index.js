@@ -85,7 +85,7 @@ Ext.define('NextThought.app.course.Index', {
 		], this.getAssignmentRoute.bind(this));
 		this.addObjectHandler('application/vnd.nextthought.courses.courseoutlinecontentnode', this.getLessonRoute.bind(this));
 
-		this.addDefaultRoute('/activity');
+		this.addDefaultRoute('/lessons');
 	},
 
 
