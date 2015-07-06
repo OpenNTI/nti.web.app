@@ -6,7 +6,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Joine
 	cls: 'joined-event',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'}},
+		'{user:avatar}',
 		{ cls: 'meta', cn: [
 			{ cls: 'label', cn: [{tag: 'span', cls: 'name link', html: '{name}'},' joined NextThought!']},
 			{ cls: 'date', html: '{date}' }
@@ -20,6 +20,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Joine
 
 		UserRepository.getUser(me.username, function(u) {
 			var rd = me.renderData = Ext.apply(this.renderData || {},u.getData());
+			rd.user = u;
 			rd.name = u.getName();
 			rd.date = Ext.Date.format(u.get('CreatedTime'), 'F j, Y');
 			if (me.rendered) {

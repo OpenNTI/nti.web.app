@@ -31,7 +31,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 			cn: [
 				{ cls: 'path' },
 				{ cls: 'item', cn: [
-					{ cls: 'avatar link', style: { backgroundImage: 'url({avatarURL});'} },
+					'{user:avatar}',
 					{ cls: 'controls', cn: [
 						{ cls: 'favorite-spacer' },
 						{ cls: 'favorite' },
@@ -138,6 +138,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 
 		UserRepository.getUser(username, function(u) {
 			me.user = u;
+			rd.user = u;
 			rd.avatarURL = u.get('avatarURL');
 			rd.Creator = u.getName();
 			if (me.rendered) {

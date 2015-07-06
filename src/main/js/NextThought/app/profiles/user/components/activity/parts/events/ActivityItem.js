@@ -192,7 +192,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Activ
 			D = Ext.dom.Element.DISPLAY,
 			subject,
 			loaded = me.loaded,
-			onScreen = loaded || (me.el && me.el.first().isOnScreenRelativeTo(Ext.get('profile'), {bottom: 1000}));
+			onScreen = loaded || (me.el && me.el.first().isOnScreenRelativeTo(Ext.getBody(), {bottom: 1000}));
 
 		if (loaded || !onScreen) {
 			return;
@@ -264,7 +264,15 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Activ
 	},
 
 
-	loadContext: function(fin) {},
+	loadContext: function(fin) {
+		var context = NextThought.app.context.ContainerContext.create({
+			container: this.record.get('ContainerId'),
+			range: this.record.get('applicableRange'),
+			contextRecord: this.record
+		});
+
+		return context.load('list');
+	},
 
 
 	goToObject: function() {

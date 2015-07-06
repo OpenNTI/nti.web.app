@@ -6,7 +6,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Blogg
 	cls: 'blogged-event',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'}},
+		'{user:avatar}',
 		{ cls: 'meta', cn: [
 			{ cls: 'title', html: '{headline.title}' },
 			{ cls: 'counts', cn: [
@@ -34,6 +34,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Blogg
 
 		UserRepository.getUser(username, function(u) {
 			me.user = u;
+			rd.user = u;
 			rd.avatarURL = u.get('avatarURL');
 			rd.name = u.getName();
 			if (me.rendered) {

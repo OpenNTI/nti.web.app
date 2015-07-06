@@ -14,7 +14,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.PostR
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'reply profile-activity-reply-item', cn: [
-			{ cls: 'avatar', style: {backgroundImage: 'url({Creator:avatarURL})'}},
+			'{Creator:avatar}',
 			{ cls: 'meta', cn: [
 				{ cls: 'controls', cn: [
 					{ cls: 'favorite-spacer' },

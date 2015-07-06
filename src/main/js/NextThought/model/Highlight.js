@@ -27,13 +27,7 @@ Ext.define('NextThought.model.Highlight', {
 		console.error('does this branch (highlight and redaction) get called??');
 
 		if (cid) {
-			return LocationMeta.getMeta(cid)
-					.then(function(meta) {
-						return {
-							verb: 'Shared a ' + t,
-							message: Ext.String.ellipsis(' in &ldquo' + ((meta || {}).label || ''), 50, true) + '&rdquo;'
-						};
-					});
+			//TODO: figure out what needs to happen here
 		}
 
 		return Promise.resolve(null);
