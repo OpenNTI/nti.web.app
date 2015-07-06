@@ -152,7 +152,7 @@ Ext.define('NextThought.app.chat.components.Window', {
 
 			if (newOccupants.length > 1) {
 				me.setTitleInfo(users);
-				list.updateList(users);
+				// list.updateList(users);
 			} else {
 				console.log('Users who left the chat: ', whoLeft);
 				Ext.each(whoLeft, function(aUser) {
@@ -160,46 +160,6 @@ Ext.define('NextThought.app.chat.components.Window', {
 				});
 			}
 		});
-
-		/*Ext.each(newOccupants,function(u){
-				 var presence = Ext.getStore('PresenceInfo').getPresenceOf(u);
-
-				 if(presence && presence.isOnline() && !Ext.Array.contains(me.onlineOccupants,u)){
-				 me.onlineOccupants.push();
-				 }else{
-				 delete me.onlineOccupants[u];
-				 }
-				 });
-
-				 if(newOccupants && newOccupants.length === 1 && isMe(newOccupants[0])){
-				 this.down('chat-entry').disable();
-				 this.down('chat-log-view').addStatusNotification("You are the ONLY one left in the chat. Your messages will not be sent.");
-				 } else{
-				 //if no other occupants are online on disable the chat.
-
-				 if(me.onlineOccupants && me.onlineOccupants.length <= 1){
-				 this.down('chat-entry').disable();
-				 this.down('chat-log-view').addStatusNotification("You are the only one available in the chat. Your messages will not be send.");
-				 }else{
-				 // for empty chat, remove all notifications.
-				 if(Ext.isEmpty(this.query('chat-log-entry'))){
-				 Ext.each(this.query('chat-notification-entry'), function(el){ el.destroy(); });
-				 }
-				 this.down('chat-entry').enable();
-				 }
-				 }
-
-				 if(newOccupants.length > 1){
-				 UserRepository.getUser(roomInfo.get('Occupants'), function (users) {
-				 me.setTitleInfo(users);
-				 list.updateList(users);
-				 });
-				 } else{
-				 console.log('Users who left the chat: ', whoLeft);
-				 Ext.each(whoLeft, function(aUser){
-				 me.updateDisplayState(aUser, 'GONE', isGroupChat);
-				 });
-				 }*/
 	},
 
 	presenceChanged: function(username, value) {
