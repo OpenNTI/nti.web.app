@@ -116,7 +116,7 @@ Ext.define('NextThought.app.chat.StateStore', {
 
 		var rId = roomInfo && roomInfo.isModel ? roomInfo.getId() : roomInfo,
 			id = IdCache.getIdentifier(rId),
-			xOcc, w, allRooms;
+			xOcc, w, allRooms, me = this;
 
 		w = this.getWindow(id);
 
@@ -130,8 +130,14 @@ Ext.define('NextThought.app.chat.StateStore', {
 					return;
 				}
 
+				// If they have the same roomId then use that window. And make sure the cache is updated.
+				if (x.roomInfo && x.roomInfo.getId() === rId) {
+					w = x;
+					me.cacheChatWindow(w, x.roomInfo);
+				}
+
 				//Be defensive.
-				if (Ext.Array.union(xOcc, roomInfo.isModel && roomInfo.get('Occupants')).length === xOcc.length) {
+				if ( roomInfo.isModel && Ext.Array.union(xOcc, roomInfo.get('Occupants')).length === xOcc.length) {
 					console.log('found a different room with same occupants: ', xOcc);
 					x.roomInfoChanged(roomInfo);
 					w = x;
@@ -175,7 +181,13 @@ Ext.define('NextThought.app.chat.StateStore', {
 		return new Promise( function(fulfill, reject) {
 			Service.getObject(roomInfoId)
 				.then( function(obj) {
-					me.showChatWindow(obj);
+					if (isMe(obj.get('Creator'))) {
+						me.showChatWindow(obj);
+					}
+					else {
+						me.fireEvent('create-window', obj);
+					}
+
 					fulfill(obj);
 				})
 				.fail( function() {

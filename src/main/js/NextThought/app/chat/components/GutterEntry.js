@@ -53,6 +53,11 @@ Ext.define('NextThought.app.chat.components.GutterEntry', {
 	},
 
 
+	clearUnreadCount: function() {
+		this.updateBadgeCount(0);
+	},
+
+
 	handleWindowNotify: function(win, msg) {
 		if (!win || win.isVisible() || isMe(msg.Creator)) {
 			return;

@@ -41,6 +41,7 @@ Ext.define('NextThought.app.chat.Index', {
 
 		this.mon(this.ChatStore, {
 			'show-window': this.showChatWindow.bind(this),
+			'create-window': this.openChatWindow.bind(this),
 			'close-window': this.closeWindow.bind(this),
 			'show-whiteboard': this.showWhiteboard.bind(this),
 			'chat-notification-toast': this.handleNonContactNotification.bind(this)
@@ -76,8 +77,9 @@ Ext.define('NextThought.app.chat.Index', {
 
 
 	canShowChat: function (roomInfo) {
-		var creator = roomInfo && roomInfo.get('Creator');
-		if (isMe(creator) || this.GroupStore.isContact(creator) || this.ChatStore.isRoomIdAccepted(roomInfo.getId())) {
+		var creator = roomInfo && roomInfo.get('Creator'),
+			isGroupChat = roomInfo && roomInfo.isGroupChat();
+		if (isMe(creator) || !isGroupChat || this.ChatStore.isRoomIdAccepted(roomInfo.getId())) {
 			return true;
 		}
 
@@ -112,7 +114,7 @@ Ext.define('NextThought.app.chat.Index', {
 				me.ChatStore.setRoomIdStatusAccepted(roomInfo.getId());
 				w.accept(true);
 				me.ChatActions.startTrackingChatState(roomInfo.get('Creator'), roomInfo, w);
-				if (w && !w.isVisible()) {
+				if (isGroupChat) {
 					w.show();
 				}
 			})

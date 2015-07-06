@@ -126,20 +126,22 @@ Ext.define('NextThought.app.chat.Gutter', {
 	},
 
 
-	openChatWindow: function(user, entry, e) {
+	openChatWindow: function(user, entry) {
 		if (entry.associatedWindow) {
 			entry.associatedWindow.show();
 		}
 		else {
 			this.ChatActions.startChat(user);
 		}
+
+		entry.clearUnreadCount();
 	},
 
 
 	bindChatWindow: function(win) {
 		var roomInfo = win && win.roomInfo,
 			isGroupChat = roomInfo.isGroupChat(),
-			occupants = roomInfo && roomInfo.getOriginalOccupants(), t, i, entry;
+			occupants = roomInfo && roomInfo.get('Occupants'), t, i, entry;
 
 		if (!isGroupChat) {
 			for (i = 0; i < occupants.length; i++) {
@@ -165,6 +167,7 @@ Ext.define('NextThought.app.chat.Gutter', {
 		var entry = this.ROOM_ENTRY_MAP[roomId];
 
 		if (entry) {
+			entry.clearUnreadCount();
 			delete entry.associatedWindow;
 			delete this.ROOM_ENTRY_MAP[roomId];
 		}
@@ -187,14 +190,32 @@ Ext.define('NextThought.app.chat.Gutter', {
 
 	handleWindowNotify: function(win, msg) {
 		var roomInfo = win && win.roomInfo,
-			entry;
+			occupants = roomInfo && roomInfo.get('Occupants'),
+			entry, t, i, me = this;
 
 		entry = this.ROOM_ENTRY_MAP[roomInfo.getId()];
 		if (entry) {
 			entry.handleWindowNotify(win, msg);
 		}
 		else {
-			this.ChatStore.fireEvent('chat-notification-toast', win, msg);
+			if (!roomInfo.isGroupChat()) {
+				for (i = 0; i < occupants.length; i++) {
+					if(!isMe(occupants[i])) {
+						t = occupants[i];
+						break;
+					}
+				}
+			}
+
+			if (t) {
+				UserRepository.getUser(t)
+					.then(function (u) {
+						me.addContacts(null, [u]);
+						me.bindChatWindow(win);
+						wait()
+							.then(me.handleWindowNotify.bind(me, win, msg));
+					});
+			}
 		}
 	}
 });
