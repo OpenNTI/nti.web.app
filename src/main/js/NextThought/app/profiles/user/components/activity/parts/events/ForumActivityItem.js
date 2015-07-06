@@ -349,7 +349,7 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItemReply', {
 	renderTpl: Ext.DomHelper.markup({
 		cls: 'reply profile-activity-reply-item',
 		cn: [
-			{ cls: 'avatar', style: { backgroundImage: 'url({avatarURL});'} },
+			'{user:avatar}',
 			{ cls: 'meta', cn: [
 				{ cls: 'controls', cn: [
 					{ cls: 'favorite-spacer' },
@@ -406,6 +406,8 @@ Ext.define('NextThought.view.profiles.parts.ForumActivityItemReply', {
 
 		UserRepository.getUser(username, function(u) {
 			me.user = u;
+
+			rd.user = u;
 			rd.avatarURL = u.get('avatarURL');
 			rd.Creator = u.getName();
 			if (me.rendered) {

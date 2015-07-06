@@ -45,5 +45,10 @@ Ext.define('NextThought.model.RelatedWork', {
 		data.domSpec = DomUtils.asDomSpec.call(data);
 
 		return data;
+	},
+
+
+	getIcon: function() {
+		return this.get('icon');
 	}
 });

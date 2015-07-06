@@ -26,7 +26,8 @@ Ext.define('NextThought.model.PageInfo', {
 		{ name: 'sharingPreference', type: 'auto' },
 		{ name: 'dataFilterPreference', type: 'auto' },
 		//Placeholder for client-side generated page content :} *facepalm*
-		{ name: 'content', type: 'string', persist: false }
+		{ name: 'content', type: 'string', persist: false },
+		{ name: 'Title', type: 'string'}
 	],
 
 	isPageInfo: true,
@@ -41,7 +42,7 @@ Ext.define('NextThought.model.PageInfo', {
 
 
 	getTitle: function(defaultTitle) {
-		return ContentUtils.findTitle(this.getId(), defaultTitle);
+		return this.get('Title');
 	},
 
 

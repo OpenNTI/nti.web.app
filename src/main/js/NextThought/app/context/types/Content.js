@@ -9,7 +9,8 @@ Ext.define('NextThought.app.context.types.Content', {
 		'NextThought.app.slidedeck.slidevideo.SlideVideo',
 		'NextThought.app.slidedeck.slidevideo.OverlayedPanel',
 		'NextThought.app.context.components.cards.*',
-		'NextThought.app.context.components.Default'
+		'NextThought.app.context.components.Default',
+		'NextThought.app.context.components.list.Content'
 	],
 
 
@@ -27,6 +28,7 @@ Ext.define('NextThought.app.context.types.Content', {
 
 		this.container = config.container;
 		this.range = config.range;
+		this.record = config.contextRecord;
 		this.maxWidth = config.maxWidth || 574;
 	},
 
@@ -47,15 +49,19 @@ Ext.define('NextThought.app.context.types.Content', {
 
 
 			config = {
-					type: this.self.type,
-					snippet: cleanContext,
-					fullContext: cleanContext,
-					containerId: cid
-				};
+				type: this.self.type,
+				snippet: cleanContext,
+				fullContext: cleanContext,
+				containerId: cid,
+				record: this.record
+			};
 
 			if (contextKind === 'card') {
-				return Ext.apply(config, {xtype: 'context-content-card' });
+				return Ext.apply(config, {xtype: 'context-content-card'});
+			} else if (contextKind === 'list') {
+				return Ext.widget('context-content-list', config);
 			}
+
 			return Ext.widget('context-default', config);
 
 		} catch (e) {

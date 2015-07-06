@@ -192,6 +192,20 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
+	getTitle: function() {
+		var bundle = this.get('Bundle');
+
+		return bundle.getTitle();
+	},
+
+
+	getIcon: function() {
+		var bundle = this.get('Bundle');
+
+		return bundle.getIcon();
+	},
+
+
 	canGetToContent: function(ntiid) {
 		var me = this;
 

@@ -250,7 +250,7 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 
 				if (a) {
 					e.stopEvent();
-					NextThought.app.navigation.Actions.navigateToHref(a.href)
+					NextThought.app.navigation.Actions.navigateToHref(a.href);
 				}
 			}, this);
 		}

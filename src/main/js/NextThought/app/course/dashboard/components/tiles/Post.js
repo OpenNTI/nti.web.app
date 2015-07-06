@@ -249,13 +249,13 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 			me.on('destroy', 'destroy', cmp);
 		}
 
-		if(!show && this.contextEl) {
+		if (!show && this.contextEl) {
 			this.contextEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 			this.contextEl.hide();
 		}
 
 		if (!this.CACHE.height) {
-			this.CACHE.height  = this.height + (show ? 186 : 10);
+			this.CACHE.height = this.height + (show ? 186 : 10);
 		}
 	},
 

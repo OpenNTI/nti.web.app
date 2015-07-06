@@ -22,12 +22,13 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Activ
 
 
 	renderSelectors: {
-		avatar: '.avatar',
+		avatar: '.avatar .profile.avatar-pic',
 		liked: '.controls .like',
 		favorites: '.controls .favorite',
 		favoritesSpacer: '.controls .favorite-spacer',
 		locationEl: '.location',
 		contextEl: '.context',
+		context: '.context',
 		title: '.subject',
 		subjectEl: '.subject',
 		locationIcon: '.icon',
@@ -58,6 +59,15 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Activ
 
 	updateFromRecord: function() {
 		this.callParent(arguments);
+	},
+
+
+	beforeRender: function() {
+		this.callParent(arguments);
+
+		this.renderData = Ext.apply(this.renderData || {}, {
+			user: this.user
+		});
 	},
 
 
@@ -219,12 +229,13 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Activ
 			me.flagEl.addCls('last');
 		}
 
-		LocationMeta.getMeta(me.record.get('ContainerId'), me.setLocation, me);
 		if (me.root) {
 			me.contextEl.show();
 			me.contextEl.mask('Loading...');
 			me.loadContext()
-				.then(function() {
+				.then(function(context) {
+					me.setContext(context);
+
 					if (me.contextEl) {
 						me.contextEl.unmask();
 						me.contextEl.select('input').addCls('preview').set({readonly: true});
@@ -264,7 +275,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Activ
 	},
 
 
-	loadContext: function(fin) {
+	loadContext: function() {
 		var context = NextThought.app.context.ContainerContext.create({
 			container: this.record.get('ContainerId'),
 			range: this.record.get('applicableRange'),
@@ -348,18 +359,9 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Activ
 		{
 			cls: 'note profile-activity-item',
 			cn: [
-				{ cls: 'content-callout', onclick: 'void(0)', cn: [
-					{ cls: 'icon' },
-					{ cn: [
-						{ cls: 'location link'},
-						{ cls: 'context', cn: [
-							{tag: 'canvas'},
-							{cls: 'text'}
-						] }
-					]}
-				]},
+				{ cls: 'content-callout context', onclick: 'void(0)'},
 				{ cls: 'item', cn: [
-					{ cls: 'avatar' },
+					'{user:avatar}',
 					{ cls: 'controls', cn: [
 						{ cls: 'favorite-spacer' },
 						{ cls: 'favorite' },

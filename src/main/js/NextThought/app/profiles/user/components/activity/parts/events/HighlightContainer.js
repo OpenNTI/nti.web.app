@@ -84,22 +84,23 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Highl
 		Ext.Array.sort(this.items, byTime);
 
 		Ext.each(items, function(i) {
-			LocationMeta.getMeta(i.get('ContainerId'), function(meta) {
-				i.meta = meta;
-				count--;
+			//TODO: figure this out
+			// LocationMeta.getMeta(i.get('ContainerId'), function(meta) {
+			// 	i.meta = meta;
+			// 	count--;
 
-				var root = meta && meta.ContentNTIID,
-					page = meta && meta.NTIID;
+			// 	var root = meta && meta.ContentNTIID,
+			// 		page = meta && meta.NTIID;
 
-				root = (books[root] = books[root] || {});
-				page = (root[page] = root[page] || []);
-				page.push(i);
+			// 	root = (books[root] = books[root] || {});
+			// 	page = (root[page] = root[page] || []);
+			// 	page.push(i);
 
-				if (!count) {
-					me.setupBookRenderData(d, books)
-						.then(me.maybeFillIn.bind(me));
-				}
-			});
+			// 	if (!count) {
+			// 		me.setupBookRenderData(d, books)
+			// 			.then(me.maybeFillIn.bind(me));
+			// 	}
+			// });
 		});
 
 		return d;

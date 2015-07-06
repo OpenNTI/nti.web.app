@@ -34,7 +34,7 @@ Ext.define('NextThought.app.context.components.cards.Content', {
 	 * Override this if you want to set content after the component's been rendered.
 	 */
 	setContent: function() {
-		if(this.textEl) {
+		if (this.textEl) {
 			this.textEl.appendChild(this.snippet);
 		}
 	}

@@ -23,7 +23,7 @@ Ext.define('NextThought.app.context.ContainerContext', {
 		var url = Service.getObjectURL(this.container);
 		if (!this.load_promise) {
 			this.load_promise = Service.request({
-				url: url ,
+				url: url,
 				headers: {
 					Accept: '*/*'
 				}
@@ -77,8 +77,8 @@ Ext.define('NextThought.app.context.ContainerContext', {
 	},
 
 
-	__handle403Response: function(response){
-		var o =  Ext.decode(response.responseText, true),
+	__handle403Response: function(response) {
+		var o = Ext.decode(response.responseText, true),
 			status = response.status,
 			catalogEntry = o && ParseUtils.parseItems(o)[0], cmp;
 

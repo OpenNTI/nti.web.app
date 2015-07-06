@@ -129,7 +129,6 @@ Ext.define('NextThought.app.course.overview.components.View', {
 					});
 				}
 
-
 				if (!record) {
 					console.error('No valid lesson to show');
 					return;

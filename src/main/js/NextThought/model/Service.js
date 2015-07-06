@@ -461,39 +461,20 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
-	getPathToContainerLink: function() {
-		if (this.__pathToContainerUrl) {
-			return this.__pathToContainerUrl;
-		}
-
-		var collection = this.getCollection('LibraryPath', 'Global');
-
-		this.__pathToContainerUrl = collection && collection.href;
-
-		return this.__pathToContainerUrl;
-	},
-
-
-	getPathToObject: function(id) {
-		var link = this.getPathToContainerLink(),
+	getPathToObjectLink: function(id) {
+		var collection = this.getCollection('LibraryPath', 'Global'),
+			url = collection && collection.href,
 			params = {
 				ObjectId: id
 			};
-			
-		if(!link){
-		    return Promise.reject('No path lookup link');
+
+		if (!url) {
+			return '';
 		}
 
-		link += '?' + Ext.Object.toQueryString(params);
+		url += '?' + Ext.Object.toQueryString(params);
 
-		return Service.request(link)
-			.then(function(response) {
-				response = JSON.parse(response);
-
-				var items = ParseUtils.parseItems(response[0]);
-
-				return items;
-			});
+		return url;
 	},
 
 

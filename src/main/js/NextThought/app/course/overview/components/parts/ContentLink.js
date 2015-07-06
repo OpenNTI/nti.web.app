@@ -20,6 +20,7 @@ Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
 		var n = config.node || {getAttribute: function(a) { return config[a];} },
 			i = config.locationInfo,
 			href = n.getAttribute('href'),
+			icon = n.getAttribute('icon'),
 			ntiid = n.getAttribute('ntiid');
 
 		if (Globals.ROOT_URL_PATTERN.test(href)) {
@@ -28,11 +29,17 @@ Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
 			href = getURL(i.root + href);
 		}
 
+		if (Globals.ROOT_URL_PATTERN.test(icon)) {
+			icon = getURL(icon);
+		} else {
+			icon = getURL(i.root + icon);
+		}
+
 		config.data = {
 			'attribute-data-href': href, href: href,
 			creator: n.getAttribute('creator'),
 			description: Ext.String.ellipsis(n.getAttribute('desc'), 200, true),
-			thumbnail: getURL(i.root + n.getAttribute('icon')),
+			thumbnail: icon,
 			ntiid: ntiid,
 			title: n.getAttribute('label'),
 			notTarget: !Globals.shouldOpenInApp(ntiid, href),

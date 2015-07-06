@@ -63,13 +63,13 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 						CACHE: {
 							context: Promise.reject()
 						}
-					}
+					};
 				});
 		}
 	},
 
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 		this.WindowActions = NextThought.app.windows.Actions.create();
 	},

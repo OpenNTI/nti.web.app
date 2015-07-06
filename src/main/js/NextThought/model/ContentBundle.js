@@ -133,6 +133,16 @@ Ext.define('NextThought.model.ContentBundle', {
 	},
 
 
+	getTitle: function() {
+		return this.get('Title');
+	},
+
+
+	getIcon: function() {
+		return this.get('icon');
+	},
+
+
 	getContentPackages: function() {
 		return this.get('ContentPackages');
 	},

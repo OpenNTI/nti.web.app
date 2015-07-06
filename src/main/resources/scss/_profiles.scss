@@ -943,6 +943,8 @@
 		}
 
 		.content-callout {
+			min-height: 65px;
+
 			&:hover{
 				&::after {
 					content: '';
@@ -1000,6 +1002,11 @@
 				color: $tertiary-grey !important;
 				overflow: hidden;
 				@include ellipse;
+
+				span:not(:first-of-type)::before {
+					content: '/';
+					margin: 0 0.5em;
+				}
 			}
 
 			.context{
