@@ -90,12 +90,12 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Education', {
 			endYear = entry.querySelector('[data-field=endYear]'),
 			description = entry.querySelector('[data-field=description]');
 
-		school = school && school.innerText;
-		degree = degree && degree.innerText;
-		startYear = startYear && startYear.innerText;
-		endYear = endYear && endYear.innerText;
-		description = description && description.innerText;
-		
+		school = school && (school.innerText || school.textContent);
+		degree = degree && (degree.innerText || degree.textContent);
+		startYear = startYear && (startYear.innerText || startYear.textContent);
+		endYear = endYear && (endYear.innerText || endYear.textContent);
+		description = description && (description.innerText || description.textContent);
+
 		function normalizeYear(year){
 		    return year ? parseInt(year, 10) : null;
 		}

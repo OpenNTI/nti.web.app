@@ -312,7 +312,7 @@
 			}
 		}
 
-		&.fixed {			
+		&.fixed {
 			height: 40px;
 			background-color: inherit;
 
@@ -323,7 +323,7 @@
 				height: 40px;
 				z-index: 11;
 
-				&::after {			
+				&::after {
 					content: '';
 					position: absolute;
 					bottom: 0px;
@@ -1848,8 +1848,17 @@
 }
 
 .profile-about {
-	&:not(.editing) .edit-only {
-		display: none !important;
+	&:not(.editing) {
+		.field.end:not(:empty) {
+			&::before {
+				content: '\2013';
+				margin: 0 0.5em;
+			}
+		}
+
+		.edit-only {
+			display: none !important;
+		}
 	}
 
 	.left {
@@ -2093,14 +2102,6 @@
 			}
 		}
 
-
-		.end:not(:empty) {
-			&::before {
-				content: '\2013';
-				margin: 0 0.5em;
-			}
-		}
-
 		.description {
 			margin-top: 0.5em;
 			font-style: italic;
@@ -2140,11 +2141,6 @@
 
 			.degree::after,
 			.field.title::after {
-				display: none;
-			}
-
-
-			.end::before {
 				display: none;
 			}
 		}

@@ -307,7 +307,7 @@ Ext.define('NextThought.app.profiles.user.components.about.Index', {
 
 	showAbout: function() {
 		this.setTitle('About');
-
+		this.removeErrors();
 		delete this.successfulEdit;
 
 		this.profileParts.forEach(function(part) {

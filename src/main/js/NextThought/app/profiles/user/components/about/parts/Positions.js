@@ -89,12 +89,12 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Positions', {
 			endYear = entry.querySelector('[data-field=endYear]'),
 			description = entry.querySelector('[data-field=description]');
 
-		companyName = companyName && companyName.innerText;
-		title = title && title.innerText;
-		startYear = startYear && startYear.innerText;
-		endYear = endYear && endYear.innerText;
-		description = description && description.innerText;
-		
+		companyName = companyName && (companyName.innerText || companyName.textContent);
+		title = title && (title.innerText || title.textContent);
+		startYear = startYear && (startYear.innerText || startYear.textContent);
+		endYear = endYear && (endYear.innerText || endYear.textContent);
+		description = description && (description.innerText || description.textContent);
+
 		function normalizeYear(year){
 		    return year ? parseInt(year, 10) : null;
 		}

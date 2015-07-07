@@ -78,7 +78,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Interests', {
 
 		if (!editor) { return; }
 
-		text = editor.innerText;
+		text = (editor.innerText || editor.textContent);
 
 		this.setUneditable();
 
@@ -148,7 +148,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Interests', {
 		var label = entry.querySelector('.label');
 
 		//if we don't have a label we are the editor
-		label = (label && label.innerText) || entry.innerText;
+		label = (label && (label.innerText || label.textContent)) || (entry.innerText || entry.textContent);
 
 		return label;
 	},
