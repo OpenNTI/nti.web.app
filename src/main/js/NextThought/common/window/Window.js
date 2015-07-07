@@ -116,14 +116,21 @@ Ext.define('NextThought.common.window.Window', {
 		// The overlay flag will allow us to opt in or out.
 		if(this.isOverlay) {
 			this.on({
-				'show': this.WindowStore.addOpenCls.bind(this.WindowStore),
+				'show': function(){
+				    me._windowStoreNotified = true;
+				    windowStore.addOpenCls();  
+				},
 				'close': function() {
 					closeCalled = true;
-					windowStore.removeOpenCls();
+					if(me._windowStoreNotified){
+					   windowStore.removeOpenCls();
+					   delete me._windowStoreNotified;
+					}
 				},
 				'destroy': function() {
-					if (!closeCalled) {
+					if (!closeCalled && me._windowStoreNotified) {
 						windowStore.removeOpenCls();
+						delete me._windowStoreNotified;
 					}
 				}
 			});
