@@ -760,16 +760,23 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 	},
 
 
-	setContext: function(context) {
+	setContext: function(contextCmp) {
 		if (!this.rendered) {
 			this.on('afterrender', Ext.bind(this.setContext, this, arguments), this, {single: true});
 			return;
 		}
-
-		this.context.setHTML('');
-
-		if (!Ext.isEmpty(context)) {
-			context.render(this.context);
+        
+        this.context.setHTML('');
+        
+        
+		if (!Ext.isEmpty(contextCmp)) {
+		    //We have seen a case where we try and render a component twice.  That is a no no and causes
+            //terrible crashes
+            if(contextCmp.rendered){
+                console.error('Attempting to rerender a context cmp');
+                return;
+            }
+		    contextCmp.render(this.context);
 
 			if (Ext.isGecko || Ext.isIE9) {
 				this.resizeMathJax(this.context);
