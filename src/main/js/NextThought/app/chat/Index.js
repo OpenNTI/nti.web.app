@@ -92,6 +92,7 @@ Ext.define('NextThought.app.chat.Index', {
 
 		if (!w) {
 			w =  Ext.widget({xtype: 'chat-window', roomInfo: roomInfo});
+			w.on('beforeshow', this.beforeChatWindowShow.bind(this, w));
 			this.ChatStore.cacheChatWindow(w, roomInfo);
 		}
 		return w;
@@ -193,6 +194,18 @@ Ext.define('NextThought.app.chat.Index', {
 	},
 
 	closeWindow: function() {},
+
+
+	beforeChatWindowShow: function(winToShow) {
+		var wins = this.ChatStore.getAllChatWindows() || [];
+
+		// Hide all other open chat windows
+		wins.forEach(function(win) {
+			if ((win !== winToShow) && win.isVisible()) {
+				win.minimize();
+			}
+		});
+	},
 
 
 	createWhiteBoard: function(data, ownerCmp, chatStatusEvent) {

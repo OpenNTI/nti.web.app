@@ -80,6 +80,10 @@ Ext.define('NextThought.app.chat.Gutter', {
 	removeContact: function(store, user) {
 		var entry = this.findEntryForUser(user.getId());
 		if (entry) {
+			if(entry.associatedWindow) {
+				entry.associatedWindow.hide();
+			}
+
 			this.remove(entry);
 		}
 	},
@@ -141,7 +145,7 @@ Ext.define('NextThought.app.chat.Gutter', {
 	bindChatWindow: function(win) {
 		var roomInfo = win && win.roomInfo,
 			isGroupChat = roomInfo.isGroupChat(),
-			occupants = roomInfo && roomInfo.get('Occupants'), t, i, entry;
+			occupants = roomInfo && roomInfo.get('Occupants'), t, i, entry, me = this;
 
 		if (!isGroupChat) {
 			for (i = 0; i < occupants.length; i++) {
@@ -157,8 +161,23 @@ Ext.define('NextThought.app.chat.Gutter', {
 				if (entry) {
 					this.ROOM_ENTRY_MAP[roomInfo.getId()] = entry;
 					entry.associatedWindow = win;
+					win.onceRendered
+						.then(me.realignChatWindow.bind(me, win, entry));
 				}
 			}
+		}
+	},
+
+
+	realignChatWindow: function(win, entry) {
+		if (!win || !entry) { return; }
+
+		var entryEl = entry.el,
+			box = entryEl.dom && entryEl.dom.getBoundingClientRect(),
+			top = box && box.top;
+
+		if (top && top > 0) {
+			win.el.setStyle('top', top + 'px');
 		}
 	},
 

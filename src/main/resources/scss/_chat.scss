@@ -3,10 +3,8 @@
 .chat-window {
 	@extend .nti-window;
 
-	bottom: 0 !important;
-	right: 90px !important;
+	right: 80px !important;
 	left: auto !important;
-	top: auto !important;
 
 	.x-window-body-chat-window {
 	    display: -webkit-box;
