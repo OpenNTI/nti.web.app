@@ -66,12 +66,6 @@ Ext.define('NextThought.app.chat.Index', {
 		if (w && this.canShowChat(roomInfo)) {
 			w.notify();
 			w.show();
-			wait(500)
-				.then(function() {
-					if(w.down('chat-entry')) {
-						w.down('chat-entry').focus();
-					}
-				});
 		}
 	},
 
@@ -92,7 +86,17 @@ Ext.define('NextThought.app.chat.Index', {
 
 		if (!w) {
 			w =  Ext.widget({xtype: 'chat-window', roomInfo: roomInfo});
-			w.on('beforeshow', this.beforeChatWindowShow.bind(this, w));
+			w.on({
+				'beforeshow': this.beforeChatWindowShow.bind(this, w),
+				'show': function() {
+					wait(500)
+						.then(function() {
+							if(w.down('chat-entry')) {
+								w.down('chat-entry').focus();
+							}
+						});
+				}
+			});
 			this.ChatStore.cacheChatWindow(w, roomInfo);
 		}
 		return w;
