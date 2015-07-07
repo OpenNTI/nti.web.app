@@ -87,7 +87,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Positions', {
 			title = entry.querySelector('[data-field=title]'),
 			startYear = entry.querySelector('[data-field=startYear]'),
 			endYear = entry.querySelector('[data-field=endYear]'),
-			description = entry.querySelector('[data-field=description');
+			description = entry.querySelector('[data-field=description]');
 
 		companyName = companyName && companyName.innerText;
 		title = title && title.innerText;

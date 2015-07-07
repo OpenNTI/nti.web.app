@@ -88,7 +88,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Education', {
 			degree = entry.querySelector('[data-field=degree]'),
 			startYear = entry.querySelector('[data-field=startYear]'),
 			endYear = entry.querySelector('[data-field=endYear]'),
-			description = entry.querySelector('[data-field=description');
+			description = entry.querySelector('[data-field=description]');
 
 		school = school && school.innerText;
 		degree = degree && degree.innerText;
