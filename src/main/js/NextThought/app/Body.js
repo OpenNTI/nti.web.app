@@ -75,8 +75,8 @@ Ext.define('NextThought.app.Body', {
 	},
 
 
-	getCmp: function(xtype) {
-		var cmp = this.down(xtype);
+	getCmp: function(xtype, cmpQuery) {
+		var cmp = this.down(cmpQuery || xtype);
 
 		if (!cmp) {
 			cmp = this.add(Ext.widget(xtype));
@@ -88,9 +88,9 @@ Ext.define('NextThought.app.Body', {
 	},
 
 
-	setActiveCmp: function(xtype) {
+	setActiveCmp: function(xtype, cmpQuery) {
 		var old = this.getLayout().getActiveItem();
-			cmp = this.getCmp(xtype);
+			cmp = this.getCmp(xtype, cmpQuery);
 
 		this.getLayout().setActiveItem(cmp);
 
@@ -211,7 +211,7 @@ Ext.define('NextThought.app.Body', {
 		   
 	setGroupActive: function(route, subRoute) {
 		var me = this,
-		   userView = me.setActiveCmp('profile-group'),
+		   userView = me.setActiveCmp('profile-group', 'profile-group(true)'),
 		   id = route.params.id,
 		   user = route.precache.user;
 		   
@@ -226,7 +226,7 @@ Ext.define('NextThought.app.Body', {
 
 	setUserActive: function(route, subRoute) {
 		var me = this,
-			userView = me.setActiveCmp('profile-user'),
+			userView = me.setActiveCmp('profile-user', 'profile-user(true)'),
 			id = route.params.id,
 			user = route.precache.user;
 
