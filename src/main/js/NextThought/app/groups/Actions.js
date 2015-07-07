@@ -31,9 +31,9 @@ Ext.define('NextThought.app.groups.Actions', {
 
 		return new Promise(function(fulfill, reject) {
 			store.on({
-				load: function(listStore, records) {
-					me.__friendsListsLoaded(listStore, records);
-					fulfill();	
+				load: function(listStore, records, success) {
+					me.__friendsListsLoaded(listStore, records, success);
+					fulfill();
 				}
 			});
 
