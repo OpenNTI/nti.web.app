@@ -91,7 +91,9 @@ Ext.define('NextThought.app.windows.Index', {
 		this.WindowActions.closeWindow();
 
 		if (afterClose) {
-			afterClose.call();
+			//give close a chance to finish before calling afterClose
+			wait()
+				.then(afterClose);
 		}
 	}
 });

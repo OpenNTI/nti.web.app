@@ -29,6 +29,7 @@ Ext.define('NextThought.app.course.info.Index', {
 		me.on('activate', this.onActivate.bind(me));
 
 		me.WindowActions = NextThought.app.windows.Actions.create();
+		me.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
 		me.mon(me.navigation,
 			{
 				'select-route': me.changeRoute.bind(me),
@@ -118,6 +119,15 @@ Ext.define('NextThought.app.course.info.Index', {
 	},
 
 	showEnrollment: function(catalogEntry) {
-		this.WindowActions.pushWindow(catalogEntry);
+		this.WindowActions.pushWindow(catalogEntry,null,null,{afterClose: this.onWindowClose.bind(this, catalogEntry)});
+	},
+
+	onWindowClose: function(catalogEntry){
+		var catalogEntryID = catalogEntry.getId();
+
+		if(catalogEntryID && !this.CourseStore.findEnrollmentForCourse(catalogEntryID)){
+			wait()
+				.then(this.pushRootRoute.bind(this, 'Library', '/library'));
+		}
 	}
 });
