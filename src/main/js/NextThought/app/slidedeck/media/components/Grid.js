@@ -84,7 +84,7 @@ Ext.define('NextThought.app.slidedeck.media.components.Grid', {
 					cmp.fireEvent('hide-grid');
 					return;
 				}
-
+				cmp.fireEvent('toggl-grid');
 				this.fromClick = true;
 			},
 			beforeselect: function(s, r) {

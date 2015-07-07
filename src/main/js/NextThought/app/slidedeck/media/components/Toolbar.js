@@ -119,6 +119,14 @@ Ext.define('NextThought.app.slidedeck.media.components.Toolbar', {
 	},
 
 
+	toggleGridPicker: function(){
+		var el = this.gridEl,
+			cls = 'active';
+
+		el.toggleCls(cls)
+	},
+
+
 	showVideoPlayerPicker: function() {
 		console.log('clicked on show the video player picker..');
 		this.createViewPlayerPicker();

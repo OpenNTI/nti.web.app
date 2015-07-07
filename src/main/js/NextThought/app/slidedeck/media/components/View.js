@@ -133,6 +133,7 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 
 		this.mon(this.gridView, {
 			'hide-grid': {fn: 'showGridPicker', scope: this.toolbar},
+			'toggl-grid': {fn: 'toggleGridPicker', scope: this.toolbar},
 			'store-set': 'listStoreSet'
 		});
 	},
