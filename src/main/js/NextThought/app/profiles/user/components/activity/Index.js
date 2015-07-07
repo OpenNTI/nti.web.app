@@ -31,8 +31,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Index', {
 		this.UserDataActions.initPageStores(this);
 		this.UserDataActions.setupPageStoreDelegates(this);
 
-		this.streamCmp = this.down('profile-user-activity-stream');
-		this.sidebarCmp = this.down('profile-user-activity-sidebar');
+		this.initChildComponentRefs();
 
 		this.streamCmp.navigateToObject = this.navigateToActivityItem.bind(this);
 
@@ -44,7 +43,11 @@ Ext.define('NextThought.app.profiles.user.components.activity.Index', {
 
 		this.addDefaultRoute('/');
 	},
-
+		   
+	initChildComponentRefs: function(){
+		this.streamCmp = this.down('profile-user-activity-stream');
+		this.sidebarCmp = this.down('profile-user-activity-sidebar');
+	},
 
 	userChanged: function(user, isMe) {
 
