@@ -88,6 +88,11 @@ Ext.define('NextThought.model.courses.navigation.CourseOutlineNode', {
 	},
 
 
+	getTitle: function() {
+		return this.get('label');
+	},
+
+
 	listenForFieldChange: function(field, fn, scope, single) {
 		var monitor;
 

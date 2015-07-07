@@ -22,10 +22,7 @@ Ext.define('NextThought.app.context.ContainerContext', {
 	load: function(type) {
 		var url = Service.getObjectURL(this.container);
 		return Service.request({
-				url: url,
-				headers: {
-					Accept: '*/*'
-				}
+				url: url
 			})
 				.then(this.__parseResponse.bind(this))
 				.then(this.__parseContext.bind(this, type))
@@ -60,10 +57,12 @@ Ext.define('NextThought.app.context.ContainerContext', {
 			handler = typesPath[keys[i]];
 			if (handler.canHandle && handler.canHandle(obj)) {
 				break;
+			} else {
+				handler = null;
 			}
 		}
-		
-		if(this.contextCmp){
+
+		if (this.contextCmp) {
 		    this.contextCmp.destroy();
 		    delete this.contextCmp;
 		}

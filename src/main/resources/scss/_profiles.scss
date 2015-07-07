@@ -1034,9 +1034,17 @@
 				}
 
 				&.video-context{
-					height: 186px;
+					height: 130px;
+
 					& > .text{
 						height: 170px;
+
+						img {max-width: 200px !important; float: left; }
+
+						.video-title {
+							display: inline-block;
+							margin-left: 10px;
+						}
 					}
 				}
 

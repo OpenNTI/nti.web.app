@@ -6,7 +6,8 @@ Ext.define('NextThought.app.context.types.Video', {
 		'NextThought.app.slidedeck.transcript.AnchorResolver',
 		'NextThought.app.context.components.Default',
 		'NextThought.app.context.components.VideoContext',
-		'NextThought.app.context.components.cards.*'
+		'NextThought.app.context.components.cards.*',
+		'NextThought.app.context.components.list.Video'
 	],
 
 	videoPlayerTpl: new Ext.XTemplate(Ext.DomHelper.markup([
@@ -28,7 +29,7 @@ Ext.define('NextThought.app.context.types.Video', {
 		}
 	},
 
-	constructor: function(config){
+	constructor: function(config) {
 		this.callParent(arguments);
 		Ext.applyIf(this, config || {});
 		this.MediaActions = NextThought.app.slidedeck.media.Actions.create();
@@ -59,7 +60,7 @@ Ext.define('NextThought.app.context.types.Video', {
 	__getBasePath: function(obj) {
 		var me = this,
 			id = this.contextRecord ? this.contextRecord.getId() : obj.ntiid;
-		return new Promise( function (fulfill, reject) {
+		return new Promise(function(fulfill, reject) {
 			if (me.course && me.course.getContentRoots) {
 				fulfill(me.course.getContentRoots()[0]);
 			}
@@ -68,12 +69,12 @@ Ext.define('NextThought.app.context.types.Video', {
 					.then(function(path) {
 						var course = path[0], p;
 
-						if(course) {
+						if (course) {
 							p = course.getContentRoots()[0];
 						}
 						fulfill(p);
 					})
-					.fail (reject);
+					.fail(reject);
 			}
 		});
 	},
@@ -82,7 +83,7 @@ Ext.define('NextThought.app.context.types.Video', {
 	/**
 	 * Parse a video object and build the context component
 	 * @param  {[Object]} obj [video object]
-	 * 
+	 *
 	 * @return {[Promise]}     [promise that will resolve with an Ext.Component]
 	 */
 	parse: function(obj, kind) {
@@ -91,15 +92,15 @@ Ext.define('NextThought.app.context.types.Video', {
 			context, cmp, me = this, store, t;
 
 		return this.__getBasePath(obj)
-				.then( function(basePath) {
+				.then(function(basePath) {
 					t = NextThought.model.transcript.TranscriptItem.fromVideo(video, basePath);
 					return Promise.resolve(t);
 				})
-				.fail( function() {
+				.fail(function() {
 					t = NextThought.model.transcript.TranscriptItem.fromVideo(video);
 					return Promise.resolve(t);
 				})
-				.then( function(transcript) {
+				.then(function(transcript) {
 					if (kind === 'card') {
 						cmp = {
 							xtype: 'context-video-card',
@@ -108,6 +109,15 @@ Ext.define('NextThought.app.context.types.Video', {
 							transcript: transcript
 						};
 						return cmp;
+					}
+
+					if (kind === 'list') {
+						return Ext.widget('context-video-list', {
+							type: me.self.type,
+							video: video,
+							transcript: transcript,
+							record: me.contextRecord
+						});
 					}
 
 					return me.MediaActions.loadTranscript(transcript)
