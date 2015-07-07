@@ -249,6 +249,14 @@
 	}
 }
 
+.group-header{
+	.meta{
+		.username::before{
+			display: none;
+		}
+	}
+}
+
 #view > .profile-tabs {
 	border-top-color: white;
 	background: white;
