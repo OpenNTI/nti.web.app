@@ -123,7 +123,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.Stream', {
 				xtype: 'profile-activity-highlight-container',
 				date: getDate(rec),
 				user: user,
-				items: [rec]
+				items: [rec],
+				navigateToObject: me.navigateToObject.bind(me)
 			};
 			cmps.push(lastHighlightContainer);
 		}
@@ -157,7 +158,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Stream', {
 				return;
 			}
 
-			cmps.push({record: i, root: true, user: user, xtype: n, navigateToObject: me.navigateToObject.bind(this)});
+			cmps.push({record: i, root: true, user: user, xtype: n, navigateToObject: me.navigateToObject.bind(me)});
 		});
 
 		return cmps;
