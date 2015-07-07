@@ -7,7 +7,7 @@ Ext.define('NextThought.app.profiles.group.components.membership.parts.Users', {
 
 	entryTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls: 'entry', 'data-route': '{route}', cn: [
-			'{group:avatar}',
+			'{member:avatar}',
 			{cls: 'name', html: '{name}'}
 		]
 	})),
@@ -17,25 +17,21 @@ Ext.define('NextThought.app.profiles.group.components.membership.parts.Users', {
 		var me = this;
 
 		me.removeAll();
-		me.showEmptyText('This group has no members');
-		return new Promise.resolve('no members');
-//		user.getGroupMembership()
-//			.then(function(groups) {
-//				if (groups.length) {
-//					groups.map(function(group) {
-//						return {
-//							group: group,
-//							name: group.getName(),
-//							route: ParseUtils.encodeForURI(group.getId())
-//						};
-//					})
-//					.forEach(me.addEntry.bind(me));
-//				} else if (isMe) {
-//					//TODO: change this text
-//					me.showEmptyText('You have no public groups.');
-//				} else {
-//					me.showEmptyText('This user has no public groups.');
-//				}
-//			});
+		
+		return UserRepository.getUser(user.get('friends'))
+			.then(function(members) {
+				if (members.length) {
+					members.map(function(member) {
+						return {
+							member: member,
+							name: member.getName(),
+							route: ParseUtils.encodeForURI(member.getId())
+						};
+					})
+					.forEach(me.addEntry.bind(me));
+				} else {
+					me.showEmptyText('This group has no members');
+				}
+			});
 	}
 });

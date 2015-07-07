@@ -84,19 +84,23 @@ Ext.define('NextThought.app.profiles.user.Index', {
 			me.isMe = isMe(me.activeEntity);
 			me.getUser = Promise.resolve(user);
 		} else {
-			me.getUser = UserRepository.getUser(id)
-				.then(function(user) {
-					me.activeEntity = user;
-
-					me.isMe = isMe(user);
-
-					return user;
-				});
+			me.getUser = this.resolveEntity(id, user);
 		}
 
 		return me.getUser;
 	},
-
+		   
+	resolveEntity: function(id, entity){
+		var me = this;
+		return UserRepository.getUser(id)
+		   .then(function(user) {
+					me.activeEntity = user;
+				 
+					me.isMe = isMe(user);
+				 
+					return user;
+			});
+	},
 
 	getRouteTitle: function() {
 		return this.activeEntity.getName();
