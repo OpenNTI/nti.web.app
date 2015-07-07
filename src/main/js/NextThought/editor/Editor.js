@@ -350,7 +350,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	setupEditor: function() {
 		var me = this,
 			el = me.el,
-			scrollParentEl = null,//me.el.parent(), // -- JSG: This was for V1, in V2 the note window doesn't scroll while its open.
+			scrollParentEl = Ext.getBody(),
 			Ce = Ext.CompositeElement,
 			tabTracker = new NextThought.util.TabIndexTracker();
 

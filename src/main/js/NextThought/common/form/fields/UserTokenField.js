@@ -103,6 +103,11 @@ Ext.define('NextThought.common.form.fields.UserTokenField', {
 		this.mon(this.inputEl, 'focus', 'onTargetOver', this.tip);
 
 		this.setupKeyMap();
+		this.windowScrollHandler = Ext.bind(function(){
+		    this.tip.hide();
+		}, this);
+		
+		window.addEventListener('scroll', this.windowScrollHandler);
 
 		if (spEl) {
 			this.mon(spEl, 'scroll', 'hide', this.tip);
@@ -445,8 +450,8 @@ Ext.define('NextThought.common.form.fields.UserTokenField', {
 			above = false,
 			align = 't-b',
 			picker = me.getPicker(),
-			spaceAbove = me.inputEl.getY(),
-			spaceBelow = Ext.Element.getViewHeight() - (me.getY() + me.getHeight()),
+			spaceAbove = me.inputEl.getY() - scrollOffset,
+			spaceBelow = Ext.Element.getViewHeight() - (me.getY() - scrollOffset + me.getHeight()),
 			pickerScrollHeight = picker.getEl().first().dom.scrollHeight,
 			pickerHeight = picker.getHeight(),
 			firstNode = picker.getNode(0),
@@ -471,7 +476,7 @@ Ext.define('NextThought.common.form.fields.UserTokenField', {
 		adjHeight(above ? spaceAbove : spaceBelow);
 
 		x = picker.getAlignToXY(this.el, 'l-l')[0] - cordinateRootX;
-		y = picker.getAlignToXY(this.inputEl, align, [0, padding])[1] - cordinateRootY;
+		y = picker.getAlignToXY(this.inputEl, align, [0, padding])[1] - cordinateRootY - scrollOffset;
 
 		if (pickerScrollHeight === 0) {
 			if (!(Ext.is.iOS && document.activeElement !== this.inputEl.dom)) {
@@ -495,7 +500,7 @@ Ext.define('NextThought.common.form.fields.UserTokenField', {
 			}
 		}
 		else {
-			picker.showAt(x, y + scrollOffset);
+			picker.showAt(x, y);
 		}
 	},
 
@@ -565,6 +570,7 @@ Ext.define('NextThought.common.form.fields.UserTokenField', {
 
 	destroy: function() {
 		this.callParent(arguments);
+		window.removeEventListener('scroll', this.windowScrollHandler);
 		//console.warn('token field destroyed.');
 	}
 });

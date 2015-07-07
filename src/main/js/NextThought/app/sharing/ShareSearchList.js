@@ -7,8 +7,6 @@ Ext.define('NextThought.app.sharing.ShareSearchList', {
 	valueField: 'Username',
 	floating: true,
 	singleSelect: true,
-
-	constrainTo: Ext.getBody(),
 	loadingHeight: 40,
 
 	plain: true,
