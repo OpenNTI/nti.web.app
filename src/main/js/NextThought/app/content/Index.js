@@ -10,7 +10,8 @@ Ext.define('NextThought.app.content.Index', {
 	requires: [
 		'NextThought.app.content.components.Navigation',
 		'NextThought.app.navigation.Actions',
-		'NextThought.app.windows.StateStore'
+		'NextThought.app.windows.StateStore',
+		'NextThought.model.Video'
 	],
 
 

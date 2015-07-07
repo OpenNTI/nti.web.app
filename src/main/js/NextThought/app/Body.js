@@ -208,15 +208,15 @@ Ext.define('NextThought.app.Body', {
 				me.replaceRoute('', '/library');
 			});
 	},
-		   
+
 	setGroupActive: function(route, subRoute) {
 		var me = this,
 		   userView = me.setActiveCmp('profile-group', 'profile-group(true)'),
 		   id = route.params.id,
 		   user = route.precache.user;
-		   
+
 		id = NextThought.model.User.getIdFromURIPart(id);
-		   
+
 		return userView.setActiveEntity(id, user)
 		   .then(userView.handleRoute.bind(userView, subRoute, route.precache))
 		   .fail(function() {

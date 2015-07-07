@@ -46,7 +46,11 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 		this.addChildRouter(this.lessons);
 
-		this.on('activate', this.onActivate.bind(this));
+		this.on({
+			'activate': this.onActivate.bind(this),
+			'deactivate': this.onDeactivate.bind(this)
+		});
+
 		this.LibraryActions = NextThought.app.library.Actions.create();
 	},
 
@@ -63,6 +67,14 @@ Ext.define('NextThought.app.course.overview.Index', {
 		this.setTitle(this.title);
 		if (item.onActivate) {
 			item.onActivate();
+		}
+	},
+
+
+	onDeactivate: function() {
+		if (this.activeMediaWindow) {
+			Ext.destroy(this.activeMediaWindow);
+			delete this.activeMediaWindow;
 		}
 	},
 
@@ -324,6 +336,9 @@ Ext.define('NextThought.app.course.overview.Index', {
 			route.path = 'content/' + Globals.trimRoute(route.path);
 		} else if (root instanceof NextThought.model.PageInfo) {
 			route = this.getRouteForPageInfoPath(root, subPath);
+			route.path = 'content/' + Globals.trimRoute(route.path);
+		} else if (root instanceof NextThought.model.Video) {
+			route = this.getRouteForVideoPath(root, subPath);
 		} else {
 			route = {
 				path: '',
@@ -357,6 +372,18 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 		return {
 			path: pageId || '',
+			isFull: true
+		};
+	},
+
+
+	getRouteForVideoPath: function(video, path) {
+		var videoId = video && video.getId();
+
+		videoId = video && ParseUtils.encodeForURI(videoId);
+
+		return {
+			path: 'video/' + videoId,
 			isFull: true
 		};
 	}
