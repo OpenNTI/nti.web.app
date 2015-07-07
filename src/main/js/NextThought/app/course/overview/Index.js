@@ -11,7 +11,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 		'NextThought.app.content.content.Index',
 		'NextThought.app.slidedeck.media.Index'
 	],
-	
+
 	statics: {
 	    showTab: function(bundle) {
 			return bundle && !bundle.get('Preview');
@@ -308,5 +308,45 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 	handleMediaClose: function(cmp) {
 		this.pushRoute(null, '/');
+	},
+
+
+	getRouteForPath: function(path) {
+		var lesson = path[0],
+			root = path[1],
+			subPath = path.slice(2),
+			route,
+			lessonId = lesson && lesson.getId();
+
+		lessonId = ParseUtils.encodeForURI(lessonId);
+		route = lessonId + '/';
+
+		if (root instanceof NextThought.model.RelatedWork) {
+			route = route + 'content/' + Globals.trimRoute(this.getRouteForRelatedWorkPath(root, subPath));
+		}
+
+		return route;
+	},
+
+
+	getRouteForRelatedWorkPath: function(relatedWork, path) {
+		var root = path[0],
+			object = path[1],
+			rootId = root && root.getId(),
+			objectId = object && object.getId(),
+			route = '';
+
+		rootId = rootId && ParseUtils.encodeForURI(rootId);
+		objectId = objectId && ParseUtils.encodeForURI(objectId);
+
+		if (root instanceof NextThought.model.PageInfo) {
+			route += rootId + '/';
+		}
+
+		if (objectId) {
+			route += 'object/' + objectId + '/';
+		}
+
+		return route;
 	}
 });

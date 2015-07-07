@@ -92,10 +92,8 @@ Ext.define('NextThought.app.course.Index', {
 	setActiveCourse: function(ntiid, course) {
 		var me = this;
 
-		ntiid = ntiid.toLowerCase();
-
 		//if we are setting my current course no need to do anything
-		if (me.activeBundle && (me.activeBundle.getId() || '').toLowerCase() === ntiid) {
+		if (me.activeBundle && (me.activeBundle.getId() || '') === ntiid) {
 			me.getActiveCourse = Promise.resolve(me.activeBundle);
 		} else {
 			me.clearRouteStates();
@@ -103,7 +101,7 @@ Ext.define('NextThought.app.course.Index', {
 				.then(function() {
 					var current;
 					//if the course was cached, no need to look for it
-					if (course && (course.getId() || '').toLowerCase() === ntiid) {
+					if (course && (course.getId() || '') === ntiid) {
 						current = course;
 					} else {
 						//find which ever course whose ntiid matches
@@ -112,7 +110,7 @@ Ext.define('NextThought.app.course.Index', {
 								instanceId = instance.getId() || '',
 								enrollmentId = enrollment.get('NTIID') || '';
 
-							return instanceId.toLowerCase() === ntiid || enrollmentId.toLowerCase() === ntiid;
+							return instanceId === ntiid || enrollmentId === ntiid;
 						});
 					}
 
@@ -421,10 +419,13 @@ Ext.define('NextThought.app.course.Index', {
 			subPath = path.slice(1),
 			route = '';
 
+
 		if (root.isForum) {
 			route = this.getRouteForForum(root, subPath);
 		} else if (root instanceof NextThought.model.assessment.Assignment) {
 			route = this.getRouteForAssignment(root, subPath);
+		} else if (root instanceof NextThought.model.courses.navigation.CourseOutlineContentNode) {
+			route = this.getRouteForLesson(root, subPath);
 		}
 
 		return route;
@@ -436,6 +437,16 @@ Ext.define('NextThought.app.course.Index', {
 			route = '/assignments/';
 
 		path.unshift(assignment);
+
+		return route + Globals.trimRoute(cmp.getRouteForPath(path));
+	},
+
+
+	getRouteForLesson: function(lesson, path) {
+		var cmp = this.down('course-overview'),
+			route = '/lessons/';
+
+		path.unshift(lesson);
 
 		return route + Globals.trimRoute(cmp.getRouteForPath(path));
 	}

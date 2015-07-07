@@ -308,6 +308,11 @@ Ext.define('NextThought.app.Body', {
 
 	getObjectRoute: function(obj) {
 		return this.PathActions.getPathToObject(obj)
+			.then(function(path) {
+				path.push(obj);
+
+				return path;
+			})
 			.then(this.getRouteForPath.bind(this))
 			.fail(function(reason) {
 				console.error(('Unable to find path for: ', obj, reason));

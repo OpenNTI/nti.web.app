@@ -95,7 +95,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.Stream', {
 
 
 	cmpsFromRecords: function(records) {
-		var cmps = [], lastHighlightContainer, user = this.user;
+		var me = this,
+			cmps = [], lastHighlightContainer, user = me.user;
 
 		function getDate(rec) {
 			var d = rec.get('CreatedTime') || new Date(0);
@@ -144,7 +145,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Stream', {
 				return;
 			}
 
-			cmps.push({record: i, root: true, user: user, xtype: n});
+			cmps.push({record: i, root: true, user: user, xtype: n, navigateToObject: me.navigateToObject.bind(this)});
 		});
 
 		return cmps;

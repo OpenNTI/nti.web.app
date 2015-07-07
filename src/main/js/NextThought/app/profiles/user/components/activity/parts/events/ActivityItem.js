@@ -287,31 +287,9 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Activ
 
 
 	goToObject: function() {
-		var rec = this.record,
-			cid;
+		var rec = this.record;
 
-		//Show purchase window if we're purchase-able
-		if (this.requiresPurchase) {
-			this.purchasable.fireAcquisitionEvent(this);
-			return;
-		}
-
-		//If we are a placholder find a reply to navigate to
-		if (!rec || rec.placeholder) {
-			Ext.each(this.down('[record]'), function(cmp) {
-				if (cmp.record && !cmp.record.placholder) {
-					rec = cmp.record;
-					return false; //break
-				}
-				return true;
-			});
-		}
-
-		cid = rec ? rec.get('ContainerId') : null;
-
-		if (rec && cid) {
-			this.fireEvent('navigation-selected', cid, rec, null);
-		}
+		this.navigateToObject(rec);
 	},
 
 

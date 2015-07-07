@@ -6,7 +6,5 @@ Ext.define('NextThought.app.profiles.user.components.activity.Sidebar', {
 
 	cls: 'activity-sidebar',
 
-	items: [
-		{xtype: 'box', autoEl: {html: 'Sidebar'}}
-	]
+	items: []
 });

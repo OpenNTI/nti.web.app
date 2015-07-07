@@ -34,6 +34,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.Index', {
 		this.streamCmp = this.down('profile-user-activity-stream');
 		this.sidebarCmp = this.down('profile-user-activity-sidebar');
 
+		this.streamCmp.navigateToObject = this.navigateToObject.bind(this);
+
 		this.sidebarCmp.updateFilter = this.updateFilter.bind(this);
 
 		this.initRouter();
