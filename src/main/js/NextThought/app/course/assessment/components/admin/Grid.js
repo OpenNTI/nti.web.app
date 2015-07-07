@@ -346,7 +346,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.Grid', {
 	onItemClicked: function(v, record, dom, ix, e) {
 		var nib = e.getTarget('.actions');
 		if (nib) {
-			NextThought.view.courseware.assessment.AssignmentStatus.getActionsMenu(record).showBy(nib, 'tr-br');
+			NextThought.app.course.assessment.AssignmentStatus.getActionsMenu(record).showBy(nib, 'tr-br');
 			return false;
 		}
 	}
