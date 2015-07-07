@@ -94,13 +94,17 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Positions', {
 		startYear = startYear && startYear.innerText;
 		endYear = endYear && endYear.innerText;
 		description = description && description.innerText;
+		
+		function normalizeYear(year){
+		    return year ? parseInt(year, 10) : null;
+		}
 
 		return {
 			MimeType: 'application/vnd.nextthought.profile.professionalposition',
 			companyName: companyName,
 			title: title,
-			startYear: startYear,
-			endYear: endYear,
+			startYear: normalizeYear(startYear),
+			endYear: normalizeYear(endYear),
 			description: description
 		};
 	},
