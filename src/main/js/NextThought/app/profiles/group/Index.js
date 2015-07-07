@@ -4,7 +4,8 @@ Ext.define('NextThought.app.profiles.group.Index', {
 
 	requires: [
 		'NextThought.app.profiles.group.components.Header',
-		'NextThought.app.profiles.user.components.membership.Index'
+		'NextThought.app.profiles.user.components.membership.Index',
+		'NextThought.app.profiles.group.components.activity.Index'
 	],
 
 	cls: 'group-profile profile',
@@ -71,6 +72,16 @@ Ext.define('NextThought.app.profiles.group.Index', {
 		   
 		   return membershipCmp.userChanged(this.activeEntity, false)
 		   .then(membershipCmp.handleRoute.bind(membershipCmp, subRoute, route.params));
+	},
+		   
+	showActivity: function(route, subRoute) {
+		var activityCmp = this.setActiveItem('profile-group-activity'),
+		    headerCmp = this.headerCmp;
+		   
+		this.setState('activity');
+		  
+		return activityCmp.userChanged(this.activeEntity, false)
+		   .then(activityCmp.handleRoute.bind(activityCmp, subRoute, route.params));
 	}
 		   
 });

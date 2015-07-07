@@ -23,7 +23,14 @@ Ext.define('NextThought.app.profiles.user.components.activity.Stream', {
 	initComponent: function() {
 		this.callParent(arguments);
 	},
-
+		   
+	initialWidgetConfig: function(){
+		return { xtype: 'joined-event', username: this.username }
+	},
+		   
+	hasInitialWidget: function(){
+		return !!this.down('joined-event');
+	},
 
 	onAdd: function(cmp) {
 		this.callParent(arguments);
@@ -154,8 +161,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.Stream', {
 	loadCallback: function(records, operation, success) {
 		if (!success && operation.error && operation.error.status === 404) {
 			//If we don't have a joined-event child add one now
-			if (!this.down('joined-event')) {
-				this.add({ xtype: 'joined-event', username: this.username });
+			if (!this.hasInitialWidget()) {
+				this.add(this.initial(initialWidgetConfig));
 			}
 		}
 	},
@@ -192,7 +199,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Stream', {
 			added, lastAdded;
 
 		if (done) {
-			add.push({ xtype: 'joined-event', username: this.username });
+			add.push(this.initialWidgetConfig());
 		}
 
 		this.clearLoadingBar();

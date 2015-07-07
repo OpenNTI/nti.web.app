@@ -31,9 +31,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Index', {
 		this.UserDataActions.initPageStores(this);
 		this.UserDataActions.setupPageStoreDelegates(this);
 
-		this.streamCmp = this.down('profile-user-activity-stream');
-		this.sidebarCmp = this.down('profile-user-activity-sidebar');
-
+		this.initChildComponentRefs();
 		this.sidebarCmp.updateFilter = this.updateFilter.bind(this);
 
 		this.initRouter();
@@ -42,11 +40,16 @@ Ext.define('NextThought.app.profiles.user.components.activity.Index', {
 
 		this.addDefaultRoute('/');
 	},
+		   
+	initChildComponentRefs: function(){
+	   this.streamCmp = this.down('profile-user-activity-stream');
+	   this.sidebarCmp = this.down('profile-user-activity-sidebar');
+	},
 
 
 	userChanged: function(user, isMe) {
 
-		this.activeUser = user;
+		this.activeEntity = user;
 		this.isMe = isMe;
 
 		this.store = this.buildStore();
@@ -57,7 +60,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Index', {
 
 
 	buildStore: function() {
-		var username = this.activeUser.getId(),
+		var username = this.activeEntity.getId(),
 			id = 'profile-activity-' + username,
 			s = Ext.getStore(id);
 
@@ -65,7 +68,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Index', {
 			s = NextThought.store.ProfileItem.create({id: id});
 		}
 
-		s.proxy.url = this.activeUser.getLink('Activity');
+		s.proxy.url = this.activeEntity.getLink('Activity');
 
 		if (!s.proxy.url) {
 			//don't attempt to do anything if no url
