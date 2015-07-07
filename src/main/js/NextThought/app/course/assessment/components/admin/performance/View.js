@@ -80,6 +80,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.View'
 		});
 
 		record = me.store.getAt(current);
+		me.getRoot().activeGradeRecord = record;
 
 		historyURL = record && record.getLink('AssignmentHistory');
 

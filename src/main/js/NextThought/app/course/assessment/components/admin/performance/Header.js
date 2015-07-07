@@ -52,8 +52,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Heade
 		}
 
 		me.mon(grade, {
-			'value-change': fillInValue,
-			single: true //Why is this only a single event?
+			'value-change': fillInValue
 		});
 
 		fillInValue();
