@@ -47,11 +47,16 @@ Ext.define('NextThought.app.profiles.user.components.activity.Stream', {
 		if (this.store) {
 			this.removeAll(true);
 		}
+		
+		if(this.storeListeners){
+		   this.storeListeners.destroy();
+		}
 
 		this.store = store;
 		this.user = user;
 
-		this.mon(this.store, {
+		this.storeListeners = this.mon(this.store, {
+			destroyable: true,
 			add: this.itemsAddedToStore.bind(this),
 			load: this.storeLoaded.bind(this),
 			beforeload: this.showLoadingBar.bind(this),
