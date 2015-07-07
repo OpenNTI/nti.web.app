@@ -50,7 +50,7 @@ Ext.define('NextThought.app.context.components.list.Content', {
 		this.callParent(arguments);
 
 		if (this.snippet) {
-			this.snippetEl.appendChild(this.snippet);
+			this.snippetEl.dom.innerHTML = this.snippet.innerHTML;
 		}
 	},
 

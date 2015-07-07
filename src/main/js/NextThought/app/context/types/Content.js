@@ -4,6 +4,7 @@ Ext.define('NextThought.app.context.types.Content', {
 		'NextThought.util.Ranges',
 		'NextThought.common.components.cards.OverlayedPanel',
 		'NextThought.common.components.cards.Card',
+		'NextThought.app.library.Actions',
 		'NextThought.app.slidedeck.OverlayedPanel',
 		'NextThought.app.slidedeck.SlideDeck',
 		'NextThought.app.slidedeck.slidevideo.SlideVideo',
@@ -18,13 +19,15 @@ Ext.define('NextThought.app.context.types.Content', {
 		type: 'content',
 
 		canHandle: function(obj) {
-			return obj instanceof Node;
+			return obj instanceof NextThought.model.PageInfo;
 		}
 	},
 
 
 	constructor: function(config) {
 		this.callParent(arguments);
+
+		this.LibraryActions = NextThought.app.library.Actions.create();
 
 		this.container = config.container;
 		this.range = config.range;
@@ -33,7 +36,30 @@ Ext.define('NextThought.app.context.types.Content', {
 	},
 
 
-	parse: function(doc, contextKind) {
+	parse: function(pageInfo, contextKind) {
+		var me = this,
+			link = pageInfo.getLink('content'),
+			contentPackage = pageInfo.get('ContentPackageNTIID');
+
+		return Promise.all([
+				Service.request(link),
+				this.LibraryActions.findContentPackage(contentPackage)
+			]).then(function(results) {
+				var xml = results[0],
+					content = results[1];
+
+				xml = (new DOMParser()).parseFromString(xml, 'text/xml');
+
+				if (xml.querySelector('parsererror')) {
+					return Promise.resolve('');
+				}
+
+				return me.__parseNode(xml, content && content.get('root'), contextKind);
+			});
+	},
+
+
+	__parseNode: function(doc, root, contextKind) {
 		var page = doc && doc.querySelector('#NTIContent'),
 			context,
 			range = this.range,
@@ -45,7 +71,7 @@ Ext.define('NextThought.app.context.types.Content', {
 			}
 
 			context = doc && RangeUtils.getContextAroundRange(range, doc, doc.body, cid);
-			cleanContext = this.__fixUpContext(context);
+			cleanContext = this.__fixUpContext(context, root);
 
 
 			config = {
@@ -70,8 +96,9 @@ Ext.define('NextThought.app.context.types.Content', {
 	},
 
 	//TODO: clean this up to not rely on ext so much.
-	__fixUpContext: function(n) {
+	__fixUpContext: function(n, root) {
 		var node = Ext.get(n), cardTpl, slideDeckTpl, slideVideoTpl,
+			imgs = n.querySelectorAll('img'),
 			maxWidth = this.maxWidth;
 
 		node.select('.injected-related-items,.related,.anchor-magic').remove();
@@ -144,6 +171,21 @@ Ext.define('NextThought.app.context.types.Content', {
 		node.query('object.overlayed').forEach(function(ob) {
 			ob.removeAttribute('data');
 			ob.removeAttribute('style');
+		});
+
+		if (imgs) {
+			imgs = Array.prototype.slice.call(imgs);
+		} else {
+			imgs = [];
+		}
+
+		imgs.forEach(function(img) {
+			var src = img.getAttribute('src');
+
+			if (!Globals.ROOT_URL_PATTERN.test(src)) {
+				src = '/' + Globals.trimRoute(root) + '/' + Globals.trimRoute(src);
+				img.setAttribute('src', src);
+			}
 		});
 
 		return node.dom;

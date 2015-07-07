@@ -23,10 +23,7 @@ Ext.define('NextThought.app.context.ContainerContext', {
 		var url = Service.getObjectURL(this.container);
 		if (!this.load_promise) {
 			this.load_promise = Service.request({
-				url: url,
-				headers: {
-					Accept: '*/*'
-				}
+				url: url
 			})
 				.then(this.__parseResponse.bind(this))
 				.then(this.__parseContext.bind(this, type))
