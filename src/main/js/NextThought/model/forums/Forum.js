@@ -41,11 +41,16 @@ Ext.define('NextThought.model.forums.Forum', {
 				}
 			};
 
-		return this.callParent([idSuffix, Ext.apply(myConfig,cfg),
+		return this.callParent([idSuffix, Ext.apply(myConfig, cfg),
 			Ext.apply({
 				sortOn: 'NewestDescendantCreatedTime',
 				sortOrder: 'DESC'
 			},extraParams
 		)]);
+	},
+
+
+	getTitle: function() {
+		return this.get('displayTitle');
 	}
 });

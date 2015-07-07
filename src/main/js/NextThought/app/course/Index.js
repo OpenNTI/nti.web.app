@@ -414,11 +414,16 @@ Ext.define('NextThought.app.course.Index', {
 	},
 
 
-	getRouteForPath: function(path) {
-		var root = path[0],
+	getRouteForPath: function(path, course) {
+		var root = path[0] || {},
+			isAccessible = this.CourseStore.hasCourse(course),
 			subPath = path.slice(1),
-			route = '';
+			route;
 
+		if (root.isBoard) {
+			root = subPath[0];
+			subPath = subPath.slice(1);
+		}
 
 		if (root.isForum) {
 			route = this.getRouteForForum(root, subPath);
@@ -426,7 +431,15 @@ Ext.define('NextThought.app.course.Index', {
 			route = this.getRouteForAssignment(root, subPath);
 		} else if (root instanceof NextThought.model.courses.navigation.CourseOutlineContentNode) {
 			route = this.getRouteForLesson(root, subPath);
+		} else {
+			route = {
+				path: '',
+				isFull: path.length <= 0,
+				isAccessible: isAccessible
+			};
 		}
+
+		route.isAccessible = route.isAccessible === false ? false : isAccessible;
 
 		return route;
 	},
@@ -434,20 +447,20 @@ Ext.define('NextThought.app.course.Index', {
 
 	getRouteForAssignment: function(assignment, path) {
 		var cmp = this.down('course-assessment-container'),
-			route = '/assignments/';
+			route = cmp.getRouteForPath(path, assignment);
 
-		path.unshift(assignment);
+		route.path = '/assignments/' + Globals.trimRoute(route.path);
 
-		return route + Globals.trimRoute(cmp.getRouteForPath(path));
+		return route;
 	},
 
 
 	getRouteForLesson: function(lesson, path) {
 		var cmp = this.down('course-overview'),
-			route = '/lessons/';
+			route = cmp.getRouteForPath(path, lesson);
 
-		path.unshift(lesson);
+		route.path = '/lessons/' + Globals.trimRoute(route.path);
 
-		return route + Globals.trimRoute(cmp.getRouteForPath(path));
+		return route;
 	}
 });

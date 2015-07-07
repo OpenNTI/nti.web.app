@@ -46,7 +46,11 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 		this.addChildRouter(this.lessons);
 
-		this.on('activate', this.onActivate.bind(this));
+		this.on({
+			'activate': this.onActivate.bind(this),
+			'deactivate': this.onDeactivate.bind(this)
+		});
+
 		this.LibraryActions = NextThought.app.library.Actions.create();
 	},
 
@@ -63,6 +67,14 @@ Ext.define('NextThought.app.course.overview.Index', {
 		this.setTitle(this.title);
 		if (item.onActivate) {
 			item.onActivate();
+		}
+	},
+
+
+	onDeactivate: function() {
+		if (this.activeMediaWindow) {
+			Ext.destroy(this.activeMediaWindow);
+			delete this.activeMediaWindow;
 		}
 	},
 
@@ -311,19 +323,30 @@ Ext.define('NextThought.app.course.overview.Index', {
 	},
 
 
-	getRouteForPath: function(path) {
-		var lesson = path[0],
-			root = path[1],
-			subPath = path.slice(2),
+	getRouteForPath: function(path, lesson) {
+		var root = path[0],
+			subPath = path.slice(1),
 			route,
 			lessonId = lesson && lesson.getId();
 
 		lessonId = ParseUtils.encodeForURI(lessonId);
-		route = lessonId + '/';
 
 		if (root instanceof NextThought.model.RelatedWork) {
-			route = route + 'content/' + Globals.trimRoute(this.getRouteForRelatedWorkPath(root, subPath));
+			route = this.getRouteForRelatedWorkPath(root, subPath);
+			route.path = 'content/' + Globals.trimRoute(route.path);
+		} else if (root instanceof NextThought.model.PageInfo) {
+			route = this.getRouteForPageInfoPath(root, subPath);
+			route.path = 'content/' + Globals.trimRoute(route.path);
+		} else if (root instanceof NextThought.model.Video) {
+			route = this.getRouteForVideoPath(root, subPath);
+		} else {
+			route = {
+				path: '',
+				isFull: subPath.length <= 0
+			};
 		}
+
+		route.path = lessonId + '/' + Globals.trimRoute(route.path);
 
 		return route;
 	},
@@ -331,22 +354,37 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 	getRouteForRelatedWorkPath: function(relatedWork, path) {
 		var root = path[0],
-			object = path[1],
-			rootId = root && root.getId(),
-			objectId = object && object.getId(),
-			route = '';
+			rootId = root && root.getId();
 
 		rootId = rootId && ParseUtils.encodeForURI(rootId);
-		objectId = objectId && ParseUtils.encodeForURI(objectId);
 
-		if (root instanceof NextThought.model.PageInfo) {
-			route += rootId + '/';
-		}
+		return {
+			path: rootId || '',
+			isFull: true
+		};
+	},
 
-		if (objectId) {
-			route += 'object/' + objectId + '/';
-		}
 
-		return route;
+	getRouteForPageInfoPath: function(pageInfo, path) {
+		var pageId = pageInfo && pageInfo.getId();
+
+		pageId = pageId && ParseUtils.encodeForURI(pageId);
+
+		return {
+			path: pageId || '',
+			isFull: true
+		};
+	},
+
+
+	getRouteForVideoPath: function(video, path) {
+		var videoId = video && video.getId();
+
+		videoId = video && ParseUtils.encodeForURI(videoId);
+
+		return {
+			path: 'video/' + videoId,
+			isFull: true
+		};
 	}
 });

@@ -256,19 +256,22 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Highl
 
 
 	onClick: function(e) {
-		var t = e.getTarget('[data-ntiid]', null, true);
-		if (!t) { return; }
+		var t = e.getTarget('[data-ntiid]', null, true),
+			ntiid = t && t.getAttribute('data-ntiid'),
+			selectedItem;
 
-		e.stopEvent();
+		if (!ntiid) { return; }
 
-		if (t.is('.selected-text')) {
-			//highlight
-			console.debug('clicked highlight: ', t.getAttribute('data-ntiid'));
-			this.goToObject(t.getAttribute('data-ntiid'));
-			return;
+		this.items.forEach(function(item) {
+			if (item.getId() === ntiid) {
+				selectedItem = item;
+			}
+		});
+
+		if (selectedItem) {
+			this.navigateToObject(selectedItem);
+			e.stopEvent();
 		}
-		console.debug('clicked content path/icon, goto: ', t.getAttribute('data-ntiid'));
-		this.fireEvent('navigation-selected', t.getAttribute('data-ntiid'), null, null);
 	},
 
 	goToObject: function(id) {

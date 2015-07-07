@@ -27,12 +27,7 @@ Ext.define('NextThought.app.profiles.user.Index', {
 		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
 		this.GroupActions = NextThought.app.groups.Actions.create();
 
-		this.headerCmp = this.add({
-			xtype: 'profile-user-header',
-			saveProfile: this.saveProfile.bind(this),
-			removeContact: this.removeContact.bind(this),
-			addContact: this.addContact.bind(this)
-		});
+		this.headerCmp = this.add(this.buildHeaderComponent());
 
 		this.bodyCmp = this.add({
 			xtype: 'container',
@@ -40,16 +35,31 @@ Ext.define('NextThought.app.profiles.user.Index', {
 		});
 
 		this.initRouter();
+		this.initRoutes();
 
+	    this.finalizeInit();
+	},
+	
+	initRoutes: function(){
 		this.addRoute('/about', this.showAbout.bind(this));
 		this.addRoute('/activity', this.showActivity.bind(this));
 		this.addRoute('/membership', this.showMembership.bind(this));
-
+		   
 		this.addDefaultRoute('/activity');
-
-		window.saveProfile = this.saveProfile.bind(this);
 	},
-
+		   
+	buildHeaderComponent: function(){
+		return {
+		   xtype: 'profile-user-header',
+		   saveProfile: this.saveProfile.bind(this),
+		   removeContact: this.removeContact.bind(this),
+		   addContact: this.addContact.bind(this)
+		}
+	},
+		   
+	finalizeInit: function(){
+	   window.saveProfile = this.saveProfile.bind(this);
+	},
 
 	onAddedToParentRouter: function() {
 		this.headerCmp.pushRoute = this.pushRoute.bind(this);
@@ -61,35 +71,39 @@ Ext.define('NextThought.app.profiles.user.Index', {
 	},
 
 
-	setActiveUser: function(id, user) {
+	setActiveEntity: function(id, user) {
 		var me = this,
 			lowerId = id.toLowerCase();
 
 
-		if (me.activeUser && (me.activeUser.get('Username') || '').toLowerCase() === lowerId) {
-			me.getUser = Promise.resolve(me.activeUser);
-			me.isMe = isMe(me.activeUser);
+		if (me.activeEntity && (me.activeEntity.get('Username') || '').toLowerCase() === lowerId) {
+			me.getUser = Promise.resolve(me.activeEntity);
+			me.isMe = isMe(me.activeEntity);
 		} else if (user && (user.get('Username') || '').toLowerCase() == lowerId) {
-			me.activeUser = user;
-			me.isMe = isMe(me.activeUser);
+			me.activeEntity = user;
+			me.isMe = isMe(me.activeEntity);
 			me.getUser = Promise.resolve(user);
 		} else {
-			me.getUser = UserRepository.getUser(id)
-				.then(function(user) {
-					me.activeUser = user;
-
-					me.isMe = isMe(user);
-
-					return user;
-				});
+			me.getUser = this.resolveEntity(id, user);
 		}
 
 		return me.getUser;
 	},
-
+		   
+	resolveEntity: function(id, entity){
+		var me = this;
+		return UserRepository.getUser(id)
+		   .then(function(user) {
+					me.activeEntity = user;
+				 
+					me.isMe = isMe(user);
+				 
+					return user;
+			});
+	},
 
 	getRouteTitle: function() {
-		return this.activeUser.getName();
+		return this.activeEntity.getName();
 	},
 
 
@@ -110,7 +124,7 @@ Ext.define('NextThought.app.profiles.user.Index', {
 
 	setState: function(active) {
 		var tabs = [],
-			isContact = this.GroupStore.isContact(this.activeUser);
+			isContact = this.GroupStore.isContact(this.activeEntity);
 
 		this.activeTab = active;
 
@@ -132,13 +146,13 @@ Ext.define('NextThought.app.profiles.user.Index', {
 			active: active === 'membership'
 		});
 
-		this.headerCmp.updateUser(this.activeUser, tabs, isContact, this.isMe);
+		this.headerCmp.updateUser(this.activeEntity, tabs, isContact, this.isMe);
 
 		this.NavActions.updateNavBar({
 			hideBranding: true
 		});
 
-		this.NavActions.setActiveContent(this.activeUser);
+		this.NavActions.setActiveContent(this.activeEntity);
 	},
 
 
@@ -149,7 +163,7 @@ Ext.define('NextThought.app.profiles.user.Index', {
 		this.setState('about');
 
 		if (this.isMe) {
-			this.activeUser.getSchema()
+			this.activeEntity.getSchema()
 				.then(function(schema) {
 					aboutCmp.setSchema(schema);
 					headerCmp.setSchema(schema);
@@ -159,7 +173,7 @@ Ext.define('NextThought.app.profiles.user.Index', {
 		aboutCmp.setHeaderCmp(headerCmp);
 		aboutCmp.gotoMembership = this.pushRoute.bind(this, 'Membership', '/membership');
 
-		return aboutCmp.userChanged(this.activeUser, this.isMe)
+		return aboutCmp.userChanged(this.activeEntity, this.isMe)
 			.then(aboutCmp.handleRoute.bind(aboutCmp, subRoute, route.params));
 	},
 
@@ -171,14 +185,14 @@ Ext.define('NextThought.app.profiles.user.Index', {
 		this.setState('activity');
 
 		if (this.isMe) {
-			this.activeUser.getSchema()
+			this.activeEntity.getSchema()
 				.then(function(schema) {
 					headerCmp.setSchema();
 				});
 		}
 
 
-		return activityCmp.userChanged(this.activeUser, this.isMe)
+		return activityCmp.userChanged(this.activeEntity, this.isMe)
 			.then(activityCmp.handleRoute.bind(activityCmp, subRoute, route.params));
 	},
 
@@ -190,13 +204,13 @@ Ext.define('NextThought.app.profiles.user.Index', {
 		this.setState('membership');
 
 		if (this.isMe) {
-			this.activeUser.getSchema()
+			this.activeEntity.getSchema()
 				.then(function(schema) {
 					headerCmp.setSchema();
 				});
 		}
 
-		return membershipCmp.userChanged(this.activeUser, this.isMe)
+		return membershipCmp.userChanged(this.activeEntity, this.isMe)
 			.then(membershipCmp.handleRoute.bind(membershipCmp, subRoute, route.params));
 	},
 
@@ -221,7 +235,7 @@ Ext.define('NextThought.app.profiles.user.Index', {
 	removeContact: function() {
 		var me = this,
 			actions = me.GroupActions,
-			user = me.activeUser;
+			user = me.activeEntity;
 
 		Ext.Msg.show({
 			title: getString('NextThought.view.profiles.outline.View.confirm'),
@@ -253,7 +267,7 @@ Ext.define('NextThought.app.profiles.user.Index', {
 	addContact: function() {
 		var me = this;
 
-		me.GroupActions.addContact(me.activeUser)
+		me.GroupActions.addContact(me.activeEntity)
 			.then(function() {
 				me.setState(this.activeTab);
 			})

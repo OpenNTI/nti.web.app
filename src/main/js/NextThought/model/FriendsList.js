@@ -20,7 +20,8 @@ Ext.define('NextThought.model.FriendsList', {
 		{ name: 'realname', type: 'string' },
 		{ name: 'CompositeGravatars', type: 'AvatarURL' },
 		{ name: 'displayName', convert: function(v,r) {return r.getName();}},
-		{ name: 'IsDynamicSharing', type: 'auto'}
+		{ name: 'IsDynamicSharing', type: 'auto'},
+		{ name: 'about', type: 'string'}
 	],
 
 	constructor: function() {
@@ -37,6 +38,13 @@ Ext.define('NextThought.model.FriendsList', {
 			}
 		});
 
+	},
+		   
+	getAboutData: function() {
+	   return {
+		   displayName: this.getName(),
+		   about: this.get('about')
+	   };
 	},
 
 

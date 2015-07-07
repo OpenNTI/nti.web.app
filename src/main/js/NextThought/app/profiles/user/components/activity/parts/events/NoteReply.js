@@ -9,16 +9,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.NoteR
 		{
 			cls: 'note profile-activity-item',
 			cn: [
-				{ cls: 'content-callout', onclick: 'void(0)', cn: [
-					{ cls: 'icon' },
-					{ cn: [
-						{ cls: 'location link'},
-						{ cls: 'context', cn: [
-							{tag: 'canvas'},
-							{cls: 'text'}
-						] }
-					]}
-				]},
+				{ cls: 'content-callout context', onclick: 'void(0)'},
 				{ cls: 'item reply profile-activity-reply-item', cn: [
 					{ cls: 'avatar' },
 					{ cls: 'controls', cn: [

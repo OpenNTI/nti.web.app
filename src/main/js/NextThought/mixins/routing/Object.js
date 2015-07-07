@@ -90,9 +90,24 @@ Ext.define('NextThought.mixins.routing.Object', {
 	 * Return the route needed to navigate to through the items in the path array
 	 * ex: [Course, Forum, Topic];
 	 *
+	 * returns an object with:
+	 *
+	 * path: String, //route itself
+	 * isFull: Boolean //True if we were able to get full route for the path
+	 * 					//false if we were only able to get part way
+	 * isAccessible: Boolean //!== false if we have access to this route
+	 * 							// === false if we don't
+	 *
 	 * @override
 	 * @param {Array} path array of objects to navigate to, top down
-	 * @return {String} the route route to navigate to
+	 * @param {Object} root the object that would be set as my root for the path
+	 * @return {Object} the route route to navigate to
 	 */
-	getRouteForPath: function(path) {}
+	getRouteForPath: function(path, root) {
+		return {
+			path: '',
+			isFull: false,
+			isAccessible: false
+		};
+	}
 });

@@ -50,6 +50,11 @@ Ext.define('NextThought.model.forums.Board', {
 	],
 
 
+	getTitle: function() {
+		return this.get('title');
+	},
+
+
 	findBundle: function() {
 		var me = this;
 

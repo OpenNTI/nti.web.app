@@ -7,9 +7,9 @@ Ext.define('NextThought.app.navigation.path.parts.Assignment', {
 
 
 	addHandlers: function(handlers) {
-		handlers['application/vnd.nextthought.grade'] = this.getPathToGrade.bind(this);
-		handlers[NextThought.model.courseware.Grade.mimeType] = this.getPathToGrade.bind(this);
-		handlers[NextThought.model.assessment.Assignment.mimeType] = this.getPathToAssignment.bind(this);
+		// handlers['application/vnd.nextthought.grade'] = this.getPathToGrade.bind(this);
+		// handlers[NextThought.model.courseware.Grade.mimeType] = this.getPathToGrade.bind(this);
+		// handlers[NextThought.model.assessment.Assignment.mimeType] = this.getPathToAssignment.bind(this);
 
 		return handlers;
 	},

@@ -10,7 +10,8 @@ Ext.define('NextThought.app.content.Index', {
 	requires: [
 		'NextThought.app.content.components.Navigation',
 		'NextThought.app.navigation.Actions',
-		'NextThought.app.windows.StateStore'
+		'NextThought.app.windows.StateStore',
+		'NextThought.model.Video'
 	],
 
 
@@ -174,33 +175,23 @@ Ext.define('NextThought.app.content.Index', {
 
 
 	getRouteForForum: function(forum, path) {
-		var topic = path.shift(),
-			comment = path.shift(),
-			forumId = forum.getId(),
-			topicId = topic && topic.getId(),
-			commentId = comment && comment.getId(),
-			route;
+		var forumId = forum.getId(),
+			topic = path.shift(),
+			comment = path.shift();
 
-		if (topicId) {
-			this.WindowStateStore.cacheObject(topicId, topic);
+		if (topic) {
+			this.WindowStateStore.cacheObject(topic.getId(), topic);
 		}
 
-		if (commentId) {
-			this.WindowStateStore.cacheObject(commentId, comment);
+		if (comment) {
+			this.WindowStateStore.cacheObject(comment.getId(), topic);
 		}
 
 		forumId = ParseUtils.encodeForURI(forumId);
-		topicId = topicId && ParseUtils.encodeForURI(topicId);
-		commentId = commentId && ParseUtils.encodeForURI(commentId);
 
-		route = '/discussions/' + forumId;
-
-		if (commentId) {
-			route += '/object/' + commentId;
-		} else if (topicId) {
-			route += '/object/' + topicId;
-		}
-
-		return route;
+		return {
+			path: '/discussions/' + forumId,
+			isFull: true
+		};
 	}
 });

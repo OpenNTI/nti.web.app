@@ -11,8 +11,8 @@ Ext.define('NextThought.app.navigation.path.parts.Content', {
 
 
 	addHandlers: function(handlers) {
-		handlers[NextThought.model.Note.mimeType] = this.getPathToNote.bind(this);
-		handlers[NextThought.model.PageInfo.mimeType] = this.getPathToPageInfo.bind(this);
+		// handlers[NextThought.model.Note.mimeType] = this.getPathToNote.bind(this);
+		// handlers[NextThought.model.PageInfo.mimeType] = this.getPathToPageInfo.bind(this);
 		return handlers;
 	},
 

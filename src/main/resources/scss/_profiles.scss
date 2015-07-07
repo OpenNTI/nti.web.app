@@ -249,6 +249,14 @@
 	}
 }
 
+.group-header{
+	.meta{
+		.username::before{
+			display: none;
+		}
+	}
+}
+
 #view > .profile-tabs {
 	border-top-color: white;
 	background: white;
@@ -752,7 +760,8 @@
 	}
 
 	.blogged-event,
-	.joined-event {
+	.joined-event,
+	.created-event{
 		background: $panel-background;
 		border: 0 solid #f2f2f2;
 		border-bottom-width: 1px;
@@ -879,6 +888,13 @@
 
 		.whiteboard-container{
 			cursor: default;
+		}
+
+		.path {
+			span:not(:first-of-type)::before {
+				content: '/';
+				margin: 0 0.5em;
+			}
 		}
 
 		.path,

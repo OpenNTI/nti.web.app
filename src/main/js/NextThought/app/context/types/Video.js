@@ -25,7 +25,7 @@ Ext.define('NextThought.app.context.types.Video', {
 		type: 'video',
 
 		canHandle: function(obj) {
-			return obj && obj.Class === 'Video';
+			return obj && (obj.Class === 'Video' || obj instanceof NextThought.model.Video);
 		}
 	},
 
@@ -87,6 +87,8 @@ Ext.define('NextThought.app.context.types.Video', {
 	 * @return {[Promise]}     [promise that will resolve with an Ext.Component]
 	 */
 	parse: function(obj, kind) {
+		obj = obj.getData();
+
 		var video = NextThought.model.PlaylistItem.create(Ext.apply({ NTIID: obj.ntiid }, obj)),
 			Resolver = NextThought.app.slidedeck.transcript.AnchorResolver,
 			context, cmp, me = this, store, t;

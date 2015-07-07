@@ -1,4 +1,10 @@
 Ext.define('NextThought.mixins.Router', {
+
+	requires: [
+		'NextThought.app.navigation.path.Actions',
+		'NextThought.app.windows.Actions'
+	],
+
 	mixins: {
 		Path: 'NextThought.mixins.routing.Path',
 		Object: 'NextThought.mixins.routing.Object'
@@ -7,11 +13,29 @@ Ext.define('NextThought.mixins.Router', {
 	initRouter: function() {
 		this.mixins.Path.initRouter.call(this);
 		this.mixins.Object.initRouter.call(this);
+
+		this.Router = {
+			PathActions: NextThought.app.navigation.path.Actions.create(),
+			WindowActions: NextThought.app.windows.Actions.create()
+		};
 	},
 
 
 	addChildRouter: function(cmp) {
 		cmp.__parentRouter = this;
+
+
+		if (!this.Router) {
+			this.initRouter();
+		}
+
+		if (!cmp.Router) {
+			cmp.initRouter();
+		}
+
+		//Add a reference to my parents root, or treat
+		//my parent as the root
+		cmp.Router.root = this.Router.root || this;
 
 		this.mixins.Path.addChildRouter.call(this, cmp);
 		// this.mixins.Object.addChildRouter.call(this, cmp);
@@ -55,6 +79,67 @@ Ext.define('NextThought.mixins.Router', {
 		return this.mixins.Object.handleObject.call(this, object)
 			.then(this.__handleObjectNav.bind(this))
 			.fail(this.__handleNoObjectNavigation.bind(this, object));
+	},
+
+	/**
+	 * Try to figure out the path to an object, and if we can get a full path navigate to it
+	 * otherwise stay where you are and attempt to open the object as a window
+	 *
+	 * the monitors can be passed to override what we do in different cases, for now the only one
+	 * we really need is a chance to override the on fail.
+	 *
+	 * {
+	 * 	doNavigateToFullPath: Function
+	 * 	onFailedToGetFullPath: Function
+	 * }
+	 *
+	 * @param  {Object} obj   the thing to navigate to
+	 * @param  {Object} monitors key val map of events to functions
+	 */
+	attemptToNavigateToObject: function(obj, monitors) {
+		var me = this;
+
+		monitors = monitors || {};
+
+		monitors.doNavigateToFullPath = monitors.doNavigateToFullPath || me.doNavigateToFullPath.bind(me);
+		monitors.onFailedToGetFullPath = monitors.onFailedToGetFullPath || me.onFailedToGetFullPath.bind(me);
+
+		me.Router.PathActions.getPathToObject(obj)
+			.then(function(path) {
+				if (!me.Router.WindowActions.hasWindow(obj)) {
+					path.push(obj);
+				}
+
+				return path;
+			})
+			.then(me.getRouteForPath.bind(me))
+			.then(function(route) {
+				if (route.isFull && route.isAccessible !== false) {
+					monitors.doNavigateToFullPath(obj, route);
+				} else {
+					monitors.onFailedToGetFullPath(obj, route);
+				}
+			});
+	},
+
+
+	doNavigateToFullPath: function(obj, route) {
+		var path = route.path,
+			objId = obj.getId(),
+			hasWindow = this.Router.WindowActions.hasWindow(obj);
+
+		objId = ParseUtils.encodeForURI(objId);
+
+		if (hasWindow) {
+			path = Globals.trimRoute(path) + '/object/' + objId;
+		}
+
+		this.pushRootRoute('', path);
+	},
+
+
+	onFailedToGetFullPath: function(obj, route) {
+		this.WindowActions.pushWindow(obj);
 	},
 
 
