@@ -50,6 +50,18 @@ Ext.define('NextThought.app.profiles.group.Index', {
 		this.NavActions.setActiveContent(this.activeEntity);
 	},
 		   
+	resolveEntity: function(id, entity){
+	   var me = this;
+	   return Service.getObject(id)
+		   .then(function(user) {
+					me.activeEntity = user;
+				 
+					me.isMe = isMe(user);
+				 
+					return user;
+				 });
+	},
+		   
 	showMembership: function(route, subRoute) {
 		   var membershipCmp = this.setActiveItem('group-profile-membership'),
 		   headerCmp = this.headerCmp;
