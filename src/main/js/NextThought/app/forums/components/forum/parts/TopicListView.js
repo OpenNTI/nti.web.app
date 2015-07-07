@@ -365,6 +365,9 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 			params.batchAround = this.topic;
 		}
 
+        //The store adds a sorter for any groupers at load time.  Make sure
+        //we clear them out, they get applied after load anyway.
+        me.setGrouper('');
 		me.store.sorters.removeAll();
 
 		return new Promise(function(fulfill, reject) {
