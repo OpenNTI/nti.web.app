@@ -54,14 +54,13 @@ Ext.define('NextThought.app.profiles.group.components.Header', {
 
 
 	fillInEntity: function(entity) {
-		var data = {};
+		var data = entity.getAboutData();
 
 		this.avatarContainerEl.dom.innerHTML = Ext.util.Format.avatar(entity);
 		this.usernameEl.update(data.displayName);
 
-		//this.__updateAbout(data);
+	    this.aboutFieldEl.dom.innerHTML = data.about || '';
 	},
-
 
 	setSchema: function(schema) {},
 
