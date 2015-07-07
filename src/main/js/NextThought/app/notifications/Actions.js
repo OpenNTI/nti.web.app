@@ -40,9 +40,9 @@ Ext.define('NextThought.app.notifications.Actions', {
 				}
 
 				Service.request(url + '/lastViewed')
-					.then(function(lastViewed) {
+					.then(function(_lastViewed) {
 						//we get this back in seconds so convert it to millis
-						lastViewed = new Date(parseFloat(lastViewed) * 1000);
+						lastViewed = new Date(parseFloat(_lastViewed) * 1000);
 					})
 					.fail(function() {
 						console.warn('Could not resolve notifications lastViewed');
