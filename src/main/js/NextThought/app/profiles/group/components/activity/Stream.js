@@ -10,6 +10,6 @@ Ext.define('NextThought.app.profiles.group.components.activity.Stream', {
 		   
 	hasInitialWidget: function(){
 	   return !!this.down('created-event');
-	},
+	}
 	
 });
