@@ -116,10 +116,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 			.then(me.callWhenRendered.bind(me, 'setContext'));
 
 		if (me.hasComments()) {
-			me.commentsContianerEl.addCls('loading');
-			me.loadComments()
-				.then(me.addComments.bind(me))
-				.fail(me.showCommentError.bind(me));
+			me.showComments();
 		}
 
 		this.mon(this.el, 'click', 'itemClicked');
@@ -259,7 +256,12 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 		}
 	},
 
-
+	showComments: function() {
+		this.commentsContianerEl.addCls('loading');
+		this.loadComments()
+			.then(this.addComments.bind(this))
+			.fail(this.showCommentError.bind(this));
+	},
 	hasComments: function() {},
 	loadComments: function() {},
 	getCmpForComment: function() {},

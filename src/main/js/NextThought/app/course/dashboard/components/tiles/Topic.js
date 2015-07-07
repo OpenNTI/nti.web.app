@@ -28,9 +28,15 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Topic', {
 
 
 	handleNavigation: function(e) {
-		this.WindowActions.pushWindow(this.record, null, e, null, {course: this.course});
+		this.WindowActions.pushWindow(this.record, null, e, {afterClose: this.onWindowClose.bind(this)}, {course: this.course});
 	},
 
+	onWindowClose: function() {
+		debugger;
+		this.removeAll(true);
+		this.updateBody();
+		this.showComments();
+	},
 
 	containedIn: function(forums) {
 		forums = Ext.isArray(forums) ? forums : [forums];
@@ -94,5 +100,9 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Topic', {
 			record: comment,
 			course: this.course
 		};
+	},
+
+	updateBody: function(){
+		this.setBody(this.getBody().value);
 	}
 });

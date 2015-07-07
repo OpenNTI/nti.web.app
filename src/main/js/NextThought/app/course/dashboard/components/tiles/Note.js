@@ -76,7 +76,14 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 
 
 	handleNavigation: function(e) {
-		this.WindowActions.pushWindow(this.record, null, e, null, {course: this.course});
+		this.WindowActions.pushWindow(this.record, null, e, {afterClose: this.onWindowClose.bind(this)}, {course: this.course});
+	},
+
+
+	onWindowClose: function() {
+		this.removeAll(true);
+		this.updateBody(); // Safe guard for now
+		this.showComments();
 	},
 
 
@@ -174,5 +181,9 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 			xtype: 'dashboard-note-comment',
 			record: comment
 		};
+	},
+
+	updateBody: function(){
+		this.setBody(this.getBody().value);
 	}
 });
