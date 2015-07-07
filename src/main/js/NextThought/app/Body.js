@@ -18,7 +18,8 @@ Ext.define('NextThought.app.Body', {
 		'NextThought.app.windows.Index',
 		'NextThought.app.windows.StateStore',
 		'NextThought.app.windows.Actions',
-		'NextThought.app.context.StateStore'
+		'NextThought.app.context.StateStore',
+		'NextThought.app.contacts.Index'
 	],
 
 	mixins: {
@@ -56,6 +57,7 @@ Ext.define('NextThought.app.Body', {
 		this.addRoute('/group/:id', this.setGroupActive.bind(this));
 		this.addRoute('/notifications/', this.setNotificationsActive.bind(this));
 		this.addRoute('/search/', this.setSearchActive.bind(this));
+		this.addRoute('/contacts/', this.setContactsActive.bind(this));
 
 		this.addDefaultRoute('/library');
 
@@ -252,6 +254,13 @@ Ext.define('NextThought.app.Body', {
 		var searchView = this.setActiveCmp('search-index');
 
 		return searchView.handleRoute(subRoute, route.precache);
+	},
+
+
+	setContactsActive: function (route, subRoute) {
+		var contactsView = this.setActiveCmp('contacts-index');
+
+		return contactsView.handleRoute(subRoute, route.precache);
 	},
 
 
