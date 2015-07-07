@@ -26,6 +26,13 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 	childEls: ['body'],
 
 
+	pathTpl: new Ext.XTemplate(Ext.DomHelper.markup({
+		tag: 'tpl', 'for': 'paths', cn: [
+			{tag: 'span', html: '{.}'}
+		]
+	})),
+
+
 	renderTpl: Ext.DomHelper.markup([
 		{
 			cls: 'topic profile-activity-item',
@@ -316,7 +323,15 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 
 
 	setPath: function(path) {
-		//TODO: fill this out once we are getting back the proper path
+		var labels;
+
+		labels = path.map(function(p) {
+			return p.getTitle && p.getTitle();
+		}).filter(function(p) { return !!p; });
+
+		this.pathTpl.append(this.pathEl, {
+			paths: labels
+		});
 	},
 
 
@@ -341,6 +356,21 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 	click: function() {
 		alert('Clicked');
 		return false;
+	},
+
+
+	forumClickHandlerGoToComments: function() {
+		this.navigateToObject(this.record);
+	},
+
+
+	forumClickHandler: function() {
+		this.navigateToObject(this.record);
+	},
+
+
+	bodyClickHandler: function() {
+		this.navigateToObject(this.record);
 	}
 
 });

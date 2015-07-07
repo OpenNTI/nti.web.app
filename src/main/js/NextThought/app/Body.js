@@ -330,6 +330,9 @@ Ext.define('NextThought.app.Body', {
 				return path;
 			})
 			.then(this.getRouteForPath.bind(this))
+			.then(function(route) {
+				return route.path;
+			})
 			.fail(function(reason) {
 				console.error(('Unable to find path for: ', obj, reason));
 				return {
@@ -349,7 +352,10 @@ Ext.define('NextThought.app.Body', {
 			route = this.getRouteForCourse(root, subPath);
 		} else {
 			console.error('No route for path: ', root, subPath);
-			route = '';
+			route = {
+				isFull: false,
+				isAccessble: false
+			};
 		}
 
 		return route;
@@ -359,13 +365,15 @@ Ext.define('NextThought.app.Body', {
 
 	getRouteForCourse: function(course, path) {
 		var cmp = this.getCmp('course-view-container'),
-			route = cmp.getRouteForPath && cmp.getRouteForPath(path),
+			route = cmp.getRouteForPath && cmp.getRouteForPath(path, course),
 			id = course.getId();
 
 		id = ParseUtils.encodeForURI(id);
 
-		route = Globals.trimRoute(route);
+		route.path = Globals.trimRoute(route.path);
 
-		return '/course/' + id + '/' + route;
+		route.path = '/course/' + id + '/' + route.path;
+
+		return route;
 	}
 });

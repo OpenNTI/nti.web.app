@@ -9,6 +9,13 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Topic
 	childEls: ['body', 'liked', 'pathEl'],
 
 
+	pathTpl: new Ext.XTemplate(Ext.DomHelper.markup({
+		tag: 'tpl', 'for': 'paths', cn: [
+			{tag: 'span', html: '{.}'}
+		]
+	})),
+
+
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'profile-activity-item', cn: [
 			{ cls: 'path', id: '{id}-pathEl'},
@@ -20,6 +27,9 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Topic
 	initComponent: function() {
 		this.callParent();
 		this.addCls('x-container-profile');
+
+		this.PathActions.getPathToObject(this.record)
+			.then(this.fillInPath.bind(this));
 		// this.fillInPath();
 	},
 
@@ -32,9 +42,25 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Topic
 	},
 
 
-	onClick: function() {
-		var p = this.post;
+	fillInPath: function(path) {
+		if (!this.rendered) {
+			this.on('afterrender', this.fillInPath.bind(this, path));
+			return;
+		}
 
-		this.fireEvent('show-topic', this, p, this.record);
+		var labels;
+
+		labels = path.map(function(p) {
+			return p.getTitle && p.getTitle();
+		}).filter(function(p) { return !!p; });
+
+		this.pathTpl.append(this.pathEl, {
+			paths: labels
+		});
+	},
+
+
+	onClick: function() {
+		this.navigateToObject(this.record);
 	}
 });

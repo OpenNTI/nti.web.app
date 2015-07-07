@@ -582,13 +582,14 @@ Ext.define('NextThought.app.course.assessment.Index', {
 	},
 
 
-	getRouteForPath: function(path) {
-		var assignment = path[0],
-			subPath = path.slice(1),
-			assignmentId = assignment.getId();
+	getRouteForPath: function(path, assignment) {
+		var assignmentId = assignment.getId();
 
 		assignmentId = ParseUtils.encodeForURI(assignmentId);
 
-		return '/' + assignmentId;
+		return {
+			path: '/' + assignmentId,
+			isFull: true
+		};
 	}
 });

@@ -15,7 +15,7 @@ Ext.define('NextThought.app.navigation.path.Actions', {
 
 		this.PathStore = NextThought.app.navigation.path.StateStore.getInstance();
 
-		// this.buildHandlerMap();
+		this.buildHandlerMap();
 	},
 
 
@@ -92,6 +92,22 @@ Ext.define('NextThought.app.navigation.path.Actions', {
 		return this.PathStore.setInCache(link, cache);
 	},
 
+
+	__doHandledRequest: function(obj, handler) {
+		var id = obj.getId(),
+			cache = this.PathStore.getFromCache(id);
+
+		if (cache) {
+			return cache;
+		}
+
+		cache = handler.call(null, obj, this.getPathToObject.bind(this));
+
+		cache.fail(this.PathStore.removeFromCache.bind(this.PathStore, id));
+
+		return this.PathStore.setInCache(id, cache);
+	},
+
 	/**
 	 * Given an object, return an array of objects that make up the path
 	 * to it.
@@ -104,9 +120,12 @@ Ext.define('NextThought.app.navigation.path.Actions', {
 	 */
 	getPathToObject: function(obj) {
 		var link = obj.getLink('LibraryPath'),
+			handler = this.mimeToHandlers[obj.mimeType],
 			request;
 
-		if (link) {
+		if (handler) {
+			request = this.__doHandledRequest(obj, handler);
+		} else if (link) {
 			request = this.__doRequestForLink(link);
 		} else {
 			request = this.__doRequestForNoLink(obj);

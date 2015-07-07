@@ -1,6 +1,8 @@
 Ext.define('NextThought.app.profiles.user.components.activity.parts.events.PostReply', {
 	extend: 'Ext.Component',
 
+	requires: ['NextThought.app.navigation.path.Actions'],
+
 	ui: 'activity',
 	cls: 'reply-event',
 
@@ -53,6 +55,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.PostR
 		this.callParent(arguments);
 		this.mon(record, 'destroy', 'destroy', this);
 		this.on({el: {'click': 'onClick', scope: this}});
+
+		this.PathActions = NextThought.app.navigation.path.Actions.create();
 	},
 
 	getRecord: function() {return this.record;},

@@ -314,5 +314,20 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 		}
 
 		return Promise.reject();
+	},
+
+
+	hasCourse: function(course) {
+		var ntiid = course.get('NTIID');
+
+		var found = this.findCourseBy(function(enrollment) {
+			var instance = enrollment.get('CourseInstance'),
+				instanceId = instance.getId() || '',
+				enrollmentId = enrollment.get('NTIID') || '';
+
+			return instanceId === ntiid || enrollmentId === ntiid;
+		});
+
+		return !!found;
 	}
 });

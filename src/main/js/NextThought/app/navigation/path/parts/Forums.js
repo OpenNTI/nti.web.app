@@ -38,8 +38,21 @@ Ext.define('NextThought.app.navigation.path.parts.Forums', {
 			}
 
 			return 0;
-		}).then(function(courses) {
-			return [courses.last(), forum];
+		}).then(function(bundles) {
+			var bundle = bundles.last(),
+				parent = bundle.get('Discussions'),
+				section = bundle.get('ParentDiscussions'),
+				parentHref = (parent && parent.get('href')) || bundle.getLink('ParentDiscussionBoard'),
+				sectionHref = (section && section.get('href')) || bundle.getLink('DiscussionBoard'),
+				board;
+
+			if (sectionHref && href.indexOf(sectionHref) >= 0) {
+				board = section;
+			} else if (parentHref && href.indexOf(parentHref) >= 0) {
+				board = parent;
+			}
+
+			return [bundles.last(), board, forum];
 		});
 	},
 

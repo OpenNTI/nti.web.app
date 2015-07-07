@@ -18,6 +18,11 @@ Ext.define('NextThought.app.windows.Actions', {
 	},
 
 
+	hasWindow: function(obj) {
+		return this.WindowStore.hasComponentForMimeType(obj.mimeType);
+	},
+
+
 	/**
 	 * Push a window to the state
 	 * @param  {String|Model} objectOrNTIID the object or ntiid of the object to show
