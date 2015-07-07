@@ -278,34 +278,10 @@ Ext.define('NextThought.util.Annotations', {
 			   },
 
 
-			   addToHistory: function(rec) {
-				   try {
-					   var s = NextThought.view.UserDataPanel.getHistoryStoreForMimeType(rec.get('Class')),
-							   clone;
-					   if (s) {
-						   clone = ParseUtils.parseItems(rec.raw)[0];
-						   s.add(clone);
-						   s.sort('CreatedTime', 'DESC');
-					   }
-				   }
-				   catch (e) {
-					   console.error('Could not add record to history store.', rec);
-				   }
-			   },
+			   addToHistory: Ext.emptyFn,
 
 
-			   updateHistory: function(rec) {
-				   var s = NextThought.view.UserDataPanel.getHistoryStoreForMimeType(rec.get('Class')),
-						   found = s.findRecord('NTIID', rec.get('NTIID'), 0, false, false, true),
-						   results;
-
-				   if (found) {
-					   results = found.set(rec.asJSON());
-					   if (!Ext.isEmpty(results)) {
-						   s.fireEvent('datachanged', s);
-					   }
-				   }
-			   }
+			   updateHistory: Ext.emptyFn
 		   },
 		   function() {
 			   window.AnnotationUtils = this;
