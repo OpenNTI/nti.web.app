@@ -336,7 +336,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 
 
 
-Ext.define('NextThought.view.profiles.parts.ForumActivityItemReply', {
+Ext.define('NextThought.app.profiles.user.components.activity.parts.events.ForumActivityItemReply', {
 	extend: 'Ext.Component',
 	alias: 'widget.profile-forum-activity-item-reply',
 
