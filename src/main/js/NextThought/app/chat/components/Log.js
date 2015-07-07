@@ -224,12 +224,11 @@ Ext.define('NextThought.app.chat.components.Log', {
 			}
 		}
 
-		if (o.el) {
-			img = o.el.select('.body-text img');
+		img = o.el && o.el.select('.body-text img');
+		if (img && img.getCount() >= 1) {
 			img.on('load', scrollChatLog);
-		} else {
-			scrollChatLog();
 		}
+		scrollChatLog();
 	},
 
 
