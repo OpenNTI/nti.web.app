@@ -286,12 +286,8 @@
 
 	.photo {
 		float: left;
-		background: {
-			color: $primary-grey;
-			size: cover;
-			position: center center;
-			repeat: no-repeat;
-		}
+		background: url('/app/resources/images/backdrops/tech_support.jpg');
+		background-size: cover;
 		width: 160px;
 		height: 160px;
 	}

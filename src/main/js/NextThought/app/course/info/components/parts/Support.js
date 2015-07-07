@@ -6,7 +6,7 @@ Ext.define('NextThought.app.course.info.components.parts.Support', {
 	ui: 'course-info',
 	cls: 'course-info-support',
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'photo', style: {backgroundImage: 'url({photo})'}},
+		{ cls: 'photo' },
 		{ cls: 'wrap', cn: [
 			{ cls: 'label', html: '{{{NextThought.view.courseware.info.parts.Support.support}}}' },
 			{ cls: 'phone', html: '{phone}'},
@@ -25,7 +25,6 @@ Ext.define('NextThought.app.course.info.components.parts.Support', {
 		}
 
 		this.renderData = Ext.apply(this.renderData || {}, {
-			photo: getString('course-info.course-supoprt.photo'),
 			phone: getString('course-info.course-supoprt.phone', null, true),
 			links: [
 				{
