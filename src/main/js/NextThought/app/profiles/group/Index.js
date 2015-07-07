@@ -3,7 +3,8 @@ Ext.define('NextThought.app.profiles.group.Index', {
 	alias: 'widget.profile-group',
 
 	requires: [
-		'NextThought.app.profiles.group.components.Header'
+		'NextThought.app.profiles.group.components.Header',
+		'NextThought.app.profiles.user.components.membership.Index'
 	],
 
 	cls: 'group-profile profile',
@@ -47,5 +48,17 @@ Ext.define('NextThought.app.profiles.group.Index', {
 		});
 
 		this.NavActions.setActiveContent(this.activeEntity);
+	},
+		   
+	showMembership: function(route, subRoute) {
+		   var membershipCmp = this.setActiveItem('group-profile-membership'),
+		   headerCmp = this.headerCmp;
+		   
+		   this.setState('membership');
+	
+		   
+		   return membershipCmp.userChanged(this.activeEntity, false)
+		   .then(membershipCmp.handleRoute.bind(membershipCmp, subRoute, route.params));
 	}
+		   
 });
