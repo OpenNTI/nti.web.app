@@ -166,8 +166,9 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Trans
 
 		//get the page info
 		//check if its cached
-
-		page = Ext.getStore('FriendsList').getById(RoomInfo.get('ContainerId'));
+        
+        NextThought.app.groups.StateStore.getInstance().getFriendsList()
+		page = NextThought.app.groups.StateStore.getInstance().getFriendsList().getById(RoomInfo.get('ContainerId'));
 
 		if (page) {
 			//its cached
