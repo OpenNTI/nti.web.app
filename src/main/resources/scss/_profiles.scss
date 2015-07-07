@@ -1027,6 +1027,8 @@
 					color: $primary-grey;
 					display: block;
 					height: 48px;
+
+					a { color: $primary-blue; text-decoration: none; }
 					img { max-width: 50% !important; }
 					p{ margin: 0; }
 				}
