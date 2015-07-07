@@ -31,13 +31,18 @@ Ext.define('NextThought.app.profiles.user.components.activity.Stream', {
 	},
 
 
-	setStore: function(store) {
+	setStore: function(store, user) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setStore.bind(this, store));
 			return;
 		}
 
+		if (this.store) {
+			this.removeAll(true);
+		}
+
 		this.store = store;
+		this.user = user;
 
 		this.mon(this.store, {
 			add: this.itemsAddedToStore.bind(this),
@@ -104,6 +109,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Stream', {
 			lastHighlightContainer = {
 				xtype: 'profile-activity-highlight-container',
 				date: getDate(rec),
+				user: user,
 				items: [rec]
 			};
 			cmps.push(lastHighlightContainer);

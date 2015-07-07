@@ -50,7 +50,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.Index', {
 		this.isMe = isMe;
 
 		this.store = this.buildStore();
-		this.streamCmp.setStore(this.store);
+		this.streamCmp.setStore(this.store, user);
 
 		return Promise.resolve();
 	},

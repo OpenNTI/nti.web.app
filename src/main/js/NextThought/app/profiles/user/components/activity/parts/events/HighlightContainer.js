@@ -2,6 +2,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Highl
 	extend: 'Ext.Component',
 	alias: 'widget.profile-activity-highlight-container',
 
+	requires: ['NextThought.app.navigation.path.Actions'],
+
 	cls: 'activity-highlight-container',
 	mixins: {
 		profileLink: 'NextThought.mixins.ProfileLinks'
@@ -58,11 +60,13 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Highl
 	setupContainerRenderData: function() {
 		var me = this,
 			c = me.up('[user]'),
-			u = c ? c.user : null,
+			u = me.user || null,
 			name = u ? u.getName() : '...',
 			items = me.items,
+			waitsOn,
 			count = items.length,
 			books = {},
+			pathActions = NextThought.app.navigation.path.Actions.create(),
 			d;
 
 		if (this.rendered) { delete me.renderData; }
@@ -83,25 +87,45 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Highl
 
 		Ext.Array.sort(this.items, byTime);
 
-		Ext.each(items, function(i) {
-			//TODO: figure this out
-			// LocationMeta.getMeta(i.get('ContainerId'), function(meta) {
-			// 	i.meta = meta;
-			// 	count--;
+		waitsOn = items.map(function(item) {
+			return pathActions.getPathToObject(item)
+				.then(function(path) {
+					var root = path[0],
+						roots, pages,
+						page = path.last(),
+						iconUrl, i,
+						label;
 
-			// 	var root = meta && meta.ContentNTIID,
-			// 		page = meta && meta.NTIID;
+					roots = books[root.get('NTIID')] = books[root.get('NTIID')] || {};
+					pages = roots[page.get('NTIID')] = roots[page.get('NTIID')] || [];
 
-			// 	root = (books[root] = books[root] || {});
-			// 	page = (root[page] = root[page] || []);
-			// 	page.push(i);
 
-			// 	if (!count) {
-			// 		me.setupBookRenderData(d, books)
-			// 			.then(me.maybeFillIn.bind(me));
-			// 	}
-			// });
+					root = root.getTitle();
+					page = page.getTitle();
+
+					if (path.length > 2) {
+						item.label = root + ' / ... / ' + page;
+					} else {
+						item.label = root + ' / ' + page;
+					}
+
+					for (i = path.length - 1; i >= 0; i--) {
+						iconUrl = path[i].getIcon && path[i].getIcon();
+
+						if (iconUrl) {
+							break;
+						}
+					}
+
+					item.icon = iconUrl;
+
+					pages.push(item);
+				});
 		});
+
+		Promise.all(waitsOn)
+			.then(me.setupBookRenderData.bind(me, d, books))
+			.then(me.maybeFillIn.bind(me));
 
 		return d;
 	},
@@ -137,18 +161,14 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Highl
 						});
 
 						if (!book.hasOwnProperty('icon')) {
-							book.icon = i.meta.getIcon(true);
+							book.icon = i.icon;
 						}
 
 						if (!page.hasOwnProperty('label')) {
-							i.meta.getPathLabel()
-								.then(function(label) {
-									page.label = label;
-									fulfill();
-								});
-						} else {
-							fulfill();
+							page.label = i.label;
 						}
+
+						fulfill();
 					});
 				});
 			}));

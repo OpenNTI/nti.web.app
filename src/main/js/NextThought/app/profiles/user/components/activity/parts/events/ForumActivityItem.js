@@ -7,7 +7,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 
 	requires: [
 		'NextThought.editor.Editor',
-		'NextThought.layout.component.Natural'
+		'NextThought.layout.component.Natural',
+		'NextThought.app.navigation.path.Actions'
 	],
 
 	mixins: {
@@ -118,6 +119,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 			store,
 			url = r.getLink('contents');
 
+		me.PathActions = NextThought.app.navigation.path.Actions.create();
+
 		me.callParent(arguments);
 		me.mixins.likeAndFavoriteActions.constructor.call(me);
 		me.mixins.flagActions.constructor.call(me);
@@ -171,6 +174,9 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 			console.error('We think this item has been deleted, no Content link available. Record: ', this.record);
 			Ext.defer(this.destroy, 1, this);
 		}
+
+		me.PathActions.getPathToObject(r)
+			.then(me.setPath.bind(me));
 	},
 
 
@@ -306,6 +312,11 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 		this.editor.reset();
 		this.editor.activate();
 		this.editor.focus(true);
+	},
+
+
+	setPath: function(path) {
+		//TODO: fill this out once we are getting back the proper path
 	},
 
 
