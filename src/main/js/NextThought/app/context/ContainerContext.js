@@ -21,8 +21,7 @@ Ext.define('NextThought.app.context.ContainerContext', {
 	 */
 	load: function(type) {
 		var url = Service.getObjectURL(this.container);
-		if (!this.load_promise) {
-			this.load_promise = Service.request({
+		return Service.request({
 				url: url,
 				headers: {
 					Accept: '*/*'
@@ -31,9 +30,6 @@ Ext.define('NextThought.app.context.ContainerContext', {
 				.then(this.__parseResponse.bind(this))
 				.then(this.__parseContext.bind(this, type))
 				.fail(this.__handle403Response.bind(this));
-		}
-
-		return this.load_promise;
 	},
 
 
@@ -66,10 +62,16 @@ Ext.define('NextThought.app.context.ContainerContext', {
 				break;
 			}
 		}
+		
+		if(this.contextCmp){
+		    this.contextCmp.destroy();
+		    delete this.contextCmp;
+		}
 
 		if (handler) {
 			handler = handler.create(this.config);
-			return handler.parse(obj, contextType);
+			this.contextCmp = handler.parse(obj, contextType);
+			return this.contextCmp;
 		}
 
 		console.error('No handler to get context from obj:', obj);
