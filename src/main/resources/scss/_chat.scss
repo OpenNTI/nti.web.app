@@ -13,9 +13,9 @@
 	    display: flex;
 	    -webkit-box-orient: vertical;
 	    -webkit-box-direction: normal;
-	    -webkit-flex-direction: column;
-	        -ms-flex-direction: column;
-	            flex-direction: column;
+	    -webkit-flex-flow: column nowrap;
+	        -ms-flex-flow: column nowrap;
+	            flex-flow: column nowrap;
 
 	    & > *:first-child {
 		    -webkit-box-flex: 0;
@@ -209,7 +209,7 @@
        	-ms-flex: 1 1 auto;
         flex: 1 1 auto;
         margin-bottom: 50px;	// Account for the chat-entry height.
-
+		max-width: 243px;
 
 		.control {
 			display: none;
