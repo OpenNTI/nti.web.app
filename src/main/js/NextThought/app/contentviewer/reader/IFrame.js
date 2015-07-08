@@ -49,7 +49,7 @@ Ext.define('NextThought.app.contentviewer.reader.IFrame', {
 
 		me.mon(me.reader, {
 			destroy: function() {
-				window.removeEventListener('scroll');
+				window.removeEventListener('scroll', scroll);
 				clearInterval(me.syncInterval);
 			},
 			resize: function() { delete me.lastHeight; }
