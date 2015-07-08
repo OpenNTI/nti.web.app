@@ -127,6 +127,6 @@ Ext.define('NextThought.app.notifications.components.Stream', {
 	rowClicked: function(view, rec, item) {
 		rec = this.unwrap(rec);
 
-		this.navigateToObject(rec);
+		this.Router.root.attemptToNavigateToObject(rec);
 	}
 });

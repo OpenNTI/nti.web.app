@@ -350,6 +350,8 @@ Ext.define('NextThought.app.Body', {
 
 		if (root.isCourse) {
 			route = this.getRouteForCourse(root, subPath);
+		} else if (root instanceof NextThought.model.User) {
+			route = this.getRouteForUser(root, subPath);
 		} else {
 			console.error('No route for path: ', root, subPath);
 			route = {
@@ -373,6 +375,18 @@ Ext.define('NextThought.app.Body', {
 		route.path = Globals.trimRoute(route.path);
 
 		route.path = '/course/' + id + '/' + route.path;
+
+		return route;
+	},
+
+
+	getRouteForUser: function(user, path) {
+		var cmp = this.getCmp('profile-user', 'profile-user(true)'),
+			route = cmp.getRouteForPath && cmp.getRouteForPath(path, user),
+			id = user.getId();
+
+		route.path = Globals.trimRoute(route.path);
+		route.path = '/user/' + id + '/' + route.path;
 
 		return route;
 	}

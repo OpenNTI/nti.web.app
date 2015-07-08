@@ -39,25 +39,25 @@ Ext.define('NextThought.app.profiles.user.Index', {
 
 	    this.finalizeInit();
 	},
-	
-	initRoutes: function(){
+
+	initRoutes: function() {
 		this.addRoute('/about', this.showAbout.bind(this));
 		this.addRoute('/activity', this.showActivity.bind(this));
 		this.addRoute('/membership', this.showMembership.bind(this));
-		   
+
 		this.addDefaultRoute('/activity');
 	},
-		   
-	buildHeaderComponent: function(){
+
+	buildHeaderComponent: function() {
 		return {
 		   xtype: 'profile-user-header',
 		   saveProfile: this.saveProfile.bind(this),
 		   removeContact: this.removeContact.bind(this),
 		   addContact: this.addContact.bind(this)
-		}
+		};
 	},
-		   
-	finalizeInit: function(){
+
+	finalizeInit: function() {
 	   window.saveProfile = this.saveProfile.bind(this);
 	},
 
@@ -89,15 +89,15 @@ Ext.define('NextThought.app.profiles.user.Index', {
 
 		return me.getUser;
 	},
-		   
-	resolveEntity: function(id, entity){
+
+	resolveEntity: function(id, entity) {
 		var me = this;
 		return UserRepository.getUser(id)
 		   .then(function(user) {
 					me.activeEntity = user;
-				 
+
 					me.isMe = isMe(user);
-				 
+
 					return user;
 			});
 	},
@@ -275,5 +275,13 @@ Ext.define('NextThought.app.profiles.user.Index', {
 				me.setState(this.activeTab);
 				alert('There was trouble adding your contact.');
 			});
+	},
+
+
+	getRouteForPath: function(path, root) {
+		return {
+			path: '',
+			isFull: true
+		};
 	}
 });
