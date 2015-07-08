@@ -64,6 +64,7 @@ Ext.define('NextThought.controller.Application', {
 
 		nav.pushRootRoute = body.pushRoute.bind(body);
 		nav.navigateToObject = body.navigateToObject.bind(body);
+		nav.attemptToNavigateToObject = body.attemptToNavigateToObject.bind(body);
 
 		NextThought.app.navigation.Actions.doPushRootRoute = body.pushRootRoute.bind(body);
 		NextThought.app.navigation.Actions.doReplaceRootRoute = body.replaceRootRoute.bind(body);

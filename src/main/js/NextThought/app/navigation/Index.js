@@ -181,7 +181,7 @@ Ext.define('NextThought.app.navigation.Index', {
 
 
 	gotoObject: function() {
-		this.navigateToObject.apply(this, arguments);
+		this.attemptToNavigateToObject.apply(this, arguments);
 	},
 
 
