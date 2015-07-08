@@ -18,7 +18,7 @@ Ext.define('NextThought.mixins.ProfileLinks', function() {
 
 
 	function showCard(e, el, position) {
-		var Popup = NextThought.view.account.contacts.management.Popout,
+		var Popup = NextThought.app.account.contacts.management.Popout,
 				pop,
 				user = this.userObject || this.user;
 

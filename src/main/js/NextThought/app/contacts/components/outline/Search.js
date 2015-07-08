@@ -5,8 +5,8 @@ Ext.define('NextThought.app.contacts.components.outline.Search', {
 	requires: [
 		'NextThought.app.groups.StateStore',
 		'NextThought.store.UserSearch',
-		'NextThought.app.chat.StateStore'
-		// 'NextThought.view.account.contacts.management.Popout'
+		'NextThought.app.chat.StateStore',
+		'NextThought.app.account.contacts.management.Popout'
 	],
 
 	preserveScrollOnRefresh: true,
@@ -69,7 +69,6 @@ Ext.define('NextThought.app.contacts.components.outline.Search', {
 
 	rowClicked: function(view, record, item, index, e) {
 		var i = Ext.fly(item);
-		//NextThought.view.account.contacts.management.Popout.popup(record,el,item,[-1, 0]);
 		//if they aren't a contact show the card
 		if (i.hasCls('not-contact')) {
 			e.stopPropagation();
@@ -101,7 +100,7 @@ Ext.define('NextThought.app.contacts.components.outline.Search', {
 			});
 		}
 
-		var popout = NextThought.view.account.contacts.management.Popout,
+		var popout = NextThought.app.account.contacts.management.Popout,
 			el = Ext.get(item), me = this;
 
 		if (!record || me.activeTargetDom === Ext.getDom(Ext.fly(item))) {

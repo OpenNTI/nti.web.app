@@ -1,6 +1,8 @@
 Ext.define('NextThought.app.contacts.components.Card', {
 	extend: 'Ext.Component',
 	alias: 'widget.contacts-tabs-card',
+
+	requires: ['NextThought.app.account.contacts.management.Popout'],
 	mixins: {
 		profileLink: 'NextThought.mixins.ProfileLinks',
 		chatLink: 'NextThought.mixins.ChatLinks'
@@ -146,7 +148,7 @@ Ext.define('NextThought.app.contacts.components.Card', {
 		if (refEl) {
 			refEl.up('.contact-card').addCls('active');
 		}
-		pop = NextThought.view.account.contacts.management.Popout.create({record: me.userObject, refEl: refEl, anchor: 'tl-tr?', offsets: offsets});
+		pop = NextThought.app.account.contacts.management.Popout.create({record: me.userObject, refEl: refEl, anchor: 'tl-tr?', offsets: offsets});
 
 		pop.on('destroy', function() {
 			refEl.up('.contact-card').removeCls('active');
