@@ -2172,6 +2172,10 @@
 	background: white;
 	padding: 20px;
 	
+	.entry[data-route]:not([data-route=""]){
+		cursor: pointer;
+	}
+	
 	&.suggested.users {
 		padding: 20px;
 	}
