@@ -218,7 +218,7 @@ Ext.define('NextThought.app.Body', {
 		   id = route.params.id,
 		   user = route.precache.user;
 
-		id = NextThought.model.User.getIdFromURIPart(id);
+		id = ParseUtils.decodeFromURI(id);
 
 		return userView.setActiveEntity(id, user)
 		   .then(userView.handleRoute.bind(userView, subRoute, route.precache))
