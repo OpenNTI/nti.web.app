@@ -11,7 +11,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.NoteR
 			cn: [
 				{ cls: 'content-callout context', onclick: 'void(0)'},
 				{ cls: 'item reply profile-activity-reply-item', cn: [
-					{ cls: 'avatar' },
+					'{user:avatar}',
 					{ cls: 'controls', cn: [
 						{ cls: 'favorite-spacer' },
 						//{ cls: 'favorite' },
