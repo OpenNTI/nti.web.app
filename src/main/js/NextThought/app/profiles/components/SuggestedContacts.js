@@ -5,6 +5,8 @@ Ext.define('NextThought.app.profiles.components.SuggestedContacts', {
 	cls: 'memberships preview users suggested',
 	title: 'You May Know...',
 
+	profileRouteRoot: '/user',
+
 	entryTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls: 'entry', 'data-route': '{route}', cn: [
 			'{entity:avatar}',

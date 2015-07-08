@@ -4,6 +4,7 @@ Ext.define('NextThought.app.profiles.user.components.membership.parts.Groups', {
 
 	cls: 'memberships full group',
 	title: 'Groups',
+	profileRouteRoot: '/group',
 
 	entryTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls: 'entry', 'data-route': '{route}', cn: [

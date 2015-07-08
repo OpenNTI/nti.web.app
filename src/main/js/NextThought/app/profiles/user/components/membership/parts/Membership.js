@@ -51,5 +51,16 @@ Ext.define('NextThought.app.profiles.user.components.membership.parts.Membership
 	},
 
 
-	onEntryClick: function() {}
+	onEntryClick: function(event, el) {
+		var entryEl = el && Ext.fly(el).up('.entry[data-route]'),
+			route = entryEl && entryEl.getAttribute('data-route'),
+			parts;
+		if(route){
+			parts = [route];
+			if(this.profileRouteRoot){
+				parts = Ext.Array.insert(parts, 0, [this.profileRouteRoot]);
+			}
+			NextThought.app.navigation.Actions.pushRootRoute('', parts.join('/'));
+		}
+	}
 });

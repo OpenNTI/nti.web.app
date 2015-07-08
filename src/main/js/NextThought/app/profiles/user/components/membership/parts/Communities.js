@@ -4,6 +4,7 @@ Ext.define('NextThought.app.profiles.user.components.membership.parts.Communitie
 
 	cls: 'memberships full communities',
 	title: 'Communities',
+	profileRouteRoot: '/community',
 
 	entryTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls: 'entry', 'data-route': '{route}', cn: [
