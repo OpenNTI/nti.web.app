@@ -120,7 +120,9 @@ Ext.define('NextThought.controller.Application', {
 			id = decodeURIComponent(id);
 			path = '/id/';
 		} else if (this.LIBRARY_FRAG_ROUTE.test(fragment)) {
-			//TODO: figure this out
+			id = parts[2];//#!library, available courses, id
+			id = B64.decodeURLFriendly(id);
+			path = '/library/catalog/courses/';
 		} else {
 			console.error('Fragement route we dont know how to handle.', fragment);
 		}
