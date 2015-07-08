@@ -5,7 +5,7 @@ Ext.define('NextThought.app.contacts.components.outline.Search', {
 	requires: [
 		'NextThought.app.groups.StateStore',
 		'NextThought.store.UserSearch',
-		'NextThought.app.chat.StateStore',
+		'NextThought.app.chat.StateStore'
 		// 'NextThought.view.account.contacts.management.Popout'
 	],
 

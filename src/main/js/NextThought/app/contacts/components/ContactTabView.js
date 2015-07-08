@@ -37,7 +37,6 @@ Ext.define('NextThought.app.contacts.components.ContactTabView', {
 	initComponent: function () {
 		this.callParent(arguments);
 
-		debugger;
 		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
 		this.buildStore();
 	},

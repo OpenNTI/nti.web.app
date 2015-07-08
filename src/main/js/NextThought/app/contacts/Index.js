@@ -140,5 +140,5 @@ Ext.define('NextThought.app.contacts.Index', {
 				window.scrollTo(0, me.keyboardUpScrollY);
 			}
 		};
-	},
+	}
 });
