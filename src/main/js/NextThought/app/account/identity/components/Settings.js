@@ -84,7 +84,7 @@ Ext.define('NextThought.app.account.identity.components.Settings', {
 		items.push({xtype: 'menuseparator'});
 
 		//Currently the impersonation link comes back even if we cannot impersonate... so lets add a gate above and beyond the presence of the link...
-		if (Service.getSupportLinks().impersonate && (/@nextthought\.com$/).test($AppConfig.username)) {
+		if ($AppConfig.userObject.getLink('logon.nti.impersonate')&& (/@nextthought\.com$/).test($AppConfig.username)) {
 			items.push({ handler: this.impersonate.bind(this), text: 'Impersonate User...' });
 		}
 

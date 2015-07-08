@@ -18,7 +18,7 @@ Ext.define('NextThought.login.Actions', {
 
 
 	handleImpersonate: function() {
-		var url = Service.getSupportLinks().impersonate,
+		var url = $AppConfig.userObject.getLink('logon.nti.impersonate'),
 			username = url && prompt('What username do you want to impersonate?'),
 			params;
 
