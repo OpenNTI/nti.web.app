@@ -231,6 +231,9 @@
 				display: inline-block;
 				text-align: center;
 			}
+			white-space: nowrap;
+			@include ellipse;
+			height:  1.2em;
 		}
 
 		.education::before {
@@ -1719,6 +1722,8 @@
 				content: '*'
 			}
 		}
+		
+		
 	}
 
 	.label {
