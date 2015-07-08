@@ -124,7 +124,6 @@ Ext.define('NextThought.app.contacts.Index', {
 
 	setActiveView: function(active, inactive, tab) {
 		var me = this;
-		debugger;
 		me.prepareNavigation();
 		me.applyState({
 			active: tab || active
