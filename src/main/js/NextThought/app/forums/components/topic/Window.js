@@ -105,8 +105,53 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 
 	showTopic: function(topic, forum, activeComment) {
 		var topicCmp = this.down('forums-topic-topic'),
-			commentCmp = this.down('forums-topic-comment-thread');
+			commentCmp = this.down('forums-topic-comment-thread'),
+			container = this.up('[currentBundle]'),
+			me = this;
 
+		function stopTimer() {
+			if (me.currentAnalyticId && me.hasCurrentTimer) {
+				delete me.hasCurrentTimer;
+				AnalyticsUtil.stopResourceTimer(me.currentAnalyticId, 'discussion-viewed');
+			}
+		}
+
+		function startTimer() {
+			if (!me.hasCurrentTimer) {
+				me.hasCurrentTimer = true;
+
+				AnalyticsUtil.getResourceTimer(me.currentAnalyticId, {
+					type: 'discussion-viewed',
+					course: container && container.currentBundle && container.currentBundle.getId(),
+					topic_id: me.currentAnalyticId
+				});
+			}
+		}
+		
+		if(topic && topic.getId() !== this.currentAnalyticId){
+			stopTimer();
+			this.currentAnalyticId = topic.getId();
+			startTimer();
+		}
+		
+		if (!this.visibilityMonitors) {
+			this.visibilityMonitors = this.on({
+				'destroy': function() {
+					Ext.destroy(me.visibilityMonitors);
+					stopTimer();
+				},
+				'visibility-changed': function(visible) {
+					//start the time when we become visible, stop it when we hide
+					if (visible) {
+						startTimer();
+					} else {
+						stopTimer();
+					}
+				}
+			}, me, {destroyable: true});
+		}
+
+		
 		if (topic) {
 			Ext.destroy(topicCmp);
 			Ext.destroy(commentCmp);
@@ -166,6 +211,7 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 			}
 		});
 	}
+	
 }, function() {
 	NextThought.app.windows.StateStore.register('application/vnd.nextthought.forums.generalforumcomment', this);
 	NextThought.app.windows.StateStore.register(NextThought.model.forums.ContentHeadlineTopic.mimeType, this);
