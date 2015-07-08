@@ -5,6 +5,8 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Groups', {
 	cls: 'memberships preview group',
 	title: 'Groups',
 
+	limit: 4,
+
 	entryTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls: 'entry', 'data-route': '{route}', cn: [
 			'{group:avatar}',
@@ -21,7 +23,10 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Groups', {
 		user.getGroupMembership()
 			.then(function(groups) {
 				if (groups.length) {
-					groups.slice(0, 4)
+					if(groups.length <= me.limit){
+						me.seeAllEl.hide();
+					}
+					groups.slice(0, me.limit)
 						.map(function(group) {
 							return {
 								group: group,

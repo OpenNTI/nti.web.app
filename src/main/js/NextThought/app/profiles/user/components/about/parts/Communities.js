@@ -4,6 +4,8 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Communities', {
 
 	cls: 'memberships preview communities',
 	title: 'Communities',
+	
+	limit: 4,
 
 	entryTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls: 'entry', 'data-route': '{route}', cn: [
@@ -20,8 +22,11 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Communities', {
 
 		user.getCommunityMembership()
 			.then(function(communities) {
+				if (communities.length <= me.limit){
+					me.seeAllEl.hide();
+				}
 				if (communities.length) {
-					communities.slice(0, 4)
+					communities.slice(0, me.limit)
 						.map(function(community) {
 							return {
 								community: community,
