@@ -2011,7 +2011,6 @@
 			width: 222px;
 			overflow: hidden;
 			white-space: nowrap;
-			@include ellipse;
 			padding: 0.75em 25px 0.75em 0.75em;
 			font-weight: 600;
 			background: #f4f4f4;
@@ -2021,6 +2020,10 @@
 			margin-right: 10px;
 			position: relative;
 			transition: width 0.3s, padding 0.3s;
+
+			&:not(.new-field){
+				@include ellipse;
+			}
 
 			&:nth-of-type(3n){
 				margin-right: 0;
