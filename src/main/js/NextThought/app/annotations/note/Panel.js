@@ -1059,16 +1059,13 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 	startResourceTimer: function() {
 		if (!this.record) { return; }
 
-		var content = Ext.getCmp('content'),
-			bundle = content && content.currentBundle;
+		var bundle = NextThought.app.context.StateStore.getInstance().getRootBundle();
 
-		if (bundle) {
-			AnalyticsUtil.getResourceTimer(this.record.getId(), {
+		AnalyticsUtil.getResourceTimer(this.record.getId(), {
 				type: 'note-viewed',
-				course: bundle.getId(),
+				course: bundle && bundle.getId(),
 				note_id: this.record.getId()
 			});
-		}
 	},
 
 	onDestroy: function() {
