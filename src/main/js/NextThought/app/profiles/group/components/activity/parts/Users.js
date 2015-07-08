@@ -20,7 +20,7 @@ Ext.define('NextThought.app.profiles.group.components.activity.parts.Users', {
 		   
 
 	entryTpl: new Ext.XTemplate(Ext.DomHelper.markup({
-		cls: 'entry', 'data-route': '{route}', cn: [
+		cls: 'entry', 'data-route': '{route}', 'data-qtip': '{name}', cn: [
 			'{member:avatar}',
 			{cls: 'name', html: '{name}'}
 		]
