@@ -52,7 +52,8 @@ Ext.define('NextThought.app.chat.Gutter', {
 		this.mon(this.ChatStore, {
 			'notify': this.handleWindowNotify.bind(this),
 			'added-chat-window': this.bindChatWindow.bind(this),
-			'exited-room': this.onRoomExit.bind(this)
+			'exited-room': this.onRoomExit.bind(this),
+			'presence-changed': this.updatePresence.bind(this)
 		});
 		this.otherContacts = [];
 	},
@@ -74,6 +75,15 @@ Ext.define('NextThought.app.chat.Gutter', {
 	updateList: function(store, users) {
 		this.removeAll(true);
 		this.addContacts(store, users);
+	},
+
+
+	updatePresence: function(username, presence){
+		var user = this.findEntryForUser(username);
+
+		if(user){
+			user.setStatus(presence);
+		}
 	},
 
 

@@ -42,7 +42,14 @@ Ext.define('NextThought.app.chat.components.GutterEntry', {
 	},
 
 
-	setStatus: function() {},
+	setStatus: function(presence) {
+		var currentStatus = this.presence && this.presence.dom.classList[1];
+
+		if(presence && currentStatus){
+			this.presence.toggleCls(currentStatus);
+			this.presence.toggleCls(presence.getName());
+		}
+	},
 
 
 	updateBadgeCount: function(count) {
