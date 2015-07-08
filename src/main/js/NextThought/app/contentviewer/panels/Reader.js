@@ -174,6 +174,23 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 	},
 
 
+	onceReadyForSearch: function() {
+		var reader = this.getReaderContent();
+
+		return reader.onceReadyForSearch();
+	},
+
+
+	showSearchHit: function(hit, fragment) {
+		var reader = this.getReaderContent(),
+			scroll = reader && reader.getScroll();
+
+		if (scroll) {
+			scroll.toSearchHit(hit, fragment);
+		}
+	},
+
+
 	showRemainingTime: function() {
 		var header = this.getToolbar();
 

@@ -308,6 +308,11 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 	},
 
 
+	onceReadyForSearch: function() {
+		return this.getIframe().onceSettled();
+	},
+
+
 	setPageInfo: function(pageInfo, bundle) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setPageInfo.bind(this, pageInfo, bundle));
@@ -331,6 +336,9 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 			.always(function() {
 				maskTarget.unmask();
 				me.splash.removeCls('initial');
+
+				me.isReadyForSearch = true;
+				me.fireEvent('ready-for-search');
 			});
 	},
 

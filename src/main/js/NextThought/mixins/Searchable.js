@@ -4,7 +4,7 @@ Ext.define('NextThought.mixins.Searchable', {
 		SearchHighlighting: 'NextThought.mixins.SearchHitHighlighting'
 	},
 
-	
+
 	requires: [
 		'NextThought.app.search.StateStore'
 	],
@@ -13,7 +13,7 @@ Ext.define('NextThought.mixins.Searchable', {
 	initSearch: function() {
 		this.SearchStore = NextThought.app.search.StateStore.getInstance();
 		this.searchId = this.getContainerIdForSearch();
-		
+
 		var search = this.SearchStore.getHitForContainer(this.searchId);
 
 		if (search) {

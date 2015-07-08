@@ -56,6 +56,11 @@ Ext.define('NextThought.app.contentviewer.Index', {
 		'NextThought.app.contentviewer.panels.*'
 	],
 
+
+	mixins: {
+		Searchable: 'NextThought.mixins.Searchable'
+	},
+
 	layout: 'none',
 
 	constructor: function(config) {
@@ -104,7 +109,24 @@ Ext.define('NextThought.app.contentviewer.Index', {
 					'assignment-submitted': me.fireEvent.bind(me, 'assignment-submitted'),
 					'assessment-graded': me.fireEvent.bind(me, 'assessment-graded')
 				});
+
+				me.initSearch();
 			});
+	},
+
+
+	getContainerIdForSearch: function() {
+		return this.pageInfo && this.pageInfo.getId();
+	},
+
+
+	onceReadyForSearch: function() {
+		return this.reader.onceReadyForSearch();
+	},
+
+
+	showSearchHit: function(hit, fragment) {
+		this.reader.showSearchHit(hit, fragment);
 	},
 
 

@@ -207,18 +207,19 @@ Ext.define('NextThought.app.contentviewer.reader.Scroll', {
 		this.scrollingEl.scrollTo('top', top, animate !== false);
 	},
 
-	toSearchHit: function(result, fragment) {
+	toSearchHit: function(hit, fragment) {
 		var me = this, pos;
 
 		this.reader.getAnnotations().clearSearchHit();
-		if (!result) {
+
+		if (!hit) {
 			return;
 		}
 		//show all the search hits
-		this.reader.getAnnotations().showSearchHit(result.hit);
+		this.reader.getAnnotations().showSearchHit(hit);
 		if (fragment) {
 			console.time('Fragment location');
-			pos = me.getFragmentLocation(fragment, result.hit.get('PhraseSearch'));
+			pos = me.getFragmentLocation(fragment, hit.get('PhraseSearch'));
 			console.timeEnd('Fragment location');
 		}
 
