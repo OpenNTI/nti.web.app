@@ -25,6 +25,7 @@ Ext.define('NextThought.controller.Application', {
 	FRAG_ROUTE: /^#!/,
 	OBJECT_FRAG_ROUTE: /^#!object\/ntiid/i,
 	LIBRARY_FRAG_ROUTE: /^#!library/i,
+	NOTIFICATIONS_FRAG_ROUTE: /^#!profile\/[^\\]+\/Notifications/i,
 
 	MARK_ROUTE: [
 		/^course\/.*\/video.*$/,
@@ -123,13 +124,16 @@ Ext.define('NextThought.controller.Application', {
 			id = parts[2];//#!library, available courses, id
 			id = B64.decodeURLFriendly(id);
 			path = '/library/catalog/courses/';
+		} else if (this.NOTIFICATIONS_FRAG_ROUTE.test(fragment)){
+			path = '/notifications'
 		} else {
 			console.error('Fragement route we dont know how to handle.', fragment);
 		}
 
-		id = ParseUtils.encodeForURI(id);
-
-		path += id;
+		if(id){
+			id = ParseUtils.encodeForURI(id);
+			path += id;
+		}
 
 		return this.handleRoute(document.title, path);
 	},
