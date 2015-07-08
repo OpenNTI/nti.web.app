@@ -11,7 +11,7 @@ Ext.define('NextThought.app.profiles.components.Header', {
 		]},
 		{tag: 'tpl', 'if': '!tip', cn: [
 			{cls: 'button {cls}', 'data-action': '{action}', html: '{label}'}
-		]}	
+		]}
 	])),
 
 
@@ -36,15 +36,15 @@ Ext.define('NextThought.app.profiles.components.Header', {
 		this.callParent(arguments);
 
 		if (!this.buttonsEl) {
-			this.addButton = function(){};
+			this.addButton = function() {};
 			this.clearButtons = function() {};
 		} else {
 			this.mon(this.buttonsEl, 'click', this.onButtonClick.bind(this));
 		}
 
 		if (!this.tabsEl) {
-			this.addTab = function(){};
-			this.clearTabs = function(){};
+			this.addTab = function() {};
+			this.clearTabs = function() {};
 		} else {
 			this.mon(this.tabsEl, 'click', this.onTabClick.bind(this));
 		}

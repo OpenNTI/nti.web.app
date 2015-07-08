@@ -26,5 +26,8 @@ Ext.define('NextThought.model.Community', {
 
 	toString: function() {
 		return this.getName();
-	}
+	},
+
+
+	getForumList: function() {}
 });

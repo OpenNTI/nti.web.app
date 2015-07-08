@@ -29,7 +29,7 @@ Ext.define('NextThought.mixins.Router', {
 			this.initRouter();
 		}
 
-		if (!cmp.Router) {
+		if (!cmp.Route && cmp.initRouter) {
 			cmp.initRouter();
 		}
 

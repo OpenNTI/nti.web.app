@@ -11,6 +11,7 @@ Ext.define('NextThought.app.Body', {
 		'NextThought.app.search.Index',
 		'NextThought.app.profiles.user.Index',
  	    'NextThought.app.profiles.group.Index',
+ 	    'NextThought.app.profiles.community.Index',
 		'NextThought.app.notifications.Index',
 		'NextThought.util.Parsing',
 		'NextThought.app.navigation.StateStore',
@@ -55,6 +56,7 @@ Ext.define('NextThought.app.Body', {
 		this.addRoute('/bundle/:id', this.setBundleActive.bind(this));
 		this.addRoute('/user/:id', this.setUserActive.bind(this));
 		this.addRoute('/group/:id', this.setGroupActive.bind(this));
+		this.addRoute('/community/:id', this.setCommunityActive.bind(this));
 		this.addRoute('/notifications/', this.setNotificationsActive.bind(this));
 		this.addRoute('/search/', this.setSearchActive.bind(this));
 		this.addRoute('/contacts/', this.setContactsActive.bind(this));
@@ -237,6 +239,22 @@ Ext.define('NextThought.app.Body', {
 
 		return userView.setActiveEntity(id, user)
 			.then(userView.handleRoute.bind(userView, subRoute, route.precache))
+			.fail(function() {
+				me.replaceRoute('', '/library');
+			});
+	},
+
+
+	setCommunityActive: function(route, subRoute) {
+		var me = this,
+			communityView = me.setActiveCmp('profile-community'),
+			id = route.params.id,
+			community = route.precache.community;
+
+		id = decodeURIComponent(id);
+
+		return communityView.setActiveEntity(id, community)
+			.then(communityView.handleRoute.bind(communityView, subRoute, route.precache))
 			.fail(function() {
 				me.replaceRoute('', '/library');
 			});

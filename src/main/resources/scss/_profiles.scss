@@ -29,7 +29,24 @@
 	}
 }
 
+.community-header {
+	.buttons {
+		float: right;
+	}
+
+	.title {
+		float: left;
+		line-height: 35px;
+		color: white;
+		margin-top: 40px;
+		margin-bottom: 10px;
+		font-size: 1.25em;
+	}
+}
+
 .profile-header {
+	overflow: hidden;
+
 	.buttons {
 		height: 35px;
 		margin-top: 40px;
@@ -56,6 +73,16 @@
 			}
 
 			&.cancel {
+				padding: 0 1.5em;
+				background-color: $primary-red;
+			}
+
+			&.join {
+				padding: 0 1.5em;
+				background-color: $secondary-green;
+			}
+
+			&.leave {
 				padding: 0 1.5em;
 				background-color: $primary-red;
 			}
@@ -2317,6 +2344,19 @@
 			line-height: 2em;
 			cursor: pointer;
 		}
+	}
+}
+
+.community-profile {
+	.community-body {
+		width: 75%;
+		float: right;
+	}
+
+	.community-sidebar {
+		width: 25%;
+		float: left;
+		padding-right: 5px;
 	}
 }
 
