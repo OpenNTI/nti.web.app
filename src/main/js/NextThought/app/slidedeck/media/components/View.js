@@ -236,7 +236,7 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 
 
 	beforeClose: function() {
-		if (!this.viewer.beforeExitViewer()) {
+		if (this.viewer && !this.viewer.beforeExitViewer()) {
 			return false;
 		}
 

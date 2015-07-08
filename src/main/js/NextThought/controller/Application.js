@@ -21,6 +21,14 @@ Ext.define('NextThought.controller.Application', {
 		{ref: 'nav', selector: 'main-navigation'}
 	],
 
+	MARK_ROUTE: [
+		/^course\/.*\/video.*$/,
+		/^search/,
+		/^notifications/,
+		/^user/,
+		/^group/
+	],
+
 	init: function() {
 		var me = this;
 
@@ -35,6 +43,7 @@ Ext.define('NextThought.controller.Application', {
 		me.GroupActions = NextThought.app.groups.Actions.create();
 		me.ContextStore = NextThought.app.context.StateStore.getInstance();
 		me.NotificationActions = NextThought.app.notifications.Actions.create();
+		me.NavigationActions = NextThought.app.navigation.Actions.create();
 
 		window.addEventListener('popstate', function(e) {
 			me.handleCurrentState();
@@ -92,6 +101,32 @@ Ext.define('NextThought.controller.Application', {
 	},
 
 
+	__shouldMark: function(route) {
+		if (!route) { return false; }
+
+		var shouldMark = false;
+
+		route = Globals.trimRoute(route);
+
+		this.MARK_ROUTE.forEach(function(regex) {
+			shouldMark = shouldMark || regex.test(route);
+		});
+
+		return shouldMark;
+	},
+
+
+	maybeMarkReturn: function(title, route) {
+		var nav = this.NavigationActions,
+			newRouteShouldMark = this.__shouldMark(route),
+			oldRouteShouldMark = this.__shouldMark(this.currentRoute);
+
+		if (newRouteShouldMark && !oldRouteShouldMark) {
+			nav.markReturnPoint(this.currentRoute);
+		}
+	},
+
+
 	handleRoute: function(title, route, precache) {
 		var body = this.getBody(),
 			path = route,
@@ -103,6 +138,10 @@ Ext.define('NextThought.controller.Application', {
 		if (parts[parts.length - 2] === 'object') {
 			path = parts.slice(0, -2).join('/');
 		}
+
+		this.maybeMarkReturn(title, route);
+
+		this.currentRoute = route;
 
 		return body.handleRoute(path, precache)
 			.then(this.onRoute.bind(this, title, route));

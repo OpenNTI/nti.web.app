@@ -80,5 +80,11 @@ Ext.define('NextThought.app.navigation.Actions', {
 	 */
 	setActiveContent: function(obj, masked) {
 		this.store.fireEvent('set-active-content', obj, masked);
+	},
+
+
+
+	markReturnPoint: function(route) {
+		this.store.markReturnPoint(route);
 	}
 });

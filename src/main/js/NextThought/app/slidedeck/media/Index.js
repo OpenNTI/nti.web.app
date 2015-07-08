@@ -2,6 +2,8 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.media-window-view',
 
+	requires: ['NextThought.app.navigation.StateStore'],
+
 	mixins: {
 		Router: 'NextThought.mixins.Router',
 		State: 'NextThought.mixins.State'
@@ -9,10 +11,12 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 
 	layout: 'none',
 
-	initComponent: function (argument) {
+	initComponent: function(argument) {
 		this.callParent(argument);
 
 		this.initRouter();
+
+		this.NavStore = NextThought.app.navigation.StateStore.getInstance();
 
 		this.LibraryActions = NextThought.app.library.Actions.create();
 		this.addRoute('/:id', this.showMediaView.bind(this));
@@ -20,7 +24,7 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 		this.__addKeyMapListeners();
 	},
 
-	
+
 	showMediaView: function(route, subRoute) {
 		var basePath = route.precache.basePath,
 			rec = route.precache.rec,
@@ -31,7 +35,7 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 		this.video = route.precache.video;
 		options.rec = rec;
 
-		if(!me.activeMediaView) {
+		if (!me.activeMediaView) {
 			me.activeMediaView = Ext.widget('media-view', {
 				currentBundle: me.currentBundle,
 				autoShow: true,
@@ -40,12 +44,12 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 			});
 		}
 
-		me.resolveVideo(me.videoId) 
-			.then(function (videoRec) {
+		me.resolveVideo(me.videoId)
+			.then(function(videoRec) {
 				me.video = videoRec;
 
-				if(!basePath && basePath != "") {
-					basePath = me.currentBundle.getContentRoots()[0];					
+				if (!basePath && basePath != '') {
+					basePath = me.currentBundle.getContentRoots()[0];
 				}
 
  				me.transcript = NextThought.model.transcript.TranscriptItem.fromVideo(me.video, basePath);
@@ -53,7 +57,7 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 			});
 	},
 
-	
+
 	showVideoGrid: function(route, subRoute) {
 		//TOOD: not yet handled
 		console.error('route not yet implemented: ', arguments);
@@ -86,14 +90,14 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 	},
 
 
-	resolveVideo: function(id){
+	resolveVideo: function(id) {
 		var me = this, video, basePath;
 
 		if (!id || !this.currentBundle) {
 			return Promise.reject();
 		}
 
-		if(me.video && me.video.isModel && me.video.getId() === id) {
+		if (me.video && me.video.isModel && me.video.getId() === id) {
 			return Promise.resolve(me.video);
 		}
 
@@ -116,8 +120,8 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 	},
 
 
-	bundleChanged: function(bundle){
-		if(bundle && bundle !== this.currentBundle) {
+	bundleChanged: function(bundle) {
+		if (bundle && bundle !== this.currentBundle) {
 			// TODO: Do more, maybe?
 			this.currentBundle = bundle;
 		}
@@ -145,13 +149,21 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 	exitViewer: function() {
 		var me = this;
 
-		if(me.activeMediaView.beforeClose() === false) {
+		if (me.activeMediaView.beforeClose() === false) {
 			return;
 		}
 
 		if (this.handleClose) {
 			wait(120)
-				.then(history.back());
+				.then(function() {
+					var route = me.NavStore.getReturnPoint();
+
+					if (route) {
+						me.pushRootRoute('', route);
+					} else {
+						me.pushRootRoute('Library', '/library');
+					}
+				});
 		}
 	}
 });

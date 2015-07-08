@@ -171,7 +171,13 @@ Ext.define('NextThought.app.navigation.Index', {
 
 
 	goBack: function() {
-		history.back();
+		var returnPoint = this.NavStore.getReturnPoint();
+
+		if (returnPoint) {
+			this.pushRootRoute('', returnPoint);
+		} else {
+			this.pushRootRoute('Library', '/library');
+		}
 	},
 
 
