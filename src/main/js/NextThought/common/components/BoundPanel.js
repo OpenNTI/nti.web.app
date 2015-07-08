@@ -9,11 +9,15 @@ Ext.define('NextThought.common.components.BoundPanel', {
 	initComponent: function() {
 		this.callParent(arguments);
 		this.store = this.store || Ext.getStore(this.storeId || '');
-		if (!this.store) {
-			console.warn('No Store!');
-			return;
+		if (this.store) {
+			this.bindStore(this.store);
 		}
+	},
 
+	bindStore: function (store) {
+		if (!store) { return; }
+
+		this.store = store;
 		this.mon(this.store, {
 			scope: this,
 			load: 'onBoundStoreLoad',
@@ -23,6 +27,10 @@ Ext.define('NextThought.common.components.BoundPanel', {
 			remove: 'onBoundStoreRemove',
 			refresh: 'doRefresh'
 		});
+
+		if (this.rendered) {
+			this.doRefresh(store);
+		}
 	},
 
 

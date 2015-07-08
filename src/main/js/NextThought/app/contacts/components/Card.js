@@ -14,9 +14,7 @@ Ext.define('NextThought.app.contacts.components.Card', {
 	renderTpl: Ext.DomHelper.markup({
 		cls: 'contact-card',
 		cn: [
-			{
-				cls: 'avatar', style: {backgroundImage: 'url({avatarURL});'}
-			},
+			'{user:avatar}',
 			{
 				cls: 'meta',
 				cn: [
@@ -76,6 +74,7 @@ Ext.define('NextThought.app.contacts.components.Card', {
 		this.renderData = Ext.apply(this.renderData || {}, u.getData());
 		this.renderData = Ext.apply(this.renderData, {hideProfile: $AppConfig.disableProfiles === true});
 		this.renderData.name = u.getName();
+		this.renderData.user = this.userObject;
 	},
 
 	afterRender: function() {

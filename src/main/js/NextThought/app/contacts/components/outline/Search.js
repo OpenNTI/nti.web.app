@@ -2,6 +2,13 @@ Ext.define('NextThought.app.contacts.components.outline.Search', {
 	extend: 'Ext.view.View',
 	alias: 'widget.contact-search-overlay',
 
+	requires: [
+		'NextThought.app.groups.StateStore',
+		'NextThought.store.UserSearch',
+		'NextThought.app.chat.StateStore',
+		// 'NextThought.view.account.contacts.management.Popout'
+	],
+
 	preserveScrollOnRefresh: true,
 	overItemCls: 'over',
 	itemSelector: '.contact-row',
@@ -18,10 +25,8 @@ Ext.define('NextThought.app.contacts.components.outline.Search', {
 		]}
 	]}), {
 		isContact: function(values) {
-			var a = Ext.getStore('all-contacts-store'),
-				o = Ext.getStore('online-contacts-store');
-			return (values.Class !== 'User' || o.contains(values.Username) || a.contains(values.Username)) ?
-				   'contact' : 'not-contact';
+			var a = NextThought.app.groups.StateStore.getInstance();
+			return (values.Class !== 'User' || a.isContact(values.Username)) ? 'contact' : 'not-contact';
 		}
 	}),
 
@@ -39,14 +44,20 @@ Ext.define('NextThought.app.contacts.components.outline.Search', {
 	constructor: function(config) {
 		var me = this;
 
+		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
+		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
+		this.ChatActions = NextThought.app.chat.Actions.create();
+
 		me.buildStore();
+
 		me.callParent(arguments);
-		me.mon(Ext.getStore('FriendsList'), {
+
+		me.mon(this.GroupStore.getFriendsList(), {
 			scope: me,
 			'update': 'refresh'
 		});
 
-		me.mon(Ext.getStore('PresenceInfo'), 'presence-changed', function(username, presence) {
+		me.mon(this.ChatStore, 'presence-changed', function(username, presence) {
 			var user = me.store.getById(username);
 
 			if (user) {
@@ -67,7 +78,7 @@ Ext.define('NextThought.app.contacts.components.outline.Search', {
 		}
 
 		this.cancelPopupTimeout();
-		this.fireEvent('chat', record);
+		this.ChatActions.startChat(record);
 		if (!Ext.is.iPad) {
 			this.startPopupTimeout(view, record, item, 2000);
 		}
@@ -114,7 +125,7 @@ Ext.define('NextThought.app.contacts.components.outline.Search', {
 
 
 	buildStore: function() {
-		var flStore = Ext.getStore('FriendsList');
+		var flStore = this.GroupStore.getFriendsList();
 		this.store = new NextThought.store.UserSearch({
 			filters: [
 				//filter out communities, lists, groups and yourself. Just return users.

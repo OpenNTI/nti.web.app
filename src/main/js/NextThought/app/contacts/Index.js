@@ -3,7 +3,10 @@ Ext.define('NextThought.app.contacts.Index', {
 	alias: 'widget.contacts-index',
 
 	requires: [
-		'NextThought.app.contacts.components.TabView'
+		'NextThought.app.contacts.components.TabView',
+		'NextThought.app.contacts.Actions',
+		'NextThought.app.contacts.StateStore',
+		'NextThought.app.contacts.components.ContactTabView'
 	],
 
 	mixins: {
@@ -13,16 +16,18 @@ Ext.define('NextThought.app.contacts.Index', {
 	title: 'Contacts',
 	defaultTab: 'my-contacts',
 
+	id: 'contacts',
+
 	items: [
-		{ xtype: 'contact-tab-view', id: 'my-contacts', bodyCls: 'make-white', outlineLabel: getString('NextThought.view.contacts.View.contact-tab') },
-		{ xtype: 'contact-tab-view', id: 'my-groups',
-			subType: 'group',
-			filterFn: function(group) { return group.hidden !== true && group.isDFL; }
-		},
-		{ xtype: 'contact-tab-view', id: 'my-lists',
-			subType: 'list',
-			filterFn: function(group) { return group.hidden !== true && !group.isDFL; }
-		}
+		{ xtype: 'contacts-tab-view', id: 'my-contacts' } //,
+		// { xtype: 'contact-tab-view', id: 'my-groups',
+		// 	subType: 'group',
+		// 	filterFn: function(group) { return group.hidden !== true && group.isDFL; }
+		// },
+		// { xtype: 'contact-tab-view', id: 'my-lists',
+		// 	subType: 'list',
+		// 	filterFn: function(group) { return group.hidden !== true && !group.isDFL; }
+		// }
 	],
 
 	layout: {
@@ -46,10 +51,50 @@ Ext.define('NextThought.app.contacts.Index', {
 		me.callParent(arguments);
 		this.removeCls('make-white');
 
+		this.ContactsActions = NextThought.app.contacts.Actions.create();
+		this.ContactsStore = NextThought.app.contacts.StateStore.getInstance();
+
+		this.initRouter();
+
+		this.addRoute('/', this.showContacts.bind(this));
+		this.addDefaultRoute('/');
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
 		if (Ext.is.iOS) {
-			this.on('afterrender', this.__adjustmentForiOS.bind(this));
+			this.__adjustmentForiOS();
 		}
 	},
+
+
+	showContacts: function () {
+		console.log(arguments);
+	},
+
+
+	pushState: function(s) {
+		history.pushState({contacts: s}, this.title, location.pathname);
+	},
+
+
+	onTabClicked: function(tabSpec) {
+		if (this.callParent(arguments) === true) {
+			this.pushState({
+				activeTab: this.parseTabSpec(tabSpec).viewId
+			});
+		}
+	},
+
+
+	restore: function(state) {
+		return new Promise(function(fulfill) {
+			this.setActiveTab(((state || {}).contacts || {}).activeTab);
+			fulfill();
+		}.bind(this));
+	},
+
 
 	__adjustmentForiOS: function () {
 		var outline = this.el.down('.contact:nth-child(1)'),
@@ -96,29 +141,4 @@ Ext.define('NextThought.app.contacts.Index', {
 			}
 		};
 	},
-
-
-	pushState: function(s) {
-		debugger;
-		history.pushState({contacts: s}, this.title, location.pathname);
-	},
-
-
-	onTabClicked: function(tabSpec) {
-		debugger;
-		if (this.callParent(arguments) === true) {
-			this.pushState({
-				activeTab: this.parseTabSpec(tabSpec).viewId
-			});
-		}
-	},
-
-
-	restore: function(state) {
-		debugger;
-		return new Promise(function(fulfill) {
-			this.setActiveTab(((state || {}).contacts || {}).activeTab);
-			fulfill();
-		}.bind(this));
-	}
 });

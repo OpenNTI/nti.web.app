@@ -6,7 +6,8 @@ Ext.define('NextThought.app.chat.Gutter', {
 		'NextThought.app.groups.StateStore',
 		'NextThought.app.chat.StateStore',
 		'NextThought.app.chat.Actions',
-		'NextThought.app.chat.components.GutterEntry'
+		'NextThought.app.chat.components.GutterEntry',
+		'NextThought.app.navigation.Actions'
 	],
 
 	cls: 'chat-gutter-window',
@@ -68,7 +69,7 @@ Ext.define('NextThought.app.chat.Gutter', {
 
 
 	goToContacts: function(e) {
-		console.warn('Should Navigate to contacts');
+		NextThought.app.navigation.Actions.pushRootRoute('Contacts', '/contacts/');
 	},
 
 
