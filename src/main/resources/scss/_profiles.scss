@@ -2174,17 +2174,23 @@
 
 	&.condensed {
 		.header {
-			font-size: 10px;
-			font-weight: bold;
+			
 			color: $secondary-grey;
-			text-transform: uppercase;
 			.title {
+				font-size: 18px;
+				font-weight: normal;
 				display: inline-block;
 				padding-right: 20px;
 			}
 			.see-all {
+				font-size: 10px;
+				font-weight: bold;
 				color: $primary-blue;
 				cursor: pointer;
+				postion: relative;
+				text-transform: uppercase;
+				float: right;
+				top: 10px;
 			}
 		}
 		.entries{
