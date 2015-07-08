@@ -49,8 +49,12 @@ Ext.define('NextThought.app.context.components.list.Content', {
 	afterRender: function() {
 		this.callParent(arguments);
 
+		var div = document.createElement('div');
+
 		if (this.snippet) {
-			this.snippetEl.dom.innerHTML = this.snippet.innerHTML;
+			div.appendChild(this.snippet);
+
+			this.snippetEl.dom.innerHTML = div.innerHTML;
 		}
 	},
 
