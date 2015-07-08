@@ -281,7 +281,7 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 		this.addButton({
 			cls: 'presence ' + presenceCls,
 			action: 'onMessage',
-			label: 'Mesage',
+			label: 'Message',
 			tip: isOnline ? '' : this.user.getName() + ' is offline.'
 		});
 	},
