@@ -299,7 +299,7 @@ NTIStrings['NextThought.view.cards.Card.by'] = 'By {creator}';
 NTIStrings['NextThought.view.cards.CardTarget.no-browser-support'] = 'Your browser does not support viewing this content with this application.';
 NTIStrings['NextThought.view.cards.CardTarget.click-here'] = '<span class=link>Click Here</span> to open in another window';
 NTIStrings['NextThought.view.cards.CardTarget.no-mobile-support'] = 'Your mobile device does not support viewing this content with this application.';
-NTIStrings['NextThought.view.cards.CardTarget.update-browser'] = 'Please tey again with the latest version of <a class="link" target="_blank" href="http://www.google.com/chrome">Chrome</a>,<a class="link" target="_blank" href="http://www.apple.com/safari/download/">Safari 5.0+</a>,<a class="link" target="_blank" href="http://www.getfirefox.com">Firefox 5.0+</a>, or <a class=link target="_blank" href="http://www.microsoft.com/ie">Internet explorer 9+</a>';
+NTIStrings['NextThought.view.cards.CardTarget.update-browser'] = 'Please try again with the latest version of <a class="link" target="_blank" href="http://www.google.com/chrome">Chrome</a>,<a class="link" target="_blank" href="http://www.apple.com/safari/download/">Safari 6.0+</a>,<a class="link" target="_blank" href="http://www.getfirefox.com">Firefox 5.0+</a>, or <a class=link target="_blank" href="http://www.microsoft.com/ie">Internet explorer 9+</a>';
 NTIStrings['NextThought.view.chat.DockItem.exit-chat'] = 'Exit Chat';
 NTIStrings['NextThought.view.chat.DockItem.chat-ended'] = 'Ended';
 NTIStrings['NextThought.view.chat.Dock.title'] = 'Chats';
