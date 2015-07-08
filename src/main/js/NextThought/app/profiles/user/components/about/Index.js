@@ -13,7 +13,6 @@ Ext.define('NextThought.app.profiles.user.components.about.Index', {
 		'NextThought.app.profiles.user.components.about.parts.Groups',
 		'NextThought.app.profiles.user.components.about.parts.Positions',
 		'NextThought.app.profiles.user.components.about.parts.Interests',
-		'NextThought.app.profiles.user.components.about.parts.Suggested',
 		'NextThought.app.profiles.components.SuggestedContacts'
 	],
 
@@ -69,7 +68,6 @@ Ext.define('NextThought.app.profiles.user.components.about.Index', {
 			this.educationCmp,
 			this.positionsCmp,
 			this.interestsCmp,
-			// this.down('profile-user-about-suggested'),
 			this.communitiesCmp,
 			this.groupsCmp,
 			this.suggestedCmp
