@@ -16,7 +16,7 @@ Ext.define('NextThought.app.image.OverlayedPanel', {
 	statics: {
 		getData: function(dom, reader) {
 			var images = DomUtils.getImagesFromDom(dom);
-			return NextThought.view.cards.Launcher.getData(dom, reader, images, function() {
+			return NextThought.common.components.cards.Launcher.getData(dom, reader, images, function() {
 				var thumb = images[0];
 				return thumb && thumb.url;
 			});

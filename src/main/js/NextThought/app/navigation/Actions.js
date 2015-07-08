@@ -32,6 +32,9 @@ Ext.define('NextThought.app.navigation.Actions', {
 			//Are we an nttid?
 			if (ParseUtils.isNTIID(newBase)) {
 				//TODO: figure this out
+				newBase = ParseUtils.encodeForURI(newBase);
+
+				this.pushRootRoute('', '/id/' + newBase);
 				return true;
 			}
 

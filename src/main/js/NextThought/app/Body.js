@@ -58,6 +58,7 @@ Ext.define('NextThought.app.Body', {
 		this.addRoute('/notifications/', this.setNotificationsActive.bind(this));
 		this.addRoute('/search/', this.setSearchActive.bind(this));
 		this.addRoute('/contacts/', this.setContactsActive.bind(this));
+		this.addRoute('/id/:id', this.setObjectActive.bind(this));
 
 		this.addDefaultRoute('/library');
 
@@ -257,10 +258,67 @@ Ext.define('NextThought.app.Body', {
 	},
 
 
-	setContactsActive: function (route, subRoute) {
+	setContactsActive: function(route, subRoute) {
 		var contactsView = this.setActiveCmp('contacts-index');
 
 		return contactsView.handleRoute(subRoute, route.precache);
+	},
+
+
+	setObjectActive: function(route, subRoute) {
+		var me = this,
+			id = route.params.id;
+
+		function doNavigate(obj, route) {
+			var path = route.path,
+				objId = obj.getId(),
+				hasWindow = me.Router.WindowActions.hasWindow(obj);
+
+			objId = ParseUtils.encodeForURI(objId);
+
+			if (hasWindow) {
+				path = Globals.trimRoute(path) + '/object/' + objId;
+			}
+
+			me.el.unmask();
+			me.replaceRootRoute('', path);
+		}
+
+		function failedNavigate(obj) {
+			var objId = obj && obj.getId(),
+				path = '/library',
+				hasWindow = obj && me.Router.WindowActions.hasWindow(obj);
+
+			objId = obj && ParseUtils.encodeForURI(objId);
+
+			if (hasWindow) {
+				path = path + '/object/' + objId;
+			}
+
+			me.el.unmask();
+			me.replaceRootRoute('', path);
+		}
+
+		me.el.mask('Loading...');
+
+		id = id && ParseUtils.decodeFromURI(id);
+
+		if (!id) {
+			me.el.unmask();
+			me.replaceRoute('Library', '/library');
+			return;
+		}
+
+		Service.getObject(id)
+			.then(function(obj) {
+				me.attemptToNavigateToObject(obj, {
+					doNavigateToFullPath: doNavigate,
+					onFailedToGetFullPath: failedNavigate
+				});
+			})
+			.fail(function() {
+				failedNavigate();
+			});
 	},
 
 
