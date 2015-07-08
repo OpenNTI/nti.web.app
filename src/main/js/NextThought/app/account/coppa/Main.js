@@ -2,6 +2,7 @@ Ext.define('NextThought.app.account.coppa.Main', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.coppa-main-view',
 	requires: [
+		'NextThought.util.Localization'
 	],
 
 	cls: 'coppa-main-view',

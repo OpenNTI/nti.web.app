@@ -11,6 +11,7 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 		'NextThought.app.windows.components.Loading',
 		'NextThought.app.windows.Actions',
 		'NextThought.model.forums.CommunityHeadlineTopic',
+		'NextThought.model.forums.ContentHeadlineTopic',
 		'NextThought.app.forums.components.topic.parts.*'
 	],
 
