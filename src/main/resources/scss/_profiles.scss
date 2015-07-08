@@ -635,8 +635,9 @@
 
 	.activity-sidebar {
 		float: left;
-		padding-left: 10px;
+		padding-left: 6px;
 		margin-top: 5px;
+		width: 25%;
 	}
 
 	.activity-event-item {
@@ -2173,10 +2174,17 @@
 
 	&.condensed {
 		.header {
+			font-size: 10px;
+			font-weight: bold;
+			color: $secondary-grey;
 			text-transform: uppercase;
 			.title {
 				display: inline-block;
 				padding-right: 20px;
+			}
+			.see-all {
+				color: $primary-blue;
+				cursor: pointer;
 			}
 		}
 		.entries{
