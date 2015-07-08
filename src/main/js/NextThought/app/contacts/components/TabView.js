@@ -8,6 +8,11 @@ Ext.define('NextThought.app.contacts.components.TabView', {
 		'NextThought.common.components.BoundPanel'
 	],
 
+	mixins: {
+		// Route: 'NextThought.mixins.Router'
+	},
+
+
 	navigation: { xtype: 'contacts-outline' },
 	body: { xtype: 'data-bound-panel' },
 

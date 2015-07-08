@@ -6,11 +6,16 @@ Ext.define('NextThought.app.contacts.Index', {
 		'NextThought.app.contacts.components.TabView',
 		'NextThought.app.contacts.Actions',
 		'NextThought.app.contacts.StateStore',
-		'NextThought.app.contacts.components.ContactTabView'
+		'NextThought.app.contacts.components.ContactTabView',
+		'NextThought.app.contacts.components.GroupTabView',
+		'NextThought.app.contacts.components.ListView',
+		'NextThought.common.components.Navigation',
+		'NextThought.app.navigation.Actions'
 	],
 
 	mixins: {
-		Route: 'NextThought.mixins.Router'
+		Route: 'NextThought.mixins.Router',
+		State: 'NextThought.mixins.State'
 	},
 
 	title: 'Contacts',
@@ -19,15 +24,9 @@ Ext.define('NextThought.app.contacts.Index', {
 	id: 'contacts',
 
 	items: [
-		{ xtype: 'contacts-tab-view', id: 'my-contacts' } //,
-		// { xtype: 'contact-tab-view', id: 'my-groups',
-		// 	subType: 'group',
-		// 	filterFn: function(group) { return group.hidden !== true && group.isDFL; }
-		// },
-		// { xtype: 'contact-tab-view', id: 'my-lists',
-		// 	subType: 'list',
-		// 	filterFn: function(group) { return group.hidden !== true && !group.isDFL; }
-		// }
+		{ xtype: 'contacts-tab-view', id: 'my-contacts' },
+		{ xtype: 'groups-tab-view', id: 'my-groups'},
+		{ xtype: 'lists-tab-view', id: 'my-lists'}
 	],
 
 	layout: {
@@ -38,12 +37,7 @@ Ext.define('NextThought.app.contacts.Index', {
 	defaultType: 'box',
 	activeItem: 0,
 
-
-	tabSpecs: [
-		{label: getString('NextThought.view.contacts.View.contact-tab'), viewId: 'my-contacts'},
-		{label: getString('NextThought.view.contacts.View.groups-tab'), viewId: 'my-groups'},
-		{label: getString('NextThought.view.contacts.View.list-tab'), viewId: 'my-lists'}
-	],
+	cmp_map: {},
 
 	initComponent: function() {
 		var me = this;
@@ -53,10 +47,14 @@ Ext.define('NextThought.app.contacts.Index', {
 
 		this.ContactsActions = NextThought.app.contacts.Actions.create();
 		this.ContactsStore = NextThought.app.contacts.StateStore.getInstance();
+		this.NavigationActions = NextThought.app.navigation.Actions.create();
 
 		this.initRouter();
 
 		this.addRoute('/', this.showContacts.bind(this));
+		this.addRoute('/groups', this.showGroups.bind(this));
+		this.addRoute('/lists', this.showLists.bind(this));
+
 		this.addDefaultRoute('/');
 	},
 
@@ -68,23 +66,121 @@ Ext.define('NextThought.app.contacts.Index', {
 		}
 	},
 
+	applyState: function(state) {
+		var active = state.active,
+			tabs = [];
 
-	showContacts: function () {
-		console.log(arguments);
+		tabs.push({
+				text: 'Contacts',
+				route: '/',
+				subRoute: this.contactsRoute,
+				active: active === 'contacts'
+			});
+
+		tabs.push({
+				text: 'Groups',
+				route: '/groups',
+				subRoute: this.groupsRoute,
+				active: active === 'groups'
+			});
+
+		tabs.push({
+				text: 'Distribution Lists',
+				route: '/lists',
+				subRoute: this.listsRoute,
+				active: active === 'lists'
+			});
+
+		this.navigation.setTabs(tabs);
 	},
 
 
-	pushState: function(s) {
-		history.pushState({contacts: s}, this.title, location.pathname);
+	showContacts: function (route, subRoute) {
+		this.contactsRoute = subRoute;
+		this.setActiveView('contacts-tab-view',
+			['groups-tab-view', 'lists-tab-view'],
+			'contacts'
+		);
 	},
 
 
-	onTabClicked: function(tabSpec) {
-		if (this.callParent(arguments) === true) {
-			this.pushState({
-				activeTab: this.parseTabSpec(tabSpec).viewId
+	showGroups: function (route, subRoute) {
+		this.groupsRoute = subRoute;
+		this.setActiveView('groups-tab-view',
+			['contacts-tab-view', 'lists-tab-view'],
+			'groups'
+		);
+	},
+
+
+	showLists: function (route, subRoute) {
+		this.listsRoute = subRoute;
+		this.setActiveView('lists-tab-view',
+			['groups-tab-view', 'contacts-tab-view'],
+			'lists'
+		);
+	},
+
+
+	setActiveView: function(active, inactive, tab) {
+		var me = this;
+		debugger;
+		me.prepareNavigation();
+		me.applyState({
+			active: tab || active
+		});
+
+		return  me.setActiveItem(active);
+	},
+
+
+	setActiveItem: function(xtype) {
+		var layout = this.getLayout(),
+			item = this.getItem(xtype),
+			current = layout.getActiveItem();
+
+		if (current === item) {
+			item.fireEvent('activate');
+		}
+
+
+		this.getLayout().setActiveItem(item);
+	},
+
+
+	getItem: function(xtype) {
+		var cmp = this.cmp_map[xtype];
+
+		if (!cmp) {
+			cmp = this.cmp_map[xtype] = this.down(xtype);
+			// this.addChildRouter(cmp);
+			cmp.contactsContainer = this;
+		}
+
+		return cmp;
+	},
+
+
+	prepareNavigation: function () {
+		this.NavigationActions.updateNavBar({
+			cmp: this.getNavigation()
+		});
+	},
+
+
+	getNavigation: function() {
+		if (!this.navigation || this.navigation.isDestroyed) {
+			this.navigation = NextThought.common.components.Navigation.create({
+				bodyView: this
 			});
 		}
+
+		return this.navigation;
+	},
+
+
+	onTabChange: function(title, route, tab) {
+		this.pushRoute('', route);
 	},
 
 
