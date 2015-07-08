@@ -5,6 +5,8 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Communities', {
 	cls: 'memberships preview communities',
 	title: 'Communities',
 	
+	profileRouteRoot: '/community',
+	
 	limit: 4,
 
 	entryTpl: new Ext.XTemplate(Ext.DomHelper.markup({
