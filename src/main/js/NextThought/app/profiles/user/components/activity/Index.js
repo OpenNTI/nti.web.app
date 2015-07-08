@@ -42,9 +42,30 @@ Ext.define('NextThought.app.profiles.user.components.activity.Index', {
 		this.addRoute('/', this.onRoute.bind(this));
 
 		this.addDefaultRoute('/');
+
+
+		this.on({
+			activate: this.onActivate.bind(this),
+			deactivate: this.onDeactivate.bind(this)
+		});
 	},
-		   
-	initChildComponentRefs: function(){
+
+
+	onActivate: function() {
+		this.items.each(function(item) {
+			item.fireEvent('activate');
+		});
+	},
+
+
+	onDeactivate: function() {
+		this.items.each(function(item) {
+			item.fireEvent('deactivate');
+		});
+	},
+
+
+	initChildComponentRefs: function() {
 		this.streamCmp = this.down('profile-user-activity-stream');
 		this.sidebarCmp = this.down('profile-user-activity-sidebar');
 	},

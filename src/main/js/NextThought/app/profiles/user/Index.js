@@ -108,7 +108,8 @@ Ext.define('NextThought.app.profiles.user.Index', {
 
 
 	setActiveItem: function(xtype) {
-		var cmp = this.down(xtype);
+		var cmp = this.down(xtype),
+			current = this.bodyCmp.getLayout().getActiveItem(cmp);
 
 		if (!cmp) {
 			cmp = this.bodyCmp.add(Ext.widget(xtype));
@@ -117,6 +118,10 @@ Ext.define('NextThought.app.profiles.user.Index', {
 		}
 
 		this.bodyCmp.getLayout().setActiveItem(cmp);
+
+		if (!current && cmp) {
+			cmp.fireEvent('activate');
+		}
 
 		return cmp;
 	},

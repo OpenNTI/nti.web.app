@@ -22,13 +22,31 @@ Ext.define('NextThought.app.profiles.user.components.activity.Stream', {
 
 	initComponent: function() {
 		this.callParent(arguments);
+
+		this.onScroll = this.onScroll.bind(this);
+
+		this.on({
+			activate: this.onActivate.bind(this),
+			deactivate: this.onDeactivate.bind(this)
+		});
 	},
-		   
-	initialWidgetConfig: function(){
-		return { xtype: 'joined-event', username: this.username }
+
+
+	onActivate: function() {
+		window.addEventListener('scroll', this.onScroll);
 	},
-		   
-	hasInitialWidget: function(){
+
+
+	onDeactivate: function() {
+		window.removeEventListener('scroll', this.onScroll);
+	},
+
+
+	initialWidgetConfig: function() {
+		return { xtype: 'joined-event', username: this.username };
+	},
+
+	hasInitialWidget: function() {
 		return !!this.down('joined-event');
 	},
 
@@ -47,8 +65,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.Stream', {
 		if (this.store) {
 			this.removeAll(true);
 		}
-		
-		if(this.storeListeners){
+
+		if (this.storeListeners) {
 		   this.storeListeners.destroy();
 		}
 
@@ -267,9 +285,9 @@ Ext.define('NextThought.app.profiles.user.components.activity.Stream', {
 	},
 
 
-	onScroll: function(e) {
-		var el = e.getTarget(),
-			height = Ext.fly(el).getHeight();
+	onScroll: function() {
+		var el = document.body,
+			height = document.documentElement.clientHeight;
 
 		if (el.scrollTop + height >= el.scrollHeight) {
 			this.onScrolledToBottom();
