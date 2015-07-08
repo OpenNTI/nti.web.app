@@ -42,6 +42,7 @@ Ext.define('NextThought.app.forums.components.forum.Index', {
 		var state = this.getRouteState();
 
 		delete state.currentPage;
+		delete state.search;
 
 		this.pushRouteState(state, title, route, precache);
 	},
