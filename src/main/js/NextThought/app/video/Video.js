@@ -453,7 +453,7 @@ Ext.define('NextThought.app.video.Video', {
 			threshold = 5,
 			current = this.playlist[this.playlistIndex],
 			id = current && current.getId(),
-			hasTranscript = !!this.up('media-viewer'),
+			hasTranscript = !!this.up('media-view'),
 			container = this.up('[currentBundle]') || Ext.getCmp('content'),
 			bundle = container && container.currentBundle && container.currentBundle.getId();
 
