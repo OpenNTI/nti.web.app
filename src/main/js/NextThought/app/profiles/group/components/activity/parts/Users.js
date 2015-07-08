@@ -5,7 +5,7 @@ Ext.define('NextThought.app.profiles.group.components.activity.parts.Users', {
 	cls: 'memberships condensed group',
 	title: 'Members',
 		   
-    limit: 30,
+	limit: 30,
 		   
 	renderSelectors: {
 		titleEl: '.title',
@@ -36,6 +36,11 @@ Ext.define('NextThought.app.profiles.group.components.activity.parts.Users', {
 		var me = this;
 
 		this.totalCount = friends.length;
+		
+		if(this.totalCount <= this.limit){
+			this.seeAllEl.hide();
+		}
+		
 		friends = friends.slice(0, this.limit);
 		headingString = Ext.String.format('{0} ({1})', this.title, this.totalCount);
 		this.titleEl.setHTML(headingString);
