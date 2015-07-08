@@ -2,6 +2,8 @@
 Ext.define('NextThought.model.courses.assignments.Summary', {
 	extend: 'NextThought.model.Base',
 
+	requires: ['NextThought.model.User'],
+
 	fields: [
 		{name: 'Alias', type: 'string'},
 		{name: 'Username', type: 'string'},
