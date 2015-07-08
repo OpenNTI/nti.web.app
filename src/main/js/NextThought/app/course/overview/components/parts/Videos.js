@@ -23,7 +23,7 @@ Ext.define('NextThought.app.course.overview.components.parts.Videos', {
 
 	requires: [
 		'NextThought.model.PlaylistItem',
-		'NextThought.common.video.Video',
+		'NextThought.app.video.Video',
 		'Ext.data.reader.Json',
 		'NextThought.app.library.Actions'
 	],
