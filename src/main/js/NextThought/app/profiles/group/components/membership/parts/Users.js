@@ -30,7 +30,7 @@ Ext.define('NextThought.app.profiles.group.components.membership.parts.Users', {
 								return {
 								member: member,
 								name: member.getName(),
-								route: ParseUtils.encodeForURI(member.getId()),
+								route: ParseUtils.encodeForURI(member.getId())
 								};
 								})
 					.forEach(me.addEntry.bind(me));
