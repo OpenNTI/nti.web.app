@@ -162,7 +162,7 @@ Ext.define('NextThought.app.profiles.user.components.about.Index', {
 
 		values.education = this.educationCmp.getValues();
 		values.positions = this.positionsCmp.getValues();
-		values.interests = this.interestsCmp.getValues();
+		values.interests = Ext.Array.filter(this.interestsCmp.getValues()||[], function(i){return !Ext.isEmpty(i);});
 
 		return values;
 	},
