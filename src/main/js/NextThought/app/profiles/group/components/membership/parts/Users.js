@@ -14,24 +14,28 @@ Ext.define('NextThought.app.profiles.group.components.membership.parts.Users', {
 
 
 	setUser: function(user, isMe) {
+		var me = this,
+		   friends = user.get('friends');
+	    return this.setFriends(friends);
+	},
+		   
+	setFriends: function(friends){
 		var me = this;
-
 		me.removeAll();
-		
-		return UserRepository.getUser(user.get('friends'))
-			.then(function(members) {
-				if (members.length) {
+		return UserRepository.getUser(friends)
+		   .then(function(members) {
+				 if (members.length) {
 					members.map(function(member) {
-						return {
-							member: member,
-							name: member.getName(),
-							route: ParseUtils.encodeForURI(member.getId())
-						};
-					})
+								return {
+								member: member,
+								name: member.getName(),
+								route: ParseUtils.encodeForURI(member.getId())
+								};
+								})
 					.forEach(me.addEntry.bind(me));
-				} else {
+				 } else {
 					me.showEmptyText('This group has no members');
-				}
+				 }
 			});
 	}
 });

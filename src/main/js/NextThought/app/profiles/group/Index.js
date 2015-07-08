@@ -77,7 +77,8 @@ Ext.define('NextThought.app.profiles.group.Index', {
 	showActivity: function(route, subRoute) {
 		var activityCmp = this.setActiveItem('profile-group-activity'),
 		    headerCmp = this.headerCmp;
-		   
+		    
+		activityCmp.gotoMembership = this.pushRoute.bind(this, 'Membership', '/membership');
 		this.setState('activity');
 		  
 		return activityCmp.userChanged(this.activeEntity, false)
