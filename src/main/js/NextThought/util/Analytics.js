@@ -68,16 +68,7 @@ Ext.define('NextThought.util.Analytics', {
 
 
 	addContext: function(context, isRoot) {
-		if (!context) {
-			this.context = [];
-			return;
-		}
-
-		if (isRoot) {
-			this.context = [];
-		}
-
-		this.context.push(context);
+	
 	},
 
 
