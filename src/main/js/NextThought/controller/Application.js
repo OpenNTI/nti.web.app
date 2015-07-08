@@ -21,6 +21,11 @@ Ext.define('NextThought.controller.Application', {
 		{ref: 'nav', selector: 'main-navigation'}
 	],
 
+
+	FRAG_ROUTE: /^#!/,
+	OBJECT_FRAG_ROUTE: /^#!object\/ntiid/i,
+	LIBRARY_FRAG_ROUTE: /^#!library/i,
+
 	MARK_ROUTE: [
 		/^course\/.*\/video.*$/,
 		/^search/,
@@ -85,6 +90,7 @@ Ext.define('NextThought.controller.Application', {
 
 	handleCurrentState: function() {
 		var path = Globals.trimRoute(window.location.pathname),
+			hash = window.location.hash,
 			parts = path.split('/');
 
 		//Get the first part of the path and use that as the path root for all the routes
@@ -92,10 +98,36 @@ Ext.define('NextThought.controller.Application', {
 
 		path = parts.slice(1).join('/');
 
-		//TODO: change to search once we can handle query params
+		if (hash && this.FRAG_ROUTE.test(hash)) {
+			return this.handleFragmentRoute(hash);
+		}
+
 		if (window.location.search) {
 			path += window.location.search;
 		}
+
+		return this.handleRoute(document.title, path);
+	},
+
+
+	handleFragmentRoute: function(fragment) {
+		var path = '',
+			parts = fragment.split('/'),
+			id, state;
+
+		if (this.OBJECT_FRAG_ROUTE.test(fragment)) {
+			id = parts.last();
+			id = decodeURIComponent(id);
+			path = '/id/';
+		} else if (this.LIBRARY_FRAG_ROUTE.test(fragment)) {
+			//TODO: figure this out
+		} else {
+			console.error('Fragement route we dont know how to handle.', fragment);
+		}
+
+		id = ParseUtils.encodeForURI(id);
+
+		path += id;
 
 		return this.handleRoute(document.title, path);
 	},
