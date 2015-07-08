@@ -73,12 +73,32 @@ Ext.define('NextThought.util.Analytics', {
 
 
 	getContextRoot: function() {
-		return this.context[0];
+		return this.getContext().first();
 	},
 
 
 	getContext: function() {
-		return this.context;
+		var ContextSS = NextThought.app.context.StateStore.getInstance(),
+			contextObjects = ContextSS.getContext(),
+			contextStrings = [];
+			
+		function mapContextObjectToAnalyticContextString(contextPart){
+			var contextObject = contextPart && contextPart.obj,
+				contextCmp = contextPart && contextPart.cmp,
+				contextStr = null;
+				
+			if(contextObject && Ext.isFunction(contextObject.getId)){
+				contextStr = contextObject.getId();
+			}
+			if(!contextStr){
+				contextStr = contextCmp && contextCmp.contextIdentifier;
+			}
+			
+			return contextStr;
+		}
+		contextStrings = Ext.Array.map(contextObjects, mapContextObjectToAnalyticContextString);
+		contextStrings = Ext.Array.filter(contextStrings, function(str){return !Ext.isEmpty(str)});
+		return contextStrings || [];
 	},
 
 
@@ -149,7 +169,7 @@ Ext.define('NextThought.util.Analytics', {
 		data.user = $AppConfig.username;
 		data.resource_id = resourceId;
 
-		if (data.course) {
+		if (data.course && data.context_path.first() != data.course) {
 			data.context_path.unshift(data.course);
 		}
 
