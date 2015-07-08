@@ -162,7 +162,8 @@ Ext.define('NextThought.app.contacts.Index', {
 
 	prepareNavigation: function () {
 		this.NavigationActions.updateNavBar({
-			cmp: this.getNavigation()
+			cmp: this.getNavigation(),
+			hideBranding: true
 		});
 	},
 
