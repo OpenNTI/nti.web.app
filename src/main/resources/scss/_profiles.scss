@@ -2171,6 +2171,10 @@
 .memberships {
 	background: white;
 	padding: 20px;
+	
+	&.suggested.users {
+		padding: 20px;
+	}
 
 	&.condensed {
 		.header {
@@ -2187,10 +2191,9 @@
 				font-weight: bold;
 				color: $primary-blue;
 				cursor: pointer;
-				postion: relative;
 				text-transform: uppercase;
 				float: right;
-				top: 10px;
+				padding-top: 10px;
 			}
 		}
 		.entries{

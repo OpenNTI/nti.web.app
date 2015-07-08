@@ -13,7 +13,8 @@ Ext.define('NextThought.app.profiles.user.components.about.Index', {
 		'NextThought.app.profiles.user.components.about.parts.Groups',
 		'NextThought.app.profiles.user.components.about.parts.Positions',
 		'NextThought.app.profiles.user.components.about.parts.Interests',
-		'NextThought.app.profiles.user.components.about.parts.Suggested'
+		'NextThought.app.profiles.user.components.about.parts.Suggested',
+		'NextThought.app.profiles.components.SuggestedContacts'
 	],
 
 
@@ -37,7 +38,7 @@ Ext.define('NextThought.app.profiles.user.components.about.Index', {
 			layout: 'none',
 			cls: 'right',
 			items: [
-				// {xtype: 'profile-user-about-suggested'},
+				{xtype: 'profile-suggested-contacts'},
 				{xtype: 'profile-user-about-communities'},
 				{xtype: 'profile-user-about-groups'}
 			]
@@ -61,6 +62,7 @@ Ext.define('NextThought.app.profiles.user.components.about.Index', {
 		this.interestsCmp = this.down('profile-user-about-interests');
 		this.communitiesCmp = this.down('profile-user-about-communities');
 		this.groupsCmp = this.down('profile-user-about-groups');
+		this.suggestedCmp = this.down('profile-suggested-contacts');
 
 		this.profileParts = [
 			this.aboutCmp,
@@ -69,7 +71,8 @@ Ext.define('NextThought.app.profiles.user.components.about.Index', {
 			this.interestsCmp,
 			// this.down('profile-user-about-suggested'),
 			this.communitiesCmp,
-			this.groupsCmp
+			this.groupsCmp,
+			this.suggestedCmp
 		];
 
 		this.on('clear-errors', this.clearError.bind(this));

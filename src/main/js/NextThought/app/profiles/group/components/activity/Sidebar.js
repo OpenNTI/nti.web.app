@@ -3,7 +3,8 @@ Ext.define('NextThought.app.profiles.group.components.activity.Sidebar', {
 	alias: 'widget.profile-group-activity-sidebar',
 
 	requires: [
-		'NextThought.app.profiles.group.components.activity.parts.Users'
+		'NextThought.app.profiles.group.components.activity.parts.Users',
+		'NextThought.app.profiles.components.SuggestedContacts'
 	],
 		   
 	layout: 'none',
@@ -11,14 +12,21 @@ Ext.define('NextThought.app.profiles.group.components.activity.Sidebar', {
 	cls: 'activity-sidebar',
 
 	items: [
-		{xtype: 'profile-group-membership-condensed'}
+		{xtype: 'profile-group-membership-condensed'},
+		{xtype: 'profile-suggested-contacts'}
 	],
-		   
+	
+	initComponent: function(){	
+		this.callParent(arguments);
+		this.membershipCmp = this.down('profile-group-membership-condensed');
+		this.suggestedCmp = this.down('profile-suggested-contacts');
+	},
+	
 	userChanged: function(entity){
-		var membership = this.down('profile-group-membership-condensed');
-		if(!membership){
-		   return Promise.reject();
-		}
-		return membership.setUser(entity);
+		var me = this;
+		return Promise.all([
+			me.membershipCmp.setUser(entity),
+			me.suggestedCmp.setEntity(entity)
+		]);
 	}
 });
