@@ -101,7 +101,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 		this.aboutEl.update(data.about || '');
 		this.emailEl.update(data.email || '');
 		this.locationEl.update(data.location || '');
-		this.homepageEl.update(data.homepage || '');
+		this.homepageEl.update(data.home_page || '');
 		this.facebookEl.update(data.facebook || '');
 		this.linkedInEl.update(data.linkedIn || '');
 		this.twitterEl.update(data.twitter || '');
