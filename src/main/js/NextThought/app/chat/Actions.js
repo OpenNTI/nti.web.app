@@ -333,6 +333,28 @@ Ext.define('NextThought.app.chat.Actions', {
 		return o.roomInfo;
 	},
 
+	onMessageError: function(errorObject, msg) {
+		var cid, win, view;
+
+		if (!msg) {
+			//TODO what to do here, pop up something generic.
+			console.error('No message object tied to error.  Dropping error', errorObject);
+			return;
+		}
+
+		//TODO do we need to do the window rebuilding stuff here
+		//like in onMessage?
+
+		cid = msg.get('ContainerId');
+		win = this.ChatStore.getChatWindow(cid);
+		view = win ? win.down('chat-view') : null;
+		if (view) {
+			view.showError(errorObject);
+		}
+		else {
+			console.warn('Error sending chat message but no chat view to show it in', msg, errorObject);
+		}
+	},
 
 	clearErrorForRoom: function(room) {
 		var cid, win, view;
