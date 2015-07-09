@@ -55,7 +55,7 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 			autoEl: {html: 'Loading...'}
 		});
 
-		this.loadingCmp.hide();
+		this.loadingCmp.addCls('hidden');
 	},
 
 
@@ -75,7 +75,7 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 			batchStart: 0
 		};
 
-		this.loadingCmp.show();
+		this.loadingCmp.removeCls('hidden');
 
 		if (this.emptyCmp) {
 			this.emptyCmp.destroy();
@@ -197,9 +197,9 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 
 		if (batch.ItemCount) {
 			this.addItems(batch.Items)
-				.always(this.loadingCmp.hide.bind(this.loadingCmp));
+				.always(this.loadingCmp.addClass.bind(this.loadingCmp, 'hidden'));
 		} else {
-			this.loadingCmp.hide();
+			this.loadingCmp.addCls('hidden');
 			this.showEmpty();
 		}
 
