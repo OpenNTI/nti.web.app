@@ -17,6 +17,11 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 		{cls: 'field-container', cn: [
 			{tag: 'span', cls: 'field-label edit-only', html: 'Name'},
 			{cls: 'error-msg'},
+			{cls: 'field realname edit-only', 'data-field': 'realname', tabindex: '0'}
+		]},
+		{cls: 'field-container', cn: [
+			{tag: 'span', cls: 'field-label edit-only', html: 'Display Name'},
+			{cls: 'error-msg'},
 			{cls: 'field alias edit-only', 'data-field': 'alias', tabindex: '0'}
 		]},
 		{cls: 'field-container', cn: [
@@ -60,6 +65,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 	renderSelectors: {
 		aboutEl: '.field.about',
 		nameEl: '.field.alias',
+		realnameEl: '.field.realname',
 		emailEl: '.field.email',
 		locationEl: '.field.location',
 		homepageEl: '.field.homepage',
@@ -98,6 +104,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 		var data = user.getAboutData();
 
 		this.nameEl.update(data.displayName || '');
+		this.realnameEl.update(data.realname || '');
 		this.aboutEl.update(data.about || '');
 		this.emailEl.update(data.email || '');
 		this.locationEl.update(data.location || '');
@@ -117,19 +124,28 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 
 	setEditable: function() {
 		this.callParent(arguments);
-
-		if (!this.nameEl.hasCls('editable') && isFeature('request-alias-change') && this.isMe) {
-			this.nameEl.addCls('request');
-		}
+		this.updateRequestAlias();
 	},
 
 
 	setUneditable: function() {
 		this.callParent(arguments);
-
-		this.nameEl.removeCls('request');
+		this.updateRequestAlias();
 	},
-
+	
+	setSchema: function() {
+		this.callParent(arguments);
+		this.updateRequestAlias();
+	},
+	
+	updateRequestAlias: function(){
+		if (!this.nameEl.hasCls('editable') && isFeature('request-alias-change') && this.isMe) {
+			this.nameEl.addCls('request');
+		}
+		else{
+			this.nameEl.removeCls('request');
+		}
+	},
 
 	requestAliasChange: function(e) {
 		if (e.getTarget('.request')) {
@@ -176,6 +192,14 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 				{
 					name: 'about',
 					selector: 'aboutEl'
+				},
+				{
+					name: 'alias',
+					selector: 'nameEl'
+				},
+				{
+					name: 'realname',
+					selector: 'realnameEl'
 				},
 				{
 					name: 'email',

@@ -74,8 +74,6 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.FieldSet', {
 
 
 	setSchema: function(schema) {
-		schema.ProfileSchema.alias.readonly = true;
-
 		this.profileSchema = schema;
 
 		if (!this.rendered) {

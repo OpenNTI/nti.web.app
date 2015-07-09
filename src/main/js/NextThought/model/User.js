@@ -231,6 +231,7 @@ Ext.define('NextThought.model.User', {
 	getAboutData: function() {
 		return {
 			displayName: this.getName(),
+			realname: this.get('realname'),
 			about: this.get('about'),
 			email: this.get('email'),
 			home_page: this.get('home_page'),
