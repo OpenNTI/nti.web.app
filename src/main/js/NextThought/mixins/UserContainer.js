@@ -10,7 +10,8 @@
 Ext.define('NextThought.mixins.UserContainer', {
 
 	requires: [
-		'Ext.Action'
+		'Ext.Action',
+		'NextThought.app.contacts.components.coderetrieval.Window'
 	],
 
 
@@ -18,6 +19,8 @@ Ext.define('NextThought.mixins.UserContainer', {
 	constructor: function() {
 		this.on('presence-changed', this.presenceOfComponentChanged, this);
 		this.on('beforeRender', this.onCmpRendered, this);
+		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
+		this.GroupActions = NextThought.app.groups.Actions.create();
 	},
 
 	setupActions: function(group, ignoreChatOption) {
@@ -307,7 +310,7 @@ Ext.define('NextThought.mixins.UserContainer', {
 									' will be permanently deleted...']);
 		function cb(str) {
 			if (str === 'ok') {
-				me.fireEvent('delete-group', me.associatedGroup);
+				me.GroupActions.deleteGroup(me.associatedGroup);
 			}
 		}
 
@@ -323,15 +326,31 @@ Ext.define('NextThought.mixins.UserContainer', {
 
 
 	getGroupCode: function(group) {
-		if (group.getLink('default-trivial-invitation-code')) {
-			this.fireEvent('get-group-code', group);
+		var dn = group.get('displayName');
+		if (!group.getLink('default-trivial-invitation-code')) {
+			return;
 		}
+
+		this.GroupActions.getGroupCode(group)
+			.then(function(code) {
+				var win = Ext.widget('coderetrieval-window', {groupName: dn, code: code});
+				win.show();
+			})
+			.fail(function(errorText) {
+				alert(errorText);
+			});
 	},
 
 
 	leaveGroup: function(group) {
 		if (group.getLink('my_membership')) {
-			this.fireEvent('leave-group', group);
+			this.GroupActions.leaveGroup(group)
+				.then(function() {
+					console.log('successfully left the group');
+				})
+				.fail(function(errorText) {
+					alert(errorText);
+				});
 		}
 	},
 
@@ -349,7 +368,7 @@ Ext.define('NextThought.mixins.UserContainer', {
 
 		function cb(str) {
 			if (str === 'ok') {
-				me.fireEvent('remove-contact', group, user.getId());
+				me.GroupActions.removeContact(group, user.getId());
 			}
 		}
 

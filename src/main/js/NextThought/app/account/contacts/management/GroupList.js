@@ -6,7 +6,8 @@ Ext.define('NextThought.app.account.contacts.management.GroupList', {
 	},
 
 	requires: [
-		'NextThought.app.groups.StateStore'
+		'NextThought.app.groups.StateStore',
+		'NextThought.app.groups.Actions'
 	],
 
 	ui: 'nt',
@@ -25,6 +26,7 @@ Ext.define('NextThought.app.account.contacts.management.GroupList', {
 
 	initComponent: function() {
 		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
+		this.GroupActions = NextThought.app.groups.Actions.create();
 		this.buildGroupListStore();
 		this.callParent(arguments);
 		this.itemSelector = '.selection-list-item';
@@ -67,8 +69,8 @@ Ext.define('NextThought.app.account.contacts.management.GroupList', {
 
 		this.store.mon(fstore, 'add', function(store, record, i) {
 			if (me.store) {
-        me.store.add(record);
-      }
+				me.store.add(record);
+			}
 		}, this);
 
 	},
@@ -210,16 +212,17 @@ Ext.define('NextThought.app.account.contacts.management.GroupList', {
 		delete this.ignoreSelection;
 	},
 
-	onDeselect: function(view,group) {
+	onDeselect: function(view, group) {
 		if (!this.ignoreSelection && group && group.hasFriend(this.username)) {
-			this.fireEvent('remove-contact', group, this.username);
+			this.GroupActions.removeContact(group, this.username);
 		}
 	},
 
 	onSelect: function(view, group) {
 		var me = this;
 		if (!this.ignoreSelection && group && !group.hasFriend(this.username)) {
-			this.fireEvent('add-contact', this.username, [group], Ext.bind(me.onSelectCallback, me, arguments));
+			this.GroupActions.addContact(this.username, [group])
+				.then(me.onSelectCallback.bind(me));
 		}
 	},
 

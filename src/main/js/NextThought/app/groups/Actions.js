@@ -294,7 +294,7 @@ Ext.define('NextThought.app.groups.Actions', {
 
 			Ext.each(groupList, function(g) {
 				var oldValue;
-				if (g.get('Username') !== contactsId && !g.hasFriend(username)) {
+				if (g.get('Username') !== contactId && !g.hasFriend(username)) {
 					oldValue = g.get('friends').slice();
 					g.addFriend(username).saveField('friends', undefined, finish, revertEditOnError(g, oldValue));
 				}
@@ -439,6 +439,12 @@ Ext.define('NextThought.app.groups.Actions', {
 	},
 
 
+	getGroupCode: function(record) {
+		var dn = record.get('displayName');
+		return this.fetchGroupCode(record, dn);
+	},
+
+
 	escapeGroupName: function(name) {
 		//Dataserver blows chunks if on @@ or @( at the beginning
 		//look for these things and yank them out.  This was happening
@@ -488,8 +494,64 @@ Ext.define('NextThought.app.groups.Actions', {
 				}
 			});
 		});
+	},
 
 
+	deleteGroup: function(record) {
+		if (record.get('Username') !== this.getMyContactsId()) {
+			record.destroy();
+		}
+	},
+
+
+	leaveGroup: function(record) {
+		var link = record.getLink('my_membership'),
+			dn = record.get('displayName'), me = this;
+
+		if (!link) {
+			return Promise.reject('Unable to leave ' + dn);
+		}
+
+		return new Promise( function(fulfill, reject) {
+			Ext.Ajax.request({
+				url: link,
+				scope: this,
+				method: 'DELETE',
+				headers: {
+					Accept: 'application/json'
+				},
+				callback: function(q, s, r) {
+					console.log(r.responseText);
+					var errorText = 'An error occurred leaving  ' + dn,
+						result;
+
+					if (s) {
+						result = Ext.decode(r.responseText, true);
+						result = ParseUtils.parseItems(result);
+					}
+
+					if (Ext.isEmpty(result)) {
+						reject(errorText + ' : ' + r.status);
+					}
+					else {
+						Ext.callback(success, this, [result[0]]);
+
+						//onSuccess instead of reloading the whole store
+						//lets try and just remove the one thing we need
+						me.GroupStore.getFriendsList().remove(record);
+						fulfill();
+					}
+				}
+			});
+		});
+	},
+
+
+	getMyContactsId: function() {
+		if (!this.myContactsId) {
+			this.myContactsId = Ext.String.format('mycontacts-{0}', $AppConfig.username);
+		}
+		return this.myContactsId;
 	}
 
 });
