@@ -43,10 +43,15 @@ Ext.define('NextThought.app.contacts.components.ContactTabView', {
 
 
 	buildStore: function() {
-		var s = this.GroupStore.getAllContactsStore();
+		var s = this.GroupStore.getAllContactsStore(),
+			store = StoreUtils.newView(s);
 
 		if (Ext.isFunction(this.filter)) {
 			s.filter(this.filter);
+		}
+
+		if (store.model === NextThought.model.User) {
+			store.on('datachanged', 'injectLetterDividers', this);
 		}
 
 		this.navigation.bindStore(s);

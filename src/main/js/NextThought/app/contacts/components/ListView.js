@@ -20,7 +20,8 @@ Ext.define('NextThought.app.contacts.components.ListView', {
 		defaultType: 'contacts-tabs-grouping',
 		items: [],
 		ui: 'contacts-list',
-		cls: 'make-white contact-panel',
+		cls: 'list-panel',
+		filter: function(group) { return group.hidden !== true && !group.isDFL; },
 		emptyCmp: {
 			xtype: 'box', emptyState: true,
 			renderTpl: Ext.DomHelper.markup([{
@@ -45,13 +46,22 @@ Ext.define('NextThought.app.contacts.components.ListView', {
 
 
 	buildStore: function() {
-		var s = this.GroupStore.getAllContactsStore();
+		var s = this.GroupStore.getFriendsList(),
+			store = StoreUtils.newView(s);
 
 		if (Ext.isFunction(this.filter)) {
-			s.filter(this.filter);
+			store.filter(this.filter);
 		}
 
-		this.navigation.bindStore(s);
 		this.body.bindStore(s);
+		this.navigation.bindStore(store);
+
+		// FIXME: for some reason the first time this is shown 
+		// if it's not the active view, it doesn't display the navigation records.
+		// For now add force it to refresh.
+		this.navigation.on({
+			'afterrender': this.navigation.refresh.bind(this.navigation),
+			single: true
+		});
 	}
 });
