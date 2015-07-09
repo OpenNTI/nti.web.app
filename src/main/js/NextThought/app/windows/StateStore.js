@@ -3,9 +3,14 @@ Ext.define('NextThought.app.windows.StateStore', {
 
 	statics: {
 		MIME_TO_CMP: {},
+		MIME_REGISTERS: {},
 
 		register: function(mimeType, cmp) {
 			this.MIME_TO_CMP[mimeType] = cmp;
+		},
+
+		registerCustomResolver: function(mimeType, fn) {
+			this.MIME_REGISTERS[mimeType] = fn;
 		}
 	},
 
@@ -39,6 +44,11 @@ Ext.define('NextThought.app.windows.StateStore', {
 	},
 
 
+	getResolverFor: function(mimeType) {
+		return this.self.MIME_REGISTERS[mimeType];
+	},
+
+
 	getComponentForMimeType: function(type) {
 		return this.self.MIME_TO_CMP[type];
 	},
@@ -54,8 +64,8 @@ Ext.define('NextThought.app.windows.StateStore', {
 	},
 
 
-	firePushWindow: function(object, state, title, route, precache) {
-		this.fireEvent('push-window', object, state, title, route, precache);
+	firePushWindow: function(object, mimeType, state, title, route, precache) {
+		this.fireEvent('push-window', object, mimeType, state, title, route, precache);
 	},
 
 	fireReplaceOpenWindowRoute: function(object, state, title, route, precache) {

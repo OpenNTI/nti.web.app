@@ -63,12 +63,25 @@ Ext.define('NextThought.app.context.StateStore', {
 
 
 	getCurrentObjectId: function() {
+		var parts = this.getCurrentObjectParts();
+
+		return parts.id;
+	},
+
+
+	getCurrentObjectParts: function() {
 		var route = Globals.trimRoute(this.getCurrentRoute()),
-			parts = route.split('/');
+			parts = route.split('/'),
+			objectParts = {};
 
 		if (parts[parts.length - 2] === 'object') {
-			return ParseUtils.decodeFromURI(parts.last());
+			objectParts.id = ParseUtils.decodeFromURI(parts.last());
+		} else if (parts[parts.length - 3] === 'object') {
+			objectParts.id = ParseUtils.decodeFromURI(parts.last());
+			objectParts.mimeType = decodeURIComponent(parts[parts.length - 2]);
 		}
+
+		return objectParts;
 	},
 
 
@@ -76,7 +89,9 @@ Ext.define('NextThought.app.context.StateStore', {
 		var route = Globals.trimRoute(this.getCurrentRoute()),
 			parts = route.split('/');
 
-		if (parts[parts.length - 2] === 'object') {
+		if (parts[parts.length - 3] === 'object') {
+			parts = parts.slice(0, -3);
+		} else if (parts[parts.length - 2] === 'object') {
 			parts = parts.slice(0, -2);
 		}
 

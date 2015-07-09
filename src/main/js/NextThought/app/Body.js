@@ -117,11 +117,13 @@ Ext.define('NextThought.app.Body', {
 
 
 	onNewContext: function() {
-		var id = this.ContextStore.getCurrentObjectId(),
+		var parts = this.ContextStore.getCurrentObjectParts(),
 			state = window.location.hash.replace('#', '');
 
-		if (id) {
-			this.WindowActions.showWindow(id, state);
+		if (parts.mimeType && parts.id) {
+			this.WindowActions.showWindowWithMimeType(parts.id, parts.mimeType, state);
+		} else if (parts.id) {
+			this.WindowActions.showWindow(parts.id, state);
 		}
 	},
 
@@ -151,7 +153,7 @@ Ext.define('NextThought.app.Body', {
 	},
 
 
-	pushWindow: function(id, state, title, route, precache) {
+	pushWindow: function(id, mimeType, state, title, route, precache) {
 		if (!title) {
 			title = this.ContextStore.getCurrentTitle();
 		}
@@ -162,7 +164,13 @@ Ext.define('NextThought.app.Body', {
 
 		if (id) {
 			id = ParseUtils.encodeForURI(id);
-			route = Globals.trimRoute(route) + '/object/' + id;
+
+			if (mimeType) {
+				mimeType = encodeURIComponent(mimeType);
+				route = Globals.trimRoute(route) + '/object/' + mimeType + '/' + id;
+			} else {
+				route = Globals.trimRoute(route) + '/object/' + id;
+			}
 		} else {
 			state = null;
 			route = this.ContextStore.removeObjectRoute();
@@ -178,14 +186,8 @@ Ext.define('NextThought.app.Body', {
 
 
 	replaceOpenWindowRoute: function() {
-		var route = this.ContextStore.getCurrentRoute(),
-			title = this.ContextStore.getCurrentTitle(),
-			parts = Globals.trimRoute(route).split('/');
-
-		if (parts[parts.length - 2] === 'object') {
-			parts = parts.slice(0, -2);
-			route = parts.join('/');
-		}
+		var route = this.ContextStore.removeObjectRoute(),
+			title = this.ContextStore.getCurrentTitle();
 
 		this.replaceRootRoute(title, route);
 	},

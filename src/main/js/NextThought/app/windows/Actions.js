@@ -30,7 +30,8 @@ Ext.define('NextThought.app.windows.Actions', {
 	 * @param  {Element} el           element to show the note opening from
 	 */
 	pushWindow: function(objectOrNTIID, state, el, monitors, precache) {
-		var id = objectOrNTIID;
+		var id = objectOrNTIID,
+			mimeType;
 
 		if (typeof objectOrNTIID !== 'string') {
 			id = objectOrNTIID.getId();
@@ -38,9 +39,13 @@ Ext.define('NextThought.app.windows.Actions', {
 
 		if (objectOrNTIID.isModel) {
 			this.WindowStore.cacheObject(id, objectOrNTIID, el, monitors, precache);
+
+			if (objectOrNTIID.addMimeTypeToRoute) {
+				mimeType = objectOrNTIID.mimeType;
+			}
 		}
 
-		this.WindowStore.firePushWindow(id, state);
+		this.WindowStore.firePushWindow(id, mimeType, state);
 	},
 
 
@@ -92,5 +97,24 @@ Ext.define('NextThought.app.windows.Actions', {
 		}).fail(function(error){
 			me.WindowStore.fireShowWindow(error, state, el, monitors, precache);
 		})
+	},
+
+
+	showWindowWithMimeType: function(id, mimeType, state) {
+		var me = this,
+			resolver = me.WindowStore.getResolverFor(mimeType);
+
+		if (!resolver) {
+			me.showWindow(id, state);
+			return;
+		}
+
+		resolver(id)
+			.then(function(result) {
+				me.WindowStore.fireShowWindow(result, state);
+			})
+			.fail(function(error) {
+				me.WindowStore.fireShowWindow(error);
+			});
 	}
 });
