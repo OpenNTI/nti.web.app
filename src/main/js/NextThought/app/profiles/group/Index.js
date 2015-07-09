@@ -37,7 +37,7 @@ Ext.define('NextThought.app.profiles.group.Index', {
 		});
 
 		tabs.push({
-			label: 'Memberships',
+			label: 'Members',
 			route: '/membership',
 			active: active === 'membership'
 		});
