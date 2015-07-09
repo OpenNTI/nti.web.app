@@ -450,6 +450,46 @@ Ext.define('NextThought.app.groups.Actions', {
 
 	generateUsername: function(newGroupName) {
 		return this.escapeGroupName(newGroupName) + '-' + $AppConfig.username + '_' + guidGenerator();
+	},
+
+
+	joinGroupWithCode: function(code, btn) {
+		var data = {'invitation_codes': [code]},
+			url = $AppConfig.userObject.getLink('accept-invitations'),
+			me = this;
+
+		if (!url) {
+			return Promise.reject({field: 'Code', message: 'There was an error applying your Group Code.'});
+		}
+
+		return new Promise(function( fulfill, reject) {
+			Ext.Ajax.request({
+				url: getURL(url),
+				scope: this,
+				jsonData: Ext.encode(data),
+				method: 'POST',
+				headers: {
+					Accept: 'application/json'
+				},
+				callback: function(q, success, r) {
+					var store;
+
+					if (!success) {
+						reject({field: 'Group Code', message: 'The code you entered is not valid.'});
+					}
+					else {
+						store = me.GroupStore.getFriendsList();
+						if (store) {
+							console.warn('Performing expensive reload of friends list store.', store);
+							store.reload();
+						}
+						fulfill();
+					}
+				}
+			});
+		});
+
+
 	}
 
 });
