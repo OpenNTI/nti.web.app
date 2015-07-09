@@ -6,7 +6,8 @@ Ext.define('NextThought.app.contacts.components.outline.View', {
 	preserveScrollOnRefresh: true,
 
 	requires: [
-		'NextThought.app.contacts.components.outline.Search'
+		'NextThought.app.contacts.components.outline.Search',
+		'NextThought.app.contacts.Actions'
 	],
 
 	mixins: {
@@ -75,6 +76,8 @@ Ext.define('NextThought.app.contacts.components.outline.View', {
 		if (this.subType === 'contact') {
 			this.mixins.contactSearching.constructor.apply(this, arguments);
 		}
+
+		this.ContactsActions = NextThought.app.contacts.Actions.create();
 	},
 
 
@@ -144,7 +147,7 @@ Ext.define('NextThought.app.contacts.components.outline.View', {
 	onButtonsClicked: function(evt) {
 		var b = evt.getTarget('.contact-button');
 		if (b && !Ext.fly(b).hasCls('search')) {
-			this.fireEvent('contact-button-clicked', b, this);
+			this.ContactsActions.groupButtonClicked(b, this);
 		}
 	},
 
