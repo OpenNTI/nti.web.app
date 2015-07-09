@@ -65,8 +65,13 @@ Ext.define('NextThought.app.chat.Gutter', {
 		this.mon(this.contactsButtonEl, 'click', this.goToContacts.bind(this));
 		this.mon(this.otherContactsEl, 'click', this.goToContacts.bind(this));
 		this.maybeUpdateOtherButton();
+		Ext.EventManager.onWindowResize(Ext.bind(this.onResize, this));
 	},
 
+	onResize: function(){
+		this.callParent(arguments);
+		this.updateList(this.store, this.store.data.items);
+	},
 
 	goToContacts: function(e) {
 		NextThought.app.navigation.Actions.pushRootRoute('Contacts', '/contacts/');
@@ -75,6 +80,7 @@ Ext.define('NextThought.app.chat.Gutter', {
 
 	updateList: function(store, users) {
 		this.removeAll(true);
+		this.otherContacts = [];
 		this.addContacts(store, users);
 	},
 
