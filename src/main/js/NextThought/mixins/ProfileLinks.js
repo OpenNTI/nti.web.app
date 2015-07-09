@@ -10,7 +10,7 @@ Ext.define('NextThought.mixins.ProfileLinks', function() {
 		var u = this.userObject || this.user,
 			profileUrl = u.getProfileUrl && u.getProfileUrl();
 
-		if(profilUrl){
+		if(profileUrl){
 			NextThought.app.navigation.Actions.pushRootRoute(u.getName(), u.getProfileUrl(), {
 				user: u
 			});
