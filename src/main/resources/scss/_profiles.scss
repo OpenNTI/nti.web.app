@@ -2311,7 +2311,7 @@
 
 	&.preview {
 		margin-top: 5px;
-		padding: 20px 20px 0;
+		padding: 15px 15px 15px 11px;
 
 		.title {
 			font-size: 1.25em;
@@ -2321,12 +2321,13 @@
 		}
 
 		.entry {
-			height: 40px;
+			height: 45px;
+			margin-bottom: 4px;
 			cursor: pointer;
 
 			.avatar {
-				width: 40px;
-				height: 40px;
+				width: 45px;
+				height: 45px;
 				margin-right: 9px;
 				float: left;
 			}
