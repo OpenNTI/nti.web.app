@@ -116,7 +116,7 @@ Ext.define('NextThought.mixins.Router', {
 				}
 
 				return path;
-			})
+			}, monitors.onFailedToGetFullPath.bind(null, obj))
 			.then(me.getRouteForPath.bind(me))
 			.then(function(route) {
 				if (route.isFull && route.isAccessible !== false) {
