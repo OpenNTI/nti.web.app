@@ -2,7 +2,8 @@ Ext.define('NextThought.app.contacts.components.list.Main', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.createlist-main-view',
 	requires: [
-		'NextThought.common.form.fields.SimpleTextField'
+		'NextThought.common.form.fields.SimpleTextField',
+		'NextThought.app.groups.Actions'
 	],
 
 	cls: 'createlist-main-view',
@@ -55,6 +56,7 @@ Ext.define('NextThought.app.contacts.components.list.Main', {
 			specialkey: this.specialkey
 		});
 		this.mon(this.down('[name=submit]'), 'click', this.submitClicked, this);
+		this.GroupActions = NextThought.app.groups.Actions.create();
 	},
 
 
@@ -100,8 +102,20 @@ Ext.define('NextThought.app.contacts.components.list.Main', {
 
 
 	submitClicked: function() {
+		var w = this.up('window'),
+			btn = this.down('[name=submit]'),
+			me = this;
+
 		this.clearError();
-		this.fireEvent('create-list', this.down('[name=submit]'));
+		this.GroupActions.createList(this.getListName(), btn)
+			.then( function (record) {
+				w.close();
+			})
+			.fail( function (errorText) {
+				console.error('An error occured', errorText);
+				me.showError(errorText);
+				btn.setDisabled(false);
+			});
 	},
 
 

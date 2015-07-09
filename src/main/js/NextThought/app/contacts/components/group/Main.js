@@ -2,7 +2,8 @@ Ext.define('NextThought.app.contacts.components.group.Main', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.codecreation-main-view',
 	requires: [
-		'NextThought.common.form.fields.SimpleTextField'
+		'NextThought.common.form.fields.SimpleTextField',
+		'NextThought.app.groups.Actions'
 	],
 
 	cls: 'codecreation-main-view',
@@ -60,6 +61,7 @@ Ext.define('NextThought.app.contacts.components.group.Main', {
 			specialkey: this.specialkey
 		});
 		this.mon(this.down('[name=submit]'), 'click', this.submitClicked, this);
+		this.GroupActions = NextThought.app.groups.Actions.create();
 	},
 
 	specialkey: function(el, event) {
@@ -106,15 +108,33 @@ Ext.define('NextThought.app.contacts.components.group.Main', {
 
 		errorText = errorText || getString('NextThought.view.account.codecreation.Main.unknown-error');
 
-	//make main error field show up
-	box.el.down('.error-desc').update(errorText);
-	box.show();
+		//make main error field show up
+		box.el.down('.error-desc').update(errorText);
+		box.show();
 	},
 
 
 	submitClicked: function() {
+		var me = this,
+			btn = this.down('[name=submit]'),
+			w = this.up('window');
+
 		this.clearError();
-		this.fireEvent('create-group-code', this.down('[name=submit]'));
+		if (btn.text === 'OK') {
+			w.close();
+			return;
+		}
+
+		this.GroupActions.createGroupAndCode(btn)
+			.then(function(code) {
+				btn.setDisabled(false);
+				w.showCreatedGroupCode(code);
+			})
+			.fail(function(errorText) {
+				console.error('An error occured', errorText);
+				me.showError(errorText);
+				btn.setDisabled(false);
+			});
 	},
 
 	clearError: function() {

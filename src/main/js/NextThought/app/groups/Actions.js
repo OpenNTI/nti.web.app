@@ -170,7 +170,7 @@ Ext.define('NextThought.app.groups.Actions', {
 					record.storeId = newStore.storeId;
 
 					wait(500)
-						.then(store.add.bind(store, record));
+						.then(store.add.bind(store, [record]));
 
 					if (callback) {
 						callback.call(scope, true, record, operation);
@@ -304,5 +304,152 @@ Ext.define('NextThought.app.groups.Actions', {
 				}
 			});
 		});
+	},
+
+
+	createDFLUnguarded: function(displayName, username, friends, callback, error, scope) {
+		return this.createFriendsListUnguarded(displayName, username, friends, true, callback, error, scope);
+	},
+
+
+	createList: function(displayName, btn) {
+		if (!Service.canFriend()) {
+			Ext.Error.raise('Permission denied.  AppUser is not allowed to create lists');
+			return Promise.reject();
+		}
+
+		var username = this.generateUsername(displayName),
+			me = this;
+
+		if (Ext.isEmpty(displayName)) {
+			return Promise.reject();
+		}
+
+		btn.setDisabled(true);
+
+		return new Promise(function (fulfill, reject) {
+			me.createGroupUnguarded(displayName, username)
+				.then( function (record) {
+					fulfill(record);
+				})
+				.fail(function (record, operation, response) {
+					var msg = response.message,
+						field = response.field,
+						code = response.code;
+
+					if (msg) {
+						if (field) {
+							msg = msg.replace(field, 'List name');
+						}
+					}
+					msg = NTIError.getError(code, {'name': 'List name'}, msg);
+					if (!msg && operation.error && operation.error === 422) {
+						//Well a field was wrong, in this case the user only put one thing
+						//in so tell him that is invalid
+						msg = 'Invalid list name ' + displayName;
+					}
+
+					reject(msg);
+				});
+		});
+	},
+
+
+	createGroupAndCode: function (btn) {
+		var w = btn.up('window'), username, displayName, me = this;
+
+		if (!Service.canCreateDynamicGroups()) {
+			Ext.Error.raise('Permission denied.  AppUser is not allowed to create dfls');
+			return Promise.reject();
+		}
+
+		displayName = w.getGroupName();
+		username = this.generateUsername(displayName);
+		console.log('Create group with name ' + displayName);
+		btn.setDisabled(true);
+
+		return new Promise( function(fulfill, reject) {
+			me.createDFLUnguarded(displayName, username)
+					.then(function(record) {
+						return me.fetchGroupCode(record, displayName);
+					})
+					.then(function (code) {
+						fulfill(code);
+					})
+					.fail(function(rec, operation, response) {
+						var msg = response && response.message,
+							field = response && response.field,
+							code = response && response.code;
+
+						if (msg) {
+							//get the error from the error util
+							if (field) {
+								msg = msg.replace(field, 'Group Name');
+							}
+						}
+
+						msg = NTIError.getError(code, {'name': 'Group name'}, msg);
+
+						if (!msg && operation.error && operation.error === 422) {
+							//Well a field was wrong, in this case the user only put one thing
+							//in so tell him that is invalid
+							msg = 'Invalid group name ' + displayName;
+						}
+
+						reject(msg);
+					});
+		});
+	},
+
+
+	fetchGroupCode: function(record, displayName, success, onError) {
+		var link = record.getLink('default-trivial-invitation-code');
+
+		if (!link) {
+			Ext.callback(onError, this, ['Group code cannot be created for ' + displayName]);
+			return Promise.reject();
+		}
+
+		return new Promise(function (fulfill, reject) {
+			Ext.Ajax.request({
+				url: link,
+				scope: this,
+				method: 'GET',
+				headers: {
+					Accept: 'application/json'
+				},
+				callback: function(q, s, r) {
+					console.log(r.responseText);
+					var result, errorText = 'An error occurred generating \'Group Code\' for ' + displayName;
+					if (s) {
+						result = Ext.decode(r.responseText, true);
+						result = result ? result.invitation_code : null;
+					}
+					if (!result) {
+						Ext.callback(onError, this, [errorText + ' : ' + r.status]);
+						reject(q, s, r);
+					}
+					else {
+						Ext.callback(success, this, [result]);
+						fulfill(result);
+					}
+				}
+			});
+		});
+	},
+
+
+	escapeGroupName: function(name) {
+		//Dataserver blows chunks if on @@ or @( at the beginning
+		//look for these things and yank them out.  This was happening
+		//when manipulating the list by the object url (say for deletion).
+		name = name.replace(/@@|@\(/ig, '');
+		return name.replace(/[^0-9A-Z\-@\+\._]/ig, '');
+	},
+
+
+	generateUsername: function(newGroupName) {
+		return this.escapeGroupName(newGroupName) + '-' + $AppConfig.username + '_' + guidGenerator();
 	}
+
 });
