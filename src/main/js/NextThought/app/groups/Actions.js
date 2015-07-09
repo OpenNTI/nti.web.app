@@ -534,8 +534,6 @@ Ext.define('NextThought.app.groups.Actions', {
 						reject(errorText + ' : ' + r.status);
 					}
 					else {
-						Ext.callback(success, this, [result[0]]);
-
 						//onSuccess instead of reloading the whole store
 						//lets try and just remove the one thing we need
 						me.GroupStore.getFriendsList().remove(record);
