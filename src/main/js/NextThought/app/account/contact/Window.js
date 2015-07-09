@@ -10,7 +10,6 @@ Ext.define('NextThought.app.account.contact.Window', {
 	cls: 'contact-us-window',
 	ui: 'nt-window',
 	minimizable: false,
-	constrain: true,
 	modal: true,
 	closable: true,
 	resizable: false,
