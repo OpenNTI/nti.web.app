@@ -500,6 +500,9 @@
 
 				.shared-to{
 					color: $primary-blue;
+					name[data-profile-idx]:not([data-profile-idx=""]){
+						cursor: pointer;
+					}
 				}
 
 				.time{
