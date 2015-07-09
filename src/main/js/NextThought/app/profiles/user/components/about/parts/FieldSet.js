@@ -1,5 +1,10 @@
 Ext.define('NextThought.app.profiles.user.components.about.parts.FieldSet', {
 	extend: 'Ext.Component',
+	
+	INPUT_TYPE_KEY_HANDLER: {
+		'numeric': 'limitToNumber',
+		'text-line': 'limitToLine'
+	},
 
 	afterRender: function() {
 		this.callParent(arguments);
@@ -14,12 +19,14 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.FieldSet', {
 
 
 	onKeyPress: function(e) {
+		var inputType = e.target.getAttribute('data-input-type'),
+			fnName = this.INPUT_TYPE_KEY_HANDLER[inputType];
 		if (this.hasErrors) {
 			this.clearErrors(e);
 		}
 
-		if (e.target.getAttribute('data-input-type') === 'numeric') {
-			this.limitToNumber(e);
+		if(Ext.isFunction(this[fnName])){
+			this[fnName](e);	
 		}
 	},
 
@@ -32,7 +39,13 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.FieldSet', {
 			e.preventDefault();
 		}
 	},
-
+	
+	limitToLine: function(e){
+		var charCode = e.key || e.charCode;
+		if(charCode == Ext.EventObject.ENTER){
+			e.preventDefault();
+		}
+	},
 
 	clearErrors: function(e) {
 		//if you haven't typed in a field that has 

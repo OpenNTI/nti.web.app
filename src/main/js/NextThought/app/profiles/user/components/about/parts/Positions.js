@@ -15,13 +15,13 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Positions', {
 				{cls: 'field-container', cn: [
 					{tag: 'span', cls: 'field-label edit-only required', html: 'Company'},
 					{cls: 'error-msg'},
-					{cls: 'field company', 'data-field': 'companyName', html: '{companyName}', tabindex: '0'}
+					{cls: 'field company', 'data-field': 'companyName', 'data-input-type': 'text-line', html: '{companyName}', tabindex: '0'}
 				]},
 				{cls: 'wrap', cn: [
 					{cls: 'title-container field-container', cn: [
 						{tag: 'span', cls: 'field-label edit-only required', html: 'Title'},
 						{cls: 'error-msg'},
-						{cls: 'field title', 'data-field': 'title', html: '{title}', tabindex: '0'}
+						{cls: 'field title', 'data-field': 'title', 'data-input-type': 'text-line', html: '{title}', tabindex: '0'}
 					]},
 					{cls: 'start-container field-container', cn: [
 						{tag: 'span', cls: 'field-label edit-only required', html: 'Start Year'},

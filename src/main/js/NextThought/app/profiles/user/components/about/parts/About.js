@@ -32,7 +32,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 		{cls: 'field-container', cn: [
 			{tag: 'span', cls: 'field-label edit-only', html: 'Location'},
 			{cls: 'error-msg'},
-			{cls: 'field location edit-only', 'data-field': 'location', tabindex: '0'}
+			{cls: 'field location edit-only', 'data-field': 'location', 'data-input-type': 'text-line', tabindex: '0'}
 		]},
 		{cls: 'field-container', cn: [
 			{tag: 'span', cls: 'field-label edit-only', html: 'Home Page'},
