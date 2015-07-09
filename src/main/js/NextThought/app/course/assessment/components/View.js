@@ -45,7 +45,7 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 					xtype: 'box',
 					autoEl: {
 						cn: {
-							cls: 'empty-state',
+							cls: 'empty-state no-assignments',
 							cn: [
 								{cls: 'header', html: getString('NextThought.view.courseware.assessment.View.empty')}
 							]

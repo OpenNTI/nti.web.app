@@ -159,6 +159,9 @@ input:-ms-input-placeholder{ @include placeholder-style(); }
 	.sub{
 		font-size: 0.5em;
 	}
+	&.no-assignments{
+	  margin-bottom: 2em;
+	}
 }
 
 .error-message-component {
