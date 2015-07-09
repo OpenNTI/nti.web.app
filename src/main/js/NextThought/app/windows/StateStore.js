@@ -58,6 +58,9 @@ Ext.define('NextThought.app.windows.StateStore', {
 		this.fireEvent('push-window', object, state, title, route, precache);
 	},
 
+	fireReplaceOpenWindowRoute: function(object, state, title, route, precache) {
+		this.fireEvent('replaceOpenWindowRoute', object, state, title, route, precache);
+	},
 
 	fireCloseWindow: function() {
 		this.fireEvent('close-window');

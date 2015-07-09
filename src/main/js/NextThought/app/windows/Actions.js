@@ -86,10 +86,11 @@ Ext.define('NextThought.app.windows.Actions', {
 			fetchObject = Promise.resolve(objectOrNTIID);
 		}
 
-		return fetchObject
-			.then(function(result) {
-				me.WindowStore.removeCache(id);
-				me.WindowStore.fireShowWindow(result, state, el, monitors, precache);
-			});
+		return fetchObject.then(function(result) {
+			me.WindowStore.removeCache(id);
+			me.WindowStore.fireShowWindow(result, state, el, monitors, precache);
+		}).fail(function(error){
+			me.WindowStore.fireShowWindow(error, state, el, monitors, precache);
+		})
 	}
 });

@@ -47,7 +47,8 @@ Ext.define('NextThought.app.Body', {
 
 		this.mon(this.NavigationStore, 'set-active-content', this.updateBodyContent.bind(this));
 		this.mon(this.WindowStore, {
-			'push-window': this.pushWindow.bind(this)
+			'push-window': this.pushWindow.bind(this),
+			'replaceOpenWindowRoute': this.replaceOpenWindowRoute.bind(this)
 		});
 		this.mon(this.ContextStore, 'new-context', this.onNewContext.bind(this));
 
@@ -173,6 +174,20 @@ Ext.define('NextThought.app.Body', {
 
 
 		this.pushRoute(title, route, precache, state);
+	},
+
+
+	replaceOpenWindowRoute: function() {
+		var route = this.ContextStore.getCurrentRoute(),
+			title = this.ContextStore.getCurrentTitle(),
+			parts = Globals.trimRoute(route).split('/');
+
+		if (parts[parts.length - 2] === 'object') {
+			parts = parts.slice(0, -2);
+			route = parts.join('/');
+		}
+
+		this.replaceRootRoute(title, route);
 	},
 
 

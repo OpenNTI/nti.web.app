@@ -390,6 +390,12 @@
 		height: 44px;
 		border-bottom: 1px solid #ededed;
 
+		.title{
+		  color: #494949;
+		  margin-left: 15px;
+		  padding-top: 10px;
+		}
+
 		.close{
 			@include icon('note-window-x', $side: after, $position: absolute);
 			top: 10px;

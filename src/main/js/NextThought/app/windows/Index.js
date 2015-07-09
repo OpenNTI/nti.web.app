@@ -60,19 +60,24 @@ Ext.define('NextThought.app.windows.Index', {
 			cmp;
 
 		if (!type) {
-			console.error('No component to show object of ', object.mimeType);
+			if(object && object.mimeType){
+				console.error('No component to show object of ', object.mimeType);
+			}else{
+				console.error('Request status of ', object[1].status);
+			}
+			
+			this.WindowStore.fireReplaceOpenWindowRoute(object,state,'','',precache);
 			return;
 		}
 
-		this.viewContainer.removeAll();
-
 		cmp = type.create({
-			record: object.isModel && object,
+			record: object && object.isModel && object,//only pass a record when we have an object and it is a model
 			precache: precache || {},
 			state: state,
 			doClose: this.doClose.bind(this, monitors && monitors.afterClose)
 		});
 
+		this.viewContainer.removeAll();
 		cmp.addCls('object-window');
 
 		this.viewContainer.add(cmp);

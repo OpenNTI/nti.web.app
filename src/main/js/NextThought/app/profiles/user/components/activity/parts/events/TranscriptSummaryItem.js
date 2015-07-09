@@ -32,6 +32,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Trans
 
 	initComponent: function() {
 		this.callParent(arguments);
+		this.WindowActions = NextThought.app.windows.Actions.create();
 		//this.mon(this.record, 'destroy', this.destroy, this);
 	},
 
@@ -212,13 +213,18 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Trans
 		}
 	},
 
+	handleNavigation: function(){
+		this.WindowActions.pushWindow(this.record, null, null);
+	},
+
 	onClick: function() {
 		var errMsg = 'Unable to load chat transcript.';
 		if (!this.record) {
 			alert({ title: 'Error' , msg: errMsg, icon: 'warning-red'});
 			return;
 		}
-		this.fireEvent('open-chat-transcript', this.record, 'Opening chat transcript.');
+		// this.fireEvent('open-chat-transcript', this.record, 'Opening chat transcript.');
+		this.handleNavigation();
 	}
 
 

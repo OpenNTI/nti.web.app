@@ -438,6 +438,10 @@
 	}
 }
 
+.chat-transcript-window {
+	position: static !important;
+}
+
 .chat-transcript {
 	@include divider;
 	.divider {
