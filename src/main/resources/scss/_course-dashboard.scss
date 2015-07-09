@@ -7,7 +7,23 @@
 	overflow-y: auto;
 	overflow-x: hidden;
 	padding: 40px 0;
+}
 
+.community-activity {
+	.tile-container.column {
+		min-height: 0;
+	}
+
+	.column.left {
+		float: left;
+	}
+
+	.column.right {
+		float: right;
+	}
+}
+
+.course-dashboard, .community-activity {
 	.empty-state {
 		height: 300px;
 		background: #ffffff;

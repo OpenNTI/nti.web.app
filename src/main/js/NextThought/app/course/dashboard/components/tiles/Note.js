@@ -21,7 +21,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 			For notes we need to know if it is in a video to determine the height of the tile
 			so wait to determine this and cache the useful async stuff we do along the way
 		 */
-		getTileConfig: function(record, course) {
+		getTileConfig: function(record, course, width) {
 			var me = this,
 				context = NextThought.app.context.ContainerContext.create({
 					container: record.get('ContainerId'),
@@ -37,7 +37,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 					if (context) {
 						if (context.type === NextThought.app.context.types.Video.type) {
 							height += me.WIDTH / me.VIDEO_THUMB_ASPECT;
-							context.width = me.WIDTH;
+							context.width = width || me.WIDTH;
 							context.height = Math.round(me.WIDTH / me.VIDEO_THUMB_ASPECT);
 						}
 						else {
@@ -50,7 +50,8 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 					return {
 						xtype: me.xtype,
 						baseHeight: me.HEIGHT + height,
-						width: me.WIDTH,
+						width: width || me.WIDTH,
+						record: record,
 						CACHE: {
 							context: Promise.resolve(context)
 						}
@@ -59,7 +60,8 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 					return {
 						xtype: me.xtype,
 						baseHeight: me.HEIGHT,
-						width: me.WIDTH,
+						width: width || me.WIDTH,
+						record: record,
 						CACHE: {
 							context: Promise.reject()
 						}
@@ -96,6 +98,10 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 
 	getPath: function() {
 		var rec = this.record;
+
+		if (!this.course) {
+			return Promise.resolve([]);
+		}
 
 		this.CACHE.loadLineage = ContentUtils.getLineageLabels(rec.get('ContainerId'), true, this.course);
 
@@ -183,7 +189,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 		};
 	},
 
-	updateBody: function(){
+	updateBody: function() {
 		this.setBody(this.getBody().value);
 	}
 });

@@ -31,6 +31,11 @@ Ext.define('NextThought.model.Community', {
 	},
 
 
+	hasActivity: function() {
+		return !!this.getLink('Activity');
+	},
+
+
 	getDefaultForum: function() {
 		return this.getForumList()
 			.then(function(forums) {
@@ -43,7 +48,7 @@ Ext.define('NextThought.model.Community', {
 	},
 
 
-	getTopics: function() {
+	getForums: function() {
 		return this.getForumList()
 			.then(function(forums) {
 				return forums.filter(function(forum) {

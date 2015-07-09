@@ -26,6 +26,8 @@ Ext.define('NextThought.app.profiles.community.components.sidebar.Index', {
 
 		this.aboutCmp = this.down('profile-community-about');
 		this.topicsCmp = this.down('profile-community-topics');
+
+		this.topicsCmp.showForum = this.showForum.bind(this);
 	},
 
 

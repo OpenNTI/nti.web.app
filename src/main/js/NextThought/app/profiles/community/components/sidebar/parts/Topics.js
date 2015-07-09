@@ -6,7 +6,7 @@ Ext.define('NextThought.app.profiles.community.components.sidebar.parts.Topics',
 	cls: 'community-topics',
 
 	entryTpl: new Ext.XTemplate(Ext.DomHelper.markup({
-		tag: 'li', cls: '{[values.cls ? values.cls : ""]}', 'data-route': '{route}', 'data-count': '{count}', html: '{label}'
+		tag: 'li', cls: 'topic{[values.cls ? " " + values.cls : ""]}', 'data-route': '{route}', 'data-count': '{count}', html: '{label}'
 	})),
 
 	renderTpl: Ext.DomHelper.markup([
@@ -21,7 +21,14 @@ Ext.define('NextThought.app.profiles.community.components.sidebar.parts.Topics',
 	},
 
 
-	updateEntity: function(entity, activeTopic) {
+	afterRender: function() {
+		this.callParent(arguments);
+
+		this.mon(this.topicsEl, 'click', this.onTopicsClick.bind(this));
+	},
+
+
+	updateEntity: function(entity, activeForum) {
 		if (!this.rendered) {
 			this.on('afterrender', this.updateEntity.bind(this, entity));
 			return;
@@ -29,28 +36,38 @@ Ext.define('NextThought.app.profiles.community.components.sidebar.parts.Topics',
 
 		var me = this;
 
-		me.clearTopics();
-		me.loadingEl.removeCls('hidden');
+		if (this.activeEntity !== entity) {
+			me.clearTopics();
+			me.loadingEl.removeCls('hidden');
+		}
 
-		me.addTopic({
-			cls: activeTopic ? '' : 'active',
-			route: '',
-			count: 0,
-			label: 'All Activity'
-		});
+		me.activeEntity = entity;
 
+		me.topicMap = {};
 
-		entity.getTopics()
+		entity.getForums()
 			.then(function(forums) {
-				forums.forEach(function(forum) {
-					var id = forum.getId(),
-						route = '/topic/';
+				me.clearTopics();
 
-					route += ParseUtils.encodeForURI(id);
+				if (entity.hasActivity()) {
+					me.addTopic({
+						cls: activeForum ? '' : 'active',
+						route: 'all',
+						count: 0,
+						label: 'All Activity'
+					});
+
+					me.topicMap.all = 'all';
+				}
+
+				forums.forEach(function(forum) {
+					var id = forum.getId();
+
+					me.topicMap[id] = forum;
 
 					me.addTopic({
-						cls: id === activeTopic ? 'active' : '',
-						route: route,
+						cls: id === activeForum ? 'active' : '',
+						route: id,
 						count: 0,
 						label: forum.get('title')
 					});
@@ -59,7 +76,6 @@ Ext.define('NextThought.app.profiles.community.components.sidebar.parts.Topics',
 			.always(function() {
 				me.loadingEl.addCls('hidden');
 			});
-
 	},
 
 
@@ -74,5 +90,16 @@ Ext.define('NextThought.app.profiles.community.components.sidebar.parts.Topics',
 		}
 
 		this.topicsEl.dom.innerHTML = '';
+	},
+
+
+	onTopicsClick: function(e) {
+		var topicEl = e.getTarget('.topic'),
+			id = topicEl.getAttribute('data-route'),
+			forum = this.topicMap[id];
+
+		if (forum && !topicEl.classList.contains('active')) {
+			this.showForum(forum);
+		}
 	}
 });

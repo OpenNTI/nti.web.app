@@ -39,7 +39,7 @@ Ext.define('NextThought.app.profiles.community.Index', {
 
 		this.sidebarCmp = this.add({
 			xtype: 'profile-community-sidebar',
-			showTopic: this.onShowTopic.bind(this)
+			showForum: this.onShowForum.bind(this)
 		});
 
 		this.initRouter();
@@ -123,6 +123,9 @@ Ext.define('NextThought.app.profiles.community.Index', {
 
 		cmp.setSourceURL(link);
 
+		this.activeCommunity.getDefaultForum()
+			.then(cmp.setPostContainer.bind(cmp));
+
 		this.setState();
 
 		return cmp.handleRoute(subRoute, route.precache);
@@ -130,6 +133,62 @@ Ext.define('NextThought.app.profiles.community.Index', {
 
 
 	showTopicActivity: function(route, subRoute) {
+		var me = this,
+			cmp = me.setActiveItem('profile-community-activity'),
+			entity = me.activeCommunity,
+			id = route.params.id, forum = route.precache.forum;
+
+		id = ParseUtils.decodeFromURI(id);
+
+		if (forum && forum.getId() === id) {
+			cmp.setSourceURL(forum.getLink('contents'));
+			cmp.setPostContainer(forum);
+		} else {
+			cmp.setSourceURL(null);
+			cmp.setPostContainer(null);
+
+			entity.getForums()
+				.then(function(topics) {
+					var current, i;
+
+					for (i = 0; i < topics.length; i++) {
+						topic = topics[i];
+
+						if (topic && topic.getId && topic.getId() === id) {
+							current = topic;
+							break;
+						}
+					}
+
+					if (!topic) {
+						return Promise.reject();
+					}
+
+					return topic;
+				})
+				.fail(function(reason) {
+					console.error('failed to load forum: ', reason);
+
+					cmp.setSourceURL(entity.getLink('Activity'));
+					me.setState();
+
+					entity.getDefaultForum()
+						.then(cmp.setPostContainer.bind(cmp));
+				})
+				.then(function(forum) {
+					var link = forum.getLink('contents');
+
+					cmp.setSourceURL(link);
+
+					cmp.setPostContainer(forum);
+				});
+		}
+
+		me.setState({
+			activeTopic: id
+		});
+
+		return cmp.handleRoute(subRoute, route.precache);
 	},
 
 	showMembers: function(route, subRoute) {
@@ -143,7 +202,19 @@ Ext.define('NextThought.app.profiles.community.Index', {
 	},
 
 
-	onShowTopic: function() {
+	onShowForum: function(forum) {
+		if (forum === 'all') {
+			this.pushRoute('Activity', '/');
+			return;
+		}
+
+		var id = forum.getId();
+
+		id = ParseUtils.encodeForURI(id);
+
+		this.pushRoute('', '/topic/' + id, {
+			forum: forum
+		});
 	},
 
 

@@ -10,18 +10,20 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Topic', {
 		HEIGHT: 200,
 		COMMENT_HEIGHT: 100,
 
-		getTileConfig: function(record) {
+		getTileConfig: function(record, course, width) {
 			var comments = Math.min(record.get('PostCount'), 2);
 
 			return Promise.resolve({
 				xtype: this.xtype,
 				baseHeight: this.HEIGHT + (comments * this.COMMENT_HEIGHT),
-				width: this.WIDTH
+				width: width || this.WIDTH,
+				record: record
 			});
 		}
 	},
 
-	initComponent: function(){
+
+	initComponent: function() {
 		this.callParent(arguments);
 		this.WindowActions = NextThought.app.windows.Actions.create();
 	},
@@ -101,7 +103,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Topic', {
 		};
 	},
 
-	updateBody: function(){
+	updateBody: function() {
 		this.setBody(this.getBody().value);
 	}
 });
