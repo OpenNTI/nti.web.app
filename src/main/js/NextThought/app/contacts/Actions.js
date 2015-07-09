@@ -11,7 +11,6 @@ Ext.define('NextThought.app.contacts.Actions', {
 
 
 	groupButtonClicked: function(btn) {
-		debugger;
 		var flyBtn = Ext.fly(btn);
 		if (flyBtn.hasCls('join-group')) {
 			this.codeWin = Ext.widget('code-window');
