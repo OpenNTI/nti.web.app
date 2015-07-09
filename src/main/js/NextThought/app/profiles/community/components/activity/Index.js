@@ -137,9 +137,9 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 			var load;
 
 			if (item instanceof NextThought.model.forums.CommunityHeadlineTopic) {
-				load = NextThought.app.course.dashboard.components.tiles.Topic.getTileConfig(item, null, 337);
+				load = NextThought.app.course.dashboard.components.tiles.Topic.getTileConfig(item, null, 336);
 			} else if (item instanceof NextThought.model.Note) {
-				load = NextThought.app.course.dashboard.components.tiles.Note.getTileConfig(item, null, 337);
+				load = NextThought.app.course.dashboard.components.tiles.Note.getTileConfig(item, null, 336);
 			} else {
 				console.warn('Unknown item in activity: ', item);
 				load = Promise.resolve(null);
