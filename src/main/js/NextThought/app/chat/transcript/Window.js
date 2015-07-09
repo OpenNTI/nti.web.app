@@ -14,6 +14,7 @@ Ext.define('NextThought.app.chat.transcript.Window', {
 		'NextThought.app.windows.Actions',
 		'NextThought.app.chat.transcript.Main',
 		'NextThought.app.chat.Gutter',
+		'NextThought.app.chat.StateStore',
 		'NextThought.model.Transcript',
 		'NextThought.util.Parsing'
 	],
@@ -29,12 +30,17 @@ Ext.define('NextThought.app.chat.transcript.Window', {
 
 		this.loadingCmp = this.add({xtype: 'window-loading'});
 
-		Service.request( this.record.getLink('transcript'))
-			.then(function(value){
-				return ParseUtils.parseItems(value)[0];
-			})
-			.then(this.insertTranscript.bind(this))
-			.then(this.remove.bind(this, this.loadingCmp));
+		if (this.record instanceof NextThought.model.Transcript) {
+			this.insertTranscript(this.record);
+			this.remove(this.loadingCmp);
+		} else {
+			Service.request( this.record.getLink('transcript'))
+				.then(function(value){
+					return ParseUtils.parseItems(value)[0];
+				})
+				.then(this.insertTranscript.bind(this))
+				.then(this.remove.bind(this, this.loadingCmp));
+		}
 	},
 
 	ui: 'chat-window',
@@ -185,4 +191,17 @@ Ext.define('NextThought.app.chat.transcript.Window', {
 	}
 }, function() {
 	NextThought.app.windows.StateStore.register(NextThought.model.TranscriptSummary.mimeType, this);
+	NextThought.app.windows.StateStore.register(NextThought.model.Transcript.mimeType, this);
+	NextThought.app.windows.StateStore.registerCustomResolver(NextThought.model.TranscriptSummary.mimeType, function(id) {
+		var store = NextThought.app.chat.StateStore.getInstance();
+
+		id = store.getTranscriptSummaryForRoomInfo(id);
+		id = id && id.toString();
+
+		if (!id) {
+			return Promise.reject();
+		}
+
+		return Service.getObject(id);
+	});
 });

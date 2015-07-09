@@ -1,6 +1,8 @@
 Ext.define('NextThought.model.TranscriptSummary', {
 	extend: 'NextThought.model.Base',
 
+	addMimeTypeToRoute: true,
+
   requires: [
     'NextThought.model.converters.GroupByTime'
   ],

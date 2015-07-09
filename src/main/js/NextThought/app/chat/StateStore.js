@@ -364,17 +364,29 @@ Ext.define('NextThought.app.chat.StateStore', {
 	},
 
 
-	getTranscriptIdForRoomInfo: function(roomInfo) {
-		var roomInfoId = roomInfo.getId(),
-			uname = roomInfo.get('Creator'),
-			id = ParseUtils.parseNTIID(roomInfoId);
+	__getTranscriptId: function(roomInfoId, uname, type) {
+		var id = ParseUtils.parseNTIID(roomInfoId);
 
 		if (!id) {
 			return null;
 		}
 		id.specific.provider = uname;
-		id.specific.type = 'Transcript';
+		id.specific.type = type;
 
 		return id;
+	},
+
+
+	getTranscriptIdForRoomInfo: function(roomInfo) {
+		var roomInfoId = roomInfo.getId();
+
+		return this.__getTranscriptId(roomInfoId, roomInfo.get('Creator'), 'Transcript');
+	},
+
+
+	getTranscriptSummaryForRoomInfo: function(roomInfo) {
+		var id = roomInfo.isModel ? roomInfo.getId() : roomInfo;
+
+		return this.__getTranscriptId(id, $AppConfig.username.replace('-', '_'), 'Transcript');
 	}
 });
