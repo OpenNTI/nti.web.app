@@ -2,14 +2,35 @@ Ext.define('NextThought.app.profiles.community.components.sidebar.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.profile-community-sidebar',
 
+	requires: ['NextThought.app.profiles.community.components.sidebar.parts.About'],
+
 	layout: 'none',
 
 	cls: 'community-sidebar',
 
 	items: [
-		{xtype: 'box', autoEl: {html: 'Side Bar'}}
+		{
+			xtype: 'container',
+			layout: 'none',
+			cls: 'card',
+			items: [
+				{xtype: 'profile-community-about'},
+				{xtype: 'profile-community-topics'}
+			]
+		}
 	],
 
 
-	updateEntity: function(entity) {}
+	initComponent: function() {
+		this.callParent(arguments);
+
+		this.aboutCmp = this.down('profile-community-about');
+		this.topicsCmp = this.down('profile-community-topics');
+	},
+
+
+	updateEntity: function(entity, activeTopic) {
+		this.aboutCmp.updateEntity(entity);
+		this.topicsCmp.updateEntity(entity, activeTopic);
+	}
 });

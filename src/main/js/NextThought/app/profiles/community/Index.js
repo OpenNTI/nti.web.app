@@ -52,6 +52,11 @@ Ext.define('NextThought.app.profiles.community.Index', {
 	},
 
 
+	getRouteTitle: function() {
+		return this.activeCommunity ? this.activeCommunity.getName() : '';
+	},
+
+
 	setActiveEntity: function(id, entity) {
 		var me = this,
 			url = Service.getResolveUserURL(id);
@@ -68,6 +73,9 @@ Ext.define('NextThought.app.profiles.community.Index', {
 			})
 			.then(function(community) {
 				me.activeCommunity = community;
+
+				//Call this with force to reload the forums incase there are any new ones
+				me.activeCommunity.getForumList(true);
 				return community;
 			});
 	},

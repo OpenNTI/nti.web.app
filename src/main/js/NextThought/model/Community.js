@@ -16,6 +16,8 @@ Ext.define('NextThought.model.Community', {
 		{ name: 'alias', type: 'string' },
 		{ name: 'realname', type: 'string' },
 		{ name: 'avatarURL', type: 'AvatarURL' },
+		{ name: 'backgroundURL', type: 'string'},
+		{ name: 'about', type: 'string'},
 		{ name: 'displayName', convert: function(v, r) {return r.getName();}}
 	],
 
@@ -29,5 +31,59 @@ Ext.define('NextThought.model.Community', {
 	},
 
 
-	getForumList: function() {}
+	getDefaultForum: function() {
+		return this.getForumList()
+			.then(function(forums) {
+				forums = forums.filter(function(forum) {
+					return forum.get('title') === 'Forum';
+				});
+
+				return forums[0];
+			});
+	},
+
+
+	getTopics: function() {
+		return this.getForumList()
+			.then(function(forums) {
+				return forums.filter(function(forum) {
+					return forum.get('title') !== 'Forum';
+				});
+			});
+	},
+
+
+	getForumList: function(force) {
+		if (this.loadForumList && !force) {
+			return this.loadForumList;
+		}
+
+		var link = this.getLink('DiscussionBoard');
+
+		if (!link) {
+			return Promise.resolve([]);
+		}
+
+		this.loadForumList = Service.request(link)
+			.then(function(response) {
+				return ParseUtils.parseItems(response)[0];
+			})
+			.then(function(board) {
+				var content = board && board.getLink('contents');
+
+				return content ? Service.request(content) : Promise.reject('No contents link');
+			})
+			.then(function(response) {
+				var json = JSON.parse(response);
+
+				return ParseUtils.parseItems(json.Items);
+			})
+			.fail(function(reason) {
+				console.error('Failed to load forum list for community:', reason);
+
+				return [];
+			});
+
+		return this.loadForumList;
+	}
 });
