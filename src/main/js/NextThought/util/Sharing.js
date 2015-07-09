@@ -220,7 +220,8 @@ Ext.define('NextThought.util.Sharing', {
 
 		return UserRepository.getUser(explicitEntities)
 			.then(function(resolvedUsers) {
-				var toResolve = resolvedUsers.length;
+				var toResolve = resolvedUsers.length,
+				nameMap = {};
 
 				Ext.each(resolvedUsers || [], function(u) {
 					var dn;
@@ -231,12 +232,17 @@ Ext.define('NextThought.util.Sharing', {
 
 					if (!Ext.isEmpty(dn) && dn.toLowerCase() !== 'unknown') {
 						names.push(' ' + dn);
+						nameMap[names.length - 1] = u;
 						return !maxLength || names.length <= maxLength;
 					}
 				});
 
 				if (tpl) {
-					names = Ext.Array.map(names, function() { return tpl.apply(arguments); });
+					names = Ext.Array.map(names, function(name, idx) {
+						var u = nameMap[idx],
+							tplArgs = [name, ((u && u.getProfileUrl && u.getProfileUrl()) ? idx : '')];
+						return tpl.apply(tplArgs);
+						});
 				}
 
 				others = toResolve - names.length;

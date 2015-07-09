@@ -46,6 +46,16 @@ Ext.define('NextThought.model.FriendsList', {
 		   about: this.get('about')
 	   };
 	},
+	
+	getProfileUrl: function() {
+		var id = this.get('Username');
+		
+		if(id && this.getLink('Activity')){
+			return '/group/'+ParseUtils.encodeForURI(id);
+		}
+		
+		return null;
+	},
 
 
 	destroy: function() {

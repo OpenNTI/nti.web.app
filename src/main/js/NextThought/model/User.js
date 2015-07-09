@@ -168,6 +168,10 @@ Ext.define('NextThought.model.User', {
 
 
 	getProfileUrl: function() {
+		if(!this.getLink('Activity')){
+			return null;
+		}
+		
 		var id = this.get('Username');
 
 		if ($AppConfig.obscureUsernames) {

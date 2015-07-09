@@ -7,13 +7,15 @@ Ext.define('NextThought.mixins.ProfileLinks', function() {
 			e.stopEvent();
 		}
 
-		var u = this.userObject || this.user;
+		var u = this.userObject || this.user,
+			profileUrl = u.getProfileUrl && u.getProfileUrl();
 
-		NextThought.app.navigation.Actions.pushRootRoute(u.getName(), u.getProfileUrl(), {
-			user: u
-		});
-
+		if(profilUrl){
+			NextThought.app.navigation.Actions.pushRootRoute(u.getName(), u.getProfileUrl(), {
+				user: u
+			});
 		return false;
+		}
 	}
 
 
@@ -60,9 +62,12 @@ Ext.define('NextThought.mixins.ProfileLinks', function() {
 		requires: ['NextThought.app.navigation.Actions'],
 
 		navigateToProfile: function(u) {
-			NextThought.app.navigation.Actions.pushRootRoute(u.getName(), u.getProfileUrl(), {
-				user: u
-			});
+			var profileUrl = u.getProfileUrl && u.getProfileUrl();
+			if(profileUrl){
+				NextThought.app.navigation.Actions.pushRootRoute(u.getName(), profileUrl, {
+					user: u
+				});
+			}
 		},
 
 		/**

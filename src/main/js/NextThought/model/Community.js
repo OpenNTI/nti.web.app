@@ -30,6 +30,13 @@ Ext.define('NextThought.model.Community', {
 		return this.getName();
 	},
 
+	getProfileUrl: function() {
+		var id = this.get('Username');
+		if(id && this.getLink('Activity')){
+			return '/community/' + ParseUtils.encodeForURI(id);
+		}
+		return null; 
+	},
 
 	hasActivity: function() {
 		return !!this.getLink('Activity');

@@ -360,7 +360,6 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 			.then(function(str) {
 				me.sharedTo.update(str);
 				me.sharedTo.set({'data-qtip': str});
-
 				me.sharedTo.select('name[data-profile-idx]').on('click', function(e) {
 					var a = e.getTarget('name'),
 						i = a && a.getAttribute('data-profile-idx'),
@@ -368,8 +367,8 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 
 						e.stopEvent();
 
-						if (a && !Ext.isEmpty(i) && u && u.getProfileUrl) {
-							me.fireEvent('show-profile', u);
+						if (a && !Ext.isEmpty(i) && u) {
+							me.navigateToProfile(u);
 						}
 				});
 			});
