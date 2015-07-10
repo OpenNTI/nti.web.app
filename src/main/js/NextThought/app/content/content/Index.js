@@ -43,6 +43,11 @@ Ext.define('NextThought.app.content.content.Index', {
 	},
 
 
+	getActiveItem: function() {
+		return this.reader;
+	},
+
+
 	getLocation: function() {
 		return this.reader.getLocation();
 	},

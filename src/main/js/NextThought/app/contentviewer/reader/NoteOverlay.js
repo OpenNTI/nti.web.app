@@ -652,7 +652,32 @@ Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
 
 	//TODO: fill this out
 	allowNavigation: function() {
-		return Promise.resolve();
+		if (!this.editor || !this.editor.isActive()) {
+			return Promise.resolve();
+		}
+
+		var me = this;
+
+		return new Promise(function(fulfill, reject) {
+			Ext.Msg.show({
+				title: 'Attention!',
+				msg: 'You are currently creating a note. Would you like to leave without saving?',
+				buttons: {
+					primary: {
+						text: 'Leave',
+						cls: 'caution',
+						handler: function() {
+							me.editor.destroy();
+							fulfill();
+						}
+					},
+					secondary: {
+						text: 'Stay',
+						handler: reject
+					}
+				}
+			});
+		});
 	}
 
 });

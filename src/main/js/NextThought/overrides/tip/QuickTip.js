@@ -63,6 +63,7 @@ Ext.define('NextThought.overrides.tip.QuickTip', {
 		return this.callParent(arguments);
 	},
 
+
 	//Override alignment and force the 'target' element to be the element with the title/tip attribute if not the
 	// registered owner element. Default to a top centered position, unless screen position forces us to reposition.
 	getTargetXY: function getTargetXY() {
@@ -248,6 +249,7 @@ Ext.define('NextThought.view.tip.Tooltip', {
 			pos = 't-br';
 			off = [-50, 0];
 		}
+
     me.anchorEl.alignTo(me.el, pos, off);
   },
 
