@@ -756,7 +756,7 @@ Ext.define('NextThought.app.course.enrollment.Details', {
 				e.stopEvent();
 			}
 
-			NextThought.app.navigation.Actions.pushRootRoute(u.getName(), u.getProfileUrl(), {
+			NextThought.app.navigation.Actions.pushRootRoute(u.getName(), u.getProfileUrl('about'), {
 				user: u
 			});
 

@@ -167,7 +167,7 @@ Ext.define('NextThought.model.User', {
 	},
 
 
-	getProfileUrl: function() {
+	getProfileUrl: function(tab) {
 		if(!this.getLink('Activity')){
 			return null;
 		}
@@ -178,7 +178,7 @@ Ext.define('NextThought.model.User', {
 			id = B64.encodeURLFriendly(id);
 		}
 
-		return '/user/' + id;
+		return tab ? '/user/' + id + '/' + Globals.trimRoute(tab) + '/' : '/user/' + id;
 	},
 
 
