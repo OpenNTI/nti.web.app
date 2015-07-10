@@ -43,7 +43,7 @@ Ext.define('NextThought.util.Format', {
 		var avatar = (value && value.get && value.get('avatarURL')) || (value && value.avatarURL),
 			clsList = [cls || 'avatar', 'avatar-container'],
 			initials = value && Ext.isFunction(value.getAvatarInitials) && value.getAvatarInitials(),
-			cn=[], color;
+			cn=[], color, idx;
 
 		function get(link) {
 			return 'url(' + link + ')';
@@ -62,7 +62,9 @@ Ext.define('NextThought.util.Format', {
 
 		clsList = clsList.join(' ');
 		if(initials && isFeature('default-avatar-to-initials')){
-			color = NextThought.util.Format.DEFAULT_AVATAR_BG_COLORS[hash(value.get('Username')) % NextThought.util.Format.DEFAULT_AVATAR_BG_COLORS.length];
+			idx = hash(value.get('Username'));
+			idx = (idx < 0 ? idx * -1 : idx) % NextThought.util.Format.DEFAULT_AVATAR_BG_COLORS.length
+			color = NextThought.util.Format.DEFAULT_AVATAR_BG_COLORS[idx];
 			cn[0] = {cls: 'fallback avatar-pic initials', style: {'background-color': '#'+color}, cn: {cls: 'inner', html: initials}};
 		}
 		else{
