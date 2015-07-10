@@ -12,7 +12,7 @@ Ext.define('NextThought.app.profiles.group.Index', {
 	
 	initRoutes: function(){
 	   this.addRoute('/activity', this.showActivity.bind(this));
-	   this.addRoute('/membership', this.showMembership.bind(this));
+	   this.addRoute('/members', this.showMembership.bind(this));
 		   
 	   this.addDefaultRoute('/activity');
 	},
@@ -38,8 +38,8 @@ Ext.define('NextThought.app.profiles.group.Index', {
 
 		tabs.push({
 			label: 'Members',
-			route: '/membership',
-			active: active === 'membership'
+			route: '/members',
+			active: active === 'members'
 		});
 
 		this.headerCmp.updateEntity(this.activeEntity, tabs);
@@ -67,7 +67,7 @@ Ext.define('NextThought.app.profiles.group.Index', {
 		   var membershipCmp = this.setActiveItem('group-profile-membership'),
 		   headerCmp = this.headerCmp;
 		   
-		   this.setState('membership');
+		   this.setState('members');
 	
 		   
 		   return membershipCmp.userChanged(this.activeEntity, false)
@@ -78,7 +78,7 @@ Ext.define('NextThought.app.profiles.group.Index', {
 		var activityCmp = this.setActiveItem('profile-group-activity'),
 		    headerCmp = this.headerCmp;
 		    
-		activityCmp.gotoMembership = this.pushRoute.bind(this, 'Membership', '/membership');
+		activityCmp.gotoMembership = this.pushRoute.bind(this, 'Members', '/members');
 		this.setState('activity');
 		  
 		return activityCmp.userChanged(this.activeEntity, false)
