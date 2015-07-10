@@ -17,8 +17,8 @@ Ext.define('NextThought.app.context.components.Default', {
 	renderSelectors: {
 		targetEl: '.content'
 	},
-	
-	
+
+
 	initComponent: function() {
 		this.callParent(arguments);
 		this.ContextStore = NextThought.app.context.StateStore.getInstance();
@@ -31,14 +31,15 @@ Ext.define('NextThought.app.context.components.Default', {
 
 
 	__setContent: function() {
-		var context = this.ContextStore.getContext(),
+		var div = document.createElement(div),
+			context = this.ContextStore.getContext(),
 			currentContext = context.last(),
 			contextRecord = currentContext && currentContext.obj;
 
 		// If we are within the current context, so just render the simpler version of context.
 		// i.e. For content's note, we will just render the range context we were given.
 		// For video object, we will only render the transcript range corresponding to that context.
-		// Otherwise, render the longer version of context's card 
+		// Otherwise, render the longer version of context's card
 		// since we are not within the original userData(i.e. Note) context.
 		if (contextRecord && contextRecord.get('NTIID') === this.containerId) {
 			this.content = this.snippet;
@@ -47,8 +48,13 @@ Ext.define('NextThought.app.context.components.Default', {
 			this.content = this.fullContext;
 		}
 
+		//this.content will be a node, but it won't be a html node, so stuff like image
+		//won't render properly if we append it straight to the dom. Do this trick to
+		//make it html that gets inserted.
 		if (this.rendered && this.content) {
-			this.targetEl.appendChild(this.content);
+			div.appendChild(this.content);
+
+			this.targetEl.dom.innerHTML = div.innerHTML;
 		}
 	}
 });
