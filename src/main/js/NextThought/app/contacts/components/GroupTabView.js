@@ -64,5 +64,6 @@ Ext.define('NextThought.app.contacts.components.GroupTabView', {
 			'afterrender': this.navigation.refresh.bind(this.navigation),
 			single: true
 		});
+		this.body.doRefresh(s);
 	}
 });

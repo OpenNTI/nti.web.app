@@ -63,5 +63,6 @@ Ext.define('NextThought.app.contacts.components.ListView', {
 			'afterrender': this.navigation.refresh.bind(this.navigation),
 			single: true
 		});
+		this.body.doRefresh(s);
 	}
 });

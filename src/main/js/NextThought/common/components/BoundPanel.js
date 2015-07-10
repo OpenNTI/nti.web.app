@@ -35,11 +35,12 @@ Ext.define('NextThought.common.components.BoundPanel', {
 
 
 	getComponentConfigForRecord: function(rec) {
+		var id = rec.getId();
 		if (rec.hidden || (this.filter && !this.filter(rec))) {
 			return null;
 		}
 
-		return {record: rec, recordId: ParseUtils.escapeId(rec.getId())};
+		return {record: rec, recordId: id && ParseUtils.escapeId(id)};
 	},
 
 

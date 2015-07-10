@@ -59,16 +59,21 @@ Ext.define('NextThought.app.groups.StateStore', {
 
 
 	getAllContactsStore: function() {
-		var me = this;
+		var me = this,
+			flStore = this.getFriendsList(),
+			contacts = flStore.getContacts();
+
 		function isMyContactFilter (item) {
 			return me.isContact(item);
 		}
 
 		if(!this.allContactsStore) {
-			this.allContactsStore = NextThought.store.Contacts.create({
-										// filters: [isMyContactFilter],
-										data: this.getFriendsList().getContacts()
-									});
+			this.allContactsStore = NextThought.store.Contacts.create({ filters: [isMyContactFilter] });
+
+			// In case the friendsList store has already been loaded, add contacts.
+			if (!Ext.isEmpty(contacts)) {
+				this.allContactsStore.addContacts(contacts);
+			}
 		}
 
 		return this.allContactsStore;

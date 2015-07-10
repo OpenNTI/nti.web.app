@@ -44,7 +44,7 @@ Ext.define('NextThought.app.contacts.components.ContactTabView', {
 
 	buildStore: function() {
 		var s = this.GroupStore.getAllContactsStore(),
-			store = StoreUtils.newView(s);
+			store = StoreUtils.newView(s), me = this;
 
 		if (Ext.isFunction(this.filter)) {
 			s.filter(this.filter);
@@ -52,9 +52,18 @@ Ext.define('NextThought.app.contacts.components.ContactTabView', {
 
 		if (store.model === NextThought.model.User) {
 			store.on('datachanged', 'injectLetterDividers', this);
+			this.injectLetterDividers(store);
 		}
 
-		this.navigation.bindStore(s);
+		this.on('destroy', 'clearListeners', store);
+
+		this.navigation.bindStore(store);
 		this.body.bindStore(s);
+		this.navigation.on({
+			'afterrender': this.navigation.refresh.bind(this.navigation),
+			single: true
+		});
+
+		this.body.doRefresh(s);
 	}
 });

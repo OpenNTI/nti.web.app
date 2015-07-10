@@ -100,7 +100,11 @@ Ext.define('NextThought.app.contacts.Index', {
 		this.setActiveView('contacts-tab-view',
 			['groups-tab-view', 'lists-tab-view'],
 			'contacts'
-		);
+		).then(function(item) {
+			if(item && item.handleRoute) {
+				item.handleRoute(subRoute);
+			}
+		});
 	},
 
 
@@ -123,13 +127,17 @@ Ext.define('NextThought.app.contacts.Index', {
 
 
 	setActiveView: function(active, inactive, tab) {
-		var me = this;
+		var me = this, item;
+
 		me.prepareNavigation();
 		me.applyState({
 			active: tab || active
 		});
 
-		return  me.setActiveItem(active);
+		return new Promise(function (fulfill, reject) {
+			item = me.setActiveItem(active);
+			fulfill(item);
+		});
 	},
 
 
@@ -144,6 +152,7 @@ Ext.define('NextThought.app.contacts.Index', {
 
 
 		this.getLayout().setActiveItem(item);
+		return item;
 	},
 
 
@@ -152,7 +161,9 @@ Ext.define('NextThought.app.contacts.Index', {
 
 		if (!cmp) {
 			cmp = this.cmp_map[xtype] = this.down(xtype);
-			// this.addChildRouter(cmp);
+			if(cmp.handleRoute) {
+				this.addChildRouter(cmp);
+			}
 			cmp.contactsContainer = this;
 		}
 
