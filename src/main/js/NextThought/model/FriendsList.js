@@ -9,6 +9,10 @@ Ext.define('NextThought.model.FriendsList', {
 		groupLike: 'NextThought.mixins.GroupLike',
 		shareEntity: 'NextThought.mixins.ShareEntity'
 	},
+	
+	statics: {
+		BLANK_AVATAR: '/app/resources/images/icons/unresolved-group.png',
+	},
 
 	isFriendsList: true,
 

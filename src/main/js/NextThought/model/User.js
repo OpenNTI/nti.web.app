@@ -196,7 +196,7 @@ Ext.define('NextThought.model.User', {
 		if(this.isUnresolved()){
 			return null;
 		}
-		return NextThought.model.User.getAvatarInitials(this.raw);
+		return NextThought.model.User.getAvatarInitials(this.raw, this.get('FirstName'), this.get('LastName'), this.getName());
 	},
 
 	save: function(ops) {
@@ -311,12 +311,12 @@ Ext.define('NextThought.model.User', {
 		//they can upload an image.  If we have a first and last from the server
 		//take the first char of each, else take the first char of the display name.
 		//As of 7/2015 this matches the mobile app. Unresolved users don't show initials
-		getAvatarInitials: function(data){		
+		getAvatarInitials: function(data, f, l, d){		
 			//TODO should we cache this?
 		
-			var first = data.NonI18NFirstName,
-			last = data.NonI18NLastName,
-			dn = data.displayName;
+			var first = f|| data.NonI18NFirstName,
+			last = l || data.NonI18NLastName,
+			dn = d || data.displayName;
 		
 			return first && last ? first[0]+last[0] : (dn && dn[0]);
 		},

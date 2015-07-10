@@ -42,6 +42,8 @@ Ext.define('NextThought.util.Format', {
 	avatar: function(value, cls) {
 		var avatar = (value && value.get && value.get('avatarURL')) || (value && value.avatarURL),
 			username = (value && value.get && value.get('Username')) || (value && value.Username),
+			clazz = (value && value.get && value.get('Class')) || (value && value.Class),
+			defaultAvatar = clazz !== 'User' ?  NextThought.model.FriendsList.BLANK_AVATAR :  NextThought.model.User.BLANK_AVATAR,
 			clsList = [cls || 'avatar', 'avatar-container'],
 			initials,
 			cn=[], color, idx;
@@ -60,6 +62,10 @@ Ext.define('NextThought.util.Format', {
 			}
 			return hash;
 		}
+		
+		if(clazz){
+			clsList.push(clazz);
+		}
 
 		if(value && Ext.isFunction(value.getAvatarInitials)){
 			initials = value.getAvatarInitials();
@@ -76,7 +82,7 @@ Ext.define('NextThought.util.Format', {
 			cn[0] = {cls: 'fallback avatar-pic initials', style: {'background-color': '#'+color}, cn: {cls: 'inner', html: initials}};
 		}
 		else{
-			cn[0] = {cls: 'fallback avatar-pic', style: {backgroundImage: get(User.BLANK_AVATAR)}}
+			cn[0] = {cls: 'fallback avatar-pic', style: {backgroundImage: get(defaultAvatar)}}
 		}
 		
 		cn[1] = {cls: 'profile avatar-pic', style: {backgroundImage: get(avatar)}}
