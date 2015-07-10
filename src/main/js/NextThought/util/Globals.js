@@ -16,6 +16,7 @@ Ext.define('NextThought.util.Globals', {
 
 	ROOT_URL_PATTERN: /^\//,//starts with a slash
 	HOST_PREFIX_PATTERN: /^(http(s)?):\/\/([a-z.\-_0-9]+)(:(\d+))?/i,
+	FILE_EXTENSION_PATTERN: /\..+$/,
 	INVALID_CHARACTERS_PATTERN: /^[^\/\\";=?<>#%'\{\}\|\^\[\]\-]+$/,
 
 
@@ -591,6 +592,32 @@ Ext.define('NextThought.util.Globals', {
 			}
 		};
 	},
+
+
+	getURLRooted: function(url, root) {
+		if (!url) { return ''; }
+
+		if (Globals.HOST_PREFIX_PATTERN.test(url) || url.indexOf('//') === 0) {
+			return url;
+		}
+
+		url = Globals.trimRoute(url);
+
+		if (root) {
+			return Globals.getURLRooted(Globals.trimRoute(root) + '/' + url + '/');
+		}
+
+		var host = $AppConfig.server.host.replace(/\/$/, '');
+
+		url = host + '/' + url;
+
+		if (!Globals.FILE_EXTENSION_PATTERN.test(url)) {
+			url += '/';
+		}
+
+		return url;
+	},
+
 
 	getURL: function(u, root) {
 		if (!u) {return '';}

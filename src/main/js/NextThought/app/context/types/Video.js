@@ -7,7 +7,8 @@ Ext.define('NextThought.app.context.types.Video', {
 		'NextThought.app.context.components.Default',
 		'NextThought.app.context.components.VideoContext',
 		'NextThought.app.context.components.cards.*',
-		'NextThought.app.context.components.list.Video'
+		'NextThought.app.context.components.list.Video',
+		'NextThought.app.navigation.path.Actions'
 	],
 
 	videoPlayerTpl: new Ext.XTemplate(Ext.DomHelper.markup([
@@ -33,6 +34,7 @@ Ext.define('NextThought.app.context.types.Video', {
 		this.callParent(arguments);
 		Ext.applyIf(this, config || {});
 		this.MediaActions = NextThought.app.slidedeck.media.Actions.create();
+		this.PathActions = NextThought.app.navigation.path.Actions.create();
 	},
 
 	__buildTranscriptStore: function(vttCueList) {
@@ -58,14 +60,13 @@ Ext.define('NextThought.app.context.types.Video', {
 
 
 	__getBasePath: function(obj) {
-		var me = this,
-			id = this.contextRecord ? this.contextRecord.getId() : obj.ntiid;
+		var me = this;
+
 		return new Promise(function(fulfill, reject) {
 			if (me.course && me.course.getContentRoots) {
 				fulfill(me.course.getContentRoots()[0]);
-			}
-			else {
-				Service.getPathToObject(id)
+			} else {
+				me.PathActions.getPathToObject(me.contextRecord || obj)
 					.then(function(path) {
 						var course = path[0], p;
 

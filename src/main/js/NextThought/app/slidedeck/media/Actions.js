@@ -168,11 +168,8 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 			jsonpUrl = transcript.get('jsonpUrl'),
 			url = transcript.get('url');
 
-		jsonpUrl = '/' + Globals.trimRoute(jsonpUrl) + '/';
-		url = '/' + Globals.trimRoute(url) + '/';
-
-		jsonpUrl = getURL(jsonpUrl, transcript.get('basePath')),
-		url = getURL(url, transcript.get('basePath'));
+		jsonpUrl = Globals.getURLRooted(jsonpUrl, base);
+		url = Globals.getURLRooted(url, base);
 
 		if (!transcript) {
 			return new Promise.reject();
