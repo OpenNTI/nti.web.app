@@ -42,23 +42,8 @@ Ext.define('NextThought.model.UserSearch', {
 
 			return presence;
 		}},
-		{ name: 'FirstName', type: 'string', mapping: 'NonI18NFirstName', convert: function(v, r) {
-			// TODO: The mapping should normally take care of this conversion but it's doesn't seem to do it.
-			var fname = r && r.raw && r.raw.NonI18NFirstName;
-			if (Ext.isEmpty(v) && !Ext.isEmpty(fname)) {
-				return fname;
-			}
-
-			return v;
-		}},
-		{ name: 'LastName', type: 'string', mapping: 'NonI18NLastName', convert: function(v, r) {
-			var lname = r && r.raw && r.raw.NonI18NLastName;
-			if (Ext.isEmpty(v) && !Ext.isEmpty(lname)) {
-				return lname;
-			}
-
-			return v;
-		}},
+		{ name: 'NonI18NFirstName', type: 'string', persist: false},
+		{ name: 'NonI18NLastName', type: 'string', persist: false},
 		{ name: 'affiliation', type: 'string', persist: false },
 		{ name: 'role', type: 'string', persist: false },
 		{ name: 'location', type: 'string', persist: false },
