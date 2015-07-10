@@ -229,3 +229,21 @@
 		}
 	}
 }
+
+.avatar-container{
+	.initials{
+		text-align: center;
+		width: 100%;
+		text-transform: uppercase;
+		font-weight: 600;
+		color: #FFF;
+		div.inner{
+			position: absolute;
+			top: 50%;
+			width: 100%;
+			line-height: 4em;
+			margin-top: -2em;
+			font-weight: 600;
+		}
+	}
+}

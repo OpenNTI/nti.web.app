@@ -191,7 +191,25 @@ Ext.define('NextThought.model.User', {
 	hasBlog: function() {
 		return Boolean(this.getLink('Blog'));
 	},
-
+	
+	//This is isn't really a battle we can win given the complexity of names
+	//globally, however as a default this should work.  If they don't like it
+	//they can upload an image.  If we have a first and last from the server
+	//take the first char of each, else take the first char of the display name.
+	//As of 7/2015 this matches the mobile app. Unresolved users don't show initials
+	getAvatarInitials: function(){
+		if(this.isUnresolved()){
+			return null;
+		}
+		
+		//TODO should we cache this?
+		
+		var first = this.get('FirstName'),
+		last = this.get('LastName'),
+		dn = this.getName();
+		
+		return first && last ? first[0]+last[0] : dn[0];
+	},
 
 	save: function(ops) {
 		var data = this.asJSON();
