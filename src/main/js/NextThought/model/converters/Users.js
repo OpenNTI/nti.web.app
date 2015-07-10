@@ -48,6 +48,9 @@ Ext.define('NextThought.model.converters.Users', {
 			}
 
 			function secure(v, i, a) {
+				if(!v){
+					return v;
+				}
 				v = v.replace('www.gravatar.com', 'secure.gravatar.com').replace('http:', 'https:');
 				if (a) {a[i] = v;}
 				return v;
