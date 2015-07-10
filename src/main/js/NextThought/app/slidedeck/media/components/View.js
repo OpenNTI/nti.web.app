@@ -88,6 +88,11 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 			this.getLayout().setActiveItem(this.viewer);
 			// Ext.EventManager.onWindowResize(this.adjustOnResize, this, {buffer: 250});
 		}
+
+
+		if(this.toolbar && this.getViewerType()){
+			this.toolbar.updateCurrentType(this.getViewerType());
+		}
 	},
 
 

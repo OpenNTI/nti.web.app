@@ -190,9 +190,7 @@ Ext.define('NextThought.app.slidedeck.media.components.Toolbar', {
 
         this.floatParent.switchVideoViewer(item.action)
             .then(function() {
-				me.pickerEl.removeCls(previousType).addCls(item.action);
-				me.pickerEl.update(item.text);
-				me.currentType = item.action;
+				me.updateCurrentType(item.action,item.text);
 
 				Ext.each(menu.query('menuitem[checked]'), function(i) {
 					i.setChecked(false, true);
@@ -202,5 +200,15 @@ Ext.define('NextThought.app.slidedeck.media.components.Toolbar', {
             });
 
 		return false;
+	},
+
+	updateCurrentType: function(newType, newText) {
+		var previousType = this.currentType, me = this;
+
+		newText = newText || this.clsToName(newType);
+
+		me.pickerEl.removeCls(previousType).addCls(newType);
+		me.currentType = newType;
+		me.pickerEl.update(newText);
 	}
 });
