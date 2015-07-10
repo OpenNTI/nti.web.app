@@ -73,7 +73,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 		bodyEl: '.post .body',
 		moreEl: '.post .more',
 		commentCountEl: '.post .comment-count',
-		commentsContianerEl: '.body-container',
+		commentsContainerEl: '.body-container',
 		addCommentEl: '.add-comment'
 	},
 
@@ -257,7 +257,6 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 	},
 
 	showComments: function() {
-		this.commentsContianerEl.addCls('loading');
 		this.loadComments()
 			.then(this.addComments.bind(this))
 			.fail(this.showCommentError.bind(this));
