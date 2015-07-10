@@ -318,7 +318,7 @@ Ext.define('NextThought.model.User', {
 			last = data.LastName,
 			dn = data.displayName;
 		
-			return first && last ? first[0]+last[0] : dn[0];
+			return first && last ? first[0]+last[0] : (dn && dn[0]);
 		},
 
 		getUnresolved: function(username) {
