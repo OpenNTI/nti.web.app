@@ -198,7 +198,8 @@ Ext.define('NextThought.cache.UserRepository', {
 			result = {},
 			l = username.length,
 			names = [],
-			toResolve = [];
+			toResolve = [],
+			canBulkResolve = !forceFullResolve && isFeature('bulk-resolve-users');
 
 		return new Promise(function(fulfill, reject) {
 
@@ -252,7 +253,7 @@ Ext.define('NextThought.cache.UserRepository', {
 					result[name] = null;
 					toResolve.push(name);
 					//Legacy Path begin:
-					if (!isFeature('bulk-resolve-users')) {
+					if (!canBulkResolve) {
 						me.makeRequest(name, {
 							scope: me,
 							failure: function() {
@@ -270,7 +271,7 @@ Ext.define('NextThought.cache.UserRepository', {
 					//Legacy Path END
 				});
 
-			if (toResolve.length > 0 && isFeature('bulk-resolve-users')) {
+			if (toResolve.length > 0 && canBulkResolve) {
 				me.bulkResolve(toResolve)
 					.done(function(users) {
 						//Note we recache the user here no matter what
@@ -475,7 +476,7 @@ Ext.define('NextThought.cache.UserRepository', {
 						console.warn('Parsing a non-user: "%s" %o', n, o);
 						o = ParseUtils.parseItems(o)[0];
 					}
-					o.summaryObject = false;
+					o.summaryObject = true;
 					me.cacheUser(o, true);
 					me.updatePresenceFromResolve([o]);
 				} else {
