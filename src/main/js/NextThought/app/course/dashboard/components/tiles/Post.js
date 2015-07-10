@@ -1,7 +1,10 @@
 Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 	extend: 'NextThought.app.course.dashboard.components.tiles.BaseContainer',
 
-	requires: ['NextThought.model.resolvers.VideoPosters'],
+	requires: [
+		'NextThought.model.resolvers.VideoPosters',
+		'NextThought.app.windows.Actions'
+	],
 
 	mixins: {
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions'

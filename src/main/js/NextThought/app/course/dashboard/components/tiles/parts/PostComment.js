@@ -4,6 +4,10 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.parts.PostComment'
 
 	cls: 'post-comment',
 
+	requires: [
+		'NextThought.app.windows.Actions'
+	],
+
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'avatar'},
 		{cls: 'meta', cn: [
