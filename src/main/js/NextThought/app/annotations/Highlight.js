@@ -167,10 +167,10 @@ Ext.define('NextThought.app.annotations.Highlight', {
 
 		rect = r && RangeUtils.safeBoundingBoxForRange(r);
 		if (!rect) {
-			return NextThought.view.annotations.Base.NOT_FOUND;
+			return NextThought.app.annotations.Base.NOT_FOUND;
 		}
 
-		return !RectUtils.isZeroRect(rect) ? rect.top : NextThought.view.annotations.Base.HIDDEN;
+		return !RectUtils.isZeroRect(rect) ? rect.top : NextThought.app.annotations.Base.HIDDEN;
 	},
 
 
