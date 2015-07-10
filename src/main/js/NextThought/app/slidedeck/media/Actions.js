@@ -24,7 +24,7 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 
 
 	hasPageStore: function(id, ctx) {
-		if(!ctx || !id) {
+		if (!ctx || !id) {
 			return false;
 		}
 
@@ -33,7 +33,7 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 
 
 	getPageStore: function(id, ctx) {
-		if(!ctx || !id) { return false; }
+		if (!ctx || !id) { return false; }
 
 		return ctx.currentPageStores[id];
 	},
@@ -63,7 +63,7 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 					.then(function(store, cmp) {
 						var o = reader && reader.noteOverlay;
 
-						if(o && o.registerGutterRecords){
+						if (o && o.registerGutterRecords) {
 							o.registerGutterRecords(store, store.getRange(), cmp);
 							return Promise.resolve();
 						}
@@ -99,7 +99,7 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 				cmp.bindToStore(store);
 
 				store.on(me, {
-					'load': function(s){
+					'load': function(s) {
 						fulfill(s, cmp);
 					},
 					single: true
@@ -153,7 +153,7 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 
 					fulfill(cueList);
 				})
-				.fail(function(){
+				.fail(function() {
 					console.log('Failure to load transcripts... ', arguments);
 					reject(arguments);
 				});
@@ -164,8 +164,15 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 	loadRawTranscript: function(transcript) {
 		var me = this,
 			content = me.MediaUserDataStore.getTranscriptObject(transcript && transcript.get('associatedVideoId')),
-			jsonpUrl = getURL(transcript.get('jsonpUrl'), transcript.get('basePath')),
-			url = getURL(transcript.get('url'), transcript.get('basePath'));
+			base = transcript.get('basePath'),
+			jsonpUrl = transcript.get('jsonpUrl'),
+			url = transcript.get('url');
+
+		jsonpUrl = '/' + Globals.trimRoute(jsonpUrl) + '/';
+		url = '/' + Globals.trimRoute(url) + '/';
+
+		jsonpUrl = getURL(jsonpUrl, transcript.get('basePath')),
+		url = getURL(url, transcript.get('basePath'));
 
 		if (!transcript) {
 			return new Promise.reject();
