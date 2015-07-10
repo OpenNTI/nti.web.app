@@ -49,6 +49,29 @@ Ext.define('NextThought.app.profiles.community.Index', {
 		this.addRoute('/members', this.showMembers.bind(this));
 
 		this.addDefaultRoute('/');
+
+		this.on({
+			activate: this.onActivate.bind(this),
+			deactivate: this.onDeactivate.bind(this)
+		});
+	},
+
+
+	onActivate: function() {
+		var cmp = this.bodyCmp.getLayout().getActiveItem();
+
+		if (cmp) {
+			cmp.fireEvent('activate');
+		}
+	},
+
+
+	onDeactivate: function() {
+		var cmp = this.bodyCmp.getLayout().getActiveItem();
+
+		if (cmp) {
+			cmp.fireEvent('deactivate');
+		}
 	},
 
 
@@ -136,7 +159,7 @@ Ext.define('NextThought.app.profiles.community.Index', {
 		var me = this,
 			cmp = me.setActiveItem('profile-community-activity'),
 			entity = me.activeCommunity,
-			id = route.params.id, forum = route.precache.forum;
+			id = route.params.id, forum = route.precache.forum || cmp.getActiveForum();
 
 		id = ParseUtils.decodeFromURI(id);
 

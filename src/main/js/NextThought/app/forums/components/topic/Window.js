@@ -23,7 +23,7 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 
 		this.add({
 			xtype: 'window-header',
-			doClose: this.doClose.bind(this)
+			doClose: this.onClose.bind(this)
 		});
 
 		this.loadingEl = this.add({xtype: 'window-loading'});
@@ -35,6 +35,11 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 		} else {
 			this.loadTopic();
 		}
+	},
+
+
+	onClose: function() {
+		this.doClose(this.activeTopic);
 	},
 
 
@@ -128,13 +133,15 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 				});
 			}
 		}
-		
-		if(topic && topic.getId() !== this.currentAnalyticId){
+
+		this.activeTopic = topic;
+
+		if (topic && topic.getId() !== this.currentAnalyticId) {
 			stopTimer();
 			this.currentAnalyticId = topic.getId();
 			startTimer();
 		}
-		
+
 		if (!this.visibilityMonitors) {
 			this.visibilityMonitors = this.on({
 				'destroy': function() {
@@ -152,7 +159,7 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 			}, me, {destroyable: true});
 		}
 
-		
+
 		if (topic) {
 			Ext.destroy(topicCmp);
 			Ext.destroy(commentCmp);
@@ -212,7 +219,7 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 			}
 		});
 	}
-	
+
 }, function() {
 	NextThought.app.windows.StateStore.register('application/vnd.nextthought.forums.generalforumcomment', this);
 	NextThought.app.windows.StateStore.register(NextThought.model.forums.ContentHeadlineTopic.mimeType, this);

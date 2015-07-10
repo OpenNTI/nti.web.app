@@ -56,6 +56,24 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 		});
 
 		this.loadingCmp.addCls('hidden');
+
+		this.on({
+			activate: this.onActivate.bind(this),
+			deactivate: this.onDeactivate.bind(this)
+		});
+
+
+		this.onScroll = this.onScroll.bind(this);
+	},
+
+
+	onActivate: function() {
+		window.addEventListener('scroll', this.onScroll);
+	},
+
+
+	onDeactivate: function() {
+		window.removeEventListener('scroll', this.onScroll);
 	},
 
 
@@ -95,6 +113,11 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 	},
 
 
+	getActiveForum: function() {
+		return this.postContainer;
+	},
+
+
 	setPostContainer: function(forum) {
 		this.postContainer = forum;
 
@@ -113,10 +136,24 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 
 	onNewPost: function() {
 		if (this.postContainer && this.postContainer.getLink('add')) {
-			this.WindowActions.showWindow('new-topic', null, this.newPostCmp.el.dom, null, {
+			this.WindowActions.showWindow('new-topic', null, this.newPostCmp.el.dom, {afterClose: this.onPostSaved.bind(this)}, {
 				forum: this.postContainer
 			});
 		}
+	},
+
+
+	onPostSaved: function(record) {
+		if (!record) { return; }
+
+		var left = this.firstColumn;
+
+		this.__loadItem(record)
+			.then(function(cmp) {
+				if (cmp) {
+					left.insert(0, cmp);
+				}
+			});
 	},
 
 
@@ -125,28 +162,32 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 
 		this.feedItems.concat(items);
 
-		return this.renderItems(items);
+		return this.__renderItems(items);
 	},
 
 
-	renderItems: function(items) {
+
+	__loadItem: function(item) {
+		var load;
+
+		if (item instanceof NextThought.model.forums.CommunityHeadlineTopic) {
+			load = NextThought.app.course.dashboard.components.tiles.Topic.getTileConfig(item, null, 336);
+		} else if (item instanceof NextThought.model.Note) {
+			load = NextThought.app.course.dashboard.components.tiles.Note.getTileConfig(item, null, 336);
+		} else {
+			console.warn('Unknown item in activity: ', item);
+			load = Promise.resolve(null);
+		}
+
+		return load;
+	},
+
+
+	__renderItems: function(items) {
 		var left = this.firstColumn,
 			right = this.secondColumn;
 
-		items = items.map(function(item, index) {
-			var load;
-
-			if (item instanceof NextThought.model.forums.CommunityHeadlineTopic) {
-				load = NextThought.app.course.dashboard.components.tiles.Topic.getTileConfig(item, null, 336);
-			} else if (item instanceof NextThought.model.Note) {
-				load = NextThought.app.course.dashboard.components.tiles.Note.getTileConfig(item, null, 336);
-			} else {
-				console.warn('Unknown item in activity: ', item);
-				load = Promise.resolve(null);
-			}
-
-			return load;
-		});
+		items = items.map(this.__loadItem.bind(this));
 
 		return Promise.all(items)
 			.then(function(results) {
@@ -204,5 +245,8 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 		}
 
 		this.nextBatchLink = nextLink;
-	}
+	},
+
+
+	onScroll: function() {}
 });

@@ -60,13 +60,13 @@ Ext.define('NextThought.app.windows.Index', {
 			cmp;
 
 		if (!type) {
-			if(object && object.mimeType){
+			if (object && object.mimeType) {
 				console.error('No component to show object of ', object.mimeType);
-			}else{
+			} else {
 				console.error('Request status of ', object[1].status);
 			}
-			
-			this.WindowStore.fireReplaceOpenWindowRoute(object,state,'','',precache);
+
+			this.WindowStore.fireReplaceOpenWindowRoute(object, state, '', '', precache);
 			return;
 		}
 
@@ -92,13 +92,13 @@ Ext.define('NextThought.app.windows.Index', {
 	},
 
 
-	doClose: function(afterClose) {
+	doClose: function(afterClose, record) {
 		this.WindowActions.closeWindow();
 
 		if (afterClose) {
 			//give close a chance to finish before calling afterClose
 			wait()
-				.then(afterClose);
+				.then(afterClose.bind(null, record));
 		}
 	}
 });
