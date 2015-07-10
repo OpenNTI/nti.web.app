@@ -38,7 +38,8 @@ Ext.define('NextThought.app.profiles.group.components.activity.parts.Users', {
 	},
 
 	setFriends: function(friends) {
-		var me = this;
+		var me = this,
+			friends = friends.slice();
 
 		if(this.creator){
 			friends.unshift(this.creator);
