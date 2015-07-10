@@ -110,8 +110,8 @@ Ext.define('NextThought.app.library.courses.components.Page', {
 				list.push(year);
 				yearBin = bin[year] = {};
 				semesterBin = yearBin[semester] = [course];
-				semesterBin.label = catalog.isArchived() ? 'Archived' : 'Current';
 			}
+			semesterBin.label = catalog.isArchived() ? 'Archived' : 'Current';
 		});
 
 		return {
