@@ -17,13 +17,17 @@ Ext.define('NextThought.app.contacts.components.outline.Search', {
 			{ tag: 'tpl', 'if': 'values.Presence', cn: { cls: 'presence {Presence.name}' }},
 			{ tag: 'tpl', 'if': '!values.Presence', cn: { cls: 'presence' }},
 			{ cls: 'nib' },
-			{ cls: 'avatar', style: {backgroundImage: 'url({avatarURL})'} },
+			'{[this.getAvatar(values)]}',
 			{ cls: 'wrap', cn: [
 				{ cls: 'name', html: '{displayName}' },
 				{ cls: 'status', html: '{status}' }
 			]}
 		]}
 	]}), {
+		getAvatar: function(model){
+			var a = NTIFormat.avatar(model);
+			return a;
+		},
 		isContact: function(values) {
 			var a = NextThought.app.groups.StateStore.getInstance();
 			return (values.Class !== 'User' || a.isContact(values.Username)) ? 'contact' : 'not-contact';
