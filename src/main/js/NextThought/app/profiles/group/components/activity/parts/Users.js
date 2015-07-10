@@ -20,7 +20,7 @@ Ext.define('NextThought.app.profiles.group.components.activity.parts.Users', {
 		   
 
 	entryTpl: new Ext.XTemplate(Ext.DomHelper.markup({
-		cls: 'entry', 'data-route': '{route}', 'data-qtip': '{name}', cn: [
+		cls: '{classes}', 'data-route': '{route}', 'data-qtip': '{name}', cn: [
 			'{member:avatar}',
 			{cls: 'name', html: '{name}'}
 		]
@@ -56,6 +56,16 @@ Ext.define('NextThought.app.profiles.group.components.activity.parts.Users', {
 		this.titleEl.setHTML(headingString);
 		
 		return this.callParent([friends]);
+	},
+	
+	configForUser: function(member){
+		var config = this.callParent(arguments),
+			classes = ['entry'];
+		if(member.get('Username') === this.creator){
+			classes.push('admin');
+		}
+		config.classes = classes.join(' ');
+		return config;
 	},
 	
 	onSeeAll: function() {

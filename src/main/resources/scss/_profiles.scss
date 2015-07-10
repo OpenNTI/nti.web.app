@@ -2226,6 +2226,15 @@
 		}
 	}
 	
+	.entry.admin{
+		@include icon('admin_badge', $top: auto, $left: auto, $side: after);
+		&::after{
+			z-index: 10;
+			bottom: 0px;
+			right: 0px;
+		}
+	}
+	
 	.entry[data-route]:not([data-route=""]){
 		cursor: pointer;
 	}
