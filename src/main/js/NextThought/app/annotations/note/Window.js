@@ -46,6 +46,7 @@ Ext.define('NextThought.app.annotations.note.Window', {
 
 		this.add({
 			xtype: 'note-main-view',
+			triggerAnalyticsViews: true,
 			record: record,
 			readerContext: context,
 			doClose: this.doClose.bind(this),

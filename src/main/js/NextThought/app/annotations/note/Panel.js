@@ -17,6 +17,8 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
 		flagActions: 'NextThought.mixins.FlagActions'
 	},
+	
+	triggerAnalyticsViews: false,
 
 	enableTitle: false,
 
@@ -1056,7 +1058,7 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 
 
 	startResourceTimer: function() {
-		if (!this.record) { return; }
+		if (!this.triggerAnalyticsViews || !this.record) { return; }
 
 		var bundle = NextThought.app.context.StateStore.getInstance().getRootBundle();
 
@@ -1072,9 +1074,10 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 			delete this.editor.ownerCt;
 			this.editor.destroy();
 		}
-
-		AnalyticsUtil.stopResourceTimer(this.record.getId(), 'note-viewed');
-
+		
+		if(this.triggerAnalyticsViews){
+			AnalyticsUtil.stopResourceTimer(this.record.getId(), 'note-viewed');
+		}
 		this.callParent(arguments);
 	},
 
