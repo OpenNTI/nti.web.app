@@ -17,6 +17,8 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 	cls: 'community-activity',
 	layout: 'none',
 
+	PAGE_SIZE: 50,
+
 	items: [],
 
 	initComponent: function() {
@@ -93,8 +95,6 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 			batchStart: 0
 		};
 
-		this.loadingCmp.removeCls('hidden');
-
 		if (this.emptyCmp) {
 			this.emptyCmp.destroy();
 			delete this.emptyCmp;
@@ -107,9 +107,7 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 
 		this.feedUrl = url;
 
-		StoreUtils.loadBatch(url, params)
-			.then(this.onBatchLoad.bind(this))
-			.fail(this.onBatchError.bind(this));
+		this.loadPage(1);
 	},
 
 
@@ -221,8 +219,28 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 	},
 
 
+	loadPage: function(page) {
+		var params = {
+				batchSize: this.PAGE_SIZE,
+				batchStart: (page - 1) * this.PAGE_SIZE
+			};
+
+		this.loadingCmp.removeCls('hidden');
+
+		this.currentPage = page;
+
+		StoreUtils.loadBatch(this.feedUrl, params)
+			.then(this.onBatchLoad.bind(this))
+			.fail(this.onBatchError.bind(this));
+	},
+
+
 	onBatchError: function(error) {
 		console.error('Failed to load community activity: ', error);
+
+		this.loadingCmp.removeCls('hidden');
+
+		this.currentPage = -1;
 
 		this.errorCmp = this.add({
 			xtype: 'box',
@@ -235,11 +253,18 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 	onBatchLoad: function(batch) {
 		var nextLink = batch.Links && Service.getLinkFrom(batch.Links, 'batch-next');
 
+		//if the number we got back is smaller than the number we requests, assume that was the last page
+		if (batch.ItemCount < this.PAGE_SIZE) {
+			this.currentPage = -1;
+		}
 
+		//if we have items
 		if (batch.ItemCount) {
 			this.addItems(batch.Items)
 				.always(this.loadingCmp.addClass.bind(this.loadingCmp, 'hidden'));
-		} else {
+		//if we don't have items and this is our first load, show an empty state
+		} else if (this.currentPage === 1) {
+			this.currentPage = -1;
 			this.loadingCmp.addCls('hidden');
 			this.showEmpty();
 		}
@@ -248,5 +273,20 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 	},
 
 
-	onScroll: function() {}
+	loadNextBatch: function() {
+		if (this.currentPage > 0) {
+			this.loadPage(this.currentPage + 1);
+		}
+	},
+
+
+	onScroll: function() {
+		var height = document.documentElement.clientHeight,
+			scrollTop = document.body.scrollTop,
+			scrollHeight = document.body.scrollHeight;
+
+		if (scrollTop + height >= scrollHeight) {
+			this.loadNextBatch();
+		}
+	}
 });
