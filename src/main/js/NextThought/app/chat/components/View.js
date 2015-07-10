@@ -17,8 +17,11 @@ Ext.define('NextThought.app.chat.components.View', {
 
 	cls: 'chat-view scrollable',
 	ui: 'chat-view',
-	layout: 'none',
 
+	layout: {
+		type: 'anchor'
+	},
+	defaults: {anchor: '100%'},
 
 	items: [
 		{ xtype: 'chat-log-view', anchor: '0 -51' },
@@ -27,7 +30,47 @@ Ext.define('NextThought.app.chat.components.View', {
 				{cls: 'error-desc'}
 			]}
 		},
-		{ xtype: 'chat-entry', itemId: 'entry', mainEntry: true}
+		{
+			cls: 'entry-card',
+			border: 0,
+			entryCard: true,
+			layout: 'card',
+			items: [
+				{ xtype: 'chat-entry', itemId: 'entry', mainEntry: true },
+				{
+					xtype: 'container',
+					layout: {
+						type: 'hbox',
+						pack: 'end',
+						align: 'middle'
+					},
+					itemId: 'buttons',
+					cls: 'mod-buttons',
+					items: [
+						{
+							xtype: 'button',
+							ui: 'flat',
+							text: getString('NextThought.view.chat.View.cancel'),
+							scale: 'large',
+							handler: function(btn) {
+								this.up('chat-window').onFlagToolClicked();
+							}
+						},
+						{
+							xtype: 'button',
+							flagButton: true,
+							ui: 'caution',
+							text: getString('NextThought.view.chat.View.report'),
+							scale: 'large',
+							disabled: true,
+							handler: function() {
+								this.up('chat-view').flagMessages();
+							}
+						}
+					]
+				}
+			]
+		}
 	],
 
 

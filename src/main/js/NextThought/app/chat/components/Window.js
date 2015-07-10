@@ -1,5 +1,5 @@
 Ext.define('NextThought.app.chat.components.Window', {
-	extend: 'NextThought.common.window.Window',
+	extend: 'Ext.window.Window',
 	alias: 'widget.chat-window',
 
 	requires: [
@@ -15,21 +15,27 @@ Ext.define('NextThought.app.chat.components.Window', {
 	focusOnToFront: false,
 	minimizable: true,
 
+	constrain: true,
 	width: 280,
 	minWidth: 250,
 
 	height: 325,
 	minHeight: 325,
+	header: false,
 
 	title: 'chat',
 
-	layout: 'none',
+	layout: {
+		type: 'vbox',
+		align: 'stretch'
+	},
+
 	isOverlay: false,
 
 	items: [
-		{xtype: 'chat-view'}
+		{xtype: 'nti-window-header' },
+		{xtype: 'chat-view', flex: 1}
 	],
-
 
 	// dockedItems: [
 	// 	{xtype: 'chat-gutter', dock: 'left', hidden: true}
@@ -58,7 +64,7 @@ Ext.define('NextThought.app.chat.components.Window', {
 		// 	'close': this.dragMaskOff,
 		// 	'hide': this.dragMaskOff
 		// });
-
+		this.titleBar = this.down('nti-window-header');
 		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
 		this.ChatActions = NextThought.app.chat.Actions.create();
 		this.setChatStatesMap();
@@ -68,6 +74,23 @@ Ext.define('NextThought.app.chat.components.Window', {
 		this.on({'beforedestroy': this.onDestroy.bind(this)});
 		this.roomInfoChanged(this.roomInfo);
 		// this.mon(Ext.getStore('PresenceInfo'), 'presence-changed', 'presenceChanged', this);
+	},
+
+
+	setTitle: function(title) {
+		if (this.titleBar) {
+			this.titleBar.update(title);
+			this.fireEvent('titleChange', this, title);
+		}
+	},
+
+
+	getTitle: function() {
+		var title;
+		if (this.titleBar) {
+			title = this.titleBar.getTitle();
+		}
+		return title || 'Untitled';
 	},
 
 
