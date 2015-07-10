@@ -17,6 +17,28 @@ Ext.define('NextThought.app.profiles.community.components.Header', {
 	},
 
 
+	initComponent: function() {
+		this.callParent(arguments);
+
+		this.onScroll = this.onScroll.bind(this);
+
+		this.on({
+			'activate': this.onActivate.bind(this),
+			'deactivate': this.onDeactivate.bind(this)
+		});
+	},
+
+
+	onActivate: function() {
+		window.addEventListener('scroll', this.onScroll);
+	},
+
+
+	onDeactivate: function() {
+		window.removeEventListener('scroll', this.onScroll);
+	},
+
+
 	updateEntity: function(community) {
 		if (!this.rendered) {
 			this.on('afterrender', this.updateEntity.bind(this, community));
@@ -40,6 +62,58 @@ Ext.define('NextThought.app.profiles.community.components.Header', {
 				label: 'Leave Community'
 			});
 		}
+
+		this.buildSettingsMenu(community);
+	},
+
+
+	buildSettingsMenu: function(community) {
+		if (this.settingsMenu) {
+			Ext.destroy(this.settingsMenu);
+		}
+
+		var show = community.getLink('unhide'),
+			hide = community.getLink('hide'),
+			items = [];
+
+		if (show) {
+			items.push({handler: this.onShow.bind(this), text: 'Show'});
+		}
+
+		if (hide) {
+			items.push({handler: this.onHide.bind(this), text: 'Hide'});
+		}
+
+		if (items.length) {
+			this.settingsMenu = Ext.widget('menu', {
+				cls: 'community-settings-menu',
+				ownerCmp: this,
+				items: items,
+				defaults: {
+					ui: 'nt-menuitems',
+					xtype: 'menucheckitem',
+					plain: true
+				}
+			});
+
+			this.addButton({
+				cls: 'settings',
+				action: 'showSettings',
+				label: ' '
+			});
+		}
+	},
+
+
+	onScroll: function() {
+		this.settingsMenu.hide();
+	},
+
+
+	showSettings: function(el) {
+		if (this.settingsMenu) {
+			this.settingsMenu.showBy(Ext.get(el), 'tl-bl');
+		}
 	},
 
 
@@ -50,5 +124,17 @@ Ext.define('NextThought.app.profiles.community.components.Header', {
 
 	onLeave: function() {
 		this.leaveCommunity();
+	},
+
+
+	onShow: function() {
+		this.settingsMenu.hide();
+		this.showCommunity();
+	},
+
+
+	onHide: function() {
+		this.settingsMenu.hide();
+		this.hideCommunity();
 	}
 });

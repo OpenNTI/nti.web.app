@@ -40,7 +40,13 @@
 		color: white;
 		margin-top: 40px;
 		margin-bottom: 10px;
-		font-size: 1.25em;
+		font-size: 1.875em;
+		font-family: $condensed-font;
+		font-weight: 700;
+		-webkit-font-smoothing: antialiased;
+		max-width: 600px;
+		overflow: hidden;
+		@include ellipse;
 	}
 }
 
@@ -50,13 +56,13 @@
 	.buttons {
 		height: 35px;
 		margin-top: 40px;
-		margin-bottom: 10px;
+		margin-bottom: 25px;
 
 		.button {
 			float: right;
 			margin-left: 10px;
 			padding: 0 1.5em 0 45px;//1.5em + 20px
-			line-height: 35px;
+			line-height: 40px;
 			color: white;
 			border-radius: 3px;
 			font-size: 0.875em;
@@ -82,9 +88,25 @@
 				background-color: $secondary-green;
 			}
 
+		 	&.leave, &.settings {
+				background: -moz-linear-gradient(top, rgba(35,35,35,0.65) 0%, rgba(0,0,0,0.65) 100%);
+				background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(35,35,35,0.65)), color-stop(100%,rgba(0,0,0,0.65)));
+				background: -webkit-linear-gradient(top, rgba(35,35,35,0.65) 0%,rgba(0,0,0,0.65) 100%);
+				background: -o-linear-gradient(top, rgba(35,35,35,0.65) 0%,rgba(0,0,0,0.65) 100%);
+				background: -ms-linear-gradient(top, rgba(35,35,35,0.65) 0%,rgba(0,0,0,0.65) 100%);
+				background: linear-gradient(to bottom, rgba(35,35,35,0.65) 0%,rgba(0,0,0,0.65) 100%);
+				filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6232323', endColorstr='#a6000000',GradientType=0 );
+		 	}
+
 			&.leave {
 				padding: 0 1.5em;
-				background-color: $primary-red;
+			}
+
+			&.settings {
+				padding: 0 1.5em;
+				height: 40px;
+
+				@include icon('settings-white', $top: 12px, $left: 13px);
 			}
 
 			&.follow {

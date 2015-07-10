@@ -60,7 +60,7 @@ Ext.define('NextThought.app.profiles.components.Header', {
 			action = button && button.getAttribute('data-action');
 
 		if (action && this[action]) {
-			this[action]();
+			this[action](button);
 		}
 	},
 

@@ -27,7 +27,9 @@ Ext.define('NextThought.app.profiles.community.Index', {
 		this.headerCmp = this.add({
 			xtype: 'profile-community-header',
 			joinCommunity: this.joinCommunity.bind(this),
-			leaveCommunity: this.leaveCommunity.bind(this)
+			leaveCommunity: this.leaveCommunity.bind(this),
+			showCommunity: this.showCommunity.bind(this),
+			hideCommunity: this.hideCommunity.bind(this)
 		});
 
 		this.bodyCmp = this.add({
@@ -64,6 +66,8 @@ Ext.define('NextThought.app.profiles.community.Index', {
 		if (cmp) {
 			cmp.fireEvent('activate');
 		}
+
+		this.headerCmp.fireEvent('activate');
 	},
 
 
@@ -73,6 +77,8 @@ Ext.define('NextThought.app.profiles.community.Index', {
 		if (cmp) {
 			cmp.fireEvent('deactivate');
 		}
+
+		this.headerCmp.fireEvent('deactivate');
 	},
 
 
@@ -297,6 +303,50 @@ Ext.define('NextThought.app.profiles.community.Index', {
 			.fail(function(reason) {
 				console.error('Error leaving community: ', reason);
 				alert('Unable to leave community at this time.');
+			});
+	},
+
+
+	showCommunity: function() {
+		var me = this,
+			show, link = me.activeCommunity.getLink('unhide');
+
+		if (!link) {
+			show = Promise.reject('No Link');
+		} else {
+			show = Service.post(link);
+		}
+
+		show
+			.then(function(response) {
+				me.activeCommunity = ParseUtils.parseItems(response)[0];
+				me.updateCommunity();
+			})
+			.fail(function(reason) {
+				console.error('Error hiding community: ', reason);
+				alert('Unable to show community at this time.');
+			});
+	},
+
+
+	hideCommunity: function() {
+		var me = this,
+			hide, link = me.activeCommunity.getLink('hide');
+
+		if (!link) {
+			hide = Promise.reject('No Link');
+		} else {
+			hide = Service.post(link);
+		}
+
+		hide
+			.then(function(response) {
+				me.activeCommunity = ParseUtils.parseItems(response)[0];
+				me.updateCommunity();
+			})
+			.fail(function(reason) {
+				console.error('Error hiding community: ', reason);
+				alert('Unable to hide community at this time.');
 			});
 	}
 });
