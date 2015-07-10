@@ -2,10 +2,21 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.parts.NoteComment'
 	extend: 'NextThought.app.course.dashboard.components.tiles.parts.PostComment',
 	alias: 'widget.dashboard-note-comment',
 
-	handleNavigation: function() {
-		var cid = this.record.get('ContainerId');
 
-		this.fireEvent('navigation-selected', cid, this.record, null, this.course);
+	initComponent: function() {
+		this.callParent(arguments);
+		this.WindowActions = NextThought.app.windows.Actions.create();
+	},
+
+	handleNavigation: function() {
+		this.WindowActions.pushWindow(this.record, null, null, {afterClose: this.onWindowClose.bind(this)}, {course: this.course});
+	},
+
+
+	onWindowClose: function() {
+		this.removeAll(true);
+		this.updateBody(); // Safe guard for now
+		this.showComments();
 	},
 
 

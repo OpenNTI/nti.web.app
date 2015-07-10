@@ -7,9 +7,23 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.parts.TopicComment
 	},
 
 
-	handleNavigation: function() {
-		this.fireEvent('goto-forum-item', this.record, this.course);
+	initComponent: function() {
+		this.callParent(arguments);
+		this.WindowActions = NextThought.app.windows.Actions.create();
 	},
+
+
+	handleNavigation: function() {
+		this.WindowActions.pushWindow(this.record, null, null, {afterClose: this.onWindowClose.bind(this)}, {course: this.course});
+	},
+
+
+	onWindowClose: function() {
+		this.removeAll(true);
+		this.updateBody(); // Safe guard for now
+		this.showComments();
+	},
+
 
 	fillInComments: function() {
 		var comments = this.record.get('ReferencedByCount');
