@@ -18,9 +18,10 @@ Ext.define('NextThought.app.sharing.ShareSearchList', {
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		tag: 'tpl', 'for': '.',
 		cn: [{
-			cls: 'x-menu-item contact-card',
+			cls: 'x-menu-item contact-card {[this.getType(values)]}',
 			cn: [
-				{cls: 'avatar {[this.getType(values)]}', style: '{[this.getIcon(values)]}'},
+				'{[this.getAvatar(values)]}',
+				{cls: 'avatar icon {[this.getType(values)]}', style: '{[this.getIcon(values)]}'},
 				{cls: 'card-body {[this.getType(values)]}', cn: [
 					{cls: 'name', html: '{displayName}'},
 					{cls: 'status', html: '{[this.getDisplayTypeValue(values)]}'}
@@ -28,9 +29,17 @@ Ext.define('NextThought.app.sharing.ShareSearchList', {
 			]}
 		]
 	}), {
+		getAvatar: function(model){
+			var a = NTIFormat.avatar(model);
+			return a;
+		},
+		isUser: function(model) {
+			var t = this.getType(model);
+			return t === 'person';
+		},
 		getIcon: function(model) {
 			var t = this.getType(model);
-			return t === 'person' ? ('background-image: url(' + model.avatarURL + ')') : '';
+			return '';
 		},
 
 		getType: function(modelData) {

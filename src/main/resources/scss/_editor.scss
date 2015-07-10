@@ -479,5 +479,18 @@ span.tab{
 }
 
 .share-search{
-	position: fixed !important;	
+	position: fixed !important;
+	.contact-card{
+		.avatar-container{
+			display: none;
+		}
+		&.person{
+			.avatar.icon{
+				display: none;
+			}
+			.avatar-container{
+				display: block;
+			}
+		}
+	}
 }
