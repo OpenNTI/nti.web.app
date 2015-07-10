@@ -131,6 +131,8 @@ Ext.define('NextThought.app.navigation.path.Actions', {
 			request = this.__doRequestForNoLink(obj);
 		}
 
-		return request;
+		return request.then(function(path){
+				return path.slice();
+			});
 	}
 });
