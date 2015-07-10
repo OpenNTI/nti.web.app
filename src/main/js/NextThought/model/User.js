@@ -314,8 +314,8 @@ Ext.define('NextThought.model.User', {
 		getAvatarInitials: function(data){		
 			//TODO should we cache this?
 		
-			var first = data.FirstName,
-			last = data.LastName,
+			var first = data.NonI18NFirstName,
+			last = data.NonI18NLastName,
 			dn = data.displayName;
 		
 			return first && last ? first[0]+last[0] : (dn && dn[0]);
