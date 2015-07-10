@@ -253,10 +253,10 @@ Ext.define('NextThought.app.profiles.user.Index', {
 					handler: function() {
 						actions.deleteContact(user)
 							.then(function() {
-								me.setState(this.activeTab);
+								me.setState(me.activeTab);
 							})
 							.fail(function() {
-								me.setState(this.activeTab);
+								me.setState(me.activeTab);
 								alert('There was trouble deleting your contact.');
 							});
 					}
@@ -273,11 +273,11 @@ Ext.define('NextThought.app.profiles.user.Index', {
 		var me = this;
 
 		me.GroupActions.addContact(me.activeEntity)
-			.then(function() {
-				me.setState(this.activeTab);
+			.then(function(something) {
+				me.setState(me.activeTab);
 			})
 			.fail(function() {
-				me.setState(this.activeTab);
+				me.setState(me.activeTab);
 				alert('There was trouble adding your contact.');
 			});
 	},
