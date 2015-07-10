@@ -196,7 +196,7 @@ Ext.define('NextThought.model.User', {
 		if(this.isUnresolved()){
 			return null;
 		}
-		return NextThought.model.User.getAvatarInitials(this.data);
+		return NextThought.model.User.getAvatarInitials(this.raw);
 	},
 
 	save: function(ops) {
