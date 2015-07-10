@@ -254,7 +254,6 @@ Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
 				}
 			}).addCls('active in-gutter');
 			me.editor.toFront();
-			me.editor.focus();
 
 			//20 px left of the right side of the reader
 			left = readerRect.right - 20;
@@ -277,6 +276,8 @@ Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
 				destroy: 'editorCleanup',
 				scope: me
 			});
+
+			me.editor.focus();
 
 			me.editor.on('destroy', 'unmask', tabPanel);
 			me.editor.mon(tabPanel, 'resize', 'syncEditorWidth', me);
