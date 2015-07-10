@@ -187,9 +187,5 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 			xtype: 'dashboard-note-comment',
 			record: comment
 		};
-	},
-
-	updateBody: function() {
-		this.setBody(this.getBody().value);
 	}
 });

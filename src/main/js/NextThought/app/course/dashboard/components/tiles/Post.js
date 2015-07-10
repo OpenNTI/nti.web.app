@@ -149,7 +149,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 	getCurrent: function() { return ''; },
 	getSharedWith: function() { return ''; },
 	getTitle: function() { return ''; },
-	getBody: function() { return ''; },
+	getBody: function() { return Promise.resolve(''); },
 	getCommentCount: function() { return 0; },
 	getContext: function() { return Promise.resolve({}); },
 
@@ -222,6 +222,12 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 
 	setTitle: function(value) {
 		this.titleEl.update(value);
+	},
+
+
+	updateBody: function() {
+		this.getBody()
+			.then(this.setBody.bind(this));
 	},
 
 

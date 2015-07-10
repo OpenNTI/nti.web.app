@@ -101,9 +101,5 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Topic', {
 			record: comment,
 			course: this.course
 		};
-	},
-
-	updateBody: function() {
-		this.setBody(this.getBody().value);
 	}
 });
