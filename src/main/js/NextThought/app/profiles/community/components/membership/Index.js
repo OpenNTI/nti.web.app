@@ -11,7 +11,7 @@ Ext.define('NextThought.app.profiles.community.components.membership.Index', {
 	},
 
 	title: 'Community Members',
-	cls: 'memberships full community',
+	cls: 'memberships full community two-column',
 	profileRouteRoot: '/user',
 
 	PAGE_SIZE: 100,
