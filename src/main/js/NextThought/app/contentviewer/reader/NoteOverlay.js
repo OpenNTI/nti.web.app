@@ -199,6 +199,8 @@ Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
 			currentBundle = location.currentBundle,
 			targetEl = this.reader.getEl().up('.x-container-reader.reader-container'),
 			tabPanel = me.getTabPanel(),
+			viewWidth = Ext.Element.getViewportWidth(),
+			editorWidth,
 			lineInfo = me.data.box.activeLineInfo;
 
 		if (!me.allowOpenEditor() || !tabPanel) {
@@ -256,6 +258,13 @@ Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
 
 			//20 px left of the right side of the reader
 			left = readerRect.right - 20;
+
+			editorWidth = me.editor.getWidth();
+
+			//make sure this left won't put the editor off screen
+			if (left + editorWidth >= viewWidth - 20) {
+				left = viewWidth - 20 - editorWidth;
+			}
 
 			//TODO: Figure out how to align this with the window scrolling
 			me.editor.el.setStyle({
@@ -363,7 +372,7 @@ Ext.define('NextThought.app.contentviewer.reader.NoteOverlay', {
 				this.lineInfoForRangeAndRect(range, rect));
 
 		var readerRect = this.reader.getAnnotationOffsets().rect;
-	
+
 		return this.openEditorClick(null, {
 			top: rect.top + readerRect.top
 		});
