@@ -40,7 +40,7 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 			//cls: 'note-reply',
 			cls: 'note',
 			cn: [
-				'{user:avatar}',
+				{cls: 'avatar-wrapper', cn: ['{user:avatar}']},
 				{
 					cls: 'meta',
 					cn: [
@@ -84,7 +84,7 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 	]),
 
 	renderSelectors: {
-		avatar: '.avatar .profile.avatar-pic',
+		avatar: '.avatar-wrapper',
 		noteBody: '.note',
 		liked: '.meta .controls .like',
 		favorites: '.meta .controls .favorite',
@@ -319,29 +319,12 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 
 
 	fillInUser: function(user) {
-		var HOST = Globals.HOST_PREFIX_PATTERN,
-			avatarURL = user.get('avatarURL'),
-			currentURL = this.avatar.getStyle('background-image').slice(4, -1), a, b, d;
-
-		if (avatarURL && avatarURL.indexOf('//') === 0) {
-			avatarURL = location.protocol + avatarURL;
-		}
-
-		a = HOST.exec(avatarURL);
-		b = HOST.exec(currentURL);
-		d = HOST.exec(location)[0];//default host
-
-		a = (a && a[0]) || d;
-		b = (b && b[0]) || d;
-
-		currentURL = currentURL.replace(HOST, '') === avatarURL.replace(HOST, '');
 
 		this.userObject = user;
+		this.renderData.user = user;
+		this.avatar.setHTML(Ext.DomHelper.createTemplate('{user:avatar}').apply({user: user}));
 		this.name.update(user.getName());
 
-		if (!currentURL || a !== b) {
-			this.avatar.setStyle({backgroundImage: 'url(' + avatarURL + ')'});
-		}
 		//NOTE: this is probably not the best place where to set the more options menu.
 		TemplatesForNotes.attachMoreReplyOptionsHandler(this, this.more, user, this.record);
 	},

@@ -30,7 +30,7 @@ Ext.define('NextThought.app.annotations.note.Main', {
 		{
 			cls: 'note main-view',
 			cn: [
-				'{user:avatar}',
+				{cls: 'avatar-wrapper', cn: ['{user:avatar}']},
 				{
 					cls: 'meta',
 					cn: [
@@ -78,7 +78,7 @@ Ext.define('NextThought.app.annotations.note.Main', {
 
 
 	renderSelectors: {
-		avatar: '.avatar .profile.avatar-pic',
+		avatar: '.avatar-wrapper',
 		contextContainer: '.context'
 	},
 

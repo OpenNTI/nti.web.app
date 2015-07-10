@@ -43,7 +43,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 				{ cls: 'like' }
 			]},
 			{cls: 'post-meta', cn: [
-				'{Creator:avatar}',
+				{ cls: 'avatar-wrapper', cn: ['{Creator:avatar}']},
 				{ cls: 'meta', cn: [
 					{cls: 'name', html: '{Creator:displayName()}'},
 					{tag: 'span', cls: 'list-item shared-with', html: '{SharedWith}'},
@@ -68,7 +68,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 		contextEl: '.context',
 		liked: '.controls .like',
 		favorites: '.controls .favorite',
-		avatarEl: '.post-meta .avatar .profile',
+		avatarEl: '.post-meta .avatar-wrapper',
 		nameEl: '.post-meta .name',
 		sharedWithEl: '.post-meta .shared-with',
 		createdEl: '.post-meta .created',
@@ -195,11 +195,10 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 
 
 	setCreator: function(value) {
-		var name = value.getName(),
-			avatar = value.get('avatarURL');
+		var name = value.getName();
 
 		this.nameEl.update(name);
-		this.avatarEl.setStyle({backgroundImage: 'url(' + avatar + ')'});
+		this.avatarEl.setHTML(Ext.DomHelper.createTemplate('{user:avatar}').apply({user: value}));
 	},
 
 

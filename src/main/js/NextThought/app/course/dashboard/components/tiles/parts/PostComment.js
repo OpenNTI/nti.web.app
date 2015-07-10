@@ -9,7 +9,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.parts.PostComment'
 	],
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'avatar'},
+		{cls: 'avatar-wrapper', cn: ['{user:avatar}']},
 		{cls: 'meta', cn: [
 			{cls: 'name'},
 			{cls: 'created'}
@@ -23,7 +23,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.parts.PostComment'
 	]),
 
 	renderSelectors: {
-		avatarEl: '.avatar',
+		avatarEl: '.avatar-wrapper',
 		nameEl: '.meta .name',
 		createdEl: '.meta .created',
 		bodyEl: '.body',
@@ -37,6 +37,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.parts.PostComment'
 		this.callParent(arguments);
 
 		if (this.isDeleted()) {
+			this.avatarEl.setHTML('');
 			this.avatarEl.setStyle({backgroundImage: 'url(' + User.BLANK_AVATAR + ')'});
 		} else {
 			this.fillInUser();
@@ -69,7 +70,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.parts.PostComment'
 
 		UserRepository.getUser(me.record.get('Creator'))
 			.then(function(user) {
-				me.avatarEl.setStyle({backgroundImage: 'url(' + user.get('avatarURL') + ')'});
+				me.avatarEl.setHTML(Ext.DomHelper.createTemplate('{user:avatar}').apply({user: user}));
 				me.nameEl.update(user.getName());
 			});
 	},
