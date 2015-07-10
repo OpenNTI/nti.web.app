@@ -176,6 +176,10 @@
 		width: 180px;
 		height: 180px;
 		float: left;
+		.fallback.initials{
+			font-size: 72px;
+			font-weight: bold;
+		}
 	}
 
 	.meta {
