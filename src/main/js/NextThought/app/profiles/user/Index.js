@@ -92,7 +92,7 @@ Ext.define('NextThought.app.profiles.user.Index', {
 
 	resolveEntity: function(id, entity) {
 		var me = this;
-		return UserRepository.getUser(id)
+		return UserRepository.getUser(id, null, null, true)
 		   .then(function(user) {
 					me.activeEntity = user;
 
