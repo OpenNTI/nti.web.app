@@ -318,9 +318,12 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	onCancel: function(e) {
 		e.stopEvent();
 		this.deactivate();
+
 		if (!this.isDestroyed) {
 			this.setValue('');
 		}
+
+		this.sharedList.pickerView.hide();
 	},
 
 

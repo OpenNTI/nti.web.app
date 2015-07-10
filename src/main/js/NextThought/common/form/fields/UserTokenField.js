@@ -103,10 +103,10 @@ Ext.define('NextThought.common.form.fields.UserTokenField', {
 		this.mon(this.inputEl, 'focus', 'onTargetOver', this.tip);
 
 		this.setupKeyMap();
-		this.windowScrollHandler = Ext.bind(function(){
+		this.windowScrollHandler = Ext.bind(function() {
 		    this.tip.hide();
 		}, this);
-		
+
 		window.addEventListener('scroll', this.windowScrollHandler);
 
 		if (spEl) {
@@ -422,7 +422,10 @@ Ext.define('NextThought.common.form.fields.UserTokenField', {
 
 		value = (value || '').replace(SearchUtils.trimRe, '');
 		this.clearResults();
-		if (!Ext.isEmpty(w)) { this.pickerView.setWidth(w); }
+
+		if (!Ext.isEmpty(w)) {
+			this.pickerView.setWidth(w);
+		}
 
 		//Clear results right before making a search.
 		this.clearResults();
