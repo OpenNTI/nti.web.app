@@ -51,7 +51,7 @@ Ext.define('NextThought.app.profiles.community.components.sidebar.parts.Topics',
 
 				if (entity.hasActivity()) {
 					me.addTopic({
-						cls: activeForum ? '' : 'active',
+						cls: activeForum === 'all' ? 'active' : '',
 						route: 'all',
 						count: 0,
 						label: 'All Activity'

@@ -2544,6 +2544,10 @@
 			margin-right: 0;
 		}
 
+		.entry:nth-of-type(3n) {
+			margin-right: 8px;
+		}
+
 		.error {
 			&.hidden {
 				display: none;

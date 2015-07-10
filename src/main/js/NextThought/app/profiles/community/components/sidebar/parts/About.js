@@ -13,7 +13,15 @@ Ext.define('NextThought.app.profiles.community.components.sidebar.parts.About', 
 
 	renderSelectors: {
 		avatarEl: '.avatar-container',
-		aboutEl: '.about'
+		aboutEl: '.about',
+		seeMembersEl: '.see-membership'
+	},
+
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		this.mon(this.seeMembersEl, 'click', this.onSeeMembers.bind(this));
 	},
 
 
@@ -25,7 +33,12 @@ Ext.define('NextThought.app.profiles.community.components.sidebar.parts.About', 
 
 		this.avatarEl.update(Ext.util.Format.avatar(entity));
 		this.aboutEl.update(entity.get('about'));
+	},
 
-		this.aboutEl.update('We\'re a community of gifted individuals with a strong grasp of how our world works. We hope to change the future for the better in any way possible');
+
+	onSeeMembers: function() {
+		if (this.gotoMembership) {
+			this.gotoMembership();
+		}
 	}
 });

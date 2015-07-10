@@ -150,7 +150,9 @@ Ext.define('NextThought.app.profiles.community.Index', {
 		this.activeCommunity.getDefaultForum()
 			.then(cmp.setPostContainer.bind(cmp));
 
-		this.setState();
+		this.setState({
+			activeTopic: 'all'
+		});
 
 		return cmp.handleRoute(subRoute, route.precache);
 	},

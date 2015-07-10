@@ -42,6 +42,7 @@ Ext.define('NextThought.app.profiles.community.components.sidebar.Index', {
 
 		this.topicsCmp.showForum = this.showForum.bind(this);
 
+		this.aboutCmp.gotoMembership = this.gotoMembership.bind(this);
 		this.membershipCmp.gotoMembership = this.gotoMembership.bind(this);
 	},
 
