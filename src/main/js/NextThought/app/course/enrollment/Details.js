@@ -164,9 +164,12 @@ Ext.define('NextThought.app.course.enrollment.Details', {
 
 		me.mon(me.cardsEl, 'click', 'handleEnrollmentClick', me);
 
-		me.el.setStyle({
-			backgroundImage: 'url(' + me.course.get('background') + ')'
-		});
+		me.course.getBackgroundImage()
+			.then(function(img) {
+				me.el.setStyle({
+					backgroundImage: 'url(' + img + ')'
+				});
+			});
 	},
 
 	/**

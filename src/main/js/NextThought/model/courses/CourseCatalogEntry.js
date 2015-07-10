@@ -76,7 +76,7 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 
 	constructor: function() {
 		this.callParent(arguments);
-		wait().then(this.__setImage.bind(this));
+		this.onceAssetsLoaded = wait().then(this.__setImage.bind(this));
 	},
 
 
@@ -106,6 +106,15 @@ Ext.define('NextThought.model.courses.CourseCatalogEntry', {
 				.then(function(url) { me.set('thumb', url); });
 		me.getImgAsset('background')
 			.then(function(url) {me.set('background', url); });
+	},
+
+	getBackgroundImage: function() {
+		var me = this;
+
+		return me.onceAssetsLoaded
+			.then(function() {
+				return me.get('background');
+			});
 	},
 
 	//update the enrollment scopes enrollment
