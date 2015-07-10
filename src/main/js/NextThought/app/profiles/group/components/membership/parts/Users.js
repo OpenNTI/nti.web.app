@@ -27,16 +27,20 @@ Ext.define('NextThought.app.profiles.group.components.membership.parts.Users', {
 		   .then(function(members) {
 				 if (members.length) {
 					members.map(function(member) {
-								return {
-								member: member,
-								name: member.getName(),
-								route: ParseUtils.encodeForURI(member.getId())
-								};
-								})
+						return me.configForUser(member);		
+					})
 					.forEach(me.addEntry.bind(me));
 				 } else {
 					me.showEmptyText('This group has no members');
 				 }
 			});
+	},
+	
+	configForUser: function(member){
+		return {
+			member: member,
+			name: member.getName(),
+			route: ParseUtils.encodeForURI(member.getId())
+		};
 	}
 });
