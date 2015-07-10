@@ -132,12 +132,12 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 		this.callParent(arguments);
 		this.updateRequestAlias();
 	},
-	
+
 	setSchema: function() {
 		this.callParent(arguments);
 		this.updateRequestAlias();
 	},
-	
+
 	updateRequestAlias: function(){
 		if (!this.nameEl.hasCls('editable') && isFeature('request-alias-change') && this.isMe) {
 			this.nameEl.addCls('request');
@@ -242,11 +242,11 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 
 			if (fieldSchema && !fieldSchema.readonly) {
 				dom = me[key.selector] && me[key.selector].dom;
-
+				
 				if (key.allowHTML) {
 					value = dom.innerHTML;
 				} else {
-					value = dom.innerText || dom.textContent || '';
+					value =  dom.textContent !== undefined ? dom.textContent : (dom.innerHTML || '');
 				}
 
 				values[key.name] = value;
