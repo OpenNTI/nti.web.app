@@ -44,12 +44,13 @@ Ext.define('NextThought.mixins.ChatLinks', {
 
 	onChatWith: function(e) {
 		e.stopEvent();
+		var ChatActions = NextThought.app.chat.Actions.create();
 		if (!this.userObject && !this.user) {
 			console.warn('No userobject to chat with');
 			return false;
 		}
 		console.debug('Clicked Chat');
-		this.fireEvent('chat', this.userObject || this.user);
+		ChatActions.startChat(this.userObject || this.user);
 		return false;
 	}
 

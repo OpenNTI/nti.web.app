@@ -6,7 +6,8 @@ Ext.define('NextThought.app.account.contacts.management.Popout', {
 		'NextThought.app.account.contacts.management.GroupList',
 		'NextThought.app.account.contacts.management.Options',
 		'NextThought.app.groups.StateStore',
-		'NextThought.app.groups.Actions'
+		'NextThought.app.groups.Actions',
+		'NextThought.app.chat.Actions'
 	],
 
 	mixins: {
@@ -98,6 +99,7 @@ Ext.define('NextThought.app.account.contacts.management.Popout', {
 
 		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
 		this.GroupActions = NextThought.app.groups.Actions.create();
+		this.ChatActions = NextThought.app.chat.Actions.create();
 		this.isContact = this.GroupStore.getFriendsList().isContact(this.record);
 
 		this.groupsList = this.groupsListMenu.down('management-group-list');
@@ -201,7 +203,7 @@ Ext.define('NextThought.app.account.contacts.management.Popout', {
 		if (e.getTarget('.add-contact')) {
 			this.onAddContact();
 		}else {
-			this.fireEvent('chat', this.record);
+			this.ChatActions.startChat(this.record);
 		}
 	},
 
