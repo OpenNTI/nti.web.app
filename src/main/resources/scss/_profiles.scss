@@ -2217,6 +2217,15 @@
 	background: white;
 	padding: 20px;
 	
+	&.admin .entry .avatar{
+		@include icon('admin_badge', $top: auto, $left: auto, $side: after);
+		&::after{
+			z-index: 10;
+			bottom: 2px;
+			right: 2px;
+		}
+	}
+	
 	.entry[data-route]:not([data-route=""]){
 		cursor: pointer;
 	}
