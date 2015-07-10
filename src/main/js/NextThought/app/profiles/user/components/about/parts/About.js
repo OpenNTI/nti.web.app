@@ -191,7 +191,8 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 			keys = [
 				{
 					name: 'about',
-					selector: 'aboutEl'
+					selector: 'aboutEl',
+					allowHTML: true
 				},
 				{
 					name: 'alias',
@@ -236,10 +237,19 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 		}
 
 		keys.forEach(function(key) {
-			var fieldSchema = schema[key.name];
+			var fieldSchema = schema[key.name],
+				dom, value;
 
 			if (fieldSchema && !fieldSchema.readonly) {
-				values[key.name] = me[key.selector] && me[key.selector].dom.innerHTML;
+				dom = me[key.selector] && me[key.selector].dom;
+
+				if (key.allowHTML) {
+					value = dom.innerHTML;
+				} else {
+					value = dom.innerText || dom.textContent || '';
+				}
+
+				values[key.name] = value;
 			}
 		});
 
