@@ -34,6 +34,6 @@ Ext.define('NextThought.app.profiles.group.components.membership.Index', {
 
 
 	onRoute: function() {
-		this.setTitle('Membership');
+		this.setTitle('Members');
 	}
 });
