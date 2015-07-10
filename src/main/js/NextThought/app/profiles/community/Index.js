@@ -39,7 +39,8 @@ Ext.define('NextThought.app.profiles.community.Index', {
 
 		this.sidebarCmp = this.add({
 			xtype: 'profile-community-sidebar',
-			showForum: this.onShowForum.bind(this)
+			showForum: this.onShowForum.bind(this),
+			gotoMembership: this.gotoMembership.bind(this)
 		});
 
 		this.initRouter();
@@ -214,7 +215,14 @@ Ext.define('NextThought.app.profiles.community.Index', {
 		return cmp.handleRoute(subRoute, route.precache);
 	},
 
+
 	showMembers: function(route, subRoute) {
+		var cmp = this.setActiveItem('profile-community-membership');
+
+		this.setState();
+		cmp.updateEntity(this.activeCommunity);
+
+		return cmp.handleRoute(subRoute, route.precache);
 	},
 
 
@@ -222,6 +230,11 @@ Ext.define('NextThought.app.profiles.community.Index', {
 		this.setState(this.activeState);
 
 		//TODO: reload what ever is active on the body
+	},
+
+
+	gotoMembership: function() {
+		this.pushRoute('Members', '/members');
 	},
 
 
