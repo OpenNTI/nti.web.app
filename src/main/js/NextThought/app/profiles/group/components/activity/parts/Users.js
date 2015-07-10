@@ -31,9 +31,18 @@ Ext.define('NextThought.app.profiles.group.components.activity.parts.Users', {
 
 		this.mon(this.seeAllEl, 'click', this.onSeeAll.bind(this));
 	},
+	
+	setUser: function(user, isMe){
+		this.creator = user.get('Creator');
+		this.callParent(arguments);
+	},
 
 	setFriends: function(friends) {
 		var me = this;
+
+		if(this.creator){
+			friends.unshift(this.creator);
+		}
 
 		this.totalCount = friends.length;
 		
