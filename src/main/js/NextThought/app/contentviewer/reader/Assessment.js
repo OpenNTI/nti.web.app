@@ -259,7 +259,7 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 			return Promise.resolve();
 		}
 
-		if (assignment.isTimed){
+		if (assignment && assignment.isTimed){
 			return this.notSubmittedTimed();
 		}
 
