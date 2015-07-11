@@ -6,7 +6,15 @@ Ext.define('NextThought.util.Sharing', {
 		var sharedTo = Ext.Array.merge(sharable.get('sharedWith') || [], people);
 		return this.setSharedWith(sharable, sharedTo, callback);
 	},
-
+	
+	canSharePublicly: function(){
+		return !!Service.get('SiteCommunity');	
+	},
+	
+	entitiesDefiningPublic: function(scopeProvider){
+		var siteCommunity = Service.get('SiteCommunity');
+		return siteCommunity ? [siteCommunity] : null;
+	},
 
 	setSharedWith: function(sharable, sharedTo, callback) {
 		var success = true;
@@ -72,21 +80,16 @@ Ext.define('NextThought.util.Sharing', {
 		var communities = [], sharedWithIds,
 				publicScope;
 
-		publicScope = (scopeProvider && scopeProvider.getPublicScope()) || [];
+		publicScope = this.entitiesDefiningPublic(scopeProvider) || [];
+		if(Ext.isEmpty(publicScope)){
+			return false;
+		}
+		
 		sharedWithIds = Ext.Array.map(sharedWith, function(u) {
 			return u.getId ? u.getId() : u;
 		});
-
-		if (!Ext.isEmpty(publicScope)) {
-			return Ext.isEmpty(Ext.Array.difference(publicScope, sharedWithIds));
-		}
-
-		Ext.each(this.getAppUserCommunities(), function(rec) {
-			communities.push(rec.getId());
-		});
-
-		//if communities is a subset of sharedWithIds we call it public
-		return Ext.isEmpty(Ext.Array.difference(communities, sharedWithIds));
+		
+		return Ext.isEmpty(Ext.Array.difference(publicScope, sharedWithIds));
 	},
 
 
@@ -126,21 +129,14 @@ Ext.define('NextThought.util.Sharing', {
 		if (Ext.isEmpty(sharingInfo)) {
 			return [];
 		}
-		var isPublic = sharingInfo.publicToggleOn,
+		var isPublic = sharingInfo.publicToggleOn && this.canSharePublicly(),
 				entities = sharingInfo.entities || [],
 				targets;
 
 		if (isPublic) {
-			targets = (scopeProvider && scopeProvider.getPublicScope()) || [];
-
-			// Use publicScope if defined, otherwise assume public means all communities that a user belongs in.
+			targets = this.entitiesDefiningPublic(scopeProvider) || [];
 			if (!Ext.isEmpty(targets)) {
 				entities = Ext.Array.merge(entities, targets);
-			}
-			else {
-				Ext.each(this.getAppUserCommunities(), function(rec) {
-					entities.push(rec.getId());
-				});
 			}
 		}
 		return Ext.Array.unique(entities);
@@ -150,8 +146,8 @@ Ext.define('NextThought.util.Sharing', {
 	sharedWithToSharedInfo: function(sharedWith, scopeProvider) {
 		var sp = scopeProvider,
 				isPublic = this.isPublic(sharedWith, sp),
-				communities = [],
 				list = [],
+				publicEntities = this.entitiesDefiningPublic(scopeProvider) || [],
 				shareInfo = {publicToggleOn: isPublic};
 
 		if (Ext.isEmpty(sharedWith)) {
@@ -162,21 +158,9 @@ Ext.define('NextThought.util.Sharing', {
 			sharedWith = [sharedWith];
 		}
 
-		Ext.each(this.getAppUserCommunities(), function(rec) {
-			communities.push(rec.getId());
-		});
-
-		/**
-		 *  NOTE: Since we don't have a good way to map the 'public' property of shared objects, we are following this rule:
-		 *  If it's shared with all communities, it is 'public', therefore for the explicit shared list, we will return all entities except communities.
-		 *  If it's private however, we will return the 'sharedWith' parameter.
-		 */
 		if (isPublic) {
-			if (sp && Ext.isFunction(sp.getPublicScope)) {
-				communities = Ext.Array.merge(communities, sp.getPublicScope());
-			}
 			Ext.each(sharedWith, function(i) {
-				if (!Ext.Array.contains(communities, i.getId ? i.getId() : i)) {
+				if (!Ext.Array.contains(publicEntities, i.getId ? i.getId() : i)) {
 					list.push(i);
 				}
 			});
