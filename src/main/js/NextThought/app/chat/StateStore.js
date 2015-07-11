@@ -161,10 +161,22 @@ Ext.define('NextThought.app.chat.StateStore', {
 
 
 	cacheChatWindow: function(win, roomInfo) {
-		var id = roomInfo && roomInfo.isModel ? roomInfo.getId() : roomInfo;
+		var rid = roomInfo && roomInfo.isModel ? roomInfo.getId() : roomInfo,
+			id = IdCache.getIdentifier(rid);
 
-		id = IdCache.getIdentifier(id);
+		// We need to ensure that each chat window is tied to one chat room
+		for(var k in this.CHAT_WIN_MAP) {
+			if(this.CHAT_WIN_MAP.hasOwnProperty(k)) {
+				if(this.CHAT_WIN_MAP[k] === win) {
+					console.debug('Room info: ' + k + ' and Room info: ' + rid + ' have the same chat window.');
+					console.debug('Delete roomInfo record: ', k);
+					delete this.CHAT_WIN_MAP[k];
+				}
+			}
+		}
+
 		this.CHAT_WIN_MAP[id] = win;
+
 		this.fireEvent('added-chat-window', win);
 	},
 
