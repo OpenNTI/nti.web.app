@@ -121,8 +121,8 @@ Ext.define('NextThought.app.slidedeck.transcript.NoteOverlay', {
 
 	allowNavigation: function(){
 		var me = this,
-			title = 'Attention!',
-			msg = 'You are currently creating a note. Would you like to leave without saving?';
+			title = 'Are you sure?',
+			msg = 'You haven’t finished your comment. Do you want to leave without finishing?';
 
 		if (this.editor && this.editor.isActive()) {
 
@@ -140,7 +140,7 @@ Ext.define('NextThought.app.slidedeck.transcript.NoteOverlay', {
 							}
 						},
 						secondary: {
-							text: 'Stay',
+							text: 'Stay and Finish',
 							handler: reject
 						}
 					}
