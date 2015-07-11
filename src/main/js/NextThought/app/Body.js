@@ -48,8 +48,10 @@ Ext.define('NextThought.app.Body', {
 		this.mon(this.NavigationStore, 'set-active-content', this.updateBodyContent.bind(this));
 		this.mon(this.WindowStore, {
 			'push-window': this.pushWindow.bind(this),
-			'replaceOpenWindowRoute': this.replaceOpenWindowRoute.bind(this)
+			'replaceOpenWindowRoute': this.replaceOpenWindowRoute.bind(this),
+			'navigate-to-record': this.navigateToWindowRecord.bind(this)
 		});
+
 		this.mon(this.ContextStore, 'new-context', this.onNewContext.bind(this));
 
 		this.addRoute('/library', this.setLibraryActive.bind(this));
@@ -150,6 +152,11 @@ Ext.define('NextThought.app.Body', {
 
 		this.el.setStyle({height: 'auto'});
 		this.removeCls('height-locked');
+	},
+
+
+	navigateToWindowRecord: function(record) {
+		this.attemptToNavigateToObject(record);
 	},
 
 

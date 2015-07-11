@@ -74,7 +74,8 @@ Ext.define('NextThought.app.windows.Index', {
 			record: object && object.isModel && object,//only pass a record when we have an object and it is a model
 			precache: precache || {},
 			state: state,
-			doClose: this.doClose.bind(this, monitors && monitors.afterClose)
+			doClose: this.doClose.bind(this, monitors && monitors.afterClose),
+			doNavigate: this.doNavigate.bind(this, monitors && monitors.beforeNavigate)
 		});
 
 		this.viewContainer.removeAll();
@@ -100,5 +101,10 @@ Ext.define('NextThought.app.windows.Index', {
 			wait()
 				.then(afterClose.bind(null, record));
 		}
+	},
+
+
+	doNavigate: function(beforeNavigate, record) {
+		this.WindowStore.navigateToObject(record);
 	}
 });

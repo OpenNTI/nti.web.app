@@ -40,7 +40,9 @@ Ext.define('NextThought.app.context.types.RelatedWork', {
 			cmp = Ext.widget('context-relatedwork-card', {
 				type: this.self.type,
 				content: obj,
-				course: this.course
+				course: this.course,
+				record: this.contextRecord,
+				doNavigate: this.doNavigate
 			});
 		}
 		return cmp;

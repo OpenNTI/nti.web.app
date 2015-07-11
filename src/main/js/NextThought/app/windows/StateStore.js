@@ -77,6 +77,11 @@ Ext.define('NextThought.app.windows.StateStore', {
 	},
 
 
+	navigateToObject: function(record) {
+		this.fireEvent('navigate-to-record', record);
+	},
+
+
 	removeCache: function(id) {
 		delete this.obj_map[id];
 	},

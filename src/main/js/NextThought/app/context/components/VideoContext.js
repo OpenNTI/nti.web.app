@@ -13,32 +13,40 @@ Ext.define('NextThought.app.context.components.VideoContext', {
 		{cls: 'video'},
 		{cls: 'content', cn: [
 			{cls: 'text'}
-		]}
+		]},
+		{cls: 'see-more hidden', html: 'Read More'}
 	]),
 
 	WIDTH: 512,
 
 	renderSelectors: {
 		videoEl: '.video',
-		textEl: '.content .text'
+		textEl: '.content .text',
+		seeMoreEl: '.see-more'
 	},
 
 
-	initComponent: function () {
+	initComponent: function() {
 		this.callParent(arguments);
 		this.ContextStore = NextThought.app.context.StateStore.getInstance();
+	},
+
+
+	isInContext: function() {
+		var context = this.ContextStore.getContext(),
+			currentContext = context && context.last(),
+			contextRecord = currentContext && currentContext.obj;
+
+		return contextRecord && contextRecord.get('NTIID') === this.containerId;
 	},
 
 
 	afterRender: function() {
 		this.callParent(arguments);
 
-		var context = this.ContextStore.getContext(),
-			currentContext = context.last(),
-			contextRecord = currentContext && currentContext.obj,
-			startTimeSeconds, pointer;
+		var startTimeSeconds, pointer;
 
-		if (contextRecord && contextRecord.get('NTIID') === this.containerId) {
+		if (this.isInContext()) {
 			this.videoEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 			this.videoEl.hide();
 		}
@@ -58,9 +66,14 @@ Ext.define('NextThought.app.context.components.VideoContext', {
 			if (startTimeSeconds > 0) {
 				this.videoplayer.setVideoAndPosition(this.videoplayer.currentVideoId, startTimeSeconds);
 			}
+
+			if (this.doNavigate) {
+				this.seeMoreEl.removeCls('hidden');
+				this.mon(this.seeMoreEl, 'click', this.doNavigate.bind(this, this.record));
+			}
 		}
 
-		if(this.snippet) {
+		if (this.snippet) {
 			this.textEl.appendChild(this.snippet);
 		}
 	}

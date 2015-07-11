@@ -337,7 +337,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 		lessonId = ParseUtils.encodeForURI(lessonId);
 
 		if (root instanceof NextThought.model.RelatedWork) {
-			route = this.getRouteForRelatedWorkPath(root, subPath);
+			route = this.getRouteForRelatedWorkPath(root, subPath, lesson);
 			route.path = 'content/' + Globals.trimRoute(route.path);
 		} else if (root instanceof NextThought.model.PageInfo) {
 			route = this.getRouteForPageInfoPath(root, subPath);
@@ -357,11 +357,16 @@ Ext.define('NextThought.app.course.overview.Index', {
 	},
 
 
-	getRouteForRelatedWorkPath: function(relatedWork, path) {
+	getRouteForRelatedWorkPath: function(relatedWork, path, lesson) {
 		var page = path[0],
 			relatedWorkId = relatedWork && relatedWork.get('target');
 			pageId = page && page.getId(),
 			path = '';
+
+		if (pageId === lesson.getId()) {
+			pageId = null;
+			relatedWorkId = relatedWork.getId();
+		}
 
 		pageId = (pageId && ParseUtils.encodeForURI(pageId));
 		relatedWorkId = relatedWorkId && ParseUtils.encodeForURI(relatedWorkId);

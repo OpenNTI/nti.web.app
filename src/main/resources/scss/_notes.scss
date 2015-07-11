@@ -531,6 +531,18 @@
 			}
 			max-height: 30em;
 
+			.see-more {
+				color: $primary-blue;
+				display: inline;
+				position: relative;
+				bottom: -20px;
+				cursor: pointer;
+				
+				&.hidden {
+					display: none;
+				}
+			}
+
 			&.slide {
 				max-height: 42em;
 			}

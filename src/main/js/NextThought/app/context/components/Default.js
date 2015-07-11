@@ -10,12 +10,14 @@ Ext.define('NextThought.app.context.components.Default', {
 
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'content'}
+		{cls: 'content'},
+		{cls: 'see-more hidden', html: 'Read More'}
 	]),
 
 
 	renderSelectors: {
-		targetEl: '.content'
+		targetEl: '.content',
+		seeMoreEl: '.see-more'
 	},
 
 
@@ -24,24 +26,38 @@ Ext.define('NextThought.app.context.components.Default', {
 		this.ContextStore = NextThought.app.context.StateStore.getInstance();
 	},
 
+
+	isInContext: function() {
+		var context = this.ContextStore.getContext(),
+			currentContext = context.last(),
+			contextRecord = currentContext && currentContext.obj;
+
+		return contextRecord && contextRecord.get('NTIID') === this.containerId;
+	},
+
+
 	afterRender: function() {
 		this.callParent(arguments);
+
 		this.__setContent();
+
+		if (this.doNavigate && !this.isInContext()) {
+			this.seeMoreEl.removeCls('hidden');
+
+			this.mon(this.seeMoreEl, 'click', this.doNavigate.bind(this, this.record));
+		}
 	},
 
 
 	__setContent: function() {
-		var div = document.createElement(div),
-			context = this.ContextStore.getContext(),
-			currentContext = context.last(),
-			contextRecord = currentContext && currentContext.obj;
+		var div = document.createElement(div);
 
 		// If we are within the current context, so just render the simpler version of context.
 		// i.e. For content's note, we will just render the range context we were given.
 		// For video object, we will only render the transcript range corresponding to that context.
 		// Otherwise, render the longer version of context's card
 		// since we are not within the original userData(i.e. Note) context.
-		if (contextRecord && contextRecord.get('NTIID') === this.containerId) {
+		if (this.isInContext()) {
 			this.content = this.snippet;
 		}
 		else {

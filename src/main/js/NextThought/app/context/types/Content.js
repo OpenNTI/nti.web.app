@@ -32,6 +32,7 @@ Ext.define('NextThought.app.context.types.Content', {
 		this.container = config.container;
 		this.range = config.range;
 		this.record = config.contextRecord;
+		this.doNavigate = config.doNavigate;
 		this.maxWidth = config.maxWidth || 574;
 	},
 
@@ -79,7 +80,8 @@ Ext.define('NextThought.app.context.types.Content', {
 				snippet: cleanContext,
 				fullContext: cleanContext,
 				containerId: cid,
-				record: this.record
+				record: this.record,
+				doNavigate: this.doNavigate
 			};
 
 			if (contextKind === 'card') {

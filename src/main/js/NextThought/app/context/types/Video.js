@@ -133,7 +133,9 @@ Ext.define('NextThought.app.context.types.Video', {
 									snippet: context,
 									containerId: me.container,
 									video: video,
-									range: me.range
+									range: me.range,
+									record: me.contextRecord,
+									doNavigate: me.doNavigate.bind(me)
 								});
 
 								return Promise.resolve(cmp);

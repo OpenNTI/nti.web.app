@@ -15,14 +15,16 @@ Ext.define('NextThought.app.context.components.cards.RelatedWork', {
 				{cls: 'title', html: '{title}'},
 				{cls: 'author', html: 'by {author}'}
 			]}
-		]}
+		]},
+		{cls: 'see-more hidden', html: 'Read More'}
 	]),
 
 	renderSelectors: {
-		iconEl: '.thumbnail'
+		iconEl: '.thumbnail',
+		seeMoreEl: '.see-more'
 	},
-	
-	
+
+
 	initComponent: function() {
 		this.callParent(arguments);
 		this.ContextStore = NextThought.app.context.StateStore.getInstance();
@@ -33,9 +35,24 @@ Ext.define('NextThought.app.context.components.cards.RelatedWork', {
 		});
 	},
 
+
+	isInContext: function() {
+		var context = this.ContextStore.getContext(),
+			root = context && context.last(),
+			id = root && root.obj && root.obj.getId();
+
+		return this.record && id === this.record.get('ContainerId');
+	},
+
+
 	afterRender: function() {
 		this.callParent(arguments);
 		this.setContent();
+
+		if (this.doNavigate && !this.isInContext()) {
+			this.seeMoreEl.removeCls('hidden');
+			this.mon(this.seeMoreEl, 'click', this.doNavigate.bind(this, this.record));
+		}
 	},
 
 	/**
@@ -52,8 +69,8 @@ Ext.define('NextThought.app.context.components.cards.RelatedWork', {
 			url = getURL(root + href);
 		}
 
-		if(this.iconEl && url) {
-			this.iconEl.setStyle({'backgroundImage': 'url(' + url + ')'});	
+		if (this.iconEl && url) {
+			this.iconEl.setStyle({'backgroundImage': 'url(' + url + ')'});
 		}
 	}
 });
