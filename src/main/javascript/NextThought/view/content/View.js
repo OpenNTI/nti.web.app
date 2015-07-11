@@ -868,7 +868,7 @@ Ext.define('NextThought.view.content.View', {
 			topic = disc.topic,
 			forum = disc.forum,
 			location = ntiid && ContentUtils.getLocation(ntiid),
-			course,
+			course, fragment, parts,
 			me = this;
 
 		tab = (tab === 'null') ? null : tab;
@@ -902,6 +902,9 @@ Ext.define('NextThought.view.content.View', {
 			return new Promise(function(fulfill, reject) {
 				function fin(reader) {
 					if (!reader) {reject('setLocation aborted'); return;}
+					if (fragment) {
+						reader.getContent().navigateToFragment(fragment);
+					}
 					fulfill(input);//don't mutate the value...
 				}
 				me.reader[(ntiid ? 'set' : 'clear') + 'Location'](ntiid, fin, true, bundle);
@@ -935,6 +938,13 @@ Ext.define('NextThought.view.content.View', {
 			}
 
 			return CourseWareUtils.containsNTIID(cce, ParseUtils.ntiidPrefix(ntiid));
+		}
+		
+		if(!location && ntiid && ntiid.indexOf('#') > 0){
+			parts = ntiid.split('#');
+			ntiid = parts[0];
+			fragment = parts[1];
+			location = ntiid && ContentUtils.getLocation(ntiid);
 		}
 
 		if (!location) {
