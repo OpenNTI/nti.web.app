@@ -24,7 +24,7 @@ Ext.define('NextThought.app.chat.components.GutterEntry', {
 		this.renderData = Ext.apply(this.renderData || {}, {
 			user: this.user,
 			presence: this.user && this.user.getPresence().getName(),
-			dataBadge: this.currentCount || 0
+			dataBadge: this.user.unreadMessageCount || 0
 		});
 
 		this.unreadMessageIds = [];
@@ -45,7 +45,7 @@ Ext.define('NextThought.app.chat.components.GutterEntry', {
 	setStatus: function(presence) {
 		var currentStatus = this.presence && this.presence.dom.classList[1];
 
-		if(presence && currentStatus){
+		if(presence && currentStatus) {
 			this.presence.toggleCls(currentStatus);
 			this.presence.toggleCls(presence.getName());
 		}
@@ -53,7 +53,9 @@ Ext.define('NextThought.app.chat.components.GutterEntry', {
 
 
 	updateBadgeCount: function(count) {
-		this.currentCount = count;
+		// Keep the unread message count on the record,
+		// that way if we redraw the entry it will still be there.
+		this.user.unreadMessageCount = count;
 		if(this.rendered) {
 			this.avatar.dom.setAttribute('data-badge', count);
 		}

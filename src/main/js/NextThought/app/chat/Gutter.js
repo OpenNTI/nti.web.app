@@ -7,7 +7,8 @@ Ext.define('NextThought.app.chat.Gutter', {
 		'NextThought.app.chat.StateStore',
 		'NextThought.app.chat.Actions',
 		'NextThought.app.chat.components.GutterEntry',
-		'NextThought.app.navigation.Actions'
+		'NextThought.app.navigation.Actions',
+		'NextThought.model.User'
 	],
 
 	cls: 'chat-gutter-window',
@@ -46,15 +47,9 @@ Ext.define('NextThought.app.chat.Gutter', {
 
 		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
 		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
-		this.store = this.GroupStore.getOnlineContactStore();
 		this.ChatActions = NextThought.app.chat.Actions.create();
 
-		this.mon(this.store, {
-			'load': this.updateList.bind(this),
-			'add': this.addContacts.bind(this),
-			'remove': this.removeContact.bind(this)
-		});
-
+		this.buildStore();
 		this.mon(this.ChatStore, {
 			'notify': this.handleWindowNotify.bind(this),
 			'added-chat-window': this.bindChatWindow.bind(this),
@@ -62,6 +57,38 @@ Ext.define('NextThought.app.chat.Gutter', {
 			'presence-changed': this.updatePresence.bind(this)
 		});
 		this.otherContacts = [];
+	},
+
+
+	buildStore: function() {
+		var onlineContactStore = this.GroupStore.getOnlineContactStore(),
+			store;
+
+		debugger;
+
+		// NOTE: The gutter needs to listen to online Contacts store but also handle chats from non-contacts.
+		// As a result, it can't just be an online contacts store, because it has to contains active chats as well.
+		// And some of those users in active chats might not pass the online contacts store filters, 
+		// namely the fact that they have to be in your contacts
+		store = new Ext.data.Store({
+			proxy: 'memory',
+			model: NextThought.model.User,
+			data: onlineContactStore.getRange()
+		});
+
+		this.mon(onlineContactStore, {
+			'load': this.onOnlineContactAdd.bind(this),
+			'add': this.onOnlineContactAdd.bind(this),
+			'remove': this.onOnlineContactRemove.bind(this)
+		});
+
+		this.store = store;
+
+		this.mon(this.store, {
+			'load': this.updateList.bind(this),
+			'add': this.addContacts.bind(this),
+			'remove': this.removeContact.bind(this)
+		});
 	},
 
 
@@ -73,7 +100,7 @@ Ext.define('NextThought.app.chat.Gutter', {
 		Ext.EventManager.onWindowResize(Ext.bind(this.onResize, this));
 	},
 
-	onResize: function(){
+	onResize: function() {
 		this.callParent(arguments);
 		this.updateList(this.store, this.store.data.items);
 	},
@@ -85,6 +112,9 @@ Ext.define('NextThought.app.chat.Gutter', {
 
 	updateList: function(store, users) {
 		this.removeAll(true);
+
+		this.ROOM_ENTRY_MAP = {};
+		this.USER_ENTRY_MAP = {};
 		this.otherContacts = [];
 		this.addContacts(store, users);
 	},
@@ -98,6 +128,13 @@ Ext.define('NextThought.app.chat.Gutter', {
 		}
 	},
 
+	onOnlineContactAdd: function(store, records) {
+		this.store.add(records);
+	},
+
+	onOnlineContactRemove: function(store, records) {
+		this.store.remove(records);
+	},
 
 	removeContact: function(store, user) {
 		var entry = this.findEntryForUser(user.get('Username')),
@@ -116,7 +153,7 @@ Ext.define('NextThought.app.chat.Gutter', {
 		var me = this;
 		users.forEach(function(user) {
 			var username = user.get('Username'), entry;
-			if (me.findEntryForUser(username)) {
+			if (!username || me.findEntryForUser(username)) {
 				return true;
 			}
 
@@ -253,7 +290,7 @@ Ext.define('NextThought.app.chat.Gutter', {
 			if (t) {
 				UserRepository.getUser(t)
 					.then(function (u) {
-						me.addContacts(null, [u]);
+						me.store.add(u);
 						me.bindChatWindow(win);
 						wait()
 							.then(me.handleWindowNotify.bind(me, win, msg));
