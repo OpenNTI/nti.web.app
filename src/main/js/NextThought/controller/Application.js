@@ -34,6 +34,7 @@ Ext.define('NextThought.controller.Application', {
 		/^notifications/,
 		/^user/,
 		/^group/,
+		/^community/,
 		/^contacts/
 	],
 
