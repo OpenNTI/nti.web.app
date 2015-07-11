@@ -11,7 +11,7 @@ Ext.define('NextThought.model.FriendsList', {
 	},
 	
 	statics: {
-		BLANK_AVATAR: '/app/resources/images/icons/unresolved-group.png',
+		BLANK_AVATAR: '/app/resources/images/icons/unresolved-group.png'
 	},
 
 	isFriendsList: true,
