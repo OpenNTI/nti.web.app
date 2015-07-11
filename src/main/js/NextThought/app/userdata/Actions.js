@@ -435,10 +435,10 @@ Ext.define('NextThought.app.userdata.Actions', {
 
 		function bad() { console.error('There is no store for id:' + id); }
 
-		theStore = ctx.currentPageStore[id];
+		theStore = ctx.currentPageStores[id];
 
 		if (!theStore) {
-			root = ctx.currentPageStore.root;
+			root = ctx.currentPageStores.root;
 
 			if (root && (id === root.containerId)) {
 				theStore = root;
@@ -462,7 +462,7 @@ Ext.define('NextThought.app.userdata.Actions', {
 		var events = ctx.pageStoreEvents,
 			monitors = events.managedListeners || [];
 
-		if (this.hasPageStore(id, ctx) && this.pageStoreId() !== store) {
+		if (this.hasPageStore(id, ctx) && this.getPageStore(id, ctx) !== store) {
 			console.warn('replacing an existing store??');
 		}
 
