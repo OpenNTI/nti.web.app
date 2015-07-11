@@ -71,7 +71,12 @@ Ext.define('NextThought.app.chat.components.Window', {
 		this.logView = this.down('chat-log-view');
 		this.entryView = this.down('chat-entry');
 
-		this.on({'beforedestroy': this.onDestroy.bind(this)});
+		this.on({
+			'beforedestroy': this.onDestroy.bind(this),
+			'beforeshow': this.beforeWindowShow.bind(this),
+			'show': this.onWindowShow.bind(this)
+		});
+
 		this.roomInfoChanged(this.roomInfo);
 		// this.mon(Ext.getStore('PresenceInfo'), 'presence-changed', 'presenceChanged', this);
 	},
@@ -98,6 +103,29 @@ Ext.define('NextThought.app.chat.components.Window', {
 		if (!this.disableExitRoom) {
 			this.ChatActions.leaveRoom(this.ChatActions.getRoomInfoFromComponent(this));
 		}
+	},
+
+
+	onWindowShow: function() {
+		var me = this;
+		wait(500)
+			.then(function() {
+				if(me.entryView && !me.entryView.disabled) {
+					me.entryView.focus();
+				}
+			});
+	},
+
+
+	beforeWindowShow: function(winToShow) {
+		var wins = this.ChatStore.getAllChatWindows() || [];
+
+		// Hide all other open chat windows
+		wins.forEach(function(win) {
+			if ((win !== winToShow) && win.isVisible()) {
+				win.minimize();
+			}
+		});
 	},
 
 

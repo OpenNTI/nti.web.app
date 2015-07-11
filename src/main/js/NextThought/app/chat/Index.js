@@ -34,7 +34,6 @@ Ext.define('NextThought.app.chat.Index', {
 
 	initComponent: function() {
 		this.callParent(arguments);
-		var socket;
 
 		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
 		this.ChatActions = NextThought.app.chat.Actions.create();
@@ -42,14 +41,9 @@ Ext.define('NextThought.app.chat.Index', {
 
 		this.mon(this.ChatStore, {
 			'show-window': this.showChatWindow.bind(this),
-			'create-window': this.openChatWindow.bind(this),
-			'close-window': this.closeWindow.bind(this),
 			'show-whiteboard': this.showWhiteboard.bind(this),
 			'chat-notification-toast': this.handleNonContactNotification.bind(this)
 		});
-
-		socket = this.ChatStore.getSocket();
-		socket.register({'chat_enteredRoom': this.enterChatRoom.bind(this)});
 	},
 
 
@@ -62,78 +56,12 @@ Ext.define('NextThought.app.chat.Index', {
 	showChatWindow: function(roomInfo) {
 		var w;
 
-		this.enterChatRoom(roomInfo);
+		this.ChatActions.onEnteredRoom(roomInfo);
 		w = this.ChatStore.getChatWindow(roomInfo);
-		if (w && this.canShowChat(roomInfo)) {
+		if (w && this.ChatActions.canShowChat(roomInfo)) {
 			w.notify();
 			w.show();
 		}
-	},
-
-
-	canShowChat: function (roomInfo) {
-		var creator = roomInfo && roomInfo.get('Creator'),
-			isGroupChat = roomInfo && roomInfo.isGroupChat();
-		if (isMe(creator) || !isGroupChat || this.ChatStore.isRoomIdAccepted(roomInfo.getId())) {
-			return true;
-		}
-
-		return false;
-	},
-
-
-	openChatWindow: function(roomInfo) {
-		var w = this.ChatStore.getChatWindow(roomInfo);
-
-		if (!w) {
-			w =  Ext.widget({xtype: 'chat-window', roomInfo: roomInfo});
-			w.on({
-				'beforeshow': this.beforeChatWindowShow.bind(this, w),
-				'show': function() {
-					wait(500)
-						.then(function() {
-							if(w.entryView && !w.entryView.disabled) {
-								w.entryView.focus();
-							}
-						});
-				}
-			});
-			this.ChatStore.cacheChatWindow(w, roomInfo);
-		}
-		return w;
-	},
-
-
-	enterChatRoom: function(msg) {
-		var me = this, w,
-			roomInfo = msg && msg.isModel ? msg : ParseUtils.parseItems([msg])[0],
-			occupants = roomInfo.get('Occupants'),
-			isGroupChat = (occupants.length > 2);
-
-		roomInfo = roomInfo && roomInfo.isModel ? roomInfo : ParseUtils.parseItems([roomInfo])[0];
-		roomInfo.setOriginalOccupants(occupants.slice());
-		me.ChatStore.putRoomInfoIntoSession(roomInfo);
-		w = me.openChatWindow(roomInfo);
-
-		this.presentInvationationToast(roomInfo)
-			.then(function() {
-				me.ChatStore.setRoomIdStatusAccepted(roomInfo.getId());
-				w.accept(true);
-				me.ChatActions.startTrackingChatState(roomInfo.get('Creator'), roomInfo, w);
-				if (isGroupChat) {
-					w.show();
-				}
-			})
-			.fail(function() {
-				// TODO: Check if this comment below is still valid
-				//because we are using this callback for both the button and window close callback.  There are 2 signatures,
-				//we ignore one so we dont try to exit a room twice.
-				console.log('Declined invitation..: ', arguments);
-				if (w && !w.isDestroyed) {
-					me.ChatActions.leaveRoom(roomInfo);
-					w.close();
-				}
-			});
 	},
 
 
@@ -145,71 +73,6 @@ Ext.define('NextThought.app.chat.Index', {
 
 		// Handle chat notification
 		console.log('Cannot add chat notification: ', msg);
-	},
-
-
-	presentInvationationToast: function(roomInfo) {
-		var me = this,
-			occupants = roomInfo.get('Occupants'),
-			isGroupChat = (occupants.length > 2),
-			creator = roomInfo.get('Creator');
-
-		//Rules for auto-accepting are getting complicated, I will enumerate them here:
-		//1) if it's not a group chat, accept if the creator is a contact.
-		//2) regardless of group or not, if the room has been previously accepted, accept (like a refresh)
-		//3) if you created it, accept
-
-		if ( this.canShowChat(roomInfo)) {
-			return Promise.resolve();
-		}
-
-		return new Promise(function (fulfill, reject) {
-			UserRepository.getUser(roomInfo.get('Creator'))
-				.then(function (u) {
-					if(me.invitationToast && me.invitationToast.roomId === IdCache.getIdentifier(roomInfo.getId())) {
-						// if we have a invitation toast for a roomInfo, don't create another one.
-						return;
-					}
-
-					//at this point, window has been created but not accepted.
-					me.invitationToast = Toaster.makeToast({
-						roomId: IdCache.getIdentifier(roomInfo.getId()),
-						title: isGroupChat ? 'Group Chat...' : 'Chat Invitation...',
-						message: isGroupChat ?
-								'You\'ve been invited to chat with <span>' + (occupants.length - 1) + '</span> friends.' :
-								'<span>' + u.getName() + '</span> would like to chat.',
-						iconCls: 'icons-chat-32',
-						buttons: [
-							{
-								label: 'decline',
-								callback: reject
-							},
-							{
-								label: 'accept',
-								callback: fulfill
-							}
-						],
-						callback: function () {
-							delete me.invitationToast;
-						},
-						scope: me
-					});
-				});
-		});
-	},
-
-	closeWindow: function() {},
-
-
-	beforeChatWindowShow: function(winToShow) {
-		var wins = this.ChatStore.getAllChatWindows() || [];
-
-		// Hide all other open chat windows
-		wins.forEach(function(win) {
-			if ((win !== winToShow) && win.isVisible()) {
-				win.minimize();
-			}
-		});
 	},
 
 

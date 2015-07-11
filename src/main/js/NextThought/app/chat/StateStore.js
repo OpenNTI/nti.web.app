@@ -114,7 +114,8 @@ Ext.define('NextThought.app.chat.StateStore', {
 	getChatWindow: function(roomInfo) {
 		if (!roomInfo) { return null; }
 
-		var rId = roomInfo && roomInfo.isModel ? roomInfo.getId() : roomInfo,
+		var rIsString = (typeof roomInfo === 'string'),
+			rId = roomInfo && roomInfo.isModel ? roomInfo.getId() : roomInfo,
 			id = IdCache.getIdentifier(rId),
 			xOcc, w, allRooms, me = this;
 
@@ -134,6 +135,10 @@ Ext.define('NextThought.app.chat.StateStore', {
 				if (x.roomInfo && x.roomInfo.getId() === rId) {
 					w = x;
 					me.cacheChatWindow(w, x.roomInfo);
+				}
+
+				if (rIsString) {
+					return;
 				}
 
 				//Be defensive.
@@ -175,30 +180,6 @@ Ext.define('NextThought.app.chat.StateStore', {
 	},
 
 
-	rebuildWindow: function(roomInfoId) {
-		var me = this;
-
-		return new Promise( function(fulfill, reject) {
-			Service.getObject(roomInfoId)
-				.then( function(obj) {
-					if (isMe(obj.get('Creator'))) {
-						me.showChatWindow(obj);
-					}
-					else {
-						me.fireEvent('create-window', obj);
-					}
-
-					fulfill(obj);
-				})
-				.fail( function() {
-					alert('Could not recover room info');
-					console.error('Could not resolve roomInfo for: ', roomInfoId);
-					reject();
-				});
-		});
-	},
-
-
 	/**
 	 * Check to see if a room already exists.  A room exists when any of the following conditions are met, in this order:
 	 *1) if there's a roomId sent.  there must be an existing roomId in the active rooms object.
@@ -209,7 +190,7 @@ Ext.define('NextThought.app.chat.StateStore', {
 	 * @param {Object} options
 	 * @return {NextThought.model.RoomInfo}
 	 */
-	getRoomInfo: function(users, roomId, options) {
+	existingRoom: function(users, roomId, options) {
 		//Add ourselves to this list
 		var key, rInfo,
 			allUsers = Ext.Array.unique(users.slice().concat($AppConfig.userObject.get('Username'))),
@@ -354,6 +335,25 @@ Ext.define('NextThought.app.chat.StateStore', {
 	},
 
 
+	getAllRoomInfosFromSession: function() {
+		var roomInfos = [], ri, key, chats;
+
+		chats = this.getSessionObject();
+
+		for (key in chats) {
+			if (chats.hasOwnProperty(key)) {
+				if (key && key !== 'roomIdsAccepted') {
+					ri = this.getRoomInfoFromSession(key, chats[key]);
+					if (ri) {
+						roomInfos.push(ri);
+					}
+				}
+			}
+		}
+		return roomInfos;
+	},
+
+
 	updateRoomInfo: function(ri) {
 		var win = this.getChatWindow(ri.getId()),
 				ro = win ? win.roomInfo : this.getRoomInfoFromSession(ri.getId());
@@ -364,7 +364,7 @@ Ext.define('NextThought.app.chat.StateStore', {
 	},
 
 
-	__getTranscriptId: function(roomInfoId, uname, type) {
+	buildTranscriptId: function(roomInfoId, uname, type) {
 		var id = ParseUtils.parseNTIID(roomInfoId);
 
 		if (!id) {
@@ -380,13 +380,13 @@ Ext.define('NextThought.app.chat.StateStore', {
 	getTranscriptIdForRoomInfo: function(roomInfo) {
 		var roomInfoId = roomInfo.getId();
 
-		return this.__getTranscriptId(roomInfoId, roomInfo.get('Creator'), 'Transcript');
+		return this.buildTranscriptId(roomInfoId, roomInfo.get('Creator'), 'Transcript');
 	},
 
 
 	getTranscriptSummaryForRoomInfo: function(roomInfo) {
 		var id = roomInfo.isModel ? roomInfo.getId() : roomInfo;
 
-		return this.__getTranscriptId(id, $AppConfig.username.replace('-', '_'), 'Transcript');
+		return this.buildTranscriptId(id, $AppConfig.username.replace('-', '_'), 'Transcript');
 	}
 });

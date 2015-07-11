@@ -46,7 +46,8 @@ Ext.define('NextThought.app.chat.Actions', {
 			'chat_exitedRoom': me.createHandlerForChatEvents(me.onExitedRoom, 'chat_exitedRoom'),
 			'chat_roomMembershipChanged': me.createHandlerForChatEvents(me.onMembershipOrModerationChanged, 'chat_roomMembershipChanged'),
 			'chat_recvMessage': me.createHandlerForChatEvents(me.onMessage, 'chat_recvMessage'),
-			'chat_recvMessageForShadow': me.createHandlerForChatEvents(me.onMessage, 'chat_recvMessageForShadow')
+			'chat_recvMessageForShadow': me.createHandlerForChatEvents(me.onMessage, 'chat_recvMessageForShadow'),
+			'chat_enteredRoom': me.onEnteredRoom.bind(me)
 		});
 
 		socket.onSocketAvailable(me.onSessionReady, me);
@@ -59,10 +60,41 @@ Ext.define('NextThought.app.chat.Actions', {
 
 	onSessionReady: function() {
 		console.log('Chat onSessionReady');
+		var me = this,
+			roomInfos = me.ChatStore.getAllRoomInfosFromSession(),
+			w;
 
-		var me = this;
+		Ext.each(roomInfos, function(ri) {
+			me.onEnteredRoom(ri);
+			w = me.ChatStore.getChatWindow(ri);
 
-		//TODO: Get all the active chats out of temp storage and restore them
+			//This chunk will try to recover the history and insert it into the chat again...
+			me.loadTranscript(ri)
+				.then(function(transcript) {
+					var messages = transcript.get('Messages');
+					messages = Ext.Array.sort(messages, function(a, b) {
+						var aRaw = a.raw || {CreatedTime: 0},
+								bRaw = b.raw || {CreatedTime: 0};
+
+						return aRaw.CreatedTime - bRaw.CreatedTime;
+					});
+
+					Ext.each(messages, function(m) {
+						me.onMessage(m);
+					}, me);
+
+					// If it's my room. Open it.
+					// FIXME: If i didn't start the chat, previously seen notes will appear as notification.
+					// We need to handle that case
+					if (me.ChatStore.isRoomIdAccepted(ri.getId()) && isMe(ri.get('Creator'))) {
+						w.show();
+					}
+				})
+				.fail(function() {
+					console.error('Could not recover chat history.');
+					me.onExitedRoom(ri.getData());
+				});
+		});
 
 		$AppConfig.Preferences.getPreference('ChatPresence/Active')
 			.then(function(value) {
@@ -119,13 +151,18 @@ Ext.define('NextThought.app.chat.Actions', {
 		users.push($AppConfig.userObject.get('Username'));
 		users = Ext.unique(users);
 
-		ri = this.ChatStore.getRoomInfo(users, options.ContainerId);
+		ri = this.ChatStore.existingRoom(users, options.ContainerId, options);
 		if (ri) {
 			this.ChatStore.showChatWindow(ri);
 		}
 		else {
 			//If there were no existing rooms, create a new one.
 			m = {'Occupants': users};
+
+			//no occupants required if there's a container id and it's a class/study room etc.
+			if (options.ContainerId && this.ChatStore.isPersistantRoomId(options.ContainerId)) {
+				roomCfg.Occupants = [];
+			}
 			socket.emit('chat_enterRoom', Ext.apply(m, options), Ext.bind(me.shouldShowRoom, me));
 		}
 	},
@@ -139,6 +176,136 @@ Ext.define('NextThought.app.chat.Actions', {
 		} else {
 			alert({title: 'Error', msg: 'Unable to start your chat at this time. Please try again later.', icon: 'warning-red'});
 		}
+	},
+
+
+	onEnteredRoom: function(msg) {
+		var me = this, w,
+			roomInfo = msg && msg.isModel ? msg : ParseUtils.parseItems([msg])[0],
+			occupants = roomInfo.get('Occupants'),
+			isGroupChat = (occupants.length > 2);
+
+		roomInfo = roomInfo && roomInfo.isModel ? roomInfo : ParseUtils.parseItems([roomInfo])[0];
+		roomInfo.setOriginalOccupants(occupants.slice());
+		me.ChatStore.putRoomInfoIntoSession(roomInfo);
+		w = me.openChatWindow(roomInfo);
+
+		this.presentInvationationToast(roomInfo)
+			.then(function() {
+				me.ChatStore.setRoomIdStatusAccepted(roomInfo.getId());
+				w.accept(true);
+				me.startTrackingChatState(roomInfo.get('Creator'), roomInfo, w);
+				if (isGroupChat) {
+					w.show();
+				}
+			})
+			.fail(function() {
+				// TODO: Check if this comment below is still valid
+				//because we are using this callback for both the button and window close callback.  There are 2 signatures,
+				//we ignore one so we dont try to exit a room twice.
+				console.log('Declined invitation..: ', arguments);
+				if (w && !w.isDestroyed) {
+					me.leaveRoom(roomInfo);
+					w.close();
+				}
+			});
+	},
+
+
+	openChatWindow: function(roomInfo) {
+		var w = this.ChatStore.getChatWindow(roomInfo);
+
+		if (!w) {
+			w =  Ext.widget({xtype: 'chat-window', roomInfo: roomInfo});
+			this.ChatStore.cacheChatWindow(w, roomInfo);
+		}
+		return w;
+	},
+
+
+	rebuildWindow: function(roomInfoId) {
+		var me = this;
+
+		return new Promise( function(fulfill, reject) {
+			Service.getObject(roomInfoId)
+				.then( function(obj) {
+					if (isMe(obj.get('Creator'))) {
+						me.ChatStore.showChatWindow(obj);
+					}
+					else {
+						me.openChatWindow(obj);
+					}
+
+					fulfill(obj);
+				})
+				.fail( function() {
+					alert('Could not recover room info');
+					console.error('Could not resolve roomInfo for: ', roomInfoId);
+					reject();
+				});
+		});
+	},
+
+
+	canShowChat: function (roomInfo) {
+		var creator = roomInfo && roomInfo.get('Creator'),
+			isGroupChat = roomInfo && roomInfo.isGroupChat();
+		if (isMe(creator) || !isGroupChat || this.ChatStore.isRoomIdAccepted(roomInfo.getId())) {
+			return true;
+		}
+
+		return false;
+	},
+
+
+	presentInvationationToast: function(roomInfo) {
+		var me = this,
+			occupants = roomInfo.get('Occupants'),
+			isGroupChat = (occupants.length > 2),
+			creator = roomInfo.get('Creator');
+
+		//Rules for auto-accepting are getting complicated, I will enumerate them here:
+		//1) if it's not a group chat, accept if the creator is a contact.
+		//2) regardless of group or not, if the room has been previously accepted, accept (like a refresh)
+		//3) if you created it, accept
+
+		if ( this.canShowChat(roomInfo)) {
+			return Promise.resolve();
+		}
+
+		return new Promise(function (fulfill, reject) {
+			UserRepository.getUser(roomInfo.get('Creator'))
+				.then(function (u) {
+					if(me.invitationToast && me.invitationToast.roomId === IdCache.getIdentifier(roomInfo.getId())) {
+						// if we have a invitation toast for a roomInfo, don't create another one.
+						return;
+					}
+
+					//at this point, window has been created but not accepted.
+					me.invitationToast = Toaster.makeToast({
+						roomId: IdCache.getIdentifier(roomInfo.getId()),
+						title: isGroupChat ? 'Group Chat...' : 'Chat Invitation...',
+						message: isGroupChat ?
+								'You\'ve been invited to chat with <span>' + (occupants.length - 1) + '</span> friends.' :
+								'<span>' + u.getName() + '</span> would like to chat.',
+						iconCls: 'icons-chat-32',
+						buttons: [
+							{
+								label: 'decline',
+								callback: reject
+							},
+							{
+								label: 'accept',
+								callback: fulfill
+							}
+						],
+						callback: function () {
+							delete me.invitationToast;
+						},
+						scope: me
+					});
+				});
+		});
 	},
 
 
@@ -219,7 +386,7 @@ Ext.define('NextThought.app.chat.Actions', {
 				w = this.ChatStore.getChatWindow(cid);
 
 		if (!w) {
-			this.ChatStore.rebuildWindow(cid)
+			this.rebuildWindow(cid)
 				.then(me.onMessage.bind(me, msg, opts));
 			return;
 		}
@@ -499,6 +666,17 @@ Ext.define('NextThought.app.chat.Actions', {
 			//im not a moderator, just leave
 			socket.emit('chat_exitRoom', room.getId());
 		}
+	},
+
+
+	loadTranscript: function(roomInfo) {
+		var id = this.ChatStore.getTranscriptIdForRoomInfo(roomInfo);
+
+		if (!id) {
+			return Promise.reject({'error': 'cannot retrieve transcript without a transcript id.'});
+		}
+
+		return Service.getObject(id);
 	},
 
 
