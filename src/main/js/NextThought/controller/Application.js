@@ -33,7 +33,8 @@ Ext.define('NextThought.controller.Application', {
 		/^search/,
 		/^notifications/,
 		/^user/,
-		/^group/
+		/^group/,
+		/^contacts/
 	],
 
 	init: function() {
