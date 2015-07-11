@@ -265,32 +265,22 @@ Ext.define('NextThought.app.chat.components.Window', {
 		this.callParent(arguments);
 
 		var me = this;
+		this.keyMap = new Ext.util.KeyMap({
+			target: this.el,
+			binding: [
+				{
+					key: Ext.EventObject.ESC,
+					fn: this.onEsc,
+					scope: this
+				}
+			]
+		});
+	},
 
-		// function getEl(c, sub) { return Ext.get(c.getId() + '-' + sub); }
 
-		// this.dropZone = Ext.dd.DropZone.create(this.getEl(), {
-
-		// 	getTargetFromEvent: function(e) {
-		// 		return e.getTarget('.chat-window');
-		// 	},
-		// 	onNodeEnter: function(target, dd, e, data) {
-		// 		Ext.fly(target).addCls('target-hover');
-		// 	},
-		// 	onNodeOut: function(target, dd, e, data) {
-		// 		Ext.fly(target).removeCls('target-hover');
-		// 	},
-
-		// 	onNodeOver: function(target, dd, e, data) {
-		// 		if (data && data.Username) {
-		// 			return Ext.dd.DropZone.prototype.dropAllowed;
-		// 		}
-		// 	},
-
-		// 	onNodeDrop: function(target, dd, e, data) {
-		// 		//				me.fireEvent('add-people', me, [data.username]);
-		// 		return true;
-		// 	}
-		// });
+	onEsc: function(k, e) {
+		e.stopEvent();
+		this.minimize();
 	},
 
 
