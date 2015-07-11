@@ -60,7 +60,7 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 			if (cid) {
 				me.initPageStores(cmp);
 				p = me.loadAnnotations(cmp, cid)
-					.then(function(store, cmp) {
+					.then(function(store) {
 						var o = reader && reader.noteOverlay;
 
 						if (o && o.registerGutterRecords) {
@@ -90,7 +90,7 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 		return new Promise(function(fulfill, reject) {
 			if (me.hasPageStore(containerId, context)) {
 				store = me.getPageStore(containerId);
-				fulfill(store, cmp);
+				fulfill(store);
 			}
 			else {
 				store = me.__buildPageStore(containerId);
@@ -98,9 +98,9 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 				me.UserDataActions.addPageStore(containerId, store, parentContext);
 				cmp.bindToStore(store);
 
-				store.on(me, {
+				store.on({
 					'load': function(s) {
-						fulfill(s, cmp);
+						fulfill(s);
 					},
 					single: true
 				});
