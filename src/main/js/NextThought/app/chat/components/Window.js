@@ -72,7 +72,7 @@ Ext.define('NextThought.app.chat.components.Window', {
 		this.entryView = this.down('chat-entry');
 
 		this.on({
-			'beforedestroy': this.onDestroy.bind(this),
+			'beforedestroy': this.beforeWindowDestroy.bind(this),
 			'beforeshow': this.beforeWindowShow.bind(this),
 			'show': this.onWindowShow.bind(this)
 		});
@@ -99,9 +99,9 @@ Ext.define('NextThought.app.chat.components.Window', {
 	},
 
 
-	onDestroy: function() {
+	beforeWindowDestroy: function() {
 		if (!this.disableExitRoom) {
-			this.ChatActions.leaveRoom(this.ChatActions.getRoomInfoFromComponent(this));
+			this.ChatActions.leaveRoom(this.roomInfo);
 		}
 	},
 

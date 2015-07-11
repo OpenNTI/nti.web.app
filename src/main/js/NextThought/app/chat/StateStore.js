@@ -131,21 +131,27 @@ Ext.define('NextThought.app.chat.StateStore', {
 					return;
 				}
 
-				// If they have the same roomId then use that window. And make sure the cache is updated.
-				if (x.roomInfo && x.roomInfo.getId() === rId) {
-					w = x;
-					me.cacheChatWindow(w, x.roomInfo);
-				}
-
 				if (rIsString) {
 					return;
 				}
 
 				//Be defensive.
 				if ( roomInfo.isModel && Ext.Array.union(xOcc, roomInfo.get('Occupants')).length === xOcc.length) {
-					console.log('found a different room with same occupants: ', xOcc);
+					console.debug('found a different room with same occupants: ', xOcc);
+
+					// Delete the old cache
+					console.debug('deleting the cache for the old room info: ', x.roomInfo.getId());
+					me.deleteRoomIdStatusAccepted(x.roomInfo && x.roomInfo.getId());
+
+					// Change the roomInfo to the new one.
 					x.roomInfoChanged(roomInfo);
+
+					// Cache the new room to make sure the map that the store has is in sync
+					console.debug('caching new room info: ', roomInfo.getId());
+					me.cacheChatWindow(x, roomInfo);
+
 					w = x;
+					return false;
 				}
 			});
 		}
