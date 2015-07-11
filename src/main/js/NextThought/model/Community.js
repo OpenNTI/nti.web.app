@@ -32,14 +32,20 @@ Ext.define('NextThought.model.Community', {
 
 	getProfileUrl: function() {
 		var id = this.get('Username');
-		if(id && this.getLink('Activity')){
+		if (id && this.getLink('Activity')) {
 			return '/community/' + ParseUtils.encodeForURI(id);
 		}
-		return null; 
+
+		return null;
 	},
 
 	hasActivity: function() {
 		return !!this.getLink('Activity');
+	},
+
+
+	isDefaultForum: function(forum) {
+		return forum && forum.get('title') === 'Forum';
 	},
 
 

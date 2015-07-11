@@ -454,6 +454,8 @@ Ext.define('NextThought.app.Body', {
 			route = this.getRouteForCourse(root, subPath);
 		} else if (root instanceof NextThought.model.User) {
 			route = this.getRouteForUser(root, subPath);
+		} else if (root instanceof NextThought.model.Community) {
+			route = this.getRouteForCommunity(root, subPath);
 		} else {
 			console.error('No route for path: ', root, subPath);
 			route = {
@@ -489,6 +491,18 @@ Ext.define('NextThought.app.Body', {
 
 		route.path = Globals.trimRoute(route.path);
 		route.path = '/user/' + id + '/' + route.path;
+
+		return route;
+	},
+
+
+	getRouteForCommunity: function(community, path) {
+		var cmp = this.getCmp('profile-community'),
+			route = cmp.getRouteForPath && cmp.getRouteForPath(path, community),
+			id = community.getId();
+
+		route.path = Globals.trimRoute(route.path);
+		route.path = '/community/' + id + '/' + route.path;
 
 		return route;
 	}

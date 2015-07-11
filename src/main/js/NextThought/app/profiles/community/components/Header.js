@@ -106,7 +106,9 @@ Ext.define('NextThought.app.profiles.community.components.Header', {
 
 
 	onScroll: function() {
-		this.settingsMenu.hide();
+		if (this.settingsMenu) {
+			this.settingsMenu.hide();
+		}
 	},
 
 

@@ -348,5 +348,23 @@ Ext.define('NextThought.app.profiles.community.Index', {
 				console.error('Error hiding community: ', reason);
 				alert('Unable to hide community at this time.');
 			});
+	},
+
+
+	getRouteForPath: function(path, community) {
+		var forum = path[1],//the first one should be the index
+			forumId = forum.getId(),
+			path = '/';
+
+		forumId = ParseUtils.encodeForURI(forumId);
+
+		if (!community.isDefaultForum(forum)) {
+			path = '/topic/' + forumId;
+		}
+
+		return {
+			isFull: true,
+			path: path
+		};
 	}
 });
