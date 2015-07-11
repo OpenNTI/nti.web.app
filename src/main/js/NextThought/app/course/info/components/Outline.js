@@ -7,6 +7,8 @@ Ext.define('NextThought.app.course.info.components.Outline', {
 		'NextThought.app.course.info.components.OpenCourseInfo'
 	],
 
+	layout: 'none',
+
 	initComponent: function() {
 		this.callParent(arguments);
 	},
@@ -34,7 +36,7 @@ Ext.define('NextThought.app.course.info.components.Outline', {
 		}
 	},
 
-	setActiveItem: function(route){
+	setActiveItem: function(route) {
 		this.menu.setActiveItem(route.path);
 	},
 

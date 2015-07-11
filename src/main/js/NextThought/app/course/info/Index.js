@@ -50,13 +50,12 @@ Ext.define('NextThought.app.course.info.Index', {
 			me.hasInfo = !!info;
 
 			me[me.infoOnly ? 'addCls' : 'removeCls']('info-only');
-			me.navigation.margin = (me.infoOnly ? '105' : '0') + ' 5 5 0';
 
 			me.body.setContent(info, status, showRoster, bundle);
 			me.navigation.setContent(info, status, showRoster);
 		}
 
-		if(me.bundle === bundle) {
+		if (me.bundle === bundle) {
 			// Short-circuit since we already have the bundle
 			return Promise.resolve();
 		}
@@ -78,11 +77,11 @@ Ext.define('NextThought.app.course.info.Index', {
 		return Promise.resolve();
 	},
 
-	showInfo: function(route, subRoute){
+	showInfo: function(route, subRoute) {
 		var me = this;
 
 		me.navigation.setActiveItem(route);
-		me.body.setActiveItem('info').then(function(){
+		me.body.setActiveItem('info').then(function() {
 			me.body.scrollInfoSectionIntoView(route);
 		});
 	},
@@ -91,7 +90,7 @@ Ext.define('NextThought.app.course.info.Index', {
 		var me = this;
 
 		me.navigation.setActiveItem(route);
-		me.body.setActiveItem('info').then(function(){
+		me.body.setActiveItem('info').then(function() {
 			me.body.scrollInfoSectionIntoView(route);
 		});
 	},
@@ -100,7 +99,7 @@ Ext.define('NextThought.app.course.info.Index', {
 		var me = this;
 
 		me.navigation.setActiveItem(route);
-		me.body.setActiveItem('info').then(function(){
+		me.body.setActiveItem('info').then(function() {
 			me.body.scrollInfoSectionIntoView(route);
 		});
 	},
@@ -109,23 +108,23 @@ Ext.define('NextThought.app.course.info.Index', {
 		var me = this;
 
 		me.navigation.setActiveItem(route);
-		me.body.setActiveItem('roster').then(function(){
+		me.body.setActiveItem('roster').then(function() {
 			me.body.scrollRosterIntoView(route, subRoute);
 		});
 	},
 
-	changeRoute: function(title, route){
+	changeRoute: function(title, route) {
 		this.pushRoute(title, route || '/');
 	},
 
 	showEnrollment: function(catalogEntry) {
-		this.WindowActions.pushWindow(catalogEntry,null,null,{afterClose: this.onWindowClose.bind(this, catalogEntry)});
+		this.WindowActions.pushWindow(catalogEntry, null, null, {afterClose: this.onWindowClose.bind(this, catalogEntry)});
 	},
 
-	onWindowClose: function(catalogEntry){
+	onWindowClose: function(catalogEntry) {
 		var catalogEntryID = catalogEntry.getId();
 
-		if(catalogEntryID && !this.CourseStore.findEnrollmentForCourse(catalogEntryID)){
+		if (catalogEntryID && !this.CourseStore.findEnrollmentForCourse(catalogEntryID)) {
 			wait()
 				.then(this.pushRootRoute.bind(this, 'Library', '/library'));
 		}
