@@ -100,12 +100,14 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Activ
 	addAdditionalRecordListeners: function(record) {
 		this.callParent(arguments);
 		this.mon(record, 'convertedToPlaceholder', this.destroy, this);
+		this.mon(record, 'deleted', this.destroy, this);
 	},
 
 
 	removeAdditionalRecordListeners: function(record) {
 		this.callParent(arguments);
 		this.mun(record, 'convertedToPlaceholder', this.destroy, this);
+		this.mun(record, 'deleted', this.destroy, this);
 	},
 
 

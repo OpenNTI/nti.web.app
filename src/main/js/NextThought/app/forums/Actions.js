@@ -91,7 +91,7 @@ Ext.define('NextThought.app.forums.Actions', {
 					fulfill(entry);
 				},
 				failure: reject
-			})
+			});
 		}).then(function(entry) {
 			var record;
 
@@ -127,20 +127,24 @@ Ext.define('NextThought.app.forums.Actions', {
 			}
 		}
 
-		record.destroy({
-			success: function() {
-				me.UserDataStore.applyToStoresThatWantItem(maybeDeleteFromStore, record);
+		return new Promise(function(fulfill, reject) {
+			record.destroy({
+				success: function() {
+					me.UserDataStore.applyToStoresThatWantItem(maybeDeleteFromStore, record);
 
-				//Delete anything left that we know of
-				Ext.StoreManager.each(function(s) {
-					maybeDeleteFromStore(null, s);
-				});
+					//Delete anything left that we know of
+					Ext.StoreManager.each(function(s) {
+						maybeDeleteFromStore(null, s);
+					});
 
-				Ext.callback(callback, null, [cmp]);
-			},
-			failure: function() {
-				alert('Sorry, could not delete that');
-			}
+					Ext.callback(callback, null, [cmp]);
+					fulfill();
+				},
+				failure: function() {
+					alert('Sorry, could not delete that');
+					reject();
+				}
+			});
 		});
 	},
 

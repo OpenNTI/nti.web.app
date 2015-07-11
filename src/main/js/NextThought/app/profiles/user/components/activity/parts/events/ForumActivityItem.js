@@ -8,7 +8,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 	requires: [
 		'NextThought.editor.Editor',
 		'NextThought.layout.component.Natural',
-		'NextThought.app.navigation.path.Actions'
+		'NextThought.app.navigation.path.Actions',
+		'NextThought.app.forums.Actions'
 	],
 
 	mixins: {
@@ -127,6 +128,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 			url = r.getLink('contents');
 
 		me.PathActions = NextThought.app.navigation.path.Actions.create();
+		me.ForumActions = NextThought.app.forums.Actions.create();
 
 		me.callParent(arguments);
 		me.mixins.likeAndFavoriteActions.constructor.call(me);
@@ -211,7 +213,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 			title: 'Are you sure?',
 			fn: function(str) {
 				if (str === 'ok') {
-					me.fireEvent('delete-post', me.record, me);
+					me.ForumActions.deleteObject(me.record);
 				}
 			}
 		});
