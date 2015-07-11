@@ -6,7 +6,8 @@ Ext.define('NextThought.app.contacts.components.outline.Search', {
 		'NextThought.app.groups.StateStore',
 		'NextThought.store.UserSearch',
 		'NextThought.app.chat.StateStore',
-		'NextThought.app.account.contacts.management.Popout'
+		'NextThought.app.account.contacts.management.Popout',
+		'NextThought.app.groups.Actions'
 	],
 
 	preserveScrollOnRefresh: true,
@@ -38,7 +39,7 @@ Ext.define('NextThought.app.contacts.components.outline.Search', {
 	cls: 'contact-search',
 	listeners: {
 		itemclick: 'rowClicked',
-		itemmouseenter: 'rowHover',
+		// itemmouseenter: 'rowHover',
 		select: function(s, record) {
 			s.deselect(record);
 		}
@@ -51,6 +52,7 @@ Ext.define('NextThought.app.contacts.components.outline.Search', {
 		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
 		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
 		this.ChatActions = NextThought.app.chat.Actions.create();
+		this.GroupActions = NextThought.app.groups.Actions.create();
 
 		me.buildStore();
 
@@ -72,60 +74,49 @@ Ext.define('NextThought.app.contacts.components.outline.Search', {
 	},
 
 	rowClicked: function(view, record, item, index, e) {
-		var i = Ext.fly(item);
-		//if they aren't a contact show the card
-		if (i.hasCls('not-contact')) {
-			e.stopPropagation();
-			this.startPopupTimeout(view, record, item, 0);
-			return;
-		}
-
-		this.cancelPopupTimeout();
-		this.ChatActions.startChat(record);
-		if (!Ext.is.iPad) {
-			this.startPopupTimeout(view, record, item, 2000);
+		if(e && e.getTarget().classList.contains('nib')){
+			this.GroupActions.addContact(record.get('Username') );
 		}
 	},
 
-
-	rowHover: function(view, record, item, wait) {
-		this.startPopupTimeout(view, record, item, 500);
-	},
-
-	startPopupTimeout: function(view, record, item, wait) {
-		function fin(pop) {
-			// If the popout is destroyed, clear the activeTargetDom,
-			// that way we will be able to show the popout again.
-			if (!pop) {
-				return;
-			}
-			pop.on('destroy', function() {
-				delete me.activeTargetDom;
-			});
-		}
-
-		var popout = NextThought.app.account.contacts.management.Popout,
-			el = Ext.get(item), me = this;
-
-		if (!record || me.activeTargetDom === Ext.getDom(Ext.fly(item))) {
-			return;
-		}
-
-		me.cancelPopupTimeout();
-		me.hoverTimeout = Ext.defer(function() {
-			Ext.fly(item).un('mouseout', me.cancelPopupTimeout, me, {single: true});
-			popout.popup(record, el, item, [-1, 0], fin);
-			me.activeTargetDom = Ext.getDom(Ext.fly(item));
-		}, wait);
-
-		Ext.fly(item).on('mouseout', me.cancelPopupTimeout, me, {single: true});
-	},
-
-
-	cancelPopupTimeout: function() {
-		clearTimeout(this.hoverTimeout);
-	},
-
+	// Old Logic for the popup
+	// rowHover: function(view, record, item, wait) {
+	// 	// this.startPopupTimeout(view, record, item, 500);
+	// },
+	//
+	// startPopupTimeout: function(view, record, item, wait) {
+	// 	function fin(pop) {
+	// 		// If the popout is destroyed, clear the activeTargetDom,
+	// 		// that way we will be able to show the popout again.
+	// 		if (!pop) {
+	// 			return;
+	// 		}
+	// 		pop.on('destroy', function() {
+	// 			delete me.activeTargetDom;
+	// 		});
+	// 	}
+	//
+	// 	var popout = NextThought.app.account.contacts.management.Popout,
+	// 		el = Ext.get(item), me = this;
+	//
+	// 	if (!record || me.activeTargetDom === Ext.getDom(Ext.fly(item))) {
+	// 		return;
+	// 	}
+	//
+	// 	me.cancelPopupTimeout();
+	// 	me.hoverTimeout = Ext.defer(function() {
+	// 		Ext.fly(item).un('mouseout', me.cancelPopupTimeout, me, {single: true});
+	// 		popout.popup(record, el, item, [-1, 0], fin);
+	// 		me.activeTargetDom = Ext.getDom(Ext.fly(item));
+	// 	}, wait);
+	//
+	// 	Ext.fly(item).on('mouseout', me.cancelPopupTimeout, me, {single: true});
+	// },
+	//
+	//
+	// cancelPopupTimeout: function() {
+	// 	clearTimeout(this.hoverTimeout);
+	// },
 
 	buildStore: function() {
 		var flStore = this.GroupStore.getFriendsList();
