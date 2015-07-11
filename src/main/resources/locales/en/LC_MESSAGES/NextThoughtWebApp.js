@@ -90,6 +90,7 @@ NTIStrings['NextThought.view.account.activity.Preview.add-comment'] = 'Add a com
 NTIStrings['NextThought.view.account.activity.Preview.no-body-content'] = 'You need to type something';
 NTIStrings['NextThought.view.account.activity.View.tooltip'] = 'Recent Activity';
 NTIStrings['NextThought.view.account.activity.View.only-me'] = 'Only Me';
+NTIStrings['NextThougth.view.account.activity.joined.community'] = 'NextThought';
 NTIStrings['NextThought.view.account.activity.View.discussions-thoughts'] = 'Discussions & Thoughts';
 NTIStrings['NextThought.view.account.activity.View.highlight-note'] = 'Highlights & Notes';
 NTIStrings['NextThought.view.account.activity.View.note'] = 'Notes';

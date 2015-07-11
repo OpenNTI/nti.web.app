@@ -182,7 +182,7 @@ Ext.define('NextThought.util.Content', {
 			return (anchor || external || /^data:/i.test(url)) ?
 				original : attr + '="' + host + url + '"';
 		}
-
+		
 		var me = this,
 			envSalt = $AppConfig.corsSalt ? ('?' + $AppConfig.corsSalt) : '',
 			locationHash = String.hash(window.location.hostname + envSalt);
