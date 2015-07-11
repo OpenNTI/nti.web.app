@@ -32,7 +32,12 @@ Ext.define('NextThought.app.chat.Gutter', {
 		otherConctactsCountEl: '.other-contacts .count'
 	},
 
+
+	/* Contains all the chat rooms currently open*/
 	ROOM_ENTRY_MAP: {},
+
+	/* Contains a map of user to Entry */
+	USER_ENTRY_MAP: {},
 
 	ENTRY_BOTTOM_OFFSET: 120,
 
@@ -85,23 +90,24 @@ Ext.define('NextThought.app.chat.Gutter', {
 	},
 
 
-	updatePresence: function(username, presence){
+	updatePresence: function(username, presence) {
 		var user = this.findEntryForUser(username);
 
-		if(user){
+		if(user) {
 			user.setStatus(presence);
 		}
 	},
 
 
 	removeContact: function(store, user) {
-		var entry = this.findEntryForUser(user.getId());
-		if (entry) {
-			if(entry.associatedWindow) {
-				entry.associatedWindow.hide();
-			}
+		var entry = this.findEntryForUser(user.get('Username')),
+			win = entry && entry.associatedWindow,
+			rid = win && win.roomInfo && win.roomInfo.getId();
 
+		// Make sure we don't remove a user with an active chat window.
+		if (entry && !this.ROOM_ENTRY_MAP[rid]) {
 			this.remove(entry);
+			delete this.USER_ENTRY_MAP[user.get('Username')];
 		}
 	},
 
@@ -109,12 +115,18 @@ Ext.define('NextThought.app.chat.Gutter', {
 	addContacts: function(store, users) {
 		var me = this;
 		users.forEach(function(user) {
+			var username = user.get('Username'), entry;
+			if (me.findEntryForUser(username)) {
+				return true;
+			}
+
 			if(me.haveRoomForNewEntry()) {
-				me.add({
+				entry = me.add({
 					xtype: 'chat-gutter-entry',
 					user: user,
 					openChatWindow: me.openChatWindow.bind(me)
 				});
+				me.USER_ENTRY_MAP[username] = entry;
 			}
 			else {
 				me.otherContacts.push(user);
@@ -179,7 +191,10 @@ Ext.define('NextThought.app.chat.Gutter', {
 					this.ROOM_ENTRY_MAP[roomInfo.getId()] = entry;
 					entry.associatedWindow = win;
 					win.onceRendered
-						.then(me.realignChatWindow.bind(me, win, entry));
+						.then(function() {
+							wait()
+								.then(me.realignChatWindow.bind(me, win, entry));
+						});
 				}
 			}
 		}
@@ -195,6 +210,7 @@ Ext.define('NextThought.app.chat.Gutter', {
 
 		if (top && top > 0) {
 			win.el.setStyle('top', top + 'px');
+			console.debug('align chat window to:', top);
 		}
 	},
 
@@ -211,16 +227,7 @@ Ext.define('NextThought.app.chat.Gutter', {
 
 
 	findEntryForUser: function(userName) {
-		var items = this.items.items, entry, u, i;
-
-		for (i = 0; i < items.length && !entry; i++) {
-			u = items[i].user && items[i].user.get('Username');
-			if (u === userName) {
-				entry = items[i];
-			}
-		}
-
-		return entry;
+		return this.USER_ENTRY_MAP[userName];
 	},
 
 
