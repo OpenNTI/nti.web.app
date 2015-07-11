@@ -21,7 +21,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 			For notes we need to know if it is in a video to determine the height of the tile
 			so wait to determine this and cache the useful async stuff we do along the way
 		 */
-		getTileConfig: function(record, course, width) {
+		getTileConfig: function(record, course, width, removeOnDelete) {
 			var me = this,
 				context = NextThought.app.context.ContainerContext.create({
 					container: record.get('ContainerId'),
@@ -52,6 +52,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 						baseHeight: me.HEIGHT + height,
 						width: width || me.WIDTH,
 						record: record,
+						removeOnDelete: removeOnDelete,
 						CACHE: {
 							context: Promise.resolve(context)
 						}
@@ -62,6 +63,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 						baseHeight: me.HEIGHT,
 						width: width || me.WIDTH,
 						record: record,
+						removeOnDelete: removeOnDelete,
 						CACHE: {
 							context: Promise.reject()
 						}
@@ -78,6 +80,10 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 
 
 	handleNavigation: function(e) {
+		if (this.removeOnDelete) {
+			this.record.destroyDoesNotClearListeners = true;
+		}
+
 		this.WindowActions.pushWindow(this.record, null, e, {afterClose: this.onWindowClose.bind(this)}, {course: this.course});
 	},
 

@@ -80,6 +80,27 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Post', {
 		addCommentEl: '.add-comment'
 	},
 
+
+	initComponent: function() {
+		this.callParent(arguments);
+
+		var me = this;
+
+		if (me.record && me.removeOnDelete) {
+			me.mon(me.record, 'deleted', me.onDelete, me);
+
+			this.on('destroy', function() {
+				me.record.un('deleted', me.onDelete, me);
+			});
+		}
+	},
+
+
+	onDelete: function() {
+		this.destroy();
+	},
+
+
 	beforeRender: function() {
 		this.callParent(arguments);
 
