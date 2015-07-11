@@ -416,7 +416,7 @@ Ext.define('NextThought.app.chat.Actions', {
 		sender = msg.get('Creator');
 		room = win && win.roomInfo || this.ChatStore.getRoomInfoFromSession(cid);
 		isGroupChat = room ? room.get('Occupants').length > 2 : false;
-
+		this.updateChatState(sender, 'active', win, isGroupChat);
 		if (win) {
 			win.handleMessageFromChannel(sender, msg, room, isGroupChat);
 		}
