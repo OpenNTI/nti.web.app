@@ -77,8 +77,11 @@ Ext.define('NextThought.app.chat.components.Window', {
 			'show': this.onWindowShow.bind(this)
 		});
 
+		this.ChatStore.on({
+			'presence-changed': this.presenceChanged.bind(this)
+		});
+
 		this.roomInfoChanged(this.roomInfo);
-		// this.mon(Ext.getStore('PresenceInfo'), 'presence-changed', 'presenceChanged', this);
 	},
 
 
@@ -216,8 +219,8 @@ Ext.define('NextThought.app.chat.components.Window', {
 
 	presenceChanged: function(username, value) {
 		var me = this,
-				logView = me.down('chat-log-view'),
-				entryView = me.down('chat-entry');
+			logView = me.down('chat-log-view'),
+			entryView = me.down('chat-entry');
 
 		//ignore people who aren't in the occupants list, return if we don't have the chat-log-view or chat-entry
 		if (!entryView || !logView || !Ext.Array.contains(me.roomInfo.get('Occupants'), username)) {
