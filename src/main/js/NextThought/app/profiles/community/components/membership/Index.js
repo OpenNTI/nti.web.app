@@ -70,7 +70,7 @@ Ext.define('NextThought.app.profiles.community.components.membership.Index', {
 
 		this.membersLink = entity.getLink('members');
 		this.activeEntity = entity;
-
+		this.removeAll();
 		this.loadPage(1);
 	},
 
