@@ -4,7 +4,8 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 
 	requires: [
 		'NextThought.app.chat.Actions',
-		'NextThought.app.chat.StateStore'
+		'NextThought.app.chat.StateStore',
+		'NextThought.app.account.settings'
 	],
 
 	cls: 'profile-header user-header',
@@ -61,6 +62,13 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 	},
 
 
+	afterRender: function() {
+		this.callParent(arguments);
+
+		this.mon(this.avatarContainerEl, 'click', this.maybeEditAvatar.bind(this));
+	},
+
+
 	updateUser: function(user, tabs, contact, isMe) {
 		if (!this.rendered) {
 			this.on('afterrender', this.updateUser.bind(this, user, tabs, contact));
@@ -80,6 +88,8 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 
 		this.__updateTabs(tabs);
 		this.clearButtons();
+
+		this.avatarContainerEl.removeCls('editing');
 
 		if (isMe) {
 			this.isMe = true;
@@ -102,7 +112,7 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 
 		this.__updateAbout(data);
 		this.__updateSocial(data);
-		
+
 		this.__updatePresence(presence);
 	},
 
@@ -143,7 +153,7 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 			this.positionEl.removeCls('hidden');
 			this.positionEl.update(positionString);
 		} else {
-			this.positionEl.addCls('hidden')
+			this.positionEl.addCls('hidden');
 		}
 
 		if (data.location) {
@@ -234,6 +244,8 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 		this.editSaveAction = save,
 		this.editCancelAction = cancel;
 
+		this.avatarContainerEl.addCls('editing');
+
 		this.addButton({
 			cls: 'save',
 			action: 'onEditSave',
@@ -320,5 +332,17 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 		if (!this.user || !this.rendered || username !== this.user.getId()) { return; }
 
 		this.__updatePresence(presence);
+	},
+
+
+	maybeEditAvatar: function(e) {
+		if (!e.getTarget('.editing')) {
+			return;
+		}
+
+		var win = NextThought.app.account.settings.Window.create();
+
+		win.show();
+		win.center();
 	}
 });
