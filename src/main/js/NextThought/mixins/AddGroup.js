@@ -1,6 +1,7 @@
 Ext.define('NextThought.mixins.AddGroup', {
+
 	requires: [
-		'NextThought.app.groups.Actions',
+		'NextThought.app.groups.Actions'
 	],
 
 	attachAddGroupControl: function(parent, tag) {
@@ -123,12 +124,12 @@ Ext.define('NextThought.mixins.AddGroup', {
 		e.stopPropagation();
 		this.newListInputBoxActive = true;
 
-    // Make sure nothing steals focus while the input is visible
-    input.un('blur').on('blur', function() {
-      if (input.isVisible()) {
-        input.focus(200);
-      }
-    }).focus();
+	    // Make sure nothing steals focus while the input is visible
+	    input.un('blur').on('blur', function() {
+	      if (input.isVisible()) {
+	        input.focus(200);
+	      }
+	    }).focus();
 
 		return false;
 	}
