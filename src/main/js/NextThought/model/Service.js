@@ -10,6 +10,7 @@ Ext.define('NextThought.model.Service', {
 	fields: [
 		{ name: 'Items', type: 'auto', defaultValue: {Items: []}},
 		{ name: 'Class', type: 'string', defaultValue: 'Service'},
+		{ name: 'SiteCommunity', type: 'string'},
 		{ name: 'CapabilityList', type: 'auto'}
 	],
 
