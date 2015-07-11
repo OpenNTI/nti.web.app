@@ -64,11 +64,11 @@ Ext.define('NextThought.app.groups.StateStore', {
 			contacts = flStore.getContacts();
 
 		function isMyContactFilter (item) {
-			return me.isContact(item);
+			return true;
 		}
 
 		if(!this.allContactsStore) {
-			this.allContactsStore = NextThought.store.Contacts.create({ filters: [isMyContactFilter] });
+			this.allContactsStore = NextThought.store.Contacts.create({ filters: [isMyContactFilter], trackPresence: false });
 
 			// In case the friendsList store has already been loaded, add contacts.
 			if (!Ext.isEmpty(contacts)) {

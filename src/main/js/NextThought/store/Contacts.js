@@ -7,6 +7,7 @@ Ext.define('NextThought.store.Contacts', {
 	remoteFilter: false,
 	remoteGroup: false,
 	sortOnFilter: true,
+	trackPresence: true,
 	sorters: [
 		{
 			property: 'displayName',
@@ -29,9 +30,11 @@ Ext.define('NextThought.store.Contacts', {
 			'load': this.friendsListStoreLoad.bind(this)
 		});
 
-		this.mon(this.ChatStore, {
-			'presence-changed': this.onPresenceChange.bind(this)
-		});
+		if (this.trackPresence) {
+			this.mon(this.ChatStore, {
+				'presence-changed': this.onPresenceChange.bind(this)
+			});
+		}
 	},
 
 
