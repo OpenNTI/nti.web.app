@@ -504,7 +504,14 @@ Ext.define('NextThought.editor.AbstractEditor', {
 					tabIndex: tabTracker && tabTracker.next(),
 					ownerCls: this.xtype,
 					value: me.sharingValue
+				
 				});
+				
+				if(!SharingUtils.canSharePublicly()){
+					me.sharedList.setPublished(false);
+					me.sharedList.setDisabled('disabled');
+				}
+				
 				this.on('destroy', 'destroy', me.sharedList);
 				this.mon(me.sharedList, 'cancel-indicated', function() {
 					this.fireEvent('cancel');

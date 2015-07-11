@@ -185,7 +185,7 @@ Ext.define('NextThought.common.form.fields.UserTokenField', {
 
 	togglePublish: function(e) {
 		e.stopEvent();
-		if (e.getTarget('.readOnly')) {
+		if (e.getTarget('.readOnly') || e.getTarget('.disabled')) {
 			return;
 		}
 
@@ -344,7 +344,11 @@ Ext.define('NextThought.common.form.fields.UserTokenField', {
 		this.tip.setWidth(this.getWidth());
 		this.tip.resumeLayouts(true);
 	},
-
+	
+	setDisabled: function(value){
+		var action = value ? 'addCls' : 'removeCls';
+		this.publishEl[action]('disabled');
+	},
 
 	getPublished: function() {
 		return this.publishEl ? this.publishEl.is('.on') : undefined;
