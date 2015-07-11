@@ -107,7 +107,9 @@ Ext.define('NextThought.app.contacts.components.list.Main', {
 			me = this;
 
 		this.clearError();
-		this.GroupActions.createList(this.getListName(), btn)
+		btn.setDisabled(true);
+		
+		this.GroupActions.createList(this.getListName())
 			.then( function (record) {
 				w.close();
 			})
