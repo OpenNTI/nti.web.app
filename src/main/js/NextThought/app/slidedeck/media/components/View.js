@@ -323,7 +323,8 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 				accountForScrollbars: false,
 				scrollToId: this.scrollToId,
 				video: this.video,
-				viewerContainer: this
+				viewerContainer: this,
+				currentBundle: this.currentBundle
 			});
 
 			this.viewerIdMap[viewerXType] = this.viewer.getId();
