@@ -234,9 +234,14 @@ Ext.define('NextThought.app.course.overview.Index', {
 			me.addChildRouter(me.activeMediaWindow);
 
 			me.activeMediaWindow.fireEvent('suspend-annotation-manager', this);
-			me.activeMediaWindow.on('destroy', function() {
-				if (me.activeMediaWindow) {
-					me.activeMediaWindow.fireEvent('resume-annotation-manager', this);
+			me.activeMediaWindow.on({
+				'beforedestroy': function() {
+					me.getLayout().setActiveItem(me.getLessons());
+				},
+				'destroy': function() {
+					if (me.activeMediaWindow) {
+						me.activeMediaWindow.fireEvent('resume-annotation-manager', this);
+					}
 				}
 			});
 		}
