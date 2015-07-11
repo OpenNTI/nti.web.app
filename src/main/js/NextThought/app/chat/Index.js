@@ -92,8 +92,8 @@ Ext.define('NextThought.app.chat.Index', {
 				'show': function() {
 					wait(500)
 						.then(function() {
-							if(w.down('chat-entry')) {
-								w.down('chat-entry').focus();
+							if(w.entryView && !w.entryView.disabled) {
+								w.entryView.focus();
 							}
 						});
 				}
