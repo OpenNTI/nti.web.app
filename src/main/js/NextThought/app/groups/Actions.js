@@ -312,7 +312,7 @@ Ext.define('NextThought.app.groups.Actions', {
 	},
 
 
-	createList: function(displayName, btn) {
+	createList: function(displayName, friends) {
 		if (!Service.canFriend()) {
 			Ext.Error.raise('Permission denied.  AppUser is not allowed to create lists');
 			return Promise.reject();
@@ -325,10 +325,8 @@ Ext.define('NextThought.app.groups.Actions', {
 			return Promise.reject();
 		}
 
-		btn.setDisabled(true);
-
 		return new Promise(function (fulfill, reject) {
-			me.createGroupUnguarded(displayName, username)
+			me.createGroupUnguarded(displayName, username, friends)
 				.then( function (record) {
 					fulfill(record);
 				})

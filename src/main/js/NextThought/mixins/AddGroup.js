@@ -1,4 +1,7 @@
 Ext.define('NextThought.mixins.AddGroup', {
+	requires: [
+		'NextThought.app.groups.Actions',
+	],
 
 	attachAddGroupControl: function(parent, tag) {
 		var link;
@@ -84,6 +87,7 @@ Ext.define('NextThought.mixins.AddGroup', {
 
 
 	submitNewGroup: function(groupName) {
+		this.GroupActions = NextThought.app.groups.Actions.create();
 		var input = this.addGroupDom.down('input'),
 			me = this,
 			friends = [];
@@ -98,11 +102,12 @@ Ext.define('NextThought.mixins.AddGroup', {
 		}
 
 		input.blur();
-		this.fireEvent('add-group', groupName, friends, function(success) {
-			if (!success) { input.addCls('error'); }
-			me.afterGroupAdd(groupName);
+		me.GroupActions.createList(groupName, friends)
+			.then(function(success){
+				if (!success) { input.addCls('error'); }
+				me.afterGroupAdd(groupName);
+			});
 
-		});
 		delete this.newListInputBoxActive;
 	},
 
