@@ -5,7 +5,7 @@ Ext.define('NextThought.app.profiles.user.components.Header', {
 	requires: [
 		'NextThought.app.chat.Actions',
 		'NextThought.app.chat.StateStore',
-		'NextThought.app.account.settings'
+		'NextThought.app.account.settings.Window'
 	],
 
 	cls: 'profile-header user-header',
