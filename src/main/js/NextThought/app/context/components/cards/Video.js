@@ -16,18 +16,31 @@ Ext.define('NextThought.app.context.components.cards.Video', {
 		text: '.text'
 	},
 
-	beforeRender: function(){
+	beforeRender: function() {
 		this.callParent(arguments);
 
-		var srcs = this.video && this.video.get('sources'),
-			src = srcs && srcs[0],
-			poster = src && src.poster;
-
 		this.renderData = Ext.applyIf(this.renderData || {}, {
-			poster: poster,
 			title: this.video.get('title')
 		});
 	},
 
-	setContent: function() {}
+
+	afterRender: function() {
+		this.callParent(arguments);
+
+		this.setPoster();
+
+		this.mon(this.video, 'resolved-poster', this.setPoster.bind(this));
+	},
+
+	setContent: function() {},
+
+
+	setPoster: function() {
+		if (!this.imageEl) { return; }
+
+		var poster = this.video.get('poster');
+
+		this.imageEl.dom.setAttribute('src', poster);
+	}
 });
