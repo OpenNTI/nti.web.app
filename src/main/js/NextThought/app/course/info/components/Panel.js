@@ -17,8 +17,6 @@ Ext.define('NextThought.app.course.info.components.Panel', {
 		var toAdd = [],
 			infoCmp = this.up('course-info');
 
-		debugger;
-
 		if (!Ext.isObject(content)) {
 			if (Ext.isString(content)) {
 				Service.getPageInfo(
