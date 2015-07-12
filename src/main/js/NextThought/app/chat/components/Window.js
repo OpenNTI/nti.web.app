@@ -328,13 +328,9 @@ Ext.define('NextThought.app.chat.components.Window', {
 
 		if (inputStates.length > 0) {
 			this.logView.showInputStateNotifications(inputStates);
-
-			// NOTE: if the user is typing that means he is active.
-			if (!wasPreviouslyInactive) { return; }
-			state = 'active';
 		}
 
-		this.updateDisplayState(sender, state, isGroupChat);
+		this.updateDisplayState(sender, state === 'inactive' ? state : 'active' , isGroupChat);
 	},
 
 
