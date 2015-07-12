@@ -2371,15 +2371,45 @@
 			}
 		}
 
-		&:not(.two-column) {
+		&.two-column {
+			.entry:nth-of-type(2n) {
+				margin-right: 0;
+			}
+		}
+		
+		&.three-column {
 			.entry:nth-of-type(3n) {
 				margin-right: 0;
 			}
 		}
-
-		&.two-column {
-			.entry:nth-of-type(2n) {
+		
+		&.four-column {
+			.entry {
+				width: 238px;
+			}
+			.entry:nth-of-type(4n) {
 				margin-right: 0;
+			}
+		}
+		
+		&.communities {
+			.entry {
+				vertical-align: top;
+				.avatar {
+					width: 100%;
+				}
+				.name {
+					width: 100%;
+					margin-left: 9px;
+				}
+			}
+			&.four-column {
+				.entry {
+					height: 204px;
+					.avatar {
+						height: 131px;
+					}
+				}
 			}
 		}
 	}

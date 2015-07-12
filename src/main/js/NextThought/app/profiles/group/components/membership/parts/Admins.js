@@ -2,7 +2,7 @@ Ext.define('NextThought.app.profiles.group.components.membership.parts.Admins', 
 	extend: 'NextThought.app.profiles.group.components.membership.parts.Users',
 	alias: 'widget.profile-group-membership-administrators',
 
-	cls: 'memberships full group admin',
+	cls: 'memberships full group admin four-column',
 	title: 'Administrators',
 
 

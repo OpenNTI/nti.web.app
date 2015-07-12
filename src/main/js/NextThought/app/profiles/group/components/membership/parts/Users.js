@@ -2,7 +2,7 @@ Ext.define('NextThought.app.profiles.group.components.membership.parts.Users', {
 	extend: 'NextThought.app.profiles.user.components.membership.parts.Membership',
 	alias: 'widget.profile-group-membership-users',
 
-	cls: 'memberships full group',
+	cls: 'memberships full group four-column',
 	title: 'Members',
 	profileRouteRoot: '/user',
 

@@ -2,7 +2,7 @@ Ext.define('NextThought.app.profiles.user.components.membership.parts.Communitie
 	extend: 'NextThought.app.profiles.user.components.membership.parts.Membership',
 	alias: 'widget.profile-user-membership-communities',
 
-	cls: 'memberships full communities',
+	cls: 'memberships full communities four-column',
 	title: 'Communities',
 	profileRouteRoot: '/community',
 
