@@ -9,7 +9,7 @@ Ext.define('NextThought.controller.Application', {
 	launchToken: {timeout: 3600000},//hour
 
 	load: function(app) {
-		debugger;
+		// debugger;
 	},
 
 	init: function() {
