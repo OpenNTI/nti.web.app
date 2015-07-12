@@ -14,8 +14,10 @@ Ext.define('NextThought.app.chat.transcript.Window', {
 		'NextThought.app.windows.Actions',
 		'NextThought.app.chat.transcript.Main',
 		'NextThought.app.chat.Gutter',
+		'NextThought.app.chat.Actions',
 		'NextThought.app.chat.StateStore',
 		'NextThought.model.Transcript',
+		'NextThought.model.MessageInfo',
 		'NextThought.util.Parsing'
 	],
 
@@ -34,8 +36,8 @@ Ext.define('NextThought.app.chat.transcript.Window', {
 			this.insertTranscript(this.record);
 			this.remove(this.loadingCmp);
 		} else {
-			Service.request( this.record.getLink('transcript'))
-				.then(function(value){
+			Service.request(this.record.getLink('transcript'))
+				.then(function(value) {
 					return ParseUtils.parseItems(value)[0];
 				})
 				.then(this.insertTranscript.bind(this))

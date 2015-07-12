@@ -4,13 +4,31 @@ Ext.define('NextThought.app.search.components.results.ChatResult', {
 
 	requires: ['NextThought.app.chat.Actions'],
 
+
+	initComponent: function() {
+		this.callParent(arguments);
+
+		this.ChatActions = NextThought.app.chat.Actions.create();
+	},
+
 	setCreator: function(user) {
-		var creator = 'Sent By ' + user.getName();
+		if (!this.rendered) {
+			this.on('afterrender', this.setCreator.bind(this, user));
+			return;
+		}
+
+		var creator = 'Sent By ' + user.getName(),
+			avatarEl = this.el.down('.avatar-container');
 
 		this.renderData.creator = creator;
 
 		if (this.rendered) {
 			this.creatorEl.update(creator);
+		}
+
+		if (!isMe(user) && avatarEl) {
+			avatarEl.removeCls('hidden');
+			avatarEl.dom.innerHTML = NTIFormat.avatar(user);
 		}
 	},
 
@@ -41,6 +59,22 @@ Ext.define('NextThought.app.search.components.results.ChatResult', {
 				}
 
 				me.titleEl.update(title);
+			});
+
+		//Kick this off so its faster on click
+		me.onLoadTranscript = me.ChatActions.loadTranscript(record.get('ContainerId'));
+	},
+
+
+	clicked: function(e) {
+		var me = this,
+			hitId = this.hit.get('NTIID');
+
+		hitId = ParseUtils.encodeForURI(hitId);
+
+		me.onLoadTranscript
+			.then(function(transcript) {
+				me.pushWindow(transcript, hitId, me.el);
 			});
 	}
 });

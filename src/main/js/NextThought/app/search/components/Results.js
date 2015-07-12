@@ -7,7 +7,9 @@ Ext.define('NextThought.app.search.components.Results', {
 		'NextThought.app.search.components.results.ChatResult',
 		'NextThought.app.search.components.results.ForumResult',
 		'NextThought.app.search.components.results.TranscriptResult',
-		'NextThought.app.navigation.path.Actions'
+		'NextThought.app.search.components.results.HighlightResult',
+		'NextThought.app.navigation.path.Actions',
+		'NextThought.app.windows.Actions'
 	],
 
 	TYPE_TO_CLS: {
@@ -29,6 +31,7 @@ Ext.define('NextThought.app.search.components.Results', {
 	initComponent: function() {
 		this.callParent(arguments);
 		this.PathActions = NextThought.app.navigation.path.Actions.create();
+		this.WindowActions = NextThought.app.windows.Actions.create();
 	},
 
 
@@ -66,7 +69,8 @@ Ext.define('NextThought.app.search.components.Results', {
 			hit: hit,
 			typeCls: cls,
 			navigateToSearchHit: this.navigateToSearchHit.bind(this),
-			getPathToObject: this.PathActions.getPathToObject.bind(this.PathActions)
+			getPathToObject: this.PathActions.getPathToObject.bind(this.PathActions),
+			pushWindow: this.WindowActions.pushWindow.bind(this.WindowActions)
 		};
 	},
 

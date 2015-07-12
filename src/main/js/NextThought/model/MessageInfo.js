@@ -6,6 +6,8 @@ Ext.define('NextThought.model.MessageInfo', {
 		bodyContent: 'NextThought.mixins.ModelWithBodyContent'
 	},
 
+	addMimeTypeToRoute: true,
+
 	fields: [
 		{ name: 'inReplyTo', type: 'string' },
 		{ name: 'Status', type: 'string' },

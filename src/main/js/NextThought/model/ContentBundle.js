@@ -124,7 +124,7 @@ Ext.define('NextThought.model.ContentBundle', {
 
 	getIconImage: function() {
 		return this.onceAssetsLoaded
-			.then(this.get.bind(this, 'icom'));
+			.then(this.get.bind(this, 'icon'));
 	},
 
 

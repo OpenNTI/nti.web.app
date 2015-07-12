@@ -22,11 +22,12 @@ Ext.define('NextThought.app.search.components.results.Base', {
 		{tag: 'span', cls: 'list-item creator', html: '{creator}'},
 		{cls: 'fragments', cn: [
 			{tag: 'tpl', 'for': 'fragments', cn: [
+				{cls: 'avatar-container hidden'},
 				{cls: 'fragment', ordinal: '{#}', html: '{.}'}
 			]}
 		]},
 		{cls: 'meta', cn: [
-			{cls: 'root-icon'},
+			{cls: 'root-icon hidden'},
 			{cls: 'path'}
 		]}
 	]),
@@ -67,6 +68,10 @@ Ext.define('NextThought.app.search.components.results.Base', {
 			hit = me.hit,
 			name = hit.get('Creator');
 
+		if (isMe(name)) {
+			this.addCls('me');
+		}
+
 		if (name === this.SYSTEM_CREATOR) {
 			me.renderData.creator === '';
 		} else if (name) {
@@ -81,7 +86,6 @@ Ext.define('NextThought.app.search.components.results.Base', {
 		if (!me.renderData.title) {
 			me.getObject
 				.then(function(obj) {
-					
 					me.setTitle(obj);
 					me.hitRecord = obj;
 
@@ -120,7 +124,8 @@ Ext.define('NextThought.app.search.components.results.Base', {
 			return;
 		}
 
-		var root = path[0],
+		var me = this,
+			root = path[0],
 			labels;
 
 		labels = path.map(function(x) {
@@ -131,7 +136,15 @@ Ext.define('NextThought.app.search.components.results.Base', {
 			}
 		}).filter(function(x) { return !! x; });
 
-		this.pathTpl.append(this.pathEl, {labels: labels});
+		me.pathTpl.append(me.pathEl, {labels: labels});
+
+		if (root && root.getIconImage) {
+			root.getIconImage()
+				.then(function(src) {
+					me.rootIconEl.removeCls('hidden');
+					me.rootIconEl.setStyle({backgroundImage: 'url(' + src + ')'});
+				});
+		}
 	},
 
 
