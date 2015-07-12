@@ -58,8 +58,8 @@ Ext.define('NextThought.app.search.SearchBar', {
 		this.callParent(arguments);
 
 		this.mon(this.inputEl, {
-			focus: this.onInputFocus.bind(this),
-			blur: this.onInputBlur.bind(this),
+			// focus: this.onInputFocus.bind(this),
+			// blur: this.onInputBlur.bind(this),
 			keypress: this.keyPressed.bind(this),
 			keydown: this.keyDown.bind(this)
 		});
@@ -123,11 +123,10 @@ Ext.define('NextThought.app.search.SearchBar', {
 
 
 	searchClicked: function(e) {
-		if (this.isFocused) {
-			e.stopPropagation();
-			this.doSearch();
-			this.doNavigation();
-		}
+		e.stopPropagation();
+
+		this.doSearch();
+		this.doNavigation();
 	},
 
 

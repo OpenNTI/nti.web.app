@@ -100,9 +100,11 @@ Ext.define('NextThought.app.navigation.Index', {
 		if (config && config.cmp) {
 			this.__renderNavCmp(config.cmp);
 			this.removeCls('no-nav');
+			this.searchCmp.isActive = true;
 		} else {
 			this.__removeNavCmp();
 			this.addCls('no-nav');
+			this.searchCmp.isActive = false;
 		}
 
 		if (config && config.hideBranding) {

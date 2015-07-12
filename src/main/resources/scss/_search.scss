@@ -287,10 +287,20 @@
 		.search-icon {
 			top: 0; right: 0;
 			height: 36px;
-			width: 25px;
+			width: 35px;
 			cursor: pointer;
+			background-color: white;
+			border-left: 1px solid #e7e7e7;
 
-			@include icon('rhp-search', $position: absolute, $top: 9px, $left: 0);
+			@include icon('rhp-search', $side: after, $position: absolute, $top: 8px, $left: 9px);
+
+			&::after {
+				opacity: 0.7;
+			}
+
+			&:hover::after {
+				opacity: 1;
+			}
 		}
 	}
 }
