@@ -11,6 +11,10 @@ Ext.define('NextThought.mixins.ProfileLinks', function() {
 			profileUrl = u.getProfileUrl && u.getProfileUrl();
 
 		if(profileUrl){
+			if (this instanceof NextThought.app.account.contacts.management.Popout) {
+				wait()
+					.then(this.destroy.bind(this));
+			}
 			NextThought.app.navigation.Actions.pushRootRoute(u.getName(), u.getProfileUrl(), {
 				user: u
 			});
