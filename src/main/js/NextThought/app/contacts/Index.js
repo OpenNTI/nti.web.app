@@ -176,6 +176,8 @@ Ext.define('NextThought.app.contacts.Index', {
 			cmp: this.getNavigation(),
 			hideBranding: true
 		});
+
+		this.NavigationActions.setActiveContent(null);
 	},
 
 
