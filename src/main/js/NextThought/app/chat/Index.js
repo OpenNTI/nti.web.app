@@ -10,7 +10,8 @@ Ext.define('NextThought.app.chat.Index', {
 		'NextThought.app.chat.StateStore',
 		'NextThought.app.chat.Actions',
 		'NextThought.app.chat.Gutter',
-		'NextThought.app.chat.transcript.Window'
+		'NextThought.app.chat.transcript.Window',
+		'NextThought.app.chat.components.Window'
 	],
 
 	items: [],
