@@ -105,7 +105,9 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 	onStoreEventsAdd: function(store, records) {
 		var cmps = this.MediaViewerStore.getComponentsForStore(store.containerId);
 		Ext.each(cmps, function(c) {
-			this.fireEvent('register-records', store, records, c);
+			if(c.isVisible(true)){
+				this.fireEvent('register-records', store, records, c);
+			}
 		});
 	},
 
@@ -113,7 +115,9 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 	onStoreEventsRemove: function(store, records) {
 		var cmps = this.MediaViewerStore.getComponentsForStore(store.containerId);
 		Ext.each(cmps, function(c) {
-			this.fireEvent('unregister-records', store, records, c);
+			if(c.isVisible(true)){
+				this.fireEvent('unregister-records', store, records, c);
+			}
 		});
 	},
 
