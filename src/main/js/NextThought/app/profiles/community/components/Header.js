@@ -71,6 +71,8 @@ Ext.define('NextThought.app.profiles.community.components.Header', {
 		if (this.settingsMenu) {
 			Ext.destroy(this.settingsMenu);
 		}
+		
+		return;
 
 		var show = community.getLink('unhide'),
 			hide = community.getLink('hide'),
