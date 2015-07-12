@@ -143,13 +143,9 @@ Ext.define('NextThought.app.content.content.Index', {
 
 		ntiid = ParseUtils.decodeFromURI(ntiid);
 
-		if (ntiid === this.root) {
-			return this.showRoot(route, subRoute);
-		}
-
 		return this.__loadContent(ntiid, obj)
 			.then(function(page) {
-				me.showReader(page, route.precache.parent, route, route.hash);
+				me.showReader(page, route.precache.parent, route.hash);
 			});
 	},
 
