@@ -9,6 +9,8 @@ Ext.define('NextThought.app.chat.components.Window', {
 		// 'NextThought.view.chat.Gutter' //,
 		// 'NextThought.view.chat.WindowManager'
 	],
+	
+	activeStates: ['active', 'composing', 'paused'],
 
 	cls: 'chat-window no-gutter',
 	ui: 'chat-window',
@@ -333,7 +335,7 @@ Ext.define('NextThought.app.chat.components.Window', {
 			this.logView.showInputStateNotifications(inputStates);
 		}
 
-		this.updateDisplayState(sender, state === 'inactive' ? state : 'active' , isGroupChat);
+		this.updateDisplayState(sender, Ext.Array.contains(this.activeStates, state) ? 'active' : state , isGroupChat);
 	},
 
 
