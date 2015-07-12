@@ -210,6 +210,7 @@ Ext.define('NextThought.view.content.reader.Content', {
 		ntiid = reader.getLocation().NTIID;
 
 		doc.getElementById('NTIContent').setAttribute('data-page-ntiid', ntiid);
+		this.adjustNTIIDLinks(doc);
 
 		me.fireEvent('set-content', reader, doc, assessmentItems, pageInfo);
 
@@ -222,7 +223,35 @@ Ext.define('NextThought.view.content.reader.Content', {
 
 		Ext.callback(finish, null, [reader]);
 	},
-
+	
+	//We would like all links to be both clickable in the app and right clickable to open in a
+	//new tab.  However we can't really hijack the context menu or cntlclicking and by default
+	//doing that on ntiids is just going to barf in the new tab.  So rewrite ntiid based links here
+	//in a way that the browsers native handling can process them (basically going out and coming back in)
+	//however we decorate the links such that our click handler to handle links internally can
+	//act as they always had.
+	adjustNTIIDLinks: function(doc){
+		var links = doc.querySelectorAll('a[href^="tag:nextthought.com"]');
+		Ext.Array.each(links, function(l){
+			var link = Ext.fly(l),
+				ntiid = ParseUtils.parseNTIID(link.getAttribute('href') || ''),
+				type, provider, typeSpecific, externalLink;
+			if(ntiid){
+				type = ntiid.specific.type;
+				provider = ntiid.specific.provider;
+				typeSpecific = ntiid.specific.typeSpecific;
+				if(type && provider && typeSpecific){
+					externalLink = Ext.String.format('/app/#!{0}/{1}/{2}', type, provider, typeSpecific);
+					if(externalLink){
+						link.set({
+							'data-internal-nav-href': ntiid.toString(),
+							'href': externalLink
+						});
+					}
+				}
+			}
+		});
+	},
 
 	buildPath: function(s) {
 		var p = (s || '').split('/'); p.splice(-1, 1, '');
@@ -322,7 +351,7 @@ Ext.define('NextThought.view.content.reader.Content', {
 	onClick: function(e, el) {
 		e.stopEvent();
 		var m = this,
-			r = el.href,
+			r = el.getAttribute('data-internal-nav-href') || el.href,
 			p = el.getAttribute('data-presentation'),
 			hash = r.split('#'),
 			target = hash[1],
