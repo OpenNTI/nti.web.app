@@ -184,19 +184,34 @@ Ext.define('NextThought.app.contentviewer.reader.Scroll', {
 			n = n.parentNode;
 		}
 
-		var el = this.scrollingEl,
-			offsets = (el && el.getScroll()) || {top: 0, left: 0},
-			o = Ext.fly(n).getY() - offsets.top,
-			st = el && el.getScroll().top,
-			h = el && el.getHeight(),
-			b = st + h - (bottomThreshold || 0);
+		var readerOffsets = this.reader.getAnnotationOffsets().rect,
+			el = this.scrollingEl.dom,
+			scrollOffsets = el ? {top: el.scrollTop, left: el.scrollLeft} : {top: 0, left: 0},
+			nodeRect = n.getBoundingClientRect(),
+			nodeTop = nodeRect.top - readerOffsets.top,
+			viewHeight = Ext.Element.getViewportHeight();
 
-		//logic to halt scrolling if conditions mentioned in function docs are met.
-		if (onlyIfNotVisible && o > st && o < b) {
+		if (onlyIfNotVisible && nodeTop > scrollOffsets.top && nodeTop < viewHeight) {
 			return;
 		}
 
-		this.to(o - (verticalOffset || 0) - 10);
+		this.to(nodeTop - (verticalOffset || 0) - 10);
+
+
+
+		// var el = this.scrollingEl,
+		// 	offsets = (el && el.getScroll()) || {top: 0, left: 0},
+		// 	o = Ext.fly(n).getY() - offsets.top,
+		// 	st = el && el.getScroll().top,
+		// 	h = el && el.getHeight(),
+		// 	b = st + h - (bottomThreshold || 0);
+
+		// //logic to halt scrolling if conditions mentioned in function docs are met.
+		// if (onlyIfNotVisible && o > st && o < b) {
+		// 	return;
+		// }
+
+		// this.to(o - (verticalOffset || 0) - 10);
 	},
 
 

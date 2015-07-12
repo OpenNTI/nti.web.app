@@ -127,15 +127,37 @@ Ext.define('NextThought.app.contentviewer.navigation.TableOfContents', {
 		this.onSelect(record);
 	},
 
+	HASH_REGEX: /#/,
+
+
+	__findPageNode: function(node) {
+		if (!node || node.tagName === 'toc') {
+			return node;
+		}
+
+		var href = node && node.getAttribute('href');
+
+		if (this.HASH_REGEX.test(href)) {
+			return this.__findPageNode(node.parentNode);
+		}
+
+		return node;
+	},
+
 
 	onSelect: function(record) {
-		var id = record.get('NTIID');
+		var node = record.get('tocNode'),
+			pageNode = this.__findPageNode(node),
+			href = node.getAttribute('href'),
+			id = pageNode && pageNode.getAttribute('ntiid');
 
 		id = ParseUtils.encodeForURI(id);
 
-		this.hide();
+		if (node !== pageNode && this.HASH_REGEX.test(href)) {
+			id += '#' + href.split('#')[1];
+		}
 
-		this.doNavigation(record.get('label'), id);
+		this.doNavigation(pageNode.getAttribute('label'), id);
 	},
 
 

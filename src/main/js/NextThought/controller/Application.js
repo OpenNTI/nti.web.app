@@ -110,6 +110,10 @@ Ext.define('NextThought.controller.Application', {
 			path += window.location.search;
 		}
 
+		if (hash) {
+			path += hash;
+		}
+
 		return this.handleRoute(document.title, path);
 	},
 
@@ -127,23 +131,23 @@ Ext.define('NextThought.controller.Application', {
 			id = parts[2];//#!library, available courses, id
 			id = B64.decodeURLFriendly(id);
 			path = '/library/catalog/courses/';
-		} else if (this.NOTIFICATIONS_FRAG_ROUTE.test(fragment)){
-			path = '/notifications'
-		} else if (this.HTML_FRAG_ROUTE.test(fragment)){
-			path = '/id/'
-			id = ParseUtils.parseNtiFragment(fragment)
+		} else if (this.NOTIFICATIONS_FRAG_ROUTE.test(fragment)) {
+			path = '/notifications';
+		} else if (this.HTML_FRAG_ROUTE.test(fragment)) {
+			path = '/id/';
+			id = ParseUtils.parseNtiFragment(fragment);
 		} else {
 			console.error('Fragement route we dont know how to handle.', fragment);
 		}
 
-		if(id){
+		if (id) {
 			id = ParseUtils.encodeForURI(id);
 			path += id;
 		}
 
 		return this.handleRoute(document.title, path);
 	},
-	
+
 	__shouldMark: function(route) {
 		if (!route) { return false; }
 
@@ -218,22 +222,36 @@ Ext.define('NextThought.controller.Application', {
 	__mergeRoute: function(route) {
 		route = Globals.trimRoute(route);
 
-		var parts = route.split('?'),
-			queryString = parts[1];
+		var a = document.createElement('a'),
+			hash, search, pathname;
 
-		route = Globals.trimRoute(parts[0]);
+		route = Globals.trimRoute(route);
 
 		if (route) {
-			route = '/' + this.APP_ROOT + '/' + route + '/';
+			route = '/' + this.APP_ROOT + '/' + route;
 		} else {
-			route = '/' + this.APP_ROOT + '/';
+			route = '/' + this.APP_ROOT;
 		}
 
-		if (queryString) {
-			route += '?' + queryString;
+		a.href = route;
+
+		hash = a.hash;
+		search = a.search;
+		pathname = a.pathname;
+
+		pathname = Globals.trimRoute(pathname);
+
+		pathname = '/' + pathname + '/';
+
+		if (search) {
+			pathname += search;
 		}
 
-		return route;
+		if (hash) {
+			pathname += hash;
+		}
+
+		return pathname;
 	},
 
 

@@ -313,14 +313,14 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 	},
 
 
-	setPageInfo: function(pageInfo, bundle) {
+	setPageInfo: function(pageInfo, bundle, fragment) {
 		if (!this.rendered) {
-			this.on('afterrender', this.setPageInfo.bind(this, pageInfo, bundle));
+			this.on('afterrender', this.setPageInfo.bind(this, pageInfo, bundle, fragment));
 			return;
 		}
 
 		if (!this.iframeReady) {
-			this.getIframe().on('iframe-ready', this.setPageInfo.bind(this, pageInfo, bundle), this, {single: true});
+			this.getIframe().on('iframe-ready', this.setPageInfo.bind(this, pageInfo, bundle, fragment), this, {single: true});
 			return;
 		}
 
@@ -339,6 +339,14 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 
 				me.isReadyForSearch = true;
 				me.fireEvent('ready-for-search');
+
+				if (fragment) {
+					//give everything a chance to settle
+					me.getIframe().onceSettled()
+						.then(function() {
+							me.getScroll().toSelector('#' + fragment);
+						});
+				}
 			});
 	},
 
@@ -365,8 +373,7 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 			function success(resp) {
 				me.beginViewAnalytics();
 				me.splash.hide();
-				me.getContent().setContent(resp, pageInfo.get('AssessmentItems'));
-				fulfill();
+				me.getContent().setContent(resp, pageInfo.get('AssessmentItems'), fulfill);
 			}
 
 			function failure(r) {

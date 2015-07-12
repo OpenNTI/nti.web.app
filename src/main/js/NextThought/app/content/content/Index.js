@@ -83,7 +83,7 @@ Ext.define('NextThought.app.content.content.Index', {
 	},
 
 
-	showReader: function(page, parent) {
+	showReader: function(page, parent, hash) {
 		if (!this.rendered) {
 			this.on('afterrender', this.showReader.bind(this, page));
 			return;
@@ -112,7 +112,8 @@ Ext.define('NextThought.app.content.content.Index', {
 			pageSource: pageSource,
 			bundle: this.currentBundle,
 			handleNavigation: this.handleNavigation.bind(this),
-			navigateToObject: this.navigateToObject && this.navigateToObject.bind(this)
+			navigateToObject: this.navigateToObject && this.navigateToObject.bind(this),
+			fragment: hash
 		});
 
 		this.setTitle(page.get('label'));
@@ -142,9 +143,13 @@ Ext.define('NextThought.app.content.content.Index', {
 
 		ntiid = ParseUtils.decodeFromURI(ntiid);
 
+		if (ntiid === this.root) {
+			return this.showRoot(route, subRoute);
+		}
+
 		return this.__loadContent(ntiid, obj)
 			.then(function(page) {
-				me.showReader(page, route.precache.parent);
+				me.showReader(page, route.precache.parent, route, route.hash);
 			});
 	},
 
@@ -172,8 +177,12 @@ Ext.define('NextThought.app.content.content.Index', {
 
 
 	showRoot: function(route, subRoute) {
+		var me = this;
+
 		return Service.getPageInfo(this.root)
-			.then(this.showReader.bind(this))
+			.then(function(pageInfo) {
+				me.showReader(pageInfo, null, route.hash);
+			})
 			.fail(this.__onFail.bind(this));
 	},
 

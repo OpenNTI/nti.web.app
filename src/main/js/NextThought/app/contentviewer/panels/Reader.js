@@ -236,7 +236,7 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 
 		//the reader might not be defined if we are in a timed assignment
 		if (reader) {
-			reader.setPageInfo(pageInfo, bundle);
+			reader.setPageInfo(pageInfo, bundle, this.fragment);
 		}
 	},
 
