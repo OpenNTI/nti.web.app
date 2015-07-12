@@ -37,7 +37,7 @@ Ext.define('NextThought.app.account.identity.components.Settings', {
 		this.AccountActions = NextThought.app.account.Actions.create();
 		this.LoginActions = NextThought.login.Actions.create();
 
-		items.push({xtype: 'account-menuitem'});
+		items.push({xtype: 'account-menuitem', setMenuClosed: this.setMenuClosed.bind(this)});
 
 		if (Service.canChat()) {
 			items.push({xtype: 'presence-menu'});

@@ -14,6 +14,9 @@ Ext.define('NextThought.mixins.ProfileLinks', function() {
 			if (this instanceof NextThought.app.account.contacts.management.Popout) {
 				wait()
 					.then(this.destroy.bind(this));
+			}else if (this instanceof NextThought.app.account.identity.components.MenuItem){
+				wait()
+					.then(this.setMenuClosed.bind(this));
 			}
 			NextThought.app.navigation.Actions.pushRootRoute(u.getName(), u.getProfileUrl(), {
 				user: u

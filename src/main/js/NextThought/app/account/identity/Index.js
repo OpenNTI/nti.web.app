@@ -30,7 +30,7 @@ Ext.define('NextThought.app.account.identity.Index', {
 			user: $AppConfig.userObject
 		});
 
-		this.menu = Ext.widget({xtype: 'settings-menu', ownerCt: this});
+		this.menu = Ext.widget({xtype: 'settings-menu', ownerCt: this, setMenuClosed: this.setMenuClosed.bind(this)});
 
 		this.on('destroy', 'destroy', this.menu);
 		this.monitorUser($AppConfig.userObject);
