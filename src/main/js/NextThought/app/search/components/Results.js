@@ -10,15 +10,16 @@ Ext.define('NextThought.app.search.components.Results', {
 		'NextThought.app.navigation.path.Actions'
 	],
 
-	TYPE_TO_LABEL: {
-		'note': 'Note',
-		'videotranscript': 'Video',
-		'communityheadlinepost': 'Topic',
-		'generalforumcomment': 'Topic Comment',
-		'messageinfo': 'Chat',
-		'personalblogentrypost': 'Thought',
-		'personalblogcomment': 'Thought Comment',
-		'bookcontent': 'Reading'
+	TYPE_TO_CLS: {
+		'note': 'note',
+		'videotranscript': 'video',
+		'forums-communityheadlinepost': 'topic',
+		'forums-generalforumcomment': 'topic-comment',
+		'messageinfo': 'chat',
+		'forum-personalblogentrypost': 'thought',
+		'forum-personalblogcomment': 'thought-comment',
+		'bookcontent': 'reading',
+		'highlight': 'highlight'
 	},
 
 	layout: 'none',
@@ -53,7 +54,7 @@ Ext.define('NextThought.app.search.components.Results', {
 	mapHitToCmp: function(hit) {
 		var type = 'search-result',
 			part = this.getMimePart(hit.get('TargetMimeType')),
-			label = this.TYPE_TO_LABEL[part],
+			cls = this.TYPE_TO_CLS[part],
 			xtype = 'search-result-' + part;
 
 		if (!Ext.isEmpty(Ext.ClassManager.getNameByAlias('widget.' + xtype))) {
@@ -63,7 +64,7 @@ Ext.define('NextThought.app.search.components.Results', {
 		return {
 			xtype: type,
 			hit: hit,
-			label: label,
+			typeCls: cls,
 			navigateToSearchHit: this.navigateToSearchHit.bind(this),
 			getPathToObject: this.PathActions.getPathToObject.bind(this.PathActions)
 		};

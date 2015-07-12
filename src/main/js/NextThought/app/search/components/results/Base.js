@@ -10,22 +10,32 @@ Ext.define('NextThought.app.search.components.results.Base', {
 		'NextThought.util.Search'
 	],
 
+	pathTpl: new Ext.XTemplate(Ext.DomHelper.markup({
+		tag: 'tpl', 'for': 'labels', cn: [
+			{tag: 'span', cls: 'list-item{[values.cls ? " " + values.cls : ""]}', html: '{label}'}
+		]
+	})),
+
+
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'title', html: '{title}'},
+		{tag: 'span', cls: 'list-item creator', html: '{creator}'},
 		{cls: 'fragments', cn: [
 			{tag: 'tpl', 'for': 'fragments', cn: [
 				{cls: 'fragment', ordinal: '{#}', html: '{.}'}
 			]}
 		]},
 		{cls: 'meta', cn: [
-			{tag: 'span', cls: 'list-item type', html: '{label}'},
-			{tag: 'span', cls: 'list-item creator', html: '{creator}'}
+			{cls: 'root-icon'},
+			{cls: 'path'}
 		]}
 	]),
 
 
 	renderSelectors: {
 		titleEl: '.title',
+		rootIconEl: '.root-icon',
+		pathEl: '.path',
 		creatorEl: '.creator'
 	},
 
@@ -57,20 +67,12 @@ Ext.define('NextThought.app.search.components.results.Base', {
 			hit = me.hit,
 			name = hit.get('Creator');
 
-		if (isMe(name)) {
-			me.renderData.name = getString('NextThought.view.menus.search.Result.me');
-		} else if (name === this.SYSTEM_CREATOR) {
-			me.renderData.name === '';
+		if (name === this.SYSTEM_CREATOR) {
+			me.renderData.creator === '';
 		} else if (name) {
 			UserRepository.getUser(name)
 				.then(function(user) {
-					var creator = 'By ' + user.getName();
-
-					me.renderData.name = creator;
-
-					if (me.rendered) {
-						me.createEl.update(creator);
-					}
+					me.setCreator(user);
 				});
 		}
 
@@ -79,13 +81,9 @@ Ext.define('NextThought.app.search.components.results.Base', {
 		if (!me.renderData.title) {
 			me.getObject
 				.then(function(obj) {
-					var title = obj.get('title');
-
-					me.renderData.title = title;
-
-					if (me.rendered) {
-						me.titleEl.update(title);
-					}
+					
+					me.setTitle(obj);
+					me.hitRecord = obj;
 
 					me.getPathToObject(obj)
 						.then(me.showBreadCrumb.bind(me));
@@ -94,7 +92,47 @@ Ext.define('NextThought.app.search.components.results.Base', {
 	},
 
 
-	showBreadCrumb: function() {},
+	setCreator: function(user) {
+		var creator = 'By ' + user.getName();
+
+		this.renderData.creator = creator;
+
+		if (this.rendered) {
+			this.creatorEl.update(creator);
+		}
+	},
+
+
+	setTitle: function(record) {
+		var title = record.get('title');
+
+		this.renderData.title = title;
+
+		if (this.rendered) {
+			this.titleEl.update(title);
+		}
+	},
+
+
+	showBreadCrumb: function(path) {
+		if (!this.rendered) {
+			this.on('afterrender', this.showBreadCrumb.bind(this, path));
+			return;
+		}
+
+		var root = path[0],
+			labels;
+
+		labels = path.map(function(x) {
+			if (x.getTitle) {
+				return {
+					label: x.getTitle()
+				};
+			}
+		}).filter(function(x) { return !! x; });
+
+		this.pathTpl.append(this.pathEl, {labels: labels});
+	},
 
 
 	wrapFragmentHits: function() {
@@ -136,6 +174,10 @@ Ext.define('NextThought.app.search.components.results.Base', {
 
 	afterRender: function() {
 		this.callParent(arguments);
+
+		if (this.typeCls) {
+			this.addCls(this.typeCls);
+		}
 
 		this.mon(this.el, 'click', this.clicked.bind(this));
 	},

@@ -301,6 +301,11 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
+	getIconImage: function() {
+		return this.get('Bundle').getIconImage();
+	},
+
+
 	getPublicScope: function() { return this.getScope('Public'); },
 	getRestrictedScope: function() { return this.getScope('Restricted'); },//i don't think this is used
 

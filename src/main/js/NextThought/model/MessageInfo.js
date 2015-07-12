@@ -11,7 +11,8 @@ Ext.define('NextThought.model.MessageInfo', {
 		{ name: 'Status', type: 'string' },
 		{ name: 'body', type: 'auto', defaultValue: [''] },
 		{ name: 'channel', type: 'string' },
-		{ name: 'recipients', type: 'auto' }
+		{ name: 'recipients', type: 'auto' },
+		{ name: 'sharedWith', type: 'auto'}
 	],
 
   hasBeenModerated: function() {

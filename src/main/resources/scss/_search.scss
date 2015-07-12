@@ -18,7 +18,7 @@
 .search-results {
 
 	.search-result, .control-item {
-		background-color: white;
+		background-color: #fafafa;
 		margin-bottom: 10px;
 	}
 
@@ -52,22 +52,84 @@
 	}
 
 	.search-result {
-		padding: 10px;
+		padding: 15px 85px 25px 79px;
+
+		&.video {
+			@include icon('search-video', $top: 18px, $left: 50px);
+		}
+
+		&.reading {
+			@include icon('search-reading', $top: 18px, $left: 50px);
+		}
+
+		&.topic, &.note, &.topic-comment, &.thought, &.thought-comment, &.chat {
+			@include icon('comment-small-dark_hover', $top: 18px, $left: 50px);
+		}
+
+		&.highlight {
+			@include icon('search-highlight', $top: 18px, $left: 50px);
+		}
+
+		&.topic-comment {
+			.title {
+				margin-bottom: 20px;
+			}
+			.creator {
+				display: none;
+			}
+		}
 
 		.title {
+			color: $secondary-grey;
+			font-size: 1.125em;
+			line-height: 1.34em;
+		}
+
+		.creator {
+			font-size: 0.625em;
+			font-weight: 600;
+			text-transform: uppercase;
 			color: $primary-blue;
-			font-size: 1.25em;
+			display: inline-block;
+			margin-bottom: 10px;
 		}
 
 		.fragments {
-			font-size: 0.875em;
+			border: 1px solid rgba(151,151,151,0.19);
+			border-radius: 5px;
+			margin-bottom: 10px;
 
 			.fragment {
-				line-height: 2em;
-				span, .term {
-					font-weight: 700;
-					font-size: 0.9rem;
+				font-size: 0.875em;
+				line-height: 1.34em;
+				padding: 10px 25px 10px 15px;
+				box-shadow: 0 1px 0 0 rgba(151,151,151,0.19);
+
+				&:last-of-type {
+					box-shadow: none;
 				}
+
+				span, .term {
+					background: #fcff13;
+					display: inline;
+					box-shadow: 0 0 0 2px #fcff13,1px 1px 2px 2px rgba(0,0,0,0.2);
+				}
+			}
+		}
+		//comment-small-dark_hover, search-highlight, search-reading, search-video
+		
+		.meta {
+			.list-item {
+				display: inline-block;
+				font-size: 0.625em;
+				font-weight: 700;
+				line-height: 1.4em;
+				color: #168FE7;
+				margin-right: 1em;
+			}
+
+			.path {
+				display: inline-block;
 			}
 		}
 	}
@@ -127,119 +189,119 @@
 }
 
 
-.search-result-category {
-	overflow: hidden;
-	position: relative;
-	margin: 0 0 3px 0;
-	background: transparent;
-	border: 1px solid #d2d2d2 !important;
-	border-top-width: 0 !important;
-	border-right-width: 0 !important;
+// .search-result-category {
+// 	overflow: hidden;
+// 	position: relative;
+// 	margin: 0 0 3px 0;
+// 	background: transparent;
+// 	border: 1px solid #d2d2d2 !important;
+// 	border-top-width: 0 !important;
+// 	border-right-width: 0 !important;
 
-	box-shadow: inset 1px 0 0 0 #ffffff,
-				0 3px 0 0 #eaeaea;
+// 	box-shadow: inset 1px 0 0 0 #ffffff,
+// 				0 3px 0 0 #eaeaea;
 
-	padding: 15px 12px 0 6px;
+// 	padding: 15px 12px 0 6px;
 
-	.body {
-		margin: 0 0 0 70px;
+// 	.body {
+// 		margin: 0 0 0 70px;
 
-		.search-result {
-			white-space: normal;
-			margin: 0 0 20px 0;
-			cursor: pointer;
-			.title, .section {
-				//Do we want search hits to not show the whole title?
-				@include ellipse;
-				overflow: hidden;
-				color: $tertiary-grey;
-				font-size: 10px;
-				text-transform: uppercase;
-				font-weight: 700;
-			}
+// 		.search-result {
+// 			white-space: normal;
+// 			margin: 0 0 20px 0;
+// 			cursor: pointer;
+// 			.title, .section {
+// 				//Do we want search hits to not show the whole title?
+// 				@include ellipse;
+// 				overflow: hidden;
+// 				color: $tertiary-grey;
+// 				font-size: 10px;
+// 				text-transform: uppercase;
+// 				font-weight: 700;
+// 			}
 			
-			.chapter {
-				display: inline;
-			}
+// 			.chapter {
+// 				display: inline;
+// 			}
 
-			.section {
-				text-transform: none;
-				font-style: italic;
-				font-size: 14px;
-				font-weight: 600;
-				padding-left: 2px;
-			}
+// 			.section {
+// 				text-transform: none;
+// 				font-style: italic;
+// 				font-size: 14px;
+// 				font-weight: 600;
+// 				padding-left: 2px;
+// 			}
 
-			.wrap {
-				margin-top: 1em;
-			}
+// 			.wrap {
+// 				margin-top: 1em;
+// 			}
 
-			.name {
-				@include menu-label-text-treatment;
-			}
+// 			.name {
+// 				@include menu-label-text-treatment;
+// 			}
 
-			.fragments, .noresults {
-				white-space: normal;
-				margin-top: 2px;
-				color: $primary-grey;
-				font-style: italic;
-				font-size: 15px;
-				.fragment{
-					margin-top: 1em;
-				}
-				span, .term {
-					background: #fcff13;
-					display: inline-block;
-					box-shadow:
-						0 0 0 2px #FCFF13,
-						1px 1px 2px 2px rgba(0,0,0,0.2);
-				}
-			}
+// 			.fragments, .noresults {
+// 				white-space: normal;
+// 				margin-top: 2px;
+// 				color: $primary-grey;
+// 				font-style: italic;
+// 				font-size: 15px;
+// 				.fragment{
+// 					margin-top: 1em;
+// 				}
+// 				span, .term {
+// 					background: #fcff13;
+// 					display: inline-block;
+// 					box-shadow:
+// 						0 0 0 2px #FCFF13,
+// 						1px 1px 2px 2px rgba(0,0,0,0.2);
+// 				}
+// 			}
 
-		}
+// 		}
 		
-		.search-result-post{
-			.tags{
-				margin-top: 1em;
-				overflow: hidden;
-				@include ellipse;
-			}
-		}	
+// 		.search-result-post{
+// 			.tags{
+// 				margin-top: 1em;
+// 				overflow: hidden;
+// 				@include ellipse;
+// 			}
+// 		}	
 		
-		.see-all, .see-all a {
-			color: $primary-blue;
-			text-decoration: none;
-			font-size: 11pt;
-		}
-	}
-	.label {
-		text-align: right;
-		float: left;
-		width: 60px;
-		color: $secondary-grey;
-		font-size: 10px;
-		text-transform: uppercase;
-		font-weight: 700;
-		overflow: hidden;
-		@include ellipse;
-	}
-}
+// 		.see-all, .see-all a {
+// 			color: $primary-blue;
+// 			text-decoration: none;
+// 			font-size: 11pt;
+// 		}
+// 	}
+// 	.label {
+// 		text-align: right;
+// 		float: left;
+// 		width: 60px;
+// 		color: $secondary-grey;
+// 		font-size: 10px;
+// 		text-transform: uppercase;
+// 		font-weight: 700;
+// 		overflow: hidden;
+// 		@include ellipse;
+// 	}
+// }
 
-#search-results {
-	@include scrollbar(#ffffff, $tertiary-grey);
-	@include fixIEScrollbarGulf();
+// #search-results {
+// 	@include scrollbar(#ffffff, $tertiary-grey);
+// 	@include fixIEScrollbarGulf();
 
-	min-height: 40px;
-	box-shadow: inset 0px 6px 6px -4px rgba(0, 0, 0, 0.2);
-	overflow:{
-		x: hidden;
-		y: auto; //scroll;
-	}
+// 	min-height: 40px;
+// 	box-shadow: inset 0px 6px 6px -4px rgba(0, 0, 0, 0.2);
+// 	overflow:{
+// 		x: hidden;
+// 		y: auto; //scroll;
+// 	}
 
-	.search-result-category{
-		@include animate(fadeInDown, 0.3s);
-	}
-	.x-mask-msg {
-		top: 25px !important;
-	}
-}
+// 	.search-result-category{
+// 		@include animate(fadeInDown, 0.3s);
+// 	}
+// 	.x-mask-msg {
+// 		top: 25px !important;
+// 	}
+// }

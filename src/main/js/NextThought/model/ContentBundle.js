@@ -122,6 +122,12 @@ Ext.define('NextThought.model.ContentBundle', {
 	},
 
 
+	getIconImage: function() {
+		return this.onceAssetsLoaded
+			.then(this.get.bind(this, 'icom'));
+	},
+
+
 	getTocs: function(status) {
 		var packages = this.get('ContentPackages');
 

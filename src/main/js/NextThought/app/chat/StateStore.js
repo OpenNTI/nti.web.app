@@ -396,9 +396,11 @@ Ext.define('NextThought.app.chat.StateStore', {
 
 
 	getTranscriptIdForRoomInfo: function(roomInfo) {
-		var roomInfoId = roomInfo.getId();
+		var isString = typeof roomInfo === 'string',
+			roomInfoId = isString ? roomInfo : roomInfo.getId(),
+			user = isString ? $AppConfig.username : roomInfo.get('Creator');
 
-		return this.buildTranscriptId(roomInfoId, roomInfo.get('Creator'), 'Transcript');
+		return this.buildTranscriptId(roomInfoId, user, 'Transcript');
 	},
 
 
