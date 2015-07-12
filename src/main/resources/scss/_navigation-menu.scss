@@ -48,11 +48,11 @@
 		left: 0;
 		transition: opacity 0.5s, left 0.5s;
 
-		@include icon('mv-back-arrow', $top: 50%, $left: 50%);
+		@include icon('overlay_close_x_dark', $top: 50%, $left: 50%);
 
 		&::after {
-			margin-top: -18px;
-			margin-left: -9px;
+			margin-top: -16px;
+			margin-left: -12px;
 			opacity: 0.7
 		}
 
