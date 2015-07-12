@@ -2,7 +2,9 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.media-window-view',
 
-	requires: ['NextThought.app.navigation.StateStore'],
+	requires: [
+		'NextThought.app.navigation.path.Actions'
+	],
 
 	mixins: {
 		Router: 'NextThought.mixins.Router',
@@ -16,7 +18,7 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 
 		this.initRouter();
 
-		this.NavStore = NextThought.app.navigation.StateStore.getInstance();
+		this.PathActions = NextThought.app.navigation.path.Actions.create();
 
 		this.LibraryActions = NextThought.app.library.Actions.create();
 		this.addRoute('/:id', this.showMediaView.bind(this));
@@ -34,6 +36,8 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 		this.videoId = ParseUtils.decodeFromURI(route.params.id);
 		this.video = route.precache.video;
 		options.rec = rec;
+
+		this.PathActions.getPathToObject(this.videoId);
 
 		if (!me.activeMediaView) {
 			me.activeMediaView = Ext.widget('media-view', {
@@ -154,13 +158,25 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 
 
 	exitViewer: function() {
-		var me = this,
-		route = me.NavStore.getReturnPoint();
+		var me = this;
 
-		if (route) {
-			me.pushRootRoute('', route);
-		} else {
-			me.pushRootRoute('Library', '/library');
-		}
+		me.PathActions.getPathToObject(me.videoId)
+			.then(function(path) {
+				var i,
+					parentPath = [];
+
+				for (i = 0; i < path.length; i++) {
+					if (path[i].get('NTIID') === me.videoId) {
+						break;
+					}
+
+					parentPath.push(path[i]);
+				}
+
+				me.Router.root.attemptToNavigateToPath(parentPath);
+			})
+			.fail(function() {
+				me.pushRootRoute('Library', '/library');
+			});
 	}
 });

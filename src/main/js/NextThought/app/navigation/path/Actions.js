@@ -35,6 +35,17 @@ Ext.define('NextThought.app.navigation.path.Actions', {
 	},
 
 
+	__doNTIIDRequest: function(ntiid) {
+		var link = Service.getPathToObjectLink(ntiid);
+
+		if (!link) {
+			return Promise.reject('Failed to build path link');
+		}
+
+		return this.__doRequestForLink(link);
+	},
+
+
 	/**
 	 * Given an object, built the link to get its path, call it, and fulfill with the path
 	 *
@@ -109,21 +120,23 @@ Ext.define('NextThought.app.navigation.path.Actions', {
 	},
 
 	/**
-	 * Given an object, return an array of objects that make up the path
+	 * Given an object (ntiid), return an array of objects that make up the path
 	 * to it.
 	 *
 	 * if the object has a LibraryPath link on it use it, otherwise
 	 * attempt to build a link using the Service doc
 	 *
-	 * @param  {Object} obj the object to get the path to
+	 * @param  {Object|String} obj the object to get the path to
 	 * @return {Promise}    fulfills with the path to the object
 	 */
 	getPathToObject: function(obj) {
-		var link = obj.getLink('LibraryPath'),
+		var link = obj.getLink && obj.getLink('LibraryPath'),
 			handler = this.mimeToHandlers[obj.mimeType],
 			request;
 
-		if (handler) {
+		if (typeof obj === 'string') {
+			request = this.__doNTIIDRequest(obj);
+		} else if (handler) {
 			request = this.__doHandledRequest(obj, handler);
 		} else if (link) {
 			request = this.__doRequestForLink(link);
@@ -131,7 +144,7 @@ Ext.define('NextThought.app.navigation.path.Actions', {
 			request = this.__doRequestForNoLink(obj);
 		}
 
-		return request.then(function(path){
+		return request.then(function(path) {
 				return path.slice();
 			});
 	}

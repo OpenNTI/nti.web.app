@@ -129,12 +129,23 @@ Ext.define('NextThought.mixins.Router', {
 	},
 
 
+	attemptToNavigateToPath: function(path) {
+		var route = this.getRouteForPath(path);
+
+		if (route.isAccessible === false) {
+			this.pushRootRoute('Library', '/library');
+		} else {
+			this.doNavigateToFullPath(null, route);
+		}
+	},
+
+
 	doNavigateToFullPath: function(obj, route) {
 		var path = route.path,
-			objId = obj.getId(),
-			hasWindow = this.Router.WindowActions.hasWindow(obj);
+			objId = obj && obj.getId(),
+			hasWindow = objId && this.Router.WindowActions.hasWindow(obj);
 
-		objId = ParseUtils.encodeForURI(objId);
+		objId = objId && ParseUtils.encodeForURI(objId);
 
 		if (hasWindow) {
 			path = Globals.trimRoute(path) + '/object/' + objId;
