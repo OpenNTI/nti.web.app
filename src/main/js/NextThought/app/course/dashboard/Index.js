@@ -251,54 +251,54 @@ Ext.define('NextThought.app.course.dashboard.Index', {
 
 		this.maybeLoadNextWeek(containerPos);
 
-		function getState(pos) {
-			var state,
-				topFromTop = pos.offsetTop,
-				bottomFromTop = (pos.offsetTop + pos.offsetHeight) - containerPos.offSetHeight,
-				topFromBottom = pos.offsetTop - containerPos.offSetHeight;
-
-			//if the top of the item is above the top of the container
-			//and the bottom if below the top of the container, this is the current item
-			if (topFromTop <= 0 && bottomFromTop > 0) {
-				state = me.self.CURRENT;
-			//else if the top is above the bottom we are in the buffer
-			} else if (topFromBottom < 0 && bottomFromTop > 0) {
-				state = me.self.IN_BUFFER;
-			//else if the bottom of the item is above the top of the container
-			} else if (bottomFromTop < 0) {
-				//if it is more than the buffer above we are out of the buffer
-				if (bottomFromTop < -buffer) {
-					state = me.self.OUT_OF_BUFFER;
-				//else we are in the buffer
-				} else {
-					state = me.self.IN_BUFFER;
-				}
-			//else if the top of the item is below the bottom of the container
-			} else if (topFromBottom > 0) {
-				//if it is more than the buffer below we are out of the buffer
-				if (topFromBottom > buffer) {
-					state = me.self.OUT_OF_BUFFER;
-				//else we are in the buffer
-				} else {
-					state = me.self.IN_BUFFER;
-				}
-			}
-
-			return state;
-		}
-
-		me.items.each(function(item) {
-			var handler = item.parentScrollChanged(getState);
-
-			if (handler) { changes.push(handler); }
-		});
-
-		me.oldScrollChanged = me.scrollChanged;
-		me.scrollChanged = function() {};
-
-		changes.forEach(function(handler) { handler.call(null, containerPos); });
-
-		me.scrollChanged = me.oldScrollChanged;
+		// function getState(pos) {
+		// 	var state,
+		// 		topFromTop = pos.offsetTop,
+		// 		bottomFromTop = (pos.offsetTop + pos.offsetHeight) - containerPos.offSetHeight,
+		// 		topFromBottom = pos.offsetTop - containerPos.offSetHeight;
+		//
+		// 	//if the top of the item is above the top of the container
+		// 	//and the bottom if below the top of the container, this is the current item
+		// 	if (topFromTop <= 0 && bottomFromTop > 0) {
+		// 		state = me.self.CURRENT;
+		// 	//else if the top is above the bottom we are in the buffer
+		// 	} else if (topFromBottom < 0 && bottomFromTop > 0) {
+		// 		state = me.self.IN_BUFFER;
+		// 	//else if the bottom of the item is above the top of the container
+		// 	} else if (bottomFromTop < 0) {
+		// 		//if it is more than the buffer above we are out of the buffer
+		// 		if (bottomFromTop < -buffer) {
+		// 			state = me.self.OUT_OF_BUFFER;
+		// 		//else we are in the buffer
+		// 		} else {
+		// 			state = me.self.IN_BUFFER;
+		// 		}
+		// 	//else if the top of the item is below the bottom of the container
+		// 	} else if (topFromBottom > 0) {
+		// 		//if it is more than the buffer below we are out of the buffer
+		// 		if (topFromBottom > buffer) {
+		// 			state = me.self.OUT_OF_BUFFER;
+		// 		//else we are in the buffer
+		// 		} else {
+		// 			state = me.self.IN_BUFFER;
+		// 		}
+		// 	}
+		//
+		// 	return state;
+		// }
+		//
+		// me.items.each(function(item) {
+		// 	var handler = item.parentScrollChanged(getState);
+		//
+		// 	if (handler) { changes.push(handler); }
+		// });
+		//
+		// me.oldScrollChanged = me.scrollChanged;
+		// me.scrollChanged = function() {};
+		//
+		// changes.forEach(function(handler) { handler.call(null, containerPos); });
+		//
+		// me.scrollChanged = me.oldScrollChanged;
 	},
 
 
