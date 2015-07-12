@@ -321,6 +321,12 @@ Ext.define('NextThought.app.contentviewer.reader.Content', {
 
 
 	onClick: function(e, el) {
+		//Stupid FF fires onClick for right click. WTF!
+		if(e.button != 0){
+			return true;
+		}
+
+
 		e.stopEvent();
 		var m = this,
 			r = el.href,
