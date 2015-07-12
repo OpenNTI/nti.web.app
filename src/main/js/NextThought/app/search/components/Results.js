@@ -130,7 +130,7 @@ Ext.define('NextThought.app.search.components.Results', {
 			nextCmp = this.add({
 				xtype: 'box',
 				nextCmp: true,
-				autoEl: {cls: 'control-item load-more', html: 'Load More'},
+				autoEl: {cls: 'control-item load-more', html: 'Show More'},
 				afterRender: function() {
 					this.mon(this.el, 'click', handler);
 				}

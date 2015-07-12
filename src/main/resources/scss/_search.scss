@@ -32,6 +32,18 @@
 			color: $primary-red;
 		}
 
+		&.load-more {
+			background: $primary-blue;
+			color: #fff;
+			cursor: pointer;
+			font-size: 0.875em;
+			font-weight: 600;
+			line-height: 1em;
+			text-transform: uppercase;
+			padding: 25px;
+			height: auto;
+		}
+
 		&.loading-container {
 			position: relative;
 

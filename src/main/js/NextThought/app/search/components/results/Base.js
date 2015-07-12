@@ -83,16 +83,14 @@ Ext.define('NextThought.app.search.components.results.Base', {
 
 		me.getObject = Service.getObject(hit.get('NTIID'));
 
-		if (!me.renderData.title) {
-			me.getObject
-				.then(function(obj) {
-					me.setTitle(obj);
-					me.hitRecord = obj;
+		me.getObject
+			.then(function(obj) {
+				me.setTitle(obj);
+				me.hitRecord = obj;
 
-					me.getPathToObject(obj)
-						.then(me.showBreadCrumb.bind(me));
-				});
-		}
+				me.getPathToObject(obj)
+					.then(me.showBreadCrumb.bind(me));
+			});
 	},
 
 
