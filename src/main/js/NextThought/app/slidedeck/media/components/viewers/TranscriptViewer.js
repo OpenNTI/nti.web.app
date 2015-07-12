@@ -101,13 +101,19 @@ Ext.define('NextThought.app.slidedeck.media.components.viewers.TranscriptViewer'
 				return false;
 			}
 		}
+	},
 
+	allowNavigation: function(){
 		if (this.videoplayer.isPlaying()) {
 			this.videoplayer.pausePlayback();
 			this.didPauseVideoPlayer = true;
 		}
 
-		return true;
+		if(this.resourceView){
+			return this.resourceView.allowNavigation();
+		}else{
+			return Promise.resolve();
+		}
 	},
 
 
@@ -306,24 +312,7 @@ Ext.define('NextThought.app.slidedeck.media.components.viewers.TranscriptViewer'
 	},
 
 
-	beforeExitViewer: function(){
-		var annotation = this.down('annotation-view');
-
-		if (this.resourceView && !this.resourceView.fireEvent('beforedestroy')) {
-			return false;
-		}
-
-		return true;
-	},
-
-
 	beforeGridViewerShow: function(){
-		if(this.resourceView && this.resourceView.beforeDeactivate){
-			if(this.resourceView.beforeDeactivate() === false){
-				return;
-			}
-		}
-
 		if (this.videoplayer.isPlaying()) {
 			this.videoplayer.pausePlayback();
 			this.didPauseVideoPlayer = true;

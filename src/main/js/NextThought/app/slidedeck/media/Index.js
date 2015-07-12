@@ -90,6 +90,13 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 	},
 
 
+	allowNavigation: function() {
+		var me = this;
+
+		return me.activeMediaView.allowNavigation();
+	},
+
+
 	resolveVideo: function(id) {
 		var me = this, video, basePath;
 
@@ -147,23 +154,13 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 
 
 	exitViewer: function() {
-		var me = this;
+		var me = this,
+		route = me.NavStore.getReturnPoint();
 
-		if (me.activeMediaView.beforeClose() === false) {
-			return;
-		}
-
-		if (this.handleClose) {
-			wait(120)
-				.then(function() {
-					var route = me.NavStore.getReturnPoint();
-
-					if (route) {
-						me.pushRootRoute('', route);
-					} else {
-						me.pushRootRoute('Library', '/library');
-					}
-				});
+		if (route) {
+			me.pushRootRoute('', route);
+		} else {
+			me.pushRootRoute('Library', '/library');
 		}
 	}
 });

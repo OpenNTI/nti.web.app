@@ -241,15 +241,18 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 
 
 	beforeClose: function() {
-		if (this.viewer && !this.viewer.beforeExitViewer()) {
-			return false;
-		}
-
 		Ext.getBody().removeCls('media-viewer-open').addCls('media-viewer-closing');
 		this.removeCls('ready');
 		this.addCls('closing');
 	},
 
+
+	allowNavigation: function(){
+		if (this.viewer) {
+			return this.viewer.allowNavigation();
+		}
+		return Promise.resolve();
+	},
 
 	listStoreSet: function(store) {
 		if (!store) { return; }
@@ -304,63 +307,68 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 			playerType = this.getViewerType(type),
 			viewerXType = this.viewerXtypeMap[playerType],
 			targetViewerId = this.viewerIdMap[viewerXType],
-			targetViewer = targetViewerId && Ext.getCmp(targetViewerId);
+			targetViewer = targetViewerId && Ext.getCmp(targetViewerId),
+			allow = Promise.resolve();
 
 
-		if (this.viewer && (this.viewer.beforeDeactivate() === false)) {
-			console.log('Cannot switch viewer because the current view refuses to deactivate.');
-			return Promise.reject();
+		if (this.viewer) {
+			allow = this.viewer.allowNavigation();
 		}
+		
+		return allow
+			.then(function(){
+				//store the current type so we can retrieve it later
+				me.getStorageManager().set('media-viewer-player-type', playerType);
 
-		//store the current type so we can retrieve it later
-		me.getStorageManager().set('media-viewer-player-type', playerType);
+				if (!targetViewer) {
+					me.viewer = me.add({
+						xtype: viewerXType,
+						transcript:  me.transcript,
+						record: me.record,
+						accountForScrollbars: false,
+						scrollToId: me.scrollToId,
+						video: me.video,
+						viewerContainer: me,
+						currentBundle: me.currentBundle
+					});
 
-		if (!targetViewer) {
-			this.viewer = this.add({
-				xtype: viewerXType,
-				transcript: this.transcript,
-				record: this.record,
-				accountForScrollbars: false,
-				scrollToId: this.scrollToId,
-				video: this.video,
-				viewerContainer: this,
-				currentBundle: this.currentBundle
+					me.viewerIdMap[viewerXType] = me.viewer.getId();
+					me.getLayout().setActiveItem(me.viewer);
+				}
+				else {
+					me.viewer = targetViewer;
+					me.getLayout().setActiveItem(me.viewer);
+				}
+
+				wait(1000)
+					.then(me.fireEvent.bind(me, 'animation-end'));
+				wait(1001)
+					.then(me.adjustOnResize.bind(me));
 			});
-
-			this.viewerIdMap[viewerXType] = this.viewer.getId();
-			this.getLayout().setActiveItem(this.viewer);
-		}
-		else {
-			this.viewer = targetViewer;
-			this.getLayout().setActiveItem(this.viewer);
-		}
-
-		wait(1000)
-			.then(this.fireEvent.bind(this, 'animation-end'));
-		wait(1001)
-			.then(this.adjustOnResize.bind(this));
-
-		return Promise.resolve();
 	},
 
 
 	showGridViewer: function(action) {
-		if (action === 'show' && this.viewer && (this.viewer.beforeDeactivate() === false)) {
-			console.log('Cannot switch viewer because the current view refuses to deactivate.');
-			return Promise.reject();
+		var me = this,
+			allow = Promise.resolve();
+
+		if (action === 'show' && me.viewer) {
+			allow = me.viewer.allowNavigation();
 		}
 
-		if (action === 'show') {
-			this.getLayout().setActiveItem(this.gridView);
-			this.el.setStyle('overflowY', 'auto');
-			this.gridView.refresh();
-			Ext.defer(this.adjustOnResize, 1000, this);
-		}
-		else {
-			this.el.setStyle('overflowY', 'hidden');
-			this.getLayout().setActiveItem(this.viewer);
-		}
-		return Promise.resolve();
+		return allow
+			.then(function() {
+				if (action === 'show') {
+					me.getLayout().setActiveItem(me.gridView);
+					me.el.setStyle('overflowY', 'auto');
+					me.gridView.refresh();
+
+					wait(2000)
+						.then(me.adjustOnResize.bind(me));
+				} else {
+					me.el.setStyle('overflowY', 'hidden');
+					me.getLayout().setActiveItem(me.viewer);
+				}
+			});
 	}
-
 });

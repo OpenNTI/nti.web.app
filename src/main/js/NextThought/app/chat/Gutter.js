@@ -64,8 +64,6 @@ Ext.define('NextThought.app.chat.Gutter', {
 		var onlineContactStore = this.GroupStore.getOnlineContactStore(),
 			store;
 
-		debugger;
-
 		// NOTE: The gutter needs to listen to online Contacts store but also handle chats from non-contacts.
 		// As a result, it can't just be an online contacts store, because it has to contains active chats as well.
 		// And some of those users in active chats might not pass the online contacts store filters, 

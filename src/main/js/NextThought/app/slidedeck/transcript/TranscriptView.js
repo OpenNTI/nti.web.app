@@ -151,8 +151,6 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 
 		this.mon(Ext.get(this.getScrollTarget()), 'scroll', 'onScroll');
 
-		this.on('beforedestroy', 'beforeDestroy');
-
 		this.on('will-hide-transcript', function() {
 			if (this.annotationView) {
 				this.annotationView.hide();
@@ -444,11 +442,6 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 	},
 
 
-	beforeDestroy: function() {
-		return this.noteOverlay && this.noteOverlay.fireEvent('beforedestroy');
-	},
-
-
 	destroy: function() {
 		if (this.annotationView && this.annotationView.store) {
 			//Make sure we clear the line filter, since this store could be bound to another view.
@@ -463,21 +456,18 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 
 	},
 
-
-	beforeDeactivate: function() {
-		if(this.noteOverlay && (this.noteOverlay.fireEvent('beforedeactivate') === false)){
-			return false;
-		}
-
+	beforeDeactivate: function(){
 		if(this.annotationView && this.annotationView.isVisible()){
-			if(this.annotationView.fireEvent('beforedeactivate') === false){
-				return false;
-			}
-
 			this.annotationView.hide();
 		}
+	},
 
-		return true;
+	allowNavigation: function() {
+		if(this.noteOverlay && this.noteOverlay.editor.isActive()){
+			return this.noteOverlay.allowNavigation();
+		}else{
+			return Promise.resolve();
+		}
 	},
 
 

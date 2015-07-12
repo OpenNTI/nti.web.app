@@ -96,7 +96,6 @@ Ext.define('NextThought.app.slidedeck.transcript.NoteOverlay', {
 		me.reader.relayEvents(me, ['save-new-note', 'save-new-series-note']);
 		me.reader.fireEvent('uses-page-preferences', this);
 
-		me.on('beforedestroy', 'beforeDestroy');
         me.on('beforedeactivate', 'beforeDeactivate');
 	},
 
@@ -115,33 +114,40 @@ Ext.define('NextThought.app.slidedeck.transcript.NoteOverlay', {
 		});
 	},
 
-	beforeDestroy: function() {
-		if (this.editor && this.editor.isActive()) {
-			var msg = 'You are currently creating a note. Please save or cancel it first.';
-			Ext.defer(function() {
-				alert({msg: msg});
-			}, 1);
-
-			return false;
-		}
-
-		return true;
-	},
-
 
     beforeDeactivate: function(){
-        if (this.editor && this.editor.isActive()) {
-            var msg = 'You are currently creating a note. Please save or cancel it first.';
-            Ext.defer(function() {
-                alert({msg: msg});
-            }, 1);
-
-            return false;
-        }
-
         return this.reader && this.reader.fireEvent('beforedeactivate');
     },
 
+	allowNavigation: function(){
+		var me = this,
+			title = 'Are you sure?',
+			msg = 'You haven’t finished your comment. Do you want to leave without finishing?';
+
+		if (this.editor && this.editor.isActive()) {
+
+			return new Promise(function(fulfill, reject) {
+				Ext.Msg.show({
+					title: title,
+					msg: msg,
+					buttons: {
+						primary: {
+							text: 'Leave',
+							cls: 'caution',
+							handler: function(){
+								me.deactivateEditor();
+								fulfill();
+							}
+						},
+						secondary: {
+							text: 'Stay and Finish',
+							handler: reject
+						}
+					}
+				});
+			});
+        }
+	},
 
 	destroy: function() {
 		this.callParent(arguments);
