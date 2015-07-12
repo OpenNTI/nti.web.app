@@ -2011,7 +2011,6 @@
 			box-shadow: inset 5px 0 0 0 #fc9f77;
 			.editable {
 				&[contenteditable="true"] {
-					min-height: 1.2em;
 					max-height: 3.6em;
 				}
 			}
@@ -2045,6 +2044,7 @@
 				padding: 0.25em;
 				max-height: 3em;
 				overflow: hidden;
+				min-height: 34px;
 
 				&:focus {
 					border-color: $tertiary-grey;
@@ -2057,11 +2057,6 @@
 
 				&.error {
 					border: 1px solid $primary-red;
-				}
-
-				&:empty::before {
-					content: 'empty';
-					visibility: hidden;
 				}
 			}
 		}
