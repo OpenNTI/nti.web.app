@@ -152,6 +152,38 @@ Ext.define('NextThought.app.contacts.components.outline.View', {
 	},
 
 
+	addMask: function() {
+		try {
+			var maskEl = this.el && this.el.down('.outline-list');
+			if (maskEl) {
+				maskEl.mask('Searching...').addCls('nti-clear');
+			}
+		} catch (e) {
+			console.warn('Error masking. %o', e);
+		}
+	},
+
+
+	removeMask: function() {
+		var maskEl = this.el.down('.outline-list'),
+			mask = maskEl && maskEl.down('.x-mask'),
+			maskMsg = maskEl && maskEl.down('.x-mask-msg');
+
+		if (mask) {
+			mask.addCls('removing');
+		}
+
+		if (maskMsg) {
+			maskMsg.addCls('removing');
+		}
+
+		if (maskEl) {
+			maskEl.removeCls('nti-clear');
+			wait(1000).then(maskEl.unmask.bind(maskEl));
+		}
+	},
+
+
 	clear: function() {
 		this.bindStore('ext-empty-store');
 	}

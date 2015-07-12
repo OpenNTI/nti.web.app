@@ -82,6 +82,7 @@ Ext.define('NextThought.mixins.ContactSearchMixin', {
 		if (this.lastSearchValue !== v) {
 			this.lastSearchValue = v;
 			this.doSearch(v);
+			this.removeMask();
 		}
 	},
 
@@ -103,6 +104,7 @@ Ext.define('NextThought.mixins.ContactSearchMixin', {
 			param = v;
 		}
 
+		this.addMask();
 		this[action]('searching');
 		if (searchStore) {
 			searchStore[fn](param);

@@ -12,6 +12,7 @@ Ext.define('NextThought.app.contacts.components.outline.Search', {
 
 	preserveScrollOnRefresh: true,
 	overItemCls: 'over',
+	loadMask: false,
 	itemSelector: '.contact-row',
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup({ tag: 'tpl', 'for': '.', cn: [
 		{ cls: 'contact-row {[this.isContact(values)]}', cn: [
