@@ -344,7 +344,7 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 					//give everything a chance to settle
 					me.getIframe().onceSettled()
 						.then(function() {
-							me.getScroll().toSelector('#' + fragment);
+							me.getScroll().toTarget(fragment);
 						});
 				}
 			});
