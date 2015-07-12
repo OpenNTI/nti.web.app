@@ -114,7 +114,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 						me.__courseCatalogEntry = rec;
 						if (rec) {
 							rec.get('Links').getRelLink('CourseInstance').href = me.get('href');
-							me.set('Preview', rec.get('Preview'));
+							me.set('Preview', true || rec.get('Preview'));
 							rec.set('enrolled', true);//if we come from here, we are enrolled.
 							me.afterEdit(['NTIID']);//let views know the record "changed".
 							fulfill(rec);

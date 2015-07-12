@@ -2,11 +2,14 @@ Ext.define('NextThought.app.course.info.components.parts.NotStarted', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-info-not-started',
 
-	requires: ['NextThought.app.course.info.components.OpenCourseInfo'],
+	requires: [
+		'NextThought.app.course.info.components.OpenCourseInfo',
+		'NextThought.app.course.enrollment.StateStore'
+	],
 
 	ui: 'course-info',
 
-	headerTpl: Ext.DomHelper.createTemplate({ cls: 'course-info-header-bar {status}', cn: [
+	renderTpl: Ext.DomHelper.createTemplate({ cls: 'course-info-header-bar {status}', cn: [
 		{ cls: 'col-left', cn: [
 			{ cls: 'label', html: getString('NextThought.view.courseware.info.parts.NotStarted.starts') },
 			{ cls: 'date', html: '{startDate:date("F j, Y")}'}
@@ -26,31 +29,23 @@ Ext.define('NextThought.app.course.info.components.parts.NotStarted', {
 	},
 
 
-	afterRender: function() {
+	beforeRender: function() {
 		var i = this.getInfo() || {},
 			c = (i.get('Credit') || [])[0],
 			e = (c && c.get('Enrollment')) || {},
 			data = {},
-			registeredText,
-			el;
+			registeredText;
 
-		this.callParent(arguments);
+		this.EnrolledStateStore = NextThought.app.course.enrollment.StateStore.getInstance();
 
-		registeredText = 'foo' || CourseWareUtils.Enrollment.getEnrolledText(i);
+		registeredText = this.EnrolledStateStore.getEnrolledText(i);
 
-		Ext.apply(data || {}, {
+		this.renderData = Ext.apply(this.renderData || {}, {
 			startDate: i.get('StartDate'),
 			status: this.enrollmentStatus,
 			enroll: getString('NextThought.view.courseware.info.parts.NotStarted.notenrolled'),
 			enrollUrl: e.url,
 			registered: registeredText || ''
-		});
-
-		el = this.headerTpl.insertFirst('course-info', data, true);
-		this.mon(el.down('.edit'), 'click', 'showEnrollWindow');
-
-		this.on('destroy', function() {
-			Ext.destroy(el);
 		});
 	}
 

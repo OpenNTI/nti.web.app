@@ -16,6 +16,7 @@ Ext.define('NextThought.app.course.info.components.Body', {
 		{ xtype: 'course-info-roster', itemId: 'roster' }
 	],
 
+
 	setContent: function(info, status, showRoster, bundle) {
 		var me = this;
 		//always reset
@@ -25,10 +26,10 @@ Ext.define('NextThought.app.course.info.components.Body', {
 	},
 
 	setActiveItem: function(itemId) {
-		var targetItem = this.down('[itemId='+itemId+']'),
+		var targetItem = this.down('[itemId=' + itemId + ']'),
 		 	activeItem = this.getLayout().getActiveItem();
 
-		 if (targetItem == activeItem){
+		 if (targetItem == activeItem) {
 		 	return Promise.resolve();
 		 }
 
@@ -45,7 +46,7 @@ Ext.define('NextThought.app.course.info.components.Body', {
 		var infoCmp = this.getComponent('info'),
 			scrollTarget, hash, scrollTargetY, brect;
 
-		if(!infoCmp.rendered){ 
+		if (!infoCmp.rendered) {
 			this.mon(infoCmp, 'afterrender', this.scrollInfoSectionIntoView.bind(this, route));
 		}
 
@@ -54,11 +55,11 @@ Ext.define('NextThought.app.course.info.components.Body', {
 			Ext.getBody().dom.scrollTop = 0;
 			return;
 		}
-		
-		if(route === '/instructors') {
+
+		if (route === '/instructors') {
 			hash = 'course-info-instructors';
 		}
-		else if(route === '/support') {
+		else if (route === '/support') {
 			hash = 'course-info-support';
 		}
 

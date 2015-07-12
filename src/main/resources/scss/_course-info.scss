@@ -1,11 +1,6 @@
 #course-info {
 	&.info-only {
 		top: 0 !important;
-		margin: -105px 0 0 0 !important;
-
-		& > .x-container {
-			top: 105px !important;
-		}
 	}
 
 }
@@ -15,13 +10,7 @@
 }
 
 .course-info-header-bar {
-	position: absolute;
-	top: 25px;
-	left: 0;
-	right: 0;
-
 	& > div {
-		position: absolute;
 		padding: 10px 15px;
 		background: rgba(0,0,0,0.2);
 		height: 61px;
@@ -37,8 +26,6 @@
 	}
 
 	.col-left {
-		left: 0;
-		width: 255px;
 		.label {
 			color: $tertiary-grey;
 			text-transform: uppercase;
@@ -47,8 +34,6 @@
 	}
 
 	.col-right {
-		left: 260px;
-		right: 0;
 		line-height: 40px;
 	}
 
