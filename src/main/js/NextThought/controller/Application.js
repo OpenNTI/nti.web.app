@@ -175,23 +175,37 @@ Ext.define('NextThought.controller.Application', {
 
 
 	handleRoute: function(title, route, precache) {
-		var body = this.getBody(),
-			path = route,
-			parts = path.split('/');
+		var a = document.createElement('a'),
+			body = this.getBody(),
+			parts, full;
+
+		//set the href as a absolute path
+		a.href = '/' + route.replace(/^\//, '');
+
+		full = a.pathname + a.search + a.hash;
+
+		//since its an absolute path the path name will start
+		//with a / so there will be an empty space at the end of the string
+		//so use that when we join to keep the path absolute
+		parts = a.pathname.split('/');
 
 		//if we are navigating to an object remove it from the path
 		//so any handlers that have a variable at the end won't accidentally
 		//get 'object'
-		if (parts[parts.length - 2] === 'object') {
-			path = parts.slice(0, -2).join('/');
+		//object/mimeType/id
+		if (parts[parts.length - 3] === 'object') {
+			a.pathname = parts.slice(0, -3).join('/');
+		//object/id
+		} else if (parts[parts.length - 2] === 'object') {
+			a.pathname = parts.slice(0, -2).join('/');
 		}
 
-		this.maybeMarkReturn(title, route);
+		this.maybeMarkReturn(title, a.pathname);
 
-		this.currentRoute = route;
+		this.currentRoute = a.pathname + a.search + a.hash;
 
-		return body.handleRoute(path, precache)
-			.then(this.onRoute.bind(this, title, route));
+		return body.handleRoute(this.currentRoute, precache)
+			.then(this.onRoute.bind(this, title, full));
 	},
 
 

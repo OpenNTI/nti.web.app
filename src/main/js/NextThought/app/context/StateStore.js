@@ -4,8 +4,13 @@ Ext.define('NextThought.app.context.StateStore', {
 	setContext: function(context, title, route) {
 		this.current_context = context;
 
+		this.ANCHOR = this.ANCHOR || document.createElement('a');
+
 		this.current_title = title;
 		this.current_route = route;
+
+		//make the href absolute;
+		this.ANCHOR.href = '/' + route.replace(/^\//, '');
 
 		this.fireEvent('new-context');
 	},
@@ -52,8 +57,23 @@ Ext.define('NextThought.app.context.StateStore', {
 	},
 
 
+	getLocationInterface: function() {
+		return this.ANCHOR.cloneNode();
+	},
+
+
 	getCurrentRoute: function() {
-		return this.current_route;
+		return this.ANCHOR.pathname;
+	},
+
+
+	getCurrentSearch: function() {
+		return this.ANCHOR.search;
+	},
+
+
+	getCurrentHash: function() {
+		return this.ANCHOR.hash;
 	},
 
 
@@ -86,7 +106,8 @@ Ext.define('NextThought.app.context.StateStore', {
 
 
 	removeObjectRoute: function() {
-		var route = Globals.trimRoute(this.getCurrentRoute()),
+		var location = this.getLocationInterface(),
+			route = Globals.trimRoute(this.getCurrentRoute()),
 			parts = route.split('/');
 
 		if (parts[parts.length - 3] === 'object') {
@@ -95,6 +116,10 @@ Ext.define('NextThought.app.context.StateStore', {
 			parts = parts.slice(0, -2);
 		}
 
-		return parts.join('/');
+		location.pathname = parts.join('/');
+
+		route = location.pathname;
+
+		return route;
 	}
 });

@@ -11,11 +11,12 @@ Ext.define('NextThought.mixins.Router', {
 	},
 
 	initRouter: function() {
-		if(this.__routerInitialized){
+		if (this.__routerInitialized) {
 			return;
 		}
+
 		this.__routerInitialized = true;
-		
+
 		this.mixins.Path.initRouter.call(this);
 		this.mixins.Object.initRouter.call(this);
 

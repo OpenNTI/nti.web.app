@@ -63,7 +63,7 @@ Ext.define('NextThought.app.windows.Index', {
 			if (object && object.mimeType) {
 				console.error('No component to show object of ', object.mimeType);
 			} else {
-				console.error('Request status of ', object[1].status);
+				console.error('Unable to figure out how to show window');
 			}
 
 			this.WindowStore.fireReplaceOpenWindowRoute(object, state, '', '', precache);

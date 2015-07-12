@@ -94,9 +94,9 @@ Ext.define('NextThought.app.windows.Actions', {
 		return fetchObject.then(function(result) {
 			me.WindowStore.removeCache(id);
 			me.WindowStore.fireShowWindow(result, state, el, monitors, precache);
-		}).fail(function(error){
+		}).fail(function(error) {
 			me.WindowStore.fireShowWindow(error, state, el, monitors, precache);
-		})
+		});
 	},
 
 

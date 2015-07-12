@@ -161,12 +161,15 @@ Ext.define('NextThought.app.Body', {
 
 
 	pushWindow: function(id, mimeType, state, title, route, precache) {
+		var location = this.ContextStore.getLocationInterface(),
+			route;
+
 		if (!title) {
 			title = this.ContextStore.getCurrentTitle();
 		}
 
-		if (!route) {
-			route = this.ContextStore.getCurrentRoute();
+		if (route) {
+			location.pathname = route;
 		}
 
 		if (id) {
@@ -174,19 +177,29 @@ Ext.define('NextThought.app.Body', {
 
 			if (mimeType) {
 				mimeType = encodeURIComponent(mimeType);
-				route = Globals.trimRoute(route) + '/object/' + mimeType + '/' + id;
+				location.pathname = Globals.trimRoute(location.pathname) + '/object/' + mimeType + '/' + id;
 			} else {
-				route = Globals.trimRoute(route) + '/object/' + id;
+				location.pathname = Globals.trimRoute(location.pathname) + '/object/' + id;
 			}
+
 		} else {
 			state = null;
-			route = this.ContextStore.removeObjectRoute();
+			location.pathname = this.ContextStore.removeObjectRoute();
 		}
 
 		if (state) {
-			route += '#' + state;
+			location.hash = state;
 		}
 
+		route = location.pathname;
+
+		if (location.search) {
+			route += location.search;
+		}
+
+		if (location.hash) {
+			route += location.hash;
+		}
 
 		this.pushRoute(title, route, precache, state);
 	},
