@@ -141,9 +141,10 @@ Ext.define('NextThought.app.groups.Actions', {
 					}
 				});
 		}
-
-		rec.hidden = true;
-		me.__setContactGroup(rec);
+		else{
+			rec.hidden = true;
+			me.__setContactGroup(rec);	
+		}
 	},
 
 
