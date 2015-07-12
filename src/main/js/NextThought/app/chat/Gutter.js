@@ -40,7 +40,7 @@ Ext.define('NextThought.app.chat.Gutter', {
 	/* Contains a map of user to Entry */
 	USER_ENTRY_MAP: {},
 
-	ENTRY_BOTTOM_OFFSET: 120,
+	ENTRY_BOTTOM_OFFSET: 70,
 
 	initComponent: function() {
 		this.callParent(arguments);
@@ -283,6 +283,16 @@ Ext.define('NextThought.app.chat.Gutter', {
 						break;
 					}
 				}
+			}
+
+			// If we have a user in our store but don't have an entry for them,
+			// it means they are already in the 'other contacts'.
+			// For now just drop the notification going to contacts grouped under 'Other Contacts'.
+			// In the short term, the 'Other Contacts' should grow a popout on hover
+			// that we can anchor notification for extra contacts and chats.
+			if (me.store.find('Username', t) > -1 && !me.USER_ENTRY_MAP[t]) {
+				console.warn('No gutter entry to handle incoming chat message: ', msg);
+				return;
 			}
 
 			if (t) {
