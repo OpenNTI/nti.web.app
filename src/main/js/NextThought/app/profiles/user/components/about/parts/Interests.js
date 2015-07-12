@@ -56,9 +56,8 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Interests', {
 
 
 	onEditorKeyPress: function(e) {
-		var code = e.key || e.charCode;
-
-		if (code === Ext.EventObject.ENTER) {
+		if (e.key === Ext.EventObject.ENTER
+		    || e.charCode === Ext.EventObject.ENTER) {
 			this.saveNewInterest();
 			e.preventDefault();
 		}
