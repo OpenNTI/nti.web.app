@@ -2,7 +2,7 @@ Ext.define('NextThought.store.courseware.Stream', {
 
 	params: {
 		NonEmptyBucketCount: 2,
-		BucketSize: 25
+		BucketSize: 50
 	},
 
 	EMPTY_BIN: {
