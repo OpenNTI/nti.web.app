@@ -162,12 +162,17 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 	},
 
 
-	addItems: function(items) {
+	addItems: function(items, feedUrl) {
+		if (feedUrl !== this.feedUrl) {
+			console.warn('Trying to add items from a different feed, dropping them on the floor');
+			return;
+		}
+
 		this.feedItems = this.feedItems || [];
 
 		this.feedItems.concat(items);
 
-		return this.__renderItems(items);
+		return this.__renderItems(items, feedUrl);
 	},
 
 
@@ -188,17 +193,25 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 	},
 
 
-	__renderItems: function(items) {
-		var left = this.firstColumn,
-			right = this.secondColumn;
+	__renderItems: function(items, feedUrl) {
+		var me = this,
+			left = me.firstColumn,
+			right = me.secondColumn;
 
-		items = items.map(this.__loadItem.bind(this));
+		me.loadingItems = true;
+
+		items = items.map(me.__loadItem.bind(me));
 
 		return Promise.all(items)
 			.then(function(results) {
 				return results.filter(function(x) { return !!x;});
 			})
 			.then(function(cmps) {
+				if (feedUrl !== me.feedUrl) {
+					console.warn('Trying to add items for a different feed, dropping them on the floor');
+					return;
+				}
+
 				cmps.forEach(function(cmp, index) {
 					if (index % 2) {
 						right.add(cmp);
@@ -225,20 +238,40 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 		});
 	},
 
-
+	/**
+	 * Given a page number load that batch for the feedUrl. Capture the current feedUrl in the closure, then check
+	 * to see if its changed by the time we've loaded. If it has don't do anything so we can avoid getting tiles from
+	 * the wrong batch
+	 *
+	 * @param  {Number} page the page number to load
+	 */
 	loadPage: function(page) {
-		var params = {
-				batchSize: this.PAGE_SIZE,
-				batchStart: (page - 1) * this.PAGE_SIZE
+		var me = this,
+			feedUrl = me.feedUrl,
+			params = {
+				batchSize: me.PAGE_SIZE,
+				batchStart: (page - 1) * me.PAGE_SIZE
 			};
 
-		this.loadingCmp.removeCls('hidden');
+		me.loadingCmp.removeCls('hidden');
 
-		this.currentPage = page;
+		me.currentPage = page;
 
-		StoreUtils.loadBatch(this.feedUrl, params)
-			.then(this.onBatchLoad.bind(this))
-			.fail(this.onBatchError.bind(this));
+		StoreUtils.loadBatch(me.feedUrl, params)
+			.then(function(batch) {
+				if (feedUrl !== me.feedUrl) {
+					console.warn('Loaded batch for a different feedurl than the active, drop it on the floor');
+				} else {
+					me.onBatchLoad(batch, feedUrl);
+				}
+			})
+			.fail(function(reason) {
+				if (feedUrl !== me.feedUrl) {
+					console.warn('Failed to loaded batch for a different feedurl than the active, drop it on the floor');
+				} else {
+					me.onBatchError(error);
+				}
+			});
 	},
 
 
@@ -257,23 +290,23 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 	},
 
 
-	onBatchLoad: function(batch) {
+	onBatchLoad: function(batch, feedUrl) {
 		var nextLink = batch.Links && Service.getLinkFrom(batch.Links, 'batch-next');
-
-		//if the number we got back is smaller than the number we requests, assume that was the last page
-		if (batch.ItemCount < this.PAGE_SIZE) {
-			this.currentPage = -1;
-		}
 
 		//if we have items
 		if (batch.ItemCount) {
-			this.addItems(batch.Items)
+			this.addItems(batch.Items, feedUrl)
 				.always(this.loadingCmp.addClass.bind(this.loadingCmp, 'hidden'));
 		//if we don't have items and this is our first load, show an empty state
 		} else if (this.currentPage === 1) {
 			this.currentPage = -1;
 			this.loadingCmp.addCls('hidden');
 			this.showEmpty();
+		}
+
+		//if the number we got back is smaller than the number we requests, assume that was the last page
+		if (batch.ItemCount < this.PAGE_SIZE) {
+			this.currentPage = -1;
 		}
 
 		this.nextBatchLink = nextLink;
