@@ -68,7 +68,10 @@ Ext.define('NextThought.model.User', {
 
 		{name: 'interests', type: 'auto'},
 		{name: 'education', type: 'auto'},
-		{name: 'positions', type: 'auto'}
+		{name: 'positions', type: 'auto'},
+
+		// ui data
+		{name: 'unreadMessageCount', type: 'auto', persist: false}
 	],
 
 	isUser: true,

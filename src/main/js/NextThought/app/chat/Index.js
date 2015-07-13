@@ -11,7 +11,8 @@ Ext.define('NextThought.app.chat.Index', {
 		'NextThought.app.chat.Actions',
 		'NextThought.app.chat.Gutter',
 		'NextThought.app.chat.transcript.Window',
-		'NextThought.app.chat.components.Window'
+		'NextThought.app.chat.components.Window',
+		'NextThought.app.chat.components.gutter.List'
 	],
 
 	items: [],
@@ -19,6 +20,7 @@ Ext.define('NextThought.app.chat.Index', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'gutter'},
+		{cls: 'gutter-list'},
 		{id: '{id}-body', cn: ['{%this.renderContainer(out, values)%}']}
 	]),
 
@@ -27,7 +29,8 @@ Ext.define('NextThought.app.chat.Index', {
 	childEls: ['body'],
 
 	renderSelectors: {
-		gutter: '.gutter'
+		gutter: '.gutter',
+		listEl: '.gutter-list'
 	},
 
 	CHAT_WIN_MAP: {},
@@ -43,7 +46,8 @@ Ext.define('NextThought.app.chat.Index', {
 		this.mon(this.ChatStore, {
 			'show-window': this.showChatWindow.bind(this),
 			'show-whiteboard': this.showWhiteboard.bind(this),
-			'chat-notification-toast': this.handleNonContactNotification.bind(this)
+			'chat-notification-toast': this.handleNonContactNotification.bind(this),
+			'show-all-gutter-contacts': this.showAllOnlineContacts.bind(this)
 		});
 	},
 
@@ -51,6 +55,16 @@ Ext.define('NextThought.app.chat.Index', {
 	afterRender: function() {
 		this.callParent(arguments);
 		this.gutterWin = Ext.widget('chat-gutter-window', {renderTo: this.gutter, autoShow: true});
+	},
+
+
+	showAllOnlineContacts: function(gutter) {
+		this.listWin = Ext.widget('chat-gutter-list-view', {
+			store: gutter && gutter.store,
+			renderTo: this.listEl
+		});
+
+		gutter.gutterList = this.listWin;
 	},
 
 

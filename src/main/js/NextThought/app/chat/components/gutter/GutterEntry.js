@@ -1,4 +1,4 @@
-Ext.define('NextThought.app.chat.components.GutterEntry', {
+Ext.define('NextThought.app.chat.components.gutter.GutterEntry', {
 	extend: 'Ext.Component',
 	alias: 'widget.chat-gutter-entry',
 
@@ -55,7 +55,7 @@ Ext.define('NextThought.app.chat.components.GutterEntry', {
 	updateBadgeCount: function(count) {
 		// Keep the unread message count on the record,
 		// that way if we redraw the entry it will still be there.
-		this.user.unreadMessageCount = count;
+		this.user.set('unreadMessageCount', count);
 		if(this.rendered) {
 			this.avatar.dom.setAttribute('data-badge', count);
 		}
@@ -64,6 +64,7 @@ Ext.define('NextThought.app.chat.components.GutterEntry', {
 
 	clearUnreadCount: function() {
 		this.unreadMessageIds = [];
+		this.user.set('unreadMessageCount', 0);
 		this.updateBadgeCount(0);
 	},
 
