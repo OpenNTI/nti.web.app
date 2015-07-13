@@ -63,7 +63,7 @@ Ext.define('NextThought.app.context.StateStore', {
 
 
 	getCurrentRoute: function() {
-		return this.ANCHOR.pathname;
+		return decodeURIComponent(this.ANCHOR.pathname);
 	},
 
 
@@ -118,7 +118,7 @@ Ext.define('NextThought.app.context.StateStore', {
 
 		location.pathname = parts.join('/');
 
-		route = location.pathname;
+		route = decodeURIComponent(location.pathname);
 
 		return route;
 	}

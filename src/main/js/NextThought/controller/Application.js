@@ -202,7 +202,7 @@ Ext.define('NextThought.controller.Application', {
 
 		this.maybeMarkReturn(title, a.pathname);
 
-		this.currentRoute = a.pathname + a.search + a.hash;
+		this.currentRoute = decodeURIComponent(a.pathname) + a.search + a.hash;
 
 		return body.handleRoute(this.currentRoute, precache)
 			.then(this.onRoute.bind(this, title, full));
@@ -251,7 +251,7 @@ Ext.define('NextThought.controller.Application', {
 
 		hash = a.hash;
 		search = a.search;
-		pathname = a.pathname;
+		pathname = decodeURIComponent(a.pathname);
 
 		pathname = Globals.trimRoute(pathname);
 

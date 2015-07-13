@@ -191,7 +191,7 @@ Ext.define('NextThought.app.Body', {
 			location.hash = state;
 		}
 
-		route = location.pathname;
+		route = decodeURIComponent(location.pathname);
 
 		if (location.search) {
 			route += location.search;
