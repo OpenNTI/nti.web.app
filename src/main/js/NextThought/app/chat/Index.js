@@ -59,12 +59,27 @@ Ext.define('NextThought.app.chat.Index', {
 
 
 	showAllOnlineContacts: function(gutter) {
-		this.listWin = Ext.widget('chat-gutter-list-view', {
-			store: gutter && gutter.store,
-			renderTo: this.listEl
-		});
+		if(!this.listWin) {
+			this.listWin = Ext.widget('chat-gutter-list-view', {
+				store: gutter && gutter.store,
+				renderTo: this.listEl,
+				openChatWindow: gutter.openChatWindow.bind(gutter)
+			});
 
-		gutter.gutterList = this.listWin;
+			gutter.gutterList = this.listWin;
+
+			this.listWin.on({
+				show: gutter.hide.bind(gutter),
+				hide: gutter.show.bind(gutter)
+			});
+			gutter.on({
+				destroy: this.listWin.destroy.bind(this.listWin)
+			});
+
+			gutter.hide();
+		}
+
+		this.listWin.show();
 	},
 
 

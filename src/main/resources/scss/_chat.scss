@@ -7,7 +7,7 @@
 	left: auto !important;
 
 	&.gutter-list-open {
-		right: 305px !important;
+		right: 240px !important;
 	}
 
 	.nti-window-header {
@@ -790,7 +790,7 @@
   			position: absolute !important;
   			bottom: 0;
   			left: 8px;
-  			@include icon('contacts-gutter',$top:1px,$left:1px);		
+  			@include icon('contacts-2',$top:1px,$left:1px);		
   		}
 
   		&.other-contacts {
@@ -798,20 +798,10 @@
 			color: #ffffff;
 			bottom: 55px;
 			left: 8px;
-			font-style: italic;
-			font-weight: 300;
-			font-size: 14px;
-			
-			.profile-pic {
-				width: 42px;
-				height: 42px;
-				border-radius: 21px;
-				background-color: #494949;
-				padding: 10px 0 0 9px;
-			}
+			@include icon('more',$top:1px,$left:1px);
 		}
 
-  		.profile-pic {
+  		.profile-pic, &.other-contacts {
   			&[data-badge]:not([data-badge="0"]) {
   				&::before {
 					content: attr(data-badge);
@@ -836,7 +826,7 @@
 
 
   	&.chat-gutter-list-window {
-		right: 80px;
+		right: 10px;
 		width: 220px;
 
 		.header {
@@ -846,6 +836,8 @@
 
 			.title {
 				color: #ffffff;
+				font-size: 14px;
+				font-weight: 200;
 			}
 
 			.close {
@@ -877,6 +869,10 @@
 				left: 0;
 				top: 0;
 				width: 42px;
+
+				.presence {
+					background-color: #232323;
+				}
 			}
 
 			.name {
@@ -885,8 +881,10 @@
 				width: 150px;
 				height: 42px;
 				color: #ffffff;
-				padding: 8px 4px 0 4px;
+				padding: 12px 4px 0 4px;
 				overflow: hidden;
+				font-size: 14px;
+				font-weight: 200;
 			}
 		}
 

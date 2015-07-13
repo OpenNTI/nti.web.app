@@ -107,7 +107,10 @@ Ext.define('NextThought.app.chat.StateStore', {
 
 
 	notify: function(win, msg) {
-		this.fireEvent('notify', win, msg);
+		var creator = msg && msg.isModel ? msg.get('Creator') : msg && msg.Creator;
+		if (!isMe(creator)) {
+			this.fireEvent('notify', win, msg);
+		}
 	},
 
 

@@ -3,7 +3,8 @@ Ext.define('NextThought.app.chat.components.gutter.List', {
 	alias: 'widget.chat-gutter-list-view',
 
 	requires: [
-		'NextThought.app.chat.StateStore'
+		'NextThought.app.chat.StateStore',
+		'NextThought.app.chat.Actions'
 	],
 
 	cls: 'chat-gutter-list-window',
@@ -57,11 +58,34 @@ Ext.define('NextThought.app.chat.components.gutter.List', {
 
 	initComponent: function() {
 		this.callParent(arguments);
+		this.on('itemclick', this.onItemClicked.bind(this));
 	},
 
 
 	afterRender: function() {
 		this.callParent(arguments);
-		this.mon(this.closeBtn, 'click', this.destroy.bind(this));
+		this.mon(this.closeBtn, 'click', this.hide.bind(this));
+	},
+
+
+	onItemClicked: function(view, user, item, index, e) {
+		this.openChatWindow(user);
+	},
+
+
+	bindChatWindow: function(win, user) {
+		var roomInfo = win && win.roomInfo,
+			isGroupChat = roomInfo.isGroupChat(),
+			me = this;
+
+
+		if (!isGroupChat && user) {
+			user.associatedWindow = win;
+			win.onceRendered
+				.then(function() {
+					wait()
+						.then(me.realignChatWindow.bind(me, win, user));
+				});
+		}
 	}
 });

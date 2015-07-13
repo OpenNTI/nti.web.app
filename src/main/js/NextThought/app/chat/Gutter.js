@@ -16,11 +16,8 @@ Ext.define('NextThought.app.chat.Gutter', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{id: '{id}-body', cn: ['{%this.renderContainer(out, values)%}']},
-		{cls: 'presence-gutter-entry other-contacts', 'data-qtip': 'Other Online Contacts', 'data-badge': '0', cn: [
-			{cls: 'profile-pic', cn: [
-				{cls: 'count'},
-				{cls: 'presence available'}
-			]}
+		{cls: 'presence-gutter-entry other-contacts', 'data-qtip': 'Expand Contacts', 'data-badge': '0', cn: [
+			{cls: 'profile-pic'}
 		]},
 		{cls: 'presence-gutter-entry show-contacts', 'data-qtip': 'Show Contacts'}
 	]),
@@ -30,13 +27,12 @@ Ext.define('NextThought.app.chat.Gutter', {
 
 	renderSelectors: {
 		contactsButtonEl: '.show-contacts',
-		otherContactsEl: '.other-contacts',
-		otherConctactsCountEl: '.other-contacts .count'
+		otherContactsEl: '.other-contacts'
 	},
 
 
 	/* Contains all the chat rooms currently open*/
-	ROOM_ENTRY_MAP: {},
+	ROOM_USER_MAP: {},
 
 	ENTRY_BOTTOM_OFFSET: 70,
 
@@ -55,6 +51,7 @@ Ext.define('NextThought.app.chat.Gutter', {
 			'presence-changed': this.updatePresence.bind(this)
 		});
 		this.otherContacts = [];
+		this.collapsedMessageCount = 0;
 	},
 
 
@@ -115,8 +112,9 @@ Ext.define('NextThought.app.chat.Gutter', {
 	updateList: function(store, users) {
 		this.removeAll(true);
 
-		this.ROOM_ENTRY_MAP = {};
+		this.ROOM_USER_MAP = {};
 		this.otherContacts = [];
+		this.collapsedMessageCount = 0
 		this.addContacts(store, users);
 	},
 
@@ -138,12 +136,12 @@ Ext.define('NextThought.app.chat.Gutter', {
 	},
 
 	removeContact: function(store, user) {
-		var entry = this.findEntryForUser(user.get('Username')),
+		var entry = this.findEntryForUser(user),
 			win = entry && entry.associatedWindow,
 			rid = win && win.roomInfo && win.roomInfo.getId();
 
 		// Make sure we don't remove a user with an active chat window.
-		if (entry && !this.ROOM_ENTRY_MAP[rid]) {
+		if (entry && !this.ROOM_USER_MAP[rid]) {
 			this.remove(entry);
 		}
 	},
@@ -186,31 +184,41 @@ Ext.define('NextThought.app.chat.Gutter', {
 	maybeUpdateOtherButton: function() {
 		var count = this.otherContacts.length;
 		if (count > 0) {
-			this.otherConctactsCountEl.update('+' + count);
 			this.otherContactsEl.show();
 		}
-		else {
-			this.otherContactsEl.hide();
-		}
+		// else {
+		// 	this.otherContactsEl.hide();
+		// }
 	},
 
 
 	openChatWindow: function(user, entry) {
-		if (entry.associatedWindow) {
-			entry.associatedWindow.show();
+		if (user.associatedWindow) {
+			user.associatedWindow.show();
 		}
 		else {
 			this.ChatActions.startChat(user);
 		}
 
-		entry.clearUnreadCount();
+		this.clearUnreadCount(user);
+	},
+
+
+	clearUnreadCount: function(user) {
+		var entry = this.findEntryForUser(user);
+
+		user.set('unreadMessageCount', 0);
+		if(entry) {
+			entry.clearUnreadCount();
+		}
 	},
 
 
 	bindChatWindow: function(win) {
 		var roomInfo = win && win.roomInfo,
 			isGroupChat = roomInfo.isGroupChat(),
-			occupants = roomInfo && roomInfo.get('Occupants'), t, i, entry, me = this;
+			occupants = roomInfo && roomInfo.get('Occupants'), t, i, entry, me = this, user;
+
 
 		if (!isGroupChat) {
 			for (i = 0; i < occupants.length; i++) {
@@ -222,14 +230,15 @@ Ext.define('NextThought.app.chat.Gutter', {
 
 			if (t) {
 				entry = this.findEntryForUser(t);
+				user = this.store.findRecord('Username', t);
 
-				if (entry) {
-					this.ROOM_ENTRY_MAP[roomInfo.getId()] = entry;
-					entry.associatedWindow = win;
+				if (user) {
+					this.ROOM_USER_MAP[roomInfo.getId()] = user;
+					user.associatedWindow = win;
 					win.onceRendered
 						.then(function() {
 							wait()
-								.then(me.realignChatWindow.bind(me, win, entry));
+								.then(me.realignChatWindow.bind(me, win, user));
 						});
 				}
 			}
@@ -244,7 +253,8 @@ Ext.define('NextThought.app.chat.Gutter', {
 
 
 	incrementCollapsedMesssageCount: function() {
-		this.otherMessageCount += 1;
+		this.collapsedMessageCount += 1;
+		this.updateCollapsedMessageCount(this.collapsedMessageCount);
 	},
 
 
@@ -254,21 +264,35 @@ Ext.define('NextThought.app.chat.Gutter', {
 	},
 
 
-	realignChatWindow: function(win, entry) {
-		if (!win || !entry) { return; }
+	getAnchorPointForUser: function(user) {
+		var dom, entry;
+		if (this.gutterList && this.gutterList.isVisible()) {
+			dom = this.gutterList.getNode(user);
+		}
+		else {
+			entry = this.findEntryForUser(user);
+			dom = entry && entry.el && entry.el.dom;
+		}
 
-		var entryEl = entry.el,
-			box = entryEl.dom && entryEl.dom.getBoundingClientRect(),
+		return dom;
+	},
+
+
+	realignChatWindow: function(win, user) {
+		if (!win) { return; }
+
+		var dom = this.getAnchorPointForUser(user),
+			box = dom && dom.getBoundingClientRect(),
 			top = box && box.top;
 
 		if (top && top > 0) {
 			win.el.setStyle('top', top + 'px');
 			console.debug('align chat window to:', top);
 		}
-		if (this.gutterList) {
+		if (this.gutterList && this.gutterList.isVisible()) {
 			win.addCls('gutter-list-open');
 			this.gutterList.on({
-				destroy: function() {
+				hide: function() {
 					win.removeCls('gutter-list-open');
 				}
 			});
@@ -277,18 +301,27 @@ Ext.define('NextThought.app.chat.Gutter', {
 
 
 	onRoomExit: function (roomId) {
-		var entry = this.ROOM_ENTRY_MAP[roomId];
+		var user = this.ROOM_USER_MAP[roomId],
+			entry = this.findEntryForUser(user.get('Username'));
 
 		if (entry) {
 			entry.clearUnreadCount();
-			delete entry.associatedWindow;
-			delete this.ROOM_ENTRY_MAP[roomId];
+		}
+
+		if (user) {
+			delete user.associatedWindow;
+			delete this.ROOM_USER_MAP[roomId];
+		}
+
+		if (this.gutterList && this.gutterList.onRoomExit) {
+			this.gutterList.onRoomExit(roomId);
 		}
 	},
 
 
-	findEntryForUser: function(userName) {
-		var result;
+	findEntryForUser: function(user) {
+		var userName = user && user.isModel ? user.get('Username') : user,
+			result;
 
 		Ext.each(this.items.items, function(entry) {
 			if (entry.user && (entry.user.get('Username') === userName)) {
@@ -306,7 +339,8 @@ Ext.define('NextThought.app.chat.Gutter', {
 			occupants = roomInfo && roomInfo.get('Occupants'),
 			entry, t, i, me = this, user, currentCount;
 
-		entry = this.ROOM_ENTRY_MAP[roomInfo.getId()];
+		user = this.ROOM_USER_MAP[roomInfo.getId()];
+		entry = this.findEntryForUser(user);
 		if (entry) {
 			entry.handleWindowNotify(win, msg);
 		}
