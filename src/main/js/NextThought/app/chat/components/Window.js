@@ -25,6 +25,8 @@ Ext.define('NextThought.app.chat.components.Window', {
 	minHeight: 325,
 	header: false,
 
+	closeAction: 'hide',
+
 	title: 'chat',
 
 	layout: {
