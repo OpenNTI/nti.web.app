@@ -239,8 +239,7 @@ Ext.define('NextThought.app.chat.Actions', {
 					fulfill(obj);
 				})
 				.fail( function() {
-					alert('Could not recover room info');
-					console.error('Could not resolve roomInfo for: ', roomInfoId);
+					console.debug('Could not resolve roomInfo for: ', roomInfoId);
 					reject();
 				});
 		});
