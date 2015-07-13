@@ -65,8 +65,8 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 	setContent: function(video, transcript, options) {
 		var me = this;
 
-		if(!this.rendered) {
-			this.onceRendered.then(function(){
+		if (!this.rendered) {
+			this.onceRendered.then(function() {
 				wait().then(me.setContent.bind(me, video, transcript, options));
 			});
 			return;
@@ -84,13 +84,13 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 		}
 
 
-		if(this.getLayout().getActiveItem() !== this.viewer) {
+		if (this.getLayout().getActiveItem() !== this.viewer) {
 			this.getLayout().setActiveItem(this.viewer);
 			// Ext.EventManager.onWindowResize(this.adjustOnResize, this, {buffer: 250});
 		}
 
 
-		if(this.toolbar && this.getViewerType()){
+		if (this.toolbar && this.getViewerType()) {
 			this.toolbar.updateCurrentType(this.getViewerType());
 		}
 	},
@@ -99,7 +99,7 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		var me  = this,
+		var me = this,
 			playerType = this.getViewerType();
 
 		this.addCls('ready');
@@ -132,7 +132,7 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 		this.on('destroy', 'destroy', this.gridView);
 		this.on('destroy', 'destroy', this.identityCmp);
 
-		if(this.parentContainer && this.parentContainer.exitViewer) {
+		if (this.parentContainer && this.parentContainer.exitViewer) {
 			this.on('exit-viewer', this.parentContainer.exitViewer.bind(this.parentContainer));
 		}
 
@@ -180,7 +180,7 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 		});
 
 		this.viewerIdMap[viewerType] = this.viewer.getId();
-		this.mon(this.viewer, 'media-viewer-ready', function(){
+		this.mon(this.viewer, 'media-viewer-ready', function() {
 				me.adjustOnResize();
 
 				if (!Ext.isEmpty(me.startAtMillis)) {
@@ -247,7 +247,7 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 	},
 
 
-	allowNavigation: function(){
+	allowNavigation: function() {
 		if (this.viewer) {
 			return this.viewer.allowNavigation();
 		}
@@ -314,16 +314,26 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 		if (this.viewer) {
 			allow = this.viewer.allowNavigation();
 		}
-		
+
 		return allow
-			.then(function(){
+			.then(function() {
 				//store the current type so we can retrieve it later
 				me.getStorageManager().set('media-viewer-player-type', playerType);
 
-				if (!targetViewer) {
+				//if we already have a video viewer for this video on this size, just make it active
+				if (targetViewer && targetViewer.video.getId() === me.video.getId()) {
+					me.viewer = targetViewer;
+					me.getLayout().setActiveItem(me.viewer);
+				} else {
+					//if we have a target viewer its set to a different video so
+					//remove it
+					if (targetViewer) {
+						me.remove(targetViewer, true);
+					}
+
 					me.viewer = me.add({
 						xtype: viewerXType,
-						transcript:  me.transcript,
+						transcript: me.transcript,
 						record: me.record,
 						accountForScrollbars: false,
 						scrollToId: me.scrollToId,
@@ -333,10 +343,6 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 					});
 
 					me.viewerIdMap[viewerXType] = me.viewer.getId();
-					me.getLayout().setActiveItem(me.viewer);
-				}
-				else {
-					me.viewer = targetViewer;
 					me.getLayout().setActiveItem(me.viewer);
 				}
 
