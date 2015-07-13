@@ -5,6 +5,7 @@ Ext.define('NextThought.app.navigation.path.Actions', {
 		'NextThought.app.navigation.path.StateStore',
 		'NextThought.app.navigation.path.parts.Assignment',
 		'NextThought.app.navigation.path.parts.Content',
+		'NextThought.app.context.StateStore',
 		'NextThought.app.navigation.path.parts.Forums',
 		'NextThought.app.navigation.path.parts.Profiles'
 	],
@@ -14,6 +15,7 @@ Ext.define('NextThought.app.navigation.path.Actions', {
 		this.callParent(arguments);
 
 		this.PathStore = NextThought.app.navigation.path.StateStore.getInstance();
+		this.ContextStore = NextThought.app.context.StateStore.getInstance();
 
 		this.buildHandlerMap();
 	},
@@ -147,5 +149,39 @@ Ext.define('NextThought.app.navigation.path.Actions', {
 		return request.then(function(path) {
 				return path.slice();
 			});
+	},
+
+	getBreadCrumb: function(record){
+		var me = this,
+			rootBundle = me.ContextStore.getRootBundle(),
+			path,
+			title;
+
+		//Get the path for the record
+		return me.getPathToObject(record)
+			.then(function(path){
+				//if the first path item is the root bundle, take it off
+				if((path && rootBundle) && path[0].getTitle() == rootBundle.getTitle()){
+					path.shift();
+				}
+				//map to item.getTitle && item.getTitle() | filter out empty
+				title = path.map(function(item){
+					if(item.getTitle && item.getTitle() != ''){
+						return {
+							label: item.getTitle()
+						};
+					}else{
+						return ''
+					}
+				})
+				
+				return title.filter(function(value){
+					if(value != '') return value
+				});
+			})
+			.fail(function(error){
+				console.error('Unable to get path because  ' + error);
+			});
 	}
+
 });

@@ -9,6 +9,7 @@ Ext.define('NextThought.model.Community', {
 	mixins: { groupLike: 'NextThought.mixins.GroupLike' },
 
 	isCommunity: true,
+	isProfile: true,
 
 	idProperty: 'Username',
 	fields: [

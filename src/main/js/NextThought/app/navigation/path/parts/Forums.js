@@ -12,7 +12,7 @@ Ext.define('NextThought.app.navigation.path.parts.Forums', {
 		// handlers[NextThought.model.forums.CommentPost.mimeType] = this.getPathToTopicComment.bind(this);
 		// handlers[NextThought.model.forums.CommunityHeadlinePost.mimeType] = this.getPathToTopicPost.bind(this);
 		// handlers[NextThought.model.forums.CommunityHeadlineTopic.mimeType] = this.getPathToTopic.bind(this);
-		// handlers[NextThought.model.forums.CommunityForum.mimeType] = this.getPathToForum.bind(this);
+		handlers[NextThought.model.forums.CommunityForum.mimeType] = this.getPathToForum.bind(this);
 
 		return handlers;
 	},

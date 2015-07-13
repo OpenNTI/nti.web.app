@@ -42,6 +42,20 @@ Ext.define('NextThought.app.context.StateStore', {
 	},
 
 
+	getRootProfile: function() {
+		var context = this.current_context || [],
+			i, x;
+
+		for (i = 0; i < context.length; i++) {
+			x = context[i];
+
+			if (x.obj && x.obj.isProfile) {
+				return x.obj;
+			}
+		}
+	},
+
+
 	getReaderLocation: function() {
 		var root = this.getRootContext(),
 			cmp = root && root.cmp;

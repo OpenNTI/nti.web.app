@@ -21,7 +21,7 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 
 		this.WindowActions = NextThought.app.windows.Actions.create();
 
-		this.add({
+		this.headerCmp = this.add({
 			xtype: 'window-header',
 			doClose: this.onClose.bind(this)
 		});
@@ -61,6 +61,7 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 
 				me.remove(me.loadingEl);
 				me.showTopic(me.record, forum);
+				me.headerCmp.showPathFor(forum);
 			});
 	},
 
@@ -80,6 +81,7 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 
 				me.remove(me.loadingEl);
 				me.showTopic(topic, forum, me.record);
+				me.headerCmp.showPathFor(forum);
 			});
 	},
 
@@ -93,6 +95,7 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 
 				me.remove(me.loadingEl);
 				me.showEditor(me.record, forum);
+				me.headerCmp.showPathFor(forum, 'New Discussion');
 			});
 	},
 

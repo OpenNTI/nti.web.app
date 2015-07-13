@@ -2,6 +2,20 @@ Ext.define('NextThought.app.windows.components.Header', {
 	extend: 'Ext.Component',
 	alias: 'widget.window-header',
 
+
+	requires: [
+		'NextThought.app.navigation.path.Actions'
+	],
+
+	pathTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+		{tag: 'tpl', 'for': 'labels', cn:  [
+			{tag: 'span', html: '{label}'}
+		]},
+		{tag: 'tpl', 'if': 'leaf', cn: [
+			{tag: 'span', cls: 'leaf' , html: '{leaf}'}
+		]}
+	])),
+
 	cls: 'window-header',
 
 	renderTpl: Ext.DomHelper.markup([
@@ -13,6 +27,12 @@ Ext.define('NextThought.app.windows.components.Header', {
 	renderSelectors: {
 		titleEl: '.title',
 		closeEl: '.close'
+	},
+
+	initComponent: function() {
+		this.callParent(arguments);
+
+		this.NavigationActions = NextThought.app.navigation.path.Actions.create();
 	},
 
 
@@ -29,5 +49,23 @@ Ext.define('NextThought.app.windows.components.Header', {
 		}
 
 		this.titleEl.update(title);
+	},
+
+
+	showPathFor: function(record, leaf) {
+		//Get the root bundle, from the context StateStore
+		if(!this.rendered){
+			this.on('afterrender', this.showPathFor.bind(this,record,leaf));
+			return;
+		}
+		var me = this,
+			container = me.titleEl,
+			title;
+
+		me.NavigationActions.getBreadCrumb(record)
+			.then(function(title){
+				container.dom.innerHTML = '';
+				container = me.pathTpl.append(container, {labels: title, leaf: leaf}, true);
+			});
 	}
 });

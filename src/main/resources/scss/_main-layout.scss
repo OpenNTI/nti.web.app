@@ -103,5 +103,25 @@ html.window-open {
 		max-width: 100%;
 		margin: 20px auto;
 		background-color: white;
+
+		.window-header{
+			.title {
+				span{
+					color: #3fb3f6;
+					
+					&:after {
+					    content: ' / ';
+					    color: #b8b8b8;
+					}
+
+					&:last-of-type:after {
+					    content: '';
+					}
+					&:last-of-type {
+					    color: #b8b8b8;
+					}
+				}
+			}
+		}
 	}
 }

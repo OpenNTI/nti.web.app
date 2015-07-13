@@ -17,7 +17,7 @@ Ext.define('NextThought.app.annotations.note.Window', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.add({
+		this.headerCmp = this.add({
 			xtype: 'window-header',
 			doClose: this.doClose.bind(this)
 		});
@@ -39,6 +39,8 @@ Ext.define('NextThought.app.annotations.note.Window', {
 				contextRecord: record,
 				doNavigate: this.doNavigate.bind(this)
 			});
+
+		this.headerCmp.showPathFor(record);
 
 		if (this.loadingEl) {
 			this.remove(this.loadingEl, true);

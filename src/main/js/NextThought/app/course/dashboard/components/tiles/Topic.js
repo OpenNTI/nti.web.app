@@ -2,7 +2,10 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Topic', {
 	extend: 'NextThought.app.course.dashboard.components.tiles.Post',
 	alias: 'widget.dashboard-topic',
 
-	requiers: ['NextThought.app.course.dashboard.components.tiles.parts.TopicComment'],
+	requiers: [
+		'NextThought.app.course.dashboard.components.tiles.parts.TopicComment',
+		'NextThought.app.navigation.path.Actions'
+	],
 
 	cls: 'dashboard-post topic',
 
@@ -27,6 +30,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Topic', {
 	initComponent: function() {
 		this.callParent(arguments);
 		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.NavigationActions = NextThought.app.navigation.path.Actions.create();
 	},
 
 
@@ -59,7 +63,12 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Topic', {
 
 
 	getPath: function() {
-		return Promise.resolve(['', 'Discussions', 'Forums']);
+		return this.NavigationActions.getBreadCrumb(this.record)
+			.then(function(path){
+				return path.map(function(item){
+					return item.label;
+				})
+			});
 	},
 
 

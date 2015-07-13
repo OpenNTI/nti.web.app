@@ -4,6 +4,8 @@ Ext.define('NextThought.model.User', {
 	requires: ['NextThought.model.PresenceInfo', 'NextThought.model.converters.PresenceInfo'],
 	idProperty: 'Username',
 
+	isProfile: true,
+
 	fields: [
 		{ name: 'lastLoginTime', type: 'date', dateFormat: 'timestamp' },
 		{ name: 'NotificationCount', type: 'int' },
