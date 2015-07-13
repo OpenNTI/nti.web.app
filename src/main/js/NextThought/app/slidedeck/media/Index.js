@@ -97,7 +97,7 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 	allowNavigation: function() {
 		var me = this;
 
-		return me.activeMediaView.allowNavigation();
+		return !me.activeMediaView || me.activeMediaView.allowNavigation();
 	},
 
 
