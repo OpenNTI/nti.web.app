@@ -282,8 +282,8 @@ Ext.define('NextThought.app.search.Index', {
 	},
 
 
-	navigateToSearchHit: function(record, hit, frag) {
-		this.SearchStore.setHitForContainer(hit.get('ContainerId'), hit, frag);
+	navigateToSearchHit: function(record, hit, frag, containerId) {
+		this.SearchStore.setHitForContainer(containerId || hit.get('ContainerId'), hit, frag);
 
 		this.Router.root.attemptToNavigateToObject(record);
 	}

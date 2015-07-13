@@ -26,6 +26,7 @@ Ext.define('NextThought.model.Hit', {
 		{ name: 'Score', type: 'auto'},
 		{ name: 'StartMilliSecs', type: 'auto' },
 		{ name: 'EndMilliSecs', type: 'auto' },
+		{ name: 'VideoID', type: 'string'},
 		//This really needs to move up onto a SearchResult object but we don't have that.  The proxy roots at Items
 		{ name: 'PhraseSearch', type: 'auto'},
 		{ name: 'GroupingField', persist: false, type: 'auto', convert: function(o, r) {

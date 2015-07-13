@@ -8,6 +8,7 @@ Ext.define('NextThought.app.search.components.Results', {
 		'NextThought.app.search.components.results.ForumResult',
 		'NextThought.app.search.components.results.TranscriptResult',
 		'NextThought.app.search.components.results.HighlightResult',
+		'NextThought.app.search.components.results.Video',
 		'NextThought.app.navigation.path.Actions',
 		'NextThought.app.windows.Actions'
 	],

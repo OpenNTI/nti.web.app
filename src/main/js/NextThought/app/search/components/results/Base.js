@@ -139,8 +139,10 @@ Ext.define('NextThought.app.search.components.results.Base', {
 		if (root && root.getIconImage) {
 			root.getIconImage()
 				.then(function(src) {
-					me.rootIconEl.removeCls('hidden');
-					me.rootIconEl.setStyle({backgroundImage: 'url(' + src + ')'});
+					if (me.rootIconEl) {
+						me.rootIconEl.removeCls('hidden');
+						me.rootIconEl.setStyle({backgroundImage: 'url(' + src + ')'});
+					}
 				});
 		}
 	},

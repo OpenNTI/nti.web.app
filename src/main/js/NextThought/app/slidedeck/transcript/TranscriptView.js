@@ -29,7 +29,7 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 	bubbleEvents: ['add', 'remove', 'editor-open', 'editorActivated', 'editorDeactivated'],
 
 	mixins: {
-		searchHitHighlighting: 'NextThought.mixins.SearchHitHighlighting'
+		Searchable: 'NextThought.mixins.Searchable'
 	},
 
 	initComponent: function() {
@@ -50,6 +50,8 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 			this.hasNoPresentationParts = true;
 		}
 
+		this.initSearch();
+
 		//Store Events
 		this.UserDataActions.setupPageStoreDelegates(this);
 
@@ -67,6 +69,26 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 		this.on('resize', function() {
 			this.fireEvent('sync-height');
 		}, this);
+	},
+
+
+	getContainerIdForSearch: function() {
+		return this.video.getId();
+	},
+
+
+	onceReadyForSearch: function() {
+		var transcript = this.down('video-transcript');
+
+		return new Promise(function(fulfill, reject) {
+			if (!transcript) {
+				fulfill();
+			} else if (transcript.isPresentationPartReady) {
+				fulfill();
+			} else {
+				transcript.on('presentation-part-ready', fulfill);
+			}
+		});
 	},
 
 
@@ -105,7 +127,7 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 	onStoreEventsAdd: function(store, records) {
 		var cmps = this.MediaViewerStore.getComponentsForStore(store.containerId);
 		Ext.each(cmps, function(c) {
-			if(c.isVisible(true)){
+			if (c.isVisible(true)) {
 				this.fireEvent('register-records', store, records, c);
 			}
 		});
@@ -115,7 +137,7 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 	onStoreEventsRemove: function(store, records) {
 		var cmps = this.MediaViewerStore.getComponentsForStore(store.containerId);
 		Ext.each(cmps, function(c) {
-			if(c.isVisible(true)){
+			if (c.isVisible(true)) {
 				this.fireEvent('unregister-records', store, records, c);
 			}
 		});
@@ -149,7 +171,7 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 			'mousedown': 'mayBeHideAnnotationView'
 		});
 
-		if(!this.transcript){
+		if (!this.transcript) {
 			this.el.addCls('no-transcript-view');
 		}
 
@@ -222,7 +244,7 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 				me.fireEvent('presentation-parts-ready', me, me.getPartComponents(), me.startOn);
 
 				Promise.all(me.MediaViewerActions.loadUserData(partCmps, me))
-					.then( function() {
+					.then(function() {
 						wait(10).then(me.fireEvent.bind(me, 'sync-height'));
 					})
 					.fail(function() {
@@ -361,7 +383,7 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 			s.addFilter({
 				id: this.lineFilterId,
 				filterFn: function(r) {
-//					console.log('rec: ', r.getId(), ' line: ', r.get('line'));
+					//console.log('rec: ', r.getId(), ' line: ', r.get('line'));
 					return r.get('pline') === line;
 				}
 			});
@@ -452,7 +474,7 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 			this.annotationView.store.removeFilter(this.lineFilterId);
 		}
 
-		if(this.annotationView) {
+		if (this.annotationView) {
 			this.annotationView.destroy();
 		}
 
@@ -460,16 +482,16 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 
 	},
 
-	beforeDeactivate: function(){
-		if(this.annotationView && this.annotationView.isVisible()){
+	beforeDeactivate: function() {
+		if (this.annotationView && this.annotationView.isVisible()) {
 			this.annotationView.hide();
 		}
 	},
 
 	allowNavigation: function() {
-		if(this.noteOverlay && this.noteOverlay.editor.isActive()){
+		if (this.noteOverlay && this.noteOverlay.editor.isActive()) {
 			return this.noteOverlay.allowNavigation();
-		}else{
+		} else {
 			return Promise.resolve();
 		}
 	},
@@ -518,7 +540,7 @@ Ext.define('NextThought.app.slidedeck.transcript.TranscriptView', {
 
 	// NOTE: We don't need to scroll to a hit since when we open the media viewer we pass it the startMillis time,
 	// By the time, this function gets called, we are already scrolled at the right location.
-	scrollToHit: Ext.emptyFn,
+	scrollToHit: function() {},
 
 	getScrollTarget: function() {
 		return this.getTargetEl().dom || this.el.dom;

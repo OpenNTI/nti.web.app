@@ -6,6 +6,10 @@ Ext.define('NextThought.app.slidedeck.media.components.viewers.TranscriptViewer'
 		'NextThought.app.video.Video'
 	],
 
+	mixins: {
+		Searchable: 'NextThought.mixins.Searchable'
+	},
+
 	ui: 'media-viewer',
 	viewerType: 'transcript-focus',
 
@@ -52,7 +56,20 @@ Ext.define('NextThought.app.slidedeck.media.components.viewers.TranscriptViewer'
 		this.callParent(arguments);
 		this.buildResourceView();
 		this.enableBubble(['jump-video-to']);
+
+		this.initSearch();
 	},
+
+
+	getContainerIdForSearch: function() {
+		return this.video.getId();
+	},
+
+
+	showSearch: function(hit, fragIdx) {
+		this.startAtMillis = hit.get('StartMilliSecs');
+	},
+
 
 
 	buildResourceView: function() {
@@ -62,6 +79,7 @@ Ext.define('NextThought.app.slidedeck.media.components.viewers.TranscriptViewer'
 			xtype: 'slidedeck-transcript',
 			transcript: this.transcript,
 			record: this.record,
+			video: this.video,
 			accountForScrollbars: false,
 			scrollToId: this.scrollToId,
 			videoPlaylist: [this.video],
