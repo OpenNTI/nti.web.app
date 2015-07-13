@@ -196,9 +196,9 @@ Ext.define('NextThought.app.chat.Gutter', {
 		if (user.associatedWindow) {
 			user.associatedWindow.show();
 		}
-		else {
-			this.ChatActions.startChat(user);
-		}
+		// else {
+		// 	this.ChatActions.startChat(user);
+		// }
 
 		this.clearUnreadCount(user);
 	},
