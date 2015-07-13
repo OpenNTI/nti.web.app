@@ -77,7 +77,7 @@ Ext.define('NextThought.app.video.navigation.Video', {
 
 	setPrev: function(video) {
 		this.prevVideo = video;
-		
+
 		if (!this.rendered || !video) {
 			return;
 		}

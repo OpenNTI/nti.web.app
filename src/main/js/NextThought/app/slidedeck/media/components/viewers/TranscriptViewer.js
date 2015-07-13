@@ -14,8 +14,8 @@ Ext.define('NextThought.app.slidedeck.media.components.viewers.TranscriptViewer'
 	frame: false,
 
 
-	statics:{
-		getTargetVideoWidth: function(el, transcriptRatio){
+	statics: {
+		getTargetVideoWidth: function(el, transcriptRatio) {
 			return 512;
 		}
 	},
@@ -48,14 +48,14 @@ Ext.define('NextThought.app.slidedeck.media.components.viewers.TranscriptViewer'
 	},
 
 
-	initComponent: function(){
+	initComponent: function() {
 		this.callParent(arguments);
 		this.buildResourceView();
 		this.enableBubble(['jump-video-to']);
 	},
 
 
-	buildResourceView: function(){
+	buildResourceView: function() {
 		var me = this;
 
 		this.resourceView = this.add({
@@ -84,7 +84,7 @@ Ext.define('NextThought.app.slidedeck.media.components.viewers.TranscriptViewer'
 	},
 
 
-	afterRender: function(){
+	afterRender: function() {
 		this.callParent(arguments);
 		this.syncVideo();
 		this.mon(this.syncEl, 'click', 'syncVideo');
@@ -93,31 +93,49 @@ Ext.define('NextThought.app.slidedeck.media.components.viewers.TranscriptViewer'
 	},
 
 
-	beforeDeactivate: function(){
+	beforeDeactivate: function() {
 		var shouldDeactivate = true;
-		if(this.resourceView && this.resourceView.beforeDeactivate){
+		if (this.resourceView && this.resourceView.beforeDeactivate) {
 			shouldDeactivate = this.resourceView.beforeDeactivate();
-			if(shouldDeactivate === false){
+			if (shouldDeactivate === false) {
 				return false;
 			}
 		}
 	},
 
-	allowNavigation: function(){
+	allowNavigation: function() {
 		if (this.videoplayer.isPlaying()) {
 			this.videoplayer.pausePlayback();
 			this.didPauseVideoPlayer = true;
 		}
 
-		if(this.resourceView){
+		if (this.resourceView) {
 			return this.resourceView.allowNavigation();
-		}else{
+		} else {
 			return Promise.resolve();
 		}
 	},
 
 
-	configureVideoPlayer: function(){
+	setNext: function(video) {
+		this.nextVideo = video;
+
+		if (this.videoPlayer) {
+			this.videoPlayer.setNext(video);
+		}
+	},
+
+
+	setPrev: function(video) {
+		this.prevVideo = video;
+
+		if (this.videoPlayer) {
+			this.videoPlayer.setPrev(video);
+		}
+	},
+
+
+	configureVideoPlayer: function() {
 		var width = this.self.getTargetVideoWidth(this.getEl(), this.transcriptRatio),
 			startTimeSeconds = (this.startAtMillis || 0) / 1000,
 			range, pointer;
@@ -158,8 +176,8 @@ Ext.define('NextThought.app.slidedeck.media.components.viewers.TranscriptViewer'
 	},
 
 
-	adjustOnResize: function(availableHeight, availableWidth){
-		if(!this.resourceView){ return; }
+	adjustOnResize: function(availableHeight, availableWidth) {
+		if (!this.resourceView) { return; }
 
 		var videoWidth = this.videoPlayerEl.getWidth(),
 			targetEl = this.getTargetEl(),
@@ -169,7 +187,7 @@ Ext.define('NextThought.app.slidedeck.media.components.viewers.TranscriptViewer'
 
 		targetEl.setStyle('height', availableHeight + 'px');
 
-		if(!tEl){
+		if (!tEl) {
 			this.alignResourceViewNextToVideo(videoWidth, top);
 		}
 		else {
@@ -188,24 +206,24 @@ Ext.define('NextThought.app.slidedeck.media.components.viewers.TranscriptViewer'
 	},
 
 
-	alignResourceViewNextToVideo: function(left, top){
+	alignResourceViewNextToVideo: function(left, top) {
 		var padding = 20,
 			targetEl = this.getTargetEl();
 
-		if(top > padding){
+		if (top > padding) {
 			targetEl.setStyle('marginTop', top + 'px');
 		}
 		targetEl.setStyle('marginLeft', left + padding + 'px');
 	},
 
 
-	onPresentationPartsReady: function(){
+	onPresentationPartsReady: function() {
 		this.fireEvent('media-viewer-ready', this);
 	},
 
 
 	willShowAnnotation: function(annotationView) {
-		if(!this.resourceView){ return;}
+		if (!this.resourceView) { return;}
 
 		var nWidth = annotationView.getWidth(),
 			tBox = this.resourceView.getBox(),
@@ -226,7 +244,7 @@ Ext.define('NextThought.app.slidedeck.media.components.viewers.TranscriptViewer'
 	},
 
 
-	unSyncVideo: function(){
+	unSyncVideo: function() {
 		var transcript = this.resourceView;
 		this.syncWithTranscript = false;
 
@@ -276,13 +294,13 @@ Ext.define('NextThought.app.slidedeck.media.components.viewers.TranscriptViewer'
 
 	getLocationInfo: function() {
 		var me = this;
-		
+
 		return new Promise(function(fufill, reject) {
 			ContentUtils.getLineage(me.video.get('NTIID'), this.ownerCt && this.ownerCt.currentBundle)
 				.then(function(lineages) {
 					var lineage = lineages[0];
 					ContentUtils.getLocation(lineage.last(), bundle)
-						.then(function (location) {
+						.then(function(location) {
 							me.setLocationInfo(location);
 							fulfill(location);
 						});
@@ -312,7 +330,7 @@ Ext.define('NextThought.app.slidedeck.media.components.viewers.TranscriptViewer'
 	},
 
 
-	beforeGridViewerShow: function(){
+	beforeGridViewerShow: function() {
 		if (this.videoplayer.isPlaying()) {
 			this.videoplayer.pausePlayback();
 			this.didPauseVideoPlayer = true;
@@ -320,7 +338,7 @@ Ext.define('NextThought.app.slidedeck.media.components.viewers.TranscriptViewer'
 	},
 
 
-	afterGridViewerHide: function(){
+	afterGridViewerHide: function() {
 		if (this.didPauseVideoPlayer) {
 			this.videoplayer.resumePlayback();
 			delete this.didPauseVideoPlayer;

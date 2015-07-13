@@ -293,9 +293,9 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 		this.prevVideo = getPrevFromIndex(index);
 		this.nextVideo = getNextFromIndex(index);
 
-		if (this.viewer && this.viewer.videoplayer) {
-			this.viewer.videoplayer.setPrev(this.prevVideo);
-			this.viewer.videoplayer.setNext(this.nextVideo);
+		if (this.viewer) {
+			this.viewer.setPrev(this.prevVideo);
+			this.viewer.setNext(this.nextVideo);
 		}
 	},
 
