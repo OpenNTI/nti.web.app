@@ -126,7 +126,7 @@ Ext.define('NextThought.app.context.types.Video', {
 					return me.MediaActions.loadTranscript(transcript)
 							.then(function(cueList) {
 								store = me.__buildTranscriptStore(cueList);
-								context = Resolver.getDomElementForTranscriptTimeRange(me.range, store);
+								context = Resolver.getDomElementForTranscriptTimeRange(me.range, store, video);
 
 								cmp = Ext.widget('context-video', {
 									type: me.self.type,

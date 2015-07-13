@@ -780,8 +780,8 @@ Ext.define('NextThought.app.userdata.Actions', {
 			selectedText;
 
 		if (!container) {
-			console.error('No container supplied pulling container from ragneDescription', rangeDescription);
-			container = ragneDescription.container;
+			console.error('No container supplied pulling container from rangeDescription', rangeDescription);
+			container = rangeDescription.container;
 		}
 
 		//make sure the body is an array:

@@ -73,8 +73,12 @@ Ext.define('NextThought.app.slidedeck.transcript.AnchorResolver', {
 	 * @param  {[Ext.Store]} cueStore    [store of cue]
 	 * @return {[HTMLElement]}             [html element containing the described time range]
 	 */
-	getDomElementForTranscriptTimeRange: function(description, cueStore) {
-		if (!description || description.isEmpty) { return; }
+	getDomElementForTranscriptTimeRange: function(description, cueStore, video) {
+		if (!description || description.isEmpty) {
+			// Notes that are anchored to the title, have any empty description.
+			// So if the description or range is null, return the title element.
+			return Ext.DomHelper.createDom({html: video.get('title')});
+		}
 
 		var start = description.getStart() && description.getStart().seconds,
 			end = description.getEnd() && description.getEnd().seconds,
