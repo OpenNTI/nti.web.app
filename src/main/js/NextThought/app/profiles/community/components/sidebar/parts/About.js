@@ -12,7 +12,7 @@ Ext.define('NextThought.app.profiles.community.components.sidebar.parts.About', 
 
 	renderSelectors: {
 		avatarEl: '.avatar-container',
-		aboutEl: '.about',
+		aboutEl: '.about'
 	},
 
 	updateEntity: function(entity) {
