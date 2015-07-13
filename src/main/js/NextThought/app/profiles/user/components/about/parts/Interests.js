@@ -6,6 +6,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Interests', {
 
 	cls: 'interests fieldset groupset',
 	title: 'Interests',
+	emptyText: 'Share your interests...',
 
 	entryTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls: 'entry interest{[values.pending ? " pending": ""]}', cn: [
@@ -22,6 +23,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Interests', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{tag: 'h2', cls: 'title', html: '{title}'},
+		{cls: 'empty-text hidden', html: '{emptyText}'},
 		{cls: 'entries'}
 	]),
 
@@ -56,8 +58,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Interests', {
 
 
 	onEditorKeyPress: function(e) {
-		if (e.key === Ext.EventObject.ENTER
-		    || e.charCode === Ext.EventObject.ENTER) {
+		if (e.key === Ext.EventObject.ENTER || e.charCode === Ext.EventObject.ENTER) {
 			this.saveNewInterest();
 			e.preventDefault();
 		}
@@ -66,7 +67,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Interests', {
 
 	getEditor: function() {
 		var dom = this.entriesEl.dom;
-		
+
 		return dom && dom.querySelector('.new-field');
 	},
 
@@ -90,7 +91,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Interests', {
 
 		editor = this.getEditor();
 
-		editor.focus();		
+		editor.focus();
 	},
 
 
@@ -126,6 +127,12 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Interests', {
 		}
 
 		var data = user.getAboutData();
+
+		if (!data.interests.length && isMe) {
+			this.showEmptyText();
+		} else {
+			this.hideEmptyText();
+		}
 
 		this.clearEntries();
 

@@ -3,19 +3,22 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.EntrySet', {
 
 	title: '',
 	errorMsg: '',
+	emptyText: '',
 
 	entryTpl: new Ext.XTemplate(),
 
 	renderTpl: Ext.DomHelper.markup([
 		{tag: 'h2', cls: 'title', html: '{title}'},
 		{cls: 'entries'},
+		{cls: 'empty-text hidden', html: '{emptyText}'},
 		{cls: 'add edit-only', html: 'Add Entry'}
 	]),
 
 
-	renderSelectors:  {
+	renderSelectors: {
 		entriesEl: '.entries',
-		addEl: '.add'
+		addEl: '.add',
+		emptyTextEl: '.empty-text'
 	},
 
 
@@ -23,7 +26,8 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.EntrySet', {
 		this.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData || {}, {
-			title: this.title
+			title: this.title,
+			emptyText: this.emptyText
 		});
 	},
 
@@ -33,6 +37,26 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.EntrySet', {
 
 
 		this.mon(this.el, 'click', this.onClicked.bind(this));
+	},
+
+
+	showEmptyText: function() {
+		if (!this.rendered) {
+			this.on('afterrender', this.showEmptyText.bind(this));
+			return;
+		}
+
+		this.emptyTextEl.removeCls('hidden');
+	},
+
+
+	hideEmptyText: function() {
+		if (!this.rendered) {
+			this.on('afterrender', this.hideEmptyText.bind(this));
+			return;
+		}
+
+		this.emptyTextEl.addCls('hidden');
 	},
 
 

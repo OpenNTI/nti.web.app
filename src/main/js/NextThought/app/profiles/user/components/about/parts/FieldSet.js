@@ -1,6 +1,6 @@
 Ext.define('NextThought.app.profiles.user.components.about.parts.FieldSet', {
 	extend: 'Ext.Component',
-	
+
 	INPUT_TYPE_KEY_HANDLER: {
 		'numeric': 'limitToNumber',
 		'text-line': 'limitToLine'
@@ -15,6 +15,17 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.FieldSet', {
 		this.onKeyPress = this.onKeyPress.bind(this);
 
 		this.el.dom.addEventListener('keypress', this.onKeyPress.bind(this));
+
+		if (this.emptyTextEl) {
+			this.mon(this.emptyTextEl, 'click', this.editProfile.bind(this));
+		}
+	},
+
+
+	editProfile: function() {
+		if (this.doEdit) {
+			this.doEdit();
+		}
 	},
 
 
@@ -25,8 +36,8 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.FieldSet', {
 			this.clearErrors(e);
 		}
 
-		if(Ext.isFunction(this[fnName])){
-			this[fnName](e);	
+		if (Ext.isFunction(this[fnName])) {
+			this[fnName](e);
 		}
 	},
 
@@ -39,16 +50,16 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.FieldSet', {
 			e.preventDefault();
 		}
 	},
-	
-	limitToLine: function(e){
+
+	limitToLine: function(e) {
 		var charCode = e.key || e.charCode;
-		if(charCode == Ext.EventObject.ENTER){
+		if (charCode == Ext.EventObject.ENTER) {
 			e.preventDefault();
 		}
 	},
 
 	clearErrors: function(e) {
-		//if you haven't typed in a field that has 
+		//if you haven't typed in a field that has
 		if (!e.target || !e.target.classList.contains('error')) { return; }
 
 		var entry = e.target,

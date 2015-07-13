@@ -50,33 +50,39 @@ Ext.define('NextThought.app.profiles.user.components.about.Index', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.initRouter();
+		var me = this;
 
-		this.addRoute('/', this.showAbout.bind(this));
-		this.addRoute('/edit', this.showEdit.bind(this));
+		me.initRouter();
 
-		this.addDefaultRoute('/');
+		me.addRoute('/', me.showAbout.bind(me));
+		me.addRoute('/edit', me.showEdit.bind(me));
 
-		this.emptyCmp = this.down('profile-user-empty');
-		this.aboutCmp = this.down('profile-user-about-about');
-		this.educationCmp = this.down('profile-user-about-education');
-		this.positionsCmp = this.down('profile-user-about-positions');
-		this.interestsCmp = this.down('profile-user-about-interests');
-		this.communitiesCmp = this.down('profile-user-about-communities');
-		this.groupsCmp = this.down('profile-user-about-groups');
-		this.suggestedCmp = this.down('profile-suggested-contacts');
+		me.addDefaultRoute('/');
 
-		this.profileParts = [
-			this.aboutCmp,
-			this.educationCmp,
-			this.positionsCmp,
-			this.interestsCmp,
-			this.communitiesCmp,
-			this.groupsCmp,
-			this.suggestedCmp
+		me.emptyCmp = me.down('profile-user-empty');
+		me.aboutCmp = me.down('profile-user-about-about');
+		me.educationCmp = me.down('profile-user-about-education');
+		me.positionsCmp = me.down('profile-user-about-positions');
+		me.interestsCmp = me.down('profile-user-about-interests');
+		me.communitiesCmp = me.down('profile-user-about-communities');
+		me.groupsCmp = me.down('profile-user-about-groups');
+		me.suggestedCmp = me.down('profile-suggested-contacts');
+
+		me.profileParts = [
+			me.aboutCmp,
+			me.educationCmp,
+			me.positionsCmp,
+			me.interestsCmp,
+			me.communitiesCmp,
+			me.groupsCmp,
+			me.suggestedCmp
 		];
 
-		this.on('clear-errors', this.clearError.bind(this));
+		me.on('clear-errors', me.clearError.bind(me));
+
+		me.profileParts.forEach(function(part) {
+			part.doEdit = me.doEdit.bind(me);
+		});
 	},
 
 
@@ -89,11 +95,16 @@ Ext.define('NextThought.app.profiles.user.components.about.Index', {
 	},
 
 
+	doEdit: function() {
+		this.pushRoute('Edit', '/edit');
+	},
+
+
 	isDataEmpty: function(user) {
 		var data = user.getAboutData(),
 			empty = true;
 
-		if (data.about || data.email || data.interests.length || data.location || data.education.length || data.positions.length) {
+		if (data.about || data.interests.length || data.education.length || data.positions.length) {
 			empty = false;
 		}
 

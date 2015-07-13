@@ -9,6 +9,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{tag: 'h2', cls: 'title', html: 'About'},
+		{cls: 'empty-text hidden', html: 'Tell us about yourself...'},
 		{cls: 'field-container', cn: [
 			{tag: 'span', cls: 'field-label edit-only', html: 'Write something about yourself.'},
 			{cls: 'error-msg'},
@@ -72,7 +73,8 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 		facebookEl: '.field.facebook',
 		linkedInEl: '.field.linked-in',
 		twitterEl: '.field.twitter',
-		googleEl: '.field.google'
+		googleEl: '.field.google',
+		emptyTextEl: '.empty-text'
 	},
 
 
@@ -102,6 +104,13 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 		this.isMe = isMe;
 
 		var data = user.getAboutData();
+
+		if (!data.about && isMe) {
+			this.emptyTextEl.removeCls('hidden');
+		} else {
+			this.emptyTextEl.addCls('hidden');
+		}
+
 
 		this.nameEl.update(data.displayName || '');
 		this.realnameEl.update(data.realname || '');
@@ -138,11 +147,10 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 		this.updateRequestAlias();
 	},
 
-	updateRequestAlias: function(){
+	updateRequestAlias: function() {
 		if (!this.nameEl.hasCls('editable') && isFeature('request-alias-change') && this.isMe) {
 			this.nameEl.addCls('request');
-		}
-		else{
+		} else {
 			this.nameEl.removeCls('request');
 		}
 	},
@@ -242,11 +250,11 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.About', {
 
 			if (fieldSchema && !fieldSchema.readonly) {
 				dom = me[key.selector] && me[key.selector].dom;
-				
+
 				if (key.allowHTML) {
 					value = dom.innerHTML;
 				} else {
-					value =  dom.textContent !== undefined ? dom.textContent : (dom.innerHTML || '');
+					value = dom.textContent !== undefined ? dom.textContent : (dom.innerHTML || '');
 				}
 
 				values[key.name] = value;

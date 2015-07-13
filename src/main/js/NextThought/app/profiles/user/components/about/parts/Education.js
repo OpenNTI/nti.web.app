@@ -7,6 +7,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Education', {
 
 	title: 'Education',
 	errorMsg: 'Missing Required Education Field',
+	emptyText: 'Where did you go to school?',
 
 	entryTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls: 'entry-container', cn: [
@@ -64,6 +65,12 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Education', {
 
 		this.clearEntries();
 
+		if (!data.education.length && isMe) {
+			this.showEmptyText();
+		} else {
+			this.hideEmptyText();
+		}
+
 		data.education.forEach(this.addEntry.bind(this));
 
 		this.applySchema();
@@ -96,7 +103,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Education', {
 		endYear = endYear && (endYear.innerText || endYear.textContent);
 		description = description && (description.innerText || description.textContent);
 
-		function normalizeYear(year){
+		function normalizeYear(year) {
 		    return year ? parseInt(year, 10) : null;
 		}
 

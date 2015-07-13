@@ -1964,6 +1964,12 @@
 		}
 	}
 
+	&.editing {
+		.empty-text {
+			display: none;
+		}
+	}
+
 	.left {
 		width: 75%;
 		float: left;
@@ -2006,6 +2012,17 @@
 		margin-top: 5px;
 		padding: 20px 40px;
 		background-color: white;
+
+		.empty-text {
+			color: $primary-blue;
+			cursor: pointer;
+			font-size: 0.875rem;
+			font-weight: 300;
+
+			&.hidden {
+				display: none;
+			}
+		}
 
 		.field-label {
 			font-size: 0.625em;

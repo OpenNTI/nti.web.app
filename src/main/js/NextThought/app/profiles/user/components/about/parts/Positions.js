@@ -7,6 +7,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Positions', {
 	cls: 'positions fieldset groupset',
 	title: 'Professional',
 	errorMsg: 'Missing Required Professional Field',
+	emptyText: 'Where do you work?',
 
 	entryTpl: new Ext.XTemplate(Ext.DomHelper.markup({
 		cls: 'entry-container', cn: [
@@ -65,6 +66,12 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Positions', {
 
 		this.clearEntries();
 
+		if (!data.positions.length && isMe) {
+			this.showEmptyText();
+		} else {
+			this.hideEmptyText();
+		}
+
 		data.positions.forEach(this.addEntry.bind(this));
 
 		if (!data.positions.length && !isMe) {
@@ -95,7 +102,7 @@ Ext.define('NextThought.app.profiles.user.components.about.parts.Positions', {
 		endYear = endYear && (endYear.innerText || endYear.textContent);
 		description = description && (description.innerText || description.textContent);
 
-		function normalizeYear(year){
+		function normalizeYear(year) {
 		    return year ? parseInt(year, 10) : null;
 		}
 
