@@ -7,6 +7,12 @@ Ext.define('NextThought.model.Video', {
 		{name: 'subtitle', type: 'string'},
 		{name: 'title', type: 'string'},
 		{name: 'sources', type: 'auto'},
-		{name: 'transcripts', type: 'auto'}
-	]
+		{name: 'transcripts', type: 'auto'},
+		{name: 'label', type: 'string'}
+	],
+
+
+	getTitle: function() {
+		return this.get('label');
+	}
 });

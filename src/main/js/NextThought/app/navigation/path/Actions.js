@@ -151,7 +151,7 @@ Ext.define('NextThought.app.navigation.path.Actions', {
 			});
 	},
 
-	getBreadCrumb: function(record){
+	getBreadCrumb: function(record) {
 		var me = this,
 			rootObject = me.ContextStore.getRootBundle() || me.ContextStore.getRootProfile(),
 			path,
@@ -159,27 +159,27 @@ Ext.define('NextThought.app.navigation.path.Actions', {
 
 		//Get the path for the record
 		return me.getPathToObject(record)
-			.then(function(path){
+			.then(function(path) {
 				//if the first path item is the root bundle, take it off
-				if((path && rootObject) && path[0].getId() == rootObject.getId()){
+				if ((path && rootObject) && path[0].getId() == rootObject.getId()) {
 					path.shift();
 				}
 				//map to item.getTitle && item.getTitle() | filter out empty
-				title = path.map(function(item){
-					if(item.getTitle && item.getTitle() != ''){
+				title = path.map(function(item) {
+					if (item.getTitle && item.getTitle() != '') {
 						return {
 							label: item.getTitle()
 						};
-					}else{
-						return ''
+					} else {
+						return '';
 					}
-				})
-				
-				return title.filter(function(value){
-					if(value != '') return value
+				});
+
+				return title.filter(function(value) {
+					return !!value;
 				});
 			})
-			.fail(function(error){
+			.fail(function(error) {
 				console.error('Unable to get path because  ' + error);
 			});
 	}

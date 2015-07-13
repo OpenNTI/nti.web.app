@@ -64,10 +64,10 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Topic', {
 
 	getPath: function() {
 		return this.NavigationActions.getBreadCrumb(this.record)
-			.then(function(path){
-				return path.map(function(item){
+			.then(function(path) {
+				return path.map(function(item) {
 					return item.label;
-				})
+				});
 			});
 	},
 

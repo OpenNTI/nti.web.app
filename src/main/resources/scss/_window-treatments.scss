@@ -389,11 +389,16 @@
 		position: relative;
 		height: 44px;
 		border-bottom: 1px solid #ededed;
+		font-size: 0.75em;
 
 		.title{
-		  color: #494949;
-		  margin-left: 15px;
-		  padding-top: 10px;
+			color: #494949;
+			margin-left: 15px;
+			line-height: 44px;
+			max-width: 675px;
+			overflow: hidden;
+			white-space: nowrap;
+			@include ellipse;
 		}
 
 		.close{

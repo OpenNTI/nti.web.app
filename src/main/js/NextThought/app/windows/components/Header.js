@@ -8,7 +8,7 @@ Ext.define('NextThought.app.windows.components.Header', {
 	],
 
 	pathTpl: new Ext.XTemplate(Ext.DomHelper.markup([
-		{tag: 'tpl', 'for': 'labels', cn:  [
+		{tag: 'tpl', 'for': 'labels', cn: [
 			{tag: 'span', html: '{label}'}
 		]},
 		{tag: 'tpl', 'if': 'leaf', cn: [
@@ -45,27 +45,30 @@ Ext.define('NextThought.app.windows.components.Header', {
 	setTitle: function(title) {
 		if (!this.rendered) {
 			this.on('afterrender', this.setTitle.bind(this, title));
-			return
+			return;
 		}
 
 		this.titleEl.update(title);
 	},
 
 
-	showPathFor: function(record, leaf) {
+	showPathFor: function(record, leaf, length) {
 		//Get the root bundle, from the context StateStore
-		if(!this.rendered){
-			this.on('afterrender', this.showPathFor.bind(this,record,leaf));
+		if (!this.rendered) {
+			this.on('afterrender', this.showPathFor.bind(this, record, leaf, length));
 			return;
 		}
 		var me = this,
-			container = me.titleEl,
-			title;
+			container = me.titleEl;
 
 		me.NavigationActions.getBreadCrumb(record)
-			.then(function(title){
+			.then(function(titles) {
+				if (length) {
+					titles = titles.slice(0, length);
+				}
+
 				container.dom.innerHTML = '';
-				container = me.pathTpl.append(container, {labels: title, leaf: leaf}, true);
+				container = me.pathTpl.append(container, {labels: titles, leaf: leaf}, true);
 			});
 	}
 });

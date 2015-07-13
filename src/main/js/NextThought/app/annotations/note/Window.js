@@ -40,7 +40,7 @@ Ext.define('NextThought.app.annotations.note.Window', {
 				doNavigate: this.doNavigate.bind(this)
 			});
 
-		this.headerCmp.showPathFor(record);
+		this.headerCmp.showPathFor(record, null, 3);
 
 		if (this.loadingEl) {
 			this.remove(this.loadingEl, true);

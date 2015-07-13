@@ -5,7 +5,8 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 
 	requires: [
 		'NextThought.app.course.dashboard.components.tiles.parts.NoteComment',
-		'NextThought.app.context.ContainerContext'
+		'NextThought.app.context.ContainerContext',
+		'NextThought.app.navigation.path.Actions'
 	],
 
 	mixins: {
@@ -76,6 +77,7 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 	initComponent: function() {
 		this.callParent(arguments);
 		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.PathActions = NextThought.app.navigation.path.Actions.create();
 	},
 
 
@@ -102,11 +104,23 @@ Ext.define('NextThought.app.course.dashboard.components.tiles.Note', {
 	},
 
 
+	getNavigationPath: function() {
+		return this.PathActions.getBreadCrumb(this.record)
+			.then(function(path) {
+				path = path.slice(0, 3);
+
+				return path.map(function(item) {
+					return item.label;
+				});
+			});
+	},
+
+
 	getPath: function() {
 		var rec = this.record;
 
 		if (!this.course) {
-			return Promise.resolve([]);
+			return this.getNavigationPath();
 		}
 
 		this.CACHE.loadLineage = ContentUtils.getLineageLabels(rec.get('ContainerId'), true, this.course);
