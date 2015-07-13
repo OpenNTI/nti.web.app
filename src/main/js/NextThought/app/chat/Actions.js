@@ -371,7 +371,7 @@ Ext.define('NextThought.app.chat.Actions', {
 		username = username && Ext.isString(username) ? username : $AppConfig.username;
 		oldStatus = room.getRoomState(username || $AppConfig.username);
 		if (oldStatus !== newStatus) {
-			console.log('transitioning room state for: ', $AppConfig.username, ' from ', oldStatus, ' to ', newStatus);
+			// console.log('transitioning room state for: ', $AppConfig.username, ' from ', oldStatus, ' to ', newStatus);
 			this.postMessage(room, {'state': newStatus}, null, channel, null, Ext.emptyFn);
 		}
 	},
@@ -448,7 +448,7 @@ Ext.define('NextThought.app.chat.Actions', {
 		room = room || win.roomInfo;
 		if (room) {
 			room.setRoomState(sender, state);
-			console.log('Update chat state: set to ', state, ' for ', sender);
+			// console.log('Update chat state: set to ', state, ' for ', sender);
 			win.updateChatState(sender, state, room, isGroupChat);
 		}
 	},

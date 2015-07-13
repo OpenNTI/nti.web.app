@@ -213,7 +213,7 @@ Ext.define('NextThought.app.chat.components.Window', {
 				me.setTitleInfo(users);
 				// list.updateList(users);
 			} else {
-				console.log('Users who left the chat: ', whoLeft);
+				// console.log('Users who left the chat: ', whoLeft);
 				Ext.each(whoLeft, function(aUser) {
 					me.updateDisplayState(aUser, getString('NextThought.view.chat.Window.gone'), isGroupChat);
 				});
