@@ -55,7 +55,7 @@ Ext.define('NextThought.app.windows.components.Header', {
 	showPathFor: function(record, leaf, length, parent) {
 		//Get the root bundle, from the context StateStore
 		if (!this.rendered) {
-			this.on('afterrender', this.showPathFor.bind(this, record, leaf, length));
+			this.on('afterrender', this.showPathFor.bind(this, record, leaf, length, parent));
 			return;
 		}
 		var me = this,
