@@ -86,11 +86,16 @@ Ext.define('NextThought.app.chat.Gutter', {
 
 
 	afterRender: function() {
+		var me = this;
 		this.callParent(arguments);
 		this.mon(this.contactsButtonEl, 'click', this.goToContacts.bind(this));
 		this.mon(this.otherContactsEl, 'click', this.showAllOnlineContacts.bind(this));
 		this.maybeUpdateOtherButton();
 		Ext.EventManager.onWindowResize(Ext.bind(this.onResize, this));
+
+		this.on('show', function() {
+			me.updateList(me.store, me.store.data.items);
+		});
 	},
 
 	onResize: function() {
@@ -371,7 +376,7 @@ Ext.define('NextThought.app.chat.Gutter', {
 				return;
 			}
 
-			if (t) {
+			if (t && !me.store.find('Username', t)) {
 				UserRepository.getUser(t)
 					.then(function (u) {
 						me.store.add(u);
