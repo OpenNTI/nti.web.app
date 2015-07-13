@@ -52,6 +52,7 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 						}
 					}
 				});
+				me.alignNavigation();
 			}
 		}
 
