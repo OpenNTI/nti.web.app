@@ -87,7 +87,7 @@ Ext.define('NextThought.login.Actions', {
 				preference = value;
 
 				if (pref || c) {
-					return Globals.loadStyleSheetPromise('/app/resource/css/accessibility.css', 'main-stylesheet')
+					return Globals.loadStyleSheetPromise('/app/resources/css/accessibility.css', 'main-stylesheet')
 						.fail(function() {
 							throw 'Failed to load the accessibility style sheet';
 						});
