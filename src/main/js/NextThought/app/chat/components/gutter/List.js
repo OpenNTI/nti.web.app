@@ -25,7 +25,8 @@ Ext.define('NextThought.app.chat.components.gutter.List', {
 	renderSelectors: {
 		frameBodyEl: '.list',
 		header: '.header',
-		closeBtn: '.header .close'
+		closeBtn: '.header .close',
+		contactsEl: '.footer .show-contacts'
 	},
 
 	getTargetEl: function() { return this.frameBodyEl; },
@@ -65,11 +66,17 @@ Ext.define('NextThought.app.chat.components.gutter.List', {
 	afterRender: function() {
 		this.callParent(arguments);
 		this.mon(this.closeBtn, 'click', this.hide.bind(this));
+		this.mon(this.contactsEl, 'click', this.goToContacts.bind(this));
 	},
 
 
 	onItemClicked: function(view, user, item, index, e) {
 		this.openChatWindow(user);
+	},
+
+
+	goToContacts: function(e) {
+		NextThought.app.navigation.Actions.pushRootRoute('Contacts', '/contacts/');
 	},
 
 
