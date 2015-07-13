@@ -160,18 +160,18 @@ Ext.define('NextThought.app.Body', {
 		this.attemptToNavigateToObject(record);
 	},
 
-
 	pushWindow: function(id, mimeType, state, title, route, precache) {
-		var location = this.ContextStore.getLocationInterface(),
-			route;
-
 		if (!title) {
 			title = this.ContextStore.getCurrentTitle();
 		}
 
-		if (route) {
-			location.pathname = route;
+		if (!route) {
+			route = this.ContextStore.getCurrentRoute();
 		}
+
+		var location = Globals.getURLParts(route),
+			search = this.ContextStore.getCurrentSearch(),
+			hash = this.ContextStore.getCurrentHash();
 
 		if (id) {
 			id = ParseUtils.encodeForURI(id);
@@ -182,25 +182,24 @@ Ext.define('NextThought.app.Body', {
 			} else {
 				location.pathname = Globals.trimRoute(location.pathname) + '/object/' + id;
 			}
-
 		} else {
 			state = null;
 			location.pathname = this.ContextStore.removeObjectRoute();
 		}
 
 		if (state) {
-			location.hash = state;
+			location.hash = '#' + state;
 		}
 
-		route = decodeURIComponent(location.pathname);
-
-		if (location.search) {
-			route += location.search;
+		if (search) {
+			location.search = location.search || search;
 		}
 
-		if (location.hash) {
-			route += location.hash;
+		if (hash) {
+			location.hash = location.hash || hash;
 		}
+
+		route = location.pathname + location.search + location.hash;
 
 		this.pushRoute(title, route, precache, state);
 	},

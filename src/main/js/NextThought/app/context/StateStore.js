@@ -4,13 +4,10 @@ Ext.define('NextThought.app.context.StateStore', {
 	setContext: function(context, title, route) {
 		this.current_context = context;
 
-		this.ANCHOR = this.ANCHOR || document.createElement('a');
+		this.ROUTE_PARTS = Globals.getURLParts(route);
 
 		this.current_title = title;
 		this.current_route = route;
-
-		//make the href absolute;
-		this.ANCHOR.href = '/' + route.replace(/^\//, '');
 
 		this.fireEvent('new-context');
 	},
@@ -57,23 +54,18 @@ Ext.define('NextThought.app.context.StateStore', {
 	},
 
 
-	getLocationInterface: function() {
-		return this.ANCHOR.cloneNode();
-	},
-
-
 	getCurrentRoute: function() {
-		return decodeURIComponent(this.ANCHOR.pathname);
+		return this.ROUTE_PARTS.pathname;
 	},
 
 
 	getCurrentSearch: function() {
-		return this.ANCHOR.search;
+		return this.ROUTE_PARTS.search;
 	},
 
 
 	getCurrentHash: function() {
-		return this.ANCHOR.hash;
+		return this.ROUTE_PARTS.hash;
 	},
 
 
@@ -105,9 +97,8 @@ Ext.define('NextThought.app.context.StateStore', {
 	},
 
 
-	removeObjectRoute: function() {
-		var location = this.getLocationInterface(),
-			route = Globals.trimRoute(this.getCurrentRoute()),
+	removeObjectRoute: function(path) {
+		var route = Globals.trimRoute(path || this.getCurrentRoute()),
 			parts = route.split('/');
 
 		if (parts[parts.length - 3] === 'object') {
@@ -116,9 +107,7 @@ Ext.define('NextThought.app.context.StateStore', {
 			parts = parts.slice(0, -2);
 		}
 
-		location.pathname = parts.join('/');
-
-		route = decodeURIComponent(location.pathname);
+		route = parts.join('/');
 
 		return route;
 	}

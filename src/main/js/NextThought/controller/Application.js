@@ -175,37 +175,33 @@ Ext.define('NextThought.controller.Application', {
 
 
 	handleRoute: function(title, route, precache) {
-		var a = document.createElement('a'),
-			body = this.getBody(),
-			parts, full;
+		var body = this.getBody(), location;
 
-		//set the href as a absolute path
-		a.href = '/' + route.replace(/^\//, '');
-
-		full = a.pathname + a.search + a.hash;
+		location = Globals.getURLParts('/' + route.replace(/^\//, ''));
 
 		//since its an absolute path the path name will start
 		//with a / so there will be an empty space at the end of the string
 		//so use that when we join to keep the path absolute
-		parts = a.pathname.split('/');
+		parts = location.pathname.split('/');
+
 
 		//if we are navigating to an object remove it from the path
 		//so any handlers that have a variable at the end won't accidentally
 		//get 'object'
 		//object/mimeType/id
 		if (parts[parts.length - 3] === 'object') {
-			a.pathname = parts.slice(0, -3).join('/');
+			location.pathname = parts.slice(0, -3).join('/');
 		//object/id
 		} else if (parts[parts.length - 2] === 'object') {
-			a.pathname = parts.slice(0, -2).join('/');
+			location.pathname = parts.slice(0, -2).join('/');
 		}
 
-		this.maybeMarkReturn(title, a.pathname);
+		this.maybeMarkReturn(title, location.pathname);
 
-		this.currentRoute = decodeURIComponent(a.pathname) + a.search + a.hash;
+		this.currentRoute = location.pathname + location.search + location.hash;
 
 		return body.handleRoute(this.currentRoute, precache)
-			.then(this.onRoute.bind(this, title, full));
+			.then(this.onRoute.bind(this, title, route));
 	},
 
 
@@ -234,35 +230,27 @@ Ext.define('NextThought.controller.Application', {
 
 
 	__mergeRoute: function(route) {
-		route = Globals.trimRoute(route);
+		var location = Globals.getURLParts(route),
+			pathname;
 
-		var a = document.createElement('a'),
-			hash, search, pathname;
-
-		route = Globals.trimRoute(route);
+		route = Globals.trimRoute(location.pathname);
 
 		if (route) {
-			route = '/' + this.APP_ROOT + '/' + route;
+			location.pathname = '/' + this.APP_ROOT + '/' + route;
 		} else {
-			route = '/' + this.APP_ROOT;
+			location.pathname = '/' + this.APP_ROOT;
 		}
 
-		a.href = route;
-
-		hash = a.hash;
-		search = a.search;
-		pathname = decodeURIComponent(a.pathname);
-
-		pathname = Globals.trimRoute(pathname);
+		pathname = Globals.trimRoute(location.pathname);
 
 		pathname = '/' + pathname + '/';
 
-		if (search) {
-			pathname += search;
+		if (location.search) {
+			pathname += location.search;
 		}
 
-		if (hash) {
-			pathname += hash;
+		if (location.hash) {
+			pathname += location.hash;
 		}
 
 		return pathname;
