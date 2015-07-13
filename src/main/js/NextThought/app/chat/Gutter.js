@@ -113,6 +113,7 @@ Ext.define('NextThought.app.chat.Gutter', {
 	showAllOnlineContacts: function(e) {
 		this.clearCollapsedMessageCount();
 		this.ChatStore.fireEvent('show-all-gutter-contacts', this);
+		this.maybeAdjustChatWindow();
 	},
 
 
@@ -242,11 +243,12 @@ Ext.define('NextThought.app.chat.Gutter', {
 				if (user) {
 					this.ROOM_USER_MAP[roomInfo.getId()] = user;
 					user.associatedWindow = win;
-					win.onceRendered
-						.then(function() {
-							wait()
-								.then(me.realignChatWindow.bind(me, win, user));
-						});
+					win.on({
+						show: function() {
+								wait()
+									.then(me.realignChatWindow.bind(me, win, user));
+							}
+					});
 				}
 			}
 		}
@@ -296,6 +298,14 @@ Ext.define('NextThought.app.chat.Gutter', {
 			win.el.setStyle('top', top + 'px');
 			console.debug('align chat window to:', top);
 		}
+
+		this.adjustToExpandedChat(win);
+	},
+
+
+	adjustToExpandedChat: function(win) {
+		if(!win) { return; }
+
 		if (this.gutterList && this.gutterList.isVisible()) {
 			win.addCls('gutter-list-open');
 			this.gutterList.on({
@@ -307,9 +317,26 @@ Ext.define('NextThought.app.chat.Gutter', {
 	},
 
 
+	maybeAdjustChatWindow: function() {
+		var wins = this.ChatStore.getAllChatWindows(),
+			me = this, rid;
+
+		Ext.each(wins || [], function(win) {
+			if (win && win.isVisible()) {
+				me.adjustToExpandedChat(win);
+			}
+
+			rid = win && win.roomInfo && win.roomInfo.getId();
+			if (me.ROOM_USER_MAP[rid]) {
+				me.realignChatWindow(win, me.ROOM_USER_MAP[rid]);
+			}
+		});
+	},
+
+
 	onRoomExit: function (roomId) {
 		var user = this.ROOM_USER_MAP[roomId],
-			entry = this.findEntryForUser(user.get('Username'));
+			entry = this.findEntryForUser(user && user.get('Username'));
 
 		if (entry) {
 			entry.clearUnreadCount();
