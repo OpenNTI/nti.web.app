@@ -139,17 +139,17 @@ Ext.define('NextThought.app.chat.Gutter', {
 		this.store.add(records);
 	},
 
-	onOnlineContactRemove: function(store, records) {
-		this.store.remove(records);
+	onOnlineContactRemove: function(store, record) {
+		if (!record.associatedWindow) {
+			this.store.remove(record);
+		}
 	},
 
 	removeContact: function(store, user) {
-		var entry = this.findEntryForUser(user),
-			win = entry && entry.associatedWindow,
-			rid = win && win.roomInfo && win.roomInfo.getId();
+		var entry = this.findEntryForUser(user);
 
 		// Make sure we don't remove a user with an active chat window.
-		if (entry && !this.ROOM_USER_MAP[rid]) {
+		if (entry) {
 			this.remove(entry);
 		}
 	},
