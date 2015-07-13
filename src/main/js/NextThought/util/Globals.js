@@ -597,7 +597,7 @@ Ext.define('NextThought.util.Globals', {
 	getURLRooted: function(url, root) {
 		if (!url) { return ''; }
 
-		if (Globals.HOST_PREFIX_PATTERN.test(url) || url.indexOf('//') === 0) {
+		if (Globals.HOST_PREFIX_PATTERN.test(url) || url.indexOf('/') === 0) {
 			return url;
 		}
 
