@@ -6,12 +6,13 @@ Ext.define('NextThought.app.Body', {
 
 	requires: [
 		'NextThought.app.library.Index',
+		'NextThought.app.bundle.Index',
 		'NextThought.app.content.Index',
 		'NextThought.app.course.Index',
 		'NextThought.app.search.Index',
 		'NextThought.app.profiles.user.Index',
- 	    'NextThought.app.profiles.group.Index',
- 	    'NextThought.app.profiles.community.Index',
+		'NextThought.app.profiles.group.Index',
+		'NextThought.app.profiles.community.Index',
 		'NextThought.app.notifications.Index',
 		'NextThought.util.Parsing',
 		'NextThought.app.navigation.StateStore',

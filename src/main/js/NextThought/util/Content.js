@@ -2,7 +2,7 @@
 Ext.define('NextThought.util.Content', {
 	singleton: true,
 
-	requires: ['NextThought.util.Parsing', 'NextThought.app.library.StateStore'],
+	requires: ['NextThought.util.Parsing', 'NextThought.app.library.StateStore', 'NextThought.overrides.builtins.RegExp'],
 
 	mixins: {
 		observable: 'Ext.util.Observable'
