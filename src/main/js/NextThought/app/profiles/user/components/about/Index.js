@@ -118,6 +118,10 @@ Ext.define('NextThought.app.profiles.user.components.about.Index', {
 		this.profileParts.forEach(function(part) {
 			part.hide();
 		});
+
+		this.communitiesCmp.show();
+		this.groupsCmp.show();
+		this.suggestedCmp.show();
 	},
 
 
@@ -138,6 +142,10 @@ Ext.define('NextThought.app.profiles.user.components.about.Index', {
 
 		if (this.isDataEmpty(user) && !isMe) {
 			this.setEmpty(user);
+
+			this.communitiesCmp.setUser(user, isMe);
+			this.groupsCmp.setUser(user, isMe);
+			this.suggestedCmp.setUser(user, isMe);
 
 			return Promise.resolve();
 		}
