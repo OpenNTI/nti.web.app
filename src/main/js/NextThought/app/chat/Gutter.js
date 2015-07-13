@@ -405,7 +405,7 @@ Ext.define('NextThought.app.chat.Gutter', {
 				return;
 			}
 
-			if (t && !me.store.find('Username', t)) {
+			if (t && me.store.find('Username', t) === -1) {
 				UserRepository.getUser(t)
 					.then(function (u) {
 						me.store.add(u);
