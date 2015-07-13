@@ -94,6 +94,8 @@ Ext.define('NextThought.app.chat.Gutter', {
 	},
 
 	onResize: function() {
+		if (!this.isVisible()) { return; }
+
 		this.callParent(arguments);
 		this.updateList(this.store, this.store.data.items);
 	},
@@ -186,9 +188,9 @@ Ext.define('NextThought.app.chat.Gutter', {
 		if (count > 0) {
 			this.otherContactsEl.show();
 		}
-		else {
-			this.otherContactsEl.hide();
-		}
+		// else {
+		// 	this.otherContactsEl.hide();
+		// }
 	},
 
 
@@ -196,9 +198,9 @@ Ext.define('NextThought.app.chat.Gutter', {
 		if (user.associatedWindow) {
 			user.associatedWindow.show();
 		}
-		// else {
-		// 	this.ChatActions.startChat(user);
-		// }
+		else {
+			this.ChatActions.startChat(user);
+		}
 
 		this.clearUnreadCount(user);
 	},
