@@ -153,7 +153,7 @@ Ext.define('NextThought.app.navigation.path.Actions', {
 
 	getBreadCrumb: function(record){
 		var me = this,
-			rootBundle = me.ContextStore.getRootBundle(),
+			rootObject = me.ContextStore.getRootBundle() || me.ContextStore.getRootProfile(),
 			path,
 			title;
 
@@ -161,7 +161,7 @@ Ext.define('NextThought.app.navigation.path.Actions', {
 		return me.getPathToObject(record)
 			.then(function(path){
 				//if the first path item is the root bundle, take it off
-				if((path && rootBundle) && path[0].getTitle() == rootBundle.getTitle()){
+				if((path && rootObject) && path[0].getId() == rootObject.getId()){
 					path.shift();
 				}
 				//map to item.getTitle && item.getTitle() | filter out empty
