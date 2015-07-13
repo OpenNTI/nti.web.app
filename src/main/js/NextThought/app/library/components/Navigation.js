@@ -87,14 +87,11 @@ Ext.define('NextThought.app.library.components.Navigation', {
 		this.buildMenu(options);
 	},
 
+
 	dropDownClick: function(e) {
-		if (e.getTarget('.disabled')) {	return; }
-
-		var available = e.getTarget('.available');
-
-		if (available) {
+		if (e.getTarget('.available')) {
 			this.bodyView.showAvailable(this.activeItem.available.title, this.activeItem.available.route);
-		} else if (e.getTarget('.label')) {
+		} else if (!e.getTarget('.disabled') && e.getTarget('.label')) {
 			this.viewMenu.showBy(this.dropdownEl, 'tl-bl');
 		}
 	}

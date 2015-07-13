@@ -43,6 +43,16 @@
 		height: 100%;
 		float: left;
 		position: relative;
+
+		&.disabled {
+			.label {
+				cursor: default;
+
+				&::after {
+					display: none;
+				}
+			}
+		}
 	}
 
 	.label {
