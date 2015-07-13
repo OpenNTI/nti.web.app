@@ -369,6 +369,8 @@ Ext.define('NextThought.app.chat.Gutter', {
 
 
 	handleWindowNotify: function(win, msg) {
+		if(win && win.isVisible()) { return; }
+
 		var roomInfo = win && win.roomInfo,
 			occupants = roomInfo && roomInfo.get('Occupants'),
 			entry, t, i, me = this, user, currentCount;
