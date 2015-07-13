@@ -132,13 +132,14 @@ Ext.define('NextThought.model.User', {
 
 
 	getBackgroundImage: function() {
-		var background = this.get('backgroundURL');
+		var background = this.get('backgroundURL'),
+			username = this.get('Username');
 
 		if (background && false) {
 			return Promise.resolve(background);
 		}
 
-		return Promise.reject();
+		return Promise.resolve(this.self.getDefaultBackgroundForUsername(username));
 	},
 
 
@@ -168,10 +169,10 @@ Ext.define('NextThought.model.User', {
 
 
 	getProfileUrl: function(tab) {
-		if(!this.getLink('Activity')){
+		if (!this.getLink('Activity')) {
 			return null;
 		}
-		
+
 		var id = this.get('Username');
 
 		if ($AppConfig.obscureUsernames) {
@@ -191,9 +192,9 @@ Ext.define('NextThought.model.User', {
 	hasBlog: function() {
 		return Boolean(this.getLink('Blog'));
 	},
-	
-	getAvatarInitials: function(){
-		if(this.isUnresolved()){
+
+	getAvatarInitials: function() {
+		if (this.isUnresolved()) {
 			return null;
 		}
 		return NextThought.model.User.getAvatarInitials(this.raw, this.get('FirstName'), this.get('LastName'), this.getName());
@@ -305,20 +306,48 @@ Ext.define('NextThought.model.User', {
 	statics: {
 
 		BLANK_AVATAR: '/app/resources/images/icons/unresolved-user.png',
+		BAKCGROUND_CHOICE_COUNT: 13,
 
 		//This is isn't really a battle we can win given the complexity of names
 		//globally, however as a default this should work.  If they don't like it
 		//they can upload an image.  If we have a first and last from the server
 		//take the first char of each, else take the first char of the display name.
 		//As of 7/2015 this matches the mobile app. Unresolved users don't show initials
-		getAvatarInitials: function(data, f, l, d){		
+		getAvatarInitials: function(data, f, l, d) {
 			//TODO should we cache this?
-		
-			var first = f|| data.NonI18NFirstName,
+
+			var first = f || data.NonI18NFirstName,
 			last = l || data.NonI18NLastName,
 			dn = d || data.displayName;
-		
-			return first && last ? first[0]+last[0] : (dn && dn[0]);
+
+			return first && last ? first[0] + last[0] : (dn && dn[0]);
+		},
+
+
+		getDefaultBackgroundForUsername: function(username) {
+			var hash = this.getUsernameHash(username),
+				idx = Math.abs(hash) % this.BAKCGROUND_CHOICE_COUNT;
+
+			if (idx < 10) {
+				idx = '0' + idx;
+			}
+
+			return '/app/resources/images/profile-backgrounds/profile_bg_' + idx + '.jpg';
+		},
+
+
+		getUsernameHash: function(str) {
+			var hash = 0, c;
+
+			if (str.length == 0) return hash;
+
+			for (i = 0; i < str.length; i++) {
+				c = str.charCodeAt(i);
+				hash = ((hash << 5) - hash) + c;
+				hash = hash & hash; // Convert to 32bit integer
+			}
+
+			return hash;
 		},
 
 		getUnresolved: function(username) {

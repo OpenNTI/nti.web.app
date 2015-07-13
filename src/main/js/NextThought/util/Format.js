@@ -1,6 +1,6 @@
 Ext.define('NextThought.util.Format', {
 	singleton: true,
-	
+
 	//http://www.materialui.co/colors 600 line
 	DEFAULT_AVATAR_BG_COLORS: ['5E35B1', '3949AB', '1E88E5', '039BE5',
 				   '00ACC1', '00897B', '43A047', '7CB342',
@@ -43,49 +43,38 @@ Ext.define('NextThought.util.Format', {
 		var avatar = (value && value.get && value.get('avatarURL')) || (value && value.avatarURL),
 			username = (value && value.get && value.get('Username')) || (value && value.Username),
 			clazz = (value && value.get && value.get('Class')) || (value && value.Class),
-			defaultAvatar = clazz !== 'User' ?  NextThought.model.FriendsList.BLANK_AVATAR :  NextThought.model.User.BLANK_AVATAR,
+			defaultAvatar = clazz !== 'User' ? NextThought.model.FriendsList.BLANK_AVATAR : NextThought.model.User.BLANK_AVATAR,
 			clsList = [cls || 'avatar', 'avatar-container'],
 			initials,
-			cn=[], color, idx;
+			cn = [], color, idx;
 
 		function get(link) {
 			return 'url(' + link + ')';
 		}
-		
-		function hash(str){
-			var hash = 0, c;
-			if (str.length == 0) return hash;
-			for (i = 0; i < str.length; i++) {
-				c = str.charCodeAt(i);
-				hash = ((hash<<5)-hash)+c;
-				hash = hash & hash; // Convert to 32bit integer
-			}
-			return hash;
-		}
-		
-		if(clazz){
+
+
+		if (clazz) {
 			clsList.push(clazz);
 		}
 
-		if(value && Ext.isFunction(value.getAvatarInitials)){
+		if (value && Ext.isFunction(value.getAvatarInitials)) {
 			initials = value.getAvatarInitials();
 		}
-		else if(value){
+		else if (value) {
 			initials = NextThought.model.User.getAvatarInitials(value);
 		}
 
 		clsList = clsList.join(' ');
-		if(initials){
-			idx = hash(username);
-			idx = (idx < 0 ? idx * -1 : idx) % NextThought.util.Format.DEFAULT_AVATAR_BG_COLORS.length
+		if (initials) {
+			idx = NextThought.model.User.getUsernameHash(username);
+			idx = (idx < 0 ? idx * -1 : idx) % NextThought.util.Format.DEFAULT_AVATAR_BG_COLORS.length;
 			color = NextThought.util.Format.DEFAULT_AVATAR_BG_COLORS[idx];
-			cn[0] = {cls: 'fallback avatar-pic initials', style: {'background-color': '#'+color}, cn: {cls: 'inner', html: initials}};
+			cn[0] = {cls: 'fallback avatar-pic initials', style: {'background-color': '#' + color}, cn: {cls: 'inner', html: initials}};
+		} else {
+			cn[0] = {cls: 'fallback avatar-pic', style: {backgroundImage: get(defaultAvatar)}};
 		}
-		else{
-			cn[0] = {cls: 'fallback avatar-pic', style: {backgroundImage: get(defaultAvatar)}}
-		}
-		
-		cn[1] = {cls: 'profile avatar-pic', style: {backgroundImage: get(avatar)}}
+
+		cn[1] = {cls: 'profile avatar-pic', style: {backgroundImage: get(avatar)}};
 
 		return Ext.DomHelper.markup({cls: clsList, cn: cn});
 	},

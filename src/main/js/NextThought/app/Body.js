@@ -422,6 +422,7 @@ Ext.define('NextThought.app.Body', {
 
 
 	updateBodyContent: function(content, masked) {
+		debugger;
 		var body = Ext.getBody(),
 			getBackground = content && content.getBackgroundImage && content.getBackgroundImage(),
 			mask = document.querySelector('.body-shade-mask');

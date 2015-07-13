@@ -103,5 +103,17 @@ Ext.define('NextThought.model.Community', {
 			});
 
 		return this.loadForumList;
+	},
+
+
+	getBackgroundImage: function() {
+		var background = this.get('backgroundURL'),
+			username = this.get('Username');
+
+		if (background) {
+			return Promise.resolve(background);
+		}
+
+		return Promise.resolve(NextThought.model.User.getDefaultBackgroundForUsername(username));
 	}
 });

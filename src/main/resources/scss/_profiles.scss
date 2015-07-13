@@ -206,10 +206,14 @@
 		}
 	}
 
+
+	.outline {
+		background-color: rgba(35, 35, 35, 0.7);
+	}
+
 	.meta {
 		padding: 20px 20px 0 200px;
 		height: 145px;//180 - 35
-		background-color: rgba(0, 0, 0, 0.1);
 
 		.about {
 			float: left;
