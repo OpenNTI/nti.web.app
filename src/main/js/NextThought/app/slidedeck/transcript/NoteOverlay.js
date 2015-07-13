@@ -181,7 +181,7 @@ Ext.define('NextThought.app.slidedeck.transcript.NoteOverlay', {
 		this.annotationOverlay.setStyle('left', w + 'px');
 
 		Ext.each(cmps, function(cmp) {
-			if (Ext.isFunction(cmp.positionAnnotationNibs)) {
+			if (Ext.isFunction(cmp.positionAnnotationNibs) && cmp.isVisible(true)) {
 				cmp.positionAnnotationNibs(me.reader.el);
 			}
 		});
@@ -197,7 +197,7 @@ Ext.define('NextThought.app.slidedeck.transcript.NoteOverlay', {
 		//the overlay needs component specific data to render a note.
 		var cmps = Ext.isFunction(this.reader.getPartComponents) ? this.reader.getPartComponents() : [];
 		Ext.each(cmps || [], function(cmp) {
-			if (Ext.isFunction(cmp.registerAnnotations)) {
+			if (Ext.isFunction(cmp.registerAnnotations) && cmp.isVisible(true)) {
 				cmp.registerAnnotations();
 			}
 		});
