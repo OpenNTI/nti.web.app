@@ -34,7 +34,7 @@ Ext.define('NextThought.app.chat.Gutter', {
 	/* Contains all the chat rooms currently open*/
 	ROOM_USER_MAP: {},
 
-	ENTRY_BOTTOM_OFFSET: 70,
+	ENTRY_BOTTOM_OFFSET: 100,
 
 	initComponent: function() {
 		this.callParent(arguments);
@@ -186,9 +186,9 @@ Ext.define('NextThought.app.chat.Gutter', {
 		if (count > 0) {
 			this.otherContactsEl.show();
 		}
-		// else {
-		// 	this.otherContactsEl.hide();
-		// }
+		else {
+			this.otherContactsEl.hide();
+		}
 	},
 
 
