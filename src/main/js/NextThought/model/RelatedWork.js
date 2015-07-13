@@ -40,7 +40,7 @@ Ext.define('NextThought.model.RelatedWork', {
 				description: this.get('description')
 			};
 
-		data['attribute-data-href'] = getURL(data.href, root);
+		data['attribute-data-href'] = Globals.getURLRooted(data.href, root);
 		data.noTarget = !Globals.shouldOpenInApp(data.ntiid, data.href);
 		data.domSpec = DomUtils.asDomSpec.call(data);
 
