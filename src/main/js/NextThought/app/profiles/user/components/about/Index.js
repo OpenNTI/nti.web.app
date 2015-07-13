@@ -7,6 +7,7 @@ Ext.define('NextThought.app.profiles.user.components.about.Index', {
 	},
 
 	requires: [
+		'NextThought.app.profiles.user.components.about.parts.Empty',
 		'NextThought.app.profiles.user.components.about.parts.About',
 		'NextThought.app.profiles.user.components.about.parts.Communities',
 		'NextThought.app.profiles.user.components.about.parts.Education',
@@ -26,6 +27,7 @@ Ext.define('NextThought.app.profiles.user.components.about.Index', {
 			layout: 'none',
 			cls: 'left',
 			items: [
+				{xtype: 'profile-user-empty'},
 				{xtype: 'profile-user-about-about'},
 				{xtype: 'profile-user-about-education'},
 				{xtype: 'profile-user-about-positions'},
@@ -55,6 +57,7 @@ Ext.define('NextThought.app.profiles.user.components.about.Index', {
 
 		this.addDefaultRoute('/');
 
+		this.emptyCmp = this.down('profile-user-empty');
 		this.aboutCmp = this.down('profile-user-about-about');
 		this.educationCmp = this.down('profile-user-about-education');
 		this.positionsCmp = this.down('profile-user-about-positions');
@@ -86,11 +89,49 @@ Ext.define('NextThought.app.profiles.user.components.about.Index', {
 	},
 
 
+	isDataEmpty: function(user) {
+		var data = user.getAboutData(),
+			empty = true;
+
+		if (data.about || data.email || data.interests.length || data.location || data.education.length || data.positions.length) {
+			empty = false;
+		}
+
+		return empty;
+	},
+
+
+	setEmpty: function(user) {
+		this.emptyCmp.show();
+
+		this.profileParts.forEach(function(part) {
+			part.hide();
+		});
+	},
+
+
+	removeEmpty: function() {
+		this.emptyCmp.hide();
+
+		this.profileParts.forEach(function(part) {
+			part.show();
+		});
+	},
+
+
 	userChanged: function(user, isMe) {
 		var cmps = this.profileParts;
 
 		this.activeUser = user;
 		this.isMe = isMe;
+
+		if (this.isDataEmpty(user) && !isMe) {
+			this.setEmpty(user);
+
+			return Promise.resolve();
+		}
+
+		this.removeEmpty();
 
 		user.getMemberships(true);
 
@@ -162,7 +203,7 @@ Ext.define('NextThought.app.profiles.user.components.about.Index', {
 
 		values.education = this.educationCmp.getValues();
 		values.positions = this.positionsCmp.getValues();
-		values.interests = Ext.Array.filter(this.interestsCmp.getValues()||[], function(i){return !Ext.isEmpty(i);});
+		values.interests = Ext.Array.filter(this.interestsCmp.getValues() || [], function(i) { return !Ext.isEmpty(i); });
 
 		return values;
 	},

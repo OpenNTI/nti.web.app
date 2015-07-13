@@ -1992,6 +1992,16 @@
 		text-align: center;
 	}
 
+	.empty-profile {
+		margin-top: 10px;
+		background-color: white;
+		text-align: center;
+		line-height: 200px;
+		font-size: 1.25em;
+		color: $tertiary-grey;
+		font-weight: 300;
+	}
+
 	.fieldset {
 		margin-top: 5px;
 		padding: 20px 40px;
