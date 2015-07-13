@@ -191,16 +191,17 @@ Ext.define('NextThought.app.slidedeck.transcript.NoteOverlay', {
 
 
 	realignNotes: function() {
-		this.annotationManager.removeAll();
 
 		//This is  not the right way to be plumbing this.  I'm not sure I have any better ideas though,
 		//the overlay needs component specific data to render a note.
-		var cmps = Ext.isFunction(this.reader.getPartComponents) ? this.reader.getPartComponents() : [];
-		Ext.each(cmps || [], function(cmp) {
-			if (Ext.isFunction(cmp.registerAnnotations) && cmp.isVisible(true)) {
+		var cmps = Ext.isFunction(this.reader.getPartComponents) ? this.reader.getPartComponents() : [],
+			visibleCmps = Ext.Array.filter(cmps, function(c){return Ext.isFunction(c.registerAnnotations) && c.isVisible(true);});
+		if(visibleCmps.length){
+			this.annotationManager.removeAll();
+			Ext.each(visibleCmps, function(cmp){
 				cmp.registerAnnotations();
-			}
-		});
+			});
+		}
 	},
 
 
