@@ -119,10 +119,17 @@ Ext.define('NextThought.app.profiles.community.components.activity.Index', {
 	setPostContainer: function(forum) {
 		this.postContainer = forum;
 
+		var title = forum && forum.getTitle();
+
+		if (title === 'Forum') {
+			title = null;
+		}
+
 		if (!forum || !forum.getLink('add')) {
 			this.newPostCmp.hide();
 		} else {
 			this.newPostCmp.show();
+			this.newPostCmp.setContainerTitle(title);
 		}
 	},
 

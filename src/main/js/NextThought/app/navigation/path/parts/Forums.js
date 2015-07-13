@@ -12,7 +12,7 @@ Ext.define('NextThought.app.navigation.path.parts.Forums', {
 		// handlers[NextThought.model.forums.CommentPost.mimeType] = this.getPathToTopicComment.bind(this);
 		// handlers[NextThought.model.forums.CommunityHeadlinePost.mimeType] = this.getPathToTopicPost.bind(this);
 		// handlers[NextThought.model.forums.CommunityHeadlineTopic.mimeType] = this.getPathToTopic.bind(this);
-		handlers[NextThought.model.forums.CommunityForum.mimeType] = this.getPathToForum.bind(this);
+		// handlers[NextThought.model.forums.CommunityForum.mimeType] = this.getPathToForum.bind(this);
 
 		return handlers;
 	},
@@ -39,6 +39,10 @@ Ext.define('NextThought.app.navigation.path.parts.Forums', {
 
 			return 0;
 		}).then(function(bundles) {
+			if (!bundles.length) {
+				return Promise.reject();
+			}
+
 			var bundle = bundles.last(),
 				parent = bundle.get('Discussions'),
 				section = bundle.get('ParentDiscussions'),

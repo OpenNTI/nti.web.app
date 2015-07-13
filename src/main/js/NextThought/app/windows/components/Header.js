@@ -52,7 +52,7 @@ Ext.define('NextThought.app.windows.components.Header', {
 	},
 
 
-	showPathFor: function(record, leaf, length) {
+	showPathFor: function(record, leaf, length, parent) {
 		//Get the root bundle, from the context StateStore
 		if (!this.rendered) {
 			this.on('afterrender', this.showPathFor.bind(this, record, leaf, length));
@@ -63,8 +63,12 @@ Ext.define('NextThought.app.windows.components.Header', {
 
 		me.NavigationActions.getBreadCrumb(record)
 			.then(function(titles) {
-				if (length) {
+				if (length && length >= 0) {
 					titles = titles.slice(0, length);
+				}
+
+				if (parent) {
+					titles.push({label: parent});
 				}
 
 				container.dom.innerHTML = '';

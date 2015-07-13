@@ -61,7 +61,7 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 
 				me.remove(me.loadingEl);
 				me.showTopic(me.record, forum);
-				me.headerCmp.showPathFor(forum);
+				me.headerCmp.showPathFor(me.record, me.record.get('title'));
 			});
 	},
 
@@ -81,7 +81,7 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 
 				me.remove(me.loadingEl);
 				me.showTopic(topic, forum, me.record);
-				me.headerCmp.showPathFor(forum);
+				me.headerCmp.showPathFor(topic);
 			});
 	},
 
@@ -95,7 +95,7 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 
 				me.remove(me.loadingEl);
 				me.showEditor(me.record, forum);
-				me.headerCmp.showPathFor(forum, 'New Discussion');
+				me.headerCmp.showPathFor(forum, 'New Discussion', -1, forum.getTitle());
 			});
 	},
 
