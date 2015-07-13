@@ -5,7 +5,8 @@ Ext.define('NextThought.app.profiles.group.Index', {
 	requires: [
 		'NextThought.app.profiles.group.components.Header',
 		'NextThought.app.profiles.user.components.membership.Index',
-		'NextThought.app.profiles.group.components.activity.Index'
+		'NextThought.app.profiles.group.components.activity.Index',
+		'NextThought.app.profiles.group.components.membership.Index'
 	],
 
 	cls: 'group-profile profile',
