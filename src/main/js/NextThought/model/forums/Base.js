@@ -92,7 +92,7 @@ Ext.define('NextThought.model.forums.Base', {
 
 	setMatchCount: function(term) {
 		var headline = this.get('headline'),
-			count = this.getMatchCount(term);
+			count = 0;
 
 		if (headline && term) {
 			count += headline.getMatchCount(term);
