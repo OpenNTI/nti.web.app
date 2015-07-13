@@ -32,6 +32,8 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 			this.loadEditor();
 		} else if (this.record instanceof NextThought.model.forums.CommentPost) {
 			this.loadComment();
+		} else if (this.record instanceof NextThought.model.forums.CommunityHeadlinePost) {
+			this.loadPost();
 		} else {
 			this.loadTopic();
 		}
@@ -67,6 +69,26 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 
 
 	loadComment: function() {
+		var me = this,
+			topic;
+
+		Service.getObject(me.record.get('ContainerId'))
+			.then(function(t) {
+				topic = t;
+
+				return me.loadForum(topic);
+			})
+			.then(function(forum) {
+				me.forum = forum;
+
+				me.remove(me.loadingEl);
+				me.showTopic(topic, forum, me.record);
+				me.headerCmp.showPathFor(topic);
+			});
+	},
+
+
+	loadPost: function() {
 		var me = this,
 			topic;
 
@@ -227,5 +249,6 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 	NextThought.app.windows.StateStore.register('application/vnd.nextthought.forums.generalforumcomment', this);
 	NextThought.app.windows.StateStore.register(NextThought.model.forums.ContentHeadlineTopic.mimeType, this);
 	NextThought.app.windows.StateStore.register(NextThought.model.forums.CommunityHeadlineTopic.mimeType, this);
+	NextThought.app.windows.StateStore.register(NextThought.model.forums.CommunityHeadlinePost.mimeType, this);
 	NextThought.app.windows.StateStore.register('new-topic', this);
 });
