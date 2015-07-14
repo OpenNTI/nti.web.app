@@ -26,5 +26,12 @@ Ext.define('NextThought.model.assessment.Part', {
 		});
 
 		return out;
+	},
+
+
+	hasSolutions: function() {
+		var solutions = this.get('solutions');
+
+		return solutions && solutions.length > 0;
 	}
 });

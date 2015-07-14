@@ -96,7 +96,7 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 			this.showAssignmentTimer(this.submission.shouldAllowSubmit && this.submission.shouldAllowSubmit.bind(this.submission));
 		}
 
-		if (pendingAssessment) {
+		if ((h && h.isSubmitted()) || pendingAssessment) {
 			this.submission.setGradingResult(pendingAssessment);
 		} else if (this.injectedSavePoint) {
 			this.submission.setFromSavePoint(this.injectedSavePoint);
@@ -260,19 +260,19 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 			isSubmitted = this.submission.isSubmitted(),
 			progressSaved = this.submission.hasProgressSaved();
 
-		if (isSubmitted || this.isInstructorProspective){
+		if (isSubmitted || this.isInstructorProspective) {
 			return Promise.resolve();
 		}
 
-		if (assignment && assignment.isTimed){
+		if (assignment && assignment.isTimed) {
 			return this.notSubmittedTimed();
 		}
 
-		if (hasAnswers && !progressSaved){
+		if (hasAnswers && !progressSaved) {
 			return this.progressLostAlert();
 		}
 
-		if(!missingAnswers){
+		if (!missingAnswers) {
 			return this.notSubmitted();
 		}
 

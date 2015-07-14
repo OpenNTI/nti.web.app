@@ -112,6 +112,11 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 	},
 
 
+	isSubmitted: function() {
+		return this.get('pendingAssessment') || this.get('Submission');
+	},
+
+
 	getDuration: function() {
 		var metaData = this.get('Metadata');
 

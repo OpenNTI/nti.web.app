@@ -135,7 +135,7 @@ Ext.define('NextThought.app.contentviewer.panels.assignment.Student', {
 
 	updateHistory: function(h) {
 		var header = this.getToolbar();
-	
+
 		header.setHistory(h);
 	}
 });

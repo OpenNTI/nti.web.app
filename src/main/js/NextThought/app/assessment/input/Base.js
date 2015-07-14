@@ -290,7 +290,7 @@ Ext.define('NextThought.app.assessment.input.Base', {
 			answer.hide();
 			e.update(this.filterHTML(p.get('hints')[this.currentHint || 0].get('value')));
 		}
-		else if (this.submitted) {
+		else if (this.submitted || p.hasSolutions()) {
 			answer.show();
 			sol = this.getSolutionContent(p);
 			if (!Ext.isString(sol)) {
@@ -448,8 +448,8 @@ Ext.define('NextThought.app.assessment.input.Base', {
 
 		if (part && part.get) {
 			this.part.set({
-				explanation: part.get('explanation'),
-				solutions: part.get('solutions')
+				explanation: part.get('explanation') || this.part.get('explanation'),
+				solutions: part.get('solutions') || this.part.get('solutions')
 			});
 		}
 
