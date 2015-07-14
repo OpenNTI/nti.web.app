@@ -72,7 +72,7 @@ Ext.define('NextThought.app.course.assessment.AssignmentStatus', {
 				if (!data.due && data.isNoSubmitAssignment) {
 					d.html = '';
 				} else {
-					d.html = 'Due ' + Ext.Date.format(data.due, 'l, F j');
+					d.html = 'Due ' + Ext.Date.format(data.due, 'l, F j g:i A T');
 				}
 
 				if (data.isNoSubmitAssignment) {
