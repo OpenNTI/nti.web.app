@@ -160,8 +160,13 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 	},
 
 
-	maybeMask: function() {
+	maybeMask: function(cmp, isActive, path) {
 		var el = this.body.el;
+
+		//if passed an active cmp the want to try to mask itself, let it
+		if (cmp && cmp.maybeMask && isActive && cmp.maybeMask(path)) {
+			return;
+		}
 
 		if (el && el.dom) {
 			el.mask('Loading...', 'loading');
@@ -171,10 +176,14 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 	},
 
 
-	maybeUnmask: function() {
+	maybeUnmask: function(cmp, isActive, path) {
 		this.finished = true;
 
 		var el = this.body.el;
+
+		if (cmp && cmp.maybeUnmask && isActive) {
+			cmp.maybeUnmask(path);
+		}
 
 		if (el && el.dom) {
 			el.unmask();
@@ -311,9 +320,10 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 		if (!this.performanceView) { return; }
 
 		var me = this,
-			student = route.precache.student;
+			student = route.precache.student,
+			isActiveItem = this.body.getLayout().getActiveItem() === this.performanceView;
 
-		me.maybeMask();
+		me.maybeMask(this.performanceView, isActiveItem, 'root');
 
 		student = student && student.getId();
 
@@ -325,7 +335,7 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 					me.performanceView.showRoot();
 				}
 			})
-			.then(me.maybeUnmask.bind(me))
+			.then(me.maybeUnmask.bind(me, me.performanceView, isActiveItem, 'root'))
 			.then(me.setTitle.bind(me, me.performanceView.title))
 			.then(me.alignNavigation.bind(me));
 	},

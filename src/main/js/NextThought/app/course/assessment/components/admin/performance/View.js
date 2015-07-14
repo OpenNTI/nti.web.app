@@ -19,6 +19,27 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.View'
 	},
 
 
+	maybeMask: function(path) {
+		var activeItem = this.getLayout().getActiveItem();
+
+		if (activeItem && activeItem.maybeMask && activeItem.path === path) {
+			activeItem.maybeMask();
+			return true;
+		}
+
+		return false;
+	},
+
+
+	maybeUnmask: function(path) {
+		this.items.each(function(item) {
+			if (item.maybeUnmask) {
+				item.maybeUnmask();
+			}
+		});
+	},
+
+
 	setAssignmentsData: function(assignments, bundle, student) {
 		//if we haven't changed bundles
 		if (this.currentBundle === bundle) {
@@ -35,7 +56,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.View'
 				assignments: assignments,
 				pushRouteState: this.pushRouteState.bind(this),
 				replaceRouteState: this.replaceRouteState.bind(this),
-				student: student
+				student: student,
+				path: 'root'
 			});
 
 		this.currentBundle = bundle;
@@ -120,7 +142,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.View'
 			predictedGrade: record.get('PredictedGrade'),
 			container: me,
 			pageSource: pageSource.load(),
-			pushRoute: me.pushRoute.bind(me)
+			pushRoute: me.pushRoute.bind(me),
+			path: 'student'
 		});
 
 		me.getLayout().setActiveItem(view);

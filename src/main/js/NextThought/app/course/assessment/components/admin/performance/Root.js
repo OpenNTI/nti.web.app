@@ -173,6 +173,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 		this.studentFilter = state.studentFilter = state.studentFilter || (isFeature('show-open-students-first') ? 'Open' : 'ForCredit');
 		this.itemFilter = state.itemFilter = state.itemFilter || 'all';
+		this.searchKey = state.searchKey = state.searchKey || '';
 		state.currentPage = state.currentPage || 1;
 
 		return this.applyState(state || {});
@@ -253,7 +254,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 		me.mon(me.header, {
 			studentEl: {click: this.showStudentMenu.bind(this)},
 			itemEl: {click: this.showItemMenu.bind(this)},
-			inputEl: {click: this.changeNameFilter.bind(this)},
+			inputEl: {keyup: this.changeNameFilter.bind(this), buffer: 350},
 			clearEl: {click: this.clearSearch.bind(this)}
 		});
 
@@ -264,6 +265,20 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 		if (!this.stateRestored) {
 			//bump this to the next event pump so the restore state has a chance to be called
 			wait().then(this.restoreState.bind(this, {}, true));
+		}
+	},
+
+
+	maybeMask: function() {
+		if (this.grid && this.grid.el) {
+			this.grid.el.mask('Loading...');
+		}
+	},
+
+
+	maybeUnmask: function() {
+		if (this.grid && this.grid.el) {
+			this.grid.el.unmask();
 		}
 	},
 
@@ -509,6 +524,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 			item.setChecked(true, true);
 			this.updateItemUI(item);
 		}
+
+		this.header.inputEl.dom.value = this.searchKey || '';
 	},
 
 
@@ -544,8 +561,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 		params.filter = filters.join(',');
 
-		if (state.searchTerm) {
-			params.search = state.searchTerm;
+		if (state.searchKey) {
+			params.search = state.searchKey;
 		} else {
 			delete params.search;
 		}
@@ -608,6 +625,12 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 			state.itemFilter = this.itemFilter;
 		} else {
 			delete state.itemFilter;
+		}
+
+		if (this.searchKey) {
+			state.searchKey = this.searchKey;
+		} else {
+			delete state.searchKey;
 		}
 
 		if (this.currentPage) {
