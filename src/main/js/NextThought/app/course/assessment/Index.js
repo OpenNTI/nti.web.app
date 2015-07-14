@@ -210,7 +210,7 @@ Ext.define('NextThought.app.course.assessment.Index', {
 				nextTitle: next && next.get('title'),
 				previous: prev && prev.getId(),
 				previousTitle: prev && prev.get('title'),
-				currentIndex: index + 1,
+				currentIndex: index,
 				total: assignments.length
 			});
 
