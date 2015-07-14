@@ -67,6 +67,10 @@ Ext.define('NextThought.app.course.assessment.Index', {
 
 
 	closeAssignment: function() {
+		var view = this.getView();
+
+		this.getLayout().setActiveItem(view);
+
 		if (this.assignment) {
 			this.assignment.destroy();
 		}
