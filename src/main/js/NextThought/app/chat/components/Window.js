@@ -144,13 +144,13 @@ Ext.define('NextThought.app.chat.components.Window', {
 		}  //Only do this if it's there.
 
 		var list = this.down('chat-gutter'),
-				me = this,
-				newOccupants = roomInfo.get('Occupants'),
-				oldOccupants = this.roomInfo.get('Occupants'),
-				whoLeft = Ext.Array.difference(oldOccupants, newOccupants),
-				isGroupChat = this.roomInfo.get('Occupants').length > 2,
-				logView = me.down('chat-log-view'),
-				chatView = me.down('chat-entry');
+			me = this,
+			newOccupants = roomInfo.get('Occupants'),
+			oldOccupants = this.roomInfo.get('Occupants'),
+			whoLeft = Ext.Array.difference(oldOccupants, newOccupants),
+			isGroupChat = this.roomInfo.get('Occupants').length > 2,
+			logView = me.down('chat-log-view'),
+			chatView = me.down('chat-entry');
 
 		//don't assume we have the chat-log-view or chat-entry
 		if (!logView || !chatView) {
@@ -182,7 +182,7 @@ Ext.define('NextThought.app.chat.components.Window', {
 					Ext.Array.remove(me.onlineOccupants, u.getId());
 
 					if (!isMe(name)) {
-						me.updateDisplayState(u.getName(), 'unavailable', isGroupChat);
+						me.updateDisplayState(u, 'unavailable', isGroupChat);
 						if (logView.addStatusNotifcation) {
 							logView.addStatusNotification(u.getName() + ' is unavailable');
 						}
@@ -249,7 +249,7 @@ Ext.define('NextThought.app.chat.components.Window', {
 				Ext.Array.remove(me.onlineOccupants, username);
 				logView.clearChatStatusNotifications();
 				logView.addStatusNotification(getFormattedString('NextThought.view.chat.Window.user-unavailable', {name: displayName}));
-				me.updateDisplayState(user.getName(), getString('NextThought.view.chat.Window.unavailable'), isGroup);
+				me.updateDisplayState(user, getString('NextThought.view.chat.Window.unavailable'), isGroup);
 
 				if (me.onlineOccupants.length <= 1) {
 					entryView.disable();
@@ -259,7 +259,7 @@ Ext.define('NextThought.app.chat.components.Window', {
 				if (!Ext.Array.contains(me.onlineOccupants, username)) {
 					Ext.Array.push(me.onlineOccupants, username);
 					entryView.enable();
-					me.updateDisplayState(user.getName(), getString('NextThought.view.chat.Window.available'), isGroup);
+					me.updateDisplayState(user, getString('NextThought.view.chat.Window.available'), isGroup);
 					logView.clearChatStatusNotifications();
 					logView.addStatusNotification(getFormattedString('NextThought.view.chat.Window.user-available', {name: displayName}));
 				}
@@ -373,20 +373,29 @@ Ext.define('NextThought.app.chat.components.Window', {
 
 
 	updateDisplayState: function(targetUser, state, isGroupChat) {
-		UserRepository.getUser(targetUser, function(u) {
+		var me = this;
+		function done(u) {
 			var name = u.getName(), txt,
-					displayState = this.chatUserStatesMap[state] || state;
+				displayState = me.chatUserStatesMap[state] || state;
+
 			if (isGroupChat) {
-				this.down('chat-gutter').setChatState(displayState, name);
+				me.down('chat-gutter').setChatState(displayState, name);
 			}
 			else if (!isGroupChat && !isMe(targetUser)) {
 				txt = getFormattedString('NextThought.view.chat.Window.occupantstatus', {
 					name: Ext.String.ellipsis(name, 16, false),
 					status: displayState
 				});
-				this.setTitle(txt);
+				me.setTitle(txt);
 			}
-		}, this);
+		}
+
+		if (targetUser && targetUser.isModel) {
+			done(targetUser);
+		}
+		else {
+			UserRepository.getUser(targetUser).then(done);
+		}
 	},
 
 
