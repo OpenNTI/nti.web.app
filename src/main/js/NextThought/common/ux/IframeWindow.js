@@ -84,6 +84,7 @@ Ext.define('NextThought.common.ux.IframeWindow', {
 		iframe.on({
 			afterRender: function(cmp) {
 				var parent = cmp.el.parent(),
+					iframe = cmp.el.dom,
 					loaded = false,
 					masked = false,
 					p = wait(100).then(function() {
@@ -92,6 +93,10 @@ Ext.define('NextThought.common.ux.IframeWindow', {
 							parent.mask(me.getLoadingText(), 'navigation');
 						}
 					});
+
+				if (me.iframeHeight) {
+					iframe.style.height = me.iframeHeight + 'px';
+				}
 
 				cmp.el.on('load', function() {
 					loaded = true;
@@ -122,6 +127,7 @@ Ext.define('NextThought.common.ux.IframeWindow', {
 	fillScreen: function() {
 		var aspect = this.desiredWidth / this.desiredHeight, //width / height
 			height, width,
+			iframe = this.down('box[itemId=iframe]'),
 			MAX_WIDTH = (Ext.Element.getViewWidth() - 50), //window width - padding
 			MAX_HEIGHT = (Ext.Element.getViewHeight() - 20 - 55); //window height - padding - bottom bar
 
@@ -132,6 +138,9 @@ Ext.define('NextThought.common.ux.IframeWindow', {
 			height--;
 			width = aspect * height;
 		}
+
+		this.iframeHeight = height;
+		this.iframeWidth = width;
 
 		this.setHeight(height + 55);
 		this.setWidth(width);

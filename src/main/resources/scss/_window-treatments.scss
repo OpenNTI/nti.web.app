@@ -279,6 +279,12 @@
 	}
 }
 
+.iframe-window {
+	iframe.iframe {
+		width: 100%;
+	}
+}
+
 .iframe-window, .confirm-window{
 	position: fixed !important;
 
