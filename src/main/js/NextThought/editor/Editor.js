@@ -504,14 +504,14 @@ Ext.define('NextThought.editor.AbstractEditor', {
 					tabIndex: tabTracker && tabTracker.next(),
 					ownerCls: this.xtype,
 					value: me.sharingValue
-				
+
 				});
-				
-				if(!SharingUtils.canSharePublicly()){
+
+				if (!SharingUtils.canSharePublicly()) {
 					me.sharedList.setPublished(false);
 					me.sharedList.setDisabled('disabled');
 				}
-				
+
 				this.on('destroy', 'destroy', me.sharedList);
 				this.mon(me.sharedList, 'cancel-indicated', function() {
 					this.fireEvent('cancel');
@@ -1196,6 +1196,55 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	},
 
 
+	__insertIntoRange: function(el, range) {
+		var content = this.el.dom.querySelector('.content'),
+			parents, i, node,
+			potentialParents = content.childNodes,
+			endContainer = range.endContainer,
+			after;
+
+		function insertAfter(n, target) {
+			if (target.nextSibling) {
+				content.insertBefore(n, target.nextSibling);
+			} else {
+				content.appendChild(n);
+			}
+		}
+
+		potentialParents = Array.prototype.slice.call(potentialParents);
+
+		if (potentialParents.length) {
+			for (i = 0; i < potentialParents.length; i++) {
+				node = potentialParents[i];
+
+				if (node.contains && node.contains(endContainer)) {
+					parent = node;
+					break;
+				}
+			}
+		} else {
+			parent = content;
+		}
+
+		if (!parent) {
+			console.error('This shouldnt be possible what did you do?');
+			throw 'No Parent';
+		}
+
+		if (parent === content) {
+			content.appendChild(el);
+		} else {
+			range.setEndAfter(parent);
+
+			after = range.extractContents();
+
+			insertAfter(el, parent);
+
+			insertAfter(after, el);
+		}
+	},
+
+
 	insertPartAtSelection: function(html) {
 		var sel,
 			range,
@@ -1236,13 +1285,17 @@ Ext.define('NextThought.editor.AbstractEditor', {
 						content.appendChild(el);
 					}
 				} else {
-					range.insertNode(el);
+					this.__insertIntoRange(el, range);
 				}
+
 
 				for (i = 0, length = el.childNodes.length; i < length; i++) {
 					//insertBefore removes its from the child list so always insert the first one
 					el.parentNode.insertBefore(el.firstChild, el);
 				}
+
+				range.selectNode(el.previousSibling);
+				range.collapse(false);
 
 				el.parentNode.removeChild(el);
 			}
