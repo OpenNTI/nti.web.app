@@ -82,6 +82,8 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 			tabIndexTracker: o.tabIndexer
 		}));
 
+		set.isAssignment = !!this.injectedAssignment;
+
 		Ext.each(questions, function(q) {me.makeAssessmentQuestion(q, set);});
 
 		this.submission = o.registerOverlayedPanel(guid + 'submission', Ext.widget('assessment-quiz-submission', {
