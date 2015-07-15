@@ -5,6 +5,7 @@ Ext.define('NextThought.util.Analytics', {
 	requires: [
 		'NextThought.util.Globals',
 		'NextThought.util.Visibility',
+		'NextThought.app.context.StateStore',
 		'Ext.util.Cookies'
 	],
 
@@ -27,7 +28,9 @@ Ext.define('NextThought.util.Analytics', {
 		'thought-viewed': true,
 		'note-viewed': true,
 		'discussion-viewed': true,
-		'course-catalog-viewed': true
+		'course-catalog-viewed': true,
+		'assignment-viewed': true,
+		'assessment-viewed': true
 	},
 
 	TYPE_TO_MIMETYPE: {
@@ -39,7 +42,9 @@ Ext.define('NextThought.util.Analytics', {
 		'thought-viewed': 'application/vnd.nextthought.analytics.blogviewevent',
 		'note-viewed': 'application/vnd.nextthought.analytics.noteviewevent',
 		'discussion-viewed': 'application/vnd.nextthought.analytics.topicviewevent',
-		'course-catalog-viewed': 'application/vnd.nextthought.analytics.coursecatalogviewevent'
+		'course-catalog-viewed': 'application/vnd.nextthought.analytics.coursecatalogviewevent',
+		'assessment-viewed': 'application/vnd.nextthought.analytics.selfassessmentviewevent',
+		'assignment-viewed': 'application/vnd.nextthought.analytics.assignmentviewevent'
 	},
 
 	FILL_IN_MAP: {
@@ -67,9 +72,7 @@ Ext.define('NextThought.util.Analytics', {
 	},
 
 
-	addContext: function(context, isRoot) {
-	
-	},
+	addContext: function(context, isRoot) {},
 
 
 	getContextRoot: function() {
@@ -81,23 +84,24 @@ Ext.define('NextThought.util.Analytics', {
 		var ContextSS = NextThought.app.context.StateStore.getInstance(),
 			contextObjects = ContextSS.getContext(),
 			contextStrings = [];
-			
-		function mapContextObjectToAnalyticContextString(contextPart){
+
+		function mapContextObjectToAnalyticContextString(contextPart) {
 			var contextObject = contextPart && contextPart.obj,
 				contextCmp = contextPart && contextPart.cmp,
 				contextStr = null;
-				
-			if(contextObject && Ext.isFunction(contextObject.getId)){
+
+			if (contextObject && Ext.isFunction(contextObject.getId)) {
 				contextStr = contextObject.getId();
 			}
-			if(!contextStr){
+			if (!contextStr) {
 				contextStr = contextCmp && contextCmp.contextIdentifier;
 			}
-			
+
 			return contextStr;
 		}
+
 		contextStrings = Ext.Array.map(contextObjects, mapContextObjectToAnalyticContextString);
-		contextStrings = Ext.Array.filter(contextStrings, function(str){return !Ext.isEmpty(str)});
+		contextStrings = Ext.Array.filter(contextStrings, function(str) {return !Ext.isEmpty(str)});
 		return contextStrings || [];
 	},
 

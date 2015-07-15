@@ -65,15 +65,6 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 			scope: this,
 			navigateAbort: 'onNavigationAborted'
 		});
-
-
-		this.on({
-			scope: this,
-			destroy: 'endViewAnalytics',
-			beginNavigate: 'endViewAnalytics',
-			'visibility-changed-hidden': 'endViewAnalytics',
-			'visibility-changed-visible': 'beginViewAnalytics'
-		});
 	},
 
 
@@ -154,42 +145,6 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 		toast.el.setStyle('right', right + 'px');
 
 		return toast;
-	},
-
-
-	beginViewAnalytics: function() {
-		var location = this.getLocation(),
-			begin = {
-				type: 'resource-viewed',
-				resource_id: location.NTIID,
-				course: location.currentBundle.getId()
-			};
-
-		if (Ext.isEmpty(begin.resource_id) || !this.isVisible(true)) {
-			return;
-		}
-
-		if (this.___lastAnalyticEvent && this.___lastAnalyticEvent.resource_id === begin.resource_id) {
-			return;
-		}
-
-		if (this.___lastAnalyticEvent) {
-			console.warn('Overwriting event %o with %o', this.___lastAnalyticEvent, begin);
-		}
-
-		this.___lastAnalyticEvent = begin;
-
-		AnalyticsUtil.getResourceTimer(begin.resource_id, begin);
-	},
-
-
-	endViewAnalytics: function() {
-		var end = this.___lastAnalyticEvent;
-
-		if (!end) {return;}
-
-		delete this.___lastAnalyticEvent;
-		AnalyticsUtil.stopResourceTimer(end.resource_id, 'resource-viewed', end);
 	},
 	//endregion
 
@@ -371,7 +326,6 @@ Ext.define('NextThought.app.contentviewer.components.Reader', {
 
 		return new Promise(function(fulfill, reject) {
 			function success(resp) {
-				me.beginViewAnalytics();
 				me.splash.hide();
 				me.getContent().setContent(resp, pageInfo.get('AssessmentItems'), fulfill);
 			}

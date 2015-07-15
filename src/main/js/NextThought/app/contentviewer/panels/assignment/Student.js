@@ -95,6 +95,7 @@ Ext.define('NextThought.app.contentviewer.panels.assignment.Student', {
 
 		function done() {
 			reader.getScroll().unlock();
+			me.beginViewedAnalytics();
 		}
 
 		if (!me.pageInfo) {
@@ -140,5 +141,22 @@ Ext.define('NextThought.app.contentviewer.panels.assignment.Student', {
 
 		assessment.updateAssignmentHistoryItem(h);
 		header.setHistory(h);
+	},
+
+
+	getAnalyticData: function() {
+		if (!this.assignment) {
+			return {};
+		}
+
+		var bundle = this.ContextStore.getRootBundle(),
+			data = {
+				type: 'assignment-viewed',
+				resource_id: this.assignment.getId(),
+				ContentId: this.pageInfo.getId(),
+				course: bundle && bundle.getId()
+			};
+
+		return data;
 	}
 });

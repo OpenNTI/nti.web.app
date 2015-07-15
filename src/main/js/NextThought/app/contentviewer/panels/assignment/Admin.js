@@ -37,6 +37,7 @@ Ext.define('NextThought.app.contentviewer.panels.assignment.Admin', {
 
 		function done() {
 			reader.getScroll().unlock();
+			this.beginViewedAnalytics();
 		}
 
 		if (!this.pageInfo) {
@@ -55,5 +56,22 @@ Ext.define('NextThought.app.contentviewer.panels.assignment.Admin', {
 			return reader.setPageInfo(pageInfo, bundle);
 		})
 		.then(done.bind(this));
+	},
+
+
+	getAnalyticData: function() {
+		if (!this.assignment) {
+			return {};
+		}
+
+		var bundle = this.ContextStore.getRootBundle(),
+			data = {
+				type: 'assignment-viewed',
+				resource_id: this.assignment.getId(),
+				ContentId: this.pageInfo.getId(),
+				course: bundle && bundle.getId()
+			};
+
+		return data;
 	}
 });

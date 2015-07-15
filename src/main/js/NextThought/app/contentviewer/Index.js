@@ -113,6 +113,18 @@ Ext.define('NextThought.app.contentviewer.Index', {
 
 				me.initSearch();
 			});
+
+		me.on({
+			'deactivate': this.onDeactivate.bind(this),
+			'beforedestroy': this.onDeactivate.bind(this)
+		});
+	},
+
+
+	onDeactivate: function() {
+		if (this.reader) {
+			this.reader.fireEvent('deactivate');
+		}
 	},
 
 

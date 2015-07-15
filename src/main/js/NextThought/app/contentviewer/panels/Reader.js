@@ -9,6 +9,7 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 		'NextThought.store.FlatPage',
 		'NextThought.app.annotations.Index',
 		'NextThought.app.userdata.Actions',
+		'NextThought.app.context.StateStore',
 		'NextThought.app.windows.Actions'
 	],
 
@@ -50,9 +51,18 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 
 		this.UserDataActions = NextThought.app.userdata.Actions.create();
 		this.WindowActions = NextThought.app.windows.Actions.create();
+		this.ContextStore = NextThought.app.context.StateStore.getInstance();
 		this.showReader();
 
-		this.on('beforedeactivate', this.beforeDeactivate, this);
+		this.on({
+			'beforedeactivate': this.beforeDeactivate.bind(this),
+			'deactivate': this.onDeactivate.bind(this)
+		});
+	},
+
+
+	onDeactivate: function() {
+		this.endViewedAnalytics();
 	},
 
 
@@ -238,6 +248,9 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 		if (reader) {
 			reader.setPageInfo(pageInfo, bundle, this.fragment);
 		}
+
+		this.onceReadyForSearch()
+			.then(this.beginViewedAnalytics.bind(this));
 	},
 
 
@@ -271,5 +284,70 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 
 	showNote: function(record, el, monitors) {
 		this.WindowActions.pushWindow(record, null, el, monitors);
+	},
+
+
+	getQuestionSet: function() {
+		var assessmentItems = this.pageInfo.get('AssessmentItems'),
+			i, item;
+
+		for (i = 0; i < assessmentItems.length; i++) {
+			item = assessmentItems[i];
+
+			if (item && item instanceof NextThought.model.assessment.QuestionSet) {
+				return item;
+			}
+		}
+
+		return null;
+	},
+
+
+	getAnalyticData: function() {
+		var questionSet = this.getQuestionSet(),
+			bundle = this.ContextStore.getRootBundle(),
+			data = {
+				course: bundle.getId()
+			};
+
+		if (questionSet) {
+			data.type = 'assessment-viewed';
+			data.resource_id = questionSet.getId();
+			data.ContentId = this.pageInfo.getId();
+		} else {
+			data.type = 'resource-viewed';
+			data.resource_id = this.pageInfo.getId();
+		}
+
+		return data;
+	},
+
+
+	beginViewedAnalytics: function() {
+		var data = this.getAnalyticData();
+		//if we don't have a resource id for some reason, we can't send a valid event
+		if (!data.resource_id) { return; }
+
+		//if we are trying to start an event for the one we already have going
+		if (this.__lastAnalyticEvent && this.__lastAnalyticEvent.resource_id === data.resource_id) {
+			return;
+		}
+
+		if (this.__lastAnalyticEvent) {
+			console.warn('Overwriting event %o with %o', this.___lastAnalyticEvent, data);
+		}
+
+		this.__lastAnalyticEvent = data;
+
+		AnalyticsUtil.getResourceTimer(data.resource_id, data);
+	},
+
+
+	endViewedAnalytics: function() {
+		var data = this.__lastAnalyticEvent;
+
+		if (!data) { return; }
+
+		AnalyticsUtil.stopResourceTimer(data.resource_id, data.type, data);
 	}
 });

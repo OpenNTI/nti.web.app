@@ -15,7 +15,6 @@ Ext.define('NextThought.app.content.content.Index', {
 
 	layout: 'none',
 
-
 	cls: 'bundle-content',
 
 
@@ -32,7 +31,19 @@ Ext.define('NextThought.app.content.content.Index', {
 
 		this.addDefaultRoute('/');
 
+		this.on({
+			'beforedeactivate': this.onBeforeDeactivate.bind(this),
+			'deactivate': this.onDeactivate.bind(this)
+		});
+
 		this.on('beforedeactivate', this.onBeforeDeactivate.bind(this));
+	},
+
+
+	onDeactivate: function() {
+		if (this.reader) {
+			this.reader.fireEvent('deactivate');
+		}
 	},
 
 
