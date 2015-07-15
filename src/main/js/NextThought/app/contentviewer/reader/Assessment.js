@@ -128,6 +128,24 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 	},
 
 
+	updateAssignmentHistoryItem: function(historyItem) {
+		//Check history item is for injectedAssignment
+		var assignmentId = this.injectedAssignment.getId(),
+			grade = historyItem.get('Grade'),
+			historyAssignmentId = grade.get('AssignmentId');
+
+		if(historyItem && (assignmentId == historyAssignmentId)){
+			if (this.injectedAssignment.isTimed) {
+				this.injectedAssignment.updateMetaData(historyItem.get('Metadata'));
+			}
+			if (this.feedback) {
+				this.feedback.setHistory(historyItem);
+			}
+		}
+
+	},
+
+
 	showAssignmentTimer: function(submitFn) {
 		var me = this,
 			max = me.injectedAssignment.getMaxTime(),
