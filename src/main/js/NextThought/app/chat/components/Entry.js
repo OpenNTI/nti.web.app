@@ -2,7 +2,7 @@ Ext.define('NextThought.app.chat.components.Entry', {
 	extend: 'Ext.Component',
 	alias: 'widget.chat-entry',
 
-	height: 51,
+	height: 61,
 	ui: 'chat-entry',
 	cls: 'chat-entry',
 
@@ -12,13 +12,14 @@ Ext.define('NextThought.app.chat.components.Entry', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{
+			cls: 'entry-wrapper',
 			cn: [
 				{
 					cls: 'add-whiteboard', 'data-qtip': '{{{NextThought.view.chat.Entry.create-whiteboard}}}'
 				},
 				{
 					cn: [
-						{ tag: 'input', type: 'text'}
+						{ tag: 'input', type: 'text', placeholder: 'Message...'}
 					]
 				}
 			]

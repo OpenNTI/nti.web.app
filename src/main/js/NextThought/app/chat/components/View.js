@@ -24,7 +24,7 @@ Ext.define('NextThought.app.chat.components.View', {
 	defaults: {anchor: '100%'},
 
 	items: [
-		{ xtype: 'chat-log-view', anchor: '0 -51' },
+		{ xtype: 'chat-log-view', anchor: '0 -61' },
 		{xtype: 'box', hidden: true, name: 'error', autoEl: {cls: 'error-box', tag: 'div',
 			cn: [
 				{cls: 'error-desc'}
