@@ -6,6 +6,7 @@
 		position: fixed;
 		top: 90px;//$header-height + 20;
 		bottom: 20px;
+		height: auto !important;
 	}
 
 	//Override these, since the placeholder is not suppose to be visible
