@@ -21,7 +21,7 @@ Ext.define('NextThought.app.chat.components.Window', {
 	width: 280,
 	minWidth: 250,
 
-	height: 325,
+	height: 425,
 	minHeight: 325,
 	header: false,
 

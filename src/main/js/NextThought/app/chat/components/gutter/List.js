@@ -65,13 +65,45 @@ Ext.define('NextThought.app.chat.components.gutter.List', {
 
 	afterRender: function() {
 		this.callParent(arguments);
+
 		this.mon(this.closeBtn, 'click', this.hide.bind(this));
 		this.mon(this.contactsEl, 'click', this.goToContacts.bind(this));
+		this.addToggleListeners();
+		this.gutter.on({
+			destroy: this.destroy.bind(this)
+		});
+	},
+
+
+	addToggleListeners: function() {
+		var me = this;
+		// When this list is shown, hide the gutter and vice-versa.
+		this.on({
+			show: function() {
+				me.gutter.hide();
+				if (me.gutter.activeUser) {
+					me.selectActiveUser(me.gutter.activeUser);
+				}
+			},
+			hide: function() {
+				me.gutter.show();
+				if (me.gutter.activeUser) {
+					me.gutter.selectActiveUser(me.gutter.activeUser);
+				}
+			}
+		});
+
+		wait()
+			.then(function() {
+				if (me.gutter.activeUser) {
+					me.selectActiveUser(me.gutter.activeUser);
+				}
+			});
 	},
 
 
 	onItemClicked: function(view, user, item, index, e) {
-		this.openChatWindow(user);
+		this.openChatWindow(user, Ext.get(item));
 	},
 
 

@@ -5,6 +5,7 @@
 
 	right: 80px !important;
 	left: auto !important;
+	top: 100px !important;
 	border: none;
 	background-color: rgba(255,255,255, 0.0);
 
@@ -850,6 +851,14 @@
 				}
   			}	
   		}
+
+  		&.active {
+  			.profile-pic{
+  				.avatar-pic {
+  					border: 2px solid $primary-blue;
+  				}
+  			}
+  		}
   	}
 
 
@@ -913,6 +922,14 @@
 				overflow: hidden;
 				font-size: 14px;
 				font-weight: 200;
+			}
+
+			&.active {
+				.profile-pic {
+					.avatar-pic {
+						border: 2px solid $primary-blue;
+					}
+				}
 			}
 		}
 

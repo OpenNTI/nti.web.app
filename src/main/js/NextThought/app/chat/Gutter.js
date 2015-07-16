@@ -201,14 +201,43 @@ Ext.define('NextThought.app.chat.Gutter', {
 
 
 	openChatWindow: function(user, entry) {
+		if (entry && entry.hasCls('active')) {
+			//Minimize the window.
+			if (user.associatedWindow) {
+				user.associatedWindow.hide();
+			}	
+			return;
+		}
+
 		if (user.associatedWindow) {
 			user.associatedWindow.show();
 		}
 		else {
 			this.ChatActions.startChat(user);
 		}
-
 		this.clearUnreadCount(user);
+	},
+
+
+	selectActiveUser: function(user) {
+		var d = this.getAnchorPointForUser(user),
+			entry = Ext.get(d);
+
+		if (entry) {
+			entry.addCls('active');
+			this.activeUser = user;
+		}
+	},
+
+
+	deselectActiveUser: function(user) {
+		var d = this.getAnchorPointForUser(user),
+			entry = d && Ext.get(d);
+
+		this.activeUser = null;
+		if (entry) {
+			entry.removeCls('active');
+		}
 	},
 
 
@@ -246,8 +275,15 @@ Ext.define('NextThought.app.chat.Gutter', {
 					win.on({
 						show: function() {
 								wait()
-									.then(me.realignChatWindow.bind(me, win, user));
-							}
+									.then(function() {
+										me.realignChatWindow(win, user);
+										me.selectActiveUser(user);
+									});
+							},
+						hide: function() {
+							wait()
+								.then(me.deselectActiveUser.bind(me, user));
+						}
 					});
 				}
 			}
@@ -289,16 +325,6 @@ Ext.define('NextThought.app.chat.Gutter', {
 
 	realignChatWindow: function(win, user) {
 		if (!win) { return; }
-
-		var dom = this.getAnchorPointForUser(user),
-			box = dom && dom.getBoundingClientRect(),
-			top = box && box.top;
-
-		if (top && top > 0) {
-			win.el.setStyle('top', top + 'px');
-			console.debug('align chat window to:', top);
-		}
-
 		this.adjustToExpandedChat(win);
 	},
 
