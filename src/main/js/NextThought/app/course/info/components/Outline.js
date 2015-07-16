@@ -13,8 +13,28 @@ Ext.define('NextThought.app.course.info.components.Outline', {
 		this.callParent(arguments);
 	},
 
-	setContent: function(info, status, showRoster) {
+	setContent: function(info, status, showRoster, courseMode) {
+		var startDate = Ext.util.Format.date(info.get('StartDate'),'F j, Y');
+		
 		this.removeAll(true);
+
+		if(courseMode){
+			this.startDate = this.add({
+				xtype: 'box',
+			    autoEl: {
+					cls: 'course-info-header-bar',
+					cn: [
+						{
+							cls: 'col-left',
+						    cn: [
+						        {cls: 'label', html: getString('NextThought.view.courseware.info.parts.NotStarted.starts')},
+								{cls: 'date', html: startDate}
+						    ]
+						}
+					]
+			    }
+			});
+		}
 
 		this.menu = this.add({
 			xtype: 'course-info-outline-menu',

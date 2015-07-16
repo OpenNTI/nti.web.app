@@ -10,10 +10,6 @@ Ext.define('NextThought.app.course.info.components.parts.NotStarted', {
 	ui: 'course-info',
 
 	renderTpl: Ext.DomHelper.createTemplate({ cls: 'course-info-header-bar {status}', cn: [
-		{ cls: 'col-left', cn: [
-			{ cls: 'label', html: getString('NextThought.view.courseware.info.parts.NotStarted.starts') },
-			{ cls: 'date', html: '{startDate:date("F j, Y")}'}
-		] },
 		{ cls: 'col-right', cn: [
 			{ tag: 'a', cls: 'enroll', html: '{enroll}', href: '{enrollUrl}', target: '_blank'},
 			{ cls: 'registered', cn: [

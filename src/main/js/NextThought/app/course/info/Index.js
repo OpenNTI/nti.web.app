@@ -52,7 +52,7 @@ Ext.define('NextThought.app.course.info.Index', {
 			me[me.infoOnly ? 'addCls' : 'removeCls']('info-only');
 
 			me.body.setContent(info, status, showRoster, bundle);
-			me.navigation.setContent(info, status, showRoster);
+			me.navigation.setContent(info, status, showRoster, me.infoOnly);
 		}
 
 
@@ -63,7 +63,7 @@ Ext.define('NextThought.app.course.info.Index', {
 		if (bundle && bundle.getWrapper) {
 			return bundle.getWrapper()
 				.done(function(e) {
-					update(catalogEntry, e.get('Status'), !!e.isAdministrative);
+					update(catalogEntry, e.get('Status'), !!e.isAdministrative, me.infoOnly);
 				})
 				.fail(function() {
 					//hide tab?
