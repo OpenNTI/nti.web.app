@@ -53,7 +53,7 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 			]}
 		]}
 	]), {
-		showReport: function(value) {
+		showReport: function (value) {
 			var show = false;
 
 			if (isFeature('analytic-reports')) {
@@ -329,7 +329,8 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 
 
 	restoreState: function(state) {
-		state.currentPage = state.currentPage || 1;
+		state.currentPage = state.currentPage || {};
+		state.currentPage[this.record.getId()] = state.currentPage[this.record.getId()] || 1;
 		state.sortBy = state.sortBy || 'active';
 
 		this.currentState = state;
@@ -343,7 +344,8 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 
 		var me = this,
 			store = me.store,
-			params = me.store.proxy.extraParams;
+			params = me.store.proxy.extraParams,
+			currentPage;
 
 		me.applyingState = true;
 
@@ -365,6 +367,10 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 			params.batchAround = this.topic;
 		}
 
+		if (state.currentPage) {
+			currentPage = state.currentPage[this.record.getId()] || 0;
+		}
+
         //The store adds a sorter for any groupers at load time.  Make sure
         //we clear them out, they get applied after load anyway.
         me.setGrouper('');
@@ -380,7 +386,7 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 
 					me.setGrouper(state.sortBy);
 
-					me.currentPage = state.currentPage;
+					me.currentPage = state.currentPage[me.record.getId()];
 					me.currentSortBy = state.sortBy;
 					me.currentSearch = state.search;
 
@@ -395,8 +401,8 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 
 			if (params.batchAround) {
 				store.load();
-			} else if (state.currentPage) {
-				store.loadPage(state.currentPage);
+			} else if (currentPage) {
+				store.loadPage(currentPage);
 			} else {
 				store.loadPage(1);
 			}
@@ -438,7 +444,7 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 
 	updateFilter: function() {
 		var state = this.currentState || {},
-			newPage = state.currentPage !== this.currentPage;
+			newPage = state.currentPage[this.record.getId()] !== this.currentPage;
 
 		if (this.currentSearch) {
 			state.search = this.currentSearch;
@@ -453,7 +459,8 @@ Ext.define('NextThought.app.forums.components.forum.parts.TopicListView', {
 		}
 
 		if (this.currentPage) {
-			state.currentPage = this.currentPage;
+			state.currentPage = state.currentPage || {};
+			state.currentPage[this.record.getId()] = this.currentPage;
 		} else {
 			delete state.currentPage;
 		}
