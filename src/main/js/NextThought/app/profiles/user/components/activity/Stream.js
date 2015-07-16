@@ -5,6 +5,16 @@ Ext.define('NextThought.app.profiles.user.components.activity.Stream', {
 	requires: [
 		'NextThought.app.profiles.user.components.activity.parts.events.ActivityItem',
 		'NextThought.app.profiles.user.components.activity.parts.events.ActivityItemReply',
+		'NextThought.app.profiles.user.components.activity.parts.events.Badge',
+		'NextThought.app.profiles.user.components.activity.parts.events.Blogged',
+		'NextThought.app.profiles.user.components.activity.parts.events.BlogReply',
+		'NextThought.app.profiles.user.components.activity.parts.events.ForumActivityItem',
+		'NextThought.app.profiles.user.components.activity.parts.events.HighlightContainer',
+		'NextThought.app.profiles.user.components.activity.parts.events.Joined',
+		'NextThought.app.profiles.user.components.activity.parts.events.NoteReply',
+		'NextThought.app.profiles.user.components.activity.parts.events.PostReply',
+		'NextThought.app.profiles.user.components.activity.parts.events.TopicReply',
+		'NextThought.app.profiles.user.components.activity.parts.events.TranscriptSummaryItem',
 		'NextThought.store.ProfileItem'
 	],
 
