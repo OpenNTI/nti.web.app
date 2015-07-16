@@ -6,7 +6,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Trans
 	cls: 'transcriptsummary-event',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'icon', style: {backgroundImage: "url('resources/images/icons/chat-32-blue.png')"}},
+		{ cls: 'icon', style: {backgroundImage: "url('/app/resources/images/icons/chat-32-blue.png')"}},
 		{ cls: 'meta', cn: [
 			{ cls: 'title', cn: [
 				{tag: 'span', cls: 'name', html: '{owner}'},
