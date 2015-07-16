@@ -147,6 +147,8 @@ Ext.define('NextThought.app.navigation.path.Actions', {
 		}
 
 		return request.then(function(path) {
+				path = path || [];
+
 				return path.slice();
 			});
 	},

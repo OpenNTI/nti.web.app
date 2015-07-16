@@ -33,7 +33,7 @@ Ext.define('NextThought.app.navigation.path.parts.Assignment', {
 			})
 			.fail(function(reason) {
 				console.error('Failed to get path for grade: ', reason);
-				return Promise.resolve();
+				return Promise.resolve([]);
 			});
 	}
 });
