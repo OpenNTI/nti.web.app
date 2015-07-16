@@ -50,12 +50,23 @@ Ext.define('NextThought.app.contentviewer.reader.IFrame', {
 		me.mon(me.reader, {
 			destroy: function() {
 				window.removeEventListener('scroll', scroll);
+				Ext.EventManager.removeResizeListner(me.onWindowResize, me);
 				clearInterval(me.syncInterval);
 			},
 			resize: function() { delete me.lastHeight; }
 		});
 
 		window.addEventListener('scroll', scroll);
+
+
+		Ext.EventManager.onWindowResize(me.onWindowResize, me);
+	},
+
+
+	onWindowResize: function() {
+		if (this.iframe && this.iframe.el) {
+			this.iframe.el.repaint();
+		}
 	},
 
 

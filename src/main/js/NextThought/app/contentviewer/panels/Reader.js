@@ -291,6 +291,8 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 		var assessmentItems = this.pageInfo.get('AssessmentItems'),
 			i, item;
 
+		assessmentItems = assessmentItems || [];
+
 		for (i = 0; i < assessmentItems.length; i++) {
 			item = assessmentItems[i];
 
