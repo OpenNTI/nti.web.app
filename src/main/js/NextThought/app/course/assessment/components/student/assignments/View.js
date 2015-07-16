@@ -182,7 +182,7 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 				groupPromise = Promise.resolve();
 			}
 
-			if (search) {
+			if (state.search) {
 				this.filterSearchValue(state.search);
 			}
 
@@ -264,15 +264,17 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 
 	updateFilters: function() {
 		var bar = this.getFilterBar(),
-			groupBy = bar && bar.getGroupBy();
+			groupBy = bar && bar.getGroupBy(),
+			search = bar && bar.getSearch();
 
 		if (!bar) { return; }
 
 		bar.enableGroupBy(false);
 		this.setState({
-			groupBy: groupBy
+			groupBy: groupBy,
+			search: search
 		})
-		.then(function(){
+		.then(function() {
 			bar.enableGroupBy(true);
 		});
 	},
@@ -295,6 +297,8 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 
 
 	filterSearchValue: function(val) {
+		val = val || '';
+
 		(this.activeStores || []).forEach(function(store) {
 			//if we are grouped by lessons we will have an ntiid here
 			var name = store.groupName.split('|').last();
