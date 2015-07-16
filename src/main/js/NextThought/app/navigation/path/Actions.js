@@ -58,7 +58,7 @@ Ext.define('NextThought.app.navigation.path.Actions', {
 		var url = Service.getPathToObjectLink(),
 			//try the container id since its more liable to be cached
 			containerId = obj.get('ContainerId'),
-			id = containerId || obj.getId(),
+			id = containerId || obj.get('NTIID'),
 			link = Service.getPathToObjectLink(id);
 
 		if (!link) {

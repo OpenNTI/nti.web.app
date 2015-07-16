@@ -518,8 +518,16 @@ Ext.define('NextThought.app.Body', {
 
 	getRouteForCommunity: function(community, path) {
 		var cmp = this.getCmp('profile-community'),
-			route = cmp.getRouteForPath && cmp.getRouteForPath(path, community),
-			id = community.getId();
+			route, id = community.getId();
+
+		if (path.length) {
+			route = cmp.getRouteForPath && cmp.getRouteForPath(path, community);
+		} else {
+			route = {
+				isFull: true,
+				path: ''
+			};
+		}
 
 		route.path = Globals.trimRoute(route.path);
 		route.path = '/community/' + id + '/' + route.path;
