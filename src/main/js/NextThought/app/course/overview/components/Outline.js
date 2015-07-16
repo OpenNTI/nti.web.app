@@ -108,15 +108,15 @@ Ext.define('NextThought.app.course.overview.components.Outline', {
 	truncateLabels: function() {
 		var me = this;
 
-		if (!me.el) { 
+		if (!me.el) {
 			me.onceRendered.then(me.truncateLabels.bind(me));
-			return; 
+			return;
 		}
-		
+
 		wait(100).then(function() {
 			var labels = me.el.select('.outline-row .label');
 			labels.each(function(label) {
-				me.truncateText(label.dom, 'parent');
+				me.truncateText(label.dom, null, true);
 			});
 		});
 	},

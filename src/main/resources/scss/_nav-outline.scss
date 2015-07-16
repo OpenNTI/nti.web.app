@@ -47,7 +47,6 @@
 
 		.label{
 			overflow: hidden;
-			@include ellipse;
 		}
 
 		&.lesson{
@@ -58,10 +57,13 @@
 			}
 
 			&:not(.heading) {
-				// To compute max height, multiply min-height by 2 (2 lines) and add padding top and bottom
-				max-height: 6.9em;
-	  			min-height: 2.8em;
-	  			font: normal 400 0.9em/1.5em $font;		
+	  			font: normal 400 0.9em/1.5em $font;
+
+	  			.label {
+	  				// To compute max height, multiply min-height by 2 (2 lines) 
+	  				max-height: 3em;
+	  				min-height: 1.5em;
+	  			}
 			}
 		}
 
@@ -128,6 +130,13 @@
 			font: normal 400 0.6em/2 $font;
 			box-shadow: 0 -1px 0 0 #f2f2f2, 0 1px 0 0 #f2f2f2;
 			//z-index: 1;
+			
+			&.heading {
+				.label {
+					// To compute max height, multiply min-height by 2 (2 lines) 
+					max-height: 2.6em;
+				}
+			}
 		}
 	}
 
@@ -182,12 +191,10 @@
 				&.unit{
 					padding: 1.75em 0.42em 0.5em 0.84em;
 					font: normal 100 1.5em "Open Sans Condensed", $font;
-					max-height: 6.45em;
-					min-height: 2.1em;	
+					min-height: 2.1em;
 
 					&:first-of-type {
 						padding-top: 0.20835em;
-						min-height: 40px;						
 					}
 				}
 			}

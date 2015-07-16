@@ -2,6 +2,10 @@ Ext.define('NextThought.app.course.overview.components.parts.Discussion', {
 	extend: 'Ext.Component',
 	alias: 'widget.course-overview-discussion',
 
+	mixins: {
+		EllipsisText: 'NextThought.mixins.EllipsisText'
+	},
+
 	ui: 'course',
 	cls: 'overview-discussion',
 
@@ -61,7 +65,7 @@ Ext.define('NextThought.app.course.overview.components.parts.Discussion', {
 
 		var title = this.el.down('.title');
 
-		$clamp(title.dom, {clamp: 3});
+		this.truncateText(title.dom);
 	},
 
 
@@ -77,7 +81,7 @@ Ext.define('NextThought.app.course.overview.components.parts.Discussion', {
 		* the same named topic.  The issue is without the contexxt of the course we are in when the topic
 		* is selected on the overview the server as multiple topics to choose from (one for each section)
 		* and it is ambiguous as to which one to select.  Now the problem with this particular hack
-		& is that when we are in a section but trying to get to the root (because the topics are set up 
+		& is that when we are in a section but trying to get to the root (because the topics are set up
 		* in the root rather than the section) the provider id no longer matches the root and we 404.  In most
 		* cases the section is what contains the topic making this a non issue, but we now have courses where
 		* the topic only exists in the parent.  We need another way to pass the context of the such that we
