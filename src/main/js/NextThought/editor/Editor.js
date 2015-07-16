@@ -323,7 +323,9 @@ Ext.define('NextThought.editor.AbstractEditor', {
 			this.setValue('');
 		}
 
-		this.sharedList.pickerView.hide();
+		if (this.sharedList) {
+			this.sharedList.pickerView.hide();
+		}
 	},
 
 
