@@ -93,7 +93,7 @@ Ext.define('NextThought.app.chat.components.gutter.List', {
 			}
 		});
 
-		wait()
+		wait(100)
 			.then(function() {
 				if (me.gutter.activeUser) {
 					me.selectActiveUser(me.gutter.activeUser);

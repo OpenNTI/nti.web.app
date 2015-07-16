@@ -80,15 +80,8 @@ Ext.define('NextThought.app.chat.Actions', {
 					});
 
 					Ext.each(messages, function(m) {
-						me.onMessage(m);
+						me.onMessage(m, {pushNotification: false});
 					}, me);
-
-					// If it's my room. Open it.
-					// FIXME: If i didn't start the chat, previously seen notes will appear as notification.
-					// We need to handle that case
-					if (me.ChatStore.isRoomIdAccepted(ri.getId()) && isMe(ri.get('Creator'))) {
-						w.show();
-					}
 				})
 				.fail(function() {
 					console.error('Could not recover chat history.');
@@ -229,13 +222,7 @@ Ext.define('NextThought.app.chat.Actions', {
 		return new Promise( function(fulfill, reject) {
 			Service.getObject(roomInfoId)
 				.then( function(obj) {
-					if (isMe(obj.get('Creator'))) {
-						me.ChatStore.showChatWindow(obj);
-					}
-					else {
-						me.openChatWindow(obj);
-					}
-
+					me.openChatWindow(obj);
 					fulfill(obj);
 				})
 				.fail( function() {
@@ -382,7 +369,8 @@ Ext.define('NextThought.app.chat.Actions', {
 				m = ParseUtils.parseItems([msg])[0],
 				channel = m && m.get('channel'),
 				cid = m && m.get('ContainerId'),
-				w = this.ChatStore.getChatWindow(cid);
+				w = this.ChatStore.getChatWindow(cid),
+				pushNotification = opts && opts.pushNotification;
 
 		if (!w) {
 			this.rebuildWindow(cid)
@@ -392,7 +380,8 @@ Ext.define('NextThought.app.chat.Actions', {
 
 		this.channelMap[channel].call(this, m, opts || {});
 
-		if (channel !== 'STATE') {
+		// FIXME: if we're adding a message as part of a chat transcript, do not push a notification.
+		if (channel !== 'STATE' && pushNotification !== false) {
 			// NOTE: We don't want state channel notifications to trigger showing the window initially or adding
 			// notification counts, only when an actual message is sent should we do this.
 			this.ChatStore.notify(w, msg);

@@ -214,6 +214,7 @@ Ext.define('NextThought.app.chat.Gutter', {
 		}
 		else {
 			this.ChatActions.startChat(user);
+			this.selectActiveUser(user);
 		}
 		this.clearUnreadCount(user);
 	},
@@ -222,6 +223,10 @@ Ext.define('NextThought.app.chat.Gutter', {
 	selectActiveUser: function(user) {
 		var d = this.getAnchorPointForUser(user),
 			entry = Ext.get(d);
+
+		if (this.activeUser) {
+			this.deselectActiveUser(this.activeUser);
+		}
 
 		if (entry) {
 			entry.addCls('active');
@@ -234,9 +239,10 @@ Ext.define('NextThought.app.chat.Gutter', {
 		var d = this.getAnchorPointForUser(user),
 			entry = d && Ext.get(d);
 
-		this.activeUser = null;
-		if (entry) {
+		
+		if (entry && entry.hasCls('active')) {
 			entry.removeCls('active');
+			this.activeUser = null;
 		}
 	},
 
