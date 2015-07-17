@@ -57,5 +57,15 @@ Ext.define('NextThought.model.RoomInfo', {
 
 	getOriginalOccupants: function() {
 		return this._originalOccupants || [];
+	},
+
+
+	getOccupantsKey: function() {
+		var occupants = this.getOriginalOccupants();
+		if (occupants.length === 0) {
+			occupants = this.get('Occupants');
+		}
+
+		return Ext.Array.sort(occupants).join("_");
 	}
 });
