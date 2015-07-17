@@ -13,6 +13,8 @@ Ext.define('NextThought.app.chat.StateStore', {
 
 	CHAT_WIN_MAP: {},
 
+	ROOM_USER_MAP: {},
+
 	getSocket: function() {
 		if (!this.socket) {
 			this.socket = Socket;
@@ -115,71 +117,57 @@ Ext.define('NextThought.app.chat.StateStore', {
 
 
 	getChatWindow: function(roomInfo) {
-		if (!roomInfo) { return null; }
+		var me = this,
+			rIsString = (typeof roomInfo === 'string'),
+			w, occupantsKey;
 
-		var rIsString = (typeof roomInfo === 'string'),
-			rId = roomInfo && roomInfo.isModel ? roomInfo.getId() : roomInfo,
-			id = IdCache.getIdentifier(rId),
-			xOcc, w, allRooms, me = this;
+		if (!rIsString && roomInfo) {
+			occupantsKey = roomInfo.getOccupantsKey();
+		}
+		else if (rIsString) {
+			occupantsKey = this.ROOM_USER_MAP[roomInfo];
+		}
 
-		w = this.getWindow(id);
-
-		if (!w) {
-			allRooms = this.getAllChatWindows();
-			//see if we have rooms with the same occupants list:
-			Ext.each(allRooms, function(x) {
-				xOcc = x.roomInfo.getOriginalOccupants();
-				//only do the next step for 1 to 1 chats, group chat changes like this could really mess everyone else up.
-				if (xOcc.length > 2) {
-					return;
-				}
-
-				if (rIsString) {
-					return;
-				}
-
-				//Be defensive.
-				if ( roomInfo.isModel && Ext.Array.union(xOcc, roomInfo.get('Occupants')).length === xOcc.length) {
-					console.debug('found a different room with same occupants: ', xOcc);
-
-					// Delete the old cache
-					console.debug('deleting the cache for the old room info: ', x.roomInfo.getId());
-					me.deleteRoomIdStatusAccepted(x.roomInfo && x.roomInfo.getId());
-
-					// Change the roomInfo to the new one.
-					x.roomInfoChanged(roomInfo);
-
-					// Cache the new room to make sure the map that the store has is in sync
-					console.debug('caching new room info: ', roomInfo.getId());
-					me.cacheChatWindow(x, roomInfo);
-
-					w = x;
-					return false;
-				}
-			});
+		if (occupantsKey) {
+			w = this.getWindow(occupantsKey);
 		}
 
 		return w;
 	},
 
 
-	cacheChatWindow: function(win, roomInfo) {
-		var rid = roomInfo && roomInfo.isModel ? roomInfo.getId() : roomInfo,
-			id = IdCache.getIdentifier(rid);
+	mergeRoomInfos: function(xRoom, wRoom) {
+		var xOcc = xRoom && xRoom.getOriginalOccupants(),
+			wOcc = wRoom && wRoom.get('Occupants');
 
-		// We need to ensure that each chat window is tied to one chat room
-		for(var k in this.CHAT_WIN_MAP) {
-			if(this.CHAT_WIN_MAP.hasOwnProperty(k)) {
-				if(this.CHAT_WIN_MAP[k] === win) {
-					console.debug('Room info: ' + k + ' and Room info: ' + rid + ' have the same chat window.');
-					console.debug('Delete roomInfo record: ', k);
-					delete this.CHAT_WIN_MAP[k];
-				}
-			}
+		if ( Ext.Array.union(xOcc, wOcc).length === xOcc.length) {
+			console.debug('found a different room with same occupants: ', xOcc);
+
+			// Delete the old cache
+			console.debug('deleting the cache for the old room info: ', x.roomInfo.getId());
+			me.deleteRoomIdStatusAccepted(x.roomInfo && x.roomInfo.getId());
+
+			// Change the roomInfo to the new one.
+			x.roomInfoChanged(roomInfo);
+
+			// Cache the new room to make sure the map that the store has is in sync
+			console.debug('caching new room info: ', roomInfo.getId());
+			me.cacheChatWindow(x, roomInfo);
+
+			w = x;
+			return w;
 		}
 
-		this.CHAT_WIN_MAP[id] = win;
+		return null;
+	},
 
+
+	cacheChatWindow: function(win, roomInfo) {
+		var rid = roomInfo && roomInfo.isModel ? roomInfo.getId() : roomInfo,
+			occupantsKey = roomInfo && roomInfo.getOccupantsKey();
+
+		this.CHAT_WIN_MAP[occupantsKey] = win;
+		this.ROOM_USER_MAP[rid] = occupantsKey;
 		this.fireEvent('added-chat-window', win);
 	},
 
@@ -215,44 +203,28 @@ Ext.define('NextThought.app.chat.StateStore', {
 		//Add ourselves to this list
 		var key, rInfo,
 			allUsers = Ext.Array.unique(users.slice().concat($AppConfig.userObject.get('Username'))),
+			occupantsKey = Ext.Array.sort(allUsers).join("_");
 			chats = this.getSessionObject();
 
-		if (options && options.ContainerId && !roomId) {
-			roomId = options.ContainerId;
-		}
-
-		for (key in chats) {
-			if (chats.hasOwnProperty(key)) {
-				rInfo = this.getRoomInfoFromSession(key, chats[key]);
-				if (rInfo) {
-					if (roomId && roomId === rInfo.getId()) {
-						break;//leave rInfo as is, so we can return it;
-					}
-					else if (!this.isPersistantRoomId(rInfo.getId())) {
-
-						if (Ext.Array.difference(rInfo.get('Occupants'), allUsers).length === 0 &&
-							Ext.Array.difference(allUsers, rInfo.get('Occupants')).length === 0) {
-							break;//leave rInfo as is, so we can return it
-						}
-					}
-					rInfo = null;
-				}
-			}
-		}
-
+		console.debug('Checking for existing room for occupants key: ', occupantsKey, ' and roomInfo id: ', roomId);
+		rInfo = this.getRoomInfoFromSession(occupantsKey);
 		return rInfo;
 	},
 
 
 	putRoomInfoIntoSession: function(roomInfo) {
 		if (!roomInfo) {
-			Ext.Error.raise('Requires a RoomInfo object');
+			console.error('Requires a RoomInfo object');
+			return;
 		}
-		var roomData = roomInfo.getData();
-		roomData.originalOccupants = roomInfo.getOriginalOccupants();
-		//		console.log('****** setting original occupants of room', roomInfo.getId(), ' to: ', roomInfo.getOriginalOccupants());
 
-		this.setSessionObject(roomData, roomInfo.getId());
+		var roomData = roomInfo.getData(),
+			key = roomInfo.getOccupantsKey();
+
+		roomData.originalOccupants = roomInfo.getOriginalOccupants();
+		console.debug('****** caching roomInfo: ', roomInfo.getId(), ' to: ', key);
+
+		this.setSessionObject(roomData, key);
 	},
 
 

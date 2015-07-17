@@ -180,7 +180,6 @@ Ext.define('NextThought.app.chat.Actions', {
 
 		roomInfo = roomInfo && roomInfo.isModel ? roomInfo : ParseUtils.parseItems([roomInfo])[0];
 		roomInfo.setOriginalOccupants(occupants.slice());
-		me.ChatStore.putRoomInfoIntoSession(roomInfo);
 		w = me.openChatWindow(roomInfo);
 
 		this.presentInvationationToast(roomInfo)
@@ -211,6 +210,7 @@ Ext.define('NextThought.app.chat.Actions', {
 		if (!w) {
 			w =  Ext.widget({xtype: 'chat-window', roomInfo: roomInfo});
 			this.ChatStore.cacheChatWindow(w, roomInfo);
+			this.ChatStore.putRoomInfoIntoSession(roomInfo);
 		}
 		return w;
 	},
@@ -402,7 +402,7 @@ Ext.define('NextThought.app.chat.Actions', {
 		win = this.ChatStore.getChatWindow(cid);
 		// moderated = Boolean(opts && opts.hasOwnProperty('moderated'));
 		sender = msg.get('Creator');
-		room = win && win.roomInfo || this.ChatStore.getRoomInfoFromSession(cid);
+		room = win && win.roomInfo;
 		isGroupChat = room ? room.get('Occupants').length > 2 : false;
 		this.updateChatState(sender, 'active', win, isGroupChat);
 		if (win) {
