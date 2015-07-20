@@ -64,28 +64,16 @@ Ext.define('NextThought.app.chat.Actions', {
 			roomInfos = me.ChatStore.getAllRoomInfosFromSession(),
 			w;
 
+		me.ChatStore.initializeTranscriptStore();
 		Ext.each(roomInfos, function(ri) {
 			me.onEnteredRoom(ri);
 			w = me.ChatStore.getChatWindow(ri);
 
 			//This chunk will try to recover the history and insert it into the chat again...
 			me.loadTranscript(ri)
-				.then(function(transcript) {
-					var messages = transcript.get('Messages');
-					messages = Ext.Array.sort(messages, function(a, b) {
-						var aRaw = a.raw || {CreatedTime: 0},
-								bRaw = b.raw || {CreatedTime: 0};
-
-						return aRaw.CreatedTime - bRaw.CreatedTime;
-					});
-
-					Ext.each(messages, function(m) {
-						me.onMessage(m, {pushNotification: false});
-					}, me);
-				})
+				.then(me.addMessagesForTranscript.bind(me))
 				.fail(function() {
-					console.error('Could not recover chat history.');
-					me.onExitedRoom(ri.getData());
+					console.warn('Could not recover chat history.');
 				});
 		});
 
@@ -211,6 +199,7 @@ Ext.define('NextThought.app.chat.Actions', {
 			w =  Ext.widget({xtype: 'chat-window', roomInfo: roomInfo});
 			this.ChatStore.cacheChatWindow(w, roomInfo);
 			this.ChatStore.putRoomInfoIntoSession(roomInfo);
+			this.fillInHistoryForOccupants(roomInfo.get('Occupants'));
 		}
 		return w;
 	},
@@ -358,7 +347,7 @@ Ext.define('NextThought.app.chat.Actions', {
 		username = username && Ext.isString(username) ? username : $AppConfig.username;
 		oldStatus = room.getRoomState(username || $AppConfig.username);
 		if (oldStatus !== newStatus) {
-			// console.log('transitioning room state for: ', $AppConfig.username, ' from ', oldStatus, ' to ', newStatus);
+			console.log('transitioning room state for: ', $AppConfig.username, ' from ', oldStatus, ' to ', newStatus);
 			this.postMessage(room, {'state': newStatus}, null, channel, null, Ext.emptyFn);
 		}
 	},
@@ -559,7 +548,7 @@ Ext.define('NextThought.app.chat.Actions', {
 			}
 
 			if (oldRoomInfo) {
-				this.ChatStore.removeSessionObject(oldRoomInfo.getId());
+				this.ChatStore.removeSessionObject(oldRoomInfo.getOccupantsKey());
 			}
 		}
 
@@ -654,6 +643,59 @@ Ext.define('NextThought.app.chat.Actions', {
 			//im not a moderator, just leave
 			socket.emit('chat_exitRoom', room.getId());
 		}
+	},
+
+
+	fillInHistoryForOccupants: function(occupants) {
+		var me = this;
+		Promise.all(this.loadHistoryForOccupants(occupants))
+			.then(function(transcripts) {
+				Ext.each(transcripts, me.addMessagesForTranscript.bind(me));
+			});
+	},
+
+
+	addMessagesForTranscript: function(transcript) {
+		function timeSort(a, b) {
+			var aRaw = a.raw || {CreatedTime: 0},
+					bRaw = b.raw || {CreatedTime: 0};
+
+			return aRaw.CreatedTime - bRaw.CreatedTime;
+		}
+
+		var messages = transcript.get('Messages'),
+			me = this;
+
+		messages = Ext.Array.sort(messages, timeSort);
+		Ext.each(messages, function(m) {
+			me.onMessage(m, {pushNotification: false});
+		}, me);
+	},
+
+
+	loadHistoryForOccupants: function(occupants) {
+		if (!this.ChatStore.transcriptStore || Ext.isEmpty(occupants)) {
+			return;
+		}
+
+		var summaries = [], me = this;
+
+		occupants = (occupants || []).slice();
+		occupants.sort();
+		occupants = occupants.join('_');
+
+		this.ChatStore.transcriptStore.each(function(item) {
+			var o = (item.get('Contributors') || []).slice();
+			o.sort();
+			o = o.join('_');
+			if (o === occupants) {
+				summaries.push(item);
+			}
+		});
+
+		return Ext.Array.map(summaries, function(summary) {
+			return me.loadTranscript(summary.get('RoomInfo'));
+		});
 	},
 
 

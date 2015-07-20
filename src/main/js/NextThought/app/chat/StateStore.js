@@ -383,5 +383,51 @@ Ext.define('NextThought.app.chat.StateStore', {
 		var id = roomInfo.isModel ? roomInfo.getId() : roomInfo;
 
 		return this.buildTranscriptId(id, $AppConfig.username.replace('-', '_'), 'Transcript');
+	},
+
+
+	initializeTranscriptStore: function() {
+		function mergeChatsFilter(item) {
+			var o = (item.get('Contributors') || []).slice(),
+				caller = mergeChatsFilter.caller || {},
+				seen = caller.seenOccupants || [];
+
+			caller.seenOccupants = seen;
+
+			o.sort();
+			o = o.join('|');
+			if (Ext.Array.contains(seen, o)) {
+				return false;
+			}
+			seen.push(o);
+			return true;
+		}
+
+		var url = Service.getContainerUrl(Globals.CONTENT_ROOT, Globals.RECURSIVE_USER_GENERATED_DATA),
+			s = NextThought.store.PageItem.make(url, Globals.CONTENT_ROOT, true);
+
+		s.addFilter([mergeChatsFilter]);
+		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
+			sortOn: 'createdTime',
+			sortOrder: 'descending',
+			pageSize: 100,
+			accept: [
+				NextThought.model.TranscriptSummary.prototype.mimeType,
+				NextThought.model.Transcript.prototype.mimeType
+			].join(',')
+		});
+
+		this.mon(s, {
+			scope: this,
+			load: function() {
+				console.log(arguments);
+			},
+			add: function() {
+				console.log(arguments);
+			}
+		});
+
+		this.transcriptStore = s;
+		s.load();
 	}
 });
