@@ -65,6 +65,7 @@ Ext.define('NextThought.app.course.overview.Index', {
 		var item = this.getLayout().getActiveItem();
 
 		this.setTitle(this.title);
+
 		if (item.onActivate) {
 			item.onActivate();
 		}
@@ -75,6 +76,10 @@ Ext.define('NextThought.app.course.overview.Index', {
 		if (this.activeMediaWindow) {
 			Ext.destroy(this.activeMediaWindow);
 			delete this.activeMediaWindow;
+		}
+
+		if (this.reader) {
+			this.reader.fireEvent('deactivate');
 		}
 	},
 

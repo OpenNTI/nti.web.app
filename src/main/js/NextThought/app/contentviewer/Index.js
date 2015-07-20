@@ -105,6 +105,7 @@ Ext.define('NextThought.app.contentviewer.Index', {
 				me.readerConfig.pageInfo = pageInfo;
 
 				me.reader = me.add(me.readerConfig);
+				me.reader.fireEvent('activate');
 
 				me.mon(me.reader, {
 					'assignment-submitted': me.fireEvent.bind(me, 'assignment-submitted'),
@@ -115,9 +116,17 @@ Ext.define('NextThought.app.contentviewer.Index', {
 			});
 
 		me.on({
+			'activate': this.onActivate.bind(this),
 			'deactivate': this.onDeactivate.bind(this),
 			'beforedestroy': this.onDeactivate.bind(this)
 		});
+	},
+
+
+	onActivate: function() {
+		if (this.reader) {
+			this.reader.fireEvent('activate');
+		}
 	},
 
 

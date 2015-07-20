@@ -49,20 +49,41 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.UserDataActions = NextThought.app.userdata.Actions.create();
-		this.WindowActions = NextThought.app.windows.Actions.create();
-		this.ContextStore = NextThought.app.context.StateStore.getInstance();
-		this.showReader();
+		var me = this;
 
-		this.on({
-			'beforedeactivate': this.beforeDeactivate.bind(this),
-			'deactivate': this.onDeactivate.bind(this)
+		me.UserDataActions = NextThought.app.userdata.Actions.create();
+		me.WindowActions = NextThought.app.windows.Actions.create();
+		me.ContextStore = NextThought.app.context.StateStore.getInstance();
+		me.showReader();
+
+		me.on({
+			'beforedeactivate': me.beforeDeactivate.bind(me),
+			'activate': me.onActivate.bind(me),
+			'deactivate': me.onDeactivate.bind(me),
+			'destroy': function() {
+				Ext.EventManager.removeResizeListener(me.onWindowResize, me);
+			}
 		});
+	},
+
+
+	onActivate: function() {
+		Ext.EventManager.onWindowResize(this.onWindowResize, this);
+		this.alignNavigation();
 	},
 
 
 	onDeactivate: function() {
 		this.endViewedAnalytics();
+		Ext.EventManager.removeResizeListener(this.onWindowResize, this);
+	},
+
+
+	onWindowResize: function() {
+		if (this.navigation && this.navigation.setWidth) {
+			this.navigation.setWidth('100%');
+			this.alignNavigation();
+		}
 	},
 
 
@@ -72,7 +93,7 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 
 		var toolbarConfig = this.getToolbarConfig(),
 			readerConfig = this.getReaderConfig(),
-			readerContent;
+			readerContent, onWindowResize;
 
 		this.flatPageStore = this.flatPageStore || NextThought.store.FlatPage.create({ storeId: 'FlatPage-' + this.id });
 		this.UserDataActions.initPageStores(this);

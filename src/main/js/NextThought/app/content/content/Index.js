@@ -33,10 +33,18 @@ Ext.define('NextThought.app.content.content.Index', {
 
 		this.on({
 			'beforedeactivate': this.onBeforeDeactivate.bind(this),
+			'activate': this.onActivate.bind(this),
 			'deactivate': this.onDeactivate.bind(this)
 		});
 
 		this.on('beforedeactivate', this.onBeforeDeactivate.bind(this));
+	},
+
+
+	onActivate: function() {
+		if (this.reader) {
+			this.reader.fireEvent('activate');
+		}
 	},
 
 
@@ -130,6 +138,7 @@ Ext.define('NextThought.app.content.content.Index', {
 		this.setTitle(page.get('label'));
 
 		this.add(this.reader);
+		this.reader.fireEvent('activate');
 	},
 
 
