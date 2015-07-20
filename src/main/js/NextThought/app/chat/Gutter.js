@@ -96,6 +96,27 @@ Ext.define('NextThought.app.chat.Gutter', {
 		this.on('show', function() {
 			me.updateList(me.store, me.store.data.items);
 		});
+		this.syncChatWindows();
+	},
+
+	syncChatWindows: function() {
+		// This function makes that we're in sync with the Chat Statestore.
+		// This ensure that all the chat windows are linked with their respective gutter entry.
+		var me = this,
+			wins = this.ChatStore.getAllChatWindows(),
+			occupants;
+		(wins || []).forEach(function(win) {
+			if (win.roomInfo && !win.roomInfo.isGroupChat()) {
+				occupants = win.roomInfo.get('Occupants');
+				occupants = (occupants || []).slice();
+				Ext.Array.remove(occupants, $AppConfig.userObject.get('Username'));
+				UserRepository.getUser(occupants[0])
+					.then(function(u) {
+						me.store.add(u);
+						me.bindChatWindow(win);
+					});
+			}
+		});
 	},
 
 	onResize: function() {
@@ -205,7 +226,7 @@ Ext.define('NextThought.app.chat.Gutter', {
 			//Minimize the window.
 			if (user.associatedWindow) {
 				user.associatedWindow.hide();
-			}	
+			}
 			return;
 		}
 
@@ -262,14 +283,10 @@ Ext.define('NextThought.app.chat.Gutter', {
 			isGroupChat = roomInfo.isGroupChat(),
 			occupants = roomInfo && roomInfo.get('Occupants'), t, i, entry, me = this, user;
 
-
+		occupants = (occupants || []).slice();
 		if (!isGroupChat) {
-			for (i = 0; i < occupants.length; i++) {
-				if(!isMe(occupants[i])) {
-					t = occupants[i];
-					break;
-				}
-			}
+			Ext.Array.remove(occupants, $AppConfig.userObject.get('Username'));
+			t = occupants[0];
 
 			if (t) {
 				entry = this.findEntryForUser(t);
