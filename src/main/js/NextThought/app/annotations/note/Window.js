@@ -19,7 +19,8 @@ Ext.define('NextThought.app.annotations.note.Window', {
 
 		this.headerCmp = this.add({
 			xtype: 'window-header',
-			doClose: this.doClose.bind(this)
+			doClose: this.doClose.bind(this),
+			doNavigate: this.doNavigate.bind(this)
 		});
 
 		this.loadingEl = this.add({xtype: 'window-loading'});

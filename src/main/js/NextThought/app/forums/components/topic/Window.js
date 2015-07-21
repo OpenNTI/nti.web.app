@@ -24,7 +24,8 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 
 		this.headerCmp = this.add({
 			xtype: 'window-header',
-			doClose: this.onClose.bind(this)
+			doClose: this.onClose.bind(this),
+			doNavigate: this.doNavigate.bind(this)
 		});
 
 		this.loadingEl = this.add({xtype: 'window-loading'});

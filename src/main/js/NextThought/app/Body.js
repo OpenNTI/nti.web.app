@@ -174,6 +174,9 @@ Ext.define('NextThought.app.Body', {
 			hash = this.ContextStore.getCurrentHash();
 
 		if (id) {
+			if(id == this.ContextStore.getCurrentObjectId()){
+				return;
+			}
 			id = ParseUtils.encodeForURI(id);
 
 			if (mimeType) {

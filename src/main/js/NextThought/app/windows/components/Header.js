@@ -33,6 +33,7 @@ Ext.define('NextThought.app.windows.components.Header', {
 		this.callParent(arguments);
 
 		this.NavigationActions = NextThought.app.navigation.path.Actions.create();
+		this.ContextStore = NextThought.app.context.StateStore.getInstance();
 	},
 
 
@@ -40,6 +41,7 @@ Ext.define('NextThought.app.windows.components.Header', {
 		this.callParent(arguments);
 
 		this.mon(this.closeEl, 'click', this.doClose.bind(this));
+		this.mon(this.titleEl, 'click', 'onPathClicked');
 	},
 
 	setTitle: function(title) {
@@ -61,6 +63,8 @@ Ext.define('NextThought.app.windows.components.Header', {
 		var me = this,
 			container = me.titleEl;
 
+		me.record = record;
+
 		me.NavigationActions.getBreadCrumb(record)
 			.then(function(titles) {
 				if (length && length >= 0) {
@@ -74,5 +78,16 @@ Ext.define('NextThought.app.windows.components.Header', {
 				container.dom.innerHTML = '';
 				container = me.pathTpl.append(container, {labels: titles, leaf: leaf}, true);
 			});
+	},
+
+
+	onPathClicked: function(e){
+		var rootContext = this.ContextStore.getRootContext(),
+			rootObj = rootContext.obj,
+			rootId =  rootObj && rootObj.getId();
+
+		if(this.record && (this.record.get('ContainerId') != rootId)){
+			this.doNavigate(this.record);
+		}
 	}
 });
