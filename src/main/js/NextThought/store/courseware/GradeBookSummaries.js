@@ -142,7 +142,10 @@ Ext.define('NextThought.store.courseware.GradeBookSummaries', {
 				grade = historyItem.get('Grade');
 
 				if (!historyItem.get('item')) {
-					historyItem.set('item', assignment);
+					historyItem.set({
+						'item': assignment,
+						'AssignmentId': assignment.getId()
+					});
 				}
 			} else {
 				grade = historyItem.Grade;

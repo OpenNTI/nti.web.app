@@ -153,9 +153,19 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 		return me.performanceView.setAssignmentsData(me.assignmentCollection, me.currentBundle, student)
 			.then(me.performanceView.showStudent.bind(me.performanceView, student))
 			.then(function() {
-				var view = me.performanceView.getStudentView();
+				var view = me.performanceView.getStudentView(),
+					store = view.store;
 
-				return view.store;
+				if (store.recordsFilledIn) {
+					return store;
+				}
+
+				return new Promise(function(fulfill, reject) {
+					me.mon(store, {
+						single: true,
+						'records-filled-in': fulfill.bind(null, store)
+					});
+				});
 			});
 	},
 

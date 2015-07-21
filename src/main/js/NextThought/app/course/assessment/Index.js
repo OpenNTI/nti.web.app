@@ -292,7 +292,7 @@ Ext.define('NextThought.app.course.assessment.Index', {
 
 
 	__getHistoryItem: function(historyItem) {
-		var link = historyItem.getLink('UsersCourseAssignmentHistoryItem'),
+		var link = historyItem && historyItem.getLink('UsersCourseAssignmentHistoryItem'),
 			load;
 
 		if (link && historyItem.isSummary) {

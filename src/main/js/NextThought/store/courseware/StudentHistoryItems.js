@@ -70,7 +70,11 @@ Ext.define('NextThought.store.courseware.StudentHistoryItems', {
 					me.remove(entry);
 				}
 			} else if (entry) {
-				entry.set('item', assignment);
+				entry.set({
+					'item': assignment,
+					'AssignmentId': assignment.getId()
+				});
+
 				me.__replaceWithCachedInstance(entry);
 			} else if (!assignment.doNotShow()) {
 				me.add(me.assignments.createPlaceholderHistoryItem(assignment, me.student));
@@ -79,6 +83,8 @@ Ext.define('NextThought.store.courseware.StudentHistoryItems', {
 
 		me.resumeEvents();
 		me.fireEvent('refresh');
+		me.recordsFilledIn = true;
+		me.fireEvent('records-filled-in');
 	},
 
 

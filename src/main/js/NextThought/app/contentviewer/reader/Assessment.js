@@ -136,7 +136,7 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 			grade = historyItem.get('Grade'),
 			historyAssignmentId = grade.get('AssignmentId');
 
-		if(historyItem && (assignmentId == historyAssignmentId)){
+		if (historyItem && (assignmentId == historyAssignmentId)) {
 			if (this.injectedAssignment.isTimed) {
 				this.injectedAssignment.updateMetaData(historyItem.get('Metadata'));
 			}
@@ -527,7 +527,7 @@ Ext.define('NextThought.app.contentviewer.reader.Assessment', {
 		items.forEach(function(i) {
 			if (i.isAssignment) {
 				assignments.push(i);
-				i.get('parts').forEach(function(qset) {
+				(i.get('parts') || []).forEach(function(qset) {
 					qset = qset.get('question_set');
 					sets[qset.getId()] = qset;
 					pushSetQuestions(qset);

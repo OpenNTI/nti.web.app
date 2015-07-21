@@ -198,6 +198,7 @@ Ext.define('NextThought.model.courses.assignments.InstructorCollection', {
 			historyItem = NextThought.model.courseware.UsersCourseAssignmentHistoryItem.create({
 				Creator: user,
 				item: assignment,
+				AssignmentId: assignment.getId(),
 				Grade: grade
 			});
 
