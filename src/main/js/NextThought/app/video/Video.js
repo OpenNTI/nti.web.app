@@ -428,9 +428,7 @@ Ext.define('NextThought.app.video.Video', {
 		var state = this.queryPlayer(),
 			time = state && state.time,
 			current = this.playlist[this.playlistIndex],
-			id = current && current.getId(),
-			container = this.up('[currentBundle]') || Ext.getCmp('content'),
-			bundle = container && container.currentBundle && container.currentBundle.getId();
+			id = current && current.getId();
 
 		//if we dont' have a player state, we aren't suppose to capture analytics,
 		//or we don't have a resource id don't send any events
@@ -438,7 +436,6 @@ Ext.define('NextThought.app.video.Video', {
 
 		AnalyticsUtil.addResource(id, {
 			type: 'video-speed-change',
-			course: bundle,
 			OldPlaySpeed: oldSpeed,
 			NewPlaySpeed: newSpeed,
 			VideoTime: time
@@ -453,9 +450,7 @@ Ext.define('NextThought.app.video.Video', {
 			threshold = 5,
 			current = this.playlist[this.playlistIndex],
 			id = current && current.getId(),
-			hasTranscript = !!this.up('media-view'),
-			container = this.up('[currentBundle]') || Ext.getCmp('content'),
-			bundle = container && container.currentBundle && container.currentBundle.getId();
+			hasTranscript = !!this.up('media-view');
 
 		//if we don't have a player state, we aren't suppose to capture analytics,
 		//or we don't have a resource id don't send any events
@@ -475,7 +470,6 @@ Ext.define('NextThought.app.video.Video', {
 			if (state.state !== this.self.states.UNSTARTED) {
 				AnalyticsUtil.getResourceTimer(id, {
 					type: 'video-skip',
-					course: bundle,
 					with_transcript: hasTranscript,
 					video_start_time: this.lasttime,
 					video_end_time: time
@@ -490,7 +484,6 @@ Ext.define('NextThought.app.video.Video', {
 			AnalyticsUtil.getResourceTimer(id, {
 				type: 'video-watch',
 				with_transcript: hasTranscript,
-				course: bundle,
 				video_start_time: time,
 				MaxDuration: state.duration / 1000,
 				PlaySpeed: state.speed

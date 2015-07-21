@@ -118,7 +118,7 @@ Ext.define('NextThought.app.course.enrollment.Details', {
 
 		AnalyticsUtil.getResourceTimer(this.course.getId(), {
 			type: 'course-catalog-viewed',
-			course: this.course.getId()
+			RootContextId: this.course.getId()
 		});
 
 		this.on('beforedeactivate', 'onBeforeDeactivate');
@@ -305,7 +305,7 @@ Ext.define('NextThought.app.course.enrollment.Details', {
 			loading = Promise.reject();
 		}
 
-		return loading
+		return loading;
 	},
 
 

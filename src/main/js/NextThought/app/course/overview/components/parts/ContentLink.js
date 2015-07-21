@@ -141,8 +141,6 @@ Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
 
 
 	onCardClicked: function(e) {
-		var bundle = this.getCurrentBundle();
-
 		if (e && e.getTarget('.comment')) {
 			e.stopEvent();
 			this.bypassEvent = false;
@@ -150,8 +148,7 @@ Ext.define('NextThought.app.course.overview.components.parts.ContentLink', {
 
 		if (this.bypassEvent) {
 			AnalyticsUtil.getResourceTimer(this.ntiid, {
-				type: 'resource-viewed',
-				course: bundle && bundle.getId()
+				type: 'resource-viewed'
 			});
 
 			this.setProgress();

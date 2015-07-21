@@ -60,6 +60,11 @@ Ext.define('NextThought.app.profiles.community.Index', {
 	},
 
 
+	getContext: function() {
+		return this.activeCommunity;
+	},
+
+
 	onActivate: function() {
 		var cmp = this.bodyCmp.getLayout().getActiveItem();
 

@@ -78,8 +78,7 @@ Ext.define('NextThought.common.ux.TimelineWindow', {
 	startTimer: function() {
 		var data = {
 				type: 'resource-viewed',
-				resource_id: this.ntiid,
-				course: this.course
+				resource_id: this.ntiid
 			};
 
 		if (this.ntiid) {

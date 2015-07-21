@@ -328,10 +328,7 @@ Ext.define('NextThought.app.contentviewer.panels.Reader', {
 
 	getAnalyticData: function() {
 		var questionSet = this.getQuestionSet(),
-			bundle = this.ContextStore.getRootBundle(),
-			data = {
-				course: bundle.getId()
-			};
+			data = {};
 
 		if (questionSet) {
 			data.type = 'assessment-viewed';

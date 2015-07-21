@@ -17,7 +17,7 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
 		flagActions: 'NextThought.mixins.FlagActions'
 	},
-	
+
 	triggerAnalyticsViews: false,
 
 	enableTitle: false,
@@ -749,18 +749,18 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 			this.on('afterrender', Ext.bind(this.setContext, this, arguments), this, {single: true});
 			return;
 		}
-        
-        this.context.setHTML('');
-        
-        
+
+		this.context.setHTML('');
+
+
 		if (!Ext.isEmpty(contextCmp)) {
-		    //We have seen a case where we try and render a component twice.  That is a no no and causes
-            //terrible crashes
-            if(contextCmp.rendered){
-                console.error('Attempting to rerender a context cmp');
-                return;
-            }
-		    contextCmp.render(this.context);
+			//We have seen a case where we try and render a component twice.  That is a no no and causes
+			//terrible crashes
+			if (contextCmp.rendered) {
+				console.error('Attempting to rerender a context cmp');
+				return;
+			}
+			contextCmp.render(this.context);
 
 			if (Ext.isGecko || Ext.isIE9) {
 				this.resizeMathJax(this.context);
@@ -1043,11 +1043,8 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 	startResourceTimer: function() {
 		if (!this.triggerAnalyticsViews || !this.record) { return; }
 
-		var bundle = NextThought.app.context.StateStore.getInstance().getRootBundle();
-
 		AnalyticsUtil.getResourceTimer(this.record.getId(), {
 				type: 'note-viewed',
-				course: bundle && bundle.getId(),
 				note_id: this.record.getId()
 			});
 	},
@@ -1057,8 +1054,8 @@ Ext.define('NextThought.app.annotations.note.Panel', {
 			delete this.editor.ownerCt;
 			this.editor.destroy();
 		}
-		
-		if(this.triggerAnalyticsViews){
+
+		if (this.triggerAnalyticsViews) {
 			AnalyticsUtil.stopResourceTimer(this.record.getId(), 'note-viewed');
 		}
 		this.callParent(arguments);

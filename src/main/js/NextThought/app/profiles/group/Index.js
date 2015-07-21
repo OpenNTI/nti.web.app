@@ -10,20 +10,20 @@ Ext.define('NextThought.app.profiles.group.Index', {
 	],
 
 	cls: 'group-profile profile',
-	
-	initRoutes: function(){
+
+	initRoutes: function() {
 	   this.addRoute('/activity', this.showActivity.bind(this));
 	   this.addRoute('/members', this.showMembership.bind(this));
-		   
+
 	   this.addDefaultRoute('/activity');
 	},
-		   
-	buildHeaderComponent: function(){
+
+	buildHeaderComponent: function() {
 		return {
 		   xtype: 'profile-group-header'
-		}
+		};
 	},
-		   
+
 	finalizeInit: Ext.emptyFn,
 
 	setState: function(active) {
@@ -51,39 +51,38 @@ Ext.define('NextThought.app.profiles.group.Index', {
 
 		this.NavActions.setActiveContent(this.activeEntity);
 	},
-		   
-	resolveEntity: function(id, entity){
+
+	resolveEntity: function(id, entity) {
 	   var me = this;
 	   return Service.getObject(id)
 		   .then(function(user) {
 					me.activeEntity = user;
-				 
+
 					me.isMe = isMe(user);
-				 
+
 					return user;
 				 });
 	},
-		   
+
 	showMembership: function(route, subRoute) {
 		   var membershipCmp = this.setActiveItem('group-profile-membership'),
 		   headerCmp = this.headerCmp;
-		   
+
 		   this.setState('members');
-	
-		   
+
+
 		   return membershipCmp.userChanged(this.activeEntity, false)
 		   .then(membershipCmp.handleRoute.bind(membershipCmp, subRoute, route.params));
 	},
-		   
+
 	showActivity: function(route, subRoute) {
 		var activityCmp = this.setActiveItem('profile-group-activity'),
 		    headerCmp = this.headerCmp;
-		    
+
 		activityCmp.gotoMembership = this.pushRoute.bind(this, 'Members', '/members');
 		this.setState('activity');
-		  
+
 		return activityCmp.userChanged(this.activeEntity, false)
 		   .then(activityCmp.handleRoute.bind(activityCmp, subRoute, route.params));
 	}
-		   
 });

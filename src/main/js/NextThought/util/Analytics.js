@@ -90,8 +90,8 @@ Ext.define('NextThought.util.Analytics', {
 				contextCmp = contextPart && contextPart.cmp,
 				contextStr = null;
 
-			if (contextObject && Ext.isFunction(contextObject.getId)) {
-				contextStr = contextObject.getId();
+			if (contextObject && Ext.isFunction(contextObject.get)) {
+				contextStr = contextObject.get('NTIID');
 			}
 			if (!contextStr) {
 				contextStr = contextCmp && contextCmp.contextIdentifier;
@@ -172,6 +172,7 @@ Ext.define('NextThought.util.Analytics', {
 		data.MimeType = this.TYPE_TO_MIMETYPE[data.type];
 		data.user = $AppConfig.username;
 		data.resource_id = resourceId;
+		data.RootContextID = data.RootContextId || data.context_path[0] || '';
 
 		if (data.course && data.context_path.first() != data.course) {
 			data.context_path.unshift(data.course);

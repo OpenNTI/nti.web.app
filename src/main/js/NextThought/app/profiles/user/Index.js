@@ -40,6 +40,10 @@ Ext.define('NextThought.app.profiles.user.Index', {
 	    this.finalizeInit();
 	},
 
+	getContext: function() {
+		return this.activeEntity;
+	},
+
 	initRoutes: function() {
 		this.addRoute('/about', this.showAbout.bind(this));
 		this.addRoute('/activity', this.showActivity.bind(this));

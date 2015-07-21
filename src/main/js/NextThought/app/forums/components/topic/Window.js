@@ -138,7 +138,6 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 	showTopic: function(topic, forum, activeComment) {
 		var topicCmp = this.down('forums-topic-topic'),
 			commentCmp = this.down('forums-topic-comment-thread'),
-			container = NextThought.app.context.StateStore.getInstance().getRootBundle(),
 			me = this;
 
 		function stopTimer() {
@@ -154,7 +153,6 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 
 				AnalyticsUtil.getResourceTimer(me.currentAnalyticId, {
 					type: 'discussion-viewed',
-					course: container && container.getId(),
 					topic_id: me.currentAnalyticId
 				});
 			}
