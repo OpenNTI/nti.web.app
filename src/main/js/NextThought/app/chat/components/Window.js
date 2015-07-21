@@ -115,6 +115,7 @@ Ext.define('NextThought.app.chat.components.Window', {
 
 	onWindowShow: function() {
 		var me = this;
+		me.updateChatViews();
 		wait(500)
 			.then(function() {
 				if(me.entryView && !me.entryView.disabled) {
@@ -221,6 +222,51 @@ Ext.define('NextThought.app.chat.components.Window', {
 		});
 	},
 
+	updateChatViews: function() {
+		var me = this,
+			onlineOccupants = [],
+			logView = me.down('chat-log-view'),
+			chatView = me.down('chat-entry'),
+			myPresence = me.ChatStore.getPresenceOf($AppConfig.userObject.get('Username'));
+
+		UserRepository.getUser(this.roomInfo.get('Occupants'), function(users) {
+			Ext.each(users, function(u) {
+				var name = u.getId(),
+					presence = me.ChatStore.getPresenceOf(name);
+
+				if (!presence || presence.isOnline()) {
+					onlineOccupants.push(u);
+				}
+			});
+
+			if (onlineOccupants.length > 1) {
+				if (Ext.isEmpty(me.query('chat-log-entry'))) {
+					Ext.each(me.query('chat-notification-entry'), function(el) {
+						el.destroy();
+					});
+				}
+				chatView.enable();
+			}
+			else if (onlineOccupants.length === 1 && !isMe(onlineOccupants[0]) && (myPresence && myPresence.isOnline())) {
+				if (Ext.isEmpty(me.query('chat-log-entry'))) {
+					Ext.each(me.query('chat-notification-entry'), function(el) {
+						el.destroy();
+					});
+				}
+				chatView.enable();
+			}
+			else if (onlineOccupants.length === 1 && isMe(onlineOccupants[0])) {
+				chatView.disable();
+				if (logView.addStatusNotification) {
+					logView.addStatusNotification(getString('NextThought.view.chat.Window.one-occupant'));
+				}
+			}
+			else {
+				chatView.disable();
+			}
+		});
+	},
+
 	presenceChanged: function(username, value) {
 		var me = this,
 			logView = me.down('chat-log-view'),
@@ -312,6 +358,8 @@ Ext.define('NextThought.app.chat.components.Window', {
 
 	handleMessageFromChannel: function(sender, msg, room, isGroupChat) {
 		var r = room || this.roomInfo;
+
+		isGroupChat = isGroupChat || r && r.isGroupChat();
 		this.logView.addMessage(msg);
 		this.updateChatState(sender, 'active', r, isGroupChat);
 	},
