@@ -2,7 +2,13 @@ Ext.define('NextThought.app.assessment.ScoreboardTally', {
 	extend: 'Ext.Component',
 	alias: 'widget.assessment-tally',
 
+
+	mixins: {
+		EllipsisText: 'NextThought.mixins.EllipsisText'
+	},
+
 	cls: 'tally-box',
+
 
 	renderTpl: Ext.DomHelper.markup([
 		{ cls: 'message' },
@@ -51,6 +57,10 @@ Ext.define('NextThought.app.assessment.ScoreboardTally', {
 		}
 
 		this.message.update(txt);
+
+		if (this.ellipseMessage) {
+			this.truncateText(this.message.dom);
+		}
 	},
 
 

@@ -22,15 +22,11 @@ Ext.define('NextThought.app.course.overview.components.parts.QuestionSet', {
 	cls: 'scoreboard overview-naquestionset',
 	ui: 'assessment',
 
-	layout: {
-		type: 'hbox',
-		align: 'middle'
-	},
-
+	layout: 'none',
 
 	items: [
 		{ xtype: 'chart-score' },
-		{ xtype: 'assessment-tally', flex: 1 },
+		{ xtype: 'assessment-tally', flex: 1, ellipseMessage: true },
 		{ xtype: 'button',
 			text: getString('NextThought.view.courseware.overview.parts.QuestionSet.review'),
 			ui: 'secondary',
