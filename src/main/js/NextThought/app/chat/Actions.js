@@ -199,7 +199,7 @@ Ext.define('NextThought.app.chat.Actions', {
 			w =  Ext.widget({xtype: 'chat-window', roomInfo: roomInfo});
 			this.ChatStore.cacheChatWindow(w, roomInfo);
 			this.ChatStore.putRoomInfoIntoSession(roomInfo);
-			this.fillInHistoryForOccupants(roomInfo.get('Occupants'));
+			this.fillInHistoryForOccupants(roomInfo.get('Occupants'), w);
 		}
 		return w;
 	},
@@ -646,16 +646,28 @@ Ext.define('NextThought.app.chat.Actions', {
 	},
 
 
-	fillInHistoryForOccupants: function(occupants) {
-		var me = this;
-		Promise.all(this.loadHistoryForOccupants(occupants))
-			.then(function(transcripts) {
-				Ext.each(transcripts, me.addMessagesForTranscript.bind(me));
+	fillInHistoryForOccupants: function(occupants, win) {
+		var me = this,
+			transcripts = this.ChatStore.getTranscripts();
+
+		if (transcripts && transcripts.isLoading()) {
+			transcripts.on({
+				load: this.fillInHistoryForOccupants.bind(this, occupants, win)
+			});
+			return;
+		}
+
+		Promise.all(me.loadHistoryForOccupants(occupants))
+			.then(function(historyItems) {
+				Ext.each(historyItems, me.addMessagesForTranscript.bind(me, win));
+			})
+			.fail(function() {
+				console.warn('Failed to load one of the chat transcripts: ', arguments);
 			});
 	},
 
 
-	addMessagesForTranscript: function(transcript) {
+	addMessagesForTranscript: function(win, transcript) {
 		function timeSort(a, b) {
 			var aRaw = a.raw || {CreatedTime: 0},
 					bRaw = b.raw || {CreatedTime: 0};
@@ -663,28 +675,32 @@ Ext.define('NextThought.app.chat.Actions', {
 			return aRaw.CreatedTime - bRaw.CreatedTime;
 		}
 
-		var messages = transcript.get('Messages'),
-			me = this;
+		var messages = transcript ? transcript.get('Messages') : [],
+			me = this, sender;
 
 		messages = Ext.Array.sort(messages, timeSort);
-		Ext.each(messages, function(m) {
-			me.onMessage(m, {pushNotification: false});
+		Ext.each(messages, function(msg) {
+			sender = msg.get('Creator');
+			if (win) {
+				win.handleMessageFromChannel(sender, msg);
+			}
 		}, me);
 	},
 
 
 	loadHistoryForOccupants: function(occupants) {
-		if (!this.ChatStore.transcriptStore || Ext.isEmpty(occupants)) {
-			return;
+		if (!this.ChatStore.getTranscripts() || Ext.isEmpty(occupants)) {
+			return [];
 		}
 
-		var summaries = [], me = this;
+		var summaries = [], me = this,
+			transcripts = this.ChatStore.getTranscripts();
 
 		occupants = (occupants || []).slice();
 		occupants.sort();
 		occupants = occupants.join('_');
 
-		this.ChatStore.transcriptStore.each(function(item) {
+		transcripts.each(function(item) {
 			var o = (item.get('Contributors') || []).slice();
 			o.sort();
 			o = o.join('_');
@@ -693,7 +709,8 @@ Ext.define('NextThought.app.chat.Actions', {
 			}
 		});
 
-		return Ext.Array.map(summaries, function(summary) {
+		// Reverse the array, so we can add the transcript fron the oldest to most recent ones.
+		return Ext.Array.map(summaries.reverse(), function(summary) {
 			return me.loadTranscript(summary.get('RoomInfo'));
 		});
 	},

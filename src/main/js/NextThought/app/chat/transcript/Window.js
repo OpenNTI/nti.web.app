@@ -197,7 +197,7 @@ Ext.define('NextThought.app.chat.transcript.Window', {
 	NextThought.app.windows.StateStore.registerCustomResolver(NextThought.model.TranscriptSummary.mimeType, function(id) {
 		var store = NextThought.app.chat.StateStore.getInstance();
 
-		id = store.getTranscriptSummaryForRoomInfo(id);
+		id = store.getTranscriptIdForRoomInfo(id);
 		id = id && id.toString();
 
 		if (!id) {
