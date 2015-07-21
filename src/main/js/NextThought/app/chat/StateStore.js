@@ -138,7 +138,8 @@ Ext.define('NextThought.app.chat.StateStore', {
 
 	mergeRoomInfos: function(xRoom, wRoom) {
 		var xOcc = xRoom && xRoom.getOriginalOccupants(),
-			wOcc = wRoom && wRoom.get('Occupants');
+			wOcc = wRoom && wRoom.get('Occupants')
+			;
 
 		if ( Ext.Array.union(xOcc, wOcc).length === xOcc.length) {
 			console.debug('found a different room with same occupants: ', xOcc);
@@ -371,42 +372,21 @@ Ext.define('NextThought.app.chat.StateStore', {
 
 
 	getTranscriptIdForRoomInfo: function(roomInfo) {
-		var isString = typeof roomInfo === 'string',
-			roomInfoId = isString ? roomInfo : roomInfo.getId(),
-			user = isString ? $AppConfig.username : roomInfo.get('Creator');
-
-		return this.buildTranscriptId(roomInfoId, user, 'Transcript');
-	},
-
-
-	getTranscriptSummaryForRoomInfo: function(roomInfo) {
 		var id = roomInfo.isModel ? roomInfo.getId() : roomInfo;
-
 		return this.buildTranscriptId(id, $AppConfig.username.replace('-', '_'), 'Transcript');
 	},
 
 
+	getTranscripts: function() {
+		return this.__transcriptStore;
+	},
+
+
 	initializeTranscriptStore: function() {
-		function mergeChatsFilter(item) {
-			var o = (item.get('Contributors') || []).slice(),
-				caller = mergeChatsFilter.caller || {},
-				seen = caller.seenOccupants || [];
-
-			caller.seenOccupants = seen;
-
-			o.sort();
-			o = o.join('|');
-			if (Ext.Array.contains(seen, o)) {
-				return false;
-			}
-			seen.push(o);
-			return true;
-		}
-
 		var url = Service.getContainerUrl(Globals.CONTENT_ROOT, Globals.RECURSIVE_USER_GENERATED_DATA),
 			s = NextThought.store.PageItem.make(url, Globals.CONTENT_ROOT, true);
 
-		s.addFilter([mergeChatsFilter]);
+		s.pageSize = 100;
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams || {}, {
 			sortOn: 'createdTime',
 			sortOrder: 'descending',
@@ -427,7 +407,7 @@ Ext.define('NextThought.app.chat.StateStore', {
 			}
 		});
 
-		this.transcriptStore = s;
+		this.__transcriptStore = s;
 		s.load();
 	}
 });
