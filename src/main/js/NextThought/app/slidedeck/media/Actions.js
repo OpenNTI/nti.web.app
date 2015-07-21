@@ -140,6 +140,11 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 
 	loadTranscript: function(transcript) {
 		var me = this;
+
+		if (!transcript) {
+			return Promise.reject('No Transcript');
+		}
+
 		return new Promise(function(fulfill, reject) {
 			me.loadRawTranscript(transcript)
 				.then(function(c) {

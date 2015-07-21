@@ -139,6 +139,18 @@ Ext.define('NextThought.app.context.types.Video', {
 								});
 
 								return Promise.resolve(cmp);
+							})
+							.fail(function(reason) {
+								cmp = Ext.widget('context-video', {
+									type: me.self.type,
+									containerId: me.container,
+									video: video,
+									range: me.range,
+									record: me.contextRecord,
+									doNavigate: me.doNavigate.bind(me)
+								});
+
+								return cmp;
 							});
 				});
 	}
