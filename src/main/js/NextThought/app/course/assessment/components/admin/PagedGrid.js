@@ -238,6 +238,9 @@ Ext.define('NextThought.app.course.assessment.components.admin.PagedGrid', {
 		var items = [],
 			definedColumns = Ext.clone(this.self.prototype.definedColumns);
 
+		extras = extras || {};
+		overrides = overrides || {};
+
 		order.forEach(function(name) {
 			var col;
 
