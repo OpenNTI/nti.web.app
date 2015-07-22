@@ -159,7 +159,7 @@ Ext.define('NextThought.app.chat.Actions', {
 
 		this.presentInvationationToast(roomInfo)
 			.then(function() {
-				me.ChatStore.setRoomIdStatusAccepted(roomInfo);
+				me.ChatStore.setOccupantsKeyAccepted(roomInfo);
 				w.accept(true);
 				me.startTrackingChatState(roomInfo.get('Creator'), roomInfo, w);
 				if (isGroupChat) {
@@ -222,7 +222,7 @@ Ext.define('NextThought.app.chat.Actions', {
 	canShowChat: function (roomInfo) {
 		var creator = roomInfo && roomInfo.get('Creator'),
 			isGroupChat = roomInfo && roomInfo.isGroupChat();
-		if (isMe(creator) || !isGroupChat || this.ChatStore.isRoomIdAccepted(roomInfo.getId())) {
+		if (isMe(creator) || !isGroupChat || this.ChatStore.isOccupantsKeyAccepted(roomInfo.getOccupantsKey())) {
 			return true;
 		}
 
@@ -623,7 +623,7 @@ Ext.define('NextThought.app.chat.Actions', {
 		// We want to remove the cached room when a user exits a room.
 		// However, we would like to keep the occupants key in the accepted list.
 		// That will help us to know when users to add in the gutter. 
-		// this.ChatStore.deleteRoomIdStatusAccepted(room.getId());
+		// this.ChatStore.deleteOccupantsKeyAccepted(room.getId());
 		this.ChatStore.removeSessionObject(room.getOccupantsKey());
 
 		if (this.isModerator(room)) {
