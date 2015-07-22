@@ -52,7 +52,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.PagedGrid', {
 			xtype: 'templatecolumn',
 			tpl: new Ext.XTemplate(Ext.DomHelper.markup([{
 					cls: 'padded-cell user-cell student-cell', cn: [
-						{ cls: 'avatar', style: {backgroundImage: 'url({avatar})'} },
+						'{User:avatar}',
 						{ cls: 'name', html: '{[this.displayName(values)]}'}
 					]
 				}]), {

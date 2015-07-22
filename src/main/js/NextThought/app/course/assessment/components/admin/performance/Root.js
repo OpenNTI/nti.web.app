@@ -58,7 +58,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 				Student: {
 					tpl: new Ext.XTemplate(Ext.DomHelper.markup([
 						{cls: 'studentbox', cn: [
-							{cls: 'avatar', style: {backgroundImage: 'url({avatar})'}},
+							'{User:avatar}',
 							{cls: 'wrap', cn: [
 								{cls: 'name', html: '{[this.displayName(values)]}'},
 								{cls: 'action-items', cn: [
