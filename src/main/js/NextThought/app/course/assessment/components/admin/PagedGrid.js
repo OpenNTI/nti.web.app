@@ -111,7 +111,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.PagedGrid', {
 					submitted = (completed && completed.get && completed.get('Last Modifed')) || completed,
 					assignment = item && item.get('item'),
 					parts = assignment && assignment.get('parts'),
-					dateFormat = 'm/d', late;
+					dateFormat = 'm/d', late = {};
 
 				if ((!submitted && !due) || !item) {
 					return '';
@@ -147,12 +147,12 @@ Ext.define('NextThought.app.course.assessment.components.admin.PagedGrid', {
 				}
 
 				//if we get here the submission was late
-				late = new Duration(Math.abs(submitted - due) / 1000);
+				late.html = TimeUtils.getNaturalDuration(Math.abs(submitted - due), 1);
 
 				return Ext.DomHelper.markup({
 					cls: 'late',
 					'data-qtip': getFormattedString('NextThought.view.courseware.assessment.admin.Grid.late', {
-						late: late.ago().replace('ago', '').trim()
+						late: late.html
 					}),
 					html: getFormattedString('NextThought.view.courseware.assessment.admin.Grid.submitted', {
 						date: Ext.Date.format(submitted, dateFormat)

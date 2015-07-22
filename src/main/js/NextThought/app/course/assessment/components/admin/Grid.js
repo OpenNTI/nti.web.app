@@ -76,12 +76,12 @@ Ext.define('NextThought.app.course.assessment.components.admin.Grid', {
 							}
 
 							//if we get here the submission was late
-							d = new Duration(Math.abs(s - d) / 1000);
+							d.html = TimeUtils.getNaturalDuration(Math.abs(s - d), 1);
 
 							return Ext.DomHelper.markup({
 								cls: 'late',
 								'data-qtip': getFormattedString('NextThought.view.courseware.assessment.admin.Grid.late', {
-									late: d.ago().replace('ago', '').trim()
+									late: d.html
 								}),
 								html: getFormattedString('NextThought.view.courseware.assessment.admin.Grid.submitted', {date: Ext.Date.format(s, 'm/d')})
 							});
