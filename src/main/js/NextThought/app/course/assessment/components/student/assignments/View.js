@@ -172,12 +172,12 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 
 				groupPromise = groups.reduce(function(p, v) {
 					return p.then(function() {
-						return wait(100).then(function() {
+						return wait(1).then(function() {
 							cmp.add(v);
-							return wait(1);
+							me.alignNavigation();
 						});
 					});
-				}, wait(10));
+				}, wait(1));
 			} else {
 				groupPromise = Promise.resolve();
 			}
@@ -186,8 +186,10 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 				this.filterSearchValue(state.search);
 			}
 
-			return groupPromise
+			groupPromise
 				.then(this.alignNavigation.bind(this));
+
+			return Promise.resolve();
 		};
 	},
 
