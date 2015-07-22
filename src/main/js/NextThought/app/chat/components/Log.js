@@ -316,6 +316,16 @@ Ext.define('NextThought.app.chat.components.Log', {
 	},
 
 
+	addMask: function() {
+		this.el.mask('loading chat history');
+	},
+
+
+	removeMask: function() {
+		this.el.unmask();
+	},
+
+
 	getMessages: function() {
 		var entryWidgets = this.query(this.entryType),
 			entries = [];
