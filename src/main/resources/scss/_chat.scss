@@ -164,6 +164,10 @@
 		//	where <shadow> is defined as:
 		//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
 		//		
+		
+		.x-mask {
+			background: rgba(245,245,245,0); // Make it transparent
+		}
 
 		.control {
 			display: none;

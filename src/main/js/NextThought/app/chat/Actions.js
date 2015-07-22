@@ -654,6 +654,11 @@ Ext.define('NextThought.app.chat.Actions', {
 			return;
 		}
 
+		win.onceRendered.
+			then(function() {
+				win.logView.addMask();
+			});
+
 		Promise.all(me.loadHistoryForOccupants(occupants))
 			.then(function(historyItems) {
 				Ext.each(historyItems, me.addMessagesForTranscript.bind(me, win));
@@ -682,6 +687,16 @@ Ext.define('NextThought.app.chat.Actions', {
 				win.handleMessageFromChannel(sender, msg);
 			}
 		}, me);
+
+		if (win.rendered) {
+			win.logView.removeMask();
+		}
+		else {
+			win.onceRendered
+				.then(function() {
+					win.logView.removeMask();
+				});
+		}
 	},
 
 
