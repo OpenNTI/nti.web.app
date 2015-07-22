@@ -92,24 +92,27 @@ Ext.define('NextThought.app.chat.Gutter', {
 		this.on('show', function() {
 			me.updateList(me.store, me.store.data.items);
 		});
-		this.syncChatWindows();
+		this.syncWithRecentChats();
 	},
 
-	syncChatWindows: function() {
+	syncWithRecentChats: function() {
 		// This function makes that we're in sync with the Chat Statestore.
-		// This ensure that all the chat windows are linked with their respective gutter entry.
+		// It helps recover and add gutter entries for people 
+		// whom we might not be following but recently chatted with.
 		var me = this,
-			wins = this.ChatStore.getAllChatWindows(),
-			occupants;
-		(wins || []).forEach(function(win) {
-			if (win.roomInfo && !win.roomInfo.isGroupChat()) {
-				occupants = win.roomInfo.get('Occupants');
-				occupants = (occupants || []).slice();
-				Ext.Array.remove(occupants, $AppConfig.userObject.get('Username'));
-				UserRepository.getUser(occupants[0])
-					.then(function(u) {
+			occupantsKeys = this.ChatStore.getAllOccupantsKeyAccepted() || [];
+
+		occupantsKeys.forEach(function(occupantsKey) {
+			var isNTIID = ParseUtils.isNTIID(occupantsKey),
+				users = isNTIID === false ? occupantsKey.split('_') : [],
+				o = Ext.Array.remove(users.slice(), $AppConfig.username);
+
+			if (o.length === 1 && me.store.find('Username', o[0]) === -1) {
+				// This is 1-1 chat, not a groupchat
+				UserRepository.getUser(o[0])
+					.then(function (u) {
+						// var p = u.getPresence();
 						me.store.add(u);
-						me.bindChatWindow(win);
 					});
 			}
 		});
