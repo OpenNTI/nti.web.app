@@ -157,7 +157,7 @@ Ext.define('NextThought.app.chat.StateStore', {
 		// Change the roomInfo to the new one.
 		chatWindow.roomInfoChanged(newRoom);
 
-		// Cache the new room to make sure the map that the store has is in sync
+		// Cache the new room to make sure the map that the store is in sync
 		console.debug('caching new room info : ', newRoom.getId());
 		me.ROOM_USER_MAP[newRoom.getId()] = occupantsKey;
 		me.putRoomInfoIntoSession(newRoom);
@@ -273,12 +273,12 @@ Ext.define('NextThought.app.chat.StateStore', {
 	},
 
 
-	isRoomIdAccepted: function(id) {
+	isOccupantsKeyAccepted: function(id) {
 		return Boolean((this.getSessionObject('roomIdsAccepted') || {})[id]);
 	},
 
 
-	setRoomIdStatusAccepted: function(roomInfo) {
+	setOccupantsKeyAccepted: function(roomInfo) {
 		var key = 'roomIdsAccepted',
 			occupantsKey = roomInfo.getOccupantsKey(),
 			status = this.getSessionObject(key) || {};
@@ -288,7 +288,7 @@ Ext.define('NextThought.app.chat.StateStore', {
 	},
 
 
-	deleteRoomIdStatusAccepted: function(roomInfo) {
+	deleteOccupantsKeyAccepted: function(roomInfo) {
 		var key = 'roomIdsAccepted',
 			status = this.getSessionObject(key),
 			occupantsKey = roomInfo.getOccupantsKey();
@@ -301,6 +301,20 @@ Ext.define('NextThought.app.chat.StateStore', {
 		delete this.CHAT_WIN_MAP[occupantsKey];
 		this.setSessionObject(status, key);
 		this.fireEvent('exited-room', roomInfo.getId());
+	},
+
+
+	getAllOccupantsKeyAccepted: function() {
+		var accepted = this.getSessionObject('roomIdsAccepted') || {},
+			pairs = [], key;
+
+		for (key in accepted) {
+			if (accepted.hasOwnProperty(key)) {
+				pairs.push(key);
+			}
+		}
+
+		return pairs;
 	},
 
 
