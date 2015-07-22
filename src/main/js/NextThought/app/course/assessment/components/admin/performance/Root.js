@@ -213,11 +213,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 
 	hidePredicted: function() {
-		var column = this.grid.down('[dataIndex=PredictedGrade]');
-
-		if (column) {
-			column.hide();
-		}
+		this.grid.hideColumn('PredictedGrade');
 	},
 
 
@@ -226,7 +222,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 			column = this.grid.down('[dataIndex=PredictedGrade]');
 
 		if (rec && rec.raw.hasOwnProperty('PredictedGrade')) {
-			column.show();
+			this.grid.showColumn('PredictedGrade');
 		}
 	},
 
@@ -354,9 +350,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 		this.studentMenu.offset = [0, x ? -x : 0];
 
-		x = this.down('[dataIndex="Username"]');
-
-		x[item.type === 'ForCredit' ? 'show' : 'hide']();
+		this.grid[item.type === 'ForCredit' ? 'showColumn' : 'hideColumn']('Username');
 
 		this.updateExportEl(item.type);
 	},

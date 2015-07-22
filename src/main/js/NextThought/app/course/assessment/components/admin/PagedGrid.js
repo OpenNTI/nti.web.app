@@ -234,6 +234,30 @@ Ext.define('NextThought.app.course.assessment.components.admin.PagedGrid', {
 	},
 
 
+	__getColumnConfigs: function(order, extras, overrides) {
+		var items = [],
+			definedColumns = Ext.clone(this.self.prototype.definedColumns);
+
+		order.forEach(function(name) {
+			var col;
+
+			if (extras[name]) {
+				col = extras[name];
+			} else if (overrides[name]) {
+				col = Ext.apply(definedColumns[name] || {}, overrides[name]);
+			} else if (definedColumns[name]) {
+				col = definedColumns[name];
+			}
+
+			if (col) {
+				items.push(col);
+			}
+		});
+
+		return items;
+	},
+
+
 	constructor: function(config) {
 		var me = this, items = [],
 			extraCols = config.extraColumns || {},
@@ -242,24 +266,9 @@ Ext.define('NextThought.app.course.assessment.components.admin.PagedGrid', {
 
 		//Clone the instances columns so it doesn't affect the other instances
 		me.columns = Ext.clone(me.self.prototype.columns);
-		me.definedColumns = Ext.clone(me.self.prototype.definedColumns);
+		me.columnOrder = order;
 
-
-		order.forEach(function(name) {
-			var col;
-
-			if (extraCols[name]) {
-				col = extraCols[name];
-			} else if (overrides[name]) {
-				col = Ext.apply(me.definedColumns[name] || {}, overrides[name]);
-			} else if (me.definedColumns[name]) {
-				col = me.definedColumns[name];
-			}
-
-			if (col) {
-				items.push(col);
-			}
-		});
+		items = me.__getColumnConfigs(order, extraCols, overrides);
 
 		me.columns.items = items;
 
@@ -280,6 +289,42 @@ Ext.define('NextThought.app.course.assessment.components.admin.PagedGrid', {
 				me.selModel.deselect(record);
 			}
 		});
+	},
+
+
+	showColumn: function(name) {
+		var index = (this.HIDDEN_INDEX || {})[name],
+			items;
+
+		//can't show a column if we didn't hide it first
+		if (!index) { return; }
+
+		delete this.HIDDEN_INDEX[name];
+
+		this.columnOrder.splice(index, 0, name);
+
+		items = this.__getColumnConfigs(this.columnOrder, this.extraColumns, this.columnOverrides);
+
+		this.reconfigure(this.store, items);
+	},
+
+
+	hideColumn: function(name) {
+		var index = this.columnOrder.indexOf(name),
+			items;
+
+		//if the column is already hidden
+		if (index < 0) { return; }
+
+		this.HIDDEN_INDEX = this.HIDDEN_INDEX || {};
+
+		this.HIDDEN_INDEX[name] = index;
+
+		this.columnOrder.splice(index, 1);
+
+		items = this.__getColumnConfigs(this.columnOrder, this.extraColumns, this.columnOverrides);
+
+		this.reconfigure(this.store, items);
 	},
 
 

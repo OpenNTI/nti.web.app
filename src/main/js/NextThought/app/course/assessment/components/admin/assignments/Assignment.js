@@ -135,8 +135,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 
 		var me = this,
 			pageHeader = me.down('course-assessment-admin-listheader'),
-			grid = me.down('grid'),
-			completed = grid.down('[name=completed]');
+			grid = me.down('grid');
 
 		me.filterMenu = this.down('filter-menupanel');
 
@@ -163,8 +162,8 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 
 		//if there is a completed column but no parts on the assignment
 		//hide the completed column
-		if (me.assignment.isEmpty() && completed) {
-			completed.hide();
+		if (me.assignment.isEmpty()) {
+			grid.hideColumn('Completed');
 		}
 
 		$AppConfig.Preferences.getPreference('Gradebook')
