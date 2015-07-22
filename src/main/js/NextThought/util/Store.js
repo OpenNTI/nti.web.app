@@ -78,7 +78,7 @@ Ext.define('NextThought.util.Store', {
 			a = document.createElement('a');
 
 		a.setAttribute('href', getURL(url));
-		a.search = queryString || '';
+		a.search = queryString || a.search || '';
 
 		return Service.request(a.href);
 	},
