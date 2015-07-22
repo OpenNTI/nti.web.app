@@ -16,6 +16,11 @@ Ext.define('NextThought.app.search.Actions', {
 	},
 
 
+	getPageSize: function() {
+		return this.PAGE_SIZE;
+	},
+
+
 	__getSearchLocation: function() {
 		var location = this.ContextStore.getReaderLocation(),
 			NTIID = location && location.NTIID,

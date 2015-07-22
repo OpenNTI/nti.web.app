@@ -92,7 +92,7 @@ Ext.define('NextThought.app.search.components.Results', {
 	showError: function() {
 		var errorCmp = this.down('[errorCmp]');
 
-		if (!erroCmp) {
+		if (!errorCmp) {
 			this.add({
 				xtype: 'box',
 				errorCmp: true,
