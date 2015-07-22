@@ -60,22 +60,9 @@ Ext.define('NextThought.app.chat.Actions', {
 
 	onSessionReady: function() {
 		console.log('Chat onSessionReady');
-		var me = this,
-			roomInfos = me.ChatStore.getAllRoomInfosFromSession(),
-			w;
+		var me = this;
 
-		me.ChatStore.initializeTranscriptStore();
-		Ext.each(roomInfos, function(ri) {
-			me.onEnteredRoom(ri);
-			w = me.ChatStore.getChatWindow(ri);
-
-			//This chunk will try to recover the history and insert it into the chat again...
-			me.loadTranscript(ri)
-				.then(me.addMessagesForTranscript.bind(me))
-				.fail(function() {
-					console.warn('Could not recover chat history.');
-				});
-		});
+		this.ChatStore.initializeTranscriptStore();
 
 		$AppConfig.Preferences.getPreference('ChatPresence/Active')
 			.then(function(value) {
@@ -172,7 +159,7 @@ Ext.define('NextThought.app.chat.Actions', {
 
 		this.presentInvationationToast(roomInfo)
 			.then(function() {
-				me.ChatStore.setRoomIdStatusAccepted(roomInfo.getId());
+				me.ChatStore.setRoomIdStatusAccepted(roomInfo);
 				w.accept(true);
 				me.startTrackingChatState(roomInfo.get('Creator'), roomInfo, w);
 				if (isGroupChat) {
@@ -205,13 +192,23 @@ Ext.define('NextThought.app.chat.Actions', {
 	},
 
 
-	rebuildWindow: function(roomInfoId) {
-		var me = this;
+	resolveWindowForUsers: function(roomInfoId, users) {
+		var me = this,
+			allUsers = Ext.Array.unique(users.slice().concat($AppConfig.userObject.get('Username'))),
+			occupantsKey = Ext.Array.sort(allUsers).join('_'),
+			win = this.ChatStore.getWindow(occupantsKey);
 
 		return new Promise( function(fulfill, reject) {
 			Service.getObject(roomInfoId)
 				.then( function(obj) {
-					me.openChatWindow(obj);
+					// If we have an existing window with the same occupants but different roomInfo.
+					// Get the new roomInfo and then update the window rather than creating another one.
+					if (win) {
+						me.ChatStore.replaceChatRoomInfo(win, obj);
+					}
+					else {
+						me.openChatWindow(obj);
+					}
 					fulfill(obj);
 				})
 				.fail( function() {
@@ -359,10 +356,14 @@ Ext.define('NextThought.app.chat.Actions', {
 				channel = m && m.get('channel'),
 				cid = m && m.get('ContainerId'),
 				w = this.ChatStore.getChatWindow(cid),
-				pushNotification = opts && opts.pushNotification;
+				pushNotification = opts && opts.pushNotification,
+				occupants = [m.get('Creator'), $AppConfig.username];
 
 		if (!w) {
-			this.rebuildWindow(cid)
+			// TODO: This is going to break for GroupChat,
+			// since we might have more occupants than just the sender and the receiver (Me).
+			// Group chat may have to depend on the roomInfo rather than occupants.
+			this.resolveWindowForUsers(cid, occupants)
 				.then(me.onMessage.bind(me, msg, opts));
 			return;
 		}
@@ -517,12 +518,18 @@ Ext.define('NextThought.app.chat.Actions', {
 	},
 
 	onSocketDisconnect: function() {
-		this.ChatStore.removeSessionObject();
+		// NOTE: Keep the accepted list of accepted rooms, keyed by occupants.
+		// We will use the list of previous chats to fill the gutter,
+		// which comes in handy for chats with people we may not be following.
+		this.ChatStore.removeAllRoomInfosFromSession();
 	},
 
 
 	onExitedRoom: function(room) {
-		this.ChatStore.removeSessionObject(room.ID);
+		var occupants = room.Occupants || [],
+			key = Ext.Array.sort(occupants.slice()).join('_');
+
+		this.ChatStore.removeSessionObject(key);
 	},
 
 
@@ -610,24 +617,14 @@ Ext.define('NextThought.app.chat.Actions', {
 		if (!room) { return; }
 
 		var me = this,
-			id = this.ChatStore.getTranscriptIdForRoomInfo(room),
 			socket = this.ChatStore.getSocket();
 
-		Service.getObject(id)
-			.then(function(obj) {
-				// TODO: Fix this.
-				var cmp = Ext.getCmp('chat-history'),
-					store = cmp && cmp.getStore();
 
-				if (store) {
-					store.add(obj);
-				}
-			})
-			.fail(function() {
-				console.warn('Failed to save chat history: ', arguments);
-			});
-
-		this.ChatStore.deleteRoomIdStatusAccepted(room.getId());
+		// We want to remove the cached room when a user exits a room.
+		// However, we would like to keep the occupants key in the accepted list.
+		// That will help us to know when users to add in the gutter. 
+		// this.ChatStore.deleteRoomIdStatusAccepted(room.getId());
+		this.ChatStore.removeSessionObject(room.getOccupantsKey());
 
 		if (this.isModerator(room)) {
 			console.log('leaving room but I\'m a moderator, relinquish control');
