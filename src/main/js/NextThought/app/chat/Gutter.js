@@ -96,7 +96,7 @@ Ext.define('NextThought.app.chat.Gutter', {
 	},
 
 	syncWithRecentChats: function() {
-		// This function makes that we're in sync with the Chat Statestore.
+		// This function makes sure that we're in sync with the Chat Statestore.
 		// It helps recover and add gutter entries for people 
 		// whom we might not be following but recently chatted with.
 		var me = this,
@@ -219,20 +219,13 @@ Ext.define('NextThought.app.chat.Gutter', {
 
 
 	openChatWindow: function(user, entry) {
-		if (entry && entry.hasCls('active')) {
-			//Minimize the window.
-			if (user.associatedWindow) {
-				user.associatedWindow.hide();
-			}
-			return;
-		}
-
-		if (user.associatedWindow) {
-			user.associatedWindow.show();
+		var isVisible = user.associatedWindow && user.associatedWindow.isVisible();
+		if (user.associatedWindow && !user.associatedWindow.isDestroyed) {
+			user.associatedWindow[isVisible ? 'hide' : 'show']();
 		}
 		else {
-			this.ChatActions.startChat(user);
 			this.selectActiveUser(user);
+			this.ChatActions.startChat(user);
 		}
 		this.clearUnreadCount(user);
 	},
