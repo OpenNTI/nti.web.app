@@ -128,24 +128,11 @@ Ext.define('NextThought.app.chat.components.View', {
 			return;
 		}
 
-		var me = this, activeTimer = 120000,
-			goneTimer = 600000,
+		var me = this,
 			room = this.up('.chat-window') ? this.up('.chat-window').roomInfo : null;
 		if (!room) {
 			console.log('Error: Cannot find the roomInfo, so we drop the chat status change');
 			return;
-		}
-
-		// NOTE: We want to always restart the timer when the receive one of these events.
-		if (notification.status === 'active' || notification.status === 'composing' || notification.status === 'paused') {
-			clearTimeout(me.inactiveTimer);
-			clearTimeout(me.awayTimer);
-			me.inactiveTimer = setTimeout(function() {
-				me.fireEvent('status-change', {status: 'inactive'});
-			}, activeTimer);
-			me.awayTimer = setTimeout(function() {
-				me.fireEvent('status-change', {status: 'gone'});
-			}, goneTimer);
 		}
 
 		if (notification.status !== 'active') {
