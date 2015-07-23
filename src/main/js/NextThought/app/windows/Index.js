@@ -40,6 +40,12 @@ Ext.define('NextThought.app.windows.Index', {
 	},
 
 
+	afterRender: function() {
+		this.callParent(arguments);
+		this.mon(this.el, 'click', this.onClick.bind(this));
+	},
+
+
 	allowNavigation: function() {
 		var allow = true;
 
@@ -54,6 +60,15 @@ Ext.define('NextThought.app.windows.Index', {
 		return allow;
 	},
 
+
+
+	onClick: function(e){
+		if (e.getTarget('.window-content')) { return; }
+
+		this.viewContainer.items.each(function(item) {
+			item.doClose();
+		});
+	},
 
 	showWindow: function(object, state, el, monitors, precache) {
 		var type = this.WindowStore.getComponentForMimeType(object && (object.mimeType || object)),
