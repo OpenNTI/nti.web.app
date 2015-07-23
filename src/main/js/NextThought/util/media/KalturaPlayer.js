@@ -2,6 +2,8 @@
 /*globals Globals, mw, NextThought, kWidget */
 Ext.define('NextThought.util.media.KalturaPlayer', {
 
+	reqruies: ['NextThought.util.Globals'],
+
 	statics: {
 		PARTNER_ID: '1500101',
 		UICONF_ID: $AppConfig.kalturaUIID || '15491291',
