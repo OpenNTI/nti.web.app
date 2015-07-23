@@ -365,6 +365,11 @@ Ext.define('NextThought.app.chat.components.Window', {
 	},
 
 
+	addBulkMessages: function(messages) {
+		this.logView.addBulkMessages(messages);
+	},
+
+
 	/**
 	 *  We use this method to update the state of other chat participants.
 	 *  Thus, it is responsible for updating the appropriate view,
