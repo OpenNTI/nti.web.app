@@ -264,6 +264,7 @@ Ext.define('NextThought.app.course.assessment.components.student.Performance', {
 					var submission = h && h.get('Submission'),
 						feedback = h && h.get('Feedback'),
 						grade = h && h.get('Grade'),
+						gradeValue = grade && grade.getValues().value,
 						pendingAssessment = h && h.get('pendingAssessment');
 
 					if (me.maybeSetFinalGrade(o, h, grade)) { return; }
@@ -277,7 +278,7 @@ Ext.define('NextThought.app.course.assessment.components.student.Performance', {
 						due: o.get('availableEnding'),
 						completed: submission && submission.get('CreatedTime'),
 						Grade: grade,
-						grade: grade && parseInt(grade.getValues().value, 10),
+						grade: gradeValue && parseInt(gradeValue, 10),
 						average: grade && grade.get('average'),
 						Feedback: feedback,
 						feedback: feedback && feedback.get('Items').length,
