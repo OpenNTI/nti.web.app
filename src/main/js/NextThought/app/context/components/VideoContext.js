@@ -4,6 +4,7 @@ Ext.define('NextThought.app.context.components.VideoContext', {
 
 	requires: [
 		'NextThought.app.context.StateStore',
+		'NextThought.app.navigation.path.Actions',
 		'NextThought.app.video.Video'
 	],
 
@@ -29,6 +30,7 @@ Ext.define('NextThought.app.context.components.VideoContext', {
 	initComponent: function() {
 		this.callParent(arguments);
 		this.ContextStore = NextThought.app.context.StateStore.getInstance();
+		this.PathActions = NextThought.app.navigation.path.Actions.create();
 	},
 
 
@@ -41,40 +43,72 @@ Ext.define('NextThought.app.context.components.VideoContext', {
 	},
 
 
+	isInPageContext: function() {
+		var context = this.ContextStore.getContext(),
+			currentContext = context && context.last(),
+			contextRecord = currentContext && currentContext.obj;
+
+		if (!contextRecord || !contextRecord.getId()) {
+			return Promise.reject();
+		}
+
+		return this.PathActions.getPathToObject(this.record)
+			.then(function(path) {
+				var pageInfo, i;
+
+				for (i = path.length - 1; i >= 0; i++) {
+					if (path[i] instanceof NextThought.model.PageInfo) {
+						pageInfo = path[i];
+						break;
+					}
+				}
+
+				if (pageInfo && pageInfo.getId() === contextRecord.getId()) {
+					return Promise.resolve();
+				}
+
+				return Promise.reject();
+			});
+	},
+
+
 	afterRender: function() {
 		this.callParent(arguments);
 
-		var startTimeSeconds, pointer;
+		var me = this,
+			startTimeSeconds, pointer;
 
-		if (this.isInContext()) {
-			this.videoEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
-			this.videoEl.hide();
-		}
-		else {
-			this.videoplayer = Ext.widget('content-video-navigation', {
-				playlist: [this.video],
-				renderTo: this.videoEl,
-				playerWidth: this.WIDTH,
-				width: this.WIDTH,
-				floatParent: this
+		if (me.isInContext()) {
+			me.videoEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
+			me.videoEl.hide();
+		} else {
+			me.videoplayer = Ext.widget('content-video-navigation', {
+				playlist: [me.video],
+				renderTo: me.videoEl,
+				playerWidth: me.WIDTH,
+				width: me.WIDTH,
+				floatParent: me
 			});
 
-			if (this.range) {
-				pointer = this.range.start || {};
+			if (me.range) {
+				pointer = me.range.start || {};
 				startTimeSeconds = pointer.seconds / 1000; //They are actually millis not seconds
 			}
 			if (startTimeSeconds > 0) {
-				this.videoplayer.setVideoAndPosition(this.videoplayer.currentVideoId, startTimeSeconds);
+				me.videoplayer.setVideoAndPosition(me.videoplayer.currentVideoId, startTimeSeconds);
 			}
 
-			if (this.doNavigate) {
-				this.seeMoreEl.removeCls('hidden');
-				this.mon(this.seeMoreEl, 'click', this.doNavigate.bind(this, this.record));
+			if (me.doNavigate) {
+				me.isInPageContext()
+					.fail(function() {
+						me.seeMoreEl.removeCls('hidden');
+						me.mon(me.seeMoreEl, 'click', me.doNavigate.bind(me, me.record));
+					});
 			}
 		}
 
-		if (this.snippet) {
-			this.textEl.appendChild(this.snippet);
+		if (me.snippet) {
+			me.textEl.appendChild(me.snippet);
 		}
 	}
 });
