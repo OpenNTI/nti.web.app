@@ -63,9 +63,16 @@ Ext.define('NextThought.app.course.overview.components.parts.Discussion', {
 	afterRender: function() {
 		this.callParent(arguments);
 
+		this.ellipsisTitle();
+	},
+
+
+	ellipsisTitle: function() {
 		var title = this.el.down('.title');
 
-		this.truncateText(title.dom);
+		if (title && title.dom) {
+			this.truncateText(title.dom);
+		}
 	},
 
 
@@ -120,6 +127,7 @@ Ext.define('NextThought.app.course.overview.components.parts.Discussion', {
 
 		if (this.rendered) {
 			this.renderTpl.overwrite(this.el, this.data);
+			this.ellipsisTitle();
 		}
 	},
 
