@@ -182,7 +182,7 @@ Ext.define('NextThought.app.course.assessment.components.student.assignments.Vie
 				groupPromise = Promise.resolve();
 			}
 
-			if (state.search) {
+			if (state && state.search) {
 				this.filterSearchValue(state.search);
 			}
 
