@@ -32,6 +32,8 @@ Ext.define('NextThought.app.windows.Index', {
 
 		this.viewContainer = this.down('window-container');
 
+		this.onKeyPress = this.onKeyPress.bind(this);
+
 		this.mon(this.WindowStore, {
 			'show-window': this.showWindow.bind(this),
 			'close-window': this.closeWindow.bind(this),
@@ -61,15 +63,6 @@ Ext.define('NextThought.app.windows.Index', {
 	},
 
 
-
-	onClick: function(e){
-		if (e.getTarget('.window-content')) { return; }
-
-		this.viewContainer.items.each(function(item) {
-			item.doClose();
-		});
-	},
-
 	showWindow: function(object, state, el, monitors, precache) {
 		var type = this.WindowStore.getComponentForMimeType(object && (object.mimeType || object)),
 			cmp;
@@ -97,8 +90,23 @@ Ext.define('NextThought.app.windows.Index', {
 		cmp.addCls('object-window');
 
 		this.viewContainer.add(cmp);
-
+		
+		document.body.addEventListener('keydown', this.onKeyPress);
 		this.WindowStore.addOpenCls(cmp.isWindow);
+	},
+
+
+	onKeyPress: function(e) {
+		var key = e.key || e.keyCode;
+		if (key === Ext.EventObject.ESC) {
+			this.closeAllWindows();
+		}
+	},
+
+
+	onClick: function(e){
+		if (e.getTarget('.window-content')) { return; }
+		this.closeAllWindows();
 	},
 
 
@@ -108,9 +116,17 @@ Ext.define('NextThought.app.windows.Index', {
 	},
 
 
+	closeAllWindows: function(){
+		this.viewContainer.items.each(function(item) {
+			item.doClose();
+		});
+	},
+
+
 	doClose: function(afterClose, record) {
 		this.WindowActions.closeWindow();
 
+		document.body.removeEventListener('keydown', this.onKeyPress);
 		if (afterClose) {
 			//give close a chance to finish before calling afterClose
 			wait()
