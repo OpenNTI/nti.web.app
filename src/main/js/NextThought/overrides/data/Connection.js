@@ -88,13 +88,7 @@ Ext.define('NextThought.overrides.data.Connection', {
 			//We only want to do this for our stuff.  TODO better way to check this
 			var redirectIf401 = options && options.url && options.url.indexOf(getURL()) >= 0;
 			if (redirectIf401) {
-				console.warn('Encountered a 401.  Will send the user to the login page.');
-				alert({
-						  msg: 'Your session has expired.  You must log in to continue.',
-						  buttons: Ext.Msg.OK,
-						  icon: Ext.Msg.WARNING,
-						  title: 'Session Expired!'
-					  }, onConfirmed);
+				onConfirmed();
 			}
 		}
 	}, this);

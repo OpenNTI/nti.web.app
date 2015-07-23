@@ -39,7 +39,7 @@ Ext.define('NextThought.login.Actions', {
 		var me = this,
 			url = getURL(Ext.String.urlAppend(
 				me.store.getLogoutURL(),
-				'success=' + encodeURIComponent(location.href)
+				'success=' + encodeURIComponent('/login')
 			));
 
 		TemporaryStorage.removeAll();
@@ -150,7 +150,7 @@ Ext.define('NextThought.login.Actions', {
 
 			return;
 		}
-		
+
 		url = Ext.String.urlAppend(url, Ext.Object.toQueryString(o));
 		location.replace(url);
 
@@ -218,19 +218,26 @@ Ext.define('NextThought.login.Actions', {
 				return Globals.parseJSON(response, true);
 			})
 			.then(function(response) {
-			    var resolveService, tosLink;
-			
+				var resolveService, tosLink;
+
+				debugger;
+
 				me.store.maybeAddImmediateAction(response);
 				me.store.setLogoutURL(me.ServiceInterface.getLinkFrom(response.Links, 'logon.logout'));
-                tosLink = me.ServiceInterface.getLinkFrom(response.Links, 'content.direct_tos_link');
-				resolveService = me.resolveService();
-				
-				resolveService.then(function(){
-				    if(tosLink){
-	       		      Service.overrideServiceLink('termsOfService', tosLink);
-    			    }
+				tosLink = me.ServiceInterface.getLinkFrom(response.Links, 'content.direct_tos_link');
+
+				if (me.ServiceInterface.getLinkFrom(response.Links, 'logon.continue')) {
+					resolveService = me.resolveService();
+				} else {
+					resolveService = Promise.reject('No Continue Link');
+				}
+
+				resolveService.then(function() {
+					if (tosLink) {
+					  Service.overrideServiceLink('termsOfService', tosLink);
+					}
 				});
-				
+
 				return resolveService;
 			});
 	},
@@ -286,10 +293,10 @@ Ext.define('NextThought.login.Actions', {
 			})
 			.fail(function(r) {
 				if (unauthed[r.status]) {
-				    //Just let this fall through and reject. we can't
-				    //logout because we never logged in, when we reject 
-				    //the failure handle gets called and we send the user to the
-				    //login page. -cutz
+					//Just let this fall through and reject. we can't
+					//logout because we never logged in, when we reject
+					//the failure handle gets called and we send the user to the
+					//login page. -cutz
 					//me.handleLogout();
 				} else {
 					alert({
