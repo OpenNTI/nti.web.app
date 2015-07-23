@@ -10,6 +10,7 @@ Ext.define('NextThought.common.components.Navigation', {
 					tag: 'li',
 					'data-index': '{#}',
 					'data-route': '{route}',
+					'data-root': '{root}',
 					'data-subroute': '{subRoute}',
 					'data-title': '{title}',
 					'data-text': '{text}',
@@ -122,17 +123,19 @@ Ext.define('NextThought.common.components.Navigation', {
 	onTabClick: function(e) {
 		var tab = e.getTarget('.tab'),
 			route = tab && tab.getAttribute('data-route'),
-			subRoute = tab && tab.getAttribute('data-subroute');
+			subRoute = tab && tab.getAttribute('data-subroute'),
+			root = tab && (tab.getAttribute('data-root') || '');
 
 		route = Globals.trimRoute(route);
 		subRoute = Globals.trimRoute(subRoute);
+		root = Globals.trimRoute(root);
 
 		if (!tab || !this.bodyView.onTabChange) { return; }
 
 		//if we are active and we have a subroute, that means the tab is not at
 		//its root so set the root route
 		if (tab.classList.contains('active') && subRoute) {
-			this.bodyView.onTabChange(tab.getAttribute('data-title'), route, tab);
+			this.bodyView.onTabChange(tab.getAttribute('data-title'), route + '/' + root, tab);
 		} else {
 			this.bodyView.onTabChange(tab.getAttribute('data-title'), route + '/' + subRoute, tab);
 		}

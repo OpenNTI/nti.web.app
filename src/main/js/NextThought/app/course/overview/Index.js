@@ -122,6 +122,8 @@ Ext.define('NextThought.app.course.overview.Index', {
 
 		this.getLayout().setActiveItem(lessons);
 
+		this.setShadowRoot(route.path);
+
 		if (this.reader) {
 			Ext.destroy(this.reader);
 			delete this.reader;

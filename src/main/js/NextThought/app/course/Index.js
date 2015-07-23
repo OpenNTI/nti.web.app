@@ -163,6 +163,7 @@ Ext.define('NextThought.app.course.Index', {
 			tabs.push({
 				text: getString('NextThought.view.content.View.dashboardtab', 'Activity'),
 				route: 'activity',
+				root: this.getRoot('course-dashboard'),
 				subRoute: this.dashboardRoute,
 				title: 'Activity',
 				active: active === 'course-dashboard'
@@ -173,6 +174,7 @@ Ext.define('NextThought.app.course.Index', {
 			tabs.push({
 				text: getString('NextThought.view.content.View.lessontab', 'Lessons'),
 				route: 'lessons',
+				root: this.getRoot('course-overview'),
 				subRoute: this.overviewRoute,
 				title: 'Lessons',
 				active: active === 'course-overview'
@@ -183,6 +185,7 @@ Ext.define('NextThought.app.course.Index', {
 			tabs.push({
 				text: getString('NextThought.view.content.View.assessmenttab', 'Assignments'),
 				route: 'assignments',
+				root: this.getRoot('course-assessment-container'),
 				subRoute: this.assignmentRoute,
 				title: 'Assignments',
 				active: active === 'course-assessment-container'
@@ -193,6 +196,7 @@ Ext.define('NextThought.app.course.Index', {
 			tabs.push({
 				text: getString('NextThought.view.content.View.discussiontab', 'Discussions'),
 				route: 'discussions',
+				root: this.getRoot('bundle-forum'),
 				subRoute: this.discussionsRoute,
 				title: 'Discussions',
 				active: active === 'bundle-forum'
@@ -203,6 +207,7 @@ Ext.define('NextThought.app.course.Index', {
 			tabs.push({
 				text: getString('NextThought.view.content.View.reporttab', 'Reports'),
 				route: 'reports',
+				root: this.getRoot('course-reports'),
 				title: 'Reports',
 				active: active === 'course-reports'
 			});
@@ -212,6 +217,7 @@ Ext.define('NextThought.app.course.Index', {
 			tabs.push({
 				text: getString('NextThought.view.content.View.infotab'),
 				route: 'info',
+				root: this.getRoot('course-info'),
 				title: 'Info',
 				active: active === 'course-info'
 			});
@@ -263,7 +269,8 @@ Ext.define('NextThought.app.course.Index', {
 				'course-info'
 			]).then(function(item) {
 				if (item.handleRoute) {
-					return item.handleRoute(subRoute, route.precache);
+					return item.handleRoute(subRoute, route.precache)
+						.then();
 				}
 			});
 	},

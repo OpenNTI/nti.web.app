@@ -87,6 +87,7 @@ Ext.define('NextThought.app.content.Index', {
 			cmp = this.cmp_map[xtype] = this.down(xtype);
 			this.addChildRouter(cmp);
 			cmp.courseContainer = this;
+			cmp.setShadowRoot = this.setShadowRoot.bind(this, xtype);
 		}
 
 		return cmp;
@@ -128,6 +129,23 @@ Ext.define('NextThought.app.content.Index', {
 	},
 
 
+	setShadowRoot: function(xtype, root) {
+		this.SHADOW_ROOTS = this.SHADOW_ROOTS || {};
+
+		this.SHADOW_ROOTS[xtype] = root;
+
+		//reapply the state so the nav can get the new root
+		this.applyState(this.activeState);
+	},
+
+
+	getRoot: function(xtype) {
+		var shadow = this.SHADOW_ROOTS && this.SHADOW_ROOTS[xtype];
+
+		return shadow || '';
+	},
+
+
 	__loadBundle: function() {
 		var bundle = this.activeBundle;
 
@@ -152,9 +170,11 @@ Ext.define('NextThought.app.content.Index', {
 
 		me.navigation.bundleChanged(me.activeBundle);
 
-		me.applyState({
+		me.activeState = {
 			active: tab || active
-		});
+		};
+
+		me.applyState(me.activeState);
 
 		function updateInactive() {
 			wait().then(me.setItemBundle.bind(me, inactive, me.activeBundle));
