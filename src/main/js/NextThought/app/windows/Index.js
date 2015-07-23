@@ -90,7 +90,7 @@ Ext.define('NextThought.app.windows.Index', {
 		cmp.addCls('object-window');
 
 		this.viewContainer.add(cmp);
-		
+
 		document.body.addEventListener('keydown', this.onKeyPress);
 		this.WindowStore.addOpenCls(cmp.isWindow);
 	},
@@ -104,7 +104,7 @@ Ext.define('NextThought.app.windows.Index', {
 	},
 
 
-	onClick: function(e){
+	onClick: function(e) {
 		if (e.getTarget('.window-content')) { return; }
 		this.closeAllWindows();
 	},
@@ -116,7 +116,7 @@ Ext.define('NextThought.app.windows.Index', {
 	},
 
 
-	closeAllWindows: function(){
+	closeAllWindows: function() {
 		this.viewContainer.items.each(function(item) {
 			item.doClose();
 		});

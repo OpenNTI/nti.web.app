@@ -412,6 +412,14 @@ Ext.define('NextThought.app.forums.components.topic.parts.Comments', {
 
 
 	onItemClick: function(record, item, index, e) {
+		//Give other event listeners a chance to do something before we modify the store
+		//causing the node that the click event is firing on to maybe be removed from the dom
+		wait()
+			.then(this.handleItemClick.bind(this, record, item, index, e));
+	},
+
+
+	handleItemClick: function(record, item, index, e) {
 		var load, me = this, width,
 			t = e.getTarget('.whiteboard-container', null, true),
 			el = Ext.get(item),
