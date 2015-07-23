@@ -220,8 +220,6 @@ Ext.define('NextThought.login.Actions', {
 			.then(function(response) {
 				var resolveService, tosLink;
 
-				debugger;
-
 				me.store.maybeAddImmediateAction(response);
 				me.store.setLogoutURL(me.ServiceInterface.getLinkFrom(response.Links, 'logon.logout'));
 				tosLink = me.ServiceInterface.getLinkFrom(response.Links, 'content.direct_tos_link');
