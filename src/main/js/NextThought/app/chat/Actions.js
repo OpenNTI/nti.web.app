@@ -47,7 +47,8 @@ Ext.define('NextThought.app.chat.Actions', {
 			'chat_roomMembershipChanged': me.createHandlerForChatEvents(me.onMembershipOrModerationChanged, 'chat_roomMembershipChanged'),
 			'chat_recvMessage': me.createHandlerForChatEvents(me.onMessage, 'chat_recvMessage'),
 			'chat_recvMessageForShadow': me.createHandlerForChatEvents(me.onMessage, 'chat_recvMessageForShadow'),
-			'chat_enteredRoom': me.onEnteredRoom.bind(me)
+			'chat_enteredRoom': me.onEnteredRoom.bind(me),
+			'socket-new-sessionid': me.createHandlerForChatEvents(me.onNewSocketConnection.bind(me), 'socket-new-sessionid')
 		});
 
 		socket.onSocketAvailable(me.onSessionReady, me);
@@ -99,6 +100,20 @@ Ext.define('NextThought.app.chat.Actions', {
 		}
 
 		socket.emit('chat_setPresence', newPresence.asJSON(), callback);
+	},
+
+
+	onNewSocketConnection: function() {
+		var me = this;
+		console.log('created a new connection');
+		$AppConfig.Preferences.getPreference('ChatPresence/Active')
+			.then(function(value) {
+				if (value) {
+					me.changePresence(value.get('type'), value.get('show'), value.get('status'));
+				} else {
+					me.changePresence('available');
+				}
+			});
 	},
 
 
@@ -661,7 +676,7 @@ Ext.define('NextThought.app.chat.Actions', {
 
 		Promise.all(me.loadHistoryForOccupants(occupants))
 			.then(function(historyItems) {
-				Ext.each(historyItems, me.addMessagesForTranscript.bind(me, win));
+				me.addMessagesForTranscript(win, historyItems);
 			})
 			.fail(function() {
 				console.warn('Failed to load one of the chat transcripts: ', arguments);
@@ -669,24 +684,22 @@ Ext.define('NextThought.app.chat.Actions', {
 	},
 
 
-	addMessagesForTranscript: function(win, transcript) {
-		function timeSort(a, b) {
-			var aRaw = a.raw || {CreatedTime: 0},
-					bRaw = b.raw || {CreatedTime: 0};
+	addMessagesForTranscript: function(win, transcripts) {
+		var me = this,
+			allMessages = [];
 
-			return aRaw.CreatedTime - bRaw.CreatedTime;
+		if (transcripts && !Ext.isArray(transcripts)) {
+			transcripts = [transcripts];
 		}
 
-		var messages = transcript ? transcript.get('Messages') : [],
-			me = this, sender;
+		transcripts.forEach(function (transcript) {
+			var messages = transcript ? transcript.get('Messages') : [];
 
-		messages = Ext.Array.sort(messages, timeSort);
-		Ext.each(messages, function(msg) {
-			sender = msg.get('Creator');
-			if (win) {
-				win.handleMessageFromChannel(sender, msg);
-			}
-		}, me);
+			messages = me.sortMessages(messages);
+			allMessages = allMessages.concat(messages);
+		});
+
+		win.addBulkMessages(allMessages);
 
 		if (win.rendered) {
 			win.logView.removeMask();
@@ -697,6 +710,19 @@ Ext.define('NextThought.app.chat.Actions', {
 					win.logView.removeMask();
 				});
 		}
+	},
+
+
+	sortMessages: function(messages) {
+		function timeSort(a, b) {
+			var aRaw = a.raw || {CreatedTime: 0},
+					bRaw = b.raw || {CreatedTime: 0};
+
+			return aRaw.CreatedTime - bRaw.CreatedTime;
+		}
+
+		messages = Ext.Array.sort(messages, timeSort);
+		return messages;
 	},
 
 
