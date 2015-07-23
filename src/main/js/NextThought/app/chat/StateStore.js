@@ -416,16 +416,6 @@ Ext.define('NextThought.app.chat.StateStore', {
 			].join(',')
 		});
 
-		this.mon(s, {
-			scope: this,
-			load: function() {
-				console.log(arguments);
-			},
-			add: function() {
-				console.log(arguments);
-			}
-		});
-
 		this.__transcriptStore = s;
 		s.load();
 	}
