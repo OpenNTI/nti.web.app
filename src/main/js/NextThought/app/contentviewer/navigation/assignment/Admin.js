@@ -35,7 +35,7 @@ Ext.define('NextThought.app.contentviewer.navigation.assignment.Admin', {
 			{cls: 'status-item', cn: {tag: 'span', cls: 'excused {excused.cls}', html: '{excused.html}'}}
 		]},
 		{ cls: 'user', cn: [
-			'{create:avatar}',
+			'{creator:avatar}',
 			{ cls: 'wrap', cn: [
 				{ cls: 'title name {presence}', cn: {html: '{displayName}' }},
 				{ cls: 'username', cn: {html: '({Username})'}},
