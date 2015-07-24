@@ -111,9 +111,8 @@ Ext.define('NextThought.app.search.SearchBar', {
 		var k = e.getKey();
 
 		if (k === e.ENTER) {
-			this.doSearch(true);
 			this.doNavigation();
-		} if (k === e.ESC) {
+		} else if (k === e.ESC) {
 			this.doSearch();
 		} else {
 			this.doSearchBuffered();
@@ -124,13 +123,14 @@ Ext.define('NextThought.app.search.SearchBar', {
 	searchClicked: function(e) {
 		e.stopPropagation();
 
-		this.doSearch(true);
 		this.doNavigation();
 	},
 
 
 	doNavigation: function() {
-		if (this.noRouteOnSearch) { return true; }
+		if (this.noRouteOnSearch) { return this.doSearch(); }
+
+		this.doSearch(true);
 
 		var params = {},
 			route = '/search/?',
