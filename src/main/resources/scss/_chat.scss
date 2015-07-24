@@ -15,7 +15,7 @@
 
 	.nti-window-header {
 		height: 42px;
-		background-color: rgba(43,43,43, 0.9);
+		background-color: #2d2d2d;
 		border: none;
   		box-shadow: none;
 
@@ -25,10 +25,36 @@
 				font-size: 16px;
 				font-weight: 600;
 				text-transform: capitalize;
+				cursor: pointer;
+			}
+
+			.controls {
+				.tool {
+					&.close {
+						margin-top: 12px;	
+					}
+
+					&.minimize {
+						display: none;
+					}
+
+
+				}
 			}
 
 			.tools {
 				img.tool{
+					&.settings {
+						opacity: 0.6;
+						margin-right: 5px;
+						background: $icons no-repeat;
+						@include sprite($icons,'chat_options',$dimensions: true);
+
+						&:hover{
+							opacity: 1;
+						}
+					}
+
 					&.add-people {
 						display: none; //turned off until this is possible in the server...
 						opacity: 0.6;
@@ -106,7 +132,7 @@
 	}
 
 	.chat-view {
-		background-color: rgba(35, 35, 35, 0.70);
+		background-color: rgba(35, 35, 35, 0.98);
 
 		.error-box {
 			position: relative;
@@ -164,6 +190,10 @@
 		//	where <shadow> is defined as:
 		//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
 		//		
+		
+		.x-mask {
+			background: rgba(245,245,245,0); // Make it transparent
+		}
 
 		.control {
 			display: none;
@@ -360,7 +390,7 @@
 
 			.entry-wrapper {
 				margin: 10px 8px 10px 8px;
-				background-color: rgba(43,43,43, 0.9);
+				background-color: #3f3f3f;
 				border-radius: 5px;
 				height: 42px;
 

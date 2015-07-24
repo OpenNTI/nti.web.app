@@ -30,10 +30,6 @@ Ext.define('NextThought.app.chat.Gutter', {
 		otherContactsEl: '.other-contacts'
 	},
 
-
-	/* Contains all the chat rooms currently open*/
-	ROOM_USER_MAP: {},
-
 	ENTRY_BOTTOM_OFFSET: 100,
 
 	initComponent: function() {
@@ -96,6 +92,30 @@ Ext.define('NextThought.app.chat.Gutter', {
 		this.on('show', function() {
 			me.updateList(me.store, me.store.data.items);
 		});
+		this.syncWithRecentChats();
+	},
+
+	syncWithRecentChats: function() {
+		// This function makes sure that we're in sync with the Chat Statestore.
+		// It helps recover and add gutter entries for people 
+		// whom we might not be following but recently chatted with.
+		var me = this,
+			occupantsKeys = this.ChatStore.getAllOccupantsKeyAccepted() || [];
+
+		occupantsKeys.forEach(function(occupantsKey) {
+			var isNTIID = ParseUtils.isNTIID(occupantsKey),
+				users = isNTIID === false ? occupantsKey.split('_') : [],
+				o = Ext.Array.remove(users.slice(), $AppConfig.username);
+
+			if (o.length === 1 && me.store.find('Username', o[0]) === -1) {
+				// This is 1-1 chat, not a groupchat
+				UserRepository.getUser(o[0])
+					.then(function (u) {
+						// var p = u.getPresence();
+						me.store.add(u);
+					});
+			}
+		});
 	},
 
 	onResize: function() {
@@ -119,10 +139,8 @@ Ext.define('NextThought.app.chat.Gutter', {
 
 	updateList: function(store, users) {
 		this.removeAll(true);
-
-		this.ROOM_USER_MAP = {};
 		this.otherContacts = [];
-		this.collapsedMessageCount = 0
+		this.collapsedMessageCount = 0;
 		this.addContacts(store, users);
 	},
 
@@ -140,15 +158,16 @@ Ext.define('NextThought.app.chat.Gutter', {
 	},
 
 	onOnlineContactRemove: function(store, record) {
-		if (!record.associatedWindow) {
-			this.store.remove(record);
+		// Make sure we don't remove a user with an active chat window.
+		var r = this.store.findRecord('Username', record.get('Username'));
+		if (r && !r.associatedWindow) {
+			this.store.remove(r);
 		}
 	},
 
 	removeContact: function(store, user) {
 		var entry = this.findEntryForUser(user);
 
-		// Make sure we don't remove a user with an active chat window.
 		if (entry) {
 			this.remove(entry);
 		}
@@ -201,20 +220,13 @@ Ext.define('NextThought.app.chat.Gutter', {
 
 
 	openChatWindow: function(user, entry) {
-		if (entry && entry.hasCls('active')) {
-			//Minimize the window.
-			if (user.associatedWindow) {
-				user.associatedWindow.hide();
-			}	
-			return;
-		}
-
-		if (user.associatedWindow) {
-			user.associatedWindow.show();
+		var isVisible = user.associatedWindow && user.associatedWindow.isVisible();
+		if (user.associatedWindow && !user.associatedWindow.isDestroyed) {
+			user.associatedWindow[isVisible ? 'hide' : 'show']();
 		}
 		else {
-			this.ChatActions.startChat(user);
 			this.selectActiveUser(user);
+			this.ChatActions.startChat(user);
 		}
 		this.clearUnreadCount(user);
 	},
@@ -262,27 +274,22 @@ Ext.define('NextThought.app.chat.Gutter', {
 			isGroupChat = roomInfo.isGroupChat(),
 			occupants = roomInfo && roomInfo.get('Occupants'), t, i, entry, me = this, user;
 
-
+		occupants = (occupants || []).slice();
 		if (!isGroupChat) {
-			for (i = 0; i < occupants.length; i++) {
-				if(!isMe(occupants[i])) {
-					t = occupants[i];
-					break;
-				}
-			}
+			Ext.Array.remove(occupants, $AppConfig.userObject.get('Username'));
+			t = occupants[0];
 
 			if (t) {
 				entry = this.findEntryForUser(t);
 				user = this.store.findRecord('Username', t);
 
 				if (user) {
-					this.ROOM_USER_MAP[roomInfo.getId()] = user;
 					user.associatedWindow = win;
 					win.on({
 						show: function() {
 								wait()
 									.then(function() {
-										me.realignChatWindow(win, user);
+										me.adjustToExpandedChat(win);
 										me.selectActiveUser(user);
 									});
 							},
@@ -329,12 +336,6 @@ Ext.define('NextThought.app.chat.Gutter', {
 	},
 
 
-	realignChatWindow: function(win, user) {
-		if (!win) { return; }
-		this.adjustToExpandedChat(win);
-	},
-
-
 	adjustToExpandedChat: function(win) {
 		if(!win) { return; }
 
@@ -351,37 +352,35 @@ Ext.define('NextThought.app.chat.Gutter', {
 
 	maybeAdjustChatWindow: function() {
 		var wins = this.ChatStore.getAllChatWindows(),
-			me = this, rid;
+			me = this;
 
 		Ext.each(wins || [], function(win) {
 			if (win && win.isVisible()) {
 				me.adjustToExpandedChat(win);
-			}
-
-			rid = win && win.roomInfo && win.roomInfo.getId();
-			if (me.ROOM_USER_MAP[rid]) {
-				me.realignChatWindow(win, me.ROOM_USER_MAP[rid]);
 			}
 		});
 	},
 
 
 	onRoomExit: function (roomId) {
-		var user = this.ROOM_USER_MAP[roomId],
-			entry = this.findEntryForUser(user && user.get('Username'));
+		var user, entry, me = this;
 
-		if (entry) {
-			entry.clearUnreadCount();
-		}
+		Service.getObject(roomId)
+			.then(function(roomInfo) {
+				var o = roomInfo.get('Occupants');
 
-		if (user) {
-			delete user.associatedWindow;
-			delete this.ROOM_USER_MAP[roomId];
-		}
+				user = Ext.Array.remove(o.slice(), $AppConfig.username)[o];
+				entry = me.findEntryForUser(user);
+				user = me.store.findRecord('Username', user);
+				if (entry) {
+					entry.clearUnreadCount();
+				}
 
-		if (this.gutterList && this.gutterList.onRoomExit) {
-			this.gutterList.onRoomExit(roomId);
-		}
+				delete user.associatedWindow;
+				if (me.gutterList && me.gutterList.onRoomExit) {
+					me.gutterList.onRoomExit(roomInfo);
+				}
+			});
 	},
 
 
@@ -403,42 +402,29 @@ Ext.define('NextThought.app.chat.Gutter', {
 	handleWindowNotify: function(win, msg) {
 		if(win && win.isVisible()) { return; }
 
-		var roomInfo = win && win.roomInfo,
-			occupants = roomInfo && roomInfo.get('Occupants'),
-			entry, t, i, me = this, user, currentCount;
+		var entry, me = this, currentCount, userRec,
+			sender = msg.isModel ? msg.get('Creator') : msg.Creator;
 
-		user = this.ROOM_USER_MAP[roomInfo.getId()];
-		entry = this.findEntryForUser(user);
+		entry = this.findEntryForUser(sender);
 		if (entry) {
 			entry.handleWindowNotify(win, msg);
 		}
 		else {
-			if (!roomInfo.isGroupChat()) {
-				for (i = 0; i < occupants.length; i++) {
-					if(!isMe(occupants[i])) {
-						t = occupants[i];
-						break;
-					}
-				}
-			}
-
 			// If we have a user in our store but don't have an entry for them,
 			// it means they are already in the 'other contacts'.
 			// Go ahead and increment the message count of 'Other Contacts'.
 			// On click, we show the full gutter list with the right count.
-			if (me.store.find('Username', t) > -1 && !me.findEntryForUser(t)) {
+			if (me.store.find('Username', sender) > -1) {
 				me.incrementCollapsedMesssageCount();
-				user = this.store.findRecord('Username', t);
-				if (user) {
-					currentCount = user.get('unreadMessageCount') || 0;
+				userRec = this.store.findRecord('Username', sender);
+				if (userRec) {
+					currentCount = userRec.get('unreadMessageCount') || 0;
 					currentCount += 1;
-					user.set('unreadMessageCount', currentCount);
+					userRec.set('unreadMessageCount', currentCount);
 				}
-				return;
 			}
-
-			if (t && me.store.find('Username', t) === -1) {
-				UserRepository.getUser(t)
+			else {
+				UserRepository.getUser(sender)
 					.then(function (u) {
 						me.store.add(u);
 						me.bindChatWindow(win);

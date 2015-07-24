@@ -232,6 +232,56 @@ Ext.define('NextThought.app.chat.components.Log', {
 	},
 
 
+	addBulkMessages: function(messages) {
+		var m = [], me = this, lastTimeStamp, lastItem;
+
+		(messages || []).forEach(function(msg) {
+			var newMsgTime = msg.get('CreatedTime'),
+				stamp = Ext.Date.format(newMsgTime, 'F j, Y, g:i a'),
+				intervalTimeStamp;
+
+			if (lastTimeStamp) {
+				// Check if the incoming message is within 5 mins from the previous message. If not, print the last timestamp.
+				// Time interval is arbitrary; we can make it whatever we want.
+				intervalTimeStamp = Ext.Date.add(lastTimeStamp, Ext.Date.MINUTE, 5);
+				if (!Ext.Date.between(newMsgTime, lastTimeStamp, intervalTimeStamp)) {
+					m.push({
+						xtype: 'chat-notification-entry',
+						message: stamp
+					});
+				}
+			}
+			else {
+				m.push({
+					xtype: 'chat-notification-entry',
+					message: stamp
+				});
+			}
+
+			m.push({
+				xtype: me.entryType,
+				message: msg,
+				messageId: IdCache.getIdentifier(msg.getId())
+			});
+
+			lastTimeStamp = newMsgTime;
+		});
+
+		if (!Ext.isEmpty(m)) {
+			me.add(m);
+		}
+
+		// Scroll to the last item.
+		lastItem = me.items.items.last();
+		wait()
+			.then(function() {
+				if (lastItem && lastItem.el) {
+					lastItem.el.scrollIntoView(me.el);
+				}
+			});
+	},
+
+
 	clearChatStatusNotifications: function() {
 		var ns = this.query('chat-notification-status'), me = this;
 		Ext.each(ns, function(n) { me.remove(n); });
@@ -313,6 +363,16 @@ Ext.define('NextThought.app.chat.components.Log', {
 		if (entry.el) {
 			entry.el.scrollIntoView(this.el.first('.x-panel-body'));
 		}
+	},
+
+
+	addMask: function() {
+		this.el.mask('loading chat history');
+	},
+
+
+	removeMask: function() {
+		this.el.unmask();
 	},
 
 

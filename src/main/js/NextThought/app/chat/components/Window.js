@@ -5,11 +5,17 @@ Ext.define('NextThought.app.chat.components.Window', {
 	requires: [
 		'NextThought.app.chat.components.View',
 		'NextThought.app.chat.components.Entry',
-		'NextThought.app.chat.StateStore'
+		'NextThought.app.chat.StateStore',
+		'NextThought.app.groups.Actions',
+		'NextThought.app.groups.StateStore'
 		// 'NextThought.view.chat.Gutter' //,
 		// 'NextThought.view.chat.WindowManager'
 	],
-	
+
+	mixins: {
+		profileLinks: 'NextThought.mixins.ProfileLinks'
+	},
+
 	activeStates: ['active', 'composing', 'paused'],
 
 	cls: 'chat-window no-gutter',
@@ -37,7 +43,16 @@ Ext.define('NextThought.app.chat.components.Window', {
 	isOverlay: false,
 
 	items: [
-		{xtype: 'nti-window-header' },
+		{
+			xtype: 'nti-window-header',
+			tools: {
+				'settings': {
+					title: 'Settings',
+					qtip: 'Settings',
+					handler: 'showSettings'
+				}
+			}
+		},
 		{xtype: 'chat-view', flex: 1}
 	],
 
@@ -71,6 +86,9 @@ Ext.define('NextThought.app.chat.components.Window', {
 		this.titleBar = this.down('nti-window-header');
 		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
 		this.ChatActions = NextThought.app.chat.Actions.create();
+		this.GroupActions = NextThought.app.groups.Actions.create();
+		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
+
 		this.setChatStatesMap();
 		this.logView = this.down('chat-log-view');
 		this.entryView = this.down('chat-entry');
@@ -115,6 +133,7 @@ Ext.define('NextThought.app.chat.components.Window', {
 
 	onWindowShow: function() {
 		var me = this;
+		me.updateChatViews();
 		wait(500)
 			.then(function() {
 				if(me.entryView && !me.entryView.disabled) {
@@ -174,6 +193,11 @@ Ext.define('NextThought.app.chat.components.Window', {
 				var name = u.getId(),
 					presence = me.ChatStore.getPresenceOf(name);
 
+				// Cache the user for 1-1 chats.
+				if (!isGroupChat && !isMe(u)) {
+					me.user = u;
+				}
+
 				//if we don't have a presence for them or they are online add them to onlineOccupants
 				if (!presence || presence.isOnline()) {
 					Ext.Array.include(me.onlineOccupants, name);
@@ -217,6 +241,51 @@ Ext.define('NextThought.app.chat.components.Window', {
 				Ext.each(whoLeft, function(aUser) {
 					me.updateDisplayState(aUser, getString('NextThought.view.chat.Window.gone'), isGroupChat);
 				});
+			}
+		});
+	},
+
+	updateChatViews: function() {
+		var me = this,
+			onlineOccupants = [],
+			logView = me.down('chat-log-view'),
+			chatView = me.down('chat-entry'),
+			myPresence = me.ChatStore.getPresenceOf($AppConfig.userObject.get('Username'));
+
+		UserRepository.getUser(this.roomInfo.get('Occupants'), function(users) {
+			Ext.each(users, function(u) {
+				var name = u.getId(),
+					presence = me.ChatStore.getPresenceOf(name);
+
+				if (!presence || presence.isOnline()) {
+					onlineOccupants.push(u);
+				}
+			});
+
+			if (onlineOccupants.length > 1) {
+				if (Ext.isEmpty(me.query('chat-log-entry'))) {
+					Ext.each(me.query('chat-notification-entry'), function(el) {
+						el.destroy();
+					});
+				}
+				chatView.enable();
+			}
+			else if (onlineOccupants.length === 1 && !isMe(onlineOccupants[0]) && (myPresence && myPresence.isOnline())) {
+				if (Ext.isEmpty(me.query('chat-log-entry'))) {
+					Ext.each(me.query('chat-notification-entry'), function(el) {
+						el.destroy();
+					});
+				}
+				chatView.enable();
+			}
+			else if (onlineOccupants.length === 1 && isMe(onlineOccupants[0])) {
+				chatView.disable();
+				if (logView.addStatusNotification) {
+					logView.addStatusNotification(getString('NextThought.view.chat.Window.one-occupant'));
+				}
+			}
+			else {
+				chatView.disable();
 			}
 		});
 	},
@@ -271,7 +340,10 @@ Ext.define('NextThought.app.chat.components.Window', {
 	afterRender: function() {
 		this.callParent(arguments);
 
-		var me = this;
+		var me = this,
+			header = me.down('nti-window-header'),
+			titleEl = header && header.textEl;
+
 		this.keyMap = new Ext.util.KeyMap({
 			target: this.el,
 			binding: [
@@ -282,6 +354,10 @@ Ext.define('NextThought.app.chat.components.Window', {
 				}
 			]
 		});
+
+		if (titleEl) {
+			this.mon(titleEl, 'click', me.goToProfile.bind(me));
+		}
 	},
 
 
@@ -310,10 +386,84 @@ Ext.define('NextThought.app.chat.components.Window', {
 	},
 
 
+	showSettings: function(e) {
+		var target = Ext.fly(e.getTarget()),
+			me = this,
+			box = target && target.getBox(),
+			x = box.left - 100,
+			y = box.top + 15,
+			isContact = this.GroupStore.isContact(this.user);
+
+		if (!this.settingsMenu) {
+			this.settingsMenu = Ext.widget('menu', {
+				cls: 'chat-settings-menu',
+				width: 100,
+				ownerCmp: this,
+				offset: [-1, -1],
+				floating: true,
+				defaults: {
+					ui: 'nt-menuitem',
+					xtype: 'menucheckitem',
+					height: 32,
+					plain: true,
+					listeners: {
+						scope: this,
+						'checkchange': 'addOrDropContact'
+					}
+				},
+				items: [
+					{
+						text: isContact ? 'Unfollow' : 'Follow',
+						checked: !isContact
+					}
+				]
+			});
+		}
+
+		wait()
+			.then(function() {
+				me.settingsMenu.showAt(x, y);
+			});
+	},
+
+
+	addOrDropContact: function(menuItem) {
+		if (!this.user) {
+			return;
+		}
+
+		if (this.GroupStore.isContact(this.user)) {
+			this.GroupActions.deleteContact(this.user)
+				.then(function() {
+					menuItem.update('Follow');
+				});
+		}
+		else {
+			this.GroupActions.addContact(this.user)
+				.then(function() {
+					menuItem.update('Unfollow');
+				});
+		}
+	},
+
+
+	goToProfile: function() {
+		if (this.user) {
+			this.navigateToProfile(this.user);
+		}
+	},
+
 	handleMessageFromChannel: function(sender, msg, room, isGroupChat) {
 		var r = room || this.roomInfo;
+
+		isGroupChat = isGroupChat || r && r.isGroupChat();
 		this.logView.addMessage(msg);
 		this.updateChatState(sender, 'active', r, isGroupChat);
+	},
+
+
+	addBulkMessages: function(messages) {
+		this.logView.addBulkMessages(messages);
 	},
 
 
