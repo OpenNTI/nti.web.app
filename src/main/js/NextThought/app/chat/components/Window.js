@@ -48,7 +48,7 @@ Ext.define('NextThought.app.chat.components.Window', {
 			tools: {
 				'settings': {
 					title: 'Settings',
-					qtip: 'Settings',
+					'tip': 'Settings',
 					handler: 'showSettings'
 				}
 			}
@@ -387,11 +387,8 @@ Ext.define('NextThought.app.chat.components.Window', {
 
 
 	showSettings: function(e) {
-		var target = Ext.fly(e.getTarget()),
+		var target = Ext.get(e.getTarget()),
 			me = this,
-			box = target && target.getBox(),
-			x = box.left - 100,
-			y = box.top + 15,
 			isContact = this.GroupStore.isContact(this.user);
 
 		if (!this.settingsMenu) {
@@ -403,12 +400,12 @@ Ext.define('NextThought.app.chat.components.Window', {
 				floating: true,
 				defaults: {
 					ui: 'nt-menuitem',
-					xtype: 'menucheckitem',
+					xtype: 'menuitem',
 					height: 32,
 					plain: true,
 					listeners: {
 						scope: this,
-						'checkchange': 'addOrDropContact'
+						'click': 'addOrDropContact'
 					}
 				},
 				items: [
@@ -422,7 +419,7 @@ Ext.define('NextThought.app.chat.components.Window', {
 
 		wait()
 			.then(function() {
-				me.settingsMenu.showAt(x, y);
+				me.settingsMenu.showBy(target.parent(), 'tr-br?', [0, 0]);
 			});
 	},
 
@@ -432,10 +429,16 @@ Ext.define('NextThought.app.chat.components.Window', {
 			return;
 		}
 
+		var me = this;
 		if (this.GroupStore.isContact(this.user)) {
-			this.GroupActions.deleteContact(this.user)
-				.then(function() {
-					menuItem.update('Follow');
+			this.areYouSure('The following action will remove this contact.')
+				.then(function(str) {
+					if (str === 'ok') {
+						me.GroupActions.deleteContact(me.user)
+							.then(function() {
+								menuItem.update('Follow');
+							});
+					}
 				});
 		}
 		else {
@@ -444,6 +447,21 @@ Ext.define('NextThought.app.chat.components.Window', {
 					menuItem.update('Unfollow');
 				});
 		}
+	},
+
+
+	areYouSure: function(msg) {
+		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
+		return new Promise(function(fulfill) {
+			Ext.Msg.show({
+				msg: msg,
+				buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+				icon: 'warning-red',
+				buttonText: {'ok': 'caution:Delete'},
+				title: 'Are you sure?',
+				fn: fulfill
+			});
+		});
 	},
 
 
