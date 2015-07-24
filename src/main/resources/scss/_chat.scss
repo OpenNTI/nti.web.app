@@ -25,10 +25,36 @@
 				font-size: 16px;
 				font-weight: 600;
 				text-transform: capitalize;
+				cursor: pointer;
+			}
+
+			.controls {
+				.tool {
+					&.close {
+						margin-top: 12px;	
+					}
+
+					&.minimize {
+						display: none;
+					}
+
+
+				}
 			}
 
 			.tools {
 				img.tool{
+					&.settings {
+						opacity: 0.6;
+						margin-right: 5px;
+						background: $icons no-repeat;
+						@include sprite($icons,'chat_options',$dimensions: true);
+
+						&:hover{
+							opacity: 1;
+						}
+					}
+
 					&.add-people {
 						display: none; //turned off until this is possible in the server...
 						opacity: 0.6;
