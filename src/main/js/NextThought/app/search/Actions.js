@@ -85,12 +85,12 @@ Ext.define('NextThought.app.search.Actions', {
 	},
 
 
-	setSearchContext: function(term) {
+	setSearchContext: function(term, silent) {
 		var currentBundle = this.ContextStore.getRootBundle(),
 			bundleId = currentBundle && currentBundle.getId(),
 			loc = this.__getSearchLocation();
 
-		this.SearchStore.setSearchContext(term, bundleId, loc);
+		this.SearchStore.setSearchContext(term, silent, bundleId, loc);
 	},
 
 

@@ -5,12 +5,14 @@ Ext.define('NextThought.app.search.StateStore', {
 
 	HIT_MAP: {},
 
-	setSearchContext: function(val, bundle, page) {
+	setSearchContext: function(val, silent, bundle, page) {
 		this.BUNDLE = bundle;
 		this.PAGE = page;
 		this.TERM = val;
 
-		this.fireEvent('context-updated');
+		if (!silent) {
+			this.fireEvent('context-updated');
+		}
 	},
 
 

@@ -101,7 +101,6 @@ Ext.define('NextThought.app.search.SearchBar', {
 			}
 
 			e.stopPropagation();
-			this.keyPressed(e);
 		}
 	},
 
@@ -112,7 +111,7 @@ Ext.define('NextThought.app.search.SearchBar', {
 		var k = e.getKey();
 
 		if (k === e.ENTER) {
-			this.doSearch();
+			this.doSearch(true);
 			this.doNavigation();
 		} if (k === e.ESC) {
 			this.doSearch();
@@ -125,7 +124,7 @@ Ext.define('NextThought.app.search.SearchBar', {
 	searchClicked: function(e) {
 		e.stopPropagation();
 
-		this.doSearch();
+		this.doSearch(true);
 		this.doNavigation();
 	},
 
@@ -154,12 +153,12 @@ Ext.define('NextThought.app.search.SearchBar', {
 	},
 
 
-	doSearch: function() {
+	doSearch: function(silent) {
 		clearTimeout(this.searchEventDelayId);
 
 		var val = this.getValue();
 
-		this.SearchActions.setSearchContext(val);
+		this.SearchActions.setSearchContext(val, silent);
 	},
 
 
