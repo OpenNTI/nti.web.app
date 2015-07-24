@@ -159,8 +159,9 @@ Ext.define('NextThought.app.chat.Gutter', {
 
 	onOnlineContactRemove: function(store, record) {
 		// Make sure we don't remove a user with an active chat window.
-		if (!record.associatedWindow) {
-			this.store.remove(record);
+		var r = this.store.findRecord('Username', record.get('Username'));
+		if (r && !r.associatedWindow) {
+			this.store.remove(r);
 		}
 	},
 
