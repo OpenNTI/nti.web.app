@@ -942,20 +942,23 @@ $experimental-support-for-svg: true;
 	box-shadow: 0 1px 0 0 rgba(0,0,0, 0.1);
 	background: $slidedeck-controls-background !important;
 	display: none;
-	z-index: 199 !important;
-	
+	z-index: 199 !important;	
 
 	&.ready {
 		display: block;
-		@include animate(FullScreenSlideInRight);
-		.x-gecko &{
-			animation: none;
-		}
 
 		.header{
 			.media-toolbar{
 				display: block;
 			}
+		}
+	}
+
+	&.showing {
+		@include animate(FullScreenSlideInRight);
+
+		.x-gecko &{
+			animation: none;
 		}
 	}
 

@@ -102,7 +102,13 @@ Ext.define('NextThought.app.slidedeck.media.components.View', {
 		var me = this,
 			playerType = this.getViewerType();
 
-		this.addCls('ready');
+		this.addCls(['showing', 'ready']);
+
+		wait(1500)
+			.then(function() {
+				me.removeCls('showing');
+			});
+
 		if (!Ext.getBody().hasCls('media-viewer-open')) {
 			wait(100)
 				.then(me.animateIn.bind(me));
