@@ -6,7 +6,10 @@
 Ext.define('NextThought.model.Community', {
 	extend: 'NextThought.model.Base',
 
-	mixins: { groupLike: 'NextThought.mixins.GroupLike' },
+	mixins: {
+		groupLike: 'NextThought.mixins.GroupLike',
+		Avatar: 'NextThought.mixins.Avatar'
+	},
 
 	isCommunity: true,
 	isProfile: true,
@@ -19,8 +22,19 @@ Ext.define('NextThought.model.Community', {
 		{ name: 'avatarURL', type: 'AvatarURL' },
 		{ name: 'backgroundURL', type: 'string'},
 		{ name: 'about', type: 'string'},
-		{ name: 'displayName', convert: function(v, r) {return r.getName();}}
+		{ name: 'displayName', convert: function(v, r) {return r.getName();}},
+
+		//UI fields
+		{ name: 'avatarInitials', type: 'string', persist: false},
+		{ name: 'avatarBGColor', type: 'string', persist: false}
 	],
+
+
+	constructor: function() {
+		this.callParent(arguments);
+
+		this.initAvatar();
+	},
 
 
 	getName: function() {
@@ -104,17 +118,5 @@ Ext.define('NextThought.model.Community', {
 			});
 
 		return this.loadForumList;
-	},
-
-
-	getBackgroundImage: function() {
-		var background = this.get('backgroundURL'),
-			username = this.get('Username');
-
-		if (background) {
-			return Promise.resolve(background);
-		}
-
-		return Promise.resolve(NextThought.model.User.getDefaultBackgroundForUsername(username));
 	}
 });

@@ -702,6 +702,7 @@ function() {
 		var keep = {
 			Class: 1,
 			CreatedTime: 1,
+			avatarURL: 1,
 			Links: 1,
 			MimeType: 1,
 			NTIID: 1,
@@ -736,6 +737,11 @@ function() {
 
 				if (shell) {
 					l = (resp.result || {}).Items || {};
+
+					if (l.avatarURL == null) {
+						l.avatarURL = '@@avatar';
+					}
+
 					for (i in l) {
 						if (l.hasOwnProperty(i)) {
 							o = l[i];

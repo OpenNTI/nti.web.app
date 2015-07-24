@@ -40,36 +40,48 @@ Ext.define('NextThought.model.converters.Users', {
 			var re = convert.re = (convert.re || /https/i), url,
 				needsSecure = re.test(location.protocol) || $AppConfig.server.forceSSL;
 
-			if (!v && rec) {
-				url = $AppConfig.server.data.split('/');
-				if (!url.last()) { url.pop(); }
-				url.push('users', rec.get('Username'), '@@avatar');
-				return url.join('/');
-			}
-
 			function secure(v, i, a) {
-				if(!v){
+				if (!v) {
 					return v;
 				}
+
 				v = v.replace('www.gravatar.com', 'secure.gravatar.com').replace('http:', 'https:');
-				if (a) {a[i] = v;}
+
+				if (a) {
+					a[i] = v;
+				}
+
 				return v;
 			}
 
-			function o(v, i, a) {
+			function maybeSecure(v, i, a) {
 
 				if (needsSecure) {
 					v = secure(v, i, a);
 				}
 
-        //				//preload
-        //				(new Image()).src = v;
+				// //preload
+				// (new Image()).src = v;
 				return v;
 			}
 
+			if (v && v === '@@avatar') {
+				url = Globals.trimRoute($AppConfig.server.data).split('/');
 
-			if (!Ext.isArray(v)) { v = o(v); }
-			else { Ext.each(v, o); }
+				url.push('users', rec.get('Username'), '@@avatar');
+				return url.join('/');
+			}
+
+			if (!v) {
+				return null;
+			}
+
+			if (!Array.isArray(v)) {
+				v = maybeSecure(v);
+			} else {
+				Ext.each(v, maybeSecure);
+			}
+
 			return v;
 		}
 	},

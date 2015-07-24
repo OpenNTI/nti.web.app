@@ -4,6 +4,10 @@ Ext.define('NextThought.model.User', {
 	requires: ['NextThought.model.PresenceInfo', 'NextThought.model.converters.PresenceInfo'],
 	idProperty: 'Username',
 
+	mixins: {
+		Avatar: 'NextThought.mixins.Avatar'
+	},
+
 	isProfile: true,
 
 	fields: [
@@ -73,11 +77,20 @@ Ext.define('NextThought.model.User', {
 		{name: 'positions', type: 'auto'},
 
 		// ui data
-		{name: 'unreadMessageCount', type: 'auto', persist: false}
+		{name: 'unreadMessageCount', type: 'auto', persist: false},
+		{ name: 'avatarInitials', type: 'string', persist: false},
+		{ name: 'avatarBGColor', type: 'string', persist: false}
 	],
 
 	isUser: true,
 	summaryObject: true,
+
+
+	constructor: function() {
+		this.callParent(arguments);
+
+		this.initAvatar();
+	},
 
 
 	equal: function(b) {
@@ -133,18 +146,6 @@ Ext.define('NextThought.model.User', {
 		}
 
 		return f;
-	},
-
-
-	getBackgroundImage: function() {
-		var background = this.get('backgroundURL'),
-			username = this.get('Username');
-
-		if (background && false) {
-			return Promise.resolve(background);
-		}
-
-		return Promise.resolve(this.self.getDefaultBackgroundForUsername(username));
 	},
 
 
@@ -311,49 +312,7 @@ Ext.define('NextThought.model.User', {
 	statics: {
 
 		BLANK_AVATAR: '/app/resources/images/icons/unresolved-user.png',
-		BAKCGROUND_CHOICE_COUNT: 13,
 
-		//This is isn't really a battle we can win given the complexity of names
-		//globally, however as a default this should work.  If they don't like it
-		//they can upload an image.  If we have a first and last from the server
-		//take the first char of each, else take the first char of the display name.
-		//As of 7/2015 this matches the mobile app. Unresolved users don't show initials
-		getAvatarInitials: function(data, f, l, d) {
-			//TODO should we cache this?
-
-			var first = f || data.NonI18NFirstName,
-			last = l || data.NonI18NLastName,
-			dn = d || data.displayName;
-
-			return first && last ? first[0] + last[0] : (dn && dn[0]);
-		},
-
-
-		getDefaultBackgroundForUsername: function(username) {
-			var hash = this.getUsernameHash(username),
-				idx = Math.abs(hash) % this.BAKCGROUND_CHOICE_COUNT;
-
-			if (idx < 10) {
-				idx = '0' + idx;
-			}
-
-			return '/app/resources/images/profile-backgrounds/profile_bg_' + idx + '.jpg';
-		},
-
-
-		getUsernameHash: function(str) {
-			var hash = 0, c;
-
-			if (str.length == 0) return hash;
-
-			for (i = 0; i < str.length; i++) {
-				c = str.charCodeAt(i);
-				hash = ((hash << 5) - hash) + c;
-				hash = hash & hash; // Convert to 32bit integer
-			}
-
-			return hash;
-		},
 
 		getUnresolved: function(username) {
 			username = username || 'Unknown';

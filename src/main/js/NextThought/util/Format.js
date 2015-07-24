@@ -1,12 +1,6 @@
 Ext.define('NextThought.util.Format', {
 	singleton: true,
 
-	//http://www.materialui.co/colors 600 line
-	DEFAULT_AVATAR_BG_COLORS: ['5E35B1', '3949AB', '1E88E5', '039BE5',
-				   '00ACC1', '00897B', '43A047', '7CB342',
-				   'C0CA33', 'FDD835', 'FFB300', 'FB8C00',
-				   'F4511E'],
-
 	currencyInfo: {
 		'USD' : {
 			sign: '$',
@@ -40,6 +34,40 @@ Ext.define('NextThought.util.Format', {
 
 
 	avatar: function(value, cls) {
+		var avatar = getField('avatarURL'),
+			bgColor = getField('avatarBGColor'),
+			initials = getField('avatarInitials'),
+			className = getField('Class'),
+			defaultAvatar = className !== 'User' ? NextThought.model.FriendsList.BLANK_AVATAR : NextThought.model.User.BLANK_AVATAR,
+			clsList = [cls || 'avatar', 'avatar-container'], cn = [];
+
+		function getField(name) {
+			return (value && value.get && value.get(name)) || (value && value[name]);
+		}
+
+		function getURL(link) {
+			return 'url(' + link + ')';
+		}
+
+		if (className) {
+			clsList.push(className);
+		}
+
+		clsList = clsList.join(' ');
+
+		if (avatar) {
+			cn.push({cls: 'profile avatar-pic', style: {backgroundImage: getURL(avatar)}});
+		} else if (initials) {
+			cn.push({cls: 'fallback avatar-pic initials', style: {'background-color': '#' + bgColor}, cn: {cls: 'inner', html: initials}});
+		} else {
+			cn.push({cls: 'fallback avatar-pic', style: {backgroundImage: getURL(defaultAvatar)}});
+		}
+
+		return Ext.DomHelper.markup({cls: clsList, cn: cn});
+	},
+
+
+	xavatar: function(value, cls) {
 		var avatar = (value && value.get && value.get('avatarURL')) || (value && value.avatarURL),
 			username = (value && value.get && value.get('Username')) || (value && value.Username),
 			clazz = (value && value.get && value.get('Class')) || (value && value.Class),

@@ -7,9 +7,10 @@ Ext.define('NextThought.model.FriendsList', {
 
 	mixins: {
 		groupLike: 'NextThought.mixins.GroupLike',
-		shareEntity: 'NextThought.mixins.ShareEntity'
+		shareEntity: 'NextThought.mixins.ShareEntity',
+		Avatar: 'NextThought.mixins.Avatar'
 	},
-	
+
 	statics: {
 		BLANK_AVATAR: '/app/resources/images/icons/unresolved-group.png'
 	},
@@ -23,13 +24,20 @@ Ext.define('NextThought.model.FriendsList', {
 		{ name: 'friends', type: 'UserList' },
 		{ name: 'realname', type: 'string' },
 		{ name: 'CompositeGravatars', type: 'AvatarURL' },
-		{ name: 'displayName', convert: function(v,r) {return r.getName();}},
+		{ name: 'displayName', convert: function(v, r) {return r.getName();}},
 		{ name: 'IsDynamicSharing', type: 'auto'},
-		{ name: 'about', type: 'string'}
+		{ name: 'about', type: 'string'},
+
+		//UI fields
+		{ name: 'avatarInitials', type: 'string', persist: false},
+		{ name: 'avatarBGColor', type: 'string', persist: false}
 	],
 
 	constructor: function() {
 		this.callParent(arguments);
+
+		this.initAvatar();
+
 		ObjectUtils.defineAttributes(this, {
 			isDFL: {
 				getter: this.mixins.shareEntity.isDynamicSharing,
@@ -43,21 +51,23 @@ Ext.define('NextThought.model.FriendsList', {
 		});
 
 	},
-		   
+
+
 	getAboutData: function() {
 	   return {
 		   displayName: this.getName(),
 		   about: this.get('about')
 	   };
 	},
-	
+
+
 	getProfileUrl: function() {
 		var id = this.get('Username');
-		
-		if(id && this.getLink('Activity')){
-			return '/group/'+ParseUtils.encodeForURI(id);
+
+		if (id && this.getLink('Activity')) {
+			return '/group/' + ParseUtils.encodeForURI(id);
 		}
-		
+
 		return null;
 	},
 
@@ -79,7 +89,7 @@ Ext.define('NextThought.model.FriendsList', {
 
 		ctx.imageSmoothingEnabled = true;
 
-		Ext.each(urls, function(url,idx) {
+		Ext.each(urls, function(url, idx) {
 			var i = new Image(),
 				col = idx % grid * offset,
 				row = Math.floor(idx / grid) * offset;
