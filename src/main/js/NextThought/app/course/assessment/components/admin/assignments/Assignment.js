@@ -464,12 +464,50 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 		grid.view.refresh();
 	},
 
+	getStoreState: function() {
+		var store = this.store,
+			sorters = this.store.sorters && this.store.sorters.items,
+			sorter = (sorters && sorters[0]) || {},
+			params = store.proxy.extraParams;
+
+		return {
+			currentPage: store.currentPage,
+			pageSize: store.pageSize,
+			searchTerm: params.search || '',
+			filter: params.filter || '',
+			sort: {
+				prop: sorter.property || '',
+				direction: sorter.direction || ''
+			}
+		};
+	},
+
+
+	isSameState: function(state) {
+		var storeState = this.getStoreState(),
+			isEqual = true;
+
+		if (state.pageSize && state.pageSize !== storeState.pageSize) {
+			isEqual = false;
+		} else if (state.currentPage !== storeState.currentPage) {
+			isEqual = false;
+		} else if ((state.searchTerm || '') !== storeState.searchTerm) {
+			isEqual = false;
+		} else if (state.filter !== storeState.filter) {
+			isEqual = false;
+		} else if (state.sort && (state.sort.prop !== storeState.sort.prop || state.sort.direction !== storeState.sort.direction)) {
+			isEqual = false;
+		}
+
+		return isEqual;
+	},
+
 
 	applyState: function(state) {
 		//if we are already applying state or the state hasn't changed and the store has loaded don't do anything
 		if (this.applyingState) { return; }
 
-		if (Ext.Object.equals(state, this.current_state) && this.initalLoad) {
+		if (this.isSameState(state) && this.initalLoad) {
 			this.refresh();
 			return Promise.resolve();
 		}

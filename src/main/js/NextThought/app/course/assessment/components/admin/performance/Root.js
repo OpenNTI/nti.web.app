@@ -530,11 +530,52 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 	},
 
 
+	getStoreState: function() {
+		var store = this.store,
+			sorters = this.store.sorters && this.store.sorters.items,
+			sorter = (sorters && sorters[0]) || {},
+			params = store.proxy.extraParams;
+
+		return {
+			currentPage: store.currentPage,
+			pageSize: store.pageSize,
+			searchKey: params.search || '',
+			filters: params.filter ? params.filter.split(',') : [],
+			sort: {
+				prop: sorter.property || '',
+				direction: sorter.direction || ''
+			}
+		};
+	},
+
+
+	isSameState: function(state) {
+		var storeState = this.getStoreState(),
+			isEqual = true;
+
+		if (state.pageSize && state.pageSize !== storeState.pageSize) {
+			isEqual = false;
+		} else if (state.currentPage !== storeState.currentPage) {
+			isEqual = false;
+		} else if ((state.searchKey || '') !== storeState.searchKey) {
+			isEqual = false;
+		} else if (storeState.filters.indexOf(state.studentFilter) < 0) {
+			isEqual = false;
+		} else if (state.itemFilter !== 'all' && storeState.filters.indexOf(state.itemFilter) < 0) {
+			isEqual = false;
+		} else if (state.sort && (state.sort.prop !== storeState.sort.prop || state.sort.direction !== storeState.sort.direction)) {
+			isEqual = false;
+		}
+
+		return isEqual;
+	},
+
+
 	applyState: function(state) {
 		//if we are already applying state or the state hasn't changed and the store has loaded don't do anything
 		if (this.applyingState) { return; }
 
-		if (Ext.Object.equals(state, this.current_state) && this.initialLoad) {
+		if (this.isSameState(state) && this.initialLoad) {
 			this.refresh();
 			return Promise.resolve();
 		}
