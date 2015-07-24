@@ -60,11 +60,17 @@ Ext.define('NextThought.app.assessment.input.Ordering', {
 		this.callParent(arguments);
 
 		var me = this;
-		Ext.defer(function() { me.dragzoneEl.setStyle({'width': '100%'}); }, 1, this);
 
-		this.initializeDragZone();
-		this.initializeDropZone();
-		this.dragzoneEl.dom.id = Ext.id();
+		wait()
+			.then(function() {
+				if (me.rendered) {
+					me.dragzoneEl.setStyle({'width': '100%'});
+				}
+			});
+
+		me.initializeDragZone();
+		me.initializeDropZone();
+		me.dragzoneEl.dom.id = Ext.id();
 	},
 
 
