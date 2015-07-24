@@ -507,7 +507,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 		//if we are already applying state or the state hasn't changed and the store has loaded don't do anything
 		if (this.applyingState) { return; }
 
-		if (this.isSameState(state) && this.initalLoad) {
+		if (this.isSameState(state) && this.initialLoad) {
 			this.refresh();
 			return Promise.resolve();
 		}
