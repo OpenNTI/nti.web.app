@@ -180,12 +180,10 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 		me.pageHeader = pageHeader;
 
 		me.pageHeader.setAssignment(me.assignment);
-		me.pageHeader.setRequestActive(true, getString('NextThought.view.courseware.assessment.assignments.admin.Assignment.request'));
 		me.pageHeader.bindStore(me.store);
 
 		me.mon(pageHeader, {
 			'toggle-avatars': 'toggleAvatars',
-			'request-change': 'requestDataChange',
 			'page-change': function() {
 				me.mon(me.store, {
 					single: true,
@@ -579,21 +577,6 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 		this.alignNavigation();
 
 		return;
-	},
-
-
-	requestDateChange: function(e) {
-		e.stopEvent();
-
-		Globals.sendEmailTo(
-				'support@nextthought.com',
-				Ext.String.format('[CHANGE REQUEST] ({0}) {1}: {2}',
-						location.hostname,
-						$AppConfig.username,
-						this.assignmentTitle)
-		);
-
-		return false;
 	},
 
 

@@ -34,7 +34,6 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 				]}
 			]},
 			{cls: 'controls', cn: [
-				{tag: 'a', cls: 'request'},
 				{tag: 'a', cls: 'export'},
 				{tag: 'a', cls: 'settings'}
 			]},
@@ -61,7 +60,6 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 		assignmentTitleEl: '.assignment .title',
 		assignmentDueEl: '.assignment .due',
 		filterEl: '.assignment .filter',
-		requestEl: '.controls .request',
 		exportEl: '.controls .export',
 		settingsEl: '.controls .settings',
 		viewingEl: '.page .viewing',
@@ -78,12 +76,10 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 		this.onStoreLoad();
 
 		this.setExportURL(this.exportURL, this.exportTip);
-		this.setRequestActive(this.requestActive, this.requestTip);
 		this.setAssignment(this.assignment);
 		this.updateFilterCount(this.filter);
 
 		this.mon(this.settingsEl, 'click', 'showSettingsMenu');
-		this.mon(this.requestEl, 'click', 'showRequestChange');
 		this.mon(this.viewingEl, 'click', 'showPageMenu');
 		this.mon(this.filterEl, 'click', this.fireEvent.bind(this, 'showFilters', this.filterEl));
 		this.mon(this.viewAssignmentEl, 'click', this.fireEvent.bind(this, 'goToRawAssignment'));
@@ -211,11 +207,6 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 	},
 
 
-	showRequestChange: function(e) {
-		this.fireEvent('request-change', e);
-	},
-
-
 	showPageMenu: function(e) {
 		if (!this.pageMenu || e.getTarget('.empty')) { return; }
 
@@ -295,21 +286,6 @@ Ext.define('NextThought.app.course.assessment.components.admin.ListHeader', {
 		this.buildSettingsMenu();
 
 		this.toggleAvatars(!show);
-	},
-
-
-	setRequestActive: function(show, tip) {
-		if (!this.rendered) {
-			this.requestActive = show;
-			this.requestTip = tip;
-			return;
-		}
-
-		this.requestEl[show ? 'removeCls' : 'addCls']('hidden');
-
-		if (show && tip) {
-			this.requestEl.dom.setAttribute('data-qtip', tip);
-		}
 	},
 
 
