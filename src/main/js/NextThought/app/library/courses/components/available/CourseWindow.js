@@ -304,7 +304,6 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 				}
 			}
 
-			me.updateButtons();
 			current.destroy();
 		});
 	},
@@ -435,6 +434,7 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 		}
 
 		me.getLayout().setActiveItem(me.tabpanel);
+		me.updateButtons();
 	},
 
 	showCourses: function(route, subRoute) {
@@ -517,7 +517,9 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 		me.mon(me.courseDetail, 'enroll-in-course', 'showEnrollmentOption');
 
 		me.getLayout().setActiveItem(me.courseDetail);
+		me.updateButtons();
 	},
+
 
 	showEnrollmentOption: function(course, name, type, config) {
 		var me = this;
@@ -558,6 +560,7 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 
 
 		me.getLayout().setActiveItem(me.courseEnrollment);
+		me.updateButtons();
 		me.closeMsg();
 	},
 
