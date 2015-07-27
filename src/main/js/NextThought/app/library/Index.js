@@ -96,9 +96,11 @@ Ext.define('NextThought.app.library.Index', {
 
 
 	getNavigation: function() {
-		this.navigation = NextThought.app.library.components.Navigation.create({
-			bodyView: this
-		});
+		if (!this.navigation || this.navigation.isDestroyed) {
+			this.navigation = NextThought.app.library.components.Navigation.create({
+				bodyView: this
+			});
+		}
 
 		return this.navigation;
 	},
