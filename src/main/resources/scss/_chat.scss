@@ -889,8 +889,26 @@
   		&.active {
   			.profile-pic{
   				.avatar-pic {
-  					border: 2px solid $primary-blue;
+  					border: 2px solid #747474;
   				}
+
+  				&.Online,&.online,&.available {
+					.avatar-pic {
+	  					border: 2px solid #8eb737;	
+	  				}
+
+				}
+				&.idle {}
+				&.away{
+					.avatar-pic {
+						border: 2px solid #ebcd25;
+					}
+				}
+				&.DnD,&.dnd {
+					.avatar-pic {
+						border: 2px solid #F35252;
+					}
+				}
   			}
   		}
   	}
@@ -941,9 +959,9 @@
 				top: 0;
 				width: 42px;
 
-				.presence {
-					background-color: #232323;
-				}
+				// .presence {
+				// 	background-color: #232323;
+				// }
 			}
 
 			.name {
@@ -961,7 +979,7 @@
 			&.active {
 				.profile-pic {
 					.avatar-pic {
-						border: 2px solid $primary-blue;
+						// border: 2px solid $primary-blue;
 					}
 				}
 			}

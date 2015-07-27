@@ -146,10 +146,17 @@ Ext.define('NextThought.app.chat.Gutter', {
 
 
 	updatePresence: function(username, presence) {
-		var user = this.findEntryForUser(username);
+		var user = this.findEntryForUser(username),
+			nodeIndex;
 
 		if(user) {
 			user.setStatus(presence);
+		}
+		if (this.gutterList && this.gutterList.isVisible()) {
+			nodeIndex = this.store.find('Username', username, 0, false, false, true);
+			if (nodeIndex > -1) {
+				this.gutterList.refreshNode(nodeIndex);
+			}
 		}
 	},
 

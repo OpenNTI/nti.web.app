@@ -199,7 +199,7 @@ Ext.define('NextThought.app.chat.components.Window', {
 				}
 
 				//if we don't have a presence for them or they are online add them to onlineOccupants
-				if (!presence || presence.isOnline()) {
+				if (presence && presence.isOnline()) {
 					Ext.Array.include(me.onlineOccupants, name);
 				} else {
 
@@ -257,7 +257,7 @@ Ext.define('NextThought.app.chat.components.Window', {
 				var name = u.getId(),
 					presence = me.ChatStore.getPresenceOf(name);
 
-				if (!presence || presence.isOnline()) {
+				if (presence && presence.isOnline()) {
 					onlineOccupants.push(u);
 				}
 			});
@@ -550,10 +550,7 @@ Ext.define('NextThought.app.chat.components.Window', {
 				me.down('chat-gutter').setChatState(displayState, name);
 			}
 			else if (!isGroupChat && !isMe(targetUser)) {
-				txt = getFormattedString('NextThought.view.chat.Window.occupantstatus', {
-					name: Ext.String.ellipsis(name, 16, false),
-					status: displayState
-				});
+				txt = Ext.String.ellipsis(name, 24, false);
 				me.setTitle(txt);
 			}
 		}

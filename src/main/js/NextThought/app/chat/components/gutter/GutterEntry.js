@@ -23,7 +23,7 @@ Ext.define('NextThought.app.chat.components.gutter.GutterEntry', {
 
 		this.renderData = Ext.apply(this.renderData || {}, {
 			user: this.user,
-			presence: this.user && this.user.getPresence().getName(),
+			presence: '',
 			dataBadge: this.user.unreadMessageCount || 0
 		});
 
@@ -33,6 +33,7 @@ Ext.define('NextThought.app.chat.components.gutter.GutterEntry', {
 
 	afterRender: function() {
 		this.callParent(arguments);
+		this.setStatus(this.user && this.user.getPresence());
 		this.mon(this.avatar, 'click', this.showChat.bind(this));
 	},
 
@@ -43,12 +44,15 @@ Ext.define('NextThought.app.chat.components.gutter.GutterEntry', {
 
 
 	setStatus: function(presence) {
-		var currentStatus = this.presence && this.presence.dom.classList[1];
+		var currentStatus = this.presence && this.presence.dom.classList[1],
+			currentActiveStatus = this.avatar && this.avatar.dom.classList[1];
 
-		if(presence && currentStatus) {
-			this.presence.toggleCls(currentStatus);
-			this.presence.toggleCls(presence.getName());
-		}
+		if (!presence) { return; }
+
+		this.presence.toggleCls(currentStatus || '');
+		this.presence.toggleCls(presence.getName());
+		this.avatar.toggleCls(currentActiveStatus || '');
+		this.avatar.addCls(presence.getName());
 	},
 
 

@@ -37,7 +37,7 @@ Ext.define('NextThought.app.chat.components.gutter.List', {
 		{tag: 'tpl', 'for': '.', cn: [
 			{cls: 'presence-gutter-entry', cn: [
 				{cls: 'name', html: '{displayName}'},
-				{cls: 'profile-pic', 'data-badge': '{[this.getBadgeCount(values)]}', cn: [
+				{cls: 'profile-pic {[this.getPresence(values)]}', 'data-badge': '{[this.getBadgeCount(values)]}', cn: [
 					'{[this.getAvatar(values)]}',
 					{cls: 'presence {[this.getPresence(values)]}'}
 				]}
@@ -48,8 +48,10 @@ Ext.define('NextThought.app.chat.components.gutter.List', {
 			return model.unreadMessageCount || 0;
 		},
 		getPresence: function(model) {
-			this.ChatStore = NextThought.app.chat.StateStore.getInstance();
-			return this.ChatStore.getPresenceOf(model.Username);
+			var ChatStore = NextThought.app.chat.StateStore.getInstance(),
+				presence = ChatStore.getPresenceOf(model.Username);
+
+			return (presence && presence.getName()) || '';
 		},
 		getAvatar: function(model) {
 			var a = NTIFormat.avatar(model);
