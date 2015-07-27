@@ -17,35 +17,35 @@ Ext.define('NextThought.app.course.enrollment.Actions', {
 	 * @param  {Function} callback    what to do when its done, takes two arguments success,changed
 	 */
 	dropCourse: function(course, callback) {
-        var me = this;
-            enrollment = me.courseStore.findEnrollmentForCourse(course.getId()),
-            courseHref = course.get('href');
+		var me = this;
+			enrollment = me.courseStore.findEnrollmentForCourse(course.getId()),
+			courseHref = course.get('href');
 
 
-        if (!enrollment) {
-            callback.call(null, true, false);
-            return;
-        }
+		if (!enrollment) {
+			callback.call(null, true, false);
+			return;
+		}
 
-        me.__toggleEnrollmentStatus(course, enrollment)
-            .then(function() {
-                course.setEnrolled(false);
-                me.refreshEnrolledCourses(callback.bind(null, true, true), function(reason) {
-                    console.error(reason);
-                    callback.call(null, false);
-                });
+		me.__toggleEnrollmentStatus(course, enrollment)
+			.then(function() {
+				course.setEnrolled(false);
+				me.refreshEnrolledCourses(callback.bind(null, true, true), function(reason) {
+					console.error(reason);
+					callback.call(null, false);
+				});
 
-                Service.request(getURL(courseHref))
-                    .then(function(catalog) {
+				Service.request(getURL(courseHref))
+					.then(function(catalog) {
 						var catalogEntry = ParseUtils.parseItems(catalog)[0];
 
-						if(catalogEntry){
+						if (catalogEntry) {
 							course.set('EnrollmentOptions', catalogEntry.get('EnrollmentOptions'));
 						}
-                    });
+					});
 
-            });
-    },
+			});
+	},
 
 	/**
 	 * Enrolls in a course
@@ -69,7 +69,7 @@ Ext.define('NextThought.app.course.enrollment.Actions', {
 				me.refreshEnrolledCourses(callback.bind(null, true, true), function(reason) {
 					console.error(reason);
 					callback.call(null, false, false);
-				});	
+				});
 			});
 	},
 
@@ -87,10 +87,12 @@ Ext.define('NextThought.app.course.enrollment.Actions', {
 
 
 	refreshEnrolledCourses: function(fulfill, reject) {
-		var me = this, 
+		var me = this,
 			collection = (Service.getCollection('EnrolledCourses', 'Courses') || {}).href;
 
-		me.LibraryActions.setUpEnrolledCourses(collection).then(fulfill).fail(reject || function(){});	
+		me.LibraryActions.setUpEnrolledCourses(collection)
+			.then(fulfill)
+			.fail(reject || function(){});
 	},
 
 
@@ -98,5 +100,4 @@ Ext.define('NextThought.app.course.enrollment.Actions', {
 		// this.enrollmentChanged();
 		this.fireEvent('content-dropped', catalogEntry);
 	}
-
 });

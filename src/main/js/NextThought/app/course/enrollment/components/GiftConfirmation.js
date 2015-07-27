@@ -99,7 +99,7 @@ Ext.define('NextThought.app.course.enrollment.components.GiftConfirmation', {
 		//prompt = prompt.replace('{date}', Ext.Date.format(start, 'F j, Y'));
 
 		if (hasReceiver) {
-			prompt +=  getString('NextThought.view.courseware.enrollment.GiftConfirmation.GiftActivated');
+			prompt += getString('NextThought.view.courseware.enrollment.GiftConfirmation.GiftActivated');
 		} else {
 			prompt += getString('NextThought.view.courseware.enrollment.GiftConfirmation.GiftRedeemed');
 		}

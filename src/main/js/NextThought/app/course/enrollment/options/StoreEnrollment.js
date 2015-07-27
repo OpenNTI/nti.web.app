@@ -1,6 +1,11 @@
 Ext.define('NextThought.app.course.enrollment.options.StoreEnrollment', {
 	extend: 'NextThought.app.course.enrollment.options.Base',
 
+	requires: [
+		'NextThought.app.store.Actions',
+		'NextThought.app.course.enrollment.Actions'
+	],
+
 	singleton: true,
 
 	NAME: 'StoreEnrollment',
@@ -10,6 +15,14 @@ Ext.define('NextThought.app.course.enrollment.options.StoreEnrollment', {
 	//set it to true so the getEnrolledWording won't short circuit
 	EnrolledWordingKey: true,
 	EnrolledWording: 'You are enrolled as a Lifelong Learner',
+
+
+	constructor: function(config) {
+		this.callParent(arguments);
+
+		this.StoreActions = NextThought.app.store.Actions.create();
+		this.CourseEnrollmentActions = NextThought.app.course.enrollment.Actions.create();
+	},
 
 	__getPurchasableByNTIID: function(ntiid, option) {
 		var items = option.Purchasables.Items, i, item,
@@ -62,7 +75,7 @@ Ext.define('NextThought.app.course.enrollment.options.StoreEnrollment', {
 		option.display = this.display;
 		option.hasCredit = false;
 		//option.Refunds = false;
-		
+
 		function addPurchasable(purchasable) {
 			option.Purchasable = purchasable;
 			option.Price = purchasable.get('Amount');
@@ -84,7 +97,9 @@ Ext.define('NextThought.app.course.enrollment.options.StoreEnrollment', {
 
 
 	__addBaseSteps: function(course, option, steps) {
-		this.__addStep({
+		var me = this;
+
+		me.__addStep({
 			xtype: 'enrollment-purchase',
 			name: 'Payment Info',
 			hasPricingCard: true,
@@ -97,13 +112,13 @@ Ext.define('NextThought.app.course.enrollment.options.StoreEnrollment', {
 				}
 
 				return new Promise(function(fulfill, reject) {
-					cmp.fireEvent('create-enroll-purchase', cmp, data.purchaseDescription, data.cardInfo, fulfill, reject);
+					me.StoreActions.createEnrollmentPurchase(cmp, data.purchaseDescription, data.cardInfo, fulfill, reject);
 				});
 			}
 		}, steps);
 
 
-		this.__addStep({
+		me.__addStep({
 			xtype: 'enrollment-paymentconfirmation',
 			name: 'Review and Purchase',
 			enrollmentOption: option,
@@ -118,19 +133,19 @@ Ext.define('NextThought.app.course.enrollment.options.StoreEnrollment', {
 				}
 
 				return new Promise(function(fulfill, reject) {
-					cmp.fireEvent('enrollment-enroll-started');
-					cmp.fireEvent('submit-enroll-purchase', cmp, data.purchaseDescription, data.tokenObject, data.pricingInfo, fulfill, reject);
+					cmp.fireEvent('enrollment-enroll-started');//Nothing is listening to this...
+					me.StoreActions.submitEnrollmentPurchase(cmp, data.purchaseDescription, data.tokenObject, data.pricingInfo, fulfill, reject);
 				}).then(function(result) {
 					//trigger the library to reload
 					return new Promise(function(fulfill, reject) {
-						cmp.fireEvent('enrollment-enrolled-complete', fulfill.bind(null, result), reject);
+						me.CourseEnrollmentActions.refreshEnrolledCourses(fulfill.bind(null, result), reject);
 					});
 				});
 			}
 		}, steps);
 
 
-		this.__addStep({
+		me.__addStep({
 			xtype: 'enrollment-confirmation',
 			name: 'Confirmation',
 			heading: 'You\'re Enrolled as a Lifelong Learner',
@@ -145,7 +160,9 @@ Ext.define('NextThought.app.course.enrollment.options.StoreEnrollment', {
 
 
 	__addGiftSteps: function(course, option, steps) {
-		this.__addStep({
+		var me = this;
+
+		me.__addStep({
 			xtype: 'enrollment-gift-purchase',
 			name: 'Payment Info',
 			hasPricingCard: true,
@@ -158,13 +175,13 @@ Ext.define('NextThought.app.course.enrollment.options.StoreEnrollment', {
 				}
 
 				return new Promise(function(fulfill, reject) {
-					cmp.fireEvent('create-gift-purchase', cmp, data.purchaseDescription, data.cardInfo, fulfill, reject);
+					me.StoreActions.createEnrollmentPurchase(cmp, data.purchaseDescription, data.cardInfo, fulfill, reject);
 				});
 			}
 		}, steps);
 
 
-		this.__addStep({
+		me.__addStep({
 			xtype: 'enrollment-paymentconfirmation',
 			name: 'Review and Purchase',
 			enrollmentOption: option,
@@ -179,12 +196,12 @@ Ext.define('NextThought.app.course.enrollment.options.StoreEnrollment', {
 				}
 
 				return new Promise(function(fulfill, reject) {
-					cmp.fireEvent('submit-gift-purchase', cmp, data.purchaseDescription, data.tokenObject, data.pricingInfo, fulfill, reject);
+					me.StoreActions.submitGiftPurchase(cmp, data.purchaseDescription, data.tokenObject, data.pricingInfo, fulfill, reject);
 				});
 			}
 		}, steps);
 
-		this.__addStep({
+		me.__addStep({
 			xtype: 'enrollment-gift-confirmation',
 			name: 'Confirmation',
 			lockCoupon: true,
@@ -202,7 +219,9 @@ Ext.define('NextThought.app.course.enrollment.options.StoreEnrollment', {
 			option.redeemToken = config[0];
 		}
 
-		this.__addStep({
+		var me = this;
+
+		me.__addStep({
 			xtype: 'enrollment-gift-redeem',
 			name: 'Redeem',
 			enrollmentOption: option,
@@ -215,17 +234,17 @@ Ext.define('NextThought.app.course.enrollment.options.StoreEnrollment', {
 					return Promise.reject();
 				}
 				return new Promise(function(fulfill, reject) {
-					cmp.fireEvent('redeem-gift', cmp, data.purchasable, data.token, data.AllowVendorUpdates, course.getId(), fulfill, reject);
+					me.StoreActions.redeemGift(cmp, data.purchasable, data.token, data.AllowVendorUpdates, course.getId(), fulfill, reject);
 				}).then(function(result) {
 					//trigger the library to reload
 					return new Promise(function(fulfill, reject) {
-						cmp.fireEvent('enrollment-enrolled-complete', fulfill, reject);
+						me.CourseEnrollmentActions.refreshEnrolledCourses(fulfill, reject);
 					});
 				});
 			}
 		}, steps);
 
-		this.__addStep({
+		me.__addStep({
 			xtype: 'enrollment-confirmation',
 			name: 'Confirmation',
 			enrollmentOption: option,
