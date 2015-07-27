@@ -47,11 +47,11 @@ Ext.define('NextThought.app.chat.Actions', {
 			'chat_roomMembershipChanged': me.createHandlerForChatEvents(me.onMembershipOrModerationChanged, 'chat_roomMembershipChanged'),
 			'chat_recvMessage': me.createHandlerForChatEvents(me.onMessage, 'chat_recvMessage'),
 			'chat_recvMessageForShadow': me.createHandlerForChatEvents(me.onMessage, 'chat_recvMessageForShadow'),
-			'chat_enteredRoom': me.onEnteredRoom.bind(me),
-			'socket-new-sessionid': me.createHandlerForChatEvents(me.onNewSocketConnection.bind(me), 'socket-new-sessionid')
+			'chat_enteredRoom': me.onEnteredRoom.bind(me)
 		});
 
 		socket.onSocketAvailable(me.onSessionReady, me);
+		socket.on('socket-new-sessionid', me.onNewSocketConnection.bind(me));
 
 		me.mon(me.LoginStore, 'will-logout', function(callback) {
 			me.changePresence('unavailable', null, null, callback);
@@ -64,15 +64,7 @@ Ext.define('NextThought.app.chat.Actions', {
 		var me = this;
 
 		this.ChatStore.initializeTranscriptStore();
-
-		$AppConfig.Preferences.getPreference('ChatPresence/Active')
-			.then(function(value) {
-				if (value) {
-					me.changePresence(value.get('type'), value.get('show'), value.get('status'));
-				} else {
-					me.changePresence('available');
-				}
-			});
+		this.onNewSocketConnection();
 	},
 
 
