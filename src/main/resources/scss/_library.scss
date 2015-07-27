@@ -753,7 +753,7 @@ li.library-grid-item {
 		padding: 10px 50px 10px 10px;
 		border-bottom: 1px solid #e5e5e5;
 		text-transform: uppercase;
-		z-index: 3;
+		z-index: 12;
 
 		.close {
 			cursor: pointer;
@@ -892,7 +892,7 @@ li.library-grid-item {
 		background-color: $secondary-green;
 		color: white;
 		max-height: 2em;
-		z-index: 2;
+		z-index: 11;
 		@include experimental(transition, all 0.5s);
 
 
