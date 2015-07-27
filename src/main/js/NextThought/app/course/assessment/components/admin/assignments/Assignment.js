@@ -598,8 +598,13 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 
 
 	updateColumns: function(filter) {
-		var c = this.down('gridcolumn[name=username]');
-		c[filter === 'ForCredit' ? 'show' : 'hide']();
+		var grid = this.down('grid');
+
+		if(filter === 'ForCredit'){
+			grid.showColumn('Username');
+		}else if(filter === 'Open'){
+			grid.hideColumn('Username');
+		}
 	},
 
 
