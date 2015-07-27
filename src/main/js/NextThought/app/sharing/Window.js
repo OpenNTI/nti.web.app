@@ -18,7 +18,7 @@ Ext.define('NextThought.app.sharing.Window', {
 				xtype: 'component',
 				renderTpl: Ext.DomHelper.markup({ cls: '{model:lowercase}', cn: [
 					{ cls: 'share-with-data', cn: [
-						{ cls: 'title', cn: [{tag: 'img', id: '{id}-avatar', src: '{avatarURL}'}, '{title}']},
+						{ cls: 'title', cn: [{cls: 'avatarContainer', html:'{user:avatar}'}, '{title}']},
 						{ cls: 'description', cn: ['{model:capitalize} by ', {tag: 'span', id: '{id}-name', cls: 'username', html: '{name}'}]},
 						{ cls: 'snippet', html: '{content:ellipsis(150)}' }
 					] }
@@ -106,14 +106,17 @@ Ext.define('NextThought.app.sharing.Window', {
 			};
 
 			UserRepository.getUser(u, function(user) {
+				var avatar;
 				if (!info.rendered) {
 					Ext.apply(info.renderData, {
-						avatarURL: user.get('avatarURL'),
+						user: user,
 						name: user.getName()
 					});
 				}
 				else {
-					info.avatar.set({src: user.get('avatarURL')});
+					avatar = info.el.down('.avatarContainer');
+
+					avatar.update(Ext.util.Format.avatar(user));
 					info.name.update(user.getName());
 				}
 
