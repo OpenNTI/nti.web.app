@@ -304,6 +304,7 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 				}
 			}
 
+			current.fireEvent('beforedeactivate');
 			current.destroy();
 		});
 	},
