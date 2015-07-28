@@ -56,7 +56,7 @@ Ext.define('NextThought.app.context.components.VideoContext', {
 			.then(function(path) {
 				var pageInfo, i;
 
-				for (i = path.length - 1; i >= 0; i++) {
+				for (i = path.length - 1; i >= 0; i--) {
 					if (path[i] instanceof NextThought.model.PageInfo) {
 						pageInfo = path[i];
 						break;
