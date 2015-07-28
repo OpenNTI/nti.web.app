@@ -10,7 +10,8 @@ Ext.define('NextThought.app.navigation.Index', {
 		'NextThought.app.navigation.StateStore',
 		'NextThought.app.account.identity.Index',
 		'NextThought.app.notifications.Tab',
-		'NextThought.app.search.SearchBar'
+		'NextThought.app.search.SearchBar',
+		'NextThought.app.chat.components.gutter.Tab'
 	],
 
 	cls: 'main-navigation',
@@ -24,6 +25,7 @@ Ext.define('NextThought.app.navigation.Index', {
 		{cls: 'nav-container'},
 		{cls: 'identity-container'},
 		{cls: 'notification-container'},
+		{cls: 'chat-notification-container'},
 		{cls: 'search-container'}
 	]),
 
@@ -34,7 +36,8 @@ Ext.define('NextThought.app.navigation.Index', {
 		navContainerEl: '.nav-container',
 		identityEl: '.identity-container',
 		notificationEl: '.notification-container',
-		searchEl: '.search-container'
+		searchEl: '.search-container',
+		chatNotifyEl: '.chat-notification-container'
 	},
 
 
@@ -45,7 +48,8 @@ Ext.define('NextThought.app.navigation.Index', {
 
 		this.mon(this.NavStore, {
 			'update-nav': this.updateNav.bind(this),
-			'set-active-content': this.setActiveContent.bind(this)
+			'set-active-content': this.setActiveContent.bind(this),
+			'show-chat-tab': this.maybeShowChatTab.bind(this)
 		});
 	},
 
@@ -207,6 +211,51 @@ Ext.define('NextThought.app.navigation.Index', {
 
 	onSearchBlur: function() {
 		this.removeCls('search-focused');
+	},
+
+
+	maybeShowChatTab: function() {
+		var viewportWidth = Ext.Element.getViewportWidth();
+		if (viewportWidth <= 1180 && !this.hasCls('has-chat-tab')) {
+			this.showChatTab();
+		}
+		else if (viewportWidth > 1180 && this.hasCls('has-chat-tab')) {
+			this.hideChatTab();
+		}
+	},
+
+
+	showChatTab: function() {
+		var me = this;
+
+		if (!this.chatTabCmp) {
+			this.chatTabCmp = NextThought.app.chat.components.gutter.Tab.create({
+				setMenuOpen: this.setState.bind(this, {active: 'chatTabCmp'}),
+				setMenuClosed: this.setState.bind(this, {}),
+				pushRootRoute: this.pushRoute.bind(this),
+				renderTo: this.chatNotifyEl
+			});
+		}
+
+		this.addCls('has-chat-tab');
+		wait()
+			.then(function() {
+				var gutterContainer = Ext.getCmp('chat-window'),
+					gutterWin = gutterContainer && gutterContainer.gutterWin,
+					listWin = gutterContainer.listWin && gutterContainer.listWin;
+
+				if ((gutterWin && gutterWin.isVisible()) || (listWin && listWin.isVisible())) {
+					me.chatTabCmp.addCls('gutter-showing');
+				}
+				else {
+					me.chatTabCmp.removeCls('gutter-showing');
+				}
+			});
+	},
+
+
+	hideChatTab: function() {
+		this.removeCls('has-chat-tab');
 	},
 
 

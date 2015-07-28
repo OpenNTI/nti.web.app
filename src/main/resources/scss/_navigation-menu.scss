@@ -24,6 +24,11 @@
 		float: right;
 	}
 
+	.chat-notification-container {
+		float: right;
+		display: none;
+	}
+
 	.back-container {
 		float: left;
 		height: 100%;
@@ -92,6 +97,16 @@
 			right: 50%;
 			width: 600px;
 			margin-right: -300px;
+		}
+	}
+
+	&.has-chat-tab {
+		.search-container {
+			right: 210px;
+		}
+
+		.chat-notification-container {
+			display: block;
 		}
 	}
 }

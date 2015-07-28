@@ -108,6 +108,13 @@ Ext.define('NextThought.app.chat.StateStore', {
 	},
 
 
+	fireGutterToggle: function() {
+		// The chat gutter should always be visible except in case the viewport width is too small (i.e width < 1024)
+		// In those cases, we will use this event to show and hide the gutter.
+		this.fireEvent('toggle-gutter');
+	},
+
+
 	notify: function(win, msg) {
 		var creator = msg && msg.isModel ? msg.get('Creator') : msg && msg.Creator;
 		if (!isMe(creator)) {
