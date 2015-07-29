@@ -48,11 +48,7 @@ Ext.define('NextThought.app.chat.components.Window', {
 			tools: {
 				'settings': {
 					title: 'Settings',
-<<<<<<< HEAD
-					qtip: 'Settings',
-=======
 					'tip': 'Settings',
->>>>>>> feature/chat
 					handler: 'showSettings'
 				}
 			}
