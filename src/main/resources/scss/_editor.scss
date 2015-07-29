@@ -478,10 +478,39 @@ span.tab{
 	}
 }
 
+.share-search-container {
+	position: fixed !important;
+	width: 331px;
+	overflow-y: auto;
+	height: auto !important;
+	box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.3) !important;
+
+	.share-search {
+		position: static !important;
+	}
+
+	.share-search-mask {
+		position: absolute !important;
+		top: 0 !important; bottom: 0 !important;
+		left: 0 !important; right: 0 !important;
+		background: white;
+		text-align: center;
+	}
+
+	.x-mask-msg .x-mask-msg-text {
+		display: inline-block;
+		position: relative;
+
+		&::after {
+			left: 0;
+		}
+	}
+}
+
+
 .share-search{
 	position: fixed !important;
 	background-color: white;
-	box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.3) !important;
 
 	.contact-card{
 		.avatar-container{

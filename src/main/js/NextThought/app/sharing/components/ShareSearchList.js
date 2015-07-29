@@ -5,7 +5,6 @@ Ext.define('NextThought.app.sharing.components.ShareSearchList', {
 	allowBlank: true,
 	displayField: 'displayName',
 	valueField: 'Username',
-	floating: true,
 	singleSelect: true,
 	loadingHeight: 40,
 
@@ -77,12 +76,15 @@ Ext.define('NextThought.app.sharing.components.ShareSearchList', {
 
 	constructor: function(cfg) {
 		var ownerCls = cfg.ownerCls || '';
+
 		this.loadMask = {
 			msg: 'Searching...',
 			maskCls: 'share-search-mask ' + ownerCls,
 			cls: 'share-search-mask ' + ownerCls,
-			msgCls: 'share-search-mask ' + ownerCls
+			msgCls: 'share-search-mask ' + ownerCls,
+			renderTo: cfg.loadMaskContainer
 		};
+
 		this.callParent([cfg]);
 
 		this.on('itemclick', this.onRecordClick.bind(this));
@@ -98,6 +100,40 @@ Ext.define('NextThought.app.sharing.components.ShareSearchList', {
 	destroy: function() {
 		this.callParent(arguments);
 		//console.warn('destroying list view...', arguments);
-	}
+	},
 
+
+	setUpMaskListeners: function(store) {
+		Ext.destroy(this.maskListeners);
+
+		if (!this.rendered) {
+			this.on('afterrender', this.setUpMaskListeners.bind(this, store));
+			return;
+		}
+
+		if (!store) {
+			return;
+		}
+
+		Ext.destroy(this.maskListeners);
+
+		this.maskListeners = this.mon(store, {
+			destroyable: true,
+			beforeload: this.loadMask.show.bind(this.loadMask),
+			load: this.loadMask.hide.bind(this.loadMask)
+		});
+
+		if (store.loading) {
+			this.loadMask.show();
+		} else {
+			this.loadMask.hide();
+		}
+	},
+
+
+	bindStore: function(store) {
+		this.callParent(arguments);
+
+		this.setUpMaskListeners(store);
+	}
 });

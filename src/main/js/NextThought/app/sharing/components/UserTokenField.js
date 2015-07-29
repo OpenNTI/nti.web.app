@@ -2,7 +2,7 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 	extend: 'NextThought.common.form.fields.TagField',
 	alias: ['widget.user-sharing-list'],
 	requires: [
-		'NextThought.app.sharing.components.ShareSearchList',
+		'NextThought.app.sharing.components.ShareSearch',
 		'NextThought.app.sharing.Actions',
 		'NextThought.util.Search',
 		'NextThought.store.UserSearch',
@@ -53,7 +53,7 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		this.searchStore = new NextThought.store.UserSearch();
 		this.suggestionStore = this.SharingActions.getSuggestionStore();
 
-		this.pickerView = Ext.widget('share-search', {
+		this.pickerView = Ext.widget('search-sharesearch', {
 			ownerCls: this.ownerCls,
 			focusOnToFront: false,
 			renderTo: spEl || Ext.getBody(),
@@ -440,71 +440,52 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 
 
 	alignPicker: function() {
-		if (!this.getEl().isVisible(true)) {
+		if (!this.el || !this.el.isVisible(true)) {
 			return;
 		}
 
-		var me = this, x, y,
-			spEl = this.scrollParentEl,
-			scrollOffset = (spEl && spEl.getScroll().top) || 0,
-			cordinateRootX = (spEl && spEl.getX()) || 0,
-			cordinateRootY = (spEl && spEl.getY()) || 0,
-			padding = 5,
-			above = false,
-			align = 't-b',
-			picker = me.getPicker(),
-			spaceAbove = me.inputEl.getY() - scrollOffset,
-			spaceBelow = Ext.Element.getViewHeight() - (me.getY() - scrollOffset + me.getHeight()),
-			pickerScrollHeight = picker.el && picker.el.dom && picker.el.dom.scrollHeight,
+		var minSpace = 300,
+			picker = this.pickerView,
 			pickerHeight = picker.getHeight(),
-			firstNode = picker.getNode(0),
-			minListHeight = (firstNode && (Ext.fly(firstNode).getHeight() * 3)) || 150;//some safe number if we can't resolve the height of 3 items.
+			viewHeight = Ext.Element.getViewportHeight(),
+			rect = this.el.dom.getBoundingClientRect(),
+			pickerScrollHeight = picker.el && picker.el.dom && picker.el.dom.scrollHeight,
+			maxHeight,
+			y, x = rect.left,
+			above = false;
 
-		function adjHeight(n) {
-			if (pickerScrollHeight > n) {
-				picker.setHeight(n - padding);
-			}
-
-			//NOTE: expand to full picker's scrollHeight, if it doesn't fill the available space.
-			if (pickerScrollHeight <= n && pickerScrollHeight > pickerHeight) {
-				picker.setHeight(pickerScrollHeight);
-			}
-		}
-
-		if (spaceBelow < minListHeight) {
-			align = 'b-t';
+		if (rect.top + rect.height + minSpace > viewHeight) {
 			above = true;
 		}
 
-		adjHeight(above ? spaceAbove : spaceBelow);
-
-		x = picker.getAlignToXY(this.el, 'l-l')[0] - cordinateRootX;
-		y = picker.getAlignToXY(this.inputEl, align, [0, padding])[1] - cordinateRootY - scrollOffset;
-
-		if (pickerScrollHeight === 0) {
-			if (!(Ext.is.iOS && document.activeElement !== this.inputEl.dom)) {
-				Ext.defer(this.alignPicker, 1, this);
-			}
+		if (above) {
+			y = Math.max(rect.top - pickerHeight, 0);
+			maxHeight = rect.top;
+		} else {
+			y = rect.top + rect.height;
+			maxHeight = viewHeight - y;
 		}
 
 		if (Ext.is.iOS) {
 			if (this.inputEl.dom.value === '' || document.activeElement !== this.inputEl.dom) {
-				me.hidePicker();
-			}
-			else {
-				picker.el.setStyle({
-					display: '',
-					height: 'auto',
-					width: '303px',
-					right: 'auto',
-					left: x + 'px',
-					top: y + 'px'
-				});
+				this.hidePicker();
 			}
 		}
-		else {
-			picker.showAt(x, y);
+
+		if (pickerScrollHeight === 0 && !(Ext.is.iOS && document.activeElement !== this.inputEl.dom)) {
+			wait()
+				.then(this.alignPicker.bind(this));
 		}
+
+		picker.show();
+
+		picker.el.setStyle({
+			height: 'auto',
+			right: 'auto',
+			left: x + 'px',
+			top: y + 'px',
+			'max-height': maxHeight + 'px'
+		});
 	},
 
 
