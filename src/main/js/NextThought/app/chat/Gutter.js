@@ -420,7 +420,10 @@ Ext.define('NextThought.app.chat.Gutter', {
 			// Go ahead and increment the message count of 'Other Contacts'.
 			// On click, we show the full gutter list with the right count.
 			if (me.store.find('Username', sender, 0, false, false, true) > -1) {
-				me.incrementCollapsedMesssageCount();
+				if (me.isVisible()) {
+					me.incrementCollapsedMesssageCount();
+				}
+
 				userRec = this.store.findRecord('Username', sender, 0, false, false, true);
 				if (userRec) {
 					currentCount = userRec.get('unreadMessageCount') || 0;

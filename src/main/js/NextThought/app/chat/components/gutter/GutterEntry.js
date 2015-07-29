@@ -24,7 +24,7 @@ Ext.define('NextThought.app.chat.components.gutter.GutterEntry', {
 		this.renderData = Ext.apply(this.renderData || {}, {
 			user: this.user,
 			presence: '',
-			dataBadge: this.user.unreadMessageCount || 0
+			dataBadge: this.user.get('unreadMessageCount') || 0
 		});
 
 		this.unreadMessageIds = [];

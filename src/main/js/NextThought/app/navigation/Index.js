@@ -11,7 +11,8 @@ Ext.define('NextThought.app.navigation.Index', {
 		'NextThought.app.account.identity.Index',
 		'NextThought.app.notifications.Tab',
 		'NextThought.app.search.SearchBar',
-		'NextThought.app.chat.components.gutter.Tab'
+		'NextThought.app.chat.components.gutter.Tab',
+		'NextThought.app.chat.Index'
 	],
 
 	cls: 'main-navigation',
@@ -215,11 +216,13 @@ Ext.define('NextThought.app.navigation.Index', {
 
 
 	maybeShowChatTab: function() {
-		var viewportWidth = Ext.Element.getViewportWidth();
-		if (viewportWidth <= 1180 && !this.hasCls('has-chat-tab')) {
+		var viewportWidth = Ext.Element.getViewportWidth(),
+			minViewportWidth = NextThought.app.chat.Index.MIN_VIEWPORT_WIDTH;
+
+		if (viewportWidth <= minViewportWidth && !this.hasCls('has-chat-tab')) {
 			this.showChatTab();
 		}
-		else if (viewportWidth > 1180 && this.hasCls('has-chat-tab')) {
+		else if (viewportWidth > minViewportWidth && this.hasCls('has-chat-tab')) {
 			this.hideChatTab();
 		}
 	},

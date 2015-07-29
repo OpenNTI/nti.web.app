@@ -18,6 +18,11 @@ Ext.define('NextThought.app.chat.Index', {
 
 	items: [],
 
+	statics: {
+		// show the notification tab if the vp is less than this threshold.
+		MIN_VIEWPORT_WIDTH: 1180
+	},
+
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'gutter'},
@@ -48,7 +53,7 @@ Ext.define('NextThought.app.chat.Index', {
 		this.mon(this.ChatStore, {
 			'show-window': this.showChatWindow.bind(this),
 			'show-whiteboard': this.showWhiteboard.bind(this),
-			'chat-notification-toast': this.handleNonContactNotification.bind(this),
+			'notify': this.handleTabNotifications.bind(this),
 			'show-all-gutter-contacts': this.showAllOnlineContacts.bind(this),
 			'toggle-gutter': this.toggleGutter.bind(this)
 		});
@@ -110,12 +115,18 @@ Ext.define('NextThought.app.chat.Index', {
 	},
 
 
-	onWindowResize: function() {
+	shouldHaveChatTab: function() {
 		var viewportWidth = Ext.Element.getViewportWidth();
 		// We would like to hide the gutter if the window is too small.
+		return viewportWidth <= NextThought.app.chat.Index.MIN_VIEWPORT_WIDTH;
+	},
+
+
+	onWindowResize: function() {
+		var showTab = this.shouldHaveChatTab();
 		this.NavigationStore.maybeShowChatTab();
 
-		if (viewportWidth <= 1180) {
+		if (showTab) {
 			this.gutterWin.hide();
 
 			if (this.listWin) {
@@ -130,14 +141,13 @@ Ext.define('NextThought.app.chat.Index', {
 	},
 
 
-	handleNonContactNotification: function (win, msg) {
-		var me = this,
-			roomInfo = win && win.roomInfo;
+	handleTabNotifications: function (win, msg) {
+		if(win && win.isVisible()) { return; }
 
-		if (!win || !roomInfo) { return; }
-
-		// Handle chat notification
-		console.log('Cannot add chat notification: ', msg);
+		var showTab = this.shouldHaveChatTab();
+		if (showTab) {
+			this.NavigationStore.fireChatNotification(msg);
+		}
 	},
 
 

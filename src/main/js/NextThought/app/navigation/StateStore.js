@@ -9,6 +9,9 @@ Ext.define('NextThought.app.navigation.StateStore', {
 		this.fireEvent('show-chat-tab');
 	},
 
+	fireChatNotification: function(msg) {
+		this.fireEvent('chat-notify-tab', msg);
+	},
 
 	markReturnPoint: function(route) {
 		this.returnPoint = route;
