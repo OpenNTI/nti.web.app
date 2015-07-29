@@ -8,7 +8,7 @@ Ext.define('NextThought.app.content.timeline.components.Header', {
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'controls', cn: [
-			{tag: 'img', cls: 'tool close'}
+			{cls: 'tool close'}
 		]},
 		{tag: 'span', html: '{title}'}
 	]),

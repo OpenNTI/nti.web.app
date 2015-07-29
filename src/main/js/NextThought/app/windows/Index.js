@@ -6,6 +6,8 @@ Ext.define('NextThought.app.windows.Index', {
 		Router: 'NextThought.mixins.Router'
 	},
 
+	activeWindows: [],
+
 	layout: 'none',
 
 	requires: [
@@ -89,7 +91,11 @@ Ext.define('NextThought.app.windows.Index', {
 		this.viewContainer.removeAll();
 		cmp.addCls('object-window');
 
-		this.viewContainer.add(cmp);
+		if (cmp.doNotCenter) {
+			this.activeWindows.push(this.add(cmp));
+		} else {
+			this.activeWindows.push(this.viewContainer.add(cmp));
+		}
 
 		document.body.addEventListener('keydown', this.onKeyPress);
 		this.WindowStore.addOpenCls(cmp.isWindow);
@@ -111,6 +117,9 @@ Ext.define('NextThought.app.windows.Index', {
 
 
 	closeWindow: function() {
+		this.activeWindows.forEach(function(win) {
+			Ext.destroy(win);
+		});
 		this.viewContainer.removeAll();
 		this.WindowStore.removeOpenCls();
 	},

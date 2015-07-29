@@ -2,7 +2,10 @@ Ext.define('NextThought.app.course.overview.components.parts.Timeline', {
 	extend: 'NextThought.common.components.cards.Card',
 	alias: 'widget.course-overview-ntitimeline',
 
-	requires: 'NextThought.common.ux.TimelineWindow',
+	requires: [
+		'NextThought.model.Timeline',
+		'NextThought.app.windows.Actions'
+	],
 
 
 	initComponent: function() {
@@ -14,6 +17,8 @@ Ext.define('NextThought.app.course.overview.components.parts.Timeline', {
 
 		height = height ? parseInt(height, 10) : -1;
 		width = width ? parseInt(width, 10) : -1;
+
+		this.WindowActions = NextThought.app.windows.Actions.create();
 
 		this.data = {
 			thumbnail: root + this.icon,
@@ -36,11 +41,11 @@ Ext.define('NextThought.app.course.overview.components.parts.Timeline', {
 
 	onCardClicked: function() {
 		var me = this,
-			win = Ext.widget('timeline-window', me.data);
+			model = NextThought.model.Timeline.fromOutlineNode(this.data);
 
-		me.mon(win, 'close', this.setProgress.bind(this, null));
-
-		win.show();
+		this.WindowActions.pushWindow(model, null, this.el, {
+			afterClose: this.setProgress.bind(this, null)
+		});
 	},
 
 	setProgress: function(progress) {

@@ -11,6 +11,8 @@ Ext.define('NextThought.app.content.timeline.Window', {
 	cls: 'timeline-window',
 	doNotCenter: true,
 
+	layout: 'none',
+
 	defaultWidth: 792,
 	defaultHeight: 595,
 	defaultRatio: 1.333, // 4:3
@@ -26,8 +28,11 @@ Ext.define('NextThought.app.content.timeline.Window', {
 		me.setHeight(size[1]);
 
 		me.add({
-			xtype: 'timeline-header'
+			xtype: 'timeline-header',
+			doClose: me.doClose.bind(me)
 		});
+
+		me.timelineHeight = size[1] - 70 - 40;
 
 		me.timelineContainer = me.add({
 			xtype: 'box',
@@ -41,7 +46,7 @@ Ext.define('NextThought.app.content.timeline.Window', {
 			items: [
 				{
 					xtype: 'box',
-					autoEl: {cls: 'close-btn'},
+					autoEl: {cls: 'close-btn', html: 'Close'},
 					afterRender: function() {
 						this.mon(this.el, 'click', me.doClose.bind(me));
 					}
@@ -56,13 +61,14 @@ Ext.define('NextThought.app.content.timeline.Window', {
 
 		createStoryJS({
 			source: this.record.get('href'),
-			embed_id: this.timelineContainer.id
+			embed_id: this.timelineContainer.id,
+			height: this.timelineHeight
 		});
 	},
 
 
 	calcSize: function(desiredWidth, desiredHeight) {
-		var maxHeight = Ext.Element.getViewportHeight() - 70 - 20, //account for the header and 10px padding
+		var maxHeight = Ext.Element.getViewportHeight() - 70 - 20, //account for the navigation header, and 10px padding
 			maxWidth = Ext.Element.getViewportWidth() - 20,//account for the 10px padding
 			size = [];
 

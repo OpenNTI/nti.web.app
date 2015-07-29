@@ -19,6 +19,7 @@ Ext.define('NextThought.app.course.Index', {
 		'NextThought.app.course.overview.Index',
 		'NextThought.app.course.reports.Index',
 		'NextThought.app.content.content.Index',
+		'NextThought.app.content.timeline.Window',
 		'NextThought.app.contentviewer.Index',
 		'NextThought.app.contentviewer.Actions'
 	],
