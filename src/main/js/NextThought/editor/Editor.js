@@ -510,7 +510,6 @@ Ext.define('NextThought.editor.AbstractEditor', {
 				});
 
 				if (!SharingUtils.canSharePublicly()) {
-					me.sharedList.setPublished(false);
 					me.sharedList.setDisabled('disabled');
 				}
 
