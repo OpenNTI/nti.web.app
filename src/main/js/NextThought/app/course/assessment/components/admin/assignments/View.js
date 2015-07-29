@@ -98,7 +98,7 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.View'
 					nextTitle: next && next.get('name'),
 					previous: previous && previous.getId(),
 					previoustitle: previous && previous.get('name'),
-					currentIndex: current + 1,
+					currentIndex: current,
 					total: this.store.getCount()
 				})
 			});

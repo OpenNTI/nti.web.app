@@ -3,6 +3,16 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 	alternateClassName: 'NextThought.model.courseware.UsersCourseAssignmentHistoryItemSummary',
 	extend: 'NextThought.model.Base',
 
+	requires: ['NextThought.util.BatchExecution'],
+
+	statics: {
+		getBatchExecution: function() {
+			this.batchExecution = this.batchExecution || NextThought.util.BatchExecution.create();
+
+			return this.batchExecution;
+		}
+	},
+
 	mimeType: 'application/vnd.nextthought.assessment.userscourseassignmenthistoryitem',
 	//application/vnd.nextthought.assessment.userscourseassignmenthistoryitemsummary
 
@@ -357,7 +367,8 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 	 */
 	saveGrade: function(value, letter) {
 		var me = this,
-			grade = me.get('Grade');
+			grade = me.get('Grade'),
+			batcher = me.self.getBatchExecution();
 
 		//if the grade is a placeholder and we aren't trying to save any values
 		if (grade.isPlaceholder && NextThought.model.courseware.Grade.isEmpty(value, letter)) {
@@ -366,7 +377,9 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 
 		//if we are a placeholder create a new grade
 		if (this.isPlaceholder) {
-			return grade.createNewGrade(value, letter)
+			return batcher.schedule(function() {
+					return grade.createNewGrade(value, letter);
+				})
 				.then(function(response) {
 					return Ext.decode(response);
 				})
@@ -388,7 +401,9 @@ Ext.define('NextThought.model.courseware.UsersCourseAssignmentHistoryItem', {
 				});
 		//if we aren't a placeholder and the grade has different values save the new ones
 		} else if (!grade.valueEquals(value, letter)) {
-			return grade.saveValue(value, letter)
+			return batcher.schedule(function() {
+					return grade.saveValue(value, letter);
+				})
 				.then(function(newGrade) {
 					grade.set(newGrade.asJSON());
 				});

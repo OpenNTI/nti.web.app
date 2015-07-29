@@ -50,7 +50,7 @@ Ext.define('NextThought.app.course.enrollment.components.Process', {
 			'create-enroll-purchase',
 			'create-gift-purchase',
 			'submit-gift-purchase',
-			'submit-enroll-purchase', 
+			'submit-enroll-purchase',
 			'enrollment-enrolled-complete',
 			'redeem-gift'
 			]);

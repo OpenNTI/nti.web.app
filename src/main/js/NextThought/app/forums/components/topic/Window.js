@@ -104,7 +104,7 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 				me.forum = forum;
 
 				me.remove(me.loadingEl);
-				me.showTopic(topic, forum, me.record);
+				me.showTopic(topic, forum);
 				me.headerCmp.showPathFor(topic);
 			});
 	},

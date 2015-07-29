@@ -136,8 +136,12 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 		this.StoreActions = NextThought.app.store.Actions.create();
 
 		this.initRouter();
+
 		this.addRoute('/', this.showCourses.bind(this));
 		this.addRoute('/:id', this.showCourseDetail.bind(this));
+		this.addRoute('/:id/redeem/:token', this.showRedeemToken.bind(this));
+
+
 		this.addDefaultRoute('/');
 		this.on('beforeclose', this.onBeforeClose, this);
 	},
@@ -149,7 +153,7 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 			upcoming = this.CourseStore.getAllUpcomingCourses();
 
 		this.updateAvailableCourses(current, upcoming, archived);
-		if(!this.tabpanel || this.tabpanel.activeTab) { return; }
+		if (!this.tabpanel || this.tabpanel.activeTab) { return; }
 
 		if (!Ext.isEmpty(upcoming)) {
 			this.tabpanel.selectTabWithName('Upcoming');
@@ -300,7 +304,7 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 				}
 			}
 
-			me.updateButtons();
+			current.fireEvent('beforedeactivate');
 			current.destroy();
 		});
 	},
@@ -410,7 +414,7 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 				ownerCt: me
 			});
 
-			me.mon(me.tabpanel, 'show-course-detail', function(course){
+			me.mon(me.tabpanel, 'show-course-detail', function(course) {
 				me.pushRoute(course.get('Title'), ParseUtils.encodeForURI(course.getId()), {course: course});
 			});
 
@@ -431,6 +435,7 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 		}
 
 		me.getLayout().setActiveItem(me.tabpanel);
+		me.updateButtons();
 	},
 
 	showCourses: function(route, subRoute) {
@@ -445,27 +450,30 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 			course = route.precache.course,
 			me = this;
 
-		if(course && course.getId().toLowerCase() === ntiid.toLowerCase()) {
+		if (course && course.getId().toLowerCase() === ntiid.toLowerCase()) {
 			this.showCourse(course);
+			return Promise.resolve();
 		}
-		else {
-			this.mun(this.CourseStore, 'all-courses-set');
-			this.mon(this.CourseStore, {
+
+		return new Promise(function(fulfill, reject) {
+			me.mun(me.CourseStore, 'all-courses-set');
+			me.mon(me.CourseStore, {
 				'all-courses-set': function(courses) {
 					me.showTabpanel();
 					me.setupCourses(courses);
 
 					course = me.CourseStore.findCourseForNtiid(ntiid);
-					if(course) {
+					if (course) {
 						wait()
 							.then(function() {
 								me.showCourse(course);
+								fulfill();
 							});
 					}
 				}
 			});
-			this.CourseActions.loadAllCourses();
-		}
+			me.CourseActions.loadAllCourses();
+		});
 	},
 
 	showCourse: function(course) {
@@ -510,7 +518,9 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 		me.mon(me.courseDetail, 'enroll-in-course', 'showEnrollmentOption');
 
 		me.getLayout().setActiveItem(me.courseDetail);
+		me.updateButtons();
 	},
+
 
 	showEnrollmentOption: function(course, name, type, config) {
 		var me = this;
@@ -551,8 +561,20 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 
 
 		me.getLayout().setActiveItem(me.courseEnrollment);
+		me.updateButtons();
 		me.closeMsg();
 	},
+
+
+	showRedeemToken: function(route, subRoute) {
+		var me = this;
+
+		return me.showCourseDetail(route, subRoute)
+			.then(function() {
+				me.courseDetail.restoreEnrollmentOption('redeem', [route.params.token]);
+			});
+	},
+
 
 	addMask: function() {
 		if (this.rendered) {

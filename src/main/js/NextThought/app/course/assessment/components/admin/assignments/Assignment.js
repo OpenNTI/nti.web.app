@@ -180,12 +180,10 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 		me.pageHeader = pageHeader;
 
 		me.pageHeader.setAssignment(me.assignment);
-		me.pageHeader.setRequestActive(true, getString('NextThought.view.courseware.assessment.assignments.admin.Assignment.request'));
 		me.pageHeader.bindStore(me.store);
 
 		me.mon(pageHeader, {
 			'toggle-avatars': 'toggleAvatars',
-			'request-change': 'requestDataChange',
 			'page-change': function() {
 				me.mon(me.store, {
 					single: true,
@@ -464,12 +462,50 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 		grid.view.refresh();
 	},
 
+	getStoreState: function() {
+		var store = this.store,
+			sorters = this.store.sorters && this.store.sorters.items,
+			sorter = (sorters && sorters[0]) || {},
+			params = store.proxy.extraParams;
+
+		return {
+			currentPage: store.currentPage,
+			pageSize: store.pageSize,
+			searchTerm: params.search || '',
+			filter: params.filter || '',
+			sort: {
+				prop: sorter.property || '',
+				direction: sorter.direction || ''
+			}
+		};
+	},
+
+
+	isSameState: function(state) {
+		var storeState = this.getStoreState(),
+			isEqual = true;
+
+		if (state.pageSize && state.pageSize !== storeState.pageSize) {
+			isEqual = false;
+		} else if (state.currentPage !== storeState.currentPage) {
+			isEqual = false;
+		} else if ((state.searchTerm || '') !== storeState.searchTerm) {
+			isEqual = false;
+		} else if (state.filter !== storeState.filter) {
+			isEqual = false;
+		} else if (state.sort && (state.sort.prop !== storeState.sort.prop || state.sort.direction !== storeState.sort.direction)) {
+			isEqual = false;
+		}
+
+		return isEqual;
+	},
+
 
 	applyState: function(state) {
 		//if we are already applying state or the state hasn't changed and the store has loaded don't do anything
 		if (this.applyingState) { return; }
 
-		if (Ext.Object.equals(state, this.current_state) && this.initalLoad) {
+		if (this.isSameState(state) && this.initialLoad) {
 			this.refresh();
 			return Promise.resolve();
 		}
@@ -544,24 +580,14 @@ Ext.define('NextThought.app.course.assessment.components.admin.assignments.Assig
 	},
 
 
-	requestDateChange: function(e) {
-		e.stopEvent();
-
-		Globals.sendEmailTo(
-				'support@nextthought.com',
-				Ext.String.format('[CHANGE REQUEST] ({0}) {1}: {2}',
-						location.hostname,
-						$AppConfig.username,
-						this.assignmentTitle)
-		);
-
-		return false;
-	},
-
-
 	updateColumns: function(filter) {
-		var c = this.down('gridcolumn[name=username]');
-		c[filter === 'ForCredit' ? 'show' : 'hide']();
+		var grid = this.down('grid');
+
+		if(filter === 'ForCredit'){
+			grid.showColumn('Username');
+		}else if(filter === 'Open'){
+			grid.hideColumn('Username');
+		}
 	},
 
 

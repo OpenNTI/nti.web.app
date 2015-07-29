@@ -7,7 +7,8 @@ Ext.define('NextThought.app.course.enrollment.Details', {
 		'NextThought.app.course.info.components.Panel',
 		'NextThought.app.course.enrollment.StateStore',
 		'NextThought.app.course.enrollment.Actions',
-		'NextThought.app.library.courses.StateStore'
+		'NextThought.app.library.courses.StateStore',
+		'NextThought.app.account.Actions'
 		// 'NextThought.view.contacts.suggestions.Window',
 		// 'NextThought.view.profiles.create.Window'
 	],
@@ -125,6 +126,7 @@ Ext.define('NextThought.app.course.enrollment.Details', {
 		this.CourseEnrollmentStore = NextThought.app.course.enrollment.StateStore.getInstance();
 		this.CourseEnrollmentActions = NextThought.app.course.enrollment.Actions.create();
 		this.CourseStore = NextThought.app.library.courses.StateStore.getInstance();
+		this.AccountActions = NextThought.app.account.Actions.create();
 
 		window.EnrollInOption = this.enrollInOption.bind(this);
 	},
@@ -746,9 +748,7 @@ Ext.define('NextThought.app.course.enrollment.Details', {
 
 		if (href === 'welcome') {
 			e.stopEvent();
-			this.fireEvent('show-permanent-welcome-guide', {
-				link: u.getLink('content.permanent_welcome_page')
-			});
+			this.AccountActions.showWelcomePage(u.getLink('content.permanent_welcome_page'));
 
 			r = false;
 		} else if (href === 'profile') {

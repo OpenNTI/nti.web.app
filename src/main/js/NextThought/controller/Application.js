@@ -122,6 +122,7 @@ Ext.define('NextThought.controller.Application', {
 	handleFragmentRoute: function(fragment) {
 		var path = '',
 			parts = fragment.split('/'),
+			subRoute = '',
 			id, state;
 
 		if (this.OBJECT_FRAG_ROUTE.test(fragment)) {
@@ -132,6 +133,11 @@ Ext.define('NextThought.controller.Application', {
 			id = parts[2];//#!library, available courses, id
 			id = B64.decodeURLFriendly(id);
 			path = '/library/catalog/courses/';
+
+			if (parts[3] === 'redeem') {
+				subRoute = 'redeem/' + parts[4];
+			}
+
 		} else if (this.NOTIFICATIONS_FRAG_ROUTE.test(fragment)) {
 			path = '/notifications';
 		} else if (this.HTML_FRAG_ROUTE.test(fragment)) {
@@ -144,6 +150,10 @@ Ext.define('NextThought.controller.Application', {
 		if (id) {
 			id = ParseUtils.encodeForURI(id);
 			path += id;
+		}
+
+		if (subRoute) {
+			path = Globals.trimRoute(path) + '/' + Globals.trimRoute(subRoute);
 		}
 
 		return this.handleRoute(document.title, path);

@@ -2,6 +2,14 @@ Ext.define('NextThought.app.course.enrollment.components.Confirmation', {
 	extend: 'Ext.Component',
 	alias: 'widget.enrollment-confirmation',
 
+	requires: [
+		'NextThought.app.account.Actions'
+	],
+
+	mixins: {
+		ProfileLinks: 'NextThought.mixins.ProfileLinks'
+	},
+
 	cls: 'enrollment-credit-purchase',
 
 	renderTpl: Ext.DomHelper.markup([
@@ -63,6 +71,9 @@ Ext.define('NextThought.app.course.enrollment.components.Confirmation', {
 			phone: getString('course-info.course-supoprt.phone'),
 			helplinks: helplinks
 		});
+
+
+		this.AccountActions = NextThought.app.account.Actions.create();
 	},
 
 
@@ -79,16 +90,14 @@ Ext.define('NextThought.app.course.enrollment.components.Confirmation', {
 
 			if (href === 'profile') {
 				e.stopEvent();
-				me.fireEvent('show-profile', $AppConfig.userObject, ['about']);
 				me.up('library-available-courses-window').close();
+				me.navigateToProfile($AppConfig.userObject);
 				return false;
 			}
 
 			if (href === 'welcome') {
 				e.stopEvent();
-				me.fireEvent('show-permanent-welcome-guide', {
-					link: $AppConfig.userObject.getLink('content.permanent_welcome_page')
-				});
+				me.AccountActions.showWelcomePage($AppConfig.getLink('content.permanent_welcome_page'));
 				return false;
 			}
 		});

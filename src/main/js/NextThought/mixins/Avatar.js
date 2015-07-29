@@ -27,8 +27,8 @@ Ext.define('NextThought.mixins.Avatar', {
 				this.AVATAR_CACHE[url] = new Promise(function(fulfill, reject) {
 					var img = new Image();
 
-					img.onload = fulfill(url);
-					img.onerror = fulfill(null);
+					img.onload = fulfill.bind(null, url);
+					img.onerror = fulfill.bind(null, null);
 
 					img.src = url;
 				});

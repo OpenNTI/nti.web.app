@@ -357,13 +357,27 @@
 		font-size: 32px;
 		font-weight: normal;
 		line-height: 48px;
-		img {
-			width: auto;
+
+		.avatarContainer {
+			display: inline-block;
+			width: 48px;
 			height: 48px;
-			border-radius: 4px;
 			vertical-align: middle;
 			margin: 10px;
 			margin-right: 15px;
+
+			.avatar-container {
+				position: relative;
+				height: 48px;
+				width: auto;
+
+				.initials {
+				  border-radius: 4px;
+				}
+				.avatar-pic{
+				  border-radius: 4px;
+				}
+			}
 		}
 	}
 

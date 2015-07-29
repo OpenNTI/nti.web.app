@@ -2,7 +2,10 @@ Ext.define('NextThought.app.course.enrollment.components.parts.Pricing', {
 	extend: 'Ext.Component',
 	alias: 'widget.enrollment-pricing',
 
-	requires: ['NextThought.common.form.fields.SimpleTextField'],
+	requires: [
+		'NextThought.common.form.fields.SimpleTextField',
+		'NextThought.app.store.Actions'
+	],
 
 	base_top: 50,
 
@@ -70,6 +73,8 @@ Ext.define('NextThought.app.course.enrollment.components.parts.Pricing', {
 		this.callParent(arguments);
 
 		this.enableBubble(['show-msg']);
+
+		this.StoreActions = NextThought.app.store.Actions.create();
 
 		this.update = Ext.Function.createBuffered(this.update.bind(this), 2000);
 	},
@@ -272,7 +277,7 @@ Ext.define('NextThought.app.course.enrollment.components.parts.Pricing', {
 		if (!coupon) {
 			onFailure();
 		} else {
-			this.fireEvent('price-enroll-purchase', this, desc, onSuccess, onFailure);
+			this.StoreActions.priceEnrollmentPurchase(this, desc, onSuccess, onFailure);
 		}
 	},
 

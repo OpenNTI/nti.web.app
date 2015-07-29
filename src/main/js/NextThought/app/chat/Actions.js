@@ -47,7 +47,8 @@ Ext.define('NextThought.app.chat.Actions', {
 			'chat_roomMembershipChanged': me.createHandlerForChatEvents(me.onMembershipOrModerationChanged, 'chat_roomMembershipChanged'),
 			'chat_recvMessage': me.createHandlerForChatEvents(me.onMessage, 'chat_recvMessage'),
 			'chat_recvMessageForShadow': me.createHandlerForChatEvents(me.onMessage, 'chat_recvMessageForShadow'),
-			'chat_enteredRoom': me.onEnteredRoom.bind(me)
+			'chat_enteredRoom': me.onEnteredRoom.bind(me),
+			'socket-new-sessionid': me.createHandlerForChatEvents(me.onNewSocketConnection.bind(me), 'socket-new-sessionid')
 		});
 
 		socket.onSocketAvailable(me.onSessionReady, me);
@@ -61,7 +62,6 @@ Ext.define('NextThought.app.chat.Actions', {
 
 	onSessionReady: function() {
 		console.log('Chat onSessionReady');
-		var me = this;
 
 		this.ChatStore.initializeTranscriptStore();
 		this.onNewSocketConnection();

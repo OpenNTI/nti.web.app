@@ -753,7 +753,7 @@ li.library-grid-item {
 		padding: 10px 50px 10px 10px;
 		border-bottom: 1px solid #e5e5e5;
 		text-transform: uppercase;
-		z-index: 3;
+		z-index: 12;
 
 		.close {
 			cursor: pointer;
@@ -879,7 +879,7 @@ li.library-grid-item {
 		right: 0; left: 0;
 		background-color: black;
 		opacity: 0.5;
-		z-index: 0;
+		z-index: -1;
 	}
 
 	.msg-container {
@@ -892,7 +892,7 @@ li.library-grid-item {
 		background-color: $secondary-green;
 		color: white;
 		max-height: 2em;
-		z-index: 2;
+		z-index: 11;
 		@include experimental(transition, all 0.5s);
 
 
@@ -937,10 +937,9 @@ li.library-grid-item {
 		position: absolute;
 		bottom: 0;
 		left: 0; right: 0;
-		z-index: 10 !important;
 	}
 
-	.body-container {
+	& > .body-container {
 		height: 90%;
 		@include experimental-value(height, calc(100% - 100px));
 		background-color: $panel-background;

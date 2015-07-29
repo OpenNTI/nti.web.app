@@ -1121,6 +1121,10 @@ canvas.x-component-course-assessment {
 	.x-container.grouping table {
 		table-layout: fixed !important;
 	}
+
+	.x-grid-body .x-grid-row .x-grid-cell.x-grid-cell-first {
+		max-width: 269px;
+	}
 }
 
 .course-assessment-assignments {

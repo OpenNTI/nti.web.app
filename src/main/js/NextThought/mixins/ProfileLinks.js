@@ -10,18 +10,20 @@ Ext.define('NextThought.mixins.ProfileLinks', function() {
 		var u = this.userObject || this.user,
 			profileUrl = u.getProfileUrl && u.getProfileUrl();
 
-		if(profileUrl){
+		if (profileUrl) {
 			if (this instanceof NextThought.app.account.contacts.management.Popout) {
 				wait()
 					.then(this.destroy.bind(this));
-			}else if (this instanceof NextThought.app.account.identity.components.MenuItem){
+			} else if (this instanceof NextThought.app.account.identity.components.MenuItem) {
 				wait()
 					.then(this.setMenuClosed.bind(this));
 			}
+
 			NextThought.app.navigation.Actions.pushRootRoute(u.getName(), u.getProfileUrl(), {
 				user: u
 			});
-		return false;
+
+			return false;
 		}
 	}
 
@@ -70,7 +72,8 @@ Ext.define('NextThought.mixins.ProfileLinks', function() {
 
 		navigateToProfile: function(u) {
 			var profileUrl = u.getProfileUrl && u.getProfileUrl();
-			if(profileUrl){
+
+			if (profileUrl) {
 				NextThought.app.navigation.Actions.pushRootRoute(u.getName(), profileUrl, {
 					user: u
 				});
