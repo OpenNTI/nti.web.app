@@ -17,6 +17,7 @@ Ext.define('NextThought.app.chat.transcript.Window', {
 		'NextThought.app.chat.Actions',
 		'NextThought.app.chat.StateStore',
 		'NextThought.model.Transcript',
+		'NextThought.model.TranscriptSummary',
 		'NextThought.model.MessageInfo',
 		'NextThought.util.Parsing'
 	],
