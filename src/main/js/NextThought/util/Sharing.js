@@ -6,12 +6,12 @@ Ext.define('NextThought.util.Sharing', {
 		var sharedTo = Ext.Array.merge(sharable.get('sharedWith') || [], people);
 		return this.setSharedWith(sharable, sharedTo, callback);
 	},
-	
-	canSharePublicly: function(){
-		return !!Service.get('SiteCommunity');	
+
+	canSharePublicly: function() {
+		return !!Service.get('SiteCommunity');
 	},
-	
-	entitiesDefiningPublic: function(scopeProvider){
+
+	entitiesDefiningPublic: function(scopeProvider) {
 		var siteCommunity = Service.get('SiteCommunity');
 		return siteCommunity ? [siteCommunity] : null;
 	},
@@ -81,14 +81,14 @@ Ext.define('NextThought.util.Sharing', {
 				publicScope;
 
 		publicScope = this.entitiesDefiningPublic(scopeProvider) || [];
-		if(Ext.isEmpty(publicScope)){
+		if (Ext.isEmpty(publicScope)) {
 			return false;
 		}
-		
+
 		sharedWithIds = Ext.Array.map(sharedWith, function(u) {
 			return u.getId ? u.getId() : u;
 		});
-		
+
 		return Ext.isEmpty(Ext.Array.difference(publicScope, sharedWithIds));
 	},
 
@@ -209,7 +209,7 @@ Ext.define('NextThought.util.Sharing', {
 
 				Ext.each(resolvedUsers || [], function(u) {
 					var dn;
-					
+
 					if (!u.Unresolved) {
 						dn = isMe(u) ? 'me' : u.getName();
 					}

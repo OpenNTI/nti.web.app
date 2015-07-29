@@ -1,8 +1,9 @@
-Ext.define('NextThought.common.form.fields.UserTokenField', {
+Ext.define('NextThought.app.sharing.components.UserTokenField', {
 	extend: 'NextThought.common.form.fields.TagField',
 	alias: ['widget.user-sharing-list'],
 	requires: [
-		'NextThought.app.sharing.ShareSearchList',
+		'NextThought.app.sharing.components.ShareSearchList',
+		'NextThought.app.sharing.Actions',
 		'NextThought.util.Search',
 		'NextThought.store.UserSearch',
 		'Ext.view.BoundListKeyNav'
@@ -12,7 +13,6 @@ Ext.define('NextThought.common.form.fields.UserTokenField', {
 	placeholder: 'Add people to the discussion',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls: 'control publish on'},
 		{cls: 'tokens', cn: [
 			{tag: 'span', cls: 'inputArea', cn: [
 				{tag: 'span', cls: 'plus'},
@@ -26,7 +26,6 @@ Ext.define('NextThought.common.form.fields.UserTokenField', {
 
 
 	renderSelectors: {
-		publishEl: '.control.publish',
 		plusEl: '.plus'
 	},
 
@@ -36,34 +35,11 @@ Ext.define('NextThought.common.form.fields.UserTokenField', {
 	},
 
 
-	TIP: {
-		'public': {
-			title: getString('NextThought.view.form.fields.UserTokenField.publictitle'),
-			html: getString('NextThought.view.form.fields.UserTokenField.publicbody')
-		},
-		'private': {
-			title: getString('NextThought.view.form.fields.UserTokenField.privatetitle'),
-			html: getString('NextThought.view.form.fields.UserTokenField.privatebody')
-		}
-	},
-
-
 	initComponent: function() {
 		this.callParent(arguments);
 		this.selections = [];
 
-		this.tip = Ext.widget('nt-tooltip', Ext.apply({
-			autoHide: true,
-			anchor: 'bottom',
-			minWidth: 250
-
-		},this.TIP['public']));
-		this.tip.blockLeftRightAlign();
-
-		if (this.readOnly) {
-			this.tip.disable();
-		}
-		this.on('destroy', 'destroy', this.tip);
+		this.SharingActions = NextThought.app.sharing.Actions.create();
 	},
 
 
@@ -74,23 +50,32 @@ Ext.define('NextThought.common.form.fields.UserTokenField', {
 			spEl = this.scrollParentEl,
 			editorEl = this.el.up('.editor');
 
-		this.store = new NextThought.store.UserSearch();
+		this.searchStore = new NextThought.store.UserSearch();
+		this.suggestionStore = this.SharingActions.getSuggestionStore();
+
 		this.pickerView = Ext.widget('share-search', {
 			ownerCls: this.ownerCls,
-			store: me.store,
 			focusOnToFront: false,
-			renderTo: spEl || Ext.getBody()
+			renderTo: spEl || Ext.getBody(),
+			selectItem: this.searchItemSelected.bind(this)
 		});
-		this.mon(this.store, {
+
+		this.mon(this.searchStore, {
 			scope: this,
-			load: 'alignPicker',
-			refresh: 'alignPicker'
+			load: 'maybeAlignPicker',
+			refresh: 'maybeAlignPicker'
+		});
+
+		this.mon(this.suggestionStore, {
+			scope: this,
+			load: 'maybeAlignPicker',
+			refresh: 'maybeAlignPicker'
 		});
 
 		this.pickerView.addCls(this.ownerCls).show().hide();
-		this.mon(this.pickerView, 'select', this.searchItemSelected, this);
+
 		this.on('destroy', 'destroy', this.pickerView);
-		this.mon(me.publishEl, 'click', this.togglePublish, this);
+
 		if (editorEl) {
 			this.mon(editorEl, {
 				scope: this,
@@ -99,18 +84,12 @@ Ext.define('NextThought.common.form.fields.UserTokenField', {
 			});
 		}
 
-		this.tip.setTarget(this.publishEl);
-		this.mon(this.inputEl, 'focus', 'onTargetOver', this.tip);
 
 		this.setupKeyMap();
-		this.windowScrollHandler = Ext.bind(function() {
-		    this.tip.hide();
-		}, this);
 
 		window.addEventListener('scroll', this.windowScrollHandler);
 
 		if (spEl) {
-			this.mon(spEl, 'scroll', 'hide', this.tip);
 			this.mon(spEl, 'scroll', 'alignPicker', this, {buffer: 300});
 		}
 
@@ -171,7 +150,9 @@ Ext.define('NextThought.common.form.fields.UserTokenField', {
 
 	addInputListeners: function() {
 		this.mon(this.inputEl, {
-			'keydown': 'onKeyDown'
+			'keydown': this.onKeyDown.bind(this),
+			'focus': this.onInputFocus.bind(this),
+			'blur': this.onInputBlur.bind(this)
 		});
 	},
 
@@ -180,16 +161,6 @@ Ext.define('NextThought.common.form.fields.UserTokenField', {
 		var i = this.inputEl,
 			v = i.getValue();
 		i[v ? 'removeCls' : 'addCls']('empty');
-	},
-
-
-	togglePublish: function(e) {
-		e.stopEvent();
-		if (e.getTarget('.readOnly') || e.getTarget('.disabled')) {
-			return;
-		}
-
-		this.setPublished(!this.getPublished());
 	},
 
 
@@ -273,7 +244,7 @@ Ext.define('NextThought.common.form.fields.UserTokenField', {
 	isToken: function(text) { return !Ext.isEmpty(text); },
 
 
-	searchItemSelected: function(sel, record) {
+	searchItemSelected: function(record) {
 		var	el = this.inputEl;
 
 		this.addSelection(record);
@@ -284,13 +255,16 @@ Ext.define('NextThought.common.form.fields.UserTokenField', {
 
 
 	collapse: function() {
-		this.store.removeAll();
-		this.getPicker().hide().setHeight(null);
+		this.searchStore.removeAll();
 	},
 
 
-	clearResults: function() {
+	clearResults: function(showSuggestions) {
 		this.collapse();
+
+		if (showSuggestions) {
+			this.showSuggestions();
+		}
 	},
 
 
@@ -301,8 +275,7 @@ Ext.define('NextThought.common.form.fields.UserTokenField', {
 		});
 
 		return {
-			entities: r,
-			publicToggleOn: this.getPublished()
+			entities: r
 		};
 	},
 
@@ -318,47 +291,26 @@ Ext.define('NextThought.common.form.fields.UserTokenField', {
 		delete this.setValueAfterRenderListener;
 
 		var me = this, explicitEntities;
+
 		this.clear();
 		explicitEntities = (sharingInfo && sharingInfo.entities) || [];
+
 		UserRepository.getUser(explicitEntities, function(users) {
 			me.addSelection(users);
 		});
-
-		this.setPublished(sharingInfo && sharingInfo.publicToggleOn);
 	},
 
 
-	setPublished: function(value) {
-		var action = value ? 'addCls' : 'removeCls',
-			state = value ? 'public' : 'private',
-			tip = this.TIP[state];
-
-		if (this.publishEl) {
-			this.publishEl[action]('on');
-		}
-
-
-		this.tip.suspendLayouts();
-		this.tip.setTitle(tip.title);
-		this.tip.update(tip.html);
-		this.tip.setWidth(this.getWidth());
-		this.tip.resumeLayouts(true);
-	},
-	
-	setDisabled: function(value){
+	setDisabled: function(value) {
 		var action = value ? 'addCls' : 'removeCls';
 		this.publishEl[action]('disabled');
-	},
-
-	getPublished: function() {
-		return this.publishEl ? this.publishEl.is('.on') : undefined;
 	},
 
 
 	handledSpecialKey: function(e) {
 		var key = e.getKey(),
 			val = this.inputEl.getValue(),
-            sel = window.getSelection().toString();
+			sel = window.getSelection().toString();
 
 		if (key === e.BACKSPACE) {
 			if (val === '') {
@@ -368,7 +320,7 @@ Ext.define('NextThought.common.form.fields.UserTokenField', {
 			}
 
 			if (val && (val.length === 1 || val === sel)) {
-				this.clearResults();
+				this.clearResults(true);
 				this.inputEl.focus(100);
 				return true;
 			}
@@ -378,8 +330,6 @@ Ext.define('NextThought.common.form.fields.UserTokenField', {
 			e.stopEvent();
 
 			if (Ext.isEmpty(val)) {
-				this.tip.onTargetOut({within: Ext.emptyFn});
-				this.tip.hide();
 				this.inputEl.blur();
 				this.clearResults();
 				this.fireEvent('cancel-indicated');
@@ -413,7 +363,22 @@ Ext.define('NextThought.common.form.fields.UserTokenField', {
 
 		if (this.handledSpecialKey(e)) { return; }
 
+
 		this.searchTimeout = Ext.defer(this.search, 250, this);
+	},
+
+
+	onInputFocus: function() {
+		// console.log('Input Focused');
+		this.search();
+		this.alignPicker();
+	},
+
+
+	onInputBlur: function() {
+		// console.log('Input Blurred');
+		wait(300)
+			.then(this.hidePicker.bind(this));
 	},
 
 
@@ -421,6 +386,7 @@ Ext.define('NextThought.common.form.fields.UserTokenField', {
 		if (!this.inputEl) {
 			return;
 		}
+
 		var value = this.inputEl.getValue(),
 			w = this.getWidth();
 
@@ -431,15 +397,39 @@ Ext.define('NextThought.common.form.fields.UserTokenField', {
 			this.pickerView.setWidth(w);
 		}
 
+		if (!value) {
+			this.showSuggestions();
+		} else {
+			this.showSearch(value);
+		}
+	},
+
+
+	showSearch: function(value) {
+		this.pickerView.bindStore(this.searchStore);
+		this.pickerView.refresh();
+
 		//Clear results right before making a search.
 		this.clearResults();
-		this.store.search(value);
+		this.searchStore.search(value);
+	},
 
+
+	showSuggestions: function() {
+		this.pickerView.bindStore(this.suggestionStore);
+		this.pickerView.refresh();
 	},
 
 
 	getPicker: function() {
 		return this.pickerView;
+	},
+
+
+	maybeAlignPicker: function() {
+		if (this.pickerView.isVisible()) {
+			this.alignPicker();
+		}
 	},
 
 
@@ -459,7 +449,7 @@ Ext.define('NextThought.common.form.fields.UserTokenField', {
 			picker = me.getPicker(),
 			spaceAbove = me.inputEl.getY() - scrollOffset,
 			spaceBelow = Ext.Element.getViewHeight() - (me.getY() - scrollOffset + me.getHeight()),
-			pickerScrollHeight = picker.getEl().first().dom.scrollHeight,
+			pickerScrollHeight = picker.el && picker.el.dom && picker.el.dom.scrollHeight,
 			pickerHeight = picker.getHeight(),
 			firstNode = picker.getNode(0),
 			minListHeight = (firstNode && (Ext.fly(firstNode).getHeight() * 3)) || 150;//some safe number if we can't resolve the height of 3 items.
@@ -511,15 +501,16 @@ Ext.define('NextThought.common.form.fields.UserTokenField', {
 		}
 	},
 
+
 	hidePicker: function() {
-		this.getPicker().el.setStyle('display', 'none');
+		this.pickerView.hide().setHeight(null);
 	},
+
 
 	clear: function() {
 		Ext.each(this.el.query('.token'), function(t) { Ext.fly(t).remove(); }, this);
 		this.selections = [];
 		this.inputEl.dom.value = '';
-		this.setPublished(false);
 		this.resetPlaceholderLabel();
 		this.clearResults();
 	},
@@ -569,9 +560,10 @@ Ext.define('NextThought.common.form.fields.UserTokenField', {
 			v = p && p.down('.value').getAttribute('data-value');
 
 		if (v) { this.removeToken(v, p); }
-    if (!Ext.is.iPad) { //Don't focus for iPad, won't bring up keyboard
-      this.inputEl.focus();
-    }
+
+		if (!Ext.is.iPad) { //Don't focus for iPad, won't bring up keyboard
+			this.inputEl.focus();
+		}
 	},
 
 

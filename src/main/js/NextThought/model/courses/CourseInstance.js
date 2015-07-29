@@ -18,7 +18,8 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		'NextThought.model.courseware.GradeBook',
 		'NextThought.model.ContentBundle',
 		'NextThought.model.forums.CommunityBoard',
-		'NextThought.model.forums.CommunityForum'
+		'NextThought.model.forums.CommunityForum',
+		'NextThought.model.UserSearch'
 	],
 
 	mixins: {
@@ -36,6 +37,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		{ name: 'GradeBook', type: 'singleItem', persist: false},
 
 		{ name: 'Scopes', type: 'auto', mapping: 'LegacyScopes' },
+		{ name: 'ParentSharingScopes', type: 'singleItem'},
 		{ name: 'SharingScopes', type: 'singleItem'},
 
 		{ name: 'TotalEnrolledCount', type: 'int'},
@@ -141,6 +143,159 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 		var bundle = this.get('Bundle');
 
 		return bundle.getFirstPage();
+	},
+
+
+	SCOPE_SUGGESTIONS: {
+		ADMIN: {
+			order: ['Default', 'Public', 'Purchased', 'ForCredit', 'ForCreditNonDegree'],
+			keys: {
+				Public: ['Public'],
+				Purchased: ['Purchased'],
+				ForCredit: ['ForCredit'],
+				ForCreditNonDegree: ['ForCreditNonDegree']
+			},
+			friendlyNames: {
+				Default: 'Default Scope',
+				Public: {
+					Section: 'My Section Public',
+					Parent: 'Course Public'
+				},
+				Purchased: {
+					Section: 'My Section Purchased',
+					Parent: 'Course Purchased'
+				},
+				ForCredit: {
+					Section: 'My Section ForCredit',
+					Parent: 'Course ForCredit'
+				},
+				ForCreditNonDegree: {
+					Section: 'My Section ForCreditNonDegree',
+					Parent: 'Course ForCreditNoneDegree'
+				}
+			}
+		},
+		STUDENT: {
+			order: ['Default', 'Public', 'ForCredit'],
+			keys: {
+				Public: ['Public', 'Purchased'],
+				ForCredit: ['ForCredit', 'ForCreditNonDegree']
+			},
+			friendlyNames: {
+				Default: 'Default Scope',
+				Public: {
+					Section: 'My Section Public',
+					Parent: 'Course Public'
+				},
+				ForCredit: {
+					Section: 'My Section ForCredit',
+					Parent: 'Course ForCredit'
+				}
+			}
+		}
+	},
+
+
+	getSuggestedSharing: function() {
+		return Promise.all([
+				this.getSectionSuggestedSharing(),
+				this.getParentSuggestedSharing()
+			]);
+	},
+
+
+	getSectionSuggestedSharing: function() {
+		var hasParent = !!this.get('ParentSharingScopes');
+
+		return this.__getSuggestedSharingForScopes(this.get('SharingScopes'), 'Section')
+			.then(function(suggestions) {
+				return {
+					label: hasParent ? 'My Section' : 'My Course',
+					suggestions: suggestions
+				};
+			});
+	},
+
+
+	getParentSuggestedSharing: function() {
+		return this.__getSuggestedSharingForScopes(this.get('ParentSharingScopes'), 'Parent')
+			.then(function(suggestions) {
+				return {
+					label: 'All Sections',
+					suggestions: suggestions
+				};
+			});
+	},
+
+
+	__getSuggestedSharingForScopes: function(sharingScopes, display) {
+		var me = this;
+
+		if (!sharingScopes) {
+			return Promise.resolve([]);
+		}
+
+		return me.getWrapper()
+			.then(function(enrollment) {
+				var config = enrollment.isAdministrative ? me.SCOPE_SUGGESTIONS.ADMIN : me.SCOPE_SUGGESTIONS.STUDENT;
+
+				return me.__buildSuggestedSharing(config, sharingScopes, display);
+			});
+	},
+
+
+	__buildSuggestedSharing: function(config, sharingScopes, display) {
+		var scopes = {}, defaultKey,
+			items = [],
+			defaultSharing = sharingScopes.getDefaultSharing(),
+			keys = Object.keys(config.keys);
+
+		keys.forEach(function(key) {
+			var names = config.keys[key],
+				scope, i;
+
+			for (i = 0; i < names.length; i++) {
+				scope = sharingScopes.getScope(names[i]);
+
+				if (!scope) { continue; }
+
+				if (scope.getId() === defaultSharing) {
+					scopes[names[i]] = scope;
+					defaultKey = names[i];
+				}
+
+				if (!scopes[key]) {
+					scopes[key] = scope;
+				}
+			}
+		});
+
+		if (defaultKey) {
+			scopes['Default'] = scopes[defaultKey];
+
+			delete scopes[defaultKey];
+
+			config.order.forEach(function(name) {
+				if (!scopes[name]) { return; }
+
+				var json = scopes[name].asJSON(),
+					scopeName = name === 'Default' ? defaultKey : name,
+					friendlyName = config.friendlyNames && config.friendlyNames[scopeName];
+
+				if (!friendlyName) {
+					json.friendlyName = '';
+				} else if (Ext.isString(friendlyName)) {
+					json.friendlyName = friendlyName;
+				} else if (friendlyName[display]) {
+					json.friendlyName = friendlyName[display];
+				}
+
+				items.push(NextThought.model.UserSearch.create(json));
+			});
+		}
+
+
+		return items;
 	},
 
 

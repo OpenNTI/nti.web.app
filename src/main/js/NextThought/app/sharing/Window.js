@@ -2,7 +2,7 @@ Ext.define('NextThought.app.sharing.Window', {
 	extend: 'NextThought.common.window.Window',
 	requires: [
 		'NextThought.util.Annotations',
-		'NextThought.common.form.fields.UserTokenField',
+		'NextThought.app.sharing.components.UserTokenField',
 		'NextThought.app.userdata.Actions'
 	],
 	alias: 'widget.share-window',

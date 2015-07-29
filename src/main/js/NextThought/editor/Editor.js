@@ -4,7 +4,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 	requires: [
 		'NextThought.util.Ranges',
 		'NextThought.common.form.fields.TagField',
-		'NextThought.common.form.fields.UserTokenField',
+		'NextThought.app.sharing.components.UserTokenField',
 		'NextThought.util.Sharing',
 		'NextThought.editor.embedvideo.Window'
 	],

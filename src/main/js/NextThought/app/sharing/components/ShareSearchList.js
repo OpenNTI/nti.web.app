@@ -1,5 +1,5 @@
-Ext.define('NextThought.app.sharing.ShareSearchList', {
-	extend: 'Ext.view.BoundList',
+Ext.define('NextThought.app.sharing.components.ShareSearchList', {
+	extend: 'Ext.view.View',
 	alias: ['widget.share-search'],
 	cls: 'share-search',
 	allowBlank: true,
@@ -13,23 +13,30 @@ Ext.define('NextThought.app.sharing.ShareSearchList', {
 	ui: 'nt',
 	baseCls: 'x-menu',
 	itemCls: 'x-menu-item contact-card',
-	itemSelector: 'x-menu-item',
+	itemSelector: '.contact-card',
 	emptyText: '<div class="x-menu-item no-results">No results found.</div>',
+
 	tpl: new Ext.XTemplate(Ext.DomHelper.markup({
-		tag: 'tpl', 'for': '.',
-		cn: [{
-			cls: 'x-menu-item contact-card {[this.getType(values)]}',
-			cn: [
-				'{[this.getAvatar(values)]}',
-				{cls: 'avatar icon {[this.getType(values)]}', style: '{[this.getIcon(values)]}'},
-				{cls: 'card-body {[this.getType(values)]}', cn: [
-					{cls: 'name', html: '{displayName}'},
-					{cls: 'status', html: '{[this.getDisplayTypeValue(values)]}'}
-				]}
+		tag: 'tpl', 'for': '.', cn: [
+			{ tag: 'tpl', 'if': 'isLabel', cn: [
+				{cls: 'x-menu-item contact-card label', html: '{realname}'}
+			]},
+			{ tag: 'tpl', 'if': '!isLabel', cn: [
+				{
+					cls: 'x-menu-item contact-card {[this.getType(values)]}',
+					cn: [
+						'{[this.getAvatar(values)]}',
+						{cls: 'avatar icon {[this.getType(values)]}', style: '{[this.getIcon(values)]}'},
+						{cls: 'card-body {[this.getType(values)]}', cn: [
+							{cls: 'name', html: '{[this.getDisplayName(values)]}'},
+							{cls: 'status', html: '{[this.getDisplayTypeValue(values)]}'}
+						]}
+					]
+				}
 			]}
-		]
-	}), {
-		getAvatar: function(model){
+	]}
+	), {
+		getAvatar: function(model) {
 			var a = NTIFormat.avatar(model);
 			return a;
 		},
@@ -46,6 +53,10 @@ Ext.define('NextThought.app.sharing.ShareSearchList', {
 			return NextThought.model.UserSearch.getType(modelData);
 		},
 
+		getDisplayName: function(modelData) {
+			return modelData.friendlyName || modelData.displayName;
+		},
+
 		getDisplayTypeValue: function(model) {
 			var t = this.getType(model),
 				map = {
@@ -54,13 +65,15 @@ Ext.define('NextThought.app.sharing.ShareSearchList', {
 					'public': 'Community',
 					'person': 'User'
 				};
+
+			if (model.friendlyName) {
+				return model.displayName;
+			}
+
 			return map[t];
 		}
 	}),
 
-	listeners: {
-		select: 'onSelect'
-	},
 
 	constructor: function(cfg) {
 		var ownerCls = cfg.ownerCls || '';
@@ -71,21 +84,15 @@ Ext.define('NextThought.app.sharing.ShareSearchList', {
 			msgCls: 'share-search-mask ' + ownerCls
 		};
 		this.callParent([cfg]);
-	},
 
-	initComponent: function() {
-		this.callParent(arguments);
-		this.itemSelector = '.contact-card';
+		this.on('itemclick', this.onRecordClick.bind(this));
 	},
 
 
-	afterRender: function() {
-		this.callParent(arguments);
-	},
-
-
-	onSelect: function() {
-		this.hide();
+	onRecordClick: function(view, record) {
+		if (!record.get('isLabel')) {
+			this.selectItem(record);
+		}
 	},
 
 	destroy: function() {
