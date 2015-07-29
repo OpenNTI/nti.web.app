@@ -248,8 +248,15 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		var	el = this.inputEl;
 
 		this.addSelection(record);
-		Ext.defer(el.focus, 10, el);
-		Ext.defer(this.updateSize, 1, this);
+
+		wait()
+			.then(this.updateSize.bind(this));
+
+		//wait for the blue event to hide the picker, before trying to show it
+		wait(400)
+			.then(el.focus.bind(el))
+			.then(this.onInputFocus.bind(this));
+
 		return true;
 	},
 
@@ -369,14 +376,13 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 
 
 	onInputFocus: function() {
-		// console.log('Input Focused');
 		this.search();
 		this.alignPicker();
 	},
 
 
 	onInputBlur: function() {
-		// console.log('Input Blurred');
+		//Wait a bit so the pickerView has time to get the click event
 		wait(300)
 			.then(this.hidePicker.bind(this));
 	},
@@ -503,6 +509,7 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 
 
 	hidePicker: function() {
+		console.log('Picker hidden');
 		this.pickerView.hide().setHeight(null);
 	},
 
