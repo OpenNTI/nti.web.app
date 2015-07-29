@@ -5,6 +5,10 @@ Ext.define('NextThought.app.navigation.StateStore', {
 		this.fireEvent('update-nav', config);
 	},
 
+	maybeShowChatTab: function() {
+		this.fireEvent('show-chat-tab');
+	},
+
 
 	markReturnPoint: function(route) {
 		this.returnPoint = route;

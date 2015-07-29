@@ -12,7 +12,8 @@ Ext.define('NextThought.app.chat.Index', {
 		'NextThought.app.chat.Gutter',
 		'NextThought.app.chat.transcript.Window',
 		'NextThought.app.chat.components.Window',
-		'NextThought.app.chat.components.gutter.List'
+		'NextThought.app.chat.components.gutter.List',
+		'NextThought.app.navigation.StateStore'
 	],
 
 	items: [],
@@ -42,19 +43,24 @@ Ext.define('NextThought.app.chat.Index', {
 		this.ChatStore = NextThought.app.chat.StateStore.getInstance();
 		this.ChatActions = NextThought.app.chat.Actions.create();
 		this.GroupStore = NextThought.app.groups.StateStore.getInstance();
+		this.NavigationStore = NextThought.app.navigation.StateStore.getInstance();
 
 		this.mon(this.ChatStore, {
 			'show-window': this.showChatWindow.bind(this),
 			'show-whiteboard': this.showWhiteboard.bind(this),
 			'chat-notification-toast': this.handleNonContactNotification.bind(this),
-			'show-all-gutter-contacts': this.showAllOnlineContacts.bind(this)
+			'show-all-gutter-contacts': this.showAllOnlineContacts.bind(this),
+			'toggle-gutter': this.toggleGutter.bind(this)
 		});
+
+		Ext.EventManager.onWindowResize(this.onWindowResize, this);
 	},
 
 
 	afterRender: function() {
 		this.callParent(arguments);
 		this.gutterWin = Ext.widget('chat-gutter-window', {renderTo: this.gutter, autoShow: true});
+		this.onWindowResize();
 	},
 
 
@@ -85,6 +91,41 @@ Ext.define('NextThought.app.chat.Index', {
 		if (w && this.ChatActions.canShowChat(roomInfo)) {
 			w.notify();
 			w.show();
+		}
+	},
+
+	toggleGutter: function() {
+		var isGutterVisible = this.gutterWin && this.gutterWin.isVisible(),
+			isListVisible = this.listWin && this.listWin.isVisible();
+
+		if (!isGutterVisible && !isListVisible) {
+			this.gutterWin.show();
+		}
+		else if (!isGutterVisible && isListVisible) {
+			this.listWin.hide();
+		}
+		else if (isGutterVisible && !isListVisible) {
+			this.gutterWin.hide();
+		}
+	},
+
+
+	onWindowResize: function() {
+		var viewportWidth = Ext.Element.getViewportWidth();
+		// We would like to hide the gutter if the window is too small.
+		this.NavigationStore.maybeShowChatTab();
+
+		if (viewportWidth <= 1180) {
+			this.gutterWin.hide();
+
+			if (this.listWin) {
+				this.listWin.hide();
+			}
+		}
+		else {
+			if (!this.gutterWin.isVisible() && (!this.listWin || !this.listWin.isVisible())) {
+				this.gutterWin.show();
+			}
 		}
 	},
 

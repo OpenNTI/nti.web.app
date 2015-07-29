@@ -233,7 +233,13 @@ Ext.define('NextThought.app.chat.components.Log', {
 
 
 	addBulkMessages: function(messages) {
-		var m = [], me = this, lastTimeStamp, lastItem;
+		var m = [], me = this, lastTimeStamp, lastItem, win;
+
+		function scroll() {
+			if (lastItem && lastItem.el) {
+				lastItem.el.scrollIntoView(me.el);
+			}
+		}
 
 		(messages || []).forEach(function(msg) {
 			var newMsgTime = msg.get('CreatedTime'),
@@ -273,12 +279,15 @@ Ext.define('NextThought.app.chat.components.Log', {
 
 		// Scroll to the last item.
 		lastItem = me.items.items.last();
-		wait()
-			.then(function() {
-				if (lastItem && lastItem.el) {
-					lastItem.el.scrollIntoView(me.el);
-				}
-			});
+		win = this.up('window');
+		if (win) {
+			if (win.isVisible()) {
+				wait().then(scroll);
+			}
+			else {
+				win.on('show', scroll);
+			}
+		}
 	},
 
 

@@ -52,6 +52,7 @@ Ext.define('NextThought.app.chat.Actions', {
 		});
 
 		socket.onSocketAvailable(me.onSessionReady, me);
+		socket.on('socket-new-sessionid', me.onNewSocketConnection.bind(me));
 
 		me.mon(me.LoginStore, 'will-logout', function(callback) {
 			me.changePresence('unavailable', null, null, callback);
@@ -61,18 +62,8 @@ Ext.define('NextThought.app.chat.Actions', {
 
 	onSessionReady: function() {
 		console.log('Chat onSessionReady');
-		var me = this;
-
 		this.ChatStore.initializeTranscriptStore();
-
-		$AppConfig.Preferences.getPreference('ChatPresence/Active')
-			.then(function(value) {
-				if (value) {
-					me.changePresence(value.get('type'), value.get('show'), value.get('status'));
-				} else {
-					me.changePresence('available');
-				}
-			});
+		this.onNewSocketConnection();
 	},
 
 
