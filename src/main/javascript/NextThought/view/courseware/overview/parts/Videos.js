@@ -22,7 +22,8 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 	requires: [
 		'NextThought.model.PlaylistItem',
 		'NextThought.view.video.Video',
-		'Ext.data.reader.Json'
+		'Ext.data.reader.Json',
+		'NextThought.app.slidedeck.media.Actions'
 	],
 
 	ui: 'course',
@@ -489,7 +490,7 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 		var me = this,
 			m = me.getSelectedVideo(),
 			li = me.locationInfo,
-			slide;
+			slide, slideActions, v;
 
 
 		if (!e.getTarget('.launch-player') && e.getTarget('.transcripts')) {
@@ -512,12 +513,12 @@ Ext.define('NextThought.view.courseware.overview.parts.Videos', {
 					}
 				});
 			} else {
-				me.fireEvent('open-slide-deck', li.ContentNTIID, slide,
-					NextThought.model.PlaylistItem.create(Ext.apply(
-							{
-								NTIID: m.getId()
-							},
-							me.videoIndex[m.getId()])));
+				// FIXME: REMOVE this, this is just to test loading slidedeck data.
+				// Otherwise, we would channel this through navigation, the same way we do for navigation to a video.
+				v = NextThought.model.PlaylistItem.create(Ext.apply( {NTIID: m.getId()}, me.videoIndex[m.getId()]) );
+				slideActions = NextThought.app.slidedeck.media.Actions.create();
+				slideActions.loadSlidedeckContent(slide);
+				me.fireEvent('open-slide-deck', li.ContentNTIID, slide, v);
 			}
 			return;
 		}

@@ -1,0 +1,16 @@
+Ext.define('NextThought.model.Slidedeck', {
+	extend: 'NextThought.model.Base',
+	mimeType: 'application/vnd.nextthought.ntislidedeck',
+
+	idProperty: 'ID',
+	fields: [
+		{ name: 'Creator', type: 'string'},
+		{ name: 'Slides', type: 'auto', defaultValue: []},
+		{ name: 'Videos', type: 'auto', defaultValue: []},
+		{ name: 'title', type: 'string'},
+		{ name: 'DCDescription', type: 'string' },
+		{ name: 'DCTitle', type: 'string' },
+		{ name: 'description', type: 'string' },
+		{ name: 'href', type: 'string'}
+	]
+});

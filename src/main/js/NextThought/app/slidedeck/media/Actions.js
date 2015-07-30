@@ -5,7 +5,9 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 		'NextThought.app.slidedeck.media.StateStore',
 		'NextThought.webvtt.Transcript',
 		'NextThought.app.userdata.Actions',
-		'NextThought.app.userdata.StateStore'
+		'NextThought.app.userdata.StateStore',
+		'NextThought.app.navigation.path.Actions',
+		'NextThought.model.Slidedeck'
 	],
 
 	constructor: function() {
@@ -14,6 +16,7 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 		this.MediaUserDataStore = NextThought.app.slidedeck.media.StateStore.getInstance();
 		this.UserDataActions = NextThought.app.userdata.Actions.create();
 		this.UserDataStore = NextThought.app.userdata.StateStore.getInstance();
+		this.PathActions = NextThought.app.navigation.path.Actions.create();
 	},
 
 
@@ -200,6 +203,65 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 					reject(arguments);
 				}
 			});
+		});
+	},
+
+
+	loadSlidedeckContent: function(slidedeckId) {
+		var me = this;
+		Service.getObject(slidedeckId)
+			.then(function(slidedeck) {
+				console.log(slidedeck);
+				me.buildSlidedeckPlaylist(slidedeck);
+			})
+			.fail(function() {
+				console.log(arguments);
+			});
+	},
+
+
+	getBasePath: function(obj) {
+		var me = this;
+		return new Promise(function(fulfill, reject) {
+			me.PathActions.getPathToObject(obj)
+				.then(function(path) {
+					var course = path[0], p;
+
+					if (course) {
+						p = course.getContentRoots()[0];
+					}
+					fulfill(p);
+				})
+				.fail(reject);
+		});
+	},
+
+
+	buildSlidedeckPlaylist: function(slidedeck) {
+		var videos = [],
+			slides, me = this;
+
+		if (!slidedeck) {
+			return Promise.reject();
+		}
+
+		slides = slidedeck.get('Slides');
+		Ext.each(slidedeck.get('Videos'), function(slidevideo) {
+			var transcript;
+			Service.getObject(slidevideo.video_ntiid)
+				.then(function(video) {
+					videos.push(video);
+
+					return me.getVideoPath(slidedeck)
+						.then(function(basePath) {
+							transcript = NextThought.model.transcript.TranscriptItem.fromVideo(video, basePath);
+							return me.loadTranscript(transcript);
+						});
+				})
+				.then(function(cueList) {
+					console.log(cueList);
+					// TODO: we should build slidedeck components
+				});
 		});
 	}
 });
