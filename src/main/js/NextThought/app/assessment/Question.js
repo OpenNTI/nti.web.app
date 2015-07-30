@@ -4,7 +4,8 @@ Ext.define('NextThought.app.assessment.Question', {
 
 	requires: [
 		'NextThought.app.assessment.Header',
-		'NextThought.app.assessment.Parts'
+		'NextThought.app.assessment.Parts',
+		'NextThought.app.assessment.Actions'
 	],
 
 
@@ -56,6 +57,8 @@ Ext.define('NextThought.app.assessment.Question', {
 
 		this.setQuestionContent(multiPart ? null : parts.first());
 		this.startTimestamp = new Date().getTime();
+
+		this.AssessmentActions = NextThought.app.assessment.Actions.create();
 	},
 
 
@@ -344,8 +347,24 @@ Ext.define('NextThought.app.assessment.Question', {
 		}
 
 		this.submitted = true;
-		var coll = {};
-		this.gatherQuestionResponse(null, coll);
-		this.fireEvent('check-answer', this, this.question, coll[this.question.getId()]);
+
+		var me = this,
+			coll = {};
+
+		me.gatherQuestionResponse(null, coll);
+
+
+		me.mask('Grading...');
+
+		me.AssessmentActions.checkAnswer(me.question, coll[me.question.getId()], me.startTimestamp, me.canSubmitIndividually())
+			.then(function(result) {
+				me.updateWithResults(result);
+			})
+			.fail(function() {
+				alert('There was a problem grading your question.');
+			})
+			.always(function() {
+				me.unmask();
+			});
 	}
 });

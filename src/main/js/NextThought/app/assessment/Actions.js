@@ -3,8 +3,16 @@ Ext.define('NextThought.app.assessment.Actions', {
 
 	requires: [
 		'NextThought.model.assessment.QuestionSetSubmission',
-		'NextThought.model.assessment.AssignmentSubmission'
+		'NextThought.model.assessment.AssignmentSubmission',
+		'NextThought.model.assessment.QuestionSubmission',
+		'NextThought.app.context.StateStore'
 	],
+
+	constructor: function() {
+		this.callParent(arguments);
+
+		this.ContextStore = NextThought.app.context.StateStore.getInstance();
+	},
 
 
 	__getDataForSubmission: function(questionSet, submissionData, containerId, startTime) {
@@ -133,6 +141,38 @@ Ext.define('NextThought.app.assessment.Actions', {
 					console.error('Failed to save assignment progress');
 
 					fulfill(null);
+				}
+			});
+		});
+	},
+
+
+	checkAnswer: function(question, answerValues, startTime, canSubmitIndividually) {
+		var endTimestamp = (new Date()).getTime(),
+			// in seconds
+			// TODO We may have to reset startTimestamp, depending on flow.
+			// SelfAssessments (and maybe assignments) could be re-submitted.
+			duration = (endTimestamp - startTime) / 1000,
+			readerContext = this.ContextStore.getReaderLocation(),
+			containerId = canSubmitIndividually ? question.getId() : readerContext.NTIID,
+			submission = NextThought.model.assessment.QuestionSubmission.create({
+				ContainerId: containerId,
+				questionId: question.getId(),
+				parts: answerValues,
+				CreatorRecordedEffortDuration: duration
+			});
+
+
+		return new Promise(function(fulfill, reject) {
+			submission.save({
+				failure: function() {
+					console.error('FAIL', arguments);
+					reject();
+				},
+				success: function(self, op) {
+					var result = op.getResultSet().records.first();
+
+					fulfill(result);
 				}
 			});
 		});
