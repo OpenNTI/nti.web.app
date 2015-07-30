@@ -1757,7 +1757,7 @@ Ext.define('NextThought.editor.AbstractEditor', {
 		return {
 			body: this.getBody(this.getBodyValue()),
 			sharingInfo: this.sharedList ? this.sharedList.getValue() : null,
-			publish: this.sharedList ? this.sharedList.getPublished() : this.getPublished(),
+			publish: this.getPublished(),
 			title: this.titleEl ? this.titleEl.getValue() : undefined,
 			tags: this.tags ? this.tags.getValue() : undefined
 		};
