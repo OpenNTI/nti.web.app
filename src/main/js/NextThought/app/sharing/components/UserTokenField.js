@@ -315,10 +315,7 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 	},
 
 
-	setDisabled: function(value) {
-		var action = value ? 'addCls' : 'removeCls';
-		this.publishEl[action]('disabled');
-	},
+	setDisabled: function(value) {},
 
 
 	handledSpecialKey: function(e) {
