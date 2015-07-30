@@ -291,7 +291,7 @@ Ext.define('NextThought.app.assessment.input.Base', {
 			e.update(this.filterHTML(p.get('hints')[this.currentHint || 0].get('value')));
 		}
 		//if we are submitted or if we are in an assignment and have solutions
-		else if (this.submitted || (this.questionSet.isAssignment && p.hasSolutions())) {
+		else if (this.submitted || (this.questionSet && this.questionSet.isAssignment && p.hasSolutions())) {
 			answer.show();
 			sol = this.getSolutionContent(p);
 			if (!Ext.isString(sol)) {
