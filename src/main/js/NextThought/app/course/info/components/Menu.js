@@ -61,29 +61,37 @@ Ext.define('NextThought.app.course.info.components.Menu', {
 			route: '/support'
 		});
 
-		if(this.showRoster) {
+		if (this.showRoster) {
 			me.itemTpl.append(me.menuEl, {
 				title: getString('NextThought.view.courseware.info.outline.Menu.roster'),
 				route: '/roster'
-			});	
+			});
+
+			if (isFeature('analytic-reports')) {
+				me.itemTpl.append(me.menuEl, {
+					title: 'Report',
+					route: '/report'
+				});
+			}
 		}
 	},
 
-	setActiveItem: function(route){
+	setActiveItem: function(route) {
 		var activeItem = this.el.down('.x-item-selected'),
 			activeItemRoute = activeItem && activeItem.getAttribute('data-route');
 
 		if (activeItemRoute === route) { return; }
 
 		activeItem.removeCls('x-item-selected');
-		activeItem = this.el.down("[data-route="+route+"]");
+		activeItem = this.el.down('[data-route=' + route + ']');
+
 		if (activeItem) {
 			activeItem.addCls('x-item-selected');
 		}
 	},
 
 
-	onClick: function(e){
+	onClick: function(e) {
 		var item = e.getTarget('.outline-row');
 
 		if (!item) { return; }

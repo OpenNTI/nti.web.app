@@ -26,6 +26,7 @@ Ext.define('NextThought.app.course.info.Index', {
 		me.addRoute('/instructors', me.showInstructors.bind(me));
 		me.addRoute('/support', me.showSupport.bind(me));
 		me.addRoute('/roster', me.showRoster.bind(me));
+		me.addRoute('/report', me.showReports.bind(me));
 		me.on('activate', this.onActivate.bind(me));
 
 		me.WindowActions = NextThought.app.windows.Actions.create();
@@ -106,6 +107,16 @@ Ext.define('NextThought.app.course.info.Index', {
 		me.navigation.setActiveItem(route);
 		me.body.setActiveItem('roster').then(function() {
 			me.body.scrollRosterIntoView(route, subRoute);
+		});
+	},
+
+	showReports: function(route, subRoute) {
+		var me = this;
+
+		me.navigation.setActiveItem(route);
+
+		me.body.setActiveItem('report').then(function() {
+			me.body.scrollReportsIntoView(route, subRoute);
 		});
 	},
 

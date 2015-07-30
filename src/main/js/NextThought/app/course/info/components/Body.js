@@ -4,7 +4,8 @@ Ext.define('NextThought.app.course.info.components.Body', {
 
 	requires: [
 		'NextThought.app.course.info.components.Panel',
-		'NextThought.app.course.info.components.Roster'
+		'NextThought.app.course.info.components.Roster',
+		'NextThought.app.course.info.components.Reports'
 	],
 
 	layout: {
@@ -13,7 +14,8 @@ Ext.define('NextThought.app.course.info.components.Body', {
 	},
 	items: [
 		{ xtype: 'course-info-panel', itemId: 'info' },
-		{ xtype: 'course-info-roster', itemId: 'roster' }
+		{ xtype: 'course-info-roster', itemId: 'roster' },
+		{ xtype: 'course-info-reports', itemId: 'report'}
 	],
 
 
@@ -23,6 +25,7 @@ Ext.define('NextThought.app.course.info.components.Body', {
 		me.setActiveItem('info');
 		me.getComponent('info').setContent(info, status);
 		me.getComponent('roster').setContent(showRoster && bundle);
+		me.getComponent('report').setContent(showRoster && bundle);
 	},
 
 	setActiveItem: function(itemId) {
@@ -39,6 +42,10 @@ Ext.define('NextThought.app.course.info.components.Body', {
 
 	scrollRosterIntoView: function(route, subRoute) {
 		// Set scroll to top. Maybe change scroll based on route and subroute??
+		Ext.getBody().dom.scrollTop = 0;
+	},
+
+	scrollReportsIntoView: function(route, subRoute) {
 		Ext.getBody().dom.scrollTop = 0;
 	},
 

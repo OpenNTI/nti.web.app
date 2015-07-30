@@ -14,11 +14,11 @@ Ext.define('NextThought.app.course.info.components.Outline', {
 	},
 
 	setContent: function(info, status, showRoster, courseMode) {
-		var startDate = Ext.util.Format.date(info.get('StartDate'),'F j, Y');
-		
+		var startDate = Ext.util.Format.date(info.get('StartDate'), 'F j, Y');
+
 		this.removeAll(true);
 
-		if(courseMode){
+		if (courseMode) {
 			this.startDate = this.add({
 				xtype: 'box',
 			    autoEl: {
@@ -44,7 +44,6 @@ Ext.define('NextThought.app.course.info.components.Outline', {
 
 		this.mon(this.menu, 'select-route', this.changeRoute.bind(this));
 
-
 		if (!showRoster) {
 			this.openCourseInfo = this.add({
 				xtype: 'course-info-outline-open-course',
@@ -54,10 +53,18 @@ Ext.define('NextThought.app.course.info.components.Outline', {
 
 			this.mon(this.openCourseInfo, 'show-enrollment', this.fireEvent.bind(this, 'show-enrollment'));
 		}
+
+		if (this.activePath) {
+			this.menu.setActiveItem(this.activePath);
+		}
 	},
 
 	setActiveItem: function(route) {
-		this.menu.setActiveItem(route.path);
+		this.activePath = route.path;
+
+		if (this.menu) {
+			this.menu.setActiveItem(route.path);
+		}
 	},
 
 	getMenu: function() {
