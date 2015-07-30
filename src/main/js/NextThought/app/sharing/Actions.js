@@ -36,17 +36,26 @@ Ext.define('NextThought.app.sharing.Actions', {
 					data = [];
 
 				if (suggestions && suggestions.length) {
-					//TODO: insert label record
+					data.push(NextThought.model.UserSearch.create({
+						realname: 'Suggestions',
+						isLabel: true
+					}));
 					data = data.concat(suggestions);
 				}
 
 				if (communities && communities.length) {
-					//TODO: insert label record
+					data.push(NextThought.model.UserSearch.create({
+						realname: 'Communities',
+						isLabel: true
+					}));
 					data = data.concat(communities);
 				}
 
 				if (groups && groups.length) {
-					//TODO: insert label record
+					data.push(NextThought.model.UserSearch.create({
+						realname: 'Groups',
+						isLabel: true
+					}));
 					data = data.concat(groups);
 				}
 
@@ -55,7 +64,16 @@ Ext.define('NextThought.app.sharing.Actions', {
 	},
 
 
-	getSiteCommunity: function() {},
+	getSiteCommunity: function() {
+		var siteId = Service.get('SiteCommunity'), i,
+			memberships = $AppConfig.userObject.get('DynamicMemberships');
+
+		for (i = 0; i < memberships.length; i++) {
+			if (memberships[i].getId && memberships[i].getId() === siteId) {
+				return NextThought.model.UserSearch.create(memberships[i].asJSON());
+			}
+		}
+	},
 
 
 	getSuggestions: function() {
@@ -93,11 +111,26 @@ Ext.define('NextThought.app.sharing.Actions', {
 
 
 	getCommunities: function() {
-		return [];
+		var memberships = $AppConfig.userObject.get('DynamicMemberships'),
+			siteId = Service.get('SiteCommunity');
+
+		return memberships.filter(function(membership) {
+			var id = membership.getId();
+
+			return membership instanceof NextThought.model.Community && !membership.isEveryone() && id !== siteId && membership.getLink('Activity');
+		}).map(function(membership) {
+			return NextThought.model.UserSearch.create(membership.asJSON());
+		});
 	},
 
 
 	getGroups: function() {
-		return [];
+		var memberships = $AppConfig.userObject.get('DynamicMemberships');
+
+		return memberships.filter(function(membership) {
+			return membership instanceof NextThought.model.FriendsList;
+		}).map(function(membership) {
+			return NextThought.model.UserSearch.create(membership.asJSON());
+		});
 	}
 });
