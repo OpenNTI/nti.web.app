@@ -58,8 +58,9 @@ Ext.define('NextThought.model.UserSearch', {
 		{ name: 'IsDynamicSharing', type: 'auto'},
 
 		//UI Fields
-		{ name: 'friendlyName', type: 'string'},
-		{ name: 'isLabel', type: 'boolean'}
+		{ name: 'friendlyName', type: 'string', persist: false},
+		{ name: 'isLabel', type: 'boolean', persist: false},
+		{ name: 'isMarked', type: 'boolean', persist: false}
 	]
 }, function() {
 	this.borrow(NextThought.model.User, ['getName', 'getProfileUrl']);

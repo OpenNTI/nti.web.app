@@ -157,40 +157,24 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 			},
 			friendlyNames: {
 				Default: 'Default Scope',
-				Public: {
-					Section: 'My Section Public',
-					Parent: 'Course Public'
-				},
-				Purchased: {
-					Section: 'My Section Purchased',
-					Parent: 'Course Purchased'
-				},
-				ForCredit: {
-					Section: 'My Section ForCredit',
-					Parent: 'Course ForCredit'
-				},
-				ForCreditNonDegree: {
-					Section: 'My Section ForCreditNonDegree',
-					Parent: 'Course ForCreditNoneDegree'
-				}
+				Public: 'All Students in {sectionName}',
+				Purchased: 'Life Long Learn Students in {sectionName}',
+				ForCredit: 'For Credit Students in {sectionName}',
+				ForCreditNonDegree: 'Five Minute Enrollment Students in {sectionName}'
 			}
 		},
 		STUDENT: {
-			order: ['Default', 'Public', 'ForCredit'],
+			order: ['Default'],
 			keys: {
 				Public: ['Public', 'Purchased'],
 				ForCredit: ['ForCredit', 'ForCreditNonDegree']
 			},
 			friendlyNames: {
 				Default: 'Default Scope',
-				Public: {
-					Section: 'My Section Public',
-					Parent: 'Course Public'
-				},
-				ForCredit: {
-					Section: 'My Section ForCredit',
-					Parent: 'Course ForCredit'
-				}
+				Public: 'All Students in {sectionName}',
+				Purchased: 'All Students in {sectionName}',
+				ForCredit: 'For Credit Students in {sectionName}',
+				ForCreditNonDegree: 'For Credit Students in {sectionName}'
 			}
 		}
 	},
@@ -198,37 +182,44 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 
 	getSuggestedSharing: function() {
 		return Promise.all([
-				this.getSectionSuggestedSharing(),
-				this.getParentSuggestedSharing()
-			]);
+				this.getParentSuggestedSharing(),
+				this.getSectionSuggestedSharing()
+			]).then(function(results) {
+				return Globals.flatten(results);
+			});
 	},
 
 
 	getSectionSuggestedSharing: function() {
-		var hasParent = !!this.get('ParentSharingScopes');
+		var hasParent = !!this.get('ParentSharingScopes'),
+			scopes = this.get('SharingScopes'),
+			containsDefault = scopes.containsDefault();
 
-		return this.__getSuggestedSharingForScopes(this.get('SharingScopes'), 'Section')
+		if (!containsDefault) {
+			return Promise.resolve([]);
+		}
+
+
+		return this.__getSuggestedSharingForScopes(scopes, hasParent ? 'My Section' : 'My Course')
 			.then(function(suggestions) {
-				return {
-					label: hasParent ? 'My Section' : 'My Course',
-					suggestions: suggestions
-				};
+				return suggestions;
 			});
 	},
 
 
 	getParentSuggestedSharing: function() {
-		return this.__getSuggestedSharingForScopes(this.get('ParentSharingScopes'), 'Parent')
+		var parentScopes = this.get('ParentSharingScopes'),
+			sectionScopes = this.get('SharingScopes'),
+			containsDefault = sectionScopes.containsDefault();
+
+		return this.__getSuggestedSharingForScopes(this.get('ParentSharingScopes'), containsDefault ? 'All Sections' : 'My Course')
 			.then(function(suggestions) {
-				return {
-					label: 'All Sections',
-					suggestions: suggestions
-				};
+				return suggestions;
 			});
 	},
 
 
-	__getSuggestedSharingForScopes: function(sharingScopes, display) {
+	__getSuggestedSharingForScopes: function(sharingScopes, sectionName) {
 		var me = this;
 
 		if (!sharingScopes) {
@@ -239,12 +230,12 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 			.then(function(enrollment) {
 				var config = enrollment.isAdministrative ? me.SCOPE_SUGGESTIONS.ADMIN : me.SCOPE_SUGGESTIONS.STUDENT;
 
-				return me.__buildSuggestedSharing(config, sharingScopes, display);
+				return me.__buildSuggestedSharing(config, sharingScopes, sectionName);
 			});
 	},
 
 
-	__buildSuggestedSharing: function(config, sharingScopes, display) {
+	__buildSuggestedSharing: function(config, sharingScopes, sectionName) {
 		var scopes = {}, defaultKey,
 			items = [],
 			defaultSharing = sharingScopes.getDefaultSharing(),
@@ -285,9 +276,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 				if (!friendlyName) {
 					json.friendlyName = '';
 				} else if (Ext.isString(friendlyName)) {
-					json.friendlyName = friendlyName;
-				} else if (friendlyName[display]) {
-					json.friendlyName = friendlyName[display];
+					json.friendlyName = friendlyName.replace('{sectionName}', sectionName);
 				}
 
 				items.push(NextThought.model.UserSearch.create(json));

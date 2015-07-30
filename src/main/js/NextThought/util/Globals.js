@@ -97,6 +97,21 @@ Ext.define('NextThought.util.Globals', {
 	},
 
 
+	flatten: function(a) {
+		if (!a.reduce) { return a; }
+
+		return a.reduce(function(acc, x) {
+			if (Array.isArray(x)) {
+				acc = acc.concat(x);
+			} else {
+				acc.push(x);
+			}
+
+			return acc;
+		}, []);
+	},
+
+
 	getError: function(e) {
 		return e.stack || e;
 	},

@@ -505,6 +505,26 @@ span.tab{
 			left: 0;
 		}
 	}
+
+	.contact-card.marked {
+		@include icon('check_gray', $side: after, $top: 23px, $left: 31px);//top: 7 + 32/2, left: 15 + 32/2
+
+		&::after {
+			z-index: 4;
+			margin-top: -7px;
+			margin-left: -8px;
+		}
+
+		.avatar-container::before {
+			content: '';
+			position: absolute;
+			top: 0; bottom: 0;
+			left: 0; right: 0;
+			background: $secondary-green;
+			opacity: 0.7;
+			z-index: 3;
+		}
+	}
 }
 
 

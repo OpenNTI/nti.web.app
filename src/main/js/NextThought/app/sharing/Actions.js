@@ -18,6 +18,7 @@ Ext.define('NextThought.app.sharing.Actions', {
 		this.__getSuggestionItems()
 			.then(function(items) {
 				store.loadRecords(items);
+				store.fireEvent('load');
 			});
 
 		return store;
@@ -70,19 +71,11 @@ Ext.define('NextThought.app.sharing.Actions', {
 
 		return Promise.all(suggestions)
 			.then(function(results) {
-				results = results.reduce(function(acc, result) {
-					if (!result) { return acc; }
-
-					if (Array.isArray(result)) {
-						acc = acc.concat(result);
-					} else {
-						acc.push(result);
-					}
-
-					return acc;
-				}, []);
+				results = Globals.flatten(results);
 
 				return results.reduce(function(acc, result) {
+					if (!result) { return acc; }
+
 					if (result.isModel) {
 						acc.push(result);
 					} else if (result.suggestions && result.suggestions.length) {

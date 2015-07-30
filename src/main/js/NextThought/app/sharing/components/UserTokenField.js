@@ -62,15 +62,17 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 
 		this.mon(this.searchStore, {
 			scope: this,
-			load: 'maybeAlignPicker',
+			load: 'onSearchLoaded',
 			refresh: 'maybeAlignPicker'
 		});
 
 		this.mon(this.suggestionStore, {
 			scope: this,
-			load: 'maybeAlignPicker',
+			load: 'onSearchLoaded',
 			refresh: 'maybeAlignPicker'
 		});
+
+		this.onSearchLoaded();
 
 		this.pickerView.addCls(this.ownerCls).show().hide();
 
@@ -206,10 +208,15 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		}
 
 		Ext.each(users, function(user) {
-			if (m.containsToken(user)) { return; }
-			m.addToken(user);
-			m.selections.push(user);
+			if (m.containsToken(user)) {
+				m.removeTokenForUser(user);
+			} else {
+				m.addToken(user);
+				m.selections.push(user);
+			}
 		});
+
+		m.onSearchLoaded();
 	},
 
 
@@ -432,6 +439,23 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 	},
 
 
+	onSearchLoaded: function() {
+		var me = this;
+
+		function mark(record) {
+			var contained = me.containsToken(record);
+
+			record.set('isMarked', contained);
+		}
+
+		me.suggestionStore.each(mark);
+
+		me.searchStore.each(mark);
+
+		this.maybeAlignPicker();
+	},
+
+
 	maybeAlignPicker: function() {
 		if (this.pickerView.isVisible()) {
 			this.alignPicker();
@@ -521,6 +545,20 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 			this.resetPlaceholderLabel();
 		}
 		this.fireEvent('sync-height', this);
+
+		this.onSearchLoaded();
+	},
+
+
+	removeTokenForUser: function(user) {
+		var name = user.get('displayName'),
+			tokenEl = this.el.down('[data-value=' + name + ']');
+
+		tokenEl = tokenEl && tokenEl.up('.token');
+
+		if (tokenEl) {
+			this.removeToken(name, tokenEl);
+		}
 	},
 
 

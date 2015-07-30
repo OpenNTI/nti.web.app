@@ -22,7 +22,7 @@ Ext.define('NextThought.app.sharing.components.ShareSearchList', {
 			]},
 			{ tag: 'tpl', 'if': '!isLabel', cn: [
 				{
-					cls: 'x-menu-item contact-card {[this.getType(values)]}',
+					cls: 'x-menu-item contact-card{[this.getTypeCls(values)]}{[this.getMarkedCls(values)]}',
 					cn: [
 						'{[this.getAvatar(values)]}',
 						{cls: 'avatar icon {[this.getType(values)]}', style: '{[this.getIcon(values)]}'},
@@ -39,13 +39,23 @@ Ext.define('NextThought.app.sharing.components.ShareSearchList', {
 			var a = NTIFormat.avatar(model);
 			return a;
 		},
+
 		isUser: function(model) {
 			var t = this.getType(model);
 			return t === 'person';
 		},
+
 		getIcon: function(model) {
 			var t = this.getType(model);
 			return '';
+		},
+
+		getTypeCls: function(model) {
+			return ' ' + this.getType(model);
+		},
+
+		getMarkedCls: function(model) {
+			return model.isMarked ? ' marked' : '';
 		},
 
 		getType: function(modelData) {
