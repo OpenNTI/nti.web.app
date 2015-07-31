@@ -22,6 +22,7 @@ Ext.define('NextThought.app.contacts.components.TabView', {
 	constructor: function(config) {
 		this.callParent(arguments);
 		this.mon(this.navigation, 'contact-row-selected', 'scrollIntoView');
+		this.on('activate', this.onActivate.bind(this));
 	},
 
 
@@ -62,6 +63,13 @@ Ext.define('NextThought.app.contacts.components.TabView', {
 		store.suspendEvents(false);
 		store.add(toAdd);
 		store.resumeEvents();
+	},
+
+
+	onActivate: function() {
+		if (!this.rendered) { return; }
+
+		this.navigation.refresh();
 	}
 
 });
