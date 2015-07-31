@@ -68,7 +68,7 @@ Ext.define('NextThought.app.windows.components.Header', {
 		me.NavigationActions.getBreadCrumb(record)
 			.then(function(titles) {
 				if (length && length >= 0) {
-					titles = titles.slice(0, length);
+					titles = titles && titles.slice(0, length) || [];
 				}
 
 				if (parent) {

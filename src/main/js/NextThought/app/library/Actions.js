@@ -72,7 +72,7 @@ Ext.define('NextThought.app.library.Actions', {
 	findContentPackage: function(id) {
 		return this.findBundleForNTIID(id)
 			.then(function(bundle) {
-				var packages = bundle.getContentPackages() || [],
+				var packages = bundle && bundle.getContentPackages() || [],
 					pack;
 
 				packages.forEach(function(p) {

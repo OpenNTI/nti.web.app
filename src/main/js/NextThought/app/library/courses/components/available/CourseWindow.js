@@ -368,7 +368,9 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 		cfgs = Ext.isArray(cfgs) ? cfgs : [cfgs];
 
 		//clear out the old buttons
-		me.footerEl.update('');
+		if (me.footerEl) {
+			me.footerEl.update('');
+		}
 
 		cfgs.forEach(function(cfg) {
 			cfg.disabled = cfg.disabled ? 'disabled' : '';
@@ -518,7 +520,9 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 		me.mon(me.courseDetail, 'enroll-in-course', 'showEnrollmentOption');
 
 		me.getLayout().setActiveItem(me.courseDetail);
-		me.updateButtons();
+		me.onceRendered.then(function() {
+			me.updateButtons();
+		});
 	},
 
 
