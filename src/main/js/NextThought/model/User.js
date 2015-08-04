@@ -204,7 +204,7 @@ Ext.define('NextThought.model.User', {
 		if (this.isUnresolved()) {
 			return null;
 		}
-		return NextThought.model.User.getAvatarInitials(this.raw, this.get('FirstName'), this.get('LastName'), this.getName());
+		return NextThought.mixins.Avatar.getAvatarInitials(this.raw, this.get('FirstName'), this.get('LastName'), this.getName());
 	},
 
 	save: function(ops) {
