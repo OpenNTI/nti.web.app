@@ -10,7 +10,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Activ
 		{
 			cls: 'reply profile-activity-reply-item',
 			cn: [
-				'{user:avatar}',
+				{cls: 'avatar-wrapper', cn: ['{user:avatar}']},
 				{ cls: 'meta', cn: [
 					{ cls: 'controls', cn: [
 						{ cls: 'favorite-spacer' },
@@ -45,7 +45,6 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Activ
 
 	renderSelectors: {
 		noteBody: '.reply',
-		avatar: '.avatar .profile.avatar-pic',
 		editEl: '.reply-options .edit',
 		flagEl: '.reply-options .flag',
 		deleteEl: '.reply-options .delete'
