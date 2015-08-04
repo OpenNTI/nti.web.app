@@ -90,7 +90,7 @@ NTIStrings.EnrollmentText = {
 		archivedNotEnrolled: {
 			title: 'This Course is Archived.',
 			price: 0,
-			information: 'Archived courses are out of session but all course content will remain available' +
+			information: 'Archived courses are out of session but all course content will remain available ' +
 							'including the lectures, course materials, quizzes, and discussions.'
 		}
 	},
@@ -169,7 +169,7 @@ NTIStrings.EnrollmentText = {
 		},
 		archivedNotEnrolled: {
 			title: 'This Course is Archived',
-			information: 'Archived courses are out of session but all course content will remain available' +
+			information: 'Archived courses are out of session but all course content will remain available ' +
 							'including the lectures, course materials, quizzes, and discussions.'
 		}
 	}
