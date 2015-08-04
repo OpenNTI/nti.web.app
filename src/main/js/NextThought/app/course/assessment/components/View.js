@@ -29,6 +29,8 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 		this.navigation.setTitle(this.title);
 
 		this.mon(this.navigation, 'select-route', this.changeRoute.bind(this));
+
+		this.on('activate', this.onActivate.bind(this));
 	},
 
 
@@ -111,6 +113,13 @@ Ext.define('NextThought.app.course.assessment.components.View', {
 				console.error('Failed to load assignments:', reason);
 				resetView(false);
 			});
+	},
+
+
+	onActivate: function() {
+		if (!this.rendered) { return; }
+
+		this.alignNavigation();
 	},
 
 
