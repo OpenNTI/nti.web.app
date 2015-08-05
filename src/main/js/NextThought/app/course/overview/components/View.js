@@ -115,7 +115,7 @@ Ext.define('NextThought.app.course.overview.components.View', {
 	showLesson: function(route, subRoute) {
 		var me = this,
 			id = route.params && route.params.lesson && ParseUtils.decodeFromURI(route.params.lesson),
-			record = route.precache.lesson;
+			record = route.precache.lesson, rIndex;
 
 		return this.store.onceBuilt()
 			.then(function() {
@@ -124,9 +124,13 @@ Ext.define('NextThought.app.course.overview.components.View', {
 				}
 
 				if (!record || record.get('type') !== 'lesson' || !record.get('NTIID')) {
-					record = me.store.findBy(function(rec) {
+					rIndex = me.store.findBy(function(rec) {
 						return rec.get('type') === 'lesson' && rec.get('NTIID');
 					});
+
+					if (rIndex > -1) {
+						record = me.store.getAt(rIndex);
+					}
 				}
 
 				if (!record) {
