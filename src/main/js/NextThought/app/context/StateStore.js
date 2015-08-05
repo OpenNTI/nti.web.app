@@ -29,7 +29,7 @@ Ext.define('NextThought.app.context.StateStore', {
 
 
 	getRootBundle: function() {
-		var context = this.current_context,
+		var context = this.current_context || [],
 			i, x;
 
 		for (i = 0; i < context.length; i++) {

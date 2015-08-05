@@ -66,7 +66,7 @@ Ext.define('NextThought.app.sharing.Actions', {
 
 	getSiteCommunity: function() {
 		var siteId = Service.get('SiteCommunity'), i,
-			memberships = $AppConfig.userObject.get('DynamicMemberships');
+			memberships = $AppConfig.userObject.get('DynamicMemberships') || [];
 
 		for (i = 0; i < memberships.length; i++) {
 			if (memberships[i].getId && memberships[i].getId() === siteId) {
