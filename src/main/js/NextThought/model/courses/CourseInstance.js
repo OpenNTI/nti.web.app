@@ -350,7 +350,7 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 	},
 
 
-	canGetToContent: function(ntiid) {
+	canGetToContent: function(ntiid, rootId) {
 		var me = this;
 
 		return Promise.all([
@@ -387,9 +387,11 @@ Ext.define('NextThought.model.courses.CourseInstance', {
 			if (canGetTo) {
 				return true;
 			}
+			//TODO: Need to simplfy logic of this entire canGetToContent function
 
 			(lineages || []).forEach(function(lineage) {
-				if (store.getById(lineage[Math.max(0, lineage.length - 2)])) {
+				if (store.getById(lineage[Math.max(0, lineage.length - 2)]) // ick, bad logic testing for the existence of the node in the Outline. (Need LibraryPath for this)
+				|| (rootId && lineage.indexOf(rootId) >= 0)) { //root is in the path of the lineage, we're good to go.
 					canGetTo = true;
 				}
 			});
