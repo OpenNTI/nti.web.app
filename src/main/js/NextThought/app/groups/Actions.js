@@ -14,6 +14,7 @@ Ext.define('NextThought.app.groups.Actions', {
 		this.LoginStore = NextThought.login.StateStore.getInstance();
 
 		this.LoginStore.registerLoginAction(this.loadFriendsList.bind(this));
+		this.LoginStore.registerLoginAction(this.loadGroupsList.bind(this));
 	},
 
 
@@ -41,6 +42,30 @@ Ext.define('NextThought.app.groups.Actions', {
 
 			store.load();
 		});
+	},
+
+
+	loadGroupsList: function() {
+		var me = this,
+			store = me.GroupStore.getGroupsList(),
+			collection = Service.getCollection('Groups');
+
+		if (!collection || !collection.href) {
+			return;
+		}
+
+		return new Promise(function(fulfill, reject) {
+			store.on({
+				load: function(listStore, records, success) {
+					fulfill();
+				}
+			});
+
+			store.proxy.url = getURL(collection.href);
+
+			store.load();
+		});
+
 	},
 
 

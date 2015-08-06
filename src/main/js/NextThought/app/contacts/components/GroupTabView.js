@@ -47,7 +47,7 @@ Ext.define('NextThought.app.contacts.components.GroupTabView', {
 
 
 	buildStore: function() {
-		var s = this.GroupStore.getFriendsList(),
+		var s = this.GroupStore.getGroupsList(),
 			store = StoreUtils.newView(s);
 
 		if (Ext.isFunction(this.filter)) {

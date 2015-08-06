@@ -20,6 +20,14 @@ Ext.define('NextThought.app.groups.StateStore', {
 		return this.friends_list_store;
 	},
 
+	getGroupsList: function() {
+		if (!this.groups_store) {
+			this.groups_store = NextThought.store.FriendsList.create();
+		}
+
+		return this.groups_store;
+	},
+
 
 	isContact: function(username) {
 		return this.getFriendsList().isContact(username);
