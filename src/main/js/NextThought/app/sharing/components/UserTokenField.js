@@ -228,6 +228,10 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		return c.length > 0;
 	},
 
+	containsUnresolved: function(){
+		c = Ext.Array.filter(this.selections, function(o, i) { return o.Unresolved === true; });
+		return c.length > 0;
+	},
 
 	getSnippet: function(value) {
 		//Truncate long names.
@@ -239,8 +243,11 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		var value = record && record.get('displayName'),
 			type = this.getType(record.getData());
 
-		if (this.isToken(value)) {
+		if (this.isToken(value) && !record.Unresolved) {
 			this.addTag(value, type);
+			this.updatePlaceholderLabel();
+		}else if(!this.containsUnresolved() && record.Unresolved){
+			this.addTag('Others',type);
 			this.updatePlaceholderLabel();
 		}
 
