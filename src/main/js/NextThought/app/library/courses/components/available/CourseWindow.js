@@ -450,11 +450,17 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 	showCourseDetail: function(route, subRoute) {
 		var ntiid = ParseUtils.decodeFromURI(route.params.id),
 			course = route.precache.course,
-			me = this;
+			q = route.queryParams,
+			me = this, isEnrollmentConfirmation = false;
 
 		if (course && course.getId().toLowerCase() === ntiid.toLowerCase()) {
 			this.showCourse(course);
 			return Promise.resolve();
+		}
+
+		if (q && q['library[paymentcomplete]']) {
+			// We need to show the most recent enrollent, which should be the course we just enrolled in.
+			isEnrollmentConfirmation = true;
 		}
 
 		return new Promise(function(fulfill, reject) {
@@ -464,7 +470,10 @@ Ext.define('NextThought.app.library.courses.components.available.CourseWindow', 
 					me.showTabpanel();
 					me.setupCourses(courses);
 
-					course = me.CourseStore.findCourseForNtiid(ntiid);
+
+					course = me.CourseStore.findCourseForNtiid(ntiid) ||
+							isEnrollmentConfirmation && me.CourseStore.getMostRecentEnrollmentCourse();
+
 					if (course) {
 						wait()
 							.then(function() {

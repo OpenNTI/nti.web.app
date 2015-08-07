@@ -317,6 +317,20 @@ Ext.define('NextThought.app.library.courses.StateStore', {
 	},
 
 
+	getMostRecentEnrollmentCourse: function() {
+		var enrolledCourses = this.getEnrolledCourses() || [],
+			enrollment = enrolledCourses[0];
+
+		enrolledCourses.forEach(function(e) {
+			if (e.get('CreatedTime') > enrollment.get('CreatedTime')) {
+				enrollment = e;
+			}
+		});
+
+		return enrollment && enrollment.getCourseCatalogEntry();
+	},
+
+
 	hasCourse: function(course) {
 		var ntiid = course.get('NTIID');
 
