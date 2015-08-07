@@ -12,6 +12,7 @@ Ext.define('NextThought.app.userdata.Actions', {
 		'NextThought.app.context.StateStore',
 		'NextThought.util.Anchors',
 		'NextThought.util.Annotations',
+		'NextThought.app.contentviewer.components.definition.Window',
 		'NextThought.app.slidedeck.transcript.AnchorResolver'
 	],
 
@@ -947,5 +948,18 @@ Ext.define('NextThought.app.userdata.Actions', {
 				}
 			});
 		});
+	},
+
+	define: function(term, boundingScreenBox, reader) {
+
+		if (this.definition) {
+			this.definition.close();
+			delete this.definition;
+		}
+		this.definition = Ext.widget('dictionary-window', {
+					term: term,
+					pointTo: boundingScreenBox,
+					reader: reader
+				}).show();
 	}
 });
