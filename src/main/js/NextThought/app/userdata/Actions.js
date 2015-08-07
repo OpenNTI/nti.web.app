@@ -930,8 +930,8 @@ Ext.define('NextThought.app.userdata.Actions', {
 			this.saveSharingPrefs(record.get('ContainerId'), newSharedWith, context);
 		}
 
-		if (Globals.arrayEquals(record.get('shareWith') || [], newSharedWith || [])) {
-			console.log('Sharing not mutated. Not showing changes', record.get('shareWith'), newSharedWith);
+		if (Globals.arrayEquals(record.get('sharedWith') || [], newSharedWith || [])) {
+			console.log('Sharing not mutated. Not showing changes', record.get('sharedWith'), newSharedWith);
 			return Promise.resolve();
 		}
 
