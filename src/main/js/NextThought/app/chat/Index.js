@@ -142,7 +142,11 @@ Ext.define('NextThought.app.chat.Index', {
 
 
 	handleTabNotifications: function (win, msg) {
-		if(win && win.isVisible()) { return; }
+		if (win && win.isVisible() ||
+			this.gutterWin && this.gutterWin.isVisible() ||
+			this.listWin && this.listWin.isVisible()) {
+			return;
+		}
 
 		var showTab = this.shouldHaveChatTab();
 		if (showTab) {
