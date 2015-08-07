@@ -3,7 +3,8 @@ Ext.define('NextThought.app.groups.Actions', {
 
 	requires: [
 		'NextThought.login.StateStore',
-		'NextThought.app.groups.StateStore'
+		'NextThought.app.groups.StateStore',
+		'NextThought.model.DynamicFriendsList'
 	],
 
 
@@ -175,8 +176,8 @@ Ext.define('NextThought.app.groups.Actions', {
 
 	createFriendsListUnguarded: function(displayName, username, friends, dynamic, callback, errorCallback, scope) {
 		var me = this,
-			rec = NextThought.model.FriendsList.create(),
-			store = me.GroupStore.getFriendsList();
+			rec = dynamic ? NextThought.model.DynamicFriendsList.create() : NextThought.model.FriendsList.create(),
+			store = dynamic ? me.GroupStore.getGroupsList() : me.GroupStore.getFriendsList();
 
 		rec.set('Username', username);
 		//We used to set realname here, but we really want alias
