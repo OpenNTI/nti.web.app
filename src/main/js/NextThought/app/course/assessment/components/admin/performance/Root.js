@@ -664,6 +664,9 @@ Ext.define('NextThought.app.course.assessment.components.admin.performance.Root'
 
 		if (this.searchKey) {
 			state.searchKey = this.searchKey;
+			if(this.currentPage && this.currentPage > 1){
+				this.currentPage = 1;
+			}
 		} else {
 			delete state.searchKey;
 		}
