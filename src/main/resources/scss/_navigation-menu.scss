@@ -36,9 +36,10 @@
 	}
 
 	.branding {
-		display: none;
+		display: block;
 		height: 100%;
 		background-size: cover !important;
+		background: url(../images/elements/nav-asset.png) center center no-repeat;
 		min-width: 72px;
 		cursor: pointer;
 	}
@@ -117,7 +118,7 @@
 	left: -3px !important;
 	padding: 0 3px 0 3px;
 	background: none;
-	
+
 	.x-panel-body-navigation-menu {
 		@include scrollbar(#ffffff, $tertiary-grey);
 		width: 100% !important;
