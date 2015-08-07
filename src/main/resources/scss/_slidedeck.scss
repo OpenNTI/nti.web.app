@@ -970,8 +970,9 @@ $experimental-support-for-svg: true;
 	}
 
 	.header{
-		position: relative;
+		position: fixed;
 		top: 0; left: 0;
+		width: 100%;
 
 		.media-toolbar{
 			display: none;
@@ -1189,6 +1190,10 @@ $experimental-support-for-svg: true;
 				}
 			}
 		}
+	}
+
+	& > .body {
+		margin-top: 75px;
 	}
 
 
@@ -1410,12 +1415,11 @@ $experimental-support-for-svg: true;
 
         &.full-video-player{
             right: 0 !important;
-            padding-bottom: 70px;
 
             .video-player{
                 position: relative;
-                top: 70px;
                 left: 0;
+                margin-bottom: 20px;
 
                 .content-video{
                     margin: 10px auto;
