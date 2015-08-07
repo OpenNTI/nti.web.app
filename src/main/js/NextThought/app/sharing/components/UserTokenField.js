@@ -340,6 +340,7 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 			if (val && (val.length === 1 || val === sel)) {
 				this.clearResults(true);
 				this.inputEl.focus(100);
+				this.alignPicker();
 				return true;
 			}
 		}
@@ -392,8 +393,14 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 	},
 
 
-	onInputBlur: function() {
+	onInputBlur: function(e) {
+		e.stopPropagation();
+		
 		//Wait a bit so the pickerView has time to get the click event
+		if (Ext.get(e.getTarget()) === this.inputEl) {
+			return;
+		}
+
 		wait(300)
 			.then(this.hidePicker.bind(this));
 	},
