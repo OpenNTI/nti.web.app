@@ -249,6 +249,7 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 	NextThought.app.windows.StateStore.register('application/vnd.nextthought.forums.generalforumcomment', this);
 	NextThought.app.windows.StateStore.register(NextThought.model.forums.ContentHeadlineTopic.mimeType, this);
 	NextThought.app.windows.StateStore.register(NextThought.model.forums.CommunityHeadlineTopic.mimeType, this);
+	NextThought.app.windows.StateStore.register(NextThought.model.forums.DFLHeadlineTopic.mimeType, this);
 	NextThought.app.windows.StateStore.register(NextThought.model.forums.CommunityHeadlinePost.mimeType, this);
 	NextThought.app.windows.StateStore.register('new-topic', this);
 });

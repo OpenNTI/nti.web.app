@@ -401,8 +401,8 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 			return;
 		}
 
-		wait(300)
-			.then(this.hidePicker.bind(this));
+		// wait(300)
+		// 	.then(this.hidePicker.bind(this));
 	},
 
 

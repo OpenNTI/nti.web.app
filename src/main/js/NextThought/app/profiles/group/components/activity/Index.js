@@ -3,8 +3,9 @@ Ext.define('NextThought.app.profiles.group.components.activity.Index', {
 	alias: 'widget.profile-group-activity',
 
 	requires: [
-		'NextThought.app.profiles.group.components.activity.Stream',
+		'NextThought.app.profiles.group.components.activity.Body',
 		'NextThought.app.profiles.group.components.activity.Sidebar',
+		'NextThought.app.profiles.group.components.activity.parts.NewPost',
 		'NextThought.app.userdata.Actions'
 	],
 
@@ -17,17 +18,19 @@ Ext.define('NextThought.app.profiles.group.components.activity.Index', {
 	layout: 'none',
 
 	items: [
-		{xtype: 'profile-group-activity-stream'},
+		{xtype: 'profile-group-activity-body'},
 		{xtype: 'profile-group-activity-sidebar'}
 	],
 
 
-	initChildComponentRefs: function(){
-		this.streamCmp = this.down('profile-group-activity-stream');
+	initChildComponentRefs: function() {
+		this.streamCmp = this.down('profile-group-activity-body');
 		this.sidebarCmp = this.down('profile-group-activity-sidebar');
 		this.membershipCmp = this.down('profile-group-membership-condensed');
+
+		this.streamCmp.navigateToObject = this.navigateToActivityItem.bind(this);
 	},
-	
+
 	onAddedToParentRouter: function() {
 		var me = this;
 
@@ -35,12 +38,19 @@ Ext.define('NextThought.app.profiles.group.components.activity.Index', {
 			me.gotoMembership();
 		};
 	},
-		   
-	userChanged: function(){
+
+	userChanged: function() {
 		var superP = this.callParent(arguments);
+
 		return Promise.all([
-			   superP,
-			   this.sidebarCmp.userChanged.apply(this.sidebarCmp, arguments)
-			   ]);
+				superP,
+				this.streamCmp.userChanged.apply(this.streamCmp, arguments),
+				this.sidebarCmp.userChanged.apply(this.sidebarCmp, arguments)
+			]);
+	},
+
+
+	navigateToActivityItem: function(item) {
+		this.Router.root.attemptToNavigateToObject(item);
 	}
 });

@@ -2,7 +2,9 @@ Ext.define('NextThought.model.FriendsList', {
 	extend: 'NextThought.model.Base',
 
 	requires: [
-		'NextThought.util.Object'
+		'NextThought.util.Object',
+		'NextThought.model.forums.DFLBoard',
+		'NextThought.model.forums.DFLForum'
 	],
 
 	mixins: {
@@ -101,6 +103,52 @@ Ext.define('NextThought.model.FriendsList', {
 			};
 			i.src = url;
 		});
-	}
+	},
 
+
+	getDefaultForum: function() {
+		return this.getForumList()
+			.then(function(forums) {
+				forums = forums.filter(function(forum) {
+					return forum.get('title') === 'Forum';
+				});
+
+				return forums[0];
+			});
+	},
+
+
+	getForumList: function(force) {
+		if (this.loadForumList && !force) {
+			return this.loadForumList;
+		}
+
+		var link = this.getLink('DiscussionBoard');
+
+		if (!link) {
+			return Promise.resolve([]);
+		}
+
+		this.loadForumList = Service.request(link)
+			.then(function(response) {
+				return ParseUtils.parseItems(response)[0];
+			})
+			.then(function(board) {
+				var content = board && board.getLink('contents');
+
+				return content ? Service.request(content) : Promise.reject('No Contents Link');
+			})
+			.then(function(response) {
+				var json = JSON.parse(response);
+
+				return ParseUtils.parseItems(json.Items);
+			})
+			.fail(function(reason) {
+				console.error('Faild to load forum list for group, ', reason);
+
+				return [];
+			});
+
+		return this.loadForumList;
+	}
 });

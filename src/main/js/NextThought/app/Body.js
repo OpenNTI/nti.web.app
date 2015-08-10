@@ -174,9 +174,10 @@ Ext.define('NextThought.app.Body', {
 			hash = this.ContextStore.getCurrentHash();
 
 		if (id) {
-			if(id == this.ContextStore.getCurrentObjectId()){
+			if (id == this.ContextStore.getCurrentObjectId()) {
 				return;
 			}
+
 			id = ParseUtils.encodeForURI(id);
 
 			if (mimeType) {
@@ -479,6 +480,8 @@ Ext.define('NextThought.app.Body', {
 			route = this.getRouteForUser(root, subPath);
 		} else if (root instanceof NextThought.model.Community) {
 			route = this.getRouteForCommunity(root, subPath);
+		} else if (root instanceof NextThought.model.DynamicFriendsList) {
+			route = this.getRouteForGroup(root, subPath);
 		} else {
 			console.error('No route for path: ', root, subPath);
 			route = {
@@ -534,6 +537,28 @@ Ext.define('NextThought.app.Body', {
 
 		route.path = Globals.trimRoute(route.path);
 		route.path = '/community/' + id + '/' + route.path;
+
+		return route;
+	},
+
+
+	getRouteForGroup: function(group, path) {
+		var cmp = this.getCmp('profile-group'),
+			route, id = group.getId();
+
+		id = ParseUtils.encodeForURI(id);
+
+		if (path.length) {
+			route = cmp.getRouteForPath && cmp.getRouteForPath(path, group);
+		} else {
+			route = {
+				isFull: true,
+				path: ''
+			};
+		}
+
+		route.path = Globals.trimRoute(route.path);
+		route.path = '/group/' + id + '/' + route.path;
 
 		return route;
 	}

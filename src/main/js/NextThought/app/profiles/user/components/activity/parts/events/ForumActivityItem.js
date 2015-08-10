@@ -2,6 +2,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 	extend: 'Ext.container.Container',
 	alias: [
 		'widget.profile-activity-communityheadlinetopic-item',
+		'widget.profile-activity-dflheadlinetopic-item',
 		'widget.profile-forum-activity-item'
 	],
 
@@ -294,6 +295,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 				scope: this,
 				'activated-editor': Ext.bind(box.hide, box, [false]),
 				'deactivated-editor': Ext.bind(box.show, box, [false]),
+				'save': this.saveComment.bind(this),
 				'no-body-content': function(editor, bodyEl) {
 					editor.markError(bodyEl, 'You need to type something');
 					return false;
@@ -321,6 +323,32 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 		this.editor.reset();
 		this.editor.activate();
 		this.editor.focus(true);
+	},
+
+
+	saveComment: function(editor, record, valueObject, successCallback) {
+		var me = this,
+			topic = this.record;
+
+		if (editor.el) {
+			editor.el.mask('Saving...');
+			editor.el.repaint();
+		}
+
+		this.ForumActions.saveTopicComment(topic, record, valueObject)
+			.then(function(rec) {
+				if (!me.isDestroyed) {
+					me.store.add(rec);
+					editor.deactivate();
+					editor.setValue('');
+					editor.reset();
+				}
+			})
+			.always(function() {
+				if (editor.el) {
+					editor.el.unmask();
+				}
+			});
 	},
 
 

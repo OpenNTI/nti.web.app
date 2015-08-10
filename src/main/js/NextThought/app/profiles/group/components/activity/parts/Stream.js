@@ -1,15 +1,14 @@
-Ext.define('NextThought.app.profiles.group.components.activity.Stream', {
+Ext.define('NextThought.app.profiles.group.components.activity.parts.Stream', {
 	extend: 'NextThought.app.profiles.user.components.activity.Stream',
 	alias: 'widget.profile-group-activity-stream',
 
 	requires: ['NextThought.app.profiles.group.components.activity.parts.events.Created'],
-		   
-	initialWidgetConfig: function(){
-	   return { xtype: 'created-event', entity: this.user }
+
+	initialWidgetConfig: function() {
+	   return { xtype: 'created-event', entity: this.user };
 	},
-		   
-	hasInitialWidget: function(){
+
+	hasInitialWidget: function() {
 	   return !!this.down('created-event');
 	}
-	
 });
