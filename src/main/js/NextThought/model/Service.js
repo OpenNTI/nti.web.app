@@ -362,6 +362,84 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
+	getGroupsMap: function() {
+		if (this.__loadUserGroups) { return this.__loadUserGroups; }
+
+		var collection = this.getCollection('Groups'),
+			href = collection && collection.href;
+
+		if (!href) {
+			return Promise.resolve([]);
+		}
+
+		this.__loadUserGroups = Service.request(href)
+			.then(function(response) {
+				var json = JSON.parse(response),
+					items = json.Items,
+					keys = Object.keys(items) || [];
+
+				keys.forEach(function(key) {
+					items[key] = ParseUtils.parseItems(items[key])[0];
+				});
+
+				return json.Items;
+			});
+
+		return this.__loadUserGroups;
+	},
+
+
+	getCommunitiesMap: function() {
+		if (this.__loadUserCommunities) { return this.__loadUserCommunities; }
+
+		var collection = this.getCollection('Communities'),
+			href = collection && collection.href;
+
+		if (!href) {
+			return Promise.resolve([]);
+		}
+
+		this.__loadUserCommunities = Service.request(href)
+			.then(function(response) {
+				var json = JSON.parse(response),
+					items = json.Items,
+					keys = Object.keys(items) || [];
+
+				keys.forEach(function(key) {
+					items[key] = ParseUtils.parseItems(items[key])[0];
+				});
+
+				return items;
+			});
+
+		return this.__loadUserCommunities;
+	},
+
+
+	getGroupsList: function() {
+		return this.getGroupsMap()
+			.then(function(items) {
+				var keys = Object.keys(items);
+
+				return keys.map(function(key) {
+					return items[key];
+				});
+			});
+	},
+
+
+	getCommunitiesList: function() {
+		return this.getCommunitiesMap()
+			.then(function(items) {
+				var keys = Object.keys(items);
+
+				return keys.map(function(key) {
+					return items[key];
+				});
+			});
+	},
+
+
 	getPageInfo: function(ntiid, success, failure, scope, targetBundle) {
 		var url, me = this,
 			cache = me.pageInfoCache = me.pageInfoCache || {},
