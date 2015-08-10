@@ -95,14 +95,22 @@
 		}
 
 		.search-container {
-			right: 25%;
+			right: 50%;
 			width: 600px;
+			margin-right: -300px;
+
+			@media screen and (max-width: 960px) {
+    			width: 480px;	
+    			margin-right: -180px;
+			}
 		}
 	}
 
 	&.has-chat-tab {
-		.search-container {
-			right: 210px;
+		&:not(.no-nav) {
+			.search-container {
+				right: 210px;
+			}
 		}
 
 		.chat-notification-container {
