@@ -6,7 +6,10 @@ Ext.define('NextThought.model.UserSearch', {
 		'NextThought.app.chat.StateStore'
 	],
 
-	mixins: { shareEntity: 'NextThought.mixins.ShareEntity' },
+	mixins: {
+		shareEntity: 'NextThought.mixins.ShareEntity',
+		Avatar: 'NextThought.mixins.Avatar'
+	},
 
 	statics: {
 		getType: function(modelData) {
@@ -61,7 +64,13 @@ Ext.define('NextThought.model.UserSearch', {
 		{ name: 'friendlyName', type: 'string', persist: false},
 		{ name: 'isLabel', type: 'boolean', persist: false},
 		{ name: 'isMarked', type: 'boolean', persist: false}
-	]
+	],
+
+	constructor: function() {
+		this.callParent(arguments);
+		this.initAvatar();
+	}
+
 }, function() {
 	this.borrow(NextThought.model.User, ['getName', 'getProfileUrl']);
 });
