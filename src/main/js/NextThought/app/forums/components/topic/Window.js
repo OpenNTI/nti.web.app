@@ -6,6 +6,7 @@ Ext.define('NextThought.app.forums.components.topic.Window', {
 	cls: 'topic-window',
 
 	requires: [
+		'NextThought.model.forums.DFLHeadlineTopic.mimeType',
 		'NextThought.app.windows.StateStore',
 		'NextThought.app.windows.components.Header',
 		'NextThought.app.windows.components.Loading',
