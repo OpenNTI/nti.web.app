@@ -20,15 +20,26 @@ Ext.define('NextThought.model.courses.CourseInstanceSharingScopes', {
 
 
 	containsDefault: function() {
-		var id = this.get('DefaultSharingScopeNTIID'),
-			items = this.get('Items') || [], i;
+		return !!this.getDefaultScope();
+	},
+
+
+	getScopeForId: function(id) {
+		var items = this.get('Items') || [], i;
 
 		for (i = 0; i < items.length; i++) {
 			if (items[i].getId && items[i].getId() === id) {
-				return true;
+				return items[i];
 			}
 		}
 
-		return false;
+		return null;
+	},
+
+
+	getDefaultScope: function() {
+		var defaultId = this.getDefaultSharing();
+
+		return this.getScopeForId(defaultId);
 	}
 });
