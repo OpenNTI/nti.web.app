@@ -8,19 +8,20 @@ Ext.define('NextThought.model.Slide', {
 	],
 
 	fields: [
+		{ name: 'id', type: 'string', mapping: 'ntiid'},
 		{ name: 'title', type: 'string' },
-		{ name: 'image', type: 'string' },
+		{ name: 'image', type: 'string', mapping: 'slidedeckimage'},
 		{ name: 'image-thumbnail', type: 'string' },
 		{ name: 'media', type: 'auto' },
 		{ name: 'video', type: 'string' },
 		{ name: 'video-type', type: 'string' },
-		{ name: 'video-id', type: 'string' },
+		{ name: 'video-id', type: 'string', mapping: 'slidevideoid'},
 		{ name: 'video-thumbnail', type: 'string' },
-		{ name: 'video-start', type: 'number' },
-		{ name: 'video-end', type: 'number' },
-		{ name: 'ordinal', type: 'number' },
+		{ name: 'video-start', type: 'number', mapping: 'slidevideostart'},
+		{ name: 'video-end', type: 'number', mapping: 'slidevideoend'},
+		{ name: 'ordinal', type: 'number', mapping: 'slidenumber'},
 		{ name: 'dom-clone', type: 'auto'},
-		{ name: 'slidedeck-id', type: 'string' }
+		{ name: 'slidedeckid', type: 'string'}
 	],
 
 

@@ -3,7 +3,8 @@ Ext.define('NextThought.app.slidedeck.media.Index', {
 	alias: 'widget.media-window-view',
 
 	requires: [
-		'NextThought.app.navigation.path.Actions'
+		'NextThought.app.navigation.path.Actions',
+		'NextThought.app.slidedeck.transcript.parts.Transcript'
 	],
 
 	mixins: {

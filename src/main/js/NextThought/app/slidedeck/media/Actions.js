@@ -238,30 +238,95 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 
 
 	buildSlidedeckPlaylist: function(slidedeck) {
-		var videos = [],
-			slides, me = this;
+		var videos = {},
+			transcripts = {}, me = this, promises,
+			slideStore;
 
 		if (!slidedeck) {
 			return Promise.reject();
 		}
 
-		slides = slidedeck.get('Slides');
-		Ext.each(slidedeck.get('Videos'), function(slidevideo) {
-			var transcript;
-			Service.getObject(slidevideo.video_ntiid)
-				.then(function(video) {
-					videos.push(video);
+		slideStore = new Ext.data.Store({
+				proxy: 'memory',
+				model: 'NextThought.model.Slide',
+				data: slidedeck.get('Slides') || []
+			});
 
-					return me.getVideoPath(slidedeck)
-						.then(function(basePath) {
-							transcript = NextThought.model.transcript.TranscriptItem.fromVideo(video, basePath);
-							return me.loadTranscript(transcript);
-						});
-				})
-				.then(function(cueList) {
-					console.log(cueList);
-					// TODO: we should build slidedeck components
-				});
+		promises = Ext.Array.map(slidedeck.get('Videos'), function(slidevideo) {
+			var transcript;
+
+			return new Promise(function(fulfill) {
+				Service.getObject(slidevideo.video_ntiid)
+					.then(function(video) {
+						videos[slidevideo.NTIID] = video;
+
+						return me.getBasePath(slidedeck)
+							.then(function(basePath) {
+								transcript = NextThought.model.transcript.TranscriptItem.fromVideo(video, basePath);
+								transcripts[slidevideo.NTIID] = transcript;
+								fulfill();
+							});
+					});
+			});
 		});
-	}
+
+		Promise.all(promises)
+			.then(function() {
+				me.buildSlidedeckComponents(slideStore, videos, transcripts);
+			});
+	},
+
+
+	buildSlidedeckComponents: function(slideStore, videosMap, transcriptsMap){
+		var isTitle = true, items = [];
+
+        slideStore.each(function(slide) {
+            var vid = slide.get('video-id'),
+                t = transcriptsMap && transcriptsMap[vid],
+                video = videosMap && videosMap[vid],
+                start = slide.get('video-start'),
+                end = slide.get('video-end');
+
+            console.log('slide starts: ', start, ' slide ends: ', end, ' and has transcript for videoid: ', t && t.get('associatedVideoId'));
+
+            if (video && isTitle) {
+                items.push({
+                    xtype: 'video-title-component',
+                    video: video
+                });
+
+                isTitle = false;
+            }
+
+            items.push({
+                xtype: 'slide-component',
+                slide: slide,
+                layout: {
+                    type: 'vbox',
+                    align: 'stretch'
+                }
+            });
+
+            if (t) {
+                // NOTE: make a copy of the transcript record,
+                // since many slide can have the same transcript but different start and end time.
+                t = t.copy();
+                t.set('desired-time-start', start);
+                t.set('desired-time-end', end);
+
+                items.push({
+                    xtype: 'video-transcript',
+                    flex: 1,
+                    transcript: t,
+                    layout: {
+                        type: 'vbox',
+                        align: 'stretch'
+                    }
+                });
+            }
+        }, this);
+
+		debugger;
+        console.log(items);
+    }
 });
