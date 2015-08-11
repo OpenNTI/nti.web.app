@@ -27,6 +27,15 @@ Ext.define('NextThought.app.sharing.components.ShareSearch', {
 		if (this.store) {
 			this.searchList.bindStore(this.store);
 		}
+
+		this.mon(this.el, 'click', this.onClicked.bind(this));
+	},
+
+
+	onClicked: function() {
+		if (this.stopHide) {
+			this.stopHide();
+		}
 	},
 
 
@@ -45,10 +54,34 @@ Ext.define('NextThought.app.sharing.components.ShareSearch', {
 		}
 	},
 
+	addSelected: function(){
+		this.searchList.addSelected();
+	},
 
 	getNode: function(index) {
 		if (this.searchList) {
 			return this.searchList.getNode(index);
 		}
+	},
+
+	getRecord: function(node){
+		return this.searchList.getRecord(node)
+	},
+
+	selectNext: function() {
+		this.searchList.selectNext();
+	},
+
+
+	selectPrev: function() {
+		this.searchList.selectPrev();
+	},
+
+	unselectItem: function() {
+		this.searchList.unselectItem();
+	},
+
+	getSelectionModel: function(){
+		return this.searchList.getSelectionModel();
 	}
 });

@@ -57,7 +57,8 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 			ownerCls: this.ownerCls,
 			focusOnToFront: false,
 			renderTo: spEl || Ext.getBody(),
-			selectItem: this.searchItemSelected.bind(this)
+			selectItem: this.searchItemSelected.bind(this),
+			stopHide: this.stopPickerHide()
 		});
 
 		this.mon(this.searchStore, {
@@ -134,17 +135,10 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 					return true;
 				},
 				enter: function(e) {
-					var selModel = picker.getSelectionModel(),
-						count = selModel.getCount();
-
-					this.selectHighlighted(e);
-
-					// Handle the case where the highlighted item is already selected
-					// In this case, the change event won't fire, so just collapse
-					if (!me.multiSelect && count === selModel.getCount()) {
-						me.collapse();
-					}
-				}
+					picker.addSelected();
+				},
+				up: function() {},
+				down: function() {}
 			});
 		}
 	},
@@ -361,6 +355,16 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 			return true;
 		}
 
+		if (key === e.DOWN) {
+			this.pickerView.selectNext();
+			e.stopEvent();
+		}
+
+		if (key === e.UP) {
+			this.pickerView.selectPrev();
+			e.stopEvent();
+		}
+
 		if (key === e.DOWN && !this.getPicker().isVisible()) {
 			this.search();
 		}
@@ -390,19 +394,21 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 	onInputFocus: function() {
 		this.search();
 		this.alignPicker();
+		clearTimeout(this.hideOnBlurTimeout);
 	},
 
 
 	onInputBlur: function(e) {
 		e.stopPropagation();
-		
-		//Wait a bit so the pickerView has time to get the click event
-		if (Ext.get(e.getTarget()) === this.inputEl) {
-			return;
-		}
 
-		// wait(300)
-		// 	.then(this.hidePicker.bind(this));
+		var me = this;
+
+		clearTimeout(this.hideOnBlurTimeout);
+
+		//Wait to see if the picker el is being clicked
+		this.hideOnBlurTimeout = setTimeout(function() {
+			me.hidePicker();
+		}, 500);
 	},
 
 
@@ -523,9 +529,14 @@ Ext.define('NextThought.app.sharing.components.UserTokenField', {
 		});
 	},
 
+	stopPickerHide: function() {
+		clearTimeout(this.hideOnBlurTimeout);
+	},
+
 
 	hidePicker: function() {
 		console.log('Picker hidden');
+		this.pickerView.unselectItem();
 		this.pickerView.hide().setHeight(null);
 	},
 

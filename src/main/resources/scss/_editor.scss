@@ -487,6 +487,14 @@ span.tab{
 
 	.share-search {
 		position: static !important;
+
+		.x-menu-item.x-item-selected {
+		    border-radius: 0;
+		    border-width: 0;
+		    border-style: none;
+		    background: #efefef !important;
+		    color: #3c3c3c !important;
+		}
 	}
 
 	.share-search-mask {
