@@ -433,6 +433,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 	extend: 'Ext.Component',
 	alias: 'widget.profile-forum-activity-item-reply',
 
+	requires: ['NextThought.app.forums.Actions'],
+
 	mixins: {
 		enableProfiles: 'NextThought.mixins.ProfileLinks',
 		likeAndFavoriteActions: 'NextThought.mixins.LikeFavoriteActions',
@@ -484,6 +486,8 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 		this.callParent(arguments);
 		this.mixins.flagActions.constructor.call(this);
 		this.mon(this.record, 'destroy', this.onRecordDestroyed, this);
+
+		this.ForumActions = NextThought.app.forums.Actions.create();
 	},
 
 	beforeRender: function() {
@@ -561,6 +565,7 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 			this.mon(this.editor, {
 				'activated-editor' : hide,
 				'deactivated-editor' : show,
+				'save': this.saveComment.bind(this),
 				'no-body-content': function(editor, el) {
 					editor.markError(el, 'You need to type something');
 					return false;
@@ -571,6 +576,32 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 		if (this.record.get('Deleted') === true) {
 			this.respondEl.hide();
 		}
+	},
+
+
+	saveComment: function(editor, record, valueObject, successCallback) {
+		var me = this,
+			topic = this.record;
+
+		if (editor.el) {
+			editor.el.mask('Saving...');
+			editor.el.repaint();
+		}
+
+		this.ForumActions.saveTopicComment(topic, record, valueObject)
+			.then(function(rec) {
+				if (!me.isDestroyed) {
+					rec.compileBodyContent(me.setBody, me);
+					editor.deactivate();
+					editor.setValue('');
+					editor.reset();
+				}
+			})
+			.always(function() {
+				if (editor.el) {
+					editor.el.unmask();
+				}
+			});
 	},
 
 
@@ -604,8 +635,23 @@ Ext.define('NextThought.app.profiles.user.components.activity.parts.events.Forum
 	},
 
 
-	onDelete: function() {
-		this.fireEvent('delete-topic-comment', this.record, this);
+	onDelete: function(e) {
+		e.stopEvent();
+		var me = this;
+		/*jslint bitwise: false*/ //Tell JSLint to ignore bitwise opperations
+		Ext.Msg.show({
+			msg: 'Deleting this comment will permanently remove it.',
+			buttons: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+			scope: me,
+			icon: 'warning-red',
+			buttonText: {'ok': 'Delete'},
+			title: 'Are you sure?',
+			fn: function(str) {
+				if (str === 'ok') {
+					me.ForumActions.deleteObject(me.record);
+				}
+			}
+		});
 	},
 
 
