@@ -261,6 +261,8 @@ Ext.define('NextThought.app.slidedeck.media.Actions', {
 			return new Promise(function(fulfill) {
 				Service.getObject(slidevideo.video_ntiid)
 					.then(function(video) {
+						var obj = video.raw || video.getData();
+						video = NextThought.model.PlaylistItem.create(obj);
 						videos[slidevideo.NTIID] = video;
 
 						return me.getBasePath(slidedeck)
